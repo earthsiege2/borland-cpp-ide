@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1994, 1996 by Borland International, All rights 
+// Copyright (c) 1994, 1997 by Borland International, All rights
 //
-//$Revision:   5.4  $
+//$Revision:   5.6  $
 //
 // TXBase class implementation.
 //----------------------------------------------------------------------------

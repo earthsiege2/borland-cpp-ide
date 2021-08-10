@@ -3,14 +3,16 @@
 # Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
 #----------------------------------------------------------------------------
 
-DEFMODEL= f
+!if !$d(MODEL)
+  MODEL=f
+!endif
 SYSTEMS = WIN32
-MYROOT  = Test
-TARGETS = $(MYROOT).exe TestHelp.hlp
 
-EXERES  = $(MYROOT)
-OBJEXE  = $(MYROOT).obj app.obj client.obj mdidlg.obj
-HLP     = TestHelp
-HLP_    = TestHelp.hpj TestHelp.rtf helpids.hh
+TARGETS = test.exe testhelp.hlp
+
+EXERES  = test
+OBJEXE  = test.obj app.obj client.obj mdidlg.obj
+HLP     = testhelp
+HLP_    = testhelp.hpj testhelp.rtf helpids.hh
 
 !include $(BCEXAMPLEDIR)\owlmake.gen

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+// $Revision:   10.12  $
 //
 // Implementation of classes TVbxControl and TBIVbxLibrary.
 //----------------------------------------------------------------------------
@@ -10,6 +10,8 @@
 #if !defined(OWL_VBXCTL_H)
 # include <owl/vbxctl.h>
 #endif
+
+OWL_DIAGINFO;
 
 //----------------------------------------------------------------------------
 
@@ -285,6 +287,50 @@ VbxEqualOperator(TGenericTableEntry __RTFAR& entry,
    return false;
 }
 
+#if defined(BI_PLAT_WIN32)
+//
+// Find which VBX sent this event.
+//
+void
+TVbxEventHandler::FindVBX(TWindow *c, LPPARAM p)
+{
+  if(!p->vbx) {
+    TVbxControl *vbx = TYPESAFE_DOWNCAST(c, TVbxControl);
+    if(vbx && HWND16TO32(vbx->GetHandle()) == p->hWnd)
+      p->vbx = vbx;
+  }
+}
+
+//
+// This function determines which environment the
+// application is running under, NT or other versions of Windows, and
+// get the object pointer accordingly.
+//
+TWindow*
+TVbxEventHandler::GetWindowPtr( HWND Window )
+{
+  if (!TSystem::IsNT()) {
+#if defined(BI_NAMESPACE)
+    return OWL::GetWindowPtr(Window);
+#else
+    return ::GetWindowPtr(Window);
+#endif
+  }
+
+  TWindow *Dlg = TYPESAFE_DOWNCAST(this, TWindow);
+
+  if(Dlg)  {
+    PARAM p = {Window};
+    Dlg->ForEach(LPFNFOREACH(FindVBX), &p);
+    return p.vbx;
+  }
+
+  return NULL;
+#pragma warn -aus
+}
+#pragma warn .aus
+#endif BI_PLAT_WIN32
+
 //
 // Handle a VBX fire event message by forwarding to control and/or
 // sub-dispatching to specific event handlers.
@@ -299,7 +345,7 @@ TVbxEventHandler::EvVbxDispatch(TParam1 p1, TParam2 p2)
   // If the control is not us, then send the fire event message to it to give
   // it first crack.
   //
-  TWindow* ctl = GetWindowPtr(e->Window);
+  TWindow* ctl = GetWindowPtr( e->Window );
   if (ctl &&
     STATIC_CAST(TEventHandler*, ctl) != STATIC_CAST(TEventHandler*, this))
     if (ctl->HandleMessage(WM_VBXFIREEVENT, p1, p2))

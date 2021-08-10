@@ -1,19 +1,17 @@
 /**********************************************************************/
 /*      IMM.H - Input Method Manager definitions                      */
 /*                                                                    */
-/*      Copyright (c) 1993-1995  Microsoft Corporation                */
+/*      Copyright (c) 1993-1996  Microsoft Corporation                */
 /**********************************************************************/
 
 #ifndef _IMM_
 #define _IMM_        // defined if IMM.H has been included
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifndef _WINUSER_
-#define VK_PROCESSKEY 0x0E5
-#endif
 
 typedef DWORD     HIMC;
 typedef DWORD     HIMCC;
@@ -21,11 +19,13 @@ typedef DWORD     HIMCC;
 typedef HKL FAR  *LPHKL;
 typedef UINT FAR *LPUINT;
 
+
 typedef struct tagCOMPOSITIONFORM {
     DWORD dwStyle;
     POINT ptCurrentPos;
     RECT  rcArea;
 } COMPOSITIONFORM, *PCOMPOSITIONFORM, NEAR *NPCOMPOSITIONFORM, FAR *LPCOMPOSITIONFORM;
+
 
 typedef struct tagCANDIDATEFORM {
     DWORD dwIndex;
@@ -33,6 +33,7 @@ typedef struct tagCANDIDATEFORM {
     POINT ptCurrentPos;
     RECT  rcArea;
 } CANDIDATEFORM, *PCANDIDATEFORM, NEAR *NPCANDIDATEFORM, FAR *LPCANDIDATEFORM;
+
 
 typedef struct tagCANDIDATELIST {
     DWORD dwSize;
@@ -64,6 +65,8 @@ typedef NPREGISTERWORDA NPREGISTERWORD;
 typedef LPREGISTERWORDA LPREGISTERWORD;
 #endif // UNICODE
 
+
+
 #define STYLE_DESCRIPTION_SIZE  32
 
 typedef struct tagSTYLEBUFA {
@@ -85,6 +88,7 @@ typedef PSTYLEBUFA PSTYLEBUF;
 typedef NPSTYLEBUFA NPSTYLEBUF;
 typedef LPSTYLEBUFA LPSTYLEBUF;
 #endif // UNICODE
+
 
 // prototype of IMM API
 
@@ -115,6 +119,7 @@ UINT WINAPI ImmGetIMEFileNameW(HKL, LPWSTR, UINT uBufLen);
 #endif // !UNICODE
 
 DWORD WINAPI ImmGetProperty(HKL, DWORD);
+
 
 BOOL WINAPI ImmIsIME(HKL);
 
@@ -171,6 +176,8 @@ BOOL WINAPI ImmSetConversionStatus(HIMC, DWORD, DWORD);
 BOOL WINAPI ImmGetOpenStatus(HIMC);
 BOOL WINAPI ImmSetOpenStatus(HIMC, BOOL);
 
+#ifdef _WINGDI_
+#ifndef NOGDI
 BOOL WINAPI ImmGetCompositionFontA(HIMC, LPLOGFONTA);
 BOOL WINAPI ImmGetCompositionFontW(HIMC, LPLOGFONTW);
 #ifdef UNICODE
@@ -186,12 +193,9 @@ BOOL WINAPI ImmSetCompositionFontW(HIMC, LPLOGFONTW);
 #else
 #define ImmSetCompositionFont  ImmSetCompositionFontA
 #endif // !UNICODE
+#endif  // ifndef NOGDI
+#endif  // ifdef _WINGDI_
 
-#ifdef UNICODE
-#define ImmConfigureIME  ImmConfigureIMEW
-#else
-#define ImmConfigureIME  ImmConfigureIMEA
-#endif // !UNICODE
 BOOL    WINAPI ImmConfigureIMEA(HKL, HWND, DWORD, LPVOID);
 BOOL    WINAPI ImmConfigureIMEW(HKL, HWND, DWORD, LPVOID);
 #ifdef UNICODE
@@ -217,6 +221,7 @@ DWORD   WINAPI ImmGetConversionListW(HKL, HIMC, LPCWSTR, LPCANDIDATELIST, DWORD 
 #endif // !UNICODE
 
 BOOL    WINAPI ImmNotifyIME(HIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue);
+
 
 BOOL WINAPI ImmGetStatusWindowPos(HIMC, LPPOINT);
 BOOL WINAPI ImmSetStatusWindowPos(HIMC, LPPOINT);
@@ -275,25 +280,8 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define ImmEnumRegisterWord  ImmEnumRegisterWordA
 #endif // !UNICODE
 
-#ifndef _WINUSER_ 
-// the IME related messages
-#define WM_CONVERTREQUESTEX             0x0108
-#define WM_IME_STARTCOMPOSITION         0x010D
-#define WM_IME_ENDCOMPOSITION           0x010E
-#define WM_IME_COMPOSITION              0x010F
-#define WM_IME_KEYLAST                  0x010F
 
-#define WM_IME_SETCONTEXT               0x0281
-#define WM_IME_NOTIFY                   0x0282
-#define WM_IME_CONTROL                  0x0283
-#define WM_IME_COMPOSITIONFULL          0x0284
-#define WM_IME_SELECT                   0x0285
-#define WM_IME_CHAR                     0x0286
-
-#define WM_IME_KEYDOWN                  0x0290
-#define WM_IME_KEYUP                    0x0291
-
-// wParam for WM_IME_CONTROL                 
+// wParam for WM_IME_CONTROL
 #define IMC_GETCANDIDATEPOS             0x0007
 #define IMC_SETCANDIDATEPOS             0x0008
 #define IMC_GETCOMPOSITIONFONT          0x0009
@@ -305,7 +293,11 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define IMC_CLOSESTATUSWINDOW           0x0021
 #define IMC_OPENSTATUSWINDOW            0x0022
 
-#endif /* !_WINUSER_ */
+
+
+
+
+
 
 // wParam for WM_IME_CONTROL to the soft keyboard
 // dwAction for ImmNotifyIME
@@ -318,6 +310,7 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define NI_SETCANDIDATE_PAGESTART       0x0016
 #define NI_SETCANDIDATE_PAGESIZE        0x0017
 
+
 // lParam for WM_IME_SETCONTEXT
 #define ISC_SHOWUICANDIDATEWINDOW       0x00000001
 #define ISC_SHOWUICOMPOSITIONWINDOW     0x80000000
@@ -325,22 +318,26 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define ISC_SHOWUIALLCANDIDATEWINDOW    0x0000000F
 #define ISC_SHOWUIALL                   0xC000000F
 
+
 // dwIndex for ImmNotifyIME/NI_COMPOSITIONSTR
 #define CPS_COMPLETE                    0x0001
 #define CPS_CONVERT                     0x0002
 #define CPS_REVERT                      0x0003
 #define CPS_CANCEL                      0x0004
 
+
 // the modifiers of hot key
 #define MOD_ALT                         0x0001
 #define MOD_CONTROL                     0x0002
 #define MOD_SHIFT                       0x0004
+
 
 #define MOD_LEFT                        0x8000
 #define MOD_RIGHT                       0x4000
 
 #define MOD_ON_KEYUP                    0x0800
 #define MOD_IGNORE_ALL_MODIFIER         0x0400
+
 
 // Windows for Simplified Chinese Edition hot key ID from 0x10 - 0x2F
 #define IME_CHOTKEY_IME_NONIME_TOGGLE           0x10
@@ -369,6 +366,8 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define IME_ITHOTKEY_PREVIOUS_COMPOSITION       0x201
 #define IME_ITHOTKEY_UISTYLE_TOGGLE             0x202
 
+
+
 // parameter of ImmGetCompositionString
 #define GCS_COMPREADSTR                 0x0001
 #define GCS_COMPREADATTR                0x0002
@@ -387,10 +386,13 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define CS_INSERTCHAR                   0x2000
 #define CS_NOMOVECARET                  0x4000
 
+
+
 // bits of fdwInit of INPUTCONTEXT
 // IME version constants
 #define IMEVER_0310                     0x0003000A
 #define IMEVER_0400                     0x00040000
+
 
 // IME property bits
 #define IME_PROP_AT_CARET               0x00010000
@@ -398,18 +400,22 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define IME_PROP_CANDLIST_START_FROM_1  0x00040000
 #define IME_PROP_UNICODE                0x00080000
 
+
 // IME UICapability bits
 #define UI_CAP_2700                     0x00000001
 #define UI_CAP_ROT90                    0x00000002
 #define UI_CAP_ROTANY                   0x00000004
 
+
 // ImmSetCompositionString Capability bits
 #define SCS_CAP_COMPSTR                 0x00000001
 #define SCS_CAP_MAKEREAD                0x00000002
 
+
 // IME WM_IME_SELECT inheritance Capability bits
 #define SELECT_CAP_CONVERSION           0x00000001
 #define SELECT_CAP_SENTENCE             0x00000002
+
 
 // ID for deIndex of ImmGetGuideLine
 #define GGL_LEVEL                       0x00000001
@@ -417,12 +423,14 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define GGL_STRING                      0x00000003
 #define GGL_PRIVATE                     0x00000004
 
+
 // ID for dwLevel of GUIDELINE Structure
 #define GL_LEVEL_NOGUIDELINE            0x00000000
 #define GL_LEVEL_FATAL                  0x00000001
 #define GL_LEVEL_ERROR                  0x00000002
 #define GL_LEVEL_WARNING                0x00000003
 #define GL_LEVEL_INFORMATION            0x00000004
+
 
 // ID for dwIndex of GUIDELINE Structure
 #define GL_ID_UNKNOWN                   0x00000000
@@ -442,6 +450,7 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define GL_ID_PRIVATE_FIRST             0x00008000
 #define GL_ID_PRIVATE_LAST              0x0000FFFF
 
+
 // ID for dwIndex of ImmGetProperty
 #define IGP_GETIMEVERSION               (DWORD)(-4)
 #define IGP_PROPERTY                    0x00000004
@@ -451,10 +460,12 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define IGP_SETCOMPSTR                  0x00000014
 #define IGP_SELECT                      0x00000018
 
+
 // dwIndex for ImmSetCompositionString API
 #define SCS_SETSTR                      (GCS_COMPREADSTR|GCS_COMPSTR)
 #define SCS_CHANGEATTR                  (GCS_COMPREADATTR|GCS_COMPATTR)
 #define SCS_CHANGECLAUSE                (GCS_COMPREADCLAUSE|GCS_COMPCLAUSE)
+
 
 // attribute for COMPOSITIONSTRING Structure
 #define ATTR_INPUT                      0x00
@@ -463,19 +474,21 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define ATTR_TARGET_NOTCONVERTED        0x03
 #define ATTR_INPUT_ERROR                0x04
 
+
 // bit field for IMC_SETCOMPOSITIONWINDOW, IMC_SETCANDIDATEWINDOW
 #define CFS_DEFAULT                     0x0000
 #define CFS_RECT                        0x0001
 #define CFS_POINT                       0x0002
-#define CFS_SCREEN                      0x0004
 #define CFS_FORCE_POSITION              0x0020
 #define CFS_CANDIDATEPOS                0x0040
 #define CFS_EXCLUDE                     0x0080
+
 
 // conversion direction for ImmGetConversionList
 #define GCL_CONVERSION                  0x0001
 #define GCL_REVERSECONVERSION           0x0002
 #define GCL_REVERSE_LENGTH              0x0003
+
 
 // bit field for conversion mode
 #define IME_CMODE_ALPHANUMERIC          0x0000
@@ -494,11 +507,13 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define IME_CMODE_EUDC                  0x0200
 #define IME_CMODE_SYMBOL                0x0400
 
+
 #define IME_SMODE_NONE                  0x0000
 #define IME_SMODE_PLAURALCLAUSE         0x0001
 #define IME_SMODE_SINGLECONVERT         0x0002
 #define IME_SMODE_AUTOMATIC             0x0004
 #define IME_SMODE_PHRASEPREDICT         0x0008
+
 
 // style of candidate
 #define IME_CAND_UNKNOWN                0x0000
@@ -508,7 +523,7 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define IME_CAND_RADICAL                0x0004
 #define IME_CAND_STROKE                 0x0005
 
-#ifndef _WINUSER_
+
 // wParam of report message WM_IME_NOTIFY
 #define IMN_CLOSESTATUSWINDOW           0x0001
 #define IMN_OPENSTATUSWINDOW            0x0002
@@ -524,16 +539,18 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define IMN_SETSTATUSWINDOWPOS          0x000C
 #define IMN_GUIDELINE                   0x000D
 #define IMN_PRIVATE                     0x000E
-#endif
+
 
 // error code of ImmGetCompositionString
 #define IMM_ERROR_NODATA                (-1)
 #define IMM_ERROR_GENERAL               (-2)
 
+
 // dialog mode of ImmConfigureIME
 #define IME_CONFIG_GENERAL              1
 #define IME_CONFIG_REGISTERWORD         2
 #define IME_CONFIG_SELECTDICTIONARY     3
+
 
 // dialog mode of ImmEscape
 #define IME_ESC_QUERY_SUPPORT           0x0003
@@ -550,10 +567,12 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 #define IME_ESC_HANJA_MODE              0x1008
 #define IME_ESC_AUTOMATA                0x1009
 
+
 // style of word registration
 #define IME_REGWORD_STYLE_EUDC          0x00000001
 #define IME_REGWORD_STYLE_USER_FIRST    0x80000000
 #define IME_REGWORD_STYLE_USER_LAST     0xFFFFFFFF
+
 
 // type of soft keyboard
 // for Windows Tranditional Chinese Edition
@@ -561,8 +580,11 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR lpszReading
 // for Windows Simplified Chinese Edition
 #define SOFTKEYBOARD_TYPE_C1            0x0002
 
+
 #ifdef __cplusplus
 }
 #endif
 
+
+#pragma option -b.
 #endif  // _IMM_

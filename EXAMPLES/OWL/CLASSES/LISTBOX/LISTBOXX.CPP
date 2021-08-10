@@ -61,6 +61,9 @@ class TListBoxWindow : public TWindow {
     TStatic*  SelCount;                // # of selected items.
     TStatic*  SelStrings;              // first 3 selected strings.
     TStatic*  SelIndexes;              // first 3 indexes.
+#if defined(WIN32)
+    TStatic*  AnchorIndex;             // First item of multiselect.
+#endif
 
     int       WhichListBox;            // current ListBox.
 
@@ -142,9 +145,15 @@ TListBoxWindow::TListBoxWindow(TWindow* parent)
   new TStatic(this, -1, "First 3 selected strings:",  200, 186, 184, 18, 25);
   SelStrings = new TStatic(this, -1, " ",  392, 186, 158, 18, 35);
 
-  new TStatic(this, -1, "Indexes of first 3 selected strings:",  200, 208,
+  new TStatic(this, -1, "Indices of first 3 selected strings:",  200, 208,
               200, 18, 25);
   SelIndexes = new TStatic(this, -1, " ",  392, 208, 158, 18, 25);
+
+#if defined(WIN32)
+  new TStatic( this, -1, "Index of first item:", 200, 230, 184, 18, 25 );
+  AnchorIndex = new TStatic(this, -1, " ", 392, 230, 158, 18, 10 );
+#endif
+  
 }
 
 //
@@ -460,6 +469,17 @@ TListBoxWindow::UpdateTextFields()
         }
         SelIndexes->SetText( buf2 );
       }
+
+#if defined(WIN32)
+      // Display index of first selected item
+      //
+      int num = ListBox->GetAnchorIndex();
+      if( num != LB_ERR )  {
+        char buf[16];
+        wsprintf( buf, "%d", num );
+        AnchorIndex->SetText( buf );
+      }
+#endif
       delete strs[0];
       delete strs[1];
       delete strs[2];
@@ -509,6 +529,9 @@ TListBoxWindow::ResetTextFields()
   SelCount->SetText(" ");
   SelStrings->SetText(" ");
   SelIndexes->SetText(" ");
+#if defined(WIN32)
+  AnchorIndex->SetText(" ");
+#endif
 }
 
 //

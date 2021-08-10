@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.12  $
+//$Revision:   10.16  $
 //
 // Implementation for TBrush GDI Brush object. Includes cache for solid brushes
 //----------------------------------------------------------------------------
@@ -12,6 +12,7 @@
 # include <owl/gdiobjec.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 
 #define CACHE_SIZE 8
@@ -128,7 +129,11 @@ TBrushCache::Lookup(COLORREF color)
 //
 // Static instance of the brush cache used by TBrush
 //
-static TBrushCache BrushCache;
+static TBrushCache& GetBrushCache() 
+{
+  static TBrushCache BrushCache;
+  return BrushCache;
+};
 
 //
 // Constructors
@@ -162,14 +167,14 @@ TBrush::TBrush(const TColor& color)
 #endif
   {
     COLORREF cr = color;
-    if ((Handle = BrushCache.Lookup(cr)) != 0)
+    if ((Handle = GetBrushCache().Lookup(cr)) != 0)
       return;
     Handle = ::CreateSolidBrush(cr);
   }
   WARNX(OwlGDI, !Handle, 0, "Cannot create solid TBrush " << hex << color);
   CheckValid();
 
-  BrushCache.Add(Handle, color);
+  GetBrushCache().Add(Handle, color);
 
   TRACEX(OwlGDI, OWL_CDLEVEL, "TBrush constructed @" << (void*)this <<
                               " with color " << (COLORREF)color);

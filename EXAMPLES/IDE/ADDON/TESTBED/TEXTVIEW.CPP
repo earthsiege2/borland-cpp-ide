@@ -3,7 +3,7 @@
   textview.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.13  $
+  $Revision:   1.16  $
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
@@ -86,7 +86,7 @@ TextViewClient::QueryInterface (REFIID riid, LPVOID FAR* ppobj)
     *ppobj = NULL;
     return ResultFromScode(E_NOINTERFACE);
   }
-  ((LPUNKNOWN)*ppobj)->AddRef();
+  AddRef();
   return NOERROR;
 }
 
@@ -393,7 +393,7 @@ TextViewFactory::QueryInterface (REFIID riid, LPVOID FAR* ppobj)
   if ((riid == IID_IUnknown))
   {
     *ppobj = (LPVOID)this;
-    ((LPUNKNOWN)*ppobj)->AddRef();
+    AddRef();
     return NOERROR;
   }
 

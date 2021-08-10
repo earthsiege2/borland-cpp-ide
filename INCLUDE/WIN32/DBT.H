@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- *  (C) Copyright MICROSOFT Corp., 1993-1995
+ *  Copyright (c) 1993-1996 Microsoft Corporation
  *
  *  Title:      DBT.H - Equates for WM_DEVICECHANGE and BroadcastSystemMessage
  *
@@ -21,9 +21,12 @@
 
 #ifndef _DBT_H
 #define	_DBT_H
+#pragma option -b
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 /*
@@ -358,7 +361,10 @@ struct _DEV_BROADCAST_USERDEFINED { /* */
 };
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif	// _DBT_H

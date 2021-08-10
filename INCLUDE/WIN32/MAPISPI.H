@@ -4,31 +4,45 @@
  *  Defines the calls and structures exchanged between MAPI or the spooler
  *  and the MAPI service providers
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef MAPISPI_H
 #define MAPISPI_H
+#pragma option -b
+
 /* Include common MAPI header files if they haven't been already. */
 #ifndef MAPIDEFS_H
+#pragma option -b.
 #include <mapidefs.h>
+#pragma option -b
 #endif
 #ifndef MAPICODE_H
+#pragma option -b.
 #include <mapicode.h>
+#pragma option -b
 #endif
 #ifndef MAPIGUID_H
+#pragma option -b.
 #include <mapiguid.h>
+#pragma option -b
 #endif
 #ifndef MAPITAGS_H
+#pragma option -b.
 #include <mapitags.h>
+#pragma option -b
 #endif
 
 #if defined (WIN16) || defined (DOS) || defined (DOS16)
+#pragma option -b.
 #include <storage.h>
+#pragma option -b
 #endif
 
-#ifdef __BORLANDC__
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 #ifndef BEGIN_INTERFACE
@@ -928,8 +942,11 @@ typedef MSGSERVICEENTRY FAR *LPMSGSERVICEENTRY;
 }
 #endif
 
-#ifdef __BORLANDC__
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif /* MAPISPI_H */

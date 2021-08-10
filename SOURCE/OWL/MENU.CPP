@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.9  $
+//$Revision:   10.13  $
 //
 // Implementation of classes TMenu and TXMenu, Window Menu encapsulation class
 // and its associated exception
@@ -15,6 +15,7 @@
 # include <owl/module.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMenu, 1, 0); // diag. group for menus
 DIAG_DECLARE_GROUP(OwlWin);                     // diag. group for windows
 
@@ -174,13 +175,6 @@ TMenu::GetMenuItemID(int pos) const
     return id;
   }
 
-  // Skip separators 
-  //
-  uint state = GetMenuState(pos, MF_BYPOSITION);
-  if (state & MF_SEPARATOR) {
-    TRACEX(OwlWin, 1, "MenuItem at " << pos << "is a separator, id=0");
-    return 0;
-  }
 
   // Try to retrieve a pop-up menu handle
   //
@@ -449,7 +443,7 @@ TPopupMenu::TPopupMenu(HMENU handle, TAutoDelete autoDelete)
 //
 // Create a popup menu from an existing menu.
 //
-TPopupMenu::TPopupMenu(TMenu& menu, TAutoDelete autoDelete)
+TPopupMenu::TPopupMenu(const TMenu& menu, TAutoDelete autoDelete)
 :
   TMenu(::CreatePopupMenu(), autoDelete)
 {

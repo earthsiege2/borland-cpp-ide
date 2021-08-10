@@ -134,10 +134,10 @@ class _DBAWARECLASS TDBEdit : public TDBControl {
     DECLARE_SOURCE( OnMouseUp,   TDBEditMouse );
 
     // Event Handlers
-    EVENT( OnClick,    TDBControl,  TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl,  TDragEvent );
-    EVENT( OnDragOver, TDBControl,  TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl,  TDragEvent );
+    DECLARE_DB_EVENT( OnClick,     TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop,  TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver,  TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,   TDragEvent );
     DECLARE_DB_EVENT( OnChange,    TNotifyEvent );
     DECLARE_DB_EVENT( OnDblClick,  TNotifyEvent );
     DECLARE_DB_EVENT( OnEnter,     TNotifyEvent );
@@ -159,11 +159,11 @@ class _DBAWARECLASS TDBEdit : public TDBControl {
 
 // Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBEdit )
-DEFINE_DB_PROP_STRING( TDBEdit, FontName );
-DEFINE_DB_PROP_STRING( TDBEdit, Caption );
-DEFINE_DB_PROP_STRING( TDBEdit, PasswordChar );
-DEFINE_DB_PROP_STRING( TDBEdit, SelText );
+DEFINE_DB_PROP_DATAFIELD( TDBEdit, _TDBEdit )
+DEFINE_DB_PROP_STRING( TDBEdit, _TDBEdit, FontName );
+DEFINE_DB_PROP_STRING( TDBEdit, _TDBEdit, Caption );
+DEFINE_DB_PROP_STRING( TDBEdit, _TDBEdit, PasswordChar );
+DEFINE_DB_PROP_STRING( TDBEdit, _TDBEdit, SelText );
 
 // Methods
 inline void TDBEdit::Clear()

@@ -3,25 +3,31 @@
  *
  * function(s)
  *        getenv - get string from environment
+ *        _wgetenv - get wide-character string from environment
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.6  $        */
 
 #include <stdlib.h>
 #include <string.h>
 #include <_process.h>
+#include <tchar.h>
+#include <_tchar.h>
+#include <_ostype.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            getenv - get string from environment
+Name            getenv, _wgetenv - get string from environment
 
 Usage           char *getenv(const char *envvar);
+		whar_t *_wgetenv(const wchar_t *envvar);
 
 Prototype in    stdlib.h
 
@@ -37,28 +43,39 @@ Description     The environment consists of a series of entries that
 
                 The string  comparison is NOT case-sensitive.
 
-Return value    On  success,   getenv  returns  a  pointer   to  the  value
+Return value    On  success, getenv and _wgetenv return a pointer to the value
                 associated with envvar.
 
 *---------------------------------------------------------------------------*/
 
-char * _RTLENTRYF _EXPFUNC getenv(const char *nameP)
+_TCHAR * _RTLENTRY _EXPFUNC _tgetenv(const _TCHAR *nameP)
 {
-    char  **envP;
+#if defined(_UNICODE)
+    if (_ostype & _WINNT)
+    {
+#endif
+    _TCHAR  **envP;
     int   len;
 
-    len = strlen(nameP);            /* save length of name */
+    len = _tcslen(nameP);            /* save length of name */
+    if (len == 0)
+        return NULL;
 
-    _lock_env();                    /* lock out other users of 'environ' */
+    _tlock_env();                    /* lock out other users of 'environ' */
 
-    for (envP = environ; *envP != NULL; envP++)
-        if (strnicmp(*envP,nameP,len) == 0 && (*envP)[len] == '=')
+    for (envP = _tenviron; *envP != NULL; envP++)
+        if (_tcsnicmp(*envP,nameP,len) == 0 && (*envP)[len] == _TEXT('='))
             break;
 
-    _unlock_env();
+    _tunlock_env();
 
     if (*envP)
         return ((*envP)+len+1);     /* point past the '=' */
     else
         return (NULL);
+#if defined(_UNICODE)
+    }
+    else
+        return NULL;
+#endif
 }

@@ -4,6 +4,7 @@
 #ifndef WORKSHOP_INVOKED
   #include <windows.h>
 #endif
+#include <owl\except.rc>
 #include "mcisound.h"
 
 ID_MENU MENU

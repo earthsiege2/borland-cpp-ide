@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Implementation of class TPrintDialog, a Print and PrintSetup common Dialog
 // encapsulation
@@ -15,6 +15,8 @@
 #if !defined(OWL_DC_H)
 # include <owl/dc.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -378,6 +380,7 @@ TPrintDialog::TData::TransferDC()
 //
 // Read the persistent object from the stream.
 //
+#pragma warn -par               // version param unused in 16-bit
 void*
 TPrintDialog::TData::Read(ipstream& is, uint32 version)
 {
@@ -421,6 +424,7 @@ TPrintDialog::TData::Read(ipstream& is, uint32 version)
 
   return this;
 }
+#pragma warn .par
 
 //
 // Write the object to a peristent stream.

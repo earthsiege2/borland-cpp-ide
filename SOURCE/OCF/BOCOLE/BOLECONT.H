@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.1  $
+// $Revision:   2.2  $
 //
 //  Implements the server helper for documents by masquerading as the 
 //  container object. Provides plumbing for server linking to documents 

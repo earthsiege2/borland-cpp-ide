@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.2  $
+//$Revision:   5.5  $
 //
 // Provides generic definitions preceeding the declaration the classes of
 // the ClassLibrary, ObjectComponents and ObjectWindows

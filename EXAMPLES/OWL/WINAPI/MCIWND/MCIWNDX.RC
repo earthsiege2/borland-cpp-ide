@@ -6,7 +6,7 @@
 #include <owl/except.rc>
 #include "mciwndx.h"
 
-ID_APPMENU MENU 
+IDM_APPMENU MENU 
 {
  POPUP "&MCIWnd"
  {

@@ -227,7 +227,6 @@ TRichEdFrame::CmFilePrintPreview()
                                      *Edit, printout.GetTitle(),
                                       new TLayoutWindow(0));
     prevW->Execute();
-    delete prevW;
   }
 }
 

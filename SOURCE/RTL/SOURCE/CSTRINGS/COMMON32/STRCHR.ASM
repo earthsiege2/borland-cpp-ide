@@ -1,13 +1,15 @@
 ;[]-----------------------------------------------------------------[]
 ;|   STRCHR.ASM -- scans a string for the first occurrence of a      |
+;|                 given character                                   |
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.4  $
 
         include RULES.ASI
 
@@ -17,28 +19,29 @@ Header@
 
 ;-----------------------------------------------------------------------
 ;
-;Name            strchr - scans a string for the first occurrence of a
-;                         given character
+;Name		strchr - scans a string for the first occurrence of a
+;		         given character
 ;
-;Usage           char *strchr(const char *str, int c);
+;Usage		char *strchr(const char *str, int c);
 ;
-;Prototype in    string.h
+;Prototype in	string.h
 ;
-;Description     strchr scans a string in the forward direction, looking for a
-;                specific character. strchr finds the first occurrence of the
-;                character ch in the string str.
+;Description	strchr scans a string in the forward direction, looking for a
+;		specific character. strchr finds the first occurrence of the
+;		character ch in the string str.
 ;
-;                The null-terminator is considered
-;                to be part of the string, so that, for example
+;		The null-terminator is considered to be a part of the string,
+;		so that, for example
 ;
-;                        strchr(strs, 0)
+;			strchr(strs, 0)
 ;
-;                returns a pointer to the terminating null character of the
-;                string "strs".
+;		returns a pointer to the terminating null character of the
+;		string "strs".  This implementation has been optimized
+;		for the Pentium processor.
 ;
-;Return value    strchr  returns a pointer to the first occurrence of the
-;                character ch in str; if ch does not occur in str, strchr
-;                returns NULL.
+;Return value	strchr  returns a pointer to the first occurrence of the
+;		character ch in str; if ch does not occur in str, strchr
+;		returns NULL.
 ;
 ;-----------------------------------------------------------------------
 
@@ -46,28 +49,63 @@ Code_seg@
 
 Func@   strchr, _EXPFUNC, _RTLENTRYF, <pointer strng>, <int c>
 
-        Link@   edi
-        mov     edi,strng       ; get source string
-        mov     edx,edi         ; save in edx
-        mov     ecx,-1
-        xor     al,al           ; search for null at end of source string
-        cld
-        repne   scasb           ; scan one character past null
-        not     ecx             ; ecx = no. of characters including null
-        mov     edi,edx         ; get destination buffer back
-        mov     al,c            ; get char to search for
-        repne   scasb           ; search for it
-        jne     notfound        ; didn't find it
-        lea     eax,[edi-1]     ; back up pointer to found character
-return:
-        Unlink@ edi
-        Return@
+	Link@   ebx
+	mov     edx,strng	; get source string
+	mov     ecx,edx		; save in edx
+	mov     al, c		; search for character
+	cld
+
+Again:
+	mov     bl, [edx]
+	cmp     al, bl
+	je      Found0
+	test    bl, bl
+	jz      notfound
+
+	mov     bl, [edx+1]
+	cmp     al, bl
+	je      Found1
+	test    bl, bl
+	jz      notfound
+
+	mov     bl, [edx+2]
+	cmp     al, bl
+	je      Found2
+	test    bl, bl
+	jz      notfound
+
+	mov     bl, [edx+3]
+	cmp     al, bl
+	je      Found3
+	add     edx, 4
+	test    bl, bl
+	jnz     Again
+
 notfound:
-        xor     eax, eax        ; not found, return NULL
-        jmp     return
+	xor     eax, eax
+	jmp     return
+
+Found0:
+	mov     eax, edx
+	jmp     return
+
+Found1:
+	lea     eax, [edx+1]
+	jmp     return
+
+Found2:
+	lea     eax, [edx+2]
+	jmp     return
+
+Found3:
+	lea     eax, [edx+3]
+
+return:
+	Unlink@ ebx
+	Return@
 
 EndFunc@ strchr
+
 Code_EndS@
 
-        end
-
+	end

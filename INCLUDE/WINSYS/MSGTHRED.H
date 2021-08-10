@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.12  $
 //
 // Definition of message queue oriented thread class support. Degenerates to a
 // simple message queue owner under non-threaded environments
@@ -18,6 +18,10 @@
 #endif
 #if !defined(WINSYS_WSYSINC_H)
 #  include <winsys/wsysinc.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //
@@ -62,7 +66,7 @@ class _WSYSCLASS TMsgThread
        ~TQueueLock();
         void Release(bool relinquish = false);
       private:
-        char Lock[sizeof(TMutex::TLock)];
+        _TCHAR Lock[sizeof(TMutex::TLock)];
         bool Locked;
     };
 #endif
@@ -91,7 +95,7 @@ class _WSYSCLASS TMsgThread
        ~TAppMutex();
         TMutex* GetMutex();
       private:
-        char Mutex[sizeof(TMutex)];
+        char* Mutex[sizeof(TMutex)];
     };
 
     TAppMutex     Mutex;                // Mutex to prevent multiple threads
@@ -101,6 +105,10 @@ class _WSYSCLASS TMsgThread
     bool          UseMutex;
 #endif
 };
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib 
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -142,8 +150,13 @@ inline TMutex* TMsgThread::GetMutex()
 //
 inline TMsgThread::TAppMutex::TAppMutex()
 {
-  if (TSystem::SupportsThreads())
+  if (TSystem::SupportsThreads()) {
+#if defined(BI_NAMESPACE)
+    ClassLib::new(Mutex) TMutex;
+#else
     new(Mutex) TMutex;
+#endif
+  }
 }
 
 //
@@ -174,9 +187,13 @@ inline TMutex* TMsgThread::TAppMutex::GetMutex()
 inline TMsgThread::TQueueLock::TQueueLock(TMsgThread& app)
 {
   TMutex* appMutex = app.GetMutex();
-  Locked = appMutex;
+  Locked = appMutex ? true : false;
   if (Locked)
+#if defined(BI_NAMESPACE)
+    ClassLib::new(Lock) TMutex::TLock(*appMutex);
+#else
     new(Lock) TMutex::TLock(*appMutex);
+#endif
 }
 
 //
@@ -188,7 +205,6 @@ inline TMsgThread::TQueueLock::~TQueueLock()
 #if defined(BI_COMP_MSC)
     REINTERPRET_CAST(TMutex::TLock*,Lock)->~TLock();
 #else
-//    REINTERPRET_CAST(TMutex::TLock*,AppLock)->TMutex::TLock::~TLock();
     REINTERPRET_CAST(TMutex::TLock*,Lock)->TMutex::Lock::~Lock();
 #endif
 }

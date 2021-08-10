@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.9  $
 //
 // Definition of class TNoteTab
 //----------------------------------------------------------------------------
@@ -22,6 +22,13 @@
 #endif
 #if !defined(CLASSLIB_VECTIMP_H)
 # include <classlib/vectimp.h>
+#endif
+#if !defined(OWL_COMMCTRL_H)
+# include <owl/commctrl.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -92,10 +99,6 @@ class _OWLCLASS TNoteTab : public TControl {
     bool        SetItem(int index, const TNoteTabItem& item);
     bool        IsVisible(int index) const;
 
-    // Set/Query attributes of control window
-    //
-    void        AdjustRect(bool clientInWindowOut, TRect& rect);
-
     // Set/Query buddy window
     //
     HWND        GetBuddy() const;
@@ -119,6 +122,9 @@ class _OWLCLASS TNoteTab : public TControl {
     void        EvLButtonDown(uint modKeys, TPoint& point);
     uint        EvGetDlgCode(MSG far* msg);
     void        EvKeyDown(uint key, uint repeatCount, uint flags);
+    void        EvSetFocus(THandle hWndLostFocus);
+    void        EvKillFocus(THandle hwndGetFocus);
+
 
     // Routines handling underlying implementation
     //
@@ -132,7 +138,7 @@ class _OWLCLASS TNoteTab : public TControl {
     void        GetScrollerArea(TRect& rect);
     void        NotifyAndSelect(int index);
 
-  protected_data:    
+  protected_data:
     bool        WindowFace;         // Active tab should use window color
     bool        Style3d;            // Draw with 3d style
     int         TopMargin;          // amount of space to res
@@ -151,12 +157,18 @@ class _OWLCLASS TNoteTab : public TControl {
     int         SelectedTab;
     TCVectorImp<TNoteTabItem*>* TabList;
 
+    void        DrawFocusRect(TDC& dc);
+    
   DECLARE_RESPONSE_TABLE(TNoteTab);
 };
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

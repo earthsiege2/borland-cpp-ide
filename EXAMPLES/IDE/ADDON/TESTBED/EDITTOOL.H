@@ -3,7 +3,7 @@
   edittool.h
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.10  $
+  $Revision:   1.13  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __EDITTOOL_H

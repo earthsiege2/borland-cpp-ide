@@ -1,3 +1,4 @@
+#pragma option -b
 /***
 *w32sut.h -
 *
@@ -11,9 +12,9 @@
 ****/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1994, 1996 by Borland International
+ *      Copyright (c) 1994, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -41,7 +42,9 @@ extern "C" {
 #ifdef W32SUT_32
 
 #ifndef __WINBASE_H
+#pragma option -b.
 #include <winbase.h>
+#pragma option -b
 #endif
 
 typedef DWORD  ( WINAPI * UT32PROC)( LPVOID lpBuff,
@@ -82,3 +85,4 @@ LPVOID  WINAPI  UTSelectorOffsetToLinear(LPBYTE lpByte);
 #if defined(__cplusplus)
 }
 #endif
+#pragma option -b.

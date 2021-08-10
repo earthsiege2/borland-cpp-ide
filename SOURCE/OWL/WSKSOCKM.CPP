@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.11  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
@@ -11,6 +11,8 @@
 #if !defined(OWL_WINSOCK_H)
 # include <owl/winsock.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Default constructor. Initializes all data members to 0.
@@ -84,7 +86,7 @@ int TSocketManager::Startup()
 {
    uint16 packedValues = (uint16)(((uint16)VersionMinor) << 8) |
                          (uint16)VersionMajor;
-   LastError = TWinSock::Dll()->WSAStartup(packedValues, &SocketInfo);
+   LastError = TWinSockDll::WSAStartup(packedValues, &SocketInfo);
    if (LastError)
      return WINSOCK_ERROR;
 
@@ -104,8 +106,8 @@ int TSocketManager::Startup()
 //
 int TSocketManager::ShutDown()
 {
-  if (TWinSock::Dll()->WSACleanup()) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+  if (TWinSockDll::WSACleanup()) {
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   StartupCount--;

@@ -2,7 +2,7 @@
 // Borland Services Library
 // Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
 //
-//$Revision:   5.13  $
+//$Revision:   5.20  $
 //
 // Reliable platform independent header for common memory and string functions
 //
@@ -21,6 +21,9 @@
 #if !defined(__STRING_H) && !defined(_INC_STRING)
 # include <string.h>
 #endif
+#if !defined(__TCHAR_H)
+# include <tchar.h>
+#endif
 
 #if !defined(SERVICES_WSYSINC_H)
 # include <services/wsysinc.h>
@@ -31,25 +34,40 @@
 // To support double-byte and extended characters, map the standard string
 // functions to the windows calls (but not if they are macros)
 //
-inline int _RTLENTRYF strcmp(const char far* s1, const char far* s2)
+# if defined(_Windows)
+inline int _RTLENTRYF _tcscmp(const _TCHAR far* s1, const _TCHAR far* s2)
                    {return lstrcmp(s1, s2);}
-inline int _RTLENTRYF stricmp(const char far* s1, const char far* s2)
+inline int _RTLENTRYF _tcsicmp(const _TCHAR far* s1, const _TCHAR far* s2)
                    {return lstrcmpi(s1, s2);}
-#if !defined(strcmpi)
-inline int       strcmpi(const char far* s1, const char far* s2)
+#   if !defined(strcmpi)
+inline int       strcmpi(const _TCHAR far* s1, const _TCHAR far* s2)
                    {return lstrcmpi(s1, s2);}
-#endif
+#   endif //strcmpi
+# else    //This is DOS
+inline int _RTLENTRYF _tcscmp(const _TCHAR far* s1, const _TCHAR far* s2)
+                   {return strcmp(s1, s2);}
+inline int _RTLENTRYF _tcsicmp(const _TCHAR far* s1, const _TCHAR far* s2)
+                   {return strcmpi(s1, s2);}
+#   if !defined(strcmpi)
+inline int       strcmpi(const _TCHAR far* s1, const _TCHAR far* s2)
+                   {return strcmpi(s1, s2);}
+#   endif
+# endif //_Windows
 #endif //BI_PLAT_MSW
 
 #if defined(BI_DBCS_SUPPORT)
-  inline uint      CharSize(const char far* s) {return ::AnsiNext(s) - s;}
+  inline uint      CharSize(const _TCHAR far* s) {return ::AnsiNext(s) - s;}
 #else
-  inline uint      CharSize(const char far*) {return sizeof(char);}
+  inline uint      CharSize(const _TCHAR far*) {return sizeof(_TCHAR);}
 #endif
 
 #if defined(BI_PLAT_MSW)
-inline char CharUpper(char c) {::AnsiUpperBuff(&c,1); return c;}
-inline char CharLower(char c) {::AnsiLowerBuff(&c,1); return c;}
+inline _TCHAR CharUpper(_TCHAR c) {::AnsiUpperBuff(&c,1); return c;}
+inline _TCHAR CharLower(_TCHAR c) {::AnsiLowerBuff(&c,1); return c;}
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //
@@ -161,6 +179,10 @@ template<class T> inline T far* TBidirCharIterator<T>::operator --(int) // postf
   return p;
 }
 
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
+
 //
 // Inline versions of memory.h & string.h functions, overloaded for far ptrs
 // for use when in a near data model.
@@ -181,25 +203,25 @@ template<class T> inline T far* TBidirCharIterator<T>::operator --(int) // postf
   inline void far* memmove(void far* d, const void far* s, size_t n)
                      {return _fmemmove(d, s, n);}
 
-  inline char far* strcat(char far* d, const char far* s)
+  inline _TCHAR far* _tcscat(_TCHAR far* d, const _TCHAR far* s)
                      {return _fstrcat(d, s);}
-  inline char far* strchr(const char far* s, int c) {return _fstrchr(s, c);}
-  inline char far* strcpy(char far* d, const char far* s)
+  inline _TCHAR far* _tcschr(const _TCHAR far* s, int c) {return _fstrchr(s, c);}
+  inline _TCHAR far* _tcscpy(_TCHAR far* d, const _TCHAR far* s)
                      {return _fstrcpy(d, s);}
-  inline size_t    strlen(const char far* s) {return _fstrlen(s);}
-  inline char far* strlwr(char far* s) {return _fstrlwr(s);}
-  inline char far* strncat(char far* d, const char far* s, size_t maxlen)
+  inline size_t    _tcslen(const _TCHAR far* s) {return _fstrlen(s);}
+  inline _TCHAR far* _tcslwr(_TCHAR far* s) {return _fstrlwr(s);}
+  inline _TCHAR far* strncat(_TCHAR far* d, const _TCHAR far* s, size_t maxlen)
                      {return _fstrncat(d, s, maxlen);}
-  inline int       strncmp(const char far* s1, const char far* s2, size_t maxlen)
+  inline int       _tcsncmp(const _TCHAR far* s1, const _TCHAR far* s2, size_t maxlen)
                      {return _fstrncmp(s1, s2, maxlen);}
-  inline char far* strncpy(char far* d, const char far* s, size_t maxlen)
+  inline _TCHAR far* _tcsncpy(_TCHAR far* d, const _TCHAR far* s, size_t maxlen)
                      {return _fstrncpy(d, s, maxlen);}
-  inline int       strnicmp(const char far* s1, const char far* s2, size_t maxlen)
+  inline int       _tcsnicmp(const _TCHAR far* s1, const _TCHAR far* s2, size_t maxlen)
                      {return _fstrnicmp(s1, s2, maxlen);}
-  inline char far* strrchr(const char far* s, int c) {return _fstrrchr(s, c);}
-  inline char far* strtok(char far* s1, const char far* s2)
+  inline _TCHAR far* _tcsrchr(const _TCHAR far* s, int c) {return _fstrrchr(s, c);}
+  inline _TCHAR far* _tcstok(_TCHAR far* s1, const _TCHAR far* s2)
                      {return _fstrtok(s1, s2);}
-  inline char far* strupr(char far* s) {return _fstrupr(s);}
+  inline _TCHAR far* _tcsupr(_TCHAR far* s) {return _fstrupr(s);}
 #endif
 
 //
@@ -215,11 +237,11 @@ template<class T> inline T far* TBidirCharIterator<T>::operator --(int) // postf
 // strings to be deleted[].
 // Also a far string version of atol for near data models
 //
-char* _SVCSFUNC strnewdup(const char* s, size_t minAllocSize = 0);
+_TCHAR* _SVCSFUNC strnewdup(const _TCHAR* s, size_t minAllocSize = 0);
 #if defined(BI_DATA_NEAR)
-  char far* _SVCSFUNC strnewdup(const char far* s, size_t minAllocSize = 0);
-  char* _SVCSFUNC nstrnewdup(const char far* s, size_t minAllocSize = 0);
-  long atol(const char far* s);
+  _TCHAR far* _SVCSFUNC strnewdup(const _TCHAR far* s, size_t minAllocSize = 0);
+  _TCHAR* _SVCSFUNC nstrnewdup(const _TCHAR far* s, size_t minAllocSize = 0);
+  long atol(const _TCHAR far* s);
 #else
 # define nstrnewdup strnewdup
 #endif
@@ -230,8 +252,8 @@ char* _SVCSFUNC strnewdup(const char* s, size_t minAllocSize = 0);
 #   define _WCHAR_T_DEFINED
 # endif
   wchar_t* _SVCSFUNC strnewdup(const wchar_t* s, size_t minAllocSize = 0);
-  wchar_t* _SVCSFUNC strcpy(wchar_t* dst, const wchar_t* src);
-  size_t   _SVCSFUNC strlen(const wchar_t* s);
+  wchar_t* _SVCSFUNC _tcscpy(wchar_t* dst, const wchar_t* src);
+  size_t   _SVCSFUNC _tcslen(const wchar_t* s);
 #endif
 
 #endif  // SERVICES_MEM_H

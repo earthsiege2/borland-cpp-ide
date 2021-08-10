@@ -3,7 +3,7 @@
   toolsrvr.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.15  $
+  $Revision:   1.19  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __AOEXPCH_H
@@ -255,9 +255,33 @@ void ProjectToolClient::CloseNotify()
     {
     _currentProject->Release();
     _currentProject = NULL;
-    _toolTestB->RemoveTool();
+//
+//     It turns out that this is a bad place to remove tools. In earlier
+//     versions of BCW, this event was being fired off too early, when a 
+//     project close could still be aborted by the user. Now, removing 
+//     the tool here has no effect, since it's too late for the toolset
+//     to be updated. Also, this wouldn't prevent the tools from being
+//     saved with the project if the user explicitly performs a project
+//     save without a project close. So, we use a new interface, 
+//     IProjectSaveClient to trigger the tool remove.
+//
+//     _toolTestB->RemoveTool();
     }
   }
+  
+void ToolTestB::BeforeSaveNotify() {
+  //
+  // Don't let the add-on tool be saved with the project.
+  //
+  RemoveTool();
+}
+void ToolTestB::AfterSaveNotify() {
+  //
+  // Put it back, since the project doesn't always close after a save.
+  //
+  AddTool();
+}
+  
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -268,49 +292,55 @@ void ProjectToolClient::CloseNotify()
 //.............................................................................
 // Make a project client so we can add a tool when a project opens.
 //
-ToolTestB::ToolTestB() 
-  {
+ToolTestB::ToolTestB() : IUNKNOWNIMPL_INIT( IProjectSaveClient ) {
   _toolServer = NULL;
   _projectClient = NULL;
   _projectServer = NULL;
 
   _toolServer = GET_INTERFACE(IToolServer);
-  if ( _toolServer ) 
-    {
+  if ( _toolServer ) {
     _projectServer = GET_INTERFACE( IProjectServer );
-    if ( _projectServer )
-      {
+    if ( _projectServer ) {
       _projectClient = new ProjectToolClient( this );
-      if ( _projectClient )
-        {
-       _projectClient->AddRef();
+      if ( _projectClient ) {
+        _projectClient->AddRef();
         _projectServer->RegisterProjectClient( _projectClient );
-        }
+      }
+      IProjectServer2 * ps2 = GET_INTERFACE( IProjectServer2 );
+      if ( ps2 ) {  // this interface not availabe in BCW versions < 5.01
+        AddRef();
+        ps2->RegisterProjectSaveClient( this );
+        ps2->Release();
       }
     }
   }
+}
 
 //.............................................................................
-ToolTestB::~ToolTestB() 
-  {
-  if ( _projectClient ) 
-    {
-    if ( _projectServer ) 
-      {
-    _projectClient->AddRef();
+ToolTestB::~ToolTestB() {
+  if ( _projectClient ) {
+    if ( _projectServer ) {
+      _projectClient->AddRef();
       _projectServer->UnregisterProjectClient( _projectClient );
+      IProjectServer2 * ps2 = GET_INTERFACE( IProjectServer2 );
+      if ( ps2 ) {  // this interface not availabe in BCW versions < 5.01
+        AddRef();
+        ps2->UnregisterProjectSaveClient( this );
+        ps2->Release();
       }
-    _projectClient->Release();
-   _projectClient = 0;
     }
-
-  if ( _projectServer ) 
-    _projectServer->Release();
-
-  if ( _toolServer ) 
-    _toolServer->Release();
+    _projectClient->Release();
+    _projectClient = 0;
   }
 
+  if ( _projectServer ) {
+    _projectServer->Release();
+  }
+
+  if ( _toolServer ) {
+    _toolServer->Release();
+  }
+}
 //.............................................................................
 BOOL ToolTestB::Init() 
   {
@@ -491,4 +521,3 @@ void ToolTestB::RemoveTool()
     OutStr( "TestTool1 not found" );
     }
   }
-

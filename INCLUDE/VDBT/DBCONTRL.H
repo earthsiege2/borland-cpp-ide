@@ -13,7 +13,6 @@
 #include <vdbt/dbtype.h>
 #include <vdbt/dbpme.h>
 #include <vdbt/dbevent.h>
-#include <vdbt/dbmisc.h>
 
 //----------------------------------------------------------------------
 // TDBControl Class Declaration
@@ -85,14 +84,6 @@ class TDBControl {
     void   Show();
     void   Update();
 
-
-  public:
-    // Common Event Handlers
-    DECLARE_DB_EVENT( OnClick,    TNotifyEvent );
-    DECLARE_DB_EVENT( OnDragDrop, TDragEvent );
-    DECLARE_DB_EVENT( OnDragOver, TDragOverEvent );
-    DECLARE_DB_EVENT( OnEndDrag,  TDragEvent );
-
   protected:
     char far* GetClassName();
 
@@ -103,8 +94,8 @@ class TDBControl {
 
 //Inlines
 DEFINE_DB_PROP_DATASOURCE( TDBControl )
-DEFINE_DB_PROP_STRING( TDBControl, Name );
-DEFINE_DB_PROP_STRING( TDBControl, Tag );
+DEFINE_DB_PROP_STRING( TDBControl, _TDBControl, Name );
+DEFINE_DB_PROP_STRING( TDBControl, _TDBControl, Tag );
 
 // Properties Getters() and Setters()
 inline TDBControl::prParent::operator TWindow*()

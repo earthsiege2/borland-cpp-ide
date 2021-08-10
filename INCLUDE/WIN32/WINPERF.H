@@ -1,6 +1,6 @@
 /*++
 
-Copyright (C) 1993 - 1995 Microsoft Corporation
+Copyright (C) 1993-1996 Microsoft Corporation
 
 Module Name:
 
@@ -30,8 +30,11 @@ Abstract:
 
 --*/
 
+/* $Copyright: 1997$ */
+
 #ifndef _WINPERF_
 #define _WINPERF_
+#pragma option -b
 
 //  Data structure definitions.
 
@@ -249,6 +252,11 @@ typedef struct _PERF_OBJECT_TYPE {
             (PERF_SIZE_DWORD | PERF_TYPE_COUNTER | PERF_COUNTER_QUEUELEN |\
             PERF_TIMER_TICK | PERF_DELTA_COUNTER | PERF_DISPLAY_NO_SUFFIX)
 
+// Queue Length Space-Time Product. Divide delta by delta time. No Display Suffix.
+#define PERF_COUNTER_LARGE_QUEUELEN_TYPE  \
+            (PERF_SIZE_LARGE | PERF_TYPE_COUNTER | PERF_COUNTER_QUEUELEN |\
+            PERF_TIMER_TICK | PERF_DELTA_COUNTER | PERF_DISPLAY_NO_SUFFIX)
+
 // 64-bit Counter.  Divide delta by delta time. Display Suffix: "/sec"
 #define PERF_COUNTER_BULK_COUNT     \
             (PERF_SIZE_LARGE | PERF_TYPE_COUNTER | PERF_COUNTER_RATE |\
@@ -424,7 +432,21 @@ typedef struct _PERF_OBJECT_TYPE {
 
 #define PERF_COUNTER_HISTOGRAM_TYPE   0x80000000
                                         // Counter begins or ends a histogram
+//
+//  This counter is used to display the difference from one sample
+//  to the next. The counter value is a constantly increasing number
+//  and the value displayed is the difference between the current
+//  value and the previous value. Negative numbers are not allowed
+//  which shouldn't be a problem as long as the counter value is
+//  increasing or unchanged.
+//
+#define PERF_COUNTER_DELTA      \
+            (PERF_SIZE_DWORD | PERF_TYPE_COUNTER | PERF_COUNTER_VALUE |\
+            PERF_DELTA_COUNTER | PERF_DISPLAY_NO_SUFFIX)
 
+#define PERF_COUNTER_LARGE_DELTA      \
+            (PERF_SIZE_LARGE | PERF_TYPE_COUNTER | PERF_COUNTER_VALUE |\
+            PERF_DELTA_COUNTER | PERF_DISPLAY_NO_SUFFIX)
 //
 //  The following are used to determine the level of detail associated
 //  with the counter.  The user will be setting the level of detail
@@ -435,7 +457,6 @@ typedef struct _PERF_OBJECT_TYPE {
 #define PERF_DETAIL_ADVANCED        200 // For the advanced user
 #define PERF_DETAIL_EXPERT          300 // For the expert user
 #define PERF_DETAIL_WIZARD          400 // For the system designer
-
 
 //
 //  There is one of the following for each of the
@@ -502,7 +523,11 @@ typedef struct _PERF_INSTANCE_DEFINITION {
                                         // this struct to the Unicode name
                                         // of this instance
     DWORD           NameLength;         // Length in bytes of name; 0 = none
-
+                                        // this length includes the characters
+                                        // in the string plus the size of the
+                                        // terminating NULL char. It does not
+                                        // include any additional pad bytes to
+                                        // correct structure alignment
 } PERF_INSTANCE_DEFINITION, *PPERF_INSTANCE_DEFINITION;
 //
 //  If .ParentObjectName is 0, there
@@ -534,6 +559,7 @@ typedef DWORD (APIENTRY PM_OPEN_PROC) (LPWSTR);
 typedef DWORD (APIENTRY PM_COLLECT_PROC) (LPWSTR, LPVOID *, LPDWORD, LPDWORD);
 typedef DWORD (APIENTRY PM_CLOSE_PROC) (void);
 
+#pragma option -b.
 #endif // _WINPERF_
 
 

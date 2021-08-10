@@ -5,7 +5,7 @@
 //
 //  SUBSYSTEM:    ApxDlgDv Application
 //  FILE:         apxdlgda.cpp
-//  AUTHOR:       
+//  AUTHOR:
 //
 //  OVERVIEW
 //  ~~~~~~~~
@@ -92,17 +92,10 @@ void TApxDlgDvApp::InitMainWindow()
 
   TSDIDecFrame* frame = new TSDIDecFrame(0, GetName(), 0, true, this);
 
-  // Assign ICON w/ this application.
+  // Assign icons for this application.
   //
   frame->SetIcon(this, IDI_SDIAPPLICATION);
   frame->SetIconSm(this, IDI_SDIAPPLICATION);
-
-
-  TStatusBar* sb = new TStatusBar(frame, TGadget::Recessed,
-                                  TStatusBar::CapsLock        |
-                                  TStatusBar::NumLock         |
-                                  TStatusBar::ScrollLock);
-  frame->Insert(*sb, TDecoratedFrame::Bottom);
 
   SetMainWindow(frame);
 

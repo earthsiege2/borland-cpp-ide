@@ -1,3 +1,20 @@
+/*-----------------------------------------------------------------------*
+ * filename - cginit.c
+ *
+ * function(s)
+ *        __cg_init -
+ *        __cg_exit -
+ *-----------------------------------------------------------------------*/
+
+/*
+ *      C/C++ Run Time Library - Version 8.0
+ *
+ *      Copyright (c) 1995, 1997 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+/* $Revision:   8.2  $        */
+
 #if defined(_Windows) && defined(_BUILDRTLDLL)
 
 #include <windows.h>

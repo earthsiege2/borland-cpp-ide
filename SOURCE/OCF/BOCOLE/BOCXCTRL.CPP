@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.6  $
+// $Revision:   2.7  $
 //
 //  Implements the Bolero half of the OLE2 Control
 //

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 // cScript
-// (C) Copyright 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1995, 1997 by Borland International, All Rights Reserved
 //
 // FILTSTUB.SPP
 //   The TransferOutputExists event is generated internally by the IDE when
@@ -8,7 +8,7 @@
 //   responsibility to package its output into a TransferOutput object and
 //   invoke this event.
 //
-// $Revision:   1.13  $
+// $Revision:   1.17  $
 //
 //----------------------------------------------------------------------------
 
@@ -25,7 +25,6 @@ library;
 on IDE:>TransferOutputExists(output){
    declare String str(output.Provider);
    declare Tool = str.Upper();
-   print("On handler invoke for Transfer output exists event");
    switch(Tool.Text){
 	  case "BORL2MSG":
 	  case "BORL2MSG.DLL":
@@ -57,5 +56,7 @@ on IDE:>TransferOutputExists(output){
    }
 
    // See if anyone else knows what to do
-   return pass(output);
+   declare rv = pass(output);
+
+   return rv;
 }

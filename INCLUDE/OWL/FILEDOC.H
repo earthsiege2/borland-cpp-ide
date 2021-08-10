@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Definition of class TFileDocument
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(__IOSTREAM_H)
 # include <iostream.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -75,6 +79,7 @@ class _OWLCLASS TFileDocument : public TDocument {
     FILETIME FileAccessTime;
     FILETIME FileUpdateTime;
 #else
+    ulong    CalcFileLength(HFILE file);
     ulong    FileTime;
 #endif
 
@@ -86,6 +91,10 @@ class _OWLCLASS TFileDocument : public TDocument {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

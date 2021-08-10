@@ -8,18 +8,19 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <mem.h>
 #include <string.h>
 #include <_printf.h>
-
+#include <_tchar.h>
 /*---------------------------------------------------------------------*
 
 Name            strputn - copies an n element string
@@ -34,10 +35,10 @@ Return value    0
 
 *---------------------------------------------------------------------*/
 
-static size_t strputn(char *S, size_t n, char **bufPP)
+static size_t strputn(_TCHAR *S, size_t n, _TCHAR **bufPP)
 {
-    memcpy (*bufPP, S, n);
-    *(*bufPP += n) = 0;
+    memcpy (*bufPP, S, (n * sizeof (_TCHAR)));
+    *(*bufPP += n) = _TEXT('\0');
     return n;
 }
 
@@ -56,51 +57,17 @@ Return value    number of bytes output
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC sprintf(char *bufP, const char *fmt, ...)
+int _RTLENTRY _EXPFUNC _stprintf(_TCHAR *bufP, const _TCHAR *fmt, ...)
 {
     va_list ap;
     int ret;
 
-    *bufP = 0;
+    *bufP = _TEXT('\0');
     va_start(ap,fmt);
-    ret = __vprinter ((putnF *)strputn, &bufP, fmt, ap);
+    ret = __vprintert ((putnF *)strputn, &bufP, fmt, ap);
     va_end(ap);
     return (ret);
 }
-
-/*---------------------------------------------------------------------*
-
-Name            swprintf - sends formatted output to a string of wchar_t
-
-Usage           int swprintf(wchar_t *string, const wchar_t *format[, argument, ...]);
-
-Prototype in    stdio.h
-
-Description     sends formatted output to a string of wchar_t
-
-Return value    number of characters output
-
-NOTE:           This function DOES NOT handle wide chars correctly yet.
-                This is just to satisfy some other internal routines.
-
-*---------------------------------------------------------------------*/
-
-int _RTLENTRY _EXPFUNC swprintf(wchar_t *wb, const wchar_t *wf, ...)
-{
-    char *bufP, *fmt;
-    va_list ap;
-    int ret;
-
-    bufP = (char *)wb;
-    fmt  = (char *)wf;
-
-    *bufP = 0;
-    va_start(ap,fmt);
-    ret = __vprinter ((putnF *)strputn, &bufP, fmt, ap);
-    va_end(ap);
-    return (ret);
-}
-
 
 /*---------------------------------------------------------------------*
 
@@ -116,9 +83,9 @@ Return value    number of bytes output
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC vsprintf(char *bufP, const char *fmt, va_list ap)
+int _RTLENTRY _EXPFUNC _vstprintf(_TCHAR *bufP, const _TCHAR *fmt, va_list ap)
 {
-    *bufP = 0;
-    return  __vprinter ((putnF *)strputn, &bufP, fmt, ap);
+    *bufP = _TEXT('\0');
+    return  __vprintert ((putnF *)strputn, &bufP, fmt, ap);
 }
 

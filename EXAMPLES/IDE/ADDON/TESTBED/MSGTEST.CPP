@@ -3,7 +3,7 @@
    msgtest.cpp
    Created: 1/3/96
    Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
-   $Revision:   1.10  $
+   $Revision:   1.13  $
     
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/ 
 #ifndef __AOEXPCH_H
@@ -170,6 +170,8 @@ DWORD GenericMessageFolder::CreatePipedProcess(LPSTR commandLine) {
  *
  */
 MsgSystemTest::MsgSystemTest() {
+   d_msgFolder1 = NULL;
+   d_msgFolder2 = NULL;
 }
 
 MsgSystemTest::~MsgSystemTest() {
@@ -178,8 +180,8 @@ MsgSystemTest::~MsgSystemTest() {
 //.............................................................................
 BOOL MsgSystemTest::Init() 
 {
-  d_msgFolder1 = new GenericMessageFolder("TestTool");
-  d_msgFolder2 = new GenericMessageFolder("TestTool");
+  d_msgFolder1 = new GenericMessageFolder("Addon");
+  d_msgFolder2 = new GenericMessageFolder("Addon");
 
   OutStr( "MsgSystemTest::Init()" );
   return FALSE;
@@ -188,8 +190,12 @@ BOOL MsgSystemTest::Init()
 void MsgSystemTest::UnInit() 
 {
   OutStr( "MsgSystemTest::UnInit()" );
-  delete d_msgFolder1;
-  delete d_msgFolder2;
+  if ( d_msgFolder1 ) {
+     delete d_msgFolder1;
+  }
+  if ( d_msgFolder2 ) {
+     delete d_msgFolder2;
+  }    
 }
 
 const char * MsgSystemTest::GetName() 

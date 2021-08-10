@@ -1,13 +1,14 @@
 LIBRARY MFCUIA32
 EXPORTS
 
-  OleUIAddVerbMenu
-  OleUIBusy
-  OleUICanConvertOrActivateAs
-  OleUIChangeIcon
-  OleUIConvert
-  OleUIEditLinks
-  OleUIInsertObject
-  OleUIPasteSpecial
-  OleUIPromptUser
-  OleUIUpdateLinks
+    OleUIAddVerbMenu
+    OleUIBusy
+    OleUICanConvertOrActivateAs
+    OleUIChangeIcon
+    OleUIConvert
+    OleUIEditLinks
+    OleUIInsertObject
+    OleUIPasteSpecial
+    OleUIPromptUser
+    OleUIUpdateLinks
+    _OleUIPromptUser                         = OleUIPromptUser

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Definition of TDialog class and TDialogAttr struct
 //----------------------------------------------------------------------------
@@ -11,6 +11,10 @@
 
 #if !defined(OWL_WINDOW_H)
 # include <owl/window.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -164,6 +168,10 @@ class _OWLCLASS TDialog : virtual public TWindow {
     char far*       GetClassName();
     void            GetWindowClass(WNDCLASS& wndClass);
 
+    // Registers WINDOW class(es) of Children
+    //
+    void            RegisterChildObjects();
+
   public_data:
     union {
       TDialogAttr  Attr;        // Old name
@@ -184,6 +192,10 @@ class _OWLCLASS TDialog : virtual public TWindow {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

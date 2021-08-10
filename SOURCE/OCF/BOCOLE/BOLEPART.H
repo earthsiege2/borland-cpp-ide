@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.7  $
+// $Revision:   2.8  $
 //
 //  Implements the Bolero half of the OLE2 client site. BOlePart objects 
 //  impersonate the server object (IPart) from the point of view of the 

@@ -3,7 +3,7 @@
   tests.h
   Created: 10/24/95
   Copyright (c) 1995, 1996 Borland International
-  $Revision:   1.15  $
+  $Revision:   1.18  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 
@@ -69,6 +69,7 @@ class TestObject {
 
   //.... implementation ....
   TestObject() { _output = NULL; }
+  virtual ~TestObject() {}
   //
   // OutStr() calls the registered TestOutput Show() method, which is
   // responsible for displaying the string in the dialog box output window.
@@ -115,12 +116,10 @@ class Tests {
  protected:
   void setup();
   void AddTest( TestObject * testObj );
-  static Tests _theTests;
+  static Tests * _theTests;
   TestObject * _testObjArray[ MAX_TESTS ];
   BOOL _setup;
 };
 
 
 #endif    // __TESTS_H
-
-

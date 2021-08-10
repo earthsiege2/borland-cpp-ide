@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // EDONLY.SPP: Edit-only. Temporarily shows only those lines in the current
 //   buffer that contain a specified string. Useful for seeing how an
@@ -17,7 +17,7 @@
 //
 // NOTES: Do not unload this script while it is an editing-only state.
 //--------------------------------------------------------------------------
-print "edonly.spp";
+print typeid(module());
 
 //
 // IDE imports.
@@ -29,9 +29,9 @@ import editor;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
-if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
-if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+if (!scriptEngine.IsLoaded("msg")) scriptEngine.Load("msg");
+if (!scriptEngine.IsLoaded("file")) scriptEngine.Load("file");
+if (!scriptEngine.IsLoaded("misc")) scriptEngine.Load("misc");
 
 //
 // RTL items.
@@ -52,7 +52,7 @@ EdOnlyBuf;            // The edit-only buffer.
 EdOnlyFile;           // The edit-only file.
 ReturnKeyAssignment;  // Original command tied to the return key.
 
-ModuleDir = GetModuleDir("edonly.spp");  // Directory of this module.
+ModuleDir = GetModuleDir(typeid(module()));  // Directory of this module.
 
 edonly()
 {

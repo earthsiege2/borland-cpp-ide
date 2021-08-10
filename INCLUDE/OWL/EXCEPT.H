@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // ObjectWindows exception class & function definitions
 //----------------------------------------------------------------------------
@@ -19,6 +19,10 @@
 # include <winsys/exbase.h>
 #endif
 #include <owl/except.rh>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
@@ -93,7 +97,15 @@ class _OWLCLASS_RTL TXOutOfMemory : public TXOwl {
 // definition of classes
 #include <services/posclass.h>
 
+#if defined(BI_NAMESPACE)
+} //namespace OWL
+#endif
+
 #if defined(OWL1_COMPAT)
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 //----------------------------------------------------------------------------
 // Owl 1.0 compatibility exception classes
@@ -137,6 +149,9 @@ class _OWLCLASS TStatus {
     int  StatusCode;
 };
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

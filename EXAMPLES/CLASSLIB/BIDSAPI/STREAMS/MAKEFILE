@@ -12,7 +12,7 @@
 #                                                                          #
 #--------------------------------------------------------------------------#
 
-MODELS  = mlhft
+MODELS  = mlft
 SYSTEMS = DOS16 WIN16 CON32
 EXE    = stream0
 EXEALL = stream0.exe stream1.exe stream2.exe stream3.exe

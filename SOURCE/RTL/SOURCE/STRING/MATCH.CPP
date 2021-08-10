@@ -20,12 +20,13 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1992, 1996 by Borland International
+ *      Copyright (c) 1992, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #if !defined(__FLAT__)
 #if defined(__MEDIUM__) || defined(__LARGE__) || defined(__HUGE__)
@@ -55,6 +56,9 @@ static void __debug(void){}
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#if defined(_MBCS)
+#include <mbctype.h>
+#endif
 
 #ifdef _RTLDLL
 #pragma codeseg _TEXTA
@@ -76,6 +80,9 @@ static void __debug(void){}
 
 typedef enum action {       /* These are put in the pattern string  */
                 /* to represent metacharacters.         */
+#if defined(_MBCS)
+  M_NOTASCII = 0x81,
+#endif
   M_BOL =    (0x80 | '^'),
   M_EOL =    (0x80 | '$'),
   M_ANY =    (0x80 | '.'),
@@ -102,7 +109,11 @@ typedef unsigned char pattern;  /* pattern strings are unsigned char */
  * bitmap that follows that character
  */
 
+#if defined(_MBCS)
+#define ADVANCE(pat) skipapat(&pat)
+#else
 #define ADVANCE(pat) (pat += (*pat == (pattern)M_CCL) ? (MAPSIZE+1) : 1)
+#endif
 
 /*
  * Bitmap functions. Set bit b in the map and
@@ -127,6 +138,9 @@ typedef unsigned char pattern;  /* pattern strings are unsigned char */
   static int        omatch(const char _FAR * _FAR *, const pattern _FAR *, const char _FAR *);
   extern const char _FAR *patcmp(const char _FAR *, const pattern _FAR *, const char _FAR *);
   extern int        esc( const char _FAR * _FAR *);
+#if defined(_MBCS)
+  static const pattern _FAR *skipapat(const pattern _FAR * _FAR *);
+#endif
 
 /*----------------------------------------------------------------------*/
 int
@@ -222,7 +236,27 @@ makepat( const char _FAR *exp, pattern _FAR *pat, size_t maxpat)
 
     default:
       prev = cur;
+#if defined(_MBCS)
+      pattern c = (pattern)esc(&exp);
+      if (c > 0x7F) {
+        if (cur >= &pat[maxpat - 2]) goto exit;
+        *cur++ = M_NOTASCII;
+        *cur++ = (pattern)(c - 0x7F);
+        if (_ismbblead(c) && *exp) {
+          c = *exp++;
+          if (cur >= &pat[maxpat - ((c > 0x7F) ? 2 : 1)]) goto exit;
+          if (c > 0x7F) {
+            *cur++ = M_NOTASCII;
+            *cur++ = (pattern)(c - 0x7F);
+          } else
+            *cur++ = c;
+        }
+      }
+      else
+        *cur++ = c;
+#else
       *cur++ = esc(&exp);
+#endif
       break;
     }
   }
@@ -305,7 +339,14 @@ matchs( const char _FAR *str, const pattern _FAR *pat, char _FAR * _FAR *startpa
       endp = patcmp(str, pat, start);
       if (endp)
     break;
+#if defined(_MBCS)
+      if (_ismbblead(*str) && str[1])
+        str += 2;
+      else
+        str++;
+#else
       str++;
+#endif
     }
   }
   *startpat = (char *)str;
@@ -434,7 +475,16 @@ omatch( const char _FAR * _FAR *strp,
 
   case M_ANY:           /* . = anything but newline */
     if (**strp != '\n')
+#if defined(_MBCS)
+    {
+      if (_ismbblead(**strp) && *(*strp+1))
+        advance = 2;
+      else
+        advance = 1;
+    }
+#else
       advance = 1;
+#endif
     break;
 
   case M_EOL:
@@ -448,6 +498,24 @@ omatch( const char _FAR * _FAR *strp,
     break;
 
   default:          /* literal match */
+#if defined(_MBCS)
+    if (*pat == M_NOTASCII) {
+      unsigned short c1, c2;
+      c1 = *++pat + 0x7F;
+      pat++;
+      if (_ismbblead(c1) && *pat && *pat <= M_NOTASCII) {
+        if (*pat == M_NOTASCII)
+          c2 = *++pat + 0x7F;
+        else
+          c2 = *pat;
+        c1 = c1 | (c2 << 8);
+        if (*(unsigned short *)*strp == c1)
+          advance = 2;
+      } else
+        if (*(unsigned char *)*strp == (pattern)c1)
+          advance = 1;
+    } else
+#endif
     if (**strp == *pat)
       advance = 1;
     break;
@@ -458,6 +526,28 @@ omatch( const char _FAR * _FAR *strp,
 
   return (advance + 1);
 }
+
+#if defined(_MBCS)
+static const pattern _FAR *
+skipapat(const pattern _FAR * _FAR *pat)
+{
+  if (**pat == M_NOTASCII) {
+    unsigned short c = *++(*pat) + 0x7F;
+    (*pat)++;
+    if (_ismbblead(c) && **pat && **pat <= M_NOTASCII) {
+      if (**pat == M_NOTASCII)
+        *pat += 2;
+      else
+        (*pat)++;
+    }
+  } else if (**pat == (pattern)M_CCL)
+    *pat += (MAPSIZE+1);
+  else
+    (*pat)++;
+
+  return *pat;
+}
+#endif
 
 #define ISHEXDIGIT(x) (isdigit(x)                       \
                             || ('a'<=(x) && (x)<='f')   \
@@ -563,4 +653,3 @@ int     esc( const char _FAR * _FAR *s)
      }
      return rval;
 }
-

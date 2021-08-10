@@ -3,27 +3,35 @@
  *
  * function(s)
  *        spawnlpe - creates and runs child processes
+ *        _wspawnlpe - creates and runs child processes
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <_process.h>
 #include <stddef.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            spawnlpe - creates and runs child processes
+Name            spawnlpe, _wspawnlpe - creates and runs child processes
 
 Usage           #include <process.h>
                 int spawnlpe(int modeF, const char *pathP, const char *arg0,
                              const char *arg1, ..., const char *argn,
                              NULL, const char *envP[]);
+                int _wspawnlpe(int modeF, const wchar_t *pathP, const wchar_t *arg0,
+                             const wchar_t *arg1, ..., const wchar_t *argn,
+                             NULL, const wchar_t *envP[]);
+
 
 Prototype in    process.h
 
@@ -123,17 +131,17 @@ Return value    On a  successful execution, the  return value is  the child
 
 *---------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC spawnlpe(int modeF, const char *pathP, const char *arg0, ...)
+int _RTLENTRY _EXPFUNC _tspawnlpe(int modeF, const _TCHAR *pathP, const _TCHAR *arg0, ...)
 {
-    const char   **p;
+    const _TCHAR   **p;
 
     /*
       For OS/2 LoadProg always does a DosExecPgm, so it doesn't need
-      a Func argument. 
+      a Func argument.
     */
 
     /* Find the end of the argument list */
 
     for (p = &arg0; *p++ != NULL; );
-    return _LoadProg(modeF, pathP, &arg0, (const char **)*p, 1);
+    return _tLoadProg(modeF, pathP, &arg0, (const _TCHAR **)*p, 1);
 }

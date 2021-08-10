@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Implementation of TPreviewWin
 //----------------------------------------------------------------------------
@@ -17,6 +17,8 @@
 # include <owl/editfile.rh>
 #endif
 #include <stdio.h>
+
+OWL_DIAGINFO;
 
 DEFINE_RESPONSE_TABLE1(TPreviewWin, TDecoratedFrame)
   EV_COMMAND(IDB_PREVIOUS, CmPrevious),

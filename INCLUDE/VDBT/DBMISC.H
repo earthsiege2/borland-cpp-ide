@@ -11,6 +11,47 @@
 #include <vdbt/bdto.h>
 
 
+//
+// Mangle the class and function names so we can have mulitpale versions of the
+// same classes and functions in one .LIB file.
+//
+#if defined( __DLL__ ) && ! defined( __FLAT__ )
+#  if defined( _RTLDLL )
+#    define GetSource       dGetSource
+#    define SetSource       dSetSource
+#    define GetField        dGetField
+#    define SetField        dSetField
+#    define GetStrings      dGetStrings
+#    define SetStrings      dSetStrings
+#    define Getstring       dGetstring
+#    define Setstring       dSetstring
+#    define ThrowException  dThrowException
+#    define DBEqualOperator dDBEqualOperator
+#  else _RTLDLL
+#    define GetSource       uGetSource
+#    define SetSource       uSetSource
+#    define GetField        uGetField
+#    define SetField        uSetField
+#    define GetStrings      uGetStrings
+#    define SetStrings      uSetStrings
+#    define Getstring       uGetstring
+#    define Setstring       uSetstring
+#    define ThrowException  uThrowException
+#    define DBEqualOperator uDBEqualOperator
+#  endif _RTLDLL
+#elif defined( _RTLDLL )
+#  define GetSource       iGetSource
+#  define SetSource       iSetSource
+#  define GetField        iGetField
+#  define SetField        iSetField
+#  define GetStrings      iGetStrings
+#  define SetStrings      iSetStrings
+#  define Getstring       iGetstring
+#  define Setstring       iSetstring
+#  define ThrowException  iThrowException
+#  define DBEqualOperator iDBEqualOperator
+#endif
+
 //------------------------------------------------------------------------------
 // Foreward Declarations
 //------------------------------------------------------------------------------
@@ -54,14 +95,14 @@ DEFINE_RESPONSE_TABLE_ENTRIES(cls)
     TDBClass( TWindow*, int, LPCSTR, int, int, int, int, TModule*x=0 ); \
     TDBClass( TWindow*, int, TModule*x=0 )
 
-#define DEFINE_DB_PROP_STRING( cls, name )                          \
+#define DEFINE_DB_PROP_STRING( cls, _cls, name )                    \
 inline string* cls::pr##name::Set()                                 \
 {                                                                   \
-  return p = ::Setstring( DBOUTER( name ), Prop_##cls##_##name, p );\
+  return p = ::Setstring( DBOUTER( name ), Prop##_cls##_##name, p );\
 }                                                                   \
 inline string* cls::pr##name::Get()                                 \
 {                                                                   \
-  return p = ::Getstring( DBOUTER( name ), Prop_##cls##_##name, p );\
+  return p = ::Getstring( DBOUTER( name ), Prop##_cls##_##name, p );\
 }
 
 #define DEFINE_DB_PROP_SOURCE( cls, name )            \
@@ -80,20 +121,22 @@ inline TDataSource* cls::pr##name::Get()              \
 #define DEFINE_DB_PROP_LOOKUPSOURCE( cls ) \
         DEFINE_DB_PROP_SOURCE( cls, LookupSource )
 
-#define DEFINE_DB_PROP_FIELD( cls, name )                                      \
+#define DEFINE_DB_PROP_FIELD( cls, _cls, name )                                \
 inline TField* cls::pr##name##Field::Get()                                     \
 {                                                                              \
   cls *c = DBOUTER( name##Field );                                             \
                                                                                \
-  return p = ::GetField( c, Prop_##cls##_##name##Field, c->##name##Source, p );\
+  return p = ::GetField( c, Prop##_cls##_##name##Field, c->##name##Source, p );\
 }                                                                              \
 inline TField* cls::pr##name##Field::Set()                                     \
 {                                                                              \
-  return p = ::SetField( DBOUTER( name##Field ), Prop_##cls##_##name##Field, p );\
+  return p = ::SetField( DBOUTER( name##Field ), Prop##_cls##_##name##Field, p );\
 }
 
-#define DEFINE_DB_PROP_DATAFIELD( cls )   DEFINE_DB_PROP_FIELD( cls, Data )
-#define DEFINE_DB_PROP_LOOKUPFIELD( cls ) DEFINE_DB_PROP_FIELD( cls, Lookup )
+#define DEFINE_DB_PROP_DATAFIELD( cls, _cls )   \
+        DEFINE_DB_PROP_FIELD( cls, _cls, Data )
+#define DEFINE_DB_PROP_LOOKUPFIELD( cls, _cls ) \
+        DEFINE_DB_PROP_FIELD( cls, _cls, Lookup )
 
 
 //----------------------------------------------------------------------------
@@ -132,12 +175,12 @@ inline TField* cls::pr##name##Field::Set()                                     \
     } name;                                                                  \
     friend struct pr##name
 
-#define DEFINE_DB_PROP_TSTRINGS( cls, name )                                 \
+#define DEFINE_DB_PROP_TSTRINGS( cls, _cls, name )                           \
 inline TStrings* cls::pr##name::Get()                                        \
 {                                                                            \
   if( p )                                                                    \
     p->OnChangeSource -= OnChangeSink;                                       \
-  if( (p = ::GetStrings( DBOUTER( name ), Prop_##cls##_##name, p )) != NULL )\
+  if( (p = ::GetStrings( DBOUTER( name ), Prop##_cls##_##name, p )) != NULL )\
     p->OnChangeSource += OnChangeSink;                                       \
   return p;                                                                  \
 }                                                                            \
@@ -145,7 +188,7 @@ inline TStrings* cls::pr##name::Set()                                        \
 {                                                                            \
   if( p )                                                                    \
     p->OnChangeSource -= OnChangeSink;                                       \
-  if( (p = ::SetStrings( DBOUTER( name ), Prop_##cls##_##name, p )) != NULL )\
+  if( (p = ::SetStrings( DBOUTER( name ), Prop##_cls##_##name, p )) != NULL )\
     p->OnChangeSource += OnChangeSink;                                       \
   return p;                                                                  \
 }

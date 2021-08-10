@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of TInputDialog.  User string input dialog box
 //----------------------------------------------------------------------------
@@ -18,6 +18,8 @@
 # include <owl/validate.h>
 #endif
 #include <string.h>
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 

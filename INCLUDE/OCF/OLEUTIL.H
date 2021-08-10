@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.6  $
+// $Revision:   2.16  $
 //
 // Low level OLE Utility class definitions
 //----------------------------------------------------------------------------
@@ -11,6 +11,9 @@
 
 #if !defined(OCF_DEFS_H)
 # include <ocf/defs.h>
+#endif
+#if !defined(OCF_EXCEPT_H)
+# include <ocf/except.h>
 #endif
 #if !defined(SERVICES_CSTRING_H)
 # include <services/cstring.h>
@@ -33,82 +36,25 @@
 #     define _ICLASS
 #   endif
 # else
-#   define _ICLASS  FAR   
+#   define _ICLASS  FAR
 # endif
 #endif
 
 #define _IFUNC STDMETHODCALLTYPE
 
-class TRegList;
-
-
-//
-// class TXOle
-// ~~~~~ ~~~~~
-// OLE API related exception object
-//
-class TXOle : public TXBase {
-  public:
-    TXOle(const string& msg, HRESULT stat);
-    TXOle(const TXOle& src);
-   ~TXOle();
-
-    TXOle* Clone();
-    void   Throw();
-
-    static void Check(HRESULT stat, const char far* msg);
-    static void Check(HRESULT stat);
-    static void Throw(HRESULT stat, const char far* msg);
-    static void OleErrorFromCode(HRESULT stat, char far* buffer, int size);
-
-    const long  Stat;
-};
-inline TXOle::TXOle(const string& msg, HRESULT stat)
-            : TXBase(msg), Stat((long)stat) {}
-inline TXOle::TXOle(const TXOle& src)
-            : TXBase(src), Stat(src.Stat) {}
-
-#if (__DEBUG > 0) || defined(__WARN)
-# define OLECALL(func, msg) TXOle::Check(func, msg)
-#else
-# define OLECALL(func, msg) TXOle::Check(func)
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
-//
-// class TXObjComp
-// ~~~~~ ~~~~~~~~~
-// Base OC exception class
-//
-class TXObjComp : public TXOle {
-  public:
-    enum TError {
-      xNoError,             // App errors
-      xBOleLoadFail,
-      xBOleVersFail,
-      xBOleBindFail,
-      xDocFactoryFail,
-      xMissingRootIStorage, // doc and part errors
-      xInternalPartError,
-      xPartInitError,
-      xRootStorageOpenError,// storage errors
-      xStorageOpenError,
-      xStorageILockError,
-      xStreamOpenError,
-    };
-    TXObjComp(TError err, const string& msg, HRESULT stat = HR_FAIL)
-      : TXOle(msg, stat), ErrorCode(err) {}
-    TXObjComp(const TXObjComp& src)
-      : TXOle(src), ErrorCode(src.ErrorCode) {}
-   ~TXObjComp();
+class   TRegList;
 
-    TXObjComp* Clone();
-    void       Throw();
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
 
-    static void Check(HRESULT stat, TError err, const char far* msg = 0);
-    static void Throw(TError err, HRESULT stat = HR_FAIL, const char far* msg = 0);
-
-    const TError ErrorCode;
-};
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
 
 //
 // class TComRef
@@ -117,31 +63,35 @@ class TXObjComp : public TXOle {
 //
 template<class T> class TComRefBase {
   public:
-         operator T far*() {return I;}
-         virtual operator T far* far*() {Clear(); return &I;}
-    int  operator !() const {return I==0;}
-    void operator delete(void* p) {((TComRefBase<T> far*)p)->I=0;}
+            operator T*()         {return I;}
+    virtual operator T**()        {Clear(); return &I;}
+    int     operator !() const    {return I==0;}
+    void operator delete(void* p) {((TComRefBase<T>*)p)->I=0;}
   protected:
     TComRefBase(const TComRefBase<T>& i) : I(i.I) {if (I) I->AddRef();}
-    void Clear() {if (I) {I->Release(); I = 0;}}
-    TComRefBase(T far* i) : I(i) {}
-    TComRefBase() : I(0) {}
+    TComRefBase(T* i) : I(i) {}
+    TComRefBase()     : I(0) {}
     virtual ~TComRefBase() {Clear();}
+
+    void Clear() {if (I) {I->Release(); I = 0;}}
     T* I;
   private:
-    void* operator new(size_t) {return 0;}  // prohibit use of new
+
+    // Prohibit use of operator new
+    //
+    void* operator new(size_t) {return 0;}
 };
 
 template<class T> class TComRef : public TComRefBase<T> {
   public:
     TComRef() : TComRefBase<T>() {}
-    TComRef(T far* iface) : TComRefBase<T>(iface) {}
+    TComRef(T* iface) : TComRefBase<T>(iface) {}
     TComRef(const TComRef<T>& i) : TComRefBase<T>(i) {}
-    TComRef<T>& operator =(T far* iface) {Clear(); I = iface; return *this;}
+    TComRef<T>& operator =(T* iface) {Clear(); I = iface; return *this;}
     TComRef<T>& operator =(const TComRef<T>& i)
                  {Clear(); if (i.I) {I = i.I; I->AddRef();} return *this;}
-    T far* operator->() {return I;}            // could throw exception if I==0
-    T far* operator->() const {return I;}      // could throw exception if I==0
+    T* operator->()       {return I;}      // Could throw exception if I==0
+    T* operator->() const {return I;}      // Could throw exception if I==0
 };
 
 //
@@ -151,23 +101,124 @@ template<class T> class TComRef : public TComRefBase<T> {
 //
 class TBSTR {
   public:
-    TBSTR() : P(0) {}
-    TBSTR(BSTR p) : P(p) {}
-   ~TBSTR() {::SysFreeString(P);}
-    BSTR   operator =(BSTR p) {if(P)::SysFreeString(P); return P = p;}
-    TBSTR& operator =(const TBSTR& p){if(P)::SysFreeString(P);P=p.P;return *this;}
-           operator BSTR() {return P;}
-           operator BSTR far*() {if(P)::SysFreeString(P); return &P;}
-    int    operator !() const {return P==0;}
-    void   operator ~() {if (P)::SysFreeString(P); P = 0;}
+    TBSTR();
+    TBSTR(BSTR p);
+   ~TBSTR();
+
+     // Operators
+    //
+    BSTR      operator =(BSTR p);
+    TBSTR&    operator =(const TBSTR& p);
+              operator  BSTR();
+              operator  BSTR*();
+    int       operator !() const;
+    void      operator ~();
 
   protected:
-    BSTR P;
+    BSTR      P;
 
   private:
-    void* operator new(size_t) {return 0;} // prohibit use of new, delete, etc
+
+    // Prohibit use of new/delete operators
+    //
+    void* operator new(size_t) {return 0;}
     void  operator delete(void*) {}
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
+
+//
+//
+//
+inline TBSTR::TBSTR() : P(0)
+{}
+
+//
+//
+//
+inline TBSTR::TBSTR(BSTR p) : P(p)
+{}
+
+//
+//
+//
+inline TBSTR::~TBSTR()
+{
+  // NOTE: OK to pass 0 to 'SysFreeString'
+  //
+  ::SysFreeString(P);
+}
+
+//
+//
+//
+inline BSTR
+TBSTR::operator =(BSTR p)
+{
+  ::SysFreeString(P);
+  return P = p;
+}
+
+//
+//
+//
+inline TBSTR&
+TBSTR::operator =(const TBSTR& p)
+{
+  ::SysFreeString(P);
+  P = p.P;
+  return *this;
+}
+
+//
+//
+//
+inline
+TBSTR::operator BSTR()
+{
+  return P;
+}
+
+//
+//
+//
+inline
+TBSTR::operator BSTR*()
+{
+  if(P)
+   ::SysFreeString(P);
+  return &P;
+}
+
+//
+//
+//
+inline int
+TBSTR::operator !() const
+{
+  return P==0;
+}
+
+//
+//
+//
+inline void
+TBSTR::operator ~()
+{
+  ::SysFreeString(P);
+  P = 0;
+}
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
+// Conversion routines
+//
+void OcHiMetricToPixel(const SIZEL& sizeHM, SIZEL& sizePix);
+void OcPixelToHiMetric(const SIZEL& sizePix, SIZEL& sizeHM);
 
 //
 // class TOleAllocator
@@ -179,25 +230,40 @@ class TOleAllocator {
     TOleAllocator();             // Gets allocator, does not initialize OLE
     TOleAllocator(IMalloc* mem); // Use 0 to initialize with OLE task allocator
    ~TOleAllocator();
-    void far* Alloc(unsigned long size);
-    void Free(void far* pv);
-    IMalloc* Mem;
+    void*     Alloc(unsigned long size);
+    void      Free(void far* pv);
+    IMalloc*  Mem;
   private:
-    bool Initialized;
+    bool      Initialized;
 };
 
-inline TOleAllocator::TOleAllocator(IMalloc* mem) : Initialized(true)
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
+
+//
+//
+//
+inline
+TOleAllocator::TOleAllocator(IMalloc* mem) : Initialized(true)
 {
   OLECALL(OleInitialize(mem), "OleInitialize");
   OLECALL(CoGetMalloc(MEMCTX_TASK, &Mem), "CoGetMalloc");
 }
 
-inline TOleAllocator::TOleAllocator() : Initialized(false)
+//
+//
+inline
+TOleAllocator::TOleAllocator() : Initialized(false)
 {
   OLECALL(CoGetMalloc(MEMCTX_TASK, &Mem), "CoGetMalloc");
 }
 
-inline TOleAllocator::~TOleAllocator()
+//
+//
+//
+inline
+TOleAllocator::~TOleAllocator()
 {
   if (Mem)
     Mem->Release();
@@ -205,20 +271,23 @@ inline TOleAllocator::~TOleAllocator()
     ::OleUninitialize();
 }
 
-inline void TOleAllocator::Free(void far* pv)
-{
-  Mem->Free(pv);
-}
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
 
 //
-// class TOleStart
-// ~~~~~ ~~~~~~~~~
+// class TOleInit
+// ~~~~~ ~~~~~~~~
 // Simple wrapper of TOleAllocator used exclusively for initializing OLE
-//  
-class TOleStart : public TOleAllocator {
+//
+class TOleInit : public TOleAllocator {
   public:
-    TOleStart() : TOleAllocator(0){};
+    TOleInit() : TOleAllocator(0){};
 };
+
+// To maintain compatibility with initial release of v5.0 of OCF
+//
+typedef TOleInit  TOleStart;
 
 //
 // class TClassId
@@ -227,9 +296,11 @@ class TOleStart : public TOleAllocator {
 //
 class far TClassId {
   public:
-    enum TGenerate {Generate};
-    TClassId(const GUID far& guid);
-    TClassId(const char far* idtxt);
+    enum TGenerate {
+      Generate
+    };
+    TClassId(const GUID& guid);
+    TClassId(const char* idtxt);
     TClassId(const TClassId& copy);
     TClassId(TGenerate);
     TClassId& operator =(const TClassId& copy);
@@ -240,16 +311,45 @@ class far TClassId {
 
   protected:
     TClassId();
-    GUID Guid;
+    GUID  Guid;
     const char* Text;
 };
 
-inline TClassId::TClassId(const GUID far& guid) : Text(0) { Guid = guid; }
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
+
+//
+//
+inline TClassId::TClassId(const GUID& guid) : Text(0) {
+  Guid = guid;
+}
+
+//
+//
 inline TClassId::TClassId(const TClassId& copy) : Guid(copy.Guid), Text(0) {}
-inline TClassId::TClassId() : Text(0) {}  // Guid must be set by derived class
-inline TClassId::operator GUID&() { return Guid; }
-inline TClassId& TClassId::operator =(const TClassId& copy)
-                                     {Guid = copy.Guid; Text=0; return *this;}
+
+// Default constructor - Derived class must set GUID
+//
+inline TClassId::TClassId() : Text(0) {}
+
+//
+//
+inline TClassId::operator GUID&() {
+  return Guid;
+}
+
+//
+//
+inline TClassId& TClassId::operator =(const TClassId& copy) {
+  Guid = copy.Guid;
+  Text=0;
+  return *this;
+}
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
 
 //
 // class TBaseClassId
@@ -259,25 +359,23 @@ inline TClassId& TClassId::operator =(const TClassId& copy)
 class TBaseClassId : public TClassId {
   public:
     TBaseClassId(TRegList& regInfo, int maxAlloc = 256);
-    TBaseClassId(const GUID far& guid, int maxAlloc = 256);
-    TBaseClassId(const char far* idtxt, int maxAlloc = 256);
+    TBaseClassId(const GUID& guid, int maxAlloc = 256);
+    TBaseClassId(const char* idtxt, int maxAlloc = 256);
     TBaseClassId(TGenerate, int maxAlloc = 256);
     TClassId operator [](int offset);
-    int AllocId();
-    int GetOffset(const GUID far& guid); // returns -1 if not within range
+    int   AllocId();
+    int   GetOffset(const GUID far& guid); // returns -1 if not within range
 
   private:
-    int Offset;    // last offset given out by AllocId(), creator reserves 0
-    int MaxAlloc;
+    int   Offset;  // Last offset given out by AllocId(), creator reserves 0
+    int   MaxAlloc;
 };
 
 //
 // Fast GUID compare functions, assume that low word has already matched OK
 //
-void CmpGuid12(IUnknown* This, REFIID req, REFIID ref, void far*far* pif);
-
-void CmpGuidOle(IUnknown* This, REFIID req, void far*far* pif);
-
+void CmpGuid12 (IUnknown* This, REFIID req, REFIID ref, void** pif);
+void CmpGuidOle(IUnknown* This, REFIID req, void** pif);
 
 //
 // class TUnknown
@@ -288,25 +386,26 @@ void CmpGuidOle(IUnknown* This, REFIID req, void far*far* pif);
 //
 class _ICLASS TUnknown {
   public:
-    operator IUnknown&() {return *Outer;} 
-    operator IUnknown*() {Outer->AddRef(); return Outer;} 
-    IUnknown* SetOuter(IUnknown* outer = 0);
-    IUnknown* GetOuter() {return Outer;}
-    unsigned long GetRefCount();
-    unsigned long AdjustRefCount(int i);
-    IUnknown& Aggregate(TUnknown& inner);  // returns outermost IUnknown
+    operator         IUnknown&() {return *Outer;}
+    operator         IUnknown*() {Outer->AddRef(); return Outer;}
+    IUnknown*       SetOuter(IUnknown* outer = 0);
+    IUnknown*       GetOuter() {return Outer;}
+    unsigned long   GetRefCount();
+    unsigned long   AdjustRefCount(int i);
+    IUnknown&       Aggregate(TUnknown& inner);  // returns outermost IUnknown
 
   protected:
-    IUnknown& ThisUnknown() {return I;}
-    IUnknown* Outer;
     TUnknown();
     virtual ~TUnknown();
-    virtual HRESULT QueryObject(const GUID far& iid, void far* far* pif);
+
+    IUnknown&       ThisUnknown() {return I;}
+    IUnknown*       Outer;
+    virtual HRESULT QueryObject(const GUID& iid, void** pif);
 
   private:
     class _ICLASS TUnknownI : public IUnknown {
       public:
-        HRESULT       _IFUNC QueryInterface(const GUID far& iid, void far*far* pif);
+        HRESULT       _IFUNC QueryInterface(const GUID far& iid, void** pif);
         unsigned long _IFUNC AddRef();
         unsigned long _IFUNC Release();
         TUnknownI() : RefCnt(0), Inner(0) {}
@@ -318,6 +417,10 @@ class _ICLASS TUnknown {
     } I;
   friend class TUnknownI;
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 inline IUnknown* TUnknown::SetOuter(IUnknown* outer)
 {
@@ -338,6 +441,7 @@ inline unsigned long TUnknown::AdjustRefCount(int i)
 {
   return (unsigned long)(I.RefCnt += i);
 }
+
 
 //------------------------------------------------------------------------
 //
@@ -411,6 +515,19 @@ inline unsigned long TUnknown::AdjustRefCount(int i)
 #define DECLARE_COMBASES5(cls,i1,i2,i3,i4,i5) \
   COMBASES_D(cls,COMQRY5BASES(i1,i2,i3,i4,i5))
 
+// Macro which can be used by classes which inherit from TUnknown for
+// IUnknown methods support - This macro defines the methods inline
+//
+#define TUNKNOWN_STANDARD_IUNKNOWN_METHODS \
+    ulong   _IFUNC   AddRef()       {return GetOuter()->AddRef();}    \
+    ulong   _IFUNC   Release()      {return GetOuter()->Release();}   \
+    HRESULT _IFUNC   QueryInterface(const GUID& iid, void** iface)    \
+                     {return GetOuter()->QueryInterface(iid, iface);}
+
+
+// Macro which can be used by classes which inherit from TUnknown for
+// IUnknown methods support - This macros defines the methods out-of-line
+//
 #define IUNKNOWN_FORWARD(cls, outer) \
   HRESULT _IFUNC cls::QueryInterface(const GUID far& iid, void far* far* pif)\
                                  { return outer->QueryInterface(iid, pif); } \

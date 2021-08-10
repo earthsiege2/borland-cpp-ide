@@ -3,7 +3,7 @@
   propview.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.12  $
+  $Revision:   1.15  $
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 #ifndef __AOEXPCH_H
@@ -25,6 +25,8 @@ static IViewType* g_viewTypeProperty;
 *
 * PropertyView
 *
+*  This example demonstrates implementation of font and color property for
+*  view.
 *
 ******************************************************************************/
 
@@ -126,8 +128,8 @@ PropertyViewClient::QueryInterface (REFIID riid, LPVOID FAR* ppobj)
   if ((riid == IID_IUnknown)/* || (riid == IID_PUBLIC_)*/)
   {
     *ppobj = (LPVOID)this;
-    ((LPUNKNOWN)*ppobj)->AddRef();
-   return NOERROR;
+    AddRef();
+    return NOERROR;
   }
 
   *ppobj = NULL;
@@ -295,7 +297,7 @@ PropertyViewFactory::QueryInterface (REFIID riid, LPVOID FAR* ppobj)
   if ((riid == IID_IUnknown)/* || (riid == IID_PUBLIC_)*/)
   {
     *ppobj = (LPVOID)this;
-    ((LPUNKNOWN)*ppobj)->AddRef();
+    AddRef();
     return NOERROR;
   }
 

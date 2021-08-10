@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.21  $
+//$Revision:   10.26  $
 //
 // Definition of classes for CommonControl encapsulation
 //----------------------------------------------------------------------------
@@ -17,6 +17,10 @@
 #endif
 #if !defined(__RICHEDIT_H) && defined(BI_PLAT_WIN32)
 # include <richedit.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 //
@@ -57,8 +61,10 @@ const int PropPageID = 0xFFF0;
 #endif
 
 //----------------------------------------------------------------------------
-
+// Forward declaration of classes used in dispatch macros
+//
 class _OWLCLASS THdrItem;
+
 
 //
 // class TCommCtrlDll
@@ -146,7 +152,7 @@ class _OWLCLASS_RTL TXCommCtrl : public TXOwl {
   public:
     TXCommCtrl();
 #if defined(BI_NO_COVAR_RET)
-    TXBase* Clone();
+    TXBase*     Clone();
 #else
     TXCommCtrl* Clone();
 #endif
@@ -166,6 +172,10 @@ class _OWLCLASS TNotify : public NMHDR {
     TNotify(HWND ctl, uint id, uint code);
 };
 
+
+//----------------------------------------------------------------------------
+// Structures used for UpDown (Spin Ctrl) notifications
+//----------------------------------------------------------------------------
 //
 // class TNmUpDown
 // ~~~~~ ~~~~~~~~~
@@ -184,6 +194,11 @@ class _OWLCLASS TNmUpDown : public NM_UPDOWN {
     operator  NMHDR&() { return hdr; }
 };
 
+
+
+//----------------------------------------------------------------------------
+// Structures used for Tab Control notifications
+//----------------------------------------------------------------------------
 //
 // class TTabKeyDown
 // ~~~~~ ~~~~~~~~~~~
@@ -198,6 +213,11 @@ class _OWLCLASS TTabKeyDown : public TC_KEYDOWN {
     operator  NMHDR&() { return hdr; }
 };
 
+
+
+//----------------------------------------------------------------------------
+// Structures used for tooltip notifications & API
+//----------------------------------------------------------------------------
 //
 // class TTooltipText
 // ~~~~~ ~~~~~~~~~~~~
@@ -216,6 +236,11 @@ class _OWLCLASS TTooltipText : public TOOLTIPTEXT {
     void        CopyText(const char far* buff);
 };
 
+
+
+//----------------------------------------------------------------------------
+// Structures used for Column Header notifications
+//----------------------------------------------------------------------------
 //
 // class THdrNotify
 // ~~~~~ ~~~~~~~~~~
@@ -227,11 +252,12 @@ class _OWLCLASS THdrNotify : public HD_NOTIFY {
     operator  NMHDR&() { return hdr; }
 };
 
-#if defined(BI_PLAT_WIN32)
-//
-// Encapsulation of RICHEDIT notification structures
-//
 
+
+//----------------------------------------------------------------------------
+// Structures used for RichEdit notifications and API
+//----------------------------------------------------------------------------
+#if defined(BI_PLAT_WIN32)
 //
 // class TEnDropFiles
 // ~~~~~ ~~~~~~~~~~~~
@@ -288,20 +314,85 @@ class _OWLCLASS TSelChange : public SELCHANGE {
 // Forward declarations of notifications
 //
 
-class _OWLCLASS TTwNotify;
-class _OWLCLASS TTwDispInfoNotify;
-class _OWLCLASS TTwKeyDownNotify;
+#include <pshpack1.h>
 
-class _OWLCLASS TLwNotify;
-class _OWLCLASS TLwDispInfoNotify;
-class _OWLCLASS TLwKeyDownNotify;
+//----------------------------------------------------------------------------
+// Structures used for ListView control (TListWindow) notifications
+//----------------------------------------------------------------------------
+//
+// class TLwNotify
+// ~~~~~ ~~~~~~~~~
+// Basic TListWindow notification
+//
+class _OWLCLASS TLwNotify : public _NM_LISTVIEW {
+  public:
+    operator  NMHDR&() { return hdr; }
+};
 
-class _OWLCLASS TEnDropFiles;
-class _OWLCLASS TMsgFilter;
-class _OWLCLASS TEnProtected;
-class _OWLCLASS TReqResize;
-class _OWLCLASS TSelChange;
-class _OWLCLASS TTooltipText;
+//
+// class TLwDispInfoNotify
+// ~~~~~ ~~~~~~~~~~~~~~~~~
+// A TListWindow notification to repaint an item.
+//
+class _OWLCLASS TLwDispInfoNotify : public _LV_DISPINFO {
+  public:
+    operator  NMHDR&() { return hdr; }
+};
+
+//
+// class TLwKeyDownNotify
+// ~~~~~ ~~~~~~~~~~~~~~~~
+// A TListWindow notification that a key has been pressed.
+//
+class _OWLCLASS TLwKeyDownNotify : public _LV_KEYDOWN {
+  public:
+    operator  NMHDR&() { return hdr; }
+};
+
+
+
+//----------------------------------------------------------------------------
+// Structures used for TreeView control (TTreeWindow) notifications
+//----------------------------------------------------------------------------
+//
+// class TTwNotify
+// ~~~~~ ~~~~~~~~~
+// Basic TTreeWindow notification
+//
+class _OWLCLASS TTwNotify : public NM_TREEVIEW {
+  public:
+    operator  NMHDR&() { return hdr; }
+};
+
+//
+// class TTwDispInfoNotify
+// ~~~~~ ~~~~~~~~~~~~~~~~~
+// A TTreeWindow notification to repaint an item.
+//
+class _OWLCLASS TTwDispInfoNotify : public TV_DISPINFO {
+  public:
+    operator  NMHDR&() { return hdr; }
+};
+
+//
+// class TTwKeyDownNotify
+// ~~~~~ ~~~~~~~~~~~~~~~~
+// A TTreeWindow notification that a key has been pressed.
+//
+class _OWLCLASS TTwKeyDownNotify : public TV_KEYDOWN {
+  public:
+    operator  NMHDR&() { return hdr; }
+};
+
+//
+// class TTwHitTestInfo
+// ~~~~~ ~~~~~~~~~~~~~~
+// A TTreeWindow notification for hit-testing.
+//
+class _OWLCLASS TTwHitTestInfo : public TV_HITTESTINFO {
+  public:
+};
+
 
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
@@ -503,7 +594,7 @@ inline void _CALLCNVN (T::*v_KEYDOWNNOTIFY_Sig(void _CALLCNVN (T::*pmf)(TTabKeyD
         EV_COMMCTL_NOTIFY_AND_NOTIFY(PropPageID, PSN_HELP, method)
 
 #define EV_PSN_KILLACTIVE(method)\
-        EV_COMMCTL_NOTIFY_BOOL_AND_NOTIFY(PropPageID, PSN_HELP, method)
+        EV_COMMCTL_NOTIFY_BOOL_AND_NOTIFY(PropPageID, PSN_KILLACTIVE, method)
 
 #define EV_PSN_QUERYCANCEL(method)\
         EV_COMMCTL_NOTIFY_BOOL_AND_NOTIFY(PropPageID, PSN_QUERYCANCEL, method)
@@ -523,9 +614,13 @@ inline void _CALLCNVN (T::*v_KEYDOWNNOTIFY_Sig(void _CALLCNVN (T::*pmf)(TTabKeyD
 #define EV_PSN_WIZNEXT(method)\
         EV_COMMCTL_NOTIFY_INT_AND_NOTIFY(PropPageID, PSN_WIZNEXT, method)
 
+
 //----------------------------------------------------------------------------
 // RichEdit Control notifications
 //
+
+#if defined(BI_PLAT_WIN32)
+
 template <class T>
 inline bool _CALLCNVN (T::*b_ENDROPFILES_Sig(bool _CALLCNVN (T::*pmf)(TEnDropFiles far&)))(TEnDropFiles far&)
 {
@@ -601,6 +696,7 @@ inline bool _CALLCNVN (T::*b_SELCHANGE_Sig(bool _CALLCNVN (T::*pmf)(TSelChange f
   {EN_SELCHANGE, id, (TAnyDispatcher)::B_LPARAM_Dispatch,\
   (TMyPMF)b_SELCHANGE_Sig(&TMyClass::method)}
 
+#endif  //  BI_PLAT_WIN32
 
 //----------------------------------------------------------------------------
 // UpDown Control notifications
@@ -728,7 +824,7 @@ inline void _CALLCNVN (T::*v_TV_DISPINFO_NOTIFY_Sig(void _CALLCNVN (T::*pmf)(TTw
 #define EV_TVN_SETDISPINFO(id, method)    EV_TV_DISPINFO_NOTIFY     (id, TVN_SETDISPINFO, method)
 #define EV_TVN_KEYDOWN(id, method)\
   {TVN_KEYDOWN, id, (TAnyDispatcher)::v_LPARAM_Dispatch,\
-  (TMyPFM)v_TV_KEYDOWN_NOTIFY_Sig(&TMyClass::method)}
+  (TMyPMF)v_TV_KEYDOWN_NOTIFY_Sig(&TMyClass::method)}
 
 //----------------------------------------------------------------------------
 // ListWindow control notifications
@@ -799,23 +895,33 @@ inline void (T::*v_LV_DISPINFO_NOTIFY_Sig(void (T::*pmf)(TLwDispInfoNotify far&)
 
 #define EV_LVN_KEYDOWN(id, method)\
   {LVN_KEYDOWN, id, (TAnyDispatcher)::v_LPARAM_Dispatch,\
-  (TMyPFM)v_LV_KEYDOWN_NOTIFY_Sig(&TMyClass::method)}
+  (TMyPMF)v_LV_KEYDOWN_NOTIFY_Sig(&TMyClass::method)}
 
 #define EV_LVN_BEGINDRAG(id, method)        EV_LISTWIND_NOTIFY(id, LVN_BEGINDRAG, method)
 #define EV_LVN_BEGINLABELEDIT(id, method)   EV_LV_DISPINFO_NOTIFY_BOOL(id, LVN_BEGINLABELEDIT, method)
 #define EV_LVN_BEGINRDRAG(id, method)       EV_LISTWIND_NOTIFY(id, LVN_BEGINRDRAG, method)
 #define EV_LVN_COLUMNCLICK(id, method)      EV_LISTWIND_NOTIFY(id, LVN_COLUMNCLICK, method)
 #define EV_LVN_DELETEALLITEMS(id, method)   EV_LISTWIND_NOTIFY(id, LVN_DELETEALLITEMS, method)
-#define EV_LVN_DELETEITEM(id, method)       EV_LISTWIND_NOTIFY(id, LVN_DELETEITEMS, method)
+#define EV_LVN_DELETEITEM(id, method)       EV_LISTWIND_NOTIFY(id, LVN_DELETEITEM, method)
+
+#if 0   // LVN_ENDDRAG is documented but not defined (currently)
 #define EV_LVN_ENDDRAG(id, method)          EV_LISTWIND_NOTIFY(id, LVN_ENDDRAG, method)
-#define EV_LVN_ENDLABELEDIT(id, method)     EV_LV_DISPINFO_NOTIFY(id, LVN_ENDLABELEDIT, method)
+#endif
+
+#if 0   // LVN_ENDRDRAG is documented but not defined (currently)
 #define EV_LVN_ENDRDRAG(id, method)         EV_LISTWIND_NOTIFY(id, LVN_ENDRDRAG, method)
+#endif
+
+#define EV_LVN_ENDLABELEDIT(id, method)     EV_LV_DISPINFO_NOTIFY(id, LVN_ENDLABELEDIT, method)
 #define EV_LVN_GETDISPINFO(id, method)      EV_LV_DISPINFO_NOTIFY(id, LVN_GETDISPINFO, method)
 #define EV_LVN_INSERTITEM(id, method)       EV_LISTWIND_NOTIFY(id, LVN_INSERTITEM, method)
 #define EV_LVN_ITEMCHANGED(id, method)      EV_LISTWIND_NOTIFY(id, LVN_ITEMCHANGED, method)
 #define EV_LVN_ITEMCHANGING(id, method)     EV_LISTWIND_NOTIFY_BOOL(id, LVN_ITEMCHANGING, method)
 #define EV_LVN_SETDISPINFO(id, method)      EV_LV_DISPINFO_NOTIFY(id, LVN_SETDISPINFO, method)
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implemenations

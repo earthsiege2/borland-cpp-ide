@@ -14,87 +14,90 @@
  *    isspace
  *    isupper
  *    isxdigit
+ *    iswalnum
+ *    iswascii
+ *    iswalpha
+ *    iswcntrl
+ *    iswdigit
+ *    iswgraph
+ *    iswlower
+ *    iswprint
+ *    iswpunct
+ *    iswspace
+ *    iswupper
+ *    iswxdigit
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.6  $        */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <_locale.h>
+#include <_tchar.h>
+#include <ctype.h>
+#include <_ctype.h>
 
-
-int _RTLENTRY _EXPFUNC __isctype( int c, int type )
+int (_RTLENTRY _EXPFUNC _istalnum)( _TINT c )
 {
-    if ( c == EOF )
-        return( 0 );
-
-    return( (_pLocale->pCtype[ (((c) & 0x00ff) +1) ] & (type)) );
+    return( __isttype( c, _IS_ALNUM ) );
 }
 
-int (_RTLENTRY _EXPFUNC isalnum)( int c )
+int (_RTLENTRY _EXPFUNC _istascii)( _TINT c )
 {
-    return( __isctype( c, _IS_ALNUM ) );
+    return( _istascii( c ) );
 }
 
-int (_RTLENTRY _EXPFUNC isascii)( int c )
-  {
-  return( isascii( c ) );
-  }
-
-int (_RTLENTRY _EXPFUNC isalpha)( int c )
+int (_RTLENTRY _EXPFUNC _istalpha)( _TINT c )
 {
-    return( __isctype( c, _IS_ALPHA ) );
+    return( __isttype( c, _IS_ALPHA ) );
 }
 
-int (_RTLENTRY _EXPFUNC iscntrl)( int c )
+int (_RTLENTRY _EXPFUNC _istcntrl)( _TINT c )
 {
-    return( __isctype( c, _IS_CTL ) );
+    return( __isttype( c, _IS_CTL ) );
 }
 
-int (_RTLENTRY _EXPFUNC isdigit)( int c )
+int (_RTLENTRY _EXPFUNC _istdigit)( _TINT c )
 {
-    return( __isctype( c, _IS_DIG ) );
+    return( __isttype( c, _IS_DIG ) );
 }
 
-int (_RTLENTRY _EXPFUNC isgraph)( int c )
+int (_RTLENTRY _EXPFUNC _istgraph)( _TINT c )
 {
-    return( __isctype( c, _IS_GRAPH ) );
+    return( __isttype( c, _IS_GRAPH ) );
 }
 
-int (_RTLENTRY _EXPFUNC islower)( int c )
+int (_RTLENTRY _EXPFUNC _istlower)( _TINT c )
 {
-    return( __isctype( c, _IS_LOW ) );
+    return( __isttype( c, _IS_LOW ) );
 }
 
-int (_RTLENTRY _EXPFUNC isprint)( int c )
+int (_RTLENTRY _EXPFUNC _istprint)( _TINT c )
 {
-    return( __isctype( c, (_IS_GRAPH) ) || (c & 0x00ff) == ' ' );
+    return( __isttype( c, (_IS_GRAPH | _IS_BLK) ));
 }
 
-int (_RTLENTRY _EXPFUNC ispunct)( int c )
+int (_RTLENTRY _EXPFUNC _istpunct)( _TINT c )
 {
-    return( __isctype( c, _IS_PUN ) );
+    return( __isttype( c, _IS_PUN ) );
 }
 
-int (_RTLENTRY _EXPFUNC isspace)( int c )
+int (_RTLENTRY _EXPFUNC _istspace)( _TINT c )
 {
-    return( __isctype( c, _IS_SP ) );
+    return( __isttype( c, _IS_SP ) );
 }
 
-int (_RTLENTRY _EXPFUNC isupper)( int c )
+int (_RTLENTRY _EXPFUNC _istupper)( _TINT c )
 {
-    return( __isctype( c, _IS_UPP ) );
+    return( __isttype( c, _IS_UPP ) );
 }
 
-int (_RTLENTRY _EXPFUNC isxdigit)( int c )
+int (_RTLENTRY _EXPFUNC _istxdigit)( _TINT c )
 {
-    return( __isctype( c, _IS_HEX ) );
+    return( __isttype( c, _IS_HEX ) );
 }
-

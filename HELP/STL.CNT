@@ -1,5 +1,6 @@
 :TITLE Rogue Wave Standard C++ Library User's Guide and Tutorial
-:INCLUDE OPENHELP.CFG
-1 Using the Standard Library with Borland C++ = UsingSTLWithBorlandC
+:INCLUDE BCBHELP.CFG
+:INCLUDE BC5HELP.CFG
+1 Using the Standard Library with Borland's BCC32 Compiler = UsingSTLWithBorlandC
 :INCLUDE STLPG.TOC
 :INCLUDE STLREF.TOC

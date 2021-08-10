@@ -1,26 +1,25 @@
-/*
-*
-*    CCONV.C
-*
-*    the "C" locale lconv structure.
-*
-*/
+/*-----------------------------------------------------------------------*
+ * filename - cconv.c
+ *
+ *    the "C" locale lconv structure.
+ *
+ *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1996, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
-
+/* $Revision:   8.4  $        */
 
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
 #include <_locale.h>
 
-struct lconv _EXPDATA _localeconvention =
+struct lconv _localeconvention =
 
 {
     ".",
@@ -43,10 +42,7 @@ struct lconv _EXPDATA _localeconvention =
     CHAR_MAX
 };
 
-struct lconv * _RTLENTRY _EXPFUNC localeconv( void )
+struct lconv * _Cdecl localeconv( void )
 {
   return( &_localeconvention );
 }
-
-
-

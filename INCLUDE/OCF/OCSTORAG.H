@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright 1994, 1996 by Borland International, All Rights Reserved
+// Copyright 1994, 1997 by Borland International, All Rights Reserved
 //
-//   Definition of TOcStorage & TOcStream classes
+// $Revision:   2.7  $
+//
+// Definition of TOcStorage & TOcStream classes
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCSTORAG_H)
 #define OCF_OCSTORAG_H
@@ -12,12 +14,6 @@
 #endif
 
 //
-// Classes defined
-//
-class _ICLASS TOcStream;
-class _ICLASS TOcStorage;
-
-//
 // Classes referenced
 //
 class _ICLASS IRootStorage;
@@ -25,6 +21,20 @@ class _ICLASS IStorage;
 class _ICLASS IStream;
 class _ICLASS ILockBytes;
 class _ICLASS IEnumSTATSTG;
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
+//
+// Classes defined
+//
+class _ICLASS TOcStream;
+class _ICLASS TOcStorage;
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 //----------------------------------------------------------------------------
 // Storage specific definitions & types, primarily for use under Win16
@@ -140,6 +150,10 @@ class _ICLASS ILockBytes : public IUnknown {};  // member functions not called
 #endif  // #if !defined(_STORAGE_H_)
 #endif  // #if !defined(BI_PLAT_WIN32)
 
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
 //
 // class TOcStream
 // ~~~~~ ~~~~~~~~~
@@ -241,8 +255,12 @@ class _OCFCLASS TOcStorage {
 //    TOcStorage* Parent;
 #endif
     IStorage*   StorageI;
-    
+
   friend TOcStream;
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 #endif  // OCF_OCSTORAG_H

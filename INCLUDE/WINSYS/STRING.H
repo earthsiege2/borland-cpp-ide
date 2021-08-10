@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.9  $
 //
 // Definition of class TString, a flexible universal string envelope class.
 // Facilitates efficient construction and assignment of many string types
@@ -29,6 +29,10 @@
 #endif
 #if !defined(SERVICES_CSTRING_H)
 # include <services/cstring.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //
@@ -75,7 +79,7 @@ class TString {
   public:
     // Construct a TString from any type of string
     //
-    TString(const char far* s = 0);
+    TString(const _TCHAR far* s = 0);
 #if defined(BI_HAS_WCHAR)
     TString(const wchar_t* s);
 #endif
@@ -97,8 +101,8 @@ class TString {
     //
     TString& operator =(const TString& s);
     TString& operator =(const string& s);
-    TString& operator =(const char far* s);
-    TString& operator =(char* s);
+    TString& operator =(const _TCHAR far* s);
+    TString& operator =(_TCHAR* s);
 #if defined(BI_HAS_WCHAR)
     TString& operator =(const wchar_t* s);
     TString& operator =(wchar_t* s);
@@ -107,8 +111,8 @@ class TString {
     // Convert this TString into the desired string type & return pointer into
     // this TString
     //
-    operator const char far*() const;
-    operator char*();
+    operator const _TCHAR far*() const;
+    operator _TCHAR*();
 #if defined(BI_HAS_WCHAR)
     operator const wchar_t*() const;
     operator wchar_t*();
@@ -121,9 +125,9 @@ class TString {
 #if defined(BI_HAS_WCHAR)
     wchar_t* RelinquishWide() const;
 #endif
-    char*    RelinquishNarrow() const;
+    _TCHAR*    RelinquishNarrow() const;
 #if 1 
-    char*    Relinquish() const;
+    _TCHAR*    Relinquish() const;
 #else
     wchar_t* Relinquish() const;
 #endif
@@ -165,8 +169,8 @@ class TString {
 //
 class TUString {
   public:
-    static TUString* Create(const char far* str);
-    static TUString* Create(char* str);
+    static TUString* Create(const _TCHAR far* str);
+    static TUString* Create(_TCHAR* str);
 #if defined(BI_HAS_WCHAR)
     static TUString* Create(const wchar_t* str);
     static TUString* Create(wchar_t* str);
@@ -177,16 +181,16 @@ class TUString {
 
     TUString* Assign(const TUString& s);
     TUString* Assign(const string& s);
-    TUString* Assign(const char far* s);
-    TUString* Assign(char* s);
+    TUString* Assign(const _TCHAR far* s);
+    TUString* Assign(_TCHAR* s);
 #if defined(BI_HAS_WCHAR)
     TUString* Assign(const wchar_t* s);
     TUString* Assign(wchar_t* s);
 #endif
     TUString* Assign(BSTR str, TLangId lang);
 
-    operator const char far*() const;
-    operator char*();
+    operator const _TCHAR far*() const;
+    operator _TCHAR*();
 #if defined(BI_HAS_WCHAR)
     operator const wchar_t*() const;
     operator wchar_t*();
@@ -216,8 +220,8 @@ class TUString {
    ~TUString() {Free();}
 
   private:
-    TUString(const char far& str);
-    TUString(char& str);
+    TUString(const _TCHAR far& str);
+    TUString(_TCHAR& str);
 #if defined(BI_HAS_WCHAR)
     TUString(const wchar_t& str);
     TUString(wchar_t& str);
@@ -228,7 +232,7 @@ class TUString {
 
     void Free();
 
-    char*    ChangeToCopy();
+    _TCHAR*    ChangeToCopy();
 #if defined(BI_HAS_WCHAR)
     wchar_t* ChangeToWCopy();
 #endif
@@ -242,8 +246,8 @@ class TUString {
     } Kind : 16;
     int16 RefCnt;
     union {
-      const char far* Const;  // Passed-in string, NOT owned here, read-only
-      char* Copy;             // Local copy, must be deleted, read-write
+      const _TCHAR far* Const;  // Passed-in string, NOT owned here, read-only
+      _TCHAR* Copy;             // Local copy, must be deleted, read-write
 #if defined(BI_HAS_WCHAR)
       const wchar_t* WConst;  // Unicode version of Const (Win32)
       wchar_t* WCopy;         // Unicode version of Copy (Win32)
@@ -258,6 +262,10 @@ class TUString {
   friend class TString;       // Envelope string class
 };
 
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
+
 //----------------------------------------------------------------------------
 // Inlines
 //
@@ -265,7 +273,7 @@ class TUString {
 //
 // Construct a TString from a character array
 //
-inline TString::TString(const char far* s)
+inline TString::TString(const _TCHAR far* s)
 :
   S(TUString::Create(s))
 {
@@ -363,7 +371,7 @@ inline bool TString::IsWide() const
 //
 // Copy contents of TString s into this string
 //
-inline TString& TString::operator =(const TString& s) 
+inline TString& TString::operator =(const TString& s)
 {
   S = S->Assign(*s.S); return *this;
 }
@@ -371,7 +379,7 @@ inline TString& TString::operator =(const TString& s)
 //
 // Copy contents of string s into this string
 //
-inline TString& TString::operator =(const string& s)  
+inline TString& TString::operator =(const string& s)
 {
   S = S->Assign(s); return *this;
 }
@@ -379,7 +387,7 @@ inline TString& TString::operator =(const string& s)
 //
 // Copy contents of const char* s into this string
 //
-inline TString& TString::operator =(const char far* s)
+inline TString& TString::operator =(const _TCHAR far* s)
 {
   S = S->Assign(s); return *this;
 }
@@ -387,7 +395,7 @@ inline TString& TString::operator =(const char far* s)
 //
 // Copy contents of char* s into this string
 //
-inline TString& TString::operator =(char* s)          
+inline TString& TString::operator =(_TCHAR* s)
 {
   S = S->Assign(s); return *this;
 }
@@ -397,7 +405,7 @@ inline TString& TString::operator =(char* s)
 //
 // Copy contents of const wchar_t* s into this string
 //
-inline TString& TString::operator =(const wchar_t* s) 
+inline TString& TString::operator =(const wchar_t* s)
 {
   S = S->Assign(s); return *this;
 }
@@ -405,7 +413,7 @@ inline TString& TString::operator =(const wchar_t* s)
 //
 // Copy contents of wchar_t* s into this string
 //
-inline TString& TString::operator =(wchar_t* s)       
+inline TString& TString::operator =(wchar_t* s)
 {
   S = S->Assign(s); return *this;
 }
@@ -414,17 +422,17 @@ inline TString& TString::operator =(wchar_t* s)
 //
 // Return string as a const char far*
 //
-inline TString::operator const char far*() const
+inline TString::operator const _TCHAR far*() const
 {
-  return S->operator const char far*();
+  return S->operator const _TCHAR far*();
 }
 
 //
 // Return string as a char*
 //
-inline TString::operator char*()          
+inline TString::operator _TCHAR*()
 {
-  return S->operator char*();
+  return S->operator _TCHAR*();
 }
 
 #if defined(BI_HAS_WCHAR)
@@ -432,7 +440,7 @@ inline TString::operator char*()
 //
 // Return string as a const wchar_t*
 //
-inline TString::operator const wchar_t*() const 
+inline TString::operator const wchar_t*() const
 {
   return S->operator const wchar_t*();
 }
@@ -440,7 +448,7 @@ inline TString::operator const wchar_t*() const
 //
 // Return string as a wchar_t*
 //
-inline TString::operator wchar_t*()       
+inline TString::operator wchar_t*()
 {
   return S->operator wchar_t*();
 }
@@ -454,7 +462,7 @@ inline BSTR TString::RelinquishSysStr() const
 #if defined(BI_OLECHAR_WIDE)
   return ::SysAllocString((const wchar_t*)*S);
 #else
-  return ::SysAllocString((const char*)*S);
+  return ::SysAllocString((const _TCHAR*)*S);
 #endif
 }
 
@@ -471,16 +479,16 @@ inline wchar_t* TString::RelinquishWide() const
 //
 // Return a pointer (char*) to a copy of the string
 //
-inline char* TString::RelinquishNarrow() const
+inline _TCHAR* TString::RelinquishNarrow() const
 {
-  return strnewdup((const char*)*S);
+  return strnewdup((const _TCHAR*)*S);
 }
 
 //
 // Return a pointer (char*) to a copy of the string
 //
 #if 1 
-inline char* TString::Relinquish() const
+inline _TCHAR* TString::Relinquish() const
 {
   return RelinquishNarrow();
 }

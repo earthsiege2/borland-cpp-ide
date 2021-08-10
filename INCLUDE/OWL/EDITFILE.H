@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Definition of class TEditFile, a text edit which can find/replace and
 // read/write from/to a file.
@@ -17,6 +17,10 @@
 # include <owl/opensave.h>
 #endif
 #include <owl/editfile.rh>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
@@ -104,6 +108,10 @@ class _OWLCLASS TEditFile : public TEditSearch {
 // definition of classes
 #include <services/posclass.h>
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 //----------------------------------------------------------------------------
 // Inline implementations
 //
@@ -111,7 +119,8 @@ class _OWLCLASS TEditFile : public TEditSearch {
 //
 inline
 TEditFile::TEditFile(TWindow* parent, int resourceId, TModule& module)
-          :TEditSearch(parent, resourceId, module)
+          :TEditSearch(parent, resourceId, module),
+           FileName(0)
 {
 }
 

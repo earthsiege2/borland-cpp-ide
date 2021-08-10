@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.7  $
+//$Revision:   5.10  $
 //
 // Implements commonly used template functions min(), max(), range()
 //
@@ -78,6 +78,10 @@ template <class T> inline T max( const T& t1, const T& t2, const T& t3 )
     return t1>t2 ? (t1>t3 ? t1 : t3) : (t2>t3 ? t2 : t3);
 }
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 template <class T> inline const T& range( const T& minVal, const T& maxVal,
                                           const T& val )
 {
@@ -90,6 +94,10 @@ template <class T> inline void Swap(T _BIDSFARDATA& a, T _BIDSFARDATA& b)
   a = b;
   b = t;
 }
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po.

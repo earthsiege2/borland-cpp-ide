@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.4  $
 //
 // Definition of class TColor [Backward compatible header]
 //----------------------------------------------------------------------------

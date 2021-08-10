@@ -386,7 +386,8 @@
 3 Scroll Bar Notification Messages = ScrollBarNotificationMessages
 3 Standard Windows Messages = WM_xxxxWindowMessages
 3 Standard Windows Messages 4.0 = StandardWindowsMessages40
-3 Tab Control Notificaiton Messages = TreeViewNotificationMessages
+3 Tab Control Notification Messages = TabControlNotificationMessages
+3 Tool Tip Notification Messages = ToolTipNotificationMessages
 3 Tree View Notification Messages = TreeViewNotificationMessages
 3 UpDown Notification Messages = UpDownNotificationMessages
 3 User-defined Messages = User_definedMessages
@@ -405,6 +406,7 @@
 3 OLE Macros = OLEmacros
 3 OLE Registration Macros = OLERegistrationmacros
 3 Response Table Macros = OLERegistrationmacros
+3 TYPESAFE_DOWNCAST Macro = TYPESAFE_DOWNCASTmacro
 3 WinSock Macros = WinSockmacros
 2 ObjectWindows Library Type Definitions
 3 TActionFunc typedef =TActionFunctypedef

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.3  $
 //
 // Defines classes handling Windows resources
 //----------------------------------------------------------------------------
@@ -20,6 +20,10 @@
 #endif
 #if !defined(WINSYS_WSYSCLS_H)
 # include <winsys/wsyscls.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 //
@@ -196,5 +200,9 @@ class _OWLCLASS TDialogRes {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  //  OWL_RESOURCE_H

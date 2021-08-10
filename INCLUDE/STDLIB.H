@@ -5,12 +5,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.16  $ */
 
 #ifndef __STDLIB_H
 #define __STDLIB_H
@@ -62,6 +63,11 @@ typedef struct {
 #define _WCHAR_T_DEFINED  /* For WINDOWS.H */
 typedef unsigned short wchar_t;
 #endif
+#endif
+
+#if !defined(_WINT_T)
+typedef wchar_t wint_t;
+#define _WINT_T
 #endif
 
 #define MB_CUR_MAX 1
@@ -351,9 +357,38 @@ long double _RTLENTRY _EXPFUNC   _strtold(const char * __s, char * *__endptr);
 unsigned long _RTLENTRY _EXPFUNC strtoul(const char * __s, char * *__endptr,
                            int __radix);
 int         _RTLENTRY _EXPFUNC   system(const char * __command);
-size_t      _RTLENTRY _EXPFUNC   wcstombs(char * __s, const wchar_t *__pwcs,
-                           size_t __n);
+
+size_t      _RTLENTRY _EXPFUNC   wcstombs(char * __s, const wchar_t *__pwcs,size_t __n);
 int         _RTLENTRY _EXPFUNC   wctomb(char * __s, wchar_t __wc);
+double      _RTLENTRY _EXPFUNC   _wtof(const wchar_t * __s);
+int         _RTLENTRY _EXPFUNC   _wtoi(const wchar_t * __s);
+long        _RTLENTRY _EXPFUNC   _wtol(const wchar_t * __s);
+long double _RTLENTRY _EXPFUNC   _wtold(const wchar_t * __s);
+double      _RTLENTRY _EXPFUNC   wcstod(const wchar_t * __s, wchar_t * *__endptr);
+long        _RTLENTRY _EXPFUNC   wcstol(const wchar_t * __s, wchar_t * *__endptr, int __radix);
+long double _RTLENTRY _EXPFUNC   _wcstold(const wchar_t * __s, wchar_t * *__endptr);
+unsigned long _RTLENTRY _EXPFUNC wcstoul(const wchar_t * __s, wchar_t * *__endptr, int __radix);
+int         _RTLENTRY  _EXPFUNC  _wsystem(const wchar_t * __command);
+wchar_t *   _RTLENTRY  _EXPFUNC  _itow(int __value, wchar_t *__string, int __radix);
+wchar_t *   _RTLENTRY  _EXPFUNC  _ltow(long __value, wchar_t *__string, int __radix);
+wchar_t *   _RTLENTRY  _EXPFUNC  _ultow(unsigned long __value, wchar_t *__string, int __radix);
+
+#if !defined(__STDC__)
+#if (__BORLANDC__ >= 0x0520) && defined (_INTEGRAL_MAX_BITS) && (_INTEGRAL_MAX_BITS >= 64)
+__int64     _RTLENTRY   _EXPFUNC _atoi64(const char * __s);
+char *      _RTLENTRY   _EXPFUNC _i64toa(__int64 value, char *strP, int radix);
+char *      _RTLENTRY   _EXPFUNC _ui64toa(unsigned __int64 value, char *strP, int radix);
+__int64     _RTLENTRY   _EXPFUNC _wtoi64(const wchar_t * __s);
+wchar_t *   _RTLENTRY   _EXPFUNC _i64tow(__int64 value, wchar_t *strP, int radix);
+wchar_t *   _RTLENTRY   _EXPFUNC _ui64tow(unsigned __int64 value, wchar_t *strP, int radix);
+#endif
+char *      _RTLENTRY   _EXPFUNC ltoa(long __value, char * __string, int __radix);
+char *      _RTLENTRY   _EXPFUNC ltoa(long __value, char * __string, int __radix);
+char *      _RTLENTRY   _EXPFUNC ecvt(double __value, int __ndig, int * __dec, int * __sign);
+char *      _RTLENTRY   _EXPFUNC fcvt(double __value, int __ndig, int * __dec, int * __sign);
+char *      _RTLENTRY   _EXPFUNC gcvt(double __value, int __ndec, char * __buf);
+
+#endif /* __STDC__ */
 
 #ifdef __cplusplus
 }
@@ -394,6 +429,7 @@ extern  int   _RTLENTRY _EXPDATA _doserrno;
 #endif /* __STDC__ */
 
 extern  char          **_RTLENTRY _EXPDATA _environ;
+extern  wchar_t       **_RTLENTRY _EXPDATA _wenviron;
 extern  int             _RTLENTRY _EXPDATA _fileinfo;
 extern  int             _RTLENTRY          _fmode;
 extern  unsigned char   _RTLENTRY _EXPDATA _osmajor;
@@ -443,14 +479,14 @@ long double   _RTLENTRY  _EXPFUNC _atold(const char * __s);
 unsigned char _RTLENTRY  _EXPFUNC _crotl(unsigned char __value, int __count);
 unsigned char _RTLENTRY  _EXPFUNC _crotr(unsigned char __value, int __count);
 
-char *        _RTLENTRY  _EXPFUNC ecvt(double __value, int __ndig, int * __dec,
+char *        _RTLENTRY  _EXPFUNC _ecvt(double __value, int __ndig, int * __dec,
                                        int * __sign);
 void          _RTLENTRY  _EXPFUNC _exit(int __status);
-char *        _RTLENTRY  _EXPFUNC fcvt(double __value, int __ndig, int * __dec,
+char *        _RTLENTRY  _EXPFUNC _fcvt(double __value, int __ndig, int * __dec,
                                        int * __sign);
 char *        _RTLENTRYF _EXPFUNC _fullpath(char * __buf, const char * __path,
                                             size_t __maxlen);
-char *        _RTLENTRY  _EXPFUNC gcvt(double __value, int __ndec,
+char *        _RTLENTRY  _EXPFUNC _gcvt(double __value, int __ndec,
                                        char * __buf);
 char *        _RTLENTRYF _EXPFUNC itoa(int __value, char * __string,
                                        int __radix);
@@ -467,7 +503,7 @@ void *        _RTLENTRY  _EXPFUNC lsearch(const void * __key, void * __base,
                                           size_t *__num, size_t __width,
                                           int (_USERENTRY *fcmp)(const void *, const void *));
 
-char *        _RTLENTRYF _EXPFUNC ltoa(long __value, char * __string,
+char *        _RTLENTRYF _EXPFUNC _ltoa(long __value, char * __string,
                                        int __radix);
 void          _RTLENTRY  _EXPFUNC _makepath(char * __path,
                                             const char * __drive,
@@ -476,24 +512,47 @@ void          _RTLENTRY  _EXPFUNC _makepath(char * __path,
                                             const char * __ext );
 int           _RTLENTRY  _EXPFUNC putenv(const char * __name);
 
-unsigned short _RTLENTRY _EXPFUNC _rotl(unsigned short __value, int __count);
-unsigned short _RTLENTRY _EXPFUNC _rotr(unsigned short __value, int __count);
+unsigned short  _RTLENTRY _EXPFUNC _rotl(unsigned short __value, int __count);
+unsigned short  _RTLENTRY _EXPFUNC _rotr(unsigned short __value, int __count);
 
-void          _RTLENTRY  _EXPFUNC _searchenv(const char * __file,
+void            _RTLENTRY _EXPFUNC _searchenv(const char * __file,
                                              const char * __varname,
                                              char *__pathname);
-void          _RTLENTRY  _EXPFUNC _searchstr(const char * __file,
+void            _RTLENTRY _EXPFUNC _searchstr(const char * __file,
                                              const char * __ipath,
                                              char *__pathname);
-void          _RTLENTRY  _EXPFUNC _splitpath(const char * __path,
+void            _RTLENTRY _EXPFUNC _splitpath(const char * __path,
                                              char * __drive,
                                              char * __dir,
                                              char * __name,
                                              char * __ext );
-void          _RTLENTRY  _EXPFUNC swab(char * __from, char * __to, int __nbytes);
-char *        _RTLENTRYF _EXPFUNC ultoa(unsigned long __value, char * __string,
+void            _RTLENTRY _EXPFUNC swab(char * __from, char * __to, int __nbytes);
+char *          _RTLENTRY _EXPFUNC ultoa(unsigned long __value, char * __string,
                                         int __radix);
+void            _RTLENTRY _EXPFUNC perror(const char * __s);
 
+void            _RTLENTRY _EXPFUNC _wperror(const wchar_t * __s);
+wchar_t *       _RTLENTRY _EXPFUNC _wfullpath(wchar_t * __buf,const wchar_t * __path,
+                                             size_t __maxlen);
+void            _RTLENTRY _EXPFUNC _wmakepath(wchar_t * __path,
+                                             const wchar_t * __drive,
+                                             const wchar_t * __dir,
+                                             const wchar_t * __name,
+                                             const wchar_t * __ext );
+void          _RTLENTRY  _EXPFUNC _wsplitpath(const wchar_t * __path,
+                                              wchar_t * __drive,
+                                              wchar_t * __dir,
+                                              wchar_t * __name,
+                                              wchar_t * __ext );
+
+void          _RTLENTRY  _EXPFUNC _wsearchenv(const wchar_t * __file,
+                                             const wchar_t * __varname,
+                                             wchar_t *__pathname);
+void          _RTLENTRY  _EXPFUNC _wsearchstr(const wchar_t * __file,
+                                             const wchar_t * __ipath,
+                                             wchar_t *__pathname);
+wchar_t *     _RTLENTRY _EXPFUNC  _wgetenv(const wchar_t * __name);
+int           _RTLENTRY _EXPFUNC  _wputenv(const wchar_t * __name);
 /* Intrinsic functions */
 
 unsigned char _RTLENTRY  ___crotl__(unsigned char __value, int __count);

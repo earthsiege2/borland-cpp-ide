@@ -288,7 +288,7 @@ TGame::ComputerTurn()
 class TSquare : public TButtonGadget {
   public:
     TSquare(int id);
-   ~TSquare() {CelArray = 0;}
+   ~TSquare();
 
     void      SetGlyph(int g);
     void      Paint(TDC& dc);
@@ -310,6 +310,11 @@ TSquare::TSquare(int id)
   TButtonGadget(IDB_EMPTY, id, NonExclusive, true, Up, false),
   Glyph(0)
 {
+}
+
+TSquare::~TSquare()
+{
+  CelArray = 0;
 }
 
 void
@@ -335,7 +340,7 @@ TSquare::Paint(TDC& dc)
   for (int i = 0; i < SqsCount; i++)
     if (!StateCels[i]) {
       ResId = StateResId[i];
-      CelArray = 0;     // leak?
+      CelArray = 0;     
       BuildCelArray();
       StateCels[i] = CelArray;
     }
@@ -345,6 +350,10 @@ TSquare::Paint(TDC& dc)
   CelArray = StateCels[Glyph];
   TButtonGadget::Paint(dc);
   CelArray = 0;
+  for(int i=0; i<3; i++)  {
+   delete StateCels[i];
+   StateCels[i] = 0;
+  }
 }
 
 //
@@ -570,7 +579,8 @@ TGameOptionsBox::HandleXOGroupMsg(uint)
 
 class TGameApp : public TApplication {
   public:
-   TGameApp() :   TApplication("TicTacToe") {}
+   TGameApp() :   TApplication("TicTacToe"), Game(0) {}
+   ~TGameApp() { delete Game; }
 
   private:
    void CmGameNew();

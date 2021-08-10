@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.11  $
 //
 // Implementation of OpenSave abstract, FileOpen, FileSave Common Dialog
 // classes
@@ -13,18 +13,20 @@
 # include <owl/opensave.h>
 #endif
 
+OWL_DIAGINFO;
+
 #if !defined(SECTION) || SECTION == 1
 
 //
 //
 //
-TOpenSaveDialog::TData::TData(uint32          flags,
-                              const char far* filter,
-                              char       far* customFilter,
-                              const char far* initialDir,
-                              const char far* defExt,
-                              int             maxPath,
-                              int             filterIndex)
+TOpenSaveDialog::TData::TData(uint32 flags,
+                              char*  filter,
+                              char*  customFilter,
+                              char*  initialDir,
+                              char*  defExt,
+                              int    maxPath,
+                              int    filterIndex)
 :
   Flags(flags), Error(0), FileName(0), Filter(0),
   CustomFilter(customFilter), FilterIndex(filterIndex),
@@ -41,7 +43,7 @@ TOpenSaveDialog::TData::TData(uint32          flags,
   // We currently cannot mix OFN_ENABLEHOOK & OFN_EXPLORER
   // when running under NT 3.51[no new shell]
   //
-  if (TSystem::IsWin95())
+  if (TSystem::Has3dUI())
     Flags |= OFN_EXPLORER;
 #endif
 }
@@ -244,7 +246,7 @@ TFileOpenDialog::DoExecute()
   int ret = ::GetOpenFileName(&ofn);
   if (ret) {
     Data.Flags = ofn.Flags;
-    Data.FilterIndex = ofn.nFilterIndex;
+    Data.FilterIndex = (int)ofn.nFilterIndex;
     Data.Error = 0;
   }
   else {

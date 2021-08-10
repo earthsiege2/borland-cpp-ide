@@ -1,15 +1,24 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.9  $
+// $Revision:   2.14  $
 //
 // Application class factory and type library implementation
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/appdesc.h>
-#include <ocf/ocreg.h>
-#include <classlib/cmdline.h>
+#if !defined(OCF_APPDESC_H)
+# include <ocf/appdesc.h>
+#endif
+#if !defined(OCF_OCREG_H)
+# include <ocf/ocreg.h>
+#endif
+#if !defined(CLASSLIB_CMDLINE_H)
+# include <classlib/cmdline.h>
+#endif
+#if !defined(CLASSLIB_OBJSTRM_H)
+# include <classlib/objstrm.h>
+#endif
 #include <strstrea.h>
 
 DIAG_DECLARE_GROUP(OcDll);
@@ -20,10 +29,9 @@ static TLangId ParseLangId(const char* text);
 // TAppDescriptor implementation
 //
 
+// Provides access to the AppDescriptor of this component
 //
-//
-//
-TAppDescriptor* TAppDescriptor::This = 0;// for components, other DLL use table
+TAppDescriptor* TAppDescriptor::This = 0;
 
 //
 //
@@ -54,7 +62,10 @@ TAppDescriptor::Init(IMalloc*)
   AppName  = &RegInfo.LookupRef("appname");
   AppDoc   = &RegInfo.LookupRef("description");
   HelpFile = &RegInfo.LookupRef("typehelp");
-  This = this;    // direct access for destructors from component main module
+
+  // Provide direct access for destructors from component main module
+  //
+  This = this;
   RegClassHdl = RegObjectHdl = ClassCount = LinkGuidCount = 0;
   DebugGuidOffset = LinkGuidOffset = LibGuidOffset = 0;
   ServedList = ActiveObject = 0;
@@ -81,8 +92,9 @@ TAppDescriptor::Init(IMalloc*)
 #endif
 
   // Set the initial usage mode based on the reglist entry and module type
+  // NOTE: InProc servers are multiple-user
   //
-  if (Options & amExeModule) {   // inproc servers are multiple-use
+  if (Options & amExeModule) {
     const char* usage = RegInfo.Lookup("usage");
     char su[] = ocrSingleUse;
     if (usage && *usage == *su)
@@ -101,10 +113,10 @@ TAppDescriptor::Init(IMalloc*)
     Version = "1.0";
 
   // Assign GUID for debug registration
+  // Check if alternate debug registration has been provided and allocated GUID
   //
-  if ((Options & amExeModule) &&
-      RegInfo.Lookup("debugprogid"))  // check if alternate debug registration
-    DebugGuidOffset = AppClassId.AllocId();  // allocate GUID for debugging
+  if ((Options & amExeModule) && RegInfo.Lookup("debugprogid"))
+    DebugGuidOffset = AppClassId.AllocId();
 
   // Generate array of all automated classes and assign GUIDs
   //
@@ -120,14 +132,20 @@ TAppDescriptor::~TAppDescriptor()
   delete TypeLib;
   delete[] ClassList;
   This = 0;
+
+  // Following should not normally happen - but just in case
+  //
   if (RefCnt > 0)
-    ::CoDisconnectObject(this,0);   // should not normally happen
+    ::CoDisconnectObject(this,0);
+
+  // And last, uninitialize OLE
+  //
   if (Options & amExeModule)
-    ::OleUninitialize();       // must happen after everything is unregistered
+    ::OleUninitialize();
 }
 
-//
-//
+// Creates a TServedObject helper object which implements an IDispatch
+// implementation on behalf of the 'Application' object.
 //
 TUnknown*
 TAppDescriptor::CreateAutoApp(TObjectDescriptor objDesc, uint32 options,
@@ -139,14 +157,26 @@ TAppDescriptor::CreateAutoApp(TObjectDescriptor objDesc, uint32 options,
     else if (options & amExeMode)
       objDesc.Destruct = TObjectDescriptor::PostQuit;
   }
-  Creator = new TServedObjectCreator(*this);  // destructed through delegation model
-  TUnknown* obj = Creator->CreateObject(objDesc, outer); // RefCnt=0
-  RegisterObject(objDesc);                        // OLE will do an AddRef()
-  return obj;     // RefCnt++ when Aggregated or converted to IUnknown*
+
+  // NOTE: Creator is destroyed via delegation
+  //
+  Creator = new TServedObjectCreator(*this);
+
+  // NOTE : Object is created with ref. count of '0'
+  //
+  TUnknown* obj = Creator->CreateObject(objDesc, outer);
+
+  // NOTE: OLE's 'RegisterActiveObject' will do an 'AddRef()'
+  //
+  RegisterObject(objDesc);
+
+  // NOTE: Object will be RefCnt++ when aggregated or converted to IUnknown*
+  //
+  return obj;
 }
 
-//
-//
+// Releases the helper object (TServedObject) implementing IDispatch on behalf
+// of the 'Application' object.
 //
 void
 TAppDescriptor::ReleaseAutoApp(TObjectDescriptor app)
@@ -156,18 +186,19 @@ TAppDescriptor::ReleaseAutoApp(TObjectDescriptor app)
     UnregisterObject();
 }
 
-//
-//
+// Creates a TServedObject helper which implements IDispatch on behalf of
+// the class described via the 'objDesc' parameter.
+// NOTE: The returned object initial ref. count is '0'.
 //
 TUnknown*
 TAppDescriptor::CreateAutoObject(TObjectDescriptor objDesc, TServedObject& app,
                                  IUnknown* outer)
 {
-  return app.Creator.CreateObject(objDesc, outer); // RefCnt initially 0
+  return app.Creator.CreateObject(objDesc, outer);
 }
 
-//
-//
+// Creates a TServedObject helper which implements IDispatch on behalf of the
+// class instance passed in via 'obj' and 'objInfo' parameters.
 //
 TUnknown*
 TAppDescriptor::CreateAutoObject(const void* obj, const typeinfo& objInfo,
@@ -177,7 +208,9 @@ TAppDescriptor::CreateAutoObject(const void* obj, const typeinfo& objInfo,
   TServedObject* autoApp = FindServed(MostDerived(app, appInfo));
   TServedObjectCreator *creator = autoApp ? &(autoApp->Creator) : Creator;
   if (!creator) {
-    Creator = new TServedObjectCreator(*this);  // destructed through delegation model
+    // NOTE: Destroyed through delegation
+    //
+    Creator = new TServedObjectCreator(*this);
     creator = Creator;
   }
 
@@ -188,11 +221,10 @@ TAppDescriptor::CreateAutoObject(const void* obj, const typeinfo& objInfo,
   return 0;
 }
 
-//
-//
+// QueryInterface: Hands out IUnknown or IClassFactory
 //
 HRESULT _IFUNC
-TAppDescriptor::QueryInterface(const IID far& riid, void far* far* retIface)
+TAppDescriptor::QueryInterface(const IID& riid, void** retIface)
 {
   if (riid == IID_IUnknown || riid == IID_IClassFactory) {
     AddRef();
@@ -203,8 +235,7 @@ TAppDescriptor::QueryInterface(const IID far& riid, void far* far* retIface)
   return HR_NOINTERFACE;
 }
 
-//
-//
+// Usual IUnknown 'AddRef'
 //
 ulong _IFUNC
 TAppDescriptor::AddRef()
@@ -212,22 +243,34 @@ TAppDescriptor::AddRef()
   return ++RefCnt;
 }
 
-//
-//
+// Usual IUnknown 'Release'
+// NOTE: This object does *NOT* delete itself
 //
 ulong _IFUNC
 TAppDescriptor::Release()
 {
-  return --RefCnt;  // note: this object will not delete itself
+  return --RefCnt;
 }
 
 //
 //
 //
 HRESULT _IFUNC
-TAppDescriptor::CreateInstance(IUnknown* outer, const IID far& riid,
-                               void far* far* ppv)
+TAppDescriptor::CreateInstance(IUnknown* outer, const IID& riid,
+                               void** ppv)
 {
+
+#if   0  
+
+  // Display which interface is being asked for
+  //
+  const char* p = OCFStringFromIID(riid);
+
+  TOcOleCtl* oleCtl = new TOcOleCtl(outer);
+  return SUCCEEDED(oleCtl->QueryInterface(riid, ppv));
+
+#else
+
   *ppv = 0;
   IUnknown* obj;
   if (!FactoryCallback)
@@ -244,7 +287,10 @@ TAppDescriptor::CreateInstance(IUnknown* outer, const IID far& riid,
       return HR_FAIL;
     if (Options & amSingleUse)
       UnregisterClass();
-    if (riid == IID_IUnknown) {  // can't return outer if aggregated
+
+    // Cannot return outer if aggregated
+    //
+    if (riid == IID_IUnknown) {
       *ppv = obj;
       return HR_OK;
     }
@@ -252,29 +298,36 @@ TAppDescriptor::CreateInstance(IUnknown* outer, const IID far& riid,
     obj->Release();
     return stat;
   }
-  catch (...) {  // we can't throw any exception through OLE
-    return HR_OUTOFMEMORY;  // probably a resource problem, better error code?
+  catch (...) {
+    // NOTE: Cannot throw any exception through OLE
+    //       We'll assume a resource problem;
+    //       Is there a better error code to express an exception ??
+    //
+    return HR_OUTOFMEMORY;
   }
+
+#endif
 }
 
-//
-//
+// LockServer [IClassFactory]
 //
 HRESULT _IFUNC
 TAppDescriptor::LockServer(int lock)
 {
   if (lock)
     LockCount++;
-  else
-    LockCount--;    // should notify app when count reaches 0?
+  else {
+    // NOTE: Should we notify app when count reaches 0?
+    //
+    LockCount--;
+  }
 
   TRACEX(OcDll, 1, "LockServer(" << lock << ") Count:" << LockCount);
 
   return HR_NOERROR;
 }
 
-//
-//
+// Returns version as a whole number
 //
 uint16
 TAppDescriptor::GetVersionField(unsigned field)
@@ -293,8 +346,8 @@ TAppDescriptor::GetVersionField(unsigned field)
   return ver;
 }
 
-//
-//
+
+// Register an EXE class object with OLE so that other applications can connect to it
 //
 void
 TAppDescriptor::RegisterClass()
@@ -302,14 +355,15 @@ TAppDescriptor::RegisterClass()
   int guidOffset = IsOptionSet(amDebug) ? DebugGuidOffset : 0;
   if (!RegClassHdl) {
     OLECALL(::CoRegisterClassObject(AppClassId[guidOffset], this,
-                      CLSCTX_LOCAL_SERVER, (Options & amSingleUse) ?
-                      REGCLS_SINGLEUSE : REGCLS_MULTIPLEUSE, &RegClassHdl),
-                      "Register App class");
+                                    CLSCTX_LOCAL_SERVER,
+                                    (Options & amSingleUse) ? REGCLS_SINGLEUSE :
+                                                              REGCLS_MULTIPLEUSE,
+                                    &RegClassHdl),
+                                    "Register App class");
   }
 }
 
-//
-//
+// Invalidates application class registered earlier with 'RegisterClass'
 //
 void
 TAppDescriptor::UnregisterClass()
@@ -320,8 +374,8 @@ TAppDescriptor::UnregisterClass()
   }
 }
 
-//
-//
+// Registers the helper object (TServedObject) of the class described via
+// the 'app' parameter as the active object for its classId.
 //
 bool
 TAppDescriptor::RegisterObject(TObjectDescriptor app)
@@ -351,21 +405,21 @@ TAppDescriptor::RegisterObject(TObjectDescriptor app)
   return true;
 }
 
-//
-//
+// Invalidates a helper object registers with RegisterObject earlier
 //
 void
 TAppDescriptor::UnregisterObject()
 {
   if (RegObjectHdl) {
-    ActiveObject = 0;  // must zero before OLE call in case obj destructor run
+    // NOTE: Zero before OLE call in case obj. destructor is invoked
+    //
+    ActiveObject = 0;
     OLECALL(::RevokeActiveObject(RegObjectHdl, 0), "Unregister App");
     RegObjectHdl = 0;
   }
 }
 
-//
-//
+// Returns the index of a 'TAutoClass' instance
 //
 int
 TAppDescriptor::GetClassIndex(TAutoClass* cls)
@@ -378,8 +432,9 @@ TAppDescriptor::GetClassIndex(TAutoClass* cls)
   return -1;
 }
 
-//
-//
+// Retrieves the GUID of the specified TAutoClass instance.
+// NOTE: Passing '0' as the 'cls' return the GUID of the type Library.
+// Returns 'true' if successful, or 'false' otherwise.
 //
 bool
 TAppDescriptor::GetClassId(TAutoClass* cls, GUID& retId)
@@ -390,15 +445,15 @@ TAppDescriptor::GetClassId(TAutoClass* cls, GUID& retId)
     if (index == -1)
       return false;
     offset = ClassList[index].GuidOffset;
-  } else {          // null class arg means type library itself
+  } else {
     offset = LibGuidOffset;
   }
   retId = AppClassId[offset];
   return true;
 }
 
-//
-//
+// Returns the GUID allocated as the specified index.
+// NOTE: Will allocate a new GUID if 'index' has not been allocated yet.
 //
 TClassId
 TAppDescriptor::GetLinkGuid(int index)
@@ -412,8 +467,7 @@ TAppDescriptor::GetLinkGuid(int index)
   return AppClassId[LinkGuidOffset + index];
 }
 
-//
-//
+// Returns the TAutoClass instance as the specified index.
 //
 TAutoClass*
 TAppDescriptor::GetAutoClass(unsigned index)
@@ -423,11 +477,10 @@ TAppDescriptor::GetAutoClass(unsigned index)
   return ClassList[index].Class;
 }
 
-//
-//
+// Returns the TAutoClass instance assigned the specified GUID.
 //
 TAutoClass*
-TAppDescriptor::GetAutoClass(const GUID far& clsid)
+TAppDescriptor::GetAutoClass(const GUID& clsid)
 {
   int offset = AppClassId.GetOffset(clsid);
   if (offset != -1) {
@@ -440,7 +493,6 @@ TAppDescriptor::GetAutoClass(const GUID far& clsid)
   return 0;
 }
 
-//
 // Get the document template with the given GUID
 //
 TRegLink*
@@ -466,8 +518,8 @@ TAppDescriptor::GetRegLink(const GUID far& clsid)
   return 0;
 }
 
-//
-//
+// Returns the 'ITypeLib' interface pointer describing the objects exposed by
+// this instance of 'TAppDescriptor'.
 //
 ITypeLib*
 TAppDescriptor::GetTypeLibrary()
@@ -619,7 +671,8 @@ TAppDescriptor::RegisterServer(TLangId lang, const char* regFilename)
     if (AppProgId) {       // don't attempt register app if no progid reg key
       if (!forceReg) {
         strstream vstrm;
-        ::OcRegisterClass(RegInfo, AppInstance, vstrm, lang, "\001\002\006");
+        NS_OCF::OcRegisterClass(
+          RegInfo, AppInstance, vstrm, lang, "\001\002\006");
         if (::OcRegistryValidate(vstrm) != 0)
           forceReg = true;
       }
@@ -630,16 +683,17 @@ TAppDescriptor::RegisterServer(TLangId lang, const char* regFilename)
           strcpy(guidStr, debugClsid);
           debugGuid = guidStr;
           if (::OcSetupDebugReg(RegInfo, regDebug, lang, debugGuid)) {
-            ::OcRegisterClass(RegInfo, AppInstance, *strm, lang, 0, 0, OcRegNoDebug);
-            ::OcRegisterClass(RegInfo, AppInstance, *strm, lang, AppDebugFilter,
-                                                                    0, regDebug);
+            NS_OCF::OcRegisterClass(
+              RegInfo, AppInstance, *strm, lang, 0, 0, OcRegNoDebug);
+            NS_OCF::OcRegisterClass(
+              RegInfo, AppInstance, *strm, lang, AppDebugFilter, 0, regDebug);
           }
           else {
             debugGuid = 0;  // if debug registration fails, use normal
           }
         }
         if (!debugGuid)
-          ::OcRegisterClass(RegInfo, AppInstance, *strm, lang, 0, 0,
+          NS_OCF::OcRegisterClass(RegInfo, AppInstance, *strm, lang, 0, 0,
                             (Options & amExeModule) ? 0 : OcRegNotDll);
       }
     }
@@ -653,7 +707,8 @@ TAppDescriptor::RegisterServer(TLangId lang, const char* regFilename)
       if (regList["progid"]) {
         char guidStr[40];
         int debugStat = (Options & amExeModule) ?
-                        ::OcSetupDebugReg(regList, regDebug, lang, guidStr) : 0;
+                        NS_OCF::OcSetupDebugReg(regList, regDebug, lang,
+                                                guidStr) : 0;
         TRegItem regClsid[3] = {{"debugger",{""}}, {"clsid",{guidStr}}, {0,{0}}};
         TRegItem* clsInfo = regClsid;
         if (!debugStat && Options & amExeModule)
@@ -667,28 +722,31 @@ TAppDescriptor::RegisterServer(TLangId lang, const char* regFilename)
         }
         if (!alwaysReg) {
           strstream checkStrm;
-          ::OcRegisterClass(regList, AppInstance, checkStrm, lang,
+          NS_OCF::OcRegisterClass(regList, AppInstance, checkStrm, lang,
                             "\001\002\006", 0, clsInfo);
-          if (::OcRegistryValidate(checkStrm) == 0)
+          if (NS_OCF::OcRegistryValidate(checkStrm) == 0)
             continue;
         }
         if (debugStat) {
-          ::OcRegisterClass(regList, AppInstance, *strm, lang, 0, regAppName, regClsid);
+          NS_OCF::OcRegisterClass(
+            regList, AppInstance, *strm, lang, 0, regAppName, regClsid);
           if (debugStat == 1) {   // needs generated guid string
             TClassId linkClsid(GetLinkGuid(linkGuidIndex++));
             strcpy(guidStr, linkClsid);
           }
-          ::OcRegisterClass(regList, AppInstance, *strm, lang, DocDebugFilter,
-                                                        regAppName, regDebug);
+          NS_OCF::OcRegisterClass(
+            regList, AppInstance, *strm, lang, DocDebugFilter, regAppName,
+            regDebug);
         }
         else {
-          ::OcRegisterClass(regList, AppInstance, *strm, lang, 0, regAppName, clsInfo);
+          NS_OCF::OcRegisterClass(regList, AppInstance, *strm, lang, 0,
+                                  regAppName, clsInfo);
         }
         forceReg = true;
       }
     }
     if (forceReg && !regFilename)
-      ::OcRegistryUpdate(regStrm);
+      NS_OCF::OcRegistryUpdate(regStrm);
     if (forceReg)
       ::RegDeleteKey(TRegKey::ClassesRoot, "OcErr_RegServer");
   }
@@ -718,7 +776,7 @@ TAppDescriptor::UnregisterServer(TLangId, const char*)
       strcpy(guidStr, debugClsid);
       debugInfo = &debugItem;
     }
-    ::OcUnregisterClass(RegInfo, debugInfo);   // unregister app
+    NS_OCF::OcUnregisterClass(RegInfo, debugInfo);   // unregister app
     if (LibGuidOffset) {
       ::RegOpenKey(TRegKey::ClassesRoot, "TypeLib", &key);
       ::RegDeleteKey(key, AppClassId[LibGuidOffset]);
@@ -742,10 +800,10 @@ TAppDescriptor::UnregisterServer(TLangId, const char*)
         TClassId linkClsid(GetLinkGuid(linkGuidIndex++));
         strcpy(guidStr, linkClsid);
         TRegItem clsItem = {"clsid", {guidStr}};
-        ::OcUnregisterClass(regList, &clsItem);
+        NS_OCF::OcUnregisterClass(regList, &clsItem);
       }
       else
-        ::OcUnregisterClass(regList);
+        NS_OCF::OcUnregisterClass(regList);
     }
   }
 }
@@ -799,6 +857,10 @@ TAppDescriptor::MakeTypeLib(TLangId lang, const char* typeLibName)
   }
 }
 
+// NOTE: 'TAppDescriptor::WriteTypeLibrary' is implemented in the
+//        module TYPELIB.CPP
+//
+
 //
 //
 //
@@ -832,8 +894,8 @@ TAppDescriptor::ProcessCmdLine(string& cmdLine)
         break;
       }
       case TCmdLine::Option: {
-        int i = 0;
-        for (; i < optionTblCount; i++) {
+        int i;
+        for (i = 0; i < optionTblCount; i++) {
           if (strnicmp(cmd.Token, optionTbl[i].String, cmd.TokenLen) == 0) {
             Options |= optionTbl[i].Flag;
             cmd.NextToken(true);    // eat token & get next
@@ -896,8 +958,12 @@ TAppDescriptor::MergeAutoClasses()
   int oldCount = ClassCount;
   ClassCount = TAutoClass::ClassList.CountAutoClasses();
   if (ClassCount) {
+
+    // Allocated GUID for type Library
+    //
     if (!LibGuidOffset)
-      LibGuidOffset = AppClassId.AllocId();  // allocate GUID for type library
+      LibGuidOffset = AppClassId.AllocId();
+
     TAutoClass::TAutoClassRef* oldList  = ClassList;
     ClassList = new TAutoClass::TAutoClassRef[ClassCount];
     TAutoClass::ClassList.MergeAutoClasses(ClassList);
@@ -915,27 +981,3 @@ TAppDescriptor::MergeAutoClasses()
   }
 }
 
-//
-//
-//
-int
-TAutoClass::TClassList::CountAutoClasses()
-{
-  int count = Count;
-  for (TExtLink* link = Link; link; link = link->Next)
-    count += link->Classes->CountAutoClasses();
-  return count;
-}
-
-//
-//
-//
-TAutoClass::TAutoClassRef*
-TAutoClass::TClassList::MergeAutoClasses(TAutoClass::TAutoClassRef* array)
-{
-  for (TAutoClass* cls = List; cls; cls = cls->NextClass, array++)
-    array->Class = cls;
-  for (TExtLink* link = Link; link; link = link->Next)
-    array = link->Classes->MergeAutoClasses(array);
-  return array;
-}

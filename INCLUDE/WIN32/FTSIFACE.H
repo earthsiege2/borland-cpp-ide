@@ -1,7 +1,24 @@
-// FTSIFACE.h -- DLL interface for FTSrch.dll
+/*++
+
+Copyright (c) 1993-1996  Microsoft Corporation
+
+Module Name:
+
+    ftsiface.h
+
+Abstract:
+
+    Interface to the full text seach DLL (ftsrch.dll) distributed with WinHelp
+
+Revision History:
+
+    Introduced with Windows 95 and Windows NT 3.51
+
+--*/
 
 #ifndef __FTSIFACE_H__
 #define __FTSIFACE_H__
+#pragma option -b
 
 typedef HANDLE HINDEX;
 typedef HANDLE HSEARCHER;
@@ -137,4 +154,5 @@ extern "C" int APIENTRY CountHilites(HHILITER hhil, int base, int limit);
 extern "C" int APIENTRY QueryHilites(HHILITER hhil, int base, int limit,
                                   					int cHilites, HILITE* paHilites);
 
+#pragma option -b.
 #endif // __FTSIFACE_H__

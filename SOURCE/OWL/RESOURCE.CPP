@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.6  $
 //
 // Implementation classes handling Windows resources
 //----------------------------------------------------------------------------
@@ -22,6 +22,8 @@
 #if !defined(OWL_CELARRAY_H)
 # include <owl/celarray.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 //
@@ -155,8 +157,9 @@ TDialogRes::GetText(char far* buffer, int size, TDlgResText which) const
     default:
       return 0;
   };
-  return ((p = lstrcpyn(buffer, p, size))) ? lstrlen(p) : 0;
-
+  p = lstrcpyn(buffer, p, size);
+  return p ? lstrlen(p) : 0;
+  
 #elif defined(BI_PLAT_WIN32)
   
   LPCWSTR p, pMenu, pClass, pCaption;
@@ -168,7 +171,7 @@ TDialogRes::GetText(char far* buffer, int size, TDlgResText which) const
     pClass = pMenu + ((*pMenu == 0xffff) ? 2 : lstrlenW(pMenu)+1);
     pCaption = pClass + ((*pClass == 0xffff) ? 2 : lstrlenW(pClass)+1);
   } else {
-    DLGTEMPLATEEX* dlgTemplateEx = GetTemplateEx();
+//    DLGTEMPLATEEX* dlgTemplateEx = GetTemplateEx();
   }
 
   switch (which) {

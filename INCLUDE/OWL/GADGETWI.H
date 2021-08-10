@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.10  $
+//$Revision:   10.14  $
 //
 // Definition of TGadgetList, TGadgetWindow & TGadgetWindowFont
 // A list holding gadgets, & a window class owning & managing tiled gadgets.
@@ -19,6 +19,11 @@
 #if !defined(OWL_GDIOBJEC_H)
 # include <owl/gdiobjec.h>
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS TCelArray;
 class _OWLCLASS TTooltip;
 
@@ -80,6 +85,7 @@ class _OWLCLASS TGadgetWindowFont : public TFont {
     TGadgetWindowFont(int  pointSize = 10,
                       bool bold = false,
                       bool italic = false);
+    TGadgetWindowFont(const TFont& font);
 };
 
 //
@@ -149,14 +155,16 @@ class _OWLCLASS TGadgetWindow : virtual public TWindow, public TGadgetList {
 
     // Hint mode settings & action used by contained gadgets
     //
-    enum THintMode {NoHints, PressHints, EnterHints};
-    void          SetHintMode(THintMode hintMode);  // default is PressHints
+    enum THintMode {
+      NoHints, 
+      PressHints, 
+      EnterHints
+    };
+    void          SetHintMode(THintMode hintMode);  
     THintMode     GetHintMode();
-
     void          SetHintCommand(int id);  // (id <= 0) to clear
 
     // TGadgetList list management overrides
-
     // Insert & remove a Gadget, update their Window ptr to this window
     //
     void     Insert(TGadget& gadget, TPlacement = After, TGadget* sibling = 0);
@@ -178,6 +186,10 @@ class _OWLCLASS TGadgetWindow : virtual public TWindow, public TGadgetList {
     // CommandEnable() member function
     //
     bool          IdleAction(long idleCount);
+
+    // Set timer - useful for gadgets that need regular update [Time/Date]
+    //
+    bool          EnableTimer();
 
     // Sent by a Gadget when its size has changed. Initiates a layout session
     //
@@ -240,6 +252,7 @@ class _OWLCLASS TGadgetWindow : virtual public TWindow, public TGadgetList {
     // Overrides of TWindow virtuals
     //
     void          SetupWindow();
+    void          CleanupWindow();
     bool          PreProcessMsg(MSG& msg);
 
     // Message response functions
@@ -247,9 +260,13 @@ class _OWLCLASS TGadgetWindow : virtual public TWindow, public TGadgetList {
     void          EvLButtonDown(uint modKeys, TPoint& point);
     void          EvLButtonUp(uint modKeys, TPoint& point);
     void          EvLButtonDblClk(uint modKeys, TPoint& point);
+    void          EvRButtonDown(uint modKeys, TPoint& point);
+    void          EvRButtonUp(uint modKeys, TPoint& point);
     void          EvMouseMove(uint modKeys, TPoint& point);
     void          EvWindowPosChanging(WINDOWPOS far& windowPos);
     void          EvSysColorChange();
+
+    void          EvCreateTooltips();
 
     // The overridden event handler functions are virtual, and not dispatched
     // thru response tables
@@ -262,7 +279,6 @@ class _OWLCLASS TGadgetWindow : virtual public TWindow, public TGadgetList {
   //
   protected_data:
     TFont*          Font;           // Font used for size calculations
-//  TBrush*         BkgndBrush;     // OBSOLETE: background brush
     TGadget*        Capture;        // Gadget that has captured the mouse
     TGadget*        AtMouse;        // Last Gadget at mouse position
     TMargins        Margins;
@@ -278,6 +294,8 @@ class _OWLCLASS TGadgetWindow : virtual public TWindow, public TGadgetList {
     bool            WantTooltip;    // Flags whether to create a tooltip
     int             RowWidth;       // Requested max width of each row
     int             RowMargin;      // Settable inter-row margin
+    bool            WantTimer;      // Flags whether to start a timer
+    uint            TimerID;        // Timer identifier
 
   private:
     // Calculate layouts metrics for window and all gadgets for a given
@@ -299,6 +317,12 @@ class _OWLCLASS TGadgetWindow : virtual public TWindow, public TGadgetList {
   DECLARE_CASTABLE;
 };
 
+
+#define EV_WM_CREATETOOLTIP\
+  {WM_OWLCREATETTIP, 0, (TAnyDispatcher)::v_Dispatch,\
+   (TMyPMF)v_Sig(&TMyClass::EvCreateTooltips)} 
+
+
 //
 // class TGadgetControl
 // ~~~~~ ~~~~~~~~~~~~~~
@@ -316,6 +340,10 @@ class _OWLCLASS TGadgetControl : public TGadgetWindow {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

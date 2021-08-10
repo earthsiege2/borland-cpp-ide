@@ -252,7 +252,7 @@ typedef enum
 	ItsWindowsNT,
 } SystemType;
 
-SystemType WhatsTheSystem( void )
+static SystemType WhatsTheSystem( void )
 {
 	DWORD version = GetVersion();
 
@@ -273,7 +273,7 @@ SystemType WhatsTheSystem( void )
 
 #endif // __FLAT__
 
-HMODULE GetVBXEmulator( HWND hwnd )
+static HMODULE GetVBXEmulator( HWND hwnd )
 {
 	HMODULE hvbxdll;
 
@@ -282,9 +282,9 @@ HMODULE GetVBXEmulator( HWND hwnd )
 	NOTUSED( hwnd );
 
 	if (WhatsTheSystem() == ItsWindows95)
-		hvbxdll = GetModuleHandle( "BIVBX30.32C" );	// Windows 95
+		hvbxdll = GetModuleHandle( "BIVBX31.32C" );	// Windows 95
 	else
-		hvbxdll = GetModuleHandle( "BIVBX30.32N" );	// Windows NT
+		hvbxdll = GetModuleHandle( "BIVBX31.32N" );	// Windows NT
 
 #else // __FLAT__
 
@@ -300,7 +300,7 @@ typedef LPVOID HCTL;
 #define GPA_VBXGETHCTL "VBXGetHctl"
 typedef HCTL (FAR PASCAL* VBXGETHCTL)( HWND );
 
-HCTL GetVBXCtl( HWND hdlg, int idc, HMODULE* phvbxdll )
+static HCTL GetVBXCtl( HWND hdlg, int idc, HMODULE* phvbxdll )
 {
 	HCTL hctl = 0;
 

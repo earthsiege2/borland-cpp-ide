@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.2  $
+//$Revision:   5.4  $
 //
 //----------------------------------------------------------------------------
 #if !defined(SERVICES_DIR_H)

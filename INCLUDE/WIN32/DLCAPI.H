@@ -1,5 +1,7 @@
 /*++
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     dlcapi.h
@@ -11,12 +13,11 @@ Abstract:
 Revision History:
 
 --*/
-
 /* $Copyright: 1994$ */
 
 #ifndef _DLCAPI_
 #define _DLCAPI_
-#define __DLCAPI_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -906,4 +907,5 @@ AcsLan(
 }
 #endif
 
+#pragma option -b.
 #endif // _DLCAPI_

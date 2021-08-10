@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+// $Revision:   10.15  $
 //
-//
+// TOleWindow - Class encapsulating a window which can be an OLE container
+//              or server window.
 //----------------------------------------------------------------------------
 #if !defined(OWL_OLEWINDO_H)
 #define OWL_OLEWINDO_H
@@ -31,18 +32,32 @@
 # include <ocf/oclink.h>
 #endif
 
-// Generic definitions/compiler options (eg. alignment) preceeding the 
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
+#if defined(BI_PLAT_WIN32)
+class _ICLASS   TOcControl;
+#endif
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+// Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
 
-
 class _OWLCLASS TPopupMenu;
-class _ICLASS   TOcControl;
 
 //
 // class TOleWindow
 // ~~~~~ ~~~~~~~~~~
-// The generic ole 2 window. Use as a client of a frame window.
+// The generic OLE2 window. Use as a client of a frame window.
 //
 class _USERCLASS TOleWindow : virtual public TWindow {
   public:
@@ -51,192 +66,221 @@ class _USERCLASS TOleWindow : virtual public TWindow {
 
     // Accessors
     //
-    TOcDocument* GetOcDoc();
-    TOcView*     GetOcView();
-    TOcRemView*  GetOcRemView();
-    TOcApp*      GetOcApp();
-    bool         HasActivePart();
-    bool         SelectEmbedded();
+    TOcDocument*      GetOcDoc();
+    TOcView*          GetOcView();
+    TOcRemView*       GetOcRemView();
+    TOcApp*           GetOcApp();
+    bool              HasActivePart();
+    bool              SelectEmbedded();
 
-    bool IsOpenEditing() const;
-    bool IsRemote() const;
+    // Query about current state
+    //
+    bool              IsOpenEditing() const;
+    bool              IsRemote() const;
 
-    virtual bool OleShutDown();
-    virtual void SetupDC(TDC& dc, bool scale = true);
-    virtual TOcView* CreateOcView(TRegLink* link, bool isRemote, IUnknown* outer);
+    // Virtuals that derived class can override
+    //
+    virtual bool      OleShutDown();
+    virtual void      SetupDC(TDC& dc, bool scale = true);
+    virtual TOcView*  CreateOcView(TRegLink* link, bool isRemote, IUnknown* outer);
+
+    // Helper routines to create new objects or controls [Container specific]
+    //
+    TOcPart*          InsertObject(TOcInitInfo& initInfo, TRect* pos = 0);
+    TOcPart*          InsertObject(CLSID& objIID, TRect* pos = 0);
+    TOcPart*          InsertObject(TString& objProgId, TRect* pos = 0);
+
+#if defined(BI_PLAT_WIN32)
+    TOcControl*       InsertControl(TOcInitInfo& initInfo, TRect* pos = 0, int id = 0);
+    TOcControl*       InsertControl(CLSID& ocxIID, TRect* pos = 0, int id = 0);
+    TOcControl*       InsertControl(const TString& ocxProgID, TRect* pos = 0, int id = 0);
+#endif
+
+    // Helper routines to retrieve information about parts (embeddings/ocxes)
+    //
+#if defined(BI_PLAT_WIN32)
+    TOcControl*       GetOcControlOfOCX(CLSID ocxIID, uint id = 0);
+#endif
 
   protected:
     // Overridables
     //
-    virtual void GetInsertPosition(TRect& rect);
-    virtual void InvalidatePart(TOcInvalidate invalid); // server only
-    virtual bool Deactivate();
-    virtual bool Select(uint modKeys, TPoint& point);
-    virtual bool PaintSelection(TDC& dc, bool erase, TRect& rect,
-                                void* userData = 0);
-    virtual bool PaintParts(TDC& dc, bool erase, TRect& rect, bool metafile);
-    virtual bool PaintLink(TDC& dc, bool erase, TRect& rect,
-                           TString& moniker);
-    virtual void GetLogPerUnit(TSize& logPerUnit);
-    virtual void SetScale(uint16 percent);
-    virtual void SetSelection(TOcPart* part);
-    virtual bool ShowCursor(HWND wnd, uint hitTest, uint mouseMsg);
-    virtual bool StartDrag(uint modKeys, TPoint& point);
-    virtual const char far* GetFileName();
+    virtual void      GetInsertPosition(TRect& rect);
+    virtual void      InvalidatePart(TOcInvalidate invalid); // server only
+    virtual bool      Deactivate();
+    virtual bool      Select(uint modKeys, TPoint& point);
+    virtual bool      PaintSelection(TDC& dc, bool erase, TRect& rect,
+                                     void* userData = 0);
+    virtual bool      PaintParts(TDC& dc, bool erase, TRect& rect, bool metafile);
+    virtual bool      PaintLink(TDC& dc, bool erase, TRect& rect,
+                                TString& moniker);
+    virtual void      GetLogPerUnit(TSize& logPerUnit);
+    virtual void      SetScale(uint16 percent);
+    virtual void      SetSelection(TOcPart* part);
+    virtual bool      ShowCursor(HWND wnd, uint hitTest, uint mouseMsg);
+    virtual bool      StartDrag(uint modKeys, TPoint& point);
+    virtual const char* GetFileName();
 
   protected:
-    void SetupWindow();
-    void CleanupWindow();
-
     // Override virtual functions defined by TWindow
     //
-    bool    PreProcessMsg(MSG& msg);
-    bool    IdleAction(long idleCount);
+    void              SetupWindow();
+    void              CleanupWindow();
+    bool              PreProcessMsg(MSG& msg);
+    bool              IdleAction(long idleCount);
+    bool              CanClose();
 
-    TResult EvCommand(uint id, HWND hWndCtl, uint notifyCode);
-    void    EvCommandEnable(TCommandEnabler& commandEnabler);
-    bool    CanClose();
-    bool InClient(TDC& dc, TPoint& point);
+    bool              InClient(TDC& dc, TPoint& point);
 
-    void EvPaint();
-    void EvSize(uint sizeType, TSize& size);
-    void EvMDIActivate(HWND hWndActivated, HWND hWndDeactivated);
-    uint EvMouseActivate(HWND topParent, uint hitCode, uint msg);
-    void EvSetFocus(HWND hWndLostFocus);
+    TResult           EvCommand(uint id, HWND hWndCtl, uint notifyCode);
+    void              EvCommandEnable(TCommandEnabler& commandEnabler);
+    void              EvPaint();
+    void              EvSize(uint sizeType, TSize& size);
+    void              EvMDIActivate(HWND hWndActivated, HWND hWndDeactivated);
+    uint              EvMouseActivate(HWND topParent, uint hitCode, uint msg);
+    void              EvSetFocus(HWND hWndLostFocus);
 
-    virtual bool EvOcViewPartInvalid(TOcPartChangeInfo& changeInfo);
+    virtual bool      EvOcViewPartInvalid(TOcPartChangeInfo& changeInfo);
 
-    void CeFileClose(TCommandEnabler& ce);
+    void              CeFileClose(TCommandEnabler& ce);
+    void              CmEditDelete();
+    void              CmEditCut();
+    void              CmEditCopy();
+    void              CmEditPaste();
+    void              CmEditPasteSpecial();
+    void              CmEditPasteLink();
+    void              CmEditLinks();
+    void              CmEditConvert();
+    void              CmEditInsertObject();
 
-    void CmEditDelete();
-    void CmEditCut();
-    void CmEditCopy();
-    void CmEditPaste();
-    void CmEditPasteSpecial();
-    void CmEditPasteLink();
-    void CmEditLinks();
-    void CmEditConvert();
-    void CmEditInsertObject();
-    void CmEditInsertControl();
-    void CmEditShowObjects();
+#if defined(BI_PLAT_WIN32)
+    void              CmEditInsertControl();
+#endif
 
-    void CeEditDelete(TCommandEnabler& ce);
-    void CeEditCut(TCommandEnabler& ce);
-    void CeEditCopy(TCommandEnabler& ce);
-    void CeEditPaste(TCommandEnabler& ce);
-    void CeEditPasteSpecial(TCommandEnabler& ce);
-    void CeEditPasteLink(TCommandEnabler& ce);
-    void CeEditLinks(TCommandEnabler& ce);
-    void CeEditObject(TCommandEnabler& ce);
-    void CeEditConvert(TCommandEnabler& ce);
-    void CeEditVerbs(TCommandEnabler& ce);
-    void CeEditInsertObject(TCommandEnabler& ce);
-    void CeEditInsertControl(TCommandEnabler& ce);
-    void CeEditShowObjects(TCommandEnabler& ce);
+    void              CmEditShowObjects();
 
-    void EvMouseMove(uint modKeys, TPoint& point);
-    void EvRButtonDown(uint modKeys, TPoint& point);
-    void EvLButtonUp(uint modKeys, TPoint& point);
-    void EvLButtonDown(uint modKeys, TPoint& point);
-    void EvLButtonDblClk(uint modKeys, TPoint& point);
-    bool EvSetCursor(HWND hWndCursor, uint hitTest, uint mouseMsg);
-    void EvDropFiles(TDropInfo dropInfo);
-    void EvHScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
-    void EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
-    void EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu);
+    void              CeEditDelete(TCommandEnabler& ce);
+    void              CeEditCut(TCommandEnabler& ce);
+    void              CeEditCopy(TCommandEnabler& ce);
+    void              CeEditPaste(TCommandEnabler& ce);
+    void              CeEditPasteSpecial(TCommandEnabler& ce);
+    void              CeEditPasteLink(TCommandEnabler& ce);
+    void              CeEditLinks(TCommandEnabler& ce);
+    void              CeEditObject(TCommandEnabler& ce);
+    void              CeEditConvert(TCommandEnabler& ce);
+    void              CeEditVerbs(TCommandEnabler& ce);
+    void              CeEditInsertObject(TCommandEnabler& ce);
 
-    TResult EvOcEvent(TParam1 param1, TParam2 param2);
-//    uint32 EvOcViewDiscardUndo(void far* undo);
+#if defined(BI_PLAT_WIN32)
+    void              CeEditInsertControl(TCommandEnabler& ce);
+#endif
+
+    void              CeEditShowObjects(TCommandEnabler& ce);
+
+    void              EvMouseMove(uint modKeys, TPoint& point);
+    void              EvRButtonDown(uint modKeys, TPoint& point);
+    void              EvLButtonUp(uint modKeys, TPoint& point);
+    void              EvLButtonDown(uint modKeys, TPoint& point);
+    void              EvLButtonDblClk(uint modKeys, TPoint& point);
+    bool              EvSetCursor(HWND hWndCursor, uint hitTest, uint mouseMsg);
+    void              EvDropFiles(TDropInfo dropInfo);
+    void              EvHScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
+    void              EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
+    void              EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu);
+
+    TResult           EvOcEvent(TParam1 param1, TParam2 param2);
 
     // Container specific messages
     //
-    const char far* EvOcViewTitle();
-    void   EvOcViewSetTitle(const char far* title);
+    const char*       EvOcViewTitle();
+    void              EvOcViewSetTitle(const char far* title);
 
-    bool   EvOcViewBorderSpaceReq(TRect far* rect);
-    bool   EvOcViewBorderSpaceSet(TRect far* rect);
-    bool   EvOcViewDrop(TOcDragDrop far& ddInfo);
-    bool   EvOcViewDrag(TOcDragDrop far& ddInfo);
-    bool   EvOcViewScroll(TOcScrollDir scrollDir);
-    bool   EvOcViewGetScale(TOcScaleFactor& scaleFactor);
-    bool   EvOcViewGetSiteRect(TRect far* rect);
-    bool   EvOcViewSetSiteRect(TRect far* rect);
-    bool   EvOcViewPartActivate(TOcPart& ocPart);
-    bool   EvOcViewPasteObject(TOcInitInfo& init);
+    bool              EvOcViewBorderSpaceReq(TRect far* rect);
+    bool              EvOcViewBorderSpaceSet(TRect far* rect);
+    bool              EvOcViewDrop(TOcDragDrop far& ddInfo);
+    bool              EvOcViewDrag(TOcDragDrop far& ddInfo);
+    bool              EvOcViewScroll(TOcScrollDir scrollDir);
+    bool              EvOcViewGetScale(TOcScaleFactor& scaleFactor);
+    bool              EvOcViewGetSiteRect(TRect far* rect);
+    bool              EvOcViewSetSiteRect(TRect far* rect);
+    bool              EvOcViewPartActivate(TOcPart& ocPart);
+    bool              EvOcViewPasteObject(TOcInitInfo& init);
 
     // Server specific messages
     //
-    bool   EvOcPartInvalid(TOcPart far& /*part*/);
-    bool   EvOcViewSavePart(TOcSaveLoad far& ocSave);
-    bool   EvOcViewLoadPart(TOcSaveLoad far& ocLoad);
-    bool   EvOcViewPaint(TOcViewPaint far& vp);
-    bool   EvOcViewInsMenus(TOcMenuDescr far& sharedMenu);
-    bool   EvOcViewShowTools(TOcToolBarInfo far& tbi);
-    bool   EvOcViewGetPalette(LOGPALETTE far* far* palette);
-    bool   EvOcViewClipData(TOcFormatData far& format);
-    bool   EvOcViewSetData(TOcFormatData far& format);
-    bool   EvOcViewClose();
-    bool   EvOcViewPartSize(TOcPartSize far& size);
-    bool   EvOcViewOpenDoc(const char far* path);
-    bool   EvOcViewAttachWindow(bool attach);
-    bool   EvOcViewSetScale(TOcScaleFactor& scaleFactor);
-    bool   EvOcViewGetItemName(TOcItemName& item);
-    bool   EvOcViewSetLink(TOcLinkView& view);
-    bool   EvOcViewBreakLink(TOcLinkView& view);
-    bool   EvOcViewDoVerb(uint verb);
+    bool              EvOcPartInvalid(TOcPart far& /*part*/);
+    bool              EvOcViewSavePart(TOcSaveLoad far& ocSave);
+    bool              EvOcViewLoadPart(TOcSaveLoad far& ocLoad);
+    bool              EvOcViewPaint(TOcViewPaint far& vp);
+    bool              EvOcViewInsMenus(TOcMenuDescr far& sharedMenu);
+    bool              EvOcViewShowTools(TOcToolBarInfo far& tbi);
+    bool              EvOcViewGetPalette(LOGPALETTE far* far* palette);
+    bool              EvOcViewClipData(TOcFormatData far& format);
+    bool              EvOcViewSetData(TOcFormatData far& format);
+    bool              EvOcViewClose();
+    bool              EvOcViewPartSize(TOcPartSize far& size);
+    bool              EvOcViewOpenDoc(const char far* path);
+    bool              EvOcViewAttachWindow(bool attach);
+    bool              EvOcViewSetScale(TOcScaleFactor& scaleFactor);
+    bool              EvOcViewGetItemName(TOcItemName& item);
+    bool              EvOcViewSetLink(TOcLinkView& view);
+    bool              EvOcViewBreakLink(TOcLinkView& view);
+    bool              EvOcViewDoVerb(uint verb);
 
-    virtual bool   EvOcViewTransformCoords(uint verb);
+    virtual bool      EvOcViewTransformCoords(uint verb);
 
+#if defined(BI_PLAT_WIN32)
     // Ambient property specific messages
     //
-    virtual bool   EvOcAmbientGetBackColor(long* rgb);
-    virtual bool   EvOcAmbientGetForeColor(long* rgb);
-    virtual bool   EvOcAmbientGetLocaleID(long* locale);
-    virtual bool   EvOcAmbientGetTextAlign(short* align);
-    virtual bool   EvOcAmbientGetMessageReflect(bool* msgReflect);
-    virtual bool   EvOcAmbientGetUserMode(bool* mode);
-    virtual bool   EvOcAmbientGetUIDead(bool* dead);
-    virtual bool   EvOcAmbientGetShowGrabHandles(bool* show);
-    virtual bool   EvOcAmbientGetShowHatching(bool* show);
-    virtual bool   EvOcAmbientGetDisplayAsDefault(bool* disp);
-    virtual bool   EvOcAmbientGetSupportsMnemonics(bool* support);
-    virtual bool   EvOcAmbientGetDisplayName(TString** name);
-    virtual bool   EvOcAmbientGetScaleUnits(TString** units);
-    virtual bool   EvOcAmbientGetFont(IDispatch** font);
+    virtual bool      EvOcAmbientGetBackColor(long* rgb);
+    virtual bool      EvOcAmbientGetForeColor(long* rgb);
+    virtual bool      EvOcAmbientGetLocaleID(long* locale);
+    virtual bool      EvOcAmbientGetTextAlign(short* align);
+    virtual bool      EvOcAmbientGetMessageReflect(bool* msgReflect);
+    virtual bool      EvOcAmbientGetUserMode(bool* mode);
+    virtual bool      EvOcAmbientGetUIDead(bool* dead);
+    virtual bool      EvOcAmbientGetShowGrabHandles(bool* show);
+    virtual bool      EvOcAmbientGetShowHatching(bool* show);
+    virtual bool      EvOcAmbientGetDisplayAsDefault(bool* disp);
+    virtual bool      EvOcAmbientGetSupportsMnemonics(bool* support);
+    virtual bool      EvOcAmbientGetDisplayName(TString** name);
+    virtual bool      EvOcAmbientGetScaleUnits(TString** units);
+    virtual bool      EvOcAmbientGetFont(IDispatch** font);
 
-    virtual bool   EvOcAmbientSetBackColor(long rgb);
-    virtual bool   EvOcAmbientSetForeColor(long rgb);
-    virtual bool   EvOcAmbientSetLocaleID(long locale);
-    virtual bool   EvOcAmbientSetTextAlign(short align);
-    virtual bool   EvOcAmbientSetMessageReflect(bool msgReflect);
-    virtual bool   EvOcAmbientSetUserMode(bool mode);
-    virtual bool   EvOcAmbientSetUIDead(bool dead);
-    virtual bool   EvOcAmbientSetShowGrabHandles(bool show);
-    virtual bool   EvOcAmbientSetShowHatching(bool show);
-    virtual bool   EvOcAmbientSetDisplayAsDefault(bool disp);
-    virtual bool   EvOcAmbientSetSupportsMnemonics(bool support);
-    virtual bool   EvOcAmbientSetDisplayName(TString* name);
-    virtual bool   EvOcAmbientSetScaleUnits(TString* units);
-    virtual bool   EvOcAmbientSetFont(IDispatch* font);
+    virtual bool      EvOcAmbientSetBackColor(long rgb);
+    virtual bool      EvOcAmbientSetForeColor(long rgb);
+    virtual bool      EvOcAmbientSetLocaleID(long locale);
+    virtual bool      EvOcAmbientSetTextAlign(short align);
+    virtual bool      EvOcAmbientSetMessageReflect(bool msgReflect);
+    virtual bool      EvOcAmbientSetUserMode(bool mode);
+    virtual bool      EvOcAmbientSetUIDead(bool dead);
+    virtual bool      EvOcAmbientSetShowGrabHandles(bool show);
+    virtual bool      EvOcAmbientSetShowHatching(bool show);
+    virtual bool      EvOcAmbientSetDisplayAsDefault(bool disp);
+    virtual bool      EvOcAmbientSetSupportsMnemonics(bool support);
+    virtual bool      EvOcAmbientSetDisplayName(TString* name);
+    virtual bool      EvOcAmbientSetScaleUnits(TString* units);
+    virtual bool      EvOcAmbientSetFont(IDispatch* font);
 
     // Ctrl event specific messages
     //
-    virtual bool   EvOcCtrlClick(TCtrlEvent* pev);
-    virtual bool   EvOcCtrlDblClick(TCtrlEvent* pev);
-    virtual bool   EvOcCtrlMouseDown(TCtrlMouseEvent* pev);
-    virtual bool   EvOcCtrlMouseMove(TCtrlMouseEvent* pev);
-    virtual bool   EvOcCtrlMouseUp(TCtrlMouseEvent* pev);
-    virtual bool   EvOcCtrlKeyDown(TCtrlKeyEvent* pev);
-    virtual bool   EvOcCtrlKeyUp(TCtrlKeyEvent* pev);
-    virtual bool   EvOcCtrlErrorEvent(TCtrlErrorEvent* pev);
-    virtual bool   EvOcCtrlFocus(TCtrlFocusEvent* pev);
-    virtual bool   EvOcCtrlPropertyChange(TCtrlPropertyEvent* pev);
-    virtual bool   EvOcCtrlPropertyRequestEdit(TCtrlPropertyEvent* pev);
-    virtual bool   EvOcCtrlCustomEvent(TCtrlCustomEvent* pev);
+    virtual bool      EvOcCtrlClick(TCtrlEvent* pev);
+    virtual bool      EvOcCtrlDblClick(TCtrlEvent* pev);
+    virtual bool      EvOcCtrlMouseDown(TCtrlMouseEvent* pev);
+    virtual bool      EvOcCtrlMouseMove(TCtrlMouseEvent* pev);
+    virtual bool      EvOcCtrlMouseUp(TCtrlMouseEvent* pev);
+    virtual bool      EvOcCtrlKeyDown(TCtrlKeyEvent* pev);
+    virtual bool      EvOcCtrlKeyUp(TCtrlKeyEvent* pev);
+    virtual bool      EvOcCtrlErrorEvent(TCtrlErrorEvent* pev);
+    virtual bool      EvOcCtrlFocus(TCtrlFocusEvent* pev);
+    virtual bool      EvOcCtrlPropertyChange(TCtrlPropertyEvent* pev);
+    virtual bool      EvOcCtrlPropertyRequestEdit(TCtrlPropertyEvent* pev);
+    virtual bool      EvOcCtrlCustomEvent(TCtrlCustomEvent* pev);
+#endif
 
-    TPopupMenu* CreateVerbPopup(const TOcVerb& ocVerb);
-    void EvDoVerb(uint whichVerb);
-    void Init();
+    TPopupMenu*       CreateVerbPopup(const TOcVerb& ocVerb);
+    void              EvDoVerb(uint whichVerb);
+    void              Init();
 
   protected:
     TOcPart*          DragPart;
@@ -274,9 +318,13 @@ class _USERCLASS TOleClientDC : public TClientDC {
     TOleClientDC(TOleWindow& win, bool scale = true);
 };
 
-// Generic definitions/compiler options (eg. alignment) following the 
+// Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 // --------------------------------------------------------------------------
 // Inline implementation
@@ -298,7 +346,7 @@ inline TOcView* TOleWindow::GetOcView() {
 
 //
 // Return pointer to 'TOcRemView' object associated with this window.
-// NOTE: Returns 0 in case of failure. For example, a TOleWindow of a 
+// NOTE: Returns 0 in case of failure. For example, a TOleWindow of a
 //       container application does not have an associated 'TOcRemView'
 //       and will return 0.
 //

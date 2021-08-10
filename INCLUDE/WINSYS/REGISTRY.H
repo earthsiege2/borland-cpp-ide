@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.20  $
+//$Revision:   5.25  $
 //
 // General Registry access & registration implementation
 //   TRegKey, TRegValue, TRegKeyIterator, TRegValueIterator
@@ -28,6 +28,9 @@
 #if !defined(SERVICSE_CHECKS_H)
 # include <services/checks.h>
 #endif
+#if !defined(__TCHAR_H)
+# include <tchar.h>
+#endif
 #if defined(BI_PLAT_WIN16)
 # if !defined(_INC_SHELLAPI)
 #   include <shellapi.h>
@@ -36,6 +39,7 @@
 #   include <storage.h>
 # endif
 #endif
+
 #if defined(BI_PLAT_WIN16)
   typedef uint32 REGSAM;
   typedef uint32 SECURITY_INFORMATION;
@@ -45,6 +49,10 @@
 
 class _EXPCLASS istream;
 class _EXPCLASS ostream;
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 //----------------------------------------------------------------------------
 // Direct registry access classes. Can read & iterate as well as create and
@@ -61,7 +69,7 @@ class TRegKey {
   public:
     typedef HKEY THandle;
 
-    // Enumeration used to specify whether a key should be created (or 
+    // Enumeration used to specify whether a key should be created (or
     // simply opened).
     //
     enum TCreateOK {
@@ -74,7 +82,7 @@ class TRegKey {
     // Can also provide an ok-to-create or open-only indicator.
     //
     TRegKey(THandle baseKey,
-            const char far* keyName,
+            const _TCHAR far* keyName,
             REGSAM samDesired = KEY_ALL_ACCESS,
             TCreateOK createOK = CreateOK);
 
@@ -84,13 +92,13 @@ class TRegKey {
 
     // Contruct a key that is an alias to an existing HKEY
     //
-    TRegKey(THandle aliasKey, bool shouldClose=false, const char far* keyName = 0);
+    TRegKey(THandle aliasKey, bool shouldClose=false, const _TCHAR far* keyName = 0);
    ~TRegKey();
 
     operator THandle() const;
 
-    long DeleteKey(const char far* subKeyName);
-    long NukeKey(const char far* subKeyName);
+    long DeleteKey(const _TCHAR far* subKeyName);
+    long NukeKey(const _TCHAR far* subKeyName);
     long Flush() const;
 
     long GetSecurity(SECURITY_INFORMATION secInf, PSECURITY_DESCRIPTOR secDesc,
@@ -99,31 +107,50 @@ class TRegKey {
 
     // Saving & loading of this key & subKeys
     //
-    long Save(const char far* fileName);
-    long LoadKey(const char far* subKeyName, const char far* fileName);
-    long ReplaceKey(const char far* subKeyName, const char far* newFileName,
-                    const char far* oldFileName);
-    long Restore(const char far* fileName, uint32 options=0);
-    long UnLoadKey(const char far* subKeyName);
+    long Save(const _TCHAR far* fileName);
+    long LoadKey(const _TCHAR far* subKeyName, const _TCHAR far* fileName);
+    long ReplaceKey(const _TCHAR far* subKeyName, const _TCHAR far* newFileName,
+                    const _TCHAR far* oldFileName);
+    long Restore(const _TCHAR far* fileName, uint32 options=0);
+    long UnLoadKey(const _TCHAR far* subKeyName);
 
     //long NotifyChangeKeyValue();
 
     // Some of these are initialized at ctor
     //
-    long QueryInfo(char far* class_, uint32* classSize, uint32* subkeyCount,
+    long QueryInfo(_TCHAR far* class_, uint32* classSize, uint32* subkeyCount,
                    uint32* maxSubkeySize, uint32* maxClassSize,
                    uint32* valueCount, uint32* maxValueName,
                    uint32* maxValueData, uint32* secDescSize,
                    FILETIME far* lastWriteTime);
 
-    const char far* GetName() const;
+    const _TCHAR far* GetName() const;
     uint32 GetSubkeyCount() const;
     uint32 GetValueCount() const;
 
     // Special predefined root keys
     //
-    static TRegKey ClassesRoot;
-    static TRegKey ClassesRootClsid;  // Commonly used subkey
+
+  #if 0
+    //
+    // The following static objects cause a problem under system where
+    // the keys do no exist: instead of simply indicating a failure to
+    // open the key, the OS causes an access violation. The previous
+    // implementation did contain a __try/__except clause to handle these
+    // (see TRegKey's constructor in REGISTRY.CPP). Unfortunately, the
+    // exceptions are still caught by debuggers; furthermore, sometimes they
+    // render the system unstable ?!?!
+    //
+    // So, we'll replace the static objects with accessors - These keys
+    // should only be accessed on versions of the OS that supports them.
+    // You can make use of TSystem to determine the OS at runtime.
+    //
+    // NOTE: ClassesRoot and ClassesRootClsid are left as static objects
+    //       since they are commonly used keys which are supported by all
+    //       current versions of Windows. Changing these is likely to
+    //       break a fair amount of code. However, we recommend that all
+    //       new code use the accessors.
+    //
     static TRegKey CurrentUser;
     static TRegKey LocalMachine;
     static TRegKey Users;
@@ -131,36 +158,59 @@ class TRegKey {
     static TRegKey DynData;
     static TRegKey PerformanceData;
 
-    //-------
+  #else
+
+    static TRegKey ClassesRoot;
+    static TRegKey ClassesRootClsid;
+
+    static TRegKey& CurrentUser()     { return GetCurrentUser();    }
+    static TRegKey& LocalMachine()    { return GetLocalMachine();   }
+    static TRegKey& Users()           { return GetUsers();          }
+    static TRegKey& CurrentConfig()   { return GetCurrentConfig();  }
+    static TRegKey& DynData()         { return GetDynData();        }
+    static TRegKey& PerformanceData() { return GetPerformanceData();}
+
+  #endif
+
+    // Accessors common/predefined registry keys
+    //
+    static TRegKey& GetClassesRoot();
+    static TRegKey& GetClassesRootClsid();
+    static TRegKey& GetCurrentUser();
+    static TRegKey& GetLocalMachine();
+    static TRegKey& GetUsers();
+    static TRegKey& GetCurrentConfig();
+    static TRegKey& GetDynData();
+    static TRegKey& GetPerformanceData();
 
     // Friend iterators only...?
     //
-    long EnumKey(int index, char far* subKeyName, int subKeyNameSize) const;
+    long EnumKey(int index, _TCHAR far* subKeyName, int subKeyNameSize) const;
 
     // Older, nameless subkey+(Default) value access
     //
-    long SetDefValue(const char far* subkeyName, uint32 type,
-                     const char far* data, uint32 dataSize);
-    long QueryDefValue(const char far* subkeyName, char far* data,
+    long SetDefValue(const _TCHAR far* subkeyName, uint32 type,
+                     const _TCHAR far* data, uint32 dataSize);
+    long QueryDefValue(const _TCHAR far* subkeyName, _TCHAR far* data,
                        uint32* dataSize) const;
 
     // Newer, named value set & get functions. Subkeys must be opened
     //
-    long SetValue(const char far* valName, uint32 type, const uint8* data,
+    long SetValue(const _TCHAR far* valName, uint32 type, const uint8* data,
                   uint32 dataSize) const;
-    long SetValue(const char far* valName, uint32 data) const;
-    long QueryValue(const char far* valName, uint32* type, uint8* data,
+    long SetValue(const _TCHAR far* valName, uint32 data) const;
+    long QueryValue(const _TCHAR far* valName, uint32* type, uint8* data,
                     uint32* dataSize) const;
-    long DeleteValue(const char far* valName) const;
+    long DeleteValue(const _TCHAR far* valName) const;
 
     // Friend iterators only...?
     //
-    long EnumValue(int index, char far* valueName, uint32& valueNameSize,
+    long EnumValue(int index, _TCHAR far* valueName, uint32& valueNameSize,
                    uint32* type = 0, uint8* data = 0, uint32* dataSize = 0) const;
 
   protected:
     THandle   Key;          // This Key's Handle
-    char far* Name;         // This Key's Name
+    _TCHAR far* Name;         // This Key's Name
     uint32    SubkeyCount;  // Number of subkeys
     uint32    ValueCount;   // Number of value entries
     bool      ShouldClose;  // Should this key be closed on destruction
@@ -175,32 +225,32 @@ class TRegKey {
 class TRegValueIterator;
 class TRegValue {
   public:
-    TRegValue(const TRegKey& key, const char far* name);
+    TRegValue(const TRegKey& key, const _TCHAR far* name);
     TRegValue(const TRegValueIterator& iter);
    ~TRegValue();
 
-    const char far* GetName() const;
+    const _TCHAR far* GetName() const;
     const uint32 GetDataType() const;
     const uint32 GetDataSize() const;
     const uint8* GetData() const;
     operator uint32() const;
-    operator const char far*() const;
+    operator const _TCHAR far*() const;
 
     // Set the data and possibly type of this value
     //
     long Set(uint32 type, uint8* data, uint32 dataSize);
     long Set(uint32 data);
-    long Set(const char far* data);
+    long Set(const _TCHAR far* data);
     void operator =(uint32 v);
     long Delete();
-    void operator =(const char far* v);
+    void operator =(const _TCHAR far* v);
 
     void RetrieveOnDemand() const;
 
   private:
     const TRegKey&  Key;      // Key that this value lives in
-    const char far* Name;     // Working name pointer
-    char far*       AName;    // Allocated space for name if needed
+    const _TCHAR far* Name;     // Working name pointer
+    _TCHAR far*       AName;    // Allocated space for name if needed
 
     // Data information. 
     uint32          DataType; // Type code for value data
@@ -271,12 +321,12 @@ class TRegValueIterator {
 //
 class TXRegistry : public TXBase {
   public:
-    TXRegistry(const char* msg, const char* key);
+    TXRegistry(const _TCHAR* msg, const _TCHAR* key);
     TXRegistry(const TXRegistry& copy);
 
-    static void Check(long stat, const char* key);
+    static void Check(long stat, const _TCHAR* key);
 
-    const char* Key;
+    const _TCHAR* Key;
 };
 
 
@@ -293,11 +343,11 @@ class TRegFormatHeap {
   public:
     TRegFormatHeap();
    ~TRegFormatHeap();
-    char*  Alloc(int spaceNeeded);
+    _TCHAR*  Alloc(int spaceNeeded);
   private:
     struct TBlock {
       TBlock*  Next;     // Next heap in chain
-      char     Data[1];  // Allocated memory starts here
+      _TCHAR     Data[1];  // Allocated memory starts here
     };
     TBlock* Head;
 };
@@ -308,15 +358,15 @@ class TRegFormatHeap {
 // A single registration list entry
 //
 struct TRegItem {
-  char*         Key;           // Non-localized parameter or registry subkey
+  _TCHAR*         Key;           // Non-localized parameter or registry subkey
   TLocaleString Value;         // Localizable value for parameter or subkey
 
   // Used privately by REGFORMAT, REGSTATUS macros
   //
-  static char* RegFormat(int f, int a, int t, int d, TRegFormatHeap& heap);
-  static char* RegFormat(const char* f, int a, int t, int d, TRegFormatHeap& heap);
-  static char* RegFlags(long flags, TRegFormatHeap& heap);
-  static char* RegVerbOpt(int mf, int sf, TRegFormatHeap& heap);
+  static _TCHAR* RegFormat(int f, int a, int t, int d, TRegFormatHeap& heap);
+  static _TCHAR* RegFormat(const _TCHAR* f, int a, int t, int d, TRegFormatHeap& heap);
+  static _TCHAR* RegFlags(long flags, TRegFormatHeap& heap);
+  static _TCHAR* RegVerbOpt(int mf, int sf, TRegFormatHeap& heap);
   static void  OverflowCheck();
 };
 
@@ -328,10 +378,10 @@ struct TRegItem {
 class TRegList {
   public:
     TRegList(TRegItem* list);
-    const char* Lookup(const char* key,
+    const _TCHAR* Lookup(const _TCHAR* key,
                        TLangId lang = TLocaleString::UserDefaultLangId);
-    TLocaleString& LookupRef(const char* key);
-    const char* operator[](const char* key);
+    TLocaleString& LookupRef(const _TCHAR* key);
+    const _TCHAR* operator[](const _TCHAR* key);
 
     TRegItem* Items;
 };
@@ -511,31 +561,31 @@ enum ocrVerbAttributes {
 //
 class TRegTemplateList {
   public:
-    TRegTemplateList(TRegKey& basekey, const char* list[]);
+    TRegTemplateList(TRegKey& basekey, const _TCHAR* list[]);
    ~TRegTemplateList();
 
     int      GetCount() const;
     TRegKey& GetBaseKey();
 
-    const char* operator [](int i);
+    const _TCHAR* operator [](int i);
 
     // Enable/Disable and activate templates
     //
     void  DisableAll();
     void  EnableAll();
     void  Enable(int i);
-    void  Enable(const char* set);
+    void  Enable(const _TCHAR* set);
 
     void  Activate(int i);
-    void  Activate(const char* set);
+    void  Activate(const _TCHAR* set);
 
     bool  IsActive(int i) const;
 
   private:
     TRegKey&     BaseKey;       // Registry key that these templates are based
-    const char** List;          // List of templates
+    const _TCHAR** List;          // List of templates
     int          Count;         // # of templates in list
-    char*        EnabledFlags;  // Which templates are currently enabled/active
+    _TCHAR*        EnabledFlags;  // Which templates are currently enabled/active
 };
 
 //
@@ -549,26 +599,26 @@ class TRegTemplateList {
 class TRegParamList {
   public:
     struct TEntry {
-      char*  Param;    // Substituted parameter name
-      char*  Default;  // Default value, 0 if no default & param is required
-      char*  TemplatesNeeded; // Octal string list of template indices to activate
+      _TCHAR*  Param;    // Substituted parameter name
+      _TCHAR*  Default;  // Default value, 0 if no default & param is required
+      _TCHAR*  TemplatesNeeded; // Octal string list of template indices to activate
     };
 
     TRegParamList(TEntry* list);
    ~TRegParamList();
 
-    int Find(const char* param);   // Associative lookup of value by param
+    int Find(const _TCHAR* param);   // Associative lookup of value by param
     int GetCount() const;
 
     TEntry& operator [](int i);
 
-    const char*& Value(int i);
+    const _TCHAR*& Value(int i);
     void   ResetDefaultValues();
 
   private:
     TEntry*        List;
     int            Count;
-    const char**   Values;
+    const _TCHAR**   Values;
 };
 
 //
@@ -578,9 +628,9 @@ class TRegParamList {
 //
 class TRegSymbolTable {
   public:
-    TRegSymbolTable(TRegKey& basekey, const char* tplList[], TRegParamList::TEntry* paramList);
+    TRegSymbolTable(TRegKey& basekey, const _TCHAR* tplList[], TRegParamList::TEntry* paramList);
 
-    void Init(char* filter);
+    void Init(_TCHAR* filter);
     void UpdateParams(TLangId lang, TRegItem* item);
     void StreamOut(TRegItem* item, ostream& out);
 //    void StreamIn(TRegItem* item, istream& in);
@@ -601,13 +651,17 @@ class TRegistry {
     static void Update(TRegKey& baseKey, istream& in);   // Writes lines to registry
 #pragma pack(push,4)
     struct TUnregParams {
-      char     Prepend;  // Optional char to prepend to key before removing
-      char*    Name;     // Name of param
+      _TCHAR     Prepend;  // Optional char to prepend to key before removing
+      _TCHAR*    Name;     // Name of param
       TRegKey* BaseKey;  // Key that that the param is based upon
     };
 #pragma pack(pop)
     static int  Unregister(TRegList& regInfo, TUnregParams* params, TRegItem* overrides = 0);
 };
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 //----------------------------------------------------------------------------
 // TRegKey inlines
@@ -626,7 +680,7 @@ TRegKey::operator TRegKey::THandle() const
 // Enumerate the subkeys of this registry key
 //
 inline long
-TRegKey::EnumKey(int index, char far* subKeyName, int subKeyNameSize) const
+TRegKey::EnumKey(int index, _TCHAR far* subKeyName, int subKeyNameSize) const
 {
   return ::RegEnumKey(Key, index, subKeyName, subKeyNameSize);
   //::RegEnumKeyEx(); ??
@@ -636,7 +690,7 @@ TRegKey::EnumKey(int index, char far* subKeyName, int subKeyNameSize) const
 // Delete the specified subkey of this registry key
 //
 inline long
-TRegKey::DeleteKey(const char far* subKeyName)
+TRegKey::DeleteKey(const _TCHAR far* subKeyName)
 {
   return ::RegDeleteKey(Key, subKeyName);
 }
@@ -656,7 +710,7 @@ TRegKey::Flush() const
 }
 
 //
-// Retrieve a copy of the security descriptor protecting this registry key. 
+// Retrieve a copy of the security descriptor protecting this registry key.
 // Note: 32 bit only
 //
 inline long
@@ -689,7 +743,7 @@ TRegKey::SetSecurity(SECURITY_INFORMATION secInf, PSECURITY_DESCRIPTOR secDesc)
 // Note: 32 bit only
 //
 inline long
-TRegKey::Save(const char far* fileName)
+TRegKey::Save(const _TCHAR far* fileName)
 {
 #if defined(BI_PLAT_WIN16)
   return 0;
@@ -699,15 +753,15 @@ TRegKey::Save(const char far* fileName)
 }
 
 //
-// Create a subkey under HKEY_USER or HKEY_LOCAL_MACHINE and stores 
-// registration information from a specified file into that subkey. This 
-// registration information is in the form of a hive. A hive is a discrete 
-// body of keys, subkeys, and values that is rooted at the top of the 
-// registry hierarchy. A hive is backed by a single file and .LOG file. 
+// Create a subkey under HKEY_USER or HKEY_LOCAL_MACHINE and stores
+// registration information from a specified file into that subkey. This
+// registration information is in the form of a hive. A hive is a discrete
+// body of keys, subkeys, and values that is rooted at the top of the
+// registry hierarchy. A hive is backed by a single file and .LOG file.
 // Note: 32 bit only
 //
 inline long
-TRegKey::LoadKey(const char far* subKeyName, const char far* fileName)
+TRegKey::LoadKey(const _TCHAR far* subKeyName, const _TCHAR far* fileName)
 {
 #if defined(BI_PLAT_WIN16)
   return 0;
@@ -717,14 +771,14 @@ TRegKey::LoadKey(const char far* subKeyName, const char far* fileName)
 }
 
 //
-// Replace the file backing this key and all its subkeys with another file, 
-// so that when the system is next started, the key and subkeys will have 
-// the values stored in the new file. 
+// Replace the file backing this key and all its subkeys with another file,
+// so that when the system is next started, the key and subkeys will have
+// the values stored in the new file.
 // Note: 32 bit only
 //
 inline long
-TRegKey::ReplaceKey(const char far* subKeyName, const char far* newFileName,
-                    const char far* oldFileName)
+TRegKey::ReplaceKey(const _TCHAR far* subKeyName, const _TCHAR far* newFileName,
+                    const _TCHAR far* oldFileName)
 {
 #if defined(BI_PLAT_WIN16)
   return 0;
@@ -735,12 +789,12 @@ TRegKey::ReplaceKey(const char far* subKeyName, const char far* newFileName,
 
 //
 // Read the registry information in a specified file and copies it over this
-// key. This registry information may be in the form of a key and multiple 
-// levels of subkeys. 
+// key. This registry information may be in the form of a key and multiple
+// levels of subkeys.
 // Note: 32 bit only
 //
 inline long
-TRegKey::Restore(const char far* fileName, uint32 options)
+TRegKey::Restore(const _TCHAR far* fileName, uint32 options)
 {
 #if defined(BI_PLAT_WIN16)
   return 0;
@@ -750,11 +804,11 @@ TRegKey::Restore(const char far* fileName, uint32 options)
 }
 
 //
-// Unload this key and its subkeys from the registry. 
+// Unload this key and its subkeys from the registry.
 //
 // Note: 32 bit only
 inline long
-TRegKey::UnLoadKey(const char far* subKeyName)
+TRegKey::UnLoadKey(const _TCHAR far* subKeyName)
 {
 #if defined(BI_PLAT_WIN16)
   return 0;
@@ -786,7 +840,7 @@ TRegKey::GetValueCount() const
 //
 // Return a string identifying this key
 //
-inline const char far*
+inline const _TCHAR far*
 TRegKey::GetName() const
 {
   return Name;
@@ -796,7 +850,7 @@ TRegKey::GetName() const
 // Associate a value with this key
 //
 inline long
-TRegKey::SetValue(const char far* valName, uint32 type, const uint8* data,
+TRegKey::SetValue(const _TCHAR far* valName, uint32 type, const uint8* data,
                   uint32 dataSize) const
 {
 #if defined(BI_PLAT_WIN16)
@@ -811,7 +865,7 @@ TRegKey::SetValue(const char far* valName, uint32 type, const uint8* data,
 // Note: 32 bit only
 //
 inline long
-TRegKey::SetValue(const char far* valName, uint32 data) const
+TRegKey::SetValue(const _TCHAR far* valName, uint32 data) const
 {
 #if defined(BI_PLAT_WIN16)
   return 0;  
@@ -821,10 +875,10 @@ TRegKey::SetValue(const char far* valName, uint32 data) const
 }
 
 //
-// Retrieve the value associated with the unnamed value for this key 
+// Retrieve the value associated with the unnamed value for this key
 //
 inline long
-TRegKey::QueryValue(const char far* valName, uint32* type, uint8* data,
+TRegKey::QueryValue(const _TCHAR far* valName, uint32* type, uint8* data,
                     uint32* dataSize) const
 {
 #if defined(BI_PLAT_WIN16)
@@ -839,7 +893,7 @@ TRegKey::QueryValue(const char far* valName, uint32* type, uint8* data,
 // Note: 32 bit only
 //
 inline long
-TRegKey::DeleteValue(const char far* valName) const
+TRegKey::DeleteValue(const _TCHAR far* valName) const
 {
 #if defined(BI_PLAT_WIN16)
   return 0;
@@ -852,8 +906,8 @@ TRegKey::DeleteValue(const char far* valName) const
 // Set the default [unnamed] value associated with this key
 //
 inline long
-TRegKey::SetDefValue(const char far* subkeyName, uint32 type,
-                     const char far* data, uint32 dataSize)
+TRegKey::SetDefValue(const _TCHAR far* subkeyName, uint32 type,
+                     const _TCHAR far* data, uint32 dataSize)
 {
   return ::RegSetValue(Key, subkeyName, type, data, dataSize);
 }
@@ -862,7 +916,7 @@ TRegKey::SetDefValue(const char far* subkeyName, uint32 type,
 // Retrieve the default [unnamed] value associated with this key
 //
 inline long
-TRegKey::QueryDefValue(const char far* subkeyName, char far* data,
+TRegKey::QueryDefValue(const _TCHAR far* subkeyName, _TCHAR far* data,
                        uint32* dataSize) const
 {
   return ::RegQueryValue(Key, subkeyName, data, (long*)dataSize);
@@ -874,7 +928,7 @@ TRegKey::QueryDefValue(const char far* subkeyName, char far* data,
 // Note: 32 bit only
 //
 inline long
-TRegKey::EnumValue(int index, char far* valueName, uint32& valueNameSize,
+TRegKey::EnumValue(int index, _TCHAR far* valueName, uint32& valueNameSize,
                    uint32* type, uint8* data, uint32* dataSize) const
 {
 #if defined(BI_PLAT_WIN16)
@@ -893,7 +947,7 @@ TRegKey::EnumValue(int index, char far* valueName, uint32& valueNameSize,
 //
 // Return a string identifying this value
 //
-inline const char far*
+inline const _TCHAR far*
 TRegValue::GetName() const
 {
   return Name;
@@ -937,9 +991,9 @@ inline TRegValue::operator uint32() const
 //
 // Return the data associated with this value as a const char*
 //
-inline TRegValue::operator const char far*() const
+inline TRegValue::operator const _TCHAR far*() const
 {
-  return (const char far*)GetData();  // Assumes DataType==REG_SZ or sim.
+  return (const _TCHAR far*)GetData();  // Assumes DataType==REG_SZ or sim.
 }
 
 //
@@ -960,11 +1014,11 @@ TRegValue::Set(uint32 data)
 // Set the data associated with this value
 //
 inline long
-TRegValue::Set(const char far* data)
+TRegValue::Set(const _TCHAR far* data)
 {
 //  TString strData(data);
 //  wchar_t* ustrData = strData;  
-  return Set(REG_SZ, (uint8*)data, strlen(data));
+  return Set(REG_SZ, (uint8*)data, _tcslen(data));
 }
 
 //
@@ -990,9 +1044,9 @@ TRegValue::operator =(uint32 v)
 // Set the data for this value to v
 //
 inline void
-TRegValue::operator =(const char far* v)
+TRegValue::operator =(const _TCHAR far* v)
 {
-  Set(DataType, (uint8*)v, strlen(v) + 1);
+  Set(DataType, (uint8*)v, _tcslen(v) + 1);
 }
 
 //----------------------------------------------------------------------------
@@ -1204,7 +1258,7 @@ TRegValueIterator::Reset()
 // processing when the exception occurred.
 //
 inline
-TXRegistry::TXRegistry(const char* msg, const char* key)
+TXRegistry::TXRegistry(const _TCHAR* msg, const _TCHAR* key)
 :
   TXBase(msg),
   Key(key)
@@ -1213,7 +1267,7 @@ TXRegistry::TXRegistry(const char* msg, const char* key)
 
 //
 // The copy constructor constructs a new registry exception object by copying
-// the one passed as copy. 
+// the one passed as copy.
 //
 inline
 TXRegistry::TXRegistry(const TXRegistry& src)
@@ -1242,8 +1296,8 @@ TRegList::TRegList(TRegItem* list)
 //
 // Return the value of the passed key as a const char*
 //
-inline const char*
-TRegList::operator[](const char* key)
+inline const _TCHAR*
+TRegList::operator[](const _TCHAR* key)
 {
   PRECONDITION(key);
   return Lookup(key);
@@ -1319,11 +1373,11 @@ TRegTemplateList::GetBaseKey()
 // Return the template string at the passed index.
 // Note: The list is indexed beginning with 1 not 0.
 //
-inline const char*
+inline const _TCHAR*
 TRegTemplateList::operator [](int i)
 {
   PRECONDITION(i > 0 && i <= Count);
-  if (i <= 0 || i > Count) 
+  if (i <= 0 || i > Count)
     return 0;
   else
     return List[i-1];
@@ -1355,7 +1409,7 @@ inline void
 TRegTemplateList::Enable(int i)
 {
   PRECONDITION(i > 0 && i <= Count);
-  if (i > 0 && i <= Count) 
+  if (i > 0 && i <= Count)
     EnabledFlags[i-1] = 0;
 }
 
@@ -1367,7 +1421,7 @@ inline void
 TRegTemplateList::Activate(int i)
 {
   PRECONDITION(i > 0 && i <= Count);
-  if (i > 0 && i <= Count) 
+  if (i > 0 && i <= Count)
     EnabledFlags[i-1]++;
 }
 
@@ -1379,7 +1433,7 @@ inline bool
 TRegTemplateList::IsActive(int i) const
 {
   PRECONDITION(i > 0 && i <= Count);
-  if (i > 0 && i <= Count) 
+  if (i > 0 && i <= Count)
     return EnabledFlags[i-1] > 0;
   else
     return false;
@@ -1405,16 +1459,16 @@ inline TRegParamList::TEntry&
 TRegParamList::operator [](int i)
 {
   PRECONDITION(i >= 0 && i < Count);
-  if (i < 0 || i >= Count) 
+  if (i < 0 || i >= Count)
     TXRegistry::Check(1,0);
   return List[i];
 }
- 
+
 
 //
 // Return the value of the param entry at the passed index
 //
-inline const char*&
+inline const _TCHAR*&
 TRegParamList::Value(int i)
 {
   PRECONDITION(i >= 0 && i < Count);

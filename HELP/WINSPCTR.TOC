@@ -1,54 +1,55 @@
 :BASE winspctr.hlp
-1 WinSpector User's Guide
-2 Basics
-3 Introduction = Intro
-3 Preferences Dialog Box = IDH_PREFERENCES
-3 Latest UAE Logged Dialog Box = IDH_DRFRANK
-3 Stack Trace Section = StackTrace
-3 Disassembly Section = DisassemblySection
-3 Register Section = RegisterSection
-3 Message Queue Section = MessageQueueSection
-3 Tasks Section = TasksSection
-3 Modules Section = ModulesSection
-3 USER and GDI Heap Information Section = UserAndGdiHeapInformation
-3 System Information Section = SysInfoSection
-3 Summary to AUX Option = Stdaux
-3 Exception Types = ExceptionTypes
-2 Tasks
-3 Creating .SYM Files = CreatingSYMFiles
-3 Creating Borland debugger information = TurboDebug
-3 Interpreting the Log File = InterpretingTheLogFile
-4 First Line of the Log File = FirstLineLog
-4 Second Line of the Log File = SecondLineLog
-3 Optimizing the Report = OptimizingTheReport
-4 Append New Reports/Overwrite Previous Report Option = AppendOver
-3 Setting WinSpector Options = SetPrefs
-3 Setting WinSpector Options in the WINSPCTR.INI = WinSpectINI
-3 Using BUILDSYM to Create .SYM Files = UsingBuildSymToCreateSymFiles 
-3 Using EXEMAP to Create Windows Format .MAP Files = UsingExeMapToCreateWindowsFormatMapFiles
-3 Using TMAPSYM to Create .SYM Files from .MAP Files = UsingTmapsymToCreateSymFilesFromMapFiles
-3 Understanding Addresses and Selectors = AddressesSelectors
-3 Using Borland debugger information = UsingTurboDebuggerInformation
-2 Glossary
-3 BUILDSYM Utility = DefIDBuildsym
-3 Call Stack = DefIDCallStack
-3 DFA Utility = DefIDDFA
-3 Directory = DefIDDirectory
-3 EXEMAP Utility = DefIDExemap
-3 Free Linear Memory Space = DefIDFreeLinMemSpc
-3 Largest Free Memory Block = DefIDLargeFreeMemBlk
-3 Logical Addresses = DefIDLogAddress
-3 Physical Addresses (Selectors) = DefIDPhysAddress
-3 Postmortem Dump = DefIDDump
-3 Stack Frame Data = DefIDShowStackInfo
-3 Swap File Pages = DefIDSwapFilePgs
-3 .SYM files = DefIDSymFiles
-3 System Information = DefIDSysInfo
-3 TMAPSYM Utility = DefIDTmapsym
-3 TOOLHELP.DLL = DefIDToolDLL
-3 Total Free Memory Space = DefIDTotalLinMemSpc
-3 User Comments = DefIDShowUserInfo
-3 Viewer = DefIDViewer
-3 WINSPCTR.BIN = DefIDWinSpectBin
-3 WINSPCTR.INI = DefIDWinSpectINI
-3 WINSPCTR.LOG = DefIDWinspctrLog
+0 WinSpector User's Guide
+
+1 WinSpector Basics
+2 Introduction = Intro
+2 Preferences Dialog Box = IDH_PREFERENCES
+2 Latest UAE Logged Dialog Box = IDH_DRFRANK
+2 Stack Trace Section = StackTrace
+2 Disassembly Section = DisassemblySection
+2 Register Section = RegisterSection
+2 Message Queue Section = MessageQueueSection
+2 Tasks Section = TasksSection
+2 Modules Section = ModulesSection
+2 USER and GDI Heap Information Section = UserAndGdiHeapInformation
+2 System Information Section = SysInfoSection
+2 Summary to AUX Option = Stdaux
+2 Exception Types = ExceptionTypes
+1 WinSpector Tasks
+2 Creating .SYM Files = CreatingSYMFiles
+2 Creating Borland debugger information = TurboDebug
+2 Interpreting the Log File = InterpretingTheLogFile
+3 First Line of the Log File = FirstLineLog
+3 Second Line of the Log File = SecondLineLog
+2 Optimizing the Report = OptimizingTheReport
+3 Append New Reports/Overwrite Previous Report Option = AppendOver
+2 Setting WinSpector Options = SetPrefs
+2 Setting WinSpector Options in the WINSPCTR.INI = WinSpectINI
+2 Using BUILDSYM to Create .SYM Files = UsingBuildSymToCreateSymFiles 
+2 Using EXEMAP to Create Windows Format .MAP Files = UsingExeMapToCreateWindowsFormatMapFiles
+2 Using TMAPSYM to Create .SYM Files from .MAP Files = UsingTmapsymToCreateSymFilesFromMapFiles
+2 Understanding Addresses and Selectors = AddressesSelectors
+2 Using Borland debugger information = UsingTurboDebuggerInformation
+1 WinSpector Glossary
+2 BUILDSYM Utility = DefIDBuildsym
+2 Call Stack = DefIDCallStack
+2 DFA Utility = DefIDDFA
+2 Directory = DefIDDirectory
+2 EXEMAP Utility = DefIDExemap
+2 Free Linear Memory Space = DefIDFreeLinMemSpc
+2 Largest Free Memory Block = DefIDLargeFreeMemBlk
+2 Logical Addresses = DefIDLogAddress
+2 Physical Addresses (Selectors) = DefIDPhysAddress
+2 Postmortem Dump = DefIDDump
+2 Stack Frame Data = DefIDShowStackInfo
+2 Swap File Pages = DefIDSwapFilePgs
+2 .SYM files = DefIDSymFiles
+2 System Information = DefIDSysInfo
+2 TMAPSYM Utility = DefIDTmapsym
+2 TOOLHELP.DLL = DefIDToolDLL
+2 Total Free Memory Space = DefIDTotalLinMemSpc
+2 User Comments = DefIDShowUserInfo
+2 Viewer = DefIDViewer
+2 WINSPCTR.BIN = DefIDWinSpectBin
+2 WINSPCTR.INI = DefIDWinSpectINI
+2 WINSPCTR.LOG = DefIDWinspctrLog

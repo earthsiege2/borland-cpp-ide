@@ -4,15 +4,18 @@
 *                                                                             *
 * Version 1.0                                                                 *
 *                                                                             *
-* Copyright (c) 1991-1995, Microsoft Corp.      All rights reserved.          *
+* Copyright (c) 1991-1996, Microsoft Corp.      All rights reserved.          *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _PRSHT_H_
 #define _PRSHT_H_
+#pragma option -b
 
-#if defined(__BORLANDC__) && defined (__FLAT__)
+#if defined( __BORLANDC__) && defined(__FLAT__)
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 //
@@ -30,7 +33,7 @@
 // For compilers that don't support nameless unions
 //
 #ifndef DUMMYUNIONNAME
-#if !defined(__cplusplus) && !defined(_ANONYMOUS_UNION)
+#ifdef NONAMELESSUNION
 #define DUMMYUNIONNAME   u
 #define DUMMYUNIONNAME2  u2
 #define DUMMYUNIONNAME3  u3
@@ -45,22 +48,27 @@
 extern "C" {
 #endif
 
-#if (WINVER >= 0x0400)
+
+#ifndef SNDMSG
+#ifdef __cplusplus
+#define SNDMSG ::SendMessage
+#else
+#define SNDMSG SendMessage
+#endif
+#endif // ifndef SNDMSG
 
 #define MAXPROPPAGES            100
 
-struct _PSP
-{
-  int dummy;    /* dummy definition of structure to prevent compiler
-                   warnings */
-};
+struct _PSP;
 typedef struct _PSP FAR* HPROPSHEETPAGE;
 
-typedef struct _PROPSHEETPAGEA FAR *LPPROPSHEETPAGEA;
-typedef struct _PROPSHEETPAGEW FAR *LPPROPSHEETPAGEW;
+#ifndef MIDL_PASS
+struct _PROPSHEETPAGEA;
+struct _PROPSHEETPAGEW;
+#endif
 
-typedef UINT (CALLBACK FAR * LPFNPSPCALLBACKA)(HWND hwnd, UINT uMsg, LPPROPSHEETPAGEA ppsp);
-typedef UINT (CALLBACK FAR * LPFNPSPCALLBACKW)(HWND hwnd, UINT uMsg, LPPROPSHEETPAGEW ppsp);
+typedef UINT (CALLBACK FAR * LPFNPSPCALLBACKA)(HWND hwnd, UINT uMsg, struct _PROPSHEETPAGEA FAR *ppsp);
+typedef UINT (CALLBACK FAR * LPFNPSPCALLBACKW)(HWND hwnd, UINT uMsg, struct _PROPSHEETPAGEW FAR *ppsp);
 
 #ifdef UNICODE
 #define LPFNPSPCALLBACK         LPFNPSPCALLBACKW
@@ -78,6 +86,7 @@ typedef UINT (CALLBACK FAR * LPFNPSPCALLBACKW)(HWND hwnd, UINT uMsg, LPPROPSHEET
 #define PSP_HASHELP             0x0020
 #define PSP_USEREFPARENT        0x0040
 #define PSP_USECALLBACK         0x0080
+
 
 #define PSPCB_RELEASE           1
 #define PSPCB_CREATE            2
@@ -241,12 +250,13 @@ typedef BOOL (CALLBACK FAR * LPFNADDPROPSHEETPAGE)(HPROPSHEETPAGE, LPARAM);
 typedef BOOL (CALLBACK FAR * LPFNADDPROPSHEETPAGES)(LPVOID, LPFNADDPROPSHEETPAGE, LPARAM);
 
 
+#if(WINVER >= 0x0400)
 typedef struct _PSHNOTIFY
 {
     NMHDR hdr;
     LPARAM lParam;
 } PSHNOTIFY, FAR *LPPSHNOTIFY;
-
+#endif
 
 #define PSN_FIRST               (0U-200U)
 #define PSN_LAST                (0U-299U)
@@ -272,52 +282,52 @@ typedef struct _PSHNOTIFY
 
 #define PSM_SETCURSEL           (WM_USER + 101)
 #define PropSheet_SetCurSel(hDlg, hpage, index) \
-        SendMessage(hDlg, PSM_SETCURSEL, (WPARAM)index, (LPARAM)hpage)
+        SNDMSG(hDlg, PSM_SETCURSEL, (WPARAM)index, (LPARAM)hpage)
 
 
 #define PSM_REMOVEPAGE          (WM_USER + 102)
 #define PropSheet_RemovePage(hDlg, index, hpage) \
-        SendMessage(hDlg, PSM_REMOVEPAGE, index, (LPARAM)hpage)
+        SNDMSG(hDlg, PSM_REMOVEPAGE, index, (LPARAM)hpage)
 
 
 #define PSM_ADDPAGE             (WM_USER + 103)
 #define PropSheet_AddPage(hDlg, hpage) \
-        SendMessage(hDlg, PSM_ADDPAGE, 0, (LPARAM)hpage)
+        SNDMSG(hDlg, PSM_ADDPAGE, 0, (LPARAM)hpage)
 
 
 #define PSM_CHANGED             (WM_USER + 104)
 #define PropSheet_Changed(hDlg, hwnd) \
-        SendMessage(hDlg, PSM_CHANGED, (WPARAM)hwnd, 0L)
+        SNDMSG(hDlg, PSM_CHANGED, (WPARAM)hwnd, 0L)
 
 
 #define PSM_RESTARTWINDOWS      (WM_USER + 105)
 #define PropSheet_RestartWindows(hDlg) \
-        SendMessage(hDlg, PSM_RESTARTWINDOWS, 0, 0L)
+        SNDMSG(hDlg, PSM_RESTARTWINDOWS, 0, 0L)
 
 
 #define PSM_REBOOTSYSTEM        (WM_USER + 106)
 #define PropSheet_RebootSystem(hDlg) \
-        SendMessage(hDlg, PSM_REBOOTSYSTEM, 0, 0L)
+        SNDMSG(hDlg, PSM_REBOOTSYSTEM, 0, 0L)
 
 
 #define PSM_CANCELTOCLOSE       (WM_USER + 107)
 #define PropSheet_CancelToClose(hDlg) \
-        SendMessage(hDlg, PSM_CANCELTOCLOSE, 0, 0L)
+        PostMessage(hDlg, PSM_CANCELTOCLOSE, 0, 0L)
 
 
 #define PSM_QUERYSIBLINGS       (WM_USER + 108)
 #define PropSheet_QuerySiblings(hDlg, wParam, lParam) \
-        SendMessage(hDlg, PSM_QUERYSIBLINGS, wParam, lParam)
+        SNDMSG(hDlg, PSM_QUERYSIBLINGS, wParam, lParam)
 
 
 #define PSM_UNCHANGED           (WM_USER + 109)
 #define PropSheet_UnChanged(hDlg, hwnd) \
-        SendMessage(hDlg, PSM_UNCHANGED, (WPARAM)hwnd, 0L)
+        SNDMSG(hDlg, PSM_UNCHANGED, (WPARAM)hwnd, 0L)
 
 
 #define PSM_APPLY               (WM_USER + 110)
 #define PropSheet_Apply(hDlg) \
-        SendMessage(hDlg, PSM_APPLY, 0, 0L)
+        SNDMSG(hDlg, PSM_APPLY, 0, 0L)
 
 
 #define PSM_SETTITLEA           (WM_USER + 111)
@@ -330,7 +340,7 @@ typedef struct _PSHNOTIFY
 #endif
 
 #define PropSheet_SetTitle(hDlg, wStyle, lpszText)\
-        SendMessage(hDlg, PSM_SETTITLE, wStyle, (LPARAM)(LPCTSTR)lpszText)
+        SNDMSG(hDlg, PSM_SETTITLE, wStyle, (LPARAM)(LPCTSTR)lpszText)
 
 
 #define PSM_SETWIZBUTTONS       (WM_USER + 112)
@@ -347,7 +357,7 @@ typedef struct _PSHNOTIFY
 
 #define PSM_PRESSBUTTON         (WM_USER + 113)
 #define PropSheet_PressButton(hDlg, iButton) \
-        SendMessage(hDlg, PSM_PRESSBUTTON, (WPARAM)iButton, 0)
+        PostMessage(hDlg, PSM_PRESSBUTTON, (WPARAM)iButton, 0)
 
 
 #define PSBTN_BACK              0
@@ -363,7 +373,7 @@ typedef struct _PSHNOTIFY
 
 #define PSM_SETCURSELID         (WM_USER + 114)
 #define PropSheet_SetCurSelByID(hDlg, id) \
-        SendMessage(hDlg, PSM_SETCURSELID, 0, (LPARAM)id)
+        SNDMSG(hDlg, PSM_SETCURSELID, 0, (LPARAM)id)
 
 
 #define PSM_SETFINISHTEXTA      (WM_USER + 115)
@@ -376,20 +386,20 @@ typedef struct _PSHNOTIFY
 #endif
 
 #define PropSheet_SetFinishText(hDlg, lpszText) \
-        SendMessage(hDlg, PSM_SETFINISHTEXT, 0, (LPARAM)lpszText)
+        SNDMSG(hDlg, PSM_SETFINISHTEXT, 0, (LPARAM)lpszText)
 
 
 #define PSM_GETTABCONTROL       (WM_USER + 116)
 #define PropSheet_GetTabControl(hDlg) \
-        (HWND)SendMessage(hDlg, PSM_GETTABCONTROL, 0, 0)
+        (HWND)SNDMSG(hDlg, PSM_GETTABCONTROL, 0, 0)
 
 #define PSM_ISDIALOGMESSAGE     (WM_USER + 117)
 #define PropSheet_IsDialogMessage(hDlg, pMsg) \
-        (BOOL)SendMessage(hDlg, PSM_ISDIALOGMESSAGE, 0, (LPARAM)pMsg)
+        (BOOL)SNDMSG(hDlg, PSM_ISDIALOGMESSAGE, 0, (LPARAM)pMsg)
 
 #define PSM_GETCURRENTPAGEHWND  (WM_USER + 118)
 #define PropSheet_GetCurrentPageHwnd(hDlg) \
-        (HWND)SendMessage(hDlg, PSM_GETCURRENTPAGEHWND, 0, 0L)
+        (HWND)SNDMSG(hDlg, PSM_GETCURRENTPAGEHWND, 0, 0L)
 
 #define ID_PSRESTARTWINDOWS     0x2
 #define ID_PSREBOOTSYSTEM       (ID_PSRESTARTWINDOWS | 0x1)
@@ -412,14 +422,23 @@ typedef struct _PSHNOTIFY
 #define PROP_LG_CXDLG           252
 #define PROP_LG_CYDLG           218
 
-#endif // (WINVER >= 0x0400)
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#if defined(__BORLANDC__) && defined (__FLAT__)
-  #include <poppack.h>
+#ifdef __BORLANDC__
+  /* This satisfies the undefined forward reference to this structure */
+  struct _PSP { int dummy; };
 #endif
 
+
+#if defined( __BORLANDC__) && defined(__FLAT__)
+#pragma option -b.
+  #include <poppack.h>
+#pragma option -b
 #endif
+
+#pragma option -b.
+#endif  // _PRSHT_H_

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.6  $
 //
 // Definition of class THotKey
 //----------------------------------------------------------------------------
@@ -11,6 +11,10 @@
 
 #if !defined(OWL_COMMCTRL_H)
 # include <owl/commctrl.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -62,5 +66,9 @@ class _OWLCLASS THotKey : public TControl {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_HOTKEY_H

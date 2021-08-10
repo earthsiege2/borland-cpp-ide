@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.5  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_STGDOC_H)
@@ -15,10 +15,6 @@
 # include <iostream.h>
 #endif
 
-// Generic definitions/compiler options (eg. alignment) preceeding the 
-// definition of classes
-#include <services/preclass.h>
-
 //
 // Forward reference OLE interface without including headers
 //
@@ -29,6 +25,14 @@
   class IStorage;
   class IStream;
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
 
 //
 // class TStorageDocument
@@ -103,6 +107,10 @@ class _USERCLASS TStorageDocument : public TDocument {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 // --------------------------------------------------------------------------
 // Inline implementations

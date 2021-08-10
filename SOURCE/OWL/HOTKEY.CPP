@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
@@ -12,6 +12,8 @@
 #if !defined(WINSYS_SYSTEM_H)
 # include <winsys/system.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Constructors for THotKey

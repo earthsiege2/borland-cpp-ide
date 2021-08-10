@@ -165,7 +165,7 @@ void TParam::GetName( string& s )
 		AnyString( param->get_Name() ).GetString( s );
 }
 
-void TParam::SetName( string& n )
+void TParam::SetName( const string& n )
 {
 	if (param)
 		param->put_Name( AnyString(n).GetPITAnyString() );
@@ -225,7 +225,7 @@ void TParam::GetAsString( string& s )
 		AnyString( param->get_AsString() ).GetString( s );
 }
 
-void TParam::SetAsString( string& s )
+void TParam::SetAsString( const string& s )
 {
 	if (param)
 		param->put_AsString( AnyString(s).GetPITAnyString() );
@@ -351,7 +351,7 @@ void TParam::GetText( string& t )
 		AnyString( param->get_Text() ).GetString( t );
 }
 
-void TParam::SetText( string& t )
+void TParam::SetText( const string& t )
 {
 	if (param)
 		param->put_Text( AnyString(t).GetPITAnyString() );
@@ -519,3 +519,4 @@ void TParams::GetItems( uint16 i, TParam& p )
 		}
 	}
 }
+

@@ -7,18 +7,22 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1995, 1996 by Borland International
+ *      Copyright (c) 1995, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #define INCL_USER
 #include <ntbc.h>
 
 #include <string.h>
 #include <stdlib.h>
+#if defined(_MBCS)
+#include <tchar.h>
+#endif
 
 char * _RTLENTRY _EXPDATA _messagefile = NULL; /* used to determine if error
                                                   messages are sent to
@@ -79,8 +83,13 @@ void _RTLENTRY _EXPFUNC _ErrorMessage(const char *s)
         char *progname;
 
         GetModuleFileName(NULL, (PSTR)&filename, sizeof(filename));
+#if defined(_MBCS)
+        if ((progname = _tcsrchr(filename,_TEXT('\\'))) == NULL &&
+            (progname = _tcsrchr(filename,_TEXT( ':'))) == NULL)
+#else
         if ((progname = strrchr(filename,'\\')) == NULL &&
             (progname = strrchr(filename, ':')) == NULL)
+#endif
             progname = filename;
         else
             progname++;

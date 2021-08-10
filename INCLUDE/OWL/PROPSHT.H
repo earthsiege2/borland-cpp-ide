@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.20  $
+//$Revision:   10.26  $
 //
 // Definition of classes encapsulating PropertySheets and PropertyPages
 //----------------------------------------------------------------------------
@@ -17,6 +17,10 @@
 #endif
 #if !defined(OWL_COMMCTRL_H)
 # include <owl/commctrl.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Documented but missing from system headers!
@@ -56,7 +60,8 @@ typedef bool (*TCondPageFunc)(TPropertyPage* pPage, void* param);
 class _OWLCLASS TPropertyPage: public TDialog {
   public:
     TPropertyPage(TPropertySheet* parent, TResId resId,
-                  const char far* title = 0, TResId iconRes = 0,
+                  const char far* title = 0,
+                  TResId iconRes = 0,
                   TModule* module = 0);
    ~TPropertyPage();
 
@@ -66,11 +71,7 @@ class _OWLCLASS TPropertyPage: public TDialog {
     void            SetIcon(TResId iconResId);
     void            SetTitle(const char far*);
     void            SetTitle(int txtResId);
-
-    // Get/Set caption
-    //
-    bool            GetPageCaption(char* txt, int size);
-    void            SetPageCaption(char far* caption);
+    void            SetFlags(uint32 flags);
 
     // Retrieve Sheet object [i.e. Parent of page]
     //
@@ -120,14 +121,15 @@ class _OWLCLASS TPropertyPage: public TDialog {
     // Virtual methods to handle the Sheet notifications. Some of these 
     // methods will most likely be overriden by TPropertyPage-derived classes
     //
-    virtual   int   Apply(TNotify far&);
-    virtual   bool  KillActive(TNotify far&);
-    virtual   void  Help(TNotify far&);
-    virtual   void  Reset(TNotify far&);
-    virtual   int   SetActive(TNotify far&);
-    virtual   int   WizBack(TNotify far&);
-    virtual   bool  WizFinish(TNotify far&);
-    virtual   int   WizNext(TNotify far&);
+    virtual   int   SetActive(TNotify&);    // PSN_SETACTIVE
+    virtual   bool  KillActive(TNotify&);   // PSN_KILLACTIVE
+    virtual   int   Apply(TNotify&);        // PSN_APPLY
+    virtual   void  Reset(TNotify&);        // PSN_RESET
+    virtual   void  Help(TNotify&);         // PSN_HELP
+    virtual   int   WizBack(TNotify&);      // PSN_WIZBACK
+    virtual   int   WizNext(TNotify&);      // PSN_WIZNEXT
+    virtual   bool  WizFinish(TNotify&);    // PSN_FINISH
+    virtual   bool  QueryCancel(TNotify&);  // PSN_QUERYCANCEL
 
     // Following structure holds information about this dialog when it is
     // inserted into a PropertySheet
@@ -138,9 +140,18 @@ class _OWLCLASS TPropertyPage: public TDialog {
     //
     HPROPSHEETPAGE  HPropPage;
 
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
     // Flags if native implementation is used
     //
     bool            UseNative;
+
+  public:
+    // Get/Set caption
+    //
+    bool            GetPageCaption(char* txt, int size);
+    void            SetPageCaption(char far* caption);
+    void            SetUseNative(bool useNative) { UseNative = useNative; }
+#endif
 
   private:
     // Hidden to prevent accidental copying or assignment
@@ -148,16 +159,22 @@ class _OWLCLASS TPropertyPage: public TDialog {
     TPropertyPage(const TPropertyPage&);
     TPropertyPage& operator =(const TPropertyPage&);
 
+    // Initialization shared by constructors
+    //
+    void Init(TResId resId, const char far* title,
+      TResId iconRes, uint32 flags);
+
     // Method that ties the C++ object presenting the page with the underlying
     // 'HWND' handle.
     //
     static void     InitHandle(THandle pageHandle, LPPROPSHEETPAGE pageInfo);
 
-    // Caption of dialog as stored in resource
+    // Iterator callback allowing each page to register its children
     //
-    TAPointer<char> ResCaption;
+    static void     RegisterPageChildObjects(TPropertyPage* page, void*);
 
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
+
     // The following methods are only valid when ObjectWindows is providing
     // the underlying implementation of PropertySheet/Page. These methods are
     // protected to support derived classes. However, your derived classes
@@ -166,6 +183,10 @@ class _OWLCLASS TPropertyPage: public TDialog {
     // underlying implementation of PropertySheet/PropertyPages.
     //
 
+    // Caption of dialog as stored in resource
+    //
+    TAPointer<char> ResCaption;
+
   public:
     void            SetModified(bool modified);
     bool            IsModified() const;
@@ -173,11 +194,18 @@ class _OWLCLASS TPropertyPage: public TDialog {
   protected:
     void            SetupWindow();
 
+    // Child notifications
+    //
+    void            CmOk();      // IDOK
+    void            CmCancel();  // IDCANCEL
+
+
   private:
     bool            Modified;
 #endif
+
+    friend          TPropertySheet;
     DECLARE_RESPONSE_TABLE(TPropertyPage);
-//  DECLARE_STREAMABLE(_OWLCLASS, TPropertyPage, 1);
 };
 
 //----------------------------------------------------------------------------
@@ -268,21 +296,22 @@ class _OWLCLASS TPropertySheet : public TWindow {
     void            ForEachPage(TActionPageFunc action, void* paramList = 0);
     TPropertyPage*  FirstPageThat(TCondPageFunc cond, void* paramList = 0);
 
-  protected:
-    bool            UseNative;      // Are we using native (OS) implementation
-    bool            SubClassSheet;  // Should we subclass the sheet (OS only)
-
-    // Flags if sheet is a wizard
+    // Tell OWL to subclass the sheet after it's created
     //
-    bool            IsWizard;
+    void            EnableSubclass(bool subclass);
+
+  protected:
+    bool            SubClassSheet;  // Should we subclass the sheet (OS only)
 
     // Holds information necessary to create the property sheet
     //
     PROPSHEETHEADER HeaderInfo;
 
-    // Helper routine to retrieve handle of pages
+    // Flags if sheet is a wizard
     //
-    bool            GetPageHandles();
+    bool            IsWizard;
+
+    bool            PreProcessMsg(MSG& msg);
 
   private:
     // Hidden to prevent accidental copying or assignment
@@ -290,26 +319,39 @@ class _OWLCLASS TPropertySheet : public TWindow {
     TPropertySheet(const TPropertySheet&);
     TPropertySheet& operator =(const TPropertySheet&);
 
+    // Helper routine to retrieve handle of pages
+    //
+    bool            GetPageHandles();
+
     // Method that ties the C++ object presenting the sheet
     // with the underlying 'HWND' handle.
     //
     void            InitHandle(THandle sheetHandle);
-    friend          TPropertyPage;
 
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
+
     // The following methods are only valid when ObjectWindows is providing
     // the underlying implementation of PropertySheet/Page. These methods are
-    // protected to support derived classes. However, your derived classes
+    // provided to support derived classes. However, your derived classes
     // should be implemented to rely on these methods only when the Common
     // Control library is unavailable and ObjectWindows is providing the
     // underlying implementation of PropertySheet/PropertyPages.
     //
+
+  public:
+    void            SetUseNative(bool useNative) { UseNative = useNative; }
+
   protected:
-    // Override TWindow virtual member functions
+    // Are we emulating or using OS support
+    //
+    bool            UseNative;      
+
+    // Override TWindow virtuals
     //
     void            SetupWindow();
     char far*       GetClassName();
     void            GetWindowClass(WNDCLASS& wndClass);
+    void            EvClose();
 
     // Helper routines to ask for info. about pages of sheet
     //
@@ -324,12 +366,12 @@ class _OWLCLASS TPropertySheet : public TWindow {
     // and the buttons of the property sheet. 
     //
     void            SyncTabAndPages();
-    void            UpdateTabAndSheetSize(const TRect& pageRect);
-    void            PositionPage(TPropertyPage* page);
-    void            ComputeMarginAndButton();
-    bool            CreateButtons();
+    virtual void    UpdateTabAndSheetSize(const TRect& pageRect);
+    virtual void    PositionPage(TPropertyPage* page);
+    virtual void    ComputeMarginAndButton();
+    virtual bool    CreateButtons();
     HWND            CreateButton(int id, const char* caption);
-    bool            UpdateButtons();
+    virtual bool    UpdateButtons();
 
     // Variables
     //
@@ -357,12 +399,17 @@ class _OWLCLASS TPropertySheet : public TWindow {
 
     DECLARE_RESPONSE_TABLE(TPropertySheet);
 #endif
+
+    friend          TPropertyPage;
 };
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -412,7 +459,7 @@ TPropertyPage::GetSheet() const
   return TYPESAFE_DOWNCAST(GetParentO(), TPropertySheet);
 }
 
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
 //
 //
 //
@@ -432,7 +479,6 @@ TPropertyPage::IsModified() const
 }
 #endif
 
-//
 // Return structure which describes the characteristics/attributes of sheet.
 //
 inline PROPSHEETHEADER& 
@@ -440,5 +486,17 @@ TPropertySheet::GetPropSheetHeader()
 {
   return HeaderInfo;  
 }
+
+//
+//
+inline void
+TPropertySheet::EnableSubclass(bool subclass)
+{
+  // Method must be invoked before the sheet is created
+  //
+  PRECONDITION(GetHandle() == 0);
+  SubClassSheet = subclass;
+}
+
 
 #endif  // OWL_PROPSHT_H

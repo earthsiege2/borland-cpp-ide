@@ -4,12 +4,13 @@
 *                                                                             *
 * Version 1.0								      *
 *                                                                             *
-* Copyright (c) 1992-1995, Microsoft Corp.	All rights reserved.	      *
+* Copyright (c) 1992-1996, Microsoft Corp.	All rights reserved.	      *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _INC_CDERR
 #define _INC_CDERR
+#pragma option -b
 
 #define CDERR_DIALOGFAILURE   0xFFFF
 
@@ -55,4 +56,5 @@
 
 #define CCERR_CHOOSECOLORCODES 0x5000
 
+#pragma option -b.
 #endif  /* !_INC_CDERR */

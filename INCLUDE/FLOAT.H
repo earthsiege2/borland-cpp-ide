@@ -6,12 +6,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $ */
 
 #ifndef __FLOAT_H
 #define __FLOAT_H
@@ -52,9 +53,9 @@
 #define FLT_MIN             1.17549435E-38F
 #define LDBL_MIN            _tiny_ldble
 
-#define DBL_MAX             _huge_dble
-#define FLT_MAX             _huge_flt
-#define LDBL_MAX            _huge_ldble
+#define DBL_MAX             _max_dble
+#define FLT_MAX             _max_flt
+#define LDBL_MAX            _max_ldble
 
 #define DBL_MAX_EXP         +1024
 #define FLT_MAX_EXP         +128
@@ -72,9 +73,9 @@
 #define FLT_MIN_EXP         -125
 #define LDBL_MIN_EXP        -16381
 
-extern float        _RTLENTRY _EXPDATA _huge_flt;
-extern double       _RTLENTRY _EXPDATA _huge_dble;
-extern long double  _RTLENTRY _EXPDATA _huge_ldble;
+extern float        _RTLENTRY _EXPDATA _max_flt;
+extern double       _RTLENTRY _EXPDATA _max_dble;
+extern long double  _RTLENTRY _EXPDATA _max_ldble;
 extern long double  _RTLENTRY _EXPDATA _tiny_ldble;
 
 #ifdef __cplusplus
@@ -84,6 +85,10 @@ unsigned int _RTLENTRY          _clear87(void);
 unsigned int _RTLENTRY          _control87(unsigned int __newcw, unsigned int __mask);
 void         _RTLENTRY          _fpreset(void);
 unsigned int _RTLENTRY          _status87(void);
+int          _RTLENTRY          _isnan (double d);
+int          _RTLENTRY          _isnanl (long double ld);
+int          _RTLENTRY          _finite (double d);
+int          _RTLENTRY          _finitel (long double ld);
 #ifdef __cplusplus
 }
 #endif

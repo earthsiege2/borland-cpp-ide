@@ -1,5 +1,5 @@
 #############################################################################
-#
+#                                                                           #
 # The make process relies on the creation of DLL and library response file  #
 # creation.  To control the location of object modules the following should #
 # be defined:                                                               #
@@ -14,6 +14,8 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
+# $Revision:   8.8  $                                                       #
+#                                                                           #
 #############################################################################
 
 #############################################################################
@@ -25,17 +27,6 @@ OBJS =               \
         memchk.obj   \
         stkavail.obj \
         calloc.obj   \
-        heap.obj     \
-        heapchk.obj  \
-        heapchkf.obj \
-        heapchkn.obj \
-        heapfill.obj \
-        heapmin.obj  \
-        heapset.obj  \
-        heapwalk.obj \
-        oheapchk.obj \
-        oheapwlk.obj \
-        realloc.obj  \
         del.obj      \
         delarray.obj \
         new.obj      \
@@ -46,17 +37,35 @@ OBJS =               \
         vapp.obj     \
         vappv.obj    \
         vdel.obj     \
-        vdelx.obj    \
-        vnew.obj     \
-        vnewv.obj
+        vdelldtc.obj \
+        vnewldtc.obj \
+        vnwvldtc.obj
+
+!if $d(MAGIC)
+OBJS = $(OBJS)	     \
+        pheap.obj    
+!else
+OBJS = $(OBJS)	     \
+        heap.obj     \
+        heapchk.obj  \
+        heapchkf.obj \
+        heapchkn.obj \
+        heapfill.obj \
+        heapmin.obj  \
+        heapset.obj  \
+        heapwalk.obj \
+        oheapchk.obj \
+        oheapwlk.obj \
+	realloc.obj
+!endif
 
 !if $d(DLL)
     IMPOBJS =            \
             chkstk.obj   \
             vdel.obj     \
-            vdelx.obj    \
-            vnew.obj     \
-            vnewv.obj
+            vdelldtc.obj \
+            vnewldtc.obj \
+            vnwvldtc.obj
 !endif
 
     MISC =		\

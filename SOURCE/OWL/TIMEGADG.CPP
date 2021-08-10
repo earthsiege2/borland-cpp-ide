@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.7  $
 //
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
@@ -16,16 +16,28 @@
 # include <classlib/pointer.h>
 #endif
 
+OWL_DIAGINFO;
+
 //
 // Constructor for TTimeGadget.
 //
-TTimeGadget::TTimeGadget(TGetTimeFunc timeFunc, int id,
-  TBorderStyle border, TAlign align, uint numChars, const char* text, TFont* font)
-:
-  TTextGadget(id, border, align, numChars, text, font),
-  TimeFunc(timeFunc)
+TTimeGadget::TTimeGadget(TGetTimeFunc timeFunc, int id, TBorderStyle border,
+                         TAlign align, uint numChars, const char* text,
+                         TFont* font)
+            :TTextGadget(id, border, align, numChars, text, font),
+             TimeFunc(timeFunc)
 {
   SetShrinkWrap(false, true);
+}
+
+//
+// Overriden from TGadget to inform gadget window to setup a timer
+//
+void
+TTimeGadget::Created()
+{
+  TGadget::Created();
+  Window->EnableTimer();
 }
 
 //
@@ -35,10 +47,15 @@ bool
 TTimeGadget::IdleAction(long count)
 {
   TGadget::IdleAction(count);
+
   string newTime;
   TimeFunc(newTime);
   SetText(newTime.c_str());
-  return true;
+
+  // NOTE: Don't return true to drain system. Let GadgetWindow Timer
+  //       message indirectly trigger IdleAction.
+  //
+  return false;
 }
 
 //
@@ -76,5 +93,28 @@ TTimeGadget::GetSystemTime(string& newTime)
     }
   }
 }
+
+
+//
+// Retrieve the local time using the Win32 API
+//
+void
+TTimeGadget::GetLocalTime(string& newTime)
+{
+  TAPointer<char> dateBuffer = new char[100];
+  TAPointer<char> timeBuffer = new char[100];
+  LCID lcid = ::GetUserDefaultLCID();
+  SYSTEMTIME systemTime;
+  ::GetLocalTime(&systemTime);
+
+  if (::GetTimeFormat(lcid, LOCALE_NOUSEROVERRIDE, &systemTime, 0, timeBuffer, 100)) {
+    if (::GetDateFormat(lcid, LOCALE_NOUSEROVERRIDE, &systemTime, 0, dateBuffer, 100)) {
+      newTime += dateBuffer;
+      newTime += " ";
+      newTime += timeBuffer;
+    }
+  }
+}
+
 
 #endif

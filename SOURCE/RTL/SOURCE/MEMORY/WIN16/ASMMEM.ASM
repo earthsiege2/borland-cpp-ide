@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 7.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
 
     INCLUDE RULES.ASI
     .286
@@ -262,7 +263,7 @@ check_all_top:
 	test	ax, 2
 	jnz	bad_size
 
-	; Check that block size is reasonable 
+	; Check that block size is reasonable
 	; (won't wrap)
 	and	ax, 0fffeh
 	add	di, ax
@@ -539,7 +540,7 @@ getfree_done:
         ;; first page already pointed to our page
 
 @@not_already_first:
-        
+
         ;; get next pointer
         mov     cx, word ptr es:[di].page_next+2
         mov     bx, word ptr es:[di].page_next

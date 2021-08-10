@@ -3,7 +3,7 @@
   option.h
   Created: 10/24/95
   Copyright (c) 1995, 1996 Borland International
-  $Revision:   1.15  $
+  $Revision:   1.18  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __OPTION_H

@@ -107,10 +107,10 @@ class _DBAWARECLASS TDBCheckBox : public TDBControl {
     DECLARE_SOURCE( OnMouseUp,   TDBCheckBoxMouse );
 
     // Event Handlers
-    EVENT( OnClick,    TDBControl,  TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl,  TDragEvent );
-    EVENT( OnDragOver, TDBControl,  TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl,  TDragEvent );
+    DECLARE_DB_EVENT( OnClick,     TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop,  TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver,  TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,   TDragEvent );
     DECLARE_DB_EVENT( OnEnter,     TNotifyEvent );
     DECLARE_DB_EVENT( OnExit,      TNotifyEvent );
     DECLARE_DB_EVENT( OnKeyDown,   TKeyEvent );
@@ -131,11 +131,11 @@ class _DBAWARECLASS TDBCheckBox : public TDBControl {
 
 // Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBCheckBox )
-DEFINE_DB_PROP_STRING( TDBCheckBox, FontName );
-DEFINE_DB_PROP_STRING( TDBCheckBox, Caption );
-DEFINE_DB_PROP_STRING( TDBCheckBox, ValueChecked );
-DEFINE_DB_PROP_STRING( TDBCheckBox, ValueUnChecked );
+DEFINE_DB_PROP_DATAFIELD( TDBCheckBox, _TDBCheckBox )
+DEFINE_DB_PROP_STRING( TDBCheckBox, _TDBCheckBox, FontName );
+DEFINE_DB_PROP_STRING( TDBCheckBox, _TDBCheckBox, Caption );
+DEFINE_DB_PROP_STRING( TDBCheckBox, _TDBCheckBox, ValueChecked );
+DEFINE_DB_PROP_STRING( TDBCheckBox, _TDBCheckBox, ValueUnChecked );
 
 // Methods
 inline char far* TDBCheckBox::GetClassName()

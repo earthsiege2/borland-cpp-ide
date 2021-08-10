@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0003    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     lmaudit.h
@@ -10,10 +12,6 @@ Abstract:
     for the following groups of NT API functions:
         NetAudit
 
-Author:
-
-    Dan Lafferty (danl)  29-Mar-1991
-
 Environment:
 
     User Mode - Win32
@@ -23,28 +21,13 @@ Notes:
     You must include NETCONS.H before this file, since this file depends
     on values defined in NETCONS.H.
 
-Revision History:
-
-    28-Mar-1991  Danl
-        Ported from LM2.0 and the LMNETAPI spec.
-    25-Apr-1991  DanHi
-	Added define for HLOG used by both audit and error logs, surrounded
-	by a protective ifdef.	Changed ae_ss_status to ae_sv_status to match
-	LanMan
-    12-Nov-1991 JohnRo
-        AUDIT_ENTRY structure needs changes to prevent alignment/padding bugs.
-        Added OPTIONAL keyword as applicable.   Work toward UNICODE.
-    26-Oct-1992 JohnRo
-        Correct typedef name for pointer to AE_SRVSTATUS.
-        Added AE_LOCKOUT structure and typedef.
-
 --*/
 
 /* $Copyright: 1994$ */
 
 #ifndef _LMAUDIT_
 #define _LMAUDIT_
-#define __LMAUDIT_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,18 +55,18 @@ typedef struct _HLOG {
 
 NET_API_STATUS NET_API_FUNCTION
 NetAuditClear (
-    IN  LPTSTR  server OPTIONAL,
-    IN  LPTSTR  backupfile OPTIONAL,
-    IN  LPTSTR  service OPTIONAL  // WARNING: buggy support before LM 2.0C!!
+    IN  LPCWSTR  server OPTIONAL,
+    IN  LPCWSTR  backupfile OPTIONAL,
+    IN  LPCWSTR  service OPTIONAL  // WARNING: buggy support before LM 2.0C!!
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetAuditRead (
-    IN  LPTSTR  server OPTIONAL,
-    IN  LPTSTR  service OPTIONAL,  // WARNING: buggy support before LM 2.0C!!
-    IN  LPHLOG  auditloghandle,
-    IN  DWORD   offset,
-    IN  LPDWORD reserved1 OPTIONAL,
+    IN  LPCWSTR  server OPTIONAL,
+    IN  LPCWSTR  service OPTIONAL,  // WARNING: buggy support before LM 2.0C!!
+    IN  LPHLOG   auditloghandle,
+    IN  DWORD    offset,
+    IN  LPDWORD  reserved1 OPTIONAL,
     IN  DWORD   reserved2,
     IN  DWORD   offsetflag,
     OUT LPBYTE  *bufptr,
@@ -94,11 +77,11 @@ NetAuditRead (
 
 NET_API_STATUS NET_API_FUNCTION
 NetAuditWrite (
-    IN  DWORD   type,
-    IN  LPBYTE  buf,
-    IN  DWORD   numbytes,
-    IN  LPTSTR  service OPTIONAL,
-    IN  LPBYTE  reserved OPTIONAL
+    IN  DWORD    type,
+    IN  LPBYTE   buf,
+    IN  DWORD    numbytes,
+    IN  LPCWSTR  service OPTIONAL,
+    IN  LPBYTE   reserved OPTIONAL
     );
 
 
@@ -414,5 +397,7 @@ typedef struct _AE_GENERIC {
 #ifdef __cplusplus
 }
 #endif
+
+#pragma option -b.
 
 #endif  // _LMAUDIT_

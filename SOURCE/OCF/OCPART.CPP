@@ -1,12 +1,15 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.11  $
+// $Revision:   2.16  $
 //
 // Implementation of TOcPart Class
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
+#if !defined(OCF_OLEUTIL_H)
+# include <ocf/oleutil.h>
+#endif
 #if !defined(OCF_OCSTORAG_H)
 # include <ocf/ocstorag.h>
 #endif
@@ -22,7 +25,6 @@
 #if !defined(OCF_OCVIEW_H)
 # include <ocf/ocview.h>
 #endif
-#include <stdio.h>  // sprintf
 
 const char  PartFormat[]     = "OcPart.%d";
 const char  PartStreamName[] = "\03OcPart";
@@ -35,17 +37,12 @@ TOcPart::TOcPart(TOcDocument& document, int id)
 :
   OcDocument(document), BPart(0), BPartI(0), BLPartI(0), Flags(Visible),
   Storage(0)
-#if defined(BI_DATA_NEAR)
- ,Name(*new string),
-  Pos(*new TPoint),
-  Size(*new TSize)
-#endif
 {
   AddRef();  // TUnknown defaults to 0, we need 1
   if (!id)
     id = OcDocument.AllocPartID();
   char name[32];
-  sprintf(name, PartFormat, id);
+  wsprintf(name, PartFormat, id);
   Name = name;
 
   // There must be a Root IStorage associated with each document
@@ -67,11 +64,6 @@ TOcPart::TOcPart(TOcDocument& document, TOcInitInfo far& initInfo,
 :
   OcDocument(document), BPart(0), BPartI(0), BLPartI(0), Flags(Visible),
   Storage(0)
-#if defined(BI_DATA_NEAR)
- ,Name(*new string),
-  Pos(*new TPoint),
-  Size(*new TSize)
-#endif
 {
   // Part position and size are in logical units
   //
@@ -79,7 +71,7 @@ TOcPart::TOcPart(TOcDocument& document, TOcInitInfo far& initInfo,
   if (!id)
     id = OcDocument.AllocPartID();
   char name[32];
-  sprintf(name, PartFormat, id);
+  wsprintf(name, PartFormat, id);
   Name = name;
 
   // There must be a Root IStorage associated with each document
@@ -100,13 +92,7 @@ TOcPart::TOcPart(TOcDocument& document, const char far* name)
 :
   OcDocument(document), BPart(0), BPartI(0), BLPartI(0), Flags(Visible),
   Storage(0),
-#if defined(BI_DATA_NEAR)
-  Name(*new string(name)),
-  Pos(*new TPoint),
-  Size(*new TSize)
-#else
   Name(name)
-#endif
 {
   AddRef();  // TUnknown defaults to 0, we need 1
 
@@ -143,11 +129,6 @@ TOcPart::~TOcPart()
   // Delete any associated storage
   //
   delete Storage;
-#if defined(BI_DATA_NEAR)
-  delete &Name;
-  delete &Pos;
-  delete &Size;
-#endif
 }
 
 //
@@ -168,7 +149,7 @@ TOcPart::Init(TOcInitInfo far* initInfo, TRect objPos)
     Pos = siteRect.Rect.TopLeft();
     Size = siteRect.Rect.Size();
   }
-  
+
   if (InitObj(initInfo)) {
     OcDocument.GetParts().Add(this);
     return true;
@@ -197,25 +178,25 @@ TOcPart::InitObj(TOcInitInfo far* initInfo)
     TXObjComp::Check(
       OcDocument.GetOcApp().BOleComponentCreate(&BPart, GetOuter(), cidBOlePart),
       TXObjComp::xInternalPartError);
-  
+
     // Get the interfaces we need & then release the object itself
     //
     if (HRSucceeded(BPart->QueryInterface(IID_IBPart, &(LPVOID)BPartI)))
       BPartI->Release();
     if (HRSucceeded(BPart->QueryInterface(IID_IBLinkable, &(LPVOID)BLPartI)))
       BLPartI->Release();
-  
+
     HRESULT hr;
     if (!BPartI || !HRSucceeded(hr = BPartI->Init(this, initInfo))) {
       BPart->Release();
       BPart = 0;
       TXObjComp::Throw(TXObjComp::xPartInitError, hr);
     }
-  
+
     Rename();
     if (initInfo->How == ihLink)  // Remember that we are a link
       Flags |= Link;
-  
+
     // New parts become active when they are init'd above. Make sure that our
     // view knows that we are active too.
     //
@@ -627,22 +608,24 @@ TOcPart::GetSize() const
 
 //
 // Set part to the new position given in logical units
+// NOTE: Does you update the part's location.
+//       Must explicitly call UpdateRect!
 //
 void
 TOcPart::SetPos(const TPoint& pos)
 {
   Pos = pos;
-//  UpdateRect();
 }
 
 //
 // Set part to the new size given in logical units
+// NOTE: Does you update the part's location.
+//       Must explicitly call UpdateRect!
 //
 void
 TOcPart::SetSize(const TSize& size)
 {
   Size = size;
-//  UpdateRect();
 }
 
 //
@@ -814,7 +797,7 @@ TOcPart::SetStorage(IStorage* storage, bool remember)
   if (Storage && (storage == Storage->GetIStorage()))
     return;
 
-  if (remember) 
+  if (remember)
     delete Storage;
 
   if (storage)

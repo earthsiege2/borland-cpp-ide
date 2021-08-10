@@ -144,7 +144,6 @@
 4 To specify the default topic for the Help file=PRO_HPJ_DEFAULT_TOPIC
 4 To add copyright information=PRO_HPJ_COPYRIGHT_INFO
 4 To run a macro when a Help file is opened=PRO_HPJ_CONFIG_MACRO
-4 To add data files to WinHelp DLLs =PRO_HPJ_DLL
 4 To store DLL-related data files within the Help file=PRO_ADD_DATA_FILES
 3 Setting Compiler Options
 4 To specify compression options=PRO_HPJ_COMPRESSION
@@ -189,14 +188,16 @@
 3 Macro error checking =MACRO_OVERVIEW_ERROR_CHECKING>main
 3 Using DLL functions as Help macros =MACRO_OVERVIEW_DLLS>main
 3 Calling macros from a program=MACRO_OVERVIEW_CALLING_FROM_APP>main
+3 Nested macros and nested string parameters=MACRO_OVERVIEW_NESTED>main
 2 Macro Quick Reference
 3 Macro quick reference =MACRO_REF_OVR>tables
 3 Button macros =MACRO_REF_BUTTON>tables
-3 Menu macros =MACRO_REF_MENU>tables
-3 Linking macros =MACRO_REF_LINK>tables
-3 Window macros =MACRO_REF_WINDOW>tables
 3 Keyboard macros =MACRO_REF_KEYBOARD>tables
+3 Linking macros =MACRO_REF_LINK>tables
+3 Menu macros =MACRO_REF_MENU>tables
+3 Program macros =MACRO_REF_PROGRAM>tables
 3 Text-marker macros =MACRO_REF_TEXT_MARKER>tables
+3 Window macros =MACRO_REF_WINDOW>tables
 2 Macro Reference
 3 About =About>main
 3 AddAccelerator =AddAccelerator>main
@@ -321,13 +322,9 @@
 3 Example code (context-sensitive Help) =CS_HELP_EXAMPLE>main
 3 Adding a tab to the Help Topics dialog box=IDH_ADD_NEW_TAB>main
 2 Help APIs
-3 GetMenuContextHelpId =GetMenuContextHelpId>main
-3 GetWindowContextHelpId =GetWindowContextHelpId>main
 3 HELPINFO =HELPINFO>main
 3 HELPWININFO =HELPWININFO>main
 3 MULTIKEYHELP =MULTIKEYHELP>main
-3 SetMenuContextHelpId =SetMenuContextHelpId>main
-3 SetWindowContextHelpId =SetWindowContextHelpId>main
 3 WinHelp =WinHelp>main
 3 WM_HELP =WM_HELP>main
 3 WM_TCARD =WM_TCARD>main

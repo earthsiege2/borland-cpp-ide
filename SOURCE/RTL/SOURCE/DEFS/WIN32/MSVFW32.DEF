@@ -24,12 +24,12 @@ EXPORTS
     GetOpenFileNamePreviewA
     GetOpenFileNamePreviewW
     ICClose
-    ICCompress
+    _ICCompress = ICCompress
     ICCompressorChoose
     ICCompressorFree
-    ICDecompress
-    ICDraw
-    ICDrawBegin
+    _ICDecompress = ICDecompress
+    _ICDraw = ICDraw
+    _ICDrawBegin = ICDrawBegin
     ICGetDisplayFormat
     ICGetInfo
     ICImageCompress
@@ -45,9 +45,8 @@ EXPORTS
     ICSeqCompressFrame
     ICSeqCompressFrameEnd
     ICSeqCompressFrameStart
-    MCIWndCreate
-    MCIWndCreateA
-    MCIWndCreateW
-    MCIWndRegisterClass
+    _MCIWndCreateA = MCIWndCreateA
+    _MCIWndCreateW = MCIWndCreateW
+    _MCIWndRegisterClass = MCIWndRegisterClass
     StretchDIB
     VideoForWindowsVersion

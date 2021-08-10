@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Implementation of class TEventHandler
 //----------------------------------------------------------------------------
@@ -12,10 +12,16 @@
 #endif
 #include <stdlib.h>
 
+OWL_DIAGINFO;
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMsg, 1, 0);
                              // diagnostic group for message tracing
 
 #if defined(__TRACE) || defined(__WARN)
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
   struct TWMStr {
     uint    msg;
     char*   str;
@@ -292,7 +298,12 @@ DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMsg, 1, 0);
         return os << "Message " << hex << msg.Message;
     }
   }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
 #endif
+
+#endif // __TRACE || __WARN
 
 //
 // Searches the list of response table entries looking for a match

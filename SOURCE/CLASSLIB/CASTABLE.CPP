@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.8  $
 //
 //  RTTI replacement class
 //----------------------------------------------------------------------------

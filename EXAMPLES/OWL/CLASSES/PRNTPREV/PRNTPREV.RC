@@ -5,6 +5,7 @@
 //----------------------------------------------------------------------------
 #include <owl/printer.rc>
 #include <owl/owlapp.rc>         // default owl app icon
+#include <owl/except.rc>
 #include "prntprev.rh"
 
 IDM_TESTMENU MENU LOADONCALL MOVEABLE PURE DISCARDABLE

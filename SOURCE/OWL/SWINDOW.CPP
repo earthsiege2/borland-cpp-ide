@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.7  $
 //
 // Streamable object implementation for TWindow.
 //----------------------------------------------------------------------------
@@ -19,6 +19,8 @@
 #if !defined(OWL_SCROLLER_H)
 # include <owl/scroller.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Externs defined in owl.cpp
@@ -53,6 +55,7 @@ TWindow::Streamer::Read(ipstream& is, uint32 version) const
   o->TransferBuffer = 0;
   o->DefaultProc = 0;
   o->HAccel = 0;
+  o->ContextPopupMenu = 0;
   o->SetUniqueId();
 
   is >> o->Module;

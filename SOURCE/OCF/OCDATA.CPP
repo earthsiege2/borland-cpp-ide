@@ -1,14 +1,18 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.4  $
+// $Revision:   2.8  $
 //
 // Implementation of TOcDataProvider Class
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/ocapp.h>
-#include <ocf/ocdata.h>
+#if !defined(OCF_OCAPP_H)
+# include <ocf/ocapp.h>
+#endif
+#if !defined(OCF_OCDATA_H)
+# include <ocf/ocdata.h>
+#endif
 
 //
 //
@@ -18,13 +22,8 @@ TOcDataProvider::TOcDataProvider(TOcView& ocView, TRegList* regList, IUnknown* o
 :
   OcView(ocView), BSite(0), BSiteI(0), BLSiteI(0),
   UserData(userData), CBDelete(callBack),
-#if defined(BI_DATA_NEAR)
-  Origin(*new TPoint(0,0)),
-  Extent(*new TSize(0,0))
-#else
   Origin(0,0),
   Extent(0,0)
-#endif
 {
   SetOuter(outer);
   AddRef();    // TUnknown defaults to 0, we need 1

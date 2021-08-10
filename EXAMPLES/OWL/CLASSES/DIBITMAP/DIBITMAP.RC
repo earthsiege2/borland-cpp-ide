@@ -5,6 +5,7 @@
 #include "dibitmap.rh"
 
 #include <owl/owlapp.rc>
+#include <owl/except.rc>
 
 IDB_BALL BITMAP "ball.bmp"
 

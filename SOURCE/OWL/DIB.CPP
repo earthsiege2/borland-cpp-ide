@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.14  $
 //
 // Implementation of TDib class, an encapsulation of Device Independent Bitmaps
 // on disk and in memory.
@@ -25,7 +25,12 @@
 # include <classlib/file.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 //
 // Direct dib surface manipulation functions
@@ -64,6 +69,10 @@ class TFileIO : public TDib::IFileIn, public TDib::IFileOut {
   private:
     TFile& File;
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #if !defined(SECTION) || SECTION == 1  // Main ctors, dtor & helpers
 
@@ -281,7 +290,7 @@ bool
 TDib::ChangeModeToRGB(const TPalette& pal)
 {
   if (Mode != DIB_PAL_COLORS ||
-      (int)((char*)Bits - (char*)Info) < NumClrs*sizeof(RGBQUAD))
+      (uint)((char*)Bits - (char*)Info) < NumClrs*sizeof(RGBQUAD))
     return false;
 
   uint16 nEntries = pal.GetNumEntries();
@@ -965,7 +974,7 @@ TDib::Write(IFileOut& out, bool writeFileHeader)
 
   // Write rest of dib, including dib header, color table & bits
   //
-  if (!out.Write(Info, size) != size) //(void huge*)Info
+  if (!out.Write(Info, size)) //(void huge*)Info
     return false;
 
   return true;
@@ -977,7 +986,7 @@ TDib::Write(IFileOut& out, bool writeFileHeader)
 //
 // Construct a Dib given dimensions and color depth
 //
-TDib::TDib(int width, int height, int nColors, uint16 mode)
+TDib::TDib(int width, int height, uint32 nColors, uint16 mode)
 {
   PRECONDITION(width && height && nColors);
 
@@ -1014,7 +1023,7 @@ TDib::TDib(int width, int height, int nColors, uint16 mode)
     //
     TScreenDC dc;
     ::GetSystemPaletteEntries(dc, 0, nColors, (LPPALETTEENTRY)Colors);
-    for (int i = 0; i < nColors; i++) {
+    for (uint32 i = 0; i < nColors; i++) {
       Swap(Colors[i].rgbRed, Colors[i].rgbBlue);
       Colors[i].rgbReserved = 0;
     }

@@ -1,5 +1,6 @@
 #ifndef __STD_MAP__
 #define __STD_MAP__
+/* $Revision:   8.1  $ */
 
 /***************************************************************************
  *
@@ -40,7 +41,7 @@
  * rights of the Government regarding its use, reproduction and disclosure
  * are as set forth in Section 52.227-19 of the FARS Computer
  * Software-Restricted Rights clause.
- * 
+ *
  * Use, duplication, or disclosure by the Government is subject to
  * restrictions as set forth in subparagraph (c)(1)(ii) of the Rights in
  * Technical Data and Computer Software clause at DFARS 252.227-7013.
@@ -86,7 +87,7 @@ struct select1st : public unary_function<T, U>
 //
 // First the map stuff.
 //
-  
+
 #ifndef RWSTD_NO_DEFAULT_TEMPLATES
 template<class Key, class T, class Compare = less<Key> >
 #else
@@ -105,7 +106,7 @@ class map
     typedef pair<Key, T>       value_type;
 #endif
     typedef Compare            key_compare;
-    
+
     class value_compare : public binary_function<value_type, value_type, bool>
     {
         friend class map<Key, T, Compare>;
@@ -120,7 +121,7 @@ class map
     };
 
   private:
-    
+
     typedef rb_tree<key_type, value_type,
                     select1st<value_type, key_type>, key_compare> rep_type;
     rep_type t;
@@ -144,21 +145,21 @@ class map
 
 #ifndef RWSTD_NO_MEMBER_TEMPLATES
     template<class InputIterator>
-    map (InputIterator first, InputIterator last, 
+    map (InputIterator first, InputIterator last,
          const Compare& comp = Compare()) : t(first, last, comp, false) {}
 #else
-    map (const value_type* first, const value_type* last, 
+    map (const value_type* first, const value_type* last,
          const Compare& comp = Compare()) : t(first, last, comp, false) {}
-    map (iterator first, iterator last, 
+    map (iterator first, iterator last,
          const Compare& comp = Compare()) : t(first, last, comp, false) {}
-    map (const_iterator first, const_iterator last, 
+    map (const_iterator first, const_iterator last,
          const Compare& comp = Compare()) : t(first, last, comp, false) {}
 #endif
 
     map (const map<Key, T, Compare>& x) : t(x.t, false) {}
     map<Key, T, Compare>& operator= (const map<Key, T, Compare>& x)
     {
-          t = x.t; return *this; 
+          t = x.t; return *this;
     }
     //
     // iterators
@@ -198,7 +199,7 @@ class map
 #ifndef RWSTD_NO_RET_TEMPLATE
     pair<iterator,bool> insert (const value_type& x) { return t.insert(x); }
 #else
-    typedef pair<iterator, bool> pair_iterator_bool; 
+    typedef pair<iterator, bool> pair_iterator_bool;
     //
     // typedef done to get around compiler bug
     //
@@ -249,16 +250,16 @@ class map
     iterator       upper_bound (const key_type& x) { return t.upper_bound(x); }
     const_iterator lower_bound (const key_type& x) const
     {
-        return t.lower_bound(x); 
+        return t.lower_bound(x);
     }
     const_iterator upper_bound (const key_type& x) const
     {
-        return t.upper_bound(x); 
+        return t.upper_bound(x);
     }
 #ifndef RWSTD_NO_RET_TEMPLATE
     pair<iterator,iterator> equal_range (const key_type& x)
 #else
-    typedef pair<iterator, iterator> pair_iterator_iterator; 
+    typedef pair<iterator, iterator> pair_iterator_iterator;
     //
     // typedef done to get around compiler bug
     //
@@ -270,7 +271,7 @@ class map
 #ifndef RWSTD_NO_RET_TEMPLATE
     pair<const_iterator, const_iterator> equal_range (const key_type& x) const
 #else
-    typedef pair<const_iterator, const_iterator> pair_citerator_citerator; 
+    typedef pair<const_iterator, const_iterator> pair_citerator_citerator;
     //
     // typedef done to get around compiler bug
     //
@@ -310,8 +311,8 @@ class multimap
     };
 
   private:
-    
-    typedef rb_tree<key_type, value_type, 
+
+    typedef rb_tree<key_type, value_type,
                     select1st<value_type, key_type>, key_compare> rep_type;
     rep_type t;
 
@@ -322,7 +323,7 @@ class multimap
     typedef typename rep_type::reference                reference;
     typedef typename rep_type::const_reference          const_reference;
     typedef typename rep_type::iterator                 iterator;
-    typedef typename rep_type::const_iterator           const_iterator; 
+    typedef typename rep_type::const_iterator           const_iterator;
     typedef typename rep_type::size_type                size_type;
     typedef typename rep_type::difference_type          difference_type;
     typedef typename rep_type::reverse_iterator         reverse_iterator;
@@ -334,10 +335,10 @@ class multimap
 
 #ifndef RWSTD_NO_MEMBER_TEMPLATES
     template<class InputIterator>
-    multimap (InputIterator first, InputIterator last, 
+    multimap (InputIterator first, InputIterator last,
               const Compare& comp = Compare()) : t(first, last, comp, true) { }
 #else
-    multimap (const value_type* first, const value_type* last, 
+    multimap (const value_type* first, const value_type* last,
               const Compare& comp = Compare()) : t(first, last, comp, true) { }
     multimap (iterator first, iterator last,
               const Compare& comp = Compare()) : t(first, last, comp, true) { }
@@ -348,7 +349,7 @@ class multimap
     multimap (const multimap<Key, T, Compare>& x) : t(x.t, true) { }
     multimap<Key, T, Compare>& operator= (const multimap<Key, T, Compare>& x)
     {
-          t = x.t; return *this; 
+          t = x.t; return *this;
     }
     //
     // iterators
@@ -416,16 +417,16 @@ class multimap
     iterator        upper_bound (const key_type& x) {return t.upper_bound(x);}
     const_iterator  lower_bound (const key_type& x) const
     {
-        return t.lower_bound(x); 
+        return t.lower_bound(x);
     }
     const_iterator  upper_bound (const key_type& x) const
     {
-        return t.upper_bound(x); 
+        return t.upper_bound(x);
     }
 #ifndef RWSTD_NO_RET_TEMPLATE
     pair<iterator,iterator> equal_range (const key_type& x)
 #else
-    typedef  pair<iterator, iterator> pair_iterator_iterator; 
+    typedef  pair<iterator, iterator> pair_iterator_iterator;
     //
     // typedef done to get around compiler bug
     //
@@ -437,7 +438,7 @@ class multimap
 #ifndef RWSTD_NO_RET_TEMPLATE
     pair<const_iterator,const_iterator> equal_range (const key_type& x) const
 #else
-    typedef  pair<const_iterator, const_iterator> pair_citerator_citerator; 
+    typedef  pair<const_iterator, const_iterator> pair_citerator_citerator;
     //
     // typedef done to get around compiler bug
     //
@@ -456,21 +457,21 @@ inline bool operator== (const map<Key, T, Compare>& x,
 }
 
 template <class Key, class T, class Compare>
-inline bool operator< (const map<Key, T, Compare>& x, 
+inline bool operator< (const map<Key, T, Compare>& x,
                        const map<Key, T, Compare>& y)
 {
     return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
 }
 
 template <class Key, class T, class Compare>
-inline bool operator== (const multimap<Key, T, Compare>& x, 
+inline bool operator== (const multimap<Key, T, Compare>& x,
                         const multimap<Key, T, Compare>& y)
 {
     return x.size() == y.size() && equal(x.begin(), x.end(), y.begin());
 }
 
 template <class Key, class T, class Compare>
-inline bool operator< (const multimap<Key, T, Compare>& x, 
+inline bool operator< (const multimap<Key, T, Compare>& x,
                        const multimap<Key, T, Compare>& y)
 {
     return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());

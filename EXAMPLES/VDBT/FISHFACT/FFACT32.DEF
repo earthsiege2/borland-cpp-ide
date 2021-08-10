@@ -1,0 +1,17 @@
+;------------------------------------------------
+;   Project fishfact
+;   Borland International
+;   Copyright © 1996. All Rights Reserved.
+;
+;   SUBSYSTEM:    fishfact.exe Module Defintion File
+;   FILE:         ffact32.def
+;   AUTHOR:       
+;
+;------------------------------------------------
+
+NAME fishfact
+
+DESCRIPTION 'fishfact Application - Copyright © 1996. All Rights Reserved.'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE

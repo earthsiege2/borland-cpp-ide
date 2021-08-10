@@ -1,3 +1,4 @@
+#pragma option -b
 /***
 *error.h - DOS error codes
 *
@@ -343,3 +344,4 @@
 #define TC_HARDERR  1
 #define TC_GP_TRAP  2
 #define TC_SIGNAL   3
+#pragma option -b.

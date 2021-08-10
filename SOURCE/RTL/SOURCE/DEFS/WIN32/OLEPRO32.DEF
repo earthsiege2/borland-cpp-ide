@@ -1,0 +1,10 @@
+LIBRARY OLEPRO32
+EXPORTS
+
+    OleCreateFontIndirect
+    OleCreatePictureIndirect
+    OleCreatePropertyFrame
+    OleCreatePropertyFrameIndirect
+    OleIconToCursor
+    OleLoadPicture
+    OleTranslateColor

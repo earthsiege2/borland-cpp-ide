@@ -1,3 +1,5 @@
+/* $Revision:   8.1  $ */
+
 /***************************************************************************
  *
  * deque - Declaration and definition for the Standard Library deque class

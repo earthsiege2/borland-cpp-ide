@@ -1,0 +1,133 @@
+Using MFC 4.1 with Borland C++
+------------------------------
+
+Here are the steps to build the MFC libraries with BC5.  We will assume
+that your copy of Borland C++ is located in c:\bc5.
+
+1) Build the Libraries
+   -------------------
+   Note: the makefile's DEBUG=1 switch enables Diagnostics in the libraries
+   and DBGINFO=1 enables Turbo Debugger information.
+
+1.1) Static Non-Debug library
+     ------------------------
+
+To build the static, non-debug library (NAFXCW.LIB)
+
+    make -fborland.mak  DEBUG=0 LIBDIR=c:\bc5\lib
+
+1.2) Static Debug library
+     --------------------
+
+To build the static, debug library (NAFXCWD.LIB)
+
+    make  -fborland.mak LIBDIR=c:\bc5\lib
+
+1.3) Non-Debug DLLs and Libraries
+     ----------------------------
+
+To build the monolithic MFC DLL (BFC40.DLL, BFC40.LIB, and BFC40S.LIB)
+
+    make -fbfcdll.mak DEBUG=0 LIBDIR=c:\bc5\lib
+
+NOTE: BFC40.DLL contains everything you'll need for MFC in non-debug
+mode.  When building MFC with DEBUG=1, you'll end up with 3 DLLs (see
+1.4)
+
+
+1.4) Debug DLLs and Libraries
+     ------------------------
+
+To build the debug MFC DLLs:
+
+    BFC40D.DLL,  BFC40D.LIB
+    BFCO40D.DLL, BFCO40D.LIB
+    BFCN40D.DLL, BFCN40D.LIB
+    BFCD40D.DLL, BFCD40D.LIB
+
+    make -fbfcdll.mak LIBDIR=c:\bc5\lib
+    make -fbfcole.mak LIBDIR=c:\bc5\lib
+    make -fbfcnet.mak LIBDIR=c:\bc5\lib
+    make -fbfcdb.mak  LIBDIR=c:\bc5\lib
+
+2) Install Libraries and DLLs
+   --------------------------
+
+The libraries that were created should already be in the Borland
+directory C:\BC5\LIB. Copy the new DLLs (located in this directory) to
+the Windows System directory, typically C:\WINDOWS\SYSTEM32.
+
+
+3) Try it out
+   ----------
+
+The Integrated Development Environment supports creating MFC projects. The
+following steps assume that you've built the static, non-debug version of
+the library and copied it to C:\BC5\LIB.
+
+a. In the IDE, select File | New | Project and browse to an MFC sample app
+   such as c:\bc5\examples\mfc\general\hello and name the project hello.
+
+b. In the Frameworks box, deselect OWL and then select MFC. Then select
+   the 4.1 radio button.
+
+c. Select the Static radio button and click OK.
+
+d. Delete the .def file from the project.
+
+e. Go to Options | Project | Directories and add c:\bc5\include\mfc to
+   the include path.
+
+f. Do a "build all" and it's ready to run!
+
+The Borland C++ IDE will setup all the defines and libraries you'll need
+to build an MFC program.  In case you want to add these into an existing
+MAKEFILE or otherwise compile at the command line, here is a list of the
+defines that should be added with -D in a compiler configuration file:
+
+  MFC 4.1, Static,  No OLE:
+    _X86_;_WINDOWS;_MSC_VER=900;_AFX_PORTABLE;_AFX_NOFORCE_LIBS;_MT;
+    _CRT_PORTABLE;_AFX_NO_DEBUG_CRT;
+
+  MFC 4.1, Static,  OLE:
+    INC_OLE2;_X86_;_WINDOWS;_MSC_VER=900;_AFX_PORTABLE;_AFX_NOFORCE_LIBS;
+    _MT;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;
+
+  MFC 4.1, Dynamic, No OLE:
+    _RTLDLL;_AFXDLL;_DLL;_X86_;_WINDOWS;_MSC_VER=900;_AFX_PORTABLE;
+    _AFX_NOFORCE_LIBS;_MT;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;
+
+  MFC 4.1, Dynamic, OLE:
+    INC_OLE2;_RTLDLL;_AFXDLL;_DLL;_X86_;_WINDOWS;_MSC_VER=900;
+    _AFX_PORTABLE;_AFX_NOFORCE_LIBS;_MT;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;
+
+  The libraries needed to link with are as follows:
+
+  MFC 4.1, Static,  No Diagnostics, No OLE:
+    nafxcw.lib odbc32.lib import32.lib cw32mt.lib
+
+  MFC 4.1, Static,  No Diagnostics, OLE:
+    nafxcw.lib ole2w32.lib odbc32.lib import32.lib cw32mt.lib
+
+  MFC 4.1, Static,  Diagnostics,    No OLE:
+    nafxcwd.lib odbc32.lib import32.lib cw32mt.lib
+
+  MFC 4.1, Static,  Diagnostics,    OLE:
+    nafxcwd.lib ole2w32.lib odbc32.lib import32.lib cw32mt.lib
+
+  MFC 4.1, Dynamic, No Diagnostics, No OLE:
+    bfcs40.lib bfc40.lib odbc32.lib import32.lib cw32mti.lib
+
+  MFC 4.1, Dynamic, No Diagnostics, OLE:
+    bfcs40.lib bfc40.lib ole2w32.lib odbc32.lib import32.lib cw32mti.lib
+
+  MFC 4.1, Dynamic, Diagnostics,    No OLE:
+    bfcs40d.lib bfc40d.lib bfco40d.lib bfcn40d.lib odbc32.lib
+    import32.lib cw32mti.lib
+
+  MFC 4.1, Dynamic, Diagnostics,    OLE:
+    bfcs40d.lib bfc40d.lib bfco40d.lib bfcn40d.lib ole2w32.lib
+    odbc32.lib import32.lib cw32mti.lib
+
+  NOTE: When building from the command line remember to use the -VF switch
+

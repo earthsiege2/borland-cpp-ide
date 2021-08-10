@@ -11,6 +11,7 @@
 #ifndef _INC_MSVIDDRV
 #define _INC_MSVIDDRV   50      /* version number */
 #define __MSVIDDRV_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -112,4 +113,5 @@ typedef struct tag_video_configure_parms {
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
+#pragma option -b.
 #endif  /* _INC_MSVIDDRV */

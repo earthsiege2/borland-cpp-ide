@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.4  $
 //
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
@@ -10,6 +10,8 @@
 #if !defined(OWL_PRINTER_H)
 # include <owl/printer.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 

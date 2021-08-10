@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0002    Increment this if a change has global effects
 
-Copyright (c) 1993-1995, Microsoft Corporation
+Copyright (c) 1993-1996, Microsoft Corporation
 
 Module Name:
 
@@ -25,12 +25,9 @@ Abstract:
 
 #ifndef _OLEDLG_H_
 #define _OLEDLG_H_
+#pragma option -b
 
 #ifndef RC_INVOKED
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #ifndef __cplusplus
 #define NONAMELESSUNION     // use strict ANSI standard (for DVOBJ.H)
@@ -45,23 +42,37 @@ extern "C" {
 #endif
 
 #ifndef _WINDOWS_
+#pragma option -b.
 #include <windows.h>
+#pragma option -b
 #endif
 #ifndef _INC_SHELLAPI
+#pragma option -b.
 #include <shellapi.h>
+#pragma option -b
 #endif
 #ifndef _INC_COMMDLG
+#pragma option -b.
 #include <commdlg.h>
+#pragma option -b
 #endif
 #ifndef _OLE2_H_
+#pragma option -b.
 #include <ole2.h>
+#pragma option -b
 #endif
+#pragma option -b.
 #include <string.h>
+#pragma option -b
+#pragma option -b.
 #include <tchar.h>
+#pragma option -b
 
 #endif // RC_INVOKED
 
+#pragma option -b.
 #include <dlgs.h>           // common dialog IDs
+#pragma option -b
 
 // Help Button Identifier
 #define IDC_OLEUIHELP                   99
@@ -201,6 +212,12 @@ extern "C" {
 #define IDD_GNRLPROPS                   1100
 #define IDD_VIEWPROPS                   1101
 #define IDD_LINKPROPS                   1102
+#define IDD_CONVERT4                    1103
+#define IDD_CONVERTONLY4                1104
+#define IDD_EDITLINKS4                  1105
+#define IDD_GNRLPROPS4                  1106
+#define IDD_LINKPROPS4                  1107
+#define IDD_PASTESPECIAL4               1108
 
 // The following Dialogs are message dialogs used by OleUIPromptUser API
 #define IDD_CANNOTUPDATELINK            1008
@@ -221,15 +238,11 @@ extern "C" {
 
 #ifndef RC_INVOKED
 
-#if defined(__BORLANDC__) && defined(__MFC_COMPAT__)
-#pragma pack(push, 4)
-#else
-#pragma pack(push, 8)
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#ifndef EXPORT
-        #define EXPORT
-#endif
+#pragma pack(push, 8)
 
 // Delimeter used to separate ItemMoniker pieces of a composite moniker
 #ifdef _MAC
@@ -265,6 +278,7 @@ typedef UINT (CALLBACK *LPFNOLEUIHOOK)(HWND, UINT, WPARAM, LPARAM);
 #define OLEUI_CANCEL                    2     // Cancel button pressed
 
 #define OLEUI_ERR_STANDARDMIN           100
+#define OLEUI_ERR_OLEMEMALLOC           100
 #define OLEUI_ERR_STRUCTURENULL         101   // Standard field validation
 #define OLEUI_ERR_STRUCTUREINVALID      102
 #define OLEUI_ERR_CBSTRUCTINCORRECT     103
@@ -281,17 +295,16 @@ typedef UINT (CALLBACK *LPFNOLEUIHOOK)(HWND, UINT, WPARAM, LPARAM);
 #define OLEUI_ERR_LOCALMEMALLOC         113
 #define OLEUI_ERR_GLOBALMEMALLOC        114
 #define OLEUI_ERR_LOADSTRING            115
-#define OLEUI_ERR_OLEMEMALLOC           116
 
 #define OLEUI_ERR_STANDARDMAX           116  // Start here for specific errors.
 
 // Miscellaneous utility functions.
 STDAPI_(BOOL) OleUIAddVerbMenuW(LPOLEOBJECT lpOleObj, LPCWSTR lpszShortType,
         HMENU hMenu, UINT uPos, UINT uIDVerbMin, UINT uIDVerbMax,
-        BOOL bAddConvert, UINT idConvert, HMENU FAR *lphMenu);
+        BOOL bAddConvert, UINT idConvert, HMENU *lphMenu);
 STDAPI_(BOOL) OleUIAddVerbMenuA(LPOLEOBJECT lpOleObj, LPCSTR lpszShortType,
         HMENU hMenu, UINT uPos, UINT uIDVerbMin, UINT uIDVerbMax,
-        BOOL bAddConvert, UINT idConvert, HMENU FAR *lphMenu);
+        BOOL bAddConvert, UINT idConvert, HMENU *lphMenu);
 #ifdef UNICODE
 #define OleUIAddVerbMenu OleUIAddVerbMenuW
 #else
@@ -327,11 +340,11 @@ typedef struct tagOLEUIINSERTOBJECTW
         LPFORMATETC     lpFormatEtc;    // IN: Desired format
         LPOLECLIENTSITE lpIOleClientSite;   // IN: Site to be use for the object.
         LPSTORAGE       lpIStorage;     // IN: Storage used for the object
-        LPVOID FAR      *ppvObj;        // OUT: Where the object is returned.
+        LPVOID          *ppvObj;        // OUT: Where the object is returned.
         SCODE           sc;             // OUT: Result of creation calls.
         HGLOBAL         hMetaPict;      // OUT: metafile aspect (METAFILEPICT)
 
-} OLEUIINSERTOBJECTW, *POLEUIINSERTOBJECTW, FAR *LPOLEUIINSERTOBJECTW;
+} OLEUIINSERTOBJECTW, *POLEUIINSERTOBJECTW, *LPOLEUIINSERTOBJECTW;
 typedef struct tagOLEUIINSERTOBJECTA
 {
         // These IN fields are standard across all OLEUI dialog functions.
@@ -358,11 +371,11 @@ typedef struct tagOLEUIINSERTOBJECTA
         LPFORMATETC     lpFormatEtc;    // IN: Desired format
         LPOLECLIENTSITE lpIOleClientSite;   // IN: Site to be use for the object.
         LPSTORAGE       lpIStorage;     // IN: Storage used for the object
-        LPVOID FAR      *ppvObj;        // OUT: Where the object is returned.
+        LPVOID          *ppvObj;        // OUT: Where the object is returned.
         SCODE           sc;             // OUT: Result of creation calls.
         HGLOBAL         hMetaPict;      // OUT: metafile aspect (METAFILEPICT)
 
-} OLEUIINSERTOBJECTA, *POLEUIINSERTOBJECTA, FAR *LPOLEUIINSERTOBJECTA;
+} OLEUIINSERTOBJECTA, *POLEUIINSERTOBJECTA, *LPOLEUIINSERTOBJECTA;
 
 STDAPI_(UINT) OleUIInsertObjectW(LPOLEUIINSERTOBJECTW);
 STDAPI_(UINT) OleUIInsertObjectA(LPOLEUIINSERTOBJECTA);
@@ -489,7 +502,7 @@ typedef struct tagOLEUIPASTEENTRYW
    DWORD            dwFlags;        // Values from OLEUIPASTEFLAG enum
    DWORD            dwScratchSpace; // Scratch space used internally.
 
-} OLEUIPASTEENTRYW, *POLEUIPASTEENTRYW, FAR *LPOLEUIPASTEENTRYW;
+} OLEUIPASTEENTRYW, *POLEUIPASTEENTRYW, *LPOLEUIPASTEENTRYW;
 typedef struct tagOLEUIPASTEENTRYA
 {
    FORMATETC        fmtetc;         // Format that is acceptable.
@@ -506,7 +519,7 @@ typedef struct tagOLEUIPASTEENTRYA
    DWORD            dwFlags;        // Values from OLEUIPASTEFLAG enum
    DWORD            dwScratchSpace; // Scratch space used internally.
 
-} OLEUIPASTEENTRYA, *POLEUIPASTEENTRYA, FAR *LPOLEUIPASTEENTRYA;
+} OLEUIPASTEENTRYA, *POLEUIPASTEENTRYA, *LPOLEUIPASTEENTRYA;
 #ifdef UNICODE
 #define tagOLEUIPASTEENTRY tagOLEUIPASTEENTRYW
 #define OLEUIPASTEENTRY OLEUIPASTEENTRYW
@@ -555,7 +568,7 @@ typedef struct tagOLEUIPASTESPECIALW
                                                                         //  may be 0,0 if different display
                                                                         //  aspect is chosen.
 
-} OLEUIPASTESPECIALW, *POLEUIPASTESPECIALW, FAR *LPOLEUIPASTESPECIALW;
+} OLEUIPASTESPECIALW, *POLEUIPASTESPECIALW, *LPOLEUIPASTESPECIALW;
 typedef struct tagOLEUIPASTESPECIALA
 {
         // These IN fields are standard across all OLEUI dialog functions.
@@ -589,7 +602,7 @@ typedef struct tagOLEUIPASTESPECIALA
                                                                         //  may be 0,0 if different display
                                                                         //  aspect is chosen.
 
-} OLEUIPASTESPECIALA, *POLEUIPASTESPECIALA, FAR *LPOLEUIPASTESPECIALA;
+} OLEUIPASTESPECIALA, *POLEUIPASTESPECIALA, *LPOLEUIPASTESPECIALA;
 #ifdef UNICODE
 
 #define tagOLEUIPASTESPECIAL tagOLEUIPASTESPECIALW
@@ -727,7 +740,7 @@ typedef struct tagOLEUIEDITLINKSW
         LPOLEUILINKCONTAINERW lpOleUILinkContainer;  // IN: Interface to manipulate
                                                                                                 // links in the container
 
-} OLEUIEDITLINKSW, *POLEUIEDITLINKSW, FAR *LPOLEUIEDITLINKSW;
+} OLEUIEDITLINKSW, *POLEUIEDITLINKSW, *LPOLEUIEDITLINKSW;
 
 typedef struct tagOLEUIEDITLINKSA
 {
@@ -746,7 +759,7 @@ typedef struct tagOLEUIEDITLINKSA
         LPOLEUILINKCONTAINERA lpOleUILinkContainer;  // IN: Interface to manipulate
                                                                                                 // links in the container
 
-} OLEUIEDITLINKSA, *POLEUIEDITLINKSA, FAR *LPOLEUIEDITLINKSA;
+} OLEUIEDITLINKSA, *POLEUIEDITLINKSA, *LPOLEUIEDITLINKSA;
 
 #ifdef UNICODE
 #define tagOLEUIEDITLINKS tagOLEUIEDITLINKSW
@@ -800,10 +813,10 @@ typedef struct tagOLEUICHANGEICONW
                                                                         //  Source of the icon is embedded in
                                                                         //  the metafile itself.
         CLSID           clsid;          // IN: class used to get Default icon
-        WCHAR           szIconExe[MAX_PATH];    // IN: exlicit icon source path
+        WCHAR           szIconExe[MAX_PATH];    // IN: explicit icon source path
         int             cchIconExe;     // IN: number of characters in szIconExe
 
-} OLEUICHANGEICONW, *POLEUICHANGEICONW, FAR *LPOLEUICHANGEICONW;
+} OLEUICHANGEICONW, *POLEUICHANGEICONW, *LPOLEUICHANGEICONW;
 
 typedef struct tagOLEUICHANGEICONA
 {
@@ -823,10 +836,10 @@ typedef struct tagOLEUICHANGEICONA
                                                                         //  Source of the icon is embedded in
                                                                         //  the metafile itself.
         CLSID           clsid;          // IN: class used to get Default icon
-        CHAR            szIconExe[MAX_PATH];    // IN: exlicit icon source path
+        CHAR            szIconExe[MAX_PATH];    // IN: explicit icon source path
         int             cchIconExe;     // IN: number of characters in szIconExe
 
-} OLEUICHANGEICONA, *POLEUICHANGEICONA, FAR *LPOLEUICHANGEICONA;
+} OLEUICHANGEICONA, *POLEUICHANGEICONA, *LPOLEUICHANGEICONA;
 
 STDAPI_(UINT) OleUIChangeIconW(LPOLEUICHANGEICONW);
 STDAPI_(UINT) OleUIChangeIconA(LPOLEUICHANGEICONA);
@@ -904,7 +917,7 @@ typedef struct tagOLEUICONVERTW
         UINT            cClsidExclude;  //IN: No. of CLSIDs in lpClsidExclude
         LPCLSID         lpClsidExclude; //IN: List of CLSIDs to exclude from list
 
-} OLEUICONVERTW, *POLEUICONVERTW, FAR *LPOLEUICONVERTW;
+} OLEUICONVERTW, *POLEUICONVERTW, *LPOLEUICONVERTW;
 
 typedef struct tagOLEUICONVERTA
 {
@@ -944,7 +957,7 @@ typedef struct tagOLEUICONVERTA
         UINT            cClsidExclude;  //IN: No. of CLSIDs in lpClsidExclude
         LPCLSID         lpClsidExclude; //IN: List of CLSIDs to exclude from list
 
-} OLEUICONVERTA, *POLEUICONVERTA, FAR *LPOLEUICONVERTA;
+} OLEUICONVERTA, *POLEUICONVERTA, *LPOLEUICONVERTA;
 
 STDAPI_(UINT) OleUIConvertW(LPOLEUICONVERTW);
 STDAPI_(UINT) OleUIConvertA(LPOLEUICONVERTA);
@@ -1004,9 +1017,9 @@ typedef struct tagOLEUIBUSYW
 
         // Specifics for OLEUIBUSY.
         HTASK           hTask;          // IN: HTask which is blocking
-        HWND FAR *      lphWndDialog;   // OUT: Dialog's HWND is placed here
+        HWND *          lphWndDialog;   // OUT: Dialog's HWND is placed here
 
-} OLEUIBUSYW, *POLEUIBUSYW, FAR *LPOLEUIBUSYW;
+} OLEUIBUSYW, *POLEUIBUSYW, *LPOLEUIBUSYW;
 
 typedef struct tagOLEUIBUSYA
 {
@@ -1023,9 +1036,9 @@ typedef struct tagOLEUIBUSYA
 
         // Specifics for OLEUIBUSY.
         HTASK           hTask;          // IN: HTask which is blocking
-        HWND FAR *      lphWndDialog;   // OUT: Dialog's HWND is placed here
+        HWND *          lphWndDialog;   // OUT: Dialog's HWND is placed here
 
-} OLEUIBUSYA, *POLEUIBUSYA, FAR *LPOLEUIBUSYA;
+} OLEUIBUSYA, *POLEUIBUSYA, *LPOLEUIBUSYA;
 
 STDAPI_(UINT) OleUIBusyW(LPOLEUIBUSYW);
 STDAPI_(UINT) OleUIBusyA(LPOLEUIBUSYA);
@@ -1086,7 +1099,7 @@ typedef struct tagOLEUICHANGESOURCEW
         LPWSTR          lpszFrom;       // OUT: prefix of source changed from
         LPWSTR          lpszTo;         // OUT: prefix of source changed to
 
-} OLEUICHANGESOURCEW, *POLEUICHANGESOURCEW, FAR *LPOLEUICHANGESOURCEW;
+} OLEUICHANGESOURCEW, *POLEUICHANGESOURCEW, *LPOLEUICHANGESOURCEW;
 
 typedef struct tagOLEUICHANGESOURCEA
 {
@@ -1113,7 +1126,7 @@ typedef struct tagOLEUICHANGESOURCEA
         LPSTR           lpszFrom;       // OUT: prefix of source changed from
         LPSTR           lpszTo;         // OUT: prefix of source changed to
 
-} OLEUICHANGESOURCEA, *POLEUICHANGESOURCEA, FAR *LPOLEUICHANGESOURCEA;
+} OLEUICHANGESOURCEA, *POLEUICHANGESOURCEA, *LPOLEUICHANGESOURCEA;
 
 STDAPI_(UINT) OleUIChangeSourceW(LPOLEUICHANGESOURCEW);
 STDAPI_(UINT) OleUIChangeSourceA(LPOLEUICHANGESOURCEA);
@@ -1146,7 +1159,7 @@ STDAPI_(UINT) OleUIChangeSourceA(LPOLEUICHANGESOURCEA);
 #define OLEUI_CSERR_SOURCENULL          (OLEUI_ERR_STANDARDMAX+4)
 #define OLEUI_CSERR_SOURCEINVALID       (OLEUI_ERR_STANDARDMAX+5)
 #define OLEUI_CSERR_SOURCEPARSERROR     (OLEUI_ERR_STANDARDMAX+6)
-#define OLEUI_CSERR_SOURCEPARSEERROR    (OLEUI_ERR_STANDARDMAX+7)
+#define OLEUI_CSERR_SOURCEPARSEERROR    (OLEUI_ERR_STANDARDMAX+6)
 
 /////////////////////////////////////////////////////////////////////////////
 // OBJECT PROPERTIES DIALOG
@@ -1438,7 +1451,9 @@ typedef struct tagOLEUILINKPROPSA
 #if (WINVER >= 0x400)
 // Under Windows 95 prsht.h is NOT a part of the normal Windows
 // environment, so we explicitly include it here to be safe.
+#pragma option -b.
 #include <prsht.h>
+#pragma option -b
 
 #ifndef PSM_SETFINISHTEXTA
 // We are building under Windows 95.
@@ -1592,8 +1607,8 @@ STDAPI_(UINT) OleUIObjectPropertiesA(LPOLEUIOBJECTPROPSA);
 /////////////////////////////////////////////////////////////////////////////
 // PROMPT USER DIALOGS
 
-int EXPORT FAR CDECL OleUIPromptUserW(int nTemplate, HWND hwndParent, ...);
-int EXPORT FAR CDECL OleUIPromptUserA(int nTemplate, HWND hwndParent, ...);
+int CDECL OleUIPromptUserW(int nTemplate, HWND hwndParent, ...);
+int CDECL OleUIPromptUserA(int nTemplate, HWND hwndParent, ...);
 
 #ifdef UNICODE
 #define OleUIPromptUser OleUIPromptUserW
@@ -1622,6 +1637,7 @@ STDAPI_(BOOL) OleUIUpdateLinksA(LPOLEUILINKCONTAINERA lpOleUILinkCntr,
 
 #endif // RC_INVOKED
 
+#pragma option -b.
 #endif  //_OLEDLG_H_
 
 /////////////////////////////////////////////////////////////////////////////

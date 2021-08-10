@@ -2,11 +2,14 @@
 // ObjectWindows
 // Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
 //
+// $Revision:   10.13  $
+//
 // Example paint program
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/dc.h>
+#include <owl/dibitmap.h>
 #include <owl/gdiobjec.h>
 #include <owl/decframe.h>
 #include <owl/chooseco.h>
@@ -30,18 +33,20 @@ DIAG_DEFINE_GROUP(PaintCmd,1,0);  // command tracing
 //
 // Build options
 //
-//#define USE_LINEBAR     // comment out for line gadgets instead of line bar
-#define USE_TOOLBAR       // comment out for floating tool & line palettes
-#define PARALLEL_PEN      // to enable parallel line drawing with pen tool
+//#define USE_LINEBAR     // Comment out for line gadgets instead of line bar
+//#define USE_TOOLBAR     // Uncomment out to have non-floating toolbar
+#define PARALLEL_PEN      // To enable parallel line drawing with pen tool
 
-const int DefWidth  = 640;
-const int DefHeight = 480;
-      int DefNColors= 0;        // fill in with screen device info
-const int DefPenSize= 3;
+const int    DefWidth  = 640;
+const int    DefHeight = 480;
+      uint32 DefNColors= 0;        // fill in with screen device info
+const int    DefPenSize= 3;
+
 const TColor DefPalette[] = {
   0x000000L, 0xFFFFFFL, 0x7F7F7FL, 0xC0C0C0L,
-  0x00007FL, 0x007F00L, 0x007F7FL, 0x7F0000L, 0x7F007FL, 0x7F7F00L,
-  0x0000FFL, 0x00FF00L, 0x00FFFFL, 0xFF0000L, 0xFF00FFL, 0xFFFF00L,
+  0x00007FL, 0x007F00L, 0x007F7FL, 0x7F0000L, 
+  0x7F007FL, 0x7F7F00L, 0x0000FFL, 0x00FF00L, 
+  0x00FFFFL, 0xFF0000L, 0xFF00FFL, 0xFFFF00L,
 };
 
 const int CM_TOOL   = 300;
@@ -308,6 +313,24 @@ END_RESPONSE_TABLE;
 
 //----------------------------------------------------------------------------
 
+// 
+// Given the bits-per-pixel depth of a DIB or a display device, return
+// the maximum number of colors that DIB or device could use.
+//
+uint32 ColorCapacity(uint depth)
+{
+  switch (depth) {
+    case 1:  return 2;
+    case 2:  return 4;
+    case 4:  return 16;
+    case 8:  return 256;
+    case 16: return 65536L;
+    default: return 16777216L;
+  }
+}
+
+//----------------------------------------------------------------------------
+
 class TCanvas : public TWindow {
   public:
     TCanvas();
@@ -323,7 +346,7 @@ class TCanvas : public TWindow {
 
     bool         AbandonOk();
     void         SetupDib(TDib* dib, const char* fileName, const char* fileTitle);
-    void         NewDib(int width, int height, int nColors);
+    void         NewDib(int width, int height, uint32 nColors);
     void         OpenDib(const char* fileName, const char* fileTitle);
     bool         SaveDib(const char* fileName);
 
@@ -473,7 +496,7 @@ TPenTool::DrawBegin(const TPoint& point)
   //
 #if defined(PARALLEL_PEN)
   // can't select a palette into to different device DCs
-  TmpPalette = new TPalette(*State->Dib);
+  TmpPalette = new TPalette(*State->Palette);
   DC->IntersectClipRect(TRect(TPoint(0,0), State->Dib->Size()));
   DC->SelectObject(*TmpPalette);
   DC->RealizePalette();
@@ -666,6 +689,16 @@ TPaletteWindow::EvLButtonDblClk(UINT, TPoint& point)
   SelectColor(point, editColor);
   if (editColor < 0)
     return;
+
+  // If the DIB lacks an adjustable palette, then stop.
+  //
+  if (State->Dib->NumColors() == 0) 
+  {
+    MessageBox("This DIB has no palette to change",
+      GetApplication()->GetName(), MB_OK);
+    return;
+  }   
+
   TChooseColorDialog::TData choose;
   choose.Flags = CC_RGBINIT;
   PALETTEENTRY pe;
@@ -859,7 +892,7 @@ TCanvas::AbandonOk()
     return true;
   const char msgFrmt[] = "%s\nThe image has changed.\n\n"
                          "Do you want to save current changes?";
-  char msg[sizeof(msgFrmt)+20];
+  char msg[sizeof(msgFrmt)+100];
   sprintf(msg, msgFrmt, State.Name.c_str());
   int resp = MessageBox(msg, GetApplication()->GetName(),
                         MB_ICONEXCLAMATION|MB_YESNOCANCEL);
@@ -875,38 +908,59 @@ TCanvas::AbandonOk()
 void
 TCanvas::SetupDib(TDib* dib, const char* name, const char* title)
 {
-  //
-  // Make sure we can get the Dib DC and palette before we commit to this dib.
-  // Revert to a DDB and a memory DC if we can't create a DIB DC.
-  //
-  TDC*      newDC;
-  TBitmap*  newBM = 0;
   TPalette* newPalette;
+
+  // Make a palette for the DIB.
+  //
   try {
-    newDC = new TDibDC(*dib);
+    newPalette = new TPalette(*dib);
   }
   catch (TGdiObject::TXGdi&) {
-    newDC = new TMemoryDC;
-    newBM = new TBitmap(TScreenDC(), *dib);
-    ((TMemoryDC*)newDC)->SelectObject(*newBM);
-    newDC->SetDIBits(*newBM, *dib);
-    if (dib->NumColors() > NColors(WORD(newBM->Planes()*newBM->BitsPixel())))
-      MessageBox("Colors may have been lost during bitmap conversion.",
-                 GetApplication()->GetName(), MB_ICONEXCLAMATION|MB_OK);
+
+    // Probably DIB is true color and therefore lacks a color table.
+    // We still need a palette object.  If the current display device
+    // supports palettes, then select a halftone palette because that
+    // will have a good range of colors to choose from.  If the
+    // current display does not support palettes (because it's a high-
+    // color display), just use the stock palette.
+    //
+    TScreenDC display;
+    if (display.GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+      newPalette = new THalftonePalette();
+    else
+      newPalette = new TPalette((HPALETTE)::GetStockObject(DEFAULT_PALETTE));
+
+
+    // (There are better ways to set up a palette for rendering a
+    // high-color image with a limited color set.  It's preferable
+    // to scan the DIB's colors and make intelligent choices about
+    // which to use--that's a standard problem, and you can find 
+    // articles describing ways to do it.)
   }
-  newPalette = new TPalette(*dib);
+
+  TMemoryDC* newDC = new TMemoryDC;
+  TBitmap*   newBM = new TBitmap(TScreenDC(), *dib, 0);
+
+  SetCursor(0, IDC_WAIT);
+  newDC->SelectObject(*newPalette);
+  newDC->RealizePalette();
+  newDC->SelectObject(*newBM);
+  newDC->SetDIBits(*newBM, *dib);
+  SetCursor(0, IDC_ARROW);
+
   delete State.DC;
   delete State.Palette;
   delete State.Dib;
   delete State.Bitmap;
-  State.DC = newDC;
-  State.Palette = newPalette;
-  State.Dib = dib;
-  State.Bitmap = newBM;
 
-  State.Name = name;
-  State.Title = title;
+  State.DC      = newDC;
+  State.Palette = newPalette;
+  State.Dib     = dib;
+  State.Bitmap  = newBM;
+  State.Name    = name;
+  State.Title   = title;
   State.Modified = false;
+
   UpdateCaption();
   AdjustScroller();
   TWindow* palette = GetParentO()->ChildWithId(ID_PALETTE);
@@ -919,24 +973,32 @@ TCanvas::SetupDib(TDib* dib, const char* name, const char* title)
 // Create a new dib & setup state info
 //
 void
-TCanvas::NewDib(int width, int height, int nColors)
+TCanvas::NewDib(int width, int height, uint32 nColors)
 {
-  // Construct the dib, catching any exptions that might occur & displaying a
-  // warning
+  // Construct the DIB, catching any exceptions that might occur and
+  // displaying a warning
   //
   TDib* dib;
   try {
     dib = new TDib(width, height, nColors);
   }
   catch (TGdiObject::TXGdi& x) {
-    MessageBox("Could Not Create DIB", GetApplication()->GetName(), MB_OK);
+    MessageBox("Cannot create DIB", GetApplication()->GetName(), MB_OK);
     return;
   }
 
-  // Setup a nice palette
+  // Convert number of colors supported to number of colors
+  // needed in color table.  For high-color images, the color
+  // table size is 0.
   //
-  for (int i = 0; i < min(nColors, int(sizeof DefPalette/sizeof DefPalette[0])); i++)
-    dib->SetColor(i, DefPalette[i]);
+  int nColorsInTable = (int)NColors(NBits(nColors));
+
+  // If a palette is needed, set up a reasonable default.
+  //
+  int nDefPalette = sizeof(DefPalette) / sizeof(DefPalette[0]);
+  if (nColorsInTable)
+    for (int i = 0; i < min(nColorsInTable, nDefPalette); i++)
+      dib->SetColor(i, DefPalette[i]);
 
   SetupDib(dib, "", "(Untitled)");
 
@@ -971,7 +1033,9 @@ TCanvas::SaveDib(const char* fileName)
 {
   if (State.Bitmap) {
     delete State.Dib;
-    State.Dib = new TDib(*State.Bitmap, State.Palette);
+    State.Dib = new TDib(*State.Bitmap,
+      // add the palette if the bitmap needs it
+      State.Bitmap->BitsPixel() <= 8 ? State.Palette : 0);
   }
   if (State.Dib->WriteFile(fileName))
     return true;
@@ -984,9 +1048,10 @@ TCanvas::UpdateCaption()
 {
   char captionBuffer[70];
   if (State.Dib)
-    sprintf(captionBuffer, "%s - %s [%dx%dx%d]", GetApplication()->GetName(),
+    sprintf(captionBuffer, "%s - %s [%dx%dx%lu]", GetApplication()->GetName(),
              (LPCSTR)State.Title.c_str(),
-             State.Dib->Width(), State.Dib->Height(), State.Dib->NumColors());
+             State.Dib->Width(), State.Dib->Height(), 
+             ColorCapacity(State.Dib->BitsPixel()));
   else
     sprintf(captionBuffer, "%s - (Bad Dib!)", GetApplication()->GetName());
   GetParentO()->SetCaption(captionBuffer);
@@ -1116,7 +1181,7 @@ TCanvas::CmFileNew()
 
   static int width = DefWidth;
   static int height = DefHeight;
-  static int ncolors = DefNColors;
+  static uint32 ncolors = DefNColors;
   if (TDibAttrDialog(this, width, height, ncolors).Execute() == IDOK)
     NewDib(width, height, ncolors);
 }
@@ -1290,6 +1355,7 @@ int
 OwlMain(int /*argc*/, char* /*argv*/ [])
 {
   TScreenDC screenDC;
-  DefNColors = (int)NColors(WORD(screenDC.GetDeviceCaps(BITSPIXEL)*screenDC.GetDeviceCaps(PLANES)));
+
+  DefNColors = ColorCapacity(screenDC.GetDeviceCaps(BITSPIXEL)*screenDC.GetDeviceCaps(PLANES));
   return TPaintApp().Run();
 }

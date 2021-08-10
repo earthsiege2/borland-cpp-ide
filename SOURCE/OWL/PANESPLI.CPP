@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.13  $
+//$Revision:   10.21  $
 //
 // Implementation of Pane Splitter classes
 //----------------------------------------------------------------------------
@@ -26,6 +26,8 @@
 # include <classlib/stacks.h>
 #endif
 #include <math.h>
+
+OWL_DIAGINFO;
 
 //
 // Defines to make typesafe downcasting simpler.
@@ -672,6 +674,21 @@ TVSplitterIndicator::Move(int dist)
   right = left + splitterWidth;
   top = orig.top;
   bottom = orig.bottom;
+
+  //
+  // Don't allow the indicator to get closer to the edge of the moveArea
+  // than the cushion.
+  //
+  if( moveArea.Width() > (Cushion) )  {
+    moveArea.left += Cushion;
+    moveArea.right -= Cushion;
+  }
+  else {
+    DistMoved = 0;
+    return;
+  }
+
+
   if (!moveArea.Contains(*this)) {
     // Indicator out of move area to put it adjacent to either top or bottom
     // of move area.
@@ -773,6 +790,20 @@ THSplitterIndicator::Move(int dist)
   bottom = top + splitterWidth;
   left = orig.left;
   right = orig.right;
+
+  //
+  // Don't allow the indicator to get closer to the edge of the moveArea
+  // than the cushion.
+  //
+  if( moveArea.Height() > (Cushion) )  {
+    moveArea.top += Cushion;
+    moveArea.bottom -= Cushion;
+  }
+  else {
+    DistMoved = 0;
+    return;
+  }
+
   if (!moveArea.Contains(*this)) {
     // Indicator out of move area to put it adjacent to either top or bottom
     // of move area.
@@ -916,6 +947,8 @@ TSplitterIndicatorMgr::MoveIndicators(const TPoint& point)
 void
 TSplitterIndicatorMgr::DrawIndicators()
 {
+  if( !SplitterIndicatorList )
+    return;
   TSplitterIndicatorListIterator  iter(*SplitterIndicatorList);
   while (iter != 0)
     (iter++)->Draw();
@@ -927,6 +960,8 @@ TSplitterIndicatorMgr::DrawIndicators()
 void
 TSplitterIndicatorMgr::ClearIndicators()
 {
+  if( !SplitterIndicatorList )
+    return;
   TSplitterIndicatorListIterator  iter(*SplitterIndicatorList);
   while (iter != 0)
     (iter++)->Clear();
@@ -952,6 +987,7 @@ TPaneSplitter::TPaneSplitter(TWindow*        parent,
   TLayoutWindow(parent, title, module),
   ShouldDelete(TShouldDelete::NoDelete),
   SplitterWidth(splitterWidth),
+  SplitterCushion(0),
   Dragging(false),
   PaneSplitterResizing(false)
 {
@@ -1038,7 +1074,8 @@ bool
 TPaneSplitter::SplitPane(TWindow* target, TWindow* newPane,
                          TSplitDirection splitDir, float percent)
 {
-  PRECONDITION(target && target != newPane);
+  PRECONDITION(target);
+  PRECONDITION(target != newPane);
 
   if (GetFirstChild() == 0) {     // if no panes.
     TLayoutMetrics  lmOfTarget;
@@ -1287,6 +1324,7 @@ TPaneSplitter::MoveSplitter(TWindow* pane, int dist)
 
   TSplitter*    splitter = SPLITTER(pane->Parent);
   TSplitterIndicator* si = splitter->CreateSplitterIndicator();
+  si->SetCushion( SplitterCushion );
 
   SplitterIndicatorList.Flush(1);
   SplitterIndicatorList.Add(si);
@@ -1333,6 +1371,8 @@ TPaneSplitter::StartSplitterMove(TSplitter* splitter, const TPoint& point)
 void
 TPaneSplitter::EndSplitterMove()
 {
+  if( !Dragging )
+    return;
   Dragging = false;
   ReleaseCapture();
   SplitterIndicatorMgr.EndMove();
@@ -1577,6 +1617,7 @@ TPaneSplitter::DoFindIntersectingSplitters(TWindow* o, void *p1, void*p2)
   TSplitter* splitter = SPLITTER(o);
   if (splitter) {
     TSplitterIndicator* i = splitter->CreateSplitterIndicator();
+    i->SetCushion( SplitterCushion );
     if (i->CouldContain(*(TPoint*)p2))
       ((TSplitterIndicatorList*)p1)->Add(i);
     else

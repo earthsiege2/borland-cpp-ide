@@ -12,7 +12,7 @@
  *
  *  This range of 256 GUIDs reserved by OLE for MAPI use October 5, 1992.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 /*
@@ -73,9 +73,10 @@
  *  0x00020382  PS_ROUTING_DISPLAY_NAME
  *  0x00020383  PS_ROUTING_ENTRYID
  *  0x00020384  PS_ROUTING_SEARCH_KEY
+ *  0x00020385  MUID_PROFILE_INSTANCE
  *  
  *  The remaining GUIDs from 0x00020300 to 0x000203FF are reserved by
- *  MAPI for future use.  The current maximum used by MAPI is 0x00020370
+ *  MAPI for future use.  The current maximum used by MAPI is 0x00020385
  *
  */
 
@@ -83,6 +84,7 @@
 #ifdef  INITGUID
 #define MAPIGUID_H
 #endif
+#pragma option -b
 
 /* Derive from IUnknown */
 #if !defined(INITGUID) || defined(USES_IID_IMAPISession)
@@ -323,7 +325,14 @@ DEFINE_OLEGUID(PS_ROUTING_ENTRYID,  0x00020383, 0, 0);
 DEFINE_OLEGUID(PS_ROUTING_SEARCH_KEY,   0x00020384, 0, 0);
 #endif
 
+/*  MUID_PROFILE_INSTANCE
+    Well known section in a profile which contains a property (PR_SEARCH_KEY) which is unique
+    for any given profile.  Applications and providers can depend on this value as being
+    different for each unique profile. */
+#if !defined(INITGUID) || defined(USES_MUID_PROFILE_INSTANCE)
+DEFINE_OLEGUID(MUID_PROFILE_INSTANCE, 0x00020385, 0, 0);
+#endif
 
-
+#pragma option -b.
 #endif  /* MAPIGUID_H */
 

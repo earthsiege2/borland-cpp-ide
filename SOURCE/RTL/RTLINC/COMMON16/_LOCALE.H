@@ -8,12 +8,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.1  $ */
 
 #ifndef ___LOCALE_H
 #define ___LOCALE_H
@@ -146,7 +147,7 @@
 
 #define LC_RESERVED1                             8
 #define LC_RESERVED2                             9
-#define LC_RESERVED3                            10    
+#define LC_RESERVED3                            10
 #define LC_RESERVED4                            11
 #define LC_RESERVED5                            12
 #define LC_RESERVED6                            13
@@ -306,9 +307,9 @@ struct Monetary {
 
     unsigned char mon_grouping[ 5 ];
 
-    unsigned char positive_sign[ 5 ];    
+    unsigned char positive_sign[ 5 ];
 
-    unsigned char negative_sign[ 5 ];    
+    unsigned char negative_sign[ 5 ];
 
     unsigned char int_frac_digits;
 
@@ -516,7 +517,7 @@ struct LOCALEOBJECT {
     char LocaleString[ ( LC_LAST * MAX_LCNAME_LEN ) ];
 
     /* LC_CTYPE */
-    
+
     struct CtypeCategory CtypeCat;
 
     unsigned char _FAR *pCtype;
@@ -535,10 +536,10 @@ struct LOCALEOBJECT {
     struct Expansion    _FAR *pExpandTbl;
     struct Compression  _FAR *pCompressTbl;
     struct Substitution _FAR *pSubstitutionTbl;
-    
+
     /* collation function */
     int    _CType _FARFUNC (*pcollate) ( const char _FAR *__s1, const char _FAR *__s2 );
-					  
+					
     /* collation transform function */
     size_t _CType _FARFUNC (*ptransform) ( char _FAR *__s1, const char _FAR *__s2, size_t __n );
 
@@ -550,7 +551,7 @@ struct LOCALEOBJECT {
 
     /* LC_TIME */
     struct TimeCategory TimeCat;
-    
+
     /* LC_MESSAGES */
     struct MessagesCategory MessagesCat;
 
@@ -558,7 +559,7 @@ struct LOCALEOBJECT {
     struct UserCategory UserCat;
 
     struct LOCALEOBJECT _FAR *pNextLocale;
-    
+
 };
 
 struct path_components {
@@ -683,4 +684,3 @@ struct LOCALEOBJECT far * far _Cdecl __getpLocale(void);
 #endif /* _RTLDLL */
 
 #endif /* ___LOCALE_H */
-

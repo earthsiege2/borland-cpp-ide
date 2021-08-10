@@ -68,7 +68,7 @@ public:
         return associationClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Association";
         }

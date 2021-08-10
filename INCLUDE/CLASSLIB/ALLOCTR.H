@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.8  $
+//$Revision:   5.13  $
 //
 //----------------------------------------------------------------------------
 #if !defined( CLASSLIB_ALLOCTR_H )
@@ -17,6 +17,10 @@
 
 #if defined(BI_CLASSLIB_NO_po)
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //----------------------------------------------------------------------------
@@ -77,7 +81,7 @@ class _BIDSFARCLASS TSharedAllocator
 
 //----------------------------------------------------------------------------
 // template <class T, class Alloc> class TManaged_T
-// ~~~~~~~~  ~~~~~ ~  ~~~~~ ~~~~~  ~~~~~ ~~~~~~~~~~  
+// ~~~~~~~~  ~~~~~ ~  ~~~~~ ~~~~~  ~~~~~ ~~~~~~~~~~
 // Provides a parametrized wrapper for type T which uses a class-specific
 // operator new and operator delete supplied by Alloc.
 //
@@ -111,17 +115,22 @@ template <class T, class Alloc> class TManaged_T : private Alloc
 # define BI_Managed_T TManaged_T
 #endif
 
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
+
 //----------------------------------------------------------------------------
 // TSharedAllocator::operator new
 // TSharedAllocator::operator delete
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// When compiling for WINDOWS, allocates memory as GMEM_SHARE.
-// When compiling for DOS, uses the global operator new and operator delete.                                                      */
+// Normally uses the global operator new and delete for memory allocaiton.
+// Users of BIDS for Windows and DPMI DOS applications may wish to
+// use GlobalAlloc instead to allow allocation of huge blocks.
+// To do so, enable the BI_CLASSLIB_ALLOW_WINALLOC define below:
 //
-// Can't test for BI_PLAT_WIN16 only, because some memory models of the
-// classlib aren't built with Windows switches
+// #define BI_CLASSLIB_ALLOW_WINALLOC
 //
-#if defined(BI_PLAT_WIN16) // || defined(BI_PLAT_DOS)
+#if defined(BI_CLASSLIB_ALLOW_WINALLOC)
 
 #if !defined(SERVICES_WSYSINC_H)
 # include <services/wsysinc.h>
@@ -130,10 +139,18 @@ template <class T, class Alloc> class TManaged_T : private Alloc
 # include <dos.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 inline void _BIDSFARDATA* operator new(size_t sz, const TSharedAllocator&)
 {
   return GlobalLock(GlobalAlloc(GHND | GMEM_SHARE, sz));
 }
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 inline void TSharedAllocator::operator delete(void _BIDSFARDATA* ptr)
 {
@@ -144,10 +161,18 @@ inline void TSharedAllocator::operator delete(void _BIDSFARDATA* ptr)
 
 #if !defined(BI_NO_ARRAYNEW)
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 inline void _BIDSFARDATA* operator new [](size_t sz, const TSharedAllocator&)
 {
   return GlobalLock(GlobalAlloc(GHND | GMEM_DDESHARE, sz));
 }
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 inline void TSharedAllocator::operator delete [](void _BIDSFARDATA* ptr)
 {
@@ -160,10 +185,18 @@ inline void TSharedAllocator::operator delete [](void _BIDSFARDATA* ptr)
 
 #else   //#if defined(BI_PLAT_WIN16) || defined(BI_PLAT_DOS)
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 inline void _BIDSFARDATA* operator new(size_t sz, const TSharedAllocator&)
 {
   return ::operator new(sz);
 }
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 inline void TSharedAllocator::operator delete(void _BIDSFARDATA* ptr)
 {
@@ -172,10 +205,18 @@ inline void TSharedAllocator::operator delete(void _BIDSFARDATA* ptr)
 
 #if !defined(BI_NO_ARRAYNEW)
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 inline void _BIDSFARDATA* operator new [](size_t sz, const TSharedAllocator&)
 {
   return ::operator new [](sz);
 }
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 inline void TSharedAllocator::operator delete [](void _BIDSFARDATA* ptr)
 {

@@ -4,12 +4,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <complex.h>
 
@@ -18,7 +19,7 @@ inline long double sqr(double x) { return x*x;}
 
 #pragma warn -lvc
 
-complex & _RTLENTRY complex::operator/=(complex & z2)
+complex & _RTLENTRY complex::operator/=(const complex & z2)
 {
     long double sum_sqrs = norm(z2);
     *this *= conj(z2);
@@ -27,17 +28,17 @@ complex & _RTLENTRY complex::operator/=(complex & z2)
     return *this;
 }
 
-complex _RTLENTRY _EXPFUNC operator/(complex & z1, complex & z2)
+complex _RTLENTRY _EXPFUNC operator/(const complex & z1, const complex & z2)
 {
     return z1 * conj(z2) / norm(z2);
 }
 
-complex _RTLENTRY _EXPFUNC operator/(double re_val1, complex & z2)
+complex _RTLENTRY _EXPFUNC operator/(double re_val1, const complex & z2)
 {
     return re_val1 * conj(z2) / norm(z2);
 }
 
-complex _RTLENTRY _EXPFUNC acos(complex & z)
+complex _RTLENTRY _EXPFUNC acos(const complex & z)
 {
     // complex i(0,1);
     // return -i*log(z+i*sqrt(1-z*z));
@@ -48,12 +49,12 @@ complex _RTLENTRY _EXPFUNC acos(complex & z)
     return complex(arg(temp2), -log(abs(temp2)));
 }
 
-double _RTLENTRY _EXPFUNC arg(complex & z)
+double _RTLENTRY _EXPFUNC arg(const complex & z)
 {
     return z == complex_zero ? 0.0 : atan2(z.im, z.re);
 }
 
-complex _RTLENTRY _EXPFUNC asin(complex & z)
+complex _RTLENTRY _EXPFUNC asin(const complex & z)
 {
     // complex i(0,1);
     // return -i*log(i*z+sqrt(1-z*z));
@@ -65,7 +66,7 @@ complex _RTLENTRY _EXPFUNC asin(complex & z)
     return complex(arg(temp2), -log(abs(temp2)));
 }
 
-complex _RTLENTRY _EXPFUNC atan(complex & z)
+complex _RTLENTRY _EXPFUNC atan(const complex & z)
 {
     // complex i(0, 1);
     // return -0.5*i * log((1+i*z)/(1-i*z));
@@ -78,7 +79,7 @@ complex _RTLENTRY _EXPFUNC atan(complex & z)
     return complex(arg(temp)/2, -log(abs(temp))/2);
 }
 
-complex _RTLENTRY _EXPFUNC cos(complex & z)
+complex _RTLENTRY _EXPFUNC cos(const complex & z)
 {
     // complex i(0, 1);
     // return (exp(i*z) + exp(-i*z))/2;
@@ -88,7 +89,7 @@ complex _RTLENTRY _EXPFUNC cos(complex & z)
     return complex(cos(z.re)*(emb+eb)/2, sin(z.re)*(emb-eb)/2);
 }
 
-complex _RTLENTRY _EXPFUNC cosh(complex & z)
+complex _RTLENTRY _EXPFUNC cosh(const complex & z)
 {
     // return (exp(z) + exp(-z))/2;
     long double ea = exp(z.re);
@@ -96,24 +97,24 @@ complex _RTLENTRY _EXPFUNC cosh(complex & z)
     return complex(cos(z.im)*(ea + eainv)/2, sin(z.im)*(ea - eainv)/2);
 }
 
-complex _RTLENTRY _EXPFUNC exp(complex & z)
+complex _RTLENTRY _EXPFUNC exp(const complex & z)
 {
     return polar(exp(z.re),z.im);
 }
 
-complex _RTLENTRY _EXPFUNC log(complex & z)
+complex _RTLENTRY _EXPFUNC log(const complex & z)
 {
     // exception if z = 0
     return complex(log(abs(z)), arg(z));
 }
 
-complex _RTLENTRY _EXPFUNC log10(complex & z)
+complex _RTLENTRY _EXPFUNC log10(const complex & z)
 {
     // return log10e*log(z);
     return log(z) * M_LOG10E;
 }
 
-complex _RTLENTRY _EXPFUNC pow(complex & base, double expon)
+complex _RTLENTRY _EXPFUNC pow(const complex & base, double expon)
 {
     // return exp(expon*log(base));
 
@@ -121,7 +122,7 @@ complex _RTLENTRY _EXPFUNC pow(complex & base, double expon)
     return polar(pow(abs(base), expon), expon*arg(base));
 }
 
-complex _RTLENTRY _EXPFUNC pow(double base, complex & expon)
+complex _RTLENTRY _EXPFUNC pow(double base, const complex & expon)
 {
     // return exp(expon*log(base));
     if (base == 0 && real(expon) > 0) return complex_zero;
@@ -131,13 +132,13 @@ complex _RTLENTRY _EXPFUNC pow(double base, complex & expon)
     return exp(expon * complex(lnx,M_PI));
 }
 
-complex _RTLENTRY _EXPFUNC pow(complex & base, complex & expon)
+complex _RTLENTRY _EXPFUNC pow(const complex & base, const complex & expon)
 {
     if (base == complex_zero && real(expon) > 0) return complex_zero;
     return exp(expon * log(base));
 }
 
-complex _RTLENTRY _EXPFUNC sin(complex & z)
+complex _RTLENTRY _EXPFUNC sin(const complex & z)
 {
     // complex i(0,1);
     // return (exp(i*z) - exp(-i*z))/(2*i);
@@ -147,7 +148,7 @@ complex _RTLENTRY _EXPFUNC sin(complex & z)
     return complex(sin(z.re)*(emb+eb)/2, -0.5*cos(z.re)*(emb-eb));
 }
 
-complex _RTLENTRY _EXPFUNC sinh(complex & z)
+complex _RTLENTRY _EXPFUNC sinh(const complex & z)
 {
     // return (exp(z) - exp(-z))/2
     long double ea = exp(z.re);
@@ -155,13 +156,13 @@ complex _RTLENTRY _EXPFUNC sinh(complex & z)
     return complex(cos(z.im)*(ea - eainv)/2, sin(z.im)*(ea + eainv)/2);
 }
 
-complex _RTLENTRY _EXPFUNC sqrt(complex & z)
+complex _RTLENTRY _EXPFUNC sqrt(const complex & z)
 {
     // return pow(z, 0.5);
     return polar(sqrt(abs(z)), arg(z) / 2);
 }
 
-complex _RTLENTRY _EXPFUNC tan(complex & z)
+complex _RTLENTRY _EXPFUNC tan(const complex & z)
 {
     // return sin(z)/cos(z)
     double sina = sin(z.re);
@@ -174,7 +175,7 @@ complex _RTLENTRY _EXPFUNC tan(complex & z)
         / (sqr(cosa*eplus) + sqr(sina*emin));
 }
 
-complex _RTLENTRY _EXPFUNC tanh(complex & z)
+complex _RTLENTRY _EXPFUNC tanh(const complex & z)
 {
     // return sinh(z)/cosh(z);
     double sinb = sin(z.im);
@@ -191,7 +192,7 @@ complex _RTLENTRY _EXPFUNC tanh(complex & z)
 
 // Stream I/O function definitions
 
-ostream & _RTLENTRY _EXPFUNC operator<<(ostream & s, complex & z)
+ostream & _RTLENTRY _EXPFUNC operator<<(ostream & s, const complex & z)
 {
     return s << "(" << real(z) << ", " << imag(z) << ")";
 }

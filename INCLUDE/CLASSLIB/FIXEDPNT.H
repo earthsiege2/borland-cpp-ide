@@ -1,13 +1,17 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.1  $
+//$Revision:   5.4  $
 //
 // Simple fixed point class that maintains numbers as 16.16
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_FIXEDPNT_H)
 #define CLASSLIB_FIXEDPNT_H
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 //
 // class TFixedPoint
@@ -28,8 +32,8 @@ class TFixedPoint {
 
     // Bitwise logical operators
     //
-    TFixedPoint    operator <<(unsigned n) {return Value << char(n);}
-    TFixedPoint    operator >>(unsigned n) {return Value >> char(n);}
+    TFixedPoint    operator <<(unsigned n) {return Value << _TCHAR(n);}
+    TFixedPoint    operator >>(unsigned n) {return Value >> _TCHAR(n);}
 
     // Assignment operators
     //
@@ -94,5 +98,9 @@ class TFixedPoint {
 
     long  Value;
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #endif  // CLASSLIB_FIXEDPNT_H

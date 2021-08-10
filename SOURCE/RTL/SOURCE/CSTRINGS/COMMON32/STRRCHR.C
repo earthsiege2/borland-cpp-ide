@@ -2,37 +2,41 @@
  * filename - strrchr.c
  *
  * function(s)
- *        strrchr - scans a string for the last occurrence of a
- *          given character
+ *        strrchr, wcsrchr - scans an ASCII/wide-character string for the
+ *		last occurrence of a given ASCII/wide-character
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #pragma inline
 
 #include <string.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            strrchr - scans a string for the last occurrence of a
+Name            strrchr, wcsrchr - scans a string for the last occurrence of a
                     given character
 
 Usage           char *strrchr(const char *str, int c);
+		wchar_t *wcsrchr(const wchar_t *str, wchar_t c);
 
 Prototype in    string.h
 
-Description     strrchr scans a string in the reverse direction, looking for a
-                specific character. strrchr finds the last occurrence of the
-                character ch in the string str. The null-terminator is considered
+Description     strrchr and wcsrchr scan an ASCII/wide-character string in the
+		reverse direction, looking for a specific ASCII/wide-character.
+		strrchr and wcsrchr find the last occurrence of the ASCII/wide-
+		character ch in the string str. The null-terminator is considered
                 to be part of the string.
 
-Return value    strrchr returns a pointer to the last occurrence of the
+Return value    strrchr and wcsrchr return a pointer to the last occurrence of the
                 character ch. If ch does not occur in str, strrchr returns
                 NULL.
 
@@ -43,20 +47,22 @@ Return value    strrchr returns a pointer to the last occurrence of the
 #  define INTRINSIC
 #endif
 
-
-char * _RTLENTRYF _EXPFUNC strrchr( const char *p, int c )
+#ifndef _UNICODE
+_TCHAR * _RTLENTRY _EXPFUNC _tcsrchr( const _TCHAR *p, int c )
+#else
+_TCHAR * _RTLENTRY _EXPFUNC _tcsrchr( const _TCHAR *p, _TCHAR c )
+#endif
 {
 
 #ifdef INTRINSIC
     return __strrchr__(p, c);
 #else
-    char *q;
+    _TCHAR *q;
 
-for (q = (char *)(p + strlen(p)); *q != (char)c; q--)
+    for (q = (_TCHAR *)(p + _tcslen(p)); *q != (_TCHAR)c; q--)
         if (q == p)
             return (NULL);
     return (q);
 #endif
 
 }
-

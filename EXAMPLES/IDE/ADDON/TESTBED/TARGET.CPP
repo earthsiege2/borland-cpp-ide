@@ -3,7 +3,7 @@
   target.cpp
   Created: 10/26/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.15  $
+  $Revision:   1.18  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __AOEXPCH_H
@@ -52,7 +52,7 @@ const char * TargetTestA::GetName() {
 const char * TargetTestA::GetTestDescription( int testNum ) {
   switch ( testNum ) {
     case 1: 
-      return "Adds a Win32 GUI Application target.";
+      return "Adds various targets to the current project.";
     case 2: 
       return "Adding custom target Win32 OWL application.";
     case 3:
@@ -60,6 +60,24 @@ const char * TargetTestA::GetTestDescription( int testNum ) {
   }
   return "This test not implemented.";
 }  
+
+struct Target {
+  const char * nodeName;
+  TargetType type;
+  TargetPlatform platform;
+  int libs;
+  TargetModel model;
+};
+static Target targets[] = {
+  { "Exe-Win32-StdLibsDyn-Gui", TT_Application, TP_Win32, TL_StdLibs|TL_Dynamic, TM_Gui },
+  { "Exe-Win32-StdLibsDyn-Console", TT_Application, TP_Win32, TL_Bids|TL_Rtl|TL_Dynamic, TM_FsConsole },
+  { "Dll-Win32-StdLibsDyn-Gui", TT_Dll, TP_Win32, TL_StdLibs|TL_Dynamic, TM_Gui },
+  { "Dll-Win16-StdLibsDyn-Gui", TT_Dll, TP_Win16, TL_StdLibs|TL_Dynamic, TM_Gui },
+  { "Exe-DosOverlay-Large", TT_Application, TP_DosOverlay, TL_StdLibs|TL_Dynamic, TM_Large },
+  { "Exe-Dos16-StdLibsStatic-Small", TT_Application, TP_Dos16, TL_StdLibs|TL_Static, TM_Small },
+  { "Lib-Dos16-STdLibs-Medium", TT_StaticLib, TP_Dos16, TL_StdLibs, TM_Medium },
+  { NULL }
+};  
 //.............................................................................
 void TargetTestA::DoTest( int testNum ) {
   if ( !_targetServer ) {
@@ -68,21 +86,23 @@ void TargetTestA::DoTest( int testNum ) {
   }
   switch ( testNum ) {
     case 1: {
-      OutStr( "Adding target." );
-      ProjectNode node = 
-          _targetServer->TargetAdd( 
-              MakePolyString( "Test1.exe" ),  // node name
-              0,                     // parent node
-              TT_Application,           // target type
-              TP_Win32,               // target platform
-              (TargetStdLibs)(TL_StdLibs|TL_Dynamic), // libs
-              TM_Gui );               // target model
+      Target * t = targets;
+      while ( t->nodeName ) {
+        ProjectNode node = _targetServer->TargetAdd(
+              MakePolyString( t->nodeName ),
+              0,
+              t->type,
+              t->platform,
+              t->libs,
+              t->model );
+        if ( _targetServer->NodeIsTarget( node ) ) {
+          OutStr( FormatStr( "New target %s added.", t->nodeName ) );
+        }
+        else {
+          OutStr( FormatStr( "Problem creating target: %s.", t->nodeName ) );
+        }
               
-      if ( _targetServer->NodeIsTarget( node ) ) {
-        OutStr( "Target node added." );
-      }
-      else {
-        OutStr( "Apparent problem adding target node!" );
+        ++t;
       }
       break;
     }

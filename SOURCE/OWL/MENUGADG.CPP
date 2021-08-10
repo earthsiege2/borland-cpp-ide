@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Defines TMenuGadget
 //
@@ -12,6 +12,8 @@
 #if !defined(OWL_MENUGADG_H)
 # include <owl/menugadg.h>
 #endif
+
+OWL_DIAGINFO;
 
 const int MaxMenuTextLen = 512;
 

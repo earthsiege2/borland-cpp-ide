@@ -1,15 +1,28 @@
+#pragma option -b
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
-/* File created by MIDL compiler version 2.00.0102 */
-/* at Fri Apr 28 07:02:30 1995
+/* File created by MIDL compiler version 3.00.44 */
+/* at Fri Jul 12 18:09:25 1996
  */
+/* Compiler settings for unknwn.idl:
+    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
+    error checks: none
+*/
 //@@MIDL_FILE_HEADING(  )
+#pragma option -b.
 #include "rpc.h"
+#pragma option -b
+#pragma option -b.
 #include "rpcndr.h"
+#pragma option -b
 #ifndef COM_NO_WINDOWS_H
+#pragma option -b.
 #include "windows.h"
+#pragma option -b
+#pragma option -b.
 #include "ole2.h"
+#pragma option -b
 #endif /*COM_NO_WINDOWS_H*/
 
 #ifndef __unknwn_h__
@@ -34,29 +47,43 @@ typedef interface IClassFactory IClassFactory;
 
 
 /* header files for imported files */
+#pragma option -b.
 #include "wtypes.h"
+#pragma option -b
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+
+/****************************************
+ * Generated header for interface: __MIDL__intf_0000
+ * at Fri Jul 12 18:09:25 1996
+ * using MIDL 3.00.44
+ ****************************************/
+/* [local] */ 
+
+
+//+-------------------------------------------------------------------------
+//
+//  Microsoft Windows
+//  Copyright (C) Microsoft Corporation, 1992 - 1996.
+//
+//--------------------------------------------------------------------------
+
+
+extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 
 #ifndef __IUnknown_INTERFACE_DEFINED__
 #define __IUnknown_INTERFACE_DEFINED__
 
 /****************************************
  * Generated header for interface: IUnknown
- * at Fri Apr 28 07:02:30 1995
- * using MIDL 2.00.0102
+ * at Fri Jul 12 18:09:25 1996
+ * using MIDL 3.00.44
  ****************************************/
 /* [unique][uuid][object][local] */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//--------------------------------------------------------------------------
-			/* size is 4 */
 typedef /* [unique] */ IUnknown __RPC_FAR *LPUNKNOWN;
 
 //////////////////////////////////////////////////////////////////
@@ -71,32 +98,36 @@ EXTERN_C const IID IID_IUnknown;
     interface IUnknown
     {
     public:
-        virtual HRESULT __stdcall QueryInterface( 
+        BEGIN_INTERFACE
+        virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual ULONG __stdcall AddRef( void) = 0;
+        virtual ULONG STDMETHODCALLTYPE AddRef( void) = 0;
         
-        virtual ULONG __stdcall Release( void) = 0;
+        virtual ULONG STDMETHODCALLTYPE Release( void) = 0;
         
+        END_INTERFACE
     };
     
 #else 	/* C style interface */
 
     typedef struct IUnknownVtbl
     {
+        BEGIN_INTERFACE
         
-        HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUnknown __RPC_FAR * This,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
         
-        ULONG ( __stdcall __RPC_FAR *AddRef )( 
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUnknown __RPC_FAR * This);
         
-        ULONG ( __stdcall __RPC_FAR *Release )( 
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IUnknown __RPC_FAR * This);
         
+        END_INTERFACE
     } IUnknownVtbl;
 
     interface IUnknown
@@ -125,10 +156,10 @@ EXTERN_C const IID IID_IUnknown;
 
 
 
-HRESULT __stdcall IUnknown_QueryInterface_Proxy( 
+HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy( 
     IUnknown __RPC_FAR * This,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB IUnknown_QueryInterface_Stub(
@@ -138,7 +169,7 @@ void __RPC_STUB IUnknown_QueryInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-ULONG __stdcall IUnknown_AddRef_Proxy( 
+ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy( 
     IUnknown __RPC_FAR * This);
 
 
@@ -149,7 +180,7 @@ void __RPC_STUB IUnknown_AddRef_Stub(
     DWORD *_pdwStubPhase);
 
 
-ULONG __stdcall IUnknown_Release_Proxy( 
+ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy( 
     IUnknown __RPC_FAR * This);
 
 
@@ -169,13 +200,12 @@ void __RPC_STUB IUnknown_Release_Stub(
 
 /****************************************
  * Generated header for interface: IClassFactory
- * at Fri Apr 28 07:02:30 1995
- * using MIDL 2.00.0102
+ * at Fri Jul 12 18:09:25 1996
+ * using MIDL 3.00.44
  ****************************************/
 /* [unique][uuid][object] */ 
 
 
-			/* size is 4 */
 typedef /* [unique] */ IClassFactory __RPC_FAR *LPCLASSFACTORY;
 
 
@@ -186,12 +216,12 @@ EXTERN_C const IID IID_IClassFactory;
     interface IClassFactory : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT __stdcall CreateInstance( 
+        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateInstance( 
             /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual HRESULT __stdcall LockServer( 
+        virtual /* [local] */ HRESULT STDMETHODCALLTYPE LockServer( 
             /* [in] */ BOOL fLock) = 0;
         
     };
@@ -200,28 +230,30 @@ EXTERN_C const IID IID_IClassFactory;
 
     typedef struct IClassFactoryVtbl
     {
+        BEGIN_INTERFACE
         
-        HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IClassFactory __RPC_FAR * This,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
         
-        ULONG ( __stdcall __RPC_FAR *AddRef )( 
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IClassFactory __RPC_FAR * This);
         
-        ULONG ( __stdcall __RPC_FAR *Release )( 
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IClassFactory __RPC_FAR * This);
         
-        /* [local] */ HRESULT ( __stdcall __RPC_FAR *CreateInstance )( 
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateInstance )( 
             IClassFactory __RPC_FAR * This,
             /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
         
-        HRESULT ( __stdcall __RPC_FAR *LockServer )( 
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockServer )( 
             IClassFactory __RPC_FAR * This,
             /* [in] */ BOOL fLock);
         
+        END_INTERFACE
     } IClassFactoryVtbl;
 
     interface IClassFactory
@@ -257,7 +289,7 @@ EXTERN_C const IID IID_IClassFactory;
 
 
 
-/* [call_as] */ HRESULT __stdcall IClassFactory_RemoteCreateInstance_Proxy( 
+/* [call_as] */ HRESULT STDMETHODCALLTYPE IClassFactory_RemoteCreateInstance_Proxy( 
     IClassFactory __RPC_FAR * This,
     /* [in] */ REFIID riid,
     /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
@@ -270,12 +302,12 @@ void __RPC_STUB IClassFactory_RemoteCreateInstance_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT __stdcall IClassFactory_LockServer_Proxy( 
+/* [call_as] */ HRESULT __stdcall IClassFactory_RemoteLockServer_Proxy( 
     IClassFactory __RPC_FAR * This,
     /* [in] */ BOOL fLock);
 
 
-void __RPC_STUB IClassFactory_LockServer_Stub(
+void __RPC_STUB IClassFactory_RemoteLockServer_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -288,17 +320,26 @@ void __RPC_STUB IClassFactory_LockServer_Stub(
 
 /* Additional Prototypes for ALL interfaces */
 
-/* [local] */ HRESULT __stdcall IClassFactory_CreateInstance_Proxy( 
+/* [local] */ HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Proxy( 
     IClassFactory __RPC_FAR * This,
     /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
 
-/* [call_as] */ HRESULT __stdcall IClassFactory_CreateInstance_Stub( 
+/* [call_as] */ HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Stub( 
     IClassFactory __RPC_FAR * This,
     /* [in] */ REFIID riid,
     /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+
+/* [local] */ HRESULT STDMETHODCALLTYPE IClassFactory_LockServer_Proxy( 
+    IClassFactory __RPC_FAR * This,
+    /* [in] */ BOOL fLock);
+
+
+/* [call_as] */ HRESULT __stdcall IClassFactory_LockServer_Stub( 
+    IClassFactory __RPC_FAR * This,
+    /* [in] */ BOOL fLock);
 
 
 
@@ -309,3 +350,4 @@ void __RPC_STUB IClassFactory_LockServer_Stub(
 #endif
 
 #endif
+#pragma option -b.

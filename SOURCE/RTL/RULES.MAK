@@ -55,6 +55,9 @@ DEFDIR    = $(SRCBASE)\defs\$(OS)
 BCINCL    = $(BCROOT)\include
 INCLBASE  = $(RTLROOT)
 
+!if $d(MAGIC) && $d(DLL)
+EXTLIB=$(EXTDIR)\vcl.lib
+!endif
 #############################################################################
 # Guard against illegal variable combinations and obtain the operating      #
 # platform specific build rules.                                            #
@@ -131,6 +134,12 @@ INCLBASE  = $(RTLROOT)
 .cpp.obj :
     $(CC) {$< }
 
+.c.i :
+    $(CPP) -Sd {$< }
+
+.cpp.i :
+    $(CPP) -Sd {$< }
+
 .def.fst:
     $(IMPLIB) $&.lib $&.def
     fastlib $&.lib $&.fst
@@ -165,7 +174,7 @@ cfg : $(OBJDIR)\rtl.cfg
 # The rule for building a response file for library creation.               #
 #############################################################################
 librsp :
-    makersp "-+$(OBJDIR:\=\\)\\%s &\n" &&|
+    makersp "-+$(OBJDIR:\=\\)\\!s &\n" &&|
 	    $(OBJS)
 |   >> $(LIBDIR)\tlib.rsp
 
@@ -198,7 +207,7 @@ importrsp :
 # The rule for building the RTL DLL.                                        #
 #############################################################################
 dll : $(LIBDIR)\dll.rsp $(LIBDIR)\import.rsp $(OBJDIR)\version.res
-    $(LINK) @dll.rsp,$(DLLNAME),,$(IMPORT),$(DEFDIR)\$(DLLDEF),$(OBJDIR)\version
+    $(LINK) -j$(EXTDIR) @dll.rsp,$(DLLNAME),,$(IMPORT) $(EXTLIB),$(DEFDIR)\$(DLLDEF),$(OBJDIR)\version
     implib $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).lib $(DLLNAME).dll
     fastlib $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).lib $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
     $(TLIB) $(IMPLIBNAME)-+$(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
@@ -214,7 +223,7 @@ dll : $(LIBDIR)\dll.rsp $(LIBDIR)\import.rsp $(OBJDIR)\version.res
 # The crux of the build process is to build the required response files     #
 # either the static or dynamic RTLs.  As the process scans each directory,  #
 # the needed objs are built and placed into $(OBJDIR).  The rule below      #
-# makes this possible.                                                      #      
+# makes this possible.                                                      #
 #############################################################################
 ALL = $(OBJDIR)\rtl.cfg
 

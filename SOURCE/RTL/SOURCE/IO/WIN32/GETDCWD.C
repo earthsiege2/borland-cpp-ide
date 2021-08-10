@@ -3,18 +3,21 @@
  *
  * function(s)
  *        getdcwd - gets current directory for specified drive
+ *        _wgetdcwd - gets current directory for specified drive (wide-character)
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.6  $        */
 
 #include <ntbc.h>
 
+#include <winbase.h>
 #include <direct.h>
 #include <dos.h>
 #include <errno.h>
@@ -22,12 +25,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <_ostype.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            _getdcwd - gets working directory for specific drive
+Name            _getdcwd, _wgetdcwd - gets working directory for specific drive
 
 Usage           char *_getdcwd(int drive, char *buf, int n);
+                wchar_t *_wgetdcwd(int drive, wchar_t *buf, int n);
 
 Prototype in    dir.h
 
@@ -52,33 +57,33 @@ Return value    _getdcwd returns buf; on error, it returns NULL.
 
 *---------------------------------------------------------------------*/
 
-char * _RTLENTRY _EXPFUNC _getdcwd(int drive, char *bufP, int bufL)
+_TCHAR * _RTLENTRY _EXPFUNC _tgetdcwd(int drive, _TCHAR *bufP, int bufL)
 {
     int     size;
-    char    bufI[_MAX_DIR + 3];
-    char    envname[4];
-    char   *filename;
+    _TCHAR    bufI[_MAX_DIR + 3];
+    _TCHAR    envname[4];
+    _TCHAR   *filename;
     unsigned drivemask;
 
     /* If the default drive is specified, simply use GetCurrentDirectory.
      */
     if (drive == 0)
     {
-        size = (int)GetCurrentDirectory(sizeof(bufI), bufI);
+        size = (int)GetCurrentDirectory(sizeof(bufI)/sizeof(_TCHAR), bufI);
         if (size == 0 || size > bufL)
         {
             errno = ENOMEM;
-            return((char *)NULL);
+            return((_TCHAR *)NULL);
         }
     }
     else if (_ostype == _DOS32)          /* MS-DOS */
     {
         /* Use DOS call 47H to get the specified directory.
          */
-        bufI[0] = drive + 'A' - 1;
-        bufI[1] = ':';
-        bufI[2] = '\\';
-        bufI[3] = '\0';
+        bufI[0] = drive + _TEXT('A') - 1;
+        bufI[1] = _TEXT(':');
+        bufI[2] = _TEXT('\\');
+        bufI[3] = _TEXT('\0');
         _ESI = (long)bufI+3;
         _DL  = drive;
         _AH  = 0x47;
@@ -92,10 +97,11 @@ char * _RTLENTRY _EXPFUNC _getdcwd(int drive, char *bufP, int bufL)
         if (drivemask & (1 << (drive-1)))
         {
 	    /* Use envname to store drive spec */
-            envname[0] = drive + 'A' - 1;
-            envname[1] = ':';
-            envname[2] = '\0';
-	    GetFullPathName(envname, sizeof(bufI), bufI, &filename);
+            envname[0] = drive + _TEXT('A') - 1;
+            envname[1] = _TEXT(':');
+            envname[2] = _TEXT('.');
+            envname[3] = _TEXT('\0');
+	    GetFullPathName(envname, sizeof(bufI)/sizeof(_TCHAR), bufI, &filename);
         }
         else
             return NULL;
@@ -105,7 +111,7 @@ char * _RTLENTRY _EXPFUNC _getdcwd(int drive, char *bufP, int bufL)
     /* If the buffer length is too small to contain the directory name,
      * return an error.
      */
-    if (strlen(bufI) >= bufL)
+    if ((int)_tcslen(bufI) >= bufL)
     {
         errno = ERANGE;
         return  NULL;
@@ -121,6 +127,6 @@ char * _RTLENTRY _EXPFUNC _getdcwd(int drive, char *bufP, int bufL)
             return  NULL;
         }
     }
-    strcpy(bufP, bufI);
+    _tcscpy(bufP, bufI);
     return  bufP;
 }

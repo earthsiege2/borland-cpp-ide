@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.9  $
 //
 // Definition of OWL signatures for ObjectComponents messages
 //----------------------------------------------------------------------------
@@ -21,8 +21,12 @@
 #if !defined(OCF_OCVIEW_H)
 # include <ocf/ocview.h>
 #endif
-#if !defined(OCF_OCCTRL_H)
+#if !defined(OCF_OCCTRL_H) && defined(BI_PLAT_WIN32)
 # include <ocf/occtrl.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 //----------------------------------------------------------------------------
@@ -167,6 +171,10 @@ inline bool _CALLCNVN (T::*B_U_Sig(bool _CALLCNVN (T::*pmf)(uint)))(uint)
   return pmf;
 }
 
+// Signature templates used to validate OCX-events handlers
+//
+#if defined(BI_PLAT_WIN32)
+
 template <class T>
 inline bool _CALLCNVN (T::*B_OC_PE_Sig(bool _CALLCNVN (T::*pmf)(TCtrlEvent*)))(TCtrlEvent*)
 {
@@ -208,6 +216,12 @@ inline bool _CALLCNVN (T::*B_OC_PEE_Sig(bool _CALLCNVN (T::*pmf)(TCtrlErrorEvent
 {
   return pmf;
 }
+
+#endif    // BI_PLAT_WIN32
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Event response table macros for ObjectConnections events
@@ -387,6 +401,10 @@ inline bool _CALLCNVN (T::*B_OC_PEE_Sig(bool _CALLCNVN (T::*pmf)(TCtrlErrorEvent
    (TMyPMF)B_U_Sig(&TMyClass::EvOcViewDoVerb)}
 
 
+// OCX Container event/dispatch macros
+//
+#if defined(BI_PLAT_WIN32)
+
 // Standard Ambient properties - Get support
 //
 #define EV_OC_AMBIENT_GETBACKCOLOR\
@@ -555,4 +573,5 @@ inline bool _CALLCNVN (T::*B_OC_PEE_Sig(bool _CALLCNVN (T::*pmf)(TCtrlErrorEvent
   {WM_OCEVENT, OC_CTRLEVENT_CUSTOMEVENT, (TAnyDispatcher)::B_LPARAM_Dispatch,\
    (TMyPMF)B_OC_PCE_Sig(&TMyClass::EvOcCtrlCustomEvent)}
 
-#endif
+#endif    //  BI_PLAT_WIN32
+#endif    //  OWL_OCFEVENT_H

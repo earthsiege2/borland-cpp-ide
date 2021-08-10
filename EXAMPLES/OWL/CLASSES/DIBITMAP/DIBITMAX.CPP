@@ -94,7 +94,7 @@ void TSpeedBall::Clear(TDC& dc)
 // ~~~~~ ~~~~~~~~~~~
 class TSpeedCourt {
   public:
-    TSpeedCourt(TDib& ballDib, int numBalls = 16);
+    TSpeedCourt(const TDib& ballDib, int numBalls = 16);
    ~TSpeedCourt();
 
     void Update(TDC& dc);
@@ -120,7 +120,7 @@ class TSpeedCourt {
 //
 //
 //
-TSpeedCourt::TSpeedCourt(TDib& ballDib, int numBalls)
+TSpeedCourt::TSpeedCourt(const TDib& ballDib, int numBalls)
 :
   BallCount(numBalls), Balls(0), Palette(0), DisplayDC(0), DisplayBitmap(0)
 {

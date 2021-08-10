@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1994 by Borland International
-#   Tutorial application -- makefile.
-#
+# OCF - (c) Copyright 1994, 1996 by Borland International
+# 
+# Tutorial application -- makefile.
 #-----------------------------------------------------------------------------
 MODELS = ldf
 

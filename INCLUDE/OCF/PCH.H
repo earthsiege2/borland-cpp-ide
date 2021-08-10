@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.4  $
 //
 // Include for OC, gets common headers when precompiled headers are enabled.
 //----------------------------------------------------------------------------

@@ -6,15 +6,18 @@
  *        _strtold - converts string to a long double value
  *        Get      - gets a character from a string
  *        UnGet    - ungets a character from a string
+ *        wcstod   - converts wide-character string to a double value
+ *        _wcstold - converts wide-character string to a long double value
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <errno.h>
 #include <_scanf.h>
@@ -24,12 +27,15 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            Get - gets a character from a string
+Name            Get - gets a character from a (wide-character)string
 
 Usage           int Get (char **strPP)
+                int Get (wchar_t **strPP)
 
 Description     returns the next character in a string
 
@@ -38,7 +44,7 @@ Return value    the next character in a string.  if that character is
 
 *---------------------------------------------------------------------*/
 
-static  int  Get (char **strPP)
+static  int  Get (_TCHAR **strPP)
 {
     unsigned    c;
 
@@ -47,9 +53,10 @@ static  int  Get (char **strPP)
 
 /*---------------------------------------------------------------------*
 
-Name            UnGet - ungets a character from a string
+Name            UnGet  - ungets a character from a (wide-character) string
 
 Usage           void UnGet (char c, char **strPP)
+                void UnGet (wchar_t c, char **strPP)
 
 Description     decrements a string pointer
 
@@ -59,7 +66,7 @@ Return value    Nothing
 
 #pragma warn -par
 
-static  void  UnGet (char c, char **strPP)
+static  void  UnGet (_TCHAR c, _TCHAR **strPP)
 {
     --(*strPP);         /* ignore c, we don't allow the string to change */
 }
@@ -70,9 +77,13 @@ static  void  UnGet (char c, char **strPP)
 
 Name            strtod   - converts string to a double value
                 _strtold - converts string to a long double value
+		wcstod   - converts wide-character string to a double value
+		_wcstold - converts wide-character string to a long double value
 
 Usage           double strtod(const char *strP, char **suffixPP);
                 long double _strtold(const char *strP, char **suffixPP);
+                double wcstod(const wchar_t *strP, wchar_t **suffixPP);
+                long double _wcstold(const wchar_t *strP, wchar_t **suffixPP);
 
 Prototype in    stdlib.h
 
@@ -108,13 +119,13 @@ Return value    strtod and _strtold return the converted value of the input
 
 *--------------------------------------------------------------------------*/
 
-long double _RTLENTRY _EXPFUNC _strtold (const char *strP, char **suffixPP)
+long double _RTLENTRY _EXPFUNC _tcstold (const _TCHAR *strP, _TCHAR **suffixPP)
 {
         int     charCt = 0;
         int     status;
         long double  result;
 
-         _scantod (
+         _scanttod (
                 &result,
                 (int  (*) (void *))Get,
                 (void (*) (int, void *))UnGet,
@@ -130,16 +141,16 @@ long double _RTLENTRY _EXPFUNC _strtold (const char *strP, char **suffixPP)
                 errno = ERANGE;
 
         if (suffixPP != NULL)
-                *suffixPP = (char *)strP;
+                *suffixPP = (_TCHAR *)strP;
 
         return (result);
 }
 
-double _RTLENTRY _EXPFUNC strtod (const char *strP, char **suffixPP)
+double _RTLENTRY _EXPFUNC _tcstod (const _TCHAR *strP, _TCHAR **suffixPP)
 {
         /*
           __ldtrunc sets 'errno' to ERANGE if the result
           is to become 0 or HUGE_VAL.
         */
-        return __ldtrunc(DBL, _strtold(strP, suffixPP), HUGE_VAL);
+        return __ldtrunc(DBL, _tcstold(strP, suffixPP), HUGE_VAL);
 }

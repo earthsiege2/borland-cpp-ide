@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
 
         include RULES.ASI
 
@@ -50,7 +51,7 @@ Func@   _qmul10, public, _RTLENTRY, <pointer quadint>, <int digit>
         mov     eax, [esi+4]            ; multiply high 32 bits
         mul     ecx
         add     eax, edi                ; add overflow from low 32 bits
-        adc     edx, 0    
+        adc     edx, 0
         mov     [esi+4], eax
         mov     eax, edx                ; return overflow word
 

@@ -158,3 +158,4 @@ void TMemoryStream::GetSize( int32& s )
 	if (stream)
 		s = stream->get_Size();
 }
+

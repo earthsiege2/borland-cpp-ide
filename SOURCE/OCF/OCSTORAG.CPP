@@ -1,15 +1,24 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.3  $
+// $Revision:   2.7  $
 //
 //   Implementation of TOcStorage & TOcStream IStorage/IStream encapsulation
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/ocobject.h>
-#include <ocf/ocstorag.h>
-#include <winsys/geometry.h>
+#if !defined(OCF_OCOBJECT_H)
+# include <ocf/ocobject.h>
+#endif
+#if !defined(OCF_OCSTORAG_H)
+# include <ocf/ocstorag.h>
+#endif
+#if !defined(OCF_OCBOCOLE_H)
+# include <ocf/ocbocole.h>
+#endif
+#if !defined(WINSYS_GEOMETRY_H)
+# include <winsys/geometry.h>
+#endif
 #include <iostream.h>
 
 DIAG_DEFINE_GROUP(OcExcept, true, 1);
@@ -48,7 +57,7 @@ void TXObjComp::Throw()
 {
   THROW( *this );
 }
- 
+
 void TXObjComp::Check(HRESULT stat, TError err, const char far* arg)
 {
   if (FAILED(stat))
@@ -272,7 +281,7 @@ TOcStorage::TOcStorage(const char far* fileName, bool create, uint32 mode)
     mode = (mode & ~STGM_SHARE_MASK) | STGM_SHARE_DENY_WRITE;
   else
     mode = (mode & ~STGM_SHARE_MASK) | STGM_SHARE_DENY_NONE;
-  
+
   HRESULT hr;
   if (create) {
     mode |= STGM_CREATE;
@@ -300,7 +309,7 @@ TOcStorage::TOcStorage(ILockBytes far* lkbyt, bool create, uint32 mode)
     mode = (mode & ~STGM_SHARE_MASK) | STGM_SHARE_DENY_WRITE;
   else
     mode = (mode & ~STGM_SHARE_MASK) | STGM_SHARE_DENY_NONE;
-  
+
   HRESULT hr;
   if (create) {
     mode |= STGM_CREATE;

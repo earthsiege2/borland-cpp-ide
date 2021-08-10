@@ -6,11 +6,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;
-;       C/C++ Run Time Library - Version 7.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1992, 1996 by Borland International
+;       Copyright (c) 1992, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
 
 	INCLUDE RULES.ASI
 
@@ -223,7 +224,7 @@ _GetSubstituteString PROC NOLANGUAGE NEAR
 
 	LES_	di, DPTR_ ES:[ ( LOCALEOBJECT PTR BX ).pSubstitutionTbl ]
 
-	xor	bx, bx			; table index 
+	xor	bx, bx			; table index
 	xor	cx, cx			
 	
 	; al still has valid character
@@ -259,7 +260,7 @@ _GetSubstituteString PROC NOLANGUAGE NEAR
 @@nextelement:
 	add	di, SIZE SUBSTITUTION	; point to next element
 	xor	cx, cx			; new count
-	xor	bx, bx			; new table index 
+	xor	bx, bx			; new table index
 	jmp	SHORT @@eachelement
 
 
@@ -335,7 +336,7 @@ _GetCompressLevelWeight PROC NOLANGUAGE NEAR
 
 	LES_	di, DPTR_ ES:[ ( LOCALEOBJECT PTR BX ).pCompressTbl ]
 
-	xor	bx, bx			; table index 
+	xor	bx, bx			; table index
 	xor	cx, cx			
 
 	dec	si			; account for increment
@@ -374,7 +375,7 @@ _GetCompressLevelWeight PROC NOLANGUAGE NEAR
 
 	add	di, SIZE COMPRESSION	; point to next element
 	xor	cx, cx			; new count
-	xor	bx, bx			; new table index 
+	xor	bx, bx			; new table index
 	jmp	SHORT @@eachelement
 
 @@havestringmatch:
@@ -460,9 +461,9 @@ _GetExpansionString PROC NOLANGUAGE NEAR
 
 	push	cx
 
-	; 
+	;
 	; point to level weights
-	; 
+	;
 
 	mov	cx, [ WORD PTR LEVEL ]
 	jcxz	@@havelevel
@@ -585,4 +586,3 @@ _GetNextExpansionWeight ENDP
 Code_EndS@
                END ; end module collate.asm
 
-

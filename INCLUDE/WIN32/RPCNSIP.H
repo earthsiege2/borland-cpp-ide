@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1992-1995 Microsoft Corporation
+Copyright (c) 1992-1996 Microsoft Corporation
 
 Module Name:
 
@@ -15,6 +15,7 @@ Abstract:
 
 #ifndef __RPCNSIP_H__
 #define __RPCNSIP_H__
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,4 +70,5 @@ I_NsClientBindDone(
 }
 #endif
 
+#pragma option -b.
 #endif /* __RPCNSIP_H__ */

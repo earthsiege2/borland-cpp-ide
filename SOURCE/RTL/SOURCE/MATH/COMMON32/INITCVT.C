@@ -3,12 +3,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1992, 1996 by Borland International
+ *      Copyright (c) 1992, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 /* MSC generates an external reference to __fltused when floating point
  * is used.  BCC generates a reference to __turboFloat when the address
@@ -17,6 +18,7 @@
  * conversion and scanning initialization functions to be linked.
  */
 
+#include <ntbc.h>
 #include <_defs.h>
 
 #if 0
@@ -29,5 +31,16 @@ int _floatconvert = 0;              /* satisfy #pragma extref _floatconvert */
 extern void _cvt_init(void);        /* printf() floating point conversion */
 extern void _scan_init(void);       /* scanf() floating point conversion */
 
-#pragma startup _cvt_init  10       /* _cvt_init to be called at startup */
-#pragma startup _scan_init 10       /* _scan_init to be called at startup */
+extern void _cvt_initw(void);       /* printf() floating point conversion */
+extern void _scan_initw(void);      /* scanf() floating point conversion */
+
+/*
+   Since the user is allowed to call both wide and narrow versions of the
+   printf/scanf series of functions at the same time, we must init both of
+   the converters to avoid the "printf floating point formats not linked..."
+   error message.
+*/
+#pragma startup _cvt_init   10      /* _cvt_init to be called at startup */
+#pragma startup _scan_init  10      /* _scan_init to be called at startup */
+#pragma startup _cvt_initw  10      /* _cvt_initw to be called at startup */
+#pragma startup _scan_initw 10      /* _scan_initw to be called at startup */

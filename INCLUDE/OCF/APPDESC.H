@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//   TAppDescriptor - OLE application descriptor definitions
+// $Revision:   2.10  $
+//
+// TAppDescriptor - OLE application descriptor definitions
 //----------------------------------------------------------------------------
 #if !defined(OCF_APPDESC_H)
 #define OCF_APPDESC_H
@@ -11,19 +13,36 @@
 # include <ocf/autodefs.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
+class _WSYSCLASS  TRegLink;
+
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
 //----------------------------------------------------------------------------
 // TAppDescriptor - application registration and browsing facilities
 //
 
-class         TServedObjectCreator;
-class _ICLASS TServedObject;
-class _ICLASS TTypeLibrary;
-class _ICLASS TCoClassInfo;
-class _WSYSCLASS TRegLink;
+class             TServedObjectCreator;
+class _ICLASS     TServedObject;
+class _ICLASS     TTypeLibrary;
+class _ICLASS     TCoClassInfo;
 
+// Factory routine which creates OLE object
+//
 typedef IUnknown*
 (*TComponentFactory)(IUnknown* outer, uint32 options, uint32 id = 0);
 
+//
+//
 class _ICLASS TAppDescriptor : public IClassFactory {
   public:
     TAppDescriptor(TRegList& regInfo, TComponentFactory callback,
@@ -31,50 +50,55 @@ class _ICLASS TAppDescriptor : public IClassFactory {
                    const TRegLink* regLink = 0);
    ~TAppDescriptor();
 
-    operator IUnknown*() {return this;}
-    bool IsAutomated() const {return ClassCount > 0;}
-    TComponentFactory GetFactory() const {return FactoryCallback;}
-    const TRegLink* GetRegLinkHead() const {return LinkHead;}
+    operator          IUnknown*()            {return this;}
+    bool              IsAutomated() const    {return ClassCount > 0;}
+    TComponentFactory GetFactory() const     {return FactoryCallback;}
+    const TRegLink*   GetRegLinkHead() const {return LinkHead;}
 
     // Command line options accessors
     //
-    bool IsOptionSet(uint32 option) const {return ToBool(Options&option);}
-    uint32 GetOptions() const {return Options;}
-    void SetOption(uint32 bit, bool state) {if (state) Options |= bit; else Options &= ~bit;}
-    void ProcessCmdLine(string& cmdLine);
-    void SetLangId(TLangId prevLang, const char* langIdStr);
+    void          ProcessCmdLine(string& cmdLine);
+    void          SetLangId(TLangId prevLang, const char* langIdStr);
+    bool          IsOptionSet(uint32 option) const  {return (Options & option) != 0;}
+    uint32        GetOptions() const                {return Options;}
+    void          SetOption(uint32 bit, bool state) {
+      if (state)
+        Options |= bit;
+      else
+        Options &= ~bit;
+    }
 
     // Registration management functions
     //
-    void RegisterClass();
-    void UnregisterClass();
-    bool RegisterObject(TObjectDescriptor app);
-    void UnregisterObject();
-    TClassId GetLinkGuid(int index);
-    void RegisterServer(TLangId lang, const char* regFile = 0);
-    void UnregisterServer(TLangId lang = 0, const char* = 0);
-    void MakeTypeLib(TLangId lang, const char* = 0);
+    void          RegisterClass();
+    void          UnregisterClass();
+    bool          RegisterObject(TObjectDescriptor app);
+    void          UnregisterObject();
+    TClassId      GetLinkGuid(int index);
+    void          RegisterServer(TLangId lang, const char* regFile = 0);
+    void          UnregisterServer(TLangId lang = 0, const char* = 0);
+    void          MakeTypeLib(TLangId lang, const char* = 0);
 
     // TAutoClass management functions
     //
-    void MergeAutoClasses();
+    void          MergeAutoClasses();
 
     // TypeLibrary management functions
     //
-    ITypeLib*   GetTypeLibrary();  // caller MUST do a Release()
-    ITypeInfo*  CreateITypeInfo(TAutoClass& cls);  // caller must release
-    int         GetClassCount() {return ClassCount;}
-    TLangId     GetAppLang() {return AppLang;}
-    int         GetClassIndex(TAutoClass* cls);  // returns -1 if not found
-    bool        GetClassId(TAutoClass* cls, GUID& retId);
-    TAutoClass* GetAutoClass(unsigned index);
-    TAutoClass* GetAutoClass(const GUID far& clsid);
-    TRegLink*   GetRegLink(const GUID far& clsid);
-    uint16      GetVersionField(uint field);
-    const char* GetAppName(TLangId lang) {return AppName->Translate(lang);}
-    const char* GetAppDoc(TLangId lang)  {return AppDoc->Translate(lang);}
-    const char* GetHelpFile(TLangId lang){return HelpFile->Translate(lang);}
-    void        WriteTypeLibrary(TLangId lang, const char far* file);
+    ITypeLib*     GetTypeLibrary();                  //NOTE: Caller MUST do a Release()
+    ITypeInfo*    CreateITypeInfo(TAutoClass& cls);  //NOTE: Caller MUST do a Release()
+    int           GetClassCount()      {return ClassCount;}
+    TLangId       GetAppLang()         {return AppLang;}
+    int           GetClassIndex(TAutoClass* cls);  // returns -1 if not found
+    bool          GetClassId(TAutoClass* cls, GUID& retId);
+    TAutoClass*   GetAutoClass(unsigned index);
+    TAutoClass*   GetAutoClass(const GUID& clsid);
+    TRegLink*     GetRegLink(const GUID& clsid);
+    uint16        GetVersionField(uint field);
+    const char*   GetAppName(TLangId lang) {return AppName->Translate(lang);}
+    const char*   GetAppDoc(TLangId lang)  {return AppDoc->Translate(lang);}
+    const char*   GetHelpFile(TLangId lang){return HelpFile->Translate(lang);}
+    void          WriteTypeLibrary(TLangId lang, const char* file);
 
     // TServedObject management functions
     //
@@ -88,53 +112,53 @@ class _ICLASS TAppDescriptor : public IClassFactory {
                                     IUnknown* outer=0);
     TServedObject* FindServed(const void far* mostDerivedObj);
     TServedObject* FindServed(TObjectDescriptor& objDesc);
-    void AddServed(TServedObject& obj);
-    void RemoveServed(TServedObject& obj);
-    void InvalidateObject(const void far* obj);
-    void ReleaseObject(const void far* obj);
-    bool IsBound() {return static_cast<bool>(ServedList != 0 || LockCount != 0);}
-    bool IsActiveObject(TServedObject* obj) {return ActiveObject == obj;}
-    void FlushServed();
+    void           AddServed(TServedObject& obj);
+    void           RemoveServed(TServedObject& obj);
+    void           InvalidateObject(const void* obj);
+    void           ReleaseObject(const void far* obj);
+    bool           IsBound() {return static_cast<bool>(ServedList != 0 || LockCount != 0);}
+    bool           IsActiveObject(TServedObject* obj) {return ActiveObject == obj;}
+    void           FlushServed();
 
     TBaseClassId  AppClassId;
 
   private:
     void           Init(IMalloc* alloc = 0);  // called only from constructor
-    TServedObject* ServedList;   // list of outstanding IDispatch/ITypeInfo objs
-    TServedObject* ActiveObject;   // currently registered active object
+    TServedObject* ServedList;     // List of outstanding IDispatch/ITypeInfo objs
+    TServedObject* ActiveObject;   // Currently registered active object
     TServedObjectCreator* Creator; // Served Object creator class
-    TRegList&      RegInfo;        // registration list for application
-    const char*    Version;        // library version, stored as text string
-    TLocaleString* AppProgId;      // progid of application
-    TLocaleString* AppName;        // name of application, localizable
-    TLocaleString* AppDoc;         // description of application, localizable
-    TLocaleString* HelpFile;       // name of help file, localizable
+    TRegList&      RegInfo;        // Registration list for application
+    const char*    Version;        // Library version, stored as text string
+    TLocaleString* AppProgId;      // Progid of application
+    TLocaleString* AppName;        // Name of application, localizable
+    TLocaleString* AppDoc;         // Description of application, localizable
+    TLocaleString* HelpFile;       // Name of help file, localizable
     TAutoClass::TAutoClassRef*
-                   ClassList;      // array of automated class references
-    int            ClassCount;     // count of classes, set when first scanned
+                   ClassList;      // Array of automated class references
+    int            ClassCount;     // Count of classes, set when first scanned
     int            DebugGuidOffset;// GUID offset for /Debug registration
     int            LibGuidOffset;  // GUID offset for the app library
     int            LinkGuidOffset; // GUID offset for the first doc template
     int            LinkGuidCount;  // count of GUIDs assigned to doc templates
-    TLangId        AppLang;        // language Id for this running instance
-    TTypeLibrary*  TypeLib;        // type library, only while referenced
-    const TRegLink* LinkHead;      // reglink list of reglists to register
+    TLangId        AppLang;        // Language Id for this running instance
+    TTypeLibrary*  TypeLib;        // Type library, only while referenced
+    const TRegLink* LinkHead;      // Reglink list of reglists to register
     TComponentFactory FactoryCallback;  // callback to create/destroy instance
     HINSTANCE      AppInstance;
     unsigned long  RefCnt;
     unsigned       LockCount;
-    unsigned long  RegClassHdl;    // for unregistration
-    unsigned long  RegObjectHdl;   // for unregistration
+    unsigned long  RegClassHdl;    // For unregistration
+    unsigned long  RegObjectHdl;   // For unregistration
     uint32         Options;        // Command line option bit flags
 
     // For EXE or DLL component main, provide direct access for destructors
     // For auxilliary DLLs, a table must be maintained of AppDesc vs. task Id
     //
-    static TAppDescriptor* This; // set by constructor to component instance
+    static TAppDescriptor* This;   // set by constructor to component instance
 
     // IUnknown interface
     //
-    HRESULT _IFUNC QueryInterface(const IID far& iid, void far* far* retIface);
+    HRESULT       _IFUNC QueryInterface(const IID far& iid, void** retIface);
     unsigned long _IFUNC AddRef();
     unsigned long _IFUNC Release();
 
@@ -142,8 +166,7 @@ class _ICLASS TAppDescriptor : public IClassFactory {
 
     // IClassFactory interface
     //
-    HRESULT _IFUNC CreateInstance(IUnknown* outer, const IID FAR& iid,
-                                  void far* far* retObject);
+    HRESULT _IFUNC CreateInstance(IUnknown* outer, const IID FAR& iid, void** retObject);
     HRESULT _IFUNC LockServer(int lock);
 
   friend class _ICLASS TTypeLibrary;
@@ -155,57 +178,59 @@ class _ICLASS TAppDescriptor : public IClassFactory {
 // For EXE and DLL component main module, provide direct access to descriptor
 // For auxilliary DLLs, must use table of app descriptor vs. task Id
 //
-inline TAppDescriptor* GetAppDescriptor() {return TAppDescriptor::This;}
+inline TAppDescriptor* GetAppDescriptor() {
+  return TAppDescriptor::This;
+}
 
 class _ICLASS TTypeLibrary : public ITypeLib {
   public:
     TTypeLibrary(TAppDescriptor& appDesc, TLangId lang);
    ~TTypeLibrary();
 
-//    operator IUnknown&() {return *this;}  
 
-    ITypeInfo*  CreateCoClassInfo();// component typeinfo, caller must release
+    // Component typeinfo - NOTE: Caller MUST Release()
+    //
+    ITypeInfo*      CreateCoClassInfo();
 
   private:
     TAppDescriptor& AppDesc;
     unsigned long   RefCnt;
     TLangId         Lang;
-    uint16          CoClassFlags;      // type flags combined from autoclasses
-    int             CoClassImplCount;  // number of interfaces in coclass
+    uint16          CoClassFlags;      // Type flags combined from autoclasses
+    int             CoClassImplCount;  // Number of interfaces in coclass
 
     // IUnknown interface
     //
-    HRESULT _IFUNC QueryInterface(const IID far& iid, void far* far* retIface);
+    HRESULT       _IFUNC QueryInterface(const IID far& iid, void** retIface);
     unsigned long _IFUNC AddRef();
     unsigned long _IFUNC Release();
 
     // ITypeLib interface
     //
     unsigned int _IFUNC GetTypeInfoCount();
-    HRESULT _IFUNC GetTypeInfo(unsigned index, ITypeInfo* far* retInfo);
-    HRESULT _IFUNC GetTypeInfoType(unsigned index, TYPEKIND far* retKind);
-    HRESULT _IFUNC GetTypeInfoOfGuid(const GUID far& guid,
-                                     ITypeInfo* far* retInfo);
-    HRESULT _IFUNC GetLibAttr(TLIBATTR far* far* retAttr);
-    HRESULT _IFUNC GetTypeComp(ITypeComp* far* retComp);
-    HRESULT _IFUNC GetDocumentation(int index, BSTR far* retName,
-                                    BSTR far* retDoc,
-                                    unsigned long far* retHelpContext,
-                                    BSTR far* retHelpFile);
-    HRESULT _IFUNC IsName(OLECHAR far* nameBuf, unsigned long hashVal,
-                          int far* retFound);
-    HRESULT _IFUNC FindName(OLECHAR far* nameBuf, unsigned long lHashVal,
-                            ITypeInfo* far* retInfo, MEMBERID far* retId,
-                            unsigned short far* inoutCount);
-    void    _IFUNC ReleaseTLibAttr(TLIBATTR far* attr);
+    HRESULT      _IFUNC GetTypeInfo(unsigned index, ITypeInfo** retInfo);
+    HRESULT      _IFUNC GetTypeInfoType(unsigned index, TYPEKIND far* retKind);
+    HRESULT      _IFUNC GetTypeInfoOfGuid(const GUID& guid, ITypeInfo** retInfo);
+    HRESULT      _IFUNC GetLibAttr(TLIBATTR** retAttr);
+    HRESULT      _IFUNC GetTypeComp(ITypeComp** retComp);
+    HRESULT      _IFUNC GetDocumentation(int index, BSTR* retName,
+                                         BSTR* retDoc,
+                                         unsigned long* retHelpContext,
+                                         BSTR* retHelpFile);
+    HRESULT      _IFUNC IsName(OLECHAR* nameBuf, unsigned long hashVal,
+                               int* retFound);
+    HRESULT      _IFUNC FindName(OLECHAR* nameBuf, unsigned long lHashVal,
+                                 ITypeInfo** retInfo, MEMBERID* retId,
+                                 unsigned short far* inoutCount);
+    void         _IFUNC ReleaseTLibAttr(TLIBATTR* attr);
 };
+
 
 class _ICLASS TCoClassInfo : public ITypeInfo {
   public:
     TCoClassInfo(TAppDescriptor& appDesc, uint16 typeFlags, int implCount);
    ~TCoClassInfo();
 
-//    operator IUnknown&() {return *this;}  
 
   private:
     TAppDescriptor& AppDesc;
@@ -218,15 +243,15 @@ class _ICLASS TCoClassInfo : public ITypeInfo {
 
     // IUnknown interface
     //
-    HRESULT _IFUNC QueryInterface(const IID far& iid, void far* far* retIface);
+    HRESULT       _IFUNC QueryInterface(const IID far& iid, void** retIface);
     unsigned long _IFUNC AddRef();
     unsigned long _IFUNC Release();
 
     // ITypeInfo implementation
     //
-    HRESULT _IFUNC GetTypeAttr(TYPEATTR far* far* pptypeattr);
-    HRESULT _IFUNC GetTypeComp(ITypeComp* far* pptcomp);
-    HRESULT _IFUNC GetFuncDesc(unsigned int index, FUNCDESC far* far* ppfuncdesc);
+    HRESULT _IFUNC GetTypeAttr(TYPEATTR** pptypeattr);
+    HRESULT _IFUNC GetTypeComp(ITypeComp** pptcomp);
+    HRESULT _IFUNC GetFuncDesc(unsigned int index, FUNCDESC** ppfuncdesc);
     HRESULT _IFUNC GetVarDesc(unsigned int index, VARDESC far* far* ppvardesc);
     HRESULT _IFUNC GetNames(MEMBERID memid, BSTR far* rgbstrNames,
                             unsigned int cMaxNames,
@@ -269,13 +294,13 @@ class _ICLASS TCoClassInfo : public ITypeInfo {
 // external entry points for DLL servers
 //
 typedef HRESULT STDAPICALLTYPE (*TDllCanUnloadNow)();
-typedef HRESULT STDAPICALLTYPE (*TDllGetClassObject)(const GUID far& clsid,
-                                                     const GUID far& iid,
-                                                     void far* far* retObj);
+typedef HRESULT STDAPICALLTYPE (*TDllGetClassObject)(const GUID& clsid, const GUID& iid, void** retObj);
 typedef HRESULT STDAPICALLTYPE (*TDllRegisterServer)();
 typedef HRESULT STDAPICALLTYPE (*TDllUnregisterServer)();
-typedef HRESULT STDAPICALLTYPE (*TDllRegisterCommand)(const char far* cmdLine);
+typedef HRESULT STDAPICALLTYPE (*TDllRegisterCommand)(const char* cmdLine);
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 #endif // OCF_APPDESC_H
-
-

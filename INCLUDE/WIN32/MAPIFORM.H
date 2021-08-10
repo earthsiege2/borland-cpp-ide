@@ -4,23 +4,34 @@
  *  Declarations of interfaces for clients and providers of MAPI
  *  forms and form registries.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef MAPIFORM_H
 #define MAPIFORM_H
+#pragma option -b
 
 /* Include common MAPI header files if they haven't been already. */
 
 #ifndef MAPIDEFS_H
+#pragma option -b.
 #include <mapidefs.h>
+#pragma option -b
+#pragma option -b.
 #include <mapicode.h>
+#pragma option -b
+#pragma option -b.
 #include <mapiguid.h>
+#pragma option -b
+#pragma option -b.
 #include <mapitags.h>
+#pragma option -b
 #endif
 
-#ifdef __BORLANDC__
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 #ifndef BEGIN_INTERFACE
@@ -552,6 +563,7 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormMgr, IUnknown)
 #define MAPIFORM_OS_WINNT_35            2
 #define MAPIFORM_OS_WIN_95              3
 #define MAPIFORM_OS_MAC_7x              4
+#define MAPIFORM_OS_WINNT_40            5
 
 #define MAPIFORM_PLATFORM(CPU, OS) ((ULONG) ((((ULONG) CPU) << 16) | OS))
 
@@ -624,9 +636,13 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormFactory, IUnknown)
     MAPI_GETLASTERROR_METHOD(PURE)
     MAPI_IMAPIFORMFACTORY_METHODS(PURE)
 };
-#ifdef __BORLANDC__
+
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
-
+#pragma option -b.
 #endif                          /* MAPIFORM_H */
+

@@ -1,14 +1,18 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.6  $
 //
 // Implementation of persistent streaming for window system structure and type
 // encapsulation
 //----------------------------------------------------------------------------
 #include <winsys/pch.h>
 #include <winsys/wsyscls.h>
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 //
 // Persistent streaming operators for resource Ids
@@ -25,7 +29,7 @@ operator >>(ipstream& is, TResId& id)
     id = int(nid);
   }
   else
-    id = (const char far *)is.freadString();
+    id = (const _TCHAR far *)is.freadString();
   return is;
 }
 
@@ -42,3 +46,8 @@ operator <<(opstream& os, const TResId& id)
     os.fwriteString(id.Str);
   return os;
 }
+
+#if defined(BI_NAMESPACE)
+}       // namespace ClassLib
+#endif
+

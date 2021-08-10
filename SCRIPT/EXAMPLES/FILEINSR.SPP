@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // FILEINSR.SPP: File Insert. Inserts a file into the current buffer.
 //
@@ -11,7 +11,7 @@
 //
 // NOTE: This functionality is already available under Brief emulation.
 //--------------------------------------------------------------------------
-print "fileinsr.spp";
+print typeid(module());
 
 //
 // IDE imports.
@@ -23,7 +23,7 @@ import editor;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
+if (!scriptEngine.IsLoaded("msg")) scriptEngine.Load("msg");
 
 fileinsr()
 {

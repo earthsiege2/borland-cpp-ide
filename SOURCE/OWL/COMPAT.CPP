@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.7  $
 //
 // OWL 1.0 compatibility structures & functions
 //----------------------------------------------------------------------------
@@ -14,6 +14,8 @@
 # include <owl/window.h>
 #endif
 
+OWL_DIAGINFO;
+
 TMessage _OWLFUNC
 __GetTMessageWin(TWindow* win)
 {
@@ -22,8 +24,8 @@ __GetTMessageWin(TWindow* win)
 
   msg.Receiver = currentEvent.Win->GetHandle();
   msg.Message = (uint16)currentEvent.Message;
-  msg.WParam = (uint16)currentEvent.WParam;
-  msg.LParam = currentEvent.LParam;
+  msg.WParam = (uint16)currentEvent.Param1;
+  msg.LParam = currentEvent.Param2;
 
   return msg;
 }

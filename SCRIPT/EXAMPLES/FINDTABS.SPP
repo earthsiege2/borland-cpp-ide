@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // FINDTABS.SPP: Find Tabs. Searches all .C, .H, .CPP, .HPP, and .SPP
 //   files in the specified directory and reports all lines that have
@@ -12,7 +12,7 @@
 //
 // FILES: FILE.SPP, MSG.SPP
 //--------------------------------------------------------------------------
-print "findtabs.spp";
+print typeid(module());
 
 //
 // IDE import(s).
@@ -23,8 +23,8 @@ import IDE;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
-if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
+if (!scriptEngine.IsLoaded("file")) scriptEngine.Load("file");
+if (!scriptEngine.IsLoaded("msg")) scriptEngine.Load("msg");
 
 findtabs()
 {

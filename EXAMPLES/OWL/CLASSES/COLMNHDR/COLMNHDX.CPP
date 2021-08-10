@@ -6,16 +6,22 @@
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
 #if !defined(OWL_LISTBOX_H)
-#include <owl/listbox.h>
+# include <owl/listbox.h>
 #endif
 #if !defined(OWL_COLMNHDR_H)
-#include <owl/colmnhdr.h>
+# include <owl/colmnhdr.h>
 #endif
 #if !defined(OWL_INPUTDIA_H)
-#include <owl/inputdia.h>
+# include <owl/inputdia.h>
 #endif
-#if !defined(OLW_VALIDATE_H)
-#include <owl/validate.h>
+#if !defined(OWL_VALIDATE_H)
+# include <owl/validate.h>
+#endif
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
+#if !defined(OWL_CHOOSEFO_H)
+# include <owl/choosefo.h>
 #endif
 #include "colmnhdr.h"
 
@@ -41,6 +47,7 @@ class TSampleApp : public TApplication {
 class TClientWindow : public TWindow {
   public:
     TClientWindow(TWindow* parent= 0);
+   ~TClientWindow();
 
   protected:
     void            Paint(TDC& dc, bool erase, TRect& rect);
@@ -58,13 +65,18 @@ class TClientWindow : public TWindow {
                     {ce.Enable(ColHdr && ColHdr->IsWindow()
                                       && ColHdr->GetCount());}
 
-    void            CmTracking(){AllowTracking = !AllowTracking;}
-    void            CeTracking(TCommandEnabler& ce)
-                    {ce.SetCheck(AllowTracking ? Chk : UnChk);}
+    void            CmChangeHeaderFont();
+    void            CeChangeHeaderFont(TCommandEnabler& ce)
+                    {ce.Enable(ColHdr && ColHdr->IsWindow()
+                                      && ColHdr->GetCount());}
 
-    void            CmChanging(){AllowChanging = !AllowChanging;}
-    void            CeChanging(TCommandEnabler& ce)
-                    {ce.SetCheck(AllowChanging ? Chk : UnChk);}
+    void            CmResizing(){AllowResizing = !AllowResizing;}
+    void            CeResizing(TCommandEnabler& ce)
+                    {ce.SetCheck(AllowResizing ? Chk : UnChk);}
+
+    void            CmClicking();
+    void            CeClicking(TCommandEnabler& ce)
+                    {ce.SetCheck(ColHdr->GetStyle() & HDS_BUTTONS ? Chk : UnChk);}
 
     // Handlers for ColumnHeader notifications
     //
@@ -72,49 +84,60 @@ class TClientWindow : public TWindow {
     void            ColHdrEndTrack(THdrNotify far&);
     void            ColHdrDividerDblClick(THdrNotify far&);
     void            ColHdrItemChanged(THdrNotify far&);
-    bool            ColHdrItemChanging(THdrNotify far&);
+    bool            ColHdrItemChanging(THdrNotify far& notify);
     void            ColHdrItemClick(THdrNotify far&);
     bool            ColHdrTrack(THdrNotify far&);
 
     // ColumnHeader-related Data members
     //
     TColumnHeader*  ColHdr;
-    bool            AllowTracking;
-    bool            AllowChanging;
+    bool            AllowResizing;
+    bool            AllowClicking;
+    TPointer<TFont> ColHdrFont;
 
   DECLARE_RESPONSE_TABLE(TClientWindow);
 };
 
 DEFINE_RESPONSE_TABLE1(TClientWindow, TWindow)
   EV_WM_SIZE,
-  EV_COMMAND(CM_ADDITEM,           CmAddHeaderItem),
-  EV_COMMAND_ENABLE(CM_ADDITEM,    CeAddHeaderItem),
-  EV_COMMAND(CM_REMOVEITEM,        CmRemoveHeaderItem),
-  EV_COMMAND_ENABLE(CM_REMOVEITEM, CeRemoveHeaderItem),
-  EV_COMMAND(CM_ALLOWTRACKING,   CmTracking),
-  EV_COMMAND_ENABLE(CM_ALLOWTRACKING, CeTracking),
-  EV_COMMAND(CM_ALLOWITEMCHANGING,   CmChanging),
-  EV_COMMAND_ENABLE(CM_ALLOWITEMCHANGING, CeChanging),
-  EV_HDN_BEGINTRACK(ColHdrID,       ColHdrBeginTrack),
-  EV_HDN_DIVIDERDBLCLICK(ColHdrID,  ColHdrDividerDblClick),
-  EV_HDN_ENDTRACK(ColHdrID,         ColHdrEndTrack),
-  EV_HDN_ITEMCHANGED(ColHdrID,      ColHdrItemChanged),
-  EV_HDN_ITEMCHANGING(ColHdrID,     ColHdrItemChanging),
-  EV_HDN_ITEMCLICK(ColHdrID,        ColHdrItemClick),
-  EV_HDN_TRACK(ColHdrID,            ColHdrTrack),
+  EV_COMMAND(CM_ADDITEM,              CmAddHeaderItem),
+  EV_COMMAND_ENABLE(CM_ADDITEM,       CeAddHeaderItem),
+  EV_COMMAND(CM_REMOVEITEM,           CmRemoveHeaderItem),
+  EV_COMMAND_ENABLE(CM_REMOVEITEM,    CeRemoveHeaderItem),
+  EV_COMMAND(CM_CHANGEFONT,           CmChangeHeaderFont),
+  EV_COMMAND_ENABLE(CM_CHANGEFONT,    CeChangeHeaderFont),
+  EV_COMMAND(CM_ALLOWRESIZING,        CmResizing),
+  EV_COMMAND_ENABLE(CM_ALLOWRESIZING, CeResizing),
+  EV_COMMAND(CM_ALLOWCLICKING,        CmClicking),
+  EV_COMMAND_ENABLE(CM_ALLOWCLICKING, CeClicking),
+  EV_HDN_BEGINTRACK(ColHdrID,         ColHdrBeginTrack),
+  EV_HDN_DIVIDERDBLCLICK(ColHdrID,    ColHdrDividerDblClick),
+  EV_HDN_ENDTRACK(ColHdrID,           ColHdrEndTrack),
+  EV_HDN_ITEMCHANGED(ColHdrID,        ColHdrItemChanged),
+  EV_HDN_ITEMCHANGING(ColHdrID,       ColHdrItemChanging),
+  EV_HDN_ITEMCLICK(ColHdrID,          ColHdrItemClick),
+  EV_HDN_TRACK(ColHdrID,              ColHdrTrack),
 END_RESPONSE_TABLE;
 
 
 TClientWindow::TClientWindow(TWindow* parent)
 :
   TWindow(parent),
-  AllowTracking(true),
-  AllowChanging(true)
+  AllowResizing(true),
+  AllowClicking(true)
 {
-  Attr.Style |= (WS_CLIPSIBLINGS|WS_CLIPCHILDREN);
+  uint32 oldStyle = GetStyle();
+  SetStyle(oldStyle |= (WS_CLIPSIBLINGS|WS_CLIPCHILDREN));
+
   ColHdr = new TColumnHeader(this, ColHdrID, 0, 0, 0, 0);
-  ColHdr->Attr.Style |= HDS_BUTTONS;
+  oldStyle = ColHdr->GetStyle();
+  ColHdr->SetStyle(oldStyle |= HDS_BUTTONS);
 };
+
+TClientWindow::~TClientWindow()
+{
+  delete ColHdr;
+}
 
 //
 // Handles WM_SIZE message sent to client window. This method simply
@@ -142,7 +165,7 @@ TClientWindow::Paint(TDC& dc, bool /*erase*/, TRect& /*rect*/)
   int count = ColHdr->GetCount();
 
   if (!count) {
-    char* noItemMsg = "ColumnHeader contains no items - Please add items.";
+    char* noItemMsg = "ColumnHeader contains no items.  Please add items.";
     dc.DrawText(noItemMsg, -1, clientRect,
                 DT_SINGLELINE|DT_CENTER|DT_VCENTER);
   }
@@ -202,12 +225,60 @@ TClientWindow::CmRemoveHeaderItem()
 }
 
 //
+// Changes the font used in the header control
+//
+void
+TClientWindow::CmChangeHeaderFont()
+{
+  TChooseFontDialog::TData FontData;
+
+  FontData.DC = 0;
+  FontData.Flags =
+    CF_EFFECTS | CF_FORCEFONTEXIST | CF_SCREENFONTS | CF_INITTOLOGFONTSTRUCT;
+  FontData.Color = 0;
+  FontData.Style = 0;
+  FontData.FontType = SCREEN_FONTTYPE;
+  FontData.SizeMin = 0;
+  FontData.SizeMax = 0;
+
+  // Fill FontData.LogFont with info about the column header's current font
+  //
+  TPointer<TFont> oldFont;
+  HFONT hFont = ColHdr->GetWindowFont();
+  if (hFont) {
+    oldFont = new TFont(hFont);
+  }
+  else {
+    oldFont = new TFont((HFONT)::GetStockObject(SYSTEM_FONT));
+  }
+  oldFont->GetObject(FontData.LogFont);
+
+  // Ask user to select a new font.  Send font to column header.
+  if (TChooseFontDialog(this, FontData).Execute() == IDOK) {
+    ColHdrFont = new TFont(&FontData.LogFont);
+    ColHdr->SetWindowFont(ColHdrFont->GetHandle(), true);
+  }
+}                                
+
+//
+// Toggle the style bit that controls whether the
+// column header receives HDN_ITEMCLICK notifications.
+//
+void
+TClientWindow::CmClicking()
+{
+  uint32 oldStyle = ColHdr->GetStyle();
+  ColHdr->SetStyle(oldStyle ^= HDS_BUTTONS);
+  ColHdr->Invalidate();
+}
+
+//
 // Handles HDN_BEGINTRACK notifications...
 //
 bool
 TClientWindow::ColHdrBeginTrack(THdrNotify far&)
 {
-  return AllowTracking ? false : true;
+  return AllowResizing ? false : true;
 }
 
 //
@@ -238,17 +309,25 @@ TClientWindow::ColHdrItemChanged(THdrNotify far&)
   Invalidate(true);
 }
 
-//
-// Handles HDN_ITEMCHANGING notification
+// Handle HDN_ITEMCHANGING notification
+// This notification comes when any attribute of a given
+// item is about to change.
 //
 bool
-TClientWindow::ColHdrItemChanging(THdrNotify far&)
+TClientWindow::ColHdrItemChanging(THdrNotify far& notify)
 {
-  return AllowChanging ? false : true;
+  // Mask flags indicate what is changing.  If the user
+  // is re-sizing a column, the width bit is set.
+  //
+  if (notify.pitem->mask & HDI_WIDTH)  
+    return AllowResizing ? false : true;   
+
+  return false;               // allow any other change
 }
 
 //
 // Handles HDN_ITEMCLICK notifications
+// 
 //
 void
 TClientWindow::ColHdrItemClick(THdrNotify far& hdrNotify)
@@ -277,25 +356,19 @@ TClientWindow::ColHdrItemClick(THdrNotify far& hdrNotify)
 bool
 TClientWindow::ColHdrTrack(THdrNotify far&)
 {
-  return AllowTracking ? false : true;
+  return AllowResizing ? false : true;
 }
 
 void
 TSampleApp::InitMainWindow()
 {
-  SetMainWindow(new TFrameWindow(0, 0, new TClientWindow()));
+  SetMainWindow(new TFrameWindow(0, "ColumnHeader Example", 
+                new TClientWindow()));
   GetMainWindow()->AssignMenu(IDM_APPMENU);
 }
 
 int
 OwlMain(int /*argc*/, char* /*argv*/ [])
 {
-#if defined(BI_PLAT_WIN16)
-  if (!TSystem::IsWin95()) {
-    ::MessageBox(0, "16-bit column header example designed to run on only Windows 95",
-                 "Error", MB_ICONSTOP | MB_OK);
-    return -1;
-  }
-#endif
   return TSampleApp().Run();
 }

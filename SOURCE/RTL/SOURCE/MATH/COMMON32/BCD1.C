@@ -4,12 +4,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <math.h>
 #include <_math.h>
@@ -85,9 +86,9 @@ long double _RTLENTRY _EXPFUNC __bcd_tobinary (const bcd *p)
  * round(x, 2) = 123.46
  * round(x, -1) = 120.
  * round(x, -2) = 100.
- * 
+ *
  * uses banker's rounding
- * 
+ *
  * Convert a binary number to decimals.
  * Use at most 'decimals' after the decimal point.
  * For maximum accuracy, use decimals=5000.
@@ -159,7 +160,7 @@ underflow:
 /*----------------------------------------------------------------------
  * __bcdlog10 - compute log10 of BCD number
  */
-long double _RTLENTRY _EXPFUNC __bcd_log10(bcd *p)
+long double _RTLENTRY _EXPFUNC __bcd_log10(const bcd *p)
 {
     return (log10l(_fildq(&p->mantissa[0])) + (long double)(p->expo - Bias));
 }

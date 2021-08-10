@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.4  $
+// $Revision:   2.5  $
 //
 // Implements message hooks for catching F1 in the dialogs
 //----------------------------------------------------------------------------

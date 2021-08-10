@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------
 // cScript
-// (C) Copyright 1987, 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1987, 1997 by Borland International, All Rights Reserved
 //
 // IDE.SPP
 //    IDE top level event handling.
 //
-// $Revision:   1.54  $
+// $Revision:   1.59  $
 //
 //----------------------------------------------------------------------------
 
@@ -151,8 +151,18 @@ on IDE:>SearchFind(declare acText){
 
 on IDE:>SearchReplace(declare acSearch, declare acReplace){
    if (IsEditKeyboard()) {
-      if (!DoIDESearchReplace())
-          return pass(acSearch, acReplace);
+      declare rv = false;
+      declare bRestorePosition = false;
+      if (!DoIDESearchReplace(bRestorePosition))
+         if (bRestorePosition) {
+            editor.TopView.Position.Save();
+            editor.TopView.Block.Save();
+            rv = pass(acSearch, acReplace);
+            editor.TopView.Position.Restore();
+            editor.TopView.Block.Restore();
+            return rv;
+         } else
+            return pass(acSearch, acReplace);
    } else {
       return pass(acSearch, acReplace);
    }
@@ -247,14 +257,9 @@ on IDE:>DoFileOpen(declare FileName, declare ToolName, declare ProjectNode)
 
 on IDE:>KeyboardAssignmentsChanged(declare nameOfKbdFile){
  // Load the newly assigned keyboard.
- // Unload existing editor emulation assignments.
- declare sFileName = new String(scriptEngine.StartupDirectory + IDE.KeyboardAssignmentFile);
- LoadKeyboardDataFile(sFileName.Text,FALSE);
-
- // Copy Editor assignments to the ClassExpert keyboard.
- declare kbdEditor = IDE.KeyboardManager.GetKeyboard("Editor");
- declare kbdClassExpert = IDE.KeyboardManager.GetKeyboard("ClassExpert");
- kbdClassExpert.Copy(kbdEditor);
+ declare String sEmulation(IDE.KeyboardAssignmentFile);
+ sEmulation = sEmulation.SubString(0,sEmulation.Index(".")-1).Text + "Emulation(false);";
+ scriptEngine.Execute(sEmulation);
 
  // This End is paired with the Start from KeyboardAssignmentsChanging
  IDE.EndWaitCursor();
@@ -273,14 +278,20 @@ on IDE:>KeyboardAssignmentsChanging(declare nameOfKbdFile){
  }
 
  // Unload existing editor emulation assignments.
- declare sFileName = new String(scriptEngine.StartupDirectory + IDE.KeyboardAssignmentFile);
- LoadKeyboardDataFile(sFileName.Text,TRUE);
+ declare String sEmulation(IDE.KeyboardAssignmentFile);
+ sEmulation = sEmulation.SubString(0,sEmulation.Index(".")-1).Text + "Emulation(true);";
+ scriptEngine.Execute(sEmulation);
+
  return pass(nameOfKbdFile);
 }
 
 on IDE:>KeywordHelp(){
-   declare sniglet = editor.GetWord();
-   return .HelpKeywordSearch(sniglet);
+   if (IsEditKeyboard()) {
+      declare sniglet = editor.GetWord();
+      return .HelpKeywordSearch(sniglet);
+   } else {
+      IDE.HelpContents();
+   }
 }
 
 on IDE:>Compile(declare fileName){
@@ -307,23 +318,65 @@ on IDE:>Unassign(sequence, keyboard){
 
 on IDE:>ToggleKeystrokeRecording(){
 
-        declare curRec = .KeyboardManager.CurrentRecord;
+   declare curRec = .KeyboardManager.CurrentRecord;
 
-        if (curRec != NULL) {
-                if(curRec.IsRecording){
-                        .KeyboardManager.StopRecord();
-                        .StatusBar = "Keystrokes recorded";
-                        return;
-                }
-
-                if(curRec.IsPaused){
-                        .ReportError("Recording is currently paused");
-                        return;
-                }
+   if (curRec != NULL) {
+      if (curRec.IsRecording) {
+         .KeyboardManager.StopRecord();
+         .StatusBar = "Keystrokes recorded";
+         return;
         }
 
-        .KeyboardManager.StartRecord(.KeyboardManager.CurrentRecord);
-        .StatusBar = "Defining keystroke recording";
+       if (curRec.IsPaused) {
+          .ReportError("Recording is currently paused");
+          return;
+       }
+   }
+
+   .KeyboardManager.StartRecord(.KeyboardManager.CurrentRecord);
+   .StatusBar = "Defining keystroke recording";
+}
+
+declare kbdOverwriteMacro = NULL;
+
+on IDE:>BriefKeystrokeRecording() {
+
+   declare curRec = .KeyboardManager.CurrentRecord;
+
+   if (curRec != NULL) {
+      if (curRec.IsRecording) {
+         .KeyboardManager.StopRecord();
+         .StatusBar = "Keystrokes recorded";
+         return;
+        }
+
+      if (kbdOverwriteMacro == NULL) {
+          kbdOverwriteMacro = new Keyboard(FALSE);
+	       kbdOverwriteMacro.Assign("<y>","IDE.BriefKeystrokeRecordingYes();",ASSIGN_IMPLICIT_SHIFT);
+          kbdOverwriteMacro.DefaultAssignment = "IDE.BriefKeystrokeRecordingNo();";
+      }
+
+      .KeyboardManager.Push(kbdOverwriteMacro, "Editor", FALSE);
+      bPopEditorKeyboard = true;
+      .StatusBar = "Overwrite existing keystroke macro [yn]?";
+
+   } else {
+      .KeyboardManager.StartRecord(.KeyboardManager.CurrentRecord);
+      .StatusBar = "Defining keystroke recording";
+   }
+}
+
+on IDE:>BriefKeystrokeRecordingYes() {
+   .KeyboardManager.Pop("Editor");
+   bPopEditorKeyboard = false;
+   .KeyboardManager.StartRecord(.KeyboardManager.CurrentRecord);
+   .StatusBar = "Defining keystroke recording";
+}
+
+on IDE:>BriefKeystrokeRecordingNo() {
+   .KeyboardManager.Pop("Editor");
+   bPopEditorKeyboard = false;
+   .StatusBar = "";
 }
 
 on IDE:>PlaybackKeystrokeRecording(){
@@ -331,7 +384,7 @@ on IDE:>PlaybackKeystrokeRecording(){
 
         if (curRec != NULL) {
 
-                if(curRec.IsRecording){
+        if(curRec.IsRecording){
          .ReportError("Can't playback while recording");
          return;
       }
@@ -348,4 +401,9 @@ on IDE:>PlaybackKeystrokeRecording(){
 
       .KeyboardManager.Playback(curRec);
    }
+}
+
+// This event is triggered by an Alt-I preesed while viewing the HelpAbout Box
+on IDE:>DisplayCredits(){
+   Credits();
 }

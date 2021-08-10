@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.12  $
+//$Revision:   10.15  $
 //
 // Implementation of class TFloatingFrame, a popup frame window that has a
 // small title bar
@@ -16,6 +16,7 @@
 # include <winsys/uimetric.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlCmd);
 
 #if !defined(SECTION) || SECTION == 1
@@ -176,10 +177,13 @@ TFloatingFrame::EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSiz
 // We only need to paint the drag frame margins. TWindow (via DefWindowProc)
 // will paint the borders, & TTinyCaption will paint the caption
 //
-void
-TFloatingFrame::EvNCPaint()
+#if defined(BI_PLAT_WIN32)
+void TFloatingFrame::EvNCPaint(HRGN)
+#else
+void TFloatingFrame::EvNCPaint()
+#endif
 {
-  TWindow::EvNCPaint();       // Default border painting--no caption
+  DefaultProcessing();       // Default border painting--no caption
 
   // Paint our caption below with possible fake active look. arg is ignored.
   //

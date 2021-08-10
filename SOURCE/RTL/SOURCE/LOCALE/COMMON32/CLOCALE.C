@@ -1,293 +1,123 @@
-/*
-*
-*    CLOCALE.C
-*
-*    the "C" locale and other locale related globals
-*
-*/
+/*-----------------------------------------------------------------------*
+ * filename - clocale.c
+ *
+ * __locale global
+ *
+ *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1996, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.7  $        */
 
 
-#include <string.h>
-#include <ctype.h>
-#include <limits.h>
 #include <_locale.h>
 
-extern unsigned char _Cdecl _lower[ 256 ];
-extern unsigned char _Cdecl _upper[ 256 ];
+WIN32MONETARY CMonetary = {
+    2,                                      // Digits (# fractional digits)
+    2,                                      // IntlDigits (# of fractional intl digits)
+    0,                                      // Mode (currency mode)
+    0,                                      // NegMode (negative currency mode)
+    0,                                      // PositiveFormat
+    0,                                      // NegativeFormat
+    0,                                      // PosSymbolPrec (is positive symbol preceeded by amount?)
+    0,                                      // PosSymbolSpace (is positive sym separated by space?)
+    0,                                      // NegSymbolPrec (is negative sym preceeded by amount?)
+    0,                                      // NegSymbolSpace (is negative sym separated by space?)
+    "",                                     // ThousandSeparator (thousand separator symbol)
+    ".",                                    // Decimal (floating point symbol)
+    "",                                     // Symbol (monetary symbol)
+    "",                                     // IntlSymbol (monetary international symbol)
+    "",                                     // Grouping
+    "",                                     // PositiveSign
+    "-",                                    // NegativeSign
+    "($v)"                                  // Negative Format string
+};
+
+WIN32NUMERIC CNumeric = {
+    "",                                     // ThousandSeparator
+    ".",                                    // Decimal (floating point symbol)
+    "",                                     // Grouping
+    "",                                     // PositiveSign
+    "-",                                    // NegativeSign
+    2                                       // Digits (number of fractional digits)
+};
+
+WIN32TIME CTimeDate = {
+    "/",                                    // DateSeparator (_SDATE)
+    ":",                                    // TimeSeparator (_STIME)
+    "%H:%M:%S",                             // TimeFormat (_STIMEFORMAT)
+    "%m/%d/%y",                             // ShortFormat (date) (_SSHORTDATE)
+    "%A, %B %d, %Y",                        // LongFormat (date) (_SLONGDATE)
+    "AM",                                   // AM (_S1159)
+    "PM",                                   // PM (_S2359)
+    0,                                      // Order (short date-format order) (_IDATE)
+    0,                                      // LongOrder (long date-format order) (_ILDATE)
+    0,                                      // TimeFmt (AM/PM || 24h) (_ITIME)
+    0,                                      // Century (4 digits or 2) (_ICENTURY)
+    0,                                      // TimeLeadZeros (_TLZERO)
+    0,                                      // DayLeadZeros (_IDAYLZERO)
+    0,                                      // MonthLeadZeros (_IMONLZERO)
+    "Monday",                               // DayName1
+    "Tuesday",                              // DayName2
+    "Wednesday",                            // DayName3
+    "Thursday",                             // DayName4
+    "Friday",                               // DayName5
+    "Saturday",                             // DayName6
+    "Sunday",                               // DayName7
+    "Mon",                                  // AbrvDayName1
+    "Tue",                                  // AbrvDayName2
+    "Wed",                                  // AbrvDayName3
+    "Thu",                                  // AbrvDayName4
+    "Fri",                                  // AbrvDayName5
+    "Sat",                                  // AbrvDayName6
+    "Sun",                                  // AbrvDayName7
+    "January",                              // MonthName1
+    "February",                             // MonthName2
+    "March",                                // MonthName3
+    "April",                                // MonthName4
+    "May",                                  // MonthName5
+    "June",                                 // MonthName6
+    "July",                                 // MonthName7
+    "August",                               // MonthName8
+    "September",                            // MonthName9
+    "October",                              // MonthName10
+    "November",                             // MonthName11
+    "December",                             // MonthName12
+
+    "Jan",                                  // AbrvMonthName1
+    "Feb",                                  // AbrvMonthName2
+    "Mar",                                  // AbrvMonthName3
+    "Apr",                                  // AbrvMonthName4
+    "May",                                  // AbrvMonthName5
+    "Jun",                                  // AbrvMonthName6
+    "Jul",                                  // AbrvMonthName7
+    "Aug",                                  // AbrvMonthName8
+    "Sep",                                  // AbrvMonthName9
+    "Oct",                                  // AbrvMonthName10
+    "Nov",                                  // AbrvMonthName11
+    "Dec"                                   // AbrvMonthName12
+};
+
+WIN32LOCALE CLOCALE = {
+    0,                                      // codepage of the locale
+    0,                                      // handle (LCID of the locale)
+    1,                                      // isCLocale (is that locale "C" locale?)
+    0,                                      // country
+    NULL,                                   // cType (category of the locale)
+    &CMonetary,                             // Monetary   "
+    &CNumeric,                              // Numeric    "
+    NULL,                                   // Collate    "
+    &CTimeDate,                             // Time       "
+    "C",                                    // setLocaleReturn
+    L"C"                                    // setLocaleReturnW
+};
 
 /*
- * The "C" locale static object
+  __locale is the global locale for the application
 */
-
-struct LOCALEOBJECT _Clocale =
-
-{
-   /* struct LocaleHeader */
-    {
-
-        {
-            C_LOCALE_SHORT_STR,
-            1, 0, 0, 0,
-        },
-
-        _STATIC,
-        1, 0,
-
-        /* min & max char bytes */
-        1, 1,
-
-        6,
-        0,
-
-        __LC_COLLATE + __LC_CTYPE + __LC_TIME + __LC_MONETARY + __LC_NUMERIC + __LC_MESSAGES,
-
-        0, 0, 0,    0, 0, 0, 0
-    },
-
-    /* locale string */
-
-    C_LOCALE_FULL_STR,
-
-    /* LC_CTYPE */
-
-    {
-
-        {
-        ( sizeof( struct CategoryHeader ) ) +
-        ( sizeof( int ) * SBCS_SIZE ) +
-        ( 2 * SBCS_SIZE ),
-
-        C_LOCALE_SHORT_STR,
-
-        },
-    },
-
-    (unsigned char *) &_ctype,
-    (unsigned char *) &_lower,
-    (unsigned char *) &_upper,
-
-    /* LC_COLLATE */
-    {
-        {
-            0,
-            C_LOCALE_SHORT_STR,
-        },
-
-        {
-            0,
-            0,
-            { 0, 0, 0, 0, 0, 0, 0, 0 },
-            0,
-        },
-    },
-
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-
-    strcmp,
-    strxfrm,
-
-    /* LC_MONETARY */
-    {
-        {
-            ( sizeof( struct CategoryHeader ) + ( sizeof( struct Monetary ) ) ),
-            C_LOCALE_SHORT_STR,
-        },
-
-        /* struct Monetary */
-        {
-
-        "",          /*  int_curr_symbol   */
-
-        "",          /*  currency_symbol   */
-
-        "",          /*  mon_decimal_point */
-
-        "",          /*  mon_thousands_sep */
-
-        "",          /*  mon_grouping      */
-
-        "",          /*  positive_sign     */
-
-        "",          /*  negative_sign     */
-
-        CHAR_MAX,    /*  int_frac_digits   */
-
-        CHAR_MAX,    /*  frac_digits       */
-
-        CHAR_MAX,    /*  p_cs_precedes     */
-        
-        CHAR_MAX,    /*  p_sep_by_space    */
-
-        CHAR_MAX,    /*  n_cs_precedes     */
-
-        CHAR_MAX,    /*  n_sep_by_space    */
-
-        CHAR_MAX,    /*  p_sign_posn       */
-
-        CHAR_MAX     /*  n_sign_posn       */
-
-        },
-    },
-
-    /* LC_NUMERIC */
-
-    {
-        {
-            ( sizeof( struct CategoryHeader ) + ( sizeof( struct Numeric ) ) ),
-            C_LOCALE_SHORT_STR,
-        },
-
-        /* struct Numeric */
-        {
-
-        ".",            /* decimal point */
-
-        "",            /* thousands_sep */
-
-        ""                /* grouping      */
-
-        },
-    },
-
-    /* LC_TIME */
-    {
-        {
-            ( sizeof( struct CategoryHeader ) + ( sizeof( struct TimeDate ) ) ),
-            C_LOCALE_SHORT_STR,
-        },
-
-        /* struct TimeDate */
-        {
-
-        {
-            "Sun",
-            "Mon",
-            "Tue",
-            "Wed",
-            "Thu",
-            "Fri",
-            "Sat"
-        },
-
-        {
-            "Sunday",   
-            "Monday",   
-            "Tuesday",  
-            "Wednesday",
-            "Thursday", 
-            "Friday",   
-            "Saturday", 
-        },
-
-        {
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-        },
-
-        {
-            "January",  
-            "February", 
-            "March",    
-            "April",    
-            "May",      
-            "June",     
-            "July",     
-            "August",   
-            "September",
-            "October",  
-            "November", 
-            "December" 
-        },
-
-        {
-            "AM",
-            "PM"
-        },
-
-        "%a %b %d %X %Y",
-
-        "%a %b %d",
-
-        "%H:%M:%S",
-
-        "%I:%M:%S %p",
-
-        " ",
-
-        " ",
-
-        " ",
-
-        {
-            /* alt_digits */
-            0
-        },
-
-        },
-    },
-
-    /* LC_MESSAGES */
-    {
-        {
-            ( sizeof( struct CategoryHeader ) + ( sizeof( struct Messages ) ) ),
-            C_LOCALE_SHORT_STR,
-        },
-
-        /* struct Messages */
-        {
-            "y",
-            "n",
-        },
-    },
-
-    /* LC_userdef */
-    {
-        {
-            sizeof( struct CategoryHeader ) +
-            sizeof( struct Messages ),
-            "",
-        },
-
-        NULL,
-    },
-};
-
-const char *_LocaleCatNames[ LC_LAST + 1 ] =
-
-{
-    "LC_ALL",
-    "LC_COLLATE",
-    "LC_CTYPE",
-    "LC_MONETARY",
-    "LC_NUMERIC",
-    "LC_TIME",
-    "LC_MESSAGES",
-    "LC_userdef"
-};
-
-/* initial state of _pLocale refers to the static "C" locale */
-struct LOCALEOBJECT * _EXPDATA _pLocale = (struct LOCALEOBJECT *) &_Clocale;
-
-/* default locale library name */
-char _EXPDATA _LocaleLibName[ MAXPATH + 1 ] = { LOCALE_LIB };
+LPWIN32LOCALE _EXPDATA __locale = &CLOCALE;

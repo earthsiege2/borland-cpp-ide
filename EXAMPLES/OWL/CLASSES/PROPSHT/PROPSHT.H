@@ -9,6 +9,7 @@
 //
 #define IDM_APPMENU     0x1000
 #define CM_PROPERTY     0x1001
+#define CM_PROPMODELESS 0x1002
 
 // Icons
 //

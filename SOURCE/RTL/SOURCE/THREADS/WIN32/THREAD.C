@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #define INCL_ERROR_H
 #include <ntbc.h>
@@ -118,6 +119,7 @@ Return value    If successful, the thread ID number.
 		follows:
 		    EAGAIN  Too many threads
 		    ENOMEM  Not enough memory
+            EINVAL  Bad stack value (for stack less than 16 bytes)
 
 *---------------------------------------------------------------------*/
 
@@ -131,6 +133,14 @@ unsigned long _RTLENTRY _EXPFUNC _beginthreadNT(void (_USERENTRY *start_address)
     DWORD tid;
     THREAD_DATA *t;
     HANDLE h;
+
+    /* Check to see that the requested stack size is valid (zero is
+    /* legal and means the same size as primary thread) */
+    if (((signed)stack_size) < 16 && stack_size != 0)
+    {
+        errno = EINVAL;
+        return -1;
+    }
 
     /* Allocate a per-thread data structure for the new thread.
      * Save a pointer to the argument list and the starting address.

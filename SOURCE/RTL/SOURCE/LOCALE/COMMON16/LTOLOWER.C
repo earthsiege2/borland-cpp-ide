@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $        */
 
 
 #include <ctype.h>
@@ -52,4 +53,3 @@ int _CType _FARFUNC _ltolower( int ch )
 	return( _QRTLInstanceData(_pLocale)->pToLower[ ( ch & 0x00ff ) ] );
 }
 
-

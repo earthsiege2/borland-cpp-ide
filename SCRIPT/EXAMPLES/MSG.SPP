@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // MSG.SPP: Message Class. Provides methods to simplify and standardize
 //   user messages. Message captions automatically indicate the calling
@@ -9,7 +9,7 @@
 // NOTES: Possible enhancement: Methods for additional message types,
 //   message logging, etc.
 //--------------------------------------------------------------------------
-print "msg.spp";
+print typeid(module());
 
 //
 // Import WinAPI(s).

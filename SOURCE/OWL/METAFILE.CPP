@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.8  $
 //
 // Implementation of TMetaFilePict class
 //----------------------------------------------------------------------------
@@ -20,6 +20,16 @@
 #if !defined(OWL_EXCEPT_H)
 # include <owl/except.h>
 #endif
+#if !defined(CLASSLIB_FILE_H)
+# include <classlib/file.h>
+#endif
+
+OWL_DIAGINFO;
+DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
+
+// Constant for checking validity of a METAFILEHEADER
+//
+const uint32 TMetaFilePict::MFHeaderKey = 0x9AC6CDD7L;
 
 //
 // Alias an existing meta file handle.
@@ -27,7 +37,8 @@
 TMetaFilePict::TMetaFilePict(HMETAFILE handle, TAutoDelete autoDelete)
 :
   TGdiBase(handle, autoDelete),
-  Extent(0,0)
+  Extent(0,0),
+  Placeable(false)
 {
   Mm = MM_ANISOTROPIC;
 }
@@ -37,10 +48,71 @@ TMetaFilePict::TMetaFilePict(HMETAFILE handle, TAutoDelete autoDelete)
 //
 TMetaFilePict::TMetaFilePict(const char* filename)
 :
-  TGdiBase(::GetMetaFile(filename), AutoDelete),
-  Extent(0,0)
+  Extent(0,0),
+  Placeable(false)
 {
-  Mm = MM_ANISOTROPIC;
+  TFile file;
+
+  file.Open(filename, O_RDONLY, SH_DENYWR);
+  file.Read(&MFHeader, sizeof(MFHeader));
+
+  // Determine whether this file begins with a valid METAFILEHEADER
+  // struct and load the file accordingly.
+  //
+  if ((MFHeader.key == MFHeaderKey)
+      && (MFHeader.checksum == CalcHeaderChecksum(MFHeader)))
+  {
+    // Determine size of metafile data
+    //
+    TFileStatus status;
+    file.GetStatus(status);
+    long size = status.size - sizeof(METAFILEHEADER);
+
+    // Convert the data to a metafile
+    //
+    HGLOBAL hMem = ::GlobalAlloc(GMEM_MOVEABLE, size);
+    if (!hMem)
+      TXOutOfMemory::Raise();
+    unsigned char _huge* pMem = (unsigned char _huge*)GlobalLock(hMem);
+    file.Read((void _huge*)pMem, size);
+
+#if defined(BI_PLAT_WIN32)
+    Handle = SetMetaFileBitsEx(size, pMem);
+    GlobalUnlock(hMem);
+#else
+    Handle = SetMetaFileBits(hMem);
+    GlobalUnlock(hMem);    
+#endif
+
+    // Remember that this metafile comes with a placeable header
+    // (in other words, MFHeader holds valid data)
+    //
+    if (Handle)
+      Placeable = true;
+
+    // Placeable metafiles are meant to be played back in
+    // the unconstrained mapping mode.  The header tells
+    // the desired size and aspect ratio.
+    //
+    Mm = MM_ANISOTROPIC;
+
+    // Set metafile dimensions according to info in header
+    //
+    Extent.cx = MFHeader.bbox.right - MFHeader.bbox.left;
+    Extent.cy = MFHeader.bbox.bottom - MFHeader.bbox.top;
+
+    // Convert dimensions to HIMETRIC units (.001 cm)
+    //
+    Extent.cx = MulDiv(Extent.cx, 2540, MFHeader.inch);
+    Extent.cy = MulDiv(Extent.cy, 2540, MFHeader.inch);
+  }  
+  else {
+    Mm = MM_ANISOTROPIC;
+    Handle = ::GetMetaFile(filename);
+  }
+  ShouldDelete = true;
+  file.Close();
+  CheckValid();
 }
 
 //
@@ -49,7 +121,8 @@ TMetaFilePict::TMetaFilePict(const char* filename)
 //
 TMetaFilePict::TMetaFilePict(const TClipboard&)
 :
-  Extent(0,0)
+  Extent(0,0),
+  Placeable(false)
 {
   HGLOBAL hmfp = ::GetClipboardData(CF_METAFILEPICT);
   METAFILEPICT far* mfp = (METAFILEPICT far*)::GlobalLock(hmfp);
@@ -75,7 +148,8 @@ TMetaFilePict::TMetaFilePict(const TClipboard&)
 TMetaFilePict::TMetaFilePict(uint size, void* data)
 :
   TGdiBase(::SetMetaFileBitsEx(size, (LPBYTE)data), NoAutoDelete),
-  Extent(0,0)
+  Extent(0,0),
+  Placeable(false)
 {
   CheckValid();
   Mm = MM_ANISOTROPIC;
@@ -89,7 +163,8 @@ TMetaFilePict::TMetaFilePict(uint size, void* data)
 TMetaFilePict::TMetaFilePict(HGLOBAL data)
 :
   TGdiBase(::SetMetaFileBitsBetter(data), NoAutoDelete),
-  Extent(0,0)
+  Extent(0,0),
+  Placeable(false)
 {
   CheckValid();
   Mm = MM_ANISOTROPIC;
@@ -103,7 +178,8 @@ TMetaFilePict::TMetaFilePict(HGLOBAL data)
 TMetaFilePict::TMetaFilePict(const TMetaFilePict& src, const char far* fileName)
 :
   TGdiBase(::CopyMetaFile(src, fileName), AutoDelete),
-  Extent(src.Extent)
+  Extent(src.Extent),
+  Placeable(false)
 {
   CheckValid();
   Mm = src.Mm;
@@ -116,6 +192,29 @@ TMetaFilePict::~TMetaFilePict()
 {
   if (ShouldDelete && Handle)
     ::DeleteMetaFile(HMETAFILE(Handle));
+}
+
+//
+// Read the fields in the file header structure of a placeable
+// metafile and compute a checksum value for verifying the
+// header's integrity.
+//
+uint16
+TMetaFilePict::CalcHeaderChecksum(const METAFILEHEADER& header)
+{
+  LPWORD lpw;             // pointer to words in header 
+  uint16 checksum = 0;
+
+  for (lpw = (LPWORD)&header;
+       lpw < (LPWORD)&header.checksum;
+       ++lpw)
+  {
+    // XOR current checksum with next field 
+    //
+    checksum ^= *lpw;
+  }
+
+  return checksum;
 }
 
 #if defined(BI_PLAT_WIN32)
@@ -140,14 +239,22 @@ TMetaFilePict::CalcPlaySize(TDC& dc, const TSize& defSize) const
 {
   // Given a fixed mapping mode, return precalculated extents
   //
-  if (Mm != MM_ISOTROPIC && Mm != MM_ANISOTROPIC)
+  if (Mm != MM_ISOTROPIC && Mm != MM_ANISOTROPIC) {
+    WARNX(OwlGDI, (Extent.X() == 0) || (Extent.Y() == 0), 0, "Constrained metafile extent == 0");
     return Extent;    // Assumes extents were calculated correctly.
+  }
+
+  //
+  // Metafile uses partially constrained or unconstrained mapping mode
+  //
 
   // If no extent info given, then use defaults
   //
-  if (!Extent.cx) {
+  if (Extent.X() == 0) {
+    WARNX(OwlGDI, (defSize.X() == 0) || (defSize.Y() == 0), 0, "Metafile using default extent == 0");
     return defSize;
   }
+
   // Use positive extents scaled to 0.01mm units
   //
   else if (Extent.cx > 0) {
@@ -183,9 +290,9 @@ TMetaFilePict::PlayOnto(TDC& dc, const TSize& defSize) const
   if (Mm)
     dc.SetMapMode(Mm);
 
-  // Set the viewport extent to the size that the metafile wil play to
+  // Set the viewport extent to the area that the metafile will fill
   //
-  if ((Mm == MM_ISOTROPIC || Mm == MM_ANISOTROPIC) && Extent.cx && Extent.cy)
+  if (Mm == MM_ISOTROPIC || Mm == MM_ANISOTROPIC)
     dc.SetViewportExt(CalcPlaySize(dc, defSize));
 
   return ::PlayMetaFile(dc, *this);

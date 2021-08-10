@@ -58,6 +58,11 @@ TTable::TTable( HWND hdlg, int idc ) : TDBDataSet()
 	TDBDataSet::SetPIT( table );
 }
 
+void TTable::AttachToControl( HWND hdlg, int idc )
+{
+	SetPIT( GetVBXPIUnknown( hdlg, idc ) );
+}
+
 void TTable::AttachControl( HWND hdlg, int idc )
 {
 	SetVBXPIUnknown( hdlg, idc, table );
@@ -345,7 +350,7 @@ void TTable::GetIndexFieldNames( string& s )
 		AnyString( table->get_IndexFieldNames() ).GetString( s );
 }
 
-void TTable::SetIndexFieldNames( string& n )
+void TTable::SetIndexFieldNames( const string& n )
 {
 	if (table)
 		table->put_IndexFieldNames( AnyString(n).GetPITAnyString() );
@@ -357,7 +362,7 @@ void TTable::GetIndexName( string& s )
 		AnyString( table->get_IndexName() ).GetString( s );
 }
 
-void TTable::SetIndexName( string& n )
+void TTable::SetIndexName( const string& n )
 {
 	if (table)
 		table->put_IndexName( AnyString(n).GetPITAnyString() );
@@ -369,7 +374,7 @@ void TTable::GetMasterFields( string& s )
 		AnyString( table->get_MasterFields() ).GetString( s );
 }
 
-void TTable::SetMasterFields( string& m )
+void TTable::SetMasterFields( const string& m )
 {
 	if (table)
 		table->put_MasterFields( AnyString(m).GetPITAnyString() );
@@ -388,7 +393,7 @@ void TTable::GetMasterSource( TDataSource& d )
 	}
 }
 
-void TTable::SetMasterSource( TDataSource& source )
+void TTable::SetMasterSource( const TDataSource& source )
 {
 	if (table)
 		table->put_MasterSource( source.GetPITDataSource() );
@@ -412,7 +417,7 @@ void TTable::GetTableName( string& s )
 		AnyString( table->get_TableName() ).GetString( s );
 }
 
-void TTable::SetTableName( string& n )
+void TTable::SetTableName( const string& n )
 {
 	if (table)
 		table->put_TableName( AnyString(n).GetPITAnyString() );
@@ -441,3 +446,4 @@ void TTable::SetUpdateMode( TUpdateMode u )
 	if (table)
 		table->put_UpdateMode( u );
 }
+

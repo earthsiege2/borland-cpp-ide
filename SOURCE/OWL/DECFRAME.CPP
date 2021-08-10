@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.15  $
+//$Revision:   10.23  $
 //
 // Implementation of class TDecoratedFrame
 //----------------------------------------------------------------------------
@@ -18,6 +18,7 @@
 # include <owl/tooltip.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlWin);   // diagnostic group for windows
 DIAG_DECLARE_GROUP(OwlCmd);   // diagnostic group for commands
 
@@ -212,7 +213,7 @@ TDecoratedFrame::GetHintText(uint id, char* buf, int size,
       if (c)
         *c = 0;
 
-      // Accelerator can be \b instead of \t (NOTE: \a in .rc make a \b 
+      // Accelerator can be \b instead of \t (NOTE: \a in .rc make a \b
       // in res)
       //
       c = strchr(buf, '\b');
@@ -280,7 +281,7 @@ TDecoratedFrame::GetHintText(uint id, char* buf, int size,
       char* pLF = strchr(buf, '\n');
       if (pLF) {
         *pLF = 0;
-        numBytes = (pLF - buf) -1;
+        numBytes = (int)(pLF - buf) -1;
       }
     }
   }
@@ -300,8 +301,8 @@ TDecoratedFrame::EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu)
       TMessageBar*  messageBar = TYPESAFE_DOWNCAST(ChildWithId(IDW_STATUSBAR),
                                                    TMessageBar);
       if (messageBar)
-        messageBar->SetHintText(0);       // Restore text of status bar    
-      MenuItemId = 0;                     //  ""  ""  ""  ""  ""  ""  
+        messageBar->SetHintText(0);       // Restore text of status bar
+      MenuItemId = 0;                     //  ""  ""  ""  ""  ""  ""
     }
     else if (flags & MF_POPUP) {
 
@@ -330,6 +331,11 @@ void
 TDecoratedFrame::EvSize(uint sizeType, TSize& size)
 {
   TLayoutWindow::EvSize(sizeType, size);
+
+  // Since TFrameWindow::EvSize wasn't called, broadcast
+  // relevant info to children explicitly.
+  //
+  TFrameWindow::BroadcastResizeToChildren(sizeType, size);
 }
 
 //
@@ -337,7 +343,7 @@ TDecoratedFrame::EvSize(uint sizeType, TSize& size)
 // there is a hint pending & this frame has a message bar.
 //
 void
-TDecoratedFrame::EvEnterIdle(uint source, THandle hDlg)
+TDecoratedFrame::EvEnterIdle(uint source, HWND hDlg)
 {
   if (source == MSGF_MENU && MenuItemId) {
     TMessageBar*  messageBar = TYPESAFE_DOWNCAST(ChildWithId(IDW_STATUSBAR),
@@ -405,30 +411,69 @@ findSibling(TWindow* win, void* param)
 //
 //
 //
+static bool
+findFirstSiblingAt(TWindow* win, void* param)
+{
+  TSiblingSearch*  search = (TSiblingSearch*)param;
+  if ((win != search->Decoration) &&
+      (GetLocation(*win) == search->Location))
+    return true;
+  return false;
+}
+
+//
+//
+//
 TResult
-TDecoratedFrame::EvCommand(uint id, THandle hWndCtl, uint notifyCode)
+TDecoratedFrame::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
 {
   TRACEX(OwlCmd, 1, "TDecoratedFrame:EvCommand - id(" << id << "), ctl(" <<\
                      hex << uint(hWndCtl) << "), code(" << notifyCode  << ")");
 
+  // Check if it's a menu-style command (i.e. skip commands from Controls)
+  //
   if (hWndCtl == 0) {
+
+    // Does the command Id correspond to the Id of one of our children
+    //
     TWindow*  decoration = ChildWithId(id);
 
+    // If yes, toggle it's visibility
+    //
     if (decoration) {
-      bool            visible = decoration->IsWindowVisible();
-      TLocation       location = GetLocation(*decoration);
+      bool visible = decoration->IsWindowVisible();
 
-      TSiblingSearch  search(decoration, location);
-      FirstThat(findSibling, &search);
-      if (!search.Sibling)
-        search.Sibling = ClientWnd;
-
-      // Toggle the window's visibility
+      // If it's visible, remove it's layout metrics - We'll 'Layout' below
+      // and toggle the actual visibility of the child below.
       //
-      if (visible)
+      if (visible) {
         RemoveChildLayoutMetrics(*decoration);
+      } else {
 
-      else
+        // Check if decoration wants to be against the frame's edge
+        //
+        bool insertAtEdge = decoration->IsFlagSet(wfInsertAtEdge);
+
+        // We want to display this child window, first retrieve it's location
+        //
+        TLocation location = GetLocation(*decoration);
+
+        // Find the decoration it should be adjacent to
+        //
+        TSiblingSearch  search(decoration, location);
+        if (insertAtEdge)
+          search.Sibling = FirstThat(findFirstSiblingAt, &search);
+        else
+          FirstThat(findSibling, &search);
+
+        // Default to client window if we could not find the decoration's
+        // potential neighbor.
+        //
+        if (!search.Sibling)
+          search.Sibling = ClientWnd;
+
+        // Insert at its desired location
+        //
         switch (location) {
           case Top:
             InsertAtTop(*decoration, search.Sibling);
@@ -446,8 +491,15 @@ TDecoratedFrame::EvCommand(uint id, THandle hWndCtl, uint notifyCode)
             InsertAtRight(*decoration, search.Sibling);
             break;
         }
+      }
 
+      // Force the layout manager to compute new locations and shuffle
+      // windows around
+      //
       Layout();
+
+      // Hide or display the decoration
+      //
       decoration->ShowWindow(visible ? SW_HIDE : SW_SHOWNA);
       return 0;
     }
@@ -722,19 +774,26 @@ TDecoratedFrame::InsertAtRight(TWindow& decoration, TWindow* insertRightOf)
 void
 TDecoratedFrame::Insert(TWindow& decoration, TLocation location)
 {
-  SetLocation(decoration, location);  // keep loc for removal & sibling inserts
+  // Store away location for remove/re-insetion
+  //
+  SetLocation(decoration, location);
 
   // Make sure the decoration has clipsiblings style, since our rearranging
   // causes corners to overlap sometimes.
   //
-  decoration.Attr.Style |= WS_CLIPSIBLINGS;
-  if (decoration.GetHandle())
-    decoration.SetWindowLong(GWL_STYLE,
-                             decoration.GetWindowLong(GWL_STYLE)|WS_CLIPSIBLINGS);
+  ModifyStyle(0, WS_CLIPSIBLINGS);
 
+  // Parent to decframe and remove layoutmetrics in case it's a re-insert
+  //
   decoration.SetParent(this);
-  RemoveChildLayoutMetrics(decoration); // in case this is a re-insert
+  RemoveChildLayoutMetrics(decoration);
 
+  // If the window should be visible, proceed with insertion.
+  // NOTE: Should we check the 'wfInsertAtEdge' flag here? It mostly
+  //       important when hiding/showing decorations [i.e. In EvCommand
+  //       handler]. However, it would be nice to check for it and use
+  //       something other than ClientWnd if necessary.
+  //
   if (decoration.Attr.Style & WS_VISIBLE) {
     switch (location) {
       case Top:

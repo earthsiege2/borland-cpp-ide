@@ -6,21 +6,26 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            tmpnam - builds a unique file name
+Name            _ttmpnam used as tmpnam and _wtmpnam
+                tmpnam   - builds a unique file name
+                _wtmpnam - builds a unique wide file name
 
 Usage           char *tmpnam(char *s);
+                wchar_t *_wtmpnam(wchar_t *s);
 
 Prototype in    stdio.h
 
@@ -28,11 +33,11 @@ Return value    a unique temporary file name
 
 *---------------------------------------------------------------------*/
 
-char * _RTLENTRY _EXPFUNC tmpnam(char *s)
+_TCHAR * _RTLENTRY _EXPFUNC _ttmpnam(_TCHAR *s)
 {
     _lock_all_streams();
 
-    s = __tmpnam(s, &_tmpnum);
+    s = __ttmpnam(s, &_tmpnum);
 
     _unlock_all_streams();
     return (s);

@@ -1,0 +1,13 @@
+#-----------------------------------------------------------------------------
+# MAKEFILE for ObjectWindows Libraries
+# Copyright (c) 1996, 1996 by Borland International, All Rights Reserved
+#
+# $Revision:   2.1  $
+#-----------------------------------------------------------------------------
+SYSTEMS = WIN32
+MODELS = fdt
+
+EXE   = DRVEXCEL
+OBJEXE= drvexcel.obj xl5en32.obj
+
+!include $(BCEXAMPLEDIR)\ocfmake.gen

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.7  $
 //
 // Definition of the UI Helper Classes: TUIHandle, TUIBorder, TUIFace, TUIPart
 //----------------------------------------------------------------------------
@@ -22,6 +22,21 @@
 # include <winsys/color.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+  
+class _WSYSCLASS TColor;
+
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
+
+  
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
@@ -31,7 +46,6 @@ class _OWLCLASS  TBrush;
 class _OWLCLASS  THatch8x8Brush;
 class _OWLCLASS  TBitmap;
 class _OWLCLASS  TIcon;
-class _WSYSCLASS TColor;
 
 //
 // Flags of DrawFrameControl API
@@ -433,6 +447,10 @@ class _OWLCLASS TUIHelper {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

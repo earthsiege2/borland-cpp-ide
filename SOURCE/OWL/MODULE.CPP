@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.13  $
+//$Revision:   10.24  $
 //
 // Implementation of class TModule. TModule defines the base behavior for
 // OWL libraries and applications.
@@ -26,8 +26,10 @@
 # include <winnls.h>
 #endif
 
-extern uint _OWLDATA GetWindowPtrMsgId;  // in applicat.cpp
+extern 
+uint _OWLDATA GetWindowPtrMsgId;   // Defined in APPLICAT.CPP
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlApp);        // General Application diagnostic group
 
 #if !defined(SECTION) || SECTION == 1
@@ -186,7 +188,7 @@ TModule::Error(xmsg& x, unsigned captionResId, unsigned promptResId)
   return HandleGlobalException(x,
     LoadString(captionResId, cbuf, sizeof(cbuf)) ? cbuf : 0,
     promptResId ?
-      (LoadString(promptResId, pbuf, sizeof(cbuf)) ? pbuf : "OK to Resume?")
+      (LoadString(promptResId, pbuf, sizeof(pbuf)) ? pbuf : "OK to Resume?")
       : 0);
 }
 
@@ -286,14 +288,23 @@ TModule::LoadString(uint id) const
         int n = ::WideCharToMultiByte(CP_ACP, 0, resData, len, 0, 0, 0, 0);
         TAPointer<char> buf = new char[n+1];
         len = ::WideCharToMultiByte(CP_ACP, 0, resData, len, buf, n+1, 0, 0);
-        retString.resize(len + 1);
-        int i;
+  #if   0
+        retString.resize(len+1);
+        uint i;
         for (i = 0; i < len; i++)
           retString[i] = (char)buf[i];
         retString[i] = 0;
+  #else
+        // The string object does not need the terminating null of C-strings
+        //
+        retString.resize(len);
+        uint i;
+        for (i = 0; i < len; i++)
+          retString[i] = (char)buf[i];
+  #endif
 # else
         retString.resize(len);
-        int i = 0;
+        uint i = 0;
         for (cnt = len; cnt--; retString[i++] = (char)*resData++)
           ;
 # endif
@@ -380,9 +391,10 @@ TModuleProc::TModuleProc(const TModule& module, const char far* id)
   static const char GetMenuStringStr[] = "GetMenuString";
 #endif
 static const char GetMenuStateStr[] = "GetMenuState";
+static const char DestroyIconStr[] = "DestroyIcon";
 
 //
-//
+// Returns TModule object wrapping the handle of the USER module
 //
 TModule&
 TUser::GetModule()
@@ -392,7 +404,7 @@ TUser::GetModule()
 }
 
 //
-//
+// Invokes 'LoadIcon' indirectly
 //
 HICON
 TUser::LoadIcon(HINSTANCE p1, LPCTSTR p2)
@@ -403,7 +415,17 @@ TUser::LoadIcon(HINSTANCE p1, LPCTSTR p2)
 }
 
 //
+// Invokes 'DestroyIcon' indirectly
 //
+BOOL
+TUser::DestroyIcon(HICON p1)
+{
+  static TModuleProc1<BOOL, HICON> destroyIcon(GetModule(), DestroyIconStr);
+  return destroyIcon(p1);
+}
+
+//
+// Invokes 'GetClassInfo' indirectly
 //
 BOOL
 TUser::GetClassInfo(HINSTANCE p1, LPCTSTR p2, LPWNDCLASS p3)
@@ -414,7 +436,7 @@ TUser::GetClassInfo(HINSTANCE p1, LPCTSTR p2, LPWNDCLASS p3)
 }
 
 //
-//
+// Invokes 'GetMenuString' indirectly
 //
 int
 TUser::GetMenuString(HMENU p1, UINT p2, LPTSTR p3, int p4, UINT p5)
@@ -425,7 +447,7 @@ TUser::GetMenuString(HMENU p1, UINT p2, LPTSTR p3, int p4, UINT p5)
 }
 
 //
-//
+// Invokes 'GetMenuState' indirectly
 //
 UINT
 TUser::GetMenuState(HMENU p1, UINT p2, UINT p3)
@@ -574,7 +596,15 @@ TObjectWindowsLibrary::Streamer::Write(opstream&) const
 //
 // Global pointer to this module
 //
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 TModule* Module = 0;
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #if defined(BI_PLAT_WIN32)
 
@@ -604,6 +634,30 @@ DllEntryPoint(HINSTANCE hInstance, uint32 reason, void*)
 
 #else  // !defined(BI_PLAT_WIN32)
 
+static char BidsDllName[] = BIDS_DLLNAME ".DLL";
+static HINSTANCE BidsInst = 0;
+
+// Add extra ref. counts on BIDS DLL since 16-bit Windows may (does) unload
+// DLLs in wrong order causing a crash at shutdown.
+//
+// NOTE: We use priority 31 to come just before/after ctr/dtr of global
+//       objects (which are assigned a priorority of 32)
+//
+static void lockDlls()
+{
+  BidsInst = ::LoadLibrary(BidsDllName);  
+}
+#pragma startup lockDlls 31
+
+// Remove extra ref. count on BIDS DLL
+//
+static void unlockDlls()
+{
+  if (BidsInst > HINSTANCE(HINSTANCE_ERROR))
+    ::FreeLibrary(BidsInst);
+}
+#pragma exit unlockDlls 31
+
 //
 // Entry point for the Owl DLL itself
 //
@@ -613,10 +667,10 @@ LibMain(HINSTANCE   hInstance,
         uint16    /*cbHeapSize*/,
         char far* /*lpCmdLine*/)
 {
-  // Allocate the TModule object for the Owl DLL. The RTL makes sure that
-  // the memory allocated is GMEM_SHARE.
+  // Static object aliasing the ObjectWindows DLL
   //
-  ::Module = new TObjectWindowsLibrary(hInstance);
+  static TObjectWindowsLibrary OWLDLLModule(hInstance);
+  ::Module = &OWLDLLModule;
 
   return Module->Status == 0;
 }
@@ -625,7 +679,6 @@ int
 FAR PASCAL
 WEP(int /*bSystemExit*/)
 {
-  delete ::Module;
   return 1;
 }
 
@@ -635,6 +688,10 @@ WEP(int /*bSystemExit*/)
 #endif  // SECTION == 3
 
 #if !defined(SECTION) || SECTION == 4
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 //
 // Inserter for formated output of instance handle
 //
@@ -643,4 +700,9 @@ operator <<(ostream& os, const TModule& m)
 {
   return os << hex << uint(m.Handle);
 }
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 #endif //section 4
+

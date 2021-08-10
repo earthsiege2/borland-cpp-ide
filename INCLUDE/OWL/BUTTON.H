@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.9  $
 //
 // Definition of class TButton. This defines the basic behavior of all buttons.
 //----------------------------------------------------------------------------
@@ -11,6 +11,10 @@
 
 #if !defined(OWL_CONTROL_H)
 # include <owl/control.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -22,6 +26,11 @@
 // ~~~~~ ~~~~~~~
 class _OWLCLASS TButton : public TControl {
   public:
+#if defined(BI_PLAT_WIN32)
+    //For use with SetImage method.
+    enum TImageType { Bitmap=IMAGE_BITMAP, Icon=IMAGE_ICON };
+#endif
+
     TButton(TWindow*        parent,
             int             id,
             const char far* text,
@@ -49,7 +58,7 @@ class _OWLCLASS TButton : public TControl {
     // image can be HICON or HBITMAP
     //
     HANDLE GetImage() const;
-    HANDLE SetImage(HANDLE image);
+    HANDLE SetImage(HANDLE image, TImageType imageType = Bitmap);
 #endif
 
   protected:
@@ -92,6 +101,10 @@ class _OWLCLASS TButton : public TControl {
 // EV_BN_HILITE(id, method)
 // EV_BN_PAINT(id, method)
 // EV_BN_UNHILITE(id, method)
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -151,10 +164,10 @@ inline HANDLE TButton::GetImage() const
 //
 // Set the associated image for this button.
 //
-inline HANDLE TButton::SetImage(HANDLE newImage)
+inline HANDLE TButton::SetImage(HANDLE newImage, TImageType imageType)
 {
   PRECONDITION(GetHandle());
-  return (HANDLE)SendMessage(BM_SETIMAGE, 0, (TParam2)newImage);
+  return (HANDLE)SendMessage(BM_SETIMAGE, (TParam1)imageType, (TParam2)newImage);
 }
 #endif
 

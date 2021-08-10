@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------------
 # Borland Class Library
-# Copyright (c) 1993, 1995 by Borland International, All Rights Reserved
+# Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 #
-# $Revision:   10.1  $
+# $Revision:   10.5  $
 #
 # Extensions to makefile.gen, adding Classlib definitions and libraries
 #----------------------------------------------------------------------------
@@ -22,8 +22,11 @@ SYSTEM  = CON32
 !endif
 
 !if "$(MODEL)"=="t"
-SYSTEM = CON32
 MT = 1
+!endif
+
+!if $d(VCL)
+MODEL=t
 !endif
 
 #
@@ -62,18 +65,27 @@ CFLAGS = $(CFLAGS) -D_BIDSDLL
 # determine library name suffix based upon model
 #
 !if $(_32BIT_)
-! ifdef USEDLL
-!  ifdef MT
-_SFX_ = ti
-!  else
-_SFX_ = fi
-!  endif
-! else
-!  ifdef MT
-_SFX_ = t
-!  else
-_SFX_ = f
-!  endif
+
+!if $d(BIDSLIBDIR) && ("$(BIDSLIBDIR)" != "$(BCLIBDIR)")
+ LIBRARYPATH = $(BIDSLIBDIR);$(LIBRARYPATH)
+!endif
+
+! ifdef USEDLL             # link BIDS dynamically
+!   if $d(VCL)
+    _SFX_ = vi
+!   elif $d(MT)
+    _SFX_ = ti
+!   else
+    _SFX_ = fi
+!   endif
+! else                     # link to BIDS statically
+!   if $d(VCL)
+    _SFX = v
+!   elif $d(MT)
+    _SFX_ = t
+!   else
+    _SFX_ = f
+!   endif
 ! endif
 !else #WIN16 or DOS16
 ! ifdef USEDLL

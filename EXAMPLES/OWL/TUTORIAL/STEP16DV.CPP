@@ -60,7 +60,7 @@ TLine::SetPen(int penSize)
 }
 
 void
-TLine::SetPen(TColor& newColor, int penSize)
+TLine::SetPen(const TColor& newColor, int penSize)
 {
   // If penSize isn't the default (0), set PenSize to the new size.
   if (penSize)

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Definition of TRecentFiles class
 //----------------------------------------------------------------------------
@@ -12,7 +12,14 @@
 #if !defined(OWL_EVENTHAN_H)
 # include <owl/eventhan.h>
 #endif
-class _WSYSCLASS TProfile;
+
+#if !defined(WINSYS_PROFILE_H)
+# include <winsys/profile.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 //
 // Derived classes should catch the following registered message to know
@@ -84,5 +91,9 @@ class _OWLCLASS TRecentFiles : virtual public TEventHandler
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_RECENTFILE_H

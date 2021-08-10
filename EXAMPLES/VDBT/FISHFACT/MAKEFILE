@@ -5,16 +5,24 @@
 
 SYSTEMS = WIN16 WIN32
 
-!if $(SYSTEM)==WIN16
-MODEL=l
-USERLIBS = $(BCLIBDIR)\bivbx.lib
-!else
-USERLIBS = $(BCLIBDIR)\bivbx32.lib
+!ifndef SYSTEM
+SYSTEM = WIN32
 !endif
 
-DEBUG = 1
+!ifndef MODEL
+MODEL = d
+!endif
 
-DEFEXE = ffactwin.def
+!if $(SYSTEM)==WIN16
+MODELS = d l
+USERLIBS = $(BCLIBDIR)\bivbx.lib
+DEFEXE = ffact16.def
+!else
+MODELS = d f
+USERLIBS = $(BCLIBDIR)\bivbx32.lib
+DEFEXE = ffact32.def
+!endif
+
 EXERES = fishfact
 OBJEXE = ffactwin.obj fshtdlgc.obj
 RESEXE = ffactwin.res

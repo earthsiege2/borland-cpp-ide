@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1991-1995 Microsoft Corporation
+Copyright (c) 1991-1996 Microsoft Corporation
 
 Module Name:
 
@@ -15,12 +15,16 @@ Abstract:
 
 #ifndef _WINREG_
 #define _WINREG_
+#pragma option -b
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#ifndef WINVER
+#define WINVER 0x0400   // version 4.0
+#endif /* !WINVER */
 
 //
 // Requested Key access mask type.
@@ -773,4 +777,5 @@ AbortSystemShutdownW(
 #endif
 
 
+#pragma option -b.
 #endif // _WINREG_

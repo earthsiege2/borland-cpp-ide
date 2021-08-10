@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.4  $
 //
 // Definition of Print and PrintSetup common Dialogs classes
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(OWL_DC_H)
 # include <owl/dc.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -122,6 +126,10 @@ class _OWLCLASS TPrintDialog : public TCommonDialog {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 // ---------------------------------------------------------------------------
 // Inline implementation

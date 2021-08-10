@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.1  $
+// $Revision:   2.2  $
 //
 //  Forces the OLE2 GUIDs to be compiled into the code segment, since 
 //  compiling them into the data segment produces multi-instance problems.

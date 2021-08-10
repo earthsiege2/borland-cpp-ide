@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.7  $
 //
 // Definition of class TDocTemplate, and class template TDocTemplateT<D,V>
 //----------------------------------------------------------------------------
@@ -17,6 +17,10 @@
 #endif
 #if !defined(CLASSLIB_OBJSTRM_H)
 # include <classlib/objstrm.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 #if defined(_OWLDLL) && defined(BI_APP_DLL) && !defined(BI_PLAT_WIN32)
@@ -70,6 +74,14 @@ class _OWLCLASS TDocTemplate : public TRegLink, public TStreamableBase {
     void                    SetModule(TModule* module);
     int                     GetRefCount() const;
 
+    const char far*         GetFileFilter() const;
+    const char far*         GetDescription() const;
+    const char far*         GetDefaultExt() const;
+    void                    SetFileFilter(const char far*);
+    void                    SetDescription(const char far*);
+    void                    SetDefaultExt(const char far*);
+
+
   protected:                // Called only from parameterized derived class
     TDocTemplate(TRegList& regList, TModule*& module, TDocTemplate*& phead);
    ~TDocTemplate();
@@ -92,12 +104,6 @@ class _OWLCLASS TDocTemplate : public TRegLink, public TStreamableBase {
     TDocument*         InitDoc(TDocument* doc,const char far* path,long flags);
     TView*             InitView(TView* view);
     bool               SelectSave(TDocument& doc);
-    const char far*    GetFileFilter() const;
-    const char far*    GetDescription() const;
-    const char far*    GetDefaultExt() const;
-    void               SetFileFilter(const char far*);
-    void               SetDescription(const char far*);
-    void               SetDefaultExt(const char far*);
 
   protected:                // Called only from parameterized derived class
     TDocTemplate(const char* desc, const char* filt,
@@ -144,6 +150,7 @@ class _DOCVIEWENTRY TDocTemplateT : public TDocTemplate {
     TView* CreateView(TDocument& doc, long flags = 0);
 #endif
 
+#if !defined(BI_NO_OBJ_STREAMING)
   // Explicit expansion of DECLARE_STREAMABLE for use with parameterized class
   // DECLARE_STREAMABLE_FROM_BASE(TDocTemplateT<D,V>);
   //
@@ -153,6 +160,7 @@ class _DOCVIEWENTRY TDocTemplateT : public TDocTemplate {
   DECLARE_STREAMER_FROM_BASE(_DOCVIEWENTRY, TEMPLATECLASS, TDocTemplate);
   DECLARE_STREAMABLE_OPS(TEMPLATECLASS);
   #undef TEMPLATECLASS
+#endif
 };
 
 // Generic definitions/compiler options (eg. alignment) following the 
@@ -189,6 +197,10 @@ const long dtFileMustExist  = 0x1000; //OFN_FILEMUSTEXIST;    // file must exist
 const long dtCreatePrompt   = 0x2000; //OFN_CREATEPROMPT;     // prompt before create
 const long dtNoReadOnly     = 0x8000; //OFN_NOREADONLYRETURN; // return writable file
 const long dtNoTestCreate   = 0x10000L;//OFN_NOTESTFILECREATE; // skip create tests;
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

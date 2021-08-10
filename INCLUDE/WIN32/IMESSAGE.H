@@ -3,11 +3,12 @@
  *
  *  External definitions for MAPI's IMessage-on-IStorage facility
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef _IMESSAGE_H_
 #define _IMESSAGE_H_
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C"
@@ -20,7 +21,7 @@ typedef struct _MSGSESS     FAR * LPMSGSESS;
  *  top-level messages opened with OpenIMsgOnIStg
  */
 typedef void (STDAPICALLTYPE MSGCALLRELEASE)(
-    ULONG       ulCallerData,
+    ULONG       ulCallerData, 
     LPMESSAGE   lpMessage );
 
 /* DLL Entry Points (found in mapiu.dll) */
@@ -57,7 +58,7 @@ STDAPI_(void) CloseIMsgSession(
  *  will support the MAPI_DIALOG and ATTACH_DIALOG flags (by calling 
  *  support method: DoMCDialog) on CopyTo and DeleteAttach methods.  
  *  If lpMapiSup is not supplied (i.e. passed 0) then dialog flags will be
- *  ignored.  If supplied then ModifyRecipients will attempt to convert
+ *  ignored.  If supplied then ModifyRecipients will attempt to convert 
  *  short term entryids to long term entryids (by calling support method 
  *  OpenAddressBook and calls on the returned object).  If not supplied 
  *  then short term entryid's will be stored without conversion.
@@ -132,7 +133,9 @@ STDAPI_(SCODE) OpenIMsgOnIStg(
 /* Attribute Array */
 
 #if defined (__BORLANDC__)
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 typedef struct _SPropAttrArray
@@ -155,7 +158,9 @@ struct _SPropAttrArray_ ## _name \
 } _name
 
 #if defined (__BORLANDC__)
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
 /*  GetAttribIMsgOnIStg - To get attributes on properties
@@ -196,5 +201,6 @@ STDAPI_(SCODE) MapStorageSCode( SCODE StgSCode );
 }
 #endif
 
+#pragma option -b.
 #endif  /* _IMESSAGE_H_ */
 

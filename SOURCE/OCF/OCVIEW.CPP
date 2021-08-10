@@ -1,22 +1,45 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.11  $
+// $Revision:   2.15  $
 //
 // Implementation of TOcView Class
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/ocstorag.h>
-#include <ocf/ocview.h>
-#include <ocf/ocremvie.h>
-#include <ocf/ocapp.h>
-#include <ocf/ocpart.h>
-#include <ocf/ocdata.h>
-#include <ocf/autodefs.h>
-#include <services/memory.h>
-#include <winsys/lclstrng.h>
-#include <winsys/geometry.h>
+#if !defined(OCF_OLEUTIL_H)
+# include <ocf/oleutil.h>
+#endif
+#if !defined(OCF_OCSTORAG_H)
+# include <ocf/ocstorag.h>
+#endif
+#if !defined(OCF_OCVIEW_H)
+# include <ocf/ocview.h>
+#endif
+#if !defined(OCF_OCREMVIE_H)
+# include <ocf/ocremvie.h>
+#endif
+#if !defined(OCF_OCAPP_H)
+# include <ocf/ocapp.h>
+#endif
+#if !defined(OCF_OCPART_H)
+# include <ocf/ocpart.h>
+#endif
+#if !defined(OCF_OCDATA_H)
+# include <ocf/ocdata.h>
+#endif
+#if !defined(OCF_AUTODEFS_H)
+# include <ocf/autodefs.h>
+#endif
+#if !defined(SERVICES_MEMORY_H)
+# include <services/memory.h>
+#endif
+#if !defined(WINSYS_LCLSTRNG_H)
+# include <winsys/lclstrng.h>
+#endif
+#if !defined(WINSYS_GEOMETRY_H)
+# include <winsys/geometry.h>
+#endif
 
 DIAG_DECLARE_GROUP(OcRefCount);
 

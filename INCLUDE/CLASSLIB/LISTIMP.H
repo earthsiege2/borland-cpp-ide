@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.7  $
+//$Revision:   5.10  $
 //
 //----------------------------------------------------------------------------
 #if !defined( CLASSLIB_LISTIMP_H )
@@ -34,6 +34,10 @@
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -1043,6 +1047,10 @@ public:
         TMISListIteratorImp<T,TStandardAllocator>( l ) {}
 
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_OLDNAMES )
 # define BI_ISListImp TISListImp

@@ -1,0 +1,90 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1995, 1997 by Borland International, All Rights Reserved
+//
+// CTXFLOPN.SPP
+//    Provides the implementation for context sensitive File Dialogs.  This 
+//    provides for maintaince of a current directory for each context that the 
+//    FileOpen dialog is used in while preserving Windows' idea of the current 
+//    directory.
+//
+// $Revision:   1.1  $
+//
+//----------------------------------------------------------------------------
+
+import "cw3220mt.dll" {
+   int fnsplit(const char *fullname, char *drive, char *dir, char *name, char *ext);
+};
+
+import IDE;
+
+ContextSensitiveFileDialog(theRequestorsName, prompt, initialSpec){
+   PushCurrentDirectory();
+
+   RestoreDirectory(theRequestorsName);
+   
+   declare theFileName = IDE.FileDialog(prompt, initialSpec);
+   if(theFileName != ""){
+      RememberDirectory(theRequestorsName, ExtractDirectoryName(theFileName));
+   }  
+   
+   PopCurrentDirectory();
+
+   return theFileName;
+}
+
+ExtractDirectoryName(fullname){
+   declare drive;
+   declare dir;
+   declare name;
+   declare ext;
+
+   declare type = fnsplit(fullname, drive, dir, name, ext);
+
+   return (drive + dir);
+}
+
+declare array rememberer[]; 
+
+RememberDirectory(forWho, dirToStore){
+   rememberer[forWho] = dirToStore;
+}
+
+RestoreDirectory(forWho){
+   if(initialized(rememberer)){
+      if(initialized(rememberer[forWho])){
+         declare theStoredDir = rememberer[forWho];
+         if(theStoredDir != ""){
+            SetCurrentDirectory(theStoredDir);
+         }
+      }
+   }
+}
+
+class DirectoryStack{
+   declare top = NULL;
+   Push(item){
+      item.next = top;
+      top = item;
+   }      
+   Pop(){
+      declare rv = top;
+      top = top.next;
+      return rv;
+   }
+};
+
+class DirectoryRecord (dName){
+   declare dirName = dName;
+   declare next;
+};
+
+declare dirStack = new DirectoryStack;
+
+PushCurrentDirectory(){
+   dirStack.Push(new DirectoryRecord(GetCurrentDirectory()));
+}
+
+PopCurrentDirectory(){
+   SetCurrentDirectory(dirStack.Pop().dirName);
+}

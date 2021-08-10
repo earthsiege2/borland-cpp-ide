@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.9  $
 //
 // Implementation of class TDocTemplate
 //----------------------------------------------------------------------------
@@ -16,6 +16,7 @@
 #endif
 #include <stdio.h>
 
+OWL_DIAGINFO;
 #if !defined(SECTION) || SECTION == 1
 
 //
@@ -94,11 +95,6 @@ TDocTemplate::~TDocTemplate()
   delete[] Directory;
 }
 
-//----------------------------------------------------------------------------
-// Backward compatibility with old style doc templates
-//
-#if defined(OWL2_COMPAT)
-
 //
 const char far* TDocTemplate::GetFileFilter() const
 {
@@ -116,6 +112,11 @@ const char far* TDocTemplate::GetDefaultExt() const
 {
   return (*RegList)["extension"];
 }
+
+//----------------------------------------------------------------------------
+// Backward compatibility with old style doc templates
+//
+#if defined(OWL2_COMPAT)
 
 //
 // The following three function vectors get reset by TDocManager constructor

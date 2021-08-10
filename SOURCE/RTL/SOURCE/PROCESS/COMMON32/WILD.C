@@ -2,16 +2,18 @@
  * filename - wild.c
  *
  * function(s)
- *        _expand_wild - expand a wild card filename argument
+ *        _expand_wild -  expand a wild card filename argument
+ *        _wexpand_wild - expand a wide-character wild card filename argument
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #ifdef __OS2__
 #include <os2bc.h>
@@ -19,38 +21,44 @@
 #include <ntbc.h>
 #endif
 #include <string.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*----------------------------------------------------------------------
  * Variables and functions from setargv.c
  */
-extern void _addarg(char *, int);   /* function to add one argument to argv */
+extern void _taddarg(_TCHAR *, int);   /* function to add one argument to argv */
 
 /*----------------------------------------------------------------------
- * expand - expand a wild-card argument into its matching filenames.
+ * _expand_wild - expand a wild-card argument into its matching filenames.
  */
-void _RTLENTRY _EXPFUNC _expand_wild(char *arg)
+void _RTLENTRY _EXPFUNC _texpand_wild(_TCHAR *arg)
 {
 #ifdef __OS2__
-    static char fullname[CCHMAXPATH];
+    static _TCHAR fullname[CCHMAXPATH];
     FILEFINDBUF3 *ff;
     HDIR hdir;
     ULONG nfiles;
     APIRET ret;
-    static char buf[1024];
+    static _TCHAR buf[1024];
 #else   /* not OS2 */
-    static char fullname[MAX_PATH];
+    static _TCHAR fullname[MAX_PATH];
     WIN32_FIND_DATA ff;
     HANDLE hdir;
 #endif  /* OS2 */
-    char *endpath;
+    _TCHAR *endpath;
     int nfound;
 
     /* Copy the path prefix to fullname.  Set endpath to point
      * to the end of the prefix.
      */
-    strcpy(fullname,arg);
-    for (endpath = fullname + strlen(fullname); endpath != fullname; endpath--)
-        if (*(endpath-1) == ':' || *(endpath-1) == '\\' || *(endpath-1) == '/')
+    _tcscpy(fullname,arg);
+    for (endpath = fullname + _tcslen(fullname); endpath != fullname; endpath--)
+#if defined(_MBCS) && !defined(_UNICODE)
+        if ( (*(endpath-1) == _TEXT(':') || *(endpath-1) == _TEXT('\\') || *(endpath-1) == _TEXT('/') ) && _mbsbtype(fullname, (endpath-1)-fullname) == _MBC_SINGLE)
+#else
+        if (*(endpath-1) == _TEXT(':') || *(endpath-1) == _TEXT('\\') || *(endpath-1) == _TEXT('/'))
+#endif
             break;
 
     /* Add each matching file to the argument list.
@@ -77,7 +85,7 @@ void _RTLENTRY _EXPFUNC _expand_wild(char *arg)
          */
         for (ff = (FILEFINDBUF3 *)buf;
              nfiles--;
-             ff = (FILEFINDBUF3 *)((char *)ff + (int)ff->oNextEntryOffset))
+             ff = (FILEFINDBUF3 *)((_TCHAR *)ff + (int)ff->oNextEntryOffset))
         {
             strcpy(endpath,ff->achName);
             _addarg(fullname, 1);
@@ -117,8 +125,8 @@ void _RTLENTRY _EXPFUNC _expand_wild(char *arg)
         /* Append the filename to the path prefix, and add the
          * resulting full pathname to the argument list.
          */
-        strcpy(endpath,ff.cFileName);
-        _addarg(fullname, 1);
+        _tcscpy(endpath,ff.cFileName);
+        _taddarg(fullname, 1);
         nfound++;
     }
 #endif  /* OS2 */
@@ -126,5 +134,5 @@ void _RTLENTRY _EXPFUNC _expand_wild(char *arg)
     /* If no matching files are found, use the argument unmodified.
      */
     if (nfound == 0)
-        _addarg(arg, 0);
+        _taddarg(arg, 0);
 }

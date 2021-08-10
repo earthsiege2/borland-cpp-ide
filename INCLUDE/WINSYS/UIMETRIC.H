@@ -2,7 +2,7 @@
 // Borland WinSys Library
 // Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.7  $
 //
 // Definition of TUIMetric, a UI metrics provider class
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(WINSYS_WSYSINC_H)
 # include <winsys/wsysinc.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //
@@ -110,6 +114,10 @@ class _WSYSCLASS TUIMetric {
   private:
     int I;
 };
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib 
+#endif
 
 //
 inline TUIMetric::TUIMetric(int i)

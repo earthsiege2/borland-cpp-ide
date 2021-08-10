@@ -1,18 +1,30 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.13  $
+// $Revision:   2.18  $
 //
 //   Implementation of TOcApp Class
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/autodefs.h>
-#include <ocf/appdesc.h>
+#if !defined(OCF_AUTODEFS_H)
+# include <ocf/autodefs.h>
+#endif
+#if !defined(OCF_APPDESC_H)
+# include <ocf/appdesc.h>
+#endif
+#if !defined(OCF_OCREG_H)
 #include <ocf/ocreg.h>
-#include <ocf/ocapp.h>
-#include <ocf/ocpart.h>
-#include <services/memory.h>
+#endif
+#if !defined(OCF_OCAPP_H)
+# include <ocf/ocapp.h>
+#endif
+#if !defined(OCF_OCPART_H)
+# include <ocf/ocpart.h>
+#endif
+#if !defined(SERVICES_MEMORY_H)
+# include <services/memory.h>
+#endif
 #if defined(BI_PLAT_WIN32)
 # include <winver.h>
 #elif defined(BI_PLAT_WIN16)
@@ -33,10 +45,6 @@ TOcApp::TOcApp(TOcRegistrar& registrar, uint32 options, TOcApp*& retOcApp)
   OcAppPtr(&retOcApp),
   Options(options),
   DisableDlgs(false),
-#if defined(BI_DATA_NEAR)
-  Name(*new TString),
-  NameList(*new TOcNameList),
-#endif
   Registrar(registrar),
   Registered(false)
 {
@@ -69,10 +77,6 @@ TOcApp::TOcApp(TOcRegistrar& registrar, uint32 options, TOcAppHost* host,
   OcAppPtr(0),
   Options(options),
   DisableDlgs(false),
-#if defined(BI_DATA_NEAR)
-  Name(*new TString),
-  NameList(*new TOcNameList),
-#endif
   Registrar(registrar),
   Registered(false)
 {
@@ -138,7 +142,7 @@ TOcApp::Init()
     char name[128];
     if (::FindResource(_hInstance, MAKEINTRESOURCE(i/16+1), RT_STRING)) {
       if (::LoadString(_hInstance, i, name, 128)) {
-        char far* resultName = strchr(name, '\n');
+        char* resultName = strchr(name, '\n');
         *resultName++ = 0;
         NameList.Add(new TOcFormatName(name, resultName));
       }
@@ -169,8 +173,8 @@ TOcApp::~TOcApp()
   // RefCnt was held by controller
   //
   if (FrameHost) {
-    if (FrameHost->EvOcAppShutdown() && IsOptionSet(amServedApp) &&
-        !IsOptionSet(amExeModule)) {
+    if (FrameHost->EvOcAppShutdown() &&
+        IsOptionSet(amServedApp) && !IsOptionSet(amExeModule)) {
       Registrar.Shutdown(0, Options);
     }
     FrameHost->ReleaseOcObject();
@@ -179,10 +183,6 @@ TOcApp::~TOcApp()
 
   if (BService)
     BService->Release();
-#if defined(BI_DATA_NEAR)
-  delete &Name;
-  delete &NameList;
-#endif
   Registrar.AppCount--;
   if (BCmI)
     BCmI->Release();
@@ -246,12 +246,17 @@ TOcApp::RegisterClasses()
 {
   if (Registered)
     return;
+
+  // No class registration for InProc Servers
+  //
   if (!(IsOptionSet(amExeModule)))
-    return;     // no class registration for inproc servers
+    return;
+
+  // No class registration for single use apps unless embedded
+  //
   if (IsOptionSet(amSingleUse) &&
-     (IsOptionSet(amAutomation)||
-     !IsOptionSet(amEmbedding)))
-    return;     // no class registration for single use apps unless embedded
+     (IsOptionSet(amAutomation)|| !IsOptionSet(amEmbedding)))
+    return;
 
   // Loop thru all templates, registering registerable classes
   //
@@ -260,9 +265,12 @@ TOcApp::RegisterClasses()
     TRegList&   regList = link->GetRegList();
     const char* progid = regList[IsOptionSet(amDebug) ? "debugprogid" : "progid" ];
     if (progid) {
+
+      // Don't register container classes unless embedding
+      //
       if (!IsOptionSet(amEmbedding) &&
           !(const char*)regList["insertable"])
-        continue;   // don't register container classes unless embedding
+        continue;
 
       bool multiUse = !IsOptionSet(amSingleUse);
       if (multiUse) {
@@ -303,7 +311,7 @@ TOcApp::UnregisterClasses()
 // Add a user defined clipboard format name
 //
 void
-TOcApp::AddUserFormatName(const char far* name, const char far* resultName, const char far* id)
+TOcApp::AddUserFormatName(const char* name, const char* resultName, const char* id)
 {
   NameList.Add(new TOcFormatName(name, resultName, id));
 }
@@ -359,7 +367,7 @@ TOcApp::CanClose()
 }
 
 uint
-TOcApp::EnableEditMenu(TOcMenuEnable menuEnable, IBDataConsumer far* ocView)
+TOcApp::EnableEditMenu(TOcMenuEnable menuEnable, IBDataConsumer* ocView)
 {
   return BServiceI ? BServiceI->EnableEditMenu(menuEnable, ocView) : 0;
 }
@@ -394,7 +402,7 @@ TOcApp::Paste(TOcInitInfo& init)
 bool
 TOcApp::Copy(TOcPart* ocPart)
 {
-  IBPart far* bPartI;
+  IBPart* bPartI;
   if (ocPart && SUCCEEDED(ocPart->QueryInterface(IID_IBPart, &(LPVOID)bPartI))) {
     ocPart->Release();
 
@@ -417,7 +425,7 @@ TOcApp::Copy(TOcDataProvider* ocData)
   else
     return false;
 
-/*
+#if   0
   IBDataProvider far* bDataI;
   if (ocData && SUCCEEDED(ocData->QueryInterface(IID_IBDataProvider, &(LPVOID)bDataI))) {
     ocData->Release();
@@ -427,7 +435,8 @@ TOcApp::Copy(TOcDataProvider* ocData)
     return HRIsOK(BServiceI->Clip(bDataI, true, true, false));
   }
   return false;
-*/
+#endif
+
   return HRIsOK(BServiceI->Clip(ocData, true, true, false));
 }
 
@@ -438,7 +447,8 @@ bool
 TOcApp::Drag(TOcDataProvider* ocData, TOcDropAction inAction, TOcDropAction& outAction)
 {
   PRECONDITION(ocData);
-  /*
+
+#if   0
   if (!BServiceI)
     return false;
 
@@ -448,7 +458,7 @@ TOcApp::Drag(TOcDataProvider* ocData, TOcDropAction inAction, TOcDropAction& out
     return HRSucceeded(BServiceI->Drag(ocData, inAction, &outAction));
   }
   return false;
-  */
+#endif
 
   return BServiceI? HRSucceeded(BServiceI->Drag(ocData, inAction, &outAction)) : false;
 }
@@ -467,7 +477,6 @@ TOcApp::Drag(TOcPart* ocPart, TOcDropAction inAction, TOcDropAction& outAction)
     return HRSucceeded(BServiceI->Drag(bPartI, inAction, &outAction));
   }
   return false;
-//  return BServiceI? HRSucceeded(BServiceI->Drag(ocPart, inAction, &outAction)) : false;
 }
 
 //
@@ -508,7 +517,9 @@ TOcApp::GetAppName()
 TOcHelp _IFUNC
 TOcApp::HelpMode(TOcHelp /*newMode*/)
 {
-  return hlpExit;  // no built in help support
+  // No built in help support
+  //
+  return hlpExit;
 }
 
 //
@@ -555,7 +566,7 @@ TOcApp::SetFrameMenu(HMENU hMenu)
 //
 //
 HRESULT _IFUNC
-TOcApp::Accelerator(MSG far* msg)
+TOcApp::Accelerator(MSG* msg)
 {
   PRECONDITION(msg);
 
@@ -610,7 +621,7 @@ TOcApp::GetWindow()
 // Get client rectangle of app's main frame window
 //
 HRESULT _IFUNC
-TOcApp::GetWindowRect(TRect far* r)
+TOcApp::GetWindowRect(TRect* r)
 {
   PRECONDITION(r);
 
@@ -632,9 +643,9 @@ TOcApp::GetWindowTitle()
 // provide a given combination.
 //
 HRESULT _IFUNC
-TOcApp::RequestBorderSpace(const TRect far* space)
+TOcApp::RequestBorderSpace(const TRect* space)
 {
-  TRect far* nc_space = CONST_CAST(TRect far*, space);  
+  TRect* nc_space = CONST_CAST(TRect*, space);  
   return HRFailIfZero(FrameHost && FrameHost->EvOcAppBorderSpaceReq(nc_space));
 }
 
@@ -643,9 +654,9 @@ TOcApp::RequestBorderSpace(const TRect far* space)
 // server adornments
 //
 HRESULT _IFUNC
-TOcApp::SetBorderSpace(const TRect far* space)
+TOcApp::SetBorderSpace(const TRect* space)
 {
-  TRect far* nc_space = CONST_CAST(TRect far*, space);  
+  TRect far* nc_space = CONST_CAST(TRect*, space);  
   return HRFailIfZero(FrameHost && FrameHost->EvOcAppBorderSpaceSet(nc_space));
 }
 
@@ -665,7 +676,6 @@ TOcApp::SetStatusText(LPCOLESTR text)
 {
   // Convert OLE str into ANSI
   //
-//  return HRFailIfZero(FrameHost && FrameHost->EvOcAppStatusText(OleStr(text)));
   if (FrameHost) {
     FrameHost->EvOcAppStatusText(OleStr(text));
     return HR_OK;
@@ -748,7 +758,7 @@ TOcApp::ShutdownMaybe()
 // Use individual FrameHost methods instead
 //
 
-/*
+#if   0
 uint32
 TOcApp::ForwardEvent(int eventId, const void far* param)
 {
@@ -766,11 +776,15 @@ TOcApp::ForwardEvent(int eventId, uint32 param)
 
   return 0;
 }
-*/
+#endif
 
 //-----------------------------------------------------------------------------
 // TOcClassMgr, IBClassMgr implementation for TOcRegistrar
 //
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
 
 class _ICLASS TOcClassMgr : private TUnknown, public IBClassMgr {
   public:
@@ -778,9 +792,8 @@ class _ICLASS TOcClassMgr : private TUnknown, public IBClassMgr {
     ~TOcClassMgr();
     ulong _IFUNC   AddRef() ;
     ulong _IFUNC   Release();
-    
-    void 					 SetApp(TOcApp* app) 
-    																		{OcApp = app;}
+
+    void SetApp(TOcApp* app) {OcApp = app;}
 
   private:
     HRESULT _IFUNC QueryInterface(const GUID far& iid, void far*far* iface)
@@ -793,17 +806,21 @@ class _ICLASS TOcClassMgr : private TUnknown, public IBClassMgr {
     //
     HRESULT      QueryObject(const IID far& iid, void far* far* iface);
 
-    TComponentFactory OcCallback;  // callback for creating component
-    uint32    Options;  // options flags from TOcRegistrar
-    TOcApp*		OcApp;
+    TComponentFactory   OcCallback;    // Callback for creating component
+    uint32              Options;       // Options flags from TOcRegistrar
+    TOcApp*             OcApp;
     friend class TOcApp;  // could delegate the interface instead...
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 TOcClassMgr::TOcClassMgr(TComponentFactory cc, uint32 options)
 :
   OcCallback(cc),
   Options(options),
-	OcApp (0)
+        OcApp (0)
 {
 }
 
@@ -847,9 +864,9 @@ TOcClassMgr::ComponentCreate(IUnknown far* far* retIface, IUnknown far* outer, B
     return *retIface ? HR_OK : HR_FAIL;
   }
   catch (...) {  // we can't throw any exception through OLE
-		// if an exception occur shutdown the application if it needs to be so
-		if (OcApp)
-    	OcApp->ShutdownMaybe ();
+                // if an exception occur shutdown the application if it needs to be so
+                if (OcApp)
+        OcApp->ShutdownMaybe ();
 
     return HR_OUTOFMEMORY;  // probably a resource problem, better error code?
   }
@@ -953,10 +970,10 @@ TOcRegistrar::CreateBOleClassMgr()
 // Override TRegistrar's GetFactory to provide additional factory support
 // using BOle factories
 //
-void far*
-TOcRegistrar::GetFactory(const GUID& clsid, const GUID far& iid)
+void*
+TOcRegistrar::GetFactory(const GUID& clsid, const GUID& iid)
 {
-  void far* factory = TRegistrar::GetFactory(clsid, iid);
+  void* factory = TRegistrar::GetFactory(clsid, iid);
   if (factory)
     return factory;
 
@@ -998,10 +1015,10 @@ TOcRegistrar::CanUnload()
   return TRegistrar::CanUnload() && AppCount == 0;
 }
 
-void						
-TOcRegistrar::SetApp(TOcApp* app) 
+void
+TOcRegistrar::SetApp(TOcApp* app)
 {
-	OcClassMgr->SetApp(app);
+        OcClassMgr->SetApp(app);
 }
 
 static bool

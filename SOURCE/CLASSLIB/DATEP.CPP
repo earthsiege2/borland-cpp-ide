@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.7  $
 //
 // TDate class persistant streaming implementation
 //----------------------------------------------------------------------------
@@ -10,6 +10,10 @@
 #include <classlib/date.h>
 #include <classlib/objstrm.h>
 #include <strstrea.h>
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 opstream _BIDSFAR & _BIDSFUNC operator << ( opstream _BIDSFAR & os, const TDate _BIDSFAR & d )
 {
@@ -20,3 +24,8 @@ ipstream _BIDSFAR & _BIDSFUNC operator >> ( ipstream _BIDSFAR & is, TDate _BIDSF
 {
     return is >> d.Julnum;
 }
+
+#if defined(BI_NAMESPACE)
+}       // namespace ClassLib
+#endif
+

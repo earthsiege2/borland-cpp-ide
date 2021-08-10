@@ -1,7 +1,6 @@
-
 /*++ BUILD Version: 0007    // Increment this if a change has global effects
 
-Copyright (c) 1990-1995  Microsoft Corporation
+Copyright (c) 1990-1996  Microsoft Corporation
 
 Module Name:
 
@@ -27,8 +26,11 @@ Notes:
 
 --*/
 
+/* $Copyright: 1994$ */
+
 #ifndef _LMBROWSR_
 #define _LMBROWSR_
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -87,29 +89,59 @@ typedef struct _BROWSER_STATISTICS_101 {
     ULONG           NumberOfDuplicateMasterAnnouncements;
 } BROWSER_STATISTICS_101, *PBROWSER_STATISTICS_101;
 
+
+typedef struct _BROWSER_EMULATED_DOMAIN {
+#ifdef MIDL_PASS
+    [string] wchar_t *DomainName;
+#else
+    LPWSTR DomainName;
+#endif // MIDL_PASS
+#ifdef MIDL_PASS
+    [string] wchar_t *EmulatedServerName;
+#else
+    LPWSTR EmulatedServerName;
+#endif // MIDL_PASS
+    DWORD Role;
+} BROWSER_EMULATED_DOMAIN, *PBROWSER_EMULATED_DOMAIN;
+
 //
 // Function Prototypes - BROWSER
 //
 
 NET_API_STATUS NET_API_FUNCTION
 I_BrowserServerEnum (
-    IN  LPTSTR      servername OPTIONAL,
-    IN  LPTSTR      transport OPTIONAL,
-    IN  LPTSTR      clientname OPTIONAL,
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     transport OPTIONAL,
+    IN  LPCWSTR     clientname OPTIONAL,
     IN  DWORD       level,
     OUT LPBYTE      *bufptr,
     IN  DWORD       prefmaxlen,
     OUT LPDWORD     entriesread,
     OUT LPDWORD     totalentries,
     IN  DWORD       servertype,
-    IN  LPTSTR      domain OPTIONAL,
+    IN  LPCWSTR     domain OPTIONAL,
     IN OUT LPDWORD  resume_handle OPTIONAL
+    );
+
+NET_API_STATUS NET_API_FUNCTION
+I_BrowserServerEnumEx (
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     transport OPTIONAL,
+    IN  LPCWSTR     clientname OPTIONAL,
+    IN  DWORD       level,
+    OUT LPBYTE      *bufptr,
+    IN  DWORD       prefmaxlen,
+    OUT LPDWORD     entriesread,
+    OUT LPDWORD     totalentries,
+    IN  DWORD       servertype,
+    IN  LPCWSTR     domain OPTIONAL,
+    IN  LPCWSTR     FirstNameToReturn OPTIONAL
     );
 
 
 NET_API_STATUS
 I_BrowserQueryOtherDomains (
-    IN  LPTSTR      servername OPTIONAL,
+    IN  LPCWSTR      servername OPTIONAL,
     OUT LPBYTE      *bufptr,
     OUT LPDWORD     entriesread,
     OUT LPDWORD     totalentries
@@ -117,7 +149,7 @@ I_BrowserQueryOtherDomains (
 
 NET_API_STATUS
 I_BrowserResetNetlogonState (
-    IN  LPTSTR      servername OPTIONAL
+    IN  LPCWSTR      servername OPTIONAL
     );
 
 NET_API_STATUS
@@ -132,21 +164,27 @@ I_BrowserSetNetlogonState(
 #define BROWSER_ROLE_BDC 0x2
 
 NET_API_STATUS
+I_BrowserQueryEmulatedDomains(
+    IN LPWSTR ServerName OPTIONAL,
+    OUT PBROWSER_EMULATED_DOMAIN *EmulatedDomains,
+    OUT LPDWORD EntriesRead );
+
+NET_API_STATUS
 I_BrowserQueryStatistics (
-    IN  LPTSTR      servername OPTIONAL,
+    IN  LPCWSTR      servername OPTIONAL,
     OUT LPBROWSER_STATISTICS *statistics
     );
 
 NET_API_STATUS
 I_BrowserResetStatistics (
-    IN  LPTSTR      servername OPTIONAL
+    IN  LPCWSTR      servername OPTIONAL
     );
 
 
 WORD
 I_BrowserServerEnumForXactsrv(
-    IN LPTSTR TransportName OPTIONAL,
-    IN LPTSTR ClientName OPTIONAL,
+    IN LPCWSTR TransportName OPTIONAL,
+    IN LPCWSTR ClientName OPTIONAL,
 
     IN ULONG NtLevel,
     IN USHORT ClientLevel,
@@ -159,7 +197,8 @@ I_BrowserServerEnumForXactsrv(
     OUT LPDWORD TotalEntries,
 
     IN DWORD ServerType,
-    IN LPTSTR Domain,
+    IN LPCWSTR Domain,
+    IN LPCWSTR FirstNameToReturn,
 
     OUT PWORD Converter
 
@@ -177,5 +216,7 @@ I_BrowserDebugTrace(
     );
 
 #endif
+
+#pragma option -b.
 
 #endif // _LMBROWSR_

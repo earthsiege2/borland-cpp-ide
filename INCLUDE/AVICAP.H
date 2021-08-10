@@ -15,9 +15,9 @@
  ***************************************************************************/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1994, 1996 by Borland International
+ *      Copyright (c) 1994, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -25,6 +25,7 @@
 #ifndef _INC_AVICAP
 #define _INC_AVICAP
 #define __AVICAP_H
+#pragma option -b
 
 #if !defined(RC_INVOKED) && !defined(VFWAPI)
 #ifdef _WIN32
@@ -49,7 +50,9 @@ extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack1.h>
+#pragma option -b
 #endif
 
 #ifndef RC_INVOKED
@@ -552,13 +555,16 @@ BOOL VFWAPI capGetDriverDescription (UINT wDriverIndex,
 #define IDS_CAP_STAT_FRAMESDROPPED  513  /* "Dropped %ld of %ld frames (%d.%02d%%) during capture." */
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
 }                       /* End of extern "C" { */
 #endif    /* __cplusplus */
 
+#pragma option -b.
 #endif /* INC_AVICAP */
 
 

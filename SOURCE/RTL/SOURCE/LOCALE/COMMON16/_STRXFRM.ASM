@@ -6,11 +6,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;
-;       C/C++ Run Time Library - Version 7.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1992, 1996 by Borland International
+;       Copyright (c) 1992, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
 
 	INCLUDE RULES.ASI
 
@@ -346,7 +347,7 @@ _LevelTransform PROC NOLANGUAGE NEAR
 
 @@checkbackward:
 
-	; check for backward processing 
+	; check for backward processing
 
 	test	ch, BACKWARD_RULE
   	jnz	@@reversekey
@@ -521,4 +522,3 @@ _LevelTransform ENDP
 Code_EndS@
 
 	END	; end module _strxfrm.asm
-

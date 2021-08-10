@@ -58,6 +58,11 @@ TBatchMove::TBatchMove( HWND hdlg, int idc ) : TBDTComponent()
 	TBDTComponent::SetPIT( batchmove );
 }
 
+void TBatchMove::AttachToControl( HWND hdlg, int idc )
+{
+	SetPIT( GetVBXPIUnknown( hdlg, idc ) );
+}
+
 void TBatchMove::AttachControl( HWND hdlg, int idc )
 {
 	SetVBXPIUnknown( hdlg, idc, batchmove );
@@ -185,7 +190,7 @@ void TBatchMove::GetChangedTableName( string& s )
 		AnyString( batchmove->get_ChangedTableName() ).GetString( s );
 }
 
-void TBatchMove::SetChangedTableName( string& n )
+void TBatchMove::SetChangedTableName( const string& n )
 {
 	if (batchmove)
 		batchmove->put_ChangedTableName( AnyString(n).GetPITAnyString() );
@@ -204,7 +209,7 @@ void TBatchMove::GetDestination( TTable& t )
 	}
 }
 
-void TBatchMove::SetDestination( TTable& t )
+void TBatchMove::SetDestination( const TTable& t )
 {
 	if (batchmove)
 		batchmove->put_Destination( t.GetPITTable() );
@@ -216,7 +221,7 @@ void TBatchMove::GetKeyViolTableName( string& s )
 		AnyString( batchmove->get_KeyViolTableName() ).GetString( s );
 }
 
-void TBatchMove::SetKeyViolTableName( string& n )
+void TBatchMove::SetKeyViolTableName( const string& n )
 {
 	if (batchmove)
 		batchmove->put_KeyViolTableName( AnyString(n).GetPITAnyString() );
@@ -235,7 +240,7 @@ void TBatchMove::GetMappings( TStrings& s )
 	}
 }
 
-void TBatchMove::SetMappings( TStrings& s )
+void TBatchMove::SetMappings( const TStrings& s )
 {
 	if (batchmove)
 		batchmove->put_Mappings( s.GetPITStrings() );
@@ -259,7 +264,7 @@ void TBatchMove::GetProblemTableName( string& s )
 		AnyString( batchmove->get_ProblemTableName() ).GetString( s );
 }
 
-void TBatchMove::SetProblemTableName( string& n )
+void TBatchMove::SetProblemTableName( const string& n )
 {
 	if (batchmove)
 		batchmove->put_ProblemTableName( AnyString(n).GetPITAnyString() );
@@ -290,7 +295,7 @@ void TBatchMove::GetSource( TDataSet& d )
 	}
 }
 
-void TBatchMove::SetSource( TDataSet& d )
+void TBatchMove::SetSource( const TDataSet& d )
 {
 	if (batchmove)
 		batchmove->put_Source( d.GetPITDataSet() );
@@ -308,3 +313,4 @@ void TBatchMove::SetTransliterate( bool t )
 		batchmove->put_Transliterate( MakeVariantBool( t ) );
 }
 
+

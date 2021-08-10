@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.10  $
+//$Revision:   10.13  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
@@ -11,6 +11,8 @@
 #if !defined(OWL_WINSOCK_H)
 # include <owl/winsock.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Actually 512 is the absolute guaranteed minimum value.  The WSAData
@@ -67,7 +69,7 @@ int TDatagramSocket::Read(char* data, int& charsToRead, TSocketAddress& address)
   // Simply call recvfrom() and return if some kind of error is encountered.
   //
   int addressSize = sizeof(sockaddr);
-  int charsReceived = TWinSock::Dll()->recvfrom(Handle, data, charsToRead, 0,
+  int charsReceived = TWinSockDll::recvfrom(Handle, data, charsToRead, 0,
                                               &address, &addressSize);
 
   if (charsReceived == SOCKET_ERROR) {
@@ -76,7 +78,7 @@ int TDatagramSocket::Read(char* data, int& charsToRead, TSocketAddress& address)
     //  posted by the driver, but before this notification function got called.
     //
     charsToRead = 0;  // This will be available for the caller to examine.
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     if (LastError == WSAEWOULDBLOCK)
       return WINSOCK_NOERROR;  // This is not considered an "error" under Winsock.
     // Some other error occurred, return from this function.
@@ -99,7 +101,7 @@ int TDatagramSocket::Write(char* data, int& charsToWrite, TSocketAddress& outSoc
   // Note that bBecomeOwnerOfdata and bCopyData are ignored if we are using DataQueues.
   // Note that thus function may block here if blocking is enabled.
   //
-  int charsSent = TWinSock::Dll()->sendto(Handle, data, charsToWrite, 0,
+  int charsSent = TWinSockDll::sendto(Handle, data, charsToWrite, 0,
                                    &outSocketAddress, sizeof(sockaddr));
   if (charsSent == SOCKET_ERROR) {
     //It is entirely possible to get a blocking error here.  For example, a call to
@@ -107,7 +109,7 @@ int TDatagramSocket::Write(char* data, int& charsToWrite, TSocketAddress& outSoc
     //  but before this notification function got called.
     //
     charsToWrite = 0;
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     if (LastError == WSAEWOULDBLOCK)
       return WINSOCK_NOERROR;
     return WINSOCK_ERROR;
@@ -136,7 +138,7 @@ int TDatagramSocket::Write(char* data, int& charsToWrite, bool becomeOwnerOfData
 TDatagramSocket::DoReadNotification(const SOCKET& /*socket*/, int error)
 {
   if (error) {
-    LastError = error; // TWinSock::Dll()->WSAGetLastError();
+    LastError = error; // TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
 
@@ -155,7 +157,7 @@ TDatagramSocket::DoReadNotification(const SOCKET& /*socket*/, int error)
 TDatagramSocket::DoWriteNotification(const SOCKET& /*s*/, int error)
 {
   if (error) {
-    LastError = error; // TWinSock::Dll()->WSAGetLastError();
+    LastError = error; // TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
 
@@ -220,14 +222,14 @@ int TStreamSocket::Read(char* data, int& charsToRead)
 {
   // Try to receive the characters.
   //
-  int charsReceived = TWinSock::Dll()->recv(Handle, data, charsToRead, 0); 
+  int charsReceived = TWinSockDll::recv(Handle, data, charsToRead, 0); 
   if (charsReceived == SOCKET_ERROR) {
     // It is entirely possible to get a blocking error here.  For example, a call to
     //  recv() could have been made right after the message was posted by the driver,
     //  but before this notification function got called.
     //
     charsToRead = 0; // This will be available for the caller to examine.
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     if (LastError == WSAEWOULDBLOCK)
       return WINSOCK_NOERROR;
     // Some other error occurred.
@@ -244,14 +246,14 @@ int TStreamSocket::Read(char* data, int& charsToRead)
 int TStreamSocket::Write(char* data, int& charsToWrite, int flags,
                 bool /*becomeOwnerOfData*/, bool /*copyData*/)
 {
-  int charsSent = TWinSock::Dll()->send(Handle, data, charsToWrite, flags);
+  int charsSent = TWinSockDll::send(Handle, data, charsToWrite, flags);
   if (charsSent == SOCKET_ERROR) {
     // It is entirely possible to get a blocking error here.  For example, a call to
     //  send() could have been made right after the message was posted by the driver,
     //  but before this notification function got called.
     //
     charsToWrite = 0;
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     if (LastError == WSAEWOULDBLOCK) {
       return WINSOCK_NOERROR;
     }
@@ -268,14 +270,14 @@ int TStreamSocket::ReadOOB(char* data, int& charsToRead)
 {
   // Try to receive the characters.
   //
-  int charsReceived = TWinSock::Dll()->recv(Handle, data, charsToRead, MSG_OOB);
+  int charsReceived = TWinSockDll::recv(Handle, data, charsToRead, MSG_OOB);
   if (charsReceived == SOCKET_ERROR) {
     // It is entirely possible to get a blocking error here.  For example, a call to
     //  recv() could have been made right after the message was posted by the driver,
     //  but before this notification function got called.
     //
     charsToRead = 0;
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     if (LastError == WSAEWOULDBLOCK)
       return WINSOCK_NOERROR;
     // Some other error occurred.
@@ -294,14 +296,14 @@ int TStreamSocket::WriteOOB(char* data, int& charsToWrite, int flags,
                             bool /*becomeOwnerOfData*/, bool /*copyData*/)
 {
   flags |= MSG_OOB;
-  int charsSent = TWinSock::Dll()->send(Handle, data, charsToWrite, flags);
+  int charsSent = TWinSockDll::send(Handle, data, charsToWrite, flags);
   if (charsSent == SOCKET_ERROR) {
     // It is entirely possible to get a blocking error here.  For example, a call to
     //  send() could have been made right after the message was posted by the driver,
     //  but before this notification function got called.
     //
     charsToWrite = 0;
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     if (LastError == WSAEWOULDBLOCK) {
       return WINSOCK_NOERROR;
     }
@@ -316,8 +318,8 @@ int TStreamSocket::WriteOOB(char* data, int& charsToWrite, int flags,
 //
 TStreamSocket::Listen(int maxQueuedConnections)
 {
-  if (TWinSock::Dll()->listen(Handle, maxQueuedConnections)) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+  if (TWinSockDll::listen(Handle, maxQueuedConnections)) {
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   ConnectStatus = Listening;
@@ -348,8 +350,8 @@ TStreamSocket::Connect(TSocketAddress& addressToConnectTo)
 //
 TStreamSocket::Connect()
 {
-  if (TWinSock::Dll()->connect(Handle, &PeerSocketAddress, sizeof(sockaddr))) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+  if (TWinSockDll::connect(Handle, &PeerSocketAddress, sizeof(sockaddr))) {
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   // The following code assumes that the socket is in non-blocking mode.  If the socket was in
@@ -409,10 +411,10 @@ TStreamSocket::Accept(TStreamSocket& socket)
 TStreamSocket::Accept(SOCKET& socket, sockaddr& address)
 {
   int addressLength = sizeof(sockaddr);
-  socket = TWinSock::Dll()->accept(Handle, &address, &addressLength);
+  socket = TWinSockDll::accept(Handle, &address, &addressLength);
 
   if (socket == INVALID_SOCKET) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -429,7 +431,7 @@ TStreamSocket::Accept(SOCKET& socket, sockaddr& address)
 TStreamSocket::DoReadNotification(const SOCKET& /*socket*/, int error)
 {
   if (error) {
-    LastError = error; // TWinSock::Dll()->WSAGetLastError();
+    LastError = error; // TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -461,7 +463,7 @@ TStreamSocket::DoWriteNotification(const SOCKET& /*s*/, int error)
 TStreamSocket::DoOOBNotification(const SOCKET& /*s*/, int error)
 {
   if (error) {
-    LastError = error; // TWinSock::Dll()->WSAGetLastError();
+    LastError = error; // TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
 

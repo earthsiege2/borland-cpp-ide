@@ -11,6 +11,8 @@ LIBEXE = $(BCLIBDIR)\ole2w32.lib $(BCLIBDIR)\ctl3d32.lib
 DEFEXE = shellapp.def
 RESEXE = shellapp.res
 OBJEXE = aboutdlg.obj shellapp.obj mdichild.obj mdiclien.obj shellwin.obj
+OSMAJOR = 4
+OSMINOR = 0
 
 !include $(BCEXAMPLEDIR)\owlmake.gen
 

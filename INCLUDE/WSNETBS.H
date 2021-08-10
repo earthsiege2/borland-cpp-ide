@@ -10,6 +10,7 @@
 
 #ifndef _WSNETBS_
 #define _WSNETBS_
+#pragma option -b
 
 /*
  *   This is the structure of the SOCKADDR structure for NETBIOS.
@@ -65,5 +66,6 @@ typedef struct sockaddr_nb {
  */
 
 
+#pragma option -b.
 #endif
 

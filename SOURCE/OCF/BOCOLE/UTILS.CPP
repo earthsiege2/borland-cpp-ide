@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.3  $
+// $Revision:   2.4  $
 //
 // Contains some functions to make 32-bit bocole work under WIN95.
 //----------------------------------------------------------------------------

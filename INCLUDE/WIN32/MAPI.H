@@ -3,7 +3,7 @@
  *
  *  Messaging Applications Programming Interface.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  *
  *  Purpose:
  *
@@ -16,7 +16,7 @@
 
 #ifndef MAPI_H
 #define MAPI_H
-
+#pragma option -b
 
 /*
  *  Types.
@@ -25,6 +25,16 @@
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+
+#ifndef EXPORT
+#ifdef WIN16
+#define EXPORT __export
+#else
+/* Additional special definitions here */
+#define EXPORT
+#endif
 #endif
 
 typedef unsigned long FAR * LPULONG;
@@ -39,8 +49,10 @@ typedef unsigned char FAR * LPBYTE;
 
 #define    lhSessionNull    ((LHANDLE)0)
 
-#ifdef __BORLANDC__
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 typedef struct
@@ -105,8 +117,10 @@ typedef struct
 #define MAPI_RECEIPT_REQUESTED  0x00000002
 #define MAPI_SENT               0x00000004
 
-#ifdef __BORLANDC__
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
 /*
@@ -127,18 +141,7 @@ typedef struct
 #endif
 #define MAPI_NEW_SESSION        0x00000002  /* Don't use shared session     */
 #define MAPI_FORCE_DOWNLOAD     0x00001000  /* Get new mail before return   */
-#define MAPI_ALLOW_OTHERS       0x00000008  /* Make this a shared session   */
-#define MAPI_EXPLICIT_PROFILE   0x00000010  /* Don't use default profile    */
 #define MAPI_EXTENDED           0x00000020  /* Extended MAPI Logon          */
-#define MAPI_USE_DEFAULT        0x00000040  /* Use default profile in logon */
-
-#define MAPI_SIMPLE_DEFAULT (MAPI_LOGON_UI | MAPI_FORCE_DOWNLOAD | MAPI_ALLOW_OTHERS)
-#define MAPI_SIMPLE_EXPLICIT (MAPI_NEW_SESSION | MAPI_FORCE_DOWNLOAD | MAPI_EXPLICIT_PROFILE)
-
-/* MAPILogoff() flags.      */
-
-#define MAPI_LOGOFF_SHARED      0x00000001  /* Close all shared sessions    */
-#define MAPI_LOGOFF_UI          0x00000002  /* It's OK to present UI        */
 
 /* MAPISendMail() flags.    */
 
@@ -274,11 +277,13 @@ typedef ULONG (FAR PASCAL MAPIDELETEMAIL)(
 typedef MAPIDELETEMAIL FAR *LPMAPIDELETEMAIL;
 MAPIDELETEMAIL MAPIDeleteMail;
 
-typedef ULONG (FAR PASCAL MAPIFREEBUFFER)(
+#ifndef _MAC
+typedef ULONG (EXPORT FAR PASCAL MAPIFREEBUFFER)(
     LPVOID pv
 );
 typedef MAPIFREEBUFFER FAR *LPMAPIFREEBUFFER;
 MAPIFREEBUFFER MAPIFreeBuffer;
+#endif
 
 typedef ULONG (FAR PASCAL MAPIADDRESS)(
     LHANDLE lhSession,
@@ -366,4 +371,5 @@ ScMAPIXFromSMAPI(LHANDLE lhSimpleSession,
 }       /*  extern "C" */
 #endif
 
+#pragma option -b.
 #endif /* MAPI_H */

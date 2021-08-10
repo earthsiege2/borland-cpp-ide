@@ -6,17 +6,19 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <_stdio.h>
 #include <_scanf.h>
+#include <_tchar.h>
 
 #undef   ungetc         /* remove the macro version */
 
@@ -43,15 +45,15 @@ Return value    the number of input fields successfully scanned, converted
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC fscanf (FILE *fp, const char *fmt, ...)
+int _RTLENTRY _EXPFUNC _ftscanf (FILE *fp, const _TCHAR *fmt, ...)
 {
     va_list ap;
     int ret;
 
     va_start(ap,fmt);
     _lock_stream(fp);
-    ret =  _scanner ( (int (*)(void *))fgetc,
-                     (void (*)(int, void *))ungetc,
+    ret =  _scannert ( (int (*)(void *))_fgettc,
+                     (void (*)(int, void *))_ungettc,
                      fp,
                      fmt,
                      ap);

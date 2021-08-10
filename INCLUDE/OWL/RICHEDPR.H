@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.10  $
 //
 // Definition of classes supporting Printing/PrintPreview for TRichEdit
 //----------------------------------------------------------------------------
@@ -27,6 +27,10 @@
 #endif
 #if !defined(OWL_RICHEDIT_H)
 # include <owl/richedit.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -101,7 +105,7 @@ template<class T> void TDynArray<T>::SetLimit(uint aLimit)
 
       // Copy over the items already in array
       //
-      for (int i=0; i<limit && i<aLimit; i++)
+      for (uint i=0; i<limit && i<aLimit; i++)
         aItems[i] = items[i];
     }
 
@@ -208,5 +212,9 @@ class _OWLCLASS TRichEditPrintout : public TPrintout {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_REDITPRI_H

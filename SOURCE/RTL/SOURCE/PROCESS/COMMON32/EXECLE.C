@@ -3,27 +3,34 @@
  *
  * function(s)
  *        execle - load and execute a program
+ *        _wexecle - load and execute a program
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <process.h>
 #include <_process.h>
 #include <stddef.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------------*
 
-Name            exec... - functions that load and run other programs
+Name            exec..., _wexec... - functions that load and run other programs
 
 Usage           int  execle(const char *pathname, const char *arg0,
                            const char *arg1, ...,
                            const char *argn, NULL, const char *envp[]);
+                int  execle(const wchar_t *pathname, const wchar_t *arg0,
+                           const wchar_t *arg1, ...,
+                           const wchar_t *argn, NULL, const wchar_t *envp[]);
 
 Prototype in    process.h
 
@@ -36,7 +43,7 @@ Description     The functions in the exec...  family load and run (execute)
                 exec...  functions search  for pathname  using the standard
                 MS-DOS search algorithm:
 
-                        . If no explicit extension is given, the function 
+                        . If no explicit extension is given, the function
                           will search for the file as given. If that one is
                           not found, the function will add .COM and search
                           again. If that's not found, it will add .EXE and
@@ -108,12 +115,12 @@ Return value    If  successful, the  exec...  functions  do not  return. On
 
 *----------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC execle(const char *pathP, const char *arg0,...)
+int _RTLENTRY _EXPFUNC _texecle(const _TCHAR *pathP, const _TCHAR *arg0,...)
 {
-    const char   **p;
+    const _TCHAR   **p;
 
     /* Find the end of the argument list */
 
     for (p = &arg0; *p++ != NULL; );
-    return (_LoadProg(P_OVERLAY, pathP, &arg0, (const char **)*p, 0));
+    return (_tLoadProg(P_OVERLAY, pathP, &arg0, (const _TCHAR **)*p, 0));
 }

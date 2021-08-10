@@ -2,12 +2,13 @@
 *                                                                             *
 * custcntl.h -  Custom Control Library header file                            *
 *                                                                             *
-*               Copyright (c) 1992-1995, Microsoft Corp.  All rights reserved *
+*               Copyright (c) 1992-1996, Microsoft Corp.  All rights reserved *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _INC_CUSTCNTL
 #define _INC_CUSTCNTL
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -205,4 +206,6 @@ typedef UINT (CALLBACK* LPFNCCINFOW)(LPCCINFOW acci);
 }
 #endif  /* __cplusplus */
 
+#pragma option -b.
 #endif  /* _INC_CUSTCNTL */
+

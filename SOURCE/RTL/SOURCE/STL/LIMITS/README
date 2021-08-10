@@ -1,3 +1,4 @@
+/* $Revision:   8.1  $    */
 
 We've made the following assumptions in our current implementation
 of numeric_limits.  If any of these assumptions aren't true, please

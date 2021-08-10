@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.6  $
 //
 //   Base exception support for framework exceptions
 //----------------------------------------------------------------------------
@@ -41,6 +41,10 @@
 # define RETHROW throw
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 //----------------------------------------------------------------------------
 //
 // Derived exception class that supports cloning, rethrowing & instance
@@ -61,5 +65,9 @@ class _WSYSCLASS_RTL TXBase : public xmsg {
   //private:
     static int InstanceCount;
 };
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 #endif  // WINSYS_EXBASE_H

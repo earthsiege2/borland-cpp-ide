@@ -34,6 +34,11 @@ call buildall %1 %2 %3 %4
 if errorlevel 1 set err=1
 if exist  ..\tasks\NUL  cd ..
 
+if exist   tools\NUL    cd tools
+call buildall %1 %2 %3 %4
+if errorlevel 1 set err=1
+if exist  ..\tools\NUL  cd ..
+
 if exist   tutorial\NUL cd tutorial
 call buildall %1 %2 %3 %4
 if errorlevel 1 set err=1

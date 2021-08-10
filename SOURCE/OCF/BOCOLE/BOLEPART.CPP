@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.13  $
+// $Revision:   2.16  $
 //
 //  Implements the Bolero half of the OLE2 client site. BOlePart objects 
 //  impersonate the server object (IPart) from the point of view of the 
@@ -273,7 +273,7 @@ BOOL _IFUNC BOlePart::InitAdvises(LPOLEOBJECT lpOleObject,
   return fStatus;
 }
 
-#ifdef __BORLANDC__ //PHP OpenStream block is optimized incorrectly
+#ifdef __BORLANDC__ 
 #pragma option -Od
 #endif
 
@@ -898,9 +898,6 @@ HRESULT _IFUNC BOlePart::ConvertHelper (LPCLSID pCid,
   BOOL fHaveUserType = FALSE;
   HRESULT hr = NOERROR;
 
-  // (PHP) This isn't really nice, but if I don't save the object,
-  // ReadFmtUserTypeStg fails. Maybe it's not so bad since we're
-  // going to save it anyway to convert it.
   //
   LPPERSISTSTORAGE pps = NULL;
   pOleObject->QueryInterface (IID_IPersistStorage, &(LPVOID) pps);
@@ -1388,9 +1385,13 @@ HRESULT _IFUNC BOlePart::Activate (BOOL fActivate)
 
 #if 1    
       if (hr == NOERROR)
-        if (IsOpenInsideOut)
+        if (IsOpenInsideOut) {
           hr = pOleObject->DoVerb (OLEIVERB_DISCARDUNDOSTATE, NULL,
             this, 0, pContainer->GetWindow(), (LPRECT) 0);
+          // if DISCARDUNDOSTATE is not implemented who cares!
+          if (hr == ResultFromScode(E_NOTIMPL))
+          	hr = NOERROR;
+        }
         else {
           if (pInPlaceObject)
             hr = pInPlaceObject->InPlaceDeactivate ();
@@ -3191,7 +3192,7 @@ void _IFUNC BOlePart::HandleLinkError()
     //
     HWND hTopWnd = GetTopWindow( hWnd );
     LPOLESTR pCaption = OLESTR( "" );
-#ifndef MS_OLEUI_DEF  // rayk? xxxxxx
+#ifndef MS_OLEUI_DEF  
     if (OleUIPromptUser (IDD_LINKSOURCEUNAVAILABLE, hTopWnd, pCaption) == ID_PU_LINKS ){
 // #endif
 
@@ -3210,7 +3211,7 @@ void _IFUNC BOlePart::HandleLinkError()
         pOBL->BrowseLinks();
         pOBL->Release();
       }
-// #ifndef MS_OLEUI_DEF  // rayk?
+// #ifndef MS_OLEUI_DEF  
     }
 #endif
   }

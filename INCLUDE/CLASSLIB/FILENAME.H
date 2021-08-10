@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.10  $
 //
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_FILENAME_H)
@@ -15,6 +15,10 @@
 # include <services/cstring.h>
 #endif
 #include <dir.h>  // struct ffblk
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 struct TFileStatus;
 
@@ -29,13 +33,13 @@ class _BIDSCLASS TFileName {
 
     // Construct a filename from its parts. OK to pass 0 to skip part
     //
-    TFileName(const char far* serverName, const char far* shareOrDeviceName,
-              const char far* path, const char far* file,
-              const char far* ext);
+    TFileName(const _TCHAR far* serverName, const _TCHAR far* shareOrDeviceName,
+              const _TCHAR far* path, const _TCHAR far* file,
+              const _TCHAR far* ext);
 
     // Construct a filename from a freeform string
     //
-    TFileName(const char far* freeform);
+    TFileName(const _TCHAR far* freeform);
     TFileName(const string& freeform);
 
     // Construct a filename from another filename
@@ -46,7 +50,7 @@ class _BIDSCLASS TFileName {
     //
     TFileName& operator =(const TFileName& src);
     TFileName& operator =(const string& src);
-    TFileName& operator =(const char far* src);
+    TFileName& operator =(const _TCHAR far* src);
 
     // Construct a filename representing a special file or directory
     //
@@ -70,10 +74,12 @@ class _BIDSCLASS TFileName {
     string ShortName(bool forceUNC = false) const;
 
     // Nice, human readable rendering of the filename using system conventions
+    // (Returns null string for directory names or malformed names.  For
+    // directories, try Canonical() instead.)
     //
     string Title() const;
 
-    // Human readable form of the filename squeezed to fit in 'maxLen' chars
+    // Human readable form of the filename squeezed to fit in 'maxLen' _TCHARs
     //
     string Squeezed(int maxLen) const;
 
@@ -128,11 +134,11 @@ class _BIDSCLASS TFileName {
 
     // Other ideas...
     //
-    static const char* WildName() {return "*";}       // General wildstring
-    static const char* WildPart(uint p) {return "*";} // Part specific?
+    static const _TCHAR* WildName() {return "*";}       // General wildstring
+    static const _TCHAR* WildPart(uint p) {return "*";} // Part specific?
 
   private:
-    void   Parse(const char far* freeform);
+    void   Parse(const _TCHAR far* freeform);
 
     bool   Unc;
     string ServerStr;
@@ -159,7 +165,7 @@ class _BIDSCLASS TFileNameIterator {
     const WIN32_FIND_DATA& Current() const;
 
 #elif defined(BI_PLAT_WIN16)
-    operator const char*() const;
+    operator const _TCHAR*() const;
 
     const ffblk& operator ++();
     const ffblk& Current() const;
@@ -175,6 +181,9 @@ class _BIDSCLASS TFileNameIterator {
     bool            Done;
 };
 
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 //----------------------------------------------------------------------------
 // Inlines
@@ -189,7 +198,7 @@ inline TFileName& TFileName::operator =(const string& src)
   return *this;
 }
 
-inline TFileName& TFileName::operator =(const char far* src)
+inline TFileName& TFileName::operator =(const _TCHAR far* src)
 {
   Parse(src);
   return *this;
@@ -236,7 +245,7 @@ inline TFileNameIterator::operator const TCHAR*() const
   return Done ? 0 : Data.cFileName;
 }
 #elif defined(BI_PLAT_WIN16)
-inline TFileNameIterator::operator const char*() const
+inline TFileNameIterator::operator const _TCHAR*() const
 {
   return Done ? 0 : Data.ff_name;
 }

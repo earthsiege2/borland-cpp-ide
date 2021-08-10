@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <ntbc.h>
 #include <errno.h>
@@ -45,7 +46,7 @@ void _RTLENTRY _EXPFUNC setdate(struct date *datep)
     d.wDay = datep->da_day;
     d.wMonth = datep->da_mon;
     d.wYear = datep->da_year;
-    if (SetLocalTime(&d) != TRUE)
+    if (SetLocalTime(&d) == 0)
         __NTerror();
 }
 
@@ -76,7 +77,7 @@ void _RTLENTRY _EXPFUNC settime(struct time *timep)
     d.wMinute = timep->ti_min;
     d.wSecond = timep->ti_sec;
     d.wMilliseconds = timep->ti_hund * 10;
-    if (SetLocalTime(&d) != TRUE)
+    if (SetLocalTime(&d) == 0)
         __NTerror();
 }
 

@@ -596,6 +596,45 @@ typedef TBdtEventSinkV5<TDBText&, TMouseButton, TShiftState, SHORT, SHORT>
 //----------------------------------------------------------------------
 // Event Dispatchers
 //----------------------------------------------------------------------
+//
+// Mangle the class and function names so we can have mulitpale versions of the
+// same classes and functions in one .LIB file.
+//
+#if defined( __DLL__ ) && ! defined( __FLAT__ )
+#  if defined( _RTLDLL )
+#    define NotifyEvent_Dispatch dNotifyEvent_Dispatch
+#    define DragEvent_Dispatch   dDragEvent_Dispatch
+#    define DragOver_Dispatch    dDragOver_Dispatch
+#    define KeyEvent_Dispatch    dKeyEvent_Dispatch
+#    define KeyPress_Dispatch    dKeyPress_Dispatch
+#    define MouseEvent_Dispatch  dMouseEvent_Dispatch
+#    define DrawItem_Dispatch    dDrawItem_Dispatch
+#    define MeasureItem_Dispatch dMeasureItem_Dispatch
+#    define NavClick_Dispatch    dNavClick_Dispatch
+#  else _RTLDLL
+#    define NotifyEvent_Dispatch uNotifyEvent_Dispatch
+#    define DragEvent_Dispatch   uDragEvent_Dispatch
+#    define DragOver_Dispatch    uDragOver_Dispatch
+#    define KeyEvent_Dispatch    uKeyEvent_Dispatch
+#    define KeyPress_Dispatch    uKeyPress_Dispatch
+#    define MouseEvent_Dispatch  uMouseEvent_Dispatch
+#    define DrawItem_Dispatch    uDrawItem_Dispatch
+#    define MeasureItem_Dispatch uMeasureItem_Dispatch
+#    define NavClick_Dispatch    uNavClick_Dispatch
+#  endif _RTLDLL
+#elif defined( _RTLDLL )
+#  define NotifyEvent_Dispatch iNotifyEvent_Dispatch
+#  define DragEvent_Dispatch   iDragEvent_Dispatch
+#  define DragOver_Dispatch    iDragOver_Dispatch
+#  define KeyEvent_Dispatch    iKeyEvent_Dispatch
+#  define KeyPress_Dispatch    iKeyPress_Dispatch
+#  define MouseEvent_Dispatch  iMouseEvent_Dispatch
+#  define DrawItem_Dispatch    iDrawItem_Dispatch
+#  define MeasureItem_Dispatch iMeasureItem_Dispatch
+#  define NavClick_Dispatch    iNavClick_Dispatch
+#endif
+
+//----------------------------------------------------------------------
 int32 _OWLFUNC  // NotifyEvent (OnClick, OnDblClick, OnChange)
 NotifyEvent_Dispatch(GENERIC& generic, void (GENERIC::*pmf)(), uint, int32);
 
@@ -627,22 +666,22 @@ NavClick_Dispatch(GENERIC&, void (GENERIC::*)(TNavigateBtn), uint, int32);
 // Event Response Table Macros
 //----------------------------------------------------------------------
 #define EV_VBXEVENT_NAVCLICK \
- {WM_VBXBASE+Event_TDBControl_Click,0,(TAnyDispatcher)::NavClick_Dispatch}
+ {WM_VBXBASE+0,0,(TAnyDispatcher)::NavClick_Dispatch}
 
 #define EV_VBXEVENT_NAVRESIZE \
  {WM_VBXBASE+Event_TDBNavigator_ReSize,0,(TAnyDispatcher)::NotifyEvent_Dispatch}
 
 #define EV_VBXEVENT_CLICK \
-  {WM_VBXBASE+Event_TDBControl_Click,0,(TAnyDispatcher)::NotifyEvent_Dispatch}
-
-#define EV_VBXEVENT_DRAGDROP \
-  {WM_VBXBASE+Event_TDBControl_DragDrop,0,(TAnyDispatcher)::DragEvent_Dispatch}
+  {WM_VBXBASE+0,0,(TAnyDispatcher)::NotifyEvent_Dispatch}
 
 #define EV_VBXEVENT_DRAGOVER \
-  {WM_VBXBASE+Event_TDBControl_DragOver,0,(TAnyDispatcher)::DragOver_Dispatch}
+  {WM_VBXBASE+1,0,(TAnyDispatcher)::DragOver_Dispatch}
+
+#define EV_VBXEVENT_DRAGDROP \
+  {WM_VBXBASE+2,0,(TAnyDispatcher)::DragEvent_Dispatch}
 
 #define EV_VBXEVENT_ENDDRAG \
-  {WM_VBXBASE+Event_TDBControl_EndDrag,0,(TAnyDispatcher)::DragEvent_Dispatch}
+  {WM_VBXBASE+3,0,(TAnyDispatcher)::DragEvent_Dispatch}
 
 #define EV_VBXEVENT_CHANGE( index ) \
   {WM_VBXBASE+index,0,(TAnyDispatcher)::NotifyEvent_Dispatch}

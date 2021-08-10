@@ -6,21 +6,26 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            _fsopen -  open a stream with file sharing
+Name            _tfsopen used as _fsopen and _wfsopen
+                _fsopen  -  open a stream with file sharing
+                _wfsopen -  open a stream with file sharing
 
 Usage           FILE *_fsopen(const char *filename, char *type, int shflag);
+                FILE *_wfsopen(const wchar_t *filename, wchar_t *type, int shflag);
 
 Prototype in    stdio.h
 
@@ -30,14 +35,15 @@ Description     Similar to fopen, except that it has a third parameter,
                 sopen documention for a complete description.
 *---------------------------------------------------------------------*/
 
-FILE * _RTLENTRY _EXPFUNC _fsopen (const char *filename, const char *type, int shflag)
+FILE * _RTLENTRY _EXPFUNC _tfsopen (const _TCHAR *filename, 
+                                    const _TCHAR *type, int shflag)
 {
     register FILE   *fp;
 
     _lock_all_streams();
 
     if ((fp = __getfp()) != NULL)
-        fp = __openfp (fp, filename, type, shflag);
+        fp = __topenfp (fp, filename, type, shflag);
 
     _unlock_all_streams();
     return (fp);

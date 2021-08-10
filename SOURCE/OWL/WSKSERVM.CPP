@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.12  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
@@ -11,6 +11,8 @@
 #if !defined(OWL_WINSOCK_H)
 # include <owl/winsock.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 //
@@ -98,11 +100,11 @@ TServiceManager::~TServiceManager()
 // 'protocol' is the protocol name, but may be passed as 0 to mean default or first found.
 // The returned entry has the port in network byte order.
 //
-int TServiceManager::GetService(TServiceEntry*& entry, int port, const char* protocol)
+int TServiceManager::GetService(TServiceEntry*& entry, ushort port, const char* protocol)
 {
-  entry = (TServiceEntry*)TWinSock::Dll()->getservbyport(port, protocol);
+  entry = (TServiceEntry*)TWinSockDll::getservbyport(port, protocol);
   if (!entry) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -122,9 +124,9 @@ int TServiceManager::GetService(TServiceEntry*& entry, int port, const char* pro
 //
 int TServiceManager::GetService(TServiceEntry*& entry, const char* name, const char* protocol)
 {
-  entry = (TServiceEntry*)TWinSock::Dll()->getservbyname(name, protocol);
+  entry = (TServiceEntry*)TWinSockDll::getservbyname(name, protocol);
   if (!entry) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -138,7 +140,7 @@ int TServiceManager::GetService(TServiceEntry*& entry, const char* name, const c
 //  in network ordering.
 // protocol is the protocol name, but may be passed as 0 to mean default or first found.
 //
-int TServiceManager::GetServicePort(char* name, int& port, const char* protocol)
+int TServiceManager::GetServicePort(char* name, ushort& port, const char* protocol)
 {
   TServiceEntry* tempServiceEntry;
 
@@ -153,7 +155,7 @@ int TServiceManager::GetServicePort(char* name, int& port, const char* protocol)
 // 'port' must be passed in network byte ordering.
 // 'protocol' is the protocol name, but may be passed as 0 to mean default or first found.
 //
-int TServiceManager::GetServiceName(int port, char* name, const char* protocol)
+int TServiceManager::GetServiceName(ushort port, char* name, const char* protocol)
 {
   // Note that because we are calling our own member function, we don't convert
   //  the address from local to network format.
@@ -178,9 +180,9 @@ int TServiceManager::CancelServiceRequest(HANDLE hService)
     return WINSOCK_ERROR;
   }
 
-  int tempValue = TWinSock::Dll()->WSACancelAsyncRequest(hService);
+  int tempValue = TWinSockDll::WSACancelAsyncRequest(hService);
   if (tempValue == SOCKET_ERROR) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   OutstandingServiceRequests--;
@@ -200,13 +202,13 @@ int TServiceManager::CancelServiceRequest(HANDLE hService)
 // The service is complete when bServiceRequestCompleted is TRUE.  You must look at nLastError in
 //  this case to see if there was an error.
 //
-int TServiceManager::GetServiceAsync(HANDLE& hService, int port, const char* protocol)
+int TServiceManager::GetServiceAsync(HANDLE& hService, ushort port, const char* protocol)
 {
   LastServiceRequestCompleted = 0;
-  hService = LastServiceRequest = TWinSock::Dll()->WSAAsyncGetServByPort(Window, MSG_SERVICE_NOTIFY,
+  hService = LastServiceRequest = TWinSockDll::WSAAsyncGetServByPort(Window, MSG_SERVICE_NOTIFY,
                                          port, protocol, ServiceBuffer, MAXGETHOSTSTRUCT);
   if (!hService) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
 
@@ -226,10 +228,10 @@ int TServiceManager::GetServiceAsync(HANDLE& hService, int port, const char* pro
 int TServiceManager::GetServiceAsync(HANDLE& hService, char* name, const char* protocol)
 {
   LastServiceRequestCompleted=0;
-  hService = LastServiceRequest = TWinSock::Dll()->WSAAsyncGetServByName(Window, MSG_SERVICE_NOTIFY,
+  hService = LastServiceRequest = TWinSockDll::WSAAsyncGetServByName(Window, MSG_SERVICE_NOTIFY,
                                     name, protocol, ServiceBuffer, MAXGETHOSTSTRUCT);
   if (!hService) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   OutstandingServiceRequests++;
@@ -252,16 +254,16 @@ int TServiceManager::GetServiceAsync(HANDLE& hService, char* name, const char* p
 //   WSAGETSYNCBUFLEN(lParam)  hold actual length of buffer
 //
 int TServiceManager::GetServiceAsync(TWindow& wndNotify, HANDLE& hService,
-                                     int port, const char* protocol,
+                                     ushort port, const char* protocol,
                                      uint message, char* buffer)
 {
   char* bufferToUse = buffer ? buffer : ServiceBuffer;
 
   LastServiceRequestCompleted=0;
-  hService = TWinSock::Dll()->WSAAsyncGetServByPort(wndNotify, message, port,
+  hService = TWinSockDll::WSAAsyncGetServByPort(wndNotify, message, port,
                                     protocol, bufferToUse, MAXGETHOSTSTRUCT);
   if (!hService) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -290,10 +292,10 @@ int TServiceManager::GetServiceAsync(TWindow& wndNotify, HANDLE& hService,
   char* bufferToUse = buffer ? buffer : ServiceBuffer;
 
   LastServiceRequestCompleted = 0;
-  hService = TWinSock::Dll()->WSAAsyncGetServByName(wndNotify, message, name,
+  hService = TWinSockDll::WSAAsyncGetServByName(wndNotify, message, name,
                                      protocol, bufferToUse, MAXGETHOSTSTRUCT);
   if (!hService) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;

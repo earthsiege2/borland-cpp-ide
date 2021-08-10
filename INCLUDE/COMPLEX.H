@@ -16,7 +16,14 @@ from AT&T C++, except for the addition of:
     complex _RTLENTRY operator-();
 */
 
-/* $Copyright: 1990$ */
+/*
+ *      C/C++ Run Time Library - Version 8.0
+ *
+ *      Copyright (c) 1990, 1997 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+/* $Revision:   8.2  $ */
 
 #ifndef __cplusplus
 #error Must use C++ for the type complex.
@@ -66,56 +73,56 @@ public:
     _RTLENTRY complex();
 
     // complex manipulations
-    friend double _RTLENTRY _EXPFUNC real(complex _FAR &);   // the real part
-    friend double _RTLENTRY _EXPFUNC imag(complex _FAR &);   // the imaginary part
-    friend complex _RTLENTRY _EXPFUNC conj(complex _FAR &);  // the complex conjugate
-    friend double _RTLENTRY _EXPFUNC norm(complex _FAR &);   // the square of the magnitude
-    friend double _RTLENTRY _EXPFUNC arg(complex _FAR &);    // the angle in the plane
+    friend double  _RTLENTRY _EXPFUNC real(const complex _FAR &);   // the real part
+    friend double  _RTLENTRY _EXPFUNC imag(const complex _FAR &);   // the imaginary part
+    friend complex _RTLENTRY _EXPFUNC conj(const complex _FAR &);   // the complex conjugate
+    friend double  _RTLENTRY _EXPFUNC norm(const complex _FAR &);   // the square of the magnitude
+    friend double  _RTLENTRY _EXPFUNC arg(const complex _FAR &);    // the angle in the plane
 
     // Create a complex object given polar coordinates
     friend complex _RTLENTRY _EXPFUNC polar(double __mag, double __angle=0);
 
     // Overloaded ANSI C math functions
-    friend double  _RTLENTRY _EXPFUNC abs(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC acos(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC asin(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC atan(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC cos(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC cosh(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC exp(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC log(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC log10(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC pow(complex _FAR & __base, double __expon);
-    friend complex _RTLENTRY _EXPFUNC pow(double __base, complex _FAR & __expon);
-    friend complex _RTLENTRY _EXPFUNC pow(complex _FAR & __base, complex _FAR & __expon);
-    friend complex _RTLENTRY _EXPFUNC sin(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC sinh(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC sqrt(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC tan(complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC tanh(complex _FAR &);
+    friend double  _RTLENTRY _EXPFUNC abs(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC acos(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC asin(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC atan(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC cos(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC cosh(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC exp(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC log(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC log10(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC pow(const complex _FAR & __base, double __expon);
+    friend complex _RTLENTRY _EXPFUNC pow(double __base, const complex _FAR & __expon);
+    friend complex _RTLENTRY _EXPFUNC pow(const complex _FAR & __base, const complex _FAR & __expon);
+    friend complex _RTLENTRY _EXPFUNC sin(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC sinh(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC sqrt(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC tan(const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC tanh(const complex _FAR &);
 
     // Binary Operator Functions
-    friend complex _RTLENTRY _EXPFUNC operator+(complex _FAR &, complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC operator+(double, complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC operator+(complex _FAR &, double);
-    friend complex _RTLENTRY _EXPFUNC operator-(complex _FAR &, complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC operator-(double, complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC operator-(complex _FAR &, double);
-    friend complex _RTLENTRY _EXPFUNC operator*(complex _FAR &, complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC operator*(complex _FAR &, double);
-    friend complex _RTLENTRY _EXPFUNC operator*(double, complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC operator/(complex _FAR &, complex _FAR &);
-    friend complex _RTLENTRY _EXPFUNC operator/(complex _FAR &, double);
-    friend complex _RTLENTRY _EXPFUNC operator/(double, complex _FAR &);
-    friend int _RTLENTRY _EXPFUNC operator==(complex _FAR &, complex _FAR &);
-    friend int _RTLENTRY _EXPFUNC operator!=(complex _FAR &, complex _FAR &);
-    complex _FAR & _RTLENTRY operator+=(complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC operator+(const complex _FAR &, const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC operator+(double, const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC operator+(const complex _FAR &, double);
+    friend complex _RTLENTRY _EXPFUNC operator-(const complex _FAR &, const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC operator-(double, const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC operator-(const complex _FAR &, double);
+    friend complex _RTLENTRY _EXPFUNC operator*(const complex _FAR &, const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC operator*(const complex _FAR &, double);
+    friend complex _RTLENTRY _EXPFUNC operator*(double, const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC operator/(const complex _FAR &, const complex _FAR &);
+    friend complex _RTLENTRY _EXPFUNC operator/(const complex _FAR &, double);
+    friend complex _RTLENTRY _EXPFUNC operator/(double, const complex _FAR &);
+    friend int _RTLENTRY _EXPFUNC operator==(const complex _FAR &, const complex _FAR &);
+    friend int _RTLENTRY _EXPFUNC operator!=(const complex _FAR &, const complex _FAR &);
+    complex _FAR & _RTLENTRY operator+=(const complex _FAR &);
     complex _FAR & _RTLENTRY operator+=(double);
-    complex _FAR & _RTLENTRY operator-=(complex _FAR &);
+    complex _FAR & _RTLENTRY operator-=(const complex _FAR &);
     complex _FAR & _RTLENTRY operator-=(double);
-    complex _FAR & _RTLENTRY operator*=(complex _FAR &);
+    complex _FAR & _RTLENTRY operator*=(const complex _FAR &);
     complex _FAR & _RTLENTRY operator*=(double);
-    complex _FAR & _RTLENTRY operator/=(complex _FAR &);
+    complex _FAR & _RTLENTRY operator/=(const complex _FAR &);
     complex _FAR & _RTLENTRY operator/=(double);
     complex _RTLENTRY operator+();
     complex _RTLENTRY operator-();
@@ -154,7 +161,7 @@ inline complex _RTLENTRY complex::operator-()
 
 // Definitions of compound-assignment operator member functions
 
-inline complex _FAR & _RTLENTRY complex::operator+=(complex _FAR & __z2)
+inline complex _FAR & _RTLENTRY complex::operator+=(const complex _FAR & __z2)
 {
     re += __z2.re;
     im += __z2.im;
@@ -167,7 +174,7 @@ inline complex _FAR & _RTLENTRY complex::operator+=(double __re_val2)
     return *this;
 }
 
-inline complex _FAR & _RTLENTRY complex::operator-=(complex _FAR & __z2)
+inline complex _FAR & _RTLENTRY complex::operator-=(const complex _FAR & __z2)
 {
     re -= __z2.re;
     im -= __z2.im;
@@ -197,17 +204,17 @@ inline complex _FAR & _RTLENTRY complex::operator/=(double __re_val2)
 
 // Definitions of non-member complex functions
 
-inline double _RTLENTRY real(complex _FAR & __z)
+inline double _RTLENTRY real(const complex _FAR & __z)
 {
     return __z.re;
 }
 
-inline double _RTLENTRY imag(complex _FAR & __z)
+inline double _RTLENTRY imag(const complex _FAR & __z)
 {
     return __z.im;
 }
 
-inline complex _RTLENTRY conj(complex _FAR & __z)
+inline complex _RTLENTRY conj(const complex _FAR & __z)
 {
     return complex(__z.re, -__z.im);
 }
@@ -220,57 +227,57 @@ inline complex _RTLENTRY polar(double __mag, double __angle)
 
 // Definitions of non-member binary operator functions
 
-inline complex _RTLENTRY operator+(complex _FAR & __z1, complex _FAR & __z2)
+inline complex _RTLENTRY operator+(const complex _FAR & __z1, const complex _FAR & __z2)
 {
     return complex(__z1.re + __z2.re, __z1.im + __z2.im);
 }
 
-inline complex _RTLENTRY operator+(double __re_val1, complex _FAR & __z2)
+inline complex _RTLENTRY operator+(double __re_val1, const complex _FAR & __z2)
 {
     return complex(__re_val1 + __z2.re, __z2.im);
 }
 
-inline complex _RTLENTRY operator+(complex _FAR & __z1, double __re_val2)
+inline complex _RTLENTRY operator+(const complex _FAR & __z1, double __re_val2)
 {
     return complex(__z1.re + __re_val2, __z1.im);
 }
 
-inline complex _RTLENTRY operator-(complex _FAR & __z1, complex _FAR & __z2)
+inline complex _RTLENTRY operator-(const complex _FAR & __z1, const complex _FAR & __z2)
 {
     return complex(__z1.re - __z2.re, __z1.im - __z2.im);
 }
 
-inline complex _RTLENTRY operator-(double __re_val1, complex _FAR & __z2)
+inline complex _RTLENTRY operator-(double __re_val1, const complex _FAR & __z2)
 {
     return complex(__re_val1 - __z2.re, -__z2.im);
 }
 
-inline complex _RTLENTRY operator-(complex _FAR & __z1, double __re_val2)
+inline complex _RTLENTRY operator-(const complex _FAR & __z1, double __re_val2)
 {
     return complex(__z1.re - __re_val2, __z1.im);
 }
 
-inline complex _RTLENTRY operator*(complex _FAR & __z1, double __re_val2)
+inline complex _RTLENTRY operator*(const complex _FAR & __z1, double __re_val2)
 {
     return complex(__z1.re*__re_val2, __z1.im*__re_val2);
 }
 
-inline complex _RTLENTRY operator*(double __re_val1, complex _FAR & __z2)
+inline complex _RTLENTRY operator*(double __re_val1, const complex _FAR & __z2)
 {
     return complex(__z2.re*__re_val1, __z2.im*__re_val1);
 }
 
-inline complex _RTLENTRY operator/(complex _FAR & __z1, double __re_val2)
+inline complex _RTLENTRY operator/(const complex _FAR & __z1, double __re_val2)
 {
     return complex(__z1.re/__re_val2, __z1.im/__re_val2);
 }
 
-inline int _RTLENTRY operator==(complex _FAR & __z1, complex _FAR & __z2)
+inline int _RTLENTRY operator==(const complex _FAR & __z1, const complex _FAR & __z2)
 {
     return __z1.re == __z2.re && __z1.im == __z2.im;
 }
 
-inline int _RTLENTRY operator!=(complex _FAR & __z1, complex _FAR & __z2)
+inline int _RTLENTRY operator!=(const complex _FAR & __z1, const complex _FAR & __z2)
 {
     return __z1.re != __z2.re || __z1.im != __z2.im;
 }
@@ -278,7 +285,7 @@ inline int _RTLENTRY operator!=(complex _FAR & __z1, complex _FAR & __z2)
 
 // Complex stream I/O
 
-ostream _FAR & _RTLENTRY _EXPFUNC operator<<(ostream _FAR &, complex _FAR &);
+ostream _FAR & _RTLENTRY _EXPFUNC operator<<(ostream _FAR &, const complex _FAR &);
 istream _FAR & _RTLENTRY _EXPFUNC operator>>(istream _FAR &, complex _FAR &);
 
 

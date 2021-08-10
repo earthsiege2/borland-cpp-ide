@@ -80,7 +80,7 @@ public:
         return stackClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Stack";
         }
@@ -324,7 +324,7 @@ public:
         return stackClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "BI_TCStackAsVector";
         }
@@ -527,7 +527,7 @@ public:
         return stackClass;
         }
 
-    virtual char _FAR * nameOf() const
+    virtual _TCHAR _FAR * nameOf() const
         {
         return "BI_TCStackAsList";
         }

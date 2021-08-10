@@ -271,9 +271,9 @@ class _DBAWARECLASS TDBGrid : public TVbxControl {
 // Inlines
 // Properties
 DEFINE_DB_PROP_DATASOURCE( TDBGrid )
-DEFINE_DB_PROP_DATAFIELD( TDBGrid )
-DEFINE_DB_PROP_STRING( TDBGrid, Name );
-DEFINE_DB_PROP_STRING( TDBGrid, Tag );
+DEFINE_DB_PROP_DATAFIELD( TDBGrid, _TDBGrid )
+DEFINE_DB_PROP_STRING( TDBGrid, _TDBGrid, Name );
+DEFINE_DB_PROP_STRING( TDBGrid, _TDBGrid, Tag );
 
 // Methods
 inline char far* TDBGrid::GetClassName()

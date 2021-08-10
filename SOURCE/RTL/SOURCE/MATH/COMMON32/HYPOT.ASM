@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.3  $
 
 ;----------------------------------------------------------------------
 ; function(s)
@@ -28,6 +29,8 @@ Data_Seg@
 
 ExtSym@         _huge_dble, qword, cdecl
 HUGE_VAL        equ     _huge_dble@
+ExtSym@         _max_dble, qword, cdecl
+DBL_MAX         equ     _max_dble@
 
 Data_EndS@
 
@@ -76,7 +79,7 @@ Locals@ <int temp>
 
         FADD                            ;       --"--  +  --"--
         FSQRT                           ; sqrt (               )
-        FCOM    DOUBLE (HUGE_VAL)
+        FCOM    DOUBLE (DBL_MAX)
         FSTSW   temp
         test    word ptr temp, 04500H
         jz      hyp_infiniteX           ; Result too large for double

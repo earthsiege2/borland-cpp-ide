@@ -10,7 +10,7 @@
 #define IDD_MCIWNDDLG         0x5000
 #define IDC_MCIWNDCTL         0x1000
 
-#define IDM_APP               0x1000
+#define IDM_APPMENU           0x1000
 #define CM_MCIWND             0x1001
 
 #endif // MCIWNDX_H

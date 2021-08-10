@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
 //
 // Illustrates usage of TTooltip class
 //----------------------------------------------------------------------------
@@ -11,9 +11,12 @@
 #include <owl/buttonga.h>
 #include <owl/inputdia.h>
 #include <owl/tooltip.h>
+#include <owl/combobox.h>
+#include <owl/controlg.h>
 #include <stdio.h>
 #include "tooltip.h"
 
+const int ID_COMBOBOX = 0x1000;
 
 TRect redRect   = TRect(10, 10, 100, 100);
 TRect blueRect  = TRect(110, 10, 200, 100);
@@ -104,7 +107,7 @@ TClientWindow::SetupWindow()
       // NOTE: Since TToolInfo will cache the text, make sure that the
       //       object's lifetime is valid for the lifetime of the tooltip
       //
-      static TToolInfo tiRed(*this, redRect, ID_REDTOOL, "Red rectangle");
+      TToolInfo tiRed(*this, redRect, ID_REDTOOL, "Red rectangle");
       tooltip->AddTool(tiRed);
 
       // Add tooltip for blue rectangle specifying string resource
@@ -124,6 +127,9 @@ TClientWindow::SetupWindow()
       //
       TToolInfo tiGreen(*this, greenRect, ID_GREENTOOL);
       tooltip->AddTool(tiGreen);
+
+      // Add tooltip for combobox in controlbar
+      //
     }
   }
 }
@@ -137,27 +143,13 @@ TClientWindow::PreProcessMsg(MSG& msg)
   TSampleApp* app = TYPESAFE_DOWNCAST(GetApplication(), TSampleApp);
   if (app) {
     TTooltip* tooltip = app->Tooltip;
-    if (tooltip && tooltip->IsWindow()) {
-
-      // Filter messages and pass on interesting ones...
-      //
-      switch(msg.message) {
-        case WM_MOUSEMOVE:
-        case WM_LBUTTONDOWN:
-        case WM_LBUTTONUP:
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-        case WM_RBUTTONDOWN:
-        case WM_RBUTTONUP:
-            tooltip->RelayEvent(msg);
-            break;
-      }
-    }
+    if (tooltip && tooltip->IsWindow()) 
+      tooltip->RelayEvent(msg);
   }
 
   // Always let event go through!
   //
-  return false;
+  return TWindow::PreProcessMsg(msg);
 }
 
 //
@@ -240,7 +232,8 @@ TSampleApp::InitMainWindow()
 {
   // Setup main window + client
   //
-  SetMainWindow(new TDecoratedFrame(0, 0, new TClientWindow()));
+  SetMainWindow(new TDecoratedFrame(0, "Tooltip Example", 
+                new TClientWindow()));
 
   // Create decoration objects
   //
@@ -255,11 +248,16 @@ TSampleApp::InitMainWindow()
   cbar->Insert(*new TButtonGadget(CM_FILESAVE, CM_FILESAVE));
   cbar->Insert(*new TButtonGadget(CM_FILEPRINT, CM_FILEPRINT));
 
-  cbar->Insert(*new TSeparatorGadget(6));
+  cbar->Insert(*new TSeparatorGadget);
   cbar->Insert(*new TButtonGadget(CM_EDITUNDO, CM_EDITUNDO));
   cbar->Insert(*new TButtonGadget(CM_EDITCUT, CM_EDITCUT));
   cbar->Insert(*new TButtonGadget(CM_EDITCOPY, CM_EDITCOPY));
   cbar->Insert(*new TButtonGadget(CM_EDITPASTE, CM_EDITPASTE));
+
+  cbar->Insert(*new TSeparatorGadget);
+  TComboBox* cBox = new TComboBox(0, ID_COMBOBOX, 0, 0, 180, 150, 
+                                  CBS_DROPDOWNLIST, -1);
+  cbar->Insert(*new TControlGadget(*cBox));
 
   // Insert decorations in main window
   //

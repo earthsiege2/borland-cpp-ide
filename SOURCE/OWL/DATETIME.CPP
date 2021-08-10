@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.6  $
 //
 // Implementation of date/time helpers, mostly for Win16
 //----------------------------------------------------------------------------
@@ -12,6 +12,13 @@
 #endif
 #include <stdio.h>
 #include <dos.h>
+
+
+OWL_DIAGINFO;
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 #if !defined(BI_PLAT_WIN32)
 
@@ -174,3 +181,7 @@ FormatFileTime(FILETIME* pft, void far* dest, int textlen)
   *((char far*)dest + textlen) = 0;
   return len;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif

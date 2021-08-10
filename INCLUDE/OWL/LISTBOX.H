@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Definition of class TListBox and TlistBoxData.  This defines the basic
 // behavior of all list box controls.
@@ -15,6 +15,10 @@
 #endif
 #if !defined(OWL_CONTAIN_H)
 # include <owl/contain.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -92,6 +96,12 @@ class _OWLCLASS TListBox : public TControl {
 
 #if defined(BI_PLAT_WIN32)
     uint32        ItemFromPoint(TPoint& p);
+    int           InitStorage(int numItemsToAdd, uint32 memoryToAllocate);
+
+    // Multiple Selection List boxes only
+    // 
+    int           GetAnchorIndex() const;
+    int           SetAnchorIndex(int index);
 #endif
 
     // Override TWindow virtual member functions
@@ -155,6 +165,10 @@ class _OWLCLASS TListBoxData {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 // --------------------------------------------------------------------------
 // Inline implementations
@@ -364,6 +378,30 @@ inline uint32 TListBox::ItemFromPoint(TPoint& p)
 {
   PRECONDITION(GetHandle());
   return (uint32)SendMessage(LB_ITEMFROMPOINT, 0, MkParam2(p.x, p.y));
+}
+
+//
+inline int TListBox::InitStorage(int numItemsToAdd, uint32 memoryToAllocate)
+{
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_INITSTORAGE, numItemsToAdd, memoryToAllocate);
+}
+
+//
+// Gets\Sets the index of the "anchor" item in a multiple selection listbox.
+// The anchor item is where a multiple selection starts. 
+//
+inline int TListBox::GetAnchorIndex() const
+{
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListBox*,this)->SendMessage(LB_GETANCHORINDEX, 0, 0);
+}
+
+//
+inline int TListBox::SetAnchorIndex(int index)
+{
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_SETANCHORINDEX, index, 0);
 }
 #endif
 

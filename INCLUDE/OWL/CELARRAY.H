@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Definition of a bitmap Cel array class.
 //----------------------------------------------------------------------------
@@ -11,6 +11,10 @@
 
 #if !defined(OWL_GDIOBJCT_H)
 # include <owl/gdiobjec.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -33,11 +37,7 @@ class _OWLCLASS TCelArray {
     virtual   ~TCelArray();
 
     TCelArray& operator =(const TCelArray&);
-//    operator   const TBitmap&() const;
     operator   TBitmap&();
-//#if !defined(OWL_NATIVECTRL_NEVER)
-//    operator HIMAGELIST() const;
-//#endif
 
     // 'Get' accessors
     //
@@ -53,6 +53,7 @@ class _OWLCLASS TCelArray {
     void       SetNumCels(int numCels);
     void       SetCelSize(TSize size);
     void       SetOffset(TPoint offs);
+    void       SetNGrowBy(int growBy);
 
     // Manipulating cel images
     //
@@ -87,6 +88,10 @@ class _OWLCLASS TCelArray {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //------------------------------------------------------------------------
 // Inline implementations
@@ -133,6 +138,13 @@ inline void TCelArray::SetNumCels(int numCels) {
 //
 inline void TCelArray::SetCelSize(TSize size) {
   CSize = size;
+}
+
+//
+// Set the increment by which the bitmap is resized
+//
+inline void TCelArray::SetNGrowBy(int growBy) {
+  NGrowBy = growBy;
 }
 
 //

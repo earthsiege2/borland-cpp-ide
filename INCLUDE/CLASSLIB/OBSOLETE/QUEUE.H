@@ -49,7 +49,7 @@ public:
         return queueClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Queue";
         }
@@ -177,7 +177,7 @@ public:
         return queueClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "BI_TCQueueAsDoubleList";
         }
@@ -287,7 +287,7 @@ public:
         return queueClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "BI_TCQueueAsDoubleList";
         }

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.11  $
+// $Revision:   2.14  $
 //
 //   Implementation of TOcRemView Class
 //----------------------------------------------------------------------------

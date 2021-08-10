@@ -2,17 +2,17 @@
 //#define __palttapp_rh
 
 /*  Project palette
-    
+
     Copyright © 1994. All Rights Reserved.
 
     SUBSYSTEM:    palette.exe Application
     FILE:         palttapp.h
-    AUTHOR:       
+    AUTHOR:
 
 
     OVERVIEW
     ========
-    Constant definitions for all resources defined in palttapp.rc.      
+    Constant definitions for all resources defined in palttapp.rc.
 */
 
 
@@ -26,8 +26,8 @@
 // Application specific definitions:
 //
 #define IDI_MDIAPPLICATION      1001            // Application icon
-#define IDA_MAIN	100
-#define IDM_MAIN	100
+#define IDA_MAIN        100
+#define IDM_MAIN        100
 #define IDI_DOC                 1002            // MDI child window icon
 
 
@@ -62,7 +62,7 @@
 #define CM_EDITADD              24327
 #define CM_EDITEDIT             24328
 
-#define CM_EDITREDO             24520
+#define CM_EDITREDO             24329
 
 #define CM_FONTBOLD             24550
 #define CM_FONTITALIC           24551
@@ -110,8 +110,8 @@
 
 
 // EditFile
-                                
-// EditSearch                   
+
+// EditSearch
 
 
 //

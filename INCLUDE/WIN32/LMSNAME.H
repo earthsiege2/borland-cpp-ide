@@ -19,6 +19,7 @@ Environment:
 
 #ifndef _LMSNAME_
 #define _LMSNAME_
+#pragma option -b
 
 //
 //  Standard LAN Manager service names.
@@ -100,4 +101,5 @@ Environment:
 
 #define SERVICE_NWCS           TEXT("NWCWorkstation")
 
+#pragma option -b.
 #endif

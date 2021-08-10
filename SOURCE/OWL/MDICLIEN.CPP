@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.9  $
 //
 // Implementation of class TMDIClient.  This defines the basic behavior
 // of all MDI client windows.
@@ -17,7 +17,11 @@
 // Define to not work around here in the client, the 'creating MDI child
 // maximized corrupts the menu bar' bug
 //
-//#define NO_MDIMAX_WORKAROUND
+#if !defined(NO_MDIMAX_WORKAROUND)
+# define MDIMAX_WORKAROUND
+#endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -270,7 +274,7 @@ TMDIClient::EvMDICreate(MDICREATESTRUCT far& createStruct)
 //
 static void sUnHide(TWindow* win, void* hWnd)
 {
-  if (*win == TWindow::THandle(hWnd))
+  if (*win == TWindow::THandle(hWnd) || !win->IsWindow())
     return;
   if (!win->IsWindowVisible()) {
     win->SetWindowPos(0, 0, 0, 0, 0,

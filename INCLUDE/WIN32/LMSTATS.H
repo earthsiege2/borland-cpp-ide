@@ -35,6 +35,7 @@ Revision History:
 #ifndef _LMSTATS_
 #define _LMSTATS_
 #define __LMSTATS_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -191,4 +192,5 @@ typedef struct _STAT_SERVER_0 {
 }
 #endif
 
+#pragma option -b.
 #endif // _LMSTATS.H

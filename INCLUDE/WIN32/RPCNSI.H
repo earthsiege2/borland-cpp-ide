@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1992-1995 Microsoft Corporation
+Copyright (c) 1992-1996 Microsoft Corporation
 
 Module Name:
 
@@ -15,6 +15,7 @@ Abstract:
 
 #ifndef __RPCNSI_H__
 #define __RPCNSI_H__
+#pragma option -b
 
 typedef void __RPC_FAR * RPC_NS_HANDLE;
 
@@ -506,4 +507,5 @@ RpcNsBindingSelect(
 
 #endif /* UNICODE */
 
+#pragma option -b.
 #endif /* __RPCNSI_H__ */

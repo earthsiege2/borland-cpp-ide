@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.10  $
 //
 // Definition of class TFloatingFrame.
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(OWL_TINYCAPT_H)
 # include <owl/tinycapt.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -76,11 +80,16 @@ class _OWLCLASS TFloatingFrame : public TFrameWindow, public TTinyCaption {
     //
     void    EvSysCommand(uint cmdType, TPoint& p);
     uint    EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize);
-    void    EvNCPaint();
     uint    EvNCHitTest(TPoint& screenPt);
     bool    EvNCActivate(bool active);
     uint    EvMouseActivate(THandle hTopLevel, uint hitCode, uint msg);
     void    EvActivateApp(bool active, HTASK hTask);
+#if defined(BI_PLAT_WIN32)
+    void     EvNCPaint(HRGN);
+#else
+    void     EvNCPaint();
+#endif //BI_PLAT_WIN32
+
 
   private:
     TSize   Margin;       // Left and right, top and bottom
@@ -94,6 +103,10 @@ class _OWLCLASS TFloatingFrame : public TFrameWindow, public TTinyCaption {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

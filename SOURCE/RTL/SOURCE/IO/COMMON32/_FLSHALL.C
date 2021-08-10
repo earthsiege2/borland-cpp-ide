@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
@@ -27,14 +28,14 @@ Prototype in    stdio.h
 Description     clears all buffers associated with open input streams,
                 and writes all buffers associated with open output streams
                 to their respective files.  Any read operation following
-                flushall reads new data into the buffers from the input
+                _flushall reads new data into the buffers from the input
                 files.
 
 Return value    the number of open input and output streams
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _flushall (void)
+int _RTLENTRY _EXPFUNC _flushall (void)
 {
         register FILE   *fp;
         register int    Nb;

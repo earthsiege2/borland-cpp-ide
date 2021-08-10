@@ -7,6 +7,8 @@
 #ifndef BDTC_H
 #define BDTC_H
 
+#include <vdbt/bdtm.h>
+
 #ifdef __FLAT__
 
 # define INC_OLE2
@@ -29,10 +31,11 @@
 #endif
 
 #pragma warn -cln
-#include <vdbt\bdti.h>
+#include <vdbt/bdti.h>
 #pragma warn .cln
 
 #include <cstring.h>
+#include <winsys/exbase.h>
 
 //............................................................................
 
@@ -119,7 +122,27 @@ STDAPI_(PITStrings) CreateITStrings( void );
 
 STDAPI_(PITAnyString) CreateITAnyString( void );
 
-STDAPI_(bool) InitBDTExceptions( void );
+//
+// Mangle the function and variable names so we can have mulitpale versions of
+// the same functions and variables in one .LIB file.
+//
+#if defined( __DLL__ ) && ! defined( __FLAT__ )
+#  if defined( _RTLDLL ) // user DLL linked with RTL.DLL
+#    define InitBDTExceptions    dInitBDTExceptions
+#    define TermBDTExceptions    dTermBDTExceptions
+#    define __ForceBDTExceptions d_ForceBDTExceptions
+#  else _RTLDLL  // user DLL linked with static libraries
+#    define InitBDTExceptions    uInitBDTExceptions
+#    define TermBDTExceptions    uTermBDTExceptions
+#    define __ForceBDTExceptions u_ForceBDTExceptions
+#  endif _RTLDLL
+#elif defined( _RTLDLL ) // user EXE linked with RTL.DLL
+#  define InitBDTExceptions    iInitBDTExceptions
+#  define TermBDTExceptions    iTermBDTExceptions
+#  define __ForceBDTExceptions i_ForceBDTExceptions
+#endif __DLL__
+
+STDAPI_(bool) _export InitBDTExceptions( void );
 STDAPI_(bool) TermBDTExceptions( void );
 
 #ifndef NOBDTCFORCEEXCEPTIONS
@@ -128,25 +151,28 @@ static bool __ForceBDTExceptions = InitBDTExceptions();
 #pragma warn .use
 #endif // NOBDTCFORCEEXCEPTIONS
 
-#define BDTC_ENABLE_EXCEPTIONS static bool __ForceBDTExceptions = InitBDTExceptions()
+#define BDTC_ENABLE_EXCEPTIONS \
+        static bool __ForceBDTExceptions = InitBDTExceptions()
 
 #endif // NOBDTCFUNCTIONS
 
 //............................................................................
 
-class BDTException
+#define _BDTCCLASS_RTL _EXPCLASS
+
+class _BDTCCLASS_RTL BDTException : public TXBase
 {
 public:
 	PIUnknown Sender;
 	string Message;
 
-	BDTException( PIUnknown s, LPCSTR m )
+	BDTException( PIUnknown s, LPCSTR m ) : TXBase( m )
 	{
 		Sender = s;
 		Message = m;
 	}
 
-	BDTException( PIUnknown s, string& m )
+	BDTException( PIUnknown s, const string& m ) : TXBase( m )
 	{
 		Sender = s;
 		Message = m;
@@ -158,19 +184,19 @@ public:
 	}
 };
 
-class EListError : public BDTException
+class _BDTCCLASS_RTL EListError : public BDTException
 {
 public:
 	EListError( PIUnknown s, LPCSTR m ) : BDTException( s, m )
 	{
 	}
 
-	EListError( PIUnknown s, string& m ) : BDTException( s, m )
+	EListError( PIUnknown s, const string& m ) : BDTException( s, m )
 	{
 	}
 };
 
-class EDatabaseError : public BDTException
+class _BDTCCLASS_RTL EDatabaseError : public BDTException
 {
 public:
 	WORD BDEErrorCode;
@@ -182,7 +208,7 @@ public:
 		NativeErrorCode = n;
 	}
 
-	EDatabaseError( PIUnknown s, string& m, WORD b, ULONG n ) : BDTException( s, m )
+	EDatabaseError( PIUnknown s, const string& m, WORD b, ULONG n ) : BDTException( s, m )
 	{
 		BDEErrorCode = b;
 		NativeErrorCode = n;
@@ -191,3 +217,4 @@ public:
 
 //............................................................................
 #endif // BDTC_H
+

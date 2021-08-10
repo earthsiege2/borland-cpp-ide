@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.9  $
+// $Revision:   2.10  $
 //
 //  Implements the Bolero half of the OLE2 control object.
 //    BOleControl objects impersonate the OCX from the point of view of the 

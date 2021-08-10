@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
 
 ;----------------------------------------------------------------------
 ; function(s)
@@ -64,9 +65,9 @@ Func@   exp, _EXPFUNC, _RTLENTRY, <double x>
 
         FLD     x.double
         mov     ax, 7FFFh
-        and     ax, x [6]       ; select exponent and most signif. bits 
+        and     ax, x [6]       ; select exponent and most signif. bits
         cmp     ax, 4086h
-        jnb     exp_tooBig      ; exp (+-709) is the limit for double 
+        jnb     exp_tooBig      ; exp (+-709) is the limit for double
 
 exp_justFits:
 
@@ -76,7 +77,7 @@ exp_end:
         Return@
 
 exp_tooBig:
-        mov     ax, 0FFFFh      ; force extreme 
+        mov     ax, 0FFFFh      ; force extreme
         ja      exp_excess
         mov     ax, x [4]
 
@@ -96,11 +97,11 @@ exp_tooTiny:
         mov     ecx, offset FLAT: zero
 
 exp_err:
-        FSTP    ST(0)           ; discard ST 
+        FSTP    ST(0)           ; discard ST
 
 ;       return  __matherr (_EDX, "exp", &x, NULL,
 ;                          (UNDERFLOW == _EDX) ? 0.0 : HUGE_VAL);
-    
+
         matherr edx, exp, x, NULL, [ecx]
         jmp     short exp_end
 

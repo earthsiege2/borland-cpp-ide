@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -43,6 +43,12 @@
 #define LONG_MIN      (-2147483647L-1)  /* minimum signed   long value */
 #define LONG_MAX        2147483647L     /* maximum signed   long value */
 #define ULONG_MAX       4294967295UL    /* maximum unsigned long value */
+
+#if defined(__FLAT__) && defined (_INTEGRAL_MAX_BITS) && (_INTEGRAL_MAX_BITS >= 64)
+#define _I64_MIN      (-9223372036854775807i64-1) /* minimum signed   __int64 value */
+#define _I64_MAX        9223372036854775807i64    /* maximum signed   __int64 value */
+#define _UI64_MAX       18446744073709551615ui64  /* maximum unsigned __int64 value */
+#endif
 
 #if !defined(__FLAT__)
 #define INT_MIN         SHRT_MIN        /* minimum signed   int value */

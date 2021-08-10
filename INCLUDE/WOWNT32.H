@@ -15,6 +15,7 @@ Abstract:
 
 #ifndef _WOWNT32_
 #define _WOWNT32_
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -259,4 +260,5 @@ BOOL WINAPI WOWCallback16Ex(
 }
 #endif /* __cplusplus */
 
+#pragma option -b.
 #endif /* !_WOWNT32_ */

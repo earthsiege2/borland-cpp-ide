@@ -200,7 +200,18 @@ TOwlMdiApp::CmFileOpen()
 {
   *FileData.FileName = 0;
   if (TFileOpenDialog(MainWindow, FileData).Execute() == IDOK) {
-    TMDIChild* child = new TMDIChild(*Client, "", new TOleSampContainer(0, FileData.FileName));
+  
+    TMDIChild* child;
+    
+    TRY {
+      child = new TMDIChild(*Client, "", new TOleSampContainer(0, FileData.FileName));
+    }
+    CATCH( (TXObjComp& x) {
+      GetMainWindow()->MessageBox(x.why().c_str(), GetName(), 
+        MB_OK|MB_ICONEXCLAMATION);
+      return;
+    })
+    
     child->SetMenuDescr(TMenuDescr(IDM_EDITFILE_CHILD));
     child->SetIcon(this, IDI_DOC);
 

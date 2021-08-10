@@ -6,23 +6,25 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
 #include <_io.h>
 #include <mem.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
 Name            __fputn - writes bytes on a stream
 
-Usage           size_t __fputn (const void *ptr, size_t n, FILE *fp)
+Usage           size_t __fputn (const _TCHAR *ptr, size_t n, FILE *fp)
 
 Prototype in    stdio.h
 
@@ -37,22 +39,27 @@ Return value    The number of bytes written is returned on success;
 
 *---------------------------------------------------------------------*/
 
-size_t __fputn( const void *ptr, size_t n, register FILE *fp )
+size_t __fputnt( const _TCHAR *ptr, size_t n, register FILE *fp )
 {
+    int ret;
 
-    if( fp->flags & _F_LBUF )       /* if it's line buffered, */
+
+#if !defined(_UNICODE)
+    if( fp->flags & _F_LBUF )       /* if it's line buffered or widechar, */
+#endif
     {                               /* handle it in the traditional way */
         int len;
-        char *p;
+        _TCHAR *p;
 
-        for (len = n, p = (char *)ptr; len != 0; len--, p++ )
+        for (len = n, p = (_TCHAR *)ptr; len != 0; len--, p++ )
         {
-            if( _lputc( *p, fp ) == EOF )
+            if( _lputtc( *p, fp ) == _TEOF )
                 return( 0 );
         }
 
         return( n );
     }
+#if !defined (_UNICODE)
     else if (fp->bsize && n <= (unsigned)fp->bsize)   /* buffer big enough? */
     {
         if( fp->level + (int)n >= 0 )  /* must we flush it to make room? */
@@ -84,9 +91,11 @@ size_t __fputn( const void *ptr, size_t n, register FILE *fp )
         }
 
         /* write it all at once! */
-        if( (unsigned)__write( fp->fd, (void *)ptr, n ) < n )
+        ret = __write( fp->fd, (void *)ptr, n );
+        if( (ret == -1) || ((unsigned)ret < n ))
             return( 0 );
         else
             return( n );
     }
+#endif /* _UNICODE */
 }

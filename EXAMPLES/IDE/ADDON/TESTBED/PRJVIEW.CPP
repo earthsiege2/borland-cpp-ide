@@ -3,7 +3,7 @@
   prjview.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.13  $
+  $Revision:   1.16  $
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 #ifndef __AOEXPCH_H
@@ -68,6 +68,7 @@ public:
   virtual void      PropertyChangeNotify();
 
   virtual void      Stop();
+  IViewParentWnd *  GetIViewParentWnd() { return d_viewParent; }
 protected:
   HWND            d_hwnd;
   IViewParentWnd* d_viewParent;
@@ -99,8 +100,6 @@ ProjectViewClient::~ProjectViewClient() {
     d_viewParent->Release();
   }
   d_projectServer->Release();
-  if ( IsWindow(d_hwnd) )
-    DestroyWindow(d_hwnd);
 };
 
 
@@ -232,6 +231,13 @@ ProjectViewFactory::ProjectViewFactory(IViewType* projectViewType)
   //
   IPolyString* viewType = MakePolyString("AddOnProjectView");
   projectViewType->Init(this, viewType, /* project region */ 0, 358, 813, 538);
+  
+  IViewType2 * vt2 = QUERY_INTERFACE( projectViewType, IViewType2 );
+  if ( vt2 ) {
+    vt2->SetDisplayName( ::MakePolyString( "AddonProject" ) );
+    vt2->SetFamilyName( ::MakePolyString( "AddonTestbedViews" ) );
+    vt2->SetDisplayFamilyName( ::MakePolyString( "AddonTestbed" ) );
+  }
 
   projectViewType->Release();
 };
@@ -243,7 +249,6 @@ void ProjectViewFactory::InitializeProperty(IViewType* projectViewType) {
 IViewClient* ProjectViewFactory::CreateView(IViewParentWnd* wndServer, void * restoreData) {
   ProjectViewClient* viewClient = new ProjectViewClient;
   viewClient->Create(wndServer, restoreData);
+  viewClient->GetIViewParentWnd()->SetTitle( ::MakePolyString( "AddOnProject View Caption" ) );
   return viewClient;
 };
-
-

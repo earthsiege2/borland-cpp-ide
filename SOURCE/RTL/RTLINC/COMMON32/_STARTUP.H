@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $ */
 
 #if !defined( __DEFS_H )
 #include <_defs.h>
@@ -58,6 +59,22 @@ typedef struct module_data
     long stackbase;             /* (EXE only) base of stack */
     int  *fmode;                /* (EXE only) address of _fmode variable */
 } MODULE_DATA;
+
+
+
+
+#ifndef _UNICODE
+void                 _initwild(void);
+void cdecl  _EXPFUNC _startup(MODULE_DATA *mod_table);
+void        _EXPFUNC _setargv(void);
+#else	//UNICODE
+void                 _winitwild(void);
+void cdecl  _EXPFUNC _wstartup(MODULE_DATA *mod_table);
+void        _EXPFUNC _wsetargv(void);
+#endif
+
+
+
 
 /* MODULE_DATA flags.
  */

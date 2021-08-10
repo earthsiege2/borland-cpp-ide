@@ -1,4 +1,5 @@
 :Base BWCC.HLP
+0 Borland Windows Custom Controls (BWCC) Programmer's Reference
 1 Borland Windows custom controls
 2 Using Borland Windows custom controls=UseBWCC
 2 Customizing existing applications for Borland Windows custom controls=CustomizeExistingAppsForBWCC

@@ -1,3 +1,5 @@
+/* $Copyright: 1995$ */
+/* $Revision:   8.2  $        */
 /***************************************************************************
  *
  * tree.cpp - Source for the Standard Library tree init mutex

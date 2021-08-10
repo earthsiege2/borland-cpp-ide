@@ -196,9 +196,10 @@ void TBDTComponent::GetName( string& s )
 		AnyString( bdtcomponent->get_Name() ).GetString( s );
 }
 
-void TBDTComponent::SetName( string& n )
+void TBDTComponent::SetName( const string& n )
 {
 	if (bdtcomponent)
 		bdtcomponent->put_Name( AnyString(n).GetPITAnyString() );
 }
 
+

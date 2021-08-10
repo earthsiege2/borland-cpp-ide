@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.5  $
+// $Revision:   2.10  $
 //
 // Actual BOcOle GUIDs spit out here
 //
@@ -16,4 +16,6 @@
 #endif
 
 #define INITGUID              // Force OLE GUIDs to be defined
-#include <olectlid.h>         // Ole control GUIDs
+#if !defined(_OLECTL_H_) && defined(BI_PLAT_WIN32)
+#include <olectl.h>           // Ole control GUIDs
+#endif

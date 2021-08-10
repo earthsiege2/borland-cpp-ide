@@ -1,5 +1,6 @@
 #ifndef __STD_STDEXCEPT
 
+/* $Revision:   8.1  $ */
 /***************************************************************************
  *
  * stdexcept - declarations for the Standard Library standard exception class
@@ -25,7 +26,7 @@
  * rights of the Government regarding its use, reproduction and disclosure
  * are as set forth in Section 52.227-19 of the FARS Computer
  * Software-Restricted Rights clause.
- * 
+ *
  * Use, duplication, or disclosure by the Government is subject to
  * restrictions as set forth in subparagraph (c)(1)(ii) of the Rights in
  * Technical Data and Computer Software clause at DFARS 252.227-7013.
@@ -54,14 +55,14 @@
 //
 #ifndef __RWSTD_EXCEPTION_SEEN
 
-#ifndef RWSTD_NO_NAMESPACE 
+#ifndef RWSTD_NO_NAMESPACE
 namespace std {
 #endif
 
 extern char RWSTDExport __rw_stdexcept_NoNamedException[];
 
 class RWSTDExport exception
-{ 
+{
   public:
     exception () RWSTD_THROW_SPEC_NULL {;}
     exception (const exception& rhs) RWSTD_THROW_SPEC_NULL { str = rhs.str; }
@@ -132,8 +133,8 @@ class RWSTDExport overflow_error : public runtime_error
 
 #define __RWSTD_EXCEPTION_SEEN
 
-#ifndef RWSTD_NO_NAMESPACE 
-} 
+#ifndef RWSTD_NO_NAMESPACE
+}
 #endif
 
 //

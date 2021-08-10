@@ -2,7 +2,7 @@
 *                                                                             *
 * ole2ver.h -   OLE 2 Version Number Info                                     *
 *                                                                             *
-*               Copyright (c) 1992-1995, Microsoft Corp. All rights reserved. *
+*               Copyright (c) 1992-1996, Microsoft Corp. All rights reserved. *
 *                                                                             *
 \*****************************************************************************/
 

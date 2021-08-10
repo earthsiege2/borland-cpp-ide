@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.12  $
+//$Revision:   10.21  $
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
 #include <owl/pch.h>
@@ -29,6 +29,8 @@
 #endif
 #include <stdio.h>
 
+OWL_DIAGINFO;
+
 #if !defined(SECTION) || SECTION == 1
 
 //
@@ -40,7 +42,9 @@ inline void SetClear(T1& var, T2 bitsOn, T2 bitsOff) {
   var |=  bitsOn;
 }
 
-//#define MANUAL_ABORT_CALL   // define to manually call abort proc
+// Define 'MANUAL_ABORT_CALL to enable the explicit abort proc call
+//
+// #define MANUAL_ABORT_CALL
 
 
 //----------------------------------------------------------------------------
@@ -76,7 +80,7 @@ TFormattedStatic::TFormattedStatic(TWindow* parent, int resId,
   TStatic(parent, resId, 0)
 {
   Text = strnewdup(text);
-  Text2 = text2 ? strnewdup(text2) : 0;
+  Text2 = text2 ? strnewdup(text2) : strnewdup("");
 }
 
 //
@@ -101,9 +105,12 @@ TFormattedStatic::SetupWindow()
   // the one or two text strings, then set the text directly to the control to
   // preserve the Title
   //
-  static char buff[256];
+
+  int len = strlen(Title) + strlen(Text) + strlen(Text2) + 5;
+  char* buff = new char[len];
   sprintf(buff, Title, Text, Text2);
   SetText(buff);
+  delete[] buff;
 }
 
 //
@@ -149,9 +156,11 @@ TNumericStatic::EvSetNumber(TParam1 param1, TParam2)
 {
   Number = param1;
   if (Number > 0) {
-    char buff[80];
-    wsprintf(buff, Title, Number);  // Need wsprintf for char far*
+    int len = strlen(Title) + sizeof(Number) + 5;
+    char* buff = new char[len];
+    wsprintf(buff, Title, Number);
     SetText(buff);
+    delete[] buff;
   }
   THandle hWndDefault = Parent->GetDlgItem(-1);
   if (Number > 0) {
@@ -184,7 +193,6 @@ TPrinterAbortDlg::TPrinterAbortDlg(TWindow*        parent,
                                    HDC             prnDC)
 :
   TDialog(parent, resId),
-  TWindow(parent, 0),
   PrnDC(prnDC)
 {
   new TNumericStatic(this, ID_PAGE, 0);
@@ -244,6 +252,7 @@ TPrinterAbortDlg::CmCancel()
 //
 
 // Set by printing dialog if user cancels
+//
 HDC TPrinter::UserAbortDC = 0;
 
 //
@@ -313,7 +322,7 @@ TPrinter::SetPrinter(const char* driver, const char* device, const char* output)
 // Abort procedure used during printing, called by windows. Returns true to
 // continue the print job, false to cancel.
 //
-/*OWL_EXPORT*/ int CALLBACK
+int CALLBACK OWL_EXPORT16
 TPrinterAbortProc(HDC hDC, int code)
 {
   GetApplicationObject()->PumpWaitingMessages();
@@ -341,6 +350,7 @@ TPrinter::ExecPrintDialog(TWindow* parent)
 //
 // Page setup dialog for Win95 support.
 //
+#pragma warn -par
 bool
 TPrinter::ExecPageSetupDialog(TWindow* parent)
 {
@@ -353,6 +363,7 @@ TPrinter::ExecPageSetupDialog(TWindow* parent)
   return false;
 #endif
 }
+#pragma warn .par
 
 //
 // Virtual called from withing Print() just before the main printing loop to
@@ -379,7 +390,6 @@ TPrinter::CreateAbortWindow(TWindow* parent, TPrintout& printout)
 void
 TPrinter::SetPageSizes(const TPrintDC& prnDC)
 {
-  //    fallback on HORZRES and VERTRES
   PageSize.cx = prnDC.GetDeviceCaps(HORZRES);
   PageSize.cy = prnDC.GetDeviceCaps(VERTRES);
   PageSizeInch.cx = prnDC.GetDeviceCaps(LOGPIXELSX);
@@ -609,7 +619,10 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, bool prompt)
         //
         // [Manually call the abort proc between bands or pages]
         //
-#if defined(MANUAL_ABORT_CALL)
+#if defined(MANUAL_ABORT_CALL) && defined(BI_PLAT_WIN16)
+
+        // Allows Abort procedure to set UserAbortDC
+        //
         prnDC->QueryAbort();
 #endif
 
@@ -634,14 +647,13 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, bool prompt)
         if (Error == 0)    // a zero return here is OK for this call
           Error = 1;
       }
-
     }  // End of Whole Document-loop
 
     // Tell GDI the document is finished
     //
     if (Error > 0)
 #if defined(MANUAL_ABORT_CALL)
-      if (banding && (UserAbortDC == *prnDC || UserAbortDC == HDC(-1))
+      if (banding && (UserAbortDC == *prnDC || UserAbortDC == HDC(-1)))
         prnDC->AbortDoc();
       else
         prnDC->EndDoc();
@@ -734,10 +746,13 @@ TPrinter::ReportError(TWindow* parent, TPrintout& printout)
   if (!module.LoadString(errorId, errorStr, sizeof(errorStr)))
     return;
 
-  char  errorMsg[80];
+  int len = strlen(errorTemplate) + strlen(printout.GetTitle()) +
+            strlen(errorStr) + 5;
+  char* errorMsg = new char[len];
   sprintf(errorMsg, errorTemplate, printout.GetTitle(), (char far*)errorStr);
 
   parent->MessageBox(errorMsg, errorCaption, MB_OK | MB_ICONSTOP);
+  delete[] errorMsg;
 }
 
 //----------------------------------------------------------------------------

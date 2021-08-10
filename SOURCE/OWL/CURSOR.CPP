@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of TCursor, a GDI Cursor object class
 //----------------------------------------------------------------------------
@@ -11,6 +11,7 @@
 # include <owl/gdiobjec.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 
 //

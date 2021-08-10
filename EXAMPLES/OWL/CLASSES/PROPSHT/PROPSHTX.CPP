@@ -41,7 +41,7 @@ class TWinAttrDlg : public TPropertyPage {
 };
 
 TWinAttrDlg::TWinAttrDlg(TPropertySheet* parent)
-            :TPropertyPage(parent, IDD_WINATTR, 0, IDI_COLOR)
+            :TPropertyPage(parent, IDD_WINATTR, "WinAttrDlg", IDI_COLOR)
 {
 }
 
@@ -130,11 +130,20 @@ class TTestPage : public TPropertyPage {
     //
     void EvCommandAndId(uint id);
 
+    // Override virtuals of TPropertyPage
+    //
+    int   SetActive(TNotify&);    // PSN_SETACTIVE
+    bool  KillActive(TNotify&);   // PSN_KILLACTIVE
+    int   Apply(TNotify&);        // PSN_APPLY
+    void  Reset(TNotify&);        // PSN_RESET
+    void  Help(TNotify&);         // PSN_HELP
+    bool  QueryCancel(TNotify&);  // PSN_QUERYCANCEL
+
     DECLARE_RESPONSE_TABLE(TTestPage);
 };
 
 TTestPage::TTestPage(TPropertySheet* parent)
-          :TPropertyPage(parent, IDD_SAMPLEPAGE)
+          :TPropertyPage(parent, IDD_SAMPLEPAGE, "TestPage")
 {
 }
 
@@ -175,6 +184,43 @@ TTestPage::EvCommandAndId(uint id)
   }
 }
 
+int   
+TTestPage::SetActive(TNotify& not)    
+{
+  return TPropertyPage::SetActive(not);
+}
+
+bool  
+TTestPage::KillActive(TNotify& not)
+{
+  return TPropertyPage::KillActive(not);
+}
+
+int   
+TTestPage::Apply(TNotify& not)
+{
+  return TPropertyPage::Apply(not);
+}
+
+void  
+TTestPage::Reset(TNotify& not)
+{
+  TPropertyPage::Reset(not);
+}
+
+void  
+TTestPage::Help(TNotify& not)
+{
+  TPropertyPage::Help(not);
+  MessageBox("Invoke WinHelp() here", GetModule()->GetName(), MB_OK);
+}
+
+bool  
+TTestPage::QueryCancel(TNotify& not)
+{
+  return TPropertyPage::QueryCancel(not);
+}
+
 //----------------------------------------------------------------------------
 
 //
@@ -186,16 +232,18 @@ class TClientWindow : public TWindow {
     TClientWindow(TWindow* parent= 0);
 
   protected:
-
     // Message Handlers
     //
-    void        Properties();
+    void        Properties(bool modal);
+    void        PropertiesModal()    { Properties(true);  }
+    void        PropertiesModeless() { Properties(false); }
 
   DECLARE_RESPONSE_TABLE(TClientWindow);
 };
 
 DEFINE_RESPONSE_TABLE1(TClientWindow, TWindow)
-  EV_COMMAND(CM_PROPERTY, Properties),
+  EV_COMMAND(CM_PROPERTY, PropertiesModal),
+  EV_COMMAND(CM_PROPMODELESS, PropertiesModeless),
 END_RESPONSE_TABLE;
 
 
@@ -207,20 +255,22 @@ TClientWindow::TClientWindow(TWindow* parent)
 }
 
 void
-TClientWindow::Properties()
+TClientWindow::Properties(bool modal)
 {
   // Allocate a PropertySheet object
   //
-  TPropertySheet* ps = new TPropertySheet(this, "Options");
+  TPropertySheet* ps = new TPropertySheet(this, "Options", 0, false, 
+                                PSH_HASHELP);
 
   // Allocate PropertyPage objects using the sheet as 'parent' parameters
   //
   new TWinAttrDlg(ps);
-  new TTestPage(ps);
-
-  // Execute the sheet...
-  //
-  ps->Execute();
+  (new TTestPage(ps))->SetFlags(PSP_HASHELP);
+  
+  if (modal)
+    ps->Execute();
+  else
+    ps->Create();
 }
 
 //----------------------------------------------------------------------------
@@ -237,7 +287,8 @@ void
 TSampleApp::InitMainWindow()
 {
   EnableCtl3d();
-  SetMainWindow(new TFrameWindow(0, 0, new TClientWindow()));
+  SetName("Property Sheet");
+  SetMainWindow(new TFrameWindow(0, GetName(), new TClientWindow()));
   GetMainWindow()->AssignMenu(IDM_APPMENU);
 }
 

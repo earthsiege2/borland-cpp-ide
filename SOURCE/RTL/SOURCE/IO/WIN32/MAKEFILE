@@ -1,5 +1,5 @@
 #############################################################################
-#
+#                                                                           #
 # The make process relies on the creation of DLL and library response file  #
 # creation.  To control the location of object modules the following should #
 # be defined:                                                               #
@@ -14,13 +14,17 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
+# $Revision:   8.15  $                                                                #
+#                                                                           #
 #############################################################################
 
 #############################################################################
 # Build the object module lists.                                            #
 #############################################################################
 OBJS =               \
-        chdir.obj    \
+        wdirect.obj  \
+        direct.obj   \
+	chdir.obj    \
         chdrive.obj  \
         chmod.obj    \
         dosclose.obj \
@@ -38,7 +42,9 @@ OBJS =               \
         fstat.obj    \
         fullpath.obj \
         getcurdi.obj \
+        wgetcurd.obj \
         getdcwd.obj  \
+        wgetdcwd.obj \
         getdfree.obj \
         getdisk.obj  \
         handles.obj  \
@@ -49,14 +55,29 @@ OBJS =               \
         oshandle.obj \
         rename.obj   \
         rmdir.obj    \
+        _stat.obj     \
         stat.obj     \
+        stati64.obj  \
         utime.obj    \
+        wchdir.obj   \
+        wchmod.obj   \
+        wdscreat.obj \
+        wfullpth.obj \
+        wmkdir.obj   \
+        wrename.obj  \
+        wrmdir.obj   \
+        wstat.obj    \
+        wstati64.obj \
+        wutime.obj   \
         _chmod.obj   \
         _close.obj   \
         _open.obj    \
         _pipe.obj    \
         _read.obj    \
+        _wopen.obj   \
         _write.obj   \
+        _waccess.obj \
+        _wchmod.obj  \
         __access.obj \
         __close.obj  \
         __dup.obj    \
@@ -65,10 +86,33 @@ OBJS =               \
         __isatty.obj \
         __lseek.obj  \
         __open.obj   \
-        __unlink.obj
+        __wopen.obj  \
+        _rmdir.obj   \
+        _mkdir.obj   \
+        _utime.obj   \
+        unlink.obj   \
+        wunlink.obj
 
 #############################################################################
 # Configure the environment appropriately.                                  #
 #############################################################################
+TASMCFG = 1        # Force tasm.cfg creation
+
 !include rules.mak
 
+wfullpth.obj : fullpath.c
+_waccess.obj : __access.c
+wchmod.obj   : chmod.c
+_wchmod.obj  : _chmod.c
+__wopen.obj  : __open.c
+_wunlnk.obj  : unlink.c
+wrename.obj  : rename.c
+wgetcurd.obj : getcurdi.c
+wgetdcwd.obj : getdcwd.c
+wchdir.obj   : chdir.c
+wmkdir.obj   : mkdir.c
+wrmdir.obj   : rmdir.c
+wstat.obj    : stat.c
+wutime.obj   : utime.c
+wdscreat.obj : doscreat.c
+_wopen.obj   : _open.c

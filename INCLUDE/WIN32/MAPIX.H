@@ -3,28 +3,39 @@
  *
  *  Definitions of objects/flags, etc used by Extended MAPI.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef MAPIX_H
 #define MAPIX_H
+#pragma option -b
 
 /* Include common MAPI header files if they haven't been already. */
 #ifndef MAPIDEFS_H
+#pragma option -b.
 #include <mapidefs.h>
+#pragma option -b
 #endif
 #ifndef MAPICODE_H
+#pragma option -b.
 #include <mapicode.h>
+#pragma option -b
 #endif
 #ifndef MAPIGUID_H
+#pragma option -b.
 #include <mapiguid.h>
+#pragma option -b
 #endif
 #ifndef MAPITAGS_H
+#pragma option -b.
 #include <mapitags.h>
+#pragma option -b
 #endif
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 #ifdef  __cplusplus
@@ -543,7 +554,10 @@ DECLARE_MAPI_INTERFACE_(IMsgServiceAdmin, IUnknown)
 #endif  
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif /* MAPIX_H */

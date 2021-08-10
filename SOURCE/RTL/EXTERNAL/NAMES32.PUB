@@ -1,8 +1,9 @@
 @$bnew$qui	___org_new
+@$bnew$qul	___org_new_huge
 @$bdele$qpv	___org_delete
 @$bdele$qnv	___org_delete
 @$bnwa$qui	___org_newa
-@$bnwa$qul	___org_newa
+@$bnwa$qul	___org_newa_huge
 @$bdla$qpv	___org_deletea
 @$bdla$qnv	___org_deletea
 __dos_close	___org__dos_close

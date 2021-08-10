@@ -27,9 +27,12 @@
 
 #ifndef _INC_MMSYSTEM
 #define _INC_MMSYSTEM   /* #defined if mmsystem.h has been included */
+#pragma option -b
 
 #ifdef _WIN32
+#pragma option -b.
 #include <pshpack1.h>
+#pragma option -b
 #else
 #ifndef RC_INVOKED
 #pragma pack(1)
@@ -3760,11 +3763,14 @@ typedef struct tagMCI_OVLY_LOAD_PARMS {
 #endif  /* __cplusplus */
 
 #ifdef _WIN32
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 #else
 #ifndef RC_INVOKED
 #pragma pack()
 #endif
 #endif
 
+#pragma option -b.
 #endif  /* _INC_MMSYSTEM */

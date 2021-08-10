@@ -3,12 +3,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #ifndef __cplusplus
 #error Must use C++ for the type bcd.
@@ -18,7 +19,7 @@
 
 // Stream I/O function definitions
 
-ostream & _RTLENTRY _EXPFUNC operator<<(ostream & s, bcd & a)
+ostream & _RTLENTRY _EXPFUNC operator<<(ostream & s, const bcd & a)
 {
     return s << real(a);
 }

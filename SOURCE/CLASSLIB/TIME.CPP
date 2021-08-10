@@ -1,13 +1,13 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.5  $
+//$Revision:   5.7  $
 //
 // TTime class implementation
 //
 // Note: Be sure that you have set your environment variable TZ.
-//       For example, for Pacific coast time, set TZ=PDT8PST.  
+//       For example, for Pacific coast time, set TZ=PDT8PST.
 //       For other time zones, see your manuals.
 //----------------------------------------------------------------------------
 #include <classlib/pch.h>
@@ -16,13 +16,13 @@
 #include <time.h>
 #include <stdio.h>
 
-enum TimeZone { CarolineIslands=-11,    MarianaIslands,         Japan, 
-                China,                  minusSeven,             minusSix, 
-                Pakistan,               CaspianSea,             Turkey, 
-                Finland,                Europe,                 Greenwich, 
-                Azores,                 two,                    Greenland, 
-                Atlantic,               USEastern,              USCentral, 
-                USMountain,             USPacific,              Alaska, 
+enum TimeZone { CarolineIslands=-11,    MarianaIslands,         Japan,
+                China,                  minusSeven,             minusSix,
+                Pakistan,               CaspianSea,             Turkey,
+                Finland,                Europe,                 Greenwich,
+                Azores,                 two,                    Greenland,
+                Atlantic,               USEastern,              USCentral,
+                USMountain,             USPacific,              Alaska,
                 Hawaii,                 Bearing};
 
 static const unsigned long SECONDS_IN_DAY  = 86400L;
@@ -45,7 +45,7 @@ static const int SUNDAY = 7;
 int TTime::AssertDate( const TDate _BIDSFAR & date )
 {
     return date.Between(RefDate,MaxDate);
-}   
+}
 
 //----------------------------------------------------------------------------
 //                     private member functions
@@ -66,8 +66,8 @@ ClockTy TTime::LocalSecs() const
 //
 TTime TTime::BuildLocal( const TDate _BIDSFAR & date, HourTy h )
 {
-    return TTime( SECONDS_IN_DAY * (date-RefDate) + 
-                  SECONDS_IN_HOUR * h + 
+    return TTime( SECONDS_IN_DAY * (date-RefDate) +
+                  SECONDS_IN_HOUR * h +
                   _timezone);
 }
 
@@ -81,7 +81,7 @@ TTime TTime::BuildLocal( const TDate _BIDSFAR & date, HourTy h )
 //
 TTime TTime::BeginDST( unsigned year )
 {
-    if( year > 1986 ) 
+    if( year > 1986 )
         {
         TDate endMarch(31, 3, year);
         return BuildLocal( endMarch.Previous(SUNDAY)+7, 2 );
@@ -128,11 +128,11 @@ TTime::TTime()
                (MonthTy)(t->tm_mon + 1),
                (YearTy)t->tm_year );
 
-  *this = TTime( today, 
-                 (HourTy)t->tm_hour, 
-                 (MinuteTy)t->tm_min, 
+  *this = TTime( today,
+                 (HourTy)t->tm_hour,
+                 (MinuteTy)t->tm_min,
                  (SecondTy)t->tm_sec );
-} 
+}
 
 //
 // Specified time and today's date:
@@ -146,17 +146,17 @@ TTime::TTime( HourTy h, MinuteTy m, SecondTy s )
 // Construct a Time for the specified (local) Date, hour, minute, and second.
 // Note: this algorithm will fail if DST correction is something other
 // than an hour.
-// It is complicated by the DST boundary problem: 
+// It is complicated by the DST boundary problem:
 // 1) Times in the phantom zone between 2AM and 3AM when DST is invoked are invalid.
 // 2) Times in the hour after 1AM when DST ends, are redundant.
-// Checking for these situations necessitates a lot of jumping back 
+// Checking for these situations necessitates a lot of jumping back
 // and forth by an hour to check for the boundary.
 //
 TTime::TTime( const TDate _BIDSFAR & date, HourTy h, MinuteTy m, SecondTy s )
 {
     if( date.IsValid() )
         {
-        Sec =   SECONDS_IN_DAY  * (date-RefDate) + 
+        Sec =   SECONDS_IN_DAY  * (date-RefDate) +
                 SECONDS_IN_HOUR * (h-1L) +    /* Note the adjustment by one hour */
                 SECONDS_IN_MIN  * m + s;
         if( Sec )
@@ -165,13 +165,13 @@ TTime::TTime( const TDate _BIDSFAR & date, HourTy h, MinuteTy m, SecondTy s )
         if( IsDST() )
             {
             Sec += SECONDS_IN_HOUR;
-            if( IsDST() ) 
+            if( IsDST() )
                 Sec -= SECONDS_IN_HOUR;
             }
         else
             {
             Sec += SECONDS_IN_HOUR;
-            if( IsDST() ) 
+            if( IsDST() )
                 Sec = 0;            // Invalid "phantom" time.
             }
         }
@@ -218,17 +218,17 @@ HourTy TTime::Hour() const
 //
 // The hour in GMT:
 //
-HourTy TTime::HourGMT() const 
+HourTy TTime::HourGMT() const
 {
     return HourTy((Sec % SECONDS_IN_DAY) / SECONDS_IN_HOUR);
-} 
+}
 
 //
 // Return TRUE if DST is active for this time:
 //
 int TTime::IsDST() const
 {
-  if( !_daylight ) 
+  if( !_daylight )
     return 0;
 
   DayTy daycount = (unsigned)(Sec/SECONDS_IN_DAY);
@@ -239,17 +239,17 @@ int TTime::IsDST() const
   return *this >= BeginDST( year ) && *this < EndDST( year );
 }
 
-TTime TTime::Max( const TTime _BIDSFAR & t ) const 
+TTime TTime::Max( const TTime _BIDSFAR & t ) const
 {
-    if( *this > t ) 
+    if( *this > t )
         return *this;
     else
         return t;
 }
 
-TTime TTime::Min( const TTime _BIDSFAR & t ) const 
+TTime TTime::Min( const TTime _BIDSFAR & t ) const
 {
-    if( *this < t ) 
+    if( *this < t )
         return *this;
     else
         return t;
@@ -266,15 +266,15 @@ MinuteTy TTime::Minute() const
 //
 // minute, in GMT
 //
-MinuteTy TTime::MinuteGMT() const 
+MinuteTy TTime::MinuteGMT() const
 {
     return MinuteTy(((Sec%SECONDS_IN_DAY)%SECONDS_IN_HOUR)/SECONDS_IN_MIN);
-} 
+}
 
 //
-// second, in local time or GMT 
+// second, in local time or GMT
 //
-SecondTy TTime::Second() const 
+SecondTy TTime::Second() const
 {
     return SecondTy(((Sec%SECONDS_IN_DAY)%SECONDS_IN_HOUR)%SECONDS_IN_MIN);
 }

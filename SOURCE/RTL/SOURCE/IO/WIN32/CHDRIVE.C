@@ -7,12 +7,13 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <ntbc.h>
 
@@ -69,7 +70,7 @@ Note            Compatible with MSC. Not the same as getdisk().
 
 *---------------------------------------------------------------------------*/
 
-int _getdrive()
+int _RTLENTRY _EXPFUNC _getdrive()
 {
     char *buf;
     int   drive;

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of TDragList
 //----------------------------------------------------------------------------
@@ -10,6 +10,8 @@
 #if !defined(OWL_DRAGLIST_H)
 # include <owl/draglist.h>
 #endif
+
+OWL_DIAGINFO;
 
 DEFINE_RESPONSE_TABLE1(TDragList, TListBox)
   EV_REGISTERED(DRAGLISTMSGSTRING, DragNotify),

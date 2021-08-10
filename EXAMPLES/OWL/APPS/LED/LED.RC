@@ -1,6 +1,7 @@
 #ifndef WS_POPUP
   #include <windows.h>
 #endif
+#include <owl/except.rc>
 
 LEDICON ICON led.ico
 

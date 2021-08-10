@@ -1,17 +1,18 @@
 /*-----------------------------------------------------------------------*
- * filename - utime.c
+ * filename - _utime.c
  *
  * function(s)
- *        utime - set file access and modification times
+ *        _utime - set file access and modification times
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <ntbc.h>
 
@@ -19,10 +20,17 @@
 #include <utime.h>
 #include <_io.h>
 #include <_time.h>
+#include <_tchar.h>
+
+#ifdef _UNICODE
+
+extern BOOL unixtofile(time_t tim, FILETIME *ftp);
+
+#else
 
 static char Days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-static BOOL unixtofile(time_t tim, FILETIME *ftp)
+BOOL unixtofile(time_t tim, FILETIME *ftp)
 {
     SYSTEMTIME st;
 
@@ -68,14 +76,19 @@ done:
 
     /* Convert the constructed system time to a file time.
      */
-    return SystemTimeToFileTime(&st,ftp);
+    return (SystemTimeToFileTime(&st,ftp) && LocalFileTimeToFileTime(ftp, ftp));
 }
+
+#endif // _UNICODE
 
 /*---------------------------------------------------------------------*
 
-Name            utime - set file modification time
+Name            _tutime used as _utime and _wutime
+                _utime   - set file modification time
+                _wutime - set file modification time
 
-Usage           int utime(const char *path, const struct utimbuf *times);
+Usage           int _utime(const char *path, const struct utimbuf *times);
+                int _wutime(const wchar_t *path, const struct utimbuf *times);
 
 Prototype in    utime.h
 
@@ -88,12 +101,12 @@ Return value    If successful, 0 is returned.  Otherwise -1 is returned
                 and errno is set as follows:
 
                 ENOENT      File not found
-                EMFILE      oo many open files
+                EMFILE      Too many open files
                 EACCESS     Permission denied
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC utime(const char *path, const struct utimbuf *times)
+int _RTLENTRY _EXPFUNC _tutime(const _TCHAR *path, const struct utimbuf *times)
 {
     unsigned err;
     HANDLE handle;

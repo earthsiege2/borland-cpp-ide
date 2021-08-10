@@ -6,9 +6,9 @@
 ;**************************************************************************
 
 ;
-;       C/C++ Run Time Library - Version 7.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
 

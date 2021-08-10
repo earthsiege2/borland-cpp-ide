@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.10  $
+//$Revision:   10.15  $
 //
 // Implementation of class TButtonGadget.
 //----------------------------------------------------------------------------
@@ -26,6 +26,7 @@
 # include <winsys/system.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGadget);
 
 //
@@ -67,7 +68,9 @@ void
 TButtonGadgetEnabler::SetText(const char far*)
 {
 # pragma warn -ccc
+# pragma warn -rch
   CHECK(true);
+# pragma warn .rch
 # pragma warn .ccc
 }
 
@@ -163,11 +166,16 @@ TButtonGadget::CommandEnable()
 
   // Must send, not post here, since a ptr to a temp is passed
   //
-  Window->HandleMessage(
-    WM_COMMAND_ENABLE,
-    0,
-    TParam2(&TButtonGadgetEnabler(*Window, this))
-  );
+  // This might be called during idle processing before the
+  // HWND has created.  Therefore, confirm handle exists.
+  //
+  if (Window->GetHandle()) {
+    Window->HandleMessage(
+      WM_COMMAND_ENABLE,
+      0,
+      TParam2(&TButtonGadgetEnabler(*Window, this))
+    );
+  }
 }
 
 //
@@ -248,11 +256,12 @@ TButtonGadget::CheckExclusively()
 void
 TButtonGadget::SetButtonState(TState newState)
 {
-  if ((Type == Exclusive || Type == SemiExclusive) && newState == Down)
-    CheckExclusively();
-
   if (newState != State) {
-    State = newState;
+      if ((Type == Exclusive || Type == SemiExclusive)
+           && newState == Down)
+        CheckExclusively();
+      else
+        State = newState;
     Invalidate();
     Update();
   }

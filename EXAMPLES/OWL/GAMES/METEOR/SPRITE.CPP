@@ -120,7 +120,8 @@ Sprite* SpriteList::CheckForHitMeteor( TPoint& p )
   return 0;
 }
 
-Meteor::Meteor( TPoint& aOrigin, TSize& aMomentum, int aSize, int aSpawnCount )
+Meteor::Meteor( const TPoint& aOrigin, const TSize& aMomentum, int aSize, 
+                int aSpawnCount )
 :
   Sprite( TSize( 600,400 ) )
 {
@@ -222,7 +223,7 @@ const char *Message::DebugInfo()
   return temp;
 }
 
-Message::Message( TPoint& aOrigin, int aBufferLen )
+Message::Message( const TPoint& aOrigin, int aBufferLen )
 :
   Sprite( TSize(600,400) )
 {

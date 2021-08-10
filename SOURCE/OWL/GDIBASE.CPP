@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.8  $
 //
 // Implementation of TGdiBase, base abstract class for all GDI objects that
 // have Handles.
@@ -12,6 +12,8 @@
 # include <owl/gdibase.h>
 #endif
 #include <stdio.h>
+
+OWL_DIAGINFO;
 
 //
 // TGdiBase constructors

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Implementation of classes TPickListPopup & TPickListDialog.
 //
@@ -17,6 +17,8 @@
 #if !defined(OWL_PICKLIST_RH)
 # include <owl/picklist.rh>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Construct a popup menu.

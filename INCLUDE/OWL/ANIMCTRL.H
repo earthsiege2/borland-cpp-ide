@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.9  $
 //
 // Definition of class TAnimateCtrl
 //----------------------------------------------------------------------------
@@ -23,6 +23,10 @@
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 //
 // class TAnimateCtrl
@@ -49,6 +53,10 @@ class _OWLCLASS TAnimateCtrl : public TControl {
   protected:
     char far* GetClassName();
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes

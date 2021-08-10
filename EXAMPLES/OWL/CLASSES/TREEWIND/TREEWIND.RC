@@ -1,6 +1,7 @@
-#define TestImage	100
+#define TestImage       100
+#include "treewind.rh"
 
-TestImage BITMAP 
+TestImage BITMAP
 {
  '42 4D 76 02 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 3C 00 00 00 10 00 00 00 01 00 04 00 00 00'
@@ -43,3 +44,13 @@ TestImage BITMAP
  'FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF'
  'FF FF FF FF 00 00'
 }
+
+IDM_MAINMENU MENU
+{
+ POPUP "&File"
+ {
+  MENUITEM "Make selected item bold (SetState)", CM_SETSTATE
+  MENUITEM "Is selected item expanded (GetState)", CM_GETSTATE
+ }
+}
+

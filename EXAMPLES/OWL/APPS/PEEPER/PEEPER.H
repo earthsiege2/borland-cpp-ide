@@ -53,10 +53,10 @@ class TClientWindow : public TWindow {
 struct MessagesTB {
    MessagesTB()
    {
-      MaxCB = MinCB = PaintCB = RestoreCB = PasteCB = CloseCB = FALSE;
+      MaxCB = MinCB = PaintCB = RestoreCB = PasteCB = CloseCB = 0;
    }
 
-   BOOL  MaxCB, MinCB, PaintCB, RestoreCB, PasteCB, CloseCB;
+   uint16  MaxCB, MinCB, PaintCB, RestoreCB, PasteCB, CloseCB;
 };
 
 //

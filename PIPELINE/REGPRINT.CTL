@@ -10,7 +10,7 @@
 
     Please Do Not Send A Cover Page With This Fax.       date:  $(system.date)
     ----------------------------------------------------------------------------
-    XXX:ALSXAAAAALAL
+    XXX:ALSXAAAAALSL
 
     Dear $(REGISTER.201), thank you for registering. 
 
@@ -42,4 +42,4 @@
 
     SQL Server(s): $(MARKETING.1052)
     
-    XXX:ALSXAAAAALAL
+    XXX:ALSXAAAAALSL

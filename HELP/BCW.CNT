@@ -1,4 +1,6 @@
 :Base BCW.HLP
+:LINK OPENHELP.HLP
+:LINK BC5MAIN.HLP
 :Title Borland C++ User's Guide
 :Index Borland C++ User's Guide = BCW.HLP
 ;:INDEX Using Borland C++ Online Documentation = OPENHELP.HLP

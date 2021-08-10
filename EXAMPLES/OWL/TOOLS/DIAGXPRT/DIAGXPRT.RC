@@ -11,6 +11,7 @@
 #define NO_IDS_EDITSEARCH
 #include <owl/editsear.rc>
 #include <owl/window.rh>
+#include <owl\except.rc>
 
 // Toolbar hints
 //

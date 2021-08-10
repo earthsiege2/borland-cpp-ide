@@ -6,6 +6,7 @@
 :INDEX ObjectComponents Programmer's Reference = OCF.HLP
 :INDEX Windows System Classes = WINSYS.HLP
 :INDEX Microsoft Windows SDK Reference = WIN32.HLP
+:INDEX ObjectWindows 5.0 Examples Help = OWLEX.HLP
 :Include OPENHELP.CFG
 :Include OWLPG.TOC
 :Include OWLRG.TOC

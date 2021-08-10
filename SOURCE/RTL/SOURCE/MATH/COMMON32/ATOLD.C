@@ -3,23 +3,27 @@
  *
  * function(s)
  *        _atold - converts a string to a long double
+ *        _wtold - converts a wide-character string to a long double
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdlib.h>
+#include <tchar.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            _atold - converts a string to a long double number
+Name            _atold, _wtold - converts a string to a long double number
 
 Usage           long double _atold(const char *strP);
+                long double _atold(const wchar_t *strP);
 
 Prototype in    stdlib.h & math.h
 
@@ -41,7 +45,7 @@ Return value    _atold returns  the converted value  of the input  string. If
 
 *---------------------------------------------------------------------------*/
 
-long double _RTLENTRY _EXPFUNC _atold(const char *strP)
+long double _RTLENTRY _EXPFUNC _ttold(const _TCHAR *strP)
 {
-    return _strtold(strP, NULL);
+    return _tcstold(strP, NULL);
 }

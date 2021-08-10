@@ -6,6 +6,7 @@
 #endif
 #include <owl\editfile.rh>
 #include <owl\inputdia.rh>
+#include <owl/except.rc>
 #include "wchess.h"
 
 ChessIcon ICON chess.ico

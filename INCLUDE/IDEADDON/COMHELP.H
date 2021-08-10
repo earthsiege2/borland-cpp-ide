@@ -1,11 +1,12 @@
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  comhelp.h
-  Created: 10/20/95
-  Copyright (c) 1995, Borland International
-  $Revision:   1.15  $
+	comhelp.h
+	Created: 10/20/95
+	Copyright (c) 1995, Borland International
+	$Header:   Y:\admin\bride\addon\deliver\interfac\comhelp.h_v   1.21   18 Nov 1996 11:29:16   JDOUGLAS  $
+	$Revision:   1.21  $
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/	
 
 #ifndef __COMHELP_H
 #define __COMHELP_H
@@ -22,125 +23,141 @@
 //
 
 // Manage the IdeServer instance pointer and get various interfaces from it
-extern void SetIdeServer( IIdeServer * pIdeServer );
-extern IIdeServer * GetIdeServer( void );  // does an addref
+extern void   SetIdeServer( IIdeServer * pIdeServer );
+extern IIdeServer * GetIdeServer( void );		// does an addref
 extern void ReleaseIdeServer( void );
 extern IUnknown * GetInterface ( REFCLSID rclsid );
 
 // These 3 call the IdeServer to make unique instances
 extern IPolyString  * CreatePolyString();
 extern IVirtualFile * CreateVirtualFile();
-extern IViewType   * CreateViewType();
+extern IViewType    * CreateViewType();
 
 // Poly string helpers
 extern IPolyString  * MakePolyString( const char * cstr );
-extern char *PolyCstrDup ( IPolyString *polystr );
+extern char *PolyCstrDup (	IPolyString *polystr );
 
 //.............................................................................
 // 
 // IUnknownImp template
-//   Derive from this, passing in an IUnknown-derived type to inherit default
-//   IUnknown implementation. For an example see examples\project.h
+// 	Derive from this, passing in an IUnknown-derived type to inherit default
+// 	IUnknown implementation. For an example see examples\project.h
 // 
 //.............................................................................
 template <class T> 
 class IUnknownImp : public T {
  public:
-  IUnknownImp( REFIID riid, LPUNKNOWN outerUnk = 0) {
-          _iid = riid; _refCount = 1;
-          d_outerUnk = outerUnk;
-  }
+   IUnknownImp( REFIID riid, LPUNKNOWN outerUnk = 0) {
+      _iid = riid; _refCount = 1;
+      d_outerUnk = outerUnk;
+   }
 
-  // IUnknown
-  virtual STDMETHODIMP QueryInterface( REFIID riid, LPVOID * ppvObj);
-  virtual STDMETHODIMP_(ULONG) AddRef  (THIS);
-  virtual STDMETHODIMP_(ULONG) Release (THIS);
+	// IUnknown
+   virtual STDMETHODIMP QueryInterface( REFIID riid, LPVOID * ppvObj);
+	virtual STDMETHODIMP_(ULONG) AddRef  (THIS);
+	virtual STDMETHODIMP_(ULONG) Release (THIS);
+   virtual ~IUnknownImp() {}
 
  protected:
-  IID _iid; 
-  ULONG _refCount;
-  LPUNKNOWN d_outerUnk;
+	IID _iid;	
+	ULONG _refCount;
+   LPUNKNOWN d_outerUnk;
 };
 
+template <class T>
+T * QueryInterfaceHelper( T * /*ignore*/, IUnknown * obj, REFIID id ) {
+   T * ret = NULL;
+   if ( obj ) {
+      HRESULT res = obj->QueryInterface( id, (void **) &ret );
+      if ( res == NOERROR ) {
+         return ret;
+      }
+   }
+   return NULL;
+}   
 
 //.............................................................................
 //
-// Define various helper macros so you can do things such as:
+//	Define various helper macros so you can do things such as:
 //
-//   IToolServer *pToolSrvr = GET_INTERFACE(IToolServer);  // ret NULL if err
+//		IToolServer *pToolSrvr = GET_INTERFACE(IToolServer); 	// ret NULL if err
 //
 // instead of the usual:
 //
-//   IToolServer *pToolSrvr;
-//   IIdeServer  *pIdeServer;
-//   HRESULT hRes = ::CoCreateInstance ( IID_Addon_IIdeAddon, NULL, 
-//                          CLSCTX_INPROC_SERVER, 
-//                          IID_IUnknown, (void **) &pIdeServer);
-//   hRes = pIdeServer->QueryInterface( IID_Addon_IToolServer, (void **) &pToolSrvr );
+//		IToolServer *pToolSrvr;
+//		IIdeServer  *pIdeServer;
+//		HRESULT hRes = ::CoCreateInstance ( IID_Addon_IIdeAddon, NULL, 
+//													  CLSCTX_INPROC_SERVER, 
+//	    											  IID_IUnknown, (void **) &pIdeServer);
+//		hRes = pIdeServer->QueryInterface( IID_Addon_IToolServer, (void **) &pToolSrvr );
 //
 // SetIdeServer must be called with the IdeServer pointer passed in to 
 // BcwAddonEntry() at startup before the first GET_INTERFACE is called. 
 // Addon clients should then call ReleaseIdeServer() in the shutdown call
 // to BcwAddonEntry() ro release the IdeServer pointer. 
-//   
+// 	
 // IUNKNOWNIMPL_INIT( Type )
-//   When deriving from IUnknownImpl, use this macro to pass the 
-//   the IID reference to the IUnknownImpl constructor.
+// 	When deriving from IUnknownImpl, use this macro to pass the 
+// 	the IID reference to the IUnknownImpl constructor.
 //
 // These macros rely on the IID consisting of "IID_Addon_" + "ClassName"
 //
-// For example, the poly string class is IPolyString and the IID is
+//	For example, the poly string class is IPolyString and the IID is
 // IID_Addon_IPolyString
 //
 
 #define MAKE_IID_NAME(Type) \
-      IID_Addon_##Type
+			IID_Addon_##Type
 
 #define GET_INTERFACE(Type) \
-     (Type *) ::GetInterface( MAKE_IID_NAME(Type) )
+		 (Type *) ::GetInterface( MAKE_IID_NAME(Type) )
 
 #define IUNKNOWNIMPL_INIT( Type ) \
-    IUnknownImp< Type > ( MAKE_IID_NAME( Type ) )
+		IUnknownImp< Type > ( MAKE_IID_NAME( Type ) )
 
 #define IUNKNOWNIMPL_INIT2( Type, outerUnk ) \
-    IUnknownImp< Type > ( MAKE_IID_NAME( Type ) , outerUnk)
+		IUnknownImp< Type > ( MAKE_IID_NAME( Type ) , outerUnk)
+      
+#define QUERY_INTERFACE( Object, Type ) \
+      ::QueryInterfaceHelper< Type >( (Type *)0, (IUnknown *) Object, MAKE_IID_NAME( Type ) )
+
 
 //.............................................................................
 template <class T> 
 STDMETHODIMP IUnknownImp<T>::QueryInterface( REFIID riid, LPVOID * ppobj ) {
-  HRESULT hRes = ResultFromScode( E_NOINTERFACE );
-  *ppobj = NULL;
+	HRESULT hRes = ResultFromScode( E_NOINTERFACE );
+	*ppobj = NULL;
 
-  if ( ( riid == IID_IUnknown ) || ( riid == _iid ) )  {
-    *ppobj = (LPVOID) this;
-  }
+	if ( ( riid == IID_IUnknown ) || ( riid == _iid ) )  {
+		*ppobj = (LPVOID) this;
+	}
 
-  if ( *ppobj != NULL ) {
-    ( (LPUNKNOWN) *ppobj )->AddRef();
-    hRes = NOERROR;
-  } else if (d_outerUnk) {
-   return d_outerUnk->QueryInterface(riid, ppobj);
-  }
-  return hRes;
+	if ( *ppobj != NULL ) {
+		AddRef();
+		hRes = NOERROR;
+	} else if (d_outerUnk) {
+      return d_outerUnk->QueryInterface(riid, ppobj);
+   }
+	return hRes;
 }
 
 
 template <class T> 
 STDMETHODIMP_(ULONG) IUnknownImp<T>::AddRef() {
-  if (d_outerUnk) {
-   d_outerUnk->AddRef();
-  }
-  return _refCount++;
+   if (d_outerUnk) {
+      d_outerUnk->AddRef();
+   }
+   return ++_refCount;
 }
 
 template <class T> 
 STDMETHODIMP_(ULONG) IUnknownImp<T>::Release (THIS)  {
-  if (d_outerUnk) {
-   d_outerUnk->Release();
-  }               // mjw - lifetime controlled by shutdown
-  return --_refCount == 0 ? (/*delete this,*/ 0) : _refCount;
+   if (d_outerUnk) {
+      d_outerUnk->Release();
+   }
+   return --_refCount == 0 ? (delete this, 0) : _refCount;
 }
 
 
 
-#endif    //  __COMHELP_H
+#endif		//  __COMHELP_H

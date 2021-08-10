@@ -2,39 +2,40 @@
  * filename - rmtmp.c
  *
  * function(s)
- *        rmtmp - close and delete open temporary file streams
+ *        _rmtmp - close and delete open temporary file streams
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
 
 /*------------------------------------------------------------------------*
 
-Name            rmtmp - close and delete open temporary streams
+Name            _rmtmp - close and delete open temporary streams
 
-Usage           int rmtmp(void);
+Usage           int _rmtmp(void);
 
 Prototype in    stdio.h
 
-Description     rmtmp closes and deletes all open temporary file streams,
+Description     _rmtmp closes and deletes all open temporary file streams,
                 which were previously created with tmpfil().  The current
                 directory must the same as when the files were created, or
                 the files will not be deleted.
 
-Return value    rmtmp returns the total number of temporary files
+Return value    _rmtmp returns the total number of temporary files
                 it closed and deleted.
 
 *-------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC rmtmp( void )
+int _RTLENTRY _EXPFUNC _rmtmp( void )
 {
     FILE *fp;
     int   i, cnt;

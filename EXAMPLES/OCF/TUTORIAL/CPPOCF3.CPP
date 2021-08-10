@@ -101,8 +101,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   try {
     // Initialize OLE
     //
-    TOleInit oleInit(::AppReg, /*Factory Callback*/0, string(lpCmdLine),
-                     ::RegLinkHead, hInstance);
+    string cmdLine(lpCmdLine);
+    TOleInitEx oleInit(::AppReg, /*Factory Callback*/0, cmdLine,
+                       ::RegLinkHead, hInstance);
 
     // Initialize application related items (eg. Window Classes)
     //

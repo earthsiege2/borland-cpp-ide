@@ -2,6 +2,7 @@
 // ObjectWindows - (C) Copyright 1993 by Borland International
 //----------------------------------------------------------------------------
 #include <owl\mdi.rh>
+#include <owl/except.rc>
 #include "mdistrm.h"
 
 #include <owl\owlapp.rc>         // default owl app icon

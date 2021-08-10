@@ -3,7 +3,7 @@
   pdview.cpp
   Created: 12/1/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.13  $
+  $Revision:   1.16  $
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 #ifndef __AOEXPCH_H
@@ -77,8 +77,8 @@ ProjectDetailViewClient::QueryInterface (REFIID riid, LPVOID FAR* ppobj)
   if ((riid == IID_IUnknown)/* || (riid == IID_PUBLIC_)*/)
   {
     *ppobj = (LPVOID)this;
-    ((LPUNKNOWN)*ppobj)->AddRef();
-   return NOERROR;
+    AddRef();
+    return NOERROR;
   }
 
   *ppobj = NULL;
@@ -163,7 +163,7 @@ ProjectDetailViewFactory::QueryInterface (REFIID riid, LPVOID FAR* ppobj)
   if ((riid == IID_IUnknown)/* || (riid == IID_PUBLIC_)*/)
   {
     *ppobj = (LPVOID)this;
-    ((LPUNKNOWN)*ppobj)->AddRef();
+    AddRef();
     return NOERROR;
   }
 
@@ -182,4 +182,3 @@ void ProjectDetailViewFactory::InitializeProperty(IViewType* viewType) {
 }
 
 //.............................................................................
-

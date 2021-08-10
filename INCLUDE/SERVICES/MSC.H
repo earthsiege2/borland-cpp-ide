@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.9  $
+//$Revision:   5.11  $
 //
 // Compiler-specific defines for Microsoft Visual C/C++. Included only by
 // defs.h
@@ -149,7 +149,7 @@
 //  C++ language features
 //
 //  When compiling with a compiler that doesn't support these
-//  features directly, remove the // from the appropriate 
+//  features directly, remove the // from the appropriate
 //  #define below or define the macro in the build environment.
 //
 

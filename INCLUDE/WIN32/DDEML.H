@@ -6,11 +6,12 @@
 *                                                                             *
 *               Version 3.10                                                  *
 *                                                                             *
-*               Copyright (c) 1993-95, Microsoft Corp.  All rights reserved.  *
+*               Copyright (c) 1993-96, Microsoft Corp.  All rights reserved.  *
 *                                                                             *
 \*****************************************************************************/
 #ifndef _INC_DDEMLH
 #define _INC_DDEMLH
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,9 +22,6 @@ extern "C" {
 DECLARE_HANDLE(HCONVLIST);
 DECLARE_HANDLE(HCONV);
 DECLARE_HANDLE(HSZ);
-// Used by BIVBX
-#define _HSZ_DEFINED
-
 DECLARE_HANDLE(HDDEDATA);
 #define EXPENTRY        CALLBACK
 
@@ -132,6 +130,11 @@ typedef CONVINFO FAR *PCONVINFO;
 
 #define CP_WINANSI      1004    /* default codepage for windows & old DDE convs. */
 #define CP_WINUNICODE   1200
+#ifdef UNICODE
+#define CP_WINNEUTRAL   CP_WINUNICODE
+#else  // !UNICODE
+#define CP_WINNEUTRAL   CP_WINANSI
+#endif // !UNICODE
 
 /***** transaction types *****/
 
@@ -490,6 +493,7 @@ typedef struct tagMONCONVSTRUCT {
 }
 #endif  /* __cplusplus */
 
+#pragma option -b.
 #endif /* _INC_DDEMLH */
 
 

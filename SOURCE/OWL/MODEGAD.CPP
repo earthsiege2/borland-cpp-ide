@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Defines TModeGadget.
 //
@@ -13,6 +13,8 @@
 #if !defined(OWL_MODEGAD_H)
 # include <owl/modegad.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Initialize the text gadget with text key's text.

@@ -147,7 +147,7 @@ TLedWindow::TLedWindow(TWindow* parent, int x, int y,
 //
 TLedWindow::~TLedWindow()
 {
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 11; i++)
     delete LedBmp[i];
 }
 

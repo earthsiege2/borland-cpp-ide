@@ -5,6 +5,7 @@
 #ifndef WORKSHOP_INVOKED
 # include <windows.h>
 #endif
+#include <owl\except.rc>
 #include "verinfo.rh"
 
 STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE

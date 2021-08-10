@@ -1,5 +1,5 @@
 #############################################################################
-#
+#                                                                           #
 # The make process relies on the creation of DLL and library response file  #
 # creation.  To control the location of object modules the following should #
 # be defined:                                                               #
@@ -13,6 +13,8 @@
 #                                                                           #
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
+#                                                                           #
+# $Revision:   8.3  $                                                                #
 #                                                                           #
 #############################################################################
 
@@ -28,7 +30,7 @@ OBJS =           \
 
 !if $d(DLL)
     RES  = version.res
-!elif !$d(MT)
+!else
     MISC = $(LIBDIR)\gp.obj
 !endif
 

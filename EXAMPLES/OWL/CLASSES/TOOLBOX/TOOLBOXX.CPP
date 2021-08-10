@@ -20,6 +20,7 @@ class TClientWindow : public TWindow {
   protected:
     void    ButtonHandler(uint id);
     bool    EvSetCursor(HWND hWndCursor, uint hitTest, uint mouseMsg);
+    void    EvSize(uint,TSize&);
 
     void    Paint(TDC& dc, bool repaint, TRect& rect);
     TPointer<TCursor> Cursor;
@@ -42,6 +43,7 @@ class TToolBoxApp : public TApplication {
 //
 DEFINE_RESPONSE_TABLE1(TClientWindow, TWindow)
   EV_WM_SETCURSOR,
+  EV_WM_SIZE,
   EV_COMMAND_AND_ID(CM_CMD1,   ButtonHandler),
   EV_COMMAND_AND_ID(CM_CMD2,   ButtonHandler),
   EV_COMMAND_AND_ID(CM_CMD3,   ButtonHandler),
@@ -93,6 +95,16 @@ TClientWindow::EvSetCursor(HWND /*hWndCursor*/, uint /*hitTest*/,
     return true;
   }
   return false;
+}
+
+//
+//
+//
+void
+TClientWindow::EvSize(uint,TSize&)
+{
+  Invalidate();
+  UpdateWindow();
 }
 
 //

@@ -19,28 +19,28 @@ class TLine : public TPoints {
   public:
     // Constructor to allow construction from a color and a pen size.
     // Also serves as default constructor.
-    TLine(const TColor& color = TColor(0), int penSize = 1) : 
+    TLine(const TColor& color = TColor(0), int penSize = 1) :
       TPoints(10, 0, 10), PenSize(penSize), Color(color) {}
 
     // Functions to modify and query pen attributes.
-    int QueryPenSize() const 
-    { 
-      return PenSize; 
-    }
-    const TColor& QueryColor() const 
+    int QueryPenSize() const
     {
-      return Color; 
+      return PenSize;
     }
-    void SetPen(TColor& newColor, int penSize = 0);
+    const TColor& QueryColor() const
+    {
+      return Color;
+    }
+    void SetPen(const TColor& newColor, int penSize = 0);
     void SetPen(int penSize);
 
     // TLine draws itself.  Returns true if everything went OK.
     virtual bool Draw(TDC&) const;
 
     // The == operator must be defined for the container class, even if unused
-    bool operator ==(const TLine& other) const 
-    { 
-      return &other == this; 
+    bool operator ==(const TLine& other) const
+    {
+      return &other == this;
     }
 
     friend ostream& operator <<(ostream& os, const TLine& line);
@@ -57,17 +57,17 @@ typedef TArrayIterator<TLine> TLinesIterator;
 class _USERCLASS TDrawDocument : public TFileDocument {
   public:
     TDrawDocument(TDocument* parent = 0) : TFileDocument(parent), Lines(0) {}
-   ~TDrawDocument() 
-    { 
-      delete Lines; 
+   ~TDrawDocument()
+    {
+      delete Lines;
     }
 
     // implement virtual methods of TDocument
     bool   Open(int mode, const char far* path=0);
     bool   Close();
-    bool   IsOpen() 
-    { 
-      return Lines != 0; 
+    bool   IsOpen()
+    {
+      return Lines != 0;
     }
     bool   Commit(bool force = false);
     bool   Revert(bool clear = false);
@@ -83,12 +83,12 @@ class _USERCLASS TDrawDocument : public TFileDocument {
 class _USERCLASS TDrawView : public TWindowView {
   public:
     TDrawView(TDrawDocument& doc, TWindow* parent = 0);
-   ~TDrawView() 
+   ~TDrawView()
     {
-      delete DragDC; 
+      delete DragDC;
       delete Line;
     }
-    static const char far* StaticName() 
+    static const char far* StaticName()
     {
       return "Draw View";
     }
@@ -129,7 +129,7 @@ TLine::SetPen(int penSize)
 }
 
 void
-TLine::SetPen(TColor& newColor, int penSize)
+TLine::SetPen(const TColor& newColor, int penSize)
 {
   // If penSize isn't the default (0), set PenSize to the new size.
   if (penSize)
@@ -308,7 +308,7 @@ DEFINE_RESPONSE_TABLE1(TDrawView, TWindowView)
   EV_VN_REVERT,
 END_RESPONSE_TABLE;
 
-TDrawView::TDrawView(TDrawDocument& doc,TWindow* parent) : 
+TDrawView::TDrawView(TDrawDocument& doc,TWindow* parent) :
   TWindowView(doc, parent), DrawDoc(&doc)
 {
   DragDC  = 0;

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.6  $
 //
 // Implementation of TPXPictureValidator, Paradox-picture input validator
 //----------------------------------------------------------------------------
@@ -22,6 +22,8 @@
 #endif
 #include <ctype.h>
 #include <stdio.h>
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -260,6 +262,7 @@ TPXPictureValidator::CheckComplete(uint termCh, uint& i, TPicResult rslt)
 //
 //
 //
+#pragma warn -aus
 TPicResult
 TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
 {
@@ -399,6 +402,7 @@ TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
 
   return (rslt == prIncompNoFill) ? prAmbiguous : prComplete;
 }
+#pragma warn .aus
 
 //
 //

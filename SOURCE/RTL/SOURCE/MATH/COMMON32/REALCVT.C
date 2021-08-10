@@ -2,36 +2,42 @@
  * filename - realcvt.c
  *
  * function(s)
- *      TrimTrailing    - suppresses trailing zeroes if needed
- *      _realcvt       - converts a double value to an ASCIIZ string
- *      _nextreal      - advance floating point argument pointer
- *      _cvt_init       - initialize pointers to conversion routines
+ *      TrimTrailing     - suppresses trailing zeroes if needed
+ *      _realcvt         - converts a double value to an ASCIIZ string
+ *      _nextreal        - advance floating point argument pointer
+ *      _cvt_init        - initialize pointers to conversion routines
+ *      _realcvtw        - converts a double value to a wide-character string
+ *      _nextrealw       - advance floating point argument pointer
+ *      _cvt_initw       - initialize pointers to conversion routines
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 
 #include <_printf.h>
 #include <string.h>
 #include <stdarg.h>
 #include <_locale.h>
+#include <_tchar.h>
 
 /* Pointers to conversion functions.
  */
-extern void (*_realcvtptr)();
-extern va_list (*_nextrealptr)();
+extern void (*_realcvttptr)();
+extern va_list (*_nextrealtptr)();
 
 /*--------------------------------------------------------------------------*
 
 Name            TrimTrailing - suppresses trailing zeroes if needed
 
 Usage           char * TrimTrailing (char formCh, char *start, char *end);
+                wchar_t * TrimTrailing (wchar_t formCh, wchar_t *start, wchar_t *end);
 
 Prototype in    local function
 
@@ -49,16 +55,17 @@ Return value    The address of the last byte of the possibly trimmed string.
 
 *---------------------------------------------------------------------------*/
 
-static char * TrimTrailing (char formCh, char *start, char *end)
+static _TCHAR * TrimTrailing (_TCHAR formCh, _TCHAR *start, _TCHAR *end)
 {
-    if (formCh == 'G' || formCh == 'g') /* only G/g removes trailing zeroes */
+    _TCHAR* DecimalPoint = (_TCHAR *) _getLocaleNumericInfo(LOCALE_SDECIMAL);
+    if (formCh == _TEXT('G') || formCh == _TEXT('g')) /* only G/g removes trailing zeroes */
     {
-        while (*(end-1) == '0')
+        while (*(end-1) == _TEXT('0'))
             if (--end <= start)
                 return (start);
     }
     /* trim the decimal point */
-    if (*(end-1) == *_localeconvention.decimal_point )
+    if (*(end-1) == *DecimalPoint )
 		--end;
     return (end);
 }
@@ -70,6 +77,9 @@ Name            _realcvt - converts a double value to an ASCIIZ string
 Usage           void _realcvt (double *valueP, int ndec,
                                         char *strP, char formCh,
                                         char altFormat);
+                void _realcvtw (double *valueP, int ndec,
+                                        wchar_t *strP, wchar_t formCh,
+                                        wchar_t altFormat);
 
 Prototype in    _printf.h
 
@@ -111,21 +121,22 @@ Return value    There is no return value
 
 *---------------------------------------------------------------------------*/
 
-static void _realcvt (void *valueP, int ndec,
-                        char *strP, char formCh, char altFormat, int type)
+static void _realcvtt (void *valueP, int ndec,
+                        _TCHAR *strP, _TCHAR formCh, _TCHAR altFormat, int type)
 {
-    char    buf [__XCVTDIG__ + 4];
-    int     sign, realcnt, cnt, exponent;
-    char    form, ch;
-    char    *src, *dst;
-    char   decimal_point_char = *_localeconvention.decimal_point;
+    _TCHAR    buf [__XCVTDIG__ + 4];
+    int       sign, realcnt, cnt, exponent;
+    _TCHAR    form, ch;
+    _TCHAR    *src, *dst;
+    _TCHAR    *decimalPoint = (_TCHAR*) _getLocaleNumericInfo(LOCALE_SDECIMAL);
+    _TCHAR    decimal_point_char = *decimalPoint; //*_localeconvention.decimal_point;
 #   define DECIMAL_POINT decimal_point_char
 
     if (ndec > __XCVTDIG__)         /* IEEE double is meaningless */
         ndec = __XCVTDIG__;         /*      beyond "__XCVTDIG__" digits. */
     realcnt = ndec;                 /* save *real* requested count */
 
-    if ((form = formCh & 0xdf) == 'F')  /* uppercase formCh */  
+    if ((form = formCh & 0xdf) == _TEXT('F'))  /* uppercase formCh */
     {
         /* F-format works with digits right of the decimal point, specified
          * to __xcvt() as a negative number.
@@ -140,7 +151,7 @@ static void _realcvt (void *valueP, int ndec,
          */
         if ((cnt = realcnt) <= 0)
             cnt = 1;                /* that one is left of '.'      */
-        else if (form == 'E')       /* e format has digit left of '.' */
+        else if (form == _TEXT('E'))       /* e format has digit left of '.' */
             cnt++, ndec++;          /* so ask __xcvt() for one more. */
     }
 
@@ -148,7 +159,7 @@ static void _realcvt (void *valueP, int ndec,
 /*      format it returns must be worked on before it can be passed     */
 /*      to the caller.  Therefore put it into a temporary buffer.       */
 
-    exponent = __xcvt(valueP,cnt,&sign,buf,type);
+    exponent = __xcvtt(valueP,cnt,&sign,buf,type);
 
     dst = strP;                 /* Set up pointer to destination string */
 
@@ -156,12 +167,12 @@ static void _realcvt (void *valueP, int ndec,
      */
     if (exponent == INF_number)
     {
-        strcpy(dst,sign ? "-INF" : "+INF");
+        _tcscpy(dst,sign ? _TEXT("-INF") : _TEXT("+INF"));
         return;
     }
     else if (exponent == NAN_number)
     {
-        strcpy(dst,sign ? "-NAN" : "+NAN");
+        _tcscpy(dst,sign ? _TEXT("-NAN") : _TEXT("+NAN"));
         return;
     }
 
@@ -172,7 +183,7 @@ static void _realcvt (void *valueP, int ndec,
     /* Either format begins with optional sign.
      */
     if (sign)
-        *dst++ = '-';
+        *dst++ = _TEXT('-');
 
     /* Now that we have the basic string, decide what format the caller
      * wants it to be put into.  Use the F format if either
@@ -182,22 +193,22 @@ static void _realcvt (void *valueP, int ndec,
      *     (if ndec is zero digits, it is taken as 1).
      * and if no more than __XCVTDIG__ integral digits can result.
      */
-    if (( form == 'F' ||
-         (form == 'G' && exponent >= -3  && exponent <= (ndec == 0 ? 1 : ndec))
+    if (( form == _TEXT('F') ||
+         (form == _TEXT('G') && exponent >= -3  && exponent <= (ndec == 0 ? 1 : ndec))
         ) && exponent <= __XCVTDIG__)
     {               /* F FORMAT */
         if (exponent <= 0)
         {
             /* No integral digits, begin with '0.'.
              */
-            *dst++ = '0';
+            *dst++ = _TEXT('0');
             *dst++ = DECIMAL_POINT;
 
             /* If the exponent is negative then leading zeroes are required.
              */
             while (exponent != 0)
             {
-                *dst++ = '0';
+                *dst++ = _TEXT('0');
                 exponent++;
             }
         }
@@ -205,7 +216,7 @@ static void _realcvt (void *valueP, int ndec,
         /* Now write the regular digits, inserting a '.' if it is somewhere
          * in the middle of the numeral.
          */
-        for (cnt = 0, src = buf; (ch = *src) != '\0'; src++)
+        for (cnt = 0, src = buf; (ch = *src) != _TEXT('\0'); src++)
         {
             *dst++ = ch;
             if (--exponent == 0)
@@ -271,7 +282,7 @@ CheckEmpty:
         }
         else if (altFormat)     /* If only one digit, but alt format, */
             *dst++ = DECIMAL_POINT;       /* put in a decimal point */
-            
+
 
         /* Now put in the exponent.  Note that the exponent returned
          * from __xcvt is one digit different, since __xcvt places the
@@ -287,7 +298,7 @@ CheckEmpty:
             *dst++ = '+';
 
         /* ANSI says that "The exponent always contains AT LEAST two digits".
-         * If the exponent is bigger than 99 then we will use as many as are 
+         * If the exponent is bigger than 99 then we will use as many as are
          * required.  It can never be more than 4 digits.
          */
         if (exponent >= 1000)
@@ -296,11 +307,11 @@ CheckEmpty:
             cnt = 3;
         else
             cnt = 2;
-        dst[cnt] = '\0';                /* null terminate early */
+        dst[cnt] = _TEXT('\0');         /* null terminate early */
         while (cnt != 0)
         {
             cnt--;
-            dst[cnt] = exponent % 10 + '0';
+            dst[cnt] = exponent % 10 + _TEXT('0');
             exponent /= 10;
         }
     }
@@ -308,7 +319,7 @@ CheckEmpty:
 
 /*--------------------------------------------------------------------------*
 
-Name            _nextreal - advance floating point argument pointer
+Name            _nextreal, _nextrealw - advance floating point argument pointer
 
 Usage           va_list _nextreal (va_list argP, int isLongDouble);
 
@@ -328,7 +339,7 @@ Return value    The new argument pointer.
 
 *---------------------------------------------------------------------------*/
 
-static va_list _nextreal (va_list argP, int isLongDouble)
+static va_list _nextrealt (va_list argP, int isLongDouble)
 {
     if (isLongDouble)
         (void)va_arg(argP,long double);
@@ -339,9 +350,10 @@ static va_list _nextreal (va_list argP, int isLongDouble)
 
 /*--------------------------------------------------------------------------*
 
-Name            _cvt_init - initialize pointers to _realcvt and _nextreal
+Name            _cvt_init, _cvt_initw - initialize pointers to _realcvt and _nextreal
 
 Usage           void _cvt_init (void);
+                void _cvt_initw (void);
 
 Prototype in    none
 
@@ -359,8 +371,9 @@ Return value    none
 
 *---------------------------------------------------------------------------*/
 
-void _RTLENTRY _cvt_init (void)
+void _RTLENTRY _cvt_initt (void)
 {
-    _realcvtptr = _realcvt;
-    _nextrealptr = _nextreal;
+    _realcvttptr = _realcvtt;
+    _nextrealtptr = _nextrealt;
 }
+

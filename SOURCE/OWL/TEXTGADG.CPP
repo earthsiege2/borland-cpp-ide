@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.7  $
 //
 // Implementation of TTextGadget.
 //----------------------------------------------------------------------------
@@ -16,6 +16,8 @@
 #if !defined(WINSYS_UIMETRIC_H)
 # include <winsys/uimetric.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Construct a text gadget
@@ -134,7 +136,7 @@ TTextGadget::Paint(TDC& dc)
   int y = innerRect.top;
 
   if (Font == 0)
-    dc.SelectObject(Window->GetFont().GetHandle());
+    dc.SelectObject(Window->GetFont());
   else
     dc.SelectObject(*Font);
 

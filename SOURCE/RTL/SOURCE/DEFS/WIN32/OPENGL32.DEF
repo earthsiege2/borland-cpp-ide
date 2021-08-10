@@ -2,9 +2,18 @@ LIBRARY OPENGL32
 EXPORTS
 
     DllInitialize
+    GlmfBeginGlsBlock
+    GlmfCloseMetaFile
+    GlmfEndGlsBlock
+    GlmfEndPlayback
+    GlmfInitPlayback
+    GlmfPlayGlsRecord
     glAccum
     glAlphaFunc
+    glAreTexturesResident
+    glArrayElement
     glBegin
+    glBindTexture
     glBitmap
     glBlendFunc
     glCallList
@@ -50,18 +59,30 @@ EXPORTS
     glColor4usv
     glColorMask
     glColorMaterial
+    glColorPointer
     glCopyPixels
+    glCopyTexImage1D
+    glCopyTexImage2D
+    glCopyTexSubImage1D
+    glCopyTexSubImage2D
     glCullFace
+    glDebugEntry
     glDeleteLists
+    glDeleteTextures
     glDepthFunc
     glDepthMask
     glDepthRange
     glDisable
+    glDisableClientState
+    glDrawArrays
     glDrawBuffer
+    glDrawElements
     glDrawPixels
     glEdgeFlag
+    glEdgeFlagPointer
     glEdgeFlagv
     glEnable
+    glEnableClientState
     glEnd
     glEndList
     glEvalCoord1d
@@ -86,6 +107,7 @@ EXPORTS
     glFrontFace
     glFrustum
     glGenLists
+    glGenTextures
     glGetBooleanv
     glGetClipPlane
     glGetDoublev
@@ -102,6 +124,7 @@ EXPORTS
     glGetPixelMapfv
     glGetPixelMapuiv
     glGetPixelMapusv
+    glGetPointerv
     glGetPolygonStipple
     glGetString
     glGetTexEnvfv
@@ -116,6 +139,7 @@ EXPORTS
     glGetTexParameteriv
     glHint
     glIndexMask
+    glIndexPointer
     glIndexd
     glIndexdv
     glIndexf
@@ -124,9 +148,13 @@ EXPORTS
     glIndexiv
     glIndexs
     glIndexsv
+    glIndexub
+    glIndexubv
     glInitNames
+    glInterleavedArrays
     glIsEnabled
     glIsList
+    glIsTexture
     glLightModelf
     glLightModelfv
     glLightModeli
@@ -169,6 +197,7 @@ EXPORTS
     glNormal3iv
     glNormal3s
     glNormal3sv
+    glNormalPointer
     glOrtho
     glPassThrough
     glPixelMapfv
@@ -181,11 +210,15 @@ EXPORTS
     glPixelZoom
     glPointSize
     glPolygonMode
+    glPolygonOffset
     glPolygonStipple
     glPopAttrib
+    glPopClientAttrib
     glPopMatrix
     glPopName
+    glPrioritizeTextures
     glPushAttrib
+    glPushClientAttrib
     glPushMatrix
     glPushName
     glRasterPos2d
@@ -265,6 +298,7 @@ EXPORTS
     glTexCoord4iv
     glTexCoord4s
     glTexCoord4sv
+    glTexCoordPointer
     glTexEnvf
     glTexEnvfv
     glTexEnvi
@@ -281,6 +315,8 @@ EXPORTS
     glTexParameterfv
     glTexParameteri
     glTexParameteriv
+    glTexSubImage1D
+    glTexSubImage2D
     glTranslated
     glTranslatef
     glVertex2d
@@ -307,11 +343,29 @@ EXPORTS
     glVertex4iv
     glVertex4s
     glVertex4sv
+    glVertexPointer
     glViewport
+    wglChoosePixelFormat
+    wglCopyContext
     wglCreateContext
+    wglCreateLayerContext
     wglDeleteContext
+    wglDescribeLayerPlane
+    wglDescribePixelFormat
     wglGetCurrentContext
     wglGetCurrentDC
+    wglGetDefaultProcAddress
+    wglGetLayerPaletteEntries
+    wglGetPixelFormat
+    wglGetProcAddress
     wglMakeCurrent
+    wglRealizeLayerPalette
+    wglSetLayerPaletteEntries
+    wglSetPixelFormat
+    wglShareLists
+    wglSwapBuffers
+    wglSwapLayerBuffers
     wglUseFontBitmapsA
     wglUseFontBitmapsW
+    wglUseFontOutlinesA
+    wglUseFontOutlinesW

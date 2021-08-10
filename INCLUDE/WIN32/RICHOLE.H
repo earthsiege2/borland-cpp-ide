@@ -1,16 +1,21 @@
+#ifndef _RICHOLE_
+#define _RICHOLE_
+#pragma option -b
+
 /*
  *	RICHOLE.H
  *
  *	Purpose:
  *		OLE Extensions to the Rich Text Editor
  *
- *	Copyright (c) 1985-1995, Microsoft Corporation
+ *	Copyright (c) 1985-1996, Microsoft Corporation
  */
 
-#ifndef _RICHOLE_
-#define	_RICHOLE_
-
-#include <pshpack4.h>
+#if defined (__BORLANDC__)
+#pragma option -b.
+  #include <pshpack8.h>
+#pragma option -b
+#endif
 
 // Structure passed to GetObject and InsertObject
 typedef struct _reobject
@@ -83,9 +88,6 @@ typedef struct _reobject
 
 DECLARE_INTERFACE_(IRichEditOle, IUnknown)
 {
-#ifdef MAC
-BEGIN_INTERFACE
-#endif
     // *** IUnknown methods ***
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lplpObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
@@ -128,9 +130,6 @@ typedef         IRichEditOle FAR * LPRICHEDITOLE;
 
 DECLARE_INTERFACE_(IRichEditOleCallback, IUnknown)
 {
-#ifdef MAC
-BEGIN_INTERFACE
-#endif
     // *** IUnknown methods ***
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lplpObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
@@ -164,8 +163,11 @@ typedef         IRichEditOleCallback FAR * LPRICHEDITOLECALLBACK;
 DEFINE_GUID(IID_IRichEditOle,         0x00020D00, 0, 0, 0xC0,0,0,0,0,0,0,0x46);
 DEFINE_GUID(IID_IRichEditOleCallback, 0x00020D03, 0, 0, 0xC0,0,0,0,0,0,0,0x46);
 #endif // !MAC
+#if defined (__BORLANDC__)
+#pragma option -b.
+  #include <poppack.h>
+#pragma option -b
+#endif
 
-#include <poppack.h>
-
-#endif /* !_RICHOLE_ */
-
+#pragma option -b.
+#endif // _RICHOLE_

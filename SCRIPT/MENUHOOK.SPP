@@ -1,3 +1,14 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1987, 1997 by Borland International, All Rights Reserved
+//
+// MENUHOOK.SPP
+//    Utility methods for adding scripted menu choices 
+//
+// $Revision:   1.5  $
+//
+//----------------------------------------------------------------------------
+
 import "MENUHOOK.DLL" {
 	int i_assign_to_view_menu( char *,char *, char *, char *);
 	int i_release_view_menu_item(char *,char * );

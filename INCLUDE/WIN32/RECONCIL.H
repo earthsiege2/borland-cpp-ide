@@ -5,12 +5,15 @@
 
 #ifndef __RECONCIL_H__
 #define __RECONCIL_H__
+#pragma option -b
 
 
 /* Headers
  **********/
 
+#pragma option -b.
 #include <recguids.h>
+#pragma option -b
 
 
 #ifdef __cplusplus
@@ -197,5 +200,6 @@ DECLARE_INTERFACE_(IBriefcaseInitiator, IUnknown)
 #endif   /* __cplusplus */
 
 
+#pragma option -b.
 #endif   /* ! __RECONCIL_H__ */
 

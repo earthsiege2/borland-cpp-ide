@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.16  $
 //
 // Definition of abstract GDI object class and derived classes
 //----------------------------------------------------------------------------
@@ -13,8 +13,22 @@
 # include <owl/gdibase.h>
 #endif
 
-class _OWLCLASS TDC;
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+  
 class _BIDSCLASS TFile;
+
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
+
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+class _OWLCLASS TDC;
 class _OWLCLASS TBrush;
 class _OWLCLASS TBitmap;
 class _OWLCLASS TDib;
@@ -53,8 +67,8 @@ class _OWLCLASS TGdiObject : private TGdiBase {
     //
    ~TGdiObject();  // GDI classes are not polymorphic, & dtor is not virtual
 
-    THandle     GetGdiHandle() const;
-    operator    THandle() const;
+    HGDIOBJ     GetGdiHandle() const;
+    operator    HGDIOBJ() const;
 
     int         GetObject(int count, void far* object) const;
     bool        operator ==(const TGdiObject& other) const;
@@ -124,8 +138,8 @@ class _OWLCLASS TPen : public TGdiObject {
 
     // Type Accessor & Conversion Operator
     //
-    THandle  GetHandle() const;
-    operator THandle() const;
+    HPEN     GetHandle() const;
+    operator HPEN() const;
 
     // Get GDI Pen Object information
     //
@@ -161,8 +175,8 @@ class _OWLCLASS TBrush : public TGdiObject {
 
     // Type Accessor & Conversion Operator
     //
-    THandle  GetHandle() const;
-    operator THandle() const;
+    HBRUSH   GetHandle() const;
+    operator HBRUSH() const;
 
     // Get GDI Brush Object information
     //
@@ -209,7 +223,7 @@ class _OWLCLASS TFont : public TGdiObject {
 
     // Constructors
     //
-    TFont(THandle handle, TAutoDelete autoDelete = NoAutoDelete);
+    TFont(HFONT handle, TAutoDelete autoDelete = NoAutoDelete);
 
     // Convenient font ctor
     //
@@ -239,20 +253,20 @@ class _OWLCLASS TFont : public TGdiObject {
 
     // Type Accessor & Conversion Operator
     //
-    THandle     GetHandle() const;
-    operator    THandle() const;
+    HFONT       GetHandle() const;
+    operator    HFONT() const;
 
-    // Retrieves info about this font when selected in the specified dc
+    // Retrieve info about this font when selected in the specified dc
     //
     TEXTMETRIC  GetTextMetrics(TDC& dc) const;
     void        GetTextMetrics(TEXTMETRIC& tm, TDC& dc) const;
 
-    // Retrieves info about this font when selected in a screen DC
+    // Retrieve info about this font when selected in a screen DC
     //
     TEXTMETRIC  GetTextMetrics() const;
     void        GetTextMetrics(TEXTMETRIC& tm) const;
 
-    // Retrieves specific attribute of font
+    // Retrieve specific attribute of font
     //
     int         GetHeight() const;
     int         GetHeight(TDC& dc) const;
@@ -263,9 +277,11 @@ class _OWLCLASS TFont : public TGdiObject {
     TSize       GetTextExtent(const char far* text) const;
     TSize       GetTextExtent(TDC& dc, const char far* text) const;
 
-    // Get GDI Font Object information
+    // Retrieve attributes of logical font
     //
-    bool        GetObject(LOGFONT far& logFont) const;
+    bool            GetObject(LOGFONT far& logFont) const;
+    const string&   GetFaceName() const;
+    uint8           GetPitchAndFamily() const;
 
   private:
     TFont& operator =(const TFont&);
@@ -308,8 +324,8 @@ class _OWLCLASS TPalette : public TGdiObject {
 
     // Type Accessor & Conversion Operator
     //
-    THandle  GetHandle() const;
-    operator THandle() const;
+    HPALETTE GetHandle() const;
+    operator HPALETTE() const;
 
     // Palette functions
     //
@@ -373,8 +389,8 @@ class _OWLCLASS TBitmap : public TGdiObject {
 
     // Type Accessor & Conversion Operator
     //
-    THandle  GetHandle() const;
-    operator THandle() const;
+    HBITMAP  GetHandle() const;
+    operator HBITMAP() const;
 
     // Get/set GDI Object information
     //
@@ -436,8 +452,8 @@ class _OWLCLASS TRegion : private TGdiBase {
 
     // Type Accessor & Conversion Operator
     //
-    THandle  GetHandle() const;
-    operator THandle() const;
+    HRGN     GetHandle() const;
+    operator HRGN() const;
 
     // Test and information functions/operators
     //
@@ -496,8 +512,8 @@ class _OWLCLASS TIcon : private TGdiBase {
 
     // Type Accessor & Conversion Operator
     //
-    THandle  GetHandle() const;
-    operator THandle() const;
+    HICON    GetHandle() const;
+    operator HICON() const;
 
     bool     operator ==(const TIcon& other) const;
 
@@ -543,8 +559,8 @@ class _OWLCLASS TCursor : public TGdiBase {
 
     // Type Accessor & Conversion Operator
     //
-    THandle  GetHandle() const;
-    operator THandle() const;
+    HCURSOR  GetHandle() const;
+    operator HCURSOR() const;
 
     bool     operator ==(const TCursor& other) const;
 
@@ -588,7 +604,7 @@ class _OWLCLASS TDib : private TGdiBase {
     TDib(const TClipboard& clipboard);
     TDib(const TDib& src);
 
-    TDib(int width, int height, int nColors, uint16 mode=DIB_RGB_COLORS);
+    TDib(int width, int height, uint32 nColors, uint16 mode=DIB_RGB_COLORS);
     TDib(HINSTANCE module, TResId resid);
     TDib(const char* name);
     TDib(TFile& file, bool readFileHeader = true);
@@ -617,8 +633,8 @@ class _OWLCLASS TDib : private TGdiBase {
 
     // Type convert this dib by returning pointers to internal structures
     //
-    THandle  GetHandle() const;
-    operator THandle() const;
+    HANDLE   GetHandle() const;
+    operator HANDLE() const;
 
     operator const BITMAPINFO far*() const;
     operator BITMAPINFO far*();
@@ -703,12 +719,12 @@ class _OWLCLASS TDib : private TGdiBase {
 
     // Internal DIB file Reda/Write functions talk to these interfaces
     //
-    class IFileIn {
+    class _OWLCLASS IFileIn {
       public:
         virtual bool Read(void HUGE* buffer, long size) = 0;
         virtual void Skip(long size) = 0;
     };
-    class IFileOut {
+    class _OWLCLASS IFileOut {
       public:
         virtual bool Write(void HUGE* buffer, long size) = 0;
     };
@@ -770,6 +786,10 @@ class _OWLCLASS TDib : private TGdiBase {
 // definition of classes
 #include <services/posclass.h>
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 //----------------------------------------------------------------------------
 // Inline implementations for abstract GDI object class and derived classes.
 //
@@ -811,15 +831,15 @@ inline TClipboard& operator <<(TClipboard& clipboard, TDib& dib)
 //
 // Return the handle of the GDI object.
 //
-inline TGdiObject::THandle TGdiObject::GetGdiHandle() const
+inline HGDIOBJ TGdiObject::GetGdiHandle() const
 {
-  return THandle(Handle);
+  return HGDIOBJ(Handle);
 }
 
 //
 // Return the handle of the GDI object.
 //
-inline TGdiObject::operator TGdiObject::THandle() const
+inline TGdiObject::operator HGDIOBJ() const
 {
   return GetGdiHandle();
 }
@@ -834,7 +854,7 @@ inline bool TGdiObject::operator ==(const TGdiObject& other) const
 }
 
 //
-// Retrive the object's attributes into a buffer.
+// Retrieve the object's attributes into a buffer.
 //
 inline int TGdiObject::GetObject(int count, void far* object) const
 {
@@ -874,15 +894,15 @@ inline bool TGdiObject::IsGDIObject() const
 //
 // Return the handle of the pen with type HPEN.
 //
-inline TPen::THandle TPen::GetHandle() const
+inline HPEN TPen::GetHandle() const
 {
-  return THandle(GetGdiHandle());
+  return HPEN(GetGdiHandle());
 }
 
 //
 // Return the handle of the pen with type HPEN.
 //
-inline TPen::operator TPen::THandle() const
+inline TPen::operator HPEN() const
 {
   return GetHandle();
 }
@@ -898,15 +918,15 @@ inline bool TPen::GetObject(LOGPEN far& logPen) const
 //
 // Return the handle of the brush with type HBRUSH.
 //
-inline TBrush::THandle TBrush::GetHandle() const
+inline HBRUSH TBrush::GetHandle() const
 {
-  return THandle(GetGdiHandle());
+  return HBRUSH(GetGdiHandle());
 }
 
 //
 // Return the handle of the brush with type HBRUSH.
 //
-inline TBrush::operator TBrush::THandle() const
+inline TBrush::operator HBRUSH() const
 {
   return GetHandle();
 }
@@ -932,15 +952,15 @@ inline bool TBrush:: UnrealizeObject()
 //
 // Return the handle of the font with type HFONT.
 //
-inline TFont::THandle TFont::GetHandle() const
+inline HFONT TFont::GetHandle() const
 {
-  return THandle(GetGdiHandle());
+  return HFONT(GetGdiHandle());
 }
 
 //
 // Return the handle of the font with type HFONT.
 //
-inline TFont::operator TFont::THandle() const
+inline TFont::operator HFONT() const
 {
   return GetHandle();
 }
@@ -1006,15 +1026,15 @@ inline int TFont::GetMaxWidth(TDC& dc) const
 //
 // Return the handle of the palette.
 //
-inline TPalette::THandle TPalette::GetHandle() const
+inline HPALETTE TPalette::GetHandle() const
 {
-  return THandle(GetGdiHandle());
+  return HPALETTE(GetGdiHandle());
 }
 
 //
 // Return the handle of the palette.
 //
-inline TPalette::operator TPalette::THandle() const
+inline TPalette::operator HPALETTE() const
 {
   return GetHandle();
 }
@@ -1106,15 +1126,15 @@ inline uint16 TPalette::GetNumEntries() const
 //
 // Return the handle of the bitmap of type BITMAP.
 //
-inline TBitmap::THandle TBitmap::GetHandle() const
+inline HBITMAP TBitmap::GetHandle() const
 {
-  return THandle(GetGdiHandle());
+  return HBITMAP(GetGdiHandle());
 }
 
 //
 // Return the handle of the bitmap of type BITMAP.
 //
-inline TBitmap::operator TBitmap::THandle() const
+inline TBitmap::operator HBITMAP() const
 {
   return GetHandle();
 }
@@ -1162,15 +1182,15 @@ inline bool TBitmap::GetObject(BITMAP far& Bitmap) const
 //
 // Return the handle of the region with type HREGION.
 //
-inline TRegion::THandle TRegion::GetHandle() const
+inline HRGN TRegion::GetHandle() const
 {
-  return THandle(Handle);
+  return HRGN(Handle);
 }
 
 //
 // Return the handle of the region with type HREGION.
 //
-inline TRegion::operator TRegion::THandle() const
+inline TRegion::operator HRGN() const
 {
   return GetHandle();
 }
@@ -1299,15 +1319,15 @@ inline TRegion& TRegion::operator ^=(const TRegion& source)
 //
 // Return the handle of the icon with type HICON.
 //
-inline TIcon::THandle TIcon::GetHandle() const
+inline HICON TIcon::GetHandle() const
 {
-  return THandle(Handle);
+  return HICON(Handle);
 }
 
 //
 // Return the handle of the icon with type HICON.
 //
-inline TIcon::operator TIcon::THandle() const
+inline TIcon::operator HICON() const
 {
   return GetHandle();
 }
@@ -1341,15 +1361,15 @@ inline bool TCursor::GetIconInfo(ICONINFO* IconInfo) const
 //
 // Return the handle of the cursor with type HCURSOR.
 //
-inline TCursor::THandle TCursor::GetHandle() const
+inline HCURSOR TCursor::GetHandle() const
 {
-  return THandle(Handle);
+  return HCURSOR(Handle);
 }
 
 //
 // Return the handle of the cursor with type HCURSOR.
 //
-inline TCursor::operator TCursor::THandle() const
+inline TCursor::operator HCURSOR() const
 {
   return GetHandle();
 }
@@ -1453,7 +1473,7 @@ inline void HUGE* TDib::GetBits()
 //
 // Return the handle of the DIB with type HANDLE.
 //
-inline TDib::THandle TDib::GetHandle() const
+inline HANDLE TDib::GetHandle() const
 {
   return Handle;
 }
@@ -1461,7 +1481,7 @@ inline TDib::THandle TDib::GetHandle() const
 //
 // Return the handle of the DIB with type HANDLE.
 //
-inline TDib::operator TDib::THandle() const
+inline TDib::operator HANDLE() const
 {
   return GetHandle();
 }
@@ -1568,7 +1588,7 @@ inline TSize TDib::Size() const
 //
 inline int TDib::ScanBytes(long w, int bpp)
 {
-  return (int)((w*bpp+31)&(~31))/8;
+  return (int)(((w*bpp+31)&(~31))/8);
 }
 
 //

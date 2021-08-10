@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1992, 1996 by Borland International
+;       Copyright (c) 1992, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.1  $
 
 _CPTR_ALLOC   equ <DD FAR PTR ?>
 
@@ -19,8 +20,8 @@ _CType              EQU     <_Cdecl>
 
 NULL                EQU     0
 
-size_t              TYPEDEF WORD 
-wchar_t             TYPEDEF WORD 
+size_t              TYPEDEF WORD
+wchar_t             TYPEDEF WORD
 
 LC_ALL              EQU     0
 LC_COLLATE          EQU     1
@@ -164,7 +165,7 @@ IGNORE_WEIGHT       EQU     0
 
 POSITION_PREFIX     EQU     001h
 
-Collate             STRUC   
+Collate             STRUC
 CollationID         DW      ?
 nLevels             DW      ?
 LevelRules          DB      8 DUP ( ? )
@@ -172,14 +173,14 @@ nTableSize          DW      ?
 
 Collate             ENDS
 
-Compression         STRUC   
+Compression         STRUC
 ElementLength       DB      ?
 CmpCollationElement DB      10 DUP ( ? )
 LevelWeight         DB      8 DUP ( ? )
 
 Compression         ENDS
 
-Expansion           STRUC   
+Expansion           STRUC
 
 ExpCollationElement DB      ?
 ExpansionLength     DB      ?
@@ -187,7 +188,7 @@ LevelWeight1        DB      80 DUP ( ? )
 
 Expansion           ENDS
 
-Substitution        STRUC   
+Substitution        STRUC
 StringLength        DB      ?
 StringElement       DB      10 DUP ( ? )
 SubstitutionLength  DB      ?
@@ -195,7 +196,7 @@ SubstitutionElement DB      10 DUP ( ? )
 
 Substitution        ENDS
 
-TimeDate            STRUC   
+TimeDate            STRUC
 abday               DB      70 DUP ( ? )
 day                 DB      140 DUP ( ? )
 abmon               DB      120 DUP ( ? )
@@ -212,14 +213,14 @@ alt_digits          DB      1000 DUP ( ? )
 
 TimeDate            ENDS
 
-Numeric             STRUC   
+Numeric             STRUC
 decimal_point       DB      2 DUP ( ? )
 thousands_sep       DB      10 DUP ( ? )
 grouping            DB      20 DUP ( ? )
 
 Numeric             ENDS
 
-Monetary            STRUC   
+Monetary            STRUC
 int_curr_symbol     DB      5 DUP ( ? )
 currency_symbol     DB      5 DUP ( ? )
 mon_decimal_point   DB      2 DUP ( ? )
@@ -238,61 +239,61 @@ n_sign_posn         DB      ?
 
 Monetary            ENDS
 
-Messages            STRUC   
+Messages            STRUC
 yesexpr             DB      5 DUP ( ? )
 noexpr              DB      5 DUP ( ? )
 
 Messages            ENDS
 
-CategoryHeader      STRUC   
+CategoryHeader      STRUC
 CategorySize        DW      ?
 CategoryName        DB      32 DUP ( ? )
 DefaultCategory     DW      ?
 
 CategoryHeader      ENDS
 
-TimeCategory        STRUC   
+TimeCategory        STRUC
 Header              CategoryHeader      <>
 TimeDateInfo        TimeDate<>
 
 TimeCategory        ENDS
 
-NumericCategory     STRUC   
+NumericCategory     STRUC
 Header              CategoryHeader      <>
 NumericInfo         Numeric <>
 
 NumericCategory     ENDS
 
-MonetaryCategory    STRUC   
+MonetaryCategory    STRUC
 Header              CategoryHeader      <>
 MonetaryInfo        Monetary<>
 
 MonetaryCategory    ENDS
 
-MessagesCategory    STRUC   
+MessagesCategory    STRUC
 Header              CategoryHeader      <>
 MessagesInfo        Messages<>
 
 MessagesCategory    ENDS
 
-CollateCategory     STRUC   
+CollateCategory     STRUC
 Header              CategoryHeader      <>
 CollateInfo         Collate <>
 
 CollateCategory     ENDS
 
-CtypeCategory       STRUC   
+CtypeCategory       STRUC
 Header              CategoryHeader      <>
 
 CtypeCategory       ENDS
 
-UserCategory        STRUC   
+UserCategory        STRUC
 Header              CategoryHeader      <>
 UserInfo            _DPTR_ALLOC
 
 UserCategory        ENDS
 
-LocaleVersion       STRUC   
+LocaleVersion       STRUC
 _Name               DB      32 DUP ( ? )
 _Major              DB      ?
 _Minor              DB      ?
@@ -301,20 +302,20 @@ _Reserved           DB      ?
 
 LocaleVersion       ENDS
 
-LocaleLocation      STRUC   
+LocaleLocation      STRUC
 LocaleName          DB      32 DUP ( ? )
 ID                  DW      ?
 LocaleOffset        DD      ?
 
 LocaleLocation      ENDS
 
-LocaleLibraryHeader STRUC   
+LocaleLibraryHeader STRUC
 LocaleLibraryVersion          LocaleVersion     <>
 nLocales            DW      ?
 
 LocaleLibraryHeader ENDS
 
-LocaleHeader        STRUC   
+LocaleHeader        STRUC
 
 ThisVersion         LocaleVersion     <>
 ObjAllocType        DW      ?
@@ -335,14 +336,14 @@ UserDefinitionsOffset                   DD      ?
 
 LocaleHeader        ENDS
 
-LocaleLib           STRUC   
+LocaleLib           STRUC
 
 ThisLib             LocaleLibraryHeader <>
 Locales             LocaleLocation      <>
 
 LocaleLib           ENDS
 
-LocaleLibraryStatus STRUC   
+LocaleLibraryStatus STRUC
 
 LibHdr              LocaleLibraryHeader <>
 Location            LocaleLocation      <>
@@ -355,7 +356,7 @@ ptmplocale          _DPTR_ALLOC
 LocaleLibraryStatus ENDS
 
 
-LOCALEOBJECT        STRUC   
+LOCALEOBJECT        STRUC
 
 LocaleHdr           LocaleHeader      <>
 LocaleString        DB ( LC_LAST * MAX_LCNAME_LEN ) DUP ( ? )
@@ -378,4 +379,3 @@ UserCat             UserCategory      <>
 pNextLocale         _DPTR_ALLOC
 
 LOCALEOBJECT        ENDS
-

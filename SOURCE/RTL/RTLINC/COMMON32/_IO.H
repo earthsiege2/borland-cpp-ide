@@ -6,15 +6,20 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.6  $ */
 
 #if !defined( __DEFS_H )
 #include <_defs.h>
+#endif
+
+#if !defined(__STDDEF_H)
+#include <stddef.h>
 #endif
 
 #ifdef __cplusplus
@@ -50,6 +55,16 @@ int      _RTLENTRYF __read   (int __handle, void *__buf, unsigned __len);
 int      _RTLENTRYF __unlink (const char *__path);
 unsigned _RTLENTRY  _umask   (unsigned __cmask);
 int      _RTLENTRYF __write  (int __handle, void *__buf, unsigned __len);
+unsigned _RTLENTRY  _DosCreate(char *pathP, unsigned attr, int *handlep,
+                               unsigned disp);
+
+#if defined(__FLAT__)
+int      __cdecl    __wopen  (const wchar_t *__path, int __access,... /*unsigned mode*/);
+int      _RTLENTRYF __wread  (int __handle, void *__buf, unsigned __len);
+int      _RTLENTRYF _wunlink (const wchar_t *__path);
+unsigned _RTLENTRY  _wDosCreate(wchar_t *pathP, unsigned attr, int *handlep,
+                               unsigned disp);
+#endif
 
 /* Functions for locking and unlocking file handles.
  */

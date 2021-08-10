@@ -1,33 +1,23 @@
 //----------------------------------------------------------------------------
-//  Project OcxDlg
-//  Borland International, Inc.
-//  Copyright © 1996. All Rights Reserved.
-//
-//  SUBSYSTEM:  OcxDlg Application
-//  FILE:       OcxDlgAp.rc
-//  AUTHOR:     Chris McConn
-//
-//  OVERVIEW
-//  ~~~~~~~~
-//  All resources defined here.
-//
+// ObjectWindows
+// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
 //----------------------------------------------------------------------------
-
 #if !defined(WORKSHOP_INVOKED)
 # include <windows.h>
 #endif
-#include "OcxDlgAp.rh"
 #include <owl/window.rh>
+#include <owl/except.rc>
+#include "ocxdlgap.rh"
 
-
-//============================================================================
 // Application ICON
+//
 IDI_SDIAPPLICATION ICON "applsdi.ico"
 
 
-//============================================================================
 // Client Dialog
-IDD_CLIENT DIALOG 55, 38, 402, 201
+//
+//IDD_CLIENT DIALOG 55, 38, 402, 201
+IDD_CLIENT DIALOG 0, 0, 402, 201
 STYLE DS_3DLOOK | WS_CHILD | WS_CLIPSIBLINGS | WS_CAPTION
 CAPTION "Dialog Client"
 FONT 8, "MS Sans Serif"
@@ -40,8 +30,8 @@ FONT 8, "MS Sans Serif"
  CONTROL "", -1, "BorShade", BSS_GROUP | BSS_CAPTION | BSS_LEFT | WS_CHILD | WS_VISIBLE, 15, 11, 373, 161
 }
 
-//============================================================================
 // Version info.
+//
 #if !defined(__DEBUG_)
 
 // Non-Debug VERSIONINFO

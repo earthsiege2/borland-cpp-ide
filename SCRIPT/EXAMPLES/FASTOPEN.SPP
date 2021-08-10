@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // FASTOPEN.SPP: Fast Open. Opens files and projects based on a search
 //   path, so you don't have to navigate directories. Supports wildcards.
@@ -15,7 +15,7 @@
 //
 // NOTES: All fastopen.* files must reside in the same directory.
 //--------------------------------------------------------------------------
-print "fastopen.spp";
+print typeid(module());
 
 //
 // IDE imports.
@@ -26,12 +26,12 @@ import scriptEngine;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
-if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
-if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+if (!scriptEngine.IsLoaded("msg")) scriptEngine.Load("msg");
+if (!scriptEngine.IsLoaded("file")) scriptEngine.Load("file");
+if (!scriptEngine.IsLoaded("misc")) scriptEngine.Load("misc");
 
 Msg = new TMsg();                          // Message object.
-ModuleDir = GetModuleDir("fastopen.spp");  // Directory of this script.
+ModuleDir = GetModuleDir(typeid(module()));  // Directory of this script.
 
 DataDirs = new array[];  // Array of directories in the search path.
 

@@ -83,7 +83,7 @@ TLine::SetPen(int penSize)
 }
 
 void
-TLine::SetPen(TColor& newColor, int penSize)
+TLine::SetPen(const TColor& newColor, int penSize)
 {
   // If penSize isn't the default (0), set PenSize to the new size.
   if (penSize)
@@ -652,7 +652,7 @@ TDrawView::TDrawView(TDrawDocument& doc, TWindow* parent)
   // this is temporary to let all control to paint
   // we need CLIPCHILDREN, so we'll put it back
   ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
-  
+
   Selected  = 0;
   Tool      = DrawPen;
   ToolBar   = 0;
@@ -1365,11 +1365,11 @@ TDrawView::CmControlFont ()
       return;
     pICtrl->Release();
 
-		// get control's IDispatch
+                // get control's IDispatch
     if (FAILED(pICtrl->GetCtrlDispatch(&pID)))
       return;
 
-		// ask for control's font
+                // ask for control's font
     if (SUCCEEDED (OcDispGetProp (pID, DISPID_FONT, &result))) {
 
       pIF = result.pdispVal;
@@ -1378,17 +1378,17 @@ TDrawView::CmControlFont ()
         result2.boolVal = result2.boolVal ? false : true;
         OcDispSetProp (pIF, DISPID_FONT_BOLD, &result2);
       }
-	    if (SUCCEEDED (OcDispGetProp (pIF, DISPID_FONT_SIZE, &result2))) {
-	      VariantChangeType( &result2, &result2, 0, VT_CY);
-	#ifdef WIN32
-	      result2.cyVal.s.Lo = result2.cyVal.s.Lo + 20000;
-	      if (result2.cyVal.s.Lo > 140000)
-	        result2.cyVal.s.Lo = 60000;
-	#else
-	      result2.cyVal.Lo = result2.cyVal.Lo + 20000;
-	#endif
-	      OcDispSetProp (pIF, DISPID_FONT_SIZE, &result2);
-	    }
+            if (SUCCEEDED (OcDispGetProp (pIF, DISPID_FONT_SIZE, &result2))) {
+              VariantChangeType( &result2, &result2, 0, VT_CY);
+        #ifdef WIN32
+              result2.cyVal.s.Lo = result2.cyVal.s.Lo + 20000;
+              if (result2.cyVal.s.Lo > 140000)
+                result2.cyVal.s.Lo = 60000;
+        #else
+              result2.cyVal.Lo = result2.cyVal.Lo + 20000;
+        #endif
+              OcDispSetProp (pIF, DISPID_FONT_SIZE, &result2);
+            }
     }
 
     pID->Release();
@@ -1996,10 +1996,10 @@ HRESULT OcDispGetPropString (IDispatch *pID, DISPID id,
     // Coerce to a string
     if (SUCCEEDED (VariantChangeType (&result, &result, 0,
         VT_BSTR )))  {
-			if (*(result.bstrVal))
-      	lstrcpy (propVal, OleStr(result.bstrVal));
+                        if (*(result.bstrVal))
+        lstrcpy (propVal, OleStr(result.bstrVal));
       else
-      	*propVal = '\0';  
+        *propVal = '\0';
     }
   }
   VariantClear (&result);

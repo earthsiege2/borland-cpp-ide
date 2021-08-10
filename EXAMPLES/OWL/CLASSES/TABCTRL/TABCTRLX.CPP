@@ -276,10 +276,10 @@ TMainWindow::CmNewTab()
   // Create/Initialize a structure to set and retrieve data;
   //
   struct {
-    int   buttonStyle;
-    int   defStyle;
-    int   singleLine;
-    int   multipleLine;
+    uint16   buttonStyle;
+    uint16   defStyle;
+    uint16   singleLine;
+    uint16   multipleLine;
   } dlgData = {0, 1, 1, 0};
 
   // Create C++ objects representing the Dialog and its controls

@@ -1,0 +1,29 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1997 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+//
+// Menu ID
+//
+#define IDM_MAINMENU    100
+
+//
+// Control window ID
+//
+#define ID_TEXTGADGET   100
+
+// 
+// Menu command IDs
+//
+
+// At runtime, CmSite uses the offset from CM_CMDBASE to
+// determine which URL to load.
+//
+#define CM_CMDBASE      10000
+#define CM_BORLANDOWL   CM_CMDBASE+0
+#define CM_OWLLIST      CM_CMDBASE+1
+#define CM_BCFAQ        CM_CMDBASE+2
+#define CM_CBUILDER     CM_CMDBASE+3
+#define CM_CPPWP        CM_CMDBASE+4
+
+// CM_EXIT is predefined in OWL

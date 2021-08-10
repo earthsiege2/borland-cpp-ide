@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of class TMetaFileDC, a Metafile DC encapsulation
 //----------------------------------------------------------------------------
@@ -10,6 +10,8 @@
 #if !defined(OWL_DC_H)
 # include <owl/dc.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Create a regular metafile DC.

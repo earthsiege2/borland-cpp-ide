@@ -27,12 +27,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $ */
 
 #if !defined(___DEFS_H)
 #define ___DEFS_H
@@ -62,10 +63,12 @@
 #       define _EXPCLASS  __export
 #       define _EXPDATA   __export
 #       define _EXPFUNC   __export
+#	define _RWSTDBUILDDLL
 #   elif defined(_RTLDLL) && !defined(__OS2__)
 #       define _EXPCLASS  __import
 #       define _EXPDATA   __import
 #       define _EXPFUNC   __import
+#	define _RWSTDDLL
 #   else
 #       define _EXPCLASS
 #       define _EXPDATA

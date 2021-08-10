@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 #include <owl\mdi.rh>
 #include <owl\window.rh>
+#include <owl/except.rc>
 
 100 MENU 
 {

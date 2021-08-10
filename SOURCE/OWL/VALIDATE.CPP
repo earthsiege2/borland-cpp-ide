@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of TValidator, user input validator abstract base class
 //----------------------------------------------------------------------------
@@ -16,6 +16,8 @@
 #endif
 #include <stdlib.h>
 #include <ctype.h>
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 

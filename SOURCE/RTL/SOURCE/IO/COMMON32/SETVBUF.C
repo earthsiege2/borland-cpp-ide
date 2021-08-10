@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -94,7 +95,7 @@ int _RTLENTRY _EXPFUNC setvbuf (FILE *fp, char *buf, int type, size_t size)
 {
     int rc;
 
-    if (fp->token != (short) fp || _IONBF < type || INT_MAX < size)
+    if (fp->token != (unsigned char) fp || _IONBF < type || INT_MAX < size)
         return(EOF);
 
     _lock_stream(fp);
@@ -109,7 +110,6 @@ int _RTLENTRY _EXPFUNC setvbuf (FILE *fp, char *buf, int type, size_t size)
      */
     rc = _allocbuf(fp, buf, type, size);
 
-exit:
     _unlock_stream(fp);
     return (rc);
 }

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Implementation of class TControlBar.
 //----------------------------------------------------------------------------
@@ -14,6 +14,7 @@
 # include <winsys/uimetric.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlWin);
 
 IMPLEMENT_CASTABLE(TControlBar);

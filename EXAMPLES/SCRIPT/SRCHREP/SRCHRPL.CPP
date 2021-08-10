@@ -39,7 +39,7 @@ searchReplaceDialog(HWND parentHwnd, char *search, char *replace, char *mask)
 
     TWindow *windowPtr = new TWindow(parentHwnd);
 
-    TDialog *optDlg = new TDialog(windowPtr, "SearchDlg");
+    TDialog *optDlg = new TDialog(windowPtr, "SEARCHDLG");
     new TEdit(optDlg, IDD_SEARCHEDITBOX, maxLength);
     new TEdit(optDlg, IDD_REPLACEEDITBOX, maxLength);
     new TEdit(optDlg, IDD_MASKEDITBOX, maxLength);

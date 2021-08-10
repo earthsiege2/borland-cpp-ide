@@ -8,15 +8,20 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1992, 1996 by Borland International
+ *      Copyright (c) 1992, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.10  $ */
 
 #ifndef ___LOCALE_H
 #define ___LOCALE_H
+
+#pragma pragma pack(push, 1)
+
+#ifndef __FLAT__
 
 #if !defined(___DEFS_H)
 #include <_defs.h>
@@ -33,8 +38,6 @@
 #if !defined(__DIR_H)
 #include <dir.h>
 #endif
-
-#pragma pragma pack(push, 1)    
 
 /* version info */
 #define LCLIB_MAJOR_VERSION                      1
@@ -540,7 +543,7 @@ struct LOCALEOBJECT {
 
     /* collation function */
     int    _RTLENTRY _EXPFUNC (*pcollate) ( const char *__s1, const char *__s2 );
-                                        
+
     /* collation transform function */
     size_t _RTLENTRY _EXPFUNC (*ptransform) ( char *__s1, const char *__s2, size_t __n );
 
@@ -607,6 +610,8 @@ struct path_components {
 
 
 /* internal prototypes */
+
+struct lconv * _RTLENTRY _EXPFUNC _llocaleconv( void );
 
 char * __lsetlocale( int __category, const char *__locale );
 
@@ -684,7 +689,189 @@ extern char _LocaleLibName[ MAXPATH + 1 ];
 
 #define __pLocale _pLocale
 
-#pragma pragma pack(pop)        
+#else  // #ifndef __FLAT__
+
+#include <windows.h>
+#include <winnls.h>
+#include <time.h>
+
+#if !defined(__LOCALE_H)
+#include <locale.h>
+#endif
+
+#define LOCALE_ERROR(code) 0x00000100 + code
+#define ERROR_LOCALE_INVALID   (APPLICATION_ERROR_MASK + LOCALE_ERROR(1))
+#define ERROR_CATEGORY_INVALID (APPLICATION_ERROR_MASK + LOCALE_ERROR(2))
+#define ERROR_LOCALE_NOTINSTALLED (APPLICATION_ERROR_MASK + LOCALE_ERROR(3))
+#define ERROR_LOCALE_NOTSUPPORTED (APPLICATION_ERROR_MASK + LOCALE_ERROR(4))
+#define ERROR_CATEGORY_NOTOPEN (APPLICATION_ERROR_MASK + LOCALE_ERROR(5))
+#define ERROR_MBCS_CODEPAGE_INVALID (APPLICATION_ERROR_MASK + LOCALE_ERROR(6))
+
+#define LC_STRING   0x0001
+#define LC_NUMBER   0x0002
+
+
+typedef struct tagCollate {
+  short dummy;
+} WIN32COLLATE, *LPWIN32COLLATE;
+
+typedef struct tagCtype {
+  unsigned short cType[257];     // array containing types of data (_ALPHA, _NUMERIC, etc...)
+} WIN32CTYPE, *LPWIN32CTYPE;
+
+typedef struct tagMonetary {
+  short Digits;                 // Number of fractional digits
+  short IntlDigits;             // Number of fractional intl digits
+  short Mode;                   // Currency mode
+  short NegMode;                // Negative currency mode
+  short PositiveFormat;         // Positive formatting
+  short NegativeFormat;         // Negative formatting
+  short PosSymbolPrec;          // Is the Symbol preceds amount
+  short PosSymbolSpace;         // Is the positive symbol separeated by space
+  short NegSymbolPrec;          // Is the negative Symbol preceds amount
+  short NegSymbolSpace;         // Is the negative symbol separeated by space
+
+  LPSTR ThousandSeparator;      // Thousand separator symbol
+  LPSTR Decimal;                // Floating point symbol
+  LPSTR Symbol;                 // Monetary Symbol
+  LPSTR IntlSymbol;             // Monetary Intl Symbol
+  LPSTR Grouping;               // Grouping
+  LPSTR PositiveSign;           // Positive Sign
+  LPSTR NegativeSign;           // Negative Sign
+  LPSTR NegativeFormatString;   // Negative format string
+} WIN32MONETARY, *LPWIN32MONETARY;
+
+typedef struct tagTime {
+  LPSTR DateSeparator;          // Date separator
+  LPSTR TimeSeparator;          // Time separator
+  LPSTR TimeFormat;             // Time formatting string
+  LPSTR ShortFormat;            // Short date formatting sting
+  LPSTR LongFormat;             // Long date formatting string
+  LPSTR AM;                     // AM designor
+  LPSTR PM;                     // PM designor
+
+  short Order;                  // Short date-format ordering
+  short LongOrder;              // Long date-format ordering
+  short TimeFmt;                // Time format specifier (AM/PM || 24h)
+  short Century;                // Century specification (4 digits or 2)
+  short TimeLeadZeros;          // Leading zeros in time fields.
+  short DayLeadZeros;           // Leading zeros in Day fields
+  short MonthLeadZeros;         // Leading zeros in Month fields
+
+  LPSTR DayName1;               // Day name for Mon
+  LPSTR DayName2;               // Day name for Tue
+  LPSTR DayName3;               // Day name for Wed
+  LPSTR DayName4;               // Day name for Thu
+  LPSTR DayName5;               // Day name for Fri
+  LPSTR DayName6;               // Day name for Sat
+  LPSTR DayName7;               // Day name for Sun
+
+  LPSTR AbrvDayName1;           // Abbreviated day name for Mon
+  LPSTR AbrvDayName2;           // Abbreviated day name for Tue
+  LPSTR AbrvDayName3;           // Abbreviated day name for Wed
+  LPSTR AbrvDayName4;           // Abbreviated day name for Thu
+  LPSTR AbrvDayName5;           // Abbreviated day name for Fri
+  LPSTR AbrvDayName6;           // Abbreviated day name for Sat
+  LPSTR AbrvDayName7;           // Abbreviated day name for Sun
+
+  LPSTR MonthName1;             // Month name for Jan
+  LPSTR MonthName2;             // Month name for Feb
+  LPSTR MonthName3;             // Month name for Mar
+  LPSTR MonthName4;             // Month name for Apr
+  LPSTR MonthName5;             // Month name for May
+  LPSTR MonthName6;             // Month name for Jun
+  LPSTR MonthName7;             // Month name for Jul
+  LPSTR MonthName8;             // Month name for Aug
+  LPSTR MonthName9;             // Month name for Sep
+  LPSTR MonthName10;            // Month name for Oct
+  LPSTR MonthName11;            // Month name for Nov
+  LPSTR MonthName12;            // Month name for Dec
+
+  LPSTR AbrvMonthName1;         // Abbreviated Month name for Jan
+  LPSTR AbrvMonthName2;         // Abbreviated Month name for Feb
+  LPSTR AbrvMonthName3;         // Abbreviated Month name for Mar
+  LPSTR AbrvMonthName4;         // Abbreviated Month name for Apr
+  LPSTR AbrvMonthName5;         // Abbreviated Month name for May
+  LPSTR AbrvMonthName6;         // Abbreviated Month name for Jun
+  LPSTR AbrvMonthName7;         // Abbreviated Month name for Jul
+  LPSTR AbrvMonthName8;         // Abbreviated Month name for Aug
+  LPSTR AbrvMonthName9;         // Abbreviated Month name for Sep
+  LPSTR AbrvMonthName10;        // Abbreviated Month name for Oct
+  LPSTR AbrvMonthName11;        // Abbreviated Month name for Nov
+  LPSTR AbrvMonthName12;        // Abbreviated Month name for Dec
+
+} WIN32TIME, *LPWIN32TIME;
+
+
+typedef struct tagNumeric {
+  LPSTR ThousandSeparator;      // Thousand separator symbol
+  LPSTR Decimal;                // Floating point symbol
+  LPSTR Grouping;               // Grouping
+  LPSTR PositiveSign;           // Positive Sign
+  LPSTR NegativeSign;           // Negative Sign
+  short Digits;                 // Number of fractional digits
+} WIN32NUMERIC, *LPWIN32NUMERIC;
+
+
+/* a pointer on this structure is stored in the Tls of each thread
+   We can like this retrieve the data at anytime and take advantage
+   of multithreading for locale management.
+ */
+
+typedef struct tagLocale {
+
+  long            codepage;     // Code page of the locale
+  LCID            handle;       // LCID of the locale
+  BOOL            isCLocale;    // is that locale "C" locale ?
+  int             country;
+
+  LPWIN32CTYPE    ctype;        // CType category of the locale
+  LPWIN32MONETARY monetary;     // Monetary category of the locale
+  LPWIN32NUMERIC  numeric;      // Numeric category of the locale
+  LPWIN32COLLATE  collate;      // Collate category of the locale
+  LPWIN32TIME     time;         // Time category of the locale
+
+  LPSTR setLocaleReturn;
+  LPWSTR setLocaleReturnW;
+} WIN32LOCALE, *LPWIN32LOCALE;
+
+LPWSTR _setLocale32W(SHORT Category, LPCWSTR LocaleName);
+LPSTR _setLocale32A(SHORT Category, LPCSTR localeName);
+
+const void* _getLocaleTimeInfo(LCTYPE info);
+const void* _getLocaleMonetaryInfo(LCTYPE info);
+const void* _getLocaleNumericInfo(LCTYPE info);
+char* _win32DateTimeToPOSIX(char* DateTime, char* dest, int size);
+const void* _getLocaleMonetaryNegFmt();
+int   _getLocaleEra(char* buf, int bufsize, const struct tm *t);
+
+#ifdef __MT__
+
+  void _lockLocale(void);
+  void _unlockLocale(void);
+
+  #define _lock_locale()    _lockLocale()
+  #define _unlock_locale()  _unlockLocale()
+
+  #define LOCKLOCALE    _lockLocale()
+  #define UNLOCKLOCALE  _unlockLocale()
+
+#else
+
+  #define _lock_locale()
+  #define _unlock_locale()
+
+  #define LOCKLOCALE
+  #define UNLOCKLOCALE
+
+#endif
+
+extern _EXPDATA LPWIN32LOCALE __locale;
+extern struct lconv _localeconvention;
+
+#endif // __FLAT__ || !__FLAT__
+
+#pragma pragma pack(pop)
 
 #endif /* ___LOCALE_H */
 

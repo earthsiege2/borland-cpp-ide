@@ -6,12 +6,13 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1992, 1996 by Borland International
+ *      Copyright (c) 1992, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $ */
 
 #ifndef __cplusplus
 #error Must use C++ for CHECKS.H
@@ -166,12 +167,12 @@ public:
 
 #if defined(__TRACE) || defined(__WARN)
 
-#if defined( __RTLDLL ) || defined( _BUILDRTLDLL )
-#if defined(__OS2__)    
+#if defined( _RTLDLL ) || defined( _BUILDRTLDLL )
+#if defined(__OS2__)
 #define DIAG_IMPORT
-#else    
+#else
 #define DIAG_IMPORT __import
-#endif    
+#endif
 #define DIAG_EXPORT __export
 #else
 #define DIAG_IMPORT

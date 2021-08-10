@@ -93,6 +93,7 @@ TApxPreviewWin::TApxPreviewWin(TWindow* parentWindow, TPrinter* printer,
   Insert(*PreviewSpeedBar, TDecoratedFrame::Top);
 
   Attr.Style &= ~WS_VISIBLE;
+  SetAcceleratorTable(IDM_PRINTPREVIEW);
 }
 
 
@@ -114,13 +115,14 @@ void TApxPreviewWin::SetupWindow()
   TAPointer<char> captionText = new char[256];
 
 ##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-  // Set the caption of the preview window to that of the Main Window.
+  // Set the caption of the preview window based on that of the Main Window.
   //
   GetApplication()->GetMainWindow()->GetWindowText(captionText, 256);
+  strcat(captionText, " (Preview)");
   SetCaption(captionText);
 
 ##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-  // Set the icons of the preview window to those of the Main Window.
+  // Set the icons of the preview window.
   //
 ##@QUERY_APPL_MODEL == VALUE_MDI 2
   SetIcon(GetApplication(), IDI_MDIAPPLICATION);

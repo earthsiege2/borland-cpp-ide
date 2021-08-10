@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Definition of Choose Color Common Dialog class
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(WINSYS_COLOR_H)
 # include <winsys/color.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -29,10 +33,17 @@ class _OWLCLASS TChooseColorDialog : public TCommonDialog {
   public:
     class _OWLCLASS TData {
       public:
-        uint32      Flags;
-        uint32      Error;
-        TColor      Color;
-        TColor*     CustColors;
+        TData(uint32 flags = 0, bool allocCustColor = false);
+        TData(uint32 flags, const TColor& initColor, 
+              bool allocCustColors = false);
+
+        uint32              Flags;
+        uint32              Error;
+        TColor              Color;
+        TColor*             CustColors;
+
+      protected:
+        TAPointer<TColor>   CustColorsArray;  
     };
 
     TChooseColorDialog(TWindow*        parent,
@@ -83,6 +94,10 @@ class _OWLCLASS TChooseColorDialog : public TCommonDialog {
 // definition of classes
 #include <services/posclass.h>
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 //----------------------------------------------------------------------------
 // Inline implementations
 //
@@ -131,4 +146,28 @@ inline TParam2 TChooseColorDialog::EvSetRGBColor(TParam1, TParam2) {
   return DefaultProcessing();
 }
 
+//
+//
+//
+inline TChooseColorDialog::TData::TData(uint32 flags, bool allocCustColor) {
+  Flags = 0;  
+  if (allocCustColor) {
+    CustColorsArray = new TColor[16];
+    CustColors = CustColorsArray;
+  }
+}
+
+//
+//
+//
+inline TChooseColorDialog::TData::TData(uint32 flags, 
+                                        const TColor& initColor, 
+                                        bool allocCustColor) {
+  Flags = flags;
+  Color = initColor;  
+  if (allocCustColor) {
+    CustColorsArray = new TColor[16];
+    CustColors = CustColorsArray;
+  }
+}
 #endif  // OWL_CHOOSECO_H

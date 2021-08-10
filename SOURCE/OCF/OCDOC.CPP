@@ -1,17 +1,30 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.6  $
+// $Revision:   2.10  $
 //
 // Implementation of TOcDocument Class
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/ocstorag.h>
-#include <ocf/ocdoc.h>
-#include <ocf/ocpart.h>
-#include <ocf/ocapp.h>
-#include <ocf/ocremvie.h>
+#if !defined(OCF_OLEUTIL_H)
+# include <ocf/oleutil.h>
+#endif
+#if !defined(OCF_OCSTORAG_H)
+# include <ocf/ocstorag.h>
+#endif
+#if !defined(OCF_OCDOC_H)
+# include <ocf/ocdoc.h>
+#endif
+#if !defined(OCF_OCPART_H)
+# include <ocf/ocpart.h>
+#endif
+#if !defined(OCF_OCAPP_H)
+# include <ocf/ocapp.h>
+#endif
+#if !defined(OCF_OCREMVIE_H)
+# include <ocf/ocremvie.h>
+#endif
 
 DIAG_DECLARE_GROUP(OcRefCount);
 
@@ -23,15 +36,9 @@ const char  DocStreamName[] = "OcDocument";
 TOcDocument::TOcDocument(TOcApp& app, const char far* fileName)
 :
   OcApp(app),
-#if defined(BI_DATA_NEAR)
-  Name(*new string(fileName)),
-  PartCollection(*new TOcPartCollection),
-  LinkCollection(*new TOcLinkCollection)
-#else
   Name(fileName),
   PartCollection(),
   LinkCollection()
-#endif
 {
   // Host support...
   //
@@ -50,15 +57,9 @@ TOcDocument::TOcDocument(TOcApp& app, const char far* fileName)
 TOcDocument::TOcDocument(TOcApp& app, const char far* fileName, IStorage far* storageI)
 :
   OcApp(app),
-#if defined(BI_DATA_NEAR)
-  Name(*new string(fileName)),
-  PartCollection(*new TOcPartCollection),
-  LinkCollection(*new TOcLinkCollection)
-#else
   Name(fileName),
   PartCollection(),
   LinkCollection()
-#endif
 {
   // Host support...
   //
@@ -80,11 +81,6 @@ TOcDocument::TOcDocument(TOcApp& app, const char far* fileName, IStorage far* st
 TOcDocument::~TOcDocument()
 {
   delete Storage;
-#if defined(BI_DATA_NEAR)
-  delete &PartCollection;
-  delete &LinkCollection;
-  delete &Name;
-#endif
 }
 
 //----------------------------------------------------------------------------
@@ -236,10 +232,6 @@ TOcDocument::LoadParts()
   if (!Storage)
     return true;
 
-  // Clear the part collection
-  //
-  //PartCollection.Clear(); 
-                            // There is a case when clearing now causes a crash
 
   // Open a stream with part information
   //
@@ -272,11 +264,14 @@ TOcDocument::LoadParts()
 
       // Read the part name string, pascal style [len]+chars, no 0
       //
-      if (!HRSucceeded(stream.Read(&len, sizeof len)))
+      if (!HRSucceeded(stream.Read(&len, sizeof(len))))
         return false;
 
-      if (len >= sizeof name) // too big for our buffer, how could that happen?
+      if (len >= sizeof(name)) {
+        // NOTE: Should *never* happen!
+        //
         return false;
+      }
 
       if (!HRSucceeded(stream.Read(name, len)))
         return false;

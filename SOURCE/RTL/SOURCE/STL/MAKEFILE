@@ -1,3 +1,5 @@
+#  $Revision:   8.2  $
+
 !if $(OS)==WIN32
 ENVIRON=WIN32
 !elif $(OS)==WIN16

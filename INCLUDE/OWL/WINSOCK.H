@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.9  $
 //
 // Main header of the Winsock OWL subsystem.
 //----------------------------------------------------------------------------
@@ -37,6 +37,10 @@
 # include <owl/wskservm.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
@@ -52,74 +56,84 @@ class _OWLCLASS TWinSockDll : public TModule {
 
     // Socket functions
     //
-    TModuleProc3<SOCKET,SOCKET,struct sockaddr far*, int far*> accept;
-    TModuleProc3<int,SOCKET,struct sockaddr far*,int>          bind;
-    TModuleProc1<int,SOCKET>                                   closesocket;
-    TModuleProc3<int,SOCKET,struct sockaddr far*,int>          connect;
-    TModuleProc3<int,SOCKET,struct sockaddr far*,int far*>     getpeername;
-    TModuleProc3<int,SOCKET,struct sockaddr far*,int far*>     getsockname;
-    TModuleProc5<int,SOCKET,int,int,char far*,int far*>        getsockopt;
-    TModuleProc1<ulong,ulong>                                  htonl;
-    TModuleProc1<ushort,ushort>                                htons;
-    TModuleProc1<ulong,const char far*>                        inet_addr;
-    TModuleProc1<char far*,struct in_addr>                     inet_ntoa;
-    TModuleProc3<int,SOCKET,long,ulong far*>                   ioctlsocket;
-    TModuleProc2<int,SOCKET,int>                               listen;
-    TModuleProc1<ulong,ulong>                                  ntohl;
-    TModuleProc1<ushort,ushort>                                ntohs;
-    TModuleProc4<int,SOCKET,char far*,int,int>                 recv;
-    TModuleProc6<int,SOCKET,char far*,int,int,struct sockaddr far*,int*>
-                                                               recvfrom;
-    TModuleProc5<int,int,struct fd_set far*,struct fd_set far*,
-                struct fd_set far*,const struct timeval far*>  select;
-    TModuleProc4<int,SOCKET,const char far*,int,int>           send;
-    TModuleProc6<int,SOCKET,const char far*,int,int,
-                 const struct sockaddr far*,int>               sendto;
-    TModuleProc5<int,SOCKET,int,int,const char far*,int>       setsockopt;
-    TModuleProc2<int,SOCKET,int>                               shutdown;
-    TModuleProc3<SOCKET,int,int,int>                           socket;
+    static SOCKET      accept(SOCKET s, struct sockaddr far* addr,
+                        int far* addrLen);
+    static int         bind(SOCKET s, struct sockaddr far* addr, int nameLen);
+    static int         closesocket(SOCKET s);
+    static int         connect(SOCKET s, struct sockaddr far* name, int nameLen);
+    static int         getpeername(SOCKET s, struct sockaddr far* name,
+                        int far* nameLen);
+    static int         getsockname(SOCKET s, struct sockaddr far* name,
+                        int far* nameLen);
+    static int         getsockopt(SOCKET s, int level, int optName, char far* optVal,
+                        int far* optLen);
+    static ulong       htonl(ulong hostLong);
+    static ushort      htons(ushort hostShort);
+    static ulong       inet_addr(const char far* cp);
+    static char far*   inet_ntoa(struct in_addr in);
+    static int         ioctlsocket(SOCKET s, long cmd, ulong far* argp);
+    static int         listen(SOCKET s, int backlog);
+    static ulong       ntohl(ulong netLong);
+    static ushort      ntohs(ushort netShort);
+    static int         recv(SOCKET s, char far* buf, int len, int flags);
+    static int         recvfrom(SOCKET s, char far* buf, int len, int flags,
+                        struct sockaddr far* from, int* fromLen);
+    static int         select(int nfds, struct fd_set far* readfds,
+                        struct fd_set far* writefds,
+                        struct fd_set far* exceptfds,
+                        const struct timeval far* timeout);
+    static int         send(SOCKET s, const char far* buf, int len, int flags);
+    static int         sendto(SOCKET s, const char far* buf, int len, int flags,
+                        const struct sockaddr far* to, int toLen);
+    static int         setsockopt(SOCKET s, int level, int optName,
+                        const char far* optVal, int optLen);
+    static int         shutdown(SOCKET s, int how);
+    static SOCKET      socket(int af, int type, int protocol);
 
     // Database functions
     //
-    TModuleProc3<struct hostent far*,const char far*,int,int> gethostbyaddr;
-    TModuleProc1<struct hostent far*,const char far*>         gethostbyname;
-    TModuleProc2<int,char far*,int>                           gethostname;
-    TModuleProc2<struct servent far*,const char far*,
-                 const char far*>                             getservbyname;
-    TModuleProc2<struct servent far*,int,const char far*>     getservbyport;
-
-    TModuleProc1<struct protoent far*,const char far*>        getprotobyname;
-    TModuleProc1<struct protoent far*,int>                    getprotobynumber;
+    static struct hostent  far*  gethostbyaddr(const char far* addr, int len,
+                                  int type);
+    static struct hostent  far*  gethostbyname(const char far* name);
+    static int                   gethostname(char far* name, int nameLen);
+    static struct servent  far*  getservbyname(const char far* name,
+                                  const char far* proto);
+    static struct servent  far*  getservbyport(int port, const char far* proto);
+    static struct protoent far*  getprotobyname(const char far* name);
+    static struct protoent far*  getprotobynumber(int proto);
 
     // Microsoft Windows Extension functions
     //
-    TModuleProc2<int,uint16,LPWSADATA> WSAStartup;
-    TModuleProc0<int> WSACleanup;
-    TModuleProcV1<int> WSASetLastError;
-    TModuleProc0<int> WSAGetLastError;
+    static int     WSAStartup(uint16 versionRequested, LPWSADATA WSAData);
+    static int     WSACleanup(void);
+    static void    WSASetLastError(int error);
+    static int     WSAGetLastError(void);
+    static BOOL    WSAIsBlocking(void);
+    static int     WSAUnhookBlockingHook(void);
+    static FARPROC WSASetBlockingHook(FARPROC blockFunc);
+    static int     WSACancelBlockingCall(void);
+    static HANDLE  WSAAsyncGetServByName(HWND hWnd, uint msg,
+                    const char far* name, const char far* proto, char far* buf,
+                    int bufLen);
+    static HANDLE  WSAAsyncGetServByPort(HWND hWnd, uint msg, int port,
+                    const char far* proto, char far* buf, int bufLen);
+    static HANDLE  WSAAsyncGetProtoByName(HWND hWnd, uint msg,
+                    const char far* name, char far* buf, int bufLen);
+    static HANDLE  WSAAsyncGetProtoByNumber(HWND hWnd, uint msg, int number,
+                    char far* buf, int bufLen);
+    static HANDLE  WSAAsyncGetHostByName(HWND hWnd, uint msg,
+                    const char far* name, char far* buf, int bufLen);
+    static HANDLE  WSAAsyncGetHostByAddr(HWND hWnd, uint msg,
+                    const char far* addr, int len, int type, char far* buf,
+                    int bufLen);
+    static int     WSACancelAsyncRequest(HANDLE hTaskHandle);
+    static int     WSAAsyncSelect(SOCKET s, HWND hWnd, uint msg, long event);
+    static int     WSARecvEx(SOCKET s, char far* buf, int len, int far* flags);
 
-    TModuleProc0<int> WSAIsBlocking;
-    TModuleProc0<int> WSAUnhookBlockingHook;
-    TModuleProc1<FARPROC,FARPROC> WSASetBlockingHook;
-    TModuleProc0<int> WSACancelBlockingCall;
-
-    TModuleProc6<HANDLE,HWND,uint,const char far*,const char far*,char far*,int>
-                                                      WSAAsyncGetServByName;
-    TModuleProc6<HANDLE,HWND,uint,int,const char far*,char far*,int>
-                                                      WSAAsyncGetServByPort;
-    TModuleProc5<HANDLE,HWND,uint,const char far*,char far*,int>
-                                                      WSAAsyncGetProtoByName;
-    TModuleProc5<HANDLE,HWND,uint,int,char far*,int>  WSAAsyncGetProtoByNumber;
-
-    TModuleProc5<HANDLE,HWND,uint,const char far*,char far*,int>
-                                                      WSAAsyncGetHostByName;
-    TModuleProc7<HANDLE,HWND,uint,const char far*,int,int,char far*,int>
-                                                      WSAAsyncGetHostByAddr;
-
-    TModuleProc1<int,HANDLE>                WSACancelAsyncRequest;
-    TModuleProc4<int,SOCKET,HWND,uint,long> WSAAsyncSelect;
-
-    TModuleProc4<int,SOCKET,char far*,int,int far*> WSARecvEx;
+    // Check for presence of Winsock DLL
+    //
+    static TModule& WinSockModule();
+    static bool IsAvailable();
 };
 
 //
@@ -127,20 +141,20 @@ class _OWLCLASS TWinSockDll : public TModule {
 // ~~~~~ ~~~~~~~~
 // Loader for the WinSock dll
 //
-typedef TDllLoader<TWinSockDll> TWinSock;
 
-#if defined(BI_COMP_BORLANDC)
-# if defined(_OWLDLL) || defined(BI_APP_DLL)
-  //
-  // Export template of TDllLoader<TWinSockDll> when building ObjectWindows DLL 
-  // and provide import declaration of DLL instance for users of the class.
-  //
-  template class _OWLCLASS TDllLoader<TWinSockDll>;
-# endif 
-#endif  
+class _OWLCLASS TWinSock
+{
+  public:
+    static bool         IsAvailable(void);
+    static TWinSockDll* Dll(void);
+};
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_WSKDLL_H

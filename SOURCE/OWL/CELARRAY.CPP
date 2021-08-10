@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.9  $
+//$Revision:   10.12  $
 //
 // Implementation of a bitmap Cel array class.
 //----------------------------------------------------------------------------
@@ -11,9 +11,10 @@
 # include <owl/celarray.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGadget);    // Common Controls diagnostic group
 
-static bool copyBmp(TBitmap& dstBM, const TBitmap& srcBM, const TPoint& pt, const TSize& size);
+bool OwlCopyBmp(TBitmap& dstBM, const TBitmap& srcBM, const TPoint& pt, const TSize& size);
 
 //
 // Construct a TCelArray from a bitmap, slicing a portion of the bitmap up
@@ -25,6 +26,7 @@ TCelArray::TCelArray(TBitmap* bmp, int numCels, TSize celSize,
 {
   PRECONDITION(bmp);
 
+  NGrowBy = 1;
   NCels = NCelsUsed = numCels < 1 ? 1 : numCels;
   CSize = celSize.cx && celSize.cy ?
             celSize :
@@ -44,6 +46,7 @@ TCelArray::TCelArray(TBitmap* bmp, int numCels, TSize celSize,
 //
 TCelArray::TCelArray(const TDib& dib, int numCels)
 {
+  NGrowBy = 1;
   NCels = NCelsUsed = numCels < 1 ? 1 : numCels;
   CSize = TSize(dib.Width() / NCels, dib.Height());
   Offs = 0;
@@ -165,7 +168,7 @@ TCelArray::Add(const TBitmap& image)
   if (!MaybeResize(count))
     return -1;
 
-  copyBmp(*Bitmap, image, CelOffset(NCelsUsed), image.Size());
+  OwlCopyBmp(*Bitmap, image, CelOffset(NCelsUsed), image.Size());
 
   int index = NCelsUsed;
   NCelsUsed += count;
@@ -194,7 +197,7 @@ TCelArray::Add(const TCelArray& src, int)
     if (!Resize(NCels + NGrowBy))
       return -1;
 
-  copyBmp(*Bitmap, (const TBitmap&)src, CelOffset(NCelsUsed), CelSize());
+  OwlCopyBmp(*Bitmap, (const TBitmap&)src, CelOffset(NCelsUsed), CelSize());
 
   TRACEX(OwlGadget, 1, "TCelArray @" << (void*)this << " added TCelArray @" <<
     (void*)&src << " index 0x" << index);
@@ -235,7 +238,7 @@ bool
 TCelArray::Replace(int index, const TBitmap& image)
 {
   if (index >= 0 && index < NCelsUsed) {
-    copyBmp(*Bitmap, image, CelOffset(index), CelSize());
+    OwlCopyBmp(*Bitmap, image, CelOffset(index), CelSize());
     TRACEX(OwlGadget, 1, "TCelArray @" << (void*)this << " index 0x" << index <<
       " replaced by TBitmap @" << (void*)&image);
     return true;
@@ -269,15 +272,16 @@ TCelArray::BitBlt(int index, TDC& dstDC, int x, int y, int /*dx*/, int /*dy*/,
 }
 
 //------------------------------------------------------------------------
-// Helper routines for internal (not OS) implementation
+// Helper routines 
+//
 
 //
 // Copy specified bitmap to the destination DC
 //
-static bool
-copyBmp(TBitmap& dstBM, const TBitmap& srcBM, const TPoint& pt, const TSize& size)
+bool
+OwlCopyBmp(TBitmap& dstBM, const TBitmap& srcBM, const TPoint& pt, const TSize& size)
 {
-  TMemoryDC srcDC(CONST_CAST(TBitmap&,srcBM));
+  TMemoryDC srcDC(CONST_CAST(TBitmap&, srcBM));
   TMemoryDC dstDC(dstBM);
   return dstDC.BitBlt(TRect(pt, size), srcDC, TPoint(0));
 }

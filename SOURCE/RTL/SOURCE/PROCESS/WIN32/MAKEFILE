@@ -1,5 +1,5 @@
 #############################################################################
-#
+#                                                                           #
 # The make process relies on the creation of DLL and library response file  #
 # creation.  To control the location of object modules the following should #
 # be defined:                                                               #
@@ -14,6 +14,8 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
+# $Revision:   8.6  $                                                                #
+#                                                                           #
 #############################################################################
 
 #############################################################################
@@ -22,13 +24,23 @@
 OBJS =               \
         setjmp.obj   \
         loadprog.obj \
+        wloadprg.obj \
         setenv.obj   \
+        wsetenv.obj  \
         setenvp.obj  \
+        wsetenvp.obj \
         signal.obj   \
         sleep.obj    \
         system.obj   \
+        wsystem.obj  \
         _cwait.obj   \
         _getpid.obj
+
+!if $d(DLL)
+IMPOBJS =            \
+	xsetenvp.obj \
+	wxsetenp.obj
+!endif
 
 !if !$d(DLL)
 MISC    = setjmpnx.obj
@@ -46,4 +58,9 @@ TASMCFG = 1        # Force tasm.cfg creation
 #############################################################################
 setjmpnx.obj : setjmp.asm
     $(ASM) -DNOXX $?, $(OBJDIR)\$&
+
+wsetenv.obj : setenv.c
+wsetenvp.obj : setenvp.c
+wloadprg.obj : loadprog.c
+wsystem.obj : system.c
 

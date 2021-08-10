@@ -6,21 +6,26 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <_io.h>
 #include <fcntl.h>
+#include <_tchar.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            creat - creates a new file or rewrites an existing one
+Name            _tcreat used as creat and _wcreat
+                creat   - creates a new file or rewrites an existing one
+                _wcreat - creates a new file or rewrites an existing one
 
 Usage           int creat(const char *filename, int permiss);
+                int _wcreat(const wchar_t *filename, int permiss);
 
 Prototype in    io.h
 
@@ -37,10 +42,10 @@ Return value    success : the new file handle
 
 *---------------------------------------------------------------------------*/
 
-int _RTLENTRYF _EXPFUNC creat(const char *path, register int mode)
+int _RTLENTRYF _EXPFUNC _tcreat(const _TCHAR *path, register int mode)
 {
     /* NOTE: O_RDWR is required for compatibility with BC++ for DOS and MSC,
      * but is incompatible with POSIX (which requires O_WRONLY).
      */
-    return __open(path, O_RDWR | O_CREAT | O_TRUNC, mode);
+    return __topen(path, O_RDWR | O_CREAT | O_TRUNC, mode);
 }

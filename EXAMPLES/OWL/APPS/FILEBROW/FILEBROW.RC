@@ -4,6 +4,7 @@
 //----------------------------------------------------------------------------
 
 #include <owl/editfile.rh>  // includes editsear.rh
+#include <owl/except.rc>
 #include "filebrow.rh"
 
 

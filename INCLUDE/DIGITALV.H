@@ -4,7 +4,7 @@
 /*                                                                          */
 /*                              Version 1.0                                 */
 /*                                                                          */
-/*        Copyright (c) 1992-1995, Microsoft Corp.  All rights reserved.    */
+/*        Copyright (c) 1995-1996, Microsoft Corp.  All rights reserved.    */
 /*                                                                          */
 /*  Date            Modification                                            */
 /*  ------------    ------------                                            */
@@ -14,10 +14,7 @@
 
 #ifndef _INC_DIGITALV
 #define _INC_DIGITALV  100
-
-#if !defined(_WIN32) && !defined(LPWSTR)
-    #define LPWSTR LPSTR
-#endif
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -75,9 +72,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 /* Window message for signal notification */
 
-#ifndef MM_MCISIGNAL
 #define MM_MCISIGNAL                        0x3CB
-#endif
 
 /* error values */
 
@@ -1092,4 +1087,5 @@ typedef LPMCI_DGV_WINDOW_PARMSA LPMCI_DGV_WINDOW_PARMS;
 }                       /* End of extern "C" { */
 #endif	/* __cplusplus */
 
+#pragma option -b.
 #endif  /* !_INC_DIGITALV */

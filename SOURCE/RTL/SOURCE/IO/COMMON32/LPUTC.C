@@ -9,65 +9,94 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
 #include <_stdio.h>
 #include <_io.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            _lputc - puts a character on a stream without locking
+Name            _lputtc used as _lputc and _lputwc
+                _lputc  - puts a character on a stream without locking
+                _lputwc - puts a wide character on a stream without locking
 
 Usage           #include <stdio.h>
-                int _lputc(int ch, FILE *stream);
+                int _lputc (int ch, FILE *stream);
+                wint_t _lputwc(wint_t wch, FILE *stream);
 
 Related
-functions usage int fputc(int ch, FILE *stream);
-                int fputchar(int ch);
-                int putch(int ch);
+functions usage _TINT _fputtc(_TINT ch, FILE *stream);
+                _TINT _fputtchar(_TINT ch);
+                _TINT _puttch(_TINT ch);
 
-                int putchar(int ch);
+                _TINT _puttchar(_TINT ch);
                 int putw(int w, FILE *stream);
 
 Prototype in    local
 
-Description     _lputc is like putc but it is a true function that outputs
+Description     _lputtc is like _puttc but it is a true function that outputs
                 ch to the named stream.  It does NOT lock the semaphore
                 for the stream.
 
-                fputc is identical to _lputc but locks the semaphore.
+                _fputtc is identical to _lputtc but locks the semaphore.
 
-Return value    On success _lputc, putc, fputc, fputchar, and putchar return
-                the character ch, while putw returns the word w, and putch
-                returns nothing.
+Return value    On success _lputtc, _puttc, _fputtc, _fputtchar, and _puttchar
+                return the character ch, while putw returns the word w, and
+                _puttch returns nothing.
 
                 On error, all the functions except putch return EOF.
 
 *---------------------------------------------------------------------*/
 
 #ifdef _MT
-int _lputc( int ch, FILE *fp )
+int _lputtc( _TINT ch, FILE *fp )
 #else
-int _RTLENTRY _EXPFUNC fputc (int ch, FILE *fp)
+_TINT _RTLENTRY _EXPFUNC _fputtc (_TINT ch, FILE *fp)
 #endif
 {
-    unsigned char c;
 
-    c = (unsigned char)ch;
+    int           nbytes;
+    char          buf[(MB_CUR_MAX>sizeof(_TCHAR))?MB_CUR_MAX:sizeof(_TCHAR)];
+#ifdef _UNICODE
+    wchar_t       c = (wchar_t) ch;
+#else
+    unsigned char c = (unsigned char) ch;
+#endif
 
-    if( fp->level < -1 )
+#ifdef _UNICODE
+    if ((_openfd[fp->fd] & O_TEXT) != 0)
     {
-        ++fp->level;
+      if( -1 == (nbytes = wctomb(buf, c)))
+          return EOF;
+    }
+    else
+    {
+      ((wchar_t*)buf)[0] = c;
+      nbytes = sizeof(wchar_t);
+    }
+#else
+    buf[0] = c;
+    nbytes = 1;
+#endif
 
-        *fp->curp++ = c;
+    if( fp->level < -nbytes )
+    {
+        memcpy(fp->curp, buf, nbytes);
+        fp->level += nbytes;
+        fp->curp  += nbytes;
 
-        if((fp->flags & _F_LBUF) && ((c == '\n') || (c == '\r')))
+        if((fp->flags & _F_LBUF) && ((c == _TEXT('\n')) || (c == _TEXT('\r'))))
         {
             /* If file is line buffered, and character is a carriage
              * return or line feed, flush the buffer.
@@ -99,9 +128,13 @@ int _RTLENTRY _EXPFUNC fputc (int ch, FILE *fp)
 
         fp->level = -fp->bsize;
 
-        *fp->curp++ = c;
+        memcpy(fp->curp, buf, nbytes);
+        /* level is one less than number in buffer so it's always less
+           than zero. Zero indicates empty buffer */
+        fp->level += nbytes - 1;
+        fp->curp  += nbytes;
 
-        if( (fp->flags & _F_LBUF) && ((c == '\n') || (c == '\r')) )
+        if( (fp->flags & _F_LBUF) && ((c == _TEXT('\n')) || (c == _TEXT('\r'))) )
         {
             if( fflush( fp ) )
                 return( EOF );
@@ -111,7 +144,7 @@ int _RTLENTRY _EXPFUNC fputc (int ch, FILE *fp)
     }
     else                     /* the stream is not buffered */
     {
-        if (__write( fp->fd, & c , 1 ) != 1)
+        if (__write( fp->fd, buf , nbytes ) != nbytes)
         {
             if( (fp->flags & _F_TERM) == 0 )
             {

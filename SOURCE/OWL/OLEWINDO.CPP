@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.14  $
+// $Revision:   10.22  $
 //
 // Implementation of TOleWindow. Window class that supports OLE 2
 // container & server using OCF TOcView & TOcRemView
@@ -24,7 +24,7 @@
 #if !defined(OCF_OCVIEW_H)
 # include <ocf/ocview.h>
 #endif
-#if !defined(OCF_OCCTRL_H)
+#if !defined(OCF_OCCTRL_H) && defined(BI_PLAT_WIN32)
 # include <ocf/occtrl.h>
 #endif
 #if !defined(OWL_OLEFRAME_H)
@@ -36,21 +36,19 @@
 #if !defined(WINSYS_UIMETRIC_H)
 # include <winsys/uimetric.h>
 #endif
-#include <owl/edit.rh>
-#include <owl/docview.rh>
-#include <owl/oleview.rh>
+#if !defined(OWL_EDIT_RH)
+# include <owl/edit.rh>
+#endif
+#if !defined(OWL_DOCVIEW_RH)
+# include <owl/docview.rh>
+#endif
+#if !defined(OWL_OLEVIEW_RH)
+# include <owl/oleview.rh>
+#endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlCmd);
 
-//----------------------------------------------------------------------------
-// Size of rectangle in two clks must occur to be a doubleClick
-// ---- moved in StartDrag ----
-//#if !defined(BI_PLAT_WIN32)
-//  TSize DblClkDelta(3, 3);
-//#else
-//  TSize DblClkDelta(TUIMetric::CxDoubleClk/2,
-//                    TUIMetric::CyDoubleClk/2);
-//#endif
 
 
 //----------------------------------------------------------------------------
@@ -103,9 +101,17 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_COMMAND(CM_EDITPASTELINK, CmEditPasteLink),
   EV_COMMAND_ENABLE(CM_EDITPASTELINK, CeEditPasteLink),
   EV_COMMAND(CM_EDITINSERTOBJECT, CmEditInsertObject),
+
+#if defined(BI_PLAT_WIN32)
   EV_COMMAND(CM_EDITINSERTCONTROL, CmEditInsertControl),
+#endif
+
   EV_COMMAND_ENABLE(CM_EDITINSERTOBJECT, CeEditInsertObject),
+
+#if defined(BI_PLAT_WIN32)
   EV_COMMAND_ENABLE(CM_EDITINSERTCONTROL, CeEditInsertControl),
+#endif
+
   EV_COMMAND_ENABLE(CM_EDITLINKS, CeEditLinks),
   EV_COMMAND(CM_EDITLINKS, CmEditLinks),
   EV_COMMAND_ENABLE(CM_EDITOBJECT, CeEditObject),
@@ -115,7 +121,6 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_COMMAND(CM_EDITSHOWOBJECTS, CmEditShowObjects),
 
   EV_MESSAGE(WM_OCEVENT, EvOcEvent),
-//  EV_OC_VIEWDISCARDUNDO,  
 
   // Container specific messages
   //
@@ -153,6 +158,7 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_OC_VIEWBREAKLINK,
   EV_OC_VIEWDOVERB,
 
+#if defined(BI_PLAT_WIN32)
   // Ambient properties
   //
   EV_OC_AMBIENT_GETBACKCOLOR,
@@ -204,6 +210,7 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_OC_CTRLEVENT_PROPERTYREQUESTEDIT,
   EV_OC_CTRLEVENT_ERROREVENT,
   EV_OC_CTRLEVENT_CUSTOMEVENT,
+#endif
 
 END_RESPONSE_TABLE;
 
@@ -211,18 +218,15 @@ END_RESPONSE_TABLE;
 //
 //
 TOleWindow::TOleWindow(TWindow* parent, TModule* module)
-:
-  TWindow(parent, 0, module),
-  Pos(0, 0, 0, 0),
-  Remote(false),
-  ShowObjects(false)
+           :TWindow(parent, 0, module), Pos(0, 0, 0, 0),
+            Remote(false), ShowObjects(false)
 {
   // Initialize virtual base, in case the derived-most used default ctor
   //
   TWindow::Init(parent, 0, module);
 
-  // Derived class will need to create a OcDocument object to hold the ole
-  // parts that we create and a OcView to provide ole services
+  // Derived class will need to create a OcDocument object to hold the OLE
+  // parts that we create and a OcView to provide OLE services
   //
   OcApp  = 0;
   OcDoc  = 0;
@@ -312,12 +316,21 @@ TOleWindow::CreateOcView(TRegLink* link, bool isRemote, IUnknown* outer)
     TRegList* regList = link ? &link->GetRegList() : 0;
 
     // Create a remote view on the server document if it embeded, else make a
-    // normal, container view
+    // normal container view [capable of hosting OCXes or 'normal' servers]
     //
     if (isRemote)
       OcView = new TOcRemView(*GetOcDoc(), regList, outer);
     else
+
+    // By default, our 32-bit container support can 'hold' embedded objects
+    // and OCX controls. So we'll default to a 'TOcxView'. However, this
+    // can be optimized if the container will never contain any OLE controls.
+    //
+#if defined(BI_PLAT_WIN32) && !defined(OWL_NO_OCX_CONTAINER_SUPPORT)
       OcView = new TOcxView(*GetOcDoc(), regList, outer);
+#elif defined(BI_PLAT_WIN16)
+      OcView = new TOcView (*GetOcDoc(), regList, outer);
+#endif
 
     Remote = isRemote;
   }
@@ -414,6 +427,185 @@ TOleWindow::IsOpenEditing() const
 }
 
 //
+//
+//
+TOcPart*
+TOleWindow::InsertObject(TOcInitInfo& initInfo, TRect* pos)
+{
+  TRect rect;
+
+  // Pass size request on if caller does not specify
+  //
+  if (!pos) {
+    pos = &rect;
+    GetInsertPosition(*pos);
+  }
+
+  TOcPart* part;
+  try {
+    part = new TOcPart (*GetOcDoc());
+    part->Init(&initInfo, *pos);
+    SetSelection(part);
+    OcView->Rename();
+    InvalidatePart(invView);
+  }
+  catch (TXOle& xole) {
+    return 0;
+  }
+  return part;
+}
+
+//
+//
+//
+TOcPart*          
+TOleWindow::InsertObject(CLSID& objIID, TRect* pos)
+{
+  TOcInitInfo initInfo(OcView);
+
+  // Initialize InitInfo structure
+  //
+  initInfo.CId   = (BCID) &objIID;    // Object's GUID
+  initInfo.Where = iwNew;             // Flag it's a new embedding
+  initInfo.How   = ihEmbed;           // Want embedded
+
+  return InsertObject(initInfo, pos);
+}
+
+//
+//
+//
+TOcPart*          
+TOleWindow::InsertObject(TString& objProgId, TRect* pos)
+{
+  // Get IID of OCX from specified ProgID
+  //
+  CLSID objIID = CLSID_NULL;
+  HRESULT hr = ::CLSIDFromProgID(objProgId, &objIID);
+
+  if (FAILED(hr)) {
+    return 0;
+  }
+  return InsertObject(objIID, pos);
+}
+
+#if defined(BI_PLAT_WIN32)
+
+//
+//
+//
+TOcControl*
+TOleWindow::InsertControl(TOcInitInfo& initInfo, TRect* pos, int id)
+{
+  TRect rect;
+
+  // Pass size request on if caller does not specify
+  //
+  if (!pos) {
+    pos = &rect;
+    GetInsertPosition(*pos);
+  }
+
+  // If user did not specify the size (i.e. right & bottom), use
+  // some default values...
+  //
+  if (pos->left == pos->right)
+    pos->right = pos->left + 100;
+  if (pos->top == pos->bottom)
+    pos->bottom = pos->top + 100;
+
+  TOcControl* ctrl;
+  try {
+    ctrl = new TOcControl (*GetOcDoc());
+    ctrl->Init(&initInfo, *pos);
+    SetSelection(ctrl);
+    OcView->Rename();
+    InvalidatePart(invView);
+    ctrl->SetId(id);
+  }
+  catch (TXOle& xole) {
+    return 0;
+  }
+  return ctrl;
+}
+
+//
+//
+//
+TOcControl*
+TOleWindow::InsertControl(CLSID& ocxIID, TRect* pos, int id)
+{
+  TOcInitInfo initInfo(OcView);
+
+  // Initialize InitInfo structure
+  //
+  initInfo.CId   = (BCID) &ocxIID;    // OCX's GUID
+  initInfo.Where = iwNewOcx;          // Flag it's an OCX
+  initInfo.How   = ihEmbed;           // Want embedded
+
+  return InsertControl(initInfo, pos, id);
+}
+
+//
+//
+//
+TOcControl*
+TOleWindow::InsertControl(const TString& ocxProgID, TRect* pos, int id)
+{
+  // Get IID of OCX from specified ProgID
+  //
+  CLSID ocxIID = CLSID_NULL;
+  HRESULT hr = ::CLSIDFromProgID(ocxProgID, &ocxIID);
+
+  if (FAILED(hr)) {
+    return 0;
+  }
+  return InsertControl(ocxIID, pos, id);
+}
+
+
+//
+//
+//
+TOcControl*
+TOleWindow::GetOcControlOfOCX(CLSID ocxIID, uint id)
+{
+  // Iterate through all parts of this window
+  //
+  for (TOcPartCollectionIter i(GetOcDoc()->GetParts()); i; i++) {
+    TOcPart* p = i.Current();
+
+    // NOTE: Here we'll simply dynamic_cast the TOcPart pointer to a
+    //       TOcControl. A more OLEish approach would be to querry for
+    //       a control interface [IBControl for example] as a safety
+    //       measure first.
+    //
+    TOcControl* pCtrl = TYPESAFE_DOWNCAST(p, TOcControl);
+    if (pCtrl) {
+      IOleObject* pOleObject = 0;
+      if (SUCCEEDED(pCtrl->QueryServer(IID_IOleObject, (void**)&pOleObject))) {
+
+        CLSID userClsId;
+        if (SUCCEEDED(pOleObject->GetUserClassID(&userClsId)) &&
+                      userClsId == ocxIID) {
+          if (pCtrl->GetId() == id) {                        
+            pOleObject->Release();
+            return pCtrl;
+          }
+        }
+        pOleObject->Release();
+      }
+    }
+  }
+
+  // Control proxy was not found
+  //
+  return 0;
+}
+
+#endif
+
+//
 // Handles the file File>Close menu option for server app
 //
 void
@@ -445,6 +637,7 @@ TOleWindow::CeEditInsertObject(TCommandEnabler& ce)
   ce.Enable(OcApp && OcView);
 }
 
+#if defined(BI_PLAT_WIN32)
 //
 //
 //
@@ -453,6 +646,7 @@ TOleWindow::CeEditInsertControl(TCommandEnabler& ce)
 {
   ce.Enable(OcApp && OcView);
 }
+#endif
 
 //
 // Get the insertion point for the embedded object in device units.
@@ -490,17 +684,11 @@ TOleWindow::CmEditInsertObject()
   TOcInitInfo initInfo(OcView);
 
   if (OcApp->Browse(initInfo)) {
-    TRect rect;
-    GetInsertPosition(rect);
-    TOcPart* part = new TOcPart (*GetOcDoc());
-    part->Init(&initInfo, rect);
-    SetSelection(part);
-
-    OcView->Rename();
-    InvalidatePart(invView);
+    InsertObject(initInfo);
   }
 }
 
+#if defined(BI_PLAT_WIN32)
 //
 // Insert an OLE object into the view
 //
@@ -511,19 +699,14 @@ TOleWindow::CmEditInsertControl()
   TOcInitInfo initInfo(OcView);
 
   if (OcApp->BrowseControls(initInfo)) {
-    TRect rect;
-    GetInsertPosition(rect);
-    rect.right  = rect.left + 100;
-    rect.bottom = rect.top + 100;
-    TOcControl* ctrl = new TOcControl (*GetOcDoc());
-    ctrl->Init(&initInfo, rect);
-    SetSelection(ctrl);
-
-    OcView->Rename();
-    InvalidatePart(invView);
+    InsertControl(initInfo);
   }
 }
+#endif
 
+//
+//
+//
 void
 TOleWindow::CeEditDelete(TCommandEnabler& ce)
 {
@@ -1551,6 +1734,7 @@ TOleWindow::EvOcViewSetData(TOcFormatData far& /*format*/)
   return false;
 }
 
+#if defined(BI_PLAT_WIN32)
 //
 // Get Ambient properties
 //
@@ -1796,6 +1980,7 @@ TOleWindow::EvOcCtrlCustomEvent(TCtrlCustomEvent* /*pev*/)
 {
   return false;
 }
+#endif
 
 //
 // Paint the embedded objects
@@ -2077,7 +2262,6 @@ TOleWindow::CleanupWindow()
 {
   TOleFrame* mainWindow = TYPESAFE_DOWNCAST(GetApplication()->GetMainWindow(),
                                             TOleFrame);
-
   if (mainWindow)
     mainWindow->OleViewClosing(true);
   OleShutDown();
@@ -2087,28 +2271,12 @@ TOleWindow::CleanupWindow()
 }
 
 
-#if 0
-static void
-DoIdleAction(TWindow* win, void* idleCount)
-{
-  win->IdleAction(*(long*)idleCount);
-}
-#endif
-
 //
 // TOleWindow processes idle action occurs once per block of messages
 //
 bool
 TOleWindow::IdleAction(long idleCount)
 {
-/*
-  if (idleCount == 0) {
-    // give child windows an opportunity to do any idle processing
-    //
-    ForEach(DoIdleAction, &idleCount);
-  }
-  return false;  // we don't need any more time for now
-*/ 
 
   return TWindow::IdleAction(idleCount);
 }

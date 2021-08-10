@@ -331,7 +331,6 @@ typedef struct FARSTRUCT _ULARGE_INTEGER {
 #endif
 #define ULISet32(li, v) ((li).HighPart = 0, (li).LowPart = (v))
 
-#ifndef _WINDOWS_
 #ifndef _FILETIME_
 #define _FILETIME_
 typedef struct FARSTRUCT tagFILETIME
@@ -339,7 +338,6 @@ typedef struct FARSTRUCT tagFILETIME
     DWORD dwLowDateTime;
     DWORD dwHighDateTime;
 } FILETIME;
-#endif
 #endif
 
 #ifdef WIN32

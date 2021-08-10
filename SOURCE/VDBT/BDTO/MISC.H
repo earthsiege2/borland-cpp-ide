@@ -43,7 +43,7 @@ inline bool MakeBool( VARIANT_BOOL v )
 #define DEFINE_BDTO_PROP_RW( cls, type, name )                                \
   cls::prop##name::operator type()                                            \
   {                                                                           \
-    type v;                                                                   \
+    static type v;                                                            \
     BDTOOUTER( name, this )->Get##name( v );                                  \
     return v;                                                                 \
   }                                                                           \
@@ -162,12 +162,12 @@ inline bool MakeBool( VARIANT_BOOL v )
   {                                                                           \
     if (v)                                                                    \
       BDTOOUTER( name, this )->Set##name( *v );                               \
-    return v;                                                                 \
+    return cls::prop##name::operator type*();                                 \
   }                                                                           \
-  type& cls::prop##name::operator=( type& v )                                 \
+  type& cls::prop##name::operator=( const type& v )                           \
   {                                                                           \
     BDTOOUTER( name, this )->Set##name( v );                                  \
-    return v;                                                                 \
+    return *(cls::prop##name::operator type*());                              \
   }                                                                           \
   cls::prop##name& cls::prop##name::operator=( const cls::prop##name& other ) \
   {                                                                           \
@@ -211,12 +211,12 @@ inline bool MakeBool( VARIANT_BOOL v )
   {                                                                           \
     if (v)                                                                    \
       BDTOOUTER( name, this )->Set##name( *v );                               \
-    return v;                                                                 \
+    return cls::prop##name::operator type*();                                 \
   }                                                                           \
-  type& cls::prop##name::operator=( type& v )                                 \
+  type& cls::prop##name::operator=( const type& v )                           \
   {                                                                           \
     BDTOOUTER( name, this )->Set##name( v );                                  \
-    return v;                                                                 \
+    return *(cls::prop##name::operator type*());                              \
   }                                                                           \
   cls::prop##name& cls::prop##name::operator=( const cls::prop##name& other ) \
   {                                                                           \
@@ -237,7 +237,7 @@ inline bool MakeBool( VARIANT_BOOL v )
   }                                                                           \
   cls::prop##name::setter##name::operator type()                              \
   {                                                                           \
-    type v;                                                                   \
+    static type v;                                                            \
     ARRAYOUTER( name, this )->CallGet##name( index, v );                      \
     return v;                                                                 \
   }                                                                           \
@@ -341,12 +341,12 @@ inline bool MakeBool( VARIANT_BOOL v )
   {                                                                           \
     if (v)                                                                    \
       ARRAYOUTER( name, this )->CallSet##name( index, *v );                   \
-    return v;                                                                 \
+    return cls::prop##name::setter##name::operator type*();                   \
   }                                                                           \
-  type& cls::prop##name::setter##name::operator=( type& v )                   \
+  type& cls::prop##name::setter##name::operator=( const type& v )                   \
   {                                                                           \
     ARRAYOUTER( name, this )->CallSet##name( index, v );                      \
-    return v;                                                                 \
+    return *(cls::prop##name::setter##name::operator type*());                \
   }                                                                           \
   cls::prop##name::setter##name& cls::prop##name::setter##name::operator=( const cls::prop##name::setter##name& other )\
   {                                                                           \
@@ -363,7 +363,7 @@ inline bool MakeBool( VARIANT_BOOL v )
       BDTOOUTER( name, this )->Get##name( i, *p##name );                      \
     return p##name;                                                           \
   }                                                                           \
-  void cls::prop##name::CallSet##name( itype i, type& v )                     \
+  void cls::prop##name::CallSet##name( itype i, const type& v )                     \
   {                                                                           \
     BDTOOUTER( name, this )->Set##name( i, v );                               \
   }
@@ -403,12 +403,12 @@ inline bool MakeBool( VARIANT_BOOL v )
   {                                                                           \
     if (v)                                                                    \
       ARRAYOUTER( name, this )->CallSet##name( index, *v );                   \
-    return v;                                                                 \
+    return cls::prop##name::setter##name::operator type*();                   \
   }                                                                           \
-  type& cls::prop##name::setter##name::operator=( type& v )                   \
+  type& cls::prop##name::setter##name::operator=( const type& v )             \
   {                                                                           \
     ARRAYOUTER( name, this )->CallSet##name( index, v );                      \
-    return v;                                                                 \
+    return *(cls::prop##name::setter##name::operator type*());                \
   }                                                                           \
   cls::prop##name::setter##name& cls::prop##name::setter##name::operator=( const cls::prop##name::setter##name& other )\
   {                                                                           \
@@ -425,7 +425,7 @@ inline bool MakeBool( VARIANT_BOOL v )
       BDTOOUTER( name, this )->Get##name( i, *p##name );                      \
     return p##name;                                                           \
   }                                                                           \
-  void cls::prop##name::CallSet##name( itype i, type& v )                     \
+  void cls::prop##name::CallSet##name( itype i, const type& v )                     \
   {                                                                           \
     BDTOOUTER( name, this )->Set##name( i, v );                               \
   }
@@ -471,5 +471,6 @@ inline bool MakeBool( VARIANT_BOOL v )
     return p##name;                                                           \
   }
 
-  
+
 #endif // MISC_H
+

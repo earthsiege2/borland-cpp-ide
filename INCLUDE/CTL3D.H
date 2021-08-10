@@ -1,3 +1,4 @@
+#pragma option -b
 /*-----------------------------------------------------------------------
 |	CTL3D.DLL
 |	
@@ -93,3 +94,4 @@ VOID WINAPI Ctl3dWinIniChange(void);
 #ifdef __cplusplus
 }
 #endif
+#pragma option -b.

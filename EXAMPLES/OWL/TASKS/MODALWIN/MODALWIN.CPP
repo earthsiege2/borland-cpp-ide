@@ -1,27 +1,43 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   10.6  $
+//
+// Sample illustrating how to 'Execute' non-dialog windows 
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
-#include <owl/applicat.h>
-#include <owl/framewin.h>
-#include <owl/button.h>
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if !defined(OWL_FRAMEWIN_H)
+# include <owl/framewin.h>
+#endif
+#if !defined(OWL_BUTTON_H)
+# include <owl/button.h>
+#endif
 #include "modalwin.h"
 
 class TModalWindow : public TWindow {
   public:
     TModalWindow(TWindow* parent, char far* title, int flags = MB_APPLMODAL,
                  TModule* module=0);
-    int Execute();
-    void Destroy(int retValue);
 
-  private:
+    // Override DoExecute so we may implement App/Sys modal
+    // NOTE: TWindow's Execute defaults to TASKMODAL
+    //
+    int  DoExecute();
+
+  protected:
+    // Message Handlers
+    //
     void CmAppModalChild();
     void CmTaskModalChild();
     void CmSysModalChild();
     void CmCancel() { Destroy(IDCANCEL); }
     void EvSysCommand(uint cmdType, TPoint& point);
 
+  private:
     int ModalFlags;
 
   DECLARE_RESPONSE_TABLE(TModalWindow);
@@ -50,26 +66,49 @@ TModalWindow::TModalWindow(TWindow* parent, char far* title,
   Attr.Y = Parent->GetWindowRect().top+60;
   Attr.W = 175 + 2*GetSystemMetrics(SM_CXDLGFRAME);
   Attr.H = 65 + 2*GetSystemMetrics(SM_CYDLGFRAME) + GetSystemMetrics(SM_CYCAPTION);
+  SetAcceleratorTable(IDA_MODALWIN);
 }
 
-int TModalWindow::Execute()
+//
+//
+//
+int 
+TModalWindow::DoExecute()
 {
-  Create();
-  return GetApplication()->BeginModal(
-//    (ModalFlags & (MB_TASKMODAL | MB_SYSTEMMODAL)) ?
-    (ModalFlags & (MB_TASKMODAL)) ?
-      this :     // task,sys modal need this window
-      Parent,    // app modal needs parent to disable
-    ModalFlags);
+  // NOTE: There's no real concept of SYSTEM MODAL windows in the 32-bit
+  //       world. We're going to default to TASKMODAL for SYSTEM MODAL
+  //       requests - For that we can just use TWindow's Execute support
+  //
+#if   defined(BI_PLAT_WIN16)
+  if (ModalFlags & MB_TASKMODAL)
+#elif defined(BI_PLAT_WIN32)
+  if ((ModalFlags & MB_TASKMODAL) || (ModalFlags & MB_SYSTEMMODAL))
+#endif
+    return TWindow::DoExecute();
+
+  else {
+    if (GetApplication()) {
+      if (Create()) {
+        SetFlag(wfModalWindow);
+
+        // NOTE: MB_APPLMODAL implies the first parameter points to the
+        //       window to disable. Otherwise that parameter points to 
+        //       the window to make modal.
+        //
+        TWindow* winparam = (ModalFlags & MB_SYSTEMMODAL) ? 
+                            TYPESAFE_DOWNCAST(this, TWindow) : Parent;
+        return GetApplication()->BeginModal(winparam, ModalFlags);
+      }
+    }
+  }
+  return -1;
 }
 
-void TModalWindow::Destroy(int result)
-{
-  GetApplication()->EndModal(result);
-  TWindow::Destroy(result);
-}
-
-void TModalWindow::EvSysCommand(uint cmdType, TPoint& point)
+//
+//
+//
+void 
+TModalWindow::EvSysCommand(uint cmdType, TPoint& point)
 {
   if ((cmdType & 0xFFF0) == SC_CLOSE)
     Destroy(IDCANCEL);
@@ -77,21 +116,33 @@ void TModalWindow::EvSysCommand(uint cmdType, TPoint& point)
     TWindow::EvSysCommand(cmdType, point);
 }
 
-void TModalWindow::CmAppModalChild()
+//
+//
+//
+void 
+TModalWindow::CmAppModalChild()
 {
   TModalWindow* mw = new TModalWindow(this, "App Modal Child", MB_APPLMODAL);
   mw->Execute();
   delete mw;
 }
 
-void TModalWindow::CmTaskModalChild()
+//
+//
+//
+void 
+TModalWindow::CmTaskModalChild()
 {
   TModalWindow* mw = new TModalWindow(this, "Task Modal Child", MB_TASKMODAL);
   mw->Execute();
   delete mw;
 }
 
-void TModalWindow::CmSysModalChild()
+//
+//
+//
+void 
+TModalWindow::CmSysModalChild()
 {
   TModalWindow* mw = new TModalWindow(this, "Sys Modal Child", MB_SYSTEMMODAL);
   mw->Execute();
@@ -106,9 +157,9 @@ class TModalApp : public TApplication {
     TModalApp() : TApplication() {}
 
   private:
-    void InitMainWindow();
-    void CmMWAbout();
-    void CmDAbout();
+    void        InitMainWindow();
+    void        CmMWAbout();
+    void        CmDAbout();
 
   DECLARE_RESPONSE_TABLE(TModalApp);
 };
@@ -121,9 +172,10 @@ END_RESPONSE_TABLE;
 void
 TModalApp::InitMainWindow()
 {
-  MainWindow = new TFrameWindow(0, "Modal Windows");
-  MainWindow->AssignMenu("TOOL_MENU");
-  MainWindow->SetIcon(this, "ICON_1");
+  TFrameWindow* frame = new TFrameWindow(0, "Modal Windows");
+  frame->AssignMenu(IDM_MODALWIN);
+  frame->SetIcon(this, IDI_MODALWIN);
+  SetMainWindow(frame);
 }
 
 //  About dialog box
@@ -131,13 +183,17 @@ TModalApp::InitMainWindow()
 void
 TModalApp::CmMWAbout()
 {
- TModalWindow(GetMainWindow(), "App Modal Window").Execute();
+  // NOTE: Here we're defaulting to MB_APPLMODAL. 
+  //
+  TModalWindow(GetMainWindow(), "App Modal Window").Execute();
 }
 
+//
+//
 void
 TModalApp::CmDAbout()
 {
-  TDialog(GetMainWindow(), "IDD_ABOUT").Execute();
+  TDialog(GetMainWindow(), IDD_ABOUT).Execute();
 }
 
 

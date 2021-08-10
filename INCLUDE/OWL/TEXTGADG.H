@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Definition of text gadget class TGadget.
 //----------------------------------------------------------------------------
@@ -15,6 +15,10 @@
 
 #if !defined(OWL_GADGET_H)
 # include <owl/gadget.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -39,11 +43,13 @@ class _OWLCLASS TTextGadget : public TGadget {
                 TFont* font = 0 /*new TGadgetWindowFont*/);
    ~TTextGadget();
 
+    // Return a copy of gadget's text
+    //
     const char far*   GetText() const;
 
     // Makes a copy of the text
     //
-    void    SetText(const char far* text);
+    void              SetText(const char far* text);
 
   protected:
     // Override virtual methods defined in TGadget
@@ -71,6 +77,10 @@ class _OWLCLASS TTextGadget : public TGadget {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 // --------------------------------------------------------------------------
 // Inline implementation

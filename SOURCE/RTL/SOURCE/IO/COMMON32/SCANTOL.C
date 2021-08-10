@@ -3,24 +3,29 @@
  *
  * function(s)
  *        _scantol  - scans a source for an ascii long
+ *        _scanwtol  - scans a source for a wide-character long
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.6  $        */
 
 #include <_scanf.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <limits.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*-----------------------------------------------------------------------*
 
-Name            _scantol - scans a source for an ascii long
+Name            _scantol, _scanwtol - scans a source for an ascii/wide-
+					character long
 
 Prototype in    _scanf.h
 
@@ -67,7 +72,7 @@ Return value    If no errors, the ASCII number converted to long integer;
 
 *------------------------------------------------------------------------*/
 
-long _scantol( int   (*Get)   (void *srceP),
+long _scanttol( int   (*Get)   (void *srceP),
                     void  (*UnGet) (int ch, void *srceP),
                     void   *srceP,
                     int           radix,
@@ -78,7 +83,7 @@ long _scantol( int   (*Get)   (void *srceP),
     char        sign = 0;
     int         ct = 0;
     int         status = 1;
-    int         ch;
+    _TINT       ch;
     unsigned long result = 0;
     int         ndigits = 0;
     enum { _space, _sign, _radix, _digits } stage;
@@ -97,7 +102,7 @@ long _scantol( int   (*Get)   (void *srceP),
          */
         if (stage == _space)
         {
-            if (ch >= 0 && ch < 128 && isspace(ch))
+            if (ch >= 0 && ch < 128 && _istspace(ch))
                 continue;
             stage = _sign;
         }
@@ -110,9 +115,9 @@ long _scantol( int   (*Get)   (void *srceP),
         if (stage == _sign)
         {
             stage = _radix;
-            if (ch == '+' || ch == '-')
+            if (ch == _TEXT('+') || ch == _TEXT('-'))
             {
-                sign = ch == '-';
+                sign = ch == _TEXT('-');
                 continue;
             }
         }
@@ -123,7 +128,7 @@ long _scantol( int   (*Get)   (void *srceP),
         if (stage == _radix)
         {
             stage = _digits;
-            if (ch == '0')
+            if (ch == _TEXT('0'))
             {
                 ndigits = 1;
 
@@ -133,7 +138,7 @@ long _scantol( int   (*Get)   (void *srceP),
                     ch = Get (srceP);
                     if (--width < 0)
                         break;
-                    if (ch == 'x' || ch == 'X')
+                    if (ch == _TEXT('x') || ch == _TEXT('X'))
                     {
                         radix = 16;
                         continue;
@@ -156,12 +161,12 @@ long _scantol( int   (*Get)   (void *srceP),
             int digit;
             unsigned long oldresult;
 
-            if (ch >= '0' && ch <= '9')
-                digit = ch - '0';
-            else if (ch >= 'a' && ch <= 'z')
-                digit = ch - 'a' + 10;
-            else if (ch >= 'A' && ch <= 'Z')
-                digit = ch - 'A' + 10;
+            if (ch >= _TEXT('0') && ch <= _TEXT('9'))
+                digit = ch - _TEXT('0');
+            else if (ch >= _TEXT('a') && ch <= _TEXT('z'))
+                digit = ch - _TEXT('a') + 10;
+            else if (ch >= _TEXT('A') && ch <= _TEXT('Z'))
+                digit = ch - _TEXT('A') + 10;
             else
                 break;
             if (digit >= radix)
@@ -187,14 +192,14 @@ long _scantol( int   (*Get)   (void *srceP),
         UnGet(ch, srceP);
         ct--;
         if (sign)
-            result = -result;
+            result = -(signed)result;
     }
 
     /* If no digits were seen, set status to 0 or EOF, depending
      * on whether we terminated due to an end of file.
      */
     if (ndigits == 0)
-        status = ch == EOF ? EOF : 0;
+        status = ch == _TEOF ? _TEOF : 0;
 
     /* Store the status of the scan and the number of characters
      * scanned, then return the result.

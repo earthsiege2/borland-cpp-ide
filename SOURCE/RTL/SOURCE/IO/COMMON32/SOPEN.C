@@ -2,31 +2,37 @@
  * filename - sopen.c
  *
  * function(s)
- *        sopen         - open a file for file sharing (MSC compatible)
+ *        _sopen         - open a file for file sharing (MSC compatible)
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdarg.h>
 #include <_io.h>
 #include <fcntl.h>
+#include <_tchar.h>
 
 /*-----------------------------------------------------------------------*
 
-Name            sopen - opens a file for file sharing
+Name            _tsopen used as _sopen and _wsopen
+                _sopen   - opens a file for file sharing
+                _wsopen - opens a file for file sharing
 
 Usage           #include <fcntl.h>
                 #include <sys\stat.h>
                 #include <share.h>
                 #include <io.h>
 
-                int sopen(const char *pathname, int access, int shflag
+                int _sopen(const char *pathname, int access, int shflag
+                          [, unsigned permiss] );
+                int _wsopen(const wchar_t *pathname, int access, int shflag
                           [, unsigned permiss] );
 
 Prototype in    io.h
@@ -34,10 +40,10 @@ Prototype in    io.h
 Description     Similar to open, except that it has an extra parameter shflag,
                 which specifies the file sharing mode.  This sharing mode
                 can be one of the constants defined in share.h; see the
-                sopen documention for a complete description.
+                _sopen documention for a complete description.
 *------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC sopen(const char *pathP, int oflag, int shflag, ...)
+int _RTLENTRY _EXPFUNC _tsopen(const _TCHAR *pathP, int oflag, int shflag, ...)
 {
     if (oflag & O_CREAT)
     {
@@ -45,10 +51,10 @@ int _RTLENTRY _EXPFUNC sopen(const char *pathP, int oflag, int shflag, ...)
         va_list ap;
 
         va_start(ap,shflag);
-        ret = __open(pathP, oflag|shflag, va_arg(ap,unsigned int));
+        ret = __topen(pathP, oflag|shflag, va_arg(ap,unsigned int));
         va_end(ap);
         return (ret);
     }
     else
-       return (__open(pathP, oflag|shflag));
+       return (__topen(pathP, oflag|shflag));
 }

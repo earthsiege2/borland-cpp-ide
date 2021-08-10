@@ -3,6 +3,7 @@
 #ifndef          _INC_NDDESEC
 #define          _INC_NDDESEC
 #define          __NDDESEC_H
+#pragma option -b
 
 #define NDDE_SHAREDB_ADD	   (0x00000001)
 #define NDDE_SHAREDB_DELETE	   (0x00000002)
@@ -99,4 +100,5 @@
 
 #define NDDE_GUI_FULL_CONTROL	(NDDE_SHARE_GENERIC_ALL)
 
+#pragma option -b.
 #endif

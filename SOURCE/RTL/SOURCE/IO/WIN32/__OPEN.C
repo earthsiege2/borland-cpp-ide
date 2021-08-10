@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #define INCL_ERROR_H
 
@@ -22,24 +23,28 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdarg.h>
+#include <_tchar.h>
 
 extern  unsigned      _notUmask;
 
 /*-----------------------------------------------------------------------*
 
-Name            __open - opens a file for reading or writing
+Name            __topen used as __open and __wopen
+                __open  - opens a file for reading or writing
+                __wopen - opens a file for reading or writing
 
 Usage           #include <fcntl.h>
                 #include<sys\stat.h>
                 int __open(const char *pathname, int access [,unsigned permiss]);
+                int __wopen(const wchar_t *pathname, int access [,unsigned permiss]);
 
-Prototype in    io.h
+Prototype in    _io.h
 
-Description     __open opens the file specified by pathname, then
+Description     __topen opens the file specified by pathname, then
                 prepares it for reading and/or writing as determined by
                 the value of access.
 
-                For __open, access is constructed by bitwise ORing flags
+                For __topen, access is constructed by bitwise ORing flags
                 from the following two lists. Only one flag from the first
                 list may be used; the remaining flags may be used in any
                 logical combination.
@@ -110,7 +115,7 @@ Description     __open opens the file specified by pathname, then
                 The maximum number of simultaneously open files is a system
                 configuration parameter.
 
-Return value    On successful completion, __open returns a non-negative
+Return value    On successful completion, __topen returns a non-negative
                 integer (the file handle), and the file pointer
                 (that marks the current position in the file) is set to the
                 beginning of the file. On error, it returns -1 and errno is
@@ -123,7 +128,7 @@ Return value    On successful completion, __open returns a non-negative
 
 *------------------------------------------------------------------------*/
 
-int _cdecl __open(const char *pathP, int oflag, ...)
+int _cdecl __topen(const _TCHAR *pathP, int oflag, ...)
 
 /*
   Open a new file or replace an existing file with the given pathname.
@@ -206,7 +211,7 @@ int _cdecl __open(const char *pathP, int oflag, ...)
     {
         /* Get current attributes of existing file.
          */
-        if ((attr = GetFileAttributes((char *)pathP)) == (DWORD)-1)
+        if ((attr = GetFileAttributes((_TCHAR *)pathP)) == (DWORD)-1)
             attr = 0;
     }
 
@@ -254,7 +259,7 @@ int _cdecl __open(const char *pathP, int oflag, ...)
 
     /* At last, we can open the file.
      */
-    if ((handle = CreateFile((char *)pathP, access, sharemode, &sec, disp,
+    if ((handle = CreateFile((_TCHAR *)pathP, access, sharemode, &sec, disp,
                           attr, NULL)) == (HANDLE)-1)
     {
         DWORD err;

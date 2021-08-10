@@ -1,30 +1,46 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.6  $
+// $Revision:   2.16  $
 //
 // TAutoVal implementation
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/autodefs.h>
-#include <services/memory.h>
+#if !defined(OCF_AUTODEFS_H)
+# include <ocf/autodefs.h>
+#endif
+#if !defined(SERVICES_MEMORY_H)
+# include <services/memory.h>
+#endif
+#if !defined(CLASSLIB_POINTER_H)
+# include <classlib/pointer.h>
+#endif
+#if !defined(__LIMITS_H)
+# include <limits.h>
+#endif
 
 //----------------------------------------------------------------------------
 // TAutoVal assignment operators (others are inline)
 //
 
-void TAutoVal::operator =(TAutoString s)
+//
+//
+void
+TAutoVal::operator =(TAutoString s)
 {
   vt = atString;
   bstrVal = ::SysAllocString((const OLECHAR far*)s);
   SetLocale(s.GetLangId() ? s.GetLangId() : TLocaleString::NativeLangId);
 }
 
-void TAutoVal::operator =(const string& s)
+//
+//
+void
+TAutoVal::operator =(const string& s)
 {
   vt = atString;
-  bstrVal = ::SysAllocString(s.c_str());
+  bstrVal = NS_CLASSLIB::SysAllocString(s.c_str());
   SetLocale(TLocaleString::NativeLangId);
 }
 
@@ -37,38 +53,53 @@ void TAutoVal::operator =(const string& s)
 // TAutoVal conversion operators
 //
 
-void TAutoVal::SetLocale(TLocaleId locale)
+//
+//
+//
+void
+TAutoVal::SetLocale(TLocaleId locale)
 {
   switch (vt) {
-  case atVoid:
-  case atString:
-  case atObject:
-    p.Locale = locale;
+    case atVoid:
+    case atString:
+    case atObject:
+         p.Locale = locale;
   };
 }
 
-TLocaleId TAutoVal::GetLocale() const
+//
+//
+//
+TLocaleId
+TAutoVal::GetLocale() const
 {
   switch (vt) {
-  case atVoid:
-  case atString:
-  case atObject:
-    return p.Locale;
-  };
-  return 0;
-}
-
-TLangId TAutoVal::GetLanguage() const
-{
-  switch (vt) {
-  case atVoid:
-  case atString:
-  case atObject:
-    return LANGIDFROMLCID(p.Locale);
+    case atVoid:
+    case atString:
+    case atObject:
+        return p.Locale;
   };
   return 0;
 }
 
+//
+//
+//
+TLangId
+TAutoVal::GetLanguage() const
+{
+  switch (vt) {
+    case atVoid:
+    case atString:
+    case atObject:
+      return LANGIDFROMLCID(p.Locale);
+  };
+  return 0;
+}
+
+//
+//
+//
 TAutoVal::operator unsigned char()
 {
   unsigned char v;
@@ -93,16 +124,20 @@ TAutoVal::operator unsigned char()
   case atByRef+atString:  if(::VarUI1FromStr(*pbstrVal,GetLocale(),0L,&v)) break; return v;
   case atByRef+atBool:    return (unsigned char)(*pbool ? 1 : 0);
   }
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+  return 0;
 }
 
+//
+//
+//
 TAutoVal::operator short()
 {
   short v;
   switch (vt) {
   case atByte:    return (short)bVal;
   case atShort:   return iVal;
-  case atLong:    if (lVal>0x7FFFL || lVal <0xFFFF8000L) break; return (short)lVal;
+  case atLong:    if(::VarI2FromI4(lVal, &v))  break; return v;
   case atFloat:   if(::VarI2FromR4(fltVal,&v)) break; return v;
   case atDouble:  if(::VarI2FromR8(dblVal,&v)) break; return v;
   case atCurrency:if(::VarI2FromCy(cyVal, &v)) break; return v;
@@ -112,7 +147,7 @@ TAutoVal::operator short()
   case atBool:    return short(boolVal ? 1 : 0);
   case atByRef+atByte:    return (short)*pbVal;
   case atByRef+atShort:   return *piVal;
-  case atByRef+atLong:    if (*plVal>0x7FFFL || *plVal <0xFFFF8000L) break; return (short)*plVal;
+  case atByRef+atLong:    if(::VarI2FromI4(*plVal, &v)) break; return v;
   case atByRef+atFloat:   if(::VarI2FromR4(*pfltVal,&v)) break; return v;
   case atByRef+atDouble:  if(::VarI2FromR8(*pdblVal,&v)) break; return v;
   case atByRef+atCurrency:if(::VarI2FromCy(*pcyVal, &v)) break; return v;
@@ -120,9 +155,13 @@ TAutoVal::operator short()
   case atByRef+atString:  if(::VarI2FromStr(*pbstrVal,GetLocale(),0L,&v)) break; return v;
   case atByRef+atBool:    return short(*pbool ? 1 : 0);
   }
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+  return 0;
 }
 
+//
+//
+//
 TAutoVal::operator long()
 {
   long v;
@@ -147,9 +186,13 @@ TAutoVal::operator long()
   case atByRef+atString:  if(::VarI4FromStr(*pbstrVal,GetLocale(),0L,&v)) break; return v;
   case atByRef+atBool:    return *pbool ? 1L : 0L;
   }
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+  return 0;
 }
 
+//
+//
+//
 TAutoVal::operator TBool()
 {
   switch (vt) {
@@ -173,9 +216,13 @@ TAutoVal::operator TBool()
   case atByRef+atString:  {short v; if(::VarBoolFromStr(*pbstrVal,GetLocale(),0L,&v)) break; return static_cast<TBool>(v!=0);}
   case atByRef+atBool:    return static_cast<TBool>(*pbool != 0);
   }
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+  return 0;
 }
 
+//
+//
+//
 TAutoVal::operator float()
 {
   float v;
@@ -200,9 +247,13 @@ TAutoVal::operator float()
   case atByRef+atString:  if(::VarR4FromStr(*pbstrVal,GetLocale(),0L,&v)) break; return v;
   case atByRef+atBool:    if(::VarR4FromBool(*pbool,&v)) break; return v;
   }
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+  return 0;
 }
 
+//
+//
+//
 TAutoVal::operator double()
 {
   double v;
@@ -227,9 +278,13 @@ TAutoVal::operator double()
   case atByRef+atString:  if(::VarR8FromStr(*pbstrVal,GetLocale(),0L,&v)) break; return v;
   case atByRef+atBool:    if(::VarR8FromBool(*pbool,&v)) break; return v;
   }
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+  return 0;
 }
 
+//
+//
+//
 TAutoVal::operator TAutoDate()
 {
   DATE v;
@@ -252,9 +307,13 @@ TAutoVal::operator TAutoDate()
   case atByRef+atString:  if(::VarDateFromStr(*pbstrVal,GetLocale(),0L,&v)) break; return v;
   case atByRef+atBool:    if(::VarDateFromBool(*pbool,&v)) break; return v;
   }
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+  return 0;
 }
 
+//
+//
+//
 TAutoVal::operator TAutoCurrency()
 {
   CY v;
@@ -282,7 +341,7 @@ TAutoVal::operator TAutoCurrency()
   default:         stat = (HRESULT)-1;
   }
   if (stat != HR_NOERROR)
-    throw TXAuto(TXAuto::xConversionFailure);
+    TXAuto::Raise(TXAuto::xConversionFailure);
   return rv;
 }
 
@@ -324,7 +383,7 @@ TAutoVal::operator TUString*()
   default:         stat = (HRESULT)-1;
   }
   if (stat != HR_NOERROR)
-    throw TXAuto(TXAuto::xConversionFailure);
+    TXAuto::Raise(TXAuto::xConversionFailure);
   return TUString::Create(v, false, LANGIDFROMLCID(lcid));
 }
 
@@ -354,8 +413,8 @@ TAutoVal::operator string()
 #else
   case atString:   return string(bstrVal);
 #endif
-  case atObject:   stat = ::VarBstrFromDisp(pdispVal,GetLocale(),0, &v); break;
-  case atBool:     stat = ::VarBstrFromBool(boolVal,lcid,0, &v); break;
+  case atObject:           stat = ::VarBstrFromDisp(pdispVal,GetLocale(),0, &v); break;
+  case atBool:             stat = ::VarBstrFromBool(boolVal,lcid,0, &v); break;
   case atByRef+atByte:     stat = ::VarBstrFromUI1(*pbVal, lcid,0, &v); break;
   case atByRef+atShort:    stat = ::VarBstrFromI2(*piVal,  lcid,0, &v); break;
   case atByRef+atLong:     stat = ::VarBstrFromI4(*plVal,  lcid,0, &v); break;
@@ -372,7 +431,7 @@ TAutoVal::operator string()
   default:         stat = (HRESULT)-1;
   }
   if (stat != HR_NOERROR)
-    throw TXAuto(TXAuto::xConversionFailure);
+    TXAuto::Raise(TXAuto::xConversionFailure);
 #if defined(BI_OLECHAR_WIDE)
   string s((TString)v);
 #else
@@ -382,35 +441,117 @@ TAutoVal::operator string()
   return s;
 }
 
+//
+// Convert TAutoVal to TAutoString
+//
+TAutoVal::operator TAutoString()
+{
+  TAutoString str( *this );
+  return str;
+}
+
+//
+//
+//
 TAutoVal::operator TString()
 {
   return operator string();
 }
 
+//
+//
+//
 TAutoVal::operator unsigned short()
 {
   long temp = operator long();
-  if (temp < 0 || temp > 65535L)
-    throw TXAuto(TXAuto::xConversionFailure);
+  if (temp < 0 || temp > long(USHRT_MAX))
+    TXAuto::Raise(TXAuto::xConversionFailure);
   return (unsigned short)temp;
 }
 
 //
 // Pointer data type conversion operators
 //
-TAutoVal::operator unsigned char far*() {ConvRef(atByte); return pbVal;}
-TAutoVal::operator short  far*() {ConvRef(atShort);  return piVal;}
-TAutoVal::operator unsigned short far*()
-       {ConvRef(atShort); return (unsigned short far*)piVal;} // may overflow!
-TAutoVal::operator long   far*() {ConvRef(atLong);   return plVal;}
-TAutoVal::operator unsigned long far*()
-       {ConvRef(atLong); return (unsigned long far*)plVal;}  // may overflow!
-TAutoVal::operator TBool   far*() {ConvRef(atBool); return (TBool far*)pbool;}
-TAutoVal::operator float  far*() {ConvRef(atFloat);  return pfltVal;}
-TAutoVal::operator double far*() {ConvRef(atDouble); return pdblVal;}
-TAutoVal::operator TAutoDate far*() {ConvRef(atDatetime); return (TAutoDate far*)pdate;}
-TAutoVal::operator TAutoCurrency far*() {ConvRef(atCurrency); return pcyVal;}
+TAutoVal::operator unsigned char* ()
+{
+  ConvRef(atByte);
+  return pbVal;
+}
 
+//
+//
+TAutoVal::operator short* ()
+{
+  ConvRef(atShort);
+  return piVal;
+}
+
+//
+//
+TAutoVal::operator unsigned short* ()
+{
+  ConvRef(atShort);
+  return (unsigned short*)piVal;    // NOTE: May overflow!
+}
+
+//
+//
+TAutoVal::operator long* ()
+{
+  ConvRef(atLong);
+  return plVal;
+}
+
+//
+//
+TAutoVal::operator unsigned long* ()
+{
+  ConvRef(atLong);
+  return (unsigned long*)plVal;     // NOTE: May overflow!
+}
+
+//
+//
+TAutoVal::operator TBool* ()
+{
+  ConvRef(atBool);
+  return (TBool*)pbool;
+}
+
+//
+//
+TAutoVal::operator float* ()
+{
+  ConvRef(atFloat);
+  return pfltVal;
+}
+
+//
+//
+TAutoVal::operator double* ()
+{
+  ConvRef(atDouble);
+  return pdblVal;
+}
+
+//
+//
+TAutoVal::operator TAutoDate* ()
+{
+  ConvRef(atDatetime);
+  return (TAutoDate*)pdate;
+}
+
+//
+//
+TAutoVal::operator TAutoCurrency* ()
+{
+  ConvRef(atCurrency);
+  return pcyVal;
+}
+
+//
+//
 void TAutoVal::ConvRef(int type)
 {
 #if 1
@@ -418,10 +559,12 @@ void TAutoVal::ConvRef(int type)
 #else
   if (type != (vt | atByRef)) {     
 #endif
-    throw TXAuto(TXAuto::xConversionFailure);
+    TXAuto::Raise(TXAuto::xConversionFailure);
   }
 }
 
+//
+//
 TAutoVal::operator IDispatch*()
 {
   if (vt == atObject) {
@@ -434,9 +577,30 @@ TAutoVal::operator IDispatch*()
       (*ppdispVal)->AddRef();
     return *ppdispVal;
   }
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+  return 0;
 }
 
+#if defined(BI_PLAT_WIN32)
+//
+//
+//
+TAutoVal::operator IPictureDisp*()
+{
+  return STATIC_CAST(IPictureDisp*, operator IDispatch*());
+}
+
+//
+//
+//
+TAutoVal::operator IFontDisp*()
+{
+  return STATIC_CAST(IFontDisp*, operator IDispatch*());
+}
+#endif
+
+//
+//
 TAutoVal::operator IUnknown*()
 {
   if (vt == atUnknown) {
@@ -449,24 +613,74 @@ TAutoVal::operator IUnknown*()
       (*ppunkVal)->AddRef();
     return *ppunkVal;
   }
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+  return 0;
 }
 
-
-TAutoVal::operator IDispatch&()
-{
-  if (vt == atObject && pdispVal)
-    return *pdispVal;
-  if (vt == (atObject | atByRef) && *ppdispVal)
-    return **ppdispVal;
-  throw TXAuto(TXAuto::xConversionFailure);
-}
-
+//
+//
 TAutoVal::operator IUnknown&()
 {
   if (vt == atUnknown && punkVal)
     return *punkVal;
   if (vt == (atUnknown | atByRef) && *ppunkVal)
     return **ppunkVal;
-  throw TXAuto(TXAuto::xConversionFailure);
+  TXAuto::Raise(TXAuto::xConversionFailure);
+}
+
+//
+//
+TAutoVal::operator IDispatch&()
+{
+  if (vt == atObject && pdispVal)
+    return *pdispVal;
+  if (vt == (atObject | atByRef) && *ppdispVal)
+    return **ppdispVal;
+  TXAuto::Raise(TXAuto::xConversionFailure);
+}
+
+#if defined(BI_PLAT_WIN32)
+//
+//
+TAutoVal::operator IPictureDisp&()
+{
+  return STATIC_CAST(IPictureDisp&, operator IDispatch&());
+}
+
+//
+//
+TAutoVal::operator IFontDisp&()
+{
+  return STATIC_CAST(IFontDisp&, operator IDispatch&());
+}
+#endif
+
+//----------------------------------------------------------------------------
+// Localized point to throw a TXAuto exception
+//
+char*
+GetAutoExceptionMsg(TXAuto::TError err)
+{
+  static TAPointer<char> errMsg = new char[60];
+  wsprintf(errMsg, "Automation Exception, TXAuto::ErrorCode=%d", err);
+  return errMsg;
+}
+
+//
+//
+TXAuto::TXAuto(TXAuto::TError err)
+       :TXBase(GetAutoExceptionMsg(err)), ErrorCode(err)
+{
+}
+
+void
+TXAuto::Throw()
+{
+  THROW( *this );
+}
+
+void
+TXAuto::Raise(TXAuto::TError err)
+{
+  TXAuto(err).Throw();
 }

@@ -19,7 +19,7 @@ TSession Session( true );		// global session variable
 
 //-----------------------------------------------------------------------------
 
-void _export STDAPICALLTYPE PasswordEventCallback( int32 data, PITSession session, VARIANT_BOOL FAR* Continue )
+static void _export STDAPICALLTYPE PasswordEventCallback( int32 data, PITSession session, VARIANT_BOOL FAR* Continue )
 {
 	if (data)
 	{
@@ -381,7 +381,7 @@ void TSession::GetNetFileDir( string& s )
 		AnyString( session->get_NetFileDir() ).GetString( s );
 }
 
-void TSession::SetNetFileDir( string& d )
+void TSession::SetNetFileDir( const string& d )
 {
 	CheckGlobalSession();
 	if (session)
@@ -395,10 +395,11 @@ void TSession::GetPrivateDir( string& s )
 		AnyString( session->get_PrivateDir() ).GetString( s );
 }
 
-void TSession::SetPrivateDir( string& d )
+void TSession::SetPrivateDir( const string& d )
 {
 	CheckGlobalSession();
 	if (session)
 		session->put_PrivateDir( AnyString(d).GetPITAnyString() );
 }
 
+

@@ -6,15 +6,17 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <_io.h>
 #include <string.h>
+#include <_tchar.h>
 
 static void _fakecvt(void)
 {
@@ -29,7 +31,7 @@ static void _fakescan(void)
 
 /* Pointers to the conversion and scanning functions.
  */
-void (*_realcvtptr)(void) = _fakecvt;
-void (*_nextrealptr)(void) = _fakecvt;
-void (*_scantodptr)(void) = _fakescan;
-void (*_scanrsltptr)(void) = _fakescan;
+void (*_realcvttptr)(void) = _fakecvt;
+void (*_nextrealtptr)(void) = _fakecvt;
+void (*_scanttodptr)(void) = _fakescan;
+void (*_scantrsltptr)(void) = _fakescan;

@@ -5,12 +5,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.12  $ */
 
 #ifndef __IO_H
 #define __IO_H
@@ -34,6 +35,14 @@
 
 #endif  /* !RC_INVOKED */
 
+
+#ifndef __cplusplus
+#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
+#define _WCHAR_T
+#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
+typedef unsigned short wchar_t;
+#endif
+#endif
 
 extern  unsigned    _RTLENTRY _EXPDATA _nfile;
 
@@ -78,6 +87,19 @@ int  _RTLENTRYF _EXPFUNC eof     (int __handle);
 long _RTLENTRYF _EXPFUNC filelength(int __handle);
 int  _RTLENTRY  _EXPFUNC32 getftime(int __handle, struct ftime _FAR *__ftimep);
 
+#if defined(__FLAT__)
+int  _RTLENTRY _EXPFUNC _waccess   (const wchar_t *__path, int __amode);
+int  _RTLENTRY _EXPFUNC _wchmod    (const wchar_t *__path, int __amode);
+int  _RTLENTRY _EXPFUNC _wrtl_chmod(const wchar_t *__pathname, int __func, ... );
+int  _RTLENTRY _EXPFUNC _wcreat    (const wchar_t *__path, int __amode);
+int  _RTLENTRY _EXPFUNC _wrtl_creat(const wchar_t *__path, int __attribute);
+int  _RTLENTRY _EXPFUNC _wunlink   (const wchar_t *__path);
+int  _RTLENTRY _EXPFUNC _wremove   (const wchar_t * __path);
+int  _RTLENTRY _EXPFUNC _wrename   (const wchar_t *__oldname,const wchar_t *__newname);
+int  _RTLENTRY _EXPFUNC _wrtl_open (const wchar_t *__path, int __oflags);
+wchar_t   * _RTLENTRY  _EXPFUNC     _wmktemp(wchar_t *__template);
+#endif
+
 #if defined(__OS2__)
 int  _RTLENTRY  _EXPFUNC _truncate(const char *__path, long __size);
 int  _RTLENTRYF _EXPFUNC _ftruncate(int __handle, long __size);
@@ -95,15 +117,22 @@ int  _RTLENTRY  _EXPFUNC ioctl   (int __handle, int __func, ...);
         /* optional 3rd and 4th args are: void _FAR * __argdx, int argcx */
 #endif
 
-int  _RTLENTRY  _EXPFUNC32 isatty(int __handle);
-int  _RTLENTRY  _EXPFUNC   lock  (int __handle, long __offset, long __length);
+int  _RTLENTRY  _EXPFUNC32 isatty (int __handle);
+int  _RTLENTRY  _EXPFUNC   lock   (int __handle, long __offset, long __length);
 int  _RTLENTRY  _EXPFUNC   locking(int __handle, int __mode, long __length);
-long _RTLENTRYF _EXPFUNC32 lseek (int __handle, long __offset, int __fromwhere);
-char _FAR * _RTLENTRYF _EXPFUNC mktemp( char _FAR *__template );
+long _RTLENTRY  _EXPFUNC32 lseek  (int __handle, long __offset, int __fromwhere);
+char * _RTLENTRY  _EXPFUNC   _mktemp(char *__template );
+
 #ifdef __IN_OPEN
 int  _RTLENTRY  _EXPFUNC   open  ();
+#ifdef __FLAT__
+int  _RTLENTRY  _EXPFUNC   _wopen  ();
+#endif
 #else
 int  _RTLENTRY  _EXPFUNC   open  (const char _FAR *__path, int __access,... /*unsigned mode*/);
+#endif
+#ifdef __FLAT__
+int  _RTLENTRY  _EXPFUNC   _wopen(const wchar_t *__path, int __access,... /*unsigned mode*/);
 #endif
 int  _RTLENTRYF _EXPFUNC   _rtl_open (const char _FAR *__path, int __oflags);
 int  _RTLENTRYF _EXPFUNC   _open (const char _FAR *__path, int __oflags);
@@ -116,10 +145,15 @@ int  _RTLENTRY  _EXPFUNC32 setftime(int __handle, struct ftime _FAR *__ftimep);
 int  _RTLENTRY  _EXPFUNC   setmode(int __handle, int __amode);
 
 #ifdef __IN_SOPEN
-int  _RTLENTRY  _EXPFUNC32 sopen ();
+int  _RTLENTRY  _EXPFUNC32 _sopen ();
+int  _RTLENTRY  _EXPFUNC32 _wsopen ();
 #else
-int  _RTLENTRY  _EXPFUNC32 sopen (const char _FAR *__path, int __access, int __shflag,
+int  _RTLENTRY  _EXPFUNC32 _sopen (const char *__path, int __access, int __shflag,
                       ... /* unsigned mode */);
+#if defined(__FLAT__)
+int  _RTLENTRY  _EXPFUNC32 _wsopen (const wchar_t *__path, int __access, int __shflag,
+                      ... /* unsigned mode */);
+#endif
 #endif
 long _RTLENTRY  _EXPFUNC32 tell  (int __handle);
 unsigned _RTLENTRY         umask (unsigned __cmask);
@@ -128,6 +162,15 @@ int  _RTLENTRY  _EXPFUNC   unlock(int __handle, long __offset, long __length);
 int  _RTLENTRYF _EXPFUNC   _rtl_write(int __handle, const void _FAR *__buf, unsigned __len);
 int  _RTLENTRYF _EXPFUNC   _write(int __handle, const void _FAR *__buf, unsigned __len);
 int  _RTLENTRYF _EXPFUNC   write (int __handle, const void _FAR *__buf, unsigned __len);
+#if !defined(__STDC__)
+char  * _RTLENTRY _EXPFUNC mktemp( char *__template );
+#ifdef __IN_SOPEN
+int  _RTLENTRY _EXPFUNC32 sopen ();
+#else
+int  _RTLENTRY _EXPFUNC32 sopen (const char *__path, int __access, int __shflag,
+                      ... /* unsigned mode */);
+#endif
+#endif
 
 #if !defined(__FLAT__)
  /* Initialization call for Easy Windows */

@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------
-//  Project ApxOle
+//  Project ApxSdi
 //  Borland International
 //  Copyright © 1996. All Rights Reserved.
 //
-//  SUBSYSTEM:    ApxOle Application
+//  SUBSYSTEM:    ApxSdi Application
 //  FILE:         apxprint.cpp
-//  AUTHOR:       
+//  AUTHOR:
 //
 //  OVERVIEW
 //  ~~~~~~~~
@@ -16,55 +16,44 @@
 #include "apxprint.h"
 
 
-// Do not enable page range in the print dialog since only one page is
-// available to be printed
-//
-void TApxPrintout::GetDialogInfo(int& minPage, int&, int& selFromPage, int&)
+
+void TApxPrintout::GetDialogInfo(int& minPage, int& maxPage,
+                                 int& selFromPage, int& selToPage)
 {
+  // Calculate the total number of pages in the document. TotalPages is
+  // initialized in INT_MAX in the event that we cannot determine the
+  // number for ourselves.
+  //
+  TPrintDC* printDC = new TPrintDC( Printer->GetSetup().GetDriverName(),
+                                    Printer->GetSetup().GetDeviceName(),
+                                    Printer->GetSetup().GetOutputName(),
+                                    Printer->GetSetup().GetDevMode() );
+
+  TEditFile* efWindow = TYPESAFE_DOWNCAST( Window, TEditFile );
+
+  if( printDC && efWindow )  {
+    TSize pageSize( printDC->GetDeviceCaps(HORZRES),
+                    printDC->GetDeviceCaps(VERTRES) );
+
+    TEXTMETRIC tm;
+    printDC->GetTextMetrics( tm );
+    int TextHeight = tm.tmHeight + tm.tmInternalLeading;
+
+    int LinesPerPage = pageSize.cy / TextHeight;
+    int TotalLines = efWindow->GetNumLines();
+    TotalPages = TotalLines / LinesPerPage + 1; //Add one to account for any roundoff.
+    if(TotalPages <= 0)
+      TotalPages = 1;
+  }
+
+  delete printDC;
+
   minPage = 1;
+  maxPage = TotalPages;
   selFromPage = 0;
+  selToPage = 0;
 }
 
-
-void TApxPrintout::BeginPrinting()
-{
-  TRect clientR;
-
-  BeginPage(clientR);
-
-  HFONT   hFont = (HFONT)Window->GetWindowFont();
-  TFont   font("Arial", -12);
-  if (!hFont)
-    DC->SelectObject(font);
-  else
-    DC->SelectObject(TFont(hFont));
-
-  TEXTMETRIC  tm;
-  int fHeight = DC->GetTextMetrics(tm) ? tm.tmHeight + tm.tmExternalLeading : 10;
-
-  DC->RestoreFont();
-
-  // How many lines of this font can we fit on a page.
-  //
-  int linesPerPage = MulDiv(clientR.Height(), 1, fHeight);
-
-  TPrintDialog::TData& printerData = Printer->GetSetup();
-
-  // GetMinMaxInfo event is overrided to return the number of lines when printing.
-  //
-  MINMAXINFO minmaxinfo;
-  Window->SendMessage(WM_GETMINMAXINFO, 0, (long)&minmaxinfo);
-  int maxPg = (minmaxinfo.ptMaxSize.y / linesPerPage) + 1.0;
-
-  // Compute the number of pages to print.
-  //
-  printerData.MinPage = 1;
-  printerData.MaxPage = maxPg;
-
-  EndPage();
-
-  TPrintout::BeginPrinting();
-}
 
 
 void TApxPrintout::BeginPage(TRect& clientR)

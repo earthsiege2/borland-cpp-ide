@@ -7,18 +7,22 @@
  *----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1992, 1996 by Borland International
+ *      Copyright (c) 1992, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #define INCL_USER
 #include <ntbc.h>
 #include <_io.h>
 #include <dosexcpt.h>
 #include <stdio.h>
+#if defined(_MBCS)
+#include <tchar.h>
+#endif
 
 extern unsigned _acrtused;              /* in startup code */
 
@@ -53,8 +57,13 @@ ULONG __EHCC __DefHandler(PEXCEPTIONREPORTRECORD p,
 	    return (XCPT_CONTINUE_SEARCH);
     }
     GetModuleFileName(NULL, (PSTR)&filename, sizeof(filename));
+#if defined(_MBCS)
+    if ((progname = _tcsrchr(filename,_TEXT('\\'))) == NULL &&
+	(progname = _tcsrchr(filename,_TEXT( ':'))) == NULL)
+#else
     if ((progname = strrchr(filename,'\\')) == NULL &&
 	(progname = strrchr(filename, ':')) == NULL)
+#endif
 	progname = filename;
     else
 	progname++;

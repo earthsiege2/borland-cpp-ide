@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.3  $
 //
 // Definition of class TMDIChild.
 //----------------------------------------------------------------------------
@@ -13,10 +13,13 @@
 # include <owl/framewin.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
-
 
 class _OWLCLASS TMDIClient;
 
@@ -63,5 +66,9 @@ class _OWLCLASS TMDIChild : virtual public TFrameWindow {
 #include <services/posclass.h>
 
 typedef TMDIChild TMdiChild;
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_MDICHILD_H

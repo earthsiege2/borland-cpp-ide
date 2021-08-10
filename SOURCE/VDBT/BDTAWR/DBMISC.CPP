@@ -4,6 +4,12 @@
 // All rights reserved.
 //--------------------------------------------------------
 
+#define __DDEML_H       // prevent the including DDEML.H in building this module
+#define _INC_DDEMLH     // due to a conflict in type declaration of HSZ
+#define __DECLARE_HSZ   // still need to force in the correct VB declaration of HSZ
+
+#include <bivbx.h>      // included first to get type HSZ declared
+
 #include <vdbt/dbmisc.h>
 
 
@@ -36,9 +42,9 @@ static HCTL PASCAL
 GetNitroControl( TVbxControl *pCtl, PIUnknown p )
 {
 #ifdef __FLAT__
-  LPCSTR lpEXTDLL = "BDT50EXF.DLL";
+  LPCSTR lpEXTDLL = "BDT52EXF.DLL";
 #else  __FLAT__
-  LPCSTR lpEXTDLL = "BDT50EX.DLL";
+  LPCSTR lpEXTDLL = "BDT52EX.DLL";
 #endif __FLAT__
   LPFNCTLNITROFIND pCtlNitroFind;
   HCTL hCtl = NULL;
@@ -71,7 +77,7 @@ FindNitroControl( TVbxControl *pCtl, LPCSTR lpName, TDataSource* DataSource )
 
   if( hCtl )
   {
-    HSZ  hszName;
+    LPSTR  hszName;
     char szName[ 256 ];
 
     if( ::VBXGetProp( hCtl, 0, &hszName ) && hszName
@@ -109,16 +115,29 @@ GetSource( TVbxControl *pCtl, LPCSTR lpName, TDataSource* DataSource )
 
     if( hCtl )
     {
-#ifdef __FLAT__
-      int  nID  = ::GetWindowLong( ::VBXGetHwnd( hCtl ), GWL_ID );
-#else  __FLAT__
-      int  nID  = ::GetWindowWord( ::VBXGetHwnd( hCtl ), GWW_ID );
-#endif __FLAT__
+      PITDataSource pitds;
 
-      *DataSource = TDataSource( pCtl->Parent->HWindow, nID );
+      if( ! ::VBXGetPropByName( hCtl, "Object", &pitds ) )
+        ThrowException( "Getting DataSource Failed"
+                      , "Can't Get Object Property", lpName );
+      else if( pitds != DataSource->GetPITDataSource() )
+      {
+#ifdef __FLAT__
+        int  nID  = ::GetWindowLong( ::VBXGetHwnd( hCtl ), GWL_ID );
+#else  __FLAT__
+        int  nID  = ::GetWindowWord( ::VBXGetHwnd( hCtl ), GWW_ID );
+#endif __FLAT__
+        if( DataSource )
+          delete DataSource;
+        DataSource = new TDataSource( pCtl->Parent->HWindow, nID );
+      }
     }
     else
-      *DataSource = TDataSource();
+    {
+      if( DataSource )
+        delete DataSource;
+      DataSource = new TDataSource();
+    }
   }
   else
     ThrowException( "Getting DataSource Failed"
@@ -130,7 +149,7 @@ GetSource( TVbxControl *pCtl, LPCSTR lpName, TDataSource* DataSource )
 static VOID PASCAL
 SetNameFromHCTL( HCTL hCtl, TVbxControl *pCtl, LPCSTR lpName )
 {
-  HSZ  hszName;
+  LPSTR  hszName;
   char szName[ 256 ];
 
   if( ! ::VBXGetProp( hCtl, 0, &hszName ) || ! hszName )
@@ -320,3 +339,4 @@ Setstring( TVbxControl* pCtl, int iIndex, string* String )
 
   return String;
 }
+

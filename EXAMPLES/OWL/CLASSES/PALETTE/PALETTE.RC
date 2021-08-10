@@ -6,6 +6,7 @@
 # include <windows.h>
 #endif
 #include <owl/owlapp.rc>        // Owl icon
+#include <owl\except.rc>
 #include "palette.h"
 
 IDM_PALTEST MENU LOADONCALL MOVEABLE PURE DISCARDABLE

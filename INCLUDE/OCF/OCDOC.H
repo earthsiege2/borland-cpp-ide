@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.10  $
 //
 // Definition of TOcDocument Class
 //----------------------------------------------------------------------------
@@ -14,10 +16,15 @@
 # include <ocf/oclink.h>
 #endif
 
+class _ICLASS IStorage;
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
 //
 // Interfaces & Classes referenced
 //
-class _ICLASS IStorage;
 class _ICLASS TOcStorage;
 class _ICLASS TOcApp;
 class _ICLASS TOcControl;
@@ -76,23 +83,20 @@ class _ICLASS TOcDocument {
     TOcStorage*    OrgStorage;   // original root storage for embedded objects
 
     int            PartID;
-#if defined(BI_DATA_NEAR)
-    string&        Name;         // Name of this document
-    TOcPartCollection& PartCollection; // Collection of parts in this document
-    TOcLinkCollection& LinkCollection; // Collection of link views in this document
-#else
     string         Name;
     TOcPartCollection  PartCollection;
     TOcLinkCollection  LinkCollection;
-#endif
 
-  friend TOcPartCollectionIter;      // To allow iterator access to collection
-  friend TOcLinkCollectionIter;      // To allow iterator access to collection
-//  friend TOcPart;
-  friend TOcControl;
-  friend TOcView;
-  friend TOcRemVie;
+  friend class TOcPartCollectionIter; // To allow iterator access to collection
+  friend class TOcLinkCollectionIter; // To allow iterator access to collection
+  friend class _ICLASS TOcControl;
+  friend class _ICLASS TOcView;
+  friend class _ICLASS TOcRemView;
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 #endif  // OCF_OCDOC_H
 

@@ -1,8 +1,7 @@
 :Base bcpp.hlp
 1 The Runtime library reference
-4 Reasons To Access the Run-time Library Source Code = ReasonsToAccessRTL
-2 Header files overview
-4 Header Files Summary = HFileIndex
+2 Reasons To Access the Run-time Library Source Code = ReasonsToAccessRTL
+2 Header Files Summary = HFileIndex
 2 The main() function
 4 About the main() function = MainFunction
 4 Arguments to main () = ArgumentsToMain
@@ -11,7 +10,8 @@
 4 The Value main() Returns = ValueMainReturns
 4 Passing File Information to Child Processes = PassingFileInformationToChildProcesses
 4 Multithread Programs = MultithreadPrograms
-4 International API = InternationalAPI
+4 International API (32-bit) = InternationalAPI
+4 International API (16-Bit) = InternationalAPI16Bit
 4 International API Sample Program (ANSI character set) = InternationalAPISampleProgram
 4 Guidelines for Selecting Run-Time Libraries = GuidelinesForSelectingRunTimeLibraries
 4 Static Run-time Libraries = StaticRuntimeLibraries
@@ -29,6 +29,7 @@
 4 Inline Routines = InlineRoutines
 4 Interface Routines (DOS, 8086, BIOS) = InterfaceRoutines
 4 International API Routines = InternationalAPIRoutines
+4 International API Routines (16-Bit) = InternationalAPIRoutines16Bit
 4 Manipulation Routines = ManipulationRoutines
 4 Math Routines = MathRoutines
 4 Memory Routines = MemoryRoutines
@@ -42,6 +43,17 @@
 3 Global variables overview
 3 Global Variables = VariablesSummary
 3 Obsolete Global Variables = ObsoleteGlobalVariables
+
+1 International API
+2 International API overview =InternationalAPIOverview
+3 International API routines= InternationalAPIRoutines
+3 Unicode macros =UnicodeMacros
+3 International API formatted I/O =InternationalAPIFormattedIO
+3 Summary of formatted I/O functions = SummaryOfFormattedIOFunctions
+3 Unicode output format specifiers = UnicodeOutputFormatSpecifiers
+3 Unicode input format specifiers = UnicodeInputFormatSpecifiers
+1 Extended types formatted I/O
+2 Extended types formatted I/O =ExtendedTypesFormattedIO
 
 1  BASM: The Inline Assembler
 2  The Inline Assembler (BASM) = BASM

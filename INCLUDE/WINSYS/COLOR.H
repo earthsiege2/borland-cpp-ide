@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.8  $
 //
 // Definition of windowing system color classes
 //----------------------------------------------------------------------------
@@ -21,6 +21,10 @@
 #   include <winsys/wsysinc.h>
 # endif
 #else
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 //
 // Simulate Windows structures
@@ -47,6 +51,15 @@
     uint8    rgbRed;
     uint8    rgbReserved;
 };
+
+#if defined(BI_NAMESPACE)
+}       // namespace ClassLib
+#endif
+
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //
@@ -218,10 +231,17 @@ class TRgbTriple : public tagRGBTRIPLE {
     bool operator ==(COLORREF cr) const;
 };
 
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
+
 //----------------------------------------------------------------------------
 // Inline Implementations
 //
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 //
 // Extract the color value from a persistent input stream.
 //
@@ -239,6 +259,10 @@ inline opstream& operator <<(opstream& os, const TColor& c)
   os << c.Value;
   return os;
 }
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 //
 // Construct a null color.
@@ -361,6 +385,13 @@ TColor::operator COLORREF() const
 //     /* colors match */
 //   else
 //     /* colors do not match */
+//
+//  To actually compare the RGB values of two TColor objects, use the
+//  operator == (COLORREF). For example,
+//  TColor colorA, colorB;
+//  if (colorA == colorB.GetValue()) {
+//      // ColorA & ColorB
+//  }
 //
 inline bool
 TColor::operator ==(const TColor& other) const

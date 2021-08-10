@@ -4,14 +4,15 @@
  *   fake IEEE floating point package interface
  *
  *-----------------------------------------------------------------------*/
- 
+
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.1  $ */
 
 /*
     If you do not have the IEEE-recommended functions discussed in
@@ -31,15 +32,15 @@
 
 // The following define the kinds (classes) of a floating-point number
 #define  FPSIGNAN    0  // signaling NaN
-#define  FPQUIETNAN  1  // quiet NaN 
-#define  FPNEGINF    2  // -infinity 
-#define  FPNEG       3  // negative normalized nonzero 
-#define  FPNEGDENOR  4  // negative denormalized 
-#define  FPNEGZERO   5  // -0 
-#define  FPPOSZERO   6  // +0 
-#define  FPPOSDENOR  7  // positive denormalized 
-#define  FPPOS       8  // positive normalized nonzero 
-#define  FPPOSINF    9  // +infinity 
+#define  FPQUIETNAN  1  // quiet NaN
+#define  FPNEGINF    2  // -infinity
+#define  FPNEG       3  // negative normalized nonzero
+#define  FPNEGDENOR  4  // negative denormalized
+#define  FPNEGZERO   5  // -0
+#define  FPPOSZERO   6  // +0
+#define  FPPOSDENOR  7  // positive denormalized
+#define  FPPOS       8  // positive normalized nonzero
+#define  FPPOSINF    9  // +infinity
 
 
 /* Returns kind (class) of parmeter.

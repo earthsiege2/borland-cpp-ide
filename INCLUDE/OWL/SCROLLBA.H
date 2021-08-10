@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Definition of class TScrollBar.  This defines the basic behavior of all
 // scrollbar controls.
@@ -12,6 +12,10 @@
 
 #if !defined(OWL_CONTROL_H)
 # include <owl/control.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -41,8 +45,8 @@ class _OWLCLASS TScrollBar : public TControl {
     //
     virtual void  GetRange(int& min, int& max) const;
     virtual int   GetPosition() const;
-    virtual void  SetRange(int min, int max);
-    virtual void  SetPosition(int thumbPos);
+    virtual void  SetRange(int min, int max, bool redraw = true);
+    virtual void  SetPosition(int thumbPos, bool redraw = true);
     virtual int   DeltaPos(int delta);
 #if defined(BI_PLAT_WIN32)
     virtual void  GetScrollInfo(SCROLLINFO* info) const;
@@ -120,6 +124,10 @@ struct TScrollBarData {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementation

@@ -1,10 +1,8 @@
 //-------------------------------------------------------
 // BRIEF Editor Keymap file.
 //-------------------------------------------------------
-// $Revision:   1.41  $
+// $Revision:   1.47  $
 // The format for KBD files is as follows:
-// [Options] section can be any script command.  The
-// entire line will be used and executed.
 // The [Assigments:Keyboard] section is used to
 // perform assignments to the specified subsystem.
 // Possible subsystems may be found in the documnetation
@@ -24,46 +22,13 @@
 // invalidating this file.  If a comment is needed, but not a
 // Keyflag then both delimiters must still be present.
 //-------------------------------------------------------
-[Options]
-import IDE;
-import editor;
-import scriptEngine;
-
-BriefEmulation();
-
-IDE.KeyboardManager.ScriptAbortKey = "<Escape>";
-
-DoIDEFileClose()      { return FUNCTION_CONTINUE; }
-DoIDEFileOpen()       { return FUNCTION_CONTINUE; }
-DoIDEFilePrint()      { if (!editor.BriefPrint()) return FUNCTION_CONTINUE; return FUNCTION_END; }
-DoIDEFileSave()       { if (!editor.Write()) return FUNCTION_CONTINUE; return FUNCTION_END; }
-DoIDEFileSaveAs()     { if (!editor.Write()) return FUNCTION_CONTINUE; return FUNCTION_END; }
-DoIDEFileSaveAll()    { return FUNCTION_CONTINUE; }
-
-DoIDEEditUndo()       { editor.Undo(); return FUNCTION_END; }
-DoIDEEditRedo()       { editor.Redo(); return FUNCTION_END; }
-DoIDEEditCut()        { editor.ModalCut(); return FUNCTION_END; }
-DoIDEEditCopy()       { editor.ModalCopy(); return FUNCTION_END; }
-DoIDEEditPaste()      { editor.Paste(); return FUNCTION_END; }
-DoIDEEditClear()      { editor.BriefDelete(); return FUNCTION_END; }
-DoIDEEditSelectAll()  { editor.SelectAll(); return FUNCTION_END; }
-DoIDEEditBufferList() { return FUNCTION_CONTINUE; }
-
-DoIDESearchFind()     { editor.BriefSetSearch(); return FUNCTION_CONTINUE; }
-DoIDESearchReplace()  { editor.BriefSetSearch(); return FUNCTION_CONTINUE; }
-DoIDESearchSearchAgain()  { return FUNCTION_CONTINUE; }
-
-DoIDESearchPreviousMessage() { IDE.ViewMessage("&Buildtime"); return FUNCTION_CONTINUE; }
-DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CONTINUE; }
-
-
 [Assignments:Desktop]
 //--------------- ----------------------------------- -------- ----------
 // Key            |:|Command                          |:|Flags |:|Comment
 //--------------- ----------------------------------- -------- ----------
 <Alt-b>           |:|IDE.EditBufferList();            |:|      |:|Edit|Buffer list, display a list of open files
 <Alt-Down>        |:|IDE.ViewActivate(DOWN);          |:|      |:|Moves to the pane below the current pane
-<Alt-e>           |:|editor.BriefEditFile();          |:|      |:|Open file into current buffer
+<Alt-e>           |:|IDE.FileOpen();                  |:|      |:|Open file into current buffer
 <Alt-F2>          |:|editor.BriefZoomPaneToggle();    |:|      |:|Zoom current pane
 <Alt-F5>          |:|IDE.DebugInspect();              |:|      |:|Inspect command - Debug|Inspect
 <Alt-F9>          |:|IDE.SpeedMenu();                 |:|      |:|SpeedMenu
@@ -82,9 +47,9 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 
 <Ctrl-F1>         |:|IDE.KeywordHelp();               |:|      |:|Keyword search command - Help|Keyword search
 <Ctrl-F2>         |:|debugger.ToggleBreakpoint();     |:|      |:|Toggle Breakpoint command - Toggle breakpoint (Edit window SpeedMenu)
-<Ctrl-F5>         |:|IDE.DebugAddWatch();             |:|      |:|Add watch command - Debug|Add watch
-<Ctrl-F7>         |:|debugger.InstructionStepInto();  |:|      |:|InstructionStepInto - Executes the next instruction, stepping into functions
-<Ctrl-F8>         |:|debugger.InstructionStepOver();  |:|      |:|InstructionStepOver - Executes the next instruction, running any functions 
+<Ctrl-F7>         |:|IDE.DebugStatementStepInto();    |:|      |:|Statement step into command
+<Ctrl-F8>         |:|IDE.DebugStatementStepOver();    |:|      |:|Statement step over command
+<Ctrl-F9>         |:|IDE.DebugAnimate();              |:|      |:|Animate current target in debugger
 <Ctrl-u>          |:|IDE.EditRedo();                  |:|      |:|Redo command - Edit|Redo
 <Ctrl-n>          |:|IDE.SearchNextMessage();         |:|      |:|Next message command - Search|Next message
 <Ctrl-p>          |:|IDE.SearchPreviousMessage();     |:|      |:|Previous message command - Search|Previous message
@@ -111,6 +76,8 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 <Keypad-Minus>    |:|IDE.EditCut();                   |:|      |:|Cut command - Edit|Cut
 
 <Shift-Down>      |:|IDE.ViewActivate(DOWN);          |:|      |:|Moves to the pane below the current pane
+<Shift-F2>        |:|IDE.DebugEvaluate();             |:|      |:|Evaluate command - Debug|Evaluate
+<Shift-F3>        |:|IDE.DebugAddWatch();             |:|      |:|Add watch command - Debug|Add watch
 <Shift-F7>        |:|debugger.InstructionStepInto();  |:|      |:|InstructionStepInto - Executes the next instruction, stepping into functions
 <Shift-F8>        |:|debugger.InstructionStepOver();  |:|      |:|InstructionStepOver - Executes the next instruction, running any functions
 <Shift-F5>        |:|IDE.SearchSearchAgain();         |:|      |:|Search again command - Search|Search again
@@ -135,10 +102,11 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 <Alt-9>           |:|editor.SetBookmark(9);           |:|      |:|Sets bookmark 9
 
 <Alt-Backspace>   |:|editor.BriefDeleteWord();        |:|      |:|Deletes the word to the right of the cursor
-<Alt-Minus>       |:|editor.PreviousBuffer();         |:|      |:|Replaces current buffer with the previous buffer from the buffer list
+<Alt-Keypad-Minus>|:|editor.PreviousBuffer();         |:|      |:|Replaces current buffer with the previous buffer from the buffer list
 <Alt-a>           |:|ToggleBlockStyle(EXCLUSIVE_BLOCK); |:|      |:|Sets block mode to non-inclusive block
 <Alt-c>           |:|ToggleBlockStyle(COLUMN_BLOCK);  |:|      |:|Sets block mode to column block
 <Alt-d>           |:|editor.ModalDeleteLine();        |:|      |:|Deletes a line
+<Alt-e>           |:|editor.BriefEditFile();          |:|      |:|Open file into current buffer
 <Alt-F3>          |:|debugger.InspectCurrent();       |:|      |:|Inspect command - Inspect (Edit window SpeedMenu)
 <Alt-F5>          |:|editor.BriefSearch();            |:|      |:|Find command - Search|Find
 <Alt-F6>          |:|editor.BriefSearch(true);        |:|      |:|Replace command - Search|Replace
@@ -163,7 +131,7 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 <Ctrl-d>          |:|editor.ModalScroll(-1);          |:|      |:|Move current line up one
 <Ctrl-e>          |:|editor.ModalScroll(1);           |:|      |:|Move current line down one
 <Ctrl-End>        |:|editor.ModalMoveViewBottom();    |:|      |:|Move cursor to the bottom of the window retaining column position
-<Ctrl-Enter>      |:|editor.OpenLine();               |:|      |:|Inserts a new line
+<Ctrl-Enter>      |:|editor.BriefOpenLine();          |:|      |:|Inserts a new line
 <Ctrl-F5>         |:|editor.ToggleSearchCase();       |:|      |:|Toggle search case sensitivity
 <Ctrl-F6>         |:|editor.ToggleRegularExpression();|:|      |:|Toggle Regular expression search
 <Ctrl-Home>       |:|editor.ModalMoveViewTop();       |:|      |:|Move cursor to the top of the window retaining column position
@@ -193,6 +161,8 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 <F4><Right>       |:|editor.DeleteView(RIGHT);        |:|      |:|Deletes the pane to the right of the current pane
 <F4><Up>          |:|editor.DeleteView(UP);           |:|      |:|Deletes the pane above the current pane
 
+<F7>              |:|IDE.BriefKeystrokeRecording();   |:|      |:|Record a key macro
+
 <Home>            |:|editor.ModalHome();              |:|      |:|Move cursor to the beginning of the line, window, file
 <Insert>          |:|IDE.EditPaste();                 |:|      |:|Paste command - Edit|Paste
 <Keypad-*>        |:|editor.Undo();                   |:|      |:|Undo command - Edit|Undo
@@ -202,13 +172,15 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 <PageDown>        |:|editor.ModalPageDown();          |:|      |:|Move cursor down one screen
 <Right>           |:|editor.ModalMoveRelative(0,1);   |:|      |:|Move cursor one character to the right
 
+<Shift-F2>        |:|IDE.DebugEvaluate();             |:|      |:|Evaluate command - Debug|Evaluate
+<Shift-F3>        |:|debugger.WatchCurrent();         |:|      |:|Add watch command - Debug|Add watch
 <Shift-Backspace> |:|editor.BriefBackspace();         |:|      |:|Deletes the character to the left of the cursor
 <Shift-End>       |:|editor.ModalEnd();               |:|      |:|Move cursor to the end of the line, window, file
-<Shift-F6>        |:|editor.ReplaceAgain();           |:|      |:|Repeat last Search|Replace
+<Shift-F6>        |:|editor.BriefReplaceAgain();           |:|      |:|Repeat last Search|Replace
 <Shift-Home>      |:|editor.ModalHome();              |:|      |:|Move cursor to the beginning of the line, window, file
 <Shift-Tab>       |:|editor.BriefSmartBackTab();      |:|      |:|Move backwards through tabs
 
-<Enter>           |:|editor.TopView.Position.InsertCharacter('\\r'); |:|      |:|Inserts a carriage return
+<Enter>           |:|editor.TopView.Position.InsertCharacter('\r'); |:|      |:|Inserts a carriage return
 <Tab>             |:|editor.BriefSmartTab();          |:|      |:|Inserts a smart tab
 <Up>              |:|editor.ModalMoveRelative(-1,0);  |:|      |:|Move cursor up one line in the window
 
@@ -236,10 +208,12 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 <Ctrl-t>          |:|WiredMethod();                   |:|      |:|All panes - Change Thread
 <Ctrl-z>          |:|WiredMethod();                   |:|      |:|Registers pane - Zero Register
 <Alt-h>           |:|IDE.HelpView();                  |:|      |:|Help
+<End>             |:|WiredMethod();                   |:|      |:|Move cursor to the end of the window
 <F2>              |:|WiredMethod();                   |:|      |:|Disassembly pane - Toggle Breakpoint
 <F5>              |:|WiredMethod();                   |:|      |:|Disassembly pane - Toggle Breakpoint
 <F7>              |:|debugger.InstructionStepInto();  |:|      |:|InstructionStepInto - Executes the next instruction, stepping into functions
 <F8>              |:|debugger.InstructionStepOver();  |:|      |:|InstructionStepOver - Executes the next instruction, running any functions
+<Home>            |:|WiredMethod();                   |:|      |:|Move cursor to the beginning of the window
 <Left>            |:|WiredMethod();                   |:|      |:|Move cursor to the left
 <Minus>           |:|WiredMethod();                   |:|      |:|Registers pane - Decrement Register
 <Down>            |:|WiredMethod();                   |:|      |:|Move cursor down one line
@@ -284,24 +258,31 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 <Alt-h>           |:|IDE.HelpView();                  |:|      |:|Help
 <Insert>          |:|WiredMethod();                   |:|      |:|Watches window - Add Watch
 <Space>           |:|WiredMethod();                   |:|      |:|Watch window - Disable/Enable Watch(es)
+<PageUp>          |:|WiredMethod();                   |:|      |:|Move cursor to the beginning of the window
+<PageDown>        |:|WiredMethod();                   |:|      |:|Move cursor to the end of the window
+<Up>              |:|WiredMethod();                   |:|      |:|Move cursor up
+<Down>            |:|WiredMethod();                   |:|      |:|Move cursor down
+<Left>            |:|WiredMethod();                   |:|      |:|Move cursor left
+<Right>           |:|WiredMethod();                   |:|      |:|Move cursor right
+<Home>            |:|WiredMethod();                   |:|      |:|Move cursor home
+<End>             |:|WiredMethod();                   |:|      |:|Move cursor end
 
 [Assignments:Breakpoints]
 //--------------- ----------------------------------- -------- ----------
 // Key            |:|Command                          |:|Flags |:|Comment
 //--------------- ----------------------------------- -------- ----------
-<Alt-d>           |:|WiredMethod();                   |:|      |:|Selects the Address tab
-<Alt-w>           |:|WiredMethod();                   |:|      |:|Selects the Data Watch tab
-<Alt-e>           |:|WiredMethod();                   |:|      |:|Edit Breakpoint
-<Alt-x>           |:|WiredMethod();                   |:|      |:|Selects the OS Exception tab
-<Alt-s>           |:|WiredMethod();                   |:|      |:|Selects the Source tab
-<Alt-t>           |:|WiredMethod();                   |:|      |:|Selects the Thread tab
-<Alt-m>           |:|WiredMethod();                   |:|      |:|Selects the Module tab
-<Alt-g>           |:|WiredMethod();                   |:|      |:|Selects the CodeGuard tab
 <Ctrl-a>          |:|WiredMethod();                   |:|      |:|Add Breakpoint
-<Ctrl-r>          |:|WiredMethod();                   |:|      |:|Remove Breakpoint
+<Ctrl-d>          |:|WiredMethod();                   |:|      |:|Selects the Address tab
 <Ctrl-e>          |:|WiredMethod();                   |:|      |:|Edit Breakpoint
-<Ctrl-o>          |:|WiredMethod();                   |:|      |:|Edit Source
+<Ctrl-g>          |:|WiredMethod();                   |:|      |:|Selects the CodeGuard tab
 <Ctrl-i>          |:|WiredMethod();                   |:|      |:|View Source
+<Ctrl-m>          |:|WiredMethod();                   |:|      |:|Selects the Module tab
+<Ctrl-o>          |:|WiredMethod();                   |:|      |:|Edit Source
+<Ctrl-r>          |:|WiredMethod();                   |:|      |:|Remove Breakpoint
+<Ctrl-s>          |:|WiredMethod();                   |:|      |:|Selects the Source tab
+<Ctrl-t>          |:|WiredMethod();                   |:|      |:|Selects the Thread tab
+<Ctrl-w>          |:|WiredMethod();                   |:|      |:|Selects the Data Watch tab
+<Ctrl-x>          |:|WiredMethod();                   |:|      |:|Selects the OS Exception tab
 <Enter>           |:|WiredMethod();                   |:|      |:|Edit Breakpoint
 <Alt-h>           |:|IDE.HelpView();                  |:|      |:|Help
 <Space>           |:|WiredMethod();                   |:|      |:|Enable/Disable Breakpoint
@@ -309,6 +290,12 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 <Insert>          |:|WiredMethod();                   |:|      |:|Add Breakpoint
 <PageUp>          |:|WiredMethod();                   |:|      |:|Move cursor to the beginning of the window
 <PageDown>        |:|WiredMethod();                   |:|      |:|Move cursor to the end of the window
+<Up>              |:|WiredMethod();                   |:|      |:|Move cursor up
+<Down>            |:|WiredMethod();                   |:|      |:|Move cursor down
+<Left>            |:|WiredMethod();                   |:|      |:|Move cursor left
+<Right>           |:|WiredMethod();                   |:|      |:|Move cursor right
+<Home>            |:|WiredMethod();                   |:|      |:|Move cursor home
+<End>             |:|WiredMethod();                   |:|      |:|Move cursor end
 
 [Assignments:Processes]
 //--------------- ----------------------------------- -------- ----------
@@ -325,6 +312,14 @@ DoIDESearchNextMessage()     { IDE.ViewMessage("&Buildtime"); return FUNCTION_CO
 <Ctrl-i>          |:|WiredMethod();                   |:|      |:|View source at current location
 <Enter>           |:|WiredMethod();                   |:|      |:|Edit source at current location
 <Alt-h>           |:|IDE.HelpView();                  |:|      |:|Help
+<PageUp>          |:|WiredMethod();                   |:|      |:|Move cursor to the beginning of the window
+<PageDown>        |:|WiredMethod();                   |:|      |:|Move cursor to the end of the window
+<Up>              |:|WiredMethod();                   |:|      |:|Move cursor up
+<Down>            |:|WiredMethod();                   |:|      |:|Move cursor down
+<Left>            |:|WiredMethod();                   |:|      |:|Move cursor left
+<Right>           |:|WiredMethod();                   |:|      |:|Move cursor right
+<Home>            |:|WiredMethod();                   |:|      |:|Move cursor home
+<End>             |:|WiredMethod();                   |:|      |:|Move cursor end
 
 [Assignments:Inspector]
 //--------------- ----------------------------------- -------- ----------

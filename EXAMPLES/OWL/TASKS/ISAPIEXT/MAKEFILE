@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1997 by Borland International, All Rights Reserved
+# written by Michael Sawczyn
+#----------------------------------------------------------------------------
+
+DLL = SimpleEx
+OBJDLL = simpleex.obj isapiext.obj
+MODELS = dft
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

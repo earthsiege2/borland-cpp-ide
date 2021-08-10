@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.13  $
+//$Revision:   10.17  $
 //
 // Implementation of the TUpDown class
 //----------------------------------------------------------------------------
@@ -16,8 +16,10 @@
 #if !defined(OWL_UIHELPER_H)
 # include <owl/uihelper.h>
 #endif
+#include <windowsx.h>
 #include <stdio.h>
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlCommCtrl);        // CommonCtrl Diagnostic group
 
 //
@@ -179,7 +181,7 @@ TUpDown::PerformCreate(int id)
 // Keep TWindow from rerouting these, must be left as-is for updown control
 //
 void
-TUpDown::EvVScroll(uint, uint, THandle)
+TUpDown::EvVScroll(uint, uint, HWND)
 {
   DefaultProcessing();
 }
@@ -188,7 +190,7 @@ TUpDown::EvVScroll(uint, uint, THandle)
 // Keep TWindow from rerouting these, must be left as-is for updown control
 //
 void
-TUpDown::EvHScroll(uint, uint, THandle)
+TUpDown::EvHScroll(uint, uint, HWND)
 {
   DefaultProcessing();
 }
@@ -206,8 +208,10 @@ TUpDown::GetAccel(int count, TUDAccel far* accels) const
     return (int)CONST_CAST(TUpDown*,this)->SendMessage(UDM_GETACCEL, count, TParam2(accels));
   }
   else {
+
     // This feature is not implemented by the emulation version
     // of the UpDown control
+    //
     TRACEX(OwlCommCtrl, 0, "TUpDown::GetAccel requires native \
                            CommCtrl implementation");
     return 0;
@@ -305,8 +309,10 @@ TUpDown::SetAccel(int count, const TUDAccel far* accels)
     return SendMessage(UDM_SETACCEL, count, TParam2(accels)) != 0;
   }
   else {
+
     // This feature is not implemented by the emulation version
     // of the UpDown control
+    //
     TRACEX(OwlCommCtrl, 0, "TUpDown::SetAccel requires native \
                            CommCtrl implementation");
     return false;
@@ -337,11 +343,11 @@ TUpDown::SetBase(int base)
 //
 // Sets the buddy window of the underlying up-down control.
 //
-TWindow::THandle
+HWND
 TUpDown::SetBuddy(HWND hBuddy)
 {
   if (NativeUse & nuUsing) {
-    return TWindow::THandle(SendMessage(UDM_SETBUDDY, TParam1(hBuddy)));
+    return HWND(SendMessage(UDM_SETBUDDY, TParam1(hBuddy)));
   }
   else {
     HWND oldBuddy = BuddyHandle;
@@ -357,6 +363,9 @@ TUpDown::SetBuddy(HWND hBuddy)
 int32
 TUpDown::SetPos(int pos)
 {
+  TRACEX(OwlCommCtrl, 0, "TUpDown::SetPos(" << pos << ") "\
+                         "Range: (" << LOWORD(GetRange()) << ','\
+                                    << HIWORD(GetRange()) << ")");
   if (NativeUse & nuUsing) {
     return SendMessage(UDM_SETPOS, 0, MkParam2(pos, 0));
   }
@@ -389,6 +398,9 @@ TUpDown::SetRange(int lower, int upper)
   PRECONDITION(upper <= UD_MAXVAL);
   PRECONDITION(abs(upper-lower) <= UD_MAXVAL);
 #endif
+
+  TRACEX(OwlCommCtrl, 0, "TUpDown::SetRange(" << lower << ',' << upper << ')'\
+                          << " Pos: " << GetPos() );  
 
   if (NativeUse & nuUsing) {
     SendMessage(UDM_SETRANGE, 0, MkParam2(upper, lower));
@@ -935,8 +947,7 @@ TUpDown::Action()
       // Shoot notification to buddy
       //
       int code = IsSet(csIncrement) ? SB_LINEUP : SB_LINEDOWN;
-      ::SendMessage(BuddyHandle, WM_VSCROLL, MAKELONG(code, Pos),
-                    TParam2(GetHandle()));
+      FORWARD_WM_VSCROLL(BuddyHandle, GetHandle(), code, Pos, ::SendMessage);
     }
   }
 }

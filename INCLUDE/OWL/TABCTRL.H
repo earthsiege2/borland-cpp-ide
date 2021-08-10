@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.11  $
+//$Revision:   10.12  $
 //
 // Definition of class TTabItem and TTabControl.
 //----------------------------------------------------------------------------
@@ -17,6 +17,10 @@
 #endif
 #if !defined(OWL_UPDOWN_H)
 # include <owl/updown.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Mentioned in documentation but currently missing from system headers
@@ -261,6 +265,10 @@ class _OWLCLASS TTabControl : public TControl {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inlines implementations

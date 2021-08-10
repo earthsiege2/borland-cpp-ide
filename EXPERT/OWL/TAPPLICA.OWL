@@ -115,6 +115,9 @@
 ## ((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
 #define IDM_SDI                 100             // Menu resource ID and Accelerator IDs
 
+##@OPT_APPL_PRINTING 2
+#define IDM_PRINTPREVIEW        200             // Accelerator ID for Print Preview window.
+
 ##--BEGIN-- @OPT_APPL_DOCVIEW
 #define IDM_DOCMANAGERFILE      32401           // Menu for DocManager merging.
 #define IDM_EDITVIEW            32581           // Menu for TEditView merging.
@@ -492,6 +495,9 @@ STACKSIZE    16384
 '
 <<[HPJ]TApplication [[TApplication]]
 ##--BEGIN--@OPT_APPL_HELP
+[CONFIG]
+BrowseButtons()
+
 [OPTIONS]
 CONTENTS=main_index
 ##@QUERY_TARGET_NAME [[Target]]
@@ -593,6 +599,4 @@ COPY "[[Icon]]" [RC]
 ##@QUERY_APPL_MODEL == VALUE_MDI
 ##:     <<TMDIChild QUERY_WIND_ICON [[Icon]]
 COPY "[[Icon]]" [RC]
-COPY "hslider.bmp" [RC]
-COPY "vslider.bmp" [RC]
 >>[FILES]TApplication [[TApplication]]

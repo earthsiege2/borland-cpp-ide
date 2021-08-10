@@ -73,6 +73,8 @@
 
 #ifndef __WINDOWS_H     /* prevent multiple includes */
 #define __WINDOWS_H
+#define _INC_WINDOWS
+#define _WINDOWS_
 
 #ifndef RC_INVOKED
 #pragma pack(push, 1)   /* Assume byte packing throughout */
@@ -278,10 +280,10 @@ typedef HINSTANCE HMODULE;  /* HMODULEs can be used in place of HINSTANCEs */
 /****** Application entry point function ************************************/
 
 #if defined(STRICT)
-int FAR PASCAL WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
+int     PASCAL WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 int FAR PASCAL LibMain(HINSTANCE, WORD, WORD, LPSTR);
 #else
-int FAR PASCAL WinMain(HANDLE, HANDLE, LPSTR, int);
+int     PASCAL WinMain(HANDLE, HANDLE, LPSTR, int);
 int FAR PASCAL LibMain(HANDLE, WORD, WORD, LPSTR);
 #endif
 int CALLBACK   WEP(int);

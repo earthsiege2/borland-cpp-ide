@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.6  $
+// $Revision:   2.9  $
 //
 // Implementation of TOcLinkView Class
 //----------------------------------------------------------------------------
@@ -23,14 +23,8 @@
 TOcLinkView::TOcLinkView(TOcView* ocView, TRegList* regList, IUnknown* outer)
 :
   BSiteI(0), OcView(ocView),
-#if defined(BI_DATA_NEAR)
-  Moniker(*new TString),
-  Origin(*new TPoint(0,0)),
-  Extent(*new TSize(0,0))
-#else
   Origin(0,0),
   Extent(0,0)
-#endif
 {
   PRECONDITION(OcView);
   SetOuter(outer);
@@ -68,9 +62,6 @@ TOcLinkView::~TOcLinkView()
   if (BSite) {
     BSite->Release();
   }
-#if defined(BI_DATA_NEAR)
-  delete &Moniker;
-#endif
 }
 
 //
@@ -273,7 +264,7 @@ TOcLinkView::SetFormatData(TOcFormatInfo far* /*fmt*/, HANDLE /*data*/, BOOL /*r
   return HR_NOTIMPL;
 }
 #endif
-                           
+
 //----------------------------------------------------------------------------
 // IBPart implementation
 

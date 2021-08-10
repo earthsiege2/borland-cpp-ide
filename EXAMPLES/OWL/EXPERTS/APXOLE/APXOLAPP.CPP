@@ -5,7 +5,7 @@
 //
 //  SUBSYSTEM:    ApxOle Application
 //  FILE:         apxolapp.cpp
-//  AUTHOR:       
+//  AUTHOR:
 //
 //  OVERVIEW
 //  ~~~~~~~~
@@ -181,7 +181,7 @@ void TApxOleApp::InitMainWindow()
   //
   frame->Attr.ExStyle |= WS_EX_ACCEPTFILES;
 
-  // Assign ICON w/ this application.
+  // Assign icons for this application.
   //
   frame->SetIcon(this, IDI_MDIAPPLICATION);
   frame->SetIconSm(this, IDI_MDIAPPLICATION);
@@ -190,13 +190,13 @@ void TApxOleApp::InitMainWindow()
   //
   frame->Attr.AccelTable = IDM_MDI;
 
-  SetupSpeedBar(frame);
-
   TStatusBar* sb = new TStatusBar(frame, TGadget::Recessed,
                                   TStatusBar::CapsLock        |
                                   TStatusBar::NumLock         |
                                   TStatusBar::ScrollLock);
   frame->Insert(*sb, TDecoratedFrame::Bottom);
+
+  SetupSpeedBar(frame);
 
   SetMainWindow(frame);
 
@@ -302,7 +302,7 @@ void TApxOleApp::EvNewView(TView& view)
     if (mdiClient) {
       TApxOleMDIChild* child = new TApxOleMDIChild(*mdiClient, 0, 0);
 
-      // Associate ICON w/ this child window.
+      // Assign icons for this child window.
       //
       child->SetIcon(this, IDI_DOC);
       child->SetIconSm(this, IDI_DOC);

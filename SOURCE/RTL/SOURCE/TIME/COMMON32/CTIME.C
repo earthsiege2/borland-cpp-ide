@@ -8,20 +8,23 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #ifdef _MT
 #include <_thread.h>
 #endif
+#include <ctype.h>
 #include <time.h>
-#include <_time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <_tchar.h>
+#include <_time.h>
 
 #ifdef _MT
 
@@ -29,36 +32,47 @@
 
 #else
 
-static char ascbuf[26];
+static _TCHAR ascbuf[26];
 
 #endif
 
 /*------------------------------------------------------------------------*
 
-Name            _atime - converts date and time to ASCII without trailing '\n'
+Name            _tatime used as:
+                _atime
+                _watime   - converts date and time to (wide) character
+                            without trailing '\n'.
 
 Usage           #include <_time.h>
-                int _atime( char *dest, const struct tm *tmPtr, char *term );
+                int  _atime( char *dest, const struct tm *tmPtr,
+                             char *term );
+                int _watime( wchar_t *dest, const struct tm *tmPtr,
+                             wchar_t *term );
 
 Prototype       _time.h
 
-Description     Provides the basic formatting capabilities for asctime() and
-                strftime( "%c" ).  These two functions both provide an ASCII
-                version of the date and time in the struct tm, but asctime()
-                adds a newline to the end.  The term parameter contains
-                the string to be appended to the end of the time string:
-                typically either a newline (asctime) or an empty string
-                (strftime).
+Description     Provides the basic formatting capabilities for asctime(),
+                _wasctime(), strftime( "%c" ) and wcsftime( "%c ).
+                These functions provide a (wide) character version of the
+                date and time in the struct tm, but asctime() and
+                _wasctime() add a newline to the end.  The term parameter
+                contains the string to be appended to the end of the time
+                string: typically either a newline (asctime, _wasctime) or
+                an empty string (strftime, wcsftime).
 
 Return value    none
 
 *---------------------------------------------------------------------------*/
+#ifdef _UNICODE
+#undef _stprintf
+#define _stprintf wsprintfW
+#endif
 
-void _atime( char *dest, const struct tm *tmPtr, char *term )
+void _tatime( _TCHAR *dest, const struct tm *tmPtr, _TCHAR *term )
 {
-    sprintf( dest, "%s %s %02d %02d:%02d:%02d %4d%s",
-        _SWeekday[tmPtr->tm_wday],
-        _SMonth[tmPtr->tm_mon],
+     _stprintf( dest, _TEXT("%s %s %02d %02d:%02d:%02d %4d%s"),
+        _tSWeekday[tmPtr->tm_wday],
+        _tSMonth[tmPtr->tm_mon],
         tmPtr->tm_mday,
         tmPtr->tm_hour,
         tmPtr->tm_min,
@@ -71,42 +85,48 @@ void _atime( char *dest, const struct tm *tmPtr, char *term )
 
 /*------------------------------------------------------------------------*
 
-Name            asctime   - converts date and time to ASCII
-                ctime     - converts date and time to a string
+Name            _tasctime and _tctime, used as:
+                  asctime - converts date and time to ASCII
+                _wasctime - converts date and time to wide character
+                  ctime   - converts date and time to a string
+                _wctime   - converts date and time to a wide char string
 
 Usage           #include <time.h>
-                char *asctime(struct tm *tmX);
-                char *ctime(long *clock);
+                char    *   asctime(struct tm *tmX);
+                wchar_t * _wasctime(struct tm *tmX);
+                char    *   ctime(long *clock);
+                wchar_t * _wctime(long *clock);
 
 Prototype in    time.h
 
-Description     asctime  converts  a  time  stored  as  a  structure  to  a
-                26-character string in the following form:
+Description     asctime and _wasctime convert a time stored as a structure
+                to a 26 (wide) character string in the following form:
 
                 Mon Nov 21 11:31:54 1983\n\0
 
                 All the fields have a constant width.
 
-                ctime converts a time pointed to by clock (such as returned
-                by the function time) to  a 26-character string of the form
-                described above.
+                ctime and _wctime convert a time pointed to by clock (such
+                as returned by the function time) to a 26 (wide) character
+                string of the form described above.
 
-Return value    asctime and ctime return a  pointer to the character string
-                containing the date and time. This string is a static which
-                is overwritten with each call.
+Return value    asctime, _wasctime, ctime and _wctime return a pointer to
+                the (wide) character string containing the date and time.
+                This string is a static which is overwritten with each call.
 
 *---------------------------------------------------------------------------*/
 
-char * _RTLENTRY _EXPFUNC asctime(const struct tm *tmPtr)
+_TCHAR * _RTLENTRY _EXPFUNC _tasctime(const struct tm *tmPtr)
 {
-    char *a;
+    _TCHAR *a;
 
-    a = ascbuf;
-    _atime(a, tmPtr, "\n");  /* ASCII time + terminating newline */
+    a = (_TCHAR*)ascbuf;
+    _tatime(a, tmPtr, _TEXT("\n"));  /* ASCII time + terminating newline */
     return(a);
 }
 
-char * _RTLENTRY _EXPFUNC ctime(const time_t *clock)
+_TCHAR * _RTLENTRY _EXPFUNC _tctime(const time_t *clock)
 {
-    return(asctime(localtime(clock)));
+    return(_tasctime(localtime(clock)));
 }
+

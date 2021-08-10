@@ -4,6 +4,7 @@
 
   BLAKJACK.RC
 *****************************************************************************/
+#include <owl/except.rc>
 
 #include "card.rh"
 BJ_ICO ICON "blakjack.ico"

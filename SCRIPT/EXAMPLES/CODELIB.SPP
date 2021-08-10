@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // CODELIB.SPP: Code Library. Displays libraries of code snippets you can
 //   insert in the current buffer. You can also edit code library data
@@ -17,7 +17,7 @@
 //
 // NOTES: All code*.* files must reside in the same directory.
 //--------------------------------------------------------------------------
-print "codelib.spp";
+print typeid(module());
 
 //
 // IDE imports.
@@ -29,9 +29,9 @@ import editor;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
-if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
-if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+if (!scriptEngine.IsLoaded("msg")) scriptEngine.Load("msg");
+if (!scriptEngine.IsLoaded("file")) scriptEngine.Load("file");
+if (!scriptEngine.IsLoaded("misc")) scriptEngine.Load("misc");
 
 //
 // Constants for the list windows.
@@ -55,7 +55,7 @@ EntryMarker;  // String used to separate library entries.
 NumEntries;   // Number of items in the list window that are library entries.
 CurLib;       // Index of the current library.
 
-ModuleDir = GetModuleDir("codelib.spp");  // Directory of this script.
+ModuleDir = GetModuleDir(typeid(module()));  // Directory of this script.
 
 //
 // Create a list window to display the code libraries.

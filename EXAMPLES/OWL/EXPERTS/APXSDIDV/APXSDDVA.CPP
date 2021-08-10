@@ -5,7 +5,7 @@
 //
 //  SUBSYSTEM:    ApxSdiDv Application
 //  FILE:         apxsddva.cpp
-//  AUTHOR:       
+//  AUTHOR:
 //
 //  OVERVIEW
 //  ~~~~~~~~
@@ -157,7 +157,7 @@ void TApxSdiDvApp::InitMainWindow()
   //
   frame->Attr.ExStyle |= WS_EX_ACCEPTFILES;
 
-  // Assign ICON w/ this application.
+  // Assign icons for this application.
   //
   frame->SetIcon(this, IDI_SDIAPPLICATION);
   frame->SetIconSm(this, IDI_SDIAPPLICATION);
@@ -170,13 +170,13 @@ void TApxSdiDvApp::InitMainWindow()
   //
   frame->Attr.AccelTable = IDM_SDI;
 
-  SetupSpeedBar(frame);
-
   TStatusBar* sb = new TStatusBar(frame, TGadget::Recessed,
                                   TStatusBar::CapsLock        |
                                   TStatusBar::NumLock         |
                                   TStatusBar::ScrollLock);
   frame->Insert(*sb, TDecoratedFrame::Bottom);
+
+  SetupSpeedBar(frame);
 
   SetMainWindow(frame);
 

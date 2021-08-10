@@ -279,7 +279,7 @@ void TVarRec::GetAsString( string& s )
 	}
 }
 
-void TVarRec::SetAsString( string& s )
+void TVarRec::SetAsString( const string& s )
 {
 	if (lpvar)
 	{
@@ -546,3 +546,4 @@ void TVarRecs::GetItems( int i, TVarRec& v )
 	if (lpvar && i < count)
 		v.SetVariant( lpvar+i );
 }
+

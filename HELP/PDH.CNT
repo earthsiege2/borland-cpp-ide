@@ -1,0 +1,4 @@
+:TITLE Microsoft Windows Performance Data Helper Reference
+:INDEX Microsoft Windows Performance Data Helper Reference = pdh.hlp
+:INCLUDE WIN32SDK.CFG
+:INCLUDE PDH.TOC

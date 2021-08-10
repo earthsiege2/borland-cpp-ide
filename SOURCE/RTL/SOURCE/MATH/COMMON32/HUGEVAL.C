@@ -8,12 +8,13 @@
 #include <_defs.h>
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 /*--------------------------------------------------------------------------*
 
@@ -29,6 +30,10 @@ are not considered representable.  It is perfectly valid to
 consider these representable, just not traditional.  For some
 applications it is indeed preferable, and it may be the default
 for some future release of Turbo C.
+
+Note that HUGE_VAL is now represented as +INF.  This allows for better
+error detection and is compatible with most other platforms.  It is
+explicitly allowed by ANSI on platforms that support it.
 
 Approximate decimal values are:
 
@@ -48,7 +53,7 @@ Its value is the NAN preferred by the 8087 chip.
 
 *---------------------------------------------------------------------------*/
 
-#define UsingINF    0
+#define UsingINF    1
 
 #if UsingINF
 
@@ -56,6 +61,10 @@ Its value is the NAN preferred by the 8087 chip.
 unsigned short _RTLENTRY _EXPDATA _huge_flt[] = { 0, 0x7F80 };
 unsigned short _RTLENTRY _EXPDATA _huge_dble[] = { 0, 0, 0, 0x7FF0 };
 unsigned short _RTLENTRY _EXPDATA _huge_ldble[] = { 0, 0, 0, 0x8000, 0x7FFF };
+
+unsigned short _RTLENTRY _EXPDATA _max_flt[] = { -1, 0x7F7F };
+unsigned short _RTLENTRY _EXPDATA _max_dble[] = { -1, -1, -1, 0x7FEF };
+unsigned short _RTLENTRY _EXPDATA _max_ldble[] = { -1, -1, -1, -1, 0x7FFE };
 
 #else
 

@@ -2,6 +2,7 @@
 */
 /********************************************************************/
 /**                     Microsoft LAN Manager                      **/
+/**               Copyright(c) Microsoft Corp., 1987-1996          **/
 /********************************************************************/
 
 /***    lmerr.h - network error definitions
@@ -18,21 +19,21 @@
 
 /**END_INTERNAL**/
 
-/* $Copyright: 1994$ */
-
 /*NOINC*/
 #ifndef NETERR_INCLUDED
 
 #define NETERR_INCLUDED
-#define __LMERR_H
-
 /*INC*/
 
+/* $Copyright: 1997$ */
+#pragma option -b
 
 #define NERR_Success            0       /* Success */
 
 // ERROR_ equates can be intermixed with NERR_ equates.
+#pragma option -b
 #include <winerror.h>
+#pragma option -b.
 
 
 
@@ -283,6 +284,7 @@
 #define NERR_DeviceShareConflict (NERR_BASE+218) /* This device cannot be shared as both a spooled and a non-spooled resource. */
 #define NERR_BrowserTableIncomplete (NERR_BASE+219)  /* The information in the list of servers may be incorrect. */
 #define NERR_NotLocalDomain     (NERR_BASE+220) /* The computer is not active in this domain. */
+#define NERR_IsDfsShare         (NERR_BASE+221) /* The share must be removed from the Distributed File System before it can be deleted. */
 
 /*
  *      CharDev API related
@@ -532,6 +534,30 @@
 
 /**INTERNAL_ONLY**/
 
+/*
+ *  Dfs API error codes.
+ *
+ *          NERR_BASE + (560-590)
+ */
+
+#define NERR_DfsInternalCorruption         (NERR_BASE+560) /*The internal database maintained by the Dfs service is corrupt*/
+#define NERR_DfsVolumeDataCorrupt          (NERR_BASE+561) /*One of the records in the internal Dfs database is corrupt*/
+#define NERR_DfsNoSuchVolume               (NERR_BASE+562) /*There is no volume whose entry path matches the input Entry Path*/
+#define NERR_DfsVolumeAlreadyExists        (NERR_BASE+563) /*A volume with the given name already exists*/
+#define NERR_DfsAlreadyShared              (NERR_BASE+564) /*The server share specified is already shared in the Dfs*/
+#define NERR_DfsNoSuchShare                (NERR_BASE+565) /*The indicated server share does not support the indicated Dfs volume*/
+#define NERR_DfsNotALeafVolume             (NERR_BASE+566) /*The operation is not valid on a non-leaf volume*/
+#define NERR_DfsLeafVolume                 (NERR_BASE+567) /*The operation is not valid on a leaf volume*/
+#define NERR_DfsVolumeHasMultipleServers   (NERR_BASE+568) /*The operation is ambiguous because the volume has multiple servers*/
+#define NERR_DfsCantCreateJunctionPoint    (NERR_BASE+569) /*Unable to create a junction point*/
+#define NERR_DfsServerNotDfsAware          (NERR_BASE+570) /*The server is not Dfs Aware*/
+#define NERR_DfsBadRenamePath              (NERR_BASE+571) /*The specified rename target path is invalid*/
+#define NERR_DfsVolumeIsOffline            (NERR_BASE+572) /*The specified Dfs volume is offline*/
+#define NERR_DfsNoSuchServer               (NERR_BASE+573) /*The specified server is not a server for this volume*/
+#define NERR_DfsCyclicalName               (NERR_BASE+574) /*A cycle in the Dfs name was detected*/
+#define NERR_DfsNotSupportedInServerDfs    (NERR_BASE+575) /*The operation is not supported on a server-based Dfs*/
+#define NERR_DfsInternalError              (NERR_BASE+590) /*Dfs internal error*/
+
 /***********WARNING ****************
  *The range 2750-2799 has been     *
  *allocated to the IBM LAN Server  *
@@ -555,6 +581,6 @@
 
 
 /*NOINC*/
+#pragma option -b.
 #endif /* NETERR_INCLUDED */
 /*INC*/
-

@@ -1,0 +1,4 @@
+:TITLE Microsoft Multimedia Programmer's Reference
+:INDEX Microsoft Multimedia Programmer's Reference = Mmedia.hlp
+:INCLUDE WIN32SDK.CFG
+:INCLUDE MMEDIA.TOC

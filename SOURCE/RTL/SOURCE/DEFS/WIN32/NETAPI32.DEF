@@ -3,22 +3,34 @@ EXPORTS
 
     I_BrowserDebugCall
     I_BrowserDebugTrace
+    I_BrowserQueryEmulatedDomains
     I_BrowserQueryOtherDomains
     I_BrowserQueryStatistics
     I_BrowserResetNetlogonState
     I_BrowserResetStatistics
     I_BrowserServerEnum
+    I_BrowserSetNetlogonState
     I_NetAccountDeltas
     I_NetAccountSync
     I_NetDatabaseDeltas
     I_NetDatabaseRedo
-    I_NetDatabaseSync2
     I_NetDatabaseSync
+    I_NetDatabaseSync2
+    I_NetDfsCreateExitPoint
+    I_NetDfsCreateLocalPartition
+    I_NetDfsDeleteExitPoint
+    I_NetDfsDeleteLocalPartition
+    I_NetDfsFixLocalVolume
+    I_NetDfsGetVersion
+    I_NetDfsIsThisADomainName
+    I_NetDfsModifyPrefix
+    I_NetDfsSetLocalVolumeState
+    I_NetDfsSetServerInfo
     I_NetGetDCList
     I_NetListCanonicalize
     I_NetListTraverse
-    I_NetLogonControl2
     I_NetLogonControl
+    I_NetLogonControl2
     I_NetLogonSamLogoff
     I_NetLogonSamLogon
     I_NetLogonUasLogoff
@@ -29,11 +41,12 @@ EXPORTS
     I_NetPathCanonicalize
     I_NetPathCompare
     I_NetPathType
-    I_NetServerAuthenticate2
     I_NetServerAuthenticate
+    I_NetServerAuthenticate2
     I_NetServerPasswordSet
     I_NetServerReqChallenge
     I_NetServerSetServiceBits
+    I_NetServerSetServiceBitsEx
     NetAlertRaise
     NetAlertRaiseEx
     NetApiBufferAllocate
@@ -48,6 +61,15 @@ EXPORTS
     NetConfigGetAll
     NetConfigSet
     NetConnectionEnum
+    NetDfsAdd
+    NetDfsEnum
+    NetDfsGetInfo
+    NetDfsManagerGetConfigInfo
+    NetDfsMove
+    NetDfsRemove
+    NetDfsRename
+    NetDfsSetInfo
+    NetEnumerateTrustedDomains
     NetErrorLogClear
     NetErrorLogRead
     NetErrorLogWrite
@@ -56,6 +78,7 @@ EXPORTS
     NetFileGetInfo
     NetGetAnyDCName
     NetGetDCName
+    NetGetDisplayInformationIndex
     NetGroupAdd
     NetGroupAddUser
     NetGroupDel
@@ -67,8 +90,10 @@ EXPORTS
     NetGroupSetUsers
     NetLocalGroupAdd
     NetLocalGroupAddMember
+    NetLocalGroupAddMembers
     NetLocalGroupDel
     NetLocalGroupDelMember
+    NetLocalGroupDelMembers
     NetLocalGroupEnum
     NetLocalGroupGetInfo
     NetLocalGroupGetMembers
@@ -79,6 +104,7 @@ EXPORTS
     NetMessageNameDel
     NetMessageNameEnum
     NetMessageNameGetInfo
+    NetQueryDisplayInformation
     NetRemoteComputerSupports
     NetRemoteTOD
     NetReplExportDirAdd
@@ -129,11 +155,15 @@ EXPORTS
     NetScheduleJobDel
     NetScheduleJobEnum
     NetScheduleJobGetInfo
+    NetServerComputerNameAdd
+    NetServerComputerNameDel
     NetServerDiskEnum
     NetServerEnum
+    NetServerEnumEx
     NetServerGetInfo
     NetServerSetInfo
     NetServerTransportAdd
+    NetServerTransportAddEx
     NetServerTransportDel
     NetServerTransportEnum
     NetServiceControl
@@ -157,6 +187,7 @@ EXPORTS
     NetUseEnum
     NetUseGetInfo
     NetUserAdd
+    NetUserChangePassword
     NetUserDel
     NetUserEnum
     NetUserGetGroups
@@ -176,9 +207,12 @@ EXPORTS
     NetWkstaUserSetInfo
     NetapipBufferAllocate
     Netbios
+    NetpAccessCheck
     NetpAccessCheckAndAudit
     NetpAllocConfigName
+    NetpAllocStrFromStr
     NetpAllocStrFromWStr
+    NetpAllocTStrFromString
     NetpAllocWStrFromStr
     NetpAllocWStrFromWStr
     NetpApiStatusToNtStatus
@@ -240,3 +274,5 @@ EXPORTS
     RxNetServerEnum
     RxNetUserPasswordSet
     RxRemoteApi
+    _NetpDbgPrint                            = NetpDbgPrint
+    _RxRemoteApi                             = RxRemoteApi

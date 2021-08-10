@@ -1,0 +1,1648 @@
+LIBRARY CP3230MT INITINSTANCE
+
+DESCRIPTION 'Borland C++ DLL Multi-thread Runtime library'
+
+DATA MULTIPLE NONSHARED
+
+EXPORTS
+    @$badd$qpxcrx6string           @498 ; operator +(const char*,const string&)
+    @$bdele$qpv                    @406 ; operator delete(void*)
+    @$bdiv$qdrx7complex            @1020; operator /(double,const complex&)
+    @$bdiv$qrx7complext1           @1019; operator /(const complex&,const complex&)
+    @$bdla$qpv                     @407 ; operator delete[](void*)
+    @$blsh$qr7ostreamrx3bcd        @1063; operator <<(ostream&,const bcd&)
+    @$blsh$qr7ostreamrx6string     @520 ; operator <<(ostream&,const string&)
+    @$blsh$qr7ostreamrx7complex    @1038; operator <<(ostream&,const complex&)
+    @$bmul$qrx7complext1           @1017; operator *(const complex&,const complex&)
+    @$bnew$qui                     @408 ; operator new(unsigned int)
+    @$bnew$quipv                   @413 ; operator new(unsigned int,void*)
+    @$bnwa$qui                     @410 ; operator new[](unsigned int)
+    @$bnwa$quipv                   @414 ; operator new[](unsigned int,void*)
+    @$brsh$qr7istreamr3bcd         @370 ; operator >>(istream&,bcd&)
+    @$brsh$qr7istreamr6string      @519 ; operator >>(istream&,string&)
+    @$brsh$qr7istreamr7complex     @405 ; operator >>(istream&,complex&)
+    @TDiagBase@Message$qpxct1t1t1ul @453 ; TDiagBase::Message(const char*,const char*,const char*,const char*,unsigned long)
+    @TDiagBase@Out                 @450 ; TDiagBase::Out
+    @TDiagBase@Output$qpxc         @454 ; TDiagBase::Output(const char*)
+    @TDiagBase@Trace$qpxct1t1ul    @451 ; TDiagBase::Trace(const char*,const char*,const char*,unsigned long)
+    @TDiagBase@Warn$qpxct1t1ul     @452 ; TDiagBase::Warn(const char*,const char*,const char*,unsigned long)
+    @TDiagGroupDef@Flags           @458 ; TDiagGroupDef::Flags
+    @TDiagGroupDef@Name            @459 ; TDiagGroupDef::Name
+    @TDiagGroupDef@Trace$qucpxct2ul @456 ; TDiagGroupDef::Trace(unsigned char,const char*,const char*,unsigned long)
+    @TDiagGroupDef@Warn$qucpxct2ul @457 ; TDiagGroupDef::Warn(unsigned char,const char*,const char*,unsigned long)
+    @TRegexp@$basg$qpxc            @492 ; TRegexp::operator =(const char*)
+    @TRegexp@$basg$qrx7TRegexp     @491 ; TRegexp::operator =(const TRegexp&)
+    @TRegexp@$bctr$qpxc            @500 ; TRegexp::TRegexp(const char*)
+    @TRegexp@$bctr$qrx7TRegexp     @501 ; TRegexp::TRegexp(const TRegexp&)
+    @TRegexp@$bdtr$qv              @502 ; TRegexp::~TRegexp()
+    @TRegexp@copy_pattern$qrx7TRegexp @503 ; TRegexp::copy_pattern(const TRegexp&)
+    @TRegexp@find$xqrx6stringpuiui @479 ; TRegexp::find(const string&,unsigned int*,unsigned int) const
+    @TRegexp@gen_pattern$qpxc      @504 ; TRegexp::gen_pattern(const char*)
+    @TRegexp@maxpat                @505 ; TRegexp::maxpat
+    @TRegexp@status$qv             @513 ; TRegexp::status()
+    @TStringRef@$bctr$qcui         @472 ; TStringRef::TStringRef(char,unsigned int)
+    @TStringRef@$bctr$qp11HINSTANCE__uii @648 ; TStringRef::TStringRef(HINSTANCE__*,unsigned int,int)
+    @TStringRef@$bctr$qpxcuit1uiui @540 ; TStringRef::TStringRef(const char*,unsigned int,const char*,unsigned int,unsigned int)
+    @TStringRef@$bdtr$qv           @541 ; TStringRef::~TStringRef()
+    @TStringRef@check_freeboard$qv @543 ; TStringRef::check_freeboard()
+    @TStringRef@grow_to$qui        @544 ; TStringRef::grow_to(unsigned int)
+    @TStringRef@read_to_delim$qr7istreamc @523 ; TStringRef::read_to_delim(istream&,char)
+    @TStringRef@read_token$qr7istream @524 ; TStringRef::read_token(istream&)
+    @TStringRef@reserve$qui        @542 ; TStringRef::reserve(unsigned int)
+    @TStringRef@round_capacity$qui @545 ; TStringRef::round_capacity(unsigned int)
+    @TStringRef@splice$quiuipxcui  @546 ; TStringRef::splice(unsigned int,unsigned int,const char*,unsigned int)
+    @TSubString@$basg$qrx6string   @490 ; TSubString::operator =(const string&)
+    @TSubString@$bcall$qui         @494 ; TSubString::operator ()(unsigned int)
+    @TSubString@$beql$xqpxc        @497 ; TSubString::operator ==(const char*) const
+    @TSubString@assert_element$xqui @547 ; TSubString::assert_element(unsigned int) const
+    @TSubString@to_lower$qv        @555 ; TSubString::to_lower()
+    @TSubString@to_upper$qv        @556 ; TSubString::to_upper()
+    @_CatchCleanup$qv              @428 ; _CatchCleanup()
+    @_ReThrowException$quipuc      @427 ; _ReThrowException(unsigned int,unsigned char*)
+    @_ThrowExceptionLDTC$qpvt1t1t1uiuiuipuct1 @397 ; _ThrowExceptionLDTC(void*,void*,void*,void*,unsigned int,unsigned int,unsigned int,unsigned char*,void*)
+    @__DynamicCast$qpvt1t1t1i      @425 ; __DynamicCast(void*,void*,void*,void*,int)
+    @__DynamicCastVCLptr$qqrpvt1   @401 ; __DynamicCastVCLptr(void*,void*) __fastcall
+    @__DynamicCastVCLref$qqrpvt1   @400 ; __DynamicCastVCLref(void*,void*) __fastcall
+    @__GetTypeInfo$qpvt1t1t1       @424 ; __GetTypeInfo(void*,void*,void*,void*)
+    @__ThrowExceptionName$qv       @436 ; __ThrowExceptionName()
+    @__ThrowFileName$qv            @434 ; __ThrowFileName()
+    @__ThrowLineNumber$qv          @435 ; __ThrowLineNumber()
+    @__lockDebuggerData$qv         @394 ; __lockDebuggerData()
+    @__unlockDebuggerData$qv       @395 ; __unlockDebuggerData()
+    @_cast_memptr$qpvt1uiuiui      @371 ; _cast_memptr(void*,void*,unsigned int,unsigned int,unsigned int)
+    @_vector_apply_$qpvt1uiuiuit1  @411 ; _vector_apply_(void*,void*,unsigned int,unsigned int,unsigned int,void*)
+    @_vector_vapply_$qpvt1uiuiuit1 @412 ; _vector_vapply_(void*,void*,unsigned int,unsigned int,unsigned int,void*)
+    @_wmemchr$qpviui               @107 ; _wmemchr(void*,int,unsigned int)
+    @_wmemchr$qpxviui              @106 ; _wmemchr(const void*,int,unsigned int)
+    @abs$qrx7complex               @1014; abs(const complex&)
+    @acos$qrx7complex              @1021; acos(const complex&)
+    @arg$qrx7complex               @1022; arg(const complex&)
+    @asin$qrx7complex              @1023; asin(const complex&)
+    @atan$qrx7complex              @1024; atan(const complex&)
+    @complex@$brdiv$qrx7complex    @1018; complex::operator /=(const complex&)
+    @complex@$brmul$qrx7complex    @1016; complex::operator *=(const complex&)
+    @conbuf@$bctr$qv               @372 ; conbuf::conbuf()
+    @conbuf@current                @377 ; conbuf::current
+    @conbuf@makeActive$qv          @374 ; conbuf::makeActive()
+    @conbuf@makeInactive$qv        @375 ; conbuf::makeInactive()
+    @conbuf@overflow$qi            @373 ; conbuf::overflow(int)
+    @conbuf@swap$qv                @376 ; conbuf::swap()
+    @constream@$bctr$qv            @378 ; constream::constream()
+    @constream@isCon_              @379 ; constream::isCon_
+    @cos$qrx7complex               @1025; cos(const complex&)
+    @cosh$qrx7complex              @1026; cosh(const complex&)
+    @dec$qr3ios                    @840 ; dec(ios&)
+    @endl$qr7ostream               @767 ; endl(ostream&)
+    @ends$qr7ostream               @768 ; ends(ostream&)
+    @exp$qrx7complex               @1027; exp(const complex&)
+    @filebuf@$bctr$qi              @656 ; filebuf::filebuf(int)
+    @filebuf@$bctr$qipci           @657 ; filebuf::filebuf(int,char*,int)
+    @filebuf@$bctr$qv              @655 ; filebuf::filebuf()
+    @filebuf@$bdtr$qv              @659 ; filebuf::~filebuf()
+    @filebuf@attach$qi             @653 ; filebuf::attach(int)
+    @filebuf@close$qv              @654 ; filebuf::close()
+    @filebuf@lock$qv               @868 ; filebuf::lock()
+    @filebuf@open$qpxcii           @661 ; filebuf::open(const char*,int,int)
+    @filebuf@openprot              @658 ; filebuf::openprot
+    @filebuf@overflow$qi           @660 ; filebuf::overflow(int)
+    @filebuf@seekoff$ql12ios@seek_diri @663 ; filebuf::seekoff(long,ios::seek_dir)
+    @filebuf@setbuf$qpci           @662 ; filebuf::setbuf(char*,int)
+    @filebuf@sync$qv               @664 ; filebuf::sync()
+    @filebuf@underflow$qv          @665 ; filebuf::underflow()
+    @filebuf@unlock$qv             @869 ; filebuf::unlock()
+    @flush$qr7ostream              @776 ; flush(ostream&)
+    @fstream@$bctr$qi              @681 ; fstream::fstream(int)
+    @fstream@$bctr$qipci           @682 ; fstream::fstream(int,char*,int)
+    @fstream@$bctr$qpxcii          @680 ; fstream::fstream(const char*,int,int)
+    @fstream@$bctr$qv              @679 ; fstream::fstream()
+    @fstream@$bdtr$qv              @683 ; fstream::~fstream()
+    @fstreambase@$bctr$qi          @669 ; fstreambase::fstreambase(int)
+    @fstreambase@$bctr$qipci       @670 ; fstreambase::fstreambase(int,char*,int)
+    @fstreambase@$bctr$qpxcii      @668 ; fstreambase::fstreambase(const char*,int,int)
+    @fstreambase@$bctr$qv          @667 ; fstreambase::fstreambase()
+    @fstreambase@$bdtr$qv          @671 ; fstreambase::~fstreambase()
+    @fstreambase@attach$qi         @652 ; fstreambase::attach(int)
+    @fstreambase@close$qv          @666 ; fstreambase::close()
+    @fstreambase@open$qpxcii       @672 ; fstreambase::open(const char*,int,int)
+    @fstreambase@setbuf$qpci       @673 ; fstreambase::setbuf(char*,int)
+    @getline$qr7istreamr6string    @521 ; getline(istream&,string&)
+    @getline$qr7istreamr6stringc   @522 ; getline(istream&,string&,char)
+    @hex$qr3ios                    @849 ; hex(ios&)
+    @ifstream@$bctr$qi             @676 ; ifstream::ifstream(int)
+    @ifstream@$bctr$qipci          @677 ; ifstream::ifstream(int,char*,int)
+    @ifstream@$bctr$qpxcii         @675 ; ifstream::ifstream(const char*,int,int)
+    @ifstream@$bctr$qv             @674 ; ifstream::ifstream()
+    @ifstream@$bdtr$qv             @678 ; ifstream::~ifstream()
+    @ios@$bctr$qp9streambuf        @839 ; ios::ios(streambuf*)
+    @ios@$bctr$qv                  @838 ; ios::ios()
+    @ios@$bdtr$qv                  @844 ; ios::~ios()
+    @ios@adjustfield               @842 ; ios::adjustfield
+    @ios@basefield                 @841 ; ios::basefield
+    @ios@bitalloc$qv               @835 ; ios::bitalloc()
+    @ios@clear$qi                  @837 ; ios::clear(int)
+    @ios@flags$ql                  @848 ; ios::flags(long)
+    @ios@floatfield                @843 ; ios::floatfield
+    @ios@init$qp9streambuf         @850 ; ios::init(streambuf*)
+    @ios@iword$qi                  @851 ; ios::iword(int)
+    @ios@nextbit                   @846 ; ios::nextbit
+    @ios@pword$qi                  @855 ; ios::pword(int)
+    @ios@setf$ql                   @856 ; ios::setf(long)
+    @ios@setf$qll                  @857 ; ios::setf(long,long)
+    @ios@setstate$qi               @858 ; ios::setstate(int)
+    @ios@skip$qi                   @859 ; ios::skip(int)
+    @ios@stdioflush                @845 ; ios::stdioflush
+    @ios@sync_with_stdio$qv        @860 ; ios::sync_with_stdio()
+    @ios@tie$qp7ostream            @861 ; ios::tie(ostream*)
+    @ios@unsetf$ql                 @862 ; ios::unsetf(long)
+    @ios@usercount                 @847 ; ios::usercount
+    @ios@usersize$qi               @863 ; ios::usersize(int)
+    @ios@xalloc$qv                 @864 ; ios::xalloc()
+    @iostream@$bctr$qp9streambuf   @689 ; iostream::iostream(streambuf*)
+    @iostream@$bctr$qv             @690 ; iostream::iostream()
+    @iostream@$bdtr$qv             @692 ; iostream::~iostream()
+    @iostream_withassign@$basg$qp9streambuf @688 ; iostream_withassign::operator =(streambuf*)
+    @iostream_withassign@$basg$qr3ios @687 ; iostream_withassign::operator =(ios&)
+    @iostream_withassign@$bctr$qv  @691 ; iostream_withassign::iostream_withassign()
+    @iostream_withassign@$bdtr$qv  @693 ; iostream_withassign::~iostream_withassign()
+    @istream@$bctr$qiip7ostream    @743 ; istream::istream(int,int,ostream*)
+    @istream@$bctr$qipci           @742 ; istream::istream(int,char*,int)
+    @istream@$bctr$qp9streambuf    @708 ; istream::istream(streambuf*)
+    @istream@$bctr$qp9streambufip7ostream @709 ; istream::istream(streambuf*,int,ostream*)
+    @istream@$bctr$qv              @707 ; istream::istream()
+    @istream@$bdtr$qv              @713 ; istream::~istream()
+    @istream@$brsh$qp9streambuf    @716 ; istream::operator >>(streambuf*)
+    @istream@$brsh$qpc             @717 ; istream::operator >>(char*)
+    @istream@$brsh$qpqr3ios$r3ios  @735 ; istream::operator >>(ios&(*)(ios&))
+    @istream@$brsh$qr4bool         @875 ; istream::operator >>(bool&)
+    @istream@$brsh$qrc             @720 ; istream::operator >>(char&)
+    @istream@$brsh$qrd             @865 ; istream::operator >>(double&)
+    @istream@$brsh$qrf             @867 ; istream::operator >>(float&)
+    @istream@$brsh$qrg             @866 ; istream::operator >>(long double&)
+    @istream@$brsh$qri             @718 ; istream::operator >>(int&)
+    @istream@$brsh$qrj             @970 ; istream::operator >>(...
+    @istream@$brsh$qrl             @719 ; istream::operator >>(long&)
+    @istream@$brsh$qrs             @722 ; istream::operator >>(short&)
+    @istream@$brsh$qruc            @723 ; istream::operator >>(unsigned char&)
+    @istream@$brsh$qrui            @724 ; istream::operator >>(unsigned int&)
+    @istream@$brsh$qruj            @971 ; istream::operator >>(unsigned ...
+    @istream@$brsh$qrul            @725 ; istream::operator >>(unsigned long&)
+    @istream@$brsh$qrus            @726 ; istream::operator >>(unsigned short&)
+    @istream@$brsh$qrzc            @721 ; istream::operator >>(signed char&)
+    @istream@do_get$qv             @711 ; istream::do_get()
+    @istream@eatwhite$qv           @715 ; istream::eatwhite()
+    @istream@get$qpcic             @732 ; istream::get(char*,int,char)
+    @istream@get$qr9streambufc     @727 ; istream::get(streambuf&,char)
+    @istream@get$qrc               @730 ; istream::get(char&)
+    @istream@get$qruc              @733 ; istream::get(unsigned char&)
+    @istream@get$qrzc              @731 ; istream::get(signed char&)
+    @istream@get$qv                @728 ; istream::get()
+    @istream@getline$qpcic         @729 ; istream::getline(char*,int,char)
+    @istream@ignore$qii            @734 ; istream::ignore(int,int)
+    @istream@ipfx$qi               @712 ; istream::ipfx(int)
+    @istream@putback$qc            @736 ; istream::putback(char)
+    @istream@read$qpci             @737 ; istream::read(char*,int)
+    @istream@seekg$ql              @739 ; istream::seekg(long)
+    @istream@seekg$ql12ios@seek_dir @738 ; istream::seekg(long,ios::seek_dir)
+    @istream@tellg$qv              @740 ; istream::tellg()
+    @istream_withassign@$basg$qp9streambuf @706 ; istream_withassign::operator =(streambuf*)
+    @istream_withassign@$basg$qr7istream @705 ; istream_withassign::operator =(istream&)
+    @istream_withassign@$bctr$qv   @710 ; istream_withassign::istream_withassign()
+    @istream_withassign@$bdtr$qv   @714 ; istream_withassign::~istream_withassign()
+    @istrstream@$bctr$qpc          @698 ; istrstream::istrstream(char*)
+    @istrstream@$bctr$qpci         @701 ; istrstream::istrstream(char*,int)
+    @istrstream@$bctr$qpuc         @700 ; istrstream::istrstream(unsigned char*)
+    @istrstream@$bctr$qpuci        @703 ; istrstream::istrstream(unsigned char*,int)
+    @istrstream@$bctr$qpzc         @699 ; istrstream::istrstream(signed char*)
+    @istrstream@$bctr$qpzci        @702 ; istrstream::istrstream(signed char*,int)
+    @istrstream@$bdtr$qv           @704 ; istrstream::~istrstream()
+    @lock$qr3ios                   @852 ; lock(ios&)
+    @log$qrx7complex               @1028; log(const complex&)
+    @log10$qrx7complex             @1029; log10(const complex&)
+    @memchr$qpviui                 @104 ; memchr(void*,int,unsigned int)
+    @memchr$qpxviui                @105 ; memchr(const void*,int,unsigned int)
+    @norm$qrx7complex              @1015; norm(const complex&)
+    @oct$qr3ios                    @854 ; oct(ios&)
+    @ofstream@$bctr$qi             @752 ; ofstream::ofstream(int)
+    @ofstream@$bctr$qipci          @753 ; ofstream::ofstream(int,char*,int)
+    @ofstream@$bctr$qpxcii         @751 ; ofstream::ofstream(const char*,int,int)
+    @ofstream@$bctr$qv             @750 ; ofstream::ofstream()
+    @ofstream@$bdtr$qv             @754 ; ofstream::~ofstream()
+    @ostream@$bctr$qi              @785 ; ostream::ostream(int)
+    @ostream@$bctr$qipc            @786 ; ostream::ostream(int,char*)
+    @ostream@$bctr$qp9streambuf    @763 ; ostream::ostream(streambuf*)
+    @ostream@$bctr$qv              @762 ; ostream::ostream()
+    @ostream@$bdtr$qv              @765 ; ostream::~ostream()
+    @ostream@$blsh$q4bool          @876 ; ostream::operator <<(bool)
+    @ostream@$blsh$qc              @774 ; ostream::operator <<(char)
+    @ostream@$blsh$qd              @967 ; ostream::operator <<(double)
+    @ostream@$blsh$qg              @769 ; ostream::operator <<(long double)
+    @ostream@$blsh$qj              @968 ; ostream::operator <<(...
+    @ostream@$blsh$ql              @772 ; ostream::operator <<(long)
+    @ostream@$blsh$qp9streambuf    @771 ; ostream::operator <<(streambuf*)
+    @ostream@$blsh$qpqr3ios$r3ios  @775 ; ostream::operator <<(ios&(*)(ios&))
+    @ostream@$blsh$qpv             @780 ; ostream::operator <<(void*)
+    @ostream@$blsh$quj             @969 ; ostream::operator <<(unsigned ...
+    @ostream@$blsh$qul             @773 ; ostream::operator <<(unsigned long)
+    @ostream@do_opfx$qv            @777 ; ostream::do_opfx()
+    @ostream@do_osfx$qv            @778 ; ostream::do_osfx()
+    @ostream@flush$qv              @770 ; ostream::flush()
+    @ostream@outstr$qpxct1         @779 ; ostream::outstr(const char*,const char*)
+    @ostream@seekp$ql              @782 ; ostream::seekp(long)
+    @ostream@seekp$ql12ios@seek_dir @781 ; ostream::seekp(long,ios::seek_dir)
+    @ostream@tellp$qv              @783 ; ostream::tellp()
+    @ostream@write$qpxci           @784 ; ostream::write(const char*,int)
+    @ostream_withassign@$basg$qp9streambuf @761 ; ostream_withassign::operator =(streambuf*)
+    @ostream_withassign@$basg$qr7ostream @760 ; ostream_withassign::operator =(ostream&)
+    @ostream_withassign@$bctr$qv   @764 ; ostream_withassign::ostream_withassign()
+    @ostream_withassign@$bdtr$qv   @766 ; ostream_withassign::~ostream_withassign()
+    @ostrstream@$bctr$qpcii        @755 ; ostrstream::ostrstream(char*,int,int)
+    @ostrstream@$bctr$qpucii       @757 ; ostrstream::ostrstream(unsigned char*,int,int)
+    @ostrstream@$bctr$qpzcii       @756 ; ostrstream::ostrstream(signed char*,int,int)
+    @ostrstream@$bctr$qv           @758 ; ostrstream::ostrstream()
+    @ostrstream@$bdtr$qv           @759 ; ostrstream::~ostrstream()
+    @pow$qdrx7complex              @1031; pow(double,const complex&)
+    @pow$qrx7complexd              @1030; pow(const complex&,double)
+    @pow$qrx7complext1             @1032; pow(const complex&,const complex&)
+    @resetiosflags$ql              @744 ; resetiosflags(long)
+    @set_new_handler$qpqv$v        @409 ; set_new_handler(void(*)())
+    @setbase$qi                    @745 ; setbase(int)
+    @setfill$qi                    @748 ; setfill(int)
+    @setiosflags$ql                @746 ; setiosflags(long)
+    @setprecision$qi               @749 ; setprecision(int)
+    @setw$qi                       @747 ; setw(int)
+    @sin$qrx7complex               @1033; sin(const complex&)
+    @sinh$qrx7complex              @1034; sinh(const complex&)
+    @sqrt$qrx7complex              @1035; sqrt(const complex&)
+    @std@$blsh$qr7ostreamrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%% @1557; std::operator <<(ostream&,const std::basic_string<char,std::string_char_traits<char>>&)
+    @std@$brsh$qr7istreamr74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%% @1552; std::operator >>(istream&,std::basic_string<char,std::string_char_traits<char>>&)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$basg$qc @1632; std::basic_string<char,std::string_char_traits<char>>::operator =(char)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$basg$qpxc @1577; std::basic_string<char,std::string_char_traits<char>>::operator =(const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$basg$qrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%% @1558; std::basic_string<char,std::string_char_traits<char>>::operator =(const std::basic_string<char,std::string_char_traits<char>>&)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$bctr$qpxcrx18std@%allocator$tc% @1553; std::basic_string<char,std::string_char_traits<char>>::string_char_traits<char>>(const char*,const std::allocator<char>&)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$bctr$qpxct1rx18std@%allocator$tc% @1608; std::basic_string<char,std::string_char_traits<char>>::string_char_traits<char>>(const char*,const char*,const std::allocator<char>&)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$bctr$qpxcuirx18std@%allocator$tc% @1566; std::basic_string<char,std::string_char_traits<char>>::string_char_traits<char>>(const char*,unsigned int,const std::allocator<char>&)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$bctr$qrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%uiuirx18std@%allocator$tc% @1578; std::basic_string<char,std::string_char_traits<char>>::string_char_traits<char>>(const std::basic_string<char,std::string_char_traits<char>>&,int,const std::allocator<char>&)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$bctr$quicrx18std@%allocator$tc% @1554; std::basic_string<char,std::string_char_traits<char>>::string_char_traits<char>>(unsigned int,char,const std::allocator<char>&)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$brplu$qc @1629; std::basic_string<char,std::string_char_traits<char>>::operator +=(char)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$brplu$qpxc @1630; std::basic_string<char,std::string_char_traits<char>>::operator +=(const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$brplu$qrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%% @1631; std::basic_string<char,std::string_char_traits<char>>::operator +=(const std::basic_string<char,std::string_char_traits<char>>&)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@$bsubs$qui @1606; std::basic_string<char,std::string_char_traits<char>>::operator [](unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@append$qpxc @1627; std::basic_string<char,std::string_char_traits<char>>::append(const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@append$qpxct1 @1626; std::basic_string<char,std::string_char_traits<char>>::append(const char*,const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@append$qpxcui @1628; std::basic_string<char,std::string_char_traits<char>>::append(const char*,unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@append$qrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%uiui @1556; std::basic_string<char,std::string_char_traits<char>>::append(const std::basic_string<char,std::string_char_traits<char>>&,int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@assign$qpxc @1624; std::basic_string<char,std::string_char_traits<char>>::assign(const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@assign$qpxct1 @1622; std::basic_string<char,std::string_char_traits<char>>::assign(const char*,const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@assign$qpxcui @1625; std::basic_string<char,std::string_char_traits<char>>::assign(const char*,unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@assign$qrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%uiui @1576; std::basic_string<char,std::string_char_traits<char>>::assign(const std::basic_string<char,std::string_char_traits<char>>&,int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@assign$quic @1623; std::basic_string<char,std::string_char_traits<char>>::assign(unsigned int,char)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@at$qui @1604; std::basic_string<char,std::string_char_traits<char>>::at(unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@at$xqui @1605; std::basic_string<char,std::string_char_traits<char>>::at(unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@c_str$xqv @1603; std::basic_string<char,std::string_char_traits<char>>::c_str() const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@capacity$xqv @1601; std::basic_string<char,std::string_char_traits<char>>::capacity() const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@clobber$qui @1563; std::basic_string<char,std::string_char_traits<char>>::clobber(unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@compare$xqpcui @1579; std::basic_string<char,std::string_char_traits<char>>::compare(char*,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@compare$xqpcuiui @1580; std::basic_string<char,std::string_char_traits<char>>::compare(char*,unsigned int,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@compare$xqrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%uiui @1564; std::basic_string<char,std::string_char_traits<char>>::compare(const std::basic_string<char,std::string_char_traits<char>>&,int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@copy$qpcuiui @1573; std::basic_string<char,std::string_char_traits<char>>::copy(char*,unsigned int,unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@copy$xqv @1599; std::basic_string<char,std::string_char_traits<char>>::copy() const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find$xqcui @1596; std::basic_string<char,std::string_char_traits<char>>::find(char,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find$xqpxcui @1597; std::basic_string<char,std::string_char_traits<char>>::find(const char*,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find$xqpxcuiui @1598; std::basic_string<char,std::string_char_traits<char>>::find(const char*,unsigned int,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find$xqrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%ui @1572; std::basic_string<char,std::string_char_traits<char>>::find(const std::basic_string<char,std::string_char_traits<char>>&) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_first_not_of$xqcui @1584; std::basic_string<char,std::string_char_traits<char>>::find_first_not_of(char,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_first_not_of$xqpxcui @1585; std::basic_string<char,std::string_char_traits<char>>::find_first_not_of(const char*,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_first_not_of$xqpxcuiui @1586; std::basic_string<char,std::string_char_traits<char>>::find_first_not_of(const char*,unsigned int,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_first_not_of$xqrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%ui @1568; std::basic_string<char,std::string_char_traits<char>>::find_first_not_of(const std::basic_string<char,std::string_char_traits<char>>&) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_first_of$xqcui @1590; std::basic_string<char,std::string_char_traits<char>>::find_first_of(char,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_first_of$xqpxcui @1591; std::basic_string<char,std::string_char_traits<char>>::find_first_of(const char*,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_first_of$xqpxcuiui @1592; std::basic_string<char,std::string_char_traits<char>>::find_first_of(const char*,unsigned int,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_first_of$xqrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%ui @1570; std::basic_string<char,std::string_char_traits<char>>::find_first_of(const std::basic_string<char,std::string_char_traits<char>>&) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_last_not_of$xqcui @1581; std::basic_string<char,std::string_char_traits<char>>::find_last_not_of(char,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_last_not_of$xqpxcui @1582; std::basic_string<char,std::string_char_traits<char>>::find_last_not_of(const char*,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_last_not_of$xqpxcuiui @1583; std::basic_string<char,std::string_char_traits<char>>::find_last_not_of(const char*,unsigned int,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_last_not_of$xqrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%ui @1567; std::basic_string<char,std::string_char_traits<char>>::find_last_not_of(const std::basic_string<char,std::string_char_traits<char>>&) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_last_of$xqcui @1587; std::basic_string<char,std::string_char_traits<char>>::find_last_of(char,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_last_of$xqpxcui @1588; std::basic_string<char,std::string_char_traits<char>>::find_last_of(const char*,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_last_of$xqpxcuiui @1589; std::basic_string<char,std::string_char_traits<char>>::find_last_of(const char*,unsigned int,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@find_last_of$xqrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%ui @1569; std::basic_string<char,std::string_char_traits<char>>::find_last_of(const std::basic_string<char,std::string_char_traits<char>>&) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@getRep$quiuir18std@%allocator$tc% @1561; std::basic_string<char,std::string_char_traits<char>>::getRep(unsigned int,unsigned int,std::allocator<char>&)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@insert$qpcpxct2 @1617; std::basic_string<char,std::string_char_traits<char>>::insert(char*,const char*,const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@insert$qpcuic @1618; std::basic_string<char,std::string_char_traits<char>>::insert(char*,unsigned int,char)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@insert$quipxc @1620; std::basic_string<char,std::string_char_traits<char>>::insert(unsigned int,const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@insert$quipxcui @1621; std::basic_string<char,std::string_char_traits<char>>::insert(unsigned int,const char*,unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@insert$quirx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%uiui @1575; std::basic_string<char,std::string_char_traits<char>>::insert(unsigned int,const std::basic_string<char,std::string_char_traits<char>>&,int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@insert$quiuic @1619; std::basic_string<char,std::string_char_traits<char>>::insert(unsigned int,unsigned int,char)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@npos @1551; std::basic_string<char,std::string_char_traits<char>>::npos
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@remove$qpc @1616; std::basic_string<char,std::string_char_traits<char>>::remove(char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@remove$qpct1 @1615; std::basic_string<char,std::string_char_traits<char>>::remove(char*,char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@replace$qpct1pxc @1610; std::basic_string<char,std::string_char_traits<char>>::replace(char*,char*,const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@replace$qpct1pxct3 @1607; std::basic_string<char,std::string_char_traits<char>>::replace(char*,char*,const char*,const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@replace$qpct1pxcui @1611; std::basic_string<char,std::string_char_traits<char>>::replace(char*,char*,const char*,unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@replace$qpct1uic @1609; std::basic_string<char,std::string_char_traits<char>>::replace(char*,char*,unsigned int,char)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@replace$quiuipxc @1613; std::basic_string<char,std::string_char_traits<char>>::replace(unsigned int,unsigned int,const char*)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@replace$quiuipxcuiuiui @1555; std::basic_string<char,std::string_char_traits<char>>::replace(unsigned int,unsigned int,const char*,unsigned int,unsigned int,unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@replace$quiuiuic @1612; std::basic_string<char,std::string_char_traits<char>>::replace(unsigned int,unsigned int,unsigned int,char)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@replace_aux$quiuirx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%uiui @1614; std::basic_string<char,std::string_char_traits<char>>::replace_aux(unsigned int,unsigned int,const std::basic_string<char,std::string_char_traits<char>>&,int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@reserve$qui @1600; std::basic_string<char,std::string_char_traits<char>>::reserve(unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@resize$qui @1602; std::basic_string<char,std::string_char_traits<char>>::resize(unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@resize$quic @1574; std::basic_string<char,std::string_char_traits<char>>::resize(unsigned int,char)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@rfind$xqcui @1593; std::basic_string<char,std::string_char_traits<char>>::rfind(char,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@rfind$xqpxcui @1594; std::basic_string<char,std::string_char_traits<char>>::rfind(const char*,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@rfind$xqpxcuiui @1595; std::basic_string<char,std::string_char_traits<char>>::rfind(const char*,unsigned int,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@rfind$xqrx74std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%ui @1571; std::basic_string<char,std::string_char_traits<char>>::rfind(const std::basic_string<char,std::string_char_traits<char>>&) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@substr$xquiui @1565; std::basic_string<char,std::string_char_traits<char>>::substr(unsigned int,unsigned int) const
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@unSafeClone$qui @1560; std::basic_string<char,std::string_char_traits<char>>::unSafeClone(unsigned int)
+    @std@%basic_string$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@unSafeClone$qv @1562; std::basic_string<char,std::string_char_traits<char>>::unSafeClone()
+    @std@%numeric_limits$t4bool%@digits @1504; std::numeric_limits<bool>::digits
+    @std@%numeric_limits$t4bool%@digits10 @1505; std::numeric_limits<bool>::digits10
+    @std@%numeric_limits$t4bool%@has_denorm @1517; std::numeric_limits<bool>::has_denorm
+    @std@%numeric_limits$t4bool%@has_infinity @1514; std::numeric_limits<bool>::has_infinity
+    @std@%numeric_limits$t4bool%@has_quiet_NaN @1515; std::numeric_limits<bool>::has_quiet_NaN
+    @std@%numeric_limits$t4bool%@has_signaling_NaN @1516; std::numeric_limits<bool>::has_signaling_NaN
+    @std@%numeric_limits$t4bool%@is_bounded @1519; std::numeric_limits<bool>::is_bounded
+    @std@%numeric_limits$t4bool%@is_exact @1508; std::numeric_limits<bool>::is_exact
+    @std@%numeric_limits$t4bool%@is_iec559 @1518; std::numeric_limits<bool>::is_iec559
+    @std@%numeric_limits$t4bool%@is_integer @1507; std::numeric_limits<bool>::is_integer
+    @std@%numeric_limits$t4bool%@is_modulo @1520; std::numeric_limits<bool>::is_modulo
+    @std@%numeric_limits$t4bool%@is_signed @1506; std::numeric_limits<bool>::is_signed
+    @std@%numeric_limits$t4bool%@is_specialized @1503; std::numeric_limits<bool>::is_specialized
+    @std@%numeric_limits$t4bool%@max_exponent @1512; std::numeric_limits<bool>::max_exponent
+    @std@%numeric_limits$t4bool%@max_exponent10 @1513; std::numeric_limits<bool>::max_exponent10
+    @std@%numeric_limits$t4bool%@min_exponent @1510; std::numeric_limits<bool>::min_exponent
+    @std@%numeric_limits$t4bool%@min_exponent10 @1511; std::numeric_limits<bool>::min_exponent10
+    @std@%numeric_limits$t4bool%@radix @1509; std::numeric_limits<bool>::radix
+    @std@%numeric_limits$t4bool%@round_style @1523; std::numeric_limits<bool>::round_style
+    @std@%numeric_limits$t4bool%@tinyness_before @1522; std::numeric_limits<bool>::tinyness_before
+    @std@%numeric_limits$t4bool%@traps @1521; std::numeric_limits<bool>::traps
+    @std@%numeric_limits$tb%@digits @1316; std::numeric_limits<wchar_t>::digits
+    @std@%numeric_limits$tb%@digits10 @1317; std::numeric_limits<wchar_t>::digits10
+    @std@%numeric_limits$tb%@has_denorm @1328; std::numeric_limits<wchar_t>::has_denorm
+    @std@%numeric_limits$tb%@has_infinity @1325; std::numeric_limits<wchar_t>::has_infinity
+    @std@%numeric_limits$tb%@has_quiet_NaN @1326; std::numeric_limits<wchar_t>::has_quiet_NaN
+    @std@%numeric_limits$tb%@has_signaling_NaN @1327; std::numeric_limits<wchar_t>::has_signaling_NaN
+    @std@%numeric_limits$tb%@is_bounded @1330; std::numeric_limits<wchar_t>::is_bounded
+    @std@%numeric_limits$tb%@is_exact @1319; std::numeric_limits<wchar_t>::is_exact
+    @std@%numeric_limits$tb%@is_iec559 @1329; std::numeric_limits<wchar_t>::is_iec559
+    @std@%numeric_limits$tb%@is_integer @1318; std::numeric_limits<wchar_t>::is_integer
+    @std@%numeric_limits$tb%@is_modulo @1331; std::numeric_limits<wchar_t>::is_modulo
+    @std@%numeric_limits$tb%@is_signed @1315; std::numeric_limits<wchar_t>::is_signed
+    @std@%numeric_limits$tb%@is_specialized @1314; std::numeric_limits<wchar_t>::is_specialized
+    @std@%numeric_limits$tb%@max$qv @1540; std::numeric_limits<wchar_t>::max()
+    @std@%numeric_limits$tb%@max_exponent @1323; std::numeric_limits<wchar_t>::max_exponent
+    @std@%numeric_limits$tb%@max_exponent10 @1324; std::numeric_limits<wchar_t>::max_exponent10
+    @std@%numeric_limits$tb%@min$qv @1539; std::numeric_limits<wchar_t>::min()
+    @std@%numeric_limits$tb%@min_exponent @1321; std::numeric_limits<wchar_t>::min_exponent
+    @std@%numeric_limits$tb%@min_exponent10 @1322; std::numeric_limits<wchar_t>::min_exponent10
+    @std@%numeric_limits$tb%@radix @1320; std::numeric_limits<wchar_t>::radix
+    @std@%numeric_limits$tb%@round_style @1334; std::numeric_limits<wchar_t>::round_style
+    @std@%numeric_limits$tb%@tinyness_before @1333; std::numeric_limits<wchar_t>::tinyness_before
+    @std@%numeric_limits$tb%@traps @1332; std::numeric_limits<wchar_t>::traps
+    @std@%numeric_limits$tc%@digits @1442; std::numeric_limits<char>::digits
+    @std@%numeric_limits$tc%@digits10 @1443; std::numeric_limits<char>::digits10
+    @std@%numeric_limits$tc%@has_denorm @1454; std::numeric_limits<char>::has_denorm
+    @std@%numeric_limits$tc%@has_infinity @1451; std::numeric_limits<char>::has_infinity
+    @std@%numeric_limits$tc%@has_quiet_NaN @1452; std::numeric_limits<char>::has_quiet_NaN
+    @std@%numeric_limits$tc%@has_signaling_NaN @1453; std::numeric_limits<char>::has_signaling_NaN
+    @std@%numeric_limits$tc%@is_bounded @1456; std::numeric_limits<char>::is_bounded
+    @std@%numeric_limits$tc%@is_exact @1445; std::numeric_limits<char>::is_exact
+    @std@%numeric_limits$tc%@is_iec559 @1455; std::numeric_limits<char>::is_iec559
+    @std@%numeric_limits$tc%@is_integer @1444; std::numeric_limits<char>::is_integer
+    @std@%numeric_limits$tc%@is_modulo @1457; std::numeric_limits<char>::is_modulo
+    @std@%numeric_limits$tc%@is_signed @1441; std::numeric_limits<char>::is_signed
+    @std@%numeric_limits$tc%@is_specialized @1440; std::numeric_limits<char>::is_specialized
+    @std@%numeric_limits$tc%@max_exponent @1449; std::numeric_limits<char>::max_exponent
+    @std@%numeric_limits$tc%@max_exponent10 @1450; std::numeric_limits<char>::max_exponent10
+    @std@%numeric_limits$tc%@min_exponent @1447; std::numeric_limits<char>::min_exponent
+    @std@%numeric_limits$tc%@min_exponent10 @1448; std::numeric_limits<char>::min_exponent10
+    @std@%numeric_limits$tc%@radix @1446; std::numeric_limits<char>::radix
+    @std@%numeric_limits$tc%@round_style @1460; std::numeric_limits<char>::round_style
+    @std@%numeric_limits$tc%@tinyness_before @1459; std::numeric_limits<char>::tinyness_before
+    @std@%numeric_limits$tc%@traps @1458; std::numeric_limits<char>::traps
+    @std@%numeric_limits$td%@denorm_min$qv @1533; std::numeric_limits<double>::denorm_min()
+    @std@%numeric_limits$td%@digits @1252; std::numeric_limits<double>::digits
+    @std@%numeric_limits$td%@digits10 @1253; std::numeric_limits<double>::digits10
+    @std@%numeric_limits$td%@has_denorm @1265; std::numeric_limits<double>::has_denorm
+    @std@%numeric_limits$td%@has_infinity @1262; std::numeric_limits<double>::has_infinity
+    @std@%numeric_limits$td%@has_quiet_NaN @1263; std::numeric_limits<double>::has_quiet_NaN
+    @std@%numeric_limits$td%@has_signaling_NaN @1264; std::numeric_limits<double>::has_signaling_NaN
+    @std@%numeric_limits$td%@infinity$qv @1530; std::numeric_limits<double>::infinity()
+    @std@%numeric_limits$td%@is_bounded @1267; std::numeric_limits<double>::is_bounded
+    @std@%numeric_limits$td%@is_exact @1256; std::numeric_limits<double>::is_exact
+    @std@%numeric_limits$td%@is_iec559 @1266; std::numeric_limits<double>::is_iec559
+    @std@%numeric_limits$td%@is_integer @1255; std::numeric_limits<double>::is_integer
+    @std@%numeric_limits$td%@is_modulo @1268; std::numeric_limits<double>::is_modulo
+    @std@%numeric_limits$td%@is_signed @1254; std::numeric_limits<double>::is_signed
+    @std@%numeric_limits$td%@is_specialized @1251; std::numeric_limits<double>::is_specialized
+    @std@%numeric_limits$td%@max_exponent @1260; std::numeric_limits<double>::max_exponent
+    @std@%numeric_limits$td%@max_exponent10 @1261; std::numeric_limits<double>::max_exponent10
+    @std@%numeric_limits$td%@min_exponent @1258; std::numeric_limits<double>::min_exponent
+    @std@%numeric_limits$td%@min_exponent10 @1259; std::numeric_limits<double>::min_exponent10
+    @std@%numeric_limits$td%@quiet_NaN$qv @1531; std::numeric_limits<double>::quiet_NaN()
+    @std@%numeric_limits$td%@radix @1257; std::numeric_limits<double>::radix
+    @std@%numeric_limits$td%@round_error$qv @1529; std::numeric_limits<double>::round_error()
+    @std@%numeric_limits$td%@round_style @1271; std::numeric_limits<double>::round_style
+    @std@%numeric_limits$td%@signaling_NaN$qv @1532; std::numeric_limits<double>::signaling_NaN()
+    @std@%numeric_limits$td%@tinyness_before @1270; std::numeric_limits<double>::tinyness_before
+    @std@%numeric_limits$td%@traps @1269; std::numeric_limits<double>::traps
+    @std@%numeric_limits$tf%@denorm_min$qv @1528; std::numeric_limits<float>::denorm_min()
+    @std@%numeric_limits$tf%@digits @1231; std::numeric_limits<float>::digits
+    @std@%numeric_limits$tf%@digits10 @1232; std::numeric_limits<float>::digits10
+    @std@%numeric_limits$tf%@has_denorm @1244; std::numeric_limits<float>::has_denorm
+    @std@%numeric_limits$tf%@has_infinity @1241; std::numeric_limits<float>::has_infinity
+    @std@%numeric_limits$tf%@has_quiet_NaN @1242; std::numeric_limits<float>::has_quiet_NaN
+    @std@%numeric_limits$tf%@has_signaling_NaN @1243; std::numeric_limits<float>::has_signaling_NaN
+    @std@%numeric_limits$tf%@infinity$qv @1525; std::numeric_limits<float>::infinity()
+    @std@%numeric_limits$tf%@is_bounded @1246; std::numeric_limits<float>::is_bounded
+    @std@%numeric_limits$tf%@is_exact @1235; std::numeric_limits<float>::is_exact
+    @std@%numeric_limits$tf%@is_iec559 @1245; std::numeric_limits<float>::is_iec559
+    @std@%numeric_limits$tf%@is_integer @1234; std::numeric_limits<float>::is_integer
+    @std@%numeric_limits$tf%@is_modulo @1247; std::numeric_limits<float>::is_modulo
+    @std@%numeric_limits$tf%@is_signed @1233; std::numeric_limits<float>::is_signed
+    @std@%numeric_limits$tf%@is_specialized @1230; std::numeric_limits<float>::is_specialized
+    @std@%numeric_limits$tf%@max_exponent @1239; std::numeric_limits<float>::max_exponent
+    @std@%numeric_limits$tf%@max_exponent10 @1240; std::numeric_limits<float>::max_exponent10
+    @std@%numeric_limits$tf%@min_exponent @1237; std::numeric_limits<float>::min_exponent
+    @std@%numeric_limits$tf%@min_exponent10 @1238; std::numeric_limits<float>::min_exponent10
+    @std@%numeric_limits$tf%@quiet_NaN$qv @1526; std::numeric_limits<float>::quiet_NaN()
+    @std@%numeric_limits$tf%@radix @1236; std::numeric_limits<float>::radix
+    @std@%numeric_limits$tf%@round_error$qv @1524; std::numeric_limits<float>::round_error()
+    @std@%numeric_limits$tf%@round_style @1250; std::numeric_limits<float>::round_style
+    @std@%numeric_limits$tf%@signaling_NaN$qv @1527; std::numeric_limits<float>::signaling_NaN()
+    @std@%numeric_limits$tf%@tinyness_before @1249; std::numeric_limits<float>::tinyness_before
+    @std@%numeric_limits$tf%@traps @1248; std::numeric_limits<float>::traps
+    @std@%numeric_limits$tg%@denorm_min$qv @1538; std::numeric_limits<long double>::denorm_min()
+    @std@%numeric_limits$tg%@digits @1273; std::numeric_limits<long double>::digits
+    @std@%numeric_limits$tg%@digits10 @1274; std::numeric_limits<long double>::digits10
+    @std@%numeric_limits$tg%@has_denorm @1286; std::numeric_limits<long double>::has_denorm
+    @std@%numeric_limits$tg%@has_infinity @1283; std::numeric_limits<long double>::has_infinity
+    @std@%numeric_limits$tg%@has_quiet_NaN @1284; std::numeric_limits<long double>::has_quiet_NaN
+    @std@%numeric_limits$tg%@has_signaling_NaN @1285; std::numeric_limits<long double>::has_signaling_NaN
+    @std@%numeric_limits$tg%@infinity$qv @1535; std::numeric_limits<long double>::infinity()
+    @std@%numeric_limits$tg%@is_bounded @1288; std::numeric_limits<long double>::is_bounded
+    @std@%numeric_limits$tg%@is_exact @1277; std::numeric_limits<long double>::is_exact
+    @std@%numeric_limits$tg%@is_iec559 @1287; std::numeric_limits<long double>::is_iec559
+    @std@%numeric_limits$tg%@is_integer @1276; std::numeric_limits<long double>::is_integer
+    @std@%numeric_limits$tg%@is_modulo @1289; std::numeric_limits<long double>::is_modulo
+    @std@%numeric_limits$tg%@is_signed @1275; std::numeric_limits<long double>::is_signed
+    @std@%numeric_limits$tg%@is_specialized @1272; std::numeric_limits<long double>::is_specialized
+    @std@%numeric_limits$tg%@max_exponent @1281; std::numeric_limits<long double>::max_exponent
+    @std@%numeric_limits$tg%@max_exponent10 @1282; std::numeric_limits<long double>::max_exponent10
+    @std@%numeric_limits$tg%@min_exponent @1279; std::numeric_limits<long double>::min_exponent
+    @std@%numeric_limits$tg%@min_exponent10 @1280; std::numeric_limits<long double>::min_exponent10
+    @std@%numeric_limits$tg%@quiet_NaN$qv @1536; std::numeric_limits<long double>::quiet_NaN()
+    @std@%numeric_limits$tg%@radix @1278; std::numeric_limits<long double>::radix
+    @std@%numeric_limits$tg%@round_error$qv @1534; std::numeric_limits<long double>::round_error()
+    @std@%numeric_limits$tg%@round_style @1292; std::numeric_limits<long double>::round_style
+    @std@%numeric_limits$tg%@signaling_NaN$qv @1537; std::numeric_limits<long double>::signaling_NaN()
+    @std@%numeric_limits$tg%@tinyness_before @1291; std::numeric_limits<long double>::tinyness_before
+    @std@%numeric_limits$tg%@traps @1290; std::numeric_limits<long double>::traps
+    @std@%numeric_limits$ti%@digits @1294; std::numeric_limits<int>::digits
+    @std@%numeric_limits$ti%@digits10 @1295; std::numeric_limits<int>::digits10
+    @std@%numeric_limits$ti%@has_denorm @1307; std::numeric_limits<int>::has_denorm
+    @std@%numeric_limits$ti%@has_infinity @1304; std::numeric_limits<int>::has_infinity
+    @std@%numeric_limits$ti%@has_quiet_NaN @1305; std::numeric_limits<int>::has_quiet_NaN
+    @std@%numeric_limits$ti%@has_signaling_NaN @1306; std::numeric_limits<int>::has_signaling_NaN
+    @std@%numeric_limits$ti%@is_bounded @1309; std::numeric_limits<int>::is_bounded
+    @std@%numeric_limits$ti%@is_exact @1298; std::numeric_limits<int>::is_exact
+    @std@%numeric_limits$ti%@is_iec559 @1308; std::numeric_limits<int>::is_iec559
+    @std@%numeric_limits$ti%@is_integer @1297; std::numeric_limits<int>::is_integer
+    @std@%numeric_limits$ti%@is_modulo @1310; std::numeric_limits<int>::is_modulo
+    @std@%numeric_limits$ti%@is_signed @1296; std::numeric_limits<int>::is_signed
+    @std@%numeric_limits$ti%@is_specialized @1293; std::numeric_limits<int>::is_specialized
+    @std@%numeric_limits$ti%@max_exponent @1302; std::numeric_limits<int>::max_exponent
+    @std@%numeric_limits$ti%@max_exponent10 @1303; std::numeric_limits<int>::max_exponent10
+    @std@%numeric_limits$ti%@min_exponent @1300; std::numeric_limits<int>::min_exponent
+    @std@%numeric_limits$ti%@min_exponent10 @1301; std::numeric_limits<int>::min_exponent10
+    @std@%numeric_limits$ti%@radix @1299; std::numeric_limits<int>::radix
+    @std@%numeric_limits$ti%@round_style @1313; std::numeric_limits<int>::round_style
+    @std@%numeric_limits$ti%@tinyness_before @1312; std::numeric_limits<int>::tinyness_before
+    @std@%numeric_limits$ti%@traps @1311; std::numeric_limits<int>::traps
+    @std@%numeric_limits$tl%@digits @1399; std::numeric_limits<long>::digits
+    @std@%numeric_limits$tl%@digits10 @1400; std::numeric_limits<long>::digits10
+    @std@%numeric_limits$tl%@has_denorm @1412; std::numeric_limits<long>::has_denorm
+    @std@%numeric_limits$tl%@has_infinity @1409; std::numeric_limits<long>::has_infinity
+    @std@%numeric_limits$tl%@has_quiet_NaN @1410; std::numeric_limits<long>::has_quiet_NaN
+    @std@%numeric_limits$tl%@has_signaling_NaN @1411; std::numeric_limits<long>::has_signaling_NaN
+    @std@%numeric_limits$tl%@is_bounded @1414; std::numeric_limits<long>::is_bounded
+    @std@%numeric_limits$tl%@is_exact @1403; std::numeric_limits<long>::is_exact
+    @std@%numeric_limits$tl%@is_iec559 @1413; std::numeric_limits<long>::is_iec559
+    @std@%numeric_limits$tl%@is_integer @1402; std::numeric_limits<long>::is_integer
+    @std@%numeric_limits$tl%@is_modulo @1415; std::numeric_limits<long>::is_modulo
+    @std@%numeric_limits$tl%@is_signed @1401; std::numeric_limits<long>::is_signed
+    @std@%numeric_limits$tl%@is_specialized @1398; std::numeric_limits<long>::is_specialized
+    @std@%numeric_limits$tl%@max_exponent @1407; std::numeric_limits<long>::max_exponent
+    @std@%numeric_limits$tl%@max_exponent10 @1408; std::numeric_limits<long>::max_exponent10
+    @std@%numeric_limits$tl%@min_exponent @1405; std::numeric_limits<long>::min_exponent
+    @std@%numeric_limits$tl%@min_exponent10 @1406; std::numeric_limits<long>::min_exponent10
+    @std@%numeric_limits$tl%@radix @1404; std::numeric_limits<long>::radix
+    @std@%numeric_limits$tl%@round_style @1418; std::numeric_limits<long>::round_style
+    @std@%numeric_limits$tl%@tinyness_before @1417; std::numeric_limits<long>::tinyness_before
+    @std@%numeric_limits$tl%@traps @1416; std::numeric_limits<long>::traps
+    @std@%numeric_limits$ts%@digits @1336; std::numeric_limits<short>::digits
+    @std@%numeric_limits$ts%@digits10 @1337; std::numeric_limits<short>::digits10
+    @std@%numeric_limits$ts%@has_denorm @1349; std::numeric_limits<short>::has_denorm
+    @std@%numeric_limits$ts%@has_infinity @1346; std::numeric_limits<short>::has_infinity
+    @std@%numeric_limits$ts%@has_quiet_NaN @1347; std::numeric_limits<short>::has_quiet_NaN
+    @std@%numeric_limits$ts%@has_signaling_NaN @1348; std::numeric_limits<short>::has_signaling_NaN
+    @std@%numeric_limits$ts%@is_bounded @1351; std::numeric_limits<short>::is_bounded
+    @std@%numeric_limits$ts%@is_exact @1340; std::numeric_limits<short>::is_exact
+    @std@%numeric_limits$ts%@is_iec559 @1350; std::numeric_limits<short>::is_iec559
+    @std@%numeric_limits$ts%@is_integer @1339; std::numeric_limits<short>::is_integer
+    @std@%numeric_limits$ts%@is_modulo @1352; std::numeric_limits<short>::is_modulo
+    @std@%numeric_limits$ts%@is_signed @1338; std::numeric_limits<short>::is_signed
+    @std@%numeric_limits$ts%@is_specialized @1335; std::numeric_limits<short>::is_specialized
+    @std@%numeric_limits$ts%@max_exponent @1344; std::numeric_limits<short>::max_exponent
+    @std@%numeric_limits$ts%@max_exponent10 @1345; std::numeric_limits<short>::max_exponent10
+    @std@%numeric_limits$ts%@min_exponent @1342; std::numeric_limits<short>::min_exponent
+    @std@%numeric_limits$ts%@min_exponent10 @1343; std::numeric_limits<short>::min_exponent10
+    @std@%numeric_limits$ts%@radix @1341; std::numeric_limits<short>::radix
+    @std@%numeric_limits$ts%@round_style @1355; std::numeric_limits<short>::round_style
+    @std@%numeric_limits$ts%@tinyness_before @1354; std::numeric_limits<short>::tinyness_before
+    @std@%numeric_limits$ts%@traps @1353; std::numeric_limits<short>::traps
+    @std@%numeric_limits$tuc%@digits @1462; std::numeric_limits<unsigned char>::digits
+    @std@%numeric_limits$tuc%@digits10 @1463; std::numeric_limits<unsigned char>::digits10
+    @std@%numeric_limits$tuc%@has_denorm @1475; std::numeric_limits<unsigned char>::has_denorm
+    @std@%numeric_limits$tuc%@has_infinity @1472; std::numeric_limits<unsigned char>::has_infinity
+    @std@%numeric_limits$tuc%@has_quiet_NaN @1473; std::numeric_limits<unsigned char>::has_quiet_NaN
+    @std@%numeric_limits$tuc%@has_signaling_NaN @1474; std::numeric_limits<unsigned char>::has_signaling_NaN
+    @std@%numeric_limits$tuc%@is_bounded @1477; std::numeric_limits<unsigned char>::is_bounded
+    @std@%numeric_limits$tuc%@is_exact @1466; std::numeric_limits<unsigned char>::is_exact
+    @std@%numeric_limits$tuc%@is_iec559 @1476; std::numeric_limits<unsigned char>::is_iec559
+    @std@%numeric_limits$tuc%@is_integer @1465; std::numeric_limits<unsigned char>::is_integer
+    @std@%numeric_limits$tuc%@is_modulo @1478; std::numeric_limits<unsigned char>::is_modulo
+    @std@%numeric_limits$tuc%@is_signed @1464; std::numeric_limits<unsigned char>::is_signed
+    @std@%numeric_limits$tuc%@is_specialized @1461; std::numeric_limits<unsigned char>::is_specialized
+    @std@%numeric_limits$tuc%@max_exponent @1470; std::numeric_limits<unsigned char>::max_exponent
+    @std@%numeric_limits$tuc%@max_exponent10 @1471; std::numeric_limits<unsigned char>::max_exponent10
+    @std@%numeric_limits$tuc%@min_exponent @1468; std::numeric_limits<unsigned char>::min_exponent
+    @std@%numeric_limits$tuc%@min_exponent10 @1469; std::numeric_limits<unsigned char>::min_exponent10
+    @std@%numeric_limits$tuc%@radix @1467; std::numeric_limits<unsigned char>::radix
+    @std@%numeric_limits$tuc%@round_style @1481; std::numeric_limits<unsigned char>::round_style
+    @std@%numeric_limits$tuc%@tinyness_before @1480; std::numeric_limits<unsigned char>::tinyness_before
+    @std@%numeric_limits$tuc%@traps @1479; std::numeric_limits<unsigned char>::traps
+    @std@%numeric_limits$tui%@digits @1378; std::numeric_limits<unsigned int>::digits
+    @std@%numeric_limits$tui%@digits10 @1379; std::numeric_limits<unsigned int>::digits10
+    @std@%numeric_limits$tui%@has_denorm @1391; std::numeric_limits<unsigned int>::has_denorm
+    @std@%numeric_limits$tui%@has_infinity @1388; std::numeric_limits<unsigned int>::has_infinity
+    @std@%numeric_limits$tui%@has_quiet_NaN @1389; std::numeric_limits<unsigned int>::has_quiet_NaN
+    @std@%numeric_limits$tui%@has_signaling_NaN @1390; std::numeric_limits<unsigned int>::has_signaling_NaN
+    @std@%numeric_limits$tui%@is_bounded @1393; std::numeric_limits<unsigned int>::is_bounded
+    @std@%numeric_limits$tui%@is_exact @1382; std::numeric_limits<unsigned int>::is_exact
+    @std@%numeric_limits$tui%@is_iec559 @1392; std::numeric_limits<unsigned int>::is_iec559
+    @std@%numeric_limits$tui%@is_integer @1381; std::numeric_limits<unsigned int>::is_integer
+    @std@%numeric_limits$tui%@is_modulo @1394; std::numeric_limits<unsigned int>::is_modulo
+    @std@%numeric_limits$tui%@is_signed @1380; std::numeric_limits<unsigned int>::is_signed
+    @std@%numeric_limits$tui%@is_specialized @1377; std::numeric_limits<unsigned int>::is_specialized
+    @std@%numeric_limits$tui%@max_exponent @1386; std::numeric_limits<unsigned int>::max_exponent
+    @std@%numeric_limits$tui%@max_exponent10 @1387; std::numeric_limits<unsigned int>::max_exponent10
+    @std@%numeric_limits$tui%@min_exponent @1384; std::numeric_limits<unsigned int>::min_exponent
+    @std@%numeric_limits$tui%@min_exponent10 @1385; std::numeric_limits<unsigned int>::min_exponent10
+    @std@%numeric_limits$tui%@radix @1383; std::numeric_limits<unsigned int>::radix
+    @std@%numeric_limits$tui%@round_style @1397; std::numeric_limits<unsigned int>::round_style
+    @std@%numeric_limits$tui%@tinyness_before @1396; std::numeric_limits<unsigned int>::tinyness_before
+    @std@%numeric_limits$tui%@traps @1395; std::numeric_limits<unsigned int>::traps
+    @std@%numeric_limits$tul%@digits @1420; std::numeric_limits<unsigned long>::digits
+    @std@%numeric_limits$tul%@digits10 @1421; std::numeric_limits<unsigned long>::digits10
+    @std@%numeric_limits$tul%@has_denorm @1433; std::numeric_limits<unsigned long>::has_denorm
+    @std@%numeric_limits$tul%@has_infinity @1430; std::numeric_limits<unsigned long>::has_infinity
+    @std@%numeric_limits$tul%@has_quiet_NaN @1431; std::numeric_limits<unsigned long>::has_quiet_NaN
+    @std@%numeric_limits$tul%@has_signaling_NaN @1432; std::numeric_limits<unsigned long>::has_signaling_NaN
+    @std@%numeric_limits$tul%@is_bounded @1435; std::numeric_limits<unsigned long>::is_bounded
+    @std@%numeric_limits$tul%@is_exact @1424; std::numeric_limits<unsigned long>::is_exact
+    @std@%numeric_limits$tul%@is_iec559 @1434; std::numeric_limits<unsigned long>::is_iec559
+    @std@%numeric_limits$tul%@is_integer @1423; std::numeric_limits<unsigned long>::is_integer
+    @std@%numeric_limits$tul%@is_modulo @1436; std::numeric_limits<unsigned long>::is_modulo
+    @std@%numeric_limits$tul%@is_signed @1422; std::numeric_limits<unsigned long>::is_signed
+    @std@%numeric_limits$tul%@is_specialized @1419; std::numeric_limits<unsigned long>::is_specialized
+    @std@%numeric_limits$tul%@max_exponent @1428; std::numeric_limits<unsigned long>::max_exponent
+    @std@%numeric_limits$tul%@max_exponent10 @1429; std::numeric_limits<unsigned long>::max_exponent10
+    @std@%numeric_limits$tul%@min_exponent @1426; std::numeric_limits<unsigned long>::min_exponent
+    @std@%numeric_limits$tul%@min_exponent10 @1427; std::numeric_limits<unsigned long>::min_exponent10
+    @std@%numeric_limits$tul%@radix @1425; std::numeric_limits<unsigned long>::radix
+    @std@%numeric_limits$tul%@round_style @1439; std::numeric_limits<unsigned long>::round_style
+    @std@%numeric_limits$tul%@tinyness_before @1438; std::numeric_limits<unsigned long>::tinyness_before
+    @std@%numeric_limits$tul%@traps @1437; std::numeric_limits<unsigned long>::traps
+    @std@%numeric_limits$tus%@digits @1357; std::numeric_limits<unsigned short>::digits
+    @std@%numeric_limits$tus%@digits10 @1358; std::numeric_limits<unsigned short>::digits10
+    @std@%numeric_limits$tus%@has_denorm @1370; std::numeric_limits<unsigned short>::has_denorm
+    @std@%numeric_limits$tus%@has_infinity @1367; std::numeric_limits<unsigned short>::has_infinity
+    @std@%numeric_limits$tus%@has_quiet_NaN @1368; std::numeric_limits<unsigned short>::has_quiet_NaN
+    @std@%numeric_limits$tus%@has_signaling_NaN @1369; std::numeric_limits<unsigned short>::has_signaling_NaN
+    @std@%numeric_limits$tus%@is_bounded @1372; std::numeric_limits<unsigned short>::is_bounded
+    @std@%numeric_limits$tus%@is_exact @1361; std::numeric_limits<unsigned short>::is_exact
+    @std@%numeric_limits$tus%@is_iec559 @1371; std::numeric_limits<unsigned short>::is_iec559
+    @std@%numeric_limits$tus%@is_integer @1360; std::numeric_limits<unsigned short>::is_integer
+    @std@%numeric_limits$tus%@is_modulo @1373; std::numeric_limits<unsigned short>::is_modulo
+    @std@%numeric_limits$tus%@is_signed @1359; std::numeric_limits<unsigned short>::is_signed
+    @std@%numeric_limits$tus%@is_specialized @1356; std::numeric_limits<unsigned short>::is_specialized
+    @std@%numeric_limits$tus%@max_exponent @1365; std::numeric_limits<unsigned short>::max_exponent
+    @std@%numeric_limits$tus%@max_exponent10 @1366; std::numeric_limits<unsigned short>::max_exponent10
+    @std@%numeric_limits$tus%@min_exponent @1363; std::numeric_limits<unsigned short>::min_exponent
+    @std@%numeric_limits$tus%@min_exponent10 @1364; std::numeric_limits<unsigned short>::min_exponent10
+    @std@%numeric_limits$tus%@radix @1362; std::numeric_limits<unsigned short>::radix
+    @std@%numeric_limits$tus%@round_style @1376; std::numeric_limits<unsigned short>::round_style
+    @std@%numeric_limits$tus%@tinyness_before @1375; std::numeric_limits<unsigned short>::tinyness_before
+    @std@%numeric_limits$tus%@traps @1374; std::numeric_limits<unsigned short>::traps
+    @std@%numeric_limits$tzc%@digits @1483; std::numeric_limits<signed char>::digits
+    @std@%numeric_limits$tzc%@digits10 @1484; std::numeric_limits<signed char>::digits10
+    @std@%numeric_limits$tzc%@has_denorm @1496; std::numeric_limits<signed char>::has_denorm
+    @std@%numeric_limits$tzc%@has_infinity @1493; std::numeric_limits<signed char>::has_infinity
+    @std@%numeric_limits$tzc%@has_quiet_NaN @1494; std::numeric_limits<signed char>::has_quiet_NaN
+    @std@%numeric_limits$tzc%@has_signaling_NaN @1495; std::numeric_limits<signed char>::has_signaling_NaN
+    @std@%numeric_limits$tzc%@is_bounded @1498; std::numeric_limits<signed char>::is_bounded
+    @std@%numeric_limits$tzc%@is_exact @1487; std::numeric_limits<signed char>::is_exact
+    @std@%numeric_limits$tzc%@is_iec559 @1497; std::numeric_limits<signed char>::is_iec559
+    @std@%numeric_limits$tzc%@is_integer @1486; std::numeric_limits<signed char>::is_integer
+    @std@%numeric_limits$tzc%@is_modulo @1499; std::numeric_limits<signed char>::is_modulo
+    @std@%numeric_limits$tzc%@is_signed @1485; std::numeric_limits<signed char>::is_signed
+    @std@%numeric_limits$tzc%@is_specialized @1482; std::numeric_limits<signed char>::is_specialized
+    @std@%numeric_limits$tzc%@max_exponent @1491; std::numeric_limits<signed char>::max_exponent
+    @std@%numeric_limits$tzc%@max_exponent10 @1492; std::numeric_limits<signed char>::max_exponent10
+    @std@%numeric_limits$tzc%@min_exponent @1489; std::numeric_limits<signed char>::min_exponent
+    @std@%numeric_limits$tzc%@min_exponent10 @1490; std::numeric_limits<signed char>::min_exponent10
+    @std@%numeric_limits$tzc%@radix @1488; std::numeric_limits<signed char>::radix
+    @std@%numeric_limits$tzc%@round_style @1502; std::numeric_limits<signed char>::round_style
+    @std@%numeric_limits$tzc%@tinyness_before @1501; std::numeric_limits<signed char>::tinyness_before
+    @std@%numeric_limits$tzc%@traps @1500; std::numeric_limits<signed char>::traps
+    @std@%string_ref$tc$t27std@%string_char_traits$tc%$t18std@%allocator$tc%%@unSafeunLink$qr18std@%allocator$tc% @1559; std::string_ref<char,std::string_char_traits<char>>::unSafeunLink(std::allocator<char>&)
+    @std@__long_random$qul         @1543; std::__long_random(unsigned long)
+    @std@__random_generator@seed$qul @1542; std::__random_generator::seed(unsigned long)
+    @std@__rw_bitset_ConversionOverflow @1229; std::__rw_bitset_ConversionOverflow
+    @std@__rw_bitset_InvalidCtorArgument @1228; std::__rw_bitset_InvalidCtorArgument
+    @std@__rw_bitset_InvalidPosition @1227; std::__rw_bitset_InvalidPosition
+    @std@__rw_stdexcept_NoNamedException @1541; std::__rw_stdexcept_NoNamedException
+    @std@__stl_tree_mutex          @1544; std::__stl_tree_mutex
+    @std@nullref                   @1550; std::nullref
+    @std@rwse_InvalidSizeParam     @1545; std::rwse_InvalidSizeParam
+    @std@rwse_PosBeyondEndOfString @1546; std::rwse_PosBeyondEndOfString
+    @std@rwse_ResultLenInvalid     @1547; std::rwse_ResultLenInvalid
+    @std@rwse_StringIndexOutOfRange @1548; std::rwse_StringIndexOutOfRange
+    @std@rwse_UnexpectedNullPtr    @1549; std::rwse_UnexpectedNullPtr
+    @stdiobuf@$bctr$qp4FILE        @787 ; stdiobuf::stdiobuf(FILE*)
+    @stdiobuf@$bdtr$qv             @788 ; stdiobuf::~stdiobuf()
+    @stdiobuf@overflow$qi          @789 ; stdiobuf::overflow(int)
+    @stdiobuf@pbackfail$qi         @790 ; stdiobuf::pbackfail(int)
+    @stdiobuf@seekoff$ql12ios@seek_diri @791 ; stdiobuf::seekoff(long,ios::seek_dir)
+    @stdiobuf@sync$qv              @792 ; stdiobuf::sync()
+    @stdiobuf@underflow$qv         @793 ; stdiobuf::underflow()
+    @stdiostream@$bctr$qp4FILE     @794 ; stdiostream::stdiostream(FILE*)
+    @stdiostream@$bdtr$qv          @795 ; stdiostream::~stdiostream()
+    @strchr$qpci                   @151 ; strchr(char*,int)
+    @strchr$qpxci                  @108 ; strchr(const char*,int)
+    @streambuf@$bctr$qpci          @817 ; streambuf::streambuf(char*,int)
+    @streambuf@$bctr$qv            @816 ; streambuf::streambuf()
+    @streambuf@$bdtr$qv            @822 ; streambuf::~streambuf()
+    @streambuf@dbp$qv              @818 ; streambuf::dbp()
+    @streambuf@do_sgetn$qpci       @820 ; streambuf::do_sgetn(char*,int)
+    @streambuf@do_snextc$qv        @819 ; streambuf::do_snextc()
+    @streambuf@do_sputn$qpxci      @821 ; streambuf::do_sputn(const char*,int)
+    @streambuf@doallocate$qv       @815 ; streambuf::doallocate()
+    @streambuf@overflow$qi         @823 ; streambuf::overflow(int)
+    @streambuf@pbackfail$qi        @824 ; streambuf::pbackfail(int)
+    @streambuf@seekoff$ql12ios@seek_diri @830 ; streambuf::seekoff(long,ios::seek_dir)
+    @streambuf@seekpos$qli         @831 ; streambuf::seekpos(long,int)
+    @streambuf@setb$qpct1i         @826 ; streambuf::setb(char*,char*,int)
+    @streambuf@setbuf$qpci         @825 ; streambuf::setbuf(char*,int)
+    @streambuf@setbuf$qpcii        @833 ; streambuf::setbuf(char*,int,int)
+    @streambuf@setg$qpct1t1        @827 ; streambuf::setg(char*,char*,char*)
+    @streambuf@setp$qpct1          @828 ; streambuf::setp(char*,char*)
+    @streambuf@sgetn$qpci          @829 ; streambuf::sgetn(char*,int)
+    @streambuf@sputn$qpxci         @832 ; streambuf::sputn(const char*,int)
+    @streambuf@sync$qv             @834 ; streambuf::sync()
+    @streambuf@underflow$qv        @836 ; streambuf::underflow()
+    @string@$bcall$qrx7TRegexpui   @495 ; string::operator ()(const TRegexp&,unsigned int)
+    @string@$bcall$qui             @493 ; string::operator ()(unsigned int)
+    @string@$bcall$xqrx7TRegexpui  @496 ; string::operator ()(const TRegexp&,unsigned int) const
+    @string@$bctr$qc               @881 ; string::string(char)
+    @string@$bctr$qcui             @882 ; string::string(char,unsigned int)
+    @string@$bctr$qp11HINSTANCE__uii @647 ; string::string(HINSTANCE__*,unsigned int,int)
+    @string@$bctr$qpxc             @468 ; string::string(const char*)
+    @string@$bctr$qpxcuiui         @469 ; string::string(const char*,unsigned int,unsigned int)
+    @string@$bctr$qrx10TSubString  @471 ; string::string(const TSubString&)
+    @string@$bctr$qrx6string       @467 ; string::string(const string&)
+    @string@$bctr$qrx6stringuiui   @470 ; string::string(const string&,unsigned int,unsigned int)
+    @string@$bctr$quc              @885 ; string::string(unsigned char)
+    @string@$bctr$qucui            @886 ; string::string(unsigned char,unsigned int)
+    @string@$bctr$qv               @466 ; string::string()
+    @string@$bctr$qzc              @883 ; string::string(signed char)
+    @string@$bctr$qzcui            @884 ; string::string(signed char,unsigned int)
+    @string@$bdtr$qv               @525 ; string::~string()
+    @string@append$qpxc            @447 ; string::append(const char*)
+    @string@append$qpxcuiui        @448 ; string::append(const char*,unsigned int,unsigned int)
+    @string@append$qrx6stringuiui  @446 ; string::append(const string&,unsigned int,unsigned int)
+    @string@assert_element$xqui    @532 ; string::assert_element(unsigned int) const
+    @string@assert_index$xqui      @533 ; string::assert_index(unsigned int) const
+    @string@assign$qrx6stringuiui  @449 ; string::assign(const string&,unsigned int,unsigned int)
+    @string@case_sensitive         @534 ; string::case_sensitive
+    @string@clone$qv               @460 ; string::clone()
+    @string@compare$xqrx6string    @461 ; string::compare(const string&) const
+    @string@compare$xqrx6stringuiui @462 ; string::compare(const string&,unsigned int,unsigned int) const
+    @string@contains$xqpxc         @473 ; string::contains(const char*) const
+    @string@copy$qpcui             @463 ; string::copy(char*,unsigned int)
+    @string@copy$qpcuiui           @464 ; string::copy(char*,unsigned int,unsigned int)
+    @string@copy$xqv               @465 ; string::copy() const
+    @string@find$xqrx6stringui     @474 ; string::find(const string&,unsigned int) const
+    @string@find$xqrx7TRegexppuiui @481 ; string::find(const TRegexp&,unsigned int*,unsigned int) const
+    @string@find$xqrx7TRegexpui    @480 ; string::find(const TRegexp&,unsigned int) const
+    @string@find_case_index$xqpxcuirui @477 ; string::find_case_index(const char*,unsigned int,unsigned int&) const
+    @string@find_first_not_of$xqrx6stringui @483 ; string::find_first_not_of(const string&,unsigned int) const
+    @string@find_first_of$xqrx6stringui @482 ; string::find_first_of(const string&,unsigned int) const
+    @string@find_index$xqpxcuirui  @478 ; string::find_index(const char*,unsigned int,unsigned int&) const
+    @string@find_last_not_of$xqrx6stringui @485 ; string::find_last_not_of(const string&,unsigned int) const
+    @string@find_last_of$xqrx6stringui @484 ; string::find_last_of(const string&,unsigned int) const
+    @string@freeboard              @539 ; string::freeboard
+    @string@hash$xqv               @486 ; string::hash() const
+    @string@hash_case$xqv          @487 ; string::hash_case() const
+    @string@initial_capac          @537 ; string::initial_capac
+    @string@initial_capacity$qui   @529 ; string::initial_capacity(unsigned int)
+    @string@insert$quirx6string    @488 ; string::insert(unsigned int,const string&)
+    @string@insert$quirx6stringuiui @489 ; string::insert(unsigned int,const string&,unsigned int,unsigned int)
+    @string@max_waste$qui          @531 ; string::max_waste(unsigned int)
+    @string@paranoid_check         @535 ; string::paranoid_check
+    @string@prepend$qpxcuiui       @499 ; string::prepend(const char*,unsigned int,unsigned int)
+    @string@read_file$qr7istream   @514 ; string::read_file(istream&)
+    @string@read_line$qr7istream   @516 ; string::read_line(istream&)
+    @string@read_string$qr7istream @515 ; string::read_string(istream&)
+    @string@read_to_delim$qr7istreamc @517 ; string::read_to_delim(istream&,char)
+    @string@read_token$qr7istream  @518 ; string::read_token(istream&)
+    @string@remove$quiui           @506 ; string::remove(unsigned int,unsigned int)
+    @string@replace$quiuirx6stringuiui @507 ; string::replace(unsigned int,unsigned int,const string&,unsigned int,unsigned int)
+    @string@reserve$qui            @508 ; string::reserve(unsigned int)
+    @string@resize$qui             @509 ; string::resize(unsigned int)
+    @string@resize_inc             @538 ; string::resize_inc
+    @string@resize_increment$qui   @530 ; string::resize_increment(unsigned int)
+    @string@rfind$xqrx6stringui    @510 ; string::rfind(const string&,unsigned int) const
+    @string@rfind_case_index$xqpxcuirui @511 ; string::rfind_case_index(const char*,unsigned int,unsigned int&) const
+    @string@rfind_index$xqpxcuirui @512 ; string::rfind_index(const char*,unsigned int,unsigned int&) const
+    @string@set_case_sensitive$qi  @526 ; string::set_case_sensitive(int)
+    @string@set_paranoid_check$qi  @527 ; string::set_paranoid_check(int)
+    @string@skip_white             @536 ; string::skip_white
+    @string@skip_whitespace$qi     @528 ; string::skip_whitespace(int)
+    @string@strip$q16string@StripTypec @548 ; string::strip(string::StripType)
+    @string@substr$xqui            @549 ; string::substr(unsigned int) const
+    @string@substr$xquiui          @550 ; string::substr(unsigned int,unsigned int) const
+    @string@substring$qpxcui       @475 ; string::substring(const char*,unsigned int)
+    @string@substring$xqpxcui      @476 ; string::substring(const char*,unsigned int) const
+    @string@to_lower$qv            @551 ; string::to_lower()
+    @string@to_upper$qv            @552 ; string::to_upper()
+    @strpbrk$qpcpxc                @168 ; strpbrk(char*,const char*)
+    @strpbrk$qpxct1                @152 ; strpbrk(const char*,const char*)
+    @strrchr$qpci                  @275 ; strrchr(char*,int)
+    @strrchr$qpxci                 @169 ; strrchr(const char*,int)
+    @strstr$qpcpxc                 @277 ; strstr(char*,const char*)
+    @strstr$qpxct1                 @276 ; strstr(const char*,const char*)
+    @strstream@$bctr$qpcii         @685 ; strstream::strstream(char*,int,int)
+    @strstream@$bctr$qv            @684 ; strstream::strstream()
+    @strstream@$bdtr$qv            @686 ; strstream::~strstream()
+    @strstreambase@$bctr$qpcit1    @812 ; strstreambase::strstreambase(char*,int,char*)
+    @strstreambase@$bctr$qv        @813 ; strstreambase::strstreambase()
+    @strstreambase@$bdtr$qv        @814 ; strstreambase::~strstreambase()
+    @strstreambuf@$bctr$qi         @798 ; strstreambuf::strstreambuf(int)
+    @strstreambuf@$bctr$qpcit1     @801 ; strstreambuf::strstreambuf(char*,int,char*)
+    @strstreambuf@$bctr$qpql$pvpqpv$v @797 ; strstreambuf::strstreambuf(void*(*)(long),void(*)(void*))
+    @strstreambuf@$bctr$qpucit1    @800 ; strstreambuf::strstreambuf(unsigned char*,int,unsigned char*)
+    @strstreambuf@$bctr$qpzcit1    @799 ; strstreambuf::strstreambuf(signed char*,int,signed char*)
+    @strstreambuf@$bctr$qv         @796 ; strstreambuf::strstreambuf()
+    @strstreambuf@$bdtr$qv         @803 ; strstreambuf::~strstreambuf()
+    @strstreambuf@doallocate$qv    @802 ; strstreambuf::doallocate()
+    @strstreambuf@freeze$qi        @804 ; strstreambuf::freeze(int)
+    @strstreambuf@init$qpcit1      @805 ; strstreambuf::init(char*,int,char*)
+    @strstreambuf@overflow$qi      @806 ; strstreambuf::overflow(int)
+    @strstreambuf@seekoff$ql12ios@seek_diri @808 ; strstreambuf::seekoff(long,ios::seek_dir)
+    @strstreambuf@setbuf$qpci      @807 ; strstreambuf::setbuf(char*,int)
+    @strstreambuf@str$qv           @809 ; strstreambuf::str()
+    @strstreambuf@sync$qv          @810 ; strstreambuf::sync()
+    @strstreambuf@underflow$qv     @811 ; strstreambuf::underflow()
+    @tan$qrx7complex               @1036; tan(const complex&)
+    @tanh$qrx7complex              @1037; tanh(const complex&)
+    @to_lower$qrx6string           @553 ; to_lower(const string&)
+    @to_upper$qrx6string           @554 ; to_upper(const string&)
+    @typeinfo@$basg$qrx8typeinfo   @438 ; typeinfo::operator =(const typeinfo&)
+    @typeinfo@$bctr$qrx8typeinfo   @437 ; typeinfo::typeinfo(const typeinfo&)
+    @typeinfo@$bdtr$qv             @439 ; typeinfo::~typeinfo()
+    @typeinfo@$beql$xqrx8typeinfo  @440 ; typeinfo::operator ==(const typeinfo&) const
+    @typeinfo@$bneq$xqrx8typeinfo  @441 ; typeinfo::operator !=(const typeinfo&) const
+    @typeinfo@before$xqrx8typeinfo @442 ; typeinfo::before(const typeinfo&) const
+    @typeinfo@name$xqv             @443 ; typeinfo::name() const
+    @unlock$qr3ios                 @853 ; unlock(ios&)
+    @ws$qr7istream                 @741 ; ws(istream&)
+    @xalloc@$bctr$qrx6stringui     @417 ; xalloc::xalloc(const string&,unsigned int)
+    @xalloc@raise$qv               @418 ; xalloc::raise()
+    @xerror@MakeString$qpxct1t1ul  @455 ; xerror::MakeString(const char*,const char*,const char*,unsigned long)
+    @xmsg@$basg$qrx4xmsg           @423 ; xmsg::operator =(const xmsg&)
+    @xmsg@$bctr$qrx4xmsg           @420 ; xmsg::xmsg(const xmsg&)
+    @xmsg@$bctr$qrx6string         @419 ; xmsg::xmsg(const string&)
+    @xmsg@$bdtr$qv                 @421 ; xmsg::~xmsg()
+    @xmsg@raise$qv                 @422 ; xmsg::raise()
+    _DebugHook                     @1640
+    _ExceptionClass                @1641
+    __8087                         @272 
+    __CurrExcContext               @433 
+    __ErrorExit                    @601 
+    __ErrorMessage                 @599 
+    __ExceptionHandler             @431 
+    __Global_unwind                @432 
+    __Local_unwind                 @429 
+    __Return_unwind                @430 
+    __SetUserHandler               @47  
+    ___ErrorMessage                @600 
+    ___ExceptionTLS                @402 
+    ___JumpToCatch__               @870 
+    ____ExceptionHandler           @396 
+    ___assertfail                  @6   
+    ___bcd_log10                   @12  
+    ___bcd_pow10                   @13  
+    ___bcd_tobinary                @10  
+    ___bcd_todecimal               @11  
+    ___debuggerDisableTerminateCallback @398 
+    ___doserrno                    @616 
+    ___errno                       @46  
+    ___ftruncate                   @557 
+    ___getStream                   @880 
+    ___isctype                     @129 
+    ___iswctype                    @985 
+    ___locale                      @986 
+    ___matherr                     @274 
+    ___matherrl                    @273 
+    ___raiseDebuggerException      @399 
+    ___threadid                    @871 
+    __alloca                       @877 
+    __argc                         @176 
+    __argv                         @177 
+    __assert                       @5   
+    __atoi64                       @1046
+    __atold                        @288 
+    __beginthread                  @649 
+    __beginthreadNT                @650 
+    __c_exit                       @60  
+    __cexit                        @59  
+    __chartype                     @972 
+    __chdrive                      @569 
+    __chmod                        @559 
+    __clear87                      @291 
+    __close                        @561 
+    __control87                    @302 
+    __creat                        @266 
+    __crotl                        @33  
+    __crotr                        @34  
+    __ctype                        @38  
+    __daylight                     @246 
+    __default87                    @40  
+    __directvideo                  @574 
+    __dos_close                    @580 
+    __dos_creat                    @581 
+    __dos_creatnew                 @582 
+    __dos_findfirst                @586 
+    __dos_findnext                 @587 
+    __dos_getdate                  @588 
+    __dos_getdiskfree              @583 
+    __dos_getdrive                 @590 
+    __dos_getfileattr              @584 
+    __dos_getftime                 @592 
+    __dos_gettime                  @589 
+    __dos_open                     @593 
+    __dos_read                     @594 
+    __dos_setdate                  @595 
+    __dos_setdrive                 @591 
+    __dos_setfileattr              @585 
+    __dos_setftime                 @597 
+    __dos_settime                  @596 
+    __dos_write                    @598 
+    __ecvt                         @1049
+    __endthread                    @651 
+    __environ                      @629 
+    __envsize                      @1219
+    __exit                         @58  
+    __exitargv                     @1202
+    __expand_wild                  @261 
+    __expandptr                    @178 
+    __fcloseall                    @403 
+    __fcvt                         @1050
+    __fdopen                       @935 
+    __fgetc                        @132 
+    __fgetchar                     @404 
+    __fgetwc                       @896 
+    __fgetwchar                    @426 
+    __fileinfo                     @16  
+    __fileno                       @895 
+    __finite                       @1066
+    __finitel                      @1067
+    __flushall                     @936 
+    __flushout                     @873 
+    __fpreset                      @314 
+    __fputc                        @267 
+    __fputchar                     @889 
+    __fputwc                       @937 
+    __fputwchar                    @890 
+    __free_heaps                   @1191
+    __fsopen                       @268 
+    __ftol                         @317 
+    __ftoul                        @1068
+    __ftruncate                    @84  
+    __fullpath                     @605 
+    __gcvt                         @1051
+    __get_osfhandle                @623 
+    __getdcwd                      @612 
+    __getdrive                     @948 
+    __getw                         @893 
+    __getws                        @894 
+    __huge_dble                    @320 
+    __huge_flt                     @319 
+    __huge_ldble                   @321 
+    __i64toa                       @1040
+    __i64tow                       @1042
+    __indefinite                   @322 
+    __ismbbalnum                   @1074
+    __ismbbalpha                   @1072
+    __ismbbgraph                   @1076
+    __ismbbkalpha                  @1069
+    __ismbbkana                    @1071
+    __ismbbkpunct                  @1070
+    __ismbblead                    @1077
+    __ismbbprint                   @1075
+    __ismbbpunct                   @1073
+    __ismbbtrail                   @1078
+    __ismbcalnum                   @1145
+    __ismbcalpha                   @1084
+    __ismbcdigit                   @1085
+    __ismbcgraph                   @1146
+    __ismbchira                    @1086
+    __ismbckata                    @1087
+    __ismbcl0                      @1088
+    __ismbcl1                      @1089
+    __ismbcl2                      @1090
+    __ismbclegal                   @1091
+    __ismbclower                   @1092
+    __ismbcprint                   @1093
+    __ismbcpunct                   @1147
+    __ismbcspace                   @1094
+    __ismbcsymbol                  @1095
+    __ismbcupper                   @1096
+    __ismbslead                    @1106
+    __ismbstrail                   @1107
+    __isnan                        @1064
+    __isnanl                       @1065
+    __itow                         @1056
+    __llocaleconv                  @334 
+    __localeconvention             @295 
+    __lower                        @296 
+    __lrand                        @165 
+    __lrotl                        @133 
+    __lrotr                        @134 
+    __lsetlocale                   @333 
+    __lstrcoll                     @336 
+    __lstricoll                    @988 
+    __lstrlwr                      @337 
+    __lstrncoll                    @990 
+    __lstrnicoll                   @992 
+    __lstrupr                      @338 
+    __lstrxfrm                     @339 
+    __ltoa                         @1055
+    __ltolower                     @340 
+    __ltoupper                     @341 
+    __ltow                         @1058
+    __ltowlower                    @997 
+    __ltowupper                    @998 
+    __lwcscoll                     @987 
+    __lwcsicoll                    @989 
+    __lwcslwr                      @994 
+    __lwcsncoll                    @991 
+    __lwcsnicoll                   @993 
+    __lwcsupr                      @995 
+    __lwcsxfrm                     @996 
+    __lwsetlocale                  @1000
+    __makepath                     @141 
+    __max_dble                     @1053
+    __max_flt                      @1052
+    __max_ldble                    @1054
+    __mbbtombc                     @1136
+    __mbbtype                      @1079
+    __mbccmp                       @1080
+    __mbccpy                       @1081
+    __mbcjistojms                  @1097
+    __mbcjmstojis                  @1098
+    __mbclen                       @1082
+    __mbctohira                    @1133
+    __mbctokata                    @1134
+    __mbctolower                   @1135
+    __mbctombb                     @1137
+    __mbctoupper                   @1138
+    __mbsbtype                     @1099
+    __mbscat                       @1148
+    __mbschr                       @1100
+    __mbscmp                       @1101
+    __mbscoll                      @1139
+    __mbscpy                       @1149
+    __mbscspn                      @1102
+    __mbsdec                       @1103
+    __mbsdup                       @1150
+    __mbsicmp                      @1104
+    __mbsicoll                     @1142
+    __mbsinc                       @1105
+    __mbslen                       @1108
+    __mbslwr                       @1109
+    __mbsnbcat                     @1110
+    __mbsnbcmp                     @1111
+    __mbsnbcnt                     @1112
+    __mbsnbcoll                    @1143
+    __mbsnbcpy                     @1113
+    __mbsnbicmp                    @1114
+    __mbsnbicoll                   @1144
+    __mbsnbset                     @1115
+    __mbsncat                      @1116
+    __mbsnccnt                     @1117
+    __mbsncmp                      @1118
+    __mbsncoll                     @1141
+    __mbsncpy                      @1119
+    __mbsnextc                     @1120
+    __mbsnicmp                     @1121
+    __mbsnicoll                    @1140
+    __mbsninc                      @1122
+    __mbsnset                      @1123
+    __mbspbrk                      @1124
+    __mbsrchr                      @1125
+    __mbsrev                       @1126
+    __mbsset                       @1127
+    __mbsspn                       @1128
+    __mbsspnp                      @1129
+    __mbsstr                       @1130
+    __mbstok                       @1131
+    __mbsupr                       @1132
+    __messagefile                  @878 
+    __mkdir                        @951 
+    __mktemp                       @897 
+    __nfile                        @68  
+    __open                         @563 
+    __open_osfhandle               @624 
+    __oscmd                        @202 
+    __osenv                        @201 
+    __osmajor                      @642 
+    __osminor                      @643 
+    __osmode                       @644 
+    __ostype                       @879 
+    __osversion                    @645 
+    __pclose                       @269 
+    __pipe                         @564 
+    __popen                        @270 
+    __putw                         @900 
+    __putws                        @901 
+    __read                         @566 
+    __rmdir                        @952 
+    __rmtmp                        @903 
+    __rotl                         @173 
+    __rotr                         @174 
+    __rtl_chmod                    @558 
+    __rtl_close                    @560 
+    __rtl_creat                    @265 
+    __rtl_open                     @562 
+    __rtl_read                     @565 
+    __rtl_write                    @872 
+    __searchenv                    @196 
+    __searchstr                    @198 
+    __setargv                      @179 
+    __setcursortype                @575 
+    __setmbcp                      @1083
+    __sleep                        @634 
+    __sopen                        @905 
+    __splitpath                    @193 
+    __startup                      @203 
+    __startupd                     @204 
+    __stat                         @953 
+    __stati64                      @954 
+    __status87                     @362 
+    __stkbase                      @416 
+    __stkchk                       @415 
+    __stpcpy                       @271 
+    __strdate                      @637 
+    __streams                      @67  
+    __strerror                     @215 
+    __stricoll                     @1002
+    __strncoll                     @1004
+    __strnicoll                    @1006
+    __strtime                      @638 
+    __strtold                      @364 
+    __sys_errlist                  @155 
+    __sys_nerr                     @156 
+    __tccmp                        @1189
+    __tccpy                        @1188
+    __tclen                        @1187
+    __tcschr                       @1151
+    __tcsclen                      @1175
+    __tcscmp                       @1163
+    __tcscoll                      @1169
+    __tcscspn                      @1152
+    __tcsdec                       @1179
+    __tcsicmp                      @1164
+    __tcsicoll                     @1170
+    __tcsinc                       @1180
+    __tcslwr                       @1185
+    __tcsnbcnt                     @1181
+    __tcsncat                      @1153
+    __tcsnccat                     @1176
+    __tcsnccmp                     @1165
+    __tcsnccnt                     @1182
+    __tcsnccoll                    @1171
+    __tcsnccpy                     @1177
+    __tcsncicmp                    @1167
+    __tcsncicoll                   @1173
+    __tcsncmp                      @1166
+    __tcsncoll                     @1172
+    __tcsncpy                      @1154
+    __tcsncset                     @1178
+    __tcsnextc                     @1190
+    __tcsnicmp                     @1168
+    __tcsnicoll                    @1174
+    __tcsninc                      @1183
+    __tcsnset                      @1160
+    __tcspbrk                      @1155
+    __tcsrchr                      @1156
+    __tcsrev                       @1161
+    __tcsset                       @1162
+    __tcsspn                       @1157
+    __tcsspnp                      @1184
+    __tcsstr                       @1158
+    __tcstok                       @1159
+    __tcsupr                       @1186
+    __tempnam                      @910 
+    __timezone                     @247 
+    __tiny_ldble                   @323 
+    __tzname                       @248 
+    __tzset                        @1635
+    __ui64toa                      @1039
+    __ui64tow                      @1041
+    __ultow                        @1057
+    __unsetuserhandler             @48  
+    __upper                        @297 
+    __utime                        @955 
+    __version                      @646 
+    __wargv                        @1203
+    __wasctime                     @1633
+    __wchdir                       @956 
+    __wchmod                       @957 
+    __wcreat                       @916 
+    __wcsdup                       @369 
+    __wcsicmp                      @392 
+    __wcsicoll                     @1003
+    __wcslwr                       @1009
+    __wcsncoll                     @1005
+    __wcsnicmp                     @393 
+    __wcsnicoll                    @1007
+    __wcsnset                      @382 
+    __wcspcpy                      @391 
+    __wcsrev                       @385 
+    __wcsset                       @386 
+    __wcstold                      @1059
+    __wcsupr                       @1010
+    __wctime                       @1634
+    __wenviron                     @1220
+    __wenvsize                     @1221
+    __wexecl                       @1192
+    __wexecle                      @1193
+    __wexeclp                      @1194
+    __wexeclpe                     @1195
+    __wexecv                       @1196
+    __wexecve                      @1197
+    __wexecvp                      @1198
+    __wexecvpe                     @1199
+    __wexitargv                    @1205
+    __wexpand_wild                 @1218
+    __wexpandptr                   @1204
+    __wfdopen                      @939 
+    __wfindfirst                   @917 
+    __wfindnext                    @918 
+    __wfnmerge                     @932 
+    __wfnsplit                     @930 
+    __wfopen                       @919 
+    __wfreopen                     @920 
+    __wfsopen                      @940 
+    __wfullpath                    @958 
+    __wgetcurdir                   @949 
+    __wgetcwd                      @921 
+    __wgetdcwd                     @950 
+    __wgetenv                      @1200
+    __wmakepath                    @926 
+    __wmemchr                      @101 
+    __wmemcpy                      @102 
+    __wmemset                      @103 
+    __wmkdir                       @959 
+    __wmktemp                      @927 
+    __wopen                        @898 
+    __woscmd                       @1224
+    __wosenv                       @1223
+    __wperror                      @928 
+    __wpopen                       @941 
+    __wputenv                      @1201
+    __wremove                      @902 
+    __wrename                      @960 
+    __write                        @567 
+    __wrmdir                       @961 
+    __wrtl_chmod                   @966 
+    __wrtl_creat                   @938 
+    __wrtl_open                    @965 
+    __wscroll                      @264 
+    __wsearchenv                   @1215
+    __wsearchstr                   @1217
+    __wsetargv                     @1206
+    __wsetlocale                   @999 
+    __wsopen                       @929 
+    __wspawnl                      @1207
+    __wspawnle                     @1208
+    __wspawnlp                     @1209
+    __wspawnlpe                    @1210
+    __wspawnv                      @1211
+    __wspawnve                     @1212
+    __wspawnvp                     @1213
+    __wspawnvpe                    @1214
+    __wsplitpath                   @931 
+    __wstartup                     @1225
+    __wstartupd                    @1226
+    __wstat                        @962 
+    __wstati64                     @963 
+    __wstrdate                     @1638
+    __wstrtime                     @1639
+    __wsystem                      @1222
+    __wtempnam                     @933 
+    __wtmpnam                      @934 
+    __wtof                         @1043
+    __wtoi                         @1045
+    __wtoi64                       @1047
+    __wtol                         @1044
+    __wtold                        @1048
+    __wtzname                      @1636
+    __wtzset                       @1637
+    __wutime                       @964 
+    _abort                         @1   
+    _abs                           @2   
+    _access                        @3   
+    _acos                          @280 
+    _acosl                         @282 
+    _alloca                        @4   
+    _asctime                       @36  
+    _asin                          @279 
+    _asinl                         @281 
+    _atan                          @283 
+    _atan2                         @284 
+    _atan2l                        @285 
+    _atanl                         @286 
+    _atexit                        @7   
+    _atof                          @287 
+    _atoi                          @8   
+    _atol                          @9   
+    _bsearch                       @14  
+    _calloc                        @15  
+    _ceil                          @289 
+    _ceill                         @290 
+    _cerr                          @696 
+    _cgets                         @17  
+    _chdir                         @568 
+    _chmod                         @570 
+    _chsize                        @18  
+    _cin                           @694 
+    _clearerr                      @19  
+    _clock                         @571 
+    _clog                          @697 
+    _close                         @20  
+    _closedir                      @578 
+    _clreol                        @572 
+    _clrscr                        @573 
+    _cos                           @298 
+    _cosh                          @299 
+    _coshl                         @300 
+    _cosl                          @301 
+    _cout                          @695 
+    _cprintf                       @28  
+    _cputs                         @29  
+    _creat                         @30  
+    _creatnew                      @32  
+    _creattemp                     @31  
+    _cscanf                        @35  
+    _ctime                         @37  
+    _cwait                         @39  
+    _delline                       @109 
+    _difftime                      @303 
+    _div                           @42  
+    _dostounix                     @240 
+    _dup                           @43  
+    _dup2                          @44  
+    _ecvt                          @304 
+    _eof                           @45  
+    _execl                         @49  
+    _execle                        @50  
+    _execlp                        @51  
+    _execlpe                       @52  
+    _execv                         @53  
+    _execve                        @54  
+    _execvp                        @55  
+    _execvpe                       @56  
+    _exit                          @57  
+    _exp                           @306 
+    _expl                          @307 
+    _fabs                          @308 
+    _fabsl                         @309 
+    _fclose                        @61  
+    _fcloseall                     @21  
+    _fcvt                          @305 
+    _fdopen                        @62  
+    _feof                          @127 
+    _ferror                        @128 
+    _fflush                        @63  
+    _fgetc                         @444 
+    _fgetchar                      @64  
+    _fgetpos                       @65  
+    _fgets                         @66  
+    _fgetwc                        @942 
+    _fgetws                        @887 
+    _filelength                    @602 
+    _fileno                        @874 
+    _findfirst                     @69  
+    _findnext                      @70  
+    _floor                         @310 
+    _floorl                        @311 
+    _flushall                      @71  
+    _fmod                          @312 
+    _fmodl                         @313 
+    _fnmerge                       @72  
+    _fnsplit                       @73  
+    _fopen                         @74  
+    _fprintf                       @75  
+    _fputc                         @445 
+    _fputchar                      @76  
+    _fputs                         @77  
+    _fputwc                        @943 
+    _fputws                        @891 
+    _fread                         @78  
+    _free                          @98  
+    _freopen                       @79  
+    _frexp                         @315 
+    _frexpl                        @316 
+    _fscanf                        @80  
+    _fseek                         @81  
+    _fsetpos                       @83  
+    _fstat                         @603 
+    _ftell                         @82  
+    _ftime                         @604 
+    _fwprintf                      @888 
+    _fwrite                        @85  
+    _fwscanf                       @892 
+    _gcvt                          @318 
+    _getc                          @123 
+    _getch                         @606 
+    _getchar                       @124 
+    _getche                        @608 
+    _getcurdir                     @609 
+    _getcwd                        @86  
+    _getdate                       @610 
+    _getdfree                      @613 
+    _getdisk                       @614 
+    _getenv                        @87  
+    _getftime                      @88  
+    _getpass                       @89  
+    _getpid                        @90  
+    _gets                          @91  
+    _gettext                       @96  
+    _gettextinfo                   @255 
+    _gettime                       @611 
+    _getw                          @92  
+    _getwc                         @922 
+    _getwchar                      @923 
+    _gmtime                        @93  
+    _gotoxy                        @95  
+    _highvideo                     @22  
+    _hypot                         @324 
+    _hypotl                        @325 
+    _insline                       @110 
+    _isalnum                       @111 
+    _isalpha                       @112 
+    _isascii                       @122 
+    _isatty                        @130 
+    _iscntrl                       @113 
+    _isdigit                       @114 
+    _isgraph                       @115 
+    _islower                       @116 
+    _isprint                       @117 
+    _ispunct                       @118 
+    _isspace                       @119 
+    _isupper                       @120 
+    _iswalnum                      @973 
+    _iswalpha                      @975 
+    _iswascii                      @974 
+    _iswcntrl                      @976 
+    _iswdigit                      @977 
+    _iswgraph                      @978 
+    _iswlower                      @979 
+    _iswprint                      @980 
+    _iswpunct                      @981 
+    _iswspace                      @982 
+    _iswupper                      @983 
+    _iswxdigit                     @984 
+    _isxdigit                      @121 
+    _itoa                          @138 
+    _kbhit                         @617 
+    _labs                          @131 
+    _ldexp                         @326 
+    _ldexpl                        @327 
+    _ldiv                          @41  
+    _lfind                         @135 
+    _localeconv                    @294 
+    _localtime                     @94  
+    _lock                          @618 
+    _locking                       @620 
+    _log                           @329 
+    _log10                         @330 
+    _log10l                        @331 
+    _logl                          @332 
+    _longjmp                       @631 
+    _lowvideo                      @23  
+    _lsearch                       @136 
+    _lseek                         @137 
+    _ltoa                          @139 
+    _malloc                        @99  
+    _mblen                         @342 
+    _mbstowcs                      @343 
+    _mbtowc                        @344 
+    _memccpy                       @142 
+    _memchr                        @143 
+    _memcmp                        @144 
+    _memcpy                        @145 
+    _memicmp                       @146 
+    _memmove                       @147 
+    _memset                        @148 
+    _mkdir                         @621 
+    _mktemp                        @149 
+    _mktime                        @150 
+    _modf                          @347 
+    _modfl                         @348 
+    _movetext                      @622 
+    _normvideo                     @24  
+    _open                          @153 
+    _opendir                       @576 
+    _perror                        @154 
+    _poly                          @349 
+    _polyl                         @350 
+    _pow                           @351 
+    _pow10                         @352 
+    _pow10l                        @353 
+    _powl                          @354 
+    _printf                        @157 
+    _putc                          @126 
+    _putch                         @158 
+    _putchar                       @125 
+    _putenv                        @159 
+    _puts                          @160 
+    _puttext                       @97  
+    _putw                          @161 
+    _putwc                         @924 
+    _putwchar                      @925 
+    _qsort                         @162 
+    _raise                         @632 
+    _rand                          @163 
+    _read                          @166 
+    _readdir                       @577 
+    _realloc                       @167 
+    _remove                        @170 
+    _rename                        @625 
+    _rewind                        @171 
+    _rewinddir                     @579 
+    _rmdir                         @626 
+    _rmtmp                         @172 
+    _scanf                         @175 
+    _searchpath                    @197 
+    _setbuf                        @180 
+    _setdate                       @627 
+    _setdisk                       @615 
+    _setftime                      @181 
+    _setjmp                        @630 
+    _setlocale                     @355 
+    _setmode                       @182 
+    _settime                       @628 
+    _setvbuf                       @183 
+    _signal                        @633 
+    _sin                           @356 
+    _sinh                          @357 
+    _sinhl                         @358 
+    _sinl                          @359 
+    _sopen                         @184 
+    _spawnl                        @185 
+    _spawnle                       @186 
+    _spawnlp                       @187 
+    _spawnlpe                      @188 
+    _spawnv                        @189 
+    _spawnve                       @190 
+    _spawnvp                       @191 
+    _spawnvpe                      @192 
+    _sprintf                       @194 
+    _sqrt                          @360 
+    _sqrtl                         @361 
+    _srand                         @164 
+    _sscanf                        @199 
+    _stackavail                    @205 
+    _stat                          @635 
+    _stime                         @636 
+    _stpcpy                        @206 
+    _strcat                        @207 
+    _strchr                        @208 
+    _strcmp                        @209 
+    _strcoll                       @210 
+    _strcpy                        @211 
+    _strcspn                       @212 
+    _strdup                        @213 
+    _strerror                      @214 
+    _strftime                      @216 
+    _stricmp                       @217 
+    _strlen                        @218 
+    _strlwr                        @219 
+    _strncat                       @220 
+    _strncmp                       @221 
+    _strncpy                       @222 
+    _strnicmp                      @223 
+    _strnset                       @224 
+    _strpbrk                       @225 
+    _strrchr                       @226 
+    _strrev                        @227 
+    _strset                        @228 
+    _strspn                        @229 
+    _strstr                        @230 
+    _strtod                        @363 
+    _strtok                        @231 
+    _strtol                        @232 
+    _strtoul                       @233 
+    _strupr                        @234 
+    _strxfrm                       @235 
+    _swab                          @236 
+    _swprintf                      @906 
+    _swscanf                       @908 
+    _system                        @639 
+    _tan                           @365 
+    _tanh                          @366 
+    _tanhl                         @367 
+    _tanl                          @368 
+    _tell                          @237 
+    _tempnam                       @238 
+    _textattr                      @25  
+    _textbackground                @26  
+    _textcolor                     @27  
+    _textmode                      @239 
+    _time                          @640 
+    _tmpfile                       @242 
+    _tmpnam                        @243 
+    _tolower                       @244 
+    _toupper                       @245 
+    _towlower                      @1012
+    _towupper                      @1013
+    _tzset                         @249 
+    _ultoa                         @140 
+    _umask                         @250 
+    _ungetc                        @251 
+    _ungetch                       @607 
+    _ungetwc                       @911 
+    _unixtodos                     @241 
+    _unlink                        @252 
+    _unlock                        @619 
+    _utime                         @641 
+    _vfprintf                      @253 
+    _vfscanf                       @254 
+    _vfwprintf                     @912 
+    _vfwscanf                      @913 
+    _vprintf                       @256 
+    _vscanf                        @257 
+    _vsprintf                      @195 
+    _vsscanf                       @200 
+    _vswprintf                     @907 
+    _vswscanf                      @909 
+    _vwprintf                      @914 
+    _vwscanf                       @915 
+    _wait                          @258 
+    _wclosedir                     @947 
+    _wcscat                        @292 
+    _wcschr                        @293 
+    _wcscmp                        @328 
+    _wcscoll                       @1001
+    _wcscpy                        @278 
+    _wcscspn                       @335 
+    _wcsftime                      @1008
+    _wcslen                        @100 
+    _wcsncat                       @390 
+    _wcsncmp                       @380 
+    _wcsncpy                       @381 
+    _wcspbrk                       @383 
+    _wcsrchr                       @384 
+    _wcsspn                        @387 
+    _wcsstr                        @388 
+    _wcstod                        @1060
+    _wcstok                        @389 
+    _wcstol                        @1061
+    _wcstombs                      @345 
+    _wcstoul                       @1062
+    _wcsxfrm                       @1011
+    _wctomb                        @346 
+    _wherex                        @259 
+    _wherey                        @260 
+    _window                        @262 
+    _wopendir                      @944 
+    _wprintf                       @899 
+    _wreaddir                      @946 
+    _wrewinddir                    @945 
+    _write                         @263 
+    _wscanf                        @904 
+    _wsearchpath                   @1216

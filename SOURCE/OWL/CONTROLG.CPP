@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.9  $
 //
 // Implementation of class TControlGadget.
 //----------------------------------------------------------------------------
@@ -17,6 +17,7 @@
 # include <owl/tooltip.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGadget);
 
 //
@@ -50,10 +51,10 @@ TControlGadget::SetBounds(const TRect& bounds)
   TRACEX(OwlGadget, 1, "TControlGadget::SetBounds() enter @" << (void*)this <<
     " bounds = " << bounds);
 
-  // Set the gadget bounds, then move, size & repaint the control
+  // Set the gadget bounds, then move & repaint the control
   //
   TGadget::SetBounds(bounds);
-  Control->SetWindowPos(0, Bounds, SWP_NOACTIVATE|SWP_NOZORDER);
+  Control->SetWindowPos(0, Bounds, SWP_NOACTIVATE|SWP_NOZORDER|SWP_NOSIZE);
 
   TRACEX(OwlGadget, 1, "TControlGadget::SetBounds() leave @" << (void*)this <<
     " bounds = " << bounds);
@@ -140,7 +141,7 @@ TControlGadget::Removed()
   // Should we destroy the control at this point??
   // Since it's no longer in the parent's child-list, there's a potential
   // leak. However, the semantics of this function is 'Removed' - therefore
-  // one could be removing the control to be reinserted in another 
+  // one could be removing the control to be reinserted in another
   // gadgetwindow.
 
   // Unregister ourself with the tooltip window (if there's one)

@@ -1,4 +1,5 @@
 :Base bcpp.hlp
+0 Borland C++ Programmer's Guide
 1 Lexical elements overview
 2 Lexical Elements = LexicalElements
 2 Whitespace Overview
@@ -437,6 +438,36 @@
 3 The 87 environment variable = The87EnvironmentVariable
 3 Registers and the 80x87 = RegistersAndThe80x87
 3 Disabling floating-point exceptions = DisablingFloating-PointExceptions
+
+1 16-bit Memory Management
+2 Running out of memory = RunningOutOfMemory
+2 Memory models 
+3 About memory models = MemoryModels
+3 The 8086 registers 
+4 About the 8086 registers = The8086registers
+4 General-purpose registers = GeneralPurposeRegisters
+4 Segment registers = SegmentRegisters
+4 Special-purpose registers = Special-PurposeRegisters
+4 The flags register = TheFlagsRegister
+3 Memory segmentation 
+4 About memory segmentation = MemorySegmentation
+4 Address calculation = AddressCalculation
+3 Pointers 
+4 About pointers= Memory_Pointers
+4 Near pointers = NearPointers
+4 Far pointers = FarPointers
+4 Huge pointers = HugePointers
+3 The six memory models
+4 About the six memory models = TheSixMemoryModels
+2 Mixed-model programming
+3 Addressing modifiers = Mixed-ModelProgrammingAddressingModifiers
+3 Segment pointers = SegmentPointers
+3 Declaring far objects = DeclaringFarObjects
+3 Declaring functions to be near or far = DeclaringFunctionsToBeNearOrFar
+3 Declaring pointers to be near, far, or huge = DeclaringPointersToBeNearFarOrHuge
+3 Pointing to a given segment:offset address = PointingToAGivenSegmentOffsetAddress
+3 Using library files = UsingLibraryFiles
+3 Linking mixed modules = LinkingMixedModules
 
 1 ANSI implementation-specific standards
 2 ANSI implementation-specific standards = ANSIImplSpecs

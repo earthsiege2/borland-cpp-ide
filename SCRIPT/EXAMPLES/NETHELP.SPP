@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // NETHELP.SPP: Internet Help. Open an URL with Netscape Navigator by
 //   selecting from a list of programming pages, FTP sites, and newsgroups.
@@ -13,7 +13,7 @@
 //
 // NOTES: All nethelp.* files must reside in the same directory.
 //--------------------------------------------------------------------------
-print "nethelp.spp";
+print typeid(module());
 
 //
 // IDE imports.
@@ -24,11 +24,11 @@ import scriptEngine;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
+if (!scriptEngine.IsLoaded("file")) scriptEngine.Load("file");
 
 URLs;  // Array of URLs.
 
-ModuleDir = GetModuleDir("nethelp.spp");  // Directory of this script.
+ModuleDir = GetModuleDir(typeid(module()));  // Directory of this script.
 
 //
 // Get the Netscape Navigator directory from the registry.

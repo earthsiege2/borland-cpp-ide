@@ -1,12 +1,12 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // MLIST.SPP: Multi-select List Window. Demonstrates a simple multiple-
 //   selection list window. Also shows how to position a popup window in
 //   the list.
 //--------------------------------------------------------------------------
-print "mlist.spp";
+print typeid(module());
 
 Items = {"Smoke", "String and cups", "Pony Express", "Wink", "Flare"};
 

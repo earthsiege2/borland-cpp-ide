@@ -1,12 +1,12 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // MODLIST.SPP: Module List. Demonstrates how to handle events from
 //   other objects to maintain the contents of a list. Implements some
 //   of the functionality provided by the Script | Modules dialog.
 //--------------------------------------------------------------------------
-print "modlist.spp";
+print typeid(module());
 
 //
 // IDE imports.

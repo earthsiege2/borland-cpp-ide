@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.9  $
 //
 //----------------------------------------------------------------------------
 #if !defined( CLASSLIB_ASSOC_H )
@@ -26,6 +26,10 @@
 # pragma option -po-
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 /*------------------------------------------------------------------------*/
 /*                                                                        */
 /*  template <class K,class V,class A> class TMDDAssociation              */
@@ -47,28 +51,28 @@ public:
     TMDDAssociation()
         {
         }
-        
+
     TMDDAssociation( const K& k, const V& v ) :
         KeyData(k),
         ValueData(v)
         {
         }
-        
+
     unsigned HashValue() const
         {
         return ::HashValue( KeyData );
         }
-        
+
     const K& Key() const
         {
         return KeyData;
         }
-        
+
     const V& Value() const
         {
         return ValueData;
         }
-        
+
     int operator == (const TMDDAssociation<K,V,A> & a) const
         {
         return KeyData == a.KeyData;
@@ -77,7 +81,7 @@ public:
     void DeleteElements()
         {
         }
-        
+
 protected:
 
     K KeyData;
@@ -101,7 +105,7 @@ public:
         TMDDAssociation<K,V,TStandardAllocator>()
         {
         }
-        
+
     TDDAssociation( const K& k, const V& v ) :
         TMDDAssociation<K,V,TStandardAllocator>( k, v )
         {
@@ -128,8 +132,8 @@ public:
         TMDDAssociation<K,TVoidPointer,A>()
         {
         }
-        
-    TMDIAssociation( const K& k, V *v ) : 
+
+    TMDIAssociation( const K& k, V *v ) :
         TMDDAssociation<K,TVoidPointer,A>( k, v )
         {
         }
@@ -151,7 +155,7 @@ public:
         {
         delete CONST_CAST(V *,Value());
         }
-        
+
 };
 
 /*------------------------------------------------------------------------*/
@@ -171,7 +175,7 @@ public:
         TMDIAssociation<K,V,TStandardAllocator>()
         {
         }
-        
+
     TDIAssociation( const K& k, V *v ) :
         TMDIAssociation<K,V,TStandardAllocator>( k, v )
         {
@@ -199,12 +203,12 @@ public:
         TMDDAssociation<TVoidPointer,V,A>()
         {
         }
-        
-    TMIDAssociation( K *k, const V& v ) : 
+
+    TMIDAssociation( K *k, const V& v ) :
         TMDDAssociation<TVoidPointer,V,A>( k, v )
         {
         }
-        
+
     const K *Key() const
         {
         return STATIC_CAST(K *, STATIC_CAST(void *, Parent::Key()));
@@ -219,14 +223,14 @@ public:
         {
         return ::HashValue( *Key() );
         }
-        
+
     Parent::Value;
 
     void DeleteElements()
         {
         delete CONST_CAST(K *,Key());
         }
-        
+
 };
 
 /*------------------------------------------------------------------------*/
@@ -246,7 +250,7 @@ public:
         TMIDAssociation<K,V,TStandardAllocator>()
         {
         }
-        
+
     TIDAssociation( K *k, const V& v ) :
         TMIDAssociation<K,V,TStandardAllocator>( k, v )
         {
@@ -274,23 +278,23 @@ public:
         TMDDAssociation<TVoidPointer,TVoidPointer,A>()
         {
         }
-        
-    TMIIAssociation( K *k, V *v ) : 
+
+    TMIIAssociation( K *k, V *v ) :
         TMDDAssociation<TVoidPointer,TVoidPointer,A>
             ( k, v )
         {
         }
-        
+
     const K *Key() const
         {
         return STATIC_CAST(K *, STATIC_CAST(void *, Parent::Key()));
         }
-        
+
     const V *Value() const
         {
         return STATIC_CAST(V *, STATIC_CAST(void *, Parent::Value()));
         }
-        
+
     int operator == (const TMIIAssociation<K,V,A>& a) const
         {
         return *Key() == *a.Key();
@@ -300,13 +304,13 @@ public:
         {
         return ::HashValue( *Key() );
         }
-        
+
     void DeleteElements()
         {
         delete CONST_CAST(K *,Key());
         delete CONST_CAST(V *,Value());
         }
-        
+
 };
 
 /*------------------------------------------------------------------------*/
@@ -326,13 +330,16 @@ public:
         TMIIAssociation<K,V,TStandardAllocator>()
         {
         }
-        
+
     TIIAssociation( K *k, V *v ) :
         TMIIAssociation<K,V,TStandardAllocator>( k, v )
         {
         }
 };
 
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po.

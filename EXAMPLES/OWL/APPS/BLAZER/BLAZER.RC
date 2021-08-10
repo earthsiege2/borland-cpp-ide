@@ -3,6 +3,7 @@
 // Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
 //----------------------------------------------------------------------------
 #include <owl/panespli.rc>
+#include <owl/except.rc>
 #include "blazer.rh"
 
 IDB_BALL BITMAP "ball.bmp"
@@ -30,6 +31,17 @@ IDM_AWCONTEXTMENU MENU
  MENUITEM "O&k",      IDOK
  MENUITEM "&Help",    IDHELP
  MENUITEM "&Options", OPTIONSID
+}
+
+IDA_ABOUT ACCELERATORS
+{
+	"K", IDOK, ALT
+	"k", IDOK, ALT
+   "H", IDHELP, ALT
+   "h", IDHELP, ALT
+   "O", OPTIONSID, ALT
+   "o", OPTIONSID, ALT
+   VK_ESCAPE, IDOK, VIRTKEY
 }
 
 IDI_BIGICON ICON
@@ -175,7 +187,7 @@ STRINGTABLE
 }
 
 IDD_SPEED DIALOG 2, 7, 175, 137
-STYLE WS_CHILD | WS_VISIBLE | WS_CAPTION
+STYLE DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CAPTION
 CAPTION "Speed"
 FONT 8, "MS Sans Serif"
 {
@@ -194,7 +206,7 @@ FONT 8, "MS Sans Serif"
 }
 
 IDD_BITBLT DIALOG 0, 0, 111, 82
-STYLE WS_CHILD | WS_VISIBLE | WS_CAPTION
+STYLE DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CAPTION
 CAPTION "BitBlt"
 FONT 8, "MS Sans Serif"
 {

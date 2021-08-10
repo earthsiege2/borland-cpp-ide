@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Implementation of TChooseColorDialog, a Choose Color Common Dialog class
 //----------------------------------------------------------------------------
@@ -11,6 +11,7 @@
 # include <owl/chooseco.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlCommDialog);  // diagnostic group for common dialogs
 
 uint TChooseColorDialog::SetRGBMsgId = 0;

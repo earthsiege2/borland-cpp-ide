@@ -2,12 +2,17 @@
 // ObjectWindows
 // Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.9  $
 //
 // Resources for ObjectWindows DLLs
 //----------------------------------------------------------------------------
 
 #include "version.rc"
+
+#if !defined(__WIN32__) && !defined(_WIN32)
+# include "owl/colmnhdr.rh"
+# include "owl/colmnhdr.rc"
+#endif
 
 #include "owl/docview.rc"
 #include "owl/editfile.rh"
@@ -29,4 +34,6 @@
 #include "owl/panespli.rc"
 #include "owl/propsht.rh"
 #include "owl/propsht.rc"
+#include "owl/winsock.rh"
+#include "owl/winsock.rc"
 

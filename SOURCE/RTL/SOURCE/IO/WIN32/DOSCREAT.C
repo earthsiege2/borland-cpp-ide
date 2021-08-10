@@ -7,30 +7,36 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #define INCL_ERROR_H
 #include <ntbc.h>
 
 #include <_io.h>
 #include <fcntl.h>
+#include <_tchar.h>
 
 
 /*--------------------------------------------------------------------------*
 
-Name            DosCreate - create a file
+Name            _tDosCreate used as DosCreate and _wDosCreate
+                DosCreate   - create a file
+                _wDosCreate - create a file
 
-Usage           unsigned DosCreate(char *pathP, DWORD attr, int *handlep,
-                    DWORD disp)
+Usage           unsigned DosCreate(char *pathP, unsigned attr, int *handlep,
+                    unsigned disp)
+                unsigned _wDosCreate(wchar_t *pathP, unsigned attr, int *handlep,
+                    unsigned disp)
 
-Prototype in    local
+Prototype in    _io.h
 
-Description     Used by _dos_creat and _dos_creatnew to create
+Description     Used by _trtl_creat, _dos_creat and _dos_creatnew to create
                 a file.
 
 Notes           disp is one of the following:
@@ -49,7 +55,7 @@ Return value    success : 0, and handle is stored at *handlep
 
 *---------------------------------------------------------------------------*/
 
-static unsigned DosCreate(char *pathP, DWORD attr, int *handlep, DWORD disp)
+unsigned _tDosCreate(_TCHAR *pathP, unsigned attr, int *handlep, unsigned disp)
 {
     HANDLE   handle;
     SECURITY_ATTRIBUTES sec;    /* used only to set inheritance flag */
@@ -63,7 +69,7 @@ static unsigned DosCreate(char *pathP, DWORD attr, int *handlep, DWORD disp)
 
     /* Create the file.
      */
-    if ((handle = CreateFile((char *)pathP, GENERIC_READ|GENERIC_WRITE,
+    if ((handle = CreateFile(pathP, GENERIC_READ|GENERIC_WRITE,
             FILE_SHARE_READ|FILE_SHARE_WRITE, &sec, disp,
             attr, NULL)) == (HANDLE)-1)
         return (__DOSerror());
@@ -134,11 +140,15 @@ Note            Compatible with Microsoft C.  Not the same as _creat().
 
 *---------------------------------------------------------------------------*/
 
+#ifndef _UNICODE
+
 unsigned _RTLENTRY _EXPFUNC
 _dos_creat (const char *pathP, unsigned attr, int *handle )
 {
-    return( DosCreate((char *)pathP, attr, handle, CREATE_ALWAYS) );
+    return( _DosCreate((char *)pathP, attr, handle, CREATE_ALWAYS) );
 }
+
+#endif
 
 /*--------------------------------------------------------------------------*
 
@@ -160,8 +170,12 @@ Note            Compatible with Microsoft C.  Not the same as creatnew().
 
 *---------------------------------------------------------------------------*/
 
+#ifndef _UNICODE
+
 unsigned _RTLENTRY _EXPFUNC
 _dos_creatnew (const char *pathP, unsigned attr, int *handle )
 {
-    return( DosCreate((char *)pathP, attr, handle, CREATE_NEW) );
+    return( _DosCreate((char *)pathP, attr, handle, CREATE_NEW) );
 }
+
+#endif

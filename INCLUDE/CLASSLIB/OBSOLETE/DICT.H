@@ -54,7 +54,7 @@ public:
         return dictionaryClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Dictionary";
         }

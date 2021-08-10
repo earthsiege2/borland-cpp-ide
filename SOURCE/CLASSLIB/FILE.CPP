@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All rights 
+// Copyright (c) 1993, 1997 by Borland International, All rights
 //
-//$Revision:   5.7  $
+//$Revision:   5.9  $
 //
 // TFile class implementation.
 //----------------------------------------------------------------------------
@@ -10,16 +10,17 @@
 #include <classlib/file.h>
 #include <limits.h>
 #include <services/dir.h>              // for findfirst()
+#include <tchar.h>
 
 #include <iostream.h>
 
-int TFile::Open(const char _BIDSFAR *name, uint16 access, uint16 permission)
+int TFile::Open(const _TCHAR _BIDSFAR *name, uint16 access, uint16 permission)
 {
   const unsigned shareFlags =
   Compat | DenyNone | DenyRead | DenyWrite | DenyRdWr | NoInherit;
   if (IsOpen())
     return 0;
-  Handle = ::sopen(name, access & ~shareFlags, access & shareFlags, permission);
+  Handle = ::_tsopen(name, access & ~shareFlags, access & shareFlags, permission);
   return IsOpen();
 }
 
@@ -98,16 +99,16 @@ struct dos_fdate {
   unsigned year : 7;
 };
 
-int TFile::GetStatus(const char _BIDSFAR *name, TFileStatus _BIDSFAR& status)
+int TFile::GetStatus(const _TCHAR _BIDSFAR *name, TFileStatus _BIDSFAR& status)
 {
-  if (::_fullpath(status.fullName, name, sizeof status.fullName) == 0) {
+  if (::_tfullpath(status.fullName, name, sizeof status.fullName) == 0) {
     status.fullName[0] = 0;
     return 0;
   }
   ffblk blk;
   const uint16 FA_ALL = FA_RDONLY | FA_HIDDEN | FA_SYSTEM |
                       FA_LABEL | FA_DIREC | FA_ARCH;
-  if (findfirst(status.fullName, &blk, FA_ALL) != 0)
+  if (_tfindfirst(status.fullName, &blk, FA_ALL) != 0)
     return 0;
 
   union {
@@ -123,7 +124,7 @@ int TFile::GetStatus(const char _BIDSFAR *name, TFileStatus _BIDSFAR& status)
                             time.hour,
                             time.min,
                             time.tsec*2);
-  
+
   status.modifyTime = status.createTime;
   status.accessTime = status.createTime;
   status.size = blk.ff_fsize;
@@ -133,9 +134,9 @@ int TFile::GetStatus(const char _BIDSFAR *name, TFileStatus _BIDSFAR& status)
 
 #elif defined(BI_PLAT_OS2)
 
-int TFile::GetStatus(const char _BIDSFAR *name, TFileStatus _BIDSFAR& status)
+int TFile::GetStatus(const _TCHAR _BIDSFAR *name, TFileStatus _BIDSFAR& status)
 {
-  if (::_fullpath(status.fullName, name, sizeof(status.fullName)) == 0) {
+  if (::_tfullpath(status.fullName, name, sizeof(status.fullName)) == 0) {
     status.fullName[0] = '\0';
     return 0;
   }
@@ -155,7 +156,7 @@ int TFile::GetStatus(const char _BIDSFAR *name, TFileStatus _BIDSFAR& status)
     status.fullName[0] = '\0';
     return 0;
   }
-    
+
   status.createTime = MakeTTime(stat.fdateCreation, stat.ftimeCreation);
   status.modifyTime = MakeTTime(stat.fdateLastWrite, stat.ftimeLastWrite);
   status.accessTime = MakeTTime(stat.fdateLastAccess, stat.ftimeLastAccess);
@@ -167,7 +168,7 @@ int TFile::GetStatus(const char _BIDSFAR *name, TFileStatus _BIDSFAR& status)
 
 #if defined(BI_PLAT_DOS) || defined(BI_PLAT_WIN16) || (defined(BI_PLAT_WIN32) && defined(BI_COMP_BORLANDC))
 
-int TFile::SetStatus(const char _BIDSFAR *name,
+int TFile::SetStatus(const _TCHAR _BIDSFAR *name,
                   const TFileStatus _BIDSFAR & status)
 {
   int attr = ::_rtl_chmod(name, 0);
@@ -214,7 +215,7 @@ FTIME MakeFTIME(TTime time)
   return ftime;
 }
 
-int TFile::SetStatus(const char _BIDSFAR *name,
+int TFile::SetStatus(const _TCHAR _BIDSFAR *name,
                   const TFileStatus _BIDSFAR & status)
 {
   FILESTATUS stat;

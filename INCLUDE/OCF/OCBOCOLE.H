@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.9  $
 //
 // ObjectComponents BOcOle engine linking & embedding interfaces
 //----------------------------------------------------------------------------
@@ -17,6 +19,10 @@
 # include <pshpack8.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
 //
 // BOcOle DLL name, entry point and version resource
 //
@@ -28,7 +34,7 @@
 # define BOLEDLLW BOLEDLL
 #endif
 #define BOLEBIND "CreateClassMgr"
-#define BOLE_FILEVER_LS 0x00010053L
+#define BOLE_FILEVER_LS 0x00010054L
 #define BOLE_FILEVER_MS 0x00010001L
 
 //
@@ -75,8 +81,8 @@ DEFINE_BOLEGUID(IID_IBControlSite,    0x02A121L);
 DEFINE_BOLEGUID(IID_BOleFont,         0x02A122L);
 DEFINE_BOLEGUID(IID_BOleControlSite,  0x02A123L);
 DEFINE_BOLEGUID(IID_IBEventsHandler,  0x02A124L);
-DEFINE_BOLEGUID(IID_IBEventClass,	  0x02A125L);
-DEFINE_BOLEGUID(IID_IBSinkList,		  0x02A126L);
+DEFINE_BOLEGUID(IID_IBEventClass,         0x02A125L);
+DEFINE_BOLEGUID(IID_IBSinkList,           0x02A126L);
 DEFINE_BOLEGUID(IID_BOlePicture,      0x02A127L);
 //DEFINE_BOLEGUID(IID_BOlePart2,        0x02A127L);
 DEFINE_BOLEGUID(IID_IBPicture,       0x02A128L);
@@ -140,7 +146,7 @@ class _ICLASS IBDataState;
 //
 // The OLE2-defined macros for these guys don't round. Our versions
 // add half the denominator so that the truncated result of the integer
-// division is rounded to the nearest integer. 
+// division is rounded to the nearest integer.
 //
 #define HIMETRIC_PER_INCH   2540      // number HIMETRIC units per inch
 
@@ -438,10 +444,10 @@ class _ICLASS IBSite2 : public IBSite {
 // IBDataState
 //
 class _ICLASS IBDataState: public IUnknown {
-	public:
-  	virtual void _IFUNC SetDirty (BOOL) 															= 0;
-		virtual HRESULT _IFUNC IsDirty ()																	= 0;
-		virtual HRESULT _IFUNC GetClassID (LPCLSID)												= 0;
+        public:
+        virtual void _IFUNC SetDirty (BOOL)                                                                                                                     = 0;
+                virtual HRESULT _IFUNC IsDirty ()                                                                                                                                       = 0;
+                virtual HRESULT _IFUNC GetClassID (LPCLSID)                                                                                             = 0;
 };
 
 //
@@ -482,8 +488,8 @@ class _ICLASS IBControl : public IBPart //, public IBDataProvider2
     virtual HRESULT _IFUNC OnMnemonic (LPMSG)                           = 0;
     virtual HRESULT _IFUNC FreezeEvents (BOOL)                           = 0;
     virtual HRESULT _IFUNC GetClassInfo (LPTYPEINFO FAR*)              = 0;
-    virtual HRESULT _IFUNC GetSizeMax (ULARGE_INTEGER FAR*)							= 0;
-    virtual HRESULT _IFUNC Save (LPSTREAM)															= 0;
+    virtual HRESULT _IFUNC GetSizeMax (ULARGE_INTEGER FAR*)                                                     = 0;
+    virtual HRESULT _IFUNC Save (LPSTREAM)                                                                                                                      = 0;
 };
 
 //
@@ -512,7 +518,7 @@ class _ICLASS IBEventsHandler : public IUnknown {
 class _ICLASS IBEventClass : public IUnknown {
   public:
     virtual HRESULT _IFUNC GetSinkList(IBSinkList **)                  = 0;
-    virtual HRESULT _IFUNC FreezeEvents (BOOL)													= 0;
+    virtual HRESULT _IFUNC FreezeEvents (BOOL)                                                                                                  = 0;
 
 };
 
@@ -632,6 +638,10 @@ DEFINE_INLINE_QI(IBDataState, IUnknown)
 
 #if defined(BI_PLAT_WIN32)
 # include <poppack.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
 #endif
 
 #endif  // OCF_OCBOCOLE_H

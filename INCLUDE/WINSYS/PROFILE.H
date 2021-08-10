@@ -2,7 +2,7 @@
 // Borland WinSys Library
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//$Revision:   5.5  $
+//$Revision:   5.9  $
 //
 // Definition of TProfile class
 //----------------------------------------------------------------------------
@@ -13,6 +13,10 @@
 # include <winsys/defs.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 //
 // class TProfile
 // ~~~~~ ~~~~~~~~
@@ -20,23 +24,27 @@ class _WSYSCLASS TProfile  {
   public:
     // Use system global profile for filename==0
     //
-    TProfile(const char far* section, const char far* filename = 0);
+    TProfile(const _TCHAR far* section, const _TCHAR far* filename = 0);
    ~TProfile();
 
-    int GetInt(const char far* key, int defaultInt = 0);
+    int GetInt(const _TCHAR far* key, int defaultInt = 0);
 
     // Returns all section values if key==0
     //
-    bool GetString(const char far* key, char far* buff,
-                   unsigned buffSize, const char far* defaultString = "");
+    bool GetString(const _TCHAR far* key, _TCHAR far* buff,
+                   unsigned buffSize, const _TCHAR far* defaultString = "");
 
-    bool WriteInt(const char far* key, int value);
-    bool WriteString(const char far* key, const char far* str);
+    bool WriteInt(const _TCHAR far* key, int value);
+    bool WriteString(const _TCHAR far* key, const _TCHAR far* str);
     void Flush();
 
-  private:
-    char far* Section;     // Name of the section to use
-    char far* FileName;    // File name of the .INI file
+  protected:
+    _TCHAR far* Section;     // Name of the section to use
+    _TCHAR far* FileName;    // File name of the .INI file
 };
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib 
+#endif
 
 #endif  // WINSYS_PROFILE_H

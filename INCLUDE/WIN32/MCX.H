@@ -2,12 +2,13 @@
 *                                                                       *
 *   mcx.h -- This module defines the 32-Bit Windows MCX APIs            *
 *                                                                       *
-*   Copyright (c) 1990-1995, Microsoft Corp. All rights reserved.       *
+*   Copyright (c) 1990-1996, Microsoft Corp. All rights reserved.       *
 *                                                                       *
 ************************************************************************/
 
 #ifndef _MCX_H_
 #define _MCX_H_
+#pragma option -b
 
 typedef struct _MODEMDEVCAPS {
     DWORD   dwActualSize;
@@ -50,7 +51,7 @@ typedef struct _MODEMSETTINGS {
     DWORD   dwSpeakerVolume;            // level
     DWORD   dwSpeakerMode;              // mode
     DWORD   dwPreferredModemOptions;    // bitmap
-    
+
     // negotiated options (read only) for current or last call
     DWORD   dwNegotiatedModemOptions;   // bitmap
     DWORD   dwNegotiatedDCERate;        // bit/s
@@ -66,26 +67,26 @@ typedef struct _MODEMSETTINGS {
 
 // SpeakerVolume for MODEMDEVCAPS
 #define MDMVOLFLAG_LOW      0x00000001
-#define MDMVOLFLAG_MEDIUM   0x00000002 
-#define MDMVOLFLAG_HIGH     0x00000004 
+#define MDMVOLFLAG_MEDIUM   0x00000002
+#define MDMVOLFLAG_HIGH     0x00000004
 
 // SpeakerVolume for MODEMSETTINGS
 #define MDMVOL_LOW          0x00000000
-#define MDMVOL_MEDIUM       0x00000001 
+#define MDMVOL_MEDIUM       0x00000001
 #define MDMVOL_HIGH         0x00000002
 
 // SpeakerMode for MODEMDEVCAPS
-#define MDMSPKRFLAG_OFF         0x00000001 
-#define MDMSPKRFLAG_DIAL        0x00000002 
-#define MDMSPKRFLAG_ON          0x00000004 
+#define MDMSPKRFLAG_OFF         0x00000001
+#define MDMSPKRFLAG_DIAL        0x00000002
+#define MDMSPKRFLAG_ON          0x00000004
 #define MDMSPKRFLAG_CALLSETUP   0x00000008
 
 // SpeakerMode for MODEMSETTINGS
-#define MDMSPKR_OFF         0x00000000 
-#define MDMSPKR_DIAL        0x00000001 
-#define MDMSPKR_ON          0x00000002 
-#define MDMSPKR_CALLSETUP   0x00000003 
- 
+#define MDMSPKR_OFF         0x00000000
+#define MDMSPKR_DIAL        0x00000001
+#define MDMSPKR_ON          0x00000002
+#define MDMSPKR_CALLSETUP   0x00000003
+
 // Modem Options
 #define MDM_COMPRESSION      0x00000001
 #define MDM_ERROR_CONTROL    0x00000002
@@ -99,4 +100,5 @@ typedef struct _MODEMSETTINGS {
 #define MDM_BLIND_DIAL       0x00000200
 #define MDM_V23_OVERRIDE     0x00000400
 
+#pragma option -b.
 #endif /* _MCX_H_ */

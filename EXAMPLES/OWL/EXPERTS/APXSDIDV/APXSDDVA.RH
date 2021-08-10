@@ -21,7 +21,9 @@
 //
 #define IDI_SDIAPPLICATION      1001            // Application icon
 
-#define IDM_SDI                100             // Menu resource ID and Accelerator IDs
+#define IDM_SDI                 100             // Menu resource ID and Accelerator IDs
+
+#define IDM_PRINTPREVIEW        200             // Accelerator ID for Print Preview window.
 
 #define IDM_DOCMANAGERFILE      32401           // Menu for DocManager merging.
 #define IDM_EDITVIEW            32581           // Menu for TEditView merging.

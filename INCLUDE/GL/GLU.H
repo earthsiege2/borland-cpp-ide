@@ -12,9 +12,9 @@ Abstract:
 --*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1994, 1996 by Borland International
+ *      Copyright (c) 1994, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -22,6 +22,7 @@ Abstract:
 #ifndef __GLU_H__
 #define __GLU_H__
 #define __GLU_H
+#pragma option -b
 
 /*
 ** Copyright 1991-1993, Silicon Graphics, Inc.
@@ -40,7 +41,9 @@ Abstract:
 ** rights reserved under the Copyright Laws of the United States.
 */
 
+#pragma option -b.
 #include <GL/gl.h>
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -257,4 +260,5 @@ typedef void (CALLBACK* GLUnurbsErrorProc)   (GLenum);
 }
 #endif
 
+#pragma option -b.
 #endif /* __GLU_H__ */

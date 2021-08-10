@@ -3,7 +3,7 @@
   viewtest.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.15  $
+  $Revision:   1.18  $
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 #ifndef __AOEXPCH_H
@@ -40,6 +40,11 @@ static IViewType* g_propertyViewType;
 //
 ViewTest::ViewTest() 
 {
+  //
+  // Create IViewType and register IUserViewFactory. This must be done
+  // during startup.
+  //
+  
   //
   // Create project view factory
   //
@@ -152,9 +157,8 @@ const char * ViewTest::GetName()
 }
 //.............................................................................
 const char * ViewTest::GetTestDescription( int testNum )
-  {
-  switch ( testNum )
-    {
+{
+  switch ( testNum ) {
     case 1:
       return "Create project view";
     case 2:
@@ -163,13 +167,15 @@ const char * ViewTest::GetTestDescription( int testNum )
       return "Create project detail view";
     case 4:
       return "Create Monitor view";
-    }
+  }
   return "This test not implemented";
-  } 
+} 
 
 void ViewTest::DoTest1()
 {
-
+  //
+  // call IViewType::CreateInstance() to create a user view in IDE
+  //
   IPolyString* title = MakePolyString("Addon Project View");
   IViewParentWnd* pvp = g_projectViewType->CreateInstance(title);
   if (pvp) {
@@ -180,7 +186,9 @@ void ViewTest::DoTest1()
 
 void ViewTest::DoTest2()
 {
-
+  //
+  // call IViewType::CreateInstance() to create a user view in IDE
+  //
   IPolyString* title = MakePolyString("Addon Text View");
   IViewParentWnd* pvp = g_textViewType->CreateInstance(title);
   if (pvp) {
@@ -199,7 +207,9 @@ void ViewTest::DoTest2()
 
 void ViewTest::DoTest3()
 {
-
+  //
+  // call IViewType::CreateInstance() to create a user view in IDE
+  //
   IPolyString* title = MakePolyString("Addon Project Detail View");
   IViewParentWnd* pvp = g_projectDetailViewType->CreateInstance(title);
   if (pvp) {
@@ -214,7 +224,9 @@ void ViewTest::DoTest3()
 
 void ViewTest::DoTest4()
 {
-
+  //
+  // call IViewType::CreateInstance() to create a user view in IDE
+  //
   IPolyString* title = MakePolyString("Addon Monitor View");
   IViewParentWnd* pvp = g_MonitorViewType->CreateInstance(title);
   if (pvp) {
@@ -226,14 +238,12 @@ void ViewTest::DoTest4()
 //.............................................................................
 void ViewTest::DoTest( int testNum )
 {
-  switch ( testNum )
-  {
-    case 1: 
-    {
+  switch ( testNum ) {
+    case 1: {
       DoTest1();
       break;
-   }
-   case 2:
+    }
+    case 2:
       DoTest2();
       break;
     case 3:
@@ -242,9 +252,8 @@ void ViewTest::DoTest( int testNum )
     case 4:
       DoTest4();
       break;
-    default: 
-    {
-    OutStr( FormatStr( "Test #%d Not Implemented!", testNum ) );
+    default: {
+      OutStr( FormatStr( "Test #%d Not Implemented!", testNum ) );
       break;
     }
   }
@@ -266,7 +275,7 @@ void  CreateNewProjectView(ProjectNode node) {
    vClient->Release();
    pvp->Release();
   }
-};
+}
 
 void  CreateDetailView(ProjectNode* nodes, int nNodes) {
 
@@ -282,5 +291,4 @@ void  CreateDetailView(ProjectNode* nodes, int nNodes) {
 
     pvp->Release();
   }
-};
-
+}

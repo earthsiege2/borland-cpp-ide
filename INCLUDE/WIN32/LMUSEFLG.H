@@ -30,6 +30,7 @@ Revision History:
 #ifndef _LMUSEFLG_
 #define _LMUSEFLG_
 #define __LMUSEFLG_H
+#pragma option -b
 
 //
 // Definition for NetWkstaTransportDel and NetUseDel deletion force levels
@@ -40,4 +41,5 @@ Revision History:
 #define USE_LOTS_OF_FORCE       2
 
 
+#pragma option -b.
 #endif // _LMUSEFLG_

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.4  $
 //
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
@@ -19,6 +19,8 @@
 #if !defined(OWL_FRAMEWIN_H)
 # include <owl/framewin.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 

@@ -2,9 +2,12 @@
 
 #ifndef _XCMC_H
 #define _XCMC_H
+#pragma option -b
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
@@ -382,8 +385,11 @@ cmc_query_configuration(
 #endif
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif  /* _XCMC_H */
 

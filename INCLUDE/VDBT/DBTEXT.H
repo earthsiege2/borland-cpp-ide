@@ -86,10 +86,10 @@ class _DBAWARECLASS TDBText : public TDBControl {
     DECLARE_SOURCE( OnMouseUp,   TDBTextMouse );
 
     // Event Handlers
-    EVENT( OnClick,    TDBControl, TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl, TDragEvent );
-    EVENT( OnDragOver, TDBControl, TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl, TDragEvent );
+    DECLARE_DB_EVENT( OnClick,     TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop,  TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver,  TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,   TDragEvent );
     DECLARE_DB_EVENT( OnDblClick,  TNotifyEvent );
     DECLARE_DB_EVENT( OnMouseDown, TMouseEvent );
     DECLARE_DB_EVENT( OnMouseMove, TMouseEvent );
@@ -105,9 +105,9 @@ class _DBAWARECLASS TDBText : public TDBControl {
 
 // Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBText )
-DEFINE_DB_PROP_STRING( TDBText, FontName );
-DEFINE_DB_PROP_STRING( TDBText, Caption );
+DEFINE_DB_PROP_DATAFIELD( TDBText, _TDBText )
+DEFINE_DB_PROP_STRING( TDBText, _TDBText, FontName );
+DEFINE_DB_PROP_STRING( TDBText, _TDBText, Caption );
 
 // Methods
 inline char far* TDBText::GetClassName()

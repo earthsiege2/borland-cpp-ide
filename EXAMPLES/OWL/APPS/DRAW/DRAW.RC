@@ -5,6 +5,7 @@
 #include <owl/inputdia.rh>
 #include <owl/inputdia.rc>
 #include <owl/owlapp.rc>         // default owl app icon
+#include <owl/except.rc>
 #include <owl/window.rh>
 #include "draw.rh"
 

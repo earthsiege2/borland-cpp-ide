@@ -199,7 +199,11 @@ void TNotebook::PaintNBC(int paintcontrol)
   }
 }
 //----------------------------------------------------------------------------
+#if defined(BI_PLAT_WIN32)
+void TNotebook::EvNCPaint(HRGN region)
+#else
 void TNotebook::EvNCPaint()
+#endif
 {
   if (defer_ncpaint > 0) {
     defer_ncpaint--;
@@ -207,7 +211,13 @@ void TNotebook::EvNCPaint()
   }
 
   log("ncpaint being done");
-  TWindow::EvNCPaint(); // let windows paint everything else in NC
+
+// let windows paint everything else in NC
+#if defined(BI_PLAT_WIN32)
+  TWindow::EvNCPaint(region);
+#else
+  TWindow::EvNCPaint(); 
+#endif
 
   ComputeSizes();               // we are called before WM_SIZE is sent...
   PaintNBC(NBC_PAINTALL);

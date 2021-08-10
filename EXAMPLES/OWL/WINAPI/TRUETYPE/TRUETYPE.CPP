@@ -342,7 +342,7 @@ TFontWindow::Paint(TDC& dc, bool, TRect&)
   }
 
   dc.RestoreDC();
-  delete fontMetric;
+  delete[] fontMetric;
 }
 
 void

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.10  $
+//$Revision:   5.14  $
 //
 // Implementation of color classes
 //----------------------------------------------------------------------------
@@ -10,8 +10,23 @@
 #include <winsys/color.h>
 #include <winsys/system.h>
 
+// Few constants only defined when WINVER >= 0x0400
+//
+#if !defined(COLOR_3DDKSHADOW)
+# define COLOR_3DDKSHADOW        21
+#endif
+#if !defined(COLOR_3DLIGHT)
+# define COLOR_3DLIGHT           22
+#endif
+#if !defined(COLOR_INFOTEXT)
+# define COLOR_INFOTEXT          23
+#endif
+#if !defined(COLOR_INFOBK)
+# define COLOR_INFOBK            24
+#endif
+
 static bool
-isWin31() 
+isWin31()
 {
 #if   defined(BI_PLAT_WIN16)
   return !TSystem::IsWin95() && !TSystem::IsWoW();
@@ -44,31 +59,45 @@ const TColor TColor::Transparent(0xFE000000l);
 // Symbolic system colors looked up on evaluation or conversion
 //
 #define Symbolic 0x80000000UL
-const TColor TColor::SysScrollbar(Symbolic | 0);
-const TColor TColor::SysDesktop(Symbolic | 1);
-const TColor TColor::SysActiveCaption(Symbolic | 2);
-const TColor TColor::SysInactiveCaption(Symbolic | 3);
-const TColor TColor::SysMenu(Symbolic | 4);
-const TColor TColor::SysWindow(Symbolic | 5);
-const TColor TColor::SysWindowFrame(Symbolic | 6);
-const TColor TColor::SysMenuText(Symbolic | 7);
-const TColor TColor::SysWindowText(Symbolic | 8);
-const TColor TColor::SysCaptionText(Symbolic | 9);
-const TColor TColor::SysActiveBorder(Symbolic | 10);
-const TColor TColor::SysInactiveBorder(Symbolic | 11);
-const TColor TColor::SysAppWorkspace(Symbolic | 12);
-const TColor TColor::SysHighlight(Symbolic | 13);
-const TColor TColor::SysHighlightText(Symbolic | 14);
-const TColor TColor::Sys3dFace(Symbolic | 15);
-const TColor TColor::Sys3dShadow(Symbolic | 16);
-const TColor TColor::SysGrayText(Symbolic | 17);
-const TColor TColor::SysBtnText(Symbolic | 18);
-const TColor TColor::SysInactiveCaptionText(Symbolic | 19);
-const TColor TColor::Sys3dHilight(Symbolic | 20);
-const TColor TColor::Sys3dDkShadow(isWin31() ? (Symbolic | 6) : (Symbolic | 21));
-const TColor TColor::Sys3dLight(isWin31() ? (Symbolic | 15) : (Symbolic | 22));
-const TColor TColor::SysInfoText(isWin31() ? MkRGB(0,0,0) : (Symbolic | 23));
-const TColor TColor::SysInfoBk(isWin31() ? MkRGB(255,255,128) : (Symbolic | 24));
+const TColor TColor::SysScrollbar          (Symbolic | COLOR_SCROLLBAR);
+const TColor TColor::SysDesktop            (Symbolic | COLOR_BACKGROUND);
+const TColor TColor::SysActiveCaption      (Symbolic | COLOR_ACTIVECAPTION);
+const TColor TColor::SysInactiveCaption    (Symbolic | COLOR_INACTIVECAPTION);
+const TColor TColor::SysMenu               (Symbolic | COLOR_MENU);
+const TColor TColor::SysWindow             (Symbolic | COLOR_WINDOW);
+const TColor TColor::SysWindowFrame        (Symbolic | COLOR_WINDOWFRAME);
+const TColor TColor::SysMenuText           (Symbolic | COLOR_MENUTEXT);
+const TColor TColor::SysWindowText         (Symbolic | COLOR_WINDOWTEXT);
+const TColor TColor::SysCaptionText        (Symbolic | COLOR_CAPTIONTEXT);
+const TColor TColor::SysActiveBorder       (Symbolic | COLOR_ACTIVEBORDER);
+const TColor TColor::SysInactiveBorder     (Symbolic | COLOR_INACTIVEBORDER);
+const TColor TColor::SysAppWorkspace       (Symbolic | COLOR_APPWORKSPACE);
+const TColor TColor::SysHighlight          (Symbolic | COLOR_HIGHLIGHT);
+const TColor TColor::SysHighlightText      (Symbolic | COLOR_HIGHLIGHTTEXT);
+const TColor TColor::Sys3dFace             (Symbolic | COLOR_BTNFACE);
+const TColor TColor::Sys3dShadow           (Symbolic | COLOR_BTNSHADOW);
+const TColor TColor::SysGrayText           (Symbolic | COLOR_GRAYTEXT);
+const TColor TColor::SysBtnText            (Symbolic | COLOR_BTNTEXT);
+
+// NOTE: WINVER >= 0x030a
+//
+const TColor TColor::SysInactiveCaptionText(Symbolic | COLOR_INACTIVECAPTIONTEXT);
+const TColor TColor::Sys3dHilight          (Symbolic | COLOR_BTNHIGHLIGHT);
+
+// NOTE: WINVER >= 0x0400
+//
+const TColor TColor::Sys3dDkShadow(isWin31() ? (Symbolic | COLOR_WINDOWFRAME) :
+                                               (Symbolic | COLOR_3DDKSHADOW));
+const TColor TColor::Sys3dLight   (isWin31() ? (Symbolic | COLOR_BTNFACE) :
+                                               (Symbolic | COLOR_3DLIGHT));
+const TColor TColor::SysInfoText  (isWin31() ?  MkRGB(0,0,0) :
+                                               (Symbolic | COLOR_INFOTEXT));
+const TColor TColor::SysInfoBk    (isWin31() ?  MkRGB(255,255,128) :
+                                               (Symbolic | COLOR_INFOBK));
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 //
 // Convert a bit count into a color count for color table use, verifying that
@@ -102,6 +131,10 @@ NBits(long colors)
     return 16;
   return 24;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
 
 //
 // Get a 32bit COLORREF type from this color object. Performs a

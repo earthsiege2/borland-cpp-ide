@@ -1,0 +1,31 @@
+#-----------------------------------------------------------------------------
+# Borland C++ - (C) Copyright 1996 by Borland International
+#   examples\vdbt\evhandle\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN16 WIN32
+
+!ifndef SYSTEM
+SYSTEM = WIN32
+!endif
+
+!ifndef MODEL
+MODEL = d
+!endif
+
+
+!if $(SYSTEM)==WIN16
+MODELS = d l
+USERLIBS =bivbx.lib bdta.lib bdto.lib bdtc.lib ole2w16.lib
+DEFEXE = evhand16.def
+!else
+MODELS = d f
+USERLIBS =bivbx32.lib bdtaf.lib bdtof.lib bdtcf.lib ole2w32.lib
+DEFEXE = evhand32.def
+!endif
+
+EXERES = evhandle
+OBJEXE = evhandle.obj dialog.obj textwnd.obj
+RESEXE = evhandle.res
+USERLIBPATH = $(BCEXAMPLEDIR)\..\lib
+!include $(BCEXAMPLEDIR)\owlmake.gen

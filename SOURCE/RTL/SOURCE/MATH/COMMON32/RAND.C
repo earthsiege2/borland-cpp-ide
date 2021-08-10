@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #pragma inline
 
@@ -117,8 +118,8 @@ long _RTLENTRY _EXPFUNC _lrand(void)
 	_ESI = Seed.lo;
 
 	asm	mov	eax, ebx
-	asm	mov	ecx, 015A4h
-	asm	mov	ebx, 04E35h
+	asm	mov	ecx, 015Ah
+	asm	mov	ebx, 4E35h
 
 
 	asm	test	eax, eax
@@ -130,7 +131,6 @@ nohi1:
 	asm	mul	esi
 	asm	add	eax, ecx
 			
-nohi2:
 	asm	xchg	eax, esi
 	asm	mul	ebx
 	asm	add	edx, esi

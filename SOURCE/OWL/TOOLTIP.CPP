@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.19  $
+//$Revision:   10.31  $
 //
 // Implements the TTooltip class
 //----------------------------------------------------------------------------
@@ -24,6 +24,7 @@
 #endif
 
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlControl);        // General Controls diagnostic group
 
 //
@@ -65,14 +66,23 @@ TToolInfo::TToolInfo(bool allocCache)
 // a window's client area. 'window' receives the 'TTN_NEEDTEXT'
 // notification in case of txt default to LPSTR_TEXTCALLBACK.
 //
-TToolInfo::TToolInfo(TWindow::THandle window, const TRect& rc,
-                     uint toolId, const char far* txt)
+TToolInfo::TToolInfo(HWND window, const TRect& rc, uint toolId,
+                     const char* txt /*=LPSTR_TEXTCALLBACK*/)
 {
   memset(this, 0, sizeof(TOOLINFO));
   cbSize = sizeof(TOOLINFO);
   SetToolInfo(window, toolId);
   SetRect(rc);
-  SetText(txt);
+#if defined(BI_PLAT_WIN32)
+
+  // NOTE: When we're using the Common Control implementation we don't want
+  //       to cache the text since we won't keep a copy of the TToolInfo
+  //       structure around.
+  //
+  SetText(txt, false);
+#elif defined(BI_PLAT_WIN16)
+  SetText(txt, true);
+#endif
 }
 
 //
@@ -80,8 +90,8 @@ TToolInfo::TToolInfo(TWindow::THandle window, const TRect& rc,
 // a window's client area. 'strRes' and 'hInst' specify a string
 // resource of the message to be used by the tooltip window.
 //
-TToolInfo::TToolInfo(TWindow::THandle window, const TRect& rc,
-                     uint toolId, int  strRes, HINSTANCE hInst)
+TToolInfo::TToolInfo(HWND window, const TRect& rc, uint toolId,
+                     int strRes, HINSTANCE hInst)
 {
   memset(this, 0, sizeof(TOOLINFO));
   cbSize = sizeof(TOOLINFO);
@@ -94,13 +104,17 @@ TToolInfo::TToolInfo(TWindow::THandle window, const TRect& rc,
 // 'parent' receives the 'TTN_NEEDTEXT' notification in case of
 // 'txt' defaults to the LPSTR_TEXTCALLBACK.
 //
-TToolInfo::TToolInfo(TWindow::THandle parent, TWindow::THandle toolWnd,
-                     const char far* txt)
+TToolInfo::TToolInfo(HWND parent, HWND toolWnd,
+                     const char* txt /*=LPSTR_TEXTCALLBACK*/)
 {
   memset(this, 0, sizeof(TOOLINFO));
   cbSize = sizeof(TOOLINFO);
   SetToolInfo(toolWnd, parent);
-  SetText(txt);
+#if defined(BI_PLAT_WIN32)
+  SetText(txt, false);
+#elif defined(BI_PLAT_WIN16)
+  SetText(txt, true);
+#endif
 }
 
 //
@@ -108,7 +122,7 @@ TToolInfo::TToolInfo(TWindow::THandle parent, TWindow::THandle toolWnd,
 // 'strRes' and 'hInst' specify a string resource to be used by
 // the tooltip window.
 //
-TToolInfo::TToolInfo(TWindow::THandle parent, TWindow::THandle toolWnd,
+TToolInfo::TToolInfo(HWND parent, HWND toolWnd,
                      int strRes, HINSTANCE hInst)
 {
   memset(this, 0, sizeof(TOOLINFO));
@@ -120,7 +134,7 @@ TToolInfo::TToolInfo(TWindow::THandle parent, TWindow::THandle toolWnd,
 //
 //
 //
-TToolInfo::TToolInfo(const TToolInfo& other) 
+TToolInfo::TToolInfo(const TToolInfo& other)
 {
   // Use assignment operator
   //
@@ -130,7 +144,7 @@ TToolInfo::TToolInfo(const TToolInfo& other)
 //
 //
 //
-TToolInfo& 
+TToolInfo&
 TToolInfo::operator =(const TToolInfo& other)
 {
   if (&other != this) {
@@ -138,7 +152,7 @@ TToolInfo::operator =(const TToolInfo& other)
     if (other.lpszText == other.GetCacheText())
       SetText(other.GetCacheText());
     /***
-    else 
+    else
      'other.lpszText' is assumed to be NULL, LPSTR_CALLBACK or pointing
       to a buffer with a long lifetime. In all three cases a shallow copy of
       the pointer is safe.
@@ -150,7 +164,7 @@ TToolInfo::operator =(const TToolInfo& other)
 //
 //
 //
-void        
+void
 TToolInfo::SetToolInfo(HWND toolWin, uint id)
 {
   PRECONDITION(::IsWindow(toolWin));
@@ -162,7 +176,7 @@ TToolInfo::SetToolInfo(HWND toolWin, uint id)
 //
 //
 //
-void        
+void
 TToolInfo::SetToolInfo(HWND toolWin, uint id, const TRect& rc)
 {
   SetToolInfo(toolWin, id);
@@ -185,17 +199,17 @@ TToolInfo::SetToolInfo(HWND toolWin, HWND parent)
 //
 // Sets the text of this tool by providing a buffer that contains
 // the string. The boolean 'copy' flag specifies whether the method
-// should make a local copy of the string. 
+// should make a local copy of the string.
 //
-void 
-TToolInfo::SetText(const char far* text, bool copy)
+void
+TToolInfo::SetText(const char* text, bool copy)
 {
   if (text == LPSTR_TEXTCALLBACK || !text || !copy) {
     lpszText = (char*)text;
     CacheText= 0;
   }
   else {
-    CacheText = nstrnewdup(text);
+    CacheText = strnewdup(text);
     lpszText = (char*)CacheText;
   }
 }
@@ -263,7 +277,7 @@ TToolInfo::IsPointInTool(HWND win, const TPoint& pt) const
 //       For temporary buffers, use the 'CopyText' method instead.
 //
 void
-TTooltipText::SetText(char far* buff)
+TTooltipText::SetText(char* buff)
 {
   lpszText = buff;
 }
@@ -273,7 +287,7 @@ TTooltipText::SetText(char far* buff)
 // buffer owned by the 'TTooltipText'.
 //
 void
-TTooltipText::CopyText(const char far* text)
+TTooltipText::CopyText(const char* text)
 {
   strncpy(szText, text, sizeof(szText));
 }
@@ -297,7 +311,7 @@ TTooltipText::SetText(int resId, HINSTANCE hInstance)
 // Construct enabler object to be sent to a window so that the latter
 // can provide the text of the specified tool.
 //
-TTooltipEnabler::TTooltipEnabler(TTooltipText& tt, TWindow::THandle hReceiver)
+TTooltipEnabler::TTooltipEnabler(TTooltipText& tt, HWND hReceiver)
 :
   TCommandEnabler(tt.hdr.idFrom, hReceiver),
   TipText(tt)
@@ -332,22 +346,31 @@ TTooltipEnabler::SetCheck(int /*check*/)
 // Initializes its data fields using parameters passed and default values
 //
 // By default, a Tooltip associated with the TTooltip will:
-//   - be active regardless of whether it's owner is active or inactive
+//   - be active regardless of whether its owner is active or inactive
 //
 TTooltip::TTooltip(TWindow* parent, bool alwaysTip, TModule* module)
-:
-  TControl(parent, 0, "", 0, 0, 0, 0, module)
+         :TControl(parent, 0, "", 0, 0, 0, 0, module)
 {
-  Attr.Style = WS_POPUP;
+  Attr.Style = (WS_POPUP | WS_DISABLED);
+
+
   if (alwaysTip)
     Attr.Style |= TTS_ALWAYSTIP;
 
-  Attr.ExStyle = WS_EX_TOPMOST|WS_EX_TOOLWINDOW;
+#if defined(BI_PLAT_WIN16)
+
+  Attr.Style |= WS_BORDER;
+
+#elif defined(BI_PLAT_WIN32)
 
   if (TSystem::Has3dUI())
     Attr.ExStyle |= WS_EX_WINDOWEDGE;
   else
     Attr.Style |= WS_BORDER;
+
+#endif
+
+  Attr.ExStyle |= WS_EX_TOPMOST;
 
   // Use Native implementation if available
   //
@@ -459,12 +482,19 @@ TTooltip::AddTool(const TToolInfo& ti)
 
 //
 // Removes a tool from the tooltip control. You must invoke the
-// 'SetToolInfo' method of TToolInfo to identify the tool to remove. 
+// 'SetToolInfo' method of TToolInfo to identify the tool to remove.
 // [i.e. the 'hwnd' or 'uId' members of the TToolInfo must identify the tool].
 //
 void
 TTooltip::DeleteTool(const TToolInfo& ti)
 {
+  // Make sure we don't hang on to a dangling pointer
+  //
+  if (&ti == ActiveTool)
+    ActiveTool = 0;
+  if (&ti == PotentialTool)
+    PotentialTool = 0;
+
   int i;
   for (i=0; i<ToolList->GetCount(); i++) {
     if ((*ToolList)[i] == ti) {
@@ -476,7 +506,7 @@ TTooltip::DeleteTool(const TToolInfo& ti)
 }
 
 //
-// Retrieves the information that the tooltip control maintains 
+// Retrieves the information that the tooltip control maintains
 // about the specified tool. Returns true if successul or false otherwise.
 // NOTE: The index is zero-based and the TToolInfo structure receives
 //       the information about the tool.
@@ -497,8 +527,8 @@ TTooltip::EnumTools(uint index, TToolInfo& ti) const
 // parameter receives the information. Returns true if successful or
 // false otherwise.
 //
-bool 
-TTooltip::GetCurrentTool(TToolInfo& ti) const
+bool
+TTooltip::GetCurrentTool(TToolInfo& /*ti*/) const
 {
   TRACEX(OwlControl, 0, "TTooltip::GetCurrentTool requires system "\
                         "implementation of tooltips");
@@ -506,8 +536,8 @@ TTooltip::GetCurrentTool(TToolInfo& ti) const
 }
 
 //
-// Retrieves the text associated with the specified tool. You must 
-// invoke the 'SetToolInfo' of the TToolInfo object to identify the tool. 
+// Retrieves the text associated with the specified tool. You must
+// invoke the 'SetToolInfo' of the TToolInfo object to identify the tool.
 // [i.e. the 'hwnd' or 'uId' members of the TToolInfo must identify the tool].
 //
 void
@@ -524,8 +554,8 @@ TTooltip::GetToolText(TToolInfo& ti) const
 }
 
 //
-// Returns the number of tools currently registered with the 
-// tooltip control. 
+// Returns the number of tools currently registered with the
+// tooltip control.
 //
 uint
 TTooltip::GetToolCount() const
@@ -535,8 +565,8 @@ TTooltip::GetToolCount() const
 
 //
 // Retrieves the information that the tooltip control maintains about
-// a tool. You must invoke the 'SetToolInfo' of TToolInfo object to identify 
-// the tool. [i.e. the 'hwnd' or 'uId' members of the TToolInfo must 
+// a tool. You must invoke the 'SetToolInfo' of TToolInfo object to identify
+// the tool. [i.e. the 'hwnd' or 'uId' members of the TToolInfo must
 // identify the tool].
 //
 bool
@@ -553,16 +583,16 @@ TTooltip::GetToolInfo(TToolInfo& ti) const
 }
 
 //
-// Sets the information that the tooltip control maintains for a 
+// Sets the information that the tooltip control maintains for a
 // particular tool. You must invoke the 'SetToolInfo' of the ToolInfo object
-// to identify the tool. 
+// to identify the tool.
 //
 void
 TTooltip::SetToolInfo(const TToolInfo& ti)
 {
   for (int i=0; i<ToolList->GetCount(); i++) {
     if ((*ToolList)[i] == ti) {
-      (*ToolList)[i] == ti;
+      (*ToolList)[i] = ti;
       return;
     }
   }
@@ -570,7 +600,7 @@ TTooltip::SetToolInfo(const TToolInfo& ti)
 }
 
 //
-// Sets the text of a tool. You must invoke the 'SetToolInfo' method of 
+// Sets the text of a tool. You must invoke the 'SetToolInfo' method of
 // TToolInfo to identify the tool being referred to.
 //
 void
@@ -578,7 +608,7 @@ TTooltip::UpdateTipText(const TToolInfo& ti)
 {
   for (int i=0; i<ToolList->GetCount(); i++) {
     if ((*ToolList)[i] == ti) {
-      (*ToolList)[i] == ti;
+      (*ToolList)[i] = ti;
       return;
     }
   }
@@ -592,7 +622,7 @@ TTooltip::UpdateTipText(const TToolInfo& ti)
 // false otherwise.
 //
 bool
-TTooltip::HitTest(TTooltipHitTestInfo& ttHTInfo) const
+TTooltip::HitTest(TTooltipHitTestInfo& /*ttHTInfo*/) const
 {
   TRACEX(OwlControl, 0, "TTooltip::HitTest requires native "\
                         "implementation of tooltips");
@@ -600,7 +630,7 @@ TTooltip::HitTest(TTooltipHitTestInfo& ttHTInfo) const
 }
 
 //
-// Updates the bounding rectangle of a tool. You must invoke the 'SetToolId' 
+// Updates the bounding rectangle of a tool. You must invoke the 'SetToolId'
 // method of TToolInfo to identify the tool. [i.e. the 'uId' member
 // of the TToolInfo must identify the tool].
 //
@@ -657,7 +687,7 @@ TTooltip::RelayEvent(MSG& msg)
 //      TTDT_AUTOMATIC: Automatically calculates the initial. reshow
 //                      and autopopup duration based on 'delay'.
 //      TTDT_AUTOPOP:   Sets the length of time before the tooltip
-//                      window is hidden if the cursor remains 
+//                      window is hidden if the cursor remains
 //                      stationary in the tool's bounding rectangle
 //                      after the tooltip window has disappeared.
 //      TTDT_INITIAL:   Set the length of time that the cursor must
@@ -670,7 +700,7 @@ TTooltip::RelayEvent(MSG& msg)
 // NOTE: The 'delay' duration is in milliseconds.
 //
 void
-TTooltip::SetDelayTime(WPARAM flag, int delay)
+TTooltip::SetDelayTime(WPARAM /*flag*/, int delay)
 {
   Delay = delay;
 
@@ -685,7 +715,7 @@ TTooltip::SetDelayTime(WPARAM flag, int delay)
   // implementation of tooltips..
   //
   TRACEX(OwlControl, 0, "TTooltip::SetDelayTime: flag is ignored");
-  
+
 }
 
 //----------------------------------------------------------------------------
@@ -718,7 +748,7 @@ TTooltip::Cleanup()
 }
 
 //
-// Update the CLASSINFO to be registered to include SAVEBITS and 
+// Update the CLASSINFO to be registered to include SAVEBITS and
 // a NUL brush.
 //
 void
@@ -815,7 +845,7 @@ TTooltip::DisableTimer()
 }
 
 //
-// WM_TIMER Handler: Display a tip if the appropriate timeout has 
+// WM_TIMER Handler: Display a tip if the appropriate timeout has
 //                   occur for a tool.
 //
 void
@@ -847,7 +877,7 @@ TTooltip::EvTimer(uint timerId)
       // Check if mouse is still within the ActiveTool and hide tip if not
       //
       HWND hwnd = WindowFromPoint(curLoc);
-      if (hwnd) 
+      if (hwnd)
         ::MapWindowPoints(HWND_DESKTOP, hwnd, LPPOINT(&curLoc), 1);
       if (!ActiveTool->IsPointInTool(hwnd, curLoc)) {
         ActiveTool = 0;
@@ -872,16 +902,21 @@ TTooltip::EvGetFont()
 // WM_SETFONT Handler: Sets a new font to be used by handler
 //
 void
-TTooltip::EvSetFont(HFONT hFont, bool redraw)
+TTooltip::EvSetFont(HFONT hFont, bool /*redraw*/)
 {
   delete ToolFont;
   ToolFont = hFont ? new TFont(hFont) : (TFont*)0;
+
+  //
+  //
+  // if (redraw)
+  //   Invalidate();
 }
 
 //
 // WM_LBUTTONDOWN handler
 //
-void        
+void
 TTooltip::EvLButtonDown(uint /*modKeys*/, TPoint& /*point*/)
 {
   // NOP
@@ -890,7 +925,7 @@ TTooltip::EvLButtonDown(uint /*modKeys*/, TPoint& /*point*/)
 //
 // WM_RBUTTONDOWN handler
 //
-void        
+void
 TTooltip::EvRButtonDown(uint /*modKeys*/, TPoint& /*point*/)
 {
   // NOP
@@ -978,7 +1013,7 @@ TTooltip::ShowActiveTip(TPoint& pt)
                   LPARAM(&ttText));
 
     // Check if text is being provided via a resource
-    // NOTE: Non null 'hinst' implies 'lpszText' is a string resource 
+    // NOTE: Non null 'hinst' implies 'lpszText' is a string resource
     //       identifier.
     //
     if (ttText.hinst && ttText.lpszText) {
@@ -1019,7 +1054,7 @@ TTooltip::ShowActiveTip(TPoint& pt)
   TSize size; {
     TClientDC dc(*this);
     dc.SelectObject(*ToolFont);
-    dc.GetTextExtent(ActiveTool->GetCacheText(), 
+    dc.GetTextExtent(ActiveTool->GetCacheText(),
                      strlen(ActiveTool->GetCacheText()),
                      size);
     dc.RestoreFont();

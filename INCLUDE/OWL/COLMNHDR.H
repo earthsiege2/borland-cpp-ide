@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.10  $
 //
 // Definition of class TColumnHeader and helper classes
 //----------------------------------------------------------------------------
@@ -11,6 +11,10 @@
 
 #if !defined(OWL_COMMCTRL_H)
 # include <owl/commctrl.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 class _OWLCLASS THdrItem;
@@ -61,7 +65,7 @@ class _OWLCLASS THdrItem : public HD_ITEM {
 
     static  void  SetDefStringSize(int size);
     static  void  SetDefBitmapSize(int size);
-
+    
   protected:
     static  int  DefStringItemSize;
     static  int  DefBitmapItemSize;
@@ -86,6 +90,15 @@ class THeaderHitTestInfo : public HD_HITTESTINFO {
 //  TColumnHeader encapsulates the 'header control', a window
 //  usually positioned above columns of text or numbers.
 //
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+#include <classlib/arrays.h>
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS TColumnHeader : public TControl {
   public:
     TColumnHeader(TWindow* parent,
@@ -94,6 +107,7 @@ class _OWLCLASS TColumnHeader : public TControl {
                   TModule*        module = 0);
 
     TColumnHeader(TWindow* parent, int resourceId, TModule* module = 0);
+    ~TColumnHeader();
 
     // Position Column Header
     //
@@ -125,6 +139,73 @@ class _OWLCLASS TColumnHeader : public TControl {
     //
     char far*     GetClassName();
 
+#if !defined(OWL_NATIVECTRL_ALWAYS)
+  public:
+    static void SetNativeUse(TNativeUse nu);
+
+  protected_data:
+    static TNativeUse ClassNativeUse;
+
+  protected:
+    void Paint(TDC &dc,bool erase,TRect &rect);
+    void EvLButtonUp(uint modKeys,TPoint &point);
+    void EvMouseMove(uint modKeys,TPoint &point);
+    void EvLButtonDblClk(uint modKeys,TPoint &point);
+    void EvLButtonDown(uint modKeys,TPoint &point);
+    bool EvSetCursor(HWND hWndCursor,uint hitTest,uint mouseMsg);
+    void EvSetFont(HFONT hFont,bool redraw);
+    HFONT EvGetFont();
+
+  private:
+    void InitCtl();
+    void CleanupCtl();
+    LRESULT SendNotify(uint code,int item);
+
+    // Internal tracking functions
+    //
+    void TrackLine(int pos);
+    void BeginTrack(const TPoint &point,int iItem);
+    void Track(const TPoint &point);
+    void EndTrack();
+
+    TFont *Font;
+
+    class _OWLCLASS TItem: public HD_ITEM {
+    public:
+      TItem();
+        TItem(const HD_ITEM &other);
+        ~TItem();
+        TItem &operator=(const TItem &other);
+      bool operator==(const TItem &other) const;
+
+    private:
+      void Cleanup();
+        void Init(const HD_ITEM &other);
+    };
+
+#if defined(BI_NAMESPACE)
+    ClassLib::TArrayAsVector<TItem> Item;
+#else
+    TArrayAsVector<TItem> Item;  
+#endif
+  
+    int HotItem;    // item currently clicked or tracked
+    enum TOperation { // current operation on hot item
+      CLICKING,
+      TRACKING,
+      NONE
+    } Operation;
+
+    // for clicking
+    int Pressed;
+    // for tracking
+    int TrackStart;
+    int TrackSize;
+    TPoint TrackPoint;
+
+  DECLARE_RESPONSE_TABLE(TColumnHeader);
+#endif
+
   private:
     // Hidden to prevent accidental copying or assignment
     //
@@ -134,9 +215,14 @@ class _OWLCLASS TColumnHeader : public TControl {
   DECLARE_STREAMABLE(_OWLCLASS, TColumnHeader, 1);
 };
 
+
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

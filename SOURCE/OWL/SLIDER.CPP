@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.9  $
 //
 // Implementation of TSlider, slider UI widget abstract base class.
 //----------------------------------------------------------------------------
@@ -17,6 +17,8 @@
 #if !defined(OWL_COMMCTRL_H)
 # include <owl/commctrl.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -115,7 +117,7 @@ TSlider::~TSlider()
 // Check & set the slider range
 //
 void
-TSlider::SetRange(int min, int max)
+TSlider::SetRange(int min, int max, bool redraw)
 {
   Min = min;
   Max = max;
@@ -130,7 +132,7 @@ TSlider::SetRange(int min, int max)
   if ((NativeUse & nuUsing) && GetHandle()) {
 //    TParam2 p2 = (Attr.Style & TBS_VERT) ? MkParam2(max, min) : MkParam2(min, max);
     TParam2 p2 = MkParam2(min, max);
-    SendMessage(TBM_SETRANGE, true, p2);  // Swapped for vertical
+    SendMessage(TBM_SETRANGE, redraw, p2);  // Swapped for vertical
   }
 #endif
 }
@@ -642,7 +644,7 @@ TSlider::EvKeyDown(uint key, uint repeatCount, uint /*flags*/)
   };
 
   if (key >= VK_PRIOR && key <= VK_DOWN) {
-    for (int i = 0; i < repeatCount; i++)
+    for (uint i = 0; i < repeatCount; i++)
       NotifyParent(KeyToCode[key-VK_PRIOR], Pos);
     NotifyParent(SB_ENDSCROLL, Pos);
   }
@@ -676,7 +678,8 @@ TSlider::EvKillFocus(THandle hGetFocus)
     return;
   }
   TClientDC dc(*this);
-  dc.FrameRect(GetClientRect(), TBrush(TColor::Sys3dFace));
+  TBrush br(TColor::Sys3dFace);
+  dc.FrameRect(GetClientRect(), br);
 
   TScrollBar::EvKillFocus(hGetFocus); // Need to let TWindow do focus save
 }

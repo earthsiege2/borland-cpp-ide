@@ -2,17 +2,18 @@
  * filename - efcvt.c
  *
  * function(s)
- *        ecvt - converts a floating-point number to a string
- *        fcvt - converts a floating-point number to a string
+ *        _ecvt - converts a floating-point number to a string
+ *        _fcvt - converts a floating-point number to a string
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #ifdef _MT
 #include <_thread.h>
@@ -34,14 +35,14 @@ static char cvtBuf[__XCVTDIG__+2];
 
 /*--------------------------------------------------------------------------*
 
-Name            ecvt - converts a floating-point number to a string
+Name            _ecvt - converts a floating-point number to a string
 
-Usage           char *ecvt(double value, int ndigit, int *decpt, int *sign);
-                char *fcvt(double value, int ndigit, int *decpt, int *sign);
+Usage           char *_ecvt(double value, int ndigit, int *decpt, int *sign);
+                char *_fcvt(double value, int ndigit, int *decpt, int *sign);
 
 Prototype in    stdlib.h
 
-Description     ecvt converts  value to a null-terminated  string of ndigit
+Description     _ecvt converts  value to a null-terminated  string of ndigit
                 digits and returns a pointer to the string. The position of
                 the decimal point  relative to the beginning of  the string
                 is stored  indirectly through decpt  (a negative value  for
@@ -50,16 +51,16 @@ Description     ecvt converts  value to a null-terminated  string of ndigit
                 is  non-zero; otherwise,  it is  0. The  low-order digit is
                 rounded.
 
-                fcvt is identical to ecvt except that the correct digit has
+                _fcvt is identical to _ecvt except that the correct digit has
                 been rounded for  FORTRAN F-format output of the  number of
                 digits specified by ndigit.
 
-Return value    The return  values of ecvt   and fcvt point  to static data
-                whose content is overwritten by each call to ecvt or fcvt.
+Return value    The return  values of _ecvt   and _fcvt point  to static data
+                whose content is overwritten by each call to _ecvt or _fcvt.
 
 *---------------------------------------------------------------------------*/
 
-char * _RTLENTRY _EXPFUNC ecvt  (double value, int nDig, int *decP, int *signP )
+char * _RTLENTRY _EXPFUNC _ecvt  (double value, int nDig, int *decP, int *signP )
 
 /*
 The double (value) is converted to a decimal string (cvtBuf) of up to 18
@@ -78,10 +79,10 @@ string).
 
 If the value was zero then the exponent is 0 and the string is all "0".  If
 the value was infinite or NAN then the exponent is 999 and the string is
-all "9". 
+all "9".
 
 The conversion to a numeral string is done in __xcvt, with only some
-parameter checking and result storage needs to be done here. 
+parameter checking and result storage needs to be done here.
 
 The return value is a pointer to the array returned by cvtBuf.
 */
@@ -96,20 +97,20 @@ The return value is a pointer to the array returned by cvtBuf.
 
 /*---------------------------------------------------------------------*
 
-Name            fcvt - converts a floating-point number to a string
+Name            _fcvt - converts a floating-point number to a string
 
-Usage           char *fcvt(double value, int ndigit, int *decpt, int *sign);
+Usage           char *_fcvt(double value, int ndigit, int *decpt, int *sign);
 
 Prototype in    stdlib.h
 
-Description     see ecvt
+Description     see _ecvt
 
 *---------------------------------------------------------------------*/
 
-char * _RTLENTRY _EXPFUNC fcvt (double value, int nDig, int *decP, int *signP )
+char * _RTLENTRY _EXPFUNC _fcvt (double value, int nDig, int *decP, int *signP )
 
 /*
-Identical to ecvt except for the interpretation of nDig.
+Identical to _ecvt except for the interpretation of nDig.
 
 "nDig" specifies the number of significant digits following the
   decimal point.
@@ -117,7 +118,7 @@ Identical to ecvt except for the interpretation of nDig.
   If nDig > 18 then nDig = 18.
 
 Also, the total of digits both left and right of the decimal point shall
-not exceed 18. 
+not exceed 18.
 */
 
 {

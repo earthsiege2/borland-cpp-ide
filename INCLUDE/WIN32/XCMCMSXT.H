@@ -8,6 +8,7 @@
 
 #ifndef XCMCMSXT_H
 #define XCMCMSXT_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,7 +26,6 @@ extern "C" {
 /* Describes extra flags used for logging on/off a session */
 #define CMC_X_MS_SESSION_FLAGS          ((CMC_uint32) MS_EXT_SET_ID + 16)
 #define CMC_X_MS_NEW_SESSION            ((CMC_flags) 1)
-#define CMC_X_MS_LOGON_UI               ((CMC_flags) 2)
 #define CMC_X_MS_FORCE_DOWNLOAD         ((CMC_flags) 4)
 
 /* Flags used by various functions */
@@ -53,4 +53,5 @@ extern "C" {
 }      /* extern "C" */
 #endif
 
+#pragma option -b.
 #endif /* XCMCMSXT_H */

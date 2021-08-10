@@ -1,4 +1,3 @@
-://$Revision:   10.2  $Author: BBABET, $Date:   30 Jan 1996 23:05:50  $
 @echo off
 if /%mk%/ == // set mk=make
 

@@ -60,6 +60,7 @@ TClientWindow::TClientWindow(TWindow* parent)
   glyph2->SetGlyph(IDB_BORBTNII_CANCEL);
   HelpButton = new TGlyphButton(this, IDC_3);
   HelpButton->SetGlyph(IDB_BORBTNII_HELP);
+  HelpButton->SetGlyph(IDB_BORBTNII_HELPG, 0, TGlyphButton::gtDisabled);
 
   EnableHelp = new TCheckBox(this, IDC_ENABLEHELP);
 

@@ -7,29 +7,33 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #ifdef _MT
 #include <_thread.h>
 #endif
 #include <string.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            strtok - searches one string for tokens, which are
-                         separated by delimiters defined in a second string
+Name            strtok, wcstok - searches one (wide-character) string for tokens,
+			which are separated by delimiters defined in a second
+			(wide-character)string
 
 Usage           char *strtok(char *str1, const char *str2);
+		wchar_t *wcstok(wchar_t *str1, const wchar_t *str2);
 
 Prototype in    string.h
 
-Description     strtok considers the string str1 to consist of a sequence of
-                zero or more text tokens, separated by spans of one or more
+Description     strtok and wcstok consider the string str1 to consist of a sequence
+		of zero or more text tokens, separated by spans of one or more
                 characters from the separator string str2.
 
                 The first call to strtok returns a pointer to the first
@@ -42,23 +46,22 @@ Description     strtok considers the string str1 to consist of a sequence of
                 call.
 
 Return value    pointer to the scanned token.  When no tokens remain in str1,
-                strtok returns a NULL pointer.
+                strtok and wcstok return a NULL pointer.
 
 *---------------------------------------------------------------------*/
-
-char * _RTLENTRYF _EXPFUNC strtok(char *s1, const char *s2)
+_TCHAR * _RTLENTRYF _EXPFUNC _tcstok(_TCHAR *s1, const _TCHAR *s2)
 {
-    register const char *sp;
-    char *tok;
-    char **save;
+    register const _TCHAR *sp;
+    _TCHAR *tok;
+    _TCHAR **save;
 #ifndef _MT
-    static char *token;
+    static _TCHAR *token;
 #endif
 
     /* Get address of saved token pointer
      */
 #ifdef _MT
-    save = &_thread_data()->thread_token;
+    save = (_TCHAR **)&_thread_data()->thread_token;
 #else
     save = &token;
 #endif

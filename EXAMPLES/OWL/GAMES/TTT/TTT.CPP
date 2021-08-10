@@ -420,6 +420,7 @@ TGameOptionsBox::HandleXOGroupMsg(uint)
 class TGameWindow : public TFrameWindow {
   public:
     TGameWindow(TWindow* parent, const char* title);
+    ~TGameWindow() { delete Game; }
 
     void EvPaint();
     void CmGameNew();
@@ -444,7 +445,8 @@ END_RESPONSE_TABLE;
 TGameWindow::TGameWindow(TWindow* parent, const char* title)
 :
   TFrameWindow(parent, title),
-  TWindow(parent, title)
+  TWindow(parent, title),
+  Game(0)
 {
   AssignMenu("COMMANDS");
   Attr.X = TGAB_INITIAL_X;

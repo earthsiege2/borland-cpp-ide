@@ -1,0 +1,4 @@
+:TITLE Microsoft Windows Pen API Programmer's Reference
+:INDEX Microsoft Windows Pen API Programmer's Reference = penapi.hlp
+:INCLUDE win32sdk.cfg
+:INCLUDE PENAPI.TOC

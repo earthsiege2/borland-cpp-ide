@@ -1,28 +1,18 @@
-/****************************************************************************
- *
- *   mmreg.h  - Registered Multimedia Information Public Header File
- *
- *   Copyright (c) 1991-1995 Microsoft Corporation.  All Rights Reserved.
- *
- * Multimedia Registration
- *
- * Place this system include file in your INCLUDE path with the Windows SDK
- * include files.
- *
- * Obtain the Multimedia Developer Registration Kit from Compuserve in WINMM mrdk.zip.
- * Please send applications and corrections to
- *
- *  Multimedia Registrations
- *  Microsoft Corporation
- *  Multimedia Technology Group
- *  One Microsoft Way
- *  Redmond, WA 98052-6399
- *
- * Developer Services:
- * 800-227-4679 x11771
- *
- * Last Update:  04/05/94  *
- ***************************************************************************/
+/*++
+
+Copyright (c) 1991-1996  Microsoft Corporation
+
+Module Name:
+
+    mmreg.h
+
+Abstract:
+
+    Multimedia Registration
+
+Revision History:
+
+--*/
 
 // Define the following to skip definitions
 //
@@ -36,9 +26,13 @@
 #ifndef _INC_MMREG
 /* use version number to verify compatibility */
 #define _INC_MMREG     144      // version * 100 + revision
+#pragma option -b
 
 #ifndef RC_INVOKED
-#include <pshpack1.h>   /* Assume byte packing throughout */
+#pragma pack(1)         /* Assume byte packing throughout */
+#pragma option -b.
+//NT #include "pshpack1.h"   /* Assume byte packing throughout */
+#pragma option -b
 #endif  /* RC_INVOKED */
 
 #ifdef __cplusplus
@@ -919,7 +913,7 @@ typedef DIALOGICOKIADPCMWAVEFORMAT FAR  *LPDIALOGICOKIADPCMWAVEFORMAT;
 
 typedef struct yamaha_adpmcwaveformat_tag {
         WAVEFORMATEX    wfx;
-
+        
 } YAMAHA_ADPCMWAVEFORMAT;
 typedef YAMAHA_ADPCMWAVEFORMAT *PYAMAHA_ADPCMWAVEFORMAT;
 typedef YAMAHA_ADPCMWAVEFORMAT NEAR *NPYAMAHA_ADPCMWAVEFORMAT;
@@ -1027,7 +1021,7 @@ typedef struct dolbyac2waveformat_tag {
 typedef struct gsm610waveformat_tag {
 WAVEFORMATEX    wfx;
 WORD                    wSamplesPerBlock;
-} GSM610WAVEFORMAT;
+} GSM610WAVEFORMAT;                     
 typedef GSM610WAVEFORMAT *PGSM610WAVEFORMAT;
 typedef GSM610WAVEFORMAT NEAR    *NPGSM610WAVEFORMAT;
 typedef GSM610WAVEFORMAT FAR     *LPGSM610WAVEFORMAT;
@@ -1053,7 +1047,7 @@ typedef ADPCMEWAVEFORMAT FAR    *LPADPCMEWAVEFORMAT;
 typedef struct contres_vqlpcwaveformat_tag {
 WAVEFORMATEX    wfx;
 WORD                    wSamplesPerBlock;
-} CONTRESVQLPCWAVEFORMAT;
+} CONTRESVQLPCWAVEFORMAT;                       
 typedef CONTRESVQLPCWAVEFORMAT *PCONTRESVQLPCWAVEFORMAT;
 typedef CONTRESVQLPCWAVEFORMAT NEAR      *NPCONTRESVQLPCWAVEFORMAT;
 typedef CONTRESVQLPCWAVEFORMAT FAR       *LPCONTRESVQLPCWAVEFORMAT;
@@ -1094,7 +1088,7 @@ typedef DIGIADPCMWAVEFORMAT FAR  *LPDIGIADPCMWAVEFORMAT;
 typedef struct contres_cr10waveformat_tag {
 WAVEFORMATEX    wfx;
 WORD                    wSamplesPerBlock;
-} CONTRESCR10WAVEFORMAT;
+} CONTRESCR10WAVEFORMAT;                        
 typedef CONTRESCR10WAVEFORMAT *PCONTRESCR10WAVEFORMAT;
 typedef CONTRESCR10WAVEFORMAT NEAR       *NPCONTRESCR10WAVEFORMAT;
 typedef CONTRESCR10WAVEFORMAT FAR        *LPCONTRESCR10WAVEFORMAT;
@@ -1441,14 +1435,14 @@ typedef struct tagEXBMINFOHEADER {
         BITMAPINFOHEADER    bmi;
         /* extended BITMAPINFOHEADER fields */
         DWORD   biExtDataOffset;
-
+        
         /* Other stuff will go here */
 
         /* ... */
 
         /* Format-specific information */
         /* biExtDataOffset points here */
-
+        
 } EXBMINFOHEADER;
 
 #endif          //NOBITMAP
@@ -1621,11 +1615,15 @@ MJPGHDTSEG_STORAGE BYTE MJPGDHTSeg[0x1A4] = {
 #endif
 
 #ifndef RC_INVOKED
-#include <poppack.h>    /* Revert to default packing */
+#pragma pack()          /* Revert to default packing */
+#pragma option -b.
+//NT #include "poppack.h"    /* Revert to default packing */
+#pragma option -b
 #endif  /* RC_INVOKED */
 
 #ifdef __cplusplus
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
+#pragma option -b.
 #endif  /* _INC_MMREG */

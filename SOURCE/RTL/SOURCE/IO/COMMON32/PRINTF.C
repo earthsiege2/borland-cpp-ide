@@ -6,16 +6,18 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <_printf.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
@@ -32,14 +34,14 @@ Return value    the number of bytes output.  In the event of an
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC printf(const char *fmt, ...)
+int _RTLENTRY _EXPFUNC _tprintf(const _TCHAR *fmt, ...)
 {
     va_list ap;
     int ret;
 
     va_start(ap,fmt);
     _lock_stream(stdout);
-    ret = __vprinter ((putnF *)__fputn, stdout, fmt, ap);
+    ret = __vprintert ((putnF *)__fputnt, stdout, fmt, ap);
     _unlock_stream(stdout);
     va_end(ap);
     return (ret);

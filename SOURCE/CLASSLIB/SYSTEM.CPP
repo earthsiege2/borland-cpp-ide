@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.12  $
 //
 // Implementation of TSystem class.
 //----------------------------------------------------------------------------
@@ -67,13 +67,32 @@ bool TSystem::SupportsInstanceData()
 bool TSystem::Has3dUI()
 {
 #if defined(BI_PLAT_WIN16)
-  return IsWin95();
+  return IsWin95() || (IsWoW() && (GetMajorVersion() >= 4));
 #else
   return GetVerInfo().GetMajorVersion() >= 4;  // Win95 or NT w/ New Shell
 #endif
 }
 
 #if defined(BI_PLAT_WIN16)
+
+//
+// Get build numbers for Windows NT or Win32s
+// Returns 0 under Win95 (no build numbers provided)
+//
+uint TSystem::GetBuildNumber() {
+
+  uint32 result = GetVersion();
+  uint build;
+
+  if (result < 0x80000000L)                // Windows NT
+    build = HIWORD(result);
+  else if (GetMajorVersion() < 4)         // Win32s
+    build = HIWORD(result) & ~0x8000;
+  else
+    build =  0;
+
+  return build;
+}
 
 //
 // Return true if the system is win16 WoW under NT.

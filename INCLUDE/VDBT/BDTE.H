@@ -29,6 +29,24 @@
 #include <vdbt\bdtf.h>
 
 //
+// Mangle the function, class and variable names so we can have
+// mulitpale versions of the same functions and variables in one
+// .LIB file.
+//
+#if defined( __DLL__ ) && ! defined( __FLAT__ )
+#  if defined( _RTLDLL )
+#    define TBdtEventSourceBase dTBdtEventSourceBase
+#    define TBdtEventSinkBase   dTBdtEventSinkBase
+#  else _RTLDLL
+#    define TBdtEventSourceBase uTBdtEventSourceBase
+#    define TBdtEventSinkBase   uTBdtEventSinkBase
+#  endif _RTLDLL
+#elif defined( _RTLDLL )
+#  define TBdtEventSourceBase iTBdtEventSourceBase
+#  define TBdtEventSinkBase   iTBdtEventSinkBase
+#endif __DLL__
+
+//
 class TBdtEventSourceBase
 {
   public:

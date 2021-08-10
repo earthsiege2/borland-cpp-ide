@@ -5,6 +5,8 @@
 #include <owl/pch.h>
 #include <owl/treewind.h>
 #include <owl/imagelst.h>
+#include <classlib/pointer.h>
+#include "treewind.rh"
 
 const int TestImage  = 100;
 const int TreeWindId = 101;
@@ -15,25 +17,29 @@ const int TreeWindId = 101;
 class TClientWindow : public TWindow {
   public:
     TClientWindow(TWindow* parent= 0);
-   ~TClientWindow();
 
   protected:
     void SetupWindow();
 
 #if defined(BI_PLAT_WIN32)
+    void CmSetState();
+    void CmGetState();
+
     // Event handlers
     //
-    bool TvnItemExpanding(TTwNotify far&)
+    bool TvnItemExpanding(TTwNotify far& notify)
     {
-      MessageBeep(-1);
+      TTreeNode node(*TreeWind, notify.itemNew);
       return false;
     }
 #endif
 
+  private:
+
     // Data members
     //
-    TTreeWindow* TreeWind;
-    TImageList* ImageList;
+    TPointer<TTreeWindow> TreeWind;
+    TPointer<TImageList> ImageList;
 
   DECLARE_RESPONSE_TABLE(TClientWindow);
 };
@@ -41,6 +47,8 @@ class TClientWindow : public TWindow {
 DEFINE_RESPONSE_TABLE1(TClientWindow, TWindow)
 #if defined(BI_PLAT_WIN32)
   EV_TVN_ITEMEXPANDING(TreeWindId, TvnItemExpanding),
+  EV_COMMAND(CM_SETSTATE, CmSetState),
+  EV_COMMAND(CM_GETSTATE, CmGetState),
 #endif
 END_RESPONSE_TABLE;
 
@@ -48,11 +56,16 @@ TClientWindow::TClientWindow(TWindow* parent)
 :
   TWindow(parent)
 {
-  Attr.Style |= WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+  // set client window style
+  //
+  uint32 style = GetStyle();
+  SetStyle(style |= WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 
-  TTreeWindow::TStyle style = TTreeWindow::TStyle(TTreeWindow::twsHasLines | TTreeWindow::twsHasButtons);
+  // set treeview window style
+  //
+  style = TVS_HASLINES | TVS_HASBUTTONS;
 #if defined(BI_PLAT_WIN32)
-  style = TTreeWindow::TStyle(style | TTreeWindow::twsLinesAtRoot);
+  style |= TVS_LINESATROOT;
 #endif
 
   TreeWind = new TTreeWindow(this, TreeWindId, 10, 10, 400, 200, style);
@@ -64,10 +77,29 @@ TClientWindow::TClientWindow(TWindow* parent)
 #endif
 }
 
-TClientWindow::~TClientWindow()
+
+#if defined(BI_PLAT_WIN32)
+void
+TClientWindow::CmSetState()
 {
-  delete ImageList;
+  TreeWind->GetSelection().SetState(TVIS_BOLD);
 }
+
+void
+TClientWindow::CmGetState()
+{
+  char buffer[1024];
+  uint state;
+
+  TTreeNode& node = TreeWind->GetSelection();
+  node.GetState(state);
+  if (state & TVIS_EXPANDED)
+    lstrcpy(buffer, "Selected node is expanded.");
+  else
+    lstrcpy(buffer, "Selected node is not expanded.");
+  MessageBox(buffer);
+}
+#endif
 
 void
 TClientWindow::SetupWindow()
@@ -77,31 +109,27 @@ TClientWindow::SetupWindow()
   // Initialize TreeWind
   //
   TTreeNode root = TreeWind->GetRoot();
-  root.AddChild(TTreeItem("Child 8"));
+  root.AddChild(TTreeNode(*TreeWind, "Child 8"));
 
-  TTreeNode parent1 = root.AddChild(TTreeItem("Parent 1"));
-  TTreeNode child1  = parent1.AddChild(TTreeItem("Child 1"));
-                      parent1.AddChild(TTreeItem("Child 2 (with some longer text)"));
+  TTreeNode parent1 = root.AddChild(TTreeNode(*TreeWind, "Parent 1"));
+  TTreeNode child1  = parent1.AddChild(TTreeNode(*TreeWind, "Child 1"));
+                      parent1.AddChild(TTreeNode(*TreeWind, "Child 2 (with some longer text)"));
 
-  root.AddChild(TTreeItem("Child 0"));
+  root.AddChild(TTreeNode(*TreeWind, "Child 0"));
 
-  TTreeNode parent2 = root.AddChild(TTreeItem("Parent 2"));
-            parent2.AddChild(TTreeItem("Child 3"));
-            parent2.AddChild(TTreeItem("Child 4"));
+  TTreeNode parent2 = root.AddChild(TTreeNode(*TreeWind, "Parent 2"));
+            parent2.AddChild(TTreeNode(*TreeWind, "Child 3"));
+            parent2.AddChild(TTreeNode(*TreeWind, "Child 4"));
 
-  TTreeNode subParent1 = child1.InsertItem(TTreeItem("Subparent 1"));
-            subParent1.AddChild(TTreeItem("Child 5"));
-            subParent1.AddChild(TTreeItem("Child 6"));
+  TTreeNode subParent1 = child1.InsertItem(TTreeNode(*TreeWind, "Subparent 1"));
+            subParent1.AddChild(TTreeNode(*TreeWind, "Child 5"));
+            subParent1.AddChild(TTreeNode(*TreeWind, "Child 6"));
 
-  root.AddChild(TTreeItem("Child 7"));
-
-
-//  TTreeNode child(root, TTreeNode::Child);
-//            child = child.GetNextSibling();
+  root.AddChild(TTreeNode(*TreeWind, "Child 7"));
 
   TreeWind->Update();
 
-  parent2.ExpandItem(TTreeNode::Expand);
+  parent2.ExpandItem(TVE_EXPAND);
 }
 
 //----------------------------------------------------------------------------
@@ -118,7 +146,10 @@ class TSampleApp : public TApplication {
 void
 TSampleApp::InitMainWindow()
 {
-  SetMainWindow(new TFrameWindow(0, 0, new TClientWindow));
+  TFrameWindow* frame = new TFrameWindow(0, 0, new TClientWindow);
+  frame->SetMenuDescr(TMenuDescr(IDM_MAINMENU));
+  SetMainWindow(frame);
+  GetMainWindow()->SetCaption("TreeWindow class");
 }
 
 int

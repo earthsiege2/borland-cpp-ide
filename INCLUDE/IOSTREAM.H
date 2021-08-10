@@ -13,12 +13,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.7  $ */
 
 #ifndef __cplusplus
 #error Must use C++ for the type iostream.
@@ -479,6 +480,10 @@ virtual _RTLENTRY ~istream();
     istream _FAR & _RTLENTRY operator>> (short _FAR &);
     istream _FAR & _RTLENTRY operator>> (int _FAR &);
     istream _FAR & _RTLENTRY operator>> (long _FAR &);
+#if defined(__FLAT__) && !defined(__STDC__) && (__BORLANDC__  >= 0x0520) && defined (_INTEGRAL_MAX_BITS) && (_INTEGRAL_MAX_BITS >= 64)
+    istream _FAR & _RTLENTRY operator>> (__int64 _FAR &);
+    istream _FAR & _RTLENTRY operator>> (unsigned __int64 _FAR &);
+#endif
     istream _FAR & _RTLENTRY operator>> (unsigned short _FAR &);
     istream _FAR & _RTLENTRY operator>> (unsigned int _FAR &);
     istream _FAR & _RTLENTRY operator>> (unsigned long _FAR &);
@@ -632,6 +637,10 @@ virtual _RTLENTRY ~ostream();
     ostream _FAR & _RTLENTRY operator<< (unsigned int);
     ostream _FAR & _RTLENTRY operator<< (long);
     ostream _FAR & _RTLENTRY operator<< (unsigned long);
+#if defined(__FLAT__) && !defined(__STDC__) && (__BORLANDC__  >= 0x0520) && defined (_INTEGRAL_MAX_BITS) && (_INTEGRAL_MAX_BITS >= 64)
+    ostream _FAR & _RTLENTRY operator<< (__int64);
+    ostream _FAR & _RTLENTRY operator<< (unsigned __int64);
+#endif   
     ostream _FAR & _RTLENTRY operator<< (float);
     ostream _FAR & _RTLENTRY operator<< (double);
     ostream _FAR & _RTLENTRY operator<< (long double);
@@ -696,9 +705,7 @@ inline ostream _FAR & _RTLENTRY ostream::operator<< (int _i)
 inline ostream _FAR & _RTLENTRY ostream::operator<< (unsigned int _i)
                 { return *this << (unsigned long) _i; }
 inline ostream _FAR & _RTLENTRY ostream::operator<< (float _f)
-                { return *this << (long double) _f; }
-inline ostream _FAR & _RTLENTRY ostream::operator<< (double _d)
-                { return *this << (long double) _d; }
+                { return *this << (double) _f; }
 inline ostream _FAR & _RTLENTRY ostream::operator<< (ostream _FAR & (_RTLENTRY *_f)(ostream _FAR &))
                 { return (*_f)(*this); }
 inline ostream _FAR & _RTLENTRY ostream::write(const signed char _FAR * _s, int _n)

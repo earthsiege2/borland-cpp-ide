@@ -1,41 +1,32 @@
 //----------------------------------------------------------------------------
-//  Project OcxDlg
-//  Borland International, Inc.
-//  Copyright © 1996. All Rights Reserved.
+// ObjectWindows
+// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
 //
-//  SUBSYSTEM:    OcxDlg Application
-//  FILE:         OcxDlgAp.h
-//  AUTHOR:       Chris McConn
+// $Revision:   10.8  $
 //
-//  OVERVIEW
-//  ~~~~~~~~
-//  Class definition for TOcxDlgApp (TApplication).
-//
+// Sample illustrating the use of OCXes in dialogs - Defines TOcxDlgApp 
 //----------------------------------------------------------------------------
-#if !defined(_OCXDLGAPP_H) // Sentry, use file only if it's not already included.
+#if !defined(_OCXDLGAPP_H) 
 #define _OCXDLGAPP_H
 
-//============================================================================
 // Main Application object
+//
 class TOcxDlgApp : public TApplication, public TOcModule {
 
-  // Functions --------------------------------------------------------------
-  public:// Constructors/Destructors
+  public:
     TOcxDlgApp();
-    virtual ~TOcxDlgApp();
 
     // Since this is a non-docview application, an implementation of 
     // CreateOleObject for app class must be provided.
+    //
     TUnknown* CreateOleObject(uint32 options, TRegLink* link) {return 0;}
 
-  public:// Implement virtual methods of TApplication
-    virtual void InitMainWindow();
-    virtual void InitInstance();
-
-  // Response Table Declaration
-  DECLARE_RESPONSE_TABLE(TOcxDlgApp);
-
+  public:
+	 // Overriden virtuals of TApplication
+	 //
+    void InitMainWindow();
+    void InitInstance();
 };
 
 
-#endif  // _OCXDLGAPP_H sentry.
+#endif  // _OCXDLGAPP_H 

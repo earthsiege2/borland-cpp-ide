@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.9  $
 //
 //----------------------------------------------------------------------------
 #if !defined(SERVICES_DEFS_H)
@@ -10,6 +10,10 @@
 
 #if !defined(__cplusplus)
 # error Must compile Borland Services Library as C++
+#endif
+
+#if !defined(__TCHAR_H)
+# include <tchar.h>
 #endif
 
 //----------------------------------------------------------------------------
@@ -167,11 +171,16 @@
 # define mutable
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 #if defined(BI_NO_BOOL)
 enum TBool {
   false,
   true
 };
+
 # if defined(EMULATE_BOOL)
     typedef TBool bool;
 #   define BI_UNIQUE_BOOL
@@ -183,6 +192,7 @@ enum TBool {
 #else
   typedef bool TBool;
 # define BI_UNIQUE_BOOL
+
 #endif
 
 #if defined(BI_NO_BOOL) && defined(EMULATE_BOOL)
@@ -193,6 +203,12 @@ enum TBool {
   template<class T> inline bool ToBool(const T& t) {
     return STATIC_CAST(bool,t);
   }
+#endif
+
+// end of emulated bool types
+//
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
 #endif
 
 //
@@ -227,6 +243,10 @@ enum TBool {
 #if defined(BI_COMP_BORLANDC)
 # include <systypes.h>
 #else
+# if defined(BI_NAMESPACE)
+  namespace ClassLib {
+# endif
+
   typedef signed char    int8;
   typedef signed short   int16;
   typedef signed long    int32;
@@ -234,15 +254,24 @@ enum TBool {
   typedef unsigned char  uint8;
   typedef unsigned short uint16;
   typedef unsigned long  uint32;
+
+# if defined(BI_NAMESPACE)
+  }     // namespace ClassLib
+# endif
 #endif
 
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 //
 // Some nonfixed-size types defined similar to the fixedsize in systypes.h
 //
+
 typedef unsigned long  ulong;
 typedef unsigned int   uint;
 typedef unsigned short ushort;
-typedef unsigned char  uchar;
+typedef _TUCHAR uchar;
 
 //
 // Integer byte, word and long word manipulation
@@ -277,6 +306,10 @@ inline uint8 HiUint8(uint16 u16) {
 inline int8 HiInt8(uint16 u16) {
   return int8(u16 >> 8);
 }
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 //----------------------------------------------------------------------------
 
@@ -331,6 +364,10 @@ inline int8 HiInt8(uint16 u16) {
 # define _SVCSCLASS_RTL _EXPCLASS
 # define _SVCSDATA
 # define _SVCSFUNC
+#endif
+
+#if defined(BI_NAMESPACE)
+using namespace ClassLib;
 #endif
 
 #endif  // SERVICES_DEFS_H

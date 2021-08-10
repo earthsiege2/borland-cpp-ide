@@ -1,10 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.6  $
 //
-// Module used to explicit expand templates used by ObjectWindows
+// Module used to explicit expand/export templates used by ObjectWindows
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
 #if !defined(OWL_DEFS_H)
@@ -23,14 +23,19 @@
 # include <classlib/memmgr.h>
 #endif
 
-#if defined(_BUILDOWLDLL)
+OWL_DIAGINFO;
+
+#if defined(BI_IMPEXP_TEMPLATES)
+# if defined(_BUILDOWLDLL)
 
 //
 // The template instances only need to be generated when building the 
-// ObjectWindows DLL - These instances are exported by OWL.
+// ObjectWindows DLL - These instances are exported by OWL and imported 
+// by user code.
 //
 template class _OWLCLASS  TMListElement<TVoidPointer, TStandardAllocator>;
 template class _OWLCLASS  TMListBlockInitializer<TVoidPointer, TStandardAllocator>;
 template class _OWLCLASS  TMListImp<TVoidPointer, TStandardAllocator>;
 
+# endif
 #endif

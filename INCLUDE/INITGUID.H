@@ -1,10 +1,11 @@
+#pragma option -b
 /*****************************************************************************\
 *                                                                             *
 * initguid.h -  Definitions for controlling GUID initialization               *
 *                                                                             *
 *               OLE Version 2.0                                               *
 *                                                                             *
-*               Copyright (c) 1992-1995, Microsoft Corp. All rights reserved. *
+*               Copyright (c) 1992-1996, Microsoft Corp. All rights reserved. *
 *                                                                             *
 \*****************************************************************************/
 
@@ -34,5 +35,6 @@
 #endif
 
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-    EXTERN_C const GUID CDECL __based(__segname("_CODE")) name \
+    EXTERN_C const GUID __based(__segname("_CODE")) name \
                     = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
+#pragma option -b.

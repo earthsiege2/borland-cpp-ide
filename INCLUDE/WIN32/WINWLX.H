@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    Increment this if a change has global effects
 
-Copyright (c) 1985-1995, Microsoft Corporation
+Copyright (c) 1985-1996, Microsoft Corporation
 
 Module Name:
 
@@ -14,6 +14,10 @@ Abstract:
     necessary to produce a replacement Graphical Identification aNd
     Authentication (GINA) DLL for Winlogon.
 
+Author:
+
+    Richard Ward (RichardW) and Jim Kelly (JimK) May-1994
+
 Revision History:
 
 
@@ -22,6 +26,7 @@ Revision History:
 
 #ifndef _WINWLX_
 #define _WINWLX_
+#pragma option -b
 
 
 
@@ -42,7 +47,8 @@ Revision History:
 //
 
 #define WLX_VERSION_1_0             (0X00010000)
-#define WLX_CURRENT_VERSION         (WLX_VERSION_1_0)
+#define WLX_VERSION_1_1             (0X00010001)
+#define WLX_CURRENT_VERSION         (WLX_VERSION_1_1)
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -105,15 +111,13 @@ Revision History:
 // is expected to contain a type-identifier.  The following constants
 // are the defined profile type identifiers.
 //
-// NOTE: currently, there is only one profile structure defined.
-//       This will change with future releases.
-//
 
 //
-// Standard profile for V1_0
+// Standard profile is V2_0
 //
 
 #define WLX_PROFILE_TYPE_V1_0           (1)
+#define WLX_PROFILE_TYPE_V2_0           (2)
 
 
 
@@ -166,11 +170,6 @@ Revision History:
 
 #define WLX_WM_SAS                  (WM_USER + 601)
 
-//
-// The WLX_WM_TIMEOUT message is sent to an open dialog before it is
-// timed out.  If it is not caught by the Dialog Proc, Winlogon will end
-// the dialog with a dialog return code below.
-#define WLX_WM_TIMEOUT              (WM_USER + 602)
 
 //
 // Dialog return values
@@ -194,7 +193,7 @@ Revision History:
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 //
-// The WLX_PROFILE_V1_0 structure is returned from a GINA DLL
+// The WLX_PROFILE_* structure is returned from a GINA DLL
 // following authentication.  This information is used by Winlogon
 // to support supplemental Network Providers and to load the
 // newly logged-on user's profile.
@@ -228,6 +227,98 @@ typedef struct _WLX_PROFILE_V1_0 {
 
 } WLX_PROFILE_V1_0, * PWLX_PROFILE_V1_0;
 
+
+typedef struct _WLX_PROFILE_V2_0 {
+
+    //
+    // This field identifies the type of profile being returned by a
+    // GINA DLL.  Profile types are defined with the prefix
+    // WLX_PROFILE_TYPE_xxx.  It allows Winlogon to typecast the
+    // structure so the remainder of the structure may be referenced.
+    //
+
+    DWORD               dwType;
+
+
+
+    //
+    // pathname of profile to load for user.
+    //
+    // This parameter can be NULL.  If so, the user has a local
+    // profile only.
+    //
+    // The buffer pointed to by this field must be separately allocated.
+    // Winlogon will free the buffer when it is no longer needed.
+    //
+    //
+
+    PWSTR               pszProfile;
+
+
+
+    //
+    // pathname of policy to load for user.
+    //
+    // This parameter can be NULL which prevents network wide policy
+    // from being applied.
+    //
+    // The buffer pointed to by this field must be separately allocated.
+    // Winlogon will free the buffer when it is no longer needed.
+    //
+    //
+
+    PWSTR               pszPolicy;
+
+
+    //
+    // pathname of network default user profile
+    //
+    // This parameter can be NULL, which causes the Default User
+    // profile on the local machine to be used.
+    //
+    // The buffer pointed to by this field must be separately allocated.
+    // Winlogon will free the buffer when it is no longer needed.
+    //
+    //
+
+    PWSTR               pszNetworkDefaultUserProfile;
+
+
+    //
+    // name of the server which validated the user account
+    //
+    // This is used to enumerate globals groups the user belongs
+    // to for policy support.  This parameter can be NULL.
+    //
+    // The buffer pointed to by this field must be separately allocated.
+    // Winlogon will free the buffer when it is no longer needed.
+    //
+    //
+
+    PWSTR               pszServerName;
+
+
+    //
+    // pointer to a series of null terminated environment variables
+    //
+    // envname=environment variable value
+    //   - or -
+    // envname=%OtherVar%\more text
+    //
+    // Each environment variable is NULL terminated with the last
+    // environment variable double NULL terminated.  These variables
+    // are set into the user's initial environment.  The environment
+    // variable value can contain other environment variables wrapped
+    // in "%" signs. This parameter can be NULL.
+    //
+    // The buffer pointed to by this field must be separately allocated.
+    // Winlogon will free the buffer when it is no longer needed.
+    //
+    //
+
+    PWSTR               pszEnvironment;
+
+} WLX_PROFILE_V2_0, * PWLX_PROFILE_V2_0;
 
 
 
@@ -389,7 +480,23 @@ WlxShutdown(
     );
 
 
+//
+// NEW for version 1.1
+//
+BOOL
+WINAPI
+WlxScreenSaverNotify(
+    PVOID                   pWlxContext,
+    BOOL *                  pSecure);
 
+BOOL
+WINAPI
+WlxStartApplication(
+    PVOID                   pWlxContext,
+    PWSTR                   pszDesktopName,
+    PVOID                   pEnvironment,
+    PWSTR                   pszCmdLine
+    );
 
 
 
@@ -400,6 +507,17 @@ WlxShutdown(
 //  Services that Winlogon provides                                   //
 //                                                                    //
 ////////////////////////////////////////////////////////////////////////
+
+typedef struct _WLX_DESKTOP {
+    DWORD       Size;
+    DWORD       Flags;
+    HDESK       hDesktop;
+    PWSTR       pszDesktopName;
+} WLX_DESKTOP, * PWLX_DESKTOP;
+
+#define WLX_DESKTOP_NAME    0x00000001      // Name present
+#define WLX_DESKTOP_HANDLE  0x00000002      // Handle present
+
 
 
 typedef VOID
@@ -495,7 +613,34 @@ typedef int
     DWORD                   dwChangeInfo
     );
 
+typedef BOOL
+(WINAPI * PWLX_GET_SOURCE_DESKTOP)(
+    HANDLE                  hWlx,
+    PWLX_DESKTOP *          ppDesktop);
 
+typedef BOOL
+(WINAPI * PWLX_SET_RETURN_DESKTOP)(
+    HANDLE                  hWlx,
+    PWLX_DESKTOP            pDesktop);
+
+typedef BOOL
+(WINAPI * PWLX_CREATE_USER_DESKTOP)(
+    HANDLE                  hWlx,
+    HANDLE                  hToken,
+    DWORD                   Flags,
+    PWSTR                   pszDesktopName,
+    PWLX_DESKTOP *          ppDesktop);
+
+#define WLX_CREATE_INSTANCE_ONLY    0x00000001
+#define WLX_CREATE_USER             0x00000002
+
+typedef int
+(WINAPI * PWLX_CHANGE_PASSWORD_NOTIFY_EX)(
+    HANDLE                  hWlx,
+    PWLX_MPR_NOTIFY_INFO    pMprInfo,
+    DWORD                   dwChangeInfo,
+    PWSTR                   ProviderName,
+    PVOID                   Reserved);
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -529,8 +674,27 @@ typedef struct _WLX_DISPATCH_VERSION_1_0 {
     PWLX_CHANGE_PASSWORD_NOTIFY     WlxChangePasswordNotify;
 } WLX_DISPATCH_VERSION_1_0, *PWLX_DISPATCH_VERSION_1_0;
 
+typedef struct _WLX_DISPATCH_VERSION_1_1 {
+    PWLX_USE_CTRL_ALT_DEL           WlxUseCtrlAltDel;
+    PWLX_SET_CONTEXT_POINTER        WlxSetContextPointer;
+    PWLX_SAS_NOTIFY                 WlxSasNotify;
+    PWLX_SET_TIMEOUT                WlxSetTimeout;
+    PWLX_ASSIGN_SHELL_PROTECTION    WlxAssignShellProtection;
+    PWLX_MESSAGE_BOX                WlxMessageBox;
+    PWLX_DIALOG_BOX                 WlxDialogBox;
+    PWLX_DIALOG_BOX_PARAM           WlxDialogBoxParam;
+    PWLX_DIALOG_BOX_INDIRECT        WlxDialogBoxIndirect;
+    PWLX_DIALOG_BOX_INDIRECT_PARAM  WlxDialogBoxIndirectParam;
+    PWLX_SWITCH_DESKTOP_TO_USER     WlxSwitchDesktopToUser;
+    PWLX_SWITCH_DESKTOP_TO_WINLOGON WlxSwitchDesktopToWinlogon;
+    PWLX_CHANGE_PASSWORD_NOTIFY     WlxChangePasswordNotify;
+    PWLX_GET_SOURCE_DESKTOP         WlxGetSourceDesktop;
+    PWLX_SET_RETURN_DESKTOP         WlxSetReturnDesktop;
+    PWLX_CREATE_USER_DESKTOP        WlxCreateUserDesktop;
+    PWLX_CHANGE_PASSWORD_NOTIFY_EX  WlxChangePasswordNotifyEx;
+} WLX_DISPATCH_VERSION_1_1, * PWLX_DISPATCH_VERSION_1_1;
 
 
 
-
+#pragma option -b.
 #endif /* _WINWLX_ */

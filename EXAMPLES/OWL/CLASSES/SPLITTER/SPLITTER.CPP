@@ -1,6 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   10.8  $
+//
+// Sample illustrating ObjectWindows' Splitter Windows
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
 #include <owl/decframe.h>
@@ -22,7 +26,6 @@ const int MaxChildren = 50;
 struct TChildInfo {
   TWindow*  Child;
   bool      CanClose;
-//  TLayoutMetrics LayoutMetrics;
 
   TChildInfo() {
     Child = 0;
@@ -42,41 +45,34 @@ class TMyChildWindow : public TWindow {
   protected:
     void  Paint(TDC&, bool, TRect&);
 
-    void  EvLButtonDown(uint modKeys, TPoint& point)
-    {
+    void  EvLButtonDown(uint modKeys, TPoint& point) {
       SetFocus();
     }
 
-    void EvSetFocus(THandle hWndLostFocus)
-    {
+    void EvSetFocus(THandle hWndLostFocus) {
       Invalidate();
       TWindow::EvSetFocus(hWndLostFocus);
     }
 
-    void EvKillFocus(THandle hWndGetFocus)
-    {
+    void EvKillFocus(THandle hWndGetFocus) {
       Invalidate();
       TWindow::EvKillFocus(hWndGetFocus);
     }
 
-    void CeCanClose(TCommandEnabler& ce)
-    {
+    void CeCanClose(TCommandEnabler& ce) {
       ce.Enable(!ChildInfo[GetId()].CanClose);
     }
 
-    void CmCanClose()
-    {
+    void CmCanClose() {
       ChildInfo[GetId()].CanClose = true;
       Invalidate();
     }
 
-    void CeCantClose(TCommandEnabler& ce)
-    {
+    void CeCantClose(TCommandEnabler& ce) {
       ce.Enable(ChildInfo[GetId()].CanClose);
     }
 
-    void CmCantClose()
-    {
+    void CmCantClose() {
       ChildInfo[GetId()].CanClose = false;
       Invalidate();
     }
@@ -88,16 +84,15 @@ DEFINE_RESPONSE_TABLE1(TMyChildWindow, TWindow)
   EV_WM_LBUTTONDOWN,
   EV_WM_SETFOCUS,
   EV_WM_KILLFOCUS,
-//  EV_COMMAND       (CM_CANCLOSE, CmCanClose),
-//  EV_COMMAND_ENABLE(CM_CANCLOSE, CeCanClose),
-//  EV_COMMAND       (CM_CANTCLOSE, CmCantClose),
-//  EV_COMMAND_ENABLE(CM_CANTCLOSE, CeCantClose),
+  EV_COMMAND       (CM_CANCLOSE, CmCanClose),
+  EV_COMMAND_ENABLE(CM_CANCLOSE, CeCanClose),
+  EV_COMMAND       (CM_CANTCLOSE, CmCantClose),
+  EV_COMMAND_ENABLE(CM_CANTCLOSE, CeCantClose),
 END_RESPONSE_TABLE;
 
 
 TMyChildWindow::TMyChildWindow(TWindow* parent, int id, char far* title)
-:
-  TWindow(parent, title)
+               :TWindow(parent, title)
 {
   SetBkgndColor(TColor::SysWindow);
   Attr.Style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_CLIPSIBLINGS;
@@ -132,6 +127,7 @@ class TMyPaneSplitter : public TPaneSplitter {
 
   protected:
     void SetupWindow();
+    void InvalidPane(int num);
 
   private:
     void CmMove();
@@ -148,8 +144,18 @@ class TMyPaneSplitter : public TPaneSplitter {
     void CmSetSplitterWidth();
     void CmNumberOfPanes();
     void CmRemoveAllPanes();
+    void CmNewPaneClient(){ SplitPane(ChildInfo[0].Child, 0, psNone);}
 
-  private:
+    void CeMove(TCommandEnabler& ce){ce.Enable(PaneCount() > 0);};
+    void CeSplit(TCommandEnabler& ce){ce.Enable(PaneCount() > 0);};
+    void CeSplitVert(TCommandEnabler& ce){ce.Enable(PaneCount() > 0);};
+    void CeSplitHorz(TCommandEnabler& ce){ce.Enable(PaneCount() > 0);};
+    void CeShrink(TCommandEnabler& ce){ce.Enable(PaneCount() > 0);};
+    void CeGrow(TCommandEnabler& ce){ce.Enable(PaneCount() > 0);};
+    void CeRemove(TCommandEnabler& ce){ce.Enable(PaneCount() > 1);};
+    void CeReplace(TCommandEnabler& ce){ce.Enable(PaneCount() > 0);};
+    void CeSwap(TCommandEnabler& ce){ce.Enable(PaneCount() > 1);};
+    void CeNewPaneClient(TCommandEnabler& ce){ce.Enable(PaneCount() == 0);}
 
   DECLARE_RESPONSE_TABLE(TMyPaneSplitter);
 };
@@ -164,6 +170,7 @@ DEFINE_RESPONSE_TABLE1(TMyPaneSplitter, TPaneSplitter)
   EV_COMMAND(CM_SHRINK, CmShrink),
   EV_COMMAND(CM_GROW, CmGrow),
 
+
   EV_COMMAND(CM_P_REMOVE, CmRemove),
   EV_COMMAND(CM_P_REPLACE, CmReplace),
   EV_COMMAND(CM_P_SWAP, CmSwap),
@@ -171,6 +178,21 @@ DEFINE_RESPONSE_TABLE1(TMyPaneSplitter, TPaneSplitter)
   EV_COMMAND(CM_S_SET_SPLITTER_WIDTH, CmSetSplitterWidth),
   EV_COMMAND(CM_P_NUMBER_OF_PANES, CmNumberOfPanes),
   EV_COMMAND(CM_P_REMOVE_ALL_PANES, CmRemoveAllPanes),
+  EV_COMMAND(CM_CREATEPANECLIENT, CmNewPaneClient),
+
+  EV_COMMAND_ENABLE(CM_S_MOVE, CeMove),
+  EV_COMMAND_ENABLE(CM_P_SPLIT, CeSplit),
+
+  EV_COMMAND_ENABLE(CM_SPLITVERT, CeSplitVert),
+  EV_COMMAND_ENABLE(CM_SPLITHORZ, CeSplitHorz),
+  EV_COMMAND_ENABLE(CM_SHRINK, CeShrink),
+  EV_COMMAND_ENABLE(CM_GROW, CeGrow),
+
+  EV_COMMAND_ENABLE(CM_P_REMOVE, CeRemove),
+  EV_COMMAND_ENABLE(CM_P_REPLACE, CeReplace),
+  EV_COMMAND_ENABLE(CM_P_SWAP, CeSwap),
+
+  EV_COMMAND_ENABLE(CM_CREATEPANECLIENT, CeNewPaneClient),
 END_RESPONSE_TABLE;
 
 //
@@ -180,23 +202,39 @@ TMyPaneSplitter::TMyPaneSplitter(TWindow* parent)
 :
   TPaneSplitter(parent)
 {
-//  OwnsElements(0);
   Attr.Style |= WS_CLIPCHILDREN;
+  //
+  // Don't allow the separators to get any closer than 20 pixels.
+  // Prevents accidental closure of panes.
+  // 
+  SetSplitterCushion( 20 );
+}
+
+void
+TMyPaneSplitter::InvalidPane(int num)
+{
+  char buff[50];
+  wsprintf(buff, "Index %d is not a valid pane");
+  MessageBox(buff, 0);
 }
 
 void
 TMyPaneSplitter::CmMove()
 {
   char buf[10] = "";
-
   if (TInputDialog(GetApplication()->GetMainWindow(),
                    "Move", "<pane #>, <distance>:",
-                   buf, sizeof buf).Execute() == IDOK) {
+                   buf, sizeof(buf)).Execute() == IDOK) {
     int pane = atoi(strtok(buf, ","));
     int dist = atoi(strtok(0, ","));
 
-    if (pane >= 0 && pane < MaxChildren)
-      MoveSplitter(ChildInfo[pane].Child, dist);
+    if (pane >= 0 && pane < MaxChildren) {
+      TWindow* child = ChildInfo[pane].Child;
+      if (child && child->GetHandle())
+        MoveSplitter(child, dist);
+      else
+        InvalidPane(pane);
+    }
   }
 }
 
@@ -214,14 +252,23 @@ TMyPaneSplitter::CmSplit()
 {
   char buf[10] = "";
   if (TInputDialog(GetApplication()->GetMainWindow(),
-                   "Split", "<Window1>,<Window2>,<0=H|1=V>:",
+                   "Split", "<Target Indx>,<New Indx>,<0=H|1=V>:",
                    buf, sizeof buf).Execute() == IDOK) {
     int w1 = atoi(strtok(buf, ","));
     int w2 = atoi(strtok(0, ","));
     int hv = atoi(strtok(0, ","));
-    SplitPane(ChildInfo[w1].Child, ChildInfo[w2].Child,
-              hv ? psVertical : psHorizontal);
-    ChildInfo[w1].Child->SetFocus();
+
+    // NOTE: The two panes can be the same window
+    //       The first index must point to an existing pane
+    //       The second index must *NOT* point to an existing pane
+    //
+    if ((w1 != w2) &&
+        (ChildInfo[w1].Child->GetHandle() != 0) &&
+        (ChildInfo[w2].Child->GetHandle() == 0)) {
+      SplitPane(ChildInfo[w1].Child, ChildInfo[w2].Child,
+                hv ? psVertical : psHorizontal);
+      ChildInfo[w1].Child->SetFocus();
+    }
   }
 }
 
@@ -281,11 +328,17 @@ TMyPaneSplitter::CmReplace()
 {
   char buf[10] = "";
   if (TInputDialog(GetApplication()->GetMainWindow(),
-                   "Replace", "<Window1>,<Window2>:",
+                   "Replace", "<Target pane index>,<New pane index>:",
                    buf, sizeof buf).Execute() == IDOK) {
     int w1 = atoi(strtok(buf, ","));
     int w2 = atoi(strtok(0, ","));
-    ReplacePane(ChildInfo[w1].Child, ChildInfo[w2].Child);
+
+    // First index must specify an existing pane while the second a
+    // brand new index..
+    //
+    if (ChildInfo[w1].Child->GetHandle() &&
+        !ChildInfo[w2].Child->GetHandle())
+      ReplacePane(ChildInfo[w1].Child, ChildInfo[w2].Child);
   }
 }
 
@@ -298,7 +351,10 @@ TMyPaneSplitter::CmSwap()
                    buf, sizeof buf).Execute() == IDOK) {
     int w1 = atoi(strtok(buf, ","));
     int w2 = atoi(strtok(0, ","));
-    SwapPanes(ChildInfo[w1].Child, ChildInfo[w2].Child);
+
+    if (ChildInfo[w1].Child->GetHandle() &&
+        ChildInfo[w2].Child->GetHandle())
+      SwapPanes(ChildInfo[w1].Child, ChildInfo[w2].Child);
   }
 }
 
@@ -366,6 +422,7 @@ class TPaneSplitterApp : public TApplication {
     void InitMainWindow();
 };
 
+
 TPaneSplitterApp::~TPaneSplitterApp()
 {
   for (int i = 0; i < MaxChildren; i++) {
@@ -380,7 +437,6 @@ TPaneSplitterApp::InitMainWindow()
   int i;
   for (i = 0; i < MaxChildren; i++) {
     ChildInfo[i].Child = new TMyChildWindow(0, i, 0);
-//    ChildInfo[i].LayoutMetrics.SetMeasurementUnits(lmPixels);
   }
   ChildInfo[i].Child = 0;
 
@@ -394,9 +450,9 @@ TPaneSplitterApp::InitMainWindow()
   cb->Insert(*new TSeparatorGadget);
   cb->Insert(*new TButtonGadget(IDB_SHRINK, CM_SHRINK));
   cb->Insert(*new TButtonGadget(IDB_GROW, CM_GROW));
-//  cb->Insert(*new TSeparatorGadget);
-//  cb->Insert(*new TButtonGadget(IDB_CANCLOSE, CM_CANCLOSE));
-//  cb->Insert(*new TButtonGadget(IDB_CANTCLOSE, CM_CANTCLOSE));
+  cb->Insert(*new TSeparatorGadget);
+  cb->Insert(*new TButtonGadget(IDB_CANCLOSE, CM_CANCLOSE));
+  cb->Insert(*new TButtonGadget(IDB_CANTCLOSE, CM_CANTCLOSE));
   frame->Insert(*cb);
 
   SetMainWindow(frame);

@@ -52,7 +52,7 @@ public:
         return arrayClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Array";
         }
@@ -385,7 +385,7 @@ public:
         return arrayClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "BI_TCArrayAsVector";
         }
@@ -718,7 +718,7 @@ public:
         return sortedArrayClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "BI_TCSArrayAsVector";
         }

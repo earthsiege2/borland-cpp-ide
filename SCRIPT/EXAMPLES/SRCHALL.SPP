@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // SRCHALL.SPP: Search All. Searches and replaces across files in the
 //   current project.
@@ -16,7 +16,7 @@
 // NOTES: Search.dll must be available for loading. It is shipped in the
 //   BCW bin directory.
 //--------------------------------------------------------------------------
-print "srchall.spp";
+print typeid(module());
 
 //
 // IDE imports.
@@ -28,7 +28,7 @@ import scriptEngine;
 //
 // Load support modules.
 //
-if (!scriptEngine.IsLoaded("foreach.spp")) scriptEngine.Load("foreach.spp");
+if (!scriptEngine.IsLoaded("foreach")) scriptEngine.Load("foreach");
 
 //
 // class TSearchRep
@@ -64,7 +64,7 @@ import "user32.dll" {
 Search(fileName, parentName, searchFor)
 {
   if (TopMessage == NULL) {
-    TopMessage = IDE.MessageCreate("Se&archAll", "transfer", INFORMATION, 0,
+    TopMessage = IDE.MessageCreate("SearchA&ll", "transfer", INFORMATION, 0,
                                    "Searching nodes for '" +
                                    searchFor + "'", 0, 0, NULL, 0, 0);
   }
@@ -90,7 +90,7 @@ Search(fileName, parentName, searchFor)
 
     if (pos.Search(searchFor, FALSE, FALSE) == TRUE) {
       do {
-        IDE.MessageCreate("Se&archAll", "", INFORMATION, TopMessage,
+        IDE.MessageCreate("SearchA&ll", "", INFORMATION, TopMessage,
                           fileName, pos.Row, pos.Column, "Found", 0, 0);
       } while (pos.SearchAgain());
     }

@@ -1,7 +1,7 @@
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
+//  Copyright (C) Microsoft Corporation, 1992 - 1996.
 //
 //  File: unknwn.idl
 //
@@ -9,6 +9,13 @@
 //
 //
 //--------------------------------------------------------------------------
+
+cpp_quote("//+-------------------------------------------------------------------------")
+cpp_quote("//")
+cpp_quote("//  Microsoft Windows")
+cpp_quote("//  Copyright (C) Microsoft Corporation, 1992 - 1996.")
+cpp_quote("//")
+cpp_quote("//--------------------------------------------------------------------------")
 
 #ifndef DO_NO_IMPORTS
 import "wtypes.idl";
@@ -23,27 +30,17 @@ import "wtypes.idl";
 
 interface IUnknown
 {
-cpp_quote("//+-------------------------------------------------------------------------")
-cpp_quote("//")
-cpp_quote("//  Microsoft Windows")
-cpp_quote("//  Copyright (C) Microsoft Corporation, 1992 - 1995.")
-cpp_quote("//")
-cpp_quote("//--------------------------------------------------------------------------")
-
-
     typedef [unique] IUnknown *LPUNKNOWN;
 
-cpp_quote("//////////////////////////////////////////////////////////////////" )
-cpp_quote("// IID_IUnknown and all other system IIDs are provided in UUID.LIB" )
+cpp_quote("//////////////////////////////////////////////////////////////////")
+cpp_quote("// IID_IUnknown and all other system IIDs are provided in UUID.LIB")
 cpp_quote("// Link that library in with your proxies, clients and servers")
-cpp_quote("//////////////////////////////////////////////////////////////////" )
+cpp_quote("//////////////////////////////////////////////////////////////////")
 
     HRESULT QueryInterface(
-    [in] REFIID riid,
-    [out] void **ppvObject);
-
+        [in] REFIID riid,
+        [out, iid_is(riid)] void **ppvObject);
     ULONG AddRef();
-
     ULONG Release();
 }
 
@@ -55,22 +52,24 @@ cpp_quote("//////////////////////////////////////////////////////////////////" )
 
 interface IClassFactory : IUnknown
 {
-
-    typedef [unique] IClassFactory *LPCLASSFACTORY;
+    typedef [unique] IClassFactory * LPCLASSFACTORY;
 
     [local]
-    HRESULT __stdcall CreateInstance(
-        [in, unique] IUnknown *pUnkOuter,
+    HRESULT CreateInstance(
+        [in, unique] IUnknown * pUnkOuter,
         [in] REFIID riid,
-        [out] void **ppvObject);
+        [out, iid_is(riid)] void **ppvObject);
 
     [call_as(CreateInstance)]
-    HRESULT __stdcall RemoteCreateInstance(
+    HRESULT RemoteCreateInstance(
         [in] REFIID riid,
-        [out, iid_is(riid)] IUnknown **ppvObject);
+        [out, iid_is(riid)] IUnknown ** ppvObject);
 
+    [local]
     HRESULT LockServer(
-        [in] BOOL fLock);
+	[in] BOOL fLock);
+
+    [call_as(LockServer)]
+    HRESULT __stdcall RemoteLockServer(
+	[in] BOOL fLock);
 }
-
-

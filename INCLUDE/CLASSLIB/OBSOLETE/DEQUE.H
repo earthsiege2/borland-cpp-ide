@@ -103,7 +103,7 @@ public:
         return dequeClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Deque";
         }
@@ -391,7 +391,7 @@ public:
         return dequeClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "BI_TCDequeAsVector";
         }
@@ -629,7 +629,7 @@ public:
         return dequeClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "BI_DequeAsDoubleList";
         }

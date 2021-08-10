@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.10  $
+//$Revision:   10.16  $
 //
 // Definition of TListWindow class
 //----------------------------------------------------------------------------
@@ -15,9 +15,12 @@
 #if !defined(BI_PLAT_WIN32)
 # error OWL: listwind.h only supports WIN32 targets
 #endif
-
 #if !defined(OWL_COMMCTRL_H)
 # include <owl/commctrl.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -29,46 +32,14 @@ class _OWLCLASS TLwFindInfo;
 class _OWLCLASS TLwHitTestInfo;
 class _OWLCLASS TLwComparator;
 
-#include <pshpack1.h>
+// Constant representing all mask flags of LV_COLUMN/LV_ITEM
 //
-// class TLwNotify
-// ~~~~~ ~~~~~~~~~
-// Basic TListWindow notification
-//
-class _OWLCLASS TLwNotify : public TNotify {
-  public:
-    int     iItem;          // index of the item
-    int     iSubItem;       // index of the subitem (column)
-    uint    uNewState;      // new state of the item
-    uint    uOldState;      // old state of the item
-    uint    uChanged;       // member indicating what changed
-    POINT   ptAction;       // point action occurred, valid for LVN_BEGINDRAG &
-                            // LVN_BEGINRDRAG
-    TParam2 lParam;         // additional data member Only valid for LVN_DELETEITEM
-};
-
-//
-// class TLwDispInfoNotify
-// ~~~~~ ~~~~~~~~~~~~~~~~~
-// A TListWindow notification to repaint an item.
-//
-class _OWLCLASS TLwDispInfoNotify : public TNotify {
-  public:
-    LV_ITEM item;           // item to repaint
-};
-
-//
-// class TLwKeyDownNotify
-// ~~~~~ ~~~~~~~~~~~~~~~~
-// A TListWindow notification that a key has been pressed.
-//
-class _OWLCLASS TLwKeyDownNotify : public TNotify {
-  public:
-    uint16 wVKey;           // which key was pressed
-    uint   flags;           // flags of the key
-};
-
-#include <poppack.h>
+#if !defined(LVCF_ALL)
+# define LVCF_ALL  (LVCF_FMT|LVCF_SUBITEM|LVCF_TEXT|LVCF_WIDTH)
+#endif
+#if !defined(LVIF_ALL)
+# define LVIF_ALL  (LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM|LVIF_STATE)
+#endif
 
 //
 // class TLwFindInfo
@@ -103,12 +74,12 @@ class _OWLCLASS TLwHitTestInfo : public LV_HITTESTINFO {
     TLwHitTestInfo(TPoint& p);
     TLwHitTestInfo(LV_HITTESTINFO); // make a copy
 
-    void SetPoint(TPoint& p);
-    int  GetIndex();
-    uint GetFlags();
+    void    SetPoint(TPoint& p);
+    int     GetIndex();
+    uint    GetFlags();
 
   protected:
-    void Init();
+    void    Init();
 };
 
 //
@@ -129,7 +100,9 @@ class _OWLCLASS TLwComparator {
 //
 // class TListWindItem
 // ~~~~~ ~~~~~~~~~~~~~
-// An item in the TListWindow.
+// Object representing an item of a TListWindow control - i.e. contains
+// information about the item's icon, label, state and application-defined
+// value
 //
 class _OWLCLASS TListWindItem : public LV_ITEM {
   public:
@@ -144,49 +117,78 @@ class _OWLCLASS TListWindItem : public LV_ITEM {
       StateImageMask  = LVIS_STATEIMAGEMASK,  // Retrieve one-based state image index
     };
 
-    // Constructors
+    // Construct an empty ListWindItem structure; typically used for 
+    // retrieving information about an existing item. For example,
     //
-    TListWindItem();        // zero every data member
-    TListWindItem(LV_ITEM); // make a copy
-    TListWindItem(char far*, int subitem = 0, int len = 0);
+    //    TListWindItem lstItem;
+    //    ListWindow->GetItem(lstItem, index, subItem);
+    //    ShowString(lstItem.GetText());
+    // 
+    TListWindItem(uint msk = LVIF_ALL, bool allocCache = true);        
 
-    // Accessors
+    // Make a copy from 'raw' system structure
     //
-    void GetText(char far*, int len = 0);
-    void SetText(char far*, int len = 0);
+    TListWindItem(const LV_ITEM& lvItem);
+
+    // Construct an object which represents an item to be
+    // added/inserted into a Listview control. For example,
+    //
+    //  TListWindItem lstItem(database.FieldName(fldIndex), fldIndex);
+    //  ListWindow->AddItem(lstItem);
+    //
+    TListWindItem(const char* text, int subitem = 0, int len = 0);
+
+    // Construct an object representing an existing item from a ListView 
+    // constrol.
+    //
+    TListWindItem(const TListWindow& ctl, int index, int subItem, 
+                  uint msk = LVIF_ALL);
+   ~TListWindItem();
+
+    // Retrieve/Set item's text
+    //
+    char*     GetText() const;
+    void      GetText(char* buff, int len = 0) const;
+    void      SetText(const char* text, int len = 0);
 
     // Index is the 0-based "row"
     //
-    int  GetIndex() const;
-    void SetIndex(int);
+    int       GetIndex() const;
+    void      SetIndex(int);
 
     // Column number
     //
-    int  GetSubItem() const;
-    void SetSubItem(int);
+    int       GetSubItem() const;
+    void      SetSubItem(int);
 
     // Extra data
     //
-    uint32 GetItemData() const;
-    void   SetItemData(uint32);
+    uint32    GetItemData() const;
+    void      SetItemData(uint32);
 
     // ImageList index
     //
-    int  GetImageIndex() const;
-    void SetImageIndex(int index);
+    int       GetImageIndex() const;
+    void      SetImageIndex(int index);
 
     // State of the item. See TListState for details.
     //
-    int  GetState() const;
-    void SetState(TListState state);
+    int       GetState() const;
+    void      SetState(TListState state);
 
     // ImageList index for the state
     //
-    int  GetStateImage() const;
-    void SetStateImage(int index);
+    int       GetStateImage() const;
+    void      SetStateImage(int index);
+
+    // Cache management routines
+    //
+    void      AllocCache(bool setpszText = true);
+    void      FlushCache();
 
   protected:
-    void Init();
+    void            Init();
+    TAPointer<char> Cache;
 };
 
 //
@@ -199,33 +201,72 @@ class _OWLCLASS TListWindColumn : public LV_COLUMN {
     // How to align a column
     //
     enum TFormat {
-      Left   = LVCFMT_LEFT,    // Left justified
-      Center = LVCFMT_CENTER,  // Centered
-      Right  = LVCFMT_RIGHT,   // Right justified
+      Left   = LVCFMT_LEFT,           // Left justified
+      Center = LVCFMT_CENTER,         // Centered
+      Right  = LVCFMT_RIGHT,          // Right justified
     };
 
-    // Constructors
+    // Zeroes out members and allocates a cache for the column text.
+    // Use this constructor to create a TListWindColumn object used for
+    // retrieving information about an existing column..
     //
-    TListWindColumn();          // zero every data member
-    TListWindColumn(LV_COLUMN); // make a copy
-    TListWindColumn(char far*, int width, TFormat how = Left, int subItem = 0);
+    TListWindColumn(uint mask = LVCF_ALL, int subItem = 0);
 
-    void SetText(char far*, int = 0);
-    void SetFormat(TFormat how);
-    void SetWidth(int pixels);
-    void SetSubItem(int);               // column number
+    // Construct a ListWindColumn object from a control. This constructor
+    // provides a quick way to construct and retrieve information about a
+    // column
+    //
+    TListWindColumn(const TListWindow& ctl, int index, uint mask = LVCF_ALL,
+                    int subItem = 0);
+                    
+    // Make a copy of system structure
+    //
+    TListWindColumn(const LV_COLUMN& lvColumn);       
+
+    // Quick ways to construct TListWindColumn object when inserting/adding
+    // new columns to a Listview control
+    //
+    // Use the first one if you want to just specify the index and text -
+    // OWL will compute the text extent from the default GUI font]
+    // Use the second one one if you want more control over the formatting]
+    //
+    TListWindColumn(char* txt, int width, TFormat how = Left, int subItem = 0);
+   ~TListWindColumn();
+
+    // Initialize members of object
+    //
+    void              SetText(const char* txt, int = 0);
+    void              SetFormat(TFormat how);
+    void              SetWidth(int pixels, char* txt = 0);
+    void              SetSubItem(int subItem);               
+    
+    // Retrieve information from object
+    // [NOTE: These members only return static data currently in the
+    //        structure.]
+    //
+    char*             GetText() const     { return pszText;      }
+    TFormat           GetFormat() const   { return TFormat(fmt); }
+    int               GetWidth() const    { return cx;           }
+    int               GetSubItem() const  { return iSubItem;     }
+
+    // Cache management routines
+    //
+    void              AllocCache(bool setpszText = true);
+    void              FlushCache();
 
   protected:
-    void Init();
+    void              Init();
+    TAPointer<char>   Cache;
 };
 
 //
 // class TListWindow
 // ~~~~~ ~~~~~~~~~~~
-// Encapsulates the ListView.
-// The ListWindow have four views: Icon, Small Icon, Report, and List.
-// The view is determined by the style of the ListWindow set either with
-// Attr.Style or SetWindowLong.
+// Encapsulates the ListView control, a window that displays a collection 
+// of items, each item consisting of an icon and a label. List view controls 
+// provide several ways of arranging items and displaying individual items. 
+// For example, additional information about each item can be displayed in 
+// columns to the right of the icon and label.
 //
 class _OWLCLASS TListWindow : public TControl {
   public:
@@ -249,9 +290,10 @@ class _OWLCLASS TListWindow : public TControl {
     // Type of rectangle boundaries to retrieve
     //
     enum TItemRectType {
-      Bounds = LVIR_BOUNDS,     // Entire boundary (icon and label)
-      Icon   = LVIR_ICON,       // Only the icon
-      Label  = LVIR_LABEL,      // Only the label
+      Bounds        = LVIR_BOUNDS,     // Entire boundary (icon and label)
+      Icon          = LVIR_ICON,       // Only the icon
+      Label         = LVIR_LABEL,      // Only the label
+      SelectBounds  = LVIR_SELECTBOUNDS// Union of Icon+Label but no colmns
     };
 
     // Next item to retrieve from current item
@@ -282,33 +324,62 @@ class _OWLCLASS TListWindow : public TControl {
 
     // Column manipulation
     //
-    int  InsertColumn(int colNum, TListWindColumn&);
-    bool DeleteColumn(int colNum);
-    bool GetColumn(int index, LV_COLUMN far*);
-    int  GetColumnWidth(int index);
-    bool SetColumn(int index, TListWindColumn&);
-    bool SetColumnWidth(int index, int width);
+    int   InsertColumn(int colNum, const TListWindColumn&);
+    bool  DeleteColumn(int colNum);
+    bool  GetColumn(int index, LV_COLUMN*); 
+    bool  GetColumn(int index, TListWindColumn& column) const; 
+    int   GetColumnWidth(int index) const;
+    bool  SetColumn(int index, const TListWindColumn&);
+    bool  SetColumnWidth(int index, int width);
 
-    // Item manipulation
+    // Retrieve/Set item data
     //
-    bool GetItem(TListWindItem&);
-    int  GetNextItem(int index, TNextItemCode code);
-    int  GetItemCount();
+    bool GetItem(TListWindItem&, int index = -1, int subitem = -1) const;
+    bool SetItem(TListWindItem&, int index = -1, int subitem = -1);
+
+    int  GetNextItem(int index, TNextItemCode code) const;
+    int  GetItemCount() const;
     void SetItemCount(int numItems);
-    bool GetItemPosition(int index, POINT far*);
-    bool SetItemPosition(int index, POINT p);
-    bool GetItemRect(int index, RECT far*, TItemRectType);
-    uint GetItemState(int index, uint mask);
+    bool GetItemPosition(int index, POINT far*);        
+    bool GetItemPosition(int index, TPoint& pt) const;  
+    bool SetItemPosition(int index, const TPoint& pt);  
+
+    bool GetItemRect(int index, RECT far*, TItemRectType);  
+    uint GetItemState(int index, uint mask) const;
     bool SetItemState(int index, uint state, uint mask);
-    int  GetItemText(int index, int subItem, char far* text, int size);
-    int  InsertItem(TListWindItem&);
+    int  GetItemText(int index, int subItem, char* text, int size) const;
+
+    // Add/Insert/Delete
+    //
+    int  AddItem(TListWindItem& newItem);
+    int  InsertItem(TListWindItem& newItem, int index = -1);
+
+    // NOTE: The following should be named 'DeleteItem' to be consistent.
+    //       However, it would then hide TControl's DeleteItem...
+    //
     bool DeleteAnItem(int itemIndex);
     bool DeleteAllItems();
-    bool SetItem(TListWindItem&);
-    void SetItemText(int index, TListWindItem&);
-    int  FindItem(int startIndex, const TLwFindInfo far* findInfo);
+
+    // Update item attributes
+    //
+    bool SetItemText(int index, const TListWindItem& item);
+    bool SetItemText(int index, int subItem, const char* text);
+
+    // Find/Sort/Arrange
+    //
+    int  FindItem(int startIndex, const TLwFindInfo* findInfo); 
     bool SortItems(const TLwComparator& Comparator, uint32 lParam = 0);
     bool Arrange(TArrangeCode code);
+
+    // Item selection
+    //
+    bool IsSelected(int index) const;
+    int  GetSelCount(void) const;
+    int  GetSelIndexes(int* indexes, int maxCount) const;
+    int  GetSelStrings(char far** strs, int maxCount, int maxChars, int subItem = 0) const;
+    bool SetSel(int index, bool select);
+    bool SetSelIndexes(int* indexes, int numSelections, bool select);
+    bool SetSelItemRange(bool select, int first, int last);
 
     // Image list manipulation
     //
@@ -327,23 +398,23 @@ class _OWLCLASS TListWindow : public TControl {
 
     // Callbacks
     //
-    uint GetCallBackMask();
+    uint GetCallBackMask() const;
     bool SetCallBackMask(uint mask);
 
     // Miscellaneous
     //
-    int  GetTopIndex();
+    int  GetTopIndex() const;
     HWND EditLabel(int itemIndex);
-    HWND GetEditControl();
+    HWND GetEditControl() const;
     bool Update(int index);
     int  HitTest(TLwHitTestInfo&);
     bool Scroll(int dx, int dy);
-    bool GetOrigin(POINT far*);
+    bool GetOrigin(POINT*);               
     int  GetStringWidth(char far* text);
-    bool GetViewRect(RECT far*);
+    bool GetViewRect(RECT far*);          
     bool EnsureVisible(int index, bool partialOk);
     bool RedrawItems(int startIndex, int endIndex);
-    int  GetCountPerPage();
+    int  GetCountPerPage() const;
 
   protected:
     char far* GetClassName();
@@ -352,12 +423,15 @@ class _OWLCLASS TListWindow : public TControl {
     TListWindow(const TListWindow&);
     TListWindow& operator=(const TListWindow&);
 
-  DECLARE_STREAMABLE(_OWLCLASS, TListWindow, 1);
 };
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -381,7 +455,8 @@ TLwComparator::Compare(uint32 item1, uint32 item2, uint32 lParam) const
 inline bool
 TListWindow::Arrange(TArrangeCode code)
 {
-  return ToBool(SendMessage(LVM_ARRANGE, (int)code));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_ARRANGE, (int)code) != 0;
 }
 
 //
@@ -390,6 +465,7 @@ TListWindow::Arrange(TArrangeCode code)
 inline HIMAGELIST
 TListWindow::CreateDragImage(int itemIndex, TPoint* upLeft)
 {
+  PRECONDITION(GetHandle());
   return (HIMAGELIST)SendMessage(LVM_CREATEDRAGIMAGE, itemIndex, TParam2(upLeft));
 }
 
@@ -399,7 +475,8 @@ TListWindow::CreateDragImage(int itemIndex, TPoint* upLeft)
 inline bool
 TListWindow::DeleteColumn(int colNum)
 {
-  return ToBool(SendMessage(LVM_DELETECOLUMN, colNum));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_DELETECOLUMN, colNum) != 0;
 }
 
 //
@@ -408,7 +485,8 @@ TListWindow::DeleteColumn(int colNum)
 inline bool
 TListWindow::DeleteAllItems()
 {
-  return ToBool(SendMessage(LVM_DELETEALLITEMS));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_DELETEALLITEMS) != 0;
 }
 
 //
@@ -417,7 +495,8 @@ TListWindow::DeleteAllItems()
 inline bool
 TListWindow::DeleteAnItem(int itemIndex)
 {
-  return ToBool(SendMessage(LVM_DELETEITEM, itemIndex));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_DELETEITEM, itemIndex) != 0;
 }
 
 //
@@ -427,6 +506,7 @@ TListWindow::DeleteAnItem(int itemIndex)
 inline HWND
 TListWindow::EditLabel(int itemIndex)
 {
+  PRECONDITION(GetHandle());
   return (HWND)SendMessage(LVM_EDITLABEL, itemIndex);
 }
 
@@ -437,7 +517,8 @@ TListWindow::EditLabel(int itemIndex)
 inline bool
 TListWindow::EnsureVisible(int index, bool partialOk)
 {
-  return ToBool(SendMessage(LVM_ENSUREVISIBLE, index, TParam2(partialOk)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_ENSUREVISIBLE, index, TParam2(partialOk)) != 0;
 }
 
 //
@@ -448,15 +529,29 @@ TListWindow::EnsureVisible(int index, bool partialOk)
 inline int
 TListWindow::FindItem(int startIndex, const TLwFindInfo far* findInfo)
 {
+  PRECONDITION(GetHandle());
   return (int)SendMessage(LVM_FINDITEM, startIndex, TParam2(findInfo));
+}
+
+//
+// Add item to the end of the list.
+//
+inline int
+TListWindow::AddItem(TListWindItem& item)
+{
+  PRECONDITION(GetHandle());
+  return (int)InsertItem(item, GetItemCount());
 }
 
 //
 // Inserts the item into the position indicated by item.iItem.
 //
 inline int
-TListWindow::InsertItem(TListWindItem& item)
+TListWindow::InsertItem(TListWindItem& item, int index /*= -1*/)
 {
+  PRECONDITION(GetHandle());
+  if (index != -1)
+    item.iItem = index;
   return (int)SendMessage(LVM_INSERTITEM, 0, TParam2(&item));
 }
 
@@ -464,8 +559,9 @@ TListWindow::InsertItem(TListWindItem& item)
 // Inserts the column 'colItem' into column number 'colNum'.
 //
 inline int
-TListWindow::InsertColumn(int colNum, TListWindColumn& colItem)
+TListWindow::InsertColumn(int colNum, const TListWindColumn& colItem)
 {
+  PRECONDITION(GetHandle());
   return (int)SendMessage(LVM_INSERTCOLUMN, colNum, TParam2(&colItem));
 }
 
@@ -475,6 +571,7 @@ TListWindow::InsertColumn(int colNum, TListWindColumn& colItem)
 inline COLORREF
 TListWindow::GetBkColor()
 {
+  PRECONDITION(GetHandle());
   return (COLORREF)SendMessage(LVM_GETBKCOLOR);
 }
 
@@ -482,27 +579,45 @@ TListWindow::GetBkColor()
 // Return the callback mask.
 //
 inline uint
-TListWindow::GetCallBackMask()
+TListWindow::GetCallBackMask() const
 {
-  return (uint)SendMessage(LVM_GETCALLBACKMASK);
+  PRECONDITION(GetHandle());
+  return (uint) CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETCALLBACKMASK);
 }
 
 //
 // Returns the column information of column number 'index'.
 //
 inline bool
-TListWindow::GetColumn(int index, LV_COLUMN far* column)
+TListWindow::GetColumn(int index, LV_COLUMN* column) 
 {
-  return ToBool(SendMessage(LVM_GETCOLUMN, index, TParam2(column)));
+  PRECONDITION(column);
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_GETCOLUMN, index, TParam2(column)) != 0;
+}
+
+//
+// Returns the column information of column number 'index'.
+//
+inline bool
+TListWindow::GetColumn(int index, TListWindColumn& column) const
+{
+  PRECONDITION(GetHandle());
+  
+  return CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETCOLUMN, 
+                                                     index, 
+                                                     TParam2(&column)) != 0;
 }
 
 //
 // Returns the width of the column 'index'.
 //
 inline int
-TListWindow::GetColumnWidth(int index)
+TListWindow::GetColumnWidth(int index) const
 {
-  return (int)SendMessage(LVM_GETCOLUMNWIDTH, index);
+  PRECONDITION(GetHandle());
+  return int(CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETCOLUMNWIDTH, 
+                                                         index));
 }
 
 //
@@ -510,18 +625,20 @@ TListWindow::GetColumnWidth(int index)
 // in list or report view.
 //
 inline int
-TListWindow::GetCountPerPage()
+TListWindow::GetCountPerPage() const
 {
-  return (int)SendMessage(LVM_GETCOUNTPERPAGE);
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETCOUNTPERPAGE);
 }
 
 //
 // Returns the HWND of the edit control used for editing labels.
 //
 inline HWND
-TListWindow::GetEditControl()
+TListWindow::GetEditControl() const
 {
-  return (HWND)SendMessage(LVM_GETEDITCONTROL);
+  PRECONDITION(GetHandle());
+  return (HWND)CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETEDITCONTROL);
 }
 
 //
@@ -530,6 +647,7 @@ TListWindow::GetEditControl()
 inline HIMAGELIST
 TListWindow::GetImageList(TImageListType type)
 {
+  PRECONDITION(GetHandle());
   return (HIMAGELIST)SendMessage(LVM_GETIMAGELIST, type);
 }
 
@@ -537,18 +655,25 @@ TListWindow::GetImageList(TImageListType type)
 // Returns the information specified by item.
 //
 inline bool
-TListWindow::GetItem(TListWindItem& item)
+TListWindow::GetItem(TListWindItem& item, int index /*= -1*/,
+                     int subItem /*= -1*/) const
 {
-  return ToBool(SendMessage(LVM_GETITEM, 0, TParam2(&item)));
+  PRECONDITION(GetHandle());
+  if (index != -1)
+    item.iItem = index;
+  if (subItem != -1)
+    item.iSubItem = subItem;
+  return CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETITEM, 0, TParam2(&item)) != 0;
 }
 
 //
 // Returns the number of items total in the ListWindow
 //
 inline int
-TListWindow::GetItemCount()
+TListWindow::GetItemCount() const
 {
-  return (int)SendMessage(LVM_GETITEMCOUNT);
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETITEMCOUNT);
 }
 
 //
@@ -557,7 +682,18 @@ TListWindow::GetItemCount()
 inline bool
 TListWindow::GetItemPosition(int index, POINT far* p)  
 {
-  return ToBool(SendMessage(LVM_GETITEMPOSITION, index, TParam2(p)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_GETITEMPOSITION, index, TParam2(p)) != 0;
+}
+
+//
+//
+//
+inline bool 
+TListWindow::GetItemPosition(int index, TPoint& pt) const
+{
+  PRECONDITION(GetHandle());
+  return CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETITEMPOSITION, index, TParam2(&pt)) != 0;
 }
 
 //
@@ -565,30 +701,32 @@ TListWindow::GetItemPosition(int index, POINT far* p)
 // TItemRectType indicates what type of rectangle to return.
 //
 inline bool
-TListWindow::GetItemRect(int index, RECT far* r, TItemRectType type) 
+TListWindow::GetItemRect(int index, RECT* r, TItemRectType type) 
 {
+  PRECONDITION(GetHandle());
   r->left = type;
-  return ToBool(SendMessage(LVM_GETITEMRECT, index, TParam2(r)));
+  return SendMessage(LVM_GETITEMRECT, index, TParam2(r)) != 0;
 }
 
 //
 // Returns the current state of the item (selected, focused, etc.)
 //
 inline uint
-TListWindow::GetItemState(int index, uint mask)
+TListWindow::GetItemState(int index, uint mask) const
 {
-  return (uint)SendMessage(LVM_GETITEMSTATE, index, TParam2(mask));
+  PRECONDITION(GetHandle());
+  return (uint)CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETITEMSTATE, index, TParam2(mask));
 }
 
 //
 // Returns the text of the item.
 //
 inline int
-TListWindow::GetItemText(int index, int subItem, char far* text, int size)
+TListWindow::GetItemText(int index, int subItem, char* text, int size) const
 {
-  TListWindItem item(text, size);
-  item.SetSubItem(subItem);
-  return (int)SendMessage(LVM_GETITEMTEXT, index, TParam2(&item));
+  PRECONDITION(GetHandle());
+  TListWindItem item(text, subItem, size);
+  return (int)CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETITEMTEXT, index, TParam2(&item));
 }
 
 //
@@ -596,9 +734,10 @@ TListWindow::GetItemText(int index, int subItem, char far* text, int size)
 // See TNextItemCode for more details.
 //
 inline int
-TListWindow::GetNextItem(int index, TNextItemCode code)
+TListWindow::GetNextItem(int index, TNextItemCode code) const
 {
-  return (int)SendMessage(LVM_GETNEXTITEM, index, MkParam2(code, 0));
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETNEXTITEM, index, MkParam2(code, 0));
 }
 
 //
@@ -608,15 +747,17 @@ TListWindow::GetNextItem(int index, TNextItemCode code)
 inline bool
 TListWindow::GetOrigin(POINT far* p)
 {
-  return ToBool(SendMessage(LVM_GETORIGIN, 0, TParam2(p)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_GETORIGIN, 0, TParam2(p)) != 0;
 }
 
 //
 // Returns the width of the text using the current ListWindow's font.
 //
 inline int
-TListWindow::GetStringWidth(char far* text)
+TListWindow::GetStringWidth(char* text)
 {
+  PRECONDITION(GetHandle());
   return (int)SendMessage(LVM_GETSTRINGWIDTH, 0, TParam2(text));
 }
 
@@ -626,6 +767,7 @@ TListWindow::GetStringWidth(char far* text)
 inline COLORREF
 TListWindow::GetTextBkColor()
 {
+  PRECONDITION(GetHandle());
   return (COLORREF)SendMessage(LVM_GETTEXTBKCOLOR);
 }
 
@@ -635,6 +777,7 @@ TListWindow::GetTextBkColor()
 inline COLORREF
 TListWindow::GetTextColor()
 {
+  PRECONDITION(GetHandle());
   return (COLORREF)SendMessage(LVM_GETTEXTCOLOR);
 }
 
@@ -642,9 +785,10 @@ TListWindow::GetTextColor()
 // Returns the index of the topmost visible item.
 //
 inline int
-TListWindow::GetTopIndex()
+TListWindow::GetTopIndex() const
 {
-  return (int)SendMessage(LVM_GETTOPINDEX);
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETTOPINDEX);
 }
 
 //
@@ -654,7 +798,8 @@ TListWindow::GetTopIndex()
 inline bool
 TListWindow::GetViewRect(RECT far* r)
 {
-  return ToBool(SendMessage(LVM_GETVIEWRECT, 0, TParam2(r)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_GETVIEWRECT, 0, TParam2(r)) != 0;
 }
 
 //
@@ -663,6 +808,7 @@ TListWindow::GetViewRect(RECT far* r)
 inline int
 TListWindow::HitTest(TLwHitTestInfo& info)
 {
+  PRECONDITION(GetHandle());
   return (int)SendMessage(LVM_HITTEST, 0, TParam2(&info));
 }
 
@@ -672,7 +818,8 @@ TListWindow::HitTest(TLwHitTestInfo& info)
 inline bool
 TListWindow::RedrawItems(int startIndex, int endIndex)
 {
-  return ToBool(SendMessage(LVM_REDRAWITEMS, 0, MkParam2(startIndex, endIndex)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_REDRAWITEMS, 0, MkParam2(startIndex, endIndex)) != 0;
 }
 
 //
@@ -682,7 +829,8 @@ TListWindow::RedrawItems(int startIndex, int endIndex)
 inline bool
 TListWindow::Scroll(int dx, int dy)
 {
-  return ToBool(SendMessage(LVM_SCROLL, 0, MkParam2(dx, dy)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SCROLL, 0, MkParam2(dx, dy)) != 0;
 }
 
 //
@@ -691,7 +839,8 @@ TListWindow::Scroll(int dx, int dy)
 inline bool
 TListWindow::SetBkColor(COLORREF c)
 {
-  return ToBool(SendMessage(LVM_SETBKCOLOR, 0, TParam2(c)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SETBKCOLOR, 0, TParam2(c)) != 0;
 }
 
 //
@@ -700,16 +849,18 @@ TListWindow::SetBkColor(COLORREF c)
 inline bool
 TListWindow::SetCallBackMask(uint mask)
 {
-  return ToBool(SendMessage(LVM_SETCALLBACKMASK, mask));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SETCALLBACKMASK, mask) != 0;
 }
 
 //
 // Sets the attributes of the column 'index'
 //
 inline bool
-TListWindow::SetColumn(int index, TListWindColumn& column)
+TListWindow::SetColumn(int index, const TListWindColumn& column)
 {
-  return ToBool(SendMessage(LVM_SETCOLUMN, index, TParam2(&column)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SETCOLUMN, index, TParam2(&column)) != 0;
 }
 
 //
@@ -718,7 +869,8 @@ TListWindow::SetColumn(int index, TListWindColumn& column)
 inline bool
 TListWindow::SetColumnWidth(int index, int width)
 {
-  return ToBool(SendMessage(LVM_SETCOLUMNWIDTH, index, MkParam2(width, 0)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SETCOLUMNWIDTH, index, MkParam2(width, 0)) != 0;
 }
 
 //
@@ -727,16 +879,23 @@ TListWindow::SetColumnWidth(int index, int width)
 inline bool
 TListWindow::SetImageList(HIMAGELIST list, TImageListType type)
 {
-  return ToBool(SendMessage(LVM_SETIMAGELIST, type, TParam2(list)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SETIMAGELIST, type, TParam2(list)) != 0;
 }
 
 //
 // Sets the attributes of the item 'item'.
 //
 inline bool
-TListWindow::SetItem(TListWindItem& item)
+TListWindow::SetItem(TListWindItem& item, int index /*= -1*/, 
+                     int subItem /*= -1*/)
 {
-  return ToBool(SendMessage(LVM_SETITEM, 0, TParam2(&item)));
+  PRECONDITION(GetHandle());
+  if (index != -1)
+    item.iItem = index;
+  if (subItem != -1)
+    item.iSubItem = subItem;
+  return SendMessage(LVM_SETITEM, 0, TParam2(&item)) != 0;
 }
 
 //
@@ -745,26 +904,40 @@ TListWindow::SetItem(TListWindItem& item)
 inline void
 TListWindow::SetItemCount(int numItems)
 {
+  PRECONDITION(GetHandle());
   SendMessage(LVM_SETITEMCOUNT, numItems);
 }
+
 
 //
 // Sets the item to a particular point.
 // Only valid for icon or small icon view.
 //
-inline bool
-TListWindow::SetItemPosition(int index, POINT p)
+inline bool 
+TListWindow::SetItemPosition(int index, const TPoint& pt) 
 {
-  return ToBool(SendMessage(LVM_SETITEMPOSITION, index, MkParam2(p.x, p.y)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SETITEMPOSITION, index, MkParam2(pt.x, pt.y)) != 0;
 }
 
 //
 // Sets the text for the item.
 //
-inline void
-TListWindow::SetItemText(int index, TListWindItem& item)
+inline bool
+TListWindow::SetItemText(int index, const TListWindItem& item)
 {
-  SendMessage(LVM_SETITEMTEXT, index, TParam2(&item));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SETITEMTEXT, index, TParam2(&item)) != 0;
+}
+
+//
+//
+//
+inline bool
+TListWindow::SetItemText(int index, int subItem, const char* text)
+{
+  PRECONDITION(GetHandle());
+  return SetItemText(index, TListWindItem(text, subItem));
 }
 
 //
@@ -773,7 +946,8 @@ TListWindow::SetItemText(int index, TListWindItem& item)
 inline bool
 TListWindow::SetTextBkColor(COLORREF c)
 {
-  return ToBool(SendMessage(LVM_SETTEXTBKCOLOR, 0, TParam2(c)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SETTEXTBKCOLOR, 0, TParam2(c)) != 0;
 }
 
 //
@@ -782,7 +956,8 @@ TListWindow::SetTextBkColor(COLORREF c)
 inline bool
 TListWindow::SetTextColor(COLORREF c)
 {
-  return ToBool(SendMessage(LVM_SETTEXTCOLOR, 0, TParam2(c)));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_SETTEXTCOLOR, 0, TParam2(c)) != 0;
 }
 
 //
@@ -793,7 +968,17 @@ TListWindow::SetTextColor(COLORREF c)
 inline bool
 TListWindow::Update(int index)
 {
-  return ToBool(SendMessage(LVM_UPDATE, index));
+  PRECONDITION(GetHandle());
+  return SendMessage(LVM_UPDATE, index) != 0;
+}
+
+//
+// Returns the text of the item.
+//
+inline char*
+TListWindItem::GetText() const
+{
+  return pszText;
 }
 
 //

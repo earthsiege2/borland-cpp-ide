@@ -116,7 +116,7 @@ public:
         return doubleListClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "DoubleList";
         }

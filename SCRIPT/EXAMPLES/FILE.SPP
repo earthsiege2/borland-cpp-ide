@@ -1,12 +1,12 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // FILE.SPP: File Classes. Includes configuration file management.
 //
 // FILES: MSG.SPP
 //--------------------------------------------------------------------------
-print "file.spp";
+print typeid(module());
 
 //
 // IDE imports.
@@ -16,7 +16,7 @@ import scriptEngine;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
+if (!scriptEngine.IsLoaded("msg")) scriptEngine.Load("msg");
 
 //
 // Windows imports.

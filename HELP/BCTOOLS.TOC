@@ -1,139 +1,156 @@
 :Base BCTOOLS.HLP
+0 Borland C++ Tools and Utilities
+
 1 Borland C++ Tools and Utilities
 2 Borland C++ tools overview = BCToolsOverview
+2 Running the command-line tools = RunningTheCommandLineTools
 2 Turbo Debugger and Turbo Profiler tools = TurboDebuggerAndTurboProfiler
 2 Microsoft redistributable tools = MicrosoftRedistributableTools
-2 Running the command-line tools = RunningTheCommandLineTools
-2 BGIOBJ.EXE
-3 BGIOBJ: Converting Graphics Drivers and Fonts = BGIOBJ
-3 BGIOBJ: Adding the New .OBJ Files to GRAPHICS.LIB = BGIOBJ_AddingNewOBJFiles
-3 BGIOBJ: Registering the Drivers and Fonts = BGIOBJ_RegisteringDriversAndFonts
-3 BGIOBJ: Example = BGIOBJ_Ex
-3 BGIOBJ: The /F option = BGIOBJ_FOption
-3 BGIOBJ: Advanced Features = BGIOBJ_AdvancedFeatures
-3 BGIOBJ: Advanced Features Example = BGIOBJ_AdvancedFeatures_Ex
-2 The C++ compilers
-3 Using the Command-Line Compilers = UsingTheCommandLineCompilers
-3 Using Configuration Files = UsingConfigurationFiles
-3 Using Response Files = UsingResponseFiles
-3 Option Precedence Rules = OptionPrecedenceRules
-3 Entering Directories for Command-Line Options = EnteringDirectoriesForCommandLineOptions
-2 The C++ preprocessors
-3 CPP and CPP32: The Preprocessors = CPP
-3 Using CPP = CPP_Using
-3 CPP as a Macro Preprocessor = CPP_MacroPreprocessor
-3 Using MIDL with CPP.EXE and CPP32.EXE = CPP_MIDL
-3 CPP and UUIDs = CPP_UUID
-2 GREP.EXE
-3 GREP: A Text-Search Utility = GREP
-3 GREP: Command-Line Syntax = GREP_CommandLineSyntax
-3 GREP: Command-Line Options = GREP_CommandLineOptions
-3 GREP: The Search String = GREP_TheSearchString
-3 GREP: File Specifications = GREP_FileSpecifications
-3 GREP examples
-4 GREP: Examples = GREP_Ex
-4 GREP: Example 1 = GREP_Ex1
-4 GREP: Example 2 = GREP_Ex2
-4 GREP: Example 3 = GREP_Ex3
-4 GREP: Example 4 = GREP_Ex4
-4 GREP: Example 5 = GREP_Ex5
-2 IMPLIB.EXE
-3 Using IMPLIB = IMPLIB
-3 Using The Module Definition File Manager (IMPDEF) = IMPDEF
-3 Classes in a DLL = ClassesInADLL
-3 Functions in a DLL = FunctionsInADLL
-2 MAKE.EXE
-3 Using MAKE
-3 Using MAKE = UsingMAKE
-3 Default MAKE Actions = DefaultMAKEActions
-3 Using Makefiles = UsingMakefiles
-3 Symbolic Targets = SymbolicTargets
-3 BUILTINS.MAK = BUILTINSMAK
-3 Using TOUCH = UsingTOUCH
-3 MAKE options
-4 MAKE Options = MAKEOptions
-4 Setting Default MAKE Options = SettingDefaultMAKEOptions
-4 Compatibility with Microsoft's NMAKE = CompatibilityWithMicrosoftSNMAKE
-3 Explicit and implicit rules
-4 Explicit and Implicit Rules = ExplicitAndImplicitRules
-4 Explicit Rule Syntax = ExplicitRuleSyntax
-4 Implicit Rule Syntax = ImplicitRuleSyntax
-3 Command Syntax
-4 Command Syntax = CommandSyntax
-4 MAKE Command Operators = MakeCommandOperators
-4 Debugging Makefiles With Temporary Files = DebuggingMAKEFilesWithTemporaryFiles
-3 MAKE macros
-4 Using MAKE Macros = UsingMAKEMacros
-4 Defining MAKE Macros = DefiningMAKEMacros
-4 String Substitutions in MAKE Macros = StringSubstitutionsInMAKEMacros
-4 Default MAKE Macros = DefaultMAKEMacros
-4 Modifying Default MAKE Macros = ModifyingDefaultMAKEMacros
-3 Make directives
-4 Using MAKE Directives = UsingMAKEDirectives
-4 .autodepend = MAKE_autodepend
-4 !error = MAKE_error
-4 !if and Other Conditional Directives = MAKE_IfAndOtherConditionalDirectives
-4 !include = MAKE_include
-4 !message = MAKE_message
-4 .path.ext = MAKE_pathExt
-4 .precious = MAKE_precious
-4 .suffixes = MAKE_suffixes
-4 !undef = MAKE_undef
-4 Using Macros in Directives = UsingMacrosInDirectives
-4 Null Macros = NullMacros
-2 OBJXREF.EXE
-3 OBJXREF: The Object Module Cross-Reference Utility = OBJXREF
-3 OBJXREF: Command Line = OBJXREF_CommandLine
-3 OBJXREF: Control Options = OBJXREF_ControlOptions
-3 OBJXREF: Report Options = OBJXREF_ReportOptions
-3 OBJXREF: Sample Reports = OBJXREF_SampleReports
-3 Report by Public Names (/RP) = OBJXREF_SampleReports_RP
-3 Report by Module (/RM) = OBJXREF_SampleReports_RM
-3 Report by Reference (/RR) = OBJXREF_SampleReports_RR
-3 Report by External References (/RX) = OBJXREF_SampleReports_RX
-3 Report of Module Sizes (/RS) = OBJXREF_SampleReports_RS
-3 Report by Class Type (/RC) = OBJXREF_SampleReports_RC
-3 Report of Unreferenced Symbol Names (/RU) = OBJXREF_SampleReports_RU
-3 Verbose Reporting (/RV) = OBJXREF_SampleReports_RV
-3 OBJXREF Examples = OBJXREF_Ex
-3 OBJXREF Error Messages and Warnings = OBJXREF_Messages
-2 TDUMP.EXE
-3 TDUMP: The file dumping utility = TDUMP
-3 TDUMP command-line options = TDUMPCommandLineOptions
-2 TLIB.EXE
-3 Using TLIB = TLIB
-3 TLIB Command-line Options = TLIBCommandLineOptions
-3 Using TLIB Response Files = ResponseFiles
-3 TLIB /C Option = TLIBCOption
-3 TLIB /E Option = TLIBEOption
-3 TLIB /P Option = TLIBPOption
-3 Operation List = OperationList
-3 TLIB Examples = TLIBExamples
-2 TLINK.EXE
-3 Using the linkers
-4 Using TLINK and TLINK32 = TLINK
-4 TLINK command-line syntax = TLINKCommandLineSyntax
-4 TLINK.CFG File = TLINKCFG
-4 Linker response files = ResponseFiles
-4 Using TLINK with BCC.EXE = UsingTLINKWithBCC.EXE
-3 Module definition files
-4 Module Definition Files = ModuleDefinitionFile
-4 CODE Statement (Module Definition File) = CODEStatement
-4 DATA Statement (Module Definition File) = DATAStatement
-4 DESCRIPTION Statement (Module Definition File) = DESCRIPTIONStatement
-4 EXETYPE Statement (Module Definition File) = EXETYPEStatement
-4 EXPORTS Statement (Module Definition File) = EXPORTSStatement
-4 IMPORTS Statement (Module Definition File) = IMPORTSStatement
-4 LIBRARY Statement (Module Definition File) = LIBRARYStatement
-4 NAME Statement (Module Definition File) = NAMEStatement
-4 SEGMENTS Statement (Module Definition File) = SEGMENTSStatement
-4 STACKSIZE Statement (Module Definition File) = STACKSIZEStatement
-4 STUB Statement (Module Definition File) = STUBStatement
-4 Example Module Definition File = ExampleModuleDefinitionFile
-2 TRIGRAPH.EXE
-3 TRIGRAPH: A Character-Conversion Utility = TRIGRAPH
-2 VBXGEN.EXE
-3 VBXGEN 1.0 = VBXGEN
-3 Symbolic Property and Event Names = VBXGEN_SymbolicPropertyAndEventNames
-3 Default Property Data = VBXGEN_DefaultPropertyData
-3 Custom OWL Classes = VBXGEN_CustomOwlClasses
+
+1 BGIOBJ.EXE
+2 Converting graphics drivers and fonts = BGIOBJ
+2 Adding the new .OBJ files to GRAPHICS.LIB = BGIOBJ_AddingNewOBJFiles
+2 Registering the drivers and fonts = BGIOBJ_RegisteringDriversAndFonts
+2 Example = BGIOBJ_Ex
+2 The /F option = BGIOBJ_FOption
+2 Advanced features = BGIOBJ_AdvancedFeatures
+2 Advanced feature example = BGIOBJ_AdvancedFeatures_Ex
+
+1 The C++ compilers
+2 Using the command-line compilers = UsingTheCommandLineCompilers
+2 Using configuration files = UsingConfigurationFiles
+2 Using the compiler response files = UsingResponseFiles
+2 Compiler option precedence rules = OptionPrecedenceRules
+2 Entering directories for command-line options = EnteringDirectoriesForCommandLineOptions
+
+1 The C++ preprocessors
+2 CPP and CPP32: The preprocessors = CPP
+2 Using CPP = CPP_Using
+2 CPP as a macro preprocessor = CPP_MacroPreprocessor
+2 Using MIDL with CPP.EXE and CPP32.EXE = CPP_MIDL
+2 CPP and UUIDs = CPP_UUID
+
+1 GREP.EXE
+2 A text-search utility = GREP
+2 Command-line syntax = GREP_CommandLineSyntax
+2 Command-line options = GREP_CommandLineOptions
+2 The search string = GREP_TheSearchString
+2 File specifications = GREP_FileSpecifications
+2 GREP examples
+3 Examples overview = GREP_Ex
+3 Example 1 = GREP_Ex1
+3 Example 2 = GREP_Ex2
+3 Example 3 = GREP_Ex3
+3 Example 4 = GREP_Ex4
+3 Example 5 = GREP_Ex5
+
+1 IDETOMAK.EXE
+2 Using IdeToMak.EXE = UsingIdeToMak
+
+1 IMPLIB.EXE
+2 Using IMPLIB = IMPLIB
+2 Using the module definition file manager (IMPDEF) = IMPDEF
+2 Classes in a DLL = ClassesInADLL
+2 Functions in a DLL = FunctionsInADLL
+
+1 MAKE.EXE
+2 Using MAKE
+2 Using MAKE = UsingMAKE
+2 Default MAKE actions = DefaultMAKEActions
+2 Using makefiles = UsingMakefiles
+2 Symbolic targets = SymbolicTargets
+2 BUILTINS.MAK = BUILTINSMAK
+2 Using TOUCH = UsingTOUCH
+2 MAKE options
+3 MAKE options = MAKEOptions
+3 Setting default MAKE options = SettingDefaultMAKEOptions
+3 Compatibility with Microsoft's NMAKE = CompatibilityWithMicrosoftSNMAKE
+2 Explicit and implicit rules
+3 Explicit and implicit rules = ExplicitAndImplicitRules
+3 Explicit rule syntax = ExplicitRuleSyntax
+3 Implicit rule syntax = ImplicitRuleSyntax
+2 Command syntax
+3 Command syntax = CommandSyntax
+3 MAKE command operators = MakeCommandOperators
+2 MAKE macros
+3 Using MAKE macros = UsingMAKEMacros
+3 Defining MAKE macros = DefiningMAKEMacros
+3 String substitutions in MAKE macros = StringSubstitutionsInMAKEMacros
+3 Default MAKE macros = DefaultMAKEMacros
+3 Modifying default MAKE macros = ModifyingDefaultMAKEMacros
+2 MAKE directives
+3 Using MAKE directives = UsingMAKEDirectives
+3 .autodepend = MAKE_autodepend
+3 !error = MAKE_error
+3 !if and other conditional directives = MAKE_IfAndOtherConditionalDirectives
+3 !include = MAKE_include
+3 !message = MAKE_message
+3 .path.ext = MAKE_pathExt
+3 .precious = MAKE_precious
+3 .suffixes = MAKE_suffixes
+3 !undef = MAKE_undef
+3 Using macros in directives = UsingMacrosInDirectives
+3 Null macros = NullMacros
+
+1 OBJXREF.EXE
+2 The object module cross-reference utility = OBJXREF
+2 Command-line options= OBJXREF_CommandLine
+2 Control options = OBJXREF_ControlOptions
+2 Report options = OBJXREF_ReportOptions
+2 Sample reports = OBJXREF_SampleReports
+2 Report by public names (/RP) = OBJXREF_SampleReports_RP
+2 Report by module (/RM) = OBJXREF_SampleReports_RM
+2 Report by reference (/RR) = OBJXREF_SampleReports_RR
+2 Report by external references (/RX) = OBJXREF_SampleReports_RX
+2 Report of module sizes (/RS) = OBJXREF_SampleReports_RS
+2 Report by class type (/RC) = OBJXREF_SampleReports_RC
+2 Report of unreferenced symbol names (/RU) = OBJXREF_SampleReports_RU
+2 Verbose reporting (/RV) = OBJXREF_SampleReports_RV
+2 Examples = OBJXREF_Ex
+2 Error messages and warnings = OBJXREF_Messages
+
+1 TDUMP.EXE
+2 The file dumping utility = TDUMP
+2 Command-line options = TDUMPCommandLineOptions
+
+1 TLIB.EXE
+2 Using TLIB = TLIB
+2 Command-line options = TLIBCommandLineOptions
+2 Using TLIB response files = ResponseFiles
+2 /C option = TLIBCOption
+2 /E option = TLIBEOption
+2 /P option = TLIBPOption
+2 Operation list = OperationList
+2 Examples = TLIBExamples
+
+1 TLINK.EXE, TLINK32.EXE and ILINK32.EXE
+2 Using the linkers
+3 Using TLINK, TLINK32, and ILINK32 = TLINK
+3 ILINK32, the incremental linker = ILINK32
+3 TLINK, TLINK32, and ILINK32 command-line syntax = TLINKCommandLineSyntax
+3 TLINK.CFG File = TLINKCFG
+3 Linker response files = ResponseFiles
+3 Using TLINK with BCC.EXE = UsingTLINKWithBCC.EXE
+2 Module definition files
+3 Module definition files = ModuleDefinitionFile
+3 CODE statement = CODEStatement
+3 DATA statement  = DATAStatement
+3 DESCRIPTION statement = DESCRIPTIONStatement
+3 EXETYPE statement = EXETYPEStatement
+3 EXPORTS statement = EXPORTSStatement
+3 IMPORTS statement = IMPORTSStatement
+3 LIBRARY statement = LIBRARYStatement
+3 NAME statement = NAMEStatement
+3 SEGMENTS statement = SEGMENTSStatement
+3 STACKSIZE statement = STACKSIZEStatement
+3 STUB statement = STUBStatement
+3 Example module definition file = ExampleModuleDefinitionFile
+
+1 TRIGRAPH.EXE
+2 A character-conversion utility = TRIGRAPH
+
+1 VBXGEN.EXE
+2 VBXGEN 1.0 = VBXGEN
+2 Symbolic property and event names = VBXGEN_SymbolicPropertyAndEventNames
+2 Default property data = VBXGEN_DefaultPropertyData
+2 Custom OWL classes = VBXGEN_CustomOwlClasses

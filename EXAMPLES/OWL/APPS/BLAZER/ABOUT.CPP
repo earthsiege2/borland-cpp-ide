@@ -263,6 +263,8 @@ TAboutWindow::TAboutWindow(TWindow* parent)
   lmOptions.Height.SameAs(Ok);
   SetChildLayoutMetrics(*Options, lmOptions);
 
+  SetAcceleratorTable(IDA_ABOUT);
+
   // Center the about window
   //
   Attr.Style = WS_POPUP | WS_THICKFRAME | WS_VISIBLE | WS_CAPTION;
@@ -274,7 +276,8 @@ TAboutWindow::TAboutWindow(TWindow* parent)
 
   // Give it a context menu
   //
-  AssignContextMenu(new TPopupMenu(TMenu(*::Application, IDM_AWCONTEXTMENU)));
+  TMenu contextMenu(*::Application, IDM_AWCONTEXTMENU);
+  AssignContextMenu(new TPopupMenu(contextMenu));
 }
 
 

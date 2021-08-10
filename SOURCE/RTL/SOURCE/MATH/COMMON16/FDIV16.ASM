@@ -1,3 +1,4 @@
+; $Revision:   8.2  $
 	include	rules.asi
 
 	Header@

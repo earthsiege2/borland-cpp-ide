@@ -3,7 +3,7 @@
   mpdenv.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.13  $
+  $Revision:   1.16  $
     
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/ 
 
@@ -30,7 +30,6 @@
 *                    various features of a MPD page
 *
 *     SubclassWindowPage: Demonstrates how to subclass a page.
-*                      (not working yet)
 *
 ******************************************************************************/
 

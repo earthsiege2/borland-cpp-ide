@@ -1,10 +1,10 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // POPUP.SPP: Popup Window. Demonstrates a simple popup window.
 //--------------------------------------------------------------------------
-print "popup.spp";
+print typeid(module());
 
 import IDE;
 

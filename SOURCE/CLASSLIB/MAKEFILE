@@ -2,18 +2,20 @@
 # MAKEFILE for Class Libraries
 # Copyright (c) Borland International 1991, 1996, All Rights Reserved
 #
-# $Revision:   5.40  $
-# $Author:   BBABET  $
-# $Date:   25 Jan 1996 11:11:32  $
+# $Revision:   5.51  $
 #
 # Defines:
 #   -DDOS, -DWIN32, -DOS2   Specifies target system
 #                           (DOS implies WIN16 for Windows specific classes)
 #   -DMT                    Build multi-thread version
+#   -DVCL                   builds OWL using the VCL-compatible RTL (cp32mt)
+#                             (implies -DMT and -DNAMESPACE;
+#                             requires MODEL=t and WIN32)
 #   MODEL=<s|c|m|l|h>       Specifies memory model for DOS library.
 #                           Required when building DOS library.
 #   BIDSNAME=xxx            Base name of the target library or DLL
 #                           Always required.
+#   BIDSDLLNAME=xxx         Overrides base name of target for DLLs only
 #   BIDSVER=xxx             Base name of the target library or DLL
 #   -DDLL                   Build a DLL.
 #   -DDIAGS                 Build the diagnostic version of the target.
@@ -21,8 +23,10 @@
 #   -DBIDSFARVTABLE         Moves class vtables out of dgroup
 #   CODEGUARD               Builds classlib with CodeGuard:
 #                            1=basic data, 2=full checking
+#   NAMESPACE               builds BIDS within a namespace "ClassLib"
 #   ALIGN=<1|2|4|8>         Specifies the alignment
 #   BCC32I                  Uses bcc32i instead of bcc32 to compile
+#   ILINK                   Uses ILINK32 instead of TLINK32 to link
 #   -DBI_REDEFINE_BOOL      Builds library with BOOL mapped to bool
 #
 # 16-bit non-diagnostic static libraries:
@@ -58,35 +62,67 @@
 # OS/2 DLLs:
 #   make -r -DOS2 -DDLL BIDSNAME=bids
 #   make -r -DOS2 -DDLL -DDIAGS BIDSNAME=bids
+#
+# Define these for alternate BIDS build directories:
+#   BIDSSRCDIR    defaults to: $(BCROOT)\source\CLASSL
+#   BIDSINCDIR    defaults to: $(BCROOT)\include
+#   BIDSLIBDIR    defaults to: $(BCROOT)\lib
+#   BIDSBINDIR    defaults to: $(BCROOT)\bin
+#
+#   When building VCL-compatible libraries, the makefile defaults
+#   assume BCROOT points to the base of the C++Builder tree. If
+#   you are building in the context of Borland C++, then you must
+#   set BCBROOT explicitly yourself.
+#
+#   BCBROOT       defaults to: $(BCROOT)   (root of C++Builder)
+#   VCLINCDIR     defaults to: $(BCBROOT)\include\VCL
+#   VCLOBJDIR     defaults to: $(BCBROOT)\lib\obj
+#   VCLLIBDIR     defaults to: $(BCBROOT)\lib
 #-----------------------------------------------------------------------------
 
 .autodepend
 .cacheautodepend
 .swap
 
-#--------------------------------------------------------------------
-# fill in defaults
-#--------------------------------------------------------------------
-!if !$d(MODEL) && !$d(DOS) && !$d(WIN16) && !$d(OS2)
+#
+# If no model is defined or implied, set a default
+#
+!if !$d(MODEL) && !$d(DOS) && !$d(WIN16) && !$d(OS2) && !$d(VCL)
   MODEL = f    # default build model = flat static, Win32
 #  MODEL = d    # default build model = flat DLL, Win32
 !endif
 
-!if $(MODEL) == d
-  DLL = 1      # model d means to build the DLL model
-  WIN32 = 1    # 32bit DLL
+#
+# If no system was set, choose one
+#
+!if (!$d(WIN32) && !$d(WIN16) && !$d(OS2))
+! if $(MODEL) == d
+    DLL = 1      # model d means to build the DLL model
+    WIN32 = 1    # 32bit DLL
+! elif ($(MODEL) == t || $(MODEL) == f || $(VCL)) && !$d(OS2)
+    WIN32 = 1    # must use WIN32 switch for flat, threaded, or VCL
+! endif
 !endif
 
-!if ($(MODEL) == t || $(MODEL) == f) && !$d(OS2)
-  WIN32 = 1    # default to WIN32 switch on for flat or multi-threaded model
-!endif
-
-!if $(MODEL) == t || $d(MT)
+#
+# For multithreaded target, set the value of MT
+#
+!if $(MODEL) == t || $d(MT) || $d(VCL)
   MT = mt       # model t implies MT. Use MT as 'mt' to build library names
 !endif
 
+#
+# VCL compatibility implies use of namespace
+#
+!if $d(VCL)
+  NAMESPACE = 1
+!endif
+
+#
+# Make sure model is consistent with system
+#
 !if $d(WIN32)
-! if $d(MT)
+! if $d(MT) || $d(VCL)
     MODEL = t
 ! else
     MODEL = f
@@ -116,6 +152,15 @@
 ! endif
 !endif
 
+#
+# Check for incompatible choices and warn user
+#
+!if $d(VCL)
+! if !$d(WIN32) || $(MODEL) != t
+!   error VCL-compatible library must be multithreaded 32-bit
+! endif
+!endif
+
 !if $d(DOS) && $d(MT)
 ! error Cannot build multi-thread library for DOS.
 !endif
@@ -126,6 +171,10 @@
 ! endif
 !endif
 
+!if $d(ILINK) && $d(WIN16)
+! error Cannot build 16-bit targets with ILINK.
+!endif
+
 #--------------------------------------------------------------------
 # dir & name components
 #--------------------------------------------------------------------
@@ -134,8 +183,15 @@
 ! if !$d(BIDSNAME) && !$d(DIAGS)
 !   error MUST DEFINE LIBRARY NAME, e.g. "MAKE MODEL=d BIDSNAME=YourName"
 ! endif
+! if !$d(BIDSDLLNAME)
+    BIDSDLLNAME= $(BIDSNAME)
+!endif
 ! if $d(WIN32)
-    KEY = $(MODEL)i             # Win32 flat or multithread DLL import library
+!   if $d(VCL)
+      KEY = vi                  # compatible with VCL (e.g. BDS52VI.LIB)
+!   else
+      KEY = $(MODEL)i           # Win32 flat or multithread DLL import library
+!   endif
 ! elif $d(OS2)
     KEY = i$(MODEL)             # OS2 DLL import library
 ! else
@@ -144,7 +200,11 @@
 
 !else
 
-KEY = $(MODEL)                  # Static library just uses model
+! if $d(VCL)
+    KEY = v                     # Compatible with VCL (e.g. BIDSV.LIB)
+! else
+    KEY = $(MODEL)              # Static library just uses model
+! endif
 
 !endif  # if/else $d(DLL)
 
@@ -155,7 +215,7 @@ KEY = $(MODEL)                  # Static library just uses model
 !if !$d(BIDSNAME)
   BIDSNAME  = bids
 ! if !$d(BIDSVER)
-    BIDSVER = 50
+    BIDSVER = 52
 ! endif
 !endif
 
@@ -177,7 +237,7 @@ KEY = $(MODEL)                  # Static library just uses model
   __DEBUG=2
   __TRACE=1
   __WARN=1
-! if $d(DOS)
+! if $d(DOS) && !$d(DLL)
     BD=db             # Bids Diag version mark (db for older dos libs)
 ! else
     BD=d              # Bids Diag version mark
@@ -216,6 +276,9 @@ KEY = $(MODEL)                  # Static library just uses model
 #
 !if !$d(BCROOT)
 ! include $(MAKEDIR)\bcroot.inc
+!endif
+!if !$d(BCROOT)
+  BCROOT = $(MAKEDIR)\..
 !endif
 
 #
@@ -274,23 +337,63 @@ BIDSOBJDIR = $(BIDSSRCDIR)\o\$(BD)$(KEY)   # Keep seperate diag/nondiag dirs
 ! endif
 !endif
 
+#
+# Where to find VCL libraries, objs, and headers
+#
+!if $d(VCL)
+! if !$d(BCBROOT)
+    BCBROOT = $(BCROOT)
+! endif
+! if !$d(VCLLIBDIR)
+    VCLLIBDIR = $(BCBROOT)\lib
+! endif
+! if !$d(VCLOBJDIR)
+    VCLOBJDIR = $(VCLLIBDIR)\obj
+! endif
+! if !$d(VCLINCDIR)
+    VCLINCDIR = $(BCBROOT)\include\vcl
+! endif
+INCLUDE = $(INCLUDE);$(VCLINCDIR)
+!endif
+
 #--------------------------------------------------------------------
 # library names
 #--------------------------------------------------------------------
 !if $d(DLL)
-! if $d(WIN32)
-    BIDSDLL = $(BIDSBINDIR)\$(BIDSNAME)$(BIDSVER)$(BD)$(MODEL).dll
+
+! if $d(VCL)
+    DLL32KEY = v
 ! else
-    BIDSDLL = $(BIDSBINDIR)\$(BIDSNAME)$(BIDSVER)$(BD).dll
+    DLL32KEY = $(MODEL)
 ! endif
+
+! if $d(WIN32)
+    BIDSDLL = $(BIDSBINDIR)\$(BIDSDLLNAME)$(BIDSVER)$(BD)$(DLL32KEY).dll
+! else
+    BIDSDLL = $(BIDSBINDIR)\$(BIDSDLLNAME)$(BIDSVER)$(BD).dll
+! endif
+
   BIDSDEF = bids.def
   BIDSRES = version.res  #bids.res
+
 !endif
 BIDSLIB = $(BIDSLIBDIR)\$(BIDSNAME)$(BD)$(KEY).lib
+
+#
+# If building for VCL, use an RTL that begins "cp" instead of "cw"
+#
+!if $d(VCL)
+  RTLPFX=cp
+!else
+  RTLPFX=cw
+!endif
 
 #--------------------------------------------------------------------
 # Options which are memory model independent
 #--------------------------------------------------------------------
+!if $d(NAMESPACE)
+  CFLAGS = $(CFLAGS) -DBI_NAMESPACE
+!endif
 !if $d(BI_REDEFINE_BOOL)
   CFLAGS = $(CFLAGS) -DBI_REDEFINE_BOOL
 !endif
@@ -305,7 +408,11 @@ BIDSLIB = $(BIDSLIBDIR)\$(BIDSNAME)$(BD)$(KEY).lib
     CC     = $(BCBINDIR)\bcc32       # Regular optimizing compiler
 ! endif
   RCC      = brcc32 -DWIN32          # Resource compiler
+! if $d(ILINK)
+  LINK     = $(BCBINDIR)\ilink32     # Linker
+! else
   LINK     = $(BCBINDIR)\tlink32     # Linker
+! endif
   LIB      = $(BCBINDIR)\tlib        # Librarian
   IMPLIB   = $(BCBINDIR)\implib      # Import library generator
   TDSTRIP  = $(BCBINDIR)\tdstrp32    # Debug info extractor
@@ -327,7 +434,7 @@ BIDSLIB = $(BIDSLIBDIR)\$(BIDSNAME)$(BD)$(KEY).lib
 ! if $d(DLL)
     CFLAGS = $(CFLAGS) -WDE -D_BUILDBIDSDLL -D_BUILDSVCSDLL -D_BUILDWSYSDLL
     LFLAGS = $(LDBG) -Tpd -s -c
-    STDLIBS  = import32 cw32$(MT)i   # Libs for linking the DLL
+    STDLIBS  = import32 $(RTLPFX)32$(MT)i   # Libs for linking the DLL
 !   if $d(CODEGUARD)
       STDLIBS  = cg32 $(STDLIBS)
 !   endif
@@ -336,10 +443,19 @@ BIDSLIB = $(BIDSLIBDIR)\$(BIDSNAME)$(BD)$(KEY).lib
     CFLAGS = $(CFLAGS) #!TH why always windows? -W
 ! endif
 
-! if $d(MT)
-    CFLAGS = $(CFLAGS) -WM
+! if $d(VCL)
+    CFLAGS  = $(CFLAGS) -b- -Vx -Ve
+    LFLAGS  = $(LFLAGS) -j$(VCLOBJDIR)
+    STDLIBS = $(STDLIBS)
 ! endif
-! if $d(ALIGN)
+
+! if !$d(MT)
+    CFLAGS = $(CFLAGS) -WM-
+! endif
+
+! if $d(VCL)
+    CFLAGS = $(CFLAGS) -a4
+! elif $d(ALIGN)
     CFLAGS = $(CFLAGS) -a$(ALIGN)
 ! endif
 
@@ -381,6 +497,7 @@ BIDSLIB = $(BIDSLIBDIR)\$(BIDSNAME)$(BD)$(KEY).lib
   CC      = $(BCBINDIR)\bcc          # Compiler
   RCC     = brcc                     # Resource compiler
   LINK    = $(BCBINDIR)\tlink        # Linker
+  RLINK   = $(BCBINDIR)\rlink        # Resource linker
   LIB     = $(BCBINDIR)\tlib         # Librarian
 
   # implib needs -o switch in 16 bit for compatibility
@@ -644,7 +761,7 @@ $(RCINCLUDEPATH)
 $(BIDSLIB): $(DEPOBJS) $(.PATH.obj)\$(BIDSDEF) $(.PATH.obj)\$(BIDSRES)
   @cd $(.PATH.obj)
   $(LINK) @&&|
-$(LFLAGS) -L$(BCLIBDIR) $(STARTUP) +
+$(LFLAGS) -L$(BCLIBDIR);$(VCLLIBDIR) $(STARTUP) +
 $(LINKOBJS)
 $(BIDSDLL)
 
@@ -681,7 +798,9 @@ $(BIDSDLL)
 
 $(STDLIBS)
 $(BIDSDEF)
-
+|
+  $(RLINK) @&&|
+-v -31 -k $(BIDSRES) $(BIDSDLL)
 |
 # $(IMPLIB) -i $(BIDSLIB) $(BIDSDEF) $(BIDSDLL) #
   $(IMPLIB) -i $(BIDSLIB) $(BIDSDLL)
@@ -696,7 +815,7 @@ $(LIBOBJS)
 
 $(.PATH.obj)\$(BIDSDEF):
   @copy &&|
-LIBRARY     $(BIDSNAME)$(BIDSVER)$(BD)
+LIBRARY     $(BIDSDLLNAME)$(BIDSVER)$(BD)
 DESCRIPTION 'Borland Class Library for C++'
 EXETYPE     WINDOWS
 CODE        PRELOAD MOVEABLE DISCARDABLE
@@ -727,7 +846,7 @@ $(LIBOBJS)
 #   TIMER.OBJ is never built for windows, so doesn't need the
 #       windows flags.
 #-----------------------------------------------------------------------------
-CFLAGS_WIN=-W $(CFLAGS_WIN)   
+CFLAGS_WIN=-W $(CFLAGS_WIN)
 
 # For pre v5.0 tools, LPCWSTR is only defined via OLE headers
 #

@@ -1,24 +1,23 @@
 /*
  * intshcut.h - Internet Shortcut interface definitions.
  *
- * Copyright (c) 1995, Microsoft Corporation.  All rights reserved.
+ * Copyright (c) 1995-1996, Microsoft Corporation.  All rights reserved.
  */
-
 
 #ifndef __INTSHCUT_H__
 #define __INTSHCUT_H__
-
+#pragma option -b
 
 /* Headers
  **********/
 
+#pragma option -b.
 #include <isguids.h>
-
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {                        /* Assume C declarations for C++. */
 #endif   /* __cplusplus */
-
 
 /* Constants
  ************/
@@ -33,334 +32,204 @@ extern "C" {                        /* Assume C declarations for C++. */
 
 /* HRESULTs */
 
-/*
-   @doc EXTERNAL
-
-   @const HRESULT | E_FLAGS | The flag combination is invalid.
-*/
-
+//
+// MessageId: E_FLAGS
+//
+// MessageText:
+//
+//  The flag combination is invalid.
+//
 #define E_FLAGS                     MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1000)
 
-/*
-   @doc EXTERNAL INTSHCUTAPI
-
-   @const HRESULT | IS_E_EXEC_FAILED | The URL's protocol handler failed to
-   run.
-*/
-
+//
+// MessageId: IS_E_EXEC_FAILED
+//
+// MessageText:
+//
+//  The URL's protocol handler failed to run.
+//
 #define IS_E_EXEC_FAILED            MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x2002)
 
-/*
-   @doc EXTERNAL INTSHCUTAPI
-
-   @const HRESULT | URL_E_INVALID_SYNTAX | The URL's syntax is invalid.
-*/
-
+//
+// MessageId: URL_E_INVALID_SYNTAX
+//
+// MessageText:
+//
+//  The URL's syntax is invalid.
+//
 #define URL_E_INVALID_SYNTAX        MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1001)
 
-/*
-   @doc EXTERNAL INTSHCUTAPI
-
-   @const HRESULT | URL_E_UNREGISTERED_PROTOCOL | The URL's protocol does not
-   have a registered protocol handler.
-*/
-
+//
+// MessageId: URL_E_UNREGISTERED_PROTOCOL
+//
+// MessageText:
+//
+//  The URL's protocol does not have a registered protocol handler.
+//
 #define URL_E_UNREGISTERED_PROTOCOL MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1002)
-
 
 /* Interfaces
  *************/
 
-/******************************************************************************
-
-@doc EXTERNAL INTSHCUTIFACE
-
-@interface IUniformResourceLocator | Methods for manipulating a uniform
-resource locator (URL).
-
-@xref <f URLAssociationDialog> <f TranslateURL>
-
-******************************************************************************/
-
-/*
-   @doc EXTERNAL INTSHCUTIFACE
-
-   @enum IURL_SETURL_FLAGS | IUniformResourceLocator::SetURL() input flags.
-*/
-
+//
+// Input flags for IUniformResourceLocator::SetURL().
+//
 typedef enum iurl_seturl_flags
 {
-   /*
-      @emem IURL_SETURL_FL_GUESS_PROTOCOL | If set, guess protocol if missing.
-      If clear, do not guess protocol.
-   */
-
-   IURL_SETURL_FL_GUESS_PROTOCOL          = 0x0001,
-
-   /*
-      @emem IURL_SETURL_FL_USE_DEFAULT_PROTOCOL | If set, use default protocol
-      if missing.  If clear, do not use default protocol.
-   */
-
-   IURL_SETURL_FL_USE_DEFAULT_PROTOCOL    = 0x0002,
-
-   ALL_IURL_SETURL_FLAGS                  = (IURL_SETURL_FL_GUESS_PROTOCOL |
-                                             IURL_SETURL_FL_USE_DEFAULT_PROTOCOL)
+   IURL_SETURL_FL_GUESS_PROTOCOL        = 0x0001,     // Guess protocol if missing
+   IURL_SETURL_FL_USE_DEFAULT_PROTOCOL  = 0x0002,     // Use default protocol if missing
 }
 IURL_SETURL_FLAGS;
 
-/*
-   @doc EXTERNAL INTSHCUTIFACE
-
-   @enum IURL_INVOKECOMMAND_FLAGS | IUniformResourceLocator::InvokeCommand()
-   input flags.
-*/
-
+//
+// Input flags for IUniformResourceLocator()::InvokeCommand().
+//
 typedef enum iurl_invokecommand_flags
 {
-   /*
-      @emem IURL_INVOKECOMMAND_FL_ALLOW_UI | If set, interaction with the user
-      is allowed.  hwndParent is valid.  If clear, interaction with the user is
-      not allowed.  hwndParent is ignored.
-   */
-
    IURL_INVOKECOMMAND_FL_ALLOW_UI                  = 0x0001,
-
-   /*
-      @emem IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB | If set, the default verb
-      for the Internet Shortcut's protocol is to be used.  pcszVerb is ignored.
-      If clear, the verb is specified by pcszVerb.
-   */
-
-   IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB          = 0x0002,
-
-   ALL_IURL_INVOKECOMMAND_FLAGS                    = (IURL_INVOKECOMMAND_FL_ALLOW_UI |
-                                                      IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB)
+   IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB          = 0x0002,    // Ignore pcszVerb
 }
 IURL_INVOKECOMMAND_FLAGS;
 
-/*
-   @doc EXTERNAL INTSHCUTIFACE
+//
+// Command info for IUniformResourceLocator::InvokeCommand().
+//
 
-   @struct URLINVOKECOMMANDINFO | Information describing the command to be
-   invoked via IUniformResourceLocator::InvokeCommand().
-*/
-
-typedef struct urlinvokecommandinfo
+typedef struct urlinvokecommandinfoA
 {
-   /*
-      @field DWORD | dwcbSize | Length of URLINVOKECOMMANDINFO structure in
-      bytes.  Should be filled in with sizeof(URLINVOKECOMMANDINFO) before
-      passing to IUniformResourceLocator::InvokeCommand().
-   */
-
-   DWORD dwcbSize;
-
-   /*
-      @field DWORD | dwFlags | A bit mask of flags from the
-      <t IURL_INVOKECOMMAND_FLAGS> enumeration.
-   */
-
-   DWORD dwFlags;
-
-   /*
-      @field HWND | hwndParent | A handle to the parent window of any windows
-      posted during IUniformResourceLocator::InvokeCommand().  Should be a
-      valid window handle if IURL_INVOKECOMMAND_FL_ALLOW_UI is set in dwFlags.
-      Ignored if IURL_INVOKECOMMAND_FL_ALLOW_UI is clear in dwFlags.
-   */
-
-   HWND hwndParent;
-
-   /*
-      @field PCSTR | pcszVerb | The verb to invoke.  Must be valid if
-      IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB is clear in dwFlags.  Ignored if
-      IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB is set in dwFlags.
-   */
-
-   PCSTR pcszVerb;
+   DWORD  dwcbSize;          // Size of structure
+   DWORD  dwFlags;           // Bit field of IURL_INVOKECOMMAND_FLAGS
+   HWND   hwndParent;        // Parent window.  Valid only if IURL_INVOKECOMMAND_FL_ALLOW_UI is set.
+   LPCSTR pcszVerb;          // Verb to invoke.  Ignored if IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB is set.
 }
-URLINVOKECOMMANDINFO;
-typedef URLINVOKECOMMANDINFO *PURLINVOKECOMMANDINFO;
-typedef const URLINVOKECOMMANDINFO CURLINVOKECOMMANDINFO;
-typedef const URLINVOKECOMMANDINFO *PCURLINVOKECOMMANDINFO;
+URLINVOKECOMMANDINFOA;
+typedef URLINVOKECOMMANDINFOA *PURLINVOKECOMMANDINFOA;
+typedef const URLINVOKECOMMANDINFOA CURLINVOKECOMMANDINFOA;
+typedef const URLINVOKECOMMANDINFOA *PCURLINVOKECOMMANDINFOA;
+
+typedef struct urlinvokecommandinfoW
+{
+   DWORD   dwcbSize;          // Size of structure
+   DWORD   dwFlags;           // Bit field of IURL_INVOKECOMMAND_FLAGS
+   HWND    hwndParent;        // Parent window.  Valid only if IURL_INVOKECOMMAND_FL_ALLOW_UI is set.
+   LPCWSTR pcszVerb;          // Verb to invoke.  Ignored if IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB is set.
+}
+URLINVOKECOMMANDINFOW;
+typedef URLINVOKECOMMANDINFOW *PURLINVOKECOMMANDINFOW;
+typedef const URLINVOKECOMMANDINFOW CURLINVOKECOMMANDINFOW;
+typedef const URLINVOKECOMMANDINFOW *PCURLINVOKECOMMANDINFOW;
+
+#ifdef UNICODE
+#define URLINVOKECOMMANDINFO            URLINVOKECOMMANDINFOW
+#define PURLINVOKECOMMANDINFO           PURLINVOKECOMMANDINFOW
+#define CURLINVOKECOMMANDINFO           CURLINVOKECOMMANDINFOW
+#define PCURLINVOKECOMMANDINFO          PCURLINVOKECOMMANDINFOW
+#else
+#define URLINVOKECOMMANDINFO            URLINVOKECOMMANDINFOA
+#define PURLINVOKECOMMANDINFO           PURLINVOKECOMMANDINFOA
+#define CURLINVOKECOMMANDINFO           CURLINVOKECOMMANDINFOA
+#define PCURLINVOKECOMMANDINFO          PCURLINVOKECOMMANDINFOA
+#endif
+
 
 #undef  INTERFACE
-#define INTERFACE IUniformResourceLocator
+#define INTERFACE IUniformResourceLocatorA
 
-DECLARE_INTERFACE_(IUniformResourceLocator, IUnknown)
+DECLARE_INTERFACE_(IUniformResourceLocatorA, IUnknown)
 {
    /* IUnknown methods */
 
    STDMETHOD(QueryInterface)(THIS_
                              REFIID riid,
                              PVOID *ppvObject) PURE;
-
    STDMETHOD_(ULONG, AddRef)(THIS) PURE;
-
    STDMETHOD_(ULONG, Release)(THIS) PURE;
 
    /* IUniformResourceLocator methods */
 
-/******************************************************************************
-
-@doc EXTERNAL INTSHCUTIFACE
-
-@method HRESULT | IUniformResourceLocator | SetURL | Sets an object's URL.
-
-@parm PCSTR | pcszURL | The URL to be used by the object.
-
-@parm DWORD | dwInFlags | A bit mask of flags from the <t IURL_SETURL_FLAGS>
-enumeration.
-
-@rdesc Returns one of the following return codes on success:
-
-@flag S_OK | The object's URL was set successfully.
-
-otherwise returns one of the following return codes on error:
-
-@flag E_OUTOFMEMORY | There is not enough memory to complete the operation.
-
-@flag URL_E_INVALID_SYNTAX | The URL's syntax is invalid.
-
-******************************************************************************/
-
    STDMETHOD(SetURL)(THIS_
-                     PCSTR pcszURL,
+                     LPCSTR pcszURL,
                      DWORD dwInFlags) PURE;
 
-/******************************************************************************
-
-@doc EXTERNAL INTSHCUTIFACE
-
-@method HRESULT | IUniformResourceLocator | GetURL | Retrieves an object's URL.
-
-@parm PSTR * | ppszURL | A pointer to a PSTR to be filled in with a pointer to
-the object's URL.  When finished, this string should be freed by calling
-SHFree().
-
-@rdesc Returns one of the following return codes on success:
-
-@flag S_OK | The object's URL was retrieved successfully.  *ppszURL points to
-the URL string.
-
-@flag S_FALSE | The object does not have a URL associated with it.  *ppszURL is
-NULL.
-
-otherwise returns one of the following return codes on error:
-
-@flag E_OUTOFMEMORY | There is not enough memory to complete the operation.
-
-******************************************************************************/
-
    STDMETHOD(GetURL)(THIS_
-                     PSTR *ppszURL) PURE;
-
-/******************************************************************************
-
-@doc EXTERNAL INTSHCUTIFACE
-
-@method HRESULT | IUniformResourceLocator | InvokeCommand | Invokes a command
-on an object's URL.
-
-@parm PURLINVOKECOMMANDINFO | purlici | A pointer to a <t URLINVOKECOMMANDINFO>
-structure describing the command to be invoked.
-
-@rdesc Returns one of the following return codes on success:
-
-@flag S_OK | The object's URL was opened successfully.
-
-@flag S_FALSE | The object does not have a URL associated with it.
-
-otherwise returns one of the following return codes on error:
-
-@flag E_OUTOFMEMORY | There is not enough memory to complete the operation.
-
-@flag IS_E_EXEC_FAILED | The URL's protocol handler failed to run.
-
-@flag URL_E_INVALID_SYNTAX | The URL's syntax is invalid.
-
-@flag URL_E_UNREGISTERED_PROTOCOL | The URL's protocol does not have a
-registered protocol handler.
-
-******************************************************************************/
+                     LPSTR *ppszURL) PURE;
 
    STDMETHOD(InvokeCommand)(THIS_
-                            PURLINVOKECOMMANDINFO purlici) PURE;
+                            PURLINVOKECOMMANDINFOA purlici) PURE;
 };
+
+#undef  INTERFACE
+#define INTERFACE IUniformResourceLocatorW
+
+DECLARE_INTERFACE_(IUniformResourceLocatorW, IUnknown)
+{
+   /* IUnknown methods */
+
+   STDMETHOD(QueryInterface)(THIS_
+                             REFIID riid,
+                             PVOID *ppvObject) PURE;
+   STDMETHOD_(ULONG, AddRef)(THIS) PURE;
+   STDMETHOD_(ULONG, Release)(THIS) PURE;
+
+   /* IUniformResourceLocator methods */
+
+   STDMETHOD(SetURL)(THIS_
+                     LPCWSTR pcszURL,
+                     DWORD dwInFlags) PURE;
+
+   STDMETHOD(GetURL)(THIS_
+                     LPWSTR *ppszURL) PURE;
+
+   STDMETHOD(InvokeCommand)(THIS_
+                            PURLINVOKECOMMANDINFOW purlici) PURE;
+};
+
+#ifdef UNICODE
+#define IUniformResourceLocator         IUniformResourceLocatorW
+#define IUniformResourceLocatorVtbl     IUniformResourceLocatorWVtbl
+#else
+#define IUniformResourceLocator         IUniformResourceLocatorA
+#define IUniformResourceLocatorVtbl     IUniformResourceLocatorAVtbl
+#endif
+
 typedef IUniformResourceLocator *PIUniformResourceLocator;
 typedef const IUniformResourceLocator CIUniformResourceLocator;
 typedef const IUniformResourceLocator *PCIUniformResourceLocator;
 
-
 /* Prototypes
  *************/
 
-/*
-   @doc EXTERNAL INTSHCUTAPI
-
-   @enum TRANSLATEURL_IN_FLAGS | TranslateURL() input flags.
-*/
-
+//
+// Input flags for TranslateURL().
+//
 typedef enum translateurl_in_flags
 {
-   /*
-      @emem TRANSLATEURL_FL_GUESS_PROTOCOL | If set, guess protocol if missing.
-      If clear, do not guess protocol.
-   */
-
-   TRANSLATEURL_FL_GUESS_PROTOCOL         = 0x0001,
-
-   /*
-      @emem TRANSLATEURL_FL_USE_DEFAULT_PROTOCOL | If set, use default protocol
-      if missing.  If clear, do not use default protocol.
-   */
-
-   TRANSLATEURL_FL_USE_DEFAULT_PROTOCOL   = 0x0002,
-
-   ALL_TRANSLATEURL_FLAGS                 = (TRANSLATEURL_FL_GUESS_PROTOCOL |
-                                             TRANSLATEURL_FL_USE_DEFAULT_PROTOCOL)
+   TRANSLATEURL_FL_GUESS_PROTOCOL         = 0x0001,     // Guess protocol if missing
+   TRANSLATEURL_FL_USE_DEFAULT_PROTOCOL   = 0x0002,     // Use default protocol if missing
 }
 TRANSLATEURL_IN_FLAGS;
 
-/******************************************************************************
-
-@doc EXTERNAL INTSHCUTAPI
-
-@func HRESULT | TranslateURL | Applies common translations to a URL string,
-creating a new URL string.
-
-@parm PCSTR | pcszURL | A pointer to the URL string to be translated.
-
-@parm DWORD | dwInFlags | A bit mask of flags from the
-<t TRANSLATEURL_IN_FLAGS> enumeration.
-
-@parm PSTR * | ppszTranslatedURL | A pointer to the newly created translated
-URL string, if any.  *ppszTranslatedURL is only valid if S_OK is returned.
-If valid, *ppszTranslatedURL should be freed by calling LocalFree().
-*ppszTranslatedURL is NULL on error.
-
-@rdesc Returns one of the following return codes on success:
-
-@flag S_OK | The URL string was translated successfully, and *ppszTranslatedURL
-points to the translated URL string.
-
-@flag S_FALSE | The URL string did not require translation.  *ppszTranslatedURL
-is NULL.
-
-otherwise returns one of the following return codes on error:
-
-@flag E_FLAGS | The flag combination passed in dwFlags is invalid.
-
-@flag E_OUTOFMEMORY | There is not enough memory to complete the operation.
-
-@flag E_POINTER | One of the input pointers was invalid.
-
-@comm TranslateURL() does not perform any validation on the syntax of the input
-URL string.  A successful return value does not indicate that the input or
-output URL strings are valid URLs.
-
-******************************************************************************/
+//
+//   TranslateURL().  This function applies common translations to a URL
+//  string, creating a new URL string.
+//
+//   This function does not perform any validation on the syntax of the input
+//  URL string.  A successful return value does not indicate that the input
+//  or output URL strings are valid URLS.
+//
+//   The function returns S_OK if the URL string is translated successfully
+//  and *ppszTranslatedURL points to the translated URL string.  S_FALSE
+//  is returned if the URL string did not require translation.  An error
+//  code is returned if an error occurs.
+//
+//  Parameters:
+//   pcszURL -- A pointer to the URL string to be translated.
+//   dwInFlags -- A bit field of TRANSLATEURL_IN_FLAGS.
+//   ppszTranslatedURL -- A pointer to the newly created, translated URL
+//     string, if any.  *ppszTranslatedURL is only valid if S_OK is returned.
+//     If valid, *ppszTranslatedURL should be freed by calling LocalFree().
+//     *ppszTranslatedURL is NULL on error.
+//
 
 INTSHCUTAPI HRESULT WINAPI TranslateURLA(PCSTR pcszURL,
                                          DWORD dwInFlags,
@@ -374,76 +243,52 @@ INTSHCUTAPI HRESULT WINAPI TranslateURLW(PCWSTR pcszURL,
 #define TranslateURL             TranslateURLA
 #endif   /* UNICODE */
 
-/*
-   @doc EXTERNAL INTSHCUTAPI
-
-   @enum URLASSOCIATIONDIALOG_IN_FLAGS | URLAssociationDialog() input flags.
-*/
-
+//
+// Input flags for URLAssociationDialog().
+//
 typedef enum urlassociationdialog_in_flags
 {
-   /*
-      @emem URLASSOCDLG_FL_USE_DEFAULT_NAME | If set, pcszFile is not valid.
-      The default URL file name should be used.  If clear, pcszFile is valid.
-   */
-
    URLASSOCDLG_FL_USE_DEFAULT_NAME        = 0x0001,
-
-   /*
-      @emem URLASSOCDLG_FL_REGISTER_ASSOC | If set, the application selected is
-      to be registered as the handler for URLs of pcszURL's protocol.  If
-      clear, no association is to be registered.  An application is only
-      registered if this flag is set, and the user indicates that a persistent
-      association is to be made.  Registration is only possible if
-      URLASSOCDLG_FL_USE_DEFAULT_NAME is clear.
-   */
-
    URLASSOCDLG_FL_REGISTER_ASSOC          = 0x0002,
-
-   ALL_URLASSOCDLG_FLAGS                  = (URLASSOCDLG_FL_USE_DEFAULT_NAME |
-                                             URLASSOCDLG_FL_REGISTER_ASSOC)
 }
 URLASSOCIATIONDIALOG_IN_FLAGS;
 
-/******************************************************************************
-
-@doc EXTERNAL INTSHCUTAPI
-
-@func HRESULT | URLAssociationDialog | Invokes the unregistered URL protocol
-dialog box.
-
-@parm HWND | hwndParent | A handle to the window to be used as the parent
-window of any posted child windows.
-
-@parm DWORD | dwInFlags | A bit mask of flags from the
-<t URLASSOCIATIONDIALOG_IN_FLAGS> enumeration.
-
-@parm PSTR | pszAppBuf | A buffer to be filled in on success with the path of
-the application selected by the user.  pszAppBuf's buffer is filled in with the
-empty string on failure.
-
-@parm UINT | ucAppBufLen | The length of pszAppBuf's buffer.
-
-@rdesc Returns one of the following return codes on success:
-
-@flag S_OK | Application registered with URL protocol.
-
-@flag S_FALSE | Nothing registered.  One-time execution via selected
-application requested.
-
-otherwise returns one of the following return codes on error:
-
-@flag E_ABORT | The user cancelled the operation.
-
-@flag E_FLAGS | The flag combination passed in dwFlags is invalid.
-
-@flag E_OUTOFMEMORY | There is not enough memory to complete the operation.
-
-@flag E_POINTER | One of the input pointers is invalid.
-
-@flag URL_E_INVALID_SYNTAX | The URL's syntax is invalid.
-
-******************************************************************************/
+//
+//   URLAssocationDialog().  This function invokes the unregistered URL
+//  protocol dialog box, providing a standard ui for choosing the handler for
+//  an unregistered URL protocol.
+//
+//  The functions returns S_OK if the application is registered with the
+//  URL protocol.  S_FALSE is returned if nothing is registered (a one-time
+//  execution via the selected application is requested).
+//
+//  Parameters:
+//   hwndParent -- A handle to the window to be used as the parent
+//   dwInFlags -- A bit field of URLASSOCIATIONDIALOG_IN_FLAGS.  The
+//                flags are:
+//
+//                  URLASSOCDLG_FL_USE_DEFAULT_NAME: Use the default Internet
+//                   Shortcut file name.  Ignore pcszFile.
+//
+//                  URLASSOCDLG_FL_REGISTER_ASSOC: The application
+//                   selected is to be registered as the handler for URLs
+//                   of pcszURL's protocol.  An application is only
+//                   registered if this flag is set, and the user indicates
+//                   that a persistent association is to be made.
+//
+//   pcszFile -- The name of the Internet Shortcut file whose URL's protocol
+//               requires a protocol handler.  Before a verb, like "open", can
+//               be invoked on an Internet Shortcut, a protocol handler must be
+//               registered for its URL protocol.  If
+//               URLASSOCDLG_FL_USE_DEFAULT_NAME is set in dwInFlags, pcszFile
+//               is ignored, and a default Internet Shortcut file name is used.
+//               pcszFile is only used for ui.
+//   pcszURL -- The URL whose unregistered protocol requires a handler.
+//   pszAppBuf -- A buffer to be filled in on success with the path
+//                of the application selected by the user.  pszAppBuf's
+//                buffer is filled in with the empty string on failure.
+//   ucAppBufLen -- The length of pszAppBuf's buffer in characters.
+//
 
 INTSHCUTAPI HRESULT WINAPI URLAssociationDialogA(HWND hwndParent,
                                                  DWORD dwInFlags,
@@ -463,78 +308,57 @@ INTSHCUTAPI HRESULT WINAPI URLAssociationDialogW(HWND hwndParent,
 #define URLAssociationDialog     URLAssociationDialogA
 #endif  /* UNICODE */
 
-/*
-   @doc EXTERNAL MIMEAPI
-
-   @enum MIMEASSOCIATIONDIALOG_IN_FLAGS | MIMEAssociationDialog() input flags.
-*/
-
+//
+// Input flags for MIMEAssocationDialog().
+//
 typedef enum mimeassociationdialog_in_flags
 {
-   /*
-      @emem TRANSLATEURL_FL_GUESS_PROTOCOL | If set, the application selected
-      is to be registered as the handler for files of the given MIME type.  If
-      clear, no association is to be registered.  An application is only
-      registered if this flag is set, and the user indicates that a persistent
-      association is to be made.  Registration is only possible if pcszFile
-      contains an extension.
-   */
-
    MIMEASSOCDLG_FL_REGISTER_ASSOC         = 0x0001,
-
-   ALL_MIMEASSOCDLG_FLAGS                 = MIMEASSOCDLG_FL_REGISTER_ASSOC
 }
 MIMEASSOCIATIONDIALOG_IN_FLAGS;
 
-/******************************************************************************
-
-@doc EXTERNAL MIMEAPI
-
-@func HRESULT | MIMEAssociationDialog | Invokes the unregistered MIME content
-type dialog box.
-
-@parm HWND | hwndParent | A handle to the window to be used as the parent
-window of any posted child windows.
-
-@parm DWORD | dwInFlags | A bit mask of flags from the
-<t MIMEASSOCIATIONDIALOG_IN_FLAGS> enumeration.
-
-@parm PCSTR | pcszFile | A pointer to a string indicating the name of the file
-containing data of pcszMIMEContentType's content type.  Ignored if
-MIMEASSOCDLG_FL_USE_DEFAULT_NAME is set.
-
-@parm PCSTR | pcszMIMEContentType | A pointer to a string indicating the
-content type for which an application is sought.
-
-@parm PSTR | pszAppBuf | A buffer to be filled in on success with the path of
-the application selected by the user.  pszAppBuf's buffer is filled in with the
-empty string on failure.
-
-@parm UINT | ucAppBufLen | The length of pszAppBuf's buffer.
-
-@rdesc Returns one of the following return codes on success:
-
-@flag S_OK | MIME content type associated with extension.  Extension associated
-as default extension for content type.  Application associated with extension.
-
-@flag S_FALSE | Nothing registered.  One-time execution via selected
-application requested.
-
-otherwise returns one of the following return codes on error:
-
-@flag E_ABORT | The user cancelled the operation.
-
-@flag E_FLAGS | The flag combination passed in dwFlags is invalid.
-
-@flag E_OUTOFMEMORY | There is not enough memory to complete the operation.
-
-@flag E_POINTER | One of the input pointers is invalid.
-
-@comm MIMEAssociationDialog() does not perform any validation on the syntax of
-the input content type string.  A successful return value does not indicate
-that the input MIME content type string is a valid content type.
-
-******************************************************************************/
+//
+//   MIMEAssociationDialog().  Invokes the unregistered MIME content
+//  type dialog box.
+//
+//   This function does not perform any validation on the syntax of the
+//  input content type string.  A successful return value does not indicate
+//  that the input MIME content type string is a valid content type.
+//
+//   The function returns S_OK if the MIME content type is associated
+//  with the extension.  The extension is associated as the default
+//  extension for the content type.  S_FALSE is returned if nothing is
+//  registered.  Otherwise, the function returns one of the following
+//  errors:
+//
+//  E_ABORT -- The user cancelled the operation.
+//  E_FLAGS -- The flag combination passed in dwFlags is invalid.
+//  E_OUTOFMEMORY -- Not enough memory to complete the operation.
+//  E_POINTER -- One of the input pointers is invalid.
+//
+//  Parameters:
+//   hwndParent -- A handle to the window to be used as the parent
+//                 window of any posted child windows.
+//   dwInFlags -- A bit field of MIMEASSOCIATIONDIALOG_IN_FLAGS.  The
+//                flags are:
+//
+//              MIMEASSOCDLG_FL_REGISTER_ASSOC: If set, the application
+//               selected is to be registered as the handler for files of
+//               the given MIME type.  If clear, no association is to be
+//               registered.  An application is only registered if this
+//               flag is set, and the user indicates that a persistent
+//               association is to be made.  Registration is only possible
+//               if pcszFile contains an extension.
+//
+//   pcszFile -- A pointer to a string indicating the name of the file
+//               containing data of pcszMIMEContentType's content type.
+//   pcszMIMEContentType -- A pointer to a string indicating the content
+//                          type for which an application is sought.
+//   pszAppBuf -- A buffer to be filled in on success with the path of
+//                the application selected by the user.  pszAppBuf's buffer
+//                is filled in with the empty string on failure.
+//   ucAppBufLen -- The length of pszAppBuf's buffer in characters.
+//
 
 INTSHCUTAPI HRESULT WINAPI MIMEAssociationDialogA(HWND hwndParent,
                                                   DWORD dwInFlags,
@@ -554,35 +378,31 @@ INTSHCUTAPI HRESULT WINAPI MIMEAssociationDialogW(HWND hwndParent,
 #define MIMEAssociationDialog    MIMEAssociationDialogA
 #endif  /* UNICODE */
 
-
-/******************************************************************************
-
-@doc EXTERNAL INTSHCUTAPI
-
-@func BOOL | InetIsOffline | Determines if the user wants to be "offline" (get
-all information from cache).
-
-@parm DWORD | dwFlags | A bit mask of flags.  No flags are currently defined.
-This parameter must be 0.
-
-@rdesc Returns TRUE to indicate that the local system is not currently
-connected to the Internet.  Returns FALSE to indicate that either the local
-system is connected to the Internet, or no attempt has yet been made to connect
-the local system to the Internet.  Applications that wish to support an
-off-line mode should do so if InetIsOffline() returns TRUE.
-
-@comm Off-line mode begins when the user has been prompted to dial-in to the
-Internet, but canceled the attempt.
-
-******************************************************************************/
-
-INTSHCUTAPI BOOL WINAPI InetIsOffline(DWORD dwFlags);
-
+//
+//   InetIsOffline().  This function determines if the user wants to be
+//  "offline" (get all information from the cache).  The dwFlags must be
+//  0.
+//
+//   The function returns TRUE to indicate that the local system is not
+//  currently connected to the Internet.  The function returns FALSE to
+//  indicate that either the local system is connected to the Internet,
+//  or no attempt has yet been made to connect the local system to the
+//  Internet.  Applications that wish to support an off-line mode should
+//  do so if InetIsOffline() returns TRUE.
+//
+//   Off-line mode begins when the user has been prompted to dial-in to
+//  an Internet providor, but canceled the attempt.
+//
+INTSHCUTAPI
+BOOL
+WINAPI
+InetIsOffline(
+    DWORD dwFlags);
 
 #ifdef __cplusplus
 }                                   /* End of extern "C" {. */
 #endif   /* __cplusplus */
 
-
+#pragma option -b.
 #endif   /* ! __INTSHCUT_H__ */
 

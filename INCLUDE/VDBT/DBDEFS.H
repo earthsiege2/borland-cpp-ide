@@ -4,6 +4,56 @@
 //--------------------------------------------------------
 
 
+//
+// Mangle the class and function names so we can have mulitpale versions of the
+// same classes and functions in one .LIB file.
+//
+#if defined( __DLL__ ) && ! defined( __FLAT__ )
+#  if defined( _RTLDLL )
+#    define TDBControl     dTDBControl
+#    define TDBCheckBox    dTDBCheckBox
+#    define TDBComboBox    dTDBComboBox
+#    define TDBEdit        dTDBEdit
+#    define TDBGrid        dTDBGrid
+#    define TDBImage       dTDBImage
+#    define TDBListBox     dTDBListBox
+#    define TDBLookupCombo dTDBLookupCombo
+#    define TDBLookupList  dTDBLookupList
+#    define TDBMemo        dTDBMemo
+#    define TDBNavigator   dTDBNavigator
+#    define TDBRadioGroup  dTDBRadioGroup
+#    define TDBText        dTDBText
+#  else _RTLDLL
+#    define TDBControl     uTDBControl
+#    define TDBCheckBox    uTDBCheckBox
+#    define TDBComboBox    uTDBComboBox
+#    define TDBEdit        uTDBEdit
+#    define TDBGrid        uTDBGrid
+#    define TDBImage       uTDBImage
+#    define TDBListBox     uTDBListBox
+#    define TDBLookupCombo uTDBLookupCombo
+#    define TDBLookupList  uTDBLookupList
+#    define TDBMemo        uTDBMemo
+#    define TDBNavigator   uTDBNavigator
+#    define TDBRadioGroup  uTDBRadioGroup
+#    define TDBText        uTDBText
+#  endif _RTLDLL
+#elif defined( _RTLDLL )
+#  define TDBControl     iTDBControl
+#  define TDBCheckBox    iTDBCheckBox
+#  define TDBComboBox    iTDBComboBox
+#  define TDBEdit        iTDBEdit
+#  define TDBGrid        iTDBGrid
+#  define TDBImage       iTDBImage
+#  define TDBListBox     iTDBListBox
+#  define TDBLookupCombo iTDBLookupCombo
+#  define TDBLookupList  iTDBLookupList
+#  define TDBMemo        iTDBMemo
+#  define TDBNavigator   iTDBNavigator
+#  define TDBRadioGroup  iTDBRadioGroup
+#  define TDBText        iTDBText
+#endif
+
 //--------------------------------------------------------
 // TDBControl (VB3, Base class)
 //--------------------------------------------------------
@@ -26,11 +76,6 @@
 #define Prop_TDBControl_About 15
 #define Prop_TDBControl_Align 16
 #define Prop_TDBControl_DataSource 17
-
-#define Event_TDBControl_Click 0
-#define Event_TDBControl_DragOver 1
-#define Event_TDBControl_DragDrop 2
-#define Event_TDBControl_EndDrag 3
 
 //--------------------------------------------------------
 // TDBText (VB3, subclassed from STATIC)
@@ -55,6 +100,10 @@
 #define Prop_TDBText_WordWrap 33
 
 // events
+#define Event_TDBText_Click 0
+#define Event_TDBText_DragOver 1
+#define Event_TDBText_DragDrop 2
+#define Event_TDBText_EndDrag 3
 #define Event_TDBText_DblClick 4
 #define Event_TDBText_MouseDown 5
 #define Event_TDBText_MouseMove 6
@@ -84,6 +133,10 @@
 #define Prop_TDBRadioGroup_Values 34
 
 // events
+#define Event_TDBRadioGroup_Click 0
+#define Event_TDBRadioGroup_DragOver 1
+#define Event_TDBRadioGroup_DragDrop 2
+#define Event_TDBRadioGroup_EndDrag 3
 #define Event_TDBRadioGroup_DblClick 4
 #define Event_TDBRadioGroup_GotFocus 5
 #define Event_TDBRadioGroup_LostFocus 6
@@ -108,6 +161,10 @@
 #define Prop_TDBNavigator_ConfirmDelete 29
 
 // events
+#define Event_TDBNavigator_Click 0
+#define Event_TDBNavigator_DragOver 1
+#define Event_TDBNavigator_DragDrop 2
+#define Event_TDBNavigator_EndDrag 3
 #define Event_TDBNavigator_DblClick 4
 #define Event_TDBNavigator_GotFocus 5
 #define Event_TDBNavigator_LostFocus 6
@@ -145,6 +202,10 @@
 #define Prop_TDBMemo_WordWrap 42
 
 // events
+#define Event_TDBMemo_Click 0
+#define Event_TDBMemo_DragOver 1
+#define Event_TDBMemo_DragDrop 2
+#define Event_TDBMemo_EndDrag 3
 #define Event_TDBMemo_DblClick 4
 #define Event_TDBMemo_KeyDown 5
 #define Event_TDBMemo_KeyPress 6
@@ -193,6 +254,10 @@
 #define Prop_TDBLookupList_Value 47
 
 // events
+#define Event_TDBLookupList_Click 0
+#define Event_TDBLookupList_DragOver 1
+#define Event_TDBLookupList_DragDrop 2
+#define Event_TDBLookupList_EndDrag 3
 #define Event_TDBLookupList_DblClick 4
 #define Event_TDBLookupList_KeyDown 5
 #define Event_TDBLookupList_KeyPress 6
@@ -238,6 +303,10 @@
 #define Prop_TDBLookupCombo_Value 48
 
 // events
+#define Event_TDBLookupCombo_Click 0
+#define Event_TDBLookupCombo_DragOver 1
+#define Event_TDBLookupCombo_DragDrop 2
+#define Event_TDBLookupCombo_EndDrag 3
 #define Event_TDBLookupCombo_DblClick 4
 #define Event_TDBLookupCombo_KeyDown 5
 #define Event_TDBLookupCombo_KeyPress 6
@@ -281,6 +350,10 @@
 #define Prop_TDBListBox_Value 41
 
 // events
+#define Event_TDBListBox_Click 0
+#define Event_TDBListBox_DragOver 1
+#define Event_TDBListBox_DragDrop 2
+#define Event_TDBListBox_EndDrag 3
 #define Event_TDBListBox_DblClick 4
 #define Event_TDBListBox_KeyDown 5
 #define Event_TDBListBox_KeyPress 6
@@ -313,6 +386,10 @@
 #define Prop_TDBImage_Stretch 30
 
 // events
+#define Event_TDBImage_Click 0
+#define Event_TDBImage_DragOver 1
+#define Event_TDBImage_DragDrop 2
+#define Event_TDBImage_EndDrag 3
 #define Event_TDBImage_DblClick 4
 #define Event_TDBImage_KeyDown 5
 #define Event_TDBImage_KeyPress 6
@@ -352,6 +429,10 @@
 #define Prop_TDBEdit_SelText 39
 
 // events
+#define Event_TDBEdit_Click 0
+#define Event_TDBEdit_DragOver 1
+#define Event_TDBEdit_DragDrop 2
+#define Event_TDBEdit_EndDrag 3
 #define Event_TDBEdit_DblClick 4
 #define Event_TDBEdit_KeyDown 5
 #define Event_TDBEdit_KeyPress 6
@@ -388,6 +469,10 @@
 #define Prop_TDBCheckBox_ValueUnChecked 35
 
 // events
+#define Event_TDBCheckBox_Click 0
+#define Event_TDBCheckBox_DragOver 1
+#define Event_TDBCheckBox_DragDrop 2
+#define Event_TDBCheckBox_EndDrag 3
 #define Event_TDBCheckBox_KeyDown 4
 #define Event_TDBCheckBox_KeyPress 5
 #define Event_TDBCheckBox_KeyUp 6
@@ -428,9 +513,12 @@
 #define Prop_TDBComboBox_SelText 41
 #define Prop_TDBComboBox_Sorted 42
 #define Prop_TDBComboBox_Style 43
-#define Prop_TDBComboBox_Value 44
 
 // events
+#define Event_TDBComboBox_Click 0
+#define Event_TDBComboBox_DragOver 1
+#define Event_TDBComboBox_DragDrop 2
+#define Event_TDBComboBox_EndDrag 3
 #define Event_TDBComboBox_DblClick 4
 #define Event_TDBComboBox_KeyDown 5
 #define Event_TDBComboBox_KeyPress 6

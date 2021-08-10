@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.15  $
+//$Revision:   10.17  $
 //
 // Implementation of class TDocument
 //----------------------------------------------------------------------------
@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stdio.h>
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
 
 //    of index between multiple applications.

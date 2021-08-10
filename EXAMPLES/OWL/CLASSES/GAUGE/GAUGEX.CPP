@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   10.3  $
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
 #include <owl/applicat.h>
@@ -12,9 +14,9 @@
 #include <owl/gdiobjec.h>
 #include <stdio.h>
 
-const uint16 IDC_SLIDER = 201;
+const uint16 IDC_SLIDER     = 201;
 const uint16 IDC_SOLIDGAUGE = 208;
-const uint16 IDC_LEDGAUGE = 209;
+const uint16 IDC_LEDGAUGE   = 209;
 
 //
 // class TTestWindow
@@ -28,8 +30,8 @@ class TTestWindow : public TWindow {
     TGauge*   SolidGauge;
     TGauge*   LedGauge;
 
-    void    SetupWindow();
-    void    UpdateGauges(uint);
+    void      SetupWindow();
+    void      UpdateGauges(uint);
 
   DECLARE_RESPONSE_TABLE(TTestWindow);
 };
@@ -41,9 +43,7 @@ END_RESPONSE_TABLE;
 //
 //
 //
-TTestWindow::TTestWindow()
-:
-  TWindow(0, 0, 0)
+TTestWindow::TTestWindow() : TWindow(0, 0, 0)
 {
   Attr.X = 20;
   Attr.Y = 20;
@@ -52,10 +52,9 @@ TTestWindow::TTestWindow()
   Attr.Style |= WS_CLIPCHILDREN;
   Attr.ExStyle |= WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW;
 
-//  TGauge::SetNativeUse(nuNever);
-
   SolidGauge = new TGauge(this, "%d%%", IDC_SOLIDGAUGE, 20, 20, 240, 34, true);
   SolidGauge->SetRange(0, 100);
+  SolidGauge->SetNativeUse(nuNever);
 
   LedGauge = new TGauge(this, IDC_LEDGAUGE, 20, 60, 240, 40 /*24*/);
   LedGauge->SetRange(0, 100);
@@ -104,8 +103,8 @@ class TTestApp : public TApplication {
     void InitMainWindow() {
       TFrameWindow* frame = new TFrameWindow(0, "Gauge Display",
                                              new TTestWindow, true);
-//      frame->EnableKBHandler();
-      frame->Attr.Style &= ~WS_THICKFRAME;
+      frame->EnableKBHandler();
+      frame->Attr.Style &= ~(WS_THICKFRAME|WS_MAXIMIZEBOX);
       SetMainWindow(frame);
     }
 };

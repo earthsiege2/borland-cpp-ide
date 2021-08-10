@@ -46,15 +46,15 @@ class _CLASSTYPE String : public Sortable
 public:
 
     String() {}
-    String( const char _FAR *str ) : strng(str) {}
-    String( const char _FAR *str, unsigned N ) : strng(str,N) {}
-    String( unsigned n, char c = ' ' ) : strng( c, n ) {}
+    String( const _TCHAR _FAR *str ) : strng(str) {}
+    String( const _TCHAR _FAR *str, unsigned N ) : strng(str,N) {}
+    String( unsigned n, _TCHAR c = ' ' ) : strng( c, n ) {}
     String( const String _FAR &str ) : strng(str.strng) {}
     virtual ~String() {}
 
     String& operator = ( const String _FAR &str )
         { strng = str.strng; return *this; }
-    operator const char _FAR *() const
+    operator const _TCHAR _FAR *() const
         { return strng.c_str(); }
 
     virtual int isEqual( const Object _FAR &o ) const
@@ -67,7 +67,7 @@ public:
         return stringClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "String";
         }

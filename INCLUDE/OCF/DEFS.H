@@ -1,11 +1,17 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.9  $
 //
 // ObjectComponents fundamental definitions
 //----------------------------------------------------------------------------
 #if !defined(OCF_DEFS_H)
 #define OCF_DEFS_H
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
 
 //
 // We must use all libraries as DLLs if we are using OCF as a DLL
@@ -30,6 +36,11 @@
 # if !defined(_RTLDLL)
 #   define _RTLDLL
 # endif
+#endif
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+using namespace OCF;
 #endif
 
 //----------------------------------------------------------------------------
@@ -57,6 +68,11 @@
 //----------------------------------------------------------------------------
 // Setup class, function and data modifier macros for OCF
 //
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
 #if defined(BI_COMP_MSC)
 # define __export      __declspec(dllexport)
 # define __import      __declspec(dllimport)
@@ -150,5 +166,18 @@ inline HRESULT HRFalseIfZero(int bexpr) {return bexpr ? HR_OK : HR_FALSE;}
 //
 inline bool HRSucceeded(HRESULT hr) {return static_cast<bool>((SCODE)hr >= 0);}
 inline bool HRIsOK(HRESULT hr) {return static_cast<bool>(hr == HR_OK);}
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+using namespace OCF;
+#endif
+
+#if defined(BI_NAMESPACE)
+# define NS_CLASSLIB ClassLib
+# define NS_OCF OCF
+#else
+# define NS_CLASSLIB
+# define NS_OCF
+#endif
 
 #endif  // OCF_DEFS_H

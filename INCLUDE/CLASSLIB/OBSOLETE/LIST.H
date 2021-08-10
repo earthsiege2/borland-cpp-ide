@@ -85,7 +85,7 @@ public:
         return listClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "List";
         }

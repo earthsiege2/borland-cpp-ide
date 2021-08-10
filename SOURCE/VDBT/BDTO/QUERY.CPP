@@ -58,6 +58,11 @@ TQuery::TQuery( HWND hdlg, int idc ) : TDBDataSet()
 	TDBDataSet::SetPIT( query );
 }
 
+void TQuery::AttachToControl( HWND hdlg, int idc )
+{
+	SetPIT( GetVBXPIUnknown( hdlg, idc ) );
+}
+
 void TQuery::AttachControl( HWND hdlg, int idc )
 {
 	SetVBXPIUnknown( hdlg, idc, query );
@@ -203,7 +208,7 @@ void TQuery::GetSQL( TStrings& s )
 	}
 }
 
-void TQuery::SetSQL( TStrings& s )
+void TQuery::SetSQL( const TStrings& s )
 {
 	if (query)
 		query->put_SQL( s.GetPITStrings() );
@@ -222,7 +227,7 @@ void TQuery::GetDataSource( TDataSource& d )
 	}
 }
 
-void TQuery::SetDataSource( TDataSource& d )
+void TQuery::SetDataSource( const TDataSource& d )
 {
 	if (query)
 		query->put_DataSource( d.GetPITDataSource() );
@@ -265,7 +270,7 @@ void TQuery::GetParams( TParams& p )
 	}
 }
 
-void TQuery::SetParams( TParams& p )
+void TQuery::SetParams( const TParams& p )
 {
 	if (query)
 		query->put_Params( p.GetPITParams() );
@@ -282,3 +287,4 @@ void TQuery::SetUpdateMode( TUpdateMode m )
 	if (query)
 		query->put_UpdateMode( m );
 }
+

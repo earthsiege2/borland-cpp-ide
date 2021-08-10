@@ -10,6 +10,7 @@
 
 #ifndef _INC_WFEXT
 #define _INC_WFEXT            /* #defined if wfext.h has been included */
+#pragma option -b
 
 #ifdef __cplusplus            /* Assume C declaration for C++ */
 extern "C" {
@@ -181,6 +182,6 @@ LONG WINAPI FMExtensionProc(HWND hwnd, WORD wEvent, LONG lParam);
 }                  /* End of extern "C" { */
 #endif             /* __cplusplus */
 
+#pragma option -b.
 #endif             /* _INC_WFEXT */
 
-

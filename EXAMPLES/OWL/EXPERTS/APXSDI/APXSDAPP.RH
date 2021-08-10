@@ -21,7 +21,9 @@
 //
 #define IDI_SDIAPPLICATION      1001            // Application icon
 
-#define IDM_SDI                100             // Menu resource ID and Accelerator IDs
+#define IDM_SDI                 100             // Menu resource ID and Accelerator IDs
+
+#define IDM_PRINTPREVIEW        200             // Accelerator ID for Print Preview window.
 
 //
 // CM_FILEnnnn commands (include/owl/editfile.rh except for CM_FILEPRINTPREVIEW)

@@ -27,10 +27,10 @@ class TApxPrintout : public TPrintout {
         Window = window;
         Scale = scale;
         MapMode = MM_ANISOTROPIC;
+        TotalPages = INT_MAX;
       }
 
     void GetDialogInfo(int& minPage, int& maxPage, int& selFromPage, int& selToPage);
-    void BeginPrinting();
     void BeginPage(TRect& clientR);
     void PrintPage(int page, TRect& rect, unsigned flags);
     void EndPage();
@@ -46,6 +46,7 @@ class TApxPrintout : public TPrintout {
     int       PrevMode;
     TSize     OldVExt, OldWExt;
     TRect     OrgR;
+    int       TotalPages; 
 };
 
 #endif  // apxprint_h

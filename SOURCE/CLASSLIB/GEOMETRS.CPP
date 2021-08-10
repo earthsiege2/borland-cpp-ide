@@ -1,13 +1,17 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.2  $
+//$Revision:   5.5  $
 //
 // Implementation of persistent streaming for window system geometry classes
 //----------------------------------------------------------------------------
 #include <winsys/pch.h>
 #include <winsys/geometry.h>
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 //----------------------------------------------------------------------------
 // TRect streaming
@@ -19,7 +23,7 @@
 istream& _WSYSFUNC
 operator >>(istream& is, TRect& r)
 {
-  char ch;
+  _TCHAR ch;
   return is >> ch >> r.left >> ch >> r.top >> ch
             >> r.right >> ch >> r.bottom >> ch;
 }
@@ -44,7 +48,7 @@ operator <<(ostream& os, const TRect& r)
 istream& _WSYSFUNC
 operator >>(istream& is, TPointL& p)
 {
-  char c;
+  _TCHAR c;
 
   is >> c;
 
@@ -82,7 +86,7 @@ operator <<(ostream& os, const TPointL& p)
 istream& _WSYSFUNC
 operator >>(istream& is, TPointF& p)
 {
-  char c;
+  _TCHAR c;
   return is >> c >> p.x >> c >> p.y >> c;
 }
 
@@ -106,7 +110,7 @@ operator <<(ostream& os, const TPointF& p)
 istream& _WSYSFUNC
 operator >>(istream& is, TPoint& p)
 {
-  char c;
+  _TCHAR c;
   return is >> c >> p.x >> c >> p.y >> c;
 }
 
@@ -129,7 +133,7 @@ operator <<(ostream& os, const TPoint& p)
 istream& _WSYSFUNC
 operator >>(istream& os, TSize& s)
 {
-  char c;
+  _TCHAR c;
   return os >> c >> s.cx >> c >> s.cy >> c;
 }
 
@@ -142,3 +146,6 @@ operator <<(ostream& os, const TSize& s)
   return os << '(' << s.cx << 'x' << s.cy << ')';
 }
 
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif

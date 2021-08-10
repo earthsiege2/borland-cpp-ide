@@ -1,13 +1,14 @@
 ;[]-----------------------------------------------------------------[]
-;|   STRNCMP.ASM -- compare one string to another                     |
+;|   STRNCMP.ASM -- compare one string to another                    |
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.4  $
 
         include RULES.ASI
 
@@ -17,9 +18,10 @@ Header@
 
 ;-----------------------------------------------------------------------
 ;
-;Name           strncmp - compare one string to another
+;Name           strncmp, wcsncmp - compare one string to another
 ;
 ;Usage          int strncmp(const char *str1, const char *str2, size_t maxlen);
+;		int wcsncmp(const wchar_t *str1, const wchar_t *str2, size_t maxlen);
 ;
 ;Prototype in   string.h
 ;
@@ -28,10 +30,10 @@ Header@
 ;               positive integer  according to whether *str1  is less than,
 ;               equal, or greater than *str2, respectively.
 ;
-;               At most "maxlen" bytes will be compared. A "maxlen" of zero
+;               At most "maxlen" characters will be compared. A "maxlen" of zero
 ;               results in an equal compare, i.e. returns a zero.
 ;
-;Return value   strncmp return an integer value such as:
+;Return value   strncmp and wcsncmp return an integer value as follows:
 ;                   < 0 if str1 is less than str2
 ;                   = 0 if str1 is the same as str2
 ;                   > 0 if str2 is greater than str2
@@ -40,9 +42,12 @@ Header@
 
 Code_seg@
 
+ifndef	_UNICODE
 Func@   strncmp, _EXPFUNC, _RTLENTRYF, <pointer str1>, <pointer str2>, <int maxlen>
-
-        Link@   esi,edi
+else
+Func@   wcsncmp, _EXPFUNC, _RTLENTRYF, <pointer str1>, <pointer str2>, <int maxlen>
+endif
+	Link@   esi,edi
         cld
 
 ; Determine size of 2nd source string.
@@ -53,8 +58,12 @@ Func@   strncmp, _EXPFUNC, _RTLENTRYF, <pointer str1>, <pointer str2>, <int maxl
         mov     ecx, eax
         jecxz   ncm_end
         mov     edx, eax
-        xor     al, al
+        xor     ax, ax
+ifndef	_UNICODE
         repne   scasb
+else
+        repne   scasw
+endif
         sub     edx, ecx
         mov     ecx, edx
 
@@ -66,7 +75,11 @@ Func@   strncmp, _EXPFUNC, _RTLENTRYF, <pointer str1>, <pointer str2>, <int maxl
 ; right termination, since if the left terminates before the right then
 ; that difference will also terminate the scan.
 
-        repe    cmpsb
+ifndef	_UNICODE
+	repe    cmpsb
+else
+	repe    cmpsw
+endif
 
 ; The result is the signed difference of the final character pair, be they
 ; equal or different. A simple byte subtract and CBW doesn't work here because
@@ -76,15 +89,23 @@ Func@   strncmp, _EXPFUNC, _RTLENTRYF, <pointer str1>, <pointer str2>, <int maxl
 
         xor     eax, eax
         mov     edx, eax
+ifndef	_UNICODE
         mov     al, [esi-1]
         mov     dl, [edi-1]
+else
+	mov     ax, WORD PTR[esi-2]
+        mov     dx, WORD PTR[edi-2]
+endif
         sub     eax, edx
 ncm_end:
         Unlink@ esi,edi
         Return@
 
+ifndef	_UNICODE
 EndFunc@ strncmp
-
+else
+EndFunc@ wcsncmp
+endif
 Code_EndS@
 
         end

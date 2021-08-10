@@ -1,0 +1,18 @@
+//----------------------------------------------------------------------------
+// Mixing BC++ built 32-bit DLL's with non-BC applications.
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#ifndef CTOBC_RH
+#define CTOBC_RH
+
+#define IDI_ICON1	1
+#define IDB_BITMAP1	1
+#define IDD_DIALOG1	1
+#define IDC_BTN_UNHANDLED	105
+#define IDC_BTN_EXCEPTION	104
+#define IDC_BTN_AVERAGE	103
+#define IDC_BTN_MULTIPLY	101
+#define IDC_BTN_MESSAGE	102
+
+
+#endif  // CTOBC_RH

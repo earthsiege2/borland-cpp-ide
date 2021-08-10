@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.13  $
 //
 // Event response table macros for windows messages
 //----------------------------------------------------------------------------
@@ -115,6 +115,13 @@
 #define EV_VIEWNOTIFY(id, method) \
   {WM_OWLNOTIFY, id, (TAnyDispatcher)::B_LPARAM_Dispatch, \
   (TMyPMF)B_LPARAM_Sig(&TMyClass::method)}
+
+//
+// Handler for the OWL frame sizing message
+//
+#define EV_OWLFRAMESIZE\
+  {WM_OWLFRAMESIZE, 0, (TAnyDispatcher)::v_WPARAM_LPARAM_Dispatch,\
+   (TMyPMF)v_U_SIZE_Sig(&TMyClass::EvOwlFrameSize)}
 
 //
 // Macros for specific WM_* messages
@@ -403,9 +410,17 @@
   {WM_NCMOUSEMOVE, 0, (TAnyDispatcher)::v_U_POINT_Dispatch,\
    (TMyPMF)v_U_POINT_Sig(&TMyClass::EvNCMouseMove)}
 
+// WM_NCPAINT has different parameters for 16 and 32bit
+//
+#if defined(BI_PLAT_WIN32)
+#define EV_WM_NCPAINT\
+  {WM_NCPAINT, 0, (TAnyDispatcher)::v_WPARAM_Dispatch,\
+   (TMyPMF)v_HRGN_Sig(&TMyClass::EvNCPaint)}
+#else
 #define EV_WM_NCPAINT\
   {WM_NCPAINT, 0, (TAnyDispatcher)::v_Dispatch,\
    (TMyPMF)v_Sig(&TMyClass::EvNCPaint)}
+#endif //BI_PLAT_WIN32
 
 #define EV_WM_NCRBUTTONDBLCLK\
   {WM_NCRBUTTONDBLCLK, 0, (TAnyDispatcher)::v_U_POINT_Dispatch,\
@@ -654,6 +669,10 @@
   {WM_MOVING, 0, (TAnyDispatcher)::B_U_RECT_Dispatch,\
   (TMyPMF)B_U_RECT_Sig(&TMyClass::EvMoving)}
 
+#define EV_WM_ENTERSIZEMOVE\
+  {WM_ENTERSIZEMOVE, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
 #define EV_WM_EXITSIZEMOVE\
   {WM_EXITSIZEMOVE, 0, (TAnyDispatcher)::v_Dispatch,\
   (TMyPMF)v_Sig(&TMyClass::EvExitSizeMove)}
@@ -833,5 +852,12 @@
 #define EV_SB_THUMBPOSITION(id, method) EV_CHILD_NOTIFY(id, SB_THUMBPOSITION, method)
 #define EV_SB_ENDSCROLL(id, method)  EV_CHILD_NOTIFY(id, SB_ENDSCROLL, method)
 #define EV_SB_BEGINTRACK(id, method) EV_CHILD_NOTIFY(id, 9, method)
+
+#if defined(BI_PLAT_WIN32)
+#define EV_STN_DBLCLK(id, method)    EV_CHILD_NOTIFY(id, STN_DBLCLK, method)
+#define EV_STN_CLICKED(id, method)   EV_CHILD_NOTIFY(id, STN_CLICKED, method)
+#define EV_STN_DISABLE(id, method)   EV_CHILD_NOTIFY(id, STN_DISABLE, method)
+#define EV_STN_ENABLE(id, method)    EV_CHILD_NOTIFY(id, STN_ENABLE, method)
+#endif
 
 #endif  // OWL_WINDOWEV_H

@@ -19,7 +19,7 @@
 ##Search2 == FALSE
 ##:         %\\"[[ClassName]] missing #include for instance data.  "
 ##*
-## (Search1 == FALSE) && (Search2 == TRUE) 
+## (Search1 == FALSE) && (Search2 == TRUE)
 ##:     ^3
 ##:     ^BOL
 [[IncludeFile]]
@@ -72,7 +72,7 @@
 ##--END-- ? XFerMarker [[Search]]
 ##^-2
 ##^BOL
-    [[ConstructorLine]]
+  [[ConstructorLine]]
 ##^^
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
 ##--END-- QUERY_BASE_NAME == "TDialog"

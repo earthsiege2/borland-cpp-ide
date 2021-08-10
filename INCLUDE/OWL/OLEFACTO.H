@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.4  $
 //
 // Templatized class implementation of OLE component creation code for
 // TComponentFactory callback for ObjectWindows applications
@@ -23,8 +23,14 @@
 #if !defined(OCF_OCREG_H)
 # include <ocf/ocreg.h>
 #endif
+#if !defined(OWL_OLEWINDO_H)
+# include <owl/olewindo.h>
+#endif
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
-// Generic definitions/compiler options (eg. alignment) preceeding the 
+// Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
 
@@ -365,8 +371,12 @@ TAutoFactory<T>::Create(IUnknown* outer, uint32 options, uint32 /*id*/)
   return ifc;
 }
 
-// Generic definitions/compiler options (eg. alignment) following the 
+// Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_OLEFACTO_H

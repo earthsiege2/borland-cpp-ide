@@ -1,4 +1,4 @@
-
+; $Revision:   8.3  $
 	include	rules.asi
 
 	Header@
@@ -278,11 +278,11 @@ FDIV_DETECT ENDP
 
 	Code_EndS@
 
-_INIT_  segment word public 'INITDATA'
+	Init_seg@
 	db      0                       ; near call
 	db      1                       ; priority 1
 	dd      offset FDIV_DETECT
-	ends
+	Init_EndS@
 
 	end
 

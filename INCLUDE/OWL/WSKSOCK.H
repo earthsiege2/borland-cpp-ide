@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.11  $
+//$Revision:   10.15  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
@@ -18,6 +18,10 @@
 #endif
 #if !defined (_WINSOCKAPI_)
 # include <winsock.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -125,18 +129,27 @@ class _OWLCLASS TSocket {
     virtual void SetNotificationSet(int notificationSet);
     virtual void SetNotificationWindow(TWindow* windowNotification);
     virtual int  CreateSocket();
-    virtual int  BindSocket(TSocketAddress& addressToBindTo); //binds to a given address.
-    virtual int  BindSocket();                                  //binds to our address.
+    
+    // binds to a given address
+    //
+    virtual int  BindSocket(const TSocketAddress& addressToBindTo);
+
+    // binds to our address
+    //
+    virtual int  BindSocket();
+
     virtual void SetMyAddress(TSocketAddress& newSocketAddress);
     virtual void SetPeerSocketAddress(TSocketAddress& newPeerSocketAddress);
-    virtual void SetSocketStyle(int nNewFamily = PF_INET, int nNewType = SOCK_STREAM,
+    virtual void SetSocketStyle(int nNewFamily = PF_INET,
+                                int nNewType = SOCK_STREAM,
                                 int nNewProtocol = 0);
     virtual int StartAcceptNotification();
     virtual int StartRegularNotification();
     virtual int StartCustomNotification(int nSelectionOptions);
     virtual int CancelNotification();
 
-    //Tells class Sockete not to close the socket on deletion.
+    // tells class TSocket not to close the socket on deletion
+    //
     bool    SetSaveSocketOnDelete(bool saveSocket = true);
 
     virtual int  ConvertProtocol(char* protocol);
@@ -146,10 +159,14 @@ class _OWLCLASS TSocket {
     int GetLastError();
     virtual ulong GetDriverWaitingSize();
     virtual ulong GetTotalWaitingSize();
-    virtual int GetMyAddress(TSocketAddress& socketAddress, int& nAddressLength, SOCKET& socket);
-    virtual int GetMyAddress(TSocketAddress& socketAddress, int& nAddressLength);
-    virtual int GetPeerAddress(TSocketAddress& socketAddress, int& nAddressLength, SOCKET& socket);
-    virtual int GetPeerAddress(TSocketAddress& socketAddress, int& nAddressLength);
+    virtual int GetMyAddress(TSocketAddress& socketAddress,
+                             int& nAddressLength, SOCKET& socket);
+    virtual int GetMyAddress(TSocketAddress& socketAddress,
+                             int& nAddressLength);
+    virtual int GetPeerAddress(TSocketAddress& socketAddress,
+                               int& nAddressLength, SOCKET& socket);
+    virtual int GetPeerAddress(TSocketAddress& socketAddress,
+                               int& nAddressLength);
 
     // Read/Write (Send/Receive)
     //
@@ -179,9 +196,13 @@ class _OWLCLASS TSocket {
 
   public_data:
     SOCKET         Handle;             // The Socket handle
-    bool           Bound;              // A flag that we can use to tell if socket is bound or not.  It gets set on automatically, but doesn't get set off automatically.
+    bool           Bound;              // A flag that we can use to tell if
+                                       // socket is bound or not.  It gets set
+                                       // on automatically, but doesn't get
+                                       // set off automatically.
     TSocketAddress SocketAddress;      // My address.
-    TSocketAddress PeerSocketAddress;  // Address of Peer to communicate with.  Used for datagrams and connections.
+    TSocketAddress PeerSocketAddress;  // Address of Peer to communicate with.
+                                       // Used for datagrams and connections.
 
   protected:
     int            Family;             // PF_INET, etc. (this is the protocol family)
@@ -201,17 +222,21 @@ class _OWLCLASS TSocket {
 
     // Notification
     //
-    virtual DoReadNotification(const SOCKET& s, int nError);
-    virtual DoWriteNotification(const SOCKET& s, int nError);
-    virtual DoOOBNotification(const SOCKET& s, int nError);
-    virtual DoAcceptNotification(const SOCKET& s, int nError);
-    virtual DoConnectNotification(const SOCKET& s, int nError);
-    virtual DoCloseNotification(const SOCKET& s, int nError);
+    virtual int DoReadNotification(const SOCKET& s, int nError);
+    virtual int DoWriteNotification(const SOCKET& s, int nError);
+    virtual int DoOOBNotification(const SOCKET& s, int nError);
+    virtual int DoAcceptNotification(const SOCKET& s, int nError);
+    virtual int DoConnectNotification(const SOCKET& s, int nError);
+    virtual int DoCloseNotification(const SOCKET& s, int nError);
 };
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

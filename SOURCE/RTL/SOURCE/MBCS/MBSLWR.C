@@ -1,0 +1,68 @@
+/*-----------------------------------------------------------------------*
+ * filename - mbslwr.c
+ *
+ * function(s)
+ *        _mbslwr - Converts uppercase letters in a string to lowercase.
+ *-----------------------------------------------------------------------*/
+
+/*
+ *      C/C++ Run Time Library - Version 8.0
+ *
+ *      Copyright (c) 1992, 1997 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#include <ctype.h>
+#include <mbctype.h>
+#include <mbstring.h>
+
+#if 0
+extern int _mbascii;
+#endif
+
+/*---------------------------------------------------------------------*
+
+Name            _mbslwr - Converts uppercase letters in a string to 
+                          lowercase.
+
+Usage           unsigned char *_mbslwr(unsigned char *s);
+
+Prototype in    mbstring.h
+
+Description     Converts all uppercase lettes in string s to lowercase
+
+Return value    _mbslwr returns a value of pointer same as argument s.
+
+                If the second byte of 2-bytes character is null,
+                the first byte of this character is regarded as null.
+
+*---------------------------------------------------------------------*/
+
+#if defined(__FARFUNCS__)
+#include <_farfunc.h>
+#include <_mbfarfn.h>
+#endif
+
+unsigned char * _RTLENTRY _EXPFUNC _mbslwr(unsigned char *s)
+{
+    unsigned char *p;
+
+    for (p = s; *p; p++)
+    {
+        if (_ismbblead(*p) && p[1])
+        {
+            p++;
+#if 0
+            if (_mbascii && p[-1] == 0x82 && *p >= 0x60 && *p <= 0x79)
+                *p += 0x21;
+#endif
+        }
+        else
+        {
+            if (isupper(*p))
+                *p += 0x20;
+        }
+    }
+    return s;
+}

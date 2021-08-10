@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.13  $
 //
 // Definition of TOcPart class
 //----------------------------------------------------------------------------
@@ -21,6 +23,10 @@
 #endif
 #if !defined(WINSYS_GEOMETRY_H)
 # include <winsys/geometry.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
 #endif
 
 //
@@ -148,15 +154,9 @@ class _ICLASS TOcPart : public TUnknown, protected IBSite2 {
     TOcDocument& OcDocument; // The OC document we are imbeded in
     TOcStorage*  Storage;    // The storage we are in
 
-#if defined(BI_DATA_NEAR)
-    string&      Name;       // Name of this part
-    TPoint&      Pos;        // position of this part in the document
-    TSize&       Size;       // Keep our idea of size independently
-#else
     string       Name;
     TPoint       Pos;
     TSize        Size;
-#endif
     enum TFlag { Visible=0x01, Selected=0x02, Active=0x04, Link=0x08,
                  Closing=0x10, OcxDefault=0x20, OcxCancel=0x40 };
     uint16       Flags;      // Is this part Selected/Visible/Active/ALink?
@@ -245,5 +245,9 @@ class TOcPartChangeInfo {
     int         Type;  // what type of change
     TOcPart*    Part;
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 #endif  // OCF_OCPART_H

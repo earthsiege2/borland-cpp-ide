@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.7  $
 //
 // TLocaleString - localized name support
 //----------------------------------------------------------------------------
@@ -19,9 +19,13 @@
 # include <services/cstring.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 #define DEFAULT_SYSTEM_LANGID 0x409   // in case 16-bit with no NLS support
 typedef uint16 TLangId;               // language ID - same as NT LANGID
-typedef int (*TstricmpLang)(const char far*, const char far*, TLangId);
+typedef int (*TstricmpLang)(const _TCHAR far*, const _TCHAR far*, TLangId);
 const TLangId LangSysDefault  = 0x0800;
 const TLangId LangUserDefault = 0x0400;
 const TLangId LangNeutral     = 0x0000;
@@ -31,12 +35,12 @@ const TLangId LangNeutral     = 0x0000;
 //
 
 struct TLocaleString {
-  const char* Translate(TLangId lang);                      // translate string
-  operator const char*();      // return current string
-  void operator =(const char* str) { Private = str; }
-  int   Compare(const char far* str, TLangId lang);   // insensitive compare
+  const _TCHAR* Translate(TLangId lang);                      // translate string
+  operator const _TCHAR*();      // return current string
+  void operator =(const _TCHAR* str) { Private = str; }
+  int   Compare(const _TCHAR far* str, TLangId lang);   // insensitive compare
 
-  const char* Private;         // string pointer used for initialization
+  const _TCHAR* Private;         // string pointer used for initialization
 
   static TLangId GetSystemLangId();  // platform-dependent implementation
   static TLangId GetUserLangId();    // platform-dependent implementation
@@ -46,9 +50,13 @@ struct TLocaleString {
   static TLangId NativeLangId;   // must define and set to lang. of literals
   static HINSTANCE Module;       // must define and set to resource module
   static TLocaleString Null;     // reference a null string
-  static int CompareLang(const char far* s1, const char far* s2, TLangId);
+  static int CompareLang(const _TCHAR far* s1, const _TCHAR far* s2, TLangId);
           // CompareLang() may be implemented in another module for NLS support
 };
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 //
 // Prefix characters for locale strings

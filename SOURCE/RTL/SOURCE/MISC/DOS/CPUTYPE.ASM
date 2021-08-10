@@ -5,11 +5,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 7.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1993, 1996 by Borland International
+;       Copyright (c) 1993, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
 
 
         INCLUDE RULES.ASI
@@ -47,12 +48,12 @@ GetCpuType	PROC NEAR
 		push	ax		; store new EFLAGS value on stack
 		popf			; replace current EFLAGS value
 		pushf			; set new EFLAGS
-		pop	ax		; store new EFLAGS in AX 
+		pop	ax		; store new EFLAGS in AX
 		and	ax,0F000h	; if bits 12-15 are set, then 8086/8088
 		cmp	ax,0F000h
 		mov	__8086,0	; turn on 8086/8088 flag
 		je	exit	
-					  
+					
 ;
 ;	80286 CPU check
 ;	Bits 12-15 are always clear on the 80286 processor.
@@ -68,14 +69,14 @@ GetCpuType	PROC NEAR
 	
 ;
 ;	i386 CPU check
-;	The AC bit, bit #18, is a new bit introduced in the EFLAGS register on the i486 DX CPU to 
+;	The AC bit, bit #18, is a new bit introduced in the EFLAGS register on the i486 DX CPU to
 ;	generate alignment faults.  This bit can be set on the i486 DX CPU, but not on the i386 CPU.
 ;
 .386
 		mov	edx,esp		; save current stack pointer to align it
 		and	sp,not 3	; align stack to avoid AC fault
 		pushfd			; push original EFLAGS
-		pop	eax		; get original EFLAGS 
+		pop	eax		; get original EFLAGS
 		mov	ecx,eax		; save original EFLAGS
 		xor	eax,40000h	; flip AC bit in EFLAGS
 		push	eax		; save for EFLAGS

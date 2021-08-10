@@ -2,12 +2,13 @@
 *                                                                             *
 * shellapi.h -  SHELL.DLL functions, types, and definitions                   *
 *                                                                             *
-* Copyright (c) 1992-1995, Microsoft Corp.  All rights reserved               *
+* Copyright (c) 1992-1996, Microsoft Corp.  All rights reserved               *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _INC_SHELLAPI
 #define _INC_SHELLAPI
+#pragma option -b
 
 
 
@@ -22,7 +23,9 @@
 #endif
 #endif // WINSHELLAPI
 
+#pragma option -b.
 #include <pshpack1.h>
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -66,7 +69,6 @@ WINSHELLAPI INT       APIENTRY ShellAboutW(HWND hWnd, LPCWSTR szApp, LPCWSTR szO
 #else
 #define ShellAbout  ShellAboutA
 #endif // !UNICODE
-WINSHELLAPI HICON     APIENTRY DuplicateIcon(HINSTANCE hInst, HICON hIcon);
 WINSHELLAPI HICON     APIENTRY ExtractAssociatedIconA(HINSTANCE hInst, LPSTR lpIconPath, LPWORD lpiIcon);
 WINSHELLAPI HICON     APIENTRY ExtractAssociatedIconW(HINSTANCE hInst, LPWSTR lpIconPath, LPWORD lpiIcon);
 #ifdef UNICODE
@@ -74,6 +76,7 @@ WINSHELLAPI HICON     APIENTRY ExtractAssociatedIconW(HINSTANCE hInst, LPWSTR lp
 #else
 #define ExtractAssociatedIcon  ExtractAssociatedIconA
 #endif // !UNICODE
+
 WINSHELLAPI HICON     APIENTRY ExtractIconA(HINSTANCE hInst, LPCSTR lpszExeFileName, UINT nIconIndex);
 WINSHELLAPI HICON     APIENTRY ExtractIconW(HINSTANCE hInst, LPCWSTR lpszExeFileName, UINT nIconIndex);
 #ifdef UNICODE
@@ -83,28 +86,6 @@ WINSHELLAPI HICON     APIENTRY ExtractIconW(HINSTANCE hInst, LPCWSTR lpszExeFile
 #endif // !UNICODE
 
 #if(WINVER >= 0x0400)
-typedef struct _DRAGINFOA {
-    UINT uSize;                 /* init with sizeof(DRAGINFO) */
-    POINT pt;
-    BOOL fNC;
-    LPSTR   lpFileList;
-    DWORD grfKeyState;
-} DRAGINFOA, FAR* LPDRAGINFOA;
-typedef struct _DRAGINFOW {
-    UINT uSize;                 /* init with sizeof(DRAGINFO) */
-    POINT pt;
-    BOOL fNC;
-    LPWSTR  lpFileList;
-    DWORD grfKeyState;
-} DRAGINFOW, FAR* LPDRAGINFOW;
-#ifdef UNICODE
-typedef DRAGINFOW DRAGINFO;
-typedef LPDRAGINFOW LPDRAGINFO;
-#else
-typedef DRAGINFOA DRAGINFO;
-typedef LPDRAGINFOA LPDRAGINFO;
-#endif // UNICODE
-
 
 ////
 //// AppBar stuff
@@ -156,20 +137,6 @@ WINSHELLAPI UINT APIENTRY SHAppBarMessage(DWORD dwMessage, PAPPBARDATA pData);
 
 
 
-WINSHELLAPI DWORD   APIENTRY DoEnvironmentSubstA(LPSTR szString, UINT cbString);
-WINSHELLAPI DWORD   APIENTRY DoEnvironmentSubstW(LPWSTR szString, UINT cbString);
-#ifdef UNICODE
-#define DoEnvironmentSubst  DoEnvironmentSubstW
-#else
-#define DoEnvironmentSubst  DoEnvironmentSubstA
-#endif // !UNICODE
-WINSHELLAPI LPSTR APIENTRY FindEnvironmentStringA(LPSTR szEnvVar);
-WINSHELLAPI LPWSTR APIENTRY FindEnvironmentStringW(LPWSTR szEnvVar);
-#ifdef UNICODE
-#define FindEnvironmentString  FindEnvironmentStringW
-#else
-#define FindEnvironmentString  FindEnvironmentStringA
-#endif // !UNICODE
 
 #define EIRESID(x) (-1 * (int)(x))
 WINSHELLAPI UINT WINAPI ExtractIconExA(LPCSTR lpszFile, int nIconIndex, HICON FAR *phiconLarge, HICON FAR *phiconSmall, UINT nIcons);
@@ -204,7 +171,7 @@ WINSHELLAPI UINT WINAPI ExtractIconExW(LPCWSTR lpszFile, int nIconIndex, HICON F
 #define FOF_FILESONLY              0x0080  // on *.*, do only files
 #define FOF_SIMPLEPROGRESS         0x0100  // means don't show names of files
 #define FOF_NOCONFIRMMKDIR         0x0200  // don't confirm making any needed dirs
-
+#define FOF_NOERRORUI              0x0400  // don't put up error UI
 typedef WORD FILEOP_FLAGS;
 
 #define PO_DELETE       0x0013  // printer is being deleted
@@ -291,10 +258,6 @@ typedef SHNAMEMAPPINGA SHNAMEMAPPING;
 typedef LPSHNAMEMAPPINGA LPSHNAMEMAPPING;
 #endif // UNICODE
 
-#define SHGetNameMappingCount(_hnm) \
-        DSA_GetItemCount(_hnm)
-#define SHGetNameMappingPtr(_hnm, _iItem) \
-        (LPSHNAMEMAPPING)DSA_GetItemPtr(_hnm, _iItem)
 
 ////
 //// End Shell File Operations
@@ -333,6 +296,8 @@ typedef LPSHNAMEMAPPINGA LPSHNAMEMAPPING;
 
 #if(WINVER >= 0x0400)
 
+
+
 // Note CLASSKEY overrides CLASSNAME
 #define SEE_MASK_CLASSNAME      0x00000001
 #define SEE_MASK_CLASSKEY       0x00000003
@@ -346,7 +311,9 @@ typedef LPSHNAMEMAPPINGA LPSHNAMEMAPPING;
 #define SEE_MASK_FLAG_DDEWAIT   0x00000100
 #define SEE_MASK_DOENVSUBST     0x00000200
 #define SEE_MASK_FLAG_NO_UI     0x00000400
-#define SEE_MASK_UNICODE        0x00010000
+#define SEE_MASK_UNICODE        0x00004000
+#define SEE_MASK_NO_CONSOLE     0x00008000
+#define SEE_MASK_ASYNCOK        0x00100000
 
 typedef struct _SHELLEXECUTEINFOA
 {
@@ -400,13 +367,6 @@ WINSHELLAPI BOOL WINAPI ShellExecuteExW(LPSHELLEXECUTEINFOW lpExecInfo);
 #define ShellExecuteEx  ShellExecuteExW
 #else
 #define ShellExecuteEx  ShellExecuteExA
-#endif // !UNICODE
-WINSHELLAPI void WINAPI WinExecErrorA(HWND hwnd, int error, LPCSTR lpstrFileName, LPCSTR lpstrTitle);
-WINSHELLAPI void WINAPI WinExecErrorW(HWND hwnd, int error, LPCWSTR lpstrFileName, LPCWSTR lpstrTitle);
-#ifdef UNICODE
-#define WinExecError  WinExecErrorW
-#else
-#define WinExecError  WinExecErrorA
 #endif // !UNICODE
 
 ////
@@ -534,23 +494,16 @@ WINSHELLAPI DWORD WINAPI SHGetFileInfoW(LPCWSTR pszPath, DWORD dwFileAttributes,
 #endif // !UNICODE
 
 
-WINSHELLAPI BOOL WINAPI SHGetNewLinkInfoA(LPCSTR pszLinkTo, LPCSTR pszDir, LPSTR pszName,
-                             BOOL FAR * pfMustCopy, UINT uFlags);
-WINSHELLAPI BOOL WINAPI SHGetNewLinkInfoW(LPCWSTR pszLinkTo, LPCWSTR pszDir, LPWSTR pszName,
-                             BOOL FAR * pfMustCopy, UINT uFlags);
-#ifdef UNICODE
-#define SHGetNewLinkInfo  SHGetNewLinkInfoW
-#else
-#define SHGetNewLinkInfo  SHGetNewLinkInfoA
-#endif // !UNICODE
-
 #define SHGNLI_PIDL             0x000000001     // pszLinkTo is a pidl
 #define SHGNLI_PREFIXNAME       0x000000002     // Make name "Shortcut to xxx"
+#define SHGNLI_NOUNIQUE         0x000000004     // don't do the unique name generation
 
 
 ////
 //// End SHGetFileInfo
 ////
+
+
 
 
 
@@ -561,6 +514,9 @@ WINSHELLAPI BOOL WINAPI SHGetNewLinkInfoW(LPCWSTR pszLinkTo, LPCWSTR pszDir, LPW
 }
 #endif  /* __cplusplus */
 
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
+#pragma option -b.
 #endif  /* _INC_SHELLAPI */

@@ -1,6 +1,6 @@
 /*++ BUILD VERSION: 0007    // INCREMENT THIS IF A CHANGE HAS GLOBAL EFFECTS
 
-Copyright (c) 1990-1995  Microsoft Corporation
+Copyright (c) 1990-1996  Microsoft Corporation
 
 Module Name:
 
@@ -24,14 +24,19 @@ Notes:
 
 --*/
 
+/* $Copyright: 1997$ */
+
 #ifndef _LMSERVER_
 #define _LMSERVER_
+#pragma option -b
+
+#pragma option -b.
+#include <winsvc.h>     // SERVICE_STATUS_HANDLE
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <winsvc.h>     // SERVICE_STATUS_HANDLE
 
 //
 // Function Prototypes - SERVER
@@ -39,15 +44,28 @@ extern "C" {
 
 NET_API_STATUS NET_API_FUNCTION
 NetServerEnum (
-    IN  LPTSTR      servername OPTIONAL,
+    IN  LPCWSTR     servername OPTIONAL,
     IN  DWORD       level,
     OUT LPBYTE      *bufptr,
     IN  DWORD       prefmaxlen,
     OUT LPDWORD     entriesread,
     OUT LPDWORD     totalentries,
     IN  DWORD       servertype,
-    IN  LPTSTR      domain OPTIONAL,
+    IN  LPCWSTR     domain OPTIONAL,
     IN OUT LPDWORD  resume_handle OPTIONAL
+    );
+
+NET_API_STATUS NET_API_FUNCTION
+NetServerEnumEx (
+    IN  LPCWSTR     ServerName OPTIONAL,
+    IN  DWORD       Level,
+    OUT LPBYTE      *Bufptr,
+    IN  DWORD       PrefMaxlen,
+    OUT LPDWORD     EntriesRead,
+    OUT LPDWORD     totalentries,
+    IN  DWORD       servertype,
+    IN  LPCWSTR     domain OPTIONAL,
+    IN  LPCWSTR     FirstNameToReturn OPTIONAL
     );
 
 NET_API_STATUS NET_API_FUNCTION
@@ -87,8 +105,28 @@ NetServerDiskEnum (
     );
 
 NET_API_STATUS NET_API_FUNCTION
+NetServerComputerNameAdd(
+    IN LPWSTR ServerName         OPTIONAL,
+    IN LPWSTR EmulatedDomainName OPTIONAL,
+    IN LPWSTR EmulatedServerName
+);
+
+NET_API_STATUS NET_API_FUNCTION
+NetServerComputerNameDel (
+    IN LPWSTR ServerName        OPTIONAL,
+    IN LPWSTR EmulatedServerName
+);
+
+NET_API_STATUS NET_API_FUNCTION
 NetServerTransportAdd (
     IN  LPTSTR  servername,
+    IN  DWORD   level,
+    IN  LPBYTE  bufptr
+    );
+
+NET_API_STATUS NET_API_FUNCTION
+NetServerTransportAddEx (
+    IN  LPTSTR  servername      OPTIONAL,
     IN  DWORD   level,
     IN  LPBYTE  bufptr
     );
@@ -382,6 +420,12 @@ typedef struct _SERVER_INFO_598 {
     DWORD           sv598_minpagedpoolchunksize;
     DWORD           sv598_maxpagedpoolchunksize;
     BOOL            sv598_sendsfrompreferredprocessor;
+    DWORD           sv598_cacheddirectorylimit;
+    DWORD           sv598_maxcopylength;
+    BOOL            sv598_enablebulktransfer;
+    BOOL            sv598_enablecompression;
+    BOOL            sv598_autosharewks;
+    BOOL            sv598_autoshareserver;
 } SERVER_INFO_598, *PSERVER_INFO_598, *LPSERVER_INFO_598;
 
 typedef struct _SERVER_INFO_1005 {
@@ -697,8 +741,32 @@ typedef struct _SERVER_INFO_1585 {
 } SERVER_INFO_1585, *PSERVER_INFO_1585, *LPSERVER_INFO_1585;
 
 typedef struct _SERVER_INFO_1586 {
-    BOOL           sv1586_maxthreadsperqueue;
+    DWORD          sv1586_maxthreadsperqueue;
 } SERVER_INFO_1586, *PSERVER_INFO_1586, *LPSERVER_INFO_1586;
+
+typedef struct _SERVER_INFO_1587 {
+    DWORD          sv1587_cacheddirectorylimit;
+} SERVER_INFO_1587, *PSERVER_INFO_1587, *LPSERVER_INFO_1587;
+
+typedef struct _SERVER_INFO_1588 {
+    DWORD          sv1588_maxcopylength;
+} SERVER_INFO_1588, *PSERVER_INFO_1588, *LPSERVER_INFO_1588;
+
+typedef struct _SERVER_INFO_1589 {
+    DWORD          sv1589_enablebulktransfer;
+} SERVER_INFO_1589, *PSERVER_INFO_1589, *LPSERVER_INFO_1589;
+
+typedef struct _SERVER_INFO_1590 {
+    DWORD          sv1590_enablecompression;
+} SERVER_INFO_1590, *PSERVER_INFO_1590, *LPSERVER_INFO_1590;
+
+typedef struct _SERVER_INFO_1591 {
+    DWORD          sv1591_autosharewks;
+} SERVER_INFO_1591, *PSERVER_INFO_1591, *LPSERVER_INFO_1591;
+
+typedef struct _SERVER_INFO_1592 {
+    DWORD          sv1592_autosharewks;
+} SERVER_INFO_1592, *PSERVER_INFO_1592, *LPSERVER_INFO_1592;
 
 //
 // A special structure definition is required in order for this
@@ -717,6 +785,15 @@ typedef struct _SERVER_TRANSPORT_INFO_0 {
     LPTSTR          svti0_networkaddress;
 } SERVER_TRANSPORT_INFO_0, *PSERVER_TRANSPORT_INFO_0, *LPSERVER_TRANSPORT_INFO_0;
 
+typedef struct _SERVER_TRANSPORT_INFO_1 {
+    DWORD           svti1_numberofvcs;
+    LPTSTR          svti1_transportname;
+    [size_is(svti1_transportaddresslength)]  LPBYTE svti1_transportaddress;
+    DWORD           svti1_transportaddresslength;
+    LPTSTR          svti1_networkaddress;
+    LPTSTR          svti1_domain;
+} SERVER_TRANSPORT_INFO_1, *PSERVER_TRANSPORT_INFO_1, *LPSERVER_TRANSPORT_INFO_1;
+
 #else
 
 typedef struct _SERVER_TRANSPORT_INFO_0 {
@@ -726,6 +803,15 @@ typedef struct _SERVER_TRANSPORT_INFO_0 {
     DWORD           svti0_transportaddresslength;
     LPTSTR          svti0_networkaddress;
 } SERVER_TRANSPORT_INFO_0, *PSERVER_TRANSPORT_INFO_0, *LPSERVER_TRANSPORT_INFO_0;
+
+typedef struct _SERVER_TRANSPORT_INFO_1 {
+    DWORD           svti1_numberofvcs;
+    LPTSTR          svti1_transportname;
+    LPBYTE          svti1_transportaddress;
+    DWORD           svti1_transportaddresslength;
+    LPTSTR          svti1_networkaddress;
+    LPTSTR          svti1_domain;
+} SERVER_TRANSPORT_INFO_1, *PSERVER_TRANSPORT_INFO_1, *LPSERVER_TRANSPORT_INFO_1;
 
 #endif
 
@@ -776,6 +862,7 @@ typedef struct _SERVER_TRANSPORT_INFO_0 {
 #define SV_TYPE_SERVER_OSF          0x00100000
 #define SV_TYPE_SERVER_VMS          0x00200000
 #define SV_TYPE_WINDOWS             0x00400000  /* Windows95 and above */
+#define SV_TYPE_DFS                 0x00800000  /* Root of a DFS tree */
 #define SV_TYPE_ALTERNATE_XPORT     0x20000000  /* return list for alternate transport */
 #define SV_TYPE_LOCAL_LIST_ONLY     0x40000000  /* Return local list only */
 #define SV_TYPE_DOMAIN_ENUM         0x80000000
@@ -929,6 +1016,12 @@ typedef struct _SERVER_TRANSPORT_INFO_0 {
 #define SV_MAXPAGEDPOOLCHUNKSIZE_PARMNUM    584
 #define SV_SENDSFROMPREFERREDPROCESSOR_PARMNUM    585
 #define SV_MAXTHREADSPERQUEUE_PARMNUM       586
+#define SV_CACHEDDIRECTORYLIMIT_PARMNUM     587
+#define SV_MAXCOPYLENGTH_PARMNUM            588
+#define SV_ENABLEBULKTRANSFER_PARMNUM       589
+#define SV_ENABLECOMPRESSION_PARMNUM        590
+#define SV_AUTOSHAREWKS_PARMNUM             591
+#define SV_AUTOSHARESERVER_PARMNUM          592
 
 //
 // Single-field infolevels for NetServerSetInfo.
@@ -1092,6 +1185,18 @@ typedef struct _SERVER_TRANSPORT_INFO_0 {
             (PARMNUM_BASE_INFOLEVEL + SV_SENDSFROMPREFERREDPROCESSOR_PARMNUM)
 #define SV_MAXTHREADSPERQUEUE_INFOLEVEL     \
             (PARMNUM_BASE_INFOLEVEL + SV_MAXTHREADSPERQUEUE_PARMNUM)
+#define SV_CACHEDDIRECTORYLIMIT_INFOLEVEL     \
+            (PARMNUM_BASE_INFOLEVEL + SV_CACHEDDIRECTORYLIMIT_PARMNUM)
+#define SV_MAXCOPYLENGTH_INFOLEVEL     \
+            (PARMNUM_BASE_INFOLEVEL + SV_MAXCOPYLENGTH_PARMNUM)
+#define SV_ENABLEBULKTRANSFER_INFOLEVEL     \
+            (PARMNUM_BASE_INFOLEVEL + SV_ENABLEBULKTRANSFER_PARMNUM)
+#define SV_ENABLECOMPRESSION_INFOLEVEL     \
+            (PARMNUM_BASE_INFOLEVEL + SV_ENABLECOMPRESSION_PARMNUM)
+#define SV_AUTOSHAREWKS_INFOLEVEL     \
+            (PARMNUM_BASE_INFOLEVEL + SV_AUTOSHAREWKS_PARMNUM)
+#define SV_AUTOSHARESERVER_INFOLEVEL     \
+            (PARMNUM_BASE_INFOLEVEL + SV_AUTOSHARESERVER_PARMNUM)
 
 #define SVI1_NUM_ELEMENTS       5
 #define SVI2_NUM_ELEMENTS       40
@@ -1126,5 +1231,6 @@ typedef struct _SERVER_TRANSPORT_INFO_0 {
 }
 #endif
 
+#pragma option -b.
 #endif // _LMSERVER_
 

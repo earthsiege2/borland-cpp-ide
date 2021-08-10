@@ -8,12 +8,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $        */
 
 #include <string.h>
 
@@ -28,4 +29,3 @@ size_t _CType strxfrm(char *dest, const char *src, size_t n)
 }
 
 
-

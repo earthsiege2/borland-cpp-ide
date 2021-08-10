@@ -7,8 +7,11 @@
 
 #ifndef          _INC_NDDEAPI
 #define          _INC_NDDEAPI
+#pragma option -b
 
+#pragma option -b.
 #include <pshpack1.h>   /* Assume byte packing throughout */
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -393,8 +396,11 @@ NDdeIsValidAppTopicListW (
 }
 #endif    /* __cplusplus */
 
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
+#pragma option -b.
 #endif  /* _INC_NDDEAPI */
 
 

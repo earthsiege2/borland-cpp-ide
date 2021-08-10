@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.7  $
 //
 // Implementation of class TMsgThread. This implements basic behavior for
 // threads that own message queues, including mutex locking for the queue

@@ -11,3 +11,4 @@
 #include <owl/inputdia.rc>
 #include <owl/editsear.rc>
 #include <owl/owlapp.rc>         // default owl app icon
+#include <owl/except.rc>

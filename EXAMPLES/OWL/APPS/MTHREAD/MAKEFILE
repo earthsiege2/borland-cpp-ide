@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1991, 1995 by Borland International
+# ObjectWindows - (C) Copyright 1991, 1996 by Borland International
 #----------------------------------------------------------------------------
 EXERES=mthread
 SYSTEMS=WIN32

@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1991-1995 Microsoft Corporation
+Copyright (c) 1991-1996 Microsoft Corporation
 
 Module Name:
 
@@ -15,8 +15,11 @@ Abstract:
 
 #ifndef __MIDLES_H__
 #define __MIDLES_H__
+#pragma option -b
 
+#pragma option -b.
 #include <rpcndr.h>
+#pragma option -b
 
 //
 // Set the packing level for RPC structures for Dos and Windows.
@@ -26,8 +29,10 @@ Abstract:
 #pragma pack(2)
 #endif
 
-#ifdef __BORLANDC__
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
@@ -213,9 +218,10 @@ NdrMesProcEncodeDecode(
 }
 #endif
 
-
-#ifdef __BORLANDC__
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
 // Reset the packing level for DOS and Windows.
@@ -224,4 +230,5 @@ NdrMesProcEncodeDecode(
 #pragma pack()
 #endif
 
+#pragma option -b.
 #endif /* __MIDLES_H__ */

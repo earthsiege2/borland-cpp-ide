@@ -3,6 +3,8 @@
 // Copyrights (C) 1996 Borland International
 //--------------------------------------------------------
 
+#include <vdbt/dbcontrl.h>
+#pragma hdrstop
 #include <vdbt/dbchkbx.h>
 
 //--------------------------------------------------------
@@ -48,6 +50,10 @@ TDBCheckBox::TDBCheckBox( TWindow *parent, int resourceId, TModule *module )
 // OWL response table
 //--------------------------------------------------------
 DEFINE_DB_RESPONSE_TABLE1( TDBCheckBox, TDBControl )
+  EV_VBXEVENT_CLICK,
+  EV_VBXEVENT_DRAGOVER,
+  EV_VBXEVENT_DRAGDROP,
+  EV_VBXEVENT_ENDDRAG,
   EV_VBXEVENT_KEYDOWN(   Event_TDBCheckBox_KeyDown ),
   EV_VBXEVENT_KEYPRESS(  Event_TDBCheckBox_KeyPress ),
   EV_VBXEVENT_KEYUP(     Event_TDBCheckBox_KeyUp ),
@@ -62,6 +68,10 @@ END_RESPONSE_TABLE;
 //--------------------------------------------------------
 // Events
 //--------------------------------------------------------
+DEFINE_DB_EVENT( TDBCheckBox, OnClick,     TNotifyEvent,   Event_TDBCheckBox_Click );
+DEFINE_DB_EVENT( TDBCheckBox, OnDragDrop,  TDragEvent,     Event_TDBCheckBox_DragDrop );
+DEFINE_DB_EVENT( TDBCheckBox, OnDragOver,  TDragOverEvent, Event_TDBCheckBox_DragOver );
+DEFINE_DB_EVENT( TDBCheckBox, OnEndDrag,   TDragEvent,     Event_TDBCheckBox_EndDrag );
 DEFINE_DB_EVENT( TDBCheckBox, OnEnter,     TNotifyEvent,   Event_TDBCheckBox_GotFocus );
 DEFINE_DB_EVENT( TDBCheckBox, OnExit,      TNotifyEvent,   Event_TDBCheckBox_LostFocus );
 DEFINE_DB_EVENT( TDBCheckBox, OnKeyDown,   TKeyEvent,      Event_TDBCheckBox_KeyDown );
@@ -69,5 +79,5 @@ DEFINE_DB_EVENT( TDBCheckBox, OnKeyPress,  TKeyPressEvent, Event_TDBCheckBox_Key
 DEFINE_DB_EVENT( TDBCheckBox, OnKeyUp,     TKeyEvent,      Event_TDBCheckBox_KeyUp );
 DEFINE_DB_EVENT( TDBCheckBox, OnMouseDown, TMouseEvent,    Event_TDBCheckBox_MouseDown );
 DEFINE_DB_EVENT( TDBCheckBox, OnMouseMove, TMouseEvent,    Event_TDBCheckBox_MouseMove );
-DEFINE_DB_EVENT( TDBCheckBox, OnMouseUp,   TMouseEvent,    Event_TDBCheckBox_MouseMove );
+DEFINE_DB_EVENT( TDBCheckBox, OnMouseUp,   TMouseEvent,    Event_TDBCheckBox_MouseUp );
 

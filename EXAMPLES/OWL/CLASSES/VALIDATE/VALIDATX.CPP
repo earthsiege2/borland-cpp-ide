@@ -39,9 +39,9 @@ struct TEmployeeStruct {
   char IDEdit[MAXIDLEN];
   char DeptEdit[MAXDEPTLEN];
   char SecEdit[MAXSECLEN];
-  bool FullTime;
-  bool Perm;
-  bool Exempt;
+  uint16 FullTime;
+  uint16 Perm;
+  uint16 Exempt;
   char CustomEdit[MAXCUSTOMLEN];
 };
 
@@ -99,8 +99,18 @@ void
 TEmployeeDlg::CmSetCustom()
 {
   char buff[40];
+  TValidator* v;
+  
   GetDlgItemText(IDC_EDIT1, buff, sizeof(buff));
-  TValidator* v = new TPXPictureValidator(buff, true);
+  
+  TRY {
+    v = new TPXPictureValidator(buff, true);
+  }
+  CATCH( (TXValidator x) {                    // catches syntax errors
+    MessageBox(x.why().c_str(), GetApplication()->GetName(), MB_OK);
+    return;
+  })
+  
   v->UnsetOption(voOnAppend);
   CustomEdit->SetValidator(v);
   CustomEdit->SetFocus();

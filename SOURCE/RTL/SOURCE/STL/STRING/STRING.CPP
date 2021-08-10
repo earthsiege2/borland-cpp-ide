@@ -1,3 +1,5 @@
+/* $Copyright: 1995$ */
+/* $Revision:   8.2  $        */
 /***************************************************************************
  *
  * string.cpp - Source for the Standard Library string classes

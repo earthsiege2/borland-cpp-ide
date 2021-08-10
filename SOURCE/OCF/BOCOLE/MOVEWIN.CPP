@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.2  $
+// $Revision:   2.3  $
 //
 // MoveWin.cpp -- An implementation of a floating border when
 //								moving/resizing a window

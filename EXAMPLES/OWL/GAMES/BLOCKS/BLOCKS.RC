@@ -5,6 +5,7 @@ BLOCKS.RC
 produced by Borland Resource Workshop
 
 *****************************************************************************/
+#include <owl/except.rc>
 
 #include "blocks.rh"
 ABOUT_BOX DIALOG 54, 42, 94, 73

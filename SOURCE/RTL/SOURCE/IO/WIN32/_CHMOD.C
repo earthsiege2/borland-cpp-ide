@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------
- * filename - chmod.c
+ * filename - _chmod.c
  *
  * function(s)
  *        _rtl_chmod - changes access mode of file
@@ -7,24 +7,29 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <ntbc.h>
 
 #include <io.h>
 #include <_io.h>
 #include <stdarg.h>
+#include <tchar.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            _rtl_chmod - changes access mode of file
+Name            _trtl_chmod used as _rtl_chmod and _wrtl_chmod
+                _rtl_chmod  - changes access mode of file
+                _wrtl_chmod - changes access mode of file
 
 Usage           int _rtl_chmod(const char *filename, int func [,int attrib]);
+                int _wrtl_chmod(const wchar_t *filename, int func [,int attrib]);
 
 Prototype in    io.h
 
@@ -43,7 +48,7 @@ Return value    success : returns the file attribute word
 
 *---------------------------------------------------------------------------*/
 
-int  _RTLENTRY _EXPFUNC _rtl_chmod (const char *filename, int func, ...)
+int  _RTLENTRY _EXPFUNC _trtl_chmod (const _TCHAR *filename, int func, ...)
 {
     DWORD attr;
 
@@ -59,12 +64,12 @@ int  _RTLENTRY _EXPFUNC _rtl_chmod (const char *filename, int func, ...)
 
         /* Set the new file attributes.
          */
-        if (SetFileAttributes((LPSTR)filename, attr) == FALSE)
+        if (SetFileAttributes(filename, attr) == FALSE)
             return (__NTerror());
     }
     else                /* get attributes */
     {
-        if ((attr = GetFileAttributes((LPSTR)filename)) == (DWORD)-1)
+        if ((attr = GetFileAttributes(filename)) == (DWORD)-1)
             return (__NTerror());
     }
 
@@ -73,6 +78,7 @@ int  _RTLENTRY _EXPFUNC _rtl_chmod (const char *filename, int func, ...)
 
 /*---------------------------------------------------------------------------*/
 
+#ifndef _UNICODE
 int  _RTLENTRY _EXPFUNC _chmod (const char *filename, int func, ...)
 {
     DWORD attr;
@@ -100,6 +106,7 @@ int  _RTLENTRY _EXPFUNC _chmod (const char *filename, int func, ...)
 
     return ((int)attr);
 }
+#endif  /* _UNICODE */
 
 
 

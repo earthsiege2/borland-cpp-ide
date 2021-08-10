@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of obsolete functions in class TModule.
 //----------------------------------------------------------------------------
@@ -16,6 +16,8 @@
 #if !defined(OWL_MDI_H)
 # include <owl/mdi.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 //

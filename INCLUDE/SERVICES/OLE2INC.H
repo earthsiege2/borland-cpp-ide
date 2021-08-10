@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.6  $
 //
 // Includes OLE2 headers in the right order with necessary macros defined
 //----------------------------------------------------------------------------
@@ -25,11 +25,11 @@
 
 //
 // Well, if wsysinc.h already was included, or it didn't get OLE2 for us, then
-// try to get the headers now. 
+// try to get the headers now.
 // NOTE: If 'BOOL to bool' remapping was requested, OLE2 headers *must* be
 //       included via 'services/wsysinc.h'; i.e. define 'INC_OLE2' before
 //       including <services/wsysinc.h>
-//       
+//
 //
 #if !defined(__OLE2_H) && !defined(_OLE2_H_)
 # if defined(BI_REDEFINE_BOOL) && !defined(SERVICES_WSYSINC_H)

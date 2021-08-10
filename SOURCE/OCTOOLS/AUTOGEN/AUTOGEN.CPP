@@ -11,7 +11,10 @@
 #include <ocf/defs.h>      // TComRef
 #include <ocf/oleutil.h>   // TComRef
 #include <winsys/exbase.h> // TXBase
-#include <olenls.h>        // LANGIDFROMCLSID
+#include <classlib/pointer.h>
+#if defined(BI_PLAT_WIN16)
+# include <olenls.h>       // LANGIDFROMCLSID
+#endif
 #include <iostream.h>
 #include <commdlg.h>       // GetFileTitle
 #include "autogen.rh"
@@ -290,6 +293,9 @@ char* invokeKind[] = {
   "?"              // 10
 };
 
+const char VariantReturnType[] = "TAutoVal";
+const char StringByRefType[] = "TBSTR";
+
 char* dataType[] = {
   "void",          //  0 void
   "NULL",          //  1 SQL NULL
@@ -303,7 +309,7 @@ char* dataType[] = {
   "IDispatch*",    //  9 dispatch interface
   "SCODE",         // 10 OLE return status
   "bool",          // 11 boolean
-  "VARIANT far*",  // 12 pointer to VARIANT union
+  "TAutoVal&",     // 12 VT_VARIANT: pointer to VARIANT union
   "IUnknown*",     // 13 unspecified COM interface
   "<14>",
   "<15>",
@@ -317,12 +323,12 @@ char* dataType[] = {
   "unsigned int",
   "void",
   "HRESULT",
-  "<ptr>",
-  "<27>",
+  "VT_PTR",
+  "VT_SAFEARRAY",
   "<array>",
   "<userdef>",
-  "char far*",
-  "wchar far*",
+  "char*",
+  "wchar*",
 };
 const int dataTypeCount = sizeof(dataType)/sizeof(char*);
 
@@ -335,7 +341,7 @@ char* autoType[] = {
   "double",        //  5 IEEE 8-byte
   "TAutoCurrency", //  6 currency
   "TAutoDate",     //  7 datetime as double
-  "TAutoString",   //  8 char far* global mem with int size before
+  "TAutoString",   //  8 OCF encapsulation of string
 };
 const int autoTypeCount = COUNTOF(autoType);
 
@@ -356,6 +362,7 @@ const int fnPrefixSet   = 4;  // prefix identifier name with "Set"
 const int fnClassName   = 8;  // add classname:: before identifier
 const int fnAutoTypes   = 16; // translate types to wrappered TAuto...
 const int fnIterator    = 32; // emit TAutoIterator<type>&
+const int fnReturnType  = 64; // the type to be formatted is the return type
 
 //
 //
@@ -370,23 +377,26 @@ bool IsDispObject(ITypeInfo* typeInfo, TYPEDESC far& typeDesc)
   return refTypeInfo.Attr->typekind==TKIND_DISPATCH;
 }
 
-char* ClassName = 0;   // will become member variable
+TAPointer<char> ClassName;
 
 //
 //
 //
-bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
-                    char far* name, ostream& out, int flags = 0)
+bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC& typeDescRef,
+                    char* name, ostream& out, int flags = 0)
 {
   bool isDispObject = false;
-  TYPEDESC far* typeDesc = &typeDescRef;
-  ARRAYDESC far* arrayDesc = 0;
+  TYPEDESC*  typeDesc = &typeDescRef;
+  ARRAYDESC* arrayDesc= 0;
   if (flags & fnIterator)
     out << "TAutoEnumerator<";
 
+  bool pointerType = false;
   int derefCount = 0;
-  for (; typeDesc->vt == VT_PTR; derefCount++)
+  for (; typeDesc->vt == VT_PTR; derefCount++) {
     typeDesc = typeDesc->lptdesc;
+    pointerType = true;
+  }
 
   if (typeDesc->vt == VT_USERDEFINED) {
     TComRef<ITypeInfo> refTypeInfo;
@@ -394,8 +404,8 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
     refTypeInfo.GetDocumentation();
     out << refTypeInfo.Name;
     refTypeInfo.GetAttr();
-    if (flags & fnObjectByRef && refTypeInfo.Attr->typekind==TKIND_DISPATCH &&
-        !(flags & fnIterator)){
+    if (flags & fnObjectByRef &&
+        refTypeInfo.Attr->typekind==TKIND_DISPATCH && !(flags & fnIterator)) {
       out << '&';    // need reference for automation proxy class
     }
     isDispObject = true;  //!CQ should this be within the prev if block?
@@ -405,16 +415,32 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
     FormatTypeName(typeInfo, arrayDesc->tdescElem, 0, out);
   }
   else {
+#if 0
     if ((flags & fnAutoTypes) && (typeDesc->vt & 31) < autoTypeCount)
       out << autoType[typeDesc->vt & 31];
     else
       out << dataType[typeDesc->vt & 31];
+#else
+    int typeIndex = typeDesc->vt & 31;
+    if ((flags & fnAutoTypes) && typeIndex < autoTypeCount) {
+      if (!pointerType || typeIndex != 8 /*TAutoString*/)
+        out << autoType[typeIndex];
+      else
+        out << StringByRefType;
+    }
+    else {
+      if ((flags & fnReturnType) && typeIndex == 12)
+        out << VariantReturnType;
+      else
+        out << dataType[typeIndex];
+    }
+#endif
   }
   if (typeDesc->vt & VT_BYREF)  // should never happen
     derefCount++;
 
   while (derefCount--)
-    out << " far*";
+    out << "*";
   if (flags & fnIterator)
     out << ">&";
 
@@ -446,13 +472,24 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
     }
 
     out << ' ';
-    if (ClassName && (flags & fnClassName))
-      out << ClassName << "::";
+    if ((char*)ClassName && (flags & fnClassName))
+      out << (char*)ClassName << "::";
     if (flags & fnPrefixGet)
       out << "Get";
     if (flags & fnPrefixSet)
       out << "Set";
     out << name;
+
+    // If name's same as ClassName, it will look like a constructor;
+    // So append an underscore.
+    //
+    if ((char*)ClassName) {
+      if(!(flags & fnPrefixGet) &&
+         !(flags & fnPrefixSet) && 
+         !strcmpi(name, ClassName)) {
+        out << '_';
+      }
+    } 
 
     if (nonascii)
       delete name;
@@ -672,9 +709,10 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
       TYPEDESC typeDescVoid;
       typeDescVoid.vt = VT_VOID;
       char semi;
+
+      ClassName = new char[lstrlen(typeInfo.Name)+1];
+      lstrcpy(ClassName, typeInfo.Name);
       if (mode & tfDispImpl) {
-        ClassName = new char[lstrlen(typeInfo.Name)+1];
-        lstrcpy(ClassName, typeInfo.Name);
         semi = ' ';
       }
       else {
@@ -710,6 +748,10 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
             out << "    ";
           if (formatFlags == 0 ||
              !((formatFlags & fnPrefixSet) || isDispObject)){
+            if (formatFlags & fnPrefixGet)
+              formatFlags |= fnReturnType;
+            else
+              formatFlags &= ~fnReturnType;
             FormatTypeName(typeInfo, typeDesc, typeInfo.Name, out, formatFlags);
             if (formatFlags & fnPrefixGet)
               out << "()";
@@ -837,6 +879,10 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
                 formatFlags |= fnPrefixGet;  // get&set may have same name
             }
           }
+          if (argIndex == -1)
+            formatFlags |=  fnReturnType;
+          else
+            formatFlags &= ~fnReturnType;
           FormatTypeName(typeInfo, *typeDesc, name, out, formatFlags);
           formatFlags &= ~fnIterator;
           if (outParam == 0) {
@@ -937,7 +983,6 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
       break;
     }
   }
-  delete ClassName;
   ClassName = 0;
 }
 
@@ -1269,7 +1314,12 @@ int GenerateFiles(char* libName, char** outFiles, TLogTypeInfo& log)
                                (LPARAM)(unsigned)selectList[i]);
       }
     }
+#if 1
     ReadTypeLib(libName, incName, libMode[fileIndex], out, log);
+#else
+//!BB    _InitEasyWin();
+//!BB    ReadTypeLib(libName, incName, libMode[fileIndex], cout, log);
+#endif
     outCount++;
   }
   return 0;
@@ -1498,3 +1548,4 @@ WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far* cmdLine, int/*show*/)
     return 2;
   }
 }
+

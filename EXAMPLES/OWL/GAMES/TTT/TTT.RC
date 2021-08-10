@@ -2,6 +2,7 @@
 // ObjectWindows - (C) Copyright 1992 by Borland International
 //----------------------------------------------------------------------------
 #include <owl\window.rh>
+#include <owl/except.rc>
 //#include <bwcc.h>
 #include "ttt.h"
 

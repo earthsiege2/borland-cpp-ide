@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_PRINTER_H)
@@ -15,6 +15,11 @@
 # include <owl/printdia.h>
 #endif
 #include <owl/printer.rh>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS TPrintDC;
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -151,7 +156,7 @@ class _OWLCLASS TPrinter: public TStreamableBase {
     TSize            GetPageSizeInch() const;
     void             SetPageSizeInch(const TSize& pageSizeInch);
 
-    void             SetPageSizes(const TPrintDC& dc);
+    virtual void     SetPageSizes(const TPrintDC& dc);
 
   protected:
     virtual void     GetDefaultPrinter();
@@ -215,6 +220,10 @@ class _OWLCLASS_RTL TXPrinter : public TXOwl {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implmentation

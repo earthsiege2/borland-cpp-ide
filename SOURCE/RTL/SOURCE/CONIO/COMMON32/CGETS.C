@@ -6,12 +6,13 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #if 0
 #define INCL_KBD
@@ -22,6 +23,10 @@
 
 #include <conio.h>
 
+#if defined(_MBCS)
+#include <mbctype.h>
+#include <mbstring.h>
+#endif
 
 /*--------------------------------------------------------------------------*
 
@@ -96,6 +101,9 @@ char * _RTLENTRY _EXPFUNC cgets(char *s)
 #else
     int c, len, maxlen;
     char *p = s + 2;
+#if defined(_MBCS)
+    char pending_dbcs_flag = 0;
+#endif
 
     len = 0;
     maxlen = s[ 0 ] & 0xff;
@@ -111,6 +119,18 @@ char * _RTLENTRY _EXPFUNC cgets(char *s)
         case '\b':
             if( len )  
             {
+#if defined(_MBCS)
+                if ( pending_dbcs_flag == 0 && len >= 2 &&
+                     _mbsbtype(s+2, (p-1)-(s+2)) == _MBC_TRAIL)
+                {
+                    putch( '\b' );
+                    putch( ' ' );
+                    putch( '\b' );
+                    --len;
+                    --p;
+                }
+                pending_dbcs_flag = 0;
+#endif
                 putch( '\b' );
                 putch( ' ' );
                 putch( '\b' );
@@ -125,12 +145,40 @@ char * _RTLENTRY _EXPFUNC cgets(char *s)
             return( s + 2 );
 
         default:
+#if defined(_MBCS)
+            if( pending_dbcs_flag )
+            {
+                /* DBCS character 2nd byte */
+                pending_dbcs_flag = 0;
+            }
+            else if( _ismbblead( c ) )
+            {
+                /* DBCS character 1st byte */
+                if( len + 2 >= maxlen )
+                {
+                    (void)getch();  /* drop 2nd byte */
+                    break;          /* buffer full */
+                }
+                pending_dbcs_flag = 1;
+            }
+            else
+            {
+                /* SBCS */
+                if( len + 1 >= maxlen )
+                    break;          /* buffer full */
+            }
+            putch(c);
+            *p++ = c;
+            ++len;
+            break;
+#else
             if( len < maxlen - 1 )
             {
                 putch(c);
                 *p++ = c;
                 ++len;
             }
+#endif
         }
     }
 #endif

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of TFilterValidator, a validator that filters out keys that
 // are not in the valid character set.
@@ -21,6 +21,8 @@
 #if !defined(OWL_FRAMEWIN_H)
 # include <owl/framewin.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 

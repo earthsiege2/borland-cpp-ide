@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    Increment this if a change has global effects
 
-Copyright (c) 1985-1995, Microsoft Corporation
+Copyright (c) 1985-1996, Microsoft Corporation
 
 Module Name:
 
@@ -15,14 +15,15 @@ Abstract:
 
 #ifndef _WINDOWS_
 #define _WINDOWS_
+#pragma option -b
 
-
-#ifndef _INC_WINDOWS
-#define _INC_WINDOWS
 
 #ifndef WINVER
 #define WINVER 0x0400
 #endif
+
+#ifndef _INC_WINDOWS
+#define _INC_WINDOWS
 
 /*  If defined, the following flags inhibit definition
  *     of the indicated items.
@@ -68,10 +69,18 @@ Abstract:
  *  NOMCX             - Modem Configuration Extensions
  */
 
-#ifdef RC_INVOKED
+#if defined(RC_INVOKED) && !defined(NOWINRES)
 
+#pragma option -b.
+#include <winresrc.h>
+#pragma option -b
+
+#else
+
+#if defined(RC_INVOKED)
 /* Turn off a bunch of stuff to ensure that RC files compile OK. */
 #define NOATOM
+#define NOGDI
 #define NOGDICAPMASKS
 #define NOMETAFILE
 #define NOMINMAX
@@ -85,8 +94,9 @@ Abstract:
 #define NOWH
 #define NOCOMM
 #define NOKANJI
+#define NOCRYPT
 #define NOMCX
-#endif /* RC_INVOKED */
+#endif
 
 #if defined(__BORLANDC__)
     #if !defined(__MFC_COMPAT__)
@@ -101,14 +111,12 @@ Abstract:
 	#define __inline  inline
     #else
         #undef  _ANONYMOUS_UNION    /* The correct term */
+        #define NONAMELESSUNION     /* Incorrect term, but MS keeps using it! */
 	#define __inline
     #endif
-#endif
-
-#if defined(NONAMELESSUNION) || (defined(_MAC) && !defined(__cplusplus) && !defined(_MSC_VER))
-# define _UNION_NAME(X) X
-#else
-# define _UNION_NAME(X)
+    #if defined(_UNICODE)
+        #define UNICODE
+    #endif
 #endif
 
 #if !defined(_PPC_) && !defined(_ALPHA_) && !defined(_MIPS_) && !defined(_X86_) && defined(_M_IX86)
@@ -128,69 +136,150 @@ Abstract:
 #endif
 
 #ifndef RC_INVOKED
-#if	( _MSC_VER >= 800 )
+#if     ( _MSC_VER >= 800 )
 #pragma warning(disable:4001)
 #endif
+#pragma option -b.
 #include <excpt.h>
+#pragma option -b
+#pragma option -b.
 #include <stdarg.h>
+#pragma option -b
 #endif /* RC_INVOKED */
 
+#pragma option -b.
 #include <windef.h>
+#pragma option -b
+#pragma option -b.
 #include <winbase.h>
+#pragma option -b
+#pragma option -b.
 #include <wingdi.h>
+#pragma option -b
+#pragma option -b.
 #include <winuser.h>
+#pragma option -b
+#pragma option -b.
 #include <winnls.h>
+#pragma option -b
+#pragma option -b.
 #include <wincon.h>
+#pragma option -b
+#pragma option -b.
 #include <winver.h>
+#pragma option -b
+#pragma option -b.
 #include <winreg.h>
+#pragma option -b
+#pragma option -b.
 #include <winnetwk.h>
+#pragma option -b
 
 #ifndef WIN32_LEAN_AND_MEAN
+#pragma option -b.
 #include <cderr.h>
+#pragma option -b
+#pragma option -b.
 #include <dde.h>
+#pragma option -b
+#pragma option -b.
 #include <ddeml.h>
+#pragma option -b
+#pragma option -b.
 #include <dlgs.h>
+#pragma option -b
+#pragma option -b.
 #include <lzexpand.h>
+#pragma option -b
+#pragma option -b.
 #include <mmsystem.h>
+#pragma option -b
+#pragma option -b.
 #include <nb30.h>
+#pragma option -b
+#pragma option -b.
 #include <rpc.h>
+#pragma option -b
+#pragma option -b.
 #include <shellapi.h>
+#pragma option -b
+#pragma option -b.
 #include <winperf.h>
-#include <winsock.h>
-#ifndef NOGDI
-#include <commdlg.h>
-#include <winspool.h>
-#ifdef INC_OLE1
-#include <ole.h>
+#pragma option -b
+#if(_WIN32_WINNT >= 0x0400)
+#pragma option -b.
+#include <winsock2.h>
+#pragma option -b
+#pragma option -b.
+#include <mswsock.h>
+#pragma option -b
 #else
+#pragma option -b.
+#include <winsock.h>
+#pragma option -b
+#endif /* _WIN32_WINNT >=  0x0400 */
+
+#if(_WIN32_WINNT >= 0x0400)
+#ifndef NOCRYPT
+#pragma option -b.
+#include <wincrypt.h>
+#pragma option -b
+#endif
+#endif /* _WIN32_WINNT >=  0x0400 */
+
+#ifndef NOGDI
+#pragma option -b.
+#include <commdlg.h>
+#pragma option -b
+#pragma option -b.
+#include <winspool.h>
+#pragma option -b
+#ifdef INC_OLE1
+#pragma option -b.
+#include <ole.h>
+#pragma option -b
+#else
+#pragma option -b.
 #include <ole2.h>
+#pragma option -b
 #endif /* !INC_OLE1 */
 #endif /* !NOGDI */
 #endif /* WIN32_LEAN_AND_MEAN */
 
 #ifdef INC_OLE2
+#pragma option -b.
 #include <ole2.h>
+#pragma option -b
 #endif /* INC_OLE2 */
 
 #ifndef NOSERVICE
+#pragma option -b.
 #include <winsvc.h>
+#pragma option -b
 #endif
 
 #if(WINVER >= 0x0400)
 #ifndef NOMCX
+#pragma option -b.
 #include <win32\mcx.h>
+#pragma option -b
 #endif /* NOMCX */
 
 #ifndef NOIME
+#pragma option -b.
 #include <win32\imm.h>
+#pragma option -b
 #endif
 #endif /* WINVER >= 0x0400 */
 
 #ifndef RC_INVOKED
-#if	( _MSC_VER >= 800 )
+#if     ( _MSC_VER >= 800 )
 #pragma warning(default:4001)
 #endif
 #endif /* RC_INVOKED */
 
+#endif /* RC_INVOKED */
+
 #endif /* _INC_WINDOWS */
+#pragma option -b.
 #endif /* _WINDOWS_ */

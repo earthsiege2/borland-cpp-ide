@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.9  $
+//$Revision:   10.11  $
 //
 // Implementation of TCommCtrlDll, a wrapper for the common control dll
 //----------------------------------------------------------------------------
@@ -14,6 +14,7 @@
 //
 // Common Controls diagnostic group
 //
+OWL_DIAGINFO;
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlCommCtrl, 1, 0);
 
 #if defined(BI_PLAT_WIN16)

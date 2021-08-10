@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------------
 # Copyright (c) 1993, 1995 by Borland International
 #
-# $Revision:   10.23  $
+# $Revision:   10.30  $
 #
 #  Common makefile generator for example makefiles
 #
@@ -16,6 +16,8 @@
 #    make SYSTEM=WIN16 MODEL=d  builds 16bit Windows large model DLL
 #    make SYSTEM=WIN32 MODEL=f  builds 32bit Windows static version
 #    make SYSTEM=WIN32 MODEL=d  builds 32bit Windows DLL version
+#    make SYSTEM=WIN32 MODEL=t  builds 32bit app with cw32mt, bidst, etc.
+#    make SYSTEM=WIN32 MODEL=t USEDLL=1   links to cw32mti, bidsti, etc.
 #    make SYSTEM=DOS16 MODEL=s  builds 16bit DOS small model static
 #    make SYSTEM=DOS16 MODEL=m  builds 16bit DOS medium model static
 #    make SYSTEM=DOS16 MODEL=c  builds 16bit DOS compact model static
@@ -102,7 +104,11 @@
 #   CPUOPT=<2|3|4|5>  Optimize for specific CPU
 #   MATHOPT=<0|1|2>   0=no math libs, 1=emulation, 2=coprocessor
 #   BCC32I            Use BCC32I.EXE instead of BCC32.EXE [32-bit only]
+#   ILINK	      Uses ILINK32 instead of TLINK32 to link
 #   REDEFINE_BOOL     Enable mapping of 'BOOL' to 'bool'
+#   NAMESPACE         Assumes  ClassLib, OCF, and OWL are using namespaces
+#   VCL               Use namespaces, VCL-compatible options, and CP32MT(i)
+#   USEDLL            Use DLL versions of standard libs (rtl, bids...)
 #
 # These are available when building non DOS targets:
 #   OSMAJOR           Operating system major version number
@@ -121,6 +127,20 @@
 #     DLLALL=  The list of all .exe targets, including extensions
 #     DLLMAKE= The list of all rules for the targets in DLLALL (may be macros)
 #
+# When building VCL-compatible programs, both BCROOT and BCBROOT need
+# to be defined.  If BC5\BIN is on your path first, then BCROOT is
+# defined by default.  If C++Builder is on your path first, BCBROOT
+# is defined by default.  You must define the other one (or both)
+# explicitly as an environment variable in order for the makefile to
+# locate the OWL source in the BC5 tree and the VCL libraries in the
+# BCB tree.
+#
+#   BCROOT        defaults to: $(BCBROOT)  ; one of these is always
+#   BCBROOT       defaults to: $(BCROOT)   ; defined by default
+#
+#   VCLINCDIR     defaults to: $(BCBROOT)\include;($BCBROOT)\include\vcl
+#   VCLOBJDIR     defaults to: $(BCBROOT)\lib\obj
+#   VCLLIBDIR     defaults to: $(BCBROOT)\lib
 #-----------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------
@@ -166,20 +186,20 @@ SYSTEMS = WIN16 DOS16 WIN32 CON32
 !endif
 
 !ifndef SYSTEM
-! if $d(WIN32) || "$(MODEL)"=="f" || "$(MODEL)" == "t" || $d(MT)
-SYSTEM  = WIN32
+! if $d(WIN32) || "$(MODEL)"=="f" || "$(MODEL)" == "t" || $d(MT) || $d(VCL)
+  SYSTEM  = WIN32
 ! elif $d(CON32)
-SYSTEM  = CON32
+  SYSTEM  = CON32
 ! elif $d(WIN16)
-SYSTEM  = WIN16
+  SYSTEM  = WIN16
 ! elif $d(DOS16)
-SYSTEM  = DOS16
-! else #default
+  SYSTEM  = DOS16
+! else                              #default
 !   if !$d(MODEL)
-SYSTEM  = WIN32
-MODEL   = d
+    SYSTEM  = WIN32
+    MODEL   = d
 !   else
-SYSTEM  = WIN16
+    SYSTEM  = WIN16
 !   endif
 ! endif
 !endif
@@ -189,6 +209,19 @@ _SYSTEMX_ = |$(SYSTEM)|
 _SYSTEM_  = $(_SYSTEMX_:|= )
 !if $(_SYSTEMS_:$(_SYSTEM_)=)==$(_SYSTEMS_)
 ! error $(SYSTEM) system not supported
+!endif
+
+#
+# Check for errors
+#
+!if $d(ILINK) && $d(WIN16)
+! error Cannot build 16-bit targets with ILINK.
+!endif
+!if $d(VCL) && $(SYSTEM) == WIN16
+! error VCL compatibility requires SYSTEM=WIN32
+!endif
+!if $d(VCL) && $(ALIGN) == 4
+! error VCL compatibility requires ALIGN=4
 !endif
 
 #
@@ -233,7 +266,9 @@ OSMINOR = 10
 # Default alignment
 #
 !ifndef ALIGN
-! if $(_32BIT_)
+! if $d(VCL)
+    ALIGN=4
+! elif $(_32BIT_)
     ALIGN=1
 ! else
     ALIGN=1
@@ -244,42 +279,79 @@ OSMINOR = 10
 # Directory & search paths
 #-----------------------------------------------------------------------------
 
-!ifndef BCBINDIR
-! ifdef BCROOT
-BCBINDIR      = $(BCROOT)\bin
-! else
-BCBINDIR      = $(MAKEDIR)
+#
+# If neither or only one of the two root variables is defined,
+# read the file bcroot.inc and let it define whatever it wants to.
+#
+!if !$d(BCROOT) || !$d(BCBROOT)
+! include $(MAKEDIR)\bcroot.inc
+! if !$d(BCROOT) && !$d(BCBROOT)
+    BCROOT = $(MAKEDIR)\..
 ! endif
 !endif
 
-!ifndef BCROOT
-! include $(MAKEDIR)\bcroot.inc
+#
+# At least one of the roots is certainly defined now.
+# If only one is defined, make them both the same.
+#
+!if !$d(BCROOT)
+BCROOT = $(BCBROOT)
+!elif !$d(BCBROOT)
+BCBROOT = $(BCROOT)
 !endif
 
-!ifndef BCROOT
-BCROOT = $(MAKEDIR)\..
+# 
+# Where to find command-line tools, headers, and libraries
+# 
+!ifndef BCBINDIR
+BCBINDIR      = $(BCROOT)\bin
 !endif
-
 !ifndef BCINCDIR
 BCINCDIR      = $(BCROOT)\include
 !endif
-
 !ifndef BCLIBDIR
 BCLIBDIR      = $(BCROOT)\lib
 !endif
 
-!ifdef USERLIBPATH
-LIBRARYPATH = -L$(USERLIBPATH)$(sp)
+#
+# Where to find VCL libraries, objs, and headers
+#
+!if $d(VCL)
+! if !$d(VCLLIBDIR)
+    VCLLIBDIR = $(BCBROOT)\lib
+! endif
+! if !$d(VCLOBJDIR)
+    VCLOBJDIR = $(VCLLIBDIR)\obj
+! endif
+! if !$d(VCLINCDIR)
+!   if "$(BCBROOT)" != "$(BCROOT)"
+      VCLINCDIR = $(BCBROOT)\include;$(BCBROOT)\include\vcl
+!   else
+      VCLINCDIR = $(BCBROOT)\include\vcl
+!   endif
+! endif
+INCLUDE = $(INCLUDE);$(VCLINCDIR)
 !endif
 
+!ifdef USERLIBPATH
+LIBRARYPATH = $(USERLIBPATH)$(sp)
+!endif
+#!ifdef VCL
+#LIBRARYPATH = $(VCLLIBDIR);$(LIBRARYPATH)
+#!endif
+
 !ifdef SYSINCPATH
-_SYSINCPATH_ = $(SYSINCPATH);
+_SYSINCPATH_ = $(SYSINCPATH)
 !endif
 !ifdef USERINCPATH
-INCLUDEPATH   = $(USERINCPATH);$(_SYSINCPATH_)$(BCINCDIR)
+INCLUDEPATH   = $(USERINCPATH);$(_SYSINCPATH_)
 !else
-INCLUDEPATH   = $(_SYSINCPATH_)$(BCINCDIR)
+INCLUDEPATH   = $(_SYSINCPATH_)
 !endif
+!ifdef VCL
+INCLUDEPATH = $(INCLUDEPATH);$(VCLINCDIR)
+!endif
+INCLUDEPATH = $(INCLUDEPATH);$(BCINCDIR)
 
 #----------------------------------------------------------------------------
 # Validate or select compiler/library model
@@ -289,36 +361,48 @@ INCLUDEPATH   = $(_SYSINCPATH_)$(BCINCDIR)
 # Set allowable models for each platform
 #
 !if   $(_32BIT_)
-_MODELS_ = dfxt
+! if $d(VCL)
+    _MODELS_ = dt
+! else
+    _MODELS_ = dfxt
+! endif
 !elif $(_GUI_)
-_MODELS_ = smcldx
+  _MODELS_ = smcldx
 !else #DOS16
-_MODELS_ = smclh
+  _MODELS_ = smclh
 !endif
 
 !ifndef MODELS
 MODELS = $(_MODELS_:x=)
 !endif
 
-!if "$(MODEL)"=="t"
-MT = 1
-!endif
-
 #
 # Validate model if defined, else get default model
 #
 !ifndef MODEL
-! if   $(_32BIT_)
-!  if  $(_GUI_)
-MODEL = f  #WIN32
+! if $(_32BIT_)
+!  if $d(VCL)
+   MODEL = t  #WIN32 threaded
+!  elif $(_GUI_)
+   MODEL = f  #WIN32
 !  else
-MODEL = f  #CON32
+   MODEL = f  #CON32
 !  endif
 ! elif $(_GUI_)
-MODEL = d  #WIN16
+  MODEL = d  #WIN16
 ! else
-MODEL = s  #DOS16
+  MODEL = s  #DOS16
 ! endif
+!endif
+
+#
+# Set MT for multithreading
+#
+!if "$(MODEL)"=="t"
+ MT = 1
+!endif
+!if $d(VCL)
+ MT = 1
 !endif
 
 #
@@ -478,30 +562,49 @@ CDIAG = $(CDIAG) -D__WARN
 #   C0       - Startup code for current model
 #   C0D      - Startup code for DLLs
 #----------------------------------------------------------------------------
+RTLPFX=cw
+RTLDIR=$(BCLIBDIR)
+
 !if $(_32BIT_)
+
+! if $d(VCL)
+  RTLPFX=cp
+  RTLDIR=$(VCLLIBDIR)
+! endif
+
 STDDLIBS = $(BCLIBDIR)\import32
 ! if $d(MT)
-  STDDLIBS = $(STDDLIBS) $(BCLIBDIR)\cw32mti
+  STDDLIBS = $(STDDLIBS) $(RTLDIR)\$(RTLPFX)32mti
 ! else
-  STDDLIBS = $(STDDLIBS) $(BCLIBDIR)\cw32i
+  STDDLIBS = $(STDDLIBS) $(RTLDIR)\$(RTLPFX)32i
 ! endif
-C0D      = $(BCLIBDIR)\c0d32
+C0D      = $(RTLDIR)\c0d32
 ! if $(_GUI_)
 _SYSCODE_ = n
-C0       = $(BCLIBDIR)\c0w32
+C0       = $(RTLDIR)\c0w32
 ! else #CON32
-C0       = $(BCLIBDIR)\c0x32
+C0       = $(RTLDIR)\c0x32
 _SYSCODE_ = c
 ! endif
 
-! ifdef USEDLL
-STDLIBS  = $(STDDLIBS)
+! if $d(DEBUG)
+  VCLLIB = $(VCLLIBDIR)\vcld.lib
 ! else
-! if $d(MT)
-STDLIBS  = $(BCLIBDIR)\import32 $(BCLIBDIR)\cw32mt
-! else
-STDLIBS  = $(BCLIBDIR)\import32 $(BCLIBDIR)\cw32
+  VCLLIB = $(VCLLIBDIR)\vcl.lib
 ! endif
+
+! ifdef USEDLL
+  STDLIBS  = $(STDDLIBS)
+! else
+!   if $d(MT)
+    STDLIBS  = $(BCLIBDIR)\import32 $(RTLDIR)\$(RTLPFX)32mt
+!   else
+    STDLIBS  = $(BCLIBDIR)\import32 $(RTLDIR)\$(RTLPFX)32
+!   endif
+! endif
+
+! if $d(VCL)
+  STDLIBS  = $(STDLIBS) $(VCLLIB)
 ! endif
 
 ! if $d(CODEGUARD)  # Codeguard must preceed all user/frmwk libraries
@@ -516,10 +619,10 @@ STDDLIBS=$(BCLIBDIR)\import $(BCLIBDIR)\crtldll
 STDLIBS  = $(STDDLIBS)
 ! else
 !   if $d(RTLFIRST)
-_RTLFIRST_ = $(BCLIBDIR)\cw$(_MODEL_)$(sp)
+_RTLFIRST_ = $(BCLIBDIR)\$(RTLPFX)$(_MODEL_)$(sp)
 STDLIBS =$(BCLIBDIR)\import $(BCLIBDIR)\mathw$(_MODEL_)
 !   else
-STDLIBS =$(BCLIBDIR)\import $(BCLIBDIR)\mathw$(_MODEL_) $(BCLIBDIR)\cw$(_MODEL_)
+STDLIBS =$(BCLIBDIR)\import $(BCLIBDIR)\mathw$(_MODEL_) $(BCLIBDIR)\$(RTLPFX)$(_MODEL_)
 !   endif
 ! endif
 ! if $d(FASTTHIS)
@@ -578,14 +681,26 @@ _LIBEXE_ = $(LIBEXE)$(sp)
 #
 # Set makefile name based on platform, model, debug/diagnostic mode
 #
-_MODELNAME_ = $(SYSTEM)$(MODEL)$(DIAGS)$(DEBUG)
+!if $d(VCL)
+  KEY = v
+!else
+  KEY = $(MODEL)
+!endif
+_MODELNAME_ = $(SYSTEM)$(KEY)$(DIAGS)$(DEBUG)
 
 #----------------------------------------------------------------------------
 # Options independent of build options
 #----------------------------------------------------------------------------
 !if $d(REDEFINE_BOOL)
-  CFLAGS = $(CFLAGS)  -DBI_REDEFINE_BOOL
-  CFLAGSD= $(CFLAGSD) -DBI_REDEFINE_BOOL
+  CFLAGS  = $(CFLAGS)  -DBI_REDEFINE_BOOL
+  CFLAGSD = $(CFLAGSD) -DBI_REDEFINE_BOOL
+!endif
+!if $d(VCL)
+  NAMESPACE = 1
+!endif
+!if $d(NAMESPACE)
+  CFLAGS  = $(CFLAGS)  -DBI_NAMESPACE
+  CFLAGSD = $(CFLAGSD) -DBI_NAMESPACE
 !endif
 
 #----------------------------------------------------------------------------
@@ -597,13 +712,21 @@ _MODELNAME_ = $(SYSTEM)$(MODEL)$(DIAGS)$(DEBUG)
 ! else
   BCC    = $(BCBINDIR)\bcc32i.exe
 ! endif
-BRCC     = $(BCBINDIR)\brcc32.exe
-TLINK    = $(BCBINDIR)\tlink32.exe
-! if $(DEBUG)
-COPTS    = -$(CPUOPT) -i55 -d -k -Od -v
+  BRCC     = $(BCBINDIR)\brcc32.exe
+! if $d(ILINK)
+  TLINK  = $(BCBINDIR)\ilink32     # incremental linker
 ! else
-COPTS    = -$(CPUOPT) -i55 -d -k- -O1gmpv
+  TLINK  = $(BCBINDIR)\tlink32     # standard linker
 ! endif
+! if $(DEBUG)
+  COPTS    = -$(CPUOPT) -i55 -d -k -Od -v
+! else
+  COPTS    = -$(CPUOPT) -i55 -d -k- -O1gmpv
+! endif
+! if $d(VCL)
+  COPTS  = $(COPTS) -b- -Vx -Ve 
+! endif
+
 CFGFILE  = bcc32.cfg
 
 ! ifdef USEDLL
@@ -614,9 +737,9 @@ CFLAGS   = $(CFLAGS) -W $(COPTS)
 CFLAGSD  = $(CFLAGSD) -WDE $(COPTS)             # Building DLL's
 ! endif                                         # Using static libraries
 
-! ifdef MT
-CFLAGS = $(CFLAGS) -WM
-CFLAGSD = $(CFLAGSD) -WM
+! if !$d(MT)
+CFLAGS = $(CFLAGS) -WM-
+CFLAGSD = $(CFLAGSD) -WM-
 ! endif
 
 ! if $d(CODEGUARD)             # d=add data, c=add calls, t=check this
@@ -636,6 +759,10 @@ LFLAGSD  = -Tpd -aa -c $(LDBG)
 ! else #CON32
 LFLAGS   = -Tpe -ap -c $(LDBG)
 LFLAGSD  = -Tpd -ap -c $(LDBG)
+! endif
+! if $d(VCL)
+  LFLAGS  = $(LFLAGS)  -j$(VCLOBJDIR) 
+  LFLAGSD = $(LFLAGSD) -j$(VCLOBJDIR) 
 ! endif
 
 LFLAGS  = /V$(OSMAJOR).$(OSMINOR) $(LFLAGS)
@@ -759,7 +886,7 @@ _MAPDLL_ = -x
 DLLRULE =^
 $(DLLBIN): $(OBJDLL) $(RESDLL) $(DEFDLL) $(LIBDLL)^
   $(TLINK) @&&|^
-$(LFLAGSD) $(LIBRARYPATH)+^
+$(LFLAGSD) -L$(LIBRARYPATH)+^
 $(C0D) $(OBJDLL)^
 $(DLLBIN)^
 $(_MAPDLL_)^
@@ -865,7 +992,7 @@ _MAPEXE_ = -x
 EXERULE =^
 $(EXEBIN): $(OBJEXE) $(RESEXE) $(DEFEXE) $(LIBEXE) $(EXE_)^
   $(TLINK) @&&|^
-$(LFLAGS) $(LIBRARYPATH)$(C0)+^
+$(LFLAGS) -L$(LIBRARYPATH) $(C0)+^
 $(OBJEXE)^
 $(EXEBIN)^
 $(_MAPEXE_)^
@@ -927,6 +1054,17 @@ all: $(MAKEFILE) $(_SENTRY_)
 ECHOOPTS= $(nl)Generating $(MAKEFILE)$(nl)
 ECHOOPTS= $(ECHOOPTS) SYSTEM is $(SYSTEM).$(nl)
 ECHOOPTS= $(ECHOOPTS) MODEL is $(MODEL).$(nl)
+!if $d(USEDLL)
+ECHOOPTS= $(ECHOOPTS) DLL versions of RTL/BIDS/OWL libraries.$(nl)
+!else
+ECHOOPTS= $(ECHOOPTS) Static versions of RTL/BIDS/OWL libraries.$(nl)
+!endif
+!if $d(NAMESPACE)
+ECHOOPTS= $(ECHOOPTS) Namespaces are ON.$(nl)
+!endif
+!if $d(VCL)
+ECHOOPTS= $(ECHOOPTS) VCL compatibility is ON.$(nl)
+!endif
 ECHOOPTS= $(ECHOOPTS) OS version $(OSMAJOR).$(OSMINOR).$(nl)
 ECHOOPTS= $(ECHOOPTS) CPU set to $(CPUOPT)86.$(nl)
 !if $(MATHOPT)==0
@@ -936,7 +1074,7 @@ ECHOOPTS= $(ECHOOPTS) Math libraries set to emulation.$(nl)
 !elif $(MATHOPT)==2
 ECHOOPTS= $(ECHOOPTS) Math libraries set to coprocessor.$(nl)
 !endif
-ECHOOPTS= $(ECHOOPTS) Alignment is set to $(ALIGN).$(nl)
+ECHOOPTS= $(ECHOOPTS) Alignment set to $(ALIGN).$(nl)
 !if $(DIAGS)==1
 ECHOOPTS= $(ECHOOPTS) Diagnostics messages are on.$(nl)
 !else
@@ -946,6 +1084,20 @@ ECHOOPTS= $(ECHOOPTS) Diagnostics messages are off.$(nl)
 ECHOOPTS= $(ECHOOPTS) Debugging information is generated.$(nl)
 !else
 ECHOOPTS= $(ECHOOPTS) Debugging information is not generated.$(nl)
+!endif
+!if $d(BCC32I)
+ECHOOPTS= $(ECHOOPTS) Compiler: BCC32I (Intel).$(nl)
+!elif $(_32BIT_)==1
+ECHOOPTS= $(ECHOOPTS) Compiler: BCC32 (standard).$(nl)
+!else
+ECHOOPTS= $(ECHOOPTS) Compiler: BCC (standard).$(nl)
+!endif
+!if $d(ILINK)
+ECHOOPTS= $(ECHOOPTS) Linker: ILINK32 (incremental).$(nl)
+!elif $(_32BIT_)==1
+ECHOOPTS= $(ECHOOPTS) Linker: TLINK32 (standard).$(nl)
+!else
+ECHOOPTS= $(ECHOOPTS) Linker: TLINK (standard).$(nl)
 !endif
 !if $(CODEGUARD)==0
 ECHOOPTS= $(ECHOOPTS) No CodeGuard information generated.$(nl)
@@ -1015,7 +1167,6 @@ $(RESDLL) : $(RESDLL_)
 # Generate compiler configuration file for DLL source files
 #
 !if "$(CFGDLL)" == "cfgdll"
-
 cfgdll:
   @copy &&|
 -I$(INCLUDEPATH)
@@ -1034,7 +1185,6 @@ $(DLLMAKE)
 # Generate compiler configuration file for EXE and LIB source files
 #
 !if ($d(EXE) || $d(LIBBIN)) && "$(CFGEXE)" == "cfgexe"
-
 cfgexe:
   @copy &&|
 -I$(INCLUDEPATH)
@@ -1116,6 +1266,7 @@ clean:
   @if exist bcc32.cfg del bcc32.cfg
   @if exist tlink.cfg del tlink.cfg
   @if exist tlink32.cfg del tlink32.cfg
+  @if exist ilink32.cfg del ilink32.cfg
   @if exist *.td? del *.td? #debugger symbols & configs
   @if exist *.tr? del *.tr? #debugger restart
   @if exist WIN16*.mak del WIN16*.mak

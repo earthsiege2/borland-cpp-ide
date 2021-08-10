@@ -1,26 +1,26 @@
 /*------------------------------------------------------------------------*/
-/*                                                                        */
 /*  VERSION.RC                                                            */
 /*                                                                        */
-/*  Copyright (c) 1993, 1995 Borland International                        */
+/*  Copyright (c) 1993, 1996 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
+/* $Revision:   5.9  $                                                    */
 /*------------------------------------------------------------------------*/
-
 #include <ver.h>
 
-
 VS_VERSION_INFO VERSIONINFO
-FILEFLAGSMASK   VS_FF_DEBUG | VS_FF_PRERELEASE
-FILEFLAGS       VS_FF_PRERELEASE | VS_FF_SPECIALBUILD
+  FILEVERSION     5,0,0,4
+  PRODUCTVERSION  5,0,2,0
+  FILEFLAGSMASK   VS_FF_DEBUG | VS_FF_PRERELEASE
+  FILEFLAGS       VS_FF_PRERELEASE | VS_FF_SPECIALBUILD
 #ifndef WIN32
-FILEOS          VOS_DOS_WINDOWS16
+  FILEOS          VOS_DOS_WINDOWS16
 #else
-FILEOS          VOS_NT_WINDOWS32
+  FILEOS          VOS_NT_WINDOWS32
 #endif
 
-FILETYPE        VFT_DLL
-FILESUBTYPE     VS_USER_DEFINED
+  FILETYPE        VFT_DLL
+  FILESUBTYPE     VS_USER_DEFINED
 
 BEGIN
   BLOCK "StringFileInfo"
@@ -29,12 +29,11 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "Borland International\0"
       VALUE "FileDescription", "BIDS Class Library\0"
-      VALUE "FileVersion", "1.00\0"
+      VALUE "FileVersion", "5.04\0"
       VALUE "InternalName", "BIDS Class Library\0"
-      VALUE "LegalCopyright", "Copyright Borland International 1993\0"
-      VALUE "ProductName", "Borland C++ 4.0\0"
-      VALUE "ProductVersion", "$Revision:   5.2  $\0"
-      VALUE "SpecialBuild", "$Date:   06 Mar 1995 19:37:02  $\0"
+      VALUE "LegalCopyright", "Copyright Borland International 1993, 1996\0"
+      VALUE "ProductName", "Borland C++ 5.2\0"
+      VALUE "ProductVersion", "$Revision:   5.9  $\0"
     END
 
   END

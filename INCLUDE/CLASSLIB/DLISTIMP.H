@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.5  $
+//$Revision:   5.8  $
 //
 //----------------------------------------------------------------------------
 #if !defined( CLASSLIB_DLISTIMP_H )
@@ -35,6 +35,10 @@
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -70,7 +74,7 @@ TMDoubleListBlockInitializer<T,Alloc>::TMDoubleListBlockInitializer()
 {
     PRECONDITION( Count != UINT_MAX );
     if( Count++ == 0 )
-        TMDoubleListElement<T,Alloc>::Mgr = 
+        TMDoubleListElement<T,Alloc>::Mgr =
             new(*this)TMMemBlocks<Alloc>( sizeof(TMDoubleListElement<T,Alloc>), 20 );
 }
 
@@ -741,23 +745,23 @@ public:
         }
 
     int Add( T *t )
-        { 
-        return Parent::Add( t ); 
+        {
+        return Parent::Add( t );
         }
 
-    int Detach( T *t, int del = 0 ) 
-        { 
-        return Parent::DoDetach( t, del ); 
+    int Detach( T *t, int del = 0 )
+        {
+        return Parent::DoDetach( t, del );
         }
 
-    int DetachAtHead( int del = 0 ) 
-        { 
-        return Parent::DoDetachAtHead( del ); 
+    int DetachAtHead( int del = 0 )
+        {
+        return Parent::DoDetachAtHead( del );
         }
 
-    int DetachAtTail( int del = 0 ) 
-        { 
-        return Parent::DoDetachAtTail( del ); 
+    int DetachAtTail( int del = 0 )
+        {
+        return Parent::DoDetachAtTail( del );
         }
 
     T *Find( const T *t );
@@ -1154,6 +1158,10 @@ public:
         TMISDoubleListIteratorImp<T,TStandardAllocator>( l ) {}
 
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_OLDNAMES )
 #define BI_ISDoubleListImp TISDoubleListImp

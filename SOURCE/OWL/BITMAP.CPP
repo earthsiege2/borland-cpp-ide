@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of GDI Bitmap object class
 //----------------------------------------------------------------------------
@@ -17,6 +17,8 @@
 # include <owl/clipboar.h>
 #endif
 
+
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 DIAG_DECLARE_GROUP(OwlGDIOrphan);  // Orphan control tracing group
 

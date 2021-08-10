@@ -6,25 +6,30 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            gets - gets a string from a stream
+Name            _getts used as gets and _getws
+                gets   - gets a string from a stream
+                _getws - gets a wide string from a stream
 
 Usage           char *gets(char *string);
+                wchar_t *_getws(wchar_t *string);
 
 Prototype in    stdio.h
 
-Description     gets reads a string into string from the
+Description     _getts reads a string into string from the
                 standard input stream stdin. The string is terminated by a
                 newline character, which is replaced in @i{string} by a null
                 character (\0).
@@ -34,19 +39,19 @@ Return value    on success, returns the string argument string;
 
 *---------------------------------------------------------------------*/
 
-char * _RTLENTRY _EXPFUNC gets(char *s)
+_TCHAR * _RTLENTRY _EXPFUNC _getts(_TCHAR *s)
 {
-    register int     c;
-    register char   *P;
+    register _TINT   c;
+    register _TCHAR *P;
 
     _lock_stream(stdin);
 
     P = s;
 
-    while ((c = getc (stdin)) != EOF && c != '\n')
+    while ((c = _gettc (stdin)) != _TEOF && c != _TEXT('\n'))
         *P++ = c;
 
-    if (EOF == c && P == s)
+    if (_TEOF == c && P == s)
         P = NULL;
     else
     {

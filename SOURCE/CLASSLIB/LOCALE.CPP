@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.7  $
+//$Revision:   5.9  $
 //
 // TLocaleString implementation - localized name support
 // TRegList implementation - runtime component and object registration list
@@ -43,7 +43,7 @@ struct TLocaleCacheBase;
 struct TLocaleCacheList {
   TLocaleCacheList() : Next(0) {}
  ~TLocaleCacheList();                     // releases cache entries
-  TLocaleCache* Lookup(const char* name); // returns cache entry, 0 if failed
+  TLocaleCache* Lookup(const _TCHAR* name); // returns cache entry, 0 if failed
   TLocaleCacheBase* Next;                 // linked list of cached translations
 };
 
@@ -52,10 +52,10 @@ struct TLocaleCacheList {
 //
 struct TLocaleCacheBase {
   long  Hash;            // hashed original string, for duplicate elimination
-  const char* Neutral;   // original string, +1 if resource found and loaded
+  const _TCHAR* Neutral;   // original string, +1 if resource found and loaded
   TLocaleCacheBase* Next;// linked list of cached strings, for search, cleanup
 
-  TLocaleCacheBase(const char* name, long hash);
+  TLocaleCacheBase(const _TCHAR* name, long hash);
   static TLocaleCacheList CacheList;
 };
 
@@ -64,21 +64,21 @@ struct TLocaleCacheBase {
 //
 struct TLocaleCache : public TLocaleCacheBase {
   void* operator new(unsigned size, unsigned buflen);
-  TLocaleCache(const char* name, long hash, HRSRC rscHdl, HGLOBAL resData);
+  TLocaleCache(const _TCHAR* name, long hash, HRSRC rscHdl, HGLOBAL resData);
  ~TLocaleCache() {}
-  const char* Translate(TLangId lang);   // (re)translate string
+  const _TCHAR* Translate(TLangId lang);   // (re)translate string
 
   TLangId ActLangId;   // actual language ID of cached string
   TLangId ReqLangId;   // requested language ID of cached string
   HRSRC   ResHdl;      // handle returned from ::FindResource()
-  char    Buf[1];      // first character is string type
+  _TCHAR    Buf[1];      // first character is string type
 };
 
 //----------------------------------------------------------------------------
 // TLocaleCache implementation
 //
 
-TLocaleCacheBase::TLocaleCacheBase(const char* name, long hash)
+TLocaleCacheBase::TLocaleCacheBase(const _TCHAR* name, long hash)
 :
   Neutral(name),
   Hash(hash)
@@ -92,7 +92,7 @@ void* TLocaleCache::operator new(unsigned size, unsigned buflen)
   return ::operator new(size+buflen);
 }
 
-TLocaleCache::TLocaleCache(const char* name, long hash,
+TLocaleCache::TLocaleCache(const _TCHAR* name, long hash,
                            HRSRC resHdl, HGLOBAL resData)
 :
   TLocaleCacheBase(name, hash),
@@ -102,16 +102,16 @@ TLocaleCache::TLocaleCache(const char* name, long hash,
   *(HGLOBAL*)(Buf+1) = resData;   // store resource pointer temp in buffer
 }
 
-TLocaleCache* TLocaleCacheList::Lookup(const char* name)
+TLocaleCache* TLocaleCacheList::Lookup(const _TCHAR* name)
 {
-  const char* neut = name + 1;      // skip over prefix flag char
+  const _TCHAR* neut = name + 1;      // skip over prefix flag char
   long hash = 0;
-  const char* pc = name;
+  const _TCHAR* pc = name;
   while (*pc)
     hash = hash*2 ^ *pc++;
   for (TLocaleCacheBase* entry = Next; entry; entry = entry->Next) {
     if (hash == entry->Hash) {
-      const char* pc = entry->Neutral;
+      const _TCHAR* pc = entry->Neutral;
       if (*pc != *neut)       // Neutral points to prefix if lookup failed
         pc++;
       if (TLocaleString::CompareLang(pc,neut,TLocaleString::NativeLangId) != 0)
@@ -130,9 +130,9 @@ TLocaleCache* TLocaleCacheList::Lookup(const char* name)
   if (!resData) {
     return 0;     // should throw exception on failure?!!
   }
-  unsigned char far* pr = (unsigned char far*)::LockResource(resData);
+  _TUCHAR far* pr = (_TUCHAR far*)::LockResource(resData);
   int maxLen = sizeof(HGLOBAL);  // scan for longest string, including null
-  unsigned char c = *pr;         // check first byte of langid or neutral text
+  _TUCHAR c = *pr;         // check first byte of langid or neutral text
   if (c == 0) {                  // check for empty resource string
     ::FreeResource(resData);
     new TLocaleCacheBase(name, hash); // add failed cache entry if null or err
@@ -143,18 +143,18 @@ TLocaleCache* TLocaleCacheList::Lookup(const char* name)
   else
     pr++;                        // start to skip over 2-byte language id
   do {                           // loop to check for maximum string length
-    unsigned char far* p = ++pr; // skip over id to start of translation
+    _TUCHAR far* p = ++pr; // skip over id to start of translation
     while ((c=*pr++) >= ' ') ;   // skip over translation string
     if ((int)(pr-p) > maxLen)    // update maximum, including terminator
       maxLen = (int)(pr-p);
   } while(c);
   TLocaleCache* cache = new(maxLen) TLocaleCache(neut, hash, resHdl, resData);
-  cache->Buf[0] = char(*name == AUTOLANG_XLAT ? AUTOLANG_CACHEDNEUT
+  cache->Buf[0] = _TCHAR(*name == AUTOLANG_XLAT ? AUTOLANG_CACHEDNEUT
                                               : AUTOLANG_CACHEDLOAD);
   return cache;
 }
 
-const char* TLocaleCache::Translate(TLangId reqLang)
+const _TCHAR* TLocaleCache::Translate(TLangId reqLang)
 {
   HGLOBAL resData;
   if (ReqLangId == InvalidLangId) { // if first time called after construction
@@ -178,12 +178,12 @@ const char* TLocaleCache::Translate(TLangId reqLang)
       return Neutral;   // should throw exception on failure?!!
   }
 
-  unsigned char far* resBuf = (unsigned char far*)::LockResource(resData);
-  unsigned char far* translation = 0;
-  unsigned char far* pr = resBuf;
+  _TUCHAR far* resBuf = (_TUCHAR far*)::LockResource(resData);
+  _TUCHAR far* translation = 0;
+  _TUCHAR far* pr = resBuf;
   TLangId            actLang = InvalidLangId;
   TLangId            resLang;
-  unsigned char c;
+  _TUCHAR c;
 
   while ((c = *pr) != 0) {
     if (c > ' ') { // check for initial neutral string, used with CACHEDLOAD
@@ -199,8 +199,8 @@ const char* TLocaleCache::Translate(TLangId reqLang)
       actLang = resLang;
       break;
     }
-    if ((char)resLang == (char)reqLang) {   // base language match
-      if ((char)actLang != (char)reqLang || resLang == (reqLang & 0x00FF)) {
+    if ((_TCHAR)resLang == (_TCHAR)reqLang) {   // base language match
+      if ((_TCHAR)actLang != (_TCHAR)reqLang || resLang == (reqLang & 0x00FF)) {
         translation = pr;
         actLang = resLang;
       }
@@ -208,12 +208,12 @@ const char* TLocaleCache::Translate(TLangId reqLang)
     for ( ; *pr >= ' '; ++pr)   // skip over translation string till next Id
       ;
   }
-  const char* retVal;
+  const _TCHAR* retVal;
   if (translation) {
     while (*translation < ' ')    // skip over multiple language IDs
       translation += 2;
     if (actLang != ActLangId) {   // if same as in buffer, leave alone
-      char* pc;
+      _TCHAR* pc;
       for (pr = translation, pc = Buf + 1; *pr >= ' '; )
         *pc++ = *pr++;
       *pc = 0;
@@ -248,7 +248,7 @@ TLocaleCacheList::~TLocaleCacheList()
 // TLocaleString implementation, except for static int CompareLang(s1,s2,lang)
 //
 
-const char* TLocaleString::Translate(TLangId reqLang)
+const _TCHAR* TLocaleString::Translate(TLangId reqLang)
 {
   if (!Private)                   // check for null string pointer
     return Private;
@@ -288,7 +288,7 @@ const char* TLocaleString::Translate(TLangId reqLang)
   }
 }
 
-TLocaleString::operator const char*()
+TLocaleString::operator const _TCHAR*()
 {
   if (Private == 0)
     return 0;
@@ -308,7 +308,7 @@ TLocaleString::operator const char*()
   }
 }
 
-int TLocaleString::Compare(const char far* str, TLangId lang)
+int TLocaleString::Compare(const _TCHAR far* str, TLangId lang)
 {
   return CompareLang(this->Translate(lang), str, lang);
 }

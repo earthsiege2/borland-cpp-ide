@@ -2,42 +2,46 @@
  * filename - strrev.c
  *
  * function(s)
- *        strrev - reverses a string
+ *        strrev, _wcsrev - reverses an ASCII/wide-character string
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <string.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            strrev - reverses a string
+Name            strrev, _wcsrev - reverses an ASCII/wide-character string
 
 Usage           char *strrev(char * str);
+		wchar_t *_wcsrev(wchar_t * str);
 
 Prototype in    string.h
 
-Description     strrev reverses all characters in a string (except the
-                terminating null character).
+Description     strrev and _wcsrev reverse all ASCII/wide-characters in a
+		an ASCII/wide-character string (except the terminating null
+		character).
 
-Return value    strrev returns a pointer to the reversed string. There is no
-                error return.
+Return value    strrev and _wcsrev return a pointer to the reversed string.
+		There is no error return.
 
 *---------------------------------------------------------------------*/
 
-char * _RTLENTRY _EXPFUNC strrev(char *str)
+_TCHAR * _RTLENTRY _EXPFUNC _tcsrev(_TCHAR *str)
 {
-     char *p, *q, r;
+     _TCHAR *p, *q, r;
 
      if (!*str)
         return str;
-     p = str + strlen(str) - 1;
+     p = str + _tcslen(str) - 1;
      q = str;
      while( p > q )
      {
@@ -55,4 +59,3 @@ char * _RTLENTRY _EXPFUNC strrev(char *str)
      }
      return(str);
 }
-

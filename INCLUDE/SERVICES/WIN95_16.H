@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.1  $
+//$Revision:   5.7  $
 //
 // Defines WIN95 specific macros/structures for use with pre-4.0 versions of
 // the WINDOWS.H header.
 //
 //----------------------------------------------------------------------------
+#if defined(_Windows)
 #if !defined(SERVICES_WIN95_16_H)
 #define SERVICES_WIN95_16_H
 
@@ -79,6 +80,19 @@ BOOL    WINAPI DrawState(HDC, HBRUSH, DRAWSTATEPROC, LPARAM, WPARAM, int, int, i
 # define  HKEY_CLASSES_ROOT   1
 #endif
 
+// When compiling a 16-bit app, wide-string types need to be redefined
+// as ANSI types to avoid compiler complaints.  The problem arises
+// because we include common control headers in 16-bit compilation.
+// (16-bit apps don't use the wide-string declarations, but bcc complains
+// because WINDOWS.H doesn't define them.)
+//
+
+#if !defined(__FLAT__)
+typedef char far* LPSTR;
+typedef LPSTR LPCWSTR;
+typedef LPSTR LPWSTR;
+#endif
+
 // Plays games with COMMCTRL.H so that we can get the WIN95 goodies
 // even when using an earlier version of the 16-bit version of
 // WINDOWS.H
@@ -91,3 +105,4 @@ BOOL    WINAPI DrawState(HDC, HBRUSH, DRAWSTATEPROC, LPARAM, WPARAM, int, int, i
 
 #endif  // WINVER < 0x0400
 #endif  // SERVICES_WIN95_16_H
+#endif  // _Windows

@@ -205,7 +205,17 @@ TOwlSdiApp::CmFileOpen()
 
   *FileData.FileName = 0;
   if (TFileOpenDialog(MainWindow, FileData).Execute() == IDOK) {
-    TWindow* client = new TOleSampContainer(0, FileData.FileName);
+    TWindow* client = 0;
+
+    TRY {
+      client = new TOleSampContainer(0, FileData.FileName);
+    }
+    CATCH ((TXObjComp x) {
+      GetMainWindow()->MessageBox(x.why().c_str(), GetName(), 
+        MB_OK|MB_ICONEXCLAMATION);
+      return;
+    }
+
     TWindow* oldClient = GetMainWindow()->SetClientWindow(client);
     if (oldClient) {
       oldClient->Destroy();

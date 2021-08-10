@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // AUTO.SPP: Automation. Demonstrates the IDE as an OLE automation
 //   controller and server.
@@ -12,7 +12,7 @@
 //   the constant TEST_PROJECT to a fully-qualified IDE file on your
 //   system.
 //--------------------------------------------------------------------------
-print "auto.spp";
+print typeid(module());
 
 //
 // Drive Autocalc as an automation server.

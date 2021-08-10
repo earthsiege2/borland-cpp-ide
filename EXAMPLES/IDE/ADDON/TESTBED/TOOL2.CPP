@@ -3,7 +3,7 @@
   tool2.cpp
   Created: 12/21/95
   Copyright (c) 1987, 1995 Borland International Inc.  All Rights Reserved.
-  $Revision:   1.11  $
+  $Revision:   1.15  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __AOEXPCH_H
@@ -28,19 +28,30 @@ ToolTestC::ToolTestC() {
   if ( _projectServer ) {
     _projectClient->AddRef();
     _projectServer->RegisterProjectClient( _projectClient );
+    IProjectServer2 * ps2 = GET_INTERFACE( IProjectServer2 );
+    if ( ps2 ) {  // this interface not available on BCW versions < 5.01
+      _projectClient->AddRef();
+      ps2->RegisterProjectSaveClient( _projectClient );
+      ps2->Release();
+    }
   }
   _toolName = MakePolyString( toolName );
   OutStr( "Registers MyTool, invoke it from the Tool menu to test." );
 }
 //.............................................................................
 ToolTestC::~ToolTestC() {
-   _projectClient->AddRef();
-   _projectServer->UnregisterProjectClient( _projectClient );
-   _projectClient->Release();
-   _projectClient = 0;
+  IProjectServer2 * ps2 = GET_INTERFACE( IProjectServer2 );
+  if ( ps2 ) {  // this interface not available on BCW versions < 5.01
+    _projectClient->AddRef();
+    ps2->UnregisterProjectSaveClient( _projectClient );
+    ps2->Release();
+  }
+  _projectClient->AddRef();
+  _projectServer->UnregisterProjectClient( _projectClient );
+  _projectClient->Release();
+  _projectClient = 0;
 
-   _toolInvoker->Release();
-   
+  _toolInvoker->Release();
 
   if ( _projectServer ) {
     _projectServer->Release();
@@ -91,12 +102,26 @@ void ProjectClient::OpenNotify( IPolyString * projectName ) {
   projectName->Release();
 }  
 //.............................................................................
-void ProjectClient::CloseNotify() {
+void ProjectClient::CloseNotify() {}
+//.............................................................................
+void ProjectClient::BeforeSaveNotify() {
+  //
+  // Yank the add-on tool before the project is saved, so it will not
+  // appear in the project if it is loaded when this add-on isn't installed.
+  //
   if ( _toolTest ) {
     _toolTest->UnregisterTool();
   }
 } 
-
+//.............................................................................
+void ProjectClient::AfterSaveNotify() {
+  //
+  // Now that the project has been saved, we must re-install the add-on tool.
+  //
+  if ( _toolTest ) {
+    _toolTest->RegisterTool();
+  }
+}
 //.............................................................................
 ToolReturn ToolInvoker::Execute( 
                 IPolyString * /* cmdLine */, 
@@ -107,4 +132,3 @@ ToolReturn ToolInvoker::Execute(
   return TR_Success;
   
 }                 
-

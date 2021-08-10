@@ -3,7 +3,7 @@
   toolsrvr.h
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.15  $
+  $Revision:   1.19  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __TOOLSRVR_H
@@ -32,7 +32,7 @@ class ToolTestA : public TestObject {
   IToolServer * _toolServer;
 }; 
 
-class ToolTestB : public TestObject {
+class ToolTestB : public TestObject, public IUnknownImp< IProjectSaveClient > {
  public:
   ToolTestB();
   virtual ~ToolTestB();
@@ -46,6 +46,10 @@ class ToolTestB : public TestObject {
   virtual const char * GetName();
   virtual const char * GetTestDescription( int testNum );
   virtual void DoTest( int testNum );
+  
+  //....... IProjectSaveClient ..........
+  virtual void BeforeSaveNotify();
+  virtual void AfterSaveNotify();
 
  protected:
   IToolServer  * _toolServer;

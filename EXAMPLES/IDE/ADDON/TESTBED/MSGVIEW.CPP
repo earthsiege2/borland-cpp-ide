@@ -3,7 +3,7 @@
   msgview.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.13  $
+  $Revision:   1.16  $
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 #ifndef __AOEXPCH_H
@@ -209,7 +209,7 @@ MonitorViewClient::QueryInterface (REFIID riid, LPVOID FAR* ppobj)
   if ((riid == IID_IUnknown)/* || (riid == IID_PUBLIC_)*/)
   {
     *ppobj = (LPVOID)this;
-    ((LPUNKNOWN)*ppobj)->AddRef();
+    AddRef();
    return NOERROR;
   }
 
@@ -291,13 +291,7 @@ void MonitorViewClient::ExecuteCommand(IPolyString* cmdStr)
 void MonitorViewClient::PropertyChangeNotify() {
 
 };
-/******************************************************************************
-*
-*
-* MonitorViewFactory
-*
-*
-******************************************************************************/
+/************************************************************************************************************************/
 
 MonitorViewFactory::MonitorViewFactory(IViewType* MonitorView) {
   m_RefCount = 1;
@@ -314,7 +308,7 @@ MonitorViewFactory::QueryInterface (REFIID riid, LPVOID FAR* ppobj)
   if ((riid == IID_IUnknown)/* || (riid == IID_PUBLIC_)*/)
   {
     *ppobj = (LPVOID)this;
-    ((LPUNKNOWN)*ppobj)->AddRef();
+    AddRef();
     return NOERROR;
   }
 
@@ -334,4 +328,3 @@ void MonitorViewFactory::InitializeProperty(IViewType* viewType) {
 
 
 //.............................................................................
-

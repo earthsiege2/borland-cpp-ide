@@ -41,11 +41,12 @@
  *  3D00    3DFF    Profile section
  *  3E00    3FFF    Status object
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef MAPITAGS_H
 #define MAPITAGS_H
+#pragma option -b
 
 /* Determine if a property is transmittable. */
 
@@ -123,7 +124,7 @@
 #define PR_RECIPIENT_REASSIGNMENT_PROHIBITED        PROP_TAG( PT_BOOLEAN,   0x002B)
 #define PR_REDIRECTION_HISTORY                      PROP_TAG( PT_BINARY,    0x002C)
 #define PR_RELATED_IPMS                             PROP_TAG( PT_BINARY,    0x002D)
-
+#define PR_ORIGINAL_SENSITIVITY                     PROP_TAG( PT_LONG,      0x002E)
 #define PR_LANGUAGES                                PROP_TAG( PT_TSTRING,   0x002F)
 #define PR_LANGUAGES_W                              PROP_TAG( PT_UNICODE,   0x002F)
 #define PR_LANGUAGES_A                              PROP_TAG( PT_STRING8,   0x002F)
@@ -276,6 +277,10 @@
 #define PR_TRANSPORT_MESSAGE_HEADERS_W              PROP_TAG(PT_UNICODE,    0x007D)
 #define PR_TRANSPORT_MESSAGE_HEADERS_A              PROP_TAG(PT_STRING8,    0x007D)
 
+#define PR_DELEGATION                               PROP_TAG(PT_BINARY,     0x007E)
+
+#define PR_TNEF_CORRELATION_KEY                     PROP_TAG(PT_BINARY,     0x007F)
+
 
 
 /*
@@ -305,6 +310,11 @@
 #define PR_ORIGINALLY_INTENDED_RECIP_ENTRYID        PROP_TAG( PT_BINARY,    0x1012)
 
 /*
+ *  Reserved 0x1100-0x1200
+ */
+
+
+/*
  *  Message recipient properties
  */
 
@@ -315,6 +325,7 @@
 #define PR_NDR_REASON_CODE                          PROP_TAG( PT_LONG,      0x0C04)
 #define PR_NDR_DIAG_CODE                            PROP_TAG( PT_LONG,      0x0C05)
 #define PR_NON_RECEIPT_NOTIFICATION_REQUESTED       PROP_TAG( PT_BOOLEAN,   0x0C06)
+#define PR_DELIVERY_POINT                           PROP_TAG( PT_LONG,      0x0C07)
 
 #define PR_ORIGINATOR_NON_DELIVERY_REPORT_REQUESTED PROP_TAG( PT_BOOLEAN,   0x0C08)
 #define PR_ORIGINATOR_REQUESTED_ALTERNATE_RECIPIENT PROP_TAG( PT_BINARY,    0x0C09)
@@ -542,7 +553,7 @@
 #define PR_COMMON_VIEWS_ENTRYID                     PROP_TAG( PT_BINARY,    0x35E6)
 #define PR_FINDER_ENTRYID                           PROP_TAG( PT_BINARY,    0x35E7)
 
-/* Proptags 35E8-35FF reserved for folders "guaranteed" by PR_VALID_FOLDER_MASK */
+/* Proptags 0x35E8-0x35FF reserved for folders "guaranteed" by PR_VALID_FOLDER_MASK */
 
 
 /*
@@ -557,14 +568,14 @@
 #define PR_DETAILS_TABLE                            PROP_TAG( PT_OBJECT,    0x3605)
 #define PR_SEARCH                                   PROP_TAG( PT_OBJECT,    0x3607)
 #define PR_SELECTABLE                               PROP_TAG( PT_BOOLEAN,   0x3609)
-#define PR_SUBFOLDERS                               PROP_TAG( PT_BOOLEAN,   0x360a)
-#define PR_STATUS                                   PROP_TAG( PT_LONG,      0x360b)
-#define PR_ANR                                      PROP_TAG( PT_TSTRING,   0x360c)
-#define PR_ANR_W                                    PROP_TAG( PT_UNICODE,   0x360c)
-#define PR_ANR_A                                    PROP_TAG( PT_STRING8,   0x360c)
-#define PR_CONTENTS_SORT_ORDER                      PROP_TAG( PT_MV_LONG,   0x360d)
-#define PR_CONTAINER_HIERARCHY                      PROP_TAG( PT_OBJECT,    0x360e)
-#define PR_CONTAINER_CONTENTS                       PROP_TAG( PT_OBJECT,    0x360f)
+#define PR_SUBFOLDERS                               PROP_TAG( PT_BOOLEAN,   0x360A)
+#define PR_STATUS                                   PROP_TAG( PT_LONG,      0x360B)
+#define PR_ANR                                      PROP_TAG( PT_TSTRING,   0x360C)
+#define PR_ANR_W                                    PROP_TAG( PT_UNICODE,   0x360C)
+#define PR_ANR_A                                    PROP_TAG( PT_STRING8,   0x360C)
+#define PR_CONTENTS_SORT_ORDER                      PROP_TAG( PT_MV_LONG,   0x360D)
+#define PR_CONTAINER_HIERARCHY                      PROP_TAG( PT_OBJECT,    0x360E)
+#define PR_CONTAINER_CONTENTS                       PROP_TAG( PT_OBJECT,    0x360F)
 #define PR_FOLDER_ASSOCIATED_CONTENTS               PROP_TAG( PT_OBJECT,    0x3610)
 #define PR_DEF_CREATE_DL                            PROP_TAG( PT_BINARY,    0x3611)
 #define PR_DEF_CREATE_MAILUSER                      PROP_TAG( PT_BINARY,    0x3612)
@@ -575,7 +586,8 @@
 #define PR_AB_PROVIDER_ID                           PROP_TAG( PT_BINARY,    0x3615)
 #define PR_DEFAULT_VIEW_ENTRYID                     PROP_TAG( PT_BINARY,    0x3616)
 #define PR_ASSOC_CONTENT_COUNT                      PROP_TAG( PT_LONG,      0x3617)
-/* Don't use 36FE and 36FF */
+
+/* Reserved 0x36C0-0x36FF */
 
 /*
  *  Attachment properties
@@ -604,6 +616,13 @@
 #define PR_ATTACH_TRANSPORT_NAME                    PROP_TAG( PT_TSTRING,   0x370C)
 #define PR_ATTACH_TRANSPORT_NAME_W                  PROP_TAG( PT_UNICODE,   0x370C)
 #define PR_ATTACH_TRANSPORT_NAME_A                  PROP_TAG( PT_STRING8,   0x370C)
+#define PR_ATTACH_LONG_PATHNAME                     PROP_TAG( PT_TSTRING,   0x370D)
+#define PR_ATTACH_LONG_PATHNAME_W                   PROP_TAG( PT_UNICODE,   0x370D)
+#define PR_ATTACH_LONG_PATHNAME_A                   PROP_TAG( PT_STRING8,   0x370D)
+#define PR_ATTACH_MIME_TAG                          PROP_TAG( PT_TSTRING,   0x370E)
+#define PR_ATTACH_MIME_TAG_W                        PROP_TAG( PT_UNICODE,   0x370E)
+#define PR_ATTACH_MIME_TAG_A                        PROP_TAG( PT_STRING8,   0x370E)
+#define PR_ATTACH_ADDITIONAL_INFO                   PROP_TAG( PT_BINARY,    0x370F)
 
 /*
  *  AB Object properties
@@ -613,10 +632,11 @@
 #define PR_TEMPLATEID                               PROP_TAG( PT_BINARY,    0x3902)
 #define PR_PRIMARY_CAPABILITY                       PROP_TAG( PT_BINARY,    0x3904)
 
+
 /*
  *  Mail user properties
  */
-
+#define PR_7BIT_DISPLAY_NAME                        PROP_TAG( PT_STRING8,   0x39FF)
 #define PR_ACCOUNT                                  PROP_TAG( PT_TSTRING,   0x3A00)
 #define PR_ACCOUNT_W                                PROP_TAG( PT_UNICODE,   0x3A00)
 #define PR_ACCOUNT_A                                PROP_TAG( PT_STRING8,   0x3A00)
@@ -732,21 +752,47 @@
 #define PR_COUNTRY                                  PROP_TAG( PT_TSTRING,   0x3A26)
 #define PR_COUNTRY_W                                PROP_TAG( PT_UNICODE,   0x3A26)
 #define PR_COUNTRY_A                                PROP_TAG( PT_STRING8,   0x3A26)
+#define PR_BUSINESS_ADDRESS_COUNTRY                 PR_COUNTRY
+#define PR_BUSINESS_ADDRESS_COUNTRY_W               PR_COUNTRY_W
+#define PR_BUSINESS_ADDRESS_COUNTRY_A               PR_COUNTRY_A
+
 #define PR_LOCALITY                                 PROP_TAG( PT_TSTRING,   0x3A27)
 #define PR_LOCALITY_W                               PROP_TAG( PT_UNICODE,   0x3A27)
 #define PR_LOCALITY_A                               PROP_TAG( PT_STRING8,   0x3A27)
+#define PR_BUSINESS_ADDRESS_CITY                    PR_LOCALITY
+#define PR_BUSINESS_ADDRESS_CITY_W                  PR_LOCALITY_W
+#define PR_BUSINESS_ADDRESS_CITY_A                  PR_LOCALITY_A
+
 #define PR_STATE_OR_PROVINCE                        PROP_TAG( PT_TSTRING,   0x3A28)
 #define PR_STATE_OR_PROVINCE_W                      PROP_TAG( PT_UNICODE,   0x3A28)
 #define PR_STATE_OR_PROVINCE_A                      PROP_TAG( PT_STRING8,   0x3A28)
+#define PR_BUSINESS_ADDRESS_STATE_OR_PROVINCE       PR_STATE_OR_PROVINCE
+#define PR_BUSINESS_ADDRESS_STATE_OR_PROVINCE_W     PR_STATE_OR_PROVINCE_W
+#define PR_BUSINESS_ADDRESS_STATE_OR_PROVINCE_A     PR_STATE_OR_PROVINCE_A
+
 #define PR_STREET_ADDRESS                           PROP_TAG( PT_TSTRING,   0x3A29)
 #define PR_STREET_ADDRESS_W                         PROP_TAG( PT_UNICODE,   0x3A29)
 #define PR_STREET_ADDRESS_A                         PROP_TAG( PT_STRING8,   0x3A29)
+#define PR_BUSINESS_ADDRESS_STREET                  PR_STREET_ADDRESS
+#define PR_BUSINESS_ADDRESS_STREET_W                PR_STREET_ADDRESS_W
+#define PR_BUSINESS_ADDRESS_STREET_A                PR_STREET_ADDRESS_A
+
 #define PR_POSTAL_CODE                              PROP_TAG( PT_TSTRING,   0x3A2A)
 #define PR_POSTAL_CODE_W                            PROP_TAG( PT_UNICODE,   0x3A2A)
 #define PR_POSTAL_CODE_A                            PROP_TAG( PT_STRING8,   0x3A2A)
+#define PR_BUSINESS_ADDRESS_POSTAL_CODE             PR_POSTAL_CODE
+#define PR_BUSINESS_ADDRESS_POSTAL_CODE_W           PR_POSTAL_CODE_W
+#define PR_BUSINESS_ADDRESS_POSTAL_CODE_A           PR_POSTAL_CODE_A
+
+
 #define PR_POST_OFFICE_BOX                          PROP_TAG( PT_TSTRING,   0x3A2B)
 #define PR_POST_OFFICE_BOX_W                        PROP_TAG( PT_UNICODE,   0x3A2B)
 #define PR_POST_OFFICE_BOX_A                        PROP_TAG( PT_STRING8,   0x3A2B)
+#define PR_BUSINESS_ADDRESS_POST_OFFICE_BOX         PR_POST_OFFICE_BOX
+#define PR_BUSINESS_ADDRESS_POST_OFFICE_BOX_W       PR_POST_OFFICE_BOX_W
+#define PR_BUSINESS_ADDRESS_POST_OFFICE_BOX_A       PR_POST_OFFICE_BOX_A
+
+
 #define PR_TELEX_NUMBER                             PROP_TAG( PT_TSTRING,   0x3A2C)
 #define PR_TELEX_NUMBER_W                           PROP_TAG( PT_UNICODE,   0x3A2C)
 #define PR_TELEX_NUMBER_A                           PROP_TAG( PT_STRING8,   0x3A2C)
@@ -764,6 +810,142 @@
 #define PR_ASSISTANT_A                              PROP_TAG( PT_STRING8,   0x3A30)
 #define PR_SEND_RICH_INFO                           PROP_TAG( PT_BOOLEAN,   0x3A40)
 
+#define PR_WEDDING_ANNIVERSARY                      PROP_TAG( PT_SYSTIME, 0x3A41)
+#define PR_BIRTHDAY                                 PROP_TAG( PT_SYSTIME, 0x3A42)
+
+
+#define PR_HOBBIES                                  PROP_TAG( PT_TSTRING, 0x3A43)
+#define PR_HOBBIES_W                                PROP_TAG( PT_UNICODE, 0x3A43)
+#define PR_HOBBIES_A                                PROP_TAG( PT_STRING8, 0x3A43)
+
+#define PR_MIDDLE_NAME                              PROP_TAG( PT_TSTRING, 0x3A44)
+#define PR_MIDDLE_NAME_W                            PROP_TAG( PT_UNICODE, 0x3A44)
+#define PR_MIDDLE_NAME_A                            PROP_TAG( PT_STRING8, 0x3A44)
+
+#define PR_DISPLAY_NAME_PREFIX                      PROP_TAG( PT_TSTRING, 0x3A45)
+#define PR_DISPLAY_NAME_PREFIX_W                    PROP_TAG( PT_UNICODE, 0x3A45)
+#define PR_DISPLAY_NAME_PREFIX_A                    PROP_TAG( PT_STRING8, 0x3A45)
+
+#define PR_PROFESSION                               PROP_TAG( PT_TSTRING, 0x3A46)
+#define PR_PROFESSION_W                             PROP_TAG( PT_UNICODE, 0x3A46)
+#define PR_PROFESSION_A                             PROP_TAG( PT_STRING8, 0x3A46)
+
+#define PR_PREFERRED_BY_NAME                        PROP_TAG( PT_TSTRING, 0x3A47)
+#define PR_PREFERRED_BY_NAME_W                      PROP_TAG( PT_UNICODE, 0x3A47)
+#define PR_PREFERRED_BY_NAME_A                      PROP_TAG( PT_STRING8, 0x3A47)
+
+#define PR_SPOUSE_NAME                              PROP_TAG( PT_TSTRING, 0x3A48)
+#define PR_SPOUSE_NAME_W                            PROP_TAG( PT_UNICODE, 0x3A48)
+#define PR_SPOUSE_NAME_A                            PROP_TAG( PT_STRING8, 0x3A48)
+
+#define PR_COMPUTER_NETWORK_NAME                    PROP_TAG( PT_TSTRING, 0x3A49)
+#define PR_COMPUTER_NETWORK_NAME_W                  PROP_TAG( PT_UNICODE, 0x3A49)
+#define PR_COMPUTER_NETWORK_NAME_A                  PROP_TAG( PT_STRING8, 0x3A49)
+
+#define PR_CUSTOMER_ID                              PROP_TAG( PT_TSTRING, 0x3A4A)
+#define PR_CUSTOMER_ID_W                            PROP_TAG( PT_UNICODE, 0x3A4A)
+#define PR_CUSTOMER_ID_A                            PROP_TAG( PT_STRING8, 0x3A4A)
+
+#define PR_TTYTDD_PHONE_NUMBER                      PROP_TAG( PT_TSTRING, 0x3A4B)
+#define PR_TTYTDD_PHONE_NUMBER_W                    PROP_TAG( PT_UNICODE, 0x3A4B)
+#define PR_TTYTDD_PHONE_NUMBER_A                    PROP_TAG( PT_STRING8, 0x3A4B)
+
+#define PR_FTP_SITE                                 PROP_TAG( PT_TSTRING, 0x3A4C)
+#define PR_FTP_SITE_W                               PROP_TAG( PT_UNICODE, 0x3A4C)
+#define PR_FTP_SITE_A                               PROP_TAG( PT_STRING8, 0x3A4C)
+
+#define PR_GENDER                                   PROP_TAG( PT_SHORT, 0x3A4D)
+
+#define PR_MANAGER_NAME                             PROP_TAG( PT_TSTRING, 0x3A4E)
+#define PR_MANAGER_NAME_W                           PROP_TAG( PT_UNICODE, 0x3A4E)
+#define PR_MANAGER_NAME_A                           PROP_TAG( PT_STRING8, 0x3A4E)
+
+#define PR_NICKNAME                                 PROP_TAG( PT_TSTRING, 0x3A4F)
+#define PR_NICKNAME_W                               PROP_TAG( PT_UNICODE, 0x3A4F)
+#define PR_NICKNAME_A                               PROP_TAG( PT_STRING8, 0x3A4F)
+
+#define PR_PERSONAL_HOME_PAGE                       PROP_TAG( PT_TSTRING, 0x3A50)
+#define PR_PERSONAL_HOME_PAGE_W                     PROP_TAG( PT_UNICODE, 0x3A50)
+#define PR_PERSONAL_HOME_PAGE_A                     PROP_TAG( PT_STRING8, 0x3A50)
+
+
+#define PR_BUSINESS_HOME_PAGE                       PROP_TAG( PT_TSTRING, 0x3A51)
+#define PR_BUSINESS_HOME_PAGE_W                     PROP_TAG( PT_UNICODE, 0x3A51)
+#define PR_BUSINESS_HOME_PAGE_A                     PROP_TAG( PT_STRING8, 0x3A51)
+
+#define PR_CONTACT_VERSION                          PROP_TAG( PT_CLSID, 0x3A52)
+#define PR_CONTACT_ENTRYIDS                         PROP_TAG( PT_MV_BINARY, 0x3A53)
+
+#define PR_CONTACT_ADDRTYPES                        PROP_TAG( PT_MV_TSTRING, 0x3A54)
+#define PR_CONTACT_ADDRTYPES_W                      PROP_TAG( PT_MV_UNICODE, 0x3A54)
+#define PR_CONTACT_ADDRTYPES_A                      PROP_TAG( PT_MV_STRING8, 0x3A54)
+
+#define PR_CONTACT_DEFAULT_ADDRESS_INDEX            PROP_TAG( PT_LONG, 0x3A55)
+
+#define PR_CONTACT_EMAIL_ADDRESSES                  PROP_TAG( PT_MV_TSTRING, 0x3A56)
+#define PR_CONTACT_EMAIL_ADDRESSES_W                PROP_TAG( PT_MV_UNICODE, 0x3A56)
+#define PR_CONTACT_EMAIL_ADDRESSES_A                PROP_TAG( PT_MV_STRING8, 0x3A56)
+
+
+#define PR_COMPANY_MAIN_PHONE_NUMBER                PROP_TAG( PT_TSTRING, 0x3A57)
+#define PR_COMPANY_MAIN_PHONE_NUMBER_W              PROP_TAG( PT_UNICODE, 0x3A57)
+#define PR_COMPANY_MAIN_PHONE_NUMBER_A              PROP_TAG( PT_STRING8, 0x3A57)
+
+#define PR_CHILDRENS_NAMES                          PROP_TAG( PT_MV_TSTRING, 0x3A58)
+#define PR_CHILDRENS_NAMES_W                        PROP_TAG( PT_MV_UNICODE, 0x3A58)
+#define PR_CHILDRENS_NAMES_A                        PROP_TAG( PT_MV_STRING8, 0x3A58)
+
+
+
+#define PR_HOME_ADDRESS_CITY                        PROP_TAG( PT_TSTRING, 0x3A59)
+#define PR_HOME_ADDRESS_CITY_W                      PROP_TAG( PT_UNICODE, 0x3A59)
+#define PR_HOME_ADDRESS_CITY_A                      PROP_TAG( PT_STRING8, 0x3A59)
+
+#define PR_HOME_ADDRESS_COUNTRY                     PROP_TAG( PT_TSTRING, 0x3A5A)
+#define PR_HOME_ADDRESS_COUNTRY_W                   PROP_TAG( PT_UNICODE, 0x3A5A)
+#define PR_HOME_ADDRESS_COUNTRY_A                   PROP_TAG( PT_STRING8, 0x3A5A)
+
+#define PR_HOME_ADDRESS_POSTAL_CODE                 PROP_TAG( PT_TSTRING, 0x3A5B)
+#define PR_HOME_ADDRESS_POSTAL_CODE_W               PROP_TAG( PT_UNICODE, 0x3A5B)
+#define PR_HOME_ADDRESS_POSTAL_CODE_A               PROP_TAG( PT_STRING8, 0x3A5B)
+
+#define PR_HOME_ADDRESS_STATE_OR_PROVINCE           PROP_TAG( PT_TSTRING, 0x3A5C)
+#define PR_HOME_ADDRESS_STATE_OR_PROVINCE_W         PROP_TAG( PT_UNICODE, 0x3A5C)
+#define PR_HOME_ADDRESS_STATE_OR_PROVINCE_A         PROP_TAG( PT_STRING8, 0x3A5C)
+
+#define PR_HOME_ADDRESS_STREET                      PROP_TAG( PT_TSTRING, 0x3A5D)
+#define PR_HOME_ADDRESS_STREET_W                    PROP_TAG( PT_UNICODE, 0x3A5D)
+#define PR_HOME_ADDRESS_STREET_A                    PROP_TAG( PT_STRING8, 0x3A5D)
+
+#define PR_HOME_ADDRESS_POST_OFFICE_BOX             PROP_TAG( PT_TSTRING, 0x3A5E)
+#define PR_HOME_ADDRESS_POST_OFFICE_BOX_W           PROP_TAG( PT_UNICODE, 0x3A5E)
+#define PR_HOME_ADDRESS_POST_OFFICE_BOX_A           PROP_TAG( PT_STRING8, 0x3A5E)
+
+#define PR_OTHER_ADDRESS_CITY                       PROP_TAG( PT_TSTRING, 0x3A5F)
+#define PR_OTHER_ADDRESS_CITY_W                     PROP_TAG( PT_UNICODE, 0x3A5F)
+#define PR_OTHER_ADDRESS_CITY_A                     PROP_TAG( PT_STRING8, 0x3A5F)
+
+#define PR_OTHER_ADDRESS_COUNTRY                    PROP_TAG( PT_TSTRING, 0x3A60)
+#define PR_OTHER_ADDRESS_COUNTRY_W                  PROP_TAG( PT_UNICODE, 0x3A60)
+#define PR_OTHER_ADDRESS_COUNTRY_A                  PROP_TAG( PT_STRING8, 0x3A60)
+
+#define PR_OTHER_ADDRESS_POSTAL_CODE                PROP_TAG( PT_TSTRING, 0x3A61)
+#define PR_OTHER_ADDRESS_POSTAL_CODE_W              PROP_TAG( PT_UNICODE, 0x3A61)
+#define PR_OTHER_ADDRESS_POSTAL_CODE_A              PROP_TAG( PT_STRING8, 0x3A61)
+
+#define PR_OTHER_ADDRESS_STATE_OR_PROVINCE          PROP_TAG( PT_TSTRING, 0x3A62)
+#define PR_OTHER_ADDRESS_STATE_OR_PROVINCE_W        PROP_TAG( PT_UNICODE, 0x3A62)
+#define PR_OTHER_ADDRESS_STATE_OR_PROVINCE_A        PROP_TAG( PT_STRING8, 0x3A62)
+
+#define PR_OTHER_ADDRESS_STREET                     PROP_TAG( PT_TSTRING, 0x3A63)
+#define PR_OTHER_ADDRESS_STREET_W                   PROP_TAG( PT_UNICODE, 0x3A63)
+#define PR_OTHER_ADDRESS_STREET_A                   PROP_TAG( PT_STRING8, 0x3A63)
+
+#define PR_OTHER_ADDRESS_POST_OFFICE_BOX            PROP_TAG( PT_TSTRING, 0x3A64)
+#define PR_OTHER_ADDRESS_POST_OFFICE_BOX_W          PROP_TAG( PT_UNICODE, 0x3A64)
+#define PR_OTHER_ADDRESS_POST_OFFICE_BOX_A          PROP_TAG( PT_STRING8, 0x3A64)
+
+
 /*
  *  Profile section properties
  */
@@ -776,6 +958,7 @@
 #define PR_AB_SEARCH_PATH                           PROP_TAG( PT_MV_BINARY, 0x3D05)
 #define PR_AB_DEFAULT_DIR                           PROP_TAG( PT_BINARY,    0x3D06)
 #define PR_AB_DEFAULT_PAB                           PROP_TAG( PT_BINARY,    0x3D07)
+
 #define PR_FILTERING_HOOKS                          PROP_TAG( PT_BINARY,    0x3D08)
 #define PR_SERVICE_NAME                             PROP_TAG( PT_TSTRING,   0x3D09)
 #define PR_SERVICE_NAME_W                           PROP_TAG( PT_UNICODE,   0x3D09)
@@ -847,4 +1030,5 @@
 #define PROP_ID_SECURE_MAX                          0x67FF
 
 
+#pragma option -b.
 #endif  /* MAPITAGS_H */

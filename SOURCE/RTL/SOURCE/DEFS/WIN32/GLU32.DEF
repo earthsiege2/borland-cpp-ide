@@ -19,6 +19,8 @@ EXPORTS
     gluErrorString
     gluErrorUnicodeStringEXT
     gluGetNurbsProperty
+    gluGetString
+    gluGetTessProperty
     gluLoadSamplingMatrices
     gluLookAt
     gluNewNurbsRenderer
@@ -42,6 +44,12 @@ EXPORTS
     gluQuadricTexture
     gluScaleImage
     gluSphere
+    gluTessBeginContour
+    gluTessBeginPolygon
     gluTessCallback
+    gluTessEndContour
+    gluTessEndPolygon
+    gluTessNormal
+    gluTessProperty
     gluTessVertex
     gluUnProject

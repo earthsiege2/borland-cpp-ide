@@ -137,10 +137,10 @@ class _DBAWARECLASS TDBMemo : public TDBControl {
     DECLARE_SOURCE( OnMouseUp,   TDBMemoMouse );
 
     // Event handlers
-    EVENT( OnClick,    TDBControl,  TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl,  TDragEvent );
-    EVENT( OnDragOver, TDBControl,  TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl,  TDragEvent );
+    DECLARE_DB_EVENT( OnClick,     TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop,  TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver,  TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,   TDragEvent );
     DECLARE_DB_EVENT( OnChange,    TNotifyEvent );
     DECLARE_DB_EVENT( OnDblClick,  TNotifyEvent );
     DECLARE_DB_EVENT( OnEnter,     TNotifyEvent );
@@ -162,10 +162,10 @@ class _DBAWARECLASS TDBMemo : public TDBControl {
 
 // Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBMemo )
-DEFINE_DB_PROP_TSTRINGS( TDBMemo, Lines )
-DEFINE_DB_PROP_STRING( TDBMemo, FontName );
-DEFINE_DB_PROP_STRING( TDBMemo, SelText );
+DEFINE_DB_PROP_DATAFIELD( TDBMemo, _TDBMemo )
+DEFINE_DB_PROP_TSTRINGS( TDBMemo, _TDBMemo, Lines )
+DEFINE_DB_PROP_STRING( TDBMemo, _TDBMemo, FontName );
+DEFINE_DB_PROP_STRING( TDBMemo, _TDBMemo, SelText );
 
 // Methods
 inline void TDBMemo::Clear()

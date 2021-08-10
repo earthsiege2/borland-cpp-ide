@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1992-1995 Microsoft Corporation
+Copyright (c) 1992-1996 Microsoft Corporation
 
 Module Name:
 
@@ -8,11 +8,11 @@ Module Name:
 
 Abstract:
 
-    Definitions for rpc proxy  stubs. 
+    Definitions for rpc proxy  stubs.
 
 Compiler switches:
 
-    -DREGISTER_PROXY_DLL 
+    -DREGISTER_PROXY_DLL
         Generates DllMain, DllRegisterServer, and DllUnregisterServer functions
         for automatically registering a proxy DLL.
 
@@ -22,7 +22,7 @@ Compiler switches:
     -DPROXY_CLSID_IS={0x6f11fe5c,0x2fc5,0x101b,{0x9e,0x45,0x00,0x00,0x0b,0x65,0xc7,0xef}}
         Specifies the value of the class ID to be used by the proxy DLL.
 
-    -DNT35_STRICT 
+    -DNT35_STRICT
         Specifies that the target platform is Windows NT 3.5. This switch disables
         the new functions added after the Windows NT 3.5 release.
 
@@ -31,14 +31,15 @@ Compiler switches:
 #ifndef __RPCPROXY_H__
 #define __RPCPROXY_H__
 #define __midl_proxy
+#pragma option -b
 
 #ifndef INC_OLE2
 #define INC_OLE2
 #endif
 
-#if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__)
+#if defined(WIN32) || defined(_MPPC_)
 
-//We need to define REFIID, REFCLSID and REFGUID here so that the
+//We need to define REFIID, REFCLSID, REFGUID, & REFFMTID here so that the
 //proxy code won't get the const GUID *const definition.
 #ifndef GUID_DEFINED
 #define GUID_DEFINED
@@ -62,6 +63,10 @@ typedef struct _GUID
     typedef CLSID *LPCLSID;
     #define CLSID_NULL          GUID_NULL
     #define IsEqualCLSID(rclsid1, rclsid2) IsEqualGUID(rclsid1, rclsid2)
+    typedef GUID FMTID;
+    typedef FMTID *LPFMTID;
+    #define FMTID_NULL          GUID_NULL
+    #define IsEqualFMTID(rfmtid1, rfmtid2) IsEqualGUID(rfmtid1, rfmtid2)
 
     #ifndef _REFGUID_DEFINED
         #define _REFGUID_DEFINED
@@ -77,6 +82,11 @@ typedef struct _GUID
         #define _REFCLSID_DEFINED
         typedef const CLSID *REFCLSID;
     #endif // !_REFCLSID_DEFINED
+
+    #ifndef _REFFMTID_DEFINED
+        #define _REFFMTID_DEFINED
+        typedef const FMTID *REFFMTID;
+    #endif // !_REFFMTID_DEFINED
 
 #endif // !__IID_DEFINED__
 
@@ -109,10 +119,18 @@ typedef struct tagProxyFileInfo
 // extended info with list of interface names
 typedef ProxyFileInfo ExtendedProxyFileInfo;
 
+#pragma option -b.
 #include <rpc.h>
+#pragma option -b
+#pragma option -b.
 #include <rpcndr.h>
+#pragma option -b
+#pragma option -b.
 #include <string.h>
+#pragma option -b
+#pragma option -b.
 #include <memory.h>
+#pragma option -b
 
 typedef struct tagCInterfaceProxyHeader
 {
@@ -125,11 +143,37 @@ typedef struct tagCInterfaceProxyHeader
     const IID *     piid;
 } CInterfaceProxyHeader;
 
+// Macro used for ANSI compatible stubs.
+
+#if defined(_MPPC_)
+#define CINTERFACE_PROXY_VTABLE( n )  \
+struct \
+{                                     \
+    CInterfaceProxyHeader header;     \
+    void * pDummyEntryForPowerMac;    \
+    void *Vtbl[ n ];                  \
+}
+#else
+#define CINTERFACE_PROXY_VTABLE( n )  \
+struct \
+{                                     \
+    CInterfaceProxyHeader header;     \
+    void *Vtbl[ n ];                  \
+}
+#endif
+
 #pragma warning( disable:4200 )
 typedef struct tagCInterfaceProxyVtbl
 {
     CInterfaceProxyHeader header;
+#if defined(_MPPC_)
+    void * pDummyEntryForPowerMac;
+#endif
+#if defined( _MSC_VER )
     void *Vtbl[];
+#else
+    void *Vtbl[1];
+#endif
 } CInterfaceProxyVtbl;
 #pragma warning( default:4200 )
 
@@ -174,7 +218,7 @@ typedef struct tagCStdPSFactoryBuffer
 void RPC_ENTRY
 NdrProxyInitialize(
     void *              This,
-    PRPC_MESSAGE        pRpcMsg, 
+    PRPC_MESSAGE        pRpcMsg,
     PMIDL_STUB_MESSAGE  pStubMsg,
     PMIDL_STUB_DESC     pStubDescriptor,
     unsigned int        ProcNum );
@@ -200,8 +244,8 @@ NdrProxyErrorHandler(
 
 void RPC_ENTRY
 NdrStubInitialize(
-    PRPC_MESSAGE        pRpcMsg, 
-    PMIDL_STUB_MESSAGE  pStubMsg, 
+    PRPC_MESSAGE        pRpcMsg,
+    PMIDL_STUB_MESSAGE  pStubMsg,
     PMIDL_STUB_DESC     pStubDescriptor,
     IRpcChannelBuffer * pRpcChannelBuffer);
 
@@ -214,7 +258,7 @@ void __RPC_STUB NdrStubForwardingFunction(
 void RPC_ENTRY
 NdrStubGetBuffer(
     IRpcStubBuffer *    This,
-    IRpcChannelBuffer * pRpcChannelBuffer, 
+    IRpcChannelBuffer * pRpcChannelBuffer,
     PMIDL_STUB_MESSAGE  pStubMsg);
 
 HRESULT RPC_ENTRY
@@ -223,8 +267,8 @@ NdrStubErrorHandler(
 
 HRESULT STDMETHODCALLTYPE
 CStdStubBuffer_QueryInterface(
-    IRpcStubBuffer *This, 
-    REFIID riid, 
+    IRpcStubBuffer *This,
+    REFIID riid,
     void **ppvObject);
 
 ULONG STDMETHODCALLTYPE
@@ -242,7 +286,7 @@ NdrCStdStubBuffer_Release(
 
 HRESULT STDMETHODCALLTYPE
 CStdStubBuffer_Connect(
-    IRpcStubBuffer *This, 
+    IRpcStubBuffer *This,
     IUnknown *pUnkServer);
 
 void STDMETHODCALLTYPE
@@ -266,7 +310,7 @@ CStdStubBuffer_CountRefs(
 
 HRESULT STDMETHODCALLTYPE
 CStdStubBuffer_DebugServerQueryInterface(
-    IRpcStubBuffer *This, 
+    IRpcStubBuffer *This,
     void **ppv);
 
 void STDMETHODCALLTYPE
@@ -274,6 +318,20 @@ CStdStubBuffer_DebugServerRelease(
     IRpcStubBuffer *This,
     void *pv);
 
+#if defined(_MPPC_)
+#define CStdStubBuffer_METHODS \
+    0,  /* a PowerMac dummy */  \
+    CStdStubBuffer_QueryInterface,\
+    CStdStubBuffer_AddRef, \
+    CStdStubBuffer_Release, \
+    CStdStubBuffer_Connect, \
+    CStdStubBuffer_Disconnect, \
+    CStdStubBuffer_Invoke, \
+    CStdStubBuffer_IsIIDSupported, \
+    CStdStubBuffer_CountRefs, \
+    CStdStubBuffer_DebugServerQueryInterface, \
+    CStdStubBuffer_DebugServerRelease
+#else
 #define CStdStubBuffer_METHODS \
     CStdStubBuffer_QueryInterface,\
     CStdStubBuffer_AddRef, \
@@ -285,6 +343,7 @@ CStdStubBuffer_DebugServerRelease(
     CStdStubBuffer_CountRefs, \
     CStdStubBuffer_DebugServerQueryInterface, \
     CStdStubBuffer_DebugServerRelease
+#endif
 
 //+-------------------------------------------------------------------------
 //
@@ -322,34 +381,34 @@ CStdStubBuffer_DebugServerRelease(
  * Proxy Dll APIs
  ****************************************************************************/
 
-HRESULT RPC_ENTRY 
+HRESULT RPC_ENTRY
 NdrDllGetClassObject (
     IN  REFCLSID                rclsid,
     IN  REFIID                  riid,
     OUT void **                 ppv,
-    IN const ProxyFileInfo **   pProxyFileList, 
+    IN const ProxyFileInfo **   pProxyFileList,
     IN const CLSID *            pclsid,
     IN CStdPSFactoryBuffer *    pPSFactoryBuffer);
 
-HRESULT RPC_ENTRY 
+HRESULT RPC_ENTRY
 NdrDllCanUnloadNow(
     IN CStdPSFactoryBuffer * pPSFactoryBuffer);
 
 /*************************************************************************
 The following new functions were added after the Windows NT 3.5 release.
-Programs intended to run on Windows NT 3.5 should define NT35_STRICT to 
+Programs intended to run on Windows NT 3.5 should define NT35_STRICT to
 ensure that no new functions are used.
 *************************************************************************/
 #ifndef NT35_STRICT
 
 HRESULT RPC_ENTRY NdrDllRegisterProxy(
     IN HMODULE                  hDll,
-    IN const ProxyFileInfo **   pProxyFileList, 
+    IN const ProxyFileInfo **   pProxyFileList,
     IN const CLSID *            pclsid);
 
 HRESULT RPC_ENTRY NdrDllUnregisterProxy(
     IN HMODULE                  hDll,
-    IN const ProxyFileInfo **   pProxyFileList, 
+    IN const ProxyFileInfo **   pProxyFileList,
     IN const CLSID *            pclsid);
 
 
@@ -378,7 +437,7 @@ HRESULT RPC_ENTRY NdrDllUnregisterProxy(
     HRESULT STDAPICALLTYPE DllUnregisterServer() \
     { \
         return NdrDllUnregisterProxy(hProxyDll, pProxyFileList, pClsID); \
-    }  
+    }
 
 //Delegation support.
 #define STUB_FORWARDING_FUNCTION        NdrStubForwardingFunction
@@ -434,7 +493,7 @@ End of new functions.
     const ProxyFileInfo  *  aProxyFileList[]    = {
 
 #define REFERENCE_PROXY_FILE(name)  \
-    & name##_ProxyFileInfo 
+    & name##_ProxyFileInfo
 
 #define PROXYFILE_LIST_END      \
     0 };
@@ -465,7 +524,7 @@ End of new functions.
     return NdrDllCanUnloadNow( pFactory );    \
     }
 
-   
+
 #define DLLDUMMYPURECALL    \
     void __cdecl _purecall(void)    \
         {   \
@@ -484,14 +543,14 @@ ULONG STDMETHODCALLTYPE CStdStubBuffer2_Release(IRpcStubBuffer *This) \
     return NdrCStdStubBuffer2_Release(This,(IPSFactoryBuffer *)pFactory);   \
     }
 #else
-#define CSTDSTUBBUFFER2RELEASE(pFactory)   
+#define CSTDSTUBBUFFER2RELEASE(pFactory)
 #endif //PROXY_DELEGATION
 
 
 #ifdef REGISTER_PROXY_DLL
 #define DLLREGISTRY_ROUTINES(pProxyFileList,pClsID ) REGISTER_PROXY_DLL_ROUTINES(pProxyFileList,pClsID )
 #else
-#define DLLREGISTRY_ROUTINES(pProxyFileList,pClsID )    
+#define DLLREGISTRY_ROUTINES(pProxyFileList,pClsID )
 #endif //REGISTER_PROXY_DLL
 
 
@@ -531,6 +590,7 @@ ULONG STDMETHODCALLTYPE CStdStubBuffer2_Release(IRpcStubBuffer *This) \
 //
 //--------------------------------------------------------------------------
 
-#endif // !defined(__RPC_DOS__) && !defined(__RPC_WIN16__)
+#endif // WIN32 or _MPPC_
 
+#pragma option -b.
 #endif // __RPCPROXY_H__

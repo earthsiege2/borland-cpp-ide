@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.1  $
+// $Revision:   2.2  $
 //
 // OleNew.cpp -- Remap global operator new to use the current Ole2 allocator
 //----------------------------------------------------------------------------

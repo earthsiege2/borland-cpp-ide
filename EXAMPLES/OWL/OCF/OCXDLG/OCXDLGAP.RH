@@ -1,18 +1,11 @@
 //----------------------------------------------------------------------------
-//  Project OcxDlg
-//  Borland International, Inc.
-//  Copyright © 1996. All Rights Reserved.
+// ObjectWindows
+// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
 //
-//  SUBSYSTEM:    OcxDlg Application
-//  FILE:         OcxDlgAp.h
-//  AUTHOR:       Chris McConn
+// $Revision:   10.7  $
 //
-//  OVERVIEW
-//  ~~~~~~~~
-//  Constant definitions for all resources defined in OcxDlgAp.rc.
-//
+// Sample illustrating the use of OCXes in dialogs 
 //----------------------------------------------------------------------------
-
 #if !defined(_OCXDLGAPP_RH) // Sentry use file only if it's not already included.
 #define _OCXDLGAPP_RH
 

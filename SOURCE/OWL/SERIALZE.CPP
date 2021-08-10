@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Implementation of classes TSerializer and TSerializeReceiver
 //----------------------------------------------------------------------------
@@ -14,6 +14,8 @@
 # include <owl/windowev.h>
 #endif
 #include <stdio.h>
+
+OWL_DIAGINFO;
 
 //
 // Breaks down the data into blocks and sends each block to the window via

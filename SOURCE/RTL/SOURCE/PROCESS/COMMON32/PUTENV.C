@@ -3,28 +3,33 @@
  *
  * function(s)
  *        putenv - adds string to current environment
+ *        wputenv - adds string to current environment
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
+#include <tchar.h>
 #include <_process.h>
+#include <_tchar.h>
 #include <string.h>
 #include <stdlib.h>
 
-extern int _RTLENTRY _EXPDATA envsize; /* number of env strings allocated */
-int _expandblock (void);
+extern int _RTLENTRY _EXPDATA _tenvsize; /* number of env strings allocated */
+int _texpandblock (void);
 
 /*-----------------------------------------------------------------------*
 
-Name            putenv - adds string to current environment
+Name            putenv, _wputenv - adds string to current environment
 
 Usage           int putenv(const char *envvar);
+                int _wputenv(const wchar_t *envvar);
 
 Prototype in    stdlib.h
 
@@ -52,45 +57,45 @@ Description     Define an environment string to be of the form:
 
 
 
-Return value    On success, putenv returns 0; on failure, -1
+Return value    On success, putenv and _wputenv  return 0; on failure, -1
 
 *------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC putenv( const char *nameP )
+int _RTLENTRY _EXPFUNC _tputenv( const _TCHAR *nameP )
 {
-    char  **envP;
+    _TCHAR  **envP;
     int   len, j;
-    char  *p;
+    _TCHAR  *p;
 
     /* Calculate length of the "NAME=" portion of the environment variable.
      */
-    if ((p = strchr(nameP,'=')) == NULL)
+    if ((p = _tcschr(nameP,_TEXT('='))) == NULL)
         return (-1);
-    len = (p - (char *)nameP) + 1;
+    len = (p - (_TCHAR *)nameP) + 1;
 
-    _lock_env();                    /* lock out other users of 'environ' */
+    _tlock_env();                    /* lock out other users of 'environ' */
 
     /* Search for this name.
      */
-    for (envP = environ; *envP != NULL; envP++)
-        if (strnicmp(*envP,nameP,len) == 0)
+    for (envP = _tenviron; *envP != NULL; envP++)
+        if (_tcsnicmp(*envP,nameP,len) == 0)
             break;
 
     if (*envP)      /* Name already exists in table */
     {
-        if (nameP[len] == '\0')
+        if (nameP[len] == _TEXT('\0'))
         {
             /* The value of the new string (the part to the right of the
              * '=') is blank.  Delete the existing string from the table.
              */
 
-            *envP = "";   /* place holder for the deleted string */
+            *envP = _TEXT("");   /* place holder for the deleted string */
         }
         else
         {
             /* Replace the string with the new string.
              */
-            *envP = (char *) nameP;
+            *envP = (_TCHAR *) nameP;
         }
     }
     else
@@ -101,14 +106,14 @@ int _RTLENTRY _EXPFUNC putenv( const char *nameP )
          */
 
         j = 4;
-        while (environ[envsize-j])
+        while (_tenviron[_tenvsize-j])
         {
             j--;
             if (j == 0)
             {
-                if (_expandblock() == 0)
+                if (_texpandblock() == 0)
                 {
-                    _unlock_env();
+                    _tunlock_env();
                     return (-1);
                 }
                 j = 4;
@@ -116,15 +121,15 @@ int _RTLENTRY _EXPFUNC putenv( const char *nameP )
         }
         /* Copy the string in the new spot
          */
-        environ[envsize-j] = (char *) nameP;
+        _tenviron[_tenvsize-j] = (_TCHAR *) nameP;
     }
 
     /* Inform the operating system about this environment string.
      */
 #ifdef __WIN32__
-    _setenv(nameP);
+    _tsetenv(nameP);
 #endif
 
-    _unlock_env();
+    _tunlock_env();
     return (0);
 }

@@ -42,7 +42,7 @@ class TLine : public TPoints {
       return Color;
     }
 
-    void SetPen(TColor& newColor, int penSize = 0);
+    void SetPen(const TColor& newColor, int penSize = 0);
     void SetPen(int penSize);
     friend bool GetPenSize(TWindow* parent, TLine& line);
     friend bool GetPenColor(TWindow* parent, TLine& line);
@@ -131,7 +131,7 @@ class _USERCLASS TDrawDocument : public TOleDocument {
       UndoAppend,
       UndoModify
     };
-                                         
+
     // OCServer changes begin
     TDrawDocument(TDocument* parent = 0);
     // OCServer changes end

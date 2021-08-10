@@ -7,12 +7,13 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1992, 1996 by Borland International
+ *      Copyright (c) 1992, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $        */
 
 #if !defined(__FLAT__)
 #if defined(__MEDIUM__) || defined(__LARGE__) || defined(__HUGE__)
@@ -37,4 +38,3 @@ string _FAR & string::append( const char _FAR *cp )
 }
 
 
-

@@ -2,19 +2,22 @@
  * filename - scantod.c
  *
  * function(s)
- *      __scantod  - converts a string to floating-point number
- *      __scanrslt - store conversion result
- *      _scan_init - initialize pointers to conversion routines
+ *      __scantod   - converts a string to floating-point number
+ *      __scanwtod  - converts a wide-character string to floating-point number
+ *      __scanrslt  - store conversion result
+ *      _scan_init  - initialize pointers to conversion routines
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
+#include <ntbc.h>
 #include <stdio.h>
 #include <_scanf.h>
 #include <ctype.h>
@@ -22,11 +25,14 @@
 #include <math.h>
 #include <stdlib.h>
 #include <_locale.h>
+#include <tchar.h>
+#include <_tchar.h>
+#include <winnls.h>
 
 /* Pointers to conversion functions.
  */
-extern void (*_scantodptr)();
-extern void (*_scanrsltptr)();
+extern void (*_scanttodptr)();
+extern void (*_scantrsltptr)();
 
 /*
   Internal RTL function to perform double/float truncations.
@@ -40,7 +46,7 @@ extern void (*_scanrsltptr)();
 
 /*--------------------------------------------------------------------------*
 
-Name            scantod - converts a string to floating-point number
+Name            scantod,scanwtod - converts a string to floating-point number
 
 Usage           void __scantod ( long double *valueP,
                                  int (* Get) (void *srceP),
@@ -148,7 +154,7 @@ static const extend INFM = {0x0000, 0x0000, 0x0000, 0x8000, 0xffff};
 static const extend NAN  = {0x0001, 0x0000, 0x0000, 0xC000, 0x7fff};
 static const extend NANM = {0x0001, 0x0000, 0x0000, 0xC000, 0xffff};
 
-static void __scantod (
+static void __scanttod (
                         long double *valueP,
                         int  (* Get) (void *srceP),
                         void (* UnGet) (int ch, void *srceP),
@@ -175,7 +181,8 @@ static void __scantod (
 	unsigned short  *fracw = (unsigned short *)&frac;
 	unsigned long   *fracl = (unsigned long  *)&frac;
 	long            tempq[2];
-	char            decimal_point_char = *_localeconvention.decimal_point;
+	_TCHAR          *decimalpoint = (_TCHAR*) _getLocaleNumericInfo(LOCALE_SDECIMAL);
+	_TCHAR          decimal_point_tchar = *decimalpoint; //*_localeconvention.decimal_point;
 
     /* Skip leading spaces on the input numeral.
      */
@@ -187,8 +194,12 @@ static void __scantod (
             status = -1;
             goto std_noResult;
         }
-        if ((ch & 0x80) != 0 || !isspace(ch))
-            break;
+#ifndef _UNICODE
+	if ((ch & 0x80) != 0 || !_istspace(ch))
+#else
+	if (!_istspace((int)ch))
+#endif
+	    break;
     }
 
     if (--width < 0)
@@ -196,9 +207,9 @@ static void __scantod (
 
     /* Is the numeral preceded by a sign ?
      */
-    if (ch == '+')
+    if (ch == _TEXT('+'))
         saw_sign = 1;
-    else if (ch == '-')
+    else if (ch == _TEXT('-'))
         sign = saw_sign = 1;
     else
         goto std_gotChar;
@@ -210,15 +221,15 @@ static void __scantod (
         ct ++;
         ch = Get (srceP);
 
-        /* Check for the special cases where +INF -INF +NAN -NAN 
+        /* Check for the special cases where +INF -INF +NAN -NAN
          * might be specified.
          */
 std_gotChar:
         if (FirstDigit == 1 && saw_sign != 0)
         {
-            if (ch == 'I')              /* Maybe we have +/-INF         */
+            if (ch == _TEXT('I'))       /* Maybe we have +/-INF         */
                 goto PossibleINF;
-            else if (ch == 'N')         /* Maybe we have +/-NAN         */
+            else if (ch == _TEXT('N'))  /* Maybe we have +/-NAN         */
                 goto PossibleNAN;
         }
 
@@ -226,7 +237,7 @@ std_gotChar:
 
         /* Watch for decimal points.
          */
-        if (ch == decimal_point_char )
+        if (ch == decimal_point_tchar )
         {
             if (decimals != 0x8000)     /* Seen a previous decimal point? */
                 break;                  /* If so, fraction is terminated */
@@ -234,11 +245,11 @@ std_gotChar:
             continue;
         }
 
-        if (ch < '0' || ch > '9')
-            break;              /* Non-numeric terminates fraction */
-        ch -= '0';              /* convert digit to equivalent number.  */
+        if (ch < _TEXT('0') || ch > _TEXT('9'))
+            break;                     /* Non-numeric terminates fraction */
+        ch -= _TEXT('0');              /* convert digit to equivalent number.  */
 
-        if (++digits <= 0)      /* Was it the first digit? */
+        if (++digits <= 0)             /* Was it the first digit? */
         {
             /* The first digit begins the fraction.  Leading
              * zeros are noted by setting digits -1, so that the
@@ -254,7 +265,7 @@ std_gotChar:
             {
                 digits = -1;            /* it is a leading zero */
                 if (decimals != 0x8000) /* has decimal point been seen ? */
-                    decimals--;         /* if yes, move it to the left. */  
+                    decimals--;         /* if yes, move it to the left. */
             }
             continue;
         }
@@ -291,7 +302,7 @@ std_gotChar:
         /* Arrive here when fraction is width-limited but valid.
          */
 std_fractionLimited:
-        ch = 'e';                   /* Behave as if exponent started. */
+        ch = _TEXT('e');                   /* Behave as if exponent started. */
         break;
     }
 
@@ -311,7 +322,7 @@ std_fractionLimited:
      * introduce it, then if found gather the short integer.
      */
     exponent = 0;
-    if (ch == 'e' || ch == 'E')
+    if (ch == _TEXT('e') || ch == _TEXT('E'))
     {
         int SignStage = 1;
 
@@ -324,17 +335,17 @@ std_fractionLimited:
             if (SignStage)
             {
                 SignStage = 0;
-                if (ch == '-')
+                if (ch == _TEXT('-'))
                 {
                     expSign = 1;
                     continue;
                 }
-                else if (ch == '+')
+                else if (ch == _TEXT('+'))
                     continue;
             }
-            if (ch < '0' || ch > '9')
+            if (ch < _TEXT('0') || ch > _TEXT('9'))
                 break;
-            if ((exponent = exponent * 10 + ch - '0') > 4932)
+            if ((exponent = exponent * 10 + ch - _TEXT('0')) > 4932)
                 ExpOflow = 1;
         }
     }
@@ -432,10 +443,10 @@ std_noResult:
                 Special case code to scan +INF -INF +NAN -NAN
   -------------------------------------------------------------------------
   One side effect here, if this ultimately isn't +INF -INF +NAN -NAN will be
-  that the apps input stream is now messed up because we needed to look 
+  that the apps input stream is now messed up because we needed to look
   ahead more than 1 character to recognize INF or NAN. The 'unget' functions
   are only guaranteed to be able to unget a maximum of one char. This means
-  on a worst case input like "+INX" there will be 3 characters we won't be 
+  on a worst case input like "+INX" there will be 3 characters we won't be
   able to push back on the stream successfully.  There's not much that can
   be done to prevent this.  The same kind of thing can happen when reading
   E format numbers, for example "1.234E+Q".  By the time the 'Q' is seen
@@ -444,11 +455,11 @@ std_noResult:
 PossibleINF:
     ct ++;
     ch = Get (srceP);
-    if (--width < 0 || ch != 'N')
+    if (--width < 0 || ch != _TEXT('N'))
         goto std_noDigitSeen;
     ct ++;
     ch = Get (srceP);
-    if (--width < 0 || ch != 'F')
+    if (--width < 0 || ch != _TEXT('F'))
         goto std_noDigitSeen;
     if (sign)
         frac = *(long double *)INFM;
@@ -459,11 +470,11 @@ PossibleINF:
 PossibleNAN:
     ct ++;
     ch = Get (srceP);
-    if (--width < 0 || ch != 'A')
+    if (--width < 0 || ch != _TEXT('A'))
         goto std_noDigitSeen;
     ct ++;
     ch = Get (srceP);
-    if (--width < 0 || ch != 'N')
+    if (--width < 0 || ch != _TEXT('N'))
         goto std_noDigitSeen;
     if (sign)
         frac = *(long double *)NANM;
@@ -474,7 +485,7 @@ PossibleNAN:
 
 /*--------------------------------------------------------------------------*
 
-Name            __scanrslt - Get conversion result
+Name            __scanrslt, __scanrsltw - Get conversion result
 
 Usage           void __scanrslt(longdouble *valueP,
                                 longdouble *rsltP,
@@ -492,7 +503,7 @@ Description     This function is used to store the result of a floating
 
 *---------------------------------------------------------------------------*/
 
-static  void __scanrslt(long double *valueP, void *rsltP, int rsltType)
+static  void __scanrsltt(long double *valueP, void *rsltP, int rsltType)
 {
         if (rsltType & isLong)
                 *(double *)rsltP = __ldtrunc(DBL, *valueP, HUGE_VAL);
@@ -504,7 +515,7 @@ static  void __scanrslt(long double *valueP, void *rsltP, int rsltType)
 
 /*--------------------------------------------------------------------------*
 
-Name            _scan_init - initialize pointers to _realcvt and _nextreal
+Name            _scan_init, _scan_initw - initialize pointers to _realcvt and _nextreal
 
 Usage           void _scan_init (void);
 
@@ -524,8 +535,8 @@ Return value    none
 
 *---------------------------------------------------------------------------*/
 
-void _RTLENTRY _scan_init (void)
+void _RTLENTRY _scan_initt (void)
 {
-    _scantodptr = __scantod;
-    _scanrsltptr = __scanrslt;
+    _scanttodptr = __scanttod;
+    _scantrsltptr = __scanrsltt;
 }

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.3  $
 //
 // Definition of container classes used and made available by OWL
 //----------------------------------------------------------------------------
@@ -16,6 +16,10 @@
 # include <classlib/arrays.h>
 #endif
 #include <limits.h>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
@@ -220,6 +224,10 @@ template <class T> class TCollection {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

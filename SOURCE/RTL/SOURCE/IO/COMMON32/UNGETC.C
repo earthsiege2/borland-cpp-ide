@@ -6,24 +6,29 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 #undef  ungetc                /* remove macro version */
 
 /*---------------------------------------------------------------------*
 
-Name            ungetc - pushes a character back into input stream
+Name            _ungettc used as ungetc and ungetwc
+                ungetc  - pushes a character back into input stream
+                ungetwc - pushes a wide character back into input stream
 
 Usage           #include <stdio.h>
                 int ungetc(int c, FILE *stream);
+                wint_t ungetwc(wint_t c, FILE *stream);
 
 Prototype in    stdio.h
 
@@ -31,7 +36,7 @@ Description     pushes the character c back onto the named input stream.
                 This character will be returned on the next call to getc
                 or fread for that stream.  One character may be pushed
                 back in all situations.  A second call to ungetc without
-                a call to getc will force the previous character to be
+                a call to getc may force the previous character to be
                 forgotten.  fseek erases all memory of a pushed-back
                 character.
 
@@ -40,22 +45,36 @@ Return value    returns the character c if it is successful.  A value of
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC ungetc( int c, FILE *fp )
+_TINT _RTLENTRY _EXPFUNC _ungettc( _TINT c, FILE *fp )
 {
     _lock_stream(fp);
 
-    if( c != EOF && fp->level >= 0)
+    if( c != _TEOF && fp->level >= 0)
     {
         fp->flags &= ~_F_EOF;                   /* clear EOF flag */
 
-        if( ++(fp->level) > 1 )                
-            --fp->curp;                         /* store in file buffer */
-        else
-            fp->curp = &fp->hold;               /* buf was empty, use hold */
-        *fp->curp = c;
+        /* If we are pointing to hold already, replace hold value */
+        if (fp->curp != (unsigned char*)&fp->hold)
+        {
+            /* We use hold if level was zero, otherwise the buffer */
+            if( (fp->level+=sizeof(_TCHAR)) > sizeof(_TCHAR) )
+            {
+                fp->curp -= sizeof(_TCHAR);     /* store in file buffer */
+                if (fp->curp < fp->buffer)      /* Did we fall off the edge */
+                {
+                  fp->curp += sizeof(_TCHAR);   /* Crawl back */
+                  fp->level -= sizeof(_TCHAR);
+                }
+            }
+            else
+            {
+                fp->curp = (unsigned char*)&fp->hold;/* buf was empty, use hold */
+            }
+        }
+        *(_TCHAR*)(fp->curp) = c;
     }
     else
-        c = EOF;            /* file not in input mode or EOF pushed back */
+        c = _TEOF;            /* file not in input mode or EOF pushed back */
 
     _unlock_stream(fp);
     return (c);

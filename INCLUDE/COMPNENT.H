@@ -1,9 +1,10 @@
-#ifndef __COMPNENT_H 
+#ifndef __COMPNENT_H
 #define __COMPNENT_H
+/* $Revision:   8.1  $ */
 
 /***************************************************************************
  *
- * compnent.h - #defines for all unfinished or broken components 
+ * compnent.h - #defines for all unfinished or broken components
  *
  * $Id: compnent.h,v 1.30 1995/09/11 22:42:35 lijewski Exp $
  *
@@ -26,7 +27,7 @@
  * rights of the Government regarding its use, reproduction and disclosure
  * are as set forth in Section 52.227-19 of the FARS Computer
  * Software-Restricted Rights clause.
- * 
+ *
  * Use, duplication, or disclosure by the Government is subject to
  * restrictions as set forth in subparagraph (c)(1)(ii) of the Rights in
  * Technical Data and Computer Software clause at DFARS 252.227-7013.

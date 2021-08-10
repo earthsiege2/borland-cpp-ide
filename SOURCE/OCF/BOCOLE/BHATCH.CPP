@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.6  $
+// $Revision:   2.7  $
 //
 // An implementation of the hatched border around inplace active windows.
 //

@@ -1,5 +1,6 @@
 #ifndef EXCHEXT_H
 #define EXCHEXT_H
+#pragma option -b
 
 
 /*
@@ -8,7 +9,7 @@
  *  Declarations of interfaces for providers of Microsoft Exchange
  *  client extensions.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 
@@ -17,7 +18,9 @@
 #endif
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 /*
@@ -46,6 +49,7 @@
 #define EECBGV_MSEXCHANGE_WIN31         (0x01010000)
 #define EECBGV_MSEXCHANGE_WIN95         (0x01020000)
 #define EECBGV_MSEXCHANGE_WINNT         (0x01030000)
+#define EECBGV_MSEXCHANGE_MAC           (0x01040000)
 #define EECBGV_VERSION_PRODUCT_MASK     (0xFF000000)
 #define EECBGV_VERSION_PLATFORM_MASK    (0x00FF0000)
 #define EECBGV_VERSION_MAJOR_MASK       (0x0000FF00)
@@ -582,6 +586,7 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,    0x1a);
 #define EECMDID_FileDelete                          21
 #define EECMDID_FileRename                          22
 #define EECMDID_FileProperties                      23
+#define EECMDID_FilePropertiesRecipients            24
 #define EECMDID_FileClose                           30
 #define EECMDID_FileExit                            32
 #define EECMDID_FileExitAndLogOff                   33
@@ -787,7 +792,10 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,    0x1a);
 #define EECMDID_HelpAbout               EECMDID_HelpAboutMicrosoftExchange
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif // EXCHEXT_H

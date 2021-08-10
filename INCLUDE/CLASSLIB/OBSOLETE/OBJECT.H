@@ -52,7 +52,7 @@ public:
         }
 
     virtual classType isA() const = 0;
-    virtual char _FAR *nameOf() const = 0;
+    virtual _TCHAR _FAR *nameOf() const = 0;
     virtual hashValueType hashValue() const = 0;
     virtual int isEqual( const Object _FAR & ) const = 0;
 
@@ -168,7 +168,7 @@ public:
         return errorClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Error";
         }

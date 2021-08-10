@@ -2,16 +2,17 @@
  * filename - mkdir.c
  *
  * function(s)
- *        mkdir - creates a directory
+ *        _mkdir - creates a directory
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #define INCL_ERROR_H
 #include <ntbc.h>
@@ -19,22 +20,26 @@
 #include <dir.h>
 #include <_io.h>
 #include <errno.h>
+#include <_tchar.h>
 
 /*-----------------------------------------------------------------------*
 
-Name            mkdir - creates a directory
+Name            _tmkdir used as _mkdir and _wmkdir
+                _mkdir   - creates a directory
+                _wmkdir - creates a directory
 
-Usage           int mkdir(const char *pathname);
+Usage           int _mkdir(const char *pathname);
+                int _wmkdir(const wchar_t *pathname);
 
 Related
-functions usage int rmdir(const char *pathname);
+functions usage int _trmdir(const _TCHAR *pathname);
 
 Prototype in    dir.h
 
-Description     mkdir takes the given pathname and creates a new
+Description     _tmkdir takes the given pathname and creates a new
                 directory with that name.
 
-                rmdir deletes the directory given by pathname. The
+                _trmdir deletes the directory given by pathname. The
                 directory named by pathname
 
                         must be empty
@@ -43,10 +48,10 @@ Description     mkdir takes the given pathname and creates a new
 
                         must not be the root directory
 
-Return value    mkdir returns the value 0 if the new directory was
+Return value    _tmkdir returns the value 0 if the new directory was
                 created.
 
-                rmdir returns 0 if the directory is successfully deleted.
+                _trmdir returns 0 if the directory is successfully deleted.
 
                 With either function, a return value of -1 indicates an error,
                 and errno is set to one of the following values:
@@ -56,9 +61,9 @@ Return value    mkdir returns the value 0 if the new directory was
 
 *------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC mkdir(const char *pathP)
+int _RTLENTRY _EXPFUNC _tmkdir(const _TCHAR *pathP)
 {
-    if (CreateDirectory((char *)pathP,NULL) != TRUE)
+    if (CreateDirectory(pathP,NULL) != TRUE)
         {
         if (GetLastError() == ERROR_ALREADY_EXISTS)
             return (__IOerror(EACCES));

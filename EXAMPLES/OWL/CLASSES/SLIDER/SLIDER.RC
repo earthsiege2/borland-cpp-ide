@@ -4,3 +4,4 @@
 //----------------------------------------------------------------------------
 #include <owl/owlapp.rc>         // default owl app icon
 #include <owl/slider.rc>
+#include <owl/except.rc>

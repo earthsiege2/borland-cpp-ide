@@ -102,7 +102,7 @@ TGdiDemoWindow::CmMoveToLineToDemo()
 void
 TGdiDemoWindow::CmFontDemo()
 {
-  TMDIChild* child = new TMDIChild(*this, "Font Window", new TFontWindow);;
+  TMDIChild* child = new TMDIChild(*this, "Font Window", new TFontWindow);
   child->SetIcon(GetApplication(), 101);
   child->Create();
 }

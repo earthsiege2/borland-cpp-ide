@@ -7,12 +7,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #if defined( _RTLDLL )
 #pragma option -zC_TEXTA
@@ -24,13 +25,13 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <math.h>
 #include <alloc.h>
 #include <io.h>
 #include <string.h>
 #include <fcntl.h>
 #include <dos.h>      
-#include <math.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <limits.h>
 #include <rtldata.h>
@@ -282,4 +283,3 @@ char * __set_c_locale( int category )
 
     return( ReturnPtr );
 }
-

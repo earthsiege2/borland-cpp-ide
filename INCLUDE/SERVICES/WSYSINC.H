@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.11  $
+//$Revision:   5.15  $
 //
 // Includes windowing system headers, with necessary macros defined
 //----------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 #if defined(BI_PLAT_MSW)
 # if defined(_INC_WINDOWS)
     //
-    // WINDOWS.H has already been included - Ensure that 
+    // WINDOWS.H has already been included - Ensure that
     // 1. STRICT is defined
     // 2. That the user did not request us to map BOOL to bool
     //
@@ -38,7 +38,7 @@
 #   define STRICT
 
     //
-    // Have WINDOWS.H use WBOOL as its 'int' alias instead of BOOL if 
+    // Have WINDOWS.H use WBOOL as its 'int' alias instead of BOOL if
     // 'BOOL to bool' mapping has been requested.
     //
 #   if defined(BI_UNIQUE_BOOL) && defined(BI_REDEFINE_BOOL)
@@ -52,7 +52,7 @@
 // Retrieve other Windows headers (before we proceed with BOOL-remapping)
 //
 
-// VER.H is currently mucking with definitions of UINT if LIB is not 
+// VER.H is currently mucking with definitions of UINT if LIB is not
 // defined.
 //
 # if defined(BI_PLAT_WIN16)
@@ -61,7 +61,7 @@
 #   endif
 #   include <ver.h>
 #   undef LIB
-# endif  
+# endif
 
 // Grab shell extension header
 //
@@ -83,7 +83,7 @@
 #   if !defined(LPCWSTR) && defined(BI_PLAT_WIN16)
       typedef const wchar_t far* LPCWSTR;
       typedef       wchar_t far* LPWSTR;
-#   endif  
+#   endif
 # endif
 
 
@@ -102,7 +102,7 @@
 // Map BOOL, TRUE and FALSE to bool, true and false respectively.
 //
 # if defined(BI_UNIQUE_BOOL) && defined(BI_REDEFINE_BOOL)
-#   undef  BOOL       
+#   undef  BOOL
 #   define BOOL bool
 #   undef  FALSE
 #   define FALSE false
@@ -133,7 +133,7 @@
     extern __cdecl HINSTANCE _hInstance;
 # else  // BI_PLAT_WIN32
     extern HINSTANCE _hInstance;
-# endif  
+# endif
 //
 // For OS/2, get os2.h
 //
@@ -152,6 +152,10 @@
 #else
   class far _ULARGE_INTEGER;
   class far _LARGE_INTEGER;
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //
@@ -179,5 +183,9 @@ class int64 {
     uint32 LowPart;
     int32  HighPart;
 };
+
+#if defined(BI_NAMESPACE)
+}       // namespace ClassLib
+#endif
 
 #endif  // CLASSLIB_WSYSINC_H

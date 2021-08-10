@@ -6,13 +6,15 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
+#include <stdio.h>
 #include <ctype.h>
 
 /*---------------------------------------------------------------------*
@@ -33,16 +35,17 @@ Return value    returns the converted value of c, on success, and nothing
 *---------------------------------------------------------------------*/
 
 int _RTLENTRYF _EXPFUNC tolower( int ch )
-  {
-  if( ch == -1 )  return( -1 );
+{
+    if( ch == EOF )
+        return( EOF );
 
-  if( isupper( (unsigned char)ch) )
+    if( isupper( (unsigned char)ch) )
     {
-    return( _tolower((unsigned char)ch) );
+        return( _tolower((unsigned char)ch) );
     }
-  else
+    else
     {
-    return( (unsigned char)ch );
+        return( (unsigned char)ch );
     }
-  }
-
+}
+

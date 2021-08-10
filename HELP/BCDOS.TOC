@@ -1,4 +1,5 @@
 :BASE bcdos.hlp
+0 Borland C++ DOS Reference
 1 DOS functions and global variables
 2 DOS-only functions = DOSOnlyFunctions
 2 DOS global variables = DOSGlobalVariables
@@ -7,5 +8,49 @@
 2 DOS interface routines = DOSInterfaceRoutines
 2 DOS memory routines = DOSMemoryRoutines
 2 Miscellaneous DOS routines = MiscellaneousDOSRoutines
+
+1 Programming with Overlays
+2 Overlays (VROOMM) for DOS = OverlaysVroommForDos
+2 How overlays work 
+3 About how overlays work = HowOverlaysWork
+3 Guidelines for using Borland C++ overlays effectively = GuidelinesForUsingBCPPOverlaysEffectively
+1 Requirements = Requirements
+1 Exception handling and overlays = ExceptionHandlingAndOverlays
+2 Using overlays 
+3 About using overlays = UsingOverlays
+3 Overlay example = OverlayExample
+2 Overlaid programs 
+3 About overlaid programs = OverlaidPrograms
+3 The far call requirement = TheFarCallRequirement
+3 Buffer size = BufferSize
+3 What not to overlay = WhatNotToOverlay
+3 Debugging overlays = DebuggingOverlays
+3 External routines in overlays = ExternalRoutinesInOverlays
+1 Swapping = Swapping
+
+1 DOS video functions
+2 Video functions = VideoFunctions
+2 Video modes = VideoModes
+2 Windows and viewports = WindowsAndViewports
+2 Programming in graphics mode 
+3 Intro to programming in graphics mode= ProgrammingInGraphicsMode
+3 Graphics System Control = GraphicsSystemControl
+3 More detail about initgraph = MoreDetailAboutInitgraph
+3 Drawing and filling = DrawingAndFilling
+3 Manipulating the screen and viewport = ManipulatingTheScreenAndViewport
+3 Text output in graphics mode = TextOutputInGraphicsMode
+3 Color control 
+4 About color control = ColorControl
+4 Pixels and palettes = PixelsAndPalettes
+4 Background and drawing color = BackgroundAndDrawingColor
+4 Color control on a CGA 
+5 About color control on a CGA = ColorControlOnACga
+5 CGA low resolution = CGALowResolution
+5 CGA high resolution = CGAHIGHRESOLUTION
+5 CGA palette routines = CGAPALETTEROUTINES
+1 Color control on the EGA and VGA = ColorControlOnTheEgaAndVga
+1 Error handling in graphics mode = ErrorHandlingInGraphicsMode
+1 State query = StateQuery
+
 1 Borland Graphics Interface (BGI)
 2 About the Borland Graphics Interface = DOSGraphicsRoutines

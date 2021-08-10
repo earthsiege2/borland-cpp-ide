@@ -3,7 +3,7 @@
   script.cpp
   Created: 10/28/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.15  $
+  $Revision:   1.18  $
   
   To try this out, make sure and put ssinit.spp and sstest.spp in your
   bc5\script directory. Then, pay attention to the "script" page in the 
@@ -24,7 +24,7 @@ ScriptTestA::ScriptTestA() {
   _scriptServer = GET_INTERFACE( IScriptServer ); 
   if ( _scriptServer ) {
     OutStr( "Scheduling script: ssinit.spp" );
-    _scriptServer->ScheduleScriptFile( MakePolyString( "ssinit.spp" ) );
+    _scriptServer->ScheduleScriptFile( MakePolyString( "ssinit" ) );
     _scriptServer->Release();
   }
   _scriptServer = NULL;
@@ -71,7 +71,7 @@ void ScriptTestA::DoTest( int testNum ) {
   }
   switch ( testNum ) {
     case 1: {
-      _scriptServer->RunScriptFile( MakePolyString( "sstest.spp" ) );
+      _scriptServer->RunScriptFile( MakePolyString( "sstest" ) );
       break;
     }
     case 2: {
@@ -87,7 +87,3 @@ void ScriptTestA::DoTest( int testNum ) {
     }
   }
 }
-
-
-
-

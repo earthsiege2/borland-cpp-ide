@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Definition of class TSplashWindow
 //----------------------------------------------------------------------------
@@ -13,7 +13,11 @@
 #include <owl/layoutwi.h>
 #endif
 
-// Generic definitions/compiler options (eg. alignment) preceeding the 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+// Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
 
@@ -64,6 +68,10 @@ class _OWLCLASS TSplashWindow : public TLayoutWindow {
     void          SetText(const char far* text);
     void          SetPercentDone(int percent);
 
+    // Overridden TWindow virtuals
+    //
+    virtual bool  Create();
+
   protected:
     void          SetupWindow();
     void          CleanupWindow();
@@ -92,9 +100,13 @@ class _OWLCLASS TSplashWindow : public TLayoutWindow {
   DECLARE_RESPONSE_TABLE(TSplashWindow);
 };
 
-// Generic definitions/compiler options (eg. alignment) following the 
+// Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -105,7 +117,7 @@ class _OWLCLASS TSplashWindow : public TLayoutWindow {
 //
 inline bool TSplashWindow::HasStyle(TStyle style) const
 {
-  return ToBool((GetStyle() & style) == style);
+  return ToBool((GetStyle() & style) == (uint)style);
 }
 
 //

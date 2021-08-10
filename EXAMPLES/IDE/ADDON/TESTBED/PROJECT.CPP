@@ -3,7 +3,7 @@
   project.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.15  $
+  $Revision:   1.18  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 
@@ -29,11 +29,11 @@ ProjectTestA::ProjectTestA() {
 ProjectTestA::~ProjectTestA() {
   if ( _projectClient ) {
     if ( _projectServer ) {
-    _projectClient->AddRef();
+      _projectClient->AddRef(); 
       _projectServer->UnregisterProjectClient( _projectClient );
     }
     _projectClient->Release();
-   _projectClient = 0;
+    _projectClient = 0;
   }
   if ( _projectServer ) {
     _projectServer->Release();
@@ -48,7 +48,7 @@ BOOL ProjectTestA::registerForEvents() {
     _projectClient = new ProjectClientImpl( this, _projectServer );
   }
   if ( _projectServer ) {
-   _projectClient->AddRef();
+    _projectClient->AddRef();
     _projectServer->RegisterProjectClient( _projectClient );
     return TRUE;
   }

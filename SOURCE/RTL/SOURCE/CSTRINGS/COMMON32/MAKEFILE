@@ -1,5 +1,5 @@
 #############################################################################
-#
+#                                                                           #
 # The make process relies on the creation of DLL and library response file  #
 # creation.  To control the location of object modules the following should #
 # be defined:                                                               #
@@ -14,6 +14,8 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
+# $Revision:   8.8  $                                                                #
+#                                                                           #
 #############################################################################
 
 #############################################################################
@@ -21,9 +23,12 @@
 #############################################################################
 OBJS =               \
         memchr.obj   \
+        wmemchr.obj  \
         memcpy.obj   \
+        wmemcpy.obj  \
         memmove.obj  \
         memset.obj   \
+        wmemset.obj  \
         qstpcpy.obj  \
         qstrcat.obj  \
         qstrchr.obj  \
@@ -61,7 +66,27 @@ OBJS =               \
         strtok.obj   \
         _stpcpy.obj  \
         wcslen.obj   \
-        wcscpy.obj
+        wcscpy.obj   \
+        wcscat.obj   \
+        wcschr.obj   \
+        wcscmp.obj   \
+        wcscspn.obj  \
+        wcsdup.obj   \
+        wcsncmp.obj  \
+        wcsncpy.obj  \
+        wcsnset.obj  \
+        wcspbrk.obj  \
+        wcsrchr.obj  \
+        wcsrev.obj   \
+        wcsset.obj   \
+        wcsspn.obj   \
+        wcsstr.obj   \
+        wcstok.obj   \
+        wcsncat.obj  \
+        wcspcpy.obj  \
+        wcsicmp.obj  \
+        wcsnicmp.obj
+
 
 !if $d(DLL)
     IMPOBJS =            \
@@ -78,4 +103,28 @@ OBJS =               \
 TASMCFG = 1        # Force tasm.cfg creation
 
 !include rules.mak
+
+CC = $(CC) -U_MBCS
+
+wcschr.obj : strchr.asm
+wcscmp.obj : strcmp.asm
+wcsncat.obj : strncat.asm
+wcsncmp.obj : strncmp.asm
+wcscspn.obj : strcspn.c
+
+wcsdup.obj : strdup.c
+wcsncpy.obj : strncpy.c
+wcsnset.obj : strnset.c
+wcspbrk.obj : strpbrk.c
+wcsrchr.obj : strrchr.c
+wcsrev.obj : strrev.c
+wcsset.obj : strset.c
+wcsspn.obj : strspn.c
+wcsstr.obj : strstr.c
+wcstok.obj : strtok.c
+wcsicmp.obj : stricmp.c
+wcsnicmp.obj : strnicmp.c
+WCSCSPN.obj : strcspn.C
+WCSICMP.obj : stricmp.C
+
 

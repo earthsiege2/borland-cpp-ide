@@ -1,0 +1,17 @@
+;------------------------------------------------
+;   Project Tdbclass
+;   Borland International
+;   Copyright © 1996. All Rights Reserved.
+;
+;   SUBSYSTEM:    tdbclass.exe Module Defintion File
+;   FILE:         tdbcls32.def
+;   AUTHOR:       
+;
+;------------------------------------------------
+
+NAME tdbclass
+
+DESCRIPTION 'TDB-Accass classes Application - Copyright © 1996. All Rights Reserved.'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE

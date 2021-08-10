@@ -1,13 +1,14 @@
 ;[]-----------------------------------------------------------------[]
-;|   STRNCAT.ASM -- appends one string to another                     |
+;|   STRNCAT.ASM -- appends one string to another                    |
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.4  $
 
         include RULES.ASI
 
@@ -23,9 +24,10 @@ Header@
 ;
 ;Prototype in   string.h
 ;
-;Description    strncat copies at most maxlen characters of source to the end
-;               of destin and then appends a null character. The maximum length
-;               of the resulting string is strlen(destin) + maxlen.
+;Description    strncat copies at most maxlen characters of source to the
+;               end of destin and then appends a null character. The maximum
+;               length of the resulting string is strlen(destin) + maxlen.
+;		This implementation has been optimized for the Pentium processor.
 ;
 ;Return value   pointer to destin
 ;
@@ -33,47 +35,68 @@ Header@
 
 Code_seg@
 
-Func@   strncat, _EXPFUNC, _RTLENTRYF, <pointer dest>, <pointer src>, <int maxlen>
+Func@	strncat, _EXPFUNC, _RTLENTRYF, <pointer dest>, <pointer src>, <int maxlen>
 
-        Link@   esi,edi
-        mov     edi,dest        ; get dest string
-        mov     edx,edi         ; save dest in edx
-        mov     ecx,-1
-        xor     al,al           ; search for null at end of source string
-        cld
-        repne   scasb           ; scan one character past null
-        lea     esi,[edi-1]     ; esi points to terminating null in dest
+	Link@   edi, ebx
+	mov     edi, dest	; get dest string
+	mov     ecx, -1
+	xor     al, al		; search for null at end of source string
+	cld
+	repne   scasb		; scan one character past null
+	mov     ecx, maxlen
+	lea     ebx, [edi-1]	; esi points to terminating null in dest
+	and     ecx, 3		; copy first three character
+	mov     edx, src	; get src string
+	jecxz   dwordcopy
 
-        mov     edi,src         ; get src string
-        mov     ecx,-1          ; figure out strlen(src)
-        repne   scasb
-        not     ecx             ; cx = strlen(src) + 1
-        sub     edi,ecx         ; point edi back to start of src
-        xchg    esi,edi         ; esi = src, edi = dest+strlen(dest)
+bytecopy:
+	mov	al, [edx]
+	mov	[ebx], al	; move one byte
+	test    al, al		; was it the end ?
+	jz	Exit
+	inc     edx
+	inc     ebx
+	dec     ecx
+	jnz     bytecopy
 
-        dec     ecx             ; don't count the null terminator
-        mov     eax,maxlen      ; get maxlen
-        cmp     ecx,eax         ; is strlen(src) <= maxlen?
-        jbe     do_copy         ; yes, use strlen as count
-        mov     ecx,eax         ; no, use maxlen as count
-do_copy:
-        mov     edx,ecx         ; save count
-        shr     ecx,1           ; calculate longword count
-        shr     ecx,1
-        cld
-        rep     movsd           ; copy longwords
-        mov     ecx,edx         ; get back count
-        and     ecx,3           ; calculate remainder byte count (0-3)
-        rep     movsb           ; copy remaining bytes
-        xor     al,al           ; store a null terminator
-        stosb
+dwordcopy:
+	mov     ecx, maxlen
+	shr     ecx, 2
+	jecxz   endstring
 
-        mov     eax, dest       ; return dest
-        Unlink@ esi,edi
-        Return@
+Again:
+	mov	al, [edx]
+	mov	[ebx], al	; move one byte
+	test	al, al		; was it the end ?
+	jz	Exit
+	mov	al, [edx + 1]
+	mov	[ebx + 1], al	; move one byte
+	test	al, al		; was it the end ?
+	jz	Exit
+	mov	al, [edx + 2]
+	mov	[ebx + 2], al	; first byte
+	test	al, al		; was it the end ?
+	jz	Exit
+	mov	al, [edx + 3]
+	add	edx, 4		; interleaved to allow pipelining
+	mov	[ebx + 3], al
+	add	ebx, 4
+	test	al, al		; was it the end
+	jz	Exit
+	dec	ecx
+	jnz	Again
+
+endstring:
+	mov	BYTE PTR [ebx], 0
+
+Exit:
+	mov	eax, dest	; return dest
+	Unlink@ edi, ebx
+	Return@
 
 EndFunc@ strncat
 
 Code_EndS@
 
-        end
+	end
+	

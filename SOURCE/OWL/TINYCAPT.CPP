@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.11  $
 //
 // Implementation of TTinyCaption
 //----------------------------------------------------------------------------
@@ -21,6 +21,8 @@
 #if !defined(WS_EX_TOOLWINDOW)
 # define WS_EX_TOOLWINDOW         0x00000080L
 #endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -193,10 +195,13 @@ TTinyCaption::DoNCHitTest(TPoint& screenPt, uint& evRes)
 //
 // We only need to paint the caption. Someone else will paint the borders
 //
-void
-TTinyCaption::EvNCPaint()
+#if defined(BI_PLAT_WIN32)
+void TTinyCaption::EvNCPaint(HRGN /*region*/)
+#else
+void TTinyCaption::EvNCPaint()
+#endif
 {
-  TWindow::EvNCPaint();  // Default border painting
+  DefaultProcessing();   // Default border painting
   DoNCPaint();           // Then our special caption painting
 }
 
@@ -518,8 +523,9 @@ TTinyCaption::DoSysCommand(uint cmdType, TPoint&)
 void
 TTinyCaption::PaintButton(TDC& dc, TRect& r, bool pressed)
 {
-//  dc.OWLFastWindowFrame(TBrush(TColor::SysWindowFrame), r, 1, 1);
-  dc.FrameRect(r, TBrush(TColor::SysWindowFrame));
+   TBrush winFrameBr(TColor::SysWindowFrame);
+//  dc.OWLFastWindowFrame(winFrameBr, r, 1, 1);
+  dc.FrameRect(r, winFrameBr);
 
   r.Inflate(-1,-1);
   dc.TextRect(r, TColor::Sys3dFace);
@@ -597,7 +603,8 @@ TTinyCaption::PaintSysBox(TDC& dc, TRect& boxRect, bool /*pressed*/)
 
   // Draw ventilator rectangle
   //
-  dc.FrameRect(ventRect, TBrush(TColor::SysBtnText));
+  TBrush btnTextBr(TColor::SysBtnText);
+  dc.FrameRect(ventRect, btnTextBr);
 
   // Draw white interior of ventilator
   //
@@ -759,8 +766,9 @@ TTinyCaption::PaintCaption(bool active)
 
   // Draw window-frame color line under caption
   //
+  TBrush winFrameBr(TColor::SysWindowFrame);
   dc.FrameRect(captRect.left, captRect.bottom-1, captRect.right, captRect.bottom,
-               TBrush(TColor::SysWindowFrame));
+               winFrameBr);
 }
 
 //

@@ -1,9 +1,27 @@
+/*++
+
+Copyright (c) 1992-1996  Microsoft Corporation
+
+Module Name:
+
+    wshatalk.h
+
+Abstract:
+
+	This is the header file for application using Windows Sockets for
+	Appletalk.
+
+Revision History:
+    10 Jul 1992     Initial Version
+
+--*/
 
 /* $Copyright: 1994$ */
 
 #ifndef _ATALKWSH_
 #define _ATALKWSH_
 #define __ATALKWSH_H
+#pragma option -b
 
 //
 //  All protocol types should be specified in the Decimal base
@@ -187,5 +205,6 @@ typedef struct _WSH_PAP_GET_SERVER_STATUS
 
 } WSH_PAP_GET_SERVER_STATUS, *PWSH_PAP_GET_SERVER_STATUS;
 
+#pragma option -b.
 #endif  // _ATALKWSH_
 

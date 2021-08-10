@@ -1,11 +1,6 @@
 @echo off
 if /%mk%/ == // set mk=make
 
-if exist ddeml\NUL  cd ddeml
-%mk% %1 %2 %3 %4
-if errorlevel 1 set err=1
-if exist ..\ddeml\NUL cd ..
-
 if exist dragdrop\NUL  cd dragdrop
 %mk% %1 %2 %3 %4
 if errorlevel 1 set err=1
@@ -40,11 +35,6 @@ if exist progman\NUL  cd progman
 %mk% %1 %2 %3 %4
 if errorlevel 1 set err=1
 if exist ..\progman\NUL cd ..
-
-if exist syscolor\NUL  cd syscolor
-%mk% %1 %2 %3 %4
-if errorlevel 1 set err=1
-if exist ..\syscolor\NUL cd ..
 
 if exist sysinfo\NUL  cd sysinfo
 %mk% %1 %2 %3 %4

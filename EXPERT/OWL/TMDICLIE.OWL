@@ -253,7 +253,7 @@ void [[TMDIClient]]::CmFileNew()
 ##--END-- <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-  // Associate ICON w/ this child window.
+  // Assign icons for this child window.
   //
   child->SetIcon(GetApplication(), IDI_DOC);
   child->SetIconSm(GetApplication(), IDI_DOC);
@@ -295,7 +295,7 @@ void [[TMDIClient]]::OpenFile(const char* fileName)
 ##--END-- TRUE
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-  // Associate ICON with this child window.
+  // Assign icons for this child window.
   //
   child->SetIcon(GetApplication(), IDI_DOC);
   child->SetIconSm(GetApplication(), IDI_DOC);

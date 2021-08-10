@@ -97,7 +97,7 @@ public:
         return priorityQueueClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "PriorityQueue";
         }

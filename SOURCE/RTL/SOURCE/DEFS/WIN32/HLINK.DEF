@@ -1,0 +1,29 @@
+LIBRARY HLINK
+EXPORTS
+
+    HlinkClone
+    HlinkCreateBrowseContext
+    HlinkCreateExtensionServices
+    HlinkCreateFromData
+    HlinkCreateFromMoniker
+    HlinkCreateFromString
+    HlinkCreateShortcut
+    HlinkCreateShortcutFromMoniker
+    HlinkCreateShortcutFromString
+    HlinkGetSpecialReference
+    HlinkGetValueFromParams
+    HlinkIsShortcut
+    HlinkNavigate
+    HlinkNavigateToStringReference
+    HlinkOnNavigate
+    HlinkParseDisplayName
+    HlinkQueryCreateFromData
+    HlinkResolveMonikerForData
+    HlinkResolveShortcut
+    HlinkResolveShortcutToMoniker
+    HlinkResolveShortcutToString
+    HlinkResolveStringForData
+    HlinkSetSpecialReference
+    HlinkTranslateURL
+    HlinkUpdateStackItem
+    OleSaveToStreamEx

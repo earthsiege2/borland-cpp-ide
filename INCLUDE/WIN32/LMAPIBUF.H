@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     lmapibuf.h
@@ -7,10 +9,6 @@ Module Name:
 Abstract:
 
     This file contains information about NetApiBuffer APIs.
-
-Author:
-
-    Dan Lafferty (Danl) 15-Mar-1991
 
 Environment:
 
@@ -21,21 +19,11 @@ Notes:
     You must include LMCONS.H before this file, since this file depends
     on values defined in LMCONS.H.
 
-Revision History:
-
-    15-Mar-1991  Danl
-        Attached NT-style header
-    03-Dec-1991  JohnRo
-        Added public NetApiBufferAllocate, NetApiBufferReallocate, and
-        NetApiBufferSize APIs.
-
 --*/
-
-/* $Copyright: 1994$ */
 
 #ifndef _LMAPIBUF_
 #define _LMAPIBUF_
-#define __LMAPIBUF_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -83,5 +71,7 @@ NetapipBufferAllocate (                 // Internal Function
 #ifdef __cplusplus
 }
 #endif
+
+#pragma option -b.
 
 #endif // _LMAPIBUF_

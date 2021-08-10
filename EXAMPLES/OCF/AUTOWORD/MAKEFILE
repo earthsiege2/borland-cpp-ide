@@ -1,0 +1,21 @@
+#-----------------------------------------------------------------------------
+# MAKEFILE for ObjectWindows Libraries
+# Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+#
+# $Revision:   2.2  $
+#
+# MAKEFILE: Builds simple Automation Controller which drives WINWORD
+#-----------------------------------------------------------------------------
+# Going 'flat' makes the controller stand-alone - so it'll be the default
+#
+SYSTEMS = WIN32
+MODELS  = fdt
+
+!if !$d(MODEL)
+MODEL=f
+!endif
+
+EXE   = drvword
+OBJEXE= drvword.obj wb70en32.obj
+
+!include $(BCEXAMPLEDIR)\ocfmake.gen

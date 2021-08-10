@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.8  $
 //
 // Provides the main entry point function for the DLL version of the class
 // libraries
@@ -10,6 +10,7 @@
 #include <classlib/pch.h>
 #include <classlib/defs.h>
 #include <services/wsysinc.h>
+#include <tchar.h>
 
 #if defined(BI_PLAT_WIN32)
 
@@ -27,7 +28,7 @@ extern "C" int FAR PASCAL LibMain(HINSTANCE, WORD, WORD, LPSTR)
 
 #elif defined(BI_PLAT_OS2)
 
-int main()
+int _tmain()
 {
     return 0;
 }

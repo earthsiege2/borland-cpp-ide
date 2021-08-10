@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // SOUND.SPP: Sound Enabler. Plays WAV files on specified IDE events, such
 //   as Build Failure.
@@ -11,7 +11,7 @@
 //
 // NOTES: All sound.* files must reside in the same directory.
 //--------------------------------------------------------------------------
-print "sound.spp";
+print typeid(module());
 
 //
 // IDE imports.
@@ -24,8 +24,8 @@ import debugger;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
-if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+if (!scriptEngine.IsLoaded("file")) scriptEngine.Load("file");
+if (!scriptEngine.IsLoaded("misc")) scriptEngine.Load("misc");
 
 //
 // Configuration values.
@@ -38,7 +38,7 @@ DebugeeStoppedWAV;
 ExitingWAV;
 StartedWAV;
 
-CFGFile = GetModuleDir("sound.spp") + "\\sound.cfg";  // The config file.
+CFGFile = GetModuleDir(typeid(module())) + "\\sound.cfg";  // The config file.
 
 sound()
 {

@@ -8,6 +8,7 @@ produced by Borland Resource Workshop
 
 *****************************************************************************/
 
+#include <owl\except.rc>
 #include "drawedge.rh"
 IDD_DRAWEDGE DIALOG 9, 23, 173, 146
 STYLE WS_CHILD | WS_VISIBLE | WS_BORDER

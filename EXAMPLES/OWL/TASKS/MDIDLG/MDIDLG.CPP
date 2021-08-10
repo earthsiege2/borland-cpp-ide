@@ -25,7 +25,7 @@ TMdiDialog::TMdiDialog(TWindow* parent, TResId resId)
 {
   Name = new TEdit(this, IDC_NAME);
   Name->SetValidator(new TFilterValidator("A-Za-z. "));
-  Phone = new TEdit(this, IDC_PHONE);
+  Phone = new TEdit(this, IDC_PHONE, 14);
   Phone->SetValidator(new TPXPictureValidator("[(###)]###-####", true));
   Number = new TEdit(this, IDC_NUMBER);
   Number->SetValidator(new TRangeValidator(1, 999));

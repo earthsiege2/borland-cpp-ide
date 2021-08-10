@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.5  $
+//$Revision:   5.8  $
 //
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_FILE_H)
@@ -19,6 +19,9 @@
 #endif
 #if defined(BI_HAS_HREADWRITE) && !defined(SERVICES_WSYSINC_H)
 # include <services/wsysinc.h>
+#endif
+#if !defined (__TCHAR_H)
+# include <tchar.h>
 #endif
 
 #if !defined(__STDLIB_H) && !defined(_INC_STDLIB)
@@ -51,6 +54,10 @@
 # pragma option -po-
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 class _BIDSCLASS TFileName;
 
 //
@@ -62,10 +69,19 @@ struct TFileStatus {
     TTime accessTime;
     long  size;
     uint8 attribute;
-    char  fullName[_MAX_PATH];
+    _TCHAR  fullName[_MAX_PATH];
 };
 
+#if defined(BI_NAMESPACE)
+}       // namespace ClassLib
+#endif
+
 class _EXPCLASS ostream;
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 ostream _BIDSFAR & _BIDSFUNC operator << (ostream _BIDSFAR&, const TFileStatus _BIDSFAR&);
 
 //
@@ -129,12 +145,12 @@ class _BIDSCLASS TFile {
     TFile();
     TFile(int handle);
     TFile(const TFile _BIDSFAR& file);
-    TFile(const char _BIDSFAR* name,
+    TFile(const _TCHAR _BIDSFAR* name,
           uint16 access = ReadOnly,
           uint16 permission = PermRdWr);
    ~TFile();
 
-    int  Open(const char _BIDSFAR* name, uint16 access, uint16 permission);
+    int  Open(const _TCHAR _BIDSFAR* name, uint16 access, uint16 permission);
     int  Close();
 
     int  GetHandle() const;
@@ -161,10 +177,10 @@ class _BIDSCLASS TFile {
     void LockRange(long position, uint32 count);
     void UnlockRange(long Position, uint32 count);
 
-    static int GetStatus(const char _BIDSFAR* name, TFileStatus _BIDSFAR& status);
-    static int SetStatus(const char _BIDSFAR* name, const TFileStatus _BIDSFAR& status);
-    static void Remove(const char _BIDSFAR* name);
-    static void Rename(const char _BIDSFAR* oldName, const char _BIDSFAR* newName);
+    static int GetStatus(const _TCHAR _BIDSFAR* name, TFileStatus _BIDSFAR& status);
+    static int SetStatus(const _TCHAR _BIDSFAR* name, const TFileStatus _BIDSFAR& status);
+    static void Remove(const _TCHAR _BIDSFAR* name);
+    static void Rename(const _TCHAR _BIDSFAR* oldName, const _TCHAR _BIDSFAR* newName);
 
   private:
     int Handle;         // Low-level C file handle
@@ -188,7 +204,7 @@ inline TFile::TFile(const TFile& file) : ShouldClose(1)
   Handle = ::dup(file.Handle);
 }
 
-inline TFile::TFile(const char* name, uint16 access, uint16 permission) :
+inline TFile::TFile(const _TCHAR* name, uint16 access, uint16 permission) :
   Handle(FileNull),
   ShouldClose(1)
 {
@@ -279,14 +295,14 @@ inline void TFile::UnlockRange(long position, uint32 count)
 #endif
 }
 
-inline void TFile::Remove(const char* name)
+inline void TFile::Remove(const _TCHAR* name)
 {
-  ::remove(name);
+  ::_tremove(name);
 }
 
-inline void TFile::Rename(const char* oldName, const char* newName)
+inline void TFile::Rename(const _TCHAR* oldName, const _TCHAR* newName)
 {
-  ::rename(oldName, newName);
+  ::_trename(oldName, newName);
 }
 
 #if defined(BI_HAS_HREADWRITE)
@@ -299,6 +315,10 @@ inline long TFile::Write(const void __huge* Buffer, long NumBytes)
 {
   return _hwrite(Handle, Buffer, NumBytes);
 }
+#endif
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
 #endif
 
 #if defined(BI_CLASSLIB_NO_po)

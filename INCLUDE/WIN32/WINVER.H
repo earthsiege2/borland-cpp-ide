@@ -6,12 +6,13 @@
 *               designed to allow version stamping of Windows executable files*
 *               and of special .VER files for DOS executable files.           *
 *                                                                             *
-*               Copyright (c) 1993, Microsoft Corp.  All rights reserved      *
+*          Copyright (c) 1993-1996, Microsoft Corp.  All rights reserved      *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef VER_H
 #define VER_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -292,4 +293,5 @@ VerQueryValueW(
 }
 #endif
 
+#pragma option -b.
 #endif  /* !VER_H */

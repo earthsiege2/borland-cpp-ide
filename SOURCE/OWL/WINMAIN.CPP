@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.8  $
 //
 // Implementation of WinMain for user exes
 //----------------------------------------------------------------------------
@@ -14,7 +14,8 @@
 # include <winsys/lclstrng.h>
 #endif
 
-DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMain, true, 0);
+OWL_DIAGINFO;
+DIAG_DECLARE_GROUP(OwlMain);
 
 //
 // Default WinMain calls OwlMain, after setting params into TApplication

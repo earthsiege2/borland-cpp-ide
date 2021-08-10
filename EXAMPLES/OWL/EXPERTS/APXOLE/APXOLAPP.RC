@@ -5,7 +5,7 @@
 //
 //  SUBSYSTEM:  ApxOle Application
 //  FILE:     apxolapp.rc
-//  AUTHOR:     
+//  AUTHOR:
 //
 //  OVERVIEW
 //  ~~~~~~~~
@@ -103,6 +103,15 @@ BEGIN
   VK_DELETE, CM_EDITCLEAR, VIRTKEY, CONTROL
   VK_BACK,   CM_EDITUNDO, VIRTKEY, ALT
   VK_F3,     CM_EDITFINDNEXT, VIRTKEY
+END
+
+
+// Accelerator table for Print Preview window.
+//
+IDM_PRINTPREVIEW ACCELERATORS
+BEGIN
+  VK_ESCAPE, APX_PPR_DONE, VIRTKEY
+  "c",       APX_PPR_DONE, ALT
 END
 
 
@@ -540,7 +549,7 @@ END
 // Slider thumb bitmaps for TSlider and TVSlider (include/owl/slider.rc)
 //
 IDB_HSLIDERTHUMB BITMAP "hslider.bmp"
-IDB_VSLIDERTHUMB BITMAP "hslider.bmp"
+IDB_VSLIDERTHUMB BITMAP "vslider.bmp"
 
 // Version info.
 //

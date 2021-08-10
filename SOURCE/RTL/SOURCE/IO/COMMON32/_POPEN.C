@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <_io.h>
 #include <io.h>
@@ -23,17 +24,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <_tchar.h>
 
 /*-----------------------------------------------------------------------*
 
-Name            _popen - create a pipe and executes a command
+Name            _tpopen used as _popen and _wpopen
+                _popen  - create a pipe and executes a command
+                _wpopen - create a pipe and executes a command
 
 Usage           #include <process.h>
                 FILE *_popen(char *command, char *mode);
+                FILE *_wpopen(wchar_t *command, wchar_t *mode);
 
 Prototype in    stdio.h
 
-Description     _popen creates a pipe and executes asynchronously a child
+Description     _tpopen creates a pipe and executes asynchronously a child
                 copy of the command processor with the passed parameter
                 string command. The mode parameter specifies the requested
                 access.
@@ -47,8 +52,8 @@ Description     _popen creates a pipe and executes asynchronously a child
 
                 The terminating "t" or "b" is optional; if missing,
                 the default translation mode (_fmode) is used.
-                
-Return value    On successful completion, _popen returns pointer to
+
+Return value    On successful completion, _tpopen returns pointer to
                 a FILE. Otherwise it returns NULL.
 
 *------------------------------------------------------------------------*/
@@ -56,22 +61,22 @@ Return value    On successful completion, _popen returns pointer to
 #define  STDOUT 1
 #define  STDIN  0
 
-FILE * _RTLENTRY _EXPFUNC _popen (const char *command, const char *mode)
+FILE * _RTLENTRY _EXPFUNC _tpopen (const _TCHAR *command, const _TCHAR *mode)
 {
-    int stdfile, oldstdio, parentpipe, childpipe, textmode, pid, usepath;
-    int hpipe[2];
-    char *argv[4];
-    char *comspec;
+    int     stdfile, oldstdio, parentpipe, childpipe, textmode, pid, usepath;
+    int     hpipe[2];
+    _TCHAR *argv [4];
+    _TCHAR *comspec;
 
     /* Set up file handle numbers depending on whether this is a read or write.
      */
-    if (mode[0] == 'w')
+    if (mode[0] == _TEXT('w'))
     {
         stdfile = STDIN;
         parentpipe = 1;
         childpipe = 0;
     }
-    else if (mode[0] == 'r')
+    else if (mode[0] == _TEXT('r'))
     {
         stdfile = STDOUT;
         parentpipe = 0;
@@ -84,9 +89,9 @@ FILE * _RTLENTRY _EXPFUNC _popen (const char *command, const char *mode)
      * If the mode string contains a 'b', use binary.  If it contains
      * a 't', use text.  If it contains neither, use _fmode.
      */
-    if (strchr(mode,'b') != NULL)
+    if (_tcschr(mode,_TEXT('b')) != NULL)
         textmode = O_BINARY;
-    else if (strchr(mode,'t') != NULL)
+    else if (_tcschr(mode,_TEXT('t')) != NULL)
         textmode = O_TEXT;
     else
         textmode = _FMODE & (O_TEXT | O_BINARY);
@@ -129,9 +134,9 @@ FILE * _RTLENTRY _EXPFUNC _popen (const char *command, const char *mode)
     /* Get the name of the command processor from COMSPEC environment
      * variable.  If not defined, search the path for cmd.exe.
      */
-    if ((comspec = getenv("COMSPEC")) == NULL)
+    if ((comspec = _tgetenv(_TEXT("COMSPEC"))) == NULL)
     {
-        comspec = "cmd.exe";
+        comspec = _TEXT("cmd.exe");
         usepath = 1;
     }
     else
@@ -141,11 +146,11 @@ FILE * _RTLENTRY _EXPFUNC _popen (const char *command, const char *mode)
      * Save its process ID so that _pclose can wait for its completion.
      */
     argv[0] = comspec;
-    argv[1] = "/c";
-    argv[2] = (char *)command;
+    argv[1] = _TEXT("/c");
+    argv[2] = (_TCHAR *)command;
     argv[3] = NULL;
-    if ((pid = _LoadProg(P_NOWAIT, comspec, (const char * const *)argv,
-                         NULL, usepath)) == -1)
+    if ((pid = _tLoadProg(P_NOWAIT, comspec, (const _TCHAR * const *)argv,
+                          NULL, usepath)) == -1)
         goto error;
 
     /* Restore the standard I/O file we temporarily changed, then
@@ -155,7 +160,7 @@ FILE * _RTLENTRY _EXPFUNC _popen (const char *command, const char *mode)
         goto error;
     __close(oldstdio);
     _pidtab[hpipe[parentpipe]] = pid;
-    return (fdopen(hpipe[parentpipe], (char *)mode));
+    return (_tfdopen(hpipe[parentpipe], (_TCHAR *)mode));
 
     /* Come here for error handling.  Close both pipe handles, and
      * restore the standard input/output handle to its original state.
@@ -184,7 +189,7 @@ Prototype in    stdio.h
 Description     _pclose closes a pipe stream created by a previous call
                 to _popen.  It closes the pipe stream and waits for the
                 child command to complete.
-                
+
 Return value    If successful, _pclose returns the termination status of
                 the child command.  This is the same value as the
                 termination status returned by cwait(), except that
@@ -192,6 +197,8 @@ Return value    If successful, _pclose returns the termination status of
                 If _pclose is unsuccessful, it returns -1.
 
 *------------------------------------------------------------------------*/
+
+#ifndef _UNICODE
 
 int _pclose (FILE *stream)
 {
@@ -216,3 +223,5 @@ int _pclose (FILE *stream)
         return (-1);
     return (((termstat >> 8) & 0xff) | ((termstat << 8) & 0xff00));
 }
+
+#endif // _UNICODE

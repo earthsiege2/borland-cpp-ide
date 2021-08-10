@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.11  $
 //
 // Implemenation of class TCheckBox.  This defines the basic behavior for all
 // check boxes.
@@ -23,6 +23,7 @@
 # include <bwcc.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlControl);
 
 #if !defined(SECTION) || SECTION == 1
@@ -109,12 +110,12 @@ uint
 TCheckBox::Transfer(void* buffer, TTransferDirection direction)
 {
   if (direction == tdGetData)
-    *(uint*)buffer = GetCheck();
+    *(uint16*)buffer = (uint16)GetCheck();
 
   else if (direction == tdSetData)
-    SetCheck(*(uint*)buffer);
+    SetCheck(*(uint16*)buffer);
 
-  return sizeof(uint);
+  return sizeof(uint16);
 }
 
 //

@@ -1,9 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
-//$Revision:   10.8  $
+// $Revision:   10.15  $
 //
 // Definition of TVbxControl and associated classes
 //----------------------------------------------------------------------------
@@ -18,11 +17,19 @@
 # if defined(BI_PLAT_WIN32) && defined(_INC_DDEMLH)
 #   define _HSZ_DEFINED
 # endif
+# if defined(INC_OLE2)
+#   define NO_VBX_LPPICTURE   // VBX makes LPPICTURE FAR* PICTURE; OLE makes it FAR* IPICTURE 
+# endif
 # include <bivbx.h>
 #endif
 #if !defined(BI_PLAT_MSW)
 # error VBX supported only under MS Windows
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS_RTL TXVbxLibrary;
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -59,6 +66,8 @@ class _OWLCLASS_RTL TXVbxLibrary : public TXOwl {
     static void Raise();
 };
 
+class _USERCLASS TVbxControl;
+
 //
 // class TVbxEventHandler
 // ~~~~~ ~~~~~~~~~~~~~~~~
@@ -66,6 +75,26 @@ class _USERCLASS TVbxEventHandler : virtual public TEventHandler {
   protected:
     TResult  EvVbxDispatch(TParam1 p1, TParam2 p2);
     TResult  EvVbxInitForm(TParam1 p1, TParam2 p2);
+
+#if defined(BI_PLAT_WIN32)
+
+  public:
+    TWindow *GetWindowPtr( HWND Window );
+
+  private:
+    static HWND HWND16TO32(HWND hw) {
+     return ((HWND)(((DWORD)((WORD)(hw)))|0xffff0000));
+    }
+
+    typedef struct {
+      HWND         hWnd;
+      TVbxControl *vbx;
+    } PARAM, FAR *LPPARAM;
+
+    typedef void (*LPFNFOREACH)(TWindow*, void*);
+
+    static void FindVBX(TWindow *c, LPPARAM p);
+#endif BI_PLAT_WIN32
 
   DECLARE_RESPONSE_TABLE(TVbxEventHandler);
 };
@@ -228,6 +257,10 @@ VBXDispatch(GENERIC& generic,
             void    (GENERIC::*pmf)(VBXEVENT FAR*),
             TParam1  param1,
             TParam2  param2);
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // TVbxControl Inlines

@@ -12,9 +12,9 @@ Abstract:
 --*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1994, 1996 by Borland International
+ *      Copyright (c) 1994, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -22,6 +22,7 @@ Abstract:
 #ifndef __GLAUX_H__
 #define __GLAUX_H__
 #define __GLAUX_H
+#pragma option -b
 
 /*
  * (c) Copyright 1993, Silicon Graphics, Inc.
@@ -60,9 +61,15 @@ Abstract:
  * OpenGL(TM) is a trademark of Silicon Graphics, Inc.
  */
 
+#pragma option -b.
 #include <windows.h>
+#pragma option -b
+#pragma option -b.
 #include <GL/gl.h>
+#pragma option -b
+#pragma option -b.
 #include <GL/glu.h>
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -361,4 +368,5 @@ HGLRC APIENTRY auxGetHGLRC(void);
 }
 #endif
 
+#pragma option -b.
 #endif /* __GLAUX_H__ */

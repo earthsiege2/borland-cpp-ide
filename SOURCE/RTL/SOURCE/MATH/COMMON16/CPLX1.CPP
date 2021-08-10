@@ -4,12 +4,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 
 #ifdef _RTLDLL
@@ -37,7 +38,7 @@ static void __debug(void){}
 #define BYTE    byte ptr
 
 
-double _Cdecl _FARFUNC abs(complex _FAR & z)
+double _Cdecl _FARFUNC abs(const complex _FAR & z)
 {
 asm LES_    bx, z
 asm fld REAL ES_ [bx]
@@ -49,7 +50,7 @@ asm fsqrt
     RETURN_TOS;
 }
 
-double _Cdecl _FARFUNC norm(complex _FAR & z)
+double _Cdecl _FARFUNC norm(const complex _FAR & z)
 {
 /*
     return z.re*z.re + z.im*z.im;
@@ -63,7 +64,7 @@ asm fadd
     RETURN_TOS;
 }
 
-complex _FAR & _Cdecl complex::operator*=(complex _FAR & z2)
+complex _FAR & _Cdecl complex::operator*=(const complex _FAR & z2)
 {
 #if defined(_RTL_ALLOW_po)
     double tmp;
@@ -96,7 +97,7 @@ asm fstp    REAL ES_ [bx+8]
     return *this;
 }
 
-complex _Cdecl _FARFUNC operator*(complex _FAR & z1, complex _FAR & z2)
+complex _Cdecl _FARFUNC operator*(const complex _FAR & z1, const complex _FAR & z2)
 {
     double temp_re = z1.re*z2.re - z1.im*z2.im;
     double temp_im = z1.im*z2.re + z1.re*z2.im;

@@ -4,11 +4,12 @@
  *  Definitions for the Profile Wizard.  Includes all prototypes
  *  and constants required by the provider-wizard code consumers.
  *
- *  Copyright 1994-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef _MAPIWZ_H
 #define _MAPIWZ_H
+#pragma option -b
 
 #define WIZ_QUERYNUMPAGES   (WM_USER +10)
 #define WIZ_NEXT            (WM_USER +11)
@@ -26,6 +27,12 @@
 #define MAPI_PW_ADD_SERVICE_ONLY        0x00000004
 #define MAPI_PW_PROVIDER_UI_ONLY        0x00000008
 #define MAPI_PW_HIDE_SERVICES_LIST      0x00000010
+
+/*
+ *  Provider should set this property to TRUE if it does not
+ *  want the Profile Wizard to display the PST setup page.
+ */
+#define PR_WIZARD_NO_PST_PAGE           PROP_TAG(PT_BOOLEAN, 0x6700)
 
 typedef HRESULT (STDAPICALLTYPE LAUNCHWIZARDENTRY)
 (
@@ -58,4 +65,6 @@ typedef WIZARDENTRY FAR * LPWIZARDENTRY;
 
 #define LAUNCHWIZARDENTRYNAME           "LAUNCHWIZARD"
 
+#pragma option -b.
 #endif  /* _MAPIWZ_H */
+

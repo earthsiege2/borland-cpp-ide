@@ -4,14 +4,21 @@
  *  Definitions and prototypes for utility functions provided by MAPI
  *  in MAPI[xx].DLL.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef _MAPIUTIL_H_
 #define _MAPIUTIL_H_
+#pragma option -b
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
+#endif
+
+#if defined (WIN32) && !defined (_WIN32)
+#define _WIN32
 #endif
 
 #ifdef __cplusplus
@@ -19,11 +26,15 @@ extern "C" {
 #endif
 
 #ifndef MAPIX_H
+#pragma option -b.
 #include <mapix.h>
+#pragma option -b
 #endif
 
 #ifdef WIN16
+#pragma option -b.
 #include <storage.h>
+#pragma option -b
 #endif
 
 #ifndef BEGIN_INTERFACE
@@ -594,6 +605,15 @@ HrThisThreadAdviseSink( LPMAPIADVISESINK lpAdviseSink,
 
 
 
+/*
+ *  Allows a client and/or provider to force notifications
+ *  which are currently queued in the MAPI notification engine
+ *  to be dispatched without doing a message dispatch.
+ */
+
+STDAPI HrDispatchNotifications (ULONG ulFlags);
+
+
 /* Service Provider Utilities */
 
 /*
@@ -779,6 +799,14 @@ STDAPI_(FILETIME)       FtMulDw(DWORD ftMultiplier, FILETIME ftMultiplicand);
 STDAPI_(FILETIME)       FtSubFt(FILETIME ftMinuend, FILETIME ftSubtrahend);
 STDAPI_(FILETIME)       FtNegFt(FILETIME ft);
 
+/* Message composition */
+
+STDAPI_(SCODE)          ScCreateConversationIndex (ULONG cbParent,
+                            LPBYTE lpbParent,
+                            ULONG FAR * lpcbConvIndex,
+                            LPBYTE FAR * lppbConvIndex);
+
+/* Store support */
 
 STDAPI WrapStoreEntryID (ULONG ulFlags, LPTSTR lpszDLLName, ULONG cbOrigEntry,
     LPENTRYID lpOrigEntry, ULONG *lpcbWrappedEntry, LPENTRYID *lppWrappedEntry);
@@ -790,6 +818,12 @@ STDAPI WrapStoreEntryID (ULONG ulFlags, LPTSTR lpszDLLName, ULONG cbOrigEntry,
 
 STDAPI_(HRESULT)
 RTFSync (LPMESSAGE lpMessage, ULONG ulFlags, BOOL FAR * lpfMessageUpdated);
+
+
+/* Flags for WrapCompressedRTFStream() */
+
+/****** MAPI_MODIFY             ((ULONG) 0x00000001) mapidefs.h */
+/****** STORE_UNCOMPRESSED_RTF  ((ULONG) 0x00008000) mapidefs.h */
 
 STDAPI_(HRESULT)
 WrapCompressedRTFStream (LPSTREAM lpCompressedRTFStream,
@@ -820,11 +854,47 @@ HrIStorageFromStream (LPUNKNOWN lpUnkIn,
 STDAPI_(SCODE)          ScInitMapiUtil(ULONG ulFlags);
 STDAPI_(VOID)           DeinitMapiUtil(VOID);
 
+
+/*
+ *  Entry point names.
+ *  
+ *  These are for new entry points defined since MAPI first shipped
+ *  in Windows 95. Using these names in a GetProcAddress call makes
+ *  it easier to write code which uses them optionally.
+ */
+
+#if defined (WIN16)
+#define szHrDispatchNotifications "HrDispatchNotifications"
+#elif defined (_WIN32) && defined (_X86_)
+#define szHrDispatchNotifications "_HrDispatchNotifications@4"
+#elif defined (_ALPHA_) || defined (_MIPS_) || defined (_PPC_)
+#define szHrDispatchNotifications "HrDispatchNotifications"
+#endif
+
+typedef HRESULT (STDAPICALLTYPE DISPATCHNOTIFICATIONS)(ULONG ulFlags);
+typedef DISPATCHNOTIFICATIONS FAR * LPDISPATCHNOTIFICATIONS;
+
+#if defined (WIN16)
+#define szScCreateConversationIndex "ScCreateConversationIndex"
+#elif defined (_WIN32) && defined (_X86_)
+#define szScCreateConversationIndex "_ScCreateConversationIndex@16"
+#elif defined (_ALPHA_) || defined (_MIPS_) || defined (_PPC_)
+#define szScCreateConversationIndex "ScCreateConversationIndex"
+#endif
+
+typedef SCODE (STDAPICALLTYPE CREATECONVERSATIONINDEX)(ULONG cbParent,
+    LPBYTE lpbParent, ULONG FAR *lpcbConvIndex, LPBYTE FAR *lppbConvIndex);
+typedef CREATECONVERSATIONINDEX FAR *LPCREATECONVERSATIONINDEX;
+
 #ifdef __cplusplus
 }
 #endif
+
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif /* _MAPIUTIL_H_ */

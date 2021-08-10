@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.15  $
+//$Revision:   10.26  $
 //
 // Definition of class TModule.  TModule defines the basic behavior for OWL
 // libraries and applications.
@@ -23,6 +23,10 @@
 # include <classlib/pointer.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
@@ -35,6 +39,26 @@
     struct far tagFILETIME {uint32 dwLowDateTime; uint32 dwHighDateTime;};
     typedef tagFILETIME FILETIME;
 #   define _FILETIME_
+# endif
+#endif
+
+// These DLL name strings are used in INITDLL.CPP and MODULE.CPP
+// for locking DLLs in memory
+//
+#if defined(_OWLDLL) && !defined(BI_PLAT_WIN32)
+# if !defined(BIDS_DLLNAME)
+#   if defined(__TRACE) || defined(__WARN)
+#     define BIDS_DLLNAME "BDS52D"
+#   else
+#     define BIDS_DLLNAME "BDS52"
+#   endif
+# endif
+# if !defined(OWL_DLLNAME)
+#   if defined(__TRACE) || defined(__WARN)
+#     define OWL_DLLNAME "OWL52D"
+#   else
+#     define OWL_DLLNAME "OWL52"
+#   endif
 # endif
 #endif
 
@@ -116,16 +140,16 @@ class _OWLCLASS TModule : public TStreamableBase {
     void          SetHandle(THandle handle);  // Set the module instance handle
 
   protected_data:
-    char far* Name;       // Name of the module
+    char*         Name;       // Name of the module
     union {
 #if defined(OWL2_COMPAT)
-      THandle HInstance;  // Old 2.x name
+      THandle     HInstance;  // Old 2.x name
 #endif
-      THandle Handle;     // New name
+      THandle     Handle;     // New name
     };
 
   private:
-    bool      ShouldFree;       // Should free the module when done?
+    bool          ShouldFree; // Should free the module when done?
 
     // Hidden to prevent accidental copying or assignment
     //
@@ -327,10 +351,30 @@ extern "C" {
   TModule** PASCAL GetModulePtr(int version);
 }
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 //
 // Main entry point for an Owl application
 //
 int OwlMain(int argc, char* argv[]);
+
+
+extern "C" {
+
+//
+// Initialization routine that must be called from User DLL if DLL
+// provides it's own entry point [i.e. LibMain or DllEntryPoint]
+//
+bool OWLInitUserDLL(HINSTANCE hInstance, LPSTR cmdLine);
+}
+
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 
 //----------------------------------------------------------------------------
 // Definition of TDllLoader template, and TModuleProc class & derived
@@ -389,7 +433,7 @@ template <class T> TDllLoader<T>::TDllLoader()
 //
 template <class T> TDllLoader<T>::~TDllLoader()
 {
-#if 0   
+#if 0
   delete Dll;
   Dll = 0;
 #endif
@@ -835,6 +879,7 @@ class TModuleProc13 : public TModuleProc {
 class _OWLCLASS TUser {
   public:
     static  HICON    LoadIcon(HINSTANCE, LPCTSTR);
+    static  BOOL     DestroyIcon(HICON);
     static  BOOL     GetClassInfo(HINSTANCE, LPCTSTR, LPWNDCLASS);
     static  int      GetMenuString(HMENU, UINT, LPTSTR, int, UINT);
     static  UINT     GetMenuState(HMENU, UINT, UINT);
@@ -844,6 +889,10 @@ class _OWLCLASS TUser {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementation
@@ -1192,42 +1241,48 @@ inline uint32 TModuleVersionInfo::GetFileFlags() const
 inline bool TModuleVersionInfo::IsDebug() const
 {
   PRECONDITION(FixedInfo);
-  return FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_DEBUG;
+  return (FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_DEBUG) ?
+         true : false;
 }
 
 //
 inline bool TModuleVersionInfo::InfoInferred() const
 {
   PRECONDITION(FixedInfo);
-  return FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_INFOINFERRED;
+  return (FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_INFOINFERRED) ?
+          true : false;
 }
 
 //
 inline bool TModuleVersionInfo::IsPatched() const
 {
   PRECONDITION(FixedInfo);
-  return FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_PATCHED;
+  return (FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_PATCHED) ?
+          true : false;
 }
 
 //
 inline bool TModuleVersionInfo::IsPreRelease() const
 {
   PRECONDITION(FixedInfo);
-  return FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_PRERELEASE;
+  return (FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_PRERELEASE) ?
+          true : false;
 }
 
 //
 inline bool TModuleVersionInfo::IsPrivateBuild() const
 {
   PRECONDITION(FixedInfo);
-  return FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_PRIVATEBUILD;
+  return (FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_PRIVATEBUILD) ?
+          true : false;
 }
 
 //
 inline bool TModuleVersionInfo::IsSpecialBuild() const
 {
   PRECONDITION(FixedInfo);
-  return FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_SPECIALBUILD;
+  return (FixedInfo->dwFileFlags & FixedInfo->dwFileFlagsMask & VS_FF_SPECIALBUILD) ?
+          true : false;
 }
 
 // returns TFileOS values

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.13  $
+//$Revision:   10.17  $
 //
 // Implementation of class TEdit.  This defines the basic behavior
 // of all edit controls.
@@ -21,6 +21,8 @@
 #include <dos.h>
 #include <string.h>
 #include <ctype.h>
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -148,7 +150,7 @@ void
 TEdit::EvChar(uint key, uint repeatCount, uint flags)
 {
   if (Validator && key != VK_BACK) {
-    int oldBuffLen = GetTextLen();
+    uint oldBuffLen = GetTextLen();
     char far* oldBuff = new char[oldBuffLen+1];
     GetText(oldBuff, oldBuffLen+1);
 
@@ -163,7 +165,7 @@ TEdit::EvChar(uint key, uint repeatCount, uint flags)
     bool postMsgModify= IsModified();             // Save (post) MODIFY flag
 
     GetSelection(startSel, endSel);
-    int buffLen = GetTextLen();
+    uint buffLen = GetTextLen();
     char far* buff = LockBuffer(max((int)TextLimit,max(oldBuffLen,buffLen))+1);
 
     // Run the result of the edit through the validator.  If incorrect,
@@ -216,7 +218,7 @@ TEdit::EvKeyDown(uint key, uint /*repeatCount*/, uint /*flags*/)
     uint  startSel, endSel;
     GetSelection(startSel, endSel);
 
-    int  buffLen = GetTextLen();   // length of buffer
+    uint  buffLen = GetTextLen();   // length of buffer
     bool wasAppending = endSel == buffLen;
 
     DefaultProcessing();
@@ -452,8 +454,8 @@ TEdit::LockBuffer(uint newSize)
   if (!(GetWindowLong(GWL_STYLE)&ES_MULTILINE)
 #if defined(BI_PLAT_WIN32)
        || TSystem::IsWin95() || TSystem::IsWin32s()  
-#endif
-  ) {
+#endif                                               
+  ) {                                                
     if (!newSize)
       newSize = GetTextLen()+1;
     char* buffer = new char[newSize];
@@ -895,7 +897,7 @@ uint
 TEdit::Transfer(void* buffer, TTransferDirection direction)
 {
   if (Validator && Validator->HasOption(voTransfer) && GetNumLines() <= 1) {
-    CHECK(GetWindowTextLength() < TextLimit);
+    CHECK((uint)GetWindowTextLength() < TextLimit);
     char* text = new char[TextLimit];
     GetText(text, TextLimit);
     uint result = Validator->Transfer(text, buffer, direction);

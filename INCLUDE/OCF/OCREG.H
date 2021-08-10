@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.10  $
 //
 // OLE Registration definitions
 //----------------------------------------------------------------------------
@@ -15,6 +17,10 @@
 #endif
 #if !defined(CLASSLIB_POINTER_H)
 # include <classlib/pointer.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
 #endif
 
 //
@@ -100,6 +106,9 @@ class _ICLASS TRegistrar {
     TRegistrar(TRegList& regInfo, TComponentFactory callback,
                string& cmdLine, HINSTANCE hInst = ::_hInstance);
     virtual ~TRegistrar();
+
+    // Create/Expose/Destroy automation object proxies
+    //
     TUnknown* CreateAutoApp(TObjectDescriptor app, uint32 options,
                             IUnknown* outer=0);
     void      ReleaseAutoApp(TObjectDescriptor app);
@@ -108,38 +117,84 @@ class _ICLASS TRegistrar {
     TUnknown* CreateAutoObject(const void* obj, const typeinfo& objInfo,
                                const void* app, const typeinfo& appInfo,
                                IUnknown* outer=0);
-    virtual void far* GetFactory(const GUID& clsid, const GUID far& iid);
-    virtual int       Run();   // run an instance of an app if it is an EXE
-    virtual void      Shutdown(IUnknown* releasedObj, uint32 options);
+
+    virtual void*     GetFactory(const GUID& clsid, const GUID& iid);
     virtual bool      CanUnload();
 
-    static TRegistrar* GetNext(TRegistrar* reg);// walk linked list of registrars
+    // Run (run app instance if EXE) and Shutdown
+    //
+    virtual int       Run();
+    virtual void      Shutdown(IUnknown* releasedObj, uint32 options);
+
+    // Walk linked list of registrars
+    //
+    static TRegistrar* GetNext(TRegistrar* reg);
 
     // Registration management functions
-    void RegisterAppClass();
-    void UnregisterAppClass();
+    //
+    void              RegisterAppClass();
+    void              UnregisterAppClass();
 
     // Command line options accessors
-    bool IsOptionSet(uint32 option) const;
-    uint32 GetOptions() const;
-    void SetOption(uint32 bit, bool state);
-    void ProcessCmdLine(string& cmdLine);
+    //
+    bool              IsOptionSet(uint32 option) const;
+    uint32            GetOptions() const;
+    void              SetOption(uint32 bit, bool state);
+    void              ProcessCmdLine(string& cmdLine);
 
-    TAppDescriptor& GetAppDescriptor() {return AppDesc;}  // internal use
+    // Accessor to AppDescriptor object (real workhorse object!)
+    //
+    TAppDescriptor&   GetAppDescriptor() {return AppDesc;}
 
   protected:
     TRegistrar(TAppDescriptor& appDesc);
     TAppDescriptor& AppDesc;
 
   private:
-    static TRegistrar* RegistrarList;  // linked list of registrar objects
-    TRegistrar* Next;                  // next link in registrar list
+
+    // Members to maintain linked list of registrar objects
+    //
+    static TRegistrar* RegistrarList;
+    TRegistrar*        Next;
 };
 
 //----------------------------------------------------------------------------
 //  Factory for automated OLE components, no linking/embedding support
 //
 
+//
+// Simple factor for COM Servers
+//
+template <class T> class TOcComFactory {
+  public:
+    operator TComponentFactory() {return Create;}
+
+    // Main Create callback function called to create app and/or object
+    //
+    static IUnknown* Create(IUnknown* outer, uint32 options, uint32 id);
+};
+
+// Main Create callback function called to create COM object
+//
+template <class T> IUnknown*
+TOcComFactory<T>::Create(IUnknown* outer, uint32 /*options*/, uint32 /*id*/)
+{
+  // Create instance of our object
+  //
+  T *objPtr = new T;
+
+  // Set the controlling IUnknown
+  //
+  objPtr->SetOuter(outer);
+
+  // Return IUnknown [operator automatically calls AddRef()]
+  //
+  return objPtr->operator IUnknown*();
+}
+
+//
+// Simple factory for Automation Server
+//
 template <class T> class TOcAutoFactory {
   public:
     operator TComponentFactory() {return Create;}
@@ -216,34 +271,94 @@ TOcAutoFactory<T>::Create(IUnknown* outer, uint32 options, uint32 /*id*/)
   return ifc;
 }
 
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
+
 //----------------------------------------------------------------------------
 
 #if !defined(OCF_APPDESC_H)
 # include <ocf/appdesc.h>  // private for inline implementation only
 #endif
 
+//
+//
+//
 inline TUnknown*
-TRegistrar::CreateAutoApp(TObjectDescriptor app, uint32 opts, IUnknown* outer)
-                             {return AppDesc.CreateAutoApp(app, opts, outer);}
+TRegistrar::CreateAutoApp(TObjectDescriptor app, uint32 opts, IUnknown* outer) {
+  return AppDesc.CreateAutoApp(app, opts, outer);
+}
+
+//
+//
+//
 inline void
-TRegistrar::ReleaseAutoApp(TObjectDescriptor app)
-                                {AppDesc.ReleaseAutoApp(app);}
+TRegistrar::ReleaseAutoApp(TObjectDescriptor app) {
+  AppDesc.ReleaseAutoApp(app);
+}
+
+//
+//
+//
 inline TUnknown*
 TRegistrar::CreateAutoObject(TObjectDescriptor doc, TServedObject& app,
-                             IUnknown* outer)
-                           {return AppDesc.CreateAutoObject(doc, app, outer);}
+                             IUnknown* outer) {
+  return AppDesc.CreateAutoObject(doc, app, outer);
+}
+
+//
+//
+//
 inline TUnknown*
 TRegistrar::CreateAutoObject(const void* obj, const typeinfo& objInfo,
                              const void* app, const typeinfo& appInfo,
-                             IUnknown* outer)
-         {return AppDesc.CreateAutoObject(obj, objInfo, app, appInfo, outer);}
-inline void TRegistrar::RegisterAppClass()    {AppDesc.RegisterClass();}
-inline void TRegistrar::UnregisterAppClass()  {AppDesc.UnregisterClass();}
-inline bool TRegistrar::IsOptionSet(uint32 option) const
-                                         {return AppDesc.IsOptionSet(option);}
-inline uint32 TRegistrar::GetOptions() const {return AppDesc.GetOptions();}
-inline void TRegistrar::SetOption(uint32 bit, bool state)
-                                              {AppDesc.SetOption(bit,state);}
-inline void TRegistrar::ProcessCmdLine(string& cmdLine)
-                                            {AppDesc.ProcessCmdLine(cmdLine);}
+                             IUnknown* outer) {
+  return AppDesc.CreateAutoObject(obj, objInfo, app, appInfo, outer);
+}
+
+//
+//
+//
+inline void
+TRegistrar::RegisterAppClass() {
+  AppDesc.RegisterClass();
+}
+
+//
+//
+//
+inline void
+TRegistrar::UnregisterAppClass()  {
+  AppDesc.UnregisterClass();
+}
+
+//
+//
+//
+inline bool
+TRegistrar::IsOptionSet(uint32 option) const {
+  return AppDesc.IsOptionSet(option);
+}
+
+//
+//
+//
+inline uint32 TRegistrar::GetOptions() const {
+  return AppDesc.GetOptions();
+}
+
+//
+//
+//
+inline void TRegistrar::SetOption(uint32 bit, bool state) {
+  AppDesc.SetOption(bit,state);
+}
+
+//
+//
+//
+inline void
+TRegistrar::ProcessCmdLine(string& cmdLine) {
+  AppDesc.ProcessCmdLine(cmdLine);
+}
 #endif  // OCF_OCREG_H

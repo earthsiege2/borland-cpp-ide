@@ -6,38 +6,43 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            fputchar - puts a character to stdout
+Name            _fputtchar used as _fputchar and _fputwchar
+                _fputchar   - puts a character to stdout
+                _fputwchar - puts a wide character to stdout
 
 
-Usage           int fputchar (register int c);
+Usage           int _fputchar (register int c);
+                wint_t _fputwchar (register wint_t c);
 
 Prototype in    stdio.h
 
-Description     fputchar simply calls fputc to output its argument to
+Description     _fputtchar simply calls _lputtc to output its argument to
                 stdout.
 
-Return value    see fgetc.
+Return value    see _fgettc.
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC fputchar (int ch)
+_TINT _RTLENTRY _EXPFUNC _fputtchar (_TINT ch)
 {
-    int ret;
+    _TINT ret;
 
     _lock_stream(stdout);
-    ret = _lputc(ch,stdout);
+    ret = _lputtc(ch,stdout);
     _unlock_stream(stdout);
     return (ret);
 }

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.7  $
 //
 // Class TControlGadget definition. TControlGadget is a gadget that takes a
 // TWindow and allows it to be inserted into a gadget window. In effect it is
@@ -16,7 +16,11 @@
 # include <owl/gadget.h>
 #endif
 
-// Generic definitions/compiler options (eg. alignment) preceeding the 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+// Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
 
@@ -38,12 +42,9 @@ class _OWLCLASS TControlGadget : public TGadget {
 
     void           SetBounds(const TRect& rect);
 
-    // Computes the area excluding the borders and margins
-    //
-    void           GetInnerRect(TRect& rect);
-
     void           GetDesiredSize(TSize& size);
 
+  public:
     TWindow*       GetControl() const;
     void           SetControl(TWindow* control);
 
@@ -57,9 +58,13 @@ class _OWLCLASS TControlGadget : public TGadget {
     TControlGadget& operator =(const TControlGadget&);
 };
 
-// Generic definitions/compiler options (eg. alignment) following the 
+// Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline Implementations

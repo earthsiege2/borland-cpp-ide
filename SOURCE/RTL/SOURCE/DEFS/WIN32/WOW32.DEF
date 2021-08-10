@@ -1,6 +1,6 @@
-LIBRARY     WOW32.DLL
-
+LIBRARY WOW32
 EXPORTS
+
     GetCommHandle
     GetCommShadowMSR
     W32Dispatch
@@ -12,6 +12,7 @@ EXPORTS
     WOWCallback16Ex
     WOWDirectedYield16
     WOWFreeMetafile
+    WOWGetDescriptor
     WOWGetVDMPointer
     WOWGetVDMPointerFix
     WOWGetVDMPointerUnfix

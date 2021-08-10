@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.9  $
 //
 // Definition of class TComboBox and TComboBoxData the base class for all
 // combobox controls.
@@ -12,6 +12,10 @@
 
 #if !defined(OWL_LISTBOX_H)
 # include <owl/listbox.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -59,6 +63,10 @@ class _OWLCLASS TComboBox : public TListBox {
     bool          GetDroppedState() const;
     bool          GetExtendedUI() const;
     int           SetExtendedUI(bool Extended);
+#if defined(BI_PLAT_WIN32)
+    uint          GetDroppedWidth() const;
+    int           SetDroppedWidth(uint width);
+#endif
 
     // Combo's List box virtual functions
     //
@@ -172,6 +180,10 @@ class _OWLCLASS TComboBoxData {
 // definition of classes
 #include <services/posclass.h>
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 //----------------------------------------------------------------------------
 // Inline implementations
 //
@@ -242,6 +254,22 @@ inline int TComboBox::SetExtendedUI(bool extended) {
   PRECONDITION(GetHandle());
   return (bool)SendMessage(CB_SETEXTENDEDUI, extended);
 }
+
+#if defined(BI_PLAT_WIN32)
+//
+inline uint TComboBox::GetDroppedWidth() const
+{
+  PRECONDITION(GetHandle());
+  return (uint)CONST_CAST(TComboBox*,this)->SendMessage(CB_GETDROPPEDWIDTH);
+}
+
+//
+inline int TComboBox::SetDroppedWidth(uint width)
+{
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(CB_SETDROPPEDWIDTH, width, 0);
+}
+#endif
 
 //
 // Add a string to the list part of the associated combobox

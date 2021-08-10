@@ -3,7 +3,7 @@
   tool2.h
   Created: 12/21/95
   Copyright (c) 1987, 1995 Borland International Inc.  All Rights Reserved.
-  $Revision:   1.11  $
+  $Revision:   1.15  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __TOOL2_H
@@ -26,9 +26,20 @@ class ToolInvoker : public IUnknownImp< IToolImplementor > {
                 int numNodes );
 };
 //.............................................................................
-class ProjectClient : public IUnknownImp< IProjectClient > {
+//
+// This class inherits from two IUnknown decendents. The IUnknown methods
+// are overridden by the comhelp IUnknownImp template class in the 
+// ProjectClient class below.
+//
+class projectClientCombo : public IProjectClient, public IProjectSaveClient {
+};
+
+class ProjectClient : public IUnknownImp< projectClientCombo > {
  public:
-  ProjectClient() : IUNKNOWNIMPL_INIT( IProjectClient ) { _toolTest = NULL; }
+  ProjectClient() : 
+      IUnknownImp< projectClientCombo >( IID_Addon_IProjectClient ) { 
+    _toolTest = NULL; 
+  }
   virtual void OpenNotify( IPolyString * projectName );
   virtual void CloseNotify();
   virtual void NodeDeleteNotify( ProjectNode node ) {}
@@ -41,7 +52,13 @@ class ProjectClient : public IUnknownImp< IProjectClient > {
                             IPolyString * outputName ) {
     outputName->Release();
   }
+  
+  // IProjectSaveClient implementation
+  virtual void BeforeSaveNotify();
+  virtual void AfterSaveNotify();
+  
   void RegisterToolTest( ToolTestC * tt ) { _toolTest = tt; }
+  
  protected:
   ToolTestC * _toolTest;
   

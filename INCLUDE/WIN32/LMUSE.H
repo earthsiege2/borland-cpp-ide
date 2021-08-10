@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     lmuse.c
@@ -8,10 +10,6 @@ Abstract:
 
     This file contains structures, function prototypes, and definitions
     for the NetUse API.
-
-Author:
-
-    Dan Lafferty (danl) 10-Mar-1991
 
 
 Environment:
@@ -25,33 +23,22 @@ Notes:
     You must include NETCONS.H before this file, since this file depends
     on values defined in NETCONS.H.
 
-Revision History:
-
-    10-Mar-1991 danl
-        Created from LM2.0 header files and NT-LAN API Spec.
-    14-Mar-91 JohnRo
-        Put OPTIONAL keywords back in.
-    19-Mar-91 ritaw
-        Added info structure for level 2, and indicies to the parameters in
-        this info structure.
-    10-Apr-1991 JohnRo
-        Clarify argument names for NetpSetParmError use.
-    12-Jun-1991 JohnRo
-        Changed to use UNICODE types.  Clarify parameter names.
 
 --*/
 
-/* $Copyright: 1994$ */
+/* $Copyright: 1997$ */
 
 #ifndef _LMUSE_
 #define _LMUSE_
-#define __LMUSE_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#pragma option -b.
 #include <lmuseflg.h>                   // Deletion force level flags
+#pragma option -b
 
 //
 // Function Prototypes
@@ -122,6 +109,11 @@ typedef struct _USE_INFO_2 {
     LPTSTR   ui2_domainname;
 }USE_INFO_2, *PUSE_INFO_2, *LPUSE_INFO_2;
 
+typedef struct _USE_INFO_3 {
+    USE_INFO_2 ui3_ui2;
+    ULONG      ui3_flags;
+} USE_INFO_3, *PUSE_INFO_3, *LPUSE_INFO_3;
+
 
 //
 // Special Values and Constants
@@ -164,8 +156,15 @@ typedef struct _USE_INFO_2 {
 #define USE_CHARDEV             2
 #define USE_IPC                 3
 
+//
+// Flags defined in the use_info_3 structure
+//
+
+#define CREATE_NO_CONNECT 0x1        // creation flags
+
 #ifdef __cplusplus
 }
 #endif
 
+#pragma option -b.
 #endif // _LMUSE_

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.9  $
 //
 // Definition of class TEdit.  This defines the basic behavior of all edit
 // controls.
@@ -14,6 +14,10 @@
 # include <owl/static.h>
 #endif
 #include <owl/edit.rh>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 class _OWLCLASS TValidator;
 
@@ -208,6 +212,10 @@ class _OWLCLASS TEdit : public TStatic {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

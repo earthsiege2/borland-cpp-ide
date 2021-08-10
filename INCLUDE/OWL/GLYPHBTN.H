@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.15  $
+//$Revision:   10.19  $
 //
 // Definition of class TGlyphButton
 //-------------------------------------------------------------------------
@@ -28,6 +28,10 @@
 #endif
 #if !defined(WINSYS_COLOR_H)
 # include <winsys/color.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -109,15 +113,6 @@ class _OWLCLASS TGlyphButton : public TButton  {
       //
       lsH_SGST,                 // Space Glyph Space Text
       lsH_GST,                  // Glyph Space Text
-      lsH_STSG,                 // Space Text  Space Glyph
-      lsH_TSGS,                 // Text  Space Glyph Space
-
-      // Vertical layouts [center horizontally]
-      //
-      lsV_SGST,                 // Space Glyph Space Text
-      lsV_GST,                  // Glyph Space Text
-      lsV_STSG,                 // Space Text  Space Glyph
-      lsV_TSGS,                 // Text  Space Glyph Space
     };
 
     // Methods to specify how the glyph and/or text should be laid out
@@ -213,6 +208,10 @@ class _OWLCLASS TGlyphButton : public TButton  {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

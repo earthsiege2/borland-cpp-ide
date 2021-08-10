@@ -4,25 +4,30 @@
  * function(s)
  *        _lstrxfrm - transforms a string according to the current locale's
  *                    collation rules.
+ *        _lwcsxfrm - transforms a wide-character string according to the
+ *                    current locale's collation rules.
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 
 #include <string.h>
 #include <_locale.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
 Name            _lstrxfrm - transforms a portion of a string
 
 Usage           size_t _lstrxfrm( char *dest, const char *src, size_t n )
+                size_t _lstrxfrm( wchar_t *dest, const wchar_t *src, size_t n )
 
 Prototype in    string.h
 
@@ -33,7 +38,15 @@ Return value    Number of characters copied
 
 *---------------------------------------------------------------------*/
 
-size_t _RTLENTRY _EXPFUNC _lstrxfrm( char *s1, const char *s2, size_t n )
+size_t _RTLENTRY _EXPFUNC _ltcsxfrm( _TCHAR *s1, const _TCHAR *s2, size_t n )
 {
-    return( _pLocale->ptransform( s1, s2, n ) );
+    LPWIN32LOCALE locale = __locale;
+
+    if (locale->isCLocale)
+    {
+        _tcsncpy(s1, s2, n);
+        return _tcslen(s2);
+    }
+
+    return LCMapString(locale->handle, LCMAP_SORTKEY, (LPCSTR)s1, -1, (LPTSTR)s2, n);
 }

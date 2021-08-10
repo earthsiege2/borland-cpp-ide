@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.10  $
+//$Revision:   5.15  $
 //
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_OBJSTRM_H)
@@ -29,9 +29,16 @@
 #if !defined(BI_NO_RTTI) && !defined(__TYPEINFO_H) && !defined(_INC_TYPEINFO)
 # include <typeinfo.h>
 #endif
+#if !defined (__TCHAR_H)
+# include <tchar.h>
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -62,7 +69,15 @@ class _BIDSCLASS TStreamableTypes;
 class _BIDSCLASS opstream;
 class _BIDSCLASS ipstream;
 
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
+
 class _EXPCLASS string;
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 ipstream _BIDSFAR& _BIDSENTRY _BIDSFUNC operator >> ( ipstream _BIDSFAR& is,
                                                       string _BIDSFAR& str );
@@ -104,7 +119,7 @@ public:
     virtual _BIDSCTOR ~TStreamableBase();
 
 #if defined( BI_NO_RTTI )
-    typedef const char * /*_BIDSENTRY*/ Type_id;
+    typedef const _TCHAR * /*_BIDSENTRY*/ Type_id;
     virtual void * /*_BIDSENTRY*/ FindBase( Type_id id ) const;
 
 public:
@@ -121,7 +136,7 @@ class _BIDSCLASS _RTTI TStreamable : public TStreamableBase
 
 protected:
 
-    virtual const char * _BIDSENTRY streamableName() const = 0;
+    virtual const _TCHAR * _BIDSENTRY streamableName() const = 0;
 
     virtual void * _BIDSENTRY read( ipstream& );
     virtual void _BIDSENTRY write( opstream& );
@@ -149,7 +164,7 @@ protected:
 
     TStreamer( TStreamableBase *obj ) : object(obj) {}
 
-    virtual const char * _BIDSENTRY StreamableName() const = 0;
+    virtual const _TCHAR * _BIDSENTRY StreamableName() const = 0;
 
     virtual void * _BIDSENTRY Read( ipstream&, uint32 ) const = 0;
     virtual void _BIDSENTRY Write( opstream& ) const = 0;
@@ -171,7 +186,7 @@ public:
 
 protected:
 
-    virtual const char * _BIDSENTRY StreamableName() const
+    virtual const _TCHAR * _BIDSENTRY StreamableName() const
         {
         return STATIC_CAST(TStreamable *,GetObject())->streamableName();
         }
@@ -204,7 +219,7 @@ public:
 
 protected:
 
-    virtual const char * _BIDSENTRY StreamableName() const
+    virtual const _TCHAR * _BIDSENTRY StreamableName() const
         {
         return _TYPENAME(GetObject());
         }
@@ -376,15 +391,15 @@ public:
     uint16 _BIDSENTRY readWord16();
     uint32 _BIDSENTRY readWord32();
 
-    char _BIDSFAR * _BIDSENTRY readString();
-    char _BIDSFAR * _BIDSENTRY readString( char _BIDSFAR *, unsigned );
-    char _BIDSFARDATA * _BIDSENTRY freadString();
-    char _BIDSFARDATA * _BIDSENTRY freadString( char _BIDSFARDATA *buf,
+    _TCHAR _BIDSFAR * _BIDSENTRY readString();
+    _TCHAR _BIDSFAR * _BIDSENTRY readString( _TCHAR _BIDSFAR *, unsigned );
+    _TCHAR _BIDSFARDATA * _BIDSENTRY freadString();
+    _TCHAR _BIDSFARDATA * _BIDSENTRY freadString( _TCHAR _BIDSFARDATA *buf,
                                             unsigned maxLen );
 
-    friend ipstream& _BIDSENTRY operator >> ( ipstream&, signed char& );
-    friend ipstream& _BIDSENTRY operator >> ( ipstream&, unsigned char& );
-    friend ipstream& _BIDSENTRY operator >> ( ipstream&, char& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, _TSCHAR& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, _TUCHAR& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, _TCHAR& );
     friend ipstream& _BIDSENTRY operator >> ( ipstream&, signed short& );
     friend ipstream& _BIDSENTRY operator >> ( ipstream&, unsigned short& );
     friend ipstream& _BIDSENTRY operator >> ( ipstream&, signed int& );
@@ -455,12 +470,12 @@ public:
     void _BIDSENTRY writeWord16( uint16 );
     void _BIDSENTRY writeWord32( uint32 );
 
-    void _BIDSENTRY writeString( const char _BIDSFAR * );
-    void _BIDSENTRY fwriteString( const char _BIDSFARDATA * str );
+    void _BIDSENTRY writeString( const _TCHAR _BIDSFAR * );
+    void _BIDSENTRY fwriteString( const _TCHAR _BIDSFARDATA * str );
 
-    friend opstream& _BIDSENTRY operator << ( opstream&, signed char );
-    friend opstream& _BIDSENTRY operator << ( opstream&, unsigned char );
-    friend opstream& _BIDSENTRY operator << ( opstream&, char );
+    friend opstream& _BIDSENTRY operator << ( opstream&, signed _TCHAR );
+    friend opstream& _BIDSENTRY operator << ( opstream&, unsigned _TCHAR );
+    friend opstream& _BIDSENTRY operator << ( opstream&, _TCHAR );
     friend opstream& _BIDSENTRY operator << ( opstream&, signed short );
     friend opstream& _BIDSENTRY operator << ( opstream&, unsigned short );
     friend opstream& _BIDSENTRY operator << ( opstream&, signed int );
@@ -511,14 +526,14 @@ class _BIDSCLASS fpbase : virtual public pstream
 public:
 
     _BIDSCTOR fpbase();
-    _BIDSCTOR fpbase( const char _BIDSFAR *, int, int = filebuf::openprot );
+    _BIDSCTOR fpbase( const _TCHAR _BIDSFAR *, int, int = filebuf::openprot );
     _BIDSCTOR fpbase( int );
-    _BIDSCTOR fpbase( int, char _BIDSFAR *, int );
+    _BIDSCTOR fpbase( int, _TCHAR _BIDSFAR *, int );
 
-    void _BIDSENTRY open( const char _BIDSFAR *, int, int = filebuf::openprot );
+    void _BIDSENTRY open( const _TCHAR _BIDSFAR *, int, int = filebuf::openprot );
     void _BIDSENTRY attach( int );
     void _BIDSENTRY close();
-    void _BIDSENTRY setbuf( char _BIDSFAR *, int );
+    void _BIDSENTRY setbuf( _TCHAR _BIDSFAR *, int );
     filebuf _BIDSFAR * _BIDSENTRY rdbuf();
 
 private:
@@ -539,15 +554,15 @@ class _BIDSCLASS ifpstream : public fpbase, public ipstream
 public:
 
     _BIDSCTOR ifpstream();
-    _BIDSCTOR ifpstream( const char _BIDSFAR *,
+    _BIDSCTOR ifpstream( const _TCHAR _BIDSFAR *,
                       int = ios::in,
                       int = filebuf::openprot
                     );
     _BIDSCTOR ifpstream( int );
-    _BIDSCTOR ifpstream( int, char _BIDSFAR *, int );
+    _BIDSCTOR ifpstream( int, _TCHAR _BIDSFAR *, int );
 
     filebuf _BIDSFAR * _BIDSENTRY rdbuf();
-    void _BIDSENTRY open( const char _BIDSFAR *,
+    void _BIDSENTRY open( const _TCHAR _BIDSFAR *,
                       int = ios::in,
                       int = filebuf::openprot
                     );
@@ -567,15 +582,15 @@ class _BIDSCLASS ofpstream : public fpbase, public opstream
 public:
 
     _BIDSCTOR ofpstream();
-    _BIDSCTOR ofpstream( const char _BIDSFAR *,
+    _BIDSCTOR ofpstream( const _TCHAR _BIDSFAR *,
                       int = ios::out,
                       int = filebuf::openprot
                     );
     _BIDSCTOR ofpstream( int );
-    _BIDSCTOR ofpstream( int, char _BIDSFAR *, int );
+    _BIDSCTOR ofpstream( int, _TCHAR _BIDSFAR *, int );
 
     filebuf _BIDSFAR * _BIDSENTRY rdbuf();
-    void _BIDSENTRY open( const char _BIDSFAR *,
+    void _BIDSENTRY open( const _TCHAR _BIDSFAR *,
                       int = ios::out,
                       int = filebuf::openprot
                     );
@@ -732,7 +747,7 @@ inline _BIDSCTOR fpbase::fpbase()
     pstream::init( &buf );
 }
 
-inline _BIDSCTOR fpbase::fpbase( const char *name, int omode, int prot )
+inline _BIDSCTOR fpbase::fpbase( const _TCHAR *name, int omode, int prot )
 {
     pstream::init( &buf );
     open( name, omode, prot );
@@ -743,7 +758,7 @@ inline _BIDSCTOR fpbase::fpbase( int f ) : buf( f )
     pstream::init( &buf );
 }
 
-inline _BIDSCTOR fpbase::fpbase( int f, char *b, int len ) : buf( f, b, len )
+inline _BIDSCTOR fpbase::fpbase( int f, _TCHAR *b, int len ) : buf( f, b, len )
 {
     pstream::init( &buf );
 }
@@ -757,7 +772,7 @@ inline _BIDSCTOR ifpstream::ifpstream()
 {
 }
 
-inline _BIDSCTOR ifpstream::ifpstream( const char* name, int omode, int prot ) :
+inline _BIDSCTOR ifpstream::ifpstream( const _TCHAR* name, int omode, int prot ) :
     fpbase( name, omode | ios::in | ios::binary, prot )
 {
 }
@@ -766,7 +781,7 @@ inline _BIDSCTOR ifpstream::ifpstream( int f ) : fpbase( f )
 {
 }
 
-inline _BIDSCTOR ifpstream::ifpstream(int f, char* b, int len) : fpbase(f, b, len)
+inline _BIDSCTOR ifpstream::ifpstream(int f, _TCHAR* b, int len) : fpbase(f, b, len)
 {
 }
 
@@ -775,7 +790,7 @@ inline filebuf * _BIDSENTRY ifpstream::rdbuf()
     return fpbase::rdbuf();
 }
 
-inline void _BIDSENTRY ifpstream::open( const char _BIDSFAR *name,
+inline void _BIDSENTRY ifpstream::open( const _TCHAR _BIDSFAR *name,
                                     int omode,
                                     int prot )
 {
@@ -787,7 +802,7 @@ inline _BIDSCTOR ofpstream::ofpstream()
 {
 }
 
-inline _BIDSCTOR ofpstream::ofpstream( const char* name, int omode, int prot ) :
+inline _BIDSCTOR ofpstream::ofpstream( const _TCHAR* name, int omode, int prot ) :
     fpbase( name, omode | ios::out | ios::binary, prot )
 {
 }
@@ -796,7 +811,7 @@ inline _BIDSCTOR ofpstream::ofpstream( int f ) : fpbase( f )
 {
 }
 
-inline _BIDSCTOR ofpstream::ofpstream(int f, char* b, int len) :
+inline _BIDSCTOR ofpstream::ofpstream(int f, _TCHAR* b, int len) :
     fpbase(f, b, len)
 {
 }
@@ -806,26 +821,26 @@ inline filebuf * _BIDSENTRY ofpstream::rdbuf()
     return fpbase::rdbuf();
 }
 
-inline void _BIDSENTRY ofpstream::open( const char _BIDSFAR *name,
+inline void _BIDSENTRY ofpstream::open( const _TCHAR _BIDSFAR *name,
                                     int omode,
                                     int prot )
 {
     fpbase::open( name, omode | ios::out | ios::binary, prot );
 }
 
-inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, signed char &ch )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, _TSCHAR &ch )
 {
     ch = ps.readByte();
     return ps;
 }
 
-inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, unsigned char &ch )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, _TUCHAR &ch )
 {
     ch = ps.readByte();
     return ps;
 }
 
-inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, char &ch )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, _TCHAR &ch )
 {
     ch = ps.readByte();
     return ps;
@@ -893,19 +908,19 @@ inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, bool &b )
 }
 #endif
 
-inline opstream& _BIDSENTRY operator << ( opstream& ps, signed char ch )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, _TSCHAR ch )
 {
     ps.writeByte( ch );
     return ps;
 }
 
-inline opstream& _BIDSENTRY operator << ( opstream& ps, unsigned char ch )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, _TUCHAR ch )
 {
     ps.writeByte( ch );
     return ps;
 }
 
-inline opstream& _BIDSENTRY operator << ( opstream& ps, char ch )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, _TCHAR ch )
 {
     ps.writeByte( ch );
     return ps;
@@ -1002,7 +1017,7 @@ template <class Base> void WriteVirtualBase( Base *base, opstream& out )
     else
         {
         Base::Streamer strmr(base);
-        out.registerObject( (TStreamableBase *)((char *)base + 1) );
+        out.registerObject( (TStreamableBase *)((_TCHAR *)base + 1) );
         out.writeByte( pstream::ptObject );
         out.writeWord32( strmr.ClassVersion() );
         strmr.Write( out );
@@ -1011,7 +1026,7 @@ template <class Base> void WriteVirtualBase( Base *base, opstream& out )
 
 template <class Base> void ReadVirtualBase( Base *base, ipstream& in )
 {
-    char ch;
+    _TCHAR ch;
     in >> ch;
     switch( ch )
         {
@@ -1036,6 +1051,22 @@ template <class Base> void ReadVirtualBase( Base *base, ipstream& in )
 //
 //  Individual Components for Streamable Declarations
 //
+
+// When using namespaces, the friend declarations need to name
+// their scope explicitly.
+//
+
+// Used to paste tokens when one argument is itself a macro
+// that needs to be processed before the ## operation
+//
+#define INNER_PASTE(a,b) a ## b
+#define PASTE(a, b) INNER_PASTE(a,b)
+
+#if defined(BI_NAMESPACE)
+# define CLASSLIB_ ClassLib::
+#else
+# define CLASSLIB_
+#endif
 
 #define DECLARE_STREAMER( exp, cls, ver )                           \
 public:                                                             \
@@ -1066,10 +1097,10 @@ public:                                                             \
                                                                     \
         };                                                          \
     friend Streamer;                                                \
-    friend void ReadBaseObject( cls *, ipstream& );                 \
-    friend void WriteBaseObject( cls *, opstream& );                \
-    friend void ReadVirtualBase( cls *, ipstream& );                \
-    friend void WriteVirtualBase( cls *, opstream& )
+    friend void PASTE(CLASSLIB_, ReadBaseObject)( cls *, ipstream& );   \
+    friend void PASTE(CLASSLIB_, WriteBaseObject)( cls *, opstream& );  \
+    friend void PASTE(CLASSLIB_, ReadVirtualBase)( cls *, ipstream& );  \
+    friend void PASTE(CLASSLIB_, WriteVirtualBase)( cls *, opstream& )
 
 #define DECLARE_STREAMER_FROM_BASE( exp, cls, base )                \
 public:                                                             \
@@ -1094,10 +1125,10 @@ public:                                                             \
                                                                     \
         };                                                          \
     friend Streamer;                                                \
-    friend void ReadBaseObject( cls *, ipstream& );                 \
-    friend void WriteBaseObject( cls *, opstream& );                \
-    friend void ReadVirtualBase( cls *, ipstream& );                \
-    friend void WriteVirtualBase( cls *, opstream& )
+    friend void PASTE(CLASSLIB_, ReadBaseObject)( cls *, ipstream& );   \
+    friend void PASTE(CLASSLIB_, WriteBaseObject)( cls *, opstream& );  \
+    friend void PASTE(CLASSLIB_, ReadVirtualBase)( cls *, ipstream& );  \
+    friend void PASTE(CLASSLIB_, WriteVirtualBase)( cls *, opstream& )
 
 #define DECLARE_ABSTRACT_STREAMER( exp, cls, ver )                  \
 public:                                                             \
@@ -1123,11 +1154,10 @@ public:                                                             \
                                                                     \
         };                                                          \
     friend Streamer;                                                \
-    friend void ReadBaseObject( cls *, ipstream& );                 \
-    friend void WriteBaseObject( cls *, opstream& );                \
-    friend void ReadVirtualBase( cls *, ipstream& );                \
-    friend void WriteVirtualBase( cls *, opstream& )
-
+    friend void PASTE(CLASSLIB_, ReadBaseObject)( cls *, ipstream& );   \
+    friend void PASTE(CLASSLIB_, WriteBaseObject)( cls *, opstream& );  \
+    friend void PASTE(CLASSLIB_, ReadVirtualBase)( cls *, ipstream& );  \
+    friend void PASTE(CLASSLIB_, WriteVirtualBase)( cls *, opstream& )
 
 #define DECLARE_STREAMABLE_OPS( cls )                               \
 static ipstream& readRef( ipstream& is, cls& cl );                  \
@@ -1169,7 +1199,7 @@ public:                                                             \
 #if !defined(BI_NO_OBJ_STREAMING)
 
 #define DECLARE_STREAMABLE( exp, cls, ver )                         \
-    DECLARE_CASTABLE;                                               \
+    DECLARE_CASTABLE ;                                               \
     DECLARE_STREAMER( exp, cls, ver );                              \
     DECLARE_STREAMABLE_OPS( cls );                                  \
     DECLARE_STREAMABLE_CTOR( cls )
@@ -1189,13 +1219,13 @@ public:                                                             \
 #else  // if BI_NO_OBJ_STREAMING
 
 #define DECLARE_STREAMABLE( exp, cls, ver )                         \
-    DECLARE_CASTABLE;
+    DECLARE_CASTABLE
 
 #define DECLARE_STREAMABLE_FROM_BASE( exp, cls, base )              \
-    DECLARE_CASTABLE;
+    DECLARE_CASTABLE
 
 #define DECLARE_ABSTRACT_STREAMABLE( exp, cls, ver )                \
-    DECLARE_CASTABLE;
+    DECLARE_CASTABLE
 
 #endif  // if/else BI_NO_OBJ_STREAMING
 
@@ -1224,7 +1254,7 @@ TStreamableBase::Type_id cls::CastableID() const                    \
 IMPLEMENT_CASTABLE_ID( cls );                                       \
 void *cls::FindBase( Type_id id ) const                             \
 {                                                                   \
-    return (strcmp( id, CastableIdent ) == 0) ? (void *)this : 0;   \
+    return (_tcscmp( id, CastableIdent ) == 0) ? (void *)this : 0;   \
 }                                                                   \
 
                                                                     \
@@ -1232,7 +1262,7 @@ void *cls::FindBase( Type_id id ) const                             \
 IMPLEMENT_CASTABLE_ID( cls );                                       \
 void *cls::FindBase( Type_id id ) const                             \
 {                                                                   \
-    if(strcmp( id, CastableIdent ) == 0)                            \
+    if(_tcscmp( id, CastableIdent ) == 0)                            \
         return (void *)this;                                        \
     else                                                            \
         return base1::FindBase(id);                                 \
@@ -1243,7 +1273,7 @@ IMPLEMENT_CASTABLE_ID( cls );                                       \
 void *cls::FindBase( Type_id id ) const                             \
 {                                                                   \
     void *res = 0;                                                  \
-    if(strcmp( id, CastableIdent ) == 0)                            \
+    if(_tcscmp( id, CastableIdent ) == 0)                            \
         return (void *)this;                                        \
     else if( (res = base1::FindBase(id)) != 0 )                     \
         return res;                                                 \
@@ -1258,7 +1288,7 @@ IMPLEMENT_CASTABLE_ID( cls );                                       \
 void *cls::FindBase( Type_id id ) const                             \
 {                                                                   \
     void *res = 0;                                                  \
-    if(strcmp( id, CastableIdent ) == 0)                            \
+    if(_tcscmp( id, CastableIdent ) == 0)                            \
         return (void *)this;                                        \
     else if( (res = base1::FindBase(id)) != 0 )                     \
         return res;                                                 \
@@ -1275,7 +1305,7 @@ IMPLEMENT_CASTABLE_ID( cls );                                       \
 void *cls::FindBase( Type_id id ) const                             \
 {                                                                   \
     void *res = 0;                                                  \
-    if(strcmp( id, CastableIdent ) == 0)                            \
+    if(_tcscmp( id, CastableIdent ) == 0)                            \
         return (void *)this;                                        \
     else if( (res = base1::FindBase(id)) != 0 )                     \
         return res;                                                 \
@@ -1294,7 +1324,7 @@ IMPLEMENT_CASTABLE_ID( cls );                                       \
 void *cls::FindBase( Type_id id ) const                             \
 {                                                                   \
     void *res = 0;                                                  \
-    if(strcmp( id, CastableIdent ) == 0)                            \
+    if(_tcscmp( id, CastableIdent ) == 0)                            \
         return (void *)this;                                        \
     else if( (res = base1::FindBase(id)) != 0 )                     \
         return res;                                                 \
@@ -1505,6 +1535,9 @@ IMPLEMENT_CASTABLE5( cls, base1, base2, base3, base4, base5 );
 
 #endif  // if/else BI_NO_OBJ_STREAMING
 
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined(BI_CLASSLIB_NO_po)
 # pragma option -po.

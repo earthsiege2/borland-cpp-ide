@@ -347,8 +347,8 @@ ReturnAnalysis()
   char buf[40];
 
   MovTab[0] = MainLine[0];   //  copy the MainLine to HintLine
-  for (myx = 1; myx <= MAXPLY; myx++)
-    HintLine[myx - 1] = MainLine[myx];
+  for (myx = 0; myx < MAXPLY; myx++)
+    HintLine[myx] = MainLine[myx];
   dep = MAXPLY;
   HintEvalu = MainEvalu;
   if (MovTab[0].movpiece == empty) {

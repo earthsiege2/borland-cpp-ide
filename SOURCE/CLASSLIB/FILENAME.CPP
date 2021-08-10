@@ -1,14 +1,16 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.16  $
+//$Revision:   5.21  $
 //
 // TFileName class implementation.
 //----------------------------------------------------------------------------
 #include <classlib/pch.h>
 #include <classlib/filename.h>
 #include <services/memory.h>
+#include <winsys/system.h>
+#include <tchar.h>
 #if !defined(BI_PLAT_WIN32)
 # include <dir.h>
 #endif
@@ -20,13 +22,13 @@
 #define WIN95_LONGFILENAME_MAX 260
 
 #if defined(BI_PLAT_MSW)
-  static char serverNamePrefix[] = "\\\\";
-  static int  serverNamePrefixLen = strlen(serverNamePrefix);
-//  static char devTerminator[] = "\\/:";
-  static char ldevTerminator = ':';
-  static char dirSeparator[] = "\\/";
-  static char dirSeparatorCh = '\\';
-  static char extSeparator = '.';
+  static _TCHAR serverNamePrefix[] = "\\\\";
+  static int  serverNamePrefixLen = _tcslen(serverNamePrefix);
+//  static _TCHAR devTerminator[] = "\\/:";
+  static _TCHAR ldevTerminator = ':';
+  static _TCHAR dirSeparator[] = "\\/";
+  static _TCHAR dirSeparatorCh = '\\';
+  static _TCHAR extSeparator = '.';
 #endif
 
 //
@@ -38,9 +40,9 @@ GetFullPathName(LPCSTR lpFileName, DWORD nBufferLength, LPSTR lpBuffer,
                 LPSTR* lpFilePart)
 {
   // use new MS-DOS long filename function x7160,0 - GetFullPathName
-  char destPath[WIN95_LONGFILENAME_MAX]; // defined at top of file
-  char const far* farFileName = lpFileName;
-  char far* farDestPath = destPath;
+  _TCHAR destPath[WIN95_LONGFILENAME_MAX]; // defined at top of file
+  _TCHAR const far* farFileName = lpFileName;
+  _TCHAR far* farDestPath = destPath;
   _asm {
     mov ax, 0x7160
     mov cl, 0                    // GetFullPathName
@@ -51,12 +53,12 @@ GetFullPathName(LPCSTR lpFileName, DWORD nBufferLength, LPSTR lpBuffer,
     jc  error
   }
 
-  strncpy(lpBuffer, destPath, (int)(nBufferLength - 1));
+  _tcsncpy(lpBuffer, destPath, (int)(nBufferLength - 1));
   goto exit;
 error:
-    strncpy(lpBuffer, lpFileName, (int)(nBufferLength - 1)); // just copy in to out
+    _tcsncpy(lpBuffer, lpFileName, (int)(nBufferLength - 1)); // just copy in to out
 exit:
-  int bufferLen = strlen(lpBuffer);
+  int bufferLen = _tcslen(lpBuffer);
   // find the beginning of the filename part, lpFilePart must point to it
   if (lpFilePart) {
     *lpFilePart = lpBuffer;
@@ -74,9 +76,9 @@ DWORD
 GetShortPathName(LPCSTR lpszLongPath, LPSTR lpszShortPath, DWORD cchBuffer)
 {
   // use new MS-DOS long filename function x7160,1 - GetShortPathName
-  char destPath[WIN95_LONGFILENAME_MAX]; // defined at top of file
-  char const far* farLongPath = lpszLongPath;
-  char far* farDestPath = destPath;
+  _TCHAR destPath[WIN95_LONGFILENAME_MAX]; // defined at top of file
+  _TCHAR const far* farLongPath = lpszLongPath;
+  _TCHAR far* farDestPath = destPath;
   _asm {
     mov ax, 0x7160
     mov cl, 1                    // GetShortPathName
@@ -86,57 +88,57 @@ GetShortPathName(LPCSTR lpszLongPath, LPSTR lpszShortPath, DWORD cchBuffer)
     int 21h
     jc  error
   }
-  strncpy(lpszShortPath, destPath, (int)(cchBuffer - 1));
+  _tcsncpy(lpszShortPath, destPath, (int)(cchBuffer - 1));
   goto exit;
 error:
-    strncpy(lpszShortPath, lpszLongPath, (int)(cchBuffer - 1)); // just copy in to out
+    _tcsncpy(lpszShortPath, lpszLongPath, (int)(cchBuffer - 1)); // just copy in to out
 exit:
-  return strlen(lpszShortPath);
+  return _tcslen(lpszShortPath);
 }
 #endif
 
 //
 // overloaded functions to perform string scanning
 //
-static const char far* strend(const char far* str)
+static const _TCHAR far* strend(const _TCHAR far* str)
 {
   while (*str)
     str++;
   return str;
 }
 
-static const char far* find(const char far* start, const char far* end, int match)
+static const _TCHAR far* find(const _TCHAR far* start, const _TCHAR far* end, int match)
 {
   while (*start != match && start != end)
     start++;
   return start;
 }
 
-static const char far* find(const char far* start, const char far* end, const char far* set)
+static const _TCHAR far* find(const _TCHAR far* start, const _TCHAR far* end, const _TCHAR far* set)
 {
-  const char far* setend = set + strlen(set);
+  const _TCHAR far* setend = set + _tcslen(set);
   while (find(set, setend, *start) == setend && start != end)
     start++;
   return start;
 }
 
-static const char far* findl(const char far* start, const char far* end, int match)
+static const _TCHAR far* findl(const _TCHAR far* start, const _TCHAR far* end, int match)
 {
   while (*start != match && start != end)
     start--;
   return start;
 }
 
-static const char far* findl(const char far* start, const char far* end, const char far* set)
+static const _TCHAR far* findl(const _TCHAR far* start, const _TCHAR far* end, const _TCHAR far* set)
 {
-  const char far* setend = set + strlen(set);
+  const _TCHAR far* setend = set + _tcslen(set);
   while (find(set, setend, *start) == setend && start != end)
     start--;
   return start;
 }
 
-static const char far* skipstr(const char far* start, const char far* end,
-                               const char far* skip)
+static const _TCHAR far* skipstr(const _TCHAR far* start, const _TCHAR far* end,
+                               const _TCHAR far* skip)
 {
   while (*skip && *start == *skip && start != end)
     start++, skip++;
@@ -151,29 +153,29 @@ static const char far* skipstr(const char far* start, const char far* end,
 //
 //
 //
-static string formServer(const char far* serverName)
+static string formServer(const _TCHAR far* serverName)
 {
   if (!serverName)
     return serverName;
 
-  const char far* serverNameEnd = strend(serverName);
+  const _TCHAR far* serverNameEnd = strend(serverName);
 
-  if (strncmp(serverName, serverNamePrefix, serverNamePrefixLen) == 0)
+  if (_tcsncmp(serverName, serverNamePrefix, serverNamePrefixLen) == 0)
     serverName += serverNamePrefixLen;               // skip "\\"
 
-  const char far* ds = find(serverName, serverNameEnd, dirSeparator);
+  const _TCHAR far* ds = find(serverName, serverNameEnd, dirSeparator);
   return string(serverName, 0, (int)(ds - serverName));
 }
 
 //
 //
 //
-static string formDevice(const char far* deviceName, bool isUNC)
+static string formDevice(const _TCHAR far* deviceName, bool isUNC)
 {
   if (!deviceName)
     return deviceName;
 
-  const char far* deviceNameEnd = strend(deviceName);
+  const _TCHAR far* deviceNameEnd = strend(deviceName);
 
 
   if (isUNC)
@@ -188,16 +190,16 @@ static string formDevice(const char far* deviceName, bool isUNC)
 // Return a well formed path from any kind of filename part. A lone name
 // is assumed to be just the path
 //
-static string formPath(const char far* path)
+static string formPath(const _TCHAR far* path)
 {
   if (!path)
     return path;
 
-  const char far* pathEnd = strend(path);
+  const _TCHAR far* pathEnd = strend(path);
 
   // Find the start of the path, skipping logical device or server+share
   //
-  const char far* dvs = find(path, pathEnd, ldevTerminator);
+  const _TCHAR far* dvs = find(path, pathEnd, ldevTerminator);
   if (dvs < pathEnd) {
     path = dvs + 1;  // skip logical device
   }
@@ -213,18 +215,18 @@ static string formPath(const char far* path)
 //   "dir.x\"          -> ""
 //   "file"            -> "file"
 //
-static string formFile(const char far* file)
+static string formFile(const _TCHAR far* file)
 {
   if (!file)
     return file;
 
-  const char far* fileEnd = strend(file);
+  const _TCHAR far* fileEnd = strend(file);
 
-  const char far* ds = findl(fileEnd-1, file-1, dirSeparator);
+  const _TCHAR far* ds = findl(fileEnd-1, file-1, dirSeparator);
   if (ds >= file)
     file = ds + 1;
 
-  const char far* es = findl(fileEnd-1, file-1, extSeparator);
+  const _TCHAR far* es = findl(fileEnd-1, file-1, extSeparator);
   if (es >= file)
     fileEnd = es;
 
@@ -239,18 +241,18 @@ static string formFile(const char far* file)
 //   "dir.x\"          -> "."
 //   "ext"             -> ".ext"
 //
-static string formExt(const char far* ext)
+static string formExt(const _TCHAR far* ext)
 {
   if (!ext)
     return ext;  // or extSeparator?
 
-  const char far* extEnd = strend(ext);
+  const _TCHAR far* extEnd = strend(ext);
 
-  const char far* ds = findl(extEnd-1, ext-1, dirSeparator);
+  const _TCHAR far* ds = findl(extEnd-1, ext-1, dirSeparator);
   if (ds >= ext)
     ext = ds + 1;
 
-  const char far* es = findl(extEnd-1, ext-1, extSeparator);
+  const _TCHAR far* es = findl(extEnd-1, ext-1, extSeparator);
   if (es >= ext)
     return es;
 
@@ -299,9 +301,9 @@ TFileName::TFileName(const TFileName& src)
 //   name := (filecharset)[...]
 //   multiname := (filecharset | .)[...]
 //
-TFileName::TFileName(const char far* serverName, const char far* deviceName,
-                     const char far* path, const char far* file,
-                     const char far* ext)
+TFileName::TFileName(const _TCHAR far* serverName, const _TCHAR far* deviceName,
+                     const _TCHAR far* path, const _TCHAR far* file,
+                     const _TCHAR far* ext)
 {
   ServerStr = formServer(serverName);
 
@@ -317,10 +319,10 @@ TFileName::TFileName(const char far* serverName, const char far* deviceName,
 //
 //
 void
-TFileName::Parse(const char far* freeform)
+TFileName::Parse(const _TCHAR far* freeform)
 {
-  const char far* nextp;
-  const char far* freeformEnd = strend(freeform);
+  const _TCHAR far* nextp;
+  const _TCHAR far* freeformEnd = strend(freeform);
 
   // Parse from the left, the server name and device if UNC "\\", or the
   // logical device name if one.
@@ -353,7 +355,7 @@ TFileName::Parse(const char far* freeform)
   // Parse the extension and filename from the right.
   //
   nextp = findl(freeformEnd-1, freeform-1, extSeparator);
-  const char far* dirp = findl(freeformEnd-1, freeform-1, dirSeparator);
+  const _TCHAR far* dirp = findl(freeformEnd-1, freeform-1, dirSeparator);
 
   if (nextp > dirp) {
     ExtStr = string(nextp, 0, (int)(freeformEnd-nextp));
@@ -376,7 +378,7 @@ TFileName::Parse(const char far* freeform)
 //
 // Construct a filename given the full path in any form
 //
-TFileName::TFileName(const char far* freeform)
+TFileName::TFileName(const _TCHAR far* freeform)
 {
   Parse(freeform);
 }
@@ -399,22 +401,22 @@ TFileName::TFileName(TFileName::TSpecialType type)
     case TempFile:
     case TempDir: {
       int tmpLen = ::GetTempPath(0,0);
-      char* tmpPath = new char[tmpLen];
+      _TCHAR* tmpPath = new _TCHAR[tmpLen];
       ::GetTempPath(tmpLen, tmpPath);
       if (type == TempDir) {
         Parse(tmpPath);
       }
       else {
-        char tmpFile[WIN95_LONGFILENAME_MAX];
+        _TCHAR tmpFile[WIN95_LONGFILENAME_MAX];
         ::GetTempFileName(tmpPath, "TFN", 0, tmpFile);
 
         Parse(tmpFile);
       }
-      delete tmpPath;
+      delete[] tmpPath;
     }
     break;
     case CurrentDir: {
-      char tmp[WIN95_LONGFILENAME_MAX];
+      _TCHAR tmp[WIN95_LONGFILENAME_MAX];
       ::GetCurrentDirectory(sizeof tmp, tmp);
 
       Parse(tmp);
@@ -423,7 +425,7 @@ TFileName::TFileName(TFileName::TSpecialType type)
 #elif defined(BI_PLAT_WIN16)
     case TempFile:
     case TempDir: {
-      char tmpFile[WIN95_LONGFILENAME_MAX];
+      _TCHAR tmpFile[WIN95_LONGFILENAME_MAX];
       ::GetTempFileName(0, "TFN", 0, tmpFile);
 
       Parse(tmpFile);
@@ -436,15 +438,15 @@ TFileName::TFileName(TFileName::TSpecialType type)
     }
     break;
     case CurrentDir: {
-      char tmp[WIN95_LONGFILENAME_MAX];
-      getcwd(tmp, sizeof tmp);
+      _TCHAR tmp[WIN95_LONGFILENAME_MAX];
+      _tgetcwd(tmp, sizeof tmp);
 
       Parse(tmp);
     }
     break;
 #endif
     case HomeDir: {
-      char tmp[WIN95_LONGFILENAME_MAX];
+      _TCHAR tmp[WIN95_LONGFILENAME_MAX];
       ::GetWindowsDirectory(tmp, sizeof tmp);
 
       Parse(tmp);
@@ -455,14 +457,14 @@ TFileName::TFileName(TFileName::TSpecialType type)
     case SharedDir:
     break;
     case SysDir: {
-      char tmp[WIN95_LONGFILENAME_MAX];
+      _TCHAR tmp[WIN95_LONGFILENAME_MAX];
       ::GetSystemDirectory(tmp, sizeof tmp);
       Parse(tmp);
     }
     break;
 #if defined(BI_PLAT_WIN32)
     case ComputerName: {
-      char tmp[WIN95_LONGFILENAME_MAX];
+      _TCHAR tmp[WIN95_LONGFILENAME_MAX];
       uint32 size = sizeof tmp;
       ::GetComputerName(tmp, &size);
       Parse(tmp);
@@ -493,7 +495,7 @@ TFileName::operator =(const TFileName& src)
 static void
 ForceFullPath(string canonical)
 {
-  char buffer[WIN95_LONGFILENAME_MAX];
+  _TCHAR buffer[WIN95_LONGFILENAME_MAX];
   ::GetFullPathName(canonical.c_str(), sizeof buffer, buffer, 0);
   canonical = buffer;
 }
@@ -524,7 +526,7 @@ TFileName::Canonical(bool forceUNC) const
 string
 TFileName::ShortName(bool forceUNC) const
 {
-  char tmp[WIN95_LONGFILENAME_MAX];
+  _TCHAR tmp[WIN95_LONGFILENAME_MAX];
   ::GetShortPathName(Canonical(forceUNC).c_str(), tmp, sizeof tmp);
 
   return string(tmp);
@@ -536,7 +538,7 @@ TFileName::ShortName(bool forceUNC) const
 string TFileName::Title() const
 {
   string canonical = Canonical();
-  char tmp[WIN95_LONGFILENAME_MAX];
+  _TCHAR tmp[WIN95_LONGFILENAME_MAX];
   ::GetFileTitle(canonical.c_str(), tmp, sizeof tmp);
 
   return string(tmp);
@@ -557,7 +559,7 @@ string TFileName::Squeezed(int maxLen) const
   };
   for (int i = 0; i < sizeof parts / sizeof parts[0]; i++) {
     string attempt = GetParts(parts[i]);
-    if (attempt.length() <= maxLen) {
+    if (attempt.length() <= (uint)maxLen) {
       return attempt;
     }
   }
@@ -715,8 +717,8 @@ TFileName::Remove() const
   if (!::DeleteFile(Canonical().c_str()))
     ::RemoveDirectory(Canonical().c_str());
 #else
-  if (remove(Canonical().c_str()) != 0)
-    rmdir(Canonical().c_str());
+  if (_tremove(Canonical().c_str()) != 0)
+    _trmdir(Canonical().c_str());
 #endif
 }
 
@@ -731,11 +733,19 @@ TFileName::Move(const TFileName& newName, uint32 /*how*/)
 #endif
 {
 #if defined(BI_PLAT_WIN32)
-  if (::MoveFileEx(Canonical().c_str(), newName.Canonical().c_str(), how)) {
-    *this = newName;
-  }
+  //
+  // Contrary to the help\MSDN MoveFileEx fails under Win95. (as of 2/97)
+  //
+  bool retval = false;
+  if( !TSystem::IsWin95() )
+    retval = ::MoveFileEx(Canonical().c_str(), newName.Canonical().c_str(), how);
+  else
+    retval = ::MoveFile(Canonical().c_str(), newName.Canonical().c_str());
+
+  if(retval)
+   *this = newName;
 #else
-  rename(Canonical().c_str(), newName.Canonical().c_str());
+  _trename(Canonical().c_str(), newName.Canonical().c_str());
 #endif
 }
 
@@ -750,26 +760,26 @@ TFileName::Copy(const TFileName& newName, bool failIfExists) const
 #else
   FILE *in;
   FILE *out;
-  char c;
+  _TCHAR c;
 
   if (failIfExists) {
-    out = fopen(newName.Canonical().c_str(), "r");
+    out = _tfopen(newName.Canonical().c_str(), "r");
     if (!out)
       return;
     fclose(out);
   }
 
-  out = fopen(newName.Canonical().c_str(), "w");
+  out = _tfopen(newName.Canonical().c_str(), "w");
   if (!out)
     return;
-  in = fopen(Canonical().c_str(), "r");
+  in = _tfopen(Canonical().c_str(), "r");
   if (!in) {
     fclose(out);
     return;
   }
 
-  while ((c = getc(in)) != 0) // != 0 part to get by compiler warning
-    putc(c, out);
+  while ((c = _gettc(in)) != 0) // != 0 part to get by compiler warning
+    _puttc(c, out);
 
   fclose(in);
   fclose(out);
@@ -792,7 +802,7 @@ BOOL CreateDirectoryEx(
    );
 */
 #else
-  return mkdir(Canonical().c_str()) == 0;
+  return _tmkdir(Canonical().c_str()) == 0;
 #endif
 }
 
@@ -805,7 +815,7 @@ TFileName::ChangeDir() const
 #if defined(BI_PLAT_WIN32)
   return ::SetCurrentDirectory(Canonical().c_str());
 #else
-  return chdir(Canonical().c_str()) == 0;
+  return _tchdir(Canonical().c_str()) == 0;
 #endif
 }
 
@@ -819,7 +829,7 @@ TFileNameIterator::TFileNameIterator(const string& wildName)
   Done(false)
 {
 #if !defined(BI_PLAT_WIN32)
-  Done = findfirst(wildName.c_str(), &Data, 0x3F) < 0;  // All attributes
+  Done = _tfindfirst(wildName.c_str(), &Data, 0x3F) < 0;  // All attributes
 #endif
 }
 
@@ -844,7 +854,7 @@ TFileNameIterator::operator ++()
 const ffblk&
 TFileNameIterator::operator ++()
 {
-  if (::findnext(&Data) < 0)
+  if (::_tfindnext(&Data) < 0)
     Done = true;
   return Data;
 }

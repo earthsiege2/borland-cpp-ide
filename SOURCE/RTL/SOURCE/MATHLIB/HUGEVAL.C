@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 
 /*--------------------------------------------------------------------------*
@@ -29,9 +30,12 @@ consider these representable, just not traditional.  For some
 applications it is indeed preferable, and it may be the default
 for some future release of Turbo C.
 
+Note that HUGE_VAL is now represented as +INF.  This allows for better
+error detection and is compatible with most other platforms.  It is
+explicitly allowed by ANSI on platforms that support it.
 Approximate decimal values are:
 
-        _huge_flt                       3.40282347E+38F
+        _huge_flt               3.40282347E+38F
         _huge_dble              1.7976931348623158E+308
         _huge_ldble             1.189731495357232E+4932L
         _tiny_ldble             3.362103143112094E-4932L
@@ -47,7 +51,7 @@ Its value is the NAN preferred by the 8087 chip.
 
 *---------------------------------------------------------------------------*/
 
-#define UsingINF        0
+#define UsingINF        1
 
 #if     UsingINF
 
@@ -55,6 +59,10 @@ Its value is the NAN preferred by the 8087 chip.
 unsigned short _huge_flt[] = { 0, 0x7F80 };
 unsigned short _huge_dble[] = { 0, 0, 0, 0x7FF0 };
 unsigned short _huge_ldble[] = { 0, 0, 0, 0x8000, 0x7FFF };
+
+unsigned short _max_flt[] = { -1, 0x7F7F };
+unsigned short _max_dble[] = { -1, -1, -1, 0x7FEF };
+unsigned short _max_ldble[] = { -1, -1, -1, -1, 0x7FFE };
 
 #else
 

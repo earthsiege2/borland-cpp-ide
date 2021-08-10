@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Definition of classes TLayoutMetrics & TLayoutWindow
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(OWL_LAYOUTCO_H)
 # include <owl/layoutco.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -93,7 +97,7 @@ class _OWLCLASS TLayoutWindow : virtual public TWindow {
     // If you change the layout metrics for a child window call Layout()
     // to have the changes take effect
     //
-    void            Layout();
+    virtual void    Layout();
 
     void            SetChildLayoutMetrics(TWindow& child, TLayoutMetrics& metrics);
     bool            GetChildLayoutMetrics(TWindow& child, TLayoutMetrics& metrics);
@@ -154,5 +158,9 @@ class _OWLCLASS TLayoutWindow : virtual public TWindow {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_LAYOUTWIN_H

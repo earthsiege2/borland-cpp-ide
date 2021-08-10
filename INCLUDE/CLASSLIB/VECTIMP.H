@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.6  $
 //
 //----------------------------------------------------------------------------
 #if !defined( CLASSLIB_VECTIMP_H )
@@ -37,6 +37,10 @@
 //#pragma option -Vo-
 #if defined(BI_CLASSLIB_NO_po)
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -534,7 +538,7 @@ template <class T, class Alloc> int TMCVectorImp<T,Alloc>::Add( const T& t )
     return 1;
 }
 
-template <class T, class Alloc> 
+template <class T, class Alloc>
 int TMCVectorImp<T,Alloc>::AddAt( const T& t, unsigned loc )
 {
     if( loc >= Lim && !Resize(loc+1) )
@@ -1167,7 +1171,7 @@ public:
 
 };
 
-template <class T, class Alloc> 
+template <class T, class Alloc>
 int TMICVectorImp<T,Alloc>::AddAt( T *t, unsigned loc )
 {
     if( loc >= Lim && !Resize(loc+1) )
@@ -1433,6 +1437,10 @@ public:
 #if defined(BI_OLDNAMES)
 # define BI_ISVectorImp TISVectorImp
 # define BI_ISVectorIteratorImp TISVectorIteratorImp
+#endif
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
 #endif
 
 #if defined(BI_CLASSLIB_NO_po)

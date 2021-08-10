@@ -3,12 +3,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $ */
 
 #ifndef __cplusplus
 #error Must use C++ for the io stream manipulators.
@@ -49,9 +50,9 @@ template<class _typ> class _EXPCLASS smanip {
 public:
         _RTLENTRY smanip(ios _FAR & (_RTLENTRY *_f)(ios _FAR &, _typ), _typ _a) :
                 _fn(_f), _ag(_a) { }
-        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, smanip<_typ> _FAR & _f) {
+        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, const smanip<_typ> _FAR & _f) {
                         (*_f._fn)(_s, _f._ag); return _s; }
-        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, smanip<_typ> _FAR & _f) {
+        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, const smanip<_typ> _FAR & _f) {
                         (*_f._fn)(_s, _f._ag); return _s; }
         };
 
@@ -69,7 +70,7 @@ template<class _typ> class _EXPCLASS imanip {
 public:
         _RTLENTRY imanip(istream _FAR & (_RTLENTRY *_f)(istream _FAR &, _typ), _typ _z ) :
                 _fn(_f), _ag(_z) { }
-        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, imanip<_typ> _FAR & _f) {
+        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, const imanip<_typ> _FAR & _f) {
                 return(*_f._fn)(_s, _f._ag); }
         };
 
@@ -88,7 +89,7 @@ template<class _typ> class _EXPCLASS omanip {
 public:
         _RTLENTRY omanip(ostream _FAR & (_RTLENTRY *_f)(ostream _FAR &, _typ), _typ _z ) :
                 _fn(_f), _ag(_z) { }
-        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, omanip<_typ> _FAR & _f) {
+        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, const omanip<_typ> _FAR & _f) {
                 return(*_f._fn)(_s, _f._ag); }
         };
 
@@ -107,9 +108,9 @@ template<class _typ> class _EXPCLASS iomanip {
 public:
         _RTLENTRY iomanip(iostream _FAR & (_RTLENTRY *_f)(iostream _FAR &, _typ), _typ _z ) :
                 _fn(_f), _ag(_z) { }
-        friend istream _FAR & _RTLENTRY operator>>(iostream _FAR & _s, iomanip<_typ> _FAR & _f) {
+        friend istream _FAR & _RTLENTRY operator>>(iostream _FAR & _s, const iomanip<_typ> _FAR & _f) {
                 return(*_f._fn)(_s, _f._ag); }
-        friend ostream _FAR & _RTLENTRY operator<<(iostream _FAR & _s, iomanip<_typ> _FAR & _f) {
+        friend ostream _FAR & _RTLENTRY operator<<(iostream _FAR & _s, const iomanip<_typ> _FAR & _f) {
                 return(*_f._fn)(_s, _f._ag); }
         };
 

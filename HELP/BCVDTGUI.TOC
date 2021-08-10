@@ -136,6 +136,8 @@
 4 The SQL property = TheSQLProperty
 4 Executing a query = ExecutingAQuery
 4 Getting a live result set = GettingALiveResultSet
+4 Local SQL syntax requirements for a live result set = LocalLive
+4 Remote server SQL syntax requirements for a live result set = RemoteLive
 3 Dynamic SQL statements
 4 About dynamic SQL statements = DynamicSqlStatements
 4 Preparing a query = PreparingAQuery

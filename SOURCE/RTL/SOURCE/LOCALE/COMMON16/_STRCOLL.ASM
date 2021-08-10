@@ -6,11 +6,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;
-;       C/C++ Run Time Library - Version 7.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1992, 1996 by Borland International
+;       Copyright (c) 1992, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
 
 	INCLUDE RULES.ASI
 
@@ -133,7 +134,7 @@ ENDIF
         ret
 
 
-__strcoll ENDP 
+__strcoll ENDP
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                                                      ;
@@ -371,7 +372,7 @@ _LevelCollate PROC NOLANGUAGE NEAR
 	; BOTH STRINGS HAVE ENDED
 	;
 
-	; check for position rule 
+	; check for position rule
 
 ;;;	test	ch, POSITION_RULE
 ;;;  	jz	@@weightdifference		; dealing with weights only
@@ -422,4 +423,3 @@ _LevelCollate ENDP
 Code_EndS@
 
                END ; end module _strcoll.asm
-

@@ -3,6 +3,8 @@
 // Copyrights (C) 1996 Borland International
 //--------------------------------------------------------
 
+#include <vdbt/dbcontrl.h>
+#pragma hdrstop
 #include <vdbt/dblkupcb.h>
 
 //--------------------------------------------------------
@@ -54,6 +56,10 @@ TDBLookupCombo::TDBLookupCombo( TWindow *parent, int resId, TModule *module )
 // OWL response table
 //--------------------------------------------------------
 DEFINE_DB_RESPONSE_TABLE1( TDBLookupCombo, TDBControl )
+  EV_VBXEVENT_CLICK,
+  EV_VBXEVENT_DRAGOVER,
+  EV_VBXEVENT_DRAGDROP,
+  EV_VBXEVENT_ENDDRAG,
   EV_VBXEVENT_DBLCLICK(  Event_TDBLookupCombo_DblClick ),
   EV_VBXEVENT_KEYDOWN(   Event_TDBLookupCombo_KeyDown ),
   EV_VBXEVENT_KEYPRESS(  Event_TDBLookupCombo_KeyPress ),
@@ -71,6 +77,10 @@ END_RESPONSE_TABLE;
 //--------------------------------------------------------
 // Event Handlers
 //--------------------------------------------------------
+DEFINE_DB_EVENT( TDBLookupCombo, OnClick,     TNotifyEvent,   Event_TDBLookupCombo_Click );
+DEFINE_DB_EVENT( TDBLookupCombo, OnDragDrop,  TDragEvent,     Event_TDBLookupCombo_DragDrop );
+DEFINE_DB_EVENT( TDBLookupCombo, OnDragOver,  TDragOverEvent, Event_TDBLookupCombo_DragOver );
+DEFINE_DB_EVENT( TDBLookupCombo, OnEndDrag,   TDragEvent,     Event_TDBLookupCombo_EndDrag );
 DEFINE_DB_EVENT( TDBLookupCombo, OnDblClick,  TNotifyEvent,   Event_TDBLookupCombo_DblClick );
 DEFINE_DB_EVENT( TDBLookupCombo, OnEnter,     TNotifyEvent,   Event_TDBLookupCombo_GotFocus );
 DEFINE_DB_EVENT( TDBLookupCombo, OnExit,      TNotifyEvent,   Event_TDBLookupCombo_LostFocus );

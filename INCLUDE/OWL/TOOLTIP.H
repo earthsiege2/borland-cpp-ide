@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.18  $
+//$Revision:   10.22  $
 //
 // Definition of the TTooltip class and helper objects
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(OWL_CONTAIN_H)
 # include <owl/contain.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -43,7 +47,7 @@ class _OWLCLASS TToolInfo : public TOOLINFO {
     // 'TTN_NEEDTEXT' notifications if 'txt' is not provided.
     //
     TToolInfo(HWND window, const TRect& rect, uint toolId,
-              const char far* txt = LPSTR_TEXTCALLBACK);
+              const char* txt = LPSTR_TEXTCALLBACK);
 
     // Constructor for a tooltip associated with a rectangular area
     // within a window's client area. The 'txtRes' specifies the ID
@@ -57,7 +61,7 @@ class _OWLCLASS TToolInfo : public TOOLINFO {
     // the default LPSTR_TEXTCALLBACK is used for the 'txt' parameter.
     //
     TToolInfo(HWND parent, HWND toolHwnd,
-              const char far* txt = LPSTR_TEXTCALLBACK);
+              const char* txt = LPSTR_TEXTCALLBACK);
 
     // Constructor for tool implemented as windows (eg. child/controls).
     // 'resId' identifies the resource ID of the string to be used by
@@ -244,6 +248,10 @@ class _OWLCLASS TTooltip : public TControl {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementation
@@ -465,7 +473,7 @@ inline void TTooltip::RelayEvent(MSG& msg)
 //
 inline void TTooltip::SetDelayTime(WPARAM flag, int delay)
 {
-  SendMessage(TTM_SETDELAYTIME, 0, TParam2(delay));
+  SendMessage(TTM_SETDELAYTIME, flag, TParam2(delay));
 }
 
 #endif  // BI_PLAT_WIN32

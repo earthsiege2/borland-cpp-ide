@@ -6,16 +6,18 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.6  $        */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <_tchar.h>
 #include <_scanf.h>
 
 /*-----------------------------------------------------------------------*
@@ -33,6 +35,9 @@ Macros for manipulating sets of characters
 #define true  1
 
 typedef char bits_t[32];
+
+/* Set up some UNICODE defines */
+#define DEFWIDTH  (sizeof (_TCHAR) == sizeof (wchar_t))
 
 
 /*-----------------------------------------------------------------------*
@@ -52,28 +57,31 @@ Warning: If you reject gotos you will be allergic to this.  Normally
 
 typedef enum
 {
-    _zz,        /* terminator   */
-    _ws,        /* space        */
-    _dc,        /* dont care    */
-    _pc,        /* percent      */
-    _su,        /* suppress     */
-    _nu,        /* numeral      */
-    _ch,        /* character    */
-    _de,        /* decimal      */
+    _zz,        /* terminator                           */
+    _ws,        /* space                                */
+    _dc,        /* dont care                            */
+    _pc,        /* percent                              */
+    _su,        /* suppress                             */
+    _nu,        /* numeral                              */
+    _ch,        /* character                            */
+    _Ch,        /* character, opposite width            */
+    _de,        /* decimal                              */
     _un,        /* unsigned decimal - same as decimal   */
-    _in,        /* general int  */
-    _fl,        /* float        */
-    _ld,        /* long double  */
-    _ha,        /* half         */
-    _lo,        /* long         */
-    _oc,        /* octal        */
-    _st,        /* string       */
-    _sc,        /* scanset      */
-    _ct,        /* count of characters scanned  */
-    _he,        /* hexadecimal  */
-    _pt,        /* pointer      */
-    _ne,        /* near         */
-    _fa,        /* far          */
+    _in,        /* general int                          */
+    _fl,        /* float                                */
+    _ld,        /* long double, __int64                 */
+    _ha,        /* half                                 */
+    _lo,        /* long                                 */
+    _oc,        /* octal                                */
+    _st,        /* string                               */
+    _St,        /* string, opposite width               */
+    _sc,        /* scanset                              */
+    _ct,        /* count of characters scanned          */
+    _he,        /* hexadecimal                          */
+    _pt,        /* pointer                              */
+    _ne,        /* near                                 */
+    _fa,        /* far                                  */
+    _wi,        /* I64 ...                              */
 }
     charClass;
 
@@ -93,10 +101,10 @@ static  const   char    scanCtype [128] =
     _nu,_nu,_nu,_nu,_nu,_nu,_nu,_nu,_nu,_nu,_dc,_dc,_dc,_dc,_dc,_dc,
 
 /*   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O      */
-    _dc,_dc,_dc,_dc,_de,_fl,_fa,_fl,_ha,_in,_dc,_dc,_ld,_dc,_ne,_oc,
+    _dc,_dc,_dc,_Ch,_de,_fl,_fa,_fl,_ha,_wi,_dc,_dc,_ld,_dc,_ne,_oc,
 
 /*   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _      */
-    _dc,_dc,_dc,_dc,_dc,_un,_dc,_dc,_he,_dc,_dc,_sc,_dc,_sc,_dc,_dc,
+    _dc,_dc,_dc,_St,_dc,_un,_dc,_dc,_he,_dc,_dc,_sc,_dc,_sc,_dc,_dc,
 
 /*   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o      */
     _dc,_dc,_dc,_ch,_de,_fl,_fl,_fl,_ha,_in,_dc,_dc,_lo,_dc,_ct,_oc,
@@ -105,7 +113,7 @@ static  const   char    scanCtype [128] =
     _pt,_dc,_dc,_st,_dc,_un,_dc,_dc,_he,_dc,_dc,_dc,_dc,_dc,_dc,_dc,
 };
 
-#define IS_WHITE(ch) ((ch & 0x80) == 0 && scanCtype[ch] == _ws)
+#define IS_WHITE(ch) ((ch & 0x80) == 0 && scanCtype[(ch & 0x7F)] == _ws)
 
 /*-----------------------------------------------------------------------*
 
@@ -147,15 +155,15 @@ Return value
 
 *------------------------------------------------------------------------*/
 
-int  _scanner( int   (*Get)   (void *srceP),
-                    void  (*UnGet) (int ch, void *srceP),
+int  _scannert( int   (*__Gett)   (void *srceP),
+                    void  (*__UnGett) (int ch, void *srceP),
                     void       *srceP,
-                    const char *formP,
+                    const _TCHAR *formP,
                     va_list     varPP )
 {
 
 
-    char    flags;
+    flagBits flags;
     int     count = 0;
     int     charCt = 0;
     int     status;
@@ -163,39 +171,67 @@ int  _scanner( int   (*Get)   (void *srceP),
     int     base;
     bits_t  bitSet;    /* for scan sets */
     int     exclude;
-    char    a, b;
-    char   *cP;
-    long    lRes;
+    _TCHAR  a, b;
+    __int64 lRes;
     unsigned short ldRes[5];    /* actually a long double */
     int     nscanned;
+    charClass curClass;
+    int     paramIsWide;
+    union
+    {
+        char     *PtrA;
+        wchar_t  *PtrW;
+    } DualPtr;
+
+#define cPA       (DualPtr.PtrA)
+#define cPW       (DualPtr.PtrW)
+#ifdef _UNICODE
+#  define cP      (DualPtr.PtrW)
+#else
+#  define cP      (DualPtr.PtrA)
+#endif
 
 ssNEXT:
-    if ('\0' == (b = *(formP++)))
+    if (_TEXT('\0') == (b = *(formP++)))
         return  count;  /* the normal end */
 
-    if ((b != '%')  || ('%' == (b = *formP++)))
+    if ((b != _TEXT('%'))  || (_TEXT('%') == (b = *formP++)))
     {
         charCt ++;
-        if ((a = Get (srceP)) == EOF)
+        if ((a = __Gett (srceP)) == _TEOF)
             goto ssEOF;
         if (IS_WHITE(b))                    /* white space ? */
         {
             while (IS_WHITE(a))
             {
                 charCt ++;
-                if ((a = Get (srceP)) == EOF)
+                if ((a = __Gett (srceP)) == _TEOF)
                     goto ssEOF;
             }
-            UnGet (a, srceP);
+            __UnGett (a, srceP);
             charCt --;
         }
         else    /* literal match required */
         {
             if (a != b)
             {
-                UnGet (a, srceP);
+                __UnGett (a, srceP);
                 goto  ssEND;
             }
+#if defined(_MBCS)
+            if (_istleadbyte (a) && *formP)
+            {
+                if ((b = __Gett (srceP)) == _TEOF)
+                    goto ssEOF;
+                if (b != *(formP++))
+                {
+                    __UnGett (b, srceP);
+                    __UnGett (a, srceP);
+                    goto  ssEND;
+                }
+                charCt ++;
+            }
+#endif
         }
         goto  ssNEXT;
     }
@@ -204,9 +240,11 @@ ssNEXT:
      */
     flags = isFarPtr;
     width  = -1;
+    paramIsWide = DEFWIDTH;
 
 ssSwitch:
-    switch ((b & 0x80) ? _dc : scanCtype [b])
+    curClass = (b & 0x80) ? _dc : scanCtype [b & 0x7F];
+    switch (curClass)
     {
         case (_su) :    flags |= isSuppressed;
                         b = *(formP++);
@@ -224,8 +262,8 @@ ssSwitch:
                         b = *(formP++);
                         goto  ssSwitch;
 
-        case (_nu) :    width = (width < 0) ? b - '0' :
-                                10 * width + b - '0';
+        case (_nu) :    width = (width < 0) ? b - _TEXT('0') :
+                                10 * width + b - _TEXT('0');
                         b = *(formP++);
                         goto  ssSwitch;
 
@@ -236,6 +274,36 @@ ssSwitch:
         case (_fa) :    flags |= isFarPtr;
                         b = *(formP++);
                         goto  ssSwitch;
+
+        case (_wi) :
+                        if (formP[0] == _TEXT('6') && formP[1] == _TEXT('4'))
+                        {
+                                flags = isLongDouble | (flags & ~(isLong | isHalf));
+                                formP += 2;
+                        }
+                        else
+                        if (formP[0] == _TEXT('3') && formP[1] == _TEXT('2'))
+                        {
+                                flags = isLong | (flags & ~(isLongDouble | isHalf));
+                                formP += 2;
+                        }
+                        else
+                        if (formP[0] == _TEXT('1') && formP[1] == _TEXT('6'))
+                        {
+                                flags = isHalf | (flags & ~(isLongDouble | isLong));
+                                formP += 2;
+                        }
+                        else
+                        if (formP[0] == _TEXT('8'))
+                        {
+                                flags &= ~(isLongDouble | isLong | isHalf);
+                                formP += 1;
+                        }
+
+
+                        b = *(formP++);
+                        goto  ssSwitch;
+
 
         case (_pt) :    goto  ssPTR;
 
@@ -256,16 +324,22 @@ ssSwitch:
                         goto  ssPUTINT;
 
         case (_fl) :    goto  ssFLOAT;
+
+        case (_St) :
         case (_st) :    goto  ssTOKEN;
+
+        case (_Ch) :
         case (_ch) :    goto  ssCHAR;
+
         case (_sc) :    goto  ssSCANSET;
+
         case (_dc) :    goto  ssEND;
 
         default: /*  never occurs.  */;
     }
 
 ssINT:
-    lRes = _scantol (Get, UnGet, srceP, base, width & 0x7FFF,
+    lRes = __scanttoint64 (__Gett, __UnGett, srceP, base, width & 0x7FFF,
                         &charCt, &status);
     if (status < 0)
         goto ssEOF;
@@ -273,23 +347,26 @@ ssINT:
         goto ssEND;
 
 ssPUTINT:
-    if ('A' <= b && b <= 'Z' && b != 'X')
+    if ((_TEXT('A') <= b) && (b <= _TEXT('Z')) && (b != _TEXT('X')))
         flags |= isLong;
 
     if ((flags & isSuppressed) == 0)
     {
+        if (flags & isLongDouble)
+            *va_arg(varPP,__int64 *) = lRes;
+        else
         if (flags & isLong)
             *va_arg(varPP,long *) = lRes;
         else if (flags & isHalf)
             *va_arg(varPP,short *) = (short)lRes;
         else *va_arg(varPP,int *) = (int)lRes;
-        if (b != 'n')
+        if (b != _TEXT('n'))
             count ++;
     }
     goto  ssNEXT;
 
 ssPTR:
-    lRes = _scantol (Get, UnGet, srceP, 16, 8, &charCt, &status);
+    lRes = __scanttoint64 (__Gett, __UnGett, srceP, 16, 8, &charCt, &status);
     if (status <= 0)
         goto ssEND;
     if ((flags & isSuppressed) == 0)
@@ -307,12 +384,12 @@ ssFLOAT:
      * pointer to a floating point number is the same size as a pointer
      * to a void.
      */
-    _scantod (ldRes,Get, UnGet, srceP, width & 0x7FFF, &charCt, &status);
+    _scanttod (ldRes,__Gett, __UnGett, srceP, width & 0x7FFF, &charCt, &status);
     if (status < 0)
         goto ssEOF;
     else if (status == 0)
         goto ssEND;
-    
+
     if ((flags & isSuppressed) == 0)
     {
         _scanrslt(ldRes, va_arg(varPP, void *), flags);
@@ -323,16 +400,29 @@ ssFLOAT:
 ssTOKEN:
     /* Skip leading whitespace.
      */
+
+    if (flags & isLong)
+      paramIsWide = 1;    /* string width forced to wide */
+    else
+    if (flags & isHalf)  /* string width forced to narrow */
+      paramIsWide = 0;
+    else
+    if (curClass == _St)  /* opposite width string */
+      paramIsWide = !paramIsWide;
+
     do
     {
         charCt++;
-        if ((a = Get(srceP)) == EOF)
+        if ((a = __Gett(srceP)) == _TEOF)
             goto ssEOF;
     } while (IS_WHITE(a));
 
     if ((flags & isSuppressed) == 0)
     {
-        cP = va_arg(varPP,char *);
+        if (paramIsWide)
+          cPW = va_arg(varPP, wchar_t *);
+        else
+          cPA = va_arg(varPP, char *);
         count ++;
     }
     if (width == -1)                /* default width becomes 7fff */
@@ -344,21 +434,71 @@ ssTOKEN:
     do
     {
         if ((flags & isSuppressed) == 0)
-            *(cP++) = a;
-        ++charCt;
-        a = Get(srceP);
-    } while (a != EOF && a != '\0' && (!IS_WHITE(a)) && --width > 0);
+        {
+            if (paramIsWide == DEFWIDTH)
+              *(cP++) = a;
+            else
+            {
+#if defined (_UNICODE)
+                /* convert from wide to narrow here */
+                char mbBuf[MB_CUR_MAX];  /* maximum length for a MB char? */
+                int ret;
+                char *pt;
+                ret = wctomb (mbBuf, a);
+                pt = mbBuf;
+                if (ret > 0 )  /* else skip this one */
+                    while (ret--)
+                        *(cP++) = *pt++;
+                else
+                  --charCt;
+#else
+                /* convert from narrow to wide here */
+                int ret;
+                wchar_t wch;
+                ret = mbtowc (&wch, cP, MB_CUR_MAX);
+                if (ret > 0 )  /* else skip this one */
+                    *(cP++) = wch;
+                else
+                  --charCt;
 
-    UnGet(a, srceP);                /* push back the last character */
+#endif /* _UNICODE */
+            }
+        }
+        ++charCt;
+        a = __Gett(srceP);
+    } while (a != _TEOF && (a != _TEXT('\0')) && (!IS_WHITE(a)) && (--width > 0));
+
+    __UnGett(a, srceP);                /* push back the last character */
     --charCt;
 
     if ((flags & isSuppressed) == 0)
-        *cP = '\0';
+        if (paramIsWide)
+            *cPW = L'\0';
+        else
+            *cPA = '\0';
+
+
     goto  ssNEXT;
 
 ssCHAR:
+
+    if (flags & isLong)
+      paramIsWide = 1;    /* char width forced to wide */
+    else
+    if (flags & isHalf)  /* char width forced to narrow */
+      paramIsWide = 0;
+    else
+    if (curClass == _Ch)  /* opposite width char */
+      paramIsWide = !paramIsWide;
+
+
+
     if ((flags & isSuppressed) == 0)
-        cP = va_arg(varPP,char *);
+        if (paramIsWide)
+          cPW = va_arg(varPP, wchar_t *);
+        else
+          cPA = va_arg(varPP, char *);
+
     if (width < 0)
         width = 1;
     if (width)
@@ -366,10 +506,36 @@ ssCHAR:
         do
         {
             charCt ++;
-            if ((a = Get (srceP)) == EOF)
+            if ((a = __Gett (srceP)) == _TEOF)
                 goto ssEOF;
             if ((flags & isSuppressed) == 0)
-                *(cP++) = a;
+            {
+                if (paramIsWide == DEFWIDTH)
+                  *(cP++) = a;
+                else
+                {
+#if defined (_UNICODE)
+                    /* convert from wide to narrow here */
+                    char mbBuf[MB_CUR_MAX];  /* maximum length for a MB char? */
+                    int ret;
+                    char *pt;
+                    ret = wctomb (mbBuf, a);
+                    pt = mbBuf;
+                    if (ret > 0 )  /* else skip this one */
+                        while (ret--)
+                            *(cP++) = *pt++;
+#else
+                    /* convert from narrow to wide here */
+                    int ret;
+                    wchar_t wch;
+                    ret = mbtowc (&wch, cP, MB_CUR_MAX);
+                    if (ret > 0 )  /* else skip this one */
+                        *(cP++) = wch;
+
+#endif /* _UNICODE */
+                }
+
+            }
         }
         while (--width > 0);
     }
@@ -385,7 +551,7 @@ ssSCANSET:
     BIT_CLRALL(bitSet);
 
     exclude = false;
-    if ('^' == (a = *(formP++)))
+    if (_TEXT('^') == (a = *(formP++)))
     {
         exclude = true;
         a = *(formP++);
@@ -396,12 +562,12 @@ ssSCANSET:
     for (;;)
     {
         b = a;                  /* save potential first char in range */
-        if (a == '\0')          /* unexpected end of format */
+        if (a == _TEXT('\0'))   /* unexpected end of format */
             goto ssEND;
         BIT_SET(bitSet,a);
-        if (']' == (a = *(formP++)))
+        if (_TEXT(']') == (a = *(formP++)))
             break;
-        if (('-' == a) && (b < *formP) && (']' != *formP))
+        if ((_TEXT('-') == a) && (b < *formP) && (_TEXT(']') != *formP))
         {
             a = *(formP++);     /* ending character in range */
             while ( ++b < a)
@@ -413,13 +579,13 @@ ssSCANSET:
         width = 0x7FFF;
 
     if ((flags & isSuppressed) == 0)
-        cP = va_arg(varPP,char *);
+        cP = va_arg(varPP,_TCHAR *);
 
     nscanned = 0;
     while (--width >= 0)
     {
         charCt ++;
-        if ((a = Get (srceP)) == EOF)
+        if ((a = __Gett (srceP)) == _TEOF)
             break;
         if (exclude == (BIT_TST(bitSet,a)))
             break;
@@ -429,21 +595,21 @@ ssSCANSET:
     }
     if (width >= 0)
     {
-        UnGet (a, srceP);
+        __UnGett (a, srceP);
         charCt --;
     }
     if (nscanned != 0 && (flags & isSuppressed) == 0)
     {
-        *(cP++) = '\0';
+        *(cP++) = _TEXT('\0');
         count++;
     }
-    if (a == EOF)
+    if (a == _TEOF)
         goto ssEOF;
     else
         goto  ssNEXT;
 
 ssEOF:
-    UnGet(EOF, srceP);
+    __UnGett(EOF, srceP);
     if (count == 0)
         return (-1);
 ssEND:

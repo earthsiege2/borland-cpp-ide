@@ -175,8 +175,8 @@ const ListBox& ListBox::operator = ( const TodoList& tdl )
         char buf[100];      // write the entry into a string
                             // and insert that string into
                             // the list box
-
-        ostrstream( buf, 100 ) << iter.Current() << ends;
+        ostrstream o(buf, 100);
+        o << iter.Current() << ends;
         SendMessage( hListBox, LB_ADDSTRING, NULL, (LONG)(LPSTR)buf );
         iter++;
         }
@@ -188,7 +188,8 @@ const ListBox& ListBox::operator = ( const TodoList& tdl )
 void ListBox::Insert( int i, const TodoEntry& tde )
 {
     char temp[100];
-    ostrstream( temp, sizeof( temp ) ) << tde << ends;
+    ostrstream o(temp, sizeof(temp));
+    o << tde << ends;
 
     SendMessage( hListBox, LB_INSERTSTRING, i, (LONG)(LPSTR)temp );
     Select( i );

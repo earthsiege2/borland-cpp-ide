@@ -2,7 +2,7 @@
 // ObjectWindows
 // Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.4  $
 //
 // Command IDs to use with window.h
 //----------------------------------------------------------------------------
@@ -47,6 +47,7 @@
 #define CM_EDITCLEAR        24326
 #define CM_EDITADD          24327
 #define CM_EDITEDIT         24328
+#define CM_EDITREDO         24329
 
 //
 // Default ObjectWindows app icon ID

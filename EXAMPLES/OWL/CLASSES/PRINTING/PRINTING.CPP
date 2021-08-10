@@ -9,6 +9,7 @@
 #include <owl/dc.h>
 #include <owl/printer.h>
 #include <owl/editfile.rh>
+#include <winsys/system.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -134,7 +135,12 @@ TRulerWin::CmFilePrint()          // Execute File:Print command
 {
   if (Printer) {
     TWindowPrintout printout("Ruler Test", this);
-    printout.SetBanding(true);
+    //
+    // Using OWL's banding support under Win95 _when_ the EXE's marked 4.0
+    // (under Options|Project|Linker|General) will cause the print to fail.
+    //
+    if(!TSystem::IsWin95())
+      printout.SetBanding(true);
     Printer->Print(this, printout, true);
   }
 }

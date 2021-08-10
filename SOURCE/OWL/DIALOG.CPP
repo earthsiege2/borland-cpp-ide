@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.11  $
+//$Revision:   10.15  $
 //
 // Implementation of class TDialog. TDialogs are the base for any type of
 // modal or modeless window that loads itself from resource.
@@ -21,6 +21,7 @@
 # include <bwcc.h>           // Currently only available with Borland C++
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlMsg);  // diagnostic group for message tracing
 DIAG_DECLARE_GROUP(OwlWin);  // diagnostic group for windows
 
@@ -297,7 +298,11 @@ TDialog::StdDlgProc(THandle hDlg, uint msg, TParam1 param1, TParam2 param2)
   // Get the window ptr using the global version since there is no other
   // context.
   //
+#if defined(BI_NAMESPACE)
+  TWindow*  w = OWL::GetWindowPtr(hDlg);
+#else
   TWindow*  w = ::GetWindowPtr(hDlg);
+#endif
   TDialog*  dialog = TYPESAFE_DOWNCAST(w, TDialog);
 
   if (DlgCreationWindow && !dialog && msg != WM_CANCELMODE && msg != WM_ENABLE) {
@@ -351,10 +356,22 @@ TDialog::StdDlgProc(THandle hDlg, uint msg, TParam1 param1, TParam2 param2)
 #pragma warn .rch
 }
 
+//
+//
+//
 static bool
 RegisterFails(TWindow* win, void*)
 {
   return !win->Register();
+}
+
+// Register all the dialog's child objects (for custom control support)
+//
+void
+TDialog::RegisterChildObjects()
+{
+  if (FirstThat(RegisterFails))
+    TXWindow::Raise(this, IDS_CHILDREGISTERFAIL);
 }
 
 //
@@ -377,8 +394,7 @@ TDialog::Create()
 
   // Register all the dialog's child objects (for custom control support)
   //
-  if (FirstThat(RegisterFails))
-    TXWindow::Raise(this, IDS_CHILDREGISTERFAIL);
+  RegisterChildObjects();
 
   SetHandle(DoCreate());
   GetApplication()->ResumeThrow();
@@ -423,8 +439,7 @@ TDialog::Execute()
 
   // Register all the dialog's child objects (for custom control support)
   //
-  if (FirstThat(RegisterFails))
-    TXWindow::Raise(0, IDS_CHILDREGISTERFAIL);   // Unspecified child window
+  RegisterChildObjects();
 
   int retValue = DoExecute();
   GetApplication()->ResumeThrow();
@@ -683,7 +698,7 @@ TDialog::IdleAction(long idleCount)
       child = ::GetWindow(child, GW_HWNDNEXT);
     }
   }
-  return true;
+  return false;
 }
 
 //

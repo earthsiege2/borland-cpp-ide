@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.11  $
+//$Revision:   10.14  $
 //
 // Definition of Pane Splitter classes
 //----------------------------------------------------------------------------
@@ -32,6 +32,10 @@
 # define IDC_SIZEALL         MAKEINTRESOURCE(32646)
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
@@ -57,7 +61,9 @@
 // manipulating panes (add, remove, move, resize, etc) and splitters (drawing,
 // width, etc).  Splitters can be moved (thus resizing the panes) by function
 // call or mouse input.  Using the mouse, multiple splitters could be moved
-// at once.
+// at once. The splitter width indicates the width of the separators and the 
+// splitter cushion is the minimum distance btwn separators (to prevent 
+// accidental closure of panes).
 //
 class _OWLCLASS TPaneSplitter : public TLayoutWindow
 {
@@ -88,6 +94,7 @@ class _OWLCLASS TPaneSplitter : public TLayoutWindow
     //
     int           GetSplitterWidth();
     int           SetSplitterWidth(int newWidth);
+    void          SetSplitterCushion(uint cushion);
     bool          MoveSplitter(TWindow* pane, int dist);
 
     bool          DelObj(TDelete dt);
@@ -105,6 +112,7 @@ class _OWLCLASS TPaneSplitter : public TLayoutWindow
     TSplitterIndicatorList SplitterIndicatorList;
     TSplitterIndicatorMgr  SplitterIndicatorMgr;
     int                    SplitterWidth;
+    uint                   SplitterCushion;
     bool                   Dragging;
     HCURSOR                ResizeCursorH;
     HCURSOR                ResizeCursorV;
@@ -127,7 +135,7 @@ class _OWLCLASS TPaneSplitter : public TLayoutWindow
     bool          HasPane(TWindow* p);
     TLayoutWindow* DoRemovePane(TWindow* pane, TDelete dt = TShouldDelete::DefDelete);
     void          FindIntersectingSplitters(const TPoint& point);
-    int           RemovePanes();
+    virtual int   RemovePanes();
     void          MoveSplitters();
     void          DestroyPane(TWindow* pane, TDelete dt = TShouldDelete::DefDelete);
 
@@ -152,6 +160,10 @@ class _OWLCLASS TPaneSplitter : public TLayoutWindow
 // definition of classes
 #include <services/posclass.h>
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 //----------------------------------------------------------------------------
 // Inline implementations
 //
@@ -163,6 +175,15 @@ inline int
 TPaneSplitter::GetSplitterWidth()
 {
   return SplitterWidth;
+}
+
+//
+// Set the cushion for the splitter widget.
+//
+inline void
+TPaneSplitter::SetSplitterCushion(uint cushion)
+{
+  SplitterCushion = cushion;
 }
 
 //

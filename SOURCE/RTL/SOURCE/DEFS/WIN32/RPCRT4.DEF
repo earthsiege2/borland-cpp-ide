@@ -12,36 +12,59 @@ EXPORTS
     CStdStubBuffer_QueryInterface
     DceErrorInqTextA
     DceErrorInqTextW
+    GlobalMutexClear
+    GlobalMutexRequest
     IUnknown_AddRef_Proxy
     IUnknown_QueryInterface_Proxy
     IUnknown_Release_Proxy
     I_RpcAllocate
+    I_RpcAsyncSendReceive
     I_RpcBindingCopy
     I_RpcBindingInqDynamicEndpoint
     I_RpcBindingInqTransportType
     I_RpcBindingIsClientLocal
+    I_RpcBindingSetAsync
     I_RpcClearMutex
+    I_RpcConnectionInqSockBuffSize2
+    I_RpcConnectionInqSockBuffSize
+    I_RpcConnectionSetSockBuffSize
     I_RpcDeleteMutex
     I_RpcFree
     I_RpcFreeBuffer
+    I_RpcFreePipeBuffer
     I_RpcGetAssociationContext
     I_RpcGetBuffer
     I_RpcGetCurrentCallHandle
+    I_RpcGetThreadEvent
+    I_RpcGetThreadWindowHandle
     I_RpcIOAlerted
     I_RpcIfInqTransferSyntaxes
+    I_RpcLaunchDatagramReceiveThread
     I_RpcMapWin32Status
     I_RpcMonitorAssociation
     I_RpcNsBindingSetEntryName
     I_RpcParseSecurity
     I_RpcPauseExecution
+    I_RpcReallocPipeBuffer
+    I_RpcReceive
     I_RpcRequestMutex
+    I_RpcSend
     I_RpcSendReceive
+    I_RpcServerAllocatePort
+    I_RpcServerInqTransportType
     I_RpcServerRegisterForwardFunction
+    I_RpcServerStartListening
+    I_RpcServerStopListening
     I_RpcSetAssociationContext
+    I_RpcSetWMsgEndpoint
     I_RpcSsDontSerializeContext
     I_RpcStopMonitorAssociation
+    I_RpcTransCancelMigration
     I_RpcTransClientMaxFrag
     I_RpcTransClientReallocBuffer
+    I_RpcTransMaybeMakeReceiveAny
+    I_RpcTransMaybeMakeReceiveDirect
+    I_RpcTransPingServer
     I_RpcTransServerFindConnection
     I_RpcTransServerFreeBuffer
     I_RpcTransServerMaxFrag
@@ -50,6 +73,7 @@ EXPORTS
     I_RpcTransServerReallocBuffer
     I_RpcTransServerReceiveDirectReady
     I_RpcTransServerUnprotectThread
+    I_RpcWindowProc
     I_UuidCreate
     MIDL_wchar_strcpy
     MIDL_wchar_strlen
@@ -73,6 +97,7 @@ EXPORTS
     NdrByteCountPointerFree
     NdrByteCountPointerMarshall
     NdrByteCountPointerUnmarshall
+    NdrCStdStubBuffer2_Release
     NdrCStdStubBuffer_Release
     NdrClearOutParameters
     NdrClientCall
@@ -116,8 +141,11 @@ EXPORTS
     NdrConformantVaryingStructUnmarshall
     NdrContextHandleSize
     NdrConvert
+    NdrConvert2
     NdrDllCanUnloadNow
     NdrDllGetClassObject
+    NdrDllRegisterProxy
+    NdrDllUnregisterProxy
     NdrEncapsulatedUnionBufferSize
     NdrEncapsulatedUnionFree
     NdrEncapsulatedUnionMarshall
@@ -136,12 +164,21 @@ EXPORTS
     NdrFullPointerXlatFree
     NdrFullPointerXlatInit
     NdrGetBuffer
+    NdrGetPartialBuffer
+    NdrGetPipeBuffer
+    NdrHardStructBufferSize
+    NdrHardStructFree
+    NdrHardStructMarshall
+    NdrHardStructMemorySize
+    NdrHardStructUnmarshall
     NdrInterfacePointerBufferSize
     NdrInterfacePointerFree
     NdrInterfacePointerMarshall
     NdrInterfacePointerMemorySize
     NdrInterfacePointerUnmarshall
+    NdrIsAppDoneWithPipes
     NdrMapCommAndFaultStatus
+    NdrMarkNextActivePipe
     NdrMesProcEncodeDecode
     NdrMesSimpleTypeAlignSize
     NdrMesSimpleTypeDecode
@@ -162,6 +199,11 @@ EXPORTS
     NdrNsSendReceive
     NdrOleAllocate
     NdrOleFree
+    NdrPipePull
+    NdrPipePush
+    NdrPipeSendReceive
+    NdrPipesDone
+    NdrPipesInitialize
     NdrPointerBufferSize
     NdrPointerFree
     NdrPointerMarshall
@@ -181,11 +223,13 @@ EXPORTS
     NdrRpcSsEnableAllocate
     NdrSendReceive
     NdrServerCall
+    NdrServerCall2
     NdrServerContextMarshall
     NdrServerContextUnmarshall
     NdrServerInitialize
     NdrServerInitializeMarshall
     NdrServerInitializeNew
+    NdrServerInitializePartial
     NdrServerInitializeUnmarshall
     NdrServerMarshall
     NdrServerUnmarshall
@@ -197,9 +241,17 @@ EXPORTS
     NdrSimpleTypeMarshall
     NdrSimpleTypeUnmarshall
     NdrStubCall
+    NdrStubCall2
+    NdrStubForwardingFunction
     NdrStubGetBuffer
     NdrStubInitialize
     NdrStubInitializeMarshall
+    NdrUserMarshalBufferSize
+    NdrUserMarshalFree
+    NdrUserMarshalMarshall
+    NdrUserMarshalMemorySize
+    NdrUserMarshalSimpleTypeConvert
+    NdrUserMarshalUnmarshall
     NdrVaryingArrayBufferSize
     NdrVaryingArrayFree
     NdrVaryingArrayMarshall
@@ -210,6 +262,7 @@ EXPORTS
     NdrXmitOrRepAsMarshall
     NdrXmitOrRepAsMemorySize
     NdrXmitOrRepAsUnmarshall
+    NdrpSetRpcSsDefaults
     RpcBindingCopy
     RpcBindingFree
     RpcBindingFromStringBindingA
@@ -217,11 +270,15 @@ EXPORTS
     RpcBindingInqAuthClientA
     RpcBindingInqAuthClientW
     RpcBindingInqAuthInfoA
+    RpcBindingInqAuthInfoExA
+    RpcBindingInqAuthInfoExW
     RpcBindingInqAuthInfoW
     RpcBindingInqObject
     RpcBindingReset
     RpcBindingServerFromClient
     RpcBindingSetAuthInfoA
+    RpcBindingSetAuthInfoExA
+    RpcBindingSetAuthInfoExW
     RpcBindingSetAuthInfoW
     RpcBindingSetObject
     RpcBindingToStringBindingA
@@ -234,9 +291,11 @@ EXPORTS
     RpcEpRegisterW
     RpcEpResolveBinding
     RpcEpUnregister
-    RpcIfIdVectorFree
+;    RpcIfIdVectorFree
     RpcIfInqId
     RpcImpersonateClient
+    RpcMgmtBindingInqParameter
+    RpcMgmtBindingSetParameter
     RpcMgmtEnableIdleCleanup
     RpcMgmtEpEltInqBegin
     RpcMgmtEpEltInqDone
@@ -246,6 +305,7 @@ EXPORTS
     RpcMgmtInqComTimeout
     RpcMgmtInqDefaultProtectLevel
     RpcMgmtInqIfIds
+    RpcMgmtInqParameter
     RpcMgmtInqServerPrincNameA
     RpcMgmtInqServerPrincNameW
     RpcMgmtInqStats
@@ -253,6 +313,7 @@ EXPORTS
     RpcMgmtSetAuthorizationFn
     RpcMgmtSetCancelTimeout
     RpcMgmtSetComTimeout
+    RpcMgmtSetParameter
     RpcMgmtSetServerStackSize
     RpcMgmtStatsVectorFree
     RpcMgmtStopServerListening
@@ -270,19 +331,31 @@ EXPORTS
     RpcProtseqVectorFreeW
     RpcRaiseException
     RpcRevertToSelf
+    RpcRevertToSelfEx
     RpcServerInqBindings
+    RpcServerInqDefaultPrincNameA
+    RpcServerInqDefaultPrincNameW
     RpcServerInqIf
     RpcServerListen
     RpcServerRegisterAuthInfoA
     RpcServerRegisterAuthInfoW
     RpcServerRegisterIf
+    RpcServerRegisterIfEx
     RpcServerUnregisterIf
     RpcServerUseAllProtseqs
+    RpcServerUseAllProtseqsEx
     RpcServerUseAllProtseqsIf
+    RpcServerUseAllProtseqsIfEx
     RpcServerUseProtseqA
     RpcServerUseProtseqEpA
+    RpcServerUseProtseqEpExA
+    RpcServerUseProtseqEpExW
     RpcServerUseProtseqEpW
+    RpcServerUseProtseqExA
+    RpcServerUseProtseqExW
     RpcServerUseProtseqIfA
+    RpcServerUseProtseqIfExA
+    RpcServerUseProtseqIfExW
     RpcServerUseProtseqIfW
     RpcServerUseProtseqW
     RpcSmAllocate
@@ -298,6 +371,7 @@ EXPORTS
     RpcSsAllocate
     RpcSsDestroyClientContext
     RpcSsDisableAllocate
+    RpcSsDontSerializeContext
     RpcSsEnableAllocate
     RpcSsFree
     RpcSsGetThreadHandle
@@ -323,6 +397,9 @@ EXPORTS
     UuidIsNil
     UuidToStringA
     UuidToStringW
+    _NdrClientCall                           = NdrClientCall
+    _NdrClientCall2                          = NdrClientCall2
+    _NdrMesProcEncodeDecode                  = NdrMesProcEncodeDecode
     char_array_from_ndr
     char_from_ndr
     data_from_ndr

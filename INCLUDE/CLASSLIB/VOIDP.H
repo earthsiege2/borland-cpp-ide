@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.6  $
 //
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_VOIDP_H)
@@ -14,6 +14,10 @@
 
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 class TVoidPointer
@@ -35,6 +39,10 @@ private:
     const void *Ptr;
 
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po.

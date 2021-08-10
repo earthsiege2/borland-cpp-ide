@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.22  $
+//$Revision:   10.28  $
 //
 // Implementation of class TDocManager
 //----------------------------------------------------------------------------
@@ -50,6 +50,7 @@
 
 typedef TDocTemplate*         TDocTemplatePtr;
 
+OWL_DIAGINFO;
 #if defined(SECTION) && SECTION != 1
 DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
 #endif
@@ -66,9 +67,9 @@ DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlDocView, 1, 0);
 // Constructor of class representing the data to be displayed in the
 // Open/Save dialogs used by the DocManager.
 //
-TDvOpenSaveData::TDvOpenSaveData(uint32 flags, char far* filter,
-                                 const char far* initialDir,
-                                 const char far* defExt,
+TDvOpenSaveData::TDvOpenSaveData(uint32 flags, char* filter,
+                                 char* initialDir,
+                                 char* defExt,
                                  int filterIndex, TDocTemplate **tmplList,
                                  int tmplCount)
 :
@@ -100,7 +101,7 @@ handleTemplateChanged(TDialog& dialog,
                       TDvOpenSaveDataOwner& dataOwner,
                       OPENFILENAME& ofn)
 {
-  int index = dialog.SendDlgItemMsg(IDC_FILETYPES, CB_GETCURSEL, 0, 0);
+  int index = (int)dialog.SendDlgItemMsg(IDC_FILETYPES, CB_GETCURSEL, 0, 0);
   if (index >= 0) {
     CHECK(index < dataOwner.GetTmplCount());
     TDocTemplate* tpl = dataOwner.GetTmplList()[index];
@@ -236,11 +237,14 @@ TDocManager::Init(int mode, TApplication* app, TDocTemplate*& templateHead)
   for (TDocTemplate* tpl = TemplateList; tpl; tpl = tpl->GetNextTemplate())
     tpl->DocManager = this;
 
+#if defined(OWL2_COMPAT)
+
   // Setup backward compatibility entry points
   //
   TDocTemplate::SelectSave_ = SelectSave;
   TDocTemplate::InitDoc_    = InitDoc;
   TDocTemplate::InitView_   = InitView;
+#endif
 }
 
 //
@@ -1257,8 +1261,8 @@ TDocManager::SelectDocPath(TDocTemplate** tpllist, int tplcount,
   flags = (tpllist[index]->GetFlags() | flags) & ~dtProhibited;
   TDvOpenSaveData data(flags,                           // flags
                        filtbuf,                         // filter
-                       tpllist[index]->GetDirectory(),  // initDir.
-                       tpllist[index]->GetDefaultExt(), // defExt.
+     CONST_CAST(char*, tpllist[index]->GetDirectory()), // initDir.
+     CONST_CAST(char*, tpllist[index]->GetDefaultExt()),// defExt.
                        index ? index+1 : 0,             // filterIndex
                        tpllist,                         // template list
                        tplcount);                       // template count

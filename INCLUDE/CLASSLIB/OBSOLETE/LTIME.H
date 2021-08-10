@@ -42,13 +42,13 @@ public:
     unsigned minute() const;
     unsigned second() const;
     unsigned hundredths() const;
-    void setHour( unsigned char );
-    void setMinute( unsigned char );
-    void setSecond( unsigned char );
-    void setHundredths( unsigned char );
+    void setHour( unsigned _TCHAR );
+    void setMinute( unsigned _TCHAR );
+    void setSecond( unsigned _TCHAR );
+    void setHundredths( unsigned _TCHAR );
 
     virtual classType isA() const = 0;
-    virtual char _FAR *nameOf() const = 0;
+    virtual _TCHAR _FAR *nameOf() const = 0;
     virtual hashValueType hashValue() const;
     virtual int isEqual( const Object _FAR & ) const;
     virtual int isLessThan( const Object _FAR & ) const;
@@ -58,18 +58,18 @@ protected:
 
     BaseTime();
     BaseTime( const BaseTime _FAR & );
-    BaseTime( unsigned char,
-              unsigned char = 0,
-              unsigned char = 0,
-              unsigned char = 0
+    BaseTime( unsigned _TCHAR,
+              unsigned _TCHAR = 0,
+              unsigned _TCHAR = 0,
+              unsigned _TCHAR = 0
             );
 
 private:
 
-    unsigned char HH;
-    unsigned char MM;
-    unsigned char SS;
-    unsigned char HD;
+    unsigned _TCHAR HH;
+    unsigned _TCHAR MM;
+    unsigned _TCHAR SS;
+    unsigned _TCHAR HD;
 };
 
 inline BaseTime::BaseTime()
@@ -87,7 +87,7 @@ inline BaseTime::BaseTime( const BaseTime _FAR & B ) :
 {
 }
 
-inline BaseTime::BaseTime( unsigned char H, unsigned char M, unsigned char S, unsigned char D )
+inline BaseTime::BaseTime( unsigned _TCHAR H, unsigned _TCHAR M, unsigned _TCHAR S, unsigned _TCHAR D )
 {
     setHour( H );
     setMinute( M );
@@ -115,25 +115,25 @@ inline unsigned BaseTime::hundredths() const
     return HD;
 }
 
-inline void BaseTime::setHour( unsigned char anHour )
+inline void BaseTime::setHour( unsigned _TCHAR anHour )
 {
     PRECONDITION( anHour < 24 );
     HH = anHour;
 }
 
-inline void BaseTime::setMinute( unsigned char M )
+inline void BaseTime::setMinute( unsigned _TCHAR M )
 {
     PRECONDITION( M < 60 );
     MM = M;
 }
 
-inline void BaseTime::setSecond( unsigned char S )
+inline void BaseTime::setSecond( unsigned _TCHAR S )
 {
     PRECONDITION( S < 60 );
     SS = S;
 }
 
-inline void BaseTime::setHundredths( unsigned char D )
+inline void BaseTime::setHundredths( unsigned _TCHAR D )
 {
     PRECONDITION( D < 100 );
     HD = D;
@@ -146,10 +146,10 @@ public:
 
     Time();
     Time( const Time _FAR & );
-    Time( unsigned char,
-          unsigned char = 0,
-          unsigned char = 0,
-          unsigned char = 0
+    Time( unsigned _TCHAR,
+          unsigned _TCHAR = 0,
+          unsigned _TCHAR = 0,
+          unsigned _TCHAR = 0
         );
 
     virtual classType isA() const
@@ -157,7 +157,7 @@ public:
         return timeClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Time";
         }
@@ -173,8 +173,8 @@ inline Time::Time( const Time& T ) : BaseTime( T )
 {
 }
 
-inline Time::Time( unsigned char H, unsigned char M, unsigned char S,
-                   unsigned char D ) :  BaseTime( H, M, S, D )
+inline Time::Time( unsigned _TCHAR H, unsigned _TCHAR M, unsigned _TCHAR S,
+                   unsigned _TCHAR D ) :  BaseTime( H, M, S, D )
 {
 }
 

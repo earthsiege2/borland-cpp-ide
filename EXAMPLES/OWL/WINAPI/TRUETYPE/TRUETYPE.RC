@@ -4,6 +4,7 @@
 #ifndef WS_POPUP
   #include <windows.h>
 #endif
+#include <owl\except.rc>
 #include <owl\editfile.rh>
 #include "truetype.h"
 

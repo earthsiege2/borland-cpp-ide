@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.3  $
 //
 // Definition of class TRadioButton.  This defines the basic behavior for all
 // radio buttons.
@@ -12,6 +12,10 @@
 
 #if !defined(OWL_CHECKBOX_H)
 # include <owl/checkbox.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -54,5 +58,9 @@ class _OWLCLASS TRadioButton : public TCheckBox {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_RADIOBUT_H

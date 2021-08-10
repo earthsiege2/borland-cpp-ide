@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of TPen, an encapsulation of the GDI Pen object
 //----------------------------------------------------------------------------
@@ -11,6 +11,7 @@
 # include <owl/gdiobjec.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 DIAG_DECLARE_GROUP(OwlGDIOrphan);  // Orphan control tracing group
 

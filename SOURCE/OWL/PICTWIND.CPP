@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.10  $
 //
 //  Implements TPictureWindow
 //----------------------------------------------------------------------------
@@ -22,6 +22,8 @@
 #if !defined(WINSYS_SYSTEM_H)
 # include <winsys/system.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Constructor assumes ownership of the DIB passed in.

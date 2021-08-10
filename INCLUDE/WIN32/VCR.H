@@ -1,3 +1,4 @@
+#pragma option -b
 /***************************************************************************
  *                                                                         *
  *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY  *
@@ -13,7 +14,9 @@
  ***************************************************************************/
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 /* string resource base for vcr device type */
@@ -423,5 +426,8 @@ typedef MCI_VCR_CUE_PARMS FAR *LPMCI_VCR_CUE_PARMS;
 #define MCIERR_VCR_ISWRITEPROTECTED         (MCIERR_CUSTOM_DRIVER_BASE + 19)
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
+#pragma option -b.

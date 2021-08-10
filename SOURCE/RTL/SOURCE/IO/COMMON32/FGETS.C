@@ -6,27 +6,32 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <stdio.h>
 #include <string.h>
 #include <_io.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            fgets - gets a string from a stream
+Name            _fgetts used as fgets and fgetws
+                fgets  - gets a string from a stream
+                fgetws - gets a wide string from a stream
 
 Usage           char *fgets(char *string, int n, FILE *stream);
+                wchar_t *fgetws(wchar_t *string, int n, FILE *stream);
 
 Prototype in    stdio.h
 
-Description     reads characters from stream into the string string:
+Description     reads characters from stream into a string:
                 The function stops reading when it either reads n-1
                 characters or reads a newline character (whichever
                 comes first).  fgets retains the newline character.
@@ -38,10 +43,12 @@ Return value    success : pointer to string
 
 *---------------------------------------------------------------------*/
 
-char * _RTLENTRY _EXPFUNC fgets (char *s, int n, FILE *fp)
+_TCHAR * _RTLENTRY _EXPFUNC _fgetts (_TCHAR *s, int n, FILE *fp)
 {
-    int     c, Chunk;
-    char    *P, *eolp;
+    _TINT    c;
+    int      Chunk;
+    _TCHAR  *P;
+    _TCHAR  *eolp;
 
     P = s;
 
@@ -57,23 +64,23 @@ char * _RTLENTRY _EXPFUNC fgets (char *s, int n, FILE *fp)
              */
             if (fp->level > 0)         /* something in the buffer */
             {
-                if (n > (unsigned)fp->level)
-                    Chunk = fp->level;
+                if ((n*sizeof(_TCHAR)) > (unsigned)fp->level)
+                    Chunk = fp->level/sizeof(_TCHAR);
                 else
                     Chunk = n;
 
                 /* If there's a newline in the buffer, treat that
-                 * the end of the buffer.
+                 * as the end of the buffer.
                  */
-                if ((eolp = memchr(fp->curp, '\n', Chunk)) != NULL)
-                    Chunk = eolp - (char *)fp->curp + 1;
+                if ((eolp = _tmemchr(fp->curp, _TEXT('\n'), Chunk)) != NULL)
+                    Chunk = eolp - (_TCHAR *)(fp->curp) + 1;
 
-                /* Copy bytes from the file buffer to the user's buffer,
+                /* Copy characters from the file buffer to the user's buffer,
                  * then update pointers and counts.
                  */
-                memcpy(P, fp->curp, Chunk);
-                fp->curp += Chunk;
-                fp->level -= Chunk;
+                _tmemcpy(P, fp->curp, Chunk);
+                fp->curp += (Chunk * sizeof(_TCHAR));
+                fp->level -= (Chunk * sizeof(_TCHAR));
                 P += Chunk;
                 n -= Chunk;
 
@@ -82,24 +89,24 @@ char * _RTLENTRY _EXPFUNC fgets (char *s, int n, FILE *fp)
                  */
                 if (eolp != NULL || n == 0)
                 {
-                    c = '\n';
+                    c = _TEXT('\n');
                     break;
                 }
 
             }
             else
                 {
-                /* The buffer is empty.  Use getc() to get one character
+                /* The buffer is empty.  Use _gettc() to get one character
                  * and fill the buffer.
                  */
-                if ((c = (int)getc(fp)) == EOF)
+                if ((c = _gettc(fp)) == _TEOF)
                     {
                     fp->flags |= _F_EOF;
                     break;
                     }
-                *P++ = (char)c;
+                *P++ = c;
                 --n;
-                if (c == '\n')
+                if (c == _TEXT('\n'))
                     break;
                 }
         }
@@ -109,16 +116,16 @@ char * _RTLENTRY _EXPFUNC fgets (char *s, int n, FILE *fp)
         /* The file is unbuffered.  Get the characters one-by-one
          * the hard way.
          */
-        c = '\0';
-        while ('\n' != c && --n > 0  &&  (c = (int)getc(fp)) != EOF)
-            *P++ = (char)c;
+        c = _TEXT('\0');
+        while (_TEXT('\n') != c && --n > 0  && (c = _gettc(fp)) != _TEOF)
+            *P++ = c;
     }
 
-    if (EOF == c && P == s)
+    if (_TEOF == c && P == s)
         P = NULL;
     else
     {
-        *P = '\0';
+        *P = _TEXT('\0');
         P = ferror (fp) ? NULL : s;
     }
 

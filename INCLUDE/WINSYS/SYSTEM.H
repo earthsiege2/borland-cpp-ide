@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.10  $
 //
 // Definition of TSystem, a system information provider class
 //----------------------------------------------------------------------------
@@ -17,10 +17,14 @@
 #endif
 
 //
-// Define Win95 platform constant if not defined in system headers 
+// Define Win95 platform constant if not defined in system headers
 //
 #if !defined(VER_PLATFORM_WIN32_WINDOWS)
 # define VER_PLATFORM_WIN32_WINDOWS 1
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //
@@ -34,7 +38,10 @@ class _WSYSCLASS TSystem {
     static bool SupportsExceptions();
     static bool SupportsThreads();
     static bool SupportsInstanceData();
+
     static bool Has3dUI();
+    static bool HasSmallCaption();
+    static bool HasSmallIcon();
 
     // More specific platform type queries
     //
@@ -72,7 +79,7 @@ class _WSYSCLASS TSystem {
     static uint GetMinorVersion();
     static uint GetBuildNumber();
 
-    static const char* GetVersionStr();
+    static const _TCHAR* GetVersionStr();
 
     // Hardware information
     //
@@ -110,7 +117,7 @@ class _WSYSCLASS TSystem {
         uint GetMinorVersion() const;
         uint GetBuildNumber() const;
         uint GetPlatformId() const;
-        const char* GetVersionStr() const;
+        const _TCHAR* GetVersionStr() const;
     };
 
     // Return an initialized version info object
@@ -132,9 +139,30 @@ class _WSYSCLASS TSystem {
 #endif
 };
 
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
+
 //----------------------------------------------------------------------------
 // Inlines
 //
+
+//
+// Does this OS support tiny caption (via the WS_EX_TOOLWINDOW style)
+//
+inline bool TSystem::HasSmallCaption()
+{
+  return Has3dUI();
+}
+
+//
+// Does this OS support small window icons
+//
+inline bool TSystem::HasSmallIcon()
+{
+  return Has3dUI();
+}
+
 
 #if defined(BI_PLAT_WIN16)
 
@@ -169,25 +197,20 @@ inline uint TSystem::GetPlatformId() {
 
 //
 inline uint TSystem::GetMajorVersion() {
-  return HIBYTE(GetVersion());
+  return LOBYTE(LOWORD(GetVersion()));
 }
 
 //
 inline uint TSystem::GetMinorVersion() {
-  return LOBYTE(GetVersion());
+  return HIBYTE(LOWORD(GetVersion()));
 }
 
 //
-inline uint TSystem::GetBuildNumber() {
-  return 0;  // Who knows?
-}
-
-//
-inline const char* TSystem::GetVersionStr() {
+inline const _TCHAR* TSystem::GetVersionStr() {
   return "";
 }
 
-#else  // Win32
+#elif defined(BI_PLAT_WIN32)
 
 //
 inline bool TSystem::IsNT() {
@@ -230,7 +253,7 @@ inline uint TSystem::GetBuildNumber() {
 }
 
 //
-inline const char* TSystem::GetVersionStr() {
+inline const _TCHAR* TSystem::GetVersionStr() {
   return GetVerInfo().GetVersionStr();
 }
 
@@ -272,7 +295,7 @@ inline uint TSystem::TVersionInfo::GetPlatformId() const {
 }
 
 //
-inline const char* TSystem::TVersionInfo::GetVersionStr() const {
+inline const _TCHAR* TSystem::TVersionInfo::GetVersionStr() const {
   return szCSDVersion;
 }
 

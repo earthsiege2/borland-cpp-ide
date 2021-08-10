@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.6  $
 //
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_HEAPSEL_H)
@@ -22,6 +22,10 @@
 # pragma option -po-
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 /*------------------------------------------------------------------------*/
 /*                                                                        */
 /*  The class THeapSelector provides a mechanism for assuring that two    */
@@ -32,9 +36,9 @@
 /*      class Derived : public THeapSelector                              */
 /*      {                                                                 */
 /*      public:                                                           */
-/*          void CreateArray() { Data = new(*this)char[17]; }             */
+/*          void CreateArray() { Data = new(*this)_TCHAR[17]; }             */
 /*      private:                                                          */
-/*          char *Data;                                                   */
+/*          _TCHAR *Data;                                                   */
 /*      };                                                                */
 /*                                                                        */
 /*  In this way, any call to CreateArray() on an object of type Derived   */
@@ -160,6 +164,10 @@ inline THeapSelector::HeapSetup::~HeapSetup()
     _DS = SavedDS;
 }
 
+#endif
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )

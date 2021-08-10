@@ -2,7 +2,7 @@
 # ObjectWindows
 # Copyright (c) 1993, 1996 by Borland International
 #
-# $Revision:   10.3  $
+# $Revision:   10.6  $
 #
 # Extension to makefile.gen, adding OWL definitions and libraries
 #----------------------------------------------------------------------------
@@ -86,19 +86,34 @@ CFLAGSD = $(CFLAGSD) -D_OWLDLL -D_BIDSDLL
 # determine library name suffix based upon model
 #
 !if $(_32BIT_)
+
+!if $d(BIDSLIBDIR) && ("$(BIDSLIBDIR)" != "$(BCLIBDIR)")
+ LIBRARYPATH = $(BIDSLIBDIR);$(LIBRARYPATH)
+!endif
+!if $d(OCFLIBDIR) && ("$(OCFLIBDIR)" != "$(BCLIBDIR)")
+ LIBRARYPATH = $(OCFLIBDIR);$(LIBRARYPATH)
+!endif
+!if $d(OWLLIBDIR) && ("$(OWLLIBDIR)" != "$(BCLIBDIR)")
+ LIBRARYPATH = $(OWLLIBDIR);$(LIBRARYPATH)
+!endif
+
 ! if $d(USEDLL)
-!  if $d(MT)
-_SFX_ = ti
-!  else
-_SFX_ = fi
-!  endif
+!   if $d(VCL)
+    _SFX_ = vi
+!   elif $d(MT)
+    _SFX_ = ti
+!   else
+    _SFX_ = fi
+!   endif
 ! else
-!  if $d(MT)
-_SFX_ = t
-!  else
-_SFX_ = f
-!  endif
-! endif
+!   if $d(VCL)
+    _SFX_ = v
+!   elif $d(MT)
+    _SFX_ = t
+!   else
+    _SFX_ = f
+!   endif
+! endif # USEDLL
 !else #WIN16
 ! if $d(USEDLL)
 _SFX_ = i

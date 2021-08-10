@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.20  $
+// $Revision:   10.36  $
 //
 // Implementation of docking window classes
 //----------------------------------------------------------------------------
@@ -36,15 +36,13 @@
 #if !defined(DS_SETFOREGROUND)
 # define DS_SETFOREGROUND    0x200L  /* not in win3.1 */
 #endif
-#if !defined(TB_CUSTOMIZE)
-# define TB_CUSTOMIZE        (WM_USER + 27)
-#endif
 
 #if !defined(SECTION) || SECTION == 1
 
 //
 // Diagnostic group for docking
 //
+OWL_DIAGINFO;
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlDocking, 1, 0);
 DIAG_DECLARE_GROUP(OwlCmd);
 
@@ -427,6 +425,7 @@ DEFINE_RESPONSE_TABLE1(TFloatingSlip, TFloatingFrame)
   EV_WM_WINDOWPOSCHANGING,
   EV_WM_WINDOWPOSCHANGED,
   EV_WM_WININICHANGE,       // WM_SETTINGCHANGE is same ID, new args in 4.x
+  EV_WM_GETMINMAXINFO,
 END_RESPONSE_TABLE;
 
 //
@@ -621,18 +620,13 @@ TFloatingSlip::EvWindowPosChanging(WINDOWPOS far& windowPos)
     if (w) {
       TDockable* dockable = TYPESAFE_DOWNCAST(w, TDockable);
       if (dockable) {
-//        TRect cr(0,0,0,0);
-//        AdjustWindowRectEx(cr, Attr.Style, false, Attr.ExStyle);
         TSize dsz = dockable->ComputeSize(alNone,
                                           &TSize(windowPos.cx, 0));
 
         // Center the non-sizing axis
         //
         if (!(windowPos.flags&SWP_NOMOVE)) {
-//        if (sizing horizontally)
             windowPos.y = windowPos.y + (windowPos.cy - dsz.cy)/2;
-//        else
-//          windowPos.x = windowPos.x + (windowpos.cx - dsz.cx)/2;
         }
         windowPos.cx = dsz.cx;
         windowPos.cy = dsz.cy;
@@ -649,15 +643,13 @@ TFloatingSlip::EvWindowPosChanging(WINDOWPOS far& windowPos)
 void
 TFloatingSlip::EvWindowPosChanged(WINDOWPOS far& windowPos)
 {
-  TFloatingFrame::EvWindowPosChanging(windowPos);
+  TFloatingFrame::EvWindowPosChanged(windowPos);
 
   if (!(windowPos.flags&SWP_NOSIZE)) {
     TWindow* w = GetClientWindow();
     if (w) {
       TDockable* dockable = TYPESAFE_DOWNCAST(w, TDockable);
       if (dockable) {
-//        TRect cr(0,0,0,0);
-//        AdjustWindowRectEx(cr, Attr.Style, false, Attr.ExStyle);
         TSize dsz = dockable->ComputeSize(alNone,
                                           &TSize(windowPos.cx, 0));
 
@@ -692,6 +684,20 @@ TFloatingSlip::EvWinIniChange(char far* /*section*/)
 }
 
 //
+// Respond to WM_GETMINMAXINFO messages to ensure that the minTrackSize
+// used by Windows is not greater than the size would be for a vertical
+// floating control bar.
+//
+void
+TFloatingSlip::EvGetMinMaxInfo(MINMAXINFO far& info)
+{
+   TSize sz(0,0);
+   ComputeSize( alLeft, &sz );
+   info.ptMinTrackSize.x = sz.cx;
+   info.ptMinTrackSize.y = sz.cy;
+}
+
+//
 // Overriden TDockingSlip virtual. Called by mouseup handler after a dockable
 // is dropped into this docking window.
 //
@@ -702,6 +708,17 @@ TFloatingSlip::DockableInsert(TDockable& dockable,
 {
   dockable.Layout(alNone);                // No specific dimensions suggested
   SetClientWindow(dockable.GetWindow());  // Set dockable as client & resize
+
+  // Retrieve window object of dockable
+  //
+  TWindow* dockableWindow = dockable.GetWindow();
+  CHECK(dockableWindow);
+
+  // Let window know it was docked [well, undocked]
+  //
+  if (dockableWindow->IsWindow())
+    dockableWindow->SendMessage(WM_OWLWINDOWDOCKED, TParam1(rpNone),
+                                TParam2((TDockingSlip*)this));
 }
 
 //
@@ -723,7 +740,11 @@ TFloatingSlip::DockableMove(TDockable& /*dockable*/, const TPoint* topLeft,
 void
 TFloatingSlip::DockableRemoved(const TRect& /*orgDragRect*/)
 {
-  CloseWindow();
+  // Clear client window
+  //
+  SetClientWindow(0);
+
+  SendMessage(WM_CLOSE);
 }
 
 //
@@ -1015,15 +1036,15 @@ TEdgeSlip::TEdgeSlip(TDecoratedFrame& parent, TAbsLocation location, TModule* mo
   Location(location),
   GridType(Location == alTop || Location == alBottom ? YCoord : XCoord)
 {
-#if DEBUG_SLIPS
-  SetBkgndColor(TColor(0,0,128));  // dark blue for debugging
+#if defined(__TRACE) || defined(__WARN)
+  // Make slip dark blue for debugging purposes in diagnostic build
+  //
+  SetBkgndColor(TColor(0, 0, 128));
 #else
   SetBkgndColor(TColor::Sys3dFace);
 #endif
-  Attr.Style |= WS_CLIPCHILDREN;
+  Attr.Style = (WS_VISIBLE|WS_CHILD|WS_CLIPCHILDREN|WS_CLIPSIBLINGS);
 
-  if (!TSystem::Has3dUI())
-    Attr.Style |= WS_BORDER;  
 }
 
 //
@@ -1220,12 +1241,12 @@ TEdgeSlip::EvLButtonDown(uint modKeys, TPoint& point)
 }
 
 //
-// Handle WM_LBUTONDBLCLICK to tell the frame to edit a toolbar
+// Forward edge slip WM_LBUTONDBLCLICK in case frame wants to customize
 //
 void
 TEdgeSlip::EvLButtonDblClk(uint, TPoint&)
 {
-  Parent->HandleMessage(TB_CUSTOMIZE, 0, 0);
+  Parent->HandleMessage(WM_OWLSLIPDBLCLK);
 }
 
 //
@@ -1254,8 +1275,11 @@ TEdgeSlip::EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize)
 //
 // Erase the background & draw in etched 'borders' within the client area.
 //
-void
-TEdgeSlip::EvNCPaint()
+#if defined(BI_PLAT_WIN32)
+void TEdgeSlip::EvNCPaint(HRGN)
+#else
+void TEdgeSlip::EvNCPaint()
+#endif
 {
   // Non-3d style
   //
@@ -1327,7 +1351,7 @@ public:
 TDecorationSpan::TDecorationSpan(TWindow* w, TGridType gridType)
 {
   TRect rect = w->GetWindowRect();
-  ::MapWindowPoints(0, w->GetParent(), (TPoint*)&rect, 2); // map to slip coordinates
+  ::MapWindowPoints(0, w->GetParentH(), (TPoint*)&rect, 2); // map to slip coordinates
 
   Window = w;
   if (gridType == YCoord) {
@@ -1527,6 +1551,7 @@ TEdgeSlip::ReLayout(bool forcedLayout)
   //
   if (sizeChanged || forcedLayout) {
     TDecoratedFrame* df = TYPESAFE_DOWNCAST(Parent, TDecoratedFrame);
+    CHECK(df);
 
     // Set the same metrics just to dirty the layout plan & force a rebuild
     //
@@ -1548,10 +1573,18 @@ TEdgeSlip::DockableInsert(TDockable& dockable, const TPoint* topLeft,
                           TRelPosition position, TDockable* relDockable)
 {
   // Get dockable's window & hide it in case we have to toss it around a bit
+  // Reparent the window to the edge slip
   //
   TWindow* dockableWindow = dockable.GetWindow();
+  CHECK(dockableWindow);
   dockableWindow->ShowWindow(SW_HIDE);
   dockableWindow->SetParent(this);
+
+  // Let window know it was docked...
+  //
+  if (dockableWindow->IsWindow())
+    dockableWindow->SendMessage(WM_OWLWINDOWDOCKED, TParam1(position),
+                                TParam2((TDockingSlip*)this));
 
   // Slam dockable over to 0,0 since Move assumes we own it already
   //
@@ -1563,7 +1596,6 @@ TEdgeSlip::DockableInsert(TDockable& dockable, const TPoint* topLeft,
   //
   dockable.Layout(GridType == YCoord ? alTop : alLeft);
 
-//  dockableWindow->Create();  // just in case? but only if we are?
   DockableMove(dockable, topLeft, position, relDockable);
   dockableWindow->ShowWindow(SW_SHOWNA);
 }
@@ -1848,15 +1880,20 @@ struct TWindowItem {
   TWindow* DockedWindow;
   int      LeftSide;
 
-  TWindowItem(TWindow* dockedW = 0, int left = 0)
-  :
-    DockedWindow(dockedW),
-    LeftSide(left)
-  {
+  TWindowItem(TWindow* dockedW = 0, int left = 0) : DockedWindow(dockedW),
+                                                    LeftSide(left)
+  {}
+
+  // operator to satisfy TIArrayAsVector
+  //
+  bool operator == (const TWindowItem& other) {
+    return (other.DockedWindow == DockedWindow) &&
+           (other.LeftSide == LeftSide);
   }
 };
-typedef TArrayAsVector<TWindowItem*> TWindowItemArray;
-typedef TArrayAsVectorIterator<TWindowItem*> TWindowItemArrayIter;
+
+typedef TIArrayAsVector<TWindowItem> TWindowItemArray;
+typedef TIArrayAsVectorIterator<TWindowItem> TWindowItemArrayIter;
 
 //
 // Build a sorted list (sorted by left coordinate) of windows on the same horz.
@@ -1887,7 +1924,7 @@ TEdgeSlip::MoveAllOthers(TWindow* draggedWindow, TWindow* movedWindow)
         // the dragged window.
         //
         if (currRect.top == draggedRect.top && currRect.left >= draggedRect.left) {
-          int   i = 0;
+          uint   i = 0;
           while (i < windowList.GetItemsInContainer()) {
             if (currRect.left <= windowList[i]->LeftSide)
               break;
@@ -1906,7 +1943,7 @@ TEdgeSlip::MoveAllOthers(TWindow* draggedWindow, TWindow* movedWindow)
   // Are there windows after the dragged window to adjust?
   //
   if (windowList.GetItemsInContainer()) {
-    int i = 0;
+    uint i = 0;
 
     // Find the first one, all subsequent ones (plus this one) will be slid.
     //
@@ -1938,14 +1975,15 @@ TEdgeSlip::MoveAllOthers(TWindow* draggedWindow, TWindow* movedWindow)
     }
   }
 
-  TWindowItemArrayIter iter(windowList);
-
-  while (iter) {
-    TWindowItem* item = iter.Current();
-    windowList.Detach(item);
-    delete item;
-    iter++;
-  }
+// Iterators cannot be used when modifying the underlying container
+//
+//  TWindowItemArrayIter iter(windowList);
+//  while (iter) {
+//    TWindowItem* item = iter.Current();
+//    windowList.Detach(item);
+//    delete item;
+//    iter++;
+//  }
 
   windowList.Flush();
 }
@@ -2250,7 +2288,6 @@ THarbor::DockDraggingBegin(TDockable& dockable, TPoint& point,
   // on the dec frame's client area.
   //
   TRect frameR = DecFrame.GetClientWindow()->GetWindowRect();
-//  DecFrame.MapWindowPoints(0, frameR, 2);
 
   if (SlipTop)
     SlipTR = SlipTop->GetWindowRect();
@@ -2340,10 +2377,6 @@ THarbor::EvMouseMove(uint modKeys, TPoint& point)
     else
       DragFrame = vFrame;
 
-    // horz & vert?
-    //
-//    if (!DragFrame.Contains(point))
-//      DragFrame.Offset(point.x - DragFrame.left - 15, point.y - DragFrame.top - 15);
 
     // Unpaint old frame, & paint new frame
     //
@@ -2385,6 +2418,7 @@ THarbor::EvLButtonUp(uint modKeys, TPoint& point)
       // working dockable may have been a helper.
       //
       TDockable* dd = TYPESAFE_DOWNCAST(dragDockable->GetWindow(), TDockable);
+      CHECK(dd);
       Move(*dd, DragSlipLoc, &DragFrame.TopLeft());
     }
     // Notifiy docking slip that the dragging resulted in a dockable move.
@@ -2416,7 +2450,7 @@ THarbor::EvLButtonDblClk(uint modKeys, TPoint& point)
     win->HandleMessage(WM_LBUTTONDBLCLK, modKeys, MkParam2(point.x, point.y));
   }
   else {
-    EvLButtonUp(modKeys, point);
+    TWindow::EvLButtonDblClk(modKeys, point);
   }
 }
 
@@ -2424,7 +2458,7 @@ THarbor::EvLButtonDblClk(uint modKeys, TPoint& point)
 // Insert a dockable into the appropriate docking area indicate by the given
 // location and either a point or a relative dockable&position
 //
-void
+TDockingSlip*
 THarbor::Insert(TDockable& dockable, TAbsLocation location,
                 const TPoint* where,
                 TRelPosition position, TDockable* relDockable)
@@ -2442,24 +2476,40 @@ THarbor::Insert(TDockable& dockable, TAbsLocation location,
     TPoint floatWhere;
     if (where) {
       floatWhere = *where;
-//      DecFrame.MapWindowPoints(0, &floatWhere, 1);  
     }
     else {
-      // Don't know where to put the floating palette, so put it at top-left
-      // of client area.
-//      floatWhere = DecFrame.GetClientRect().TopLeft();
-//      DecFrame.MapWindowPoints(0, &floatWhere, 1);
+      // Don't know where to put the floating palette, use CW_USEDEFAULT
+      //
       floatWhere = TPoint(CW_USEDEFAULT, CW_USEDEFAULT);
     }
 
     // Call out to the virtual to contruct a hidden floating slip
     //
     TFloatingSlip* slip = ConstructFloatingSlip(DecFrame,
-                                                floatWhere.x, floatWhere.y, dw);
+                                                floatWhere.x, floatWhere.y,
+                                                dw);
+    // Give slip pointer to harbor
+    //
     slip->SetHarbor(this);
-    slip->Create();
-    slip->DockableInsert(dockable, where, rpNone, 0);
-    slip->ShowWindow(SW_SHOWNA);
+
+    // If decorated frame is already created, the create floating slip
+    //
+    if (DecFrame.GetHandle()) {
+      slip->Create();
+      slip->DockableInsert(dockable, where, rpNone, 0);
+      slip->ShowWindow(SW_SHOWNA);
+
+    } else {
+
+      // Slip will be created latter (auto-creation) - make sure it's visible
+      //
+      slip->Attr.Style |= WS_VISIBLE;
+      slip->DockableInsert(dockable, where, rpNone, 0);
+    }
+
+    // Return floating slip
+    //
+    return slip;
   }
   else {
     TEdgeSlip* slip = GetEdgeSlip(location);
@@ -2470,15 +2520,20 @@ THarbor::Insert(TDockable& dockable, TAbsLocation location,
       SetEdgeSlip(location, slip);
       DecFrame.Insert(*slip, (TDecoratedFrame::TLocation)location);
 
-      if (DecFrame.GetHandle())  // Make sure the slip is created if frame is
+      // If frame is created, go ahead and create slip
+      //
+      if (DecFrame.GetHandle())
         slip->Create();
     }
 
     // Insert the dockable into the slip, based on args given
     //
     slip->DockableInsert(dockable, where, position, relDockable);
-  }
 
+    // Return edge slip
+    //
+    return slip;
+  }
 }
 
 //
@@ -2525,7 +2580,6 @@ THarbor::Move(TDockable& dockable, TAbsLocation location, const TPoint* where,
 void
 THarbor::Remove(TDockable& dockable)
 {
-  // Find the slip containg the dockable
   // Get the actual window associated with the dockable
   //
   TWindow* dockableWindow = dockable.GetWindow();
@@ -2534,11 +2588,12 @@ THarbor::Remove(TDockable& dockable)
     TRect previousRect;
     dockable.GetRect(previousRect);
 
-    // Find the slip containg the dockable
+    // Find the slip containing the dockable
     //
-    TDockingSlip* previousSlip = TYPESAFE_DOWNCAST(dockableWindow->Parent, TDockingSlip);
+    TDockingSlip* previousSlip = TYPESAFE_DOWNCAST(dockableWindow->Parent,
+                                                   TDockingSlip);
 
-    // Remove the dockable from the slip
+    // Remove the dockable from the slip and reparent it to the harbor
     //
     dockableWindow->ShowWindow(SW_HIDE);
     dockableWindow->SetParent(this);

@@ -1,6 +1,7 @@
 LIBRARY MSACM32
 EXPORTS
 
+    XRegThunkEntry
     acmDriverAddA
     acmDriverAddW
     acmDriverClose
@@ -38,6 +39,7 @@ EXPORTS
     acmMetrics
     acmStreamClose
     acmStreamConvert
+    acmStreamMessage
     acmStreamOpen
     acmStreamPrepareHeader
     acmStreamReset

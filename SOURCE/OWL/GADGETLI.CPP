@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of class TGadgetList, the base for classes that own gadgets
 //----------------------------------------------------------------------------
@@ -13,6 +13,8 @@
 #if !defined(OWL_GADGETWI_H)
 # include <owl/gadgetwi.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Return the gadget that a given window-relative point is in, 0 if none found

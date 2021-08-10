@@ -1,5 +1,6 @@
 #ifndef __RWSTDDEFS_H__
 #define __RWSTDDEFS_H__
+/* $Revision:   8.2  $ */
 
 /***************************************************************************
  *
@@ -136,6 +137,7 @@ ENDWRAP
 #else
    /* Disable Windows hacks if we are not compiling for Windows: */
 #  define RWSTDExport
+#  define RWSTDExportTemplate
 #  define rwexport
 #endif
 

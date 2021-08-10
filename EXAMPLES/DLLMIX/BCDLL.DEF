@@ -1,0 +1,9 @@
+; Message and UnhandledException each get exported by two names. Normally,
+; defining an export by alias hides the original export name, so we must
+; trick the linker a little and also alias the names to themselves.
+
+EXPORTS
+   Message                 = Message
+   UnhandledException      = UnhandledException
+   VBMessage               = Message
+   VBUnhandledException    = UnhandledException

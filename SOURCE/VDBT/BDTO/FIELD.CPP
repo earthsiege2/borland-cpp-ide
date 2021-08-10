@@ -15,7 +15,7 @@
 
 //-----------------------------------------------------------------------------
 
-void _export STDAPICALLTYPE FieldNotifyEventCallback( int32 data, PITField field )
+static void _export STDAPICALLTYPE FieldNotifyEventCallback( int32 data, PITField field )
 {
 	if (data)
 	{
@@ -54,7 +54,7 @@ void TField::AttachOnValidate( const TBdtEventSourceBase&, bool attach )
 }
 
 
-void _export STDAPICALLTYPE FieldGetTextEventCallback( int32 data, PITField field, PITAnyString Text, VARIANT_BOOL DisplayText )
+static void _export STDAPICALLTYPE FieldGetTextEventCallback( int32 data, PITField field, PITAnyString Text, VARIANT_BOOL DisplayText )
 {
 	if (data)
 	{
@@ -88,7 +88,7 @@ void TField::AttachOnGetText( const TBdtEventSourceBase&, bool attach )
 	}
 }
 
-void _export STDAPICALLTYPE FieldSetTextEventCallback( int32 data, PITField field, PITAnyString Text )
+static void _export STDAPICALLTYPE FieldSetTextEventCallback( int32 data, PITField field, PITAnyString Text )
 {
 	if (data)
 	{
@@ -388,7 +388,7 @@ void TField::GetAsString( string& s )
 		AnyString( field->get_AsString() ).GetString( s );
 }
 
-void TField::SetAsString( string& s )
+void TField::SetAsString( const string& s )
 {
 	if (field)
 		field->put_AsString( AnyString(s).GetPITAnyString() );
@@ -413,7 +413,7 @@ void TField::GetDataSet( TDataSet& d )
 	}
 }
 
-void TField::SetDataSet( TDataSet& d )
+void TField::SetDataSet( const TDataSet& d )
 {
 	if (field)
 		field->put_DataSet( d.GetPITDataSet() );
@@ -443,7 +443,7 @@ void TField::GetEditMask( string& s )
 		AnyString( field->get_EditMask() ).GetString( s );
 }
 
-void TField::SetEditMask( string& m )
+void TField::SetEditMask( const string& m )
 {
 	if (field)
 		field->put_EditMask( AnyString(m).GetPITAnyString() );
@@ -485,7 +485,7 @@ void TField::GetText( string& s )
 		AnyString( field->get_Text() ).GetString( s );
 }
 
-void TField::SetText( string& t )
+void TField::SetText( const string& t )
 {
 	if (field)
 		field->put_Text( AnyString(t).GetPITAnyString() );
@@ -516,7 +516,7 @@ void TField::GetFieldName( string& s )
 		AnyString( field->get_FieldName() ).GetString( s );
 }
 
-void TField::SetFieldName( string& n )
+void TField::SetFieldName( const string& n )
 {
 	if (field)
 		field->put_FieldName( AnyString(n).GetPITAnyString() );
@@ -624,7 +624,7 @@ void TStringField::GetValue( string& s )
 	GetAsString( s );
 }
 
-void TStringField::SetValue( string& s )
+void TStringField::SetValue( const string& s )
 {
 	SetAsString( s );
 }
@@ -664,7 +664,7 @@ void TNumericField::GetDisplayFormat( string& s )
 		AnyString( field->get_DisplayFormat() ).GetString( s );
 }
 
-void TNumericField::SetDisplayFormat( string& s )
+void TNumericField::SetDisplayFormat( const string& s )
 {
 	if (field)
 		field->put_DisplayFormat( AnyString(s).GetPITAnyString() );
@@ -676,7 +676,7 @@ void TNumericField::GetEditFormat( string& s )
 		AnyString( field->get_EditFormat() ).GetString( s );
 }
 
-void TNumericField::SetEditFormat( string& s )
+void TNumericField::SetEditFormat( const string& s )
 {
 	if (field)
 		field->put_EditFormat( AnyString(s).GetPITAnyString() );
@@ -898,7 +898,7 @@ void TBooleanField::GetDisplayValues( string& s )
 		AnyString( field->get_DisplayValues() ).GetString( s );
 }
 
-void TBooleanField::SetDisplayValues( string& s )
+void TBooleanField::SetDisplayValues( const string& s )
 {
 	if (field)
 		field->put_DisplayValues( AnyString(s).GetPITAnyString() );
@@ -940,7 +940,7 @@ void TDateTimeField::GetDisplayFormat( string& s )
 		AnyString( field->get_DisplayFormat() ).GetString( s );
 }
 
-void TDateTimeField::SetDisplayFormat( string& s )
+void TDateTimeField::SetDisplayFormat( const string& s )
 {
 	if (field)
 		field->put_DisplayFormat( AnyString(s).GetPITAnyString() );
@@ -1085,3 +1085,4 @@ void TGraphicField::LoadFromBitmap( HBITMAP hbitmap, HPALETTE hpalette )
 }
 
 //-----------------------------------------------------------------------------
+

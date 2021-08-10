@@ -42,6 +42,7 @@ double
 dynamic_cast
 else
 enum
+explicit
 extern
 false
 float
@@ -77,6 +78,7 @@ true
 try
 typedef
 typeid
+typename
 union
 unsigned
 using

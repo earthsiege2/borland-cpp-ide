@@ -1,0 +1,6 @@
+LIBRARY WINTRUST
+EXPORTS
+
+    WinLoadTrustProvider
+    WinSubmitCertificate
+    WinVerifyTrust

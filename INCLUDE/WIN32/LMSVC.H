@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0002    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     lmsvc.h
@@ -8,10 +10,6 @@ Abstract:
 
     This file contains structures, function prototypes, and definitions
     for the NetService API.
-
-Author:
-
-    Dan Lafferty (danl)     08-Mar-1991
 
 [Environment:]
 
@@ -22,37 +20,13 @@ Author:
     You must include NETCONS.H before this file, since this file depends
     on values defined in NETCONS.H.
 
-Revision History:
-
-    10-Mar-1991     danl
-        Created from LM2.0 header files and NT-LAN API Spec.
-    29-Jul-1991  DanHi
-        Change comments after manifest constants for error messages to a format
-        that is recognized by mapmsg.exe
-    06-Sep-1991 JohnRo
-        Added OPTIONAL keywords as applicable.
-    16-Sep-1991 CliffV
-        Added TEXT() around SERVICE_ service named.
-        Added Netlogon specific uninstall codes.
-    16-Sep-1991 JohnRo
-        Correct UNICODE use of SERVICE_ENCRYPT.
-    25-Sep-1991 CliffV
-        Added SERVICE2_BASE and SERVICE_UIC_M_NETLOGON_PATH from LM 2.1.
-    14-Feb-1992 RitaW
-        Moved service name strings to lmsname.h.
-    02-Jun-1992 JohnRo
-        RAID 9829: Avoid winsvc.h compiler warnings.
-    31-Mar-1993 Danl
-        Used upper bits in the code field to extend the max possible waithint
-        to FFFF.  Created macros for accessing this.  (SERVICE_NT...).
-
 --*/
 
-/* $Copyright: 1994$ */
+/* $Copyright: 1997$ */
 
 #ifndef _LMSVC_
 #define _LMSVC_
-#define __LMSVC_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,31 +35,33 @@ extern "C" {
 //
 // Include the file which contains all the service name strings.
 //
+#pragma option -b.
 #include <lmsname.h>
+#pragma option -b
 
 //
 //  Data Structures
 //
 
 typedef struct _SERVICE_INFO_0 {
-    LPTSTR  svci0_name;
+    LPWSTR  svci0_name;
 } SERVICE_INFO_0, *PSERVICE_INFO_0, * LPSERVICE_INFO_0;
 
 typedef struct _SERVICE_INFO_1 {
-    LPTSTR  svci1_name;
+    LPWSTR  svci1_name;
     DWORD   svci1_status;
     DWORD   svci1_code;
     DWORD   svci1_pid;
 } SERVICE_INFO_1, *PSERVICE_INFO_1, * LPSERVICE_INFO_1;
 
 typedef struct _SERVICE_INFO_2 {
-    LPTSTR  svci2_name;
+    LPWSTR  svci2_name;
     DWORD   svci2_status;
     DWORD   svci2_code;
     DWORD   svci2_pid;
-    LPTSTR  svci2_text;
+    LPWSTR  svci2_text;
     DWORD   svci2_specific_error;
-    LPTSTR  svci2_display_name;
+    LPWSTR  svci2_display_name;
 } SERVICE_INFO_2, *PSERVICE_INFO_2, * LPSERVICE_INFO_2;
 
 //
@@ -94,8 +70,8 @@ typedef struct _SERVICE_INFO_2 {
 
 NET_API_STATUS NET_API_FUNCTION
 NetServiceControl (
-    IN  LPTSTR  servername OPTIONAL,
-    IN  LPTSTR  service,
+    IN  LPCWSTR servername OPTIONAL,
+    IN  LPCWSTR service,
     IN  DWORD   opcode,
     IN  DWORD   arg,
     OUT LPBYTE  *bufptr
@@ -103,7 +79,7 @@ NetServiceControl (
 
 NET_API_STATUS NET_API_FUNCTION
 NetServiceEnum (
-    IN  LPTSTR      servername OPTIONAL,
+    IN  LPCWSTR     servername OPTIONAL,
     IN  DWORD       level,
     OUT LPBYTE      *bufptr,
     IN  DWORD       prefmaxlen,
@@ -114,18 +90,18 @@ NetServiceEnum (
 
 NET_API_STATUS NET_API_FUNCTION
 NetServiceGetInfo (
-    IN  LPTSTR  servername OPTIONAL,
-    IN  LPTSTR  service,
+    IN  LPCWSTR servername OPTIONAL,
+    IN  LPCWSTR service,
     IN  DWORD   level,
     OUT LPBYTE   *bufptr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetServiceInstall (
-    IN  LPTSTR  servername OPTIONAL,
-    IN  LPTSTR  service,
+    IN  LPCWSTR servername OPTIONAL,
+    IN  LPCWSTR service,
     IN  DWORD   argc,
-    IN  LPTSTR  argv[],
+    IN  LPCWSTR argv[],
     OUT LPBYTE  *bufptr
     );
 
@@ -178,7 +154,7 @@ NetServiceInstall (
 //  Additional standard LAN Manager for MS-DOS services
 //
 
-#define SERVICE_DOS_ENCRYPTION  TEXT("ENCRYPT")
+#define SERVICE_DOS_ENCRYPTION  L"ENCRYPT"
 
 //
 //  NetServiceControl opcodes.
@@ -508,7 +484,7 @@ NetServiceInstall (
 
 #define SERVICE_UIC_M_DATABASE_ERROR    (SERVICE2_BASE + 2)
 /*
- * An internal error occurred while accessing the computer's 
+ * An internal error occurred while accessing the computer's
  * local or network security database.
  */
 
@@ -558,4 +534,5 @@ NetServiceInstall (
 }
 #endif
 
+#pragma option -b.
 #endif // _LMSVC_

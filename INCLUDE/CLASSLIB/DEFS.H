@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.10  $
 //
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_DEFS_H)
@@ -19,7 +19,7 @@
 //
 // Be sure _BUILDBIDSDLL is defined when building an actual BIDS dll
 //
-#if defined(_BIDSDLL) || defined(_CLASSDLL) || defined(_BUILDBIDSDLL)
+#if defined(_BIDSDLL) || defined(_CLASSDLL) || defined(_BUILDBIDSDLL) || defined(_RTLDLL)
 # if !defined(_BIDSDLL)
 #   define _BIDSDLL
 # endif
@@ -153,5 +153,13 @@
 # endif
 #endif
 #define _BIDSFAR
+
+#if defined(BI_NAMESPACE)
+
+# if defined(BI_NO_NAMESPACE)
+#   error Compiler lacks support for namespaces.
+# endif
+
+#endif
 
 #endif  // CLASSLIB_DEFS_H

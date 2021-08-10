@@ -4,27 +4,28 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <complex.h>
 
 
-double _RTLENTRY _EXPFUNC abs(complex & z)
+double _RTLENTRY _EXPFUNC abs(const complex & z)
 {
     return (sqrt(z.re*z.re + z.im*z.im));
 }
 
-double _RTLENTRY _EXPFUNC norm(complex & z)
+double _RTLENTRY _EXPFUNC norm(const complex & z)
 {
     return (z.re*z.re + z.im*z.im);
 }
 
-complex & _RTLENTRY complex::operator*=(complex & z2)
+complex & _RTLENTRY complex::operator*=(const complex & z2)
 {
     double temp_re = this->re*z2.re - this->im*z2.im;
     double temp_im = this->im*z2.re + this->re*z2.im;
@@ -34,7 +35,7 @@ complex & _RTLENTRY complex::operator*=(complex & z2)
     return *this;
 }
 
-complex _RTLENTRY _EXPFUNC operator*(complex & z1, complex & z2)
+complex _RTLENTRY _EXPFUNC operator*(const complex & z1, const complex & z2)
 {
     double temp_re = z1.re*z2.re - z1.im*z2.im;
     double temp_im = z1.im*z2.re + z1.re*z2.im;

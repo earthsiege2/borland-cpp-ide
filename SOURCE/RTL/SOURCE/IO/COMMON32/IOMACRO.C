@@ -8,38 +8,42 @@
  *    putchar
  *    feof
  *    ferror
- *    fileno
+ *    _fileno
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdio.h>
+#include <_tchar.h>
 
-int (_RTLENTRY _EXPFUNC getc)( FILE *fp )
+_TINT (_RTLENTRY _EXPFUNC _gettc)( FILE *fp )
   {
-  return( fgetc( fp ) );
+  return( _fgettc( fp ) );
   }
 
-int (_RTLENTRY _EXPFUNC getchar)( void )
+_TINT (_RTLENTRY _EXPFUNC _gettchar)( void )
   {
-  return( getchar() );
+  return( _gettchar() );
   }
 
-int (_RTLENTRY _EXPFUNC putc)( const int c, FILE *fp )
+_TINT (_RTLENTRY _EXPFUNC _puttc)( const _TINT c, FILE *fp )
   {
-  return( fputc( c, fp ) );
+  return( _fputtc( c, fp ) );
   }
 
-int (_RTLENTRY _EXPFUNC putchar)( const int c )
+_TINT (_RTLENTRY _EXPFUNC _puttchar)( const _TINT c )
   {
-  return( putchar( c ) );
+  return( _puttchar( c ) );
   }
+
+#ifndef _UNICODE
 
 int (_RTLENTRY _EXPFUNC feof)( FILE *fp )
   {
@@ -51,7 +55,9 @@ int (_RTLENTRY _EXPFUNC ferror)( FILE *fp )
   return( ferror( fp ) );
   }
 
-int (_RTLENTRY _EXPFUNC fileno)( FILE *fp )
+int (_RTLENTRY _EXPFUNC _fileno)( FILE *fp )
   {
-  return( fileno( fp ) );
+  return( _fileno( fp ) );
   }
+
+#endif  // _UNICODE

@@ -1,8 +1,10 @@
 LIBRARY WSOCK32
 EXPORTS
 
+    AcceptEx
     EnumProtocolsA
     EnumProtocolsW
+    GetAcceptExSockaddrs
     GetAddressByNameA
     GetAddressByNameW
     GetNameByTypeA
@@ -11,9 +13,11 @@ EXPORTS
     GetServiceW
     GetTypeByNameA
     GetTypeByNameW
+    MigrateWinsockConfiguration
     NPLoadNameSpaces
     SetServiceA
     SetServiceW
+    TransmitFile
     WSAAsyncGetHostByAddr
     WSAAsyncGetHostByName
     WSAAsyncGetProtoByName

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.6  $
 //
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_TIME_H)
@@ -25,6 +25,11 @@
 class _EXPCLASS string;
 class _EXPCLASS istream;
 class _EXPCLASS ostream;
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 class _BIDSCLASS ipstream;
 class _BIDSCLASS opstream;
 
@@ -208,6 +213,10 @@ inline HashValue( TTime _BIDSFAR & t )
 {
     return t.Hash();
 }
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po.

@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 7.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1987, 1996 by Borland International
+;       Copyright (c) 1987, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
 
 
         INCLUDE RULES.ASI
@@ -87,7 +88,7 @@ ENDIF
                 mov     bx, ax
                 pop     es              ; Restore Environment Segment address
 IF      LDATA
-                mov     word ptr _environ@, ax     
+                mov     word ptr _environ@, ax
                 mov     word ptr _environ@+2, dx
                 push    ds
                 mov     ds, dx

@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <errno.h>
 #include <float.h>
@@ -64,8 +65,6 @@ double __ldtrunc(int flag, long double x, double xhuge)
     unsigned short *xp;
     double doubleval;
     float  floatval;
-
-    sign = 0;
 
     if (flag == 0)          /* is it a float? */
     {

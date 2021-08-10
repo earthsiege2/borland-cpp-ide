@@ -1,5 +1,5 @@
 #############################################################################
-#
+#                                                                           #
 # The make process relies on the creation of DLL and library response file  #
 # creation.  To control the location of object modules the following should #
 # be defined:                                                               #
@@ -13,6 +13,8 @@
 #                                                                           #
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
+#                                                                           #
+# $Revision:   8.7  $	                                                    #
 #                                                                           #
 #############################################################################
 
@@ -28,14 +30,18 @@ OBJS =              \
             libmain.obj	\
 	    rawdll.obj
 
-    MISC =                      \
-            $(LIBDIR)\c0d32.obj \
+    MISC =                         \
+            $(LIBDIR)\c0d32dyn.obj \
             $(LIBDIR)\c0d32x.obj
 
-!elif !$d(MT)
-    MISC =                      \
-            $(LIBDIR)\c0w32.obj \
-            $(LIBDIR)\c0x32.obj
+!elif !$d(MT) || $d(MAGIC)
+    MISC =                       \
+            $(LIBDIR)\c0d32.obj  \
+            $(LIBDIR)\c0w32.obj  \
+            $(LIBDIR)\c0x32.obj  \
+            $(LIBDIR)\c0d32w.obj \
+            $(LIBDIR)\c0w32w.obj \
+            $(LIBDIR)\c0x32w.obj
 !endif
 
 #############################################################################
@@ -51,18 +57,41 @@ TASMCFG = 1        # Force tasm.cfg creation
 $(LIBDIR)\c0x32.obj : c0nt.obj
     copy $** $<
 
+$(LIBDIR)\c0x32w.obj : wc0nt.obj
+    copy $** $<
+
 $(LIBDIR)\c0w32.obj : c0ntw.obj
+    copy $** $<
+
+$(LIBDIR)\c0w32w.obj : wc0ntw.obj
     copy $** $<
 
 $(LIBDIR)\c0d32.obj : c0ntd.obj
     copy $** $<
 
+$(LIBDIR)\c0d32w.obj : wc0ntd.obj
+    copy $** $<
+
+$(LIBDIR)\c0d32dyn.obj: c0ntddyn.obj
+    copy $** $<
+
 $(LIBDIR)\c0d32x.obj: c0ntdx.obj
     copy $** $<
 
-c0ntw.obj : c0nt.asm
+c0nt.obj    : c0nt.asm
 
-c0ntd.obj : c0nt.asm
+wc0nt.obj   : c0nt.asm
 
-c0ntdx.obj: c0nt.asm
+c0ntw.obj   : c0nt.asm
+
+wc0ntw.obj  : c0nt.asm
+
+c0ntd.obj   : c0nt.asm
+
+wc0ntd.obj  : c0nt.asm
+
+c0ntddyn.obj: c0nt.asm
+
+c0ntdx.obj  : c0nt.asm
+
 

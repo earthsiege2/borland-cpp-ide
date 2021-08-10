@@ -30,11 +30,11 @@ static TOcApp*  TheOcApp = 0;
 // Initializes OLE to use default IMalloc allocator.
 // Creates OCF helper objects
 //
-TOleInit::TOleInit(TRegList& regInfo,
-                   TComponentFactory callback,
-                   string& cmdLine, TRegLink* linkHead,
-                   HINSTANCE hInst) :
-          TOleAllocator(0), OcRegistrar(0), OcApp(TheOcApp)
+TOleInitEx::TOleInitEx(TRegList& regInfo,
+                       TComponentFactory callback,
+                       string& cmdLine, TRegLink* linkHead,
+                       HINSTANCE hInst) 
+           : OcRegistrar(0), OcApp(TheOcApp)
 {
   // Initialize OCF objects: Create TOcRegistrar & TOcApp
   //
@@ -47,7 +47,7 @@ TOleInit::TOleInit(TRegList& regInfo,
 //
 // Cleans up the OCF helper objects
 //
-TOleInit::~TOleInit()
+TOleInitEx::~TOleInitEx()
 {
   // Free the Registrar
   //

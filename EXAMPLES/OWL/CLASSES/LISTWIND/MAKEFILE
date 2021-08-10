@@ -5,6 +5,8 @@
 
 MODELS  = dft
 SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
 
 EXERES = listwind
 OBJEXE = listwinx.obj

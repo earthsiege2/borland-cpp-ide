@@ -1,12 +1,12 @@
 //----------------------------------------------------------------------------
 // cScript
-// (C) Copyright 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1995, 1997 by Borland International, All Rights Reserved
 //
 // ED_DFLT.SPP
 //    Script component of IDE's Editor Default emulation.
 //    Provides support services for editing environment.
 //
-// $Revision:   1.2  $
+// $Revision:   1.8  $
 //
 //----------------------------------------------------------------------------
 // Default Editor.
@@ -33,6 +33,35 @@ library;
 #define BOOKMARK_ID_SYSTEM_ONE   19
 #define BOOKMARK_ID_SYSTEM_TWO   18
 #define BOOKMARK_ID_SYSTEM_THREE 17
+#define FUNCTION_CONTINUE 0
+#define FUNCTION_END      1
+
+//----------------------------------------------------------------------------
+// Menu Vectors.
+//----------------------------------------------------------------------------
+
+DoIDEFileClose()      { return FUNCTION_CONTINUE; }
+DoIDEFileOpen()       { return FUNCTION_CONTINUE; }
+DoIDEFilePrint()      { return FUNCTION_CONTINUE; }
+DoIDEFileSave()       { return FUNCTION_CONTINUE; }
+DoIDEFileSaveAs()     { return FUNCTION_CONTINUE; }
+DoIDEFileSaveAll()    { return FUNCTION_CONTINUE; }
+
+DoIDEEditUndo()       { editor.Undo(); return FUNCTION_END; }
+DoIDEEditRedo()       { editor.Redo(); return FUNCTION_END; }
+DoIDEEditCut()        { editor.InternalCut(); return FUNCTION_END; }
+DoIDEEditCopy()       { editor.Copy(); return FUNCTION_END;  }
+DoIDEEditPaste()      { editor.Paste(); return FUNCTION_END; }
+DoIDEEditClear()      { editor.InternalDelete(); return FUNCTION_END; }
+DoIDEEditSelectAll()  { editor.SelectAll(); return FUNCTION_END; }
+DoIDEEditBufferList() { return FUNCTION_CONTINUE; }
+
+DoIDESearchFind()     { return FUNCTION_CONTINUE;}
+DoIDESearchReplace()  { return FUNCTION_CONTINUE; }
+DoIDESearchSearchAgain() { return FUNCTION_CONTINUE; }
+
+DoIDESearchPreviousMessage() { return FUNCTION_CONTINUE; }
+DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 
 //----------------------------------------------------------------------------
 // Methods.
@@ -41,12 +70,16 @@ library;
 //
 // Used to autoload the Default emulation specific methods.
 //
-DefaultEmulation() {
-   if (bFileLoading) {
-      print "Default emulation enabled.";
-   } else {
+defaultEmulation(bUnassign) {
+
+   IDE.KeyboardManager.ScriptAbortKey = "<Escape>";
+   IDE.KeyboardManager.ProcessKeyboardAssignments(scriptEngine.StartupDirectory+IDE.KeyboardAssignmentFile,bUnassign);
+
+   if (bUnassign) {
       print "Default emulation removed.";
-      scriptEngine.Unload("ed_dflt.spp");
+      scriptEngine.Unload(typeid(module()));
+   } else {
+      print "Default emulation enabled.";
    }
 }
 
@@ -228,10 +261,12 @@ on editor:>InternalDeleteLine() {
    ep.MoveBOL();
    ep.Save();
    BeginBlock(EXCLUSIVE_BLOCK);
-   declare nRow = ep.Row;
-   ep.MoveRelative(1,0);
-   if (ep.Row == nRow)
+
+   if (ep.Row == ep.LastRow)
       ep.MoveEOL();
+   else
+      ep.MoveRelative(1,0);
+
    EndBlock(EXCLUSIVE_BLOCK);
    eb.Delete();
    ep.Restore();
@@ -319,8 +354,23 @@ on editor:>InternalMarkToEOL() {
 on editor:>InternalMoveBlock() {
    declare eb = .BlockExists();
    if (eb != NULL) {
+      declare ev = .TopView;
+      declare ep = ev.Position;
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
       eb.Save();
-      .TopView.Position.Move(eb.StartingRow,eb.StartingColumn);
+      ep.Move(eb.StartingRow, eb.StartingColumn);
+      eb.Restore();
+      eb.Cut();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+      declare nRow = ep.Row;
+      declare nColumn = ep.Column;
+      ep.InsertScrap();
+      ep.Move(nRow, nColumn);
+      eb.Begin();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+      eb.Extend(ep.Row, ep.Column);
+      eb.Save();
+      ep.Move(nRow, nColumn);
       eb.Restore();
    }
 }
@@ -336,6 +386,34 @@ on editor:>InternalMarkWord() {
    }
 
    return .MarkWord();
+}
+
+//
+// Using Internal behavior block a line.
+//
+on editor:>InternalMarkLine() {
+
+   declare eb = .BlockExists();
+   declare ep = .TopView.Position;
+
+   SetBlockStyle(EXCLUSIVE_BLOCK);
+
+   if (ep.Column == 1) {
+      ep.Save();
+
+      if (ep.Row <  ep.LastRow)
+         ep.MoveRelative(1,0);
+      else
+         ep.MoveEOL();
+
+      if (eb == NULL)
+         eb = .TopView.Block;
+
+      ResetBlock();
+      eb.End();
+      ep.Restore();
+      eb.Begin();
+   }
 }
 
 //

@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $ */
 
 #if !defined(__OS2__) && !defined(__WIN32__)
 #error Locks and threads can only be used on OS/2 and NT
@@ -60,7 +61,10 @@ typedef struct _thread_data
     __seed_t   thread_seed;         /* random number seed */
 #ifdef __WIN32__
     void    *thread_exceptvars;
-#endif        
+#endif
+#if defined(_MBCS)
+    int     thread_lead_byte;       /* pending leadbyte data used by putch() */
+#endif
 } THREAD_DATA;
 
 /* On OS/2, a lock_t is the same as an HMTX. On WIN32, it is a pointer

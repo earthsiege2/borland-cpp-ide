@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +37,7 @@ Description     This function is a helper function used by setvbuf and
                 that it does not verify the file pointer, flush the file,
                 or lock/unlock the file.  See setvbuf.c for more information.
 
-Return value    _allocbuf returns 0 on success. It returns non-zero if 
+Return value    _allocbuf returns 0 on success. It returns non-zero if
                 buf is NULL and there is not enough space to allocate a
                 buffer.
 
@@ -49,7 +50,7 @@ int _allocbuf(FILE *fp, char *buf, int type, size_t size)
 
     fp->flags &= ~(_F_BUF | _F_LBUF);
     fp->bsize = 0;
-    fp->curp = fp->buffer = & fp->hold;
+    fp->curp = fp->buffer = (unsigned char*)&fp->hold;
 
     if (_IONBF != type && size > 0)
     {

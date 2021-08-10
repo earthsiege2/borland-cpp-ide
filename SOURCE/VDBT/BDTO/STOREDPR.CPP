@@ -59,6 +59,11 @@ TStoredProc::TStoredProc( HWND hdlg, int idc ) : TDBDataSet()
 	TDBDataSet::SetPIT( storedproc );
 }
 
+void TStoredProc::AttachToControl( HWND hdlg, int idc )
+{
+	SetPIT( GetVBXPIUnknown( hdlg, idc ) );
+}
+
 void TStoredProc::AttachControl( HWND hdlg, int idc )
 {
 	SetVBXPIUnknown( hdlg, idc, storedproc );
@@ -203,7 +208,7 @@ void TStoredProc::GetStoredProcName( string& s )
 		AnyString( storedproc->get_StoredProcName() ).GetString( s );
 }
 
-void TStoredProc::SetStoredProcName( string& n )
+void TStoredProc::SetStoredProcName( const string& n )
 {
 	if (storedproc)
 		storedproc->put_StoredProcName( AnyString(n).GetPITAnyString() );
@@ -234,7 +239,7 @@ void TStoredProc::GetParams( TParams& p )
 	}
 }
 
-void TStoredProc::SetParams( TParams& p )
+void TStoredProc::SetParams( const TParams& p )
 {
 	if (storedproc)
 		storedproc->put_Params( p.GetPITParams() );
@@ -251,3 +256,4 @@ void TStoredProc::SetParamBindMode( TParamBindMode m )
 	if (storedproc)
 		storedproc->put_ParamBindMode( m );
 }
+

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.10  $
 //
 //----------------------------------------------------------------------------
 #if !defined(WINSYS_DEFS_H)
@@ -19,7 +19,7 @@
 //
 // Be sure _BUILDWSYSDLL is defined when building an actual WSYS dll
 //
-#if defined(_BIDSDLL) || defined(_WSYSDLL) || defined(_SVCSDLL) || defined(_BUILDWSYSDLL)
+#if defined(_BIDSDLL) || defined(_WSYSDLL) || defined(_SVCSDLL) || defined(_BUILDWSYSDLL) || defined(_RTLDLL)
 # if !defined(_WSYSDLL)
 #   define _WSYSDLL
 # endif
@@ -79,8 +79,16 @@
 //----------------------------------------------------------------------------
 // WinSys extensions to the runtime diagnostics in classlib/checks.h
 //
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 uint8 _WSYSFUNC GetDiagEnabled(char* file, char* name, uint8 e);
 uint8 _WSYSFUNC GetDiagLevel(char* file, char* name, uint8 l);
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 #define WSYS_INI "OWL.INI"
 

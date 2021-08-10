@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.11  $
+//$Revision:   10.16  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
@@ -11,6 +11,8 @@
 #if !defined(OWL_WINSOCK_H)
 # include <owl/winsock.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Only the family is specified.  The rest of the data will currently be
@@ -125,6 +127,17 @@ TINetSocketAddress::TINetSocketAddress(ushort newPort, ulong newAddress, ushort 
 // format of numerical IP addressing (e.g. "132.212.43.1").  It cannot be in
 // the form of "user@place" nFamily is in the form of AF_INET, etc.
 //
+TINetSocketAddress::TINetSocketAddress(ushort newPort, const char* newAddressStr, ushort newFamily)
+{
+  ulong newAddress = ConvertAddress(newAddressStr);
+  SetAddress(newFamily, newPort, newAddress);
+}
+
+// 
+// Obsolete version of previous constructor included for backward
+// compatibility (doesn't use const)
+// 
+
 TINetSocketAddress::TINetSocketAddress(ushort newPort, char* newAddressStr, ushort newFamily)
 {
   ulong newAddress = ConvertAddress(newAddressStr);
@@ -145,9 +158,9 @@ TINetSocketAddress& TINetSocketAddress::operator =(const sockaddr& newSockaddr)
 // converts it to an IP address (ulong) if possible.  The returned value will
 // be in network byte ordering. It should be INADDR_NONE if there was an error.
 //
-ulong TINetSocketAddress::ConvertAddress(char far* address)
+ulong TINetSocketAddress::ConvertAddress(const char far* address)
 {
-  return TWinSock::Dll()->inet_addr(address);
+  return TWinSockDll::inet_addr(address);
 }
 
 //
@@ -165,7 +178,7 @@ char far* TINetSocketAddress::ConvertAddress(ulong address)
   char far* addressStr;
 
   tempAddress.s_addr = address;
-  addressStr = TWinSock::Dll()->inet_ntoa(tempAddress);
+  addressStr = TWinSockDll::inet_ntoa(tempAddress);
   return addressStr;
 }
 
@@ -183,13 +196,15 @@ char far* TINetSocketAddress::ConvertAddress(ulong address)
 // only to tell you if it is in dotted-decimal format or not.  The return
 // value is 1 if in dotted-decimal format, and 0 if not.
 //
-short TINetSocketAddress::IsAddressDottedDecimal(char far* addressStr)
+#pragma warn -cln
+short TINetSocketAddress::IsAddressDottedDecimal(const char far* addressStr)
 {
-  ulong returnValue = TWinSock::Dll()->inet_addr(addressStr);
+  ulong returnValue = TWinSockDll::inet_addr(addressStr);
   if (returnValue == INADDR_NONE)
     return 0;
   return 1;
 }
+#pragma warn .cln
 
 //
 // This function makes an address out of the necessary IP address components.
@@ -224,6 +239,7 @@ ulong TINetSocketAddress::GetNetworkAddress() const
 //
 // This function returns 0 if the network cannot be determined.
 //
+#pragma warn -cln
 ulong TINetSocketAddress::GetNetwork() const
 {
   TINetClass theINetClass = GetClass();
@@ -240,6 +256,7 @@ ulong TINetSocketAddress::GetNetwork() const
 
   return GetNetwork(subnetMask);
 }
+#pragma warn .cln
 
 //
 // Return network address with subnet masked out
@@ -282,7 +299,7 @@ void TINetSocketAddress::SetNetworkAddress(ulong address)
 //
 // Sets the network address.
 //
-void TINetSocketAddress::SetNetworkAddress(char* addressDottedDecimal)
+void TINetSocketAddress::SetNetworkAddress(const char* addressDottedDecimal)
 {
    SetNetworkAddress(ConvertAddress(addressDottedDecimal));
 }
@@ -301,6 +318,7 @@ void TINetSocketAddress::SetFiller()
 // This function uses WinSock macros to get standard class information.
 // It knows nothing about subnetting, nor any classes beyond class C.
 //
+#pragma warn -cln
 TINetSocketAddress::TINetClass TINetSocketAddress::GetClass() const
 {
   if (IN_CLASSA(GetNetworkAddress()))
@@ -311,3 +329,4 @@ TINetSocketAddress::TINetClass TINetSocketAddress::GetClass() const
     return ClassC;
   return ClassUnknown;
 }
+#pragma warn .cln

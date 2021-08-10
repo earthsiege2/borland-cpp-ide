@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // AUTOSAVE.SPP: Autosave. Saves files, environment, desktop, project,
 //   and/or messages at the specified interval.
@@ -11,8 +11,8 @@
 //
 // NOTES: All autosave.* files must reside in the same directory. 
 //--------------------------------------------------------------------------
-print "autosave.spp";
-
+print typeid(module());
+ 
 //
 // IDE imports.
 //
@@ -22,9 +22,9 @@ import scriptEngine;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
-if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
-if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+if (!scriptEngine.IsLoaded("msg")) scriptEngine.Load("msg");
+if (!scriptEngine.IsLoaded("file")) scriptEngine.Load("file");
+if (!scriptEngine.IsLoaded("misc")) scriptEngine.Load("misc");
 
 //
 // Configuration values.
@@ -43,7 +43,7 @@ bAutosaveComplete = TRUE;  // Reentry flag.
 //
 // Fully-qualified configuration file.
 //
-CFGFile = GetModuleDir("autosave.spp") + "\\autosave.cfg";
+CFGFile = GetModuleDir(typeid(module())) + "\\autosave.cfg";
 
 autosave()
 {

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.2  $
+//$Revision:   5.5  $
 //
 // Reliable include for standard C++ exception classes
 //----------------------------------------------------------------------------
@@ -52,6 +52,10 @@
 
 class _EXPCLASS string;
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 class _EXPCLASS xmsg
 {
 public:
@@ -88,6 +92,10 @@ inline size_t _RTLENTRY xalloc::requested() const
 {
     return siz;
 }
+
+#if defined(BI_NAMESPACE)
+}       // namespace ClassLib
+#endif
 
 #endif  // if/else BI_COMP_BORLANDC
 

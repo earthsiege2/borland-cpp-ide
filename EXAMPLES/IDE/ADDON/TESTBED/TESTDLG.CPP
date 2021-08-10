@@ -2,7 +2,7 @@
 
   testdlg.cpp
   Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
-  $Revision:   1.15  $
+  $Revision:   1.18  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __AOEXPCH_H

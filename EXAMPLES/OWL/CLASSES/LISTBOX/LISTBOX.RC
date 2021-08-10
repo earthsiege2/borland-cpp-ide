@@ -5,6 +5,7 @@
 #include <owl/owlapp.rc>         // default owl app icon
 #include <owl/inputdia.rc>
 #include <owl/window.rh>
+#include <owl\except.rc>
 #include "listbox.rh"
 
 IDM_LISTBOX_MENU MENU

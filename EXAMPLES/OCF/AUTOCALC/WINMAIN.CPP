@@ -52,8 +52,9 @@ WinMain(HINSTANCE hInst, HINSTANCE prev, char far* cmdLine, int/*cmdShow*/)
 {
   if(prev || InitApplication(hInst)) {
     try {
+      string cmdLineString(cmdLine);
       ::Registrar=new TRegistrar(AppReg,TOcAutoFactory<TCalc>(),
-                                 string(cmdLine), hInst);
+                                 cmdLineString, hInst);
       TAutoCommand::SetErrorMsgHook(ErrorLookup);
       if (!::Registrar->IsOptionSet(amAnyRegOption))
         ::Registrar->Run();
@@ -83,8 +84,9 @@ DllEntryPoint(HINSTANCE hInst, uint32 reason, LPVOID)
 #endif
   if (InitApplication(hInst)) {
     try {
+      string cmdLineString(cmdLine);
       ::Registrar=new TRegistrar(AppReg,TOcAutoFactory<TCalc>(),
-                                 string(cmdLine), hInst);
+                                 cmdLineString, hInst);
       return 1;
     }
     catch (TXBase& x) {

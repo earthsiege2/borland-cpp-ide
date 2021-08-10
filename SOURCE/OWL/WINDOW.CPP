@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.41  $
+//$Revision:   10.63  $
 //
 // Implementation of TWindow.  This defines the basic behavior of all Windows.
 //----------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlMsg);  // diagnostic group for message tracing
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlWin, 1, 0);  // diag. group for windows
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlCmd, 1, 0);  // diag. group for commands
@@ -90,6 +91,7 @@ DEFINE_RESPONSE_TABLE(TWindow)
   EV_WM_SYSCOLORCHANGE,
   EV_WM_INITMENUPOPUP,
   EV_WM_CONTEXTMENU,
+  EV_WM_ENTERIDLE,
 END_RESPONSE_TABLE;
 
 
@@ -100,7 +102,7 @@ END_RESPONSE_TABLE;
 //
 //
 //
-TCommandEnabler::TCommandEnabler(uint id, TWindow::THandle hReceiver)
+TCommandEnabler::TCommandEnabler(uint id, HWND hReceiver)
 :
   Id(id),
   HWndReceiver(hReceiver)
@@ -131,7 +133,7 @@ TWindow::TWindow(TWindow* parent, const char far* title, TModule* module)
 // Constructor for a TWindow which is being used as an alias for a
 // non-OWL window.  This ctor is generally not used by derived classes
 //
-TWindow::TWindow(THandle handle, TModule* module)
+TWindow::TWindow(HWND handle, TModule* module)
 {
   PRECONDITION(handle);
 
@@ -176,7 +178,7 @@ TWindow::Init(TWindow* parent, const char far* title, TModule* module)
 // called more than once.
 //
 void
-TWindow::Init(THandle handle, TModule* module)
+TWindow::Init(HWND handle, TModule* module)
 {
   PRECONDITION(handle);
 
@@ -196,7 +198,7 @@ TWindow::Init(THandle handle, TModule* module)
     // private Init() so the receiver can be added to the parent's list of
     // children
     //
-    THandle   hParent = GetParentH();
+    HWND   hParent = GetParentH();
     TWindow*  parent = hParent ? GetWindowPtr(hParent) : 0;
     Init(parent, module);
 
@@ -334,7 +336,7 @@ TWindow::~TWindow()
       // May want to check WNDPROC against Thunk to see if its still us
       // and not restore if it's not us...
       //
-      WARNX(OwlWin, GetWindowLong(GWL_WNDPROC) != (uint32)GetThunk(), 0,
+      WARNX(OwlWin, GetWindowLong(GWL_WNDPROC) != (int32)GetThunk(), 0,
             "Restoring old WndProc after foreign subclass of:" << *this);
       SetWindowLong(GWL_WNDPROC, uint32(DefaultProc));
     }
@@ -588,7 +590,7 @@ TWindow::DefaultProcessing()
   //
   uint    notifyCode;
   uint    id;
-  THandle hWndCtl;
+  HWND hWndCtl;
 
   // Get notify code, control id and control handle from packed params.
   // Unpacking based on message & platform.
@@ -600,7 +602,7 @@ TWindow::DefaultProcessing()
     notifyCode = HiUint16(currentEvent.Param1);
 #endif
     id = LoUint16(currentEvent.Param1);
-    hWndCtl = THandle((uint)currentEvent.Param2);
+    hWndCtl = HWND((uint)currentEvent.Param2);
   }
   else {
     notifyCode = ((TNotify*)currentEvent.Param2)->code;
@@ -709,7 +711,7 @@ TWindow::DefaultProcessing()
 //              if the message is from a menu, it is 0
 //
 TResult
-TWindow::EvCommand(uint id, THandle hWndCtl, uint notifyCode)
+TWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
 {
   TRACEX(OwlCmd, 1, "TWindow::EvCommand - id(" << id << "), ctl(" <<\
                      hex << uint(hWndCtl) << "), code(" << notifyCode  << ")");
@@ -783,7 +785,7 @@ TWindow::EvCommand(uint id, THandle hWndCtl, uint notifyCode)
 // Handle WM_NOTIFY & subdispatch messages from child controls
 //
 TResult
-TWindow::EvNotify(uint ctlId, TNotify far& notifyInfo)
+TWindow::EvNotify(uint ctlId, TNotify& notifyInfo)
 {
   TWindow*        receiver = this;
   TEqualOperator  equal = 0;
@@ -833,13 +835,13 @@ TWindow::EvCommandEnable(TCommandEnabler& commandEnabler)
 // Don't process for windows out of our window tree (esp. other apps)
 //
 void
-TWindow::RouteCommandEnable(THandle hInitCmdTarget, TCommandEnabler& commandEnabler)
+TWindow::RouteCommandEnable(HWND hInitCmdTarget, TCommandEnabler& commandEnabler)
 {
   // Extra processing for commands & commandEnablers: send the command down the
   // command chain if we are the original receiver
   //
   if (commandEnabler.IsReceiver(*this)) {
-    THandle  hCmdTarget = hInitCmdTarget;
+    HWND  hCmdTarget = hInitCmdTarget;
     while (hCmdTarget && hCmdTarget != *this) {
       TWindow*  cmdTarget = GetWindowPtr(hCmdTarget);
 
@@ -868,7 +870,7 @@ TWindow::RouteCommandEnable(THandle hInitCmdTarget, TCommandEnabler& commandEnab
     bool        enable = false;
     TEventInfo  eventInfo(0, commandEnabler.Id);
 
-    THandle  hCmdTarget = hInitCmdTarget;
+    HWND  hCmdTarget = hInitCmdTarget;
     while (true) {
       TWindow*  cmdTarget = GetWindowPtr(hCmdTarget);
 
@@ -914,6 +916,10 @@ TWindow::DefWindowProc(uint message, TParam1 param1, TParam2 param2)
   return result;
 }
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif 
+
 //
 // Message cache
 //
@@ -945,6 +951,10 @@ void CacheFlush(uint32 id) {
     if (msgCache[i].UniqueId == id)
       msgCache[i].Msg = 0;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif 
 
 //
 // If rtti is available, then use it get an id for this window that is unique
@@ -984,6 +994,7 @@ TWindow::WindowProc(uint msg, TParam1 param1, TParam2 param2)
   // virtual EvCommandEnable
   //
   if (msg == WM_COMMAND_ENABLE) {
+    TRACEX(OwlMsg, 1, "WM_COMMAND_ENABLE" << "! => " << *this);
     EvCommandEnable(*(TCommandEnabler*)param2);
     return 0;
   }
@@ -991,16 +1002,28 @@ TWindow::WindowProc(uint msg, TParam1 param1, TParam2 param2)
   // virtual EvCommand
   //
   else if (msg == WM_COMMAND) {
+    TRACEX(OwlMsg, 1, "WM_COMMAND, " << LoUint16(param1) << " ! => " << *this);
 #if defined(BI_PLAT_WIN16)
-    return EvCommand(LoUint16(param1), THandle(uint(param2)), HiUint16(param2));
+    return EvCommand(LoUint16(param1), HWND(uint(param2)), HiUint16(param2));
 #else
-    return EvCommand(LoUint16(param1), THandle(uint(param2)), HiUint16(param1));
+    return EvCommand(LoUint16(param1), HWND(uint(param2)), HiUint16(param1));
 #endif
   }
   // Handle WM_NOTIFY msgs by directly calling the virtual EvNotify
   //
   else if (msg == WM_NOTIFY) {
-    return EvNotify(param1, *(TNotify far*)param2);
+
+    // We've received reports of some controls (out there) sending
+    // WM_NOTIFY with a NULL LPARAM !!
+    //
+    static TNotify dumbNMHDR;
+    TNotify* not = param2 ? (TNotify*)param2 : &dumbNMHDR;
+
+    TRACEX(OwlMsg, 1, "WM_NOTIFY, " << not->idFrom   << ", "\
+                                    << not->code     << ", "\
+                                    << hex << uint(not->hwndFrom) << ", "\
+                                    << " ! => " << *this);
+    return EvNotify(param1, *not);
   }
 
   // Handle all other messages by looking up and dispatching using the
@@ -1028,7 +1051,7 @@ TWindow::WindowProc(uint msg, TParam1 param1, TParam2 param2)
     // Perform the lookup on this window.
     //
     else if (Find(eventInfo)) {
-      TRACEX(OwlMsg, 1, MsgName(msg) << " => " << *this);
+      TRACEX(OwlMsg, 1, MsgName(msg) << "  => " << *this);
       msgCache[key].Set(UniqueId, msg, eventInfo.Entry, int(eventInfo.Object) - int(this));
       return Dispatch(eventInfo, param1, param2);
     }
@@ -1082,13 +1105,13 @@ TWindow::HandleMessage(uint msg, TParam1 param1, TParam2 param2)
 //
 #if defined(BI_PLAT_WIN16)
 TResult CALLBACK OWL_EXPORT16
-TWindow::StdWndProc(THandle, uint msg, TParam1 param1, TParam2 param2)
+TWindow::StdWndProc(HWND, uint msg, TParam1 param1, TParam2 param2)
 {
   return ((TWindow*)MK_FP(_ES,_BX))->ReceiveMessage(msg, param1, param2);
 }
 #else
 /*OWL_EXPORT*/ TResult CALLBACK
-TWindow::StdWndProc(THandle, uint msg, TParam1 param1, TParam2 param2)
+TWindow::StdWndProc(HWND, uint msg, TParam1 param1, TParam2 param2)
 {
 #if defined(BI_COMP_BORLANDC)
   return ((TWindow*)_EAX)->ReceiveMessage(msg, param1, param2);
@@ -1152,6 +1175,10 @@ TWindow::ReceiveMessage(uint msg, TParam1 param1, TParam2 param2)
 # pragma warn .rch
 }
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 //
 // Determine the object pointer by sending a GetWindowPtrMsgId message to the
 // window.  When the first StdWndProc() in the subclass chain receives this
@@ -1159,7 +1186,7 @@ TWindow::ReceiveMessage(uint msg, TParam1 param1, TParam2 param2)
 // If app is non-zero, then the process makes sure that the corresponding
 // TWindow is returned.
 //
-TWindow* _OWLFUNC GetWindowPtr(TWindow::THandle hWnd, const TApplication* app)
+TWindow* _OWLFUNC GetWindowPtr(HWND hWnd, const TApplication* app)
 {
   if (!hWnd /* && ::IsWindow(hWnd) */)  // Could also check handle validity
     return 0;
@@ -1195,6 +1222,10 @@ TWindow* _OWLFUNC GetWindowPtr(TWindow::THandle hWnd, const TApplication* app)
   return (TWindow*)::CallWindowProc(wndProc, hWnd, GetWindowPtrMsgId, 0, param2);
 }
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 //
 // Response method for an incoming WM_CREATE message
 //
@@ -1213,7 +1244,7 @@ TWindow::EvCreate(CREATESTRUCT far&)
 // Regular windows never hold focus child handles--just say no.
 //
 bool
-TWindow::HoldFocusHWnd(THandle /*hWndLose*/, THandle /*hWndGain*/)
+TWindow::HoldFocusHWnd(HWND /*hWndLose*/, HWND /*hWndGain*/)
 {
   return false;
 }
@@ -1223,7 +1254,7 @@ TWindow::HoldFocusHWnd(THandle /*hWndLose*/, THandle /*hWndGain*/)
 // Handle and possibly restore focus later.
 //
 void
-TWindow::EvKillFocus(THandle getFocus)
+TWindow::EvKillFocus(HWND getFocus)
 {
   // Follow the parent chain back until a window volunteers to hold our handle
   //
@@ -1357,7 +1388,7 @@ TWindow::EvMeasureItem(uint ctrlId, MEASUREITEMSTRUCT far& measureInfo)
     // menu->MeasureItem(measureInfo);
   }
   else {
-    THandle  hCtl = GetDlgItem(measureInfo.CtlID);  // hWnd not in struct, get
+    HWND  hCtl = GetDlgItem(measureInfo.CtlID);  // hWnd not in struct, get
     TWindow* win = GetWindowPtr(hCtl);
 
     // If the GetWindowPtr failed, & CreationWindow is non-zero, then this
@@ -1397,11 +1428,11 @@ TWindow::EvWin32CtlColor(TParam1 param1, TParam2 param2)
   TEventInfo  eventInfo(WM_CTLCOLOR);
 
   if (Find(eventInfo)) {
-    typedef HBRUSH(GENERIC::*CTL_COLOR_PMF)(HDC, THandle, uint);
+    typedef HBRUSH(GENERIC::*CTL_COLOR_PMF)(HDC, HWND, uint);
 
     CTL_COLOR_PMF&  pmf = (CTL_COLOR_PMF&)(eventInfo.Entry->Pmf);
 
-    return (TResult)(eventInfo.Object->*pmf)((HDC)param1, (THandle)param2, ctlType);
+    return (TResult)(eventInfo.Object->*pmf)((HDC)param1, (HWND)param2, ctlType);
   }
   return DefWindowProc(GetCurrentEvent().Message, param1, param2);
 }
@@ -1411,7 +1442,7 @@ TWindow::EvWin32CtlColor(TParam1 param1, TParam2 param2)
 // Dispatches scroll messages as if they were Command messages.
 //
 void
-TWindow::DispatchScroll(uint scrollCode, uint /*thumbPos*/, THandle hWndCtrl)
+TWindow::DispatchScroll(uint scrollCode, uint /*thumbPos*/, HWND hWndCtrl)
 {
   if (hWndCtrl) {
     TWindow* win = GetWindowPtr(hWndCtrl);
@@ -1448,7 +1479,7 @@ TWindow::DispatchScroll(uint scrollCode, uint /*thumbPos*/, THandle hWndCtrl)
 // style, it will not have scrollbar controls
 //
 void
-TWindow::EvHScroll(uint scrollCode, uint thumbPos, THandle hWndCtl)
+TWindow::EvHScroll(uint scrollCode, uint thumbPos, HWND hWndCtl)
 {
   if (!(GetWindowLong(GWL_STYLE) & WS_HSCROLL))
     DispatchScroll(scrollCode, thumbPos, hWndCtl);  // from scrollbar control
@@ -1471,7 +1502,7 @@ TWindow::EvHScroll(uint scrollCode, uint thumbPos, THandle hWndCtl)
 // style, it will not have scrollbar controls
 //
 void
-TWindow::EvVScroll(uint scrollCode, uint thumbPos, THandle hWndCtl)
+TWindow::EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl)
 {
   if (!(GetWindowLong(GWL_STYLE) & WS_VSCROLL))
     DispatchScroll(scrollCode, thumbPos, hWndCtl);
@@ -1498,7 +1529,8 @@ TWindow::EvEraseBkgnd(HDC hDC)
     //
     if (BkgndColor != TColor::Transparent) {
       TDC dc(hDC);
-      dc.SelectObject(TBrush(BkgndColor));  // Rely on caching for performance
+      TBrush bkBrush(BkgndColor);
+      dc.SelectObject(bkBrush);
       dc.SetBkColor(BkgndColor);
       dc.PatBlt(GetClientRect());
       dc.RestoreBrush();
@@ -1516,7 +1548,7 @@ TWindow::EvEraseBkgnd(HDC hDC)
 // control
 //
 HBRUSH
-TWindow::EvCtlColor(HDC hDC, THandle /*hWndChild*/, uint ctlType)
+TWindow::EvCtlColor(HDC hDC, HWND /*hWndChild*/, uint ctlType)
 {
   // If a bkgnd color is set, then setup the hdc's bkcolor and return a
   // brush for the child to use
@@ -1578,7 +1610,7 @@ TWindow::Paint(TDC&, bool /*erase*/, TRect&)
 // client area, set the cursor
 //
 bool
-TWindow::EvSetCursor(THandle hWndCursor, uint hitTest, uint /*mouseMsg*/)
+TWindow::EvSetCursor(HWND hWndCursor, uint hitTest, uint /*mouseMsg*/)
 {
   if (hWndCursor == GetHandle() && hitTest == HTCLIENT && HCursor) {
     ::SetCursor(HCursor);
@@ -1623,6 +1655,10 @@ TWindow::EvLButtonDown(uint /*modKeys*/, TPoint& /*pt*/)
   DefaultProcessing();
 }
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif 
+
 //
 //
 //
@@ -1632,6 +1668,10 @@ DoEnableAutoCreate(TWindow* win, void* /*retVal*/)
   if (win->GetHandle())
     win->EnableAutoCreate();
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif 
 
 //
 // Destroys an MS-Windows element associated with the TWindow.
@@ -1741,7 +1781,7 @@ TWindow::LoadAcceleratorTable()
 }
 
 //
-// Perform MS Windows THandle creation and keep hwnd in Handle member
+// Perform MS Windows HWND creation and keep hwnd in Handle member
 //
 void
 TWindow::PerformCreate(int menuOrId)
@@ -1772,14 +1812,14 @@ TWindow::PerformCreate(int menuOrId)
 }
 
 //
-// Associates an MS-Windows interface element with the TWindow object,
+// Associates an MS Windows interface element with the TWindow object,
 // after creating the interface element if not already created
 //
 // When creating an element, uses the creation attributes previously set in
-// the Attr data field(simply associates the TWindow with an already
+// the Attr data field (simply associates the TWindow with an already
 // created interface element if the "FromResource" flag is set)
 //
-// Since this member function now throw an exception on error, it always
+// Since this member function now throws an exception on error, it always
 // returns true.
 //
 bool
@@ -1792,10 +1832,10 @@ TWindow::Create()
 
   DisableAutoCreate();
 
-  // If this is the main window, make sure it is treated like one by the shell
+  // If this is the main window, make sure it is treated as one by the shell
   //
   if (IsFlagSet(wfMainWindow))
-    Attr.Style != WS_EX_APPWINDOW;
+    ModifyExStyle(0, WS_EX_APPWINDOW);
 
   if (IsFlagSet(wfFromResource))
     SetHandle(Parent ? Parent->GetDlgItem(Attr.Id) : 0);  // Windows already created it
@@ -1922,18 +1962,25 @@ TWindow::DoExecute()
 // method.
 //
 // Can be redefined in derived classes to perform additional special
-// initialization that requires an THandle.
+// initialization that requires an HWND.
 //
 void
 TWindow::SetupWindow()
 {
   TRACEX(OwlWin, 1, "TWindow::SetupWindow() @" << (void*)this << *this);
+
+  // Update scrollbar - if a scroller was attached to the window
+  //
   if (Scroller)
     Scroller->SetSBarRange();
 
-  if (!CreateChildren())
-    TXWindow::Raise(0, IDS_CHILDCREATEFAIL); // not us, an unspecified child
+  // NOTE: CreateChildren will throw a TXWindow exception if one of the
+  //       child objects could not be created.
+  //
+  CreateChildren();
 
+  // Initialize children specified data
+  //
   TransferData(tdSetData);
 }
 
@@ -2159,12 +2206,13 @@ TWindow::EvEndSession(bool, bool)
   DefaultProcessing();    
 }
 
+
 //
 // Handle message posted to us by a control needing assistance in dealing with
 // invalid inputs
 //
 void
-TWindow::EvChildInvalid(THandle handle)
+TWindow::EvChildInvalid(HWND handle)
 {
   PRECONDITION(handle);
 
@@ -2175,11 +2223,33 @@ TWindow::EvChildInvalid(THandle handle)
 // Non-virtuals
 //
 
+void
+TWindow::AttachHandle(HWND handle)
+{
+  ClearFlag(wfDetached);
+  ::FreeInstanceThunk(Thunk);
+  Thunk = 0;
+  Init(handle, GetModule());
+}
+
+
+void
+TWindow::DetachHandle()
+{
+  // NOTE: This is by no means a complete way of detaching the window...
+  //       The following is logic allows Delphi/OWL interaction..
+  //
+  ClearFlag(wfFullyCreated);
+  SetHandle(0);
+  SetFlag(wfDetached);
+}
+
+
 //
 //
 //
 unsigned
-TWindow::NumChildren()
+TWindow::NumChildren() const
 {
   return IndexOf(ChildList) + 1;
 }
@@ -2191,7 +2261,7 @@ void
 TWindow::AssignZOrder()
 {
   TWindow*  wnd;
-  THandle   curWindow = GetHandle();
+  HWND   curWindow = GetHandle();
 
   if (curWindow) {
     curWindow = ::GetWindow(curWindow, GW_CHILD);
@@ -2266,18 +2336,24 @@ cantCreate(TWindow* win, void*)
 }
 
 //
-// Create the children of the object.  returns true if all the windows
-// were successfully created
+// Create the children of the object.  Returns true if all the windows
+// were successfully created.
+// NOTE: Throws an exception (TXWindow) if a child object could not be
+//       created.
 //
 bool
 TWindow::CreateChildren()
 {
-  if (FirstThat(cantCreate)) // create children first to restore created order
-    return false;
+  // Create children first to restore creation order
+  //
+  TWindow* childFailed = FirstThat(cantCreate);
+  if (childFailed) {
+    TXWindow::Raise(childFailed, IDS_CHILDCREATEFAIL);
+  }
 
   // Restore Z-ordering for children that have Z-ordering recorded
   //
-  THandle above = HWND_TOP;
+  HWND above = HWND_TOP;
   for (int top = NumChildren(); top; top--) {
     TWindow* wnd = FirstThat(&TWindow::OrderIsI, &top);
     if (wnd) {
@@ -2348,7 +2424,7 @@ TWindow::Previous()
 // child passed meets the criteria
 //
 TWindow*
-TWindow::FirstThat(TCondFunc test, void* paramList)
+TWindow::FirstThat(TCondFunc test, void* paramList) const
 {
   if (ChildList) {
     TWindow*  nextChild = ChildList->Next();
@@ -2467,12 +2543,14 @@ static bool isItThisChild1(TWindow* win, void* child)
 //
 //
 //
+#pragma warn -ncf
 int
-TWindow::IndexOf(TWindow* child)
+TWindow::IndexOf(TWindow* child) const
 {
   position = -1;
   return FirstThat(isItThisChild1, child) ? position : -1;
 }
+#pragma warn .ncf
 
 //
 // Returns the child at the passed position in the TWindow's
@@ -2542,7 +2620,7 @@ TWindow::SendMessage(uint msg, TParam1 param1, TParam2 param2)
 // on the send argument.
 //
 TResult
-TWindow::ForwardMessage(THandle handle, bool send)
+TWindow::ForwardMessage(HWND handle, bool send)
 {
   if (!handle)
     return 0;
@@ -2582,8 +2660,8 @@ TWindow::ForwardMessage(bool send)
 void
 TWindow::ChildBroadcastMessage(uint msg, TParam1 param1, TParam2 param2)
 {
-  for (THandle hWndChild = GetWindow(GW_CHILD); hWndChild; ) {
-    THandle hWndNext = ::GetWindow(hWndChild, GW_HWNDNEXT);
+  for (HWND hWndChild = GetWindow(GW_CHILD); hWndChild; ) {
+    HWND hWndNext = ::GetWindow(hWndChild, GW_HWNDNEXT);
     ::SendMessage(hWndChild, msg, param1, param2);
     GetApplication()->ResumeThrow();
     hWndChild = hWndNext;
@@ -2650,7 +2728,7 @@ TWindow::GetWindowTextTitle()
 //   NOTE: the title is not copied here, but in GetWindowTextTitle()
 //
 void
-TWindow::GetHWndState()
+TWindow::GetHWndState(bool forceStyleSync)
 {
   // Retrieve Attr.Style and Attr.ExStyle
   //
@@ -2661,7 +2739,7 @@ TWindow::GetHWndState()
   // in the CreateWindowEx call.  in the case of the ResourceId
   // constructors, of course, we must retrieve these values.
   //
-  if (IsFlagSet(wfFromResource)) {
+  if (IsFlagSet(wfFromResource) || forceStyleSync) {
     Attr.Style = GetWindowLong(GWL_STYLE);
     Attr.ExStyle = GetWindowLong(GWL_EXSTYLE);
   }
@@ -2674,7 +2752,7 @@ TWindow::GetHWndState()
   Attr.H = wndRect.Height();
   Attr.W = wndRect.Width();
 
-  THandle  hParent = GetParentH();
+  HWND  hParent = GetParentH();
   if ((Attr.Style & WS_CHILD) && hParent)
     ::ScreenToClient(hParent, &wndRect.TopLeft());
 
@@ -2822,7 +2900,7 @@ TWindow::GetClientRect(TRect& rect) const {
 // Set the new window position.
 //
 bool
-TWindow::SetWindowPos(THandle hWndInsertAfter,
+TWindow::SetWindowPos(HWND hWndInsertAfter,
                       int x, int y, int w, int h,
                       uint flags)
 {
@@ -2883,7 +2961,7 @@ TWindow::ShowWindow(int cmdShow)
       break;
     case SW_SHOWMAXIMIZED:
       Attr.Style |= WS_VISIBLE;
-      Attr.Style |= WS_MINIMIZE;
+      Attr.Style |= WS_MAXIMIZE;
       break;
     case SW_SHOWNOACTIVATE:
     case SW_SHOW:
@@ -3008,6 +3086,29 @@ TWindow::EvContextMenu(HWND /*child*/, int x, int y)
 }
 
 //
+//
+//
+void
+TWindow::EvEnterIdle(uint source, HWND hWndDlg)
+{
+  // If we're the main window, let it rip from the receiver
+  //
+  if (source == MSGF_DIALOGBOX) {
+    if (IsFlagSet(wfMainWindow))
+      IdleAction(0);
+    else {
+      TWindow* win = GetWindowPtr(hWndDlg);
+      if (win)
+        win->IdleAction(0);
+    }
+  }
+
+  // Let original proc. have a crack at msg.
+  //
+  DefaultProcessing();
+}
+
+//
 // Wrapper for Windows API.
 //
 int
@@ -3089,6 +3190,7 @@ TWindow::SetScrollRange(int bar, int minPos, int maxPos, bool redraw)
 #endif
 }
 
+#pragma warn -par
 //
 //
 //
@@ -3106,7 +3208,9 @@ TWindow::SetScrollPage(int bar, int page, bool redraw)
   SetScrollInfo(bar, &info, redraw);
 #endif
 }
+#pragma warn .par
 
+#pragma warn -par
 //
 //
 //
@@ -3125,6 +3229,7 @@ TWindow::GetScrollPage(int bar) const
   return info.nPage;
 #endif
 }
+#pragma warn .par
 
 #if defined(BI_PLAT_WIN32)
 //
@@ -3164,6 +3269,11 @@ TWindow::GetUpdateRgn(TRegion& region, bool erase) const
 //
 //
 #if defined(__TRACE) || defined(__WARN)
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif 
+
   ostream& operator <<(ostream& os, const TWindow& w)
   {
     os << '(';
@@ -3180,7 +3290,12 @@ TWindow::GetUpdateRgn(TRegion& region, bool erase) const
     os << ')';
     return os;
   }
-#endif
+  
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif 
+
+#endif // __TRACE || __WARN
 
 
 //

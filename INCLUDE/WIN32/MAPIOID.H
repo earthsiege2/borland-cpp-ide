@@ -3,11 +3,12 @@
  *
  *  MAPI OID definition header file
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef _MAPIOID_
 #define _MAPIOID_
+#pragma option -b
 
 /*
  *  MAPI 1.0 Object Identifiers (OID's)
@@ -48,13 +49,8 @@
 #define DEFINE_OID_2(name, b0, b1, b2) \
     EXTERN_C const BYTE FAR * name
 
-#ifdef _MAC
-#define DEFINE_OID_3(name, b0, b1, b2, b3) \
-    EXTERN_C _declspec(allocate("_FAR_DATA")) const BYTE FAR * name
-#else
 #define DEFINE_OID_3(name, b0, b1, b2, b3) \
     EXTERN_C const BYTE FAR * name
-#endif
 
 #define DEFINE_OID_4(name, b0, b1, b2, b3, b4) \
     EXTERN_C const BYTE FAR * name
@@ -65,7 +61,9 @@
 #define CB_OID_4        12
 
 #ifdef INITOID
+#pragma option -b.
 #include <initoid.h>
+#pragma option -b
 #endif
 
 #ifdef  USES_OID_TNEF
@@ -103,4 +101,10 @@ DEFINE_OID_1(OID_MAC_BINARY, OID_ENCODING, 0x01);
 #define CB_OID_MAC_BINARY CB_OID_1
 #endif
 
+#ifdef  USES_OID_MIMETAG
+DEFINE_OID_1(OID_MIMETAG, OID_TAG, 0x04);
+#define CB_OID_MIMETAG CB_OID_1
+#endif
+
+#pragma option -b.
 #endif

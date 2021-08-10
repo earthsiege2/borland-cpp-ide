@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of class TRollDialog, an automatic roll-up dialog
 //----------------------------------------------------------------------------
@@ -13,6 +13,8 @@
 #if !defined(OWL_MENU_H)
 # include <owl/menu.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Fibonacci sequence used for accelerated animation.

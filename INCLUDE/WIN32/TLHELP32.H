@@ -10,11 +10,16 @@
 *                                                                             *
 \*****************************************************************************/
 
+/* $Copyright: 1997$ */
+
 #ifndef _INC_TOOLHELP32
 #define _INC_TOOLHELP32
+#pragma option -b
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
@@ -170,7 +175,10 @@ BOOL WINAPI Module32Next(HANDLE hSnapshot, LPMODULEENTRY32 lpme);
 #endif
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif // _INC_TOOLHELP32

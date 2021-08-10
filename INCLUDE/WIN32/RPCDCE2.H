@@ -22,6 +22,7 @@ Revision History:
 #ifndef __RPCDCE2_H__
 #define __RPCDCE2_H__
 #define __RPCDCE2_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -186,5 +187,6 @@ RpcMgmtSetAuthorizationFn (
 }
 #endif
 
+#pragma option -b.
 #endif /* __RPCDCE2_H__ */
 

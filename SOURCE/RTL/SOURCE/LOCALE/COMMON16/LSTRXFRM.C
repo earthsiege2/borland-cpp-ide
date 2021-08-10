@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $        */
 
 #include <string.h>
 #include <rtldata.h>
@@ -40,4 +41,3 @@ size_t _CType _lstrxfrm(char _FAR *s1, const char _FAR *s2, size_t n )
     return( _QRTLInstanceData(_pLocale)->ptransform( s1, s2, n ) );
 }
 
-

@@ -1,5 +1,6 @@
 #ifndef __STD_UTILITY__
 #define __STD_UTILITY__
+/* $Revision:   8.1  $ */
 
 /***************************************************************************
  *
@@ -40,7 +41,7 @@
  * rights of the Government regarding its use, reproduction and disclosure
  * are as set forth in Section 52.227-19 of the FARS Computer
  * Software-Restricted Rights clause.
- * 
+ *
  * Use, duplication, or disclosure by the Government is subject to
  * restrictions as set forth in subparagraph (c)(1)(ii) of the Rights in
  * Technical Data and Computer Software clause at DFARS 252.227-7013.
@@ -101,9 +102,9 @@ struct pair
     T2 second;
     pair (const T1& a, const T2& b) : first(a), second(b) {}
 #ifdef RWSTD_NO_MEMBER_WO_DEF_CTOR
-    pair () 
+    pair ()
 #ifndef RWSTD_NO_BUILT_IN_CTOR
-: first(T1()), second(T2()) 
+: first(T1()), second(T2())
 #endif
     { ; }
 #endif
@@ -112,14 +113,14 @@ struct pair
 
 template <class T1, class T2>
 inline bool operator==(const pair<T1, T2>& x, const pair<T1, T2>& y)
-{ 
-    return x.first == y.first && x.second == y.second; 
+{
+    return x.first == y.first && x.second == y.second;
 }
 
 template <class T1, class T2>
 inline bool operator<(const pair<T1, T2>& x, const pair<T1, T2>& y)
-{ 
-    return x.first < y.first || (!(y.first < x.first) && x.second < y.second); 
+{
+    return x.first < y.first || (!(y.first < x.first) && x.second < y.second);
 }
 
 template <class T1, class T2>

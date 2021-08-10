@@ -9,9 +9,9 @@
 ****/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -20,6 +20,7 @@
 
 #ifndef __EXCPT_H
 #define __EXCPT_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -404,4 +405,5 @@ extern int           __abnormal_termination;
 }
 #endif
 
+#pragma option -b.
 #endif  /* __EXCPT_H */

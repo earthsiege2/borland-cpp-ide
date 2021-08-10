@@ -1,14 +1,20 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//   Automation Symbol Table, Command, and Proxy Macro Definitions
+// $Revision:   2.8  $
+//
+// Automation Symbol Table, Command, and Proxy Macro Definitions
 //----------------------------------------------------------------------------
 #if !defined(OCF_AUTOMACR_H)
 #define OCF_AUTOMACR_H
 
 #if !defined(OCF_AUTODEFS_H)
 # include <ocf/autodefs.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
 #endif
 
 //
@@ -354,7 +360,7 @@ typedef unsigned char TAutoByteEnum;
 //
 // Macros for defining lists of arguments
 //
-                    
+
 #define DEFARGS0(t0)                t0 Val;
 #define DEFARGS1(t1)                t1 Arg1;
 #define DEFARGS2(t1,t2)             t1 Arg1;t2 Arg2;
@@ -732,6 +738,33 @@ typedef unsigned char TAutoByteEnum;
 #define AUTONAMES10(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10) \
   static TAutoDispIds<10> i_(this,id,_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
 
+#define AUTONAMES11(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11) static TAutoDispIds<11> i_(this, id, _A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES12(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12) static TAutoDispIds<12> i_(this, id, _A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES13(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13) static TAutoDispIds<13> i_(this, id, _A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES14(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14) static TAutoDispIds<14> i_(this, id, _A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES15(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15) static TAutoDispIds<15> i_(this, id, _A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES16(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16) static TAutoDispIds<16> i_(this, id, _A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES17(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17) static TAutoDispIds<17> i_(this, id, _A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES18(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18) static TAutoDispIds<18> i_(this, id, _A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES19(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19) static TAutoDispIds<19> i_(this, id, _A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES20(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20) static TAutoDispIds<20> i_(this, id, _A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES21(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21) static TAutoDispIds<21> i_(this, id, _A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES22(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22) static TAutoDispIds<22> i_(this, id, _A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES23(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23) static TAutoDispIds<23> i_(this, id, _A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES24(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24) static TAutoDispIds<24> i_(this, id, _A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES25(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25) static TAutoDispIds<25> i_(this, id, _A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES26(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26) static TAutoDispIds<26> i_(this, id, _A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES27(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27) static TAutoDispIds<27> i_(this, id, _A(n27)_A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES28(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27,n28) static TAutoDispIds<28> i_(this, id, _A(n28)_A(n27)_A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES29(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27,n28,n29) static TAutoDispIds<29> i_(this, id, _A(n29)_A(n28)_A(n27)_A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES30(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27,n28,n29,n30) static TAutoDispIds<30> i_(this, id, _A(n30)_A(n29)_A(n28)_A(n27)_A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES31(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27,n28,n29,n30,n31) static TAutoDispIds<31> i_(this, id, _A(n31)_A(n30)_A(n29)_A(n28)_A(n27)_A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES32(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27,n28,n29,n30,n31,n32) static TAutoDispIds<32> i_(this, id, _A(n32)_A(n31)_A(n30)_A(n29)_A(n28)_A(n27)_A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES33(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27,n28,n29,n30,n31,n32,n33) static TAutoDispIds<33> i_(this, id, _A(n33)_A(n32)_A(n31)_A(n30)_A(n29)_A(n28)_A(n27)_A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES34(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27,n28,n29,n30,n31,n32,n33,n34) static TAutoDispIds<34> i_(this, id, _A(n34)_A(n33)_A(n32)_A(n31)_A(n30)_A(n29)_A(n28)_A(n27)_A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+#define AUTONAMES35(id,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27,n28,n29,n30,n31,n32,n33,n34,n35) static TAutoDispIds<35> i_(this, id, _A(n35)_A(n34)_A(n33)_A(n32)_A(n31)_A(n30)_A(n29)_A(n28)_A(n27)_A(n26)_A(n25)_A(n24)_A(n23)_A(n22)_A(n21)_A(n20)_A(n19)_A(n18)_A(n17)_A(n16)_A(n15)_A(n14)_A(n13)_A(n12)_A(n11)_A(n10)_A(n9)_A(n8)_A(n7)_A(n6)_A(n5)_A(n4)_A(n3)_A(n2)_A(n1));
+
+
 #define AUTOARGS0()          TAutoArgs<0>a_;
 #define AUTOARGS1(a1)        TAutoArgs<1>a_; a_[1]=a1;
 #define AUTOARGS2(a1,a2)     TAutoArgs<2>a_; a_[1]=a1; a_[2]=a2;
@@ -755,8 +788,36 @@ typedef unsigned char TAutoByteEnum;
   TAutoArgs<10>a_;a_[1]=a1;a_[2]=a2;a_[3]=a3;a_[4]=a4;a_[5]=a5; \
   a_[6]=a6;a_[7]=a7;a_[8]=a8;a_[9]=a9;a_[10]=a10;
 
+
+#define AUTOARGS11(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11) TAutoArgs<11>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11;
+#define AUTOARGS12(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12) TAutoArgs<12>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12;
+#define AUTOARGS13(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13) TAutoArgs<13>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13;
+#define AUTOARGS14(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14) TAutoArgs<14>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14;
+#define AUTOARGS15(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15) TAutoArgs<15>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15;
+#define AUTOARGS16(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16) TAutoArgs<16>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16;
+#define AUTOARGS17(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17) TAutoArgs<17>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17;
+#define AUTOARGS18(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18) TAutoArgs<18>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18;
+#define AUTOARGS19(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19) TAutoArgs<19>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19;
+#define AUTOARGS20(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20) TAutoArgs<20>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20;
+#define AUTOARGS21(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21) TAutoArgs<21>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21;
+#define AUTOARGS22(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22) TAutoArgs<22>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22;
+#define AUTOARGS23(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23) TAutoArgs<23>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23;
+#define AUTOARGS24(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24) TAutoArgs<24>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24;
+#define AUTOARGS25(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25) TAutoArgs<25>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25;
+#define AUTOARGS26(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26) TAutoArgs<26>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26;
+#define AUTOARGS27(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27) TAutoArgs<27>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27;
+#define AUTOARGS28(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28) TAutoArgs<28>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27; a_[28]=a28;
+#define AUTOARGS29(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29) TAutoArgs<29>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27; a_[28]=a28; a_[29]=a29;
+#define AUTOARGS30(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30) TAutoArgs<30>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27; a_[28]=a28; a_[29]=a29; a_[30]=a30;
+#define AUTOARGS31(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31) TAutoArgs<31>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27; a_[28]=a28; a_[29]=a29; a_[30]=a30; a_[31]=a31;
+#define AUTOARGS31(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31) TAutoArgs<31>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27; a_[28]=a28; a_[29]=a29; a_[30]=a30; a_[31]=a31;
+#define AUTOARGS32(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32) TAutoArgs<32>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27; a_[28]=a28; a_[29]=a29; a_[30]=a30; a_[31]=a31; a_[32]=a32;
+#define AUTOARGS33(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32,a33) TAutoArgs<33>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27; a_[28]=a28; a_[29]=a29; a_[30]=a30; a_[31]=a31; a_[32]=a32; a_[33]=a33;
+#define AUTOARGS34(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32,a33,a34) TAutoArgs<34>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27; a_[28]=a28; a_[29]=a29; a_[30]=a30; a_[31]=a31; a_[32]=a32; a_[33]=a33; a_[34]=a34;
+#define AUTOARGS35(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32,a33,a34,a35) TAutoArgs<35>a_; a_[1]=a1; a_[2]=a2; a_[3]=a3; a_[4]=a4; a_[5]=a5; a_[6]=a6; a_[7]=a7; a_[8]=a8; a_[9]=a9; a_[10]=a10; a_[11]=a11; a_[12]=a12; a_[13]=a13; a_[14]=a14; a_[15]=a15; a_[16]=a16; a_[17]=a17; a_[18]=a18; a_[19]=a19; a_[20]=a20; a_[21]=a21; a_[22]=a22; a_[23]=a23; a_[24]=a24; a_[25]=a25; a_[26]=a26; a_[27]=a27; a_[28]=a28; a_[29]=a29; a_[30]=a30; a_[31]=a31; a_[32]=a32; a_[33]=a33; a_[34]=a34; a_[35]=a35;
+
 #define AUTOCALL_METHOD_RET        return Invoke(acMethod,  a_, i_, i_);
-#define AUTOCALL_METHOD_VOID              Invoke(acMethod,  a_, i_, i_);
+#define AUTOCALL_METHOD_VOID     Invoke(acMethod|acVoidRet, a_, i_, i_);
 #define AUTOCALL_METHOD_REF(prx) prx.Bind(Invoke(acMethod,  a_, i_, i_));
 #define AUTOCALL_METHOD_CONV(t)  return t(Invoke(acMethod,  a_, i_, i_));
 
@@ -764,5 +825,39 @@ typedef unsigned char TAutoByteEnum;
 #define AUTOCALL_PROP_SET(val) a_[0]=val; Invoke(acPropSet, a_, i_, i_);
 #define AUTOCALL_PROP_REF(prx)   prx.Bind(Invoke(acPropGet, a_, i_, i_));
 #define AUTOCALL_PROP_CONV(t)    return t(Invoke(acPropGet, a_, i_, i_));
+
+#if defined(BI_PLAT_WIN32)
+
+//
+// Special automation macro for default 'IDispatch::Invoke' handling
+//
+// DISPID_CATCH_ALL is a MEMBERID which is treated specially by both the
+// TServedObject and TDispatch implementation of 'Invoke'. When found in a
+// class symbol table, the handler associate with this ID is called for any
+// method for which a specific handler was not specified. This makes the
+// associated function a 'catch-all'.
+//
+// NOTE: *USE WITH CARE*
+//
+// This support makes it ideal for event sinking. It allows a single handler
+// to be called for all custom events. See the TOcControlEvent class for more
+// information.
+//
+#define DISPID_CATCH_ALL    (-999)
+
+#define AUTOFUNCX(name, func, ret, defs) \
+        AUTOFUNC_(name, Val=(ret)This->func( (long *)Args);, defs, \
+        RETARG(ret) DEFARGSX, BLDARGSX, CTRARGSX, SETARGSX)
+
+#define DEFARGSX           TAutoStack *Args;
+#define BLDARGSX          ,&args
+#define CTRARGSX          ,TAutoStack *args
+#define SETARGSX          ,Args(args)
+
+#endif  // BI_PLAT_WIN32
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 #endif  // OCF_AUTOMACR_H

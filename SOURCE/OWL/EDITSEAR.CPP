@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of class TEditWindow, an edit control that responds to Find,
 // Replace and FindNext commands.
@@ -22,6 +22,8 @@
 # include <owl/findrepl.h>
 #endif
 #include <stdio.h>
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 

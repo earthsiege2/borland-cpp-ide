@@ -1,22 +1,23 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.1  $
+//$Revision:   5.3  $
 //
 // class TCmdLine implementation
 //----------------------------------------------------------------------------
 #include <classlib/pch.h>
 #include <classlib/cmdline.h>
 #include <services/memory.h>
+#include <tchar.h>
 
-const char whitespace[] = " \t";
-const char terminator[] = "=/ \t";  // remove /- to dissallow separating there
+const _TCHAR whitespace[] = " \t";
+const _TCHAR terminator[] = "=/ \t";  // remove /- to dissallow separating there
 
-TCmdLine::TCmdLine(const char far* cmdLine)
+TCmdLine::TCmdLine(const _TCHAR far* cmdLine)
 {
-  Buffer = new char[strlen(cmdLine)+1];
-  strcpy(Buffer, cmdLine);
+  Buffer = new _TCHAR[_tcslen(cmdLine)+1];
+  _tcscpy(Buffer, cmdLine);
   Reset();
 }
 
@@ -43,7 +44,7 @@ TCmdLine::TKind TCmdLine::NextToken(bool removeCurrent)
   // adjustment. TokenStart stays right past previous token
   //
   if (removeCurrent) {
-    strcpy(TokenStart, Token+TokenLen);
+    _tcscpy(TokenStart, Token+TokenLen);
     Token = TokenStart;
   }
   else {
@@ -53,7 +54,7 @@ TCmdLine::TKind TCmdLine::NextToken(bool removeCurrent)
 
   // Adjust token ptr to begining of token & determine kind
   //
-  Token += strspn(Token, whitespace);  // skip leading whitespace
+  Token += _tcsspn(Token, whitespace);  // skip leading whitespace
   switch (*Token) {
     case 0:
       Kind = Done;
@@ -70,7 +71,7 @@ TCmdLine::TKind TCmdLine::NextToken(bool removeCurrent)
     default:
       Kind = Name;
   }
-  Token += strspn(Token, whitespace);  // skip any more whitespace
-  TokenLen = strcspn(Token, terminator);
+  Token += _tcsspn(Token, whitespace);  // skip any more whitespace
+  TokenLen = _tcscspn(Token, terminator);
   return Kind;
 }

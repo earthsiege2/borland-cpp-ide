@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Implementation of Common Dialog abstract base class
 //----------------------------------------------------------------------------
@@ -17,6 +17,7 @@
 //
 // Diagnostic group for Common Dialog
 //
+OWL_DIAGINFO;
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlCommDialog, 1, 0);
 
 DEFINE_RESPONSE_TABLE1(TCommonDialog, TDialog)

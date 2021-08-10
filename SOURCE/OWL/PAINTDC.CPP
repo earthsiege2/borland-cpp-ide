@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of TPaintDC, an encapsulation of client DCs used when
 // responding to paint messages
@@ -11,6 +11,8 @@
 #if !defined(OWL_DC_H)
 # include <owl/dc.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 //

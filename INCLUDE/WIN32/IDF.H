@@ -1,3 +1,4 @@
+#pragma option -b
 //************************************************************************
 //**
 //**  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -55,7 +56,9 @@
 */
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 typedef struct tag_IDFHEADER
@@ -393,5 +396,8 @@ typedef struct tag_IDFKEYMAP
 } IDFKEYMAP, *PIDFKEYMAP, FAR *LPIDFKEYMAP;
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
+#pragma option -b.

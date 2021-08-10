@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.8  $
 //
 // Dispatch functions (crackers) to crack a Windows message and pass control
 // to a member function via a pointer (pmf).
@@ -12,6 +12,10 @@
 
 #if !defined(OWL_DEFS_H)
 # include <owl/defs.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 //
@@ -586,6 +590,10 @@ v_ParentNotify_Dispatch(GENERIC& generic,
                         void    (GENERIC::*pmf)(uint, uint, uint),
                         uint     wParam,
                         int32    lParam);
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 
 //----------------------------------------------------------------------------

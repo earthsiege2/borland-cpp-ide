@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Definition of class TGauge, a gauge control encapsulation & implementation.
 //----------------------------------------------------------------------------
@@ -17,6 +17,10 @@
 #endif
 #if !defined(OWL_COMMCTRL_H)
 # include <owl/commctrl.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -58,13 +62,27 @@ class _OWLCLASS TGauge : public TControl {
     void          StepIt();
     void operator ++(int);
 
+    // Set whether the control is horizontal. This method is useful
+    // for an object coming from a dialog resource. [For objects created
+    // by OWL, use the constructor which accepts a boolean 'isHorizontal'
+    // parameter.
+    //
+    void          SetHorizontal(bool horizontal);
+
     // Set the LED style & sizing as well as the indicator color
     // Ignored by CommonControl impl.
+    //
+    // NOTE: Invoking these methods may *NOT* be effective if OWL
+    //       uses the Common Control support and instead of 
+    //       emulating the control.
     //
     void          SetLed(int spacing, int thickPercent = 90);
     void          SetColor(const TColor& color);
 
-    static void   SetNativeUse(TNativeUse nu);
+    // Specifies whether OWL should use or avoid the system implementation
+    // of gauge/progressbar if/when available.
+    //
+    void          SetNativeUse(TNativeUse nu = nuDontCare);
 
   protected:
 
@@ -107,6 +125,10 @@ class _OWLCLASS TGauge : public TControl {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -151,7 +173,14 @@ inline void TGauge::SetColor(const TColor& color)
 //
 inline void TGauge::SetNativeUse(TNativeUse nu)
 {
-  ClassNativeUse = nu;
+  NativeUse = nu;
+}
+
+// Specifies whether the control is a horizontal (or vertical) gauge control
+//
+inline void TGauge::SetHorizontal(bool isHorizontal)
+{
+  IsHorizontal = isHorizontal;
 }
 
 #endif  // OWL_GAUGE_H

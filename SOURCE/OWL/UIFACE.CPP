@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.11  $
 //
 // Implements TUIFace
 //----------------------------------------------------------------------------
@@ -13,6 +13,8 @@
 #if !defined(OWL_GDIOBJEC_H)
 # include <owl/gdiobjec.h>
 #endif
+
+OWL_DIAGINFO;
 
 const long RopPSDPxax = 0x00B8074AL;  //
 const long RopDSPDxax = 0x00E20746L;  //
@@ -189,7 +191,8 @@ TUIFace::PaintBm(const TBitmap& glyph, const TRect& glyphSrcRect,
 
         // Fill background around mask with button face
         //
-        FillBackground(dc, maskDC, fillRect, TBrush(TColor::Sys3dFace));
+        TBrush btnFaceBr(TColor::Sys3dFace);
+        FillBackground(dc, maskDC, fillRect, btnFaceBr);
       }
 
       dc.BitBlt(glyphDstRect, memDC, glyphSrcRect.TopLeft());
@@ -320,6 +323,7 @@ TUIFace::Paint(TDC& dc, const TRect& srcRect, const TPoint& pt, TState state,
 //
 // Encapsulates and emulate the 32-bit DrawState API.
 //
+#pragma warn -par  // most parameters unused in 16-bit build
 bool
 TUIFace::Draw(TDC& dc, HBRUSH hbr, LPARAM lp, WPARAM wp,
               int x, int y, int cx, int cy, uint flags)
@@ -341,7 +345,7 @@ TUIFace::Draw(TDC& dc, HBRUSH hbr, LPARAM lp, WPARAM wp,
   return false;
 #else
   uint type = flags & 0x000F;
-  uint state= flags & 0xFFF0;
+//  uint state= flags & 0xFFF0;
 
   switch (type) {
     case DST_BITMAP:
@@ -354,6 +358,7 @@ TUIFace::Draw(TDC& dc, HBRUSH hbr, LPARAM lp, WPARAM wp,
   return true;
 #endif
 }
+#pragma warn .par
 
 //
 // Paint the mask onto a DC.

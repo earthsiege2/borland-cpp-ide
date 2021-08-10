@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.22  $
+//$Revision:   10.38  $
 //
 // Base window class TWindow definition, including HWND encapsulation.
 //----------------------------------------------------------------------------
@@ -35,6 +35,10 @@
 #endif
 #include <owl/window.rh>
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
@@ -53,20 +57,22 @@ class _OWLCLASS_RTL TXWindow;
 // enum TWindowFlag
 // ~~~~ ~~~~~~~~~~~
 enum TWindowFlag {
-  wfAlias           = 0x0001,  // TWindow is an alias to a preexisting HWND
-  wfAutoCreate      = 0x0002,  // Create the HWND when our parent is created
-  wfFromResource    = 0x0004,  // Handle comes from HWND created from resource
-  wfShrinkToClient  = 0x0008,  // Shrink a frame window to its client's size
-  wfMainWindow      = 0x0010,  // This frame window is the main window
-  wfFullyCreated    = 0x0020,  // Window is fully created & not being destroyed
-  wfStreamTop       = 0x0040,  // This window is the topmost one to stream
-  wfPredefinedClass = 0x0080,  // Window class used was not defined by Owl
-  wfTransfer        = 0x0100,  // Transfer enabled
-  wfUnHidden        = 0x0200,  // Used temporarily when destroying MDI child
-  wfUnDisabled      = 0x0400,  // Used temporarily when destroying MDI child
-  wfDeleteOnClose   = 0x0800,  // Window is condemned on EvClose
-  wfPropagateIdle   = 0x1000,  // Pass down IdleAction
-  wfModalWindow     = 0x2000   // Was created via TWindow::Execute
+  wfAlias           = 0x0001, // TWindow is an alias to a preexisting HWND
+  wfAutoCreate      = 0x0002, // Create the HWND when our parent is created
+  wfFromResource    = 0x0004, // Handle comes from HWND created from resource
+  wfShrinkToClient  = 0x0008, // Shrink a frame window to its client's size
+  wfMainWindow      = 0x0010, // This frame window is the main window
+  wfFullyCreated    = 0x0020, // Window is fully created & not being destroyed
+  wfStreamTop       = 0x0040, // This window is the topmost one to stream
+  wfPredefinedClass = 0x0080, // Window class used was not defined by Owl
+  wfTransfer        = 0x0100, // Transfer enabled
+  wfUnHidden        = 0x0200, // Used temporarily when destroying MDI child
+  wfUnDisabled      = 0x0400, // Used temporarily when destroying MDI child
+  wfDeleteOnClose   = 0x0800, // Window is condemned on EvClose
+  wfPropagateIdle   = 0x1000, // Pass down IdleAction
+  wfModalWindow     = 0x2000, // Was created via TWindow::Execute
+  wfDetached        = 0x4000, // Window handle has been detached
+  wfInsertAtEdge    = 0x8000  // (Decoration) Window to be inserted against frame's edge
 };
 
 //
@@ -220,13 +226,13 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // Constructors and destructor for TWindow
     //
     TWindow(TWindow* parent, const char far* title = 0, TModule* module = 0);
-    TWindow(THandle handle, TModule* module = 0);
+    TWindow(HWND handle, TModule* module = 0);
 
     virtual ~TWindow();
 
     // Two iterators that take function pointers
     //
-    TWindow*          FirstThat(TCondFunc test, void* paramList = 0);
+    TWindow*          FirstThat(TCondFunc test, void* paramList = 0) const;
     void              ForEach(TActionFunc action, void* paramList = 0);
 
     // Two iterators that take pointers to member functions
@@ -241,7 +247,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     TWindow*          GetFirstChild();
     TWindow*          GetLastChild();
     TWindow*          Previous();
-    uint              NumChildren();   // Number of child windows
+    uint              NumChildren() const;   // Number of child windows
 
     // Query and set the Owl window flags. Accepts TWindowFlag args, possibly
     // or'd together.
@@ -297,6 +303,12 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     static void       ShutDownWindow(TWindow* win, int retVal = 0);
     void              ShutDownWindow(int retVal = 0);
 
+    // Attach or detach a window handle to a TWindow object.  Used when
+    // a child re-creates itself.
+    //
+    void              AttachHandle(HWND handle);
+    void              DetachHandle();
+
 #if defined(BI_MULTI_THREAD_RTL)
     // Override TEventHandler::Dispatch() to handle multi-thread
     // synchronization
@@ -309,7 +321,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     //
     virtual bool      PreProcessMsg(MSG& msg);
     virtual bool      IdleAction(long idleCount);
-    virtual bool      HoldFocusHWnd(THandle hLose, THandle hGain);
+    virtual bool      HoldFocusHWnd(HWND hLose, HWND hGain);
 
     // Child and parenting
     //
@@ -320,10 +332,10 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // pointer to the OWL object. May return different objects in some cases.
     // Use H & O varieties to avoid change across version
     //
-    THandle           GetParentH() const; // Native handle version
+    HWND           GetParentH() const; // Native handle version
     TWindow*          GetParentO() const; // OWL object version
 #if defined(OWL2_COMPAT)
-    THandle           GetParent() const;  // Old version -- returns handle
+    HWND           GetParent() const;  // Old version -- returns handle
 #else
     TWindow*          GetParent();        // New version -- returns object
 #endif
@@ -338,11 +350,6 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     void              SetBkgndColor(const TColor& color);
     void              SetAcceleratorTable(TResId resId);
 
-    // Resynching state  
-    //
-    void              GetHWndState();
-    void              GetWindowTextTitle();
-
     // Can close virtual tests whether all children and this window are ready
     // and able to close
     //
@@ -351,7 +358,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // Forwards the current event to "handle" using either PostMessage() or
     // SendMessage(). Owl window version calls directly to window proc on send.
     //
-    TResult           ForwardMessage(THandle handle, bool send = true);
+    TResult           ForwardMessage(HWND handle, bool send = true);
     TResult           ForwardMessage(bool send = true);
 
     // Send message to all children
@@ -360,14 +367,14 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
 
     // Notify a window (parent usually) of a child action.
     //
-    void              SendNotification(int id, int notifyCode, THandle hCtl,
+    void              SendNotification(int id, int notifyCode, HWND hCtl,
                                        uint msg = WM_COMMAND);
-    void              SendNotification(THandle receiver, int id,
-                                       int notifyCode, THandle hCtl,
+    void              SendNotification(HWND receiver, int id,
+                                       int notifyCode, HWND hCtl,
                                        uint msg = WM_COMMAND);
     uint32            SendNotification(int id, NMHDR& nmhdr,
                                        uint msg = WM_NOTIFY);
-    uint32            SendNotification(THandle receiver, uint id,
+    uint32            SendNotification(HWND receiver, uint id,
                                        NMHDR& nmhdr, uint msg = WM_NOTIFY);
 
     // Called from StdWndProc to allow exceptions to be caught and suspended.
@@ -389,7 +396,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
 
     // Called by WindowProc() to handle WM_COMMANDs
     //
-    virtual TResult   EvCommand(uint id, THandle hWndCtl, uint notifyCode);
+    virtual TResult   EvCommand(uint id, HWND hWndCtl, uint notifyCode);
 
     // Called by WindowProc() to handle WM_NOTIFYs
     //
@@ -398,7 +405,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // Called by WindowProc() to handle WM_COMMAND_ENABLE, & helper function
     //
     virtual void      EvCommandEnable(TCommandEnabler& ce);
-    void              RouteCommandEnable(THandle hInitCmdTarget, TCommandEnabler& ce);
+    void              RouteCommandEnable(HWND hInitCmdTarget, TCommandEnabler& ce);
 
     // Default processing, deals with special cases or calls DefWindowProc
     //
@@ -425,8 +432,8 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
 
     // Allow a TWindow& to be used as an HWND in Windows API calls
     //
-    THandle           GetHandle() const;
-    operator          THandle() const;
+    HWND           GetHandle() const;
+    operator          HWND() const;
     bool              IsWindow() const;
 
     // Messages
@@ -435,11 +442,11 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     TResult           SendDlgItemMessage(int childId, uint msg, TParam1 p1 = 0,
                                          TParam2 p2 = 0);
     bool              PostMessage(uint msg, TParam1 p1 = 0, TParam2 p2 = 0);
-    static THandle    GetCapture();
-    THandle           SetCapture();
+    static HWND    GetCapture();
+    HWND           SetCapture();
     static void       ReleaseCapture();
-    static THandle    GetFocus();
-    THandle           SetFocus();
+    static HWND    GetFocus();
+    HWND           SetFocus();
     bool              IsWindowEnabled() const;
     virtual bool      EnableWindow(bool enable);
     void              SetRedraw(bool redraw);
@@ -447,11 +454,11 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // Window coordinates, dimensions...
     //
     void              ScreenToClient(TPoint& point) const;
-    void              MapWindowPoints(THandle hWndTo, TPoint* pts, int count) const;
+    void              MapWindowPoints(HWND hWndTo, TPoint* pts, int count) const;
     void              GetClientRect(TRect& rect) const;
     TRect             GetClientRect() const;
-    static THandle    WindowFromPoint(const TPoint& point);
-    THandle           ChildWindowFromPoint(const TPoint& point) const;
+    static HWND    WindowFromPoint(const TPoint& point);
+    HWND           ChildWindowFromPoint(const TPoint& point) const;
     void              ClientToScreen(TPoint& point) const;
     void              GetWindowRect(TRect& rect) const;
     TRect             GetWindowRect() const;
@@ -510,21 +517,21 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // Window positioning(Z), sibling relationships
     //
     void              BringWindowToTop();
-    static THandle    GetActiveWindow();
-    THandle           SetActiveWindow();
-    static THandle    GetDesktopWindow();
+    static HWND    GetActiveWindow();
+    HWND           SetActiveWindow();
+    static HWND    GetDesktopWindow();
 #if defined(BI_PLAT_WIN16)
-    static THandle    GetSysModalWindow();
-    THandle           SetSysModalWindow();
+    static HWND    GetSysModalWindow();
+    HWND           SetSysModalWindow();
 #endif
-    THandle           GetLastActivePopup() const;
-    THandle           GetNextWindow(uint dirFlag) const;
-    THandle           GetTopWindow() const;
-    THandle           GetWindow(uint cmd) const;
-    bool              SetWindowPos(THandle      hWndInsertAfter,
+    HWND           GetLastActivePopup() const;
+    HWND           GetNextWindow(uint dirFlag) const;
+    HWND           GetTopWindow() const;
+    HWND           GetWindow(uint cmd) const;
+    bool              SetWindowPos(HWND      hWndInsertAfter,
                                    const TRect& rect,
                                    uint         flags);
-    bool              SetWindowPos(THandle      hWndInsertAfter,
+    bool              SetWindowPos(HWND      hWndInsertAfter,
                                    int x, int y, int w, int h,
                                    uint         flags);
 
@@ -579,7 +586,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // Parent/child with Ids
     //
     int               GetDlgCtrlID() const;
-    THandle           GetDlgItem(int childId) const;
+    HWND           GetDlgItem(int childId) const;
     uint              GetDlgItemInt(int   childId,
                                     bool* translated = 0,
                                     bool  isSigned = true) const;
@@ -591,10 +598,10 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
                                      int       max) const;
     void              SetDlgItemText(int childId, const char far* text) const;
     uint              IsDlgButtonChecked(int buttonId) const;
-    bool              IsChild(THandle hWnd) const;
-    THandle           GetNextDlgGroupItem(THandle hWndCtrl,
+    bool              IsChild(HWND hWnd) const;
+    HWND           GetNextDlgGroupItem(HWND hWndCtrl,
                                           bool previous = false) const;
-    THandle           GetNextDlgTabItem(THandle hWndCtrl,
+    HWND           GetNextDlgTabItem(HWND hWndCtrl,
                                         bool previous = false) const;
     void              CheckDlgButton(int buttonId, uint check);
     void              CheckRadioButton(int firstButtonId,
@@ -662,8 +669,8 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     void              EvDeleteItem(uint ctrlId, DELETEITEMSTRUCT far& deleteInfo);
     void              EvDrawItem(uint ctrlId, DRAWITEMSTRUCT far& drawInfo);
     void              EvMeasureItem(uint ctrlId, MEASUREITEMSTRUCT far& measureInfo);
-    void              EvHScroll(uint scrollCode, uint thumbPos, THandle hWndCtl);
-    void              EvVScroll(uint scrollCode, uint thumbPos, THandle hWndCtl);
+    void              EvHScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
+    void              EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
     void              EvMove(TPoint& clientOrigin);
     void              EvNCDestroy();
     bool              EvQueryEndSession();
@@ -676,7 +683,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
 
     // Input validation message handler
     //
-    void              EvChildInvalid(THandle hWnd);
+    void              EvChildInvalid(HWND hWnd);
 
     // System messages
     //
@@ -697,21 +704,21 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     //
     void              EvActivate(uint active,
                                  bool minimized,
-                                 THandle hWndOther /* may be 0 */);
+                                 HWND hWndOther /* may be 0 */);
     void              EvActivateApp(bool active, HTASK hTask);
     void              EvCancelMode();
     void              EvGetMinMaxInfo(MINMAXINFO far& minmaxinfo);
     void              EvGetText(uint buffSize, char far* buff);
     uint              EvGetTextLength();
     void              EvIconEraseBkgnd(HDC hDC);
-    void              EvKillFocus(THandle hWndGetFocus /* may be 0 */);
-    uint              EvMouseActivate(THandle hTopLevel, uint hitCode, uint msg);
+    void              EvKillFocus(HWND hWndGetFocus /* may be 0 */);
+    uint              EvMouseActivate(HWND hTopLevel, uint hitCode, uint msg);
 
     // The following are called under Win32 only
     //
     void              EvInputFocus(bool gainingFocus);
-    void              EvOtherWindowCreated(THandle hWndOther);
-    void              EvOtherWindowDestroyed(THandle hWndOther);
+    void              EvOtherWindowCreated(HWND hWndOther);
+    void              EvOtherWindowDestroyed(HWND hWndOther);
     void              EvPaintIcon();
     void              EvHotKey(int idHotKey);
 #if defined(BI_PLAT_WIN32)
@@ -725,10 +732,10 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     HANDLE            EvQueryDragIcon();
     bool              EvQueryOpen();
     void              EvQueueSync();
-    bool              EvSetCursor(THandle hWndCursor,
+    bool              EvSetCursor(HWND hWndCursor,
                                   uint hitTest,
                                   uint mouseMsg);
-    void              EvSetFocus(THandle hWndLostFocus /* may be 0 */);
+    void              EvSetFocus(HWND hWndLostFocus /* may be 0 */);
     HFONT             EvGetFont();
     void              EvSetFont(HFONT hFont, bool redraw);
     void              EvSetRedraw(bool redraw);
@@ -739,7 +746,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
 
     // Controls
     //
-    HBRUSH            EvCtlColor(HDC hDC, THandle hWndChild, uint ctlType);
+    HBRUSH            EvCtlColor(HDC hDC, HWND hWndChild, uint ctlType);
 
     // Keyboard input
     //
@@ -774,10 +781,10 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     void              EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu);
     void              EvContextMenu(HWND childHwnd, int x, int y);
 
-    // Dialog messages
+    // Dialog [Menu] messages
     //
-    void              EvEnterIdle(uint source, THandle hWndDlg);
     uint              EvGetDlgCode(MSG far* msg);
+    void              EvEnterIdle(uint source, HWND hWndDlg);
 
     // Print manager messages
     //
@@ -786,20 +793,20 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // Clipboard messages
     //
     void              EvAskCBFormatName(uint bufLen, char far* buffer);
-    void              EvChangeCBChain(THandle hWndRemoved, THandle hWndNext);
+    void              EvChangeCBChain(HWND hWndRemoved, HWND hWndNext);
     void              EvDrawClipboard();
     void              EvDestroyClipboard();
-    void              EvHScrollClipboard(THandle hCBViewer, uint scrollCode, uint pos);
-    void              EvPaintClipboard(THandle hWnd, HANDLE hPaintStruct);
+    void              EvHScrollClipboard(HWND hCBViewer, uint scrollCode, uint pos);
+    void              EvPaintClipboard(HWND hWnd, HANDLE hPaintStruct);
     void              EvRenderAllFormats();
     void              EvRenderFormat(uint dataFormat);
-    void              EvSizeClipboard(THandle hWndViewer, HANDLE hRect);
-    void              EvVScrollClipboard(THandle hCBViewer, uint scrollCode, uint pos);
+    void              EvSizeClipboard(HWND hWndViewer, HANDLE hRect);
+    void              EvVScrollClipboard(HWND hCBViewer, uint scrollCode, uint pos);
 
     // Palette manager messages
     //
-    void              EvPaletteChanged(THandle hWndPalChg);
-    void              EvPaletteIsChanging(THandle hWndPalChg);
+    void              EvPaletteChanged(HWND hWndPalChg);
+    void              EvPaletteIsChanging(HWND hWndPalChg);
     bool              EvQueryNewPalette();
 
     // Drag-n-drop messages
@@ -808,8 +815,8 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
 
     // List box messages
     //
-    int               EvCharToItem(uint key, THandle hWndListBox, uint caretPos);
-    int               EvVKeyToItem(uint key, THandle hWndListBox, uint caretPos);
+    int               EvCharToItem(uint key, HWND hWndListBox, uint caretPos);
+    int               EvVKeyToItem(uint key, HWND hWndListBox, uint caretPos);
 
     // Non-client messages
     //
@@ -824,10 +831,17 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     void              EvNCMButtonDown(uint hitTest, TPoint& point);
     void              EvNCMButtonUp(uint hitTest, TPoint& point);
     void              EvNCMouseMove(uint hitTest, TPoint& point);
-    void              EvNCPaint();
     void              EvNCRButtonDblClk(uint hitTest, TPoint& point);
     void              EvNCRButtonDown(uint hitTest, TPoint& point);
     void              EvNCRButtonUp(uint hitTest, TPoint& point);
+
+    // WM_NCPAINT now passes an HRGN under Win32.
+    //
+#if defined(BI_PLAT_WIN32)
+    void              EvNCPaint(HRGN);
+#else
+    void              EvNCPaint();
+#endif
 
     // Icon messages
     //
@@ -836,8 +850,8 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
 
     // Callback procs for hooking TWindow to native window
     //
-    static TResult CALLBACK InitWndProc(THandle, uint, TParam1, TParam2);
-    static TResult CALLBACK StdWndProc(THandle, uint, TParam1, TParam2);
+    static TResult CALLBACK InitWndProc(HWND, uint, TParam1, TParam2);
+    static TResult CALLBACK StdWndProc(HWND, uint, TParam1, TParam2);
 
   protected:
     // Constructor & subsequent initializer for use with virtual derivations
@@ -845,12 +859,17 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     //
     TWindow();
     void              Init(TWindow* parent, const char far* title, TModule* module);
-    void              Init(THandle hWnd, TModule* module);
+    void              Init(HWND hWnd, TModule* module);
 
     // Set the window handle in a derived class. Used by derived classes that
     // create their window handle in a class specific way.
     //
-    void              SetHandle(THandle handle);
+    void              SetHandle(HWND handle);
+
+    // Resynching state
+    //
+    void              GetHWndState(bool forceStyleSync = false);
+    void              GetWindowTextTitle();
 
     virtual void      GetWindowClass(WNDCLASS& wndClass);
     virtual char far* GetClassName();
@@ -858,21 +877,21 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     virtual void      SetupWindow();
     virtual void      CleanupWindow();
 
-    void              DispatchScroll(uint scrollCode, uint thumbPos, THandle hWndCtrl);
+    void              DispatchScroll(uint scrollCode, uint thumbPos, HWND hWndCtrl);
 
     void              LoadAcceleratorTable();
     virtual void      RemoveChild(TWindow* child);
 
-    TWindow*          GetWindowPtr(THandle hWnd) const;
+    TWindow*          GetWindowPtr(HWND hWnd) const;
 
     // Member data  
     //
   public_data:
     union {
 #if defined(OWL2_COMPAT)
-      THandle         HWindow;  // Old obsolete name
+      HWND         HWindow;  // Old obsolete name
 #endif
-      THandle         Handle;   // Handle to associated MS-Windows window
+      HWND         Handle;   // Handle to associated MS-Windows window
     };
     char far*         Title;    // Logical title. Usually the same as window text
     TWindow*          Parent;   // Owl parent, use GetParentO(), SetParent()
@@ -910,7 +929,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     bool              OrderIsI(TWindow* win, void* position);
     void              AssignZOrder();
     void              AddChild(TWindow* child);
-    int               IndexOf(TWindow* child);
+    int               IndexOf(TWindow* child) const;
     TWindow*          At(int position);
 
     void              SetUniqueId();
@@ -927,7 +946,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     void              Show(int cmdShow);  // Use ShowWindow()
 
     // Obsolete way to open the global clipboard object. The recomended way is
-    // to construct a TClipboard using the TClipboard(TWindow::THandle) ctor
+    // to construct a TClipboard using the TClipboard(HWND) ctor
     //
     TClipboard&       OpenClipboard();
     typedef ::TXWindow TXWindow;        // Exceptions moved to global scope
@@ -982,17 +1001,26 @@ class _OWLCLASS_RTL TXWindow : public TXOwl {
 void DoEnableAutoCreate(TWindow* win, void*);
 
 //
-// Raw function to retrieve a TWindow pointer given an THandle from the a given
+// Raw function to retrieve a TWindow pointer given an HWND from the a given
 // app, or any app (app==0). Use the TWindow or TApplication member versions
 // in new code for more protection.
 //
 TWindow* _OWLFUNC GetWindowPtr(HWND hWnd, const TApplication* app = 0);
 #if defined(OWL1_COMPAT)
-inline TWindow* GetObjectPtr(HWND hWnd) {return ::GetWindowPtr(hWnd);}
+inline TWindow* GetObjectPtr(HWND hWnd)
+# if defined(BI_NAMESPACE)
+    {return OWL::GetWindowPtr(hWnd);}
+# else
+    {return ::GetWindowPtr(hWnd);}
+# endif
 #endif
 
 #if defined(__TRACE) || defined(__WARN)
   ostream& operator <<(ostream& os, const TWindow& w);
+#endif
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
 #endif
 
 //----------------------------------------------------------------------------
@@ -1182,13 +1210,13 @@ inline void TWindow::SetTransferBuffer(void* transferBuffer)
 }
 
 //----------------------------------------------------------------------------
-// THandle wrappers
+// HWND wrappers
 //
 
 //
 // Return the handle of the parent.
 //
-inline TWindow::THandle TWindow::GetParentH() const
+inline HWND TWindow::GetParentH() const
 {
   return GetHandle() ? ::GetParent(GetHandle()) : 0;
 }
@@ -1205,7 +1233,7 @@ inline TWindow* TWindow::GetParentO() const
 //
 // For OWL 2 compatability, GetParent returns the handle.
 //
-inline TWindow::THandle TWindow::GetParent() const
+inline HWND TWindow::GetParent() const
 {
   return GetParentH();
 }
@@ -1222,19 +1250,19 @@ inline TWindow* TWindow::GetParent()
 //
 // Return the handle of the window.
 //
-inline TWindow::THandle TWindow::GetHandle() const
+inline HWND TWindow::GetHandle() const
 {
   return Handle;
 }
 
 //
-inline TWindow::operator TWindow::THandle() const
+inline TWindow::operator HWND() const
 {
   return GetHandle();
 }
 
 //
-inline void TWindow::SetHandle(TWindow::THandle handle)
+inline void TWindow::SetHandle(HWND handle)
 {
   Handle = handle;
 }
@@ -1255,7 +1283,7 @@ inline TCurrentEvent& TWindow::GetCurrentEvent()
 
 //
 inline void
-TWindow::SendNotification(int id, int notifyCode, THandle hCtl, uint msg)
+TWindow::SendNotification(int id, int notifyCode, HWND hCtl, uint msg)
 {
 #if defined(BI_PLAT_WIN32)
   SendMessage(msg, MkParam1(id, notifyCode), TParam2(hCtl));
@@ -1266,8 +1294,8 @@ TWindow::SendNotification(int id, int notifyCode, THandle hCtl, uint msg)
 
 //
 inline void
-TWindow::SendNotification(THandle receiver, int id, int notifyCode,
-                          THandle hCtl, uint msg)
+TWindow::SendNotification(HWND receiver, int id, int notifyCode,
+                          HWND hCtl, uint msg)
 {
   PRECONDITION(receiver && ::IsWindow(receiver));
 #if defined(BI_PLAT_WIN32)
@@ -1287,7 +1315,7 @@ TWindow::SendNotification(int id, NMHDR& nmhdr, uint msg)
 //
 //
 inline uint32
-TWindow::SendNotification(THandle receiver, uint id, NMHDR& nmhdr, uint msg)
+TWindow::SendNotification(HWND receiver, uint id, NMHDR& nmhdr, uint msg)
 {
   return ::SendMessage(receiver, msg, TParam1(id), TParam2(&nmhdr));
 }
@@ -1316,7 +1344,7 @@ TWindow::PostMessage(uint msg, TParam1 p1, TParam2 p2)
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetCapture()
 {
   return ::GetCapture();
@@ -1325,7 +1353,7 @@ TWindow::GetCapture()
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::SetCapture()
 {
   PRECONDITION(GetHandle());
@@ -1344,7 +1372,7 @@ TWindow::ReleaseCapture()
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetFocus()
 {
   return ::GetFocus();
@@ -1353,7 +1381,7 @@ TWindow::GetFocus()
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::SetFocus()
 {
   PRECONDITION(GetHandle());
@@ -1404,7 +1432,7 @@ TWindow::ScreenToClient(TPoint& point) const
 // Wrapper for Windows API.
 //
 inline void
-TWindow::MapWindowPoints(THandle hWndTo, TPoint* points, int count) const
+TWindow::MapWindowPoints(HWND hWndTo, TPoint* points, int count) const
 {
   PRECONDITION(GetHandle());
   ::MapWindowPoints(GetHandle(), hWndTo, points, count);
@@ -1424,7 +1452,7 @@ TWindow::GetClientRect() const
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::WindowFromPoint(const TPoint& point)
 {
   return ::WindowFromPoint(point);
@@ -1433,7 +1461,7 @@ TWindow::WindowFromPoint(const TPoint& point)
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::ChildWindowFromPoint(const TPoint& point) const
 {
   PRECONDITION(GetHandle());
@@ -1555,7 +1583,7 @@ TWindow::SetWindowWord(int index, uint16 newWord)
 }
 
 //
-inline WNDPROC           
+inline WNDPROC
 TWindow::GetWindowProc() const
 {
   PRECONDITION(GetHandle());
@@ -1563,7 +1591,7 @@ TWindow::GetWindowProc() const
 }
 
 //
-inline WNDPROC           
+inline WNDPROC
 TWindow::SetWindowProc(WNDPROC wndProc)
 {
   PRECONDITION(GetHandle());
@@ -1762,7 +1790,7 @@ TWindow::BringWindowToTop()
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetActiveWindow()
 {
   return ::GetActiveWindow();
@@ -1771,7 +1799,7 @@ TWindow::GetActiveWindow()
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::SetActiveWindow()
 {
   PRECONDITION(GetHandle());
@@ -1781,7 +1809,7 @@ TWindow::SetActiveWindow()
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetDesktopWindow()
 {
   return ::GetDesktopWindow();
@@ -1791,7 +1819,7 @@ TWindow::GetDesktopWindow()
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetSysModalWindow()
 {
   return ::GetSysModalWindow();
@@ -1800,7 +1828,7 @@ TWindow::GetSysModalWindow()
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::SetSysModalWindow()
 {
   PRECONDITION(GetHandle());
@@ -1811,7 +1839,7 @@ TWindow::SetSysModalWindow()
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetNextWindow(uint flag) const
 {
   PRECONDITION(GetHandle());
@@ -1825,7 +1853,7 @@ TWindow::GetNextWindow(uint flag) const
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetLastActivePopup() const
 {
   PRECONDITION(GetHandle());
@@ -1835,7 +1863,7 @@ TWindow::GetLastActivePopup() const
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetWindow(uint flag) const
 {
 //  PRECONDITION(GetHandle());
@@ -1845,7 +1873,7 @@ TWindow::GetWindow(uint flag) const
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetTopWindow() const
 {
   PRECONDITION(GetHandle());
@@ -1854,7 +1882,7 @@ TWindow::GetTopWindow() const
 
 //
 inline bool
-TWindow::SetWindowPos(THandle hWndInsertAfter, const TRect& rect, uint flags)
+TWindow::SetWindowPos(HWND hWndInsertAfter, const TRect& rect, uint flags)
 {
   return SetWindowPos(hWndInsertAfter,
                       rect.left, rect.top, rect.Width(), rect.Height(), flags);
@@ -2031,7 +2059,7 @@ TWindow::GetDlgCtrlID() const
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
+inline HWND
 TWindow::GetDlgItem(int childId) const
 {
   PRECONDITION(GetHandle());
@@ -2082,7 +2110,7 @@ TWindow::IsDlgButtonChecked(int buttonId) const
 // Wrapper for Windows API.
 //
 inline bool
-TWindow::IsChild(THandle hWnd) const
+TWindow::IsChild(HWND hWnd) const
 {
   PRECONDITION(GetHandle());
   return ::IsChild(GetHandle(), hWnd);
@@ -2091,8 +2119,8 @@ TWindow::IsChild(THandle hWnd) const
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
-TWindow::GetNextDlgGroupItem(THandle hWndCtrl, bool previous) const
+inline HWND
+TWindow::GetNextDlgGroupItem(HWND hWndCtrl, bool previous) const
 {
   PRECONDITION(GetHandle());
   return ::GetNextDlgGroupItem(GetHandle(), hWndCtrl, previous);
@@ -2101,8 +2129,8 @@ TWindow::GetNextDlgGroupItem(THandle hWndCtrl, bool previous) const
 //
 // Wrapper for Windows API.
 //
-inline TWindow::THandle
-TWindow::GetNextDlgTabItem(THandle hWndCtrl, bool previous) const
+inline HWND
+TWindow::GetNextDlgTabItem(HWND hWndCtrl, bool previous) const
 {
   PRECONDITION(GetHandle());
   return ::GetNextDlgTabItem(GetHandle(), hWndCtrl, previous);
@@ -2392,9 +2420,13 @@ TWindow::DragAcceptFiles(bool accept)
 }
 
 //
-inline TWindow* TWindow::GetWindowPtr(THandle hWnd) const
+inline TWindow* TWindow::GetWindowPtr(HWND hWnd) const
 {
+#if defined(BI_NAMESPACE)
+  return OWL::GetWindowPtr(hWnd, GetApplication());
+#else
   return ::GetWindowPtr(hWnd, GetApplication());
+#endif
 }
 
 //
@@ -2404,7 +2436,7 @@ inline TWindow* TWindow::GetWindowPtr(THandle hWnd) const
 //
 inline void TWindow::EvActivate(uint /*active*/,
                                 bool /*minimized*/,
-                                THandle /*hWndOther*//*may be 0*/)
+                                HWND /*hWndOther*//*may be 0*/)
 {
   DefaultProcessing();
 }
@@ -2428,7 +2460,7 @@ inline void TWindow::EvCancelMode()
 }
 
 //
-inline void TWindow::EvChangeCBChain(THandle /*hWndRemoved*/, THandle /*hWndNext*/)
+inline void TWindow::EvChangeCBChain(HWND /*hWndRemoved*/, HWND /*hWndNext*/)
 {
   DefaultProcessing();
 }
@@ -2440,13 +2472,13 @@ inline void TWindow::EvChar(uint /*key*/, uint /*repeatCount*/, uint /*flags*/)
 }
 
 //
-inline int TWindow::EvCharToItem(uint /*key*/, THandle /*hWndListBox*/, uint /*caretPos*/)
+inline int TWindow::EvCharToItem(uint /*key*/, HWND /*hWndListBox*/, uint /*caretPos*/)
 {
   return (int)DefaultProcessing();
 }
 
 //
-inline int TWindow::EvVKeyToItem(uint /*key*/, THandle /*hWndListBox*/, uint /*caretPos*/)
+inline int TWindow::EvVKeyToItem(uint /*key*/, HWND /*hWndListBox*/, uint /*caretPos*/)
 {
   return (int)DefaultProcessing();
 }
@@ -2509,12 +2541,6 @@ inline void TWindow::EvEnable(bool /*enabled*/)
 }
 
 //
-inline void TWindow::EvEnterIdle(uint /*source*/, THandle /*hWndDlg*/)
-{
-  DefaultProcessing();
-}
-
-//
 inline void TWindow::EvFontChange()
 {
   DefaultProcessing();
@@ -2563,7 +2589,7 @@ inline void TWindow::EvInputFocus(bool /*gainingFocus*/)
 }
 
 //
-inline void TWindow::EvHScrollClipboard(THandle /*hWndCBViewer*/,
+inline void TWindow::EvHScrollClipboard(HWND /*hWndCBViewer*/,
                                            uint /*scrollCode*/,
                                            uint /*pos*/)
 {
@@ -2637,7 +2663,7 @@ inline void TWindow::EvMenuSelect(uint /*menuItemId*/, uint /*flags*/, HMENU /*h
 }
 
 //
-inline uint TWindow::EvMouseActivate(THandle /*hWndTopLevel*/, uint /*hitTestCode*/, uint /*msg*/)
+inline uint TWindow::EvMouseActivate(HWND /*hWndTopLevel*/, uint /*hitTestCode*/, uint /*msg*/)
 {
   return (uint)DefaultProcessing();
 }
@@ -2714,11 +2740,19 @@ inline void TWindow::EvNCMouseMove(uint /*hitTest*/, TPoint&)
   DefaultProcessing();
 }
 
+#if defined(BI_PLAT_WIN32)
+//
+inline void TWindow::EvNCPaint(HRGN /*region*/)
+{
+  DefaultProcessing();
+}
+#else
 //
 inline void TWindow::EvNCPaint()
 {
   DefaultProcessing();
 }
+#endif //BI_PLAT_WIN32
 
 //
 inline void TWindow::EvNCRButtonDblClk(uint /*hitTest*/, TPoint&)
@@ -2745,13 +2779,13 @@ inline void TWindow::EvNextDlgCtl(uint /*hctlOrDir*/, uint /*isHCtl*/)
 }
 
 //
-inline void TWindow::EvOtherWindowCreated(THandle /*hWndOther*/)
+inline void TWindow::EvOtherWindowCreated(HWND /*hWndOther*/)
 {
   DefaultProcessing();
 }
 
 //
-inline void TWindow::EvOtherWindowDestroyed(THandle /*hWndOther*/)
+inline void TWindow::EvOtherWindowDestroyed(HWND /*hWndOther*/)
 {
   DefaultProcessing();
 }
@@ -2763,19 +2797,19 @@ inline void TWindow::EvPaintIcon()
 }
 
 //
-inline void TWindow::EvPaintClipboard(THandle, HANDLE /*hPaintStruct*/)
+inline void TWindow::EvPaintClipboard(HWND, HANDLE /*hPaintStruct*/)
 {
   DefaultProcessing();
 }
 
 //
-inline void TWindow::EvPaletteChanged(THandle /*hWndPalChg*/)
+inline void TWindow::EvPaletteChanged(HWND /*hWndPalChg*/)
 {
   DefaultProcessing();
 }
 
 //
-inline void TWindow::EvPaletteIsChanging(THandle /*hWndPalChg*/)
+inline void TWindow::EvPaletteIsChanging(HWND /*hWndPalChg*/)
 {
   DefaultProcessing();
 }
@@ -2853,7 +2887,7 @@ inline void TWindow::EvRButtonUp(uint /*modKeys*/, TPoint&)
 }
 
 //
-inline void TWindow::EvSetFocus(THandle /*hWndLostFocus*/)
+inline void TWindow::EvSetFocus(HWND /*hWndLostFocus*/)
 {
   DefaultProcessing();
 }
@@ -2883,7 +2917,7 @@ inline void TWindow::EvShowWindow(bool /*show*/, uint /*status*/)
 }
 
 //
-inline void TWindow::EvSizeClipboard(THandle /*hWndViewer*/, HANDLE /*hRect*/)
+inline void TWindow::EvSizeClipboard(HWND /*hWndViewer*/, HANDLE /*hRect*/)
 {
   DefaultProcessing();
 }
@@ -2943,7 +2977,7 @@ inline void TWindow::EvWinIniChange(char far* /*section*/)
 }
 
 //
-inline void TWindow::EvVScrollClipboard(THandle /*hWndCBViewer*/,
+inline void TWindow::EvVScrollClipboard(HWND /*hWndCBViewer*/,
                                            uint /*scrollCode*/,
                                            uint /*pos*/)
 {

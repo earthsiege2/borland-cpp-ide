@@ -2,7 +2,7 @@
 // ObjectWindows
 // Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.7  $
 //
 // String resource IDs to use with except.h and except.rc
 //----------------------------------------------------------------------------
@@ -93,6 +93,8 @@
 #define IDS_LINKQUERYINTRFCFAIL 32479     //
 #define IDS_PERSISTFILELOADFAIL 32480     //
 #define IDS_LINKGETIDLISTFAIL   32481     //
+#define IDS_SHLLINKSETPATHFAIL  32482     //
+#define IDS_SHLLINKSETDESCFAIL  32483     //
                                           
 #define IDS_CLIPBOARDBUSY       32729     //
                                           

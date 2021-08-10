@@ -3,6 +3,8 @@
 // Copyright (C) 1996 Borland International
 //--------------------------------------------------------
 
+#include <vdbt/dbcontrl.h>
+#pragma hdrstop
 #include <vdbt/dblkuplb.h>
 
 //--------------------------------------------------------
@@ -44,6 +46,10 @@ TDBLookupList::TDBLookupList( TWindow *parent, int resourceId, TModule *module )
 // OWL response table
 //--------------------------------------------------------
 DEFINE_DB_RESPONSE_TABLE1( TDBLookupList, TDBControl )
+  EV_VBXEVENT_CLICK,
+  EV_VBXEVENT_DRAGOVER,
+  EV_VBXEVENT_DRAGDROP,
+  EV_VBXEVENT_ENDDRAG,
   EV_VBXEVENT_DBLCLICK( Event_TDBLookupList_DblClick ),
   EV_VBXEVENT_KEYDOWN(  Event_TDBLookupList_KeyDown ),
   EV_VBXEVENT_KEYPRESS( Event_TDBLookupList_KeyPress ),
@@ -56,6 +62,10 @@ END_RESPONSE_TABLE;
 //--------------------------------------------------------
 // Event Handlers
 //--------------------------------------------------------
+DEFINE_DB_EVENT( TDBLookupList, OnClick,     TNotifyEvent,   Event_TDBLookupList_Click );
+DEFINE_DB_EVENT( TDBLookupList, OnDragDrop,  TDragEvent,     Event_TDBLookupList_DragDrop );
+DEFINE_DB_EVENT( TDBLookupList, OnDragOver,  TDragOverEvent, Event_TDBLookupList_DragOver );
+DEFINE_DB_EVENT( TDBLookupList, OnEndDrag,   TDragEvent,     Event_TDBLookupList_EndDrag );
 DEFINE_DB_EVENT( TDBLookupList, OnDblClick, TNotifyEvent,   Event_TDBLookupList_DblClick );
 DEFINE_DB_EVENT( TDBLookupList, OnEnter,    TNotifyEvent,   Event_TDBLookupList_GotFocus );
 DEFINE_DB_EVENT( TDBLookupList, OnExit,     TNotifyEvent,   Event_TDBLookupList_LostFocus );

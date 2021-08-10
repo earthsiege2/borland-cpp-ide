@@ -11,11 +11,6 @@ if exist blocks\NUL     cd blocks
 if errorlevel 1 set err=1
 if exist ..\blocks\NUL  cd ..
 
-if exist checkers\NUL   cd checkers
-%mk% %1 %2 %3 %4
-if errorlevel 1 set err=1
-if exist ..\checkers\NUL cd ..
-
 if exist chess\NUL      cd chess
 %mk% %1 %2 %3 %4
 if errorlevel 1 set err=1
@@ -25,11 +20,6 @@ if exist cribbage\NUL   cd cribbage
 %mk% %1 %2 %3 %4
 if errorlevel 1 set err=1
 if exist ..\cribbage\NUL cd ..
-
-if exist mahjongg\NUL   cd mahjongg
-%mk% %1 %2 %3 %4
-if errorlevel 1 set err=1
-if exist ..\mahjongg\NUL cd ..
 
 if exist meteor\NUL     cd meteor
 %mk% %1 %2 %3 %4

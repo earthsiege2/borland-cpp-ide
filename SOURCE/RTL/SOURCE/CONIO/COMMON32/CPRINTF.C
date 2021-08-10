@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <_printf.h>
 #include <_video.h>
@@ -39,7 +40,7 @@ int _RTLENTRY _EXPFUNC cprintf(const char *fmt, ...)
     int ret;
 
     va_start(ap,fmt);
-    ret = __vprinter(__cputn, 0, fmt, ap);
+    ret = __vprinter((putnF *)__cputn, 0, fmt, ap);
     va_end(ap);
     return (ret);
 }

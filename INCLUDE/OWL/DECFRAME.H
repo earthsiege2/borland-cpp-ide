@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Definition of class TDecoratedFrame, a TFrameWindow that can manage
 // decorations around the client window.
@@ -15,6 +15,10 @@
 #endif
 #if !defined(OWL_LAYOUTWI_H)
 # include <owl/layoutwi.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 const int IDW_TOOLBAR       = 32041;  // Standard toolbar child window ID
@@ -135,6 +139,10 @@ class _OWLCLASS TDecoratedFrame : virtual public TFrameWindow,
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

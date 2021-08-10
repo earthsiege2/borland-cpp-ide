@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1992-1995 Microsoft Corporation
+Copyright (c) 1992-1996 Microsoft Corporation
 
 Module Name:
 
@@ -10,14 +10,40 @@ Abstract:
 
     Definitions for stub data structures and prototypes of helper functions.
 
+Author:
+
+    DonnaLi (01-01-91)
+
 Environment:
 
     DOS, Win 3.X, and Win/NT.
+
+Revision History:
+
+   DONNALI  08-29-91     Start recording history
+   donnali  09-11-91     change conversion macros
+   donnali  09-18-91     check in files for moving
+   STEVEZ   10-15-91     Merge with NT tree
+   donnali  10-28-91     add prototype
+   donnali  11-19-91     bugfix for strings
+   MIKEMON  12-17-91     DCE runtime API conversion
+   donnali  03-24-92     change rpc public header f
+   STEVEZ   04-04-92     add nsi include
+   mikemon  04-18-92     security support and misc
+   DovhH    04-24-24     Changed signature of <int>_from_ndr
+                         (to unsigned <int>)
+                         Added <base_type>_array_from_ndr routines
+   RyszardK 06-17-93     Added support for hyper
+   VibhasC  09-11-93     Created rpcndrn.h
+   DKays    10-14-93     Fixed up rpcndrn.h MIDL 2.0
+   RyszardK 01-15-94     Merged in the midl 2.0 changes from rpcndrn.h
+   Stevebl  04-22-96     Hookole support changes to MIDL_*_INFO
 
 --*/
 
 #ifndef __RPCNDR_H__
 #define __RPCNDR_H__
+#pragma option -b
 
 //
 // Set the packing level for RPC structures for Dos, Windows and Mac.
@@ -31,7 +57,9 @@ Environment:
 #define _MAC_
 #endif
 
+#pragma option -b.
 #include <rpcnsip.h>
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -100,6 +128,23 @@ extern "C" {
 #define NDR_LOCAL_ENDIAN                NDR_LITTLE_ENDIAN
 #endif
 
+
+/****************************************************************************
+ *  Macros for targeted platforms
+ ****************************************************************************/
+
+#if (defined(_WIN32_DCOM) || 0x400 <= _WIN32_WINNT)
+#define TARGET_IS_NT40_OR_LATER                   1
+#else
+#define TARGET_IS_NT40_OR_LATER                   0
+#endif
+
+#if (0x400 <= WINVER)
+#define TARGET_IS_NT351_OR_WIN95_OR_LATER         1
+#else
+#define TARGET_IS_NT351_OR_WIN95_OR_LATER         0
+#endif
+
 /****************************************************************************
  *  Other MIDL base types / predefined types:
  ****************************************************************************/
@@ -126,7 +171,7 @@ typedef double MIDL_uhyper;
 
 #endif // _HYPER_DEFINED
 
-#if !defined(__cplusplus) && !defined(_WCHAR_T_DEFINED)
+#ifndef _WCHAR_T_DEFINED
 typedef unsigned short wchar_t;
 #define _WCHAR_T_DEFINED
 #endif
@@ -180,6 +225,9 @@ void             __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #define __MIDL_DECLSPEC_DLLIMPORT
 #define __MIDL_DECLSPEC_DLLEXPORT
 #endif
+
+
+
 
 /****************************************************************************
  * Context handle management related definitions:
@@ -581,6 +629,16 @@ typedef unsigned long error_status_t;
                         (unsigned char)((s & 0x00ff0000) >> 16), (unsigned char)(s >> 24)
 #endif //  Mac
 
+//
+// On the server side, the following exceptions are mapped to
+// the bad stub data exception if -error stub_data is used.
+//
+
+#define RPC_BAD_STUB_DATA_EXCEPTION_FILTER  \
+                 ( (RpcExceptionCode() == STATUS_ACCESS_VIOLATION)  || \
+                   (RpcExceptionCode() == STATUS_DATATYPE_MISALIGNMENT) || \
+                   (RpcExceptionCode() == RPC_X_BAD_STUB_DATA) )
+
 /////////////////////////////////////////////////////////////////////////////
 // Some stub helper functions.
 /////////////////////////////////////////////////////////////////////////////
@@ -619,10 +677,88 @@ typedef struct
     } ARRAY_INFO, __RPC_FAR *PARRAY_INFO;
 
 /*
+ *  Pipe related definitions.
+ */
+
+typedef void
+(__RPC_FAR __RPC_API * NDR_PIPE_PULL_RTN)(
+        char          __RPC_FAR *  state,
+        void          __RPC_FAR *  buf,
+        unsigned long              esize,
+        unsigned long __RPC_FAR *  ecount );
+
+typedef void
+(__RPC_FAR __RPC_API * NDR_PIPE_PUSH_RTN)(
+        char          __RPC_FAR *  state,
+        void          __RPC_FAR *  buf,
+        unsigned long              ecount );
+
+typedef void
+(__RPC_FAR __RPC_API * NDR_PIPE_ALLOC_RTN)(
+        char             __RPC_FAR *  state,
+        unsigned long                 bsize,
+        void __RPC_FAR * __RPC_FAR *  buf,
+        unsigned long    __RPC_FAR *  bcount );
+
+
+typedef struct  _GENERIC_PIPE_TYPE
+    {
+    NDR_PIPE_PULL_RTN       pfnPull;
+    NDR_PIPE_PUSH_RTN       pfnPush;
+    NDR_PIPE_ALLOC_RTN      pfnAlloc;
+    char  __RPC_FAR *       pState;
+    } GENERIC_PIPE_TYPE;
+
+
+typedef struct {
+    int                         CurrentState;
+    int                         ElemsInChunk;
+    int                         ElemAlign;          
+    int                         ElemWireSize;         
+    int                         ElemMemSize;
+    int                         PartialBufferSize;
+    unsigned char __RPC_FAR *   PartialElem;
+    int                         PartialElemSize;
+    int                         PartialOffset;
+    int                         EndOfPipe;
+    } NDR_PIPE_STATE;
+
+typedef struct  _PIPE_MESSAGE
+    {
+    unsigned short                  Signature;
+    unsigned short                  PipeId;
+    GENERIC_PIPE_TYPE  __RPC_FAR *  pPipeType;
+    PFORMAT_STRING                  pTypeFormat;
+    unsigned short                  PipeStatus;
+    unsigned short                  PipeFlags;
+    struct _MIDL_STUB_MESSAGE  __RPC_FAR *  pStubMsg;
+    } NDR_PIPE_MESSAGE, __RPC_FAR * PNDR_PIPE_MESSAGE;
+
+typedef struct  _NDR_PIPE_DESC
+    {
+    NDR_PIPE_MESSAGE  __RPC_FAR *   pPipeMsg;
+    short                           CurrentPipe;
+    short                           InPipes;
+    short                           OutPipes;
+    short                           TotalPipes;
+    short                           PipeVersion;
+    short                           Flags;
+    unsigned char  __RPC_FAR *      DispatchBuffer;
+    unsigned char  __RPC_FAR *      LastPartialBuffer;
+    unsigned long                   LastPartialSize;
+    unsigned char  __RPC_FAR *      BufferSave;
+    unsigned long                   LengthSave;
+    NDR_PIPE_STATE                  RuntimeState;
+    } NDR_PIPE_DESC, __RPC_FAR * PNDR_PIPE_DESC;
+
+
+/*
  * MIDL Stub Message
  */
 #if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__) && !defined(__RPC_MAC__)
+#pragma option -b.
 #include <pshpack4.h>
+#pragma option -b
 #endif
 
 typedef struct _MIDL_STUB_MESSAGE
@@ -790,15 +926,23 @@ typedef struct _MIDL_STUB_MESSAGE
     unsigned long                   dwStubPhase;
 
     /*
-     * Reserved for future use.
+     * Pipe descriptor, defined for the 4.0 release.
      */
 
-    unsigned long                   Reserved[5];
+    NDR_PIPE_DESC   __RPC_FAR *     pPipeDesc;
+
+    unsigned long                   Reserved[4];
+
+    /*
+     *  Fields up to this point present since the 3.50 release.
+     */
 
     } MIDL_STUB_MESSAGE, __RPC_FAR *PMIDL_STUB_MESSAGE;
 
 #if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__) && !defined(__RPC_MAC__)
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 #endif
 
 /*
@@ -826,8 +970,18 @@ typedef struct __GENERIC_BINDING_INFO
     } GENERIC_BINDING_INFO, __RPC_FAR *PGENERIC_BINDING_INFO;
 
 // typedef EXPR_EVAL - see above
+// typedefs for xmit_as
 
-typedef void (__RPC_FAR __RPC_USER * XMIT_HELPER_ROUTINE)( PMIDL_STUB_MESSAGE );
+#if (defined(_MSC_VER)) && !defined(MIDL_PASS)
+// a Microsoft C++ compiler
+#define NDR_SHAREABLE __inline
+#else
+#define NDR_SHAREABLE static
+#endif
+
+
+typedef void (__RPC_FAR __RPC_USER * XMIT_HELPER_ROUTINE)
+    ( PMIDL_STUB_MESSAGE );
 
 typedef struct _XMIT_ROUTINE_QUINTUPLE
     {
@@ -836,6 +990,47 @@ typedef struct _XMIT_ROUTINE_QUINTUPLE
     XMIT_HELPER_ROUTINE     pfnFreeXmit;
     XMIT_HELPER_ROUTINE     pfnFreeInst;
     } XMIT_ROUTINE_QUINTUPLE, __RPC_FAR *PXMIT_ROUTINE_QUINTUPLE;
+
+typedef unsigned long
+(__RPC_FAR __RPC_USER * USER_MARSHAL_SIZING_ROUTINE)
+    (unsigned long __RPC_FAR *,
+     unsigned long,
+     void __RPC_FAR * );
+
+typedef unsigned char __RPC_FAR *
+(__RPC_FAR __RPC_USER * USER_MARSHAL_MARSHALLING_ROUTINE)
+    (unsigned long __RPC_FAR *,
+     unsigned char  __RPC_FAR * ,
+     void __RPC_FAR * );
+
+typedef unsigned char __RPC_FAR *
+(__RPC_FAR __RPC_USER * USER_MARSHAL_UNMARSHALLING_ROUTINE)
+    (unsigned long __RPC_FAR *,
+     unsigned char  __RPC_FAR * ,
+     void __RPC_FAR * );
+
+typedef void (__RPC_FAR __RPC_USER * USER_MARSHAL_FREEING_ROUTINE)
+    (unsigned long __RPC_FAR *,
+     void __RPC_FAR * );
+
+typedef struct _USER_MARSHAL_ROUTINE_QUADRUPLE
+    {
+    USER_MARSHAL_SIZING_ROUTINE          pfnBufferSize;
+    USER_MARSHAL_MARSHALLING_ROUTINE     pfnMarshall;
+    USER_MARSHAL_UNMARSHALLING_ROUTINE   pfnUnmarshall;
+    USER_MARSHAL_FREEING_ROUTINE         pfnFree;
+    } USER_MARSHAL_ROUTINE_QUADRUPLE;
+
+typedef struct _USER_MARSHAL_CB
+{
+    unsigned long       Flags;
+    PMIDL_STUB_MESSAGE  pStubMsg;
+    PFORMAT_STRING      pReserve;
+} USER_MARSHAL_CB;
+
+
+#define USER_CALL_CTXT_MASK(f)	((f) & 0xff)
+#define GET_USER_DATA_REP(f)    ((f) >> 16)
 
 typedef struct _MALLOC_FREE_STRUCT
     {
@@ -852,6 +1047,7 @@ typedef struct _COMM_FAULT_OFFSETS
 /*
  * MIDL Stub Descriptor
  */
+
 typedef struct _MIDL_STUB_DESC
     {
 
@@ -874,22 +1070,32 @@ typedef struct _MIDL_STUB_DESC
 
     const XMIT_ROUTINE_QUINTUPLE __RPC_FAR *        aXmitQuintuple;
 
-    const unsigned char __RPC_FAR *             pFormatTypes;
+    const unsigned char __RPC_FAR *                 pFormatTypes;
 
-    int                                 fCheckBounds;
+    int                                             fCheckBounds;
 
     /* Ndr library version. */
-    unsigned long                       Version;
+    unsigned long                                   Version;
 
     /*
-     * Reserved for future use.
+     * Reserved for future use. (no reserves )
      */
 
-    MALLOC_FREE_STRUCT __RPC_FAR *      pMallocFreeStruct;
+    MALLOC_FREE_STRUCT __RPC_FAR *                  pMallocFreeStruct;
 
     long                                MIDLVersion;
 
     const COMM_FAULT_OFFSETS __RPC_FAR *    CommFaultOffsets;
+
+    // New fields for version 3.0+
+
+    const USER_MARSHAL_ROUTINE_QUADRUPLE __RPC_FAR * aUserMarshalQuadruple;
+
+    long                                    Reserved1;
+    long                                    Reserved2;
+    long                                    Reserved3;
+    long                                    Reserved4;
+    long                                    Reserved5;
 
     } MIDL_STUB_DESC;
 
@@ -929,6 +1135,9 @@ typedef struct  _MIDL_SERVER_INFO_
     PFORMAT_STRING              ProcString;
     const unsigned short *      FmtStringOffset;
     const STUB_THUNK *          ThunkTable;
+    PFORMAT_STRING              LocalFormatTypes;
+    PFORMAT_STRING              LocalProcString;
+    const unsigned short *      LocalFmtStringOffset;
     } MIDL_SERVER_INFO, *PMIDL_SERVER_INFO;
 
 /*
@@ -939,6 +1148,9 @@ typedef struct _MIDL_STUBLESS_PROXY_INFO
     PMIDL_STUB_DESC                     pStubDesc;
     PFORMAT_STRING                      ProcFormatString;
     const unsigned short __RPC_FAR *    FormatStringOffset;
+    PFORMAT_STRING                      LocalFormatTypes;
+    PFORMAT_STRING                      LocalProcString;
+    const unsigned short __RPC_FAR *    LocalFmtStringOffset;
     } MIDL_STUBLESS_PROXY_INFO;
 
 typedef MIDL_STUBLESS_PROXY_INFO __RPC_FAR * PMIDL_STUBLESS_PROXY_INFO;
@@ -1161,6 +1373,15 @@ NdrXmitOrRepAsMarshall(
     PFORMAT_STRING                      pFormat
     );
 
+/* User_marshal */
+
+unsigned char __RPC_FAR * RPC_ENTRY
+NdrUserMarshalMarshall(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    unsigned char __RPC_FAR *           pMemory,
+    PFORMAT_STRING                      pFormat
+    );
+
 /* Cairo interface pointer */
 
 unsigned char __RPC_FAR * RPC_ENTRY
@@ -1345,6 +1566,16 @@ NdrXmitOrRepAsUnmarshall(
     unsigned char                           fMustAlloc
     );
 
+/* User_marshal */
+
+unsigned char __RPC_FAR * RPC_ENTRY
+NdrUserMarshalUnmarshall(
+    PMIDL_STUB_MESSAGE                      pStubMsg,
+    unsigned char __RPC_FAR * __RPC_FAR *   ppMemory,
+    PFORMAT_STRING                          pFormat,
+    unsigned char                           fMustAlloc
+    );
+
 /* Cairo interface pointer */
 
 unsigned char __RPC_FAR * RPC_ENTRY
@@ -1504,6 +1735,15 @@ NdrXmitOrRepAsBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
+/* User_marshal */
+
+void RPC_ENTRY
+NdrUserMarshalBufferSize(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    unsigned char __RPC_FAR *           pMemory,
+    PFORMAT_STRING                      pFormat
+    );
+
 /* Cairo Interface pointer */
 
 void RPC_ENTRY
@@ -1628,6 +1868,14 @@ NdrNonEncapsulatedUnionMemorySize(
 
 unsigned long RPC_ENTRY
 NdrXmitOrRepAsMemorySize(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    PFORMAT_STRING                      pFormat
+    );
+
+/* User_marshal */
+
+unsigned long RPC_ENTRY
+NdrUserMarshalMemorySize(
     PMIDL_STUB_MESSAGE                  pStubMsg,
     PFORMAT_STRING                      pFormat
     );
@@ -1759,6 +2007,15 @@ NdrXmitOrRepAsFree(
     PFORMAT_STRING                      pFormat
     );
 
+/* User_marshal */
+
+void RPC_ENTRY
+NdrUserMarshalFree(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    unsigned char __RPC_FAR *           pMemory,
+    PFORMAT_STRING                      pFormat
+    );
+
 /* Cairo Interface pointer */
 
 void RPC_ENTRY
@@ -1773,9 +2030,36 @@ NdrInterfacePointerFree(
  */
 
 void RPC_ENTRY
+NdrConvert2(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    PFORMAT_STRING                      pFormat,
+    long                                NumberParams
+    );
+
+void RPC_ENTRY
 NdrConvert(
     PMIDL_STUB_MESSAGE                  pStubMsg,
     PFORMAT_STRING                      pFormat
+    );
+
+#define USER_MARSHAL_FC_BYTE         1
+#define USER_MARSHAL_FC_CHAR         2
+#define USER_MARSHAL_FC_SMALL        3
+#define USER_MARSHAL_FC_USMALL       4
+#define USER_MARSHAL_FC_WCHAR        5
+#define USER_MARSHAL_FC_SHORT        6
+#define USER_MARSHAL_FC_USHORT       7
+#define USER_MARSHAL_FC_LONG         8
+#define USER_MARSHAL_FC_ULONG        9
+#define USER_MARSHAL_FC_FLOAT       10
+#define USER_MARSHAL_FC_HYPER       11
+#define USER_MARSHAL_FC_DOUBLE      12
+
+unsigned char __RPC_FAR * RPC_ENTRY
+NdrUserMarshalSimpleTypeConvert(
+    unsigned long * pFlags,
+    unsigned char * pBuffer,
+    unsigned char   FormatChar
     );
 
 /*
@@ -1795,6 +2079,14 @@ NdrServerInitializeNew(
     PRPC_MESSAGE                        pRpcMsg,
     PMIDL_STUB_MESSAGE                  pStubMsg,
     PMIDL_STUB_DESC                     pStubDescriptor
+    );
+
+void RPC_ENTRY
+NdrServerInitializePartial(
+    PRPC_MESSAGE                        pRpcMsg,
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    PMIDL_STUB_DESC                     pStubDescriptor,
+    unsigned long                       RequestedBufferSize
     );
 
 void RPC_ENTRY
@@ -1840,16 +2132,32 @@ NdrNsGetBuffer(
     );
 
 unsigned char __RPC_FAR * RPC_ENTRY
+NdrGetPipeBuffer(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    unsigned long                       BufferLength,
+    RPC_BINDING_HANDLE                  Handle );
+
+void RPC_ENTRY
+NdrGetPartialBuffer(
+    PMIDL_STUB_MESSAGE                  pStubMsg );
+
+unsigned char __RPC_FAR * RPC_ENTRY
 NdrSendReceive(
     PMIDL_STUB_MESSAGE                  pStubMsg,
-    unsigned char __RPC_FAR*                        pBufferEnd
+    unsigned char __RPC_FAR*            pBufferEnd
     );
 
 unsigned char __RPC_FAR * RPC_ENTRY
 NdrNsSendReceive(
     PMIDL_STUB_MESSAGE                  pStubMsg,
-    unsigned char __RPC_FAR *                       pBufferEnd,
-    RPC_BINDING_HANDLE __RPC_FAR *              pAutoHandle
+    unsigned char __RPC_FAR *           pBufferEnd,
+    RPC_BINDING_HANDLE __RPC_FAR *      pAutoHandle
+    );
+
+void  RPC_ENTRY
+NdrPipeSendReceive(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    NDR_PIPE_DESC  *                    pPipeDesc
     );
 
 void RPC_ENTRY
@@ -1857,11 +2165,61 @@ NdrFreeBuffer(
     PMIDL_STUB_MESSAGE                  pStubMsg
     );
 
+
+/*
+ * Pipe specific calls
+ */
+
+void RPC_ENTRY
+NdrPipesInitialize(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    PFORMAT_STRING                      pParamDesc,
+    NDR_PIPE_DESC    __RPC_FAR *        pPipeDesc,
+    NDR_PIPE_MESSAGE __RPC_FAR *        pPipeMsg,
+    char             __RPC_FAR *        pStackTop,
+    unsigned long                       NumberParams );
+
+void
+NdrMarkNextActivePipe( 
+    NDR_PIPE_DESC __RPC_FAR  *          pPipeDesc,
+    unsigned int                        DirectionMask );
+
+void RPC_ENTRY
+NdrPipePull(
+    char          __RPC_FAR *           pState,
+    void          __RPC_FAR *           buf,
+    unsigned long                       esize,
+    unsigned long __RPC_FAR *           ecount );
+
+void  RPC_ENTRY
+NdrPipePush(
+    char          __RPC_FAR *           pState,
+    void          __RPC_FAR *           buf,
+    unsigned long                       ecount );
+
+void RPC_ENTRY
+NdrIsAppDoneWithPipes( 
+    NDR_PIPE_DESC  *                    pPipeDesc
+    );
+
+void RPC_ENTRY
+NdrPipesDone( 
+    PMIDL_STUB_MESSAGE                  pStubMsg
+    );
+
+
 /*
  * Interpeter calls.
  */
 
 /* client */
+
+CLIENT_CALL_RETURN RPC_VAR_ENTRY
+NdrClientCall2(
+    PMIDL_STUB_DESC                     pStubDescriptor,
+    PFORMAT_STRING                      pFormat,
+    ...
+    );
 
 CLIENT_CALL_RETURN RPC_VAR_ENTRY
 NdrClientCall(
@@ -1886,6 +2244,18 @@ typedef enum {
     PROXY_UNMARSHAL
 }PROXY_PHASE;
 
+long RPC_ENTRY
+NdrStubCall2(
+    struct IRpcStubBuffer __RPC_FAR *    pThis,
+    struct IRpcChannelBuffer __RPC_FAR * pChannel,
+    PRPC_MESSAGE                         pRpcMsg,
+    unsigned long __RPC_FAR *            pdwStubPhase
+    );
+
+void RPC_ENTRY
+NdrServerCall2(
+    PRPC_MESSAGE                         pRpcMsg
+    );
 
 long RPC_ENTRY
 NdrStubCall (
@@ -2264,4 +2634,10 @@ NdrOleFree (
 #pragma pack()
 #endif
 
+#pragma option -b.
 #endif /* __RPCNDR_H__ */
+
+
+
+
+

@@ -1,0 +1,16 @@
+#-----------------------------------------------------------------------------
+# ObjectComponents
+# Copyright (c) 1996, 1996 by Borland International, All Rights Reserved
+#
+# $Revision:   2.1  $
+#
+#  Makefile to build a DLL with custom COM interfaces and a simple 
+#  application which uses the interfaces
+#-----------------------------------------------------------------------------
+SYSTEMS=WIN16 WIN32
+MODELS= fdl
+
+DLL    = comsrvr
+EXERES = usecom
+
+!include $(BCEXAMPLEDIR)\ocfmake.gen

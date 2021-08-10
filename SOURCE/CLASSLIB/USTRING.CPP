@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.8  $
 //
 // TString (& TUString) implementation (others functions are inline)
 //----------------------------------------------------------------------------
@@ -9,6 +9,7 @@
 #include <winsys/string.h>
 #include <services/memory.h>
 #include <string.h>
+#include <tchar.h>
 
 TUString TUString::Null;   // null TAutoStrings reference this object
 
@@ -45,17 +46,17 @@ wchar_t* TUString::ConvertAtoW(const char* src, size_t len)
 //
 // Change UString to isCopy regardless of current type
 //
-char* TUString::ChangeToCopy()
+_TCHAR* TUString::ChangeToCopy()
 {
-  char* dst = 0;
-  const char far* src;
+  _TCHAR* dst = 0;
+  const _TCHAR far* src;
   int len;
   switch (Kind) {
     case isNull:
       return 0;
     case isConst:
       src = Const;
-      len = strlen(Const);
+      len = _tcslen(Const);
       break;
     case isCopy:
       return Copy;
@@ -85,7 +86,7 @@ char* TUString::ChangeToCopy()
       len = ((string*)&String)->length();
   }
   if (!dst) {
-    dst = new char[len+1];
+    dst = new _TCHAR[len+1];
     memcpy(dst, src, len+1);
   }
   if (Kind == isBstr)
@@ -116,7 +117,7 @@ wchar_t* TUString::ChangeToWCopy()
       break;
     case isWConst:
       src = WConst;
-      len = strlen(WConst);
+      len = _tcslen(WConst);
       break;
     case isWCopy:
       return WCopy;
@@ -153,7 +154,7 @@ wchar_t* TUString::ChangeToWCopy()
 //
 
 //
-inline TUString::TUString(const char far& str)
+inline TUString::TUString(const _TCHAR far& str)
 :
   Kind(isConst),
   Const(&str),
@@ -163,12 +164,12 @@ inline TUString::TUString(const char far& str)
 }
 
 //
-inline TUString::TUString(char& str)
+inline TUString::TUString(_TCHAR& str)
 :
   Kind(isCopy), RefCnt(1), Lang(0)
 {
-  Copy = new char[strlen(&str)+1];
-  strcpy(Copy, &str);
+  Copy = new _TCHAR[_tcslen(&str)+1];
+  _tcscpy(Copy, &str);
 }
 
 #if defined(BI_HAS_WCHAR)
@@ -182,7 +183,7 @@ inline TUString::TUString(const wchar_t& str)
   Lang(0)
 {
 }
-  
+
 //
 inline TUString::TUString(wchar_t& str)
 :
@@ -190,8 +191,8 @@ inline TUString::TUString(wchar_t& str)
   RefCnt(1),
   Lang(0)
 {
-  WCopy = new wchar_t[strlen(&str)+1];
-  strcpy(WCopy, &str);
+  WCopy = new wchar_t[_tcslen(&str)+1];
+  _tcscpy(WCopy, &str);
 }
 #endif
 
@@ -229,16 +230,16 @@ inline TUString::TUString(const string& str)
 //------------------------------------------------------------------------
 // Static creation, or factory functions return pointers to new UStrings, or
 // pointers to the Null UString
-// 
+//
 
 //
-TUString* TUString::Create(const char far* str)
+TUString* TUString::Create(const _TCHAR far* str)
 {
   return str /*&& *str*/ ? new TUString(*str) : &++Null;
 }
 
 //
-TUString* TUString::Create(char* str)
+TUString* TUString::Create(_TCHAR* str)
 {
   return str /*&& *str*/ ? new TUString(*str) : &++Null;
 }
@@ -281,7 +282,7 @@ TUString* TUString::Create(const string& str)
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //
 
 //
@@ -312,7 +313,7 @@ TUString* TUString::Assign(const string& s)
 }
 
 //
-TUString* TUString::Assign(const char far* s)
+TUString* TUString::Assign(const _TCHAR far* s)
 {
   if (s && *s && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
     Free();
@@ -327,13 +328,13 @@ TUString* TUString::Assign(const char far* s)
 }
 
 //
-TUString* TUString::Assign(char* s)
+TUString* TUString::Assign(_TCHAR* s)
 {
   if (s && *s && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
     Free();
     Kind = isCopy;
-    Copy = new char[strlen(s)+1];
-    strcpy(Copy, s);
+    Copy = new _TCHAR[_tcslen(s)+1];
+    _tcscpy(Copy, s);
     return this;
   }
   else {
@@ -365,8 +366,8 @@ TUString* TUString::Assign(wchar_t* s)
   if (s && *s && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
     Free();
     Kind = isWCopy;
-    WCopy = new wchar_t[strlen(s)+1];
-    strcpy(WCopy, s);
+    WCopy = new wchar_t[_tcslen(s)+1];
+    _tcscpy(WCopy, s);
     return this;
   }
   else {
@@ -398,12 +399,12 @@ TUString* TUString::Assign(BSTR str, TLangId lang)
 //------------------------------------------------------------------------
 
 //
-TUString::operator const char far*() const
+TUString::operator const _TCHAR far*() const
 {
   switch (Kind) {
     case isNull:    return 0;
     case isConst:   return Const;
-    case isCopy:    return Copy;    
+    case isCopy:    return Copy;
     case isString:  return ((string*)&String)->c_str();
 #if defined(BI_OLECHAR_WIDE)
     case isBstr:
@@ -419,7 +420,7 @@ TUString::operator const char far*() const
 }
 
 //
-TUString::operator char*()
+TUString::operator _TCHAR*()
 {
   return ChangeToCopy();
 }
@@ -432,7 +433,7 @@ TUString::operator const wchar_t*() const
   switch (Kind) {
     case isNull:    return 0;
     case isWConst:  return WConst;
-    case isWCopy:   return WCopy;    
+    case isWCopy:   return WCopy;
 #if defined(BI_OLECHAR_WIDE)
     case isBstr:
     case isExtBstr: return Bstr;
@@ -441,7 +442,7 @@ TUString::operator const wchar_t*() const
     case isExtBstr: return CONST_CAST(TUString*,this)->ChangeToWCopy();
 #endif
     case isConst:
-    case isCopy: 
+    case isCopy:
     case isString:  return CONST_CAST(TUString*,this)->ChangeToWCopy();
   }
   return 0; // suppress warning
@@ -457,20 +458,20 @@ TUString::operator wchar_t*()
 //------------------------------------------------------------------------
 
 //
-// 
+//
 //
 int TUString::Length() const
 {
   switch (Kind) {
     case isNull:    return 0;
 #if defined(BI_HAS_WCHAR)
-    case isWConst:  return strlen(WConst);
-    case isWCopy:   return strlen(WCopy);
+    case isWConst:  return _tcslen(WConst);
+    case isWCopy:   return _tcslen(WCopy);
 #endif
     case isBstr:
     case isExtBstr: return ::SysStringLen(Bstr);
-    case isConst:   return strlen(Const);
-    case isCopy:    return strlen(Copy);
+    case isConst:   return _tcslen(Const);
+    case isCopy:    return _tcslen(Copy);
     case isString:  return ((string*)&String)->length();
   }
   return 0; // suppress warning

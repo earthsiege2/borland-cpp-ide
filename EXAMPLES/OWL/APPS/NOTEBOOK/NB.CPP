@@ -89,8 +89,8 @@ void TTestApp::InitInstance()
 int OwlMain(int /*argc*/, char* /*argv*/ [])
 {
 #if defined(__WIN32__)
-  if (!(GetVersion()&0x80000000)) {
-    ::MessageBox(0, "This is not a Win NT Example", "OWL Examples", MB_OK);
+  if (!TSystem::Has3dUI()) {
+    ::MessageBox(0, "Must be run on Windows 4.0 or greater.", "OWL Examples", MB_OK);
     return 0;
   }
 #endif

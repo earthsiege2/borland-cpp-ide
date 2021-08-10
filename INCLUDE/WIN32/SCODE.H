@@ -1,6 +1,7 @@
+#pragma option -b
 /*++
 
-Copyright (c) 1992 - 1995 Microsoft Corporation
+Copyright (c) 1992-1996 Microsoft Corporation
 
 Module Name:
 
@@ -13,6 +14,9 @@ Abstract:
 --*/
 
 #ifndef  _WINERROR_
+#pragma option -b.
 #include <winerror.h>
+#pragma option -b
 #endif
 
+#pragma option -b.

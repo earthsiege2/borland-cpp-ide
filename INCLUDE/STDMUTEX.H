@@ -1,5 +1,6 @@
 #ifndef __RWSTD_MUTEX_H__
 #define __RWSTD_MUTEX_H__
+/* $Revision:   8.4  $ */
 
 /*
  * Declarations for class RWSTDMutex and RWSTDGuard.

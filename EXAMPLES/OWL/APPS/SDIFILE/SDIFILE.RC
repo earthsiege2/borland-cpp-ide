@@ -8,6 +8,7 @@
 #include <owl/editfile.rc>
 #include <owl/editsear.rc>
 #include <owl/docview.rc>
+#include <owl/except.rc>
 
 201 ICON 
 {

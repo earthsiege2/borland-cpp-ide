@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.19  $
+// $Revision:   2.31  $
 //
 // OLE Automation Class Definitions
 //----------------------------------------------------------------------------
@@ -23,6 +23,18 @@
 #endif
 #if !defined(__TYPEINFO_H)
 # include <typeinfo.h>          // C++ type info
+#endif
+#if !defined(_OLECTL_H_) && defined(BI_PLAT_WIN32)
+# if defined(__BIVBX_H) && !defined(NO_VBX_PICTURES)
+#   error BIVBX.H's LPPICTURE is incompatible with OLECTL.H - define NO_VBX_PICTURES
+# else
+#   define  NO_VBX_PICTURES     // Make sure we're BIVBX's compatible
+#   include <olectl.h>          // Ole Controls definitions
+# endif
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
 #endif
 
 //
@@ -105,20 +117,23 @@ extern "C" const GUID __cdecl IID_TServedObject;
 class TXAuto : public TXBase {
   public:
     enum TError {
-      xNoError,
-      xConversionFailure,
-      xNotIDispatch,
-      xForeignIDispatch,
-      xTypeMismatch,
-      xNoArgSymbol,
-      xParameterMissing,
-      xNoDefaultValue,
-      xValidateFailure,
-      xExecutionFailure,
-      xErrorStatus,
+      xNoError,                 //  0
+      xConversionFailure,       //  1
+      xNotIDispatch,            //  2
+      xForeignIDispatch,        //  3
+      xTypeMismatch,            //  4
+      xNoArgSymbol,             //  5
+      xParameterMissing,        //  6
+      xNoDefaultValue,          //  7
+      xValidateFailure,         //  8
+      xExecutionFailure,        //  9
+      xErrorStatus,             // 10
     };
-    TXAuto(TXAuto::TError err)
-        : TXBase("Automation Exception"), ErrorCode(err) {}
+    TXAuto(TXAuto::TError err);
+    void          Throw();
+    static void   Raise(TXAuto::TError err);
+
+  public:
     TError ErrorCode;
 };
 
@@ -138,28 +153,28 @@ class TAutoClass : public TAutoType {
    ~TAutoClass();
 
     short         CountCommands();    // forces counts to be set on first call
-    TAutoSymbol*  Lookup(char far* name, TLangId lang, short symFlags, long far& id);
-    TAutoSymbol*  LookupArg(char far* name, TLangId lang, TAutoSymbol* cmd,
+    TAutoSymbol*  Lookup(char* name, TLangId lang, short symFlags, long far& id);
+    TAutoSymbol*  LookupArg(char* name, TLangId lang, TAutoSymbol* cmd,
                             long far& retid);
     TAutoSymbol*  FindId(long id, ObjectPtr& objptr);
     TAutoSymbol*  FindFunction(unsigned index, MEMBERID& retId);
     TAutoSymbol*  FindVariable(unsigned index, MEMBERID& retId);
     TXAuto::TError Dispatch(ObjectPtr obj, TAutoCreator& creator,
                             TUnknown& owner, int attr, TAutoStack& args,
-                            TAutoVal far* retval);
-    TAutoSymbol*  GetTable();
-    TAutoSymbol*  GetClassSymbol();
-    short         GetArgCount(TAutoSymbol& sym);
-    TAutoCommandBuildDtr GetDestructor();
-    const typeinfo&  GetTypeInfo();
-    const char* GetName(TLangId lang = TLocaleString::UserDefaultLangId);
-    const char* GetDoc (TLangId lang = TLocaleString::UserDefaultLangId);
-    unsigned long GetHelpId();
-    unsigned short GetTypeFlags();
-    int            GetImplTypeFlags();
-    unsigned short GetCoClassFlags();
-    TAggregator GetAggregator();
-    IUnknown&   Aggregate(ObjectPtr obj, TUnknown& inner);
+                            TAutoVal* retval);
+    TAutoSymbol*           GetTable() const;
+    TAutoSymbol*           GetClassSymbol() const;
+    short                  GetArgCount(TAutoSymbol& sym);
+    TAutoCommandBuildDtr   GetDestructor() const;
+    const typeinfo&        GetTypeInfo() const;
+    const char*            GetName(TLangId lang = TLocaleString::UserDefaultLangId) const;
+    const char*            GetDoc (TLangId lang = TLocaleString::UserDefaultLangId) const;
+    unsigned long          GetHelpId() const;
+    unsigned short         GetTypeFlags() const;
+    int                    GetImplTypeFlags() const;
+    unsigned short         GetCoClassFlags() const;
+    TAggregator            GetAggregator() const;
+    IUnknown&              Aggregate(ObjectPtr obj, TUnknown& inner);
 
   protected:
     TAggregator Aggregator;  // aggregator function for C++ COM classes
@@ -214,6 +229,15 @@ struct TAutoVoid {
 };
 
 //
+// Class to implement assignment of VT_ERROR/DISP_E_PARAMNOTFOUND
+// (i.e. Optional arguments) to TAutoVal
+//
+struct TNoArg {
+   //
+   // Dummy structure
+};
+
+//
 // Wrapper class to disambiguate automation date type from double
 //
 struct TAutoDate {
@@ -248,16 +272,16 @@ struct far TAutoCurrency {
     bool B;
     static TAutoType ClassInfo;
   };
-  // Needed for automating bool far* when bool is not a type
+  // Needed for automating bool* when bool is not a type
   //
   struct TAutoBoolRef {  //
     TAutoBoolRef() : P(0) {}
-    TAutoBoolRef(bool far* p) : P(p) {}
-    TAutoBoolRef(TBool far* p) : P((bool far*)p) {}
-    operator bool far*() {return P;}
-    void operator =(bool far* p) {P = p;}
-    void operator =(TBool far* p){P = (bool far*)p;}
-    bool far* P;
+    TAutoBoolRef(bool* p) : P(p) {}
+    TAutoBoolRef(TBool* p) : P((bool*)p) {}
+    operator bool*() {return P;}
+    void operator =(bool* p) {P = p;}
+    void operator =(TBool* p){P = (bool*)p;}
+    bool* P;
     static TAutoType ClassInfo;
   };
 #else
@@ -275,6 +299,7 @@ struct TAutoLong       { static TAutoType ClassInfo; };
 struct TAutoByte       { static TAutoType ClassInfo; };
 struct TAutoUnknown    { static TAutoType ClassInfo; };  // for raw IUnknown*
 struct TAutoDispatch   { static TAutoType ClassInfo; };  // for raw IDispatch*
+struct TAutoVariant    { static TAutoType ClassInfo; };
 struct TAutoShortRef   { static TAutoType ClassInfo; };
 struct TAutoLongRef    { static TAutoType ClassInfo; };
 struct TAutoFloatRef   { static TAutoType ClassInfo; };
@@ -283,6 +308,7 @@ struct TAutoCurrencyRef{ static TAutoType ClassInfo; };
 struct TAutoDateRef    { static TAutoType ClassInfo; };
 struct TAutoStringRef  { static TAutoType ClassInfo; };
 struct TAutoVariantRef { static TAutoType ClassInfo; };
+struct TAutoSafeArray  { static TAutoType ClassInfo; };
 struct TAutoByteRef    { static TAutoType ClassInfo; };
 #if (MAXINT==MAXSHORT)
   typedef TAutoShort    TAutoInt;
@@ -298,13 +324,13 @@ struct TAutoByteRef    { static TAutoType ClassInfo; };
 
 enum AutoSymFlag {
   asAnyCommand     = 0x0017,  // any command: method, property get/set, build
-   asOleType       = 0x0007,  // method or property exposed for OLE
-    asMethod       = 0x0001,  // method     (same as OLE INVOKE_FUNC)
-    asGet          = 0x0002,  // returns property value (INVOKE_PROPERTYGET)
-     asIterator    = 0x000A,  // iterator property (_NewEnum)
-    asSet          = 0x0004,  // set property value     (INVOKE_PROPERTYSET)
-    asGetSet       = 0x0006,  // can get or set property(...GET + ...SET)
-   asBuild         = 0x0010,  // contructor command (unsupported by OLE 2.01)
+  asOleType        = 0x0007,  // method or property exposed for OLE
+  asMethod         = 0x0001,  // method     (same as OLE INVOKE_FUNC)
+  asGet            = 0x0002,  // returns property value (INVOKE_PROPERTYGET)
+  asIterator       = 0x000A,  // iterator property (_NewEnum)
+  asSet            = 0x0004,  // set property value     (INVOKE_PROPERTYSET)
+  asGetSet         = 0x0006,  // can get or set property(...GET + ...SET)
+  asBuild          = 0x0010,  // contructor command (unsupported by OLE 2.01)
   asFactory        = 0x0020,  // for creating objects or class determination
   asClass          = 0x0040,  // extension to another class symbol table
   asArgument       = 0x0080,  // property returning an object
@@ -323,30 +349,31 @@ enum AutoSymFlag {
 
 //
 enum AutoDataType {
-  atVoid              = 0x0000,   //  void
-  atNull              = 0x0001,   //  SQL style Null
-  atShort             = 0x0002,   //  2 byte signed int
-  atLong              = 0x0003,   //  4 byte signed int
-  atFloat             = 0x0004,   //  4 byte real
-  atDouble            = 0x0005,   //  8 byte real
-  atCurrency          = 0x0006,   //  currency
-  atDatetime          = 0x0007,   //  datetime as double
-  atString            = 0x0008,   //  BSTR, string preceeded by length
-  atObject            = 0x0009,   //  IDispatch*
-  atError             = 0x000A,   //  SCODE
-  atBool              = 0x000B,   //  True=-1, False=0
-  atVariant           = 0x000C,   //  VARIANT FAR*
-  atUnknown           = 0x000D,   //  IUnknown*
-  atByte              = 0x0011,  //  byte, unsigned char
+  atVoid              = VT_EMPTY,     //  0x0000,   //  void
+  atNull              = VT_NULL,      //  0x0001,   //  SQL style Null
+  atShort             = VT_I2,        //  0x0002,   //  2 byte signed int
+  atLong              = VT_I4,        //  0x0003,   //  4 byte signed int
+  atFloat             = VT_R4,        //  0x0004,   //  4 byte real
+  atDouble            = VT_R8,        //  0x0005,   //  8 byte real
+  atCurrency          = VT_CY,        //  0x0006,   //  currency
+  atDatetime          = VT_DATE,      //  0x0007,   //  datetime as double
+  atString            = VT_BSTR,      //  0x0008,   //  String preceeded by length
+  atObject            = VT_DISPATCH,  //  0x0009,   //  IDispatch*
+  atError             = VT_ERROR,     //  0x000A,   //  SCODE
+  atBool              = VT_BOOL,      //  0x000B,   //  True=-1, False=0
+  atVariant           = VT_VARIANT,   //  0x000C,   //  VARIANT*
+  atUnknown           = VT_UNKNOWN,   //  0x000D,   //  IUnknown*
+  atByte              = VT_UI1,       //  0x0011,   //  byte, unsigned char
+  atArray             = VT_ARRAY,     //
   atObjectDesc        = 0x001D,   //  object precursor state (internal use only)
   atLoanedBSTR        = 0x001A,   //  BSTR owned by TUString (internal use only)
   atTypeMask          = 0x001F,   //  base type code without bit flags
   atOLE2Mask          = 0x601F,   //  type code with bit flags
 };
-const uint16 atSafeArray = 0x2000;
-const uint16 atByRef     = 0x4000;
-const uint16 atEnum      = 0x1000;   // non-OLE, enumeration for data of a type
-const uint16 atAutoClass = 0x0800;   // non-OLE, class object is a TAutoClass
+const uint16 atSafeArray= 0x2000;
+const uint16 atByRef    = 0x4000;
+const uint16 atEnum     = 0x1000; // non-OLE, enumeration for data of a type
+const uint16 atAutoClass= 0x0800; // non-OLE, class object is a TAutoClass
 
 //----------------------------------------------------------------------------
 // Automated class typeinfo flags - corresponding to OLE 2.02 definitions
@@ -412,30 +439,30 @@ struct TAutoSymbol {
     short SymCount;           // asClass only: symbol count, 0 = uncounted yet
     unsigned short TypeFlags; // class symbol only (terminator)
   };
-  TAutoType* Type;             // pointer to class/type/enum descriptor
+  TAutoType* Type;                  // pointer to class/type/enum descriptor
   union {
-    TAutoCommandBuild  Build;  // asAnyCommand only: address of command builder
-    TAutoIteratorBuild BuildIter;// asIterator only: address of iterator builder
-    TAutoSymTypeConvert Convert; // asFactory/asClass: function to perform cast
-    TAutoCommandBuildDtr BuildDtr;// terminator only: destructor command builder
-    void far*      DefaultArg; // asArgument: default value, extends to 8 bytes
+    TAutoCommandBuild  Build;       // asAnyCommand only: address of command builder
+    TAutoIteratorBuild BuildIter;   // asIterator only: address of iterator builder
+    TAutoSymTypeConvert Convert;    // asFactory/asClass: function to perform cast
+    TAutoCommandBuildDtr BuildDtr;  // terminator only: destructor command builder
+    void*      DefaultArg;          // asArgument: default value, extends to 8 bytes
   };
-  ulong HelpId;              // help context ID, not for asArgument
+  ulong HelpId;                     // help context ID, not for asArgument
 
   // Inline data member accessor functions
   //
-  void SetFlag(uint16 mask);
-  void ClearFlag(uint16 mask);
-  bool TestFlag(uint16 mask);
-  uint16 GetFlags();
-  bool IsEnum();
-  bool IsByRef();
-  bool IsArray();
-  bool IsIterator();
-  bool IsTerminator();
-  uint16 GetDataType();
-  TAutoClass*  GetClass();
-  TAutoEnum*   GetEnum();
+  void         SetFlag(uint16 mask);
+  void         ClearFlag(uint16 mask);
+  bool         TestFlag(uint16 mask) const;
+  uint16       GetFlags() const;
+  bool         IsEnum() const;
+  bool         IsByRef() const;
+  bool         IsArray() const;
+  bool         IsIterator() const;
+  bool         IsTerminator() const;
+  uint16       GetDataType() const;
+  TAutoClass*  GetClass() const;
+  TAutoEnum*   GetEnum() const;
 
   // Inline static functions solely to provide type-safety initializing symbols
   //
@@ -448,14 +475,23 @@ struct TAutoSymbol {
 // struct TObjectDescriptor
 // ~~~~~~ ~~~~~~~~~~~~~~~~~
 // Precursor to TServedObject containing object info
-// Note: Cannot have a constructor and must limit to 8 bytes for TAutoVal union
+// NOTE: Cannot have a constructor and must limit to 8 bytes for TAutoVal union
 //
 struct TObjectDescBase {   // ONLY for use when storing in TAutoVal union
   const void* Object;      // pointer to C++ object
   TAutoClass* Class;       // class descriptor, contains typeinfo
-  const void far* MostDerived()
-                         {return ::MostDerived(Object, Class->GetTypeInfo());}
+  const void* MostDerived() {
+    return NS_OCF::MostDerived(Object, Class->GetTypeInfo());
+  }
 };
+
+// Double check size of TObjectDescBase
+//
+#if defined(BI_COMP_BORLANDC)
+  #if sizeof(TObjectDescBase) > 8
+    #error Sizeof TObjectDescBase must be 8 bytes - it's a TAutoVal union member
+  #endif
+#endif
 
 //
 // struct TObjectDescriptor
@@ -484,73 +520,137 @@ struct TObjectDescriptor : public TObjectDescBase {
 // This class simply duplicates and adds access methods to the system VARIANT
 // Data members or virtual functions cannot be added.
 // We rely on the fact that we can cast a VARIANT safely to/from a TAutoVal.
-
 //
 class far TAutoVal {
   public:
+
+    // Default constructors/assignment operators/destructors
+    //
+    TAutoVal();
+    TAutoVal(const TAutoVal& src);
+    const TAutoVal& operator =(const TAutoVal& src);
+    ~TAutoVal();
+
+    // Constructors to create a TAutoVal/VARIANT from a C++ type
+    //
+    TAutoVal(unsigned char      i){ *this = i; };
+    TAutoVal(signed char        i){ *this = i; };
+    TAutoVal(char               i){ *this = i; };
+    TAutoVal(unsigned char*     p){ *this = p; };
+    TAutoVal(signed char*       p){ *this = p; };
+    TAutoVal(char*              p){ *this = p; };
+    TAutoVal(int                i){ *this = i; };
+    TAutoVal(int*               p){ *this = p; };
+    TAutoVal(unsigned int       i){ *this = i; };
+    TAutoVal(unsigned int*      p){ *this = p; };
+    TAutoVal(unsigned short     i){ *this = i; };
+    TAutoVal(unsigned short*    p){ *this = p; };
+    TAutoVal(long               i){ *this = i; };
+    TAutoVal(long*              p){ *this = p; };
+    TAutoVal(unsigned long      i){ *this = i; };
+    TAutoVal(unsigned long*     p){ *this = p; };
+    TAutoVal(short              i){ *this = i; };
+    TAutoVal(short*             p){ *this = p; };
+    TAutoVal(float              i){ *this = i; };
+    TAutoVal(float*             p){ *this = p; };
+    TAutoVal(double             i){ *this = i; };
+    TAutoVal(double*            p){ *this = p; };
+    TAutoVal(TBool              i){ *this = i; };
+    TAutoVal(TBool*             p){ *this = p; };
+#if !defined(BI_UNIQUE_BOOL)
+    TAutoVal(TAutoBool          i){ *this = i; };
+    TAutoVal(TAutoBoolRef       p){ *this = p; };
+#endif
+    TAutoVal(const string&      s){ *this = s; };
+    TAutoVal(TAutoString        s){ *this = s; };
+    TAutoVal(TAutoCurrency      i){ *this = i; };
+    TAutoVal(TAutoCurrency*     p){ *this = p; };
+    TAutoVal(TAutoDate          i){ *this = i; };
+    TAutoVal(TAutoDate*         i){ *this = i; };
+    TAutoVal(IDispatch*       ifc){ *this = ifc; };
+    TAutoVal(IUnknown*        ifc){ *this = ifc; };
+#if defined(BI_PLAT_WIN32)
+    TAutoVal(IPictureDisp*    ifc){ *this = ifc; };
+    TAutoVal(IFontDisp*       ifc){ *this = ifc; };
+#endif
+    TAutoVal(VARIANT&           v){ *this = v; };
+    TAutoVal(const TNoArg&      n){ *this = n; };
+
+    // Operators to extract a C++ type from a TAutoVal/VARIANT
+    //
     operator unsigned char();
     operator signed char();
     operator char();
-    operator unsigned char far*();
-    operator signed char far*();
-    operator char far*();
+    operator unsigned char*();
+    operator signed char*();
+    operator char*();
     operator int();
-    operator int far*();
+    operator int*();
     operator unsigned int();
     operator short();
-    operator short far*();
+    operator short*();
     operator unsigned short();
-    operator unsigned short far*();// Note:VARIANT can't distinguish from short*
+    operator unsigned short*();
     operator long();
-    operator long far*();
+    operator long*();
     operator unsigned long();
-    operator unsigned long far*();// Note:VARIANT can't distinguish from long*
+    operator unsigned long*();
     operator float();
-    operator float far*();
+    operator float*();
     operator double();
-    operator double far*();
+    operator double*();
     operator TBool();
-    operator TBool far*();
+    operator TBool*();
 #if !defined(BI_UNIQUE_BOOL)
     operator TAutoBool();
     operator TAutoBoolRef();
 #endif
     operator TAutoCurrency();
-    operator TAutoCurrency far*();
+    operator TAutoCurrency*();
     operator TAutoDate();
-    operator TAutoDate far*();
+    operator TAutoDate*();
     operator string();
     operator TUString*();
     operator TString();
-    operator IDispatch*();
+    operator TAutoString();
     operator IUnknown*();
-    operator IDispatch&();
+    operator IDispatch*();
+#if defined(BI_PLAT_WIN32)
+    operator IPictureDisp*();
+    operator IFontDisp*();
+    operator IPictureDisp&();
+    operator IFontDisp&();
+#endif
     operator IUnknown&();
+    operator IDispatch&();
 
+    // Assignment operators to initialize a TAutoVal/VARIANT with the contents
+    // of a instance of a C++ type.
+    //
     void operator =(unsigned char      i);
     void operator =(signed char        i);
     void operator =(char               i);
-    void operator =(unsigned char far* p);
-    void operator =(signed char far*   p);
-    void operator =(char far*          p);
+    void operator =(unsigned char*     p);
+    void operator =(signed char*       p);
+    void operator =(char*              p);
     void operator =(int                i);
-    void operator =(int far*           p);
+    void operator =(int*               p);
     void operator =(unsigned int       i);
-    void operator =(unsigned int far*  p);
+    void operator =(unsigned int*      p);
     void operator =(unsigned short     i);
-    void operator =(unsigned short far*p);
+    void operator =(unsigned short*    p);
     void operator =(long               i);
-    void operator =(long far*          p);
+    void operator =(long*              p);
     void operator =(unsigned long      i);
-    void operator =(unsigned long far* p);
+    void operator =(unsigned long*     p);
     void operator =(short              i);
-    void operator =(short far*         p);
+    void operator =(short*             p);
     void operator =(float              i);
-    void operator =(float far*         p);
+    void operator =(float*             p);
     void operator =(double             i);
-    void operator =(double far*        p);
+    void operator =(double*            p);
     void operator =(TBool              i);
-    void operator =(TBool far*         p);
+    void operator =(TBool*             p);
 #if !defined(BI_UNIQUE_BOOL)
     void operator =(TAutoBool          i);
     void operator =(TAutoBoolRef       p);
@@ -558,29 +658,46 @@ class far TAutoVal {
     void operator =(const string&      s);
     void operator =(TAutoString        s);
     void operator =(TAutoCurrency      i);
-    void operator =(TAutoCurrency far* p);
+    void operator =(TAutoCurrency*     p);
     void operator =(TAutoDate          i);
-    void operator =(TAutoDate far*     i);
-    void operator =(IDispatch*       ifc);
+    void operator =(TAutoDate*         i);
     void operator =(IUnknown*        ifc);
+    void operator =(IDispatch*       ifc);
+#if defined(BI_PLAT_WIN32)
+    void operator =(IPictureDisp*    ifc);
+    void operator =(IFontDisp*       ifc);
+#endif
+    void operator =(VARIANT&           v);
     void operator =(TObjectDescriptor od);
-    void operator =(TAutoVoid);
+    void operator =(TAutoVoid           );
+    void operator =(const TNoArg&      n);
 
-    int GetDataType();
-    void Clear();      // free any references, set type to atVoid
-    void Restore();    // convert any non-OLE changes back to original types
-    void Copy(const TAutoVal& copy);
-    bool IsRef();
-    TAutoVal far* DereferenceVariant();
-    void SetLocale(TLocaleId);  // associate locale with appropriate pointers
-    TLocaleId GetLocale() const;// retrieve locale from appropriate pointers
-    TLangId   GetLanguage() const; // retrieve language from pointer types
-    TString   StrVal();   // returns internal string pointer if atString
-    bool GetObjDesc(TObjectDescriptor&);// return temp object info, else false
-    SAFEARRAY far* GetArray();   // return array pointer, null if not array
-    void far* SetByRef(AutoDataType);  // set type, return pointer to data loc
+    // Query/Manipulate VARIANT object
+    //
+    int         GetDataType() const;   // Returns variant type
+    void        Init();                // Initializes VARIANT/TAutoVal to 0s
+    void        Clear();               // Free refs, set type to atVoid
+    void        Restore();             // Revert non-OLE changes to original types
+    void        Copy(const TAutoVal& copy);
+    HRESULT     ChangeType(VARTYPE type, TAutoVal* src = 0);
+    bool        IsRef() const;
+
+    // Retrieve VARIANT object catering for VT_VARIANT|VT_BYREF
+    //
+    TAutoVal*   DereferenceVariant();
+
+    void        SetLocale(TLocaleId);     // Associate locale with appropriate pointers
+    TLocaleId   GetLocale() const;        // Retrieve locale from appropriate pointers
+    TLangId     GetLanguage() const;      // Retrieve language from pointer types
+    TString     StrVal();                 // Returns internal string pointer if atString
+    bool        GetObjDesc(TObjectDescriptor&); // Return temp obj info or false
+    SAFEARRAY*  GetArray();               // Return array pointer, or 0
+    void*       SetByRef(AutoDataType);   // Set type, return pointer to data loc
 
   private:
+
+    // The following members follow the layout of the actual VARIANT type
+    //
     unsigned short vt;
     unsigned short Reserved1;
     unsigned short Reserved2;
@@ -598,38 +715,50 @@ class far TAutoVal {
       BSTR          bstrVal;          // VT_BSTR
       IUnknown*     punkVal;          // VT_UNKNOWN
       IDispatch*    pdispVal;         // VT_DISPATCH
-      SAFEARRAY far* parray;          // VT_ARRAY|*
+      SAFEARRAY* parray;              // VT_ARRAY
+      unsigned char* pbVal;           // VT_BYREF|VT_UI1
+      short        * piVal;           // VT_BYREF|VT_I2
+      long         * plVal;           // VT_BYREF|VT_I4
+      float        * pfltVal;         // VT_BYREF|VT_R4
+      double       * pdblVal;         // VT_BYREF|VT_R8
+      VARIANT_BOOL * pbool;           // VT_BYREF|VT_BOOL
+      SCODE        * pscode;          // VT_BYREF|VT_ERROR
+      TAutoCurrency* pcyVal;          // VT_BYREF|VT_CY
+      DATE         * pdate;           // VT_BYREF|VT_DATE
+      BSTR         * pbstrVal;        // VT_BYREF|VT_BSTR
+      IUnknown*    * ppunkVal;        // VT_BYREF|VT_UNKNOWN
+      IDispatch*   * ppdispVal;       // VT_BYREF|VT_DISPATCH
+      SAFEARRAY*   * pparray;         // VT_BYREF|VT_ARRAY
+      VARIANT      * pvarVal;         // VT_BYREF|VT_VARIANT
+      void         * byref;           // Generic ByRef
 
-      unsigned char far* pbVal;       // VT_BYREF|VT_UI1
-      short         far* piVal;       // VT_BYREF|VT_I2
-      long          far* plVal;       // VT_BYREF|VT_I4
-      float         far* pfltVal;     // VT_BYREF|VT_R4
-      double        far* pdblVal;     // VT_BYREF|VT_R8
-      VARIANT_BOOL  far* pbool;       // VT_BYREF|VT_BOOL
-      SCODE         far* pscode;      // VT_BYREF|VT_ERROR
-      TAutoCurrency far* pcyVal;      // VT_BYREF|VT_CY
-      DATE          far* pdate;       // VT_BYREF|VT_DATE
-      BSTR          far* pbstrVal;    // VT_BYREF|VT_BSTR
-      IUnknown*     far* ppunkVal;    // VT_BYREF|VT_UNKNOWN
-      IDispatch*    far* ppdispVal;   // VT_BYREF|VT_DISPATCH
-      SAFEARRAY far* far* pparray;    // VT_BYREF|VT_ARRAY|*
-      VARIANT       far* pvarVal;     // VT_BYREF|VT_VARIANT
-      void          far* byref;       // Generic ByRef
-
-      struct {                       // added locale info for BSTR/IDispatch
-        void far* Val;
-        LCID      Locale;            // unused 4 bytes for pointer types
+      // The following entries are enhancements to the VARIANT type allowing
+      // OCF to 'carry' additional information. NOTE: These members make it
+      // impractical to have TAutoVal derive from the VARIANT type.
+      //
+      struct {                       // Added locale info for BSTR/IDispatch
+        void* Val;
+        LCID      Locale;            // Unused 4 bytes for pointer types
       } p;
 
-      struct {                       // added info when loaned BSTR ownership
+      struct {                       // Added info when loaned BSTR ownership
         BSTR      Val;
-        TUString* Holder;            // string holder sharing current BSTR
+        TUString* Holder;            // String holder sharing current BSTR
       } s;
 
-      TObjectDescBase ObjDesc;       // temporary space for returning object
+      TObjectDescBase ObjDesc;       // Temporary space for returning object
     };
+
     void ConvRef(int type);
 };
+
+// Check that TAutoVal is 'size-wise' VARIANT compatible
+//
+#if defined(BI_COMP_BORLANDC)
+# if sizeof(TAutoVal) != sizeof(VARIANT)
+#    Error Sizeof(TAutoVal) must match Sizeof(VARIANT)
+# endif
+#endif
 
 //
 // class TAutoString
@@ -638,7 +767,7 @@ class far TAutoVal {
 //
 class TAutoString : public TString {
   public:
-    TAutoString(const char far* s = 0) : TString(s) {}
+    TAutoString(const char* s = 0) : TString(s) {}
 #if defined(BI_HAS_WCHAR)
     TAutoString(const wchar_t* s)      : TString(s) {}
 #endif
@@ -648,7 +777,7 @@ class TAutoString : public TString {
     TAutoString(TAutoVal& val)         : TString((TString)val) {}
     TAutoString(const TAutoString& src) : TString(src.S) {++*S;}
 
-    TAutoString& operator =(const char far* s) {S = S->Assign(s); return *this;}
+    TAutoString& operator =(const char* s) {S = S->Assign(s); return *this;}
     TAutoString& operator =(const TAutoString& s) {S = S->Assign(*s.S); return *this;}
     TAutoString& operator =(char* s)           {S = S->Assign(s); return *this;}
 #if defined(BI_HAS_WCHAR)
@@ -668,9 +797,9 @@ class TAutoString : public TString {
 class TAutoStack {
   public:
     enum {SetValue = -3};     // Special arg index for property set value
-    TAutoStack(DISPID dispid, VARIANT far* stack, TLocaleId locale,
+    TAutoStack(DISPID dispid, VARIANT* stack, TLocaleId locale,
                int argcount,
-               int namedcount, long far* map, TServedObject* owner);
+               int namedcount, long* map, TServedObject* owner);
    ~TAutoStack();
     TAutoVal& operator[](int index);
 
@@ -686,9 +815,9 @@ class TAutoStack {
 
   protected:
     int            NamedCount;
-    long far*      NamedIds;
+    long*          NamedIds;
     TAutoVal       Default;
-    TAutoVal far*  Stack;
+    TAutoVal*      Stack;
 };
 
 struct TAutoTransfer;              // Persistence transfer parameter structure
@@ -828,7 +957,7 @@ class _ICLASS TServedObject : public TServedCOM {
     TServedObject* GetAppObject() {return Creator.AppObject;}
     TServedObjectCreator& GetCreator() {return Creator;}
     void* Object;          // pointer to C++ object instance, 0 if deleted
-    const void far* RootObject;  // pointer to object of most derived class
+    const void* RootObject;  // pointer to object of most derived class
     TAutoClass*     Class;       // class of which object is an instance
     TServedObjectCreator& Creator;
     operator IDispatch*();
@@ -840,89 +969,89 @@ class _ICLASS TServedObject : public TServedCOM {
     //
     ulong   _IFUNC AddRef() {return GetOuter()->AddRef();}
     ulong   _IFUNC Release() {return GetOuter()->Release();}
-    HRESULT _IFUNC QueryInterface(const GUID far& iid, void far*far* iface)
+    HRESULT _IFUNC QueryInterface(const GUID far& iid, void*far* iface)
                      {return GetOuter()->QueryInterface(iid, iface);}
 
   protected:
     // TUnknown overrides
     //
-    HRESULT      QueryObject(const IID far& iid, void far* far* iface);
+    HRESULT      QueryObject(const IID far& iid, void** iface);
 
   private:
     IID                   iidEvent;
     TServedObject*        Next;
-    TServedObject* far*   Prev;
+    TServedObject**   Prev;
     // need to access local LANGID for typeinfo, either as member or as global
 
     // IDispatch implementation
-    HRESULT _IFUNC GetTypeInfoCount(unsigned int far* pctinfo);
+    HRESULT _IFUNC GetTypeInfoCount(unsigned int* pctinfo);
     HRESULT _IFUNC GetTypeInfo(unsigned int itinfo, LCID lcid,
-                               ITypeInfo* far* pptinfo);
-    HRESULT _IFUNC GetIDsOfNames(const IID far& riid, OLECHAR far* far* rgszNames,
+                               ITypeInfo** pptinfo);
+    HRESULT _IFUNC GetIDsOfNames(const IID far& riid, OLECHAR** rgszNames,
                                  uint cNames, LCID lcid,
-                                 DISPID far* rgdispid);
+                                 DISPID* rgdispid);
     HRESULT _IFUNC Invoke(DISPID dispidMember, const IID far& riid, LCID lcid,
                                  unsigned short wFlags,
-                                 DISPPARAMS far* pdispparams,
-                                 VARIANT far* pvarResult,
-                                 EXCEPINFO far* pexcepinfo,
-                                 unsigned int far* puArgErr);
+                                 DISPPARAMS* pdispparams,
+                                 VARIANT* pvarResult,
+                                 EXCEPINFO* pexcepinfo,
+                                 unsigned int* puArgErr);
 
     // ITypeInfo implementation
     //
-    HRESULT _IFUNC GetTypeAttr(TYPEATTR far* far* pptypeattr);
-    HRESULT _IFUNC GetTypeComp(ITypeComp* far* pptcomp);
-    HRESULT _IFUNC GetFuncDesc(unsigned int index, FUNCDESC far* far* ppfuncdesc);
-    HRESULT _IFUNC GetVarDesc(unsigned int index, VARDESC far* far* ppvardesc);
-    HRESULT _IFUNC GetNames(MEMBERID memid, BSTR far* rgbstrNames,
+    HRESULT _IFUNC GetTypeAttr(TYPEATTR** pptypeattr);
+    HRESULT _IFUNC GetTypeComp(ITypeComp** pptcomp);
+    HRESULT _IFUNC GetFuncDesc(unsigned int index, FUNCDESC** ppfuncdesc);
+    HRESULT _IFUNC GetVarDesc(unsigned int index, VARDESC** ppvardesc);
+    HRESULT _IFUNC GetNames(MEMBERID memid, BSTR* rgbstrNames,
                             unsigned int cMaxNames,
-                            unsigned int far* pcNames);
-    HRESULT _IFUNC GetRefTypeOfImplType(unsigned int index, HREFTYPE far* phreftype);
-    HRESULT _IFUNC GetImplTypeFlags(unsigned int index, int far* pimpltypeflags);
-    HRESULT _IFUNC GetIDsOfNames(OLECHAR far* far* rgszNames,
+                            unsigned int* pcNames);
+    HRESULT _IFUNC GetRefTypeOfImplType(unsigned int index, HREFTYPE* phreftype);
+    HRESULT _IFUNC GetImplTypeFlags(unsigned int index, int* pimpltypeflags);
+    HRESULT _IFUNC GetIDsOfNames(OLECHAR** rgszNames,
                                  unsigned int cNames,
-                                 MEMBERID far* rgmemid);
-    HRESULT _IFUNC Invoke(void far* pvInstance, MEMBERID memid,
+                                 MEMBERID* rgmemid);
+    HRESULT _IFUNC Invoke(void* pvInstance, MEMBERID memid,
                           unsigned short wFlags,
                           DISPPARAMS far *pdispparams,
                           VARIANT far *pvarResult,
                           EXCEPINFO far *pexcepinfo,
                           unsigned int far *puArgErr);
     HRESULT _IFUNC GetDocumentation(MEMBERID memid,
-                                    BSTR far* pbstrName,
-                                    BSTR far* pbstrDocString,
-                                    ulong far* pdwHelpContext,
-                                    BSTR far* pbstrHelpFile);
+                                    BSTR* pbstrName,
+                                    BSTR* pbstrDocString,
+                                    ulong* pdwHelpContext,
+                                    BSTR* pbstrHelpFile);
     HRESULT _IFUNC GetDllEntry(MEMBERID memid, INVOKEKIND invkind,
-                               BSTR far* pbstrDllName,
-                               BSTR far* pbstrName,
-                               unsigned short far* pwOrdinal);
+                               BSTR* pbstrDllName,
+                               BSTR* pbstrName,
+                               unsigned short* pwOrdinal);
     HRESULT _IFUNC GetRefTypeInfo(HREFTYPE hreftype,
-                                  ITypeInfo* far* pptinfo);
+                                  ITypeInfo** pptinfo);
     HRESULT _IFUNC AddressOfMember(MEMBERID memid, INVOKEKIND invkind,
-                                   void far* far* ppv);
+                                   void** ppv);
     HRESULT _IFUNC CreateInstance(IUnknown* punkOuter, const IID far& riid,
-                                  void far* far* ppvObj);
-    HRESULT _IFUNC GetMops(MEMBERID memid, BSTR far* pbstrMops);
-    HRESULT _IFUNC GetContainingTypeLib(ITypeLib* far* pptlib,
-                                        uint far* pindex);
-    void _IFUNC ReleaseTypeAttr(TYPEATTR far* ptypeattr);
-    void _IFUNC ReleaseFuncDesc(FUNCDESC far* pfuncdesc);
-    void _IFUNC ReleaseVarDesc(VARDESC far* pvardesc);
+                                  void** ppvObj);
+    HRESULT _IFUNC GetMops(MEMBERID memid, BSTR* pbstrMops);
+    HRESULT _IFUNC GetContainingTypeLib(ITypeLib** pptlib,
+                                        uint* pindex);
+    void _IFUNC ReleaseTypeAttr(TYPEATTR* ptypeattr);
+    void _IFUNC ReleaseFuncDesc(FUNCDESC* pfuncdesc);
+    void _IFUNC ReleaseVarDesc(VARDESC* pvardesc);
     HRESULT _IFUNC GetFuncDocFromIndex(unsigned index,
-                                       BSTR far* retName, BSTR far* retDoc,
-                                       ulong far* retHelpContext,
-                                       BSTR far* retHelpFile);
+                                       BSTR* retName, BSTR* retDoc,
+                                       ulong* retHelpContext,
+                                       BSTR* retHelpFile);
     // GetVarDocFromIndex and GetDocFromSym are used to by WriteTypeLib to make
     // type libraries
     HRESULT _IFUNC GetVarDocFromIndex(unsigned index,
-                                      BSTR far* retName, BSTR far* retDoc,
-                                      ulong far* retHelpContext,
-                                      BSTR far* retHelpFile);
+                                      BSTR* retName, BSTR* retDoc,
+                                      ulong* retHelpContext,
+                                      BSTR* retHelpFile);
     HRESULT _IFUNC GetDocFromSym(TAutoSymbol* sym,
-                                 BSTR far* retName, BSTR far* retDoc,
-                                 ulong far* retHelpContext,
-                                 BSTR far* retHelpFile);
+                                 BSTR* retName, BSTR* retDoc,
+                                 ulong* retHelpContext,
+                                 BSTR* retHelpFile);
     friend class _ICLASS TAppDescriptor;   // access to Next,Prev
     friend class _ICLASS TOcxView;         // access to QueryObject
     friend class _ICLASS TOcControl;       // access to QueryObject
@@ -936,25 +1065,25 @@ DECLARE_COMBASES1(TDispatchCOM, IDispatch)
 
 class _ICLASS TDispatch : public TDispatchCOM {
   public:
-    TDispatch(TObjectDescriptor& obj, IUnknown* outer = 0);
+    TDispatch(const TObjectDescriptor& obj, IUnknown* outer = 0);
     void*        Object;      // pointer to C++ object instance, 0 if deleted
     TAutoClass*  Class;       // class of which object is an instance
     void InvalidateObject() {Object = 0;}
     operator IDispatch*();
   private:
     // IDispatch implementation
-    HRESULT _IFUNC GetTypeInfoCount(unsigned int far* pctinfo);
+    HRESULT _IFUNC GetTypeInfoCount(unsigned int* pctinfo);
     HRESULT _IFUNC GetTypeInfo(unsigned int itinfo, LCID lcid,
-                               ITypeInfo* far* pptinfo);
-    HRESULT _IFUNC GetIDsOfNames(const IID far& riid, OLECHAR far* far* rgszNames,
+                               ITypeInfo** pptinfo);
+    HRESULT _IFUNC GetIDsOfNames(const IID far& riid, OLECHAR** rgszNames,
                                  unsigned int cNames, LCID lcid,
-                                 DISPID far* rgdispid);
+                                 DISPID* rgdispid);
     HRESULT _IFUNC Invoke(DISPID dispidMember, const IID far& riid, LCID lcid,
                                  unsigned short wFlags,
-                                 DISPPARAMS far* pdispparams,
-                                 VARIANT far* pvarResult,
-                                 EXCEPINFO far* pexcepinfo,
-                                 unsigned int far* puArgErr);
+                                 DISPPARAMS* pdispparams,
+                                 VARIANT* pvarResult,
+                                 EXCEPINFO* pexcepinfo,
+                                 unsigned int* puArgErr);
 };
 
 //----------------------------------------------------------------------------
@@ -984,7 +1113,7 @@ template<class T>
 TAutoObject<T>::TAutoObject(IDispatch& ifc)
 {
   TServedObject* obj;
-  if (ifc.QueryInterface(IID_TServedObject, (void far* far*)&obj) != 0)
+  if (ifc.QueryInterface(IID_TServedObject, (void**)&obj) != 0)
     throw TXAuto(TXAuto::xForeignIDispatch);
   P = (T*)DynamicCast(obj->Object, obj->Class->GetTypeInfo(), typeid(T));
   if (!P)
@@ -995,7 +1124,7 @@ template<class T> void
 TAutoObject<T>::operator=(IDispatch& ifc)
 {
   TServedObject* obj;
-  if (ifc.QueryInterface(IID_TServedObject, (void far* far*)&obj) != 0)
+  if (ifc.QueryInterface(IID_TServedObject, (void**)&obj) != 0)
     throw TXAuto(TXAuto::xForeignIDispatch);
   P = (T*)DynamicCast(obj->Object, obj->Class->GetTypeInfo(), typeid(T));
   if (!P)
@@ -1030,14 +1159,14 @@ class TAutoObjectByVal : public TAutoObjectDelete<T> {
 class TAutoIterator : public IEnumVARIANT {
   public:
     // IEnumVARIANT implementation
-    HRESULT       _IFUNC QueryInterface(const GUID far& iid, void far*far* pif);
+    HRESULT       _IFUNC QueryInterface(const GUID far& iid, void*far* pif);
     unsigned long _IFUNC AddRef();
     unsigned long _IFUNC Release();
-    HRESULT _IFUNC Next(unsigned long count, VARIANT far* retvals,
-                        unsigned long far* retcount);
+    HRESULT _IFUNC Next(unsigned long count, VARIANT* retvals,
+                        unsigned long* retcount);
     HRESULT _IFUNC Skip(unsigned long count);
     HRESULT _IFUNC Reset();
-    HRESULT _IFUNC Clone(IEnumVARIANT* far* retiter);
+    HRESULT _IFUNC Clone(IEnumVARIANT** retiter);
 
     // specific implementation required by derived classes
     virtual void           Init()=0;   // reset to first item
@@ -1075,62 +1204,106 @@ enum AutoCallFlag {
   acVoidRet        = 0x8000,  // pass NULL for return variant, not OLE2 flag
 };
 
+// TAutoProxyArgs is the base class of TAutoArgs. The logic used within
+// TAutoProxyArgs makes certain assumption involving TAutoArgs.
+//
 class TAutoProxyArgs {
-  public:
+  protected:
     TAutoProxyArgs(int cnt) : Count(cnt) {}
    ~TAutoProxyArgs();
+
+  public:
+    // The following operators assume that if one skips this object, an
+    // array of TAutoVal/VARIANT object follows..
+    //
+    operator  TAutoVal&()    {return *(TAutoVal*)(this+1);}
+    operator  VARIANT* ()    {return  (VARIANT* )(this+1);}
+    operator  unsigned int() {return Count;}
     TAutoVal& operator[](int index);
-    operator TAutoVal&()    {return *(TAutoVal*)(this+1);}
-    operator VARIANT far*() {return (VARIANT far*)(this+1);}
-    operator unsigned int() {return Count;}
+
   private:
-    int Count;
+    int       Count;
 };
 
+// class TAutoArgs
+// ~~~~~~~~~~~~~~~
+// The first TAutoVal item of TAutoArgs holds the return value. Items at
+// indices 1 through N+1 represent the first, second, third ... paramters.
+// Of course, these parameters are optional.
+//
 template <int N>
 struct TAutoArgs : public TAutoProxyArgs {
   TAutoVal Args[N+1];
   TAutoArgs() : TAutoProxyArgs(N) {}
 };
 
+
+// class TAutoProxy
+// ~~~~~ ~~~~~~~~~~
+//
 class TAutoProxy {
   public:
    ~TAutoProxy();
-    void Bind(IUnknown* obj);
-    void Bind(IUnknown& obj);
-    void Bind(const GUID& guid);
-    void Bind(const char far* progid);
-    void Bind(TAutoVal& val);
-    void Bind(IDispatch* obj);
-    void Bind(IDispatch& obj);
-    void Unbind();
-    void MustBeBound();
-    bool IsBound()  {return ToBool(That != 0);}
-    void SetLang(TLangId lang) {Lang = lang;}
-    operator IDispatch*();
-    operator IDispatch&();
-    long      Lookup(const long id) {return id;}
-    long      Lookup(const char far* name);
-    void      Lookup(const char far* names, long* ids, unsigned count);
+
+    // Attach to [Detatch from] a dispatch interface
+    //
+    void        Bind(IUnknown* obj);
+    void        Bind(IUnknown& obj);
+    void        Bind(const GUID& guid);
+    void        Bind(const char* progid);
+    void        Bind(TAutoVal& val);
+    void        Bind(IDispatch* obj);
+    void        Bind(IDispatch& obj);
+    void        Unbind(bool release = true);
+
+    // Check/Querry binding
+    //
+    void        MustBeBound();
+    bool        IsBound()  {return ToBool(That != 0);}
+
+    // Check it there's a running copy of an object which supports IDispatch
+    //
+    static IDispatch*  GetObject(const char* progid);
+
+    // Locale support
+    //
+    void        SetLang(TLangId lang) {Lang = lang;}
+
+    // Access to dispatch interface
+    //
+    operator    IDispatch*();
+    operator    IDispatch&();
+
+    // Retrieve dispId
+    //
+    long        Lookup(const long id) {return id;}
+    long        Lookup(const char* name);
+    void        Lookup(const char* names, long* ids, unsigned count);
+
   protected:
     TAutoProxy(TLangId lang) : That(0), Lang(lang) {}
-    TAutoVal& Invoke(uint16 attr, TAutoProxyArgs& args, long* ids, unsigned named=0);
-    IDispatch* That;
-    TLangId Lang;
+
+    // Invoke (IDispatch::Invoke)
+    //
+    TAutoVal&   Invoke(uint16 attr, TAutoProxyArgs& args, long* ids, unsigned named=0);
+
+    IDispatch*  That;
+    TLangId     Lang;
 };
 
 struct TAutoDispId {
   TAutoDispId(TAutoProxy* prx, const char* name) : Id(prx->Lookup(name)) {}
   TAutoDispId(TAutoProxy*, long id) : Id(id) {}
-  long Id;
-  operator long*()  {return &Id;}
-  operator unsigned() {return 0;}
+  operator long*()    {return &Id;}
+  operator unsigned() {return   0;}
+
+  long     Id;
 };
 
 template <int N> struct TAutoDispIds {
   TAutoDispIds(TAutoProxy* prx, const char* names) {prx->Lookup(names, Ids);}
   long Ids[N+1];
-  operator long*()  {return Ids;}
+  operator long*()    {return Ids;}
   operator unsigned() {return N;}
 };
 
@@ -1147,8 +1320,8 @@ class TAutoEnumeratorBase {
   protected:
     TAutoEnumeratorBase() : Iterator(0) {Current = TAutoVoid();}
     TAutoEnumeratorBase(const TAutoEnumeratorBase& copy);
-    IEnumVARIANT* Iterator;
-    TAutoVal Current;
+    IEnumVARIANT*     Iterator;
+    TAutoVal          Current;
 };
 
 template <class T>
@@ -1160,23 +1333,44 @@ class TAutoEnumerator : public TAutoEnumeratorBase {
     operator T();
 };
 
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
+
 //____________________________________________________________________________
 //
 // Inline implementations for automation controller
 //____________________________________________________________________________
 
+//
+//
 inline TAutoVal& TAutoProxyArgs::operator[](int index)
 {
+  // NOTE: It's OK to use Count as subscript since there's always one
+  //       addition TAutoVal/VARIANT for the return value.
+  //
+  PRECONDITION(index <= Count);
+
+  // NOTE: The logic below takes care of the difference in the C and
+  //       Automation calling conventions.
+  //
   return *((TAutoVal*)(this+1)+(index ? Count+1-index : 0));
 }
 
-inline TAutoProxy::operator IDispatch&()  // this function not used internally
+//
+//
+inline TAutoProxy::operator IDispatch&()
 {
-  if (!That)   // test only needed if inline to prevent function call overhead
+  // Following conditional avoid function call overhead - specially since
+  // method is inline
+  //
+  if (!That)
     MustBeBound();
   return *That;
 }
 
+//
+//
 inline TAutoProxy::operator IDispatch*()
 {
   if (That)
@@ -1184,13 +1378,17 @@ inline TAutoProxy::operator IDispatch*()
   return That;
 }
 
-inline void TAutoProxy::Unbind()
+//
+//
+inline void TAutoProxy::Unbind(bool release)
 {
-  if (That)
+  if (release && That)
     That->Release();
   That = 0;
 }
 
+//
+//
 inline TAutoProxy::~TAutoProxy()
 {
   Unbind();
@@ -1214,39 +1412,83 @@ inline TAutoEnumerator<TAutoString>::operator TAutoString()
 
 // TAutoClass inlines
 
-inline TAutoSymbol* TAutoClass::GetTable()       {return Table;}
-inline TAutoSymbol* TAutoClass::GetClassSymbol() {return ClassSymbol;}
-inline TAutoCommandBuildDtr TAutoClass::GetDestructor() {return ClassSymbol->BuildDtr;}
-inline const typeinfo&  TAutoClass::GetTypeInfo()    {return TypeInfo;}
-inline const char* TAutoClass::GetName(TLangId id) {return ClassSymbol->Name.Translate(id);}
-inline const char* TAutoClass::GetDoc (TLangId id) {return ClassSymbol->Doc.Translate(id);}
-inline unsigned long TAutoClass::GetHelpId() {return ClassSymbol->HelpId;}
-inline unsigned short TAutoClass::GetTypeFlags()
-                            {return ClassSymbol->TypeFlags & tfAutoClassMask;}
-inline int TAutoClass::GetImplTypeFlags() {return ClassSymbol->TypeFlags>>12;}
-inline unsigned short TAutoClass::GetCoClassFlags()
-                            {return ClassSymbol->TypeFlags & tfCoClassXfer;}
-inline TAggregator TAutoClass::GetAggregator() {return Aggregator;}
-inline IUnknown& TAutoClass::Aggregate(ObjectPtr obj, TUnknown& inner)
-        {return obj && Aggregator ? Aggregator(obj, inner) : (IUnknown&)inner;}
+inline TAutoSymbol* TAutoClass::GetTable() const {
+  return Table;
+}
+inline TAutoSymbol* TAutoClass::GetClassSymbol() const {
+  return ClassSymbol;
+}
+inline TAutoCommandBuildDtr TAutoClass::GetDestructor() const {
+  return ClassSymbol->BuildDtr;
+}
+inline const typeinfo&  TAutoClass::GetTypeInfo() const {
+  return TypeInfo;
+}
+inline const char* TAutoClass::GetName(TLangId id) const {
+  return ClassSymbol->Name.Translate(id);
+}
+inline const char* TAutoClass::GetDoc (TLangId id) const {
+  return ClassSymbol->Doc.Translate(id);
+}
+inline unsigned long TAutoClass::GetHelpId() const {
+  return ClassSymbol->HelpId;
+}
+inline unsigned short TAutoClass::GetTypeFlags() const {
+  return ClassSymbol->TypeFlags & tfAutoClassMask;
+}
+inline int TAutoClass::GetImplTypeFlags() const {
+  return ClassSymbol->TypeFlags>>12;
+}
+inline unsigned short TAutoClass::GetCoClassFlags() const {
+  return ClassSymbol->TypeFlags & tfCoClassXfer;
+}
+inline TAggregator TAutoClass::GetAggregator() const {
+  return Aggregator;
+}
+inline IUnknown& TAutoClass::Aggregate(ObjectPtr obj, TUnknown& inner) {
+  return obj && Aggregator ? Aggregator(obj, inner) : (IUnknown&)inner;
+}
+
 //____________________________________________________________________________
 
 // TAutoSymbol inlines
 
-inline void TAutoSymbol::SetFlag(uint16 mask) {Attr |= mask;}
-inline void TAutoSymbol::ClearFlag(uint16 mask) {Attr &= uint16(~mask);}
-inline bool TAutoSymbol::TestFlag(uint16 mask) {return (Attr&mask)? true:false;}
-inline uint16 TAutoSymbol::GetFlags() {return (uint16)Attr;}
-inline bool TAutoSymbol::IsEnum() {return (Type->GetType() & atEnum)? true:false;}
-inline bool TAutoSymbol::IsByRef() {return (Type->GetType() & atByRef)? true:false;}
-inline bool TAutoSymbol::IsArray() {return (Type->GetType() & atSafeArray)? true:false;}
-inline bool TAutoSymbol::IsIterator() {return ToBool((Attr&asIterator)==asIterator);}
-inline bool TAutoSymbol::IsTerminator() {return ToBool((Attr & asNotTerminator)== 0);}
-inline uint16 TAutoSymbol::GetDataType() {return uint16(Type->GetType() & atTypeMask);}
-inline TAutoClass* TAutoSymbol::GetClass(){return (Type->GetType()&atAutoClass)?
-                                                      (TAutoClass*)Type : 0; }
-inline TAutoEnum* TAutoSymbol::GetEnum() {return (Type->GetType()&atEnum) ?
-                                                      (TAutoEnum*)Type : 0; }
+inline void TAutoSymbol::SetFlag(uint16 mask) {
+ Attr |= mask;
+}
+inline void TAutoSymbol::ClearFlag(uint16 mask) {
+  Attr &= uint16(~mask);
+}
+inline bool TAutoSymbol::TestFlag(uint16 mask) const {
+  return (Attr&mask)? true : false;
+}
+inline uint16 TAutoSymbol::GetFlags() const {
+  return (uint16)Attr;
+}
+inline bool TAutoSymbol::IsEnum() const {
+  return (Type->GetType() & atEnum)? true : false;
+}
+inline bool TAutoSymbol::IsByRef() const {
+  return (Type->GetType() & atByRef)? true:false;
+}
+inline bool TAutoSymbol::IsArray() const {
+  return (Type->GetType() & atSafeArray)? true : false;
+}
+inline bool TAutoSymbol::IsIterator() const {
+  return ((Attr&asIterator)==asIterator) ? true : false;
+}
+inline bool TAutoSymbol::IsTerminator() const {
+  return ((Attr & asNotTerminator)== 0) ? true : false;
+}
+inline uint16 TAutoSymbol::GetDataType() const {
+  return uint16(Type->GetType() & atTypeMask);
+}
+inline TAutoClass* TAutoSymbol::GetClass() const {
+  return (Type->GetType() & atAutoClass)? (TAutoClass*)Type : 0;
+}
+inline TAutoEnum* TAutoSymbol::GetEnum() const {
+  return (Type->GetType() & atEnum) ? (TAutoEnum*)Type : 0;
+}
 inline TAutoCommandBuild TAutoSymbol::InitTypeConvert(TAutoSymTypeConvert f)
                                          { return (TAutoCommandBuild)f;}
 inline TAutoCommandBuild TAutoSymbol::InitAutoIterator(TAutoIteratorBuild f)
@@ -1257,89 +1499,150 @@ inline TAutoCommandBuild TAutoSymbol::InitAutoDestructor(TAutoCommandBuildDtr f)
 
 // TAutoVal inlines
 
+//
+//
+inline TAutoVal::TAutoVal()
+{
+  Init();
+}
+
+//
+//
+inline TAutoVal::~TAutoVal()
+{
+  Clear();
+}
+
+//
+//
+inline TAutoVal::TAutoVal(const TAutoVal& src)
+{
+  Init();
+  ::VariantCopy((VARIANT*)this, (VARIANT*)&src);
+}
+
+//
+//
+inline const TAutoVal& TAutoVal::operator=(const TAutoVal& src)
+{
+  // NOTE: 'VariantCopy' takes care of 'freeing' the destination
+  //
+  ::VariantCopy((VARIANT*)this, (VARIANT*)&src);
+  return *this;
+}
+
 inline TAutoVal::operator unsigned long(){return (unsigned long)operator long();}
 #if (MAXINT==MAXSHORT)
 inline TAutoVal::operator int()          {return operator short();}
 inline TAutoVal::operator unsigned int() {return operator unsigned short();}
-inline TAutoVal::operator int far*()     {return (int far*)operator short far*();}
+inline TAutoVal::operator int*()         {return (int*)operator short*();}
 #else
 inline TAutoVal::operator int()          {return operator long(); }
 inline TAutoVal::operator unsigned int() {return (unsigned long)(long)*this;}
-inline TAutoVal::operator int far*()     {return (int far*)operator long far*();}
+inline TAutoVal::operator int*()         {return (int*)operator long*();}
 #endif
 
 #if !defined(BI_UNIQUE_BOOL)
-inline TAutoVal::operator TAutoBool()  {return TAutoBool(operator TBool());}
-inline TAutoVal::operator TAutoBoolRef(){return TAutoBoolRef(operator TBool far*());}
+inline TAutoVal::operator TAutoBool()    {return TAutoBool(operator TBool());}
+inline TAutoVal::operator TAutoBoolRef() {return TAutoBoolRef(operator TBool*());}
 #endif
-inline TAutoVal::operator signed char(){return operator unsigned char();}
-inline TAutoVal::operator char()       {return operator unsigned char();}
-inline TAutoVal::operator char far*()  {return (char far*)operator unsigned char far*();}
-inline TAutoVal::operator signed char far*(){return (signed char far*)operator unsigned char far*();}
+inline TAutoVal::operator signed char()  {return operator unsigned char();}
+inline TAutoVal::operator char()         {return operator unsigned char();}
+inline TAutoVal::operator char*()        {return (char*)operator unsigned char*();}
+inline TAutoVal::operator signed char*() {return (signed char*)operator unsigned char*();}
 
-inline void TAutoVal::operator =(IDispatch* ifc) {vt=atObject; pdispVal=ifc;}
-inline void TAutoVal::operator =(IUnknown* ifc)  {vt=atUnknown; punkVal=ifc;}
-inline void TAutoVal::operator =(unsigned char v){vt=atByte;   bVal  = v;}
-inline void TAutoVal::operator =(signed char v)  {vt=atByte;   bVal  = v;}
-inline void TAutoVal::operator =(char v)         {vt=atByte;   bVal  = v;}
-inline void TAutoVal::operator =(short  v)       {vt=atShort;  iVal  = v;}
-inline void TAutoVal::operator =(long   v)       {vt=atLong;   lVal  = v;}
-inline void TAutoVal::operator =(float  v)       {vt=atFloat;  fltVal= v;}
-inline void TAutoVal::operator =(double v)       {vt=atDouble; dblVal= v;}
-inline void TAutoVal::operator =(TBool  v)   {vt=atBool; boolVal = short(v ? -1 : 0);}
+inline void TAutoVal::operator =(IUnknown*     ifc){vt=atUnknown; punkVal=ifc;}
+inline void TAutoVal::operator =(IDispatch*    ifc){vt=atObject; pdispVal=ifc;}
+
+#if defined(BI_PLAT_WIN32)
+inline void TAutoVal::operator =(IPictureDisp* ifc){vt=atObject; pdispVal=ifc;}
+inline void TAutoVal::operator =(IFontDisp*    ifc){vt=atObject; pdispVal=ifc;}
+#endif
+
+inline void TAutoVal::operator =(VARIANT&        v){vt=atVariant; pvarVal= &v;}
+inline void TAutoVal::operator =(unsigned char   v){vt=atByte;   bVal  = v;}
+inline void TAutoVal::operator =(signed   char   v){vt=atByte;   bVal  = v;}
+inline void TAutoVal::operator =(char            v){vt=atByte;   bVal  = v;}
+inline void TAutoVal::operator =(short           v){vt=atShort;  iVal  = v;}
+inline void TAutoVal::operator =(long            v){vt=atLong;   lVal  = v;}
+inline void TAutoVal::operator =(float           v){vt=atFloat;  fltVal= v;}
+inline void TAutoVal::operator =(double          v){vt=atDouble; dblVal= v;}
+inline void TAutoVal::operator =(TBool           v){vt=atBool;   boolVal = short(v ? -1 : 0);}
 #if !defined(BI_UNIQUE_BOOL)
 inline void TAutoVal::operator =(TAutoBool v){vt=atBool; boolVal = short((bool)v ? -1 : 0);}
 #endif
-inline void TAutoVal::operator =(TAutoDate v)    {vt=atDatetime; date = v;}
+inline void TAutoVal::operator =(TAutoDate     v){vt=atDatetime; date = v;}
 inline void TAutoVal::operator =(TAutoCurrency v){vt=atCurrency; cyVal = v;}
-inline void TAutoVal::operator =(TAutoVoid)      {vt=atVoid;}
-inline void TAutoVal::operator =(unsigned char far* p){vt=atByte+atByRef; pbVal=p;}
-inline void TAutoVal::operator =(signed char far* p){vt=atByte+atByRef; pbVal=(unsigned char far*) p;}
-inline void TAutoVal::operator =(char far* p)       {vt=atByte+atByRef; pbVal=(unsigned char far*) p;}
-inline void TAutoVal::operator =(short far* p) {vt=atShort+atByRef; piVal=p;}
-inline void TAutoVal::operator =(long far* p)  {vt=atLong+atByRef;  plVal=p;}
-inline void TAutoVal::operator =(TBool far* p) {vt=atBool+atByRef;  pbool=(VARIANT_BOOL far*)p;}
+inline void TAutoVal::operator =(TAutoVoid      ){vt=atVoid;}
+inline void TAutoVal::operator =(const TNoArg&  ){vt=atError; scode=DISP_E_PARAMNOTFOUND;}
+
+inline void TAutoVal::operator =(unsigned char* p){vt=atByte+atByRef; pbVal=p;}
+inline void TAutoVal::operator =(signed char*   p){vt=atByte+atByRef; pbVal=(unsigned char*) p;}
+inline void TAutoVal::operator =(char*          p){vt=atByte+atByRef; pbVal=(unsigned char*) p;}
+inline void TAutoVal::operator =(short*         p){vt=atShort+atByRef; piVal=p;}
+inline void TAutoVal::operator =(long*          p){vt=atLong+atByRef;  plVal=p;}
+inline void TAutoVal::operator =(TBool*         p){vt=atBool+atByRef;  pbool=(VARIANT_BOOL*)p;}
 #if !defined(BI_UNIQUE_BOOL)
-inline void TAutoVal::operator =(TAutoBoolRef p){vt=atBool+atByRef; pbool=(VARIANT_BOOL far*)(bool far*)p;}
+inline void TAutoVal::operator =(TAutoBoolRef   p){vt=atBool+atByRef; pbool=(VARIANT_BOOL*)(bool*)p;}
 #endif
-inline void TAutoVal::operator =(float far* p) {vt=atFloat+atByRef; pfltVal=p;}
-inline void TAutoVal::operator =(double far* p){vt=atDouble+atByRef;pdblVal=p;}
-inline void TAutoVal::operator =(TAutoDate far* p){vt=atDatetime+atByRef;pdate=(double far*)p;}
-inline void TAutoVal::operator =(TAutoCurrency far* p){vt=atCurrency+atByRef;pcyVal=p;}
+inline void TAutoVal::operator =(float*         p){vt=atFloat+atByRef; pfltVal=p;}
+inline void TAutoVal::operator =(double*        p){vt=atDouble+atByRef;pdblVal=p;}
+inline void TAutoVal::operator =(TAutoDate*     p){vt=atDatetime+atByRef;pdate=(double*)p;}
+inline void TAutoVal::operator =(TAutoCurrency* p){vt=atCurrency+atByRef;pcyVal=p;}
 
-inline void TAutoVal::operator =(unsigned short v){vt=atLong; lVal = (long)v;}
-inline void TAutoVal::operator =(unsigned short far* p)
-                                  {vt=atShort+atByRef; piVal = (short far*)p;}
-inline void TAutoVal::operator =(unsigned long v) {vt=atLong; lVal = (long)v;}
-inline void TAutoVal::operator =(unsigned long far* p)
-                                    {vt=atLong+atByRef; plVal = (long far*)p;}
+inline void TAutoVal::operator =(unsigned short  v){vt=atLong; lVal = (long)v;}
+inline void TAutoVal::operator =(unsigned short* p){vt=atShort+atByRef; piVal = (short*)p;}
+inline void TAutoVal::operator =(unsigned long   v){vt=atLong; lVal = (long)v;}
+inline void TAutoVal::operator =(unsigned long*  p){vt=atLong+atByRef; plVal = (long*)p;}
 #if (MAXINT==MAXSHORT)
-inline void TAutoVal::operator =(int v) {vt=atShort; iVal=v;}
-inline void TAutoVal::operator =(int far* p) {vt=atShort+atByRef; piVal=(short far*)p;}
-inline void TAutoVal::operator =(unsigned int v) {operator =((unsigned short)v);}
-inline void TAutoVal::operator =(unsigned int far* p) {operator =((unsigned short far*)p);}
+inline void TAutoVal::operator =(int           v){vt=atShort; iVal=v;}
+inline void TAutoVal::operator =(int*          p){vt=atShort+atByRef; piVal=(short*)p;}
+inline void TAutoVal::operator =(unsigned int  v){operator =((unsigned short)v);}
+inline void TAutoVal::operator =(unsigned int* p){operator =((unsigned short*)p);}
 #else
-inline void TAutoVal::operator =(int v) {vt=atLong; lVal=v;}
-inline void TAutoVal::operator =(int far* p) {vt=atLong+atByRef; plVal = (long far*)p;}
-inline void TAutoVal::operator =(unsigned int v) {operator =((unsigned long)v);}
-inline void TAutoVal::operator =(unsigned int far* p) {operator =((unsigned long far*)p);}
+inline void TAutoVal::operator =(int           v){vt=atLong; lVal=v;}
+inline void TAutoVal::operator =(int*          p){vt=atLong+atByRef; plVal = (long*)p;}
+inline void TAutoVal::operator =(unsigned int  v){operator =((unsigned long)v);}
+inline void TAutoVal::operator =(unsigned int* p){operator =((unsigned long*)p);}
 #endif
 
+//
+//
 inline void TAutoVal::operator =(TObjectDescriptor od)
-  {vt=atObjectDesc; ObjDesc.Object=od.Object; ObjDesc.Class=od.Class;
-   if (od.Destruct == TObjectDescriptor::Delete) vt |= atByRef;}
+{
+  vt = atObjectDesc;
+  ObjDesc.Object= od.Object;
+  ObjDesc.Class = od.Class;
+  if (od.Destruct == TObjectDescriptor::Delete)
+    vt |= atByRef;
+}
 
-inline int TAutoVal::GetDataType() {return vt;}
+//
+//
+inline int TAutoVal::GetDataType() const {
+  return vt;
+}
 
+//
+//
+inline void TAutoVal::Init()
+{
+  memset(this, 0, sizeof(*this));
+}
+
+//
+//
 inline void TAutoVal::Clear()
 {
   if ((vt & ~atByRef) == atLoanedBSTR) {
     s.Holder->ReleaseBstr((vt & atByRef) ? *pbstrVal : bstrVal);
     vt = uint16(atString | (vt & atByRef));
   }
-  ::VariantClear((VARIANT far*)this);
+  ::VariantClear((VARIANT*)this);
 }
 
+//
+//
 inline void TAutoVal::Restore()
 {
   if ((vt & ~atByRef) == atLoanedBSTR) {
@@ -1348,9 +1651,12 @@ inline void TAutoVal::Restore()
   } else if (vt == uint16(atBool | atByRef) && *pbool != 0) {
     *pbool = -1;
   }
-  // need to check if atObjectDesc? should never happen as it is temporary
+
+  // Need to check if atObjectDesc? Should never happen as it is temporary
 }
 
+//
+//
 inline void TAutoVal::Copy(const TAutoVal& copy)
 {
   vt = copy.vt;
@@ -1361,24 +1667,46 @@ inline void TAutoVal::Copy(const TAutoVal& copy)
     bstrVal = ::SysAllocString(bstrVal);
 }
 
-inline bool TAutoVal::IsRef() {return ToBool(vt & atByRef);}
+// Converts TAutoVal/VARIANT to another type
+// NOTE: Converts in-place if source is not specified
+//
+inline HRESULT TAutoVal::ChangeType(VARTYPE varType, TAutoVal* src) {
+   return ::VariantChangeType((VARIANT*)this, src ? (VARIANT*)src : (VARIANT*)this, 0, varType);
+}
 
-inline TAutoVal far* TAutoVal::DereferenceVariant()
-               {return vt==atVariant+atByRef ? (TAutoVal far*)pvarVal : this;}
+// Is TAutoVal Object (i.e. VARIANT) passing data by reference
+//
+inline bool TAutoVal::IsRef() const {
+  return (vt & atByRef) ? true : false;
+}
 
-inline TString TAutoVal::StrVal() {return vt==atString ? bstrVal : 0;}
+//
+//
+inline TAutoVal* TAutoVal::DereferenceVariant() {
+  return vt==atVariant+atByRef ? (TAutoVal*)pvarVal : this;
+}
 
+//
+//
+inline TString TAutoVal::StrVal() {
+  return vt==atString ? bstrVal : 0;
+}
+
+//
+//
 inline bool TAutoVal::GetObjDesc(TObjectDescriptor& od)
 {
   if ((char)vt != atObjectDesc)
     return false;
   od.Object = ObjDesc.Object;
-  od.Class = ObjDesc.Class;
+  od.Class  = ObjDesc.Class;
   od.Destruct = IsRef() ? TObjectDescriptor::Delete : TObjectDescriptor::Quiet;
   return true;
 }
 
-inline SAFEARRAY far* TAutoVal::GetArray()
+//
+//
+inline SAFEARRAY* TAutoVal::GetArray()
 {
   if (vt == atSafeArray)
     return parray;
@@ -1387,7 +1715,9 @@ inline SAFEARRAY far* TAutoVal::GetArray()
   return 0;
 }
 
-inline void far* TAutoVal::SetByRef(AutoDataType datatype)
+//
+//
+inline void* TAutoVal::SetByRef(AutoDataType datatype)
 {
   if (vt == atVariant)
     return this;
@@ -1396,7 +1726,6 @@ inline void far* TAutoVal::SetByRef(AutoDataType datatype)
 }
 
 //____________________________________________________________________________
-
 // TServedObject inlines
 
 inline TServedObject::operator IDispatch*()
@@ -1443,7 +1772,7 @@ template <class T> bool
 TAutoEnumT<T>::Convert(TAutoVal& txtVal, TAutoVal& numVal)
 {
   TString& stringRef = txtVal.StrVal();  // 0 if not string type
-  const char far* str = stringRef;
+  const char* str = stringRef;
   if (str) {
     TLangId langId = txtVal.GetLanguage();
     for (int i = 0; i < Count; i++) {
@@ -1479,7 +1808,7 @@ TAutoEnumT<T>::Convert(TAutoVal& numVal, TLangId langId)
 inline bool
 TAutoEnumT<const char*>::Convert(TAutoVal& numVal, TLangId langId)
 {
-  const char far* str = numVal.StrVal();  // 0 if not string type
+  const char* str = numVal.StrVal();  // 0 if not string type
   if (str)
     for (int i = 0; i < Count; i++) {
       if (lstrcmp(Table[i].Val, str) == 0) {

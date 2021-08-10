@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.6  $
 //
 // Note: Hash tables can determine the hash value of an object by
 //       calling a member function or global function named HashValue().
@@ -41,6 +41,10 @@
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -146,23 +150,23 @@ public:
         {
         Restart();
         }
-        
+
     ~TMInternalHashTableIteratorImp()
         {
         delete ListIter;
         }
-        
+
     operator int()
         {
         return HashIter;
         }
-        
+
     const T& Current()
         {
         PRECONDITION( ListIter != 0 );
         return ListIter->Current();
         }
-        
+
     const T& operator ++ ( int )
         {
         PRECONDITION( ListIter != 0 );
@@ -170,7 +174,7 @@ public:
         Scan();
         return t;
         }
-        
+
     const T& operator ++ ()
         {
         PRECONDITION( ListIter != 0 );
@@ -178,14 +182,14 @@ public:
         PRECONDITION( ListIter != 0 );
         return ListIter->Current();
         }
-        
+
     void Restart();
-        
+
 private:
 
     TMIVectorIteratorImp<List,Alloc> HashIter;
     TMListIteratorImp<T,Alloc> *ListIter;
-    
+
     void Scan();
 };
 
@@ -193,7 +197,7 @@ template <class T,class Alloc,class List>
 void TMInternalHashTableIteratorImp<T,Alloc,List>::Restart()
 {
     HashIter.Restart();
-        
+
     delete ListIter;
     while( HashIter && HashIter.Current() == 0 )
         HashIter++;
@@ -256,7 +260,7 @@ public:
         TMInternalHashImp< T,Alloc,TMListImp<T,Alloc> >(size)
         {
         }
-        
+
     void ForEach( IterFunc iter, void *args );
     T *Find( const T& t ) const;
     void Flush();
@@ -284,7 +288,7 @@ template <class T,class Alloc> class TMHashTableIteratorImp :
 public:
     TMHashTableIteratorImp( const TMHashTableImp<T,Alloc>& h ) :
         TMInternalHashTableIteratorImp<T,Alloc,TMListImp<T,Alloc> >(h) {}
-    
+
 };
 
 template <class T,class Alloc>
@@ -298,7 +302,7 @@ int TMHashTableImp<T,Alloc>::Add( const T& t )
         }
     if( list == 0 )
         return 0;
-    else 
+    else
         {
         list->Add(t);
         ItemsInContainer++;
@@ -461,12 +465,12 @@ public:
         {
         return STATIC_CAST(T *,STATIC_CAST(void *,Parent::Current()));
         }
-        
+
     T *operator ++ (int)
         {
         return STATIC_CAST(T *,STATIC_CAST(void *,Parent::operator++(1)));
         }
-        
+
     T *operator ++ ()
         {
         return STATIC_CAST(T *,STATIC_CAST(void *,Parent::operator++()));
@@ -506,7 +510,7 @@ template <class T,class Alloc> int TMIHashTableImp<T,Alloc>::Add( T *t )
         }
     if( list == 0 )
         return 0;
-    else 
+    else
         {
         list->Add(t);
         ItemsInContainer++;
@@ -582,6 +586,10 @@ public:
         {
         }
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po.

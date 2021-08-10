@@ -3,7 +3,7 @@
   edittest.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.16  $
+  $Revision:   1.19  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __AOEXPCH_H

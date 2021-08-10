@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0002    // Increment this if a change has global effects
 
-Copyright (c) 1989-1995  Microsoft Corporation
+Copyright (c) 1989-1996  Microsoft Corporation
 
 Module Name:
 
@@ -21,8 +21,13 @@ Revision History:
 
 #ifndef _WINCON_
 #define _WINCON_
+#pragma option -b
 
-#include <pshpack4.h>
+#ifdef __BORLANDC__
+#pragma option -b.
+  #include <pshpack4.h>
+#pragma option -b
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -725,6 +730,11 @@ SetConsoleOutputCP(
 }
 #endif
 
-#include <poppack.h>
+#ifdef __BORLANDC__
+#pragma option -b.
+  #include <poppack.h>
+#pragma option -b
+#endif
 
+#pragma option -b.
 #endif // _WINCON_

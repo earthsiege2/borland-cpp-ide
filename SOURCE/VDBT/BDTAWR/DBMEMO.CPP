@@ -3,6 +3,8 @@
 // Copyright (C) 1996 Borland International
 //--------------------------------------------------------
 
+#include <vdbt/dbcontrl.h>
+#pragma hdrstop
 #include <vdbt/dbmemo.h>
 
 //--------------------------------------------------------
@@ -52,6 +54,10 @@ TDBMemo::TDBMemo( TWindow *parent, int resourceId, TModule *module )
 // OWL response table.
 //--------------------------------------------------------
 DEFINE_DB_RESPONSE_TABLE1( TDBMemo, TDBControl )
+  EV_VBXEVENT_CLICK,
+  EV_VBXEVENT_DRAGOVER,
+  EV_VBXEVENT_DRAGDROP,
+  EV_VBXEVENT_ENDDRAG,
   EV_VBXEVENT_DBLCLICK(  Event_TDBMemo_DblClick ),
   EV_VBXEVENT_KEYDOWN(   Event_TDBMemo_KeyDown ),
   EV_VBXEVENT_KEYPRESS(  Event_TDBMemo_KeyPress ),
@@ -68,6 +74,10 @@ END_RESPONSE_TABLE;
 //--------------------------------------------------------
 // Event handlers
 //--------------------------------------------------------
+DEFINE_DB_EVENT( TDBMemo, OnClick,     TNotifyEvent,   Event_TDBMemo_Click );
+DEFINE_DB_EVENT( TDBMemo, OnDragDrop,  TDragEvent,     Event_TDBMemo_DragDrop );
+DEFINE_DB_EVENT( TDBMemo, OnDragOver,  TDragOverEvent, Event_TDBMemo_DragOver );
+DEFINE_DB_EVENT( TDBMemo, OnEndDrag,   TDragEvent,     Event_TDBMemo_EndDrag );
 DEFINE_DB_EVENT( TDBMemo, OnChange,    TNotifyEvent,   Event_TDBMemo_Change );
 DEFINE_DB_EVENT( TDBMemo, OnDblClick,  TNotifyEvent,   Event_TDBMemo_DblClick );
 DEFINE_DB_EVENT( TDBMemo, OnEnter,     TNotifyEvent,   Event_TDBMemo_GotFocus );

@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
 ;       Copyright (c) 1999 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
 
         include RULES.ASI
 
@@ -53,7 +54,7 @@ Func@   _memchk, public, _RTLENTRYF, <pointer src>,<int c>,<int n>
         mov     ecx,edx         ; get back count
         and     ecx,3           ; calculate remainder byte count (0-3)
         repe    scasb           ; scan remaining bytes
-        jne     ret_0           ; 
+        jne     ret_0           ;
 ret_1:
         mov     eax,1           ; return 1 if block is OK
 return:

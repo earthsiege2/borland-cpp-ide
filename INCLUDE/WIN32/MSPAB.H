@@ -1,9 +1,10 @@
+#pragma option -b
 /*
  *  M S P A B . H
  *  
  *  Public definitions for the Microsoft Personal Address Book
  *  
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 /*
@@ -67,3 +68,4 @@
 
 #define     PAB_DIR_VIEW_FIRST_THEN_LAST    0
 #define     PAB_DIR_VIEW_LAST_THEN_FIRST    1
+#pragma option -b.

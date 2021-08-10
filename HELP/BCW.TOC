@@ -62,6 +62,7 @@
 4 Make All = IDH_PMakeAll
 4 Build All = IDH_PBuildAll
 4 Generate Makefile = IDH_PGenerate
+4 Stop Background Task = IDH_PStopBackgroundTask
 
 3 Script menu
 4 About the cScript menu = IDH_Mscript
@@ -128,6 +129,7 @@
 4 Add watch  = IDH_DAddWatch
 4 Evaluate = IDH_DEvaluate
 4 Inspect = IDH_DInspect
+4 View Locals = IDH_DViewLocals
 
 3 Resource Workshop Menus
 4 Resource = IDH_MResource@WORKSHOP.HLP
@@ -230,33 +232,44 @@
 2 Make = IDH_OPMake
 
 1 Project Manager
-2 Creating a new project = IDH_FNewProject 
-2 Style Sheets = StyleSheets
-2 Target types = IDH_TargetExpert
-2 Source pools = SourcePools
-
-2 Managing Projects
-3 About Managing Projects = ManagingProjects
-3 Adding a new target = IDH_PNewTarget
-3 Compiling a project = IDH_PCompile
-3 Creating a multiple target project = CreatingAMultipleTargetProject
-3 Converting old projects = ConvertingOldProjects
-3 Building part of a project = BuildingPartOfAProject
-3 Generating a MAKE file for a project = IDH_PGenerate
-3 MAKE all targets = IDH_PMakeAll
-3 Rebuilding files in a project = IDH_PBuildAll
-3 Setting local options = IDH_LocalOptions
-3 Set node attributes = IDH_NodeAttributes
-3 Sharing Style Sheets = SharingStyleSheets
-3 Sharing Tools = SharingTools
-3 Viewing option settings = IDH_ViewOptionsHierarchy
-
-2 Project Hierarchy
-3 About the Project Hierarchy = IDH_PROJECT_HIERARCHY
+2 Project management = ProjectManagement
+3 Project management tools = ManagingProjects
+2 The Project Manager
+3 About the Project Manager = IDH_PROJECT_HIERARCHY
+4 Creating a new project = IDH_FNewProject
+4 Creating multiple-target projects = CreatingAMultipleTargetProject
+3 Target types = IDH_TargetExpert
+3 Node types and colors= NodeTypes
+3 Node attributes = IDH_NodeAttributes
 3 Displaying node information = IDH_OEProjectView
-3 Editing the project hierarchy = ProjectHierarchyReference
-3 Reference copy nodes = ReferenceCopyNodes
 3 Setting build attributes for a node = IDH_BuildAttributes
+3 Copying nodes =  ReferenceCopyNodes
+3 Adding nodes = IDH_AddNodeSpeedMenu
+4 Adding a target node= IDH_PNewTarget
+3 Deleting nodes = IDH_DeleteNodeSpeedMenu
+4 Deleting targets = DeletingTargets
+3 Grouping files with Source Pools = SourcePools
+4 Creating Source Pools = CreatingSourcePools
+3 Project Manager commands = ProjectManagerCommands
+3 Navigating in the project tree = ProjectHierarchyReference
+3 Generating a MAKE file for a project = IDH_PGenerate
+3 Converting old projects = ConvertingOldProjects
+2 Compiling targets
+3 Compiling a project = IDH_PCompile
+3 Compile SpeedMenu command = CompileProjectWindowSpeedMenu
+3 Building part of a project = BuildingPartOfAProject
+3 Make node = IDH_MakeNodeSpeedMenu
+3 MAKE all targets = IDH_PMakeAll
+3 Build node = IDH_BuildNodeSpeedMenu
+3 Building all files in a project = IDH_PBuildAll
+2 Setting project options
+3 Local options = IDH_LocalOptions
+3 Setting options locally = IDH_SettingOptionsLocally
+3 View options hierarchy = IDH_ViewOptionsHierarchy
+3 Edit options hierarchy = IDH_EditButtonOptionsHierarchy
+3 About Style Sheets = StyleSheets
+4 Sharing Style Sheets = SharingStyleSheets
+4 Sharing Tools = SharingTools
 
 1 AppExpert
 2 Generating Windows applications = UsingAppExpert
@@ -362,5 +375,10 @@
 2 Rename an AppExpert Element = RenamingAnAppExpertElement
 2 Use Style Sheets = StyleSheets
 2 Use Rescan to Rebuild Your Project Database = UsingRescan
+
+;1 Borland Development Tools for Java
+;2 Getting Started with Borland Development Tools for Java=IntroductiontoJavaTools@BCWJava.HLP
+;2 Debugger for Java=DebuggingJavaClasses@BCWJava.HLP
+;2 Writing HTML=WritingHTML@BCWJava.HLP
 
 

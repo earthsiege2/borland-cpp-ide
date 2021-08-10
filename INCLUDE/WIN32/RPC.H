@@ -1,6 +1,7 @@
+#pragma option -b
 /*++
 
-Copyright (c) 1991-1995 Microsoft Corporation
+Copyright (c) 1991-1996 Microsoft Corporation
 
 Module Name:
 
@@ -13,7 +14,9 @@ Abstract:
 --*/
 
 #ifndef RPC_NO_WINDOWS_H
+#pragma option -b.
 #include <windows.h>
+#pragma option -b
 #endif // RPC_NO_WINDOWS_H
 
 #ifndef __RPC_H__
@@ -24,10 +27,7 @@ extern "C" {
 #endif
 
 #define __RPC_WIN32__
-
-#ifndef _WIN95      /* Default to NT */
 #define __RPC_NT__
-#endif /* !WIN95 */
 
 #ifndef __MIDL_USER_DEFINED
 #define midl_user_allocate MIDL_user_allocate
@@ -39,7 +39,7 @@ typedef void * I_RPC_HANDLE;
 typedef long RPC_STATUS;
 
 #define RPC_UNICODE_SUPPORTED
-#if   (_MSC_VER >= 800) || defined (_STDCALL_SUPPORTED) || defined (__BORLANDC__)
+#if   (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined (__BORLANDC__)
 #define __RPC_FAR
 #define __RPC_API  __stdcall
 #define __RPC_USER __stdcall
@@ -59,13 +59,23 @@ typedef long RPC_STATUS;
 #undef OPTIONAL
 #endif /* IN */
 
+#pragma option -b.
 #include <rpcdce.h>
+#pragma option -b
+#pragma option -b.
 #include <rpcnsi.h>
+#pragma option -b
+#pragma option -b.
 #include <rpcnterr.h>
+#pragma option -b
 
 
+#pragma option -b.
 #include <excpt.h>
+#pragma option -b
+#pragma option -b.
 #include <winerror.h>
+#pragma option -b
 
 #define RpcTryExcept \
     __try \
@@ -108,6 +118,11 @@ RpcImpersonateClient (
     );
 
 RPC_STATUS RPC_ENTRY
+RpcRevertToSelfEx (
+    IN RPC_BINDING_HANDLE BindingHandle OPTIONAL
+    );
+
+RPC_STATUS RPC_ENTRY
 RpcRevertToSelf (
     );
 
@@ -122,3 +137,4 @@ I_RpcMapWin32Status (
 
 #endif // __RPC_H__
 
+#pragma option -b.

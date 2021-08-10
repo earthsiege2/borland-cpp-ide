@@ -7,10 +7,9 @@
 #define IDD_DRAWSTATE	101
 
 #define IDC_BITMAP	100
-#define IDC_COMPLEX	101
-#define IDC_ICONT	102
-#define IDC_PREFIXTEXT	103
-#define IDC_TEXT	104
+#define IDC_ICONT	101
+#define IDC_PREFIXTEXT	102
+#define IDC_TEXT	103
 
 #define IDC_NORMAL	110
 #define IDC_UNION	111

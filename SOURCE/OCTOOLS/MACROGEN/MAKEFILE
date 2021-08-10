@@ -8,4 +8,11 @@ MODEL = s
 SYSTEM = DOS16
 EXE    = macrogen
 
+#
+# should make look for BIDS somewhere other than BCROOT?
+#
+!if $d(BIDSINCDIR)
+USERINCPATH=$(BIDSINCDIR)
+!endif
+
 !include $(BCEXAMPLEDIR)\makefile.gen

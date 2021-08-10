@@ -16,12 +16,12 @@
 ##        :^@StartLine
 ##        :^BOL
 ##        --BEGIN-- ((StartLine - 1) != EndLine) && (StartLine != EndLine)
-##            :--FOR-- VEntries = 1 TO(EndLine - StartLine)
+##            :--FOR-- VEntries = 1 TO (EndLine - StartLine)
 ##                :ScanVEntry([[FunctionName]])
 ##                    :DBVirtual(ClassName, FunctionName)
 ##                    :^1
 ##*
-##            :--NEXT-- VEntries = 1 TO(EndLine - StartLine)
+##            :--NEXT-- VEntries = 1 TO (EndLine - StartLine)
 ##        --END-- ((StartLine - 2) != EndLine) && (StartLine != EndLine)
 ##    --END-- ? \\"//{{[[ClassName]]VIRTUAL_END}}"
 ##--END-- ? \\"//{{[[ClassName]]VIRTUAL_BEGIN}}"
@@ -54,12 +54,12 @@
 ##              :(YPos() - 2) [[EndLine]]
 ##              :^@StartLine
 ##              :^BOL
-##              :--FOR-- IEntries = 1 TO(EndLine - StartLine)
+##              :--FOR-- IEntries = 1 TO ((EndLine - StartLine) + 1)
 ##                  :ScanIEntry([[ResourceID]], [[MemberName]], [[MemberType]])
 ##                  :DBInstance(ClassName, ResourceID, MemberName, MemberType)
 ##                  :^1
 ##*
-##              :--NEXT-- IEntries = 1 TO(EndLine - StartLine)
+##              :--NEXT-- IEntries = 1 TO ((EndLine - StartLine) + 1)
 ##          --END-- ? \\"//{{[[ClassName]]XFER_DEF_END}}"
 ##      --END-- ? \\"//{{[[ClassName]]XFER_DEF}}"
 ##--END-- QUERY_BASE_NAME == "TDialog"
@@ -81,7 +81,7 @@
 ##                      :^@StartLine
 ##                      :^BOL
 ##                      :0 [[CurrViewLine]]
-##                      --FOR-- ViewEntry = 1 TO((EndLine - StartLine) + 1)
+##                      --FOR-- ViewEntry = 1 TO ((EndLine - StartLine) + 1)
 ##                          :ScanViewEntry([[Template]], [[TDocument]], [[TView]]) [[viewResult]]
 ##                          :YPos() CurrViewLine
 ##                          :? "//{{DOC_MANAGER}}"
@@ -111,9 +111,9 @@
 ##          :^@StartLine
 ##          :^BOL
 ##          --BEGIN-- 0 != (EndLine - StartLine)
-##              :--FOR-- RespEntry = 1 TO(EndLine - StartLine)
+##              :--FOR-- RespEntry = 1 TO (EndLine - StartLine)
 ##                  :ScanRespEntry([[RspConstant]], [[RspFunctionName]], [[RspEventType]], [[RspMenuType]])
-##                      :RspEventType != "OWLVIEW"
+##                      :((RspEventType != "OWLVIEW") && (RspEventType != "OWLDOCUMENT")  && (RspEventType != "REGISTERED"))
 ##                          :DBResponse(ClassName, RspConstant, RspFunctionName, RspEventType, RspMenuType)
 ##*
 ##                  :^1

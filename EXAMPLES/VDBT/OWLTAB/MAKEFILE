@@ -1,22 +1,41 @@
 #----------------------------------------------------------------------------
 # Borland C++ - (C) Copyright 1996 by Borland International
 #   examples\vdbt\owltab\makefile
-# $Revision:   1.9  $
-# $Author:   JHEHER  $
-# $Date:   14 Feb 1996 15:55:14  $
 #----------------------------------------------------------------------------
 
 SYSTEMS = WIN16 WIN32
 
-!if $(SYSTEM)==WIN16
-SUFFIX   = 16
-USERLIBS = bdto.lib bdtci.lib ole2w16.lib mathwl cwl
-!else
-SUFFIX   = 32
-USERLIBS = bdtof.lib bdtcfi.lib ole2w32.lib
+!ifndef SYSTEM
+SYSTEM = WIN32
 !endif
 
-APPNAME  = owltab
+!ifndef MODEL
+MODEL = d
+!endif
+
+!if $(SYSTEM)==WIN16
+MODELS = d l
+!if $(MODEL)==d
+USERLIBS = bidsi.lib bdto.lib bdtc.lib ole2w16.lib
+!else
+USERLIBS = bidsl.lib bdto.lib bdtc.lib ole2w16.lib
+!endif
+SUFFIX   = 16
+
+!else
+
+MODELS = d f
+
+!if $(MODEL)==d
+USERLIBS = bidsfi.lib bdtof.lib bdtcf.lib ole2w32.lib
+!else
+USERLIBS = bidsf.lib bdtof.lib bdtcf.lib ole2w32.lib
+!endif
+
+SUFFIX   = 32
+!endif
+
+APPNAME = owltab
 DEFEXE  = $(APPNAME)$(SUFFIX).def
 EXERES  = $(APPNAME)
 OBJEXE  = $(APPNAME).obj

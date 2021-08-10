@@ -13,6 +13,7 @@
 
 #ifndef _INC_ACM
 #define _INC_ACM        /* #defined if msacm.h has been included */
+#pragma option -b
 
 #if !defined(_INC_MMREG) || (_INC_MMREG < 142)
 #ifndef RC_INVOKED
@@ -35,7 +36,9 @@
 #endif
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack1.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
@@ -1882,11 +1885,14 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
                                        
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
+#pragma option -b.
 #endif  /* _INC_ACM */

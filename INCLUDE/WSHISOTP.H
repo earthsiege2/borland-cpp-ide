@@ -11,9 +11,9 @@
  */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1994, 1996 by Borland International
+ *      Copyright (c) 1994, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -21,6 +21,7 @@
 #ifndef _WSHISOTP_
 #define _WSHISOTP_
 #define __WSHISOTP_H
+#pragma option -b
 
 /*
  * Protocol values for ISO transport protocols.
@@ -95,5 +96,6 @@ typedef struct sockaddr_tp {
 #define ISO_EXP_DATA_USE  00    /* Use of Expedited Data */
 #define ISO_EXP_DATA_NUSE 01    /* Non-use of Expedited Data */
 
+#pragma option -b.
 #endif
 

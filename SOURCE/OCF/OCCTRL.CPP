@@ -1,13 +1,16 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (c) Copyright 1996 by Borland International, All Rights Reserved
+// (c) Copyright 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.17  $
+// $Revision:   2.24  $
 //
-//   Implementation of TOcControl Class
+// Implementation of the TOcControl Class and helpers
+// These class encapsulate the hosting of OCX controls...
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <olectl.h>
+#if !defined(OCF_OLEUTIL_H)
+# include <ocf/oleutil.h>
+#endif
 #if !defined(OCF_OCSTORAG_H)
 # include <ocf/ocstorag.h>
 #endif
@@ -23,14 +26,110 @@
 #if !defined(OCF_OCCTRL_H)
 # include <ocf/occtrl.h>
 #endif
+#if !defined(OCF_AUTODEFS_H)
+# include <ocf/autodefs.h>
+#endif
+#if !defined(OCF_AUTOMACR_H)
+# include <ocf/automacr.h>
+#endif
 
-#include <stdio.h>  // sprintf
 
+// Routine to convert TOcControl* to TOcxView* [treated as opaque pointers]
+// for exposing delegated properties..
+//
+static ObjectPtr
+GetControlView(ObjectPtr ctl);
 
 //
 //
 //
-ObjectPtr GetControlView(ObjectPtr ctl);
+TEventEntry::TEventEntry() : IDOfEvent(0), ParamCount(0), NameAndParams(0)
+{}
+
+//
+//
+//
+TEventEntry::~TEventEntry()
+{
+  Cleanup();
+}
+
+//
+// NOTE: Does not invoke 'Cleanup' before initializing data member with
+//       newly retrieved information. Invoke 'Cleanup' explicitly if
+//       object has already retrieved event information.
+//
+void
+TEventEntry::Init(int index, ITypeInfo* typeInfo)
+{
+  PRECONDITION(typeInfo);
+  LPFUNCDESC funcDesc= 0;
+  if (SUCCEEDED(typeInfo->GetFuncDesc(index, &funcDesc))) {
+    CHECK(funcDesc);
+    IDOfEvent = funcDesc->memid;
+    ParamCount= funcDesc->cParams;
+    NameAndParams= new BSTR[funcDesc->cParams+1];
+
+    uint i;
+    typeInfo->GetNames(funcDesc->memid, NameAndParams,
+                       funcDesc->cParams+1, &i);
+    CHECK(i == funcDesc->cParams+1);
+    typeInfo->ReleaseFuncDesc(funcDesc);
+  }
+}
+
+//
+//
+//
+void
+TEventEntry::Cleanup()
+{
+  if (NameAndParams) {
+    for (int i=0; i<=ParamCount; i++)
+      ::SysFreeString(NameAndParams[i]);
+    delete [] NameAndParams;
+    NameAndParams = 0;
+  }
+}
+
+//
+//
+//
+TEventList::TEventList(ITypeInfo* eventTypeInfo)
+           :EventList(0), Count(0), EventIID(CLSID_NULL)
+{
+  PRECONDITION(eventTypeInfo);
+
+  LPTYPEATTR tAttr = 0;
+  if (SUCCEEDED(eventTypeInfo->GetTypeAttr(&tAttr))) {
+    EventIID = tAttr->guid;
+    Count = tAttr->cFuncs;
+    if (Count) {
+      EventList = new TEventEntry[Count];
+      for (int i=0; i<Count; i++)
+        EventList[i].Init(i, eventTypeInfo);
+    }
+    eventTypeInfo->ReleaseTypeAttr(tAttr);
+  }
+}
+
+//
+//
+//
+TEventList::~TEventList()
+{
+  delete [] EventList;
+}
+
+//
+//
+//
+TEventEntry&
+TEventList::operator[](int index) {
+  PRECONDITION(index < Count);
+  PRECONDITION(EventList);
+  return EventList[index];
+}
 
 //
 // Control container ambient property support
@@ -56,18 +155,22 @@ END_AUTOCLASS(TOcxView, tfNormal, "TOcxView",   "@TOcxView_", 0)
 // Control standard extended properties and standard events
 //
 DEFINE_AUTOCLASS(TOcControl)
-  // standard extended properties
-  EXPOSE_PROPRO_ID(0x80010008L,   Parent,  TAutoDispatch,"!Parent",     "!Parent",          0)
-  EXPOSE_PROPRW_ID(0x80010007L,   Visible, TAutoBool,    "!Visible",    "!Visible",         0)
-  EXPOSE_PROPRW_ID(0x80010037L,   Cancel,  TAutoBool,    "!Cancel",     "@Cancel_",         0)
-  EXPOSE_PROPRW_ID(0x80010038L,   Default, TAutoBool,    "!Default",    "@Default_",        0)
-  EXPOSE_PROPRW_ID(0x80010000L,   Name,    TAutoString,  "!Name",       "@ObjName_",        0)
-  EXPOSE_PROPRW_ID(0x80010100L,   Left,     TAutoLong,   "!Left",       "!Left",            0)
-  EXPOSE_PROPRW_ID(0x80010101L,   Top,      TAutoLong,   "!Top",        "!Top",             0)
-  EXPOSE_PROPRW_ID(0x80010102L,   Width,    TAutoLong,   "!Width",      "!Width",           0)
-  EXPOSE_PROPRW_ID(0x80010103L,   Height,   TAutoLong,   "!Height",     "!Height",          0)
+  //
+  // Standard extended properties
+  //
+  EXPOSE_PROPRO_ID(0x80010008L,   Parent,  TAutoDispatch,"!Parent",     "!Parent",   0)
+  EXPOSE_PROPRW_ID(0x80010007L,   Visible, TAutoBool,    "!Visible",    "!Visible",  0)
+  EXPOSE_PROPRW_ID(0x80010037L,   Cancel,  TAutoBool,    "!Cancel",     "@Cancel_",  0)
+  EXPOSE_PROPRW_ID(0x80010038L,   Default, TAutoBool,    "!Default",    "@Default_", 0)
+  EXPOSE_PROPRW_ID(0x80010000L,   Name,    TAutoString,  "!Name",       "@ObjName_", 0)
+  EXPOSE_PROPRW_ID(0x80010100L,   Left,     TAutoLong,   "!Left",       "!Left",     0)
+  EXPOSE_PROPRW_ID(0x80010101L,   Top,      TAutoLong,   "!Top",        "!Top",      0)
+  EXPOSE_PROPRW_ID(0x80010102L,   Width,    TAutoLong,   "!Width",      "!Width",    0)
+  EXPOSE_PROPRW_ID(0x80010103L,   Height,   TAutoLong,   "!Height",     "!Height",   0)
 
-  EXPOSE_DELEGATE(TOcxView, "TOcxView",  GetControlView)  // expose ambients
+  // Expose ambient properties
+  //
+  EXPOSE_DELEGATE(TOcxView, "TOcxView",  GetControlView)
 
 END_AUTOCLASS(TOcControl, tfNormal, "TOcControl",   "@TOcControl_", 0)
 
@@ -76,7 +179,9 @@ END_AUTOCLASS(TOcControl, tfNormal, "TOcControl",   "@TOcControl_", 0)
 // Control standard extended properties and standard events
 //
 DEFINE_AUTOCLASS(TOcControlEvent)
-  // standard events
+  //
+  // Standard events
+  //
   EXPOSE_METHOD_ID(DISPID_CLICK,     Click,    TAutoLong,  "!Click",     "@Click_",     0)
   EXPOSE_METHOD_ID(DISPID_DBLCLICK,  DblClick, TAutoLong,  "!DblClick",  "@DblClick_",  0)
   EXPOSE_METHOD_ID(DISPID_MOUSEDOWN, MouseDown,TAutoLong,  "!MouseDown", "@MouseDown_", 0)
@@ -108,11 +213,14 @@ DEFINE_AUTOCLASS(TOcControlEvent)
     REQUIRED_ARG(TAutoString,"!HelpFile")
     REQUIRED_ARG(TAutoLong,  "!HelpContext")
     REQUIRED_ARG(TAutoBoolRef,"!CancelDisplay")
-  EXPOSE_METHOD_ID(DISPID_DEFAULT_EVENT, CustomEvent,  TAutoLong, "!CustomEvent", "@CustomEvent_",0)
+  EXPOSE_METHOD_ID(DISPID_CATCH_ALL, CustomEvent,  TAutoLong, "!CustomEvent", "@CustomEvent_",0)
     REQUIRED_ARG(TAutoLongRef, "!Number")
 
 END_AUTOCLASS(TOcControlEvent, tfNormal, "TOcControlEvent",   "@TOcCtrlEvent_", 0)
 
+//
+//
+//
 ObjectPtr GetControlView(ObjectPtr ctl)
 {
   return (ObjectPtr)((TOcControl*)ctl)->GetActiveControlView();
@@ -122,9 +230,8 @@ ObjectPtr GetControlView(ObjectPtr ctl)
 // Construct a new part with a given temp id
 //
 TOcControl::TOcControl(TOcDocument& document, int id, TOcControlEvent* pEv)
-:
-  TOcPart(document, id),
-  pUserName(new TString), BCtrlI(0), pIExtended(0), pEvents(pEv)
+           :TOcPart(document, id), pUserName(new TString), BCtrlI(0),
+            pIExtended(0), pEvents(pEv), EventList(0)
 {
   *pUserName = GetName();
 }
@@ -133,35 +240,38 @@ TOcControl::TOcControl(TOcDocument& document, int id, TOcControlEvent* pEv)
 // Construct a part from a named stream in an oc doc's storage
 //
 TOcControl::TOcControl(TOcDocument& document, const char far* name)
-:
-  TOcPart(document, name),
-  pUserName(0), BCtrlI(0), pIExtended(0)
+           :TOcPart(document, name), pUserName(0), BCtrlI(0), pIExtended(0),
+            pEvents(0), EventList(0)
 {
 }
 
+//
+//
+//
 TOcControl::~TOcControl()
 {
   if (pIExtended)
     pIExtended->Release();
-  if (pUserName)
-    delete pUserName;
+  delete pUserName;
+  delete EventList;
 }
 
-
+//
+//
+//
 bool
-TOcControl::Init (TOcInitInfo far* initInfo, TRect objPos)
+TOcControl::Init(TOcInitInfo far* initInfo, TRect objPos)
 {
-  return TOcPart::Init (initInfo, objPos);
+  return TOcPart::Init(initInfo, objPos);
 }
-
 
 //
 // Perform common ctor initialization
 //
 bool
-TOcControl::InitObj (TOcInitInfo far* initInfo)
+TOcControl::InitObj(TOcInitInfo far* initInfo)
 {
-  if (TOcPart::InitObj ((TOcInitInfo far *)NULL) == false)
+  if (TOcPart::InitObj((TOcInitInfo far *)NULL) == false)
     return false;
 
   if (initInfo) {
@@ -196,8 +306,7 @@ TOcControl::InitObj (TOcInitInfo far* initInfo)
     HRESULT hr;
     IBSite* BSiteI;
     hr = QueryInterface(IID_IBSite, &(LPVOID)BSiteI);
-    if (HRSucceeded(hr))
-    {
+    if (HRSucceeded(hr)) {
       IDispatch* pID = 0;
       TOcView*   activeView = OcDocument.GetActiveView();
       CHECK(activeView);
@@ -240,17 +349,65 @@ TOcControl::InitObj (TOcInitInfo far* initInfo)
   return true;
 }
 
+//
+// Retrieves the ITypeInfo the 'default source' event object of this
+// control.
+// NOTE: Receiver must 'Release' the returned object, if successful.
+//
+ITypeInfo*
+TOcControl::GetEventTypeInfo()
+{
+  ITypeInfo* pRet = NULL;
+  if (GetBControlI())
+    GetBControlI()->GetEventTypeInfo(&pRet);
+  return pRet;
+}
+
+//
+// Retrieves a list of events generated by this control.
+// Returns true if the event list was successfully retrieved.
+//
+bool
+TOcControl::FillEventList()
+{
+  // Skip if we've already retrieved the event list
+  //
+  if (EventList && EventList->GetCount())
+    return true;
+
+  // Retrieve Event ITypeInfo
+  //
+  ITypeInfo* eventTypeInfo = GetEventTypeInfo();
+  if (!eventTypeInfo)
+    return false;
+
+  // Allocate new EventList object
+  //
+  EventList = new TEventList(eventTypeInfo);
+  eventTypeInfo->Release();
+  return true;
+}
 
 //
 //
 //
-ITypeInfo *
-TOcControl::GetEventTypeInfo()
+TEventList*
+TOcControl::GetEventList() const
 {
-  ITypeInfo* pRet = NULL;
-  if (BCtrlI)
-    BCtrlI->GetEventTypeInfo (&pRet);
-  return pRet;
+  return EventList;
+}
+
+//
+// Retrieves the primary IDispatch of the control.
+// NOTE: Receiver must 'Release' the returned object, if successful.
+//
+IDispatch*
+TOcControl::GetCtlDispatch()
+{
+  IDispatch* pDisp = 0;
+  if (GetBControlI())
+    GetBControlI()->GetCtrlDispatch(&pDisp);
+  return pDisp;
 }
 
 //
@@ -261,12 +418,13 @@ TOcControl::SetEventDispatch()
 {
   if (!pEvents)
     return;
+
   pEvents->pCtrl = this;
   pEvents->InitEventDispatch();
 
   IDispatch*     pID = 0;
   TServedObject* pS = pEvents->pIEvents;
-  if (SUCCEEDED(pS->QueryObject(IID_IDispatch, &(VOID FAR*)pID))) {
+  if (SUCCEEDED(pS->QueryObject(IID_IDispatch, (void**)&pID))) {
     IID iidEv;
 
     BCtrlI->GetEventIID(&iidEv);
@@ -295,14 +453,14 @@ TOcControl::SetEventDispatch()
             //
             TAutoSymbol* sym = pS->Class->FindId(pFD->memid, object);
             if (!sym) {
-              UINT       cNames;
-              BSTR       bstrName;       //Event name(function only)
-              DISPID     dispid;       //Event name(function only)
+              UINT   cNames;
+              BSTR   bstrName;    // Event name(function only)
+              DISPID dispid;      // Event name(function only)
               if (SUCCEEDED(pITypeInfo->GetNames(pFD->memid, &bstrName,
-                  1, &cNames))) {
+                                                 1, &cNames))) {
                 sym = pS->Class->Lookup(OleStr(bstrName),
-                             LANGIDFROMLCID(LOCALE_USER_DEFAULT),
-                             asAnyCommand, dispid);
+                                        LANGIDFROMLCID(LOCALE_USER_DEFAULT),
+                                        asAnyCommand, dispid);
                 if (sym &&
                     (sym->DispId == -1 || sym->DispId == 0) &&
                     sym->TestFlag(DISPATCH_METHOD) && // check type
@@ -343,10 +501,8 @@ TOcControl::CreateAutoObject(const void* obj, TAutoClass& clsInfo)
   TUnknown* result = 0;
   appDesc = &(OcDocument.OcApp.GetRegistrar().GetAppDescriptor());
   if (appDesc) {
-    result = appDesc->CreateAutoObject(
-         obj, clsInfo.GetTypeInfo(),
-         obj, clsInfo.GetTypeInfo(),
-         0);
+    result = appDesc->CreateAutoObject(obj, clsInfo.GetTypeInfo(),
+                                       obj, clsInfo.GetTypeInfo(), 0);
     if (result)
       ((TServedObject*)result)->AddRef();
   }
@@ -393,7 +549,7 @@ TOcControl::GetUserName()
 }
 
 //
-//
+// Retrieves the extended IDispatch (exposing extended properties)
 //
 IDispatch*
 TOcControl::GetParent()
@@ -457,7 +613,6 @@ TOcControl::SetHeight(long Value)
 HRESULT _IFUNC
 TOcControl::OnControlFocus(BOOL fGotFocus)
 {
-  TCtrlFocusEvent ev;
   TOcView* view = OcDocument.GetActiveView();
   if (!view)
     return HR_FAIL;
@@ -466,8 +621,7 @@ TOcControl::OnControlFocus(BOOL fGotFocus)
      (view->GetActivePart() != this))
     view->GetActivePart()->Activate (FALSE);
 
-  ev.Ctrl = this;
-  ev.GotFocus = fGotFocus;
+  TCtrlFocusEvent ev(this, fGotFocus);
   view->ForwardEvent(OC_CTRLEVENT_FOCUS, &ev);
   return HR_NOERROR;
 }
@@ -478,14 +632,11 @@ TOcControl::OnControlFocus(BOOL fGotFocus)
 HRESULT _IFUNC
 TOcControl::OnPropertyChanged(DISPID dispid)
 {
-  TCtrlPropertyEvent ev;
   TOcView* view = OcDocument.GetActiveView();
   if (!view)
     return HR_FAIL;
 
-  ev.Ctrl = this;
-  ev.DispId = dispid;
-  ev.accept = true;
+  TCtrlPropertyEvent ev(this, dispid);
   view->ForwardEvent(OC_CTRLEVENT_PROPERTYCHANGE, &ev);
   return HR_NOERROR;
 }
@@ -496,14 +647,11 @@ TOcControl::OnPropertyChanged(DISPID dispid)
 HRESULT _IFUNC
 TOcControl::OnPropertyRequestEdit(DISPID dispid)
 {
-  TCtrlPropertyEvent ev;
   TOcView* view = OcDocument.GetActiveView();
   if (!view)
     return HR_FAIL;
 
-  ev.Ctrl = this;
-  ev.DispId = dispid;
-  ev.accept = true;
+  TCtrlPropertyEvent ev(this, dispid);
   view->ForwardEvent(OC_CTRLEVENT_PROPERTYREQUESTEDIT, &ev);
   return ev.accept ? HR_OK : HR_FALSE;
 }
@@ -515,15 +663,11 @@ HRESULT _IFUNC
 TOcControl::TransformCoords(TPointL far* lpptlHimetric,
                             TPointF far* lpptfContainer, DWORD flags)
 {
-  TCtrlTransformCoords ev;
   TOcView* view = OcDocument.GetActiveView();
   if (!view)
     return HR_FAIL;
 
-  ev.Ctrl = this;
-  ev.lpptHimetric = lpptlHimetric;
-  ev.lpptContainer = lpptfContainer;
-  ev.flags = flags;
+  TCtrlTransformCoords ev(this, lpptlHimetric, lpptfContainer, flags);
   if (!view->ForwardEvent(OC_VIEWTRANSFORMCOORDS, &ev)) {
 
     // default if not handled is to go from himetric to pixels and back again
@@ -863,7 +1007,7 @@ TString&
 TOcxView::GetDisplayName()
 {
   TString* value;
-  return ForwardEvent(OC_AMBIENT_GETDISPLAYNAME, &value) ? *value: *pBlankString;
+  return ForwardEvent(OC_AMBIENT_GETDISPLAYNAME, &value) ? *value : *pBlankString;
 }
 
 
@@ -871,7 +1015,7 @@ TString&
 TOcxView::GetScaleUnits()
 {
   TString* value;
-  return ForwardEvent(OC_AMBIENT_GETSCALEUNITS, &value) ? *value: *pBlankString;
+  return ForwardEvent(OC_AMBIENT_GETSCALEUNITS, &value) ? *value : *pBlankString;
 }
 
 
@@ -879,7 +1023,9 @@ IDispatch*
 TOcxView::GetFont()
 {
   IDispatch* value;
-  // note that if view handles the message, it should AddRef the font
+
+  // NOTE: If view handles the message, it should AddRef the font
+  //
   return ForwardEvent(OC_AMBIENT_GETFONT, &value) ? value: 0;
 }
 
@@ -894,8 +1040,13 @@ TOcxView::AmbientChanged(DISPID dispid)
     TOcPart* ocPart = (TOcPart*)i.Current();
     IBControl* CtrlI;
     if (SUCCEEDED(ocPart->QueryInterface(IID_IBControl, &(LPVOID)CtrlI))) {
+#if 0
       CtrlI->Release();
       CtrlI->AmbientChanged(dispid);
+#else
+      CtrlI->AmbientChanged(dispid);
+      CtrlI->Release();
+#endif
     }
   }
 }
@@ -912,8 +1063,7 @@ TOcxView::GetAmbientValue(long ambientMsg, long def)
 //    Support for standard events and generic custom event
 //
 TOcControlEvent::TOcControlEvent()
-:
-  pCtrl(0), pIEvents(0)
+                :pCtrl(0), pIEvents(0)
 {
 }
 
@@ -941,188 +1091,229 @@ TOcControlEvent::CreateAutoObject(const void* obj, TAutoClass& clsInfo)
     return 0;
 }
 
-long
-TOcControlEvent::ForwardClickEvent(long msg)
+//
+//
+//
+HRESULT
+TOcControlEvent::ForwardClickEvent(uint msg, DISPID dispid)
 {
   TOcView* view = pCtrl->GetActiveControlView();
   if (!view)
     return E_FAIL;
 
-  TCtrlEvent ev;
-  ev.Ctrl = pCtrl;
-  view->ForwardEvent(int(msg), &ev);
+  TCtrlEvent ev(pCtrl, dispid);
+  view->ForwardEvent(msg, &ev);
   return S_OK;
 }
 
-long
-TOcControlEvent::ForwardMouseEvent(long msg, short button, short shift,
-    long x, long y)
+//
+//
+//
+HRESULT
+TOcControlEvent::ForwardMouseEvent(uint msg, DISPID id,
+                                   short button, short shift,
+                                   long x, long y)
 {
   TOcView* view = pCtrl->GetActiveControlView();
   if (!view)
     return E_FAIL;
 
-  TCtrlMouseEvent ev;
-  ev.Ctrl = pCtrl;
-  ev.Button = button;
-  ev.Shift = shift;
-  ev.X = x;
-  ev.Y = y;
-  view->ForwardEvent(int(msg), &ev);
+  TCtrlMouseEvent ev(pCtrl, id, button, shift, x, y);
+  view->ForwardEvent(msg, &ev);
   return S_OK;
 }
 
-long
-TOcControlEvent::ForwardKeyEvent(long msg, short* keyCode, short shift)
+//
+//
+//
+HRESULT
+TOcControlEvent::ForwardKeyEvent(uint msg, DISPID id,
+                                 short* keyCode, short shift)
 {
   TOcView* view = pCtrl->GetActiveControlView();
   if (!view)
     return E_FAIL;
 
-  TCtrlKeyEvent ev;
-  ev.Ctrl = pCtrl;
-  ev.KeyCode = *keyCode;
-  ev.Shift = shift;
-  view->ForwardEvent(int(msg), &ev);
-  *keyCode = ev.KeyCode;
+  TCtrlKeyEvent ev(pCtrl, id, *keyCode, shift);
+  view->ForwardEvent(msg, &ev);
   return S_OK;
 }
 
-long
+//
+//
+//
+HRESULT
 TOcControlEvent::ErrorEvent(short Number, TAutoString Description,
-                  SCODE SCode, TAutoString Source, TAutoString HelpFile,
-                  long HelpContext, bool far* CancelDisplay)
+                            SCODE SCode, TAutoString Source,
+                            TAutoString HelpFile, long HelpContext,
+                            bool* CancelDisplay)
 {
   TOcView* view = pCtrl->GetActiveControlView();
   if (!view)
     return E_FAIL;
 
-  TCtrlErrorEvent ev;
-  ev.Ctrl = pCtrl;
-  ev.Number = Number;
-  ev.SCode = SCode;
-  ev.HelpContext = HelpContext;
-  ev.CancelDisplay = *CancelDisplay;
-  ev.Description = Description;
-  ev.Source = Source;
-  ev.HelpFile = HelpFile;
-
+  TCtrlErrorEvent ev(pCtrl, Number, Description, SCode, Source, HelpFile,
+                     HelpContext, *CancelDisplay);
   view->ForwardEvent(OC_CTRLEVENT_ERROREVENT, &ev);
-  *CancelDisplay = ev.CancelDisplay;
   return S_OK;
 }
 
+//
+//
+//
 HRESULT
 TOcControlEvent::CustomEvent(long* args)
 {
-  TCtrlCustomEvent ev;
-  TAutoStack* Args = (TAutoStack*)args;
   TOcView* view = pCtrl->GetActiveControlView();
   if (!view)
     return HR_FAIL;
 
-  ev.Ctrl = pCtrl;
-  ev.Args = Args;
+  TAutoStack* autoStack = (TAutoStack*)args;
+  TCtrlCustomEvent ev(pCtrl, autoStack->DispId, autoStack);
   view->ForwardEvent(OC_CTRLEVENT_CUSTOMEVENT, &ev);
   return HR_NOERROR;
 }
 
-long
+//
+//
+//
+HRESULT
 TOcControlEvent::Click()
 {
-  return ForwardClickEvent(OC_CTRLEVENT_CLICK);
+  return ForwardClickEvent(OC_CTRLEVENT_CLICK, DISPID_CLICK);
 }
 
-long
+//
+//
+//
+HRESULT
 TOcControlEvent::DblClick()
 {
-  return ForwardClickEvent(OC_CTRLEVENT_DBLCLICK);
+  return ForwardClickEvent(OC_CTRLEVENT_DBLCLICK, DISPID_DBLCLICK);
 }
 
-long
+//
+//
+//
+HRESULT
 TOcControlEvent::MouseDown(short button, short shift, long x, long y)
 {
-  return ForwardMouseEvent(OC_CTRLEVENT_MOUSEDOWN, button, shift, x, y);
+  return ForwardMouseEvent(OC_CTRLEVENT_MOUSEDOWN, DISPID_MOUSEDOWN,
+                           button, shift, x, y);
 }
 
-long
+//
+//
+//
+HRESULT
 TOcControlEvent::MouseMove(short button, short shift, long x, long y)
 {
-  return ForwardMouseEvent(OC_CTRLEVENT_MOUSEMOVE, button, shift, x, y);
+  return ForwardMouseEvent(OC_CTRLEVENT_MOUSEMOVE, DISPID_MOUSEMOVE,
+                           button, shift, x, y);
 }
 
-long
+//
+//
+//
+HRESULT
 TOcControlEvent::MouseUp(short button, short shift, long x, long y)
 {
-  return ForwardMouseEvent(OC_CTRLEVENT_MOUSEUP, button, shift, x, y);
+  return ForwardMouseEvent(OC_CTRLEVENT_MOUSEUP,
+                           DISPID_MOUSEUP, button, shift, x, y);
 }
 
-long
+//
+//
+//
+HRESULT
 TOcControlEvent::KeyDown(short far* keyCode, short shift)
 {
-  return ForwardKeyEvent(OC_CTRLEVENT_KEYDOWN, keyCode, shift);
+  return ForwardKeyEvent(OC_CTRLEVENT_KEYDOWN, DISPID_KEYDOWN,
+                         keyCode, shift);
 }
 
-long
+//
+//
+//
+HRESULT
 TOcControlEvent::KeyUp(short far* keyCode, short shift)
 {
-  return ForwardKeyEvent(OC_CTRLEVENT_KEYDOWN, keyCode, shift);
+  return ForwardKeyEvent(OC_CTRLEVENT_KEYUP, DISPID_KEYUP,
+                         keyCode, shift);
 }
 
-//-------------------------------------------
-//  OCX Registration and Unregistration
-//     may want to move these into bocole
-//-------------------------------------------
+//
+//
+//
+typedef HRESULT PASCAL FAR _export (*REGPROC)();
 
-HRESULT OcRegisterProc (char far* LibraryName, char far* ProcName)
+//
+//
+//
+static HRESULT
+OcInvokeProc(char* libraryName, char* procName)
 {
-  HINSTANCE LibHandle;
-  HRESULT   hr = ResultFromScode (E_FAIL);
+  HRESULT hr = ResultFromScode (E_FAIL);
 
-  LibHandle = LoadLibrary(LibraryName);
-  if (!LibHandle)
+  HINSTANCE libHandle = LoadLibrary(libraryName);
+  if (libHandle <= HINSTANCE(HINSTANCE_ERROR))
     return hr;
 
-  HRESULT PASCAL FAR _export (*DllRegisterServer)();
-  (FARPROC)DllRegisterServer = ::GetProcAddress (LibHandle, ProcName);
-  if (!DllRegisterServer)
-    return hr;
+  REGPROC dllRegProc;
+  dllRegProc = (REGPROC)::GetProcAddress (libHandle, procName);
+  if (dllRegProc) {
+    hr = dllRegProc();
+  }
 
-  hr = DllRegisterServer ();
-  FreeLibrary(LibHandle);
+  FreeLibrary(libHandle);
   return hr;
 }
 
-
-HRESULT OcRegisterControl (char far* LibraryName)
+//
+//
+//
+HRESULT
+OcRegisterControl(char* libraryName)
 {
-  return OcRegisterProc (LibraryName, "DllRegisterServer");
+  // NOTE: The new recommendation is to refrain from loading the control
+  //       until the 'SelfRegister' string has been found in the VERSIONINFO
+  //       resource...
+  //
+  return OcInvokeProc(libraryName, "DllRegisterServer");
 }
 
-
-HRESULT OcUnregisterControl (CLSID ClassId)
+//
+//
+//
+HRESULT
+OcUnregisterControl (CLSID classId)
 {
-  LPOLESTR str;
-  char     buf[255];
-  char     temp[64];
-  char     LibraryName[512];
-  LONG     len;
   HRESULT  hr;
+  LPOLESTR str;
+  hr = StringFromCLSID (classId, &str);
 
-  StringFromCLSID (ClassId, &str);
-  strcpy (temp, OleStr (str));
-  wsprintf (buf, "CLSID\\%s\\InprocServer32", temp);
-  IMalloc *pMalloc;
-  if (SUCCEEDED(CoGetMalloc (MEMCTX_TASK, &pMalloc))) {
-    pMalloc->Free (str);
-    pMalloc->Release ();
+  if (SUCCEEDED(hr)) {
+    char temp[64];
+    strcpy (temp, OleStr(str));
+
+    char     key[255];
+    wsprintf (key, "CLSID\\%s\\InprocServer32", temp);
+    CoTaskMemFree(str);
+
+    char  ocxPath[_MAX_PATH];
+    long  len = sizeof(ocxPath);
+    hr = (HRESULT)RegQueryValue (TRegKey::ClassesRoot,
+                                (LPCSTR)key, (LPSTR)ocxPath,
+                                (LONG FAR*)&len);
+    if (SUCCEEDED(hr)) {
+
+      // NOTE: The new recommendation is to refrain from loading the control
+      //       until the 'SelfRegister' string has been found in the VERSIONINFO
+      //       resource...
+      //
+      hr = OcInvokeProc(ocxPath, "DllUnregisterServer");
+    }
   }
-  len = 512;
-  hr = (HRESULT)RegQueryValue (TRegKey::ClassesRoot,
-                              (LPCSTR)buf, (LPSTR)LibraryName,
-                              (LONG FAR*)&len);
-  if (SUCCEEDED (hr))
-    hr = OcRegisterProc(LibraryName, "DllUnregisterServer");
   return hr;
 }
 

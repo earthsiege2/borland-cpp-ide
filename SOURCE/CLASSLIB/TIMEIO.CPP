@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.7  $
 //
 // TTime class IO and conversion implementation
 //----------------------------------------------------------------------------
@@ -21,29 +21,33 @@ int TTime::PrintDateFlag = 1;
 
 string TTime::AsString() const
 {
-    char buf[80];
+    _TCHAR buf[80];
     ostrstream strtemp(buf, sizeof(buf));
     strtemp << (*this) << ends;
     string temp(buf);
     return temp;
 }
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 ostream _BIDSFAR & _BIDSFUNC operator << ( ostream _BIDSFAR & s, const TTime _BIDSFAR & t )
 {
-    char buf[80];
+    _TCHAR buf[80];
 
     // We use an ostrstream to format into buf so that
     // we don't affect the ostream's width setting.
     //
     ostrstream out( buf, sizeof(buf) );
-  
+
     // First print the date if requested:
     //
-    if(TTime::PrintDateFlag) 
+    if(TTime::PrintDateFlag)
         out << TDate(t) << " ";
 
     unsigned hh = t.Hour();
-    out << (hh <= 12 ? hh : hh-12) << ':' 
+    out << (hh <= 12 ? hh : hh-12) << ':'
         << setfill('0') << setw(2) << t.Minute() << ':'
         << setw(2) << t.Second() << ' ' << setfill(' ');
     out << ( hh<12 ? "am" : "pm") << ends;
@@ -54,6 +58,10 @@ ostream _BIDSFAR & _BIDSFUNC operator << ( ostream _BIDSFAR & s, const TTime _BI
     s << buf;
     return s;
 }
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 int TTime::PrintDate( int f )
 {

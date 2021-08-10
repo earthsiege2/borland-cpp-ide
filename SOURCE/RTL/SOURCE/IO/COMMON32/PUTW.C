@@ -1,42 +1,43 @@
 /*-----------------------------------------------------------------------*
- * filename - putw.c
+ * filename - _putw.c
  *
  * function(s)
- *        putw - puts word on a stream
+ *        _putw - puts word on a stream
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 
 /*---------------------------------------------------------------------*
 
-Name            putw - puts a character or word on a stream
+Name            _putw - puts a character or word on a stream
 
 Usage           #include <stdio.h>
-                int putw(int w, FILE *stream);
+                int _putw(int w, FILE *stream);
 
 Prototype in    stdio.h
 
-Description     putw outputs the integer w to the output stream. putw neither
+Description     _putw outputs the integer w to the output stream. _putw neither
                 expects nor causes special alignment in the file.
 
-Return value    On success putw returns the integer w.
+Return value    On success _putw returns the integer w.
 
-                On error, putw returns EOF.
+                On error, _putw returns EOF.
 
                 Since EOF is a legitimate integer, ferror
-                should be used to detect errors with putw.
+                should be used to detect errors with _putw.
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC putw(int w, FILE *fp)
+int _RTLENTRY _EXPFUNC _putw(int w, FILE *fp)
 {
     int i;
     char *p;

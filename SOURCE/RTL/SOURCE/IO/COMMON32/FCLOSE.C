@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdio.h>
 #include <alloc.h>
@@ -40,7 +41,7 @@ int _RTLENTRY _EXPFUNC fclose (FILE *fp)
 {
     int rc;
 
-    if (fp == NULL || fp->token != (short) fp)
+    if (fp == NULL || fp->token != (unsigned char) fp)
         return(EOF);                /* invalid pointer */
 
     _lock_stream(fp);
@@ -63,7 +64,7 @@ int _RTLENTRY _EXPFUNC fclose (FILE *fp)
 
     if (fp->istemp != 0)
     {
-        __unlink(__mkname((char *)NULL, (char *)NULL, fp->istemp));
+        _unlink(__mkname((char *)NULL, (char *)NULL, fp->istemp));
         fp->istemp = 0;
     }
 

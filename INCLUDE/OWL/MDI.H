@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.4  $
 //
 // Definition of TMDIClient and TMDIFrame classes
 //----------------------------------------------------------------------------
@@ -20,6 +20,10 @@
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 class _OWLCLASS TMDIFrame;
 
@@ -139,6 +143,10 @@ typedef TMDIFrame TMdiFrame;
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.16  $
+//$Revision:   10.23  $
 //
 // Implementation of TGlyphButton
 //----------------------------------------------------------------------------
@@ -30,6 +30,7 @@ const int  BUTTONSTATE_FOCUS    = 0x0008;
 const int  BUTTONSTYLE_MASK     = 0x00FF;
 const long RopDSPDxax           = 0x00E20746L;
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlControl);        // General Controls diagnostic group
 
 // Hard-coded color constant that a bitmap designer can use as background.
@@ -192,11 +193,11 @@ DEFINE_RESPONSE_TABLE1(TGlyphButton, TButton)
   EV_WM_CANCELMODE,
   EV_MESSAGE(BM_SETSTATE, BmSetState),
   EV_MESSAGE(BM_GETSTATE, BmGetState),
-  EV_MESSAGE(BM_SETSTYLE, BMSetStyle),
+  EV_MESSAGE(BM_SETSTYLE, BmSetStyle),
 END_RESPONSE_TABLE;
 
 //
-//
+// Window proc. of control to handle messages sent before OWL thunks
 //
 LRESULT CALLBACK OWL_EXPORT16
 BButtonProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -209,24 +210,6 @@ BButtonProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return DLGC_BUTTON|DLGC_DEFPUSHBUTTON;
       else
         return DLGC_BUTTON|DLGC_UNDEFPUSHBUTTON;
-    }
-
-    case BM_SETSTATE: {
-      static int i;
-      i++;
-      break;
-    }
-
-    case BM_GETSTATE: {
-      static int i;
-      i++;
-      break;
-    }
-
-    case BM_SETSTYLE:   {
-      static int i;
-      i++;
-      break;
     }
   }
   return DefWindowProc(hwnd, msg, wParam, lParam);
@@ -431,7 +414,7 @@ TGlyphButton::EvSetFont(HFONT hFont, bool redraw)
 // button or the default push button according to our style.
 //
 uint
-TGlyphButton::EvGetDlgCode(MSG far* /*msg*/)
+TGlyphButton::EvGetDlgCode(MSG* /*msg*/)
 {
   if (IsSet(biDefault))
     return DLGC_BUTTON|DLGC_DEFPUSHBUTTON;
@@ -765,6 +748,8 @@ TGlyphButton::PaintFace(TDC& dc, TRect& rect)
   TRect textRect(0, 0, 0, 0);     // Size of text
   TAPointer<char> text;           // Pointer to caption dynamic buffer
   TPointer<TFont> tmpFnt;         // Object wrapping font handle
+  TColor textColor;               // Color used for button's text
+
   if (IsSet(biShowText)) {
     len = GetWindowTextLength();
     if (len) {
@@ -795,19 +780,24 @@ TGlyphButton::PaintFace(TDC& dc, TRect& rect)
 
       // Display text in proper color
       //
-      TColor textColor;
+      // Under NT 3.51 and Window 3.1, the system inexplicably returns values
+      // for gray text that are the same as either button text (so text never
+      // looks grayed) or as button face (so grayed text is invisible).  The
+      // extra if statement guards against those problems.
+      //
       if (IsSet(biDisabled)) {
-        if (TSystem::IsWin95())
-          textColor = TColor::SysGrayText;
-        else
-          textColor = TColor::Gray;
-      }
-      else
+        textColor = TColor::SysGrayText;
+        if ((textColor == TColor::Sys3dFace.GetValue()) || 
+            (textColor == TColor::SysBtnText.GetValue())) {
+          textColor = TColor::Sys3dShadow;
+        }
+      } else {
         textColor = TColor::SysBtnText;
+      }
 
-      TColor oldColor = dc.SetTextColor(textColor);
+      TColor oldColor = dc.SetTextColor(textColor); 
       dc.DrawText(text, len, textRect, DT_WORDBREAK|DT_CALCRECT);
-      dc.SetTextColor(oldColor);
+      dc.SetTextColor(oldColor);                    
     }
   }
 
@@ -835,8 +825,7 @@ TGlyphButton::PaintFace(TDC& dc, TRect& rect)
     }
     if (!textRect.IsNull()) {
       int mode = dc.SetBkMode(TRANSPARENT);
-      TColor oldColor = dc.SetTextColor(IsSet(biDisabled) ? TColor::SysGrayText :
-                                                            TColor::SysBtnText);
+      TColor oldColor = dc.SetTextColor(textColor);
       dc.DrawText(text, len, textRect, DT_WORDBREAK);
       dc.SetTextColor(oldColor);
       dc.SetBkMode(mode);
@@ -857,6 +846,8 @@ TGlyphButton::PaintFace(TDC& dc, TRect& rect)
 //
 // Virtual routine invoked to retrieve the placement of text and glyph
 // when drawing the button.
+// Override this routine to customize the layout logic and support
+// custom layout styles.
 //
 void
 TGlyphButton::LayoutTextGlyph(const TRect& faceRect, TRect& textRect,
@@ -916,20 +907,12 @@ TGlyphButton::LayoutTextGlyph(const TRect& faceRect, TRect& textRect,
             }
             break;
 
-      case lsH_STSG:
-      case lsH_TSGS:
-      case lsV_SGST:
-      case lsV_GST:
-      case lsV_STSG:
-      case lsV_TSGS:
-            break;
 
       default:
         break;
     }
 
-    if (LayStyle == lsH_SGST || LayStyle == lsH_GST ||
-        LayStyle == lsH_STSG || LayStyle == lsH_TSGS ) {
+    if (LayStyle == lsH_SGST || LayStyle == lsH_GST) {
 
       // Center vertically
       //
@@ -942,21 +925,6 @@ TGlyphButton::LayoutTextGlyph(const TRect& faceRect, TRect& textRect,
       //
       glyphRect.Offset(gDelta, 0);
       textRect.Offset(tDelta, 0);
-    }
-    else if (LayStyle == lsV_SGST || LayStyle == lsV_GST ||
-             LayStyle == lsV_STSG || LayStyle == lsV_TSGS ) {
-
-      // Or center horizontally
-      //
-      if (textRect.Width() < faceRect.Width())
-        textRect.Offset((faceRect.Width() - textRect.Width())/2, 0);
-      if (glyphRect.Width() < faceRect.Width())
-        glyphRect.Offset((faceRect.Width() - glyphRect.Width())/2, 0);
-
-      // Layout vertically
-      //
-      glyphRect.Offset(0, gDelta);
-      textRect.Offset(0, tDelta);
     }
   }
 }

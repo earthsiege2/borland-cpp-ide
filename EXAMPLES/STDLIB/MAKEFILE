@@ -49,19 +49,24 @@
 
 ########################   Targets    #################################
 
-all :   accum.exe adj_diff.exe advance.exe b_search.exe binders.exe bitset.exe \
-        complex.exe copyex.exe count.exe deque.exe distance.exe \
-        eqlrange.exe equal.exe exceptio.exe \
-        fill.exe find.exe find_f_o.exe for_each.exe funct_ob.exe \
-        generate.exe heap_ops.exe includes.exe inr_prod.exe ins_itr.exe \
-        lex_comp.exe limits.exe list.exe \
-        max.exe max_elem.exe merge.exe mismatch.exe multiset.exe \
-        negator.exe nthelem.exe p_queue.exe partsort.exe partsum.exe permute.exe \
-        pnt2fnct.exe prtition.exe queue.exe remove.exe replace.exe \
-        rev_itr.exe reverse.exe rndshufl.exe rotate.exe search.exe \
-        setex.exe set_diff.exe set_intr.exe set_unin.exe set_s_di.exe \
-        set_intr.cpp string.exe swap.exe trnsform.exe \
-        ul_bound.exe unique.exe vector.exe
+all : accum.exe adj_diff.exe advance.exe auto_ptr.exe b_search.exe \
+	binders.exe bitset.exe complex.exe copyex.exe count.exe \
+	deque.exe distance.exe eqlrange.exe equal.exe exceptio.exe \
+	exceptn.exe fill.exe find.exe find_f_o.exe for_each.exe \
+	funct_ob.exe generate.exe heap_ops.exe includes.exe \
+	inr_prod.exe ins_itr.exe lex_comp.exe limits.exe list.exe \
+        map.exe max.exe max_elem.exe merge.exe mismatch.exe \
+	multimap.exe multiset.exe negator.exe nthelem.exe p_queue.exe \
+	partsort.exe partsum.exe permute.exe pnt2fnct.exe prtition.exe \
+	queue.exe remove.exe replace.exe rev_itr.exe reverse.exe \
+	rndshufl.exe rotate.exe search.exe setex.exe set_diff.exe \
+	set_intr.exe set_unin.exe set_s_di.exe set_intr.cpp sort.exe \
+	stack.exe string.exe swap.exe trnsform.exe ul_bound.exe \
+	unique.exe vector.exe alg1.exe alg2.exe alg3.exe alg4.exe \
+	alg5.exe alg6.exe alg7.exe calc.exe complx.exe concord.exe \
+	graph.exe icecream.exe radix.exe sieve.exe spell.exe tele.exe \
+	widwork.exe
+
 
 clean:
    if exist *.obj del *.obj

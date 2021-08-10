@@ -1,92 +1,99 @@
 /*++
 
+Copyright (C) 1992-1996 Microsoft Corporation
+
 Module Name:
 
     snmp.h
 
 Abstract:
 
-    Type definitions for SNMP Extension Agent Development.
+    Definitions for SNMP Extension Agent development.
 
 --*/
 
-/* $Copyright: 1994$ */
+#ifndef _INC_SNMP
+#define _INC_SNMP
+#pragma option -b
 
-#ifndef snmp_h
-#define snmp_h
-#define __SNMP_H
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// Additional header files                                                   //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
+#pragma option -b.
 #include <windows.h>
+#pragma option -b
 
-
-//
-// SNMP API Constant Definitions
-//
-
-// Purely for code readability
-#define IN
-#define OUT
-
-
-// API return type
-
-#define SNMPAPI          int
-
-#if (_MSC_VER >= 800) || defined(__BORLANDC__)
-#define SNMP_FUNC_TYPE   __stdcall
-#else
-#define SNMP_FUNC_TYPE
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP API return type definitions                                          //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
-// API return codes
-#define SNMPAPI_NOERROR TRUE
-#define SNMPAPI_ERROR   FALSE
+#define SNMPAPI                         INT
+#define SNMP_FUNC_TYPE                  WINAPI
 
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP API return code definitions                                          //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
-// class field of BER tag
-#define ASN_UNIVERSAL         0x00
-#define ASN_APPLICATION       0x40
-#define ASN_CONTEXTSPECIFIC   0x80
-#define ASN_PRIVATE           0xC0
+#define SNMPAPI_NOERROR                 TRUE
+#define SNMPAPI_ERROR                   FALSE
 
-// primative/constructed field of BER tag
-#define ASN_PRIMATIVE         0x00
-#define ASN_CONSTRUCTOR       0x20
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP API error code definitions                                           //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
+#define SNMP_MEM_ALLOC_ERROR            1
 
-// ASN.1 simple types
-#define ASN_INTEGER           (ASN_UNIVERSAL | ASN_PRIMATIVE | 0x02)
-#define ASN_OCTETSTRING       (ASN_UNIVERSAL | ASN_PRIMATIVE | 0x04)
-#define ASN_NULL              (ASN_UNIVERSAL | ASN_PRIMATIVE | 0x05)
-#define ASN_OBJECTIDENTIFIER  (ASN_UNIVERSAL | ASN_PRIMATIVE | 0x06)
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// BER API error code definitions                                            //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
-// ASN.1 constructor types
-#define ASN_SEQUENCE          (ASN_UNIVERSAL | ASN_CONSTRUCTOR | 0x10)
-#define ASN_SEQUENCEOF        ASN_SEQUENCE
+#define SNMP_BERAPI_INVALID_LENGTH      10
+#define SNMP_BERAPI_INVALID_TAG         11
+#define SNMP_BERAPI_OVERFLOW            12
+#define SNMP_BERAPI_SHORT_BUFFER        13
+#define SNMP_BERAPI_INVALID_OBJELEM     14
 
-// ASN.1 application specific primatives
-#define ASN_RFC1155_IPADDRESS  (ASN_APPLICATION | ASN_PRIMATIVE | 0x00)
-#define ASN_RFC1155_COUNTER    (ASN_APPLICATION | ASN_PRIMATIVE | 0x01)
-#define ASN_RFC1155_GAUGE      (ASN_APPLICATION | ASN_PRIMATIVE | 0x02)
-#define ASN_RFC1155_TIMETICKS  (ASN_APPLICATION | ASN_PRIMATIVE | 0x03)
-#define ASN_RFC1155_OPAQUE     (ASN_APPLICATION | ASN_PRIMATIVE | 0x04)
-#define ASN_RFC1213_DISPSTRING ASN_OCTETSTRING
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// PDU API error code definitions                                            //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
-// ASN.1 application specific constructors
-#define ASN_RFC1157_GETREQUEST     \
-            (ASN_CONTEXTSPECIFIC | ASN_CONSTRUCTOR | 0x00)
-#define ASN_RFC1157_GETNEXTREQUEST \
-            (ASN_CONTEXTSPECIFIC | ASN_CONSTRUCTOR | 0x01)
-#define ASN_RFC1157_GETRESPONSE    \
-            (ASN_CONTEXTSPECIFIC | ASN_CONSTRUCTOR | 0x02)
-#define ASN_RFC1157_SETREQUEST     \
-            (ASN_CONTEXTSPECIFIC | ASN_CONSTRUCTOR | 0x03)
-#define ASN_RFC1157_TRAP           \
-            (ASN_CONTEXTSPECIFIC | ASN_CONSTRUCTOR | 0x04)
+#define SNMP_PDUAPI_UNRECOGNIZED_PDU    20
+#define SNMP_PDUAPI_INVALID_ES          21
+#define SNMP_PDUAPI_INVALID_GT          22
 
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// AUTH API error code definitions                                           //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
-// PDU error status
+#define SNMP_AUTHAPI_INVALID_VERSION    30
+#define SNMP_AUTHAPI_INVALID_MSG_TYPE   31
+#define SNMP_AUTHAPI_TRIV_AUTH_FAILED   32
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP PDU error status definitions                                         //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
 #define SNMP_ERRORSTATUS_NOERROR        0
 #define SNMP_ERRORSTATUS_TOOBIG         1
 #define SNMP_ERRORSTATUS_NOSUCHNAME     2
@@ -94,8 +101,12 @@ Abstract:
 #define SNMP_ERRORSTATUS_READONLY       4
 #define SNMP_ERRORSTATUS_GENERR         5
 
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP PDU generic trap definitions                                         //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
-// PDU generic traps
 #define SNMP_GENERICTRAP_COLDSTART      0
 #define SNMP_GENERICTRAP_WARMSTART      1
 #define SNMP_GENERICTRAP_LINKDOWN       2
@@ -104,241 +115,322 @@ Abstract:
 #define SNMP_GENERICTRAP_EGPNEIGHLOSS   5
 #define SNMP_GENERICTRAP_ENTERSPECIFIC  6
 
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// BER encoding definitions                                                  //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
+#define ASN_UNIVERSAL                   0x00
+#define ASN_APPLICATION                 0x40
+#define ASN_CONTEXTSPECIFIC             0x80
+#define ASN_PRIVATE                     0xC0
 
-//
-// SNMP Error codes
-//
-
-// General error codes
-#define SNMP_MEM_ALLOC_ERROR          1
-
-// BER API error codes (using Get/Set LastError)
-#define SNMP_BERAPI_INVALID_LENGTH    10
-#define SNMP_BERAPI_INVALID_TAG       11
-#define SNMP_BERAPI_OVERFLOW          12
-#define SNMP_BERAPI_SHORT_BUFFER      13
-#define SNMP_BERAPI_INVALID_OBJELEM   14
-
-// PDU API Error Codes
-#define SNMP_PDUAPI_UNRECOGNIZED_PDU  20
-#define SNMP_PDUAPI_INVALID_ES        21
-#define SNMP_PDUAPI_INVALID_GT        22
-
-// AUTHENTICATION API Error Codes
-#define SNMP_AUTHAPI_INVALID_VERSION  30
-#define SNMP_AUTHAPI_INVALID_MSG_TYPE 31
-#define SNMP_AUTHAPI_TRIV_AUTH_FAILED 32
-
-
+#define ASN_PRIMATIVE                   0x00
+#define ASN_CONSTRUCTOR                 0x20
 
 //
-// SNMP API Type Definitions
+// For BER tags with a number ranging from 0 to 30 (inclusive), the
+// identifier octets consists of a single octet encoded as follows:
+//
+//   7 6 5 4 3 2 1 0
+//  +---+-+---------+
+//  |Cls|P| Tag Num |
+//  +---+-+---------+
+//
+//  where
+//
+//      Cls - is the class of the tag
+//
+//          00 - universal
+//          01 - application
+//          10 - context-specific
+//          11 - private
+//
+//      P - indicates whether encoding is primitive
+//
+//           0 - primitive
+//           1 - constructed
+//
+//      Tag Num - is the number of the tag
 //
 
-typedef long           AsnInteger;
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// ASN.1 simple types                                                        //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+#define ASN_INTEGER                (ASN_UNIVERSAL|ASN_PRIMATIVE|0x02)
+#define ASN_OCTETSTRING            (ASN_UNIVERSAL|ASN_PRIMATIVE|0x04)
+#define ASN_NULL                   (ASN_UNIVERSAL|ASN_PRIMATIVE|0x05)
+#define ASN_OBJECTIDENTIFIER       (ASN_UNIVERSAL|ASN_PRIMATIVE|0x06)
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// ASN.1 constructor types                                                   //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+#define ASN_SEQUENCE               (ASN_UNIVERSAL|ASN_CONSTRUCTOR|0x10)
+#define ASN_SEQUENCEOF             ASN_SEQUENCE
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// ASN.1 application specific primatives                                     //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+#define ASN_RFC1155_IPADDRESS      (ASN_APPLICATION|ASN_PRIMATIVE|0x00)
+#define ASN_RFC1155_COUNTER        (ASN_APPLICATION|ASN_PRIMATIVE|0x01)
+#define ASN_RFC1155_GAUGE          (ASN_APPLICATION|ASN_PRIMATIVE|0x02)
+#define ASN_RFC1155_TIMETICKS      (ASN_APPLICATION|ASN_PRIMATIVE|0x03)
+#define ASN_RFC1155_OPAQUE         (ASN_APPLICATION|ASN_PRIMATIVE|0x04)
+#define ASN_RFC1213_DISPSTRING     ASN_OCTETSTRING
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// ASN.1 application specific constructors                                   //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+#define ASN_RFC1157_GETREQUEST     (ASN_CONTEXTSPECIFIC|ASN_CONSTRUCTOR|0x00)
+#define ASN_RFC1157_GETNEXTREQUEST (ASN_CONTEXTSPECIFIC|ASN_CONSTRUCTOR|0x01)
+#define ASN_RFC1157_GETRESPONSE    (ASN_CONTEXTSPECIFIC|ASN_CONSTRUCTOR|0x02)
+#define ASN_RFC1157_SETREQUEST     (ASN_CONTEXTSPECIFIC|ASN_CONSTRUCTOR|0x03)
+#define ASN_RFC1157_TRAP           (ASN_CONTEXTSPECIFIC|ASN_CONSTRUCTOR|0x04)
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP ASN type definitions                                                 //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
 typedef struct {
-    BYTE *stream;
-    UINT  length;
-    BOOL dynamic;
-}                      AsnOctetString;
+    BYTE * stream;              // pointer to octet stream
+    UINT   length;              // number of octets in stream
+    BOOL   dynamic;             // true if octets must be freed
+} AsnOctetString;
+
 typedef struct {
-    UINT idLength;
-    UINT *ids;
-}                      AsnObjectIdentifier;
+    UINT   idLength;            // number of integers in oid
+    UINT * ids;                 // pointer to integer stream
+} AsnObjectIdentifier;
 
-typedef AsnOctetString AsnSequence;
-typedef AsnSequence    AsnImplicitSequence;
+typedef LONG                    AsnInteger;
+typedef DWORD                   AsnCounter;
+typedef DWORD                   AsnGauge;
+typedef DWORD                   AsnTimeticks;
 
-typedef AsnOctetString AsnIPAddress;
-typedef AsnOctetString AsnDisplayString;
-typedef DWORD          AsnCounter;
-typedef DWORD          AsnGauge;
-typedef DWORD          AsnTimeticks;
-typedef AsnOctetString AsnOpaque;
+typedef AsnOctetString          AsnSequence;
+typedef AsnOctetString          AsnImplicitSequence;
+typedef AsnOctetString          AsnIPAddress;
+typedef AsnOctetString          AsnDisplayString;
+typedef AsnOctetString          AsnOpaque;
+
+typedef AsnObjectIdentifier     AsnObjectName;
+typedef AsnIPAddress            AsnNetworkAddress;
 
 typedef struct {
     BYTE asnType;
     union {
-        // RFC 1155 SimpleSyntax (subset of ISO ASN.1)
-        AsnInteger           number;
-        AsnOctetString       string;
-        AsnObjectIdentifier  object;
-
-        // ISO ASN.1
-        AsnSequence          sequence;
-
-        // RFC 1155 ApplicationSyntax
-        AsnIPAddress         address;
-        AsnCounter           counter;
-        AsnGauge             gauge;
-        AsnTimeticks         ticks;
-        AsnOpaque            arbitrary;
+        AsnInteger              number;
+        AsnOctetString          string;
+        AsnObjectIdentifier     object;
+        AsnSequence             sequence;
+        AsnIPAddress            address;
+        AsnCounter              counter;
+        AsnGauge                gauge;
+        AsnTimeticks            ticks;
+        AsnOpaque               arbitrary;
     } asnValue;
 } AsnAny;
 
-typedef AsnObjectIdentifier AsnObjectName;
-typedef AsnAny              AsnObjectSyntax;
-typedef AsnIPAddress        AsnNetworkAddress;
+typedef AsnAny                  AsnObjectSyntax;
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP API type definitions                                                 //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
 typedef struct vb {
-    AsnObjectName   name;
-    AsnObjectSyntax value;
+    AsnObjectName    name;      // variable's object identifer
+    AsnObjectSyntax  value;     // variable's value (in asn terms)
 } RFC1157VarBind;
 
 typedef struct {
-    RFC1157VarBind *list;
-    UINT           len;
+    RFC1157VarBind * list;      // array of variable bindings
+    UINT             len;       // number of bindings in array
 } RFC1157VarBindList;
 
-typedef struct {
-    RFC1157VarBindList varBinds;
-    AsnInteger         requestType;
-    AsnInteger         requestId;
-    AsnInteger         errorStatus;
-    AsnInteger         errorIndex;
-} RFC1157Pdu;
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP API prototypes                                                       //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
 
-typedef struct {
-    RFC1157VarBindList  varBinds;
-    AsnObjectIdentifier enterprise;
-    AsnNetworkAddress   agentAddr;
-    AsnInteger          genericTrap;
-    AsnInteger          specificTrap;
-    AsnTimeticks        timeStamp;
-} RFC1157TrapPdu;
-
-typedef struct {
-   BYTE pduType;
-   union {
-      RFC1157Pdu     pdu;
-      RFC1157TrapPdu trap;
-   } pduValue;
-} RFC1157Pdus;
-
-typedef struct {
-    AsnObjectIdentifier dstParty;
-    AsnObjectIdentifier srcParty;
-    RFC1157Pdus pdu;
-    AsnOctetString community; // This is temporary
-} SnmpMgmtCom;
-
-
-
-//
-// SNMP Utility Prototypes
-//
-
-
-// Preferred names for the APIs, prototypes following may change in future.
-
-#define SnmpUtilOidCpy(a,b)      SNMP_oidcpy(a,b)
-#define SnmpUtilOidAppend(a,b)   SNMP_oidappend(a,b)
-#define SnmpUtilOidNCmp(a,b,c)   SNMP_oidncmp(a,b,c)
-#define SnmpUtilOidCmp(a,b)      SNMP_oidcmp(a,b)
-#define SnmpUtilOidFree(a)       SNMP_oidfree(a)
-
-#define SnmpUtilVarBindListCpy(a,b)  SNMP_CopyVarBindList(a,b)
-#define SnmpUtilVarBindCpy(a,b)      SNMP_CopyVarBind(a,b)
-#define SnmpUtilVarBindListFree(a)   SNMP_FreeVarBindList(a)
-#define SnmpUtilVarBindFree(a)       SNMP_FreeVarBind(a)
-
-#define SnmpUtilPrintAsnAny(a)   SNMP_printany(a)
-
-#ifdef SNMPDBG
-#define SNMP_free(x)   SNMP_DBG_free(x, __LINE__, __FILE__)
-#define SNMP_malloc(x) SNMP_DBG_malloc(x, __LINE__, __FILE__)
-#define SNMP_realloc(x, y)  SNMP_DBG_realloc(x, y, __LINE__, __FILE__)
-#else
-#define SNMP_free(x)   free(x)
-#define SNMP_malloc(x) malloc(x)
-#define SNMP_realloc(x, y)  realloc(x, y)
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern void
-SNMP_FUNC_TYPE SNMP_DBG_free(
-    IN void *x,
-    IN int line,
-    IN char *file
+SNMPAPI
+SNMP_FUNC_TYPE
+SnmpUtilOidCpy(
+    OUT AsnObjectIdentifier *DstObjId,
+    IN  AsnObjectIdentifier *SrcObjId
     );
 
-extern void *
-SNMP_FUNC_TYPE SNMP_DBG_malloc(
-    IN unsigned int x,
-    IN int line,
-    IN char *file
+SNMPAPI
+SNMP_FUNC_TYPE
+SnmpUtilOidAppend(
+    IN OUT AsnObjectIdentifier *DstObjId,
+    IN     AsnObjectIdentifier *SrcObjId
     );
 
-extern void *
-SNMP_FUNC_TYPE SNMP_DBG_realloc(
-    IN void *x,
-    IN unsigned int y,
-    IN int line,
-    IN char *file
+SNMPAPI
+SNMP_FUNC_TYPE
+SnmpUtilOidNCmp(
+    IN AsnObjectIdentifier *ObjIdA,
+    IN AsnObjectIdentifier *ObjIdB,
+    IN UINT                 Len
     );
 
-extern SNMPAPI
-SNMP_FUNC_TYPE SNMP_oidcpy(
-    OUT AsnObjectIdentifier *DestObjId, // Destination OID
-    IN AsnObjectIdentifier *SrcObjId    // Source OID
+SNMPAPI
+SNMP_FUNC_TYPE
+SnmpUtilOidCmp(
+    IN AsnObjectIdentifier *ObjIdA,
+    IN AsnObjectIdentifier *ObjIdB
     );
 
-extern SNMPAPI
-SNMP_FUNC_TYPE SNMP_oidappend(
-    IN OUT AsnObjectIdentifier *DestObjId, // Destination OID
-    IN AsnObjectIdentifier *SrcObjId       // Source OID
+VOID
+SNMP_FUNC_TYPE
+SnmpUtilOidFree(
+    IN OUT AsnObjectIdentifier *ObjId
     );
 
-extern SNMPAPI
-SNMP_FUNC_TYPE SNMP_oidncmp(
-    IN AsnObjectIdentifier *A, // First OID
-    IN AsnObjectIdentifier *B, // Second OID
-    IN UINT Len                // Max len to compare
+SNMPAPI
+SNMP_FUNC_TYPE
+SnmpUtilVarBindListCpy(
+    OUT RFC1157VarBindList *DstVarBindList,
+    IN  RFC1157VarBindList *SrcVarBindList
     );
 
-#define SNMP_oidcmp(A,B) SNMP_oidncmp(A,B,max((A)->idLength,(B)->idLength))
-
-extern void
-SNMP_FUNC_TYPE SNMP_oidfree(
-    IN OUT AsnObjectIdentifier *Obj // OID to free
+SNMPAPI
+SNMP_FUNC_TYPE
+SnmpUtilVarBindCpy(
+    OUT RFC1157VarBind *DstVarBind,
+    IN  RFC1157VarBind *SrcVarBind
     );
 
-extern SNMPAPI
-SNMP_FUNC_TYPE SNMP_CopyVarBindList(
-    RFC1157VarBindList *dst, // Destination var bind list
-    RFC1157VarBindList *src  // Source var bind list
+VOID
+SNMP_FUNC_TYPE
+SnmpUtilVarBindListFree(
+    IN OUT RFC1157VarBindList *VarBindList
     );
 
-extern SNMPAPI
-SNMP_FUNC_TYPE SNMP_CopyVarBind(
-    RFC1157VarBind *dst, // Destination var bind
-    RFC1157VarBind *src  // Source var bind
+VOID
+SNMP_FUNC_TYPE
+SnmpUtilVarBindFree(
+    IN OUT RFC1157VarBind *VarBind
     );
 
-
-extern void
-SNMP_FUNC_TYPE SNMP_FreeVarBindList(
-    RFC1157VarBindList *VarBindList // Variable bindings list to free
-    );
-
-extern void
-SNMP_FUNC_TYPE SNMP_FreeVarBind(
-    RFC1157VarBind *VarBind // Variable binding to free
-    );
-
-
-extern void
-SNMP_FUNC_TYPE SNMP_printany(
+VOID
+SNMP_FUNC_TYPE
+SnmpUtilPrintAsnAny(
     IN AsnAny *Any
     );
+
+VOID
+SNMP_FUNC_TYPE
+SnmpUtilMemFree(
+    IN OUT LPVOID Addr
+    );
+
+LPVOID
+SNMP_FUNC_TYPE
+SnmpUtilMemAlloc(
+    IN UINT Size
+    );
+
+LPVOID
+SNMP_FUNC_TYPE
+SnmpUtilMemReAlloc(
+    IN LPVOID Addr,
+    IN UINT   NewSize
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP debugging definitions                                                //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+#define SNMP_LOG_SILENT             0x0
+#define SNMP_LOG_FATAL              0x1
+#define SNMP_LOG_ERROR              0x2
+#define SNMP_LOG_WARNING            0x3
+#define SNMP_LOG_TRACE              0x4
+#define SNMP_LOG_VERBOSE            0x5
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// SNMP debugging prototypes                                                 //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+VOID
+SNMP_FUNC_TYPE
+SnmpUtilDbgPrint(
+    IN INT nLogLevel,               // see log levels above...
+    IN LPSTR szFormat,
+    IN ...
+    );
+
+#if DBG
+#define SNMPDBG(_x_)                SnmpUtilDbgPrint _x_
+#else
+#define SNMPDBG(_x_)
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// Miscellaneous definitions                                                 //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+#define SNMP_MAX_OID_LEN            0x7f00 // max number of elements in oid
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// Support for old definitions (support disabled via SNMPSTRICT)             //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+#ifndef SNMPSTRICT
+
+#define SNMP_oidcpy                 SnmpUtilOidCpy
+#define SNMP_oidappend              SnmpUtilOidAppend
+#define SNMP_oidncmp                SnmpUtilOidNCmp
+#define SNMP_oidcmp                 SnmpUtilOidCmp
+#define SNMP_oidfree                SnmpUtilOidFree
+
+#define SNMP_CopyVarBindList        SnmpUtilVarBindListCpy
+#define SNMP_FreeVarBindList        SnmpUtilVarBindListFree
+#define SNMP_CopyVarBind            SnmpUtilVarBindCpy
+#define SNMP_FreeVarBind            SnmpUtilVarBindFree
+
+#define SNMP_printany               SnmpUtilPrintAsnAny
+
+#define SNMP_free                   SnmpUtilMemFree
+#define SNMP_malloc                 SnmpUtilMemAlloc
+#define SNMP_realloc                SnmpUtilMemReAlloc
+
+#define SNMP_DBG_free               SnmpUtilMemFree
+#define SNMP_DBG_malloc             SnmpUtilMemAlloc
+#define SNMP_DBG_realloc            SnmpUtilMemReAlloc
+
+#endif // SNMPSTRICT
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* snmp_h */
-
+#pragma option -b.
+#endif // _INC_SNMP

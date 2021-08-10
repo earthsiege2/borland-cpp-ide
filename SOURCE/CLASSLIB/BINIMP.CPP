@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.9  $
 //
 //----------------------------------------------------------------------------
 #include <classlib/pch.h>
@@ -103,6 +103,10 @@ int TBinarySearchTreeBase::RemNode( BinNode *node, BinNode *parent, int del )
     return 1;
 }
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 class TBinaryTreeKiller : public TBinaryTreeInternalIteratorBase
 {
 
@@ -123,6 +127,10 @@ private:
     const TBinaryTreeKiller& operator = ( const TBinaryTreeKiller& );
 
 };
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 void TBinaryTreeKiller::Apply( TBinarySearchTreeBase::BinNode _FAR *node,
                            TBinarySearchTreeBase::BinNode _FAR *parent )

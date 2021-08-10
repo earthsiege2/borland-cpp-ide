@@ -1,5 +1,6 @@
 #ifndef __RWSTDWIND_H__
 #define __RWSTDWIND_H__
+/* $Revision:   8.1  $ */
 
 /***************************************************************************
  *
@@ -26,7 +27,7 @@
  * rights of the Government regarding its use, reproduction and disclosure
  * are as set forth in Section 52.227-19 of the FARS Computer
  * Software-Restricted Rights clause.
- * 
+ *
  * Use, duplication, or disclosure by the Government is subject to
  * restrictions as set forth in subparagraph (c)(1)(ii) of the Rights in
  * Technical Data and Computer Software clause at DFARS 252.227-7013.
@@ -79,7 +80,7 @@
  * If you intend to use a DLL version of the Borland RTL as well, then you
  * should also define the macro _RTLDLL, as per Borland's instructions.
  *
- * You must also specify the -WS switch ("smart callbacks") for the 
+ * You must also specify the -WS switch ("smart callbacks") for the
  * Borland Compiler.
  *
  *
@@ -90,21 +91,21 @@
  *
  *                Creating a RW static Windows library
  *
- * If your intention is to create a Rogue Wave library to be used as 
+ * If your intention is to create a Rogue Wave library to be used as
  * as a static Windows library, then one of the macros __WIN16__ or __WIN32__
  * must have been defined in compiler.h (or by the compiler directly).
  *
- * Borland:	__WIN16__ will be defined if both _Windows and __MSDOS__ 
- *              is defined.  _Windows will be defined automatically if 
+ * Borland:	__WIN16__ will be defined if both _Windows and __MSDOS__
+ *              is defined.  _Windows will be defined automatically if
  *              any -W switch is used.  Borland defines __WIN32__ automatically
  *              in their 32-bit compiler for Windows NT / Win32s.
  *
  * Microsoft:	Microsoft automatically defines _WINDOWS if you use the
- *		/GA (preferred) or /GW switch. 
+ *		/GA (preferred) or /GW switch.
  *              __WIN32__ will only be defined if either it, or WIN32,
  *              is explicitly defined on the cl command line.
  *
- * 
+ *
  *                 Using a RW static Windows library
  *
  * Nothing special needs to be done.  Just link compile with the appropriate
@@ -148,12 +149,12 @@
 #      ifdef RWSTD_EXPORT_TEMPLATE
 #        define RWSTDExportTemplate _export	/* Mark template insts as exported */
 #      else
-#        define RWSTDExportTemplate 
+#        define RWSTDExportTemplate
 #      endif
 #      define rwexport _export	                /*    & functions as well   */
 #    else /* Microsoft: */
 #      define RWSTDExport __declspec(dllexport)
-#      define RWSTDExportTemplate              
+#      define RWSTDExportTemplate
 #      define rwexport __declspec(dllexport)
 #    endif
 #  else
@@ -163,24 +164,24 @@
 #      define rwexport far	/*    & functions as far */
 #    elif defined(__WIN32__)
 #      ifndef _MSC_VER
-#        define RWSTDExport _import     
+#        define RWSTDExport _import
 #        ifdef RWSTD_EXPORT_TEMPLATE
 #          define RWSTDExportTemplate _import
 #        else
-#          define RWSTDExportTemplate 
+#          define RWSTDExportTemplate
 #        endif
 #        define rwexport
 #      else
 #        define RWSTDExport  __declspec(dllimport)
-#        define RWSTDExportTemplate 
+#        define RWSTDExportTemplate
 #        define rwexport
-#      endif  
+#      endif
 #    endif
 #  endif
 #else
    // Neither compiling, nor using the  DLL.
 #  define RWSTDExport
-#  define RWSTDExportTemplate 
+#  define RWSTDExportTemplate
 #  define rwexport
 #endif
 

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.8  $
 //
 // Implementation of class TLayoutWindow.
 //----------------------------------------------------------------------------
@@ -17,6 +17,75 @@
 # include <classlib/fixedpnt.h>
 #endif
 
+OWL_DIAGINFO;
+//----------------------------------------------------------------------------
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+// Small wrapper around the 'DeferWindowPos' APIs
+//
+class TDeferWinPos {
+  public:
+    TDeferWinPos(int numWindows);
+   ~TDeferWinPos();
+    bool  DeferWindowPos(HWND hwnd, HWND after, int x, int y, int cx, int cy,
+                         uint flags);
+    bool  EndDeferWindowPos();
+  protected:
+    HDWP  Hdwp;
+};
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
+//
+//
+//
+TDeferWinPos::TDeferWinPos(int numWindows)
+{
+  Hdwp = numWindows ? ::BeginDeferWindowPos(numWindows) : 0;
+}
+
+//
+//
+//
+bool
+TDeferWinPos::DeferWindowPos(HWND hwnd, HWND after, int x, int y, 
+                             int cx, int cy, uint flags)
+{
+  PRECONDITION(Hdwp);
+  Hdwp = ::DeferWindowPos(Hdwp, hwnd, after, x, y, cx, cy, flags);
+  CHECK(Hdwp);
+  return Hdwp != 0;
+}
+
+//
+//
+//
+bool  
+TDeferWinPos::EndDeferWindowPos()
+{
+  PRECONDITION(Hdwp);
+  if (::EndDeferWindowPos(Hdwp)) {
+    Hdwp = 0;
+    return true;
+  }
+  return false;
+}
+
+//
+//
+//
+TDeferWinPos::~TDeferWinPos()
+{
+  if (Hdwp)
+    EndDeferWindowPos();
+}
+
+
 DEFINE_RESPONSE_TABLE1(TLayoutWindow, TWindow)
   EV_WM_SIZE,
 END_RESPONSE_TABLE;
@@ -29,6 +98,11 @@ IMPLEMENT_CASTABLE(TLayoutWindow);
 // the method for solving the constraint is represented as an ordered linear
 // combination of the inputs and the constant with the constant expressed last
 //
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 struct TVariable;
 struct TConstraint {
   TVariable*    Inputs[3];
@@ -67,6 +141,10 @@ struct TChildMetrics {
 
     TChildMetrics(TWindow& child, TLayoutMetrics& metrics);
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 
@@ -183,7 +261,22 @@ TLayoutWindow::Layout()
     //
     ExecutePlan();
 
-    // Now do the actual resizing of the windows
+    // Find out how many windows we're dealing with
+    //
+    int numWindows = 0;
+    for (childMetrics = ChildMetrics; childMetrics; childMetrics = childMetrics->Next) {
+      TWindow*    win = childMetrics->Child;
+      if (win->GetHandle())
+        numWindows++;
+    }
+
+#if !defined(OWL_NO_DEFERWINDOWPOS_LAYOUT)
+    // Helper object to use 'DefWindowPos' API
+    //
+    TDeferWinPos dwp(numWindows);
+#endif
+
+    // Do actual resizing
     //
     for (childMetrics = ChildMetrics; childMetrics; childMetrics = childMetrics->Next) {
       TWindow*    win = childMetrics->Child;
@@ -191,7 +284,7 @@ TLayoutWindow::Layout()
 
       if (win->GetHandle()) {
 
-
+#if defined(OWL_NO_DEFERWINDOWPOS_LAYOUT)
         win->SetWindowPos(
           0,
           variables[0].Value,
@@ -200,6 +293,14 @@ TLayoutWindow::Layout()
           variables[3].Value - variables[1].Value + 1,
           SWP_NOACTIVATE | SWP_NOZORDER
         );
+#else
+        dwp.DeferWindowPos(*win, 0, 
+                           variables[0].Value,
+                           variables[1].Value,
+                           variables[2].Value - variables[0].Value + 1,
+                           variables[3].Value - variables[1].Value + 1,
+                           SWP_NOACTIVATE | SWP_NOZORDER);
+#endif
       }
       else {
         win->Attr.X = variables[0].Value;

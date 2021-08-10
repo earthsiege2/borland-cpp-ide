@@ -36,3 +36,4 @@
 
 #define OPTIONSID         104
 
+#define IDA_ABOUT         500

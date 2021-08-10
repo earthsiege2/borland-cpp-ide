@@ -1,12 +1,11 @@
 //----------------------------------------------------------------------------
 // cScript
-// (C) Copyright 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1995, 1997 by Borland International, All Rights Reserved
 //
 // STARTUP.SPP
 //    Script component of cScript startup process.
 //
-// $Revision:   1.63  $
-// $Revision:   1.63  $
+// $Revision:   1.70  $
 //
 //----------------------------------------------------------------------------
 
@@ -51,8 +50,9 @@ LoadKeyboard(){
  // declare General = new KeyboardDataFile(sFileName.Text,FALSE);
 
  // editor.KBD Assignments based upon Options|Environment+Editor.
- declare String sFileName(scriptEngine.StartupDirectory + IDE.KeyboardAssignmentFile);
- LoadKeyboardDataFile(sFileName.Text,FALSE);
+   declare String sEmulation(IDE.KeyboardAssignmentFile);
+   sEmulation = sEmulation.SubString(0,sEmulation.Index(".")-1).Text + "Emulation(false);";
+   scriptEngine.Execute(sEmulation);
 
  // For future expansion...
  // declare Custom  = new KeyboardDataFile("CUSTOM.KBC");
@@ -77,6 +77,8 @@ scriptEngine.SymbolLoad("BRIEFEx", "assign_to_key, block_search, center, \
                                     unload_macro, prev_char, tolower, toupper, \
                                     i_search, swap_anchor");
 
+scriptEngine.SymbolLoad("ctxflopn", "ContextSensitiveFileDialog");
+                                    
 //
 // Script engine must have these modules loaded for a comprehensive IDE.
 //
@@ -84,7 +86,6 @@ scriptEngine.Load("miscscr");
 scriptEngine.Load("edit");
 scriptEngine.Load("debug");
 scriptEngine.Load("ide");
-scriptEngine.Load("keymaps");
 scriptEngine.Load("filtstub");
 
 //
@@ -98,11 +99,25 @@ LoadKeyboard();
 scriptEngine.DiagnosticMessageMask |= OBJECT_DIAGNOSTICS;
 
 //
-// Setup default regions.
+// Setup default view regions.
 //
-IDE.SetRegion("Editor", 1, 1, 10000, 6666);
+// Each of the main IDE View types has a region associated with it.  A View's 
+// region determines its initial position and is also used during Tile and 
+// Cascade operations.  The following calls determine the window characteristics 
+// of the IDE, namely that Editor windows shold reside in the top two thirds 
+// of the desktop and that the Message and Project windows occupy the lower 
+// third (right on top of each other).  The first argument to SetRegion 
+// specifies the name of the region.  The remaining arguments are dimensions 
+// that should be in the range 1 - 10000.  The dimensions are used at runtime 
+// to calculate a ratio of the IDE's desktop area to use.  Ten thousand means 
+// the whole thing, 5000 means half, etc.  The order of the dimension arguments 
+// is: left, right, top, bottom.
+//
+//IDE.SetRegion("Editor", 1, 1, 10000, 6666);  // traditional layout
+IDE.SetRegion("Editor", 1, 1, 7000, 6666);
 IDE.SetRegion("Message", 1, 6666, 10000, 10000);
-IDE.SetRegion("Project", 1, 6666, 10000, 10000);
+// IDE.SetRegion("Project", 1, 6666, 10000, 10000);  // traditional layout
+IDE.SetRegion("Project", 7000, 1, 10000, 6666);
 
 IDE.SetRegion("Watches", 1, 1, 10000, 6666);
 IDE.SetRegion("Breakpoints", 1, 1, 10000, 6666);
@@ -116,6 +131,18 @@ IDE.SetRegion("CPU", 1, 1, 10000, 6666);
 // Provide access to the example scripts.
 //
 scriptEngine.Load("exscr");
+
+//
+// Must be after EXSCR because EXSCR adds "assign_to_view_menu" to the global 
+// namespace
+//
+assign_to_view_menu("IDE", "&Debug|&View Locals", "debugger.Inspect(\"$locals\");", 
+   "inspect the variables which are owned by the currently active scope");
+
+//
+// Provide access to editor tool tips
+//
+scriptEngine.Load("tips");
 
 //
 // Notify IDE user of progress, set diagnostic state and regions.

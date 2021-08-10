@@ -1,3 +1,5 @@
+/* $Revision:   8.1  $ */
+
 /***************************************************************************
  *
  * random.h - Header for the Standard Library random generator

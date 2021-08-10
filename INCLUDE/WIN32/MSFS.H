@@ -1,11 +1,12 @@
 #if !defined( _MSFS_H )
 #define _MSFS_H
+#pragma option -b
 
 /*
  *  M S F S . H
  *
  *
- *  Copyright Microsoft Corporation 1993-1995, All Rights Reserved
+ *  Copyright (C) Microsoft Corp. 1986-1996.  All Rights Reserved.
  *
  *
  *  Definitions used by the the Microsoft Mail transport, address book
@@ -18,8 +19,8 @@
  *
  *  PR_CFG_SERVER_PATH
  *      --  The path to the users post office.  Mapped network drives, UNC and NETWARE paths
- *          are acceptable.  NETWARE paths of the type NWServer/share:dir\dir1 are converted to
- *          UNC paths of the type \\NWServer\share\dir\dir1.
+ *          are acceptable.  NETWARE paths of the type NWServer/share:dir\dir1 are converted to 
+ *          UNC paths of the type \\NWServer\share\dir\dir1. 
  *
  *  PR_CFG_MAILBOX
  *      --  The users mailbox name.  eg. in a NET/PO/USER address,
@@ -225,15 +226,21 @@
  *          the phone number and other relevent information needed to perform the connection.
  *
  *          Note:   All FILETIME structure members should always use local time.  ie. GetLocalTime()
- *                  returns a SYSTEMTIME structure which can then be converted to FILETIME via
+ *                  returns a SYSTEMTIME structure which can then be converted to FILETIME via 
  *                  SystemTimetoFileTime().
  */
 
+#pragma option -b.
 #include <ras.h>
+#pragma option -b
+#pragma option -b.
 #include <mapitags.h>
+#pragma option -b
 
-#ifdef __BORLANDC__
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 /*
@@ -358,8 +365,13 @@ typedef struct SchedSess {
 //                          MAPI_ACCESS_READ
 //                          (MAPI_ACCESS_CREATE_HIERARCHY | MAPI_ACCESS_CREATE_CONTENTS)
 //                          MAPI_ACCESS_DELETE
-//
+//  
 #define PR_ASSIGNED_ACCESS  PROP_TAG(PT_LONG, 0x66ff)
+
+// PR_OWNER_NAME      - Owner's name of the shared folder.
+//                      This property can be retrieved and cannot be set.
+//  
+#define PR_OWNER_NAME       PROP_TAG(PT_STRING8, 0x66fe)
 
 // SFSP_ACCESS_OWNER -  This flag is returned when PR_ASSIGNED_ACCESS is retrieved by the owner
 //                      of the folder. It can not be set.
@@ -373,9 +385,12 @@ typedef struct SchedSess {
 
 #define MSFS_UID_SFPROVIDER     { 0x00,0xff,0xb8,0x64,0x60,0x41,0xb8,0x01, \
                                   0x08,0x00,0x2b,0x2b,0x8a,0x29,0x00,0x00 }
-                                                                            
-#ifdef __BORLANDC__
+#if defined (__BORLANDC__)
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif // _MSFS_H
+

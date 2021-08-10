@@ -75,6 +75,9 @@ TTestWindow::TTestWindow()
   Attr.H = 160;
 
   Clickee = new TEdit(this, IDC_CLICKEE, "42", 10, 10, 70, 28);
+#if defined(BI_PLAT_WIN32)
+  Clickee->Attr.ExStyle |= WS_EX_CLIENTEDGE;
+#endif
   Clicker = new TUpDown(this, IDC_CLICKER, 76, 11, TUIMetric::CxVScroll, 26, Clickee);
   Clicker->Attr.Style |= UDS_SETBUDDYINT | UDS_ALIGNRIGHT;
 

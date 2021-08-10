@@ -1,23 +1,32 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.17  $
 //
 // Implementation of class TTreeWindow for Win16
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
-#include <owl/treewind.h>
-#include <stdio.h>
+#if !defined(OWL_TREEWIND_H)
+# include <owl/treewind.h>
+#endif
+#if !defined(__STDIO_H)
+# include <stdio.h>
+#endif
+#if !defined(__TCHAR_H)
+# include <tchar.h>
+#endif
 
-const int ButtonHeight = 11;
-const int ButtonWidth  = 10;
+OWL_DIAGINFO;
+
+const int TTreeWindow::ButtonHeight = 11;
+const int TTreeWindow::ButtonWidth  = 10;
 
 //
 // Create the control dynamically.
 //
 TTreeWindow::TTreeWindow(TWindow* parent, int id, int x, int y, int w, int h,
-                         TStyle style, TModule* module)
+                         uint32 style, TModule* module)
 :
   TListBox(parent, id, x, y, w, h, module),
   Style(style)
@@ -338,7 +347,7 @@ TTreeWindow::PaintLink(DRAWITEMSTRUCT far& drawInfo)
 
   // Draw connecting lines if necessary
   //
-  if (HasStyle(twsHasLines)) {
+  if (HasStyle(TVS_HASLINES)) {
     TPen pen(TColor::Gray, 1, PS_DOT);
     dc.SelectObject(pen);
 
@@ -391,7 +400,7 @@ TTreeWindow::PaintLink(DRAWITEMSTRUCT far& drawInfo)
 
   // Draw parent blocks
   //
-  if (HasStyle(twsHasButtons)) {
+  if (HasStyle(TVS_HASBUTTONS)) {
     TRect temp = drawRect;
     temp.left = temp.right - GetIndent();
 
@@ -461,18 +470,18 @@ TTreeWindow::GetSelection()
 //
 //
 void
-TTreeWindow::SetStyle(TStyle style)
+TTreeWindow::SetStyle(uint32 style)
 {
-  Style = style;
+  TWindow::SetStyle(WS_CHILD | style);
 }
 
 //
 //
 //
 bool
-TTreeWindow::HasStyle(TStyle style)
+TTreeWindow::HasStyle(uint32 style)
 {
-  return (Style & style) ? true : false;
+  return (GetStyle() & style) ? true : false;
 }
 
 //----------------------------------------------------------------------------
@@ -777,15 +786,29 @@ TTreeLink::IsFirstChild()
 //
 // Initialize based on the root for TTreeWindow
 //
-TTreeNode::TTreeNode(TTreeWindow& window)
+TTreeNode::TTreeNode(TTreeWindow& tree)
+:
+  TreeView(&tree)
 {
-  *this = window.GetRoot();
+  *this = tree.GetRoot();
+}
+
+//
+//
+//
+TTreeNode::TTreeNode(TTreeWindow& tree, char far* text)
+:
+  TreeView(&tree)
+{
+  SetText(text);
 }
 
 //
 //
 //
 TTreeNode::TTreeNode(TTreeLink& link)
+:
+  TreeView(&link.Window)
 {
   Link = &link;
 }
@@ -794,14 +817,18 @@ TTreeNode::TTreeNode(TTreeLink& link)
 // Copy constructor
 //
 TTreeNode::TTreeNode(const TTreeNode& other)
+:
+  TreeView(other.TreeView)
 {
-  Link = other.Link;
+  CopyNode(other);
 }
 
 //
 // Navigational constructor
 //
-TTreeNode::TTreeNode(const TTreeNode& other, TNextCode nextCode)
+TTreeNode::TTreeNode(const TTreeNode& other, uint32 nextCode)
+:
+  TreeView(other.TreeView)
 {
   TTreeNode node = other;
   *this = node.GetNextItem(nextCode);
@@ -813,10 +840,20 @@ TTreeNode::TTreeNode(const TTreeNode& other, TNextCode nextCode)
 TTreeNode
 TTreeNode::operator =(const TTreeNode& other)
 {
-  Link = other.Link;
-  return *this;
+  return CopyNode(other);
 }
 
+//
+//  Reset node to make it a copy of another node
+//
+TTreeNode&
+TTreeNode::CopyNode(const TTreeNode& node)
+{
+  TreeView    = node.TreeView;
+  ItemStruct  = node.ItemStruct;    // this gets the text, too
+  Link        = node.Link;
+  return *this;
+}
 
 //
 //
@@ -830,7 +867,7 @@ TTreeNode::~TTreeNode()
 //
 //
 bool
-TTreeNode::ExpandItem(TExpandCode flag)
+TTreeNode::ExpandItem(uint32 flag)
 {
   if (!Link->IsParent())
     return false;
@@ -869,7 +906,7 @@ TTreeNode::ExpandItem(TExpandCode flag)
 //
 //
 TTreeNode
-TTreeNode::GetNextItem(TNextCode flag)
+TTreeNode::GetNextItem(uint32 flag) const
 {
   switch (flag) {
     case Root:
@@ -916,17 +953,30 @@ TTreeNode::GetItem(TTreeItem* item)
 //
 //
 //
-TTreeNode
-TTreeNode::AddChild(TTreeItem& item)
+bool
+TTreeNode::SetItem()
 {
-  return TTreeNode(*Link->AddLastChild(item));
+  PRECONDITION(TreeView->GetHandle());
+  *(Link->TreeItem) = ItemStruct;
+  TreeView->Invalidate();
+  return true;
+}
+
+//
+//
+//
+bool TTreeNode::GetItem()
+{
+  PRECONDITION(TreeView->GetHandle());
+  ItemStruct = *(Link->TreeItem);
+  return true;
 }
 
 //
 //
 //
 TTreeNode
-TTreeNode::AddSibling(TTreeItem& item)
+TTreeNode::AddSibling(const TTreeItem& item) const
 {
   return TTreeNode(*Link->AddAtTail(item));
 }
@@ -935,7 +985,7 @@ TTreeNode::AddSibling(TTreeItem& item)
 //
 //
 TTreeNode
-TTreeNode::InsertChild(TTreeItem& item, THowToInsert howToInsert)
+TTreeNode::InsertChild(const TTreeItem& item, uint32 howToInsert) const
 {
   TTreeLink* link;
 
@@ -960,7 +1010,7 @@ TTreeNode::InsertChild(TTreeItem& item, THowToInsert howToInsert)
 //
 //
 TTreeNode
-TTreeNode::InsertItem(TTreeItem& item)
+TTreeNode::InsertItem(const TTreeItem& item) const
 {
   return TTreeNode(*(Link->AddAfter(item)));
 }
@@ -974,6 +1024,48 @@ TTreeNode::Delete()
   return Link->Delete();
 }
 
+
+bool
+TTreeNode::SetText(const char far* text, bool /*ignored*/)
+{
+  ItemStruct.SetText(text);
+  return true;
+}
+
+//
+// Return a pointer to the node's text.
+//
+// The value returned in "text" points to the string in the tree's
+// internal data structure.  The node owns the string.  Don't delete
+// the string yourself. To modify the string, call SetText with a
+// new value.
+//
+bool
+TTreeNode::GetText(char far*& text, bool /*ignored*/)
+{
+  text = ItemStruct.Text;
+  return true;
+}
+
+char far*
+TTreeNode::GetText(bool /*ignored*/)
+{
+  return ItemStruct.Text;
+}
+
+bool
+TTreeNode::SetItemData(uint32 data, bool /*ignored*/)
+{
+  ItemStruct.SetItemData(data);
+  return true;
+}
+
+bool
+TTreeNode::GetItemData(uint32& data, bool /*ignored*/)
+{
+  data = ItemStruct.GetItemData();
+  return true;
+}
 
 //----------------------------------------------------------------------------
 // TTreeItem
@@ -1026,30 +1118,30 @@ TTreeItem::TTreeItem(const TTreeItem& other)
 
   Length = other.Length;
   Text   = new char[Length + 1];
-  strcpy(Text, other.Text);
+  _tcscpy(Text, other.Text);
 }
 
 //
-//
+//  Assign the text that belongs to this item.
 //
 void
-TTreeItem::SetText(char far* text, int len)
+TTreeItem::SetText(const char far* text, int size)
 {
   delete[] Text;
   Text   = strnewdup(text);
-  Length = len ? len : strlen(text);
+  Length = max(size, _tcslen(text) + 1);
 }
 
 //
 //
 //
 void
-TTreeItem::GetText(char far* text, int len)
+TTreeItem::GetText(char far* text, int len) const
 {
   if (Length < len)
-    strcpy(text, Text);
+    _tcscpy(text, Text);
   else
-    strncpy(text, Text, len);
+    _tcsncpy(text, Text, len);
 }
 
 //
@@ -1062,8 +1154,8 @@ TTreeItem::operator =(const TTreeItem& other)
   ItemData = other.ItemData;
 
   Length = other.Length;
-  Text   = new char[Length + 1];
-  strcpy(Text, other.Text);
+  Text   = new _TCHAR[Length + 1];
+  _tcscpy(Text, other.Text);
 
   return *this;
 }

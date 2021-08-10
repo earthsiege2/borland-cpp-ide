@@ -5,12 +5,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $ */
 
 #ifndef __STDDEF_H
 #define __STDDEF_H
@@ -55,6 +56,11 @@ typedef unsigned size_t;
 #define _WCHAR_T_DEFINED  /* For WINDOWS.H */
 typedef unsigned short wchar_t;
 #endif
+#endif
+
+#if !defined(_WINT_T)
+typedef wchar_t wint_t;
+#define _WINT_T
 #endif
 
 #if defined(__OS2__) || defined(__WIN32__)

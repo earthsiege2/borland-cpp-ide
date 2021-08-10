@@ -15,7 +15,7 @@
 
 //-----------------------------------------------------------------------------
 
-void _export STDAPICALLTYPE DataSetNotifyEventCallback( int32 data, PITDataSet dataset )
+static void _export STDAPICALLTYPE DataSetNotifyEventCallback( int32 data, PITDataSet dataset )
 {
 	if (data)
 	{
@@ -1009,9 +1009,10 @@ void TDBDataSet::GetDatabaseName( string& s )
 		AnyString( dbdataset->get_DatabaseName() ).GetString( s );
 }
 
-void TDBDataSet::SetDatabaseName( string& n )
+void TDBDataSet::SetDatabaseName( const string& n )
 {
 	if (dbdataset)
 		dbdataset->put_DatabaseName( AnyString(n).GetPITAnyString() );
 }
 
+

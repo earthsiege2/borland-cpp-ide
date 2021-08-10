@@ -6,12 +6,13 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <_io.h>
 #include <dos.h>
@@ -68,7 +69,7 @@ int _RTLENTRY _EXPFUNC creattemp (char *pathP, int attr)
             c = *s & 0x0f;
             *d++ = c < 10 ? c + '0' : c - 10 + 'a';
         }
-        *d++ = '\0';        /* null-terminate the name */
+        *d = '\0';        /* null-terminate the name */
 
         /* Try to create the file, but only if it doesn't already exist.
          */

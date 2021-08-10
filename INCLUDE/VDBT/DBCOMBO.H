@@ -125,10 +125,10 @@ class _DBAWARECLASS TDBComboBox : public TDBControl {
     DECLARE_SOURCE( OnMeasureItem, TDBComboBoxMeasureItem );
 
     // Event Handlers
-    EVENT( OnClick,    TDBControl,   TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl,   TDragEvent );
-    EVENT( OnDragOver, TDBControl,   TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl,   TDragEvent );
+    DECLARE_DB_EVENT( OnClick,       TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop,    TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver,    TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,     TDragEvent );
     DECLARE_DB_EVENT( OnChange,      TNotifyEvent );
     DECLARE_DB_EVENT( OnDblClick,    TNotifyEvent );
     DECLARE_DB_EVENT( OnDrawItem,    TDrawItemEvent );
@@ -150,11 +150,11 @@ class _DBAWARECLASS TDBComboBox : public TDBControl {
 
 // Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBComboBox )
-DEFINE_DB_PROP_TSTRINGS( TDBComboBox, Items )
-DEFINE_DB_PROP_STRING( TDBComboBox, FontName );
-DEFINE_DB_PROP_STRING( TDBComboBox, Caption );
-DEFINE_DB_PROP_STRING( TDBComboBox, SelText );
+DEFINE_DB_PROP_DATAFIELD( TDBComboBox, _TDBComboBox )
+DEFINE_DB_PROP_TSTRINGS( TDBComboBox, _TDBComboBox, Items )
+DEFINE_DB_PROP_STRING( TDBComboBox, _TDBComboBox, FontName );
+DEFINE_DB_PROP_STRING( TDBComboBox, _TDBComboBox, Caption );
+DEFINE_DB_PROP_STRING( TDBComboBox, _TDBComboBox, SelText );
 
 // Methods
 inline char far* TDBComboBox::GetClassName()

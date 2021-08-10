@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Definition of class TAppDictionary. This class manages associations between
 // processes/tasks and TApplication pointers.
@@ -13,11 +13,16 @@
 #if !defined(OWL_DEFS_H)
 # include <owl/defs.h>
 #endif
-class _OWLCLASS TApplication;
 
 #if !defined(BI_PLAT_WIN32)
   inline uint GetCurrentProcessId() {return (uint)GetCurrentTask();}
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+class _OWLCLASS TApplication;
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
@@ -60,11 +65,10 @@ class _OWLCLASS TAppDictionary {
 // definition of classes
 #include <services/posclass.h>
 
-//
 // Global exported TAppDictionary in Owl. User Component DLLs should have a
 // similar 'AppDictionary'.
 //
-extern TAppDictionary _OWLDATA OwlAppDictionary;
+extern TAppDictionary& _OWLFUNC OWLGetAppDictionary();
 
 //
 // Global function that calls GetApplication() on owl's app-dictionary.
@@ -82,9 +86,13 @@ TApplication* _OWLFUNC GetApplicationObject(uint pid = 0);
   TAppDictionary  AppDictionary
 #else
 # define DEFINE_APP_DICTIONARY(AppDictionary)    \
-  TAppDictionary& AppDictionary = ::OwlAppDictionary
+  TAppDictionary& AppDictionary = OWLGetAppDictionary()
 #endif
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+    
 //----------------------------------------------------------------------------
 // inlines
 

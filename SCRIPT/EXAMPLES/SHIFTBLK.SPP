@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // SHIFTBLK.SPP: Shift Block. Shifts the current block right or left a
 //   column at a time.
@@ -13,7 +13,7 @@
 //   are #def'd below. Brief emulation provides functionality similar to
 //   Shift Block.
 //--------------------------------------------------------------------------
-print "shiftblk.spp";
+print typeid(module());
 
 //
 // IDE imports.

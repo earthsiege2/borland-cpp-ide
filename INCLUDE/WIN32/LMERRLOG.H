@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0002    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     lmerrlog.h
@@ -10,10 +12,6 @@ Abstract:
     for the following groups of NT API functions:
         NetErrorLog
 
-Author:
-
-    Dan Lafferty (danl)  29-Mar-1991
-
 Environment:
 
     User Mode - Win32
@@ -23,47 +21,32 @@ Notes:
     You must include NETCONS.H before this file, since this file depends
     on values defined in NETCONS.H.
 
-Revision History:
-
-    28-Mar-1991  Danl
-        Ported from LM2.0 and the LMNETAPI spec.
-    25-Apr-1991  DanHi
-         Surrounded define for HLOG (used by both audit and error logs),
-         by a protective ifdef since I added the define to lmaudit.h
-    29-Jul-1991  DanHi
-        Change comments after manifest constants for error messages to a format
-        that is recognized by mapmsg.exe
-    12-Nov-1991 JohnRo
-        ERROR_LOG structure needs changes to prevent alignment/padding problems.
-        Also change offset fields to pointers where possible.
-        Clarify UNICODE (TCHAR) handling.
-
-    28-Jul-1992 Madana
-        Created another range of error log code ERRLOG2_BASE
-        (5800 - 5899) and added several new error log codes for netlogon
-        service.
-
 --*/
 
-/* $Copyright: 1994$ */
+/* $Copyright: 1997$ */
 
 #ifndef _LMERRLOG_
 #define _LMERRLOG_
-#define __LMERRLOG_H
+#pragma option -b
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //
 // Data Structures - Config
 //
 
 typedef struct _ERROR_LOG {
-     DWORD          el_len;
-     DWORD          el_reserved;
-     DWORD          el_time;
-     DWORD          el_error;
-     LPTSTR         el_name;             // pointer to service name
-     LPTSTR         el_text;             // pointer to string array
-     LPBYTE         el_data;             // pointer to BYTE array
-     DWORD          el_data_size;        // byte count of el_data area
-     DWORD          el_nstrings;         // number of strings in el_text.
+     DWORD         el_len;
+     DWORD         el_reserved;
+     DWORD         el_time;
+     DWORD         el_error;
+     LPWSTR        el_name;             // pointer to service name
+     LPWSTR        el_text;             // pointer to string array
+     LPBYTE        el_data;             // pointer to BYTE array
+     DWORD         el_data_size;        // byte count of el_data area
+     DWORD         el_nstrings;         // number of strings in el_text.
 } ERROR_LOG, *PERROR_LOG, *LPERROR_LOG;
 
 
@@ -93,19 +76,19 @@ typedef struct _HLOG {
 
 NET_API_STATUS NET_API_FUNCTION
 NetErrorLogClear (
-    IN LPTSTR server,
-    IN LPTSTR backupfile,
-    IN LPBYTE reserved
+    IN LPCWSTR server,
+    IN LPCWSTR backupfile,
+    IN LPBYTE  reserved
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetErrorLogRead (
-    IN LPTSTR server,
-    IN LPTSTR reserved1,
-    IN LPHLOG errloghandle,
-    IN DWORD offset,
+    IN LPCWSTR server,
+    IN LPWSTR  reserved1,
+    IN LPHLOG  errloghandle,
+    IN DWORD   offset,
     IN LPDWORD reserved2,
-    IN DWORD reserved3,
+    IN DWORD   reserved3,
     IN DWORD offsetflag,
     OUT LPBYTE * bufptr,
     IN DWORD prefmaxlen,
@@ -115,10 +98,10 @@ NetErrorLogRead (
 
 NET_API_STATUS NET_API_FUNCTION
 NetErrorLogWrite (
-    IN LPBYTE reserved1,
-    IN DWORD code,
-    IN LPTSTR component,
-    IN LPBYTE buffer,
+    IN LPBYTE  reserved1,
+    IN DWORD   code,
+    IN LPCWSTR component,
+    IN LPBYTE  buffer,
     IN DWORD numbytes,
     IN LPBYTE msgbuf,
     IN DWORD strcount,
@@ -959,8 +942,9 @@ NetErrorLogWrite (
 
 #define NELOG_NetlogonAuthNoDomainController    (ERRLOG2_BASE + 19)
     /*
-     *  No Windows NT Domain Controller is available for domain %1 for
-     *  the following reason: %n%2
+     * No Windows NT Domain Controller is available for domain %1.
+     * (This event is expected and can be ignored when booting with
+     * the 'No Net' Hardware Profile.)  The following error occurred:%n%2
      */
 
 #define NELOG_NetlogonAuthNoTrustLsaSecret      (ERRLOG2_BASE + 20)
@@ -1253,7 +1237,7 @@ NetErrorLogWrite (
     */
 
 //
-// More Netlogon service events
+// More Netlogon and RPL service events
 //
 #define NELOG_NetlogonSessionTypeWrong            (ERRLOG2_BASE + 70)
     /*
@@ -1263,5 +1247,16 @@ NetErrorLogWrite (
      * a member workstation in domain %3, or as a server in domain %3.
      * Use the Server Manager to remove the BDC account for %2.
      */
+#define NELOG_RplUpgradeDBTo40                    (ERRLOG2_BASE + 71)
+    /*
+    * The remoteboot database was in NT 3.5 / NT 3.51 format and NT is
+    * attempting to convert it to NT 4.0 format. The JETCONV converter
+    * will write to the Application event log when it is finished.
+    */
 
+#ifdef __cplusplus
+}
+#endif
+
+#pragma option -b.
 #endif // _LMERRLOG_

@@ -3,27 +3,32 @@
  *
  * function(s)
  *    system - issues an NT command
+ *    wsystem - issues an NT command
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdlib.h>
 #include <process.h>
 #include <_process.h>
 #include <errno.h>
 #include <string.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            system - issues an NT command
+Name            system, wsystem - issues an NT command
 
 Usage           int system(const char *command);
+                int system(const wchar_t *command);
 
 Prototype in    stdlib.h
 
@@ -52,21 +57,21 @@ Return value:   If command is a NULL pointer then system() returns
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC system(const char *cmd)
+int _RTLENTRY _EXPFUNC _tsystem(const _TCHAR *cmd)
 {
-    char            *cmdP;
-    char            *pathP;
+    _TCHAR          *cmdP;
+    _TCHAR          *pathP;
     int             rc;
-    char            pathbuf[_MAX_PATH];
-    char            *argP[3];
+    _TCHAR          pathbuf[_MAX_PATH];
+    _TCHAR          *argP[3];
 
     /* Try to locate the command processor.  First try COMSPEC,
      * and if that isn't defined, search the PATH for CMD.EXE.
      */
-    if ((pathP = getenv("COMSPEC")) == NULL)
+    if ((pathP = _tgetenv(_TEXT("COMSPEC"))) == NULL)
     {
-        _searchenv("CMD.EXE","PATH",pathbuf);
-        if (pathbuf[0] == '\0')
+        _tsearchenv(_TEXT("CMD.EXE"),_TEXT("PATH"),pathbuf);
+        if (pathbuf[0] == _TEXT('\0'))
             errno = ENOENT;
         else
             pathP = pathbuf;
@@ -82,14 +87,14 @@ int _RTLENTRY _EXPFUNC system(const char *cmd)
 
     /* Build command line.
      */
-    if ((cmdP = malloc(strlen(cmd) + 4)) == NULL)
+    if (((cmdP = malloc((_tcslen(cmd)* sizeof(_TCHAR)) + (4*sizeof(_TCHAR)))) == NULL))
     {
         errno = ENOMEM;
         return (-1);
     }
 
-    strcpy(cmdP, "/c ");
-    strcat(cmdP, cmd);
+    _tcscpy(cmdP, _TEXT("/c "));
+    _tcscat(cmdP, cmd);
 
     /* Now, call the low level program loading function.  It expects
      * the arguments in an array of pointers.
@@ -97,7 +102,7 @@ int _RTLENTRY _EXPFUNC system(const char *cmd)
     argP[0] = pathP;
     argP[1] = cmdP;
     argP[2] = NULL;
-    rc = _LoadProg(P_WAIT, pathP, (const char * const *)argP, NULL, 0);
+    rc = _tLoadProg(P_WAIT, pathP, (const _TCHAR * const *)argP, NULL, 0);
 
     /* Release all buffers and return the exit status of CMD.EXE.
      */

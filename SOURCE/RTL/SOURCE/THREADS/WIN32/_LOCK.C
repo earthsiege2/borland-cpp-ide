@@ -9,12 +9,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $        */
 
 /* The following line is required to define the CRITICAL_SECTION correctly
  * in WINNT.H for SDK3.  It apparently enables debugging fields, which

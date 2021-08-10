@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1985-1995, Microsoft Corporation
+Copyright (c) 1985-1996, Microsoft Corporation
 
 Module Name:
 
@@ -13,14 +13,19 @@ Abstract:
 
 --*/
 
+/* $Copyright: 1997$ */
+
 #ifndef _VDMDBG_
 #define _VDMDBG_
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#pragma option -b.
 #include <pshpack4.h>
+#pragma option -b
 
 #define STATUS_VDM_EVENT    STATUS_SEGMENT_NOTIFICATION
 
@@ -319,7 +324,9 @@ typedef DWORD (CALLBACK* DEBUGEVENTPROC)( LPDEBUG_EVENT, LPVOID );
 #define DW3(x) (x.ExceptionInformation[2])
 #define DW4(x) (x.ExceptionInformation[3])
 
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
 BOOL
 WINAPI
@@ -427,6 +434,8 @@ VDMGlobalNext(
 
 typedef BOOL (WINAPI *PROCESSENUMPROC)( DWORD dwProcessId, DWORD dwAttributes, LPARAM lpUserDefined );
 typedef BOOL (WINAPI *TASKENUMPROC)( DWORD dwThreadId, WORD hMod16, WORD hTask16, LPARAM lpUserDefined );
+typedef BOOL (WINAPI *TASKENUMPROCEX)( DWORD dwThreadId, WORD hMod16, WORD hTask16,
+                                       PSZ pszModName, PSZ pszFileName, LPARAM lpUserDefined );
 
 #define WOW_SYSTEM  (DWORD)0x0001
 
@@ -445,11 +454,67 @@ VDMEnumTaskWOW(
     LPARAM          lparam
 );
 
+//
+// VDMEnumTaskWOWEx is the same as VDMEnumTaskWOW except
+// the callback procedure gets two more parameters,
+// the module name of the EXE and the full path to the
+// EXE.
+//
+
+INT
+WINAPI
+VDMEnumTaskWOWEx(
+    DWORD           dwProcessId,
+    TASKENUMPROCEX  fp,
+    LPARAM          lparam
+);
+
+//
+// VDMTerminateTaskWOW rudely terminates a 16-bit WOW task
+// similar to the way TerminateProcess kills a Win32
+// process.
+//
+
+BOOL
+WINAPI
+VDMTerminateTaskWOW(
+    DWORD           dwProcessId,
+    WORD            htask
+);
+
+//
+// VDMStartTaskInWOW launches a Win16 task in a pre-existing
+// WOW VDM.  Note that the caller is responsible for ensuring
+// the program is a 16-bit Windows program.  If it is a DOS
+// or Win32 program, it will still be launched from within
+// the target WOW VDM.
+//
+// The supplied command line and show command are passed
+// unchanged to the 16-bit WinExec API in the target WOW VDM.
+//
+// Note this routine is ANSI-only.
+//
+
+BOOL
+VDMStartTaskInWOW(
+    DWORD           dwProcessId,
+    LPSTR           lpCommandLine,
+    WORD            wShow
+);
+
+//
+// VDMKillWOW is not implemented.
+//
+
 BOOL
 WINAPI
 VDMKillWOW(
     VOID
 );
+
+//
+// VDMDetectWOW is not implemented.
+//
 
 BOOL
 WINAPI
@@ -468,4 +533,5 @@ VDMBreakThread(
 }
 #endif
 
+#pragma option -b.
 #endif // _VDMDBG_

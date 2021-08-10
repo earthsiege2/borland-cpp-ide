@@ -2,7 +2,7 @@
 # ObjectComponents
 # Copyright (c) Borland International 1991, 1996. All Rights Reserved
 #
-#  $Revision:   2.21  $
+#  $Revision:   2.30  $
 #
 # MAKEFILE for BOCOLE Helper DLL
 #
@@ -10,13 +10,16 @@
 #   MODEL=<l|f>       one of: large, flat
 #   WIN32             enables win32 DLL [flat]
 #   WIN16             enables win16 DLL [large]
+#   MT     	      links to the multithreaded version of the RTL
+#   VCL   	      builds BOCOLE using the VCL-compatible RTL (cp32mt)
+#                      (implies -DMT; requires WIN32)
 #   DEBUG             enables debug info for TDW & TD32
 #   BOCONAME=Xxx      lib & DLL name base, Defaults to BOCOLE or BOCOF
 #   BOCORES=Xxxx      name of .RES file [defaults to BOCONAME.res]
 #   CODEGUARD         builds with CodeGuard:  1=basic data, 2=full checking
 #   RTLDLL            builds BOCOLE DLL which uses DLL version of RTL
-#   ALIGN=<1|2|4|8>   Specifies the alignment
-#
+#   ALIGN=<1|2|4|8>   specifies the alignment
+#   ILINK	      uses ILINK32 instead of TLINK32 to link
 #
 # Define these for alternate OCF build directories:
 #   BOCOLESRCDIR    defaults to: $(OCFSRCDIR)\bocole
@@ -39,6 +42,30 @@
 
 DLL = 1
 
+#
+# For multithreaded target, set the value of MT
+#
+!if $(MODEL) == t || $d(MT) || $d(VCL)
+  MT = mt       # model t implies MT. Use MT as 'mt' to build library names
+!endif
+
+!if $d(MT) || $(VCL)
+ MODEL = t
+!endif
+
+#
+# Check for incompatible choices and warn user
+#
+!if $d(VCL)
+! if !$d(WIN32) || $(MODEL) != t
+!   error VCL-compatible library must be multithreaded 32-bit
+! endif
+!endif
+
+!if $d(ILINK) && $d(WIN16)
+! error Cannot build 16-bit targets with ILINK.
+!endif
+
 
 #--------------------------------------------------------------------
 # Dir & name components
@@ -53,7 +80,6 @@ DLL = 1
 !if !$d(BOCORES)
   BOCORES = $(BOCONAME).res
 !endif
-
 
 
 #--------------------------------------------------------------------
@@ -138,6 +164,10 @@ INCLUDE = $(BOCOLEINCDIR);$(BCINCDIR)
   RCINCLUDEPATH = -i$(BCINCDIR)\WIN32 -i$(BCINCDIR)
 !endif
 
+!if $d(VCL) && !$d(VCLOBJDIR)
+  VCLOBJDIR = $(BCLIBDIR)\obj
+!endif
+
 .PATH.obj = $(BOCOLEOBJDIR)
 .PATH.res = $(BOCOLEOBJDIR)
 .PATH.def = $(BOCOLEOBJDIR)
@@ -149,6 +179,20 @@ INCLUDE = $(BOCOLEINCDIR);$(BCINCDIR)
 # Library names
 #--------------------------------------------------------------------
 
+#
+# If building for VCL, use an RTL that begins "cp" instead of "cw"
+#
+!if $d(VCL)
+  RTLPFX=cp
+!else
+  RTLPFX=cw
+!endif
+
+!if $d(DEBUG)
+  VCLLIB = vcld
+!else
+  VCLLIB = vcl
+!endif
 
 #--------------------------------------------------------------------
 # Generic BOCOLE Options
@@ -157,7 +201,7 @@ CFLAGS = -DINC_OLE2 -DMS_OLEUI_DEF -c
 !if !$d(DIAGS)
   CFLAGS = $(CFLAGS) -DNDEBUG
 !endif
-LFLAGS = -c -n -s
+LFLAGS = -c -s
 
 
 #--------------------------------------------------------------------
@@ -167,18 +211,24 @@ LFLAGS = -c -n -s
   CC       = $(BCBINDIR)\bcc32       # Compiler
   RCC      = $(BCBINDIR)\brcc32 -w32 # Resource compiler
   CCASM    = $(BCBINDIR)\tasm32      # Assembler
+
+! if $d(ILINK)
+  LINK     = $(BCBINDIR)\ilink32     # Linker
+! else
   LINK     = $(BCBINDIR)\tlink32     # Linker
+! endif
+
   LIB      = $(BCBINDIR)\tlib        # Librarian
   IMPLIB   = $(BCBINDIR)\implib      # Import library generator
   TDSTRIP  = $(BCBINDIR)\tdstrp32    # Debug info extractor
 
-  CFLAGS   = $(CFLAGS) -DWIN32 -a4 -i60 -d -O -Obels -Z -RT- -x-
+  CFLAGS   = $(CFLAGS) -DWIN32 -i60 -d -O -Obels -Z -RT- -x-
   STDLIBS  = ole2w32 import32 
 
 ! if $d(RTLDLL)  
-    STDLIBS = $(STDLIBS) cw32$(MT)i
+    STDLIBS = $(STDLIBS) $(RTLPFX)32$(MT)i
 ! else
-    STDLIBS = $(STDLIBS) cw32$(MT)
+    STDLIBS = $(STDLIBS) $(RTLPFX)32$(MT)
 ! endif
 
   BOLEUILIB = $(BOCOLESRCDIR)\boleui32\boleui32.lib
@@ -218,13 +268,24 @@ LFLAGS = -c -n -s
     STDLIBS  = cg32 $(STDLIBS)
 !  endif
 
-!  if $d(MT)
-    CFLAGS = $(CFLAGS) -WM
+! if $d(VCL)
+    CFLAGS  = $(CFLAGS) -b- -Vx -Ve
+    LFLAGS  = $(LFLAGS) -j$(VCLOBJDIR)
+    STDLIBS = $(STDLIBS) $(VCLLIB)
+! endif 
+
+!  if !$d(MT)
+    CFLAGS = $(CFLAGS) -WM-
 !  endif
 
-!  if $d(ALIGN)
+!  if $d(VCL)
+    CFLAGS = $(CFLAGS) -a4
+!  elif $d(ALIGN)
     CFLAGS = $(CFLAGS) -a$(ALIGN)
+!  else
+    CFLAGS = $(CFLAGS) -a4
 !  endif
+
 #--------------------------------------------------------------------
 # Tools and options for Win16
 #--------------------------------------------------------------------
@@ -233,6 +294,7 @@ LFLAGS = -c -n -s
   RCC      = $(BCBINCIR)\brcc32 -31  # Resource compiler
   CCASM    = $(BCBINDIR)\tasm        # Assembler
   LINK     = $(BCBINDIR)\tlink       # Linker
+  RLINK    = $(BCBINDIR)\rlink       # Resource Linker
   LIB      = $(BCBINDIR)\tlib        # Librarian
   TDSTRIP  = $(BCBINDIR)\tdstrip     # Debug info extractor
 
@@ -366,12 +428,19 @@ $(BOCOLEBINDIR)\$(BOCONAME).DLL : $(LIBDEPOBJS) \
   $(LINK) @&&|
 $(LFLAGS) -L$(BCLIBDIR) $(STARTUP) +
 $(LINKOBJS)
-$(BOCOLEBINDIR)\$(BOCONAME)
+$(BOCOLEBINDIR)\$(BOCONAME).DLL
 $(.PATH.obj)\$(BOCONAME).map
 $(BOLEUILIB) $(STDLIBS)
 $(.PATH.obj)\$(BOCONAME).def
+!if $d(WIN32)
 $(.PATH.obj)\$(BOCORES) $(BOLEUIRES) 
+!endif
 |
+!if $d(WIN16)
+  $(RLINK) @&&|
+-v -31 -k -fi $(.PATH.obj)\$(BOCORES) $(BOLEUIRES) $(BOCOLEBINDIR)\$(BOCONAME).DLL 
+| 
+!endif
   $(TDSTRIP) -s $(BOCOLEBINDIR)\$(BOCONAME).DLL
   $(IMPLIB) $(BOCOLEBINDIR)\$(BOCONAME).LIB $(BOCOLEBINDIR)\$(BOCONAME).DLL
 
@@ -447,12 +516,10 @@ DATA         MULTIPLE NONSHARED
 
 SEGMENTS
 	_TEXT   PRELOAD MOVEABLE DISCARDABLE
-	;WEP_TEXT PRELOAD MOVEABLE DISCARDABLE  
 
 HEAPSIZE     1024
 
 EXPORTS
-	;WEP @1 RESIDENTNAME PRIVATE            
 	DllGetClassObject	@2
 	CreateClassMgr		@3
 	DllCanUnloadNow		@4
@@ -513,4 +580,3 @@ boleguid.obj : $(BOCOLESRCDIR)\boleguid.cpp
   $(CC) -H- -zE_TEXT -zFCODE $(BOCOLESRCDIR)\boleguid.cpp
 
 !endif
-

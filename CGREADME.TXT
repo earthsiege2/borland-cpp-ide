@@ -2,23 +2,21 @@
                   WELCOME TO CODEGUARD 16/32 FOR BORLAND C++ 5.0
                  ************************************************
 
-*****************
-TABLE OF CONTENTS
-*****************
+********
+CONTENTS
+********
 
 1.  How to Get Assistance
 2.  Installation
-3.  New Features
-4.  Important Information
+3.  Important Information
 
 ------------------------
 1. HOW TO GET ASSISTANCE
 ------------------------
 
 If you have any problems, please read this file and other files in your
-DOC subdirectory, and check the on-line help.  If you still have a
-question and need assistance, help is available from the following
-sources:
+DOC subdirectory, and check the online help.  If you still need assistance, 
+help is available from the following sources:
 
   1. Borland offers a wide variety of Technical Support plans
      providing a range of assistance from installation and general
@@ -26,134 +24,36 @@ sources:
      debugging help. For information about these support programs,
      call 1-800-523-7070.
 
-  2. For immediate assistance with everything from configuring Borland C++
-     to C++ programming or debugging, call our C++ Programmer's Advisor
-     Lines ($2/minute, first minute free):
+  2. For immediate assistance with everything from configuring Borland 
+     C++ to C++ programming or debugging, call our C++ Programmer's 
+     Advisor Lines ($2.95/minute, first minute free):
 
-     1-900-555-1002  or 1-800-782-5558 (MC/Visa)
+     1-800-782-5558 (MC/Visa)
 
-     For assistance outside of North America, see item 9 below.
-
-  3. For on-line access to the Borland CompuServe forums, with their
-     libraries of technical information and answers to common questions,
-     type
-
-     GO BCPP - CodeGuard is supported in section 9.
-
-     If you are not a member of CompuServe, see the enclosed
-     special offer, and write for full details on how to receive
-     a free IntroPak containing a $15 credit toward your first
-     month's on-line charges.
-
-  4. Borland's TECHFAX service. Call (800) 822-4269 for a FAX
+  3. Borland's TECHFAX service. Call 1-800-822-4269 for a FAX
      catalog of technical document entries. For assistance outside of
      North America, contact your local Borland representative.
 
-  5. Borland DLBBS. Dial (408) 431-5096 (up to 9600 baud, 8-N-1)
-     for a host of free technical documents and example programs.
-
-  6. Technical information on Borland C++ is available on the Internet
+  4. Technical information on Borland C++ is available on the Internet
      via anonymous ftp at our ftp site ftp.borland.com and via the
      World Wide Web at the URL http://www.borland.com.
 
-  7. Subscribe to Borland's free electronic newsletters and get a regular
-     update on the hottest programming tips and tricks.
-
-     For more information on Borland's listservers see:
-
-     http://www.borland.com/Connect/interact.html
-
-  8. Technical Support for European Customers is exclusively handled through
-     a number of companies in Europe.  These companies are fully equipped and
-     trained to handle all requests for Technical Support you may have and
-     receive full backup support from Borland. The following numbers can be
-     used for Technical Support in Europe and Australia.  In addition to free
-     support for installation problems, there are several payable support
-     programs available.
-
-     Country         Phone number         Description
-     --------------------------------------------------------------------
-     Australia       1 800 641 144        Support for all products
-                     1 800 632 266        Customer Services
-
-     Germany,        +49 (0)8995914705    Free installation support
-     Switzerland     Use the same number to inquire about support contracts
-     and Austria
-
-     France          +33 (1) 41377018     Free Database installation support
-                     +33 (1) 41377019     Free Languages installation support
-                     +33 (1) 41377009     Inquiries about support contracts
-
-     UK and          +44 (0)1256 373477   Free dBASE installation support
-     Ireland         +44 (0)1256 373478   Free Paradox installation support
-                     +44 (0)1256 373479   Free Languages installation support
-                     Use any of these numbers to inquire about support
-                     contracts
-
-     Netherlands     +31 (0)30 833730     Free installation support
-                     Use the same number to inquire about support contracts
-
-     Belgium (NL)    +32 (0) 27143503     Free installation support
-                     Use the same number to inquire about support contracts
-
-     Belgium (FR)    +32 (0) 27143504     Free installation support
-     and Luxembourg  Use the same number to inquire about support contracts
-
-     Norway and      +47 (0) 22250017     Free installation support
-     Iceland          Use the same number to inquire about support contracts
-
-     Denmark         +45 (0) 45762313     Free installation support
-                     Use the same number to inquire about support contracts
-
-     Sweden          +46 (0) 86270110     Free installation support
-                     Use the same number to inquire about support contracts
-
-     Finland         +358 (0) 904209792   Free installation support
-                     Use the same number to inquire about support contracts
-
-     Spain and       +34 (1) 6618091      Free installation support
-     Italy           +34 (1) 6615010      Inquiries about support contracts
-                     +39 (2) 57303203     Free installation support
-                     Use the same number to inquire about support contracts
-
-     Czech republic  +42 (2) 6272135      Information about all support
 
 ---------------
 2. INSTALLATION
 ---------------
 
 To install CodeGuard 16/32 for Borland C++ 5.0, run SETUP.EXE located in
-\SETUP\CG5
-
-
----------------
-3. NEW FEATURES
----------------
-
-* Supports both 16 and 32-bit Windows applications
-
-* Validates Windows resource handles used in function calls.
-
-* Hierarchical message view in the Borland C++ IDE for viewing CodeGuard errors.
-
-* Configurable as to the number of log file messages generated.
-
-* Ability to disable resource leak messages.
-
-* Verifies pointers on dereference and checks pointer arithmetic.  (32-bit only)
-
-* Works with multithreaded applications  (32-bit only)
-
-* Supports running multiple CodeGuarded applications at the same time (32-bit only)
-
+\SETUP\CG5.
 
 
 ------------------------
-4. IMPORTANT INFORMATION
+3. IMPORTANT INFORMATION
 ------------------------
 
-This section contains important information not found in the manuals, online
-Help, or online text files.
+This section contains important information not found in the manuals, 
+online Help, or online text files.
+
 
 General
 -------
@@ -161,62 +61,66 @@ General
 If you are developing applications with CodeGuard across multiple
 directories, take care when using relative paths (i.e. ..\foo.cpp).  If
 your CodeGuard errors do not include source information, you may need to
-specify in CGCONFIG.EXE the directory where your .OBJs reside rather than
-your source directory to compensate for relative paths.
+specify in CGCONFIG.EXE the directory where your .OBJs reside rather 
+than your source directory to compensate for relative paths.
 
 Programs which use the obsolete IOStream 1.2 constructors will report
-resource Leaks when built with CodeGuard.  Borland does not plan to update
-this obsolete code and will likely remove support for IOStream 1.2 in future
-products.
+resource Leaks when built with CodeGuard.  Borland does not plan to 
+update this code.
 
 The log view in Turbo Debugger for Windows and Turbo Debugger for Win32
-(TDW and TD32) scrolls when full.  If you are capturing CodeGuard messages
-in the log view and it appears that you are missing errors, see the
-application's .CGL file for a complete log.
+(TDW and TD32) scrolls when full.  If you are capturing CodeGuard 
+messages in the log view and it appears that you are missing errors, 
+see the application's .CGL file for a complete log.
 
-CodeGuard cannot give accurate source positions for errors that occur
-within inline functions.  The command line compiler defaults to generating
-inline functions out of line when debugging information is turned on, but
-the IDE does not.  For debugging purposes, it is best to compile your
-CodeGuard enabled applications with "Out of line inline functions" (-vi-)
-enabled.  In the IDE, look under Options | Project | Compiler | Debugging
+CodeGuard cannot give accurate source positions for errors that
+occur within inline functions.  The command line compiler defaults
+to generating inline functions out of line when debugging information 
+is turned on, but the IDE does not.  For debugging purposes, it is 
+best to compile your CodeGuard enabled applications with "Out of line
+inline functions" (-vi-) enabled.  In the IDE, look under 
+Options|Project|Compiler|Debugging.
 
 Conditions which produce the message "CodeGuard Error: That entrypoint
-is not available (undefined dynalink)" will leave CodeGuard in an unstable
-state.  Until you restart Windows, or, under Windows NT, shutdown VDMs, all
-subsequent CodeGuard enabled applications run will produce a similar error.
+is not available (undefined dynalink)" will leave CodeGuard in an 
+unstable state.  Until you restart Windows, or, under Windows NT, 
+shutdown VDMs, all subsequent CodeGuard enabled applications run will 
+produce a similar error.
 
-The message "Resource from different RTL" will sometimes indicate a mixing
-of far and near memory allocation routines.  For example, allocating memory
-with faralloc() and releasing it with free() can produce this message even
-when used from the same RTL.
+The message "Resource from different RTL" will sometimes indicate a 
+mixing of far and near memory allocation routines.  For example, 
+allocating memory with faralloc() and releasing it with free() can 
+produce this message even when used from the same RTL.
 
 Versions of the OWL, BIDS and ObjectComponents libraries built with
-CodeGuard enabled are provided.  These can be found in the LIB\CG directory.
+CodeGuard enabled are provided.  These can be found in the LIB\CG 
+directory.
 
-If you are building an application using CodeGuard, any DLLs used by that
+If building an application using CodeGuard, any DLLs used by that
 application must also have CodeGuard enabled if they share the same
-version of the RTL DLL with the EXE.  If the DLLs use a different version
-of the RTL DLL or use the RTL linked statically the DLLs need not be built
-with CodeGuard.  In either of these cases, however, it is important to
-link CG16.LIB or CG32.LIB *before* any of the import libraries for the
-other DLLs or you will see spurious resource leak errors.  See the online
-help for TLINK for information on library ordering on the command line.
-In the IDE, you must enable Options | Environment | Project View | Show
-run-time nodes to see and change the library ordering in your project.
+version of the RTL DLL with the EXE.  If the DLLs use a different 
+version of the RTL DLL or use the RTL linked statically, the DLLs need 
+not be built with CodeGuard.  In either of these cases, however, it is 
+important to link CG16.LIB or CG32.LIB *before* any of the import 
+libraries for the other DLLs or you will see spurious resource leak 
+errors.  See online help for TLINK for information on library 
+ordering on the command line. In the IDE, you must enable 
+Options|Environment|Project View | Show runtime nodes to see and 
+change the library ordering in your project.
 
 You should not run an application built without CodeGuard which uses the
-RTL DLL at the same time as an application built with CodeGuard that uses
-the RTL DLL.
+RTL DLL at the same time as an application built with CodeGuard that 
+uses the RTL DLL.
 
 CodeGuard expects source files to be saved to disk and unmodified when
 providing line number information.  If you have made modifications to
 your source which are not committed to disk, or if you have committed
 modifications to disk without rebuilding, CodeGuard may provide you
 with code excerpts which are unrelated to the error detected.
-In the IDE, turn on Options | Environment | Preferences | Auto Save |
-Editor files to automatically save all dirty buffers before build, run,
+In the IDE, turn on Options|Environment|Preferences|AutoSave|
+Editor files to automatically save all dirty buffers before you build, run,
 debug run, exit, or transfer.
+
 
 Linker Errors with Undefined Symbols
 ------------------------------------
@@ -228,20 +132,21 @@ don't use CG16.LIB and you attempt to link a CodeGuard-enabled module:
         Undefined symbol _CG_THIS in module FILENAME.CPP.
 
 These are symbols which the compiler inserts into your modules to allow
-CodeGuard to detect errors.  If you disable CodeGuard for an application,
-it is important to perform an entire rebuild of that application (rather
-than a make) to remove these symbols from your OBJs.
+CodeGuard to detect errors.  If you disable CodeGuard for an 
+application, it is important to perform an entire rebuild of that 
+application (rather than a make) to remove these symbols from your OBJs.
+
 
 Using Map Files
 ---------------
 A general debugging technique with CodeGuard is to use the .CGL file in
 conjunction with map files for the modules in your program.  In the .CGL
-file, the segments and offset of a problem within the module is given. These
-correspond directly to entries in the map file generated for the module. Be
-sure to generate a detailed map file with line numbers for every module in
-your application.
+file, the segments and offset of a problem within the module is given. 
+These correspond directly to entries in the map file generated for the 
+module. Be sure to generate a detailed map file with line numbers for 
+every module in your application.
 
-Once you have the map files, look up the first line of the error in
+Once you have the map files, look at the first line of the error in
 your .CGL file:
 
  >> Resource type mismatch: a(n) object was expected. delete(0x4AA7:0012)
@@ -251,10 +156,10 @@ your .CGL file:
  >> 0x5B27:1AA0(=FOO.DLL:0x33:1AA0)
 
 In this case, it is FOO.DLL:0x33:01AA. You know the problem is coming
-from FOO, and it is in segment 0x33 offset 0x1AA. If you take a look at
+from FOO, and it is in segment 0x33 offset 0x1AA. If you look at
 the map file, you'll see which OBJ this is in. From the offset, you can
-find out which function is causing the problem.  The line numbers section
-will give you file name and line number positions for the segment and
+find out which function is causing the problem.  The line numbers 
+section will give you file name and line number of the segment and
 offset for a more detailed location of the problem.
 
 
@@ -274,6 +179,7 @@ you can use WinSpector and DFA to get the source file and line number
 where the fault occurred, the type of fault, the call stack, and the
 values of global and local variables at the time of the fault.
 
+
 CodeGuard 32 and Exceptions under Windows 95
 --------------------------------------------
 There is an anomaly unique to Windows 95 which appears to be a result of
@@ -281,16 +187,16 @@ attempting to open and close a file while the operating system is
 processing an exception.  As a result, previous reports in the CodeGuard
 log file are overwritten by subsequent reporting.  However, the first
 messages in a series of exceptions represent the real failure in the
-application being debugged.  To view these reports, you need to take these
-steps:
+application being debugged.  To view these reports, you need to take 
+these steps:
 
-1) Run your application.  When the exception occurs, Win 95 will pop
-up an error dialog.
+1) Run your application.  When the exception occurs, Win95 displays
+   an error dialog.
 
-2) Do not close the system dialog.  Instead, bring up a dos box or
-explorer, navigate to the home directory of the executable you are
-debugging, and copy or rename the *.CGL file.
+2) Do not close the system dialog.  Instead, bring up a DOS box or
+   Explorer, navigate to the home directory of the executable you are
+   debugging, and copy or rename the *.CGL file.
 
-If, for any reason, you determine these subsequent reports to be of value,
-you can trap them in the same manner by capturing the CodeGuard log file
-at each system error dialog.
+If, for any reason, you determine these subsequent reports to be of 
+value, you can trap them in the same manner by capturing the CodeGuard 
+log file at each system error dialog.

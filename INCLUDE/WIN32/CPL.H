@@ -4,7 +4,7 @@
 *                                                                             *
 *               Version 3.10                                                  *
 *                                                                             *
-*               Copyright (c) 1992-1995, Microsoft Corp.  All rights reserved *
+*               Copyright (c) 1992-1996, Microsoft Corp.  All rights reserved *
 *                                                                             *
 ******************************************************************************/
 /*
@@ -22,23 +22,18 @@
 *              ...
 *
 *
-*  The order applet DLL's are loaded by CONTROL.EXE is:
-*
-*      1) MAIN.CPL is loaded from the windows system directory.
-*
-*      2) Installable drivers that are loaded and export the
-*         CplApplet() routine.
-*
-*      3) DLL's specified in the [MMCPL] section of CONTROL.INI.
-*
-*      4) DLL's named *.CPL from windows system directory.
+*  The order applet DLL's are loaded by CONTROL.EXE is not guaranteed.
+*  Control panels may be sorted for display, etc.
 *
 */
 #ifndef _INC_CPL
 #define _INC_CPL
+#pragma option -b
 
 
+#pragma option -b.
 #include <pshpack1.h>   /* Assume byte packing throughout */
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -109,8 +104,6 @@ typedef NEWCPLINFOA NEWCPLINFO;
 typedef LPNEWCPLINFOA LPNEWCPLINFO;
 #endif // UNICODE
 
-/* The messages CPlApplet() must handle: */
-
 #if(WINVER >= 0x0400)
 #define CPL_DYNAMIC_RES 0
 // This constant may be used in place of real resource IDs for the idIcon,
@@ -127,6 +120,8 @@ typedef LPNEWCPLINFOA LPNEWCPLINFO;
 
 #endif /* WINVER >= 0x0400 */
 
+/* The messages CPlApplet() must handle: */
+
 #define CPL_INIT        1
 /*  This message is sent to indicate CPlApplet() was found. */
 /*  lParam1 and lParam2 are not defined. */
@@ -142,17 +137,22 @@ typedef LPNEWCPLINFOA LPNEWCPLINFO;
 
 #define CPL_INQUIRE     3
 /*  This message is sent for information about each applet. */
+
+/*  A CPL SHOULD HANDLE BOTH THE CPL_INQUIRE AND CPL_NEWINQUIRE MESSAGES. */
+/*  The developer must not make any assumptions about the order or dependance */
+/*  of CPL inquiries. */
+
 /*  lParam1 is the applet number to register, a value from 0 to */
 /*  (CPL_GETCOUNT - 1).  lParam2 is a far ptr to a CPLINFO structure. */
-/*  Fill in CPL_INFO's idIcon, idName, idInfo and lData fields with */
+/*  Fill in CPLINFO's idIcon, idName, idInfo and lData fields with */
 /*  the resource id for an icon to display, name and description string ids, */
-/*  and a long data item associated with applet #lParam1. */
+/*  and a long data item associated with applet #lParam1.  This information */
+/*  may be cached by the caller at runtime and/or across sessions. */
+/*  To prevent caching, see CPL_DYNAMIC_RES, above.  */
 
 
 #define CPL_SELECT      4
-/*  This message is sent when the applet's icon has been clicked upon. */
-/*  lParam1 is the applet number which was selected.  lParam2 is the */
-/*  applet's lData value. */
+/*  The CPL_SELECT message has been deleted. */
 
 
 #define CPL_DBLCLK      5
@@ -175,12 +175,21 @@ typedef LPNEWCPLINFOA LPNEWCPLINFO;
 
 
 #define CPL_NEWINQUIRE    8
-/* this is the same as CPL_INQUIRE execpt lParam2 is a pointer to a */
-/* NEWCPLINFO structure.  this will be sent before the CPL_INQUIRE */
-/* and if it is responed to (return != 0) CPL_INQUIRE will not be sent */
+/* Same as CPL_INQUIRE execpt lParam2 is a pointer to a NEWCPLINFO struct. */
+
+/*  A CPL SHOULD HANDLE BOTH THE CPL_INQUIRE AND CPL_NEWINQUIRE MESSAGES. */
+/*  The developer must not make any assumptions about the order or dependance */
+/*  of CPL inquiries. */
 
 #if(WINVER >= 0x0400)
-#define CPL_STARTWPARMS 9
+#define CPL_STARTWPARMSA 9
+#define CPL_STARTWPARMSW 10
+#ifdef UNICODE
+#define CPL_STARTWPARMS CPL_STARTWPARMSW
+#else
+#define CPL_STARTWPARMS CPL_STARTWPARMSA
+#endif
+
 /* this message parallels CPL_DBLCLK in that the applet should initiate
 ** its dialog box.  where it differs is that this invocation is coming
 ** out of RUNDLL, and there may be some extra directions for execution.
@@ -200,6 +209,9 @@ typedef LPNEWCPLINFOA LPNEWCPLINFO;
 }
 #endif    /* __cplusplus */
 
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
+#pragma option -b.
 #endif  /* _INC_CPL */

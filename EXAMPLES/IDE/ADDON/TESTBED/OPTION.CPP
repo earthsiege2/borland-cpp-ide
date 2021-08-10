@@ -3,7 +3,7 @@
   option.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.15  $
+  $Revision:   1.18  $
   
   Test the OptionSet server.
   See tests.h for a description of the TestObject class, which OptionSetTestA

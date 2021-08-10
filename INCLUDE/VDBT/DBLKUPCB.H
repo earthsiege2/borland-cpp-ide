@@ -41,7 +41,7 @@ class _DBAWARECLASS TDBLookupCombo : public TDBControl {
     DECLARE_DB_PROP_RW2( TField,      LookupField );
     DECLARE_DB_PROP_RW2( string,LookupDisplay );
     DECLARE_DB_PROP_RW0( int,   MaxLength,     Prop_TDBLookupCombo_MaxLength );
-    DECLARE_DB_PROP_RW1( int, TDBLookupListOptions
+    DECLARE_DB_PROP_RW1( USHORT, TDBLookupListOptions
                               , Options,       Prop_TDBLookupCombo_Options );
     DECLARE_DB_PROP_RW0( Bool,  ReadOnly,      Prop_TDBLookupCombo_ReadOnly );
     DECLARE_DB_PROP_RW0( int,   SelLength,     Prop_TDBLookupCombo_SelLength );
@@ -143,10 +143,10 @@ class _DBAWARECLASS TDBLookupCombo : public TDBControl {
     DECLARE_SOURCE( OnMouseUp,   TDBLookupComboMouse );
 
     // Event Handlers
-    EVENT( OnClick,    TDBControl,  TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl,  TDragEvent );
-    EVENT( OnDragOver, TDBControl,  TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl,  TDragEvent );
+    DECLARE_DB_EVENT( OnClick,     TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop,  TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver,  TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,   TDragEvent );
     DECLARE_DB_EVENT( OnDblClick,  TNotifyEvent );
     DECLARE_DB_EVENT( OnEnter,     TNotifyEvent );
     DECLARE_DB_EVENT( OnExit,      TNotifyEvent );
@@ -169,15 +169,15 @@ class _DBAWARECLASS TDBLookupCombo : public TDBControl {
 
 // Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBLookupCombo )
-DEFINE_DB_PROP_LOOKUPFIELD( TDBLookupCombo )
+DEFINE_DB_PROP_DATAFIELD( TDBLookupCombo, _TDBLookupCombo )
+DEFINE_DB_PROP_LOOKUPFIELD( TDBLookupCombo, _TDBLookupCombo )
 DEFINE_DB_PROP_LOOKUPSOURCE( TDBLookupCombo )
-DEFINE_DB_PROP_STRING( TDBLookupCombo, FontName );
-DEFINE_DB_PROP_STRING( TDBLookupCombo, Caption );
-DEFINE_DB_PROP_STRING( TDBLookupCombo, DisplayValue );
-DEFINE_DB_PROP_STRING( TDBLookupCombo, LookupDisplay );
-DEFINE_DB_PROP_STRING( TDBLookupCombo, SelText );
-DEFINE_DB_PROP_STRING( TDBLookupCombo, Value );
+DEFINE_DB_PROP_STRING( TDBLookupCombo, _TDBLookupCombo, FontName );
+DEFINE_DB_PROP_STRING( TDBLookupCombo, _TDBLookupCombo, Caption );
+DEFINE_DB_PROP_STRING( TDBLookupCombo, _TDBLookupCombo, DisplayValue );
+DEFINE_DB_PROP_STRING( TDBLookupCombo, _TDBLookupCombo, LookupDisplay );
+DEFINE_DB_PROP_STRING( TDBLookupCombo, _TDBLookupCombo, SelText );
+DEFINE_DB_PROP_STRING( TDBLookupCombo, _TDBLookupCombo, Value );
 
 // Methods
 inline void TDBLookupCombo::CloseUp()

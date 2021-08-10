@@ -1,5 +1,6 @@
 #ifndef __STD_SET__
 #define __STD_SET__
+/* $Revision:   8.1  $ */
 
 /***************************************************************************
  *
@@ -40,7 +41,7 @@
  * rights of the Government regarding its use, reproduction and disclosure
  * are as set forth in Section 52.227-19 of the FARS Computer
  * Software-Restricted Rights clause.
- * 
+ *
  * Use, duplication, or disclosure by the Government is subject to
  * restrictions as set forth in subparagraph (c)(1)(ii) of the Rights in
  * Technical Data and Computer Software clause at DFARS 252.227-7013.
@@ -82,7 +83,7 @@ struct ident : public unary_function<T, U>
 {
     const U& operator() (const T& x) const { return x; }
 };
-  
+
 #ifndef RWSTD_NO_DEFAULT_TEMPLATES
 template<class Key, class Compare = less<Key> >
 #else
@@ -100,8 +101,8 @@ class set
     typedef Compare                                    value_compare;
 
   private:
-    
-    typedef rb_tree<key_type, value_type, 
+
+    typedef rb_tree<key_type, value_type,
                     ident<value_type, key_type>, key_compare> rep_type;
     rep_type t;
 
@@ -154,8 +155,8 @@ class set
     const_iterator           begin  () const { return t.begin();  }
     iterator                 end    ()       { return t.end();    }
     const_iterator           end    () const { return t.end();    }
-    reverse_iterator         rbegin ()       { return t.rbegin(); } 
-    const_reverse_iterator   rbegin () const { return t.rbegin(); } 
+    reverse_iterator         rbegin ()       { return t.rbegin(); }
+    const_reverse_iterator   rbegin () const { return t.rbegin(); }
     reverse_iterator         rend   ()       { return t.rend();   }
     const_reverse_iterator   rend   () const { return t.rend();   }
     //
@@ -181,9 +182,9 @@ class set
 #endif
     {
 #ifndef RWSTD_NO_MEMBER_TYPE_TPARAM
-        pair<typename rep_type::iterator, bool> p = t.insert(x); 
+        pair<typename rep_type::iterator, bool> p = t.insert(x);
 #else
-        pair<t_iterator,bool> p = t.insert(x); 
+        pair<t_iterator,bool> p = t.insert(x);
 #endif
         return pair<iterator, bool>(p.first, p.second);
     }
@@ -215,7 +216,7 @@ class set
     }
     size_type erase (const key_type& x)
     {
-        return t.erase(x); 
+        return t.erase(x);
     }
     void erase (iterator first, iterator last)
     {
@@ -258,7 +259,7 @@ template <class Key, class Compare>
 class multiset
 {
   public:
-    //  
+    //
     // types
     //
     typedef Key      key_type;
@@ -267,8 +268,8 @@ class multiset
     typedef Compare  value_compare;
 
   private:
-    
-    typedef rb_tree<key_type, value_type, 
+
+    typedef rb_tree<key_type, value_type,
                     ident<value_type, key_type>, key_compare> rep_type;
     rep_type t;
 
@@ -291,18 +292,18 @@ class multiset
 
 #ifndef RWSTD_NO_MEMBER_TEMPLATES
     template<class InputIterator>
-    multiset (InputIterator first, InputIterator last, 
+    multiset (InputIterator first, InputIterator last,
               const Compare& comp = Compare()) : t(comp, true)
     {
         while (first != last) t.insert(*first++);
     }
 #else
-    multiset (const value_type* first, const value_type* last, 
+    multiset (const value_type* first, const value_type* last,
               const Compare& comp = Compare()) : t(comp, true)
     {
         while (first != last) t.insert(*first++);
     }
-    multiset (const_iterator first, const_iterator last, 
+    multiset (const_iterator first, const_iterator last,
               const Compare& comp = Compare()) : t(comp, true)
     {
         while (first != last) t.insert(*first++);
@@ -321,8 +322,8 @@ class multiset
     const_iterator           begin  () const { return t.begin();  }
     iterator                 end    ()       { return t.end();    }
     const_iterator           end    () const { return t.end();    }
-    reverse_iterator         rbegin ()       { return t.rbegin(); } 
-    const_reverse_iterator   rbegin () const { return t.rbegin(); } 
+    reverse_iterator         rbegin ()       { return t.rbegin(); }
+    const_reverse_iterator   rbegin () const { return t.rbegin(); }
     reverse_iterator         rend   ()       { return t.rend();   }
     const_reverse_iterator   rend   () const { return t.rend();   }
 
@@ -366,7 +367,7 @@ class multiset
     void erase (iterator first, iterator last)
     {
         t.erase((typename rep_type::iterator&)first,
-                (typename rep_type::iterator&)last); 
+                (typename rep_type::iterator&)last);
     }
     void swap (multiset<Key, Compare>& x) { t.swap(x.t); }
     //
@@ -385,12 +386,12 @@ class multiset
     }
     iterator  upper_bound (const key_type& x) const
     {
-        return t.upper_bound(x); 
+        return t.upper_bound(x);
     }
 #ifndef RWSTD_NO_RET_TEMPLATE
     pair<iterator,iterator> equal_range (const key_type& x) const
 #else
-    typedef  pair<iterator, iterator> pair_iterator_iterator; 
+    typedef  pair<iterator, iterator> pair_iterator_iterator;
     //
     // typedef done to get around compiler bug
     //
@@ -414,14 +415,14 @@ inline bool operator< (const set<Key, Compare>& x, const set<Key, Compare>& y)
 }
 
 template <class Key, class Compare>
-inline bool operator== (const multiset<Key, Compare>& x, 
+inline bool operator== (const multiset<Key, Compare>& x,
                         const multiset<Key, Compare>& y)
 {
     return x.size() == y.size() && equal(x.begin(), x.end(), y.begin());
 }
 
 template <class Key, class Compare>
-inline bool operator< (const multiset<Key, Compare>& x, 
+inline bool operator< (const multiset<Key, Compare>& x,
                        const multiset<Key, Compare>& y)
 {
     return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());

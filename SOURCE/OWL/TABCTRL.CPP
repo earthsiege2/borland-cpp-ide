@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.18  $
+//$Revision:   10.22  $
 //
 // Implementation of classes TTabItem and TTabControl.
 //----------------------------------------------------------------------------
@@ -20,6 +20,7 @@
 # include <owl/gdiobjec.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlCommCtrl);        // CommonCtrl Diagnostic group
 
 //
@@ -257,10 +258,11 @@ TTabControl::GetClassName()
 
   // For debugging purposes only
   //
-#if defined(__TRACE) || defined(__WARN)
+#if defined(__OWL_NO_COMMCTRL)
 
   // CommCtrl is always available under the new Shell - If IsAvailable()
-  // returns false, we must be running a test/debugging run.
+  // returns false, we must be running a test/debugging run. Return a
+  // non-system name to avoid conflicts
   //
   if (!TCommCtrl::IsAvailable() && TSystem::Has3dUI())
     return "OWL_Tab";
@@ -944,7 +946,7 @@ TTabControl::InitCtl()
   TabSize = TSize(0, 0);
   TabList = new TCollection<TTabEntryInternal>(InitSize, InitDelta);
   Updown = new TUpDown(this, ID_Updown, 0, 0, 0, 0, this);
-  Updown->Attr.Style |= UDS_HORZ;
+  Updown->ModifyStyle(UDS_WRAP, UDS_HORZ);
 }
 
 //
@@ -1414,7 +1416,7 @@ TTabControl::SetTabRectsSingle(int firstTab)
 
   TRect newRect;
 
-  // Assume scrollers are unless we have tabs off to the left
+  // Assume scrollers are off unless we have tabs off to the left
   //
   int index;
   int count = GetCount();
@@ -1546,38 +1548,32 @@ TTabControl::NotifyAndSelect(int index, bool bringInView)
 void
 TTabControl::UpdateScrollRange()
 {
-  int pos = 0;
-  int upr = 0;
+  int left = 0;
   int cnt = GetCount();
 
-  // Find items off to the left
+  // Find index of leftmost item
+  // NOTE: Leftmost item is never clipped on the left side
   //
-  int i;
-  for (i=0; i < cnt; i++) {
-    if (IsVisible(i))
-      break;
-    else
-      pos++;
-  }
+  while (left < cnt && !IsVisible(left))
+    left++;
 
-  // Find items off to the right
+  // Find how many items not fully are hanging on the right
   //      
-  for (i=cnt-1; i >=0; i--) {
-    if (IsVisible(i) && !IsClipped(i))
-      break;
-    else
-      upr++;
-  }
-
-  // Update scroller's data
+  int noShowRight = 0;
+  for (int i = cnt-1; i >=0; i--)
+    if (!IsVisible(i) || IsClipped(i))
+      noShowRight++;
+   
+  // Now we want the scroller to allow us to go left 'left' times and go
+  // right 'noShowRight' times.
   //      
-  Updown->SetRange(0, pos+upr);
-  Updown->SetPos(pos);
+  Updown->SetRange(0, noShowRight);
+  Updown->SetPos(left);
 }
 
 //
-// Routine which updates the Bold and Normal font used by the
-// TabControl when display Tab Labels
+// Update the Bold and Normal font used by the
+// TabControl when displaying Tab labels
 //
 void
 TTabControl::SetupFont(HFONT font)
@@ -1587,14 +1583,17 @@ TTabControl::SetupFont(HFONT font)
     //
     font = Parent->GetWindowFont();
 
-    // Settle for the ANSI proportional one 
+    // Use the default UI font
     //
-    if (!font)
-      font = (HFONT)GetStockObject(ANSI_VAR_FONT);
+    if (!font) {
+      LOGFONT lf;
+      TDefaultGUIFont().GetObject(lf);
+      font = CreateFontIndirect(&lf);
+    }
   }
 
-  // Create a Normal and Bold version of the font for the
-  // TabControl's use...
+  // Create Normal and Bold versions of the font for the
+  // TabControl's use.
   //
   if (font) {
     LOGFONT lf;

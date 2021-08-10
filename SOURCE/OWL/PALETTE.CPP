@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.4  $
 //
 // Implementation of TPalette, an encapsulation of the GDI Palette object
 //----------------------------------------------------------------------------
@@ -15,6 +15,7 @@
 #endif
 #include <memory.h>
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 DIAG_DECLARE_GROUP(OwlGDIOrphan);  // Orphan control tracing group
 

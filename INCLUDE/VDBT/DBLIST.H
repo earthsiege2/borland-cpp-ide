@@ -135,10 +135,10 @@ class _DBAWARECLASS TDBListBox : public TDBControl {
     DECLARE_SOURCE( OnMouseUp,     TDBListBoxMouse );
 
     // Event Handlers
-    EVENT( OnClick,    TDBControl,   TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl,   TDragEvent );
-    EVENT( OnDragOver, TDBControl,   TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl,   TDragEvent );
+    DECLARE_DB_EVENT( OnClick,       TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop,    TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver,    TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,     TDragEvent );
     DECLARE_DB_EVENT( OnDblClick,    TNotifyEvent );
     DECLARE_DB_EVENT( OnDrawItem,    TDrawItemEvent );
     DECLARE_DB_EVENT( OnEnter,       TNotifyEvent );
@@ -166,11 +166,11 @@ class _DBAWARECLASS TDBListBox : public TDBControl {
 
 // Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBListBox )
-DEFINE_DB_PROP_TSTRINGS( TDBListBox, Items )
-DEFINE_DB_PROP_STRING( TDBListBox, FontName );
-DEFINE_DB_PROP_STRING( TDBListBox, Caption );
-DEFINE_DB_PROP_STRING( TDBListBox, Value );
+DEFINE_DB_PROP_DATAFIELD( TDBListBox, _TDBListBox )
+DEFINE_DB_PROP_TSTRINGS( TDBListBox, _TDBListBox, Items )
+DEFINE_DB_PROP_STRING( TDBListBox, _TDBListBox, FontName );
+DEFINE_DB_PROP_STRING( TDBListBox, _TDBListBox, Caption );
+DEFINE_DB_PROP_STRING( TDBListBox, _TDBListBox, Value );
 
 // Methods
 inline char far* TDBListBox::GetClassName()

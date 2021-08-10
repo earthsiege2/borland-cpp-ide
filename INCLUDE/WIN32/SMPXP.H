@@ -1,3 +1,4 @@
+#pragma option -b
 /*
  *  S M P X P . H
  *
@@ -86,3 +87,4 @@
  *      writer will truncate the logfile to (modulo a line ending).
  */
 
+#pragma option -b.

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.10  $
+//$Revision:   5.13  $
 //
 // Classes for window system structure and type encapsulation
 //----------------------------------------------------------------------------
@@ -16,6 +16,10 @@
 # include <winsys/geometry.h>     // TPoint, et. al.
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 //
 // class TResId
 // ~~~~~ ~~~~~~
@@ -27,24 +31,28 @@ class TResId {
     // Constructors
     //
     TResId() : Num(0) {}
-    TResId(const char far* resStr) : Str(resStr) {}
+    TResId(const _TCHAR far* resStr) : Str(resStr) {}
     TResId(int resNum) : Num(unsigned(resNum)) {}
 
     // Type Conversion operators & information
     //
-    operator char far*() {return (char far*)Str;}
+    operator _TCHAR far*() {return (_TCHAR far*)Str;}
     bool IsString() const {return HiUint16(Num) != 0;}
 
   private:
     union {
       uint32          Num;  // Assumes that these 32bit fields will overlay
-      const char far* Str;
+      const _TCHAR far* Str;
     };
 
   friend ipstream& _WSYSFUNC operator >>(ipstream& is, TResId& id);
   friend opstream& _WSYSFUNC operator <<(opstream& os, const TResId& id);
   friend ostream& _WSYSFUNC  operator <<(ostream& os, const TResId& id);
 };
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 //
 // MSW only classes
@@ -57,6 +65,10 @@ class TResId {
 # if !defined(CLASSLIB_BAGS_H)
 #   include <classlib/bags.h>
 # endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 //
 // class TDropInfo
@@ -75,7 +87,7 @@ class TDropInfo {
 
     // Information access
     //
-    uint DragQueryFile(uint index, char far* name, uint nameLen)
+    uint DragQueryFile(uint index, _TCHAR far* name, uint nameLen)
            {return ::DragQueryFile(Handle, index, name, nameLen);}
     uint DragQueryFileCount() {return ::DragQueryFile(Handle, uint(-1), 0, 0);}
     uint DragQueryFileNameLen(uint index)
@@ -96,18 +108,18 @@ class TDropInfo {
 //
 class _WSYSCLASS TFileDroplet {
   public:
-    TFileDroplet(const char* fileName, TPoint& p, bool inClient);
+    TFileDroplet(const _TCHAR* fileName, TPoint& p, bool inClient);
     TFileDroplet(TDropInfo& drop, int i);
    ~TFileDroplet();
 
     operator ==(const TFileDroplet& other) const {return &other == this;}
 
-    const char* GetName() const {return FileName;}
+    const _TCHAR* GetName() const {return FileName;}
     TPoint      GetPoint() const {return Point;}
     bool        GetInClientArea() const {return InClientArea;}
 
   private:
-    char*   FileName;
+    _TCHAR*   FileName;
     TPoint  Point;
     bool    InClientArea;
 
@@ -135,7 +147,7 @@ class TProcInstance {
 #else
     TProcInstance(FARPROC p) {Instance = FARPROC(p);}
 #endif
-   
+
     operator FARPROC() {return Instance;}
 
   private:
@@ -149,13 +161,13 @@ class TProcInstance {
 //     resource.
 //   - 'resType' is a constant string that defines the resource type.
 //
-// For example, 
+// For example,
 //
 //     typedef TResource<DLGTEMPLATE, RT_DIALOG> TDlgResource;
 //     TDlgResource dlgInfo(hInstance, IDD_ABOUTDLG);
 //     DLGTEMPLATE* pDlgTmpl = dlgInfo;
 //
-template <class T, const char far* resType>
+template <class T, const _TCHAR far* resType>
 class _WSYSCLASS TResource {
   public:
     TResource(HINSTANCE hModule, TResId resId);
@@ -175,7 +187,7 @@ class _WSYSCLASS TResource {
 //
 // Loads & locks the specified resource..
 //
-template <class T, const char far* resType>
+template <class T, const _TCHAR far* resType>
 TResource<T, resType>::TResource(HINSTANCE hModule, TResId resId)
 :
   MemHandle(0),
@@ -184,7 +196,7 @@ TResource<T, resType>::TResource(HINSTANCE hModule, TResId resId)
   HRSRC resHandle = FindResource(hModule, resId, resType);
   if (resHandle) {
     MemHandle = LoadResource(hModule, resHandle);
-    if (MemHandle) 
+    if (MemHandle)
       MemPtr = (T*)LockResource(MemHandle);
   }
 }
@@ -192,9 +204,9 @@ TResource<T, resType>::TResource(HINSTANCE hModule, TResId resId)
 #if defined(BI_PLAT_WIN32)
 //
 // Loads & locks a resource of the type 'resType' from the module
-// (hModule). Accepts a LanguageID for localized resources. 
+// (hModule). Accepts a LanguageID for localized resources.
 //
-template <class T, const char far* resType>
+template <class T, const _TCHAR far* resType>
 TResource<T, resType>::TResource(HINSTANCE hModule, TResId resId, LANGID lcid)
 :
   MemHandle(0),
@@ -203,7 +215,7 @@ TResource<T, resType>::TResource(HINSTANCE hModule, TResId resId, LANGID lcid)
   HRSRC resHandle = FindResourceEx(hModule, resId, resType, lcid);
   if (resHandle) {
     MemHandle = LoadResource(hModule, resHandle);
-    if (MemHandle) 
+    if (MemHandle)
       MemPtr = (T*)LockResource(MemHandle);
   }
 }
@@ -213,7 +225,7 @@ TResource<T, resType>::TResource(HINSTANCE hModule, TResId resId, LANGID lcid)
 // Unlocks and frees the resource loaded earlier.
 // NOTE: Unlocking and freeing of resources is not necessary in WIN32.
 //
-template <class T, const char far* resType>
+template <class T, const _TCHAR far* resType>
 TResource<T, resType>::~TResource()
 {
   // NOTE: UnlockResource and FreeResource are not necessary (albeit harmless)
@@ -222,7 +234,7 @@ TResource<T, resType>::~TResource()
 #if defined(BI_PLAT_WIN16)
   if (MemHandle) {
     UnlockResource(MemHandle);
-    FreeResource(MemHandle);      
+    FreeResource(MemHandle);
   }
 #endif
   MemHandle = 0;
@@ -232,26 +244,29 @@ TResource<T, resType>::~TResource()
 //
 // Returns true if resource was successfully loaded or false otherwise.
 //
-template <class T, const char far* resType> bool
+template <class T, const _TCHAR far* resType> bool
 TResource<T, resType>::IsOK() const
 {
   return ((MemHandle != 0) && (MemPtr != 0));
 }
 
 //
-// Returns a pointer to the locked resource. 
+// Returns a pointer to the locked resource.
 // NOTE: This operator eliminates the need to explicitly cast
 //       LPVOID to a structure representing the actual layout
 //       of individual resource types.
 //
-template <class T, const char far* resType>
+template <class T, const _TCHAR far* resType>
 TResource<T, resType>::operator T* ()
 {
   PRECONDITION(IsOK());
   return MemPtr;
 }
 
-#endif  // BI_PLAT_MSW
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
+#endif  // BI_PLAT_MSW
 
 #endif  // WINSYS_WINCLASS_H

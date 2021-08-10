@@ -50,7 +50,7 @@ public:
         return setClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Set";
         }
@@ -164,7 +164,7 @@ public:
         return setClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "BI_TCSetAsVector";
         }

@@ -4,12 +4,13 @@
 *                                                                             *
 * Version 1.0                                                                 *
 *                                                                             *
-* Copyright (c) 1991-1995, Microsoft Corp.      All rights reserved.          *
+* Copyright (c) 1991-1996, Microsoft Corp.      All rights reserved.          *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _INC_COMMCTRL
 #define _INC_COMMCTRL
+#pragma option -b
 
 #ifndef NOUSER
 
@@ -40,20 +41,15 @@
 #endif
 #endif // DUMMYUNIONNAME
 
-#if !defined(UNICODE) && !defined(__WIN32__)
-typedef LPSTR LPWSTR;
-typedef LPCSTR LPCWSTR;
-#endif
-
 #ifdef _WIN32
+#pragma option -b.
 #include <pshpack1.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#if (WINVER >= 0x0400)
 
 //
 // Users of this header may define any number of these constants to avoid
@@ -76,7 +72,16 @@ extern "C" {
 //
 //=============================================================================
 
+#pragma option -b.
 #include <prsht.h>
+#pragma option -b
+
+
+#ifdef __cplusplus
+#define SNDMSG ::SendMessage
+#else
+#define SNDMSG SendMessage
+#endif
 
 
 WINCOMMCTRLAPI void WINAPI InitCommonControls(void);
@@ -149,6 +154,7 @@ WINCOMMCTRLAPI void WINAPI InitCommonControls(void);
 #define MSGF_COMMCTRL_TOOLBARCUST   0x4203
 
 
+
 //====== IMAGE APIS ===========================================================
 
 #ifndef NOIMAGEAPIS
@@ -156,10 +162,7 @@ WINCOMMCTRLAPI void WINAPI InitCommonControls(void);
 #define CLR_NONE                0xFFFFFFFFL
 #define CLR_DEFAULT             0xFF000000L
 
-struct _IMAGELIST
-{
-    int dummy;      /* used to prevent undefined structure warnings */
-};
+struct _IMAGELIST;
 typedef struct _IMAGELIST NEAR* HIMAGELIST;
 
 #define ILC_MASK                0x0001
@@ -217,7 +220,7 @@ WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_LoadImageW(HINSTANCE hi, LPCWSTR lpb
 #endif
 
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_BeginDrag(HIMAGELIST himlTrack, int iTrack, int dxHotspot, int dyHotspot);
-WINCOMMCTRLAPI void        WINAPI ImageList_EndDrag(void);
+WINCOMMCTRLAPI void        WINAPI ImageList_EndDrag();
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_DragEnter(HWND hwndLock, int x, int y);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_DragLeave(HWND hwndLock);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_DragMove(int x, int y);
@@ -325,7 +328,7 @@ typedef struct _HD_ITEMW
 
 #define HDM_GETITEMCOUNT        (HDM_FIRST + 0)
 #define Header_GetItemCount(hwndHD) \
-    (int)SendMessage((hwndHD), HDM_GETITEMCOUNT, 0, 0L)
+    (int)SNDMSG((hwndHD), HDM_GETITEMCOUNT, 0, 0L)
 
 
 #define HDM_INSERTITEMA         (HDM_FIRST + 1)
@@ -338,12 +341,12 @@ typedef struct _HD_ITEMW
 #endif
 
 #define Header_InsertItem(hwndHD, i, phdi) \
-    (int)SendMessage((hwndHD), HDM_INSERTITEM, (WPARAM)(int)(i), (LPARAM)(const HD_ITEM FAR*)(phdi))
+    (int)SNDMSG((hwndHD), HDM_INSERTITEM, (WPARAM)(int)(i), (LPARAM)(const HD_ITEM FAR*)(phdi))
 
 
 #define HDM_DELETEITEM          (HDM_FIRST + 2)
 #define Header_DeleteItem(hwndHD, i) \
-    (BOOL)SendMessage((hwndHD), HDM_DELETEITEM, (WPARAM)(int)(i), 0L)
+    (BOOL)SNDMSG((hwndHD), HDM_DELETEITEM, (WPARAM)(int)(i), 0L)
 
 
 #define HDM_GETITEMA            (HDM_FIRST + 3)
@@ -356,7 +359,7 @@ typedef struct _HD_ITEMW
 #endif
 
 #define Header_GetItem(hwndHD, i, phdi) \
-    (BOOL)SendMessage((hwndHD), HDM_GETITEM, (WPARAM)(int)(i), (LPARAM)(HD_ITEM FAR*)(phdi))
+    (BOOL)SNDMSG((hwndHD), HDM_GETITEM, (WPARAM)(int)(i), (LPARAM)(HD_ITEM FAR*)(phdi))
 
 
 #define HDM_SETITEMA            (HDM_FIRST + 4)
@@ -369,7 +372,7 @@ typedef struct _HD_ITEMW
 #endif
 
 #define Header_SetItem(hwndHD, i, phdi) \
-    (BOOL)SendMessage((hwndHD), HDM_SETITEM, (WPARAM)(int)(i), (LPARAM)(const HD_ITEM FAR*)(phdi))
+    (BOOL)SNDMSG((hwndHD), HDM_SETITEM, (WPARAM)(int)(i), (LPARAM)(const HD_ITEM FAR*)(phdi))
 
 
 typedef struct _HD_LAYOUT
@@ -381,7 +384,7 @@ typedef struct _HD_LAYOUT
 
 #define HDM_LAYOUT              (HDM_FIRST + 5)
 #define Header_Layout(hwndHD, playout) \
-    (BOOL)SendMessage((hwndHD), HDM_LAYOUT, 0, (LPARAM)(HD_LAYOUT FAR*)(playout))
+    (BOOL)SNDMSG((hwndHD), HDM_LAYOUT, 0, (LPARAM)(HD_LAYOUT FAR*)(playout))
 
 
 #define HHT_NOWHERE             0x0001
@@ -641,6 +644,7 @@ typedef struct tagTBSAVEPARAMSW {
 #define TB_GETBUTTONTEXTA       (WM_USER + 45)
 #define TB_GETBUTTONTEXTW       (WM_USER + 75)
 #define TB_REPLACEBITMAP        (WM_USER + 46)
+#define TB_SETINDENT            (WM_USER + 47)
 
 
 #ifdef UNICODE
@@ -767,10 +771,11 @@ typedef struct tagTOOLINFOW {
 #define TTS_ALWAYSTIP           0x01
 #define TTS_NOPREFIX            0x02
 
-#define TTF_IDISHWND            0x01
-#define TTF_CENTERTIP           0x02
-#define TTF_RTLREADING          0x04
-#define TTF_SUBCLASS            0x10
+#define TTF_IDISHWND            0x0001
+#define TTF_CENTERTIP           0x0002
+#define TTF_RTLREADING          0x0004
+#define TTF_SUBCLASS            0x0010
+
 
 #define TTDT_AUTOMATIC          0
 #define TTDT_RESHOW             1
@@ -785,7 +790,7 @@ typedef struct tagTOOLINFOW {
 #define TTM_DELTOOLW            (WM_USER + 51)
 #define TTM_NEWTOOLRECTA        (WM_USER + 6)
 #define TTM_NEWTOOLRECTW        (WM_USER + 52)
-#define TTM_RELAYEVENT          (WM_USER + 7)
+#define TTM_RELAYEVENT          (WM_USER + 7)                           
 
 #define TTM_GETTOOLINFOA        (WM_USER + 8)
 #define TTM_GETTOOLINFOW        (WM_USER + 53)
@@ -805,6 +810,7 @@ typedef struct tagTOOLINFOW {
 #define TTM_GETCURRENTTOOLA     (WM_USER + 15)
 #define TTM_GETCURRENTTOOLW     (WM_USER + 59)
 #define TTM_WINDOWFROMPOINT     (WM_USER + 16)
+
 
 #ifdef UNICODE
 #define TTM_ADDTOOL             TTM_ADDTOOLW
@@ -858,7 +864,6 @@ typedef struct _TT_HITTESTINFOW {
 #define TTN_SHOW                (TTN_FIRST - 1)
 #define TTN_POP                 (TTN_FIRST - 2)
 
-
 #ifdef UNICODE
 #define TTN_NEEDTEXT            TTN_NEEDTEXTW
 #else
@@ -880,7 +885,6 @@ typedef struct tagTOOLTIPTEXTW {
     HINSTANCE hinst;
     UINT uFlags;
 } TOOLTIPTEXTW, FAR *LPTOOLTIPTEXTW;
-
 
 #ifdef UNICODE
 #define TOOLTIPTEXT             TOOLTIPTEXTW
@@ -1260,6 +1264,7 @@ typedef struct _NM_UPDOWN
 #define LVS_NOLABELWRAP         0x0080
 #define LVS_AUTOARRANGE         0x0100
 #define LVS_EDITLABELS          0x0200
+#define LVS_OWNERDATA           0x1000
 #define LVS_NOSCROLL            0x2000
 
 #define LVS_TYPESTYLEMASK       0xfc00
@@ -1274,15 +1279,15 @@ typedef struct _NM_UPDOWN
 
 #define LVM_GETBKCOLOR          (LVM_FIRST + 0)
 #define ListView_GetBkColor(hwnd)  \
-    (COLORREF)SendMessage((hwnd), LVM_GETBKCOLOR, 0, 0L)
+    (COLORREF)SNDMSG((hwnd), LVM_GETBKCOLOR, 0, 0L)
 
 #define LVM_SETBKCOLOR          (LVM_FIRST + 1)
 #define ListView_SetBkColor(hwnd, clrBk) \
-    (BOOL)SendMessage((hwnd), LVM_SETBKCOLOR, 0, (LPARAM)(COLORREF)(clrBk))
+    (BOOL)SNDMSG((hwnd), LVM_SETBKCOLOR, 0, (LPARAM)(COLORREF)(clrBk))
 
 #define LVM_GETIMAGELIST        (LVM_FIRST + 2)
 #define ListView_GetImageList(hwnd, iImageList) \
-    (HIMAGELIST)SendMessage((hwnd), LVM_GETIMAGELIST, (WPARAM)(INT)(iImageList), 0L)
+    (HIMAGELIST)SNDMSG((hwnd), LVM_GETIMAGELIST, (WPARAM)(INT)(iImageList), 0L)
 
 #define LVSIL_NORMAL            0
 #define LVSIL_SMALL             1
@@ -1290,12 +1295,11 @@ typedef struct _NM_UPDOWN
 
 #define LVM_SETIMAGELIST        (LVM_FIRST + 3)
 #define ListView_SetImageList(hwnd, himl, iImageList) \
-    (HIMAGELIST)(UINT)SendMessage((hwnd), LVM_SETIMAGELIST, (WPARAM)(iImageList), (LPARAM)(UINT)(HIMAGELIST)(himl))
+    (HIMAGELIST)(UINT)SNDMSG((hwnd), LVM_SETIMAGELIST, (WPARAM)(iImageList), (LPARAM)(UINT)(HIMAGELIST)(himl))
 
 #define LVM_GETITEMCOUNT        (LVM_FIRST + 4)
 #define ListView_GetItemCount(hwnd) \
-    (int)SendMessage((hwnd), LVM_GETITEMCOUNT, 0, 0L)
-
+    (int)SNDMSG((hwnd), LVM_GETITEMCOUNT, 0, 0L)
 
 #define LVIF_TEXT               0x0001
 #define LVIF_IMAGE              0x0002
@@ -1306,6 +1310,7 @@ typedef struct _NM_UPDOWN
 #define LVIS_SELECTED           0x0002
 #define LVIS_CUT                0x0004
 #define LVIS_DROPHILITED        0x0008
+
 
 #define LVIS_OVERLAYMASK        0x0F00
 #define LVIS_STATEIMAGEMASK     0xF000
@@ -1363,7 +1368,7 @@ typedef struct _LV_ITEMW
 #endif
 
 #define ListView_GetItem(hwnd, pitem) \
-    (BOOL)SendMessage((hwnd), LVM_GETITEM, 0, (LPARAM)(LV_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), LVM_GETITEM, 0, (LPARAM)(LV_ITEM FAR*)(pitem))
 
 
 #define LVM_SETITEMA            (LVM_FIRST + 6)
@@ -1375,7 +1380,7 @@ typedef struct _LV_ITEMW
 #endif
 
 #define ListView_SetItem(hwnd, pitem) \
-    (BOOL)SendMessage((hwnd), LVM_SETITEM, 0, (LPARAM)(const LV_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), LVM_SETITEM, 0, (LPARAM)(const LV_ITEM FAR*)(pitem))
 
 
 #define LVM_INSERTITEMA         (LVM_FIRST + 7)
@@ -1386,27 +1391,27 @@ typedef struct _LV_ITEMW
 #define LVM_INSERTITEM          LVM_INSERTITEMA
 #endif
 #define ListView_InsertItem(hwnd, pitem)   \
-    (int)SendMessage((hwnd), LVM_INSERTITEM, 0, (LPARAM)(const LV_ITEM FAR*)(pitem))
+    (int)SNDMSG((hwnd), LVM_INSERTITEM, 0, (LPARAM)(const LV_ITEM FAR*)(pitem))
 
 
 #define LVM_DELETEITEM          (LVM_FIRST + 8)
 #define ListView_DeleteItem(hwnd, i) \
-    (BOOL)SendMessage((hwnd), LVM_DELETEITEM, (WPARAM)(int)(i), 0L)
+    (BOOL)SNDMSG((hwnd), LVM_DELETEITEM, (WPARAM)(int)(i), 0L)
 
 
 #define LVM_DELETEALLITEMS      (LVM_FIRST + 9)
 #define ListView_DeleteAllItems(hwnd) \
-    (BOOL)SendMessage((hwnd), LVM_DELETEALLITEMS, 0, 0L)
+    (BOOL)SNDMSG((hwnd), LVM_DELETEALLITEMS, 0, 0L)
 
 
 #define LVM_GETCALLBACKMASK     (LVM_FIRST + 10)
 #define ListView_GetCallbackMask(hwnd) \
-    (BOOL)SendMessage((hwnd), LVM_GETCALLBACKMASK, 0, 0)
+    (BOOL)SNDMSG((hwnd), LVM_GETCALLBACKMASK, 0, 0)
 
 
 #define LVM_SETCALLBACKMASK     (LVM_FIRST + 11)
 #define ListView_SetCallbackMask(hwnd, mask) \
-    (BOOL)SendMessage((hwnd), LVM_SETCALLBACKMASK, (WPARAM)(UINT)(mask), 0)
+    (BOOL)SNDMSG((hwnd), LVM_SETCALLBACKMASK, (WPARAM)(UINT)(mask), 0)
 
 
 #define LVNI_ALL                0x0000
@@ -1423,7 +1428,7 @@ typedef struct _LV_ITEMW
 
 #define LVM_GETNEXTITEM         (LVM_FIRST + 12)
 #define ListView_GetNextItem(hwnd, i, flags) \
-    (int)SendMessage((hwnd), LVM_GETNEXTITEM, (WPARAM)(int)(i), MAKELPARAM((flags), 0))
+    (int)SNDMSG((hwnd), LVM_GETNEXTITEM, (WPARAM)(int)(i), MAKELPARAM((flags), 0))
 
 
 #define LVFI_PARAM              0x0001
@@ -1465,7 +1470,7 @@ typedef struct _LV_FINDINFOW
 #endif
 
 #define ListView_FindItem(hwnd, iStart, plvfi) \
-    (int)SendMessage((hwnd), LVM_FINDITEM, (WPARAM)(int)(iStart), (LPARAM)(const LV_FINDINFO FAR*)(plvfi))
+    (int)SNDMSG((hwnd), LVM_FINDITEM, (WPARAM)(int)(iStart), (LPARAM)(const LV_FINDINFO FAR*)(plvfi))
 
 #define LVIR_BOUNDS             0
 #define LVIR_ICON               1
@@ -1475,18 +1480,18 @@ typedef struct _LV_FINDINFOW
 
 #define LVM_GETITEMRECT         (LVM_FIRST + 14)
 #define ListView_GetItemRect(hwnd, i, prc, code) \
-     (BOOL)SendMessage((hwnd), LVM_GETITEMRECT, (WPARAM)(int)(i), \
+     (BOOL)SNDMSG((hwnd), LVM_GETITEMRECT, (WPARAM)(int)(i), \
            ((prc) ? (((RECT FAR *)(prc))->left = (code),(LPARAM)(RECT FAR*)(prc)) : (LPARAM)(RECT FAR*)NULL))
 
 
 #define LVM_SETITEMPOSITION     (LVM_FIRST + 15)
 #define ListView_SetItemPosition(hwndLV, i, x, y) \
-    (BOOL)SendMessage((hwndLV), LVM_SETITEMPOSITION, (WPARAM)(int)(i), MAKELPARAM((x), (y)))
+    (BOOL)SNDMSG((hwndLV), LVM_SETITEMPOSITION, (WPARAM)(int)(i), MAKELPARAM((x), (y)))
 
 
 #define LVM_GETITEMPOSITION     (LVM_FIRST + 16)
 #define ListView_GetItemPosition(hwndLV, i, ppt) \
-    (BOOL)SendMessage((hwndLV), LVM_GETITEMPOSITION, (WPARAM)(int)(i), (LPARAM)(POINT FAR*)(ppt))
+    (BOOL)SNDMSG((hwndLV), LVM_GETITEMPOSITION, (WPARAM)(int)(i), (LPARAM)(POINT FAR*)(ppt))
 
 
 #define LVM_GETSTRINGWIDTHA     (LVM_FIRST + 17)
@@ -1498,7 +1503,7 @@ typedef struct _LV_FINDINFOW
 #endif
 
 #define ListView_GetStringWidth(hwndLV, psz) \
-    (int)SendMessage((hwndLV), LVM_GETSTRINGWIDTH, 0, (LPARAM)(LPCTSTR)(psz))
+    (int)SNDMSG((hwndLV), LVM_GETSTRINGWIDTH, 0, (LPARAM)(LPCTSTR)(psz))
 
 
 #define LVHT_NOWHERE            0x0001
@@ -1521,22 +1526,22 @@ typedef struct _LV_HITTESTINFO
 
 #define LVM_HITTEST             (LVM_FIRST + 18)
 #define ListView_HitTest(hwndLV, pinfo) \
-    (int)SendMessage((hwndLV), LVM_HITTEST, 0, (LPARAM)(LV_HITTESTINFO FAR*)(pinfo))
+    (int)SNDMSG((hwndLV), LVM_HITTEST, 0, (LPARAM)(LV_HITTESTINFO FAR*)(pinfo))
 
 
 #define LVM_ENSUREVISIBLE       (LVM_FIRST + 19)
 #define ListView_EnsureVisible(hwndLV, i, fPartialOK) \
-    (BOOL)SendMessage((hwndLV), LVM_ENSUREVISIBLE, (WPARAM)(int)(i), MAKELPARAM((fPartialOK), 0))
+    (BOOL)SNDMSG((hwndLV), LVM_ENSUREVISIBLE, (WPARAM)(int)(i), MAKELPARAM((fPartialOK), 0))
 
 
 #define LVM_SCROLL              (LVM_FIRST + 20)
 #define ListView_Scroll(hwndLV, dx, dy) \
-    (BOOL)SendMessage((hwndLV), LVM_SCROLL, (WPARAM)(int)dx, (LPARAM)(int)dy)
+    (BOOL)SNDMSG((hwndLV), LVM_SCROLL, (WPARAM)(int)dx, (LPARAM)(int)dy)
 
 
 #define LVM_REDRAWITEMS         (LVM_FIRST + 21)
 #define ListView_RedrawItems(hwndLV, iFirst, iLast) \
-    (BOOL)SendMessage((hwndLV), LVM_REDRAWITEMS, (WPARAM)(int)iFirst, (LPARAM)(int)iLast)
+    (BOOL)SNDMSG((hwndLV), LVM_REDRAWITEMS, (WPARAM)(int)iFirst, (LPARAM)(int)iLast)
 
 
 #define LVA_DEFAULT             0x0000
@@ -1547,7 +1552,7 @@ typedef struct _LV_HITTESTINFO
 
 #define LVM_ARRANGE             (LVM_FIRST + 22)
 #define ListView_Arrange(hwndLV, code) \
-    (BOOL)SendMessage((hwndLV), LVM_ARRANGE, (WPARAM)(UINT)(code), 0L)
+    (BOOL)SNDMSG((hwndLV), LVM_ARRANGE, (WPARAM)(UINT)(code), 0L)
 
 
 #define LVM_EDITLABELA          (LVM_FIRST + 23)
@@ -1559,12 +1564,12 @@ typedef struct _LV_HITTESTINFO
 #endif
 
 #define ListView_EditLabel(hwndLV, i) \
-    (HWND)SendMessage((hwndLV), LVM_EDITLABEL, (WPARAM)(int)(i), 0L)
+    (HWND)SNDMSG((hwndLV), LVM_EDITLABEL, (WPARAM)(int)(i), 0L)
 
 
 #define LVM_GETEDITCONTROL      (LVM_FIRST + 24)
 #define ListView_GetEditControl(hwndLV) \
-    (HWND)SendMessage((hwndLV), LVM_GETEDITCONTROL, 0, 0L)
+    (HWND)SNDMSG((hwndLV), LVM_GETEDITCONTROL, 0, 0L)
 
 
 typedef struct _LV_COLUMNA
@@ -1614,7 +1619,7 @@ typedef struct _LV_COLUMNW
 #endif
 
 #define ListView_GetColumn(hwnd, iCol, pcol) \
-    (BOOL)SendMessage((hwnd), LVM_GETCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(LV_COLUMN FAR*)(pcol))
+    (BOOL)SNDMSG((hwnd), LVM_GETCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(LV_COLUMN FAR*)(pcol))
 
 
 #define LVM_SETCOLUMNA          (LVM_FIRST + 26)
@@ -1626,7 +1631,7 @@ typedef struct _LV_COLUMNW
 #endif
 
 #define ListView_SetColumn(hwnd, iCol, pcol) \
-    (BOOL)SendMessage((hwnd), LVM_SETCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMN FAR*)(pcol))
+    (BOOL)SNDMSG((hwnd), LVM_SETCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMN FAR*)(pcol))
 
 
 #define LVM_INSERTCOLUMNA       (LVM_FIRST + 27)
@@ -1638,17 +1643,17 @@ typedef struct _LV_COLUMNW
 #endif
 
 #define ListView_InsertColumn(hwnd, iCol, pcol) \
-    (int)SendMessage((hwnd), LVM_INSERTCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMN FAR*)(pcol))
+    (int)SNDMSG((hwnd), LVM_INSERTCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMN FAR*)(pcol))
 
 
 #define LVM_DELETECOLUMN        (LVM_FIRST + 28)
 #define ListView_DeleteColumn(hwnd, iCol) \
-    (BOOL)SendMessage((hwnd), LVM_DELETECOLUMN, (WPARAM)(int)(iCol), 0)
+    (BOOL)SNDMSG((hwnd), LVM_DELETECOLUMN, (WPARAM)(int)(iCol), 0)
 
 
 #define LVM_GETCOLUMNWIDTH      (LVM_FIRST + 29)
 #define ListView_GetColumnWidth(hwnd, iCol) \
-    (int)SendMessage((hwnd), LVM_GETCOLUMNWIDTH, (WPARAM)(int)(iCol), 0)
+    (int)SNDMSG((hwnd), LVM_GETCOLUMNWIDTH, (WPARAM)(int)(iCol), 0)
 
 
 #define LVSCW_AUTOSIZE              -1
@@ -1656,57 +1661,57 @@ typedef struct _LV_COLUMNW
 #define LVM_SETCOLUMNWIDTH          (LVM_FIRST + 30)
 
 #define ListView_SetColumnWidth(hwnd, iCol, cx) \
-    (BOOL)SendMessage((hwnd), LVM_SETCOLUMNWIDTH, (WPARAM)(int)(iCol), MAKELPARAM((cx), 0))
+    (BOOL)SNDMSG((hwnd), LVM_SETCOLUMNWIDTH, (WPARAM)(int)(iCol), MAKELPARAM((cx), 0))
 
 
 #define LVM_CREATEDRAGIMAGE     (LVM_FIRST + 33)
 #define ListView_CreateDragImage(hwnd, i, lpptUpLeft) \
-    (HIMAGELIST)SendMessage((hwnd), LVM_CREATEDRAGIMAGE, (WPARAM)(int)(i), (LPARAM)(LPPOINT)(lpptUpLeft))
+    (HIMAGELIST)SNDMSG((hwnd), LVM_CREATEDRAGIMAGE, (WPARAM)(int)(i), (LPARAM)(LPPOINT)(lpptUpLeft))
 
 
 #define LVM_GETVIEWRECT         (LVM_FIRST + 34)
 #define ListView_GetViewRect(hwnd, prc) \
-    (BOOL)SendMessage((hwnd), LVM_GETVIEWRECT, 0, (LPARAM)(RECT FAR*)(prc))
+    (BOOL)SNDMSG((hwnd), LVM_GETVIEWRECT, 0, (LPARAM)(RECT FAR*)(prc))
 
 
 #define LVM_GETTEXTCOLOR        (LVM_FIRST + 35)
 #define ListView_GetTextColor(hwnd)  \
-    (COLORREF)SendMessage((hwnd), LVM_GETTEXTCOLOR, 0, 0L)
+    (COLORREF)SNDMSG((hwnd), LVM_GETTEXTCOLOR, 0, 0L)
 
 
 #define LVM_SETTEXTCOLOR        (LVM_FIRST + 36)
 #define ListView_SetTextColor(hwnd, clrText) \
-    (BOOL)SendMessage((hwnd), LVM_SETTEXTCOLOR, 0, (LPARAM)(COLORREF)(clrText))
+    (BOOL)SNDMSG((hwnd), LVM_SETTEXTCOLOR, 0, (LPARAM)(COLORREF)(clrText))
 
 
 #define LVM_GETTEXTBKCOLOR      (LVM_FIRST + 37)
 #define ListView_GetTextBkColor(hwnd)  \
-    (COLORREF)SendMessage((hwnd), LVM_GETTEXTBKCOLOR, 0, 0L)
+    (COLORREF)SNDMSG((hwnd), LVM_GETTEXTBKCOLOR, 0, 0L)
 
 
 #define LVM_SETTEXTBKCOLOR      (LVM_FIRST + 38)
 #define ListView_SetTextBkColor(hwnd, clrTextBk) \
-    (BOOL)SendMessage((hwnd), LVM_SETTEXTBKCOLOR, 0, (LPARAM)(COLORREF)(clrTextBk))
+    (BOOL)SNDMSG((hwnd), LVM_SETTEXTBKCOLOR, 0, (LPARAM)(COLORREF)(clrTextBk))
 
 
 #define LVM_GETTOPINDEX         (LVM_FIRST + 39)
 #define ListView_GetTopIndex(hwndLV) \
-    (int)SendMessage((hwndLV), LVM_GETTOPINDEX, 0, 0)
+    (int)SNDMSG((hwndLV), LVM_GETTOPINDEX, 0, 0)
 
 
 #define LVM_GETCOUNTPERPAGE     (LVM_FIRST + 40)
 #define ListView_GetCountPerPage(hwndLV) \
-    (int)SendMessage((hwndLV), LVM_GETCOUNTPERPAGE, 0, 0)
+    (int)SNDMSG((hwndLV), LVM_GETCOUNTPERPAGE, 0, 0)
 
 
 #define LVM_GETORIGIN           (LVM_FIRST + 41)
 #define ListView_GetOrigin(hwndLV, ppt) \
-    (BOOL)SendMessage((hwndLV), LVM_GETORIGIN, (WPARAM)0, (LPARAM)(POINT FAR*)(ppt))
+    (BOOL)SNDMSG((hwndLV), LVM_GETORIGIN, (WPARAM)0, (LPARAM)(POINT FAR*)(ppt))
 
 
 #define LVM_UPDATE              (LVM_FIRST + 42)
 #define ListView_Update(hwndLV, i) \
-    (BOOL)SendMessage((hwndLV), LVM_UPDATE, (WPARAM)i, 0L)
+    (BOOL)SNDMSG((hwndLV), LVM_UPDATE, (WPARAM)i, 0L)
 
 
 #define LVM_SETITEMSTATE        (LVM_FIRST + 43)
@@ -1714,13 +1719,13 @@ typedef struct _LV_COLUMNW
 { LV_ITEM _ms_lvi;\
   _ms_lvi.stateMask = mask;\
   _ms_lvi.state = data;\
-  SendMessage((hwndLV), LVM_SETITEMSTATE, (WPARAM)i, (LPARAM)(LV_ITEM FAR *)&_ms_lvi);\
+  SNDMSG((hwndLV), LVM_SETITEMSTATE, (WPARAM)i, (LPARAM)(LV_ITEM FAR *)&_ms_lvi);\
 }
 
 
 #define LVM_GETITEMSTATE        (LVM_FIRST + 44)
 #define ListView_GetItemState(hwndLV, i, mask) \
-   (UINT)SendMessage((hwndLV), LVM_GETITEMSTATE, (WPARAM)i, (LPARAM)mask)
+   (UINT)SNDMSG((hwndLV), LVM_GETITEMSTATE, (WPARAM)i, (LPARAM)mask)
 
 
 #define LVM_GETITEMTEXTA        (LVM_FIRST + 45)
@@ -1737,7 +1742,7 @@ typedef struct _LV_COLUMNW
   _ms_lvi.iSubItem = iSubItem_;\
   _ms_lvi.cchTextMax = cchTextMax_;\
   _ms_lvi.pszText = pszText_;\
-  SendMessage((hwndLV), LVM_GETITEMTEXT, (WPARAM)i, (LPARAM)(LV_ITEM FAR *)&_ms_lvi);\
+  SNDMSG((hwndLV), LVM_GETITEMTEXT, (WPARAM)i, (LPARAM)(LV_ITEM FAR *)&_ms_lvi);\
 }
 
 
@@ -1754,13 +1759,13 @@ typedef struct _LV_COLUMNW
 { LV_ITEM _ms_lvi;\
   _ms_lvi.iSubItem = iSubItem_;\
   _ms_lvi.pszText = pszText_;\
-  SendMessage((hwndLV), LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)(LV_ITEM FAR *)&_ms_lvi);\
+  SNDMSG((hwndLV), LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)(LV_ITEM FAR *)&_ms_lvi);\
 }
 
 
 #define LVM_SETITEMCOUNT        (LVM_FIRST + 47)
 #define ListView_SetItemCount(hwndLV, cItems) \
-  SendMessage((hwndLV), LVM_SETITEMCOUNT, (WPARAM)cItems, 0)
+  SNDMSG((hwndLV), LVM_SETITEMCOUNT, (WPARAM)cItems, 0)
 
 
 typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
@@ -1768,25 +1773,25 @@ typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
 
 #define LVM_SORTITEMS           (LVM_FIRST + 48)
 #define ListView_SortItems(hwndLV, _pfnCompare, _lPrm) \
-  (BOOL)SendMessage((hwndLV), LVM_SORTITEMS, (WPARAM)(LPARAM)_lPrm, \
+  (BOOL)SNDMSG((hwndLV), LVM_SORTITEMS, (WPARAM)(LPARAM)_lPrm, \
   (LPARAM)(PFNLVCOMPARE)_pfnCompare)
 
 
 #define LVM_SETITEMPOSITION32   (LVM_FIRST + 49)
 #define ListView_SetItemPosition32(hwndLV, i, x, y) \
 { POINT ptNewPos = {x,y}; \
-    SendMessage((hwndLV), LVM_SETITEMPOSITION32, (WPARAM)(int)(i), (LPARAM)&ptNewPos); \
+    SNDMSG((hwndLV), LVM_SETITEMPOSITION32, (WPARAM)(int)(i), (LPARAM)&ptNewPos); \
 }
 
 
 #define LVM_GETSELECTEDCOUNT    (LVM_FIRST + 50)
 #define ListView_GetSelectedCount(hwndLV) \
-    (UINT)SendMessage((hwndLV), LVM_GETSELECTEDCOUNT, 0, 0L)
+    (UINT)SNDMSG((hwndLV), LVM_GETSELECTEDCOUNT, 0, 0L)
 
 
 #define LVM_GETITEMSPACING      (LVM_FIRST + 51)
 #define ListView_GetItemSpacing(hwndLV, fSmall) \
-        (DWORD)SendMessage((hwndLV), LVM_GETITEMSPACING, fSmall, 0L)
+        (DWORD)SNDMSG((hwndLV), LVM_GETITEMSPACING, fSmall, 0L)
 
 
 #define LVM_GETISEARCHSTRINGA   (LVM_FIRST + 52)
@@ -1799,7 +1804,7 @@ typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
 #endif
 
 #define ListView_GetISearchString(hwndLV, lpsz) \
-        (BOOL)SendMessage((hwndLV), LVM_GETISEARCHSTRING, 0, (LPARAM)(LPTSTR)lpsz)
+        (BOOL)SNDMSG((hwndLV), LVM_GETISEARCHSTRING, 0, (LPARAM)(LPTSTR)lpsz)
 
 
 typedef struct _NM_LISTVIEW
@@ -1814,6 +1819,20 @@ typedef struct _NM_LISTVIEW
     LPARAM  lParam;
 } NM_LISTVIEW, FAR *LPNM_LISTVIEW;
 
+typedef struct _NM_CACHEHINT
+{
+    NMHDR   hdr;
+    int     iFrom;
+    int     iTo;
+} NM_CACHEHINT, FAR *LPNM_CACHEHINT, FAR *PNM_CACHEHINT;
+
+typedef struct _NM_FINDITEM
+{
+    NMHDR   hdr;
+    int     iStart;
+    LV_FINDINFO lvfi;
+} NM_FINDITEM, FAR *LPNM_FINDITEM, FAR *PNM_FINDITEM;
+
 
 #define LVN_ITEMCHANGING        (LVN_FIRST-0)
 #define LVN_ITEMCHANGED         (LVN_FIRST-1)
@@ -1827,6 +1846,16 @@ typedef struct _NM_LISTVIEW
 #define LVN_COLUMNCLICK         (LVN_FIRST-8)
 #define LVN_BEGINDRAG           (LVN_FIRST-9)
 #define LVN_BEGINRDRAG          (LVN_FIRST-11)
+
+#define LVN_ODCACHEHINT         (LVN_FIRST-13)
+#define LVN_ODFINDITEMA         (LVN_FIRST-52)
+#define LVN_ODFINDITEMW         (LVN_FIRST-79)
+
+#ifdef UNICODE
+#define LVN_ODFINDITEM          LVN_ODFINDITEMW
+#else
+#define LVN_ODFINDITEM          LVN_ODFINDITEMA
+#endif
 
 
 
@@ -1862,12 +1891,12 @@ typedef struct _LV_DISPINFOW {
     LV_ITEMW item;
 } LV_DISPINFOW;
 
-#ifdef UNICODE
-#define  LV_DISPINFO            LV_DISPINFOW
-#else
-#define  LV_DISPINFO            LV_DISPINFOA
-#endif
-
+#ifdef UNICODE                                                       
+#define  LV_DISPINFO            LV_DISPINFOW                         
+#else                                                                
+#define  LV_DISPINFO            LV_DISPINFOA                         
+#endif                                                               
+                                                                     
 #define LVN_KEYDOWN             (LVN_FIRST-55)
 
 typedef struct _LV_KEYDOWN
@@ -1904,10 +1933,7 @@ typedef struct _LV_KEYDOWN
 #define TVS_DISABLEDRAGDROP     0x0010
 #define TVS_SHOWSELALWAYS       0x0020
 
-typedef struct _TREEITEM
-{
-    int dummy;      /* used to prevent undefined structure warnings */
-}   FAR* HTREEITEM;
+typedef struct _TREEITEM FAR* HTREEITEM;
 
 #define TVIF_TEXT               0x0001
 #define TVIF_IMAGE              0x0002
@@ -2001,21 +2027,21 @@ typedef struct _TV_INSERTSTRUCTW {
 #endif
 
 #define TreeView_InsertItem(hwnd, lpis) \
-    (HTREEITEM)SendMessage((hwnd), TVM_INSERTITEM, 0, (LPARAM)(LPTV_INSERTSTRUCT)(lpis))
+    (HTREEITEM)SNDMSG((hwnd), TVM_INSERTITEM, 0, (LPARAM)(LPTV_INSERTSTRUCT)(lpis))
 
 
 #define TVM_DELETEITEM          (TV_FIRST + 1)
 #define TreeView_DeleteItem(hwnd, hitem) \
-    (BOOL)SendMessage((hwnd), TVM_DELETEITEM, 0, (LPARAM)(HTREEITEM)(hitem))
+    (BOOL)SNDMSG((hwnd), TVM_DELETEITEM, 0, (LPARAM)(HTREEITEM)(hitem))
 
 
 #define TreeView_DeleteAllItems(hwnd) \
-    (BOOL)SendMessage((hwnd), TVM_DELETEITEM, 0, (LPARAM)TVI_ROOT)
+    (BOOL)SNDMSG((hwnd), TVM_DELETEITEM, 0, (LPARAM)TVI_ROOT)
 
 
 #define TVM_EXPAND              (TV_FIRST + 2)
 #define TreeView_Expand(hwnd, hitem, code) \
-    (BOOL)SendMessage((hwnd), TVM_EXPAND, (WPARAM)code, (LPARAM)(HTREEITEM)(hitem))
+    (BOOL)SNDMSG((hwnd), TVM_EXPAND, (WPARAM)code, (LPARAM)(HTREEITEM)(hitem))
 
 
 #define TVE_COLLAPSE            0x0001
@@ -2026,27 +2052,27 @@ typedef struct _TV_INSERTSTRUCTW {
 
 #define TVM_GETITEMRECT         (TV_FIRST + 4)
 #define TreeView_GetItemRect(hwnd, hitem, prc, code) \
-    (*(HTREEITEM FAR *)prc = (hitem), (BOOL)SendMessage((hwnd), TVM_GETITEMRECT, (WPARAM)(code), (LPARAM)(RECT FAR*)(prc)))
+    (*(HTREEITEM FAR *)prc = (hitem), (BOOL)SNDMSG((hwnd), TVM_GETITEMRECT, (WPARAM)(code), (LPARAM)(RECT FAR*)(prc)))
 
 
 #define TVM_GETCOUNT            (TV_FIRST + 5)
 #define TreeView_GetCount(hwnd) \
-    (UINT)SendMessage((hwnd), TVM_GETCOUNT, 0, 0)
+    (UINT)SNDMSG((hwnd), TVM_GETCOUNT, 0, 0)
 
 
 #define TVM_GETINDENT           (TV_FIRST + 6)
 #define TreeView_GetIndent(hwnd) \
-    (UINT)SendMessage((hwnd), TVM_GETINDENT, 0, 0)
+    (UINT)SNDMSG((hwnd), TVM_GETINDENT, 0, 0)
 
 
 #define TVM_SETINDENT           (TV_FIRST + 7)
 #define TreeView_SetIndent(hwnd, indent) \
-    (BOOL)SendMessage((hwnd), TVM_SETINDENT, (WPARAM)indent, 0)
+    (BOOL)SNDMSG((hwnd), TVM_SETINDENT, (WPARAM)indent, 0)
 
 
 #define TVM_GETIMAGELIST        (TV_FIRST + 8)
 #define TreeView_GetImageList(hwnd, iImage) \
-    (HIMAGELIST)SendMessage((hwnd), TVM_GETIMAGELIST, iImage, 0)
+    (HIMAGELIST)SNDMSG((hwnd), TVM_GETIMAGELIST, iImage, 0)
 
 
 #define TVSIL_NORMAL            0
@@ -2055,12 +2081,12 @@ typedef struct _TV_INSERTSTRUCTW {
 
 #define TVM_SETIMAGELIST        (TV_FIRST + 9)
 #define TreeView_SetImageList(hwnd, himl, iImage) \
-    (HIMAGELIST)SendMessage((hwnd), TVM_SETIMAGELIST, iImage, (LPARAM)(UINT)(HIMAGELIST)(himl))
+    (HIMAGELIST)SNDMSG((hwnd), TVM_SETIMAGELIST, iImage, (LPARAM)(UINT)(HIMAGELIST)(himl))
 
 
 #define TVM_GETNEXTITEM         (TV_FIRST + 10)
 #define TreeView_GetNextItem(hwnd, hitem, code) \
-    (HTREEITEM)SendMessage((hwnd), TVM_GETNEXTITEM, (WPARAM)code, (LPARAM)(HTREEITEM)(hitem))
+    (HTREEITEM)SNDMSG((hwnd), TVM_GETNEXTITEM, (WPARAM)code, (LPARAM)(HTREEITEM)(hitem))
 
 
 #define TVGN_ROOT               0x0000
@@ -2088,7 +2114,7 @@ typedef struct _TV_INSERTSTRUCTW {
 
 #define TVM_SELECTITEM          (TV_FIRST + 11)
 #define TreeView_Select(hwnd, hitem, code) \
-    (HTREEITEM)SendMessage((hwnd), TVM_SELECTITEM, (WPARAM)code, (LPARAM)(HTREEITEM)(hitem))
+    (HTREEITEM)SNDMSG((hwnd), TVM_SELECTITEM, (WPARAM)code, (LPARAM)(HTREEITEM)(hitem))
 
 
 #define TreeView_SelectItem(hwnd, hitem)            TreeView_Select(hwnd, hitem, TVGN_CARET)
@@ -2106,7 +2132,7 @@ typedef struct _TV_INSERTSTRUCTW {
 #endif
 
 #define TreeView_GetItem(hwnd, pitem) \
-    (BOOL)SendMessage((hwnd), TVM_GETITEM, 0, (LPARAM)(TV_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), TVM_GETITEM, 0, (LPARAM)(TV_ITEM FAR*)(pitem))
 
 
 #define TVM_SETITEMA            (TV_FIRST + 13)
@@ -2119,7 +2145,7 @@ typedef struct _TV_INSERTSTRUCTW {
 #endif
 
 #define TreeView_SetItem(hwnd, pitem) \
-    (BOOL)SendMessage((hwnd), TVM_SETITEM, 0, (LPARAM)(const TV_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), TVM_SETITEM, 0, (LPARAM)(const TV_ITEM FAR*)(pitem))
 
 
 #define TVM_EDITLABELA          (TV_FIRST + 14)
@@ -2131,22 +2157,22 @@ typedef struct _TV_INSERTSTRUCTW {
 #endif
 
 #define TreeView_EditLabel(hwnd, hitem) \
-    (HWND)SendMessage((hwnd), TVM_EDITLABEL, 0, (LPARAM)(HTREEITEM)(hitem))
+    (HWND)SNDMSG((hwnd), TVM_EDITLABEL, 0, (LPARAM)(HTREEITEM)(hitem))
 
 
 #define TVM_GETEDITCONTROL      (TV_FIRST + 15)
 #define TreeView_GetEditControl(hwnd) \
-    (HWND)SendMessage((hwnd), TVM_GETEDITCONTROL, 0, 0)
+    (HWND)SNDMSG((hwnd), TVM_GETEDITCONTROL, 0, 0)
 
 
 #define TVM_GETVISIBLECOUNT     (TV_FIRST + 16)
 #define TreeView_GetVisibleCount(hwnd) \
-    (UINT)SendMessage((hwnd), TVM_GETVISIBLECOUNT, 0, 0)
+    (UINT)SNDMSG((hwnd), TVM_GETVISIBLECOUNT, 0, 0)
 
 
 #define TVM_HITTEST             (TV_FIRST + 17)
 #define TreeView_HitTest(hwnd, lpht) \
-    (HTREEITEM)SendMessage((hwnd), TVM_HITTEST, 0, (LPARAM)(LPTV_HITTESTINFO)(lpht))
+    (HTREEITEM)SNDMSG((hwnd), TVM_HITTEST, 0, (LPARAM)(LPTV_HITTESTINFO)(lpht))
 
 
 typedef struct _TV_HITTESTINFO {
@@ -2172,28 +2198,28 @@ typedef struct _TV_HITTESTINFO {
 
 #define TVM_CREATEDRAGIMAGE     (TV_FIRST + 18)
 #define TreeView_CreateDragImage(hwnd, hitem) \
-    (HIMAGELIST)SendMessage((hwnd), TVM_CREATEDRAGIMAGE, 0, (LPARAM)(HTREEITEM)(hitem))
+    (HIMAGELIST)SNDMSG((hwnd), TVM_CREATEDRAGIMAGE, 0, (LPARAM)(HTREEITEM)(hitem))
 
 
 #define TVM_SORTCHILDREN        (TV_FIRST + 19)
 #define TreeView_SortChildren(hwnd, hitem, recurse) \
-    (BOOL)SendMessage((hwnd), TVM_SORTCHILDREN, (WPARAM)recurse, (LPARAM)(HTREEITEM)(hitem))
+    (BOOL)SNDMSG((hwnd), TVM_SORTCHILDREN, (WPARAM)recurse, (LPARAM)(HTREEITEM)(hitem))
 
 
 #define TVM_ENSUREVISIBLE       (TV_FIRST + 20)
 #define TreeView_EnsureVisible(hwnd, hitem) \
-    (BOOL)SendMessage((hwnd), TVM_ENSUREVISIBLE, 0, (LPARAM)(HTREEITEM)(hitem))
+    (BOOL)SNDMSG((hwnd), TVM_ENSUREVISIBLE, 0, (LPARAM)(HTREEITEM)(hitem))
 
 
 #define TVM_SORTCHILDRENCB      (TV_FIRST + 21)
 #define TreeView_SortChildrenCB(hwnd, psort, recurse) \
-    (BOOL)SendMessage((hwnd), TVM_SORTCHILDRENCB, (WPARAM)recurse, \
+    (BOOL)SNDMSG((hwnd), TVM_SORTCHILDRENCB, (WPARAM)recurse, \
     (LPARAM)(LPTV_SORTCB)(psort))
 
 
 #define TVM_ENDEDITLABELNOW     (TV_FIRST + 22)
 #define TreeView_EndEditLabelNow(hwnd, fCancel) \
-    (BOOL)SendMessage((hwnd), TVM_ENDEDITLABELNOW, (WPARAM)fCancel, 0)
+    (BOOL)SNDMSG((hwnd), TVM_ENDEDITLABELNOW, (WPARAM)fCancel, 0)
 
 
 #define TVM_GETISEARCHSTRINGA   (TV_FIRST + 23)
@@ -2206,7 +2232,7 @@ typedef struct _TV_HITTESTINFO {
 #endif
 
 #define TreeView_GetISearchString(hwndTV, lpsz) \
-        (BOOL)SendMessage((hwndTV), TVM_GETISEARCHSTRING, 0, (LPARAM)(LPTSTR)lpsz)
+        (BOOL)SNDMSG((hwndTV), TVM_GETISEARCHSTRING, 0, (LPARAM)(LPTSTR)lpsz)
 
 
 typedef int (CALLBACK *PFNTVCOMPARE)(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
@@ -2368,17 +2394,17 @@ typedef struct _TV_KEYDOWN {
 
 #define TCM_GETIMAGELIST        (TCM_FIRST + 2)
 #define TabCtrl_GetImageList(hwnd) \
-    (HIMAGELIST)SendMessage((hwnd), TCM_GETIMAGELIST, 0, 0L)
+    (HIMAGELIST)SNDMSG((hwnd), TCM_GETIMAGELIST, 0, 0L)
 
 
 #define TCM_SETIMAGELIST        (TCM_FIRST + 3)
 #define TabCtrl_SetImageList(hwnd, himl) \
-    (HIMAGELIST)SendMessage((hwnd), TCM_SETIMAGELIST, 0, (LPARAM)(UINT)(HIMAGELIST)(himl))
+    (HIMAGELIST)SNDMSG((hwnd), TCM_SETIMAGELIST, 0, (LPARAM)(UINT)(HIMAGELIST)(himl))
 
 
 #define TCM_GETITEMCOUNT        (TCM_FIRST + 4)
 #define TabCtrl_GetItemCount(hwnd) \
-    (int)SendMessage((hwnd), TCM_GETITEMCOUNT, 0, 0L)
+    (int)SNDMSG((hwnd), TCM_GETITEMCOUNT, 0, 0L)
 
 
 
@@ -2456,7 +2482,7 @@ typedef struct _TC_ITEMW
 #endif
 
 #define TabCtrl_GetItem(hwnd, iItem, pitem) \
-    (BOOL)SendMessage((hwnd), TCM_GETITEM, (WPARAM)(int)iItem, (LPARAM)(TC_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), TCM_GETITEM, (WPARAM)(int)iItem, (LPARAM)(TC_ITEM FAR*)(pitem))
 
 
 #define TCM_SETITEMA            (TCM_FIRST + 6)
@@ -2469,7 +2495,7 @@ typedef struct _TC_ITEMW
 #endif
 
 #define TabCtrl_SetItem(hwnd, iItem, pitem) \
-    (BOOL)SendMessage((hwnd), TCM_SETITEM, (WPARAM)(int)iItem, (LPARAM)(TC_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), TCM_SETITEM, (WPARAM)(int)iItem, (LPARAM)(TC_ITEM FAR*)(pitem))
 
 
 #define TCM_INSERTITEMA         (TCM_FIRST + 7)
@@ -2482,32 +2508,32 @@ typedef struct _TC_ITEMW
 #endif
 
 #define TabCtrl_InsertItem(hwnd, iItem, pitem)   \
-    (int)SendMessage((hwnd), TCM_INSERTITEM, (WPARAM)(int)iItem, (LPARAM)(const TC_ITEM FAR*)(pitem))
+    (int)SNDMSG((hwnd), TCM_INSERTITEM, (WPARAM)(int)iItem, (LPARAM)(const TC_ITEM FAR*)(pitem))
 
 
 #define TCM_DELETEITEM          (TCM_FIRST + 8)
 #define TabCtrl_DeleteItem(hwnd, i) \
-    (BOOL)SendMessage((hwnd), TCM_DELETEITEM, (WPARAM)(int)(i), 0L)
+    (BOOL)SNDMSG((hwnd), TCM_DELETEITEM, (WPARAM)(int)(i), 0L)
 
 
 #define TCM_DELETEALLITEMS      (TCM_FIRST + 9)
 #define TabCtrl_DeleteAllItems(hwnd) \
-    (BOOL)SendMessage((hwnd), TCM_DELETEALLITEMS, 0, 0L)
+    (BOOL)SNDMSG((hwnd), TCM_DELETEALLITEMS, 0, 0L)
 
 
 #define TCM_GETITEMRECT         (TCM_FIRST + 10)
 #define TabCtrl_GetItemRect(hwnd, i, prc) \
-    (BOOL)SendMessage((hwnd), TCM_GETITEMRECT, (WPARAM)(int)(i), (LPARAM)(RECT FAR*)(prc))
+    (BOOL)SNDMSG((hwnd), TCM_GETITEMRECT, (WPARAM)(int)(i), (LPARAM)(RECT FAR*)(prc))
 
 
 #define TCM_GETCURSEL           (TCM_FIRST + 11)
 #define TabCtrl_GetCurSel(hwnd) \
-    (int)SendMessage((hwnd), TCM_GETCURSEL, 0, 0)
+    (int)SNDMSG((hwnd), TCM_GETCURSEL, 0, 0)
 
 
 #define TCM_SETCURSEL           (TCM_FIRST + 12)
 #define TabCtrl_SetCurSel(hwnd, i) \
-    (int)SendMessage((hwnd), TCM_SETCURSEL, (WPARAM)i, 0)
+    (int)SNDMSG((hwnd), TCM_SETCURSEL, (WPARAM)i, 0)
 
 
 #define TCHT_NOWHERE            0x0001
@@ -2525,56 +2551,56 @@ typedef struct _TC_HITTESTINFO
 
 #define TCM_HITTEST             (TCM_FIRST + 13)
 #define TabCtrl_HitTest(hwndTC, pinfo) \
-    (int)SendMessage((hwndTC), TCM_HITTEST, 0, (LPARAM)(TC_HITTESTINFO FAR*)(pinfo))
+    (int)SNDMSG((hwndTC), TCM_HITTEST, 0, (LPARAM)(TC_HITTESTINFO FAR*)(pinfo))
 
 
 #define TCM_SETITEMEXTRA        (TCM_FIRST + 14)
 #define TabCtrl_SetItemExtra(hwndTC, cb) \
-    (BOOL)SendMessage((hwndTC), TCM_SETITEMEXTRA, (WPARAM)(cb), 0L)
+    (BOOL)SNDMSG((hwndTC), TCM_SETITEMEXTRA, (WPARAM)(cb), 0L)
 
 
 #define TCM_ADJUSTRECT          (TCM_FIRST + 40)
 #define TabCtrl_AdjustRect(hwnd, bLarger, prc) \
-    (int)SendMessage(hwnd, TCM_ADJUSTRECT, (WPARAM)(BOOL)bLarger, (LPARAM)(RECT FAR *)prc)
+    (int)SNDMSG(hwnd, TCM_ADJUSTRECT, (WPARAM)(BOOL)bLarger, (LPARAM)(RECT FAR *)prc)
 
 
 #define TCM_SETITEMSIZE         (TCM_FIRST + 41)
 #define TabCtrl_SetItemSize(hwnd, x, y) \
-    (DWORD)SendMessage((hwnd), TCM_SETITEMSIZE, 0, MAKELPARAM(x,y))
+    (DWORD)SNDMSG((hwnd), TCM_SETITEMSIZE, 0, MAKELPARAM(x,y))
 
 
 #define TCM_REMOVEIMAGE         (TCM_FIRST + 42)
 #define TabCtrl_RemoveImage(hwnd, i) \
-        (void)SendMessage((hwnd), TCM_REMOVEIMAGE, i, 0L)
+        (void)SNDMSG((hwnd), TCM_REMOVEIMAGE, i, 0L)
 
 
 #define TCM_SETPADDING          (TCM_FIRST + 43)
 #define TabCtrl_SetPadding(hwnd,  cx, cy) \
-        (void)SendMessage((hwnd), TCM_SETPADDING, 0, MAKELPARAM(cx, cy))
+        (void)SNDMSG((hwnd), TCM_SETPADDING, 0, MAKELPARAM(cx, cy))
 
 
 #define TCM_GETROWCOUNT         (TCM_FIRST + 44)
 #define TabCtrl_GetRowCount(hwnd) \
-        (int)SendMessage((hwnd), TCM_GETROWCOUNT, 0, 0L)
+        (int)SNDMSG((hwnd), TCM_GETROWCOUNT, 0, 0L)
 
 
 #define TCM_GETTOOLTIPS         (TCM_FIRST + 45)
 #define TabCtrl_GetToolTips(hwnd) \
-        (HWND)SendMessage((hwnd), TCM_GETTOOLTIPS, 0, 0L)
+        (HWND)SNDMSG((hwnd), TCM_GETTOOLTIPS, 0, 0L)
 
 
 #define TCM_SETTOOLTIPS         (TCM_FIRST + 46)
 #define TabCtrl_SetToolTips(hwnd, hwndTT) \
-        (void)SendMessage((hwnd), TCM_SETTOOLTIPS, (WPARAM)hwndTT, 0L)
+        (void)SNDMSG((hwnd), TCM_SETTOOLTIPS, (WPARAM)hwndTT, 0L)
 
 
 #define TCM_GETCURFOCUS         (TCM_FIRST + 47)
 #define TabCtrl_GetCurFocus(hwnd) \
-    (int)SendMessage((hwnd), TCM_GETCURFOCUS, 0, 0)
+    (int)SNDMSG((hwnd), TCM_GETCURFOCUS, 0, 0)
 
 #define TCM_SETCURFOCUS         (TCM_FIRST + 48)
 #define TabCtrl_SetCurFocus(hwnd, i) \
-    SendMessage((hwnd),TCM_SETCURFOCUS, i, 0)
+    SNDMSG((hwnd),TCM_SETCURFOCUS, i, 0)
 
 
 #define TCN_KEYDOWN             (TCN_FIRST - 0)
@@ -2632,9 +2658,9 @@ typedef struct _TC_KEYDOWN
             CreateWindow(ANIMATE_CLASS, NULL,           \
                 dwStyle, 0, 0, 0, 0, hwndP, (HMENU)(id), hInstance, NULL)
 
-#define Animate_Open(hwnd, szName)          (BOOL)SendMessage(hwnd, ACM_OPEN, 0, (LPARAM)(LPTSTR)(szName))
-#define Animate_Play(hwnd, from, to, rep)   (BOOL)SendMessage(hwnd, ACM_PLAY, (WPARAM)(UINT)(rep), (LPARAM)MAKELONG(from, to))
-#define Animate_Stop(hwnd)                  (BOOL)SendMessage(hwnd, ACM_STOP, 0, 0)
+#define Animate_Open(hwnd, szName)          (BOOL)SNDMSG(hwnd, ACM_OPEN, 0, (LPARAM)(LPTSTR)(szName))
+#define Animate_Play(hwnd, from, to, rep)   (BOOL)SNDMSG(hwnd, ACM_PLAY, (WPARAM)(UINT)(rep), (LPARAM)MAKELONG(from, to))
+#define Animate_Stop(hwnd)                  (BOOL)SNDMSG(hwnd, ACM_STOP, 0, 0)
 #define Animate_Close(hwnd)                 Animate_Open(hwnd, NULL)
 #define Animate_Seek(hwnd, frame)           Animate_Play(hwnd, frame, frame, 1)
 #endif
@@ -2642,16 +2668,18 @@ typedef struct _TC_KEYDOWN
 #endif
 
 
-#endif // (WINVER >= 0x0400)
 
 #ifdef __cplusplus
 }
 #endif
 
 #ifdef _WIN32
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 #endif
 
 #endif
 
+#pragma option -b.
 #endif

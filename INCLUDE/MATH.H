@@ -6,12 +6,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.10  $ */
 
 #ifndef  __MATH_H
 #define  __MATH_H
@@ -20,6 +21,9 @@
 #include <_defs.h>
 #endif
 
+#if !defined(__STDDEF_H)
+#include <stddef.h>
+#endif
 
 #if !defined(RC_INVOKED)
 
@@ -154,10 +158,11 @@ long double _RTLENTRY _EXPFUNC sqrtl  (long double __x);
 long double _RTLENTRY _EXPFUNC tanhl  (long double __x);
 long double _RTLENTRY _EXPFUNC tanl   (long double __x);
 
+double      _RTLENTRY _EXPFUNC atof  (const char _FAR *__s);
+
 #ifdef __cplusplus
 }
 #endif
-
 
 #if !defined(__STDC__)
 
@@ -185,15 +190,13 @@ int         _RTLENTRY abs(int __x);
 
 #endif /* __ABS_DEFINED */
 
-double      _RTLENTRY          atof  (const char _FAR *__s);
 long        _RTLENTRY          labs  (long __x);
 int         _RTLENTRY _EXPFUNC _matherrl (struct _exceptionl _FAR *__e);
-
-long double _RTLENTRY          _atold (const char _FAR *__s);
 
 long double _RTLENTRY          hypotl (long double __x, long double __y);
 long double _RTLENTRY          polyl  (long double __x, int __degree, long double _FAR *__coeffs);
 long double _RTLENTRY _EXPFUNC pow10l (int __p);
+
 
 #ifdef __cplusplus
 }
@@ -264,10 +267,11 @@ double      _RTLENTRY _EXPFUNC __cos__ (double __x);
 long double _RTLENTRY _EXPFUNC __cosl__(long double __x);
 long double _RTLENTRY _EXPFUNC __sinl__(long double __x);
 
+double      _RTLENTRY _EXPFUNC atof    (const char * __s);
+
 #ifdef __cplusplus
 }
 #endif
-
 
 #if !defined(__STDC__) /* NON_ANSI */
 
@@ -286,7 +290,6 @@ int         _RTLENTRYF _EXPFUNC abs(int __x);
 #endif
 #endif /* __ABS_DEFINED */
 
-double      _RTLENTRY _EXPFUNC atof    (const char * __s);
 long        _RTLENTRY _EXPFUNC labs    (long __x);
 double      _RTLENTRY _EXPFUNC pow10   (int __p);
 
@@ -301,6 +304,18 @@ long double _RTLENTRY _EXPFUNC hypotl  (long double __x, long double __y);
 long double _RTLENTRY _EXPFUNC polyl   (long double __x, int __degree, long double coeffs []);
 long double _RTLENTRY _EXPFUNC pow10l  (int __p);
 
+#if (__BORLANDC__ >= 0x0520) && defined (_INTEGRAL_MAX_BITS) && (_INTEGRAL_MAX_BITS >= 64)
+__int64     _RTLENTRY _EXPFUNC   _atoi64(const char * __s);
+char *      _RTLENTRY   _EXPFUNC _i64toa(__int64 value, char *strP, int radix);
+char *      _RTLENTRY   _EXPFUNC _ui64toa(unsigned __int64 value, char *strP, int radix);
+__int64     _RTLENTRY _EXPFUNC   _wtoi64(const wchar_t * __s);
+wchar_t *   _RTLENTRY   _EXPFUNC _i64tow(__int64 value, wchar_t *strP, int radix);
+wchar_t *   _RTLENTRY   _EXPFUNC _ui64tow(unsigned __int64 value, wchar_t *strP, int radix);
+#endif
+double      _RTLENTRY _EXPFUNC   _wtof(const wchar_t * __s);
+int         _RTLENTRY _EXPFUNC   _wtoi(const wchar_t * __s);
+long        _RTLENTRY _EXPFUNC   _wtol(const wchar_t * __s);
+long double _RTLENTRY _EXPFUNC   _wtold(const wchar_t * __s);
 
 #ifdef __cplusplus
 }

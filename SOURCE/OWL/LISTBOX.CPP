@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.8  $
 //
 // Implementation of class TListBox and TListBoxData.
 //----------------------------------------------------------------------------
@@ -12,6 +12,8 @@
 # include <owl/listbox.h>
 #endif
 #include <stdlib.h>
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -74,7 +76,7 @@ TListBoxData::Select(int index)
 void
 TListBoxData::SelectString(const char far* str)
 {
-  for (int i = 0; i < Strings.GetItemsInContainer(); i++)
+  for (uint i = 0; i < Strings.GetItemsInContainer(); i++)
     if (strcmp(Strings[i].c_str(), str) == 0) {
       Select(i);
       break;
@@ -250,22 +252,22 @@ TListBox::Transfer(void* buffer, TTransferDirection direction)
     // Add each string, item data and selections in listBoxData to list box
     //
     const int noSelection = -1;
-    int  selCount = listBoxData->GetSelCount();  // for multi selection
+    uint selCount = listBoxData->GetSelCount();  // for multi selection
     int  selIndex = noSelection;                 // for single selection
-    for (int i = 0; i < listBoxData->GetStrings().GetItemsInContainer(); i++) {
+    for (uint i = 0; i < listBoxData->GetStrings().GetItemsInContainer(); i++) {
       // Index may be different from i when the listbox is sorted.
       //
       int index = AddString(listBoxData->GetStrings()[i].c_str());
       SetItemData(index, listBoxData->GetItemDatas()[i]);
       if (style & MULTIPLESEL) {
-        for (int j = 0; j < selCount; j++)
-          if (listBoxData->GetSelIndices()[j] == i) {
+        for (uint j = 0; j < selCount; j++)
+          if (listBoxData->GetSelIndices()[j] == (int)i) {
             SetSel(index, true);
             break;
           }
       }
       else {
-        if (listBoxData->GetSelIndices()[0] == i)
+        if ((uint)listBoxData->GetSelIndices()[0] == i)
           selIndex = index;
         else
           // Inserted something before item and the item to select has been

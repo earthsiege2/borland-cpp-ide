@@ -1,13 +1,14 @@
 /************************************************************************
 *                                                                       *
-*   winerror.h --  error code definitions for the Win32 API functions   *  
+*   winerror.h --  error code definitions for the Win32 API functions   *
 *                                                                       *
-*   Copyright (c) 1991-1995, Microsoft Corp. All rights reserved.       *
+*   Copyright (c) 1991-1996, Microsoft Corp. All rights reserved.       *
 *                                                                       *
 ************************************************************************/
 
 #ifndef _WINERROR_
 #define _WINERROR_
+#pragma option -b
 
 
 //
@@ -42,11 +43,14 @@
 #define FACILITY_WINDOWS                 8
 #define FACILITY_STORAGE                 3
 #define FACILITY_RPC                     1
+#define FACILITY_SSPI                    9
 #define FACILITY_WIN32                   7
 #define FACILITY_CONTROL                 10
 #define FACILITY_NULL                    0
+#define FACILITY_INTERNET                12
 #define FACILITY_ITF                     4
 #define FACILITY_DISPATCH                2
+#define FACILITY_CERT                    11
 
 
 //
@@ -872,7 +876,7 @@
 //
 // MessageText:
 //
-//  This function is only valid in Win32 mode.
+//  This function is only valid in Windows NT mode.
 //
 #define ERROR_CALL_NOT_IMPLEMENTED       120L
 
@@ -954,7 +958,7 @@
 //
 // MessageText:
 //
-//  The %1 application cannot be run in Win32 mode.
+//  The %1 application cannot be run in Windows NT mode.
 //
 #define ERROR_CHILD_NOT_COMPLETE         129L
 
@@ -1400,7 +1404,7 @@
 //
 // MessageText:
 //
-//  Cannot run %1 in Win32 mode.
+//  Cannot run %1 in Windows NT mode.
 //
 #define ERROR_INVALID_EXE_SIGNATURE      191L
 
@@ -1418,7 +1422,7 @@
 //
 // MessageText:
 //
-//  %1 is not a valid Win32 application.
+//  %1 is not a valid Windows NT application.
 //
 #define ERROR_BAD_EXE_FORMAT             193L
 
@@ -1599,6 +1603,16 @@
 //  Can't nest calls to LoadModule.
 //
 #define ERROR_NESTING_NOT_ALLOWED        215L
+
+//
+// MessageId: ERROR_EXE_MACHINE_TYPE_MISMATCH
+//
+// MessageText:
+//
+//  The image file %1 is valid, but is for a machine type other
+//  than the current machine.
+//
+#define ERROR_EXE_MACHINE_TYPE_MISMATCH  216L
 
 //
 // MessageId: ERROR_BAD_PIPE
@@ -2341,6 +2355,16 @@
 #define ERROR_DUPLICATE_SERVICE_NAME     1078L
 
 //
+// MessageId: ERROR_DIFFERENT_SERVICE_ACCOUNT
+//
+// MessageText:
+//
+//  The account specified for this service is different from the account
+//  specified for other services running in the same process.
+//
+#define ERROR_DIFFERENT_SERVICE_ACCOUNT  1079L
+
+//
 // MessageId: ERROR_END_OF_MEDIA
 //
 // MessageText:
@@ -2664,6 +2688,16 @@
 //  The system BIOS failed an attempt to change the system power state.
 //
 #define ERROR_SET_POWER_STATE_FAILED     1141L
+
+//
+// MessageId: ERROR_TOO_MANY_LINKS
+//
+// MessageText:
+//
+//  An attempt was made to create more links on a file than
+//  the file system supports.
+//
+#define ERROR_TOO_MANY_LINKS             1142L
 
 //
 // MessageId: ERROR_OLD_WIN_VERSION
@@ -4133,8 +4167,8 @@
 //
 // MessageText:
 //
-//  The service being accessed is licensed for a particular number of
-//  connections. No more connections can be made to the service at this time
+//  The service being accessed is licensed for a particular number of connections.
+//  No more connections can be made to the service at this time
 //  because there are already as many connections as the service can accept.
 //
 #define ERROR_LICENSE_QUOTA_EXCEEDED     1395L
@@ -4664,6 +4698,42 @@
 //  A menu item was not found.
 //
 #define ERROR_MENU_ITEM_NOT_FOUND        1456L
+
+//
+// MessageId: ERROR_INVALID_KEYBOARD_HANDLE
+//
+// MessageText:
+//
+//  Invalid keyboard layout handle.
+//
+#define ERROR_INVALID_KEYBOARD_HANDLE    1457L
+
+//
+// MessageId: ERROR_HOOK_TYPE_NOT_ALLOWED
+//
+// MessageText:
+//
+//  Hook type not allowed.
+//
+#define ERROR_HOOK_TYPE_NOT_ALLOWED      1458L
+
+//
+// MessageId: ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION
+//
+// MessageText:
+//
+//  This operation requires an interactive windowstation.
+//
+#define ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION 1459L
+
+//
+// MessageId: ERROR_TIMEOUT
+//
+// MessageText:
+//
+//  This operation returned because the timeout period expired.
+//
+#define ERROR_TIMEOUT                    1460L
 
 // End of WinUser error codes
 
@@ -5807,7 +5877,7 @@
 //
 // MessageText:
 //
-//  The error specified is not a valid Windows RPC error code.
+//  The error specified is not a valid Windows NT RPC error code.
 //
 #define RPC_S_NOT_RPC_ERROR              1823L
 
@@ -5864,6 +5934,33 @@
 //  Incompatible version of the RPC stub.
 //
 #define RPC_X_WRONG_STUB_VERSION         1829L
+
+//
+// MessageId: RPC_X_INVALID_PIPE_OBJECT
+//
+// MessageText:
+//
+//  The idl pipe object is invalid or corrupted.
+//
+#define RPC_X_INVALID_PIPE_OBJECT        1830L
+
+//
+// MessageId: RPC_X_INVALID_PIPE_OPERATION
+//
+// MessageText:
+//
+//  The operation is invalid for a given idl pipe object.
+//
+#define RPC_X_INVALID_PIPE_OPERATION     1831L
+
+//
+// MessageId: RPC_X_WRONG_PIPE_VERSION
+//
+// MessageText:
+//
+//  The idl pipe version is not supported.
+//
+#define RPC_X_WRONG_PIPE_VERSION         1832L
 
 //
 // MessageId: RPC_S_GROUP_MEMBER_NOT_FOUND
@@ -5972,6 +6069,42 @@
 //  The referenced account is currently locked out and may not be logged on to.
 //
 #define ERROR_ACCOUNT_LOCKED_OUT         1909L
+
+//
+// MessageId: OR_INVALID_OXID
+//
+// MessageText:
+//
+//  The object exporter specified was not found.
+//
+#define OR_INVALID_OXID                  1910L
+
+//
+// MessageId: OR_INVALID_OID
+//
+// MessageText:
+//
+//  The object specified was not found.
+//
+#define OR_INVALID_OID                   1911L
+
+//
+// MessageId: OR_INVALID_SET
+//
+// MessageText:
+//
+//  The object resolver set specified was not found.
+//
+#define OR_INVALID_SET                   1912L
+
+//
+// MessageId: RPC_S_SEND_INCOMPLETE
+//
+// MessageText:
+//
+//  Some data remains to be sent in the request buffer.
+//
+#define RPC_S_SEND_INCOMPLETE            1913L
 
 //
 // MessageId: ERROR_NO_BROWSER_SERVERS_FOUND
@@ -6118,6 +6251,51 @@
 //
 #define ERROR_PRINT_MONITOR_ALREADY_INSTALLED 3006L
 
+//
+// MessageId: ERROR_INVALID_PRINT_MONITOR
+//
+// MessageText:
+//
+//  The specified print monitor does not have the required functions.
+//
+#define ERROR_INVALID_PRINT_MONITOR      3007L
+
+//
+// MessageId: ERROR_PRINT_MONITOR_IN_USE
+//
+// MessageText:
+//
+//  The specified print monitor is currently in use.
+//
+#define ERROR_PRINT_MONITOR_IN_USE       3008L
+
+//
+// MessageId: ERROR_PRINTER_HAS_JOBS_QUEUED
+//
+// MessageText:
+//
+//  The requested operation is not allowed when there are jobs queued to the printer.
+//
+#define ERROR_PRINTER_HAS_JOBS_QUEUED    3009L
+
+//
+// MessageId: ERROR_SUCCESS_REBOOT_REQUIRED
+//
+// MessageText:
+//
+//  The requested operation is successful.  Changes will not be effective until the system is rebooted.
+//
+#define ERROR_SUCCESS_REBOOT_REQUIRED    3010L
+
+//
+// MessageId: ERROR_SUCCESS_RESTART_REQUIRED
+//
+// MessageText:
+//
+//  The requested operation is successful.  Changes will not be effective until the service is restarted.
+//
+#define ERROR_SUCCESS_RESTART_REQUIRED   3011L
+
 ////////////////////////////////////
 //                                //
 //     Wins Error Codes           //
@@ -6197,11 +6375,11 @@
 //
 // The return value of OLE APIs and methods is an HRESULT.
 // This is not a handle to anything, but is merely a 32-bit value
-// with several fields encoded in the value.  The parts of an 
-// HRESULT are shown below.  
+// with several fields encoded in the value.  The parts of an
+// HRESULT are shown below.
 //
-// Many of the macros and functions below were orginally defined to 
-// operate on SCODEs.  SCODEs are no longer used.  The macros are 
+// Many of the macros and functions below were orginally defined to
+// operate on SCODEs.  SCODEs are no longer used.  The macros are
 // still present for compatibility and easy porting of Win16 code.
 // Newly written code should use the HRESULT macros and functions.
 //
@@ -6342,7 +6520,13 @@
 // HRESULT definitions
 //
 
-#define NOERROR             S_OK
+#ifdef RC_INVOKED
+#define _HRESULT_TYPEDEF_(_sc) _sc
+#else // RC_INVOKED
+#define _HRESULT_TYPEDEF_(_sc) ((HRESULT)_sc)
+#endif // RC_INVOKED
+
+#define NOERROR             0
 
 //
 // Error definitions follow
@@ -6359,11 +6543,11 @@
 //
 // MessageText:
 //
-//  Unexpected failure
+//  Catastrophic failure
 //
-#define E_UNEXPECTED                     0x8000FFFFL
+#define E_UNEXPECTED                     _HRESULT_TYPEDEF_(0x8000FFFFL)
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_MAC)
 //
 // MessageId: E_NOTIMPL
 //
@@ -6371,7 +6555,7 @@
 //
 //  Not implemented
 //
-#define E_NOTIMPL                        0x80004001L
+#define E_NOTIMPL                        _HRESULT_TYPEDEF_(0x80004001L)
 
 //
 // MessageId: E_OUTOFMEMORY
@@ -6380,7 +6564,7 @@
 //
 //  Ran out of memory
 //
-#define E_OUTOFMEMORY                    0x8007000EL
+#define E_OUTOFMEMORY                    _HRESULT_TYPEDEF_(0x8007000EL)
 
 //
 // MessageId: E_INVALIDARG
@@ -6389,7 +6573,7 @@
 //
 //  One or more arguments are invalid
 //
-#define E_INVALIDARG                     0x80070057L
+#define E_INVALIDARG                     _HRESULT_TYPEDEF_(0x80070057L)
 
 //
 // MessageId: E_NOINTERFACE
@@ -6398,7 +6582,7 @@
 //
 //  No such interface supported
 //
-#define E_NOINTERFACE                    0x80004002L
+#define E_NOINTERFACE                    _HRESULT_TYPEDEF_(0x80004002L)
 
 //
 // MessageId: E_POINTER
@@ -6407,7 +6591,7 @@
 //
 //  Invalid pointer
 //
-#define E_POINTER                        0x80004003L
+#define E_POINTER                        _HRESULT_TYPEDEF_(0x80004003L)
 
 //
 // MessageId: E_HANDLE
@@ -6416,7 +6600,7 @@
 //
 //  Invalid handle
 //
-#define E_HANDLE                         0x80070006L
+#define E_HANDLE                         _HRESULT_TYPEDEF_(0x80070006L)
 
 //
 // MessageId: E_ABORT
@@ -6425,7 +6609,7 @@
 //
 //  Operation aborted
 //
-#define E_ABORT                          0x80004004L
+#define E_ABORT                          _HRESULT_TYPEDEF_(0x80004004L)
 
 //
 // MessageId: E_FAIL
@@ -6434,7 +6618,7 @@
 //
 //  Unspecified error
 //
-#define E_FAIL                           0x80004005L
+#define E_FAIL                           _HRESULT_TYPEDEF_(0x80004005L)
 
 //
 // MessageId: E_ACCESSDENIED
@@ -6443,7 +6627,7 @@
 //
 //  General access denied error
 //
-#define E_ACCESSDENIED                   0x80070005L
+#define E_ACCESSDENIED                   _HRESULT_TYPEDEF_(0x80070005L)
 
 #else
 //
@@ -6453,7 +6637,7 @@
 //
 //  Not implemented
 //
-#define E_NOTIMPL                        0x80000001L
+#define E_NOTIMPL                        _HRESULT_TYPEDEF_(0x80000001L)
 
 //
 // MessageId: E_OUTOFMEMORY
@@ -6462,7 +6646,7 @@
 //
 //  Ran out of memory
 //
-#define E_OUTOFMEMORY                    0x80000002L
+#define E_OUTOFMEMORY                    _HRESULT_TYPEDEF_(0x80000002L)
 
 //
 // MessageId: E_INVALIDARG
@@ -6471,7 +6655,7 @@
 //
 //  One or more arguments are invalid
 //
-#define E_INVALIDARG                     0x80000003L
+#define E_INVALIDARG                     _HRESULT_TYPEDEF_(0x80000003L)
 
 //
 // MessageId: E_NOINTERFACE
@@ -6480,7 +6664,7 @@
 //
 //  No such interface supported
 //
-#define E_NOINTERFACE                    0x80000004L
+#define E_NOINTERFACE                    _HRESULT_TYPEDEF_(0x80000004L)
 
 //
 // MessageId: E_POINTER
@@ -6489,7 +6673,7 @@
 //
 //  Invalid pointer
 //
-#define E_POINTER                        0x80000005L
+#define E_POINTER                        _HRESULT_TYPEDEF_(0x80000005L)
 
 //
 // MessageId: E_HANDLE
@@ -6498,7 +6682,7 @@
 //
 //  Invalid handle
 //
-#define E_HANDLE                         0x80000006L
+#define E_HANDLE                         _HRESULT_TYPEDEF_(0x80000006L)
 
 //
 // MessageId: E_ABORT
@@ -6507,7 +6691,7 @@
 //
 //  Operation aborted
 //
-#define E_ABORT                          0x80000007L
+#define E_ABORT                          _HRESULT_TYPEDEF_(0x80000007L)
 
 //
 // MessageId: E_FAIL
@@ -6516,7 +6700,7 @@
 //
 //  Unspecified error
 //
-#define E_FAIL                           0x80000008L
+#define E_FAIL                           _HRESULT_TYPEDEF_(0x80000008L)
 
 //
 // MessageId: E_ACCESSDENIED
@@ -6525,9 +6709,18 @@
 //
 //  General access denied error
 //
-#define E_ACCESSDENIED                   0x80000009L
+#define E_ACCESSDENIED                   _HRESULT_TYPEDEF_(0x80000009L)
 
-#endif //_WIN32
+#endif //WIN32
+//
+// MessageId: E_PENDING
+//
+// MessageText:
+//
+//  The data necessary to complete this operation is not yet available.
+//
+#define E_PENDING                        _HRESULT_TYPEDEF_(0x8000000AL)
+
 //
 // MessageId: CO_E_INIT_TLS
 //
@@ -6535,7 +6728,7 @@
 //
 //  Thread local storage failure
 //
-#define CO_E_INIT_TLS                    0x80004006L
+#define CO_E_INIT_TLS                    _HRESULT_TYPEDEF_(0x80004006L)
 
 //
 // MessageId: CO_E_INIT_SHARED_ALLOCATOR
@@ -6544,7 +6737,7 @@
 //
 //  Get shared memory allocator failure
 //
-#define CO_E_INIT_SHARED_ALLOCATOR       0x80004007L
+#define CO_E_INIT_SHARED_ALLOCATOR       _HRESULT_TYPEDEF_(0x80004007L)
 
 //
 // MessageId: CO_E_INIT_MEMORY_ALLOCATOR
@@ -6553,7 +6746,7 @@
 //
 //  Get memory allocator failure
 //
-#define CO_E_INIT_MEMORY_ALLOCATOR       0x80004008L
+#define CO_E_INIT_MEMORY_ALLOCATOR       _HRESULT_TYPEDEF_(0x80004008L)
 
 //
 // MessageId: CO_E_INIT_CLASS_CACHE
@@ -6562,7 +6755,7 @@
 //
 //  Unable to initialize class cache
 //
-#define CO_E_INIT_CLASS_CACHE            0x80004009L
+#define CO_E_INIT_CLASS_CACHE            _HRESULT_TYPEDEF_(0x80004009L)
 
 //
 // MessageId: CO_E_INIT_RPC_CHANNEL
@@ -6571,7 +6764,7 @@
 //
 //  Unable to initialize RPC services
 //
-#define CO_E_INIT_RPC_CHANNEL            0x8000400AL
+#define CO_E_INIT_RPC_CHANNEL            _HRESULT_TYPEDEF_(0x8000400AL)
 
 //
 // MessageId: CO_E_INIT_TLS_SET_CHANNEL_CONTROL
@@ -6580,7 +6773,7 @@
 //
 //  Cannot set thread local storage channel control
 //
-#define CO_E_INIT_TLS_SET_CHANNEL_CONTROL 0x8000400BL
+#define CO_E_INIT_TLS_SET_CHANNEL_CONTROL _HRESULT_TYPEDEF_(0x8000400BL)
 
 //
 // MessageId: CO_E_INIT_TLS_CHANNEL_CONTROL
@@ -6589,7 +6782,7 @@
 //
 //  Could not allocate thread local storage channel control
 //
-#define CO_E_INIT_TLS_CHANNEL_CONTROL    0x8000400CL
+#define CO_E_INIT_TLS_CHANNEL_CONTROL    _HRESULT_TYPEDEF_(0x8000400CL)
 
 //
 // MessageId: CO_E_INIT_UNACCEPTED_USER_ALLOCATOR
@@ -6598,7 +6791,7 @@
 //
 //  The user supplied memory allocator is unacceptable
 //
-#define CO_E_INIT_UNACCEPTED_USER_ALLOCATOR 0x8000400DL
+#define CO_E_INIT_UNACCEPTED_USER_ALLOCATOR _HRESULT_TYPEDEF_(0x8000400DL)
 
 //
 // MessageId: CO_E_INIT_SCM_MUTEX_EXISTS
@@ -6607,7 +6800,7 @@
 //
 //  The OLE service mutex already exists
 //
-#define CO_E_INIT_SCM_MUTEX_EXISTS       0x8000400EL
+#define CO_E_INIT_SCM_MUTEX_EXISTS       _HRESULT_TYPEDEF_(0x8000400EL)
 
 //
 // MessageId: CO_E_INIT_SCM_FILE_MAPPING_EXISTS
@@ -6616,7 +6809,7 @@
 //
 //  The OLE service file mapping already exists
 //
-#define CO_E_INIT_SCM_FILE_MAPPING_EXISTS 0x8000400FL
+#define CO_E_INIT_SCM_FILE_MAPPING_EXISTS _HRESULT_TYPEDEF_(0x8000400FL)
 
 //
 // MessageId: CO_E_INIT_SCM_MAP_VIEW_OF_FILE
@@ -6625,7 +6818,7 @@
 //
 //  Unable to map view of file for OLE service
 //
-#define CO_E_INIT_SCM_MAP_VIEW_OF_FILE   0x80004010L
+#define CO_E_INIT_SCM_MAP_VIEW_OF_FILE   _HRESULT_TYPEDEF_(0x80004010L)
 
 //
 // MessageId: CO_E_INIT_SCM_EXEC_FAILURE
@@ -6634,7 +6827,7 @@
 //
 //  Failure attempting to launch OLE service
 //
-#define CO_E_INIT_SCM_EXEC_FAILURE       0x80004011L
+#define CO_E_INIT_SCM_EXEC_FAILURE       _HRESULT_TYPEDEF_(0x80004011L)
 
 //
 // MessageId: CO_E_INIT_ONLY_SINGLE_THREADED
@@ -6643,14 +6836,149 @@
 //
 //  There was an attempt to call CoInitialize a second time while single threaded
 //
-#define CO_E_INIT_ONLY_SINGLE_THREADED   0x80004012L
+#define CO_E_INIT_ONLY_SINGLE_THREADED   _HRESULT_TYPEDEF_(0x80004012L)
+
+//
+// MessageId: CO_E_CANT_REMOTE
+//
+// MessageText:
+//
+//  A Remote activation was necessary but was not allowed
+//
+#define CO_E_CANT_REMOTE                 _HRESULT_TYPEDEF_(0x80004013L)
+
+//
+// MessageId: CO_E_BAD_SERVER_NAME
+//
+// MessageText:
+//
+//  A Remote activation was necessary but the server name provided was invalid
+//
+#define CO_E_BAD_SERVER_NAME             _HRESULT_TYPEDEF_(0x80004014L)
+
+//
+// MessageId: CO_E_WRONG_SERVER_IDENTITY
+//
+// MessageText:
+//
+//  The class is configured to run as a security id different from the caller
+//
+#define CO_E_WRONG_SERVER_IDENTITY       _HRESULT_TYPEDEF_(0x80004015L)
+
+//
+// MessageId: CO_E_OLE1DDE_DISABLED
+//
+// MessageText:
+//
+//  Use of Ole1 services requiring DDE windows is disabled
+//
+#define CO_E_OLE1DDE_DISABLED            _HRESULT_TYPEDEF_(0x80004016L)
+
+//
+// MessageId: CO_E_RUNAS_SYNTAX
+//
+// MessageText:
+//
+//  A RunAs specification must be <domain name>\<user name> or simply <user name>
+//
+#define CO_E_RUNAS_SYNTAX                _HRESULT_TYPEDEF_(0x80004017L)
+
+//
+// MessageId: CO_E_CREATEPROCESS_FAILURE
+//
+// MessageText:
+//
+//  The server process could not be started.  The pathname may be incorrect.
+//
+#define CO_E_CREATEPROCESS_FAILURE       _HRESULT_TYPEDEF_(0x80004018L)
+
+//
+// MessageId: CO_E_RUNAS_CREATEPROCESS_FAILURE
+//
+// MessageText:
+//
+//  The server process could not be started as the configured identity.  The pathname may be incorrect or unavailable.
+//
+#define CO_E_RUNAS_CREATEPROCESS_FAILURE _HRESULT_TYPEDEF_(0x80004019L)
+
+//
+// MessageId: CO_E_RUNAS_LOGON_FAILURE
+//
+// MessageText:
+//
+//  The server process could not be started because the configured identity is incorrect.  Check the username and password.
+//
+#define CO_E_RUNAS_LOGON_FAILURE         _HRESULT_TYPEDEF_(0x8000401AL)
+
+//
+// MessageId: CO_E_LAUNCH_PERMSSION_DENIED
+//
+// MessageText:
+//
+//  The client is not allowed to launch this server.
+//
+#define CO_E_LAUNCH_PERMSSION_DENIED     _HRESULT_TYPEDEF_(0x8000401BL)
+
+//
+// MessageId: CO_E_START_SERVICE_FAILURE
+//
+// MessageText:
+//
+//  The service providing this server could not be started.
+//
+#define CO_E_START_SERVICE_FAILURE       _HRESULT_TYPEDEF_(0x8000401CL)
+
+//
+// MessageId: CO_E_REMOTE_COMMUNICATION_FAILURE
+//
+// MessageText:
+//
+//  This computer was unable to communicate with the computer providing the server.
+//
+#define CO_E_REMOTE_COMMUNICATION_FAILURE _HRESULT_TYPEDEF_(0x8000401DL)
+
+//
+// MessageId: CO_E_SERVER_START_TIMEOUT
+//
+// MessageText:
+//
+//  The server did not respond after being launched.
+//
+#define CO_E_SERVER_START_TIMEOUT        _HRESULT_TYPEDEF_(0x8000401EL)
+
+//
+// MessageId: CO_E_CLSREG_INCONSISTENT
+//
+// MessageText:
+//
+//  The registration information for this server is inconsistent or incomplete.
+//
+#define CO_E_CLSREG_INCONSISTENT         _HRESULT_TYPEDEF_(0x8000401FL)
+
+//
+// MessageId: CO_E_IIDREG_INCONSISTENT
+//
+// MessageText:
+//
+//  The registration information for this interface is inconsistent or incomplete.
+//
+#define CO_E_IIDREG_INCONSISTENT         _HRESULT_TYPEDEF_(0x80004020L)
+
+//
+// MessageId: CO_E_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The operation attempted is not supported.
+//
+#define CO_E_NOT_SUPPORTED               _HRESULT_TYPEDEF_(0x80004021L)
 
 
 //
 // Success codes
 //
-#define S_OK                                   (0x00000000L)
-#define S_FALSE                                (0x00000001L)
+#define S_OK                                   ((HRESULT)0x00000000L)
+#define S_FALSE                                ((HRESULT)0x00000001L)
 
 // ******************
 // FACILITY_ITF
@@ -6666,10 +6994,10 @@
 // Generic OLE errors that may be returned by many inerfaces
 //
 
-#define OLE_E_FIRST 0x80040000L
-#define OLE_E_LAST  0x800400FFL
-#define OLE_S_FIRST 0x00040000L
-#define OLE_S_LAST  0x000400FFL
+#define OLE_E_FIRST ((HRESULT)0x80040000L)
+#define OLE_E_LAST  ((HRESULT)0x800400FFL)
+#define OLE_S_FIRST ((HRESULT)0x00040000L)
+#define OLE_S_LAST  ((HRESULT)0x000400FFL)
 
 //
 // Old OLE errors
@@ -6681,7 +7009,7 @@
 //
 //  Invalid OLEVERB structure
 //
-#define OLE_E_OLEVERB                    0x80040000L
+#define OLE_E_OLEVERB                    _HRESULT_TYPEDEF_(0x80040000L)
 
 //
 // MessageId: OLE_E_ADVF
@@ -6690,7 +7018,7 @@
 //
 //  Invalid advise flags
 //
-#define OLE_E_ADVF                       0x80040001L
+#define OLE_E_ADVF                       _HRESULT_TYPEDEF_(0x80040001L)
 
 //
 // MessageId: OLE_E_ENUM_NOMORE
@@ -6699,7 +7027,7 @@
 //
 //  Can't enumerate any more, because the associated data is missing
 //
-#define OLE_E_ENUM_NOMORE                0x80040002L
+#define OLE_E_ENUM_NOMORE                _HRESULT_TYPEDEF_(0x80040002L)
 
 //
 // MessageId: OLE_E_ADVISENOTSUPPORTED
@@ -6708,7 +7036,7 @@
 //
 //  This implementation doesn't take advises
 //
-#define OLE_E_ADVISENOTSUPPORTED         0x80040003L
+#define OLE_E_ADVISENOTSUPPORTED         _HRESULT_TYPEDEF_(0x80040003L)
 
 //
 // MessageId: OLE_E_NOCONNECTION
@@ -6717,7 +7045,7 @@
 //
 //  There is no connection for this connection ID
 //
-#define OLE_E_NOCONNECTION               0x80040004L
+#define OLE_E_NOCONNECTION               _HRESULT_TYPEDEF_(0x80040004L)
 
 //
 // MessageId: OLE_E_NOTRUNNING
@@ -6726,7 +7054,7 @@
 //
 //  Need to run the object to perform this operation
 //
-#define OLE_E_NOTRUNNING                 0x80040005L
+#define OLE_E_NOTRUNNING                 _HRESULT_TYPEDEF_(0x80040005L)
 
 //
 // MessageId: OLE_E_NOCACHE
@@ -6735,7 +7063,7 @@
 //
 //  There is no cache to operate on
 //
-#define OLE_E_NOCACHE                    0x80040006L
+#define OLE_E_NOCACHE                    _HRESULT_TYPEDEF_(0x80040006L)
 
 //
 // MessageId: OLE_E_BLANK
@@ -6744,7 +7072,7 @@
 //
 //  Uninitialized object
 //
-#define OLE_E_BLANK                      0x80040007L
+#define OLE_E_BLANK                      _HRESULT_TYPEDEF_(0x80040007L)
 
 //
 // MessageId: OLE_E_CLASSDIFF
@@ -6753,7 +7081,7 @@
 //
 //  Linked object's source class has changed
 //
-#define OLE_E_CLASSDIFF                  0x80040008L
+#define OLE_E_CLASSDIFF                  _HRESULT_TYPEDEF_(0x80040008L)
 
 //
 // MessageId: OLE_E_CANT_GETMONIKER
@@ -6762,7 +7090,7 @@
 //
 //  Not able to get the moniker of the object
 //
-#define OLE_E_CANT_GETMONIKER            0x80040009L
+#define OLE_E_CANT_GETMONIKER            _HRESULT_TYPEDEF_(0x80040009L)
 
 //
 // MessageId: OLE_E_CANT_BINDTOSOURCE
@@ -6771,7 +7099,7 @@
 //
 //  Not able to bind to the source
 //
-#define OLE_E_CANT_BINDTOSOURCE          0x8004000AL
+#define OLE_E_CANT_BINDTOSOURCE          _HRESULT_TYPEDEF_(0x8004000AL)
 
 //
 // MessageId: OLE_E_STATIC
@@ -6780,7 +7108,7 @@
 //
 //  Object is static; operation not allowed
 //
-#define OLE_E_STATIC                     0x8004000BL
+#define OLE_E_STATIC                     _HRESULT_TYPEDEF_(0x8004000BL)
 
 //
 // MessageId: OLE_E_PROMPTSAVECANCELLED
@@ -6789,7 +7117,7 @@
 //
 //  User cancelled out of save dialog
 //
-#define OLE_E_PROMPTSAVECANCELLED        0x8004000CL
+#define OLE_E_PROMPTSAVECANCELLED        _HRESULT_TYPEDEF_(0x8004000CL)
 
 //
 // MessageId: OLE_E_INVALIDRECT
@@ -6798,7 +7126,7 @@
 //
 //  Invalid rectangle
 //
-#define OLE_E_INVALIDRECT                0x8004000DL
+#define OLE_E_INVALIDRECT                _HRESULT_TYPEDEF_(0x8004000DL)
 
 //
 // MessageId: OLE_E_WRONGCOMPOBJ
@@ -6807,7 +7135,7 @@
 //
 //  compobj.dll is too old for the ole2.dll initialized
 //
-#define OLE_E_WRONGCOMPOBJ               0x8004000EL
+#define OLE_E_WRONGCOMPOBJ               _HRESULT_TYPEDEF_(0x8004000EL)
 
 //
 // MessageId: OLE_E_INVALIDHWND
@@ -6816,7 +7144,7 @@
 //
 //  Invalid window handle
 //
-#define OLE_E_INVALIDHWND                0x8004000FL
+#define OLE_E_INVALIDHWND                _HRESULT_TYPEDEF_(0x8004000FL)
 
 //
 // MessageId: OLE_E_NOT_INPLACEACTIVE
@@ -6825,7 +7153,7 @@
 //
 //  Object is not in any of the inplace active states
 //
-#define OLE_E_NOT_INPLACEACTIVE          0x80040010L
+#define OLE_E_NOT_INPLACEACTIVE          _HRESULT_TYPEDEF_(0x80040010L)
 
 //
 // MessageId: OLE_E_CANTCONVERT
@@ -6834,7 +7162,7 @@
 //
 //  Not able to convert object
 //
-#define OLE_E_CANTCONVERT                0x80040011L
+#define OLE_E_CANTCONVERT                _HRESULT_TYPEDEF_(0x80040011L)
 
 //
 // MessageId: OLE_E_NOSTORAGE
@@ -6844,7 +7172,7 @@
 //  Not able to perform the operation because object is not given storage yet
 //  
 //
-#define OLE_E_NOSTORAGE                  0x80040012L
+#define OLE_E_NOSTORAGE                  _HRESULT_TYPEDEF_(0x80040012L)
 
 //
 // MessageId: DV_E_FORMATETC
@@ -6853,7 +7181,7 @@
 //
 //  Invalid FORMATETC structure
 //
-#define DV_E_FORMATETC                   0x80040064L
+#define DV_E_FORMATETC                   _HRESULT_TYPEDEF_(0x80040064L)
 
 //
 // MessageId: DV_E_DVTARGETDEVICE
@@ -6862,7 +7190,7 @@
 //
 //  Invalid DVTARGETDEVICE structure
 //
-#define DV_E_DVTARGETDEVICE              0x80040065L
+#define DV_E_DVTARGETDEVICE              _HRESULT_TYPEDEF_(0x80040065L)
 
 //
 // MessageId: DV_E_STGMEDIUM
@@ -6871,7 +7199,7 @@
 //
 //  Invalid STDGMEDIUM structure
 //
-#define DV_E_STGMEDIUM                   0x80040066L
+#define DV_E_STGMEDIUM                   _HRESULT_TYPEDEF_(0x80040066L)
 
 //
 // MessageId: DV_E_STATDATA
@@ -6880,7 +7208,7 @@
 //
 //  Invalid STATDATA structure
 //
-#define DV_E_STATDATA                    0x80040067L
+#define DV_E_STATDATA                    _HRESULT_TYPEDEF_(0x80040067L)
 
 //
 // MessageId: DV_E_LINDEX
@@ -6889,7 +7217,7 @@
 //
 //  Invalid lindex
 //
-#define DV_E_LINDEX                      0x80040068L
+#define DV_E_LINDEX                      _HRESULT_TYPEDEF_(0x80040068L)
 
 //
 // MessageId: DV_E_TYMED
@@ -6898,7 +7226,7 @@
 //
 //  Invalid tymed
 //
-#define DV_E_TYMED                       0x80040069L
+#define DV_E_TYMED                       _HRESULT_TYPEDEF_(0x80040069L)
 
 //
 // MessageId: DV_E_CLIPFORMAT
@@ -6907,7 +7235,7 @@
 //
 //  Invalid clipboard format
 //
-#define DV_E_CLIPFORMAT                  0x8004006AL
+#define DV_E_CLIPFORMAT                  _HRESULT_TYPEDEF_(0x8004006AL)
 
 //
 // MessageId: DV_E_DVASPECT
@@ -6916,7 +7244,7 @@
 //
 //  Invalid aspect(s)
 //
-#define DV_E_DVASPECT                    0x8004006BL
+#define DV_E_DVASPECT                    _HRESULT_TYPEDEF_(0x8004006BL)
 
 //
 // MessageId: DV_E_DVTARGETDEVICE_SIZE
@@ -6925,7 +7253,7 @@
 //
 //  tdSize parameter of the DVTARGETDEVICE structure is invalid
 //
-#define DV_E_DVTARGETDEVICE_SIZE         0x8004006CL
+#define DV_E_DVTARGETDEVICE_SIZE         _HRESULT_TYPEDEF_(0x8004006CL)
 
 //
 // MessageId: DV_E_NOIVIEWOBJECT
@@ -6934,7 +7262,7 @@
 //
 //  Object doesn't support IViewObject interface
 //
-#define DV_E_NOIVIEWOBJECT               0x8004006DL
+#define DV_E_NOIVIEWOBJECT               _HRESULT_TYPEDEF_(0x8004006DL)
 
 #define DRAGDROP_E_FIRST 0x80040100L
 #define DRAGDROP_E_LAST  0x8004010FL
@@ -6947,7 +7275,7 @@
 //
 //  Trying to revoke a drop target that has not been registered
 //
-#define DRAGDROP_E_NOTREGISTERED         0x80040100L
+#define DRAGDROP_E_NOTREGISTERED         _HRESULT_TYPEDEF_(0x80040100L)
 
 //
 // MessageId: DRAGDROP_E_ALREADYREGISTERED
@@ -6956,7 +7284,7 @@
 //
 //  This window has already been registered as a drop target
 //
-#define DRAGDROP_E_ALREADYREGISTERED     0x80040101L
+#define DRAGDROP_E_ALREADYREGISTERED     _HRESULT_TYPEDEF_(0x80040101L)
 
 //
 // MessageId: DRAGDROP_E_INVALIDHWND
@@ -6965,7 +7293,7 @@
 //
 //  Invalid window handle
 //
-#define DRAGDROP_E_INVALIDHWND           0x80040102L
+#define DRAGDROP_E_INVALIDHWND           _HRESULT_TYPEDEF_(0x80040102L)
 
 #define CLASSFACTORY_E_FIRST  0x80040110L
 #define CLASSFACTORY_E_LAST   0x8004011FL
@@ -6978,7 +7306,7 @@
 //
 //  Class does not support aggregation (or class object is remote)
 //
-#define CLASS_E_NOAGGREGATION            0x80040110L
+#define CLASS_E_NOAGGREGATION            _HRESULT_TYPEDEF_(0x80040110L)
 
 //
 // MessageId: CLASS_E_CLASSNOTAVAILABLE
@@ -6987,7 +7315,7 @@
 //
 //  ClassFactory cannot supply requested class
 //
-#define CLASS_E_CLASSNOTAVAILABLE        0x80040111L
+#define CLASS_E_CLASSNOTAVAILABLE        _HRESULT_TYPEDEF_(0x80040111L)
 
 #define MARSHAL_E_FIRST  0x80040120L
 #define MARSHAL_E_LAST   0x8004012FL
@@ -7008,7 +7336,7 @@
 //
 //  Error drawing view
 //
-#define VIEW_E_DRAW                      0x80040140L
+#define VIEW_E_DRAW                      _HRESULT_TYPEDEF_(0x80040140L)
 
 #define REGDB_E_FIRST     0x80040150L
 #define REGDB_E_LAST      0x8004015FL
@@ -7021,7 +7349,7 @@
 //
 //  Could not read key from registry
 //
-#define REGDB_E_READREGDB                0x80040150L
+#define REGDB_E_READREGDB                _HRESULT_TYPEDEF_(0x80040150L)
 
 //
 // MessageId: REGDB_E_WRITEREGDB
@@ -7030,7 +7358,7 @@
 //
 //  Could not write key to registry
 //
-#define REGDB_E_WRITEREGDB               0x80040151L
+#define REGDB_E_WRITEREGDB               _HRESULT_TYPEDEF_(0x80040151L)
 
 //
 // MessageId: REGDB_E_KEYMISSING
@@ -7039,7 +7367,7 @@
 //
 //  Could not find the key in the registry
 //
-#define REGDB_E_KEYMISSING               0x80040152L
+#define REGDB_E_KEYMISSING               _HRESULT_TYPEDEF_(0x80040152L)
 
 //
 // MessageId: REGDB_E_INVALIDVALUE
@@ -7048,7 +7376,7 @@
 //
 //  Invalid value for registry
 //
-#define REGDB_E_INVALIDVALUE             0x80040153L
+#define REGDB_E_INVALIDVALUE             _HRESULT_TYPEDEF_(0x80040153L)
 
 //
 // MessageId: REGDB_E_CLASSNOTREG
@@ -7057,7 +7385,7 @@
 //
 //  Class not registered
 //
-#define REGDB_E_CLASSNOTREG              0x80040154L
+#define REGDB_E_CLASSNOTREG              _HRESULT_TYPEDEF_(0x80040154L)
 
 //
 // MessageId: REGDB_E_IIDNOTREG
@@ -7066,7 +7394,7 @@
 //
 //  Interface not registered
 //
-#define REGDB_E_IIDNOTREG                0x80040155L
+#define REGDB_E_IIDNOTREG                _HRESULT_TYPEDEF_(0x80040155L)
 
 #define CACHE_E_FIRST     0x80040170L
 #define CACHE_E_LAST      0x8004017FL
@@ -7079,7 +7407,7 @@
 //
 //  Cache not updated
 //
-#define CACHE_E_NOCACHE_UPDATED          0x80040170L
+#define CACHE_E_NOCACHE_UPDATED          _HRESULT_TYPEDEF_(0x80040170L)
 
 #define OLEOBJ_E_FIRST     0x80040180L
 #define OLEOBJ_E_LAST      0x8004018FL
@@ -7092,7 +7420,7 @@
 //
 //  No verbs for OLE object
 //
-#define OLEOBJ_E_NOVERBS                 0x80040180L
+#define OLEOBJ_E_NOVERBS                 _HRESULT_TYPEDEF_(0x80040180L)
 
 //
 // MessageId: OLEOBJ_E_INVALIDVERB
@@ -7101,7 +7429,7 @@
 //
 //  Invalid verb for OLE object
 //
-#define OLEOBJ_E_INVALIDVERB             0x80040181L
+#define OLEOBJ_E_INVALIDVERB             _HRESULT_TYPEDEF_(0x80040181L)
 
 #define CLIENTSITE_E_FIRST     0x80040190L
 #define CLIENTSITE_E_LAST      0x8004019FL
@@ -7114,7 +7442,7 @@
 //
 //  Undo is not available
 //
-#define INPLACE_E_NOTUNDOABLE            0x800401A0L
+#define INPLACE_E_NOTUNDOABLE            _HRESULT_TYPEDEF_(0x800401A0L)
 
 //
 // MessageId: INPLACE_E_NOTOOLSPACE
@@ -7123,7 +7451,7 @@
 //
 //  Space for tools is not available
 //
-#define INPLACE_E_NOTOOLSPACE            0x800401A1L
+#define INPLACE_E_NOTOOLSPACE            _HRESULT_TYPEDEF_(0x800401A1L)
 
 #define INPLACE_E_FIRST     0x800401A0L
 #define INPLACE_E_LAST      0x800401AFL
@@ -7144,7 +7472,7 @@
 //
 //  OLESTREAM Get method failed
 //
-#define CONVERT10_E_OLESTREAM_GET        0x800401C0L
+#define CONVERT10_E_OLESTREAM_GET        _HRESULT_TYPEDEF_(0x800401C0L)
 
 //
 // MessageId: CONVERT10_E_OLESTREAM_PUT
@@ -7153,7 +7481,7 @@
 //
 //  OLESTREAM Put method failed
 //
-#define CONVERT10_E_OLESTREAM_PUT        0x800401C1L
+#define CONVERT10_E_OLESTREAM_PUT        _HRESULT_TYPEDEF_(0x800401C1L)
 
 //
 // MessageId: CONVERT10_E_OLESTREAM_FMT
@@ -7162,7 +7490,7 @@
 //
 //  Contents of the OLESTREAM not in correct format
 //
-#define CONVERT10_E_OLESTREAM_FMT        0x800401C2L
+#define CONVERT10_E_OLESTREAM_FMT        _HRESULT_TYPEDEF_(0x800401C2L)
 
 //
 // MessageId: CONVERT10_E_OLESTREAM_BITMAP_TO_DIB
@@ -7171,7 +7499,7 @@
 //
 //  There was an error in a Windows GDI call while converting the bitmap to a DIB
 //
-#define CONVERT10_E_OLESTREAM_BITMAP_TO_DIB 0x800401C3L
+#define CONVERT10_E_OLESTREAM_BITMAP_TO_DIB _HRESULT_TYPEDEF_(0x800401C3L)
 
 //
 // MessageId: CONVERT10_E_STG_FMT
@@ -7180,7 +7508,7 @@
 //
 //  Contents of the IStorage not in correct format
 //
-#define CONVERT10_E_STG_FMT              0x800401C4L
+#define CONVERT10_E_STG_FMT              _HRESULT_TYPEDEF_(0x800401C4L)
 
 //
 // MessageId: CONVERT10_E_STG_NO_STD_STREAM
@@ -7189,7 +7517,7 @@
 //
 //  Contents of IStorage is missing one of the standard streams
 //
-#define CONVERT10_E_STG_NO_STD_STREAM    0x800401C5L
+#define CONVERT10_E_STG_NO_STD_STREAM    _HRESULT_TYPEDEF_(0x800401C5L)
 
 //
 // MessageId: CONVERT10_E_STG_DIB_TO_BITMAP
@@ -7199,7 +7527,7 @@
 //  There was an error in a Windows GDI call while converting the DIB to a bitmap.
 //  
 //
-#define CONVERT10_E_STG_DIB_TO_BITMAP    0x800401C6L
+#define CONVERT10_E_STG_DIB_TO_BITMAP    _HRESULT_TYPEDEF_(0x800401C6L)
 
 #define CLIPBRD_E_FIRST        0x800401D0L
 #define CLIPBRD_E_LAST         0x800401DFL
@@ -7212,7 +7540,7 @@
 //
 //  OpenClipboard Failed
 //
-#define CLIPBRD_E_CANT_OPEN              0x800401D0L
+#define CLIPBRD_E_CANT_OPEN              _HRESULT_TYPEDEF_(0x800401D0L)
 
 //
 // MessageId: CLIPBRD_E_CANT_EMPTY
@@ -7221,7 +7549,7 @@
 //
 //  EmptyClipboard Failed
 //
-#define CLIPBRD_E_CANT_EMPTY             0x800401D1L
+#define CLIPBRD_E_CANT_EMPTY             _HRESULT_TYPEDEF_(0x800401D1L)
 
 //
 // MessageId: CLIPBRD_E_CANT_SET
@@ -7230,7 +7558,7 @@
 //
 //  SetClipboard Failed
 //
-#define CLIPBRD_E_CANT_SET               0x800401D2L
+#define CLIPBRD_E_CANT_SET               _HRESULT_TYPEDEF_(0x800401D2L)
 
 //
 // MessageId: CLIPBRD_E_BAD_DATA
@@ -7239,7 +7567,7 @@
 //
 //  Data on clipboard is invalid
 //
-#define CLIPBRD_E_BAD_DATA               0x800401D3L
+#define CLIPBRD_E_BAD_DATA               _HRESULT_TYPEDEF_(0x800401D3L)
 
 //
 // MessageId: CLIPBRD_E_CANT_CLOSE
@@ -7248,7 +7576,7 @@
 //
 //  CloseClipboard Failed
 //
-#define CLIPBRD_E_CANT_CLOSE             0x800401D4L
+#define CLIPBRD_E_CANT_CLOSE             _HRESULT_TYPEDEF_(0x800401D4L)
 
 #define MK_E_FIRST        0x800401E0L
 #define MK_E_LAST         0x800401EFL
@@ -7261,7 +7589,7 @@
 //
 //  Moniker needs to be connected manually
 //
-#define MK_E_CONNECTMANUALLY             0x800401E0L
+#define MK_E_CONNECTMANUALLY             _HRESULT_TYPEDEF_(0x800401E0L)
 
 //
 // MessageId: MK_E_EXCEEDEDDEADLINE
@@ -7270,7 +7598,7 @@
 //
 //  Operation exceeded deadline
 //
-#define MK_E_EXCEEDEDDEADLINE            0x800401E1L
+#define MK_E_EXCEEDEDDEADLINE            _HRESULT_TYPEDEF_(0x800401E1L)
 
 //
 // MessageId: MK_E_NEEDGENERIC
@@ -7279,7 +7607,7 @@
 //
 //  Moniker needs to be generic
 //
-#define MK_E_NEEDGENERIC                 0x800401E2L
+#define MK_E_NEEDGENERIC                 _HRESULT_TYPEDEF_(0x800401E2L)
 
 //
 // MessageId: MK_E_UNAVAILABLE
@@ -7288,7 +7616,7 @@
 //
 //  Operation unavailable
 //
-#define MK_E_UNAVAILABLE                 0x800401E3L
+#define MK_E_UNAVAILABLE                 _HRESULT_TYPEDEF_(0x800401E3L)
 
 //
 // MessageId: MK_E_SYNTAX
@@ -7297,7 +7625,7 @@
 //
 //  Invalid syntax
 //
-#define MK_E_SYNTAX                      0x800401E4L
+#define MK_E_SYNTAX                      _HRESULT_TYPEDEF_(0x800401E4L)
 
 //
 // MessageId: MK_E_NOOBJECT
@@ -7306,7 +7634,7 @@
 //
 //  No object for moniker
 //
-#define MK_E_NOOBJECT                    0x800401E5L
+#define MK_E_NOOBJECT                    _HRESULT_TYPEDEF_(0x800401E5L)
 
 //
 // MessageId: MK_E_INVALIDEXTENSION
@@ -7315,7 +7643,7 @@
 //
 //  Bad extension for file
 //
-#define MK_E_INVALIDEXTENSION            0x800401E6L
+#define MK_E_INVALIDEXTENSION            _HRESULT_TYPEDEF_(0x800401E6L)
 
 //
 // MessageId: MK_E_INTERMEDIATEINTERFACENOTSUPPORTED
@@ -7324,7 +7652,7 @@
 //
 //  Intermediate operation failed
 //
-#define MK_E_INTERMEDIATEINTERFACENOTSUPPORTED 0x800401E7L
+#define MK_E_INTERMEDIATEINTERFACENOTSUPPORTED _HRESULT_TYPEDEF_(0x800401E7L)
 
 //
 // MessageId: MK_E_NOTBINDABLE
@@ -7333,7 +7661,7 @@
 //
 //  Moniker is not bindable
 //
-#define MK_E_NOTBINDABLE                 0x800401E8L
+#define MK_E_NOTBINDABLE                 _HRESULT_TYPEDEF_(0x800401E8L)
 
 //
 // MessageId: MK_E_NOTBOUND
@@ -7342,7 +7670,7 @@
 //
 //  Moniker is not bound
 //
-#define MK_E_NOTBOUND                    0x800401E9L
+#define MK_E_NOTBOUND                    _HRESULT_TYPEDEF_(0x800401E9L)
 
 //
 // MessageId: MK_E_CANTOPENFILE
@@ -7351,7 +7679,7 @@
 //
 //  Moniker cannot open file
 //
-#define MK_E_CANTOPENFILE                0x800401EAL
+#define MK_E_CANTOPENFILE                _HRESULT_TYPEDEF_(0x800401EAL)
 
 //
 // MessageId: MK_E_MUSTBOTHERUSER
@@ -7360,7 +7688,7 @@
 //
 //  User input required for operation to succeed
 //
-#define MK_E_MUSTBOTHERUSER              0x800401EBL
+#define MK_E_MUSTBOTHERUSER              _HRESULT_TYPEDEF_(0x800401EBL)
 
 //
 // MessageId: MK_E_NOINVERSE
@@ -7369,7 +7697,7 @@
 //
 //  Moniker class has no inverse
 //
-#define MK_E_NOINVERSE                   0x800401ECL
+#define MK_E_NOINVERSE                   _HRESULT_TYPEDEF_(0x800401ECL)
 
 //
 // MessageId: MK_E_NOSTORAGE
@@ -7378,7 +7706,7 @@
 //
 //  Moniker does not refer to storage
 //
-#define MK_E_NOSTORAGE                   0x800401EDL
+#define MK_E_NOSTORAGE                   _HRESULT_TYPEDEF_(0x800401EDL)
 
 //
 // MessageId: MK_E_NOPREFIX
@@ -7387,7 +7715,7 @@
 //
 //  No common prefix
 //
-#define MK_E_NOPREFIX                    0x800401EEL
+#define MK_E_NOPREFIX                    _HRESULT_TYPEDEF_(0x800401EEL)
 
 //
 // MessageId: MK_E_ENUMERATION_FAILED
@@ -7396,7 +7724,7 @@
 //
 //  Moniker could not be enumerated
 //
-#define MK_E_ENUMERATION_FAILED          0x800401EFL
+#define MK_E_ENUMERATION_FAILED          _HRESULT_TYPEDEF_(0x800401EFL)
 
 #define CO_E_FIRST        0x800401F0L
 #define CO_E_LAST         0x800401FFL
@@ -7409,7 +7737,7 @@
 //
 //  CoInitialize has not been called.
 //
-#define CO_E_NOTINITIALIZED              0x800401F0L
+#define CO_E_NOTINITIALIZED              _HRESULT_TYPEDEF_(0x800401F0L)
 
 //
 // MessageId: CO_E_ALREADYINITIALIZED
@@ -7418,7 +7746,7 @@
 //
 //  CoInitialize has already been called.
 //
-#define CO_E_ALREADYINITIALIZED          0x800401F1L
+#define CO_E_ALREADYINITIALIZED          _HRESULT_TYPEDEF_(0x800401F1L)
 
 //
 // MessageId: CO_E_CANTDETERMINECLASS
@@ -7427,7 +7755,7 @@
 //
 //  Class of object cannot be determined
 //
-#define CO_E_CANTDETERMINECLASS          0x800401F2L
+#define CO_E_CANTDETERMINECLASS          _HRESULT_TYPEDEF_(0x800401F2L)
 
 //
 // MessageId: CO_E_CLASSSTRING
@@ -7436,7 +7764,7 @@
 //
 //  Invalid class string
 //
-#define CO_E_CLASSSTRING                 0x800401F3L
+#define CO_E_CLASSSTRING                 _HRESULT_TYPEDEF_(0x800401F3L)
 
 //
 // MessageId: CO_E_IIDSTRING
@@ -7445,7 +7773,7 @@
 //
 //  Invalid interface string
 //
-#define CO_E_IIDSTRING                   0x800401F4L
+#define CO_E_IIDSTRING                   _HRESULT_TYPEDEF_(0x800401F4L)
 
 //
 // MessageId: CO_E_APPNOTFOUND
@@ -7454,7 +7782,7 @@
 //
 //  Application not found
 //
-#define CO_E_APPNOTFOUND                 0x800401F5L
+#define CO_E_APPNOTFOUND                 _HRESULT_TYPEDEF_(0x800401F5L)
 
 //
 // MessageId: CO_E_APPSINGLEUSE
@@ -7463,7 +7791,7 @@
 //
 //  Application cannot be run more than once
 //
-#define CO_E_APPSINGLEUSE                0x800401F6L
+#define CO_E_APPSINGLEUSE                _HRESULT_TYPEDEF_(0x800401F6L)
 
 //
 // MessageId: CO_E_ERRORINAPP
@@ -7472,7 +7800,7 @@
 //
 //  Some error in application program
 //
-#define CO_E_ERRORINAPP                  0x800401F7L
+#define CO_E_ERRORINAPP                  _HRESULT_TYPEDEF_(0x800401F7L)
 
 //
 // MessageId: CO_E_DLLNOTFOUND
@@ -7481,7 +7809,7 @@
 //
 //  DLL for class not found
 //
-#define CO_E_DLLNOTFOUND                 0x800401F8L
+#define CO_E_DLLNOTFOUND                 _HRESULT_TYPEDEF_(0x800401F8L)
 
 //
 // MessageId: CO_E_ERRORINDLL
@@ -7490,7 +7818,7 @@
 //
 //  Error in the DLL
 //
-#define CO_E_ERRORINDLL                  0x800401F9L
+#define CO_E_ERRORINDLL                  _HRESULT_TYPEDEF_(0x800401F9L)
 
 //
 // MessageId: CO_E_WRONGOSFORAPP
@@ -7499,7 +7827,7 @@
 //
 //  Wrong OS or OS version for application
 //
-#define CO_E_WRONGOSFORAPP               0x800401FAL
+#define CO_E_WRONGOSFORAPP               _HRESULT_TYPEDEF_(0x800401FAL)
 
 //
 // MessageId: CO_E_OBJNOTREG
@@ -7508,7 +7836,7 @@
 //
 //  Object is not registered
 //
-#define CO_E_OBJNOTREG                   0x800401FBL
+#define CO_E_OBJNOTREG                   _HRESULT_TYPEDEF_(0x800401FBL)
 
 //
 // MessageId: CO_E_OBJISREG
@@ -7517,7 +7845,7 @@
 //
 //  Object is already registered
 //
-#define CO_E_OBJISREG                    0x800401FCL
+#define CO_E_OBJISREG                    _HRESULT_TYPEDEF_(0x800401FCL)
 
 //
 // MessageId: CO_E_OBJNOTCONNECTED
@@ -7526,7 +7854,7 @@
 //
 //  Object is not connected to server
 //
-#define CO_E_OBJNOTCONNECTED             0x800401FDL
+#define CO_E_OBJNOTCONNECTED             _HRESULT_TYPEDEF_(0x800401FDL)
 
 //
 // MessageId: CO_E_APPDIDNTREG
@@ -7535,7 +7863,7 @@
 //
 //  Application was launched but it didn't register a class factory
 //
-#define CO_E_APPDIDNTREG                 0x800401FEL
+#define CO_E_APPDIDNTREG                 _HRESULT_TYPEDEF_(0x800401FEL)
 
 //
 // MessageId: CO_E_RELEASED
@@ -7544,7 +7872,7 @@
 //
 //  Object has been released
 //
-#define CO_E_RELEASED                    0x800401FFL
+#define CO_E_RELEASED                    _HRESULT_TYPEDEF_(0x800401FFL)
 
 //
 // Old OLE Success Codes
@@ -7556,7 +7884,7 @@
 //
 //  Use the registry database to provide the requested information
 //
-#define OLE_S_USEREG                     0x00040000L
+#define OLE_S_USEREG                     _HRESULT_TYPEDEF_(0x00040000L)
 
 //
 // MessageId: OLE_S_STATIC
@@ -7565,7 +7893,7 @@
 //
 //  Success, but static
 //
-#define OLE_S_STATIC                     0x00040001L
+#define OLE_S_STATIC                     _HRESULT_TYPEDEF_(0x00040001L)
 
 //
 // MessageId: OLE_S_MAC_CLIPFORMAT
@@ -7574,7 +7902,7 @@
 //
 //  Macintosh clipboard format
 //
-#define OLE_S_MAC_CLIPFORMAT             0x00040002L
+#define OLE_S_MAC_CLIPFORMAT             _HRESULT_TYPEDEF_(0x00040002L)
 
 //
 // MessageId: DRAGDROP_S_DROP
@@ -7583,7 +7911,7 @@
 //
 //  Successful drop took place
 //
-#define DRAGDROP_S_DROP                  0x00040100L
+#define DRAGDROP_S_DROP                  _HRESULT_TYPEDEF_(0x00040100L)
 
 //
 // MessageId: DRAGDROP_S_CANCEL
@@ -7592,7 +7920,7 @@
 //
 //  Drag-drop operation canceled
 //
-#define DRAGDROP_S_CANCEL                0x00040101L
+#define DRAGDROP_S_CANCEL                _HRESULT_TYPEDEF_(0x00040101L)
 
 //
 // MessageId: DRAGDROP_S_USEDEFAULTCURSORS
@@ -7601,7 +7929,7 @@
 //
 //  Use the default cursor
 //
-#define DRAGDROP_S_USEDEFAULTCURSORS     0x00040102L
+#define DRAGDROP_S_USEDEFAULTCURSORS     _HRESULT_TYPEDEF_(0x00040102L)
 
 //
 // MessageId: DATA_S_SAMEFORMATETC
@@ -7610,7 +7938,7 @@
 //
 //  Data has same FORMATETC
 //
-#define DATA_S_SAMEFORMATETC             0x00040130L
+#define DATA_S_SAMEFORMATETC             _HRESULT_TYPEDEF_(0x00040130L)
 
 //
 // MessageId: VIEW_S_ALREADY_FROZEN
@@ -7619,7 +7947,7 @@
 //
 //  View is already frozen
 //
-#define VIEW_S_ALREADY_FROZEN            0x00040140L
+#define VIEW_S_ALREADY_FROZEN            _HRESULT_TYPEDEF_(0x00040140L)
 
 //
 // MessageId: CACHE_S_FORMATETC_NOTSUPPORTED
@@ -7628,7 +7956,7 @@
 //
 //  FORMATETC not supported
 //
-#define CACHE_S_FORMATETC_NOTSUPPORTED   0x00040170L
+#define CACHE_S_FORMATETC_NOTSUPPORTED   _HRESULT_TYPEDEF_(0x00040170L)
 
 //
 // MessageId: CACHE_S_SAMECACHE
@@ -7637,7 +7965,7 @@
 //
 //  Same cache
 //
-#define CACHE_S_SAMECACHE                0x00040171L
+#define CACHE_S_SAMECACHE                _HRESULT_TYPEDEF_(0x00040171L)
 
 //
 // MessageId: CACHE_S_SOMECACHES_NOTUPDATED
@@ -7646,7 +7974,7 @@
 //
 //  Some cache(s) not updated
 //
-#define CACHE_S_SOMECACHES_NOTUPDATED    0x00040172L
+#define CACHE_S_SOMECACHES_NOTUPDATED    _HRESULT_TYPEDEF_(0x00040172L)
 
 //
 // MessageId: OLEOBJ_S_INVALIDVERB
@@ -7655,7 +7983,7 @@
 //
 //  Invalid verb for OLE object
 //
-#define OLEOBJ_S_INVALIDVERB             0x00040180L
+#define OLEOBJ_S_INVALIDVERB             _HRESULT_TYPEDEF_(0x00040180L)
 
 //
 // MessageId: OLEOBJ_S_CANNOT_DOVERB_NOW
@@ -7664,7 +7992,7 @@
 //
 //  Verb number is valid but verb cannot be done now
 //
-#define OLEOBJ_S_CANNOT_DOVERB_NOW       0x00040181L
+#define OLEOBJ_S_CANNOT_DOVERB_NOW       _HRESULT_TYPEDEF_(0x00040181L)
 
 //
 // MessageId: OLEOBJ_S_INVALIDHWND
@@ -7673,7 +8001,7 @@
 //
 //  Invalid window handle passed
 //
-#define OLEOBJ_S_INVALIDHWND             0x00040182L
+#define OLEOBJ_S_INVALIDHWND             _HRESULT_TYPEDEF_(0x00040182L)
 
 //
 // MessageId: INPLACE_S_TRUNCATED
@@ -7682,7 +8010,7 @@
 //
 //  Message is too long; some of it had to be truncated before displaying
 //
-#define INPLACE_S_TRUNCATED              0x000401A0L
+#define INPLACE_S_TRUNCATED              _HRESULT_TYPEDEF_(0x000401A0L)
 
 //
 // MessageId: CONVERT10_S_NO_PRESENTATION
@@ -7691,7 +8019,7 @@
 //
 //  Unable to convert OLESTREAM to IStorage
 //
-#define CONVERT10_S_NO_PRESENTATION      0x000401C0L
+#define CONVERT10_S_NO_PRESENTATION      _HRESULT_TYPEDEF_(0x000401C0L)
 
 //
 // MessageId: MK_S_REDUCED_TO_SELF
@@ -7700,7 +8028,7 @@
 //
 //  Moniker reduced to itself
 //
-#define MK_S_REDUCED_TO_SELF             0x000401E2L
+#define MK_S_REDUCED_TO_SELF             _HRESULT_TYPEDEF_(0x000401E2L)
 
 //
 // MessageId: MK_S_ME
@@ -7709,7 +8037,7 @@
 //
 //  Common prefix is this moniker
 //
-#define MK_S_ME                          0x000401E4L
+#define MK_S_ME                          _HRESULT_TYPEDEF_(0x000401E4L)
 
 //
 // MessageId: MK_S_HIM
@@ -7718,7 +8046,7 @@
 //
 //  Common prefix is input moniker
 //
-#define MK_S_HIM                         0x000401E5L
+#define MK_S_HIM                         _HRESULT_TYPEDEF_(0x000401E5L)
 
 //
 // MessageId: MK_S_US
@@ -7727,7 +8055,7 @@
 //
 //  Common prefix is both monikers
 //
-#define MK_S_US                          0x000401E6L
+#define MK_S_US                          _HRESULT_TYPEDEF_(0x000401E6L)
 
 //
 // MessageId: MK_S_MONIKERALREADYREGISTERED
@@ -7736,7 +8064,7 @@
 //
 //  Moniker is already registered in running object table
 //
-#define MK_S_MONIKERALREADYREGISTERED    0x000401E7L
+#define MK_S_MONIKERALREADYREGISTERED    _HRESULT_TYPEDEF_(0x000401E7L)
 
 // ******************
 // FACILITY_WINDOWS
@@ -7752,7 +8080,7 @@
 //
 //  Attempt to create a class object failed
 //
-#define CO_E_CLASS_CREATE_FAILED         0x80080001L
+#define CO_E_CLASS_CREATE_FAILED         _HRESULT_TYPEDEF_(0x80080001L)
 
 //
 // MessageId: CO_E_SCM_ERROR
@@ -7761,7 +8089,7 @@
 //
 //  OLE service could not bind object
 //
-#define CO_E_SCM_ERROR                   0x80080002L
+#define CO_E_SCM_ERROR                   _HRESULT_TYPEDEF_(0x80080002L)
 
 //
 // MessageId: CO_E_SCM_RPC_FAILURE
@@ -7770,7 +8098,7 @@
 //
 //  RPC communication failed with OLE service
 //
-#define CO_E_SCM_RPC_FAILURE             0x80080003L
+#define CO_E_SCM_RPC_FAILURE             _HRESULT_TYPEDEF_(0x80080003L)
 
 //
 // MessageId: CO_E_BAD_PATH
@@ -7779,7 +8107,7 @@
 //
 //  Bad path to object
 //
-#define CO_E_BAD_PATH                    0x80080004L
+#define CO_E_BAD_PATH                    _HRESULT_TYPEDEF_(0x80080004L)
 
 //
 // MessageId: CO_E_SERVER_EXEC_FAILURE
@@ -7788,7 +8116,7 @@
 //
 //  Server execution failed
 //
-#define CO_E_SERVER_EXEC_FAILURE         0x80080005L
+#define CO_E_SERVER_EXEC_FAILURE         _HRESULT_TYPEDEF_(0x80080005L)
 
 //
 // MessageId: CO_E_OBJSRV_RPC_FAILURE
@@ -7797,7 +8125,7 @@
 //
 //  OLE service could not communicate with the object server
 //
-#define CO_E_OBJSRV_RPC_FAILURE          0x80080006L
+#define CO_E_OBJSRV_RPC_FAILURE          _HRESULT_TYPEDEF_(0x80080006L)
 
 //
 // MessageId: MK_E_NO_NORMALIZED
@@ -7806,7 +8134,7 @@
 //
 //  Moniker path could not be normalized
 //
-#define MK_E_NO_NORMALIZED               0x80080007L
+#define MK_E_NO_NORMALIZED               _HRESULT_TYPEDEF_(0x80080007L)
 
 //
 // MessageId: CO_E_SERVER_STOPPING
@@ -7815,7 +8143,7 @@
 //
 //  Object server is stopping when OLE service contacts it
 //
-#define CO_E_SERVER_STOPPING             0x80080008L
+#define CO_E_SERVER_STOPPING             _HRESULT_TYPEDEF_(0x80080008L)
 
 //
 // MessageId: MEM_E_INVALID_ROOT
@@ -7824,7 +8152,7 @@
 //
 //  An invalid root block pointer was specified
 //
-#define MEM_E_INVALID_ROOT               0x80080009L
+#define MEM_E_INVALID_ROOT               _HRESULT_TYPEDEF_(0x80080009L)
 
 //
 // MessageId: MEM_E_INVALID_LINK
@@ -7833,7 +8161,7 @@
 //
 //  An allocation chain contained an invalid link pointer
 //
-#define MEM_E_INVALID_LINK               0x80080010L
+#define MEM_E_INVALID_LINK               _HRESULT_TYPEDEF_(0x80080010L)
 
 //
 // MessageId: MEM_E_INVALID_SIZE
@@ -7842,7 +8170,16 @@
 //
 //  The requested allocation size was too large
 //
-#define MEM_E_INVALID_SIZE               0x80080011L
+#define MEM_E_INVALID_SIZE               _HRESULT_TYPEDEF_(0x80080011L)
+
+//
+// MessageId: CO_S_NOTALLINTERFACES
+//
+// MessageText:
+//
+//  Not all the requested interfaces were available
+//
+#define CO_S_NOTALLINTERFACES            _HRESULT_TYPEDEF_(0x00080012L)
 
 // ******************
 // FACILITY_DISPATCH
@@ -7854,7 +8191,7 @@
 //
 //  Unknown interface.
 //
-#define DISP_E_UNKNOWNINTERFACE          0x80020001L
+#define DISP_E_UNKNOWNINTERFACE          _HRESULT_TYPEDEF_(0x80020001L)
 
 //
 // MessageId: DISP_E_MEMBERNOTFOUND
@@ -7863,7 +8200,7 @@
 //
 //  Member not found.
 //
-#define DISP_E_MEMBERNOTFOUND            0x80020003L
+#define DISP_E_MEMBERNOTFOUND            _HRESULT_TYPEDEF_(0x80020003L)
 
 //
 // MessageId: DISP_E_PARAMNOTFOUND
@@ -7872,7 +8209,7 @@
 //
 //  Parameter not found.
 //
-#define DISP_E_PARAMNOTFOUND             0x80020004L
+#define DISP_E_PARAMNOTFOUND             _HRESULT_TYPEDEF_(0x80020004L)
 
 //
 // MessageId: DISP_E_TYPEMISMATCH
@@ -7881,7 +8218,7 @@
 //
 //  Type mismatch.
 //
-#define DISP_E_TYPEMISMATCH              0x80020005L
+#define DISP_E_TYPEMISMATCH              _HRESULT_TYPEDEF_(0x80020005L)
 
 //
 // MessageId: DISP_E_UNKNOWNNAME
@@ -7890,7 +8227,7 @@
 //
 //  Unknown name.
 //
-#define DISP_E_UNKNOWNNAME               0x80020006L
+#define DISP_E_UNKNOWNNAME               _HRESULT_TYPEDEF_(0x80020006L)
 
 //
 // MessageId: DISP_E_NONAMEDARGS
@@ -7899,7 +8236,7 @@
 //
 //  No named arguments.
 //
-#define DISP_E_NONAMEDARGS               0x80020007L
+#define DISP_E_NONAMEDARGS               _HRESULT_TYPEDEF_(0x80020007L)
 
 //
 // MessageId: DISP_E_BADVARTYPE
@@ -7908,7 +8245,7 @@
 //
 //  Bad variable type.
 //
-#define DISP_E_BADVARTYPE                0x80020008L
+#define DISP_E_BADVARTYPE                _HRESULT_TYPEDEF_(0x80020008L)
 
 //
 // MessageId: DISP_E_EXCEPTION
@@ -7917,7 +8254,7 @@
 //
 //  Exception occurred.
 //
-#define DISP_E_EXCEPTION                 0x80020009L
+#define DISP_E_EXCEPTION                 _HRESULT_TYPEDEF_(0x80020009L)
 
 //
 // MessageId: DISP_E_OVERFLOW
@@ -7926,7 +8263,7 @@
 //
 //  Out of present range.
 //
-#define DISP_E_OVERFLOW                  0x8002000AL
+#define DISP_E_OVERFLOW                  _HRESULT_TYPEDEF_(0x8002000AL)
 
 //
 // MessageId: DISP_E_BADINDEX
@@ -7935,7 +8272,7 @@
 //
 //  Invalid index.
 //
-#define DISP_E_BADINDEX                  0x8002000BL
+#define DISP_E_BADINDEX                  _HRESULT_TYPEDEF_(0x8002000BL)
 
 //
 // MessageId: DISP_E_UNKNOWNLCID
@@ -7944,7 +8281,7 @@
 //
 //  Unknown language.
 //
-#define DISP_E_UNKNOWNLCID               0x8002000CL
+#define DISP_E_UNKNOWNLCID               _HRESULT_TYPEDEF_(0x8002000CL)
 
 //
 // MessageId: DISP_E_ARRAYISLOCKED
@@ -7953,7 +8290,7 @@
 //
 //  Memory is locked.
 //
-#define DISP_E_ARRAYISLOCKED             0x8002000DL
+#define DISP_E_ARRAYISLOCKED             _HRESULT_TYPEDEF_(0x8002000DL)
 
 //
 // MessageId: DISP_E_BADPARAMCOUNT
@@ -7962,7 +8299,7 @@
 //
 //  Invalid number of parameters.
 //
-#define DISP_E_BADPARAMCOUNT             0x8002000EL
+#define DISP_E_BADPARAMCOUNT             _HRESULT_TYPEDEF_(0x8002000EL)
 
 //
 // MessageId: DISP_E_PARAMNOTOPTIONAL
@@ -7971,7 +8308,7 @@
 //
 //  Parameter not optional.
 //
-#define DISP_E_PARAMNOTOPTIONAL          0x8002000FL
+#define DISP_E_PARAMNOTOPTIONAL          _HRESULT_TYPEDEF_(0x8002000FL)
 
 //
 // MessageId: DISP_E_BADCALLEE
@@ -7980,7 +8317,7 @@
 //
 //  Invalid callee.
 //
-#define DISP_E_BADCALLEE                 0x80020010L
+#define DISP_E_BADCALLEE                 _HRESULT_TYPEDEF_(0x80020010L)
 
 //
 // MessageId: DISP_E_NOTACOLLECTION
@@ -7989,7 +8326,7 @@
 //
 //  Does not support a collection.
 //
-#define DISP_E_NOTACOLLECTION            0x80020011L
+#define DISP_E_NOTACOLLECTION            _HRESULT_TYPEDEF_(0x80020011L)
 
 //
 // MessageId: TYPE_E_BUFFERTOOSMALL
@@ -7998,7 +8335,7 @@
 //
 //  Buffer too small.
 //
-#define TYPE_E_BUFFERTOOSMALL            0x80028016L
+#define TYPE_E_BUFFERTOOSMALL            _HRESULT_TYPEDEF_(0x80028016L)
 
 //
 // MessageId: TYPE_E_INVDATAREAD
@@ -8007,7 +8344,7 @@
 //
 //  Old format or invalid type library.
 //
-#define TYPE_E_INVDATAREAD               0x80028018L
+#define TYPE_E_INVDATAREAD               _HRESULT_TYPEDEF_(0x80028018L)
 
 //
 // MessageId: TYPE_E_UNSUPFORMAT
@@ -8016,7 +8353,7 @@
 //
 //  Old format or invalid type library.
 //
-#define TYPE_E_UNSUPFORMAT               0x80028019L
+#define TYPE_E_UNSUPFORMAT               _HRESULT_TYPEDEF_(0x80028019L)
 
 //
 // MessageId: TYPE_E_REGISTRYACCESS
@@ -8025,7 +8362,7 @@
 //
 //  Error accessing the OLE registry.
 //
-#define TYPE_E_REGISTRYACCESS            0x8002801CL
+#define TYPE_E_REGISTRYACCESS            _HRESULT_TYPEDEF_(0x8002801CL)
 
 //
 // MessageId: TYPE_E_LIBNOTREGISTERED
@@ -8034,7 +8371,7 @@
 //
 //  Library not registered.
 //
-#define TYPE_E_LIBNOTREGISTERED          0x8002801DL
+#define TYPE_E_LIBNOTREGISTERED          _HRESULT_TYPEDEF_(0x8002801DL)
 
 //
 // MessageId: TYPE_E_UNDEFINEDTYPE
@@ -8043,7 +8380,7 @@
 //
 //  Bound to unknown type.
 //
-#define TYPE_E_UNDEFINEDTYPE             0x80028027L
+#define TYPE_E_UNDEFINEDTYPE             _HRESULT_TYPEDEF_(0x80028027L)
 
 //
 // MessageId: TYPE_E_QUALIFIEDNAMEDISALLOWED
@@ -8052,7 +8389,7 @@
 //
 //  Qualified name disallowed.
 //
-#define TYPE_E_QUALIFIEDNAMEDISALLOWED   0x80028028L
+#define TYPE_E_QUALIFIEDNAMEDISALLOWED   _HRESULT_TYPEDEF_(0x80028028L)
 
 //
 // MessageId: TYPE_E_INVALIDSTATE
@@ -8061,7 +8398,7 @@
 //
 //  Invalid forward reference, or reference to uncompiled type.
 //
-#define TYPE_E_INVALIDSTATE              0x80028029L
+#define TYPE_E_INVALIDSTATE              _HRESULT_TYPEDEF_(0x80028029L)
 
 //
 // MessageId: TYPE_E_WRONGTYPEKIND
@@ -8070,7 +8407,7 @@
 //
 //  Type mismatch.
 //
-#define TYPE_E_WRONGTYPEKIND             0x8002802AL
+#define TYPE_E_WRONGTYPEKIND             _HRESULT_TYPEDEF_(0x8002802AL)
 
 //
 // MessageId: TYPE_E_ELEMENTNOTFOUND
@@ -8079,7 +8416,7 @@
 //
 //  Element not found.
 //
-#define TYPE_E_ELEMENTNOTFOUND           0x8002802BL
+#define TYPE_E_ELEMENTNOTFOUND           _HRESULT_TYPEDEF_(0x8002802BL)
 
 //
 // MessageId: TYPE_E_AMBIGUOUSNAME
@@ -8088,7 +8425,7 @@
 //
 //  Ambiguous name.
 //
-#define TYPE_E_AMBIGUOUSNAME             0x8002802CL
+#define TYPE_E_AMBIGUOUSNAME             _HRESULT_TYPEDEF_(0x8002802CL)
 
 //
 // MessageId: TYPE_E_NAMECONFLICT
@@ -8097,7 +8434,7 @@
 //
 //  Name already exists in the library.
 //
-#define TYPE_E_NAMECONFLICT              0x8002802DL
+#define TYPE_E_NAMECONFLICT              _HRESULT_TYPEDEF_(0x8002802DL)
 
 //
 // MessageId: TYPE_E_UNKNOWNLCID
@@ -8106,7 +8443,7 @@
 //
 //  Unknown LCID.
 //
-#define TYPE_E_UNKNOWNLCID               0x8002802EL
+#define TYPE_E_UNKNOWNLCID               _HRESULT_TYPEDEF_(0x8002802EL)
 
 //
 // MessageId: TYPE_E_DLLFUNCTIONNOTFOUND
@@ -8115,7 +8452,7 @@
 //
 //  Function not defined in specified DLL.
 //
-#define TYPE_E_DLLFUNCTIONNOTFOUND       0x8002802FL
+#define TYPE_E_DLLFUNCTIONNOTFOUND       _HRESULT_TYPEDEF_(0x8002802FL)
 
 //
 // MessageId: TYPE_E_BADMODULEKIND
@@ -8124,7 +8461,7 @@
 //
 //  Wrong module kind for the operation.
 //
-#define TYPE_E_BADMODULEKIND             0x800288BDL
+#define TYPE_E_BADMODULEKIND             _HRESULT_TYPEDEF_(0x800288BDL)
 
 //
 // MessageId: TYPE_E_SIZETOOBIG
@@ -8133,7 +8470,7 @@
 //
 //  Size may not exceed 64K.
 //
-#define TYPE_E_SIZETOOBIG                0x800288C5L
+#define TYPE_E_SIZETOOBIG                _HRESULT_TYPEDEF_(0x800288C5L)
 
 //
 // MessageId: TYPE_E_DUPLICATEID
@@ -8142,7 +8479,7 @@
 //
 //  Duplicate ID in inheritance hierarchy.
 //
-#define TYPE_E_DUPLICATEID               0x800288C6L
+#define TYPE_E_DUPLICATEID               _HRESULT_TYPEDEF_(0x800288C6L)
 
 //
 // MessageId: TYPE_E_INVALIDID
@@ -8151,7 +8488,7 @@
 //
 //  Incorrect inheritance depth in standard OLE hmember.
 //
-#define TYPE_E_INVALIDID                 0x800288CFL
+#define TYPE_E_INVALIDID                 _HRESULT_TYPEDEF_(0x800288CFL)
 
 //
 // MessageId: TYPE_E_TYPEMISMATCH
@@ -8160,7 +8497,7 @@
 //
 //  Type mismatch.
 //
-#define TYPE_E_TYPEMISMATCH              0x80028CA0L
+#define TYPE_E_TYPEMISMATCH              _HRESULT_TYPEDEF_(0x80028CA0L)
 
 //
 // MessageId: TYPE_E_OUTOFBOUNDS
@@ -8169,7 +8506,7 @@
 //
 //  Invalid number of arguments.
 //
-#define TYPE_E_OUTOFBOUNDS               0x80028CA1L
+#define TYPE_E_OUTOFBOUNDS               _HRESULT_TYPEDEF_(0x80028CA1L)
 
 //
 // MessageId: TYPE_E_IOERROR
@@ -8178,7 +8515,7 @@
 //
 //  I/O Error.
 //
-#define TYPE_E_IOERROR                   0x80028CA2L
+#define TYPE_E_IOERROR                   _HRESULT_TYPEDEF_(0x80028CA2L)
 
 //
 // MessageId: TYPE_E_CANTCREATETMPFILE
@@ -8187,7 +8524,7 @@
 //
 //  Error creating unique tmp file.
 //
-#define TYPE_E_CANTCREATETMPFILE         0x80028CA3L
+#define TYPE_E_CANTCREATETMPFILE         _HRESULT_TYPEDEF_(0x80028CA3L)
 
 //
 // MessageId: TYPE_E_CANTLOADLIBRARY
@@ -8196,7 +8533,7 @@
 //
 //  Error loading type library/DLL.
 //
-#define TYPE_E_CANTLOADLIBRARY           0x80029C4AL
+#define TYPE_E_CANTLOADLIBRARY           _HRESULT_TYPEDEF_(0x80029C4AL)
 
 //
 // MessageId: TYPE_E_INCONSISTENTPROPFUNCS
@@ -8205,7 +8542,7 @@
 //
 //  Inconsistent property functions.
 //
-#define TYPE_E_INCONSISTENTPROPFUNCS     0x80029C83L
+#define TYPE_E_INCONSISTENTPROPFUNCS     _HRESULT_TYPEDEF_(0x80029C83L)
 
 //
 // MessageId: TYPE_E_CIRCULARTYPE
@@ -8214,7 +8551,7 @@
 //
 //  Circular dependency between types/modules.
 //
-#define TYPE_E_CIRCULARTYPE              0x80029C84L
+#define TYPE_E_CIRCULARTYPE              _HRESULT_TYPEDEF_(0x80029C84L)
 
 // ******************
 // FACILITY_STORAGE
@@ -8226,7 +8563,7 @@
 //
 //  Unable to perform requested operation.
 //
-#define STG_E_INVALIDFUNCTION            0x80030001L
+#define STG_E_INVALIDFUNCTION            _HRESULT_TYPEDEF_(0x80030001L)
 
 //
 // MessageId: STG_E_FILENOTFOUND
@@ -8235,7 +8572,7 @@
 //
 //  %1 could not be found.
 //
-#define STG_E_FILENOTFOUND               0x80030002L
+#define STG_E_FILENOTFOUND               _HRESULT_TYPEDEF_(0x80030002L)
 
 //
 // MessageId: STG_E_PATHNOTFOUND
@@ -8244,7 +8581,7 @@
 //
 //  The path %1 could not be found.
 //
-#define STG_E_PATHNOTFOUND               0x80030003L
+#define STG_E_PATHNOTFOUND               _HRESULT_TYPEDEF_(0x80030003L)
 
 //
 // MessageId: STG_E_TOOMANYOPENFILES
@@ -8253,7 +8590,7 @@
 //
 //  There are insufficient resources to open another file.
 //
-#define STG_E_TOOMANYOPENFILES           0x80030004L
+#define STG_E_TOOMANYOPENFILES           _HRESULT_TYPEDEF_(0x80030004L)
 
 //
 // MessageId: STG_E_ACCESSDENIED
@@ -8262,7 +8599,7 @@
 //
 //  Access Denied.
 //
-#define STG_E_ACCESSDENIED               0x80030005L
+#define STG_E_ACCESSDENIED               _HRESULT_TYPEDEF_(0x80030005L)
 
 //
 // MessageId: STG_E_INVALIDHANDLE
@@ -8271,7 +8608,7 @@
 //
 //  Attempted an operation on an invalid object.
 //
-#define STG_E_INVALIDHANDLE              0x80030006L
+#define STG_E_INVALIDHANDLE              _HRESULT_TYPEDEF_(0x80030006L)
 
 //
 // MessageId: STG_E_INSUFFICIENTMEMORY
@@ -8280,7 +8617,7 @@
 //
 //  There is insufficient memory available to complete operation.
 //
-#define STG_E_INSUFFICIENTMEMORY         0x80030008L
+#define STG_E_INSUFFICIENTMEMORY         _HRESULT_TYPEDEF_(0x80030008L)
 
 //
 // MessageId: STG_E_INVALIDPOINTER
@@ -8289,7 +8626,7 @@
 //
 //  Invalid pointer error.
 //
-#define STG_E_INVALIDPOINTER             0x80030009L
+#define STG_E_INVALIDPOINTER             _HRESULT_TYPEDEF_(0x80030009L)
 
 //
 // MessageId: STG_E_NOMOREFILES
@@ -8298,7 +8635,7 @@
 //
 //  There are no more entries to return.
 //
-#define STG_E_NOMOREFILES                0x80030012L
+#define STG_E_NOMOREFILES                _HRESULT_TYPEDEF_(0x80030012L)
 
 //
 // MessageId: STG_E_DISKISWRITEPROTECTED
@@ -8307,7 +8644,7 @@
 //
 //  Disk is write-protected.
 //
-#define STG_E_DISKISWRITEPROTECTED       0x80030013L
+#define STG_E_DISKISWRITEPROTECTED       _HRESULT_TYPEDEF_(0x80030013L)
 
 //
 // MessageId: STG_E_SEEKERROR
@@ -8316,7 +8653,7 @@
 //
 //  An error occurred during a seek operation.
 //
-#define STG_E_SEEKERROR                  0x80030019L
+#define STG_E_SEEKERROR                  _HRESULT_TYPEDEF_(0x80030019L)
 
 //
 // MessageId: STG_E_WRITEFAULT
@@ -8325,7 +8662,7 @@
 //
 //  A disk error occurred during a write operation.
 //
-#define STG_E_WRITEFAULT                 0x8003001DL
+#define STG_E_WRITEFAULT                 _HRESULT_TYPEDEF_(0x8003001DL)
 
 //
 // MessageId: STG_E_READFAULT
@@ -8334,7 +8671,7 @@
 //
 //  A disk error occurred during a read operation.
 //
-#define STG_E_READFAULT                  0x8003001EL
+#define STG_E_READFAULT                  _HRESULT_TYPEDEF_(0x8003001EL)
 
 //
 // MessageId: STG_E_SHAREVIOLATION
@@ -8343,7 +8680,7 @@
 //
 //  A share violation has occurred.
 //
-#define STG_E_SHAREVIOLATION             0x80030020L
+#define STG_E_SHAREVIOLATION             _HRESULT_TYPEDEF_(0x80030020L)
 
 //
 // MessageId: STG_E_LOCKVIOLATION
@@ -8352,7 +8689,7 @@
 //
 //  A lock violation has occurred.
 //
-#define STG_E_LOCKVIOLATION              0x80030021L
+#define STG_E_LOCKVIOLATION              _HRESULT_TYPEDEF_(0x80030021L)
 
 //
 // MessageId: STG_E_FILEALREADYEXISTS
@@ -8361,7 +8698,7 @@
 //
 //  %1 already exists.
 //
-#define STG_E_FILEALREADYEXISTS          0x80030050L
+#define STG_E_FILEALREADYEXISTS          _HRESULT_TYPEDEF_(0x80030050L)
 
 //
 // MessageId: STG_E_INVALIDPARAMETER
@@ -8370,7 +8707,7 @@
 //
 //  Invalid parameter error.
 //
-#define STG_E_INVALIDPARAMETER           0x80030057L
+#define STG_E_INVALIDPARAMETER           _HRESULT_TYPEDEF_(0x80030057L)
 
 //
 // MessageId: STG_E_MEDIUMFULL
@@ -8379,7 +8716,16 @@
 //
 //  There is insufficient disk space to complete operation.
 //
-#define STG_E_MEDIUMFULL                 0x80030070L
+#define STG_E_MEDIUMFULL                 _HRESULT_TYPEDEF_(0x80030070L)
+
+//
+// MessageId: STG_E_PROPSETMISMATCHED
+//
+// MessageText:
+//
+//  Illegal write of non-simple property to simple property set.
+//
+#define STG_E_PROPSETMISMATCHED          _HRESULT_TYPEDEF_(0x800300F0L)
 
 //
 // MessageId: STG_E_ABNORMALAPIEXIT
@@ -8388,7 +8734,7 @@
 //
 //  An API call exited abnormally.
 //
-#define STG_E_ABNORMALAPIEXIT            0x800300FAL
+#define STG_E_ABNORMALAPIEXIT            _HRESULT_TYPEDEF_(0x800300FAL)
 
 //
 // MessageId: STG_E_INVALIDHEADER
@@ -8397,7 +8743,7 @@
 //
 //  The file %1 is not a valid compound file.
 //
-#define STG_E_INVALIDHEADER              0x800300FBL
+#define STG_E_INVALIDHEADER              _HRESULT_TYPEDEF_(0x800300FBL)
 
 //
 // MessageId: STG_E_INVALIDNAME
@@ -8406,7 +8752,7 @@
 //
 //  The name %1 is not valid.
 //
-#define STG_E_INVALIDNAME                0x800300FCL
+#define STG_E_INVALIDNAME                _HRESULT_TYPEDEF_(0x800300FCL)
 
 //
 // MessageId: STG_E_UNKNOWN
@@ -8415,7 +8761,7 @@
 //
 //  An unexpected error occurred.
 //
-#define STG_E_UNKNOWN                    0x800300FDL
+#define STG_E_UNKNOWN                    _HRESULT_TYPEDEF_(0x800300FDL)
 
 //
 // MessageId: STG_E_UNIMPLEMENTEDFUNCTION
@@ -8424,7 +8770,7 @@
 //
 //  That function is not implemented.
 //
-#define STG_E_UNIMPLEMENTEDFUNCTION      0x800300FEL
+#define STG_E_UNIMPLEMENTEDFUNCTION      _HRESULT_TYPEDEF_(0x800300FEL)
 
 //
 // MessageId: STG_E_INVALIDFLAG
@@ -8433,7 +8779,7 @@
 //
 //  Invalid flag error.
 //
-#define STG_E_INVALIDFLAG                0x800300FFL
+#define STG_E_INVALIDFLAG                _HRESULT_TYPEDEF_(0x800300FFL)
 
 //
 // MessageId: STG_E_INUSE
@@ -8442,7 +8788,7 @@
 //
 //  Attempted to use an object that is busy.
 //
-#define STG_E_INUSE                      0x80030100L
+#define STG_E_INUSE                      _HRESULT_TYPEDEF_(0x80030100L)
 
 //
 // MessageId: STG_E_NOTCURRENT
@@ -8451,7 +8797,7 @@
 //
 //  The storage has been changed since the last commit.
 //
-#define STG_E_NOTCURRENT                 0x80030101L
+#define STG_E_NOTCURRENT                 _HRESULT_TYPEDEF_(0x80030101L)
 
 //
 // MessageId: STG_E_REVERTED
@@ -8460,7 +8806,7 @@
 //
 //  Attempted to use an object that has ceased to exist.
 //
-#define STG_E_REVERTED                   0x80030102L
+#define STG_E_REVERTED                   _HRESULT_TYPEDEF_(0x80030102L)
 
 //
 // MessageId: STG_E_CANTSAVE
@@ -8469,7 +8815,7 @@
 //
 //  Can't save.
 //
-#define STG_E_CANTSAVE                   0x80030103L
+#define STG_E_CANTSAVE                   _HRESULT_TYPEDEF_(0x80030103L)
 
 //
 // MessageId: STG_E_OLDFORMAT
@@ -8478,7 +8824,7 @@
 //
 //  The compound file %1 was produced with an incompatible version of storage.
 //
-#define STG_E_OLDFORMAT                  0x80030104L
+#define STG_E_OLDFORMAT                  _HRESULT_TYPEDEF_(0x80030104L)
 
 //
 // MessageId: STG_E_OLDDLL
@@ -8487,7 +8833,7 @@
 //
 //  The compound file %1 was produced with a newer version of storage.
 //
-#define STG_E_OLDDLL                     0x80030105L
+#define STG_E_OLDDLL                     _HRESULT_TYPEDEF_(0x80030105L)
 
 //
 // MessageId: STG_E_SHAREREQUIRED
@@ -8496,7 +8842,7 @@
 //
 //  Share.exe or equivalent is required for operation.
 //
-#define STG_E_SHAREREQUIRED              0x80030106L
+#define STG_E_SHAREREQUIRED              _HRESULT_TYPEDEF_(0x80030106L)
 
 //
 // MessageId: STG_E_NOTFILEBASEDSTORAGE
@@ -8505,7 +8851,7 @@
 //
 //  Illegal operation called on non-file based storage.
 //
-#define STG_E_NOTFILEBASEDSTORAGE        0x80030107L
+#define STG_E_NOTFILEBASEDSTORAGE        _HRESULT_TYPEDEF_(0x80030107L)
 
 //
 // MessageId: STG_E_EXTANTMARSHALLINGS
@@ -8514,7 +8860,43 @@
 //
 //  Illegal operation called on object with extant marshallings.
 //
-#define STG_E_EXTANTMARSHALLINGS         0x80030108L
+#define STG_E_EXTANTMARSHALLINGS         _HRESULT_TYPEDEF_(0x80030108L)
+
+//
+// MessageId: STG_E_DOCFILECORRUPT
+//
+// MessageText:
+//
+//  The docfile has been corrupted.
+//
+#define STG_E_DOCFILECORRUPT             _HRESULT_TYPEDEF_(0x80030109L)
+
+//
+// MessageId: STG_E_BADBASEADDRESS
+//
+// MessageText:
+//
+//  OLE32.DLL has been loaded at the wrong address.
+//
+#define STG_E_BADBASEADDRESS             _HRESULT_TYPEDEF_(0x80030110L)
+
+//
+// MessageId: STG_E_INCOMPLETE
+//
+// MessageText:
+//
+//  The file download was aborted abnormally.  The file is incomplete.
+//
+#define STG_E_INCOMPLETE                 _HRESULT_TYPEDEF_(0x80030201L)
+
+//
+// MessageId: STG_E_TERMINATED
+//
+// MessageText:
+//
+//  The file download has been terminated.
+//
+#define STG_E_TERMINATED                 _HRESULT_TYPEDEF_(0x80030202L)
 
 //
 // MessageId: STG_S_CONVERTED
@@ -8523,7 +8905,34 @@
 //
 //  The underlying file was converted to compound file format.
 //
-#define STG_S_CONVERTED                  0x00030200L
+#define STG_S_CONVERTED                  _HRESULT_TYPEDEF_(0x00030200L)
+
+//
+// MessageId: STG_S_BLOCK
+//
+// MessageText:
+//
+//  The storage operation should block until more data is available.
+//
+#define STG_S_BLOCK                      _HRESULT_TYPEDEF_(0x00030201L)
+
+//
+// MessageId: STG_S_RETRYNOW
+//
+// MessageText:
+//
+//  The storage operation should retry immediately.
+//
+#define STG_S_RETRYNOW                   _HRESULT_TYPEDEF_(0x00030202L)
+
+//
+// MessageId: STG_S_MONITORING
+//
+// MessageText:
+//
+//  The notified event sink will not influence the storage operation.
+//
+#define STG_S_MONITORING                 _HRESULT_TYPEDEF_(0x00030203L)
 
 // ******************
 // FACILITY_RPC
@@ -8538,7 +8947,7 @@
 //
 //  Call was rejected by callee.
 //
-#define RPC_E_CALL_REJECTED              0x80010001L
+#define RPC_E_CALL_REJECTED              _HRESULT_TYPEDEF_(0x80010001L)
 
 //
 // MessageId: RPC_E_CALL_CANCELED
@@ -8547,7 +8956,7 @@
 //
 //  Call was canceled by the message filter.
 //
-#define RPC_E_CALL_CANCELED              0x80010002L
+#define RPC_E_CALL_CANCELED              _HRESULT_TYPEDEF_(0x80010002L)
 
 //
 // MessageId: RPC_E_CANTPOST_INSENDCALL
@@ -8557,7 +8966,7 @@
 //  The caller is dispatching an intertask SendMessage call and
 //  cannot call out via PostMessage.
 //
-#define RPC_E_CANTPOST_INSENDCALL        0x80010003L
+#define RPC_E_CANTPOST_INSENDCALL        _HRESULT_TYPEDEF_(0x80010003L)
 
 //
 // MessageId: RPC_E_CANTCALLOUT_INASYNCCALL
@@ -8567,7 +8976,7 @@
 //  The caller is dispatching an asynchronous call and cannot
 //  make an outgoing call on behalf of this call.
 //
-#define RPC_E_CANTCALLOUT_INASYNCCALL    0x80010004L
+#define RPC_E_CANTCALLOUT_INASYNCCALL    _HRESULT_TYPEDEF_(0x80010004L)
 
 //
 // MessageId: RPC_E_CANTCALLOUT_INEXTERNALCALL
@@ -8576,7 +8985,7 @@
 //
 //  It is illegal to call out while inside message filter.
 //
-#define RPC_E_CANTCALLOUT_INEXTERNALCALL 0x80010005L
+#define RPC_E_CANTCALLOUT_INEXTERNALCALL _HRESULT_TYPEDEF_(0x80010005L)
 
 //
 // MessageId: RPC_E_CONNECTION_TERMINATED
@@ -8587,7 +8996,7 @@
 //  and cannot be used any more. Other connections
 //  are still valid.
 //
-#define RPC_E_CONNECTION_TERMINATED      0x80010006L
+#define RPC_E_CONNECTION_TERMINATED      _HRESULT_TYPEDEF_(0x80010006L)
 
 //
 // MessageId: RPC_E_SERVER_DIED
@@ -8598,7 +9007,7 @@
 //  and disappeared; all connections are invalid.  The call may
 //  have executed.
 //
-#define RPC_E_SERVER_DIED                0x80010007L
+#define RPC_E_SERVER_DIED                _HRESULT_TYPEDEF_(0x80010007L)
 
 //
 // MessageId: RPC_E_CLIENT_DIED
@@ -8608,7 +9017,7 @@
 //  The caller (client) disappeared while the callee (server) was
 //  processing a call.
 //
-#define RPC_E_CLIENT_DIED                0x80010008L
+#define RPC_E_CLIENT_DIED                _HRESULT_TYPEDEF_(0x80010008L)
 
 //
 // MessageId: RPC_E_INVALID_DATAPACKET
@@ -8617,7 +9026,7 @@
 //
 //  The data packet with the marshalled parameter data is incorrect.
 //
-#define RPC_E_INVALID_DATAPACKET         0x80010009L
+#define RPC_E_INVALID_DATAPACKET         _HRESULT_TYPEDEF_(0x80010009L)
 
 //
 // MessageId: RPC_E_CANTTRANSMIT_CALL
@@ -8627,7 +9036,7 @@
 //  The call was not transmitted properly; the message queue
 //  was full and was not emptied after yielding.
 //
-#define RPC_E_CANTTRANSMIT_CALL          0x8001000AL
+#define RPC_E_CANTTRANSMIT_CALL          _HRESULT_TYPEDEF_(0x8001000AL)
 
 //
 // MessageId: RPC_E_CLIENT_CANTMARSHAL_DATA
@@ -8636,7 +9045,7 @@
 //
 //  The client (caller) cannot marshall the parameter data - low memory, etc.
 //
-#define RPC_E_CLIENT_CANTMARSHAL_DATA    0x8001000BL
+#define RPC_E_CLIENT_CANTMARSHAL_DATA    _HRESULT_TYPEDEF_(0x8001000BL)
 
 //
 // MessageId: RPC_E_CLIENT_CANTUNMARSHAL_DATA
@@ -8645,7 +9054,7 @@
 //
 //  The client (caller) cannot unmarshall the return data - low memory, etc.
 //
-#define RPC_E_CLIENT_CANTUNMARSHAL_DATA  0x8001000CL
+#define RPC_E_CLIENT_CANTUNMARSHAL_DATA  _HRESULT_TYPEDEF_(0x8001000CL)
 
 //
 // MessageId: RPC_E_SERVER_CANTMARSHAL_DATA
@@ -8654,7 +9063,7 @@
 //
 //  The server (callee) cannot marshall the return data - low memory, etc.
 //
-#define RPC_E_SERVER_CANTMARSHAL_DATA    0x8001000DL
+#define RPC_E_SERVER_CANTMARSHAL_DATA    _HRESULT_TYPEDEF_(0x8001000DL)
 
 //
 // MessageId: RPC_E_SERVER_CANTUNMARSHAL_DATA
@@ -8663,7 +9072,7 @@
 //
 //  The server (callee) cannot unmarshall the parameter data - low memory, etc.
 //
-#define RPC_E_SERVER_CANTUNMARSHAL_DATA  0x8001000EL
+#define RPC_E_SERVER_CANTUNMARSHAL_DATA  _HRESULT_TYPEDEF_(0x8001000EL)
 
 //
 // MessageId: RPC_E_INVALID_DATA
@@ -8672,7 +9081,7 @@
 //
 //  Received data is invalid; could be server or client data.
 //
-#define RPC_E_INVALID_DATA               0x8001000FL
+#define RPC_E_INVALID_DATA               _HRESULT_TYPEDEF_(0x8001000FL)
 
 //
 // MessageId: RPC_E_INVALID_PARAMETER
@@ -8681,7 +9090,7 @@
 //
 //  A particular parameter is invalid and cannot be (un)marshalled.
 //
-#define RPC_E_INVALID_PARAMETER          0x80010010L
+#define RPC_E_INVALID_PARAMETER          _HRESULT_TYPEDEF_(0x80010010L)
 
 //
 // MessageId: RPC_E_CANTCALLOUT_AGAIN
@@ -8690,7 +9099,7 @@
 //
 //  There is no second outgoing call on same channel in DDE conversation.
 //
-#define RPC_E_CANTCALLOUT_AGAIN          0x80010011L
+#define RPC_E_CANTCALLOUT_AGAIN          _HRESULT_TYPEDEF_(0x80010011L)
 
 //
 // MessageId: RPC_E_SERVER_DIED_DNE
@@ -8700,7 +9109,7 @@
 //  The callee (server [not server application]) is not available
 //  and disappeared; all connections are invalid.  The call did not execute.
 //
-#define RPC_E_SERVER_DIED_DNE            0x80010012L
+#define RPC_E_SERVER_DIED_DNE            _HRESULT_TYPEDEF_(0x80010012L)
 
 //
 // MessageId: RPC_E_SYS_CALL_FAILED
@@ -8709,7 +9118,7 @@
 //
 //  System call failed.
 //
-#define RPC_E_SYS_CALL_FAILED            0x80010100L
+#define RPC_E_SYS_CALL_FAILED            _HRESULT_TYPEDEF_(0x80010100L)
 
 //
 // MessageId: RPC_E_OUT_OF_RESOURCES
@@ -8718,7 +9127,7 @@
 //
 //  Could not allocate some required resource (memory, events, ...)
 //
-#define RPC_E_OUT_OF_RESOURCES           0x80010101L
+#define RPC_E_OUT_OF_RESOURCES           _HRESULT_TYPEDEF_(0x80010101L)
 
 //
 // MessageId: RPC_E_ATTEMPTED_MULTITHREAD
@@ -8727,7 +9136,7 @@
 //
 //  Attempted to make calls on more than one thread in single threaded mode.
 //
-#define RPC_E_ATTEMPTED_MULTITHREAD      0x80010102L
+#define RPC_E_ATTEMPTED_MULTITHREAD      _HRESULT_TYPEDEF_(0x80010102L)
 
 //
 // MessageId: RPC_E_NOT_REGISTERED
@@ -8736,7 +9145,7 @@
 //
 //  The requested interface is not registered on the server object.
 //
-#define RPC_E_NOT_REGISTERED             0x80010103L
+#define RPC_E_NOT_REGISTERED             _HRESULT_TYPEDEF_(0x80010103L)
 
 //
 // MessageId: RPC_E_FAULT
@@ -8745,7 +9154,7 @@
 //
 //  RPC could not call the server or could not return the results of calling the server.
 //
-#define RPC_E_FAULT                      0x80010104L
+#define RPC_E_FAULT                      _HRESULT_TYPEDEF_(0x80010104L)
 
 //
 // MessageId: RPC_E_SERVERFAULT
@@ -8754,7 +9163,7 @@
 //
 //  The server threw an exception.
 //
-#define RPC_E_SERVERFAULT                0x80010105L
+#define RPC_E_SERVERFAULT                _HRESULT_TYPEDEF_(0x80010105L)
 
 //
 // MessageId: RPC_E_CHANGED_MODE
@@ -8763,7 +9172,7 @@
 //
 //  Cannot change thread mode after it is set.
 //
-#define RPC_E_CHANGED_MODE               0x80010106L
+#define RPC_E_CHANGED_MODE               _HRESULT_TYPEDEF_(0x80010106L)
 
 //
 // MessageId: RPC_E_INVALIDMETHOD
@@ -8772,7 +9181,7 @@
 //
 //  The method called does not exist on the server.
 //
-#define RPC_E_INVALIDMETHOD              0x80010107L
+#define RPC_E_INVALIDMETHOD              _HRESULT_TYPEDEF_(0x80010107L)
 
 //
 // MessageId: RPC_E_DISCONNECTED
@@ -8781,7 +9190,7 @@
 //
 //  The object invoked has disconnected from its clients.
 //
-#define RPC_E_DISCONNECTED               0x80010108L
+#define RPC_E_DISCONNECTED               _HRESULT_TYPEDEF_(0x80010108L)
 
 //
 // MessageId: RPC_E_RETRY
@@ -8790,7 +9199,7 @@
 //
 //  The object invoked chose not to process the call now.  Try again later.
 //
-#define RPC_E_RETRY                      0x80010109L
+#define RPC_E_RETRY                      _HRESULT_TYPEDEF_(0x80010109L)
 
 //
 // MessageId: RPC_E_SERVERCALL_RETRYLATER
@@ -8799,7 +9208,7 @@
 //
 //  The message filter indicated that the application is busy.
 //
-#define RPC_E_SERVERCALL_RETRYLATER      0x8001010AL
+#define RPC_E_SERVERCALL_RETRYLATER      _HRESULT_TYPEDEF_(0x8001010AL)
 
 //
 // MessageId: RPC_E_SERVERCALL_REJECTED
@@ -8808,7 +9217,7 @@
 //
 //  The message filter rejected the call.
 //
-#define RPC_E_SERVERCALL_REJECTED        0x8001010BL
+#define RPC_E_SERVERCALL_REJECTED        _HRESULT_TYPEDEF_(0x8001010BL)
 
 //
 // MessageId: RPC_E_INVALID_CALLDATA
@@ -8817,7 +9226,7 @@
 //
 //  A call control interfaces was called with invalid data.
 //
-#define RPC_E_INVALID_CALLDATA           0x8001010CL
+#define RPC_E_INVALID_CALLDATA           _HRESULT_TYPEDEF_(0x8001010CL)
 
 //
 // MessageId: RPC_E_CANTCALLOUT_ININPUTSYNCCALL
@@ -8826,7 +9235,7 @@
 //
 //  An outgoing call cannot be made since the application is dispatching an input-synchronous call.
 //
-#define RPC_E_CANTCALLOUT_ININPUTSYNCCALL 0x8001010DL
+#define RPC_E_CANTCALLOUT_ININPUTSYNCCALL _HRESULT_TYPEDEF_(0x8001010DL)
 
 //
 // MessageId: RPC_E_WRONG_THREAD
@@ -8835,7 +9244,7 @@
 //
 //  The application called an interface that was marshalled for a different thread.
 //
-#define RPC_E_WRONG_THREAD               0x8001010EL
+#define RPC_E_WRONG_THREAD               _HRESULT_TYPEDEF_(0x8001010EL)
 
 //
 // MessageId: RPC_E_THREAD_NOT_INIT
@@ -8844,7 +9253,135 @@
 //
 //  CoInitialize has not been called on the current thread.
 //
-#define RPC_E_THREAD_NOT_INIT            0x8001010FL
+#define RPC_E_THREAD_NOT_INIT            _HRESULT_TYPEDEF_(0x8001010FL)
+
+//
+// MessageId: RPC_E_VERSION_MISMATCH
+//
+// MessageText:
+//
+//  The version of OLE on the client and server machines does not match.
+//
+#define RPC_E_VERSION_MISMATCH           _HRESULT_TYPEDEF_(0x80010110L)
+
+//
+// MessageId: RPC_E_INVALID_HEADER
+//
+// MessageText:
+//
+//  OLE received a packet with an invalid header.
+//
+#define RPC_E_INVALID_HEADER             _HRESULT_TYPEDEF_(0x80010111L)
+
+//
+// MessageId: RPC_E_INVALID_EXTENSION
+//
+// MessageText:
+//
+//  OLE received a packet with an invalid extension.
+//
+#define RPC_E_INVALID_EXTENSION          _HRESULT_TYPEDEF_(0x80010112L)
+
+//
+// MessageId: RPC_E_INVALID_IPID
+//
+// MessageText:
+//
+//  The requested object or interface does not exist.
+//
+#define RPC_E_INVALID_IPID               _HRESULT_TYPEDEF_(0x80010113L)
+
+//
+// MessageId: RPC_E_INVALID_OBJECT
+//
+// MessageText:
+//
+//  The requested object does not exist.
+//
+#define RPC_E_INVALID_OBJECT             _HRESULT_TYPEDEF_(0x80010114L)
+
+//
+// MessageId: RPC_S_CALLPENDING
+//
+// MessageText:
+//
+//  OLE has sent a request and is waiting for a reply.
+//
+#define RPC_S_CALLPENDING                _HRESULT_TYPEDEF_(0x80010115L)
+
+//
+// MessageId: RPC_S_WAITONTIMER
+//
+// MessageText:
+//
+//  OLE is waiting before retrying a request.
+//
+#define RPC_S_WAITONTIMER                _HRESULT_TYPEDEF_(0x80010116L)
+
+//
+// MessageId: RPC_E_CALL_COMPLETE
+//
+// MessageText:
+//
+//  Call context cannot be accessed after call completed.
+//
+#define RPC_E_CALL_COMPLETE              _HRESULT_TYPEDEF_(0x80010117L)
+
+//
+// MessageId: RPC_E_UNSECURE_CALL
+//
+// MessageText:
+//
+//  Impersonate on unsecure calls is not supported.
+//
+#define RPC_E_UNSECURE_CALL              _HRESULT_TYPEDEF_(0x80010118L)
+
+//
+// MessageId: RPC_E_TOO_LATE
+//
+// MessageText:
+//
+//  Security must be initialized before any interfaces are marshalled or
+//  unmarshalled.  It cannot be changed once initialized.
+//
+#define RPC_E_TOO_LATE                   _HRESULT_TYPEDEF_(0x80010119L)
+
+//
+// MessageId: RPC_E_NO_GOOD_SECURITY_PACKAGES
+//
+// MessageText:
+//
+//  No security packages are installed on this machine or the user is not logged
+//  on or there are no compatible security packages between the client and server.
+//
+#define RPC_E_NO_GOOD_SECURITY_PACKAGES  _HRESULT_TYPEDEF_(0x8001011AL)
+
+//
+// MessageId: RPC_E_ACCESS_DENIED
+//
+// MessageText:
+//
+//  Access is denied.
+//
+#define RPC_E_ACCESS_DENIED              _HRESULT_TYPEDEF_(0x8001011BL)
+
+//
+// MessageId: RPC_E_REMOTE_DISABLED
+//
+// MessageText:
+//
+//  Remote calls are not allowed for this process.
+//
+#define RPC_E_REMOTE_DISABLED            _HRESULT_TYPEDEF_(0x8001011CL)
+
+//
+// MessageId: RPC_E_INVALID_OBJREF
+//
+// MessageText:
+//
+//  The marshaled interface data packet (OBJREF) has an invalid or unknown format.
+//
+#define RPC_E_INVALID_OBJREF             _HRESULT_TYPEDEF_(0x8001011DL)
 
 //
 // MessageId: RPC_E_UNEXPECTED
@@ -8853,6 +9390,517 @@
 //
 //  An internal error occurred.
 //
-#define RPC_E_UNEXPECTED                 0x8001FFFFL
+#define RPC_E_UNEXPECTED                 _HRESULT_TYPEDEF_(0x8001FFFFL)
 
+
+ /////////////////
+ //
+ //  FACILITY_SSPI
+ //
+ /////////////////
+
+//
+// MessageId: NTE_BAD_UID
+//
+// MessageText:
+//
+//  Bad UID.
+//
+#define NTE_BAD_UID                      _HRESULT_TYPEDEF_(0x80090001L)
+
+//
+// MessageId: NTE_BAD_HASH
+//
+// MessageText:
+//
+//  Bad Hash.
+//
+#define NTE_BAD_HASH                     _HRESULT_TYPEDEF_(0x80090002L)
+
+//
+// MessageId: NTE_BAD_KEY
+//
+// MessageText:
+//
+//  Bad Key.
+//
+#define NTE_BAD_KEY                      _HRESULT_TYPEDEF_(0x80090003L)
+
+//
+// MessageId: NTE_BAD_LEN
+//
+// MessageText:
+//
+//  Bad Length.
+//
+#define NTE_BAD_LEN                      _HRESULT_TYPEDEF_(0x80090004L)
+
+//
+// MessageId: NTE_BAD_DATA
+//
+// MessageText:
+//
+//  Bad Data.
+//
+#define NTE_BAD_DATA                     _HRESULT_TYPEDEF_(0x80090005L)
+
+//
+// MessageId: NTE_BAD_SIGNATURE
+//
+// MessageText:
+//
+//  Invalid Signature.
+//
+#define NTE_BAD_SIGNATURE                _HRESULT_TYPEDEF_(0x80090006L)
+
+//
+// MessageId: NTE_BAD_VER
+//
+// MessageText:
+//
+//  Bad Version of provider.
+//
+#define NTE_BAD_VER                      _HRESULT_TYPEDEF_(0x80090007L)
+
+//
+// MessageId: NTE_BAD_ALGID
+//
+// MessageText:
+//
+//  Invalid algorithm specified.
+//
+#define NTE_BAD_ALGID                    _HRESULT_TYPEDEF_(0x80090008L)
+
+//
+// MessageId: NTE_BAD_FLAGS
+//
+// MessageText:
+//
+//  Invalid flags specified.
+//
+#define NTE_BAD_FLAGS                    _HRESULT_TYPEDEF_(0x80090009L)
+
+//
+// MessageId: NTE_BAD_TYPE
+//
+// MessageText:
+//
+//  Invalid type specified.
+//
+#define NTE_BAD_TYPE                     _HRESULT_TYPEDEF_(0x8009000AL)
+
+//
+// MessageId: NTE_BAD_KEY_STATE
+//
+// MessageText:
+//
+//  Key not valid for use in specified state.
+//
+#define NTE_BAD_KEY_STATE                _HRESULT_TYPEDEF_(0x8009000BL)
+
+//
+// MessageId: NTE_BAD_HASH_STATE
+//
+// MessageText:
+//
+//  Hash not valid for use in specified state.
+//
+#define NTE_BAD_HASH_STATE               _HRESULT_TYPEDEF_(0x8009000CL)
+
+//
+// MessageId: NTE_NO_KEY
+//
+// MessageText:
+//
+//  Key does not exist.
+//
+#define NTE_NO_KEY                       _HRESULT_TYPEDEF_(0x8009000DL)
+
+//
+// MessageId: NTE_NO_MEMORY
+//
+// MessageText:
+//
+//  Insufficient memory available for the operation.
+//
+#define NTE_NO_MEMORY                    _HRESULT_TYPEDEF_(0x8009000EL)
+
+//
+// MessageId: NTE_EXISTS
+//
+// MessageText:
+//
+//  Object already exists.
+//
+#define NTE_EXISTS                       _HRESULT_TYPEDEF_(0x8009000FL)
+
+//
+// MessageId: NTE_PERM
+//
+// MessageText:
+//
+//  Access denied.
+//
+#define NTE_PERM                         _HRESULT_TYPEDEF_(0x80090010L)
+
+//
+// MessageId: NTE_NOT_FOUND
+//
+// MessageText:
+//
+//  Object was not found.
+//
+#define NTE_NOT_FOUND                    _HRESULT_TYPEDEF_(0x80090011L)
+
+//
+// MessageId: NTE_DOUBLE_ENCRYPT
+//
+// MessageText:
+//
+//  Data already encrypted.
+//
+#define NTE_DOUBLE_ENCRYPT               _HRESULT_TYPEDEF_(0x80090012L)
+
+//
+// MessageId: NTE_BAD_PROVIDER
+//
+// MessageText:
+//
+//  Invalid provider specified.
+//
+#define NTE_BAD_PROVIDER                 _HRESULT_TYPEDEF_(0x80090013L)
+
+//
+// MessageId: NTE_BAD_PROV_TYPE
+//
+// MessageText:
+//
+//  Invalid provider type specified.
+//
+#define NTE_BAD_PROV_TYPE                _HRESULT_TYPEDEF_(0x80090014L)
+
+//
+// MessageId: NTE_BAD_PUBLIC_KEY
+//
+// MessageText:
+//
+//  Provider's public key is invalid.
+//
+#define NTE_BAD_PUBLIC_KEY               _HRESULT_TYPEDEF_(0x80090015L)
+
+//
+// MessageId: NTE_BAD_KEYSET
+//
+// MessageText:
+//
+//  Keyset does not exist
+//
+#define NTE_BAD_KEYSET                   _HRESULT_TYPEDEF_(0x80090016L)
+
+//
+// MessageId: NTE_PROV_TYPE_NOT_DEF
+//
+// MessageText:
+//
+//  Provider type not defined.
+//
+#define NTE_PROV_TYPE_NOT_DEF            _HRESULT_TYPEDEF_(0x80090017L)
+
+//
+// MessageId: NTE_PROV_TYPE_ENTRY_BAD
+//
+// MessageText:
+//
+//  Provider type as registered is invalid.
+//
+#define NTE_PROV_TYPE_ENTRY_BAD          _HRESULT_TYPEDEF_(0x80090018L)
+
+//
+// MessageId: NTE_KEYSET_NOT_DEF
+//
+// MessageText:
+//
+//  The keyset is not defined.
+//
+#define NTE_KEYSET_NOT_DEF               _HRESULT_TYPEDEF_(0x80090019L)
+
+//
+// MessageId: NTE_KEYSET_ENTRY_BAD
+//
+// MessageText:
+//
+//  Keyset as registered is invalid.
+//
+#define NTE_KEYSET_ENTRY_BAD             _HRESULT_TYPEDEF_(0x8009001AL)
+
+//
+// MessageId: NTE_PROV_TYPE_NO_MATCH
+//
+// MessageText:
+//
+//  Provider type does not match registered value.
+//
+#define NTE_PROV_TYPE_NO_MATCH           _HRESULT_TYPEDEF_(0x8009001BL)
+
+//
+// MessageId: NTE_SIGNATURE_FILE_BAD
+//
+// MessageText:
+//
+//  The digital signature file is corrupt.
+//
+#define NTE_SIGNATURE_FILE_BAD           _HRESULT_TYPEDEF_(0x8009001CL)
+
+//
+// MessageId: NTE_PROVIDER_DLL_FAIL
+//
+// MessageText:
+//
+//  Provider DLL failed to initialize correctly.
+//
+#define NTE_PROVIDER_DLL_FAIL            _HRESULT_TYPEDEF_(0x8009001DL)
+
+//
+// MessageId: NTE_PROV_DLL_NOT_FOUND
+//
+// MessageText:
+//
+//  Provider DLL could not be found.
+//
+#define NTE_PROV_DLL_NOT_FOUND           _HRESULT_TYPEDEF_(0x8009001EL)
+
+//
+// MessageId: NTE_BAD_KEYSET_PARAM
+//
+// MessageText:
+//
+//  The Keyset parameter is invalid.
+//
+#define NTE_BAD_KEYSET_PARAM             _HRESULT_TYPEDEF_(0x8009001FL)
+
+//
+// MessageId: NTE_FAIL
+//
+// MessageText:
+//
+//  An internal error occurred.
+//
+#define NTE_FAIL                         _HRESULT_TYPEDEF_(0x80090020L)
+
+//
+// MessageId: NTE_SYS_ERR
+//
+// MessageText:
+//
+//  A base error occurred.
+//
+#define NTE_SYS_ERR                      _HRESULT_TYPEDEF_(0x80090021L)
+
+#define NTE_OP_OK 0
+
+//
+// Note that additional FACILITY_SSPI errors are in issperr.h
+//
+// ******************
+// FACILITY_CERT
+// ******************
+//
+// MessageId: TRUST_E_PROVIDER_UNKNOWN
+//
+// MessageText:
+//
+//  The specified trust provider is not known on this system.
+//
+#define TRUST_E_PROVIDER_UNKNOWN         _HRESULT_TYPEDEF_(0x800B0001L)
+
+//
+// MessageId: TRUST_E_ACTION_UNKNOWN
+//
+// MessageText:
+//
+//  The trust verification action specified is not supported by the specified trust provider.
+//
+#define TRUST_E_ACTION_UNKNOWN           _HRESULT_TYPEDEF_(0x800B0002L)
+
+//
+// MessageId: TRUST_E_SUBJECT_FORM_UNKNOWN
+//
+// MessageText:
+//
+//  The form specified for the subject is not one supported or known by the specified trust provider.
+//
+#define TRUST_E_SUBJECT_FORM_UNKNOWN     _HRESULT_TYPEDEF_(0x800B0003L)
+
+//
+// MessageId: TRUST_E_SUBJECT_NOT_TRUSTED
+//
+// MessageText:
+//
+//  The subject is not trusted for the specified action.
+//
+#define TRUST_E_SUBJECT_NOT_TRUSTED      _HRESULT_TYPEDEF_(0x800B0004L)
+
+//
+// MessageId: DIGSIG_E_ENCODE
+//
+// MessageText:
+//
+//  Error due to problem in ASN.1 encoding process.
+//
+#define DIGSIG_E_ENCODE                  _HRESULT_TYPEDEF_(0x800B0005L)
+
+//
+// MessageId: DIGSIG_E_DECODE
+//
+// MessageText:
+//
+//  Error due to problem in ASN.1 decoding process.
+//
+#define DIGSIG_E_DECODE                  _HRESULT_TYPEDEF_(0x800B0006L)
+
+//
+// MessageId: DIGSIG_E_EXTENSIBILITY
+//
+// MessageText:
+//
+//  Reading / writing Extensions where Attributes are appropriate, and visa versa.
+//
+#define DIGSIG_E_EXTENSIBILITY           _HRESULT_TYPEDEF_(0x800B0007L)
+
+//
+// MessageId: DIGSIG_E_CRYPTO
+//
+// MessageText:
+//
+//  Unspecified cryptographic failure.
+//
+#define DIGSIG_E_CRYPTO                  _HRESULT_TYPEDEF_(0x800B0008L)
+
+//
+// MessageId: PERSIST_E_SIZEDEFINITE
+//
+// MessageText:
+//
+//  The size of the data could not be determined.
+//
+#define PERSIST_E_SIZEDEFINITE           _HRESULT_TYPEDEF_(0x800B0009L)
+
+//
+// MessageId: PERSIST_E_SIZEINDEFINITE
+//
+// MessageText:
+//
+//  The size of the indefinite-sized data could not be determined.
+//
+#define PERSIST_E_SIZEINDEFINITE         _HRESULT_TYPEDEF_(0x800B000AL)
+
+//
+// MessageId: PERSIST_E_NOTSELFSIZING
+//
+// MessageText:
+//
+//  This object does not read and write self-sizing data.
+//
+#define PERSIST_E_NOTSELFSIZING          _HRESULT_TYPEDEF_(0x800B000BL)
+
+//
+// MessageId: TRUST_E_NOSIGNATURE
+//
+// MessageText:
+//
+//  No signature was present in the subject.
+//
+#define TRUST_E_NOSIGNATURE              _HRESULT_TYPEDEF_(0x800B0100L)
+
+//
+// MessageId: CERT_E_EXPIRED
+//
+// MessageText:
+//
+//  A required certificate is not within its validity period.
+//
+#define CERT_E_EXPIRED                   _HRESULT_TYPEDEF_(0x800B0101L)
+
+//
+// MessageId: CERT_E_VALIDIYPERIODNESTING
+//
+// MessageText:
+//
+//  The validity periods of the certification chain do not nest correctly.
+//
+#define CERT_E_VALIDIYPERIODNESTING      _HRESULT_TYPEDEF_(0x800B0102L)
+
+//
+// MessageId: CERT_E_ROLE
+//
+// MessageText:
+//
+//  A certificate that can only be used as an end-entity is being used as a CA or visa versa.
+//
+#define CERT_E_ROLE                      _HRESULT_TYPEDEF_(0x800B0103L)
+
+//
+// MessageId: CERT_E_PATHLENCONST
+//
+// MessageText:
+//
+//  A path length constraint in the certification chain has been violated.
+//
+#define CERT_E_PATHLENCONST              _HRESULT_TYPEDEF_(0x800B0104L)
+
+//
+// MessageId: CERT_E_CRITICAL
+//
+// MessageText:
+//
+//  An extension of unknown type that is labeled 'critical' is present in a certificate.
+//
+#define CERT_E_CRITICAL                  _HRESULT_TYPEDEF_(0x800B0105L)
+
+//
+// MessageId: CERT_E_PURPOSE
+//
+// MessageText:
+//
+//  A certificate is being used for a purpose other than that for which it is permitted.
+//
+#define CERT_E_PURPOSE                   _HRESULT_TYPEDEF_(0x800B0106L)
+
+//
+// MessageId: CERT_E_ISSUERCHAINING
+//
+// MessageText:
+//
+//  A parent of a given certificate in fact did not issue that child certificate.
+//
+#define CERT_E_ISSUERCHAINING            _HRESULT_TYPEDEF_(0x800B0107L)
+
+//
+// MessageId: CERT_E_MALFORMED
+//
+// MessageText:
+//
+//  A certificate is missing or has an empty value for an important field, such as a subject or issuer name.
+//
+#define CERT_E_MALFORMED                 _HRESULT_TYPEDEF_(0x800B0108L)
+
+//
+// MessageId: CERT_E_UNTRUSTEDROOT
+//
+// MessageText:
+//
+//  A certification chain processed correctly, but terminated in a root certificate which isn't trusted by the trust provider.
+//
+#define CERT_E_UNTRUSTEDROOT             _HRESULT_TYPEDEF_(0x800B0109L)
+
+//
+// MessageId: CERT_E_CHAINING
+//
+// MessageText:
+//
+//  A chain of certs didn't chain as they should in a certain application of chaining.
+//
+#define CERT_E_CHAINING                  _HRESULT_TYPEDEF_(0x800B010AL)
+
+#pragma option -b.
 #endif // _WINERROR_

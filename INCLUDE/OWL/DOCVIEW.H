@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.10  $
 //
 // Definition of classes TDocument, TView, TWindowView, TStream, TInStream,
 // TOutStream
@@ -19,6 +19,11 @@
 #if !defined(__COMMDLG_H)
 # include <commdlg.h>
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS TDocManager;
 class _OWLCLASS TDocTemplate;
 class _OWLCLASS TMenuDescr;
@@ -459,6 +464,10 @@ NOTIFY_SIG(vnIsWindow,    HWND)
 #define EV_VN_ISDIRTY     VN_DEFINE(vnIsDirty,     VnIsDirty,     void)
 #define EV_VN_ISWINDOW    VN_DEFINE(vnIsWindow,    VnIsWindow,    int)
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 //----------------------------------------------------------------------------
 // Inline implementations
 //
@@ -669,8 +678,13 @@ inline const char far* TWindowView::StaticName() {
 }
 
 //
+// Only query document if this is the last view open to it.
+//
 inline bool TWindowView::CanClose() {
-  return TWindow::CanClose() && Doc->CanClose();
+  return TWindow::CanClose() && 
+         (Doc->NextView(this) || 
+          Doc->NextView(0) != this ||
+          Doc->CanClose());
 }
 
 //

@@ -59,7 +59,7 @@ public:
     virtual Object _FAR & lastThat( condFuncType, void _FAR * ) const;
 
     virtual classType isA() const = 0;
-    virtual char _FAR *nameOf() const = 0;
+    virtual _TCHAR _FAR *nameOf() const = 0;
     virtual hashValueType hashValue() const;
     virtual int isEqual( const Object& ) const;
 

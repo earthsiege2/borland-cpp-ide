@@ -95,6 +95,15 @@ BEGIN
 END
 
 
+// Accelerator table for Print Preview window.
+//
+IDM_PRINTPREVIEW ACCELERATORS
+BEGIN
+  VK_ESCAPE, APX_PPR_DONE, VIRTKEY
+  "c",       APX_PPR_DONE, ALT
+END
+
+
 
 // Table of help hints displayed in the status bar.
 //
@@ -327,7 +336,7 @@ END
 // Slider thumb bitmaps for TSlider and TVSlider (include/owl/slider.rc)
 //
 IDB_HSLIDERTHUMB BITMAP "hslider.bmp"
-IDB_VSLIDERTHUMB BITMAP "hslider.bmp"
+IDB_VSLIDERTHUMB BITMAP "vslider.bmp"
 
 // Version info.
 //

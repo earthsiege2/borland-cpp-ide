@@ -231,7 +231,7 @@ void [[TApplication]]::InitMainWindow()
 
 ##{fwndbkgd.snp}
 ##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-  // Assign ICON w/ this application.
+  // Assign icons for this application.
   //
   frame->SetIcon(this, IDI_MDIAPPLICATION);
   frame->SetIconSm(this, IDI_MDIAPPLICATION);
@@ -244,15 +244,15 @@ void [[TApplication]]::InitMainWindow()
 ##@QUERY_APPL_MODEL == VALUE_SDI
   frame->Attr.AccelTable = IDM_SDI;
 
-##@OPT_APPL_TOOLBAR
-  SetupSpeedBar(frame);
-##@OPT_APPL_STATUSBAR 7
-
+##@OPT_APPL_STATUSBAR 6
   TStatusBar* sb = new TStatusBar(frame, TGadget::Recessed,
                                   TStatusBar::CapsLock        |
                                   TStatusBar::NumLock         |
                                   TStatusBar::ScrollLock);
   frame->Insert(*sb, TDecoratedFrame::Bottom);
+
+##@OPT_APPL_TOOLBAR 2
+  SetupSpeedBar(frame);
 
   SetMainWindow(frame);
 

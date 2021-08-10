@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0006    // Increment this if a change has global effects
 
+Copyright (c) 1992-1996  Microsoft Corporation
+
 Module Name:
 
     lmat.h
@@ -8,10 +10,6 @@ Abstract:
 
     This file contains structures, function prototypes, and definitions
     for the schedule service API-s.
-
-Author:
-
-    Vladimir Z. Vulovic     (vladimv)       06 - November - 1992
 
 Environment:
 
@@ -32,7 +30,7 @@ Revision History:
 
 #ifndef _LMAT_
 #define _LMAT_
-#define __LMAT_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,7 +41,7 @@ extern "C" {
 //
 
 //
-//  Do we exec programs for this job periodically (/EVERY switch) 
+//  Do we exec programs for this job periodically (/EVERY switch)
 //  or one time (/NEXT switch).
 //
 #define JOB_RUN_PERIODICALLY            0x01    //  set if EVERY
@@ -106,21 +104,21 @@ typedef struct _AT_ENUM {
 
 NET_API_STATUS NET_API_FUNCTION
 NetScheduleJobAdd(
-    IN      LPWSTR          Servername  OPTIONAL,
+    IN      LPCWSTR         Servername  OPTIONAL,
     IN      LPBYTE          Buffer,
     OUT     LPDWORD         JobId
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetScheduleJobDel(
-    IN      LPWSTR          Servername  OPTIONAL,
+    IN      LPCWSTR         Servername  OPTIONAL,
     IN      DWORD           MinJobId,
     IN      DWORD           MaxJobId
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetScheduleJobEnum(
-    IN      LPWSTR          Servername              OPTIONAL,
+    IN      LPCWSTR         Servername              OPTIONAL,
     OUT     LPBYTE *        PointerToBuffer,
     IN      DWORD           PrefferedMaximumLength,
     OUT     LPDWORD         EntriesRead,
@@ -130,7 +128,7 @@ NetScheduleJobEnum(
 
 NET_API_STATUS NET_API_FUNCTION
 NetScheduleJobGetInfo(
-    IN      LPWSTR          Servername              OPTIONAL,
+    IN      LPCWSTR         Servername              OPTIONAL,
     IN      DWORD           JobId,
     OUT     LPBYTE *        PointerToBuffer
     );
@@ -138,5 +136,7 @@ NetScheduleJobGetInfo(
 #ifdef __cplusplus
 }
 #endif
+
+#pragma option -b.
 
 #endif // _LMAT_

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.7  $
 //
 // Class definitions for object streaming
 //
@@ -34,6 +34,9 @@
 #if !defined(__STRING_H) && !defined(_INC_STRING)
 # include <string.h>
 #endif
+#if !defined (__TCHAR_H)
+# include <tchar.h>
+#endif
 
 #if defined(_FASTTHIS)
 #  define _BIDSFASTTHIS __fastthis
@@ -50,6 +53,10 @@
 
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 #if defined( BI_NO_PER_INSTANCE_DATA ) && defined(_BIDSDLL)
@@ -88,8 +95,8 @@ class _BIDSCLASS TStreamableClass : public ObjectBuilder
 
 public:
 
-    _BIDSCTOR TStreamableClass( const char *n, 
-                             BUILDER b, 
+    _BIDSCTOR TStreamableClass( const _TCHAR *n,
+                             BUILDER b,
                              int d = NoDelta,
                              ModuleId mid = GetModuleId() );
 
@@ -97,7 +104,7 @@ public:
 
     int _BIDSENTRY operator == ( const TStreamableClass& n ) const
         {
-        if( strcmp( ObjectId, n.ObjectId ) != 0 )
+        if( _tcscmp( ObjectId, n.ObjectId ) != 0 )
             return 0;
         else
             return (ModId == 0 || n.ModId == 0 || ModId == n.ModId);
@@ -105,7 +112,7 @@ public:
 
     int _BIDSENTRY operator < ( const TStreamableClass& n ) const
         {
-        int res = strcmp( ObjectId, n.ObjectId );
+        int res = _tcscmp( ObjectId, n.ObjectId );
         if( res < 0 )
             return 1;
         else if( res > 0 )
@@ -118,7 +125,7 @@ public:
 
 private:
 
-    const char *ObjectId;
+    const _TCHAR *ObjectId;
     ModuleId ModId;
 
 };
@@ -133,13 +140,17 @@ public:
     void _BIDSENTRY RegisterType( ModuleId id, TStreamableClass& );
     void _BIDSENTRY UnRegisterType( ModuleId id, TStreamableClass& );
     const ObjectBuilder * _BIDSENTRY Lookup( ModuleId id,
-                                         const char *name ) const;
+                                         const _TCHAR *name ) const;
 
 private:
 
     TISVectorImp< TStreamableClass > Types;
 
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po.

@@ -1,6 +1,6 @@
-/*++ BUILD Version: 0012    // Increment this if a change has global effects
+/*++ BUILD Version: 0013    // Increment this if a change has global effects
 
-Copyright (c) 1990-1995  Microsoft Corporation
+Copyright (c) 1990-1996  Microsoft Corporation
 
 Module Name:
 
@@ -14,8 +14,11 @@ Revision History:
 
 --*/
 
+/* $Copyright: 1997$ */
+
 #ifndef _WINIOCTL_
 #define _WINIOCTL_
+#pragma option -b
 
 
 #ifndef _DEVIOCTL_
@@ -72,6 +75,9 @@ Revision History:
 #define FILE_DEVICE_NETWORK_REDIRECTOR  0x00000028
 #define FILE_DEVICE_BATTERY             0x00000029
 #define FILE_DEVICE_BUS_EXTENDER        0x0000002a
+#define FILE_DEVICE_MODEM               0x0000002b
+#define FILE_DEVICE_VDM                 0x0000002c
+#define FILE_DEVICE_MASS_STORAGE        0x0000002d
 
 //
 // Macro definition for defining IOCTL and FSCTL function control codes.  Note
@@ -111,6 +117,47 @@ Revision History:
 #endif // _DEVIOCTL_
 
 
+#ifndef _NTDDSTOR_H_
+#define _NTDDSTOR_H_
+
+
+//
+// IoControlCode values for disk devices.
+//
+
+#define IOCTL_STORAGE_BASE                FILE_DEVICE_MASS_STORAGE
+
+//
+// The following device control codes are common for all class drivers.  They
+// should be used in place of the older IOCTL_DISK, IOCTL_CDROM and IOCTL_TAPE
+// common codes
+//
+
+#define IOCTL_STORAGE_CHECK_VERIFY     CTL_CODE(IOCTL_STORAGE_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_MEDIA_REMOVAL    CTL_CODE(IOCTL_STORAGE_BASE, 0x0201, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_EJECT_MEDIA      CTL_CODE(IOCTL_STORAGE_BASE, 0x0202, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_LOAD_MEDIA       CTL_CODE(IOCTL_STORAGE_BASE, 0x0203, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_RESERVE          CTL_CODE(IOCTL_STORAGE_BASE, 0x0204, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_RELEASE          CTL_CODE(IOCTL_STORAGE_BASE, 0x0205, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_FIND_NEW_DEVICES CTL_CODE(IOCTL_STORAGE_BASE, 0x0206, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_GET_MEDIA_TYPES  CTL_CODE(IOCTL_STORAGE_BASE, 0x0300, METHOD_BUFFERED, FILE_ANY_ACCESS)
+
+//
+// IOCTL_STORAGE_MEDIA_REMOVAL disables the mechanism
+// on a storage device that ejects media. This function
+// may or may not be supported on storage devices that
+// support removable media.
+//
+// TRUE means prevent media from being removed.
+// FALSE means allow media removal.
+//
+
+typedef struct _PREVENT_MEDIA_REMOVAL {
+    BOOLEAN PreventMediaRemoval;
+} PREVENT_MEDIA_REMOVAL, *PPREVENT_MEDIA_REMOVAL;
+
+#endif // _NTDDSTOR_H_
+
 //
 // IoControlCode values for disk devices.
 //
@@ -128,15 +175,31 @@ Revision History:
 #define IOCTL_DISK_IS_WRITABLE          CTL_CODE(IOCTL_DISK_BASE, 0x0009, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DISK_LOGGING              CTL_CODE(IOCTL_DISK_BASE, 0x000a, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DISK_FORMAT_TRACKS_EX     CTL_CODE(IOCTL_DISK_BASE, 0x000b, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
-#define IOCTL_DISK_HISTOGRAM_STRUCTURE	CTL_CODE(IOCTL_DISK_BASE, 0x000c, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DISK_HISTOGRAM_DATA	CTL_CODE(IOCTL_DISK_BASE, 0x000d, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DISK_HISTOGRAM_RESET	CTL_CODE(IOCTL_DISK_BASE, 0x000e, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DISK_REQUEST_STRUCTURE	CTL_CODE(IOCTL_DISK_BASE, 0x000f, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DISK_REQUEST_DATA		CTL_CODE(IOCTL_DISK_BASE, 0x0010, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_HISTOGRAM_STRUCTURE  CTL_CODE(IOCTL_DISK_BASE, 0x000c, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_HISTOGRAM_DATA       CTL_CODE(IOCTL_DISK_BASE, 0x000d, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_HISTOGRAM_RESET      CTL_CODE(IOCTL_DISK_BASE, 0x000e, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_REQUEST_STRUCTURE    CTL_CODE(IOCTL_DISK_BASE, 0x000f, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_REQUEST_DATA         CTL_CODE(IOCTL_DISK_BASE, 0x0010, METHOD_BUFFERED, FILE_ANY_ACCESS)
+
+#if(_WIN32_WINNT >= 0x0400)
+#define IOCTL_DISK_CONTROLLER_NUMBER    CTL_CODE(IOCTL_DISK_BASE, 0x0011, METHOD_BUFFERED, FILE_ANY_ACCESS)
+
+//
+// IOCTL support for SMART drive fault prediction.
+//
+
+#define SMART_GET_VERSION               CTL_CODE(IOCTL_DISK_BASE, 0x0020, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define SMART_SEND_DRIVE_COMMAND        CTL_CODE(IOCTL_DISK_BASE, 0x0021, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define SMART_RCV_DRIVE_DATA            CTL_CODE(IOCTL_DISK_BASE, 0x0022, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#endif /* _WIN32_WINNT >= 0x0400 */
+
 
 //
 // The following device control codes are common for all class drivers.  The
 // functions codes defined here must match all of the other class drivers.
+//
+// Warning: these codes will be replaced in the future by equivalent
+// IOCTL_STORAGE codes
 //
 
 #define IOCTL_DISK_CHECK_VERIFY     CTL_CODE(IOCTL_DISK_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -146,8 +209,6 @@ Revision History:
 #define IOCTL_DISK_RESERVE          CTL_CODE(IOCTL_DISK_BASE, 0x0204, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_DISK_RELEASE          CTL_CODE(IOCTL_DISK_BASE, 0x0205, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_DISK_FIND_NEW_DEVICES CTL_CODE(IOCTL_DISK_BASE, 0x0206, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_DISK_REMOVE_DEVICE    CTL_CODE(IOCTL_DISK_BASE, 0x0207, METHOD_BUFFERED, FILE_READ_ACCESS)
-
 #define IOCTL_DISK_GET_MEDIA_TYPES CTL_CODE(IOCTL_DISK_BASE, 0x0300, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 //
@@ -162,6 +223,10 @@ Revision History:
 #define PARTITION_EXTENDED              0x05      // Extended partition entry
 #define PARTITION_HUGE                  0x06      // Huge partition MS-DOS V4
 #define PARTITION_IFS                   0x07      // IFS Partition
+#define PARTITION_FAT32                 0x0B      // FAT32
+#define PARTITION_FAT32_XINT13          0x0C      // FAT32 using extended int13 services
+#define PARTITION_XINT13                0x0E      // Win95 partition using extended int13 services
+#define PARTITION_XINT13_EXTENDED       0x0F      // Same as type 5 but uses extended int13 services
 #define PARTITION_PREP                  0x41      // PowerPC Reference Platform (PReP) Boot Partition
 #define PARTITION_UNIX                  0x63      // Unix
 
@@ -207,10 +272,42 @@ Revision History:
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT_16)) ||  \
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_IFS)) ||  \
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_HUGE)) ||  \
+     ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT32)) ||  \
+     ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT32_XINT13)) ||  \
+     ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_XINT13)) ||  \
      ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT_12) ||  \
      ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT_16) ||  \
      ((PartitionType & ~PARTITION_NTFT) == PARTITION_IFS)    ||  \
-     ((PartitionType & ~PARTITION_NTFT) == PARTITION_HUGE) )
+     ((PartitionType & ~PARTITION_NTFT) == PARTITION_HUGE)    ||  \
+     ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT32)  || \
+     ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT32_XINT13) || \
+     ((PartitionType & ~PARTITION_NTFT) == PARTITION_XINT13) )
+
+//++
+//
+// BOOLEAN
+// IsContainerPartition(
+//     IN DWORD PartitionType
+//     )
+//
+// Routine Description:
+//
+//     This macro is used to determine to which partition types are actually
+//     containers for other partitions (ie, extended partitions).
+//
+// Arguments:
+//
+//     PartitionType - Supplies the type of the partition being examined.
+//
+// Return Value:
+//
+//     The return value is TRUE if the partition type is a container,
+//     otherwise FALSE is returned.
+//
+//--
+
+#define IsContainerPartition( PartitionType ) \
+    ((PartitionType == PARTITION_EXTENDED) || (PartitionType == PARTITION_XINT13_EXTENDED))
 
 //
 // Define the media types supported by the driver.
@@ -229,7 +326,8 @@ typedef enum _MEDIA_TYPE {
     F5_180_512,             // 5.25", 180KB,  512 bytes/sector
     F5_160_512,             // 5.25", 160KB,  512 bytes/sector
     RemovableMedia,         // Removable media other than floppy
-    FixedMedia              // Fixed hard disk media
+    FixedMedia,             // Fixed hard disk media
+    F3_120M_512             // 3.5", 120M Floppy
 } MEDIA_TYPE, *PMEDIA_TYPE;
 
 //
@@ -344,19 +442,18 @@ typedef struct _REASSIGN_BLOCKS {
     DWORD BlockNumber[1];
 } REASSIGN_BLOCKS, *PREASSIGN_BLOCKS;
 
+#if(_WIN32_WINNT >= 0x0400)
 //
-// IOCTL_DISK_MEDIA_REMOVAL disables the mechanism
-// on a SCSI device that ejects media. This function
-// may or may not be supported on SCSI devices that
-// support removable media.
-//
-// TRUE means prevent media from being removed.
-// FALSE means allow media removal.
+// IOCTL_DISK_CONTROLLER_NUMBER returns the controller and disk
+// number for the handle.  This is used to determine if a disk
+// is attached to the primary or secondary IDE controller.
 //
 
-typedef struct _PREVENT_MEDIA_REMOVAL {
-    BOOLEAN PreventMediaRemoval;
-} PREVENT_MEDIA_REMOVAL, *PPREVENT_MEDIA_REMOVAL;
+typedef struct _DISK_CONTROLLER_NUMBER {
+    DWORD ControllerNumber;
+    DWORD DiskNumber;
+} DISK_CONTROLLER_NUMBER, *PDISK_CONTROLLER_NUMBER;
+#endif /* _WIN32_WINNT >= 0x0400 */
 
 ///////////////////////////////////////////////////////
 //                                                   //
@@ -374,30 +471,30 @@ typedef struct _PREVENT_MEDIA_REMOVAL {
 //                                                   //
 ///////////////////////////////////////////////////////
 
-#define HIST_NO_OF_BUCKETS	24
+#define HIST_NO_OF_BUCKETS  24
 
 typedef struct _HISTOGRAM_BUCKET {
-    DWORD 		Reads;
-    DWORD		Writes;
+    DWORD       Reads;
+    DWORD       Writes;
 } HISTOGRAM_BUCKET, *PHISTOGRAM_BUCKET;
 
-#define HISTOGRAM_BUCKET_SIZE	sizeof(HISTOGRAM_BUCKET)
+#define HISTOGRAM_BUCKET_SIZE   sizeof(HISTOGRAM_BUCKET)
 
 typedef struct _DISK_HISTOGRAM {
-    LARGE_INTEGER	DiskSize;
-    LARGE_INTEGER	Start;
-    LARGE_INTEGER	End;
-    LARGE_INTEGER	Average;
-    LARGE_INTEGER	AverageRead;
-    LARGE_INTEGER	AverageWrite;
-    DWORD		Granularity;
-    DWORD		Size;
-    DWORD		ReadCount;
-    DWORD		WriteCount;
-    PHISTOGRAM_BUCKET	Histogram;
+    LARGE_INTEGER   DiskSize;
+    LARGE_INTEGER   Start;
+    LARGE_INTEGER   End;
+    LARGE_INTEGER   Average;
+    LARGE_INTEGER   AverageRead;
+    LARGE_INTEGER   AverageWrite;
+    DWORD           Granularity;
+    DWORD           Size;
+    DWORD           ReadCount;
+    DWORD           WriteCount;
+    PHISTOGRAM_BUCKET  Histogram;
 } DISK_HISTOGRAM, *PDISK_HISTOGRAM;
 
-#define DISK_HISTOGRAM_SIZE	sizeof(DISK_HISTOGRAM)
+#define DISK_HISTOGRAM_SIZE sizeof(DISK_HISTOGRAM)
 
 ///////////////////////////////////////////////////////
 //                                                   //
@@ -534,6 +631,146 @@ typedef struct _BIN_RESULTS {
     BIN_COUNT BinCounts[1];
 } BIN_RESULTS, *PBIN_RESULTS;
 
+#if(_WIN32_WINNT >= 0x0400)
+//
+// Data structures for SMART drive fault prediction.
+//
+// GETVERSIONINPARAMS contains the data returned from the
+// Get Driver Version function.
+//
+
+#pragma pack(1)
+typedef struct _GETVERSIONINPARAMS {
+        BYTE     bVersion;               // Binary driver version.
+        BYTE     bRevision;              // Binary driver revision.
+        BYTE     bReserved;              // Not used.
+        BYTE     bIDEDeviceMap;          // Bit map of IDE devices.
+        DWORD   fCapabilities;          // Bit mask of driver capabilities.
+        DWORD   dwReserved[4];          // For future use.
+} GETVERSIONINPARAMS, *PGETVERSIONINPARAMS, *LPGETVERSIONINPARAMS;
+#pragma pack()
+
+//
+// Bits returned in the fCapabilities member of GETVERSIONINPARAMS
+//
+
+#define CAP_ATA_ID_CMD          1       // ATA ID command supported
+#define CAP_ATAPI_ID_CMD        2       // ATAPI ID command supported
+#define CAP_SMART_CMD           4       // SMART commannds supported
+
+//
+// IDE registers
+//
+
+#pragma pack(1)
+typedef struct _IDEREGS {
+        BYTE     bFeaturesReg;           // Used for specifying SMART "commands".
+        BYTE     bSectorCountReg;        // IDE sector count register
+        BYTE     bSectorNumberReg;       // IDE sector number register
+        BYTE     bCylLowReg;             // IDE low order cylinder value
+        BYTE     bCylHighReg;            // IDE high order cylinder value
+        BYTE     bDriveHeadReg;          // IDE drive/head register
+        BYTE     bCommandReg;            // Actual IDE command.
+        BYTE     bReserved;                      // reserved for future use.  Must be zero.
+} IDEREGS, *PIDEREGS, *LPIDEREGS;
+#pragma pack()
+
+//
+// Valid values for the bCommandReg member of IDEREGS.
+//
+
+#define ATAPI_ID_CMD    0xA1            // Returns ID sector for ATAPI.
+#define ID_CMD          0xEC            // Returns ID sector for ATA.
+#define SMART_CMD       0xB0            // Performs SMART cmd.
+                                        // Requires valid bFeaturesReg,
+                                        // bCylLowReg, and bCylHighReg
+
+//
+// Cylinder register defines for SMART command
+//
+
+#define SMART_CYL_LOW   0x4F
+#define SMART_CYL_HI    0xC2
+
+
+//
+// SENDCMDINPARAMS contains the input parameters for the
+// Send Command to Drive function.
+//
+
+#pragma pack(1)
+typedef struct _SENDCMDINPARAMS {
+        DWORD   cBufferSize;            // Buffer size in bytes
+        IDEREGS irDriveRegs;            // Structure with drive register values.
+        BYTE     bDriveNumber;           // Physical drive number to send
+                                                                // command to (0,1,2,3).
+        BYTE     bReserved[3];           // Reserved for future expansion.
+        DWORD   dwReserved[4];          // For future use.
+        BYTE     bBuffer[1];                     // Input buffer.
+} SENDCMDINPARAMS, *PSENDCMDINPARAMS, *LPSENDCMDINPARAMS;
+#pragma pack()
+
+//
+// Status returned from driver
+//
+
+#pragma pack(1)
+typedef struct _DRIVERSTATUS {
+        BYTE     bDriverError;           // Error code from driver,
+                                                                // or 0 if no error.
+        BYTE     bIDEError;                      // Contents of IDE Error register.
+                                                                // Only valid when bDriverError
+                                                                // is SMART_IDE_ERROR.
+        BYTE     bReserved[2];           // Reserved for future expansion.
+        DWORD   dwReserved[2];          // Reserved for future expansion.
+} DRIVERSTATUS, *PDRIVERSTATUS, *LPDRIVERSTATUS;
+#pragma pack()
+
+//
+// bDriverError values
+//
+
+#define SMART_NO_ERROR          0       // No error
+#define SMART_IDE_ERROR         1       // Error from IDE controller
+#define SMART_INVALID_FLAG      2       // Invalid command flag
+#define SMART_INVALID_COMMAND   3       // Invalid command byte
+#define SMART_INVALID_BUFFER    4       // Bad buffer (null, invalid addr..)
+#define SMART_INVALID_DRIVE     5       // Drive number not valid
+#define SMART_INVALID_IOCTL     6       // Invalid IOCTL
+#define SMART_ERROR_NO_MEM      7       // Could not lock user's buffer
+#define SMART_INVALID_REGISTER  8       // Some IDE Register not valid
+#define SMART_NOT_SUPPORTED     9       // Invalid cmd flag set
+#define SMART_NO_IDE_DEVICE     10      // Cmd issued to device not present
+                                        // although drive number is valid
+
+#pragma pack(1)
+typedef struct _SENDCMDOUTPARAMS {
+        DWORD                   cBufferSize;            // Size of bBuffer in bytes
+        DRIVERSTATUS            DriverStatus;           // Driver status structure.
+        BYTE                    bBuffer[1];             // Buffer of arbitrary length in which to store the data read from the                                                                                  // drive.
+} SENDCMDOUTPARAMS, *PSENDCMDOUTPARAMS, *LPSENDCMDOUTPARAMS;
+#pragma pack()
+
+
+#define READ_ATTRIBUTE_BUFFER_SIZE  512
+#define IDENTIFY_BUFFER_SIZE        512
+#define READ_THRESHOLD_BUFFER_SIZE  512
+
+//
+// Feature register defines for SMART "sub commands"
+//
+
+#define READ_ATTRIBUTES         0xD0
+#define READ_THRESHOLDS         0xD1
+#define ENABLE_DISABLE_AUTOSAVE 0xD2
+#define SAVE_ATTRIBUTE_VALUES   0xD3
+#define EXECUTE_OFFLINE_DIAGS   0xD4
+#define ENABLE_SMART            0xD8
+#define DISABLE_SMART           0xD9
+#define RETURN_SMART_STATUS     0xDA
+#endif /* _WIN32_WINNT >= 0x0400 */
+
+
 
 #define IOCTL_SERIAL_LSRMST_INSERT      CTL_CODE(FILE_DEVICE_SERIAL_PORT,31,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
@@ -572,5 +809,6 @@ typedef struct _BIN_RESULTS {
 #define FSCTL_READ_COMPRESSION          CTL_CODE(FILE_DEVICE_FILE_SYSTEM,17, METHOD_NEITHER,  FILE_READ_DATA)
 #define FSCTL_WRITE_COMPRESSION         CTL_CODE(FILE_DEVICE_FILE_SYSTEM,18, METHOD_NEITHER,  FILE_WRITE_DATA)
 
+#pragma option -b.
 #endif // _WINIOCTL_
 

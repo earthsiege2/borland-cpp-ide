@@ -22,6 +22,7 @@
 
 #ifndef _INC_PBT
 #define _INC_PBT
+#pragma option -b
 
 #ifndef WM_POWERBROADCAST
 #define WM_POWERBROADCAST               0x218
@@ -47,4 +48,5 @@
 
 #define PBT_APMOEMEVENT                 0x000B
 
+#pragma option -b.
 #endif // _INC_PBT

@@ -1,3 +1,4 @@
+#pragma option -b
 /****************************************************************************/
 /*                                                                          */
 /*        DISPDIB.H - Include file for DisplayDib() function.               */
@@ -274,3 +275,4 @@ static __inline HWND DisplayDibWindowCreateEx(HWND hwndParent, HINSTANCE hInstan
 #define DisplayDibWindowEndEx(hwnd)                     SendMessage(hwnd, DDM_END, 0, 0)
 #define DisplayDibWindowClose(hwnd)                     SendMessage(hwnd, DDM_CLOSE, 0, 0)
 #endif
+#pragma option -b.

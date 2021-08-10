@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1991-1995 Microsoft Corporation
+Copyright (c) 1991-1996 Microsoft Corporation
 
 Module Name:
 
@@ -14,6 +14,7 @@ Abstract:
 
 #ifndef __RPCDCE_H__
 #define __RPCDCE_H__
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -90,8 +91,11 @@ typedef struct _RPC_IF_ID
 #define RPC_C_LISTEN_MAX_CALLS_DEFAULT 1234
 #define RPC_C_PROTSEQ_MAX_REQS_DEFAULT 10
 
-#ifdef RPC_UNICODE_SUPPORTED
+#define RPC_C_BIND_TO_ALL_NICS 1
+#define RPC_C_USE_INTERNET_PORT 1
+#define RPC_C_USE_INTRANET_PORT 2
 
+#ifdef RPC_UNICODE_SUPPORTED
 typedef struct _RPC_PROTSEQ_VECTORA
 {
     unsigned int Count;
@@ -119,6 +123,11 @@ typedef struct _RPC_PROTSEQ_VECTOR
 } RPC_PROTSEQ_VECTOR;
 
 #endif /* RPC_UNICODE_SUPPORTED */
+typedef struct _RPC_POLICY {
+    unsigned int Length ;
+    unsigned long EndpointFlags ;
+    unsigned long NICFlags ;
+    } RPC_POLICY,  __RPC_FAR *PRPC_POLICY ;
 
 typedef void __RPC_USER
 RPC_OBJECT_INQ_FN (
@@ -126,6 +135,12 @@ RPC_OBJECT_INQ_FN (
     OUT UUID __RPC_FAR * TypeUuid,
     OUT RPC_STATUS __RPC_FAR * Status
     );
+
+typedef RPC_STATUS
+RPC_IF_CALLBACK_FN (
+    IN RPC_IF_HANDLE  InterfaceUuid,
+    IN void *Context
+    ) ;
 
 #define RPC_MGR_EPV void
 
@@ -190,9 +205,6 @@ RpcBindingFromStringBinding (
     );
 
 #endif /* RPC_UNICODE_SUPPORTED */
-
-/* RpcBindingInqAuthClient */
-/* RpcBindingInqAuthInfo */
 
 /* client/server */
 RPC_STATUS RPC_ENTRY
@@ -546,6 +558,17 @@ RpcServerRegisterIf (
 
 /* server */
 RPC_STATUS RPC_ENTRY
+RpcServerRegisterIfEx (
+    IN RPC_IF_HANDLE IfSpec,
+    IN UUID __RPC_FAR * MgrTypeUuid,
+    IN RPC_MGR_EPV __RPC_FAR * MgrEpv,
+    IN unsigned int Flags,
+    IN unsigned int MaxCalls,
+    IN RPC_IF_CALLBACK_FN __RPC_FAR *IfCallback
+    );
+
+/* server */
+RPC_STATUS RPC_ENTRY
 RpcServerUnregisterIf (
     IN RPC_IF_HANDLE IfSpec,
     IN UUID __RPC_FAR * MgrTypeUuid, OPTIONAL
@@ -561,11 +584,29 @@ RpcServerUseAllProtseqs (
 
 /* server */
 RPC_STATUS RPC_ENTRY
+RpcServerUseAllProtseqsEx (
+    IN unsigned int MaxCalls,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
+    );
+
+/* server */
+RPC_STATUS RPC_ENTRY
 RpcServerUseAllProtseqsIf (
     IN unsigned int MaxCalls,
     IN RPC_IF_HANDLE IfSpec,
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
     );
+
+/* server */
+RPC_STATUS RPC_ENTRY
+RpcServerUseAllProtseqsIfEx (
+    IN unsigned int MaxCalls,
+    IN RPC_IF_HANDLE IfSpec,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
+    );
+
 
 /* server */
 
@@ -579,16 +620,34 @@ RpcServerUseProtseqA (
     );
 
 RPC_STATUS RPC_ENTRY
+RpcServerUseProtseqExA (
+    IN unsigned char __RPC_FAR * Protseq,
+    IN unsigned int MaxCalls,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
+    );
+
+RPC_STATUS RPC_ENTRY
 RpcServerUseProtseqW (
     IN unsigned short __RPC_FAR * Protseq,
     IN unsigned int MaxCalls,
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
     );
 
+RPC_STATUS RPC_ENTRY
+RpcServerUseProtseqExW (
+    IN unsigned short __RPC_FAR * Protseq,
+    IN unsigned int MaxCalls,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
+    );
+
 #ifdef UNICODE
 #define RpcServerUseProtseq RpcServerUseProtseqW
+#define RpcServerUseProtseqEx RpcServerUseProtseqExW
 #else /* UNICODE */
 #define RpcServerUseProtseq RpcServerUseProtseqA
+#define RpcServerUseProtseqEx RpcServerUseProtseqExA
 #endif /* UNICODE */
 
 #else /* RPC_UNICODE_SUPPORTED */
@@ -598,6 +657,14 @@ RpcServerUseProtseq (
     IN unsigned char __RPC_FAR * Protseq,
     IN unsigned int MaxCalls,
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcServerUseProtseqEx (
+    IN unsigned char __RPC_FAR * Protseq,
+    IN unsigned int MaxCalls,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
     );
 
 #endif /* RPC_UNICODE_SUPPORTED */
@@ -615,6 +682,15 @@ RpcServerUseProtseqEpA (
     );
 
 RPC_STATUS RPC_ENTRY
+RpcServerUseProtseqEpExA (
+    IN unsigned char __RPC_FAR * Protseq,
+    IN unsigned int MaxCalls,
+    IN unsigned char __RPC_FAR * Endpoint,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
+    );
+
+RPC_STATUS RPC_ENTRY
 RpcServerUseProtseqEpW (
     IN unsigned short __RPC_FAR * Protseq,
     IN unsigned int MaxCalls,
@@ -622,10 +698,21 @@ RpcServerUseProtseqEpW (
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
     );
 
+RPC_STATUS RPC_ENTRY
+RpcServerUseProtseqEpExW (
+    IN unsigned short __RPC_FAR * Protseq,
+    IN unsigned int MaxCalls,
+    IN unsigned short __RPC_FAR * Endpoint,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
+    );
+
 #ifdef UNICODE
 #define RpcServerUseProtseqEp RpcServerUseProtseqEpW
+#define RpcServerUseProtseqEpEx RpcServerUseProtseqEpExW
 #else /* UNICODE */
 #define RpcServerUseProtseqEp RpcServerUseProtseqEpA
+#define RpcServerUseProtseqEpEx RpcServerUseProtseqEpExA
 #endif /* UNICODE */
 
 #else /* RPC_UNICODE_SUPPORTED */
@@ -636,6 +723,15 @@ RpcServerUseProtseqEp (
     IN unsigned int MaxCalls,
     IN unsigned char __RPC_FAR * Endpoint,
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcServerUseProtseqEpEx (
+    IN unsigned char __RPC_FAR * Protseq,
+    IN unsigned int MaxCalls,
+    IN unsigned char __RPC_FAR * Endpoint,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
     );
 
 #endif /* RPC_UNICODE_SUPPORTED */
@@ -653,6 +749,15 @@ RpcServerUseProtseqIfA (
     );
 
 RPC_STATUS RPC_ENTRY
+RpcServerUseProtseqIfExA (
+    IN unsigned char __RPC_FAR * Protseq,
+    IN unsigned int MaxCalls,
+    IN RPC_IF_HANDLE IfSpec,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
+    );
+
+RPC_STATUS RPC_ENTRY
 RpcServerUseProtseqIfW (
     IN unsigned short __RPC_FAR * Protseq,
     IN unsigned int MaxCalls,
@@ -660,10 +765,21 @@ RpcServerUseProtseqIfW (
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
     );
 
+RPC_STATUS RPC_ENTRY
+RpcServerUseProtseqIfExW (
+    IN unsigned short __RPC_FAR * Protseq,
+    IN unsigned int MaxCalls,
+    IN RPC_IF_HANDLE IfSpec,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
+    );
+
 #ifdef UNICODE
 #define RpcServerUseProtseqIf RpcServerUseProtseqIfW
+#define RpcServerUseProtseqIfEx RpcServerUseProtseqIfExW
 #else /* UNICODE */
 #define RpcServerUseProtseqIf RpcServerUseProtseqIfA
+#define RpcServerUseProtseqIfEx RpcServerUseProtseqIfExA
 #endif /* UNICODE */
 
 #else /* RPC_UNICODE_SUPPORTED */
@@ -674,6 +790,15 @@ RpcServerUseProtseqIf (
     IN unsigned int MaxCalls,
     IN RPC_IF_HANDLE IfSpec,
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcServerUseProtseqIfEx (
+    IN unsigned char __RPC_FAR * Protseq,
+    IN unsigned int MaxCalls,
+    IN RPC_IF_HANDLE IfSpec,
+    IN void __RPC_FAR * SecurityDescriptor,
+    IN PRPC_POLICY Policy
     );
 
 #endif /* RPC_UNICODE_SUPPORTED */
@@ -713,6 +838,12 @@ RpcMgmtWaitServerListen (
 RPC_STATUS RPC_ENTRY
 RpcMgmtSetServerStackSize (
     IN unsigned long ThreadStackSize
+    );
+
+/* server */
+void RPC_ENTRY
+RpcSsDontSerializeContext (
+    void
     );
 
 /* client */
@@ -848,6 +979,16 @@ typedef void __RPC_FAR * RPC_AUTHZ_HANDLE;
 #define RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5
 #define RPC_C_AUTHN_LEVEL_PKT_PRIVACY 6
 
+#define RPC_C_IMP_LEVEL_ANONYMOUS    1
+#define RPC_C_IMP_LEVEL_IDENTIFY     2
+#define RPC_C_IMP_LEVEL_IMPERSONATE  3
+#define RPC_C_IMP_LEVEL_DELEGATE     4
+
+#define RPC_C_QOS_IDENTITY_STATIC    0
+#define RPC_C_QOS_IDENTITY_DYNAMIC   1
+
+#define RPC_C_QOS_CAPABILITIES_DEFAULT     0
+#define RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH 1
 
 #define RPC_C_PROTECT_LEVEL_DEFAULT       (RPC_C_AUTHN_LEVEL_DEFAULT)
 #define RPC_C_PROTECT_LEVEL_NONE          (RPC_C_AUTHN_LEVEL_NONE)
@@ -863,6 +1004,15 @@ typedef void __RPC_FAR * RPC_AUTHZ_HANDLE;
 #define RPC_C_AUTHN_DEC_PUBLIC 4
 #define RPC_C_AUTHN_WINNT       10
 #define RPC_C_AUTHN_DEFAULT 0xFFFFFFFFL
+
+#define RPC_C_SECURITY_QOS_VERSION  1L
+
+typedef struct _RPC_SECURITY_QOS {
+  unsigned long Version;
+  unsigned long Capabilities;
+  unsigned long IdentityTracking;
+  unsigned long ImpersonationType;
+} RPC_SECURITY_QOS, *PRPC_SECURITY_QOS;
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
 typedef struct _SEC_WINNT_AUTH_IDENTITY
@@ -896,6 +1046,7 @@ typedef struct _SEC_WINNT_AUTH_IDENTITY_A {
   unsigned long PasswordLength;
   unsigned long Flags;
 } SEC_WINNT_AUTH_IDENTITY_A, *PSEC_WINNT_AUTH_IDENTITY_A;
+
 
 #ifdef UNICODE
 #define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_W
@@ -965,6 +1116,17 @@ RpcBindingSetAuthInfoA (
     );
 
 RPC_STATUS RPC_ENTRY
+RpcBindingSetAuthInfoExA (
+    IN RPC_BINDING_HANDLE Binding,
+    IN unsigned char __RPC_FAR * ServerPrincName,
+    IN unsigned long AuthnLevel,
+    IN unsigned long AuthnSvc,
+    IN RPC_AUTH_IDENTITY_HANDLE AuthIdentity, OPTIONAL
+    IN unsigned long AuthzSvc,
+    IN RPC_SECURITY_QOS *SecurityQos OPTIONAL
+    );
+
+RPC_STATUS RPC_ENTRY
 RpcBindingSetAuthInfoW (
     IN RPC_BINDING_HANDLE Binding,
     IN unsigned short __RPC_FAR * ServerPrincName,
@@ -972,6 +1134,41 @@ RpcBindingSetAuthInfoW (
     IN unsigned long AuthnSvc,
     IN RPC_AUTH_IDENTITY_HANDLE AuthIdentity, OPTIONAL
     IN unsigned long AuthzSvc
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcBindingSetAuthInfoExW (
+    IN RPC_BINDING_HANDLE Binding,
+    IN unsigned short __RPC_FAR * ServerPrincName,
+    IN unsigned long AuthnLevel,
+    IN unsigned long AuthnSvc,
+    IN RPC_AUTH_IDENTITY_HANDLE AuthIdentity, OPTIONAL
+    IN unsigned long AuthzSvc, OPTIONAL
+    IN RPC_SECURITY_QOS *SecurityQOS
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcBindingInqAuthInfoExA (
+    IN RPC_BINDING_HANDLE Binding,
+    OUT unsigned char __RPC_FAR * __RPC_FAR * ServerPrincName, OPTIONAL
+    OUT unsigned long __RPC_FAR * AuthnLevel, OPTIONAL
+    OUT unsigned long __RPC_FAR * AuthnSvc, OPTIONAL
+    OUT RPC_AUTH_IDENTITY_HANDLE __RPC_FAR * AuthIdentity, OPTIONAL
+    OUT unsigned long __RPC_FAR * AuthzSvc, OPTIONAL
+    IN  unsigned long RpcQosVersion,
+    OUT RPC_SECURITY_QOS *SecurityQOS
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcBindingInqAuthInfoExW (
+    IN RPC_BINDING_HANDLE Binding,
+    OUT unsigned short __RPC_FAR * __RPC_FAR * ServerPrincName, OPTIONAL
+    OUT unsigned long __RPC_FAR * AuthnLevel, OPTIONAL
+    OUT unsigned long __RPC_FAR * AuthnSvc, OPTIONAL
+    OUT RPC_AUTH_IDENTITY_HANDLE __RPC_FAR * AuthIdentity, OPTIONAL
+    OUT unsigned long __RPC_FAR * AuthzSvc OPTIONAL,
+    IN  unsigned long RpcQosVersion,
+    OUT RPC_SECURITY_QOS *SecurityQOS
     );
 
 typedef void
@@ -1004,11 +1201,15 @@ RpcServerRegisterAuthInfoW (
 #define RpcBindingInqAuthInfo RpcBindingInqAuthInfoW
 #define RpcBindingSetAuthInfo RpcBindingSetAuthInfoW
 #define RpcServerRegisterAuthInfo RpcServerRegisterAuthInfoW
+#define RpcBindingInqAuthInfoEx RpcBindingInqAuthInfoExW
+#define RpcBindingSetAuthInfoEx RpcBindingSetAuthInfoExW
 #else /* UNICODE */
 #define RpcBindingInqAuthClient RpcBindingInqAuthClientA
 #define RpcBindingInqAuthInfo RpcBindingInqAuthInfoA
 #define RpcBindingSetAuthInfo RpcBindingSetAuthInfoA
 #define RpcServerRegisterAuthInfo RpcServerRegisterAuthInfoA
+#define RpcBindingInqAuthInfoEx RpcBindingInqAuthInfoExA
+#define RpcBindingSetAuthInfoEx RpcBindingSetAuthInfoExA
 #endif /* UNICODE */
 
 #else /* RPC_UNICODE_SUPPORTED */
@@ -1376,10 +1577,46 @@ RpcMgmtSetAuthorizationFn (
     IN RPC_MGMT_AUTHORIZATION_FN AuthorizationFn
     );
 
+
+#define RPC_C_PARM_MAX_PACKET_LENGTH    1
+#define RPC_C_PARM_BUFFER_LENGTH        2
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtInqParameter (
+    IN unsigned Parameter,
+    IN unsigned long __RPC_FAR * Value
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtSetParameter (
+    IN unsigned Parameter,
+    IN unsigned long Value
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtBindingInqParameter (
+    IN RPC_BINDING_HANDLE Handle,
+    IN unsigned Parameter,
+    IN unsigned long __RPC_FAR * Value
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtBindingSetParameter (
+    IN RPC_BINDING_HANDLE Handle,
+    IN unsigned Parameter,
+    IN unsigned long Value
+    );
+
+#define RPC_IF_AUTOLISTEN 0x0001
+#define RPC_IF_OLE              0x0002
+
+#pragma option -b.
 #include <rpcdcep.h>
+#pragma option -b
 
 #ifdef __cplusplus
 }
 #endif
 
+#pragma option -b.
 #endif /* __RPCDCE_H__ */

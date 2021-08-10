@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0003    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     lmconfig.h
@@ -10,10 +12,6 @@ Abstract:
     for the following groups of NT API functions:
         NetConfig
 
-Author:
-
-    Dan Lafferty (danl)  29-Mar-1991
-
 Environment:
 
     User Mode - Win32
@@ -23,24 +21,13 @@ Notes:
     You must include NETCONS.H before this file, since this file depends
     on values defined in NETCONS.H.
 
-Revision History:
-
-    28-Mar-1991  Danl
-        Ported from LM2.0 and the LMNETAPI spec.
-    20-Nov-1991  JohnRo
-        Implemented remote NetConfig APIs.  Changed LPSTR to LPTSTR.
-        NetConfigGet and NetConfigGetAll shouldn't return total available.
-        Don't use ULONG.
-    08-Apr-1992 JohnRo
-        Fixed UNICODE handling.
-
 --*/
 
-/* $Copyright: 1994$ */
+/* $Copyright: 1997$ */
 
 #ifndef _LMCONFIG_
 #define _LMCONFIG_
-#define __LMCONFIG_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,9 +41,9 @@ extern "C" {
 
 NET_API_STATUS NET_API_FUNCTION
 NetConfigGet (
-    IN  LPTSTR  server OPTIONAL,
-    IN  LPTSTR  component,
-    IN  LPTSTR  parameter,
+    IN  LPCWSTR  server OPTIONAL,
+    IN  LPCWSTR  component,
+    IN  LPCWSTR  parameter,
 #ifdef REVISED_CONFIG_APIS
     OUT LPBYTE  *bufptr
 #else
@@ -67,8 +54,8 @@ NetConfigGet (
 
 NET_API_STATUS NET_API_FUNCTION
 NetConfigGetAll (
-    IN  LPTSTR  server OPTIONAL,
-    IN  LPTSTR  component,
+    IN  LPCWSTR  server OPTIONAL,
+    IN  LPCWSTR  component,
 #ifdef REVISED_CONFIG_APIS
     OUT LPBYTE  *bufptr
 #else
@@ -80,9 +67,9 @@ NetConfigGetAll (
 
 NET_API_STATUS NET_API_FUNCTION
 NetConfigSet (
-    IN  LPTSTR  server OPTIONAL,
-    IN  LPTSTR  reserved1 OPTIONAL,
-    IN  LPTSTR  component,
+    IN  LPCWSTR  server OPTIONAL,
+    IN  LPCWSTR  reserved1 OPTIONAL,
+    IN  LPCWSTR  component,
     IN  DWORD   level,
     IN  DWORD   reserved2,
     IN  LPBYTE  buf,
@@ -94,8 +81,8 @@ NetConfigSet (
 //
 
 typedef struct _CONFIG_INFO_0 {
-     LPTSTR         cfgi0_key;
-     LPTSTR         cfgi0_data;
+     LPWSTR         cfgi0_key;
+     LPWSTR         cfgi0_data;
 } CONFIG_INFO_0, *PCONFIG_INFO_0, *LPCONFIG_INFO_0;
 
 
@@ -103,4 +90,5 @@ typedef struct _CONFIG_INFO_0 {
 }
 #endif
 
+#pragma option -b.
 #endif  // _LMCONFIG_

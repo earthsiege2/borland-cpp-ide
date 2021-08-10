@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.6  $
 //
 // TDate class implementation
 //----------------------------------------------------------------------------
@@ -14,6 +14,7 @@
 #include <time.h>
 #include <string.h>
 #include <ctype.h>
+#include <tchar.h>
 
 /****************************************************************
  *                                                              *
@@ -21,25 +22,25 @@
  *                                                              *
  ****************************************************************/
 
-static const unsigned char DaysInMonth[12] = 
+static const _TUCHAR DaysInMonth[12] =
     { 31,28,31,30,31,30,31,31,30,31,30,31 };
 static const DayTy FirstDayOfEachMonth[12] =
     { 1,32,60,91,121,152,182,213,244,274,305,335 };
-static const char *MonthNames[12] = 
+static const _TCHAR *MonthNames[12] =
     { "January","February","March","April","May","June",
       "July","August","September","October","November","December" };
-static const char *UCMonthNames[12] =
+static const _TCHAR *UCMonthNames[12] =
     { "JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE",
       "JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER" };
-static const char *WeekDayNames[7] =
+static const _TCHAR *WeekDayNames[7] =
     { "Monday","Tuesday","Wednesday",
       "Thursday","Friday","Saturday","Sunday" };
-static const char *UCWeekDayNames[7] =
+static const _TCHAR *UCWeekDayNames[7] =
     { "MONDAY","TUESDAY","WEDNESDAY",
       "THURSDAY","FRIDAY","SATURDAY","SUNDAY" };
 
 static int _BIDSNEARFUNC
-FindMatch( const char *str, const char**candidates, int icand );
+FindMatch( const _TCHAR *str, const _TCHAR**candidates, int icand );
 
 /***************************************************************************/
 
@@ -74,7 +75,7 @@ TDate::TDate(DayTy day, YearTy year)
 //
 //   Construct a TDate for the given day, monthName, and year.
 //
-TDate::TDate( DayTy day, const char _BIDSFAR *monthName, YearTy year )
+TDate::TDate( DayTy day, const _TCHAR _BIDSFAR *monthName, YearTy year )
 {
     Julnum = Jday( IndexOfMonth(monthName), day, year );
 }
@@ -98,7 +99,7 @@ TDate::TDate( DayTy day, MonthTy month, YearTy year )
 // Monday == 1, ... , Sunday == 7
 // Return 0 for weekday number out of range
 //
-const char _BIDSFAR *TDate::DayName( DayTy weekDayNumber )
+const _TCHAR _BIDSFAR *TDate::DayName( DayTy weekDayNumber )
 {
     return AssertWeekDayNumber(weekDayNumber) ? WeekDayNames[weekDayNumber-1] : 0;
 }
@@ -107,7 +108,7 @@ const char _BIDSFAR *TDate::DayName( DayTy weekDayNumber )
 // Return the number, 1-7, of the day of the week named nameOfDay.
 // Return 0 if name doesn't match.
 //
-DayTy TDate::DayOfWeek( const char _BIDSFAR *nameOfDay )
+DayTy TDate::DayOfWeek( const _TCHAR _BIDSFAR *nameOfDay )
 {
     return (DayTy)(FindMatch( nameOfDay, UCWeekDayNames, 7 )+1);
 }
@@ -117,7 +118,7 @@ DayTy TDate::DayOfWeek( const char _BIDSFAR *nameOfDay )
 //
 int TDate::DayWithinMonth( MonthTy month, DayTy day, YearTy year )
 {
-    if( day <= 0 || !AssertIndexOfMonth(month) ) 
+    if( day <= 0 || !AssertIndexOfMonth(month) )
         return 0;
     unsigned d = DaysInMonth[month-1];
     if( LeapYear(year) && month == 2 )
@@ -137,7 +138,7 @@ DayTy TDate::DaysInYear( YearTy year )
 // Returns the number, 1-12, of the month named nameOfMonth.
 // Return 0 for no match.
 //
-MonthTy TDate::IndexOfMonth( const char _BIDSFAR *nameOfMonth )
+MonthTy TDate::IndexOfMonth( const _TCHAR _BIDSFAR *nameOfMonth )
 {
     return (MonthTy)(FindMatch( nameOfMonth, UCMonthNames, 12 )+1);
 }
@@ -154,21 +155,21 @@ JulTy TDate::Jday( MonthTy m, DayTy d, YearTy y )
     unsigned long c, ya;
     if( y <= 99 )
         y += 1900;
-    if( !DayWithinMonth(m, d, y) ) 
+    if( !DayWithinMonth(m, d, y) )
         return (JulTy)0;
 
-    if( m > 2 )          
+    if( m > 2 )
         m -= 3;
-    else 
+    else
         {
         m += 9;
         y--;
-        } 
+        }
 
     c = y / 100;
     ya = y - 100*c;
     return ((146097L*c)>>2) + ((1461*ya)>>2) + (153*m + 2)/5 + d + 1721119L;
-} 
+}
 
 //
 // Algorithm from K & R, "The C Programming Language", 1st ed.
@@ -182,7 +183,7 @@ int TDate::LeapYear( YearTy year )
 // Returns a string name for the month number.
 // Return 0 if invalid month number.
 //
-const char _BIDSFAR *TDate::MonthName( MonthTy monthNumber )
+const _TCHAR _BIDSFAR *TDate::MonthName( MonthTy monthNumber )
 {
     return AssertIndexOfMonth(monthNumber) ? MonthNames[monthNumber-1] : 0;
 }
@@ -190,13 +191,13 @@ const char _BIDSFAR *TDate::MonthName( MonthTy monthNumber )
 //
 // Return index of case-insensitive match; -1 if no match.
 //
-static int _BIDSNEARFUNC FindMatch( const char *str, const char**candidates, int icand )
+static int _BIDSNEARFUNC FindMatch( const _TCHAR *str, const _TCHAR**candidates, int icand )
 {
-    unsigned len = strlen(str);
+    unsigned len = _tcslen(str);
 
     while(icand--)
         {
-        if( strnicmp(str, candidates[icand], len) == 0)
+        if( _tcsnicmp(str, candidates[icand], len) == 0)
             break;
         }
     return icand;
@@ -262,7 +263,7 @@ unsigned TDate::Hash() const
 // Convert a Julian day number to its corresponding Gregorian calendar
 // date.  Algorithm 199 from Communications of the ACM, Volume 6, No. 8,
 // (Aug. 1963), p. 444.  Gregorian calendar started on Sep. 14, 1752.
-// This function not valid before that.  
+// This function not valid before that.
 //
 void _BIDSNEARFUNC TDate::Mdy( MonthTy _BIDSFAR & m, DayTy _BIDSFAR & D, YearTy _BIDSFAR & y ) const
 {
@@ -281,12 +282,12 @@ void _BIDSNEARFUNC TDate::Mdy( MonthTy _BIDSFAR & m, DayTy _BIDSFAR & D, YearTy 
 
     if( m < 10 )
         m += 3;
-    else 
+    else
         {
         m -= 9;
         y++;
-        } 
-} 
+        }
+}
 
 //
 //
@@ -299,7 +300,7 @@ TDate TDate::Max( const TDate _BIDSFAR & dt ) const
 //
 //
 //
-TDate TDate::Min( const TDate _BIDSFAR & dt ) const 
+TDate TDate::Min( const TDate _BIDSFAR & dt ) const
 {
     return dt.Julnum < Julnum ? dt : *this;
 }
@@ -317,7 +318,7 @@ MonthTy TDate::Month() const
 //
 //
 //
-TDate TDate::Previous( const char _BIDSFAR *dayName) const
+TDate TDate::Previous( const _TCHAR _BIDSFAR *dayName) const
 {
     return Previous( DayOfWeek(dayName) );
 }

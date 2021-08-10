@@ -4,12 +4,13 @@
 *                                                                             *
 *               Version Win32 / Windows NT                                    *
 *                                                                             *
-*               Copyright (c) 1992-1995, Microsoft Corp.  All rights reserved.*
+*               Copyright (c) 1992-1996, Microsoft Corp.  All rights reserved.*
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _INC_WINDOWSX
 #define _INC_WINDOWSX
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -907,7 +908,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define HANDLE_WM_CHARTOITEM(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(int)(fn)((hwnd), (UINT)LOWORD(wParam), (HWND)(lParam), (int)(short)HIWORD(wParam))
 #define FORWARD_WM_CHARTOITEM(hwnd, ch, hwndListBox, iCaret, fn) \
-    (int)(DWORD)(fn)((hwnd), WM_CHARTOITEM, MAKEWPARAM((UINT)(iCaret), (UINT)(ch)), (LPARAM)(hwndListBox))
+    (int)(DWORD)(fn)((hwnd), WM_CHARTOITEM, MAKEWPARAM((UINT)(ch), (UINT)(iCaret)), (LPARAM)(hwndListBox))
 
 /* void Cls_OnQueueSync(HWND hwnd) */
 #define HANDLE_WM_QUEUESYNC(hwnd, wParam, lParam, fn) \
@@ -921,6 +922,25 @@ extern "C" {            /* Assume C declarations for C++ */
 #define FORWARD_WM_COMMNOTIFY(hwnd, cid, flags, fn) \
     (void)(fn)((hwnd), WM_COMMNOTIFY, (WPARAM)(cid), MAKELPARAM((flags), 0))
 #endif
+
+/* void Cls_OnDisplayChange(HWND hwnd, UINT bitsPerPixel, UINT cxScreen, UINT cyScreen) */
+#define HANDLE_WM_DISPLAYCHANGE(hwnd, wParam, lParam, fn) \
+    ((fn)((hwnd), (UINT)(wParam), (UINT)LOWORD(lParam), (UINT)HIWORD(wParam)), 0L)
+#define FORWARD_WM_DISPLAYCHANGE(hwnd, bitsPerPixel, cxScreen, cyScreen, fn) \
+    (void)(fn)((hwnd), WM_DISPLAYCHANGE, (WPARAM)(UINT)(bitsPerPixel), (LPARAM)MAKELPARAM((UINT)(cxScreen), (UINT)(cyScreen)))
+
+/* BOOL Cls_OnDeviceChange(HWND hwnd, UINT uEvent, DWORD dwEventData) */
+#define HANDLE_WM_DEVICECHANGE(hwnd, wParam, lParam, fn) \
+    (LRESULT)(DWORD)(BOOL)(fn)((hwnd), (UINT)(wParam), (DWORD)(wParam))
+#define FORWARD_WM_DEVICECHANGE(hwnd, uEvent, dwEventData, fn) \
+    (BOOL)(DWORD)(fn)((hwnd), WM_DEVICECHANGE, (WPARAM)(UINT)(uEvent), (LPARAM)(DWORD)(dwEventData))
+
+/* void Cls_OnContextMenu(HWND hwnd, HWND hwndContext, UINT xPos, UINT yPos) */
+#define HANDLE_WM_CONTEXTMENU(hwnd, wParam, lParam, fn) \
+    ((fn)((hwnd), (HWND)(wParam), (UINT)LOWORD(lParam), (UINT)HIWORD(lParam)), 0L)
+#define FORWARD_WM_CONTEXTMENU(hwnd, hwndContext, xPos, yPos, fn) \
+    (void)(fn)((hwnd), WM_CONTEXTMENU, (WPARAM)(HWND)(hwndContext), MAKELPARAM((UINT)(xPos), (UINT)(yPos)))
+
 /****** Static control message APIs ******************************************/
 
 #define Static_Enable(hwndCtl, fEnable)         EnableWindow((hwndCtl), (fEnable))
@@ -1140,6 +1160,9 @@ extern "C" {            /* Assume C declarations for C++ */
 #define GET_WPARAM(wp, lp)                      (wp)
 #define GET_LPARAM(wp, lp)                      (lp)
 
+#define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))
+#define GET_Y_LPARAM(lp)                        ((int)(short)HIWORD(lp))
+
 #define GET_WM_ACTIVATE_STATE(wp, lp)           LOWORD(wp)
 #define GET_WM_ACTIVATE_FMINIMIZED(wp, lp)      (BOOL)HIWORD(wp)
 #define GET_WM_ACTIVATE_HWND(wp, lp)            (HWND)(lp)
@@ -1282,4 +1305,5 @@ extern "C" {            /* Assume C declarations for C++ */
 }                       /* End of extern "C" { */
 #endif       /* __cplusplus */
 
+#pragma option -b.
 #endif  /* !_INC_WINDOWSX */

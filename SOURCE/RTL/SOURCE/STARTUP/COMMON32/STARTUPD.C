@@ -3,15 +3,17 @@
  *
  * function(s)
  *      _startupd       - initialization and termination for DLLs
+ *      _wstartupd      - wide-character initialization and termination for DLLs
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.8  $        */
 
 #ifdef __OS2__
 #include <os2bc.h>
@@ -25,6 +27,9 @@
 #include <stdio.h>
 #include <_stdio.h>
 #include <_thread.h>
+#include <tchar.h>
+#include <_tchar.h>
+#include <winbase.h>
 
 #if defined(__MT__)
 void _cleanup_handle_locks(void);
@@ -34,31 +39,31 @@ void _cleanup_stream_locks(void);
 
 /*---------------------------------------------------------------------*
 
-Name            _startupd - initialization and termination for DLLs
+Name            _startupd, _wstartupd - initialization and termination for DLLs
 
 Usage           ULONG cdecl _startupd(MODULE_DATA *mod_table,
-                        long modhandle, long hPDLL);
+			long modhandle, long hPDLL);
 
 Description     This function is called at startup time from C02.ASM or
-                C0NT.ASM when a DLL is initialized or terminated.  It is
-                passed a pointer to a MODULE_DATA structure, which contains
-                addresses and flags unique to this DLL.  On OS/2,
-                some additional parameters are passed to this function
-                by the OS itself.
+		C0NT.ASM when a DLL is initialized or terminated.  It is
+		passed a pointer to a MODULE_DATA structure, which contains
+		addresses and flags unique to this DLL.  On OS/2,
+		some additional parameters are passed to this function
+		by the OS itself.
 
-                The MODULE_DATA structure contains a pointer to the _INIT_
-                and _EXIT_ segments, which contain lists of the init
-                and exit procedures, respectively, for this DLL.  If this
-                is a multi-DLL application, as indicated by the _multidll
-                external variable having a non-zero value, these addresses
-                are saved in a shared memory segment, so that the EXE
-                that invoked this DLL can call the init and exit
-                procedures itself.  This is done because the OS doesn't
-                guarantee a particular DLL initialization order when
-                loading multiple DLLs.
+		The MODULE_DATA structure contains a pointer to the _INIT_
+		and _EXIT_ segments, which contain lists of the init
+		and exit procedures, respectively, for this DLL.  If this
+		is a multi-DLL application, as indicated by the _multidll
+		external variable having a non-zero value, these addresses
+		are saved in a shared memory segment, so that the EXE
+		that invoked this DLL can call the init and exit
+		procedures itself.  This is done because the OS doesn't
+		guarantee a particular DLL initialization order when
+		loading multiple DLLs.
 
-                If this is not a multi-DLL application, the init or exit
-                procedures are called directly by this function.
+		If this is not a multi-DLL application, the init or exit
+		procedures are called directly by this function.
 
 Return value    1 (success)
 
@@ -80,13 +85,13 @@ static HMODULE _hCGModHandle;
 
 #endif
 
-extern char * _EXPDATA _osenv;             /* pointer to raw OS environment data */
+extern _TCHAR * _EXPDATA _tosenv;             /* pointer to raw OS environment data */
 
 #if defined(__WIN32__) && !defined(_BUILDRTLDLL)
 static int usecount;
 #endif
 
-ULONG cdecl _EXPFUNC _startupd
+ULONG cdecl _EXPFUNC _tstartupd
 (
 /* This parameter is passed by C02.ASM.
  */
@@ -128,56 +133,56 @@ ULONG cdecl _EXPFUNC _startupd
 #endif
     {
 #if defined(__WIN32__) && !defined(_BUILDRTLDLL)
-        if (!usecount++)    // if not previously initialized
-            {               // Note: always true for nonshared data
+	if (!usecount++)    // if not previously initialized
+	    {               // Note: always true for nonshared data
 #endif
 
 #if defined(__WIN32__) && defined(_BUILDRTLDLL)
-        /* Hack for Gabor */
-        if (!_hCG && GetModuleHandle("CG32.DLL") != NULL)
-            {
-            _hCG = LoadLibrary("CG32.DLL");
-            _pfnCG = (_CGCALL) GetProcAddress(_hCG, "_CG_RTLDLLINIT");
-            _pfnCG(mod_handle, 1);
+	/* Hack for Gabor */
+	if (!_hCG && GetModuleHandleA("CG32.DLL") != NULL)
+	    {
+	    _hCG = LoadLibrary(_TEXT("CG32.DLL"));
+	    _pfnCG = (_CGCALL) GetProcAddress(_hCG, "_CG_RTLDLLINIT");
+	    _pfnCG(mod_handle, 1);
 	    _hCGModHandle = mod_handle;
-            }
+	    }
 #endif
 
 #ifdef __WIN32__
-        _osenv = GetEnvironmentStrings();
-        _hInstance = mod_handle;
+	_tosenv = GetEnvironmentStrings();
+	_hInstance = mod_handle;
 
 	if (_pRawDllMain)
-            _pRawDllMain(_hInstance, reason, 0);
+	    _pRawDllMain(_hInstance, reason, 0);
 #endif
-        /* Call initialization functions for the DLL (not the application).
-         * The app's init functions will be called later by startup().
-         * However, if this is a multi-dll application, don't call
-         * the init functions -- just put pointers to them in a shared
-         * memory region.
-         */
-        if (_multidll && (share__dll_table = _create_shmem()) != NULL &&
-          share__dll_table->table[share__dll_table->ntables] != (MODULE_DATA *)-1)
-        {
-            share__dll_table->table[share__dll_table->ntables++] = mod_table;
-        }
-        else
-        {
-            _multidll = 0;      /* force termination to call exit procs */
+	/* Call initialization functions for the DLL (not the application).
+	 * The app's init functions will be called later by startup().
+	 * However, if this is a multi-dll application, don't call
+	 * the init functions -- just put pointers to them in a shared
+	 * memory region.
+	 */
+	if (_multidll && (share__dll_table = _create_shmem()) != NULL &&
+	  share__dll_table->table[share__dll_table->ntables] != (MODULE_DATA *)-1)
+	{
+	    share__dll_table->table[share__dll_table->ntables++] = mod_table;
+	}
+	else
+	{
+	    _multidll = 0;      /* force termination to call exit procs */
 
-            /* Call all _INIT_ functions.
-             */
-            while ((func = _init_exit_proc(&_dll_table, 0)) != NULLFUNC)
-                func();
+	    /* Call all _INIT_ functions.
+	     */
+	    while ((func = _init_exit_proc(&_dll_table, 0)) != NULLFUNC)
+		func();
 
-            /* Call _dllmain on OS/2.
-             */
+	    /* Call _dllmain on OS/2.
+	     */
 #ifdef __OS2__
 #pragma warn -pro
-            return mod_table->main(0, mod_handle);  /* call _dllmain */
+	    return mod_table->main(0, mod_handle);  /* call _dllmain */
 #pragma warn .pro
 #endif
-        }
+	}
 #if defined(__WIN32__) && !defined(_BUILDRTLDLL)
     }  // !usecount
 #endif
@@ -190,42 +195,41 @@ ULONG cdecl _EXPFUNC _startupd
 #endif
     {
 #if defined(__WIN32__) && !defined(_BUILDRTLDLL)
-        if (!--usecount)    // If last client terminating
-            {               // Note: always true for nonshared data
+	if (!--usecount)    // If last client terminating
+	    {               // Note: always true for nonshared data
 #endif
-        /* The following loop calls the DLL's exit procedures.
-         * This is also done by _cleanup(), if the application exits
-         * with exit(); in that case, we won't do anything here, because
-         * all the exit procedures will be marked as "called".  But if the
-         * application exits some other way, we must call the exit
-         * procedures here.
-         */
-        if (!_multidll)
-        {
-            /* Call all _EXIT_ functions.
-             */
-            while ((func = _init_exit_proc(&_dll_table, 1)) != NULLFUNC)
-                func();
+	/* The following loop calls the DLL's exit procedures.
+	 * This is also done by _cleanup(), if the application exits
+	 * with exit(); in that case, we won't do anything here, because
+	 * all the exit procedures will be marked as "called".  But if the
+	 * application exits some other way, we must call the exit
+	 * procedures here.
+	 */
+	if (!_multidll)
+	{
+	    /* Call all _EXIT_ functions.
+	     */
+	    while ((func = _init_exit_proc(&_dll_table, 1)) != NULLFUNC)
+		func();
 
 #if defined(__MT__)
 #if 0        /* Adding these two lines fixes a rare CG RTL memory leak.
-                It's commented out since it seems to adversly effect
-                other parts of the stream locking system.
-             */
-             _cleanup_handle_locks();
-             _cleanup_stream_locks();
+		It's commented out since it seems to adversly effect
+		other parts of the stream locking system.
+	     */
+	     _cleanup_handle_locks();
+	     _cleanup_stream_locks();
 #endif /* 0 */
 #endif /* __MT__ */
 
-
-            /* Call _dllmain on OS/2.
-             */
+	     /* Call _dllmain on OS/2.
+	     */
 #ifdef __OS2__
 #pragma warn -pro
-            return mod_table->main(1, mod_handle);  /* call _dllmain */
+	    return mod_table->main(1, mod_handle);  /* call _dllmain */
 #pragma warn .pro
 #endif
-        }
+	}
 #if defined(__WIN32__) && !defined(_BUILDRTLDLL)
     }  // !usecount
 #endif
@@ -240,13 +244,20 @@ ULONG cdecl _EXPFUNC _startupd
     if (_pRawDllMain)
 	_pRawDllMain(_hInstance, reason, 0);
 #endif
+#if !defined(_BUILDRTLDLL)
+	     if (reason == DLL_PROCESS_DETACH && usecount == 0 && _tosenv)
+	     {
+		 FreeEnvironmentStrings (_tosenv);
+		 _tosenv = 0;
+	     }
+#endif /* !_BUILDRTLDLL */
 
 #if defined(__WIN32__) && defined(_BUILDRTLDLL)
     if (_hCGModHandle == mod_handle && _hCG && reason == DLL_PROCESS_DETACH)
-        {
-        _pfnCG(mod_handle, 0);
-        FreeLibrary(_hCG);
-        }
+	{
+	_pfnCG(mod_handle, 0);
+	FreeLibrary(_hCG);
+	}
 #endif
     return retval;
 #pragma warn .pro

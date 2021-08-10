@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.6  $
 //
 // Definition of a bit set and a character set
 //----------------------------------------------------------------------------
@@ -13,12 +13,24 @@
 # include <owl/defs.h>
 #endif
 
-// Generic definitions/compiler options (eg. alignment) preceeding the 
-// definition of classes
-#include <services/preclass.h>
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 class _BIDSCLASS opstream;
 class _BIDSCLASS ipstream;
+
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
 
 //
 // class TBitSet
@@ -102,6 +114,10 @@ template <class T> class _OWLCLASS TBitFlags {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.10  $
+//$Revision:   5.14  $
 //
 // Classes for window system geometry
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(CLASSLIB_OBJSTRM_H)
 # include <classlib/objstrm.h>    // Need persist streaming classes & operators
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //
@@ -309,6 +313,10 @@ ipstream& _WSYSFUNC operator >>(ipstream& is, TRect& r);
 istream& _WSYSFUNC operator >>(istream& is, TRect& r);
 opstream& _WSYSFUNC operator <<(opstream& os, const TRect& r);
 ostream& _WSYSFUNC operator <<(ostream& os, const TRect& r);
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 //----------------------------------------------------------------------------
 // Inlines
@@ -1252,7 +1260,6 @@ TRect::Inflate(const TSize& delta)
 {
   return Inflate(delta.cx, delta.cy);
 }
-
 
 //----------------------------------------------------------------------------
 // TSize

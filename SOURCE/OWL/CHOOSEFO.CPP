@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Implementation of TChooseFontDialog, a Choose Font Common Dialog class
 //----------------------------------------------------------------------------
@@ -14,6 +14,7 @@
 # include <dlgs.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlCommDialog);  // diagnostic group for common dialogs
 
 DEFINE_RESPONSE_TABLE1(TChooseFontDialog, TCommonDialog)

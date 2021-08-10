@@ -1,12 +1,12 @@
 //----------------------------------------------------------------------------
 // cScript
-// (C) Copyright 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1995, 1997 by Borland International, All Rights Reserved
 //
 // ED_EPSLN.SPP
 //    Script component of IDE's Editor Epsilon emulation.
 //    Provides support services for editing environment.
 //
-// $Revision:   1.7  $
+// $Revision:   1.19  $
 //
 //----------------------------------------------------------------------------
 // Epsilon Editor.
@@ -34,6 +34,35 @@ library;
 #define BOOKMARK_ID_SYSTEM_ONE   19
 #define BOOKMARK_ID_SYSTEM_TWO   18
 #define BOOKMARK_ID_SYSTEM_THREE 17
+#define FUNCTION_CONTINUE 0
+#define FUNCTION_END      1
+
+//----------------------------------------------------------------------------
+// Menu Vectors.
+//----------------------------------------------------------------------------
+
+DoIDEFileClose()      { return FUNCTION_CONTINUE; }
+DoIDEFileOpen()       { return FUNCTION_CONTINUE; }
+DoIDEFilePrint()      { return FUNCTION_CONTINUE; }
+DoIDEFileSave()       { return FUNCTION_CONTINUE; }
+DoIDEFileSaveAs()     { return FUNCTION_CONTINUE; }
+DoIDEFileSaveAll()    { return FUNCTION_CONTINUE; }
+
+DoIDEEditUndo()       { editor.Undo(); return FUNCTION_END; }
+DoIDEEditRedo()       { editor.Redo(); return FUNCTION_END; }
+DoIDEEditCut()        { editor.EmacsAppendNextMenuKillStart(); editor.EmacsKillRegion(); editor.EmacsAppendNextMenuKillEnd(); return FUNCTION_END; }
+DoIDEEditCopy()       { editor.EmacsCopyRegion(); return FUNCTION_END;  }
+DoIDEEditPaste()      { editor.EmacsYank(); return FUNCTION_END; }
+DoIDEEditClear()      { editor.EmacsAppendNextMenuKillStart(); editor.EmacsKillRegion(); editor.EmacsAppendNextMenuKillEnd(); return FUNCTION_END; }
+DoIDEEditSelectAll()  { editor.SelectAll(); return FUNCTION_END; }
+DoIDEEditBufferList() { return FUNCTION_CONTINUE; }
+
+DoIDESearchFind()     { editor.EmacsSetSearch(); return FUNCTION_CONTINUE; }
+DoIDESearchReplace()  { editor.EmacsSetReplace(); return FUNCTION_CONTINUE; }
+DoIDESearchSearchAgain() { return FUNCTION_CONTINUE; }
+
+DoIDESearchPreviousMessage() { return FUNCTION_CONTINUE; }
+DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 
 //----------------------------------------------------------------------------
 // Methods.
@@ -42,12 +71,16 @@ library;
 //
 // Used to autoload the Default emulation specific methods.
 //
-EpsilonEmulation() {
-   if (bFileLoading) {
-      print "Epsilon emulation enabled.";
-   } else {
+epsilonEmulation(bUnassign) {
+
+   IDE.KeyboardManager.ScriptAbortKey = "<Ctrl-g>";
+   IDE.KeyboardManager.ProcessKeyboardAssignments(scriptEngine.StartupDirectory+IDE.KeyboardAssignmentFile,bUnassign);
+
+   if (bUnassign) {
       print "Epsilon emulation removed.";
-      scriptEngine.Unload("ed_epsln.spp");
+      scriptEngine.Unload(typeid(module()));
+   } else {
+      print "Epsilon emulation enabled.";
    }
 }
 
@@ -63,6 +96,7 @@ class EmacsSubsystem {
    LoadMateFunctionality();
 
    // Buffer variables.
+   declare nClipboardToken = 0;
    declare nKeysProcessedKill = -1;
    declare nKeysProcessedYankPop = -1;
    declare nKeysProcessedYank = -1;
@@ -115,11 +149,13 @@ class EmacsSubsystem {
             aKillBuffers[nIndex] = new String(acContents + aKillBuffers[nIndex].Text);
          else
             aKillBuffers[nIndex] = new String(aKillBuffers[nIndex].Text + acContents);
-            ep.SetClipboard(aKillBuffers[nIndex].Text);
+            if (ep != NULL)
+               ep.SetClipboard(aKillBuffers[nIndex].Text);
       } else {
          StepKillBufferIndex();
          aKillBuffers[nKillBufferIndex] = new String(acContents);
-         ep.SetClipboard(aKillBuffers[nKillBufferIndex].Text);
+         if (ep != NULL)
+            ep.SetClipboard(aKillBuffers[nKillBufferIndex].Text);
       }
       nKeysProcessedKill = IDE.KeyboardManager.KeysProcessed;
    }
@@ -131,6 +167,7 @@ class EmacsSubsystem {
           if (initialized(aKillBuffers[nKillBufferIndex])) {
              declare aString = aKillBuffers[nKillBufferIndex];
              ep.SetClipboard(aString.Text);
+             nClipboardToken = ep.GetClipboardToken();
              return aString.Text;
           }
       }
@@ -168,9 +205,27 @@ on editor:>EmacsAppendNextKill()
 }
 
 //
+// The next kill operations should append if appending has been set and the menu is used.
+//
+on editor:>EmacsAppendNextMenuKillStart()
+{
+   if (ess.nKeysProcessedKill == IDE.KeyboardManager.KeysProcessed) 
+       ess.nKeysProcessedKill = IDE.KeyboardManager.KeysProcessed-1;
+}
+
+//
+// The next kill operations should no longer append if appending has been set and the menu is used.
+//
+on editor:>EmacsAppendNextMenuKillEnd()
+{
+   if (ess.nKeysProcessedKill == IDE.KeyboardManager.KeysProcessed-1) 
+       ess.nKeysProcessedKill = IDE.KeyboardManager.KeysProcessed-2;
+}
+
+//
 // The next operation should use this argument.
 //
-on editor:>EmacsArgument()
+on editor:>EmacsArgument(declare nAmount)
 {
    if (ess.kbdArgument == NULL) {
       ess.kbdArgument = new Keyboard(FALSE);
@@ -197,7 +252,11 @@ on editor:>EmacsArgument()
       kbd.DefaultAssignment = "editor.EmacsArgumentDoAction();";
    }
 
-   ess.nArgument = 4;
+   if (initialized(nAmount))
+      ess.nArgument = nAmount;
+   else
+      ess.nArgument = 4;
+      
    ess.nKeysEntered = 0;
    ess.acCommand = NULL;
    ess.kbdEditor = IDE.KeyboardManager.GetKeyboard("Editor");
@@ -229,17 +288,25 @@ on editor:>EmacsArgumentDoAction() {
    declare km = IDE.KeyboardManager;
 
    if (ess.nKeysEntered < 2) {
-      ess.nKeysEntered++;
-      declare String sCommand(ess.kbdEditor.GetCommand(km.CodeToKey(km.LastKeyProcessed)));
-      if (sCommand.Length > 0) {
-         ess.acCommand = sCommand.Text;
-      }
-   }
+       ess.nKeysEntered++;
+       declare String sCommand(ess.kbdEditor.GetCommand(km.CodeToKey(km.LastKeyProcessed)));
+       if (sCommand.Length)
+          ess.acCommand = sCommand;
+       else {
+          if (km.LastKeyProcessed < 128) {
+           declare k = new String();
+           k.Character = km.LastKeyProcessed;
+           ess.acCommand = k;
+          }
+       }
+  }
 
    if (ess.acCommand != NULL) {
       declare nIndex = 0;
+      if (ess.acCommand.Length == 1)
+         ess.acCommand = new String("editor.TopView.Position.InsertText(\""+ess.acCommand.Text+"\");");
       for (nIndex = 0;nIndex < ess.nArgument; nIndex++) {
-         scriptEngine.Execute(ess.acCommand);
+         scriptEngine.Execute(ess.acCommand.Text);
       }
       ess.nKeysEntered = 2;
    }
@@ -290,7 +357,7 @@ on editor:>EmacsBackwardKillLevel() {
    declare nResult = ep.Search("[\]})]",TRUE,TRUE,SEARCH_BACKWARD);
 
    if (nResult) {
-      if (.MateQuite(ep.Read(1), SEARCH_BACKWARD)) {
+      if (.MateQuiet(ep.Read(1), SEARCH_BACKWARD)) {
          eb.Begin();
          if (eb.Size) {
             ess.SetKillBufferContents(eb.Text,ep,true);
@@ -336,7 +403,7 @@ on editor:>EmacsBackwardLevel() {
 
    declare nResult = ep.Search("[\]})]",TRUE,TRUE,SEARCH_BACKWARD);
 
-   if (nResult && .MateQuite(ep.Read(1), SEARCH_BACKWARD) && bBlock)
+   if (nResult && .MateQuiet(ep.Read(1), SEARCH_BACKWARD) && bBlock)
       eb.Begin();
 }
 
@@ -344,7 +411,6 @@ on editor:>EmacsBackwardLevel() {
 // Move backwards one paragraph.
 //
 on editor:>EmacsBackwardParagraph() {
-   // Search for ')', '}' or ']'
 
    declare bBlock = FALSE;
    declare eb = .BlockExists();
@@ -449,10 +515,12 @@ on editor:>EmacsCapitalizeWord() {
    .EmacsForwardCharacter();
    declare eb = EndBlock();
    eb.UpperCase();
-   BeginBlock(EXCLUSIVE_BLOCK);             // implied call to Reset
-   .EmacsForwardWord();
-   eb = EndBlock();
-   eb.LowerCase();
+   if (.TopView.Position.IsWordCharacter) {
+      BeginBlock(EXCLUSIVE_BLOCK);             // implied call to Reset
+      .EmacsForwardWord();
+      eb = EndBlock();
+      eb.LowerCase();
+   }
    ResetBlock(EXCLUSIVE_BLOCK);
 }
 
@@ -460,14 +528,14 @@ on editor:>EmacsCapitalizeWord() {
 // Copy the highlighted region to a kill buffer.
 //
 on editor:>EmacsCopyRegion() {
+
+   ess.nKeysProcessedKill = 0;
+
    declare eb = .BlockExists();
 
    if (eb != NULL) {
       ess.SetKillBufferContents(eb.Text,.TopView.Position,false);
-      if (ess.nKeysProcessedKill == IDE.KeyboardManager.KeysProcessed)
-         CopyBlock(eb,TRUE);
-      else
-         CopyBlock(eb,FALSE);
+      CopyBlock(eb,false);
    } else {
       declare ev = .TopView;
       declare ep = ev.Position;
@@ -480,10 +548,7 @@ on editor:>EmacsCopyRegion() {
 
       if (eb.Size) {
          ess.SetKillBufferContents(eb.Text,ep,false);
-         if (ess.nKeysProcessedKill == IDE.KeyboardManager.KeysProcessed)
-            CopyBlock(eb,TRUE);
-         else
-            CopyBlock(eb,FALSE);
+         CopyBlock(eb,false);
       }
       ep.Restore();
       ResetBlock();
@@ -548,10 +613,14 @@ on editor:>EmacsDeleteBlankLines() {
        if (!ep.IsWhiteSpace)
            ep.MoveRelative(-1,0);
 
-       declare nEndingRow = ep.Row;
+                 declare nEndingRow = ep.Row;
 
        if (nEndingRow == nBeginingRow) {
-          // Do Nothing.
+           ep.Move(nBeginingRow,1);
+           eb.Begin();
+           ep.Move(nEndingRow+1,1);
+           eb.End();
+           eb.Delete();
        } else {
            ep.Move(nBeginingRow,1);
            eb.Begin();
@@ -627,7 +696,7 @@ on editor:>EmacsForwardLevel() {
    declare nResult = ep.Search("[\]})]",TRUE,TRUE,SEARCH_FORWARD);
 
    if (nResult) {
-      if (.MateQuite(ep.Read(1), SEARCH_FORWARD)) {
+      if (.MateQuiet(ep.Read(1), SEARCH_FORWARD)) {
          if (bBlock) {
             eb.Begin();
          }
@@ -649,6 +718,203 @@ on editor:>EmacsIndentRegion() {
 on editor:>EmacsIndentUnder() {
    // SmartTab
    .TopView.Position.Align(1);
+}
+
+//
+// Begins incremental searching of current buffer.
+//
+declare EmacsISearchKbd = NULL;
+declare EmacsISearchString = "";
+declare EmacsISearchDirection = SEARCH_FORWARD;
+
+on editor:>EmacsIncrementalSearch(declare direction) {
+
+   if (EmacsISearchKbd == NULL) {
+       EmacsISearchKbd = new Keyboard(false);      // not transparent
+       EmacsISearchKbd.Assign("<Minus>","editor.EmacsISearchMinus();");
+       EmacsISearchKbd.Assign("<Space>","editor.EmacsISearchSpace();");
+       EmacsISearchKbd.Assign("<Backspace>","editor.EmacsISearchBackspace();");
+       EmacsISearchKbd.Assign("<Ctrl-g>","IDE.KeyboardManager.SendKeys(\"{VK_ESCAPE}\");");
+       EmacsISearchKbd.Assign("<Ctrl-r>","editor.EmacsISearchBackward();");
+       EmacsISearchKbd.Assign("<Ctrl-s>","editor.EmacsISearchForward();");
+       EmacsISearchKbd.DefaultAssignment = "editor.EmacsISearchKey();";
+   }
+
+   if (initialized(direction))
+      EmacsISearchDirection = direction;
+   else {
+       if (.SearchOptions.GoForward)
+          EmacsISearchDirection = SEARCH_FORWARD;
+       else
+          EmacsISearchDirection = SEARCH_BACKWARD;
+   }
+
+   declare keySequence = IDE.KeyboardManager.GetKeyboard("Desktop").GetKeySequence("IDE.SearchSearchAgain();");
+   EmacsISearchKbd.Assign(keySequence,"editor.EmacsISearchEndAndSearchAgain();");
+
+   IDE.KeyboardManager.Push(EmacsISearchKbd, "Editor", false);
+   bPopEditorKeyboard = true;
+   EmacsISearchString = "";
+   .EmacsISearchDisplayStatus();
+}
+
+//
+// Performs incremental searching of current buffer.
+//
+on editor:>EmacsISearch(declare acKey) {
+
+   declare ep = .TopView.Position;
+   declare sKey = new String(acKey);
+   sKey = sKey.SubString(1, 1);
+
+   if ((IDE.KeyboardManager.KeyboardFlags & 0x03) && // Shift is pressed...
+       sKey.Character > 96 &&                        // It's between lower case 'a'
+       sKey.Character < 123)                         // and a 'z'
+       sKey.Character -= 32;
+
+   // Move the cursor back before the highlight to search again from the
+   // begining of the highlight when searching forward.
+   if (EmacsISearchDirection == SEARCH_FORWARD)
+      ep.MoveRelative(0,-(new String(EmacsISearchString).Length));
+
+   // Add the new key to the search string.
+   EmacsISearchString = EmacsISearchString + sKey.Text;
+
+   if (EmacsISearchDirection == SEARCH_BACKWARD)
+      ep.MoveRelative(0,new String(EmacsISearchString).Length);
+
+   // Search for the search string...
+   // If this fails go back to the previous search string and
+   //   search for the last known successful string.
+   if (!.EmacsISearchAgain()) {
+      declare String CS(EmacsISearchString);
+      EmacsISearchString = CS.SubString(0, CS.Length - 1).Text;
+      ep.Search(EmacsISearchString, .SearchOptions.CaseSensitive, true, EmacsISearchDirection,BRIEF_RE);
+   }
+
+   .SearchOptions.SearchText = EmacsISearchString;
+
+   .EmacsISearchDisplayStatus();
+}
+
+
+on editor:>EmacsISearchBackward() {
+   if (EmacsISearchDirection == SEARCH_BACKWARD)
+      .EmacsISearchAgain(true);
+   else
+      {
+       EmacsISearchDirection = SEARCH_BACKWARD;
+       .EmacsISearchAgain(true);
+       .EmacsISearchAgain(true);
+      }
+   .EmacsISearchDisplayStatus();
+}
+
+on editor:>EmacsISearchDisplayStatus() {
+   if (EmacsISearchDirection == SEARCH_FORWARD)
+      IDE.StatusBar = "I-Search (forward) for:" + EmacsISearchString;
+   else
+      IDE.StatusBar = "I-Search (backward) for:" + EmacsISearchString;
+}
+
+
+on editor:>EmacsISearchForward() {
+   if (EmacsISearchDirection == SEARCH_FORWARD)
+      .EmacsISearchAgain(true);
+   else
+      {
+       EmacsISearchDirection = SEARCH_FORWARD;
+       .EmacsISearchAgain(true);
+       .EmacsISearchAgain(true);
+      }
+   .EmacsISearchDisplayStatus();
+}
+
+on editor:>EmacsISearchAgain(declare bStep) {
+
+   declare ep = .TopView.Position;
+
+   declare result = ep.Search(EmacsISearchString, .SearchOptions.CaseSensitive, true, EmacsISearchDirection,BRIEF_RE);
+
+   if (!result) {
+      if (bStep) {
+         if (EmacsISearchDirection == SEARCH_FORWARD)
+            ep.MoveRelative(0,-(new String(EmacsISearchString).Length));
+         else
+            ep.MoveRelative(0,new String(EmacsISearchString).Length);
+
+         ep.Search(EmacsISearchString, .SearchOptions.CaseSensitive, true, EmacsISearchDirection,BRIEF_RE);
+      }
+    IDE.MessageBeep();
+   }
+
+ return result;
+}
+
+
+//
+// Undoes the last incremental search.
+//
+
+on editor:>EmacsISearchBackspace() {
+
+   declare ep = .TopView.Position;
+
+   // Move the cursor back before the highlight to search again from the
+   // begining of the highlight when searching forward.
+   if (EmacsISearchDirection == SEARCH_FORWARD)
+      ep.MoveRelative(0,-(new String(EmacsISearchString).Length));
+   else
+      ep.MoveRelative(0,new String(EmacsISearchString).Length);
+
+   declare String CS(EmacsISearchString);
+
+   if (CS.Length <= 1) {
+      EmacsISearchString = "";
+      ep.Move(ep.Row, ep.Column);
+   } else {
+      EmacsISearchString = CS.SubString(0, CS.Length - 1).Text;
+      .EmacsISearchAgain();
+   }
+
+   .EmacsISearchDisplayStatus();
+}
+
+//
+// Ends incremental searching and performs search again.
+//
+on editor:>EmacsISearchEndAndSearchAgain() {
+
+   IDE.KeyboardManager.SendKeys("{VK_ESCAPE}");
+   IDE.EmacsSearchSearchAgain();
+}
+
+//
+// Processes general keys.
+//
+
+on editor:>EmacsISearchKey() {
+
+   declare nLastKeyProcessed = IDE.KeyboardManager.LastKeyProcessed;
+
+   if ((nLastKeyProcessed < 28) || (nLastKeyProcessed > 127)) {
+
+      IDE.KeyboardManager.Pop("Editor");
+      bPopEditorKeyboard = false;
+
+      IDE.StatusBar = "I-Search ended";
+      return;
+   }
+
+   .EmacsISearch(IDE.KeyboardManager.CodeToKey(nLastKeyProcessed));
+}
+
+on editor:>EmacsISearchMinus() {
+ .EmacsISearch("<->");
+}
+
+on editor:>EmacsISearchSpace() {
+ .EmacsISearch("< >");
 }
 
 on editor:>EmacsExchangePointAndMark() {
@@ -677,7 +943,6 @@ on editor:>EmacsFindFile() {
 // Move backwards one paragraph.
 //
 on editor:>EmacsForwardParagraph() {
-   // Search for ')', '}' or ']'
 
    declare bBlock = FALSE;
    declare eb = .BlockExists();
@@ -688,19 +953,19 @@ on editor:>EmacsForwardParagraph() {
    }
 
    if (ep.Column == 1 && ep.IsWhiteSpace)
-      ep.MoveRelative(-1,0);
+      ep.MoveRelative(1,0);
    else
       ep.Move(0,1);
 
-   while (ep.Row != 1) {
+   while (ep.Row != ep.LastRow) {
       if (ep.IsWhiteSpace) {
          break;
       }
-      ep.MoveRelative(-1,0);
+      ep.MoveRelative(1,0);
    }
 
    if (bBlock) {
-      eb.Begin();
+      eb.End();
    }
 }
 
@@ -715,12 +980,25 @@ on editor:>EmacsIndentPrevious() {
    if (ep.Row != 1) {
       ep.Save();
       ep.Move(ep.Row-1,1);
-      ep.MoveCursor(SKIP_RIGHT | SKIP_WHITE | SKIP_STREAM);
+      ep.MoveCursor(SKIP_RIGHT | SKIP_WHITE);
       declare c = ep.Column;
       ep.Restore();
 
       if (ep.Column < c)
-         return ep.Align(1);
+         {
+          declare eb = .BlockExists();
+          if (eb == NULL)
+             eb = .TopView.Block;
+          eb.Save();
+          ep.Save();
+          eb.Begin();
+          ep.MoveCursor(SKIP_RIGHT | SKIP_WHITE);
+          eb.End();
+          eb.Delete();
+          eb.Restore();
+          ep.Restore();
+          return ep.Align(1);
+         }
    }
 
   return ep.InsertCharacter('\t');
@@ -817,108 +1095,29 @@ on editor:>EmacsForwardWord() {
 
 on editor:>EmacsOneWindow() {
 
-	declare bViewExists = true;
-	declare bThisDirection;
-	declare ew = .TopView.Window;
+   declare ev = .TopView;
 
-	while (bViewExists != NULL) {
-
-	  bViewExists = false;
-
-	  if (initialized(ew.ViewExists(UP)))
-		  bThisDirection = ew.ViewExists(UP);
-	  else
-		  bThisDirection = false;
-		  
-	  bViewExists |= bThisDirection;
-
-	  if (bThisDirection != NULL) {
-		  .DeleteView(UP);
-	  }
-
-	  if (initialized(ew.ViewExists(DOWN)))
-		  bThisDirection = ew.ViewExists(DOWN);
-	  else
-		  bThisDirection = false;
-		  
-	  bViewExists |= bThisDirection;
-
-	  if (bThisDirection != NULL) {
-		  .DeleteView(DOWN);
-	  }
-
-	  if (initialized(ew.ViewExists(LEFT)))
-			bThisDirection = ew.ViewExists(LEFT);
-	  else
-		  bThisDirection = false;
-		  
-	  bViewExists |= bThisDirection;
-
-	  if (bThisDirection != NULL) {
-		  .DeleteView(LEFT);
-	  }
-
-	  if (initialized(ew.ViewExists(RIGHT)))
-		  bThisDirection = ew.ViewExists(RIGHT);
-	  else
-		  bThisDirection = false;
-
-	  bViewExists |= bThisDirection;
-
-	  if (bThisDirection != NULL) {
-		  .DeleteView(RIGHT);
-	  }
-	}
+   if (ev != NULL) {
+       declare ew = ev.Window;
+       if (ew != NULL) {
+         ew.OneView(ev);
+       }
+   }
 }
 
 on editor:>EmacsDeleteView() {
 
    declare ev = .TopView;
-   declare ew = ev.Window;
 
-   if (initialized(ew.ViewExists(UP))) {
-      ew.ViewActivate(UP);
-      ew.ViewDelete(DOWN);
-      if (initialized(ew.ViewExists(DOWN))) {
-         if (ew.ViewExits(DOWN) == ev)
-             ew.ViewActivate(DOWN);
-         else
-            return;
-      }
+   if (ev != NULL) {
+       declare ew = ev.Window;
+       if (ew != NULL) {
+         ew.RemoveView(ev);
+       }
    }
-
-   if (initialized(ew.ViewExists(DOWN))) {
-      ew.ViewActivate(DOWN);
-      ew.ViewDelete(UP);
-      if (initialized(ew.ViewExists(UP))) {
-         if (ew.ViewExits(UP) == ev)
-             ew.ViewActivate(UP);
-         else
-            return;
-      }
-   }
-
-   if (initialized(ew.ViewExists(RIGHT))) {
-      ew.ViewActivate(RIGHT);
-      ew.ViewDelete(LEFT);
-      if (initialized(ew.ViewExists(LEFT))) {
-         if (ew.ViewExits(LEFT) == ev)
-             ew.ViewActivate(LEFT);
-         else
-            return;
-      }
-   }
-
-   if (initialized(ew.ViewExists(LEFT))) {
-      ew.ViewActivate(LEFT);
-      ew.ViewDelete(RIGHT);
-      if (initialized(ew.ViewExists(RIGHT))) {
-         if (ew.ViewExits(RIGHT) == ev)
-             ew.ViewActivate(RIGHT);
-      }
-   }
-
 }
+
+
 
 //
 // Using EMACS behavior cut block.
@@ -934,7 +1133,7 @@ on editor:>EmacsKillRegion() {
 
    if (eb != NULL) {
       // Cut the region.
-      ess.SetKillBufferContents(eb.Text,ep,false);
+      ess.SetKillBufferContents(eb.Text,ep,true);
       RemoveBlock(eb);
    } else {
       declare ev = .TopView;
@@ -947,7 +1146,7 @@ on editor:>EmacsKillRegion() {
       eb.End();
 
       if (eb.Size) {
-         ess.SetKillBufferContents(eb.Text,ep,false);
+         ess.SetKillBufferContents(eb.Text,ep,true);
          RemoveBlock(eb);
       }
 
@@ -1053,7 +1252,7 @@ on editor:>EmacsSetKeyAbort(declare acKeyName) {
 on editor:>EmacsSetReplace() {
 
    declare key = IDE.KeyboardManager.CodeToKey(IDE.KeyboardManager.LastKeyProcessed);
-   
+
    if (key == "<Shift-Alt-7>" || key == "<Shift-7>") {
     .SearchOptions.RegularExpression = FALSE;
     .SearchOptions.PromptOnReplace = FALSE;
@@ -1081,6 +1280,9 @@ on editor:>EmacsSetSearch() {
 }
 
 on editor:>EmacsToIndentation() {
+   declare ep = .TopView.Position;
+   ep.MoveBOL();
+   ep.MoveCursor(SKIP_RIGHT | SKIP_WHITE | SKIP_STREAM);
 }
 
 //
@@ -1125,57 +1327,47 @@ on editor:>EmacsTransposeCharacters() {
 // Using EMACS behavior swap words.
 //
 on editor:>EmacsTransposeWords() {
-   // declare variables.
-   declare eb = .TopView.Block;
    declare ep = .TopView.Position;
+   declare eb = .TopView.Block;
 
-   ep.Save();                               // Save wherever the cursor is
-   eb.Save();
-   eb.Reset();
+   if (ep.IsWordCharacter && ep.Column != 1)
+      .EmacsBackwardWord();
 
-   // Goto the next word.
-   .MoveCursorToWordRight();
-   ep.MoveCursor(SKIP_LEFT | SKIP_NONWORD | SKIP_STREAM);
-   eb.End();
+   .EmacsBackwardWord();
 
-   // We're at the begining of the first transposed word.
-   ep.MoveCursor(SKIP_LEFT | SKIP_WORD | SKIP_STREAM);
-   ep.Save();                               // Save before first word
-   eb.Begin();
+   .TopView.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+   BeginBlock(EXCLUSIVE_BLOCK);
+   .EmacsForwardWord();
+   EndBlock();
 
-   // Get this word.
-   declare acSection1 = eb.Text;
-   eb.Cut();
+   declare txtWord1 = eb.Text;
+   eb.Delete();
+   .TopView.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
 
-   // We're at the beginning of the whitespace
-   eb.Reset();
-   eb.Begin();
+   BeginBlock(EXCLUSIVE_BLOCK);
+   .EmacsForwardWord();
+   .EmacsBackwardWord();
+   EndBlock();
 
-   // We're at the begining of the second transposed word.
-   ep.Save();                               // Save just before whitespace
-   ep.MoveCursor(SKIP_RIGHT | SKIP_NONWORD | SKIP_STREAM);
-   eb.End();
-   declare acWhiteSpace = eb.Text;
-   eb.Cut();
-   ep.Restore();                            // Move to where whitespace was
+   declare txtWord2 = eb.Text;
+   eb.Delete();
+   .TopView.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
 
-   // Get the second word.
-   eb.Reset();
-   eb.Begin();
-   ep.MoveCursor(SKIP_RIGHT | SKIP_WORD | SKIP_STREAM);
-   eb.End();
+   BeginBlock(EXCLUSIVE_BLOCK);
+   .EmacsForwardWord();
+   EndBlock();
 
-   declare acSection2 = eb.Text;
-   eb.Cut();
+   declare txtWord3 = eb.Text;
+   eb.Delete();
+   .TopView.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
 
-   // Now put everything back.
-   ep.Restore();                            // Move to where first word was
-   ep.InsertText(acSection2);
-   ep.InsertText(acWhiteSpace);
-   ep.InsertText(acSection1);
+   ep.InsertText(txtWord3);
+   ep.Save();
+   ep.InsertText(txtWord2);
+   ep.InsertText(txtWord1);
 
-   ep.Restore();                            // Move to where cursor was
-   eb.Restore();
+   ep.Restore();
+   ResetBlock();
 }
 
 //
@@ -1264,6 +1456,14 @@ on editor:>ViewActivated(newEditView) {
    // Reset Epsilon kill append.
    ess.nKeysProcessedKill = 0;
 
+   // Check for new clipboard content.
+   if (ess.nClipboardToken != newEditView.Position.GetClipboardToken()) {
+      ess.nClipboardToken = newEditView.Position.GetClipboardToken();
+      declare sText = new String(newEditView.Position.GetClipboard());
+      if (sText.Length)
+         ess.SetKillBufferContents(sText.Text,NULL,false);
+   }
+
    // Perform existing behaviour
    pass(newEditView);
 }
@@ -1284,44 +1484,44 @@ on editor:>EmacsSelectBuffer()
        EmacsSelectBufferKbd.DefaultAssignment = "editor.EmacsSelectBufferEnd(true);";
    }
 
-	if (initialized(.TopBuffer)) {
-		 if (!initialized(.TopBuffer.PriorBuffer()) && !initialized(.TopBuffer.NextBuffer())) {
-			  IDE.StatusBar = "Only one buffer.";
-		 } else {
-			 ebCurrentSelectionBuffer = .TopBuffer;
-			 IDE.KeyboardManager.Push(EmacsSelectBufferKbd, "Editor", FALSE);
+        if (initialized(.TopBuffer)) {
+                 if (!initialized(.TopBuffer.PriorBuffer()) && !initialized(.TopBuffer.NextBuffer())) {
+                          IDE.StatusBar = "Only one buffer.";
+                 } else {
+                         ebCurrentSelectionBuffer = .TopBuffer;
+                         IDE.KeyboardManager.Push(EmacsSelectBufferKbd, "Editor", FALSE);
           bPopEditorKeyboard = true;
 
-			 if (initialized(.TopBuffer.PriorBuffer()))	
-				  ebCurrentSelectionBuffer = .TopBuffer.PriorBuffer();
-			 IDE.StatusBar = "Select Buffer: " + ebCurrentSelectionBuffer.FullName;
-		 }
-	} else
-		IDE.StatusBar = "No buffers loaded.";
+                         if (initialized(.TopBuffer.PriorBuffer()))
+                                  ebCurrentSelectionBuffer = .TopBuffer.PriorBuffer();
+                         IDE.StatusBar = "Select Buffer: " + ebCurrentSelectionBuffer.FullName;
+                 }
+        } else
+                IDE.StatusBar = "No buffers loaded.";
 }
 
 on editor:>EmacsSelectBufferDown() {
-	declare curView = .TopView;
-	if (ebCurrentSelectionBuffer != NULL) {
-		ebCurrentSelectionBuffer = ebCurrentSelectionBuffer.NextBuffer();
-	}
-	IDE.StatusBar = "Select Buffer: " + ebCurrentSelectionBuffer.FullName;
+        declare curView = .TopView;
+        if (ebCurrentSelectionBuffer != NULL) {
+                ebCurrentSelectionBuffer = ebCurrentSelectionBuffer.NextBuffer();
+        }
+        IDE.StatusBar = "Select Buffer: " + ebCurrentSelectionBuffer.FullName;
 }
 
 on editor:>EmacsSelectBufferUp() {
-	if (ebCurrentSelectionBuffer != NULL) {
-		ebCurrentSelectionBuffer = ebCurrentSelectionBuffer.PriorBuffer();
-	}
-	IDE.StatusBar = "Select Buffer: " + ebCurrentSelectionBuffer.FullName;
+        if (ebCurrentSelectionBuffer != NULL) {
+                ebCurrentSelectionBuffer = ebCurrentSelectionBuffer.PriorBuffer();
+        }
+        IDE.StatusBar = "Select Buffer: " + ebCurrentSelectionBuffer.FullName;
 }
 
 on editor:>EmacsSelectBufferEnter() {
-	declare curView = .TopView;
+        declare curView = .TopView;
 
-	if (initialized(curView)) {
-		curView.Attach(ebCurrentSelectionBuffer);
-    	IDE.StatusBar = ebCurrentSelectionBuffer.FullName, " Selected.";
-	}
+        if (initialized(curView)) {
+                curView.Attach(ebCurrentSelectionBuffer);
+        IDE.StatusBar = ebCurrentSelectionBuffer.FullName, " Selected.";
+        }
 
   .EmacsSelectBufferEnd();
 }
@@ -1330,8 +1530,8 @@ on editor:>EmacsSelectBufferEnd(declare bNoSelection) {
 
   if (initialized(bNoSelection))
      if (bNoSelection)
-    	IDE.StatusBar = "Select buffer cancelled.";
- 
+        IDE.StatusBar = "Select buffer cancelled.";
+
   IDE.KeyboardManager.Pop("Editor");
   bPopEditorKeyboard = false;
 }

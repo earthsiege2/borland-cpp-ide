@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1995, 1996 by Borland International
+ *      Copyright (c) 1995, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $ */
 
 #include <string.h>
 
@@ -32,12 +33,9 @@ Return value    returns the length of the string
 
 size_t      _RTLENTRY  _EXPFUNC wcslen(const wchar_t *__s)
 {
-    wchar_t c;
     size_t len = 0;
 
-    do
-    {
-        c = __s[len++];
-    } while (c != 0);
+    while ( __s[len] != 0)
+        len++;
     return len;
 }

@@ -126,6 +126,9 @@ DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
   } else if (msg == WM_CLOSE) {
     ::PostMessage(hDlg, WM_USERSTAT, IDABORT, 0);
     return 1;
+  } else if (msg == WM_DESTROY) {
+    ::PostMessage(hDlg, WM_USERSTAT, IDABORT, 0);
+    return 1;
   }
   return 0;
 }

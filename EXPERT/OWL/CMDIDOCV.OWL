@@ -345,7 +345,7 @@ void [[TApplication]]::InitMainWindow()
 
 ##--END-- ((@QUERY_APPL_OLE != VALUE_SERVER) && (@QUERY_APPL_OLE != VALUE_OLEBOTH))
 ##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-  // Assign ICON w/ this application.
+  // Assign icons for this application.
   //
   frame->SetIcon(this, IDI_MDIAPPLICATION);
   frame->SetIconSm(this, IDI_MDIAPPLICATION);
@@ -355,15 +355,15 @@ void [[TApplication]]::InitMainWindow()
   //
   frame->Attr.AccelTable = IDM_MDI;
 
-##@OPT_APPL_TOOLBAR
-  SetupSpeedBar(frame);
-##@OPT_APPL_STATUSBAR 7
-
+##@OPT_APPL_STATUSBAR 6
   TStatusBar* sb = new TStatusBar(frame, TGadget::Recessed,
                                   TStatusBar::CapsLock        |
                                   TStatusBar::NumLock         |
                                   TStatusBar::ScrollLock);
   frame->Insert(*sb, TDecoratedFrame::Bottom);
+
+##@OPT_APPL_TOOLBAR 2
+  SetupSpeedBar(frame);
 
   SetMainWindow(frame);
 
@@ -428,7 +428,7 @@ void [[TApplication]]::EvNewView(TView& view)
       [[TMDIChild]]* child = new [[TMDIChild]](*mdiClient, 0, 0);
 
 ##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-      // Associate ICON w/ this child window.
+      // Assign icons for this child window.
       //
       child->SetIcon(this, IDI_DOC);
       child->SetIconSm(this, IDI_DOC);
@@ -452,7 +452,13 @@ void [[TApplication]]::EvNewView(TView& view)
     [[TMDIChild]]* child = new [[TMDIChild]](*mdiClient, 0, view.GetWindow());
 
 ##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-    // Associate ICON w/ this child window.
+    // Set the menu descriptor for this view.
+    //
+    if (view.GetViewMenu())
+      child->SetMenuDescr(*view.GetViewMenu());
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+    // Assign icons with this child window.
     //
     child->SetIcon(this, IDI_DOC);
     child->SetIconSm(this, IDI_DOC);

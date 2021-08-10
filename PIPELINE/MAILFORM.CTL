@@ -16,7 +16,7 @@
 
                                                                 $(system.date)
 --------------------------------< fold back here >----------------------------------
-    XXX:ALSXAAAAALAL
+    XXX:ALSXAAAAALSL
     Dear $(REGISTER.201), thank you for registering. 
 
     Name:       $(REGISTER.201,15)   MI: $(REGISTER.202,1)   Last: $(REGISTER.203,20) 
@@ -49,4 +49,4 @@
 
     SQL Server(s): $(MARKETING.1052)
     
-    XXX:ALSXAAAAALAL
+    XXX:ALSXAAAAALSL

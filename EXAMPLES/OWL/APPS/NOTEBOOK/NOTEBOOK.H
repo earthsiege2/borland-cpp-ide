@@ -89,7 +89,11 @@ class TNotebook : public virtual TWindow
     void EvGetMinMaxInfo(MINMAXINFO far& minmaxinfo);
     uint EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize);
     UINT EvNCHitTest(TPoint& screenPt);
+#if defined(BI_PLAT_WIN32)
+    void EvNCPaint(HRGN);
+#else
     void EvNCPaint();
+#endif
     void EvNCLButtonDown(UINT hitTest, TPoint& screenPt);
     void EvNCLButtonDblClk(UINT hitTest, TPoint& screenPt);
     void EvMouseMove(UINT hitTest, TPoint& clientpt);

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.29  $
+//$Revision:   10.46  $
 //
 // Implementation of class TGadgetWindow and TGadgetWindowFont.
 //----------------------------------------------------------------------------
@@ -15,6 +15,9 @@
 #endif
 #if !defined(OWL_FRAMEWIN_H)
 # include <owl/framewin.h>
+#endif
+#if !defined(OWL_DECFRAME_H)
+# include <owl/decframe.h>
 #endif
 #if !defined(OWL_CELARRAY_H)
 # include <owl/celarray.h>
@@ -30,8 +33,12 @@
 //
 // Diagnostic group for gadgets & gadget windows
 //
+OWL_DIAGINFO;
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlGadget, 1, 0);
 DIAG_DECLARE_GROUP(OwlCmd);
+
+const uint GadgetWindowTimerID = 0xBACA;
+const uint GadgetWindowTimeOut = 1000;
 
 IMPLEMENT_CASTABLE1(TGadgetWindow, TWindow);
 
@@ -39,9 +46,12 @@ DEFINE_RESPONSE_TABLE1(TGadgetWindow, TWindow)
   EV_WM_LBUTTONDOWN,
   EV_WM_LBUTTONUP,
   EV_WM_LBUTTONDBLCLK,
+  EV_WM_RBUTTONDOWN,
+  EV_WM_RBUTTONUP,
   EV_WM_MOUSEMOVE,
   EV_WM_WINDOWPOSCHANGING,
   EV_WM_SYSCOLORCHANGE,
+  EV_WM_CREATETOOLTIP,
 END_RESPONSE_TABLE;
 
 //
@@ -60,9 +70,27 @@ static inline int heightInPixels(int pointSize)
 //
 TGadgetWindowFont::TGadgetWindowFont(int pointSize, bool bold, bool italic)
 :
+  TFont(TDefaultGUIFont().GetFaceName().c_str(),
+        heightInPixels(pointSize),
+        0, 0, 0,
+        bold ? FW_BOLD : FW_NORMAL,
+        TDefaultGUIFont().GetPitchAndFamily(),
+        uint8(italic))
+/*
   TFont("MS Sans Serif", heightInPixels(pointSize), 0, 0, 0,
         bold ? FW_BOLD : FW_NORMAL,
         uint8(VARIABLE_PITCH | FF_SWISS), uint8(italic))
+*/        
+{
+}
+
+//
+// Construct a specialized gadget window font. Base it on an existing font
+// object. 
+//
+TGadgetWindowFont::TGadgetWindowFont(const TFont& font)
+:
+  TFont(font)
 {
 }
 
@@ -75,6 +103,7 @@ TGadgetWindow::TGadgetWindow(TWindow*       parent,
                              TTileDirection direction,
                              TFont*         font,
                              TModule*       module)
+              :TimerID(0), WantTimer(false)
 {
   // Initialize virtual base, in case the derived-most used default ctor
   //
@@ -84,8 +113,8 @@ TGadgetWindow::TGadgetWindow(TWindow*       parent,
   //
   Attr.Style |= WS_CLIPCHILDREN;
 
-  // Older, non 3d UI uses a plain thin border. 3d UI relies on neighbor window
-  // edges.
+  // Older, non 3d UI uses a plain thin border. 3d UI relies on
+  // neighbor window edges.
   //
   if (!TSystem::Has3dUI())
     Attr.Style |= WS_BORDER;
@@ -144,14 +173,12 @@ TGadgetWindow::~TGadgetWindow()
 
   while (gadget) {
     TGadget*  tmp = gadget;
-
     gadget = gadget->Next;
     delete tmp;
   }
 
   delete Font;
   delete SharedCels;
-  delete Tooltip;
 }
 
 //
@@ -191,11 +218,37 @@ TGadgetWindow::IdleAction(long idleCount)
 
   // Let the gadgets do command enabling if they need to
   //
-  bool result = false;
   for (TGadget* g = Gadgets; g; g = g->NextGadget())
-    result |= g->IdleAction(idleCount);
+    g->IdleAction(idleCount);
 
-  return result | TWindow::IdleAction(idleCount);
+  // Chain to base implementation
+  //
+  return TWindow::IdleAction(idleCount);
+}
+
+//
+// Inform GadgetWindow to start a Timer notification.
+//
+// NOTE: TGadgetWindow does not catch the WM_TIMER event. The purpose of
+//       the timer message it to cause message dispatching which eventually
+//       leads to an 'IdleAction' call.
+//
+bool
+TGadgetWindow::EnableTimer()
+{
+  // Set flag and let 'SetupWindow' create timer
+  //
+  if (!GetHandle()) {
+    WantTimer = true;
+    return true;
+  }
+
+  // Set a timer if one's not enabled already
+  //
+  if (!TimerID)
+    TimerID = SetTimer(GadgetWindowTimerID, GadgetWindowTimeOut);
+
+  return TimerID != 0;
 }
 
 //
@@ -251,20 +304,34 @@ TGadgetWindow::GadgetReleaseCapture(TGadget& gadget)
 void
 TGadgetWindow::SetHintCommand(int id)
 {
-  if (Parent) {
+  // Find our ancestor decorated frame [which potentially has a statusbar
+  // to show hint messages]
+  //
+  TWindow* parent= GetParentO();
+  TDecoratedFrame* frame= parent ?
+                          TYPESAFE_DOWNCAST(parent, TDecoratedFrame) : 0;
+  while (parent && !frame) {
+    parent = parent->GetParentO();
+    if (parent)
+      frame = TYPESAFE_DOWNCAST(parent, TDecoratedFrame);
+  }
+
+  // Forward command id to frame via fake WM_MENUSELECT messages
+  //
+  if (frame) {
     if (id > 0) {
-      Parent->HandleMessage(WM_MENUSELECT, id, 0);
+      frame->HandleMessage(WM_MENUSELECT, id, 0);
     }
     else {
       // Send a menuselect w/ flags==0xFFFF and hMenu==0 to indicate end
       //
 #if defined(BI_PLAT_WIN32)
-      Parent->HandleMessage(WM_MENUSELECT, 0xFFFF0000, 0); // flags+item, hmenu
+      frame->HandleMessage(WM_MENUSELECT, 0xFFFF0000, 0); // flags+item, hmenu
 #else
-      Parent->HandleMessage(WM_MENUSELECT, 0, 0x0000FFFFL);// item, hmenu+flags
+      frame->HandleMessage(WM_MENUSELECT, 0, 0x0000FFFFL);// item, hmenu+flags
 #endif
     }
-    Parent->HandleMessage(WM_ENTERIDLE, MSGF_MENU);
+    frame->HandleMessage(WM_ENTERIDLE, MSGF_MENU);
   }
 }
 
@@ -973,11 +1040,18 @@ TGadgetWindow::Removed(TGadget& gadget)
   //
   if (gadget.WideAsPossible)
     WideAsPossible--;
+
+  // Clear last know gadget as mouse location
+  //
   if (&gadget == AtMouse)
     AtMouse = 0;
 
+  // Release caption if it has/had it
+  //
   GadgetReleaseCapture(gadget);
 
+  // Notify gadget and reset/adjust variables to reflect new state of gadget
+  //
   gadget.Removed();
   gadget.Window = 0;
   gadget.Next = 0;
@@ -1016,17 +1090,17 @@ TGadgetWindow::GetCelArray(int minX, int minY)
 }
 
 //
-// Override TWindow::SetupWindow to create tooltips for the gadget window.
+// Override TWindow::SetupWindow.
 //
 void
 TGadgetWindow::SetupWindow()
 {
   TWindow::SetupWindow();
 
-  // If 'WantTooltip' is enabled, created the control
+  // if 'WantTimer' is enabled, start a timer
   //
-  if (WantTooltip)
-    SetTooltip(new TTooltip(this));
+  if (WantTimer)
+    EnableTimer();
 
   if (DirtyLayout)    
     LayoutSession();
@@ -1054,12 +1128,26 @@ TGadgetWindow::SetupWindow()
                  SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOZORDER);
   }
 
-  // Inform each gadget that the gadgetwindow is now created. This allows
-  // gadgets to perform initialization [eg. registering with the tooltip] which
-  // requires the 'HWND' to be valid
+  // Create toolips after all other windows have been created.
   //
-  for (TGadget* g = Gadgets; g; g = g->NextGadget())
-    g->Created();
+  PostMessage( WM_OWLCREATETTIP );
+}
+
+//
+// Override TWindow's virtual to cleanup potential Timer
+//
+void
+TGadgetWindow::CleanupWindow()
+{
+  // Cleanup pending timer
+  //
+  if (TimerID && KillTimer(TimerID)) {
+    TimerID = 0;
+  }
+
+  // Chain to base class' version
+  //
+  TWindow::CleanupWindow();
 }
 
 //
@@ -1083,6 +1171,28 @@ TGadgetWindow::PreProcessMsg(MSG& msg)
   //
   return TWindow::PreProcessMsg(msg);
 }
+
+//
+// Create Tooltips for GadgetWindow
+//
+void
+TGadgetWindow::EvCreateTooltips()
+{
+  // If 'WantTooltip' is enabled, created the control
+  //
+  if (WantTooltip)
+    EnableTooltip(true);
+
+  // Inform each gadget that the gadgetwindow is now created. This allows
+  // gadgets to perform initialization [eg. registering with the tooltip] which
+  // requires the 'HWND' to be valid
+  //
+  for (TGadget* g = Gadgets; g; g = g->NextGadget())
+    g->Created();
+
+}
+
+
 
 //
 // Intercept window size changes to make sure that this gadget window follows
@@ -1169,7 +1279,7 @@ TGadgetWindow::Paint(TDC& dc, bool erase, TRect& rect)
   // Especially useful for docking windows which undergo internal state
   // changes
   //
-  if (Tooltip) {
+  if (Tooltip && Tooltip->IsWindow()) {
     uint count = Tooltip->GetToolCount();
     if (count) {
       TPen redPen(TColor(0xff, 0, 0));
@@ -1235,6 +1345,44 @@ TGadgetWindow::EvLButtonDblClk(uint modKeys, TPoint& point)
 }
 
 //
+// Pass RButton messages to the gadget at the mouse location or the one
+// with Capture
+//
+// NOTE: The default right-mouse down handler of TGadget does
+//       *NOT* set capture
+//
+void
+TGadgetWindow::EvRButtonDown(uint modKeys, TPoint& point)
+{
+  TGadget* gadget = Capture ? Capture : GadgetFromPoint(point);
+
+  if (gadget && (gadget->GetEnabled() || Capture)) {
+    TPoint gadgetPoint = point - *(TSize*)&gadget->GetBounds().TopLeft();
+    gadget->RButtonDown(modKeys, gadgetPoint);
+  }
+
+  TWindow::EvRButtonDown(modKeys, point);
+}
+
+//
+// Pass RButton messages to the gadget at the mouse location or the one with
+// capture.
+//
+// NOTE: The default right-mouse down handler of TGadget does
+//       *NOT* set capture
+//
+void
+TGadgetWindow::EvRButtonUp(uint modKeys, TPoint& point)
+{
+  TGadget* gadget = Capture ? Capture : GadgetFromPoint(point);
+
+  if (gadget && (gadget->GetEnabled() || Capture))
+    gadget->RButtonUp(modKeys, TPoint(point.x - gadget->GetBounds().left,
+                                      point.y - gadget->GetBounds().top));
+  TWindow::EvRButtonUp(modKeys, point);
+}
+
+//
 // Forward mouse moves to the gadget that has captures the mouse, if any.
 // Otherwise checks for mouse entering & leaving gadgets
 //
@@ -1279,7 +1427,35 @@ void
 TGadgetWindow::EnableTooltip(bool enable)
 {
   if (!Tooltip) {
-    SetTooltip(new TTooltip(this));
+
+    // Find a parent for the tooltip: It's attractive to make the
+    // gadgetwindow the owner of the tooltip, a popup window. However, this
+    // will typically fail since the gadget window is invariably a child
+    // window. Windows seems to accomodate this situation by simply making
+    // the tooltip's owner the gadgetwindow's owner. This works fine until
+    // the owner of the gadgetwindow is destroyed before the gadgetwindow
+    // is destroyed, such as in the case of a gadgetwindow initally created
+    // as a floating docking toolbar; When it's docked, the floating slip,
+    // it's original owner, is destroyed and the gadget window is reparented
+    // to an edge slip. In this scenario, the tooltip is silently destroyed
+    // along with the floating slip [it's real owner!] and the docked
+    // gadgetwindow no longer provide tool tips!
+    //
+
+    // To circumvent this scenario, we'll look for a window which is fairly
+    // stable/rooted as owner of the tooltip. Ideally, we'll get the
+    // application's main window.
+    //
+    TWindow* tipParent = this;
+    while (tipParent->GetParentO()) {
+      tipParent = tipParent->GetParentO();
+      if (tipParent->IsFlagSet(wfMainWindow))
+        break;
+    }
+
+    // Create and initialize tooltip
+    //
+    SetTooltip(new TTooltip(tipParent));
   }
   else {
     if (Tooltip->GetHandle())
@@ -1293,11 +1469,24 @@ TGadgetWindow::EnableTooltip(bool enable)
 void
 TGadgetWindow::SetTooltip(TTooltip* tooltip)
 {
-  delete Tooltip;
+  // Cleanup; via Condemned list if tooltip was created
+  //
+  if (Tooltip) {
+    if (Tooltip->GetHandle())
+      Tooltip->SendMessage(WM_CLOSE);
+    else
+      delete Tooltip;
+  }
+
+  // Store new tooltip and create if necessary
+  //
   Tooltip = tooltip;
   if (Tooltip) {
     if (!Tooltip->GetHandle()) {
-      Tooltip->Attr.Style |= WS_VISIBLE;
+
+      // Make sure tooltip is disabled so it does not take input focus
+      //
+      Tooltip->Attr.Style |= WS_DISABLED;
       Tooltip->Create();
     }
   }
@@ -1309,10 +1498,21 @@ TGadgetWindow::SetTooltip(TTooltip* tooltip)
 // target.
 //
 TResult
-TGadgetWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode) 
+TGadgetWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
 {
   TRACEX(OwlCmd, 1, "TGadgetWindow::EvCommand - id(" << id << "), ctl(" <<\
                      hex << uint(hWndCtl) << "), code(" << notifyCode  << ")");
+
+  // First allow any derived class that wants to handle the command
+  // NOTE: This search only caters for menu-style WM_COMMANDs (not those
+  //       sent by controls)
+  //
+  TEventInfo  eventInfo(0, id);
+  if (Find(eventInfo)) {
+    Dispatch(eventInfo, id);
+    return 0;
+  }
+
 
 #if 0
   // Prior versions of TGadgetWindow relied on TWindow's EvCommand for
@@ -1331,7 +1531,7 @@ TGadgetWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
   TWindow* target;
   TFrameWindow* frame;
 
-  // Find the frame who is our latest ancestor and make him our command target
+  // Find the frame who is our latest ancestor and make it our command target
   //
   for (target = GetParentO(); target; target = target->GetParentO()) {
     frame = TYPESAFE_DOWNCAST(target, TFrameWindow);
@@ -1339,14 +1539,17 @@ TGadgetWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
       break;
   }
 
-  // Make sure our frame doesn't think we are its command target, or a BAD
+  // Make sure the frame doesn't think we are its command target, or a BAD
   // loop will happen
   //
   if (target && (!frame || frame->GetCommandTarget() != GetHandle())) {
     CHECK(target->IsWindow());
-    target->EvCommand(id, hWndCtl, notifyCode);
+    return target->EvCommand(id, hWndCtl, notifyCode);
   }
-  return 0;
+
+  // If all command routing fails, go back to basic dispatching of TWindow
+  //
+  return TWindow::EvCommand(id, hWndCtl, notifyCode);
 }
 
 //
@@ -1357,6 +1560,9 @@ TGadgetWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
 void
 TGadgetWindow::EvCommandEnable(TCommandEnabler& ce)
 {
+  // If someone derived from TGadgetWindow and handles the command there,
+  // give these handlers the first crack.
+  //
   TEventInfo eventInfo(WM_COMMAND_ENABLE, ce.Id);
   if (Find(eventInfo)) {
     Dispatch(eventInfo, 0, TParam2(&ce));
@@ -1372,8 +1578,12 @@ TGadgetWindow::EvCommandEnable(TCommandEnabler& ce)
     CHECK(target->IsWindow());
     ce.SetReceiver(*target);
     target->EvCommandEnable(ce);
+    if( ce.GetHandled() )
+      return;
   }
 
+  // Default to TWindow's implementation if the above routing fails
+  //
   TWindow::EvCommandEnable(ce);
 }
 
@@ -1383,22 +1593,29 @@ TGadgetWindow::EvCommandEnable(TCommandEnabler& ce)
 TResult
 TGadgetWindow::EvNotify(uint id, TNotify far& notifyInfo)
 {
+  // Intercept requests for tooltip texts and turn the request into
+  // a 'CommandEnabler'. This mechanism allows use the route the request
+  // the same way commands are routed in OWL. Therefore, the object that
+  // handles a command is the object that get's first crack at providing
+  // the tip text for that command.
+  //
   if (notifyInfo.code == TTN_NEEDTEXT) {
-
-    TTooltipText far& ttText = *(TTooltipText far*)&notifyInfo;
+    TTooltipText& ttText = *(TTooltipText*)&notifyInfo;
     TTooltipEnabler enabler(ttText, *this);
 
 #if defined(__TRACE) || defined(__WARN)
     char text[50];
     sprintf(text, (ttText.uFlags & TTF_IDISHWND) ? "Tip for 0x%X not found" :
                                                    "Text for %d not found",
-                                                   enabler.Id);
+                                                    enabler.Id);
     enabler.SetText(text);
 #endif
     HandleMessage(WM_COMMAND_ENABLE, 0, TParam2(&enabler));
     return 0;
   }
 
+  // Chain to TWindow's dispatch mechanism
+  //
   return TWindow::EvNotify(id, notifyInfo);
 }
 

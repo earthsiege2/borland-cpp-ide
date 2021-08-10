@@ -1,5 +1,7 @@
 //*++
 //
+// Copyright (c) 1991-1996  Microsoft Corporation
+//
 // Module Name:
 //
 //  nb30.h
@@ -9,19 +11,17 @@
 //  This module contains the definitions for portable NetBIOS 3.0
 //  support.
 //
-// Author:
-//
-//  Colin Watson (ColinW) 06-Jun-1991
-//
-// Revision History:
-//
 //--*/
-
-/* $Copyright: 1994$ */
 
 #ifndef NCB_INCLUDED
 #define NCB_INCLUDED
-#define __NB30_H
+#pragma option -b
+
+#if defined (__BORLANDC__)
+#pragma option -b.
+  #include <pshpack8.h>
+#pragma option -b
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -312,4 +312,11 @@ Netbios(
 }
 #endif
 
+#if defined (__BORLANDC__)
+#pragma option -b.
+  #include <poppack.h>
+#pragma option -b
+#endif
+
+#pragma option -b.
 #endif /* NCB_INCLUDED */

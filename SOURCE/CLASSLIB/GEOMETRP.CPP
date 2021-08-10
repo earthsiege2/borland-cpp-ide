@@ -1,14 +1,18 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.2  $
+//$Revision:   5.5  $
 //
 // Implementation of persistent streaming for window system structure and type
 // encapsulation
 //----------------------------------------------------------------------------
 #include <winsys/pch.h>
 #include <winsys/geometry.h>
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 //----------------------------------------------------------------------------
 // TRect streaming
@@ -127,4 +131,10 @@ operator <<(opstream& os, const TSize& s)
 {
   return os << s.cx << s.cy;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
+
+
 

@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.18  $
 //
 //   Definition of Compound Document TOcView Class
 //----------------------------------------------------------------------------
@@ -15,13 +17,26 @@
 # include <ocf/ocapp.h>      // Client related
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
+class         TRegList;
+
+#if defined(BI_NAMESPACE)
+}  // namespace ClassLib
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
 //
 // Classes referenced
 //
 class _ICLASS TOcControl;
 class _ICLASS TOcStorage;
 class _ICLASS TOcDataProvider;
-class         TRegList;
 
 //
 // OCF Mixin classes for users derived application class
@@ -270,19 +285,11 @@ class _ICLASS TOcView : public TUnknown,
 
     uint32          Options;
 
-#if defined(BI_DATA_NEAR)
-    TPoint&          Origin;       // Origin of view topleft relative to the document
-    TSize&           Extent;       // Extent of view's perception of document?
-    string&          WinTitle;     // Merged window title string
-    TOcFormatList&   FormatList;   // list of clipboard formats supported
-    TString&         OrgTitle;     // Original window title string
-#else
     TPoint           Origin;
     TSize            Extent;
     string           WinTitle;
     TOcFormatList    FormatList;
     TString          OrgTitle;     // Original window title string
-#endif
     int              LinkFormat;   // adjustment for format count
     TRegList*        RegList;
     TOcDataProvider* OcData;       // Dataprovider representing this view
@@ -489,7 +496,7 @@ class _OCMCLASS TOcContainerHost {
     // OC-Host support
     //
     virtual void  ReleaseOcObject() = 0;
-  
+
     // Container methods
     //
     virtual bool   EvOcViewOpenDoc(const char far* path) = 0;
@@ -529,7 +536,7 @@ class _OCMCLASS TOcCtrlContainerHost {
     // OC-Host support
     //
     virtual void  ReleaseOcObject() = 0;
-  
+
     // Control methods
     //
     virtual bool   EvOcViewTransformCoords(uint verb) = 0;
@@ -589,7 +596,7 @@ class _OCMCLASS TOcServerHost {
     // OC-Host support
     //
     virtual void  ReleaseOcObject() = 0;
-  
+
     // Data server methods
     //
     virtual bool   EvOcViewGetItemName(TOcItemName& item) = 0;
@@ -637,7 +644,7 @@ class _OCMCLASS TOcContainerHostMsg : public TOcContainerHost {
     // OC-Host support
     //
     virtual void  ReleaseOcObject() {delete this;}
-  
+
     // Container methods
     //
     virtual bool   EvOcViewOpenDoc(const char far* path);
@@ -687,7 +694,7 @@ class _OCMCLASS TOcServerHostMsg : public TOcServerHost {
     // OC-Host support
     //
     virtual void  ReleaseOcObject() {delete this;}
-  
+
     // Data server methods
     //
     virtual bool   EvOcViewGetItemName(TOcItemName& item);
@@ -839,6 +846,10 @@ TOcView::ForwardEvent(int eventId, uint32 param)
 #define OC_AMBIENT_SETFONT             0x036D
 
 #define OC_USEREVENT                   0xF000  // User defined events
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 //----------------------------------------------------------------------------
 // Inline Implementations

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.15  $
+// $Revision:   10.22  $
 //
 // TDockable classes: TDockableGadgetWindow & TDockableControlBar
 // TDockingSlip classes: TFloatingSlip & TEdgeSlip
@@ -22,6 +22,10 @@
 #endif
 #if !defined(OWL_CONTROLB_H)
 # include <owl/controlb.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -204,6 +208,7 @@ class _OWLCLASS TFloatingSlip : public TFloatingFrame,
     void    EvWindowPosChanged(WINDOWPOS far& windowPos);
     void    EvClose();
     void    EvWinIniChange(char far*);
+    void    EvGetMinMaxInfo(MINMAXINFO far& info);
 
   DECLARE_RESPONSE_TABLE(TFloatingSlip);
 };
@@ -232,7 +237,6 @@ template <class T> class TFastList {
     int  Count() const;                   // The count of entries in list
 
     void Clear();     
-//    void Free();              // Clear and free all Objects (delete the items).
     T& operator [](int i);
 
     void Fill(TWindow* parent, TGridType gridType);
@@ -290,7 +294,13 @@ class _OWLCLASS TEdgeSlip : public TWindow, public TDockingSlip {
     void     EvLButtonDown(uint modKeys, TPoint& point);
     void     EvLButtonDblClk(uint modKeys, TPoint& point);
     uint     EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize);
+
+#if defined(BI_PLAT_WIN32)
+    void     EvNCPaint(HRGN);
+#else
     void     EvNCPaint();
+#endif //BI_PLAT_WIN32
+
     bool     EvEraseBkgnd(HDC);
     void     EvParentNotify(uint event, uint childHandleOrX, uint childIDOrY);
     void     EvWindowPosChanging(WINDOWPOS far& windowPos);
@@ -327,38 +337,47 @@ class _OWLCLASS THarbor : public TWindow {
 
     // Dockable window insertion
     //
-    void     Insert(TDockable& dockable, TAbsLocation location,
-                    const TPoint* where = 0,
-                    TRelPosition position = rpNone, TDockable* relativeTo = 0);
+    TDockingSlip*   Insert(TDockable& dockable,
+                           TAbsLocation location,
+                           const TPoint* where = 0,
+                           TRelPosition position = rpNone,
+                           TDockable* relativeTo = 0);
 
     // Move a dockable from one slip to another, programatically
     //
-    void     Move(TDockable& dockable, TAbsLocation location,
-                  const TPoint* where = 0,
-                  TRelPosition position = rpNone, TDockable* relativeTo = 0);
+    void            Move(TDockable& dockable,
+                         TAbsLocation location,
+                         const TPoint* where = 0,
+                         TRelPosition position = rpNone,
+                         TDockable* relativeTo = 0);
 
     // Remove a dockable from the harbor
     //
-    void     Remove(TDockable& dockable);
+    void            Remove(TDockable& dockable);
 
     // Called by docking slips
     //
-    bool     DockDraggingBegin(TDockable& dockable, TPoint& pt,
-                               TAbsLocation location,
-                               TDockingSlip* dockingNotify = 0);
+    bool            DockDraggingBegin(TDockable& dockable, TPoint& pt,
+                                      TAbsLocation location,
+                                      TDockingSlip* dockingNotify = 0);
 
   protected:
-    void         SetupWindow();
+    void            SetupWindow();
 
-    TEdgeSlip*   GetEdgeSlip(TAbsLocation location);
-    void         SetEdgeSlip(TAbsLocation location, TEdgeSlip* slip);
-    TRelPosition GetSlipPosition(TAbsLocation location);
+    TEdgeSlip*      GetEdgeSlip(TAbsLocation location);
+    void            SetEdgeSlip(TAbsLocation location, TEdgeSlip* slip);
+    TRelPosition    GetSlipPosition(TAbsLocation location);
 
+    // Factory members - could be overridden by derived THarbor class
+    //
     virtual TEdgeSlip* ConstructEdgeSlip(TDecoratedFrame& df,
                                          TAbsLocation location);
     virtual TFloatingSlip* ConstructFloatingSlip(TDecoratedFrame& df,
-                                                 int x, int y, TWindow* dockableWindow);
+                                                 int x, int y,
+                                                 TWindow* dockableWindow);
 
+    // Mouse handlers - invoked when harbor grabs capture
+    //
     void     EvMouseMove(uint modKeys, TPoint& point);
     void     EvLButtonUp(uint modKeys, TPoint& point);
     void     EvLButtonDblClk(uint modKeys, TPoint& point);
@@ -384,7 +403,7 @@ class _OWLCLASS THarbor : public TWindow {
     TSize         DragHSize;       // Size of dockable when horizontal
     TSize         DragNSize;       // Size of dockable when a natural shape
     TPoint        DragAnchor;
-    TDockingSlip* DragNotificatee;
+    TDockingSlip* DragNotificatee; // Slip notified on drag operations
 
     TRect         SlipTR;
     TRect         SlipBR;
@@ -397,6 +416,10 @@ class _OWLCLASS THarbor : public TWindow {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

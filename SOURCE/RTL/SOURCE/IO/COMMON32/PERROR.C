@@ -6,17 +6,21 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
+#include <_tchar.h>
 
+#ifndef _UNICODE
 char    * _RTLENTRY _EXPDATA _sys_errlist[] = {
 /*  0 */    "Error 0",
 /*  1 */    "Invalid function number",
@@ -71,15 +75,25 @@ char    * _RTLENTRY _EXPDATA _sys_errlist[] = {
 
 int   _RTLENTRY _EXPDATA _sys_nerr = sizeof(_sys_errlist) / sizeof(_sys_errlist[0]);
 
+#else
+
+extern char    * _RTLENTRY _EXPDATA _sys_errlist[];
+extern int       _RTLENTRY _EXPDATA _sys_nerr;
+
+#endif // _UNICODE
+
 /*---------------------------------------------------------------------*
 
-Name            perror - system error messages
+Name            _tperror used as perror and _wperror
+                perror   - system error messages
+                _wperror - system error messages
 
 Usage           void perror(const char *string);
+                void _wperror(const wchar_t *string);
 
 Prototype in    stdio.h
 
-Description     perror prints an error message to stderr, describing
+Description     _tperror prints an error message to stderr, describing
                 the most recent error encountered in a system call from the
                 current program.
 
@@ -99,7 +113,7 @@ Return value    None
 
 *---------------------------------------------------------------------*/
 
-void _RTLENTRY _EXPFUNC perror(const char *s)
+void _RTLENTRY _EXPFUNC _tperror(const _TCHAR *s)
 {
     char    *cp;
 
@@ -110,7 +124,17 @@ void _RTLENTRY _EXPFUNC perror(const char *s)
 
     if (s && *s)
     {
+        /* If wide char string, convert to multibyte */
+#ifdef _UNICODE
+        char * errorStr;
+        int elen = (wcslen( s ) + 1) * MB_CUR_MAX;
+        errorStr = (char*)malloc( elen );
+        if( errorStr && wcstombs( errorStr, s, elen ) != (size_t)-1 )
+          fputs(errorStr, stderr);
+        free( errorStr );
+#else
         fputs(s, stderr);
+#endif
         fputs(": ", stderr);
     }
     fputs(cp, stderr);

@@ -3,6 +3,8 @@
 // Copyrights (C) 1996 Borland International
 //--------------------------------------------------------
 
+#include <vdbt/dbcontrl.h>
+#pragma hdrstop
 #include <vdbt/dbedit.h>
 
 //--------------------------------------------------------
@@ -52,6 +54,10 @@ TDBEdit::TDBEdit( TWindow *parent, int resourceId, TModule *module )
 // OWL response table.
 //--------------------------------------------------------
 DEFINE_DB_RESPONSE_TABLE1( TDBEdit, TDBControl )
+  EV_VBXEVENT_CLICK,
+  EV_VBXEVENT_DRAGOVER,
+  EV_VBXEVENT_DRAGDROP,
+  EV_VBXEVENT_ENDDRAG,
   EV_VBXEVENT_DBLCLICK(  Event_TDBEdit_DblClick ),
   EV_VBXEVENT_KEYDOWN(   Event_TDBEdit_KeyDown ),
   EV_VBXEVENT_KEYPRESS(  Event_TDBEdit_KeyPress ),
@@ -68,6 +74,10 @@ END_RESPONSE_TABLE;
 //--------------------------------------------------------
 // Event Handlers
 //--------------------------------------------------------
+DEFINE_DB_EVENT( TDBEdit, OnClick,     TNotifyEvent,   Event_TDBEdit_Click );
+DEFINE_DB_EVENT( TDBEdit, OnDragDrop,  TDragEvent,     Event_TDBEdit_DragDrop );
+DEFINE_DB_EVENT( TDBEdit, OnDragOver,  TDragOverEvent, Event_TDBEdit_DragOver );
+DEFINE_DB_EVENT( TDBEdit, OnEndDrag,   TDragEvent,     Event_TDBEdit_EndDrag );
 DEFINE_DB_EVENT( TDBEdit, OnChange,    TNotifyEvent,   Event_TDBEdit_Change );
 DEFINE_DB_EVENT( TDBEdit, OnDblClick,  TNotifyEvent,   Event_TDBEdit_DblClick );
 DEFINE_DB_EVENT( TDBEdit, OnEnter,     TNotifyEvent,   Event_TDBEdit_GotFocus );

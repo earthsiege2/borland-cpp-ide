@@ -5,12 +5,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.1  $ */
 
 #ifndef __SEARCH_H
 #define __SEARCH_H
@@ -37,15 +38,15 @@ typedef unsigned size_t;
 #ifdef __cplusplus
 extern "C" {
 #endif
-void *      _RTLENTRYF _EXPFUNC bsearch(const void * __key, const void * __base, 
+void *      _RTLENTRYF _EXPFUNC bsearch(const void * __key, const void * __base,
                            size_t __nelem, size_t __width,
                            int (_USERENTRY *fcmp)(const void *,
                            const void *));
-void *      _RTLENTRY _EXPFUNC lfind(const void * __key, const void * __base, 
+void *      _RTLENTRY _EXPFUNC lfind(const void * __key, const void * __base,
                                 size_t*__num, size_t __width,
                                 int (_USERENTRY *fcmp)(const void *, const void *));
-void *      _RTLENTRY _EXPFUNC lsearch(const void * __key, void * __base, 
-                                size_t*__num, size_t __width, 
+void *      _RTLENTRY _EXPFUNC lsearch(const void * __key, void * __base,
+                                size_t*__num, size_t __width,
                                 int (_USERENTRY *fcmp)(const void *, const void *));
 void        _RTLENTRYF _EXPFUNC qsort(void * __base, size_t __nelem, size_t __width,
                          int (_USERENTRY *__fcmp)(const void *, const void *));

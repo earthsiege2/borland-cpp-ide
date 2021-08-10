@@ -34,7 +34,7 @@ class TLine : public TPoints {
     // Functions to modify and query pen attributes.
     int QueryPenSize() const {return PenSize;}
     const TColor& QueryColor() const {return Color;}
-    void SetPen(TColor& newColor, int penSize = 0);
+    void SetPen(const TColor& newColor, int penSize = 0);
     void SetPen(int penSize);
     friend bool GetPenSize(TWindow* parent, TLine& line);
     friend bool GetPenColor(TWindow* parent, TLine& line);
@@ -233,7 +233,7 @@ TLine::SetPen(int penSize)
 }
 
 void
-TLine::SetPen(TColor& newColor, int penSize)
+TLine::SetPen(const TColor& newColor, int penSize)
 {
   // If penSize isn't the default (0), set PenSize to the new size.
   if (penSize)

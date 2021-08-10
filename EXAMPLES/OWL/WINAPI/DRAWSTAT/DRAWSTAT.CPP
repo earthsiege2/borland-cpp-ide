@@ -54,6 +54,8 @@ TTestWindow::SetupWindow()
 {
   TDialog::SetupWindow();
 
+  SendDlgItemMessage( IDC_BITMAP, BM_SETCHECK, 1, 0 );
+
   ::GetWindowRect(GetDlgItem(IDC_SAMPLE), &SampleRect);
   ScreenToClient(SampleRect.TopLeft());
   ScreenToClient(SampleRect.BottomRight());
@@ -75,8 +77,6 @@ TTestWindow::PaintSample(TDC& dc)
   switch (Type) {
     case DST_BITMAP:
       lp = LPARAM((HBITMAP)SampleBmp);
-      break;
-    case DST_COMPLEX:
       break;
     case DST_ICON:
       lp = LPARAM((HICON)SampleIcn);
@@ -110,7 +110,8 @@ TTestWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
     return TDialog::EvCommand(id, hWndCtl, notifyCode);
 
   Update();
-  PaintSample(TClientDC(*this));
+  Invalidate();
+  UpdateWindow();
 
   return true;
 }
@@ -120,7 +121,6 @@ TTestWindow::Update()
 {
   static int typeBit[] = {
     DST_BITMAP,
-    DST_COMPLEX,
     DST_ICON,
     DST_PREFIXTEXT,
     DST_TEXT,

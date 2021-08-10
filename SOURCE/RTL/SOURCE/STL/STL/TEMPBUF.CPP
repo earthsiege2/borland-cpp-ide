@@ -1,3 +1,5 @@
+/* $Copyright: 1995$ */
+/* $Revision:   8.2  $        */
 /***************************************************************************
  *
  * tempbuf.cpp - Source for the Standard Library temp buffer

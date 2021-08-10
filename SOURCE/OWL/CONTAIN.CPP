@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of many of OWL's container classes
 //----------------------------------------------------------------------------
@@ -11,6 +11,7 @@
 # include <owl/contain.h>
 #endif
 
+OWL_DIAGINFO;
 
 //
 //

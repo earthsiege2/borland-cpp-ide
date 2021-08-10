@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 
 #pragma inline
@@ -21,6 +22,7 @@
 #include <math.h>
 #include <errno.h>
 
+extern double _max_dble;
 
 /*--------------------------------------------------------------------------*
 
@@ -64,11 +66,11 @@ asm     jnb     hyp_infiniteY
 asm     FADD                            /*       --"--  +  --"--        */
 asm     FSQRT                           /* sqrt (               )       */
 #ifdef __HUGE__
-asm     mov     ax, seg HUGE_VAL
+asm     mov     ax, seg _max_dble
 asm     mov     es,ax
-asm     FCOM    es: DOUBLE (HUGE_VAL)
+asm     FCOM    es: DOUBLE (_max_dble)
 #else
-asm     FCOM    DOUBLE (HUGE_VAL)
+asm     FCOM    DOUBLE (_max_dble)
 #endif
 asm     FSTSW   temp
 asm     test    temp, 04500H

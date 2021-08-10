@@ -1,13 +1,16 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.11  $
+//$Revision:   10.17  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
+#if !defined(OWL_MODULE_H)
+# include <owl/module.h>
+#endif
 #if !defined(OWL_WINSOCK_H)
 # include <owl/winsock.h>
 #endif
@@ -15,6 +18,8 @@
 # include <owl/winsock.rh>
 #endif
 #include <stdio.h>
+
+OWL_DIAGINFO;
 
 extern HINSTANCE _hInstance;   //Defined by startup code for windows programs.
 
@@ -51,6 +56,10 @@ TSocketError& TSocketError::operator =(const TSocketError& src)
   return *this;
 }
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 //
 // The important criteria for determining equality is the error value.  The
 //  string is unimportant.
@@ -60,6 +69,10 @@ bool operator ==(const TSocketError& socketError1,
 {
   return socketError1.Error == socketError2.Error;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //
 // Initialize the error code.
@@ -109,7 +122,7 @@ char* TSocketError::AppendError(char* stringToAppendErrorTo, char* destination)
     strcpy(tempString, stringToAppendErrorTo);
     strcat(tempString, "\n\n");
     strcat(tempString, GetReasonString());
-    return String;
+    return tempString;
   }
 
   strcpy(destination, stringToAppendErrorTo);
@@ -129,12 +142,12 @@ char* TSocketError::AppendError(int stringResourceToAppendErrorTo, char* destina
 {
   if (!destination) { // In this case, the user wants to use our own string.
     TAPointer<char> tempString = new char[SizeToAllocate];
-    ::LoadString(_hInstance, stringResourceToAppendErrorTo, tempString, 90);
-    AppendError(tempString);  
+    GetModule().LoadString(stringResourceToAppendErrorTo, tempString, 90);
+    AppendError(tempString);
     strcpy(String, tempString);
     return String;
    }
-   ::LoadString(_hInstance, stringResourceToAppendErrorTo, destination, 90);
+   GetModule().LoadString(stringResourceToAppendErrorTo, destination, 90);
    return AppendError(destination);
 }
 
@@ -211,6 +224,19 @@ void TSocketError::GetErrorString()
   while (id < COUNTOF(resIdLookup) && resIdLookup[id] != Error)
     id++;
   TAPointer<char> temp = new char[SizeToAllocate];
-  ::LoadString(_hInstance, IDS_WINSOCK_BASE+id, temp, SizeToAllocate);
+  GetModule().LoadString(IDS_WINSOCK_BASE+id+1, temp, SizeToAllocate);
   sprintf(String, "Winsock Error %d %s", Error, (char*)temp);
 }
+
+//
+// Return the current module.  Used when loading strings.
+// Important when linking to OWL dynamically because ::LoadString
+// would try to load from the EXE, but the WinSock resource
+// strings are in the DLL.
+//
+TModule&
+TSocketError::GetModule()         // this is a static function
+{
+  return *Module;
+}
+

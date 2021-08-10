@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.9  $
+//$Revision:   10.14  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
@@ -11,6 +11,8 @@
 #if !defined(OWL_WINSOCK_H)
 # include <owl/winsock.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 //
@@ -128,8 +130,8 @@ THostInfoManager::~THostInfoManager()
 //
 int THostInfoManager::GetHostName(char far* name, int nameLength)
 {
-  if (!TWinSock::Dll()->gethostname(name, nameLength)) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+  if (TWinSockDll::gethostname(name, nameLength) == SOCKET_ERROR) {
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -196,11 +198,11 @@ int THostInfoManager::GetHostInfo(THostEntry*& entry, const TSocketAddress& addr
   sockaddr_in* tempSockAddrIn = (sockaddr_in*)&address;
   tempSockAddrIn->sin_addr.s_addr = tempSockAddrIn->sin_addr.s_addr;
 
-  entry = (THostEntry*)TWinSock::Dll()->gethostbyaddr(
+  entry = (THostEntry*)TWinSockDll::gethostbyaddr(
                                    (const char far*)&tempSockAddrIn->sin_addr.s_addr,
                                    sizeof(ulong), PF_INET);
   if (!entry) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -221,9 +223,9 @@ int THostInfoManager::GetHostInfo(THostEntry*& entry, const TSocketAddress& addr
 //
 int THostInfoManager::GetHostInfo(THostEntry*& entry, const char far* name)
 {
-  entry = (THostEntry*)TWinSock::Dll()->gethostbyname(name);
+  entry = (THostEntry*)TWinSockDll::gethostbyname(name);
   if (!entry) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -242,8 +244,8 @@ int THostInfoManager::CancelHostRequest(HANDLE hostRequest)
     return WINSOCK_ERROR;
   }
 
-  if (TWinSock::Dll()->WSACancelAsyncRequest(hostRequest) == SOCKET_ERROR) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+  if (TWinSockDll::WSACancelAsyncRequest(hostRequest) == SOCKET_ERROR) {
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
 
@@ -278,12 +280,12 @@ int THostInfoManager::GetHostInfoAsync(HANDLE& hostRequest, TSocketAddress& addr
 
   HostRequestCompleted = false;
   HostRequest = hostRequest =
-    TWinSock::Dll()->WSAAsyncGetHostByAddr(HostWindow, MSG_HOST_INFO_NOTIFY,
+    TWinSockDll::WSAAsyncGetHostByAddr(HostWindow, MSG_HOST_INFO_NOTIFY,
                                     (char far*)&tempSockAddrIn->sin_addr.s_addr,
                                     sizeof(ulong), PF_INET, HostInfoBuffer,
                                     MAXGETHOSTSTRUCT);
   if (!hostRequest) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -297,11 +299,11 @@ int THostInfoManager::GetHostInfoAsync(HANDLE& theHostRequest, char far* name)
 {
   HostRequestCompleted = false;
   HostRequest = theHostRequest =
-      TWinSock::Dll()->WSAAsyncGetHostByName(HostWindow, MSG_HOST_INFO_NOTIFY, name,
+      TWinSockDll::WSAAsyncGetHostByName(HostWindow, MSG_HOST_INFO_NOTIFY, name,
                                       HostInfoBuffer, MAXGETHOSTSTRUCT);
 
   if (!HostRequest) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -334,13 +336,13 @@ int THostInfoManager::GetHostInfoAsync(TWindow& wndNotify, HANDLE& hostRequest,
 
   HostRequestCompleted = false;
   HostRequest = hostRequest =
-    TWinSock::Dll()->WSAAsyncGetHostByAddr(wndNotify, message,
+    TWinSockDll::WSAAsyncGetHostByAddr(wndNotify, message,
                                     (char far*)&tempSockAddrIn->sin_addr.s_addr,
                                     sizeof(ulong), PF_INET, bufferToUse,
                                     MAXGETHOSTSTRUCT);
 
   if (!hostRequest) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -364,11 +366,11 @@ int THostInfoManager::GetHostInfoAsync(TWindow& wndNotify, HANDLE& hostRequest, 
 
   HostRequestCompleted = false;
   HostRequest = hostRequest =
-     TWinSock::Dll()->WSAAsyncGetHostByName(wndNotify, message, name, bufferToUse,
+     TWinSockDll::WSAAsyncGetHostByName(wndNotify, message, name, bufferToUse,
                                      MAXGETHOSTSTRUCT);
 
   if (!hostRequest) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -387,7 +389,7 @@ int THostInfoManager::HostEntryToAddress(THostEntry* entry, char far* address)
   tempInAddr.s_addr = *((ulong*)entry->h_addr);
             //else: = *((ulong*)hEntry->h_addr_list[0])
 
-  char far* tempAddress = TWinSock::Dll()->inet_ntoa(tempInAddr);
+  char far* tempAddress = TWinSockDll::inet_ntoa(tempInAddr);
   if (!tempAddress)
     return WINSOCK_ERROR;
   strcpy(address, tempAddress);
@@ -402,7 +404,8 @@ int THostInfoManager::HostEntryToAddress(THostEntry* entry, char far* address)
 //
 int THostInfoManager::HostEntryToAddress(THostEntry* entry, TSocketAddress& address)
 {
-  ((TINetSocketAddress)address).SetNetworkAddress(*((ulong*)entry->h_addr));
+  TINetSocketAddress *addr = STATIC_CAST(TINetSocketAddress*, &address);
+  addr->SetNetworkAddress(*((ulong*)entry->h_addr));
   return WINSOCK_NOERROR;
 }
 
@@ -411,9 +414,10 @@ int THostInfoManager::HostEntryToAddress(THostEntry* entry, TSocketAddress& addr
 // You may want to subclass this function.  If you do, you will probably want to call this
 //  function as part of the subclassed function.
 //
-void THostInfoManager::SetHostRequestCompleted(int error)
+void THostInfoManager::SetHostRequestCompleted(int result)
 {
-  if (error == SOCKET_ERROR)
+  int error = WSAGETASYNCERROR(result);
+  if (error != 0)
     LastError = error;
   HostRequestCompleted = true;  // Of course, there may have been an error.
 }

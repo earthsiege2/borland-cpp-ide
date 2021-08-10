@@ -1,4 +1,4 @@
-LIBRARY BC500RTL
+LIBRARY BC520RTL
 
 DESCRIPTION     'Runtime Library for BC++'
 
@@ -46,8 +46,6 @@ EXPORTS
     __BCD_LOG10                              @027
     __BCD_TOBINARY                           @028
     __BCD_TODECIMAL                          @029
-    @$BLSH$QM7OSTREAMM3BCD                   @030 ; operator <<(ostream*,bcd*)
-    @$BRSH$QM7ISTREAMM3BCD                   @031 ; operator >>(istream*,bcd*)
     _bdos                                    @032
     _bsearch                                 @033
     @_cast_memptr$qnvt1uiuiui                @034 ; _cast_memptr(void*,void*,unsigned int,unsigned int,unsigned
@@ -60,32 +58,6 @@ EXPORTS
     __rtl_close                              @041
     _fcloseall                               @042
     __X                                      @043
-    @$bmul$qm7complext1                      @044 ; operator *(complex*,complex*)
-    @abs$qm7complex                          @045 ; abs(complex*)
-    @norm$qm7complex                         @046 ; norm(complex*)
-    @complex@0$brmul$qm7complex              @047 ; complex::operator *=(complex*)
-    @arg$qm7complex                          @048 ; arg(complex*)
-    @acos$qm7complex                         @049 ; acos(complex*)
-    @asin$qm7complex                         @050 ; asin(complex*)
-    @atan$qm7complex                         @051 ; atan(complex*)
-    @cos$qm7complex                          @052 ; cos(complex*)
-    @cosh$qm7complex                         @053 ; cosh(complex*)
-    @exp$qm7complex                          @054 ; exp(complex*)
-    @log$qm7complex                          @055 ; log(complex*)
-    @log10$qm7complex                        @056 ; log10(complex*)
-    @pow$qm7complexd                         @057 ; pow(complex*,double)
-    @pow$qdm7complex                         @058 ; pow(double,complex*)
-    @pow$qm7complext1                        @059 ; pow(complex*,complex*)
-    @sin$qm7complex                          @060 ; sin(complex*)
-    @sinh$qm7complex                         @061 ; sinh(complex*)
-    @sqrt$qm7complex                         @062 ; sqrt(complex*)
-    @tan$qm7complex                          @063 ; tan(complex*)
-    @tanh$qm7complex                         @064 ; tanh(complex*)
-    @$bdiv$qm7complext1                      @065 ; operator /(complex*,complex*)
-    @$bdiv$qdm7complex                       @066 ; operator /(double,complex*)
-    @complex@0$brdiv$qm7complex              @067 ; complex::operator /=(complex*)
-    @$blsh$qm7ostreamm7complex               @068 ; operator <<(ostream*,complex*)
-    @$brsh$qm7istreamm7complex               @069 ; operator >>(istream*,complex*)
     _creat                                   @070
     __creat                                  @071
     _creatnew                                @072
@@ -709,3 +681,6 @@ EXPORTS
     @string@0$bctr$qzcui                     @691 ; string::string(signed char,unsigned int)
     @string@0$bctr$quc                       @692 ; string::string(unsigned char)
     @string@0$bctr$qucui                     @693 ; string::string(unsigned char,unsigned int)
+    __errorBox                               @694 
+    __errorExitBox                           @695 
+    ___set_messagefile                       @696 

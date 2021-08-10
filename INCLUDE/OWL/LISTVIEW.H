@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.5  $
 //
 // Definition of class TListView
 //----------------------------------------------------------------------------
@@ -16,6 +16,10 @@
 # include <owl/listbox.h>
 #endif
 #include <owl/listview.rh>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
@@ -89,6 +93,10 @@ class _OWLCLASS TListView : public TListBox, public TView {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

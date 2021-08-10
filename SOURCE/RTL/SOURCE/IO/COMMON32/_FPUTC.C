@@ -6,22 +6,27 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
 #include <_io.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            _fputc - puts a character on a stream
-
-Usage           int _fputc(int ch, FILE *stream);
+Name            __fputtc used as _fputc and _fputwc
+                _fputc  - puts a character on a stream
+                _fputwc - puts a wide character on a stream
+                                                   
+Usage           int _fputc(char ch, FILE *stream);
+                wint_t _fputwc(wchar_t ch, FILE *stream);
 
 Prototype in    stdio.h
 
@@ -35,9 +40,9 @@ Return value    On success it returns the character ch
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC _fputc( char ch,  FILE *fp )
-{
-    --fp->level;
+_TINT _RTLENTRY _EXPFUNC __fputtc( _TCHAR ch,  FILE *fp )
+{    
+    fp->level -= sizeof(_TCHAR);
 
-    return( fputc( ch, fp ) );
+    return( _fputtc( ch, fp ) );
 }

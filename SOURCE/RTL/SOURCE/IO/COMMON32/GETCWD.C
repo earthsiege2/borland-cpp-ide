@@ -3,25 +3,29 @@
  *
  * function(s)
  *        getcwd - gets current working directory
+ *        _wgetcwd - gets current working directory (wide-character)
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <direct.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            getcwd - gets current working directory
+Name            getcwd, _wgetcwd - gets current working directory
 
 Usage           char *getcwd(char *buf, int n);
+                wchar_t *_wgetcwd(wchar_t *buf, int n);
 
 Prototype in    dir.h
 
@@ -46,7 +50,7 @@ Return value    getcwd returns buf; on error, it returns NULL.
 
 *---------------------------------------------------------------------*/
 
-char * _RTLENTRY _EXPFUNC getcwd(char *bufP, int bufL)
+_TCHAR * _RTLENTRY _EXPFUNC _tgetcwd(_TCHAR *bufP, int bufL)
 {
-    return (_getdcwd(0, bufP, bufL));
+    return (_tgetdcwd(0, bufP, bufL));
 }

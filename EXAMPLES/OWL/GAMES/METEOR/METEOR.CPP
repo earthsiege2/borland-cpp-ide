@@ -84,9 +84,8 @@ MeteorWindow::MeteorWindow( TWindow* parent )
   Attr.W = width;
   Attr.H = height;
   for (int i=0;i<METEOR_COUNT;i++)
-    sprites.Add( new Meteor( TPoint( random(width), random(height) ),
-										 TSize( random(5)-3, random(5)-3 ),
-                               3, 3 ) );
+      sprites.Add( new Meteor( TPoint( random(width), random(height) ),
+                               TSize( random(5)-3, random(5)-3 ), 3, 3 ) );
   ship = new Ship( TPoint( width/2, height/2 ) );
   scoreDisplay = new Message(TPoint(5,5),25);
   scoreDisplay->SetText("");

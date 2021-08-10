@@ -51,9 +51,14 @@
 /*NOINC*/
 #ifndef SVRAPI_INCLUDED
 #define SVRAPI_INCLUDED
+#pragma option -b
 
+#pragma option -b.
 #include <lmcons.h>
+#pragma option -b
+#pragma option -b.
 #include <lmerr.h>
+#pragma option -b
 
 #ifndef RC_INVOKED
 #pragma pack(1)         /* Assume byte packing throughout */
@@ -1311,5 +1316,6 @@ struct security_info_1 {
 #pragma pack()          /* Revert to default packing */
 #endif
 
+#pragma option -b.
 #endif /* SVRAPI_INCLUDED */
 /*INC*/

@@ -1,0 +1,13 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (C) 1991, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+// #include <owl/owlapp.rc>         // default owl app icon
+// #include <owl/except.rc>
+#include "main.h"
+
+IDM_APPMENU MENU
+BEGIN
+  MENUITEM "&Color", CM_COLOR
+END
+

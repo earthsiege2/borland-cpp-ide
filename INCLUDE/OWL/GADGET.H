@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.13  $
 //
 // Base class TGadget and simple derived TSeparatorGadget.
 //----------------------------------------------------------------------------
@@ -15,8 +15,16 @@
 #if !defined(OWL_DC_H)
 # include <owl/dc.h>
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS TGadgetWindow;
 
+//
+// Ids of some OWL predefined gadgets
+//
 #define IDG_FIRST       30000   // first predefined gadget ID
 #define IDG_LAST        31000   // last predefined gadget ID
 #define IDG_MESSAGE     IDG_FIRST + 0    // + 0 is for backwards compatability
@@ -37,15 +45,15 @@ class _OWLCLASS TGadgetWindow;
 // ~~~~~~ ~~~~~~~~
 // Margin units & dimensions used by class TGadgetWindow and class TGadget.
 //
-struct TMargins {
+struct _OWLCLASS TMargins {
   enum TUnits {Pixels, LayoutUnits, BorderUnits};
 
   TUnits  Units;
 
-  int  Left   : 8;
-  int  Right  : 8;
-  int  Top    : 8;
-  int  Bottom : 8;
+  int  Left;
+  int  Right;
+  int  Top;
+  int  Bottom;
 
   TMargins() {Units = LayoutUnits; Left = Right = Top = Bottom = 0;}
 
@@ -205,10 +213,12 @@ class _OWLCLASS TGadget {
     // Captures the mouse if "TrackMouse" is set.
     //
     virtual void   LButtonDown(uint modKeys, TPoint& point);
+    virtual void   RButtonDown(uint modKeys, TPoint& point);
 
     // Releases the mouse capture if "TrackMouse" is set.
     //
     virtual void   LButtonUp(uint modKeys, TPoint& point);
+    virtual void   RButtonUp(uint modKeys, TPoint& point);
 
   // Data members -- will become private
   //
@@ -276,6 +286,10 @@ class _OWLCLASS TSizeGripGadget : public TSeparatorGadget {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

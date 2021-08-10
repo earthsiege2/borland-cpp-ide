@@ -58,6 +58,7 @@ Revision History:
 
 #define NETCONS_INCLUDED
 #define __LMCONS_H
+#pragma option -b
 
 /*INC*/
 
@@ -267,6 +268,6 @@ Revision History:
 #define MAX_LANMAN_MESSAGE_ID  5799
 
 /*NOINC*/
+#pragma option -b.
 #endif // NETCONS_INCLUDED
 /*INC*/
-

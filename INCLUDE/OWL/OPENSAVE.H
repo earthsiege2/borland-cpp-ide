@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Definition of TOpenSave abstract, TFileOpen, TFileSave common Dialog classes
 //----------------------------------------------------------------------------
@@ -13,10 +13,13 @@
 # include <owl/commdial.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
-
 
 //
 // class TOpenSaveDialog
@@ -25,19 +28,19 @@ class _OWLCLASS TOpenSaveDialog : public TCommonDialog {
   public:
     class _OWLCLASS TData {
       public:
-        uint32          Flags;
-        uint32          Error;
-        char*           FileName;
-        char far*       Filter;
-        char far*       CustomFilter;
-        int             FilterIndex;
-        const char far* InitialDir;
-        const char far* DefExt;
-        int             MaxPath;
+        uint32  Flags;
+        uint32  Error;
+        char*   FileName;
+        char*   Filter;
+        char*   CustomFilter;
+        int     FilterIndex;
+        char*   InitialDir;
+        char*   DefExt;
+        int     MaxPath;
 
-        TData(uint32 flags=0, const char far* filter=0, char far* customFilter=0,
-              const char far* initialDir=0, const char far* defExt=0,
-              int maxPath=0, int filterIndex = 0);
+        TData(uint32 flags=0, char* filter=0, char* customFilter=0,
+              char* initialDir=0, char* defExt=0,int maxPath=0, 
+              int filterIndex = 0);
         TData(const TData& src);
        ~TData();
 
@@ -143,6 +146,10 @@ class _OWLCLASS TFileSaveDialog : public TOpenSaveDialog {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

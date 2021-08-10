@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_OLEVIEW_H)
@@ -16,6 +16,10 @@
 #endif
 #if !defined(OWL_DOCMANAG_H)
 # include <owl/docmanag.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 //
@@ -33,7 +37,7 @@ NOTIFY_SIG(vnLinkMoniker, TString&)
 #define EV_VN_LINKVIEW    VN_DEFINE(vnLinkView,    VnLinkView,    long)
 #define EV_VN_LINKMONIKER VN_DEFINE(vnLinkMoniker, VnLinkMoniker, long)
 
-// Generic definitions/compiler options (eg. alignment) preceeding the 
+// Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
 
@@ -56,10 +60,14 @@ class _USERCLASS TOleView : public TOleWindow, public TView {
     bool     SetDocTitle(const char far* docname, int index);
     bool     OleShutDown();
 
-  protected:
+
+    // Inherited virtuals from TWindow
+    //
     bool CanClose();
-    TOcView* CreateOcView(TRegLink* link, bool isEmbedded, IUnknown* outer);
     void CleanupWindow();
+
+  protected:
+    TOcView* CreateOcView(TRegLink* link, bool isEmbedded, IUnknown* outer);
     bool OtherViewExists();
 
     // View notifications
@@ -124,9 +132,13 @@ class _DOCVIEWCLASS TOleLinkView : public TView {
   DECLARE_RESPONSE_TABLE(TOleLinkView);
 };
 
-// Generic definitions/compiler options (eg. alignment) following the 
+// Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 // --------------------------------------------------------------------------
 // Inline implementation

@@ -5,15 +5,17 @@
  *        Get    - gets the next character in a string
  *        UnGet  - moves a character pointer one position forward
  *        strtol - convert a string to a long integer
+ *        wcstol - convert a wide-character string to a long integer
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdlib.h>
 #include <limits.h>
@@ -21,19 +23,22 @@
 #include <errno.h>
 #include <_scanf.h>
 #include <stddef.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
 Name            Get - gets the next character in a string
 
 Usage           static int Get(char **strPP);
+                static int Get(wchar_t **strPP);
 
 Return value    the next character in a string.  It return -1 if the next
                 character is the null character.
 
 *---------------------------------------------------------------------*/
 
-static int Get(char **strPP)
+static int Get(_TCHAR **strPP)
 {
         register    unsigned    c;
 
@@ -52,7 +57,7 @@ Description     decrements a character pointer
 
 #pragma warn -par
 
-static void UnGet(char c, char **strPP)
+static void UnGet(_TCHAR c, _TCHAR **strPP)
 {
         --(*strPP);         /* ignore c, we don't allow the string to change */
 }
@@ -99,7 +104,7 @@ Return value    If the  radix is invalid or  no number could be  found then
 
 *---------------------------------------------------------------------------*/
 
-long _RTLENTRY _EXPFUNC strtol(const char *strP, char **suffixPP, int radix)
+long _RTLENTRY _EXPFUNC _tcstol(const _TCHAR *strP, _TCHAR **suffixPP, int radix)
 {
         int     charCt = 0;
         int     status;
@@ -108,14 +113,14 @@ long _RTLENTRY _EXPFUNC strtol(const char *strP, char **suffixPP, int radix)
 
         errno = 0;
 
-        while (isspace(*strP))
+        while (_istspace(*strP))
         {
                 strP++;
                 charCt++;
         }
-        is_signed = *strP == '-';
+        is_signed = *strP == _TEXT('-');
 
-        result = _scantol (
+        result = _scanttol (
                 (int (*)(void *))Get,
                 (void (*)(int, void *))UnGet,
                 &strP,
@@ -134,9 +139,9 @@ long _RTLENTRY _EXPFUNC strtol(const char *strP, char **suffixPP, int radix)
                 errno = ERANGE;
                 result = is_signed ? LONG_MIN : LONG_MAX;
         }
-        
+
         if (suffixPP != NULL)
-                *suffixPP = (char *)strP;
+                *suffixPP = (_TCHAR *)strP;
 
         return (result);
 }

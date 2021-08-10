@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.10  $
 //
 // Various general OC enums and structs
 //----------------------------------------------------------------------------
@@ -16,6 +18,11 @@
 #if !defined(OCF_OCREG_H)
 # include <ocf/ocreg.h>
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
 class _ICLASS IBContainer; // forward references
 class TOcVerb;
 
@@ -186,5 +193,9 @@ struct TOcFormatInfo {
   ocrMedium Medium;              // BOleMedium
   BOOL      IsLinkable;
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 #endif  // OCF_OCOBJECT_H

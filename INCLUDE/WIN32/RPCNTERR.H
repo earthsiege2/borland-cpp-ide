@@ -1,6 +1,6 @@
 /*********************************************************/
 /**               Microsoft LAN Manager                 **/
-/**       Copyright(c) Microsoft Corp., 1987-1995       **/
+/**       Copyright(c) Microsoft Corp., 1987-1996       **/
 /**                                                     **/
 /**     Rpc Error Codes from the compiler and runtime   **/
 /**                                                     **/

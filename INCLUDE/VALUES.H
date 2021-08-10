@@ -6,12 +6,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $ */
 
 #if !defined(__VALUES_H)
 #define __VALUES_H
@@ -25,13 +26,15 @@
 
 #if !defined(__FLAT__)
 #define MAXINT      0x7FFF
+#define HIBITS      0x8000
+#define HIBITI      0x8000
 #else    /* defined __FLAT__ */
 #define MAXINT      0x7fffffff
+#define HIBITS      0x80000000
+#define HIBITI      0x80000000
 #endif
 
 #define MAXLONG     0x7fffffff
-#define HIBITS      0x8000
-#define HIBITI      0x8000
 #define HIBITL      0x80000000
 
 #define DMAXEXP     308

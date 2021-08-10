@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.2  $
+//$Revision:   5.4  $
 //
 // Implementation of TProfile class
 //----------------------------------------------------------------------------
@@ -14,7 +14,7 @@
 // Use system profile for filename==0. Use system to search in normal places
 // if no path is included in filename.
 //
-TProfile::TProfile(const char far* section, const char far* filename)
+TProfile::TProfile(const _TCHAR far* section, const _TCHAR far* filename)
 {
   Section  = section ? strnewdup(section) : 0;
 
@@ -47,7 +47,7 @@ TProfile::~TProfile()
 // Retrieve an integer value from the profile
 //
 int
-TProfile::GetInt(const char far* key, int defaultInt)
+TProfile::GetInt(const _TCHAR far* key, int defaultInt)
 {
   return FileName
     ? ::GetPrivateProfileInt(Section, key, defaultInt, FileName)
@@ -58,8 +58,8 @@ TProfile::GetInt(const char far* key, int defaultInt)
 // Return all section values if key==0
 //
 bool
-TProfile::GetString(const char far* key, char far* buff, unsigned buffSize,
-                    const char far* defaultString)
+TProfile::GetString(const _TCHAR far* key, _TCHAR far* buff, unsigned buffSize,
+                    const _TCHAR far* defaultString)
 {
   return FileName
     ? ::GetPrivateProfileString(Section, key, defaultString, buff, buffSize, FileName)
@@ -70,9 +70,9 @@ TProfile::GetString(const char far* key, char far* buff, unsigned buffSize,
 // Write an integer value to the profile
 //
 bool
-TProfile::WriteInt(const char far* key, int value)
+TProfile::WriteInt(const _TCHAR far* key, int value)
 {
-  char buf[16];
+  _TCHAR buf[16];
   itoa(value, buf, 10);
   return WriteString(key, buf);
 }
@@ -81,7 +81,7 @@ TProfile::WriteInt(const char far* key, int value)
 // Write an string value to the profile
 //
 bool
-TProfile::WriteString(const char far* key, const char far* str)
+TProfile::WriteString(const _TCHAR far* key, const _TCHAR far* str)
 {
   return FileName
     ? ::WritePrivateProfileString(Section, key, str, FileName)

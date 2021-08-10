@@ -7,6 +7,9 @@ EXPORTS
     DrvGetModuleHandle
     FindCommandItem
     GetDriverModuleHandle
+    MigrateAllDrivers
+    MigrateMidiUser
+    MigrateSoundEvents
     NotifyCallbackData
     OpenDriver
     PlaySound
@@ -16,6 +19,7 @@ EXPORTS
     WOW32DriverCallback
     WOW32ResolveMultiMediaHandle
     WOWAppExit
+    _winmmDbgOut                             = winmmDbgOut
     aux32Message
     auxGetDevCapsA
     auxGetDevCapsW
@@ -24,10 +28,12 @@ EXPORTS
     auxOutMessage
     auxSetVolume
     joy32Message
+    joyConfigChanged
     joyGetDevCapsA
     joyGetDevCapsW
     joyGetNumDevs
     joyGetPos
+    joyGetPosEx
     joyGetThreshold
     joyReleaseCapture
     joySetCalibration
@@ -58,6 +64,8 @@ EXPORTS
     mciSetYieldProc
     mciUnlockCommandTable
     mid32Message
+    midiConnect
+    midiDisconnect
     midiInAddBuffer
     midiInClose
     midiInGetDevCapsA
@@ -91,6 +99,14 @@ EXPORTS
     midiOutSetVolume
     midiOutShortMsg
     midiOutUnprepareHeader
+    midiStreamClose
+    midiStreamOpen
+    midiStreamOut
+    midiStreamPause
+    midiStreamPosition
+    midiStreamProperty
+    midiStreamRestart
+    midiStreamStop
     mixerClose
     mixerGetControlDetailsA
     mixerGetControlDetailsW
@@ -135,13 +151,13 @@ EXPORTS
     mmsystemGetVersion
     mod32Message
     mxd32Message
+    private1
     private10
     private11
     private12
     private13
     private14
     private15
-    private1
     private2
     private3
     private4

@@ -2,12 +2,13 @@
 *                                                                         *
 * wingdi.h -- GDI procedure declarations, constant definitions and macros *
 *                                                                         *
-* Copyright (c) 1985-1995, Microsoft Corp. All rights reserved.           *
+* Copyright (c) 1985-1996, Microsoft Corp. All rights reserved.           *
 *                                                                         *
 **************************************************************************/
 
 #ifndef _WINGDI_
 #define _WINGDI_
+#pragma option -b
 
 
 //
@@ -34,6 +35,9 @@
 extern "C" {
 #endif
 
+#ifndef WINVER
+#define WINVER 0x0400   // version 4.0
+#endif /* WINVER */
 
 #ifndef NOGDI
 
@@ -149,6 +153,7 @@ extern "C" {
 #if(WINVER >= 0x0400)
 #define ETO_GLYPH_INDEX              0x0010
 #define ETO_RTLREADING               0x0080
+#define ETO_IGNORELANGUAGE           0x1000
 #endif /* WINVER >= 0x0400 */
 
 #define ASPECT_FILTERING             0x0001
@@ -378,13 +383,17 @@ typedef struct tagBITMAP
     LPVOID      bmBits;
   } BITMAP, *PBITMAP, NEAR *NPBITMAP, FAR *LPBITMAP;
 
+#pragma option -b.
 #include <pshpack1.h>
+#pragma option -b
 typedef struct tagRGBTRIPLE {
         BYTE    rgbtBlue;
         BYTE    rgbtGreen;
         BYTE    rgbtRed;
 } RGBTRIPLE;
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
 typedef struct tagRGBQUAD {
         BYTE    rgbBlue;
@@ -398,27 +407,27 @@ typedef RGBQUAD FAR* LPRGBQUAD;
 
 /* Image Color Matching color definitions */
 
-typedef LONG	LCSCSTYPE;
-#define LCS_CALIBRATED_RGB		0x00000000L
-#define LCS_DEVICE_RGB			0x00000001L
-#define LCS_DEVICE_CMYK			0x00000002L
+typedef LONG   LCSCSTYPE;
+#define LCS_CALIBRATED_RGB              0x00000000L
+#define LCS_DEVICE_RGB                  0x00000001L
+#define LCS_DEVICE_CMYK                 0x00000002L
 
-typedef	LONG	LCSGAMUTMATCH;
-#define LCS_GM_BUSINESS			0x00000001L
-#define LCS_GM_GRAPHICS			0x00000002L
-#define LCS_GM_IMAGES			0x00000004L
+typedef LONG    LCSGAMUTMATCH;
+#define LCS_GM_BUSINESS                 0x00000001L
+#define LCS_GM_GRAPHICS                 0x00000002L
+#define LCS_GM_IMAGES                   0x00000004L
 
 /* ICM Defines for results from CheckColorInGamut() */
-#define CM_OUT_OF_GAMUT		255
-#define CM_IN_GAMUT			0
+#define CM_OUT_OF_GAMUT         255
+#define CM_IN_GAMUT                     0
 
 /* Macros to retrieve CMYK values from a COLORREF */
-#define GetCValue(cmyk)      ((BYTE)(cmyk))
-#define GetMValue(cmyk)      ((BYTE)((cmyk)>> 8))
-#define GetYValue(cmyk)      ((BYTE)((cmyk)>>16))
-#define GetKValue(cmyk)      ((BYTE)((cmyk)>>24))
+#define GetKValue(cmyk)      ((BYTE)(cmyk))
+#define GetYValue(cmyk)      ((BYTE)((cmyk)>> 8))
+#define GetMValue(cmyk)      ((BYTE)((cmyk)>>16))
+#define GetCValue(cmyk)      ((BYTE)((cmyk)>>24))
 
-#define CMYK(c,m,y,k)       ((COLORREF)((((BYTE)(c)|((WORD)((BYTE)(m))<<8))|(((DWORD)(BYTE)(y))<<16))|(((DWORD)(BYTE)(k))<<24)))
+#define CMYK(c,m,y,k)       ((COLORREF)((((BYTE)(k)|((WORD)((BYTE)(y))<<8))|(((DWORD)(BYTE)(m))<<16))|(((DWORD)(BYTE)(c))<<24)))
 
 typedef long            FXPT16DOT16, FAR *LPFXPT16DOT16;
 typedef long            FXPT2DOT30, FAR *LPFXPT2DOT30;
@@ -429,17 +438,17 @@ typedef long            FXPT2DOT30, FAR *LPFXPT2DOT30;
 
 typedef struct tagCIEXYZ
 {
-	FXPT2DOT30 ciexyzX;
-	FXPT2DOT30 ciexyzY;
-	FXPT2DOT30 ciexyzZ;
+        FXPT2DOT30 ciexyzX;
+        FXPT2DOT30 ciexyzY;
+        FXPT2DOT30 ciexyzZ;
 } CIEXYZ;
 typedef CIEXYZ  FAR *LPCIEXYZ;
 
 typedef struct tagICEXYZTRIPLE
 {
-	CIEXYZ  ciexyzRed;
-	CIEXYZ  ciexyzGreen;
-	CIEXYZ  ciexyzBlue;
+        CIEXYZ  ciexyzRed;
+        CIEXYZ  ciexyzGreen;
+        CIEXYZ  ciexyzBlue;
 } CIEXYZTRIPLE;
 typedef CIEXYZTRIPLE    FAR *LPCIEXYZTRIPLE;
 
@@ -549,7 +558,9 @@ typedef struct tagBITMAPCOREINFO {
     RGBTRIPLE           bmciColors[1];
 } BITMAPCOREINFO, FAR *LPBITMAPCOREINFO, *PBITMAPCOREINFO;
 
+#pragma option -b.
 #include <pshpack2.h>
+#pragma option -b
 typedef struct tagBITMAPFILEHEADER {
         WORD    bfType;
         DWORD   bfSize;
@@ -557,7 +568,9 @@ typedef struct tagBITMAPFILEHEADER {
         WORD    bfReserved2;
         DWORD   bfOffBits;
 } BITMAPFILEHEADER, FAR *LPBITMAPFILEHEADER, *PBITMAPFILEHEADER;
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
 #define MAKEPOINTS(l)       (*((POINTS FAR *)&(l)))
 
@@ -576,9 +589,9 @@ typedef struct tagCHARSETINFO
     FONTSIGNATURE fs;
 } CHARSETINFO, *PCHARSETINFO, NEAR *NPCHARSETINFO, FAR *LPCHARSETINFO;
 
-#define TCI_SRCCHARSET	1
-#define TCI_SRCCODEPAGE	2
-#define TCI_SRCFONTSIG	3
+#define TCI_SRCCHARSET  1
+#define TCI_SRCCODEPAGE 2
+#define TCI_SRCFONTSIG  3
 
 typedef struct tagLOCALESIGNATURE
 {
@@ -614,7 +627,9 @@ typedef struct tagMETAFILEPICT
     HMETAFILE   hMF;
   } METAFILEPICT, FAR *LPMETAFILEPICT;
 
+#pragma option -b.
 #include <pshpack2.h>
+#pragma option -b
 typedef struct tagMETAHEADER
 {
     WORD        mtType;
@@ -628,7 +643,9 @@ typedef struct tagMETAHEADER
 typedef struct tagMETAHEADER UNALIGNED *PMETAHEADER;
 typedef struct tagMETAHEADER UNALIGNED FAR *LPMETAHEADER;
 
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
 /* Enhanced Metafile structures */
 typedef struct tagENHMETARECORD
@@ -659,6 +676,12 @@ typedef struct tagENHMETAHEADER
     DWORD   nPalEntries;        // Number of entries in the metafile palette.
     SIZEL   szlDevice;          // Size of the reference device in pels
     SIZEL   szlMillimeters;     // Size of the reference device in millimeters
+    DWORD   cbPixelFormat;      // Size of PIXELFORMATDESCRIPTOR information
+                                // This is 0 if no pixel format is set
+    DWORD   offPixelFormat;     // Offset to PIXELFORMATDESCRIPTOR
+                                // This is 0 if no pixel format is set
+    DWORD   bOpenGL;            // TRUE if OpenGL commands are present in
+                                // the metafile, otherwise FALSE
 } ENHMETAHEADER, *PENHMETAHEADER, *LPENHMETAHEADER;
 
 #endif /* NOMETAFILE */
@@ -744,7 +767,9 @@ typedef LPTEXTMETRICA LPTEXTMETRIC;
 #define NTM_BOLD        0x00000020L
 #define NTM_ITALIC      0x00000001L
 
+#pragma option -b.
 #include <pshpack4.h>
+#pragma option -b
 typedef struct tagNEWTEXTMETRICA
 {
     LONG        tmHeight;
@@ -810,7 +835,9 @@ typedef PNEWTEXTMETRICA PNEWTEXTMETRIC;
 typedef NPNEWTEXTMETRICA NPNEWTEXTMETRIC;
 typedef LPNEWTEXTMETRICA LPNEWTEXTMETRIC;
 #endif // UNICODE
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
 #if(WINVER >= 0x0400)
 typedef struct tagNEWTEXTMETRICEXA
@@ -973,9 +1000,9 @@ typedef struct tagENUMLOGFONTEXA
 typedef struct tagENUMLOGFONTEXW
 {
     LOGFONTW    elfLogFont;
-    BYTE        elfFullName[LF_FULLFACESIZE];
-    BYTE        elfStyle[LF_FACESIZE];
-    BYTE        elfScript[LF_FACESIZE];
+    WCHAR       elfFullName[LF_FULLFACESIZE];
+    WCHAR       elfStyle[LF_FACESIZE];
+    WCHAR       elfScript[LF_FACESIZE];
 } ENUMLOGFONTEXW, FAR *LPENUMLOGFONTEXW;
 #ifdef UNICODE
 typedef ENUMLOGFONTEXW ENUMLOGFONTEX;
@@ -986,15 +1013,16 @@ typedef LPENUMLOGFONTEXA LPENUMLOGFONTEX;
 #endif // UNICODE
 #endif /* WINVER >= 0x0400 */
 
-#define OUT_DEFAULT_PRECIS      0
-#define OUT_STRING_PRECIS       1
-#define OUT_CHARACTER_PRECIS    2
-#define OUT_STROKE_PRECIS       3
-#define OUT_TT_PRECIS           4
-#define OUT_DEVICE_PRECIS       5
-#define OUT_RASTER_PRECIS       6
-#define OUT_TT_ONLY_PRECIS      7
-#define OUT_OUTLINE_PRECIS      8
+#define OUT_DEFAULT_PRECIS          0
+#define OUT_STRING_PRECIS           1
+#define OUT_CHARACTER_PRECIS        2
+#define OUT_STROKE_PRECIS           3
+#define OUT_TT_PRECIS               4
+#define OUT_DEVICE_PRECIS           5
+#define OUT_RASTER_PRECIS           6
+#define OUT_TT_ONLY_PRECIS          7
+#define OUT_OUTLINE_PRECIS          8
+#define OUT_SCREEN_OUTLINE_PRECIS   9
 
 #define CLIP_DEFAULT_PRECIS     0
 #define CLIP_CHARACTER_PRECIS   1
@@ -1033,6 +1061,7 @@ typedef LPENUMLOGFONTEXA LPENUMLOGFONTEX;
 #define ARABIC_CHARSET          178
 #define GREEK_CHARSET           161
 #define TURKISH_CHARSET         162
+#define VIETNAMESE_CHARSET      163
 #define THAI_CHARSET            222
 #define EASTEUROPE_CHARSET      238
 #define RUSSIAN_CHARSET         204
@@ -1040,21 +1069,22 @@ typedef LPENUMLOGFONTEXA LPENUMLOGFONTEX;
 #define MAC_CHARSET             77
 #define BALTIC_CHARSET          186
 
-#define FS_LATIN1		0x00000001L
-#define FS_LATIN2		0x00000002L
-#define FS_CYRILLIC		0x00000004L
-#define FS_GREEK		0x00000008L
-#define FS_TURKISH		0x00000010L
-#define FS_HEBREW		0x00000020L
-#define FS_ARABIC		0x00000040L
-#define FS_BALTIC		0x00000080L
-#define FS_THAI			0x00010000L
-#define FS_JISJAPAN		0x00020000L
-#define FS_CHINESESIMP  0x00040000L
-#define FS_WANSUNG		0x00080000L
-#define FS_CHINESETRAD	0x00100000L
-#define FS_JOHAB        0x00200000L
-#define FS_SYMBOL	    0x80000000L
+#define FS_LATIN1               0x00000001L
+#define FS_LATIN2               0x00000002L
+#define FS_CYRILLIC             0x00000004L
+#define FS_GREEK                0x00000008L
+#define FS_TURKISH              0x00000010L
+#define FS_HEBREW               0x00000020L
+#define FS_ARABIC               0x00000040L
+#define FS_BALTIC               0x00000080L
+#define FS_VIETNAMESE           0x00000100L
+#define FS_THAI                 0x00010000L
+#define FS_JISJAPAN             0x00020000L
+#define FS_CHINESESIMP          0x00040000L
+#define FS_WANSUNG              0x00080000L
+#define FS_CHINESETRAD          0x00100000L
+#define FS_JOHAB                0x00200000L
+#define FS_SYMBOL               0x80000000L
 #endif /* WINVER >= 0x0400 */
 
 /* Font Families */
@@ -1362,6 +1392,7 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define BS_DIBPATTERNPT     6
 #define BS_PATTERN8X8       7
 #define BS_DIBPATTERN8X8    8
+#define BS_MONOPATTERN      9
 
 /* Hatch Styles */
 #define HS_HORIZONTAL       0       /* ----- */
@@ -1598,14 +1629,14 @@ typedef struct _devicemodeA {
     DWORD  dmPelsHeight;
     DWORD  dmDisplayFlags;
     DWORD  dmDisplayFrequency;
-#if (WINVER >= 0x0400)
     DWORD  dmICMMethod;
     DWORD  dmICMIntent;
     DWORD  dmMediaType;
     DWORD  dmDitherType;
-    DWORD  dmReserved1;
-    DWORD  dmReserved2;
-#endif /* WINVER */
+    DWORD  dmICCManufacturer;
+    DWORD  dmICCModel;
+    DWORD  dmPanningWidth;
+    DWORD  dmPanningHeight;
 } DEVMODEA, *PDEVMODEA, *NPDEVMODEA, *LPDEVMODEA;
 typedef struct _devicemodeW {
     WCHAR  dmDeviceName[CCHDEVICENAME];
@@ -1634,14 +1665,14 @@ typedef struct _devicemodeW {
     DWORD  dmPelsHeight;
     DWORD  dmDisplayFlags;
     DWORD  dmDisplayFrequency;
-#if (WINVER >= 0x0400)
     DWORD  dmICMMethod;
     DWORD  dmICMIntent;
     DWORD  dmMediaType;
     DWORD  dmDitherType;
-    DWORD  dmReserved1;
-    DWORD  dmReserved2;
-#endif /* WINVER */
+    DWORD  dmICCManufacturer;
+    DWORD  dmICCModel;
+    DWORD  dmPanningWidth;
+    DWORD  dmPanningHeight;
 } DEVMODEW, *PDEVMODEW, *NPDEVMODEW, *LPDEVMODEW;
 #ifdef UNICODE
 typedef DEVMODEW DEVMODE;
@@ -1655,12 +1686,7 @@ typedef NPDEVMODEA NPDEVMODE;
 typedef LPDEVMODEA LPDEVMODE;
 #endif // UNICODE
 
-/* current version of specification */
-#if (WINVER >= 0x0400)
-#define DM_SPECVERSION 0x0400
-#else
-#define DM_SPECVERSION 0x0320
-#endif /* WINVER */
+#define DM_SPECVERSION 0x0401
 
 /* field selection bits */
 #define DM_ORIENTATION      0x00000001L
@@ -1683,12 +1709,14 @@ typedef LPDEVMODEA LPDEVMODE;
 #define DM_PELSHEIGHT       0x00100000L
 #define DM_DISPLAYFLAGS     0x00200000L
 #define DM_DISPLAYFREQUENCY 0x00400000L
-#if(WINVER >= 0x0400)
-#define DM_ICMMETHOD	    0x00800000L
-#define DM_ICMINTENT	    0x01000000L
-#define DM_MEDIATYPE	    0x02000000L
-#define DM_DITHERTYPE	    0x04000000L
-#endif /* WINVER >= 0x0400 */
+#define DM_PANNINGWIDTH     0x00800000L
+#define DM_PANNINGHEIGHT    0x01000000L
+#define DM_ICMMETHOD        0x02000000L
+#define DM_ICMINTENT        0x04000000L
+#define DM_MEDIATYPE        0x08000000L
+#define DM_DITHERTYPE       0x10000000L
+#define DM_ICCMANUFACTURER  0x20000000L
+#define DM_ICCMODEL         0x40000000L
 
 /* orientation selections */
 #define DMORIENT_PORTRAIT   1
@@ -1746,10 +1774,10 @@ typedef LPDEVMODEA LPDEVMODE;
 #define DMPAPER_ENV_INVITE          47  /* Envelope Invite 220 x 220 mm       */
 #define DMPAPER_RESERVED_48         48  /* RESERVED--DO NOT USE               */
 #define DMPAPER_RESERVED_49         49  /* RESERVED--DO NOT USE               */
-#define DMPAPER_LETTER_EXTRA	    50  /* Letter Extra 9 \275 x 12 in        */
-#define DMPAPER_LEGAL_EXTRA 	    51  /* Legal Extra 9 \275 x 15 in         */
-#define DMPAPER_TABLOID_EXTRA	    52  /* Tabloid Extra 11.69 x 18 in        */
-#define DMPAPER_A4_EXTRA     	    53  /* A4 Extra 9.27 x 12.69 in           */
+#define DMPAPER_LETTER_EXTRA        50  /* Letter Extra 9 \275 x 12 in        */
+#define DMPAPER_LEGAL_EXTRA         51  /* Legal Extra 9 \275 x 15 in         */
+#define DMPAPER_TABLOID_EXTRA       52  /* Tabloid Extra 11.69 x 18 in        */
+#define DMPAPER_A4_EXTRA            53  /* A4 Extra 9.27 x 12.69 in           */
 #define DMPAPER_LETTER_TRANSVERSE   54  /* Letter Transverse 8 \275 x 11 in   */
 #define DMPAPER_A4_TRANSVERSE       55  /* A4 Transverse 210 x 297 mm         */
 #define DMPAPER_LETTER_EXTRA_TRANSVERSE 56 /* Letter Extra Transverse 9\275 x 12 in */
@@ -1824,8 +1852,9 @@ typedef LPDEVMODEA LPDEVMODE;
 
 /* DEVMODE dmDisplayFlags flags */
 
-#define DM_GRAYSCALE  0x00000001
-#define DM_INTERLACED 0x00000002
+//#define DM_GRAYSCALE    0x00000001 /* This flag is no longer valid */
+//#define DM_INTERLACED   0x00000002 /* This flag is no longer valid */
+#define DMDISPLAYFLAGS_TEXTMODE 0x00000004
 
 #if(WINVER >= 0x0400)
 /* ICM methods */
@@ -1852,18 +1881,11 @@ typedef LPDEVMODEA LPDEVMODE;
 #define DMMEDIA_USER        256   /* Device-specific media start here */
 
 /* Dither types */
-#define DMDITHER_NONE		1   /* No dithering */
-#define DMDITHER_COARSE 	2   /* Dither with a coarse brush */
-#define DMDITHER_FINE		3   /* Dither with a fine brush */
-#define DMDITHER_LINEART	4   /* LineArt dithering */
-
-#define DMDITHER_ERRORDIFFUSION 5 /* LineArt dithering */
-#define DMDITHER_RESERVED6	6   /* LineArt dithering */
-#define DMDITHER_RESERVED7	7   /* LineArt dithering */
-#define DMDITHER_RESERVED8	8   /* LineArt dithering */
-#define DMDITHER_RESERVED9	9   /* LineArt dithering */
-
-#define DMDITHER_GRAYSCALE     10   /* Device does grayscaling */
+#define DMDITHER_NONE       1   /* No dithering */
+#define DMDITHER_COARSE     2   /* Dither with a coarse brush */
+#define DMDITHER_FINE       3   /* Dither with a fine brush */
+#define DMDITHER_LINEART    4   /* LineArt dithering */
+#define DMDITHER_GRAYSCALE  5   /* Device does grayscaling */
 
 #define DMDITHER_USER     256   /* Device-specific dithers start here */
 #endif /* WINVER >= 0x0400 */
@@ -2085,16 +2107,16 @@ typedef struct tagTTPOLYGONHEADER
 #define GCP_LIGATE         0x0020
 ////#define GCP_GLYPHINDEXING  0x0080
 #define GCP_DIACRITIC      0x0100
-#define GCP_KASHIDA	   0x0400
+#define GCP_KASHIDA        0x0400
 #define GCP_ERROR          0x8000
-#define FLI_MASK	   0x103B
+#define FLI_MASK           0x103B
 
 #define GCP_JUSTIFY        0x00010000L
 ////#define GCP_NODIACRITICS   0x00020000L
-#define FLI_GLYPHS	   0x00040000L
-#define GCP_CLASSIN        0x00080000L	
+#define FLI_GLYPHS         0x00040000L
+#define GCP_CLASSIN        0x00080000L
 #define GCP_MAXEXTENT      0x00100000L
-#define GCP_JUSTIFYIN	   0x00200000L
+#define GCP_JUSTIFYIN      0x00200000L
 #define GCP_DISPLAYZWG      0x00400000L
 #define GCP_SYMSWAPOFF      0x00800000L
 #define GCP_NUMERICOVERRIDE 0x01000000L
@@ -2127,7 +2149,7 @@ typedef struct tagGCP_RESULTSA
     UINT FAR *lpOrder;
     int FAR  *lpDx;
     int FAR  *lpCaretPos;
-    LPSTR     lpClass;
+    LPSTR   lpClass;
     LPWSTR  lpGlyphs;
     UINT    nGlyphs;
     int     nMaxFit;
@@ -2139,7 +2161,7 @@ typedef struct tagGCP_RESULTSW
     UINT FAR *lpOrder;
     int FAR  *lpDx;
     int FAR  *lpCaretPos;
-    LPWSTR    lpClass;
+    LPSTR   lpClass;
     LPWSTR  lpGlyphs;
     UINT    nGlyphs;
     int     nMaxFit;
@@ -2215,8 +2237,11 @@ typedef struct tagPIXELFORMATDESCRIPTOR
 #define PFD_NEED_SYSTEM_PALETTE     0x00000100
 #define PFD_SWAP_EXCHANGE           0x00000200
 #define PFD_SWAP_COPY               0x00000400
+#define PFD_SWAP_LAYER_BUFFERS      0x00000800
+#define PFD_GENERIC_ACCELERATED     0x00001000
 
 /* PIXELFORMATDESCRIPTOR flags for use in ChoosePixelFormat only */
+#define PFD_DEPTH_DONTCARE          0x20000000
 #define PFD_DOUBLEBUFFER_DONTCARE   0x40000000
 #define PFD_STEREO_DONTCARE         0x80000000
 
@@ -2401,8 +2426,7 @@ typedef DWORD  (CALLBACK* LPFNDEVCAPS)(LPSTR, LPSTR, UINT, LPSTR, LPDEVMODE);
 #define DC_BINADJUST            19
 #define DC_EMF_COMPLIANT        20
 #define DC_DATATYPE_PRODUCED    21
-#define DC_MANUFACTURER 	23
-#define DC_MODEL		24
+#define DC_COLLATE              22
 #endif /* WINVER >= 0x0400 */
 
 /* bit fields of the return value (DWORD) for DC_TRUETYPE */
@@ -2780,6 +2804,8 @@ WINGDIAPI UINT  WINAPI GetEnhMetaFileDescriptionW(HENHMETAFILE, UINT, LPWSTR );
 #endif // !UNICODE
 WINGDIAPI UINT  WINAPI GetEnhMetaFileHeader(HENHMETAFILE, UINT, LPENHMETAHEADER );
 WINGDIAPI UINT  WINAPI GetEnhMetaFilePaletteEntries(HENHMETAFILE, UINT, LPPALETTEENTRY );
+WINGDIAPI UINT  WINAPI GetEnhMetaFilePixelFormat(HENHMETAFILE, UINT,
+                                                 PIXELFORMATDESCRIPTOR *);
 WINGDIAPI UINT  WINAPI GetWinMetaFileBits(HENHMETAFILE, UINT, LPBYTE, INT, HDC);
 WINGDIAPI BOOL  WINAPI PlayEnhMetaFile(HDC, HENHMETAFILE, CONST RECT *);
 WINGDIAPI BOOL  WINAPI PlayEnhMetaFileRecord(HDC, LPHANDLETABLE, CONST ENHMETARECORD *, UINT);
@@ -3024,14 +3050,14 @@ WINGDIAPI BOOL  WINAPI GetDCOrgEx(HDC,LPPOINT);
 WINGDIAPI BOOL  WINAPI FixBrushOrgEx(HDC,int,int,LPPOINT);
 WINGDIAPI BOOL  WINAPI UnrealizeObject(HGDIOBJ);
 
-WINGDIAPI BOOL  WINAPI GdiFlush();
+WINGDIAPI BOOL  WINAPI GdiFlush(VOID);
 WINGDIAPI DWORD WINAPI GdiSetBatchLimit(DWORD);
-WINGDIAPI DWORD WINAPI GdiGetBatchLimit();
+WINGDIAPI DWORD WINAPI GdiGetBatchLimit(VOID);
 
 #if(WINVER >= 0x0400)
 
 #define ICM_OFF   1
-#define ICM_ON	  2
+#define ICM_ON    2
 #define ICM_QUERY 3
 
 int WINAPI SetICMMode(HDC, int);
@@ -3070,13 +3096,6 @@ BOOL WINAPI SetICMProfileW(HDC,LPWSTR);
 BOOL WINAPI GetDeviceGammaRamp(HDC,LPVOID);
 BOOL WINAPI SetDeviceGammaRamp(HDC,LPVOID);
 BOOL WINAPI ColorMatchToTarget(HDC,HDC,DWORD);
-BOOL WINAPI UpdateICMRegKeyA(DWORD, DWORD, LPSTR, UINT);
-BOOL WINAPI UpdateICMRegKeyW(DWORD, DWORD, LPWSTR, UINT);
-#ifdef UNICODE
-#define UpdateICMRegKey  UpdateICMRegKeyW
-#else
-#define UpdateICMRegKey  UpdateICMRegKeyA
-#endif // !UNICODE
 typedef int (CALLBACK* ICMENUMPROCA)(LPSTR, LPARAM);
 typedef int (CALLBACK* ICMENUMPROCW)(LPWSTR, LPARAM);
 #ifdef UNICODE
@@ -3206,16 +3225,19 @@ int WINAPI EnumICMProfilesW(HDC,ICMENUMPROCW,LPARAM);
 #define EMR_POLYTEXTOUTA                96
 #define EMR_POLYTEXTOUTW                97
 #if(WINVER >= 0x0400)
-#define EMR_SETICMMODE			98
+#define EMR_SETICMMODE                  98
 #define EMR_CREATECOLORSPACE            99
 #define EMR_SETCOLORSPACE              100
 #define EMR_DELETECOLORSPACE           101
+#define EMR_GLSRECORD                  102
+#define EMR_GLSBOUNDEDRECORD           103
+#define EMR_PIXELFORMAT                104
 #endif /* WINVER >= 0x0400 */
 
 #define EMR_MIN                         1
 
 #if (WINVER >= 0x0400)
-#define EMR_MAX                        101
+#define EMR_MAX                        104
 #else
 #define EMR_MAX                         97
 #endif
@@ -3267,7 +3289,7 @@ typedef struct tagEMRSELECTCLIPPATH
   EMRSETPOLYFILLMODE,   *PEMRSETPOLYFILLMODE,
   EMRSETROP2,           *PEMRSETROP2,
   EMRSETSTRETCHBLTMODE, *PEMRSETSTRETCHBLTMODE,
-  EMRSETICMMODE,	*PEMRSETICMMODE,
+  EMRSETICMMODE,        *PEMRSETICMMODE,
   EMRSETTEXTALIGN,      *PEMRSETTEXTALIGN;
 
 typedef struct tagEMRSETMITERLIMIT
@@ -3759,8 +3781,8 @@ typedef struct tagEMRCREATEPALETTE
 
 typedef struct tagEMRCREATECOLORSPACE
 {
-    EMR 	    emr;
-    DWORD	    ihCS;	// ColorSpace handle index
+    EMR             emr;
+    DWORD           ihCS;       // ColorSpace handle index
     LOGCOLORSPACEW  lcs;
 } EMRCREATECOLORSPACE, *PEMRCREATECOLORSPACE;
 
@@ -3827,6 +3849,26 @@ typedef struct tagEMRFORMAT
                                 // It must begin at a DWORD offset.
 } EMRFORMAT, *PEMRFORMAT;
 
+typedef struct tagEMRGLSRECORD
+{
+    EMR     emr;
+    DWORD   cbData;             // Size of data in bytes
+    BYTE    Data[1];
+} EMRGLSRECORD, *PEMRGLSRECORD;
+
+typedef struct tagEMRGLSBOUNDEDRECORD
+{
+    EMR     emr;
+    RECTL   rclBounds;          // Bounds in recording coordinates
+    DWORD   cbData;             // Size of data in bytes
+    BYTE    Data[1];
+} EMRGLSBOUNDEDRECORD, *PEMRGLSBOUNDEDRECORD;
+
+typedef struct tagEMRPIXELFORMAT
+{
+    EMR     emr;
+    PIXELFORMATDESCRIPTOR pfd;
+} EMRPIXELFORMAT, *PEMRPIXELFORMAT;
 
 #define GDICOMMENT_IDENTIFIER           0x43494447
 #define GDICOMMENT_WINDOWS_METAFILE     0x80000001
@@ -3840,7 +3882,9 @@ typedef struct tagEMRFORMAT
 
 // OpenGL wgl prototypes
 
+WINGDIAPI BOOL  WINAPI wglCopyContext(HGLRC, HGLRC, UINT);
 WINGDIAPI HGLRC WINAPI wglCreateContext(HDC);
+WINGDIAPI HGLRC WINAPI wglCreateLayerContext(HDC, int);
 WINGDIAPI BOOL  WINAPI wglDeleteContext(HGLRC);
 WINGDIAPI HGLRC WINAPI wglGetCurrentContext(VOID);
 WINGDIAPI HDC   WINAPI wglGetCurrentDC(VOID);
@@ -3881,6 +3925,90 @@ WINGDIAPI BOOL  WINAPI wglUseFontOutlinesW(HDC, DWORD, DWORD, DWORD, FLOAT,
 #define wglUseFontOutlines  wglUseFontOutlinesA
 #endif // !UNICODE
 
+/* Layer plane descriptor */
+typedef struct tagLAYERPLANEDESCRIPTOR { // lpd
+    WORD  nSize;
+    WORD  nVersion;
+    DWORD dwFlags;
+    BYTE  iPixelType;
+    BYTE  cColorBits;
+    BYTE  cRedBits;
+    BYTE  cRedShift;
+    BYTE  cGreenBits;
+    BYTE  cGreenShift;
+    BYTE  cBlueBits;
+    BYTE  cBlueShift;
+    BYTE  cAlphaBits;
+    BYTE  cAlphaShift;
+    BYTE  cAccumBits;
+    BYTE  cAccumRedBits;
+    BYTE  cAccumGreenBits;
+    BYTE  cAccumBlueBits;
+    BYTE  cAccumAlphaBits;
+    BYTE  cDepthBits;
+    BYTE  cStencilBits;
+    BYTE  cAuxBuffers;
+    BYTE  iLayerPlane;
+    BYTE  bReserved;
+    COLORREF crTransparent;
+} LAYERPLANEDESCRIPTOR, *PLAYERPLANEDESCRIPTOR, FAR *LPLAYERPLANEDESCRIPTOR;
+
+/* LAYERPLANEDESCRIPTOR flags */
+#define LPD_DOUBLEBUFFER        0x00000001
+#define LPD_STEREO              0x00000002
+#define LPD_SUPPORT_GDI         0x00000010
+#define LPD_SUPPORT_OPENGL      0x00000020
+#define LPD_SHARE_DEPTH         0x00000040
+#define LPD_SHARE_STENCIL       0x00000080
+#define LPD_SHARE_ACCUM         0x00000100
+#define LPD_SWAP_EXCHANGE       0x00000200
+#define LPD_SWAP_COPY           0x00000400
+#define LPD_TRANSPARENT         0x00001000
+
+#define LPD_TYPE_RGBA        0
+#define LPD_TYPE_COLORINDEX  1
+
+/* wglSwapLayerBuffers flags */
+#define WGL_SWAP_MAIN_PLANE     0x00000001
+#define WGL_SWAP_OVERLAY1       0x00000002
+#define WGL_SWAP_OVERLAY2       0x00000004
+#define WGL_SWAP_OVERLAY3       0x00000008
+#define WGL_SWAP_OVERLAY4       0x00000010
+#define WGL_SWAP_OVERLAY5       0x00000020
+#define WGL_SWAP_OVERLAY6       0x00000040
+#define WGL_SWAP_OVERLAY7       0x00000080
+#define WGL_SWAP_OVERLAY8       0x00000100
+#define WGL_SWAP_OVERLAY9       0x00000200
+#define WGL_SWAP_OVERLAY10      0x00000400
+#define WGL_SWAP_OVERLAY11      0x00000800
+#define WGL_SWAP_OVERLAY12      0x00001000
+#define WGL_SWAP_OVERLAY13      0x00002000
+#define WGL_SWAP_OVERLAY14      0x00004000
+#define WGL_SWAP_OVERLAY15      0x00008000
+#define WGL_SWAP_UNDERLAY1      0x00010000
+#define WGL_SWAP_UNDERLAY2      0x00020000
+#define WGL_SWAP_UNDERLAY3      0x00040000
+#define WGL_SWAP_UNDERLAY4      0x00080000
+#define WGL_SWAP_UNDERLAY5      0x00100000
+#define WGL_SWAP_UNDERLAY6      0x00200000
+#define WGL_SWAP_UNDERLAY7      0x00400000
+#define WGL_SWAP_UNDERLAY8      0x00800000
+#define WGL_SWAP_UNDERLAY9      0x01000000
+#define WGL_SWAP_UNDERLAY10     0x02000000
+#define WGL_SWAP_UNDERLAY11     0x04000000
+#define WGL_SWAP_UNDERLAY12     0x08000000
+#define WGL_SWAP_UNDERLAY13     0x10000000
+#define WGL_SWAP_UNDERLAY14     0x20000000
+#define WGL_SWAP_UNDERLAY15     0x40000000
+
+WINGDIAPI BOOL WINAPI wglDescribeLayerPlane(HDC, int, int, UINT,
+                                            LPLAYERPLANEDESCRIPTOR);
+WINGDIAPI int  WINAPI wglSetLayerPaletteEntries(HDC, int, int, int,
+                                                CONST COLORREF *);
+WINGDIAPI int  WINAPI wglGetLayerPaletteEntries(HDC, int, int, int,
+                                                COLORREF *);
+WINGDIAPI BOOL WINAPI wglRealizeLayerPalette(HDC, int, BOOL);
+WINGDIAPI BOOL WINAPI wglSwapLayerBuffers(HDC, UINT);
 
 #endif /* NOGDI */
 
@@ -3891,4 +4019,5 @@ WINGDIAPI BOOL  WINAPI wglUseFontOutlinesW(HDC, DWORD, DWORD, DWORD, FLOAT,
 
 
 
+#pragma option -b.
 #endif /* _WINGDI_ */

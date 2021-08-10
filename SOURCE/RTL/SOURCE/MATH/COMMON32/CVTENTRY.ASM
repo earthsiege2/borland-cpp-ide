@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.3  $
 
         include RULES.ASI
 
@@ -19,17 +20,24 @@ Header@
 
 Data_seg@
 
+ifndef _UNICODE
 cPtrExt@ _realcvtptr,  cdecl
 cPtrExt@ _nextrealptr, cdecl
 cPtrExt@ _scantodptr,  cdecl
 cPtrExt@ _scanrsltptr, cdecl
-
+else
+cPtrExt@ _realcvtwptr,  cdecl
+cPtrExt@ _nextrealwptr, cdecl
+cPtrExt@ _scanwtodptr,  cdecl
+cPtrExt@ _scanwrsltptr, cdecl
+endif
 Data_EndS@
 
 ; Entry points for the conversion functions
 
 Code_seg@
 
+ifndef _UNICODE
 Func@ __realcvt,  public, _RTLENTRY, <long val>, <int ndec>, <pointer s>, <int radx>, <char signed>, <char hex>
         jmp [_realcvtptr@]
 EndFunc@ __realcvt
@@ -45,7 +53,23 @@ EndFunc@ _scantod, _RTLENTRY
 Func@ _scanrslt, public, _RTLENTRY, <pointer valP>, <pointer rsltP>, <int rtype>
         jmp [_scanrsltptr@]
 EndFunc@ _scanrslt, _RTLENTRY
+else
+Func@ __realcvtw,  public, _RTLENTRY, <long val>, <int ndec>, <pointer s>, <int radx>, <char signed>, <char hex>
+        jmp [_realcvtwptr@]
+EndFunc@ __realcvtw
 
+Func@ __nextrealw, public, _RTLENTRY, <pointer ap>, <int isld>
+        jmp [_nextrealwptr@]
+EndFunc@ __nextrealw, _RTLENTRY
+
+Func@ _scanwtod, public, _RTLENTRY, <pointer valP>, <pointer get>, <pointer unget>, <pointer srcP>, <int wid>, <pointer cP>, <pointer stP>
+        jmp [_scanwtodptr@]
+EndFunc@ _scanwtod, _RTLENTRY
+
+Func@ _scanrsltw, public, _RTLENTRY, <pointer valP>, <pointer rsltP>, <int rtype>
+        jmp [_scanwrsltptr@]
+EndFunc@ _scanrsltw, _RTLENTRY
+endif
 Code_EndS@
 
         end

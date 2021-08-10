@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.17  $
+//$Revision:   5.22  $
 //
 // General Registry access & registration implementation
 //----------------------------------------------------------------------------
@@ -12,6 +12,7 @@
 #include <classlib/pointer.h>
 #include <services/checks.h>
 #include <stdlib.h>  // atol()
+#include <tchar.h>
 //#include <stdio.h>   // sprintf()
 
 //
@@ -31,20 +32,85 @@ TRegKey TRegKey::ClassesRoot((TSystem::IsWin95())? ((HKEY)0x80000000L):
 #else
 TRegKey TRegKey::ClassesRoot(HKEY_CLASSES_ROOT, true, "HKEY_CLASSES_ROOT");
 #endif
-
 TRegKey TRegKey::ClassesRootClsid(ClassesRoot, "CLSID", KEY_ALL_ACCESS, NoCreate);
-TRegKey TRegKey::CurrentUser(HKEY_CURRENT_USER, true, "HKEY_CURRENT_USER");
-TRegKey TRegKey::LocalMachine(HKEY_LOCAL_MACHINE, true, "HKEY_LOCAL_MACHINE");
-TRegKey TRegKey::Users(HKEY_USERS, true, "HKEY_USERS");
 
-// Win4.0 only, handles end up 0 during object construction
 //
-TRegKey TRegKey::CurrentConfig(HKEY_CURRENT_CONFIG, true, "HKEY_CURRENT_CONFIG");
-TRegKey TRegKey::DynData(HKEY_DYN_DATA, true, "HKEY_DYN_DATA");
+//
+//
+TRegKey&
+TRegKey::GetClassesRoot()
+{
+  return ClassesRoot;
+}
 
-// Win32 3.51 or greater?
 //
-TRegKey TRegKey::PerformanceData(HKEY_PERFORMANCE_DATA, true, "HKEY_PERFORMANCE_DATA");
+//
+//
+TRegKey&
+TRegKey::GetClassesRootClsid()
+{
+  return ClassesRootClsid;
+}
+
+//
+//
+//
+TRegKey&
+TRegKey::GetCurrentUser()
+{
+  static TRegKey CurrentUser(HKEY_CURRENT_USER, true, "HKEY_CURRENT_USER");
+  return CurrentUser;
+}
+
+//
+//
+//
+TRegKey&
+TRegKey::GetLocalMachine()
+{
+  static TRegKey LocalMachine(HKEY_LOCAL_MACHINE, true, "HKEY_LOCAL_MACHINE");
+  return LocalMachine;
+}
+
+//
+//
+//
+TRegKey&
+TRegKey::GetUsers()
+{
+  static TRegKey Users(HKEY_USERS, true, "HKEY_USERS");
+  return Users;
+}
+
+//
+//
+//
+TRegKey&
+TRegKey::GetCurrentConfig()
+{
+  static TRegKey CurrentConfig(HKEY_CURRENT_CONFIG, true, "HKEY_CURRENT_CONFIG");
+  return CurrentConfig;
+}
+
+//
+//
+//
+TRegKey&
+TRegKey::GetDynData()
+{
+  static TRegKey DynData(HKEY_DYN_DATA, true, "HKEY_DYN_DATA");
+  return DynData;
+}
+
+//
+//
+//
+TRegKey&
+TRegKey::GetPerformanceData()
+{
+  static TRegKey PerformanceData(HKEY_PERFORMANCE_DATA, true, "HKEY_PERFORMANCE_DATA");
+  return PerformanceData;
+}
 
 //
 // Different parameter usage & initial code for Win16 vs Win32
@@ -53,9 +119,10 @@ TRegKey TRegKey::PerformanceData(HKEY_PERFORMANCE_DATA, true, "HKEY_PERFORMANCE_
 //
 // Initialize the object with the passed-in data.
 //
-TRegKey::TRegKey(THandle baseKey, const char far* keyName, REGSAM /*samDesired*/, TCreateOK createOK)
+TRegKey::TRegKey(THandle baseKey, const _TCHAR far* keyName, REGSAM /*samDesired*/, TCreateOK createOK)
 :
-  Name(strnewdup(keyName))
+  Name(strnewdup(keyName)),
+  Key(0)
 {
   if (createOK == CreateOK) {
     ::RegCreateKey(baseKey, Name, &Key);
@@ -67,9 +134,10 @@ TRegKey::TRegKey(THandle baseKey, const char far* keyName, REGSAM /*samDesired*/
 //
 // Initialize the object with the passed-in data.
 //
-TRegKey::TRegKey(THandle baseKey, const char far* keyName, REGSAM samDesired, TCreateOK createOK)
+TRegKey::TRegKey(THandle baseKey, const _TCHAR far* keyName, REGSAM samDesired, TCreateOK createOK)
 :
-  Name(strnewdup(keyName))
+  Name(strnewdup(keyName)),
+  Key(0)
 {
   if (createOK == CreateOK) {
     uint32 disposition;
@@ -98,7 +166,7 @@ TRegKey::TRegKey(const TRegKeyIterator& iter, REGSAM samDesired)
 #endif
 :
   Key(0),
-  Name(new char[_MAX_PATH+1])
+  Name(new _TCHAR[_MAX_PATH+1])
 {
   iter.BaseKey().EnumKey(iter.Current(), Name, _MAX_PATH+1);
 #if defined(BI_PLAT_WIN16)
@@ -115,7 +183,7 @@ TRegKey::TRegKey(const TRegKeyIterator& iter, REGSAM samDesired)
 // Construct a TRegKey object around an existing key. Commonly used for
 // wrapping the preexisting pseudo-keys.
 //
-TRegKey::TRegKey(THandle aliasKey, bool shouldClose, const char far* keyName)
+TRegKey::TRegKey(THandle aliasKey, bool shouldClose, const _TCHAR far* keyName)
 :
   Key(aliasKey),
   Name(strnewdup(keyName))
@@ -163,7 +231,7 @@ TRegKey::~TRegKey()
 // Emulation for 16-bits.
 //
 long
-TRegKey::QueryInfo(char far* /*class_*/, uint32* /*classSize*/,
+TRegKey::QueryInfo(_TCHAR far* /*class_*/, uint32* /*classSize*/,
                         uint32* subkeyCount,
                         uint32* /*maxSubkeySize*/, uint32* /*maxClassSize*/,
                         uint32* valueCount, uint32* /*maxValueName*/,
@@ -175,7 +243,7 @@ TRegKey::QueryInfo(char far* /*class_*/, uint32* /*classSize*/,
   if (subkeyCount) {
     int i = 0;
     for (;; i++) {
-      char dummy[_MAX_PATH+1];
+      _TCHAR dummy[_MAX_PATH+1];
       long r = ::RegEnumKey(Key, i, dummy, sizeof dummy);
       if (r != 0/* && r != ERROR_MORE_DATA*/)
         break;
@@ -191,13 +259,13 @@ TRegKey::QueryInfo(char far* /*class_*/, uint32* /*classSize*/,
 // Wrapper for RegQueryInfoKey API.
 //
 long
-TRegKey::QueryInfo(char far* class_, uint32* classSize,
+TRegKey::QueryInfo(_TCHAR far* class_, uint32* classSize,
                    uint32* subkeyCount,  uint32* maxSubkeySize,
                    uint32* maxClassSize, uint32* valueCount,
                    uint32* maxValueName, uint32* maxValueData,
                    uint32* secDescSize, PFILETIME lastWriteTime)
 {
-  char      db[256];
+  _TCHAR      db[256];
   uint32    d1 = sizeof db;
   uint32    d2 = 0;
   uint32    d3 = 0;
@@ -228,7 +296,7 @@ TRegKey::QueryInfo(char far* class_, uint32* classSize,
 // fails if a key has subkeys, so must tail-recurse to clean them up first.
 //
 long
-TRegKey::NukeKey(const char far* subKeyName)
+TRegKey::NukeKey(const _TCHAR far* subKeyName)
 {
   {
     TRegKey subKey(*this, subKeyName, KEY_ALL_ACCESS, TRegKey::NoCreate);
@@ -250,7 +318,7 @@ TRegKey::NukeKey(const char far* subKeyName)
 //
 // Create a value object named 'name' associated with the the current key.
 //
-TRegValue::TRegValue(const TRegKey& key, const char far* name)
+TRegValue::TRegValue(const TRegKey& key, const _TCHAR far* name)
 :
   Key(key), Name(name), AName(0), Data(0)
 {
@@ -266,7 +334,7 @@ TRegValue::TRegValue(const TRegValueIterator& iter)
   Key(iter.BaseKey()), Data(0)
 {
   uint32 nameSize = _MAX_PATH; //0;  
-  Name = AName = new char[(int)nameSize];
+  Name = AName = new _TCHAR[(int)nameSize];
   DataSize = 0;
   Key.EnumValue(iter.Current(), AName, nameSize, &DataType, 0, &DataSize);
 }
@@ -324,15 +392,15 @@ TRegValue::Set(uint32 type, uint8* data, uint32 dataSize)
 // Registry exception checking. Throw a TXRegistry if arg is non-zero
 //
 void
-TXRegistry::Check(long stat, const char* key)
+TXRegistry::Check(long stat, const _TCHAR* key)
 {
   if (stat != 0 && !InstanceCount) {
     if (stat == 1)      // default bool true to a generic E_FAIL
       stat = E_FAIL;
-    char buf[100];
+    _TCHAR buf[100];
     if (key)
       wsprintf(buf, "Registry failure on key: %s, ErrorCode = %lX\n",
-               (const char far*)key, stat);
+               (const _TCHAR far*)key, stat);
     else
       wsprintf(buf, "Registry failure on unknown key: ErrorCode = %lX\n",
                stat);
@@ -347,7 +415,7 @@ TXRegistry::Check(long stat, const char* key)
 // Initialize object with the passed-in data.
 // Counts the number of items in the list.
 //
-TRegTemplateList::TRegTemplateList(TRegKey& basekey, const char* list[])
+TRegTemplateList::TRegTemplateList(TRegKey& basekey, const _TCHAR* list[])
 :
   BaseKey(basekey),
   List(list)
@@ -356,7 +424,7 @@ TRegTemplateList::TRegTemplateList(TRegKey& basekey, const char* list[])
 
   for (Count = 0; List[Count]; Count++)
     ;
-  EnabledFlags = new char[Count];
+  EnabledFlags = new _TCHAR[Count];
 }
 
 //
@@ -371,9 +439,9 @@ TRegTemplateList::~TRegTemplateList()
 // Enable items from the set.
 //
 void
-TRegTemplateList::Enable(const char* set)
+TRegTemplateList::Enable(const _TCHAR* set)
 {
-  for (const char* pc = set; *pc != 0; pc++)
+  for (const _TCHAR* pc = set; *pc != 0; pc++)
     EnabledFlags[*pc - 1] = 0;                 // Selectively allow enable
 }
 
@@ -381,9 +449,9 @@ TRegTemplateList::Enable(const char* set)
 // Activate the items in the set.
 //
 void
-TRegTemplateList::Activate(const char* set)
+TRegTemplateList::Activate(const _TCHAR* set)
 {
-  for (const char* pc = set; *pc != 0; pc++)
+  for (const _TCHAR* pc = set; *pc != 0; pc++)
     EnabledFlags[*pc - 1]++;  
 }
 
@@ -401,7 +469,7 @@ TRegParamList::TRegParamList(TEntry* list)
 
   for (Count = 0; List[Count].Param; Count++)
     ;
-  typedef const char* cpchar;
+  typedef const _TCHAR* cpchar;
   Values = new cpchar[Count];
 }
 
@@ -426,7 +494,7 @@ TRegParamList::ResetDefaultValues()
 //
 // Look for a given param in this param list
 //
-int TRegParamList::Find(const char* param)
+int TRegParamList::Find(const _TCHAR* param)
 {
   PRECONDITION(param);
   if (!param)
@@ -434,7 +502,7 @@ int TRegParamList::Find(const char* param)
 
   int i = Count;
   while (--i >= 0) {
-    if (strcmp(List[i].Param, param) == 0)
+    if (_tcscmp(List[i].Param, param) == 0)
       break;
   }
   return i;
@@ -445,7 +513,7 @@ int TRegParamList::Find(const char* param)
 //
 // Initialize the symbol table with the data.
 //
-TRegSymbolTable::TRegSymbolTable(TRegKey& basekey, const char* tplList[],
+TRegSymbolTable::TRegSymbolTable(TRegKey& basekey, const _TCHAR* tplList[],
                                  TRegParamList::TEntry* paramList)
 :
   Templates(basekey, tplList),
@@ -459,7 +527,7 @@ TRegSymbolTable::TRegSymbolTable(TRegKey& basekey, const char* tplList[],
 // Initialize paramater values with defaults
 //
 void
-TRegSymbolTable::Init(char* filter)
+TRegSymbolTable::Init(_TCHAR* filter)
 {
   if (filter) {
     Templates.DisableAll();
@@ -512,8 +580,8 @@ TRegSymbolTable::StreamOut(TRegItem* item, ostream& out)
     // Setup pt from standard templates, or from userKeys in item prepended
     // by spaces.
     //
-    const char* userval = 0;
-    const char* pt;
+    const _TCHAR* userval = 0;
+    const _TCHAR* pt;
     if (itpl <= Templates.GetCount()) {  // Processing standard template array
       if (!Templates.IsActive(itpl))
         continue;
@@ -530,13 +598,13 @@ TRegSymbolTable::StreamOut(TRegItem* item, ostream& out)
     // way.
     //
     const int bufSize  = 512;
-    TAPointer<char> buf = new char[bufSize];
+    TAPointer<_TCHAR> buf = new _TCHAR[bufSize];
 
-    char*       data = 0; // Optional data for keys-value=data
-    const char* pc;       // Point where param token began
-    char*       pb = buf; // Working buffer write pointer
+    _TCHAR*       data = 0; // Optional data for keys-value=data
+    const _TCHAR* pc;       // Point where param token began
+    _TCHAR*       pb = buf; // Working buffer write pointer
     for (;;) {
-      char  c = *pt++;  // Current character being copied
+      _TCHAR  c = *pt++;  // Current character being copied
       switch (c) {
         case '<':
           pc = pb;      // Remember where param token starts
@@ -551,7 +619,7 @@ TRegSymbolTable::StreamOut(TRegItem* item, ostream& out)
 
           // Now get the value obtained above
           //
-          pb = (char*)pc; // Move buffer ptr back
+          pb = (_TCHAR*)pc; // Move buffer ptr back
           TXRegistry::Check((pc = Params.Value(i)) == 0, Params[i].Param);
 
           if (*pc == 0 && *pt == ' ')  
@@ -594,7 +662,7 @@ TRegSymbolTable::StreamOut(TRegItem* item, ostream& out)
 #else
       << Templates.GetBaseKey().GetName()
 #endif
-      << '\\' << (const char*)buf;
+      << '\\' << (const _TCHAR*)buf;
     if (data)
       out << " = " << data;
     out << '\n';
@@ -616,18 +684,18 @@ void TRegistry::Update(TRegKey& baseKey, istream& in)
     // Get line into entry buffer, skip over base key if it exists, ignore line
     // if it doesn't
     //
-    char entry[512];
-    in.getline(entry, strlen(baseKey.GetName())+1);
-    if (strcmp(entry, baseKey.GetName()) != 0)
+    _TCHAR entry[512];
+    in.getline(entry, _tcslen(baseKey.GetName())+1);
+    if (_tcscmp(entry, baseKey.GetName()) != 0)
       continue;
     in.getline(entry, 1+1);  // Eat the '\' separator
     in.getline(entry, sizeof entry);
 
     // Split entry into keys-value and data strings
     //
-    char* data = strchr(entry, '=');
+    _TCHAR* data = _tcschr(entry, '=');
     if (data) {
-      char* pc = data;
+      _TCHAR* pc = data;
       while (*(pc-1) == ' ')
         pc--;
       *pc = 0;
@@ -636,7 +704,7 @@ void TRegistry::Update(TRegKey& baseKey, istream& in)
     }
     else
       data = "";
-    char* valName = strchr(entry, '|');
+    _TCHAR* valName = _tcschr(entry, '|');
     if (valName)
       *valName++ = 0;  // Terminate key at value name separator
 
@@ -666,35 +734,35 @@ int TRegistry::Validate(TRegKey& baseKey, istream& in)
     // Get line into entry buffer, skip over hive key if it exists, ignore line
     // if it doesn't
     //
-    char entry[512];
-    in.getline(entry, strlen(baseKey.GetName())+1);  // 1 for '\', 1 for 0
-    if (strcmp(entry, baseKey.GetName()) != 0)
+    _TCHAR entry[512];
+    in.getline(entry, _tcslen(baseKey.GetName())+1);  // 1 for '\', 1 for 0
+    if (_tcscmp(entry, baseKey.GetName()) != 0)
       continue;
     in.getline(entry, 1+1);  // Eat the '\' separator
     in.getline(entry, sizeof entry);
 
     // Split entry into keys-value and data strings
     //
-    char* data = strchr(entry, '=');
+    _TCHAR* data = _tcschr(entry, '=');
     if (data) {
-      char* pc = data;
+      _TCHAR* pc = data;
       while (*(pc-1) == ' ')
         pc--;
       *pc = 0;
       while (*(++data) == ' ')
         ;
     }
-    char* valName = strchr(entry, '|');
+    _TCHAR* valName = _tcschr(entry, '|');
     if (valName)
       *valName = '\\';  // Replace value name separator with \ for query
 
     // Now lookup keys-value part to get its data and see if it matches the
     // data value from the instream
     //
-    char buf[300];
+    _TCHAR buf[300];
     uint32 bufSize = sizeof buf;
     if (baseKey.QueryDefValue(entry, buf, &bufSize) != S_OK
-        || (data && strcmp(data, buf) != 0))
+        || (data && _tcscmp(data, buf) != 0))
       diffCount++;
   }
   return diffCount;
@@ -713,21 +781,21 @@ TRegistry::Unregister(TRegList& regInfo, TUnregParams* params, TRegItem* overrid
   // up all nested keys too
   //
   for (int i = 0; params[i].Name && params[i].BaseKey; i++) {
-    const char* regKey = regInfo[params[i].Name];
+    const _TCHAR* regKey = regInfo[params[i].Name];
 
     // If the param not found & it matches the overrides item, then use that
     // value
     //
-    if (!regKey && overrides && strcmp(overrides->Key, params[i].Name) == 0)
+    if (!regKey && overrides && _tcscmp(overrides->Key, params[i].Name) == 0)
       regKey = overrides->Value;
 
     // If key-value was found, unregister it
     //
     if (regKey) {
-      char buff[16];
+      _TCHAR buff[16];
       if (params[i].Prepend) { // Special case prepending char to key
         buff[0] = '.';
-        strcpy(buff+1, regKey);
+        _tcscpy(buff+1, regKey);
         regKey = buff;
       }
 

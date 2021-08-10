@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.1  $
+// $Revision:   2.2  $
 //
 // OleDebug.cpp -- Some debugging utilities for getting symbolic output
 //                 from the OLE2 error codes and enums

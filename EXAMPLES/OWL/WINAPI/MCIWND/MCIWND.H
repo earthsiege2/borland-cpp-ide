@@ -11,7 +11,12 @@
 # include <owl/defs.h>
 #endif
 
-//
+#if !defined(BI_PLAT_WIN32)
+#error This example must be built as a WIN32 Target
+#endif
+
+// VFW.H relies on some macros which may not be defined by the 
+// BORLAND C++ compiler.
 //
 #if defined(__BORLANDC__)  
 # define __inline  inline

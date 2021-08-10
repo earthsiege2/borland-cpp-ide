@@ -12,6 +12,7 @@
 
 #ifndef _SMPMS_H_
 #define _SMPMS_H_
+#pragma option -b
 
 #define SMS_EXTERN_PROPID_BASE  0x6700      /* From MAPITAGS.H comments */
 
@@ -53,5 +54,6 @@
         0x93, 0xdc, 0x5a, 0xab, \
         0x3C, 0x47, 0x84, 0x37 }
 
+#pragma option -b.
 #endif  /* _SMPMS_H_ */
 

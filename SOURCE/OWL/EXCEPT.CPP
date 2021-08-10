@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.9  $
 //
 // Implementation of class TXOwl, the base exception class for OWL exceptions
 // that can forward handling to the app module by default.
@@ -18,6 +18,8 @@
 # include <owl/module.h>
 #endif
 #include <stdio.h>
+
+OWL_DIAGINFO;
 
 //
 // mbModalFlag() determines the best MB modal flag to use in the current
@@ -55,9 +57,14 @@ static unsigned mbModalFlag()
   return hasWnds ? MB_TASKMODAL : MB_SYSTEMMODAL;
 }
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif 
 //
 // Global exception handler used when an application object is not available.
-// May be overriden by user code by redefining this function.  If a valid
+// May be overriden by user code by redefining this function. Note that the
+// program must be linked statically to OWL in order for an overridden version
+// of this function to be called by the framework. If a valid
 // application object is found by GetApplicationObject, then the virtual
 // TModule::Error(TXOwl& x, char* caption, bool canResume) is usually used
 // instead.
@@ -85,6 +92,10 @@ HandleGlobalException(xmsg& x, char* caption, char* canResume)
   return ::MessageBox(0, errorStr, caption,
                       mbModalFlag() | MB_ICONSTOP | buttons) == IDYES ? 0 : -1;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif 
 
 //----------------------------------------------------------------------------
 
@@ -181,7 +192,7 @@ TXOwl::ResourceIdToString(bool* found, uint resId, TModule* module)
     *found = status;
 
   if (!status)
-    sprintf(buf, "Exception #%u (no message available).", resId);
+    sprintf(buf, "Exception #%u (Could not load description string; <owl/except.rc> not bound?).", resId);
 
   string rscStr(buf);
   return rscStr;

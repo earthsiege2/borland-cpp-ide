@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.10  $
 //
 // Implementation of class TOleDialog. This defines the basic behavior of all
 // Ole dialogs.
@@ -13,18 +13,17 @@
 # include <owl/oledialg.h>
 #endif
 
+OWL_DIAGINFO;
+
 DEFINE_RESPONSE_TABLE2(TOleDialog, TOleWindow, TDialog)
   EV_OC_VIEWSETSITERECT,
 END_RESPONSE_TABLE;
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 //
-// Construction/Destruction handling.
+//
 //
 TOleDialog::TOleDialog(TWindow* parent, TResId resId, TModule* module)
-:
-  TOleWindow(parent, module),
-  TDialog(parent, resId, module)
+           :TOleWindow(parent, module), TDialog(parent, resId, module)
 {
   // Register OCX class
   //
@@ -60,11 +59,12 @@ TOleDialog::SetupWindow()
     //
     HWND hWndControl = CheckChild(hWnd);
 
-    // Loop through all the children and look for controls
+    // Loop through all the children and look for 'stub' windows
+    // that should be replaced with an OCX control...
     //
     while ((hWnd = ::GetWindow(hWnd, GW_HWNDNEXT)) != 0) {
       if (hWndControl)
-        ::DestroyWindow(hWndControl); // destroy the dummy window
+        ::DestroyWindow(hWndControl);
       hWndControl = CheckChild(hWnd);
     }
 
@@ -86,15 +86,15 @@ TOleDialog::IdleAction(long idleCount)
 bool
 TOleDialog::PreProcessMsg(MSG& msg)
 {
-  TOleWindow::PreProcessMsg(msg);
-  return TDialog::PreProcessMsg(msg);
+  if (TOleWindow::PreProcessMsg(msg) || TDialog::PreProcessMsg(msg))
+    return true;
+  return false;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 //
 // Override SetSiteRect from TOleWindow since we want to force
 // our OCX Controls to keep the size and position defined in
-// the resource file. This is done simply returning false
+// the resource file. This is done by simply returning false
 //
 bool
 TOleDialog::EvOcViewSetSiteRect(TRect far* rect)
@@ -103,7 +103,6 @@ TOleDialog::EvOcViewSetSiteRect(TRect far* rect)
   return false;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 //
 // Check if the hWndChild is a placeholder for a control and if so
 // load it. Return hWndChild (if a control is found) so that the calling
@@ -113,8 +112,8 @@ HWND
 TOleDialog::CheckChild(HWND hWndChild)
 {
   char className [50];
-  if (::GetClassName(hWndChild, className, 50)) {
-    if (strcmp(className, "OCX") == 0) {
+  if (::GetClassName(hWndChild, className, sizeof(className))) {
+    if (strcmp(className, OCX_STUB_CLASS) == 0) {
       LoadControl(hWndChild);
       return hWndChild;
     }
@@ -122,18 +121,16 @@ TOleDialog::CheckChild(HWND hWndChild)
   return 0;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 //
-// Find out ProgId and position for this control and load it
+// Find out ProgId (from caption of control) and position for this
+// control and load it
 //
 void
 TOleDialog::LoadControl(HWND hControl)
 {
-  char ProgId [50];
-  TRect ControlRect;
-
-  // Get control size
+  // Get stub control's location
   //
+  TRect ControlRect;
   ::GetWindowRect(hControl, &ControlRect);
   TPoint TopLeft(ControlRect.left, ControlRect.top);
   ::ScreenToClient(*this, &TopLeft);
@@ -143,53 +140,20 @@ TOleDialog::LoadControl(HWND hControl)
 
   // Get ProgId
   //
-  ::GetWindowText(hControl, ProgId, 50);
+  char progId [80];
+  ::GetWindowText(hControl, progId, sizeof(progId));
 
-  LoadControl(ProgId, ControlRect);
+  // Create control with specified progid at location
+  //
+  InsertControl(TString(progId), &ControlRect);
 }
 
-
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 //
-// Load a control to a given position. This is actually a hidden
-// InsertControl
-//
-void
-TOleDialog::LoadControl(TString ProgId, TRect position)
-{
-  TOcInitInfo initInfo(OcView);
-
-  // Get class id from prog id
-  //
-  CLSID dummyId = CLSID_NULL;
-  ::CLSIDFromProgID(ProgId, &dummyId);
-  //if (FAILED(::CLSIDFromProgID(ProgId, &dummyId)))
-  //  ::MessageBox(0, "Unable to open control", "Open Error", MB_OK);
-  initInfo.CId = (BCID) &dummyId;
-
-  // Fill the remaining fields in InitInfo
-  //
-  initInfo.Where = iwNewOcx;
-  initInfo.How = ihEmbed;
-
-  // Load the control
-  //
-//  SetSelection(new TOcControl(*GetOcDoc(), &initInfo, position));
-  TOcControl* control = new TOcControl(*GetOcDoc());
-  control->Init(&initInfo, position);
-  SetSelection(control);
-  OcView->Rename();
-  InvalidatePart(invView);
-
-}
-
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// Class for register and unregister OCX window class
+// Class to register and unregister the window class which acts as a
+// stub window for an OCX in a dialog
 //
 TRegisterOcxWnd::TRegisterOcxWnd(HINSTANCE hInst)
-:
-  HAppInst(hInst)
+                :HAppInst(hInst)
 {
   // Registration for OCX window
   //
@@ -204,13 +168,13 @@ TRegisterOcxWnd::TRegisterOcxWnd(HINSTANCE hInst)
   wndClass.hCursor = 0;
   wndClass.hbrBackground = 0;
   wndClass.lpszMenuName = 0;
-  wndClass.lpszClassName = "OCX";
+  wndClass.lpszClassName = OCX_STUB_CLASS;
 
   RegisterClass(&wndClass);
 }
 
 //
-// Unregister OCX window
+// Unregister OCX stub-window class
 //
 TRegisterOcxWnd::~TRegisterOcxWnd()
 {

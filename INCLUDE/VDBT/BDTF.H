@@ -38,6 +38,21 @@
 #include <ctype.h>  // get size_t definition
 
 //
+// Mangle the function, class and variable names so we can have
+// mulitpale versions of the same functions and variables in one
+// .LIB file.
+//
+#if defined( __DLL__ ) && ! defined( __FLAT__ )
+#  if defined( _RTLDLL )
+#    define TFunctorBase dFunctorBase
+#  else _RTLDLL
+#    define TFunctorBase uFunctorBase
+#  endif _RTLDLL
+#elif defined( _RTLDLL )
+#  define TFunctorBase iFunctorBase
+#endif __DLL__
+
+//
 // Base functor class holds all of the actual data
 //
 class TFunctorBase

@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.14  $
+// $Revision:   2.15  $
 //
 //  Implements the Bolero half of the application-level object. Provides some 
 //  system services such as default dialogs.

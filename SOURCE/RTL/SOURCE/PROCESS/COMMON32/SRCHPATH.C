@@ -3,37 +3,41 @@
  *
  * function(s)
  *        searchpath   - searches the PATH environment variable
+ *        wsearchpath  - searches the wide-character PATH environment variable
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #ifdef _MT
 #include <_thread.h>
 #endif
 #include <dir.h>
 #include <stdlib.h>
+#include <_tchar.h>
 
 #ifdef _MT
 
-#define pathbuf (char *)THREAD_BUF(pathbuf,_MAX_PATH)
+#define pathbuf (_TCHAR *)THREAD_BUF(pathbuf,_MAX_PATH*sizeof(wchar_t))
 
 #else
 
-static char pathbuf[_MAX_PATH];
+static _TCHAR pathbuf[_MAX_PATH];
 
 #endif  /* _MT */
 
 /*-----------------------------------------------------------------------*
 
-Name            searchpath - searches the DOS path
+Name            searchpath, wsearchpath - searches the DOS path
 
 Usage           char *searchpath(const char *filename);
+                wchar_t *searchpath(const wchar_t *filename);
 
 Prototype in    dir.h
 
@@ -47,10 +51,10 @@ Return value    A pointer to the filename string if the file is successfully
 
 *------------------------------------------------------------------------*/
 
-char * _RTLENTRYF _EXPFUNC searchpath(const char *file)
+_TCHAR * _RTLENTRYF _EXPFUNC _tsearchpath(const _TCHAR *file)
 {
-    char *buf = pathbuf;
+    _TCHAR *buf = pathbuf;
 
-    _searchenv(file, "PATH", buf);
-    return (buf[0] == '\0' ? NULL : buf);
+    _tsearchenv(file, _TEXT("PATH"), buf);
+    return (buf[0] == _TEXT('\0') ? NULL : buf);
 }

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.10  $
+//$Revision:   10.12  $
 //
 // Definition of class TDocManager
 //----------------------------------------------------------------------------
@@ -20,6 +20,10 @@
 #endif
 #if !defined(OWL_OPENSAVE_H)
 # include <owl/opensave.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 //
@@ -231,8 +235,8 @@ class _OWLCLASS TDocManager : virtual public TEventHandler,
 //
 class _OWLCLASS TDvOpenSaveData : public TOpenSaveDialog::TData {
   public:
-    TDvOpenSaveData(uint32 flags, char far* filter, 
-                    const char far* initialDir, const char far* defExt, 
+    TDvOpenSaveData(uint32 flags, char* filter, 
+                    char* initialDir, char* defExt, 
                     int filterIndex, TDocTemplate **tmplList, int tmplCount);
 
     TDocTemplate**  GetTmplList() const;
@@ -314,6 +318,10 @@ class _OWLCLASS TDvFileSaveDialog : public TFileSaveDialog, public TDvOpenSaveDa
 // definition of classes
 #include <services/posclass.h>
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+  
 //----------------------------------------------------------------------------
 // Inline implementations
 //

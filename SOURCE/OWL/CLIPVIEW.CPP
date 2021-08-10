@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of class TClipboardViewer, a TWindow mixin that allows a
 // window to receive clipboard notifications appropriate for being a viewer
@@ -11,6 +11,8 @@
 #if !defined(OWL_CLIPVIEW_H)
 # include <owl/clipview.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // We only want to search this mixin for events, so don't include any base

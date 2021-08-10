@@ -8,9 +8,12 @@
 
 #ifndef _INC_WING
 #define _INC_WING
+#pragma option -b
 
 #ifndef _INC_WINDOWS
+#pragma option -b.
 #include <windows.h>    /* Include windows.h if not already included */
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
@@ -74,6 +77,6 @@ BOOL WINGAPI WinGStretchBlt( HDC hdcDest, int nXOriginDest,
 }                       /* End of extern "C" */
 #endif
 
+#pragma option -b.
 #endif // _INC_WING
 
-

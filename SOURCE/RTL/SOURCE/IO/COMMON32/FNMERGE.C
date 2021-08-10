@@ -3,25 +3,30 @@
  *
  * function(s)
  *        fnmerge - make new filename
+ *        _wfnmerge - make new wide-character filename
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdlib.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            fnmerge - makes new file name
+Name            fnmerge, _wfnmerge - makes new (wide-character) file name
 
 Usage           #include <dir.h>
                 void fnmerge(char *path, const char * drive, const char * dir,
                              const char * name, const char * ext);
+                void wfnmerge(wchar_t *path, const wchar_t * drive, const wchar_t * dir,
+                             const wchar_t * name, const wchar_t * ext);
 
 Related
 functions usage int fnsplit(const char *path, char *drive, char *dir,
@@ -59,8 +64,8 @@ Return value    None
 
 *---------------------------------------------------------------------*/
 
-void _RTLENTRYF _EXPFUNC fnmerge(register char *pathP, const char *driveP,
-const char *dirP, const char *nameP, const char *extP)
+void _RTLENTRY _EXPFUNC _tfnmerge(register _TCHAR *pathP, const _TCHAR *driveP,
+const _TCHAR *dirP, const _TCHAR *nameP, const _TCHAR *extP)
 {
-    _makepath(pathP,driveP,dirP,nameP,extP);
+    _tmakepath(pathP,driveP,dirP,nameP,extP);
 }

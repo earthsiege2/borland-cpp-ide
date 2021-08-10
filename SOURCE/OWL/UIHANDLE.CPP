@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.5  $
 //
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
@@ -12,6 +12,8 @@
 #if !defined(OWL_GDIOBJEC_H)
 # include <owl/gdiobjec.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Construct a UIHandle object given a frame, a style and a handle size
@@ -147,7 +149,8 @@ TUIHandle::Paint(TDC& dc) const
     dc.SetROP2(R2_XORPEN);
     TRect frame = Frame;
     if (Style & Framed) {
-      dc.FrameRect(frame, TBrush(TColor::Black));
+      TBrush frameBr(TColor::Black);
+      dc.FrameRect(frame, frameBr);
     }
     else {
       TPen dashPen(TColor::White, 1, PS_DASH);

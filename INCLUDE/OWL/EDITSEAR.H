@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.6  $
 //
 // Definition of class TEditSearch, an edit control that responds to Find,
 // Replace and FindNext menu commands.
@@ -17,6 +17,10 @@
 # include <owl/findrepl.h>
 #endif
 #include <owl/editsear.rh>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
@@ -93,6 +97,10 @@ class _OWLCLASS TEditSearch : public TEdit {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

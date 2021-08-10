@@ -239,7 +239,7 @@ public:
     virtual countType getItemsInContainer() const { return itemsInContainer; }
 
     virtual classType isA() const { return btreeClass; }
-    virtual char _FAR *nameOf() const { return "Btree"; }
+    virtual _TCHAR _FAR *nameOf() const { return "Btree"; }
     virtual int isEqual( const Object _FAR & ) const;
     virtual void printOn( ostream _FAR & ) const;
     virtual ContainerIterator _FAR & initIterator() const;

@@ -2,27 +2,32 @@
  * filename - rmdir.c
  *
  * function(s)
- *        rmdir - removes directory
+ *        _rmdir - removes directory
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <ntbc.h>
 
 #include <dir.h>
 #include <_io.h>
+#include <_tchar.h>
 
 /*-----------------------------------------------------------------------*
 
-Name            rmdir - removes directory
+Name            _trmdir used as _rmdir and _wrmdir
+                _rmdir   - removes directory
+                _wrmdir - removes directory
 
-Usage           int rmdir(const char *pathname);
+Usage           int _rmdir(const char *pathname);
+                int _wrmdir(const wchar_t *pathname);
 
 Prototype in    dir.h
 
@@ -43,9 +48,9 @@ Return value    success : 0
 
 *------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC rmdir(const char *pathP)
+int _RTLENTRY _EXPFUNC _trmdir(const _TCHAR *pathP)
 {
-    if (RemoveDirectory((char *)pathP) != TRUE)
+    if (RemoveDirectory(pathP) != TRUE)
         return (__NTerror());
     else
         return(0);

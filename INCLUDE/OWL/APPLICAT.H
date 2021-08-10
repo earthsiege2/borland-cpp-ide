@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.11  $
 //
 // Definition of class TApplication. This defines the basic behavior for OWL
 // applications. Also definitions for TBwccDll, TCtl3dDll, TXInvalidMainWindow
@@ -20,9 +20,20 @@
 # include <winsys/msgthred.h>
 #endif
 
-// Generic definitions/compiler options (eg. alignment) preceeding the 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+// Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
+
+//
+// Language defines for TApplication::EnableBWCC()
+//
+#define BWCC_LANG_GERMAN 0x07
+#define BWCC_LANG_US     0x09
+#define BWCC_LANG_FRENCH 0x0c
 
 class _OWLCLASS TWindow;
 class _OWLCLASS TFrameWindow;
@@ -245,10 +256,10 @@ class _OWLCLASS TApplication : virtual public TEventHandler,
     // Static application initialization parameters cached here before app
     // is actually constructed
     //
-    static HINSTANCE  InitHInstance;
-    static HINSTANCE  InitHPrevInstance;
-    static string     InitCmdLine;
-    static int        InitCmdShow;
+    static HINSTANCE  InitHInstance;          // WinMain's 1st param
+    static HINSTANCE  InitHPrevInstance;      // WinMain's 2nd param
+    static string&    GetInitCmdLine();       // WinMain's 3rd param
+    static int        InitCmdShow;            // WinMain's 4th param
 
     // Response tables
     //
@@ -344,9 +355,13 @@ class _OWLCLASS_RTL TXInvalidMainWindow : public TXOwl {
     static void Raise();
 };
 
-// Generic definitions/compiler options (eg. alignment) following the 
+// Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -408,7 +423,7 @@ inline void TApplication::SetCmdShow(int cmdshow)
 //
 inline string& TApplication::GetCmdLine()
 {
-  return InitCmdLine;
+  return GetInitCmdLine();
 }
 
 //
@@ -429,14 +444,26 @@ inline int TApplication::QueryThrow() const
 }
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 extern TWindow* GetWindowPtr(HWND, const TApplication*);
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //
 // Return the window pointer given a window's handle.
 //
 inline TWindow* TApplication::GetWindowPtr(HWND hWnd) const
 {
+#if defined(BI_NAMESPACE)
+  return OWL::GetWindowPtr(hWnd, this);
+#else
   return ::GetWindowPtr(hWnd, this);
+#endif
 }
 
 //
@@ -449,7 +476,7 @@ inline void TApplication::SetWinMainParams(HINSTANCE       hInstance,
 {
   InitHInstance = hInstance;
   InitHPrevInstance = hPrevInstance;
-  InitCmdLine = cmdLine;
+  GetInitCmdLine() = cmdLine;
   InitCmdShow = cmdShow;
 }
 
@@ -458,7 +485,7 @@ inline void TApplication::SetWinMainParams(HINSTANCE       hInstance,
 //
 inline void TApplication::GetWinMainParams()
 {
-  InitModule(InitHInstance, InitCmdLine.c_str());
+  InitModule(InitHInstance, GetInitCmdLine().c_str());
   hPrevInstance = InitHPrevInstance;
   nCmdShow = InitCmdShow;
 }

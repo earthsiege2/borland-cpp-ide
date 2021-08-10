@@ -3,36 +3,45 @@
  *
  * function(s)
  *        __xcvt - converts a double value to an ASCIIZ string
+ *        __xcvtw - converts a double value to a wide-character string
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <float.h>      /* for _status87 */
 #include <string.h>     /* for memset */
 #include <math.h>
 #include <_printf.h>
 #include <_math.h>
+#include <_tchar.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            __xcvt - convert double/long double value to ASCIIZ string
+Name            __xcvt, __xcvtw - convert double/long double value to an
+				  ASCIIZ/wide-character string
 
 Usage           int __xcvt(void *valP,
                            short ndigits,
                            int *signP,
                            char *strP,
                            int ftype)
+                int __xcvtw(void *valP,
+                           short ndigits,
+                           int *signP,
+                           wchar_t *strP,
+                           int ftype)
 
 Prototype in    _printf.h
 
-Description     The double/long double (*valP) is converted to a decimal 
-                string (*strP) of up to 18 digits, a  sign (*signP, 
+Description     The double/long double (*valP) is converted to a decimal
+                string (*strP) of up to 18 digits, a  sign (*signP,
                 false == positive) and a decimal exponent (the function
                 return value).
 
@@ -75,7 +84,7 @@ Note: A #define in '_printf.h' can be used to enable recognition of floats
 
 #define MaxSigDigits    19
 
-int __xcvt(void *valP, int digits, int *signP, char *strP, int ftype)
+int __xcvtt(void *valP, int digits, int *signP, _TCHAR *strP, int ftype)
 {
     short   ten = 10;
     short   SW;             /* iNDP status word */
@@ -87,9 +96,9 @@ int __xcvt(void *valP, int digits, int *signP, char *strP, int ftype)
     long            templ;
     int             prec, decimals, power, abspower, roundup, ndigs;
     long            double power10;
-    char            *p, *endp;
+    _TCHAR            *p, *endp;
 
-    /* Convert parm to 'long double' and store locally.  We ZAP the sign 
+    /* Convert parm to 'long double' and store locally.  We ZAP the sign
      * bit out of the number in the local copy, but after saving
      * the exponent word.  This saves having to do a FABS later on
      * which saves lots of time if this code is running emulated
@@ -117,14 +126,14 @@ int __xcvt(void *valP, int digits, int *signP, char *strP, int ftype)
     fracw[4] = exponent & 0x7fff;       /* zap the sign bit */
     *signP = (exponent & 0x8000) != 0;  /* return sign to caller */
 
-    /* 
-        Weed out all the 'strange' numbers here(0, Infinity & NANs).    
+    /*
+        Weed out all the 'strange' numbers here(0, Infinity & NANs).
 
-        The format of C0, C1, C2 & C4 in the status word is:    
+        The format of C0, C1, C2 & C4 in the status word is:
 
         15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
         --+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--
-           C3          C2 C1 C0 
+           C3          C2 C1 C0
         ----- upper byte ------+----- lower byte ------
                    AH                      AL
 
@@ -147,8 +156,8 @@ int __xcvt(void *valP, int digits, int *signP, char *strP, int ftype)
          1  1  1  0     -Denormal       (*)
          1  1  1  1     Empty
 
-         (*) We'll never see these in operation because we've zapped the 
-             sign bit before loading the number (it was saved though 
+         (*) We'll never see these in operation because we've zapped the
+             sign bit before loading the number (it was saved though
              before being clobbered).
 
         Note : 286/287 specific porters.
@@ -172,8 +181,8 @@ roundToZero:
             ndigs = -ndigs + 1;         /* digit left of decimal point */
         if (ndigs > __XCVTDIG__)        /* limit caller's buffer */
             ndigs = __XCVTDIG__;
-        memset(strP,'0',ndigs);         /* fill in with '0' */
-        strP[ndigs] = '\0';             /* null terminate string */
+        _tmemset(strP,_TEXT('0'),ndigs);/* fill in with '0' */
+        strP[ndigs] = _TEXT('\0');      /* null terminate string */
         *signP = 0;                     /* eliminate negative zero */
         return (1);                     /* We really want 0.0E+01       */
     }
@@ -198,13 +207,13 @@ roundToZero:
         - the answer can be wrong: it is somewhat rare but rounding errors
           in the log function can cause the wrong number of digits.
 
-        An alternative method is to make a swift estimate of the log, then 
-        check it later.  So long as the error is at most one digit up or 
+        An alternative method is to make a swift estimate of the log, then
+        check it later.  So long as the error is at most one digit up or
         down, and happens in a minority of cases, performance will be
-        reasonable.  We can form the estimate by multiplying the binary 
+        reasonable.  We can form the estimate by multiplying the binary
         exponent by a conversion factor Log10of2.  Since 16 bit accuracy
         is OK at this stage, it is possible to use fixed point arithmetic
-        on the main CPU. 
+        on the main CPU.
 */
     templ = (exponent & 0x7fff) - 0x3fff;   /* remove bias and sign */
     templ *= (long)0x4d10;          /* 10000h * Log10of2, rounded.  */
@@ -256,7 +265,7 @@ roundToZero:
             abspower = 4932;
         power10 = _pow10(abspower);
 
-        /* Now the value 10^(|power|) is in power10.  That is multiplied 
+        /* Now the value 10^(|power|) is in power10.  That is multiplied
          * or divided with the value in frac to yield a number with an
          * integral part probably having just the number of wanted digits.
          */
@@ -316,7 +325,7 @@ roundToZero:
      */
     _fuistq((long *)&frac,&frac);/* Convert to unsigned 64-bit integer */
     p = endp = &strP[prec];     /* Locate the end of string .. */
-    *p-- = '\0';                /* .. and put the zero terminator there. */
+    *p-- = _TEXT('\0');         /* .. and put the zero terminator there. */
 
     /* The roundup flag is necessary because the rounding to integer can change
      * a 999.. value to 1000..  by rounding up.  In that case the number
@@ -344,7 +353,7 @@ roundToZero:
 
             ch = _qdiv10((long *)&frac);    /* get frac % 10; frac /= 10 */
             roundup |= ch;
-            *p-- = ch + '0';
+            *p-- = ch + _TEXT('0');
             if (--prec == 0)
                 break;
         }
@@ -358,9 +367,9 @@ roundToZero:
          */
         decimals++;
         if (digits <= 0)
-            *endp = '0';
+            *endp = _TEXT('0');
         endp++;
-        *(p+1) = '1';
+        *(p+1) = _TEXT('1');
     }
 
     /* The caller may want more than 18 digits.  We oblige, with limits,
@@ -375,12 +384,12 @@ roundToZero:
     if (ndigs > __XCVTDIG__)
         ndigs = __XCVTDIG__;
 
-    *endp = '\0';                       /* make sure null terminated */
+    *endp = _TEXT('\0');                /* make sure null terminated */
     ndigs -= (endp - strP);             /* calculate actual digits */
     if (ndigs > 0)
     {
-        memset(endp,'0',ndigs);         /* extend the string */
-        *(endp+ndigs) = '\0';           /* null-terminate it */
+        _tmemset(endp,_TEXT('0'),ndigs);  /* extend the string */
+        *(endp+ndigs) = _TEXT('\0');    /* null-terminate it */
     }
     return (decimals);
 }

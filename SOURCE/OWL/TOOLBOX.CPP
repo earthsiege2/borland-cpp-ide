@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.9  $
 //
 // Implementation of class TToolBox, a 2-d arrangement of TButtonGadgets.
 //----------------------------------------------------------------------------
@@ -16,6 +16,8 @@
 #if !defined(WINSYS_UIMETRIC_H)
 # include <winsys/uimetric.h>
 #endif
+
+OWL_DIAGINFO;
 
 IMPLEMENT_CASTABLE(TToolBox);
 
@@ -49,10 +51,11 @@ TToolBox::TToolBox(TWindow*        parent,
 void
 TToolBox::Insert(TGadget& g, TPlacement placement, TGadget* sibling)
 {
-  TButtonGadget* bg = TYPESAFE_DOWNCAST(&g,TButtonGadget);
-  PRECONDITION(bg != 0);
-
   TGadgetWindow::Insert(g, placement, sibling);
+
+  // Notch the corners if it's a buttonGadget
+  //
+  TButtonGadget* bg = TYPESAFE_DOWNCAST(&g,TButtonGadget);
   if (bg)
     bg->SetNotchCorners(false);
 }

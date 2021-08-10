@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.3  $
+// $Revision:   2.4  $
 //
 //  Interface of the Bolero half of the OLE2 server object. BOleSite objects 
 //  impersonate the client application from the point of view of the Bolero 

@@ -9,16 +9,18 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <_scanf.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
@@ -32,11 +34,11 @@ Return value    the character read or -1 of the null character
 
 *---------------------------------------------------------------------*/
 
-static int Get(char **strPP)
+static int Get(_TCHAR **strPP)
 {
-    register    unsigned  char  c;
+    register    _TUCHAR  c;
 
-    return  ((c = *((*strPP) ++)) == 0) ? -1 : c;
+    return  ((c = *((*strPP) ++)) == _TEXT('\0')) ? -1 : c;
 }
 
 
@@ -52,7 +54,7 @@ Description     decrements a character pointer
 
 #pragma warn -par
 
-static void UnGet(char c, char **strPP)
+static void UnGet(_TCHAR c, _TCHAR **strPP)
 {
     --(*strPP);         /* ignore c, we don't allow the string to change */
 }
@@ -75,13 +77,13 @@ Return value    number of fields scanned and stored.  sscanf returns EOF
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC sscanf(const char *buf, const char *fmt, ...)
+int _RTLENTRY _EXPFUNC _stscanf(const _TCHAR *buf, const _TCHAR *fmt, ...)
 {
     va_list ap;
     int ret;
 
     va_start(ap,fmt);
-    ret =  _scanner (
+    ret =  _scannert (
         (int (*)(void *))Get,
         (void (*)(int, void *))UnGet,
         &buf,
@@ -109,9 +111,9 @@ Return value    number of fields scanned and stored.  vsscanf returns EOF
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC vsscanf(const char *buf, const char *fmt, va_list ap)
+int _RTLENTRY _EXPFUNC _vstscanf(const _TCHAR *buf, const _TCHAR *fmt, va_list ap)
 {
-    return  _scanner(
+    return  _scannert(
         (int (*)(void *))Get,
         (void (*)(int, void *))UnGet,
         &buf,

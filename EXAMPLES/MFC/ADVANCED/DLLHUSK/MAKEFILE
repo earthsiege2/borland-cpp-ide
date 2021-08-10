@@ -1,0 +1,90 @@
+# This is a part of the Microsoft Foundation Classes C++ library.
+# Copyright (C) 1992-1995 Microsoft Corporation
+# All rights reserved.
+#
+# This source code is only intended as a supplement to the
+# Microsoft Foundation Classes Reference and related
+# electronic documentation provided with the library.
+# See these sources for detailed information regarding the
+# Microsoft Foundation Classes product.
+
+AFXDLL=1
+EXTRA_LIBS=testdll1.lib testdll2.lib
+
+All: $(EXTRA_LIBS) testdll1.dll testdll2.dll MainRule
+
+PROJ=DLLHUSK
+OBJS=dllhusk.obj mainfrm.obj
+
+!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+
+clean::
+	if exist *.dll erase *.dll
+
+#############################################################################
+# Common rules and values for building MFC Extension DLLs
+
+DLL_CPPFLAGS=/D_WINDLL /D_AFXEXT /D_RTLDLL /D_MT /w- /I$(BORINCL);$(BORINCL)\mfc -Vd -VF
+DLL_LINKFLAGS=/Tpd /L$(BORLIB) /n /s /w-inq
+!if "$(DEBUG)" == "0"
+DLL_CPPFLAGS=$(DLL_CPPFLAGS) /v-
+DLL_LINKFLAGS=$(DLL_LINKFLAGS) /v-
+!else
+DLL_CPPFLAGS=$(DLL_CPPFLAGS) /D_DEBUG /v
+DLL_LINKFLAGS=$(DLL_LINKFLAGS) /v
+!endif
+!if "$(UNICODE)" != "1"
+!else
+DLL_CPPFLAGS=$(DLL_CPPFLAGS) /D_UNICODE
+!endif
+
+RFLAGS=$(RFLAGS) /D_AFXDLL
+
+#############################################################################
+# Special rules for building TESTDLL1
+
+TESTDLL1_RESOURCES=testdll1.res
+
+testdll1.obj: testdll1.cpp testdll1.h
+	bcc32 $(DLL_CPPFLAGS) /c testdll1.cpp
+
+testdll1.dll: testdll1.obj $(TESTDLL1_RESOURCES)
+	$(LINKCMD) @&&~
+$(DLL_LINKFLAGS) +
+$(BORLIB)\c0d32.obj testdll1.obj
+testdll1.dll
+testdll1.map
+$(LIBRARIES)
+
+$(TESTDLL1_RESOURCES)
+~
+
+testdll1.lib: testdll1.dll
+        implib testdll1.lib testdll1.dll
+
+
+#############################################################################
+# Special rules for building TESTDLL2
+
+TESTDLL2_RESOURCES=testdll2.res
+
+testdll2.obj: testdll2.cpp testdll2.h
+	bcc32 $(DLL_CPPFLAGS) /c testdll2.cpp
+
+
+testdll2.dll: testdll2.obj $(TESTDLL2_RESOURCES)
+	$(LINKCMD) @&&~
+$(DLL_LINKFLAGS) +
+$(BORLIB)\c0d32.obj testdll2.obj
+testdll2.dll
+testdll2.map
+$(LIBRARIES)
+
+$(TESTDLL2_RESOURCES)
+~
+
+testdll2.lib: testdll2.dll
+        implib testdll2.lib testdll2.dll
+
+
+#############################################################################

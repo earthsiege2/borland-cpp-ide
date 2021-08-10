@@ -98,9 +98,9 @@ class _DBAWARECLASS TDBNavigator : public TDBControl {
 
     // Event Handlers
     DECLARE_DB_EVENT( OnClick,    TNavClick );
-    EVENT( OnDragDrop, TDBControl, TDragEvent );
-    EVENT( OnDragOver, TDBControl, TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl, TDragEvent );
+    DECLARE_DB_EVENT( OnDragDrop, TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver, TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,  TDragEvent );
     DECLARE_DB_EVENT( OnDblClick, TNotifyEvent );
     DECLARE_DB_EVENT( OnEnter,    TNotifyEvent );
     DECLARE_DB_EVENT( OnExit,     TNotifyEvent );

@@ -6,24 +6,30 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <ntbc.h>
 
 #include <_io.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <_ostype.h>
+#include <_tchar.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            chdir - changes working directory
+Name            _tchdir used as chdir and _wchdir
+                chdir   - changes working directory
+                _wchdir - changes working directory
 
 Usage           int chdir(const char *path);
+                int _wchdir(const wchar_t *path);
 
 Prototype in    dir.h
 
@@ -36,38 +42,35 @@ Return value    success : 0
 
 *---------------------------------------------------------------------------*/
 
-int _RTLENTRYF _EXPFUNC chdir(const char *pathP)
+int _RTLENTRYF _EXPFUNC _tchdir(const _TCHAR *pathP)
 {
-    char buffer[_MAX_PATH];
-    char envname[4];
-    char drive;
+    _TCHAR buffer[_MAX_PATH];
+    _TCHAR envname[4];
+    _TCHAR drive;
 
-    /* No drive was specified, so let's change the current
-     * directory for the current drive.
-     */
-
-    if (SetCurrentDirectory((char *)pathP) != TRUE)
-	return (__NTerror());
+    if (SetCurrentDirectory(pathP) != TRUE)
+        return (__NTerror());
 
     if (GetCurrentDirectory(sizeof(buffer), buffer) == 0)
-	return (__NTerror());
+        return (__NTerror());
 
-    /* If the path specifies a drive, set the current directory for
-     * that drive.
-     */
-    drive = toupper(buffer[0]);
-    if (drive >= 'A' && drive <= 'Z' && buffer[1] == ':')
+    if (_ostype != _DOS32)
     {
-	/* On NT, you set the current directory for a given drive by
-	 * setting the magic environment variable =N:, where N is the
-	 * drive letter.
-	 */
-	envname[0] = '=';
-	envname[1] = drive;
-	envname[2] = ':';
-	envname[3] = '\0';
-	if (SetEnvironmentVariable(envname, buffer) != TRUE)
-	    return (__NTerror());
+        drive = _totupper(buffer[0]);
+        if (drive >= _TEXT('A') && drive <= _TEXT('Z') &&
+            buffer[1] == _TEXT(':'))
+        {
+            /* On NT, you set the current directory for a given drive by
+             * setting the magic environment variable =N:, where N is the
+             * drive letter.
+             */
+            envname[0] = _TEXT('=');
+            envname[1] = drive;
+            envname[2] = _TEXT(':');
+            envname[3] = _TEXT('\0');
+            if (SetEnvironmentVariable(envname, buffer) != TRUE)
+                return (__NTerror());
+        }
     }
     return(0);
 }

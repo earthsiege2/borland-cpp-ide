@@ -1,3 +1,4 @@
+#pragma option -b
 /**************************************************************************
  *
  *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
@@ -6,7 +7,7 @@
  *  PURPOSE.
  *
  *
-**	Copyright (C) Microsoft Corporation 1991-1994. All rights reserved.
+**	Copyright (C) Microsoft Corporation 1991-1996. All rights reserved.
 **
 **	Title: mciavi.h - Multimedia Systems Media Control Interface
 **	AVI driver external header file
@@ -79,3 +80,4 @@
 #define MCIERR_AVI_DISPLAYERROR         (MCIERR_CUSTOM_DRIVER_BASE + 106)
 #define MCIERR_AVI_AUDIOERROR		(MCIERR_CUSTOM_DRIVER_BASE + 107)
 #define MCIERR_AVI_BADPALETTE		(MCIERR_CUSTOM_DRIVER_BASE + 108)
+#pragma option -b.

@@ -3,22 +3,29 @@
  *
  *  Status Codes returned by MAPI routines
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef MAPICODE_H
 #define MAPICODE_H
+#pragma option -b
+
+#if defined (WIN32) && !defined (_WIN32)
+#define _WIN32
+#endif
 
 /* Define S_OK and ITF_* */
 
-#ifdef WIN32
+#ifdef _WIN32
+#pragma option -b.
 #include <winerror.h>
+#pragma option -b
 #endif
 
 /*
  *  MAPI Status codes follow the style of OLE 2.0 sCodes as defined in the
  *  OLE 2.0 Programmer's Reference and header file scode.h (Windows 3.x)
- *  or winerror.h (Windows NT 3.5 and Windows 95).
+ *  or winerror.h (Windows NT and Windows 95).
  *
  */
 
@@ -149,6 +156,16 @@
 #define MAPI_E_CORRUPT_DATA                             MAKE_MAPI_E( 0x11B )
 #define MAPI_E_UNCONFIGURED                             MAKE_MAPI_E( 0x11C )
 #define MAPI_E_FAILONEPROVIDER                          MAKE_MAPI_E( 0x11D )
+#define MAPI_E_UNKNOWN_CPID                             MAKE_MAPI_E( 0x11E )
+#define MAPI_E_UNKNOWN_LCID                             MAKE_MAPI_E( 0x11F )
+
+/* Flavors of E_ACCESSDENIED, used at logon */
+
+#define MAPI_E_PASSWORD_CHANGE_REQUIRED                 MAKE_MAPI_E( 0x120 )
+#define MAPI_E_PASSWORD_EXPIRED                         MAKE_MAPI_E( 0x121 )
+#define MAPI_E_INVALID_WORKSTATION_ACCOUNT              MAKE_MAPI_E( 0x122 )
+#define MAPI_E_INVALID_ACCESS_TIME                      MAKE_MAPI_E( 0x123 )
+#define MAPI_E_ACCOUNT_DISABLED                         MAKE_MAPI_E( 0x124 )
 
 /* MAPI base function and status object specific errors and warnings */
 
@@ -226,4 +243,5 @@
 #define HR_FAILED(_hr) FAILED((SCODE)(_hr))
 #endif
 
+#pragma option -b.
 #endif  /* MAPICODE_H */

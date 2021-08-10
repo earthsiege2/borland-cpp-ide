@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of TBitSet, a set of up to 256 bit flags
 //----------------------------------------------------------------------------
@@ -13,6 +13,8 @@
 #if !defined(CLASSLIB_OBJSTRM_H)
 # include <classlib/objstrm.h>
 #endif
+
+OWL_DIAGINFO;
 
 uint8 near TBitSet::Masks[8] = {
   0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80
@@ -140,6 +142,10 @@ TBitSet::IsEmpty() const
   return true;
 }
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 //
 // Return true if the two bitsets are indentical.
 //
@@ -169,6 +175,10 @@ ipstream& operator >>(ipstream& in, TBitSet& bs)
   in.freadBytes(bs.Bits, sizeof(bs.Bits));
   return in;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 

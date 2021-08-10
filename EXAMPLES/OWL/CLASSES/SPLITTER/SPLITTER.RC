@@ -5,6 +5,7 @@
 #include <owl/owlapp.rc>
 #include <owl/inputdia.rc>
 #include <owl/panespli.rc>
+#include <owl/except.rc>
 #include "splitter.rh"
 
 
@@ -15,6 +16,8 @@ IDM_LAYOUT MENU
   MENUITEM "&Move",                 CM_S_MOVE
   MENUITEM "&Display Width",        CM_S_WIDTH
   MENUITEM "&SetWidth",             CM_S_SET_SPLITTER_WIDTH
+  MENUITEM  SEPARATOR
+  MENUITEM "&New Pane Client",      CM_CREATEPANECLIENT
  }
  POPUP "&Pane"
  {
@@ -26,6 +29,16 @@ IDM_LAYOUT MENU
   MENUITEM "&ForEach",              CM_P_FOR_EACH_PANE
   MENUITEM "Remove &All Panes",     CM_P_REMOVE_ALL_PANES
  }
+}
+
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+{
+	CM_SPLITVERT   			"\nSplit current pane vertically"
+	CM_SPLITHORZ        "\nSplit current pane horizontally"
+	CM_SHRINK           "\nShrink current pane"
+	CM_GROW             "\nExpand current pane"
+	CM_CANCLOSE   		 	"\nPane can close"
+	CM_CANTCLOSE  	    "\nPane can't close"
 }
 
 

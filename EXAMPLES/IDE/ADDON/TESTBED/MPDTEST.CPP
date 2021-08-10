@@ -3,7 +3,7 @@
   mpdtest.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.15  $
+  $Revision:   1.19  $
     
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/ 
 #ifndef __AOEXPCH_H
@@ -83,10 +83,10 @@ void MpdTest::DoTest1() {
 }
 
 void MpdTest::DoTest2() {
-  d_chapPrj->AddRef();
-  d_impdServer->UnRegisterChapter(d_chapPrj);
-  d_chapPrj->Release();
-  d_chapPrj = 0;
+  if ( d_chapPrj ) {   
+    d_impdServer->UnRegisterChapter(d_chapPrj);  // object will be released
+    d_chapPrj = 0;
+  }
 };
 
 void MpdTest::DoTest3() {
@@ -103,11 +103,11 @@ void MpdTest::DoTest3() {
   OutStr("Test chapter registered, select Option->Environment to see new pages");
 }
 
-void MpdTest::DoTest4() 
-{
-  d_impdServer->UnRegisterChapter(d_chapEnv);
-  d_chapEnv->Release();
-  d_chapEnv = 0;
+void MpdTest::DoTest4() {
+  if ( d_impdServer ) {
+    d_impdServer->UnRegisterChapter(d_chapEnv);  // object will be released
+    d_chapEnv = 0;
+  }
 };
 
 void MpdTest::DoTest( int testNum ) 

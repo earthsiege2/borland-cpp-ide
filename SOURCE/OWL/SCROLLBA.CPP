@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.8  $
 //
 // Implementation of class TScrollBar.  This defines the basic behavior of all
 // scrollbar controls.
@@ -15,6 +15,8 @@
 #if !defined(WINSYS_UIMETRIC_H)
 # include <winsys/uimetric.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -158,7 +160,7 @@ TScrollBar::GetPosition() const
 // Sets the position of the thumb.
 //
 void
-TScrollBar::SetPosition(int thumbPos)
+TScrollBar::SetPosition(int thumbPos, bool redraw)
 {
   PRECONDITION(GetHandle());
   int  min, max;
@@ -174,14 +176,14 @@ TScrollBar::SetPosition(int thumbPos)
 
   if (thumbPos != GetPosition()) {
 #if defined(BI_PLAT_WIN16)
-    ::SetScrollPos(GetHandle(), SB_CTL, thumbPos, true);
+    ::SetScrollPos(GetHandle(), SB_CTL, thumbPos, redraw);
 #else
     SCROLLINFO info;
     ZeroMemory(&info, sizeof info);
     info.cbSize = sizeof info;
     info.fMask = SIF_POS;
     info.nPos = thumbPos;
-    SetScrollInfo(&info);
+    SetScrollInfo(&info, redraw);
 #endif
   }
 }
@@ -238,11 +240,11 @@ TScrollBar::GetRange(int& min, int& max) const
 // Sets the range of the scrollbar.
 //
 void
-TScrollBar::SetRange(int min, int max)
+TScrollBar::SetRange(int min, int max, bool redraw)
 {
   PRECONDITION(GetHandle());
 #if defined(BI_PLAT_WIN16)
-  ::SetScrollRange(GetHandle(), SB_CTL, min, max, false);
+  ::SetScrollRange(GetHandle(), SB_CTL, min, max, redraw);
 #else
   SCROLLINFO info;
   ZeroMemory(&info, sizeof info);
@@ -250,7 +252,7 @@ TScrollBar::SetRange(int min, int max)
   info.fMask = SIF_RANGE;
   info.nMin = min;
   info.nMax = max;
-  SetScrollInfo(&info);
+  SetScrollInfo(&info,redraw);
 #endif
 }
 

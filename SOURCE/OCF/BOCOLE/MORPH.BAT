@@ -2,9 +2,9 @@
 :// ObjectComponents
 :// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 ://
-:// $Revision:   2.1  $
+:// $Revision:   2.2  $
 :// $Author:   BBABET  $
-:// $Date:   18 Dec 1995 12:52:20  $
+:// $Date:   08 Jun 1996 12:17:58  $
 :// -------------------------------------------------------------------------
 
 copy bole16.rc bocole.rc

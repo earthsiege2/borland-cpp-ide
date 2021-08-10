@@ -3,12 +3,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 
 #ifndef __cplusplus
@@ -19,7 +20,7 @@
 
 // Stream I/O function definitions
 
-ostream _FAR & pascal _FARFUNC operator<<(ostream _FAR & s, bcd _FAR & a)
+ostream _FAR & pascal _FARFUNC operator<<(ostream _FAR & s, const bcd _FAR & a)
 {
     return s << real(a);
 }

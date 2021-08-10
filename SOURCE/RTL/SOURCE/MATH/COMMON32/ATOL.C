@@ -4,26 +4,31 @@
  * function(s)
  *        atol  - converts a string to a long
  *        atoi  - converts a string to an int
+ *        _wtol  - converts a wide-character string to a long
+ *        _wtoi  - converts a wide-character string to an int
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <tchar.h>
 
 #undef   atoi           /* macro in stdlib */
 
 /*--------------------------------------------------------------------------*
 
-Name            atol - converts a string to an integer
+Name            atol, _wtol - converts a string to an integer
 
 Usage           long atol(const char *nptr);
+                long _wtol(const wchar_t *nptr);
 
 Prototype in    stdlib.h
 
@@ -44,28 +49,28 @@ Return value    converted long value of the input string.  If the string
 
 *---------------------------------------------------------------------------*/
 
-long _RTLENTRYF _EXPFUNC atol(const char *strP)
+long _RTLENTRY _EXPFUNC _ttol(const _TCHAR *strP)
 {
-    char c;
+    _TCHAR c;
     int  is_neg;
     long result;
 
     result = 0;                     /* default result is 0 */
 
-    while (isspace((c = *strP++)))  /* skip any whitespace characters */
+    while (_istspace((c = *strP++)))  /* skip any whitespace characters */
         ;
 
-    if (c == '+' || c == '-')       /* remember if negative sign seen */
+    if (c == _TEXT('+') || c == _TEXT('-'))       /* remember if negative sign seen */
     {
-        is_neg = c == '-';
+        is_neg = c == _TEXT('-');
         c = *strP++;                /* skip sign, get next char */
     }
     else
         is_neg = 0;
 
-    while (c >= '0' && c <= '9')    /* accumulate digits, ignore overflow */
+    while (c >= _TEXT('0') && c <= _TEXT('9'))    /* accumulate digits, ignore overflow */
     {
-        result = result * 10 + c - '0';
+        result = result * 10 + c - _TEXT('0');
         c = *strP++;
     }
 
@@ -74,9 +79,10 @@ long _RTLENTRYF _EXPFUNC atol(const char *strP)
 
 /*--------------------------------------------------------------------------*
 
-Name            atoi - converts a string to an integer
+Name            atoi, _wtoi - converts a string to an integer
 
 Usage           int atoi(char *nptr);
+                int atoi(wchar_t *nptr);
 
 Prototype in    stdlib.h
 
@@ -90,7 +96,7 @@ Return value    converted long value of the input string.  If the string
 
 *---------------------------------------------------------------------------*/
 
-int _RTLENTRYF atoi(const char *strP)
+int _RTLENTRY _EXPFUNC _ttoi(const _TCHAR *strP)
 {
-        return (int) atol (strP);
+        return (int) _ttol (strP);
 }

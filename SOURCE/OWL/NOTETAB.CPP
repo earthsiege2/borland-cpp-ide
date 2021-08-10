@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.14  $
 //
 // Implementation of class TNoteTab
 //----------------------------------------------------------------------------
@@ -20,6 +20,8 @@
 # include <winsys/uimetric.h>
 #endif
 
+OWL_DIAGINFO;
+
 //
 // Constants used when drawing control
 //
@@ -30,6 +32,8 @@ const int LabelVMargin= 1;        // Pad above/below the tab label
 const int TabMargin   = 4;        // Margin between two tabs
 const int CtrlMargin  = 5;        // Margin on each side of tab row
 const int CtrlVMargin = 1;        // Margin above row of tab
+const int HorzSelInc  = 2;        // Increment for selected tab
+const int VertSelInc  = 2;        // Increment for selected tab
 
 //----------------------------------------------------------------------------
 
@@ -38,10 +42,12 @@ DEFINE_RESPONSE_TABLE1(TNoteTab, TControl)
   EV_WM_LBUTTONDOWN,
   EV_WM_GETDLGCODE,
   EV_WM_KEYDOWN,
+  EV_WM_SETFOCUS,
+  EV_WM_KILLFOCUS,
 END_RESPONSE_TABLE;
 
 //
-// Constructor of NoteTab object. Use this constructor when creating a 
+// Constructor of NoteTab object. Use this constructor when creating a
 // notetab control from scratch.
 //
 TNoteTab::TNoteTab(TWindow*   parent,
@@ -59,7 +65,7 @@ TNoteTab::TNoteTab(TWindow*   parent,
 }
 
 //
-// Constructor of Notetab object. Use this constructor when aliasing a 
+// Constructor of Notetab object. Use this constructor when aliasing a
 // control defined within a dialog template.
 //
 TNoteTab::TNoteTab(TWindow*   parent,
@@ -80,6 +86,12 @@ TNoteTab::TNoteTab(TWindow*   parent,
 //
 TNoteTab::~TNoteTab()
 {
+  // Cleanup memory associated with notetab items
+  //
+  DeleteAll();
+
+  // Cleanup font and tab item collection
+  //
   delete TabFont;
   delete TabList;
 }
@@ -122,6 +134,11 @@ TNoteTab::SetupWindow()
   Attr.H = cy;
   SetWindowPos(0, 0, 0, Attr.W, Attr.H, SWP_NOMOVE|SWP_NOACTIVATE|
                                                      SWP_NOZORDER);
+
+  // Initialize BuddyHandle if we have a Buddy.
+  //
+  if( Buddy )
+    BuddyHandle = Buddy->GetHandle();
 }
 
 //
@@ -219,7 +236,7 @@ TNoteTab::GetCount() const
 
 //
 // Return the index of the selected tabitem.
-// NOTE: Returns a zero-based index or -1 if there are no tab items 
+// NOTE: Returns a zero-based index or -1 if there are no tab items
 //       in the notetab control.
 int
 TNoteTab::GetSel() const
@@ -301,6 +318,9 @@ void
 TNoteTab::SetBuddy(HWND hwnd)
 {
   BuddyHandle = hwnd;
+  Buddy = GetWindowPtr( BuddyHandle );
+  if( !Buddy )
+    Buddy = new TWindow( hwnd );
 }
 
 //
@@ -386,13 +406,13 @@ TNoteTab::Paint(TDC& dc, bool /*erase*/, TRect& /*rect*/)
     dc.SelectObject(*TabFont);
 
     while (--i >= -1) {
-      // Skip the selected tab, it's drawn last. Otherwise get the 
+      // Skip the selected tab, it's drawn last. Otherwise get the
       // working index
       //
       if (i == GetSel())
         continue;
       int ti = (i == -1) ? GetSel() : i;
-      
+
       // Retrieve tab item information
       //
       TNoteTabItem& tab = *(*TabList)[ti];
@@ -401,16 +421,16 @@ TNoteTab::Paint(TDC& dc, bool /*erase*/, TRect& /*rect*/)
       // Draw border of tab
       //
       TPoint pt[4] = {                                // Corner points
-        TPoint(tbRect.left-TabMargin, tbRect.top-1),  // Top left   
+        TPoint(tbRect.left-TabMargin, tbRect.top-1),  // Top left
         TPoint(tbRect.left, tbRect.bottom),           // Bottom left
         TPoint(tbRect.right, tbRect.bottom),          // Bottom right
-        TPoint(tbRect.right+TabMargin, tbRect.top-1)  // Top right  
+        TPoint(tbRect.right+TabMargin, tbRect.top-1)  // Top right
       };
 
       // If this is the selected tab...
       //
       if (i == -1) {
-         // If 3d, draw edge around 
+         // If 3d, draw edge around
          if (Style3d) {
            clientRect.top += TUIMetric::CySizeFrame;
            TUIBorder(clientRect, TUIBorder::WndRecessed).Paint(dc);
@@ -472,6 +492,12 @@ TNoteTab::Paint(TDC& dc, bool /*erase*/, TRect& /*rect*/)
       //
       dc.SetBkMode(TRANSPARENT);
       dc.DrawText(tab.Label.c_str(), -1, tbRect, DT_CENTER|DT_SINGLELINE|DT_VCENTER);
+
+      // If the note tab has input focus, draw the focus rectangle
+      //
+      if (i == -1 && GetFocus() == GetHandle()) {
+          DrawFocusRect(dc);
+      }
     }
 
     dc.RestoreBrush();
@@ -493,7 +519,7 @@ TNoteTab::EvSize(uint sizeType, TSize& size)
 }
 
 //
-// WM_LBUTTONDOWN handler - 
+// WM_LBUTTONDOWN handler -
 //
 void
 TNoteTab::EvLButtonDown(uint /*modKeys*/, TPoint& point)
@@ -501,6 +527,56 @@ TNoteTab::EvLButtonDown(uint /*modKeys*/, TPoint& point)
   int hitIndex = TabFromPoint(point);
   if (hitIndex != -1) {
     NotifyAndSelect(hitIndex);
+  }
+
+  // Grab focus
+  SetFocus();
+}
+
+//
+// Handle WM_SETFOCUS: Draw focus to identify selected tab
+//
+void
+TNoteTab::EvSetFocus(THandle hWndLostFocus)
+{
+  TControl::EvSetFocus(hWndLostFocus);
+  DrawFocusRect(TClientDC(*this));
+}
+
+//
+// Handle WM_KillFOCUS: Remove dotted focus rectangle from selected tab
+//
+void
+TNoteTab::EvKillFocus(THandle hWndGetFocus)
+{
+  TControl::EvKillFocus(hWndGetFocus);
+  DrawFocusRect(TClientDC(*this));
+}
+
+//
+// Draw a dashed rectangle around the selected tab if it has input focus.
+// calling this function a second time for the same tab erases the
+// rectangle.
+//
+void
+TNoteTab::DrawFocusRect(TDC& dc)
+{
+  if (GetCount() > 0 && GetSel() >= 0) {
+
+    // Set the appropriate background color so the the focus rectangle
+    // will erase cleanly.
+    //
+    // Setting color here is redundant when called from Paint, because
+    // Windows sets the background color for the Paint DC.  Windows does
+    // not set it, however, for the DC passed to SetFocus and KillFocus.
+    //
+    dc.SetBkColor(TColor::Sys3dFace);
+
+    // Calculate coordinates and draw the focus rectangle
+    //
+    TRect selectedRect = (*TabList)[GetSel()]->Rect;
+    selectedRect.Inflate(-HorzSelInc, -VertSelInc);
+    dc.DrawFocusRect(selectedRect);
   }
 }
 
@@ -521,10 +597,24 @@ TNoteTab::EvGetDlgCode(MSG far* msg)
 void
 TNoteTab::EvKeyDown(uint key, uint /*repeatCount*/, uint /*flags*/)
 {
+  int tab = GetSel();
+
+  // right arrow key pressed
+  //
   if (key == VK_RIGHT) {
+    if (tab == GetCount() - 1)    // is selected tab already at the left end?
+      return;
+    else
+      NotifyAndSelect(++tab);
   }
 
+  // left arrow key pressed
+  //
   if (key == VK_LEFT) {
+    if (tab == 0)                 // is selected tab already at the right end?
+      return;
+    else
+      NotifyAndSelect(--tab);
   }
 }
 
@@ -646,11 +736,14 @@ TNoteTab::SetupFont(HFONT font)
     //
     if (Parent && Parent->GetHandle())
       font = Parent->GetWindowFont();
-
-    // Settle for the ANSI proportional one 
+      
+    // Use the default UI font
     //
-    if (!font)
-      font = (HFONT)GetStockObject(ANSI_VAR_FONT);
+    if (!font) {
+      LOGFONT lf;
+      TDefaultGUIFont().GetObject(lf);
+      font = CreateFontIndirect(&lf);
+    }
   }
 
   if (font)
@@ -673,7 +766,7 @@ TNoteTab::TabFromPoint(const TPoint& pt)
 //
 // Select a tab and send the appropriate notifications
 //
-void        
+void
 TNoteTab::NotifyAndSelect(int index)
 {
   PRECONDITION(index >= 0);
@@ -688,17 +781,21 @@ TNoteTab::NotifyAndSelect(int index)
     //
     SetSel(index);
 
-    // Notify of selection change
+    // Notify of selection change to the buddy if one, otherwise
+    // the parent.
     //
     not.code = TCN_SELCHANGE;
-    SendNotification(::GetParent(*this), Attr.Id, not);
-  }         
-}           
-            
-//          
+    if( Buddy )
+      SendNotification( BuddyHandle, Attr.Id, not);
+    else
+      SendNotification(::GetParent(*this), Attr.Id, not);
+  }
+}
+
+//
 // Retrieve  the desired location of the scrollers within the tab
-//          
-void        
+//
+void
 TNoteTab::GetScrollerArea(TRect& rect)
 {
   PRECONDITION(GetCount() > 0);

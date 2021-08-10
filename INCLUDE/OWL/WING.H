@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+// $Revision:   10.7  $
 //
 // Definition of WinG dynamic library wrapper classes, TWinGDll & TWinG
 //----------------------------------------------------------------------------
@@ -16,6 +16,10 @@
 # include <wing.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
@@ -25,42 +29,38 @@
 // ~~~~~ ~~~~~~~~
 // Wrapper for the WinG dll itself
 //
-class _OWLCLASS TWinGDll : public TModule {
+class _OWLCLASS TWinGDll {
   public:
-    TWinGDll();
+    static HDC      CreateDC();
+    static BOOL     RecommendDIBFormat(BITMAPINFO*);
+    static HBITMAP  CreateBitmap(HDC, BITMAPINFO const*, void**);
+    static void*    GetDIBPointer(HBITMAP, BITMAPINFO*);
+    static uint     GetDIBColorTable(HDC, uint, uint, RGBQUAD*);
+    static uint     SetDIBColorTable(HDC, uint, uint, RGBQUAD const*);
+    static HPALETTE CreateHalftonePalette();
+    static HBRUSH   CreateHalfToneBrush(HDC, COLORREF, WING_DITHER_TYPE);
+    static BOOL     BitBlt(HDC, int, int, int, int, HDC, int, int);
+    static BOOL     StretchBlt(HDC, int, int, int, int, HDC, int, int, int, int);
 
-    TModuleProc0<HDC> CreateDC;
-    TModuleProc1<BOOL, BITMAPINFO far*> RecommendDIBFormat;
-    TModuleProc3<HBITMAP,HDC,BITMAPINFO const far*,void far* far*> CreateBitmap;
-    TModuleProc2<void far*,HBITMAP,BITMAPINFO far*> GetDIBPointer;
-    TModuleProc4<uint,HDC,uint,uint,RGBQUAD far*> GetDIBColorTable;
-    TModuleProc4<uint,HDC,uint,uint,RGBQUAD const far*> SetDIBColorTable;
-    TModuleProc0<HPALETTE> CreateHalftonePalette;
-    TModuleProc3<HBRUSH,HDC,COLORREF,WING_DITHER_TYPE> CreateHalftoneBrush;
-    TModuleProc8<BOOL,HDC,int,int,int,int,HDC,int,int> BitBlt;
-    TModuleProc10<BOOL,HDC,int,int,int,int,HDC,int,int,int,int> StretchBlt;
+    static TModule& WinGModule();
+    static bool     IsAvailable();
 };
 
-
 //
-// class TWinG
-// ~~~~~ ~~~~~
-// Loader for the WinG dll
 //
-typedef TDllLoader<TWinGDll> TWinG;
-
-#if defined(BI_COMP_BORLANDC)
-# if defined(_OWLDLL) || defined(BI_APP_DLL)
-  //
-  // Export template of TDllLoader<TWinGDll> when building ObjectWindows DLL 
-  // and provide import declaration of DLL instance for users of the class.
-  //
-  template class _OWLCLASS TDllLoader<TWinGDll>;
-# endif 
-#endif  
+//
+class _OWLCLASS TWinG {
+  public:
+    static bool       IsAvailable();
+    static TWinGDll*  Dll();
+};
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif // OWL_WING_H

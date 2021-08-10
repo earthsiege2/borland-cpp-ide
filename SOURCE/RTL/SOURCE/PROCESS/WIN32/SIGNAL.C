@@ -16,12 +16,13 @@
  *----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #define INCL_CON
 #include <ntbc.h>
@@ -73,6 +74,7 @@ static  char  HandlerPtrSet=0;
 #define SIGMAX_INDEX    10
 
 #ifndef _MT
+/* In the Single-threaded RTL, all the signal handlers are global */
 static CatcherPTR Dispatch[SIGMAX_INDEX] =
 {
     SIG_DFL,
@@ -86,6 +88,37 @@ static CatcherPTR Dispatch[SIGMAX_INDEX] =
     SIG_DFL,
     SIG_DFL
 };
+#else
+/*
+    In the Multi-threaded RTL, most of the signal handlers are
+    stored in TLS which makes them local to the thread which
+    set them up.
+
+    What follows is a global copy of the signal dispatch table
+    that is used to store SIGINT and SIGBREAK only.  All others
+    are stored in TLS.
+
+    This is because the ctrl-c/ctrl-break notifications come in
+    via a unique system thread and therefore aren't set up with
+    the user's TLS info (and the signal wouldn't get dispatched).
+    To fix this, we make the SIGINT and SIGBREAK handlers global
+    to the process not local to particular thread.
+
+*/
+static CatcherPTR DispatchBreaks[SIGMAX_INDEX] =
+{
+    SIG_DFL,
+    SIG_DFL,
+    SIG_DFL,
+    SIG_DFL,
+    SIG_DFL,
+    SIG_DFL,
+    SIG_DFL,
+    SIG_DFL,
+    SIG_DFL,
+    SIG_DFL
+};
+
 #endif  /* not _MT */
 
 static const int IxGen[SIGMAX_INDEX] =
@@ -366,20 +399,27 @@ CatcherPTR _RTLENTRY _EXPFUNC signal(int sig, CatcherPTR New)
      * values.
      */
 #ifdef _MT
-    if ((t = _thread_data()) == NULL)
-        return (SIG_ERR);   /* can't set erro, which also needs thread data */
-    if ((Dispatch = t->thread_sig) == NULL)
+    if (sig == SIGINT || sig == SIGBREAK)
     {
-        int i;
-
-        if ((Dispatch = (CatcherPTR *)malloc(sizeof(void *)*SIGMAX_INDEX)) == NULL)
+        Dispatch = DispatchBreaks;
+    }
+    else
+    {
+        if ((t = _thread_data()) == NULL)
+            return (SIG_ERR);   /* can't set erro, which also needs thread data */
+        if ((Dispatch = t->thread_sig) == NULL)
         {
-            errno = ENOMEM;
-            return (SIG_ERR);
+            int i;
+
+            if ((Dispatch = (CatcherPTR *)malloc(sizeof(void *)*SIGMAX_INDEX)) == NULL)
+            {
+                errno = ENOMEM;
+                return (SIG_ERR);
+            }
+            for (i = 0; i < SIGMAX_INDEX; i++)
+                Dispatch[i] = SIG_DFL;
+            t->thread_sig = Dispatch;
         }
-        for (i = 0; i < SIGMAX_INDEX; i++)
-            Dispatch[i] = SIG_DFL;
-        t->thread_sig = Dispatch;
     }
 #endif
 
@@ -409,8 +449,13 @@ int _RTLENTRY _EXPFUNC raise(int SigType)
      * has been allocated for this thread, don't handle the exception.
      */
 #ifdef _MT
-    if ((t = _thread_data()) == NULL || (Dispatch = t->thread_sig) == NULL)
-        return (1);
+    if (SigType == SIGINT || SigType == SIGBREAK)
+    {
+        Dispatch = DispatchBreaks;
+    }
+    else
+        if ((t = _thread_data()) == NULL || (Dispatch = t->thread_sig) == NULL)
+            return (1);
 #endif
 
     if ((Index = GetIndex(SigType)) == BogusSignal)

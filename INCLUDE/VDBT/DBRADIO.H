@@ -84,10 +84,10 @@ class _DBAWARECLASS TDBRadioGroup : public TDBControl {
     DECLARE_SOURCE( OnExit,     TDBRadioGroupNotify );
 
     // Event Handlers
-    EVENT( OnClick,    TDBControl, TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl, TDragEvent );
-    EVENT( OnDragOver, TDBControl, TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl, TDragEvent );
+    DECLARE_DB_EVENT( OnClick,    TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop, TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver, TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,  TDragEvent );
     DECLARE_DB_EVENT( OnChange,   TNotifyEvent );
     DECLARE_DB_EVENT( OnDblClick, TNotifyEvent );
     DECLARE_DB_EVENT( OnEnter,    TNotifyEvent );
@@ -103,12 +103,12 @@ class _DBAWARECLASS TDBRadioGroup : public TDBControl {
 
 // Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBRadioGroup )
-DEFINE_DB_PROP_TSTRINGS( TDBRadioGroup, Items )
-DEFINE_DB_PROP_TSTRINGS( TDBRadioGroup, Values )
-DEFINE_DB_PROP_STRING( TDBRadioGroup, FontName );
-DEFINE_DB_PROP_STRING( TDBRadioGroup, Caption );
-DEFINE_DB_PROP_STRING( TDBRadioGroup, Value );
+DEFINE_DB_PROP_DATAFIELD( TDBRadioGroup, _TDBRadioGroup )
+DEFINE_DB_PROP_TSTRINGS( TDBRadioGroup, _TDBRadioGroup, Items )
+DEFINE_DB_PROP_TSTRINGS( TDBRadioGroup, _TDBRadioGroup, Values )
+DEFINE_DB_PROP_STRING( TDBRadioGroup, _TDBRadioGroup, FontName );
+DEFINE_DB_PROP_STRING( TDBRadioGroup, _TDBRadioGroup, Caption );
+DEFINE_DB_PROP_STRING( TDBRadioGroup, _TDBRadioGroup, Value );
 
 // Methods
 inline char far* TDBRadioGroup::GetClassName()

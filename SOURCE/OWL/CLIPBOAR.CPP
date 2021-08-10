@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of TClipboard which provides clipboard encapsulation
 //----------------------------------------------------------------------------
@@ -10,6 +10,8 @@
 #if !defined(OWL_CLIPBOAR_H)
 # include <owl/clipboar.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if defined(OWL2_COMPAT)
 //

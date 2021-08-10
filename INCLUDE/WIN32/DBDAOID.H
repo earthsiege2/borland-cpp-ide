@@ -1,3 +1,4 @@
+#pragma option -b
 /************************************************************************
 **	D B D A O I D . H													*
 **																		*
@@ -129,3 +130,4 @@ DEFINE_OLEGUID(IID_IDAODocumentW,		0x00025e9d, 0, 0);
 DEFINE_OLEGUID(IID_IDAODocuments,		0x00025e9e, 0, 0);
 DEFINE_OLEGUID(IID_IDAODocumentsW,		0x00025e9f, 0, 0);
 
+#pragma option -b.

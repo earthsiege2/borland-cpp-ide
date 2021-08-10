@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0002    // Increment this if a change has global effects
 
-Copyright (c) 1991-1995  Microsoft Corporation
+Copyright (c) 1991-1996  Microsoft Corporation
 
 Module Name:
 
@@ -28,12 +28,15 @@ Notes:
 
 #ifndef _LMUSER_
 #define _LMUSER_
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#pragma option -b.
 #include <lmcons.h>     // unfortunately created a dependence on this
+#pragma option -b
 
 //
 // Function Prototypes - User
@@ -41,7 +44,7 @@ extern "C" {
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserAdd (
-    IN  LPWSTR     servername OPTIONAL,
+    IN  LPCWSTR     servername OPTIONAL,
     IN  DWORD      level,
     IN  LPBYTE     buf,
     OUT LPDWORD    parm_err OPTIONAL
@@ -49,7 +52,7 @@ NetUserAdd (
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserEnum (
-    IN  LPWSTR     servername OPTIONAL,
+    IN  LPCWSTR     servername OPTIONAL,
     IN  DWORD      level,
     IN  DWORD      filter,
     OUT LPBYTE     *bufptr,
@@ -61,16 +64,16 @@ NetUserEnum (
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserGetInfo (
-    IN  LPWSTR     servername OPTIONAL,
-    IN  LPWSTR     username,
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     username,
     IN  DWORD      level,
     OUT LPBYTE     *bufptr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserSetInfo (
-    IN  LPWSTR    servername OPTIONAL,
-    IN  LPWSTR    username,
+    IN  LPCWSTR    servername OPTIONAL,
+    IN  LPCWSTR    username,
     IN  DWORD     level,
     IN  LPBYTE    buf,
     OUT LPDWORD   parm_err OPTIONAL
@@ -78,14 +81,14 @@ NetUserSetInfo (
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserDel (
-    IN  LPWSTR    servername OPTIONAL,
-    IN  LPWSTR    username
+    IN  LPCWSTR    servername OPTIONAL,
+    IN  LPCWSTR    username
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserGetGroups (
-    IN  LPWSTR    servername OPTIONAL,
-    IN  LPWSTR    username,
+    IN  LPCWSTR    servername OPTIONAL,
+    IN  LPCWSTR    username,
     IN  DWORD     level,
     OUT LPBYTE    *bufptr,
     IN  DWORD     prefmaxlen,
@@ -95,8 +98,8 @@ NetUserGetGroups (
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserSetGroups (
-    IN  LPWSTR    servername OPTIONAL,
-    IN  LPWSTR    username,
+    IN  LPCWSTR    servername OPTIONAL,
+    IN  LPCWSTR    username,
     IN  DWORD     level,
     IN  LPBYTE    buf,
     IN  DWORD     num_entries
@@ -104,8 +107,8 @@ NetUserSetGroups (
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserGetLocalGroups (
-    IN  LPWSTR    servername OPTIONAL,
-    IN  LPWSTR    username,
+    IN  LPCWSTR    servername OPTIONAL,
+    IN  LPCWSTR    username,
     IN  DWORD     level,
     IN  DWORD     flags,
     OUT LPBYTE    *bufptr,
@@ -116,14 +119,14 @@ NetUserGetLocalGroups (
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserModalsGet (
-    IN  LPWSTR    servername OPTIONAL,
+    IN  LPCWSTR    servername OPTIONAL,
     IN  DWORD     level,
     OUT LPBYTE    *bufptr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserModalsSet (
-    IN  LPWSTR    servername OPTIONAL,
+    IN  LPCWSTR    servername OPTIONAL,
     IN  DWORD     level,
     IN  LPBYTE    buf,
     OUT LPDWORD   parm_err OPTIONAL
@@ -131,10 +134,10 @@ NetUserModalsSet (
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserChangePassword (
-    IN  LPWSTR   domainname OPTIONAL,
-    IN  LPWSTR   username OPTIONAL,
-    IN  LPWSTR   oldpassword,
-    IN  LPWSTR   newpassword
+    IN  LPCWSTR   domainname OPTIONAL,
+    IN  LPCWSTR   username OPTIONAL,
+    IN  LPCWSTR   oldpassword,
+    IN  LPCWSTR   newpassword
     );
 
 
@@ -462,6 +465,7 @@ typedef struct _USER_MODALS_INFO_1007 {
                 )
 
 #define UF_DONT_EXPIRE_PASSWD           0x10000
+#define UF_MNS_LOGON_ACCOUNT            0x20000
 
 
 #define UF_SETTABLE_BITS        ( \
@@ -472,7 +476,8 @@ typedef struct _USER_MODALS_INFO_1007 {
                     UF_PASSWD_NOTREQD | \
                     UF_PASSWD_CANT_CHANGE | \
                     UF_ACCOUNT_TYPE_MASK | \
-                    UF_DONT_EXPIRE_PASSWD \
+                    UF_DONT_EXPIRE_PASSWD | \
+                    UF_MNS_LOGON_ACCOUNT \
                 )
 
 //
@@ -704,7 +709,7 @@ typedef struct _USER_MODALS_INFO_1007 {
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupAdd (
-    IN  LPWSTR   servername OPTIONAL,
+    IN  LPCWSTR   servername OPTIONAL,
     IN  DWORD    level,
     IN  LPBYTE   buf,
     OUT LPDWORD  parm_err OPTIONAL
@@ -712,14 +717,14 @@ NetGroupAdd (
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupAddUser (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   GroupName,
-    IN  LPWSTR   username
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   GroupName,
+    IN  LPCWSTR   username
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupEnum (
-    IN  LPWSTR      servername OPTIONAL,
+    IN  LPCWSTR      servername OPTIONAL,
     IN  DWORD       level,
     OUT LPBYTE      *bufptr,
     IN  DWORD       prefmaxlen,
@@ -730,16 +735,16 @@ NetGroupEnum (
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupGetInfo (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   groupname,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   groupname,
     IN  DWORD    level,
     OUT LPBYTE   *bufptr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupSetInfo (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   groupname,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   groupname,
     IN  DWORD    level,
     IN  LPBYTE   buf,
     OUT LPDWORD  parm_err OPTIONAL
@@ -747,21 +752,21 @@ NetGroupSetInfo (
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupDel (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   groupname
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   groupname
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupDelUser (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   GroupName,
-    IN  LPWSTR   Username
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   GroupName,
+    IN  LPCWSTR   Username
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupGetUsers (
-    IN  LPWSTR     servername OPTIONAL,
-    IN  LPWSTR     groupname,
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     groupname,
     IN  DWORD      level,
     OUT LPBYTE     *bufptr,
     IN  DWORD      prefmaxlen,
@@ -772,8 +777,8 @@ NetGroupGetUsers (
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupSetUsers (
-    IN  LPWSTR     servername OPTIONAL,
-    IN  LPWSTR     groupname,
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     groupname,
     IN  DWORD      level,
     IN  LPBYTE     buf,
     IN  DWORD      totalentries
@@ -873,7 +878,7 @@ typedef struct _GROUP_USERS_INFO_1 {
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupAdd (
-    IN  LPWSTR   servername OPTIONAL,
+    IN  LPCWSTR   servername OPTIONAL,
     IN  DWORD    level,
     IN  LPBYTE   buf,
     OUT LPDWORD  parm_err OPTIONAL
@@ -881,14 +886,14 @@ NetLocalGroupAdd (
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupAddMember (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   groupname,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   groupname,
     IN  PSID     membersid
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupEnum (
-    IN  LPWSTR      servername OPTIONAL,
+    IN  LPCWSTR      servername OPTIONAL,
     IN  DWORD       level,
     OUT LPBYTE      *bufptr,
     IN  DWORD       prefmaxlen,
@@ -899,16 +904,16 @@ NetLocalGroupEnum (
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupGetInfo (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   groupname,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   groupname,
     IN  DWORD    level,
     OUT LPBYTE   *bufptr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupSetInfo (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   groupname,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   groupname,
     IN  DWORD    level,
     IN  LPBYTE   buf,
     OUT LPDWORD  parm_err OPTIONAL
@@ -916,21 +921,21 @@ NetLocalGroupSetInfo (
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupDel (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   groupname
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   groupname
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupDelMember (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   groupname,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   groupname,
     IN  PSID     membersid
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupGetMembers (
-    IN  LPWSTR     servername OPTIONAL,
-    IN  LPWSTR     localgroupname,
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     localgroupname,
     IN  DWORD      level,
     OUT LPBYTE     *bufptr,
     IN  DWORD      prefmaxlen,
@@ -941,8 +946,8 @@ NetLocalGroupGetMembers (
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupSetMembers (
-    IN  LPWSTR     servername OPTIONAL,
-    IN  LPWSTR     groupname,
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     groupname,
     IN  DWORD      level,
     IN  LPBYTE     buf,
     IN  DWORD      totalentries
@@ -950,8 +955,8 @@ NetLocalGroupSetMembers (
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupAddMembers (
-    IN  LPWSTR     servername OPTIONAL,
-    IN  LPWSTR     groupname,
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     groupname,
     IN  DWORD      level,
     IN  LPBYTE     buf,
     IN  DWORD      totalentries
@@ -959,8 +964,8 @@ NetLocalGroupAddMembers (
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupDelMembers (
-    IN  LPWSTR     servername OPTIONAL,
-    IN  LPWSTR     groupname,
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     groupname,
     IN  DWORD      level,
     IN  LPBYTE     buf,
     IN  DWORD      totalentries
@@ -1022,7 +1027,7 @@ typedef struct _LOCALGROUP_USERS_INFO_0 {
 
 NET_API_STATUS NET_API_FUNCTION
 NetQueryDisplayInformation(
-    IN LPWSTR ServerName OPTIONAL,
+    IN LPCWSTR ServerName OPTIONAL,
     IN DWORD Level,
     IN DWORD Index,
     IN DWORD EntriesRequested,
@@ -1032,9 +1037,9 @@ NetQueryDisplayInformation(
 
 NET_API_STATUS NET_API_FUNCTION
 NetGetDisplayInformationIndex(
-    IN LPWSTR ServerName OPTIONAL,
+    IN LPCWSTR ServerName OPTIONAL,
     IN DWORD Level,
-    IN LPWSTR Prefix,
+    IN LPCWSTR Prefix,
     OUT LPDWORD Index );
 
 //
@@ -1087,7 +1092,7 @@ typedef struct _NET_DISPLAY_GROUP {
 
 NET_API_STATUS NET_API_FUNCTION
 NetAccessAdd (
-    IN  LPTSTR   servername OPTIONAL,
+    IN  LPCWSTR   servername OPTIONAL,
     IN  DWORD    level,
     IN  LPBYTE   buf,
     OUT LPDWORD  parm_err OPTIONAL
@@ -1097,8 +1102,8 @@ NetAccessAdd (
 
 NET_API_STATUS NET_API_FUNCTION
 NetAccessEnum (
-    IN  LPTSTR     servername OPTIONAL,
-    IN  LPTSTR     BasePath,
+    IN  LPCWSTR     servername OPTIONAL,
+    IN  LPCWSTR     BasePath,
     IN  DWORD      Recursive,
     IN  DWORD      level,
     OUT LPBYTE     *bufptr,
@@ -1112,8 +1117,8 @@ NetAccessEnum (
 
 NET_API_STATUS NET_API_FUNCTION
 NetAccessGetInfo (
-    IN  LPTSTR   servername OPTIONAL,
-    IN  LPTSTR   resource,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   resource,
     IN  DWORD    level,
     OUT LPBYTE   *bufptr
     );
@@ -1122,8 +1127,8 @@ NetAccessGetInfo (
 
 NET_API_STATUS NET_API_FUNCTION
 NetAccessSetInfo (
-    IN  LPTSTR   servername OPTIONAL,
-    IN  LPTSTR   resource,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   resource,
     IN  DWORD    level,
     IN  LPBYTE   buf,
     OUT LPDWORD  parm_err OPTIONAL
@@ -1133,17 +1138,17 @@ NetAccessSetInfo (
 
 NET_API_STATUS NET_API_FUNCTION
 NetAccessDel (
-    IN  LPTSTR   servername OPTIONAL,
-    IN  LPTSTR   resource
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   resource
     );
 
 #define NetAccessGetUserPerms RxNetAccessGetUserPerms
 
 NET_API_STATUS NET_API_FUNCTION
 NetAccessGetUserPerms (
-    IN  LPTSTR   servername OPTIONAL,
-    IN  LPTSTR   UGname,
-    IN  LPTSTR   resource,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   UGname,
+    IN  LPCWSTR   resource,
     OUT LPDWORD  Perms
     );
 
@@ -1152,11 +1157,11 @@ NetAccessGetUserPerms (
 //
 
 typedef struct _ACCESS_INFO_0 {
-    LPTSTR   acc0_resource_name;
+    LPWSTR   acc0_resource_name;
 }ACCESS_INFO_0, *PACCESS_INFO_0, *LPACCESS_INFO_0;
 
 typedef struct _ACCESS_INFO_1 {
-    LPTSTR   acc1_resource_name;
+    LPWSTR   acc1_resource_name;
     DWORD    acc1_attr;
     DWORD    acc1_count;
 }ACCESS_INFO_1, *PACCESS_INFO_1, *LPACCESS_INFO_1;
@@ -1167,7 +1172,7 @@ typedef struct _ACCESS_INFO_1002 {
 
 
 typedef struct _ACCESS_LIST {
-    LPTSTR   acl_ugname;
+    LPWSTR   acl_ugname;
     DWORD    acl_access;
 }ACCESS_LIST, *PACCESS_LIST, *LPACCESS_LIST;
 
@@ -1272,22 +1277,22 @@ typedef struct _ACCESS_LIST {
 
 NET_API_STATUS NET_API_FUNCTION
 NetGetDCName (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   domainname OPTIONAL,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   domainname OPTIONAL,
     OUT LPBYTE  *bufptr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetGetAnyDCName (
-    IN  LPWSTR   servername OPTIONAL,
-    IN  LPWSTR   domainname OPTIONAL,
+    IN  LPCWSTR   servername OPTIONAL,
+    IN  LPCWSTR   domainname OPTIONAL,
     OUT LPBYTE  *bufptr
     );
 
 
 NET_API_STATUS NET_API_FUNCTION
 I_NetLogonControl(
-    IN LPWSTR ServerName OPTIONAL,
+    IN LPCWSTR ServerName OPTIONAL,
     IN DWORD FunctionCode,
     IN DWORD QueryLevel,
     OUT LPBYTE *Buffer
@@ -1295,11 +1300,21 @@ I_NetLogonControl(
 
 NET_API_STATUS NET_API_FUNCTION
 I_NetLogonControl2(
-    IN LPWSTR ServerName OPTIONAL,
+    IN LPCWSTR ServerName OPTIONAL,
     IN DWORD FunctionCode,
     IN DWORD QueryLevel,
     IN LPBYTE Data,
     OUT LPBYTE *Buffer
+    );
+
+#ifndef _NTDEF_
+typedef LONG NTSTATUS, *PNTSTATUS;
+#endif
+
+NTSTATUS
+NetEnumerateTrustedDomains (
+    IN LPWSTR ServerName OPTIONAL,
+    OUT LPWSTR *DomainNames
     );
 
 
@@ -1321,9 +1336,12 @@ I_NetLogonControl2(
 #define NETLOGON_CONTROL_PDC_REPLICATE 4    // Force PDC to broadcast change
 #define NETLOGON_CONTROL_REDISCOVER    5    // Force to re-discover trusted domain DCs
 #define NETLOGON_CONTROL_TC_QUERY      6    // Query status of specified trusted channel status
+#define NETLOGON_CONTROL_TRANSPORT_NOTIFY 7 // Notify netlogon that a new transport has come online
+#define NETLOGON_CONTROL_FIND_USER     8    // Find named user in a trusted domain
 
 // Debug function codes
 
+#define NETLOGON_CONTROL_UNLOAD_NETLOGON_DLL 0xFFFB
 #define NETLOGON_CONTROL_BACKUP_CHANGE_LOG  0xFFFC
 #define NETLOGON_CONTROL_TRUNCATE_LOG       0xFFFD
 #define NETLOGON_CONTROL_SET_DBFLAG         0xFFFE
@@ -1359,6 +1377,16 @@ typedef struct _NETLOGON_INFO_3 {
         DWORD netlog3_reserved5;
 } NETLOGON_INFO_3, *PNETLOGON_INFO_3;
 
+typedef struct _NETLOGON_INFO_4 {
+#ifdef MIDL_PASS
+        [string] wchar_t * netlog4_trusted_dc_name;
+        [string] wchar_t * netlog4_trusted_domain_name;
+#else
+        LPWSTR netlog4_trusted_dc_name;
+        LPWSTR netlog4_trusted_domain_name;
+#endif // MIDL_PASS
+} NETLOGON_INFO_4, *PNETLOGON_INFO_4;
+
 //
 // Values of netlog1_flags
 //
@@ -1371,5 +1399,7 @@ typedef struct _NETLOGON_INFO_3 {
 #ifdef __cplusplus
 }
 #endif
+
+#pragma option -b.
 
 #endif // _LMDOMAIN_

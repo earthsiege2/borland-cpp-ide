@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     lmchdev.h
@@ -12,10 +14,6 @@ Abstract:
         NetCharDevQ
         NetHandle
 
-Author:
-
-    Dan Lafferty (danl)  11-Mar-1991
-
 [Environment:]
 
     User Mode - Win32
@@ -25,20 +23,13 @@ Author:
     You must include NETCONS.H before this file, since this file depends
     on values defined in NETCONS.H.
 
-Revision History:
-
-    11-Mar-1991  Danl
-        Created from LM2.0 header files and NT-LAN API Spec.
-    14-Apr-1991 w-shanku
-        Changed ParmNum constants to be more consistent with OS/2 parmnums.
-
 --*/
 
 /* $Copyright: 1994$ */
 
 #ifndef _LMCHDEV_
 #define _LMCHDEV_
-#define __LMCHDEV_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,7 +45,7 @@ extern "C" {
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevEnum (
-    IN  LPTSTR      servername,
+    IN  LPCWSTR      servername,
     IN  DWORD       level,
     OUT LPBYTE      *bufptr,
     IN  DWORD       prefmaxlen,
@@ -65,16 +56,16 @@ NetCharDevEnum (
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevGetInfo (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  devname,
+    IN  LPCWSTR  servername,
+    IN  LPCWSTR  devname,
     IN  DWORD   level,
     OUT LPBYTE  *bufptr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevControl (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  devname,
+    IN  LPCWSTR  servername,
+    IN  LPCWSTR  devname,
     IN  DWORD   opcode
     );
 
@@ -83,13 +74,13 @@ NetCharDevControl (
 //
 
 typedef struct _CHARDEV_INFO_0 {
-    LPTSTR  ch0_dev;
+    LPWSTR  ch0_dev;
 } CHARDEV_INFO_0, *PCHARDEV_INFO_0, *LPCHARDEV_INFO_0;
 
 typedef struct _CHARDEV_INFO_1 {
-    LPTSTR  ch1_dev;
+    LPWSTR  ch1_dev;
     DWORD   ch1_status;
-    LPTSTR  ch1_username;
+    LPWSTR  ch1_username;
     DWORD   ch1_time;
 } CHARDEV_INFO_1, *PCHARDEV_INFO_1, *LPCHARDEV_INFO_1;
 
@@ -104,8 +95,8 @@ typedef struct _CHARDEV_INFO_1 {
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevQEnum (
-    IN  LPTSTR      servername,
-    IN  LPTSTR      username,
+    IN  LPCWSTR      servername,
+    IN  LPCWSTR      username,
     IN  DWORD       level,
     OUT LPBYTE      *bufptr,
     IN  DWORD       prefmaxlen,
@@ -116,17 +107,17 @@ NetCharDevQEnum (
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevQGetInfo (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  queuename,
-    IN  LPTSTR  username,
+    IN  LPCWSTR  servername,
+    IN  LPCWSTR  queuename,
+    IN  LPCWSTR  username,
     IN  DWORD   level,
     OUT LPBYTE  *bufptr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevQSetInfo (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  queuename,
+    IN  LPCWSTR  servername,
+    IN  LPCWSTR  queuename,
     IN  DWORD   level,
     IN  LPBYTE  buf,
     OUT LPDWORD parm_err
@@ -134,15 +125,15 @@ NetCharDevQSetInfo (
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevQPurge (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  queuename
+    IN  LPCWSTR  servername,
+    IN  LPCWSTR  queuename
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetCharDevQPurgeSelf (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  queuename,
-    IN  LPTSTR  computername
+    IN  LPCWSTR  servername,
+    IN  LPCWSTR  queuename,
+    IN  LPCWSTR  computername
     );
 
 //
@@ -150,13 +141,13 @@ NetCharDevQPurgeSelf (
 //
 
 typedef struct _CHARDEVQ_INFO_0 {
-    LPTSTR  cq0_dev;
+    LPWSTR  cq0_dev;
 } CHARDEVQ_INFO_0, *PCHARDEVQ_INFO_0, *LPCHARDEVQ_INFO_0;
 
 typedef struct _CHARDEVQ_INFO_1 {
-    LPTSTR  cq1_dev;
+    LPWSTR  cq1_dev;
     DWORD   cq1_priority;
-    LPTSTR  cq1_devs;
+    LPWSTR  cq1_devs;
     DWORD   cq1_numusers;
     DWORD   cq1_numahead;
 } CHARDEVQ_INFO_1, *PCHARDEVQ_INFO_1, *LPCHARDEVQ_INFO_1;
@@ -166,7 +157,7 @@ typedef struct _CHARDEVQ_INFO_1002 {
 } CHARDEVQ_INFO_1002, *PCHARDEVQ_INFO_1002, *LPCHARDEVQ_INFO_1002;
 
 typedef struct _CHARDEVQ_INFO_1003 {
-    LPTSTR  cq1003_devs;
+    LPWSTR  cq1003_devs;
 } CHARDEVQ_INFO_1003, *PCHARDEVQ_INFO_1003, *LPCHARDEVQ_INFO_1003;
 
 
@@ -278,5 +269,7 @@ typedef struct _HANDLE_INFO_1 {
 #ifdef __cplusplus
 }
 #endif
+
+#pragma option -b.
 
 #endif // _LMHANDLE_

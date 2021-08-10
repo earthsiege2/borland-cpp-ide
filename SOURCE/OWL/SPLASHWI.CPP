@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.13  $
 //
 // Implementation of TSplashWindow
 //----------------------------------------------------------------------------
@@ -28,6 +28,8 @@
 #if !defined(WINSYS_UIMETRIC_H)
 # include <winsys/uimetric.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // ID for creating a timer.
@@ -68,8 +70,6 @@ TSplashWindow::TSplashWindow(TDib& dib, int width, int height,
   PictWindow(0),
   Static(0)
 {
-  Attr.Style = WS_POPUP | WS_VISIBLE | WS_BORDER;
-
   if (HasStyle(ShrinkToFit)) {
     Attr.W = dib.Width();
     Attr.H = dib.Height();
@@ -79,6 +79,18 @@ TSplashWindow::TSplashWindow(TDib& dib, int width, int height,
     Attr.H = height;
   }
 
+  Attr.Style = WS_POPUP | WS_VISIBLE | WS_BORDER;
+
+  // If there's a title add the WS_CAPTION style. If ShrinkToFit is set
+  // we also want to adjust the height of the window to account for the
+  // caption.
+  //
+  if( title )  {
+    Attr.Style |= WS_CAPTION;
+    if( HasStyle(ShrinkToFit) )
+      Attr.H += ::GetSystemMetrics( SM_CYCAPTION );
+  }
+
   // Ready the layout metrics
   //
   int heightPercentDW = 100;
@@ -86,9 +98,13 @@ TSplashWindow::TSplashWindow(TDib& dib, int width, int height,
   TLayoutMetrics lmGauge;
   TLayoutMetrics lmStatic;
 
-  // Center the dib by default
+  // Center the dib by default unless ShrinktoFit is set.
   //
-  PictWindow = new TPictureWindow(this, &dib, TPictureWindow::Center, "", module);
+  if( HasStyle(ShrinkToFit) )
+    PictWindow = new TPictureWindow(this, &dib, TPictureWindow::UpperLeft, "", module);
+  else
+    PictWindow = new TPictureWindow(this, &dib, TPictureWindow::Center, "", module);
+
   lmPictWindow.X.SameAs(lmParent, lmLeft);
   lmPictWindow.Y.SameAs(lmParent, lmTop);
   lmPictWindow.Width.SameAs(lmParent, lmWidth);
@@ -148,9 +164,16 @@ TSplashWindow::SetupWindow()
 {
   TLayoutWindow::SetupWindow();
 
-  // Center window and make topmost
+  // Center window, make topmost and adjust size to accomidate static
+  // and gauge.
   //
   TRect r  = GetWindowRect();
+
+  if( HasStyle(MakeGauge) && HasStyle(MakeStatic) )  {
+    int deltaH = Gauge->Attr.H;
+    r.Inflate( 0, deltaH );
+  }
+
   TRect fullRect(0, 0, TUIMetric::CxScreen, TUIMetric::CyScreen);
 
   int x = (fullRect.Width() - r.Width()) / 2;
@@ -192,6 +215,17 @@ TSplashWindow::CleanupWindow()
 
   if (GetTimeOut() != 0)
     KillTimer(TimerId);
+}
+
+//
+// Overload Create so that we can force the window to paint asap.
+//
+bool
+TSplashWindow::Create()
+{
+   bool retval = TLayoutWindow::Create();
+   UpdateWindow();
+   return retval;
 }
 
 //
@@ -241,7 +275,7 @@ TSplashWindow::EvLButtonDown(uint /*modKeys*/, TPoint& /*point*/)
     if (HasStyle(MakeGauge))
       if (GetGauge()->GetValue() < PercentThreshold)
         return;
-    CloseWindow();
+      SendMessage(WM_CLOSE);
   }
 }
 
@@ -259,5 +293,5 @@ TSplashWindow::EvTimer(uint /*timerId*/)
       return;
     }
   }
-  CloseWindow();
+  SendMessage(WM_CLOSE);
 }

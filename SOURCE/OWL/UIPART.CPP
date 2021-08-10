@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.8  $
 //
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
@@ -12,6 +12,8 @@
 #if !defined(OWL_GDIOBJEC_H)
 # include <owl/gdiobjec.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Empty constructor.
@@ -30,6 +32,7 @@ TUIPart::Paint(TDC& dc, TRect& rect, TType type, TState state)
   return DrawFrameControl(dc, rect, type, state);
 }
 
+#pragma warn -par
 //
 // Wrapper for the DrawFrameControl API.
 //
@@ -54,4 +57,4 @@ TUIPart::DrawFrameControl(TDC& dc, TRect& rect, TType type, TState state)
   //
   return false;
 }
-
+#pragma warn .par

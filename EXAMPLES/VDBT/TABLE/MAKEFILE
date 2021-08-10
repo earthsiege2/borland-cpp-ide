@@ -5,12 +5,35 @@
 
 SYSTEMS = WIN16 WIN32
 
+!ifndef SYSTEM
+SYSTEM = WIN32
+!endif
+
+!ifndef MODEL
+MODEL = d
+!endif
+
 !if $(SYSTEM)==WIN16
-SUFFIX   = 16
-USERLIBS = bdto.lib bdtci.lib ole2w16.lib mathwl cwl
+MODELS = d l
+!if $(MODEL)==d
+USERLIBS = bidsi.lib bdtc.lib
 !else
+USERLIBS = bidsl.lib bdtc.lib
+!endif
+SUFFIX   = 16
+
+!else
+
+#WIN32 Macro definitions
+MODELS = d f
+
+!if $(MODEL)==d
+USERLIBS = bidsfi.lib bdtcf.lib
+!else
+USERLIBS = bidsf.lib bdtcf.lib
+!endif
+
 SUFFIX   = 32
-USERLIBS = bdtof.lib bdtcfi.lib ole2w32.lib
 !endif
 
 APPNAME = table

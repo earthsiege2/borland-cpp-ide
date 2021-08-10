@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.8  $
 //
 // Implementation of TMemoryDC and TDibDC encapsulation classes
 //----------------------------------------------------------------------------
@@ -14,6 +14,7 @@
 # include <owl/gdiobjec.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 
 //
@@ -107,7 +108,12 @@ TMemDCCache::Release(HDC hDC)
 //
 //
 //
-static TMemDCCache MemDCCache;
+static TMemDCCache&
+GetMemDCCache()
+{
+  static TMemDCCache MemDCCache;
+  return MemDCCache;
+}
 
 //
 // Construct a screen-compatible memory DC. Try to get one from the cache first
@@ -168,7 +174,7 @@ TMemoryDC::TMemoryDC(const char far* driver, const char far* device,
 void
 TMemoryDC::Init()
 {
-  Handle = MemDCCache.Get();
+  Handle = GetMemDCCache().Get();
   if (Handle) {
     ShouldDelete = false;              // Found, let the cache own the handle
   }
@@ -218,5 +224,5 @@ TMemoryDC::~TMemoryDC()
   RestoreBitmap();
   RestoreObjects();
   if (!ShouldDelete)  // The HDC is never from the cache if ShouldDelete
-    MemDCCache.Release(HDC(Handle));
+    GetMemDCCache().Release(HDC(Handle));
 }

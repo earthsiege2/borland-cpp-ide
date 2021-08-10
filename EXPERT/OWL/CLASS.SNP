@@ -2,13 +2,13 @@
 ##QUERY_BASE_NAME [[BaseName]]
 ##QUERY_WIND_CLIENT [[Client]]
 ##"" [[ClientBase]]
-##--BEGIN-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
+##--BEGIN-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame") || (BaseName == "TOleMDIFrame")
 ##:  <<*Client QUERY_BASE_NAME ClientBase
 ## (Client != "TMDIClient") && (ClientBase != "TMDIClient")
 ##:     QUERY_CLASS_NAME [[ClassName]]
 ##:     %\\"The class [[ClassName]]'s client can only be a TMDIClient type class.  "
 ##*
-##--END-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
+##--END-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame") || (BaseName == "TOleMDIFrame")
 ##--BEGIN-- "" [[ConstructorParam]]
 ##"" [[ClientClass]]
 ##"" [[ClientParam]]
@@ -41,7 +41,7 @@
 ##--BEGIN-- QUERY_BASE_NAME [[BaseName]]
 
 ##QUERY_INCLUDE [[IncludeFile]]
-#include <owl/[[IncludeFile]]>
+#include <[[IncludeFile]]>
 ##QUERY_WIND_CLIENT [[Client]]
 ##Client != ""
 ##:     GetIncludeFile(\\"[[Client]]") [[ClientIncludeFile]]
@@ -147,7 +147,7 @@ class [[ClassName]] : public [[BaseName]] {
 [[ClassName]]::~[[ClassName]]()
 {
 ##QUERY_WINDOW_BASE 2
-  Destroy();
+  Destroy(IDCANCEL);
 
   // INSERT>> Your destructor code here.
 

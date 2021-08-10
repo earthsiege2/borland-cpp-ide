@@ -1,13 +1,17 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.6  $
 //
 // Implementation of classes for windowing system geometry
 //----------------------------------------------------------------------------
 #include <winsys/pch.h>
 #include <winsys/geometry.h>
+
+#if defined(BI_NAMESPACE)
+ namespace ClassLib {
+#endif
 
 //
 // Calculates the integer square root of a 32bit signed long. Returns a 16bit
@@ -28,6 +32,10 @@ Sqrt(int32 val)
 
   return int16(best);
 }
+
+#if defined(BI_NAMESPACE)
+}         // namespace ClassLib
+#endif
 
 //
 // Return the distance between the origin and the point.

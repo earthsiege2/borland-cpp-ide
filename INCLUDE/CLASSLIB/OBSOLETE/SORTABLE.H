@@ -45,7 +45,7 @@ public:
         }
 
     virtual classType isA() const = 0;
-    virtual char _FAR *nameOf() const = 0;
+    virtual _TCHAR _FAR *nameOf() const = 0;
     virtual hashValueType hashValue() const = 0;
     virtual void printOn( ostream& ) const = 0;
 

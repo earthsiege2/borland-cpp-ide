@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.5  $
 //
 // Definition of Choose Font Common Dialog class
 //----------------------------------------------------------------------------
@@ -12,7 +12,21 @@
 #if !defined(OWL_COMMDIAL_H)
 # include <owl/commdial.h>
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 class _WSYSCLASS TColor;
+
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
+  
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
@@ -78,6 +92,10 @@ class _OWLCLASS TChooseFontDialog : public TCommonDialog {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

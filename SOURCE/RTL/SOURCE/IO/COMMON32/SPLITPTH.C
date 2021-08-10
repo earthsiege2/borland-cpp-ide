@@ -9,41 +9,42 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <dir.h>
 #include <string.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            CopyIt - copies a string to another
+Name            CopyIt - copies a (wide) string to another
 
-Usage           void CopyIt(char *dst, const char *src,
-                                        unsigned maxlen)
+Usage           void CopyIt (_TCHAR *dst, const _TCHAR *src, unsigned maxlen)
 
 Prototype in    local to this module
 
-Description     copies string scr to string dst.
+Description     copies (wide) string scr to (wide) string dst.
 
 Return value    nothing
 
 *---------------------------------------------------------------------*/
 
-static void CopyIt(char *dst, const char *src, unsigned maxlen)
+static void CopyIt(_TCHAR *dst, const _TCHAR *src, unsigned maxlen)
 {
         if (dst) {
-                if(strlen(src) >= maxlen)
+                if(_tcslen(src) >= maxlen)
                 {
-                        strncpy(dst, src, maxlen);
+                        _tcsncpy(dst, src, maxlen);
                         dst[maxlen] = 0;
                 }
                 else
-                        strcpy(dst, src);
+                        _tcscpy(dst, src);
         }
 }
 
@@ -51,7 +52,7 @@ static void CopyIt(char *dst, const char *src, unsigned maxlen)
 
 Name            DotFound - checks for special dir name cases
 
-Usage           int DotFound(char *pB);
+Usage           int DotFound(_TCHAR *pB);
 
 Prototype in    local to this module
 
@@ -59,17 +60,28 @@ Description     checks for special directory names
 
 *---------------------------------------------------------------------*/
 
-static  int DotFound(char *pB)
+#if defined(_MBCS) && !defined(_UNICODE)
+static  int DotFound(_TCHAR *baseP, _TCHAR *pB)
+#else
+static  int DotFound(_TCHAR *pB)
+#endif
 {
-        if (*(pB-1) == '.')
+#if defined(_MBCS) && !defined(_UNICODE)
+        if (*(pB-1) == _TEXT('.') && _mbsbtype(baseP, (pB-1)-baseP) == _MBC_SINGLE)
                 pB--;
+        if (_mbsbtype(baseP, (pB-1)-baseP) == _MBC_TRAIL)
+                return 0;
+#else
+        if (*(pB-1) == _TEXT('.'))
+                pB--;
+#endif
         switch (*--pB) {
-        case ':'  :
-                if (*(pB-2) != '\0')
+        case _TEXT(':')  :
+                if (*(pB-2) != _TEXT('\0'))
                         break;
-        case '/'  :
-        case '\\' :
-        case '\0' :
+        case _TEXT('/')  :
+        case _TEXT('\\') :
+        case _TEXT('\0') :
                 return 1;
         }
         return 0;
@@ -77,23 +89,35 @@ static  int DotFound(char *pB)
 
 /*---------------------------------------------------------------------*
 
-Name            _fnsplit - splits a full path name into its components
+Name            _tfnsplit used as _fnsplit and _wfnsplit
+                _fnsplit  - splits a full path name into its components
+                _wfnsplit - splits a full (wide) path name into its components
+
+                _tsplitpath used as _splitpath and _wsplitpath
+                _splitpath  - splits a full path name into its components
+                _wsplitpath - splits a full (wide) path name into its components
 
 Usage           #include <dir.h>
-                int _fnsplit(const char *path, char * drive, char * dir,
-                             char * name, char * ext);
+                int _fnsplit (const char *path, char * drive, char * dir,
+                              char * name, char * ext);
+                int _wfnsplit(const wchar_t *path, wchar_t * drive, wchar_t * dir,
+                              wchar_t * name, wchar_t * ext);
 
-                void _splitpath(const char *path, char * drive, char * dir,
-                             char * name, char * ext);
+                void _splitpath (const char *path, char * drive, char * dir,
+                                 char * name, char * ext);
+                void _wsplitpath(const wchar_t *path, wchar_t * drive,
+                                 wchar_t * dir, wchar_t * name, wchar_t * ext);
 
 Related
-functions usage void _makepath(char *path, const char *drive, const char *dir,
-                            const char *name, const char *ext);
+functions usage void _makepath (char *path, const char *drive, const char *dir,
+                                const char *name, const char *ext);
+                void _wmakepath(wchar_t *path, const wchar_t *drive,
+                                const wchar_t *dir, const wchar_t *name,
+                                const wchar_t *ext);
 
 Prototype in    dir.h
 
-Description     _fnsplit takes a file's full path name (path) as a string
-                in the form
+Description     Takes a file's full path name (path) as a string in the form
 
                         X:\DIR\SUBDIR\NAME.EXT
 
@@ -117,12 +141,12 @@ Description     _fnsplit takes a file's full path name (path) as a string
                         MAXFILE         (9)     name
                         MAXEXT          (5)     ext; includes leading dot (.)
 
-                _fnsplit assumes that there is enough space to store each
+                Assumes that there is enough space to store each
                 non-NULL component. fnmerge assumes that there is enough
                 space for the constructed path name. The maximum constructed
                 length is MAXPATH.
 
-                When _fnsplit splits path, it treats the punctuation as
+                When these functions split a path, they treat the punctuation as
                 follows:
 
                 * drive keeps the colon attached (C:, A:, etc.)
@@ -132,15 +156,16 @@ Description     _fnsplit takes a file's full path name (path) as a string
 
                 * ext keeps the dot preceding the extension (.c, .exe, etc.)
 
-                _splitpath is an MSC-compatible function that is identical
-                to _fnsplit, except that is doesn't return a value.
+                _splitpath/_wsplitpath are MSC-compatible functions that are
+                identical to _fnsplit/_wfnsplit, except that they don't
+                return a value.
 
-                _splitpath (or _fnsplit) and _makepath are invertible; if you
-                split a given path with _splitpath (or _fnsplit), then
-                merge the resultant components with _makepath, you end up
-                with path.
+                The _splitpath and _makepath functions are invertible; if you
+                split a given path with a _splitpath function, then
+                merge the resultant components with a _makepath function, you
+                end up with path.
 
-Return value    _fnsplit returns an integer (composed of five flags,
+Return value    _fnsplit/_wfnsplit returns an integer (composed of five flags,
                 defined in dir.h) indicating which of the full path name
                 components were present in path; these flags and the components
                 they represent are:
@@ -152,18 +177,22 @@ Return value    _fnsplit returns an integer (composed of five flags,
                         DRIVE           a drive specification (see dir.h)
                         WILDCARDS       wildcards (* or ? cards)
 
-                _splitpath does not return a value.
+                _splitpath/_wsplitpath does not return a value.
 
 *---------------------------------------------------------------------*/
+#ifndef _UNICODE
+#undef  _tfnsplit
+#define _tfnsplit _fnsplit
+#endif
 
-int _RTLENTRYF _fnsplit(const char *pathP, char *driveP, char *dirP,
-char *nameP, char *extP)
+int _RTLENTRY _EXPFUNC _tfnsplit(const _TCHAR *pathP, _TCHAR *driveP, _TCHAR *dirP,
+                         _TCHAR *nameP, _TCHAR *extP)
 {
-        register char   *pB;
+        register _TCHAR   *pB;
         register int    Wrk;
         int     Ret;
 
-        char buf[ MAXPATH+2 ];
+        _TCHAR buf[ MAXPATH+2 ];
 
         /*
           Set all string to default value zero
@@ -182,10 +211,10 @@ char *nameP, char *extP)
           Copy filename into template up to MAXPATH characters
         */
         pB = buf;
-        if ((Wrk = strlen(pathP)) > MAXPATH)
+        if ((Wrk = _tcslen(pathP)) > MAXPATH)
                 Wrk = MAXPATH;
         *pB++ = 0;
-        strncpy(pB, pathP, Wrk);
+        _tcsncpy(pB, pathP, Wrk);
         *(pB += Wrk) = 0;
 
         /*
@@ -193,20 +222,30 @@ char *nameP, char *extP)
         */
         Wrk = 0;
         for (; ; ) {
+#if defined(_MBCS) && !defined(_UNICODE)
+                if (_mbsbtype(buf+1, (pB-1) - (buf+1)) == _MBC_TRAIL) {
+                        pB -= 2;
+                        continue;
+                }
+#endif
                 switch (*--pB) {
-                case '.'  :
-                        if (!Wrk && (*(pB+1) == '\0'))
+                case _TEXT('.')  :
+                        if (!Wrk && (*(pB+1) == _TEXT('\0')))
+#if defined(_MBCS) && !defined(_UNICODE)
+                                Wrk = DotFound(buf+1, pB);
+#else
                                 Wrk = DotFound(pB);
+#endif
                         if ((!Wrk) && ((Ret & EXTENSION) == 0)) {
                                 Ret |= EXTENSION;
                                 CopyIt(extP, pB, MAXEXT - 1);
                                 *pB = 0;
                         }
                         continue;
-                case ':'  :
+                case _TEXT(':')  :
                         if (pB != &buf[2])
                                 continue;
-                case '\0' :
+                case _TEXT('\0') :
                         if (Wrk) {
                                 if (*++pB)
                                         Ret |= DIRECTORY;
@@ -214,20 +253,20 @@ char *nameP, char *extP)
                                 *pB-- = 0;
                                 break;
                         }
-                case '/'  :
-                case '\\' :
+                case _TEXT('/')  :
+                case _TEXT('\\') :
                         if (!Wrk) {
                                 Wrk++;
                                 if (*++pB)
                                         Ret |= FILENAME;
                                 CopyIt(nameP, pB, MAXFILE - 1);
                                 *pB-- = 0;
-                                if (*pB == 0 || (*pB == ':' && pB == &buf[2]))
+                                if (*pB == 0 || (*pB == _TEXT(':') && pB == &buf[2]))
                                         break;
                         }
                         continue;
-                case '*'  :
-                case '?'  :
+                case _TEXT('*')  :
+                case _TEXT('?')  :
                         if (!Wrk)
                                 Ret |= WILDCARDS;
                 default :
@@ -235,7 +274,7 @@ char *nameP, char *extP)
                 }
                 break;
         }
-        if (*pB == ':') {
+        if (*pB == _TEXT(':')) {
                 if (buf[1])
                         Ret |= DRIVE;
                 CopyIt(driveP, &buf[1], MAXDRIVE - 1);
@@ -244,8 +283,8 @@ char *nameP, char *extP)
         return (Ret);
 }
 
-void _RTLENTRY _EXPFUNC _splitpath(const char *pathP, char *driveP, char *dirP,
-char *nameP, char *extP)
+void _RTLENTRY _EXPFUNC _tsplitpath(const _TCHAR *pathP, _TCHAR *driveP,
+                                    _TCHAR *dirP, _TCHAR *nameP, _TCHAR *extP)
 {
-        (void)_fnsplit(pathP,driveP,dirP,nameP,extP);
+        (void)_tfnsplit(pathP,driveP,dirP,nameP,extP);
 }

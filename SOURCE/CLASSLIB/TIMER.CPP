@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.5  $
+//$Revision:   5.8  $
 //
 // TTimer class implementation for DOS and Win16
 //----------------------------------------------------------------------------
 #include <classlib/pch.h>
 #include <classlib/defs.h>
+#include <tchar.h>
 
 #if defined(BI_PLAT_DOS) || defined(BI_PLAT_WIN16)
 
@@ -46,7 +47,7 @@ void TTimer::Start()
 void TTimer::Stop()
 {
     outportb( 0x43, 0 );
-    unsigned char temp = inportb( 0x40 );
+    _TUCHAR temp = inportb( 0x40 );
 
     TIME stopTime;
     stopTime.TimerCount = (inportb( 0x40 ) << 8) + temp;
@@ -89,7 +90,7 @@ unsigned TTimer::Calibrate()
 #include <iostream.h>
 #include <stdio.h>
 
-int main( void )
+int _tmain( void )
 {
     delay( 0 );
     cout << "Resolution: " << Timer::Resolution() << endl;
@@ -100,7 +101,7 @@ int main( void )
         w.Start();
         delay( d1 );
         w.Stop();
-        printf( "%4u ms., actual time = %6f seconds.\n", d1, w.Time() );
+        _tprintf( "%4u ms., actual time = %6f seconds.\n", d1, w.Time() );
         w.Reset();
         }
     return 0;

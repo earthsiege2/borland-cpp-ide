@@ -5,12 +5,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $ */
 
 #if !defined(__MEM_H)
 #define __MEM_H
@@ -73,15 +74,26 @@ void _FAR * _RTLENTRYF _EXPFUNC memmove(void _FAR *__dest, const void _FAR *__sr
                                         size_t __n);
 void _FAR * _RTLENTRYF _EXPFUNC memset(void _FAR *__s, int __c, size_t __n);
 
+#if defined(__FLAT__)
+void *          _RTLENTRY  _EXPFUNC _wmemset(void *__s, int __c, size_t __n);
+void *          _RTLENTRY  _EXPFUNC _wmemcpy(void *__dest, const void *__src, size_t __n);
+#endif
 
 #if defined(__cplusplus)
 extern "C++"
 {
           void _FAR * _RTLENTRY _EXPFUNC32 memchr(void _FAR *__s, int __c, size_t __n);
     const void _FAR * _RTLENTRY _EXPFUNC32 memchr(const void _FAR *__s, int __c, size_t __n);
+#if defined(__FLAT__)
+          void      * _RTLENTRY _EXPFUNC32 _wmemchr(void *__s, int __c, size_t __n);
+    const void      * _RTLENTRY _EXPFUNC32 _wmemchr(const void *__s, int __c, size_t __n);
+#endif
 }
 #else
           void _FAR * _RTLENTRY _EXPFUNC32 memchr(const void _FAR *__s, int __c, size_t __n);
+#if defined(__FLAT__)
+          void      * _RTLENTRY _EXPFUNC32 _wmemchr(const void *__s, int __c, size_t __n);
+#endif
 #endif
 
 

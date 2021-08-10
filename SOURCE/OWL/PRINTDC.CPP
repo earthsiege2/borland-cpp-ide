@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.7  $
 //
 // Implementation of TPrintDC
 //----------------------------------------------------------------------------
@@ -13,6 +13,8 @@
 #if !defined(OWL_MODULE_H)
 # include <owl/module.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Supply missing function definition and macros for newer Win32 function
@@ -65,6 +67,10 @@ TPrintDC::TPrintDC(HDC handle, TAutoDelete autoDelete)
 {
   memset(&DocInfo, 0, sizeof(DocInfo));
   DocInfo.cbSize = sizeof(DocInfo);
+  DocInfo.lpszOutput = "";
+#if defined(BI_PLAT_WIN32)
+  DocInfo.lpszDatatype = "";
+#endif
 }
 
 //
@@ -77,6 +83,10 @@ TPrintDC::TPrintDC(const char far* driver, const char far* device,
 {
   memset(&DocInfo, 0, sizeof(DocInfo));
   DocInfo.cbSize = sizeof(DocInfo);
+  DocInfo.lpszOutput = "";
+#if defined(BI_PLAT_WIN32)
+  DocInfo.lpszDatatype = "";
+#endif
 }
 
 //

@@ -1,0 +1,20 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for OWLDLG example                                            #
+#                                                                          #
+#   Copyright (c) 1997, Borland International                              #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#       make                 for a statically linked EXE                   #
+#       make -DUSEDLL        for an EXE that uses RTL/OWL/BIDS DLLs        #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE     = VCLDLG
+OBJEXE  = VCLDLG.OBJ ADOPT.OBJ MAIN.OBJ
+RESEXE  = VCLDLG.DFM VCLDLG.RES
+VCL     = 1
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

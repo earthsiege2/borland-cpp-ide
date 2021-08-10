@@ -39,6 +39,7 @@
 
 #ifndef _INC_VFW
 #define _INC_VFW
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -82,7 +83,9 @@ LONG VFWAPI TermVFW(void);
  ****************************************************************************/
 
 #if !defined(_INC_MMSYSTEM) && (!defined(NOVIDEO) || !defined(NOAVICAP))
+#pragma option -b.
     #include <mmsystem.h>
+#pragma option -b
 #endif
 
 /****************************************************************************/
@@ -1137,7 +1140,9 @@ LPVOID VFWAPI ICSeqCompressFrame(
 void VFWAPI ICCompressorFree(PCOMPVARS pc);
 
 #else
+#pragma option -b.
     #include <compman.h>
+#pragma option -b
 #endif  /* not _WIN32 */
 #endif  /* NOCOMPMAN */
 
@@ -1314,7 +1319,9 @@ BOOL VFWAPI DrawDibTime(HDRAWDIB hdd, LPDRAWDIBTIME lpddtime);
 DWORD VFWAPI DrawDibProfileDisplay(LPBITMAPINFOHEADER lpbi);
 
 #else
+#pragma option -b.
     #include <drawdib.h>
+#pragma option -b
 #endif  /* not _WIN32 */
 #endif  /* NODRAWDIB */
 
@@ -1554,7 +1561,9 @@ typedef struct
 } AVIPALCHANGE;
 
 #else
+#pragma option -b.
     #include <avifmt.h>
+#pragma option -b
 #endif  /* not _WIN32 */
 #endif /* NOAVIFMT */
 
@@ -1566,11 +1575,15 @@ typedef struct
 
 #ifdef _WIN32
 #ifndef RC_INVOKED
+#pragma option -b.
 #include "pshpack8.h"
+#pragma option -b
 #endif
 #endif
 #ifndef NOMMREG
+#pragma option -b.
     #include <mmreg.h>
+#pragma option -b
 #endif
 
 /****************************************************************************
@@ -1784,7 +1797,9 @@ typedef struct {
 #define AVICOMPRESSF_KEYFRAMES		0x00000004    // use keyframes
 #define AVICOMPRESSF_VALID		0x00000008    // has valid data?
 
+#pragma option -b.
 #include <ole2.h>
+#pragma option -b
 
 /*	-	-	-	-	-	-	-	-	*/
 
@@ -2364,7 +2379,9 @@ STDAPI EditStreamSetInfoA(PAVISTREAM pavi, LPAVISTREAMINFOA lpInfo, LONG cbInfo)
 #define AVIERR_ERROR            MAKE_AVIERR(199)
 #endif
 #else
+#pragma option -b.
     #include <avifile.h>
+#pragma option -b
 #endif  /* not _WIN32 */
 #endif  /* NOAVIFILE */
 
@@ -2746,7 +2763,9 @@ BOOL VFWAPIV MCIWndRegisterClass();
 #endif
 
 #else
+#pragma option -b.
     #include <mciwnd.h>
+#pragma option -b
 #endif  /* not _WIN32 */
 #endif  /* NOAVIFILE */
 
@@ -2931,7 +2950,9 @@ typedef struct channel_caps_tag {
 #endif  /* ifndef _RCINVOKED */
 
 #else
+#pragma option -b.
     #include <msvideo.h>
+#pragma option -b
 #endif  /* not _WIN32 */
 #endif  /* NOVIDEO */
 
@@ -3408,7 +3429,9 @@ BOOL VFWAPI capGetDriverDescriptionW (UINT wDriverIndex,
 #define IDS_CAP_STAT_VIDEOONLY      512  /* "Captured %d.%03d sec.  %ld frames (%ld dropped) (%d.%03d fps)" */
 #define IDS_CAP_STAT_FRAMESDROPPED  513  /* "Dropped %ld of %ld frames (%d.%02d%%) during capture." */
 #else
+#pragma option -b.
     #include <avicap.h>
+#pragma option -b
 #endif  /* not _WIN32 */
 #endif  /* NOAVIFILE */
 
@@ -3419,7 +3442,9 @@ BOOL VFWAPI capGetDriverDescriptionW (UINT wDriverIndex,
  ***************************************************************************/
 
 #ifndef NOMSACM
+#pragma option -b.
     #include <msacm.h>
+#pragma option -b
 #endif
 
 /****************************************************************************
@@ -3447,7 +3472,9 @@ BOOL VFWAPI capGetDriverDescriptionW (UINT wDriverIndex,
 #endif // OFN_READONLY
 
 #ifndef RC_INVOKED
+#pragma option -b.
 #include "poppack.h"
+#pragma option -b
 #endif
 
 #else
@@ -3461,4 +3488,5 @@ BOOL VFWAPI capGetDriverDescriptionW (UINT wDriverIndex,
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
+#pragma option -b.
 #endif  /* _INC_VFW */

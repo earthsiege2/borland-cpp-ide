@@ -1,5 +1,5 @@
 #############################################################################
-#
+#                                                                           #
 # The make process relies on the creation of DLL and library response file  #
 # creation.  To control the location of object modules the following should #
 # be defined:                                                               #
@@ -14,17 +14,26 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
+# $Revision:   8.5  $                                                                #
+#                                                                           #
 #############################################################################
 
 #############################################################################
 # Build the object module lists.                                            #
 #############################################################################
 OBJS =               \
-        startup.obj  \
-        startupd.obj
+        globals.obj  \
+        initexit.obj \
+	startup.obj  \
+        wstartup.obj \
+        startupd.obj \
+        wstrtupd.obj
 
 #############################################################################
 # Configure the environment appropriately.                                  #
 #############################################################################
 !include rules.mak
+
+wstartup.obj : startup.c
+wstrtupd.obj : startupd.c
 

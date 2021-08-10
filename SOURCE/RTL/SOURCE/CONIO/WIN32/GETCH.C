@@ -7,12 +7,13 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #define INCL_CON
 #define INCL_USER
@@ -21,7 +22,7 @@
 #include <conio.h>
 #include <stdio.h>      /* EOF definition */
 
-#define KBD_TEXTMODE (ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT)
+extern HANDLE _hin;  /* From CRTINIT.C for console input */
 
 /* The following two variables are located in kbhit.c. */
 
@@ -29,7 +30,6 @@ extern unsigned char _cFlag;    /* Flag presence of un-gotten char */
 extern unsigned char _cChar;    /* The ungotten char               */
 
 int _cextend = -1;                /* Used for the scan code of an extended key */
-
 
 /*----------------------------------------------------------------------
  * The following table maps NT virtual keycodes to PC BIOS keyboard
@@ -96,7 +96,7 @@ struct kbd
     { 'X',          'x',        'X',        0x18,       EXT(45)  },
     { 'Y',          'y',        'Y',        0x19,       EXT(21)  },
     { 'Z',          'z',        'Z',        0x1a,       EXT(44)  },
-    
+
     { VK_PRIOR,     EXT(73),    EXT(73),    EXT(132),   EXT(153) },
     { VK_NEXT,      EXT(81),    EXT(81),    EXT(118),   EXT(161) },
     { VK_END,       EXT(79),    EXT(79),    EXT(117),   EXT(159) },
@@ -148,6 +148,7 @@ struct kbd
 
     { -1,           -1,         -1,         -1,         -1       }  /** END **/
 };
+
 /*--------------------------------------------------------------------------*
 
 Name            getch - gets character from console
@@ -163,12 +164,10 @@ Return value    getch and getche return the character read. There is no
                 error return for these two functions.
 
 *---------------------------------------------------------------------------*/
-
 int _RTLENTRY _EXPFUNC getch(void)
 {
     INPUT_RECORD inp;
     DWORD nread;
-    HANDLE hin;
     DWORD kbdmode;
     struct kbd *k;
     int keycode, state, c;
@@ -192,22 +191,25 @@ int _RTLENTRY _EXPFUNC getch(void)
         return c;                   /* Return the extended scancode */
     }
 
-    /* Get the keyboard mode, then set it to binary if necessary.
+    /* Get the keyboard mode, then set it to binary mode.
      * This is done to prevent NT from handling control keys
      * like Control-C and Control-S.
      */
-    hin = GetStdHandle(STD_INPUT_HANDLE);
-    if (GetConsoleMode(hin, &kbdmode) != TRUE)
+    if (GetConsoleMode(_hin, &kbdmode) != TRUE)
+    {
         return -1;
-    if ((kbdmode & KBD_TEXTMODE) != 0)
-        if (SetConsoleMode(hin, kbdmode & ~KBD_TEXTMODE) != TRUE)
-            return -1;
+    }
+
+    if (SetConsoleMode(_hin, 0 ) != TRUE)
+    {
+        return -1;
+    }
 
     /* Get keyboard events until a recognizable one appears.
      */
     for (;;)
     {
-        if (ReadConsoleInput(hin, &inp, 1, &nread) != TRUE)
+        if (ReadConsoleInput(_hin, &inp, 1, &nread) != TRUE)
         {
             c = -1;
             break;
@@ -217,13 +219,26 @@ int _RTLENTRY _EXPFUNC getch(void)
             keycode = inp.Event.KeyEvent.wVirtualKeyCode;
             state   = inp.Event.KeyEvent.dwControlKeyState;
 
+            /*
+             * Test for the Win95 anomaly where the NumericPad '.' button
+             * (with NumLock on) returns a 0x2E (VK_DELETE) when it should
+             * return a 0x6E (VK_DECIMAL) like NT does.
+             */
+            if ((state & NUMLOCK_ON) && (keycode == VK_DELETE))
+                keycode = VK_DECIMAL;
+
             /* Look up the virtual keycode in the table.  Ignore
              * unrecognized keys.
              */
             for (k = &kbdtab[0]; keycode != k->keycode && k->keycode != -1; k++)
                 ;
+#if defined(_MBCS)
+            if (k->keycode == -1 && !inp.Event.KeyEvent.uChar.AsciiChar)    /* value not in table */
+                continue;
+#else
             if (k->keycode == -1)       /* value not in table */
                 continue;
+#endif
 
             /* Check the state of the shift keys.  ALT has highest
              * priority, followed by Control, followed by Shift.
@@ -246,7 +261,16 @@ int _RTLENTRY _EXPFUNC getch(void)
                     c = k->normal;
             }
             if (c == -1)
+#if defined(_MBCS)
+            {
+                c = (UCHAR)inp.Event.KeyEvent.uChar.AsciiChar;
+                if (c)
+                     break;
+                continue;
+            }
+#else
                 continue;               /* no BIOS equivalent */
+#endif
 
             /* If it is an extended key, save the key value and
              * return 0.  The next time we're called, we'll return
@@ -261,12 +285,12 @@ int _RTLENTRY _EXPFUNC getch(void)
         }
     }
 
-    /* If we changed the keyboard mode to binary mode earlier,
-     * change it back to its original mode.
+    /* Change the keyboard back to its original mode.
      */
-    if ((kbdmode & KBD_TEXTMODE) != 0)
-        if (SetConsoleMode(hin, kbdmode) != TRUE)
-            return -1;
+    if (SetConsoleMode(_hin, kbdmode) != TRUE)
+    {
+        return -1;
+    }
 
     return c;
 }

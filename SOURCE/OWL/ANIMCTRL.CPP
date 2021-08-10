@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.10  $
 //
 // Implementation of the TAnimateCtrl class
 //----------------------------------------------------------------------------
@@ -11,6 +11,7 @@
 # include <owl/animctrl.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlCommCtrl);
 
 // Constructor for a TAnimateCtrl to be associated with a new underlying

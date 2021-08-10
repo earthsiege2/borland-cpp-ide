@@ -8,12 +8,19 @@
 #if !defined(BDTO_H)
 #define BDTO_H
 
-# define _BDTOCLASS
+#if ! defined( __FLAT__ ) && defined( _RTLDLL )
+#  define _BDTOCLASS _huge
+#else
+#  define _BDTOCLASS
+#endif
+
 #if defined(__FLAT__)
 # define _BDTOCALLBACK _pascal
 #else
 # define _BDTOCALLBACK _far _pascal
 #endif
+
+#include <vdbt/bdtm.h>
 
 #if defined(__FLAT__)
 # define INC_OLE2
@@ -32,9 +39,27 @@
 # define NOBDTCFUNCTIONS
 #endif
 #define NOBDTCFORCEEXCEPTIONS
-#include <vdbt\bdtc.h>
+#include <vdbt/bdtc.h>
 
-#include <vdbt\bdte.h>
+#include <vdbt/bdte.h>
+
+//
+// Mangle the function, class and variable names so we can have
+// mulitpale versions of the same functions and variables in one
+// .LIB file.
+//
+#if defined( __DLL__ ) && ! defined( __FLAT__ )
+#  if defined( _RTLDLL )
+#    define VDBTEasterEgg dVDBTEasterEgg
+#    define Session       dSession
+#  else _RTLDLL
+#    define VDBTEasterEgg uVDBTEasterEgg
+#    define Session       uSession
+#  endif _RTLDLL
+#elif defined( _RTLDLL )
+#  define VDBTEasterEgg iVDBTEasterEgg
+#  define Session       iSession
+#endif __DLL__
 
 class _BDTOCLASS TBDTObject; typedef TBDTObject far* PTBDTObject;
 class _BDTOCLASS TBDTComponent; typedef TBDTComponent far* PTBDTComponent;
@@ -140,7 +165,7 @@ class _BDTOCLASS TVarRecs; typedef TVarRecs far* PTVarRecs;
 #define DECLARE_BDTO_OBJECTPROP_RW( type, name )                              \
   public:                                                                     \
     void Get##name( type& );                                                  \
-    void Set##name( type& );                                                  \
+    void Set##name( const type& );                                            \
     class _BDTOCLASS prop##name                                               \
     {                                                                         \
       friend type;                                                            \
@@ -154,7 +179,7 @@ class _BDTOCLASS TVarRecs; typedef TVarRecs far* PTVarRecs;
       type* operator->();                                                     \
       const type& operator*();                                                \
       type* operator=( type* );                                               \
-      type& operator=( type& );                                               \
+      type& operator=( const type& );                                         \
       prop##name& operator=( const prop##name& );                             \
     } name;                                                                   \
     friend prop##name
@@ -218,7 +243,7 @@ class _BDTOCLASS TVarRecs; typedef TVarRecs far* PTVarRecs;
 #define DECLARE_BDTO_ARRAYOBJECTPROP_RW( type, name, itype, itype2 )          \
   public:                                                                     \
     void Get##name( itype, type& );                                           \
-    void Set##name( itype, type& );                                           \
+    void Set##name( itype, const type& );                                     \
     class _BDTOCLASS prop##name                                               \
     {                                                                         \
       friend type;                                                            \
@@ -227,7 +252,7 @@ class _BDTOCLASS TVarRecs; typedef TVarRecs far* PTVarRecs;
 	   prop##name& operator=( const prop##name& ); /* not allowed */           \
       type* p##name;                                                          \
       type* CallGet##name( itype i );                                         \
-      void CallSet##name( itype i, type& v );                                 \
+      void CallSet##name( itype i, const type& v );                           \
     public:                                                                   \
       prop##name();                                                           \
       ~prop##name();                                                          \
@@ -240,7 +265,7 @@ class _BDTOCLASS TVarRecs; typedef TVarRecs far* PTVarRecs;
         type* operator->();                                                   \
         const type& operator*();                                              \
         type* operator=( type* );                                             \
-        type& operator=( type& );                                             \
+        type& operator=( const type& );                                       \
         setter##name& operator=( const setter##name& );                       \
       } name;                                                                 \
       friend setter##name;                                                    \
@@ -383,6 +408,7 @@ typedef TBdtEventSinkV2<TField&, const string&> TFieldSetTextSink;
 #define DECLARE_BDTO_VBX( type )                                              \
   public:                                                                     \
     type( HWND hdlg, int idc );                                               \
+    void AttachToControl( HWND hdlg, int idc );                               \
     void AttachControl( HWND hdlg, int idc )
 
 class _BDTOCLASS TBDTObject
@@ -1334,3 +1360,4 @@ extern TSession Session;        // global session variable
 void VDBTEasterEgg( void );
 
 #endif // BDTO_H
+

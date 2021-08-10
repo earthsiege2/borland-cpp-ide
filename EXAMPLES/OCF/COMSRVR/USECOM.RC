@@ -1,0 +1,25 @@
+//----------------------------------------------------------------------------
+// ObjectComponents - (c) Copyright 1996, 1996 by Borland International
+//
+// $Revision:   2.0  $
+//----------------------------------------------------------------------------
+#include "usecom.rh"
+
+ID_MAINMENU MENU
+{
+  POPUP "&File"
+  {
+    MENUITEM "E&xit",                   CM_FILEEXIT
+  }
+
+  POPUP "&Interfaces"
+  {
+    MENUITEM "Retrieve &Shape",         CM_GETSHAPE
+    MENUITEM "Retrieve &Calendar",      CM_GETCALENDAR
+    MENUITEM SEPARATOR
+    MENUITEM "&Release",                CM_RELEASEINTERFACES
+    MENUITEM "&Free Unused Libraries",  CM_FREEUNUSEDLIBRARIES
+  }
+}
+
+

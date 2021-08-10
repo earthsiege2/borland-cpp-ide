@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.4  $
 //
 // Implementation of class TOleMDIFrame.
 //----------------------------------------------------------------------------
@@ -21,6 +21,7 @@
 # include <owl/olemdifr.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlOleMenu);
 
 DEFINE_RESPONSE_TABLE2(TOleMDIFrame, TOleFrame, TMDIFrame)

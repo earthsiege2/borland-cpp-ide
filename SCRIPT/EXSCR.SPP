@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // EXSCR.SPP: Example Scripts Installation. 
 //--------------------------------------------------------------------------
@@ -17,10 +17,10 @@ import IDE;
 #define MENU_DESCR   "Install/Uninstall example scripts"
 
 exscr(){
-
+   
    // Add menu item for example script installation/uninstallation.
    //
-   if (!scriptEngine.IsLoaded("menuhook.spp")) scriptEngine.Load("menuhook.spp");
+   if (!scriptEngine.IsLoaded("menuhook")) scriptEngine.Load("menuhook");
    assign_to_view_menu("IDE", MENU_TEXT, "InstallUninstall();", MENU_DESCR);
 
    //

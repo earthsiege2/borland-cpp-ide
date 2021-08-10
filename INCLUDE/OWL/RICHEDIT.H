@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.14  $
+//$Revision:   10.16  $
 //
 // Definition of class TRichEdit.
 //----------------------------------------------------------------------------
@@ -24,6 +24,10 @@
 #endif
 #if !defined(__RICHOLE_H)
 # include <richole.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 //
@@ -214,7 +218,7 @@ class _OWLCLASS TRichEditModule : public TModule {
 //
 typedef TDllLoader<TRichEditModule> TRichEditDll;
 
-#if  defined(BI_COMP_BORLANDC)
+#if defined(BI_IMPEXP_TEMPLATES)
 # if defined(_OWLDLL) || defined(BI_APP_DLL)
   //
   // Export template of TDllLoader<TRichEditModule> when building ObjectWindows
@@ -420,6 +424,10 @@ class _OWLCLASS TRichEdit : public TEditFile {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementation

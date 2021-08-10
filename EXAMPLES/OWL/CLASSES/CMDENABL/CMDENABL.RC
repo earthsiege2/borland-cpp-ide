@@ -8,6 +8,7 @@
 # include <windows.h>
 #endif
 
+#include <owl\except.rc>
 #include "cmdenabl.h"
 
 #ifdef RC_INVOKED

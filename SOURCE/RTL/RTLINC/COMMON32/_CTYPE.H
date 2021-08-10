@@ -5,12 +5,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1992, 1996 by Borland International
+ *      Copyright (c) 1992, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $ */
 
 #ifndef __CTYPE_H
 #include <ctype.h>
@@ -40,33 +41,35 @@ int _RTLENTRY  _EXPFUNC iscpunct (int __c);
 int _RTLENTRY  _EXPFUNC iscspace (int __c);
 int _RTLENTRY  _EXPFUNC iscupper (int __c);
 int _RTLENTRY  _EXPFUNC iscxdigit(int __c);
+int _RTLENTRY  _EXPFUNC __isctype(int c, int type);
+int _RTLENTRY  _EXPFUNC __iswctype(int c, int type);
 
 #ifdef __cplusplus
 }
 #endif
 
 /* "C" locale only character classification macros */
-#define iscalnum(c)  (_ctype[ (c)+1 ] & (_IS_ALNUM))
+#define iscalnum(c)  (_chartype[ (c)+1 ] & (_IS_ALNUM))
 
-#define iscalpha(c)  (_ctype[ (c)+1 ] & (_IS_ALPHA))
+#define iscalpha(c)  (_chartype[ (c)+1 ] & (_IS_ALPHA))
 
-#define isccntrl(c)  (_ctype[ (c)+1 ] & (_IS_CTL))
+#define isccntrl(c)  (_chartype[ (c)+1 ] & (_IS_CTL))
 
-#define iscdigit(c)  (_ctype[ (c)+1 ] & (_IS_DIG))
+#define iscdigit(c)  (_chartype[ (c)+1 ] & (_IS_DIG))
 
-#define iscgraph(c)  (_ctype[ (c)+1 ] & (_IS_GRAPH))
+#define iscgraph(c)  (_chartype[ (c)+1 ] & (_IS_GRAPH))
 
-#define isclower(c)  (_ctype[ (c)+1 ] & (_IS_LOW))
+#define isclower(c)  (_chartype[ (c)+1 ] & (_IS_LOW))
 
-#define iscprint(c)  (_ctype[ (c)+1 ] & (_IS_GRAPH | _IS_BLK))
+#define iscprint(c)  (_chartype[ (c)+1 ] & (_IS_GRAPH | _IS_BLK))
 
-#define iscpunct(c)  (_ctype[ (c)+1 ] & (_IS_PUN))
+#define iscpunct(c)  (_chartype[ (c)+1 ] & (_IS_PUN))
 
-#define iscspace(c)  (_ctype[ (c)+1 ] & (_IS_SP))
+#define iscspace(c)  (_chartype[ (c)+1 ] & (_IS_SP))
 
-#define iscupper(c)  (_ctype[ (c)+1 ] & (_IS_UPP))
+#define iscupper(c)  (_chartype[ (c)+1 ] & (_IS_UPP))
 
-#define iscxdigit(c) (_ctype[ (c)+1 ] & (_IS_HEX))
+#define iscxdigit(c) (_chartype[ (c)+1 ] & (_IS_HEX))
 
 #define _isctype( c, type )  (int) (_locale->pctype[ (((c) & 0x00ff) +1) ] & (type))
 

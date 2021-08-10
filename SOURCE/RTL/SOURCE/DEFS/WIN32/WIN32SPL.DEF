@@ -1,5 +1,5 @@
 LIBRARY WIN32SPL
 EXPORTS
 
+    InitializePrintMonitor
     InitializePrintProvidor
-    LibMain

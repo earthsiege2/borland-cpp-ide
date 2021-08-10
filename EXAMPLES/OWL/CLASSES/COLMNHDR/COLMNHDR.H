@@ -9,8 +9,9 @@
 
 #define CM_ADDITEM              0x1001
 #define CM_REMOVEITEM           0x1002
-#define CM_ALLOWTRACKING        0x1100
-#define CM_ALLOWITEMCHANGING    0x1101
+#define CM_CHANGEFONT           0x1003
+#define CM_ALLOWRESIZING        0x1100
+#define CM_ALLOWCLICKING        0x1101
 
 
 #endif // COLMNHDR_H

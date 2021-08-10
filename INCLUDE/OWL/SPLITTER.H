@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.9  $
 //
 // Definition of helper classes for Pane Splitters
 //----------------------------------------------------------------------------
@@ -18,6 +18,11 @@
 #if !defined(CLASSLIB_SHDEL_H)
 # include <classlib/shddel.h>
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS TDC;
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
@@ -150,7 +155,7 @@ class _OWLCLASS THSplitter : public TSplitter {
 //
 class _OWLCLASS TSplitterIndicator : public TRect {
   public:
-    TSplitterIndicator(TSplitter* splitter, const TRect& rect);
+    TSplitterIndicator(TSplitter* splitter, const TRect& rect, uint cushion=0);
 
     int               operator == (const TSplitterIndicator& si) const;
     virtual void      ConnectToRect(const TRect& rect) = 0;
@@ -162,11 +167,16 @@ class _OWLCLASS TSplitterIndicator : public TRect {
     virtual bool      CouldContain(const TPoint& point) = 0;
     TSplitter*        GetSplitter();
     virtual TRect     CalcAreaOfSplitterMove() = 0;
+    void              SetCushion(const uint cushion);
 
   protected:
     TSplitter*  Splitter;
     bool        Showing;
     uint        DistMoved;
+    //
+    // Minimum distance btwn separators.
+    // 
+    uint        Cushion;
 };
 
 //
@@ -176,7 +186,7 @@ class _OWLCLASS TSplitterIndicator : public TRect {
 //
 class _OWLCLASS TVSplitterIndicator : public TSplitterIndicator {
   public:
-    TVSplitterIndicator(TSplitter* splitter, const TRect& rect);
+    TVSplitterIndicator(TSplitter* splitter, const TRect& rect, uint cushion=0);
 
     // Override virtuals
     //
@@ -194,7 +204,7 @@ class _OWLCLASS TVSplitterIndicator : public TSplitterIndicator {
 //
 class _OWLCLASS THSplitterIndicator : public TSplitterIndicator {
   public:
-    THSplitterIndicator(TSplitter* splitter, const TRect& rect);
+    THSplitterIndicator(TSplitter* splitter, const TRect& rect, uint cushion=0);
 
     // Override virtuals
     //
@@ -242,6 +252,10 @@ class _OWLCLASS TSplitterIndicatorMgr {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -297,9 +311,9 @@ THSplitter::SplitDirection()
 }
 
 //
-inline TSplitterIndicator::TSplitterIndicator(TSplitter* splitter, const TRect& rect)
+inline TSplitterIndicator::TSplitterIndicator(TSplitter* splitter, const TRect& rect, uint cushion)
 :
-  TRect(rect), Splitter(splitter), Showing(false), DistMoved(0)
+  TRect(rect), Splitter(splitter), Showing(false), DistMoved(0), Cushion(cushion)
 {
 }
 
@@ -339,16 +353,25 @@ TSplitterIndicator::GetSplitter()
 }
 
 //
-inline TVSplitterIndicator::TVSplitterIndicator(TSplitter* splitter, const TRect& rect)
+// Set cushion
+//
+inline void
+TSplitterIndicator::SetCushion(const uint cushion)
+{
+   Cushion = cushion;
+}
+
+//
+inline TVSplitterIndicator::TVSplitterIndicator(TSplitter* splitter, const TRect& rect, uint cushion)
 :
-  TSplitterIndicator(splitter, rect)
+  TSplitterIndicator(splitter, rect, cushion)
 {
 }
 
 //
-inline THSplitterIndicator::THSplitterIndicator(TSplitter* splitter, const TRect& rect)
+inline THSplitterIndicator::THSplitterIndicator(TSplitter* splitter, const TRect& rect, uint cushion)
 :
-  TSplitterIndicator(splitter, rect)
+  TSplitterIndicator(splitter, rect, cushion)
 {
 }
 

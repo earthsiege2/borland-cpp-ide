@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.3  $
+// $Revision:   2.4  $
 //
 // 	Implements the Bolero half of the OLE2 in-process server object.
 //    BOleIps objects impersonate the client application from the point of 

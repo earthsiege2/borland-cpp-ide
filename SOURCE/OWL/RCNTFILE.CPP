@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.12  $
+//$Revision:   10.14  $
 //
 // Implementation of class TRecentFiles
 //----------------------------------------------------------------------------
@@ -10,14 +10,14 @@
 #if !defined(OWL_FRAMEWIN_H)
 # include <owl/framewin.h>
 #endif
+#if !defined(WINSYS_PROFILE_H)
+# include <winsys/profile.h>
+#endif
 #if !defined(OWL_RCNTFILE_H)
 # include <owl/rcntfile.h>
 #endif
 #if !defined(CLASSLIB_POINTER_H)
 # include <classlib/pointer.h>
-#endif
-#if !defined(WINSYS_PROFILE_H)
-# include <winsys/profile.h>
 #endif
 #if !defined(OWL_WINDOW_RH)
 # include <owl/window.rh>
@@ -26,6 +26,12 @@
 # include <owl/editfile.rh>
 #endif
 #include <stdio.h>
+
+OWL_DIAGINFO;
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 const int CM_MRU_FIRST      = 31990;
 const int CM_MRU_LAST       = CM_MRU_FIRST + TRecentFiles::MaxMenuItems;
@@ -36,6 +42,10 @@ const char* MruPrefix = "MRU";
 const char* MenuItemDefault = "Default";
 const int   MaxMenuItemLen = 255;
 uint TRecentFiles::MruMessage = 0;
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 IMPLEMENT_CASTABLE(TRecentFiles);
 

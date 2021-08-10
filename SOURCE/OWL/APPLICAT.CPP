@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.15  $
+//$Revision:   10.25  $
 //
 // Implementation of class TApplication. This defines the basic behavior
 // for ObjectWindows applications.
@@ -24,7 +24,11 @@
 #if !defined(OWL_WINDOW_RH)
 # include <owl/window.rh>
 #endif
+#if defined(BI_COMP_BORLANDC) && !defined(__BWCC_H)
+# include <bwcc.h>
+#endif
 
+OWL_DIAGINFO;
 #if defined(SECTION) && SECTION != 1
 DIAG_DECLARE_GROUP(OwlApp);        // General Application diagnostic group
 #endif
@@ -38,8 +42,16 @@ DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlApp, 1, 0);
 //
 HINSTANCE  TApplication::InitHInstance;
 HINSTANCE  TApplication::InitHPrevInstance;
-string     TApplication::InitCmdLine;
 int        TApplication::InitCmdShow;
+
+//
+//
+string&     
+TApplication::GetInitCmdLine()
+{
+  static string InitCmdLine;
+  return InitCmdLine;
+};
 
 //
 // Global GetWindowPtr() message ID used for registered message
@@ -53,10 +65,10 @@ uint _OWLDATA GetWindowPtrMsgId = 0;
 TApplication::TApplication(const char far* name, TModule*& gModule,
                            TAppDictionary* appDict)
 :
-  TModule(name, InitHInstance, InitCmdLine.c_str()),
+  TModule(name, InitHInstance, GetInitCmdLine().c_str()),
   TMsgThread(TMsgThread::Current),
   XBase(0), XState(0), DocManager(0),
-  Dictionary(appDict ? appDict : &::OwlAppDictionary)
+  Dictionary(appDict ? appDict : &(OWLGetAppDictionary()))
 {
   TRACEX(OwlApp, OWL_CDLEVEL, "TApplication constructing @" << (void*)this);
 
@@ -71,7 +83,7 @@ TApplication::TApplication(const char far* name, TModule*& gModule,
   BWCCModule = 0;
   Ctl3dModule = 0;
   CondemnedWindows = 0;
-  CmdLine = InitCmdLine;
+  CmdLine = GetInitCmdLine();
 
   Dictionary->Add(this);
   gModule = this;
@@ -98,7 +110,7 @@ TApplication::TApplication(const char far* name,
   TModule(name, instance, cmdLine),
   TMsgThread(TMsgThread::Current),
   XBase(0), XState(0), DocManager(0),
-  Dictionary(appDict ? appDict : &::OwlAppDictionary)
+  Dictionary(appDict ? appDict : &(OWLGetAppDictionary()))
 {
   TRACEX(OwlApp, OWL_CDLEVEL, "TApplication constructing @" << (void*)this);
   hPrevInstance = prevInstance;
@@ -233,9 +245,6 @@ TApplication::InitInstance()
 
   TRACEX(OwlApp, 1, "TApplication::InitInstance() called @" << (void*)this);
 
-  if (!hPrevInstance)
-    InitApplication();
-
   InitMainWindow();
 
   if (MainWindow) {
@@ -358,12 +367,14 @@ TApplication::Run()
     }
 #if !defined(BI_NO_NEW_CASTS)
     catch (Bad_cast& x) {
-      status = Error(xmsg(string(typeid(x).name())), 0);
+      xmsg msg(string(typeid(x).name()));
+      status = Error(msg, 0);
       if (status)
         throw;
     }
     catch (Bad_typeid& x) {
-      status = Error(xmsg(string(typeid(x).name())), 0);
+      xmsg msg(string(typeid(x).name()));
+      status = Error(msg, 0);
       if (status)
         throw;
     }
@@ -402,8 +413,17 @@ TApplication::Start()
   CATCH( (TXOwl& x) {status = x.Unhandled(this, 0);})
   CATCH( (xmsg& x) {status = Error(x, 0);})
 #if !defined(BI_NO_NEW_CASTS)
-  CATCH( (Bad_cast& x) {status = Error(xmsg(string(typeid(x).name())), 0);} )
-  CATCH( (Bad_typeid& x) {status = Error(xmsg(string(typeid(x).name())), 0);} )
+  
+  CATCH( (Bad_cast& x)
+  {
+    xmsg msg(string(typeid(x).name()));
+    status = Error(msg, 0);
+  })
+  CATCH( (Bad_typeid& x)
+  {
+    xmsg msg(string(typeid(x).name()));
+    status = Error(msg, 0);
+  })
 #endif
 
   return status;
@@ -446,14 +466,16 @@ TApplication::MessageLoop()
     }
 #if !defined(BI_NO_NEW_CASTS)
     catch (Bad_cast& x) {
-      MessageLoopResult = Error(xmsg(string(typeid(x).name())), 0, IDS_OKTORESUME);
+      xmsg msg(string(typeid(x).name()));
+      MessageLoopResult = Error(msg, 0, IDS_OKTORESUME);
       if (MessageLoopResult != 0) {
         ::PostQuitMessage(MessageLoopResult);
         break;
       }
     }
     catch (Bad_typeid& x) {
-      MessageLoopResult = Error(xmsg(string(typeid(x).name())), 0, IDS_OKTORESUME);
+      xmsg msg(string(typeid(x).name()));
+      MessageLoopResult = Error(msg, 0, IDS_OKTORESUME);
       if (MessageLoopResult != 0) {
         ::PostQuitMessage(MessageLoopResult);
         break;
@@ -535,10 +557,17 @@ TApplication::ProcessAppMsg(MSG& msg)
 #if defined(BI_PLAT_WIN32)
     // NT seems very picky about calls to ::GetWindowThreadProcessId
     // with the HWND of the desktop. Hence we'll abort this loop
-    // when encountering the desktop.
-    // Dealing with the ComboLBox
+    // when encountering the desktop. Specially useful when dealing with
+    // DropDown[List] ComboBoxes thunked by OWL when hit the ComboLBox 
+    // window which is parented to the Desktop.
     //
-    static HWND deskTopHwnd = ::GetDesktopWindow();
+    class _TDesktopWindow {
+      public:
+       _TDesktopWindow() : hwnd(::GetDesktopWindow()){}
+        operator  HWND() const { return hwnd; }
+        HWND      hwnd;
+    };
+    const static _TDesktopWindow deskTopHwnd;
     if (hWnd == deskTopHwnd)
       break;
 #endif
@@ -673,7 +702,7 @@ TApplication::CmExit()
 {
   TFrameWindow* frame = GetMainWindow();
   if (frame) {
-    frame->CloseWindow();
+    frame->SendMessage(WM_CLOSE);
     DeleteCondemned();
   }
 }
@@ -728,16 +757,40 @@ TApplication::PreProcessMenu(HMENU hMenubar)
 // Condemn a window to be deleted the at the next available safe time.
 // Adds the window to a normal single linked list
 //
-// Condemned windows should be removed if they are destructed in the mean time
-// thru some other mechanism (i.e. stack, aggregate, etc)
+// Condemned windows should be removed if they are destructed in the mean 
+// time thru some other mechanism (i.e. stack, aggregate, etc)
 //
 void
 TApplication::Condemn(TWindow* win)
 {
   TRACEX(OwlApp, 1, "Condemning window @" << (void*)win << *win);
   win->SetParent(0);
+
+#if 0
+
+  // The following logic is from previous versions of ObjectWindows.
+  // It results in LIFO destructions which is somewhat unfair.
+  // However, we'll keep this code around in case previous applications 
+  // relied on this destruction order
+  //
   win->SetNext(CondemnedWindows);
   CondemnedWindows = win;
+
+#else
+
+  // Insert the new window to be deleted at the end of the list
+  //
+  win->SetNext(0);
+  if (CondemnedWindows) {
+    TWindow* eol = CondemnedWindows;
+    while (eol->Next())
+      eol = eol->Next();
+    eol->SetNext(win);
+  } else {
+    CondemnedWindows = win;
+  }
+
+#endif
 }
 
 //
@@ -876,7 +929,7 @@ static void termModal(TEnumInfo& ei)
 //   MB_APPLMODAL -   window is the owner to disable (if 0, none are disabled)
 //   MB_TASKMODAL -   window is the window to make modal,
 //                    all other top level windows are disabled
-//   MB_SYSTEMMODAL - window is the window to make system modal
+//   MB_SYSTEMMODAL - window is the window to make system modal (16-bit only)
 //
 // return -1 on errors
 //
@@ -884,23 +937,36 @@ int
 TApplication::BeginModal(TWindow* window, int flags)
 {
   TEnumInfo  ei = { 0, 0, 0 };
-  TEnumInfo* lastStackTop = stackTop; // keep last stackTop to restore later
-  stackTop = &ei;                     // point stackTop to topmost ei
+  TEnumInfo* lastStackTop = stackTop; // Keep last stackTop to restore later
+  stackTop = &ei;                     // Point stackTop to topmost ei
 
-  // Set modal state
+#if defined(BI_PLAT_WIN32)
+  // The concept of SYSTEM MODAL applies only to the 16-bit environment of
+  // Windows. The semantics of TASKMODAL is the closest to SYSMODAL in
+  // 32-bit - specially in relation to the meaning of the 'window' parameter.
+  // So we'll coerce SYSTEM MODAL to TASK MODAL
+  //
+  if (flags & MB_SYSTEMMODAL) {
+    flags &= ~MB_SYSTEMMODAL;
+    flags |=  MB_TASKMODAL;
+  }
+#endif
+
+  // Check modal state
   //
   if (flags & MB_TASKMODAL) {
-
+    // Save the window to make modal
+    //
     if (window)
-      ei.ModalWnd = window->GetHandle();  // don't disable the modal window if exists
+      ei.ModalWnd = window->GetHandle();  
 
     // Count windows to disable
     //
-#if defined(BI_PLAT_WIN32)
+#if   defined(BI_PLAT_WIN32)
     if (!EnumThreadWindows(GetCurrentThreadId(), (WNDENUMPROC)disableWnds,
                            TParam2((TEnumInfo far*)&ei)))
       return -1;
-#else
+#elif defined(BI_PLAT_WIN16)
     if (!EnumTaskWindows(GetCurrentTask(), (WNDENUMPROC)disableWnds,
                          TParam2((TEnumInfo far*)&ei)))
       return -1;
@@ -912,33 +978,26 @@ TApplication::BeginModal(TWindow* window, int flags)
     HWND* hWnds = ei.Wnds = new HWND[ei.Count + 1];
     memset(ei.Wnds, 0, sizeof(TModule::THandle)*(ei.Count + 1));
 
-#if defined(BI_PLAT_WIN32)
+#if   defined(BI_PLAT_WIN32)
     EnumThreadWindows(GetCurrentThreadId(), (WNDENUMPROC)disableWnds,
                       TParam2((TEnumInfo far*)&ei));
-#else
+#elif defined(BI_PLAT_WIN16)
     EnumTaskWindows(GetCurrentTask(), (WNDENUMPROC)disableWnds,
                     TParam2((TEnumInfo far*)&ei));
 #endif
 
-    ei.Wnds = hWnds;  // restore alloc'd pointer since enumerator bumps it
+    ei.Wnds = hWnds;  // Restore alloc'd pointer since enumerator bumps it
   }
 #if defined(BI_PLAT_WIN16)
   else if (flags & MB_SYSTEMMODAL)
     window->SetSysModalWindow();
 #endif
 
-  //
-  //    MB_APPMODAL. However, the semantics of 'window' differs between
-  //    16-bit and 32-bit: In 16-bit 'window' refers to the window itself.
-  //    In 32-bit, 'window' would have to be the parent since we fall
-  //    thru' to MB_APPMODAL. Maybe we should consider updating the logic
-  //    to have MB_SYTEMMODAL default to MB_TASKMODAL in 32-bit mode...
-  //    This inconsistency is illustrated by the MODALWIN example: selecting
-  //    'SystemModal' two or three times behaves differently in 16 and 32
-  //    bit...
-  //
   else if (window) {
-    ei.ModalWnd = window->GetHandle();  // remember who to re-enable later
+
+    // In MB_APPMODAL mode, we simply disable the window specified
+    //
+    ei.ModalWnd = window->GetHandle();  // Remember who to re-enable later
     CHECK(ei.ModalWnd);
     window->EnableWindow(false);
   }
@@ -956,7 +1015,7 @@ TApplication::BeginModal(TWindow* window, int flags)
     RETHROW;
   })
   stackTop = lastStackTop;
-  termModal(ei);            // just in case termModal was missed in EndModal
+  termModal(ei);            // Just in case termModal was missed in EndModal
 
   // Return the result from the modal window's EndModal call
   //
@@ -1004,14 +1063,17 @@ TApplication::EnableBWCC(bool enable, uint language)
         BWCCModule = new TBwccDll();
         BWCCModule->IntlInit(language);
         BWCCModule->Register(GetHandle());
-        BWCCOn = true;
+
+        WARNX(OwlApp, BWCCModule->GetVersion() < BWCCVERSION, 0, \
+              "Old version of BWCC DLL found");
       }
       catch (...) {
+        TRACEX(OwlApp, 0, "Unable to create instance of TBwccDll");
+        return;
       }
     }
   }
-  else
-    BWCCOn = false;
+  BWCCOn = enable;
 }
 
 //
@@ -1020,10 +1082,12 @@ TApplication::EnableBWCC(bool enable, uint language)
 void
 TApplication::EnableCtl3d(bool enable)
 {
-  // If we are running Win95 or NT 3.51, or newer, then ctl3d is builtin &
-  // unnecessary
+  // As per Article Q125684 of Microsoft Development Library:
+  // "If major version is 4 or greater, the application should not 
+  //  implement CTL3D".
+  //      'How to Use CTL3D Under the Windows 95 Operating System'
   //
-  if (TSystem::Has3dUI())
+  if (TSystem::GetMajorVersion() >= 4)
     return;
 
   // Load the Ctl3d DLL if needed & register our instance
@@ -1035,6 +1099,7 @@ TApplication::EnableCtl3d(bool enable)
         Ctl3dModule->Register(*this);
       }
       catch (...) {
+        TRACEX(OwlApp, 0, "Unable to create instance of TCtl3dDll");
         return;
       }
     }

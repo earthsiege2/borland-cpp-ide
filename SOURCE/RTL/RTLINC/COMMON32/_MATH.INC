@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1987, 1996 by Borland International
+;       Copyright (c) 1987, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.1  $
 
 EMU_BROKEN  equ 0   ; set to 0 when fstp st(1) works correctly
 
@@ -45,13 +46,13 @@ _DATA   ENDS
     push    dword ptr retval
     ifidn <arg2p>, <NULL>
     push    0
-    else    
+    else
     lea     eax, arg2p
     push    eax
     endif
     ifidn <arg1p>, <NULL>
     push    0
-    else    
+    else
     lea     eax, arg1p
     push    eax
     endif
@@ -85,13 +86,13 @@ _DATA   ENDS
     push    dword ptr retval
     ifidn <arg2p>, <NULL>
     push    0
-    else    
+    else
     lea     eax, arg2p
     push    eax
     endif
     ifidn <arg1p>, <NULL>
     push    0
-    else    
+    else
     lea     eax, arg1p
     push    eax
     endif

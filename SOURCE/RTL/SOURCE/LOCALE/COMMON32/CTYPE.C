@@ -8,23 +8,35 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 
-#include <ctype.h>
-#include <_locale.h>
+/* Old character classes */
+
+#define _IS_SP     1           /* space */
+#define _IS_DIG    2           /* digit */
+#define _IS_UPP    4           /* upper case */
+#define _IS_LOW    8           /* lower case */
+#define _IS_HEX   16           /* [0..9] or [A-F] or [a-f] */
+#define _IS_CTL   32           /* control */
+#define _IS_PUN   64           /* punctuation */
+#define _IS_BLK  128           /* blank */
+
+#define _IS_ALPHA    (_IS_UPP | _IS_LOW)
+#define _IS_ALNUM    (_IS_DIG | _IS_ALPHA)
+#define _IS_GRAPH    (_IS_ALNUM | _IS_HEX | _IS_PUN)
 
 /*
- * The "C" locale ctype array
+ * The old "C" locale ctype array
 */
 
-unsigned char _Cdecl _ctype[ SBCS_CTYPE_TSIZE ] =
-
+unsigned char __cdecl _ctype[ 257 ] =
 {
     0x00,                                /* 0xffff (-1) EOF */
     _IS_CTL,                             /* 0x00 */

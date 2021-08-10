@@ -4,6 +4,7 @@
 //----------------------------------------------------------------------------
 #include <owl/owlapp.rc>
 #include <owl/picklist.rc>
+#include <owl/except.rc>
 #include "picklist.rh"
 
 IDM_MAINMENU MENU

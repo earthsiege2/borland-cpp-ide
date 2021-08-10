@@ -1,5 +1,5 @@
 #############################################################################
-#
+#                                                                           #
 # The make process relies on the creation of DLL and library response file  #
 # creation.  To control the location of object modules the following should #
 # be defined:                                                               #
@@ -14,6 +14,8 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
+# $Revision:   8.6  $                                                                #
+#                                                                           #
 #############################################################################
 
 #############################################################################
@@ -21,15 +23,27 @@
 #############################################################################
 OBJS =               \
         ctime.obj    \
+        wctime.obj   \
         difftime.obj \
         gmtime.obj   \
         mktime.obj   \
         timecvt.obj  \
         timedata.obj \
-        tzset.obj
+        wtimedat.obj \
+        timefunc.obj \
+	tzdata.obj   \
+        tzset.obj    \
+        _tzset.obj   \
+        wtzset.obj
 
 #############################################################################
 # Configure the environment appropriately.                                  #
 #############################################################################
+TASMCFG = 1        # Force tasm.cfg creation
+
 !include rules.mak
+
+wctime.obj   : ctime.c
+wtimedat.obj : timedata.c
+wtzset.obj   : tzset.c
 

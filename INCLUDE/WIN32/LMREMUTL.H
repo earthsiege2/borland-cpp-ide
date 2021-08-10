@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     lmremutl.h
@@ -9,40 +11,19 @@ Abstract:
     This file contains structures, function prototypes, and definitions
     for the NetRemote API.
 
-Author:
-
-    Dan Lafferty (danl) 10-Mar-1991
-
 Environment:
 
     User Mode - Win32
     Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
     Requires ANSI C extensions: slash-slash comments, long external names.
 
-Revision History:
-
-    10-Mar-1991 danl
-        Created from LM2.0 header files and NT-LAN API Spec.
-    14-Mar-1991 JohnRo
-        Delete password case-sensitivity bit.
-        Change time of day structure to be NT style names.
-    22-Mar-1991 JohnRo
-        Changed tod_timezone to be signed.  Got rid of tabs in file.
-    06-May-1991 JohnRo
-        Implement UNICODE.
-    31-Oct-1991 JohnRo
-        RAID 3414: allow explicit local server name.  Also allow use of
-        NetRemoteComputerSupports() for local computer.
-    06-May-1993 JohnRo
-        RAID 8849: Export RxRemoteApi for general use.
-
 --*/
 
-/* $Copyright: 1994$ */
+/* $Copyright: 1997$ */
 
 #ifndef _LMREMUTL_
 #define _LMREMUTL_
-#define __LMREMUTL_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -73,13 +54,13 @@ typedef DESC_CHAR * LPDESC;
 
 NET_API_STATUS NET_API_FUNCTION
 NetRemoteTOD (
-    IN LPTSTR UncServerName,
+    IN LPCWSTR UncServerName,
     OUT LPBYTE *BufferPtr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetRemoteComputerSupports(
-    IN LPTSTR UncServerName OPTIONAL,   // Must start with "\\".
+    IN LPCWSTR UncServerName OPTIONAL,   // Must start with "\\".
     IN DWORD OptionsWanted,             // Set SUPPORTS_ bits wanted.
     OUT LPDWORD OptionsSupported        // Supported features, masked.
     );
@@ -87,7 +68,7 @@ NetRemoteComputerSupports(
 NET_API_STATUS
 RxRemoteApi(
     IN DWORD ApiNumber,
-    IN LPTSTR UncServerName,                    // Required, with \\name.
+    IN LPCWSTR UncServerName,                    // Required, with \\name.
     IN LPDESC ParmDescString,
     IN LPDESC DataDesc16 OPTIONAL,
     IN LPDESC DataDesc32 OPTIONAL,
@@ -147,4 +128,5 @@ typedef struct _TIME_OF_DAY_INFO {
 }
 #endif
 
+#pragma option -b.
 #endif //_LMREMUTL_

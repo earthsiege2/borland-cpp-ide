@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Implementation of TOleView. Doc/View view derived from TOleWindow that
 // supports OLE 2 using OCF TOcView & TOcRemView
@@ -36,6 +36,8 @@
 #if !defined(OWL_OLEDOC_H)
 # include <owl/oledoc.h>
 #endif
+
+OWL_DIAGINFO;
 
 //----------------------------------------------------------------------------
 // TOleView

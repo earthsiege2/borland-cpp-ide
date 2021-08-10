@@ -8,7 +8,7 @@
  *
  *      Copyright (c) 1993, 1994 by Borland International
  *      All Rights Reserved.
- *      $Revision:   9.13  $
+ *      $Revision:   9.17  $
  */
 
 #ifndef __BIVBX_H
@@ -25,10 +25,14 @@
 
 #ifndef __VBX_H
 
-  #if ! defined(__DDEML_H) && ! defined(_HSZ_DEFINED)
-    #define _HSZ_DEFINED
-    typedef LPSTR          HSZ;
+  #if ! defined(_HSZ_DEFINED)
+    #if defined(__DECLARE_HSZ) || (! defined(__DDEML_H) && ! defined(_INC_DDEMLH))
+      #define _HSZ_DEFINED
+      typedef LPSTR          HSZ;
+    #endif
   #endif
+  
+
   typedef unsigned char  ENUM;
   typedef LPVOID         HCTL;
   typedef short          SHORT;
@@ -79,6 +83,7 @@ HCTL      WINAPI VBXCreate(HWND windowParent, UINT id,
                            LPCSTR title, DWORD style,
                            int x, int y, int w, int h,
                            HFORMFILE file);
+BOOL      WINAPI VBXMakeDefCtlNameBuf(HCTL hCtl, LPSTR lpszBuf, int nMax);
 
 /* Dialogs */
 BOOL WINAPI VBXInitDialog(HWND window, HINSTANCE instance, LPSTR id);
@@ -167,16 +172,20 @@ typedef struct PICTURE {
   BYTE unused1;
   BYTE unused2;
   BYTE unused3;
-} PICTURE, FAR * LPPICTURE, NEAR * NPPICTURE;
+} PICTURE, NEAR * NPPICTURE;
+
+#if !defined(NO_VBX_LPPICTURE)
+typedef PICTURE FAR* LPPICTURE;
+#endif
 
 #define PICTURE_EMPTY       0
 #define PICTURE_BMP         1
 #define PICTURE_META        2
 #define PICTURE_ICON        3
 
-HPIC   WINAPI VBXCreatePicture(LPPICTURE picture);
+HPIC   WINAPI VBXCreatePicture(PICTURE FAR* picture);
 VOID   WINAPI VBXDestroyPicture(HPIC pic);
-HPIC   WINAPI VBXGetPicture(HPIC pic, LPPICTURE picture);
+HPIC   WINAPI VBXGetPicture(HPIC pic, PICTURE FAR* picture);
 ERR    WINAPI VBXGetPictureFromClipboard(HPIC FAR *pic, HANDLE data, WORD format);
 HPIC   WINAPI VBXReferencePicture(HPIC pic);
 #endif
@@ -245,4 +254,3 @@ typedef struct ELEMENTSTRUCT {
 
 #endif  /* __BIVBX_H */
 
-

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// (C) Copyright 1993, 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1993, 1997 by Borland International, All Rights Reserved
 //
 //   Diagnostic macros for checking:
 //
@@ -21,10 +21,10 @@
 
 #if !defined(SERVICES_CSTRING_H )
 # include <services/cstring.h>
-#endif   
+#endif
 #if !defined(SERVICES_EXCEPT_H)
 # include <services/except.h>
-#endif   
+#endif
 #include <strstrea.h>
 
 //
@@ -128,9 +128,9 @@ public:
 #if defined( __RTLDLL ) || defined( _BUILDRTLDLL )
 # if defined(BI_PLAT_OS2)
 #   define DIAG_IMPORT
-# else    
+# else
 #   define DIAG_IMPORT __import
-# endif    
+# endif
 # define DIAG_EXPORT __export
 #else
 # define DIAG_IMPORT

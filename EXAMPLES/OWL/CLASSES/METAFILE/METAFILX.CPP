@@ -55,7 +55,7 @@ END_RESPONSE_TABLE;
 void
 TMetaFileExWindow::CmFileOpen()
 {
-  const char* filter = 
+  char* filter = 
 #if defined(BI_PLAT_WIN32)
                        "Enh. Metafiles|*.emf|"
 #endif

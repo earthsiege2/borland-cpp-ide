@@ -4,6 +4,7 @@
 
 #ifndef _LZEXPAND_
 #define _LZEXPAND_
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -124,4 +125,5 @@ LZClose(
 #endif
 
 
+#pragma option -b.
 #endif // _LZEXPAND_

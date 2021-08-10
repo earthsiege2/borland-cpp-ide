@@ -16,7 +16,9 @@
 !if !$d(MODEL)
 MODEL     = l                         #default model
 !endif
-MODELS    = mlf                       #allowable models
+MODELS    = lf                        #allowable models
+SYSTEMS   = WIN16 WIN32               #allowable systems
+
 EXERES    = callcalc                  #target base name (.EXE & .RES)
 RESEXE_   = callcalc.rh               #.RES dependency
 

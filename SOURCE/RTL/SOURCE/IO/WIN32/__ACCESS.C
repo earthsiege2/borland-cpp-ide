@@ -6,30 +6,35 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <ntbc.h>
 
 #include <_io.h>
+#include <tchar.h>
 #include <errno.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            __access - determines accessibility of a file
+Name            _taccess used as __access and _waccess
+                __access - determines accessibility of a file
+                _waccess - determines accessibility of a file
 
 Usage           int __access(const char *filename, int amode);
+                int _waccess(const wchar_t *filename, int amode);
 
 Prototype in    _io.h
 
-Description     __access checks  a named file  to determine if  it exists and
+Description     Checks  a named file  to determine if  it exists and
                 whether it can be read, written or executed.
 
-                filename points to a string naming the file.
+                filename points to a (wide) string naming the file.
 
                 amode  contains a  bit pattern  constructed as  follows:
                         06      Check for read and write permission
@@ -47,11 +52,15 @@ Return value    If  the   requested  access  is  allowed,   0  is  returned
 
 *----------------------------------------------------------------------------*/
 
-int _RTLENTRY __access(const char *filename, int amode)
+#ifdef _UNICODE
+int _RTLENTRY _EXPFUNC _waccess(const wchar_t *filename, int amode)
+#else
+int _RTLENTRY _EXPFUNC __access(const char *filename, int amode)
+#endif
 {
     DWORD attr;         /* file attributes */
 
-    if ((attr = GetFileAttributes((char *)filename)) == (DWORD)-1)
+    if ((attr = GetFileAttributes(filename)) == (DWORD)-1)
         return (__NTerror());
 
     if ((amode & 0x0002) != 0 && (attr & FILE_ATTRIBUTE_READONLY) != 0)

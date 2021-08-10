@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.9  $
+//$Revision:   10.11  $
 //
 // Implementation of class TImageList, an ImageList 'common control' wrapper
 //----------------------------------------------------------------------------
@@ -11,6 +11,7 @@
 # include <owl/imagelst.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlCommCtrl);    // Common Controls diagnostic group
 
 //

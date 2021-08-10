@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1995, 1996 by Borland International
+ *      Copyright (c) 1995, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <alloc.h>
 #include <malloc.h>
@@ -50,16 +51,7 @@ int __memBogusAddr (void *p)
         This helper function takes an address and tests to see if the memory
         is valid to read from.  If not it returns 1, If so it returns 0
     */
-
-    int numCopied;
-    unsigned char value;
-    ReadProcessMemory (GetCurrentProcess(), (LPVOID)p,
-        (LPVOID)&value, 1, (LPDWORD)&numCopied);
-
-    if (numCopied != 1)
-        return 1;  /* no read access */
-
-    return 0;
+    return IsBadReadPtr (p, 1);
 }
 
 /*---------------------------------------------------------------------*/
@@ -83,216 +75,216 @@ int _RTLENTRY _EXPFUNC _heapchk(void)
     _lock_heap();
 
     if (!_firstHeap)
-      RETURN(_HEAPEMPTY);
+        RETURN(_HEAPEMPTY);
 
     for (h = _firstHeap; h; h = h->nextHeap)
     {
-      if (__memBogusAddr (h))
-      {
-        RETURN(_HEAPCORRUPT);
-      }
-      commitSum += h->cSize;
-      for (bh = FIRSTBLOCK(h); HDR2PTR(bh) != ((char *) h + h->cSize); bh = NEXT(bh))
-      {
-        void *p = HDR2PTR(bh);
-
-        if (__memBogusAddr (bh))
+        if (__memBogusAddr (h))
         {
-          RETURN(_HEAPCORRUPT);
-        }
-
-        if (p < h || p > (char *) h + h->cSize)
-        {
-          #ifdef DBG
-            char buf[80];
-            sprintf(buf, "Block out of range block[%p]  heap[%p]", p, h);
-            DBG_MAC (buf);
-          #endif
-          RETURN(_HEAPCORRUPT);
-        }
-
-        if (ISFREE(bh))
-        {
-          if (__memBogusAddr(NEXT(bh)))
-          {
             RETURN(_HEAPCORRUPT);
-          }
-          if (!ISPFREE(NEXT(bh)))
-          {
-             #ifdef DBG
-               DBG_MAC("prev free bit missing");
-             #endif
-             RETURN(_HEAPCORRUPT);
-          }
-
-          if (PFREE(NEXT(bh)) != bh)
-          {
-             #ifdef DBG
-               DBG_MAC("free backlink broken");
-             #endif
-             RETURN(_HEAPCORRUPT);
-          }
-
-          fnum1++;
         }
-      }
+        commitSum += h->cSize;
+        for (bh = FIRSTBLOCK(h); HDR2PTR(bh) != ((char *) h + h->cSize); bh = NEXT(bh))
+        {
+            void *p = HDR2PTR(bh);
+
+            if (__memBogusAddr (bh))
+            {
+                RETURN(_HEAPCORRUPT);
+            }
+
+            if (p < h || p > (char *) h + h->cSize)
+            {
+#ifdef DBG
+                char buf[80];
+                sprintf(buf, "Block out of range block[%p]  heap[%p]", p, h);
+                DBG_MAC (buf);
+#endif
+                RETURN(_HEAPCORRUPT);
+            }
+
+            if (ISFREE(bh))
+            {
+                if (__memBogusAddr(NEXT(bh)))
+                {
+                    RETURN(_HEAPCORRUPT);
+                }
+                if (!ISPFREE(NEXT(bh)))
+                {
+#ifdef DBG
+                    DBG_MAC("prev free bit missing");
+#endif
+                    RETURN(_HEAPCORRUPT);
+                }
+
+                if (PFREE(NEXT(bh)) != bh)
+                {
+#ifdef DBG
+                    DBG_MAC("free backlink broken");
+#endif
+                    RETURN(_HEAPCORRUPT);
+                }
+
+                fnum1++;
+            }
+        }
     }
     if (commitSum != __allocated)
     {
-      #ifdef DBG
+#ifdef DBG
         DBG_MAC("allocated number is off!!!");
-      #endif
-      RETURN(_HEAPCORRUPT);
+#endif
+        RETURN(_HEAPCORRUPT);
     }
 
     if (_linktable)
     {
-      size_t i;
+        size_t i;
 
-      for (i = MINSIZE; i < _smalloc_threshold; i += ALIGNMENT)
-      {
-        BLOCKHDR *p = HDR4SIZE(i);
-        if (__memBogusAddr(p))
+        for (i = MINSIZE; i < _smalloc_threshold; i += ALIGNMENT)
         {
-          RETURN(_HEAPCORRUPT);
-        }
+            BLOCKHDR *p = HDR4SIZE(i);
+            if (__memBogusAddr(p))
+            {
+                RETURN(_HEAPCORRUPT);
+            }
 
-        for (bh = p->nextFree; bh != p; bh = bh->nextFree)
-        {
-          if (__memBogusAddr(bh))
-          {
-            RETURN(_HEAPCORRUPT);
-          }
-          if (__memBogusAddr(bh->nextFree))
-          {
-            RETURN(_HEAPCORRUPT);
-          }
-          if (bh->nextFree->prevFree != bh)
-          {
-            #ifdef DBG
-              DBG_MAC("free list error");
-            #endif
-            RETURN(_HEAPCORRUPT);
-          }
-          if (SIZE(bh) != i)
-          {
-            #ifdef DBG
-              DBG_MAC("bad size block in small free list");
-            #endif
-            RETURN(_HEAPCORRUPT);
-          }
+            for (bh = p->nextFree; bh != p; bh = bh->nextFree)
+            {
+                if (__memBogusAddr(bh))
+                {
+                    RETURN(_HEAPCORRUPT);
+                }
+                if (__memBogusAddr(bh->nextFree))
+                {
+                    RETURN(_HEAPCORRUPT);
+                }
+                if (bh->nextFree->prevFree != bh)
+                {
+#ifdef DBG
+                    DBG_MAC("free list error");
+#endif
+                    RETURN(_HEAPCORRUPT);
+                }
+                if (SIZE(bh) != i)
+                {
+#ifdef DBG
+                    DBG_MAC("bad size block in small free list");
+#endif
+                    RETURN(_HEAPCORRUPT);
+                }
 
-          if (!ISPFREE(NEXT(bh)))
-          {
-            #ifdef DBG
-              DBG_MAC("bad block in free list");
-            #endif
-            RETURN(_HEAPCORRUPT);
-          }
+                if (!ISPFREE(NEXT(bh)))
+                {
+#ifdef DBG
+                    DBG_MAC("bad block in free list");
+#endif
+                    RETURN(_HEAPCORRUPT);
+                }
 
-          if (PFREE(NEXT(bh)) != bh)
-          {
-            #ifdef DBG
-              DBG_MAC("bad block in free list");
-            #endif
-            RETURN(_HEAPCORRUPT);
-          }
+                if (PFREE(NEXT(bh)) != bh)
+                {
+#ifdef DBG
+                    DBG_MAC("bad block in free list");
+#endif
+                    RETURN(_HEAPCORRUPT);
+                }
 
 #ifdef	BALANCEDFIT
-          snum++;
+                snum++;
 #endif
-          fnum2++;
-        }
-      }
-
-      for (bh = _freeStart.nextFree; bh != &_freeStart; bh = bh->nextFree)
-      {
-        if (__memBogusAddr(bh))
-        {
-          RETURN(_HEAPCORRUPT);
-        }
-        if (__memBogusAddr(bh->nextFree))
-        {
-          RETURN(_HEAPCORRUPT);
+                fnum2++;
+            }
         }
 
-        if (bh->nextFree->prevFree != bh)
+        for (bh = _freeStart.nextFree; bh != &_freeStart; bh = bh->nextFree)
         {
-          #ifdef DBG
-            DBG_MAC("free list error");
-          #endif
-          RETURN(_HEAPCORRUPT);
-        }
+            if (__memBogusAddr(bh))
+            {
+                RETURN(_HEAPCORRUPT);
+            }
+            if (__memBogusAddr(bh->nextFree))
+            {
+                RETURN(_HEAPCORRUPT);
+            }
 
-        if (SIZE(bh) < _smalloc_threshold)
-        {
-          #ifdef DBG
-            DBG_MAC("small block in big free list");
-          #endif
-          RETURN(_HEAPCORRUPT);
-        }
+            if (bh->nextFree->prevFree != bh)
+            {
+#ifdef DBG
+                DBG_MAC("free list error");
+#endif
+                RETURN(_HEAPCORRUPT);
+            }
 
-        if (!ISPFREE(NEXT(bh)))
-        {
-          #ifdef DBG
-            DBG_MAC("bad block in free list");
-          #endif
-          RETURN(_HEAPCORRUPT);
-        }
+            if (SIZE(bh) < _smalloc_threshold)
+            {
+#ifdef DBG
+                DBG_MAC("small block in big free list");
+#endif
+                RETURN(_HEAPCORRUPT);
+            }
 
-        if (PFREE(NEXT(bh)) != bh)
-        {
-          #ifdef DBG
-            DBG_MAC("bad block in free list");
-          #endif
-          RETURN(_HEAPCORRUPT);
-        }
+            if (!ISPFREE(NEXT(bh)))
+            {
+#ifdef DBG
+                DBG_MAC("bad block in free list");
+#endif
+                RETURN(_HEAPCORRUPT);
+            }
+
+            if (PFREE(NEXT(bh)) != bh)
+            {
+#ifdef DBG
+                DBG_MAC("bad block in free list");
+#endif
+                RETURN(_HEAPCORRUPT);
+            }
 
 #ifdef	BALANCEDFIT
-        bnum++;
+            bnum++;
 #endif
-        fnum2++;
+            fnum2++;
 
-        if (bh == _rover)
-         _roverFound = 1;
-      }
+            if (bh == _rover)
+                _roverFound = 1;
+        }
     }
 
     if (!_roverFound && &_freeStart != _rover)
     {
-      #ifdef DBG
+#ifdef DBG
         DBG_MAC("_rover not in free list!");
-      #endif
-      RETURN(_HEAPCORRUPT);
+#endif
+        RETURN(_HEAPCORRUPT);
     }
 
     if (fnum1 != fnum2)
     {
-      #ifdef DBG
+#ifdef DBG
         DBG_MAC("Free block number mismatch");
-      #endif
-      RETURN(_HEAPCORRUPT);
+#endif
+        RETURN(_HEAPCORRUPT);
     }
 
 #ifdef	BALANCEDFIT
     if (snum != _numSmall)
     {
-      #ifdef DBG
+#ifdef DBG
         DBG_MAC("Small block number mismatch");
-      #endif
-      RETURN(_HEAPCORRUPT);
+#endif
+        RETURN(_HEAPCORRUPT);
     }
 
     if (bnum != _numBig)
     {
-      #ifdef DBG
+#ifdef DBG
         DBG_MAC("Big block number mismatch");
-      #endif
-      RETURN(_HEAPCORRUPT);
+#endif
+        RETURN(_HEAPCORRUPT);
     }
 #endif
-   rc = _HEAPOK;
-exit:
+    rc = _HEAPOK;
+  exit:
     _unlock_heap();
     return rc;
 }

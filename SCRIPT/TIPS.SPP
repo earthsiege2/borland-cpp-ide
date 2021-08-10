@@ -1,0 +1,158 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
+//
+// TIPS.SPP: Evaluation Tips. When the debugger has a process loaded,
+//   evaluates the item under the cursor and displays the result in a
+//   mouse tip.  When there is no process loaded, show the name of the 
+//   buffer.
+//
+//--------------------------------------------------------------------------
+
+// mark this module as being a library module
+library;
+
+//
+// IDE imports.
+//
+import editor;
+import debugger;
+import IDE;
+
+//
+// If debugging and we have a source file, evaluate the symbol under the
+// cursor when a mouse tip is "requested."
+//
+on editor:>MouseTipRequested(theView, line, col){
+  if (debugger.HasProcess) {
+    declare topView = editor.TopView;
+    declare curPos  = topView.Position;
+    declare curBlk  = topView.Block;
+
+    // Get the block, or word under the cursor.
+    //
+    declare symbol;
+    if (curBlk.IsValid) {
+      symbol = curBlk.Text;
+    } else {
+      curPos.Save();
+      curPos.Move(line, col);
+      symbol = .GetCPPSymbol();
+      curPos.Restore();
+    }
+
+    //
+    // Evaluate.
+    //
+    declare evaluation;
+    if (symbol != "") {
+      // Include ',r' so that members of structs and classes are named
+      evaluation = debugger.Evaluate(symbol + ",r");
+
+      // Filter out empty and invalid expressions
+      declare String subStr(evaluation);
+      if(evaluation != "" && evaluation != "Expression syntax" &&
+         subStr.SubString(0, 9).Text != "Undefined" &&
+         subStr.SubString(0, 8).Text != "Improper"){
+          return symbol + ": " + evaluation;
+      }
+    } else {
+      return pass(theView, line, col);
+    }
+  }
+
+  //  
+  // No process under debugger, if the mouse is resting over the currently 
+  // active EditView, do nothing (user can see view's description in the 
+  // View's title).  Otherwise, return the buffer's name and description.
+  //
+
+  /*
+      customers found this behavior to be annoying, so it has been commented 
+      out.
+  if(editor.TopView != theView){
+     declare retVal = "";
+     declare eBuf = theView.Buffer;
+     if(eBuf.IsReadOnly)
+       retVal += "R";
+     if(eBuf.IsModified)
+       retVal += "*";
+     if(retVal != "")
+       retVal += "  ";
+     retVal += (eBuf.FullName + " (" + line + ", " + col + ")");
+
+     return retVal;
+  }
+  */
+
+  return pass(theView, line, col);
+}
+
+on editor:>GetCPPSymbol(){
+   if(!initialized(.TopView)){
+      // no edit window exists, can't rip anything
+      return "";
+   }
+
+   declare ep = .TopView.Position;
+   if (!(ep.IsWordCharacter || (ep.Character == '_') || (ep.Character == '.') ||
+      (ep.Character == '-') || (ep.Character == '>') || (ep.Character == ']') ||
+      (ep.Character == ']'))) {
+      return "";
+   }
+
+   declare lhs = ep.RipText("0123456789_.->:[]", BACKWARD_RIP | INCLUDE_ALPHA_CHARS);
+   ep.MoveRelative(0, 1);
+
+   declare rhs;
+
+   // Only include brackets if one or more appear in the left hand side.
+   // This allows viewing the entire structure rather than the single
+   // element if the tip is requested to the left of '.' or '->'.
+   // A ':' is also included so that static class references are displayed
+   // with the "Class::" prefix if present.
+   declare String srch(lhs);
+
+   if(srch.Contains("[]"))
+       rhs = ep.RipText("0123456789_.->:[]", INCLUDE_ALPHA_CHARS);
+   else
+       rhs = ep.RipText("0123456789_:", INCLUDE_ALPHA_CHARS);
+
+   declare rv = lhs + rhs;
+
+   // Derefernce operators (->) are okay in our return string, but minus (-) 
+   // and greater (>) than operators by themselves aren't.  Neither is a ':'.
+   declare String whole(rv);
+   if(whole.Contains(">-")){
+      // ensure that it contains only dereference operators.
+      for(declare i = 0; i < whole.Length; i++){
+         declare piece = whole.SubString(i);
+         if(piece.Character == '-'){
+            // next char must be a '>' or it is invalid!
+            piece = whole.SubString(++i);
+            if(piece.Character != '>'){
+               rv = whole.SubString(0, i - 1).Text;
+               break;
+            }
+         }else{
+            // if we see a '>' w/out a preceding '-', it is invalid
+            if(piece.Character == '>'){
+               rv = whole.SubString(0, i).Text;
+               break;
+            }else{
+                // If ':', next char must be a ':' too or it is invalid
+                if(piece.Character == ':'){
+                    piece = whole.SubString(++i);
+                    if(piece.Character != ':'){
+                       rv = whole.SubString(0, i - 1).Text;
+                       break;
+                    }
+                }
+            }
+         }
+      }
+   }
+
+   return rv;
+}
+

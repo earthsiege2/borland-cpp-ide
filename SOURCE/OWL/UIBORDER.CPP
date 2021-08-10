@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.7  $
 //
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
@@ -12,6 +12,8 @@
 #if !defined(OWL_GDIOBJEC_H)
 # include <owl/gdiobjec.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Construct a UIBorder object given a frame and a hilevel style type.
@@ -155,8 +157,10 @@ TUIBorder::DrawEdge(TDC& dc, const TRect& frame, uint edge, uint flags)
       f.Inflate(-1,-1);
     }
     if (flags & Fill) { 
-      dc.SelectObject(TBrush(TColor::SysWindow));
+      TBrush brsh(TColor::SysWindow);
+      dc.SelectObject(brsh);
       dc.PatBlt(f);
+      dc.RestoreBrush();
     }
     return true;
   }
@@ -169,8 +173,10 @@ TUIBorder::DrawEdge(TDC& dc, const TRect& frame, uint edge, uint flags)
       f.Inflate(-1,-1);
     }
     if (flags & Fill) { 
-      dc.SelectObject(TBrush(TColor::Sys3dFace));
+      TBrush brsh(TColor::Sys3dFace);
+      dc.SelectObject(brsh);
       dc.PatBlt(f);
+      dc.RestoreBrush();
     }
     return true;
   }
@@ -218,8 +224,10 @@ TUIBorder::DrawEdge(TDC& dc, const TRect& frame, uint edge, uint flags)
   // Fill interior if indicated
   //
   if (flags & Fill) {
-    dc.SelectObject(TBrush(TColor::Sys3dFace));
+    TBrush brsh(TColor::Sys3dFace);
+    dc.SelectObject(brsh);
     dc.PatBlt(f);
+    dc.RestoreBrush();
   }
 
 //  if (flags & Adjust)
@@ -235,19 +243,23 @@ void
 TUIBorder::PaintFrame(TDC& dc, const TRect& fr, uint flags, const TColor& tlColor, const TColor& brColor)
 {
   if (flags & (Top | Left)) {
-    dc.SelectObject(TBrush(tlColor));
+    TBrush brsh(tlColor);
+    dc.SelectObject(brsh);
     if (flags & Top)
       dc.PatBlt(fr.left, fr.top, fr.Width()-1, 1);
     if (flags & Left)
       dc.PatBlt(fr.left, fr.top+1, 1, fr.Height()-2);
+    dc.RestoreBrush();
   }
 
   if (flags & (Bottom | Right)) {
-    dc.SelectObject(TBrush(brColor));
+    TBrush brsh(brColor);
+    dc.SelectObject(brsh);
     if (flags & Bottom)
       dc.PatBlt(fr.left, fr.bottom-1, fr.Width(), 1);
     if (flags & Right)
       dc.PatBlt(fr.right-1, fr.top, 1, fr.Height()-1);
+    dc.RestoreBrush();
   }
 }
 
@@ -258,23 +270,27 @@ void
 TUIBorder::PaintFrameC(TDC& dc, const TRect& fr, uint flags, const TColor& tlColor, const TColor& brColor, const TColor& bcColor)
 {
   if (flags & (Top | Left)) {
-    dc.SelectObject(TBrush(tlColor));
+    TBrush brsh(tlColor);
+    dc.SelectObject(brsh);
     if (flags & Top) {
       dc.PatBlt(fr.left, fr.top, fr.Width()-2, 1);
       dc.SetPixel(fr.right-1, fr.top, bcColor);
     }
     if (flags & Left)
       dc.PatBlt(fr.left, fr.top+1, 1, fr.Height()-2);
+    dc.RestoreBrush();
   }
 
   if (flags & (Bottom | Right)) {
-    dc.SelectObject(TBrush(brColor));
+    TBrush brsh(brColor);
+    dc.SelectObject(brsh);
     if (flags & Bottom) {
       dc.SetPixel(fr.left, fr.bottom-1, bcColor);
       dc.PatBlt(fr.left+1, fr.bottom-1, fr.Width(), 1);
     }
     if (flags & Right)
       dc.PatBlt(fr.right-1, fr.top, 1, fr.Height()-1);
+    dc.RestoreBrush();    
   }
 }
 

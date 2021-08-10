@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// (C) Copyright 1993, 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1993, 1997 by Borland International, All Rights Reserved
 //
 //----------------------------------------------------------------------------
 #if !defined(SERVICES_PRIVATE_DEFS_H)

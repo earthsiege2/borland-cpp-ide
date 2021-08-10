@@ -5,7 +5,7 @@
 //
 //  SUBSYSTEM:    ApxDlg Application
 //  FILE:         apxdlgap.cpp
-//  AUTHOR:       
+//  AUTHOR:
 //
 //  OVERVIEW
 //  ~~~~~~~~
@@ -68,17 +68,10 @@ void TApxDlgApp::InitMainWindow()
   TSDIDecFrame* frame = new TSDIDecFrame(0, GetName(), 0, true);
   frame->SetFlag(wfShrinkToClient);
 
-  // Assign ICON w/ this application.
+  // Assign icons for this application.
   //
   frame->SetIcon(this, IDI_SDIAPPLICATION);
   frame->SetIconSm(this, IDI_SDIAPPLICATION);
-
-
-  TStatusBar* sb = new TStatusBar(frame, TGadget::Recessed,
-                                  TStatusBar::CapsLock        |
-                                  TStatusBar::NumLock         |
-                                  TStatusBar::ScrollLock);
-  frame->Insert(*sb, TDecoratedFrame::Bottom);
 
   SetMainWindow(frame);
 

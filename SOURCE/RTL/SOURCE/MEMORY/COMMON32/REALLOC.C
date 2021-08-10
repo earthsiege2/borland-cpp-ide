@@ -8,12 +8,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1995, 1996 by Borland International
+ *      Copyright (c) 1995, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <mem.h>
@@ -170,7 +171,6 @@ Return value    If the new block can be succesfully reallocated, the
 void * _RTLENTRY _EXPFUNC grealloc(void * block, size_t size)
 {
     BLOCKHDR * bh;
-    size_t aSize;
 
     if (size == 0)
     {
@@ -187,14 +187,14 @@ void * _RTLENTRY _EXPFUNC grealloc(void * block, size_t size)
     else
     {
         void * newb;
-    _lock_heap();
+        _lock_heap();
         bh = PTR2HDR(block);
         if ((newb = gmalloc(size)) != NULL)
         {
             memmove(newb,block,MIN( size, SIZE(bh)));
             gfree(block);
         }
-    _unlock_heap();
+        _unlock_heap();
         return newb;
     }
 }

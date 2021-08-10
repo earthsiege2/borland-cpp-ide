@@ -1,26 +1,6 @@
-:Title Using Online Help
-:INDEX Using Online Help = OPENHELP.HLP
-:INDEX Borland C++ User's Guide = BCW.HLP
-:INDEX Borland C++ Programmer's Reference = BCPP.HLP
-:INDEX Borland C++ Class Libraries Guide = CLASSLIB.HLP
-:INDEX Borland C++ DOS Reference = BCDOS.HLP
-:INDEX Resource Workshop User's Guide = WORKSHOP.HLP
-:INDEX Borland Windows Custom Controls = BWCC.HLP
-:INDEX Borland C++ Tools & Utilities = BCTOOLS.HLP
-:INDEX Borland C++ Error Messages and Warnings = BCERRMSG.HLP
-:INDEX WinSight User's Guide = WINSIGHT.HLP
-:INDEX WinSpector User's Guide = WINSPCTR.HLP
-:INDEX ObjectWindows 5.0 Programmer's Reference = OWL50.HLP
-:INDEX ObjectComponents Programmer's Reference = OCF.HLP
-:INDEX ObjectScripting Programmer's Reference = SCRIPT.HLP
-:INDEX Visual Database Tools Reference Guide = BCVDTREF.HLP
-:INDEX CodeGuard 5.0 User's Guide = CG5.HLP
-:INDEX Microsoft Windows SDK Reference = WIN32.HLP
-:INDEX InstallShield Express Help = ISX.HLP
-:INDEX Windows System Classes = WINSYS.HLP
+:Title Borland C++ 5.02 Documentation
 
 :INCLUDE OPENHELP.CFG
 :INCLUDE WHATSNEW.TOC
 :INCLUDE OPENHELP.TOC
-:INCLUDE OPENHELP.MST
 

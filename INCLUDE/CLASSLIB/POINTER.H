@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.7  $
+//$Revision:   5.10  $
 //
 // Various types of smart pointer templatized classes
 //----------------------------------------------------------------------------
@@ -13,6 +13,10 @@
 # include <classlib/defs.h>
 #endif
 #include <new.h>  // for size_t
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 //
 // A pair of smart pointer template classes. Provides basic conversion
@@ -187,16 +191,20 @@ TAEnvelope<T>& TAEnvelope<T>::operator =(T array[])
 //----------------------------------------------------------------------------
 
 //
-// Obsolete, should use TAPointer<char> for char[]'s
+// Obsolete, should use TAPointer<_TCHAR> for _TCHAR[]'s
 //
-class TPointer<char> : public TPointerBase<char> {
+class TPointer<_TCHAR> : public TPointerBase<_TCHAR> {
   public:
-    TPointer() : TPointerBase<char>() {}
-    TPointer(char pointer[]) : TPointerBase<char>(pointer) {}
+    TPointer() : TPointerBase<_TCHAR>() {}
+    TPointer(_TCHAR pointer[]) : TPointerBase<_TCHAR>(pointer) {}
    ~TPointer() {delete[] P;}
-    char* operator =(char src[]) {delete[] P; return P = src;}
-    char* operator =(const TPointer<char>& src) {delete[] P; return P = src.P;}
-    char& operator[](int i) {return P[i];}
+    _TCHAR* operator =(_TCHAR src[]) {delete[] P; return P = src;}
+    _TCHAR* operator =(const TPointer<_TCHAR>& src) {delete[] P; return P = src.P;}
+    _TCHAR& operator[](int i) {return P[i];}
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #endif  // CLASSLIB_POINTER_H

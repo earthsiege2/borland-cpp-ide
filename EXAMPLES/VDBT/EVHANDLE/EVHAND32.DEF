@@ -1,0 +1,17 @@
+;------------------------------------------------
+;   Project EVHANDLE
+;   Borland International
+;   Copyright © 1996. All Rights Reserved.
+;
+;   SUBSYSTEM:    EVHANDLE.EXE Module Defintion File
+;   FILE:         EVHAND32.DEF
+;   AUTHOR:       
+;
+;------------------------------------------------
+
+NAME EVHANDLE
+
+DESCRIPTION 'Source-Sink Application - Copyright © 1996. All Rights Reserved.'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE

@@ -273,6 +273,9 @@ class TMyClientWindow : public TWindow {
       Printer = 0;
     }
 
+    ~TMyClientWindow() 
+    { delete Printer; }
+
     void Paint(TDC& dc, bool erase, TRect& rect);
     void EvSize(uint sizeType, TSize& size);
 
@@ -431,27 +434,27 @@ TMyClientWindow::Paint(TDC& dc, bool erase, TRect& rect)
   h = -12;
   TFont fontSmall(h, 0, 0, 0, FW_NORMAL, 0, 0, 0,
                   ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                  DEFAULT_QUALITY, VARIABLE_PITCH | FF_SWISS, 0);
+                  DEFAULT_QUALITY, VARIABLE_PITCH | FF_SWISS, "");
 
   h = -24;
   TFont fontBig(h, 0, 0, 0, FW_NORMAL, 0, 0, 0,
                 ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                DRAFT_QUALITY, VARIABLE_PITCH | FF_SWISS, 0);
+                DRAFT_QUALITY, VARIABLE_PITCH | FF_SWISS, "");
 
   h = -14;
   TFont fontItalic(h, 0, 0, 0, FW_NORMAL, TRUE, 0, 0,
                    ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                   DEFAULT_QUALITY, FIXED_PITCH | FF_MODERN, 0);
+                   DEFAULT_QUALITY, FIXED_PITCH | FF_MODERN, "");
 
   h = -18;
   TFont fontBold(h, 0, 0, 0, FW_BOLD, 0, 0, 0,
                  ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                 PROOF_QUALITY, VARIABLE_PITCH | FF_SWISS, 0);
+                 PROOF_QUALITY, VARIABLE_PITCH | FF_SWISS, "");
 
   h = -14;
   TFont fontVertical(h, 0, 2700, 2700, FW_NORMAL, 0, 0, 0,
                      ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                     DEFAULT_QUALITY, VARIABLE_PITCH | FF_SWISS, 0);
+                     DEFAULT_QUALITY, VARIABLE_PITCH | FF_SWISS, "");
 
   TSize     extent;
   dc.SetBkMode(TRANSPARENT);

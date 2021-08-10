@@ -4,11 +4,12 @@
  *  This file lists internal properties of the Microsoft Personal
  *  Information Store
  *  
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef _MSPST_H_
 #define _MSPST_H_
+#pragma option -b
 
 
 /*  The following is a list of properties that may be passed in
@@ -92,4 +93,5 @@
                                 0x00, 0xaa, 0x00, 0x37, \
                                 0xd9, 0x6e, 0x00, 0x00 }
 
+#pragma option -b.
 #endif  /* _MSPST_H_ */

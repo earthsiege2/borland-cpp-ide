@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.7  $
 //
 // Implementation of class TAppDictionary, a dictionary of associations
 // between pids (Process IDs) and TApplication pointers.
@@ -20,12 +20,28 @@
 # include <string.h>
 #endif
 
-//#define LOCALALLOC_TABLE  // Define to use local alloc for table
-
+// Defining LOCALALLOC_TABLE instructs OWL to use LocalAlloc for the table
 //
+//#define LOCALALLOC_TABLE  
+
+OWL_DIAGINFO;
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Global dictionary used by OWL for EXE Application lookup
 //
-TAppDictionary _OWLDATA OwlAppDictionary;
+TAppDictionary& _OWLFUNC 
+OWLGetAppDictionary()
+{
+  static TAppDictionary OwlAppDictionary;
+  return OwlAppDictionary;
+};
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 
@@ -36,6 +52,10 @@ TAppDictionary _OWLDATA OwlAppDictionary;
 // unnecesasry
 //
 #if defined(BI_APP_DLL) || defined(BI_PLAT_WIN32)
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 //
 // Abstract Base for dictionary implementation
@@ -98,6 +118,10 @@ class TAppDictInstImp : public TAppDictImp {
   private:
     TAppDictionary::TEntry     Entry;
 };
+#endif
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
 #endif
 
 //----------------------------------------------------------------------------
@@ -226,7 +250,7 @@ TAppDictionary::DeleteCondemned()
 extern "C" TApplication* PASCAL _OWLFUNC
 GetTaskApplicationObject(unsigned pid)
 {
-  return ::OwlAppDictionary.GetApplication(pid);
+  return OWLGetAppDictionary().GetApplication(pid);
 }
 
 //----------------------------------------------------------------------------
@@ -429,6 +453,10 @@ bool TAppDictionary::DeleteCondemned() {
 
 //----------------------------------------------------------------------------
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif 
+
 //
 // Global function that calls GetApplication() on OWL's app-dictionary.
 // Used by EXEs, or DLLs statically linking OWL. Never returns 0, will make
@@ -436,7 +464,7 @@ bool TAppDictionary::DeleteCondemned() {
 //
 TApplication* _OWLFUNC GetApplicationObject(unsigned pid)
 {
-  TApplication* app = ::OwlAppDictionary.GetApplication(pid);
+  TApplication* app = OWLGetAppDictionary().GetApplication(pid);
   if (app)
     return app;
 
@@ -447,5 +475,9 @@ TApplication* _OWLFUNC GetApplicationObject(unsigned pid)
   // and pass the default dictionary.
   //
   TModule* tempModule;
-  return new TApplication("ALIAS", tempModule, &OwlAppDictionary);
+  return new TApplication("ALIAS", tempModule, &(OWLGetAppDictionary()));
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif 

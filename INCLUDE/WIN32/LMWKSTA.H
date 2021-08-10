@@ -67,12 +67,15 @@ Revision History:
 #ifndef _LMWKSTA_
 #define _LMWKSTA_
 #define __LMWKSTA_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#pragma option -b.
 #include <lmuseflg.h>                   // Deletion force level flags
+#pragma option -b
 
 //
 // Function Prototypes
@@ -577,4 +580,5 @@ typedef struct _WKSTA_TRANSPORT_INFO_0 {
 }
 #endif
 
+#pragma option -b.
 #endif // _LMWKSTA_

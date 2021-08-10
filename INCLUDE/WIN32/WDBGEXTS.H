@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1992-1995  Microsoft Corporation
+Copyright (c) 1992-1996  Microsoft Corporation
 
 Module Name:
 
@@ -27,9 +27,12 @@ Revision History:
 
 #ifndef _WDBGEXTS_
 #define _WDBGEXTS_
+#pragma option -b
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
@@ -43,6 +46,8 @@ extern "C" {
 #ifndef _WINDEF_
 typedef CONST void far *LPCVOID;
 #endif
+
+typedef DWORDLONG ULONGLONG;
 
 
 typedef
@@ -238,7 +243,7 @@ ULONG
     VOID
     );
 
-#define EXT_API_VERSION_NUMBER 3
+#define EXT_API_VERSION_NUMBER 4
 
 typedef struct EXT_API_VERSION {
     USHORT  MajorVersion;
@@ -262,6 +267,10 @@ LPEXT_API_VERSION
 #define IG_WRITE_PHYSICAL           7
 #define IG_READ_IO_SPACE_EX         8
 #define IG_WRITE_IO_SPACE_EX        9
+#define IG_KSTACK_HELP             10
+#define IG_SET_THREAD              11
+#define IG_READ_MSR                12
+#define IG_WRITE_MSR               13
 
 typedef struct _tagPROCESSORINFO {
     USHORT      Processor;                // current processor
@@ -296,6 +305,10 @@ typedef struct _tagPHYSICAL {
     UCHAR                  Buf[1];
 } PHYSICAL, *PPHYSICAL;
 
+typedef struct _tagREAD_WRITE_MSR {
+    ULONG       Msr;
+    LONGLONG    Value;
+} READ_WRITE_MSR, *PREAD_WRITE_MSR;
 
 #ifdef __cplusplus
 #define CPPMOD extern "C"
@@ -327,6 +340,7 @@ typedef struct _tagPHYSICAL {
 #define SetContext       (ExtensionApis.lpSetThreadContextRoutine)
 #define Ioctl            (ExtensionApis.lpIoctlRoutine)
 #define StackTrace       (ExtensionApis.lpStackTraceRoutine)
+
 
 #define GetKdContext(ppi) \
     Ioctl( IG_KD_CONTEXT, (PVOID)ppi, sizeof(*ppi) )
@@ -463,6 +477,47 @@ WritePhysical(
     *sizew = phy->BufLen;
     LocalFree( phy );
 }
+
+__inline VOID
+SetThreadForOperation(
+    PULONG Thread
+    )
+{
+    Ioctl(IG_SET_THREAD, (PVOID)Thread, sizeof(ULONG));
+}
+
+__inline VOID
+ReadMsr(
+    ULONG       MsrReg,
+    ULONGLONG   *MsrValue
+    )
+{
+    PREAD_WRITE_MSR msr;
+    LARGE_INTEGER li;
+
+    msr = (PREAD_WRITE_MSR)LocalAlloc(LPTR,  sizeof(*msr));
+    msr->Msr = MsrReg;
+    Ioctl( IG_READ_MSR, (PVOID)msr, sizeof(*msr) );
+
+    *MsrValue = msr->Value;
+    LocalFree( msr );
+}
+
+__inline VOID
+WriteMsr(
+    ULONG       MsrReg,
+    ULONGLONG   MsrValue
+    )
+{
+    PREAD_WRITE_MSR msr;
+
+    msr = (PREAD_WRITE_MSR)LocalAlloc(LPTR,  sizeof(*msr));
+    msr->Msr = MsrReg;
+    msr->Value = MsrValue;
+    Ioctl( IG_WRITE_MSR, (PVOID)msr, sizeof(*msr) );
+    LocalFree( msr );
+}
+
 #endif
 
 
@@ -471,7 +526,10 @@ WritePhysical(
 #endif
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif // _WDBGEXTS_

@@ -36,7 +36,7 @@ class TLine : public TPoints {
       return Color;
     }
 
-    void SetPen(TColor& newColor, int penSize = 0);
+    void SetPen(const TColor& newColor, int penSize = 0);
     void SetPen(int penSize);
 
     // TLine draws itself.  Returns true if everything went OK.
@@ -66,7 +66,7 @@ TLine::SetPen(int penSize)
 }
 
 void
-TLine::SetPen(TColor& newColor, int penSize)
+TLine::SetPen(const TColor& newColor, int penSize)
 {
   // If penSize isn't the default (0), set PenSize to the new size.
   if (penSize)

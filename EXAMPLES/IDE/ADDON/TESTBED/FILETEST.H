@@ -10,6 +10,7 @@
 #define __FILETEST_H
 
 #include <ideaddon\ivfile.h>
+#include <ideaddon\ipolystr.h>
 #include "tests.h"
 
 //.............................................................................
@@ -26,6 +27,10 @@ class FileTestA : public TestObject {
   virtual void DoTest( int testNum );
 
  protected:
+  IPolyString * getReadFilePath();
+  bool compareFiles( IVirtualFile * reader );
+  bool testRead();
+  bool testReadWrite();
   IVirtualFile * _vFile;
 }; 
 

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.4  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_COMPAT_H)
@@ -15,6 +15,10 @@
 
 #if !defined(OWL_DEFS_H)
 # include <owl/defs.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 //
@@ -90,5 +94,9 @@ typedef void _FAR * _FAR & RPvoid;
 typedef char _FAR * Pchar;
 typedef const char _FAR * PCchar;
 typedef const void _FAR * PCvoid;
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_COMPAT_H

@@ -1,0 +1,11 @@
+LIBRARY WEBPOST
+EXPORTS
+
+    WpBindToSiteA
+    WpBindToSiteW
+    WpDeleteSiteA
+    WpDeleteSiteW
+    WpListSitesA
+    WpListSitesW
+    WpPostA
+    WpPostW

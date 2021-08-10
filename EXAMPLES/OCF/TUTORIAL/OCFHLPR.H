@@ -64,13 +64,13 @@ class MenuDescr : public TOcMenuDescr {
 // Object which initializes OLE and creates the basic OCF Helper objects
 // required by any application supporting Linking and Embedding
 //
-class TOleInit : public TOleAllocator {
+class TOleInitEx : public TOleInit {
   public:
-    TOleInit(TRegList& regInfo,
-             TComponentFactory callback,
-             string& cmdLine, TRegLink* linkHead = 0,
-             HINSTANCE hInst = ::_hInstance);
-   ~TOleInit();
+    TOleInitEx(TRegList& regInfo,
+               TComponentFactory callback,
+               string& cmdLine, TRegLink* linkHead = 0,
+               HINSTANCE hInst = ::_hInstance);
+   ~TOleInitEx();
 
   protected:
     TOcRegistrar*   OcRegistrar;

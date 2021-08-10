@@ -7,10 +7,8 @@ TITLE:
     DBUGDEMO
 
 PURPOSE:
-    This example is designed to be used in conjunction with the tutorial
-    contained in Chapter 4 of the Turbo Debugger User's Guide, "Debugging
-    a simple example."
-
+    This example is designed to be used in conjunction with the integrated
+    debugger tutorial located on Borland Online (http://www.borland.com/).
 
 COMMENTS:
     The project will not build without following the directions contained

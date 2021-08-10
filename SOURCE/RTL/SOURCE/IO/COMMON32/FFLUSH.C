@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
@@ -47,17 +48,18 @@ int _RTLENTRY _EXPFUNC  fflush (FILE *fp)
         return (0);
     }
 
-    if( fp->token != (short)fp )
+    if( fp->token != (unsigned char)fp )
         return( EOF );      /* validity check */
 
     _lock_stream(fp);
 
     if( fp->level >= 0 )                    /* no output data in buffer */
     {
-        if( fp->flags & _F_LBUF || fp->curp == &fp->hold )
+        if( fp->flags & _F_LBUF ||
+            fp->curp == (unsigned char*)&fp->hold )
         {
             fp->level = 0;                  /* ensure no unget char */
-            if( fp->curp == &fp->hold )
+            if( fp->curp == (unsigned char*)&fp->hold )
             fp->curp = fp->buffer;
         }
 

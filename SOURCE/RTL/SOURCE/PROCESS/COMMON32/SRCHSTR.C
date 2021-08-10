@@ -3,27 +3,33 @@
  *
  * function(s)
  *        _searchstr   - search a list of directories for a file.
+ *        _wsearchstr  - search a wide-character list of directories for a file.
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
+#include <io.h>
 #include <_io.h>
+#include <tchar.h>
 #include <direct.h>
 #include <string.h>
 #include <stdlib.h>
 
 /*-----------------------------------------------------------------------*
 
-Name            _searchstr - searches for a file using a path string
+Name            _searchstr, _wsearchstr - searches for a file using a path string
 
 Usage           void _searchstr(const char *filename, const char *varname,
                                 char *pathname);
+                void _searchstr(const wchar_t *filename, const wchar_t *varname,
+                                wchar_t *pathname);
 
 Prototype in    stdlib.h
 
@@ -40,54 +46,58 @@ Return value    None.
 
 *------------------------------------------------------------------------*/
 
-void _RTLENTRY _EXPFUNC _searchstr(const char *file, const char *ipath, char *pathname)
+void _RTLENTRY _EXPFUNC _tsearchstr(const _TCHAR *file, const _TCHAR *ipath, _TCHAR *pathname)
 {
-    char c;
+    _TCHAR c;
     int len;
-    char *temp;
+    _TCHAR *temp;
 
     /* Try the current directory, then all directories in the
      * string ipath.
      */
-    if (_getdcwd(0,pathname,_MAX_PATH) == NULL)
+    if (_tgetdcwd(0,pathname,_MAX_PATH) == NULL)
         len = 0;
     else
-        len = strlen(pathname);
+        len = _tcslen(pathname);
     for (;;)
     {
         /* The next directory to try is already in pathname, and its
          * length is in len.  If it doesn't end in a slash, and isn't
          * blank, append a slash.
          */
-        pathname[len] = '\0';
-        if (len != 0 && (c = pathname[len-1]) != '\\' && c != '/')
-            strcat(pathname,"\\");
+        pathname[len] = _TEXT('\0');
+#if defined(_MBCS)
+        if (len != 0 && (c = *_tcsdec(pathname, pathname+len)) != _TEXT('\\') && c != _TEXT('/'))
+#else
+        if (len != 0 && (c = pathname[len-1]) != _TEXT('\\') && c != _TEXT('/'))
+#endif
+            _tcscat(pathname,_TEXT("\\"));
 
         /* Append the filename to the directory name, then return
          * if the file exists.
          */
-        strcat(pathname,file);
-        if (__access(pathname, 0) == 0)
+        _tcscat(pathname,file);
+        if (_taccess(pathname, 0) == 0)
             break;
 
         /* Try the next directory in the ipath string.
          */
-        if (*ipath == '\0')             /* end of the variable */
+        if (*ipath == _TEXT('\0'))             /* end of the variable */
         {
-            pathname[0] = '\0';         /* return an empty path */
+            pathname[0] = _TEXT('\0');         /* return an empty path */
             return;
         }
-        for (len = 0; *ipath != ';' && *ipath != '\0'; ipath++, len++)
+        for (len = 0; *ipath != _TEXT(';') && *ipath != _TEXT('\0'); ipath++, len++)
             pathname[len] = *ipath;     /* copy next directory */
-        if (*ipath != '\0')
+        if (*ipath != _TEXT('\0'))
             ipath++;                    /* skip over semicolon */
     }
 
     /* Pathname contains the relative path of the found file.  Convert
      * it to an absolute path.
      */
-    if ((temp = _fullpath(NULL, pathname, _MAX_PATH)) == NULL)
+    if ((temp = _tfullpath(NULL, pathname, _MAX_PATH)) == NULL)
         return;
-    strcpy(pathname, temp);
+    _tcscpy(pathname, temp);
     free(temp);
 }

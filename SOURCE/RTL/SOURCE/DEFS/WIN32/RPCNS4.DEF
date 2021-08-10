@@ -6,6 +6,7 @@ EXPORTS
     I_RpcNsRaiseException
     I_RpcNsSendReceive
     I_RpcReBindBuffer
+    RpcIfIdVectorFree
     RpcNsBindingExportA
     RpcNsBindingExportW
     RpcNsBindingImportBeginA

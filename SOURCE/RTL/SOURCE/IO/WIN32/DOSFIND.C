@@ -7,167 +7,25 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
-#define INCL_ERROR_H
-#include <ntbc.h>
-
-#include <_io.h>
-#include <_thread.h>
-#include <dos.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
 #include <dir.h>
-#define SPECIAL_BITS (_A_SUBDIR|_A_HIDDEN|_A_SYSTEM)
-
-/*----------------------------------------------------------------------
- * Semaphore used to govern access to the directory handle list.
- */
-#ifdef _MT
-lock_t hdir_lock;       /* heap semaphore */
-#endif
-
-/*----------------------------------------------------------------------
- * handle_list is a list is kept of all outstanding find_t blocks,
- * so that directory handles can be recycled.
- */
-typedef struct handle_rec
-{
-    struct find_t     *finfo;
-    HANDLE             handle;
-    DWORD              attr;
-    char              *name;
-    struct handle_rec *next;
-} HANDLE_REC;
-
-static HANDLE_REC *handle_list;
-
-/*---------------------------------------------------------------------*
-
-Name            _handle_done - Cleans up the handle list
-
-Usage           void _handle_done(void);
-
-Prototype in
-
-Description     This helper function is called from the exit code to
-                clean up the list of directory handles.
-
-Return value    None.
-
-*---------------------------------------------------------------------*/
-
-static void _handle_done (void)
-{
-#pragma exit _handle_done 1
-    HANDLE_REC * r;
-    while (handle_list)
-    {
-        r = handle_list->next;
-        free (handle_list);
-        handle_list = r;
-    }
-
-}
-
-/*---------------------------------------------------------------------*
-
-Name            _init_hdir - set up the directory handle lock
-
-Usage           void _init_hdir(void);
-
-Prototype in
-
-Description     Create the semaphore locks used to govern access to
-                the list of directory handles.
-
-Return value    None.
-
-*---------------------------------------------------------------------*/
-
-#ifdef _MT
-static void _init_hdir()
-{
-#pragma startup _init_hdir 1
-
-    /* Create the lock used to govern access to the directory handle list.
-     */
-    _create_lock(&hdir_lock,"creating directory lock");
-}
-#endif
-
+#include <dos.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            get_handle - get a directory handle
-
-Usage           HANDLE_REC *get_handle (struct find_t *fileinfo);
-
-Prototype in    local
-
-Description     get_handle searches the list of outstanding find_t blocks
-                kept in handle_list for the specified block.  If it is
-                found, the address of the HANDLE_REC corresponding
-                to the block is returned.  If it is not found, a new
-                handle record is allocated with the handle set to
-                HDIR_CREATE and its address is returned.
-
-                This scheme allows us to recycle directory used by
-                earlier findfirst calls, since there is no findclose
-                call on DOS.
-
-Return value    If successful, the address of a HANDLE_REC structure;
-                otherwise NULL is returned.
-
-*---------------------------------------------------------------------------*/
-
-static HANDLE_REC *get_handle (struct find_t *fileinfo)
-{
-    HANDLE_REC *r;
-
-    _lock(hdir_lock,"locking directory handles");
-
-    /* Search for a matching handle record using the
-     * the address of the fileinfo block as the key.
-     */
-    for (r = handle_list; r != NULL && r->finfo != fileinfo; r = r->next)
-        ;
-    if (r != NULL)
-    {
-        /* This handle has been used before, so close it.
-         */
-        FindClose(r->handle);
-    }
-    else if ((r = malloc(sizeof(HANDLE_REC))) != NULL)
-    {
-        /* This is a find_t structure that hasn't been seen before, so
-         * allocate a new one.
-         */
-        r->finfo = fileinfo;            /* save pointer to find_t struct */
-        r->next = handle_list;          /* insert at head of handle list */
-        handle_list = r;
-    }
-    fileinfo->reserved = (long)r;       /* save pointer to handle record */
-
-    _unlock(hdir_lock,"unlocking directory handles");
-    return r;
-}
-
-
-/*--------------------------------------------------------------------------*
-
-Name            _dos_findfirst - searches disk directory
+Name            _dos_findfirst  - searches disk directory
 
 Usage           unsigned _dos_findfirst(const char *pathname, unsigned attrib,
                               struct find_t *fileinfo);
 
-Prototype in    dir.h
+Prototype in    dos.h
 
 Description     begins a search of a disk directory similar to the
                 MS-DOS system call 0x4E.
@@ -201,55 +59,17 @@ Return value    success : 0
 unsigned _RTLENTRY _EXPFUNC
 _dos_findfirst (const char *pathname, unsigned attrib, struct find_t *fileinfo)
 {
-    HANDLE_REC *hr;
-
-    /* Get a handle record.
-     */
-    if ((hr = get_handle(fileinfo)) == NULL)
-    {
-        __IOerror(ERROR_NOT_ENOUGH_MEMORY);
-        return (ERROR_NOT_ENOUGH_MEMORY);
-    }
-
-    hr->handle = (HANDLE)-1;        /* force FindFirst to be called */
-    hr->attr   = attrib;            /* save search attributes */
-    hr->name   = (char *)pathname;
-    return (_dos_findnext(fileinfo));
+  return (findfirst(pathname, (struct ffblk *)fileinfo, attrib)
+          == 0 ? 0 : -1);
 }
 
 /*--------------------------------------------------------------------------*
 
-Name            GetVol - Gets the drive volume from the specified path
-
-Usage           char *GetVol (char *path)
-
-Return value    ASCIIZ volume string
-                or
-                NULL if an error occured
-*---------------------------------------------------------------------------*/
-
-static char *GetVol (char *s)
-{
-    static char buf[256];
-    char drive[7];
-
-    _fullpath (buf, s, 255);
-    fnsplit (buf, drive, NULL, NULL, NULL);
-    strcat (drive,"\\");
-    buf[0] = 0;
-    if (GetVolumeInformation (drive, buf, 255, NULL, NULL, NULL, NULL, 0))
-        return buf;
-
-  return NULL;
-}
-
-/*--------------------------------------------------------------------------*
-
-Name            _dos_findnext - fetches files which match _dos_findfirst
+Name            _dos_findnext  - fetches files which match _dos_findfirst
 
 Usage           unsigned _dos_findnext(struct find_t *fileinfo);
 
-Prototype in    dir.h
+Prototype in    dos.h
 
 Description     _dos_findnext is used to fetch subsequent files which
                 match the pathname given in _dos_findfirst.  fileinfo is the
@@ -267,67 +87,6 @@ Return value    success : 0
 *---------------------------------------------------------------------------*/
 unsigned _RTLENTRY _EXPFUNC _dos_findnext(struct find_t *fileinfo)
 {
-    WIN32_FIND_DATA ff;
-    HANDLE_REC *hr;
-    FILETIME local;
-    BOOL found;
-    char *ptr;
-
-    hr = (HANDLE_REC *)fileinfo->reserved;
-
-    /* If requested attributes word has the Volume ID bit set,
-     * get and return the volume label entry (only on first call).
-     */
-    if ((hr->attr & _A_VOLID) && hr->handle == (HANDLE)-1)
-    {
-        fileinfo->attrib = _A_VOLID;
-        ptr = GetVol (hr->name);
-        if (ptr)
-        {
-            strcpy(fileinfo->name, ptr);
-            hr->handle = (HANDLE)-2;      /* note that the volume has been
-                                           * returned
-                                           */
-            return 0;
-        }
-        else
-            return (__DOSerror());
-    }
-
-    for (;;)
-    {
-        if ((hr->handle == (HANDLE)-1) || (hr->handle == (HANDLE)-2))
-        {
-            hr->handle = (HANDLE)-1;      /* in case it's -2
-                                           */
-            hr->handle = FindFirstFile(hr->name, &ff);
-            found = hr->handle != (HANDLE)-1;
-        }
-        else
-            found = FindNextFile(hr->handle, &ff);
-        if (!found)
-            return (__DOSerror());
-
-        /* If requested attribute word includes hidden, system, or
-         * subdirectory bits, return normal files AND those with
-         * any of the requested attributes.
-         */
-        else if ((ff.dwFileAttributes & SPECIAL_BITS) == 0 ||
-                 (hr->attr & ff.dwFileAttributes & SPECIAL_BITS) != 0)
-            break;
-    }
-
-    /* Fill in the find_t structure from the NT structure.
-     */
-    fileinfo->attrib = ff.dwFileAttributes;
-
-    /* Convert times from GM to Local
-     */
-    FileTimeToLocalFileTime(&ff.ftLastWriteTime, &local);
-
-    FileTimeToDosDateTime(&local, &fileinfo->wr_date, &fileinfo->wr_time);
-    fileinfo->size = ff.nFileSizeLow;
-    strcpy(fileinfo->name, ff.cFileName);
-    return (0);
+  return (findnext((struct ffblk *)fileinfo) == 0 ? 0 : -1);
 }
 

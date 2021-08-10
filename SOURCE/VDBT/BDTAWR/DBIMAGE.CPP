@@ -3,6 +3,8 @@
 // Copyrights (C) 1996 Borland International
 //--------------------------------------------------------
 
+#include <vdbt/dbcontrl.h>
+#pragma hdrstop
 #include <vdbt/dbimage.h>
 
 //--------------------------------------------------------
@@ -50,6 +52,10 @@ TDBImage::TDBImage( TWindow *parent, int resourceId, TModule *module )
 // OWL response table
 //--------------------------------------------------------
 DEFINE_DB_RESPONSE_TABLE1( TDBImage, TDBControl )
+  EV_VBXEVENT_CLICK,
+  EV_VBXEVENT_DRAGOVER,
+  EV_VBXEVENT_DRAGDROP,
+  EV_VBXEVENT_ENDDRAG,
   EV_VBXEVENT_DBLCLICK(  Event_TDBImage_DblClick ),
   EV_VBXEVENT_KEYDOWN(   Event_TDBImage_KeyDown ),
   EV_VBXEVENT_KEYPRESS(  Event_TDBImage_KeyPress ),
@@ -65,6 +71,10 @@ END_RESPONSE_TABLE;
 //--------------------------------------------------------
 // Events
 //--------------------------------------------------------
+DEFINE_DB_EVENT( TDBImage, OnClick,     TNotifyEvent,   Event_TDBImage_Click );
+DEFINE_DB_EVENT( TDBImage, OnDragDrop,  TDragEvent,     Event_TDBImage_DragDrop );
+DEFINE_DB_EVENT( TDBImage, OnDragOver,  TDragOverEvent, Event_TDBImage_DragOver );
+DEFINE_DB_EVENT( TDBImage, OnEndDrag,   TDragEvent,     Event_TDBImage_EndDrag );
 DEFINE_DB_EVENT( TDBImage, OnDblClick,  TNotifyEvent,   Event_TDBImage_DblClick );
 DEFINE_DB_EVENT( TDBImage, OnEnter,     TNotifyEvent,   Event_TDBImage_GotFocus );
 DEFINE_DB_EVENT( TDBImage, OnExit,      TNotifyEvent,   Event_TDBImage_LostFocus );

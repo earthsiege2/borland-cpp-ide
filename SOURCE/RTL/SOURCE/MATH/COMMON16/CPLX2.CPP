@@ -4,12 +4,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 
 #include <complex.h>
@@ -24,7 +25,7 @@ inline long double sqr(double x) { return x*x;}
 
 #pragma warn -lvc
 
-complex _FAR & _Cdecl complex::operator/=(complex _FAR & z2)
+complex _FAR & _Cdecl complex::operator/=(const complex _FAR & z2)
 {
     long double sum_sqrs = norm(z2);
     *this *= conj(z2);
@@ -33,17 +34,17 @@ complex _FAR & _Cdecl complex::operator/=(complex _FAR & z2)
     return *this;
 }
 
-complex _Cdecl _FARFUNC operator/(complex _FAR & z1, complex _FAR & z2)
+complex _Cdecl _FARFUNC operator/(const complex _FAR & z1, const complex _FAR & z2)
 {
     return z1 * conj(z2) / norm(z2);
 }
 
-complex _Cdecl _FARFUNC operator/(double re_val1, complex _FAR & z2)
+complex _Cdecl _FARFUNC operator/(double re_val1, const complex _FAR & z2)
 {
     return re_val1 * conj(z2) / norm(z2);
 }
 
-complex _Cdecl _FARFUNC acos(complex _FAR & z)
+complex _Cdecl _FARFUNC acos(const complex _FAR & z)
 {
     // complex i(0,1);
     // return -i*log(z+i*sqrt(1-z*z));
@@ -54,12 +55,12 @@ complex _Cdecl _FARFUNC acos(complex _FAR & z)
     return complex(arg(temp2), -log(abs(temp2)));
 }
 
-double _Cdecl _FARFUNC arg(complex _FAR & z)
+double _Cdecl _FARFUNC arg(const complex _FAR & z)
 {
     return z == complex_zero ? 0.0 : atan2(z.im, z.re);
 }
 
-complex _Cdecl _FARFUNC asin(complex _FAR & z)
+complex _Cdecl _FARFUNC asin(const complex _FAR & z)
 {
     // complex i(0,1);
     // return -i*log(i*z+sqrt(1-z*z));
@@ -71,7 +72,7 @@ complex _Cdecl _FARFUNC asin(complex _FAR & z)
     return complex(arg(temp2), -log(abs(temp2)));
 }
 
-complex _Cdecl _FARFUNC atan(complex _FAR & z)
+complex _Cdecl _FARFUNC atan(const complex _FAR & z)
 {
     // complex i(0, 1);
     // return -0.5*i * log((1+i*z)/(1-i*z));
@@ -84,7 +85,7 @@ complex _Cdecl _FARFUNC atan(complex _FAR & z)
     return complex(arg(temp)/2, -log(abs(temp))/2);
 }
 
-complex _Cdecl _FARFUNC cos(complex _FAR & z)
+complex _Cdecl _FARFUNC cos(const complex _FAR & z)
 {
     // complex i(0, 1);
     // return (exp(i*z) + exp(-i*z))/2;
@@ -94,7 +95,7 @@ complex _Cdecl _FARFUNC cos(complex _FAR & z)
     return complex(cos(z.re)*(emb+eb)/2, sin(z.re)*(emb-eb)/2);
 }
 
-complex _Cdecl _FARFUNC cosh(complex _FAR & z)
+complex _Cdecl _FARFUNC cosh(const complex _FAR & z)
 {
     // return (exp(z) + exp(-z))/2;
     long double ea = exp(z.re);
@@ -102,24 +103,24 @@ complex _Cdecl _FARFUNC cosh(complex _FAR & z)
     return complex(cos(z.im)*(ea + eainv)/2, sin(z.im)*(ea - eainv)/2);
 }
 
-complex _Cdecl _FARFUNC exp(complex _FAR & z)
+complex _Cdecl _FARFUNC exp(const complex _FAR & z)
 {
     return polar(exp(z.re),z.im);
 }
 
-complex _Cdecl _FARFUNC log(complex _FAR & z)
+complex _Cdecl _FARFUNC log(const complex _FAR & z)
 {
     // exception if z = 0
     return complex(log(abs(z)), arg(z));
 }
 
-complex _Cdecl _FARFUNC log10(complex _FAR & z)
+complex _Cdecl _FARFUNC log10(const complex _FAR & z)
 {
     // return log10e*log(z);
     return log(z) * M_LOG10E;
 }
 
-complex _Cdecl _FARFUNC pow(complex _FAR & base, double expon)
+complex _Cdecl _FARFUNC pow(const complex _FAR & base, double expon)
 {
     // return exp(expon*log(base));
 
@@ -127,7 +128,7 @@ complex _Cdecl _FARFUNC pow(complex _FAR & base, double expon)
     return polar(pow(abs(base), expon), expon*arg(base));
 }
 
-complex _Cdecl _FARFUNC pow(double base, complex _FAR & expon)
+complex _Cdecl _FARFUNC pow(double base, const complex _FAR & expon)
 {
     // return exp(expon*log(base));
     if (base == 0 && real(expon) > 0) return complex_zero;
@@ -137,13 +138,13 @@ complex _Cdecl _FARFUNC pow(double base, complex _FAR & expon)
     return exp(expon * complex(lnx,M_PI));
 }
 
-complex _Cdecl _FARFUNC pow(complex _FAR & base, complex _FAR & expon)
+complex _Cdecl _FARFUNC pow(const complex _FAR & base, const complex _FAR & expon)
 {
     if (base == complex_zero && real(expon) > 0) return complex_zero;
     return exp(expon * log(base));
 }
 
-complex _Cdecl _FARFUNC sin(complex _FAR & z)
+complex _Cdecl _FARFUNC sin(const complex _FAR & z)
 {
     // complex i(0,1);
     // return (exp(i*z) - exp(-i*z))/(2*i);
@@ -153,7 +154,7 @@ complex _Cdecl _FARFUNC sin(complex _FAR & z)
     return complex(sin(z.re)*(emb+eb)/2, -0.5*cos(z.re)*(emb-eb));
 }
 
-complex _Cdecl _FARFUNC sinh(complex _FAR & z)
+complex _Cdecl _FARFUNC sinh(const complex _FAR & z)
 {
     // return (exp(z) - exp(-z))/2
     long double ea = exp(z.re);
@@ -161,13 +162,13 @@ complex _Cdecl _FARFUNC sinh(complex _FAR & z)
     return complex(cos(z.im)*(ea - eainv)/2, sin(z.im)*(ea + eainv)/2);
 }
 
-complex _Cdecl _FARFUNC sqrt(complex _FAR & z)
+complex _Cdecl _FARFUNC sqrt(const complex _FAR & z)
 {
     // return pow(z, 0.5);
     return polar(sqrt(abs(z)), arg(z) / 2);
 }
 
-complex _Cdecl _FARFUNC tan(complex _FAR & z)
+complex _Cdecl _FARFUNC tan(const complex _FAR & z)
 {
     // return sin(z)/cos(z)
     double sina = sin(z.re);
@@ -180,7 +181,7 @@ complex _Cdecl _FARFUNC tan(complex _FAR & z)
         / (sqr(cosa*eplus) + sqr(sina*emin));
 }
 
-complex _Cdecl _FARFUNC tanh(complex _FAR & z)
+complex _Cdecl _FARFUNC tanh(const complex _FAR & z)
 {
     // return sinh(z)/cosh(z);
     double sinb = sin(z.im);
@@ -197,7 +198,7 @@ complex _Cdecl _FARFUNC tanh(complex _FAR & z)
 
 // Stream I/O function definitions
 
-ostream _FAR & _Cdecl _FARFUNC operator<<(ostream _FAR & s, complex _FAR & z)
+ostream _FAR & _Cdecl _FARFUNC operator<<(ostream _FAR & s, const complex _FAR & z)
 {
     return s << "(" << real(z) << ", " << imag(z) << ")";
 }

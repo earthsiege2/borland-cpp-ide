@@ -8,12 +8,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #ifdef __OS2__
 #include <os2bc.h>
@@ -24,6 +25,8 @@
 
 #include <_defs.h>
 #include <_io.h>
+
+//#define PRONTODEBUGGER
 
 /*----------------------------------------------------------------------
  * _ExcRegPtr contains the address of an exception registration
@@ -42,10 +45,12 @@ int _EXPDATA _stkchk = 0;
  * used, it points to a handler that always returns XCPT_CONTINUE_SEARCH.
  * If signal() is called, signal() sets it to point to its own exception
  * handler.
- */                             
+ */
 ERR _HandlerPtr, _UserHandlerPtr;
 
 #define CPP_EXCEPT_CODE 0x0EEFFACE
+#define PAS_EXCEPT_CODE 0x0EEDFACE
+
 extern void __call_terminate(void);
 extern void __doGlobalUnwind(void);
 
@@ -53,6 +58,13 @@ ULONG __EHCC __DefHandler(PEXCEPTIONREPORTRECORD p,
                           PEXCEPTIONREGISTRATIONRECORD q,
                           PCONTEXTRECORD r,
                           PVOID s);
+
+#ifdef	PRONTODEBUGGER
+extern	int             	__CPPdebugHook;
+extern	void	__cdecl __raiseDebuggerException(int                    kind,  /*XXdebuggerNotification */
+               				         int			argCount,
+        					 ...);
+#endif
 
 /*---------------------------------------------------------------------*
 
@@ -91,7 +103,12 @@ static ULONG __EHCC ExcHandler(PEXCEPTIONREPORTRECORD p,
                                PCONTEXTRECORD r,
                                PVOID s)
 {
-    if  (p->ExceptionNum == CPP_EXCEPT_CODE)
+#if defined(__WIN32__)
+    if (p->ExceptionNum == 0xeedfad6) 
+        return XCPT_CONTINUE_EXECUTION;
+#endif
+    
+    if  (p->ExceptionNum == CPP_EXCEPT_CODE || p->ExceptionNum == PAS_EXCEPT_CODE)
     {
         _EAX = (unsigned)q;
         _EDX = (unsigned)p;
@@ -112,6 +129,17 @@ static ULONG __EHCC ExcHandler(PEXCEPTIONREPORTRECORD p,
             return (XCPT_CONTINUE_EXECUTION);
     
 #if defined(__WIN32__)
+#ifdef	PRONTODEBUGGER
+    if	(__CPPdebugHook && (p->ExceptionNum < 0xeedface || p->ExceptionNum > 0xeefface))
+    {
+        __raiseDebuggerException(2, /* XXDNrawException */
+                                 3,
+				 q,
+				 p,
+				 r
+				 );
+    }
+#endif
     {
         EXCEPTION_POINTERS exceptPointers;
             

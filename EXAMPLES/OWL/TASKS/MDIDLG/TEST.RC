@@ -11,6 +11,7 @@
 #include <owl/owlapp.rc>
 #include <owl/validate.rc>
 #include <owl/window.rh>
+#include <owl/except.rc>
 #include <owl/mdi.rh>
 #include "Test.rh"
 

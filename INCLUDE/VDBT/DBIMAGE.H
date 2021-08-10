@@ -113,10 +113,10 @@ class _DBAWARECLASS TDBImage : public TDBControl {
     DECLARE_SOURCE( OnMouseUp,   TDBImageMouse );
 
     // Event Handlers
-    EVENT( OnClick,    TDBControl,  TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl,  TDragEvent );
-    EVENT( OnDragOver, TDBControl,  TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl,  TDragEvent );
+    DECLARE_DB_EVENT( OnClick,     TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop,  TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver,  TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,   TDragEvent );
     DECLARE_DB_EVENT( OnDblClick,  TNotifyEvent );
     DECLARE_DB_EVENT( OnEnter,     TNotifyEvent );
     DECLARE_DB_EVENT( OnExit,      TNotifyEvent );
@@ -137,8 +137,8 @@ class _DBAWARECLASS TDBImage : public TDBControl {
 
 //Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBImage )
-DEFINE_DB_PROP_STRING( TDBImage, Caption );
+DEFINE_DB_PROP_DATAFIELD( TDBImage, _TDBImage )
+DEFINE_DB_PROP_STRING( TDBImage, _TDBImage, Caption );
 
 // Methods
 inline void TDBImage::CopyToClipboard()

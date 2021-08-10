@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.9  $
+//$Revision:   10.11  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
@@ -18,6 +18,10 @@
 #endif
 #if !defined (_WINSOCKAPI_)
 # include <winsock.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) following the 
@@ -76,14 +80,14 @@ class _OWLCLASS TServiceManager {
 
     int   GetLastError();
     int   GetLastServiceCompletion();
-    int   GetService(TServiceEntry*& sEntry, int nPort, const char* szProtocol = 0);
+    int   GetService(TServiceEntry*& sEntry, ushort port, const char* szProtocol = 0);
     int   GetService(TServiceEntry*& sEntry, const char* szName,
                      const char* szProtocol = 0);
-    int   GetServicePort(char* szName, int& nPort, const char* szProtocol = 0);
-    int   GetServiceName(int nPort, char* szName, const char* szProtocol = 0);
-    int   GetServiceAsync(HANDLE& hService, int nPort, const char* szProtocol = 0);
+    int   GetServicePort(char* szName, ushort& port, const char* szProtocol = 0);
+    int   GetServiceName(ushort port, char* szName, const char* szProtocol = 0);
+    int   GetServiceAsync(HANDLE& hService, ushort port, const char* szProtocol = 0);
     int   GetServiceAsync(HANDLE& hService, char* szName, const char* szProtocol = 0);
-    int   GetServiceAsync(TWindow& wndNotify, HANDLE& hService, int nPort,
+    int   GetServiceAsync(TWindow& wndNotify, HANDLE& hService, ushort port,
                           const char* szProtocol = 0, uint nMessage = MSG_SERVICE_NOTIFY,
                           char* chBuffer = 0);
     int   GetServiceAsync(TWindow& wndNotify, HANDLE& hService, char* szName,
@@ -113,6 +117,10 @@ class _OWLCLASS TServiceManager {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

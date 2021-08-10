@@ -1,0 +1,63 @@
+:Base misapi.HLP
+1 ISAPI Programmer's Reference
+2 Legal Information=_in_Legal_Information
+2 Writing an Internet Server Application
+3 Overview=_in_Overview
+3 Writing an Internet Server Application=_in_Writing_an_Internet_Server_Application
+3 Introduction to CGI=_in_Introduction_to_CGI
+3 Drawbacks with Current HTTP Servers=_in_Drawbacks_with_Current_HTTP_Servers
+3 Advantages of DLLs Over Executable Files=_in_Advantages_of_DLLs_Over_Executable_Files
+3 ISAPI Applications Architecture and CGI Architecture=_in_ISAPI_Applications_Architecture_and_CGI_Architecture
+3 Converting Existing CGI Scripts to ISAPI Application DLLs=_in_Converting_Existing_CGI_Scripts_to_ISAPI_Application_DLLs
+3 Interaction Between the HTTP Server and the ISAPI Applications=_in_Interaction_Between_the_HTTP_Server_and_the_ISAPI_Applications
+3 Entry Points for Internet Web Server Applications=_in_Entry_Points_for_Internet_Web_Server_Applications
+3 Important Notes=_in_Important_Notes
+2 Writing an ISAPI Filter
+3 Overview=_in_Writing_an_ISAPI_Filter
+3 ISAPI Filter Overview=_in_ISAPI_Filter_Overview
+3 DLL Entry Points=_in_DLL_Entry_Points
+3 Using ISAPI Filter Functions=_in_Using_ISAPI_Filter_Functions
+2 ISAPI Reference
+3 Filters
+4 GetFilterVersion=_in_GetFilterVersion
+4 HttpFilterProc=_in_HttpFilterProc
+3 Functions
+4 GetServerVariable=_in_GetServerVariable
+4 ReadClient=_in_ReadClient
+4 ServerSupportFunction=_in_ServerSupportFunction
+4 WriteClient=_in_WriteClient
+3 Modules
+4 HTTP Server Extension Interface=_in_HTTP_Server_Extension_Interface
+3 Structures
+4 HTTP_FILTER_ACCESS_DENIED=_in_HTTP_FILTER_ACCESS_DENIED_str
+4 HTTP_FILTER_AUTHENT=_in_HTTP_FILTER_AUTHENT_str
+4 HTTP_FILTER_CONTEXT=_in_HTTP_FILTER_CONTEXT_str
+4 HTTP_FILTER_LOG=_in_HTTP_FILTER_LOG_str
+4 HTTP_FILTER_PREPROC_HEADERS=_in_HTTP_FILTER_PREPROC_HEADERS_str
+4 HTTP_FILTER_RAW_DATA=_in_HTTP_FILTER_RAW_DATA_str
+4 HTTP_FILTER_URL_MAP=_in_HTTP_FILTER_URL_MAP_str
+4 HTTP_FILTER_VERSION=_in_HTTP_FILTER_VERSION_str
+3 Internet Service Manager
+4 Overview=_in_Internet_Service_Manager
+4 Program Structure=_in_Program_Structure
+4 Internet Service Manager (ISM)=_in_Internet_Service_Manager_ISM_
+4 Configuration DLLs=_in_Configuration_DLLs
+4 Internet Service Manager Application=_in_Internet_Service_Manager_Application
+4 Report View=_in_Report_View
+4 Servers View=_in_Servers_View
+4 Services View=_in_Services_View
+4 Service Features=_in_Service_Features
+4 Extension DLLs=_in_Extension_DLLs
+4 Internet Service Manager API (ISMAPI) Interface=_in_Internet_Service_Manager_API_ISMAPI_Interface
+4 Definitions=_in_Definitions
+3 Functions
+4 ISMChangeServiceState=_in_ISMChangeServiceState
+4 ISMConfigureServers=_in_ISMConfigureServers
+4 ISMDiscoverServers=_in_ISMDiscoverServers
+4 ISMQueryServerInfo=_in_ISMQueryServerInfo
+4 ISMQueryServiceInfo=_in_ISMQueryServiceInfo
+3 Structures
+4 ISMSERVERINFO=_in_ISMSERVERINFO_str
+4 ISMSERVICEINFO=_in_ISMSERVICEINFO_str
+2 Help Files=_in_Help_Files
+2 Registry Layout=_in_Registry_Layout

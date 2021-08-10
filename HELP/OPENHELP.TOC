@@ -1,13 +1,14 @@
 :Base OPENHELP.HLP
-1 Getting Help in Borland C++
-2 About getting Help in Borland C++ = UsingBorHelp
-2 Using Help in Borland C++ = UsingHelpInBorlandC
-2 Getting context-sensitive Help = ContextSensitiveHelp
-2 Accessing and using contents screens = BorlandHelpContents
-2 Using the index = UsingTheIndex
-2 Searching for keywords = KeywordSearch
-2 Printing Help topics = PrintingHelpTopics
-2 Help SpeedMenus = LocalHelpMenus
-2 Using Windows Help = UsingWindowsHelp
+1 Using OpenHelp
+2 About OpenHelp = AboutOpenHelp@openhelp.hlp>main
+2 Starting OpenHelp = StartingOpenHelp@openhelp.hlp>TaskWin
+2 Changing the active search range = ChangingTheActiveSearchRange@openhelp.hlp>TaskWin
+2 Creating a new search range = CreatingANewSearchRange@openhelp.hlp>TaskWin
+2 Modifying search ranges = ModifyingSearchRanges@openhelp.hlp>TaskWin
+2 Adding Help files to OpenHelp = AddingHelpFilesToOpenHelp@openhelp.hlp>TaskWin
+2 Removing Help files from OpenHelp = RemovingHelpFilesFromAOpenHelp@openhelp.hlp>TaskWin
+
+
+
 
 

@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <ntbc.h>
 #include <_io.h>
@@ -51,7 +52,7 @@ int _RTLENTRY _EXPFUNC stime(time_t *tp)
     d.wMonth        = t->tm_mon + 1;
     d.wYear         = t->tm_year + 1900;
     d.wDayOfWeek    = t->tm_wday;
-    if (SetLocalTime(&d) != TRUE)
+    if (SetLocalTime(&d) == 0)
         return (__NTerror());
     else
         return (0);

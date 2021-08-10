@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.11  $
 //
 // Implementation of TDibDC encapsulation class, including the use of WinG when
 // needed.
@@ -18,6 +18,7 @@
 # include <owl/wing.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 
 //
@@ -54,16 +55,6 @@ TDibDC::TDibDC(const TBitmap& bitmap)
   SelectObject(bitmap);
 }
 
-//
-// Older DIB driver based DIB DC construction. Given dib ends up selected into
-// constructed DC
-//
-TDibDC::TDibDC(const TDib& dib)
-:
-  TMemoryDC("DIB", 0, 0, (const DEVMODE far*)dib.GetInfoHeader())
-{
-  CheckValid();
-}
 
 //
 // Get the color table of the currently selected bitmap.

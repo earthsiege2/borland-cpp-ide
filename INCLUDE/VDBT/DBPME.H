@@ -8,8 +8,13 @@
 #define DBPME_H_
 
 #include <vdbt/bdto.h>
+#include <vdbt/dbmisc.h>
 
-#define _DBAWARECLASS
+#if ! defined( __FLAT__ ) && defined( _RTLDLL )
+#  define _DBAWARECLASS HUGE
+#else
+#  define _DBAWARECLASS
+#endif
 
 //----------------------------------------------------------------------------
 // Tamplates
@@ -219,7 +224,7 @@ public:                                                    \
     }                                                      \
     type2& operator=( type2& arg )                         \
     {                                                      \
-      *this = type1( arg );                                \
+      *this = (type1&)arg;                                 \
       return arg;                                          \
     }                                                      \
     operator type2()                                       \
@@ -286,51 +291,31 @@ friend struct ev##name
 //----------------------------------------------------------------------------
 // DEFINE_DB_EVENT( cls, name, type, index )
 //----------------------------------------------------------------------------
-#define DEFINE_DB_EVENT( cls, name, type, index )                              \
-cls::type cls::Get##name##Handler()                                            \
-{                                                                              \
-  return (cls::type)__entries[ index - Event_TDBControl_EndDrag - 1 ].Pmf;     \
-}                                                                              \
-cls::type cls::Set##name##Handler( cls::type NewHandler )                      \
-{                                                                              \
- cls::type OldHandler                                                          \
-            = (cls::type)__entries[ index - Event_TDBControl_EndDrag - 1 ].Pmf;\
-  /* Assign a new handler */                                                   \
-  (cls::type)__entries[ index - Event_TDBControl_EndDrag - 1 ].Pmf             \
-                                                                  = NewHandler;\
-                                                                               \
-  return OldHandler;  /* return the previous handler */                        \
-}                                                                              \
-cls::ev##name::ev##name( cls::type Handler )                                   \
-{                                                                              \
-  *this = Handler;                                                             \
-}                                                                              \
-cls::ev##name::operator cls::type ()                                           \
-{                                                                              \
-  return DBOUTER( name )->Get##name##Handler();                                \
-}                                                                              \
-cls::type cls::ev##name::operator=( cls::type NewHandler )                     \
-{                                                                              \
-  return DBOUTER( name )->Set##name##Handler( NewHandler );                    \
+#define DEFINE_DB_EVENT( cls, name, type, index )           \
+cls::type cls::Get##name##Handler()                         \
+{                                                           \
+  return (cls::type)__entries[ index ].Pmf;                 \
+}                                                           \
+cls::type cls::Set##name##Handler( cls::type NewHandler )   \
+{                                                           \
+  cls::type OldHandler = (cls::type)__entries[ index ].Pmf; \
+  /* Assign a new handler */                                \
+  (cls::type)__entries[ index ].Pmf = NewHandler;           \
+                                                            \
+  return OldHandler;  /* return the previous handler */     \
+}                                                           \
+cls::ev##name::ev##name( cls::type Handler )                \
+{                                                           \
+  *this = Handler;                                          \
+}                                                           \
+cls::ev##name::operator cls::type ()                        \
+{                                                           \
+  return DBOUTER( name )->Get##name##Handler();             \
+}                                                           \
+cls::type cls::ev##name::operator=( cls::type NewHandler )  \
+{                                                           \
+  return DBOUTER( name )->Set##name##Handler( NewHandler ); \
 }
-//----------------------------------------------------------------------------
-#define EVENT( name, base, type )                          \
-  public:                                                  \
-    struct ev##name {                                      \
-      ev##name( type e=NULL )                              \
-      {                                                    \
-        DBOUTER( name )->base::name = (base::type)e;       \
-      }                                                    \
-      type operator =( type e )                            \
-      {                                                    \
-        return DBOUTER( name )->base::name = (base::type)e;\
-      }                                                    \
-      operator base::type ()                               \
-      {                                                    \
-        return DBOUTER( name )->base::name;                \
-      }                                                    \
-    } name;                                                \
-  friend struct ev##name
 //----------------------------------------------------------------------------
 
 #endif DBPME_H_

@@ -5,15 +5,17 @@
  *        Get     - gets the next character in a string
  *        UnGet   - moves a character pointer one position forward
  *        strtoul - convert a string to an unsigned long integer
+ *        wcstoul - convert a wide-character string to an unsigned long integer
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <stdlib.h>
 #include <limits.h>
@@ -21,7 +23,8 @@
 #include <errno.h>
 #include <_scanf.h>
 #include <stddef.h>
-
+#include <tchar.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
@@ -34,7 +37,7 @@ Return value    the next character in a string.  It return -1 if the next
 
 *---------------------------------------------------------------------*/
 
-static int Get(char **strPP)
+static int Get(_TCHAR **strPP)
 {
         register unsigned       c;
 
@@ -54,7 +57,7 @@ Description     decrements a character pointer
 
 #pragma warn -par
 
-static void UnGet(char c, char **strPP)
+static void UnGet(_TCHAR c, _TCHAR **strPP)
 {
         --(*strPP);     /* ignore c, we don't allow the string to change */
 }
@@ -63,9 +66,11 @@ static void UnGet(char c, char **strPP)
 
 /*-------------------------------------------------------------------------*
 
-Name            strtoul - convert a string to an unsigned long integer
+Name            strtoul,wcstoul - convert a string to an unsigned long integer
 
 Usage           unsigned long strtoul(const char *strP, char **suffixPP,
+                                      int radix);
+                unsigned long wcstoul(const wchar_t *strP, wchar_t **suffixPP,
                                       int radix);
 
 Prototype in    stdlib.h
@@ -102,21 +107,21 @@ Return value    If the  radix is invalid or  no number could be  found then
 
 ----------------------------------------------------------------------------*/
 
-unsigned long _RTLENTRY _EXPFUNC strtoul(const char *strP, char **suffixPP, int radix)
+unsigned long _RTLENTRY _EXPFUNC _tcstoul(const _TCHAR *strP, _TCHAR **suffixPP, int radix)
 {
         int     charCt = 0;
         int     status = 0;
-        long    result = 0L;
+        long    result;
 
 
-        while (isspace(*strP))
+        while ((int)_istspace(*strP))	//JAF
         {
                 strP++;
                 charCt++;
         }
 
         errno = 0;
-        result = _scantol (
+        result = _scanttol (
                 (int (*)(void *))Get,
                 (void (*)(int, void *))UnGet,
                 &strP,
@@ -134,7 +139,7 @@ unsigned long _RTLENTRY _EXPFUNC strtoul(const char *strP, char **suffixPP, int 
                 errno = ERANGE;
         }
         if (NULL != suffixPP)
-                *suffixPP = (char *)strP;
+                *suffixPP = (_TCHAR *)strP;
 
         return (result);
 }

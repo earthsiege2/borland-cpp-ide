@@ -10,12 +10,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -23,19 +24,20 @@
 #include <sys/stat.h>
 #include <_io.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 extern void     (*_exitfopen)();
 extern void     _xfclose();
 
 /*---------------------------------------------------------------------*
 
-Name            CheckOpenType - examines file open type
+Name            CheckOpenType  - examines file open type
 
-Usage           static unsigned 
-                  CheckOpenType (const char *type, unsigned *oflagsP,
-                                 unsigned *modeP)
+Usage           static unsigned
+                  CheckOpenType (const _TCHAR *type, unsigned *oflagsP,
+                                   unsigned *modeP)
 
-Prototype in    _stdio.h
+Prototype in    local
 
 Description
 
@@ -67,34 +69,34 @@ Return value    see description above
 
 *---------------------------------------------------------------------*/
 
-static unsigned 
-CheckOpenType (register const char *type, unsigned *oflagsP, unsigned *modeP)
+static unsigned
+CheckOpenType (register const _TCHAR *type, unsigned *oflagsP, unsigned *modeP)
 
 {
-    unsigned        oflags = 0;
     unsigned        mode   = 0;
-    unsigned        flags  = 0;
-    char    c;
+    unsigned        oflags;
+    unsigned        flags ;
+    _TCHAR          c;
 
-    if ((c = *type++) == 'r')
+    if ((c = *type++) == _TEXT('r'))
     {
         oflags =  O_RDONLY;
         flags  = _F_READ;
     }
-    else if (c == 'w')
+    else if (c == _TEXT('w'))
     {
         oflags = O_CREAT | O_WRONLY | O_TRUNC;
         mode   = S_IWRITE;
         flags  = _F_WRIT;
     }
-    else if (c == 'a')
+    else if (c == _TEXT('a'))
     {
         oflags = O_WRONLY | O_CREAT | O_APPEND;
         mode   = S_IWRITE;
         flags  = _F_WRIT;
     }
 #if 0
-    else if (c == 'c')  /* New DOS 'commit' attribute */
+    else if (c == _TEXT('c'))  /* New DOS 'commit' attribute */
     {
         // ...
     }
@@ -104,9 +106,10 @@ CheckOpenType (register const char *type, unsigned *oflagsP, unsigned *modeP)
 
     c  = *type++;
 
-    if (c == '+' || (*type == '+' && (c == 't' || c == 'b')))
+    if (c == _TEXT('+') ||
+        (*type == _TEXT('+') && (c == _TEXT('t') || c == _TEXT('b'))))
     {
-        if (c == '+')
+        if (c == _TEXT('+'))
             c = *type;
         /* same modes, but both read and write */
         oflags = (oflags & ~(O_WRONLY | O_RDONLY)) | O_RDWR;
@@ -114,18 +117,18 @@ CheckOpenType (register const char *type, unsigned *oflagsP, unsigned *modeP)
         flags  = _F_READ | _F_WRIT;
     }
 
-    if ('t' == c)
+    if (_TEXT('t') == c)
     {
         oflags |= O_TEXT;
     }
-    else if ('b' == c)
+    else if (_TEXT('b') == c)
     {
         oflags |= O_BINARY;
         flags |= _F_BIN;
     }
     else
     {
-        if ((c != '+') && (c != '\0'))
+        if ((c != _TEXT('+')) && (c != _TEXT('\0')))
             return 0;   /* bad character in mode string */
 
         if ((oflags |= (_FMODE & (O_TEXT | O_BINARY))) & O_BINARY)
@@ -140,10 +143,12 @@ CheckOpenType (register const char *type, unsigned *oflagsP, unsigned *modeP)
 
 /*---------------------------------------------------------------------*
 
-Name            __openfp - opens a file
+Name            __topenfp used as __openfp and __wopenfp
+                __openfp - opens a file
+                __wopenfp - opens a file
 
-Usage           static FILE * __openfp (FILE *fp,
-                const char *filename, const char *type, int shflag);
+Usage           FILE * __topenfp (FILE *fp,
+                const _TCHAR *filename, const _TCHAR *type, int shflag);
 
 Prototype in    _stdio.h
 
@@ -155,14 +160,14 @@ Return value    On successful completion, each function returns the
 
 *---------------------------------------------------------------------*/
 
-FILE     * __openfp (FILE *fp, const char *filename,
-const char *type, int shflag)
+FILE     * __topenfp (FILE *fp, const _TCHAR *filename,
+const _TCHAR *type, int shflag)
 {
     unsigned    oflag, mode;
 
     if (((fp->flags = CheckOpenType (type, &oflag, &mode)) == 0) ||
         ((fp->fd < 0) &&
-        (fp->fd = __open (filename, oflag|shflag, mode)) < 0))
+        (fp->fd = __topen (filename, oflag|shflag, mode)) < 0))
     {
         fp->fd = -1;
         fp->flags = 0;
@@ -196,6 +201,8 @@ Description     gets a file pointer
 
 *---------------------------------------------------------------------*/
 
+#ifndef _UNICODE
+
 FILE     * __getfp(void)
 {
     register FILE   *fp;
@@ -206,30 +213,34 @@ FILE     * __getfp(void)
     return (fp);
 }
 
+#endif // _UNICODE
 
 /*---------------------------------------------------------------------*
 
-Name            fopen - opens a stream
+Name            _tfopen used as fopen and _wfopen
+                fopen   - opens a stream
+                _wfopen - opens a stream
 
 Usage           #include <stdio.h>
                 FILE *fopen(const char *filename, const char *type);
+                FILE *_wfopen(const wchar_t *filename, const wchar_t *type);
 
 Related
-functions usage FILE *fdopen(int handle, char *type);
-                FILE *freopen(const char *filename, const char *type,
+functions usage FILE *_tfdopen(int handle, _TCHAR *type);
+                FILE *_tfreopen(const _TCHAR *filename, const _TCHAR *type,
                   FILE *stream);
 
 Prototype in    stdio.h
 
-Description     fopen opens the file named by filename and
+Description     _tfopen opens the file named by filename and
                 associates a stream with it. fopen returns a pointer to be
                 used to identify the stream in subsequent operations.
 
-                fdopen associates a stream with a file handle obtained from
+                _tfdopen associates a stream with a file handle obtained from
                 creat, dup, dup2, or open. The type of stream must match the
                 mode of the open handle.
 
-                freopen substitutes the named file in place of the open
+                _tfreopen substitutes the named file in place of the open
                 stream. The original stream is closed, regardless of
                 whether the open succeeds. freopen is useful for changing the
                 file attached to stdin, stdout, or stderr.
@@ -272,19 +283,19 @@ Description     fopen opens the file named by filename and
                 encounters end-of-file.
 
 Return value    On successful completion, each function returns the
-                newly open stream. freopen returns the argument stream.
+                newly open stream. _tfreopen returns the argument stream.
                 In the event of error, each function returns NULL.
 
 *---------------------------------------------------------------------*/
 
-FILE * _RTLENTRY _EXPFUNC fopen (const char *filename, const char *type)
+FILE * _RTLENTRY _EXPFUNC _tfopen (const _TCHAR *filename, const _TCHAR *type)
 {
     register FILE   *fp;
 
     _lock_all_streams();
 
     if ((fp = __getfp()) != NULL)
-        fp = __openfp (fp, filename, type, 0);
+        fp = __topenfp (fp, filename, type, 0);
 
     _unlock_all_streams();
 

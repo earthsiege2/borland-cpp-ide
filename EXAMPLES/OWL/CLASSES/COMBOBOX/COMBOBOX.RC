@@ -10,6 +10,7 @@
 #include <owl/inputdia.rh>
 #include <owl/inputdia.rc>
 #include <owl/window.rh>
+#include <owl/except.rc>
 #include "combobox.rh"
 
 IDM_COMBOBOX MENU

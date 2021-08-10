@@ -1,0 +1,399 @@
+:BASE winsys.hlp
+1 Windows System Classes Reference Guide
+
+2 TColor class
+3 About TColor = TColor
+3 Black = TColor_Black
+3 Gray = TColor_Gray
+3 LtBlue = TColor_LtBlue
+3 LtCyan = TColor_LtCyan
+3 LtGray = TColor_LtGray
+3 LtGreen = TColor_LtGreen
+3 LtMagenta = TColor_LtMagenta
+3 LtRed = TColor_LtRed
+3 LtYellow = TColor_LtYellow
+3 None = TColor_None
+3 Sys3dDkShadow = TColor_Sys3dDkShadow
+3 Sys3dFace = TColor_Sys3dFace
+3 Sys3dHilight = TColor_Sys3dHilight
+3 Sys3dLight = TColor_Sys3dLight
+3 Sys3dShadow = TColor_Sys3dShadow
+3 SysActiveBorder = TColor_SysActiveBorder
+3 SysActiveCaption = TColor_SysActiveCaption
+3 SysAppWorkspace = TColor_SysAppWorkspace
+3 SysBtnText = TColor_SysBtnText
+3 SysCaptionText = TColor_SysCaptionText
+3 SysDesktop = TColor_SysDesktop
+3 SysGrayText = TColor_SysGrayText
+3 SysHighlight = TColor_SysHighlight
+3 SysHighlightText = TColor_SysHighlightText
+3 SysInactiveBorder = TColor_SysInactiveBorder
+3 SysInactiveCaption = TColor_SysInactiveCaption
+3 SysInactiveCaptionText = TColor_SysInactiveCaptionText
+3 SysInfoBk = TColor_SysInfoBk
+3 SysInfoText = TColor_SysInfoText
+3 SysMenu = TColor_SysMenu
+3 SysMenuText = TColor_SysMenuText
+3 SysScrollbar = TColor_SysScrollbar
+3 SysWindow = TColor_SysWindow
+3 SysWindowFrame = TColor_SysWindowFrame
+3 SysWindowText = TColor_SysWindowText
+3 Transparent = TColor_Transparent
+3 White = TColor_White
+3 TColor = TColor_TColor
+3 Blue = TColor_Blue
+3 Flags = TColor_Flags
+3 GetSysColor = TColor_GetSysColor
+3 GetValue = TColor_GetValue
+3 Green = TColor_Green
+3 IsSysColor = TColor_IsSysColor
+3 assignment operator = TColor_operatorEq
+3 equals operator = TColor_operatorEqEq
+3 not equals operator = TColor_operatorExEq
+3 operator COLORREF = TColor_operatorCOLORREFParen
+3 Index = TColor_Index
+3 PalIndex = TColor_PalIndex
+3 PalRelative = TColor_PalRelative
+3 Red = TColor_Red
+3 Rgb = TColor_Rgb
+3 SetSysColors = TColor_SetSysColors
+3 SetValue = TColor_SetValue
+3 Value = TColor_Value
+
+2 TDropInfo class
+3 About TDropInfo = TDropInfo
+3 TDropInfo = TDropInfo_TDropInfo
+3 DragFinish = TDropInfo_DragFinish
+3 DragQueryFile = TDropInfo_DragQueryFile
+3 DragQueryFileCount = TDropInfo_DragQueryFileCount
+3 DragQueryFileNameLen = TDropInfo_DragQueryFileNameLen
+3 DragQueryPoint = TDropInfo_DragQueryPoint
+3 operator HDROP = TDropInfo_operatorHDROPParen
+
+2 TFileDroplet Class
+3 About TFileDroplet = TFileDroplet
+3 TFileDroplet = TFileDroplet_TFileDroplet
+3 GetInClientArea = TFileDroplet_GetInClientArea
+3 GetName = TFileDroplet_GetName
+3 GetPoint = TFileDroplet_GetPoint
+3 equals operator = TFileDroplet_operatorEqEq
+
+2 TLangId typedef
+3 About TLangId = TLangId
+
+2 TLocaleString struct
+3 About TLocaleString = TLocaleString
+3 Compare = TLocaleString_Compare
+3 CompareLang = TLocaleString_CompareLang
+3 GetSystemLangId = TLocaleString_GetSystemLangId
+3 GetUserLangId = TLocaleString_GetUserLangId
+3 IsNativeLangId = TLocaleString_IsNativeLangId
+3 Module = TLocaleString_Module
+3 NativeLangId = TLocaleString_NativeLangId
+3 Null = TLocaleString_Null
+3 operator const char* = TLocaleString_operator_const_char
+3 assignment operator = TLocaleString_operatorEq
+3 Private = TLocaleString_Private
+3 SystemDefaultLangId = TLocaleString_SystemDefaultLangId
+3 Translate = TLocaleString_Translate
+3 UserDefaultLangId = TLocaleString_UserDefaultLangId
+
+2 TMsgThread class
+3 About TMsgThread = TMsgThread
+3 TCurrent enum = TMsgThread_TCurrentenum
+3 TMsgThread = TMsgThread_TMsgThread
+3 BreakMessageLoop = TMsgThread_BreakMessageLoop
+3 LoopRunning = TMsgThread_LoopRunning
+3 MessageLoop = TMsgThread_MessageLoop
+3 EnableMultiThreading = TMsgThread_EnableMultiThreading
+3 FlushQueue = TMsgThread_FlushQueue
+3 GetMutex = TMsgThread_GetMutex
+3 IdleAction = TMsgThread_IdleAction
+3 IsRunning = TMsgThread_IsRunning
+3 ProcessMsg = TMsgThread_ProcessMsg
+3 PumpWaitingMessages = TMsgThread_PumpWaitingMessages
+3 TMsgThread (Protected) = TMsgThread_TMsgThread_prot
+3 InitInstance = TMsgThread_InitInstance
+3 Mutex = TMsgThread_Mutex
+3 Run = TMsgThread_Run
+3 TermInstance = TMsgThread_TermInstance
+
+2 TPaletteEntry class
+3 About TPaletteEntry = TPaletteEntry
+3 TPaletteEntry = TPaletteEntry_TPaletteEntry
+3 equals operator = TPaletteEntry_operatorEqEq
+
+2 TPoint class
+3 About TPoint = TPoint
+3 TPoint = TPoint_TPoint
+3 Magnitude = TPoint_Magnitude
+3 Offset = TPoint_Offset
+3 OffsetBy = TPoint_OffsetBy
+3 operator + = TPoint_operatorPl
+3 operator - = TPoint_operatorMi
+3 equals operator = TPoint_operatorEqeq
+3 increment operator = TPoint_operatorPleq
+3 decrement operator = TPoint_operatorMieq
+3 not equals operator = TPoint_operatorExeq
+3 operator >> = TPoint_operatorRrarr
+3 operator << = TPoint_operatorLlarr
+3 X = TPoint_X
+3 Y = TPoint_Y
+
+2 TPointF class
+3 About TPointF = TPointF
+3 TPointF = TPointF_TPointF
+3 Offset = TPointF_Offset
+3 OffsetBy = TPointF_OffsetBy
+3 not equals operator = TPointF_operatorExEq
+3 operator + = TPointF_operatorPl
+3 increment operator = TPointF_operatorPlEq
+3 operator - = TPointF_operatorMi
+3 decrement operator = TPointF_operatorMiEq
+3 equals operator = TPointF_operatorEqEq
+3 X = TPointF_X
+3 Y = TPointF_Y
+
+2 TPointL class
+3 About TPointL = TPointL
+3 TPointL = TPointL_TPointL
+3 Offset = TPointL_Offset
+3 OffsetBy = TPointL_OffsetBy
+3 not equals operator = TPointL_operatorExEq
+3 operator + = TPointL_operatorPl
+3 increment operator = TPointL_operatorPlEq
+3 operator - = TPointL_operatorMi
+3 decrement operator = TPointL_operatorMiEq
+3 equals operator = TPointL_operatorEqEq
+3 X = TPointL_X
+3 Y = TPointL_Y
+
+2 TProcInstance class
+3 About TProcInstance = TProcInstance
+3 TProcInstance = TProcInstance_TProcInstance
+3 operator FARPROC = TProcInstance_operatorFARPROC
+
+2 TProfile class
+3 About TProfile = TProfile
+3 TProfile = TProfile_TProfile
+3 Flush = TProfile_Flush
+3 GetInt = TProfile_GetInt
+3 GetString = TProfile_GetString
+3 WriteInt = TProfile_WriteInt
+3 WriteString = TProfile_WriteString
+
+2 TRect class
+3 About TRect = TRect
+3 TRect = TRect_TRect
+3 Area = TRect_Area
+3 Bottom = TRect_Bottom
+3 BottomLeft = TRect_BottomLeft
+3 BottomRight = TRect_BottomRight
+3 Contains = TRect_Contains
+3 Height = TRect_Height
+3 Inflate = TRect_Inflate
+3 InflatedBy = TRect_InflatedBy
+3 IsEmpty = TRect_IsEmpty
+3 IsNull = TRect_IsNull
+3 Left = TRect_Left
+3 MovedTo = TRect_MovedTo
+3 MoveTo = TRect_MoveTo
+3 Normalize = TRect_Normalize
+3 Normalized = TRect_Normalized
+3 Offset = TRect_Offset
+3 OffsetBy = TRect_OffsetBy
+3 Right = TRect_Right
+3 Set = TRect_Set
+3 SetEmpty = TRect_SetEmpty
+3 SetNull = TRect_SetNull
+3 SetWH = TRect_SetWH
+3 Size = TRect_Size
+3 Subtract = TRect_Subtract
+3 Top = TRect_Top
+3 TopLeft = TRect_TopLeft
+3 TopRight = TRect_TopRight
+3 Touches = TRect_Touches
+3 Width = TRect_Width
+3 X = TRect_X
+3 Y = TRect_Y
+3 operator + = TRect_operatorPl
+3 operator - = TRect_operatorMi
+3 operator & = TRect_operatorAnd
+3 operator | = TRect_operatorDi
+3 equals operator = TRect_operatorEqEq
+3 not equals operator = TRect_operatorExEq
+3 increment operator = TRect_operatorPleq
+3 decrement operator = TRect_operatorMieq
+3 AND operator = TRect_operatorAndeq
+3 OR operator = TRect_operatorDieq
+3 operator TPoint* = TRect_operatorTPointStarParen
+3 operator >> = TRect_operatorRrarr
+3 operator << = TRect_operatorLlarr
+
+2 TRegItem struct
+3 About TRegItem = TRegItem
+3 Key = TRegItem_Key
+3 Value = TRegItem_Value
+3 OverflowCheck = TRegItem_OverflowCheck
+3 RegFlags = TRegItem_RegFlags
+3 RegFormat = TRegItem_RegFormat
+3 RegVerbOpt = TRegItem_RegVerbOpt
+
+2 TRegKey class
+3 About TRegKey = TRegKey
+3 TRegKey = TRegKey_TRegKey
+3 ClassesRoot = TRegKey_ClassesRoot
+3 ClassesRootClsid = TRegKey_ClassesRootClsid
+3 CurrentConfig = TRegKey_CurrentConfig
+3 CurrentUser = TRegKey_CurrentUser
+3 DeleteKey = TRegKey_DeleteKey
+3 DeleteValue = TRegKey_DeleteValue
+3 DynData = TRegKey_DynData
+3 EnumKey = TRegKey_EnumKey
+3 EnumValue = TRegKey_EnumValue
+3 Flush = TRegKey_Flush
+3 GetName = TRegKey_GetName
+3 GetSecurity = TRegKey_GetSecurity
+3 GetSubkeyCount = TRegKey_GetSubkeyCount
+3 GetValueCount = TRegKey_GetValueCount
+3 LoadKey = TRegKey_LoadKey
+3 LocalMachine = TRegKey_LocalMachine
+3 NukeKey = TRegKey_NukeKey
+3 PerformanceData = TRegKey_PerformanceData
+3 QueryDefValue = TRegKey_QueryDefValue
+3 QueryInfo = TRegKey_QueryInfo
+3 QueryValue = TRegKey_QueryValue
+3 ReplaceKey = TRegKey_ReplaceKey
+3 Restore = TRegKey_Restore
+3 Save = TRegKey_Save
+3 SetDefValue = TRegKey_SetDefValue
+3 SetSecurity = TRegKey_SetSecurity
+3 SetValue = TRegKey_SetValue
+3 THandle = TRegKey_THandle
+3 UnLoadKey = TRegKey_UnLoadKey
+3 Users = TRegKey_Users
+3 Key = TRegKey_Key
+3 Name = TRegKey_Name
+3 ShouldClose = TRegKey_ShouldClose
+3 SubkeyCount = TRegKey_SubkeyCount
+3 ValueCount = TRegKey_ValueCount
+
+2 TRegLink struct
+3 About TRegLink = TRegLink
+3 TRegLink = TRegLink_TRegLink
+3 RegList = TRegLink_RegList
+3 AddLink = TRegLink_AddLink
+3 GetNext = TRegLink_GetNext
+3 GetRegList = TRegLink_GetRegList
+3 RemoveLink = TRegLink_RemoveLink
+3 Next = TRegLink_Next
+3 NextLink = TRegLink_NextLink
+
+2 TRegList class
+3 About TRegList = TRegList
+3 Items = TRegList_Items
+3 operator [ ] = TRegList_OperatorBrBr
+3 TRegList = TRegList_TRegList
+3 Lookup = TRegList_Lookup
+3 LookupRef = TRegList_LookupRef
+
+2 TRegistry class
+3 About TRegistry = TRegistry
+3 Unregister = TRegistry_Unregister
+3 Update = TRegistry_Update
+3 Validate = TRegistry_Validate
+
+2 TRegValueIterator class
+3 About TRegValueIterator = TRegValueIterator
+3 TRegValueIterator = TRegValueIterator_TRegValueIterator
+3 BaseKey = TRegValueIterator_BaseKey
+3 operator bool = TRegValueIterator_operatorBool
+3 Current = TRegValueIterator_Current
+3 operator ++ = TRegValueIterator_operatorPlPl
+3 operator -- = TRegValueIterator_operatorMiMi
+3 operator [ ] = TRegValueIterator_operatorLBrcRBrc
+3 Reset = TRegValueIterator_Reset
+
+2 TRegValue class
+3 About TRegValue = TRegValue
+3 TRegValue = TRegValue_TRegValue
+3 operator * = TRegValue_operatorAsterisk
+3 Delete = TRegValue_Delete
+3 GetData = TRegValue_GetData
+3 GetDataSize = TRegValue_GetDataSize
+3 GetDataType = TRegValue_GetDataType
+3 GetName = TRegValue_GetName
+3 assignment operator = TRegValue_operatorEq
+3 RetrieveOnDemand = TRegValue_RetrieveOnDemand
+3 Set = TRegValue_Set
+3 uint32 = TRegValue_uint32
+
+2 TResId class
+3 About TResId = TResid
+3 TResId = TResId_TResId
+3 IsString = TResId_IsString
+3 operator char far* = TResId_operatorcharfarptr
+3 operator >> = TResId_operatorRrarr
+3 operator << = TResId_operatorLlarr
+
+2 TResource class
+3 About TResource = TResource
+3 TResource = TResource_TResource
+3 T* = TResource_T*
+3 IsOK = TResource_IsOK
+3 MemHandle = TResource_MemHandle
+3 MemPtr = TResource_MemPtr
+
+2 TRgbQuad class
+3 About TRgbQuad = TRgbQuad
+3 TRgbQuad = TRgbQuad_TRgbQuad
+3 equals operator = TRgbQuad_operatorEqEq
+
+2 TRgbTriple class
+3 About TRgbTriple = TRgbTriple
+3 TRgbTriple = TRgbTriple_TRgbTriple
+3 equals operator = TRgbTriple_operatorEqEq
+
+2 TSize class
+3 About TSize = TSize
+3 TSize = TSize_TSize
+3 Magnitude = TSize_Magnitude
+3 operator + = TSize_operatorPl
+3 operator - = TSize_operatorMi
+3 equals operator = TSize_operatorEqEq
+3 not equals operator = TSize_operatorExclamEq
+3 increment operator = TSize_operatorPleq
+3 decrement operator = TSize_operatorMieq
+3 operator >> = TSize_operatorRrarr
+3 operator << = TSize_operatorLlarr
+3 X = TSize_X
+3 Y = TSize_Y
+
+2 TString class
+3 About TString = TString
+3 TString = TString_TString
+3 operator * = TString_operatorAst
+3 GetLangId = TString_GetLangId
+3 IsNull = TString_IsNull
+3 IsWide = TString_IsWide
+3 Length = TString_Length
+3 assignment operator = TString_operatorEq
+3 Relinquish = TString_Relinquish
+3 RelinquishNarrow = TString_RelinquishNarrow
+3 RelinquishSysStr = TString_RelinquishSysStr
+3 RelinquishWide = TString_RelinquishWide
+3 S = TString_S
+
+2 TXBase class
+3 About TXBase = TXBase
+3 InstanceCount = TXBase_InstanceCount
+3 TXBase = TXBase_TXBase
+3 Clone = TXBase_Clone
+3 Raise = TXBase_Raise
+3 Throw = TXBase_Throw
+
+2 TXRegistry class
+3 About TXRegistry = TXRegistry
+3 TXRegistry = TXRegistry_TXRegistry
+3 Check = TXRegistry_Check
+3 Key = TXRegistry_Key

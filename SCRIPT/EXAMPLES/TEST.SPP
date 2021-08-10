@@ -1,10 +1,10 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // TEST.SPP: Test harness.
 //--------------------------------------------------------------------------
-print "test.spp";  // Verify script loaded.
+print typeid(module()); // Verify script loaded.
 
 //
 // Handy globals.

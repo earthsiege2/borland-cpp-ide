@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 
 #include <stdio.h>
@@ -20,19 +21,16 @@
 
 /*---------------------------------------------------------------------*
 
-Name            _flushout - clears all output buffers
+Name            _flushout - writes all output buffers
 
 Usage           int _flushout(void);
 
 Prototype in    stdio.h
 
-Description     clears all buffers associated with open input streams,
-                and writes all buffers associated with open output streams
-                to their respective files.  Any read operation following
-                flushall reads new data into the buffers from the input
-                files.
+Description     Writes all buffers associated with open output streams
+                to their respective files.
 
-Return value    the number of open input and output streams
+Return value    the number of open output streams
 
 *---------------------------------------------------------------------*/
 int _RTLENTRY _EXPFUNC _flushout(void)
@@ -41,9 +39,9 @@ int _RTLENTRY _EXPFUNC _flushout(void)
     register int    Nb;
     int             Cpt;
     int             count;
-    
+
     _lock_all_streams();
-    
+
     for (Cpt = 0, Nb = _nfile, fp = _streams; Nb--; fp++)
         if( fp->level < 0 )                 /* output data waiting in buffer */
             {
@@ -54,10 +52,10 @@ int _RTLENTRY _EXPFUNC _flushout(void)
                 ((fp->flags & _F_TERM) == 0) )
                 {
                 fp->flags |= _F_ERR;
-                }   
+                }
             Cpt++;
             }
-    
+
     _unlock_all_streams();
     return(Cpt);
 }

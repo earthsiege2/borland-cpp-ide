@@ -10,6 +10,8 @@
 #include <owl/window.rh>
 #include "sockdemo.rh"
 
+#include <owl/winsock.rc>
+
 MENU_MAIN MENU 
 {
  POPUP "&File"

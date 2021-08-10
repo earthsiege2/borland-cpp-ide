@@ -1,26 +1,27 @@
 /*-----------------------------------------------------------------------*
- * filename - getw.c
+ * filename - _getw.c
  *
  * function(s)
- *        getw - gets a word from a stream
+ *        _getw - gets a word from a stream
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 
 /*---------------------------------------------------------------------*
 
-Name            getw - gets a word from a stream
+Name            _getw - gets a word from a stream
 
 Usage           #include <stdio.h>
-                int getw(FILE * stream);
+                int _getw(FILE * stream);
 
 Prototype in    stdio.h
 
@@ -28,7 +29,7 @@ Description     see getc
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC getw(FILE *fp)
+int _RTLENTRY _EXPFUNC _getw(FILE *fp)
 {
     int c, res, i;
     char *p;

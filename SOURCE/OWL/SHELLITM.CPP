@@ -1,27 +1,29 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.16  $
+//$Revision:   10.20  $
 //
-//    Implementations of the following Win95 Shell Classes:
-//      TPidl, TShellItem, and TShellItemIterator
-//    The following clases are completely implemented in the header file:
-//      TShellMalloc, TExtractIcon, TContextMenu, TDataObject, TDropTarget
+// Implementations of the following Win95 Shell Classes:
+//    TPidl, TShellItem, and TShellItemIterator
+// The following clases are completely implemented in the header file:
+//    TShellMalloc, TExtractIcon, TContextMenu, TDataObject, TDropTarget
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
 #if !defined(OWL_SHELLITM_H)
 # include <owl/shellitm.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlShell, 1, 0);        // Shell Diagostic Group
 
 //
 //  protected function used internally to free PIDL memory with the shell's allocator
 //
-void TPidl::FreePidl()
+void
+TPidl::FreePidl()
 {
-  if (Pidl) {  // it's OK to Free(0), but why cross a process boundary 3 times?
+  if (Pidl) {
     TShellMalloc malloc;
     malloc->Free(Pidl);
     Pidl = 0;
@@ -29,9 +31,11 @@ void TPidl::FreePidl()
 }
 
 //
-// GetItemCount returns the number of identifiers in the identifier list (pidl)
+// GetItemCount returns the number of identifiers in the
+// identifier list (pidl)
 //
-long TPidl::GetItemCount() const
+long
+TPidl::GetItemCount() const
 {
   long cnt = 0;
 
@@ -48,7 +52,8 @@ long TPidl::GetItemCount() const
 //
 // GetSize returns the size (in bytes) of the PIDL
 //
-ulong TPidl::GetSize() const
+ulong
+TPidl::GetSize() const
 {
   long size = sizeof(Pidl->mkid.cb);
   ITEMIDLIST* pidl = Pidl;
@@ -62,7 +67,8 @@ ulong TPidl::GetSize() const
 //
 // CopyPidl copies a pidl (allocates memory with the shell's allocator)
 //
-ITEMIDLIST* TPidl::CopyPidl() const
+ITEMIDLIST*
+TPidl::CopyPidl() const
 {
   if (!Pidl)
     return 0;
@@ -70,7 +76,8 @@ ITEMIDLIST* TPidl::CopyPidl() const
     ITEMIDLIST* newPidl;
     TShellMalloc malloc;
     newPidl = REINTERPRET_CAST(ITEMIDLIST*, malloc->Alloc(GetSize()));
-    WARNX(OwlShell, !newPidl, 0, "IShellMalloc::Alloc failed.  IShellMalloc* = "
+    WARNX(OwlShell, !newPidl, 0, \
+         "IShellMalloc::Alloc failed.  IShellMalloc* = "\
           << hex << STATIC_CAST(IMalloc*, malloc));
     if (!newPidl)
       TXShell::Raise(IDS_SHELLALLOCFAIL);
@@ -82,7 +89,7 @@ ITEMIDLIST* TPidl::CopyPidl() const
       pidlSrc = Next(pidlSrc);
     }
     ushort zero = 0;
-    CopyMemory(pidlDest, &zero, sizeof (USHORT));
+    CopyMemory(pidlDest, &zero, sizeof(ushort));
     return newPidl;
   }
 }
@@ -90,12 +97,14 @@ ITEMIDLIST* TPidl::CopyPidl() const
 //
 // GetLastItem returns the last item in an identifier list
 // for file system items, this is the rightmost part of a path
-// e.g., GetLastItem() on a pidl representing "c:\\dir1\\dir2\\dir3\\file1") returns "file1"
+// e.g., GetLastItem() on a pidl representing
+//       "c:\\dir1\\dir2\\dir3\\file1") returns "file1"
 //
-TPidl TPidl::GetLastItem() const
+TPidl
+TPidl::GetLastItem() const
 {
   if (!Pidl)
-         return TPidl();
+    return TPidl();
   else {
     long cnt = GetItemCount();
     ITEMIDLIST* pidl = Pidl;
@@ -121,7 +130,8 @@ TPidl TPidl::GetLastItem() const
 //
 // StripLastItem returns a pidl stipped of its last (rightmost) item
 //
-TPidl TPidl::StripLastItem() const
+TPidl
+TPidl::StripLastItem() const
 {
   int i;
   if (!Pidl)
@@ -166,10 +176,7 @@ TPidl TPidl::StripLastItem() const
 // in the shell namespace.
 //
 TShellItem::TShellItem(const char* path, bool throwOnInvalidPath, HWND windowOwner)
-:
-  TComRef<IShellFolder>(0),
-  Pidl(0),
-  ParentFolder(0)
+           :TComRef<IShellFolder>(0), Pidl(0), ParentFolder(0)
 {
   TShellItem desktop(TShellItem::Desktop, windowOwner);
 
@@ -186,8 +193,8 @@ TShellItem::TShellItem(const char* path, bool throwOnInvalidPath, HWND windowOwn
   Pidl = cs.Pidl.GetLastItem();
 
   hr = desktop->BindToObject(cs.Pidl.StripLastItem(), 0, IID_IShellFolder,
-                             REINTERPRET_CAST(void **, STATIC_CAST(IShellFolder**,
-                                                                   ParentFolder)));
+                             REINTERPRET_CAST(void **,
+                             STATIC_CAST(IShellFolder**, ParentFolder)));
   WARNX(OwlShell, FAILED(hr), 0, "IShellFolder::BindToObject failed.  TShellItem* = "
         << hex << (LPVOID)this << "  IShellFolder* = "
         << STATIC_CAST(IShellFolder*, ParentFolder));
@@ -202,10 +209,7 @@ TShellItem::TShellItem(const char* path, bool throwOnInvalidPath, HWND windowOwn
 //  Programmer's Guide to MS Windows 95, MS Press, p. 209)
 //
 TShellItem::TShellItem(const TSpecialFolderKind kind, HWND windowOwner)
-:
-  TComRef<IShellFolder>(0),
-  Pidl(0),
-  ParentFolder(0)
+           :TComRef<IShellFolder>(0), Pidl(0), ParentFolder(0)
 {
   IShellFolder* desktop;
   HRESULT hr = ::SHGetDesktopFolder(&desktop);
@@ -214,10 +218,11 @@ TShellItem::TShellItem(const TSpecialFolderKind kind, HWND windowOwner)
 
   TPidl pidl;
   hr = ::SHGetSpecialFolderLocation(windowOwner, kind, pidl);
-  WARNX(OwlShell, FAILED(hr), 0, "::SHGetSpecialFolderLocation failed.  kind = " << kind);
+  WARNX(OwlShell, FAILED(hr), 0, \
+        "::SHGetSpecialFolderLocation failed.  kind = " << kind);
   TXShell::Check(hr, IDS_SHGETSPECIALFAIL);
   if (kind == Desktop) {
-    I = desktop;                      // Gets itself for the ParentFolder below
+    I = desktop;       // Gets itself for the ParentFolder below
     I->AddRef();
   }
   else {
@@ -228,9 +233,9 @@ TShellItem::TShellItem(const TSpecialFolderKind kind, HWND windowOwner)
     TXShell::Check(hr, IDS_BINDTOOBJECTFAIL);
   }
 
-  ParentFolder = desktop;  // are we sure are we that all special folders are
-  Pidl = pidl;             // one level removed from root? !JK
-}
+  ParentFolder = desktop;  // It's not clearly documented but we're assuming
+  Pidl = pidl;             // that all special folders are children of the
+}                          // desktop/root.
 
 //
 //  TShellItem constructor to make a TShellItem from a TCreateStruct
@@ -248,10 +253,8 @@ TShellItem::TShellItem(const TSpecialFolderKind kind, HWND windowOwner)
 //      BrowseForFolder(), ParseDisplayName()
 //
 TShellItem::TShellItem(const TCreateStruct& cs)
-:
-  TComRef<IShellFolder>(0),
-  Pidl(cs.Pidl),
-  ParentFolder(cs.ParentFolder)
+           :TComRef<IShellFolder>(0), Pidl(cs.Pidl),
+            ParentFolder(cs.ParentFolder)
 {
 }
 
@@ -261,10 +264,7 @@ TShellItem::TShellItem(const TCreateStruct& cs)
 //
 //
 TShellItem::TShellItem(ITEMIDLIST* pidl, const TComRef<IShellFolder>& parentFolder)
-:
-  TComRef<IShellFolder>(0),
-  Pidl(pidl),
-  ParentFolder(parentFolder)
+           :TComRef<IShellFolder>(0), Pidl(pidl), ParentFolder(parentFolder)
 {
 }
 
@@ -273,10 +273,7 @@ TShellItem::TShellItem(ITEMIDLIST* pidl, const TComRef<IShellFolder>& parentFold
 //    TComRef<IShellFolder> (parent folder)
 //
 TShellItem::TShellItem(const TPidl& pidl, const TComRef<IShellFolder>& parentFolder)
-:
-  TComRef<IShellFolder>(0),
-  Pidl(pidl),
-  ParentFolder(parentFolder)
+           :TComRef<IShellFolder>(0), Pidl(pidl), ParentFolder(parentFolder)
 {
 }
 
@@ -284,10 +281,8 @@ TShellItem::TShellItem(const TPidl& pidl, const TComRef<IShellFolder>& parentFol
 //  TShellItem copy constructor
 //
 TShellItem::TShellItem(const TShellItem& source)
-:
-  TComRef<IShellFolder>(source),
-  Pidl(source.Pidl),
-  ParentFolder(source.ParentFolder)
+           :TComRef<IShellFolder>(source), Pidl(source.Pidl),
+            ParentFolder(source.ParentFolder)
 {
 }
 
@@ -319,14 +314,14 @@ TShellItem& TShellItem::operator = (const TCreateStruct& cs)
 //  GetAttributes gets Capabilities, Display, Contents, & Misc. Attributes
 //    with a single call
 //
-//  validateCachedInfo defaults to false.  If true, the shell will not rely on
-//    cached information.
-//    [SFGAO_VALIDATE is not explained in MSFT doc, check that this is true !JK]
+//  'validateCachedInfo' defaults to false.  If true, the shell will not
+//   rely on cached information.
 //
 //  See MS doc for IShellFolder::GetAttributesOf for more information, Programmer's
 //    Guide to MS Windows 95, MS Press, pp. 194-195.
 //
-ulong TShellItem::GetAttributes(const ulong reqAttrib, const bool validateCachedInfo) const
+ulong
+TShellItem::GetAttributes(const ulong reqAttrib, const bool validateCachedInfo) const
 {
   EnforceValidity();
   ulong req = reqAttrib | ((validateCachedInfo)? SFGAO_VALIDATE: 0);
@@ -345,7 +340,8 @@ ulong TShellItem::GetAttributes(const ulong reqAttrib, const bool validateCached
 //  Note:  GetAttribute gets attributes one at a time.  GetAttributes (with the 's')
 //    is used to get any number of attributes with one call.
 //
-bool TShellItem::GetAttribute(const TAttribute at, const bool validateCachedInfo) const
+bool
+TShellItem::GetAttribute(const TAttribute at, const bool validateCachedInfo) const
 {
   EnforceValidity();
   ulong req = at;
@@ -358,7 +354,8 @@ bool TShellItem::GetAttribute(const TAttribute at, const bool validateCachedInfo
 //
 //  IsDesktop returns true if the TShellItem respresents the shell's desktop.
 //
-bool TShellItem::IsDesktop() const
+bool
+TShellItem::IsDesktop() const
 {
   EnforceValidity();
   TShellItem desktop(Desktop);
@@ -367,9 +364,10 @@ bool TShellItem::IsDesktop() const
 
 //
 //  GetParentFolder returns a TCreateStruct representing the folder which contains
-//    the TShellItem.
+//  the TShellItem.
 //
-TShellItem::TCreateStruct TShellItem::GetParentFolder() const
+TShellItem::TCreateStruct
+TShellItem::GetParentFolder() const
 {
   EnforceValidity();
   TCreateStruct cs;
@@ -396,7 +394,8 @@ TShellItem::TCreateStruct TShellItem::GetParentFolder() const
 //
 //  GetFullyQualifiedPidl returns a TPidl that is fully qualified (from the desktop).
 //
-TPidl TShellItem::GetFullyQualifiedPidl() const
+TPidl
+TShellItem::GetFullyQualifiedPidl() const
 {
   EnforceValidity();
   TString name = GetDisplayName(ForParsing);
@@ -414,7 +413,8 @@ TPidl TShellItem::GetFullyQualifiedPidl() const
 //  See MS doc for SHGetFileInfo for more information, Programmer's Guide to MS
 //    Windows 95, MS Press, pp. 205-207.
 //
-TShellItem::TExeKind TShellItem::GetExeType(uint* major, uint* minor) const
+TShellItem::TExeKind
+TShellItem::GetExeType(uint* major, uint* minor) const
 {
   EnforceValidity();
 
@@ -446,7 +446,7 @@ TShellItem::TExeKind TShellItem::GetExeType(uint* major, uint* minor) const
   else
     TXShell::Raise(IDS_GETFILEINFOFAIL);
 
-  return NonExecutable;                                 // to satisfy compiler
+  return NonExecutable;     // To satisfy compiler
 }
 
 //
@@ -456,7 +456,8 @@ TShellItem::TExeKind TShellItem::GetExeType(uint* major, uint* minor) const
 //  See MS doc for SHGetFileInfo for more information, Programmer's Guide to MS
 //    Windows 95, MS Press, pp. 205-207.
 //
-TString TShellItem::GetTypeName() const
+TString
+TShellItem::GetTypeName() const
 {
   EnforceValidity();
   TString typeName;
@@ -485,7 +486,8 @@ TString TShellItem::GetTypeName() const
 //  See MS doc for IShellFolder::GetDisplayNameOf for more information,
 //    Programmer's Guide to MS Windows 95, MS Press, pp. 197-198.
 //
-TString TShellItem::GetDisplayName(const TDisplayNameKind kind) const
+TString
+TShellItem::GetDisplayName(const TDisplayNameKind kind) const
 {
   EnforceValidity();
   TString s;
@@ -498,14 +500,14 @@ TString TShellItem::GetDisplayName(const TDisplayNameKind kind) const
   TXShell::Check(hr, IDS_GETDISPLAYNAMEFAIL);
 
   switch (strRet.uType) {
-    case STRRET_WSTR: // case requested
+    case STRRET_WSTR:   // Case requested
       s = strRet.pOleStr;
       ::SysFreeString(strRet.pOleStr);
       break;
-    case STRRET_CSTR: // c string
+    case STRRET_CSTR:   // C-string
       s = strRet.cStr;
       break;
-    case STRRET_OFFSET: // offset into the piddle
+    case STRRET_OFFSET: // Offset into the piddle
       s = REINTERPRET_CAST(char *, STATIC_CAST(ITEMIDLIST*, Pidl)) + strRet.uOffset;
       break;
     }
@@ -516,7 +518,8 @@ TString TShellItem::GetDisplayName(const TDisplayNameKind kind) const
 //
 //  GetPath returns the fully qualified path representing this TShellItem
 //
-TString TShellItem::GetPath() const
+TString
+TShellItem::GetPath() const
 {
   char path[_MAX_PATH];
 
@@ -529,7 +532,6 @@ TString TShellItem::GetPath() const
   TString s;
   s = path;
   return s;
-//  return TString(path);  // TString doesn't make a copy !JK
 }
 
 //
@@ -541,14 +543,15 @@ TString TShellItem::GetPath() const
 //  See MS doc for IShellFolder::SetNameOf for more information, Programmer's
 //    Guide to MS Windows 95, MS Press, pp. 198-199.
 //
-void TShellItem::Rename(const char *newName, HWND windowOwner, const TDisplayNameKind kind)
+void
+TShellItem::Rename(const char *newName, HWND windowOwner, const TDisplayNameKind kind)
 {
   LPITEMIDLIST pidl;
 
   if (!CanBeRenamed())
     TXShell::Raise(IDS_SHELLRENAMEFAIL);
 
-  // this stuff needed for ::SHChangeNotify
+  // This stuff needed for ::SHChangeNotify
   bool isFolder = IsFolder();
   char oldPath[_MAX_PATH];
   ::memset(oldPath, 0, sizeof (oldPath));
@@ -587,9 +590,10 @@ void TShellItem::Rename(const char *newName, HWND windowOwner, const TDisplayNam
 //  See MS doc for SHFileOperation for more information, Programmer's Guide to
 //    MS Windows 95, MS Press, p. 204.
 //
-bool TShellItem::Copy(const char* dest, const bool destIsFolder,
-                      const USHORT flags, const char* title,
-                      HWND windowOwner) const
+bool
+TShellItem::Copy(const char* dest, const bool destIsFolder,
+                 const USHORT flags, const char* title,
+                 HWND windowOwner) const
 {
   EnforceValidity();
   SHFILEOPSTRUCT fo;
@@ -608,11 +612,12 @@ bool TShellItem::Copy(const char* dest, const bool destIsFolder,
   strcpy(destPath, dest);
   fo.pTo = destPath;
   fo.fFlags = flags;
+  fo.fAnyOperationsAborted = FALSE;
   fo.hNameMappings = 0;
   fo.lpszProgressTitle = title;
 
   if (!destIsFolder)
-    fo.fFlags |= FOF_MULTIDESTFILES; // destination is a filename, not a folder
+    fo.fFlags |= FOF_MULTIDESTFILES; // Destination is a filename, not a folder
 
   bool isFolder = IsFolder();
 
@@ -640,8 +645,9 @@ bool TShellItem::Copy(const char* dest, const bool destIsFolder,
 //  See MS doc for SHFileOperation for more information, Programmer's Guide to
 //    MS Windows 95, MS Press, p. 204.
 //
-bool TShellItem::Copy(const TShellItem& dest, const USHORT flags, const char* title,
-                      HWND windowOwner) const
+bool
+TShellItem::Copy(const TShellItem& dest, const USHORT flags, const char* title,
+                 HWND windowOwner) const
 {
   return Copy(dest.GetDisplayName(ForParsing), dest.IsFolder(), flags, title, windowOwner);
 }
@@ -660,8 +666,9 @@ bool TShellItem::Copy(const TShellItem& dest, const USHORT flags, const char* ti
 //  See MS doc for SHFileOperation for more information, Programmer's Guide to
 //    MS Windows 95, MS Press, p. 204.
 //
-bool TShellItem::Move(const char* destFolder, const USHORT flags, const char* title,
-                      HWND windowOwner)
+bool
+TShellItem::Move(const char* destFolder, const USHORT flags, const char* title,
+                 HWND windowOwner)
 {
   EnforceValidity();
   SHFILEOPSTRUCT fo;
@@ -681,6 +688,7 @@ bool TShellItem::Move(const char* destFolder, const USHORT flags, const char* ti
   strcpy(destPath, destFolder);
   fo.pTo = destPath;
   fo.fFlags = flags;
+  fo.fAnyOperationsAborted = FALSE;
   fo.hNameMappings = 0;
   fo.lpszProgressTitle = title;
 
@@ -698,10 +706,10 @@ bool TShellItem::Move(const char* destFolder, const USHORT flags, const char* ti
   ::strcat(newPath, GetDisplayName());
   *this = TShellItem(newPath);              // change myself to the new location
 
-  // notify deletion of old path
+  // Notify deletion of old path
   ::SHChangeNotify(isFolder? SHCNE_RMDIR: SHCNE_DELETE, SHCNF_PATH /*| SHCNF_FLUSH*/,
                    STATIC_CAST(const char*, oldPath), 0);
-  // notify creation of new path
+  // Notify creation of new path
   ::SHChangeNotify(isFolder? SHCNE_MKDIR: SHCNE_CREATE, SHCNF_PATH /*| SHCNF_FLUSH*/,
                    STATIC_CAST(const char*, GetDisplayName(ForParsing)), 0);
 
@@ -722,8 +730,9 @@ bool TShellItem::Move(const char* destFolder, const USHORT flags, const char* ti
 //  See MS doc for SHFileOperation for more information, Programmer's Guide to
 //    MS Windows 95, MS Press, p. 204.
 //
-bool TShellItem::Move(const TShellItem& destFolder, const USHORT flags,
-                      const char* title, HWND windowOwner)
+bool
+TShellItem::Move(const TShellItem& destFolder, const USHORT flags,
+                 const char* title, HWND windowOwner)
 {
   return Move(destFolder.GetDisplayName(ForParsing), flags, title, windowOwner);
 }
@@ -742,10 +751,11 @@ bool TShellItem::Move(const TShellItem& destFolder, const USHORT flags,
 //  See MS doc for SHFileOperation for more information, Programmer's Guide to
 //    MS Windows 95, MS Press, p. 204.
 //
-bool TShellItem::Delete(const USHORT flags, const char* title, HWND windowOwner)
+bool
+TShellItem::Delete(const USHORT flags, const char* title, HWND windowOwner)
 {
   EnforceValidity();
-  if (!Pidl)                                                // nothing to delete
+  if (!Pidl)           // Nothing to delete!
     return true;
 
   if (!CanBeDeleted())
@@ -756,16 +766,18 @@ bool TShellItem::Delete(const USHORT flags, const char* title, HWND windowOwner)
   fo.wFunc = FO_DELETE;
   char path[_MAX_PATH];
   ::memset(path, 0, sizeof (path));
-  strcpy(path, GetDisplayName(ForParsing)); // also used to reconstruct if delete fails/user aborts
+  strcpy(path, GetDisplayName(ForParsing)); // Also used to reconstruct if delete fails/user aborts
   fo.pFrom = path;
   fo.pTo = 0;
   fo.fFlags = flags;
+  fo.fAnyOperationsAborted = FALSE;
   fo.hNameMappings = 0;
   fo.lpszProgressTitle = title;
 
-  bool isFolder = IsFolder();                    // needed for ::SHChangeNotify
+  bool isFolder = IsFolder();               // Needed for ::SHChangeNotify
 
-  //about to delete: save and release everything
+  // About to delete: save and release everything
+  //
   TComRef<IShellFolder>::operator=(0);
   Pidl = 0;
   ParentFolder = 0;
@@ -789,7 +801,8 @@ bool TShellItem::Delete(const USHORT flags, const char* title, HWND windowOwner)
 //    (see MS doc for information on IExtractIcon,
 //    Programmer's Guide to MS Windows 95, MS Press, pp. 242-244)
 //
-TExtractIcon TShellItem::GetExtractIcon(HWND windowOwner)
+TExtractIcon
+TShellItem::GetExtractIcon(HWND windowOwner)
 {
   EnforceValidity();
   IExtractIcon* iface;
@@ -810,7 +823,8 @@ TExtractIcon TShellItem::GetExtractIcon(HWND windowOwner)
 //    (see MS doc for information on IContextMenu,
 //    Programmer's Guide to MS Windows 95, MS Press, pp. 237-240)
 //
-TContextMenu TShellItem::GetContextMenu(HWND windowOwner)
+TContextMenu
+TShellItem::GetContextMenu(HWND windowOwner)
 {
   EnforceValidity();
   IContextMenu* iface;
@@ -831,7 +845,8 @@ TContextMenu TShellItem::GetContextMenu(HWND windowOwner)
 //    (see MS doc for a very brief description of IDataObject,
 //    Programmer's Guide to MS Windows 95, MS Press, p. 113)
 //
-TDataObject TShellItem::GetDataObject(HWND windowOwner)
+TDataObject
+TShellItem::GetDataObject(HWND windowOwner)
 {
   EnforceValidity();
   IDataObject* iface;
@@ -849,7 +864,8 @@ TDataObject TShellItem::GetDataObject(HWND windowOwner)
 //  GetDropTarget returns an interface pointer to this TShellItem's IDropTarget
 //    OLE interface
 //
-TDropTarget TShellItem::GetDropTarget(HWND windowOwner)
+TDropTarget
+TShellItem::GetDropTarget(HWND windowOwner)
 {
   EnforceValidity();
   IDropTarget* iface;
@@ -871,7 +887,8 @@ TDropTarget TShellItem::GetDropTarget(HWND windowOwner)
 //    (see MS doc on SHGetFileInfo for meanings,
 //    Programmer's Guide to MS Windows 95, MS Press, pp. 206-207)
 //
-HICON TShellItem::GetIcon(TIconSize size, uint kind)
+HICON
+TShellItem::GetIcon(TIconSize size, uint kind)
 {
   EnforceValidity();
 
@@ -898,6 +915,7 @@ HICON TShellItem::GetIcon(TIconSize size, uint kind)
 
   // TShellItem is part of file system or couldn't get the icon with
   // IExtractIcon::Extract
+  //
   SHFILEINFO fi;
   uint flags = SHGFI_ICON | kind | size;
 
@@ -921,7 +939,8 @@ HICON TShellItem::GetIcon(TIconSize size, uint kind)
 //             empty (invalid) item.  One MUST check for this by calling IsValid()
 //             upon return from this function.
 //
-TShellItem TShellItem::ResolveShortcut(HWND windowOwner)
+TShellItem
+TShellItem::ResolveShortcut(HWND windowOwner)
 {
   EnforceValidity();
 
@@ -930,26 +949,31 @@ TShellItem TShellItem::ResolveShortcut(HWND windowOwner)
 
   HRESULT hr;
   TComRef<IShellLink> shellLink;
-  TComRef<IPersistFile> persistFile;
-  TPidl resolvedPidl;
-
   hr = CoCreateInstance(CLSID_ShellLink, 0, CLSCTX_INPROC_SERVER, IID_IShellLink,
                         REINTERPRET_CAST(void **, STATIC_CAST(IShellLink**, shellLink)));
   TXShell::Check(hr, IDS_CREATESHELLLINKFAIL);
 
+  TComRef<IPersistFile> persistFile;
   hr = shellLink->QueryInterface(IID_IPersistFile,
                                  REINTERPRET_CAST(void **, STATIC_CAST(IPersistFile**, persistFile)));
   TXShell::Check(hr, IDS_LINKQUERYINTRFCFAIL);
   TString shortcutFile = GetPath();
   hr = persistFile->Load(shortcutFile, STGM_READ);
   TXShell::Check(hr, IDS_PERSISTFILELOADFAIL);
+
   hr = shellLink->Resolve(windowOwner, SLR_ANY_MATCH | SLR_UPDATE);
-  if (FAILED(hr))
-    return TShellItem();        // couldn't resolve, return empty (invalid) item
+  if (FAILED(hr)) {
+    // Failure to Resolve: return empty/invalid shell item object
+    //
+    return TShellItem();
+  }
+
+  TPidl resolvedPidl;
   hr = shellLink->GetIDList(resolvedPidl);
   TXShell::Check(hr, IDS_LINKGETIDLISTFAIL);
 
   // Construct the resolved TShellItem
+  //
   TCreateStruct cs;
   cs.Pidl = resolvedPidl.GetLastItem();
   if (resolvedPidl.GetItemCount() == 1)
@@ -963,11 +987,110 @@ TShellItem TShellItem::ResolveShortcut(HWND windowOwner)
 }
 
 //
+// Create a shortcut to a file object
+//
+// IMPORTANT:  This function calls CoCreateInstance.  Therefore an
+//             application that uses this function MUST have previously
+//             called CoInitialize (or OLEInitialize).
+//
+HRESULT
+TShellItem::CreateShortCut(LPCSTR objPath, LPSTR pathLink, LPSTR description)
+{
+  HRESULT hr;
+  TComRef<IShellLink> shellLink;
+  hr = CoCreateInstance(CLSID_ShellLink, 0, CLSCTX_INPROC_SERVER, IID_IShellLink,
+                        REINTERPRET_CAST(void **, STATIC_CAST(IShellLink**, shellLink)));
+  TXShell::Check(hr, IDS_CREATESHELLLINKFAIL);
+
+  // Set path to shortcut target and add description
+  //
+  hr = shellLink->SetPath(TString(objPath));
+  TXShell::Check(hr, IDS_SHLLINKSETPATHFAIL);
+  hr = shellLink->SetDescription(TString(description));
+  TXShell::Check(hr, IDS_SHLLINKSETDESCFAIL);
+
+  // Query IShellLink for the IPersistFile Interface for saving the
+  // shortcut in persistent storage
+  //
+  TComRef<IPersistFile> persistFile;
+  hr = shellLink->QueryInterface(IID_IPersistFile,
+                                 REINTERPRET_CAST(void **, STATIC_CAST(IPersistFile**, persistFile)));
+  TXShell::Check(hr, IDS_LINKQUERYINTRFCFAIL);
+
+  // Save link by calling IPersistFile::Save
+  //
+  hr = persistFile->Save(TString(pathLink), TRUE);
+  return hr;
+}
+
+//
+// Create a shortcut to a non-file object
+//
+// IMPORTANT:  This function calls CoCreateInstance.  Therefore an
+//             application that uses this function MUST have previously
+//             called CoInitialize (or OLEInitialize).
+//
+HRESULT
+TShellItem::CreateShortCut(LPCITEMIDLIST pidl, LPSTR pathLink, LPSTR description)
+{
+  HRESULT hr;
+  TComRef<IShellLink> shellLink;
+  hr = CoCreateInstance(CLSID_ShellLink, 0, CLSCTX_INPROC_SERVER, IID_IShellLink,
+                        REINTERPRET_CAST(void **, STATIC_CAST(IShellLink**, shellLink)));
+  TXShell::Check(hr, IDS_CREATESHELLLINKFAIL);
+
+  // Set path to shortcut target and add description
+  //
+  shellLink->SetIDList(pidl);
+  shellLink->SetDescription(description);
+
+  // Query IShellLink for the IPersistFile Interface for saving the
+  // shortcut in persistent storage
+  //
+  TComRef<IPersistFile> persistFile;
+  hr = shellLink->QueryInterface(IID_IPersistFile,
+                                 REINTERPRET_CAST(void **, STATIC_CAST(IPersistFile**, persistFile)));
+  TXShell::Check(hr, IDS_LINKQUERYINTRFCFAIL);
+
+  // Save link by calling IPersistFile::Save
+  //
+  hr = persistFile->Save(TString(pathLink), TRUE);
+  return hr;
+}
+
+//
+// Creates a shortcut to this object
+//
+// IMPORTANT:  This function calls CoCreateInstance.  Therefore an
+//             application that uses this function MUST have previously
+//             called CoInitialize (or OLEInitialize).
+//
+TShellItem
+TShellItem::CreateShortCut(LPSTR linkPath, LPSTR description)
+{
+  EnforceValidity();
+
+  if (IsPartOfFileSystem()) {
+    if (SUCCEEDED(CreateShortCut(GetPath(), linkPath, description)))
+      return TShellItem(linkPath);
+  } else {
+    if (SUCCEEDED(CreateShortCut(GetFullyQualifiedPidl(), linkPath,
+                                 description)))
+      return TShellItem(linkPath);
+  }
+
+  // Failure: return empty/invalid Shell Item object
+  //
+  return TShellItem();
+}
+
+//
 //  Adds the TShellItem to the taskbar's recent document list
 //    (see MS doc for more info on SHAddToRecentDocs,
 //    Programmer's Guide to MS Windows 95, MS Press, p. 202)
 //
-void TShellItem::AddToRecentDocs() const
+void
+TShellItem::AddToRecentDocs() const
 {
   EnforceValidity();
   ::SHAddToRecentDocs(SHARD_PIDL, STATIC_CAST(const ITEMIDLIST *, GetFullyQualifiedPidl()));
@@ -980,7 +1103,8 @@ void TShellItem::AddToRecentDocs() const
 //    (see MS doc for more info CompareIDs,
 //    Programmer's Guide to MS Windows 95, MS Press, p. 194)
 //
-short TShellItem::CompareIDs(const TShellItem& rhs) const
+short
+TShellItem::CompareIDs(const TShellItem& rhs) const
 {
   EnforceValidity();
   rhs.EnforceValidity();
@@ -1009,7 +1133,8 @@ short TShellItem::CompareIDs(const TShellItem& rhs) const
 //  EnforceValidity is a protected function that checks that a TShellItem is valid
 //    before proceeding with an operation that requires the TShellItem to be valid
 //
-void TShellItem::EnforceValidity() const
+void
+TShellItem::EnforceValidity() const
 {
   WARNX(OwlShell, !Valid(), 0, "TShellItem is not valid."
         << "  TShellItem* = " << hex << (LPVOID)this);
@@ -1026,10 +1151,11 @@ void TShellItem::EnforceValidity() const
 //    folders have an IShellFolder interface;  consequently, if this function is
 //    called on a TShellItem that is not a folder, an exception will be thrown.
 //
-void TShellItem::RetrieveIShellFolder() const
+void
+TShellItem::RetrieveIShellFolder() const
 {
   EnforceValidity();
-  if (!I) { // need to call BindToObject
+  if (!I) { // Need to call BindToObject
     IShellFolder* iface;
     HRESULT hr = ParentFolder->BindToObject(Pidl, 0, IID_IShellFolder,
                                             REINTERPRET_CAST(void **, &iface));
@@ -1047,8 +1173,9 @@ void TShellItem::RetrieveIShellFolder() const
 //    if this function is called on a TShellItem that is not a folder, an
 //    exception will be thrown.
 //
-void TShellItem::EnumObjects(IEnumIDList** iface, HWND windowOwner,
-                             const int kind) const
+void
+TShellItem::EnumObjects(IEnumIDList** iface, HWND windowOwner,
+                        const int kind) const
 {
   EnforceValidity();
   RetrieveIShellFolder();
@@ -1070,10 +1197,11 @@ void TShellItem::EnumObjects(IEnumIDList** iface, HWND windowOwner,
 //  Additional Documentation:  See MS doc on SHBrowseForFolder for more info,
 //    more info, Programmer's Guide to MS Windows 95, MS Press, pp. 202-203.
 //
-bool TShellItem::BrowseForFolder(TCreateStruct& cs, HWND windowOwner,
-                                 const char* title, const UINT flags, int* image,
-                                 const bool includeStatus, BFFCALLBACK func,
-                                 const LPARAM param) const
+bool
+TShellItem::BrowseForFolder(TCreateStruct& cs, HWND windowOwner,
+                            const char* title, const UINT flags, int* image,
+                            const bool includeStatus, BFFCALLBACK func,
+                            const LPARAM param) const
 {
   EnforceValidity();
   RetrieveIShellFolder();
@@ -1122,9 +1250,10 @@ bool TShellItem::BrowseForFolder(TCreateStruct& cs, HWND windowOwner,
 //  Additional Documentation:  See MS doc on IShellFolder::ParseDisplayName for
 //    more info, Programmer's Guide to MS Windows 95, MS Press, pp. 191-192.
 //
-HRESULT TShellItem::ParseDisplayName(TCreateStruct& cs, const char* displayName,
-                                     ulong* eaten, HWND windowOwner,
-                                     ulong* attrib) const
+HRESULT
+TShellItem::ParseDisplayName(TCreateStruct& cs, const char* displayName,
+                             ulong* eaten, HWND windowOwner,
+                             ulong* attrib) const
 {
   EnforceValidity();
   TPidl pidl;
@@ -1250,7 +1379,8 @@ TShellItem::TCreateStruct TShellItemIterator::operator ++()
 //    information about TCreateStruct, see the comments in the
 //    TShellItem::TShellItem(const TCreateStruct& cs) constructor.
 //
-TShellItem::TCreateStruct  TShellItemIterator::operator ++(int)
+TShellItem::TCreateStruct
+TShellItemIterator::operator ++(int)
 {
   EnforceValidInterface();
   WARNX(OwlShell, Index == -1, 0, "Attempt to read past end of TShellItemIterator"
@@ -1277,7 +1407,8 @@ TShellItem::TCreateStruct  TShellItemIterator::operator ++(int)
 //    it requires IEnumIDList::Reset to be called and IEnumIDList::Reset returns
 //    E_NOTIMPL (not implemented) in the intitial Win95 release.
 //
-TShellItem::TCreateStruct  TShellItemIterator::operator --()
+TShellItem::TCreateStruct
+TShellItemIterator::operator --()
 {
   EnforceValidInterface();
   return operator[] (Index - 1);
@@ -1295,7 +1426,8 @@ TShellItem::TCreateStruct  TShellItemIterator::operator --()
 //    it requires IEnumIDList::Reset to be called and IEnumIDList::Reset returns
 //    E_NOTIMPL (not implemented) in the intitial Win95 release.
 //
-TShellItem::TCreateStruct  TShellItemIterator::operator --(int)
+TShellItem::TCreateStruct
+TShellItemIterator::operator --(int)
 {
   EnforceValidInterface();
   WARNX(OwlShell, Index == -1, 0, "Attempt to read past end of TShellItemIterator"
@@ -1317,7 +1449,8 @@ TShellItem::TCreateStruct  TShellItemIterator::operator --(int)
 //    information about TCreateStruct, see the comments in the
 //    TShellItem::TShellItem(const TCreateStruct& cs) constructor.
 //
-TShellItem::TCreateStruct TShellItemIterator::Current()
+TShellItem::TCreateStruct
+TShellItemIterator::Current()
 {
   EnforceValidInterface();
   WARNX(OwlShell, Index == -1, 0, "Attempt to read past end of TShellItemIterator"
@@ -1358,7 +1491,8 @@ void TShellItemIterator::Next()
 //    IEnumIDList::Skip returns E_NOTIMPL (not implemented) in the intitial Win95
 //    release.
 //
-void TShellItemIterator::Skip(const ulong count)
+void
+TShellItemIterator::Skip(const ulong count)
 {
   EnforceValidInterface();
   if (count) {
@@ -1382,7 +1516,8 @@ void TShellItemIterator::Skip(const ulong count)
 //    IEnumIDList::Reset returns E_NOTIMPL (not implemented) in the intitial Win95
 //    release.
 //
-void TShellItemIterator::Reset()
+void
+TShellItemIterator::Reset()
 {
   EnforceValidInterface();
   HRESULT hr = I->Reset();
@@ -1406,7 +1541,8 @@ void TShellItemIterator::Reset()
 //    will work is to call it sequentially, beginning at index 0 (i.e., to use it
 //    like operator ++().
 //
-TShellItem::TCreateStruct TShellItemIterator::operator [](const long index)
+TShellItem::TCreateStruct
+TShellItemIterator::operator [](const long index)
 {
   EnforceValidInterface();
   if (Index == index)
@@ -1435,7 +1571,8 @@ TShellItem::TCreateStruct TShellItemIterator::operator [](const long index)
 //  Note:  This function does not work with the intial release of Win95 because
 //    Clone and Reset are borken in the intitial Win95 release.
 //
-long TShellItemIterator::GetCount() const
+long
+TShellItemIterator::GetCount() const
 {
   EnforceValidInterface();
   TShellItemIterator list(*this);  // clone so we don't affect position
@@ -1453,7 +1590,8 @@ long TShellItemIterator::GetCount() const
 //    TShellItemIterator contains a valid IEnumIDList interface pointer.  If it
 //    doesn't, it throws an exception.
 //
-void TShellItemIterator::EnforceValidInterface() const
+void
+TShellItemIterator::EnforceValidInterface() const
 {
   WARNX(OwlShell, !I, 0, "TShellItemIterator is not valid (IEnumIDList* == 0)."
         << "  TShellItemIterator* = " << hex

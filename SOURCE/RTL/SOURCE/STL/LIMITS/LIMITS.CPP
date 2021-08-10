@@ -1,3 +1,5 @@
+/* $Copyright: 1995$ */
+/* $Revision:   8.2  $        */
 /***************************************************************************
  *
  * limits.cpp - Source for the Standard Library limits class
@@ -212,7 +214,7 @@ const int  numeric_limits<short>::min_exponent      __RW_INIT(0);
 const int  numeric_limits<short>::max_exponent      __RW_INIT(0);
 const bool numeric_limits<short>::has_infinity      __RW_INIT(false);
 const bool numeric_limits<short>::has_quiet_NaN     __RW_INIT(false);
-const bool numeric_limits<short>::has_signaling_NaN __RW_INIT(false);   
+const bool numeric_limits<short>::has_signaling_NaN __RW_INIT(false);
 const bool numeric_limits<short>::is_iec559         __RW_INIT(false);
 const bool numeric_limits<short>::is_bounded        __RW_INIT(true);
 const bool numeric_limits<short>::is_modulo         __RW_INIT(numeric_limits<int>::is_modulo);
@@ -302,7 +304,7 @@ const int  numeric_limits<long>::min_exponent      __RW_INIT(0);
 const int  numeric_limits<long>::max_exponent      __RW_INIT(0);
 const bool numeric_limits<long>::has_infinity      __RW_INIT(false);
 const bool numeric_limits<long>::has_quiet_NaN     __RW_INIT(false);
-const bool numeric_limits<long>::has_signaling_NaN __RW_INIT(false);    
+const bool numeric_limits<long>::has_signaling_NaN __RW_INIT(false);
 const bool numeric_limits<long>::is_iec559         __RW_INIT(false);
 const bool numeric_limits<long>::is_bounded        __RW_INIT(true);
 const bool numeric_limits<long>::is_modulo         __RW_INIT(numeric_limits<int>::is_modulo);
@@ -324,7 +326,7 @@ const int  numeric_limits<unsigned long>::min_exponent      __RW_INIT(0);
 const int  numeric_limits<unsigned long>::max_exponent      __RW_INIT(0);
 const bool numeric_limits<unsigned long>::has_infinity      __RW_INIT(false);
 const bool numeric_limits<unsigned long>::has_quiet_NaN     __RW_INIT(false);
-const bool numeric_limits<unsigned long>::has_signaling_NaN __RW_INIT(false);   
+const bool numeric_limits<unsigned long>::has_signaling_NaN __RW_INIT(false);
 const bool numeric_limits<unsigned long>::is_iec559         __RW_INIT(false);
 const bool numeric_limits<unsigned long>::is_bounded        __RW_INIT(true);
 const bool numeric_limits<unsigned long>::is_modulo         __RW_INIT(true);
@@ -347,7 +349,7 @@ const int  numeric_limits<char>::min_exponent       __RW_INIT(0);
 const int  numeric_limits<char>::max_exponent       __RW_INIT(0);
 const bool numeric_limits<char>::has_infinity       __RW_INIT(false);
 const bool numeric_limits<char>::has_quiet_NaN      __RW_INIT(false);
-const bool numeric_limits<char>::has_signaling_NaN  __RW_INIT(false);   
+const bool numeric_limits<char>::has_signaling_NaN  __RW_INIT(false);
 const bool numeric_limits<char>::is_iec559          __RW_INIT(false);
 const bool numeric_limits<char>::is_bounded         __RW_INIT(true);
 const bool numeric_limits<char>::is_modulo          __RW_INIT(is_signed ? numeric_limits<int>::is_modulo : true);
@@ -370,7 +372,7 @@ const int  numeric_limits<wchar_t>::min_exponent      __RW_INIT(0);
 const int  numeric_limits<wchar_t>::max_exponent      __RW_INIT(0);
 const bool numeric_limits<wchar_t>::has_infinity      __RW_INIT(false);
 const bool numeric_limits<wchar_t>::has_quiet_NaN     __RW_INIT(false);
-const bool numeric_limits<wchar_t>::has_signaling_NaN __RW_INIT(false); 
+const bool numeric_limits<wchar_t>::has_signaling_NaN __RW_INIT(false);
 const bool numeric_limits<wchar_t>::is_iec559         __RW_INIT(false);
 const bool numeric_limits<wchar_t>::is_bounded        __RW_INIT(true);
 const bool numeric_limits<wchar_t>::is_modulo         __RW_INIT(is_signed ? numeric_limits<int>::is_modulo : true);

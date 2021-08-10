@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_TINYCAPT_H)
@@ -11,6 +11,11 @@
 #if !defined(OWL_WINDOW_H)
 # include <owl/window.h>
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS TFont;
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -58,7 +63,6 @@ class _OWLCLASS TTinyCaption : public virtual TWindow {
     TRect       GetMaxBoxRect();
 
     uint        EvNCHitTest(TPoint& screenPt);
-    void        EvNCPaint();
     uint        EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize);
     void        EvNCLButtonDown(uint hitTest, TPoint& screenPt);
     void        EvMouseMove(uint hitTest, TPoint& screenPt);
@@ -66,6 +70,12 @@ class _OWLCLASS TTinyCaption : public virtual TWindow {
     bool        EvNCActivate(bool active);
     TResult     EvCommand(uint id, HWND hWndCtl, uint notifyCode);
     void        EvSysCommand(uint cmdType, TPoint& p);
+#if defined(BI_PLAT_WIN32)
+    void     EvNCPaint(HRGN);
+#else
+    void     EvNCPaint();
+#endif //BI_PLAT_WIN32
+
 
   protected_data:
     // Cache system metrics 
@@ -94,5 +104,9 @@ class _OWLCLASS TTinyCaption : public virtual TWindow {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_TINYCAPT_H

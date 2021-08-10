@@ -7,28 +7,33 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <fcntl.h>
 #include <_io.h>
+#include <_tchar.h>
 
 #define BAD_FLAGS (O_BINARY | O_TEXT | O_APPEND | O_CREAT)
 
 /*-----------------------------------------------------------------------*
 
-Name            _rtl_open - opens a file for reading or writing
+Name            _trtl_open used as _rtl_open and _wrtl_open
+                _rtl_open  - opens a file for reading or writing
+                _wrtl_open - opens a file for reading or writing
 
 Usage           #include <fcntl.h>
                 int _rtl_open(const char *pathname, int access);
+                int _wrtl_open(const wchar_t *pathname, int access);
 
 Prototype in    io.h
 
-Description     _rtl_open opens an existing file for reading or writing.
+Description     _trtl_open opens an existing file for reading or writing.
                 The file is always opened in binary mode.  The allowable
                 flags are:
 
@@ -45,7 +50,7 @@ Description     _rtl_open opens an existing file for reading or writing.
                                 file.
                 O_DENYNONE      Allows other shared opens to the file.
 
-Return value    On successful completion, _rtl_open returns a non-negative
+Return value    On successful completion, _trtl_open returns a non-negative
                 integer (the file handle), and the file pointer
                 (that marks the current position in the file) is set to the
                 beginning of the file. On error, it returns -1 and errno is
@@ -57,12 +62,14 @@ Return value    On successful completion, _rtl_open returns a non-negative
 
 *------------------------------------------------------------------------*/
 
-int _RTLENTRYF _EXPFUNC _rtl_open( const char *filename, int oflag )
+int _RTLENTRYF _EXPFUNC _trtl_open( const _TCHAR *filename, int oflag )
 {
-    return (__open(filename, (oflag & ~BAD_FLAGS) | O_BINARY));
+    return (__topen(filename, (oflag & ~BAD_FLAGS) | O_BINARY));
 }
 
 /*------------------------------------------------------------------------*/
+
+#ifndef _UNICODE
 
 /* obsolete version */
 
@@ -70,3 +77,5 @@ int _RTLENTRYF _EXPFUNC _open( const char *filename, int oflag )
 {
    return( _rtl_open(filename, oflag) );
 }
+
+#endif

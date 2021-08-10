@@ -1,0 +1,28 @@
+;-----------------------------------------------------------------------------
+;   Project EVHANDLE
+;   
+;   Copyright © 1996. All Rights Reserved.
+;
+;   SUBSYSTEM:    EVHANDLE Module Definition File
+;   FILE:         EVHANDLE.DEF
+;   AUTHOR:       
+;
+;-----------------------------------------------------------------------------
+
+NAME 'EVHANDLE'
+
+DESCRIPTION 'Source-Sink Application - Copyright © 1996. All Rights Reserved.'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE
+
+; Note: When compiling an application as a 32-bit target, the linker
+;       will generate a warning with the settings below.  If you intend
+;       to build your application as a 32-bit target only, you can
+;       safely delete the STACKSIZE setting to get rid of this warning.
+;
+;       The STACKSIZE of 16384 or larger is recommended for 16-bit
+;       applications using vbx controls.
+;
+HEAPSIZE    4096
+STACKSIZE   21000

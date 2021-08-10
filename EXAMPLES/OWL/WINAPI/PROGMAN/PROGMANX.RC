@@ -9,6 +9,7 @@
 
 #include <owl/inputdia.rh>
 #include <owl/inputdia.rc>
+#include <owl\except.rc>
 
 IDD_PROGTALK DIALOG 47, 35, 170, 104
 STYLE WS_CHILD | WS_VISIBLE

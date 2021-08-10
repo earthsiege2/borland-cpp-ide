@@ -5,12 +5,13 @@
 
 */
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $ */
 
 #ifndef __DOS_H
 #define __DOS_H
@@ -19,6 +20,14 @@
 #include <_defs.h>
 #endif
 
+
+#ifndef __cplusplus
+#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
+#define _WCHAR_T
+#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
+typedef unsigned short wchar_t;
+#endif
+#endif
 
 #if !defined(RC_INVOKED)
 
@@ -122,6 +131,15 @@ struct  ffblk   {
     unsigned short  ff_fdate;
     char            ff_name[256];
 };
+struct  _wffblk {
+    long            ff_reserved;
+    long            ff_fsize;
+    unsigned long   ff_attrib;
+    unsigned short  ff_ftime;
+    unsigned short  ff_fdate;
+    wchar_t         ff_name[256];
+};
+
 #endif  /* __FFBLK_DEF */
 
 struct find_t
@@ -133,7 +151,6 @@ struct find_t
     unsigned short  wr_date;           /* date of last write to file */
     char            name[256];         /* asciiz name of matched file */
 };
-
 #else  /* __FLAT__ */
 
 #ifndef _FFBLK_DEF
@@ -552,6 +569,7 @@ extern  unsigned      _RTLENTRY _psp;
 
 extern  int const     _RTLENTRY _8087;
 extern  char        **_RTLENTRY _environ;
+extern  wchar_t     **_RTLENTRY _wenviron;
 extern  unsigned      _RTLENTRY _heaplen;
 extern  unsigned char _RTLENTRY _osmajor;
 extern  unsigned char _RTLENTRY _osminor;

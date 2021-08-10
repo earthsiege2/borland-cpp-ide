@@ -3,6 +3,8 @@
 // Copyrights (C) 1996 Borland International
 //--------------------------------------------------------
 
+#include <vdbt/dbcontrl.h>
+#pragma hdrstop
 #include <vdbt/dblist.h>
 #include <stdio.h>
 
@@ -64,6 +66,10 @@ void TDBListBox::SetupWindow()
 // OWL response table.
 //--------------------------------------------------------
 DEFINE_DB_RESPONSE_TABLE1( TDBListBox, TDBControl )
+  EV_VBXEVENT_CLICK,
+  EV_VBXEVENT_DRAGOVER,
+  EV_VBXEVENT_DRAGDROP,
+  EV_VBXEVENT_ENDDRAG,
   EV_VBXEVENT_DBLCLICK(    Event_TDBListBox_DblClick ),
   EV_VBXEVENT_KEYDOWN(     Event_TDBListBox_KeyDown ),
   EV_VBXEVENT_KEYPRESS(    Event_TDBListBox_KeyPress ),
@@ -81,6 +87,10 @@ END_RESPONSE_TABLE;
 //--------------------------------------------------------
 // Event Handlers
 //--------------------------------------------------------
+DEFINE_DB_EVENT( TDBListBox, OnClick,       TNotifyEvent,      Event_TDBListBox_Click );
+DEFINE_DB_EVENT( TDBListBox, OnDragDrop,    TDragEvent,        Event_TDBListBox_DragDrop );
+DEFINE_DB_EVENT( TDBListBox, OnDragOver,    TDragOverEvent,    Event_TDBListBox_DragOver );
+DEFINE_DB_EVENT( TDBListBox, OnEndDrag,     TDragEvent,        Event_TDBListBox_EndDrag );
 DEFINE_DB_EVENT( TDBListBox, OnDblClick,    TNotifyEvent,      Event_TDBListBox_DblClick );
 DEFINE_DB_EVENT( TDBListBox, OnDrawItem,    TDrawItemEvent,    Event_TDBListBox_DrawItem );
 DEFINE_DB_EVENT( TDBListBox, OnEnter,       TNotifyEvent,      Event_TDBListBox_GotFocus );

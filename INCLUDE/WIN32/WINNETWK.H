@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1991-1995  Microsoft Corporation
+Copyright (c) 1991-1996  Microsoft Corporation
 
 Module Name:
 
@@ -22,10 +22,13 @@ Notes:
 
 #ifndef _WINNETWK_
 #define _WINNETWK_
+#pragma option -b
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 //
 // Network types
@@ -46,11 +49,14 @@ extern "C" {
 #define     WNNC_NET_PATHWORKS  0x000D0000
 #define     WNNC_NET_LIFENET    0x000E0000
 #define     WNNC_NET_POWERLAN   0x000F0000
-#define     WNNC_NET_BWNFS		0x00100000
-#define     WNNC_NET_COGENT		0x00110000
-#define     WNNC_NET_FARALLON	0x00120000
-#define     WNNC_NET_APPLETALK	0x00130000
-#define     WNNC_NET_INTERGRAPH	0x00140000
+#define     WNNC_NET_BWNFS      0x00100000
+#define     WNNC_NET_COGENT     0x00110000
+#define     WNNC_NET_FARALLON   0x00120000
+#define     WNNC_NET_APPLETALK  0x00130000
+#define     WNNC_NET_INTERGRAPH 0x00140000
+#define     WNNC_NET_SYMFONET   0x00150000
+#define     WNNC_NET_CLEARCASE  0x00160000
+
 
 //
 //  Network Resources.
@@ -77,7 +83,8 @@ extern "C" {
 #if(WINVER >= 0x0400)
 #define RESOURCEUSAGE_NOLOCALDEVICE 0x00000004
 #define RESOURCEUSAGE_SIBLING       0x00000008
-#define RESOURCEUSAGE_ALL           (RESOURCEUSAGE_CONNECTABLE | RESOURCEUSAGE_CONTAINER)
+#define RESOURCEUSAGE_ATTACHED      0x00000010
+#define RESOURCEUSAGE_ALL           (RESOURCEUSAGE_CONNECTABLE | RESOURCEUSAGE_CONTAINER | RESOURCEUSAGE_ATTACHED)
 #endif /* WINVER >= 0x0400 */
 #define RESOURCEUSAGE_RESERVED      0x80000000
 
@@ -94,6 +101,9 @@ extern "C" {
 #define RESOURCEDISPLAYTYPE_DIRECTORY      0x00000009
 #endif /* WINVER >= 0x0400 */
 #define RESOURCEDISPLAYTYPE_TREE           0x0000000A
+#if(WINVER >= 0x0400)
+#define RESOURCEDISPLAYTYPE_NDSCONTAINER   0x0000000B
+#endif /* WINVER >= 0x0400 */
 
 typedef struct  _NETRESOURCEA {
     DWORD    dwScope;
@@ -123,9 +133,10 @@ typedef NETRESOURCEA NETRESOURCE;
 typedef LPNETRESOURCEA LPNETRESOURCE;
 #endif // UNICODE
 
+
 //
 //  Network Connections.
-// 
+//
 
 #define NETPROPERTY_PERSISTENT       1
 
@@ -140,7 +151,10 @@ typedef LPNETRESOURCEA LPNETRESOURCE;
 #define CONNECT_REDIRECT            0x00000080
 #define CONNECT_LOCALDRIVE          0x00000100
 #define CONNECT_CURRENT_MEDIA       0x00000200
+#define CONNECT_DEFERRED            0x00000400
+#define CONNECT_RESERVED            0xFF000000
 #endif /* WINVER >= 0x0400 */
+
 
 DWORD APIENTRY
 WNetAddConnectionA(
@@ -254,6 +268,7 @@ WNetGetConnectionW(
 #define WNetGetConnection  WNetGetConnectionA
 #endif // !UNICODE
 
+
 #if(WINVER >= 0x0400)
 DWORD APIENTRY
 WNetUseConnectionA(
@@ -302,9 +317,10 @@ WNetSetConnectionW(
 #endif // !UNICODE
 #endif /* WINVER >= 0x0400 */
 
+
 //
 //  Network Connection Dialogs.
-// 
+//
 
 DWORD APIENTRY
 WNetConnectionDialog(
@@ -408,6 +424,7 @@ WNetDisconnectDialog1W(
 #endif // !UNICODE
 #endif /* WINVER >= 0x0400 */
 
+
 //
 //  Network Browsing.
 //
@@ -458,6 +475,8 @@ DWORD APIENTRY
 WNetCloseEnum(
     HANDLE   hEnum
     );
+
+
 
 //
 //  Universal Naming.
@@ -540,6 +559,9 @@ WNetGetUserW(
 #define WNetGetUser  WNetGetUserA
 #endif // !UNICODE
 
+
+
+
 //
 // Other.
 //
@@ -550,6 +572,7 @@ WNetGetUserW(
 #define WNFMT_INENUM            0x10
 #define WNFMT_CONNECTION        0x20
 #endif /* WINVER >= 0x0400 */
+
 
 #if(WINVER >= 0x0400)
 DWORD APIENTRY
@@ -640,6 +663,7 @@ typedef UINT (FAR PASCAL *PFNRECONCILEPROFILEW) (
 #define RP_LOGON    0x01        /* if set, do for logon, else for logoff */
 #define RP_INIFILE  0x02        /* if set, reconcile .INI file, else reg. hive */
 
+
 //
 //  Policies.
 //
@@ -667,9 +691,10 @@ typedef BOOL (FAR PASCAL *PFNPROCESSPOLICIESW) (
 #define PP_DISPLAYERRORS    0x01    /* if set, display error messages, else fail silently if error */
 #endif /* WINVER >= 0x0400 */
 
+
 //
 //  Error handling.
-// 
+//
 
 DWORD APIENTRY
 WNetGetLastErrorA(
@@ -697,7 +722,7 @@ WNetGetLastErrorW(
 //  STATUS CODES
 //
 
-// General   
+// General
 
 #define WN_SUCCESS                      NO_ERROR
 #define WN_NO_ERROR                     NO_ERROR
@@ -753,6 +778,7 @@ WNetGetLastErrorW(
 #define WN_NOT_VALIDATED                ERROR_NO_LOGON_SERVERS
 #endif /* WINVER >= 0x0400 */
 
+
 //
 //  For Shell
 //
@@ -792,4 +818,5 @@ MultinetGetConnectionPerformanceW(
 }
 #endif
 
+#pragma option -b.
 #endif  // _WINNETWK_

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.11  $
+//$Revision:   5.14  $
 //
 // Compiler-specific defines for Borland C/C++. Included only by compiler.h
 //----------------------------------------------------------------------------
@@ -149,9 +149,11 @@
 //  #define below or define the macro in the build environment.
 //
 
+// BC v5.0 introduces the ability to import/export templates
 //
-//  Language feature:          Description                  Classlib header
-//  ~~~~~~~~~~~~~~~~           ~~~~~~~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~
+#if (__BORLANDC__ >= 0x500)
+# define BI_IMPEXP_TEMPLATES // Import and export template instances
+#endif
 
 // BC has had these since 4.0
 //

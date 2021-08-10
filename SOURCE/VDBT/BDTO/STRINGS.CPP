@@ -15,7 +15,7 @@
 
 //-----------------------------------------------------------------------------
 
-void _export STDAPICALLTYPE StringsNotifyEventCallback( int32 data, PITStrings strings )
+static void _export STDAPICALLTYPE StringsNotifyEventCallback( int32 data, PITStrings strings )
 {
 	if (data)
 	{
@@ -353,7 +353,7 @@ void TStrings::GetValues( string& name, string& s )
 		AnyString( strings->get_Values( AnyString(name).GetPITAnyString() ) ).GetString( s );
 }
 
-void TStrings::SetValues( string& name, string& value )
+void TStrings::SetValues( string& name, const string& value )
 {
 	if (strings)
 		strings->put_Values( AnyString(name).GetPITAnyString(), AnyString(value).GetPITAnyString() );
@@ -365,11 +365,12 @@ void TStrings::GetStrings( int index, string& s )
 		AnyString( strings->get_Strings( index ) ).GetString( s );
 }
 
-void TStrings::SetStrings( int index, string& s )
+void TStrings::SetStrings( int index, const string& s )
 {
 	if (strings)
 		strings->put_Strings( index, AnyString(s).GetPITAnyString() );
 }
+
 
 void TStrings::GetText( string& s )
 {
@@ -377,7 +378,7 @@ void TStrings::GetText( string& s )
 		AnyString( strings->get_Text() ).GetString( s );
 }
 
-void TStrings::SetText( string& text )
+void TStrings::SetText( const string& text )
 {
 	if (strings)
 		strings->put_Text( AnyString(text).GetPITAnyString() );
@@ -406,3 +407,4 @@ void TStrings::SetSorted( bool s )
 	if (strings)
 		strings->put_Sorted( MakeVariantBool( s ) );
 }
+

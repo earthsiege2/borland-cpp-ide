@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   10.3  $
 //
 // Docking window example main source file
 //----------------------------------------------------------------------------
@@ -24,7 +26,6 @@
 // by the application.
 //
 DEFINE_RESPONSE_TABLE1(TDockingApp, TApplication)
-//{{TDockingAppRSP_TBL_BEGIN}}
   EV_COMMAND(CM_HELPABOUT, CmHelpAbout),
   EV_COMMAND(CM_MDIFILENEW, CmFileNew),
   EV_COMMAND(CM_MDIFILEOPEN, CmFileOpen),
@@ -40,18 +41,15 @@ END_RESPONSE_TABLE;
 //
 //
 //
-TDockingApp::TDockingApp()
-:
-  TApplication("Docking Example")
-{
-}
+TDockingApp::TDockingApp() : TApplication("Docking Example")
+{}
 
 
 TDockingApp::~TDockingApp()
-{
-}
+{}
 
-static TDockable* newSpeedbar(TDecoratedFrame* frame, const char far* caption)
+static TDockable* 
+newSpeedbar(TDecoratedFrame* frame, const char* caption)
 {
   // Create command toolbar and associate toolbar buttons with commands.
   //
@@ -76,11 +74,13 @@ static TDockable* newSpeedbar(TDecoratedFrame* frame, const char far* caption)
   cb->Insert(*new TButtonGadget(CM_FILEPRINTPREVIEW, CM_FILEPRINTPREVIEW));
 
   // Add fly-over help hints.
+  //
   cb->SetHintMode(TGadgetWindow::EnterHints);
   return cb;
 }
 
-void TDockingApp::SetupSpeedBar(TDecoratedFrame* frame)
+void 
+TDockingApp::SetupSpeedBar(TDecoratedFrame* frame)
 {
   Harbor = new THarbor(*frame);
 
@@ -103,15 +103,20 @@ void TDockingApp::SetupSpeedBar(TDecoratedFrame* frame)
   cb2->Insert(*new TButtonGadget(CM_FONTRIGHT, CM_FONTRIGHT));
   cb2->Insert(*new TButtonGadget(CM_FONTCENTER, CM_FONTCENTER));
 
+  // Insert some toolbars on the edges
+  //
   Harbor->Insert(*cb2, alTop);
   Harbor->Insert(*newSpeedbar(frame, "Toolbar 1"), alTop);
   Harbor->Insert(*newSpeedbar(frame, "Toolbar 2"), alRight);
+
+  // Create a dockable floating toolbar
+  //
+  Harbor->Insert(*newSpeedbar(frame, "Toolbar 3"), alNone);
 
   // Create coord toolbar and associate toolbar buttons with commands.
   //
   TDockableControlBar* cb3 = new TDockableControlBar(frame);
   cb3->SetCaption("Toolbar with Edit controls");
-
   cb3->Insert(*new TTextGadget(650, TGadget::None, TTextGadget::Left, 1, "X"));
   cb3->Insert(*new TControlGadget(*new TEdit(0, 651, "10", 0, 0, 60, 24, 4)));
   cb3->Insert(*new TSeparatorGadget);
@@ -152,12 +157,17 @@ void TDockingApp::InitMainWindow()
   SetupSpeedBar(frame);
 
   TStatusBar *sb = new TStatusBar(frame, TGadget::Recessed,
-                  TStatusBar::CapsLock | TStatusBar::NumLock |
-                  TStatusBar::ScrollLock | TStatusBar::SizeGrip);
+                                  TStatusBar::CapsLock | 
+                                  TStatusBar::NumLock |
+                                  TStatusBar::ScrollLock | 
+                                  TStatusBar::SizeGrip);
+
+  // Show hints in the text gadget
+  //
+  sb->SetWideHints(false);
   frame->Insert(*sb, TDecoratedFrame::Bottom);
 
   SetMainWindow(frame);
-
   frame->SetMenuDescr(TMenuDescr(IDM_MAIN, 1, 2, 0, 0, 1, 1));
 }
 

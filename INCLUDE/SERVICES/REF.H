@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Services Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.2  $
+//$Revision:   5.5  $
 //
 // Implementation of class TReference -- base class for reference counting
 //
@@ -19,6 +19,10 @@
 
 #else
 
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 class _EXPCLASS TReference {
   public:
     _RTLENTRY TReference(unsigned short initRef = 0) : Refs(initRef) { }
@@ -29,6 +33,10 @@ class _EXPCLASS TReference {
   private:
     unsigned short Refs;    // Number of references to this block
 };
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif
 
 #endif  // else if BI_COMP_BORLANDC
 

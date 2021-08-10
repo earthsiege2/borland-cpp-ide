@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.3  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_OLEFRAME_H)
@@ -21,6 +21,22 @@
 # include <owl/olefacto.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
+class TOcMenuDescr;
+class _ICLASS TOcApp;
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
+
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
@@ -31,9 +47,6 @@
 const int IDW_PADDECORATION = 32042;
 const int IDW_REMVIEWBUCKET = 32046;  // Window id for remote view holder
 const int IDT_DLLIDLE       = 32000;  // Idle timer ID for DLL servers
-
-class TOcMenuDescr;
-class _ICLASS TOcApp;
 
 //
 // class TOleFrame
@@ -94,6 +107,10 @@ class _USERCLASS TOleFrame : public TDecoratedFrame {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 // --------------------------------------------------------------------------
 // Inline implementations

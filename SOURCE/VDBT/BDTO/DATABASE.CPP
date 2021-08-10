@@ -15,7 +15,7 @@
 
 //-----------------------------------------------------------------------------
 
-void _export STDAPICALLTYPE LoginEventCallback( int32 data, PITDatabase database, PITStrings LoginParams )
+static void _export STDAPICALLTYPE LoginEventCallback( int32 data, PITDatabase database, PITStrings LoginParams )
 {
 	if (data)
 	{
@@ -122,6 +122,11 @@ TDatabase::TDatabase( HWND hdlg, int idc ) :
 {
 	SetTDatabase( GetVBXPIUnknown( hdlg, idc ) );
 	TBDTComponent::SetPIT( database );
+}
+
+void TDatabase::AttachToControl( HWND hdlg, int idc )
+{
+	SetPIT( GetVBXPIUnknown( hdlg, idc ) );
 }
 
 void TDatabase::AttachControl( HWND hdlg, int idc )
@@ -287,7 +292,7 @@ void TDatabase::GetAliasName( string& s )
 		AnyString( database->get_AliasName() ).GetString( s );
 }
 
-void TDatabase::SetAliasName( string& n )
+void TDatabase::SetAliasName( const string& n )
 {
 	if (database)
 		database->put_AliasName( AnyString(n).GetPITAnyString() );
@@ -311,7 +316,7 @@ void TDatabase::GetDatabaseName( string& s )
 		AnyString( database->get_DatabaseName() ).GetString( s );
 }
 
-void TDatabase::SetDatabaseName( string& n )
+void TDatabase::SetDatabaseName( const string& n )
 {
 	if (database)
 		database->put_DatabaseName( AnyString(n).GetPITAnyString() );
@@ -323,7 +328,7 @@ void TDatabase::GetDriverName( string& s )
 		AnyString( database->get_DriverName() ).GetString( s );
 }
 
-void TDatabase::SetDriverName( string& n )
+void TDatabase::SetDriverName( const string& n )
 {
 	if (database)
 		database->put_DriverName( AnyString(n).GetPITAnyString() );
@@ -366,7 +371,7 @@ void TDatabase::GetParams( TStrings& s )
 	}
 }
 
-void TDatabase::SetParams( TStrings& p )
+void TDatabase::SetParams( const TStrings& p )
 {
 	if (database)
 		database->put_Params( p.GetPITStrings() );
@@ -384,3 +389,4 @@ void TDatabase::SetTransIsolation( TTransIsolation t )
 		database->put_TransIsolation( t );
 }
 
+

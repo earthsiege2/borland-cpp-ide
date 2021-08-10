@@ -3,9 +3,9 @@
   cmdtest.cpp
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.13  $
-   
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
+  $Revision:   1.17  $
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 #ifndef __AOEXPCH_H
   #include "aoexpch.h"
 #endif
@@ -20,7 +20,7 @@ BOOL PASCAL Enabler();
 static BOOL okToEnable = TRUE;
 
 //.............................................................................
-CmdTestA::CmdTestA() 
+CmdTestA::CmdTestA()
   {
   _startInitFailed = TRUE;
   _cmdServer  = GET_INTERFACE(ICommandServer);
@@ -29,8 +29,8 @@ CmdTestA::CmdTestA()
     ICommand *cmd = _cmdServer->CreateCommand();
     if ( cmd )
       {
-      HBITMAP small = LoadBitmap( ghInst, MAKEINTRESOURCE(BITMAP_1) );
-      HBITMAP large = LoadBitmap( ghInst, MAKEINTRESOURCE(BITMAP_2) );
+      HBITMAP smallBmp = LoadBitmap( ghInst, MAKEINTRESOURCE(BITMAP_1) );
+      HBITMAP largeBmp = LoadBitmap( ghInst, MAKEINTRESOURCE(BITMAP_2) );
 
       // Fill in the cmd
       cmd->SetName( ::MakePolyString ("AnotherFileOpen") );
@@ -40,7 +40,7 @@ CmdTestA::CmdTestA()
       cmd->SetHelpHint( ::MakePolyString ("A test of the command interface")  );
       cmd->SetHelpId( 0 );
       cmd->SetHelpFile( NULL );
-      cmd->SetIcons( small, large );
+      cmd->SetIcons( smallBmp, largeBmp );
       cmd->SetEnableFunction( Enabler );
       cmd->SetUserData( 0 );
 
@@ -51,17 +51,17 @@ CmdTestA::CmdTestA()
     }
   }
 //.............................................................................
-CmdTestA::~CmdTestA() 
+CmdTestA::~CmdTestA()
   {
   UnInit();
-  if ( _cmdServer ) 
+  if ( _cmdServer )
     {
     _cmdServer->Release();
     _cmdServer = NULL;
     }
   }
 //.............................................................................
-BOOL CmdTestA::Init() 
+BOOL CmdTestA::Init()
   {
   if ( _startInitFailed )
     {
@@ -75,17 +75,17 @@ BOOL CmdTestA::Init()
   return FALSE;
 }
 //.............................................................................
-void CmdTestA::UnInit() 
+void CmdTestA::UnInit()
   {
   OutStr( "CmdTestA::UnInit() is a no-op" );
   }
 //.............................................................................
-const char * CmdTestA::GetName() 
+const char * CmdTestA::GetName()
   {
   return "Command test";
   }
 //.............................................................................
-const char * CmdTestA::GetTestDescription( int testNum ) 
+const char * CmdTestA::GetTestDescription( int testNum )
   {
   switch ( testNum )
     {
@@ -93,24 +93,24 @@ const char * CmdTestA::GetTestDescription( int testNum )
       return "Toggle command enable/disable";
     }
   return "This test not implemented.";
-  }  
+  }
 //.............................................................................
-void CmdTestA::DoTest( int testNum ) 
+void CmdTestA::DoTest( int testNum )
   {
-  if ( !_cmdServer ) 
+  if ( !_cmdServer )
     {
     OutStr( "Command Server not initialized!" );
     return;
     }
-  switch ( testNum ) 
-    {  
+  switch ( testNum )
+    {
     case 1:
       okToEnable = !okToEnable;
-      OutStr( FormatStr( 
-            "our command is now %s.", okToEnable? 
+      OutStr( FormatStr(
+            "our command is now %s.", okToEnable?
             "enabled" : "disabled" ) );
-      break;            
-    default: 
+      break;
+    default:
       {
       OutStr( FormatStr( "Test #%d Not Implemented!", testNum ) );
       }
@@ -120,4 +120,4 @@ void CmdTestA::DoTest( int testNum )
 
 BOOL PASCAL Enabler() {
   return okToEnable;
-} 
+}

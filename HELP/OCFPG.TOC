@@ -1,6 +1,7 @@
 :BASE OCF.HLP
 1 ObjectComponents Programmer's Guide
 2 Overview of ObjectComponents
+3 What's new in ObjectComponents for Borland C++ 5.01 = WhatsNewInObjectComponents
 3 What is ObjectComponents? = WhatIsObjectComponents
 3 OLE 2 features supported by ObjectComponents = OLE2FeaturesSupportedByObjectComponents
 3 How ObjectComponents talks to OLE = HowObjectComponentsTalksToOLE

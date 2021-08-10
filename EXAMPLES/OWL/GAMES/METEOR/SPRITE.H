@@ -21,7 +21,7 @@ class Sprite {
   friend class SpriteList;   // so the SpriteList class can access
                              // data members
   public:
-    Sprite( TSize& aScreenSize ) {
+    Sprite( const TSize& aScreenSize ) {
       screenSize = aScreenSize;
       ResetBoundingRect();
       mx=my=0;
@@ -135,7 +135,8 @@ extern int count1;
 //
 class Meteor : public Sprite {
   public:
-    Meteor( TPoint& aOrigin, TSize& aMomentum, int aSize, int aSpawnCount );
+    Meteor( const TPoint& aOrigin, const TSize& aMomentum, 
+            int aSize, int aSpawnCount );
 
     int GetSize() { return size; }
     void SetRotationAngle( int angle );
@@ -164,7 +165,7 @@ class Meteor : public Sprite {
 //
 class Shot : public Sprite {
   public:
-    Shot( TPoint& aOrigin, TSize& aMomentum, int aTimeToDie ):
+    Shot( const TPoint& aOrigin, const TSize& aMomentum, int aTimeToDie ):
       Sprite( TSize(600,400) ) {  //*BBK*
       origin = aOrigin;
       mx = aMomentum.cx;
@@ -194,7 +195,7 @@ class Shot : public Sprite {
 //
 class Debris : public Sprite {
   public:
-    Debris( TPoint& aP1, TPoint& aP2, TSize& screenSize )
+    Debris( const TPoint& aP1, const TPoint& aP2, const TSize& screenSize )
     :
       Sprite(screenSize)
     {
@@ -233,7 +234,7 @@ class Debris : public Sprite {
 //
 class Ship : public Sprite {
   public:
-    Ship( TPoint& pos )
+    Ship( const TPoint& pos )
     :
       Sprite( TSize(600,400) )
     {
@@ -317,9 +318,9 @@ class Ship : public Sprite {
 //
 class Message: public Sprite {
   char *text;
-  int  bufferLen;
+  uint  bufferLen;
 public:
-  Message( TPoint& aOrigin, int aBufferLen );
+  Message( const TPoint& aOrigin, int aBufferLen );
   ~Message();
   void SetText( const char *aText ) {
     if (strlen(aText) < bufferLen)

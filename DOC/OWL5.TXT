@@ -1,16 +1,73 @@
-ObjectWindows 5.0
+ObjectWindows 5.01
 
-This file contains a list of the new features for Borland's
-ObjectWindows for C++ version 5.0 and information about the
-product that is not included in the documentation. The online
-Help contains updated information not found in the printed
-documentation. For the latest information about Borland C++ and
-for information about how to contact Borland, see the README.TXT
-file included with your distribution disks.
+TABLE OF CONTENTS
+ 1. New features
+ 2. API, implementation, and organizational changes
+ 3. Known problems
+
+1. New features or examples ObjectWindows v5.01 includes the
+following new features:  
+
+-  Emulation of the Column Header common control when running
+   16-bit applications on Windows v3.1 or Windows NT.
+
+OCF/OLE
+-  OCF now supports the Automation VARIANT type via the TAutoVal class.
+-  The AUTOWORD and AUTOEXCL examples (\BC5\EXAMPLES\OCF\) illustrate MS Word and MS Excel controllers, respectively.
+-  The COMSRVR illustrates a simple COM server.
+ 
+ 2. API/Implementation Changes and Fixes
+This section describes changes that were made to ObjectWindows v5.01:
+-  The EvCommand method of TGadgetWindow now attempts to dispatch a menu style command before rerouting the command to the Command Target. This allows derived toolbars, status bars, and toolboxes to have the first crack at commands.
+-  TGadgetWindow creates its tooltip window with the WS_DISABLED flag enabled to prevent the tooltip from accidentally grabbing input focus.
+-  TOleWindow no longer exposes methods/routines related to hosting OCXes in 16-bit since the required low-level support is not implemented in the underlying helper DLL, BOCOLE.DLL.
+-  TFrameWindow's GetCommandTarget uses the following search logic:
+     a. Focus window if it's a child of our client
+     b. Our client window
+     c. Focus window if it's a child of ours
+     d. Last focus child of ours
+     e. The frame itself
+   NOTE: In prior versions, items b and c were reversed; this often caused menus/buttongadgets to be disabled if a window not parent to the frame's client area (such as a control in a toolbar) has focus.
+
+-  TPrinter's SetPageSizes is now virtual.
+-  TPaneSplitter's RemovePanes is now virtual.
+-  Nested classes within TDib are now properly exported from the ObjectWindows DLL.
+-  The size grip is removed from maximized frame.
+   NOTE: The size grip is not implemented in 16-bit as the current implementation of TUIPart does not emulate the functionality provided by the 'DrawFrameControl' API.
+-  The 'NGrowBy' member of TCelArray is initialized to 1 if an initial value was not specified.
+-  TTooltip only caches the hint text specified when OWL provides the underlying implementation of tooltips.
+-  TPropertySheet's PageUnchanged method now passes the window's handle when sending the PSM_UNCHANGED message.
+-  TPropertySheet provides a 'EnableSubclass' method to inform OWL that the property sheet should be subclassed and thunked. Use this method if you want to customize the sheet and/or added event handlers in a TPropertySheet-derived class.
+-  The TWinsockDll class now provides static member functions which bind to the corresponding API in the Winsock DLL the first time they are invoked. The prior version exposed 'function' objects which required that the DLL implement all functions whether they were invoked or not. The same applies to the TWinGDll class.
+-  TWindow provides two new methods Attach and Detach for instances when the underlying HWND may be destroyed and recreated.
+
+
+ 3. Known problems
+-  The location is ignored when inserting a dockable window into the harbor.  
+-  The text of a TGlyphButton object is not painted correctly when the button is disabled.
+-  Various members of the TPrintDialog::TData object are not properly copied to the PRINTDLG or PAGESETUPDLG structures.
+-  Misc. painting problems with docking toolbars
+-  Status bars (TStatusBar) and the bottom of a decorated frame's client are not laid out correctly.
+-  Enabling 'ShrinkToClient' does not work properly with dialogs as client with decorated frame windows.
+
+OCF/OLE
+-  Embedded or linked objects revert to their original size after being resized and made persistent.
+-  OLE documents are considered dirty as soon as an object is activated
+-  TOcDocument creates a TOcPart for both 'regular' embedded objects and OLE control loaded from a storage/stream (NOTE: A TOcControl should be created for controls).
+
+BIDS/Class Library
+-  The constructor of some of the static instances of TRegKey causes an exception under Windows NT v3.51. [NOTE: The current implementation uses a __try/__except block to catch the exception. The exceptions are therefore only noticeable when running under a debugger, such as TD32].
+-  TFileName's MergeParts fails to check for existing backslashes.
+-  TFileName's Move relies on the 'MoveFileEx' API which is not implemented on Windows 95. 
+-  TButtonGadget fails to rebuild the bitmaps of the button upon a WM_SYSCOLORCHANGE message.
+ 
+
+ObjectWindows 5.0
+This file contains a list of the new features for Borland's ObjectWindows for C++ version 5.0 and information about the product that is not included in the documentation. The online Help contains updated information not found in the printed documentation. For the latest information about Borland C++ and how to contact Borland, see the README.TXT file included with your distribution disks.
  
 TABLE OF CONTENTS
  1. New features
- 2. API, implementation and organization changes
+ 2. API, implementation, and organizational changes
  3. ObjectWindows examples directory structure
  4. Rebuilding ObjectWindows Library
  5. Known problems
@@ -18,106 +75,74 @@ TABLE OF CONTENTS
 1. New features 
 ObjectWindows 5.0 includes the following new features:
  -  Complete encapsulation of Windows Common Controls
-	Common Control			            ObjectWindows Class(es)
-	Animation 				            TAnimateCtrl
-	Column Header 			            TColumnHeader
-	Progress Indicator			        TGauge
-	Hotkey				                THotKey
-	Track Bar				            TSlider
-	List View				            TListWindow
-	Tree View				            TTreeWindow
-	PropertySheet & Property Pages		TPropertySheet/TPropertyPage
-	Tab 				                TTabControl
-	Tooltip				                TTooltip
-	UpDown				                TUpDown
-	RichEdit				            TRichEdit
-	Drag Listbox				        TDragList
+	Common Control			ObjectWindows Class(es)
+	Animation 				        TAnimateCtrl
+	Column Header 				    TColumnHeader
+	Progress Indicator			    TGauge
+	Hotkey				            THotKey
+	Track Bar				        TSlider
+	List View				        TListWindow
+	Tree View				        TTreeWindow
+	PropertySheet & Property Pages	TPropertySheet/TPropertyPage
+	Tab 				            TTabControl
+	Tooltip				            TTooltip
+	UpDown				            TUpDown
+	RichEdit				        TRichEdit
+	Drag Listbox				    TDragList
 
- -  Additional ObjectWindows Controls such as glyph buttons, check listboxes 
-    and notetabs 
- -  Improved toolbar and statusbar implementation with docking support and 
-    new gadgets (See the DOCKING and GADGETS examples under EXAMPLES\OWL\CLASSES)
- -  OCX Container support: OWL's TOleWindow can now host OCX controls. The 
-    TOleDialog class provides a mechanism whereby OLE controls are 
-    dynamically instantiated when a dialog is created. The OCXDIALOG example 
-    illustrates. OWL and OCF also provides methods to catch events and invoke 
-    the properties and methods of the controls.
+ -  Additional ObjectWindows Controls, such as glyph buttons, check listboxes, and notetabs 
+ -  Improved toolbar and status bar implementation with docking support and new gadgets (See the DOCKING and GADGETS examples under EXAMPLES\OWL\CLASSES)
+ -  OCX Container support: OWL's TOleWindow can now host OCX controls. The TOleDialog class provides a mechanism whereby OLE controls are dynamically instantiated when a dialog is created. The OCXDIALOG example illustrates. OWL and OCF also provides methods to catch events and invoke the properties and methods of the controls.
 
  -  New classes that manage UI drawing
-	    UI Helper Class			Draws
-	    TUIHandle				Manipulators for on-screen objects
-	    TUIBorder				Border styles
-	    TUIPart				    Frame and parts of controls
-	    TUIFace				    Bitmap in various states (eg. disabled)
+	UI Helper Class			Draws
+	TUIHandle				Manipulators for on-screen objects
+	TUIBorder				Border styles
+	TUIPart				    Frame and parts of controls
+	TUIFace				    Bitmap in various states (e.g. disabled)
 
- -  Support classes for OS extensions such as WinG, Winsock and MAPI
+ -  Support classes for OS extensions such as WinG, Winsock, and MAPI
  -  Improved routing of WM_COMMAND messages
- -  Encapsulation of the Win95 Shell Namespace with easy methods to browse 
-    through the hierarchy of objects (files, storage devices, printers, 
-    networks etc) on the desktop. 
+ -  Encapsulation of the Win95 Shell Namespace with easy methods to browse through the hierarchy of objects (files, storage devices, printers, networks, etc.) on the desktop. 
 
-2. API, implementation and organization changes
+2. API, implementation, and organizational changes
 This section describes changes that have been made to ObjectWindows
--  Several methods have been updated to use the intrinsic 'bool' type 
-   supported by the compiler
--  The virtual method 'Error' of TValidator now takes a 'TWindow*' as 
-   parameter
--  TBitmapGadget takes two additonal, optional parameters: 'index' of image 
-   and 'flag' indicating whether the image is from the shared TCelArray 
-   instance
--  Several methods of TDC which expected a TColor by value now take a 
-   'const TColor&' instead
--  Several methods of TEdit are now virtual so they may be overriden by the 
-   new TRichEdit class
--  TGadget is now derived from TStreameableBase when compiled in an 
-   environment which does not support RTTI
--  TGadgetWindow no longer relies on the WM_SIZE message to layout its 
-   gadgets; the WM_WINDOWPOSCHANGING message is used instead
--  The 'margin' paramter of the TGauge constructor now defaults to 1
+-  Several methods have been updated to use the intrinsic 'bool' type supported by the compiler
+-  The virtual method 'Error' of TValidator now takes a 'TWindow*' as parameter
+-  TBitmapGadget takes two additional, optional parameters: 'index' of image and 'flag' indicating whether the image is from the shared TCelArray instance
+-  Several methods of TDC which expected a TColor by value now take a 'const TColor&' instead
+-  Several methods of TEdit are now virtual so they may be overridden by the new TRichEdit class
+-  TGadget is now derived from TStreameableBase when compiled in an environment which does not support RTTI
+-  TGadgetWindow no longer relies on the WM_SIZE message to layout its gadgets; the WM_WINDOWPOSCHANGING message is used instead
+-  The 'margin' parameter of the TGauge constructor now defaults to 1
 -  TModule is no longer derived from TEventHandler
--  The 'size' parameter of the TSeparatorGadget now defaults to 0, allowing 
-   the gadget to dynamically compute the proper value based on the 
-   environment settings.
--  The constructor of TTextGadget now takes an additional, optional TFont* 
-   as parameter
--  TWindow's GetParent now returns a 'TWindow*'. The 'GetParentH' returns 
-   the parent's window handle
--  TControlGadget no longer defines the 'void Invalidate(bool = true' method
--  TTextGadgets now uses the 'tmMaxCharWidth' data member of the TEXTMETRICS 
-   structure to determine its size [instead of 
-   ((tmMaxCharWidth+tmAveCharWidth)/2)]
+-  The 'size' parameter of the TSeparatorGadget now defaults to 0, allowing the gadget to dynamically compute the proper value based on the environment settings.
+-  The constructor of TTextGadget now takes an additional, optional TFont* as parameter
+-  TWindow's GetParent now returns a 'TWindow*'. The 'GetParentH' returns the parent's window handle
+-  TControlGadget no longer defines the 'void Invalidate(bool = true)' method
+-  TTextGadgets now uses the 'tmMaxCharWidth' data member of the TEXTMETRICS structure to determine its size [instead of ((tmMaxCharWidth+tmAveCharWidth)/2)]
 -  TWindow's IdleAction now invokes the 'IdleAction' method of its children.
 
 3. New examples directory structure
-The directorires containing ObjectWindows examples have been restructured
+The directories containing ObjectWindows examples have been restructured
 
-Directory structure             Contains
+Directory structure                                    Contains
 + BC5
    + Examples		
       + OWL
-          + Apps		        Samples using multiple OWL classes
-          + Classes		        Smaller samples illustrating one or two classes
-          + Experts             Some standard AppExpert-generated applications
-          + Games		        Sample Games written with OWL
-          + OCF		            OLE Container/Server samples
-          + Tasks		        Tasks-oriented samples
-          + Tools		        Tools written with ObjectWindows
-          + Tutorial		    Examples accompanying OWL Tutorial manual
-          + WinAPI		        Examples exploring various Windows API
+          + Apps		Samples using multiple OWL classes
+          + Classes		Smaller samples illustrating one or two classes
+          + Experts     Some standard AppExpert-generated applications
+          + Games		Sample Games written with OWL
+          + OCF		    OLE Container/Server samples
+          + Tasks		Task-oriented samples
+          + Tools		Tools written with ObjectWindows
+          + Tutorial	Examples for use with the OWL Tutorial 
+          + WinAPI		Examples exploring various Windows API
 
-4. Rebuilding ObjectWindows Library 
-The batch file BUILDOWL.BAT located in the SOURCE\OWL directory
-illustrates the MAKE options used to build the various versions
-of the ObjectWindows Library.  The batch file only utilizes the
-basic options. You may run the batch file with additional
-parameters such as DIAGS=1 or CODEGUARD=2 to create the
-diagnostic or codeguarded versions of the library respectively.
-NOTE: The ObjectWindows library now contains two assembly
-modules (DIBBLT16.ASM & DIBBLT32.ASM) which require TASM when
-rebuilding the library
+4. Rebuilding ObjectWindows Library
+The batch file BUILDOWL.BAT located in the SOURCE\OWL directory illustrates the MAKE options used to build the various versions of the ObjectWindows Library. The batch file only utilizes the basic options. You can run the batch file with additional parameters such as DIAGS=1 or CODEGUARD=2 to create the diagnostic or CodeGuarded versions of the library, respectively. 
+NOTE: The ObjectWindows library now contains two assembly modules (DIBBLT16.ASM & DIBBLT32.ASM) which require TASM when rebuilding the library. Prebuilt copies of the object modules are included in the respective subdirectories under the SOURCE\OWL\O directory if you do not have a copy of the Turbo Assembler.
 
-
-5. Known problems Some methods of the TUIxxxx helper objects do
-not have proper emulation support when running under Windows 3.1.
-Subsequently, some classes, such as TSeparatorGadget may not
-behave correctly under Windows 3.1.
+5. Known problems
+Some methods of the TUIxxxx helper objects do not have proper emulation support when running under Windows 3.1. Subsequently, some classes, such as TSeparatorGadget, may not behave correctly under Windows 3.1.

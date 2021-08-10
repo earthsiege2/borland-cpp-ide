@@ -2,40 +2,41 @@
  * filename - closeall.c
  *
  * function(s)
- *        fcloseall - close open streams
+ *        _fcloseall - close open streams
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
 
 /*------------------------------------------------------------------------*
 
-Name            fcloseall - close open streams
+Name            _fcloseall - close open streams
 
-Usage           int fcloseall(void);
+Usage           int _fcloseall(void);
 
 Prototype in    stdio.h
 
-Description     fcloseall closes all open  streams except stdin and stdout.
+Description     _fcloseall closes all open  streams except stdin and stdout.
                 All buffers  associated to each  stream are flushed  before
                 closing. System  allocated buffers are freed  upon closing.
                 Buffers   assigned   with   setbuf   or   setvbuf  are  not
                 automatically freed.
 
-Return value    fcloseall returns the total number of streams it closed or,
+Return value    _fcloseall returns the total number of streams it closed or,
                 EOF if any errors were detected.
 
 *-------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC fcloseall (void)
+int _RTLENTRY _EXPFUNC _fcloseall (void)
 {
     FILE *fp;
     int   i, cnt;

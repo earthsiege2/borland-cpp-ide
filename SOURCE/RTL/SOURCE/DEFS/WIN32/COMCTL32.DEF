@@ -1,31 +1,72 @@
-LIBRARY     COMCTL32.DLL
-
+LIBRARY COMCTL32
 EXPORTS
+
+    AddMRUData
+    AddMRUStringA
+    AddMRUStringW
+    Alloc
     Cctl1632_ThunkData32
     CreateHeaderWindow
     CreateHeaderWindowA
     CreateHeaderWindowW
+    CreateMRUListA
+    CreateMRUListW
     CreateMappedBitmap
+    CreatePage
     CreatePropertySheetPage
     CreatePropertySheetPageA
     CreatePropertySheetPageW
+    CreateProxyPage
     CreateStatusWindow
     CreateStatusWindowA
     CreateStatusWindowW
     CreateToolbar
     CreateToolbarEx
     CreateUpDownControl
+    DPA_Clone
+    DPA_Create
+    DPA_CreateEx
+    DPA_DeleteAllPtrs
+    DPA_DeletePtr
+    DPA_Destroy
+    DPA_GetPtr
+    DPA_GetPtrIndex
+    DPA_Grow
+    DPA_InsertPtr
+    DPA_Search
+    DPA_SetPtr
+    DPA_Sort
+    DSA_Create
+    DSA_DeleteAllItems
+    DSA_DeleteItem
+    DSA_Destroy
+    DSA_GetItem
+    DSA_GetItemPtr
+    DSA_InsertItem
+    DSA_SetItem
+    DelMRUString
     DestroyPropertySheetPage
+    DllGetVersion
+    DoReaderMode
     DrawInsert
     DrawStatusText
     DrawStatusTextA
     DrawStatusTextW
+    EnumMRUListA
+    EnumMRUListW
+    FindMRUData
+    FindMRUStringA
+    FindMRUStringW
+    Free
+    FreeMRUList
     GetEffectiveClientRect
+    GetSize
     HeaderWndProc
     ImageList_Add
     ImageList_AddIcon
     ImageList_AddMasked
     ImageList_BeginDrag
+    ImageList_Copy
     ImageList_Create
     ImageList_Destroy
     ImageList_DragEnter
@@ -52,18 +93,57 @@ EXPORTS
     ImageList_ReplaceIcon
     ImageList_SetBkColor
     ImageList_SetDragCursorImage
+    ImageList_SetFilter
     ImageList_SetIconSize
+    ImageList_SetImageCount
     ImageList_SetOverlayImage
     ImageList_Write
     InitCommonControls
+    InitCommonControlsEx
+    IntlStrEqWorkerA
+    IntlStrEqWorkerW
     LBItemFromPt
     MakeDragList
     MenuHelp
     PropertySheet
     PropertySheetA
     PropertySheetW
+    ReAlloc
+    SendNotify
+    SendNotifyEx
+    SetPathWordBreakProc
     ShowHideMenuCtl
+    SmoothScrollWindow
     StatusWndProc
+    StrCSpnA
+    StrCSpnIA
+    StrCSpnIW
+    StrCSpnW
+    StrChrA
+    StrChrIA
+    StrChrIW
+    StrChrW
+    StrCmpNA
+    StrCmpNIA
+    StrCmpNIW
+    StrCmpNW
+    StrRChrA
+    StrRChrIA
+    StrRChrIW
+    StrRChrW
+    StrRStrIA
+    StrRStrIW
+    StrStrA
+    StrStrIA
+    StrStrIW
+    StrStrW
+    StrToIntA
+    StrToIntW
+    Str_GetPtrA
+    Str_GetPtrW
+    Str_SetPtrA
+    Str_SetPtrW
     ToolbarWndProc
     TrackBarWndProc
     UpDownWndProc
+    _TrackMouseEvent

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.9  $
 //
 // Implementation of class TScroller.
 //----------------------------------------------------------------------------
@@ -22,6 +22,8 @@
 #define max(a,b)   (((a) > (b)) ? (a) : (b))
 #define min(a,b)   (((a) < (b)) ? (a) : (b))
 #define abs(a)     ((a) >= 0 ? (a) : -(a))
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 //
@@ -68,7 +70,10 @@ TScroller::~TScroller()
 void
 TScroller::SetPageSize()
 {
-  if (Window) {
+  PRECONDITION(Window);
+  PRECONDITION(Window->GetHandle());
+
+  if (Window && Window->GetHandle()) {
     TRect  clientRect;
     Window->GetClientRect(clientRect);
     int width = clientRect.Width();
@@ -78,7 +83,7 @@ TScroller::SetPageSize()
       XPage = max(1, (width+1) / XUnit - 1);
 #if defined(BI_PLAT_WIN32)
       if (XTotalUnits && XTotalUnits > width) {
-        Window->SetScrollPage(SB_HORZ, width / XTotalUnits * XRange, true);
+        Window->SetScrollPage(SB_HORZ, (width * XRange) / XTotalUnits, true);
       }
       else
         Window->SetScrollPage(SB_HORZ, XUnit, false);
@@ -89,7 +94,7 @@ TScroller::SetPageSize()
       YPage = max(1, (height+1) / YUnit - 1);
 #if defined(BI_PLAT_WIN32)
       if (YTotalUnits && YTotalUnits > height) {
-        Window->SetScrollPage(SB_VERT, height / YTotalUnits * YRange, true);
+        Window->SetScrollPage(SB_VERT, (height * YRange)/ YTotalUnits, true);
       }
       else
         Window->SetScrollPage(SB_VERT, YUnit, false);
@@ -144,7 +149,10 @@ TScroller::SetUnits(int xUnit, int yUnit)
 void
 TScroller::SetSBarRange()
 {
-  if (Window) {
+  PRECONDITION(Window);
+  PRECONDITION(Window->GetHandle());
+
+  if (Window && Window->GetHandle()) {
     if (HasHScrollBar) {
       int curMin, curMax;
       Window->GetScrollRange(SB_HORZ, curMin, curMax);
@@ -316,7 +324,10 @@ TScroller::HScroll(uint scrollEvent, int thumbPos)
 void
 TScroller::ScrollTo(long x, long y)
 {
-  if (Window) {
+  PRECONDITION(Window);
+  PRECONDITION(Window->GetHandle());
+
+  if (Window && Window->GetHandle()) {
     long  newXPos = max(0, min(x, XRange));
     long  newYPos = max(0, min(y, YRange));
 
@@ -361,6 +372,9 @@ TScroller::IsAutoMode()
 void
 TScroller::AutoScroll()
 {
+  PRECONDITION(Window);
+  PRECONDITION(Window->GetHandle());
+
   if (AutoMode && Window) {
     TRect  clientRect;
     TPoint cursorPos;

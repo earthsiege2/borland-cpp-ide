@@ -1,22 +1,31 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.5  $
+// $Revision:   2.9  $
 //
 //   OLE Registration implementation
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/ocreg.h>
-#include <ocf/appdesc.h>
-#include <classlib/pointer.h>
+#if !defined(OCF_OCREG_H)
+# include <ocf/ocreg.h>
+#endif
+#if !defined(OCF_APPDESC_H)
+# include <ocf/appdesc.h>
+#endif
+#if !defined(CLASSLIB_POINTER_H)
+# include <classlib/pointer.h>
+#endif
 #include <shellapi.h>
 #include <string.h>
-#include <stdlib.h>  // atol()
-#include <stdio.h>   // sprintf()
+#include <stdlib.h>
 
 DIAG_DEFINE_GROUP(OcDll, true, 1);
 DIAG_DECLARE_GROUP(OcRefCount);
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
 
 #if defined(BI_APP_DLL)
   extern TRegistrar* DllRegistrar;
@@ -91,13 +100,20 @@ static const char* OcRegTemplates[] = {
 
 /* 054 */ "CLSID\\<clsid>\\Version = <version>",
 /* 055 */ "CLSID\\<clsid>\\DataFormats\\DefaultFile = <filefmt>",
-/* 056 */ "CLSID\\<clsid>\\Ole1Class = <progid>",  // is this really needed?
+/* 056 */ "CLSID\\<clsid>\\Ole1Class = <progid>",        
 /* 057 */ ".<extension> = <progid>",
 
 /* 060 */ "<progid>\\Shell\\Print\\Command = <path> %1",
 /* 061 */ "<progid>\\Shell\\Open\\Command = <path> %1",
 /* 062 */ "<progid>\\protocol\\StdFileEditing\\server = <debugger> <path><extraopt>",
 /* 063 */ "<progid>\\Insertable",
+
+// Following entries are specific to controls
+//
+
+/* 064 */ "CLSID\\<clsid>\\Control",
+/* 065 */ "CLSID\\<clsid>\\ToolBoxBitmap32 = <path>,<toolbmpindex>",
+
           0,
 };
 
@@ -108,6 +124,7 @@ static TRegParamList::TEntry OcRegParams[] = {
   {"clsid",             0, ""                },// GUID standard string form
   {"progid",            0, "\001\002\003\005\006\007"},// A unique name
   {"insertable",        0, "\046\047\062\063"},// Defined to publish server
+  {"control",           0, "\064\065"        },// Defined to publish control
   {"usage",  ocrSingleUse, ""                },// Class factory registration
   {"description",       0, ""                },// Human readable, 40 chars max
 #if defined(BI_PLAT_WIN32)
@@ -122,6 +139,7 @@ static TRegParamList::TEntry OcRegParams[] = {
   {"permid",            0, "\050\051\053"    },// Version independent clsid
   {"permname",          0, "\052"            },// Version independent progid
   {"iconindex",       "0", "\004"            },// Zero-based resource icon
+  {"toolbmpindex",    "1", "\065"            },// Index of resource bitmap for palette
   {"menuname",         "", "\045"            },// 15 characters maximum
   {"appname",           0, ""                },// AppName, AuxUserType/3
   {"verb0",             0, "\010\020"        },// Name of primary verb
@@ -165,7 +183,7 @@ static TRegParamList::TEntry OcRegParams[] = {
   {"docflags",        "0", ""                },
   {"directory",         0, ""                },
   {"docfilter",         0, ""                },
-  {"debugclsid",        0, ""/*INTERNAL GEN*/},// Internal,NOT USER SPECIFIED 
+  {"debugclsid",        0, ""/*INTERNAL GEN*/},// Internal,NOT USER SPECIFIED
   {"extraopt",         "", ""/*INTERNAL USE*/},// Cmdline debug/non-debug flag
   {"debugprogid",       0, ""                },// Define to force debug reg
   {"debugdesc",         0, ""                },// Different string for debug
@@ -196,8 +214,8 @@ long OcRegisterClass(TRegList& regInfo, HINSTANCE module, ostream& out,
   // Initialize the symbol table
   //
   symbolTable.Init(filter);
-  
-  // Check for language defaulted to system or user configuration & 
+
+  // Check for language defaulted to system or user configuration &
   // assign language parameter based on TLocaleString's setting
   //
   if (lang == LangSysDefault)
@@ -207,9 +225,9 @@ long OcRegisterClass(TRegList& regInfo, HINSTANCE module, ostream& out,
 
   int langIdx = symbolTable.Params.Find("language");
   char langBuf[10];
-  sprintf(langBuf, "%X", lang);
+  wsprintf(langBuf, "%X", lang);
   symbolTable.Params.Value(langIdx) = langBuf;
-  
+
   // Assign path parameter initially to module load path of the given HINSTANCE
   //
   const int pathSize = 512;
@@ -344,12 +362,16 @@ int OcSetupDebugReg(TRegList& regInfo, TRegItem* regDebug, TLangId lang,
           TXRegistry::Check(1, *newKey); // incomplete debug registration
       }
     }
-    regDebug->Key   = *oldKey;         // Write normal key + debug value to 
+    regDebug->Key   = *oldKey;         // Write normal key + debug value to
     regDebug->Value = value;           // output reg list
   }
   regDebug->Key = 0;                   // 0-terminate reg list
   return stat;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 //----------------------------------------------------------------------------
 // TRegistrar - Application registration manager interface class
@@ -513,17 +535,17 @@ STDAPI __export DllGetClassObject(const GUID far& clsid, const GUID far& iid,
 // OLE 2.0 entry point for checking if DLL has no clients and can be unloaded
 //
 STDAPI __export DllCanUnloadNow()
-{  
+{
   TRegistrar* registrar = 0;
   while ((registrar = TRegistrar::GetNext(registrar)) != 0) {
     if (!registrar->CanUnload()) {
-      TRACEX(OcDll, 1, "DllCanUnloadNow returning " << hex << uint32(HR_FALSE));
+      TRACEX(OcDll, 1, "DllCanUnloadNow returning HR_FALSE");
       return HR_FALSE;
     }
   }
-  TRACEX(OcDll, 1, "DllCanUnloadNow returning " << hex << uint32(HR_OK));
+  TRACEX(OcDll, 1, "DllCanUnloadNow returning HR_OK");
   return HR_OK;
-}     
+}
 
 //
 // OLE 2.0 entry point for registering DLL, no locale info passed

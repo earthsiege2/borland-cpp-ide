@@ -1,5 +1,6 @@
 #ifndef __STDRWCOMPILER_H__
 #define __STDRWCOMPILER_H__ 1
+/* $Revision:   8.3  $ */
 
 /***************************************************************************
  *
@@ -744,7 +745,7 @@
 #      define RWSTD_NO_PART_SPEC_OVERLOAD           1
 #      define RWSTD_NO_EXPLICIT_INSTANTIATION       1
 
-#else    if __TURBOC__ < 0x501
+#elif __TURBOC__ <= 0x520
 /*
  *   Borland 5.0:
  *   implements namespaces, bool and mutable
@@ -850,7 +851,7 @@
 #      define RWSTD_NO_EXCEPTIONS                   1
 
 /* MSVC version 3.0 */
-#else if _MSC_VER < 1001
+#elif _MSC_VER < 1001
 #      define RWSTD_NO_BOOL                         1
 #      define RWSTD_NO_DEFAULT_TEMPLATES            1
 #      define RWSTD_NO_FORWARD_DEFAULT_TEMPLATES    1

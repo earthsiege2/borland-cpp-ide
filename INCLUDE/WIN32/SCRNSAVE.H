@@ -4,7 +4,9 @@
 *                                                                             *
 *               Version 1.0                                                   *
 *                                                                             *
+#pragma option -b.
 *               NOTE: windows.h must be #included first                       *
+#pragma option -b
 *                                                                             *
 *  Windows NT NOTE:   (Differences from Win 3.1 Screensavers)                 *
 *                                                                             *
@@ -23,21 +25,24 @@
 *               and dialogs have been removed from individual Screensavers.   *
 *                                                                             *
 *                                                                             *
-*          Copyright (c) 1992-1995, Microsoft Corp.  All rights reserved.     *
+*          Copyright (c) 1992-1996, Microsoft Corp.  All rights reserved.     *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _INC_SCRNSAVE
 #define _INC_SCRNSAVE
+#pragma option -b
 
+#pragma option -b.
 #include <pshpack1.h>   /* Assume byte packing throughout */
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif	/* __cplusplus */
 
 
-/* MANDATORY string required in .RC file 
+/* MANDATORY string required in .RC file
  * This string should contain a less than 25 char name/description of the
  * screen saver.  This string is what will be seen by the user in the Control
  * Panel's Desktop applet screen saver listbox.
@@ -71,7 +76,12 @@ extern "C" {            /* Assume C declarations for C++ */
  * DefScreenSaverProc if desired which will take default action on any
  * unprocessed message...
  */
+#ifdef UNICODE
+LRESULT WINAPI ScreenSaverProcW (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+#   define  ScreenSaverProc ScreenSaverProcW
+#else
 LRESULT WINAPI ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+#endif
 
 /* This function performs default message processing.  Currently handles
  * the following messages:
@@ -141,7 +151,7 @@ BOOL WINAPI RegisterDialogClasses (HANDLE hInst);
 #define BUFFLEN           255
 
 /* The following globals are defined in scrnsave.lib */
-extern HANDLE hMainInstance;
+extern HINSTANCE hMainInstance;
 extern HWND   hMainWindow;
 extern BOOL   fChildPreview;
 extern TCHAR  szName[TITLEBARNAMELEN];
@@ -164,7 +174,7 @@ extern UINT   MyHelpMessage;
  * check failed.  Return nonzero for success.  If you run out of memory or
  * encounter a similar class of error, return non-zero so the user isn't left
  * out in the cold.  The default action is to call the Windows Master
- * Password Router to validate the user's password. 
+ * Password Router to validate the user's password.
  */
 
 void WINAPI ScreenSaverChangePassword( HWND hParent );
@@ -182,6 +192,9 @@ void WINAPI ScreenSaverChangePassword( HWND hParent );
 }
 #endif	/* __cplusplus */
 
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
+#pragma option -b.
 #endif  /* !_INC_SCRNSAVE */

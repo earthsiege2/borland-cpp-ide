@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <ntbc.h>
 
@@ -20,6 +21,7 @@
 #include <_io.h>
 #include <stdlib.h>
 #include <string.h>
+#include <_tchar.h>
 
 /* The following helper function is in statcvt.c.
  */
@@ -33,10 +35,13 @@ extern void _statcvt(
 
 /*-----------------------------------------------------------------------*
 
-Name            stat - gets information about open file
+Name            _tstat used as stat and _wstat
+                stat   - gets information about open file
+                _wstat - gets information about open file
 
 Usage           #include <sys\stat.h>
                 int stat(const char *pathname, struct stat *buff)
+                int _wstat(const wchar_t *pathname, struct stat *buff)
 
 Prototype in    sys\stat.h
 
@@ -77,32 +82,32 @@ Return value    The return value is 0 if the call was successful, otherwise
 
 *------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC stat (const char *pathP, struct stat *bufP)
+int _RTLENTRY _EXPFUNC _tstat (const _TCHAR *pathP, struct stat *bufP)
 {
     WIN32_FIND_DATA ff;
     HANDLE      hfile;              /* file handle */
-    char        curdir[MAX_PATH];   /* current directory */
-    char        DriveChar;
-    char       *full;
+    _TCHAR      curdir[MAX_PATH];   /* current directory */
+    _TCHAR      DriveChar;
+    _TCHAR     *full = 0;
 
     /* Assume it is a disk file and try to get the FindFirst info.
      */
     memset(bufP, 0, sizeof(struct stat));   /* Zero the structure   */
     bufP->st_nlink = 1;
 
-    if ((hfile = FindFirstFile((char *)pathP, &ff)) == (HANDLE)-1)
+    if ((hfile = FindFirstFile(pathP, &ff)) == (HANDLE)-1)
     {
         /* Check for special case of ROOT directory
          */
-        if ((strpbrk(pathP, "\\/.") != NULL) &&
-           ((full = _fullpath(NULL, pathP, 0)) != NULL) &&
-           (strlen(full) == 3))
+        if ((_tcspbrk(pathP, _TEXT("\\/.")) != NULL) &&
+           ((full = _tfullpath(NULL, pathP, 0)) != NULL) &&
+           (_tcslen(full) == 3))
         {
             if (GetDriveType(full) < 2)
                 return (__NTerror());
 
             bufP->st_mode = S_IFDIR;
-            bufP->st_dev = bufP->st_rdev = toupper(full[0]) - 'A' + 1;
+            bufP->st_dev = bufP->st_rdev = _totupper(full[0]) - _TEXT('A') + 1;
 
             free(full);
             return 0;
@@ -114,7 +119,7 @@ int _RTLENTRY _EXPFUNC stat (const char *pathP, struct stat *bufP)
         /* It may not be a disk file.  Try to open the file for reading
          * so we can find out the type of the file.
          */
-        if ((hfile = CreateFile((PSZ)pathP, GENERIC_READ,
+        if ((hfile = CreateFile(pathP, GENERIC_READ,
                       FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                       OPEN_EXISTING, 0, NULL)) == (HANDLE)-1)
             return (__NTerror());
@@ -135,12 +140,12 @@ int _RTLENTRY _EXPFUNC stat (const char *pathP, struct stat *bufP)
     /* Determine the disk device by parsing the drive name.
      * If no drive name, assume current drive.
      */
-    if (pathP[1] == ':')
+    if (pathP[1] == _TEXT(':'))
         DriveChar = pathP[0];
     else
     {
         if (GetCurrentDirectory(sizeof(curdir), curdir) == 0)
-            DriveChar = 'A';        /* reasonable default if failure */
+            DriveChar = _TEXT('A');        /* reasonable default if failure */
         else
             DriveChar = curdir[0];
     }

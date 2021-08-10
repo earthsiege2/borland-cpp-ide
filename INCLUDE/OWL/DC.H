@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.12  $
+//$Revision:   10.15  $
 //
 // Definition of GDI DC encapsulation classes:
 //   TDC, TWindowDC, TScreenDC, TDesktopDC, TClientDC, TPaintDC, TMetaFileDC,
@@ -16,6 +16,10 @@
 #endif
 #if defined(BI_PLAT_WIN16) && !defined(__PRINT_H)
 # include <print.h>      // Win16 printing and some general DC APIs
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 class _OWLCLASS TPen;
@@ -660,7 +664,6 @@ class _OWLCLASS TDibDC : public TMemoryDC {
   public:
     TDibDC();
     TDibDC(const TBitmap& bitmap);
-    TDibDC(const TDib& dib);
 
     uint        GetDIBColorTable(uint start, uint entries, RGBQUAD far* colors);
     uint        SetDIBColorTable(uint start, uint entries, const RGBQUAD far* colors);
@@ -741,6 +744,10 @@ class _OWLCLASS TPrintDC : public TCreatedDC {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inlines for DC classes

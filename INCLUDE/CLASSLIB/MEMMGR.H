@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.8  $
+//$Revision:   5.11  $
 //
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_MEMMGR_H)
@@ -31,6 +31,10 @@
 //#pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -72,7 +76,7 @@ inline void *TMBlockList<Alloc>::operator new ( size_t sz,
                                             size_t extra,
                                             const Alloc& a )
 {
-    return new(a)char[sz+extra];
+    return new(a)_TCHAR[sz+extra];
 }
 
 template <class Alloc>
@@ -124,7 +128,7 @@ public:
     TMBaseMemBlocks( size_t = 8192 );
     ~TMBaseMemBlocks();
 
-    char *Block() const { return REINTERPRET_CAST(char *,CurBlock); }
+    _TCHAR *Block() const { return REINTERPRET_CAST(_TCHAR *,CurBlock); }
     unsigned Count() const { return BlockCount; }
     int AllocBlock( size_t );
     void FreeTo( unsigned );
@@ -372,11 +376,11 @@ public:
       Mem( sz*count ),
       FreeList(0),
       Size( max(sz,sizeof(void *)) )
-    { 
+    {
       CHECK( sz != 0 && count != 0 );
     }
 
-    void *Allocate( size_t sz) 
+    void *Allocate( size_t sz)
     {
       PRECONDITION( Size == max(sz,sizeof(void *)) );
       if( FreeList == 0 )
@@ -388,7 +392,7 @@ public:
         return temp;
         }
     }
-    void Free( void * block) 
+    void Free( void * block)
     {
       *(void **)block = FreeList;
       FreeList = block;
@@ -474,6 +478,10 @@ typedef TMMemBlocks<TStandardAllocator> TStandardBlocks;
 
 #if defined(BI_PLAT_WIN16) && !defined(BI_DATA_NEAR)
  typedef TMMemBlocks<TSharedAllocator> TSharedBlocks;
+#endif
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )

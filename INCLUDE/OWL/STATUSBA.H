@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.9  $
 //
 // Definition of class TStatusBar.
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(OWL_TEXTGADG_H)
 # include <owl/textgadg.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -51,6 +55,11 @@ class _OWLCLASS TStatusBar : public TMessageBar {
     //
     void        Insert(TGadget& gadget, TPlacement = After, TGadget* sibling = 0);
 
+    // Overriden method of TMessageBar to use our own text gadget
+    // Set (or clear if 0) menu/command item hint text displayed in/on bar
+    //
+    virtual void    SetHintText(const char* text);
+
     // In order for the mode indicator status to appear you must have
     // specified the mode when the window was constructed
     //
@@ -61,13 +70,17 @@ class _OWLCLASS TStatusBar : public TMessageBar {
     struct TSpacing {
       TMargins::TUnits  Units;
       int               Value;
-
       TSpacing();
     };
 
     // Sets the spacing to be used between mode indicator gadgets
     //
     void        SetSpacing(const TSpacing& spacing);
+
+    // Control whether hint text is display over the whole window or in
+    // a text gadget.
+    //
+    void        SetWideHints(bool on);
 
   protected:
     void        PositionGadget(TGadget* previous, TGadget* next, TPoint& point);
@@ -77,6 +90,8 @@ class _OWLCLASS TStatusBar : public TMessageBar {
     uint        GetModeIndicators() const;
     void        SetModeIndicators(uint modeindicators);
 
+
+    void        EvOwlFrameSize(uint sizeType, TSize&);
     uint        EvNCHitTest(TPoint& point);
 
   protected_data:
@@ -85,11 +100,16 @@ class _OWLCLASS TStatusBar : public TMessageBar {
     uint                   NumModeIndicators;
     uint                   ModeIndicators;
     uint                   ModeIndicatorState;
+    bool                   WideHintText;
 
   private:
     bool        GetGadgetAndStrings(TModeIndicator mode, TTextGadget*& gadget,
                                     const char*& strOn);
     bool        IsModeIndicator(TGadget* gadget);
+
+#if !defined(BI_PLAT_WIN16)
+    void        InsertSizeGrip(void);
+#endif
 
     // Hidden to prevent accidental copying or assignment
     //
@@ -97,12 +117,22 @@ class _OWLCLASS TStatusBar : public TMessageBar {
     TStatusBar& operator =(const TStatusBar&);
 
   DECLARE_CASTABLE;
+
+#if !defined(BI_PLAT_WIN16)
+  // The event handlers are for managing size grips, which 
+  // aren't available in 16-bit Windows
+  //
   DECLARE_RESPONSE_TABLE(TStatusBar);
+#endif
 };
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -159,5 +189,12 @@ inline void TStatusBar::SetModeIndicators(uint modeindicators) {
   ModeIndicators = modeindicators;
 }
 
+//
+// Informs the StatusBar whether hints should be displayed in a text gadget
+// (on == false) or over the area of the whole statusbar (on == true).
+//
+inline void TStatusBar::SetWideHints(bool on) {
+  WideHintText = on;
+}
 
 #endif  // OWL_STATUSBA_H

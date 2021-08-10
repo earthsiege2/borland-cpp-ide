@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.10  $
 //
 // Implementation of classes TFileDocument, TFileInStream, TFileOutStream,
 // TFileBuf
@@ -14,7 +14,13 @@
 #endif
 #include <stdio.h>
 
+OWL_DIAGINFO;
+
 #if !defined(SECTION) || SECTION == 1
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 //
 // class TFileBuf
@@ -67,6 +73,10 @@ class _OWLCLASS_RTL TFileOutStream : public TFileStreamBase, public TOutStream {
               : TOutStream (doc,0,omode), TFileStreamBase(fhdl,omode,seekpos){}
    ~TFileOutStream();
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 
@@ -128,13 +138,32 @@ TFileDocument::OpenThisFile(int omode, const char far* name, streampos* pseekpos
   InfoPresent = GetFileTime((HANDLE)fhdl, &FileCreateTime, &FileAccessTime,
                             &FileUpdateTime);
 #else
-  FileLength = filelength(fhdl);
+  FileLength = CalcFileLength(fhdl);
   getftime(fhdl, (struct ftime*)&FileTime);
   InfoPresent = true;
 #endif
   NotifyViews(vnDocOpened,omode);
   return fhdl;
 }
+
+//
+// Private function used in 16-bit because it's not a good idea to call
+// filelength() on a file handle returned from _lopen().
+//
+#if !defined(BI_PLAT_WIN32)
+#define FILE_BEGIN   0
+#define FILE_CURRENT 1
+#define FILE_END     2
+
+ulong
+TFileDocument::CalcFileLength(HFILE file)
+{
+  long pos = _llseek(file, 0, FILE_CURRENT);
+  long length = _llseek(file, 0, FILE_END);
+  _llseek(file, pos, FILE_BEGIN);
+  return length;
+}
+#endif
 
 //
 //
@@ -499,7 +528,7 @@ int TFileBuf::sync()
           *(srcp = curp) = '\n';
         }
       }
-      count = curp - srcp;  // write what remains in the buffer below
+      count = (uint)(curp - srcp);  // write what remains in the buffer below
     }
     if (::_lwrite(xfd, srcp, count) != count)
       return EOF;

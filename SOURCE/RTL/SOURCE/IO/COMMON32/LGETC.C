@@ -1,27 +1,29 @@
 /*-----------------------------------------------------------------------*
- * filename - fgetc.c
+ * filename - lgetc.c
  *
  * function(s)
  *    FlushOutStreams - flushes output streams
  *    _ffill      - fill up the read-ahead buffer
- *    _lgetc      - gets character from stream without locking 
+ *    _lgetc      - gets character from stream without locking
  *                  (multi-thread only)
- *    fgetc       - gets character from stream with locking 
+ *    _fgetc      - gets character from stream with locking
  *                  (single-thread only)
- *    _fgetc      - gets character from stream
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.6  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
 #include <_io.h>
+#include <ctype.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
@@ -50,9 +52,12 @@ static void FlushOutStreams( void )
 
 /*---------------------------------------------------------------------*
 
-Name        _ffill - fill up the read-ahead buffer
+Name        _tffill used as _ffill and _wffill
+            _ffill  - fill up the read-ahead buffer
+            _wffill - fill up the (wide) read-ahead buffer
 
 Usage       static  int _ffill  (FILE *fp)
+            static  int _wffill  (FILE *fp)
 
 Description Fill up the read-ahead buffer.  Trusts caller to have checked
             permission to read before calling.  However, we do check
@@ -65,12 +70,14 @@ Return value    -1 <carry set> if error,
 
 *---------------------------------------------------------------------*/
 
-static int _ffill( FILE *fp )
+static int _tffill( FILE *fp )
 {
     if( fp->flags & _F_TERM )
         FlushOutStreams();
 
-    if( (fp->level = __read( fp->fd, (fp->curp = fp->buffer), fp->bsize) ) > 0)
+    fp->level = __tread( fp->fd, (fp->curp = fp->buffer), fp->bsize/sizeof(_TCHAR));
+    fp->level *= sizeof(_TCHAR);
+    if( fp->level > 0)
     {
         fp->flags &= ~_F_EOF;
         return 0;
@@ -92,9 +99,12 @@ static int _ffill( FILE *fp )
 
 /*---------------------------------------------------------------------*
 
-Name            _fgetc - gets character from stream
+Name            __fgettc used as _fgetc and _fgetwc
+                _fgetc  - gets character from stream
+                _fgetwc - gets (wide) character from stream
 
 Usage           int _fgetc(FILE *stream);
+                wint_t _fgetwc(FILE *stream);
 
 Prototype in    stdio.h
 
@@ -104,25 +114,28 @@ Description     this function is only called by the getc() macro. The
 
 Return value    the character read, after converting it to an int
                 without sign extension.  On end-of-file or error,
-                fgetchar returns EOF
+                _fgetc returns EOF
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC _fgetc( register FILE *fp )
+_TINT _RTLENTRY _EXPFUNC __fgettc( register FILE *fp )
 {
-    ++fp->level;
+    fp->level += sizeof(_TCHAR);
 
-    return( fgetc( fp ) );
+    return( _fgettc( fp ) );
 }
 
 
 /*---------------------------------------------------------------------*
 
-Name            _lgetc - gets character from stream without locking
+Name            _lgettc used as _lgetc and _lgetwc
+                _lgetc  - gets character from stream without locking
+                _lgetwc - gets (wide) character from stream without locking
 
 Usage           int _lgetc(FILE *stream);
+                wint_t _lgetwc(FILE *stream);
 
-Prototype in    stdio.h
+Prototype in    _stdio.h
 
 Description     behaves exactly like getc, except that it is a true
                 function while getc is a macro.  It does NOT lock
@@ -135,20 +148,25 @@ Return value    the character read, after converting it to an int
 *---------------------------------------------------------------------*/
 
 #ifdef _MT
-int _lgetc( register FILE  *fp )
+int _lgettc( register FILE  *fp )
 #else
-int _RTLENTRY _EXPFUNC fgetc (FILE  *fp)
+_TINT _RTLENTRY _EXPFUNC _fgettc (FILE  *fp)
 #endif
 {
-    static unsigned char    c;
+#ifdef _UNICODE
+    static wchar_t c;
+#else
+    static unsigned char c;
+#endif
 
     if( fp == NULL)
         return( EOF );
 
     if( fp->level > 0 )
     {
-        --fp->level;
-        return( (unsigned char)(*fp->curp++) );
+        fp->level -= sizeof(_TCHAR);
+        c = *((_TCHAR*)fp->curp)++;
+        return c;
     }
 
     if( fp->level < 0 || fp->flags & (_F_OUT | _F_ERR) || !(fp->flags & _F_READ) )
@@ -161,17 +179,18 @@ int _RTLENTRY _EXPFUNC fgetc (FILE  *fp)
 
     if( fp->bsize != 0 )        /* is the stream buffered ? */
     {
-        if( _ffill( fp ) )
+        if( _tffill( fp ) )
             return( EOF );
-        --fp->level;
-        return( (unsigned char)(*fp->curp++) );
+        fp->level -= sizeof(_TCHAR);
+        c = *((_TCHAR*)fp->curp)++;
+        return c;
     }
     else                /* an unbuffered stream */
     {
         if( fp->flags & _F_TERM )
             FlushOutStreams();
 
-        if( !__read( fp->fd, &c, 1 ) )
+        if( !__tread( fp->fd, &c, 1 ) )
         {
             if( __eof( fp->fd ) != 1 )
                 fp->flags |= _F_ERR;
@@ -181,6 +200,6 @@ int _RTLENTRY _EXPFUNC fgetc (FILE  *fp)
             return( EOF );
         }
         fp->flags &= ~_F_EOF;
-        return( (unsigned char) c);
+        return c;
     }
 }

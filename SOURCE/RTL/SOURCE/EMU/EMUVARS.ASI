@@ -3,11 +3,13 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 7.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1986, 1996 by Borland International
+;       Copyright (c) 1986, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.2  $
+
 
 
 ;       This file is designed to be included both by the start-up
@@ -16,7 +18,7 @@
 ;       from the emulator.
 
 ifdef	Internal
-   
+
 ;Anders Modified for Turbo Pascal using _Pascal_ conditional.   15 Apr 88
 ;Roger  Data initialization moved to emulator FINIT code.       13 Jul 88
 ;       Added Safety Stamp so debugger can detect emulator.

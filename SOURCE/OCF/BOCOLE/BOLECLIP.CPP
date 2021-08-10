@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.7  $
+// $Revision:   2.8  $
 //----------------------------------------------------------------------------
 #include "BOle.h"
 #include "BOleSite.h"

@@ -3,6 +3,7 @@
 // Copyright (C) 1995, 1995 by Borland International, All Rights Reserved
 // ---------------------------------------------------------------------------
 #include <owl/inputdia.rc>
+#include <owl\except.rc>
 #include "dynmnu.rh"
 
 TrackMenu MENU

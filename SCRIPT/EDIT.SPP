@@ -1,12 +1,12 @@
 //----------------------------------------------------------------------------
 // cScript
-// (C) Copyright 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1995, 1997 by Borland International, All Rights Reserved
 //
 // EDIT.SPP
 //    Script component of IDE's Editor editor class.
 //    Provides support services for editing environment.
 //
-// $Revision:   1.138  $
+// $Revision:   1.161  $
 //
 //----------------------------------------------------------------------------
 
@@ -31,10 +31,10 @@ export bPopEditorKeyboard = false;
 // Symbol Loads
 //----------------------------------------------------------------------------
 
-scriptEngine.SymbolLoad("ED_BRIEF", "BriefEmulation");
-scriptEngine.SymbolLoad("ED_CLSSC", "ClassicEmulation");
-scriptEngine.SymbolLoad("ED_DFLT", "DefaultEmulation");
-scriptEngine.SymbolLoad("ED_EPSLN", "EpsilonEmulation");
+scriptEngine.SymbolLoad("ED_BRIEF", "briefEmulation");
+scriptEngine.SymbolLoad("ED_CLSSC", "classicEmulation");
+scriptEngine.SymbolLoad("ED_DFLT", "defaultEmulation");
+scriptEngine.SymbolLoad("ED_EPSLN", "epsilonEmulation");
 
 //----------------------------------------------------------------------------
 // Symbol Defines
@@ -59,7 +59,7 @@ on editor:>MoveCursorToMarkBegin() {
       eb.Save();
       .TopView.Position.Move(eb.StartingRow, eb.StartingColumn);
       eb.Restore();
-	} else {
+        } else {
       IDE.ReportError("Mark not selected");
    }
 }
@@ -97,7 +97,7 @@ on editor:>MoveCursorToWordLeft() {
        declare nRow = ep.Row;
        ep.MoveRelative(-1,0);
        if (ep.Row != nRow)
-	   ep.MoveEOL();
+           ep.MoveEOL();
    } else {
       ep.MoveCursor(SKIP_LEFT | SKIP_NONWORD);
       ep.MoveCursor(SKIP_LEFT | SKIP_WORD);
@@ -115,7 +115,7 @@ on editor:>MoveCursorToWordRight() {
        declare nRow = ep.Row;
        ep.MoveRelative(1,0);
        if (ep.Row != nRow)
-	   ep.Move(0,1);
+           ep.Move(0,1);
    } else {
       ep.MoveCursor(SKIP_RIGHT | SKIP_WORD);
       ep.MoveCursor(SKIP_RIGHT | SKIP_NONWORD);
@@ -152,7 +152,7 @@ on editor:>MarkToBOL(declare nBlockStyle) {
       eb.Begin();
 
       if (!initialized(nBlockStyle))
-	 nBlockStyle = gbStyle;
+         nBlockStyle = gbStyle;
 
       SetBlockStyle(nBlockStyle);
    }
@@ -196,7 +196,7 @@ on editor:>MarkToEOL(declare nBlockStyle) {
       eb.Begin();
 
       if (!initialized(nBlockStyle))
-	  nBlockStyle = gbStyle;
+          nBlockStyle = gbStyle;
 
       SetBlockStyle(nBlockStyle);
    }
@@ -232,7 +232,7 @@ on editor:>MarkToPageDown() {
    declare eb = .BlockExists();
 
    if (eb == NULL) {
-      eb = BeginBlock(gbStyle,true);
+      eb = BeginBlock(gbStyle,false);
    }
 
    eb.ExtendPageDown();
@@ -249,7 +249,7 @@ on editor:>MarkToPageUp() {
       eb.Reset();
       eb.Begin();
       SetBlockStyle(gbStyle);
-	}
+        }
 
    eb.ExtendPageUp();
 }
@@ -266,7 +266,10 @@ on editor:>MarkToViewBottom() {
       SetBlockStyle(gbStyle);
    }
 
-   eb.Extend(.TopView.BottomRow, .TopView.Position.Column);
+   if (.TopView.BottomRow)
+      eb.Extend(.TopView.BottomRow-1, .TopView.Position.Column);
+   else
+      eb.Extend(.TopView.BottomRow, .TopView.Position.Column);
 }
 
 //
@@ -384,7 +387,7 @@ on editor:>ModalMoveBOL() {
 on editor:>ModalMoveEOF() {
    declare eb = .BlockExists();
    if (eb != NULL) {
-		return .MarkToEOF();
+                return .MarkToEOF();
    }
 
    .TopView.SetTopLeft(0,1);
@@ -571,16 +574,16 @@ on editor:>CreateView(declare direction) {
    if (initialized(ew))
        if (ew != gewClassExpert) {
 
-	    declare evNew = ew.ViewCreate(direction);
+            declare evNew = ew.ViewCreate(direction);
 
-	    if (initialized(evNew))
-		if (evNew != NULL){
-		    declare evOrg = .TopView;
-		    declare ep = evNew.Position;
-						  ep.Move(evOrg.Position.Row, evOrg.Position.Column);
-						  IDE.ViewActivate(direction);
-						  return evNew;
-		}
+            if (initialized(evNew))
+                if (evNew != NULL){
+                    declare evOrg = .TopView;
+                    declare ep = evNew.Position;
+                                                  ep.Move(evOrg.Position.Row, evOrg.Position.Column);
+                                                  IDE.ViewActivate(direction);
+                                                  return evNew;
+                }
        }
 
    return false;
@@ -593,12 +596,12 @@ on editor:>DeleteView(declare direction) {
 
    if (initialized(.TopView)) {
        if (.TopView != NULL) {
-	   if (initialized(.TopView.Window)) {
-	       declare ew = .TopView.Window;
+           if (initialized(.TopView.Window)) {
+               declare ew = .TopView.Window;
 
-	       if (ew != NULL && ew != gewClassExpert)
-		   return ew.ViewDelete(direction);
-	   }
+               if (ew != NULL && ew != gewClassExpert)
+                   return ew.ViewDelete(direction);
+           }
        }
    }
 
@@ -680,46 +683,58 @@ on editor:>MoveLineViewCenter() {
 //
 // This method is invoked by the IDE in response to source file navigation
 // from the MessageView, Debugger and Browser when the Options|Environment|
-// Preferences|Source Tracking options is set to 'Current Window'
+// Preferences|Source Tracking option is set to 'Current Window'
 //
-on editor:>NewView(declare fn) {
+on editor:>NewView(declare fn, declare forcePrompt) {
    declare msg;
+
+   if(!initialized(forcePrompt))
+      forcePrompt = false;
 
    // prompt for the filename if necessary
    if (!IDE.IsLegalFileName(fn)) {
-      fn = IDE.FileDialog("Open File (into pane)","*.*");
+      fn = ContextSensitiveFileDialog("EditFile", "Open File (into pane):", "*.*");
+   }else if(forcePrompt != 0){
+      fn = ContextSensitiveFileDialog("EditFile", "Open File (into pane):", fn);
    }
 
    if (IDE.IsLegalFileName(fn)) {
 
       declare newBuf = new EditBuffer(fn);
       if (newBuf == NULL) {
-	 IDE.ReportError("Unable to create new edit buffer");
-	 return;
+         IDE.ReportError("Unable to create new edit buffer");
+         return;
       }
       if (newBuf.IsValid == FALSE) {
-	 IDE.ReportError("Unable to create new edit buffer");
-	 return;
+         IDE.ReportError("Unable to create new edit buffer");
+         return;
       }
 
       declare theView = .TopView;
       declare replaceExisting = false;
-      if (theView != NULL)
-	if(theView.IsValid == TRUE) {
-		replaceExisting = true;
+      if (theView != NULL){
+         if(theView.IsValid == TRUE) {
+            replaceExisting = true;
+         }
       }
-      
+
       if(replaceExisting){
-	 theView.Attach(newBuf);
-      }else{
-	 // create a new Editor Window
-	 new EditWindow(newBuf).Activate();
+         if(theView.Attach(newBuf) == NULL){
+            // the Attach will fail if the TopView is a editor embedded within 
+            // the ClassExpert.  In this case we will bring up an entierly new 
+            // window.
+            IDE.DoFileOpen(fn, "Text Edit");
+         }
+      }else{                               
+         // use DoFileOpen in order to ensure that the buffer will be opened
+         // regardless of the file's existence.
+         IDE.DoFileOpen(fn, "Text Edit");
       }
 
       if (IDE.FileExists(fn))
-	 msg = FormatString("Buffer \"%1\" opened", fn);
+         msg = FormatString("Buffer \"%1\" opened", fn);
       else
-	 msg = FormatString("Buffer \"%1\" created", fn);
+         msg = FormatString("Buffer \"%1\" created", fn);
 
       IDE.StatusBar = msg;
    }
@@ -733,11 +748,11 @@ on editor:>NextWindow() {
       declare ew = .GetWindow();
 
       if (initialized(ew)) {
-	  ew = ew.Next;
+          ew = ew.Next;
 
-	  if (ew != NULL) {
-	      ew.Activate();
-	  }
+          if (ew != NULL) {
+              ew.Activate();
+          }
       }
    }
 }
@@ -786,10 +801,10 @@ on editor:>PreviousWindow() {
       declare ew = .GetWindow();
 
       if (initialized(ew)) {
-	  ew = ew.Prior;
-	  if (ew != NULL) {
-	      ew.Activate();
-	 }
+          ew = ew.Prior;
+          if (ew != NULL) {
+              ew.Activate();
+         }
       }
    }
 }
@@ -824,10 +839,10 @@ on editor:>Delete() {
    declare eb = .BlockExists();
    if (eb != NULL) {
       if (eb.Size != 0) {
-	  RemoveBlock(eb,TRUE);
-	  IDE.StatusBar = "Block deleted";
-	  return;
-	 }
+          RemoveBlock(eb,TRUE);
+          IDE.StatusBar = "Block deleted";
+          return;
+         }
    }
    return .DeleteChar(1);
 }
@@ -877,18 +892,18 @@ on editor:>DeleteToEOL(declare emacsStyle, declare append) {
    // see if we are already at (or past) the end
    if (thePos.Column <= endCol) {
       if (!emacsStyle) {
-	 // restore the position and leave
-	 thePos.Move(endRow, endCol);
+         // restore the position and leave
+         thePos.Move(endRow, endCol);
       } else {
-	 // pull the next line up a row
-	 thePos.Save();
+         // pull the next line up a row
+         thePos.Save();
 
-	 SetBlockStyle(INCLUSIVE_BLOCK);
-	 theBlock.Extend(endRow, endCol);
-	 rv = theBlock.Text;
-	 theBlock.Cut(append);
+         SetBlockStyle(INCLUSIVE_BLOCK);
+         theBlock.Extend(endRow, endCol);
+         rv = theBlock.Text;
+         theBlock.Cut(append);
 
-	 thePos.Restore();
+         thePos.Restore();
       }
    } else {
       // delete remainder of line
@@ -897,9 +912,9 @@ on editor:>DeleteToEOL(declare emacsStyle, declare append) {
       theBlock.Extend(endRow, endCol);
       rv = theBlock.Text;
       if (emacsStyle)
-	 theBlock.Cut(append);
+         theBlock.Cut(append);
       else
-	 theBlock.Delete();
+         theBlock.Delete();
    }
 
    if (nColumnCorrection != .TopView.LeftColumn) {
@@ -939,18 +954,19 @@ on editor:>GetWord() {
       return "";
    }
 
-   declare theBlock = .TopView.Block;
+   declare theBlock = .BlockExists();
    declare thePos = .TopView.Position;
 
-   if (theBlock.Size > 0) {
-      declare chkStr = new String(theBlock.Text);
+   if (theBlock != NULL)
+      if (theBlock.Size > 0) {
+          declare chkStr = new String(theBlock.Text);
 
-      // if there are nothing but alphanumeric characters in the
-      // block, assume the block is what they want.
-      // if (!chkStr.Contains("", INVERT_LEGAL_CHARS |
-      // INCLUDE_ALPHA_CHARS | INCLUDE_NUMERIC_CHARS))
-      return theBlock.Text;
-   }
+          // if there are nothing but alphanumeric characters in the
+          // block, assume the block is what they want.
+          // if (!chkStr.Contains("", INVERT_LEGAL_CHARS |
+          // INCLUDE_ALPHA_CHARS | INCLUDE_NUMERIC_CHARS))
+          return theBlock.Text;
+      }
 
    //
    // Bug fix for B50-31615 [SQF]
@@ -961,7 +977,8 @@ on editor:>GetWord() {
    }
 
    thePos.Save();
-   theBlock.Save();
+   if (theBlock != NULL)
+       theBlock.Save();
 
    declare rv = new String(.MarkWord().Text);
    declare crlf = new String("\n");
@@ -970,7 +987,9 @@ on editor:>GetWord() {
       rv = rv.SubString(0,fixup-2);
 
    thePos.Restore();
-   theBlock.Restore();
+   ResetBlock();
+   if (theBlock != NULL)
+       theBlock.Restore();
 
    return rv.Text;
 }
@@ -1007,15 +1026,15 @@ on editor:>MarkWord() {
 
    if (!ep.IsWhiteSpace) {
       if (!ep.IsWordCharacter) {
-	 ep.MoveCursor(SKIP_RIGHT | SKIP_NONWORD);
+         ep.MoveCursor(SKIP_RIGHT | SKIP_NONWORD);
       }
 
       if (ep.IsWordCharacter) {
-	 theBlock.Reset();
-	 SetBlockStyle(EXCLUSIVE_BLOCK);
-	 theBlock.Begin();
-	 ep.MoveCursor(SKIP_RIGHT | SKIP_WORD);
-	 theBlock.End();
+         theBlock.Reset();
+         SetBlockStyle(EXCLUSIVE_BLOCK);
+         theBlock.Begin();
+         ep.MoveCursor(SKIP_RIGHT | SKIP_WORD);
+         theBlock.End();
       }
    }
    return theBlock;
@@ -1084,49 +1103,6 @@ on editor:>Cut() {
       RemoveBlock(eb);
    } else
       IDE.ReportError("No marked block");
-}
-
-//
-// Copy currently selected block, switch to single line block mode if
-// needed.
-//
-on editor:>ModalCopy(declare append) {
-   declare eb = .BlockExists();
-   declare msg;
-   if (eb == NULL) {
-      eb = ToggleBlockStyle(LINE_BLOCK);
-      msg = "Line copied to scrap";
-   } else
-      msg = "Block copied to scrap";
-
-   CopyBlock(eb,append);
-
-   IDE.StatusBar = msg;
-}
-
-//
-// Cut currently selected block, switch to single line block mode if
-// needed.
-//
-on editor:>ModalCut() {
-   // declare variables.
-   declare eb = .BlockExists();
-   declare ep = .TopView.Position;
-   declare nRestoreColumn = 0;
-   declare msg = "Block deleted to scrap";
-
-   if (eb == NULL) {
-      nRestoreColumn = ep.Column;
-      eb = ToggleBlockStyle(LINE_BLOCK);
-      msg = "Line cut to scrap";
-   }
-
-   RemoveBlock(eb);
-
-   if (nRestoreColumn)
-       ep.Move(0,nRestoreColumn);
-
-   IDE.StatusBar = msg;
 }
 
 //
@@ -1210,7 +1186,7 @@ on editor:>StartBlock(declare type) {
 
    if ((ep.Row > eb.EndingRow) ||
       ((ep.Row == eb.EndingRow) &&
-	 (ep.Column >= eb.EndingColumn))) {
+         (ep.Column >= eb.EndingColumn))) {
       ResetBlock(type);
    } else {
       BeginBlock(type);
@@ -1233,7 +1209,7 @@ on editor:>StopBlock(declare type) {
 
    if ( (ep.Row < eb.StartingRow) ||
       ((ep.Row == eb.StartingRow) &&
-	 (ep.Column <= eb.StartingColumn))) {
+         (ep.Column <= eb.StartingColumn))) {
       ResetBlock(type);
    } else {
       EndBlock();
@@ -1248,7 +1224,7 @@ on editor:>SlideBlock(backward) {
    if (eb != NULL) {
       declare nIndent = .Options.BlockIndent;
       if (backward) {
-	 nIndent = nIndent * -1;
+         nIndent = nIndent * -1;
       }
       eb.Indent(nIndent);
    } else
@@ -1266,13 +1242,13 @@ on editor:>ToggleBlock() {
 // Write out block.
 //
 on editor:>Write() {
-	declare eb = .BlockExists();
+        declare eb = .BlockExists();
 
-	if (eb != NULL)
-		if (eb.Size != 0) {
-			eb.SaveToFile();
-			return TRUE;
-		}
+        if (eb != NULL){
+                if (eb.Size != 0) {
+                        return eb.SaveToFile();
+                }
+   }
 
   return FALSE;
 }
@@ -1289,28 +1265,28 @@ on editor:>DeleteBuffer() {
    if (initialized(.TopBuffer)) {
       if (initialized(.TopView)) {
 
-	 declare curBuf = .TopBuffer;
-	 declare curView = .TopView;
+         declare curBuf = .TopBuffer;
+         declare curView = .TopView;
 
-	 if (curView != NULL && curView.IsValid == true) {
+         if (curView != NULL && curView.IsValid == true) {
 
-	    if (curBuf.IsModified == true) {
-	       declare theMsg = FormatString("Buffer \"%1\" has been modified, delete anyway?", curBuf.FullName);
-	       if (IDE.YesNoDialog(theMsg, "No") != "Yes")
-		  return;
-	    }
+            if (curBuf.IsModified == true) {
+               declare theMsg = FormatString("Buffer \"%1\" has been modified, delete anyway?", curBuf.FullName);
+               if (IDE.YesNoDialog(theMsg, "No") != "Yes")
+                  return;
+            }
 
-	    declare nextBuffer = curBuf.NextBuffer();
+            declare nextBuffer = curBuf.NextBuffer();
 
-	    if (nextBuffer.FullName != curBuf.FullName) {
-	       curView.Attach(nextBuffer);
+            if (nextBuffer.FullName != curBuf.FullName) {
+               curView.Attach(nextBuffer);
 
-	       if (curBuf.Destroy() == false)
-		  IDE.StatusBar = FormatString("Existing views on \"%1\" still exist", curBuf.FullName);
-	       else
-		  IDE.StatusBar = FormatString("Buffer %1 activated", nextBuffer.Describe());
-	    }
-	 }
+               if (curBuf.Destroy() == false)
+                  IDE.StatusBar = FormatString("Existing views on \"%1\" still exist", curBuf.FullName);
+               else
+                  IDE.StatusBar = FormatString("Buffer %1 activated", nextBuffer.Describe());
+            }
+         }
       }
    }
 }
@@ -1324,10 +1300,10 @@ on editor:>NextBuffer() {
       declare curBuf = .TopBuffer;
       declare nextBuffer = curBuf.NextBuffer();
       if (nextBuffer.FullName != curBuf.FullName) {
-	 curView.Attach(nextBuffer);
-	 IDE.StatusBar = FormatString("Buffer %1 activated", nextBuffer.Describe());
+         curView.Attach(nextBuffer);
+         IDE.StatusBar = FormatString("Buffer %1 activated", nextBuffer.Describe());
       }else{
-	 IDE.StatusBar = "No other buffers";
+         IDE.StatusBar = "No other buffers";
       }
    }
 }
@@ -1341,8 +1317,8 @@ on editor:>PreviousBuffer() {
       declare curBuf = .TopBuffer;
       declare priorBuffer = curBuf.PriorBuffer();
       if (priorBuffer.FullName != curBuf.FullName) {
-	 curView.Attach(priorBuffer);
-	 IDE.StatusBar = FormatString("Buffer %1 activated", priorBuffer.Describe());
+         curView.Attach(priorBuffer);
+         IDE.StatusBar = FormatString("Buffer %1 activated", priorBuffer.Describe());
       }
    }
 }
@@ -1393,17 +1369,6 @@ on editor:>Replace(declare direction) {
       .SearchOptions.GoForward = !(direction == SEARCH_BACKWARD);
    }
 }
-
-//
-// Repeat the last search/replace operation.
-//
-on editor:>ReplaceAgain() {
-
-   declare ep = .TopView.Position;
-   ep.SearchOptions.Copy(.SearchOptions);
-   ep.ReplaceAgain();
-}
-
 
 //----------------------------------------------------------------------------
 // Methods controlling option settings.
@@ -1536,19 +1501,19 @@ on editor:>GotoBookmark(declare nBookmarkId) {
 
    if (!initialized(nBookmarkId)) {
        if (kbdGotoBookmark == NULL) {
-	   kbdGotoBookmark = new Keyboard(FALSE);
-	   kbdGotoBookmark.Assign("<0>","editor.GotoBookmarkSelect(0);");
-	   kbdGotoBookmark.Assign("<1>","editor.GotoBookmarkSelect(1);");
-	   kbdGotoBookmark.Assign("<2>","editor.GotoBookmarkSelect(2);");
-	   kbdGotoBookmark.Assign("<3>","editor.GotoBookmarkSelect(3);");
-	   kbdGotoBookmark.Assign("<4>","editor.GotoBookmarkSelect(4);");
-	   kbdGotoBookmark.Assign("<5>","editor.GotoBookmarkSelect(5);");
-	   kbdGotoBookmark.Assign("<6>","editor.GotoBookmarkSelect(6);");
-	   kbdGotoBookmark.Assign("<7>","editor.GotoBookmarkSelect(7);");
-	   kbdGotoBookmark.Assign("<8>","editor.GotoBookmarkSelect(8);");
-	   kbdGotoBookmark.Assign("<9>","editor.GotoBookmarkSelect(9);");
+           kbdGotoBookmark = new Keyboard(FALSE);
+           kbdGotoBookmark.Assign("<0>","editor.GotoBookmarkSelect(0);");
+           kbdGotoBookmark.Assign("<1>","editor.GotoBookmarkSelect(1);");
+           kbdGotoBookmark.Assign("<2>","editor.GotoBookmarkSelect(2);");
+           kbdGotoBookmark.Assign("<3>","editor.GotoBookmarkSelect(3);");
+           kbdGotoBookmark.Assign("<4>","editor.GotoBookmarkSelect(4);");
+           kbdGotoBookmark.Assign("<5>","editor.GotoBookmarkSelect(5);");
+           kbdGotoBookmark.Assign("<6>","editor.GotoBookmarkSelect(6);");
+           kbdGotoBookmark.Assign("<7>","editor.GotoBookmarkSelect(7);");
+           kbdGotoBookmark.Assign("<8>","editor.GotoBookmarkSelect(8);");
+           kbdGotoBookmark.Assign("<9>","editor.GotoBookmarkSelect(9);");
 
-	   kbdGotoBookmark.DefaultAssignment = "editor.GotoBookmarkSelect();";
+           kbdGotoBookmark.DefaultAssignment = "editor.GotoBookmarkSelect();";
        }
 
        IDE.KeyboardManager.Push(kbdGotoBookmark, "Editor", FALSE);
@@ -1560,25 +1525,46 @@ on editor:>GotoBookmark(declare nBookmarkId) {
        declare result = .TopView.BookmarkGoto(nBookmarkId);
 
        if (result) {
-	   .TopView.Position.MoveRelative(0,0);
+           .TopView.Position.MoveRelative(0,0);
        }  else
-	   IDE.ReportError(FormatString("Bookmark %1 doesn't exist.", nBookmarkId));
+           IDE.ReportError(FormatString("Bookmark %1 doesn't exist.", nBookmarkId));
    }
 }
 
 on editor:>GotoBookmarkSelect(declare nBookmarkId) {
 
    if (initialized(nBookmarkId)) {
+       declare eb = .BlockExists();
+       declare ep = .TopView.Position;
+
+       if (eb != NULL) {
+           eb.Save();
+           ep.Save();
+       }
 
        declare result = .TopView.BookmarkGoto(nBookmarkId);
 
        if (result) {
-	   .TopView.Position.MoveRelative(0,0);
-	   IDE.StatusBar = "";
+           if (eb != NULL) {
+               declare nRow = ep.Row;
+               declare nColumn = ep.Column;
+
+               ep.Restore();
+               eb.Restore();
+
+               eb.Extend(nRow,nColumn);
+
+           } else {
+                // Force repositioning of the view...
+                ep.MoveRelative(0,0);
+           }
+
+           IDE.StatusBar = "";
+
        } else
-	   IDE.ReportError(FormatString("Bookmark %1 doesn't exist.", nBookmarkId));
+                 IDE.ReportError(FormatString("Bookmark %1 doesn't exist.", nBookmarkId));
    } else
-       IDE.StatusBar = "";
+        IDE.StatusBar = "";
 
   IDE.KeyboardManager.Pop("Editor");
   bPopEditorKeyboard = false;
@@ -1664,11 +1650,17 @@ on editor:>IncrementalSearch(declare direction) {
 
    if (ISearchKbd == NULL) {
        ISearchKbd = new Keyboard(false);      // not transparent
-       ISearchKbd.Assign("<Space>","editor.ISearchSpace();");
        ISearchKbd.Assign("<Backspace>","editor.ISearchBackspace();");
+       ISearchKbd.Assign("<Space>","editor.ISearchSpecial(\"< >\");");
+       ISearchKbd.Assign("<Minus>","editor.ISearchSpecial(\"<->\");");
+       ISearchKbd.Assign("<~>","editor.ISearchSpecial(\"<~>\");");
+       ISearchKbd.Assign("<Shift-.>","editor.ISearchSpecial(\"<>>\");");
+       ISearchKbd.Assign("<Shift-,>","editor.ISearchSpecial(\"<<>\");");
        ISearchKbd.Assign("<Ctrl-g>","IDE.KeyboardManager.SendKeys(\"{VK_ESCAPE}\");");
        ISearchKbd.Assign("<Ctrl-r>","editor.ISearchBackward();");
        ISearchKbd.Assign("<Ctrl-s>","editor.ISearchForward();");
+       ISearchKbd.Assign("<Ctrl-c>","editor.ISearchCaseSensitive();");
+       ISearchKbd.Assign("<Ctrl-e>","editor.ISearchRegularExpressions();");
        ISearchKbd.DefaultAssignment = "editor.ISearchKey();";
    }
 
@@ -1676,9 +1668,9 @@ on editor:>IncrementalSearch(declare direction) {
       ISearchDirection = direction;
    else {
        if (.SearchOptions.GoForward)
-	  ISearchDirection = SEARCH_FORWARD;
+          ISearchDirection = SEARCH_FORWARD;
        else
-	  ISearchDirection = SEARCH_BACKWARD;
+          ISearchDirection = SEARCH_BACKWARD;
    }
 
    declare keySequence = IDE.KeyboardManager.GetKeyboard("Desktop").GetKeySequence("IDE.SearchSearchAgain();");
@@ -1700,15 +1692,37 @@ on editor:>ISearch(declare acKey) {
    declare sKey = new String(acKey);
    sKey = sKey.SubString(1, 1);
 
-   if ((IDE.KeyboardManager.KeyboardFlags & 0x03) && sKey.Character > 96)
-      sKey.Character -= 32;
+      if ((IDE.KeyboardManager.KeyboardFlags & 0x03) && // Shift is pressed...
+       sKey.Character > 96 &&                        // It's between lower case 'a'
+       sKey.Character < 123)                         // and a 'z'
+       sKey.Character -= 32;
 
+   // Move the cursor back before the highlight to search again from the
+   // begining of the highlight when searching forward.
+   if (ISearchDirection == SEARCH_FORWARD)
+       ep.MoveRelative(0,-(new String(ISearchString).Length));
+
+   // Add the new key to the search string.
    ISearchString = ISearchString + sKey.Text;
 
-   declare String CS(ISearchString);
+   if (ISearchDirection == SEARCH_BACKWARD)
+      ep.MoveRelative(0,new String(ISearchString).Length);
 
-   if (!.ISearchAgain())
+   // Search for the search string...
+   // If this fails go back to the previous search string and
+   //   search for the last known successful string.
+   if (ISearchDirection == SEARCH_FORWARD && .SearchOptions.RegularExpression)
+      ep.MoveRelative(0,-(new String(ISearchString).Length));
+
+   if (!.ISearchAgain()) {
+      declare String CS(ISearchString);
       ISearchString = CS.SubString(0, CS.Length - 1).Text;
+      if (.SearchOptions.RegularExpression)
+         ep.Search("\\c"+ISearchString, .SearchOptions.CaseSensitive, true, ISearchDirection,BRIEF_RE);
+      else {
+         ep.Search(ISearchString, .SearchOptions.CaseSensitive, false, ISearchDirection);
+      }
+   }
 
    .SearchOptions.SearchText = ISearchString;
 
@@ -1720,23 +1734,43 @@ on editor:>ISearchBackward() {
    if (ISearchDirection == SEARCH_BACKWARD)
       .ISearchAgain(true);
    else
-      ISearchDirection = SEARCH_BACKWARD;
+      {
+       ISearchDirection = SEARCH_BACKWARD;
+       .ISearchAgain(true);
+       if (!.SearchOptions.RegularExpression)
+          .ISearchAgain(true);
+      }
    .ISearchDisplayStatus();
+
 }
 
 on editor:>ISearchDisplayStatus() {
-   if (ISearchDirection == SEARCH_FORWARD)
-      IDE.StatusBar = "I-Search (forward) for:" + ISearchString;
-   else
-      IDE.StatusBar = "I-Search (backward) for:" + ISearchString;
-}
 
+   declare sbMessage = "I-Search ";
+
+   if (ISearchDirection == SEARCH_FORWARD)
+      sbMessage = sbMessage + "(frwd";
+   else
+      sbMessage = sbMessage + "(bkwd";
+
+
+   if (.SearchOptions.RegularExpression)
+      sbMessage = sbMessage + ",re";
+
+   if (.SearchOptions.CaseSensitive)
+      sbMessage = sbMessage + ",cs";
+
+   IDE.StatusBar = sbMessage + " ) for:" + ISearchString+ "     [Ctrl-s=Frwd Ctrl-r=Rvrs Ctrl-c=Case Ctrl-e=RE] ";
+}
 
 on editor:>ISearchForward() {
    if (ISearchDirection == SEARCH_FORWARD)
       .ISearchAgain(true);
    else
-      ISearchDirection = SEARCH_FORWARD;
+      {
+       ISearchDirection = SEARCH_FORWARD;
+       .ISearchAgain(true);
+      }
    .ISearchDisplayStatus();
 }
 
@@ -1746,16 +1780,32 @@ on editor:>ISearchAgain(declare bStep) {
 
    if (initialized(bStep))
       if (bStep && ISearchDirection == SEARCH_FORWARD)
-	 ep.MoveRelative(0,new String(ISearchString).Length);
+         ep.MoveRelative(0,new String(ISearchString).Length);
 
-   declare result = ep.Search("\\c"+ISearchString, .SearchOptions.CaseSensitive, true, ISearchDirection,BRIEF_RE);
+   declare result;
+
+   if (.SearchOptions.RegularExpression)
+      result = ep.Search("\\c"+ISearchString, .SearchOptions.CaseSensitive, true, ISearchDirection,BRIEF_RE);
+   else
+      result = ep.Search(ISearchString, .SearchOptions.CaseSensitive, false, ISearchDirection);
 
    if (!result) {
-      if (bStep && ISearchDirection == SEARCH_FORWARD) {
-	 ep.MoveRelative(0,-(new String(ISearchString).Length));
-	 ep.Search("\\c"+ISearchString, .SearchOptions.CaseSensitive, true, ISearchDirection,BRIEF_RE);
+      if (bStep) {
+         if (ISearchDirection == SEARCH_FORWARD)
+            {
+             if (.SearchOptions.RegularExpression)
+                ep.MoveRelative(0,-(new String(ISearchString).Length));
+            }
+           else
+              ep.MoveRelative(0,new String(ISearchString).Length);
+
+         if (.SearchOptions.RegularExpression)
+            ep.Search("\\c"+ISearchString, .SearchOptions.CaseSensitive, true, ISearchDirection,BRIEF_RE);
+         else {
+            ep.Search(ISearchString, .SearchOptions.CaseSensitive, false, ISearchDirection);
+         }
       }
-      IDE.Message(FormatString("Search string '%1' not found. ", ISearchString), ERROR, OK);
+      IDE.MessageBeep();
    }
 
    return result;
@@ -1768,10 +1818,26 @@ on editor:>ISearchAgain(declare bStep) {
 
 on editor:>ISearchBackspace() {
 
+   declare ep = .TopView.Position;
+
+   // Move the cursor back before the highlight to search again from the
+   // begining of the highlight when searching forward.
+
    declare String CS(ISearchString);
-   ISearchString = CS.SubString(0, CS.Length - 1).Text;
+
+   if (CS.Length <= 1) {
+      if (CS.Length == 1 && ISearchDirection == SEARCH_FORWARD && !.SearchOptions.RegularExpression)
+          ep.MoveRelative(0,-1);
+      ISearchString = "";
+      ep.Move(ep.Row, ep.Column);
+   } else {
+      if (ISearchDirection == SEARCH_FORWARD && !.SearchOptions.RegularExpression)
+          ep.MoveRelative(0,-(new String(ISearchString).Length));
+      ISearchString = CS.SubString(0, CS.Length - 1).Text;
+      .ISearchAgain();
+   }
+
    .ISearchDisplayStatus();
-   IDE.EditUndo();
 }
 
 //
@@ -1794,7 +1860,8 @@ on editor:>ISearchKey() {
    if ((nLastKeyProcessed < 28) || (nLastKeyProcessed > 127)) {
 
       declare String CS(ISearchString);
-      .TopView.Position.MoveRelative(0, CS.Length);
+      if (.SearchOptions.RegularExpression)
+         .TopView.Position.MoveRelative(0, CS.Length);
       IDE.KeyboardManager.Pop("Editor");
       bPopEditorKeyboard = false;
 
@@ -1805,8 +1872,20 @@ on editor:>ISearchKey() {
    .ISearch(IDE.KeyboardManager.CodeToKey(nLastKeyProcessed));
 }
 
-on editor:>ISearchSpace() {
- .ISearch("< >");
+on editor:>ISearchCaseSensitive() {
+   // Togggle case sensitive option.
+   .SearchOptions.CaseSensitive = !.SearchOptions.CaseSensitive;
+   .ISearchDisplayStatus();
+}
+
+on editor:>ISearchRegularExpressions() {
+   // Togggle regular expressions option.
+   .SearchOptions.RegularExpression = !.SearchOptions.RegularExpression;
+   .ISearchDisplayStatus();
+}
+
+on editor:>ISearchSpecial(declare nKey) {
+ .ISearch(nKey);
 }
 
 //----------------------------------------------------------------------------
@@ -1820,8 +1899,8 @@ on editor:>OptionsChanged(editOptions) {
 
    if (initialized(.TopView))
        if (.TopView != NULL)
-	   if (initialized(.TopView.Block))
-	       .TopView.Block.Style = gbStyle;
+           if (initialized(.TopView.Block))
+               .TopView.Block.Style = gbStyle;
 
    pass(editOptions);
 }
@@ -1860,12 +1939,20 @@ on editor:>ViewActivated(newEditView) {
 
    if (IDE.KeyboardManager.GetKeyboard() == IDE.KeyboardManager.GetKeyboard("ClassExpert"))
       if (initialized(.GetWindow()))
-	  gewClassExpert = .GetWindow();
+          gewClassExpert = .GetWindow();
 
    // Perform existing behaviour
    pass(newEditView);
+
    // Reset block kill append.
-   screenBlock = newEditView.Block;
+   if(screenBlock != newEditView.Block){
+      screenBlock = newEditView.Block;
+      if (initialized(screenBlock)){
+         if (!screenBlock.IsValid){
+            ResetBlock();
+         }
+      }
+   }
 }
 
 //
@@ -1886,6 +1973,35 @@ on editor:>BlockExists() {
    return NULL;
 }
 
+declare gbMouseBlock = false;
+
+on editor:>MouseBlockCreated() {
+   gbMouseBlock = true;
+   pass();
+}
+
+on editor:>MouseLeftDown() {
+   SetBlockStyle(gbStyle);
+   gbMouseBlock = false;
+   pass();
+}
+
+on editor:>MouseLeftUp() {
+
+   if (gbStyle != .TopView.Block.Style) {
+      gbStyle = .TopView.Block.Style;
+      gbToggle = true;
+   }
+
+   pass();
+
+   if (!gbMouseBlock) {
+      if (!(IDE.KeyboardManager.KeyboardFlags & 0x03))
+         ResetBlock(gbStyle);
+   }
+
+   gbMouseBlock = false;
+}
 
 ToggleBlockStyle(newStyle) {
 
@@ -1897,29 +2013,29 @@ ToggleBlockStyle(newStyle) {
       case COLUMN_BLOCK:
       case INCLUSIVE_BLOCK:
       case LINE_BLOCK: {
-	  if (currentStyle == newStyle) {
-	     ResetBlock();
-	     gbToggle = false;
-	     zeroSizeBlockOkay = false;
-	  } else {
-	     gbStyle = newStyle;
-	     screenBlock.Style = newStyle;
-	     gbToggle = true;
-	  }
+          if (currentStyle == newStyle) {
+             ResetBlock();
+             gbToggle = false;
+             zeroSizeBlockOkay = false;
+          } else {
+             gbStyle = newStyle;
+             screenBlock.Style = newStyle;
+             gbToggle = true;
+          }
        break;
       }
 
       case EXCLUSIVE_BLOCK: {
-	  if (currentStyle == newStyle && gbToggle) {
-	     ResetBlock();
-	     gbToggle = false;
-	     zeroSizeBlockOkay = false;
-	  } else {
-	     zeroSizeBlockOkay = true;
-	     gbStyle = newStyle;
-	     screenBlock.Style = newStyle;
-	     gbToggle = true;
-	  }
+          if (currentStyle == newStyle && gbToggle) {
+             ResetBlock();
+             gbToggle = false;
+             zeroSizeBlockOkay = false;
+          } else {
+             zeroSizeBlockOkay = true;
+             gbStyle = newStyle;
+             screenBlock.Style = newStyle;
+             gbToggle = true;
+          }
        break;
       }
 
@@ -1935,10 +2051,10 @@ ResetBlock(declare type) {
    if (initialized(type)) {
        declare curType = screenBlock.Style;
        if (curType == type) {
-	   zeroSizeBlockOkay = FALSE;
+           zeroSizeBlockOkay = FALSE;
        }
    } else {
-	zeroSizeBlockOkay = FALSE;
+        zeroSizeBlockOkay = FALSE;
    }
 
    gbToggle = false;
@@ -1954,9 +2070,14 @@ BeginBlock(declare type, declare bBlockReset) {
 
    if (initialized(bBlockReset)) {
       if (bBlockReset == true) {
-	  screenBlock.Begin();
-	  SetBlockStyle(type);
-	  return screenBlock;
+          screenBlock.Begin();
+          SetBlockStyle(type);
+          return screenBlock;
+      } else {
+          screenBlock.Reset();
+          screenBlock.Begin();
+          SetBlockStyle(type);
+          return screenBlock;
       }
    } else {
       screenBlock.Reset();
@@ -1993,13 +2114,13 @@ RemoveBlock(declare editBlock, declare bDelete) {
       editor.TopView.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
 
       if (initialized(bDelete)) {
-	  if (bDelete == TRUE) {
-	     editBlock.Delete();
-	  } else {
-	     editBlock.Cut();
-	  }
+          if (bDelete == TRUE) {
+             editBlock.Delete();
+          } else {
+             editBlock.Cut();
+          }
        } else {
-	  editBlock.Cut();
+          editBlock.Cut();
        }
 
        editor.TopView.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);

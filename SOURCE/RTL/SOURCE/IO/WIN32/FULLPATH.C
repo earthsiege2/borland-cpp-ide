@@ -6,29 +6,35 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <ntbc.h>
 
 #include <stdlib.h>
 #include <string.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            _fullpath - makes new file name
+Name            _tfullpath used as _fullpath and _wfullpath
+                _fullpath  - makes new file name
+                _wfullpath - makes new wide file name
 
 Usage           #include <dir.h>
                 char *_fullpath(char *buffer, const char * pathname,
                                 size_t maxlen);
+                char *_wfullpath(wchar_t *buffer, const wchar_t * pathname,
+                                size_t maxlen);
 
 Prototype in    stdlib.h
 
-Description     _fullpath converts the relative path name name 'pathname'
+Description     Converts the relative path name name 'pathname'
                 to a fully qualified pathname, stored in 'buffer'.  The
                 relative path can contain ".\" and "..".
 
@@ -49,26 +55,51 @@ Return value    A pointer to the buffer containing the fully qualified
 
 *---------------------------------------------------------------------*/
 
-char * _RTLENTRYF _EXPFUNC
-_fullpath(char *buffer, const char *pathname, size_t maxlen)
+_TCHAR * _RTLENTRYF _EXPFUNC
+_tfullpath(_TCHAR *buffer, const _TCHAR *pathname, size_t maxlen)
 {
-    char *tempbuf;
-    char *lastpart;
-    int len;
+    _TCHAR *tempbuf;
+    _TCHAR *lastpart;
+    size_t len;
 
     /* Allocate a temporary buffer to hold the fully qualified path.
      */
-    if ((tempbuf = malloc(_MAX_PATH)) == NULL)
+    if ((tempbuf = malloc(_MAX_PATH * sizeof(_TCHAR))) == NULL)
         return (NULL);
 
     /* Use wonderful new NT function to do all the hard work.
      */
-    len = (int)GetFullPathName((char *)pathname,_MAX_PATH, tempbuf, &lastpart);
+    len = (size_t)GetFullPathName((_TCHAR *)pathname,_MAX_PATH, tempbuf, &lastpart);
     if (len == 0 || len >= _MAX_PATH)
     {
         free(tempbuf);
         return (NULL);
     }
+
+    /*  _fullpath is documented as failing for an invalid drive.
+     *  If you prefer not to validate the drive then turn off the
+     *  following conditional.
+     */
+#if 1
+    if (tempbuf[1] == ':')
+    {
+        _TCHAR root[4];
+        root[0] = tempbuf[0];
+        root[1] = ':';
+        root[2] = '\\';
+        root[3] = 0;
+
+        /* On error GetDriveType returns:
+               0	The drive type cannot be determined.
+               1	The root directory does not exist.
+         */
+        if (GetDriveType(root) < 2)
+        {
+            free(tempbuf);
+            return (NULL);
+        }
+    }
+#endif
 
     /* Copy the temp buffer to the user's buffer, if present.
      * Otherwise shrink the temp buffer and return a pointer to it.
@@ -83,11 +114,12 @@ _fullpath(char *buffer, const char *pathname, size_t maxlen)
         }
         else
         {
-            strcpy(buffer,tempbuf);
+            _tcscpy(buffer,tempbuf);
             free(tempbuf);
             return (buffer);
         }
     }
     else
-        return (realloc(tempbuf,len));          /* shrink the buffer */
+        /* shrink the buffer */
+        return ((_TCHAR*)realloc(tempbuf,len * sizeof(_TCHAR)));
 }

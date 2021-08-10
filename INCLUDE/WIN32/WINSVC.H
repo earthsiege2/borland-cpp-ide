@@ -17,6 +17,7 @@ Environment:
 --*/
 #ifndef _WINSVC_
 #define _WINSVC_
+#pragma option -b
 
 //
 // Define API decoration for direct importing of DLL references.
@@ -748,4 +749,5 @@ UnlockServiceDatabase(
 }
 #endif
 
+#pragma option -b.
 #endif // _WINSVC_

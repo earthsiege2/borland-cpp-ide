@@ -6,40 +6,45 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            fputc - puts a character on a stream with locking
+Name            _fputtc used as fputc and fputwc
+                fputc  - puts a character on a stream with locking
+                fputwc - puts a wide character on a stream with locking
 
 Usage           #include <stdio.h>
-                int fputc(int ch, FILE *stream);
+                int fputc (int ch, FILE *stream);
+                int fputwc(wint_t ch, FILE *stream);
 
 Related
-functions usage int _lputc(int ch, FILE *stream);
+functions usage _TINT _lputtc(_TINT ch, FILE *stream);
 
 Prototype in    stdio.h
 
-Description     see _lputc in lputc.c
+Description     see _lputtc in lputc.c
 
-Return value    see _lputc.
+Return value    see _lputtc.
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC fputc (int ch, FILE *fp)
+_TINT _RTLENTRY _EXPFUNC _fputtc (_TINT ch, FILE *fp)
 {
-    int ret;
+    _TINT ret;
 
     _lock_stream(fp);
-    ret = _lputc(ch,fp);
+    ret = _lputtc(ch,fp);
     _unlock_stream(fp);
     return (ret);
 }

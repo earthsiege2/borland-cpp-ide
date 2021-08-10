@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1991-1995 Microsoft Corporation
+Copyright (c) 1991-1996 Microsoft Corporation
 
 Module Name:
 
@@ -16,6 +16,7 @@ Abstract:
 
 #ifndef __RPCDCEP_H__
 #define __RPCDCEP_H__
+#pragma option -b
 
 // Set the packing level for RPC structures for Dos and Windows.
 
@@ -61,15 +62,22 @@ typedef RPC_STATUS RPC_ENTRY RPC_FORWARD_FUNCTION(
                        IN void __RPC_FAR * __RPC_FAR * ppDestEndpoint);
 
 /*
- * Types of function calls for datagram and rpc
+ * Types of function calls for datagram rpc
  */
 
 #define RPC_NCA_FLAGS_DEFAULT       0x00000000  /* 0b000...000 */
 #define RPC_NCA_FLAGS_IDEMPOTENT    0x00000001  /* 0b000...001 */
 #define RPC_NCA_FLAGS_BROADCAST     0x00000002  /* 0b000...010 */
 #define RPC_NCA_FLAGS_MAYBE         0x00000004  /* 0b000...100 */
+
+#define RPC_BUFFER_COMPLETE          0x00001000 /* used by pipes */
+#define RPC_BUFFER_PARTIAL              0x00002000 /* used by pipes */
+#define RPC_BUFFER_EXTRA                 0x00004000 /* used by pipes */
+
+#define RPCFLG_NON_NDR                    0x80000000UL
 #define RPCFLG_ASYNCHRONOUS         0x40000000UL
 #define RPCFLG_INPUT_SYNCHRONOUS    0x20000000UL
+#define RPCFLG_LOCAL_CALL                0x10000000UL
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
 #define RPC_FLAGS_VALID_BIT 0x8000
@@ -101,6 +109,8 @@ typedef struct _RPC_PROTSEQ_ENDPOINT
 Both of these types MUST start with the InterfaceId and TransferSyntax.
 Look at RpcIfInqId and I_RpcIfInqTransferSyntaxes to see why.
 */
+#define NT351_INTERFACE_SIZE 0x40
+#define RPC_INTERFACE_HAS_PIPES           0x0001
 
 typedef struct _RPC_SERVER_INTERFACE
 {
@@ -112,6 +122,7 @@ typedef struct _RPC_SERVER_INTERFACE
     PRPC_PROTSEQ_ENDPOINT RpcProtseqEndpoint;
     RPC_MGR_EPV __RPC_FAR *DefaultManagerEpv;
     void const __RPC_FAR *InterpreterInfo;
+    unsigned int Flags ;
 } RPC_SERVER_INTERFACE, __RPC_FAR * PRPC_SERVER_INTERFACE;
 
 typedef struct _RPC_CLIENT_INTERFACE
@@ -124,6 +135,7 @@ typedef struct _RPC_CLIENT_INTERFACE
     PRPC_PROTSEQ_ENDPOINT RpcProtseqEndpoint;
     unsigned long Reserved;
     void const __RPC_FAR * InterpreterInfo;
+    unsigned int Flags ;
 } RPC_CLIENT_INTERFACE, __RPC_FAR * PRPC_CLIENT_INTERFACE;
 
 RPC_STATUS RPC_ENTRY
@@ -140,6 +152,28 @@ RPC_STATUS RPC_ENTRY
 I_RpcFreeBuffer (
     IN OUT RPC_MESSAGE __RPC_FAR * Message
     );
+
+RPC_STATUS RPC_ENTRY
+I_RpcSend (
+    IN OUT PRPC_MESSAGE Message
+    ) ;
+
+RPC_STATUS RPC_ENTRY
+I_RpcReceive (
+    IN OUT PRPC_MESSAGE Message,
+    IN unsigned int Size
+    ) ;
+
+RPC_STATUS RPC_ENTRY
+I_RpcFreePipeBuffer (
+    IN OUT RPC_MESSAGE __RPC_FAR * Message
+    ) ;
+
+RPC_STATUS RPC_ENTRY
+I_RpcReallocPipeBuffer (
+    IN PRPC_MESSAGE Message,
+    IN unsigned int NewSize
+    ) ;
 
 typedef void * I_RPC_MUTEX;
 
@@ -215,7 +249,7 @@ I_RpcNsBindingSetEntryName (
     IN unsigned short __RPC_FAR * EntryName
     );
 
-#else 
+#else
 
 RPC_STATUS RPC_ENTRY
 I_RpcNsBindingSetEntryName (
@@ -224,7 +258,7 @@ I_RpcNsBindingSetEntryName (
     IN unsigned char __RPC_FAR * EntryName
     );
 
-#endif 
+#endif
 
 #ifdef __RPC_NT__
 
@@ -234,7 +268,7 @@ I_RpcBindingInqDynamicEndpoint (
     OUT unsigned short __RPC_FAR * __RPC_FAR * DynamicEndpoint
     );
 
-#else 
+#else
 
 RPC_STATUS RPC_ENTRY
 I_RpcBindingInqDynamicEndpoint (
@@ -242,12 +276,12 @@ I_RpcBindingInqDynamicEndpoint (
     OUT unsigned char __RPC_FAR * __RPC_FAR * DynamicEndpoint
     );
 
-#endif 
+#endif
 
-#define TRANSPORT_TYPE_CN   0x1
-#define TRANSPORT_TYPE_DG   0x2
-#define TRANSPORT_TYPE_LPC  0x4
-#define TRANSPORT_TYPE_WMSG 0x8
+#define TRANSPORT_TYPE_CN        0x1
+#define TRANSPORT_TYPE_DG        0x2
+#define TRANSPORT_TYPE_LPC       0x4
+#define TRANSPORT_TYPE_WMSG   0x8
 
 RPC_STATUS RPC_ENTRY
 I_RpcBindingInqTransportType (
@@ -292,11 +326,17 @@ I_RpcSsDontSerializeContext (
     void
     );
 
+RPC_STATUS RPC_ENTRY
+I_RpcLaunchDatagramReceiveThread(
+    void __RPC_FAR * pAddress
+    );
 
 RPC_STATUS RPC_ENTRY
 I_RpcServerRegisterForwardFunction (
     IN RPC_FORWARD_FUNCTION __RPC_FAR * pForwardFunction
-                       );
+    );
+
+
 RPC_STATUS RPC_ENTRY
 I_RpcConnectionInqSockBuffSize(
   OUT unsigned long __RPC_FAR * RecvBuffSize,
@@ -305,63 +345,63 @@ I_RpcConnectionInqSockBuffSize(
 
 RPC_STATUS RPC_ENTRY
 I_RpcConnectionSetSockBuffSize(
-  IN unsigned long RecvBuffSize,
-  IN unsigned long SendBuffSize
-  );
+   IN unsigned long RecvBuffSize,
+   IN unsigned long SendBuffSize
+   );
 
-#ifdef __RPC_WIN32__
 
-typedef
-RPC_STATUS
-(__RPC_USER __RPC_FAR * RPC_BLOCKING_FUNCTION) (
-    IN void __RPC_FAR *RpcWindowHandle,
-    IN void __RPC_FAR *Context
-    );
+#ifdef MSWMSG
+RPC_STATUS RPC_ENTRY
+I_RpcServerStartListening(
+    HWND hWnd
+    ) ;
+
+RPC_STATUS RPC_ENTRY
+I_RpcServerStopListening(
+    ) ;
+
+RPC_STATUS RPC_ENTRY
+I_RpcGetThreadWindowHandle(
+    OUT HWND *WindowHandle
+    ) ;
+
+typedef RPC_STATUS (*RPC_BLOCKING_FN) (
+    IN void *wnd,
+    IN void *Context,
+    IN HANDLE hSyncEvent
+    ) ;
+
+RPC_STATUS RPC_ENTRY
+I_RpcAsyncSendReceive(
+    IN OUT PRPC_MESSAGE pRpcMessage,
+    IN OPTIONAL void *Context,
+    HWND hWnd
+    ) ;
 
 RPC_STATUS RPC_ENTRY
 I_RpcBindingSetAsync(
     IN RPC_BINDING_HANDLE Binding,
-    IN RPC_BLOCKING_FUNCTION BlockingHook
-    );
+    IN RPC_BLOCKING_FN BlockingFn
+    ) ;
+
+LONG RPC_ENTRY
+I_RpcWindowProc(
+    IN HWND hWnd,
+    IN UINT Message,
+    IN WPARAM wParam,
+    IN LPARAM lParam
+    ) ;
 
 RPC_STATUS RPC_ENTRY
-I_RpcAsyncSendReceive(
-    IN OUT RPC_MESSAGE __RPC_FAR * Message,
-    IN void __RPC_FAR * Context
-    );
-
-RPC_STATUS RPC_ENTRY
-I_RpcGetThreadWindowHandle(
-    OUT void __RPC_FAR * __RPC_FAR * WindowHandle
-    );
-
-RPC_STATUS RPC_ENTRY
-I_RpcServerThreadPauseListening(
-    );
-
-RPC_STATUS RPC_ENTRY
-I_RpcServerThreadContinueListening(
-    );
-
-RPC_STATUS RPC_ENTRY
-I_RpcServerUnregisterEndpointA (
-    IN unsigned char * Protseq,
-    IN unsigned char * Endpoint
-    );
-
-RPC_STATUS RPC_ENTRY
-I_RpcServerUnregisterEndpointW (
-    IN unsigned short * Protseq,
-    IN unsigned short * Endpoint
-    );
-
-#ifdef UNICODE
-#define I_RpcServerUnregisterEndpoint I_RpcServerUnregisterEndpointW
-#else
-#define I_RpcServerUnregisterEndpoint I_RpcServerUnregisterEndpointA
+I_RpcSetWMsgEndpoint (
+    IN WCHAR __RPC_FAR * Endpoint
+    ) ;
 #endif
 
-#endif // __RPC_WIN32__
+RPC_STATUS RPC_ENTRY
+I_RpcServerInqTransportType(
+    OUT unsigned int __RPC_FAR * Type
+    ) ;
 
 #ifdef __cplusplus
 }
@@ -373,4 +413,5 @@ I_RpcServerUnregisterEndpointW (
 #pragma pack()
 #endif
 
+#pragma option -b.
 #endif /* __RPCDCEP_H__ */

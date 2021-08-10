@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.8  $
 //
 // Implementation of TMDIChild. This defines the basic behavior of all MDI
 // child windows
@@ -19,6 +19,7 @@
 # include <owl/applicat.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlWin);  // diagnostic group for windows
 
 #if !defined(WS_EX_MDICHILD)
@@ -29,7 +30,9 @@ DIAG_DECLARE_GROUP(OwlWin);  // diagnostic group for windows
 // Define to not work around here in the client, the 'creating MDI child
 // maximized corrupts the menu bar' bug
 //
-//#define NO_MDIMAX_WORKAROUND
+#if !defined(NO_MDIMAX_WORKAROUND)
+# define MDIMAX_WORKAROUND
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 

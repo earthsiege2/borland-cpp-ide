@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #define INCL_ERROR_H
 
@@ -65,7 +66,7 @@ Return value    Locking return 0 on success.  On failure, -1 is returned,
                 EDEADLOCK       File cannot be locked after 10 retries
                                 (mode is LK_LOCK or LK_RLCK)
                 EINVAL          Invalid mode
-                
+
 
 Portability     Unique to MS-DOS 3.x, NT, and OS/2. Older versions of
                 MS-DOS do not support these calls.  Not available on UNIX.
@@ -80,6 +81,9 @@ int _RTLENTRY _EXPFUNC locking(int fd, int mode, long length)
     int rc, tries, olderrno;
     long offset;
     HANDLE hf;
+
+    if (fd == -1)
+        return (EBADF);
 
     _lock_handle(fd);
 
@@ -107,7 +111,7 @@ int _RTLENTRY _EXPFUNC locking(int fd, int mode, long length)
                 RETURN (0);                 /* success */
             }
             __NTerror();                    /* failure - set errno */
-            
+
             if (errno != EACCES)            /* not a locking violation? */
                     RETURN (-1);            /* return right away */
             Sleep(1000);                    /* failed - try again 1 sec later */

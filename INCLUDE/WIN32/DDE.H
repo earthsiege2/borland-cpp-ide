@@ -2,19 +2,28 @@
 *                                                                             *
 * dde.h -       Dynamic Data Exchange structures and definitions              *
 *                                                                             *
-* Copyright (c) 1993-1995, Microsoft Corp.	All rights reserved	      *
+* Copyright (c) 1993-1996, Microsoft Corp.	All rights reserved	              *
 *                                                                             *
 \*****************************************************************************/
 #ifndef _DDEHEADER_INCLUDED_
 #define _DDEHEADER_INCLUDED_
+#pragma option -b
 
 #ifndef _WINDEF_
+#pragma option -b.
 #include <windef.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#ifdef __BORLANDC__
+  #pragma warn -bbf
+#endif
+
+// begin_r_dde
 
 /* DDE window messages */
 
@@ -30,9 +39,7 @@ extern "C" {
 #define WM_DDE_EXECUTE	    (WM_DDE_FIRST+8)
 #define WM_DDE_LAST	        (WM_DDE_FIRST+8)
 
-#if !defined(RC_INVOKED)
-#pragma warn -bbf
-#endif
+// end_r_dde
 
 /*----------------------------------------------------------------------------
 |       DDEACK structure
@@ -135,10 +142,6 @@ typedef struct {
 } DDEUP;
 
 
-#if !defined(RC_INVOKED)
-#pragma warn .bbf
-#endif
-
 /*
  * DDE SECURITY
  */
@@ -164,8 +167,13 @@ BOOL APIENTRY UnpackDDElParam(UINT msg, LONG lParam, PUINT puiLo, PUINT puiHi);
 BOOL APIENTRY FreeDDElParam(UINT msg, LONG lParam);
 LONG APIENTRY ReuseDDElParam(LONG lParam, UINT msgIn, UINT msgOut, UINT uiLo, UINT uiHi);
 
+#ifdef __BORLANDC__
+  #pragma warn .bbf
+#endif
+
 #ifdef __cplusplus
 }
 #endif
 
+#pragma option -b.
 #endif // _DDEHEADER_INCLUDED_

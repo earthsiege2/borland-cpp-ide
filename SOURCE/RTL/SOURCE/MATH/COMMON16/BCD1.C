@@ -4,12 +4,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 
 #include <_defs.h>
@@ -313,15 +314,19 @@ typedef enum {
 #define FLIB_(fun)      _FAST_(0ECh + 2*fun)
 #define _FAST_(shortCode)       int     3Eh;  asm db    shortCode, 90h
 
-long double pascal _FARFUNC __bcd_log10(bcd far *p)
+long double pascal _FARFUNC __bcd_log10(const bcd far *p)
 {
+I       sub     sp, 2
 I       les     bx, p
 I       fild    LONG64 es:[bx]
 asm     FLIB_   (_Log10_)
-I       sub     WORD es:[bx+8], Bias
-I       fiadd   WORD es:[bx+8]
-I       add     WORD es:[bx+8], Bias
+I       mov     ax, es:[bx+8]
+I       sub     ax, Bias
+I       mov     bx, sp
+I       mov     WORD [bx], ax
+I       fiadd   WORD [bx]
 I       fwait
+I       add     sp, 2
 #pragma noretval
         return;
 }

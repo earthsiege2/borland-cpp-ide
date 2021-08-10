@@ -2,13 +2,17 @@
 *                                                                       *
 *   commdlg.h -- This module defines the 32-Bit Common Dialog APIs      *
 *                                                                       *
-*   Copyright (c) 1992-1995, Microsoft Corp. All rights reserved.       *
+*   Copyright (c) 1992-1996, Microsoft Corp. All rights reserved.       *
 *                                                                       *
 ************************************************************************/
 #ifndef _INC_COMMDLG
 #define _INC_COMMDLG
+#pragma option -b
 
+
+#pragma option -b.
 #include <pshpack1.h>         /* Assume byte packing throughout */
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -479,8 +483,6 @@ BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define REGULAR_FONTTYPE      0x0400
 
 #define WM_CHOOSEFONT_GETLOGFONT      (WM_USER + 1)
-#define WM_CHOOSEFONT_SETLOGFONT      (WM_USER + 101)
-#define WM_CHOOSEFONT_SETFLAGS        (WM_USER + 102)
 
 // strings used to obtain unique window message for communication
 // between dialog and caller
@@ -622,6 +624,7 @@ typedef DEVNAMES * LPDEVNAMES;
 
 #define DN_DEFAULTPRN      0x0001
 
+
 DWORD APIENTRY     CommDlgExtendedError(VOID);
 
 #if(WINVER >= 0x0400)
@@ -705,11 +708,16 @@ BOOL APIENTRY PageSetupDlgW( LPPAGESETUPDLGW );
 #define PSD_ENABLEPAGESETUPTEMPLATEHANDLE 0x00020000 // must be same as PD_*
 #define PSD_ENABLEPAGEPAINTHOOK           0x00040000
 #define PSD_DISABLEPAGEPAINTING           0x00080000
+#define PSD_NONETWORKBUTTON               0x00200000 // must be same as PD_*
 #endif /* WINVER >= 0x0400 */
+
 
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
+#pragma option -b.
 #endif  /* !_INC_COMMDLG */

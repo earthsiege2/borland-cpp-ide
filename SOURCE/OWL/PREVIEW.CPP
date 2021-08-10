@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Implementation of print preview classes
 //----------------------------------------------------------------------------
@@ -23,6 +23,8 @@
 # include <owl/printdia.h>
 #endif
 #include <math.h>
+
+OWL_DIAGINFO;
 
 //
 // Some inlines to provide platform independence since we drop directly to API

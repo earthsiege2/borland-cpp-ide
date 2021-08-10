@@ -115,7 +115,7 @@ void TApxMdiMDIClient::CmFileNew()
 
   TApxMdiMDIChild* child = new TApxMdiMDIChild(*this, title, 0);
 
-  // Associate ICON w/ this child window.
+  // Assign icons for this child window.
   //
   child->SetIcon(GetApplication(), IDI_DOC);
   child->SetIconSm(GetApplication(), IDI_DOC);
@@ -141,7 +141,7 @@ void TApxMdiMDIClient::OpenFile(const char* fileName)
   //
   TApxMdiMDIChild* child = new TApxMdiMDIChild(*this, "", new TApxMdiEditFile(0, 0, 0, 0, 0, 0, 0, theApp->FileData.FileName));
 
-  // Associate ICON with this child window.
+  // Assign icons for this child window.
   //
   child->SetIcon(GetApplication(), IDI_DOC);
   child->SetIconSm(GetApplication(), IDI_DOC);

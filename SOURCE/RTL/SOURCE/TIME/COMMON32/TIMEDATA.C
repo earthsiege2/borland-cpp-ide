@@ -5,35 +5,53 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
-char *_SWeekday[7] = {
-  "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+#if !defined( __CTYPE_H )
+#include <ctype.h>
+#endif
+
+#if !defined( __TIME_H )
+#include <time.h>
+#endif
+
+#if !defined( ___TIME_H )
+#include <_time.h>
+#endif
+
+_TCHAR *_tSWeekday[7] = {
+  _TEXT("Sun"), _TEXT("Mon"), _TEXT("Tue"), _TEXT("Wed"), _TEXT("Thu"),
+  _TEXT("Fri"), _TEXT("Sat")
   };
 
-char *_LWeekday[7] = {
-  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+_TCHAR *_tLWeekday[7] = {
+  _TEXT("Sunday"),   _TEXT("Monday"), _TEXT("Tuesday"), _TEXT("Wednesday"),
+  _TEXT("Thursday"), _TEXT("Friday"), _TEXT("Saturday")
   };
 
-char *_SMonth[12] = {
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+_TCHAR *_tSMonth[12] = {
+  _TEXT("Jan"), _TEXT("Feb"), _TEXT("Mar"), _TEXT("Apr"),
+  _TEXT("May"), _TEXT("Jun"), _TEXT("Jul"), _TEXT("Aug"),
+  _TEXT("Sep"), _TEXT("Oct"), _TEXT("Nov"), _TEXT("Dec")
   };
 
-char *_LMonth[12] = {
-  "January", "February", "March",     "April",   "May",      "June",
-  "July",    "August",   "September", "October", "November", "December"
+_TCHAR *_tLMonth[12] = {
+  _TEXT("January"),  _TEXT("February"), _TEXT("March"),     _TEXT("April"),
+  _TEXT("May"),      _TEXT("June"),     _TEXT("July"),      _TEXT("August"),
+  _TEXT("September"),_TEXT("October"),  _TEXT("November"),  _TEXT("December")
   };
 
-char *_AmPm[2] = {
-  "AM", "PM"
+_TCHAR *_tAmPm[2] = {
+  _TEXT("AM"), _TEXT("PM")
   };
 
+#ifndef _UNICODE
 char _Days[12] = {
   31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
   };
@@ -41,4 +59,4 @@ char _Days[12] = {
 int _YDays[13] = {
   0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365
   };
-
+#endif

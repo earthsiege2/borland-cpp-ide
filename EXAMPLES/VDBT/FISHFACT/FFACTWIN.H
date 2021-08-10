@@ -14,10 +14,6 @@
     ========
     Class definition for fishfactApp (TApplication).
 
-	$Revision:   1.1  $
-	$Author:   JHEHER  $
-	$Date:   03 Jan 1996 15:54:30  $
-
 */
 
 

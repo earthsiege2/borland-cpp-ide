@@ -5,7 +5,7 @@
 //
 //  SUBSYSTEM:    ApxMdiDv Application
 //  FILE:         apxmddva.cpp
-//  AUTHOR:       
+//  AUTHOR:
 //
 //  OVERVIEW
 //  ~~~~~~~~
@@ -155,7 +155,7 @@ void TApxMdiDvApp::InitMainWindow()
 
   nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWNORMAL : nCmdShow;
 
-  // Assign ICON w/ this application.
+  // Assign icons for this application.
   //
   frame->SetIcon(this, IDI_MDIAPPLICATION);
   frame->SetIconSm(this, IDI_MDIAPPLICATION);
@@ -164,13 +164,13 @@ void TApxMdiDvApp::InitMainWindow()
   //
   frame->Attr.AccelTable = IDM_MDI;
 
-  SetupSpeedBar(frame);
-
   TStatusBar* sb = new TStatusBar(frame, TGadget::Recessed,
                                   TStatusBar::CapsLock        |
                                   TStatusBar::NumLock         |
                                   TStatusBar::ScrollLock);
   frame->Insert(*sb, TDecoratedFrame::Bottom);
+
+  SetupSpeedBar(frame);
 
   SetMainWindow(frame);
 
@@ -266,7 +266,12 @@ void TApxMdiDvApp::EvNewView(TView& view)
   if (mdiClient) {
     TApxMdiDvMDIChild* child = new TApxMdiDvMDIChild(*mdiClient, 0, view.GetWindow());
 
-    // Associate ICON w/ this child window.
+    // Set the menu descriptor for this view.
+    //
+    if (view.GetViewMenu())
+      child->SetMenuDescr(*view.GetViewMenu());
+
+    // Assign icons with this child window.
     //
     child->SetIcon(this, IDI_DOC);
     child->SetIconSm(this, IDI_DOC);

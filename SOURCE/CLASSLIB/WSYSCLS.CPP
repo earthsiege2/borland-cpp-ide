@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland WinSys Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.5  $
 //
 // Implementation of window system structure and type encapsulation
 //----------------------------------------------------------------------------
@@ -13,7 +13,7 @@
 //
 // Drag / Drop support
 //
-TFileDroplet::TFileDroplet(const char* fileName, TPoint& p, bool inClient)
+TFileDroplet::TFileDroplet(const _TCHAR* fileName, TPoint& p, bool inClient)
 :
   FileName(strnewdup(fileName)),
   Point(p),
@@ -37,7 +37,7 @@ TFileDroplet::TFileDroplet(TDropInfo& drop, int i)
   // Tell DragQueryFile the file wanted (i) and the length of the buffer.
   //
   int  namelen = drop.DragQueryFileNameLen(i) + 1;
-  FileName = new char[namelen];
+  FileName = new _TCHAR[namelen];
 
   drop.DragQueryFile(i, FileName, namelen);
 

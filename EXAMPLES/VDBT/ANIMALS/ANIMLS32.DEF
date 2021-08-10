@@ -1,0 +1,17 @@
+;------------------------------------------------
+;   Project animals
+;   Borland International
+;   Copyright © 1996. All Rights Reserved.
+;
+;   SUBSYSTEM:    animals.exe Module Defintion File
+;   FILE:         animls32.def
+;   AUTHOR:       
+;
+;------------------------------------------------
+
+NAME animals
+
+DESCRIPTION 'animals Application - Copyright © 1996. All Rights Reserved.'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE

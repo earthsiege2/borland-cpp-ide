@@ -1,40 +1,43 @@
 :BASE winsight.hlp
-1 WinSight User's Guide
-2 Getting Started = GettingStarted
+0 WinSight User's Guide
+
+1 WinSight overview
+2 Getting started = GettingStarted
 2 Using WinSight = UseWinSight
-2 Basics = Essentials
-2 Tasks = Tasks
-2 Using the Mouse with WinSight = UseMouse
+2 WinSight basics = Essentials
+2 WinSight tasks = Tasks
+2 Using the mouse with WinSight = UseMouse
 2 Using the keyboard with WinSight = UseKeyboard
-2 Find Window Mode = FindWindows
-2 Tracing Messages = MTOMessagesToTraceCBoxes
-2 WinSight views
-3 WinSight Views = WinSightViews
-4 Window Tree View = WindowTreeView
-4 Message Trace View = MessageTraceView
-4 Class List View = ClassListView
-4 Detail Window = DetailWindow
-2 Winsight menus
-3 WinSight menu commands = Commands
-3 Spy Menu
-4 Spy Menu = MSpy
-3 View menu
-4 View Menu = MView
-5 View | Class List = VClassList
-5 View | Window Tree = VWindowTree
-5 View | Message Trace = VMessageTrace
-5 View | Split Horizontal = VSplitHorizontal
-5 View | Split Vertical = VSplitVertical
-3 Tree menu
-4 Tree Menu = MTree
-5 Tree | Expand One Level (+) = TExpandOneLevel
-5 Tree | Expand Branch (*) = TExpandBranch
-5 Tree | Expand All (Ctrl+*) = TExpandAll
-5 Tree | Collapse Branch (-) = TCollapseBranch
-3 Messages menu
-4 Messages menu = MMessages
-4 Messages WinSight Tracks = MessageGroups
-3 Start!/Stop! menu
-4 Stop! and Start! menu = MStopStart
-3 Help menu
-4 Help menu = MHelp
+2 Find Window mode = FindWindows
+2 Tracing messages = MTOMessagesToTraceCBoxes
+1WinSight views
+2 WinSight views = WinSightViews
+3 Window Tree view = WindowTreeView
+3 Message Trace view = MessageTraceView
+3 Class List view = ClassListView
+3 Detail window = DetailWindow
+1 WinSight menus
+2 WinSight menu commands = Commands
+2 Spy menu
+3 Spy menu = MSpy
+2 View menu
+3 View Menu = MView
+4 View | Class List = VClassList
+4 View | Window Tree = VWindowTree
+4 View | Message Trace = VMessageTrace
+4 View | Split Horizontal = VSplitHorizontal
+4 View | Split Vertical = VSplitVertical
+2 Tree menu
+3 Tree menu = MTree
+4 Tree | Expand One Level (+) = TExpandOneLevel
+4 Tree | Expand Branch (*) = TExpandBranch
+4 Tree | Expand All (Ctrl+*) = TExpandAll
+4 Tree | Collapse Branch (-) = TCollapseBranch
+2 Messages menu
+3 Messages menu = MMessages
+3 Tracking messages = MessageGroups
+2 Start!/Stop! menu
+3 Start!/Stop! menu = MStopStart
+2 Help menu
+3 Help menu = Mhelp
+

@@ -2,7 +2,7 @@
 // ObjectWindows
 // Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//$Revision:   10.1  $
+//$Revision:   10.5  $
 //
 // Resources to use with TSocketError
 //----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
   IDS_WINSOCK_BASE+49, "(WSATRY_AGAIN): Non-authoritative host not found",
   IDS_WINSOCK_BASE+50, "(WSANO_RECOVERY): Non-recoverable error",
   IDS_WINSOCK_BASE+51, "(WSANO_DATA): No information of the requested type was available",
-  IDS_WINSOCK_BASE+52, "(???): Unknown error or n
+  IDS_WINSOCK_BASE+52, "(???): Unknown error"
 }
 #endif
 #undef NO_IDS_WINSOCK_BASE

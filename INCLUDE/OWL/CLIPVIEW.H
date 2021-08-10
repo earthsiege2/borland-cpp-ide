@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.2  $
+//$Revision:   10.3  $
 //
 // Mixin class TClipboardViewer that allows a TWindow derived class to hook in
 // on the clipboard notification chain.
@@ -12,6 +12,10 @@
 
 #if !defined(OWL_WINDOW_H)
 # include <owl/window.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -63,6 +67,10 @@ class _OWLCLASS TClipboardViewer : virtual public TWindow {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //
 // Inline implementations

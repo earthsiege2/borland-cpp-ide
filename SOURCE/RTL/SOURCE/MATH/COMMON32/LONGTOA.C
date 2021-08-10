@@ -4,25 +4,33 @@
  * function(s)
  *    __longtoa - converts a long to a character string
  *    __utoa    - converts an unsigned int to a decimal string
+ *    __longtow - converts a long to a wide-character string
+ *    __utow    - converts an unsigned int to a wide-character decimal string
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdlib.h>
 #include <_printf.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*-----------------------------------------------------------------------*
 
 Name            __longtoa - converts a long to a character string
+		__longtow - converts a long to a wide-character string
 
 Usage           char * __longtoa (long value, char *strP, int radix,
                                         char maybeSigned, char hexStyle);
+                wchar_t * __longtow (long value, wchar_t *strP, int radix,
+                                        char maybeSigned, wchar_t hexStyle);
 
 Prototype in    _printf.h
 
@@ -49,12 +57,12 @@ Return value    pointer to the string
 
 *------------------------------------------------------------------------*/
 
-char * __longtoa (long value, char *strP, int radix,
-                        char maybeSigned, char hexStyle)
+_TCHAR * _longtot (long value, _TCHAR *strP, int radix,
+                        _TCHAR maybeSigned, _TCHAR hexStyle)
 {
-    char    buf [34];
-    char    c, *p, *bufp;
-    
+    _TCHAR    buf [34];
+    _TCHAR    c, *p, *bufp;
+
     p = strP;
 
     /* If the requested radix is invalid, generate an empty result.
@@ -66,7 +74,7 @@ char * __longtoa (long value, char *strP, int radix,
          */
         if (value < 0 && maybeSigned != 0)
         {
-            *p++ = '-';
+            *p++ = _TEXT('-');
             value = -value;
         }
 
@@ -89,23 +97,24 @@ char * __longtoa (long value, char *strP, int radix,
         while (bufp != buf)
         {
             if ((c = *--bufp) < 10)
-                *p++ = (char)(c + '0');
+                *p++ = (_TCHAR)(c + _TEXT('0'));
             else
-                *p++ = (char)((c - 10) + hexStyle);
+                *p++ = (_TCHAR)((c - 10) + hexStyle);
         }
     }
 
     /* terminate the output string with a zero.
      */
-    *p = '\0';
+    *p = _TEXT('\0');
     return (strP);          /* return a pointer to the string */
 }
 
 /*-----------------------------------------------------------------------*
 
-Name            __utoa - converts an unsigned int to a decimal string
+Name            __utoa, __utow - converts an unsigned int to a decimal string
 
 Usage           char *__utoa(unsigned value, char *buf)
+                wchar_t *__utoa(unsigned value, wchar_t *buf)
 
 Prototype in    _printf.h
 
@@ -113,7 +122,7 @@ Description     see __longtoa above.
 
 *------------------------------------------------------------------------*/
 
-char * __utoa(unsigned value, char *buf)
+_TCHAR * _utot(unsigned value, _TCHAR *buf)
 {
-    return  __longtoa ((long)(unsigned long)value, buf, 10, 0, 'a');
+    return  _longtot ((long)(unsigned long)value, buf, 10, 0, _TEXT('a'));
 }

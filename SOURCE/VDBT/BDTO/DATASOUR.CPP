@@ -18,7 +18,7 @@
 
 //-----------------------------------------------------------------------------
 
-void STDAPICALLTYPE _export DataSourceNotifyEventCallback( int32 data, PITDataSource datasource )
+static void STDAPICALLTYPE _export DataSourceNotifyEventCallback( int32 data, PITDataSource datasource )
 {
 	if (data)
 	{
@@ -56,7 +56,7 @@ void TDataSource::AttachOnUpdateData( const TBdtEventSourceBase&, bool attach )
 	}
 }
 
-void STDAPICALLTYPE _export DataChangeEventCallback( int32 data, PITDataSource datasource, PITField field )
+static void STDAPICALLTYPE _export DataChangeEventCallback( int32 data, PITDataSource datasource, PITField field )
 {
 	if (data)
 	{
@@ -193,6 +193,11 @@ TDataSource::TDataSource( HWND hdlg, int idc ) :
 	TBDTComponent::SetPIT( datasource );
 }
 
+void TDataSource::AttachToControl( HWND hdlg, int idc )
+{
+	SetPIT( GetVBXPIUnknown( hdlg, idc ) );
+}
+
 void TDataSource::AttachControl( HWND hdlg, int idc )
 {
 	SetVBXPIUnknown( hdlg, idc, datasource );
@@ -293,7 +298,7 @@ void TDataSource::GetDataSet( TDataSet& d )
 	}
 }
 
-void TDataSource::SetDataSet( TDataSet& d )
+void TDataSource::SetDataSet( const TDataSet& d )
 {
 	if (datasource)
 		datasource->put_DataSet( d.GetPITDataSet() );
@@ -310,3 +315,4 @@ void TDataSource::SetEnabled( bool e )
 	if (datasource)
 		datasource->put_Enabled( MakeVariantBool( e ) );
 }
+

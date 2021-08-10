@@ -1,22 +1,29 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.3  $
+// $Revision:   2.7  $
 //
 // OLE Automation Client Implementation
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/autodefs.h>
-#include <services/memory.h>
+#if !defined(OCF_AUTODEFS_H)
+# include <ocf/autodefs.h>
+#endif
+#if !defined(SERVICES_MEMORY_H)
+# include <services/memory.h>
+#endif
+#if !defined(CLASSLIB_POINTER_H)
+# include <classlib/pointer.h>
+#endif
 
 TAutoProxyArgs::~TAutoProxyArgs()
 {
-  while (Count >= 0)
-    ::VariantClear((VARIANT far*)((TAutoVal*)(this+1)+Count--));
 }
 
-void TAutoProxy::Bind(const char far* progid)
+//
+//
+void TAutoProxy::Bind(const char* progid)
 {
   PRECONDITION(progid);
 
@@ -25,6 +32,8 @@ void TAutoProxy::Bind(const char far* progid)
   Bind(guid);
 }
 
+//
+//
 void TAutoProxy::Bind(const GUID& guid)
 {
   IUnknown* unk;
@@ -38,6 +47,8 @@ void TAutoProxy::Bind(const GUID& guid)
   Bind(unk);
 }
 
+//
+//
 void TAutoProxy::Bind(IUnknown* unk)
 {
   if (!unk)
@@ -49,12 +60,16 @@ void TAutoProxy::Bind(IUnknown* unk)
   Bind(dsp);
 }
 
+//
+//
 void TAutoProxy::Bind(IDispatch* dsp)
 {
   Unbind();
   That = dsp;
 }
 
+//
+//
 void TAutoProxy::Bind(IUnknown& unk)
 {
   IDispatch* dsp;
@@ -62,6 +77,8 @@ void TAutoProxy::Bind(IUnknown& unk)
   Bind(dsp);
 }
 
+//
+//
 void TAutoProxy::Bind(IDispatch& obj)
 {
   Unbind();
@@ -69,20 +86,46 @@ void TAutoProxy::Bind(IDispatch& obj)
   That = &obj;
 }
 
+//
+//
 void TAutoProxy::Bind(TAutoVal& val)
 {
   if (val.GetDataType() == atVoid)
     That = 0;
   else
-    Bind((IDispatch&)val);  // throws exception if fails
+    // NOTE: The following call throws exception in case of failure
+    //
+    Bind((IDispatch&)val);
 }
 
+//
+//
 void TAutoProxy::MustBeBound()
 {
   if (!That)
-    throw TXAuto(TXAuto::xNotIDispatch);
+    TXAuto::Raise(TXAuto::xNotIDispatch);
 }
 
+//
+//
+IDispatch* TAutoProxy::GetObject(const char* progid)
+{
+  CLSID clsid;
+  TXOle::Check(CLSIDFromProgID(OleStr(progid), &clsid));
+
+  LPUNKNOWN  punk  = 0;
+  LPDISPATCH pdisp = 0;
+  HRESULT hr = GetActiveObject(clsid, 0, &punk);
+  if (SUCCEEDED(hr)) {
+    punk->QueryInterface(IID_IDispatch,
+                         (void**)&pdisp);
+    punk->Release();
+  }
+  return pdisp;
+}
+
+//
+//
 long TAutoProxy::Lookup(const char far* name)
 {
   if (!name)
@@ -142,21 +185,26 @@ void TAutoProxy::Lookup(const char far* names, long* ids, unsigned count)
 }
 
 TAutoVal&
-TAutoProxy::Invoke(uint16 attr, TAutoProxyArgs& args, long* ids, unsigned named)
+TAutoProxy::Invoke(uint16 attr, TAutoProxyArgs& args,
+                   long* ids, unsigned named)
 {
-  EXCEPINFO errinfo;
-  unsigned int errarg;
-  VARIANT far* retval = 0;
-
+  // Check that we're bound
+  //
   MustBeBound();
+
+  VARIANT* retval = 0;
   if (!(attr & (acPropSet | acVoidRet))) {
+
+    // NOTE: The first TAutoVal/VARIANT of TAutoProxyArgs (really TAutoArgs)
+    //       is for the return value...
     retval = args;
-    ::VariantInit(retval);
+
   }
+
   DISPID funcId = ids[0];
   DISPPARAMS params;
   params.cArgs = args;
-  params.cNamedArgs = named;  
+  params.cNamedArgs = named;
   params.rgvarg = args;
   params.rgdispidNamedArgs = ids;
   if (attr & acPropSet) {
@@ -167,14 +215,41 @@ TAutoProxy::Invoke(uint16 attr, TAutoProxyArgs& args, long* ids, unsigned named)
     params.rgdispidNamedArgs++;
     params.rgvarg++;
   }
+
+  unsigned int errarg = 0;
+  EXCEPINFO errinfo = {0};
   HRESULT stat = That->Invoke(funcId, IID_NULL, Lang,
                               uint16(attr & (acMethod | acPropSet | acPropGet)),
                               &params, retval, &errinfo, &errarg);
-  ids[0] = funcId;         // restore function id incase PropSet
+
+  // Restore function id incase PropSet
+  //
+  ids[0] = funcId;
+
+  // Check for failure
+  //
   if (stat != HR_NOERROR) {
-    char buf[50];
-    wsprintf(buf, "Invoke Id = %ld", funcId);
-    TXOle::Check(stat, buf);
+    TAPointer<char> errMsg = new char[100];
+
+    // Is there additional informatiol in the EXCEPINFO structure
+    //
+    if (stat == ResultFromScode(DISP_E_EXCEPTION)) {
+      TString str(errinfo.bstrDescription);
+      char *errDesc = errinfo.bstrDescription ? (char*)str : "";
+      wsprintf(errMsg, "Invoke ID= %ld/%lX (%s) %s=%X", funcId, funcId,
+                       errDesc,
+                       errinfo.wCode ? "wCode" : "scode",
+                       errinfo.wCode ? errinfo.wCode : errinfo.scode);
+    }
+    else if (stat == ResultFromScode(DISP_E_TYPEMISMATCH) ||
+             stat == ResultFromScode(DISP_E_PARAMNOTFOUND)) {
+      wsprintf(errMsg, "Invoke ID= %ld/%lX, arg Index:%d", funcId, funcId,
+                        errarg);
+    }
+    else {
+      wsprintf(errMsg, "Invoke Id= %ld/%lX", funcId, funcId);
+    }
+    TXOle::Check(stat, errMsg);
   }
   return args;
 }

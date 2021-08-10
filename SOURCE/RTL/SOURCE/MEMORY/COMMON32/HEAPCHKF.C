@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1995, 1996 by Borland International
+ *      Copyright (c) 1995, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <mem.h>
@@ -20,44 +21,43 @@
 
 int _RTLENTRY _EXPFUNC heapcheckfree(unsigned int value)
 {
-    HEAP *h;
     BLOCKHDR *bh;
 
     _lock_heap();
     if (_linktable)
     {
-      size_t i;
+        size_t i;
 
-      if (heapcheck () != _HEAPOK)
-      {
-        _unlock_heap();
-        return _HEAPCORRUPT;
-      }
-
-      for (i = MINSIZE; i < _smalloc_threshold; i += ALIGNMENT)
-      {
-        BLOCKHDR *p = HDR4SIZE(i);
-
-        for (bh = p->nextFree; bh != p; bh = bh->nextFree)
+        if (heapcheck () != _HEAPOK)
         {
-          if (_memchk (((char *)HDR2PTR(bh))+8, value, SIZE(bh)-12) == 0)
-          {
             _unlock_heap();
-            return _BADVALUE;
-          }
+            return _HEAPCORRUPT;
         }
-      }
 
-      for (bh = _freeStart.nextFree; bh != &_freeStart; bh = bh->nextFree)
-      {
-        if (_memchk (((char *)HDR2PTR(bh) +8), value, SIZE(bh) - 12) == 0)
+        for (i = MINSIZE; i < _smalloc_threshold; i += ALIGNMENT)
         {
-          _unlock_heap();
-          return _BADVALUE;
+            BLOCKHDR *p = HDR4SIZE(i);
+
+            for (bh = p->nextFree; bh != p; bh = bh->nextFree)
+            {
+                if (_memchk (((char *)HDR2PTR(bh))+8, value, SIZE(bh)-12) == 0)
+                {
+                    _unlock_heap();
+                    return _BADVALUE;
+                }
+            }
         }
-      }
-   }
-   _unlock_heap();
-   return _HEAPOK;
+
+        for (bh = _freeStart.nextFree; bh != &_freeStart; bh = bh->nextFree)
+        {
+            if (_memchk (((char *)HDR2PTR(bh) +8), value, SIZE(bh) - 12) == 0)
+            {
+                _unlock_heap();
+                return _BADVALUE;
+            }
+        }
+    }
+    _unlock_heap();
+    return _HEAPOK;
 }
 

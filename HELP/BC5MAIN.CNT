@@ -1,0 +1,38 @@
+:TITLE Borland C++ 5.02 Online Help
+:BASE bc5main.hlp
+:INDEX Borland C++ 5.02 Online Help = bc5main.hlp
+:LINK bc5main.hlp
+
+:INCLUDE bc5help.cfg
+
+1 Using Help in Borland C++ 5.0
+2 About Using Help in Borland C++ 5.0 = UsingHelpInBorlandC
+2 Getting Help in Borland C++ 5.0 = UsingBorHelp
+2 Getting Context-Sensitive Help = ContextSensitiveHelp
+2 Accessing and Using Contents Screens = BorlandHelpContents
+2 Using the Index = UsingTheIndex
+2 Searching for Keywords = KeywordSearch
+2 Printing Help Topics = PrintingHelpTopics
+2 Help Context Menus = LocalHelpMenus
+2 Using Windows Help = UsingWindowsHelp
+2 Redistributable Files = RedistributableFiles
+
+:INCLUDE openhelp.toc
+:INCLUDE bcw.mst
+:INCLUDE workshop.mst
+:INCLUDE scriptc.toc
+:INCLUDE scriptr.toc
+:INCLUDE bctools.mst
+:INCLUDE bcpppg.mst
+:INCLUDE bcpprg.toc
+:INCLUDE bcvdtgui.toc
+:INCLUDE bcvdtref.toc
+:INCLUDE stlpg.toc
+:INCLUDE stlref.toc
+:INCLUDE clslibpg.toc
+:INCLUDE clslibrg.toc
+:INCLUDE owlpg.toc
+:INCLUDE owlrg.toc
+:INCLUDE ocfpg.toc
+:INCLUDE ocflr.toc
+:INCLUDE bcerrmsg.mst

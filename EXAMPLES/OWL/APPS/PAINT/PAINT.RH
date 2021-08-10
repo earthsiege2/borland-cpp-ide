@@ -6,9 +6,11 @@
 #define IDC_WIDTH     102
 #define IDC_HEIGHT    103
 
-#define IDC_2COLOR    104
-#define IDC_16COLOR   105
-#define IDC_256COLOR  106
+#define IDC_2COLOR    101
+#define IDC_16COLOR   102
+#define IDC_256COLOR  103
+#define IDC_HICOLOR	  104
+#define IDC_TRUECOLOR	105
 
 #define CM_VIEWTOOLS  601
 #define CM_VIEWLINES  602

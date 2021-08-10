@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.10  $
 //
 // Implementation of OWL message dispatcher functions
 //----------------------------------------------------------------------------
@@ -11,8 +11,14 @@
 # include <owl/dispatch.h>
 #endif
 
+OWL_DIAGINFO;
+
 //----------------------------------------------------------------------------
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+  
 int32 _OWLFUNC
 i_LPARAM_Dispatch(GENERIC& generic,
                   int     (GENERIC::*pmf)(int32),
@@ -586,3 +592,7 @@ v_ParentNotify_Dispatch(GENERIC& generic,
 #endif
   return 0;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif

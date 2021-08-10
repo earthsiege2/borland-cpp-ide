@@ -290,7 +290,7 @@ TGadgetFactory::SetNumChars(uint numChars)
 void
 TGadgetFactory::SetGadgetText(const char* text)
 {
-  delete GadgetText;
+  delete[] GadgetText;
   GadgetText = strnewdup(text);
 }
 

@@ -1,0 +1,13 @@
+LIBRARY LSAPI32
+EXPORTS
+
+    LSEnumProviders
+    LSFreeHandle
+    LSGetMessage
+    LSInstall
+    LSLicenseUnitsGet
+    LSLicenseUnitsSet
+    LSQuery
+    LSRelease
+    LSRequest
+    LSUpdate

@@ -1,10 +1,8 @@
 //-------------------------------------------------------
 // Classic Keymap Data File.
 //-------------------------------------------------------
-// $Revision:   1.44  $
+// $Revision:   1.49  $
 // The format for KBD files is as follows:
-// [Options] section can be any script command.  The
-// entire line will be used and executed.
 // The [Assigments:Keyboard] section is used to
 // perform assignments to the specified subsystem.
 // Possible subsystems may be found in the documnetation
@@ -24,37 +22,6 @@
 // invalidating this file.  If a comment is needed, but not a
 // Keyflag then both delimiters must still be present.
 //-------------------------------------------------------
-[Options]
-import IDE;
-import editor;
-import scriptEngine;
-
-ClassicEmulation();
-
-IDE.KeyboardManager.ScriptAbortKey = "<Escape>";
-
-DoIDEFileClose()      { return FUNCTION_CONTINUE; }
-DoIDEFileOpen()       { return FUNCTION_CONTINUE; }
-DoIDEFilePrint()      { return FUNCTION_CONTINUE; }
-DoIDEFileSave()       { return FUNCTION_CONTINUE; }
-DoIDEFileSaveAs()     { return FUNCTION_CONTINUE; }
-DoIDEFileSaveAll()    { return FUNCTION_CONTINUE; }
-
-DoIDEEditUndo()       { editor.Undo(); return FUNCTION_END; }
-DoIDEEditRedo()       { editor.Redo(); return FUNCTION_END; }
-DoIDEEditCut()        { editor.ClassicCut(); return FUNCTION_END; }
-DoIDEEditCopy()       { editor.Copy(); return FUNCTION_END;  }
-DoIDEEditPaste()      { editor.Paste(); return FUNCTION_END; }
-DoIDEEditClear()      { editor.ClassicBlockDelete(); return FUNCTION_END; }
-DoIDEEditSelectAll()  { editor.SelectAll(); return FUNCTION_END; }
-DoIDEEditBufferList() { return FUNCTION_CONTINUE; }
-
-DoIDESearchFind()     { editor.Search(); return FUNCTION_CONTINUE; }
-DoIDESearchReplace()  { editor.Replace(); return FUNCTION_CONTINUE; }
-DoIDESearchSearchAgain() { return FUNCTION_CONTINUE; }
-
-DoIDESearchPreviousMessage() { return FUNCTION_CONTINUE; }
-DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 
 [Assignments:Desktop]
 //--------------- ----------------------------------- -------- ----------
@@ -123,6 +90,7 @@ DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 <Shift-Delete>    |:|IDE.EditCut();                   |:|      |:|Cut command - Edit|Cut
 <Shift-F7>        |:|debugger.InstructionStepInto();  |:|      |:|Statement step into command
 <Shift-F8>        |:|debugger.InstructionStepOver();  |:|      |:|Statement step over command
+<Shift-F9>        |:|IDE.DebugAnimate();              |:|      |:|Animate curent taret in debugger
 <Shift-Insert>    |:|IDE.EditPaste();                 |:|      |:|Paste command - Edit|Paste
 
 
@@ -253,18 +221,18 @@ DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 <Ctrl-q><Ctrl-v>  |:|;                                |:|      |:|
 <Ctrl-q><Ctrl-w>  |:|;                                |:|      |:|
 <Ctrl-q><Ctrl-x>  |:|editor.TopView.Position.Move(editor.TopView.BottomRow-1); |:|      |:|Move cursor to bottom of window retaining column
-<Ctrl-q><Ctrl-y>  |:|editor.DeleteToEOL();            |:|      |:|Delete from cursor to the end of the line
+<Ctrl-q><Ctrl-y>  |:|editor.ClassicDeleteToEOL();     |:|      |:|Delete from cursor to the end of the line
 <Ctrl-q><Ctrl-z>  |:|;                                |:|      |:|
-<Ctrl-q><0>       |:|editor.SetBookmark(0);           |:|      |:|Sets bookmark 0
-<Ctrl-q><1>       |:|editor.SetBookmark(1);           |:|      |:|Sets bookmark 1
-<Ctrl-q><2>       |:|editor.SetBookmark(2);           |:|      |:|Sets bookmark 2
-<Ctrl-q><3>       |:|editor.SetBookmark(3);           |:|      |:|Sets bookmark 3
-<Ctrl-q><4>       |:|editor.SetBookmark(4);           |:|      |:|Sets bookmark 4
-<Ctrl-q><5>       |:|editor.SetBookmark(5);           |:|      |:|Sets bookmark 5
-<Ctrl-q><6>       |:|editor.SetBookmark(6);           |:|      |:|Sets bookmark 6
-<Ctrl-q><7>       |:|editor.SetBookmark(7);           |:|      |:|Sets bookmark 7
-<Ctrl-q><8>       |:|editor.SetBookmark(8);           |:|      |:|Sets bookmark 8
-<Ctrl-q><9>       |:|editor.SetBookmark(9);           |:|      |:|Sets bookmark 9
+<Ctrl-q><0>       |:|editor.GotoBookmark(0);          |:|      |:|Go to bookmark 0
+<Ctrl-q><1>       |:|editor.GotoBookmark(1);          |:|      |:|Go to bookmark 1
+<Ctrl-q><2>       |:|editor.GotoBookmark(2);          |:|      |:|Go to bookmark 2
+<Ctrl-q><3>       |:|editor.GotoBookmark(3);          |:|      |:|Go to bookmark 3
+<Ctrl-q><4>       |:|editor.GotoBookmark(4);          |:|      |:|Go to bookmark 4
+<Ctrl-q><5>       |:|editor.GotoBookmark(5);          |:|      |:|Go to bookmark 5
+<Ctrl-q><6>       |:|editor.GotoBookmark(6);          |:|      |:|Go to bookmark 6
+<Ctrl-q><7>       |:|editor.GotoBookmark(7);          |:|      |:|Go to bookmark 7
+<Ctrl-q><8>       |:|editor.GotoBookmark(8);          |:|      |:|Go to bookmark 8
+<Ctrl-q><9>       |:|editor.GotoBookmark(9);          |:|      |:|Go to bookmark 9
 <Ctrl-q><Ctrl-0>  |:|editor.GotoBookmark(0);          |:|      |:|Go to bookmark 0
 <Ctrl-q><Ctrl-1>  |:|editor.GotoBookmark(1);          |:|      |:|Go to bookmark 1
 <Ctrl-q><Ctrl-2>  |:|editor.GotoBookmark(2);          |:|      |:|Go to bookmark 2
@@ -294,7 +262,7 @@ DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 <Delete>          |:|editor.TopView.Position.Delete(1); |:|      |:|
 <Down>            |:|editor.TopView.Position.MoveRelative(1, 0);SetZeroBlock(FALSE); |:|      |:|
 
-<Enter>           |:|editor.TopView.Position.InsertCharacter('\\r'); |:|      |:|
+<Enter>           |:|editor.TopView.Position.InsertCharacter('\r'); |:|      |:|
 <End>             |:|editor.TopView.Position.MoveEOL(); |:|      |:|
 <Escape>          |:|;                                  |:|      |:|
 <Home>            |:|editor.TopView.Position.MoveBOL(); |:|      |:|
@@ -338,7 +306,7 @@ DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 <Shift-Space>     |:|editor.TopView.Position.InsertCharacter(' '); |:|      |:|Inserts a ' ' (space) character
 <Shift-Tab>       |:|editor.BackTab();                |:|      |:|Moves the cursor to the previous tab stop
 
-<Tab>             |:|editor.TopView.Position.InsertCharacter('\\t'); |:|      |:|Inserts a tab character
+<Tab>             |:|editor.TopView.Position.InsertCharacter('\t'); |:|      |:|Inserts a tab character
 <Up>              |:|editor.TopView.Position.MoveRelative(-1, 0);SetZeroBlock(FALSE); |:|      |:|Move cursor up one line
 
 [Assignments:CPU]
@@ -363,11 +331,13 @@ DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 <Ctrl-s>          |:|WiredMethod();                   |:|      |:|Disassembly - Go to Source; Stack - Top Stack; Registers - Show Old Registers
 <Ctrl-t>          |:|WiredMethod();                   |:|      |:|All panes - Change Thread
 <Ctrl-z>          |:|WiredMethod();                   |:|      |:|Registers pane - Zero Register
+<End>             |:|WiredMethod();                   |:|      |:|Move cursor to the end of the window
 <F1>              |:|IDE.HelpView();                  |:|      |:|Help
 <F2>              |:|WiredMethod();                   |:|      |:|Disassembly pane - Toggle Breakpoint
 <F5>              |:|WiredMethod();                   |:|      |:|Disassembly pane - Toggle Breakpoint
 <F7>              |:|debugger.InstructionStepInto();  |:|      |:|InstructionStepInto - Executes the next instruction, stepping into functions
 <F8>              |:|debugger.InstructionStepOver();  |:|      |:|InstructionStepOver - Executes the next instruction, running any functions
+<Home>            |:|WiredMethod();                   |:|      |:|Move cursor to the beginning of the window
 <Left>            |:|WiredMethod();                   |:|      |:|Move cursor to the left
 <Minus>           |:|WiredMethod();                   |:|      |:|Registers pane - Decrement Register
 <Down>            |:|WiredMethod();                   |:|      |:|Move cursor down one line
@@ -416,24 +386,31 @@ DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 <F1>              |:|IDE.HelpView();                  |:|      |:|Help
 <Insert>          |:|WiredMethod();                   |:|      |:|Watches window - Add Watch
 <Space>           |:|WiredMethod();                   |:|      |:|Watch window - Disable/Enable Watch(es)
+<PageUp>          |:|WiredMethod();                   |:|      |:|Move cursor to the beginning of the window
+<PageDown>        |:|WiredMethod();                   |:|      |:|Move cursor to the end of the window
+<Up>              |:|WiredMethod();                   |:|      |:|Move cursor up
+<Down>            |:|WiredMethod();                   |:|      |:|Move cursor down
+<Left>            |:|WiredMethod();                   |:|      |:|Move cursor left
+<Right>           |:|WiredMethod();                   |:|      |:|Move cursor right
+<Home>            |:|WiredMethod();                   |:|      |:|Move cursor home
+<End>             |:|WiredMethod();                   |:|      |:|Move cursor end
 
 [Assignments:Breakpoints]
 //--------------- ----------------------------------- -------- ----------
 // Key            |:|Command                          |:|Flags |:|Comment
 //--------------- ----------------------------------- -------- ----------
-<Alt-d>           |:|WiredMethod();                   |:|      |:|Selects the Address tab
-<Alt-w>           |:|WiredMethod();                   |:|      |:|Selects the Data Watch tab
-<Alt-e>           |:|WiredMethod();                   |:|      |:|Edit Breakpoint
-<Alt-x>           |:|WiredMethod();                   |:|      |:|Selects the OS Exception tab
-<Alt-s>           |:|WiredMethod();                   |:|      |:|Selects the Source tab
-<Alt-t>           |:|WiredMethod();                   |:|      |:|Selects the Thread tab
-<Alt-m>           |:|WiredMethod();                   |:|      |:|Selects the Module tab
-<Alt-g>           |:|WiredMethod();                   |:|      |:|Selects the CodeGuard tab
 <Ctrl-a>          |:|WiredMethod();                   |:|      |:|Add Breakpoint
-<Ctrl-r>          |:|WiredMethod();                   |:|      |:|Remove Breakpoint
+<Ctrl-d>          |:|WiredMethod();                   |:|      |:|Selects the Address tab
 <Ctrl-e>          |:|WiredMethod();                   |:|      |:|Edit Breakpoint
-<Ctrl-o>          |:|WiredMethod();                   |:|      |:|Edit Source
+<Ctrl-g>          |:|WiredMethod();                   |:|      |:|Selects the CodeGuard tab
 <Ctrl-i>          |:|WiredMethod();                   |:|      |:|View Source
+<Ctrl-m>          |:|WiredMethod();                   |:|      |:|Selects the Module tab
+<Ctrl-o>          |:|WiredMethod();                   |:|      |:|Edit Source
+<Ctrl-r>          |:|WiredMethod();                   |:|      |:|Remove Breakpoint
+<Ctrl-s>          |:|WiredMethod();                   |:|      |:|Selects the Source tab
+<Ctrl-t>          |:|WiredMethod();                   |:|      |:|Selects the Thread tab
+<Ctrl-w>          |:|WiredMethod();                   |:|      |:|Selects the Data Watch tab
+<Ctrl-x>          |:|WiredMethod();                   |:|      |:|Selects the OS Exception tab
 <Enter>           |:|WiredMethod();                   |:|      |:|Edit Breakpoint
 <F1>              |:|IDE.HelpView();                  |:|      |:|Help
 <Space>           |:|WiredMethod();                   |:|      |:|Enable/Disable Breakpoint
@@ -441,6 +418,12 @@ DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 <Insert>          |:|WiredMethod();                   |:|      |:|Add Breakpoint
 <PageUp>          |:|WiredMethod();                   |:|      |:|Move cursor to the beginning of the window
 <PageDown>        |:|WiredMethod();                   |:|      |:|Move cursor to the end of the window
+<Up>              |:|WiredMethod();                   |:|      |:|Move cursor up
+<Down>            |:|WiredMethod();                   |:|      |:|Move cursor down
+<Left>            |:|WiredMethod();                   |:|      |:|Move cursor left
+<Right>           |:|WiredMethod();                   |:|      |:|Move cursor right
+<Home>            |:|WiredMethod();                   |:|      |:|Move cursor home
+<End>             |:|WiredMethod();                   |:|      |:|Move cursor end
 
 [Assignments:Processes]
 //--------------- ----------------------------------- -------- ----------
@@ -457,6 +440,14 @@ DoIDESearchNextMessage()     { return FUNCTION_CONTINUE; }
 <Ctrl-i>          |:|WiredMethod();                   |:|      |:|View source at current location
 <Enter>           |:|WiredMethod();                   |:|      |:|Edit source at current location
 <F1>              |:|IDE.HelpView();                  |:|      |:|Help
+<PageUp>          |:|WiredMethod();                   |:|      |:|Move cursor to the beginning of the window
+<PageDown>        |:|WiredMethod();                   |:|      |:|Move cursor to the end of the window
+<Up>              |:|WiredMethod();                   |:|      |:|Move cursor up
+<Down>            |:|WiredMethod();                   |:|      |:|Move cursor down
+<Left>            |:|WiredMethod();                   |:|      |:|Move cursor left
+<Right>           |:|WiredMethod();                   |:|      |:|Move cursor right
+<Home>            |:|WiredMethod();                   |:|      |:|Move cursor home
+<End>             |:|WiredMethod();                   |:|      |:|Move cursor end
 
 [Assignments:Inspector]
 //--------------- ----------------------------------- -------- ----------

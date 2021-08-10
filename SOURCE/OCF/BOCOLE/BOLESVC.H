@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.8  $
+// $Revision:   2.9  $
 //
 //  Declares the application-level object for "global" stuff. You should have 
 //  one service object per Bolero connection.

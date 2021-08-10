@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Implements TCheckList and TCheckListItem
 //----------------------------------------------------------------------------
@@ -12,6 +12,7 @@
 #include <owl/uihelper.h>
 #include <string.h>
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlControl);
 
 const int CheckBoxWidth = 15;

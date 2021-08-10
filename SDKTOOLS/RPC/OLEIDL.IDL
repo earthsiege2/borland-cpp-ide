@@ -1,11 +1,18 @@
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
+//  Copyright (C) Microsoft Corporation, 1992 - 1996.
 //
 //  File: oadvhr.idl
 //
 //--------------------------------------------------------------------------
+
+cpp_quote("//+-------------------------------------------------------------------------")
+cpp_quote("//")
+cpp_quote("//  Microsoft Windows")
+cpp_quote("//  Copyright (C) Microsoft Corporation, 1992 - 1996.")
+cpp_quote("//")
+cpp_quote("//--------------------------------------------------------------------------")
 
 #ifndef DO_NO_IMPORTS
 import "objidl.idl";
@@ -22,13 +29,6 @@ interface IEnumOLEVERB;
 
 interface IOleAdviseHolder : IUnknown
 {
-
-cpp_quote("//+-------------------------------------------------------------------------")
-cpp_quote("//")
-cpp_quote("//  Microsoft Windows")
-cpp_quote("//  Copyright (C) Microsoft Corporation, 1992 - 1995.")
-cpp_quote("//")
-cpp_quote("//--------------------------------------------------------------------------")
 
     typedef [unique] IOleAdviseHolder * LPOLEADVISEHOLDER;
 
@@ -66,7 +66,6 @@ cpp_quote("//-------------------------------------------------------------------
 }
 
 [
-    local,
     object,
     uuid(0000011e-0000-0000-C000-000000000046),
     pointer_default(unique)
@@ -110,7 +109,6 @@ interface IOleCache : IUnknown
 
 [
     object,
-    local,
     uuid(00000128-0000-0000-C000-000000000046),
     pointer_default(unique)
 ]
@@ -139,7 +137,7 @@ interface IOleCache2 : IOleCache
 
 
     // IOleCache2::DiscardCache options
-    typedef [transmit_as(long)] enum tagDISCARDCACHE
+    typedef [v1_enum] enum tagDISCARDCACHE
     {
         DISCARDCACHE_SAVEIFDIRTY =  0,  // Save all dirty cache before discarding
         DISCARDCACHE_NOSAVE      =  1   // Don't save dirty caches before
@@ -147,18 +145,20 @@ interface IOleCache2 : IOleCache
     } DISCARDCACHE;
 
 
-
-    cpp_quote("#define DISCARDCACHE_to_xmit(pEnum, ppLong) *(ppLong) = (long *) (pEnum)")
-    cpp_quote("#define DISCARDCACHE_from_xmit(pLong, pEnum) *(pEnum) = (DISCARDCACHE) *(pLong)")
-    cpp_quote("#define DISCARDCACHE_free_inst(pEnum) ")
-    cpp_quote("#define DISCARDCACHE_free_xmit(pLong) ")
-
-
+    [local]
     HRESULT UpdateCache
     (
         [in] LPDATAOBJECT pDataObject,
         [in] DWORD grfUpdf,
         [in] LPVOID pReserved
+    );
+
+    [call_as(UpdateCache)]
+    HRESULT RemoteUpdateCache
+    (
+        [in] LPDATAOBJECT pDataObject,
+        [in] DWORD grfUpdf,
+        [in] DWORD pReserved
     );
 
 
@@ -171,7 +171,6 @@ interface IOleCache2 : IOleCache
 
 [
     object,
-    local,
     uuid(00000129-0000-0000-C000-000000000046)
 ]
 
@@ -291,7 +290,7 @@ interface IOleObject : IUnknown
 
     typedef [unique] IOleObject *LPOLEOBJECT;
 
-    typedef enum tagOLEGETMONIKER
+    typedef enum tagOLEGETMONIKER 
     {
         OLEGETMONIKER_ONLYIFTHERE = 1,
         OLEGETMONIKER_FORCEASSIGN = 2,
@@ -299,34 +298,47 @@ interface IOleObject : IUnknown
         OLEGETMONIKER_TEMPFORUSER = 4
     } OLEGETMONIKER;
 
-    typedef enum tagOLEWHICHMK
+    typedef enum tagOLEWHICHMK 
     {
         OLEWHICHMK_CONTAINER = 1,
         OLEWHICHMK_OBJREL    = 2,
         OLEWHICHMK_OBJFULL   = 3
     } OLEWHICHMK;
 
-    typedef enum tagUSERCLASSTYPE {
-        USERCLASSTYPE_FULL = 1,
-        USERCLASSTYPE_SHORT = 2,
+    typedef enum tagUSERCLASSTYPE 
+    {
+        USERCLASSTYPE_FULL    = 1,
+        USERCLASSTYPE_SHORT   = 2,
         USERCLASSTYPE_APPNAME = 3,
     } USERCLASSTYPE;
 
-    typedef enum tagOLEMISC // bitwise
+    typedef enum tagOLEMISC 
     {
-      OLEMISC_RECOMPOSEONRESIZE   = 1,
-      OLEMISC_ONLYICONIC          = 2,
-      OLEMISC_INSERTNOTREPLACE    = 4,
-      OLEMISC_STATIC              = 8,
-      OLEMISC_CANTLINKINSIDE      = 16,
-      OLEMISC_CANLINKBYOLE1       = 32,
-      OLEMISC_ISLINKOBJECT        = 64,
-      OLEMISC_INSIDEOUT           = 128,
-      OLEMISC_ACTIVATEWHENVISIBLE = 256,
-      OLEMISC_RENDERINGISDEVICEINDEPENDENT = 512
+        OLEMISC_RECOMPOSEONRESIZE           = 0x00000001,
+        OLEMISC_ONLYICONIC                  = 0x00000002,
+        OLEMISC_INSERTNOTREPLACE            = 0x00000004,
+        OLEMISC_STATIC                      = 0x00000008,
+        OLEMISC_CANTLINKINSIDE              = 0x00000010,
+        OLEMISC_CANLINKBYOLE1               = 0x00000020,
+        OLEMISC_ISLINKOBJECT                = 0x00000040,
+        OLEMISC_INSIDEOUT                   = 0x00000080,
+        OLEMISC_ACTIVATEWHENVISIBLE         = 0x00000100,
+        OLEMISC_RENDERINGISDEVICEINDEPENDENT= 0x00000200,
+        OLEMISC_INVISIBLEATRUNTIME          = 0x00000400,
+        OLEMISC_ALWAYSRUN                   = 0x00000800,
+        OLEMISC_ACTSLIKEBUTTON              = 0x00001000,
+        OLEMISC_ACTSLIKELABEL               = 0x00002000,
+        OLEMISC_NOUIACTIVATE                = 0x00004000,
+        OLEMISC_ALIGNABLE                   = 0x00008000,
+        OLEMISC_SIMPLEFRAME                 = 0x00010000,
+        OLEMISC_SETCLIENTSITEFIRST          = 0x00020000,
+        OLEMISC_IMEMODE                     = 0x00040000,
+        OLEMISC_IGNOREACTIVATEWHENVISIBLE   = 0x00080000,
+        OLEMISC_WANTSTOMENUMERGE            = 0x00100000,
+        OLEMISC_SUPPORTSMULTILEVELUNDO      = 0x00200000
     } OLEMISC;
 
-    typedef enum tagOLECLOSE
+    typedef enum tagOLECLOSE 
     {
         OLECLOSE_SAVEIFDIRTY = 0,
         OLECLOSE_NOSAVE      = 1,
@@ -555,7 +567,6 @@ interface IOleWindow : IUnknown
 }
 
 [
-    local,
     object,
     uuid(0000011d-0000-0000-C000-000000000046)
 ]
@@ -669,15 +680,15 @@ interface IOleItemContainer : IOleContainer
     } OLECONTF;
 
     [local]
-    HRESULT __stdcall GetObject(
+    HRESULT GetObject(
         [in] LPOLESTR pszItem,
         [in] DWORD dwSpeedNeeded,
         [in, unique] IBindCtx *pbc,
         [in] REFIID riid,
-        [out] void **ppvObject);
+        [out, iid_is(riid)] void **ppvObject);
 
     [call_as(GetObject)]
-    HRESULT __stdcall RemoteGetObject(
+    HRESULT RemoteGetObject(
         [in] LPOLESTR pszItem,
         [in] DWORD dwSpeedNeeded,
         [in, unique] IBindCtx *pbc,
@@ -685,14 +696,14 @@ interface IOleItemContainer : IOleContainer
         [out, iid_is(riid)] IUnknown **ppvObject);
 
     [local]
-    HRESULT __stdcall GetObjectStorage(
+    HRESULT GetObjectStorage(
         [in] LPOLESTR pszItem,
         [in, unique] IBindCtx *pbc,
         [in] REFIID riid,
-        [out] void **ppvStorage);
+        [out, iid_is(riid)] void **ppvStorage);
 
     [call_as(GetObjectStorage)]
-    HRESULT __stdcall RemoteGetObjectStorage(
+    HRESULT RemoteGetObjectStorage(
         [in] LPOLESTR pszItem,
         [in, unique] IBindCtx *pbc,
         [in] REFIID riid,
@@ -757,13 +768,13 @@ interface IOleInPlaceActiveObject : IOleWindow
     typedef [unique] IOleInPlaceActiveObject *LPOLEINPLACEACTIVEOBJECT;
 
     [local]
-    HRESULT __stdcall TranslateAccelerator
+    HRESULT TranslateAccelerator
     (
         [in] LPMSG lpmsg
     );
 
     [call_as(TranslateAccelerator)]
-    HRESULT __stdcall RemoteTranslateAccelerator();
+    HRESULT RemoteTranslateAccelerator();
 
     [input_sync]
     HRESULT OnFrameWindowActivate
@@ -971,7 +982,16 @@ interface IOleInPlaceSite : IOleWindow
 }
 
 [
-    local,
+    object,
+    uuid(0000012a-0000-0000-C000-000000000046)
+]
+
+interface IContinue : IUnknown
+{
+    HRESULT FContinue();
+}
+
+[
     object,
     uuid(0000010d-0000-0000-C000-000000000046)
 ]
@@ -981,6 +1001,7 @@ interface IViewObject : IUnknown
 
     typedef [unique] IViewObject *LPVIEWOBJECT;
 
+    [local]
     HRESULT Draw
     (
         [in] DWORD dwDrawAspect,
@@ -989,22 +1010,49 @@ interface IViewObject : IUnknown
         [in, unique] DVTARGETDEVICE *ptd,
         [in] HDC hdcTargetDev,
         [in] HDC hdcDraw,
-    [in] LPCRECTL lprcBounds,
-    [in] LPCRECTL lprcWBounds,
-        [in] BOOL (__stdcall *pfnContinue)(DWORD dwContinue),
+        [in] LPCRECTL lprcBounds,
+        [in, unique] LPCRECTL lprcWBounds,
+        [in] BOOL (*pfnContinue)(DWORD dwContinue),
         [in] DWORD dwContinue
     );
 
+    [call_as(Draw)]
+    HRESULT RemoteDraw
+    (
+        [in] DWORD dwDrawAspect,
+        [in] LONG lindex,
+        [in] DWORD pvAspect,
+        [in, unique] DVTARGETDEVICE *ptd,
+        [in] DWORD hdcTargetDev,
+        [in] DWORD hdcDraw,
+        [in] LPCRECTL lprcBounds,
+        [in, unique] LPCRECTL lprcWBounds,
+        [in] IContinue *pContinue
+    );
+
+    [local]
     HRESULT GetColorSet
     (
         [in] DWORD dwDrawAspect,
         [in] LONG lindex,
         [in, unique] void *pvAspect,
-        [in] DVTARGETDEVICE *ptd,
+        [in, unique] DVTARGETDEVICE *ptd,
         [in] HDC hicTargetDev,
         [out] LOGPALETTE **ppColorSet
     );
 
+    [call_as(GetColorSet)]
+    HRESULT RemoteGetColorSet
+    (
+        [in] DWORD dwDrawAspect,
+        [in] LONG lindex,
+        [in] DWORD pvAspect,
+        [in, unique] DVTARGETDEVICE *ptd,
+        [in] DWORD hicTargetDev,
+        [out] LOGPALETTE **ppColorSet
+    );
+
+    [local]
     HRESULT Freeze
     (
         [in] DWORD dwDrawAspect,
@@ -1012,6 +1060,16 @@ interface IViewObject : IUnknown
         [in, unique] void *pvAspect,
         [out] DWORD *pdwFreeze
     );
+
+    [call_as(Freeze)]
+    HRESULT RemoteFreeze
+    (
+        [in] DWORD dwDrawAspect,
+        [in] LONG lindex,
+        [in] DWORD pvAspect,
+        [out] DWORD *pdwFreeze
+    );
+
 
     HRESULT Unfreeze
     (
@@ -1035,7 +1093,6 @@ interface IViewObject : IUnknown
 }
 
 [
-    local,
     object,
     uuid(00000127-0000-0000-C000-000000000046)
 ]
@@ -1049,7 +1106,7 @@ interface IViewObject2 : IViewObject
     (
         [in]  DWORD dwDrawAspect,
         [in]  LONG lindex,
-        [in]  DVTARGETDEVICE* ptd,
+        [in, unique]  DVTARGETDEVICE* ptd,
         [out] LPSIZEL lpsizel
     );
 
@@ -1175,13 +1232,14 @@ interface IEnumOLEVERB : IUnknown
     } OLEVERBATTRIB;
 
     [local]
-    HRESULT __stdcall Next(
+    HRESULT Next(
         [in] ULONG celt,
-        [out] LPOLEVERB rgelt,
+        [out, size_is(celt), length_is(*pceltFetched)]
+        LPOLEVERB rgelt,
         [out] ULONG *pceltFetched);
 
     [call_as(Next)]
-    HRESULT __stdcall RemoteNext(
+    HRESULT RemoteNext(
         [in] ULONG celt,
         [out, size_is(celt), length_is(*pceltFetched)]
         LPOLEVERB rgelt,

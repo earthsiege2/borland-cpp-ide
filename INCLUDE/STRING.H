@@ -5,12 +5,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.16  $ */
 
 #if !defined(__USING_STD_NAMES__)
 
@@ -54,8 +55,40 @@ extern "C" {
 typedef unsigned size_t;
 #endif
 
-size_t      _RTLENTRY  _EXPFUNC wcslen(const wchar_t *__s);
-wchar_t *   _RTLENTRY  _EXPFUNC wcscpy(wchar_t *__dst, const wchar_t *__src);
+#define wcscmpi(s1,s2)      _wcsicmp(s1,s2)
+#define _wcscmpi(s1,s2)     _wcsicmp(s1,s2)
+#define wcsncmpi(s1,s2,n)   _wcsnicmp(s1,s2,n)
+#define _wcsncmpi(s1,s2,n)  _wcsnicmp(s1,s2,n)
+
+size_t          _RTLENTRY  _EXPFUNC wcslen(const wchar_t *__s);
+wchar_t *       _RTLENTRY  _EXPFUNC wcscpy(wchar_t *__dst, const wchar_t *__src);
+wchar_t *       _RTLENTRY  _EXPFUNC wcscat(wchar_t *__dest, const wchar_t *__src);
+wchar_t *       _RTLENTRY  _EXPFUNC wcschr(const wchar_t *__s, int __c);
+int             _RTLENTRY  _EXPFUNC wcscmp(const wchar_t *__s1, const wchar_t *__s2);
+int             _RTLENTRY  _EXPFUNC wcscoll(const wchar_t * __s1, const wchar_t * __s2);
+size_t          _RTLENTRY  _EXPFUNC wcscspn(const wchar_t *__s1, const wchar_t *__s2);
+wchar_t *       _RTLENTRY  _EXPFUNC _wcsdup(const wchar_t *__s);
+int             _RTLENTRY  _EXPFUNC wcsncmp(const wchar_t *__s1, const wchar_t *__s2, size_t __maxlen);
+wchar_t *       _RTLENTRY  _EXPFUNC wcsncpy(wchar_t *__dest, const wchar_t *__src, size_t __maxlen);
+wchar_t *       _RTLENTRY  _EXPFUNC _wcsnset(wchar_t *__s, wchar_t __ch, size_t __n);
+wchar_t *       _RTLENTRY  _EXPFUNC wcspbrk(const wchar_t *__s1, const wchar_t *__s2);
+wchar_t *       _RTLENTRY  _EXPFUNC wcsrchr(const wchar_t *__s, wchar_t __c);
+wchar_t *       _RTLENTRY  _EXPFUNC _wcsrev(wchar_t *__s);
+wchar_t *       _RTLENTRY  _EXPFUNC _wcsset(wchar_t*__s, wchar_t __ch);
+size_t          _RTLENTRY  _EXPFUNC wcsspn(const wchar_t *__s1, const wchar_t *__s2);
+wchar_t *       _RTLENTRY  _EXPFUNC wcsstr(const wchar_t *__s1, const wchar_t *__s2);
+wchar_t *       _RTLENTRY  _EXPFUNC wcstok(wchar_t *__s1, const wchar_t *__s2);
+wchar_t *       _RTLENTRY  _EXPFUNC wcsncat(wchar_t *__dest, const wchar_t *__src, size_t __maxlen);
+wchar_t *       _RTLENTRY  _EXPFUNC wcspcpy(wchar_t *__dest, const wchar_t *__src);
+wchar_t *       _RTLENTRY  _EXPFUNC _wcspcpy(wchar_t *__dest, const wchar_t *__src);
+int             _RTLENTRY  _EXPFUNC _wcsicmp(const wchar_t *__s1, const wchar_t *__s2);
+int             _RTLENTRY  _EXPFUNC _wcsnicmp(const wchar_t *__s1, const wchar_t *__s2, size_t __maxlen);
+void *          _RTLENTRY  _EXPFUNC _wmemset(void *__s, int __c, size_t __n);
+wchar_t *       _RTLENTRYF _EXPFUNC _wcslwr(wchar_t *__s);
+wchar_t *       _RTLENTRYF _EXPFUNC _wcsupr(wchar_t *__s);
+wchar_t *       _RTLENTRYF _EXPFUNC _lwcslwr(wchar_t *__s);
+wchar_t *       _RTLENTRYF _EXPFUNC _lwcsupr(wchar_t *__s);
+void *          _RTLENTRY  _EXPFUNC _wmemcpy(void *__dest, const void *__src, size_t __n);
 
 int         _RTLENTRY  _EXPFUNC memcmp(const void _FAR *__s1,
                                        const void _FAR *__s2, size_t __n);
@@ -111,6 +144,10 @@ extern "C++"
 {
           void _FAR * _RTLENTRY  _EXPFUNC32 memchr(void _FAR *__s, int __c, size_t __n);
     const void _FAR * _RTLENTRY  _EXPFUNC32 memchr(const void _FAR *__s, int __c, size_t __n);
+#if defined(__FLAT__)
+          void      * _RTLENTRY  _EXPFUNC32 _wmemchr(void *__s, int __c, size_t __n);
+    const void      * _RTLENTRY  _EXPFUNC32 _wmemchr(const void *__s, int __c, size_t __n);
+#endif
           char _FAR * _RTLENTRYF _EXPFUNC   strchr(char _FAR * __s, int __c);
     const char _FAR * _RTLENTRYF _EXPFUNC   strchr(const char _FAR * __s, int __c);
           char _FAR * _RTLENTRYF _EXPFUNC   strrchr(char _FAR *__s, int __c);
@@ -122,6 +159,9 @@ extern "C++"
 }
 #else
           void _FAR * _RTLENTRY  _EXPFUNC32 memchr(const void _FAR *__s, int __c, size_t __n);
+#if defined(__FLAT__)
+          void      * _RTLENTRY  _EXPFUNC32 _wmemchr(const void *__s, int __c, size_t __n);
+#endif
           char _FAR * _RTLENTRYF _EXPFUNC   strchr(const char _FAR * __s, int __c);
           char _FAR * _RTLENTRYF _EXPFUNC   strrchr(const char _FAR *__s, int __c);
           char _FAR * _RTLENTRYF _EXPFUNC   strpbrk(const char _FAR *__s1, const char _FAR *__s2);
@@ -250,11 +290,26 @@ char  __far * _RTLENTRY _FARCALL  _fstrupr(char __far *__s);
 
 
 int    _RTLENTRY  _EXPFUNC _lstrcoll(const char * __s1, const char * __s2);
-size_t _RTLENTRY  _EXPFUNC _lstrxfrm(char * __s1, const char * __s2,
-                                     size_t __n );
+int    _RTLENTRY  _EXPFUNC _lstricoll(const char * __s1, const char * __s2);
+int    _RTLENTRY  _EXPFUNC _lstrncoll(const char * __s1, const char * __s2, const int len);
+int    _RTLENTRY  _EXPFUNC _lstrnicoll(const char * __s1, const char * __s2, int len);
+size_t _RTLENTRY  _EXPFUNC _lstrxfrm(char * __s1, const char * __s2,size_t __n );
 int    _RTLENTRY  _EXPFUNC strcoll(const char * __s1, const char * __s2);
-size_t _RTLENTRY  _EXPFUNC strxfrm(char * __s1, const char * __s2,
-                                   size_t __n );
+int    _RTLENTRY  _EXPFUNC _stricoll(const char * __s1, const char * __s2);
+int    _RTLENTRY  _EXPFUNC _strncoll(const char * __s1, const char * __s2, size_t __n);
+int    _RTLENTRY  _EXPFUNC _strnicoll(const char * __s1, const char * __s2, int len);
+size_t _RTLENTRY  _EXPFUNC strxfrm(char * __s1, const char * __s2,size_t __n );
+
+int    _RTLENTRY  _EXPFUNC _lwcscoll(const wchar_t * __s1, const wchar_t * __s2);
+int    _RTLENTRY  _EXPFUNC _lwcsicoll(const wchar_t * __s1, const wchar_t * __s2);
+int    _RTLENTRY  _EXPFUNC _lwcsncoll(const wchar_t * __s1, const wchar_t * __s2, const int len);
+int    _RTLENTRY  _EXPFUNC _lwcsnicoll(const wchar_t * __s1, const wchar_t * __s2, int len);
+size_t _RTLENTRY  _EXPFUNC _lwcsxfrm(wchar_t * __s1, const wchar_t * __s2,size_t __n );
+int    _RTLENTRY  _EXPFUNC wcscoll(const wchar_t * __s1, const wchar_t * __s2);
+int    _RTLENTRY  _EXPFUNC _wcsicoll(const wchar_t * __s1, const wchar_t * __s2);
+int    _RTLENTRY  _EXPFUNC _wcsncoll(const wchar_t * __s1, const wchar_t * __s2, size_t __n);
+int    _RTLENTRY  _EXPFUNC _wcsnicoll(const wchar_t * __s1, const wchar_t * __s2, int len);
+size_t _RTLENTRY  _EXPFUNC wcsxfrm(wchar_t * __s1, const wchar_t * __s2, size_t __n );
 
 
 #if !defined(__STDC__) /* NON_ANSI  */
@@ -294,10 +349,13 @@ size_t _RTLENTRY  _EXPFUNC strxfrm(char * __s1, const char * __s2,
 #endif  /* __FLAT__ */
 
 #if defined(__USELOCALES__)
-#define  strupr   _lstrupr
-#define  strlwr   _lstrlwr
-#define  strcoll  _lstrcoll
-#define  strxfrm  _lstrxfrm
+#define  strupr     _lstrupr
+#define  strlwr     _lstrlwr
+#define  strcoll    _lstrcoll
+#define  stricoll   _lstricoll
+#define  strncoll   _lstrncoll
+#define  strnicoll  _lstrnicoll
+#define  strxfrm    _lstrxfrm
 #endif  /* __USELOCALES__ */
 
 #ifdef __cplusplus

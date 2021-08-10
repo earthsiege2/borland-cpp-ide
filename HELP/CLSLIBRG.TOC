@@ -1837,7 +1837,7 @@
 3 TStackIterator template
 4 About the TStackIterator template = TStackIterator
 
-2 Vactor classes
+2 Vector classes
 3 TMVectorImp template
 4 About the TMVectorImp template = TMVectorImp
 4 CondFunc = TMVectorImp_CondFunc

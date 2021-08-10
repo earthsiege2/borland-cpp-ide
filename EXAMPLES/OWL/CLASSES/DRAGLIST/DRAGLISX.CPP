@@ -134,6 +134,8 @@ TExampleDragList::Dropped(int item, const TPoint& point)
       }
       if (::Status)
          ::Status->SetText(::Buffer);
+
+      delete[] moveItem;
    }
 }
 

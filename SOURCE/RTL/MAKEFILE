@@ -15,7 +15,7 @@
 # which allows the commandline of a command to exceed 128 chars.  The
 # default behavior is to report an error for any line exceeding 128.
 #
-CMDLINE = -l OS=$(OS)
+CMDLINE = -l OS=$(OS) -DMBCS
 
 !if $d(DEBUG)
     CMDLINE = $(CMDLINE) -DDEBUG
@@ -31,6 +31,10 @@ CMDLINE = -l OS=$(OS)
 
 !if $d(MT)
     CMDLINE = $(CMDLINE) -DMT
+!endif
+
+!if $d(MAGIC)
+    CMDLINE = $(CMDLINE) -DMAGIC
 !endif
 
 !if $d(PCH)
@@ -74,9 +78,7 @@ $(BUILDDIR) :
          $(MAKE) -I$(RTLROOT) $(CMDLINE) dll
 !    endif
 !else
-!    if $(OS) == DOS || $(OS) == WIN16
-         $(MAKE) -I$(RTLROOT) $(CMDLINE) objs
-!    endif
+     $(MAKE) -I$(RTLROOT) $(CMDLINE) objs
      $(MAKE) -I$(RTLROOT) $(CMDLINE) lib
 !endif
 
@@ -89,7 +91,7 @@ start :
     @echo.
 !if $d(DLL)
     if exist $(LIBDIR)\dll.rsp del $(LIBDIR)\dll.rsp
-    echo $(LIBDIR)\\\\$(DLLC0)+ > $(LIBDIR)\dll.rsp
+    echo $(LIBDIR)\\$(DLLC0)+ > $(LIBDIR)\dll.rsp
     if exist $(LIBDIR)\import.rsp del $(LIBDIR)\import.rsp
 !else
     if exist $(LIBDIR)\tlib.rsp del $(LIBDIR)\tlib.rsp

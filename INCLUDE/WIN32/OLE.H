@@ -4,17 +4,22 @@
 *                                                                             *
 *               Version 1.0                                                   *
 *                                                                             *
+#pragma option -b.
 *               NOTE: windows.h must be #included first                       *
+#pragma option -b
 *                                                                             *
-*               Copyright (c) 1990-1995, Microsoft Corp.  All rights reserved.*
+*               Copyright (c) 1990-1996, Microsoft Corp.  All rights reserved.*
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _INC_OLE
 #define _INC_OLE
+#pragma option -b
 
 #ifdef WIN16
+#pragma option -b.
 #include <pshpack1.h>   /* Assume byte packing throughout */
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
@@ -497,7 +502,10 @@ typedef struct _OLESERVERDOC
 #endif  /* __cplusplus */
 
 #ifdef WIN16
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif  /* !_INC_OLE */

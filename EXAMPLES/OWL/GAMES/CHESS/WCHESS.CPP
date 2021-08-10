@@ -311,7 +311,7 @@ TChessWindow::TChessWindow()
 
 TChessWindow::~TChessWindow()
 {
-  delete FileName;
+  delete[] FileName;
   delete TInfo;
   ::DeleteObject(hWhiteBrush);
   ::DeleteObject(hBlackBrush);
@@ -338,7 +338,7 @@ TChessWindow::GetWindowClass(WNDCLASS& wndClass)
   // window class, which OWL will register for you
   //
   ::hArrowCursor = wndClass.hCursor = ::LoadCursor(0, IDC_ARROW);
-  hBKBrushBmp = GetApplication()->LoadBitmap("BKBrushBmp");
+  hBKBrushBmp = GetApplication()->LoadBitmap("BKBrush");
   hBKBrush = ::CreatePatternBrush(hBKBrushBmp);
 
   wndClass.hbrBackground = hBKBrush;

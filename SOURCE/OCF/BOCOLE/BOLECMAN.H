@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.3  $
+// $Revision:   2.4  $
 //
 //  Declares an IBClassMgr "factory" which can create Bolero helper objects.
 //

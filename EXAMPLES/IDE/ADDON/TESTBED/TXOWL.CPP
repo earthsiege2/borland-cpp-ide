@@ -2,7 +2,7 @@
 
    Created: 1/1/96
    Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
-   $Revision:   1.10  $
+   $Revision:   1.15  $
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/ 
 #ifndef __AOEXPCH_H
@@ -31,11 +31,6 @@ extern HINSTANCE ghInst;
 #define OWL_NODETYPE_STR ".exe"
 #define CPP_NODETYPE_STR ".cpp"
 
-//
-// 1 to 15 is reserved by IDE. see txservers.h
-//
-#define TX_OWL_SID 25
-
 ///////////////////////////////////////////////////////////////////////////////
 OwlTarget::~OwlTarget() {
   if ( d_targetMgr ) {
@@ -52,14 +47,16 @@ OwlTarget::~OwlTarget() {
 void OwlTarget::SetIDEObj(LPUNKNOWN ideObj) {
 
   d_IdeObj = ideObj;
-  d_IdeObj->QueryInterface(IID_TARAGET_MANAGER, (LPVOID*)&d_targetMgr);
-  d_targetMgr->QueryInterface(  IID_TARAGET_MANAGER_PROPERTY_DIALOG
+  //
+  // Get the ITargetManager interface and register our target type
+  //
+  d_IdeObj->QueryInterface(IID_Addon_ITargetManager, (LPVOID*)&d_targetMgr);
+  d_targetMgr->QueryInterface(  IID_Addon_ITargetManagerPropertyDialog
                               , (LPVOID*)&d_targetMgrDlg);
   d_hTarget = d_targetMgr->AddTargetType(this
                                       , MakePolyString(OWL_APP_TYPE_STR)
                                       , ghInst
                                       , IDD_WIN32_OWL_TARGET);
-  ideObj->AddRef();
 };
 
 static OwlTargetData p_defaultTargetData = { 0, 0};
@@ -86,7 +83,7 @@ void OwlTarget::Setup(ProjectNode node) {
       d_targetData = *(OwlTargetData*)p;
     } else {
       //
-      // do the default
+      // Should not get here, but get the default anyway.
       //
       d_targetData = p_defaultTargetData;
     }
@@ -98,11 +95,6 @@ void OwlTarget::Setup(ProjectNode node) {
     d_targetData = p_defaultTargetData;
   }
 }
-
-#define IDC_BWCC          1001
-#define IDC_DYNAMIC_LIB  1002
-#define IDC_STATIC_LIB    1003
-
 
 void OwlTarget::GetDlgItems() {
   HWND hwndCtl = d_targetMgrDlg->GetControlWindow(IDC_BWCC);
@@ -118,7 +110,9 @@ void OwlTarget::SetDlgItems() {
               = d_targetMgrDlg->GetAdvancedButton();
   advanceBut->Enable(0);
   advanceBut->Release();
-
+  //
+  // add platform Win32
+  //
   ITargetManagerDialogList* pltm = d_targetMgrDlg->GetPlatformList();
   pltm->Clear();
   IPolyString* platFormStr = MakePolyString(OWL_PLATFORM_STR);
@@ -127,13 +121,18 @@ void OwlTarget::SetDlgItems() {
   pltm->Select(platFormStr);
   pltm->Release();
 
+  //
+  // add image GUI
+  //
   ITargetManagerDialogList* image = d_targetMgrDlg->GetImageList();
   image->Clear();
   image->Add(MakePolyString(OWL_IMAGE_STR), d_hTarget);
   image->Select(MakePolyString(OWL_IMAGE_STR));
   image->Release();
 
-
+  //
+  // initialize our own fields
+  //
   HWND hwndCtl = d_targetMgrDlg->GetControlWindow(IDC_BWCC);
   Button_SetCheck(hwndCtl, d_targetData.d_fBWCC);
   hwndCtl = d_targetMgrDlg->GetControlWindow(IDC_DYNAMIC_LIB);
@@ -144,6 +143,9 @@ void OwlTarget::SetDlgItems() {
 };
 
 void OwlTarget::OnCommand(UINT id) {
+  //
+  // we don't need to do anything here
+  //
   switch (id) {
     case IDC_BWCC:
       {
@@ -177,6 +179,9 @@ void OwlTarget::PlatformSelectionChangeNotification(UINT /*id*/) {
 ///////////////////////////////////////////////////////////////////////////////
 
 BOOL OwlTarget::IsTargetable(IPolyString* fileExt) {
+  //
+  // We can target any files with extension .exe
+  //
   BOOL targetable = (lstrcmpi(fileExt->GetCstr(), OWL_NODETYPE_STR) == 0);
   fileExt->Release();
   return targetable;
@@ -206,6 +211,10 @@ ConvertNodeToTarget(ProjectNode nodeTarget, IPolyString* name) {
 
 
   if ( !nodeTarget ) {
+    //
+    // nodeTarget is NULL, we are asked to create a new target from the root
+    // node.
+    //
 
     //
     // if name == foo.exe, it will become foo.exe
@@ -225,6 +234,9 @@ ConvertNodeToTarget(ProjectNode nodeTarget, IPolyString* name) {
     //
     _makepath(path_buffer, drive, dir, fname, OWL_NODETYPE_STR);
 
+    //
+    // Call TargetAdd() to create an IDE stock target.
+    //
     nodeTarget = targetServer->TargetAdd( 
                           MakePolyString(path_buffer),    // node name
                           0,                              // parent node
@@ -244,6 +256,9 @@ ConvertNodeToTarget(ProjectNode nodeTarget, IPolyString* name) {
     _makepath(path_buffer, drive, dir, fname, CPP_NODETYPE_STR);
     projectServer->NodeAdd(nodeTarget, MakePolyString(path_buffer));
   } else {
+    //
+    // A valid nodeTarget, we are asked to convert a node to a target
+    //
     nodeTarget = targetServer->ConvertNodeToTarget( nodeTarget,
                           TT_Application,                // target type
                           TP_Win32,                      // target platform
@@ -308,17 +323,16 @@ OwlTargetImpl::OwlTargetImpl(LPUNKNOWN ideObj)
   SetIDEObj(ideObj);
 };
 
-
 STDMETHODIMP
 OwlTargetImpl::QueryInterface(REFIID riid, LPVOID FAR* ppobj) {
-  if ((riid == IID_IUnknown) || (riid == IID_TARAGET_PROPERTY_PAGE))   {
-    *ppobj = (LPVOID)(ITargetPropertyPage*)this;
-  } else if ((riid == IID_TARAGET_TYPE)) {
+  if (riid == IID_IUnknown) {
+   *ppobj = (LPVOID)(ITargetPropertyPage *) this;
+  } else if ((riid == IID_Addon_ITargetType)) {
     *ppobj = (LPVOID)(ITargetType*)this;
   } else {
     *ppobj = NULL;
     return ResultFromScode(E_NOINTERFACE);
   }
-  ((LPUNKNOWN)*ppobj)->AddRef();
+  AddRef();
   return NOERROR;
 }

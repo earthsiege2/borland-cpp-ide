@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.3  $
+// $Revision:   2.4  $
 //
 // PortDefs.h -- Contains some portability macros which are used to compile
 //               the same Bolero codebase for Win3.1 and Win32.

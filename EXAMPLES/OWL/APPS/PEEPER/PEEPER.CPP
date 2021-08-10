@@ -338,8 +338,8 @@ TPeeper::CmHelp()
 int OwlMain(int, char* [])
 {
 #if defined(BI_PLAT_WIN32)
-  if (TSystem::GetPlatformId() == TSystem::Win32NT) {
-    ::MessageBox(0,"This is not a WIN NT Example", "OWL Examples", MB_OK);
+  if (!TSystem::Has3dUI()) {
+    ::MessageBox(0,"This example requires Win 4.0 or greater", "OWL Examples", MB_OK);
     return 0;
   }
 #endif

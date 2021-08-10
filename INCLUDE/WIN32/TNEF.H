@@ -8,14 +8,17 @@
  *  message.  This implementation sits on top of the IStream object as
  *  documented in the OLE 2 Specs.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef TNEF_H
 #define TNEF_H
+#pragma option -b
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 #ifdef __cplusplus
@@ -356,12 +359,13 @@ typedef struct _NSID
 #define attRecipTable               ATT( atpByte,       0x9004) /* PR_MESSAGE_RECIPIENTS */
 #define attAttachment               ATT( atpByte,       0x9005)
 #define attTnefVersion              ATT( atpDword,      0x9006)
-#define attOemCodepage              ATT( atpByte,       0x9007) 
+#define attOemCodepage              ATT( atpByte,       0x9007)
 #define attOriginalMessageClass     ATT( atpWord,       0x0006) /* PR_ORIG_MESSAGE_CLASS */
 
 #define attOwner                    ATT( atpByte,       0x0000) /* PR_RCVD_REPRESENTING_xxx  or
                                                                    PR_SENT_REPRESENTING_xxx */
 #define attSentFor                  ATT( atpByte,       0x0001) /* PR_SENT_REPRESENTING_xxx */
+#define attDelegate                 ATT( atpByte,       0x0002) /* PR_RCVD_REPRESENTING_xxx */
 #define attDateStart                ATT( atpDate,       0x0006) /* PR_DATE_START */
 #define attDateEnd                  ATT( atpDate,       0x0007) /* PR_DATE_END */
 #define attAidOwner                 ATT( atpLong,       0x0008) /* PR_OWNER_APPT_ID */
@@ -372,7 +376,10 @@ typedef struct _NSID
 #endif
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif  /*  defined TNEF_H */

@@ -137,6 +137,7 @@ void TCallDemoDlg::SetupWindow()
 TCallDemoDlg::TCallDemoDlg(TWindow* parent, TResId resId)
 				: TDialog(parent, resId), TWindow(parent)
 {
+  intldemo->Bind(ExeProgId);
   intldemo->GetWindow(LocaleFrame);
 	 
   LocaleFrame.EnglishLanguage();   // set to English UI
@@ -198,7 +199,6 @@ int OwlMain(int /* argc */, char* /* argv */ [])
   intldemo = new TLocaleApplication;
 
   try {
-	 intldemo->Bind(ExeProgId);
 	 TCallDemoApp().Run();
 	 intldemo->Quit();
 	 return 0;

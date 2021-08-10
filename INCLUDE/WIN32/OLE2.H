@@ -1,7 +1,7 @@
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
+//  Copyright (C) Microsoft Corporation, 1992-1996.
 //
 //  File:       OLE2.h
 //  Contents:   Main OLE2 header; Defines Linking and Emmebbeding interfaces, and API's.
@@ -10,9 +10,12 @@
 //----------------------------------------------------------------------------
 #if !defined( _OLE2_H_ )
 #define _OLE2_H_
+#pragma option -b
 
 // Set packing to 8
+#pragma option -b.
 #include <pshpack8.h>
+#pragma option -b
 
 // Make 100% sure WIN32 is defined
 #ifndef WIN32
@@ -23,10 +26,16 @@
 // SET to remove _export from interface definitions
 
 
+#pragma option -b.
 #include <winerror.h>
+#pragma option -b
 
+#pragma option -b.
 #include <objbase.h>
+#pragma option -b
+#pragma option -b.
 #include <oleauto.h>
+#pragma option -b
 
 // View OBJECT Error Codes
 
@@ -56,9 +65,14 @@
 #define EMBDHLP_CREATENOW    0x00000000L
 #define EMBDHLP_DELAYCREATE  0x00010000L
 
+/* extended create function flags */
+#define OLECREATE_LEAVERUNNING	0x00000001
+
 /* pull in the MIDL generated header */
 
+#pragma option -b.
 #include <oleidl.h>
+#pragma option -b
 
 
 
@@ -108,15 +122,33 @@ WINOLEAPI  OleCreate(REFCLSID rclsid, REFIID riid, DWORD renderopt,
                 LPFORMATETC pFormatEtc, LPOLECLIENTSITE pClientSite,
                 LPSTORAGE pStg, LPVOID FAR* ppvObj);
 
+WINOLEAPI  OleCreateEx(REFCLSID rclsid, REFIID riid, DWORD dwFlags,
+                DWORD renderopt, ULONG cFormats, DWORD* rgAdvf,
+                LPFORMATETC rgFormatEtc, IAdviseSink FAR* lpAdviseSink,
+                DWORD FAR* rgdwConnection, LPOLECLIENTSITE pClientSite,
+                LPSTORAGE pStg, LPVOID FAR* ppvObj);
+
 WINOLEAPI  OleCreateFromData(LPDATAOBJECT pSrcDataObj, REFIID riid,
                 DWORD renderopt, LPFORMATETC pFormatEtc,
                 LPOLECLIENTSITE pClientSite, LPSTORAGE pStg,
                 LPVOID FAR* ppvObj);
 
+WINOLEAPI  OleCreateFromDataEx(LPDATAOBJECT pSrcDataObj, REFIID riid,
+                DWORD dwFlags, DWORD renderopt, ULONG cFormats, DWORD* rgAdvf,
+                LPFORMATETC rgFormatEtc, IAdviseSink FAR* lpAdviseSink,
+                DWORD FAR* rgdwConnection, LPOLECLIENTSITE pClientSite,
+                LPSTORAGE pStg, LPVOID FAR* ppvObj);
+
 WINOLEAPI  OleCreateLinkFromData(LPDATAOBJECT pSrcDataObj, REFIID riid,
                 DWORD renderopt, LPFORMATETC pFormatEtc,
                 LPOLECLIENTSITE pClientSite, LPSTORAGE pStg,
                 LPVOID FAR* ppvObj);
+
+WINOLEAPI  OleCreateLinkFromDataEx(LPDATAOBJECT pSrcDataObj, REFIID riid,
+                DWORD dwFlags, DWORD renderopt, ULONG cFormats, DWORD* rgAdvf,
+                LPFORMATETC rgFormatEtc, IAdviseSink FAR* lpAdviseSink,
+                DWORD FAR* rgdwConnection, LPOLECLIENTSITE pClientSite,
+                LPSTORAGE pStg, LPVOID FAR* ppvObj);
 
 WINOLEAPI  OleCreateStaticFromData(LPDATAOBJECT pSrcDataObj, REFIID iid,
                 DWORD renderopt, LPFORMATETC pFormatEtc,
@@ -128,13 +160,31 @@ WINOLEAPI  OleCreateLink(LPMONIKER pmkLinkSrc, REFIID riid,
             DWORD renderopt, LPFORMATETC lpFormatEtc,
             LPOLECLIENTSITE pClientSite, LPSTORAGE pStg, LPVOID FAR* ppvObj);
 
+WINOLEAPI  OleCreateLinkEx(LPMONIKER pmkLinkSrc, REFIID riid,
+            DWORD dwFlags, DWORD renderopt, ULONG cFormats, DWORD* rgAdvf,
+            LPFORMATETC rgFormatEtc, IAdviseSink FAR* lpAdviseSink,
+            DWORD FAR* rgdwConnection, LPOLECLIENTSITE pClientSite,
+            LPSTORAGE pStg, LPVOID FAR* ppvObj);
+
 WINOLEAPI  OleCreateLinkToFile(LPCOLESTR lpszFileName, REFIID riid,
             DWORD renderopt, LPFORMATETC lpFormatEtc,
             LPOLECLIENTSITE pClientSite, LPSTORAGE pStg, LPVOID FAR* ppvObj);
 
+WINOLEAPI  OleCreateLinkToFileEx(LPCOLESTR lpszFileName, REFIID riid,
+            DWORD dwFlags, DWORD renderopt, ULONG cFormats, DWORD* rgAdvf,
+            LPFORMATETC rgFormatEtc, IAdviseSink FAR* lpAdviseSink,
+            DWORD FAR* rgdwConnection, LPOLECLIENTSITE pClientSite,
+            LPSTORAGE pStg, LPVOID FAR* ppvObj);
+
 WINOLEAPI  OleCreateFromFile(REFCLSID rclsid, LPCOLESTR lpszFileName, REFIID riid,
             DWORD renderopt, LPFORMATETC lpFormatEtc,
             LPOLECLIENTSITE pClientSite, LPSTORAGE pStg, LPVOID FAR* ppvObj);
+
+WINOLEAPI  OleCreateFromFileEx(REFCLSID rclsid, LPCOLESTR lpszFileName, REFIID riid,
+            DWORD dwFlags, DWORD renderopt, ULONG cFormats, DWORD* rgAdvf,
+            LPFORMATETC rgFormatEtc, IAdviseSink FAR* lpAdviseSink,
+            DWORD FAR* rgdwConnection, LPOLECLIENTSITE pClientSite,
+            LPSTORAGE pStg, LPVOID FAR* ppvObj);
 
 WINOLEAPI  OleLoad(LPSTORAGE pStg, REFIID riid, LPOLECLIENTSITE pClientSite,
             LPVOID FAR* ppvObj);
@@ -298,8 +348,11 @@ WINOLEAPI OleConvertOLESTREAMToIStorageEx
      LPSTGMEDIUM        pmedium);   //      bits
 
 #ifndef RC_INVOKED
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 #endif // RC_INVOKED
 
+#pragma option -b.
 #endif     // __OLE2_H__
 

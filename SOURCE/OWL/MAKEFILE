@@ -2,7 +2,7 @@
 # MAKEFILE for ObjectWindows Libraries
 # Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 #
-# $Revision:   10.65  $
+# $Revision:   10.85  $
 #
 # Defines:
 #   MODEL=<d|l|f|t> one of:
@@ -11,18 +11,22 @@
 #   WIN32        enables win32
 #   WIN16        enables win16
 #   MT           builds OWL to be used with multithreaded rtl
+#   VCL          builds OWL using the VCL-compatible RTL (cp32mt)
+#                 (implies -DMT and -DNAMESPACE; requires MODEL=t and WIN32)
 #   ALIGN=<1|2|4|8> specifies the alignment
 #   DIAGS        enables runtime diagnostics (adds 'd' to lib name before 'w')
 #   DEBUG        enables debug info for debuggers
 #   OWLNOPCH     disables precompiled headers for OWL
 #   OWLSECTION   enables sectioning of sources into multiple small objs
-#   OWLNAME=Xxx  lib & DLL name base, Defaults to 'owl'. Req. for non-diag DLLs
-#   OWLVER=nnn   version for OWL DLL. Defaults to 50. Req. for non-diag DLLs
+#   OWLNAME=Xxx  lib/DLL name base (defaults to 'owl' req. for non-diag DLLs)
+#   OWLVER=nnn   version for OWL DLL (efaults to 52 req. for non-diag DLLs)
 #   USERDLL      builds OWL for use in a user DLL (adds 'u' to lib name after
 #                model)
 #   OWLFARVTABLE moves OWL class vtables out of dgroup (only 16-bit)
 #   CODEGUARD    builds OWL with CodeGuard:  1=basic data, 2=full checking
+#   NAMESPACE    builds OWL within a namespace "OWL"
 #   BCC32I       uses bcc32i instead of bcc32 to compile
+#   ILINK        uses ILINK32 instead of TLINK32 to link
 #   NO_EMULATED_CTRL   builds library using system implementation of common
 #                      controls
 #   REDEFINE_BOOL      builds library with BOOL mapped to bool
@@ -32,10 +36,24 @@
 #   NO_OWL2_COMPAT     builds library without API exposed for backward
 #                      compatibility with v2.x of ObjectWindows.
 #                      NOTE: NO_OWL2_COMPAT implies NO_OWL1_COMPAT
-#   NO_WIN32S_SUPPORT  builds library without special code to make up for
-#                      WIN32s lack of support for safe exceptions
 #
 #
+#   NO_OBJ_STREAMING   builds library without special code to allow
+#                      some OWL objects to be persisted in a stream
+#
+#
+#
+# Standard builds:
+#   make MODEL=l OWLSECTION=1                    large model library (owlwl.lib)
+#   make MODEL=d OWLNAME=Owl OWLVER=52          16bit DLL (owlwi.lib, owl52.dll)
+#   make WIN32=1 OWLSECTION=1                    32bit flat model library (owlwf.lib)
+#   make MODEL=d WIN32=1 OWLNAME=owl OWLVER=52  32bit DLL (owlwfi.lib, owl52f.dll)
+#
+# Diagnostic builds:
+#   make MODEL=l OWLSECTION=1 -DDIAGS  large model diag library (owldwl.lib)
+#   make MODEL=d DIAGS=1               16bit diag DLL (owldwi.lib owl52d.dll)
+#   make WIN32=1 OWLSECTION=1 -DDIAGS  32bit flat model diag lib (owldwf.lib)
+#   make MODEL=d WIN32=1 DIAGS=1       32bit diag DLL (owldwfi.lib owl52df.dll)
 #
 # Define these for alternate OWL build directories:
 #   OWLSRCDIR    defaults to: $(BCROOT)\source\owl
@@ -43,22 +61,24 @@
 #   OWLLIBDIR    defaults to: $(BCROOT)\lib
 #   OWLBINDIR    defaults to: $(BCROOT)\bin
 #
-# Standard builds:
-#   make MODEL=l OWLSECTION=1                    large model library (owlwl.lib)
-#   make MODEL=d OWLNAME=Owl OWLVER=50           16bit DLL (owlwi.lib, owl50.dll)
-#   make WIN32=1 OWLSECTION=1                    32bit flat model library (owlwf.lib)
-#   make MODEL=d WIN32=1 OWLNAME=owl OWLVER=50   32bit DLL (owlwfi.lib, owl50f.dll)
+# When building VCL-compatible programs, both BCROOT and BCBROOT need
+# to be defined.  If BC5\BIN is on your path first, then BCROOT is
+# defined by default.  If C++Builder is on your path first, BCBROOT
+# is defined by default.  You must define the other one (or both)
+# explicitly as an environment variable in order for the makefile to
+# locate the OWL source in the BC5 tree and the VCL libraries in the
+# BCB tree.
 #
-# Diagnostic builds:
-#   make MODEL=l OWLSECTION=1 -DDIAGS  large model diag library (owldwl.lib)
-#   make MODEL=d DIAGS=1               16bit diag DLL (owldwi.lib, owl50d.dll)
-#   make WIN32=1 OWLSECTION=1 -DDIAGS  32bit flat model diag lib (owldwf.lib)
-#   make MODEL=d WIN32=1 DIAGS=1       32bit diag DLL (owldwfi.lib, owl50df.dll)
+#   BCROOT        defaults to: $(BCBROOT)  ; one of these is always
+#   BCBROOT       defaults to: $(BCROOT)   ; defined by default
+#
+#   VCLINCDIR     defaults to: $(BCBROOT)\include;($BCBROOT)\include\vcl
+#   VCLOBJDIR     defaults to: $(BCBROOT)\lib\obj
+#   VCLLIBDIR     defaults to: $(BCBROOT)\lib
 #
 # Notes:
 #   The owl16.ord file should be maintained if OWL functions are changed
 #   otherwise warnings will be generated during the DLL link.
-#
 #-----------------------------------------------------------------------------
 
 .autodepend
@@ -79,10 +99,16 @@
 #   ==l   |  !  |       |   !   | MODEL=l    WIN16=1
 #---------+-----+-------+-------+--------------------------------
 
-!if !$d(MODEL) && !defined(MT) && !$d(WIN16) && !$d(OS2)
+#
+# If no model is defined or implied, set a default
+#
+!if !$d(MODEL) && !defined(MT) && !$d(WIN16) && !$d(OS2) && !$d(VCL)
   MODEL = f    # default build model = flat static, Win32
 !endif
 
+#
+# DLL model implies some other settings
+#
 !if $(MODEL) == d     # model d is short for building the DLL-- flat or large
   DLL = 1
 ! if !$d(WIN16) && !$d(OS2)
@@ -90,18 +116,36 @@
 ! endif
 !endif
 
-!if ($(MODEL) == t || $(MODEL) == f) && !$d(OS2)
-  WIN32 = 1    # default to WIN32 switch on for flat or multi-threaded model
-!elif $(MODEL)==l
-  WIN16 = 1    # default to WIN16 switch on for large model
+#
+# If no system was set, choose a default
+#
+!if (!$d(WIN32) && !$d(WIN16) && !$d(OS2))
+! if $(MODEL) == t || $(MODEL) == f || $d(VCL) || $d(MT)
+    WIN32 = 1    # default to WIN32 switch on for flat or multi-threaded model
+! elif $(MODEL)==l
+    WIN16 = 1    # default to WIN16 switch on for large model
+! endif
 !endif
 
-!if $(MODEL) == t || $d(MT)
+#
+# For multithreaded target, set the value of MT
+#
+!if $(MODEL) == t || $d(MT) || $d(VCL)
   MT = mt       # model t implies MT. Use MT as 'mt' to build library names
 !endif
 
+#
+# VCL compatibility implies use of namespace
+#
+!if $d(VCL)
+  NAMESPACE = 1
+!endif
+
+#
+# Make sure model is consistent with system
+#
 !if $d(WIN32)
-! if $d(MT)
+! if $d(MT) || $d(VCL)
     MODEL = t
 ! else
     MODEL = f
@@ -117,6 +161,15 @@
   ALIGN = 1
 !endif
 
+#
+# Check for incompatible choices and warn user
+#
+!if $d(VCL)
+! if !$d(WIN32) || $(MODEL) != t
+!   error VCL-compatible library must be multithreaded 32-bit
+! endif
+!endif
+
 !if $d(DOS) && $d(MT)
 ! error Cannot build multi-thread library for DOS.
 !endif
@@ -126,6 +179,11 @@
 !   error MODEL must be l, f, or t
 ! endif
 !endif
+
+!if $d(ILINK) && $d(WIN16)
+! error Cannot build 16-bit targets with ILINK.
+!endif
+
 
 #--------------------------------------------------------------------
 # Dir & name components
@@ -137,14 +195,22 @@
 ! endif
 
 ! if $d(WIN32)
-    KEY = w$(MODEL)i            # 32bit flat or multithread DLL import library
+!   if $d(VCL)
+      KEY = wvi                 # VCL-compatible import library
+!   else
+      KEY = w$(MODEL)i          # 32bit flat or multithread DLL import library
+!   endif
 ! else
     KEY = wi                    # 16bit DLL import library
 ! endif
 
 !else
 
-KEY = w$(MODEL)                 # Static library uses w+model
+! if $d(VCL)
+    KEY = wv
+! else
+    KEY = w$(MODEL)             # Static library uses w+model
+! endif
 
 !endif  # if/else $d(DLL)
 
@@ -155,7 +221,7 @@ KEY = w$(MODEL)                 # Static library uses w+model
 !if !$d(OWLNAME)
   OWLNAME = owl
 ! if !$d(OWLVER)
-    OWLVER = 50
+    OWLVER = 52
 ! endif
 !endif
 
@@ -177,8 +243,8 @@ KEY = w$(MODEL)                 # Static library uses w+model
   __DEBUG=2
   __TRACE=1
   __WARN=1
-! if $d(WIN32)
-    BD=d              # Use Bids Diag version when OWL lib is diag
+! if $d(WIN32) || $d(DLL)
+    BD=d              # Use BIDS Diag version when OWL lib is diag
 ! else
     BD=db             # Extension compatible with traditional DOS names
 ! endif
@@ -203,19 +269,24 @@ KEY = w$(MODEL)                 # Static library uses w+model
 #--------------------------------------------------------------------
 
 #
-# BC tools BCBINDIR can be based on MAKEDIR if no BCROOT is defined
+# If neither or only one of the two root variables is defined,
+# read the file bcroot.inc and let it define whatever it wants to.
 #
-!if $d(BCROOT)
-  BCBINDIR = $(BCROOT)\bin
-!else
-  BCBINDIR = $(MAKEDIR)
+!if !$d(BCROOT) || !$d(BCBROOT)
+! include $(MAKEDIR)\bcroot.inc
+! if !$d(BCROOT) && !$d(BCBROOT)
+    BCROOT = $(MAKEDIR)\..
+! endif
 !endif
 
 #
-# Default bcroot to whatever is in bcroot.inc
+# At least one of the roots is certainly defined now.
+# If only one is defined, make them both the same.
 #
 !if !$d(BCROOT)
-! include $(MAKEDIR)\bcroot.inc
+BCROOT = $(BCBROOT)
+!elif !$d(BCBROOT)
+BCBROOT = $(BCROOT)
 !endif
 
 #
@@ -287,10 +358,26 @@ OWLOBJDIR = $(OWLSRCDIR)\o\$(OD)$(KEY)   # Keep seperate diag/nondiag dirs
 .PATH.cpp = $(OWLSRCDIR)
 
 #
+# Where to find VCL libraries, objs, and headers
+#
+!if $d(VCL)
+! if !$d(VCLLIBDIR)
+    VCLLIBDIR = $(BCBROOT)\lib
+! endif
+! if !$d(VCLOBJDIR)
+    VCLOBJDIR = $(VCLLIBDIR)\obj
+! endif
+! if !$d(VCLINCDIR)
+    VCLINCDIR = $(BCBROOT)\include\vcl
+! endif
+INCLUDE = $(INCLUDE);$(VCLINCDIR)
+!endif
+
+#
 # Define OWLNOPCH to disable the use of Precompiled headers when building OWL
 #
 !if !$d(OWLNOPCH)
-  CPCH= -H=$(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).csm -H"pch.h" -D_OWLPCH
+ CPCH= -H=$(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).csm -H"pch.h" -D_OWLPCH
 ! if $d(WIN32) || $(__MAKE__) > 0x0370  # -Hc: !valid for 16-bit before v5.0
     CPCH = $(CPCH) -Hc
 ! endif
@@ -301,7 +388,11 @@ OWLOBJDIR = $(OWLSRCDIR)\o\$(OD)$(KEY)   # Keep seperate diag/nondiag dirs
 #--------------------------------------------------------------------
 !if $d(DLL)
 ! if $d(WIN32)
-    OWLDLL = $(OWLBINDIR)\$(OWLNAME)$(OWLVER)$(OD)$(MODEL).dll
+!   if $d(VCL)
+      OWLDLL = $(OWLBINDIR)\$(OWLNAME)$(OWLVER)$(OD)v.dll
+!   else
+      OWLDLL = $(OWLBINDIR)\$(OWLNAME)$(OWLVER)$(OD)$(MODEL).dll
+!   endif
 ! else
     OWLDLL = $(OWLBINDIR)\$(OWLNAME)$(OWLVER)$(OD).dll
 ! endif
@@ -310,13 +401,21 @@ OWLOBJDIR = $(OWLSRCDIR)\o\$(OD)$(KEY)   # Keep seperate diag/nondiag dirs
 !endif
 OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
 
-#--------------------------------------------------------------------
-# Tools and options for Win32
-#--------------------------------------------------------------------
+#
+# If building for VCL, use an RTL that begins "cp" instead of "cw"
+#
+!if $d(VCL)
+  RTLPFX=cp
+!else
+  RTLPFX=cw
+!endif
 
-#
-# Options which are Win16/Win32 independent
-#
+#--------------------------------------------------------------------
+# Tools and options which are Win16/Win32 independent
+#--------------------------------------------------------------------
+!if $d(NAMESPACE)
+  CFLAGS = $(CFLAGS) -DBI_NAMESPACE
+!endif
 !if $d(REDEFINE_BOOL)
   CFLAGS = $(CFLAGS) -DBI_REDEFINE_BOOL
 !endif
@@ -332,12 +431,20 @@ OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
 !if $d(NO_OWL1_COMPAT)              # Build without backward compatible API
   CFLAGS = $(CFLAGS) -DNO_OWL1_COMPAT
 !endif
-!if $d(NO_WIN32S_SUPPORT)           # Build without special code for Win32s
-  CFLAGS = $(CFALGS) -DNO_WIN32S_SUPPORT
+#
+#
+#
+!if $d(NO_OBJ_STREAMING)            # Build without persistent/stream support
+  CFLAGS = $(CFLAGS) -DBI_NO_OBJ_STREAMING
 !endif
 #
 #
 #
+
+
+#--------------------------------------------------------------------
+# Tools and options for Win32
+#--------------------------------------------------------------------
 
 !if $d(WIN32)
 ! if $d(BCC32I)
@@ -347,12 +454,18 @@ OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
 ! endif
   RCC      = brcc32 -w32             # Resource compiler
   ASM      = $(BCBINDIR)\tasm32      # Assembler
+! if $d(ILINK)
+  LINK     = $(BCBINDIR)\ilink32     # Linker
+! else
   LINK     = $(BCBINDIR)\tlink32     # Linker
+! endif
   LIB      = $(BCBINDIR)\tlib        # Librarian
   IMPLIB   = $(BCBINDIR)\implib      # Import library generator
   TDSTRIP  = $(BCBINDIR)\tdstrp32    # Debug info extractor
 
-  CFLAGS   = $(CFLAGS) -3 -d -k- -Ogmpv   # Optimizations (-O1gmpv), stdcall
+! if !$d(NO_OWL_OPT)
+    CFLAGS = $(CFLAGS) -3 -d -k- -Ogmpv   # Optimizations (-O1gmpv), stdcall
+! endif
 ! if $d(CODEGUARD)                   # d=add data, c=add calls, t=check this
     CFLAGS = $(CFLAGS) -vGd -vGt
 !   if $(CODEGUARD) == 2
@@ -364,16 +477,21 @@ OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
 ! if $d(DEBUG)
     LIBFLAGS = /P4096 #/C
 ! else
-    LIBFLAGS = /P128 /0 #/C
+    LIBFLAGS = /P1024 /0 #/C
 ! endif
 
 ! if $d(DLL)
     CFLAGS = $(CFLAGS) -WDE -D_BUILDOWLDLL
-    LFLAGS = $(LDBG) -Tpd -aa -s -c
+    LFLAGS = $(LDBG) -Tpd -aa -x -c -r
 !   if !$d(BIDSILIB)
-      BIDSILIB = bids$(BD)$(MODEL)i
+!     if $d(VCL)
+        DLL32KEY = v
+!     else
+        DLL32KEY = $(MODEL)
+!     endif
+      BIDSILIB = bids$(BD)$(DLL32KEY)i
 !   endif
-    STDLIBS  = import32 cw32$(MT)i   # Libs for linking the DLL
+    STDLIBS  = import32 $(RTLPFX)32$(MT)i   # Libs for linking the DLL
 !   if $d(CODEGUARD)
       STDLIBS  = cg32 $(STDLIBS)
 !   endif
@@ -382,11 +500,19 @@ OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
     CFLAGS = $(CFLAGS) -W
 ! endif
 
-! if $d(MT)
-    CFLAGS = $(CFLAGS) -WM
+! if $d(VCL)
+    CFLAGS  = $(CFLAGS) -b- -Vx -Ve
+    LFLAGS  = $(LFLAGS) -j$(VCLOBJDIR)
+    STDLIBS = $(STDLIBS)
 ! endif
 
-! if $d(ALIGN)
+! if !$d(MT)
+    CFLAGS = $(CFLAGS) -WM-
+! endif
+
+! if $d(VCL)
+    CFLAGS = $(CFLAGS) -a4
+! elif $d(ALIGN)
     CFLAGS = $(CFLAGS) -a$(ALIGN)
 ! endif
 
@@ -405,7 +531,11 @@ OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
   IMPLIB   = $(BCBINDIR)\implib -o -w # Import library generator
   TDSTRIP  = $(BCBINDIR)\tdstrip     # Debug info extractor
 
-  CFLAGS   = $(CFLAGS) -3 -d -k- -O1gmpv # Optimizations
+! if !$d(NO_OWL_OPT)
+    CFLAGS = $(CFLAGS) -3 -d -k- -O1gmpv # Optimizations
+! else
+    CFLAGS = $(CFLAGS) -Od               # No optimizations
+! endif
 ! if $d(CODEGUARD)                   # d=add data, c=add calls, t=check this
     CFLAGS = $(CFLAGS) -vGd -vGt
 !  endif
@@ -699,7 +829,9 @@ OBJS_CMN = $(OBJS_CMN)\
 # Add in these objs when not sectioning
 #
 !else
-OBJS_CMN = $(OBJS_CMN)\
+OBJS_CMN = \
+ PFXmodule.obj\
+ $(OBJS_CMN)\
  PFXapplicat.obj\
  PFXbrush.obj\
  PFXbutton.obj\
@@ -732,7 +864,6 @@ OBJS_CMN = $(OBJS_CMN)\
  PFXmdiclien.obj\
  PFXmdiframe.obj\
  PFXmenudesc.obj\
- PFXmodule.obj\
  PFXopensave.obj\
  PFXpictval.obj\
  PFXprintdia.obj\
@@ -782,11 +913,12 @@ OBJS_OLE2=\
  PFXoledoc.obj\
  PFXoleframe.obj\
  PFXolemdifr.obj\
- PFXoleview.obj\
- PFXoledialg.obj
+ PFXoleview.obj
 
-!if $d(WIN32)
-OBJS_OLE2 = $(OBJS_OLE2) PFXshellitm.obj
+!if     $d(WIN32)
+OBJS_OLE2 = $(OBJS_OLE2) \
+ PFXoledialg.obj \
+ PFXshellitm.obj
 !endif
 
 OBJS_LIB = $(OBJS_LIB) $(OBJS_OLE2)
@@ -798,7 +930,8 @@ OBJS_LIB = $(OBJS_LIB)\
 !if $d(USERDLL) || $d(WIN32)   # Lib for use by DLLs
 OBJS_LIB = $(OBJS_LIB)\
  PFXlibmain.obj\
- PFXowlmain.obj
+ PFXowlmain.obj\
+ PFXinitdll.obj
 !endif
 !if !$d(USERDLL) || $d(WIN32)  # Lib for use in EXEs
 OBJS_LIB = $(OBJS_LIB)\
@@ -848,7 +981,7 @@ $(RCINCLUDEPATH)
 $(OWLLIB): $(LIBDEPOBJS) $(.PATH.obj)\$(OWLDEF) $(.PATH.obj)\$(OWLRES)
   @cd $(.PATH.obj)
   $(LINK) @&&|
-$(LFLAGS) -L$(LIBPATH) $(STARTUP) +
+$(LFLAGS) -L$(LIBPATH);$(VCLLIBDIR) $(STARTUP) +
 $(LINKOBJS)
 $(OWLDLL)
 
@@ -864,13 +997,24 @@ $(LIBOBJS)
   @-del $*.bak
   @cd $(.PATH.cpp)
 
+!if $d(USE_ORD32)
+$(.PATH.obj)\$(OWLDEF): $(.PATH.cpp)\owl32.ord
+!else
 $(.PATH.obj)\$(OWLDEF):
+!endif
   @copy &&|
 LIBRARY     $(OWLNAME)$(OWLVER)$(OD)
 DESCRIPTION 'ObjectWindows DLL'
 EXETYPE     WINDOWS
-DATA        MULTIPLE NONSHARED
+DATA        MULTIPLE
+EXPORTS
+!if $d(USE_ORD32)
+| + $(.PATH.cpp)\owl32.ord $(.PATH.obj)\$(OWLDEF) > NUL
+!else
 | $(.PATH.obj)\$(OWLDEF) > NUL
+!endif
+
+
 
 # Compile objs that aren't part of the Owl DLL as if they were user EXE or
 # user DLL objs
@@ -913,8 +1057,8 @@ $(OWLDLL)
 $(BIDSILIB) $(STDLIBS)
 $(OWLDEF)
 |
-!endif
   $(RLINK) -v -k $(OWLRES) $(OWLDLL)
+!endif
   $(TDSTRIP) -s $(OWLDLL)
   @-del $*.bak
   @cd $(.PATH.cpp)
@@ -1234,4 +1378,3 @@ vslider1.obj: vslider.cpp
   $(CC) -o$< -DSECTION=1 vslider.cpp
 vslider2.obj: vslider.cpp
   $(CC) -o$< -DSECTION=2 vslider.cpp
-

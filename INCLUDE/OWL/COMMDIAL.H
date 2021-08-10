@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.6  $
 //
 // Definition of Common Dialog abstract base class
 //----------------------------------------------------------------------------
@@ -17,6 +17,10 @@
 #endif
 #if !defined(__CDERR_H)
 # include <cderr.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -60,6 +64,10 @@ class _OWLCLASS TCommonDialog : public TDialog {
 // definition of classes
 #include <services/posclass.h>
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 #if defined(BI_PLAT_WIN16)
   typedef UINT (CALLBACK *LPOFNHOOKPROC)(HWND, UINT, WPARAM, LPARAM);
   typedef UINT (CALLBACK *LPCCHOOKPROC)(HWND, UINT, WPARAM, LPARAM);
@@ -68,7 +76,7 @@ class _OWLCLASS TCommonDialog : public TDialog {
   typedef UINT (CALLBACK *LPPRINTHOOKPROC)(HWND, UINT, WPARAM, LPARAM);
   typedef UINT (CALLBACK *LPSETUPHOOKPROC)(HWND, UINT, WPARAM, LPARAM);
 #endif
-
+  
 //----------------------------------------------------------------------------
 // Inline implementations
 //

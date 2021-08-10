@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.8  $
 //
 // Implementation of class TEditView
 //----------------------------------------------------------------------------
@@ -18,6 +18,7 @@
 # include <owl/editview.rh>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
 
 #if !defined(SECTION) || SECTION == 1

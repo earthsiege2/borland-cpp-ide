@@ -3,11 +3,16 @@
  *
  *  Internationalization Support Utilities
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef _MAPINLS_H_
 #define _MAPINLS_H_
+#pragma option -b
+
+#if defined (WIN32) && !defined (_WIN32)
+#define _WIN32
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,7 +32,9 @@ extern "C" {
 #endif
 
 #if defined(DOS) || defined(_MAC)
+#pragma option -b.
 #include <string.h>
+#pragma option -b
 #endif
 
 #ifndef FAR
@@ -60,15 +67,16 @@ typedef const TCHAR FAR *               LPCTSTR;
 typedef DWORD                           LCID;
 typedef const void FAR *                LPCVOID;
 
+#ifndef _MAC
 #ifndef LPOLESTR
-#if !defined (_WIN32) || defined (_MAC)
+#if !defined (_WIN32)
 
 #define LPOLESTR        LPSTR
 #define LPCOLESTR       LPCSTR
 #define OLECHAR         char
-#define OLESTR(str) str
+#define OLESTR(str)     str
 
-#else  /* _Win32 */
+#else  /* Win32 */
 
 #define LPOLESTR        LPWSTR
 #define LPCOLESTR       LPCWSTR
@@ -77,6 +85,7 @@ typedef const void FAR *                LPCVOID;
 
 #endif /* !_WIN32 */
 #endif /* LPOLESTR */
+#endif /* _MAC */
 
 #define NORM_IGNORECASE                 0x00000001     /* ignore case */
 #define NORM_IGNORENONSPACE             0x00000002     /* ignore diacritics */
@@ -178,6 +187,8 @@ BOOL    WINAPI  MNLS_IsBadStringPtrW(LPCWSTR lpsz, UINT ucchMax);
 #define CompareStringA          MNLS_CompareStringA
 #endif
 
+#if !defined(MAPI_NOWIDECHAR)
+
 #define lstrlenW                MNLS_lstrlenW
 #define lstrcmpW                MNLS_lstrcmpW
 #define lstrcpyW                MNLS_lstrcpyW
@@ -191,9 +202,12 @@ BOOL    WINAPI  MNLS_IsBadStringPtrW(LPCWSTR lpsz, UINT ucchMax);
 #define IsBadStringPtrW         (FALSE)
 #endif
 
+#endif  /* ! MAPI_NOWIDECHAR */
+
 #ifdef __cplusplus
 }
 #endif
 
+#pragma option -b.
 #endif /* _MAPINLS_H_ */
 

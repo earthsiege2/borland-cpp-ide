@@ -103,7 +103,7 @@ public:
         return bagClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Bag";
         }
@@ -349,7 +349,7 @@ public:
         return bagClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "BI_TCBagAsVector";
         }

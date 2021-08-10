@@ -1,133 +1,51 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-// $Revision:   2.6  $
+// $Revision:   2.14  $
 //
 // OLE Utility class implementations
 //----------------------------------------------------------------------------
 #include <ocf/pch.h>
-#include <ocf/defs.h>
-#include <ocf/oleutil.h>
-#include <winsys/string.h>
-#include <services/memory.h>
+#if !defined(OCF_DEFS_H)
+# include <ocf/defs.h>
+#endif
+#if !defined(OCF_OLEUTIL_H)
+# include <ocf/oleutil.h>
+#endif
+#if !defined(WINSYS_STRING_H)
+# include <winsys/string.h>
+#endif
+#if !defined(SERVICES_MEMORY_H)
+# include <services/memory.h>
+#endif
+#if !defined (WINSYS_REGISTRY_H)
+# include <winsys/registry.h>
+#endif
+#if !defined (OCF_OCBOCOLE_H)
+# include <ocf/ocbocole.h>
+#endif
 
 DIAG_DEFINE_GROUP(OcRefCount, true, 1);
 
-#if defined(BI_PLAT_WIN16)
-const char OleErrorStringsDLL[] = "OLE_ERR.DLL";
-#else
-const char OleErrorStringsDLL[] = "OLE_ERRF.DLL";
-#endif
-
-
 //
 //
 //
-TXOle::~TXOle()
-{
-}
-
-//
-//
-//
-TXOle*
-TXOle::Clone()
-{
-  return new TXOle(*this);
-}
-
-//
-//
-//
-void
-TXOle::Throw()
-{
-  THROW( *this );
-}
-
-//
-//
-//
-void
-TXOle::Check(HRESULT hr, const char far* msg)
-{
-  if (FAILED(hr))
-    Throw(hr, msg);
-}
-
-//
-//
-//
-void
-TXOle::Check(HRESULT hr)
-{
-  Check(hr, 0);
-}
-
-//
-//
-//
-void
-TXOle::Throw(HRESULT hr, const char far* msg)
-{
-  if (!InstanceCount) {
-    char buf[128+1];
-    wsprintf(buf, "%s failed, ", msg ? msg : "OLE call");
-
-    int len = strlen(buf);
-    OleErrorFromCode(hr, buf + len, sizeof buf - len - 2);
-    strcat(buf, ".");
-
-    WARN(hr != HR_NOERROR, buf);
-    throw TXOle(buf, hr);
-  }
-}
-
-//
-// If OLE-Error-String DLL exists, & msg string is there, then use
-// it. Otherwise just use the number.
-//
-void
-TXOle::OleErrorFromCode(HRESULT stat, char far* buffer, int size)
-{
-  const   char HResultToStringIDFunc[] = "StringIDFromHResult";
-  typedef int _export CALLBACK (*TStringIDFromHResult)(HRESULT hr);
-
-  int len = 0;
-  OFSTRUCT ofs;
-  if (OpenFile(OleErrorStringsDLL, &ofs, OF_EXIST) != HFILE_ERROR) {
-    HINSTANCE hInst = LoadLibrary(OleErrorStringsDLL);
-    if (hInst > (HINSTANCE)HINSTANCE_ERROR) {
-      TStringIDFromHResult func =
-          (TStringIDFromHResult)GetProcAddress(hInst, HResultToStringIDFunc);
-      if (func) {
-        int id = func(stat);
-        if (id)
-          len = ::LoadString(hInst, id, buffer, size);
-      }
-      FreeLibrary(hInst);
-    }
-  }
-  if (!len) {
-    char numBuf[25];
-    wsprintf(numBuf, "ErrorCode: %8lX", stat);
-    strncat(buffer, numBuf, size - strlen(buffer) - 1);
-  }
-  buffer[size-1] = 0;
-}
-
-//----------------------------------------------------------------------------
-
-//
-//
-//
-void far*
+void*
 TOleAllocator::Alloc(unsigned long size)
 {
-  void far* blk = Mem->Alloc(size);
+  void* blk = Mem->Alloc(size);
   OLECALL(blk ? 0 : HR_OUTOFMEMORY, "IMalloc::Alloc");
   return blk;
+}
+
+//
+//
+//
+void
+TOleAllocator::Free(void* pv)
+{
+  Mem->Free(pv);
 }
 
 //----------------------------------------------------------------------------
@@ -137,12 +55,10 @@ TOleAllocator::Alloc(unsigned long size)
 //
 //
 //
-TClassId::TClassId(const char far* idtxt)
-:
-  Text(0)
+TClassId::TClassId(const char* idtxt)
+         :Text(0)
 {
   PRECONDITION(idtxt);
-
   OLECALL(::CLSIDFromString(OleStr((char far*)idtxt), &Guid), "Invalid GUID string");
 }
 
@@ -150,9 +66,7 @@ TClassId::TClassId(const char far* idtxt)
 //
 //
 TClassId::TClassId(const GUID far& guid, int offset)
-:
-  Text(0),
-  Guid(guid)
+         :Text(0), Guid(guid)
 {
   Guid.Data1 += (long)offset;
 }
@@ -161,8 +75,7 @@ TClassId::TClassId(const GUID far& guid, int offset)
 //
 //
 TClassId::TClassId(TGenerate)
-:
-  Text(0)
+         :Text(0)
 {
   OLECALL(::CoCreateGuid(&Guid), "CoCreateGuid");
 }
@@ -195,10 +108,7 @@ TClassId::operator const char*()
 //
 //
 TBaseClassId::TBaseClassId(const GUID far& guid, int maxAlloc)
-:
-  TClassId(guid),
-  MaxAlloc(maxAlloc),
-  Offset(0)
+             :TClassId(guid), MaxAlloc(maxAlloc), Offset(0)
 {
 }
 
@@ -206,10 +116,7 @@ TBaseClassId::TBaseClassId(const GUID far& guid, int maxAlloc)
 //
 //
 TBaseClassId::TBaseClassId(const char far* idtxt, int maxAlloc)
-:
-  TClassId(idtxt),
-  MaxAlloc(maxAlloc),
-  Offset(0)
+             :TClassId(idtxt), MaxAlloc(maxAlloc), Offset(0)
 {
 }
 
@@ -217,10 +124,7 @@ TBaseClassId::TBaseClassId(const char far* idtxt, int maxAlloc)
 //
 //
 TBaseClassId::TBaseClassId(TGenerate e, int maxAlloc)
-:
-  TClassId(e),
-  MaxAlloc(maxAlloc),
-  Offset(0)
+             :TClassId(e), MaxAlloc(maxAlloc), Offset(0)
 {
 }
 
@@ -228,13 +132,9 @@ TBaseClassId::TBaseClassId(TGenerate e, int maxAlloc)
 //
 //
 TBaseClassId::TBaseClassId(TRegList& regInfo, int maxAlloc)
-:
-  TClassId(),
-  MaxAlloc(maxAlloc),
-  Offset(0)
+             :TClassId(), MaxAlloc(maxAlloc), Offset(0)
 {
   const char* str = regInfo["clsid"];
-  // must check for valid clasid, else generate??
   if (!str)
     OLECALL(HR_CLASS_CLASSNOTAVAILABLE, "Missing REGDATA clsid");
   OLECALL(::CLSIDFromString(OleStr((char far*)str), &Guid), "Invalid GUID string");
@@ -267,13 +167,13 @@ TBaseClassId::AllocId()
 //
 //
 int
-TBaseClassId::GetOffset(const GUID far& guid)
+TBaseClassId::GetOffset(const GUID& guid)
 {
   unsigned long offset = guid.Data1 - Guid.Data1;
   if ( offset >= (unsigned long)Offset &&
-       ((long far*)&guid)[1] == ((long*)&Guid)[1] &&
-       ((long far*)&guid)[2] == ((long*)&Guid)[2] &&
-       ((long far*)&guid)[3] == ((long*)&Guid)[3] )
+       ((long*)&guid)[1] == ((long*)&Guid)[1] &&
+       ((long*)&guid)[2] == ((long*)&Guid)[2] &&
+       ((long*)&guid)[3] == ((long*)&Guid)[3] )
     return int(offset);
   else
     return -1;
@@ -284,6 +184,10 @@ TBaseClassId::GetOffset(const GUID far& guid)
 //       the low-order long word is verifed before calling these routines
 //       success is indicated by virtue of assigment of the returned interface
 //
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
 
 //
 //
@@ -305,13 +209,17 @@ CmpGuid12(IUnknown* obj, REFIID req, REFIID ref, void far*far* pif)
 void
 CmpGuidOle(IUnknown* obj, REFIID req, void far*far* pif)
 {
-  if ( ((long far*)&req)[1] == 0x00000000L &&
-       ((long far*)&req)[2] == 0x000000C0L &&
-       ((long far*)&req)[3] == 0x46000000L ) {
+  if ( ((long*)&req)[1] == 0x00000000L &&
+       ((long*)&req)[2] == 0x000000C0L &&
+       ((long*)&req)[3] == 0x46000000L ) {
     *pif = obj;
     obj->AddRef();
   }
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 //----------------------------------------------------------------------------
 // TUnknown - standard implementation of IUnknown
@@ -330,8 +238,7 @@ CmpGuidOle(IUnknown* obj, REFIID req, void far*far* pif)
 //
 //
 TUnknown::TUnknown()
-:
-  Outer(&I)
+         :Outer(&I)
 {
 #if (__DEBUG >= 2)
   if (!UnknownBag)
@@ -404,8 +311,8 @@ TUnknown::TUnknownI::QueryInterface(const GUID far& iid, void far* far* pif)
 unsigned long _IFUNC
 TUnknown::TUnknownI::AddRef()
 {
-  TRACEX(OcRefCount, 2,
-         "AddRef on " << (void*)&Host() << " to " << (RefCnt+1));
+  TRACEX(OcRefCount, 1,
+         "AddRef on " << _TYPENAME(&Host()) << ' ' << (void*)&Host() << " to " << (RefCnt+1));
   return ++RefCnt;
 }
 
@@ -415,8 +322,8 @@ TUnknown::TUnknownI::AddRef()
 unsigned long _IFUNC
 TUnknown::TUnknownI::Release()
 {
-  TRACEX(OcRefCount, 2,
-         "Release on " << (void*)&Host() << " to " << (RefCnt-1));
+  TRACEX(OcRefCount, 1,
+         "Release on " << _TYPENAME(&Host()) << ' ' << (void*)&Host() << " to " << (RefCnt-1));
   if (--RefCnt != 0)
     return RefCnt;
   if (Inner) {
@@ -444,8 +351,53 @@ TUnknown::GetRefCount()
 //
 TUnknown::TUnknownI::~TUnknownI()
 {
-  if (RefCnt)             // in case destructor called before RefCnt goes to 0
+  // In case destructor called before RefCnt goes to 0
+  //
+  if (RefCnt)
     ::CoDisconnectObject(this,0);// OLE will try to remove external references
+}
+
+//----------------------------------------------------------------------------
+// Pixel <-> HiMetric conversion routines
+//
+static int logPixX = 0;
+static int logPixY = 0;
+
+//
+//
+static void
+GetScreenMetrics(int& logPixX, int& logPixY)
+{
+  HDC hDCScreen = GetDC(0);
+  logPixX = GetDeviceCaps(hDCScreen, LOGPIXELSX);
+  logPixY = GetDeviceCaps(hDCScreen, LOGPIXELSY);
+  ReleaseDC(0, hDCScreen);
+}
+
+//
+//
+//
+void
+OcHiMetricToPixel(const SIZEL& sizeHM, SIZEL& sizePix)
+{
+  if (!logPixX || !logPixY)
+    GetScreenMetrics(logPixX, logPixY);
+
+  sizePix.cx = MAP_LOGHIM_TO_PIX(sizeHM.cx, logPixX);
+  sizePix.cy = MAP_LOGHIM_TO_PIX(sizeHM.cy, logPixY);
+}
+
+//
+//
+//
+void
+OcPixelToHiMetric(const SIZEL& sizePix, SIZEL& sizeHM)
+{
+  if (!logPixX || !logPixY)
+    GetScreenMetrics(logPixX, logPixY);
+
+  sizeHM.cx = MAP_PIX_TO_LOGHIM(sizePix.cx, logPixX);
+  sizeHM.cy = MAP_PIX_TO_LOGHIM(sizePix.cy, logPixY);
 }
 
 //----------------------------------------------------------------------------

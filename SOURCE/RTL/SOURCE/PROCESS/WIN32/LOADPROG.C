@@ -3,27 +3,33 @@
  *
  * function(s)
  *    _LoadProg -- Load and Execute a program
+ *    _wLoadProg -- Load and Execute a program
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.10  $        */
 
 #define INCL_USER
 #define INCL_ERROR_H
 #include <ntbc.h>
 
+#include <io.h>
 #include <_io.h>
 #include <_process.h>
 #include <errno.h>
 #include <process.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <tchar.h>
+#include <_tchar.h>
+#include <_malloc.h>
+#include <winbase.h>
 
 /*-----------------------------------------------------------------------
  * _add_pid_ptr - pointer to function to add process to table
@@ -35,19 +41,24 @@
  */
 
 #pragma argsused
+#ifndef _UNICODE	//we only need one copy of this and rather than move it...
 int _dummy_add_pid(DWORD pid, HANDLE handle)
 {
     return (int)pid;
 }
-
 int (*_add_pid_ptr)(DWORD, HANDLE) = _dummy_add_pid;
+#else
+extern int (*_add_pid_ptr)(DWORD, HANDLE);
+#endif
 
 /*-----------------------------------------------------------------------*
 
-Name            search -- search for an executable program
+Name            search, _wsearch -- search for an executable program
 
 Usage           int search(const char *pathP, char *fullname, const char *ext,
-                           int usepath);
+			   int usepath);
+                int _wsearch(const wchar_t *pathP, wchar_t *fullname,
+		           const wchar_t *ext, int usepath);
 
 Prototype in    local
 
@@ -62,32 +73,34 @@ Return value    If the program is found, 1 is returned; otherwise 0.
 
 *------------------------------------------------------------------------*/
 
-static int search(const char *pathP, char *fullname, const char *ext,
+static int _tsearch(const _TCHAR *pathP, _TCHAR *fullname, const _TCHAR *ext,
                   int UsePath)
 {
-    char name[_MAX_PATH];
+    _TCHAR name[_MAX_PATH];
 
-    strcpy(name,pathP);                 /* make a copy of program name */
-    strcat(name,ext);                   /* append the extension */
+    _tcscpy(name,pathP);                 /* make a copy of program name */
+    _tcscat(name,ext);                   /* append the extension */
     if (UsePath)                        /* search the PATH */
     {
-        _searchenv(name,"PATH",fullname);
-        return (fullname[0] != '\0');   /* is the full name non-empty? */
+        _tsearchenv(name,_TEXT("PATH"),fullname);
+        return (fullname[0] != _TEXT('\0'));   /* is the full name non-empty? */
     }
     else                                /* assume it's a relative path */
     {
-        strcpy(fullname,name);
-        return (__access(name,4) == 0); /* do we have read access? */
+        _tcscpy(fullname,name);
+        return (_taccess(name,4) == 0); /* do we have read access? */
     }
 
 }
 
 /*-----------------------------------------------------------------------*
 
-Name            make_cmdline -- construct argument strings
+Name            make_cmdline, _wmake_cmdline -- construct argument strings
 
 Usage           char *make_cmdline(const char *arg0, const char *arg1,
                              const char *argP[]);
+                wchar_t *_wmake_cmdline(const wchar_t *arg0, const wchar_t *arg1,
+                             const wchar_t *argP[]);
 
 Prototype in    local
 
@@ -110,26 +123,30 @@ Return value    If successful, a pointer to the argument buffer, which
 
 *------------------------------------------------------------------------*/
 
-static char *make_cmdline(const char *arg0, const char *arg1,
-                          const char * const *argP)
+static _TCHAR *_tmake_cmdline(const _TCHAR *arg0, const _TCHAR *arg1,
+                          const _TCHAR * const *argP)
 {
     int len;
-    const char * const * argv;
-    char *buf;
-    char *p;
+    const _TCHAR * const * argv;
+    _TCHAR *buf;
+    _TCHAR *p;
+    _TCHAR sfn[_MAX_PATH];
+
+    if (arg0 && GetShortPathName(arg0, sfn, _MAX_PATH))
+        arg0 = sfn;
 
     /* Compute the required allocation size, then allocate the buffer.
      */
     len = 0;
     if (arg0 != NULL)
-        len += strlen(arg0) + 1;        /* length of arg0 */
+        len += _tcslen(arg0) + 1;        /* length of arg0 */
 
     if (arg1 != NULL)
-        len += strlen(arg1) + 1;        /* length of second optional arg */
+        len += _tcslen(arg1) + 1;        /* length of second optional arg */
 
     for (argv = argP; *argv != NULL; argv++)
-        len += strlen(*argv) + 1;       /* length of each argument */
-    if ((buf = malloc(len)) == NULL)
+        len += _tcslen(*argv) + 1;       /* length of each argument */
+    if ((buf = malloc(len*sizeof(_TCHAR))) == NULL)
         return (NULL);
 
     /* Copy arg0 (typically the program name) to the buffer.
@@ -137,16 +154,16 @@ static char *make_cmdline(const char *arg0, const char *arg1,
     p = buf;
     if (arg0 != NULL)
     {
-        p = _stpcpy(p,arg0);
-        *p++ = ' ';
+        p = _tcspcpy(p,arg0);
+        *p++ = _TEXT(' ');
     }
 
     /* Concatenate the optional prefix argument.
      */
     if (arg1 != NULL)
     {
-        p = _stpcpy(p,arg1);
-        *p++ = ' ';
+        p = _tcspcpy(p,arg1);
+        *p++ = _TEXT(' ');
     }
 
     /* Concatenate the arguments, separated by spaces.
@@ -155,19 +172,20 @@ static char *make_cmdline(const char *arg0, const char *arg1,
     {
         for (argv = argP; *argv != NULL; argv++)
         {
-            p = _stpcpy(p,*argv);
-            *p++ = ' ';
+            p = _tcspcpy(p,*argv);
+            *p++ = _TEXT(' ');
         }
     }
-    *(p-1) = '\0';      /* last token terminated by nul character */
+    *(p-1) = _TEXT('\0');      /* last token terminated by nul character */
     return (buf);
 }
 
 /*-----------------------------------------------------------------------*
 
-Name            make_env -- construct environment block
+Name            make_env, _wmake_env -- construct environment block
 
 Usage           char *make_env(const char * const * envV);
+                wchar_t *wmake_env(const wchar_t * const * envV);
 
 Prototype in    local
 
@@ -182,41 +200,47 @@ Return value    If successful, a pointer to the environment buffer, which
 
 *------------------------------------------------------------------------*/
 
-static char *make_env(const char * const * envV)
+static _TCHAR *_tmake_env(const _TCHAR * const * envV)
 {
     int len;
-    const char * const * envp;
-    char *buf;
-    char *p;
+    const _TCHAR * const * envp;
+    _TCHAR *buf;
+    _TCHAR *p;
 
     /* Compute the required allocation size, then allocate the buffer.
      * The length includes space for each environment string and
      * its null terminator, and the null that follows the last string.
      */
     for (len = 1, envp = envV; *envp != NULL; envp++)
-        len += strlen(*envp) + 1;
+        len += _tcslen(*envp) + 1;
 
-    if ((buf = malloc(len)) == NULL)
+    if ((buf = malloc(len*sizeof(_TCHAR))) == NULL)
         return (NULL);
 
     /* Copy each environment string into the buffer.  If file info
      * is enabled, the last string is _C_FILE_INFO.
      */
     for (envp = envV, p = buf; *envp != NULL; envp++)
-        p = _stpcpy(p,*envp) + 1;
-    *p = '\0';
+        p = _tcspcpy(p,*envp) + sizeof(_TCHAR);
+    *p = _TEXT('\0');
     return (buf);
 }
 
 /*-----------------------------------------------------------------------*
 
-Name            _LoadProg -- Load and Execute a program
+Name            _LoadProg, _wLoadProg -- Load and Execute a program
 
 Usage           #include <_process.h>
                 int _LoadProg(int mode,
                         const char *pathP,
                         const char * const *argP,
                         const char * const *envV,
+                        int UsePath)
+
+		int _wLoadProg(int mode,
+                        const wchar_t *pathP,
+                        const wchar_t * const *argP,
+                        const wchar_t * const *envV,
                         int UsePath)
 
 Prototype in    _process.h
@@ -266,15 +290,15 @@ Return value    A successful _exec does not return, and a successful _spawn
 
 *------------------------------------------------------------------------*/
 
-int _LoadProg(int mode, const char *pathP, const char * const *argP,
-              const char * const *envV, int UsePath)
+int _tLoadProg(int mode, const _TCHAR *pathP, const _TCHAR * const *argP,
+              const _TCHAR * const *envV, int UsePath)
 {
-    char                fullname[_MAX_PATH];
+    _TCHAR                fullname[_MAX_PATH];
     SECURITY_ATTRIBUTES sec;
     STARTUPINFO         start;
     PROCESS_INFORMATION pinfo;
     DWORD               exitcode;
-    char                *cmdP, *envP, *comspec, *ext;
+    _TCHAR              *cmdP, *envP, *comspec, *ext;
     int                 rc;
     unsigned            found, c, batch;
 
@@ -291,33 +315,33 @@ int _LoadProg(int mode, const char *pathP, const char * const *argP,
     /* If the program name contains a drive specifier or directory separators,
      * don't search the path.
      */
-    if ((c = pathP[0]) >= 'a')
-        c -= 'a' - 'A';
-    if ((c >= 'A' && c <= 'Z' && pathP[1] == ':') ||
-            strchr(pathP,'/') != NULL || strchr(pathP,'\\') != NULL)
+    if ((c = pathP[0]) >= _TEXT('a'))
+        c -= _TEXT('a') - _TEXT('A');
+    if ((c >= _TEXT('A') && c <= _TEXT('Z') && pathP[1] == _TEXT(':')) ||
+            _tcschr(pathP,_TEXT('/')) != NULL || _tcschr(pathP,_TEXT('\\')) != NULL)
         UsePath = 0;
 
     /* Check if the program exists.  If no extension is given,
      * try .EXE and then .BAT, and finally .CMD.
      */
     batch = 0;
-    if ((ext = strrchr(pathP,'.')) != NULL) /* file has an extension */
+    if ((ext = _tcsrchr(pathP,_TEXT('.'))) != NULL) /* file has an extension */
     {
-        if ((found = search(pathP, fullname, "", UsePath)) != 0)
+        if ((found = _tsearch(pathP, fullname, _TEXT(""), UsePath)) != 0)
             /* is it a batch file? */
-            if ((stricmp(ext,".BAT") == 0) || (stricmp(ext,".CMD") == 0))
+            if ((_tcsicmp(ext,_TEXT(".BAT")) == 0) || (_tcsicmp(ext,_TEXT(".CMD")) == 0))
                 batch = 1;
     }
     else                                    /* file has no extension */
     {
-        if ((found = search(pathP, fullname, ".EXE", UsePath)) == 0)
-            if ((batch=found = search(pathP, fullname, ".BAT", UsePath)) == 0)
-                batch=found = search(pathP, fullname, ".CMD", UsePath);
+        if ((found = _tsearch(pathP, fullname, _TEXT(".EXE"), UsePath)) == 0)
+            if ((batch=found = _tsearch(pathP, fullname, _TEXT(".BAT"), UsePath)) == 0)
+                batch=found = _tsearch(pathP, fullname, _TEXT(".CMD"), UsePath);
                 /* use shell to run .BAT
                  * or .CMD files
                  */
     }
-    if (!found || (batch && (comspec = getenv("COMSPEC")) == NULL))
+    if (!found || (batch && (comspec = _tgetenv(_TEXT("COMSPEC"))) == NULL))
     {
         errno = ENOENT;
         return -1;
@@ -326,9 +350,9 @@ int _LoadProg(int mode, const char *pathP, const char * const *argP,
     /* Concatenate arguments to make the command line.
      */
     if (batch)
-        cmdP = make_cmdline(comspec,"/c",argP);
+        cmdP = _tmake_cmdline(comspec,_TEXT("/c"),argP);
     else
-        cmdP = make_cmdline(argP[0],NULL,&argP[1]);
+        cmdP = _tmake_cmdline(argP[0],NULL,&argP[1]);
 
     if (cmdP == NULL)
     {
@@ -341,7 +365,7 @@ int _LoadProg(int mode, const char *pathP, const char * const *argP,
      */
     if (envV == NULL)
         envP = NULL;
-    else if ((envP = make_env(envV)) == NULL)
+    else if ((envP = _tmake_env(envV)) == NULL)
     {
 memerr:
         errno = ENOMEM;
@@ -380,7 +404,7 @@ memerr:
 
         ((int)start.cbReserved2)) == NULL)
             goto memerr;
-        (*_cfinfo_get)((char *)start.lpReserved2);      /* copy file info */
+        (*_cfinfo_get)((char *)start.lpReserved2);      /* copy file info (byte)*/
     }
 
     sec.nLength = sizeof(sec);
@@ -394,7 +418,7 @@ memerr:
      * just do a synchronous exec and then an _exit(0) to sort of fake it.
      */
     if (CreateProcess(
-        batch ? (PSZ)comspec : (PSZ)fullname,   /* program name */
+        batch ? comspec : fullname,             /* program name */
         cmdP,                                   /* command line */
         &sec,                                   /* process attributes */
         &sec,                                   /* thread attributes */

@@ -5,18 +5,23 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $ */
 
 #if !defined(__PROCESS_H)
 #define __PROCESS_H
 
 #if !defined(___DEFS_H)
 #include <_defs.h>
+#endif
+
+#if !defined(__STDDEF_H)
+#include <stddef.h>
 #endif
 
 
@@ -107,6 +112,30 @@ int  _RTLENTRY _EXPFUNC spawnvpe(int __mode, const char * __path, char * const *
                                 char * const * __env);
 int  _RTLENTRY _EXPFUNC system(const char * __command);
 
+
+int  _RTLENTRY _EXPFUNC _wexecl(const wchar_t * __path, const wchar_t * __arg0, ...);
+int  _RTLENTRY _EXPFUNC _wexecle(const wchar_t * __path, const wchar_t * __arg0, ...);
+int  _RTLENTRY _EXPFUNC _wexeclp(const wchar_t * __path, const wchar_t * __arg0, ...);
+int  _RTLENTRY _EXPFUNC _wexeclpe(const wchar_t * __path, const wchar_t * __arg0, ...);
+int  _RTLENTRY _EXPFUNC _wexecv(const wchar_t * __path, wchar_t * const * __argv);
+int  _RTLENTRY _EXPFUNC _wexecve(const wchar_t * __path, wchar_t * const * __argv,
+                              wchar_t * const * __env);
+int  _RTLENTRY _EXPFUNC _wexecvp(const wchar_t * __path, wchar_t * const * __argv);
+int  _RTLENTRY _EXPFUNC _wexecvpe(const wchar_t * __path, wchar_t * const * __argv,
+                                wchar_t * const * __env);
+int  _RTLENTRY _EXPFUNC _wspawnl(int __mode, const wchar_t * __path, const wchar_t * __arg0, ...);
+int  _RTLENTRY _EXPFUNC _wspawnle(int __mode, const wchar_t * __path, const wchar_t * __arg0, ...);
+int  _RTLENTRY _EXPFUNC _wspawnlp(int __mode, const wchar_t * __path, const wchar_t * __arg0, ...);
+int  _RTLENTRY _EXPFUNC _wspawnlpe(int __mode, const wchar_t * __path, const wchar_t * __arg0, ...);
+int  _RTLENTRY _EXPFUNC _wspawnv(int __mode, const wchar_t * __path, wchar_t * const * __argv);
+int  _RTLENTRY _EXPFUNC _wspawnve(int __mode, const wchar_t * __path, wchar_t * const * __argv,
+                               wchar_t * const * __env);
+int  _RTLENTRY _EXPFUNC _wspawnvp(int __mode, const wchar_t * __path, wchar_t * const * __argv);
+int  _RTLENTRY _EXPFUNC _wspawnvpe(int __mode, const wchar_t * __path, wchar_t * const * __argv,
+                                wchar_t * const * __env);
+int  _RTLENTRY _EXPFUNC _wsystem(const wchar_t * __command);
+
+
 #if defined(__MT__)
 
 #if defined(__OS2__)
@@ -127,28 +156,17 @@ unsigned long _RTLENTRY _EXPFUNC _beginthreadNT(void (_USERENTRY *__start)(void 
 
 void _RTLENTRY _EXPFUNC _endthread     (void);
 
-#if defined(__MFC_COMPAT__)
-inline unsigned long _RTLENTRY _beginthreadex
-(
-    void *security,
-    unsigned stksize,
-    unsigned (__stdcall *start_address)(void *),
-    void *arglist,
-    unsigned initflag,
-    unsigned *threadaddr
-)
-{
-    return _beginthreadNT((void(_USERENTRY *)(void *))start_address, stksize,
-                          arglist, security, (unsigned long)initflag,
-                          (unsigned long *)threadaddr);
-}
-#pragma argsused
-inline void _RTLENTRY _endthreadex(unsigned retval)
-{
-    _endthread();
-}
-#endif  /* __MFC_COMPAT__ */
-
+/* Support for MSC or MFC source code */
+#define _beginthreadex(security,stksize,startaddr,arglist,initflag,threadaddr)\
+        _beginthreadNT(                                                       \
+                       ((void(_USERENTRY *)(void *))startaddr),               \
+                       (stksize),                                             \
+                       (arglist),                                             \
+                       (security),                                            \
+                       ((unsigned long)initflag),                             \
+                       ((unsigned long *)threadaddr)                          \
+                      ) /* End of _beginthreadex definition */
+#define _endthreadex(a) _endthread()
 
 #endif  /* __MT__ */
 

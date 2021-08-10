@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.5  $
+// $Revision:   2.6  $
 //
 // Implements the Bolero half of the document-level object. Provides plumbing 
 // for activation of OLE2 objects as document windows become active. 

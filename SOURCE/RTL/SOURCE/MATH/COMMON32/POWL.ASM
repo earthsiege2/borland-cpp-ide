@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.3  $
 
 ;----------------------------------------------------------------------
 ; function(s)
@@ -118,7 +119,8 @@ Data_EndS@
 Code_Seg@
 
 Func@   powl, _EXPFUNC, _RTLENTRY, <longdouble x>, <longdouble y>
-Locals@ <longdouble temp>,<word sword>,<word negate>
+Locals@ <longdouble temp>,<word filler>,<word sword>,<word negate>
+                                    ; (filler pads the stack to align 4)
 
 ;       long double temp;           ; also used as a 64-bit integer
 ;       unsigned    sword;          ; status-word from testing y

@@ -6,5 +6,10 @@
 EXERES = colmnhdr
 OBJEXE = colmnhdx.obj
 
+!if "$(SYSTEM)" != "WIN16"
+  OSMAJOR = 4
+  OSMINOR = 0
+!endif
+
 !include $(BCEXAMPLEDIR)\owlmake.gen
 

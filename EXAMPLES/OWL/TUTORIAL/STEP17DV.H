@@ -37,7 +37,7 @@ class TLine : public TPoints {
       return Color;
     }
 
-    void SetPen(TColor& newColor, int penSize = 0);
+    void SetPen(const TColor& newColor, int penSize = 0);
     void SetPen(int penSize);
     friend bool GetPenSize(TWindow* parent, TLine& line);
     friend bool GetPenColor(TWindow* parent, TLine& line);

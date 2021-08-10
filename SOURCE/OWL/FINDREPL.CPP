@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of abstract class TFindReplaceDialog, and leaf classes
 // TFindDialog and TReplaceDialog that encapsulate Common Dialogs
@@ -15,6 +15,8 @@
 #if !defined(ctlFirst)
 # include <dlgs.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 

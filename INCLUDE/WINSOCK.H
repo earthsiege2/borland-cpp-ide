@@ -1,4 +1,5 @@
 /* WINSOCK.H--definitions to be used with the WINSOCK.DLL
+ * Copyright (c) 1993-1996, Microsoft Corp. All rights reserved.
  *
  * This header file corresponds to version 1.1 of the Windows Sockets specification.
  *
@@ -11,12 +12,15 @@
 
 #ifndef _WINSOCKAPI_
 #define _WINSOCKAPI_
+#pragma option -b
 
 /*
  * Pull in WINDOWS.H if necessary
  */
 #ifndef _INC_WINDOWS
+#pragma option -b.
 #include <windows.h>
+#pragma option -b
 #endif /* _INC_WINDOWS */
 
 /*
@@ -187,7 +191,8 @@ struct  protoent {
  */
 #define IPPROTO_IP              0               /* dummy for IP */
 #define IPPROTO_ICMP            1               /* control message protocol */
-#define IPPROTO_GGP             2               /* gateway^2 (deprecated) */
+#define IPPROTO_IGMP            2               /* group management protocol */
+#define IPPROTO_GGP             3               /* gateway^2 (deprecated) */
 #define IPPROTO_TCP             6               /* tcp */
 #define IPPROTO_PUP             12              /* pup */
 #define IPPROTO_UDP             17              /* user datagram protocol */
@@ -335,6 +340,10 @@ typedef WSADATA FAR *LPWSADATA;
 #define IP_MULTICAST_LOOP   4           /* set/get IP multicast loopback    */
 #define IP_ADD_MEMBERSHIP   5           /* add  an IP group membership      */
 #define IP_DROP_MEMBERSHIP  6           /* drop an IP group membership      */
+#define IP_TTL              7           /* set/get IP Time To Live          */
+#define IP_TOS              8           /* set/get IP Type Of Service       */
+#define IP_DONTFRAGMENT     9           /* set/get IP Don't Fragment flag   */
+
 
 #define IP_DEFAULT_MULTICAST_TTL   1    /* normally limit m'casts to 1 hop  */
 #define IP_DEFAULT_MULTICAST_LOOP  1    /* normally hear sends if a member  */
@@ -422,6 +431,8 @@ struct ip_mreq {
  */
 #define SO_MAXDG        0x7009
 #define SO_MAXPATHDG    0x700A
+#define SO_UPDATE_ACCEPT_CONTEXT 0x700B
+#define SO_CONNECT_TIME 0x700C
 
 /*
  * TCP options.
@@ -453,8 +464,11 @@ struct ip_mreq {
 #define AF_APPLETALK    16              /* AppleTalk */
 #define AF_NETBIOS      17              /* NetBios-style addresses */
 #define AF_VOICEVIEW    18              /* VoiceView */
+#define AF_FIREFOX      19              /* FireFox */
+#define AF_UNKNOWN1     20              /* Somebody is using this! */
+#define AF_BAN          21              /* Banyan */
 
-#define AF_MAX          19
+#define AF_MAX          22
 
 /*
  * Structure used by kernel to store most
@@ -497,6 +511,9 @@ struct sockproto {
 #define PF_HYLINK       AF_HYLINK
 #define PF_APPLETALK    AF_APPLETALK
 #define PF_VOICEVIEW    AF_VOICEVIEW
+#define PF_FIREFOX      AF_FIREFOX
+#define PF_UNKNOWN1     AF_UNKNOWN1
+#define PF_BAN          AF_BAN
 
 #define PF_MAX          AF_MAX
 
@@ -812,13 +829,17 @@ int PASCAL FAR WSAAsyncSelect(SOCKET s, HWND hWnd, u_int wMsg,
 
 int PASCAL FAR WSARecvEx (SOCKET s, char FAR * buf, int len, int FAR *flags);
 
-#if defined(__FLAT__)
+#if defined(__BORLANDC__) && defined(__FLAT__)
 typedef struct _TRANSMIT_FILE_BUFFERS {
     PVOID Head;
     DWORD HeadLength;
     PVOID Tail;
     DWORD TailLength;
 } TRANSMIT_FILE_BUFFERS, *PTRANSMIT_FILE_BUFFERS, *LPTRANSMIT_FILE_BUFFERS;
+
+#define TF_DISCONNECT       0x01
+#define TF_REUSE_SOCKET     0x02
+#define TF_WRITE_BEHIND     0x04
 
 BOOL
 PASCAL FAR
@@ -831,7 +852,33 @@ TransmitFile (
     IN LPTRANSMIT_FILE_BUFFERS lpTransmitBuffers,
     IN DWORD dwReserved
     );
-#endif
+
+BOOL
+PASCAL FAR
+AcceptEx (
+    IN SOCKET sListenSocket,
+    IN SOCKET sAcceptSocket,
+    IN PVOID lpOutputBuffer,
+    IN DWORD dwReceiveDataLength,
+    IN DWORD dwLocalAddressLength,
+    IN DWORD dwRemoteAddressLength,
+    OUT LPDWORD lpdwBytesReceived,
+    IN LPOVERLAPPED lpOverlapped
+    );
+
+VOID
+PASCAL FAR
+GetAcceptExSockaddrs (
+    IN PVOID lpOutputBuffer,
+    IN DWORD dwReceiveDataLength,
+    IN DWORD dwLocalAddressLength,
+    IN DWORD dwRemoteAddressLength,
+    OUT struct sockaddr **LocalSockaddr,
+    OUT LPINT LocalSockaddrLength,
+    OUT struct sockaddr **RemoteSockaddr,
+    OUT LPINT RemoteSockaddrLength
+    );
+#endif /* __BORLANDC__ && __FLAT__ */
 
 #ifdef __cplusplus
 }
@@ -912,6 +959,7 @@ typedef struct timeval FAR *LPTIMEVAL;
  */
 #define WSAGETSELECTERROR(lParam)           HIWORD(lParam)
 
+#pragma option -b.
 #endif  /* _WINSOCKAPI_ */
 
 

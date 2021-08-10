@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.7  $
 //
 // Internal window object thunk creation & maintanance.
 //----------------------------------------------------------------------------
@@ -18,6 +18,7 @@
 # include <stddef.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlWin);
 
 //
@@ -205,8 +206,34 @@ CreateInstanceThunk(TWindow* w, TThunkProc thunkProc)
   blockCode[4] = 0xea;
 
   if (!ThunkFreeList) {
+
+#if 1
+    // Attempt to allocate the memory via an indirect call to 'GlobalAlloc'
+    // This allows us to bypass memory trackers which will report that the 
+    // memory was never freed. Indeed, the memory is never 'GlobalFree'ed
+    // but that's because the DATA is turned into a CODE selector via
+    // AllocCStoDSAlias and then cleaned up via a call to 'FreeSelector'.
+    //
+    typedef HGLOBAL   WINAPI (*pfnGblAlloc)(UINT, DWORD);
+    typedef VOID FAR* WINAPI (*pfnGblLock) (HGLOBAL);
+
+    static pfnGblAlloc gblAlloc =(pfnGblAlloc)GetProcAddress(GetModuleHandle("KERNEL"), "GlobalAlloc");
+    static pfnGblLock  gblLock  =(pfnGblLock)GetProcAddress(GetModuleHandle("KERNEL"), "GlobalLock");
+
+    CHECK(gblAlloc);
+    CHECK(gblLock);
+
+    HGLOBAL hndl = gblAlloc ? (*gblAlloc)(GMEM_FIXED | GMEM_SHARE | GMEM_NOT_BANKED,
+                                          sizeof(TThunkBlock)) :
+                              GlobalAlloc(GMEM_FIXED | GMEM_SHARE | GMEM_NOT_BANKED,
+                                          sizeof(TThunkBlock));
+    block = (TThunkBlock far*)(gblLock ? (*gblLock)(hndl) : GlobalLock(hndl));
+#else
+
     block = (TThunkBlock far*)GlobalLock(GlobalAlloc(GMEM_FIXED | GMEM_SHARE | GMEM_NOT_BANKED,
                                          sizeof(TThunkBlock)));
+#endif
+
     block->Next = ThunkBlockList;
     memcpy(block->Code, blockCode, 5);
     block->Proc = (void far*)thunkProc;

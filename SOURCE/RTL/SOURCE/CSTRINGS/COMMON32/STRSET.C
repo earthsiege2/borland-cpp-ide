@@ -2,31 +2,35 @@
  * filename - strset.c
  *
  * function(s)
- *        strset - sets all characters in a string to a given
- *                 character
+ *        strset, _wcsset - sets all (wide-)characters in a (wide-character)
+ *			string to a given (wide-)character
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <string.h>
+#include <_string.h>
+#include <tchar.h>
 #include <mem.h>
 
 /*---------------------------------------------------------------------*
 
-Name            strset - sets all characters in a string to a given
-                         character
+Name            strset, _wcsset - sets all wide-characters in a (wide-character)
+			string to a given (wide-)character
 
 Usage           char *strset(char *str, int ch);
+                wchar_t *_wcsset(wchar_t *str, wchar_t ch);
 
 Prototype in    string.h
 
-Description     strset sets all characters in the string str to the
+Description     strset and _wcsset set all characters in the string str to the
                 character ch.
 
 Return value    pointer to str
@@ -38,12 +42,20 @@ Return value    pointer to str
 #  define INTRINSIC
 #endif
 
-char * _RTLENTRY _EXPFUNC strset(char *s, int ch)
+#ifndef _UNICODE
+_TCHAR * _RTLENTRY _EXPFUNC _tcsset(_TCHAR *s, int ch)
+#else
+_TCHAR * _RTLENTRY _EXPFUNC _tcsset(_TCHAR *s, _TCHAR ch)
+#endif
 {
 #ifdef INTRINSIC
     return __strset__(s, ch);
 #else
-     memset(s, ch, strlen(s));
+#ifndef _UNICODE
+     memset(s, ch, _tcslen(s));
+#else
+     _wmemset(s, ch, _tcslen(s));
+#endif
      return (s);
 #endif
 }

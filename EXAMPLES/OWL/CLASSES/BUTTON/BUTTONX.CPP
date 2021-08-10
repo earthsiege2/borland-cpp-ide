@@ -72,6 +72,7 @@ TTestWindow::TTestWindow()
                               174, 128, 138, 24, GroupBox);
   RButton2 = new TRadioButton(this, ID_RBUTTON2, "Radio Button 2",
                               174, 162, 138, 24, GroupBox);
+  SetBkgndColor( TColor::Sys3dFace );
 }
 
 //

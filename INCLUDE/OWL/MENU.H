@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.10  $
 //
 // Definition of Window Menu encapsulation class
 //----------------------------------------------------------------------------
@@ -11,6 +11,10 @@
 
 #if !defined(OWL_GDIOBJEC_H)
 # include <owl/gdiobjec.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -49,7 +53,6 @@ typedef uint TMenuItem;
 #if !defined(MIIM_ALL)
 # define MIIM_ALL  (MIIM_CHECKMARKS|MIIM_DATA|MIIM_ID|MIIM_STATE|MIIM_SUBMENU|MIIM_TYPE)
 #endif
-
 
 //
 // class TMenuItemInfo
@@ -192,7 +195,7 @@ class _OWLCLASS TPopupMenu : public TMenu {
   public:
     TPopupMenu(TAutoDelete autoDelete = AutoDelete);
     TPopupMenu(HMENU handle, TAutoDelete autoDelete = NoAutoDelete);
-    TPopupMenu(TMenu& menu, TAutoDelete autoDelete = AutoDelete);
+    TPopupMenu(const TMenu& menu, TAutoDelete autoDelete = AutoDelete);
     bool        TrackPopupMenu(uint flags, int x, int y, int rsvd, HWND wnd,
                                const TRect* rect=0);
     bool        TrackPopupMenu(uint flags, const TPoint& point, int rsvd,
@@ -255,6 +258,10 @@ class _OWLCLASS TMenuDescr : public TMenu {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

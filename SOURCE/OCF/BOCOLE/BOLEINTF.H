@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.10  $
+// $Revision:   2.11  $
 //
 //  Contains the main interfaces (abstract base classes) used by Bolero to 
 //  encapsulate OLE2 compound document functionality

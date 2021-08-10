@@ -5,12 +5,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $ */
 
 #ifndef __DIRENT_H
 #define __DIRENT_H
@@ -57,6 +58,7 @@ struct dirent
 #endif
 };
 
+
 #if !defined(__FLAT__)
 
 /* _DIR type returned by _opendir().  The first two members cannot
@@ -75,6 +77,13 @@ typedef struct
 #else    /* defined __FLAT__ */
 
 
+/* wdirent structure returned by wreaddir().
+ */
+struct wdirent
+{
+    wchar_t        d_name[260];
+};
+
 /* DIR type returned by opendir().  The members of this structure
  * must not be accessed by application programs.
  */
@@ -92,6 +101,26 @@ typedef struct
     char          _d_buf[sizeof(WIN32_FIND_DATA)];  /* buffer for a single file */
 #endif
 } DIR;
+
+typedef struct
+{
+    unsigned long _d_hdir;              /* directory handle */
+    wchar_t      *_d_dirname;           /* directory name */
+    unsigned      _d_magic;             /* magic cookie for verifying handle */
+    unsigned      _d_nfiles;            /* no. of files remaining in buf */
+#if defined(__OS2__)
+    char         *_d_bufp;              /* next entry in buffer */
+    char          _d_buf[512];          /* buffer for found filenames */
+#endif
+#if defined(__WIN32__)
+    char          _d_buf[sizeof(WIN32_FIND_DATA)];  /* buffer for a single file */
+#endif
+} wDIR;
+
+wDIR           * _RTLENTRY _EXPFUNC wopendir  (const wchar_t *__dirname);
+struct wdirent * _RTLENTRY _EXPFUNC wreaddir  (wDIR *__dir);
+int              _RTLENTRY _EXPFUNC wclosedir (wDIR *__dir);
+void             _RTLENTRY _EXPFUNC wrewinddir(wDIR *__dir);
 
 #endif  /* __FLAT__ */
 

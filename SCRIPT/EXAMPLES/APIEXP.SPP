@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // Object Scripting
-// Copyright (c) 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1996, 1997 by Borland International, All Rights Reserved
 //
 // APIEXP.SPP: API Expander. Expands current word in editor to the matching
 //   Windows API or C RTL signiture. Provides selection list if seed string
@@ -16,7 +16,7 @@
 // NOTES: All apiexp.* files must reside in the same directory. The DAT file
 //   does not currently contain every Windows API.
 //--------------------------------------------------------------------------
-print "apiexp.spp";
+print typeid(module());
 
 //
 // IDE imports.
@@ -28,16 +28,16 @@ import editor;
 //
 // Load support module(s).
 //
-if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
-if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
-if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+if (!scriptEngine.IsLoaded("msg")) scriptEngine.Load("msg");
+if (!scriptEngine.IsLoaded("file")) scriptEngine.Load("file");
+if (!scriptEngine.IsLoaded("misc")) scriptEngine.Load("misc");
 
 Msg = new TMsg();  // Message object.
 
 //
 // Create an expander object.
 //
-Expander = new TExpander(GetModuleDir("apiexp.spp") + "\\apiexp.dat", TRUE);
+Expander = new TExpander(GetModuleDir(typeid(module())) + "\\apiexp.dat", TRUE);
 
 apiexp()
 {

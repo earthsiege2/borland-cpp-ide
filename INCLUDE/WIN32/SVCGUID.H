@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1992-1995  Microsoft Corporation
+Copyright (c) 1992-1996  Microsoft Corporation
 
 Module Name:
 
@@ -22,10 +22,15 @@ Revision History:
 
 --*/
 
+/* $Copyright: 1997$ */
+
 #ifndef _SVCGUID_
 #define _SVCGUID_
+#pragma option -b
 
+#pragma option -b.
 #include  <basetyps.h>
+#pragma option -b
 
 //
 // HOSTNAME--special GUID which refers to the name of a host as opposed
@@ -35,17 +40,33 @@ Revision History:
 #define SVCID_HOSTNAME { 0x0002a800, 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
 
 //
-// Macros for defining and testing TCP and UDP GUIDs from a well-known 
-// port.  
+// GUIDs for dealing with AF_INET address spaces alone. These are
+// intended to be used when fetching hostent or servent information
+// from such a provider. These are not general-purpose types and
+// should be used only when the intent is getting at down-level
+// information.
 //
 
-#define SVCID_TCP(_Port) \
-             { (0x0009 << 16) | (_Port), 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
+#define SVCID_INET_HOSTADDRBYINETSTRING \
+              { 0x0002a801, 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
+#define SVCID_INET_SERVICEBYNAME \
+                  { 0x0002a802, 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
+#define SVCID_INET_HOSTADDRBYNAME \
+                  { 0x0002a803, 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
+
+//
+// Macros for defining and testing TCP and UDP GUIDs from a well-known
+// port.
+//
+
+#define SVCID_TCP_RR(_Port, _RR) \
+             { (0x0009 << 16) | (_Port), 0, _RR, { 0xC0,0,0,0,0,0,0,0x46 } }
+
+#define SVCID_TCP(_Port) SVCID_TCP_RR(_Port, 0)
 
 #define IS_SVCID_TCP(_g) \
              ( ((((_g)->Data1) & 0xFFFF0000) == 0x00090000) && \
                (((_g)->Data2) == 0) &&                       \
-               (((_g)->Data3) == 0) &&                       \
                (((_g)->Data4[0]) == 0xC0) &&                 \
                (((_g)->Data4[1]) == 0) &&                    \
                (((_g)->Data4[2]) == 0) &&                    \
@@ -58,10 +79,13 @@ Revision History:
 #define PORT_FROM_SVCID_TCP(_g) \
                ((WORD)(_g->Data1 & 0xFFFF))
 
-#define SET_TCP_SVCID(_g,_Port) {                            \
+#define RR_FROM_SVCID(_RR) (_RR->Data3)
+
+
+#define SET_TCP_SVCID_RR(_g,_Port, _RR) {                    \
                (_g)->Data1 = (0x0009 << 16 ) | (_Port);      \
                (_g)->Data2 = 0;                              \
-               (_g)->Data3 = 0;                              \
+               (_g)->Data3 = _RR;                            \
                (_g)->Data4[0] = 0xC0;                        \
                (_g)->Data4[1] = 0x0;                         \
                (_g)->Data4[2] = 0x0;                         \
@@ -71,13 +95,16 @@ Revision History:
                (_g)->Data4[6] = 0x0;                         \
                (_g)->Data4[7] = 0x46; }
 
-#define SVCID_UDP(_Port) \
-             { (0x000A << 16) | (_Port), 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
+#define SET_TCP_SVCID(_g,_Port) SET_TCP_SVCID_RR(_g, _Port, 0)
+
+#define SVCID_UDP_RR(_Port, _RR) \
+             { (0x0009 << 16) | (_Port), 0, _RR, { 0xC0,0,0,0,0,0,0,0x46 } }
+
+#define SVCID_UDP(_Port) SVCID_UDP(_Port)  SVCID_UDP_RR(_Port, 0)
 
 #define IS_SVCID_UDP(_g) \
              ( ((((_g)->Data1) & 0xFFFF0000) == 0x000A0000) && \
                (((_g)->Data2) == 0) &&                       \
-               (((_g)->Data3) == 0) &&                       \
                (((_g)->Data4[0]) == 0xC0) &&                 \
                (((_g)->Data4[1]) == 0) &&                    \
                (((_g)->Data4[2]) == 0) &&                    \
@@ -90,10 +117,10 @@ Revision History:
 #define PORT_FROM_SVCID_UDP(_g) \
                ((WORD)(_g->Data1 & 0xFFFF))
 
-#define SET_UDP_SVCID(_g,_Port) {                            \
+#define SET_UDP_SVCID_RR(_g,_Port, _RR) {                    \
                (_g)->Data1 = (0x000A << 16 ) | (_Port);      \
                (_g)->Data2 = 0;                              \
-               (_g)->Data3 = 0;                              \
+               (_g)->Data3 = _RR;                            \
                (_g)->Data4[0] = 0xC0;                        \
                (_g)->Data4[1] = 0x0;                         \
                (_g)->Data4[2] = 0x0;                         \
@@ -103,14 +130,16 @@ Revision History:
                (_g)->Data4[6] = 0x0;                         \
                (_g)->Data4[7] = 0x46; }
 
+#define SET_UDP_SVCID(_g, _Port) SET_UDP_SVCID_RR(_g, _Port, 0)
+
 //
-// Macros for defining and testing Netware (SAP) services based on the 
-// SAP ID.  
+// Macros for defining and testing Netware (SAP) services based on the
+// SAP ID.
 //
 
 #define SVCID_NETWARE(_SapId) \
              { (0x000B << 16) | (_SapId), 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
-          
+
 #define IS_SVCID_NETWARE(_g) \
              ( ((((_g)->Data1) & 0xFFFF0000) == 0x000B0000) && \
                (((_g)->Data2) == 0) &&                       \
@@ -315,4 +344,5 @@ Revision History:
 #define SVCID_SNA_SERVER                  SVCID_NETWARE( 0x444 )
 #define SVCID_SAA_SERVER                  SVCID_NETWARE( 0x130 )
 
+#pragma option -b.
 #endif // _SVCGUID_

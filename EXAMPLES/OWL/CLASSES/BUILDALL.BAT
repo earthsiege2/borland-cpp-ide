@@ -1,4 +1,3 @@
-://$Revision:   10.4  $Author: BBABET, $Date:   09 Jan 1996 09:05:04  $
 @echo off
 if /%mk%/ == // set mk=make
 
@@ -122,11 +121,6 @@ if exist listwind\NUL    cd listwind
 if errorlevel 1 set err=1
 if exist ..\listwind\NUL cd ..
 
-if exist mailer\NUL    cd mailer
-%mk% %1 %2 %3 %4
-if errorlevel 1 set err=1
-if exist ..\mailer\NUL cd ..
-
 if exist mciwnd\NUL      cd mciwnd
 %mk% %1 %2 %3 %4
 if errorlevel 1 set err=1
@@ -136,6 +130,11 @@ if exist mdi\NUL         cd mdi
 %mk% %1 %2 %3 %4
 if errorlevel 1 set err=1
 if exist ..\mdi\NUL      cd ..
+
+if exist metafile\NUL         cd metafile
+%mk% %1 %2 %3 %4
+if errorlevel 1 set err=1
+if exist ..\metafile\NUL      cd ..
 
 if exist mru\NUL         cd mru
 %mk% %1 %2 %3 %4
@@ -152,10 +151,10 @@ if exist picklist\NUL    cd picklist
 if errorlevel 1 set err=1
 if exist ..\picklist\NUL cd ..
 
-if exist pickwind\NUL    cd pickwind
+if exist pictwnd\NUL    cd pictwnd
 %mk% %1 %2 %3 %4
 if errorlevel 1 set err=1
-if exist ..\pickwind\NUL cd ..
+if exist ..\pictwnd\NUL cd ..
 
 if exist printing\NUL    cd printing
 %mk% %1 %2 %3 %4

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of class TModuleVersionInfo, version resource parser &
 // accessor class
@@ -16,6 +16,8 @@
 #if defined(BI_PLAT_WIN16)
 # include <ver.h>
 #endif
+
+OWL_DIAGINFO;
 
 static char viRootStr[] =             "\\";
 static char viTransStr[] =            "\\VarFileInfo\\Translation";

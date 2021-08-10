@@ -1,5 +1,5 @@
 
-// Borland C++ - (C) Copyright 1991, 1994 by Borland International
+// Borland C++ - (C) Copyright 1991, 1996 by Borland International
 
 //*******************************************************************
 //
@@ -19,6 +19,8 @@
 // friendly varients.  
 #undef CreateDirectory
 #undef RemoveDirectory
+#undef GetCurrentDirectory
+#undef SetCurrentDirectory
 #undef FindFirstFile
 #undef FindNextFile
 #undef GetEnvironmentVariable
@@ -43,10 +45,24 @@ extern "C" char EXPOSEDFUNC CreateDirectory(const char * fileName){
    sa.lpSecurityDescriptor = NULL;
    sa.bInheritHandle = TRUE;  // why not?
    return (bool)::CreateDirectoryA(fileName, &sa);
-}
+}              
 
 extern "C" char EXPOSEDFUNC RemoveDirectory(const char * fileName){
    return (bool)::RemoveDirectoryA(fileName);
+}
+
+extern "C" const char *EXPOSEDFUNC GetCurrentDirectory(){
+   char dirSpec[MAXDRIVE + MAXDIR + 1];
+   StringReturn = "";
+
+   if(GetCurrentDirectoryA(sizeof(dirSpec), dirSpec)){
+      StringReturn = dirSpec;      
+   }
+   return StringReturn.c_str();
+}
+
+extern "C" bool EXPOSEDFUNC SetCurrentDirectory(const char *dName){
+   return SetCurrentDirectoryA(dName);
 }
 
 extern "C" void EXPOSEDFUNC Abort(){
@@ -152,8 +168,8 @@ extern "C" const char * EXPOSEDFUNC GetEnvironmentVariable(const char * envVar){
    return StringReturn.c_str();
 }
 
-extern "C" void EXPOSEDFUNC AssociateButton(int resId, const char * scriptToExecute){
-   // gmc revisit: Conrad needs to implement this!
+extern "C" void EXPOSEDFUNC AssociateButton(int /*resId*/, const char * /*scriptToExecute*/){
+   // need to implement this!
 }
 
 extern "C" char EXPOSEDFUNC PlaySound(const char *wavFile, int optionsMask){
@@ -275,8 +291,10 @@ extern "C" bool EXPOSEDFUNC SetValueData(HKEY hTopKey,
    HKEY   hKey;
    LONG   lResult;
    BOOL   bSuccess;
+   DWORD  disp;
 
-   if (RegOpenKeyEx(hTopKey, szSubKey, 0, KEY_WRITE, &hKey) == ERROR_SUCCESS){
+   if (RegCreateKeyEx(hTopKey, szSubKey, 0, "", REG_OPTION_NON_VOLATILE, 
+   	KEY_ALL_ACCESS, NULL, &hKey, &disp) == ERROR_SUCCESS){
       lResult = RegSetValueEx(hKey, szValueName, 0, REG_SZ, (LPBYTE)szValueData,
                               strlen(szValueData) + 1);
       bSuccess = (lResult == ERROR_SUCCESS ? TRUE : FALSE);
@@ -284,4 +302,79 @@ extern "C" bool EXPOSEDFUNC SetValueData(HKEY hTopKey,
    RegCloseKey(hKey);
 
    return bSuccess;
+}
+
+// The purpose of this routine is to return a string that contains the hotkeys 
+// associated with the main BCW menu.  This can be used when writing scripts 
+// that perform assignements to determine what keystrokes will implicitly be 
+// recognized by the IDE (for example, Alt-F will invoke the file menu).
+// Given a main menu with the content:
+//  File Edit Search View Project Script Tool Debug Options Window Help
+//  -    -    -      -    -        -     -    -     -       -      -
+// the result will be "FESVPCTDOWH"
+extern "C" const char *EXPOSEDFUNC GetMainMenuHotKeys(){
+   StringReturn = "";
+
+   HWND curWin = ::GetFocus();
+   HWND frameWin;
+   do{
+      frameWin = curWin;
+      curWin = GetParent(curWin);
+   }while(curWin);
+   
+   if(frameWin){
+      char outBuf[200];
+      int outBufUsed = 0;
+
+      #if 0 // this doesn't work under NT 
+      MENUITEMINFO mi;
+      HMENU menu = GetMenu(frameWin);
+      int cnt = GetMenuItemCount(menu);
+      for (int i = 0; i < cnt; i++){
+         if(GetMenuItemInfo(menu, i, TRUE, &mi)){
+            if(mi.fType & MFT_STRING && mi.cch){
+               for(int j = 0; j < mi.cch - 1; j++){
+                  if(mi.dwTypeData[j] == '&'){
+                     outBuf[outBufUsed++] = mi.dwTypeData[j + 1];
+                     outBuf[outBufUsed] = '\0';
+                     break;
+                  }
+               }
+            }
+         }
+      }
+      #else
+      char menuString[200];
+      HMENU menu = GetMenu(frameWin);
+      int cnt = GetMenuItemCount(menu);
+      for (int i = 0; i < cnt; i++){
+         int choiceLen = GetMenuString(menu, i, menuString, 
+            sizeof(menuString), MF_BYPOSITION);
+         if(choiceLen){
+            for(int j = 0; j < choiceLen - 1; j++){
+               if(menuString[j] == '&'){
+                  outBuf[outBufUsed++] = menuString[j + 1];
+                  outBuf[outBufUsed] = '\0';
+                  break;
+               }
+            }
+         }
+      }
+      
+      #endif
+
+      if(outBufUsed)
+         StringReturn = outBuf;
+   }
+   
+   return StringReturn.c_str();
+}  
+
+int WINAPI
+DllEntryPoint( HINSTANCE hInst, DWORD fdwReason, LPVOID )
+{
+    if(fdwReason == DLL_PROCESS_ATTACH){
+      DisableThreadLibraryCalls(hInst);
+    }
+    return TRUE;
 }

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.8  $
+//$Revision:   5.15  $
 //
 // TThread class implementation
 //----------------------------------------------------------------------------
@@ -59,7 +59,7 @@ TSemaphoreSet::TSemaphoreSet(const TSemaphore* sems[], int size)
   Count = count;
   Size = size >= 0 ? size : count;
   if (Size) {
-    Sems = new TSemaphorePtr[Size];
+    Sems = CONST_CAST(const TSemaphore**, new TSemaphorePtr[Size]);
     int i = 0;
     if (sems)
       for (; i < Count; i++)
@@ -285,10 +285,15 @@ const TThread& TThread::operator =(const TThread& thread)
 //
 TThread::~TThread()
 {
-  if (!Attached && GetStatus() != Finished)
+  if (!Attached && (GetStatus() == Running || GetStatus() == Suspended))
     throw TThreadError(TThreadError::DestroyBeforeExit);
 #if defined(BI_PLAT_WIN32)
+//
+// The RTL calls CloseHandle in _endthread, so we shouldn't if the thread
+// was started with _beginthreadNT(...).
+#  if !defined(BI_MULTI_THREAD_RTL)
   ::CloseHandle(Handle);
+#  endif
 #elif defined(BI_PLAT_OS2)
 #endif
 }
@@ -299,10 +304,15 @@ TThread::~TThread()
 //
 TThread::THandle TThread::Start()
 {
-  // If this thread is already started, just return the current handle
+  // If Start() has already been called for this thread, release the
+  // previously created system thread object before launching a new one.
   //
-  if (Handle)
-    return Handle;
+  if ((GetStatus() != Created) && Handle) {
+#if defined(BI_PLAT_WIN32)
+    ::CloseHandle(Handle);
+#elif defined(BI_PLAT_OS2)
+#endif
+  }
 
 #if defined(BI_PLAT_WIN32)
 # if defined(BI_MULTI_THREAD_RTL)
@@ -537,7 +547,7 @@ TThread::TThreadError::TThreadError(TErrorType type)
 //
 string TThread::TThreadError::MakeString(TErrorType type)
 {
-  static char* Names[] = {
+  static _TCHAR* Names[] = {
     "Suspend() before Run()",
     "Resume() before Run()",
     "Resume() during Run()",

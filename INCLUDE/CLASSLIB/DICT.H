@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.7  $
 //
 //----------------------------------------------------------------------------
 #if !defined( CLASSLIB_DICT_H )
@@ -23,6 +23,10 @@
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -50,37 +54,37 @@ public:
         HashTable(size)
         {
         }
-        
+
     int Add( const T& t )
         {
         return Find( t ) ? 0 : HashTable.Add( t );
         }
-        
+
     int Detach( const T& t, DeleteType dt = DefDelete );
-        
+
     T *Find( const T& t )
         {
         return HashTable.Find( t );
         }
 
     void Flush( DeleteType dt = DefDelete );
-        
+
     void ForEach( void (*func)(T&, void *),
                   void *args )
         {
         HashTable.ForEach( func, args );
         }
-        
+
     unsigned GetItemsInContainer() const
         {
         return HashTable.GetItemsInContainer();
         }
-        
+
     int IsEmpty() const
         {
         return HashTable.IsEmpty();
         }
-        
+
 protected:
 
     TMHashTableImp<T,A> HashTable;
@@ -88,7 +92,7 @@ protected:
 private:
 
     static void DeleteElement( T& t, void * );
-    
+
 };
 
 template <class T, class A>
@@ -103,7 +107,7 @@ int TMDictionaryAsHashTable<T,A>::Detach( const T& t,
         }
     return HashTable.Detach( t );
 }
-        
+
 template <class T, class A>
 void TMDictionaryAsHashTable<T,A>::Flush(DeleteType dt)
 {
@@ -113,7 +117,7 @@ void TMDictionaryAsHashTable<T,A>::Flush(DeleteType dt)
         }
     HashTable.Flush();
 }
-        
+
 template <class T, class A>
 void TMDictionaryAsHashTable<T,A>::DeleteElement( T& t, void * )
 {
@@ -130,7 +134,7 @@ public:
         TMHashTableIteratorImp<T,A>( t.HashTable )
         {
         }
-        
+
 };
 
 /*------------------------------------------------------------------------*/
@@ -152,7 +156,7 @@ public:
         TMDictionaryAsHashTable<T,TStandardAllocator>(size)
         {
         }
-        
+
 };
 
 template <class T>
@@ -165,7 +169,7 @@ public:
         TMDictionaryAsHashTableIterator<T,TStandardAllocator>( t )
         {
         }
-        
+
 };
 
 /*------------------------------------------------------------------------*/
@@ -191,45 +195,45 @@ public:
         HashTable(size)
         {
         }
-        
+
     int Add( T *t )
         {
         return Find( t ) ? 0 : HashTable.Add( t );
         }
-        
+
     int Detach( T *t, DeleteType dt = DefDelete );
-        
+
     T *Find( T *t )
         {
         return HashTable.Find( t );
         }
 
     void Flush( DeleteType dt = DefDelete );
-        
+
     void ForEach( void (*func)(T&, void *),
                   void *args )
         {
         HashTable.ForEach( func, args );
         }
-        
+
     unsigned GetItemsInContainer() const
         {
         return HashTable.GetItemsInContainer();
         }
-        
+
     int IsEmpty() const
         {
         return HashTable.IsEmpty();
         }
-        
+
 protected:
 
     TMIHashTableImp<T,A> HashTable;
-    
+
 private:
 
     static void DeleteElement( T& t, void * );
-    
+
 };
 
 template <class T, class A>
@@ -243,7 +247,7 @@ int TMIDictionaryAsHashTable<T,A>::Detach( T *t, DeleteType dt = DefDelete )
         }
     return HashTable.Detach( t, DelObj(dt) );
 }
-        
+
 template <class T, class A>
 void TMIDictionaryAsHashTable<T,A>::Flush( DeleteType dt = DefDelete )
 {
@@ -253,7 +257,7 @@ void TMIDictionaryAsHashTable<T,A>::Flush( DeleteType dt = DefDelete )
         }
     HashTable.Flush(DelObj(dt));
 }
-        
+
 template <class T, class A>
 void TMIDictionaryAsHashTable<T,A>::DeleteElement( T& t, void * )
 {
@@ -270,7 +274,7 @@ public:
         TMIHashTableIteratorImp<T,A>( t.HashTable )
         {
         }
-        
+
 };
 
 /*------------------------------------------------------------------------*/
@@ -308,7 +312,7 @@ public:
         TMIDictionaryAsHashTableIterator<T,TStandardAllocator>( t )
         {
         }
-        
+
 };
 
 /*------------------------------------------------------------------------*/
@@ -347,6 +351,10 @@ public:
         }
 
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po.

@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.2  $ */
 
 #if !defined( __DEFS_H )
 #include <_defs.h>
@@ -63,6 +64,8 @@ int           _virt_decommit(void *__base, unsigned long __size);
 int           _virt_release (void *__base);
 int           _virt_reserve (unsigned long __size, void **__ptr,
                              unsigned long *__actual);
+
+void *        __org_malloc(size_t  __size);
 
 #ifdef _MT
 void        _lock_heap  (void);

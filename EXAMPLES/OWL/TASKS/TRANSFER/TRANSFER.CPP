@@ -29,17 +29,17 @@ const WM_DIALOG_CLOSED = WM_USER + 100;
 struct TTransferStruct {
   TTransferStruct();
 
-  uint            MrTitle;
-  uint            MsTitle;
-  uint            DrTitle;
+  uint16          MrTitle;
+  uint16          MsTitle;
+  uint16          DrTitle;
   char            NameEdit[MAXNAMELEN];
   char            Addr1Edit[MAXADDRLEN];
   char            Addr2Edit[MAXADDRLEN];
   char            CityStEdit[MAXCITYSTLEN];
   char            CountryEdit[MAXCOUNTRYLEN];
-  uint            CheckBox1;
-  uint            CheckBox2;
-  uint            CheckBox3;
+  uint16          CheckBox1;
+  uint16          CheckBox2;
+  uint16          CheckBox3;
   TListBoxData    ListBoxData;
   char            LBDataEdit[MAXLBDATALEN];
   TComboBoxData   ComboBoxData;

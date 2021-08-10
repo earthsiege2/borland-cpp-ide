@@ -6,22 +6,27 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.5  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
 #include <_io.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            _fdopen -  associates a stream with a file handle
+Name            _tfdopen used as _fdopen and _wfdopen
+                _fdopen  -  associates a stream with a file handle
+                _wfdopen -  associates a stream with a file handle
 
 Usage           FILE *_fdopen(int handle, char *type);
+                FILE *_wfdopen(int handle, wchar_t *type);
 
 Prototype in    _stdio.h (fdopen declared in stdio.h)
 
@@ -30,7 +35,11 @@ Description     This is the internal entry point for fdopen.
 
 *---------------------------------------------------------------------*/
 
-FILE * _RTLENTRY _fdopen (int handle, char *type)
+#ifdef _UNICODE
+FILE * _RTLENTRY _EXPFUNC _wfdopen (int handle, wchar_t *type)
+#else
+FILE * _RTLENTRY _EXPFUNC _fdopen (int handle, char *type)
+#endif
 {
     register FILE   *fp;
 
@@ -41,7 +50,7 @@ FILE * _RTLENTRY _fdopen (int handle, char *type)
     else if ((fp = __getfp()) != NULL)
     {
         fp->fd = handle;
-        fp = __openfp (fp, NULL, type, 0);
+        fp = __topenfp (fp, NULL, type, 0);
     }
 
     _unlock_all_streams();

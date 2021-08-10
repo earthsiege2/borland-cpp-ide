@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.10  $
 //
 // General definitions used by all ObjectWindows programs. Included directly
 // by ObjectWindows source modules.
@@ -160,8 +160,11 @@
 //----------------------------------------------------------------------------
 // Owl settings for runtime diagnostics in winsys.defs.h & classlib/checks.h
 //
-#define OWL_INI "OWL.INI"
-#define OWL_CDLEVEL 2
+#define   OWL_INI     "OWL.INI"
+#define   OWL_CDLEVEL  2
+#if !defined(OWL_DIAGINFO)
+# define OWL_DIAGINFO
+#endif
 
 //----------------------------------------------------------------------------
 // Strict data makes all data members private. Accessors must then be used
@@ -193,6 +196,25 @@
 // Common external Owl functions & data
 //
 #include <owl/version.h>             // OWL version # constants
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 uint16 far _OWLFUNC OWLGetVersion(); // Get version of OWL (dll) at runtime
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
+#if defined(BI_NAMESPACE)
+using namespace OWL;
+#endif
+
+#if defined(BI_NAMESPACE)
+# define NS_OWL OWL
+#else
+# define NS_OWL
+#endif
 
 #endif  // OWL_DEFS_H

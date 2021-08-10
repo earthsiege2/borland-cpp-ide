@@ -11,12 +11,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <_io.h>
 #include <_thread.h>
@@ -65,12 +66,12 @@ void _RTLENTRY _init_streams(void)
      * set the _openfd[] flags for the standard files.
      */
     for (i = 0; i < 3; i++)
-        _streams[i].token = (short) (i + _streams);
+        _streams[i].token = (unsigned char) (i + _streams);
 
     for (i = 3; i < _nfile; i++)
     {
         _streams[i].fd = -1;
-        _streams[i].token = (short) (i + _streams);
+        _streams[i].token = (unsigned char) (i + _streams);
     }
 
     if ((_openfd[stdin->fd] & O_DEVICE) == 0)

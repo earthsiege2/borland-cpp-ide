@@ -41,8 +41,8 @@ public:
     unsigned Month() const;
     unsigned Day() const;
     unsigned Year() const;
-    void SetMonth( unsigned char );
-    void SetDay( unsigned char );
+    void SetMonth( unsigned _TCHAR );
+    void SetDay( unsigned _TCHAR );
     void SetYear( unsigned );
 
     virtual hashValueType hashValue() const;
@@ -53,13 +53,13 @@ public:
 protected:
 
     BaseDate();
-    BaseDate( unsigned char, unsigned char, unsigned );
+    BaseDate( unsigned _TCHAR, unsigned _TCHAR, unsigned );
     BaseDate( const BaseDate _FAR & );
 
 private:
 
-    unsigned char MM;
-    unsigned char DD;
+    unsigned _TCHAR MM;
+    unsigned _TCHAR DD;
     unsigned int YY;
 
 };
@@ -73,7 +73,7 @@ inline BaseDate::BaseDate()
     YY = d.da_year;
 }
 
-inline BaseDate::BaseDate( unsigned char M, unsigned char D, unsigned Y )
+inline BaseDate::BaseDate( unsigned _TCHAR M, unsigned _TCHAR D, unsigned Y )
 {
     SetMonth( M );
     SetDay( D );
@@ -100,13 +100,13 @@ inline unsigned BaseDate::Year() const
     return YY;
 }
 
-inline void BaseDate::SetMonth( unsigned char M )
+inline void BaseDate::SetMonth( unsigned _TCHAR M )
 {
     PRECONDITION( M > 0 && M < 13 );
     MM = M;
 }
 
-inline void BaseDate::SetDay( unsigned char D )
+inline void BaseDate::SetDay( unsigned _TCHAR D )
 {
     PRECONDITION( D < 32 );
     DD = D;
@@ -123,7 +123,7 @@ class _CLASSTYPE Date : public BaseDate
 public:
 
     Date();
-    Date( unsigned char, unsigned char, unsigned );
+    Date( unsigned _TCHAR, unsigned _TCHAR, unsigned );
     Date( const Date _FAR & );
 
     virtual classType isA() const
@@ -131,7 +131,7 @@ public:
         return dateClass;
         }
 
-    virtual char _FAR *nameOf() const
+    virtual _TCHAR _FAR *nameOf() const
         {
         return "Date";
         }
@@ -144,7 +144,7 @@ inline Date::Date()
 {
 }
 
-inline Date::Date( unsigned char M, unsigned char D, unsigned Y ) :
+inline Date::Date( unsigned _TCHAR M, unsigned _TCHAR D, unsigned Y ) :
     BaseDate( M, D, Y )
 {
 }

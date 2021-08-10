@@ -3,7 +3,7 @@
   menutest.h
   Created: 10/24/95
   Copyright (c) 1995, Borland International
-  $Revision:   1.12  $
+  $Revision:   1.15  $
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 #ifndef __MENUTEST_H

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.7  $
+//$Revision:   10.11  $
 //
 // Implementation of class TListView
 //----------------------------------------------------------------------------
@@ -19,6 +19,7 @@
 #include <owl/edit.rh>
 #include <stdio.h>
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
 
 #if !defined(SECTION) || SECTION == 1
@@ -127,7 +128,7 @@ TListView::LoadData(int top, int sel)
 
   DirtyFlag = false;
 
-  bool status = true;
+  bool status;
   istream* inStream;
   if ((inStream = Doc->InStream(ios::in)) == 0) {
     Doc->PostError(IDS_UNABLEOPEN, MB_OK);
@@ -258,7 +259,7 @@ TListView::CmEditCopy()
 {
   int index = GetSelIndex();
   int count = GetCount();
-  if (count <= 1 || index >= count-1)
+  if (count <= 1 || index >= count)
     return;
 
   TClipboard cb(*this);

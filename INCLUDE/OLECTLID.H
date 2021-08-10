@@ -1,3 +1,4 @@
+#pragma option -b
 /*****************************************************************************\
 *                                                                             *
 * olectlid.h    Master definition of GUIDs for OLE Controls                   *
@@ -7,12 +8,23 @@
 \*****************************************************************************/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1994, 1996 by Borland International
+ *      Copyright (c) 1994, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+
+#if defined(__FLAT__)
+
+#pragma option -b.
+#pragma message("WARNING: your code should #include olectl.h instead")
+#pragma option -b
+#pragma option -b.
+#include <olectl.h>
+#pragma option -b
+
+#else
 
 #if !defined(__OLECTLID_H)
 #define __OLECTLID_H
@@ -180,3 +192,5 @@ DEFINE_GUID(GUID_HANDLE,
 
 
 #endif  // __OLECTLID_H
+#endif  // __FLAT__
+#pragma option -b.

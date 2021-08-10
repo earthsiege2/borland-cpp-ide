@@ -1,0 +1,7 @@
+LIBRARY LOADPERF
+EXPORTS
+
+    LoadPerfCounterTextStringsA
+    LoadPerfCounterTextStringsW
+    UnloadPerfCounterTextStringsA
+    UnloadPerfCounterTextStringsW

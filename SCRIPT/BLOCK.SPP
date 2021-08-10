@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------
 // cScript
-// (C) Copyright 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1995, 1997 by Borland International, All Rights Reserved
 //
 // BLOCK.SPP
 //    Provides support services for blocking operations.
 //
-// $Revision:   1.14  $
+// $Revision:   1.15  $
 //
 //----------------------------------------------------------------------------
 

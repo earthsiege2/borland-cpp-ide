@@ -2,26 +2,31 @@
  * filename - strlwr.c
  *
  * function(s)
- *        strlwr - converts a string to lower-case according to the
+ *        strlwr - converts an ASCII string to lower-case according to the
  *                 "C" locale
+ *        _wcslwr - converts a wide-character string to lower-case according
+ *			to the "C" locale
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <string.h>
 #include <ctype.h>
+#include <tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            strlwr - converts a string to lower-case
+Name            strlwr, _wcslwr - converts a string to lower-case
 
 Usage           char *strlwr(char *str);
+                wchar_t *_wcslwr(wchar_t *str);
 
 Prototype in    string.h
 
@@ -32,11 +37,10 @@ Return value    pointer to the converted string
 
 *---------------------------------------------------------------------*/
 
-char * _RTLENTRYF _EXPFUNC strlwr(char *s)
+_TCHAR * _RTLENTRYF _EXPFUNC _tcslwr(_TCHAR *s)
 {
-    char *p = s;
-    while ( (*p = (char)tolower(*p)) != '\0')
+    _TCHAR *p = s;
+    while ( (*p = (_TCHAR)tolower(*p)) != _TEXT('\0'))
          p++;
     return s;
 }
-

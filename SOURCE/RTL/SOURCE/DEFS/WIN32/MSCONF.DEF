@@ -1,0 +1,20 @@
+LIBRARY MSCONF
+EXPORTS
+
+    ConferenceCancelTransfer
+    ConferenceConnectA
+    ConferenceConnectW
+    ConferenceDisconnect
+    ConferenceGetInfoA
+    ConferenceGetInfoW
+    ConferenceLaunchRemote
+    ConferenceListen
+    ConferenceRemoveNotify
+    ConferenceSendData
+    ConferenceSendFileA
+    ConferenceSendFileW
+    ConferenceSetInfoA
+    ConferenceSetInfoW
+    ConferenceSetNotify
+    ConferenceShareWindow
+    NewMediaPhone

@@ -6,12 +6,13 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <ntbc.h>
 
@@ -19,21 +20,25 @@
 #include <sys/stat.h>
 #include <io.h>
 #include <_io.h>
+#include <tchar.h>
 
 /*-------------------------------------------------------------------------*
 
-Name            chmod - changes access mode of file
+Name            _tchmod used as _wchmod and chmod
+                chmod   - changes access mode of file
+                _wchmod - changes access mode of file
 
 Usage           #include <sys/types.h>
                 #include <sys/stat.h>
                 int chmod(const char *filename, int permiss);
+                int _wchmod(const wchar_t *filename, int permiss);
 
 Prototype in    io.h
 
-Description     chmod  sets   the  file access  permissions  of   the  file
+Description     Sets   the  file access  permissions  of   the  file
                 according to the mask given by permiss.
 
-                filename points to a string naming the file.
+                filename points to a (wide) string naming the file.
 
                 permiss can contain  one or both of the  symbolic constants
                 S_IWRITE and S_IREAD:
@@ -51,13 +56,13 @@ Return value    Upon  successfully  changing  the  file access  mode, chmod
 
 *---------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC chmod( const char *pathname, int attrib )
+int _RTLENTRY _EXPFUNC _tchmod( const _TCHAR *pathname, int attrib )
 {
     DWORD fattr;
 
     /* Get the current file attributes.
      */
-    if ((fattr = GetFileAttributes((char *)pathname)) == (DWORD)-1)
+    if ((fattr = GetFileAttributes(pathname)) == (DWORD)-1)
         return (__NTerror());
 
     /* Set or clear the read-only attribute depending on whether
@@ -71,7 +76,7 @@ int _RTLENTRY _EXPFUNC chmod( const char *pathname, int attrib )
 
     /* Set the new file attributes.
      */
-    if (SetFileAttributes((char *)pathname, fattr) != TRUE)
+    if (SetFileAttributes(pathname, fattr) != TRUE)
         return (__NTerror());
     else
         return (0);

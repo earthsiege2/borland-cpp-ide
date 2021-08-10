@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.3  $
+//$Revision:   5.6  $
 //
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_DATE_H)
@@ -19,6 +19,11 @@
 class _EXPCLASS string;
 class _EXPCLASS istream;
 class _EXPCLASS ostream;
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 class _BIDSCLASS TTime;
 class _BIDSCLASS ipstream;
 class _BIDSCLASS opstream;
@@ -62,7 +67,7 @@ public:
     TDate( DayTy day, YearTy year );
 
     //  Construct a TDate for the given day, month, and year.
-    TDate( DayTy, const char _BIDSFAR * month, YearTy );
+    TDate( DayTy, const _TCHAR _BIDSFAR * month, YearTy );
     TDate( DayTy, MonthTy, YearTy );
     TDate( istream _BIDSFAR & s );      // Read date from stream.
     TDate( const TTime _BIDSFAR & );    // Construct a TDate from a TTime
@@ -80,9 +85,9 @@ public:
     TDate Max( const TDate _BIDSFAR & dt ) const;
     TDate Min( const TDate _BIDSFAR & dt ) const;
     MonthTy Month() const;
-    const char _BIDSFAR *NameOfDay() const;
-    const char _BIDSFAR *NameOfMonth() const;
-    TDate Previous( const char _BIDSFAR *dayName ) const;  // Return date of previous dayName
+    const _TCHAR _BIDSFAR *NameOfDay() const;
+    const _TCHAR _BIDSFAR *NameOfMonth() const;
+    TDate Previous( const _TCHAR _BIDSFAR *dayName ) const;  // Return date of previous dayName
     TDate Previous( DayTy ) const;                // Same as above, but use day of week
     DayTy WeekDay() const;
     YearTy Year() const;
@@ -114,14 +119,14 @@ public:
     friend ipstream _BIDSFAR & _BIDSFUNC operator >> ( ipstream _BIDSFAR & s, TDate _BIDSFAR & d );
 
     // Static member functions:
-    static const char _BIDSFAR *DayName( DayTy weekDayNumber );
-    static DayTy DayOfWeek( const char _BIDSFAR * dayName );
+    static const _TCHAR _BIDSFAR *DayName( DayTy weekDayNumber );
+    static DayTy DayOfWeek( const _TCHAR _BIDSFAR * dayName );
     static int DayWithinMonth( MonthTy, DayTy, YearTy );
     static DayTy DaysInYear( YearTy );
-    static MonthTy IndexOfMonth( const char * _BIDSFAR monthName );
+    static MonthTy IndexOfMonth( const _TCHAR * _BIDSFAR monthName );
     static JulTy Jday( MonthTy, DayTy, YearTy );
     static int LeapYear( YearTy year );
-    static const char _BIDSFAR *MonthName( MonthTy monthNumber );
+    static const _TCHAR _BIDSFAR *MonthName( MonthTy monthNumber );
     static HowToPrint SetPrintOption( HowToPrint h );
 
 protected:
@@ -175,12 +180,12 @@ inline int TDate::Leap() const
     return LeapYear(Year());
 }
 
-inline const char *TDate::NameOfDay() const
+inline const _TCHAR *TDate::NameOfDay() const
 {
     return DayName(WeekDay());
 }
 
-inline const char *TDate::NameOfMonth() const
+inline const _TCHAR *TDate::NameOfMonth() const
 {
     return MonthName(Month());
 }
@@ -280,6 +285,10 @@ inline HashValue( TDate _BIDSFAR & d )
 {
     return d.Hash();
 }
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po.

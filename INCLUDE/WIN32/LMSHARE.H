@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1990-1996  Microsoft Corporation
+
 Module Name:
 
     lmshare.h
@@ -13,10 +15,6 @@ Abstract:
         NetFile
         NetConnection
 
-Author:
-
-    Dan Lafferty (danl)  25-Jan-1991
-
 Environment:
 
     User Mode - Win32
@@ -25,25 +23,8 @@ Notes:
 
     You must include <windef.h> and <lmcons.h> before this file.
 
-Revision History:
-
-    25-Jan-1991 Danl
-        Ported from LM2.0
-    14-Apr-1991 w-shanku
-        Changed parmnum values to be more consistent with OS/2 parmnums.
-    19-Jul-1991 JohnRo
-        Added some OPTIONAL equates to NetConnectionEnum.
-    20-Aug-1991 JohnRo
-        Added some OPTIONAL equates to NetFile APIs.
-        Changed LPSTR to LPTSTR.
-    20-Nov-1991 JohnRo
-        Implement remote NetSession APIs.  (Added OPTIONAL to NetSession APIs.)
-        Clarify that client name (arg to NetSession APIs) is a UNC computer
-        name, whereas the session info structures contain non-UNC names.
-
 --*/
-
-/* $Copyright: 1994$ */
+/* $Copyright: 1997$ */
 
 //
 // SHARE API
@@ -51,7 +32,7 @@ Revision History:
 
 #ifndef _LMSHARE_
 #define _LMSHARE_
-#define __LMSHARE_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -171,6 +152,11 @@ typedef struct _SHARE_INFO_1004 {
     LPTSTR  shi1004_remark;
 } SHARE_INFO_1004, *PSHARE_INFO_1004, *LPSHARE_INFO_1004;
 
+typedef struct _SHARE_INFO_1005 {
+    DWORD  shi1005_flags;
+} SHARE_INFO_1005, *PSHARE_INFO_1005, *LPSHARE_INFO_1005;
+
+
 typedef struct _SHARE_INFO_1006 {
     DWORD   shi1006_max_uses;
 } SHARE_INFO_1006, *PSHARE_INFO_1006, *LPSHARE_INFO_1006;
@@ -221,11 +207,16 @@ typedef struct _SHARE_INFO_1501 {
 #define STYPE_PRINTQ            1
 #define STYPE_DEVICE            2
 #define STYPE_IPC               3
-#define STYPE_DFS               100
 
 #define STYPE_SPECIAL           0x80000000
 
 #define SHI_USES_UNLIMITED      (DWORD)-1
+
+//
+// Flags values for the 1005 infolevel
+//
+#define SHI1005_FLAGS_DFS  0x01        // Share is in the DFS
+#define SHI1005_FLAGS_DFS_ROOT 0x02    // Share is root of DFS
 
 #endif // _LMSHARE_
 
@@ -451,4 +442,5 @@ typedef struct _FILE_INFO_3 {
 }
 #endif
 
+#pragma option -b.
 #endif // _LMFILE_

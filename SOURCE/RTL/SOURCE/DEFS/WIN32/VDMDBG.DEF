@@ -5,6 +5,7 @@ EXPORTS
     VDMDetectWOW
     VDMEnumProcessWOW
     VDMEnumTaskWOW
+    VDMEnumTaskWOWEx
     VDMGetModuleSelector
     VDMGetPointer
     VDMGetSelectorModule
@@ -17,3 +18,5 @@ EXPORTS
     VDMModuleNext
     VDMProcessException
     VDMSetThreadContext
+    VDMStartTaskInWOW
+    VDMTerminateTaskWOW

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.6  $
+//$Revision:   5.9  $
 //
 //----------------------------------------------------------------------------
 #include <classlib/pch.h>
@@ -11,33 +11,34 @@
 #include <services/checks.h>
 #include <services/cstring.h>
 #include <services/memory.h>
+#include <tchar.h>
 
 DIAG_DEFINE_GROUP(Objstrm,1,0);
 
 const uint32 streamVersion = 0x0101;
-const char versionIndicator = ':';
+const _TCHAR versionIndicator = ':';
 
-const char EOS = '\0';
+const _TCHAR EOS = '\0';
 
 const uint8  oldNullStringLen = UCHAR_MAX;
 const uint32 nullStringLen = ULONG_MAX;
 
 TStreamableTypes *pstream::types = 0;
 
-const char *TStreamer::StreamableName() const
+const _TCHAR *TStreamer::StreamableName() const
 {
     return 0;
 }
 
-TStreamableClass::TStreamableClass( const char *n,
+TStreamableClass::TStreamableClass( const _TCHAR *n,
                                     BUILDER b,
                                     int d,
                                     ModuleId id ) :
     ObjectBuilder( b, d ),
     ModId(id)
 {
-    ObjectId = new char[strlen(n)+1];
-    strcpy( CONST_CAST(char *,ObjectId), n );
+    ObjectId = new _TCHAR[_tcslen(n)+1];
+    _tcscpy( CONST_CAST(_TCHAR *,ObjectId), n );
     pstream::initTypes();
     if( id != 0 )   // id == 0 is used only during lookup.
                     // It flags an instance that shouldn't be registered
@@ -49,7 +50,7 @@ TStreamableClass::~TStreamableClass()
     if( ModId != 0 )
         pstream::types->UnRegisterType( ModId, *this );
 
-    delete [] CONST_CAST(char *,ObjectId);
+    delete [] CONST_CAST(_TCHAR *,ObjectId);
 }
 
 void TStreamableTypes::RegisterType( ModuleId, TStreamableClass& ts )
@@ -65,7 +66,7 @@ void TStreamableTypes::UnRegisterType( ModuleId, TStreamableClass& ts )
 }
 
 const ObjectBuilder *TStreamableTypes::Lookup( ModuleId,
-                                               const char *name ) const
+                                               const _TCHAR *name ) const
 {
     unsigned loc = Types.Find(&TStreamableClass(name,0,0,0));
     if( loc == UINT_MAX )
@@ -111,7 +112,7 @@ void TPWrittenObjects::RemoveAll()
 
 void TPWrittenObjects::RegisterObject( TStreamableBase *adr )
 {
-    Data.Add( TPWObj( ((char *)(void *)adr)+1, ++CurId ) );
+    Data.Add( TPWObj( ((_TCHAR *)(void *)adr)+1, ++CurId ) );
 }
 
 void TPWrittenObjects::RegisterVB( const TStreamableBase *adr )
@@ -121,7 +122,7 @@ void TPWrittenObjects::RegisterVB( const TStreamableBase *adr )
 
 P_id_type TPWrittenObjects::FindObject( TStreamableBase *d )
 {
-    unsigned res = Data.Find( TPWObj(((char *)(void *)d)+1,0) );
+    unsigned res = Data.Find( TPWObj(((_TCHAR *)(void *)d)+1,0) );
     if( res == UINT_MAX )
         return 0;
     else
@@ -208,7 +209,7 @@ void ipstream::readBytes( void *data, size_t sz )
     PRECONDITION( data != 0 );
     if( good() && sz > 0 )
         {
-        if( bp->sgetn( (char *)data, sz ) != sz )
+        if( bp->sgetn( (_TCHAR *)data, sz ) != sz )
             clear( ios::failbit );
         }
 }
@@ -219,7 +220,7 @@ void ipstream::freadBytes( void _BIDSFARDATA *data, size_t sz )
 
     if( good() && sz > 0 )
         {
-        char *buf = new char[sz];
+        _TCHAR *buf = new _TCHAR[sz];
 
         if( bp->sgetn( buf, sz ) != sz )
             clear( ios::failbit );
@@ -245,7 +246,7 @@ uint16 ipstream::readWord16()
     else
         {
         uint16 temp;
-        if( bp->sgetn( (char *)&temp, sizeof( temp ) ) != sizeof( temp ) )
+        if( bp->sgetn( (_TCHAR *)&temp, sizeof( temp ) ) != sizeof( temp ) )
             clear( ios::failbit );
         return temp;
         }
@@ -258,7 +259,7 @@ uint32 ipstream::readWord32()
     else
         {
         uint32 temp;
-        if( bp->sgetn( (char *)&temp, sizeof( temp ) ) != sizeof( temp ) )
+        if( bp->sgetn( (_TCHAR *)&temp, sizeof( temp ) ) != sizeof( temp ) )
             clear( ios::failbit );
         return temp;
         }
@@ -280,7 +281,7 @@ uint32 ipstream::readStringLength()
     return len;
 }
 
-char *ipstream::readString()
+_TCHAR *ipstream::readString()
 {
     if( !good() )
         return 0;
@@ -290,7 +291,7 @@ char *ipstream::readString()
         if( len == nullStringLen )
             return 0;
 
-        char *buf = new char[size_t(len+1)];
+        _TCHAR *buf = new _TCHAR[size_t(len+1)];
         if( buf == 0 )
             return 0;
         readBytes( buf, size_t(len) );
@@ -299,7 +300,7 @@ char *ipstream::readString()
         }
 }
 
-char *ipstream::readString( char *buf, unsigned maxLen )
+_TCHAR *ipstream::readString( _TCHAR *buf, unsigned maxLen )
 {
     PRECONDITION( buf != 0 );
 
@@ -316,7 +317,7 @@ char *ipstream::readString( char *buf, unsigned maxLen )
         }
 }
 
-char _BIDSFARDATA *ipstream::freadString()
+_TCHAR _BIDSFARDATA *ipstream::freadString()
 {
     if( !good() )
         return 0;
@@ -326,14 +327,14 @@ char _BIDSFARDATA *ipstream::freadString()
         if( len == nullStringLen )
             return 0;
 
-        char _BIDSFARDATA *buf = new _BIDSFARDATA char[size_t(len)+1];
+        _TCHAR _BIDSFARDATA *buf = new _BIDSFARDATA _TCHAR[size_t(len)+1];
         freadBytes(buf, size_t(len));
         buf[size_t(len)] = EOS;
         return buf;
         }
 }
 
-char _BIDSFARDATA *ipstream::freadString( char _BIDSFARDATA *buf, unsigned maxLen )
+_TCHAR _BIDSFARDATA *ipstream::freadString( _TCHAR _BIDSFARDATA *buf, unsigned maxLen )
 {
     PRECONDITION(buf != 0 );
 
@@ -393,14 +394,14 @@ TStreamableBase _FAR *ipstream::readObject( TStreamableBase _FAR *&mem,
 
 const ObjectBuilder *ipstream::readPrefix( ModuleId mid )
 {
-    char ch = readByte();
+    _TCHAR ch = readByte();
     if( ch != '[' )
         {
         clear( ios::failbit );
         return 0;
         }
 
-    char name[128];
+    _TCHAR name[128];
     name[0] = EOS;
     readString( name, sizeof name );
     if( name[0] == EOS )
@@ -441,7 +442,7 @@ void ipstream::readSuffix()
 {
     if( !good() )
         return;
-    char ch = readByte();
+    _TCHAR ch = readByte();
     if( ch != ']' )
         clear( ios::failbit );
 }
@@ -452,7 +453,7 @@ TStreamableBase _FAR *ipstream::readObjectPointer( TStreamableBase _FAR *&mem,
     if( !good() )
         return 0;
 
-    char ch = readByte();
+    _TCHAR ch = readByte();
     switch( ch )
         {
         case pstream::ptNull:
@@ -560,7 +561,7 @@ void opstream::writeBytes( const void *data, size_t sz )
 
     if( good() && sz > 0 )
         {
-        if( bp->sputn( (char *)data, sz ) != sz )
+        if( bp->sputn( (_TCHAR *)data, sz ) != sz )
             clear( ios::failbit );
         }
 }
@@ -569,7 +570,7 @@ void opstream::writeWord16( uint16 word16 )
 {
     if( good() )
         {
-        if( bp->sputn( (char *)&word16, sizeof(word16) ) != sizeof(word16) )
+        if( bp->sputn( (_TCHAR *)&word16, sizeof(word16) ) != sizeof(word16) )
             clear( ios::failbit );
         }
 }
@@ -578,7 +579,7 @@ void opstream::writeWord32( uint32 word32 )
 {
     if( good() )
         {
-        if( bp->sputn( (char *)&word32, sizeof(word32) ) != sizeof(word32) )
+        if( bp->sputn( (_TCHAR *)&word32, sizeof(word32) ) != sizeof(word32) )
             clear( ios::failbit );
         }
 }
@@ -589,17 +590,17 @@ void opstream::fwriteBytes( const void _BIDSFARDATA *data, size_t sz )
 
     if( good() && sz > 0 )
         {
-        char *buf = new char[sz];
+        _TCHAR *buf = new _TCHAR[sz];
 
         memcpy( buf, data, sz );
-        if( bp->sputn( (char *)buf, sz ) != sz )
+        if( bp->sputn( (_TCHAR *)buf, sz ) != sz )
             clear( ios::failbit );
 
         delete[] buf;
         }
 }
 
-void opstream::writeString( const char *str )
+void opstream::writeString( const _TCHAR *str )
 {
     if( !good() )
         return;
@@ -609,12 +610,12 @@ void opstream::writeString( const char *str )
         writeWord32( nullStringLen );
         return;
         }
-    size_t len = strlen( str );
+    size_t len = _tcslen( str );
     writeWord32( len );
     writeBytes( str, len );
 }
 
-void opstream::fwriteString( const char _BIDSFARDATA * str )
+void opstream::fwriteString( const _TCHAR _BIDSFARDATA * str )
 {
     if( !good() )
         return;
@@ -624,7 +625,7 @@ void opstream::fwriteString( const char _BIDSFARDATA * str )
         writeWord32( nullStringLen );
         return;
         }
-    size_t len = strlen( str );
+    size_t len = _tcslen( str );
     writeWord32( len );
     fwriteBytes(str, len);
 }
@@ -689,7 +690,7 @@ void opstream::writeData( const TStreamableBase *t, ModuleId mid )
         }
 }
 
-void fpbase::open( const char *b, int m, int prot )
+void fpbase::open( const _TCHAR *b, int m, int prot )
 {
     if( buf.is_open() )
         clear(ios::failbit);        // fail - already open
@@ -717,7 +718,7 @@ void fpbase::close()
         clear(ios::failbit);
 }
 
-void fpbase::setbuf(char* b, int len)
+void fpbase::setbuf(_TCHAR* b, int len)
 {
     if( buf.setbuf(b, len) )
         clear(ios::goodbit);
@@ -729,6 +730,10 @@ void fpbase::setbuf(char* b, int len)
 //  These operators are not friends of string, so
 //  they must use only the public interface.
 //
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 opstream _BIDSFAR& _BIDSENTRY _BIDSFUNC operator << ( opstream _BIDSFAR& os,
                                                       const string _BIDSFAR& str )
 {
@@ -746,7 +751,7 @@ ipstream _BIDSFAR& _BIDSENTRY _BIDSFUNC operator >> ( ipstream _BIDSFAR& is,
             str = "";
         else
             {
-            char *temp = new char[size_t(len)+1];
+            _TCHAR *temp = new _TCHAR[size_t(len)+1];
             is.readBytes( temp, size_t(len) );
             temp[size_t(len)] = EOS;
             str = temp;
@@ -755,3 +760,7 @@ ipstream _BIDSFAR& _BIDSENTRY _BIDSFUNC operator >> ( ipstream _BIDSFAR& is,
         }
     return is;
 }
+
+#if defined(BI_NAMESPACE)
+}     // namespace ClassLib
+#endif

@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------
 // cScript
-// (C) Copyright 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1995, 1997 by Borland International, All Rights Reserved
 //
 // OPENFILE.SPP
 //    Opens a file.
 //
-// $Revision:   1.13  $
+// $Revision:   1.27  $
 //
 //----------------------------------------------------------------------------
 
@@ -21,53 +21,95 @@ library;
 // into an edit buffer.
 //
 LoadFileAtCursor(){
-   declare bracketedFlag = true;
-   declare String wholeLine(editor.GetLine());
 
-   wholeLine = wholeLine.Compress();
+   declare quotedFlag = false;
+   declare bracketedFlag = false;
 
-   declare incPos = wholeLine.Index("include");
-   if(incPos){
-      // we have a #include line
-      declare startPos = incPos + 7;     // since strlen("include") is 7
-      declare endPos = startPos;
-      switch(wholeLine.SubString(startPos, 1).Text){
-         case "<":
-            endPos = wholeLine.Index(">");
-            bracketedFlag = true;
-            break;
-         case "\"":
-            bracketedFlag = false;
-            declare String remainder(wholeLine.SubString(startPos + 1).Text);
-            endPos = startPos + 1 + remainder.Index("\"");
-            break;
-      }
+   declare ep = editor.TopView.Position;
 
-      declare ripLength = endPos - startPos;
-      ripLength -= 2;                  // we don't want either end character
-      if(ripLength > 0){
-         declare String fileName(wholeLine.SubString(startPos + 1, ripLength).Text);
-         fileName = fileName.Compress();
-         fileName = fileName.Trim();
-         fileName = fileName.Trim(TRUE);
+   // Get the token delimited by whitespace or the whole line...
+   declare bFoundDelimiter = false;
 
-         // The new ANSI style header notation allows system header files to be
-         // specified without extension.  As in:
-         //   #include <stdio>
-         // if we detect an extensionless header file in angle brackets we'll
-         // append a .h so we can find them
-         if(bracketedFlag){
-            if(fileName.Index(".") == 0){
-               fileName = new String(fileName.Text + ".h");
-            }
-         }
+   // Will we need to contend with a quote or angle bracket?
+   ep.Save();
 
-         SmartFileLoad(fileName.Text, editor.TopBuffer.FullName, !bracketedFlag);
-         return;
+   declare nCurrentLine = ep.Row;
+
+   if (ep.Search("[<\"]",false,true,SEARCH_BACKWARD,BRIEF_RE)) {
+      if (ep.Row == nCurrentLine) {
+         bFoundDelimiter = ep.Character;
+      } else {
+         ep.Restore();
+         ep.Save();
       }
    }
 
-   IDE.StatusBar = "no file detected at current position";
+   //  Use whitespace as a delimiter
+   if (!bFoundDelimiter)
+      ep.MoveCursor(SKIP_NONWHITE|SKIP_LEFT);
+
+   declare String sLine(ep.Read());
+   ep.Restore();
+
+   // Parse out file name.
+
+   // Look for angle brackets or quotes.
+   declare nEndPos = 0;
+   declare nStartPos = sLine.Index("<");
+
+   if (!nStartPos) { 
+      // We didn't have an angle bracket
+      nStartPos = sLine.Index("\"");
+      if (!nStartPos) { 
+         // We didn't have a quote. Start from the begining of the token.
+         nStartPos = 0; 
+      } else {  
+         // Find the other quote. Strip out first quote.
+         quotedFlag = true;
+         sLine = sLine.SubString(nStartPos);
+         nStartPos = 0;
+         nEndPos = sLine.Index("\"") - 1;
+      }
+   } else { 
+      // Try to find the matching angle bracket. Strip out opening bracket.
+      sLine = sLine.SubString(nStartPos);
+      nStartPos = 0;
+      nEndPos = sLine.Index(">") - 1;
+      bracketedFlag = true;
+   }
+
+   if (!nEndPos) {  
+       // Look for whitespace delimeter
+       nEndPos = sLine.Index(" ");
+       if (!nEndPos)
+          nEndPos = sLine.Index("\t");
+       if (!nEndPos)
+          nEndPos = sLine.Index("\n");
+   }
+
+   sLine = sLine.SubString(nStartPos,nEndPos);
+
+   sLine = sLine.Trim();
+   sLine = sLine.Trim(TRUE);
+
+   if (sLine.Length) {
+
+      // The new ANSI style header notation allows system header files to be 
+      // specified without extension.  As in:
+      //   #include <stdio>
+      // if we detect an extensionless header file in angle brackets we'll 
+      // append a .h so we can find them.
+      if(bracketedFlag){
+         if(sLine.Index(".") == 0){
+            sLine = new String(sLine.Text + ".h");
+         }
+      }
+
+      SmartFileLoad(sLine.Text, editor.TopBuffer.FullName, quotedFlag);
+      return;
+   }
+
+  IDE.FileOpen("");
 }
 
 
@@ -118,8 +160,16 @@ SmartFileLoad(declare fileToLoad, declare origFile, declare bQuotedFlag){
       }
    }
 
-   // find a project node to use as a base
-   declare ProjectNode srcFile(origFile);
+   // Let's use the associated editor to obtain the proper project node.
+   declare ProjectNode srcFile(NULL,editor.TopView);
+
+   // Well if it isn't an associated view then... We look using the file name.
+   if(!srcFile.IsValid){
+      // find a project node to use as a base
+      srcFile = new ProjectNode(origFile);
+   }
+
+   // The name didn't work so we will use a general purpose node object.
    if(!srcFile.IsValid){
       srcFile = new ProjectNode();
    }
@@ -143,9 +193,17 @@ SmartFileLoad(declare fileToLoad, declare origFile, declare bQuotedFlag){
 
    if(foundName == NULL){
       // still can't find it - see if user knows
-      IDE.FileOpen(fileToLoad);
+      if(IDE.UseCurrentWindowForSourceTracking){
+         editor.NewView(fileToLoad, true);
+      }else{
+         IDE.FileOpen(fileToLoad);
+      }
    }else{
-      // open it 
-      IDE.DoFileOpen(foundName);
+      // open it
+      if(IDE.UseCurrentWindowForSourceTracking){
+         editor.NewView(foundName);
+      }else{
+         IDE.DoFileOpen(foundName);
+      }
    }
 }

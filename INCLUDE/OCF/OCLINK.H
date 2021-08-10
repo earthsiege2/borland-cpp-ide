@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.9  $
 //
 // Definition of TOcLinkView Class
 //----------------------------------------------------------------------------
@@ -21,6 +23,10 @@
 #endif
 #if !defined(WINSYS_GEOMETRY_H)
 # include <winsys/geometry.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
 #endif
 
 class _ICLASS TOcView;
@@ -95,13 +101,8 @@ class _ICLASS TOcLinkView : public TUnknown,
     HRESULT _IFUNC  DoQueryInterface(const IID far& iid, void far* far* pif);
     LPOLESTR _IFUNC GetName(TOcPartName);
 
-#if defined(BI_DATA_NEAR)
-    TPoint&         Origin;  // Origin of view topleft relative to the document
-    TSize&          Extent;  // size of the document containing selection
-#else
     TPoint          Origin;
     TSize           Extent;
-#endif
 
   private:
    ~TOcLinkView();
@@ -111,11 +112,7 @@ class _ICLASS TOcLinkView : public TUnknown,
     IBSite*         BSiteI;          // Site interface
     IBApplication*  BAppI;           // Site's application interface
 
-#if defined(BI_DATA_NEAR)
-    TString&        Moniker;         //
-#else
     TString         Moniker;
-#endif
 
   friend class TOcLinkCollection;
 };
@@ -162,5 +159,9 @@ class TOcLinkCollectionIter : private TCVectorIteratorImp<TOcLinkView*> {
     void Restart(unsigned start, unsigned stop) {Base::Restart(start, stop);}
 };
 typedef TOcLinkCollectionIter TOcViewCollectionIter;  // For compatibility only
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 #endif  // OCF_OCLINK_H

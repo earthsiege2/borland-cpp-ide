@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.8  $
 //
 // Definition of TEventHandler and related classes & macros
 //----------------------------------------------------------------------------
@@ -16,6 +16,10 @@
 # include <owl/dispatch.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
@@ -25,7 +29,7 @@
 // use with the diagnostic library
 //
 #if defined(__TRACE) || defined(__WARN)
-  class _EXPCLASS ostream;
+  class _EXPCLASS ::ostream;
   class _OWLCLASS MsgName {
     public:
       friend ostream& operator <<(ostream& os, const MsgName& msg);
@@ -48,20 +52,24 @@
 //
 // Messages defined for OWL use - the top of the user range of ids is reserved
 //
-#define WM_OWLLAST        0x7FFF
-#define WM_OWLFIRST       (WM_OWLLAST - 0x03FF)
+#define WM_OWLLAST          0x7FFF
+#define WM_OWLFIRST        (WM_OWLLAST - 0x03FF)
 
-#define WM_COMMAND_ENABLE (WM_OWLLAST - 0)
-#define WM_CHILDINVALID   (WM_OWLLAST - 1)
-#define WM_OWLDOCUMENT    (WM_OWLLAST - 2)
-#define WM_OWLVIEW        (WM_OWLLAST - 3)
-#define WM_OWLNOTIFY      (WM_OWLLAST - 4)
-#define WM_OWLPREPROCMENU (WM_OWLLAST - 5)
-#define WM_OWLCANCLOSE    (WM_OWLLAST - 6)
-#define WM_VBXINITFORM    (WM_OWLLAST - 7)
-#define WM_VBXNAME        (WM_OWLLAST - 8)
-#define WM_VBXBASE        (WM_OWLLAST - 8 - 256)
-#define WM_OWLWAKEUP      (WM_VBXBASE - 1)
+#define WM_COMMAND_ENABLE  (WM_OWLLAST - 0)
+#define WM_CHILDINVALID    (WM_OWLLAST - 1)
+#define WM_OWLDOCUMENT     (WM_OWLLAST - 2)
+#define WM_OWLVIEW         (WM_OWLLAST - 3)
+#define WM_OWLNOTIFY       (WM_OWLLAST - 4)
+#define WM_OWLPREPROCMENU  (WM_OWLLAST - 5)
+#define WM_OWLCANCLOSE     (WM_OWLLAST - 6)
+#define WM_VBXINITFORM     (WM_OWLLAST - 7)
+#define WM_VBXNAME         (WM_OWLLAST - 8)
+#define WM_VBXBASE         (WM_OWLLAST - 8 - 256)
+#define WM_OWLWAKEUP       (WM_VBXBASE - 1)
+#define WM_OWLFRAMESIZE    (WM_VBXBASE - 2) // Notify children of frame resizing
+#define WM_OWLSLIPDBLCLK   (WM_VBXBASE - 3) // Notify parent of user dblclick of edge slip
+#define WM_OWLWINDOWDOCKED (WM_VBXBASE - 4) // Notify window it was [un]docked/reparented
+#define WM_OWLCREATETTIP   (WM_VBXBASE - 5) // Notify gadget window to create tooltips
 
 //
 // Portable types for message & event components
@@ -150,6 +158,10 @@ template <class T> class TResponseTableEntry {
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //
 // Macros to declare a response table

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.9  $
 //
 // Implementation of class TEditFile, a text edit which can find/replace and
 // read/write from/to a file.
@@ -33,6 +33,8 @@
 #include <string.h>
 #include <limits.h>
 #include <stdio.h>
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -82,7 +84,7 @@ TEditFile::SetupWindow()
   // We currently cannot mix OFN_ENABLEHOOK & OFN_EXPLORER
   // when running under NT 3.51[no new shell]
   //
-  if (TSystem::IsWin95())
+  if (TSystem::Has3dUI())
     FileData.Flags |= OFN_EXPLORER;
 #endif
 

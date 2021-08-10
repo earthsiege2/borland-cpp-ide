@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.15  $
 //
 // Definition of TOcApp application connection class
 //----------------------------------------------------------------------------
@@ -27,9 +29,22 @@
 #endif
 #include <ocf/ocapp.rh>
 
-class _ICLASS    TOcPart;
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
+
 class _WSYSCLASS TRegLink;
 class            TRegList;
+
+#if defined(BI_NAMESPACE)
+} // namespace ClassLib
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
+#endif
+
+class _ICLASS    TOcPart;
 class _ICLASS    TOcClassMgr;
 class _ICLASS    TOcApp;
 
@@ -105,7 +120,7 @@ class TOcRegistrar : public TRegistrar {
     void            CreateOcApp(uint32 options, TOcApp*& ret);
     IBClassMgr*     CreateBOleClassMgr();
 
-    void						SetApp(TOcApp* app);
+    void                                                SetApp(TOcApp* app);
 
   protected:
     void far* GetFactory(const GUID& clsid, const GUID far& iid);
@@ -263,13 +278,8 @@ class _ICLASS TOcApp : public TUnknown,
     IUnknown*      BService;    // BOle service object & interface
     IBService2*    BServiceI;   //
 
-#if defined(BI_DATA_NEAR)
-    TString&       Name;        // Application name from reglist
-    TOcNameList&   NameList;    // Clipboard format name list
-#else
     TString        Name;
     TOcNameList    NameList;
-#endif
     bool           DisableDlgs; // Server went modal--disable our dialogs
 
   friend class _ICLASS TOcDocument;
@@ -439,6 +449,10 @@ class _OCMCLASS TOcAppFrameHostMsg : public TOcAppFrameHost {
   private:
     HWND   Wnd;
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 //
 inline TOcAppHost::~TOcAppHost()

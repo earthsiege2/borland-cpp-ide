@@ -1,0 +1,30 @@
+#-----------------------------------------------------------------------------
+# Borland C++ - (C) Copyright 1996 by Borland International
+#   examples\vdbt\tdbclass\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN16 WIN32
+
+!ifndef SYSTEM
+SYSTEM = WIN32
+!endif
+
+!ifndef MODEL
+MODEL = d
+!endif
+
+
+!if $(SYSTEM)==WIN16
+MODELS = d l
+USERLIBS =bivbx.lib bdta.lib bdto.lib bdtc.lib ole2w16.lib
+DEFEXE = tdbcls16.def
+!else
+MODELS = d f
+USERLIBS =bivbx32.lib bdtaf.lib bdtof.lib bdtcf.lib ole2w32.lib
+DEFEXE = tdbcls32.def
+!endif
+
+EXE    = tdbclass
+OBJEXE = tdbclass.obj
+USERLIBPATH = $(BCEXAMPLEDIR)\..\lib
+!include $(BCEXAMPLEDIR)\owlmake.gen

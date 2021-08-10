@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 
 #include <stdio.h>
@@ -34,7 +35,7 @@ Description     clears all buffers associated with open input streams,
 Return value    the number of open input and output streams
 
 *---------------------------------------------------------------------*/
-int _FARFUNC flushall(void)
+int _FARFUNC _flushall(void)
 {
     register FILE   *fp;
     register int    Nb;
@@ -52,4 +53,10 @@ int _FARFUNC flushall(void)
         }
 
     return(Cpt);
+}
+
+
+int _FARFUNC flushall(void)
+{
+    return _flushall();
 }

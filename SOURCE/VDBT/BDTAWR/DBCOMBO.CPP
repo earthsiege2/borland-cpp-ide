@@ -3,6 +3,8 @@
 // Copyrights (C) 1996 Borland International
 //--------------------------------------------------------
 
+#include <vdbt/dbcontrl.h>
+#pragma hdrstop
 #include <vdbt/dbcombo.h>
 
 //--------------------------------------------------------
@@ -52,6 +54,11 @@ TDBComboBox::TDBComboBox( TWindow *parent, int resourceId, TModule *module )
 // OWL response table
 //--------------------------------------------------------
 DEFINE_DB_RESPONSE_TABLE1( TDBComboBox, TDBControl )
+  EV_VBXEVENT_CLICK,
+  EV_VBXEVENT_DRAGOVER,
+  EV_VBXEVENT_DRAGDROP,
+  EV_VBXEVENT_ENDDRAG,
+  EV_VBXEVENT_DBLCLICK(    Event_TDBComboBox_DblClick ),
   EV_VBXEVENT_KEYDOWN(     Event_TDBComboBox_KeyDown ),
   EV_VBXEVENT_KEYPRESS(    Event_TDBComboBox_KeyPress ),
   EV_VBXEVENT_KEYUP(       Event_TDBComboBox_KeyUp ),
@@ -67,6 +74,10 @@ END_RESPONSE_TABLE;
 //--------------------------------------------------------
 // Event Handlers
 //--------------------------------------------------------
+DEFINE_DB_EVENT( TDBComboBox, OnClick,     TNotifyEvent,   Event_TDBComboBox_Click );
+DEFINE_DB_EVENT( TDBComboBox, OnDragDrop,  TDragEvent,     Event_TDBComboBox_DragDrop );
+DEFINE_DB_EVENT( TDBComboBox, OnDragOver,  TDragOverEvent, Event_TDBComboBox_DragOver );
+DEFINE_DB_EVENT( TDBComboBox, OnEndDrag,   TDragEvent,     Event_TDBComboBox_EndDrag );
 DEFINE_DB_EVENT( TDBComboBox, OnChange,      TNotifyEvent,      Event_TDBComboBox_Change );
 DEFINE_DB_EVENT( TDBComboBox, OnDblClick,    TNotifyEvent,      Event_TDBComboBox_DblClick );
 DEFINE_DB_EVENT( TDBComboBox, OnDrawItem,    TDrawItemEvent,    Event_TDBComboBox_DrawItem );

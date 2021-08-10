@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Implementation of classes TStorageDocument, TDocFile, and associated streams
 //----------------------------------------------------------------------------
@@ -18,6 +18,12 @@
 # include <owl/stgdoc.h>
 #endif
 #include <stdio.h>
+
+OWL_DIAGINFO;
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 //
 // Simple refcount debug assistant
@@ -101,6 +107,10 @@ class _OWLCLASS_RTL TStorageOutStream : public TStorageStreamBase,
                     TStorageStreamBase(*doc.StorageI,name,     mode) {}
    ~TStorageOutStream() {}
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // class TStorageDocument

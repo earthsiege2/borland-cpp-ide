@@ -46,6 +46,10 @@
 #include "blazer.rh"
 #include "helpids.hh"
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS TMailer;
 class _OWLCLASS TCelArray;
 class _OWLCLASS TImageList;
@@ -54,6 +58,10 @@ class _OWLCLASS THarbor;
 class _OWLCLASS TWinGIdentity;
 class _OWLCLASS TButton;
 class _OWLCLASS TMciWaveAudio;
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //
 // Constants

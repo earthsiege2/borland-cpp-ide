@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     lmmsg.h
@@ -8,10 +10,6 @@ Abstract:
 
     This file contains structures, function prototypes, and definitions
     for the NetMessage API.
-
-Author:
-
-    Dan Lafferty (danl) 10-Mar-1991
 
 [Environment:]
 
@@ -22,18 +20,13 @@ Author:
     You must include NETCONS.H before this file, since this file depends
     on values defined in NETCONS.H.
 
-Revision History:
-
-    10-Mar-1991 danl
-        Created from LM2.0 header files and NT-LAN API Spec.
-
 --*/
 
-/* $Copyright: 1994$ */
+/* $Copyright: 1997$ */
 
 #ifndef _LMMSG_
 #define _LMMSG_
-#define __LMMSG_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,13 +38,13 @@ extern "C" {
 
 NET_API_STATUS NET_API_FUNCTION
 NetMessageNameAdd (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  msgname
+    IN  LPCWSTR  servername,
+    IN  LPCWSTR  msgname
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetMessageNameEnum (
-    IN  LPTSTR      servername,
+    IN  LPCWSTR     servername,
     IN  DWORD       level,
     OUT LPBYTE      *bufptr,
     IN  DWORD       prefmaxlen,
@@ -62,25 +55,25 @@ NetMessageNameEnum (
 
 NET_API_STATUS NET_API_FUNCTION
 NetMessageNameGetInfo (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  msgname,
+    IN  LPCWSTR servername,
+    IN  LPCWSTR msgname,
     IN  DWORD   level,
     OUT LPBYTE  *bufptr
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetMessageNameDel (
-    IN  LPTSTR   servername,
-    IN  LPTSTR   msgname
+    IN  LPCWSTR   servername,
+    IN  LPCWSTR   msgname
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetMessageBufferSend (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  msgname,
-    IN  LPTSTR  fromname,
-    IN  LPBYTE  buf,
-    IN  DWORD   buflen
+    IN  LPCWSTR  servername,
+    IN  LPCWSTR  msgname,
+    IN  LPCWSTR  fromname,
+    IN  LPBYTE   buf,
+    IN  DWORD    buflen
     );
 
 //
@@ -88,13 +81,13 @@ NetMessageBufferSend (
 //
 
 typedef struct _MSG_INFO_0 {
-    LPTSTR  msgi0_name;
+    LPWSTR  msgi0_name;
 }MSG_INFO_0, *PMSG_INFO_0, *LPMSG_INFO_0;
 
 typedef struct _MSG_INFO_1 {
-    LPTSTR  msgi1_name;
+    LPWSTR  msgi1_name;
     DWORD   msgi1_forward_flag;
-    LPTSTR  msgi1_forward;
+    LPWSTR  msgi1_forward;
 }MSG_INFO_1, *PMSG_INFO_1, *LPMSG_INFO_1;
 
 //
@@ -113,4 +106,5 @@ typedef struct _MSG_INFO_1 {
 }
 #endif
 
+#pragma option -b.
 #endif //_LMMSG_

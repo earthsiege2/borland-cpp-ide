@@ -96,7 +96,7 @@ enum ClassLib_errors
     __ElastError   // don't remove
 };
 
-void ClassLib_error( ClassLib_errors, char _FAR *addstr = 0 );
+void ClassLib_error( ClassLib_errors, _TCHAR _FAR *addstr = 0 );
 
 #if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po.

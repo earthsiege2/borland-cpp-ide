@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.11  $
 //
 // Implementation of TFont, an encapsulation of the GDI Font object
 //----------------------------------------------------------------------------
@@ -17,6 +17,7 @@
 # define  DEFAULT_GUI_FONT  17
 #endif
 
+OWL_DIAGINFO;
 DIAG_DECLARE_GROUP(OwlGDI);          // General GDI diagnostic group
 DIAG_DECLARE_GROUP(OwlGDIOrphan);    // Oprhan control tracing group
 
@@ -94,7 +95,7 @@ TFont::TFont(const TFont& src)
 {
 #if !defined(NO_GDI_SHARE_HANDLES)
   Handle = src.Handle;
-  RefAdd(Handle, Pen);
+  RefAdd(Handle, Font);
 #else
   LOGFONT logFont;
   src.GetObject(logFont);
@@ -137,7 +138,8 @@ TFont::GetTextMetrics(TDC& dc) const
 void
 TFont::GetTextMetrics(TEXTMETRIC& tm) const
 {
-  GetTextMetrics(tm, TScreenDC());
+  TScreenDC dc;
+  GetTextMetrics(tm, dc);
 }
 
 //
@@ -148,7 +150,8 @@ TEXTMETRIC
 TFont::GetTextMetrics() const
 {
   TEXTMETRIC tm;
-  GetTextMetrics(tm, TScreenDC());
+  TScreenDC dc;
+  GetTextMetrics(tm, dc);
   return tm;
 }
 
@@ -158,7 +161,8 @@ TFont::GetTextMetrics() const
 TSize
 TFont::GetTextExtent(const char far* text) const
 {
-  return GetTextExtent(TScreenDC(), text);
+  TScreenDC dc;
+  return GetTextExtent(dc, text);
 }
 
 //
@@ -172,6 +176,33 @@ TFont::GetTextExtent(TDC& dc, const char far* text) const
   TSize size = dc.GetTextExtent(text, strlen(text));
   dc.RestoreFont();
   return size;
+}
+
+//
+//  Return the font's name
+//
+const string&
+TFont::GetFaceName() const
+{
+  LOGFONT lf;
+  static string name;
+  if (name.is_null())
+  {
+    GetObject(lf);
+    name = string(lf.lfFaceName);
+  }
+  return name;
+}
+
+//
+//  Return the pitch and family flags for this logical font
+//
+uint8
+TFont::GetPitchAndFamily() const
+{
+  LOGFONT lf;
+  GetObject(lf);
+  return lf.lfPitchAndFamily;
 }
 
 //

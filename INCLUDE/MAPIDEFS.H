@@ -3,39 +3,57 @@
  *
  *  Definitions used by MAPI clients and service providers.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef MAPIDEFS_H
 #define MAPIDEFS_H
+#pragma option -b
 
-#if defined (_WIN32) && !defined (_MAC)  /* Must include WINDOWS.H on Win32 */
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
+
+#if defined (WIN32) && !defined (_WIN32)
+#define _WIN32
+#endif
+
+#if defined (_WIN32) /* Must include WINDOWS.H on Win32 */
 #ifndef _WINDOWS_
 #define INC_OLE2 /* Get the OLE2 stuff */
 #define INC_RPC  /* harmless on Windows NT; Windows 95 needs it */
 #define _INC_OLE /* Windows 95 will include OLE1 without this */
+#pragma option -b.
 #include <windows.h>
+#pragma option -b
 #endif
 
-#ifndef _WINERROR_
+#ifndef _OLEERROR_H_
+#pragma option -b.
 #include <winerror.h>
+#pragma option -b
 #endif
 #ifndef _OBJBASE_H_
+#pragma option -b.
 #include <objbase.h>
+#pragma option -b
 #endif
 #endif
 
-#if defined (WIN16) || defined (DOS) || defined (DOS16) || defined (_MAC)
+#if defined (WIN16) || defined (DOS) || defined (DOS16)
 #ifndef _COMPOBJ_H_
+#pragma option -b.
 #include <compobj.h>
+#pragma option -b
 #endif
 #endif
 
 #ifndef _INC_STDDEF
+#pragma option -b.
 #include <stddef.h>
+#pragma option -b
 #endif
 
 /* Array dimension for structures with variable-sized arrays at the end. */
@@ -56,12 +74,17 @@
 #define STDINITMETHODIMP_(type) type STDMAPIINITCALLTYPE
 #endif
 
+
+#define MAPI_NT_SERVICE     ((ULONG) 0x00010000)  /* Provider is being loaded in an NT service */
+
+
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
 /* Simple data types */
 
+#if !defined (MIDL_PASS) /* MIDL doesn't want to see these */
 
 typedef WORD                WCHAR;
 
@@ -76,6 +99,8 @@ typedef const WCHAR FAR *   LPCWSTR;
 typedef TCHAR FAR *         LPTSTR;
 typedef const TCHAR FAR *   LPCTSTR;
 typedef BYTE FAR *          LPBYTE;
+#endif /* defined MIDL_PASS */
+
 typedef ULONG FAR *         LPULONG;
 
 #ifndef __LHANDLE
@@ -191,6 +216,17 @@ typedef struct _MAPIUID
 
 #define IsEqualMAPIUID(lpuid1, lpuid2)  (!memcmp(lpuid1, lpuid2, sizeof(MAPIUID)))
 
+/*
+ * Constants for one-off entry ID:
+ * The MAPIUID that identifies the one-off provider;
+ * the flag that defines whether the embedded strings are Unicode;
+ * the flag that specifies whether the recipient gets TNEF or not.
+ */
+
+#define MAPI_ONE_OFF_UID { 0x81, 0x2b, 0x1f, 0xa4, 0xbe, 0xa3, 0x10, 0x19, \
+                           0x9d, 0x6e, 0x00, 0xdd, 0x01, 0x0f, 0x54, 0x02 }
+#define MAPI_ONE_OFF_UNICODE        0x8000
+#define MAPI_ONE_OFF_NO_RICH_INFO   0x0001
 
 /* Object type */
 
@@ -364,28 +400,28 @@ typedef struct _SPropValue  SPropValue;
 #define _CY_DEFINED
 #if (defined (WIN16) || defined (DOS)) && !defined (_VARIANT_H_)
 typedef struct FARSTRUCT tagCY {
-#ifdef _MAC          
+#ifdef _MAC
         long      Hi;
-        long Lo;     
-#else                
+        long Lo;
+#else
         unsigned long Lo;
         long      Hi;
-#endif               
+#endif
 } CY;
 #elif defined (_WIN32)
 /* real definition that makes the C++ compiler happy */
 typedef union tagCY {
-    struct {         
-#ifdef _MAC          
+    struct {
+#ifdef _MAC
         long      Hi;
-        long Lo;     
-#else                
+        long Lo;
+#else
         unsigned long Lo;
         long      Hi;
-#endif               
-    };               
-    LONGLONG int64;  
-} CY;                
+#endif
+    };
+    LONGLONG int64;
+} CY;
 #endif /* 16-bit vs 32-bit definition */
 #endif
             /* size is 8 */
@@ -699,7 +735,7 @@ typedef FREEBUFFER FAR *    LPFREEBUFFER;
 /* Pointers to MAPI Interfaces --------------------------------------------- */
 
 typedef const IID FAR * LPCIID;
-             
+
 DECLARE_MAPI_INTERFACE_PTR(IMsgStore,       LPMDB);
 DECLARE_MAPI_INTERFACE_PTR(IMAPIFolder,     LPMAPIFOLDER);
 DECLARE_MAPI_INTERFACE_PTR(IMessage,        LPMESSAGE);
@@ -910,7 +946,7 @@ typedef NOTIFCALLBACK FAR * LPNOTIFCALLBACK;
 #define     INTERFACE   IMAPIProgress
 DECLARE_MAPI_INTERFACE_(IMAPIProgress, IUnknown)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROGRESS_METHODS(PURE)
 };
@@ -1045,7 +1081,7 @@ typedef struct _MAPINAMEID
 #define      INTERFACE  IMAPIProp
 DECLARE_MAPI_INTERFACE_(IMAPIProp, IUnknown)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
 };
@@ -1376,7 +1412,7 @@ typedef struct _SRestriction
 #define      INTERFACE  IMAPITable
 DECLARE_MAPI_INTERFACE_(IMAPITable, IUnknown)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPITABLE_METHODS(PURE)
 };
@@ -1396,7 +1432,7 @@ DECLARE_MAPI_INTERFACE_(IMAPITable, IUnknown)
 #define      INTERFACE  IProfSect
 DECLARE_MAPI_INTERFACE_(IProfSect, IMAPIProp)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IPROFSECT_METHODS(PURE)
@@ -1499,7 +1535,7 @@ DECLARE_MAPI_INTERFACE_(IProfSect, IMAPIProp)
 #define      INTERFACE  IMAPIStatus
 DECLARE_MAPI_INTERFACE_(IMAPIStatus, IMAPIProp)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IMAPISTATUS_METHODS(PURE)
@@ -1566,7 +1602,7 @@ DECLARE_MAPI_INTERFACE_(IMAPIStatus, IMAPIProp)
 #define      INTERFACE  IMAPIContainer
 DECLARE_MAPI_INTERFACE_(IMAPIContainer, IMAPIProp)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IMAPICONTAINER_METHODS(PURE)
@@ -1612,7 +1648,7 @@ typedef struct _flaglist
 /* ResolveNames() - rgulFlags */
 #define MAPI_UNRESOLVED         ((ULONG) 0x00000000)
 #define MAPI_AMBIGUOUS          ((ULONG) 0x00000001)
-#define MAPI_RESOLVED           ((ULONG) 0x00000002) 
+#define MAPI_RESOLVED           ((ULONG) 0x00000002)
 
 
 #define MAPI_IABCONTAINER_METHODS(IPURE)                                \
@@ -1639,7 +1675,7 @@ typedef struct _flaglist
 #define      INTERFACE  IABContainer
 DECLARE_MAPI_INTERFACE_(IABContainer, IMAPIContainer)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IMAPICONTAINER_METHODS(PURE)
@@ -1712,6 +1748,16 @@ DECLARE_MAPI_INTERFACE_(IABContainer, IMAPIContainer)
 #define MAPI_DIAG_SECURE_MESSAGING_ERROR            MAPI_DIAG( 46 )
 #define MAPI_DIAG_DOWNGRADING_IMPOSSIBLE            MAPI_DIAG( 47 )
 
+/* Values of PR_DELIVERY_POINT (MH_T_DELIVERY_POINT) */
+
+#define MAPI_MH_DP_PUBLIC_UA                        ((ULONG) 0)
+#define MAPI_MH_DP_PRIVATE_UA                       ((ULONG) 1)
+#define MAPI_MH_DP_MS                               ((ULONG) 2)
+#define MAPI_MH_DP_ML                               ((ULONG) 3)
+#define MAPI_MH_DP_PDAU                             ((ULONG) 4)
+#define MAPI_MH_DP_PDS_PATRON                       ((ULONG) 5)
+#define MAPI_MH_DP_OTHER_AU                         ((ULONG) 6)
+
 
 #define MAPI_IMAILUSER_METHODS(IPURE)
 
@@ -1719,7 +1765,7 @@ DECLARE_MAPI_INTERFACE_(IABContainer, IMAPIContainer)
 #define      INTERFACE  IMailUser
 DECLARE_MAPI_INTERFACE_(IMailUser, IMAPIProp)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IMAILUSER_METHODS(PURE)
@@ -1751,7 +1797,7 @@ DECLARE_MAPI_INTERFACE_(IMailUser, IMAPIProp)
 #define      INTERFACE  IDistList
 DECLARE_MAPI_INTERFACE_(IDistList, IMAPIContainer)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IMAPICONTAINER_METHODS(PURE)
@@ -1803,10 +1849,12 @@ DECLARE_MAPI_INTERFACE_(IDistList, IMAPIContainer)
 /* SetReadFlags */
 
 /****** SUPPRESS_RECEIPT        ((ULONG) 0x00000001) below */
-/****** MESSAGE_DIALOG          ((ULONG) 0x00000002) above */
+/****** FOLDER_DIALOG           ((ULONG) 0x00000002) above */
 /****** CLEAR_READ_FLAG         ((ULONG) 0x00000004) below */
 /****** MAPI_DEFERRED_ERRORS    ((ULONG) 0x00000008) below */
-#define GENERATE_RECEIPT_ONLY   ((ULONG) 0x00000010)
+/****** GENERATE_RECEIPT_ONLY   ((ULONG) 0x00000010) below */
+/****** CLEAR_RN_PENDING        ((ULONG) 0x00000020) below */
+/****** CLEAR_NRN_PENDING       ((ULONG) 0x00000040) below */
 
 
 /* GetMessageStatus */
@@ -1899,7 +1947,7 @@ DECLARE_MAPI_INTERFACE_(IDistList, IMAPIContainer)
 #define      INTERFACE  IMAPIFolder
 DECLARE_MAPI_INTERFACE_(IMAPIFolder, IMAPIContainer)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IMAPICONTAINER_METHODS(PURE)
@@ -1923,6 +1971,8 @@ DECLARE_MAPI_INTERFACE_(IMAPIFolder, IMAPIContainer)
 #define STORE_RTF_OK            ((ULONG) 0x00000800)
 #define STORE_RESTRICTION_OK    ((ULONG) 0x00001000)
 #define STORE_SORT_OK           ((ULONG) 0x00002000)
+#define STORE_PUBLIC_FOLDERS    ((ULONG) 0x00004000)
+#define STORE_UNCOMPRESSED_RTF  ((ULONG) 0x00008000)
 
 /* PR_STORE_STATE bits, try not to collide with PR_STORE_SUPPORT_MASK */
 
@@ -2036,7 +2086,7 @@ DECLARE_MAPI_INTERFACE_(IMAPIFolder, IMAPIContainer)
 #define      INTERFACE  IMsgStore
 DECLARE_MAPI_INTERFACE_(IMsgStore, IMAPIProp)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IMSGSTORE_METHODS(PURE)
@@ -2058,6 +2108,8 @@ DECLARE_MAPI_INTERFACE_(IMsgStore, IMAPIProp)
 #define MSGFLAG_FROMME          ((ULONG) 0x00000020)
 #define MSGFLAG_ASSOCIATED      ((ULONG) 0x00000040)
 #define MSGFLAG_RESEND          ((ULONG) 0x00000080)
+#define MSGFLAG_RN_PENDING      ((ULONG) 0x00000100)
+#define MSGFLAG_NRN_PENDING     ((ULONG) 0x00000200)
 
 /* Flags defined in PR_SUBMIT_FLAGS */
 
@@ -2082,7 +2134,9 @@ DECLARE_MAPI_INTERFACE_(IMsgStore, IMAPIProp)
 #define SUPPRESS_RECEIPT        ((ULONG) 0x00000001)
 #define CLEAR_READ_FLAG         ((ULONG) 0x00000004)
 /****** MAPI_DEFERRED_ERRORS    ((ULONG) 0x00000008) below */
-/****** GENERATE_RECEIPT_ONLY   ((ULONG) 0x00000010) above */
+#define GENERATE_RECEIPT_ONLY   ((ULONG) 0x00000010)
+#define CLEAR_RN_PENDING        ((ULONG) 0x00000020)
+#define CLEAR_NRN_PENDING       ((ULONG) 0x00000040)
 
 /* DeleteAttach */
 
@@ -2142,7 +2196,7 @@ DECLARE_MAPI_INTERFACE_(IMsgStore, IMAPIProp)
 #define      INTERFACE  IMessage
 DECLARE_MAPI_INTERFACE_(IMessage, IMAPIProp)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IMESSAGE_METHODS(PURE)
@@ -2166,7 +2220,7 @@ DECLARE_MAPI_INTERFACE_(IMessage, IMAPIProp)
 #define      INTERFACE  IAttach
 DECLARE_MAPI_INTERFACE_(IAttach, IMAPIProp)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPIPROP_METHODS(PURE)
     MAPI_IATTACH_METHODS(PURE)
@@ -2220,6 +2274,7 @@ DECLARE_MAPI_INTERFACE_(IAttach, IMAPIProp)
 /*  For folder hierarchy tables */
 #define DT_FOLDER           ((ULONG) 0x01000000)
 #define DT_FOLDER_LINK      ((ULONG) 0x02000000)
+#define DT_FOLDER_SPECIAL   ((ULONG) 0x04000000)
 
 /*  Accelerator callback for DIALOG_SDI form of AB UI */
 typedef BOOL (STDMETHODCALLTYPE ACCELERATEABSDI)(ULONG ulUIParam,
@@ -2321,7 +2376,7 @@ typedef struct _ADRPARM
 #define      INTERFACE  IMAPIControl
 DECLARE_MAPI_INTERFACE_(IMAPIControl, IUnknown)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IMAPICONTROL_METHODS(PURE)
 };
@@ -2549,7 +2604,7 @@ typedef struct _DTBLMVDDLBX
     ULONG ulMVPropTag;
 } DTBLMVDDLBX, FAR * LPDTBLMVDDLBX;
 
-    
+
 
 
 
@@ -2596,7 +2651,7 @@ typedef struct _DTBLMVDDLBX
 #define      INTERFACE  IProviderAdmin
 DECLARE_MAPI_INTERFACE_(IProviderAdmin, IUnknown)
 {
-    BEGIN_INTERFACE 
+    BEGIN_INTERFACE
     MAPI_IUNKNOWN_METHODS(PURE)
     MAPI_IPROVIDERADMIN_METHODS(PURE)
 };
@@ -2608,7 +2663,10 @@ DECLARE_MAPI_INTERFACE_(IProviderAdmin, IUnknown)
 #endif
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif /* MAPIDEFS_H */

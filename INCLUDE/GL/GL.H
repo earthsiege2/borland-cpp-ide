@@ -12,9 +12,9 @@ Abstract:
 --*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1994, 1996 by Borland International
+ *      Copyright (c) 1994, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -22,6 +22,7 @@ Abstract:
 #ifndef __GL_H__
 #define __GL_H__
 #define __GL_H
+#pragma option -b
 
 /*
 ** Copyright 1991-1993, Silicon Graphics, Inc.
@@ -1139,4 +1140,5 @@ WINGDIAPI void APIENTRY glViewport (GLint x, GLint y, GLsizei width, GLsizei hei
 #ifdef __cplusplus
 }
 #endif
+#pragma option -b.
 #endif /* __GL_H__ */

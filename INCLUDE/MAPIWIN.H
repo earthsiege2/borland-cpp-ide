@@ -17,7 +17,7 @@
  *  The third section simply defines a few conventions
  *  (simplifications) for common operations.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 /*
@@ -57,12 +57,21 @@
 
 #ifndef __MAPIWIN_H__
 #define __MAPIWIN_H__
-
-#include "mapinls.h"
+#pragma option -b
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
+
+#if defined (WIN32) && !defined (_WIN32)
+#define _WIN32
+#endif
+
+#pragma option -b.
+#include "mapinls.h"
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -88,7 +97,7 @@ LPVOID FAR PASCAL   PvGetVerifyInstanceGlobals(DWORD dwPid);
 LPVOID FAR PASCAL   PvSlowGetInstanceGlobals(DWORD dwPid);
 BOOL __export FAR PASCAL FCleanupInstanceGlobals(WORD, DWORD);
 
-#elif defined(_MAC)  /* !WIN16 */
+#elif defined(_MAC) /* !WIN16 */
 
 #define MULDIV(x,y,z)               MulDiv(x,y,z)
 
@@ -115,8 +124,10 @@ extern LPVOID pinstX;
 
 #if defined(_WIN32) && !defined(_MAC)
 #define szMAPIDLLSuffix     "32"
-#elif defined(WIN16) || defined(DOS) || defined(_MAC)
+#elif defined(WIN16) || defined(DOS)
 #define szMAPIDLLSuffix     ""
+#elif  defined(_MAC)
+#define szMAPIDLLSuffix     "M"
 #else
 #error "Don't know the suffix for DLLs on this platform"
 #endif
@@ -127,7 +138,7 @@ extern LPVOID pinstX;
 /*  or the other.               */
 /********************************/
 
-#if !defined(_WIN32)
+#if !defined(_WIN32) 
 #define ZeroMemory(pb,cb)           memset((pb),0,(cb))
 #define FillMemory(pb,cb,b)         memset((pb),(b),(cb))
 #define CopyMemory(pbDst,pbSrc,cb)  do                              \
@@ -145,7 +156,9 @@ extern LPVOID pinstX;
 #if defined(WIN16) || defined(_MAC)
 
 #ifndef _MAC
+#pragma option -b.
 #include <error.h>              /*  for GetLastError() */
+#pragma option -b
 #endif
 
 typedef int                 INT;
@@ -261,7 +274,7 @@ typedef struct _TIME_ZONE_INFORMATION {
  *
  *  Due to the mappings we cannot pass them through directly,
  *  so we will have to use a conversion within APIs that test
- *  these bits.  It would be best to use the WIN32 #defines
+ *  these bits.  It would be best to use the Win32 #defines
  *  for these flags and convert as needed in the APIs.
  */
 #define GENERIC_READ                (0x80000000) /* from WINNT.H */
@@ -325,7 +338,13 @@ DWORD WINAPI    GetFileAttributes(LPCSTR lpFileName);
 DWORD WINAPI    GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh);
 BOOL WINAPI     GetFileTime(HANDLE hFile, FILETIME FAR *lpftCreation,
                 FILETIME FAR *lpftLastAccess, FILETIME FAR *lpftLastWrite);
+BOOL WINAPI     SetFileTime(HANDLE hFile, const FILETIME FAR *lpftCreation,
+                const FILETIME FAR *lpftLastAccess,
+                const FILETIME FAR *lpftLastWrite);
 #ifndef _MAC
+/*  IsTask can crash - here's a safer one.  */
+BOOL WINAPI     FIsTask(HTASK hTask);
+
 HANDLE WINAPI   CreateFile(LPCSTR lpFileName, DWORD dwDesiredAccess,
                 DWORD dwShareMode, LPVOID lpSecurityAttributes,
                 DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes,
@@ -418,9 +437,12 @@ BOOL WINAPI IsBadBoundedStringPtr(const void FAR* lpsz, UINT cchMax);
 #ifdef __cplusplus
 }
 #endif
+
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
-
+#pragma option -b.
 #endif /* __MAPIWIN_H__ */

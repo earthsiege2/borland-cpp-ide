@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <ntbc.h>
 
@@ -168,7 +169,7 @@ Returns
                 ECHILD - No child exists or the 'pid' value is bad.
 *--------------------------------------------------------------------------*/
 
-int _RTLENTRY _cwait(int *term_stat, int pid, int action)
+int _RTLENTRY _EXPFUNC _cwait(int *term_stat, int pid, int action)
 {
     DWORD   ret, exitcode;
     int     index, rc;

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.12  $
+//$Revision:   10.19  $
 //
 // Implementation of classes TGadget, TSeparatorGadget and TSizeGripGadget
 //----------------------------------------------------------------------------
@@ -22,6 +22,8 @@
 #if !defined(WINSYS_UIMETRIC_H)
 # include <winsys/uimetric.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if defined(BI_NO_RTTI)
   IMPLEMENT_CASTABLE1(TGadget, TStreamableBase);
@@ -293,8 +295,7 @@ TGadget::Created()
   // Register ourself with the tooltip window (if there's one)
   //
   TTooltip* tooltip = Window->GetTooltip();
-  if (tooltip) {
-    CHECK(tooltip->GetHandle());
+  if (tooltip && tooltip->IsWindow()) {
 
     // Don't register gadget's with Id's of 0 or -1.
     // Typically, 0 is reserved by separators and -1 could
@@ -325,8 +326,7 @@ TGadget::Removed()
   //
   if (Window && Window->GetHandle()) {
     TTooltip* tooltip = Window->GetTooltip();
-    if (tooltip) {
-      CHECK(tooltip->GetHandle());
+    if (tooltip && tooltip->IsWindow()) {
 
       // Don't bother with gadgets with Id's of 0 or -1.
       // Typically, 0 is reserved by separators and -1 could
@@ -350,8 +350,7 @@ TGadget::Moved()
   //
   if (Window && Window->GetHandle()) {
     TTooltip* tooltip = Window->GetTooltip();
-    if (tooltip) {
-      CHECK(tooltip->GetHandle());
+    if (tooltip && tooltip->IsWindow()) {
 
       // Don't bother with gadgets with Id's of 0 or -1.
       // Typically, 0 is reserved by separators and -1 could
@@ -363,13 +362,25 @@ TGadget::Moved()
         //
         TToolInfo ti(true);
         ti.SetToolInfo(*Window, Id);
-        tooltip->GetToolInfo(ti);
+        if (tooltip->GetToolInfo(ti)) {
 
-        // Update the tooltip info if we've moved
-        //
-        if (TRect(ti.rect) != Bounds) {
-          tooltip->NewToolRect(TToolInfo(Window->GetHandle(), Bounds, Id));
+          // Update the tooltip info if we've moved
+          //
+          if (TRect(ti.rect) != Bounds)
+            tooltip->NewToolRect(TToolInfo(Window->GetHandle(), Bounds, Id));
         }
+
+#if 0   // POSSIBLE ENHANCEMENT /////////////////////////////////////////////
+        // If the tool information could not be retrieved, should we just
+        // go ahead and add a brand new tool? We should really never get
+        // here unless the tooltip of the gadget window was manipulated
+        // behind our back or replaced with a new one...
+        //
+        else {
+          TToolInfo toolInfo(Window->GetHandle(), Bounds, Id);
+          tooltip->AddTool(toolInfo);
+        }
+#endif  /////////////////////////////////////////////////////////////////////
       }
     }
   }
@@ -420,14 +431,12 @@ TGadget::PaintBorder(TDC& dc)
     int  yB = TUIMetric::CyBorder;
 
     if (BorderStyle == Plain) {
-      dc.OWLFastWindowFrame(TBrush(TColor::SysWindowFrame),
+      TBrush winBr(TColor::SysWindowFrame);
+      dc.OWLFastWindowFrame(winBr,
                             TRect(0, 0, Bounds.Width(), Bounds.Height()),
                             xB, yB);
     }
     else {
-      TBrush  highlight(TColor::Sys3dHilight);
-      TBrush  shadow(TColor::Sys3dShadow);
-
       // Use the 1:1 mapping of BorderStyle to TUIBorder::TStyle
       //
       TRect boundsRect(0,0,Bounds.Width(),Bounds.Height());
@@ -536,15 +545,14 @@ TGadget::MouseLeave(uint /*modKeys*/, TPoint&)
   // messages.
   //
   TTooltip* tooltip = Window->GetTooltip();
-  if (tooltip) {
-    CHECK(tooltip->GetHandle());
+  if (tooltip && tooltip->IsWindow()) {
 
     TPoint crsPoint;
     GetCursorPos(&crsPoint);
     HWND hwnd = WindowFromPoint(crsPoint);
-    if (hwnd) 
+    if (hwnd)
       ::MapWindowPoints(HWND_DESKTOP, hwnd, LPPOINT(&crsPoint), 1);
-    else 
+    else
       hwnd = GetDesktopWindow();
 
     MSG msg;
@@ -574,6 +582,26 @@ TGadget::LButtonUp(uint /*modKeys*/, TPoint&)
 {
   if (TrackMouse)
     Window->GadgetReleaseCapture(*this);
+}
+
+//
+//
+//
+void
+TGadget::RButtonDown(uint /*modKeys*/, TPoint&)
+{
+  // TGadget does nothing with right mouse messages.
+  // However, a derived gadgets may catch this event
+}
+
+//
+//
+//
+void
+TGadget::RButtonUp(uint /*modKeys*/, TPoint&)
+{
+  // TGadget does nothing with right mouse messages.
+  // However, a derived gadgets may catch this event
 }
 
 //----------------------------------------------------------------------------
@@ -617,6 +645,10 @@ TSizeGripGadget::TSizeGripGadget(int id)
                    TUIMetric::CxHScroll :
                    TUIMetric::CyVScroll, id)
 {
+  // Enable gadget so mouse hit testing handler will let cursor change
+  // when user moves over the size grip.
+  //
+  SetEnabled(true);
 }
 
 //

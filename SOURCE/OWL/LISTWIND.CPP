@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.10  $
+//$Revision:   10.17  $
 //
 // Implementation of TListWindow and support classes
 //----------------------------------------------------------------------------
@@ -13,6 +13,8 @@
 #if !defined(WINSYS_SYSTEM_H)
 # include <winsys/system.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // Constructor that creates a window
@@ -26,7 +28,7 @@ TListWindow::TListWindow(TWindow* parent, int id,
     throw TXCommCtrl();
 
 #if defined(BI_PLAT_WIN32)
-  if (TSystem::IsWin95())
+  if (TSystem::Has3dUI())
     Attr.ExStyle |= WS_EX_CLIENTEDGE;
 #endif
 }
@@ -187,50 +189,43 @@ TLwHitTestInfo::SetPoint(TPoint& p)
 // TListWindItem
 
 //
-// Private Init to zero out data members.
+// Create an item structure used primarily for retrieving information about
+// existing items within a Listview control.
 //
-void
-TListWindItem::Init()
-{
-  mask       = 0;
-  iItem      = 0;
-  iSubItem   = 0;
-  state      = 0;
-  stateMask  = 0;
-  pszText    = 0;
-  cchTextMax = 0;
-  iImage     = 0;
-  lParam     = 0;
-}
-
-//
-// Default constructor
-//
-TListWindItem::TListWindItem()
+TListWindItem::TListWindItem(uint msk /*= LVIF_ALL*/,
+                             bool allocCache /*= true*/)
 {
   Init();
+  mask = msk;
+  if (allocCache) {
+    AllocCache(true);
+  }
 }
 
 //
 // Construct based on an existing structure.
 //
-TListWindItem::TListWindItem(LV_ITEM item)
+TListWindItem::TListWindItem(const LV_ITEM& item)
 {
-  mask       = item.mask;
-  iItem      = item.iItem;
-  iSubItem   = item.iSubItem;
-  state      = item.state;
-  stateMask  = item.stateMask;
-  pszText    = item.pszText;
-  cchTextMax = item.cchTextMax;
-  iImage     = item.iImage;
-  lParam     = item.lParam;
+  // First do a shallow copy
+  //
+  *((LV_ITEM*)this) = item;
+
+  // Deep copy text, if necessary
+  //
+  if( (item.mask & LVIF_TEXT) &&
+      item.pszText &&
+      item.pszText != LPSTR_TEXTCALLBACK )
+  {
+    AllocCache();
+    strncpy(pszText, item.pszText, _MAX_PATH);
+  }
 }
 
 //
 // Construct based on text, column number, and length of text.
 //
-TListWindItem::TListWindItem(char far* text, int subItem, int len)
+TListWindItem::TListWindItem(const char* text, int subItem, int len)
 {
   Init();
   SetText(text, len);
@@ -238,10 +233,44 @@ TListWindItem::TListWindItem(char far* text, int subItem, int len)
 }
 
 //
+//
+//
+TListWindItem::TListWindItem(const TListWindow& ctl, int index, int subItem,
+                             uint msk /*= LVIF_ALL*/)
+{
+  PRECONDITION(ctl.GetHandle());
+  Init();
+  mask = msk;
+
+  // Allocate room for text if we're retrieving it
+  //
+  if (mask & LVIF_TEXT) {
+    AllocCache();
+  }
+  ctl.GetItem(*this, index, subItem);
+}
+
+//
+//
+//
+TListWindItem::~TListWindItem()
+{
+  // Cache's self-cleaning
+}
+
+// Clear out all members
+//
+void
+TListWindItem::Init()
+{
+  memset((LV_ITEM*)this, 0, sizeof(LV_ITEM));
+}
+
+//
 // Returns the text of the item.
 //
 void
-TListWindItem::GetText(char far* buffer, int size)
+TListWindItem::GetText(char* buffer, int size) const
 {
   if (mask & LVIF_TEXT) {
     strncpy(buffer, pszText, size);
@@ -252,11 +281,11 @@ TListWindItem::GetText(char far* buffer, int size)
 // Sets the text buffer.
 //
 void
-TListWindItem::SetText(char far* buffer, int size)
+TListWindItem::SetText(const char* buffer, int size)
 {
   mask |= LVIF_TEXT;
-  pszText = buffer;
-  cchTextMax = (size == 0) ? strlen(buffer) : size;
+  pszText = CONST_CAST(char*, buffer);
+  cchTextMax = ((size != 0) ? size : (buffer ? lstrlen(buffer) : 0));
 }
 
 //
@@ -366,47 +395,96 @@ TListWindItem::SetStateImage(int index)
   state = INDEXTOSTATEIMAGEMASK(index+1);
 }
 
+//
+//
+//
+void
+TListWindItem::AllocCache(bool setpszText /*= true*/)
+{
+  Cache = new char[_MAX_PATH];
+  if (setpszText)
+    SetText(Cache, _MAX_PATH);
+}
+
+//
+//
+//
+void
+TListWindItem::FlushCache()
+{
+  Cache = 0;
+}
+
 //----------------------------------------------------------------------------
 // TListWindColumn
 
 //
-// Private Init to zero out data members.
+// Constructs a TListWindColumn object used to retrieve information about
+// an existing column. For example,
+//    TListWindColumn col;
+//    ListWnd->GetColumn(1, col);
+//    ShowString(col.GetText()
 //
-void
-TListWindColumn::Init()
+TListWindColumn::TListWindColumn(uint flags /*= 0*/, int subItem /*= 0*/)
 {
-  mask       = 0;
-  fmt        = 0;
-  cx         = 0;
-  pszText    = 0;
-  cchTextMax = 0;
-  iSubItem   = 0;
+  Init();
+  mask = flags;
+  SetSubItem(subItem);
+  if (flags & LVCF_TEXT)
+    AllocCache();
+}
+
+//
+//
+//
+TListWindColumn::TListWindColumn(const TListWindow& ctl, int index,
+                                 uint flags  /*= LVCF_ALL*/,
+                                 int subItem /*= 0 */)
+{
+  PRECONDITION(ctl.GetHandle());
+  Init();
+  mask = flags;
+  SetSubItem(subItem);
+  if (flags & LVCF_TEXT)
+    AllocCache();
+  ctl.GetColumn(index, *this);
 }
 
 //
 // Construct based on the text, width of the column, alignment, and column number
 //
-TListWindColumn::TListWindColumn(char far* text, int width, TFormat how, int subItem)
+TListWindColumn::TListWindColumn(char* text, int width,
+                                 TFormat how /*= Left*/,
+                                 int subItem /*= 0*/)
 {
   Init();
   SetText(text);
   SetFormat(how);
-  SetWidth(width);
+  SetWidth(width, text);
   SetSubItem(subItem);
 }
 
 //
-// Default constructor
 //
-TListWindColumn::TListWindColumn()
+//
+TListWindColumn::~TListWindColumn()
 {
-  Init();
+  // Cache's self-cleaning
+}
+
+//
+//
+//
+void
+TListWindColumn::Init()
+{
+  memset((LV_COLUMN*)this, 0, sizeof(LV_COLUMN));
 }
 
 //
 // Construct based on exising structure.
 //
-TListWindColumn::TListWindColumn(LV_COLUMN column)
+TListWindColumn::TListWindColumn(const LV_COLUMN& column)
 {
   mask       = column.mask;
   fmt        = column.fmt;
@@ -420,11 +498,11 @@ TListWindColumn::TListWindColumn(LV_COLUMN column)
 // Sets the text and buffer size of the column
 //
 void
-TListWindColumn::SetText(char far* text, int size)
+TListWindColumn::SetText(const char* text, int size)
 {
   mask      |= LVCF_TEXT;
-  pszText    = text;
-  cchTextMax = (size == 0) ? strlen(text) : size;
+  pszText    = CONST_CAST(char*, text);
+  cchTextMax = (size != 0) ? size : (text ? lstrlen(text) : 0);
 }
 
 //
@@ -439,12 +517,29 @@ TListWindColumn::SetFormat(TFormat how)
 
 //
 // Sets the width of the column
+// NOTE: Will compute a default width using the system's default GUI
+//       font and the text parameter if 'pixels=0' and 'txt != 0'.
 //
 void
-TListWindColumn::SetWidth(int pixels)
+TListWindColumn::SetWidth(int pixels, char* txt /*= 0*/)
 {
   mask |= LVCF_WIDTH;
-  cx    = pixels;
+
+  if (pixels) {
+    // Use user provided size
+    //
+    cx = pixels;
+  } else if (txt) {
+
+    // Compute from text - if provided
+    //
+    cx = TDefaultGUIFont().GetTextExtent(txt).cx;
+  } else {
+
+    // Should we use a better default width ??
+    //
+    cx = 0;
+  }
 }
 
 //
@@ -455,6 +550,32 @@ TListWindColumn::SetSubItem(int item)
 {
   mask    |= LVCF_SUBITEM;
   iSubItem = item;
+}
+
+//
+//
+//
+void
+TListWindColumn::AllocCache(bool setpszText /*= true*/)
+{
+  Cache = new char[_MAX_PATH];
+  if (setpszText)
+    SetText(Cache, _MAX_PATH);
+}
+
+//
+//
+//
+void
+TListWindColumn::FlushCache()
+{
+  // First make sure 'pszText' does not point to dangling memory
+  //
+  if (pszText == Cache) {
+    pszText = 0;
+    mask &= ~LVCF_TEXT;
+  }
+  Cache = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -507,30 +628,152 @@ TListWindow::SortItems(const TLwComparator& comparator, uint32 lParam)
   TListCompareThunk ct;
   ct.This = &comparator;
   ct.ItemData = lParam;
-  return ToBool(SendMessage(LVM_SORTITEMS, TParam1(OwlListViewCompare), lParam));
+  return ToBool(SendMessage(LVM_SORTITEMS, TParam1(&ct), TParam2(OwlListViewCompare)));
 }
 
-IMPLEMENT_STREAMABLE1(TListWindow, TControl);
-
-#if !defined(BI_NO_OBJ_STREAMING)
-
 //
-// Reads an instance of TListWindow from the passed ipstream
+// Return the number of items currently selected.
+// (Useful before calling GetSelIndexes.)
 //
-void*
-TListWindow::Streamer::Read(ipstream& is, uint32 /*version*/) const
+int
+TListWindow::GetSelCount() const
 {
-  ReadBaseObject((TControl*)GetObject(), is);
-  return GetObject();
+  return CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETSELECTEDCOUNT);
 }
 
 //
-// Writes the TListWindow to the passed opstream
+//  Fill an integer array with indexes of selected items.
+//  (Note GetSelCount returns the number of selected items.)
+//  Returns the number of indexes placed in the indexes array.
+//  If the list view uses the LVS_SINGLESEL, multiple selection
+//  has been disabled and the function returns -1.
 //
-void
-TListWindow::Streamer::Write(opstream& os) const
+int
+TListWindow::GetSelIndexes(int* indexes, int maxCount) const
 {
-  WriteBaseObject((TControl*)GetObject(), os);
+  int count = 0;                  // number of selected items found
+
+  if (GetStyle() & LVS_SINGLESEL)
+    return -1;
+
+  // get index of first selected item
+  //
+  int index = CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETNEXTITEM,
+          TParam1(-1), MkParam2(LVNI_ALL|LVNI_SELECTED, 0));
+
+  // while index indicates a selected item
+  //
+  while (index != -1) {
+    indexes[count] = index;
+    count++;
+    if (count > maxCount)
+      break;
+
+    // get next selected item
+    //
+    index = CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETNEXTITEM,
+            TParam1(index), MkParam2(LVNI_ALL|LVNI_SELECTED, 0));
+  }
+
+  return count;
 }
 
-#endif
+//
+// Fill an array with strings from the selected items.
+// maxCount is the size of the strs[] array.  maxChars is
+// the size of each array element.  subItem indicates which
+// item string to return.
+//
+// Return the number of strings retrieved, or -1 for errors.
+//
+int
+TListWindow::GetSelStrings(char far** strs, int maxCount, int maxChars,
+  int subItem /*=0*/) const
+{
+  // This function is for multiselect list views only.
+  //
+  if (GetStyle() & LVS_SINGLESEL)
+    return -1;
+
+  // get index of first selected item
+  //
+  int index = CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETNEXTITEM,
+          TParam1(-1), MkParam2(LVNI_ALL|LVNI_SELECTED, 0));
+
+  // loop through selected items
+  //
+  int count = 0;
+  while (index != -1) {
+    CONST_CAST(TListWindow*, this)->GetItemText(index, subItem,
+      strs[count], maxChars);
+    count++;
+    if (count > maxCount)
+      break;
+
+    // get next selected item
+    //
+    index = CONST_CAST(TListWindow*, this)->SendMessage(LVM_GETNEXTITEM,
+            TParam1(index), MkParam2(LVNI_ALL|LVNI_SELECTED, 0));
+  }
+
+  return count;
+}
+
+//
+//  Determine selection state of an item.
+//  Return true if the item is selected.
+//
+bool
+TListWindow::IsSelected(int index) const
+{
+  return CONST_CAST(TListWindow*, this)->GetItemState(index, LVIS_SELECTED);
+}
+
+//
+//  Select or deselect an item.
+//  Returns true for success.
+//
+bool
+TListWindow::SetSel(int index, bool select)
+{
+  return SetItemState(index, select ? LVIS_SELECTED : 0, LVIS_SELECTED);
+}
+
+//
+//  Select or deselect all the items whose indexes appear in indexes[]
+//  Returns true for success.
+//
+bool
+TListWindow::SetSelIndexes(int* indexes, int count, bool select)
+{
+  // This command is only for multiselect list views.
+  //
+  if (GetStyle() & LVS_SINGLESEL)
+    return false;
+
+  for (int i = 0; i < count; i++)
+    if (!SetSel(indexes[i], select))
+      return false;
+
+  return true;
+}
+
+//
+//  Select or deselect all the items in the given range.
+//  Returns true for success.
+//
+bool
+TListWindow::SetSelItemRange(bool select, int first, int last)
+{
+  // This command is only for multiselect list views.
+  //
+  if (GetStyle() & LVS_SINGLESEL)
+    return false;
+
+  for (int i = first; i <= last; i++)
+    if (!SetSel(i, select))
+      return false;
+
+  return true;
+}
+

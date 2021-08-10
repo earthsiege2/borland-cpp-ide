@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of TOleDocument. Doc/View document that supports OLE 2
 // using OCF TOcDocument
@@ -30,6 +30,8 @@
 #if !defined(OWL_OLEVIEW_H)
 # include <owl/oleview.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 //

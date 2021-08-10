@@ -5,12 +5,13 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.1  $ */
 
 
 #if !defined(___DEFS_H)
@@ -71,7 +72,7 @@ void _RTLENTRY _EXPFUNC __assertfail(char * __msg, char * __cond,
                                      char * __file, int __line);
 
 #ifdef  __cplusplus
-}                                  
+}
 #endif
 
 #undef assert

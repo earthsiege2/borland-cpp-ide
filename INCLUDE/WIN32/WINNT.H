@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0093     Increment this if a change has global effects
 
-Copyright (c) 1990-1995  Microsoft Corporation
+Copyright (c) 1990-1996  Microsoft Corporation
 
 Module Name:
 
@@ -17,12 +17,19 @@ Revision History:
 
 #ifndef _WINNT_
 #define _WINNT_
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#ifdef __BORLANDC__
+  #pragma warn -bbf
+#endif
+
+#pragma option -b.
 #include <ctype.h>
+#pragma option -b
 #define ANYSIZE_ARRAY 1
 
 #if defined(_M_MRX000) && !(defined(MIDL_PASS) || defined(RC_INVOKED)) && defined(ENABLE_RESTRICTED)
@@ -38,17 +45,13 @@ extern "C" {
 #endif
 
 
-#if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
-#define DECLSPEC_IMPORT
-#else
 #if (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_ALPHA) || defined(_M_PPC)) && !defined(MIDL_PASS)
 #define DECLSPEC_IMPORT __declspec(dllimport)
 #else
 #define DECLSPEC_IMPORT
 #endif
-#endif
 
-typedef void *PVOID;
+typedef void *PVOID;    
 
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
 #define NTAPI __stdcall
@@ -107,7 +110,7 @@ typedef CONST CHAR *LPCSTR, *PCSTR;
 //
 // Neutral ANSI/UNICODE types and macros
 //
-#ifdef  UNICODE
+#ifdef  UNICODE                     // r_winnt
 
 #ifndef _TCHAR_DEFINED
 typedef WCHAR TCHAR, *PTCHAR;
@@ -119,9 +122,9 @@ typedef LPWSTR LPTCH, PTCH;
 typedef LPWSTR PTSTR, LPTSTR;
 typedef LPCWSTR LPCTSTR;
 typedef LPWSTR LP;
-#define __TEXT(quote) L##quote
+#define __TEXT(quote) L##quote      // r_winnt
 
-#else   /* UNICODE */
+#else   /* UNICODE */               // r_winnt
 
 #ifndef _TCHAR_DEFINED
 typedef char TCHAR, *PTCHAR;
@@ -132,14 +135,14 @@ typedef unsigned char TBYTE , *PTBYTE ;
 typedef LPSTR LPTCH, PTCH;
 typedef LPSTR PTSTR, LPTSTR;
 typedef LPCSTR LPCTSTR;
-#define __TEXT(quote) quote
+#define __TEXT(quote) quote         // r_winnt
 
-#endif /* UNICODE */
-#define TEXT(quote) __TEXT(quote)
+#endif /* UNICODE */                // r_winnt
+#define TEXT(quote) __TEXT(quote)   // r_winnt
 
 
-typedef SHORT *PSHORT;
-typedef LONG *PLONG;
+typedef SHORT *PSHORT;  
+typedef LONG *PLONG;    
 
 #ifdef STRICT
 typedef void *HANDLE;
@@ -150,12 +153,20 @@ typedef PVOID HANDLE;
 #endif
 typedef HANDLE *PHANDLE;
 
-typedef char CCHAR;
-typedef DWORD LCID;
-typedef PDWORD PLCID;
-typedef WORD   LANGID;
-/*lint -e624 */
-/*lint +e624 */
+//
+// Flag (bit) fields
+//
+
+typedef BYTE   FCHAR;
+typedef WORD   FSHORT;
+typedef DWORD  FLONG;
+
+typedef char CCHAR;          
+typedef DWORD LCID;         
+typedef PDWORD PLCID;       
+typedef WORD   LANGID;      
+/*lint -e624 */  
+/*lint +e624 */  
 #define APPLICATION_ERROR_MASK       0x20000000
 #define ERROR_SEVERITY_SUCCESS       0x00000000
 #define ERROR_SEVERITY_INFORMATIONAL 0x40000000
@@ -167,9 +178,16 @@ typedef WORD   LANGID;
 // __midl is set by the 2.0 midl and not by 1.0 midl.
 //
 
+#define _DWORDLONG_
 #if (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64))
 typedef __int64 LONGLONG;
 typedef unsigned __int64 DWORDLONG;
+
+#ifdef __BORLANDC__
+#  define MAXLONGLONG                      (0x7fffffffffffffffi64)
+#else
+#  define MAXLONGLONG                      (0x7fffffffffffffff)
+#endif /* __BORLANDC__ */
 #else
 typedef double LONGLONG;
 typedef double DWORDLONG;
@@ -223,13 +241,16 @@ typedef union _ULARGE_INTEGER {
 
 typedef ULARGE_INTEGER *PULARGE_INTEGER;
 
-// end_ntminiport end_ntndis
+// end_ntminiport end_ntndis end_ntminitape
 
 //
 // Locally Unique Identifier
 //
 
-typedef LARGE_INTEGER LUID, *PLUID;
+typedef struct _LUID {
+    DWORD LowPart;
+    LONG HighPart;
+} LUID, *PLUID;
 
 
 //
@@ -349,7 +370,7 @@ Int64ShrlMod32 (
     DWORD ShiftCount
     );
 
-#if !defined (__cplusplus) && !defined(__BORLANDC__)
+#if !defined(__BORLANDC__)
 
 #pragma warning(disable:4035)               // re-enable below
 
@@ -360,7 +381,7 @@ Int64ShllMod32 (
     DWORD ShiftCount
     )
 {
-    _asm    {
+    __asm    {
         mov     ecx, ShiftCount
         mov     eax, dword ptr [Value]
         mov     edx, dword ptr [Value+4]
@@ -376,7 +397,7 @@ Int64ShraMod32 (
     DWORD ShiftCount
     )
 {
-    _asm {
+    __asm {
         mov     ecx, ShiftCount
         mov     eax, dword ptr [Value]
         mov     edx, dword ptr [Value+4]
@@ -392,7 +413,7 @@ Int64ShrlMod32 (
     DWORD ShiftCount
     )
 {
-    _asm    {
+    __asm    {
         mov     ecx, ShiftCount
         mov     eax, dword ptr [Value]
         mov     edx, dword ptr [Value+4]
@@ -401,15 +422,18 @@ Int64ShrlMod32 (
     }
 }
 
+#pragma warning(default:4035)
+
 #else
+/* For Borland, let the compiler generate calls to __int64 helper functions */
 
 #define Int64ShllMod32(a, b) ((DWORDLONG)(a) << (b))
 #define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
 #define Int64ShrlMod32(a, b) ((DWORDLONG)(a) >> (b))
 
-#endif // !defined (__cplusplus)
+#endif /* !defined (__BORLANDC__) */
 
-#pragma warning(default:4035)
+
 
 #elif defined(_M_ALPHA)
 
@@ -443,17 +467,17 @@ Int64ShrlMod32 (
 
 #endif
 
-#define UNICODE_NULL ((WCHAR)0)
-typedef BYTE  BOOLEAN;
-typedef BOOLEAN *PBOOLEAN;
+#define UNICODE_NULL ((WCHAR)0) 
+typedef BYTE  BOOLEAN;           
+typedef BOOLEAN *PBOOLEAN;       
 //
 //  Doubly linked list structure.  Can be used as either a list head, or
 //  as link words.
 //
 
 typedef struct _LIST_ENTRY {
-   struct _LIST_ENTRY *Flink;
-   struct _LIST_ENTRY *Blink;
+   struct _LIST_ENTRY * volatile Flink;
+   struct _LIST_ENTRY * volatile Blink;
 } LIST_ENTRY, *PLIST_ENTRY, *RESTRICTED_POINTER PRLIST_ENTRY;
 
 //
@@ -490,14 +514,14 @@ typedef struct  _OBJECTID {     // size is 20
 } OBJECTID;
 #endif // !_OBJECTID_DEFINED
 
-#define MINCHAR     0x80
-#define MAXCHAR     0x7f
-#define MINSHORT    0x8000
-#define MAXSHORT    0x7fff
-#define MINLONG     0x80000000
-#define MAXLONG     0x7fffffff
-#define MAXBYTE     0xff
-#define MAXWORD     0xffff
+#define MINCHAR     0x80        
+#define MAXCHAR     0x7f        
+#define MINSHORT    0x8000      
+#define MAXSHORT    0x7fff      
+#define MINLONG     0x80000000  
+#define MAXLONG     0x7fffffff  
+#define MAXBYTE     0xff        
+#define MAXWORD     0xffff      
 #define MAXDWORD    0xffffffff
 //
 // Calculate the byte offset of a field in a structure of type type.
@@ -515,31 +539,31 @@ typedef struct  _OBJECTID {     // size is 20
                                                   (PCHAR)(address) - \
                                                   (PCHAR)(&((type *)0)->field)))
 
-/*
- *  Language IDs.
- *
- *  The following two combinations of primary language ID and
- *  sublanguage ID have special semantics:
- *
- *    Primary Language ID   Sublanguage ID      Result
- *    -------------------   ---------------     ------------------------
- *    LANG_NEUTRAL          SUBLANG_NEUTRAL     Language neutral
- *    LANG_NEUTRAL          SUBLANG_DEFAULT     User default language
- *    LANG_NEUTRAL          SUBLANG_SYS_DEFAULT System default language
- */
+//
+//  Language IDs.
+//
+//  The following two combinations of primary language ID and
+//  sublanguage ID have special semantics:
+//
+//    Primary Language ID   Sublanguage ID      Result
+//    -------------------   ---------------     ------------------------
+//    LANG_NEUTRAL          SUBLANG_NEUTRAL     Language neutral
+//    LANG_NEUTRAL          SUBLANG_DEFAULT     User default language
+//    LANG_NEUTRAL          SUBLANG_SYS_DEFAULT System default language
+//
 
-/*
- *  Primary language IDs.
- */
+//
+//  Primary language IDs.
+//
 
 #define LANG_NEUTRAL                     0x00
 
-#define LANG_ARABIC                      0x01
 #define LANG_AFRIKAANS                   0x36
 #define LANG_ALBANIAN                    0x1c
+#define LANG_ARABIC                      0x01
 #define LANG_BASQUE                      0x2d
+#define LANG_BELARUSIAN                  0x23
 #define LANG_BULGARIAN                   0x02
-#define LANG_BYELORUSSIAN                0x23
 #define LANG_CATALAN                     0x03
 #define LANG_CHINESE                     0x04
 #define LANG_CROATIAN                    0x1a
@@ -554,7 +578,7 @@ typedef struct  _OBJECTID {     // size is 20
 #define LANG_FRENCH                      0x0c
 #define LANG_GERMAN                      0x07
 #define LANG_GREEK                       0x08
-#define LANG_HEBREW                      0x0D
+#define LANG_HEBREW                      0x0d
 #define LANG_HUNGARIAN                   0x0e
 #define LANG_ICELANDIC                   0x0f
 #define LANG_INDONESIAN                  0x21
@@ -568,148 +592,167 @@ typedef struct  _OBJECTID {     // size is 20
 #define LANG_PORTUGUESE                  0x16
 #define LANG_ROMANIAN                    0x18
 #define LANG_RUSSIAN                     0x19
+#define LANG_SERBIAN                     0x1a
 #define LANG_SLOVAK                      0x1b
 #define LANG_SLOVENIAN                   0x24
-#define LANG_SORBIAN                     0x2e
 #define LANG_SPANISH                     0x0a
 #define LANG_SWEDISH                     0x1d
 #define LANG_THAI                        0x1e
 #define LANG_TURKISH                     0x1f
 #define LANG_UKRAINIAN                   0x22
+#define LANG_VIETNAMESE                  0x2a
 
-/*
- *  Sublanguage IDs.
- *
- *  The name immediately following SUBLANG_ dictates which primary
- *  language ID that sublanguage ID can be combined with to form a
- *  valid language ID.
- */
-#define SUBLANG_NEUTRAL                  0x00    /* language neutral */
-#define SUBLANG_DEFAULT                  0x01    /* user default */
-#define SUBLANG_SYS_DEFAULT              0x02    /* system default */
+//
+//  Sublanguage IDs.
+//
+//  The name immediately following SUBLANG_ dictates which primary
+//  language ID that sublanguage ID can be combined with to form a
+//  valid language ID.
+//
 
-#define SUBLANG_ARABIC                   0x01    /* Arabic (Saudi Arabia) */
-#define SUBLANG_ARABIC_IRAQ              0x02    /* Arabic (Iraq) */
-#define SUBLANG_ARABIC_EGYPT             0x03    /* Arabic (Egypt) */
-#define SUBLANG_ARABIC_LIBYA             0x04    /* Arabic (Libya) */
-#define SUBLANG_ARABIC_ALGERIA           0x05    /* Arabic (Algeria) */
-#define SUBLANG_ARABIC_MOROCCO           0x06    /* Arabic (Morocco) */
-#define SUBLANG_ARABIC_TUNISIA           0x07    /* Arabic (Tunisia) */
-#define SUBLANG_ARABIC_OMAN              0x08    /* Arabic (Oman) */
-#define SUBLANG_ARABIC_YEMEN             0x09    /* Arabic (Yemen) */
-#define SUBLANG_ARABIC_SYRIA             0x10    /* Arabic (Syria) */
-#define SUBLANG_ARABIC_JORDAN            0x11    /* Arabic (Jordan) */
-#define SUBLANG_ARABIC_LEBANON           0x12    /* Arabic (Lebanon) */
-#define SUBLANG_ARABIC_KUWAIT            0x13    /* Arabic (Kuwait) */
-#define SUBLANG_ARABIC_UAE               0x14    /* Arabic (United Arab Emirates) */
-#define SUBLANG_ARABIC_BAHRAIN           0x15    /* Arabic (Bahrain) */
-#define SUBLANG_ARABIC_QATAR             0x16    /* Arabic (Qatar) */
-#define SUBLANG_CHINESE_TRADITIONAL      0x01    /* Chinese (Taiwan) */
-#define SUBLANG_CHINESE_SIMPLIFIED       0x02    /* Chinese (PR China) */
-#define SUBLANG_CHINESE_HONGKONG         0x03    /* Chinese (Hong Kong) */
-#define SUBLANG_CHINESE_SINGAPORE        0x04    /* Chinese (Singapore) */
-#define SUBLANG_DUTCH                    0x01    /* Dutch */
-#define SUBLANG_DUTCH_BELGIAN            0x02    /* Dutch (Belgian) */
-#define SUBLANG_ENGLISH_US               0x01    /* English (USA) */
-#define SUBLANG_ENGLISH_UK               0x02    /* English (UK) */
-#define SUBLANG_ENGLISH_AUS              0x03    /* English (Australian) */
-#define SUBLANG_ENGLISH_CAN              0x04    /* English (Canadian) */
-#define SUBLANG_ENGLISH_NZ               0x05    /* English (New Zealand) */
-#define SUBLANG_ENGLISH_EIRE             0x06    /* English (Irish) */
-#define SUBLANG_ENGLISH_SAFRICA          0x07    /* English (South Africa) */
-#define SUBLANG_ENGLISH_JAMAICA          0x08    /* English (Jamaica) */
-#define SUBLANG_ENGLISH_CARRIBEAN        0x09    /* English (Carribean) */
-#define SUBLANG_FRENCH                   0x01    /* French */
-#define SUBLANG_FRENCH_BELGIAN           0x02    /* French (Belgian) */
-#define SUBLANG_FRENCH_CANADIAN          0x03    /* French (Canadian) */
-#define SUBLANG_FRENCH_SWISS             0x04    /* French (Swiss) */
-#define SUBLANG_FRENCH_LUXEMBOURG        0x05    /* French (Luxembourg) */
-#define SUBLANG_GERMAN                   0x01    /* German */
-#define SUBLANG_GERMAN_SWISS             0x02    /* German (Swiss) */
-#define SUBLANG_GERMAN_AUSTRIAN          0x03    /* German (Austrian) */
-#define SUBLANG_GERMAN_LUXEMBOURG        0x04    /* German (Luxembourg) */
-#define SUBLANG_GERMAN_LIECHTENSTEIN     0x05    /* German (Liechtenstein) */
-#define SUBLANG_ITALIAN                  0x01    /* Italian */
-#define SUBLANG_ITALIAN_SWISS            0x02    /* Italian (Swiss) */
-#define SUBLANG_KOREAN                   0x01    /* Korean */
-#define SUBLANG_KOREAN_JOHAB             0x02    /* Korean (Johab) */
-#define SUBLANG_NORWEGIAN_BOKMAL         0x01    /* Norwegian (Bokmal) */
-#define SUBLANG_NORWEGIAN_NYNORSK        0x02    /* Norwegian (Nynorsk) */
-#define SUBLANG_PORTUGUESE               0x02    /* Portuguese */
-#define SUBLANG_PORTUGUESE_BRAZILIAN     0x01    /* Portuguese (Brazilian) */
-#define SUBLANG_SPANISH                  0x01    /* Spanish (Castilian) */
-#define SUBLANG_SPANISH_MEXICAN          0x02    /* Spanish (Mexican) */
-#define SUBLANG_SPANISH_MODERN           0x03    /* Spanish (Modern) */
-#define SUBLANG_SPANISH_GUATEMALA        0x04    /* Spanish (Guatemala) */
-#define SUBLANG_SPANISH_COSTARICA        0x05    /* Spanish (Costa Rica) */
-#define SUBLANG_SPANISH_PANAMA           0x06    /* Spanish (Panama) */
-#define SUBLANG_SPANISH_DOMINICAN        0x07    /* Spanish (Dominican Republic) */
-#define SUBLANG_SPANISH_VENEZUELA        0x08    /* Spanish (Venezuela) */
-#define SUBLANG_SPANISH_COLOMBIA         0x09    /* Spanish (Colombia) */
-#define SUBLANG_SPANISH_PERU             0x10    /* Spanish (Peru) */
-#define SUBLANG_SPANISH_ARGENTINA        0x11    /* Spanish (Argentina) */
-#define SUBLANG_SPANISH_ECUADOR          0x12    /* Spanish (Ecuador) */
-#define SUBLANG_SPANISH_CHILE            0x13    /* Spanish (Chile) */
-#define SUBLANG_SPANISH_URUGUAY          0x14    /* Spanish (Uruguay) */
-#define SUBLANG_SPANISH_PARAGUAY         0x15    /* Spanish (Paraguay) */
-#define SUBLANG_SPANISH_BOLIVIA          0x16    /* Spanish (Bolivia) */
+#define SUBLANG_NEUTRAL                  0x00    // language neutral
+#define SUBLANG_DEFAULT                  0x01    // user default
+#define SUBLANG_SYS_DEFAULT              0x02    // system default
 
-/*
- *  Sorting IDs.
- *
- */
-#define SORT_DEFAULT                     0x0     /* sorting default */
+#define SUBLANG_ARABIC_SAUDI_ARABIA      0x01    // Arabic (Saudi Arabia)
+#define SUBLANG_ARABIC_IRAQ              0x02    // Arabic (Iraq)
+#define SUBLANG_ARABIC_EGYPT             0x03    // Arabic (Egypt)
+#define SUBLANG_ARABIC_LIBYA             0x04    // Arabic (Libya)
+#define SUBLANG_ARABIC_ALGERIA           0x05    // Arabic (Algeria)
+#define SUBLANG_ARABIC_MOROCCO           0x06    // Arabic (Morocco)
+#define SUBLANG_ARABIC_TUNISIA           0x07    // Arabic (Tunisia)
+#define SUBLANG_ARABIC_OMAN              0x08    // Arabic (Oman)
+#define SUBLANG_ARABIC_YEMEN             0x09    // Arabic (Yemen)
+#define SUBLANG_ARABIC_SYRIA             0x0a    // Arabic (Syria)
+#define SUBLANG_ARABIC_JORDAN            0x0b    // Arabic (Jordan)
+#define SUBLANG_ARABIC_LEBANON           0x0c    // Arabic (Lebanon)
+#define SUBLANG_ARABIC_KUWAIT            0x0d    // Arabic (Kuwait)
+#define SUBLANG_ARABIC_UAE               0x0e    // Arabic (U.A.E)
+#define SUBLANG_ARABIC_BAHRAIN           0x0f    // Arabic (Bahrain)
+#define SUBLANG_ARABIC_QATAR             0x10    // Arabic (Qatar)
+#define SUBLANG_CHINESE_TRADITIONAL      0x01    // Chinese (Taiwan)
+#define SUBLANG_CHINESE_SIMPLIFIED       0x02    // Chinese (PR China)
+#define SUBLANG_CHINESE_HONGKONG         0x03    // Chinese (Hong Kong)
+#define SUBLANG_CHINESE_SINGAPORE        0x04    // Chinese (Singapore)
+#define SUBLANG_DUTCH                    0x01    // Dutch
+#define SUBLANG_DUTCH_BELGIAN            0x02    // Dutch (Belgian)
+#define SUBLANG_ENGLISH_US               0x01    // English (USA)
+#define SUBLANG_ENGLISH_UK               0x02    // English (UK)
+#define SUBLANG_ENGLISH_AUS              0x03    // English (Australian)
+#define SUBLANG_ENGLISH_CAN              0x04    // English (Canadian)
+#define SUBLANG_ENGLISH_NZ               0x05    // English (New Zealand)
+#define SUBLANG_ENGLISH_EIRE             0x06    // English (Irish)
+#define SUBLANG_ENGLISH_SOUTH_AFRICA     0x07    // English (South Africa)
+#define SUBLANG_ENGLISH_JAMAICA          0x08    // English (Jamaica)
+#define SUBLANG_ENGLISH_CARIBBEAN        0x09    // English (Caribbean)
+#define SUBLANG_ENGLISH_BELIZE           0x0a    // English (Belize)
+#define SUBLANG_ENGLISH_TRINIDAD         0x0b    // English (Trinidad)
+#define SUBLANG_FRENCH                   0x01    // French
+#define SUBLANG_FRENCH_BELGIAN           0x02    // French (Belgian)
+#define SUBLANG_FRENCH_CANADIAN          0x03    // French (Canadian)
+#define SUBLANG_FRENCH_SWISS             0x04    // French (Swiss)
+#define SUBLANG_FRENCH_LUXEMBOURG        0x05    // French (Luxembourg)
+#define SUBLANG_GERMAN                   0x01    // German
+#define SUBLANG_GERMAN_SWISS             0x02    // German (Swiss)
+#define SUBLANG_GERMAN_AUSTRIAN          0x03    // German (Austrian)
+#define SUBLANG_GERMAN_LUXEMBOURG        0x04    // German (Luxembourg)
+#define SUBLANG_GERMAN_LIECHTENSTEIN     0x05    // German (Liechtenstein)
+#define SUBLANG_ITALIAN                  0x01    // Italian
+#define SUBLANG_ITALIAN_SWISS            0x02    // Italian (Swiss)
+#define SUBLANG_KOREAN                   0x01    // Korean (Extended Wansung)
+#define SUBLANG_KOREAN_JOHAB             0x02    // Korean (Johab)
+#define SUBLANG_NORWEGIAN_BOKMAL         0x01    // Norwegian (Bokmal)
+#define SUBLANG_NORWEGIAN_NYNORSK        0x02    // Norwegian (Nynorsk)
+#define SUBLANG_PORTUGUESE               0x02    // Portuguese
+#define SUBLANG_PORTUGUESE_BRAZILIAN     0x01    // Portuguese (Brazilian)
+#define SUBLANG_SERBIAN_LATIN            0x02    // Serbian (Latin)
+#define SUBLANG_SERBIAN_CYRILLIC         0x03    // Serbian (Cyrillic)
+#define SUBLANG_SPANISH                  0x01    // Spanish (Castilian)
+#define SUBLANG_SPANISH_MEXICAN          0x02    // Spanish (Mexican)
+#define SUBLANG_SPANISH_MODERN           0x03    // Spanish (Modern)
+#define SUBLANG_SPANISH_GUATEMALA        0x04    // Spanish (Guatemala)
+#define SUBLANG_SPANISH_COSTA_RICA       0x05    // Spanish (Costa Rica)
+#define SUBLANG_SPANISH_PANAMA           0x06    // Spanish (Panama)
+#define SUBLANG_SPANISH_DOMINICAN_REPUBLIC 0x07  // Spanish (Dominican Republic)
+#define SUBLANG_SPANISH_VENEZUELA        0x08    // Spanish (Venezuela)
+#define SUBLANG_SPANISH_COLOMBIA         0x09    // Spanish (Colombia)
+#define SUBLANG_SPANISH_PERU             0x0a    // Spanish (Peru)
+#define SUBLANG_SPANISH_ARGENTINA        0x0b    // Spanish (Argentina)
+#define SUBLANG_SPANISH_ECUADOR          0x0c    // Spanish (Ecuador)
+#define SUBLANG_SPANISH_CHILE            0x0d    // Spanish (Chile)
+#define SUBLANG_SPANISH_URUGUAY          0x0e    // Spanish (Uruguay)
+#define SUBLANG_SPANISH_PARAGUAY         0x0f    // Spanish (Paraguay)
+#define SUBLANG_SPANISH_BOLIVIA          0x10    // Spanish (Bolivia)
+#define SUBLANG_SPANISH_EL_SALVADOR      0x11    // Spanish (El Salvador)
+#define SUBLANG_SPANISH_HONDURAS         0x12    // Spanish (Honduras)
+#define SUBLANG_SPANISH_NICARAGUA        0x13    // Spanish (Nicaragua)
+#define SUBLANG_SPANISH_PUERTO_RICO      0x14    // Spanish (Puerto Rico)
+#define SUBLANG_SWEDISH                  0x01    // Swedish
+#define SUBLANG_SWEDISH_FINLAND          0x02    // Swedish (Finland)
 
-#define SORT_JAPANESE_XJIS               0x0     /* Japanese XJIS order */
-#define SORT_JAPANESE_UNICODE            0x1     /* Japanese Unicode order */
+//
+//  Sorting IDs.
+//
 
-#define SORT_CHINESE_BIG5                0x0     /* Chinese BIG5 order */
-#define SORT_CHINESE_UNICODE             0x1     /* Chinese Unicode order */
+#define SORT_DEFAULT                     0x0     // sorting default
 
-#define SORT_KOREAN_KSC                  0x0     /* Korean KSC order */
-#define SORT_KOREAN_UNICODE              0x1     /* Korean Unicode order */
+#define SORT_JAPANESE_XJIS               0x0     // Japanese XJIS order
+#define SORT_JAPANESE_UNICODE            0x1     // Japanese Unicode order
 
+#define SORT_CHINESE_BIG5                0x0     // Chinese BIG5 order
+#define SORT_CHINESE_PRCP                0x0     // PRC Chinese Phonetic order
+#define SORT_CHINESE_UNICODE             0x1     // Chinese Unicode order
+#define SORT_CHINESE_PRC                 0x2     // PRC Chinese Stroke Count order
 
-/*
- *  A language ID is a 16 bit value which is the combination of a
- *  primary language ID and a secondary language ID.  The bits are
- *  allocated as follows:
- *
- *       +-----------------------+-------------------------+
- *       |     Sublanguage ID    |   Primary Language ID   |
- *       +-----------------------+-------------------------+
- *        15                   10 9                       0   bit
- *
- *
- *  Language ID creation/extraction macros:
- *
- *    MAKELANGID    - construct language id from a primary language id and
- *                    a sublanguage id.
- *    PRIMARYLANGID - extract primary language id from a language id.
- *    SUBLANGID     - extract sublanguage id from a language id.
- */
+#define SORT_KOREAN_KSC                  0x0     // Korean KSC order
+#define SORT_KOREAN_UNICODE              0x1     // Korean Unicode order
+
+#define SORT_GERMAN_PHONE_BOOK           0x1     // German Phone Book order
+
+// end_r_winnt
+
+//
+//  A language ID is a 16 bit value which is the combination of a
+//  primary language ID and a secondary language ID.  The bits are
+//  allocated as follows:
+//
+//       +-----------------------+-------------------------+
+//       |     Sublanguage ID    |   Primary Language ID   |
+//       +-----------------------+-------------------------+
+//        15                   10 9                       0   bit
+//
+//
+//  Language ID creation/extraction macros:
+//
+//    MAKELANGID    - construct language id from a primary language id and
+//                    a sublanguage id.
+//    PRIMARYLANGID - extract primary language id from a language id.
+//    SUBLANGID     - extract sublanguage id from a language id.
+//
+
 #define MAKELANGID(p, s)       ((((WORD  )(s)) << 10) | (WORD  )(p))
 #define PRIMARYLANGID(lgid)    ((WORD  )(lgid) & 0x3ff)
 #define SUBLANGID(lgid)        ((WORD  )(lgid) >> 10)
 
 
-/*
- *  A locale ID is a 32 bit value which is the combination of a
- *  language ID, a sort ID, and a reserved area.  The bits are
- *  allocated as follows:
- *
- *       +-------------+---------+-------------------------+
- *       |   Reserved  | Sort ID |      Language ID        |
- *       +-------------+---------+-------------------------+
- *        31         20 19     16 15                      0   bit
- *
- *
- *  Locale ID creation/extraction macros:
- *
- *    MAKELCID       - construct locale id from a language id and a sort id.
- *    LANGIDFROMLCID - extract language id from a locale id.
- *    SORTIDFROMLCID - extract sort id from a locale id.
- */
+//
+//  A locale ID is a 32 bit value which is the combination of a
+//  language ID, a sort ID, and a reserved area.  The bits are
+//  allocated as follows:
+//
+//       +-------------+---------+-------------------------+
+//       |   Reserved  | Sort ID |      Language ID        |
+//       +-------------+---------+-------------------------+
+//        31         20 19     16 15                      0   bit
+//
+//
+//  Locale ID creation/extraction macros:
+//
+//    MAKELCID       - construct locale id from a language id and a sort id.
+//    LANGIDFROMLCID - extract language id from a locale id.
+//    SORTIDFROMLCID - extract sort id from a locale id.
+//
+
 #define NLS_VALID_LOCALE_MASK  0x000fffff
 
 #define MAKELCID(lgid, srtid)  ((DWORD)((((DWORD)((WORD  )(srtid))) << 16) |  \
@@ -718,18 +761,21 @@ typedef struct  _OBJECTID {     // size is 20
 #define SORTIDFROMLCID(lcid)   ((WORD  )((((DWORD)(lcid)) & NLS_VALID_LOCALE_MASK) >> 16))
 
 
-/*
- *  Default System and User IDs for language and locale.
- */
+//
+//  Default System and User IDs for language and locale.
+//
+
 #define LANG_SYSTEM_DEFAULT    (MAKELANGID(LANG_NEUTRAL, SUBLANG_SYS_DEFAULT))
 #define LANG_USER_DEFAULT      (MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT))
 
 #define LOCALE_SYSTEM_DEFAULT  (MAKELCID(LANG_SYSTEM_DEFAULT, SORT_DEFAULT))
 #define LOCALE_USER_DEFAULT    (MAKELCID(LANG_USER_DEFAULT, SORT_DEFAULT))
 
+#define LOCALE_NEUTRAL                                                        \
+          (MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), SORT_DEFAULT))
 
 
-// begin_ntminiport begin_ntndis
+// begin_ntminiport begin_ntndis begin_ntminitape
 
 //
 // Macros used to eliminate compiler warning generated when formal
@@ -795,6 +841,7 @@ typedef struct  _OBJECTID {     // size is 20
 #define STATUS_SINGLE_STEP               ((DWORD   )0x80000004L)    
 #define STATUS_ACCESS_VIOLATION          ((DWORD   )0xC0000005L)    
 #define STATUS_IN_PAGE_ERROR             ((DWORD   )0xC0000006L)    
+#define STATUS_INVALID_HANDLE            ((DWORD   )0xC0000008L)    
 #define STATUS_NO_MEMORY                 ((DWORD   )0xC0000017L)    
 #define STATUS_ILLEGAL_INSTRUCTION       ((DWORD   )0xC000001DL)    
 #define STATUS_NONCONTINUABLE_EXCEPTION  ((DWORD   )0xC0000025L)    
@@ -819,7 +866,35 @@ typedef struct  _OBJECTID {     // size is 20
 #define MAXIMUM_SUSPEND_COUNT MAXCHAR // Maximum times thread can be suspended
 typedef DWORD KSPIN_LOCK;  
 
+#ifdef _ALPHA_                          // winnt
+void *_rdteb(void);                     // winnt
+#if defined(_M_ALPHA)                   // winnt
+#pragma intrinsic(_rdteb)               // winnt
+#endif                                  // winnt
+#endif                                  // winnt
+
+#if defined(_M_ALPHA)
+#define NtCurrentTeb() ((struct _TEB *)_rdteb())
+#else
+struct _TEB *
+NtCurrentTeb(void);
+#endif
+
+//
+// Define function to return the current Thread Environment Block
+//
+
 #ifdef _ALPHA_
+
+
+
+//
+// Define functions to get the address of the current fiber and the
+// current fiber data.
+//
+
+#define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
+#define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
 // begin_ntddk begin_nthal
 //
@@ -1192,7 +1267,7 @@ __jump_unwind (
 #endif // _ALPHA_
 
 
-#ifdef _M_IX86
+#ifdef _X86_
 
 //
 // Disable these two pramas that evaluate to "sti" "cli" on x86 so that driver
@@ -1215,6 +1290,30 @@ __jump_unwind (
 #endif
 
 
+#if !defined(MIDL_PASS) && defined(_M_IX86)
+#ifdef __BORLANDC__
+/* Since Microsoft want's these to be inline even in "C" programs, we have
+   added simple prototypes here and moved the real functions into the RTL
+*/
+#ifdef __MT__ /* Force no prototype unless in MT mode */
+PVOID GetFiberData( void );
+PVOID GetCurrentFiber( void );
+#endif /* __MT__ */
+#else  /* __BORLANDC__ */
+#pragma warning (disable:4035)        // disable 4035 (function must return something)
+__inline PVOID GetFiberData( void ) { __asm {
+                                        mov eax, fs:[0x10]
+                                        mov eax,[eax]
+                                        }
+                                     }
+__inline PVOID GetCurrentFiber( void ) { __asm mov eax, fs:[0x10] }
+
+#pragma warning (default:4035)        // Reenable it
+#endif /* __BORLANDC__ */
+#endif
+
+// begin_wx86
+
 //
 //  Define the size of the 80387 save area, which is in the context frame.
 //
@@ -1230,6 +1329,8 @@ __jump_unwind (
 #define CONTEXT_i386    0x00010000    // this assumes that i386 and
 #define CONTEXT_i486    0x00010000    // i486 have identical context records
 
+// end_wx86
+
 #define CONTEXT_CONTROL         (CONTEXT_i386 | 0x00000001L) // SS:SP, CS:IP, FLAGS, BP
 #define CONTEXT_INTEGER         (CONTEXT_i386 | 0x00000002L) // AX, BX, CX, DX, SI, DI
 #define CONTEXT_SEGMENTS        (CONTEXT_i386 | 0x00000004L) // DS, ES, FS, GS
@@ -1238,6 +1339,8 @@ __jump_unwind (
 
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_INTEGER |\
                       CONTEXT_SEGMENTS)
+
+// begin_wx86
 
 #endif
 
@@ -1349,11 +1452,8 @@ typedef CONTEXT *PCONTEXT;
 
 // begin_ntminiport
 
-#endif //_M_IX86
+#endif //_X86_
 
-#if !defined(RC_INVOKED)
-#pragma warn -bbf
-#endif
 
 typedef struct _LDT_ENTRY {
     WORD    LimitLow;
@@ -1380,11 +1480,16 @@ typedef struct _LDT_ENTRY {
     } HighWord;
 } LDT_ENTRY, *PLDT_ENTRY;
 
-#if !defined(RC_INVOKED)
-#pragma warn .bbf
-#endif
 
 #if defined(_MIPS_)
+
+//
+// Define functions to get the address of the current fiber and the
+// current fiber data.
+//
+
+#define GetCurrentFiber() ((*(PNT_TIB *)0x7ffff4a8)->FiberData)
+#define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
 // begin_ntddk begin_nthal
 //
@@ -1395,11 +1500,14 @@ typedef struct _LDT_ENTRY {
 
 #define CONTEXT_R4000   0x00010000    // r4000 context
 
-#define CONTEXT_CONTROL         (CONTEXT_R4000 | 0x00000001L)
-#define CONTEXT_FLOATING_POINT  (CONTEXT_R4000 | 0x00000002L)
-#define CONTEXT_INTEGER         (CONTEXT_R4000 | 0x00000004L)
+#define CONTEXT_CONTROL          (CONTEXT_R4000 | 0x00000001)
+#define CONTEXT_FLOATING_POINT   (CONTEXT_R4000 | 0x00000002)
+#define CONTEXT_INTEGER          (CONTEXT_R4000 | 0x00000004)
+#define CONTEXT_EXTENDED_FLOAT   (CONTEXT_FLOATING_POINT | 0x00000008)
+#define CONTEXT_EXTENDED_INTEGER (CONTEXT_INTEGER | 0x00000010)
 
-#define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
+#define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | \
+                      CONTEXT_INTEGER | CONTEXT_EXTENDED_INTEGER)
 
 #endif
 
@@ -1423,136 +1531,314 @@ typedef struct _CONTEXT {
     // This section is always present and is used as an argument build
     // area.
     //
-
-    DWORD Argument[4];
-
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
+    // N.B. Context records are 0 mod 8 aligned starting with NT 4.0.
     //
 
-    DWORD FltF0;
-    DWORD FltF1;
-    DWORD FltF2;
-    DWORD FltF3;
-    DWORD FltF4;
-    DWORD FltF5;
-    DWORD FltF6;
-    DWORD FltF7;
-    DWORD FltF8;
-    DWORD FltF9;
-    DWORD FltF10;
-    DWORD FltF11;
-    DWORD FltF12;
-    DWORD FltF13;
-    DWORD FltF14;
-    DWORD FltF15;
-    DWORD FltF16;
-    DWORD FltF17;
-    DWORD FltF18;
-    DWORD FltF19;
-    DWORD FltF20;
-    DWORD FltF21;
-    DWORD FltF22;
-    DWORD FltF23;
-    DWORD FltF24;
-    DWORD FltF25;
-    DWORD FltF26;
-    DWORD FltF27;
-    DWORD FltF28;
-    DWORD FltF29;
-    DWORD FltF30;
-    DWORD FltF31;
+    union {
+        DWORD Argument[4];
+        DWORDLONG Alignment;
+#ifdef _ANONYMOUS_UNION
+    };
+#else
+    } _u;
+#endif
 
     //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
-    // N.B. The registers gp, sp, and ra are defined in this section, but are
-    //  considered part of the control context rather than part of the integer
-    //  context.
-    //
-    // N.B. Register zero is not stored in the frame.
+    // The following union defines the 32-bit and 64-bit register context.
     //
 
-    DWORD IntZero;
-    DWORD IntAt;
-    DWORD IntV0;
-    DWORD IntV1;
-    DWORD IntA0;
-    DWORD IntA1;
-    DWORD IntA2;
-    DWORD IntA3;
-    DWORD IntT0;
-    DWORD IntT1;
-    DWORD IntT2;
-    DWORD IntT3;
-    DWORD IntT4;
-    DWORD IntT5;
-    DWORD IntT6;
-    DWORD IntT7;
-    DWORD IntS0;
-    DWORD IntS1;
-    DWORD IntS2;
-    DWORD IntS3;
-    DWORD IntS4;
-    DWORD IntS5;
-    DWORD IntS6;
-    DWORD IntS7;
-    DWORD IntT8;
-    DWORD IntT9;
-    DWORD IntK0;
-    DWORD IntK1;
-    DWORD IntGp;
-    DWORD IntSp;
-    DWORD IntS8;
-    DWORD IntRa;
-    DWORD IntLo;
-    DWORD IntHi;
+    union {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+        //
+        // 32-bit context.
+        //
 
-    DWORD Fsr;
+        struct {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
-    // N.B. The registers gp, sp, and ra are defined in the integer section,
-    //   but are considered part of the control context rather than part of
-    //   the integer context.
-    //
+            //
+            // This section is specified/returned if the ContextFlags contains
+            // the flag CONTEXT_FLOATING_POINT.
+            //
+            // N.B. This section contains the 16 double floating registers f0,
+            //      f2, ..., f30.
+            //
 
-    DWORD Fir;
-    DWORD Psr;
+            DWORD FltF0;
+            DWORD FltF1;
+            DWORD FltF2;
+            DWORD FltF3;
+            DWORD FltF4;
+            DWORD FltF5;
+            DWORD FltF6;
+            DWORD FltF7;
+            DWORD FltF8;
+            DWORD FltF9;
+            DWORD FltF10;
+            DWORD FltF11;
+            DWORD FltF12;
+            DWORD FltF13;
+            DWORD FltF14;
+            DWORD FltF15;
+            DWORD FltF16;
+            DWORD FltF17;
+            DWORD FltF18;
+            DWORD FltF19;
+            DWORD FltF20;
+            DWORD FltF21;
+            DWORD FltF22;
+            DWORD FltF23;
+            DWORD FltF24;
+            DWORD FltF25;
+            DWORD FltF26;
+            DWORD FltF27;
+            DWORD FltF28;
+            DWORD FltF29;
+            DWORD FltF30;
+            DWORD FltF31;
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+            //
+            // This section is specified/returned if the ContextFlags contains
+            // the flag CONTEXT_INTEGER.
+            //
+            // N.B. The registers gp, sp, and ra are defined in this section,
+            //      but are considered part of the control context rather than
+            //      part of the integer context.
+            //
+            // N.B. Register zero is not stored in the frame.
+            //
 
-    DWORD ContextFlags;
+            DWORD IntZero;
+            DWORD IntAt;
+            DWORD IntV0;
+            DWORD IntV1;
+            DWORD IntA0;
+            DWORD IntA1;
+            DWORD IntA2;
+            DWORD IntA3;
+            DWORD IntT0;
+            DWORD IntT1;
+            DWORD IntT2;
+            DWORD IntT3;
+            DWORD IntT4;
+            DWORD IntT5;
+            DWORD IntT6;
+            DWORD IntT7;
+            DWORD IntS0;
+            DWORD IntS1;
+            DWORD IntS2;
+            DWORD IntS3;
+            DWORD IntS4;
+            DWORD IntS5;
+            DWORD IntS6;
+            DWORD IntS7;
+            DWORD IntT8;
+            DWORD IntT9;
+            DWORD IntK0;
+            DWORD IntK1;
+            DWORD IntGp;
+            DWORD IntSp;
+            DWORD IntS8;
+            DWORD IntRa;
+            DWORD IntLo;
+            DWORD IntHi;
 
-    DWORD Fill[2];
+            //
+            // This section is specified/returned if the ContextFlags word contains
+            // the flag CONTEXT_FLOATING_POINT.
+            //
+
+            DWORD Fsr;
+
+            //
+            // This section is specified/returned if the ContextFlags word contains
+            // the flag CONTEXT_CONTROL.
+            //
+            // N.B. The registers gp, sp, and ra are defined in the integer section,
+            //   but are considered part of the control context rather than part of
+            //   the integer context.
+            //
+
+            DWORD Fir;
+            DWORD Psr;
+
+            //
+            // The flags values within this flag control the contents of
+            // a CONTEXT record.
+            //
+            // If the context record is used as an input parameter, then
+            // for each portion of the context record controlled by a flag
+            // whose value is set, it is assumed that that portion of the
+            // context record contains valid context. If the context record
+            // is being used to modify a thread's context, then only that
+            // portion of the threads context will be modified.
+            //
+            // If the context record is used as an IN OUT parameter to capture
+            // the context of a thread, then only those portions of the thread's
+            // context corresponding to set flags will be returned.
+            //
+            // The context record is never used as an OUT only parameter.
+            //
+
+            DWORD ContextFlags;
+#ifdef _ANONYMOUS_STRUCT
+        };
+#else
+        } _s1;
+#endif
+        //
+        // 64-bit context.
+        //
+
+        struct {
+
+            //
+            // This section is specified/returned if the ContextFlags contains
+            // the flag CONTEXT_EXTENDED_FLOAT.
+            //
+            // N.B. This section contains the 32 double floating registers f0,
+            //      f1, ..., f31.
+            //
+
+            DWORDLONG XFltF0;
+            DWORDLONG XFltF1;
+            DWORDLONG XFltF2;
+            DWORDLONG XFltF3;
+            DWORDLONG XFltF4;
+            DWORDLONG XFltF5;
+            DWORDLONG XFltF6;
+            DWORDLONG XFltF7;
+            DWORDLONG XFltF8;
+            DWORDLONG XFltF9;
+            DWORDLONG XFltF10;
+            DWORDLONG XFltF11;
+            DWORDLONG XFltF12;
+            DWORDLONG XFltF13;
+            DWORDLONG XFltF14;
+            DWORDLONG XFltF15;
+            DWORDLONG XFltF16;
+            DWORDLONG XFltF17;
+            DWORDLONG XFltF18;
+            DWORDLONG XFltF19;
+            DWORDLONG XFltF20;
+            DWORDLONG XFltF21;
+            DWORDLONG XFltF22;
+            DWORDLONG XFltF23;
+            DWORDLONG XFltF24;
+            DWORDLONG XFltF25;
+            DWORDLONG XFltF26;
+            DWORDLONG XFltF27;
+            DWORDLONG XFltF28;
+            DWORDLONG XFltF29;
+            DWORDLONG XFltF30;
+            DWORDLONG XFltF31;
+
+            //
+            // The following sections must exactly overlay the 32-bit context.
+            //
+
+            DWORD Fill1;
+            DWORD Fill2;
+
+            //
+            // This section is specified/returned if the ContextFlags contains
+            // the flag CONTEXT_FLOATING_POINT.
+            //
+
+            DWORD XFsr;
+
+            //
+            // This section is specified/returned if the ContextFlags contains
+            // the flag CONTEXT_CONTROL.
+            //
+            // N.B. The registers gp, sp, and ra are defined in the integer
+            //      section, but are considered part of the control context
+            //      rather than part of the integer context.
+            //
+
+            DWORD XFir;
+            DWORD XPsr;
+
+            //
+            // The flags values within this flag control the contents of
+            // a CONTEXT record.
+            //
+            // If the context record is used as an input parameter, then
+            // for each portion of the context record controlled by a flag
+            // whose value is set, it is assumed that that portion of the
+            // context record contains valid context. If the context record
+            // is being used to modify a thread's context, then only that
+            // portion of the threads context will be modified.
+            //
+            // If the context record is used as an IN OUT parameter to capture
+            // the context of a thread, then only those portions of the thread's
+            // context corresponding to set flags will be returned.
+            //
+            // The context record is never used as an OUT only parameter.
+            //
+
+            DWORD XContextFlags;
+
+            //
+            // This section is specified/returned if the ContextFlags contains
+            // the flag CONTEXT_EXTENDED_INTEGER.
+            //
+            // N.B. The registers gp, sp, and ra are defined in this section,
+            //      but are considered part of the control context rather than
+            //      part of the integer  context.
+            //
+            // N.B. Register zero is not stored in the frame.
+            //
+
+            DWORDLONG XIntZero;
+            DWORDLONG XIntAt;
+            DWORDLONG XIntV0;
+            DWORDLONG XIntV1;
+            DWORDLONG XIntA0;
+            DWORDLONG XIntA1;
+            DWORDLONG XIntA2;
+            DWORDLONG XIntA3;
+            DWORDLONG XIntT0;
+            DWORDLONG XIntT1;
+            DWORDLONG XIntT2;
+            DWORDLONG XIntT3;
+            DWORDLONG XIntT4;
+            DWORDLONG XIntT5;
+            DWORDLONG XIntT6;
+            DWORDLONG XIntT7;
+            DWORDLONG XIntS0;
+            DWORDLONG XIntS1;
+            DWORDLONG XIntS2;
+            DWORDLONG XIntS3;
+            DWORDLONG XIntS4;
+            DWORDLONG XIntS5;
+            DWORDLONG XIntS6;
+            DWORDLONG XIntS7;
+            DWORDLONG XIntT8;
+            DWORDLONG XIntT9;
+            DWORDLONG XIntK0;
+            DWORDLONG XIntK1;
+            DWORDLONG XIntGp;
+            DWORDLONG XIntSp;
+            DWORDLONG XIntS8;
+            DWORDLONG XIntRa;
+            DWORDLONG XIntLo;
+            DWORDLONG XIntHi;
+#ifdef _ANONYMOUS_STRUCT
+        };
+#else
+        } _s2;
+#endif
+
+#ifdef _ANONYMOUS_UNION
+    };
+#else
+    } _u;
+#endif
 } CONTEXT, *PCONTEXT;
 
 // end_ntddk end_nthal
+
+#define CONTEXT32_LENGTH 0x130          // The original 32-bit Context length (pre NT 4.0)
 
 #endif // MIPS
 
@@ -1569,6 +1855,30 @@ __jump_unwind (
 
 
 #if defined(_PPC_)
+
+
+//
+// The address of the TEB is placed into GPR 13 at context switch time
+// and should never be destroyed.  To get the address of the TEB use
+// the compiler intrinsic to access it directly from GPR 13.
+//
+
+#if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
+unsigned __gregister_get( unsigned const regnum );
+#define NtCurrentTeb() ((struct _TEB *)__gregister_get(13))
+#elif defined(_M_PPC)
+struct _TEB * __builtin_get_gpr13(VOID);
+#define NtCurrentTeb() ((struct _TEB *)__builtin_get_gpr13())
+#endif
+
+
+//
+// Define functions to get the address of the current fiber and the
+// current fiber data.
+//
+
+#define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
+#define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
 // begin_ntddk begin_nthal
 //
@@ -1764,12 +2074,6 @@ typedef struct _STACK_FRAME_HEADER {    // GPR 1 points here
 
 } STACK_FRAME_HEADER,*PSTACK_FRAME_HEADER;
 
-#endif // _PPC_
-
-
-#if defined(_PPC_)
-
-// **FINISH** This may need alteration for PowerPC
 
 VOID
 __jump_unwind (
@@ -1777,8 +2081,7 @@ __jump_unwind (
     PVOID TargetPc
     );
 
-#endif // _PPC_
-
+#endif // defined(_PPC_)
 #define EXCEPTION_NONCONTINUABLE 0x1    // Noncontinuable exception
 #define EXCEPTION_MAXIMUM_PARAMETERS 15 // maximum number of exception parameters
 
@@ -1807,25 +2110,28 @@ typedef struct _EXCEPTION_POINTERS {
     PEXCEPTION_RECORD ExceptionRecord;
     PCONTEXT ContextRecord;
 } EXCEPTION_POINTERS, *PEXCEPTION_POINTERS;
-#define PROCESS_TERMINATE         (0x0001)
-#define PROCESS_CREATE_THREAD     (0x0002)
-#define PROCESS_VM_OPERATION      (0x0008)
-#define PROCESS_VM_READ           (0x0010)
-#define PROCESS_VM_WRITE          (0x0020)
-#define PROCESS_DUP_HANDLE        (0x0040)
-#define PROCESS_CREATE_PROCESS    (0x0080)
-#define PROCESS_SET_QUOTA         (0x0100)
-#define PROCESS_SET_INFORMATION   (0x0200)
-#define PROCESS_QUERY_INFORMATION (0x0400)
+#define PROCESS_TERMINATE         (0x0001)  
+#define PROCESS_CREATE_THREAD     (0x0002)  
+#define PROCESS_VM_OPERATION      (0x0008)  
+#define PROCESS_VM_READ           (0x0010)  
+#define PROCESS_VM_WRITE          (0x0020)  
+#define PROCESS_DUP_HANDLE        (0x0040)  
+#define PROCESS_CREATE_PROCESS    (0x0080)  
+#define PROCESS_SET_QUOTA         (0x0100)  
+#define PROCESS_SET_INFORMATION   (0x0200)  
+#define PROCESS_QUERY_INFORMATION (0x0400)  
 #define PROCESS_ALL_ACCESS        (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | \
                                    0xFFF)
 
-#define THREAD_TERMINATE               (0x0001)
-#define THREAD_SUSPEND_RESUME          (0x0002)
-#define THREAD_GET_CONTEXT             (0x0008)
-#define THREAD_SET_CONTEXT             (0x0010)
-#define THREAD_SET_INFORMATION         (0x0020)
-#define THREAD_QUERY_INFORMATION       (0x0040)
+
+#define MAXIMUM_PROCESSORS 32
+
+#define THREAD_TERMINATE               (0x0001)  
+#define THREAD_SUSPEND_RESUME          (0x0002)  
+#define THREAD_GET_CONTEXT             (0x0008)  
+#define THREAD_SET_CONTEXT             (0x0010)  
+#define THREAD_SET_INFORMATION         (0x0020)  
+#define THREAD_QUERY_INFORMATION       (0x0040)  
 #define THREAD_SET_THREAD_TOKEN        (0x0080)
 #define THREAD_IMPERSONATE             (0x0100)
 #define THREAD_DIRECT_IMPERSONATION    (0x0200)
@@ -1836,6 +2142,25 @@ typedef struct _EXCEPTION_POINTERS {
 
 // end_ntddk
 #define TLS_MINIMUM_AVAILABLE 64
+
+typedef struct _NT_TIB {
+    struct _EXCEPTION_REGISTRATION_RECORD *ExceptionList;
+    PVOID StackBase;
+    PVOID StackLimit;
+    PVOID SubSystemTib;
+    union {
+        PVOID FiberData;
+        DWORD Version;
+#ifdef _ANONYMOUS_UNION
+    };
+#else
+    } _u;
+#endif
+
+    PVOID ArbitraryUserPointer;
+    struct _NT_TIB *Self;
+} NT_TIB;
+typedef NT_TIB *PNT_TIB;
 #define THREAD_BASE_PRIORITY_LOWRT  15  // value that gets a thread to LowRealtime-1
 #define THREAD_BASE_PRIORITY_MAX    2   // maximum thread base priority boost
 #define THREAD_BASE_PRIORITY_MIN    -2  // minimum thread base priority boost
@@ -1851,14 +2176,14 @@ typedef struct _QUOTA_LIMITS {
 } QUOTA_LIMITS;
 typedef QUOTA_LIMITS *PQUOTA_LIMITS;
 
-#define EVENT_MODIFY_STATE      0x0002
-#define EVENT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
+#define EVENT_MODIFY_STATE      0x0002  
+#define EVENT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) 
 #define MUTANT_QUERY_STATE      0x0001
 
 #define MUTANT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|\
                           MUTANT_QUERY_STATE)
-#define SEMAPHORE_MODIFY_STATE      0x0002
-#define SEMAPHORE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
+#define SEMAPHORE_MODIFY_STATE      0x0002  
+#define SEMAPHORE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) 
 #define TIME_ZONE_ID_UNKNOWN  0
 #define TIME_ZONE_ID_STANDARD 1
 #define TIME_ZONE_ID_DAYLIGHT 2
@@ -1875,6 +2200,10 @@ typedef QUOTA_LIMITS *PQUOTA_LIMITS;
 #define PROCESSOR_ARCHITECTURE_PPC   3
 #define PROCESSOR_ARCHITECTURE_UNKNOWN 0xFFFF
 
+#define PF_FLOATING_POINT_PRECISION_ERRATA  0   
+#define PF_FLOATING_POINT_EMULATED          1   
+#define PF_COMPARE_EXCHANGE_DOUBLE          2   
+#define PF_MMX_INSTRUCTIONS_AVAILABLE       3   
 typedef struct _MEMORY_BASIC_INFORMATION {
     PVOID BaseAddress;
     PVOID AllocationBase;
@@ -1895,30 +2224,31 @@ typedef struct _MEMORY_BASIC_INFORMATION {
                             SECTION_MAP_READ |       \
                             SECTION_MAP_EXECUTE |    \
                             SECTION_EXTEND_SIZE)
-#define PAGE_NOACCESS          0x01
-#define PAGE_READONLY          0x02
-#define PAGE_READWRITE         0x04
-#define PAGE_WRITECOPY         0x08
-#define PAGE_EXECUTE           0x10
-#define PAGE_EXECUTE_READ      0x20
-#define PAGE_EXECUTE_READWRITE 0x40
-#define PAGE_EXECUTE_WRITECOPY 0x80
-#define PAGE_GUARD            0x100
-#define PAGE_NOCACHE          0x200
-#define MEM_COMMIT           0x1000
-#define MEM_RESERVE          0x2000
-#define MEM_DECOMMIT         0x4000
-#define MEM_RELEASE          0x8000
-#define MEM_FREE            0x10000
-#define MEM_PRIVATE         0x20000
-#define MEM_MAPPED          0x40000
-#define MEM_TOP_DOWN       0x100000
-#define SEC_FILE           0x800000
-#define SEC_IMAGE         0x1000000
-#define SEC_RESERVE       0x4000000
-#define SEC_COMMIT        0x8000000
-#define SEC_NOCACHE      0x10000000
-#define MEM_IMAGE         SEC_IMAGE
+#define PAGE_NOACCESS          0x01     
+#define PAGE_READONLY          0x02     
+#define PAGE_READWRITE         0x04     
+#define PAGE_WRITECOPY         0x08     
+#define PAGE_EXECUTE           0x10     
+#define PAGE_EXECUTE_READ      0x20     
+#define PAGE_EXECUTE_READWRITE 0x40     
+#define PAGE_EXECUTE_WRITECOPY 0x80     
+#define PAGE_GUARD            0x100     
+#define PAGE_NOCACHE          0x200     
+#define MEM_COMMIT           0x1000     
+#define MEM_RESERVE          0x2000     
+#define MEM_DECOMMIT         0x4000     
+#define MEM_RELEASE          0x8000     
+#define MEM_FREE            0x10000     
+#define MEM_PRIVATE         0x20000     
+#define MEM_MAPPED          0x40000     
+#define MEM_RESET           0x80000     
+#define MEM_TOP_DOWN       0x100000     
+#define SEC_FILE           0x800000     
+#define SEC_IMAGE         0x1000000     
+#define SEC_RESERVE       0x4000000     
+#define SEC_COMMIT        0x8000000     
+#define SEC_NOCACHE      0x10000000     
+#define MEM_IMAGE         SEC_IMAGE     
 
 //
 // Define access rights to files and directories
@@ -1943,10 +2273,8 @@ typedef struct _MEMORY_BASIC_INFORMATION {
 #define FILE_CREATE_PIPE_INSTANCE ( 0x0004 )    // named pipe
 
 #define FILE_READ_EA              ( 0x0008 )    // file & directory
-#define FILE_READ_PROPERTIES      FILE_READ_EA
 
 #define FILE_WRITE_EA             ( 0x0010 )    // file & directory
-#define FILE_WRITE_PROPERTIES     FILE_WRITE_EA
 
 #define FILE_EXECUTE              ( 0x0020 )    // file
 #define FILE_TRAVERSE             ( 0x0020 )    // directory
@@ -1979,37 +2307,58 @@ typedef struct _MEMORY_BASIC_INFORMATION {
                                    FILE_EXECUTE             |\
                                    SYNCHRONIZE)
 
-#define FILE_SHARE_READ                 0x00000001
-#define FILE_SHARE_WRITE                0x00000002
-#define FILE_ATTRIBUTE_READONLY         0x00000001
-#define FILE_ATTRIBUTE_HIDDEN           0x00000002
-#define FILE_ATTRIBUTE_SYSTEM           0x00000004
-#define FILE_ATTRIBUTE_DIRECTORY        0x00000010
-#define FILE_ATTRIBUTE_ARCHIVE          0x00000020
-#define FILE_ATTRIBUTE_NORMAL           0x00000080
-#define FILE_ATTRIBUTE_TEMPORARY        0x00000100
-#define FILE_ATTRIBUTE_COMPRESSED       0x00000800
-#define FILE_NOTIFY_CHANGE_FILE_NAME    0x00000001
-#define FILE_NOTIFY_CHANGE_DIR_NAME     0x00000002
-#define FILE_NOTIFY_CHANGE_ATTRIBUTES   0x00000004
-#define FILE_NOTIFY_CHANGE_SIZE         0x00000008
-#define FILE_NOTIFY_CHANGE_LAST_WRITE   0x00000010
-#define FILE_NOTIFY_CHANGE_SECURITY     0x00000100
-#define MAILSLOT_NO_MESSAGE             ((DWORD)-1)
-#define MAILSLOT_WAIT_FOREVER           ((DWORD)-1)
-#define FILE_CASE_SENSITIVE_SEARCH      0x00000001
-#define FILE_CASE_PRESERVED_NAMES       0x00000002
-#define FILE_UNICODE_ON_DISK            0x00000004
-#define FILE_PERSISTENT_ACLS            0x00000008
-#define FILE_FILE_COMPRESSION           0x00000010
-#define FILE_VOLUME_IS_COMPRESSED       0x00008000
-#define IO_COMPLETION_MODIFY_STATE  0x0002
-#define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
-#define DUPLICATE_CLOSE_SOURCE      0x00000001
-#define DUPLICATE_SAME_ACCESS       0x00000002
-typedef PVOID PACCESS_TOKEN;
-typedef PVOID PSECURITY_DESCRIPTOR;
-typedef PVOID PSID;
+#define FILE_SHARE_READ                 0x00000001  
+#define FILE_SHARE_WRITE                0x00000002  
+#define FILE_SHARE_DELETE               0x00000004  
+#define FILE_ATTRIBUTE_READONLY         0x00000001  
+#define FILE_ATTRIBUTE_HIDDEN           0x00000002  
+#define FILE_ATTRIBUTE_SYSTEM           0x00000004  
+#define FILE_ATTRIBUTE_DIRECTORY        0x00000010  
+#define FILE_ATTRIBUTE_ARCHIVE          0x00000020  
+#define FILE_ATTRIBUTE_NORMAL           0x00000080  
+#define FILE_ATTRIBUTE_TEMPORARY        0x00000100  
+#define FILE_ATTRIBUTE_COMPRESSED       0x00000800  
+#define FILE_ATTRIBUTE_OFFLINE          0x00001000  
+#define FILE_NOTIFY_CHANGE_FILE_NAME    0x00000001   
+#define FILE_NOTIFY_CHANGE_DIR_NAME     0x00000002   
+#define FILE_NOTIFY_CHANGE_ATTRIBUTES   0x00000004   
+#define FILE_NOTIFY_CHANGE_SIZE         0x00000008   
+#define FILE_NOTIFY_CHANGE_LAST_WRITE   0x00000010   
+#define FILE_NOTIFY_CHANGE_LAST_ACCESS  0x00000020   
+#define FILE_NOTIFY_CHANGE_CREATION     0x00000040   
+#define FILE_NOTIFY_CHANGE_SECURITY     0x00000100   
+#define FILE_ACTION_ADDED               0x00000001   
+#define FILE_ACTION_REMOVED             0x00000002   
+#define FILE_ACTION_MODIFIED            0x00000003   
+#define FILE_ACTION_RENAMED_OLD_NAME    0x00000004   
+#define FILE_ACTION_RENAMED_NEW_NAME    0x00000005   
+#define MAILSLOT_NO_MESSAGE             ((DWORD)-1) 
+#define MAILSLOT_WAIT_FOREVER           ((DWORD)-1) 
+#define FILE_CASE_SENSITIVE_SEARCH      0x00000001  
+#define FILE_CASE_PRESERVED_NAMES       0x00000002  
+#define FILE_UNICODE_ON_DISK            0x00000004  
+#define FILE_PERSISTENT_ACLS            0x00000008  
+#define FILE_FILE_COMPRESSION           0x00000010  
+#define FILE_VOLUME_IS_COMPRESSED       0x00008000  
+
+//
+// Define the file notification information structure
+//
+
+typedef struct _FILE_NOTIFY_INFORMATION {
+    DWORD NextEntryOffset;
+    DWORD Action;
+    DWORD FileNameLength;
+    WCHAR FileName[1];
+} FILE_NOTIFY_INFORMATION, *PFILE_NOTIFY_INFORMATION;
+
+#define IO_COMPLETION_MODIFY_STATE  0x0002  
+#define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) 
+#define DUPLICATE_CLOSE_SOURCE      0x00000001  
+#define DUPLICATE_SAME_ACCESS       0x00000002  
+typedef PVOID PACCESS_TOKEN;            
+typedef PVOID PSECURITY_DESCRIPTOR;     
+typedef PVOID PSID;     
 ////////////////////////////////////////////////////////////////////////
 //                                                                    //
 //                             ACCESS MASK                            //
@@ -2126,7 +2475,9 @@ typedef GENERIC_MAPPING *PGENERIC_MAPPING;
 //
 
 
+#pragma option -b.
 #include <pshpack4.h>
+#pragma option -b
 
 typedef struct _LUID_AND_ATTRIBUTES {
     LUID Luid;
@@ -2135,7 +2486,9 @@ typedef struct _LUID_AND_ATTRIBUTES {
 typedef LUID_AND_ATTRIBUTES LUID_AND_ATTRIBUTES_ARRAY[ANYSIZE_ARRAY];
 typedef LUID_AND_ATTRIBUTES_ARRAY *PLUID_AND_ATTRIBUTES_ARRAY;
 
+#pragma option -b.
 #include <poppack.h>
+#pragma option -b
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -2201,8 +2554,6 @@ typedef enum _SID_NAME_USE {
     SidTypeUnknown
 } SID_NAME_USE, *PSID_NAME_USE;
 
-// end_ntifs
-
 typedef struct _SID_AND_ATTRIBUTES {
     PSID Sid;
     DWORD Attributes;
@@ -2217,30 +2568,33 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 //                                                                         //
 // Universal well-known SIDs                                               //
 //                                                                         //
-//     Null SID              S-1-0-0                                       //
-//     World                 S-1-1-0                                       //
-//     Local                 S-1-2-0                                       //
-//     Creator Owner ID      S-1-3-0                                       //
-//     Creator Group ID      S-1-3-1                                       //
+//     Null SID                     S-1-0-0                                //
+//     World                        S-1-1-0                                //
+//     Local                        S-1-2-0                                //
+//     Creator Owner ID             S-1-3-0                                //
+//     Creator Group ID             S-1-3-1                                //
+//     Creator Owner Server ID      S-1-3-2                                //
+//     Creator Group Server ID      S-1-3-3                                //
 //                                                                         //
-//     (Non-unique IDs)      S-1-4                                         //
+//     (Non-unique IDs)             S-1-4                                  //
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#define SECURITY_NULL_SID_AUTHORITY     {0,0,0,0,0,0}
-#define SECURITY_WORLD_SID_AUTHORITY    {0,0,0,0,0,1}
-#define SECURITY_LOCAL_SID_AUTHORITY    {0,0,0,0,0,2}
-#define SECURITY_CREATOR_SID_AUTHORITY  {0,0,0,0,0,3}
-#define SECURITY_NON_UNIQUE_AUTHORITY   {0,0,0,0,0,4}
+#define SECURITY_NULL_SID_AUTHORITY       {0,0,0,0,0,0}
+#define SECURITY_WORLD_SID_AUTHORITY      {0,0,0,0,0,1}
+#define SECURITY_LOCAL_SID_AUTHORITY      {0,0,0,0,0,2}
+#define SECURITY_CREATOR_SID_AUTHORITY    {0,0,0,0,0,3}
+#define SECURITY_NON_UNIQUE_AUTHORITY     {0,0,0,0,0,4}
 
-#define SECURITY_NULL_RID               (0x00000000L)
-#define SECURITY_WORLD_RID              (0x00000000L)
-#define SECURITY_LOCAL_RID              (0X00000000L)
+#define SECURITY_NULL_RID                 (0x00000000L)
+#define SECURITY_WORLD_RID                (0x00000000L)
+#define SECURITY_LOCAL_RID                (0X00000000L)
 
-#define SECURITY_CREATOR_OWNER_RID      (0x00000000L)
-#define SECURITY_CREATOR_GROUP_RID      (0x00000001L)
+#define SECURITY_CREATOR_OWNER_RID        (0x00000000L)
+#define SECURITY_CREATOR_GROUP_RID        (0x00000001L)
 
-
+#define SECURITY_CREATOR_OWNER_SERVER_RID (0x00000002L)
+#define SECURITY_CREATOR_GROUP_SERVER_RID (0x00000003L)
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2255,6 +2609,8 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 //     Interactive           S-1-5-4                                       //
 //     Service               S-1-5-6                                       //
 //     AnonymousLogon        S-1-5-7       (aka null logon session)        //
+//     Proxy                 S-1-5-8                                       //
+//     ServerLogon           S-1-5-8       (aka domain controller account) //
 //                                                                         //
 //     (Logon IDs)           S-1-5-5-X-Y                                   //
 //                                                                         //
@@ -2273,6 +2629,8 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 #define SECURITY_INTERACTIVE_RID        (0x00000004L)
 #define SECURITY_SERVICE_RID            (0x00000006L)
 #define SECURITY_ANONYMOUS_LOGON_RID    (0x00000007L)
+#define SECURITY_PROXY_RID              (0x00000008L)
+#define SECURITY_SERVER_LOGON_RID       (0x00000009L)
 
 #define SECURITY_LOGON_IDS_RID          (0x00000005L)
 #define SECURITY_LOGON_IDS_RID_COUNT    (3L)
@@ -2401,6 +2759,7 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 
 #define ACL_REVISION1   (1)
 #define ACL_REVISION2   (2)
+#define ACL_REVISION3   (3)
 
 typedef struct _ACL {
     BYTE  AclRevision;
@@ -2543,6 +2902,7 @@ typedef struct _SYSTEM_ALARM_ACE {
 typedef SYSTEM_ALARM_ACE *PSYSTEM_ALARM_ACE;
 
 // end_ntifs
+
 
 
 //
@@ -2839,42 +3199,6 @@ typedef enum _SECURITY_IMPERSONATION_LEVEL {
 
 #define DEFAULT_IMPERSONATION_LEVEL SecurityImpersonation
 
-// end_nthal
-//
-// Security Tracking Mode
-//
-
-#define SECURITY_DYNAMIC_TRACKING      (TRUE)
-#define SECURITY_STATIC_TRACKING       (FALSE)
-
-typedef BOOLEAN SECURITY_CONTEXT_TRACKING_MODE,
-                    * PSECURITY_CONTEXT_TRACKING_MODE;
-
-
-
-//
-// Quality Of Service
-//
-
-typedef struct _SECURITY_QUALITY_OF_SERVICE {
-    DWORD Length;
-    SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
-    SECURITY_CONTEXT_TRACKING_MODE ContextTrackingMode;
-    BOOLEAN EffectiveOnly;
-    } SECURITY_QUALITY_OF_SERVICE, * PSECURITY_QUALITY_OF_SERVICE;
-
-
-//
-// Used to represent information related to a thread impersonation
-//
-
-typedef struct _SE_IMPERSONATION_STATE {
-    PACCESS_TOKEN Token;
-    BOOLEAN CopyOnOpen;
-    BOOLEAN EffectiveOnly;
-    SECURITY_IMPERSONATION_LEVEL Level;
-} SE_IMPERSONATION_STATE, *PSE_IMPERSONATION_STATE;
-
 
 ////////////////////////////////////////////////////////////////////
 //                                                                //
@@ -2920,7 +3244,7 @@ typedef struct _SE_IMPERSONATION_STATE {
 #define TOKEN_EXECUTE    (STANDARD_RIGHTS_EXECUTE)
 
 
-// begin_ntifs
+//
 //
 // Token Types
 //
@@ -2931,7 +3255,6 @@ typedef enum _TOKEN_TYPE {
     } TOKEN_TYPE;
 typedef TOKEN_TYPE *PTOKEN_TYPE;
 
-// end_ntifs
 
 //
 // Token Information Classes.
@@ -2950,6 +3273,7 @@ typedef enum _TOKEN_INFORMATION_CLASS {
     TokenImpersonationLevel,
     TokenStatistics
 } TOKEN_INFORMATION_CLASS, *PTOKEN_INFORMATION_CLASS;
+// end_ntifs
 
 //
 // Token information class structures
@@ -2960,6 +3284,7 @@ typedef struct _TOKEN_USER {
     SID_AND_ATTRIBUTES User;
 } TOKEN_USER, *PTOKEN_USER;
 
+// begin_ntifs
 
 typedef struct _TOKEN_GROUPS {
     DWORD GroupCount;
@@ -2972,6 +3297,7 @@ typedef struct _TOKEN_PRIVILEGES {
     LUID_AND_ATTRIBUTES Privileges[ANYSIZE_ARRAY];
 } TOKEN_PRIVILEGES, *PTOKEN_PRIVILEGES;
 
+// end_ntifs
 
 typedef struct _TOKEN_OWNER {
     PSID Owner;
@@ -2988,7 +3314,6 @@ typedef struct _TOKEN_DEFAULT_DACL {
 } TOKEN_DEFAULT_DACL, *PTOKEN_DEFAULT_DACL;
 
 
-// begin_ntifs
 
 #define TOKEN_SOURCE_LENGTH 8
 
@@ -3022,6 +3347,41 @@ typedef struct _TOKEN_CONTROL {
     TOKEN_SOURCE TokenSource;
     } TOKEN_CONTROL, *PTOKEN_CONTROL;
 
+//
+// Security Tracking Mode
+//
+
+#define SECURITY_DYNAMIC_TRACKING      (TRUE)
+#define SECURITY_STATIC_TRACKING       (FALSE)
+
+typedef BOOLEAN SECURITY_CONTEXT_TRACKING_MODE,
+                    * PSECURITY_CONTEXT_TRACKING_MODE;
+
+
+
+//
+// Quality Of Service
+//
+
+typedef struct _SECURITY_QUALITY_OF_SERVICE {
+    DWORD Length;
+    SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
+    SECURITY_CONTEXT_TRACKING_MODE ContextTrackingMode;
+    BOOLEAN EffectiveOnly;
+    } SECURITY_QUALITY_OF_SERVICE, * PSECURITY_QUALITY_OF_SERVICE;
+
+
+//
+// Used to represent information related to a thread impersonation
+//
+
+typedef struct _SE_IMPERSONATION_STATE {
+    PACCESS_TOKEN Token;
+    BOOLEAN CopyOnOpen;
+    BOOLEAN EffectiveOnly;
+    SECURITY_IMPERSONATION_LEVEL Level;
+} SE_IMPERSONATION_STATE, *PSE_IMPERSONATION_STATE;
+
 
 typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 
@@ -3035,13 +3395,19 @@ typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 // Image Format
 //
 
-#include "pshpack1.h"
+#pragma option -b.
+#include "pshpack4.h"                   // 4 byte packing is the default
+#pragma option -b
 
 #define IMAGE_DOS_SIGNATURE                 0x5A4D      // MZ
 #define IMAGE_OS2_SIGNATURE                 0x454E      // NE
 #define IMAGE_OS2_SIGNATURE_LE              0x454C      // LE
 #define IMAGE_VXD_SIGNATURE                 0x454C      // LE
 #define IMAGE_NT_SIGNATURE                  0x00004550  // PE00
+
+#pragma option -b.
+#include "pshpack2.h"                   // 16 bit headers are 2 byte packed
+#pragma option -b
 
 typedef struct _IMAGE_DOS_HEADER {      // DOS .EXE header
     WORD   e_magic;                     // Magic number
@@ -3152,6 +3518,10 @@ typedef struct _IMAGE_VXD_HEADER {      // Windows VXD header
     WORD   e32_ddkver;                  // DDK version for VxD
   } IMAGE_VXD_HEADER, *PIMAGE_VXD_HEADER;
 
+#pragma option -b.
+#include "poppack.h"                    // Back to 4 byte packing
+#pragma option -b
+
 //
 // File header format.
 //
@@ -3172,11 +3542,15 @@ typedef struct _IMAGE_FILE_HEADER {
 #define IMAGE_FILE_EXECUTABLE_IMAGE          0x0002  // File is executable  (i.e. no unresolved externel references).
 #define IMAGE_FILE_LINE_NUMS_STRIPPED        0x0004  // Line nunbers stripped from file.
 #define IMAGE_FILE_LOCAL_SYMS_STRIPPED       0x0008  // Local symbols stripped from file.
+#define IMAGE_FILE_AGGRESIVE_WS_TRIM         0x0010  // Agressively trim working set
 #define IMAGE_FILE_BYTES_REVERSED_LO         0x0080  // Bytes of machine word are reversed.
 #define IMAGE_FILE_32BIT_MACHINE             0x0100  // 32 bit word machine.
 #define IMAGE_FILE_DEBUG_STRIPPED            0x0200  // Debugging info stripped from file in .DBG file
+#define IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP   0x0400  // If Image is on removable media, copy and run from the swap file.
+#define IMAGE_FILE_NET_RUN_FROM_SWAP         0x0800  // If Image is on Net, copy and run from the swap file.
 #define IMAGE_FILE_SYSTEM                    0x1000  // System File.
 #define IMAGE_FILE_DLL                       0x2000  // File is a DLL.
+#define IMAGE_FILE_UP_SYSTEM_ONLY            0x4000  // File should only be run on a UP machine
 #define IMAGE_FILE_BYTES_REVERSED_HI         0x8000  // Bytes of machine word are reversed.
 
 #define IMAGE_FILE_MACHINE_UNKNOWN           0
@@ -3230,7 +3604,7 @@ typedef struct _IMAGE_OPTIONAL_HEADER {
     WORD    MinorImageVersion;
     WORD    MajorSubsystemVersion;
     WORD    MinorSubsystemVersion;
-    DWORD   Reserved1;
+    DWORD   Win32VersionValue;
     DWORD   SizeOfImage;
     DWORD   SizeOfHeaders;
     DWORD   CheckSum;
@@ -3294,6 +3668,7 @@ typedef struct _IMAGE_ROM_HEADERS {
 #define IMAGE_SUBSYSTEM_WINDOWS_CUI          3   // Image runs in the Windows character subsystem.
 #define IMAGE_SUBSYSTEM_OS2_CUI              5   // image runs in the OS/2 character subsystem.
 #define IMAGE_SUBSYSTEM_POSIX_CUI            7   // image run  in the Posix character subsystem.
+#define IMAGE_SUBSYSTEM_RESERVED8            8   // image run  in the 8 subsystem.
 
 
 // Directory Entries
@@ -3384,6 +3759,16 @@ typedef struct _IMAGE_SECTION_HEADER {
 #define IMAGE_SCN_MEM_READ                   0x40000000  // Section is readable.
 #define IMAGE_SCN_MEM_WRITE                  0x80000000  // Section is writeable.
 
+
+//
+// TLS Chaacteristic Flags
+//
+#define IMAGE_SCN_SCALE_INDEX                0x00000001  // Tls index is scaled
+
+#pragma option -b.
+#include "pshpack2.h"                       // Symbols, relocs, and linenumbers are 2 byte packed
+#pragma option -b
+
 //
 // Symbol format.
 //
@@ -3404,6 +3789,7 @@ typedef struct _IMAGE_SYMBOL {
     BYTE    NumberOfAuxSymbols;
 } IMAGE_SYMBOL;
 typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
+
 
 #define IMAGE_SIZEOF_SYMBOL                  18
 
@@ -3684,6 +4070,8 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_PPC_REFHI             0x0010
 #define IMAGE_REL_PPC_REFLO             0x0011
 #define IMAGE_REL_PPC_PAIR              0x0012
+#define IMAGE_REL_PPC_SECRELLO          0x0013  // Low 16-bit section relative reference (used for >32k TLS)
+#define IMAGE_REL_PPC_SECRELHI          0x0014  // High 16-bit section relative reference (used for >32k TLS)
 
 #define IMAGE_REL_PPC_TYPEMASK          0x00FF  // mask to isolate above values in IMAGE_RELOCATION.Type
 
@@ -3693,29 +4081,6 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_PPC_BRTAKEN           0x0200  // fix branch prediction bit to predict branch taken
 #define IMAGE_REL_PPC_BRNTAKEN          0x0400  // fix branch prediction bit to predict branch not taken
 #define IMAGE_REL_PPC_TOCDEFN           0x0800  // toc slot defined in file (or, data in toc)
-
-//
-// Based relocation format.
-//
-
-typedef struct _IMAGE_BASE_RELOCATION {
-    DWORD   VirtualAddress;
-    DWORD   SizeOfBlock;
-//  WORD    TypeOffset[1];
-} IMAGE_BASE_RELOCATION, *PIMAGE_BASE_RELOCATION;
-
-#define IMAGE_SIZEOF_BASE_RELOCATION         8
-
-//
-// Based relocation types.
-//
-
-#define IMAGE_REL_BASED_ABSOLUTE              0
-#define IMAGE_REL_BASED_HIGH                  1
-#define IMAGE_REL_BASED_LOW                   2
-#define IMAGE_REL_BASED_HIGHLOW               3
-#define IMAGE_REL_BASED_HIGHADJ               4
-#define IMAGE_REL_BASED_MIPS_JMPADDR          5
 
 //
 // Line number format.
@@ -3731,6 +4096,36 @@ typedef struct _IMAGE_LINENUMBER {
 typedef IMAGE_LINENUMBER UNALIGNED *PIMAGE_LINENUMBER;
 
 #define IMAGE_SIZEOF_LINENUMBER              6
+
+#pragma option -b.
+#include "poppack.h"                        // Back to 4 byte packing
+#pragma option -b
+
+//
+// Based relocation format.
+//
+
+typedef struct _IMAGE_BASE_RELOCATION {
+    DWORD   VirtualAddress;
+    DWORD   SizeOfBlock;
+//  WORD    TypeOffset[1];
+} IMAGE_BASE_RELOCATION;
+typedef IMAGE_BASE_RELOCATION UNALIGNED * PIMAGE_BASE_RELOCATION;
+
+#define IMAGE_SIZEOF_BASE_RELOCATION         8
+
+//
+// Based relocation types.
+//
+
+#define IMAGE_REL_BASED_ABSOLUTE              0
+#define IMAGE_REL_BASED_HIGH                  1
+#define IMAGE_REL_BASED_LOW                   2
+#define IMAGE_REL_BASED_HIGHLOW               3
+#define IMAGE_REL_BASED_HIGHADJ               4
+#define IMAGE_REL_BASED_MIPS_JMPADDR          5
+#define IMAGE_REL_BASED_SECTION               6
+#define IMAGE_REL_BASED_REL32                 7
 
 //
 // Archive format.
@@ -3793,7 +4188,8 @@ typedef struct _IMAGE_THUNK_DATA {
         DWORD Ordinal;
         PIMAGE_IMPORT_BY_NAME AddressOfData;
     } u1;
-} IMAGE_THUNK_DATA, *PIMAGE_THUNK_DATA;
+} IMAGE_THUNK_DATA;
+typedef IMAGE_THUNK_DATA * PIMAGE_THUNK_DATA;
 
 #define IMAGE_ORDINAL_FLAG 0x80000000
 #define IMAGE_SNAP_BY_ORDINAL(Ordinal) ((Ordinal & IMAGE_ORDINAL_FLAG) != 0)
@@ -3816,7 +4212,8 @@ typedef struct _IMAGE_IMPORT_DESCRIPTOR {
     DWORD   ForwarderChain;                 // -1 if no forwarders
     DWORD   Name;
     PIMAGE_THUNK_DATA FirstThunk;           // RVA to IAT (if bound this IAT has actual addresses)
-} IMAGE_IMPORT_DESCRIPTOR, *PIMAGE_IMPORT_DESCRIPTOR;
+} IMAGE_IMPORT_DESCRIPTOR;
+typedef IMAGE_IMPORT_DESCRIPTOR UNALIGNED *PIMAGE_IMPORT_DESCRIPTOR;
 
 //
 // New format import descriptors pointed to by DataDirectory[ IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT ]
@@ -3827,7 +4224,7 @@ typedef struct _IMAGE_BOUND_IMPORT_DESCRIPTOR {
     WORD    OffsetModuleName;
     WORD    NumberOfModuleForwarderRefs;
 // Array of zero or more IMAGE_BOUND_FORWARDER_REF follows
-} IMAGE_BOUND_IMPORT_DESCRIPTOR, *PIMAGE_BOUND_IMPORT_DESCRIPTOR;
+} IMAGE_BOUND_IMPORT_DESCRIPTOR,  *PIMAGE_BOUND_IMPORT_DESCRIPTOR;
 
 typedef struct _IMAGE_BOUND_FORWARDER_REF {
     DWORD   TimeDateStamp;
@@ -3903,10 +4300,6 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY {
 // field points to a resource data entry.
 //
 
-#if !defined(RC_INVOKED)
-#pragma warn -bbf
-#endif
-
 typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
     union {
         struct {
@@ -3916,14 +4309,14 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
         };
 #else
 	}s;
-#endif	
+#endif
         DWORD   Name;
         WORD    Id;
 #if defined(_ANONYMOUS_UNION) || !defined(__BORLANDC__)
     };
 #else
     }u;
-#endif	
+#endif
     union {
         DWORD   OffsetToData;
         struct {
@@ -3933,17 +4326,13 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
         };
 #else
 	}s;
-#endif	
+#endif
 #if defined(_ANONYMOUS_UNION) || !defined(__BORLANDC__)
     };
 #else
     }u2;
 #endif
 } IMAGE_RESOURCE_DIRECTORY_ENTRY, *PIMAGE_RESOURCE_DIRECTORY_ENTRY;
-
-#if !defined(RC_INVOKED)
-#pragma warn .bbf
-#endif
 
 //
 // For resource directory entries that have actual string names, the Name
@@ -4000,7 +4389,8 @@ typedef struct _IMAGE_LOAD_CONFIG_DIRECTORY {
     DWORD   MaximumAllocationSize;
     DWORD   VirtualMemoryThreshold;
     DWORD   ProcessHeapFlags;
-    DWORD   Reserved[ 4 ];
+    DWORD   ProcessAffinityMask;
+    DWORD   Reserved[ 3 ];
 } IMAGE_LOAD_CONFIG_DIRECTORY, *PIMAGE_LOAD_CONFIG_DIRECTORY;
 
 
@@ -4044,6 +4434,7 @@ typedef struct _IMAGE_DEBUG_DIRECTORY {
 #define IMAGE_DEBUG_TYPE_OMAP_TO_SRC      7
 #define IMAGE_DEBUG_TYPE_OMAP_FROM_SRC    8
 
+
 typedef struct _IMAGE_COFF_SYMBOLS_HEADER {
     DWORD   NumberOfSymbols;
     DWORD   LvaToFirstSymbol;
@@ -4060,10 +4451,6 @@ typedef struct _IMAGE_COFF_SYMBOLS_HEADER {
 #define FRAME_TSS       2
 #define FRAME_NONFPO    3
 
-#if !defined(RC_INVOKED)
-#pragma warn -bbf
-#endif
-
 typedef struct _FPO_DATA {
     DWORD       ulOffStart;             // offset 1st byte of function code
     DWORD       cbProcSize;             // # bytes in function
@@ -4078,9 +4465,6 @@ typedef struct _FPO_DATA {
 } FPO_DATA, *PFPO_DATA;
 #define SIZEOF_RFPO_DATA 16
 
-#if !defined(RC_INVOKED)
-#pragma warn .bbf
-#endif
 
 #define IMAGE_DEBUG_MISC_EXENAME    1
 
@@ -4138,12 +4522,19 @@ typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
     DWORD       NumberOfSections;
     DWORD       ExportedNamesSize;
     DWORD       DebugDirectorySize;
-    DWORD       Reserved[ 3 ];          // Note: reserved[0] is actually the section alignment
+    DWORD       SectionAlignment;
+    DWORD       Reserved[2];
 } IMAGE_SEPARATE_DEBUG_HEADER, *PIMAGE_SEPARATE_DEBUG_HEADER;
 
-#define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4944
+#define IMAGE_SEPARATE_DEBUG_SIGNATURE  0x4944
 
-#include "poppack.h"
+#define IMAGE_SEPARATE_DEBUG_FLAGS_MASK 0x8000
+#define IMAGE_SEPARATE_DEBUG_MISMATCH   0x8000  // when DBG was updated, the
+                                                // old checksum didn't match.
+
+#pragma option -b.
+#include "poppack.h"                        // Return to the default
+#pragma option -b
 
 //
 // End Image Format
@@ -4152,21 +4543,23 @@ typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
 //
 // for move macros
 //
+#pragma option -b.
 #include <string.h>
-#define HEAP_NO_SERIALIZE               0x00000001
-#define HEAP_GROWABLE                   0x00000002
-#define HEAP_GENERATE_EXCEPTIONS        0x00000004
-#define HEAP_ZERO_MEMORY                0x00000008
-#define HEAP_REALLOC_IN_PLACE_ONLY      0x00000010
-#define HEAP_TAIL_CHECKING_ENABLED      0x00000020
-#define HEAP_FREE_CHECKING_ENABLED      0x00000040
-#define HEAP_DISABLE_COALESCE_ON_FREE   0x00000080
-#define HEAP_CREATE_ALIGN_16            0x00010000
-#define HEAP_CREATE_ENABLE_TRACING      0x00020000
-#define HEAP_MAXIMUM_TAG                0x0FFF
-#define HEAP_PSEUDO_TAG_FLAG            0x8000
-#define HEAP_TAG_SHIFT                  16
-#define HEAP_MAKE_TAG_FLAGS( b, o ) ((DWORD)((b) + ((o) << 16)))
+#pragma option -b
+#define HEAP_NO_SERIALIZE               0x00000001      
+#define HEAP_GROWABLE                   0x00000002      
+#define HEAP_GENERATE_EXCEPTIONS        0x00000004      
+#define HEAP_ZERO_MEMORY                0x00000008      
+#define HEAP_REALLOC_IN_PLACE_ONLY      0x00000010      
+#define HEAP_TAIL_CHECKING_ENABLED      0x00000020      
+#define HEAP_FREE_CHECKING_ENABLED      0x00000040      
+#define HEAP_DISABLE_COALESCE_ON_FREE   0x00000080      
+#define HEAP_CREATE_ALIGN_16            0x00010000      
+#define HEAP_CREATE_ENABLE_TRACING      0x00020000      
+#define HEAP_MAXIMUM_TAG                0x0FFF              
+#define HEAP_PSEUDO_TAG_FLAG            0x8000              
+#define HEAP_TAG_SHIFT                  16                  
+#define HEAP_MAKE_TAG_FLAGS( b, o ) ((DWORD)((b) + ((o) << 16)))  
 
 #define IS_TEXT_UNICODE_ASCII16               0x0001
 #define IS_TEXT_UNICODE_REVERSE_ASCII16       0x0010
@@ -4190,22 +4583,56 @@ typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
 #define IS_TEXT_UNICODE_NOT_UNICODE_MASK      0x0F00
 #define IS_TEXT_UNICODE_NOT_ASCII_MASK        0xF000
 
-#define COMPRESSION_FORMAT_NONE          (0x0000)
-#define COMPRESSION_FORMAT_DEFAULT       (0x0001)
-#define COMPRESSION_FORMAT_LZNT1         (0x0002)
-#define COMPRESSION_ENGINE_STANDARD      (0x0000)
-#define COMPRESSION_ENGINE_MAXIMUM       (0x0100)
+#define COMPRESSION_FORMAT_NONE          (0x0000)   
+#define COMPRESSION_FORMAT_DEFAULT       (0x0001)   
+#define COMPRESSION_FORMAT_LZNT1         (0x0002)   
+#define COMPRESSION_ENGINE_STANDARD      (0x0000)   
+#define COMPRESSION_ENGINE_MAXIMUM       (0x0100)   
 #if defined(_M_IX86) || defined(_M_MRX000) || defined(_M_ALPHA)
+
+#if defined(_M_MRX000)
+NTSYSAPI
+DWORD
+NTAPI
+RtlEqualMemory (
+    CONST VOID *Source1,
+    CONST VOID *Source2,
+    DWORD Length
+    );
+
+#else
+#define RtlEqualMemory(Destination,Source,Length) (!memcmp((Destination),(Source),(Length)))
+#endif
+
 #define RtlMoveMemory(Destination,Source,Length) memmove((Destination),(Source),(Length))
 #define RtlCopyMemory(Destination,Source,Length) memcpy((Destination),(Source),(Length))
 #define RtlFillMemory(Destination,Length,Fill) memset((Destination),(Fill),(Length))
 #define RtlZeroMemory(Destination,Length) memset((Destination),0,(Length))
-#else
+
+#else // _M_PPC
+
+NTSYSAPI
+DWORD
+NTAPI
+RtlEqualMemory (
+    CONST VOID *Source1,
+    CONST VOID *Source2,
+    DWORD Length
+    );
 
 NTSYSAPI
 VOID
 NTAPI
 RtlCopyMemory (
+   VOID UNALIGNED *Destination,
+   CONST VOID UNALIGNED *Source,
+   DWORD Length
+   );
+
+NTSYSAPI
+VOID
+NTAPI
+RtlCopyMemory32 (
    VOID UNALIGNED *Destination,
    CONST VOID UNALIGNED *Source,
    DWORD Length
@@ -4285,10 +4712,10 @@ typedef struct _RTL_CRITICAL_SECTION {
     HANDLE LockSemaphore;
     DWORD Reserved;
 } RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;
-#define DLL_PROCESS_ATTACH 1
-#define DLL_THREAD_ATTACH  2
-#define DLL_THREAD_DETACH  3
-#define DLL_PROCESS_DETACH 0
+#define DLL_PROCESS_ATTACH 1    
+#define DLL_THREAD_ATTACH  2    
+#define DLL_THREAD_DETACH  3    
+#define DLL_PROCESS_DETACH 0    
 
 //
 // Defines for the READ flags for Eventlogging
@@ -4358,12 +4785,12 @@ typedef struct _EVENTLOGRECORD {
     //
 } EVENTLOGRECORD, *PEVENTLOGRECORD;
 
-#define DBG_CONTINUE                    ((DWORD   )0x00010002L)
-#define DBG_TERMINATE_THREAD            ((DWORD   )0x40010003L)
-#define DBG_TERMINATE_PROCESS           ((DWORD   )0x40010004L)
-#define DBG_CONTROL_C                   ((DWORD   )0x40010005L)
-#define DBG_CONTROL_BREAK               ((DWORD   )0x40010008L)
-#define DBG_EXCEPTION_NOT_HANDLED       ((DWORD   )0x80010001L)
+#define DBG_CONTINUE                    ((DWORD   )0x00010002L) 
+#define DBG_TERMINATE_THREAD            ((DWORD   )0x40010003L) 
+#define DBG_TERMINATE_PROCESS           ((DWORD   )0x40010004L) 
+#define DBG_CONTROL_C                   ((DWORD   )0x40010005L) 
+#define DBG_CONTROL_BREAK               ((DWORD   )0x40010008L) 
+#define DBG_EXCEPTION_NOT_HANDLED       ((DWORD   )0x80010001L) 
 //
 
 // begin_ntddk begin_nthal
@@ -4425,12 +4852,15 @@ typedef struct _EVENTLOGRECORD {
                                                     // special access rules
                                                     // privilege required
 
+#define REG_OPTION_OPEN_LINK        (0x00000008L)   // Open symbolic link
+
 #define REG_LEGAL_OPTION            \
                 (REG_OPTION_RESERVED            |\
                  REG_OPTION_NON_VOLATILE        |\
                  REG_OPTION_VOLATILE            |\
                  REG_OPTION_CREATE_LINK         |\
-                 REG_OPTION_BACKUP_RESTORE)
+                 REG_OPTION_BACKUP_RESTORE      |\
+                 REG_OPTION_OPEN_LINK)
 
 //
 // Key creation/open disposition
@@ -4445,6 +4875,7 @@ typedef struct _EVENTLOGRECORD {
 
 #define REG_WHOLE_HIVE_VOLATILE     (0x00000001L)   // Restore whole hive volatile
 #define REG_REFRESH_HIVE            (0x00000002L)   // Unwind changes to last flush
+#define REG_NO_LAZY_FLUSH           (0x00000004L)   // Never lazy flush this hive
 
 // end_ntddk end_nthal
 
@@ -4669,6 +5100,8 @@ typedef struct _TAPE_SET_POSITION {
 #define TAPE_DRIVE_GET_LOGICAL_BLK  0x00200000
 #define TAPE_DRIVE_SET_EOT_WZ_SIZE  0x00400000
 
+#define TAPE_DRIVE_EJECT_MEDIA      0x01000000
+
 #define TAPE_DRIVE_RESERVED_BIT     0x80000000  //don't use this bit!
 //                                              //can't be a low features bit!
 //                                              //reserved; high features only
@@ -4777,10 +5210,19 @@ typedef struct _TAPE_CREATE_PARTITION {
     DWORD Size;
 } TAPE_CREATE_PARTITION, *PTAPE_CREATE_PARTITION;
 
+#ifdef __BORLANDC__
+  /* This satisfies the undefined forward reference to these structures */
+  struct _TEB { int dummy; };
+  struct _EXCEPTION_REGISTRATION_RECORD { int dummy; };
+#endif
+
+#ifdef __BORLANDC__
+  #pragma warn .bbf
+#endif
 
 #ifdef __cplusplus
 }
 #endif
 
+#pragma option -b.
 #endif /* _WINNT_ */
-

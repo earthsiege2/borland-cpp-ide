@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.8  $
 //
 // Implementation of TGdiObject, abstract class for GDI objects that can be
 // selected into TDCs
@@ -12,6 +12,7 @@
 # include <owl/gdiobjec.h>
 #endif
 
+OWL_DIAGINFO;
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlGDI, 1, 0);
                                    // General GDI diagnostic group
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlGDIOrphan, 1, 0);
@@ -21,6 +22,10 @@ DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlGDIOrphan, 1, 0);
 // TGdiObject's internal orphan control object, container and member functions
 //
 #include <classlib/bags.h>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 struct TObjInfo {
   HANDLE            Handle;
@@ -45,6 +50,10 @@ const static char* ObjTypeStr[] = {
 };
 #endif
 
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
+
 //
 // Find a reference to a given handle in the ObjInfoBag
 //
@@ -64,11 +73,24 @@ TGdiObject::RefFind(HANDLE handle)
 void
 TGdiObject::RefAdd(HANDLE handle, TGdiObject::TType type)
 {
+#if !defined(NO_GDI_SHARE_HANDLES)
+  if (handle) {
+    TObjInfo* member = RefFind(handle);
+    if (member)
+      member->RefCount++;
+    else {
+      if (!ObjInfoBag)
+        ObjInfoBag = new TObjInfoBag;
+      ObjInfoBag->Add(TObjInfo(handle, type, 1));
+    }
+  }
+#else
   if (handle && !RefFind(handle)) {
     if (!ObjInfoBag)
       ObjInfoBag = new TObjInfoBag;
     ObjInfoBag->Add(TObjInfo(handle, type, 1));
   }
+#endif
 }
 
 //

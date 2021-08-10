@@ -1,14 +1,16 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 // Implements TMci and TMciHiddenWindow
 //----------------------------------------------------------------------------
 #include <owl/pch.h>
 #if !defined(OWL_MCI_H)
 # include <owl/mci.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 //

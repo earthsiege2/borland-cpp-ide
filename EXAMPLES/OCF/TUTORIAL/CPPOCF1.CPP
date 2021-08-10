@@ -45,7 +45,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     // Initialize OCF objects
     //
-    OcRegistrar = new TOcRegistrar(::AppReg, 0, string(lpCmdLine),
+    string cmdLine(lpCmdLine);
+    OcRegistrar = new TOcRegistrar(::AppReg, 0, cmdLine,
                                    ::RegLinkHead, hInstance);
     OcRegistrar->CreateOcApp(OcRegistrar->GetOptions(), OcApp);
 

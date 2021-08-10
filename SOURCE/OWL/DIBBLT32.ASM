@@ -3,8 +3,6 @@
 ;// Copyright (c) 1995, 1996 by Borland International, All rights Reserved
 ;//
 ;//$Revision:   10.2  $
-;//$Author:   JKLINE  $
-;//$Date:   11 Feb 1996 19:20:28  $
 ;//
 ;//   DibSpriteBlt8 : 32 Bit Non-GDI SpriteBlt for 8bpp DIBs
 ;//   DibCopyBlt8 :   32 Bit Non-GDI CopyBlt for 8bpp DIBs

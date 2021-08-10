@@ -119,6 +119,6 @@
 ##*
 ##--END-- ? ClassMarker [[Search]]
 ##^BOL
-  [[FunctionResult]] [[FunctionName]][[FunctionDefParam]];
+    [[FunctionResult]] [[FunctionName]][[FunctionDefParam]];
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
 >>[H]

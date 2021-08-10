@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.7  $
 //
 // Definition of classes TSlider & TVSlider.  This defines the basic behavior
 // of slider controls.
@@ -20,6 +20,10 @@
 # include <owl/commctrl.h>
 #endif
 #include <owl/slider.rh>
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
@@ -48,7 +52,7 @@ class _OWLCLASS TSlider : public TScrollBar {
     //
     void          GetRange(int& min, int& max) const;
     int           GetPosition() const;
-    void          SetRange(int min, int max);
+    void          SetRange(int min, int max, bool redraw = true);
     void          SetPosition(int thumbPos);
     void          SetPosition(int thumbPos, bool redraw);
 
@@ -203,6 +207,10 @@ class _OWLCLASS TVSlider : public TSlider {
 // Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

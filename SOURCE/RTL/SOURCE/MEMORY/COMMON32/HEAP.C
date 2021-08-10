@@ -13,12 +13,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1995, 1996 by Borland International
+ *      Copyright (c) 1995, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.6  $        */
 
 #include <mem.h>
 #include <_heap.h>
@@ -128,7 +129,7 @@ Return value    None.
 
 void _init_lock (void)
 {
-#pragma startup _init_lock 2
+#pragma startup _init_lock 1
     // Create the lock used to govern access to the heap.
     _create_lock(&_heap_lock,"creating heap lock");
 }
@@ -241,8 +242,6 @@ static int _RTLENTRY _EXPFUNC _vheapadd(void *ptr, size_t cSize, size_t rSize)
     if (cSize < PAGESIZE)
         return -1;
 
-    _lock_heap();
-
     // create the heap header
 
     h->numSysBlocks = 1;
@@ -308,7 +307,6 @@ static int _RTLENTRY _EXPFUNC _vheapadd(void *ptr, size_t cSize, size_t rSize)
     ADDFREEAFTER(b, bp);
     SETFSIZE(b, size);
 
-    _unlock_heap();
     return 0;
 }
 
@@ -373,30 +371,29 @@ static int _RTLENTRY _EXPFUNC _heapresize(HEAP * h, size_t cSize)
 
             //if (SIZE(b) + MINFREE < delta)
             if (SIZE(b) - MINFREE < delta)
+            {
                 return -1;
-
-            _lock_heap();
+            }
 
             b->blockSize -= delta;
             SETFSIZE(b, SIZE(b));
             NEXT(b)->blockSize = 0 + F_PFREE;
-        if (SIZE(b)<_smalloc_threshold)
-        {
-            // the block needs to move
-            REMOVEFREE(b);
-            ADDFREEAFTER(b, HDR4SIZE(SIZE(b)));
-        }
 
-            _unlock_heap();
+            if (SIZE(b)<_smalloc_threshold)
+            {
+                // the block needs to move
+                REMOVEFREE(b);
+                ADDFREEAFTER(b, HDR4SIZE(SIZE(b)));
+            }
         }
         else
+        {
             return -1;
+        }
     }
     else
     {
         // grow
-
-        _lock_heap();
 
         delta = cSize - h->cSize;
 
@@ -407,7 +404,6 @@ static int _RTLENTRY _EXPFUNC _heapresize(HEAP * h, size_t cSize)
         gfree(HDR2PTR(b));
 
         h->cSize += delta;
-        _unlock_heap();
 
     }
 
@@ -453,26 +449,31 @@ static int _get_more_heap(size_t minSize)
             if (_virt_commit((char *) h + h->cSize, newSize - h->cSize) != 0)
             {
                 // should never fail
-                _lock_heap();
                 __allocated += newSize - h->cSize;
                 _heapresize(h, newSize);
-                _unlock_heap();
+
                 return 0;
             }
-        // otherwise, try to commit PAGESIZE
-        else if(_virt_commit ((char *) h+h->cSize, PAGESIZE))
-        {
-            __allocated+= PAGESIZE;
-            _heapresize(h, h->cSize+PAGESIZE);
-            return 0;
-        }
-        // we are out of memory, not worth trying more
-        else return -1;
+            // otherwise, try to commit PAGESIZE
+            else if(_virt_commit ((char *) h+h->cSize, PAGESIZE))
+            {
+                __allocated+= PAGESIZE;
+                _heapresize(h, h->cSize+PAGESIZE);
+
+                return 0;
+            }
+            // we are out of memory, not worth trying more
+            else
+            {
+              return -1;
+            }
         }
     }
 
     if (_virt_reserve(MAX(_virt_heap_size, aMinSize), &v, &vsize) == 0)
+    {
         return -1;
+    }
 
     csize = ALIGNUPBY(aMinSize + PAGESIZE, avail > __allocated + _virt_chunk_size ? _virt_chunk_size : _virt_chunk_size2);
 
@@ -492,21 +493,24 @@ static int _get_more_heap(size_t minSize)
                     _heapresize(h, h->rSize);
                 }
                 else
+                {
                     return -1;
+                }
             }
 
             if (_virt_commit(v, csize - g) != 0)
             {
-                _lock_heap();
                 __allocated += csize - g;
                 h->sysBlocks[h->numSysBlocks++] = v;
                 h->rSize += vsize;
                 _heapresize(h, h->cSize + csize - g);
-                _unlock_heap();
+
                 return 0;
             }
             else
+            {
                 return -1;
+            }
         }
     }
 
@@ -520,6 +524,7 @@ static int _get_more_heap(size_t minSize)
 
     __allocated += csize;
     _vheapadd(v, csize, vsize);
+
     return 0;
 }
 
@@ -542,12 +547,18 @@ Return value
 static int _release_heap_at(BLOCKHDR * b)
 {
     HEAP *h;
-    BLOCKHDR *bn = NEXT(b);
+    BLOCKHDR *bn;
     size_t delta;
-    size_t freethreshold = avail > __allocated ? _virt_chunk_free : _virt_chunk_free2;
+    size_t freethreshold;
+
+    bn = NEXT(b);
+    freethreshold = avail > __allocated ? _virt_chunk_free : _virt_chunk_free2;
 
     if (b->blockSize-MINFREE < freethreshold)
+    {
         return 0;
+    }
+
 
     delta = ALIGNDNBY(b->blockSize-MINFREE, freethreshold);
 
@@ -558,8 +569,6 @@ static int _release_heap_at(BLOCKHDR * b)
             // we can shrink this heap
 
             size_t newSize = h->cSize - delta;
-
-            _lock_heap();
 
             // we made sure it will not fail
             _heapresize(h, newSize);
@@ -574,15 +583,13 @@ static int _release_heap_at(BLOCKHDR * b)
                 __allocated -= s;
 
                 _virt_release(h->sysBlocks[h->numSysBlocks]);
-
                 h->cSize = h->rSize = h->sysBlocks[h->numSysBlocks] - (char *) h;
-
             }
 
             _virt_decommit(h->sysBlocks[h->numSysBlocks - 1] + newSize, h->cSize - newSize);
             __allocated -= h->cSize - newSize;
             h->cSize = newSize;
-            _unlock_heap();
+
             return 1;
         }
     }
@@ -621,9 +628,9 @@ void _RTLENTRY _EXPFUNC gfree(void *block)
     if (!block)
         return;
 
-    b = PTR2HDR(block);
-
     _lock_heap();
+
+    b = PTR2HDR(block);
 
     if (ISPFREE(b))
     {
@@ -692,13 +699,12 @@ void _RTLENTRY _EXPFUNC gfree(void *block)
     ADDFREEAFTER(b, bp);
     SETFSIZE(b, s);
 
-    _unlock_heap();
-
     // check if we can shrink the heap
     if (NEXT(b)->blockSize == 0 + F_PFREE && b->blockSize > (avail > __allocated ? _virt_chunk_free : _virt_chunk_free2))
     {
         _release_heap_at(b);
     }
+    _unlock_heap();
 }
 
 
@@ -726,9 +732,12 @@ void *_RTLENTRY _EXPFUNC gmalloc(size_t size)
     size_t aSize;
     size_t saveSize;
     BLOCKHDR *fh;
+    void *vp;
 
     if (!size)
         return NULL;
+
+    _lock_heap();
 
     if (size < MINSIZE)
         aSize = MINSIZE;
@@ -742,8 +751,6 @@ void *_RTLENTRY _EXPFUNC gmalloc(size_t size)
 #ifdef  STAT
     n++;
 #endif
-
-    _lock_heap();
 
     if (aSize < _smalloc_threshold)
     {
@@ -760,8 +767,9 @@ void *_RTLENTRY _EXPFUNC gmalloc(size_t size)
             _numSmall--;
 #endif
             REMOVEFREE(fh);
+            vp = HDR2PTR(fh);
             _unlock_heap();
-            return HDR2PTR(fh);
+            return vp;
         }
 #endif
 #ifdef BALANCEDFIT
@@ -1171,8 +1179,9 @@ void *_RTLENTRY _EXPFUNC gmalloc(size_t size)
 #endif
 
             REMOVEFREE(fh);
+            vp = HDR2PTR(fh);
             _unlock_heap();
-            return HDR2PTR(fh);
+            return vp;
         }
         else
         {
@@ -1214,21 +1223,25 @@ void *_RTLENTRY _EXPFUNC gmalloc(size_t size)
                 _rover = nh;
             }
 
+            vp = HDR2PTR(fh);
             _unlock_heap();
-            return HDR2PTR(fh);
+            return vp;
         }
     }
     else
     {
-        _unlock_heap();
 
         if (_get_more_heap(size + 64) == 0)
         {
+            _unlock_heap();
             return gmalloc(size);
         }
 
         else
+        {
+            _unlock_heap();
             return NULL;
+        }
     }
 }
 
@@ -1249,30 +1262,25 @@ static int releaseHeap = 0;
 
 void _EXPFUNC _free_heaps()
 {
-    HEAP *h;
+    HEAP *h, *nexth = 0;
     int i;
 
     if (releaseHeap)
     {
-	for (h = _firstHeap;;)
-	{
-	    void *nextH = h->nextHeap;
+        for (h = _firstHeap; h; h = nexth)
+        {
+            nexth = h->nextHeap;
+            for (i = --h->numSysBlocks; i>=0 ; i--)
+            {
+                size_t s = h->cSize - (h->sysBlocks[i] -(char*)h);
+                void *p = h->sysBlocks[i];
 
-	    for (i = --h->numSysBlocks; i>=0 ; i--)
-	    {
-		size_t s = h->cSize - (h->sysBlocks[i] -(char*)h);
-		void *p = h->sysBlocks[i];
+                h->cSize = h->rSize = h->sysBlocks[i] - (char *) h;
 
-		h->cSize = h->rSize = h->sysBlocks[i] - (char *) h;
-
-		_virt_decommit(p, s);
-		_virt_release(p);
-	    }
-	    if (nextH)
-		h = nextH;
-	    else
-		break;
-	}
+                _virt_decommit(p, s);
+                _virt_release(p);
+            }
+        }
     }
 }
 

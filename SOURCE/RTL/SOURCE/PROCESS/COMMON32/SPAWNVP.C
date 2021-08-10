@@ -3,26 +3,30 @@
  *
  * function(s)
  *        spawnvp - creates and runs child processes
+ *        _wspawnvp - creates and runs child processes
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <_process.h>
 #include <stddef.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            spawnvp - creates and runs child processes
+Name            spawnvp, _wspawnvp - creates and runs child processes
 
 Usage           #include <process.h>
-                int spawnvp(int modeF, const char * pathP,
-                            char * const * argv);
+                int spawnvp(int modeF, const char * pathP, char * const * argv);
+                int _wspawnvp(int modeF, const wchar_t * pathP, wchar_t * const * argv);
 
 Prototype in    process.h
 
@@ -122,12 +126,12 @@ Return value    On a  successful execution, the  return value is  the child
 
 *---------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC spawnvp(int modeF, const char *pathP,
-                               char * const * argv)
+int _RTLENTRY _EXPFUNC _tspawnvp(int modeF, const _TCHAR *pathP,
+                               _TCHAR * const * argv)
 {
     /*
       For OS/2 LoadProg always does a DosExecPgm, so it doesn't need
       a Func argument.
     */
-        return _LoadProg(modeF, pathP, argv, NULL, 1);
+        return _tLoadProg(modeF, pathP, argv, NULL, 1);
 }

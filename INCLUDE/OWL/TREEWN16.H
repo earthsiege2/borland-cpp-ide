@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.17  $
 //
 // Definition TTreeWindow class for Win16
 //----------------------------------------------------------------------------
@@ -16,12 +16,16 @@
 # include <owl/listbox.h>
 #endif
 
-// Generic definitions/compiler options (eg. alignment) preceeding the 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
+// Generic definitions/compiler options (eg. alignment) preceeding the
 // definition of classes
 #include <services/preclass.h>
 
 class _OWLCLASS TTreeItem;
-class _OWLCLASS TTreeNode;  // Navigational class
+class _OWLCLASS TTreeNode;
 class _OWLCLASS TTreeLink;
 class _OWLCLASS TTreeWindow;
 
@@ -41,13 +45,13 @@ class _OWLCLASS TTreeItem {
 
     // Manipulate the text properties
     //
-    void   SetText(char far*, int len = 0);
-    void   GetText(char far*, int len = 0);
+    void   SetText(const char far*, int len = 0);
+    void   GetText(char far*, int len = 0) const;
 
     // Manipulate the extra data
     //
-    void   SetItemData(uint32);
-    uint32 GetItemData();
+    void   SetItemData(uint32 data);
+    uint32 GetItemData(void) const;
 
     TTreeItem operator =(const TTreeItem&);
 
@@ -60,6 +64,7 @@ class _OWLCLASS TTreeItem {
 
   friend class TTreeLink;
   friend class TTreeWindow;
+  friend class TTreeNode;
 };
 
 
@@ -128,88 +133,182 @@ class _OWLCLASS TTreeLink {
 //
 class _OWLCLASS TTreeNode {
   public:
-    enum TExpandCode {
-      Collapse,
-      Expand,
-      Toggle,
-    };
 
-    enum TNextCode {
-      Root,
-      Next,
-      Previous,
-      Parent,
-      Child,
-      Caret,
-    };
-
+#pragma warn -cln               // constant is long
     enum THowToInsert {
-      First,
-      Last,
-      Sort,
+      First = TVI_FIRST,
+      Last  = TVI_LAST,
+      Sort  = TVI_SORT
     };
+#pragma warn .cln
 
     // Constructors and destructor
     //
-    TTreeNode(TTreeWindow&);                // Initializer
-    TTreeNode(const TTreeNode&);            // Copy
-    TTreeNode(const TTreeNode&, TNextCode); // Navigational
+    TTreeNode(void) : TreeView(0) {}
+    TTreeNode(TTreeWindow& tree, char far* text);
+    TTreeNode(TTreeWindow& tree);
+    TTreeNode(const TTreeNode&);
+    TTreeNode(const TTreeNode&, uint32);
     TTreeNode(TTreeLink&);
+
+    // The next two constructors are for creating new nodes.  Both create only
+    // the C++ TTreeNode object.  Call SetItem to make the new node appear in
+    // the treeview control.
+    //
+    TTreeNode(TTreeWindow& tw, const char far* text);
+    TTreeNode(TTreeWindow& tw, const char far* text, int index, int selIndex);
+
+    // The next two constructors create a node object to represent a node
+    // that already exists.
+
+    // Use this constructor in event handlers. The event message carries
+    // a TTwNotify structure.
+    //
+    TTreeNode(TTreeWindow& tw, TV_ITEM item);
+
+    // This constructor is useful for enumerating nodes on a tree.
+    // Passing just the first parameter creates the node object for
+    // the tree's root, a good starting point.
+    //
+#pragma warn -cln               // constant is long
+    TTreeNode(TTreeWindow& tw, HTREEITEM hItem = TVI_ROOT);
+#pragma warn .cln
+
+    // Tell the node which TTreeWindow it belongs to. Used with the default
+    // constructor.
+    //
+    void AttachToTree(TTreeWindow* tw);
+
    ~TTreeNode();
 
     // Navigation
     //
-    TTreeNode GetParent();
-    TTreeNode GetChild();
-    TTreeNode GetNextSibling();
-    TTreeNode GetPrevSibling();
-    TTreeNode GetNextItem(TNextCode flag);
+    TTreeNode GetParent() const;
+    TTreeNode GetChild() const;
+    TTreeNode GetNextSibling() const;
+    TTreeNode GetPrevSibling() const;
+    TTreeNode GetNextItem(uint32 flag) const;
 
     // Adding and deleting items from the tree
     //
-    TTreeNode AddChild(TTreeItem&);         // add item at end
-    TTreeNode AddSibling(TTreeItem&);
-    TTreeNode InsertChild(TTreeItem&, THowToInsert);
-    TTreeNode InsertItem(TTreeItem&);
+    TTreeNode AddChild(const TTreeNode& node) const;
+    TTreeNode AddSibling(const TTreeNode& node) const;
+    TTreeNode InsertChild(const TTreeNode& node, uint32 how) const;
+    TTreeNode InsertItem(const TTreeNode& node) const;
     bool      Delete();
+
+    // These older add/delete methods use TTreeItem.  They have
+    // been replaced by the versions that operate on the node
+    // itself.  They are retained for backward compatibility.
+    //
+    TTreeNode AddChild(const TTreeItem&) const;         // add item at end
+    TTreeNode AddSibling(const TTreeItem&) const;
+    TTreeNode InsertChild(const TTreeItem&, uint32) const;
+    TTreeNode InsertItem(const TTreeItem&) const;
 
     // Operations on the node
     //
-    bool      ExpandItem(TExpandCode flag);
-    bool      GetItem(TTreeItem* item);
+    bool      ExpandItem(uint32 flag);
+
+    // Set/GetText store the text in the node's internal buffer so the
+    // caller doesn't have to worry about string length and buffer
+    // ownership.
+    //
+    bool       SetText(const char far* text, bool sendNow = true);
+    bool       GetText(char far*& text, bool getNew = false);
+    char far*  GetText(bool getNew = false);
+
+    // These operations send messages to the control.  The message delivery
+    // might fail, so they return bool.
+    //
+    bool       SetItemData(uint32 data, bool sendNow = true);
+    bool       GetItemData(uint32& data, bool getNew = true);
+
+    // The Set/Get accessors for individual node attributes send a message
+    // to send data to or receive data from the treeview control.  You can
+    // minimize the number of messages sent by using the sendNow or getNew
+    // parameters to prevent the message from being sent.  Then follow up
+    // with a single call to SetItem or GetItem.  This packages all pending
+    // business in a single message call.
+    //
+    //    SetText("MyText", false);     // these two send no message
+    //    SetItemData(1, false);
+    //    SetItem();                    // one msg is sent with both attributes
+    //
+    bool       GetItem(void);
+    bool       SetItem(void);
+
+    bool       GetItem(TTreeItem* item);    // preserved for compatibility
+
 
     TTreeNode operator=(const TTreeNode&);
 
+    operator bool() const;
+
     TTreeLink* Link;
 
-  private:
-};
+    // Codes for TTreeNode (TExpandCode, TNextCode)
+    //
+    // Retained for compatiblity, but no longer recommended.
+    // Use the TVE_ and TVGN_ constants directly instead of
+    // these enums.
 
+    enum TExpandCode {
+      Collapse      = TVE_COLLAPSE,
+      Expand        = TVE_EXPAND,
+      Toggle        = TVE_TOGGLE,
+      CollapseReset = TVE_COLLAPSERESET // ignored in 16-bit
+    };
+
+    enum TNextCode {
+      Root     = TVGN_ROOT,
+      Next     = TVGN_NEXT,
+      Previous = TVGN_PREVIOUS,
+      Parent   = TVGN_PARENT,
+      Child    = TVGN_CHILD,
+      Caret    = TVGN_CARET,
+
+      FirstVisible    = TVGN_FIRSTVISIBLE, // these 4 are ignore in 16-bit
+      NextVisible     = TVGN_NEXTVISIBLE,
+      PreviousVisible = TVGN_PREVIOUSVISIBLE,
+      DropHilite      = TVGN_DROPHILITE
+    };
+
+  protected:
+    TTreeItem ItemStruct;             // contains a TV_ITEM with HTREEITEM
+    TTreeWindow* TreeView;            // wrapper for item of this tree
+
+  private:
+    TAPointer<char> CacheText;        // buffer for node text
+    static uint NodeTextCacheSize;    // size of text caching buffer
+
+    // Used by copy constructor and assignment operator
+    //
+    TTreeNode& TTreeNode::CopyNode(const TTreeNode& ti);
+};
 
 //
 // class TTreeWindow
 // ~~~~~ ~~~~~~~~~~~
 // Simulates the common control.
 //
+// Inheritance from TListBox is merely an implementation convenience.
+// TTreeWindow is not meant to use the TListBox interface.
+//
 class _OWLCLASS TTreeWindow : public TListBox {
   public:
-    enum TStyle {
-      twsNone       = 0x0000,
-      twsHasLines   = 0x0001,
-      twsHasButtons = 0x0002,
-    };
 
     // Constructors and destructor
     //
     TTreeWindow(TWindow* parent, int id, int x, int y, int w, int h,
-                TStyle style = twsNone, TModule* module = 0);
+                uint32 style = 0, TModule* module = 0);
     TTreeWindow(TWindow* parent, int resourceId, TModule* module = 0);
    ~TTreeWindow();
 
     // Set the styles
     //
-    void SetStyle(TStyle style);
-    bool HasStyle(TStyle style);
+    void SetStyle(uint32 style);
+    bool HasStyle(uint32 style);
 
     // Return special nodes
     //
@@ -224,6 +323,19 @@ class _OWLCLASS TTreeWindow : public TListBox {
     TFont* GetFont();
 
     void Update();
+
+    // enum retained for compatiblity, but no longer recommended.
+    // Use the TVS_* style constants directly instead of this enum.
+    //
+    enum TStyle {
+      twsNone       = 0x0000,
+      twsHasLines   = TVS_HASLINES,
+      twsHasButtons = TVS_LINESATROOT,
+
+      twsEditLabels      = TVS_EDITLABELS,      // ignored in 16-bit
+      twsDisableDragDrop = TVS_DISABLEDRAGDROP, // ignored in 16-bit
+      twsShowSelAlways   = TVS_SHOWSELALWAYS    // ignored in 16-bit
+    };
 
   protected:
     TTreeLink* GetLinkAtIndex(int index);
@@ -245,7 +357,7 @@ class _OWLCLASS TTreeWindow : public TListBox {
     HFONT EvGetFont();
 
     TFont* Font;
-    TStyle Style;
+    uint32 Style;
 
   private:
     void Init();
@@ -258,14 +370,23 @@ class _OWLCLASS TTreeWindow : public TListBox {
     TTreeWindow(const TTreeWindow&);
     TTreeWindow& operator=(const TTreeWindow&);
 
+    // Used when painting
+    //
+    static const int ButtonHeight;
+    static const int ButtonWidth;
+
   friend class TTreeNode;
 
   DECLARE_RESPONSE_TABLE(TTreeWindow);
 };
 
-// Generic definitions/compiler options (eg. alignment) following the 
+// Generic definitions/compiler options (eg. alignment) following the
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // TTreeItem
@@ -280,7 +401,7 @@ TTreeItem::SetItemData(uint32 data)
 
 //
 inline uint32
-TTreeItem::GetItemData()
+TTreeItem::GetItemData() const
 {
   return ItemData;
 }
@@ -294,7 +415,7 @@ TTreeItem::GetItemData()
 inline bool
 TTreeLink::IsRoot()
 {
-  return ToBool(ParentLink == 0);
+  return ParentLink == 0;
 }
 
 //
@@ -322,7 +443,7 @@ TTreeLink::SetIndentLevel(int indentLevel)
 inline bool
 TTreeLink::IsParent()
 {
-  return ToBool(FirstChild != 0 && LastChild != 0);
+  return FirstChild != 0 && LastChild != 0;
 }
 
 
@@ -332,32 +453,64 @@ TTreeLink::IsParent()
 
 //
 inline TTreeNode
-TTreeNode::GetParent()
+TTreeNode::GetParent() const
 {
   return GetNextItem(Parent);
 }
 
 //
 inline TTreeNode
-TTreeNode::GetChild()
+TTreeNode::GetChild() const
 {
   return GetNextItem(Child);
 }
 
 //
 inline TTreeNode
-TTreeNode::GetNextSibling()
+TTreeNode::GetNextSibling() const
 {
   return GetNextItem(Next);
 }
 
 //
 inline TTreeNode
-TTreeNode::GetPrevSibling()
+TTreeNode::GetPrevSibling() const
 {
   return GetNextItem(Previous);
 }
 
+//
+inline TTreeNode
+TTreeNode::AddChild(const TTreeItem& item) const
+{
+  return TTreeNode(*Link->AddLastChild(item));
+}
+
+//
+inline TTreeNode
+TTreeNode::AddChild(const TTreeNode& node) const
+{
+  return TTreeNode(*Link->AddLastChild(node.ItemStruct));
+}
+
+//
+inline TTreeNode
+TTreeNode::AddSibling(const TTreeNode& node) const
+{
+  return TTreeNode(*Link->AddAtTail(node.ItemStruct));
+}
+
+inline TTreeNode
+TTreeNode::InsertChild(const TTreeNode& node, uint32 how) const
+{
+  return InsertChild(node.ItemStruct, how);
+}
+
+inline TTreeNode
+TTreeNode::InsertItem(const TTreeNode& node) const
+{
+  return TTreeNode(*(Link->AddAfter(node.ItemStruct)));
+}
 
 //----------------------------------------------------------------------------
 // TTreeWindow

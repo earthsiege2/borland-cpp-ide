@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
 //$Revision:   5.15  $
 //
@@ -8,6 +8,10 @@
 //----------------------------------------------------------------------------
 #if !defined(CLASSLIB_RESOURCE_H)
 #define CLASSLIB_RESOURCE_H
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
+#endif
 
 const DEFAULT_HASH_TABLE_SIZE   = 111;
 const DEFAULT_BAG_SIZE          =  29;
@@ -17,5 +21,9 @@ const DEFAULT_QUEUE_SIZE        =  20;
 const DEFAULT_STACK_SIZE        =  20;
 const DEFAULT_ARRAY_SIZE        =  20;
 const DEFAULT_DICT_SIZE         =  20;
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #endif  // CLASSLIB_RESOURCE_H

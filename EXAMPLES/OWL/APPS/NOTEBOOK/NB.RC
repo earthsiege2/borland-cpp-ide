@@ -2,6 +2,8 @@
 // ObjectWindows - (C) Copyright 1991, 1993 by Borland International
 //----------------------------------------------------------------------------
 
+#include <owl/except.rc>
+
 MAINMENU MENU PRELOAD MOVEABLE DISCARDABLE 
 {
  POPUP "&File"

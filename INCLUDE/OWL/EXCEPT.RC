@@ -2,7 +2,7 @@
 // ObjectWindows
 // Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.5  $
 //
 // Exception string resources to use to enable exception messages
 //----------------------------------------------------------------------------
@@ -91,6 +91,8 @@ STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
   IDS_LINKQUERYINTRFCFAIL "IShellLink::QueryInterface(IPersistFile) failed."
   IDS_PERSISTFILELOADFAIL "IPersistFile::Load failed."
   IDS_LINKGETIDLISTFAIL   "IShellLink::GetIDList failed."
+  IDS_SHLLINKSETPATHFAIL  "IShellLink::SetPath failed."
+  IDS_SHLLINKSETDESCFAIL  "IShellLink::SetDescription failed."
 
   IDS_CLIPBOARDBUSY       "Attempt to open busy clipboard"
 

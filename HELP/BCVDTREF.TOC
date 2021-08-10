@@ -576,6 +576,7 @@
 3 AttachControl method = vclAttachControlMethod
 3 BatchMove method = vclMoveMethod
 3 BeginDrag method = vclBeginDragMethod
+3 BtnClick method = vclBtnClickMethod
 3 CancelRange method = vclCancelRangeMethod
 3 CanFocus method = vclCanFocusMethod
 3 CheckBrowseMode method = vclCheckBrowseModeMethod
@@ -589,7 +590,6 @@
 3 Clear method for (other controls) = vclClearMethodEdit
 3 ClearFields method = vclClearFieldsMethod
 3 ClearSelection method = vclClearSelectionMethod
-3 ClickButton method = vclClickButtonMethod
 3 ClientToScreen method = vclClientToScreenMethod
 3 Close method (datasets) = vclClosemethodTable
 3 Close method (TDatabase) = vclClosemethodDataBase
@@ -736,107 +736,153 @@
 3 WriteBuffer method = vclWriteBufferMethod
 
 2 Events
-3 AfterCancel event = vclAfterCancelEvent
-3 Handling the AfterCancel event = vclHandlingAfterCancel
-3 AfterClose event = vclAfterCloseEvent
-3 Handling the AfterClose event = vclHandlingAfterClose
-3 AfterDelete event = vclAfterDeleteEvent
-3 Handling the AfterDelete event = vclHandlingAfterDelete
-3 AfterEdit event = vclAfterEditEvent
-3 Handling the AfterEdit event = vclHandlingAfterEdit
-3 AfterInsert event = vclAfterInsertEvent
-3 Handling the AfterInsert event = vclHandlingAfterInsert
-3 AfterOpen event = vclAfterOpenEvent
-3 Handling the AfterOpen event = vclHandlingAfterOpen
-3 AfterPost event = vclAfterPostEvent
-3 Handling the AfterPost event = vclHandlingAfterPost
-3 BeforeCancel event = vclBeforeCancelEvent
-3 Handling the BeforeCancel event = vclHandlingBeforeCancel
-3 BeforeClose event = vclBeforeCloseEvent
-3 Handling the BeforeClose event = vclHandlingBeforeClose
-3 BeforeDelete event = vclBeforeDeleteEvent
-3 Handling the BeforeDelete event = vclHandlingBeforeDelete
-3 BeforeEdit event = vclBeforeEditEvent
-3 Handling the BeforeEdit event = vclHandlingBeforeEdit
-3 BeforeInsert event = vclBeforeInsertEvent
-3 Handling the BeforeInsert event = vclHandlingBeforeInsert
-3 BeforeOpen event = vclBeforeOpenEvent
-3 Handling the BeforeOpen event = vclHandlingBeforeOpen
-3 BeforePost event = vclBeforePostEvent
-3 Handling the BeforePost event = vclHandlingBeforePost
-3 OnCalcFields event = vclOnCalcFieldsEvent
-3 Handling the OnCalcFields event = vclHandlingOnCalcFields
-3 OnChange event = vclOnChangeEvent
-3 OnChange event for data-aware controls = vclOnChangeEventDB
-3 Handling the OnChange event for data-aware controls = vclHandlingOnChangeDB
-4 For the TDBComboBox component = TDBComboBoxOnMeasureItem
-4 For the TDBEdit component = TDBEditOnMouseUp
-4 For the TDBLookupCombo component = TDBLookupComboOnMouseUp
-4 For the TDBMemo component = TDBMemoOnMouseUp
-4 For the TDBRadioGroup component = TDBRadioGroupOnEndDrag
-3 OnChange event for fields = vclOnChangeEventFields
-3 Handling the OnChange event for fields = vclHandlingOnChangeFields
-3 OnChange event for strings = vclOnChangeEventStrings
-3 Handling the OnChange event for strings = vclHandlingOnChangeStrings
-3 OnClick event = vclOnClickEvent
-3 Handling the OnClick event = vclHandlingOnClickCtls
-4 For the TDBCheckBox component = TDBCheckBoxOnMouseUp
-4 For the TDBGrid component = TDBGridOnKeyUp
-4 For the TDBImage component = TDBImageOnMouseUp
-4 For the TDBListBox component = TDBListBoxOnMouseUp
-4 For the TDBLookupList component = TDBLookupListOnKeyUp
-4 For the TDBText component = TDBTextOnMouseUp
-3 OnClick event for TDBNavigator = vclOnClickEventDBNavigator
-3 Handing the OnClick event for TDBNavigator = vclHandlingOnClickDBNavigator
-3 Handling the OnDataChange event = vclHandlingOnDataChange
-3 OnDblClick event = vclOnDblClickEvent
-3 Handling the OnDblClick event = vclHandlingOnDblClick
-3 OnDragDrop event = vclOnDragDropEvent
-3 Handling the OnDragDrop event = vclHandlingOnDragDrop
-4 For the TDBNavigator component = TDBNavigatorOnEndDrag
-4 For the DBText component = TDBTextOnDragDrop
-3 OnDragOver event = vclOnDragOverEvent
-3 Handling the OnDragOver event = vclHandlingOnDragOver
-3 OnDrawItem event = vclOnDrawItemEvent
-3 Handling the OnDrawItem event = vclHandlingOnDrawItem
-3 OnDropDown event = vclOnDropDownEvent
-3 Handling the OnDropDown event = vclHandlingOnDropDown
-3 OnEndDrag event = vclOnEndDragEvent
-3 Handling the OnEndDrag event = vclHandlingOnEndDrag
-3 OnEnter event = vclOnEnterEvent
-3 Handling the OnEnter event = vclHandlingOnEnter
-3 OnExit event = vclOnExitEvent
-3 Handling the OnExit event = vclHandlingOnExit
-3 OnGetText event = vclOnGEtTextEvent
-3 Handling the OnGetText event = vclHandlingOnGEtText
-3 OnKeyDown event = vclOnKeyDownEvent
-3 Handling the OnKeyDown event = vclHandlingOnKeyDown
-3 OnKeyPress event = vclOnKeyPressEvent
-3 Handling the OnKeyPress event = vclHandlingOnKeyPress
-3 OnKeyUp event = vclOnKeyUpEvent
-3 Handling the OnKeyUp event = vclHandlingOnKeyUp
-3 OnLogin Event = vclOnLoginEvent
-3 Handling the OnLogin Event = vclHandlingOnLogin
-3 OnMeasureItem event = vclOnMeasureItemEvent
-3 Handling the OnMeasureItem event = vclHandlingOnMeasureItem
-3 OnMouseDown event = vclOnMouseDownEvent
-3 Handling the OnMouseDown event = vclHandlingOnMouseDown
-3 OnMouseMove event = vclOnMouseMoveEvent
-3 Handling the OnMouseMove event = vclHandlingOnMouseMove
-3 OnMouseUp event = vclOnMouseUpEvent
-3 Handling the OnMouseUp event = vclHandlingOnMouseUp
-3 OnNewRecord event = vclOnNewRecordEvent
-3 Handling the OnNewRecord event = vclHandlingOnNewRecord
-3 OnPassword event = vclOnPasswordEvent
-3 Handling the OnPassword event = vclHandlingOnPassword
-3 OnResize event = vclOnResizeEvent
-3 Handling the OnResize event = vclHandlingOnResize
-3 OnSetText event = vclOnSetTextEvent
-3 Handling the OnSetText event = vclHandlingOnSetText
-3 OnStateChange event = vclOnStateChangeEvent
-3 Handling the OnStateChange event = vclHandlingOnStateChange
-3 OnUpdateData event = vclOnUpdateDataEvent
-3 Handling the OnUpdateData event = vclHandlingOnUpdateData
-3 OnValidate event = vclOnValidateEvent
-3 Handling the OnValidate event = vclHandlingOnValidate
+3 AfterCancel event
+4 AfterCancel event = vclAfterCancelEvent
+4 Handling the AfterCancel event = vclHandlingAfterCancel
+3 AfterClose event
+4 AfterClose event = vclAfterCloseEvent
+4 Handling the AfterClose event = vclHandlingAfterClose
+3 AfterDelete event
+4 AfterDelete event = vclAfterDeleteEvent
+4 Handling the AfterDelete event = vclHandlingAfterDelete
+3 AfterEdit event
+4 AfterEdit event = vclAfterEditEvent
+4 Handling the AfterEdit event = vclHandlingAfterEdit
+3 AfterInsert event
+4 AfterInsert event = vclAfterInsertEvent
+4 Handling the AfterInsert event = vclHandlingAfterInsert
+3 AfterOpen event
+4 AfterOpen event = vclAfterOpenEvent
+4 Handling the AfterOpen event = vclHandlingAfterOpen
+3 AfterPost event
+4 AfterPost event = vclAfterPostEvent
+4 Handling the AfterPost event = vclHandlingAfterPost
+3 BeforeCancel event
+4 BeforeCancel event = vclBeforeCancelEvent
+4 Handling the BeforeCancel event = vclHandlingBeforeCancel
+3 BeforeClose event
+4 BeforeClose event = vclBeforeCloseEvent
+4 Handling the BeforeClose event = vclHandlingBeforeClose
+3 BeforeDelete event
+4 BeforeDelete event = vclBeforeDeleteEvent
+4 Handling the BeforeDelete event = vclHandlingBeforeDelete
+3 BeforeEdit event
+4 BeforeEdit event = vclBeforeEditEvent
+4 Handling the BeforeEdit event = vclHandlingBeforeEdit
+3 BeforeInsert event
+4 BeforeInsert event = vclBeforeInsertEvent
+4 Handling the BeforeInsert event = vclHandlingBeforeInsert
+3 BeforeOpen event
+4 BeforeOpen event = vclBeforeOpenEvent
+4 Handling the BeforeOpen event = vclHandlingBeforeOpen
+3 BeforePost event
+4 BeforePost event = vclBeforePostEvent
+4 Handling the BeforePost event = vclHandlingBeforePost
+3 OnCalcFields event
+4 OnCalcFields event = vclOnCalcFieldsEvent
+4 Handling the OnCalcFields event = vclHandlingOnCalcFields
+3 OnChange event
+4 OnChange event = vclOnChangeEvent
+4 OnChange event for data-aware controls = vclOnChangeEventDB
+4 Handling the OnChange event for data-aware controls = vclHandlingOnChangeDB
+4 Handling OnChange for specific components
+5 For the TDBComboBox component = TDBComboBoxOnMeasureItem
+5 For the TDBEdit component = TDBEditOnMouseUp
+5 For the TDBLookupCombo component = TDBLookupComboOnMouseUp
+5 For the TDBMemo component = TDBMemoOnMouseUp
+5 For the TDBRadioGroup component = TDBRadioGroupOnEndDrag
+4 OnChange event for fields = vclOnChangeEventFields
+4 Handling the OnChange event for fields = vclHandlingOnChangeFields
+4 OnChange event for strings = vclOnChangeEventStrings
+4 Handling the OnChange event for strings = vclHandlingOnChangeStrings
+3 OnClick event
+4 OnClick event = vclOnClickEvent
+4 Handling the OnClick event = vclHandlingOnClickCtls
+4 Handling OnClick for specific components
+5 For the TDBCheckBox component = TDBCheckBoxOnMouseUp
+5 For the TDBGrid component = TDBGridOnKeyUp
+5 For the TDBImage component = TDBImageOnMouseUp
+5 For the TDBListBox component = TDBListBoxOnMouseUp
+5 For the TDBLookupList component = TDBLookupListOnKeyUp
+5 For the TDBText component = TDBTextOnMouseUp
+4 OnClick event for TDBNavigator = vclOnClickEventDBNavigator
+4 Handing the OnClick event for TDBNavigator = vclHandlingOnClickDBNavigator
+3 OnDataChange event
+4 OnDataChange event= vclOnDataChangeEvent
+4 Handling the OnDataChange event = vclHandlingOnDataChange
+3 OnDblClick event
+4 OnDblClick event = vclOnDblClickEvent
+4 Handling the OnDblClick event = vclHandlingOnDblClick
+3 OnDragDrop event 
+4 OnDragDrop event = vclOnDragDropEvent
+4 Handling the OnDragDrop event = vclHandlingOnDragDrop
+4 Handling OnDragDrop for specific components
+5 For the TDBNavigator component = TDBNavigatorOnEndDrag
+5 For the DBText component = TDBTextOnDragDrop
+3 OnDragOver event
+4 OnDragOver event = vclOnDragOverEvent
+4 Handling the OnDragOver event = vclHandlingOnDragOver
+3 OnDrawItem event
+4 OnDrawItem event = vclOnDrawItemEvent
+4 Handling the OnDrawItem event = vclHandlingOnDrawItem
+3 OnDropDown event
+4 OnDropDown event = vclOnDropDownEvent
+4 Handling the OnDropDown event = vclHandlingOnDropDown
+3 OnEndDrag event 
+4 OnEndDrag event = vclOnEndDragEvent
+4 Handling the OnEndDrag event = vclHandlingOnEndDrag
+3 OnEnter event
+4 OnEnter event = vclOnEnterEvent
+4 Handling the OnEnter event = vclHandlingOnEnter
+3 OnExit event
+4 OnExit event = vclOnExitEvent
+4 Handling the OnExit event = vclHandlingOnExit
+3 OnGetText event 
+4 OnGetText event = vclOnGEtTextEvent
+4 Handling the OnGetText event = vclHandlingOnGEtText
+3 OnKeyDown event
+4 OnKeyDown event = vclOnKeyDownEvent
+4 Handling the OnKeyDown event = vclHandlingOnKeyDown
+3 OnKeyPress event
+4 OnKeyPress event = vclOnKeyPressEvent
+4 Handling the OnKeyPress event = vclHandlingOnKeyPress
+3 OnKeyUp event
+4 OnKeyUp event = vclOnKeyUpEvent
+4 Handling the OnKeyUp event = vclHandlingOnKeyUp
+3 OnLogin Event 
+4 OnLogin Event = vclOnLoginEvent
+4 Handling the OnLogin Event = vclHandlingOnLogin
+3 OnMeasureItem event 
+4 OnMeasureItem event = vclOnMeasureItemEvent
+4 Handling the OnMeasureItem event = vclHandlingOnMeasureItem
+3 OnMouseDown event
+4 OnMouseDown event = vclOnMouseDownEvent
+4 Handling the OnMouseDown event = vclHandlingOnMouseDown
+3 OnMouseMove event
+4 OnMouseMove event = vclOnMouseMoveEvent
+4 Handling the OnMouseMove event = vclHandlingOnMouseMove
+3 OnMouseUp event
+4 OnMouseUp event = vclOnMouseUpEvent
+4 Handling the OnMouseUp event = vclHandlingOnMouseUp
+3 OnNewRecord event
+4 OnNewRecord event = vclOnNewRecordEvent
+4 Handling the OnNewRecord event = vclHandlingOnNewRecord
+3 OnPassword event
+4 OnPassword event = vclOnPasswordEvent
+4 Handling the OnPassword event = vclHandlingOnPassword
+3 OnResize event
+4 OnResize event = vclOnResizeEvent
+4 Handling the OnResize event = vclHandlingOnResize
+3 OnSetText event
+4 OnSetText event = vclOnSetTextEvent
+4 Handling the OnSetText event = vclHandlingOnSetText
+3 OnStateChange event
+4 OnStateChange event = vclOnStateChangeEvent
+4 Handling the OnStateChange event = vclHandlingOnStateChange
+3 OnUpdateData event
+4 OnUpdateData event = vclOnUpdateDataEvent
+4 Handling the OnUpdateData event = vclHandlingOnUpdateData
+3 OnValidate event
+4 OnValidate event = vclOnValidateEvent
+4 Handling the OnValidate event = vclHandlingOnValidate
 

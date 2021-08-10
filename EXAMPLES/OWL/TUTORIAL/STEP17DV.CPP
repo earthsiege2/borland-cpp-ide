@@ -71,7 +71,7 @@ TLine::SetPen(int penSize)
 }
 
 void
-TLine::SetPen(TColor& newColor, int penSize)
+TLine::SetPen(const TColor& newColor, int penSize)
 {
   // If penSize isn't the default (0), set PenSize to the new size.
   if (penSize)
@@ -945,7 +945,7 @@ TDrawView::EvMouseMove(uint modKeys, TPoint& point)
     TOcDropAction outAction;
     TOcDataProvider* ocData = new TOcDataProvider(*OcView, &DocReg, 0,
                                                   (void*)Selected, CleanUp);
-    OcApp->Drag(ocData, TOcDropAction(daDropCopy|daDropMove|daDropLink), 
+    OcApp->Drag(ocData, TOcDropAction(daDropCopy|daDropMove|daDropLink),
                 outAction);
 
     if (outAction == daDropMove) {

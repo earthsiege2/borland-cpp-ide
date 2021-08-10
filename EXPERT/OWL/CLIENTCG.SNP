@@ -23,7 +23,7 @@
 ##QUERY_BASE_NAME [[BaseName]]
 ##QUERY_WIND_CLIENT [[Client]]
 ##"" [[ClientBase]]
-##--BEGIN-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
+##--BEGIN-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame") || (BaseName == "TOleMDIFrame")
 ##:  <<*Client QUERY_BASE_NAME ClientBase
 ## (Client != "TMDIClient") && (ClientBase != "TMDIClient")
 ##:     QUERY_CLASS_NAME [[ClassName]]
@@ -51,7 +51,7 @@
 ##*
 ##:     --END-- FoundIt
 ##--END-- ? \\"[[ClassName]]("
-##--END-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
+##--END-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame") || (BaseName == "TOleMDIFrame")
 ##--END-- Client != ""
 >>[H]
 

@@ -4,21 +4,25 @@
 # Copyright (c) Borland International 1994, 1996
 # All Rights Reserved
 #
-# $Revision:   2.18  $
+# $Revision:   2.30  $
 #
 # Defines:
 #   MODEL=<d|s|m|l|f>   one of: dll(default), small, medium, large or flat
 #   WIN32        enables win32 static (flat) or DLL
+#   MT 		 links to the multithreaded version of the RTL
 #   DIAGS        enables runtime diagnostics (adds 'd' to lib name before 'w')
 #   DEBUG        enables debug info for TDW & TD32
+#   VCL    	 builds OWL using the VCL-compatible RTL (cp32mt)
+#                 (implies -DMT and -DNAMESPACE; requires MODEL=t and WIN32)
 #   OCFNOPCH     disables precompiled headers for OCF
 #   OCFNAME=Xxx  lib & DLL name base, Defaults to 'OCF'. Req. for non-diag DLLs
-#   OCFVER=nnn   version for OCF DLL. Defaults to 250. Req. for non-diag DLLs
+#   OCFVER=nnn   version for OCF DLL. Defaults to 52. Req. for non-diag DLLs
 #   USERDLL      builds OCF for use in a user DLL (adds 'u' to lib name after
 #                model)
-#   CODEGUARD    builds ocf with CodeGuard:  1=basic data, 2=full checking
-#   ALIGN=<1|2|4|8>        Specifies the alignment
-#
+#   CODEGUARD    builds OCF with CodeGuard:  1=basic data, 2=full checking
+#   NAMESPACE    builds OCF within a namespace "OCF"
+#   ALIGN=<1|2|4|8>        specifies the alignment
+#   ILINK	 uses ILINK32 instead of TLINK32 to link
 #
 # Define these for alternate OCF build directories:
 #   OCFSRCDIR    defaults to: $(BCROOT)\source\OCF
@@ -26,6 +30,15 @@
 #   OCFLIBDIR    defaults to: $(BCROOT)\lib
 #   OCFBINDIR    defaults to: $(BCROOT)\bin
 #
+#   When building VCL-compatible libraries, the makefile defaults
+#   assume BCROOT points to the base of the C++Builder tree. If
+#   you are building in the context of Borland C++, then you must
+#   set BCBROOT explicitly yourself.
+#
+#   BCBROOT      defaults to: $(BCROOT)   (root of C++Builder)
+#   VCLINCDIR    defaults to: $(BCBROOT)\include\VCL
+#   VCLOBJDIR    defaults to: $(BCBROOT)\lib\obj
+#   VCLLIBDIR    defaults to: $(BCBROOT)\lib
 #-----------------------------------------------------------------------------
 
 .autodepend
@@ -46,11 +59,17 @@
 #   ==m|l |  !  |       |   !   | MODEL=m|l  WIN16=1
 #---------+-----+-------+-------+--------------------------------
 
-!if !$d(MODEL) && !defined(MT) && !$d(WIN16) && !$d(OS2)
+#
+# If no model is defined or implied, set a default
+#
+!if !$d(MODEL) && !defined(MT) && !$d(WIN16) && !$d(OS2) && !$d(VCL)
   MODEL = f    # default build model = flat static, Win32
-#  MODEL = d    # default build model = flat DLL, Win32
+# MODEL = d    # default build model = flat DLL, Win32
 !endif
 
+#
+# DLL model implies some other settings
+#
 !if $(MODEL) == d     # model d is short for building the DLL-- flat or large
   DLL = 1
 ! if !$d(WIN16) && !$d(OS2)
@@ -58,18 +77,36 @@
 ! endif
 !endif
 
-!if ($(MODEL) == t || $(MODEL) == f) && !$d(OS2)
-  WIN32 = 1    # default to WIN32 switch on for flat or multi-threaded model
-!elif $(MODEL)==m || $(MODEL)==l
-  WIN16 = 1    # default to WIN16 switch on for medium or large model
+#
+# If no system was set, choose a default 
+#
+!if (!$d(WIN32) && !$d(WIN16) && !$d(OS2))
+! if ($(MODEL) == t || $(MODEL) == f || $d(VCL) || $d(MT)) && !$d(OS2)
+    WIN32 = 1    # default to WIN32 switch on for flat or multi-threaded model
+! elif $(MODEL)==l
+    WIN16 = 1    # default to WIN16 switch on for large model
+! endif
 !endif
 
+#
+# For multithreaded target, set the value of MT
+#
 !if $(MODEL) == t || $d(MT)
   MT = mt       # model t implies MT. Use MT as 'mt' to build library names
 !endif
 
+#
+# VCL compatibility implies use of namespace
+# 
+!if $d(VCL)
+  NAMESPACE = 1
+!endif
+
+#
+# Make sure model is consistent with system
+#
 !if $d(WIN32)
-! if $d(MT)
+! if $d(MT) || $d(VCL)
     MODEL = t
 ! else
     MODEL = f
@@ -79,10 +116,10 @@
 !endif
 
 #
-# Some MODELs [m,l,f,t] always imply WIN16 or WIN32 - Update
+# Some MODELs [l,f,t] always imply WIN16 or WIN32 - Update
 # according to model.
 #
-!if   ($(MODEL) == m || $(MODEL) == l)  # MODEL == m|l
+!if   $(MODEL) == l  						# MODEL == l
   WIN16 = 1
 !elif ($(MODEL) == t || $(MODEL) == f)  # MODEL == f|t
   WIN32 = 1
@@ -99,13 +136,20 @@
 ! endif
 !endif
 
+#
+# Check for incompatible choices and warn user
+#
+!if $d(ILINK) && $d(WIN16)
+! error Cannot build 16-bit targets with ILINK.
+!endif
+
 !if $d(DOS) && $d(MT)
 ! error Cannot build multi-thread library for DOS.
 !endif
 
 !if $d(MODEL)
-! if $(MODEL) != m && $(MODEL) != l && $(MODEL) != f && $(MODEL) != t && $(MODEL) != d
-!   error MODEL must be m, l, d, f or t
+! if $(MODEL) != l && $(MODEL) != f && $(MODEL) != t && $(MODEL) != d
+!   error MODEL must be l, d, f or t
 ! endif
 !endif
 
@@ -115,14 +159,23 @@
 !if $d(DLL)
 
 ! if $d(WIN32)
-    KEY = w$(MODEL)i            # 32bit flat or multithread DLL import library
+!   if $d(VCL)
+      KEY = v
+!   else
+      KEY = $(MODEL)
+!   endif
+    KEY = w$(KEY)i              # 32bit flat or multithread DLL import library
 ! else
     KEY = wi                    # 16bit DLL import library
 ! endif
 
 !else
 
-KEY = w$(MODEL)                 # Static library uses w+model
+! if $d(VCL)
+    KEY = wv
+! else
+    KEY = w$(MODEL)             # Static library uses w+model
+! endif
 
 !endif  # if/else $d(DLL)
 
@@ -131,9 +184,9 @@ KEY = w$(MODEL)                 # Static library uses w+model
 ! endif
 
 !if !$d(OCFNAME)
-  OCFNAME = ocf
+  OCFNAME = OCF
 ! if !$d(OCFVER)
-    OCFVER = 50
+    OCFVER = 52
 ! endif
 !endif
 
@@ -192,8 +245,9 @@ KEY = w$(MODEL)                 # Static library uses w+model
 #
 # Default bcroot to whatever is in bcroot.inc
 #
+
 !if !$d(BCROOT)
-! include $(MAKEDIR)\bcroot.inc
+!include $(MAKEDIR)\bcroot.inc
 !endif
 
 #
@@ -225,7 +279,7 @@ BCBINDIR = $(BCROOT)\bin
 #
 # Check if BIDS header directory was specified
 #
-!if $d(BIDSINCDIR)  
+!if $d(BIDSINCDIR)
   INCLUDE=$(OCFINCDIR);$(BIDSINCDIR);$(BCINCDIR)
 !else
   INCLUDE=$(OCFINCDIR);$(BCINCDIR)
@@ -263,10 +317,45 @@ OCFOBJDIR = $(OCFSRCDIR)\o\$(OD)$(KEY)   # Keep seperate diag/nondiag dirs
 ! endif
 !endif
 
+#
+# Where to find VCL libraries, objs, and headers
+#
+!if $d(VCL)
+! if !$d(BCBROOT)
+    BCBROOT = $(BCROOT)
+! endif
+! if !$d(VCLLIBDIR)
+    VCLLIBDIR = $(BCBROOT)\lib
+! endif
+! if !$d(VCLOBJDIR)
+    VCLOBJDIR = $(VCLLIBDIR)\obj
+! endif
+! if !$d(VCLINCDIR)
+    VCLINCDIR = $(BCBROOT)\include\vcl
+! endif
+INCLUDE = $(INCLUDE);$(VCLINCDIR)
+!endif
+
 #--------------------------------------------------------------------
 # Library names
 #--------------------------------------------------------------------
 OCFLIB = $(OCFLIBDIR)\$(OCFNAME)$(OD)$(KEY).lib
+
+#
+# If building for VCL, use an RTL that begins "cp" instead of "cw"
+#
+!if $d(VCL)
+  RTLPFX=cp
+!else
+  RTLPFX=cw
+!endif
+
+#--------------------------------------------------------------------
+# Tools and options which are Win16/Win32 independent
+#--------------------------------------------------------------------
+!if $d(NAMESPACE)
+  CFLAGS = $(CFLAGS) -DBI_NAMESPACE
+!endif
 
 #--------------------------------------------------------------------
 # Tools and options for Win32
@@ -276,12 +365,18 @@ OCFLIB = $(OCFLIBDIR)\$(OCFNAME)$(OD)$(KEY).lib
 #  CC       = $(BCBINDIR)\bcc32i      # Compiler
   RCC      = brcc32 -w32             # Resource compiler
   CCASM    = $(BCBINDIR)\tasm32      # Assembler
+
+! if $d(ILINK)
+  LINK     = $(BCBINDIR)\ilink32     # Linker
+! else
   LINK     = $(BCBINDIR)\tlink32     # Linker
+! endif
+
   LIB      = $(BCBINDIR)\tlib        # Librarian
   IMPLIB   = $(BCBINDIR)\implib      # Import library generator
   TDSTRIP  = $(BCBINDIR)\tdstrp32    # Debug info extractor
 
-  CFLAGS   = -d -k- -Ogmpv           # Optimizations (-O1gmpv)
+  CFLAGS   = -d -k- -Ogmpv $(CFLAGS) # Optimizations (-O1gmpv)
 ! if $d(CODEGUARD)                   # d=add data, c=add calls, t=check this
     CFLAGS = $(CFLAGS) -vGd -vGt
 !   if $(CODEGUARD) == 2
@@ -292,16 +387,21 @@ OCFLIB = $(OCFLIBDIR)\$(OCFNAME)$(OD)$(KEY).lib
 ! if $d(DEBUG)
     TLIBOPTS = /P512 /C
 ! else
-    TLIBOPTS = /P32 /0 /C
+    TLIBOPTS = /P64 /0 /C
 ! endif
 
 ! if $d(DLL)
     CFLAGS = $(CFLAGS) -WDE -D_BUILDOCFDLL
     LFLAGS = $(LDBG) -Tpd -aa -s -c
 !   if !$d(BIDSILIB)
-      BIDSILIB = bids$(BD)$(MODEL)i
+!     if $d(VCL)
+        DLL32KEY = v
+!     else
+        DLL32KEY = MODEL
+!     endif      
+      BIDSILIB = bids$(BD)$(DLL32KEY)i
 !   endif
-    STDLIBS  = import32 cw32$(MT)i   # Libs for linking the DLL
+    STDLIBS  = import32 $(RTLPFX)32$(MT)i 
 !   if $d(CODEGUARD)
       STDLIBS  = cg32 $(STDLIBS)
 !   endif
@@ -309,13 +409,21 @@ OCFLIB = $(OCFLIBDIR)\$(OCFNAME)$(OD)$(KEY).lib
     CFLAGS = $(CFLAGS) -W
 ! endif
 
-!if $d(MT)
-  CFLAGS = $(CFLAGS) -WM
-!endif
+! if $d(VCL)
+    CFLAGS  = $(CFLAGS) -b- -Vx -Ve
+    LFLAGS  = $(LFLAGS) -j$(VCLOBJDIR)
+    STDLIBS = $(STDLIBS) 
+! endif 
 
-!if $d(ALIGN)
-  CFLAGS = $(CFLAGS) -a$(ALIGN)
-!endif
+! if !$d(MT)
+    CFLAGS = $(CFLAGS) -WM-
+! endif
+
+! if $d(VCL)
+    CFLAGS = $(CFLAGS) -a4
+! elif $d(ALIGN)
+    CFLAGS = $(CFLAGS) -a$(ALIGN)
+! endif
 
 #--------------------------------------------------------------------
 # Tools and options for Win16
@@ -407,25 +515,38 @@ OCFLIB = $(OCFLIBDIR)\$(OCFNAME)$(OD)$(KEY).lib
 # Common, unsectioned objs go into static libs and DLLs
 #
 OBJS_CMN = \
- PFXautocli.obj\
  PFXappdesc.obj\
+ PFXautocli.obj\
+ PFXautodisp.obj\
+ PFXautoiter.obj\
+ PFXautostck.obj\
  PFXautosrv.obj\
+ PFXautosym.obj\
  PFXautoval.obj\
  PFXocreg.obj\
  PFXocstorag.obj\
  PFXoleutil.obj\
- PFXtypelib.obj
+ PFXtypelib.obj\
+ PFXversion.obj\
+ PFXexcept.obj
 
 OBJS_CMN = $(OBJS_CMN)\
  PFXocapp.obj\
  PFXocdoc.obj\
  PFXocpart.obj\
- PFXocctrl.obj\
  PFXocremvie.obj\
  PFXocdata.obj\
  PFXoclink.obj\
  PFXocview.obj\
  PFXocguid.obj
+
+# Modules built only in 32-bit
+#
+!if	$d(WIN32)
+OBJS_CMN = $(OBJS_CMN) \
+ PFXocctrl.obj
+!endif
+
 
 # Put together obj groups into lists for different targets
 #

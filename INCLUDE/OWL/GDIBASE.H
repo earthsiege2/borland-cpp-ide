@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.3  $
+//$Revision:   10.5  $
 //
 // Definition of base most abstract GDI object class, and associated exception
 // class
@@ -23,9 +23,34 @@
 # include <classlib/pointer.h>   // get this header for backward compatibility
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
+
+//
+// class TXGdi
+// ~~~~~ ~~~~~
+// Base GDI exception class. Handles all GDI related exceptions
+//
+class _OWLCLASS_RTL TXGdi : public TXOwl {
+  public:
+    TXGdi(uint resId = IDS_GDIFAILURE, HANDLE handle = 0);
+
+    static string Msg(uint resId, HANDLE);
+
+#if defined(BI_NO_COVAR_RET)
+    TXBase* Clone();
+#else
+    TXGdi* Clone();
+#endif
+    void Throw();
+
+    static void Raise(uint resId = IDS_GDIFAILURE, HANDLE handle = 0);
+};
 
 //
 // Flag for Handle ctors to control Handle deletion in dtor
@@ -57,31 +82,19 @@ class _OWLCLASS TGdiBase {
   private:
     TGdiBase(const TGdiBase&); // Protect against copying & assignment
     TGdiBase& operator =(const TGdiBase&);
-};
 
-//
-// class TXGdi
-// ~~~~~ ~~~~~
-// Base GDI exception class. Handles all GDI related exceptions
-//
-class _OWLCLASS_RTL TXGdi : public TXOwl {
+#if defined(OWL2_COMPAT)
   public:
-    TXGdi(uint resId = IDS_GDIFAILURE, HANDLE handle = 0);
-
-    static string Msg(uint resId, HANDLE);
-
-#if defined(BI_NO_COVAR_RET)
-    TXBase* Clone();
-#else
-    TXGdi* Clone();
+    typedef ::TXGdi TXGdi;  // Exceptions moved to global scope
 #endif
-    void Throw();
-
-    static void Raise(uint resId = IDS_GDIFAILURE, HANDLE handle = 0);
 };
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // OWL_GDIBASE_H

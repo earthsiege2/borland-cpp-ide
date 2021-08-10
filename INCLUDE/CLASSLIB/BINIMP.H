@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.5  $
+//$Revision:   5.8  $
 //
 //----------------------------------------------------------------------------
 #if !defined( CLASSLIB_BINIMP_H )
@@ -21,6 +21,10 @@
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -416,7 +420,7 @@ public:
         {
         return Parent::Add( t );
         }
-        
+
     int Detach( T _BIDSFAR *t, int del = 0 )
         {
         return Parent::RemoveNode( &TBinaryNodeImp<TVoidPointer>(t), del );
@@ -552,6 +556,10 @@ public:
     Parent::Restart;
 
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po.

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.9  $
+//$Revision:   5.13  $
 //
 // Defines the class TSemaphore and its nested class TLock.
 // Defines the derived semaphore class TMutex
@@ -39,6 +39,10 @@
 
 #if defined(BI_CLASSLIB_NO_po)
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 //
@@ -119,11 +123,11 @@ class _BIDSCLASS TMutex : public TSemaphore
 {
   public:
 #if defined(BI_PLAT_WIN32)
-    TMutex(const char* name = 0, LPSECURITY_ATTRIBUTES sa = 0);
-    TMutex(const char* name, bool inherit, uint32 access = MUTEX_ALL_ACCESS);
+    TMutex(const _TCHAR* name = 0, LPSECURITY_ATTRIBUTES sa = 0);
+    TMutex(const _TCHAR* name, bool inherit, uint32 access = MUTEX_ALL_ACCESS);
     TMutex(THandle handle);
 #elif defined(BI_PLAT_OS2)
-    TMutex(const char* name = 0);
+    TMutex(const _TCHAR* name = 0);
    ~TMutex();
 #endif
 
@@ -133,11 +137,23 @@ class _BIDSCLASS TMutex : public TSemaphore
 #endif
     typedef TLock Lock;  // For compatibility with old T-less typename
 
+    // If another mutex with the same name existed when this mutex
+    // was created, then another handle to the object exists and
+    // someone else may be using it too.
+    //
+#if defined(BI_PLAT_WIN32)
+    bool IsShared();
+#endif
+
   private:
     TMutex(const TMutex&);
     const TMutex& operator =(const TMutex&);
 
     virtual void Release();  // Release this mutex semaphore
+
+#if defined(BI_PLAT_WIN32)
+    bool Shared;
+#endif
 
 #if defined(BI_PLAT_OS2)
     THandle Handle;
@@ -153,9 +169,9 @@ class _BIDSCLASS TMutex : public TSemaphore
 class _BIDSCLASS TCountedSemaphore : public TSemaphore
 {
   public:
-    TCountedSemaphore(int initialCount, int maxCount, const char* name = 0,
+    TCountedSemaphore(int initialCount, int maxCount, const _TCHAR* name = 0,
                       LPSECURITY_ATTRIBUTES sa = 0);
-    TCountedSemaphore(const char* name, bool inherit,
+    TCountedSemaphore(const _TCHAR* name, bool inherit,
                       uint32 access = SEMAPHORE_ALL_ACCESS);
     TCountedSemaphore(THandle handle);
 
@@ -176,13 +192,13 @@ class _BIDSCLASS TEventSemaphore : public TSemaphore
   public:
 #if defined(BI_PLAT_WIN32)
     TEventSemaphore(bool manualReset=false, bool initialState=false,
-                    const char* name = 0, LPSECURITY_ATTRIBUTES sa = 0);
-    TEventSemaphore(const char* name, bool inherit,
+                    const _TCHAR* name = 0, LPSECURITY_ATTRIBUTES sa = 0);
+    TEventSemaphore(const _TCHAR* name, bool inherit,
                     uint32 access = SEMAPHORE_ALL_ACCESS);
     TEventSemaphore(THandle handle);
 #elif defined(BI_PLAT_OS2)
     TEventSemaphore(bool manualReset=false, bool initialState=false,
-                    const char* name = 0);
+                    const _TCHAR* name = 0);
    ~TEventSemaphore();
 #endif
 
@@ -255,7 +271,7 @@ class _BIDSCLASS TSemaphoreSet
           MsgWaiting = -4,   //               Msg waiting
         };
         int  WhichAquired() const;  // See which was aquired >=0, or enum
-       
+
         void Release(bool relinquish = false);
 
       protected:
@@ -480,7 +496,7 @@ template <class T> class TStaticSync
 //     Suspend();              Suspends execution of the thread.
 //     Resume();               Resumes execution of a suspended thread.
 //
-//     Terminate();            Sets an internal flag that indicates that the 
+//     Terminate();            Sets an internal flag that indicates that the
 //                             thread should exit. The derived class can check
 //                             the state of this flag by calling
 //                             ShouldTerminate().
@@ -508,7 +524,7 @@ template <class T> class TStaticSync
 //
 //     enum TStatus;           Identifies the states that the class can be in.
 //
-//         Created             The class has been created but the thread has 
+//         Created             The class has been created but the thread has
 //                             not been started.
 //         Running             The thread is running.
 //
@@ -520,7 +536,7 @@ template <class T> class TStaticSync
 //                             only when the operating system is unable to
 //                             start the thread.
 //
-//     class TThreadError;     The error class that defines the objects that 
+//     class TThreadError;     The error class that defines the objects that
 //                             are thrown when an error occurs.
 //
 // TThread::ThreadError Public Interface
@@ -694,7 +710,7 @@ class _BIDSCLASS TThread
       Highest      = THREAD_PRIORITY_HIGHEST,       //   2
       TimeCritical = THREAD_PRIORITY_TIME_CRITICAL, //  15
     };
-      
+
     int GetPriority() const;
     int SetPriority(int);   // Can pass a TPriority for simplicity
 
@@ -820,27 +836,45 @@ inline void TSemaphore::TLock::Release(bool relinquish)
 // TMutex Win32
 
 //
-inline TMutex::TMutex(const char* name, LPSECURITY_ATTRIBUTES sa)
+inline TMutex::TMutex(const _TCHAR* name, LPSECURITY_ATTRIBUTES sa)
+ : Shared(false)
 {
   Handle = ::CreateMutex(sa, false, name);  // don't aquire now
+  if (Handle && (GetLastError() == ERROR_ALREADY_EXISTS))
+    Shared = true;
 }
 
 //
 // Open an existing mutex. Fails if not there.
 //
-inline TMutex::TMutex(const char* name, bool inherit, uint32 access)
+inline TMutex::TMutex(const _TCHAR* name, bool inherit, uint32 access)
+  : Shared(false)
 {
   Handle = ::OpenMutex(access, inherit, name);
+  if (Handle)
+    Shared = true;
 }
 
 //
 //
 //
 inline TMutex::TMutex(THandle handle)
+  : Shared(false)
 {
-  ::DuplicateHandle(::GetCurrentProcess(), handle,
-                    ::GetCurrentProcess(), &Handle,
-                    0, false, DUPLICATE_SAME_ACCESS);
+  if (::DuplicateHandle(::GetCurrentProcess(), handle,
+                        ::GetCurrentProcess(), &Handle,
+                        0, false, DUPLICATE_SAME_ACCESS))
+  {
+    Shared = true;
+  }
+}
+
+//
+//
+//
+inline bool TMutex::IsShared()
+{
+  return Shared;
 }
 
 //----------------------------------------
@@ -848,14 +882,14 @@ inline TMutex::TMutex(THandle handle)
 
 //
 inline TCountedSemaphore::TCountedSemaphore(int initialCount, int maxCount,
-                                            const char* name,
+                                            const _TCHAR* name,
                                             LPSECURITY_ATTRIBUTES sa)
 {
   Handle = ::CreateSemaphore(sa, initialCount, maxCount, name);
 }
 
 //
-inline TCountedSemaphore::TCountedSemaphore(const char* name, bool inherit,
+inline TCountedSemaphore::TCountedSemaphore(const _TCHAR* name, bool inherit,
                                             uint32 access)
 {
   Handle = ::OpenSemaphore(access, inherit, name);
@@ -873,14 +907,14 @@ inline TCountedSemaphore::TCountedSemaphore(THandle handle)
 // TEventSemaphore Win32
 
 inline TEventSemaphore::TEventSemaphore(bool manualReset, bool initialState,
-                                        const char* name,
+                                        const _TCHAR* name,
                                         LPSECURITY_ATTRIBUTES sa)
 {
   Handle = ::CreateEvent(sa, manualReset, initialState, name);
 }
 
 //
-inline TEventSemaphore::TEventSemaphore(const char* name, bool inherit,
+inline TEventSemaphore::TEventSemaphore(const _TCHAR* name, bool inherit,
                                         uint32 access)
 {
   Handle = ::OpenEvent(access, inherit, name);
@@ -935,7 +969,7 @@ inline int TSemaphoreSet::TLock::WhichAquired() const
 {
   return Locked;
 }
-       
+
 #elif defined(BI_PLAT_OS2)
 
 //----------------------------------------
@@ -1211,6 +1245,10 @@ inline TThread::TThreadError::TErrorType TThread::TThreadError::GetErrorType() c
 {
   return Type;
 }
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined(BI_CLASSLIB_NO_po)
 # pragma option -po.

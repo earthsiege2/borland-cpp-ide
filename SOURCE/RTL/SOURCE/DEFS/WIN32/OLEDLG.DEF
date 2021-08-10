@@ -24,3 +24,5 @@ EXPORTS
     OleUIPromptUserW
     OleUIUpdateLinksA
     OleUIUpdateLinksW
+    _OleUIPromptUserA                        = OleUIPromptUserA
+    _OleUIPromptUserW                        = OleUIPromptUserW

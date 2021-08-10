@@ -6,6 +6,7 @@
   #include <windows.h>
 #endif
 #include <owl/owlapp.rc>         // default owl app icon
+#include <owl/except.rc>
 #include <owl/window.rh>
 #include "transfer.h"
 

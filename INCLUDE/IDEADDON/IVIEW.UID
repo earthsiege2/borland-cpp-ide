@@ -1,8 +1,9 @@
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  Created: 1/1/96
-  Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
-  $Revision:   1.15  $
+   Created: 1/1/96
+   Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+   $Header:   Y:\admin\bride\addon\deliver\interfac\iview.uiv   1.19   18 Nov 1996 11:30:16   JDOUGLAS  $
+   $Revision:   1.19  $
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
 
@@ -20,4 +21,10 @@ DEFINE_GUID(IID_Addon_IViewFile, 0x707240E2L,
 DEFINE_GUID(IID_Addon_IViewClient, 0x707240E3L,
 0x4B4B, 0x11CF, 0x9D, 0x40, 0x44, 0x45,0x53, 0x54, 0x00, 0x00 );
 
+DEFINE_GUID(IID_Addon_IViewType2, 0x707240E6L,
+0x4B4B, 0x11CF, 0x9D, 0x40, 0x44, 0x45,0x53, 0x54, 0x00, 0x00 );
+
+
 #endif // __IVIEW_UID
+
+

@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.1  $
+// $Revision:   2.2  $
 //
 // 	Implements the Bolero half of the OLE2 in-process server object.
 //    BOleInProcSite  overrides some of the default handler implementation

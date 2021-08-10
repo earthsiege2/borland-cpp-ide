@@ -1,0 +1,4 @@
+:TITLE Win32 Programming Techniques
+:INDEX Win32 Programming Techniques = progtech.hlp
+:INCLUDE WIN32SDK.CFG
+:INCLUDE PROGTECH.TOC

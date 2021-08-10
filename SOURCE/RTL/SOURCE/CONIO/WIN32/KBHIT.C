@@ -6,18 +6,21 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #define INCL_CON
 #define INCL_USER
 #include <ntbc.h>
 
 #include <conio.h>
+
+extern HANDLE _hin;  /* From CRTINIT.C for console input */
 
 #define MAX_INPUT_RECORDS 20
 
@@ -27,6 +30,7 @@ unsigned char _cFlag = 0;       /* Flag presence of un-gotten char */
 unsigned char _cChar = 0;       /* The ungotten char               */
 
 extern int _cextend;            /* Used for the scan code of an extended key */
+
 /*-----------------------------------------------------------------------*
 
 Name            kbhit - checks for recent keystrokes
@@ -48,7 +52,6 @@ int _RTLENTRY _EXPFUNC kbhit(void)
 {
     static INPUT_RECORD pinp[MAX_INPUT_RECORDS];
     DWORD nread, nevents, j;
-    HANDLE hin;
 
     if (_cFlag)             /* has a character been ungetch'd? */
         return (1);
@@ -57,10 +60,8 @@ int _RTLENTRY _EXPFUNC kbhit(void)
         return (1);         /* last char was a 0 signifing that next one will
                                be the scan code of an extended key */
 
-    hin = GetStdHandle(STD_INPUT_HANDLE);
-
     /* Get the number of pending input records */
-    GetNumberOfConsoleInputEvents(hin, &nevents);
+    GetNumberOfConsoleInputEvents(_hin, &nevents);
 
     /* Check for limit violations (if > max, return 0 and let the user
        call us again later for further checks)
@@ -69,7 +70,7 @@ int _RTLENTRY _EXPFUNC kbhit(void)
         return 0;
 
     /* Read all the pending records */
-    PeekConsoleInput(hin, pinp, nevents, &nread);
+    PeekConsoleInput(_hin, pinp, nevents, &nread);
 
     /* Cycle through the records looking for valid key presses */
     for (j = 0;j<nevents;j++)

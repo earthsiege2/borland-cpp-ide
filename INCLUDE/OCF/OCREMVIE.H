@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.9  $
 //
 // Definition of TOcRemView Class
 //----------------------------------------------------------------------------
@@ -9,6 +11,10 @@
 
 #if !defined(OCF_OCVIEW_H)
 # include <ocf/ocview.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
 #endif
 
 //
@@ -143,6 +149,10 @@ class _ICLASS TOcRemView : public TOcView, public IBPart2 {
     TState          State;           // Current state of this server view
     TKind           Kind;            // What kind of server view this is
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

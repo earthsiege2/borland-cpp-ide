@@ -2,7 +2,7 @@
 // ObjectComponents
 // Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// $Revision:   2.13  $
+// $Revision:   2.16  $
 //
 //  Implements the Bolero half of the OLE2 control object.
 //    BOleControl objects impersonate the OCX from the point of view of the 
@@ -14,7 +14,7 @@
 #include "BOleFont.h"
 #include "BOleDoc.h"
 
-#ifdef WIN16
+#if defined(WIN16)
 #include <olenls.h>
 #endif
 
@@ -71,15 +71,15 @@ HRESULT _IFUNC BOleControl::QueryInterfaceMain(REFIID iid, LPVOID FAR *ppv)
 
 
 BOleControl::BOleControl (BOleClassManager *pF, IBUnknownMain * pO,
-                           BOleDocument * pOD) : 
+                           BOleDocument * pOD) :
   BOlePart (pF, pO, pOD),
-  pIEvents (NULL),         pIAmbients (NULL), 
-  pCtrlDispatch (NULL),    pOleCtrl (NULL), 
-  pCSite (NULL),           pNextCtrl (NULL), 
-  pPrevCtrl (NULL),        iidEvents (IID_NULL), 
+  pIEvents (NULL),         pIAmbients (NULL),
+  pCtrlDispatch (NULL),    pOleCtrl (NULL),
+  pCSite (NULL),           pNextCtrl (NULL),
+  pPrevCtrl (NULL),        iidEvents (IID_NULL),
   ConnEvents (0),          ConnProp (0)
 {
-  CtrlInfo.cb = 0;
+  CtrlInfo.cb = sizeof(CONTROLINFO);
   CtrlInfo.cAccel = 0;
   CtrlInfo.hAccel = 0;
 }
@@ -135,7 +135,7 @@ HRESULT _IFUNC BOleControl::Init(IBSite * pIS,BOleInitInfo *pBI)
    * information for this control.  We have to reload this
    * information in IOleControlSite::OnControlInfoChanged.
    */
-  pOleCtrl->GetControlInfo (&CtrlInfo); 
+  pOleCtrl->GetControlInfo (&CtrlInfo);
 
   /*
    * Get the properties and methods IDispatch
@@ -260,26 +260,27 @@ HRESULT _IFUNC BOleControl::BOleCreate (BOleInitInfo *pBI, DWORD dwRenderOpt,
     fmtetc.dwAspect = DVASPECT_CONTENT;
   }
 
-  /* OleCreate will run the object at this point using OleRun. But OleRun
+#if 0
+  OleCreate will run the object at this point using OleRun. But OleRun
   calls IPersistStorage::InitNew before IOleObject::SetClientSite using
   the client site and storage pointers saved in the handler. For this
   reason, ControlCreate () doesn't support LocalServer controls.
-  (LocalServer controls
-  currently cannot be implemented because the new OLE control interfaces
-  do not have marshalling code).
+  (LocalServer controls currently cannot be implemented because the new 
+   OLE control interfaces do not have marshalling code).
 
-   // Run object
+  // Run object
   hr = OleRun (punk);
   if (FAILED (hr))
      goto error;
-  */
+#endif
 
   LPOLECACHE polecache;
   DWORD dwConnId;
   // Cache presentation
   hr = punk->QueryInterface (IID_IOleCache, (LPVOID FAR*)&polecache);
   if (FAILED (hr))
-    goto error;
+  	return NOERROR;
+    //goto error;
   hr =  polecache->Cache (&fmtetc, ADVF_PRIMEFIRST, &dwConnId);
   polecache->Release ();
   if (FAILED (hr))

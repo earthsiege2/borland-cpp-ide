@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.8  $
+//$Revision:   10.12  $
 //
 // Implementation of TDiBitmap class, a combination of a GDI TBitmap object and
 // a Device Independent Bitmap TDib object.
@@ -19,6 +19,8 @@
 # include <owl/wing.h>
 #endif
 
+OWL_DIAGINFO;
+
 //
 // Initialize our bitmap side from the dib side. TDib::Bits gets setup to
 // point to the new DIBSection/WinG managed dib buffer.
@@ -32,7 +34,10 @@ void TDiBitmap::InitBitmap()
   dc.SelectObject(p);
   dc.RealizePalette();
 #if defined(BI_PLAT_WIN32)
-  TBitmap::Handle = dc.CreateDIBSection(*GetInfo(), Usage(), &Bits);
+  void *bits;
+  TBitmap::Handle = dc.CreateDIBSection(*GetInfo(), Usage(), &bits);
+  memcpy(bits, Bits, SizeImage());
+  Bits = bits;
 #else
   if (TWinG::IsAvailable())
     TBitmap::Handle = TWinG::Dll()->CreateBitmap(dc, GetInfo(), &(void far*)Bits);
@@ -228,14 +233,13 @@ TIdentityPalette::TIdentityPalette(const TPalette& palette)
 //
 THalftonePalette::THalftonePalette()
 :
-  TPalette(0, NoAutoDelete)
-{
 #if defined(BI_PLAT_WIN32)
-  Handle = ::CreateHalftonePalette(TScreenDC());
+  TPalette(::CreateHalftonePalette(TScreenDC()), NoAutoDelete)
 #else
-  if (TWinG::IsAvailable())
-    Handle = TWinG::Dll()->CreateHalftonePalette();
+  TPalette(TWinG::IsAvailable() ? TWinG::Dll()->CreateHalftonePalette() : 0,
+           NoAutoDelete )
 #endif
+{
 
   ShouldDelete = true;
   CheckValid();

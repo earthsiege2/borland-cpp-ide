@@ -1,0 +1,25 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1997 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#include <owl/owlapp.rc>
+#include <owl/except.rc>
+#include <owl/statusba.rc>
+#include <owl/window.rh>
+#include "main.rh"
+
+IDM_MAINMENU MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM "E&xit"   CM_EXIT
+  END
+  POPUP "&Sites"
+  BEGIN
+    MENUITEM "&Borland's OWL page"              CM_BORLANDOWL
+    MENUITEM "OWL mailing list"                 CM_OWLLIST
+    MENUITEM "Unofficial Borland C++ &FAQ"      CM_BCFAQ
+    MENUITEM "Borland C++Builder"               CM_CBUILDER
+    MENUITEM "ANSI/ISO Working Paper (Jan96)"   CM_CPPWP
+  END
+END

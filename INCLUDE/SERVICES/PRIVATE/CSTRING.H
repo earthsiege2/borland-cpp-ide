@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 // Borland Class Library
-// (C) Copyright 1993, 1995 by Borland International, All Rights Reserved
+// (C) Copyright 1993, 1997 by Borland International, All Rights Reserved
 //
 //   Standard C++ string class
 //

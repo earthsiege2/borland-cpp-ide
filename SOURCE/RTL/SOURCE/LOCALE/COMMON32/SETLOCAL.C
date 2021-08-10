@@ -7,29 +7,31 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1993, 1996 by Borland International
+ *      Copyright (c) 1993, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 
 #include <locale.h>
 #include <limits.h>
 #include <string.h>
 #include <stdio.h>
+#include <tchar.h>
 
 #pragma warn -par
 
-char * _RTLENTRY _EXPFUNC setlocale( int category, const char *locale )
+_TCHAR * _RTLENTRY _EXPFUNC _tsetlocale( int category, const _TCHAR *locale )
   {
   if( locale == NULL )
     {
-    return( "C" );
+    return( _TEXT("C") );
     }
   else
     {
-    return( *locale && strcmp( locale, "C" ) ? NULL : (char *) locale );
+    return( *locale && _tcscmp( locale, _TEXT("C") ) ? NULL : (_TCHAR *) locale );
     }
   }

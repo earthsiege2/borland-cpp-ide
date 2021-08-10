@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of class THelpFileManager & THelpContext
 //----------------------------------------------------------------------------
@@ -20,6 +20,7 @@
 # include <owl/framewin.h>
 #endif
 
+OWL_DIAGINFO;
 
 //
 // Constructor saves the name of the help file and creates the global

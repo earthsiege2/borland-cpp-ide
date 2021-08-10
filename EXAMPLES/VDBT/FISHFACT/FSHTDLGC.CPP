@@ -11,10 +11,6 @@
     ========
     Source file for implementation of fishfactTDLGClient (TDialog).
 
-	$Revision:   1.2  $
-	$Author:   JHEHER  $
-	$Date:   09 Feb 1996 15:47:28  $
-
 */
 
 

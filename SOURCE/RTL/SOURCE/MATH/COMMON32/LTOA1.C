@@ -3,42 +3,51 @@
  *
  * function(s)
  *        itoa      - converts an integer to a string
- *        ltoa      - converts a long to a string
+ *        _ltoa      - converts a long to a string
  *        ultoa     - converts an unsigned long to a string
+ *        _itow     - converts an integer to a wide-character string
+ *        _ltow     - converts a long to a wide-character string
+ *        _ultow     - converts an unsigned long to a wide-character string
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <stdlib.h>
 #include <_printf.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*-----------------------------------------------------------------------*
 
 Name            itoa  - converts an integer to a string
-                ltoa  - converts a long to a string
+                _ltoa  - converts a long to a string
                 ultoa - converts an unsigned long to a string
 
 Usage           char *itoa(int value, char *strP, int radix);
-                char *ltoa(long value, char *strP, int radix);
+                char *_ltoa(long value, char *strP, int radix);
                 char *ultoa(unsigned long value, char *strP, int radix);
+                wchar_t *itow(int value, wchar_t *strP, int radix);
+                wchar_t *ltow(long value, wchar_t *strP, int radix);
+                wchar_t *ultow(unsigned long value, wchar_t *strP, int radix);
 
 Prototype in    stdlib.h
                 _printf.h for __longtoa
 
 Description     These functions  convert value to a  null-terminated string
                 and  store the  result in  string. With  itoa, value  is an
-                integer;  with ltoa  it is  a  long;  with ultoa  it is  an
+                integer;  with _ltoa  it is  a  long;  with ultoa  it is  an
                 unsigned long.  __longtoa is the  internal routine used for
                 all these conversions to ASCII (in longtoa.cas).
 
                 radix specifies the base to be used in converting value. it
-                must be between  2 and 36 (inclusive). With  itoa and ltoa,
+                must be between  2 and 36 (inclusive). With  itoa and _ltoa,
                 if value is negative, and  radix is 10, the first character
                 of string is  the minus sign (-). This does  not occur with
                 ultoa. Also, ultoa performs no overflow checking.
@@ -60,21 +69,23 @@ Return value    All these functions return a pointer to string. There is no
 
 *------------------------------------------------------------------------*/
 
-char *_RTLENTRYF _EXPFUNC itoa( int value, char *strP, int radix )
+_TCHAR *_RTLENTRY _EXPFUNC _itot( int value, _TCHAR *strP, int radix )
 {
 #define dword   unsigned long
 
-        return  __longtoa ((radix == 10) ? (long) value :
+        return  _longtot ((radix == 10) ? (long) value :
                            (dword)((unsigned)value), strP, radix, (radix == 10),
-                           'a');
+                           _TEXT('a'));
 }
 
 
 /*-----------------------------------------------------------------------*
 
 Name            ultoa - converts an unsigned long to a string
+                _ultow - converts an unsigned long to a string
 
 Usage           char *ultoa(unsigned long value, char *string, int radix);
+                wchar_t *_ultow(unsigned long value, wchar_t *string, int radix);
 
 Prototype in    stdlib.h
 
@@ -82,17 +93,18 @@ Description     see itoa
 
 *------------------------------------------------------------------------*/
 
-char * _RTLENTRYF _EXPFUNC ultoa (unsigned long value, char *strP, int radix)
+_TCHAR * _RTLENTRY _EXPFUNC _ultot (unsigned long value, _TCHAR *strP, int radix)
 {
-        return  __longtoa (value, strP, radix, 0, 'a');
+        return  _longtot (value, strP, radix, 0, _TEXT('a'));
 }
 
 
 /*-----------------------------------------------------------------------*
 
-Name            ltoa - converts a long to a string
+Name            _ltoa - converts a long to a string
+                _ltow - converts a long to a string
 
-Usage           char *ltoa(long value, char *string, int radix);
+Usage           char *_ltoa(long value, char *string, int radix);
 
 Prototype in    stdlib.h
 
@@ -100,7 +112,7 @@ Description     see itoa
 
 *------------------------------------------------------------------------*/
 
-char  * _RTLENTRYF _EXPFUNC ltoa (long value, char *strP, int radix)
+_TCHAR  * _RTLENTRY _EXPFUNC _ltot (long value, _TCHAR *strP, int radix)
 {
-        return  __longtoa (value, strP, radix, (radix == 10), 'a');
+        return  _longtot (value, strP, radix, (radix == 10), _TEXT('a'));
 }

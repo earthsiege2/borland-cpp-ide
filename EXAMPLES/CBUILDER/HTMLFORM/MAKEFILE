@@ -1,0 +1,20 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for HTMLFORM example                                          #
+#                                                                          #
+#   Copyright (c) 1997, Borland International                              #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#       make                 for a statically linked EXE                   #
+#       make -DUSEDLL        for an EXE that uses RTL/OWL/BIDS DLLs        #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE     = HTMLFORM
+OBJEXE  = MAIN.OBJ ADOPT.OBJ HTMLFORM.OBJ
+RESEXE  = HTMLFORM.DFM MAIN.RES
+VCL     = 1
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

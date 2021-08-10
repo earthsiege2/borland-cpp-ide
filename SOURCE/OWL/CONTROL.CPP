@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Implementation of class TControl.  This defines the basic behavior of all
 // controls.
@@ -13,6 +13,7 @@
 # include <owl/control.h>
 #endif
 
+OWL_DIAGINFO;
 #if defined(SECTION) && SECTION != 1
 DIAG_DECLARE_GROUP(OwlControl);
 #endif

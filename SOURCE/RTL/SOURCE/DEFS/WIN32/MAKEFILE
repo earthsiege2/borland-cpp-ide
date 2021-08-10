@@ -14,6 +14,8 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
+# $Revision:   8.14  $                                                                #
+#                                                                           #
 #############################################################################
 
 #############################################################################
@@ -31,6 +33,24 @@ MISC =  $(MISC)                \
                                     # import32.lib because NT has same
                                     # functions listed in a different module)
 
+MISC =  $(MISC)                \
+        $(LIBDIR)\ws2_32.lib        # WinSock 2.0 (some sames conflict with
+                                    # WinSock 1.x, therefore this must be
+                                    # seperate from import32.lib)
+
+MISC =  $(MISC)                \
+        $(LIBDIR)\mswsock.lib       # MS's extensions to Winsock (with conflicts)
+                                    # therefore this must be
+                                    # seperate from import32.lib
+
+MISC =  $(MISC)                \
+        $(LIBDIR)\th32.lib          # ToolHelp32 (for Win95) some conflicts,
+                                    # therefore this must be
+                                    # seperate from import32.lib
+
+MISC =  $(MISC)                \
+        $(LIBDIR)\inet.lib          # Internet APIs (WININET, MSCONF, WEBPOST,
+                                    # URLMON, HLINK)
 
 #############################################################################
 # Configure the environment appropriately.                                  #
@@ -64,46 +84,98 @@ WIN95LIBS =          \
         mapi32.def   \
         tapi32.def   \
         pkpd32.def   \
-        url.def
+        url.def      \
+        snmpapi.def
+
+TH32LIB =            \
+        th32.def
+
+INETLIBS =           \
+        hlink.def    \
+        msconf.def   \
+        urlmon.def   \
+        webpost.def  \
+        wininet.def
+
+NT40LIBS =           \
+        wintrust.def \
+        vfw32.def    \
+        wst.def      \
+        sporder.def  \
+        setupapi.def \
+        rassapi.def  \
+        rasdlg.def   \
+        pdh.def      \
+        lsapi32.def  \
+        loadperf.def \
+        imagehlp.def \
+        cap.def
+
+DIRECTXLIBS =        \
+        ddraw.def    \
+        dplay.def    \
+        dsound.def   \
+        dflayout.def \
+        d3drm.def
 
 RPCEXTRALIB =        \
         rpcdce4.def
 
+WS2_32LIB =          \
+        ws2_32.def
+
+
+MSWSOCKLIB =         \
+        mswsock.def
+
 GUILIBS =            \
-        avicap32.def \
-        avifil32.def \
+#
+# avifil, avicap, and msvfw seem to be older versions of the new vfw32
+#
+#        avicap32.def \
+#        avifil32.def \
         comctl32.def \
         comdlg32.def \
         ctl3d32.def  \
         gdi32.def    \
         glu32.def    \
         msacm32.def  \
-        msvfw32.def  \
+#        msvfw32.def  \
         opengl32.def \
         shell32.def  \
         user32.def   \
         winmm.def    \
         wow32.def
 
+OLEPRO32LIB =        \
+        olepro32.def
+
 OLE2LIBS =           \
         ole32.def    \
         oleaut32.def \
-        oledlg.def
+        oledlg.def   \
+        $(OLEPRO32LIB)
 
 OLE1LIBS =           \
         olecli32.def \
         olesvr32.def
 
 
-MSEXTRALIB =          \
-        mfcuia32.def  \
-        svrapi.def    \
-        penwin32.def  \
-        winstrm.def   \
+MSEXTRALIB =         \
+        mfcuia32.def \
+        svrapi.def   \
+        penwin32.def \
+        winstrm.def  \
+        thunk32.def  \
         $(OLE1LIBS)
 
 
-$(LIBDIR)\import32.lib : $(CONLIBS:.def=.fst) $(GUILIBS:.def=.fst) $(WIN95LIBS:.def=.fst) guid.obj
+$(LIBDIR)\import32.lib : $(NT40LIBS:.def=.fst) $(CONLIBS:.def=.fst)     \
+                         $(GUILIBS:.def=.fst)  $(DIRECTXLIBS:.def=.fst) \
+                         $(WIN95LIBS:.def=.fst) guid.obj guid2.obj      \
+                         $(OLE2LIBS:.def=.fst) uuid.obj docobj_i.obj    \
+                                               inetguid.obj
+
     makersp "-+!s &\n" &&|
         $?
 |   > $&.rsp
@@ -112,7 +184,7 @@ $(LIBDIR)\import32.lib : $(CONLIBS:.def=.fst) $(GUILIBS:.def=.fst) $(WIN95LIBS:.
     del temp.lst
     if exist $*.bak del $*.bak
 
-$(LIBDIR)\ole2w32.lib : $(OLE2LIBS:.def=.fst) uuid.obj
+$(LIBDIR)\ole2w32.lib : $(OLE2LIBS:.def=.fst)
     makersp "-+!s &\n" &&|
         $?
 |   > $&.rsp
@@ -131,6 +203,42 @@ $(LIBDIR)\msextra.lib : $(MSEXTRALIB:.def=.fst)
     if exist $*.bak del $*.bak
 
 $(LIBDIR)\rpcextra.lib : $(RPCEXTRALIB:.def=.fst)
+    makersp "-+!s &\n" &&|
+        $?
+|   > $&.rsp
+    $(TLIB) $< @$&.rsp, temp.lst
+    del *.rsp
+    del temp.lst
+    if exist $*.bak del $*.bak
+
+$(LIBDIR)\ws2_32.lib : $(WS2_32LIB:.def=.fst)
+    makersp "-+!s &\n" &&|
+        $?
+|   > $&.rsp
+    $(TLIB) $< @$&.rsp, temp.lst
+    del *.rsp
+    del temp.lst
+    if exist $*.bak del $*.bak
+
+$(LIBDIR)\mswsock.lib : $(MSWSOCKLIB:.def=.fst)
+    makersp "-+!s &\n" &&|
+        $?
+|   > $&.rsp
+    $(TLIB) $< @$&.rsp, temp.lst
+    del *.rsp
+    del temp.lst
+    if exist $*.bak del $*.bak
+
+$(LIBDIR)\th32.lib : $(TH32LIB:.def=.fst)
+    makersp "-+!s &\n" &&|
+        $?
+|   > $&.rsp
+    $(TLIB) $< @$&.rsp, temp.lst
+    del *.rsp
+    del temp.lst
+    if exist $*.bak del $*.bak
+
+$(LIBDIR)\inet.lib : $(INETLIBS:.def=.fst)
     makersp "-+!s &\n" &&|
         $?
 |   > $&.rsp

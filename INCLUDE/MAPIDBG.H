@@ -4,11 +4,16 @@
  *  Debugging support for MAPI service providers.
  *  Support functions are implemented in MAPIDBG.C.
  *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef __MAPIDBG_H_
 #define __MAPIDBG_H_
+#pragma option -b
+
+#if defined (WIN32) && !defined (_WIN32)
+#define _WIN32
+#endif
 
 /*
  * Debugging Macros -------------------------------------------------------
@@ -135,7 +140,7 @@ typedef unsigned long DWORD;
 
 /*
  *   Trace Macros ------------------------------------------------------------
- *
+ *  
  *      DebugTrace          Use for arbitrary formatted output. It
  *                          takes exactly the same arguments as the
  *                          Windows wsprintf() function.
@@ -197,7 +202,7 @@ SCODE EXPORTDBG __cdecl     ScodeFromSzFn(char *psz);
 void * EXPORTDBG __cdecl    DBGMEM_EncapsulateFn(void * pmalloc, char *pszSubsys, int fCheckOften);
 void EXPORTDBG __cdecl      DBGMEM_ShutdownFn(void * pmalloc);
 void EXPORTDBG __cdecl      DBGMEM_CheckMemFn(void * pmalloc, int fReportOrphans);
-#if defined(_WIN32) && defined(_M_IX86)
+#if defined(_WIN32) && defined(_X86_)
 void EXPORTDBG __cdecl      DBGMEM_LeakHook(FARPROC pfn);
 void EXPORTDBG __cdecl      GetCallStack(DWORD *, int, int);
 #endif
@@ -217,7 +222,7 @@ EXTERN_C_END
 
 /*
  *  Debugging Macros -------------------------------------------------------
- *
+ *  
  *      SzDecodeScode           Returns the string name of an SCODE
  *      SzDecodeUlPropTag       Returns the string name of a property
  *                              tag
@@ -472,4 +477,5 @@ extern SCODE IMSLogon_Logoff_Scodes[];
 
 /* ------------------------------------------------------------------------ */
 
+#pragma option -b.
 #endif

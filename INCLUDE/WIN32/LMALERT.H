@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0003    // Increment this if a change has global effects
 
+Copyright (c) 1991-1996  Microsoft Corporation
+
 Module Name:
 
     alert.h
@@ -8,10 +10,6 @@ Abstract:
 
     This file contains structures for communication with the Alerter
     service.
-
-Author:
-
-    Dan Lafferty (danl) 12-Mar-1991
 
 Environment:
 
@@ -24,35 +22,13 @@ Notes:
 
     ALERT.H includes ALERTMSG.H which defines the alert message numbers
 
-Revision History:
-
-    12-Mar-1991 danl
-        Created from LM2.0 header files and NT-LAN API Spec.
-    14-Mar-1991 JohnRo
-        Temporarily commented-out include of "alertmsg.h".
-    22-July-1991 ritaw
-        Removed NetAlert API prototypes.
-        STD_ALERT structure holds offsets to strings rather than string
-        pointers.
-        Renamed file from lmalert.h back to alert.h and put in the net inc
-        directory since this file is private to LAN Man components.
-    24-July-1990 ritaw
-        Due to LAN Man 2.0 assumptions, the event and service names of the
-        STD_ALERT structure must be embedded strings.   All LAN Man 2.0 code
-        which write to alert structures can be ported without additional
-        changes.
-    04-Apr-1992 JohnRo
-        Added NetAlertRaise and NetAlertRaiseEx APIs.
-        Changed ALERT_xxx_EVENT equates to be TCHAR strings.
-        Fixed definition of LPSTD_ALERT (used by NetAlertRaise API).
 
 --*/
 
-/* $Copyright: 1994$ */
 
 #ifndef _ALERT_
 #define _ALERT_
-#define __LMALERT_H
+#pragma option -b
 
 
 #ifdef __cplusplus
@@ -65,17 +41,17 @@ extern "C" {
 
 NET_API_STATUS NET_API_FUNCTION
 NetAlertRaise(
-    IN LPTSTR AlertEventName,
-    IN LPVOID Buffer,
-    IN DWORD BufferSize
+    IN LPCWSTR AlertEventName,
+    IN LPVOID  Buffer,
+    IN DWORD   BufferSize
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetAlertRaiseEx(
-    IN LPTSTR AlertEventName,
-    IN LPVOID VariableInfo,
-    IN DWORD VariableInfoSize,
-    IN LPTSTR ServiceName
+    IN LPCWSTR AlertEventName,
+    IN LPVOID  VariableInfo,
+    IN DWORD   VariableInfoSize,
+    IN LPCWSTR ServiceName
     );
 
 
@@ -85,8 +61,8 @@ NetAlertRaiseEx(
 
 typedef struct _STD_ALERT {
     DWORD  alrt_timestamp;
-    TCHAR  alrt_eventname[EVLEN + 1];
-    TCHAR  alrt_servicename[SNLEN + 1];
+    WCHAR  alrt_eventname[EVLEN + 1];
+    WCHAR  alrt_servicename[SNLEN + 1];
 }STD_ALERT, *PSTD_ALERT, *LPSTD_ALERT;
 
 typedef struct _ADMIN_OTHER_INFO {
@@ -118,7 +94,7 @@ typedef struct _USER_OTHER_INFO {
 //
 // Name of mailslot to send alert notifications
 //
-#define ALERTER_MAILSLOT          TEXT("\\\\.\\MAILSLOT\\Alerter")
+#define ALERTER_MAILSLOT          L"\\\\.\\MAILSLOT\\Alerter"
 
 //
 // The following macro gives a pointer to the other_info data.
@@ -140,11 +116,11 @@ typedef struct _USER_OTHER_INFO {
 //      Names of standard Microsoft-defined alert events.
 //
 
-#define ALERT_PRINT_EVENT           TEXT("PRINTING")
-#define ALERT_MESSAGE_EVENT         TEXT("MESSAGE")
-#define ALERT_ERRORLOG_EVENT        TEXT("ERRORLOG")
-#define ALERT_ADMIN_EVENT           TEXT("ADMIN")
-#define ALERT_USER_EVENT            TEXT("USER")
+#define ALERT_PRINT_EVENT           L"PRINTING"
+#define ALERT_MESSAGE_EVENT         L"MESSAGE"
+#define ALERT_ERRORLOG_EVENT        L"ERRORLOG"
+#define ALERT_ADMIN_EVENT           L"ADMIN"
+#define ALERT_USER_EVENT            L"USER"
 
 //
 //      Bitmap masks for prjob_status field of PRINTJOB.
@@ -176,5 +152,7 @@ typedef struct _USER_OTHER_INFO {
 #ifdef __cplusplus
 }
 #endif
+
+#pragma option -b.
 
 #endif // _ALERT_

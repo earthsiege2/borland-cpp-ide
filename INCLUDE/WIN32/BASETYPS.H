@@ -1,7 +1,7 @@
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
+//  Copyright (C) Microsoft Corporation, 1992-1996.
 //
 //  File:       basetyps.h
 //
@@ -11,6 +11,7 @@
 
 #if !defined( _BASETYPS_H_ )
 #define _BASETYPS_H_
+#pragma option -b
 
 // Common macros gleamed from COMPOBJ.H
 
@@ -207,11 +208,11 @@
 
 #ifndef INITGUID
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-    EXTERN_C const GUID CDECL FAR name
+    EXTERN_C const GUID FAR name
 #else
 
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-        EXTERN_C const GUID CDECL name \
+        EXTERN_C const GUID name \
                 = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
 #endif // INITGUID
 
@@ -242,5 +243,6 @@ typedef struct _GUID
 } GUID;
 #endif /* GUID_DEFINED */
 
+#pragma option -b.
 #endif
 

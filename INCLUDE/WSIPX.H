@@ -32,9 +32,12 @@
 
 #ifndef _WSIPX_
 #define _WSIPX_
+#pragma option -b
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 /*
@@ -59,8 +62,11 @@ typedef struct sockaddr_ipx {
 #define NSPROTO_SPXII    1257
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif
 

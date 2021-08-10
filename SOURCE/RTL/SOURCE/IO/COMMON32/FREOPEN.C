@@ -6,21 +6,27 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
-Name            freopen -  replaces a stream
+Name            _tfreopen used as freopen and _wfreopen
+                freopen   -  replaces a stream
+                _wfreopen -  replaces a stream
 
 Usage           FILE *freopen(const char *filename, const char *type,
+                              FILE *stream);
+                FILE *_wfreopen(const wchar_t *filename, const wchar_t *type,
                               FILE *stream);
 
 Prototype in    stdio.h
@@ -29,11 +35,12 @@ Description     See description of fopen() in fopen.c
 
 *---------------------------------------------------------------------*/
 
-FILE * _RTLENTRY _EXPFUNC freopen(const char *filename, const char *type, FILE *fp)
+FILE * _RTLENTRY _EXPFUNC _tfreopen(const _TCHAR *filename,
+                                    const _TCHAR *type, FILE *fp)
 {
     FILE *rc;
 
-    if (fp->token != (short) fp)
+    if (fp->token != (unsigned char) fp)
         return NULL;    /* validate pointer */
 
     _lock_all_streams();
@@ -41,7 +48,7 @@ FILE * _RTLENTRY _EXPFUNC freopen(const char *filename, const char *type, FILE *
 
     fclose (fp);
 
-    rc = __openfp (fp, filename, type, 0);
+    rc = __topenfp (fp, filename, type, 0);
 
     _unlock_stream(fp);
     _unlock_all_streams();

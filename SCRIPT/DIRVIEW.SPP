@@ -1,0 +1,208 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1995, 1997 by Borland International, All Rights Reserved
+//
+// DIRVIEW.SPP
+//    Script component of IDE's directory navigator.
+//
+// $Revision:   1.2  $
+//
+//----------------------------------------------------------------------------
+import IDE;
+
+declare acOriginalDirectory;
+
+class DirectoryListWindow(nTop, nLeft, nHeight, nWidth, acCaption, bMultipleSelect, bSorted, asIntialValues)
+: ListWindow(nTop, nLeft, nHeight, nWidth, acCaption, bMultipleSelect, bSorted, asIntialValues)
+{
+ declare acCurrentDirectory = "C:\\";
+
+ FillDirectoryList()
+ {
+  Clear();
+  Hidden = true;
+
+  declare nIndex = 0;
+  declare nListCount = 0;
+  declare array aacTempList[300];
+
+  acOriginalDirectory = GetCurrentDirectory();
+  SetCurrentDirectory(acCurrentDirectory);
+
+  if ((aacTempList[nIndex++] = IDE.FindFirstFile("*.*")) != "")
+     {
+      nListCount++;
+      while ((aacTempList[nIndex++] = IDE.FindNextFile()) != "")
+         nListCount++;
+     }
+
+  for (nIndex = 0; nIndex < nListCount; nIndex++)
+     {
+      SetCurrentDirectory(aacTempList[nIndex]);
+
+      if (GetCurrentDirectory() == acCurrentDirectory + aacTempList[nIndex])
+          Add("+ " + aacTempList[nIndex]);
+      else
+          Add("  " + aacTempList[nIndex]);
+
+      SetCurrentDirectory(acCurrentDirectory);
+     }
+
+  Caption = acCurrentDirectory;
+  Hidden = false;
+  SetCurrentDirectory(acOriginalDirectory);
+ }
+
+  FillDrivesList()
+  {
+   Clear();
+   Hidden = true;
+
+   declare nIndex = 0;
+   declare nListCount = 0;
+
+   declare acOriginalDirectory = GetCurrentDirectory();
+
+   declare sDrive = new String;
+
+   Add("A:\\", 0);
+   Add("B:\\", 1);
+
+   nListCount = 2;
+
+   acOriginalDirectory = GetCurrentDirectory();
+
+   for (nIndex = 67; nIndex < 91; nIndex++)
+     {
+      sDrive.Character = nIndex;
+      SetCurrentDirectory(sDrive.Text + ":\\");
+
+      if (GetCurrentDirectory() == sDrive.Text + ":\\")
+         {
+          Add(sDrive.Text + ":\\", nListCount++);
+         }
+     }
+
+   Caption = "Directory Navigator";
+   Hidden = false;
+   SetCurrentDirectory(acOriginalDirectory);
+  }
+};
+
+declare dlwList = DirectoryListWindow(0,0,500,200,"",false,true);
+dlwList.Execute();
+dlwList.FillDrivesList();
+
+on dlwList:>Accept()
+{
+ if (dlwList.CurrentIndex != -1)
+   {
+    declare acNewDirectory = "";
+    declare sNewDirectory = new String(dlwList.GetString(dlwList.CurrentIndex));
+
+      if (sNewDirectory.SubString(1,2).Text == ":\\")
+       {
+        dlwList.acCurrentDirectory = sNewDirectory.Text;
+        dlwList.FillDirectoryList();
+       }
+    else if (sNewDirectory.Text == "  ..")
+       {
+        dlwList.PreviousDir();
+       }
+    else if (sNewDirectory.SubString(0,2).Text == "+ ")
+       {
+        acNewDirectory = sNewDirectory.SubString(2).Text;
+        acNewDirectory = dlwList.acCurrentDirectory + acNewDirectory ;
+        acOriginalDirectory = GetCurrentDirectory();
+        SetCurrentDirectory(acNewDirectory);
+
+        if (GetCurrentDirectory() == acNewDirectory)
+           {
+            dlwList.acCurrentDirectory = acNewDirectory + "\\";
+            dlwList.FillDirectoryList();
+           }
+        SetCurrentDirectory(acOriginalDirectory);
+       }
+    else if (sNewDirectory.SubString(0,2).Text == "  ")
+       {
+        IDE.DoFileOpen(dlwList.acCurrentDirectory+sNewDirectory.SubString(2).Text);
+       }
+  }
+}
+
+on dlwList:>Delete()
+{
+ if (dlwList.CurrentIndex != -1)
+   {
+    declare sName = new String(dlwList.GetString(dlwList.CurrentIndex));
+
+    if (sName.SubString(0,2).Text == "+ ")
+       {
+        sName = sName.SubString(2);
+
+        if (IDE.YesNoDialog("Delete Directory: "+dlwList.acCurrentDirectory+sName.Text) == "Yes")
+           {
+            RemoveDirectory(dlwList.acCurrentDirectory+sName.Text);
+            dlwList.FillDirectoryList();
+           }
+       }
+    else if (sName.SubString(0,2).Text == "  ")
+       {
+        sName = sName.SubString(2);
+
+        if (IDE.YesNoDialog("Delete File: "+dlwList.acCurrentDirectory+sName.Text) == "Yes")
+           {
+            DeleteFile(dlwList.acCurrentDirectory+sName.Text);
+            dlwList.FillDirectoryList();
+           }
+       }
+   }
+}
+
+on dlwList:>Insert()
+{
+ declare sNewFile = new String(dlwList.GetString(dlwList.CurrentIndex));
+
+ if (sNewFile.SubString(1,2).Text == ":\\")
+    {
+     sNewFile = new String(sNewFile.Text + IDE.SimpleDialog("Create File: "+sNewFile.Text,""));
+     if (sNewFile.Length < 4)
+        return;
+    }
+ else
+    {
+     sNewFile = new String(dlwList.acCurrentDirectory + IDE.SimpleDialog("Create File: " + dlwList.acCurrentDirectory,""));
+     if (sNewFile.Length < 1)
+        return;
+    }
+
+ IDE.DoFileOpen(sNewFile.Text);
+}
+
+on dlwList:>KeyPressed(declare sKeyNames)
+{
+ if (sKeyNames == "<Ctrl-h>")
+   dlwList.PreviousDir();
+}
+
+on dlwList:>PreviousDir()
+{
+ declare sDirectory = new String(dlwList.acCurrentDirectory);
+ declare nBackslash = sDirectory.Index("\\",SEARCH_BACKWARD);
+ if (nBackslash)
+    {
+     sDirectory = sDirectory.SubString(0,nBackslash-1);
+     nBackslash = sDirectory.Index("\\",SEARCH_BACKWARD);
+     if (nBackslash)
+        {
+         dlwList.acCurrentDirectory = sDirectory.SubString(0,nBackslash).Text;
+         dlwList.FillDirectoryList();
+         return TRUE;
+        }
+     else
+        {
+         dlwList.FillDrivesList();
+        }
+    }
+}
+

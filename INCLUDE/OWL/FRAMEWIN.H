@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.6  $
+//$Revision:   10.12  $
 //
 // Definition of class TFrameWindow.
 //----------------------------------------------------------------------------
@@ -14,6 +14,10 @@
 #endif
 #if !defined(OWL_MENU_H)
 # include <owl/menu.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
 #endif
 
 // Generic definitions/compiler options (eg. alignment) preceeding the 
@@ -76,6 +80,7 @@ class _OWLCLASS TFrameWindow : virtual public TWindow {
     const TMenuDescr* GetMenuDescr() const;
     bool            MergeMenu(const TMenuDescr& childMenuDescr);
     bool            RestoreMenu();
+    TModule*        GetMergeModule();
 
     HICON           GetIcon() const;
     HICON           GetIconSm() const;
@@ -119,6 +124,10 @@ class _OWLCLASS TFrameWindow : virtual public TWindow {
     TResult         EvCommand(uint id, HWND hWndCtl, uint notifyCode);
     void            EvCommandEnable(TCommandEnabler& ce);
 
+    // Tell child windows frame has minimized/maximized/restored
+    //
+    void            BroadcastResizeToChildren(uint sizeType, TSize& size);
+
     // Message response functions
     //
     void            EvInitMenuPopup(HMENU hPopupMenu, uint index, bool sysMenu);
@@ -130,7 +139,6 @@ class _OWLCLASS TFrameWindow : virtual public TWindow {
     void            EvParentNotify(uint event,
                                    uint childHandleOrX,
                                    uint childIDOrY);
-    void            EvEnterIdle(uint source, HWND hWndDlg);
 
     void            EvPaletteChanged(THandle hWndPalChg);
     bool            EvQueryNewPalette();
@@ -146,7 +154,6 @@ class _OWLCLASS TFrameWindow : virtual public TWindow {
     void            SetHWndRestoreFocus(HWND hwndRestoreFocus);
     int             GetDocTitleIndex() const;
     void            SetDocTitleIndex(int index);
-    TModule*        GetMergeModule();
     void            SetMergeModule(TModule* module);
 
   public_data:
@@ -178,12 +185,16 @@ class _OWLCLASS TFrameWindow : virtual public TWindow {
     TFrameWindow& operator =(const TFrameWindow&);
 
   DECLARE_RESPONSE_TABLE(TFrameWindow);
-  DECLARE_STREAMABLE(_OWLCLASS, TFrameWindow, 1);
+  DECLARE_STREAMABLE(_OWLCLASS, TFrameWindow, 2);
 };
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations

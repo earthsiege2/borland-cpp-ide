@@ -1,5 +1,9 @@
+;
+; Warning: WINSPOOL must have an extension of .DRV !!!
+;
 LIBRARY WINSPOOL.DRV
 EXPORTS
+
     ADVANCEDSETUPDIALOG
     AbortPrinter
     AddFormA
@@ -18,6 +22,7 @@ EXPORTS
     AddPrintProvidorW
     AddPrinterA
     AddPrinterConnectionA
+    AddPrinterConnectionUI
     AddPrinterConnectionW
     AddPrinterDriverA
     AddPrinterDriverW
@@ -29,6 +34,8 @@ EXPORTS
     ConfigurePortA
     ConfigurePortW
     ConnectToPrinterDlg
+    ConvertAnsiDevModeToUnicodeDevmode
+    ConvertUnicodeDevModeToAnsiDevmode
     CreatePrinterIC
     DEVICECAPABILITIES
     DEVICEMODE
@@ -45,16 +52,22 @@ EXPORTS
     DeletePrinter
     DeletePrinterConnectionA
     DeletePrinterConnectionW
+    DeletePrinterDataA
+    DeletePrinterDataW
     DeletePrinterDriverA
     DeletePrinterDriverW
     DeletePrinterIC
     DevQueryPrint
+    DevQueryPrintEx
     DeviceCapabilities
     DeviceCapabilitiesA
     DeviceCapabilitiesW
     DeviceMode
+    DevicePropertySheets
+    DocumentEvent
     DocumentPropertiesA
     DocumentPropertiesW
+    DocumentPropertySheets
     EXTDEVICEMODE
     EndDocPrinter
     EndPagePrinter
@@ -70,14 +83,18 @@ EXPORTS
     EnumPrintProcessorDatatypesW
     EnumPrintProcessorsA
     EnumPrintProcessorsW
+    EnumPrinterDataA
+    EnumPrinterDataW
     EnumPrinterDriversA
     EnumPrinterDriversW
+    EnumPrinterPropertySheets
     EnumPrintersA
     EnumPrintersW
     ExtDeviceMode
     FindClosePrinterChangeNotification
     FindFirstPrinterChangeNotification
     FindNextPrinterChangeNotification
+    FreePrinterNotifyInfo
     GetFormA
     GetFormW
     GetJobA
@@ -99,20 +116,26 @@ EXPORTS
     PrinterMessageBoxA
     PrinterMessageBoxW
     PrinterProperties
+    QueryRemoteFonts
+    QuerySpoolMode
     ReadPrinter
     ResetPrinterA
     ResetPrinterW
     ScheduleJob
+    SetAllocFailCount
     SetFormA
     SetFormW
     SetJobA
     SetJobW
+    SetPortA
+    SetPortW
     SetPrinterA
     SetPrinterDataA
     SetPrinterDataW
     SetPrinterW
     SpoolerDevQueryPrintW
     SpoolerInit
+    SpoolerPrinterEvent
     StartDocDlgA
     StartDocDlgW
     StartDocPrinterA

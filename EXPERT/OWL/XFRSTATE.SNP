@@ -7,25 +7,25 @@
 ##--BEGIN-- TRUE
 ##--BEGIN-- ControlType == "BUTTON"
 ## (ControlSubType == "DEFPUSHBUTTON") || (ControlSubType == "USERBUTTON") || (ControlSubType == "PUSHBUTTON")
-##:     \\"TButton *[[DataName]];" ClassDefLine
+##:     \\"TButton* [[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TButton(this, [[Constant]]);" ConstructorLine
 ##:     "" StructDefLine
 ##:     "#include <owl/button.h>" IncludeFile
 ##*
 ## (ControlSubType == "GROUPBOX")
-##:     \\"TGroupBox *[[DataName]];" ClassDefLine
+##:     \\"TGroupBox* [[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TGroupBox(this, [[Constant]]);" ConstructorLine
 ##:     "" StructDefLine
 ##:     "#include <owl/groupbox.h>" IncludeFile
 ##*
 ## (ControlSubType == "CHECKBOX") || (ControlSubType == "AUTOCHECKBOX") || (ControlSubType == "3STATE") || (ControlSubType == "AUTO3STATE")
-##:     \\"TCheckBox *[[DataName]];" ClassDefLine
+##:     \\"TCheckBox* [[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TCheckBox(this, [[Constant]], 0);" ConstructorLine
 ##:     \\"uint    [[DataName]];" StructDefLine
 ##:     "#include <owl/checkbox.h>" IncludeFile
 ##*
 ## (ControlSubType == "RADIOBUTTON") || (ControlSubType == "AUTORADIOBUTTON")
-##:     \\"TRadioButton *[[DataName]];" ClassDefLine
+##:     \\"TRadioButton* [[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TRadioButton(this, [[Constant]], 0);" ConstructorLine
 ##:     \\"uint    [[DataName]];" StructDefLine
 ##:     "#include <owl/radiobut.h>" IncludeFile
@@ -35,7 +35,7 @@
 ##DataTypeSize == ""
 ##:         "255" DataTypeSize
 ##*
-##:     \\"TStatic *[[DataName]];" ClassDefLine
+##:     \\"TStatic* [[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TStatic(this, [[Constant]], [[DataTypeSize]]);" ConstructorLine
 ##:     \\"char    [[DataName]][ [[DataTypeSize]] ];" StructDefLine
 ##:     "#include <owl/static.h>" IncludeFile
@@ -44,19 +44,19 @@
 ##DataTypeSize == ""
 ##:         "255" DataTypeSize
 ##*
-##:     \\"TEdit *[[DataName]];" ClassDefLine
+##:     \\"TEdit* [[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TEdit(this, [[Constant]], [[DataTypeSize]]);" ConstructorLine
 ##:     \\"char    [[DataName]][ [[DataTypeSize]] ];" StructDefLine
 ##:     "#include <owl/edit.h>" IncludeFile
 ##--END-- ControlType == "EDIT"
 ##--BEGIN-- ControlType == "LISTBOX"
-##:     \\"TListBox *[[DataName]];" ClassDefLine
+##:     \\"TListBox* [[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TListBox(this, [[Constant]]);" ConstructorLine
 ##:     \\"TListBoxData  [[DataName]];" StructDefLine
 ##:     "#include <owl/listbox.h>" IncludeFile
 ##--END-- ControlType == "LISTBOX"
 ##--BEGIN-- ControlType == "SCROLLBAR"
-##:     \\"TScrollBar *[[DataName]];" ClassDefLine
+##:     \\"TScrollBar* [[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TScrollBar(this, [[Constant]]);" ConstructorLine
 ##:     \\"TScrollBarData    [[DataName]];" StructDefLine
 ##:     "#include <owl/scrollba.h>" IncludeFile
@@ -65,11 +65,234 @@
 ##DataTypeSize == ""
 ##:         "1" DataTypeSize
 ##*
-##:     \\"TComboBox *[[DataName]];" ClassDefLine
+##:     \\"TComboBox* [[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TComboBox(this, [[Constant]], [[DataTypeSize]]);" ConstructorLine
 ##:     \\"TComboBoxData  [[DataName]];" StructDefLine
 ##:     "#include <owl/combobox.h>" IncludeFile
 ##--END-- ControlType == "COMBOBOX"
+'
+' Win32 Common Controls
+'
+##--BEGIN-- ControlType == "SYSANIMATE32"
+##:     \\"TAnimateCtrl* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TAnimateCtrl(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/animctrl.h>" IncludeFile
+##*
+##--END-- ControlType == "SYSANIMATE32"
+'
+##--BEGIN-- ControlType == "SYSHEADER32"
+##:     \\"TColumnHeader* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TColumnHeader(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/colmnhdr.h>" IncludeFile
+##*
+##--END-- ControlType == "SYSHEADER32"
+'
+##--BEGIN-- ControlType == "MSCTLS_HOTKEY32"
+##:     \\"THotKey* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new THotKey(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/hotkey.h>" IncludeFile
+##*
+##--END-- ControlType == "MSCTLS_HOTKEY32"
+'
+##--BEGIN-- ControlType == "SYSLISTVIEW32"
+##:     \\"TListWindow* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TListWindow(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/listwind.h>" IncludeFile
+##*
+##--END-- ControlType == "SYSLISTVIEW32"
+'
+##--BEGIN-- ControlType == "MSCTLS_PROGRESS32"
+##:     \\"TGauge* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TGauge(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/gauge.h>" IncludeFile
+##*
+##--END-- ControlType == "MSCTLS_PROGRESS32"
+'
+##--BEGIN-- ControlType == "RICHEDIT"
+##:     \\"TRichEdit* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TRichEdit(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/richedit.h>" IncludeFile
+##*
+##--END-- ControlType == "RICHEDIT"
+'
+##--BEGIN-- ControlType == "SYSTABCONTROL32"
+##:     \\"TTabControl* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TTabControl(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/tabctrl.h>" IncludeFile
+##*
+##--END-- ControlType == "SYSTABCONTROL32"
+'
+##--BEGIN-- ControlType == "MSCTLS_TRACKBAR32"
+##:     \\"THSlider* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new THSlider(this, [[Constant]], IDB_HSLIDERTHUMB);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/slider.h>" IncludeFile
+##*
+##--END-- ControlType == "MSCTLS_TRACKBAR32"
+'
+##--BEGIN-- ControlType == "SYSTREEVIEW32"
+##:     \\"TTreeWindow* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TTreeWindow(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/treewind.h>" IncludeFile
+##*
+##--END-- ControlType == "SYSTREEVIEW32"
+'
+##--BEGIN-- ControlType == "MSCTLS_UPDOWN32"
+##:     \\"TUpDown* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TUpDown(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <owl/updown.h>" IncludeFile
+##*
+##--END-- ControlType == "MSCTLS_UPDOWN32"
+'
+' Win32 Common Controls (END)
+'
+'
+' VDBT Controls
+'
+##--BEGIN-- ControlType == "VBCONTROL"
+'
+' Data aware controls
+'
+## (ControlSubType == "TDBCheckBox")
+##:     \\"TDBCheckBox* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBCheckBox(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbchkbx.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBComboBox")
+##:     \\"TDBComboBox* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBComboBox(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbcombo.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBEdit")
+##:     \\"TDBEdit* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBEdit(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbedit.h>" IncludeFile
+##*
+'
+## (ControlSubType == "SSView")
+##:     \\"TDBGrid* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBGrid(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbgrid.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBImage")
+##:     \\"TDBImage* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBImage(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbimage.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBListBox")
+##:     \\"TDBListBox* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBListBox(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dblist.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBLookupCombo")
+##:     \\"TDBLookupCombo* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBLookupCombo(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dblkupcb.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBLookupList")
+##:     \\"TDBLookupList* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBLookupList(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dblkuplb.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBMemo")
+##:     \\"TDBMemo* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBMemo(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbmemo.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBNavigator")
+##:     \\"TDBNavigator* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBNavigator(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbnvgtr.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBRadioGroup")
+##:     \\"TDBRadioGroup* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBRadioGroup(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbradio.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDBText")
+##:     \\"TDBText* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBText(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbtext.h>" IncludeFile
+##*
+'
+' Data access controls
+'
+## (ControlSubType == "TBatchMove")
+##:     \\"TDBBatchMove* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBBatchMove(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbacc.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDatabase")
+##:     \\"TDBDatabase* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBDatabase(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbacc.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TDataSource")
+##:     \\"TDBDataSource* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBDataSource(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbacc.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TQuery")
+##:     \\"TDBQuery* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBQuery(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbacc.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TStoredProc")
+##:     \\"TDBStoredProc* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBStoredProc(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbacc.h>" IncludeFile
+##*
+'
+## (ControlSubType == "TTable")
+##:     \\"TDBTable* [[DataName]];" ClassDefLine
+##:     \\"[[DataName]] = new TDBTable(this, [[Constant]]);" ConstructorLine
+##:     "" StructDefLine
+##:     "#include <vdbt/dbacc.h>" IncludeFile
+##*
+##--END-- ControlType == "VBCONTROL"
+'
+' VDBT Controls (END)
+'
 ## (ClassDefLine == "") && (ConstructorLine == "") && (StructDefLine == "")
 ##:     %\\"Unknown Control Type [[ControlType]].  "
 ##*

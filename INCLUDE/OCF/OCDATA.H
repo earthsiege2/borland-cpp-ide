@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectComponents
-// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1997 by Borland International, All Rights Reserved
+//
+// $Revision:   2.8  $
 //
 // Definition of TOcDataProvider Class
 //----------------------------------------------------------------------------
@@ -9,6 +11,10 @@
 
 #if !defined(OCF_OCVIEW_H)
 # include <ocf/ocview.h>
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace OCF {
 #endif
 
 //
@@ -57,13 +63,8 @@ class _OCFCLASS TOcDataProvider : public TUnknown,
     HRESULT _IFUNC  GetPartSize(TSize far* size);
     HRESULT _IFUNC  Save(IStorage*, BOOL sameAsLoad, BOOL remember);
 
-#if defined(BI_DATA_NEAR)
-    TPoint&        Origin;  // Origin of view topleft relative to the document
-    TSize&         Extent;  // size of the document containing selection
-#else
     TPoint         Origin;
     TSize          Extent;
-#endif
 
   private:
    ~TOcDataProvider();
@@ -79,5 +80,9 @@ class _OCFCLASS TOcDataProvider : public TUnknown,
     void*           UserData;        // pointer to application specific data such as selection
     TDeleteUserData CBDelete;        // Call back function for cleaning up user data
 };
+
+#if defined(BI_NAMESPACE)
+} // namespace OCF
+#endif
 
 #endif  // OCF_OCDATA_H

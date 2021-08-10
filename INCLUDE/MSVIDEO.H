@@ -11,9 +11,9 @@
 /****************************************************************************/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1994, 1996 by Borland International
+ *      Copyright (c) 1994, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -21,6 +21,7 @@
 #ifndef _INC_MSVIDEO
 #define _INC_MSVIDEO    50      /* version number */
 #define __MSVIDEO_H
+#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -290,4 +291,5 @@ DWORD WINAPI videoStreamFreeHdrAndBuffer(HVIDEO hVideo,
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
+#pragma option -b.
 #endif  /* _INC_MSVIDEO */

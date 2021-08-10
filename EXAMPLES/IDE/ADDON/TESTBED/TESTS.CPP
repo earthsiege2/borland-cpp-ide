@@ -2,7 +2,8 @@
 
   tests.cpp
   Copyright (c) 1995, 1996 Borland International
-  $Revision:   1.15  $
+  $Revision:   1.19  $
+  $Header:   Y:\admin\bride\addon\deliver\examples\tests.cpv   1.19   19 Nov 1996 11:21:42   JDOUGLAS  $
   
   To add a new test:
   - Derive your test class from TestObject and implement pure virtual methods
@@ -11,6 +12,8 @@
   - Add a new instance to the _testObjArray in Tests::setup(), 
    
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/  
+
+
 
 #ifndef __AOEXPCH_H
   #include "aoexpch.h"
@@ -24,11 +27,14 @@
 #include "tests.h"
 #include "option.h"
 #include "project.h"
+#include "project2.h"
+#include "project3.h"
 #include "target.h"
 #include "toolsrvr.h"
 #include "script.h"
 #include "testdlg.h"
 #include "edittest.h"
+#include "edittst2.h"
 #include "maketest.h"
 #include "viewtest.h"
 #include "filetest.h"
@@ -38,6 +44,12 @@
 #include "tool2.h"
 #include "edittool.h"
 #include "msgtest.h"
+#include "prset.h"
+#include "msgtest2.h"
+#include "msgcli.h"
+#include "ideuitst.h"
+
+static Tests * TheTests = NULL;
 
 //.............................................................................
 void Tests::setup() {
@@ -51,6 +63,8 @@ void Tests::setup() {
   AddTest( new OptionSetTestA );
   AddTest( new TargetTestA );
   AddTest( new ProjectTestA );
+  AddTest( new ProjectTestB );
+  AddTest( new ProjectTestC );
   AddTest( new ToolTestA );
   AddTest( new ScriptTestA );
   AddTest( new ToolTestB );
@@ -65,13 +79,19 @@ void Tests::setup() {
   AddTest( new MsgSystemTest);
   AddTest( new EditTestB );
   AddTest( new MenuTestB );
-
+  AddTest( new EditTestC );
+  AddTest( new PrinterSettingsTest );
+  AddTest( new MsgTest );
+  AddTest( new MessageClientTest );
+  AddTest( new IdeUITest );
+  
   _setup = TRUE;
 }
 //.............................................................................
 Tests::Tests() { 
   memset( _testObjArray, NULL, sizeof( _testObjArray ) );
   _setup = FALSE;
+  _theTests = this;
 }
 //.............................................................................
 Tests::~Tests() {
@@ -81,17 +101,18 @@ Tests::~Tests() {
       delete (*p);
     }
   }
+  _theTests = NULL;
 }  
 //.............................................................................
-Tests Tests::_theTests;
+Tests * Tests::_theTests;
 
 //.............................................................................
 Tests * Tests::GetTests() {
   //
   // static method.
   //
-  _theTests.setup();
-  return &_theTests;  
+  _theTests->setup();
+  return _theTests;  
 }
 //.............................................................................
 void Tests::AddTest( TestObject * testObj ) {
@@ -166,12 +187,19 @@ extern HINSTANCE ghInst = NULL;
 extern "C" void WINAPI __export
 BcwAddOnEntry( IIdeServer * pIdeServer ) {
   if ( pIdeServer ) {       // startup time
+    if ( !TheTests ) {
+      TheTests = new Tests;
+    }       
     SetIdeServer( pIdeServer );
     CreateTestDialog( ghInst );
   }
   else {                // shutdown time
     DestroyTestDialog();
     ReleaseIdeServer();
+    if ( TheTests ) {
+      delete TheTests;
+      TheTests = NULL;
+    }      
   }
 }
 //.............................................................................
@@ -195,4 +223,4 @@ DllEntryPoint(HINSTANCE hInst, DWORD fdwReason, LPVOID) {
   }
   return TRUE;
 }
-  
+

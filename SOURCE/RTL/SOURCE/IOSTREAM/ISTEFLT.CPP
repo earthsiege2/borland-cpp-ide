@@ -8,12 +8,13 @@
 /*[]------------------------------------------------------------[]*/
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1990, 1996 by Borland International
+ *      Copyright (c) 1990, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <ioconfig.h>
 #include <iostream.h>
@@ -28,7 +29,7 @@
  */
 istream _FAR & istream::operator>> (float _FAR & f)
 {
-    long double x;
+    double x;
 
     *this >> x;     // extract the value
     if( ! fail() )

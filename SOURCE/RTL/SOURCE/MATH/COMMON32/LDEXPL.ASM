@@ -3,11 +3,12 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 2.0
+;       C/C++ Run Time Library - Version 8.0
 ; 
-;       Copyright (c) 1991, 1996 by Borland International
+;       Copyright (c) 1991, 1997 by Borland International
 ;       All Rights Reserved.
 ; 
+; $Revision:   8.4  $
 
 ;----------------------------------------------------------------------
 ; function(s)
@@ -55,7 +56,8 @@ Data_EndS@
 Code_Seg@
 
 Func@   ldexpl, _EXPFUNC, _RTLENTRY, <longdouble value>,<int scale>
-Locals@ <longdouble yVal>                   ; used in error exits
+Locals@ <longdouble yVal>, <word filler>  ; used in error exits
+                                          ; (filler pads the stack to align 4)
 
         Link@
 

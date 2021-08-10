@@ -5,28 +5,45 @@ AFLAGS   = -Mx -t -m -D__WIN32__ -I$(BCINCL) -I$(INCLBASE)\rtlinc\common32 -I$(I
 ASM      = tasm32
 BRCC     = brcc32
 CC       = bcc32 +$(OBJDIR)\$(CFG)
+CPP      = cpp32 +$(OBJDIR)\$(CFG)
 CFLAGS   = -c -X -n$(OBJDIR) -I$(INCLUDES) -w -w-sig
 IMPLIB   = implib -i -c
 INCLUDES = $(BCINCL);$(INCLBASE)\rtlinc\common32;$(INCLBASE)\rtlinc\win32
 LINK     = tlink32 -s -c -Tpd
+!if $d(MAGIC)
+LIBNAME  = cp32
+!else
 LIBNAME  = cw32
-OBJDIR   = $(OBJBASE)\obj$(MTSUFFIX)$(DLLSUFFIX)
+!endif
+OBJDIR   = $(OBJBASE)\obj$(MAGICSUFFIX)$(MTSUFFIX)$(DLLSUFFIX)
 PUBTOOL  = pubdup.exe
 PUBNAME  = names32.pub
 
 !if $d(DEBUG)
-    TLIB = tlib /C /P128
+    TLIB = tlib /C /P512
 !else
     TLIB   = tlib /C /0
     CFLAGS = $(CFLAGS) -O2
 !endif
 
-!if $d(MT)
-    AFLAGS   = $(AFLAGS) -D_MT
-    CFLAGS   = $(CFLAGS) -D_MT -WM -DRWSTD_MULTI_THREAD=1
-    MTSUFFIX = mt
+!if $d(MAGIC)
+    CFLAGS = $(CFLAGS) -DMAGIC
+    AFLAGS = $(AFLAGS) -DMAGIC
+    MAGICSUFFIX = mg
 !endif
 
+!if $d(MT)
+    AFLAGS   = $(AFLAGS) -D_MT
+    CFLAGS   = $(CFLAGS) -WM -DRWSTD_MULTI_THREAD=1
+    MTSUFFIX = mt
+!else
+    CFLAGS   = $(CFLAGS) -WM-
+!endif
+
+!if $d(MBCS)
+    CFLAGS = $(CFLAGS) -D_MBCS -D_MBC_USE_MACROS
+    AFLAGS = $(AFLAGS) -D_MBCS -D_MBC_USE_MACROS
+!endif
 
 !if $d(DLL)
     AFLAGS     = $(AFLAGS) -D_BUILDRTLDLL
@@ -35,9 +52,13 @@ PUBNAME  = names32.pub
     DLLDEF     = $(LIBNAME)$(MTSUFFIX)
     DLLNAME    = $(LIBNAME)$(DLLVER)$(MTSUFFIX)
     DLLSUFFIX  = x
-    DLLVER     = 20
+    DLLVER     = 30
     IMPLIBNAME = $(LIBNAME)$(MTSUFFIX)i
+!if $d(MAGIC)
+    IMPORT     = import32 $(EXTDIR)\bcbmm
+!else
     IMPORT     = import32
+!endif
 !else
     CFLAGS     = $(CFLAGS) -W
 !endif
@@ -48,7 +69,7 @@ PUBNAME  = names32.pub
 # CFLAGS.                                                                   #
 #############################################################################
 !if $d(PCH)
-    CC = $(CC) -H -Hc
+    CC = $(CC) -H -Hc -Hs-
 !endif
 
 #############################################################################
@@ -68,6 +89,7 @@ SRCDIRS =                               \
           $(SRCBASE)\iostream\common32  \
           $(SRCBASE)\locale\common32    \
           $(SRCBASE)\math\common32      \
+          $(SRCBASE)\mbcs               \
           $(SRCBASE)\memory\common32    \
           $(SRCBASE)\memory\win32       \
           $(SRCBASE)\misc               \
@@ -94,7 +116,7 @@ SRCDIRS =                               \
               $(SRCBASE)\threads\win32
 !endif
 
-!if $d(DLL) && !$d(MT)
+!if !$d(DLL) && !$d(MT) || $d(MAGIC)
     SRCDIRS = $(SRCDIRS)                \
               $(SRCBASE)\defs\win32
 !endif

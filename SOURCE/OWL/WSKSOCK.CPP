@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.10  $
+//$Revision:   10.17  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
@@ -11,6 +11,8 @@
 #if !defined(OWL_WINSOCK_H)
 # include <owl/winsock.h>
 #endif
+
+OWL_DIAGINFO;
 
 //
 // default constructor for a socket.  You can set the individual members of
@@ -103,7 +105,7 @@ void TSocket::Init()
 int TSocket::SocketsCallCheck(int error)
 {
   if (error) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;
@@ -135,6 +137,10 @@ TSocket& TSocket::operator =(TSocket& newSocket)
   return *this;
 }
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 //
 // While it is possible that two sockets could refer to the same SOCKET (though
 //  this would likely create a mess if not governed with care), it is defined as
@@ -145,6 +151,10 @@ bool operator ==(const TSocket& socket1, const TSocket& socket2)
 {
   return socket1.Handle == socket2.Handle && socket1.Window == socket2.Window;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //
 // See SocketWindow::StartAcceptNotification() for documentation
@@ -231,7 +241,7 @@ int TSocket::ConvertProtocol(char* protocol)
 //
 int TSocket::CreateSocket()
 {
-  Handle = TWinSock::Dll()->socket(Family, Type, Protocol);
+  Handle = TWinSockDll::socket(Family, Type, Protocol);
   return SocketsCallCheck(Handle == INVALID_SOCKET);
 }
 
@@ -241,9 +251,9 @@ int TSocket::CreateSocket()
 int TSocket::CloseSocket()
 {
   if (Handle != INVALID_SOCKET) {
-    int error = TWinSock::Dll()->closesocket(Handle);
+    int error = TWinSockDll::closesocket(Handle);
     if (error) {
-      LastError = TWinSock::Dll()->WSAGetLastError();
+      LastError = TWinSockDll::WSAGetLastError();
       return WINSOCK_ERROR;
     }
   }
@@ -266,9 +276,9 @@ int TSocket::CloseSocket()
 int TSocket::ShutDownSocket(TShutMode shutMode)
 {
   if (Handle != INVALID_SOCKET) {
-    int error = TWinSock::Dll()->shutdown(Handle, shutMode);
+    int error = TWinSockDll::shutdown(Handle, shutMode);
     if (error) {
-      LastError = TWinSock::Dll()->WSAGetLastError();
+      LastError = TWinSockDll::WSAGetLastError();
       return WINSOCK_ERROR;
     }
     Handle = INVALID_SOCKET;  // It's invalid now.
@@ -285,14 +295,14 @@ int TSocket::ShutDownSocket(TShutMode shutMode)
 // The address argument must be in network byte ordering. On the other hand, the
 //  SocketAddress class always keeps is addresses in network byte ordering.
 //
-int TSocket::BindSocket(TSocketAddress& addressToBindTo)
+int TSocket::BindSocket(const TSocketAddress& addressToBindTo)
 {
   SocketAddress = addressToBindTo;
 
   // bind() ideally returns 0.
   //
-  if (TWinSock::Dll()->bind(Handle, &SocketAddress, sizeof(sockaddr))) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+  if (TWinSockDll::bind(Handle, &SocketAddress, sizeof(sockaddr))) {
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   Bound = true;
@@ -315,7 +325,7 @@ int TSocket::BindSocket()
 //
 int TSocket::GetMyAddress(TSocketAddress& socketAddress, int& addressLength, SOCKET& socket)
 {
-  return SocketsCallCheck(!TWinSock::Dll()->getsockname(socket, &socketAddress, &addressLength));
+  return SocketsCallCheck(!TWinSockDll::getsockname(socket, &socketAddress, &addressLength));
 }
 
 //
@@ -343,7 +353,7 @@ int TSocket::GetPeerAddress(TSocketAddress& socketAddress, int& addressLength, S
   if (!socket)
     socket = Handle;
 
-  return SocketsCallCheck(!TWinSock::Dll()->getpeername(socket, &socketAddress, &addressLength));
+  return SocketsCallCheck(!TWinSockDll::getpeername(socket, &socketAddress, &addressLength));
 }
 
 //
@@ -385,14 +395,16 @@ void TSocket::SetPeerSocketAddress(TSocketAddress& newPeerSocketAddress)
 // For datagrams, it is the size of the next datagram.
 // For streams, it "should" be the total waiting bytes.
 //
+#pragma warn -cln
 ulong TSocket::GetDriverWaitingSize()
 {
   ulong charsWaiting;
-  if (TWinSock::Dll()->ioctlsocket(Handle, FIONREAD, &charsWaiting)) {
+  if (TWinSockDll::ioctlsocket(Handle, FIONREAD, &charsWaiting)) {
     return 0;
   }
   return charsWaiting;
 }
+#pragma warn .cln
 
 //
 // Returns the total number of bytes waiting to be read.
@@ -468,7 +480,10 @@ void TSocket::SetMaxReadBufferSize(int maxReadBufferSize)
 //
 int TSocket::SetBroadcastOption(bool broadcast)
 {
-  return SocketsCallCheck(TWinSock::Dll()->setsockopt(Handle, SOL_SOCKET, SO_BROADCAST, (char*)&broadcast, sizeof broadcast));
+  // Must pass an int, not a bool, to setsockopt
+  //
+  int bcast = broadcast;
+  return SocketsCallCheck(TWinSockDll::setsockopt(Handle, SOL_SOCKET, SO_BROADCAST, (char*)&bcast, sizeof bcast));
 }
 
 //
@@ -476,7 +491,7 @@ int TSocket::SetBroadcastOption(bool broadcast)
 //
 int TSocket::SetDebugOption(bool debug)
 {
-  return SocketsCallCheck(TWinSock::Dll()->setsockopt(Handle, SOL_SOCKET, SO_DEBUG, (char*)&debug, sizeof debug));
+  return SocketsCallCheck(TWinSockDll::setsockopt(Handle, SOL_SOCKET, SO_DEBUG, (char*)&debug, sizeof debug));
 }
 
 //
@@ -493,7 +508,7 @@ int TSocket::SetLingerOption(bool linger, ushort lingerTime)
   lingerOptions.l_onoff = linger;  //Note that bLinger is a bool and LINGER.l_onoff is a u_short.
   lingerOptions.l_linger = lingerTime;
 
-  return SocketsCallCheck(TWinSock::Dll()->setsockopt(Handle, SOL_SOCKET, SO_LINGER, (char*)&lingerOptions, sizeof lingerOptions));
+  return SocketsCallCheck(TWinSockDll::setsockopt(Handle, SOL_SOCKET, SO_LINGER, (char*)&lingerOptions, sizeof lingerOptions));
 }
 
 //
@@ -502,7 +517,7 @@ int TSocket::SetLingerOption(bool linger, ushort lingerTime)
 int TSocket::SetRouteOption(bool route)
 {
   route = !route;
-  return SocketsCallCheck(TWinSock::Dll()->setsockopt(Handle, SOL_SOCKET, SO_DONTROUTE, (char*)&route, sizeof route));
+  return SocketsCallCheck(TWinSockDll::setsockopt(Handle, SOL_SOCKET, SO_DONTROUTE, (char*)&route, sizeof route));
 }
 
 //
@@ -510,7 +525,7 @@ int TSocket::SetRouteOption(bool route)
 //
 int TSocket::SetKeepAliveOption(bool keepAlive)
 {
-  return SocketsCallCheck(TWinSock::Dll()->setsockopt(Handle, SOL_SOCKET, SO_KEEPALIVE, (char*)&keepAlive, sizeof keepAlive));
+  return SocketsCallCheck(TWinSockDll::setsockopt(Handle, SOL_SOCKET, SO_KEEPALIVE, (char*)&keepAlive, sizeof keepAlive));
 }
 
 //
@@ -518,7 +533,7 @@ int TSocket::SetKeepAliveOption(bool keepAlive)
 //
 int TSocket::SetOOBOption(bool sendOOBDataInline)
 {
-  return SocketsCallCheck(TWinSock::Dll()->setsockopt(Handle, SOL_SOCKET, SO_OOBINLINE, (char*)&sendOOBDataInline, sizeof sendOOBDataInline));
+  return SocketsCallCheck(TWinSockDll::setsockopt(Handle, SOL_SOCKET, SO_OOBINLINE, (char*)&sendOOBDataInline, sizeof sendOOBDataInline));
 }
 
 //
@@ -526,7 +541,7 @@ int TSocket::SetOOBOption(bool sendOOBDataInline)
 //
 int TSocket::SetReceiveBufferOption(int receiveBufferSize)
 {
-  return SocketsCallCheck(TWinSock::Dll()->setsockopt(Handle, SOL_SOCKET, SO_RCVBUF, (char*)&receiveBufferSize, sizeof receiveBufferSize));
+  return SocketsCallCheck(TWinSockDll::setsockopt(Handle, SOL_SOCKET, SO_RCVBUF, (char*)&receiveBufferSize, sizeof receiveBufferSize));
 }
 
 //
@@ -534,7 +549,7 @@ int TSocket::SetReceiveBufferOption(int receiveBufferSize)
 //
 int TSocket::SetSendBufferOption(int sendBufferSize)
 {
-  return SocketsCallCheck(TWinSock::Dll()->setsockopt(Handle, SOL_SOCKET, SO_SNDBUF, (char*)&sendBufferSize, sizeof sendBufferSize));
+  return SocketsCallCheck(TWinSockDll::setsockopt(Handle, SOL_SOCKET, SO_SNDBUF, (char*)&sendBufferSize, sizeof sendBufferSize));
 }
 
 //
@@ -542,7 +557,7 @@ int TSocket::SetSendBufferOption(int sendBufferSize)
 //
 int TSocket::SetReuseAddressOption(bool allowReuseAddress)
 {
-  return SocketsCallCheck(TWinSock::Dll()->setsockopt(Handle, SOL_SOCKET, SO_REUSEADDR, (char*)&allowReuseAddress, sizeof allowReuseAddress));
+  return SocketsCallCheck(TWinSockDll::setsockopt(Handle, SOL_SOCKET, SO_REUSEADDR, (char*)&allowReuseAddress, sizeof(char*)));
 }
 
 //
@@ -551,7 +566,7 @@ int TSocket::SetReuseAddressOption(bool allowReuseAddress)
 int TSocket::GetBroadcastOption(bool& broadcast)
 {
   int size = sizeof broadcast;
-  return SocketsCallCheck(TWinSock::Dll()->getsockopt(Handle, SOL_SOCKET, SO_BROADCAST, (char*)&broadcast, &size));
+  return SocketsCallCheck(TWinSockDll::getsockopt(Handle, SOL_SOCKET, SO_BROADCAST, (char*)&broadcast, &size));
 }
 
 //
@@ -560,7 +575,7 @@ int TSocket::GetBroadcastOption(bool& broadcast)
 int TSocket::GetDebugOption(bool& debug)
 {
   int size = sizeof debug;
-  return SocketsCallCheck(TWinSock::Dll()->getsockopt(Handle, SOL_SOCKET, SO_DEBUG, (char*)&debug, &size));
+  return SocketsCallCheck(TWinSockDll::getsockopt(Handle, SOL_SOCKET, SO_DEBUG, (char*)&debug, &size));
 }
 
 //
@@ -571,7 +586,7 @@ int TSocket::GetLingerOption(bool& linger, ushort& lingerTime)
   LINGER lingerOptions;
   int size = sizeof lingerOptions;
 
-  if (SocketsCallCheck(TWinSock::Dll()->getsockopt(Handle, SOL_SOCKET, SO_LINGER, (char*)&lingerOptions, &size)) == WINSOCK_NOERROR) {
+  if (SocketsCallCheck(TWinSockDll::getsockopt(Handle, SOL_SOCKET, SO_LINGER, (char*)&lingerOptions, &size)) == WINSOCK_NOERROR) {
     linger = lingerOptions.l_onoff;
     lingerTime = lingerOptions.l_linger;
     return WINSOCK_NOERROR;
@@ -585,7 +600,7 @@ int TSocket::GetLingerOption(bool& linger, ushort& lingerTime)
 int TSocket::GetRouteOption(bool& route)
 {
   int size = sizeof route;
-  if (SocketsCallCheck(TWinSock::Dll()->getsockopt(Handle, SOL_SOCKET, SO_DONTROUTE, (char*)&route, &size)) == WINSOCK_NOERROR) {
+  if (SocketsCallCheck(TWinSockDll::getsockopt(Handle, SOL_SOCKET, SO_DONTROUTE, (char*)&route, &size)) == WINSOCK_NOERROR) {
     // route value of true means "don't route."  So we change it to mean what
     // you'd think.
     //
@@ -601,7 +616,7 @@ int TSocket::GetRouteOption(bool& route)
 int TSocket::GetKeepAliveOption(bool& keepAlive)
 {
   int size = sizeof keepAlive;
-  return SocketsCallCheck(TWinSock::Dll()->getsockopt(Handle, SOL_SOCKET, SO_KEEPALIVE, (char*)&keepAlive, &size));
+  return SocketsCallCheck(TWinSockDll::getsockopt(Handle, SOL_SOCKET, SO_KEEPALIVE, (char*)&keepAlive, &size));
 }
 
 //
@@ -610,7 +625,7 @@ int TSocket::GetKeepAliveOption(bool& keepAlive)
 int TSocket::GetOOBOption(bool& sendOOBDataInline)
 {
   int size = sizeof sendOOBDataInline;
-  return SocketsCallCheck(TWinSock::Dll()->getsockopt(Handle, SOL_SOCKET, SO_OOBINLINE, (char*)&sendOOBDataInline, &size));
+  return SocketsCallCheck(TWinSockDll::getsockopt(Handle, SOL_SOCKET, SO_OOBINLINE, (char*)&sendOOBDataInline, &size));
 }
 
 //
@@ -619,7 +634,7 @@ int TSocket::GetOOBOption(bool& sendOOBDataInline)
 int TSocket::GetReceiveBufferOption(int& receiveBufferSize)
 {
   int size = sizeof receiveBufferSize;
-  return SocketsCallCheck(TWinSock::Dll()->getsockopt(Handle, SOL_SOCKET, SO_RCVBUF, (char*)&receiveBufferSize, &size));
+  return SocketsCallCheck(TWinSockDll::getsockopt(Handle, SOL_SOCKET, SO_RCVBUF, (char*)&receiveBufferSize, &size));
 }
 
 //
@@ -628,7 +643,7 @@ int TSocket::GetReceiveBufferOption(int& receiveBufferSize)
 int TSocket::GetSendBufferOption(int& sendBufferSize)
 {
   int size = sizeof sendBufferSize;
-  return SocketsCallCheck(TWinSock::Dll()->getsockopt(Handle, SOL_SOCKET, SO_SNDBUF, (char*)&sendBufferSize, &size));
+  return SocketsCallCheck(TWinSockDll::getsockopt(Handle, SOL_SOCKET, SO_SNDBUF, (char*)&sendBufferSize, &size));
 }
 
 //
@@ -637,7 +652,7 @@ int TSocket::GetSendBufferOption(int& sendBufferSize)
 int TSocket::GetReuseAddressOption(bool& allowReuseAddress)
 {
   int size = sizeof allowReuseAddress;
-  return SocketsCallCheck(TWinSock::Dll()->getsockopt(Handle, SOL_SOCKET, SO_REUSEADDR, (char*)&allowReuseAddress, &size));
+  return SocketsCallCheck(TWinSockDll::getsockopt(Handle, SOL_SOCKET, SO_REUSEADDR, (char*)&allowReuseAddress, &size));
 }
 
 //----------------------------------------------------------------------------
@@ -691,7 +706,7 @@ TSocketWindow& TSocketWindow::operator =(TSocketWindow& src)
     // Note that if SelectOptions were empty (0), then we are saying to turn
     //  off notifications and make the socket blocking.
     //
-    TWinSock::Dll()->WSAAsyncSelect(SocketParent->Handle, *this, MSG_SOCKET_NOTIFY, SelectOptions);
+    TWinSockDll::WSAAsyncSelect(SocketParent->Handle, *this, MSG_SOCKET_NOTIFY, SelectOptions);
   }
   return *this;
 }
@@ -746,9 +761,9 @@ int TSocketWindow::StartCustomNotification(int selectOptions)
 {
   SelectOptions = selectOptions;
 
-  int error = TWinSock::Dll()->WSAAsyncSelect(*SocketParent, *this, MSG_SOCKET_NOTIFY, SelectOptions);
+  int error = TWinSockDll::WSAAsyncSelect(*SocketParent, *this, MSG_SOCKET_NOTIFY, SelectOptions);
   if (error) {
-    LastError = TWinSock::Dll()->WSAGetLastError();
+    LastError = TWinSockDll::WSAGetLastError();
     return WINSOCK_ERROR;
   }
   return WINSOCK_NOERROR;

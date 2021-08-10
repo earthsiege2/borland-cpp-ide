@@ -7,23 +7,43 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.7  $        */
 
 #include <stdio.h>
 #include <_printf.h>
 #include <string.h>
+#include <stdlib.h>
+#include <values.h>
+#include <_tchar.h>
 
-static  char    NullString[] = "(null)";
+/****************************************************************************/
+/* Set up some UNICODE defines */
+#define DEFWIDTH  (sizeof (_TCHAR) == sizeof (wchar_t))
+static  char    NullStringA[] =  "(null)";
+static  wchar_t NullStringW[] = L"(null)";
+#ifdef _UNICODE
+#  define DefNullString (NullStringW)
+#else
+#  define DefNullString (NullStringA)
+#endif /* _UNICODE */
+
+#define MAX_BUF_LEN      512
+#if (MAX_BUF_LEN < __CVTMAX__)
+#  error MAX_BUF_LEN Must be >= __CVTMAX__ !
+#endif
+typedef unsigned char    bits08;
+/****************************************************************************/
 
 #define Ssize 80
 typedef struct
 {
-    char    S[Ssize];
+    _TCHAR  S[Ssize];
     int     Scount;
     putnF   *putter;
     void    *outP;
@@ -56,7 +76,7 @@ static void PutFlush( PutRec *p )
 
 Name            PutToS - output a character to putter function
 
-Usage           static void PutToS( char c, PutRec *p )
+Usage           static void PutToS( _TCHAR c, PutRec *p )
 
 Description     Output one character to the _putrec buffer, and flush
                 the buffer when full to the putter function.
@@ -64,7 +84,7 @@ Description     Output one character to the _putrec buffer, and flush
 
 *------------------------------------------------------------------------*/
 
-static void PutToS( char c, PutRec *p )
+static void PutToS( _TCHAR c, PutRec *p )
 {
     if (p->Scount >= Ssize)
         PutFlush(p);
@@ -77,22 +97,22 @@ static void PutToS( char c, PutRec *p )
 
 Name            Hex8 - converts int to 8 hex digits
 
-Usage           static void Hex8( unsigned n, char *buf )
+Usage           static void Hex8( unsigned n, _TCHAR *buf )
 
 Description     Convert 32 bit parameter (n) to 8 hex digits at buf.
 
 *------------------------------------------------------------------------*/
 
-static void Hex8 (unsigned long n, char *buf)
+static void Hex8 (unsigned long n, _TCHAR *buf)
 {
     int i, c;
 
     for (i = 7; i >= 0; i--)
     {
         if ((c = (int)n & 0x0f) < 10)
-            buf[i] = c + '0';
+            buf[i] = c + _TEXT('0');
         else
-            buf[i] = c - 10 + 'A';
+            buf[i] = c - 10 + _TEXT('A');
         n >>= 4;
     }
 }
@@ -121,8 +141,8 @@ typedef
                 _pr,    /* precision            */
                 _nu,    /* numeral              */
                 _lo,    /* long                 */
-                _ld,    /* long double          */
-                _sh,    /* short                */
+                _ld,    /* long double, __int64 */
+                _sh,    /* short, narrow        */
                 _fz,    /* fill zeros           */
 
                 _de,    /* decimal              */
@@ -134,6 +154,8 @@ typedef
                 _fl,    /* float                */
                 _ch,    /* char                 */
                 _st,    /* string               */
+                _Ch,    /* wide char            */
+                _St,    /* wide string          */
 
                 _ns,    /* number sent          */
                 _zz,    /* terminator           */
@@ -142,11 +164,12 @@ typedef
 
                 _ne,    /* near pointer         */
                 _fa,    /* far pointer          */
+                _wi,    /* wide (for I64)       */
         } characterClass;
 
         /*  Here is the table of classes, indexed by character. */
 
-static unsigned char printCtype [96] =
+static bits08 printCtype [96] =
 {
 /*       SP   !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /  */
         _si,_dc,_dc,_af,_dc,_pc,_dc,_dc,_dc,_dc,_ar,_si,_dc,_lj,_pr,_dc,
@@ -155,10 +178,10 @@ static unsigned char printCtype [96] =
         _fz,_nu,_nu,_nu,_nu,_nu,_nu,_nu,_nu,_nu,_dc,_dc,_dc,_dc,_dc,_dc,
 
 /*        _   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O  */
-        _dc,_dc,_dc,_dc,_dc,_fl,_fa,_fl,_sh,_dc,_dc,_dc,_ld,_dc,_ne,_dc,
+        _dc,_dc,_dc,_Ch,_dc,_fl,_fa,_fl,_sh,_wi,_dc,_dc,_ld,_dc,_ne,_dc,
 
 /*        P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _  */
-        _dc,_dc,_dc,_dc,_dc,_dc,_dc,_dc,_he,_dc,_dc,_dc,_dc,_dc,_dc,_dc,
+        _dc,_dc,_dc,_St,_dc,_dc,_dc,_dc,_he,_dc,_dc,_dc,_dc,_dc,_dc,_dc,
 
 /*        `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o  */
         _dc,_dc,_dc,_ch,_de,_fl,_fl,_fl,_sh,_de,_dc,_dc,_lo,_dc,_ns,_oc,
@@ -174,7 +197,7 @@ Name            __vprinter - sends formatted output
 
 Usage           int   __vprinter (putnF  *putter,
                                          void   *outP,
-                                         const char   *formP,
+                                         const _TCHAR *formP,
                                          va_list *argP)
 
 Prototype in    _printf.h
@@ -234,54 +257,88 @@ Return value    The result of the function is a count of the characters sent to
                                 'g'|'G'|'c'|'s'|'p'|'N'|'F'
 
 *---------------------------------------------------------------------*/
-int __vprinter (putnF      *putter,
-                void       *outP,
-                const char *formP,
-                va_list    argP)
+int __vprintert (putnF        *putter,
+                 void         *outP,
+                 const _TCHAR *formP,
+                 va_list      argP)
 {
 
 
     typedef
             enum
             {
-            flagStage, fillzStage, wideStage, dotStage, precStage,
-            ellStage, typeStage,
+                flagStage, fillzStage, wideStage, dotStage, precStage,
+                ellStage, typeStage,
             } syntaxStages;
 
      typedef
             enum
             {
-            altFormatBit = 1,       /* the '#' flag                 */
-            leftJustBit  = 2,       /* the '-' flag                 */
-            notZeroBit   = 4,       /* 0 (octal) or 0x (hex) prefix */
-            fillZerosBit = 8,       /* zero fill width              */
-            isLongBit    = 16,      /* long-type argument           */
-            farPtrBit    = 32,      /* far pointers                 */
-            alt0xBit     = 64,      /* '#' confirmed for %x format  */
-            floatBit     = 128,     /* float arg 4 bytes not 8!     */
-            LongDoubleBit= 256,     /* signal a long double argument*/
-            isShortBit   = 512      /* long-type argument           */
+                altFormatBit = 0x0001, /* the '#' flag                 */
+                leftJustBit  = 0x0002, /* the '-' flag                 */
+                notZeroBit   = 0x0004, /* 0 (octal) or 0x (hex) prefix */
+                fillZerosBit = 0x0008, /* zero fill width              */
+                isLongBit    = 0x0010, /* long-type argument           */
+                farPtrBit    = 0x0020, /* far pointers                 */
+                alt0xBit     = 0x0040, /* '#' confirmed for %x format  */
+                floatBit     = 0x0080, /* float arg 4 bytes not 8!     */
+                LongDoubleBit= 0x0100, /* signal a long double argument*/
+                isShortBit   = 0x0200, /* short-type argument          */
             } flagBits;
 
     flagBits flagSet;
 
-    char     fc;                    /* format char, from fmt string */
-    char     isSigned;              /* chooses signed/unsigned ints */
+    _TCHAR   fc;                    /* format char, from fmt string */
+    _TCHAR   isSigned;              /* chooses signed/unsigned ints */
     int      width;
     int      precision;
-    char     plusSign;
+    _TCHAR   plusSign;
     int      leadZ;
-    char     *abandonP;             /* posn of bad syntax in fmt str*/
-    char     tempStr [__CVTMAX__];  /* longest _realcvt or longtoa string*/
+    _TCHAR   *abandonP;             /* posn of bad syntax in fmt str*/
+
+    char     *PtrA;                 /* Other extra pointers */
+    wchar_t  *PtrW;
+
+    union
+    {
+        char     *PtrA;
+        wchar_t  *PtrW;
+    } DualPtr;
+    union
+    {
+        char      StrA [__CVTMAX__];
+        wchar_t   StrW [__CVTMAX__];
+    } DualStr;
+
+    union
+    {
+        char      StrA [MAX_BUF_LEN];
+        wchar_t   StrW [MAX_BUF_LEN];
+    } Buffer;
+
+#define tempStrA  (DualStr.StrA)
+#define tempStrW  (DualStr.StrW)
+#define cPA       (DualPtr.PtrA)
+#define cPW       (DualPtr.PtrW)
+#ifdef _UNICODE
+#  define tempStr tempStrW
+#  define cP      (DualPtr.PtrW)
+#else
+#  define tempStr tempStrA
+#  define cP      (DualPtr.PtrA)
+#endif
+
+    int      isWideBuffer;          /* use to denote width of 'DualStr' buffer */
+
     PutRec   put;                   /* characters sent to putter    */
 
-    char     hexCase;               /* upper/lower Hex alphabet     */
+    _TCHAR   hexCase;               /* upper/lower Hex alphabet     */
+    unsigned __int64  temp64;       /* used to be long, now it's int64 */
     unsigned long     tempL;
     unsigned          tempI;
     unsigned short    tempS;
-    syntaxStages    stage;          /* was CH */
-    char     c;
-    char     *cP;
+    syntaxStages      stage;        /* was CH */
+    _TCHAR   c;
     int      radix;
     int      ndigits;
     int      len;
@@ -318,26 +375,35 @@ NEXT:
             /* This code is arranged to give in-line flow to the most frequent
              * case, literal transcription from *formP to *outP.
              */
-            if ((fc = *formP++) == '\0')
-                goto respond;           /* end of format string */
-            if (fc == '%')              /* '%' char begins a conversion */
+            if ((fc = *formP++) == _TEXT('\0'))
+                goto respond;             /* end of format string */
+            if (fc == _TEXT('%'))         /* '%' char begins a conversion */
             {
-                if ((fc = *formP) == '%')
-                    formP++;            /* but "%%" is just a literal '%'. */
+                if ((fc = *formP) == _TEXT('%'))
+                    formP++;              /* but "%%" is just a literal '%'. */
                 else
                     break;
             }
-            PutToS(fc,&put);            /* copy literal character */
+#if defined(_MBCS)
+            if (_istleadbyte(fc) && *formP)
+            {
+                PutToS(fc,&put);          /* copy literal character */
+                fc = *formP++;
+            }
+#endif
+            PutToS(fc,&put);              /* copy literal character */
         }
 
         /* If arrived here then a conversion specification has been
          * encountered.
          */
-        abandonP = (char *)formP - 1;   /* abandon will print from '%' */
+        abandonP = (_TCHAR *)formP - 1;   /* abandon will print from '%' */
         stage = flagStage;
-        leadZ = plusSign = 0;
+        leadZ = 0;
+        plusSign = _TEXT('\0');
         flagSet = farPtrBit;
         width = precision = -1;
+        isWideBuffer = DEFWIDTH;
 
                 /*==================================*/
                 /* loop to here when scanning flags */
@@ -346,14 +412,15 @@ NEXT:
         for (;;)
         {
             fc = *formP++;              /* get next format character */
-            if (fc < ' ')               /* filter out controls or highs */
+            if (fc < _TEXT(' ') ||      /* filter out controls */
+               (int)fc > (int)_TEXT('\x7F'))     /* or highs */
                 goto abandon;
 
 /**************************************************************************
  *                 Main character classification switch                   *
  **************************************************************************/
 
-            switch (printCtype[fc - ' '])
+            switch (printCtype[(bits08)(fc - _TEXT(' '))])
             {
             case (_af):                 /* when '#' was seen            */
                 if (stage > flagStage)
@@ -370,7 +437,7 @@ NEXT:
             case (_si):                 /* when ' ' or '+' was seen     */
                 if (stage > flagStage)
                     goto abandon;
-                if (plusSign != '+')
+                if (plusSign != _TEXT('+'))
                     plusSign = fc;      /* ' ' ignored if '+' already   */
                 continue;
 
@@ -404,7 +471,7 @@ NEXT:
                 {
                     if ((int)tempI < 0)      /* is the width negative?       */
                     {
-                        width = -tempI;
+                        width = -(int)tempI;
                         flagSet |= leftJustBit;
                     }
                     else
@@ -432,7 +499,7 @@ NEXT:
 */
             case (_nu):                     /* when 0..9 seen               */
 case_nu:
-                fc -= '0';                  /* turn '0'-'9' to 0-9          */
+                fc -= _TEXT('0');          /* turn '0'-'9' to 0-9          */
                 if (stage <= wideStage)     /* is it part of a width spec?  */
                 {
                     stage = wideStage;
@@ -459,14 +526,51 @@ case_nu:
                 stage = ellStage;
                 continue;
 
-            case (_ld):                     /* 'L' was seen (long double)   */
+            case (_ld):                     /* 'L' was seen (long double or */
+                                            /*  __int64)                    */
                 flagSet = (flagSet | LongDoubleBit) & ~isLongBit;
                 stage = ellStage;
                 continue;
 
-            case (_sh):                     /* 'h' or 'H' was seen (short)  */
-                flagSet = (flagSet | isShortBit) & ~isLongBit;
+            case (_sh):                     /* 'h' or 'H' was seen (short   */
+                                            /*  or narrow)                  */
+                flagSet = (flagSet | isShortBit) & ~(isLongBit);
                 stage = ellStage;
+                continue;
+
+            case (_wi):                     /* 'I' was seen (wide)           */
+                if (formP[0] == _TEXT('6') && formP[1] == _TEXT('4'))
+                  /* handles the Microsoft I64 format */
+                {
+                    formP += 2;
+                    flagSet = (flagSet | LongDoubleBit) & ~(isLongBit | isShortBit);
+                    stage = ellStage;
+                }
+                else
+                if (formP[0] == _TEXT('3') && formP[1] == _TEXT('2'))
+                  /* handles the Microsoft I32 format */
+                {
+                    formP += 2;
+                    flagSet = (flagSet | isLongBit) & ~(LongDoubleBit | isShortBit);
+                    stage = ellStage;
+                }
+                else
+                if (formP[0] == _TEXT('1') && formP[1] == _TEXT('6'))
+                  /* handles the Microsoft I16 format */
+                {
+                    formP += 2;
+                    flagSet = (flagSet | isShortBit) & ~(LongDoubleBit | isLongBit);
+                    stage = ellStage;
+                }
+                else
+                if (formP[0] == _TEXT('8'))
+                  /* handles the Microsoft I8 format */
+                {
+                    formP += 1;
+                    /* make it a regular int since that's how a char is passed */
+                    flagSet &= ~(LongDoubleBit | isLongBit | isShortBit);
+                    stage = ellStage;
+                }
                 continue;
 
 /*--------------------------------------------------------------------------
@@ -488,7 +592,8 @@ Remember fc contains a copy of the original character.
                 goto NoSign;
             case (_he):                 /* hex                          */
                 radix = 16;
-                hexCase = fc - 'X' + 'A'; /* Adjust for aAbBcC etc later  */
+                                        /* Adjust for aAbBcC etc later  */
+                hexCase = fc - _TEXT('X') + _TEXT('A');
 NoSign:
                 plusSign = 0;           /* It's an unsigned operand     */
                 isSigned = 0;
@@ -498,52 +603,61 @@ NoSign:
                 radix = 10;
                 isSigned = 1;
 toAscii:
-                if (flagSet & isLongBit)
+                if (flagSet & LongDoubleBit) /* context here means __int64 */
+                    temp64 = va_arg(argP,unsigned __int64);
+                else if (flagSet & isLongBit)
+                {
                     tempL = va_arg(argP,unsigned long);
+                    if (isSigned)       /* check for sign extension     */
+                        temp64 = (unsigned __int64)(long)tempL;
+                    else
+                        temp64 = (unsigned __int64)tempL;
+                }
                 else if (flagSet & isShortBit)
                 {
                     tempS = va_arg(argP,short);
                     if (isSigned)       /* check for sign extension     */
-                        tempL = (unsigned long)(short)tempS;
+                        temp64 = (unsigned __int64)(short)tempS;
                     else
-                        tempL = (unsigned long)tempS;
+                        temp64 = (unsigned __int64)tempS;
                 }
                 else
                 {
                     tempI = va_arg(argP,int);
                     if (isSigned)       /* check for sign extension     */
-                        tempL = (unsigned long)(int)tempI;
+                        temp64 = (unsigned __int64)(int)tempI;
                     else
-                        tempL = (unsigned long)tempI;
+                        temp64 = (unsigned __int64)tempI;
                 }
 
                 cP = &tempStr[1];
-                if (tempL == 0)
+                if (temp64 == 0i64)
                 {
                     /* ANSI special case where the value is zero and
                      * the precision is zero: don't print anything.
                      */
                     if (precision == 0)
                     {
-                        *cP = '\0';
+                        *cP = _TEXT('\0');
                         goto converted;
                     }
                 }
                 else
                     flagSet |= notZeroBit;  /* flag non-zeroness           */
 
+
 /*-------------------------------------------------------------------------
         "Normal" integer output cases wind up down here somewhere.
 -------------------------------------------------------------------------*/
 
-                __longtoa(tempL, cP, radix, isSigned, hexCase);
+                __int64tot(temp64, cP, radix, isSigned, hexCase);
 converted:
                 if (precision >= 0)
                 {
-                    len = ndigits = strlen(cP);
-                    if (*cP == '-')         /* Is the number negative? */
+                    len = ndigits = _tcslen(cP);
+                    if (*cP == _TEXT('-'))  /* Is the number negative? */
                         ndigits--;          /* decrement no. of digits */
-                    else if (plusSign != '\0')
+                    else if (plusSign != _TEXT('\0'))
                     {                       /* It's positive and needs sign */
                         len++;              /* Increase length of string */
                         *--cP = plusSign;   /* Insert a '+' */
@@ -561,44 +675,164 @@ converted:
                     goto testFillZeros;
 
             case (_pt):                 /* pointer      */
-                cP = va_arg(argP,char *);
+                cP = va_arg(argP,_TCHAR *);
                 Hex8((unsigned long)cP,tempStr);
-                tempStr[8] = '\0';
-                isSigned = 0;
+                tempStr[8] = _TEXT('\0');
+/*                isSigned = 0;  */   /* removed because of warning */
                 flagSet &= ~notZeroBit;
                 cP = tempStr;
                 goto testFillZeros;
 
-            case (_ch):                 /* char         */
+            case (_Ch):                 /* char, opposite */
+                if (!(flagSet & (isShortBit | isLongBit)))
+                flagSet |=
+#ifdef _UNICODE
+                           isShortBit;
+#else
+                           isLongBit;
+
+#endif
+
+                /* fall through to _ch */
+
+            case (_ch):                 /* char, normal  */
 
                 /* The 'c' conversion takes a character as parameter.
                  * Note, however, that the character occupies an
                  * (int) sized cell in the argument list.
+                 *
+                 * Note: We must handle both narrow and wide versions
+                 * depending on the flags specified and the version called:
+                 *
+                 * Format           printf          wprintf
+                 * ----------------------------------------
+                 * %c               narrow          wide
+                 * %C               wide            narrow
+                 * %hc              narrow          narrow
+                 * %hC              narrow          narrow
+                 * %lc              wide            wide
+                 * %lC              wide            wide
+                 *
+                 *
                  */
-                tempStr[0] = (char)va_arg(argP,int);
-                tempStr[1] = '\0';
-                cP = tempStr;
-                len = 1;
+#if defined (_UNICODE)
+                if ((flagSet & isShortBit) != 0)
+                {
+                    tempStrA[0] = (char)(va_arg(argP,int) & 0x00FF) ;
+                    tempStrA[1] = '\0';
+                    isWideBuffer = 0;
+                    cPA = tempStrA;
+                    len = 1;
+                }
+#else
+                if ((flagSet & isLongBit) != 0)
+                {
+                    tempStrW[0] = (wchar_t) va_arg(argP,int);
+                    tempStrW[1] = L'\0';
+                    isWideBuffer = 1;
+                    cPW = tempStrW;
+                    len = 1;
+                }
+#endif /* _UNICODE */
+                else
+                {
+                    /* Use default char size for normal operation */
+                    tempStr[0] = (_TCHAR)va_arg(argP,int);
+                    tempStr[1] = _TEXT('\0');
+                    cP = tempStr;
+                    isWideBuffer = DEFWIDTH;
+                    len = 1;
+                }
                 goto CopyLen;
 
-            case (_st):                 /* string       */
+            case (_St):                 /* string, opposite */
+                if (!(flagSet & (isShortBit | isLongBit)))
+                flagSet |=
+#ifdef _UNICODE
+                           isShortBit;
+#else
+                           isLongBit;
+
+#endif
+                /* fall through to _st */
+
+            case (_st):                 /* string, normal   */
 
                 /* The 's' conversion takes a string (char *) as
                  * argument and copies the string to the output
                  * buffer.
+                 *
+                 * Note: We must handle both narrow and wide versions
+                 * depending on the flags specified and the version called:
+                 *
+                 * Format           printf          wprintf
+                 * ----------------------------------------
+                 * %s               narrow          wide
+                 * %S               wide            narrow
+                 * %hs              narrow          narrow
+                 * %hS              narrow          narrow
+                 * %ls              wide            wide
+                 * %lS              wide            wide
+                 *
                  */
-                cP = va_arg(argP,char *);
-                if (cP == NULL)
-                    cP = NullString;
-                if ((len = strlen(cP)) > precision && precision >= 0)
-                    len = precision;    /* precision may truncate string. */
+
+#ifdef _UNICODE
+                if ((flagSet & isShortBit) != 0)
+                {
+                    cPA = va_arg(argP,char *);
+                    isWideBuffer = 0;
+                    if (cPA == NULL)
+                        cPA = NullStringA;
+                }
+#else
+                if ((flagSet & isLongBit) != 0)
+                {
+                    cPW = va_arg(argP,wchar_t *);
+                    isWideBuffer = 1;
+                    if (cPW == NULL)
+                        cPW = NullStringW;
+                }
+#endif /* _UNICODE */
+                else
+                {
+                    cP = va_arg(argP,_TCHAR *);
+                    isWideBuffer = DEFWIDTH;
+                    if (cP == NULL)
+                        cP = (_TCHAR *) DefNullString;
+                }
+
+                if (isWideBuffer)
+                {
+                    int l;  /* temp var for holding the max len or prec. */
+                    if (precision >= 0)
+                      l = precision;
+                    else
+                      l = MAXINT;
+                    PtrW = cPW;
+                    len = 0;
+                    while (l && (*PtrW != L'\0'))
+                      l--, len++, PtrW++;
+                }
+                else
+                {
+                    int l;  /* temp var for holding the max len or prec. */
+                    if (precision >= 0)
+                      l = precision;
+                    else
+                      l = MAXINT;
+                    PtrA = cPA;
+                    len = 0;
+                    while (l && (*PtrA != '\0'))
+                      l--, len++, PtrA++;
+                }
+
                 goto CopyLen;
 
             case (_fl):                 /* float        */
 
                 /* All real-number conversions are done by __realcvt.
                  */
-                __realcvt(
+                __realcvtt(
                     argP,
                     precision < 0 ? 6 : precision,  /* default prec. is 6 */
                     cP = &tempStr[1],
@@ -621,8 +855,8 @@ converted:
 testFillZeros:
                 if ((flagSet & fillZerosBit) && width > 0)
                 {
-                    len = strlen(cP);
-                    if (*cP == '-')
+                    len = _tcslen(cP);
+                    if (*cP == _TEXT('-'))
                         len--;          /* Length too long because '-'  */
                     if (width > len)    /* leadZ defaulted to 0 before  */
                         leadZ = width - len;
@@ -630,7 +864,7 @@ testFillZeros:
 
 /*
 If arrived here, then tempStr contains the result of a numeric
-conversion.  It may be necessary the prefix the number with
+conversion.  It may be necessary to prefix the number with
 a mandatory sign or space.
 */
 
@@ -639,9 +873,9 @@ a mandatory sign or space.
                  * Adjust number of leading zeros down by one
                  * if precision not specified.
                  */
-                if (*cP == '-' || plusSign != '\0')
+                if (*cP == _TEXT('-') || plusSign != _TEXT('\0'))
                 {
-                    if (*cP != '-')
+                    if (*cP != _TEXT('-'))
                         *--cP = plusSign;
                     if (leadZ > 0 && precision < 0)
                         leadZ--;
@@ -652,18 +886,18 @@ If arrived here then cP points to the converted string,
 which must now be padded, aligned, and copied to the output.
 */
 
-                len = strlen(cP);
+                len = _tcslen(cP);
 CopyLen:                                /* comes from %c or %s section  */
 
                 if ((flagSet & (notZeroBit | altFormatBit))
                             == (notZeroBit | altFormatBit))
                 {
-                    if (fc == 'o')      /* Is it alternate octal form?  */
+                    if (fc == _TEXT('o')) /* Is it alternate octal form?  */
                     {
                         if (leadZ <= 0) /* Yes, alternate mode w/octal  */
                             leadZ = 1;  /*     one leading zero.        */
                      }
-                    else if (fc == 'x' || fc == 'X')
+                    else if (fc == _TEXT('x') || fc == _TEXT('X'))
                     {
                         /* Alternate hex form: send 0x or 0X prefix.
                          */
@@ -681,7 +915,7 @@ CopyLen:                                /* comes from %c or %s section  */
                 {                               /* (! leftJust) == leftFill */
                     while (width > len)
                     {
-                        PutToS(' ',&put);
+                        PutToS(_TEXT(' '),&put);
                         width--;
                     }
                 }
@@ -690,7 +924,7 @@ CopyLen:                                /* comes from %c or %s section  */
                  */
                 if (flagSet & alt0xBit)
                 {                       /* Yes, Send "0x" or "0X"       */
-                    PutToS('0',&put);
+                    PutToS(_TEXT('0'),&put);
                     PutToS(fc,&put);    /* fc is 'x' or 'X'             */
                 }
 
@@ -704,7 +938,8 @@ CopyLen:                                /* comes from %c or %s section  */
                     /* Any leading sign must be copied before
                      * the leading zeroes.
                      */
-                    if (*cP == '-' || *cP == ' ' || *cP == '+')
+                    if (*cP == _TEXT('-') || *cP == _TEXT(' ') ||
+                        *cP == _TEXT('+'))
                     {
                         PutToS(*cP++,&put);
                         len--;
@@ -712,8 +947,53 @@ CopyLen:                                /* comes from %c or %s section  */
                     }
 
                     while (leadZ--)
-                        PutToS('0',&put);
+                        PutToS(_TEXT('0'),&put);
                 }
+
+                /* Convert the string to the proper type if needed */
+#ifdef _UNICODE
+                if (!isWideBuffer)
+                {
+                    /* Convert single chars into wide chars */
+                    char    *p = cPA;
+                    wchar_t wch;
+                    int widx = 0;
+                    int ret, count;
+                    count = len;
+                    while (count-- > 0)
+                    {
+                        ret = mbtowc (&wch, p, MB_CUR_MAX);
+                        if (ret <= 0)
+                            break;
+                        Buffer.StrW[widx++] = wch;
+                        p += ret;
+                    }
+
+                    cPW = Buffer.StrW;
+                }
+#else
+                if (isWideBuffer)
+                {
+                    /* Convert wide chars into MBCS */
+                    wchar_t *p  = cPW;
+                    char     ch;
+                    int idx = 0;
+                    int ret, count, j;
+                    char mbBuf[MB_CUR_MAX];  /* maximum length for a MB char? */
+                    count = len;
+                    while (count-- > 0)
+                    {
+                        ret = wctomb (mbBuf, *p++);
+                        if (ret <= 0)
+                            break;
+                        for (j=0;j<ret; j++)
+                          Buffer.StrA[idx++] = mbBuf[j];
+                    }
+
+                    cPA = Buffer.StrA;
+                }
+#endif
+
 
                 /* Now we copy the actual converted string from tempStr
                  * to output.
@@ -728,7 +1008,7 @@ CopyLen:                                /* comes from %c or %s section  */
                 /* Is the field to be right-filled?
                  */
                 while (width-- > 0)         /* while any remaining width */
-                    PutToS(' ',&put);
+                    PutToS(_TEXT(' '),&put);
 
                 /* If arrive here, the conversion has been done and copied
                  * to output.
@@ -736,7 +1016,7 @@ CopyLen:                                /* comes from %c or %s section  */
                 goto NEXT;
 
             case (_ns) :                 /* number sent */
-                cP = va_arg(argP,char *);
+                cP = va_arg(argP,_TCHAR *);
                 if (flagSet & isLongBit)
                     *((long *)cP) = put.totalSent;
                 else if (flagSet & isShortBit)
@@ -765,7 +1045,7 @@ CopyLen:                                /* comes from %c or %s section  */
 
 abandon:
 
-    while ((c = *abandonP++) != '\0')
+    while ((c = *abandonP++) != _TEXT('\0'))
         PutToS(c,&put);
 
 

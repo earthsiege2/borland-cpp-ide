@@ -3,25 +3,30 @@
  *
  * function(s)
  *        execvp - load and execute a program
+ *        _wexecvp - load and execute a program
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <process.h>
 #include <_process.h>
 #include <stddef.h>
+#include <tchar.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------------*
 
-Name            exec... - functions that load and run other programs
+Name            exec..., _wexec... - functions that load and run other programs
 
 Usage           int  execvp(const char *pathname, char * const * argv);
+                int  _wexecvp(const wchar_t *pathname, wchar_t * const * argv);
 
 Prototype in    process.h
 
@@ -106,8 +111,8 @@ Return value    If  successful, the  exec...  functions  do not  return. On
 
 *----------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC execvp(const char *pathP, char * const * argv)
+int _RTLENTRY _EXPFUNC _texecvp(const _TCHAR *pathP, _TCHAR * const * argv)
 {
-        return (_LoadProg(P_OVERLAY, pathP, argv, NULL, 1));
+        return (_tLoadProg(P_OVERLAY, pathP, argv, NULL, 1));
 }
 

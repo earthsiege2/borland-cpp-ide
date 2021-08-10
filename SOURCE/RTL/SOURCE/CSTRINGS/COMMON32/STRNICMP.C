@@ -1,28 +1,32 @@
 /*-----------------------------------------------------------------------*
- * filename - strnicmp.cas
+ * filename - strnicmp.c
  *
  * function(s)
- *        strnicmp  -  compare  one  string  to  another  without case
- *                     sensitivity
+ *        strnicmp  -  compare one string to another without case sensitivity
+ *        wcsnicmp  -  compare one wide-character string to another without
+ *			case sensitivity
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
 #include <string.h>
+#include <tchar.h>
 #include <ctype.h>
 
 /*-----------------------------------------------------------------------*
 
-Name            strnicmp  -  compare  one  string  to  another  without case
-                             sensitivity
+Name            strnicmp, _wcsnicmp - compare one  ASCII/wide-character string
+			    to another without case sensitivity
 
 Usage           int strnicmp(const char *str1, const char *str2, size_t maxlen);
+		int _wcsnicmp(const wchar_t *str1, const wchar_t *str2, size_t maxlen);
 
 Prototype in    string.h
 
@@ -41,16 +45,16 @@ Description     Case-independent  comparison of  *str1 with  *str2. Compare
                 When  comparing to  punctuation characters  alphabetics are
                 always treated as upper-case.
 
-Return value    strnicmp returns an integer value such as:
+Return value    strnicmp and _wcsicmp return an integer value such as:
                         < 0     if str1 is less than str2
                         = 0     if str1 is the same as str2
                         > 0     if str2 is greater than str2
 
 *------------------------------------------------------------------------*/
 
-int _RTLENTRYF _EXPFUNC strnicmp(const char *str1, const char *str2, size_t maxlen)
+int _RTLENTRY _EXPFUNC _tcsnicmp(const _TCHAR *str1, const _TCHAR *str2, size_t maxlen)
 {
-    while (toupper(*str1) == toupper(*str2) && *str1 != '\0' && maxlen != 0)
+    while (_totupper(*str1) == _totupper(*str2) && *str1 != _TEXT('\0') && maxlen != 0)
     {
         maxlen--;
         str1++;
@@ -59,5 +63,5 @@ int _RTLENTRYF _EXPFUNC strnicmp(const char *str1, const char *str2, size_t maxl
     if (maxlen == 0)
         return (0);
     else
-        return (toupper(*str1) - toupper(*str2));
+        return (_totupper(*str1) - _totupper(*str2));
 }

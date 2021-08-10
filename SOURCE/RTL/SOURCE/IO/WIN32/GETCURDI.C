@@ -3,24 +3,29 @@
  *
  * function(s)
  *        getcurdir - gets current directory for specified drive
+ *        _wgetcurdir - gets current directory for specified drive (wide-character)
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.4  $        */
 
+#include <dir.h>
 #include <direct.h>
 #include <string.h>
+#include <tchar.h>
 
 /*--------------------------------------------------------------------------*
 
-Name            getcurdir - gets current directory for specified drive
+Name            getcurdir, _wgetcurdir - gets current directory for specified drive
 
 Usage           int getcurdir(int drive, char *direc);
+                int _wgetcurdir(int drive, wchar_t *direc);
 
 Prototype in    dir.h
 
@@ -39,13 +44,13 @@ Return value    getcurdir returns 0 on success or -1 in the event
 
 *---------------------------------------------------------------------------*/
 
-int _RTLENTRY _EXPFUNC getcurdir(int drive, char *direc)
+int _RTLENTRY _EXPFUNC _tgetcurdir(int drive, _TCHAR *direc)
 {
     /* Use _getdcwd to do all the messy hard work.  Then
      * strip out the drive name and leading slash from the result.
      */
-    if (_getdcwd(drive, direc, MAXDIR) == NULL)
+    if (_tgetdcwd(drive, direc, MAXDIR) == NULL)
         return (-1);
-    memmove(direc, direc+3, strlen(direc+3)+1);
+    memmove(direc, direc+3, (_tcslen(direc+3)+1)*sizeof(_TCHAR));
     return (0);
 }

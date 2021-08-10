@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.11  $
+//$Revision:   10.13  $
 //
 // Winsock for OWL subsystem.
 // Based on work by Paul Pedriana, 70541.3223@compuserve.com
@@ -17,10 +17,13 @@
 # include <winsock.h>
 #endif
 
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 // Generic definitions/compiler options (eg. alignment) preceeding the 
 // definition of classes
 #include <services/preclass.h>
-
 
 //
 // class TSocketAddress
@@ -65,7 +68,7 @@ class _OWLCLASS TINetSocketAddress : public TSocketAddress {
     TINetSocketAddress(const sockaddr& src);
     TINetSocketAddress(ushort newPort, ulong newAddress = INADDR_ANY,
                        ushort newFamily = AF_INET);
-    TINetSocketAddress(ushort newPort, char* newAddress,
+    TINetSocketAddress(ushort newPort, const char* newAddress,
                        ushort newFamily = AF_INET);
 
     TINetSocketAddress& operator =(const sockaddr& src);
@@ -81,17 +84,32 @@ class _OWLCLASS TINetSocketAddress : public TSocketAddress {
     void SetAddress(ushort newFamily, ushort newPort, ulong newAddress);
     void SetPort(ushort port);
     void SetNetworkAddress(ulong address);
-    void SetNetworkAddress(char* addressDottedDecimal);
+    void SetNetworkAddress(const char* addressDottedDecimal);
     void SetFiller();
 
-    static ulong ConvertAddress(char far* address);
+    static ulong ConvertAddress(const char far* address);
     static char far* ConvertAddress(ulong address);
+    static short IsAddressDottedDecimal(const char far* address);
+
+    // These routines are rendered obsolete by newer versions
+    // that use const for the address argument.  Included for
+    // backwards compatibility.
+
+    TINetSocketAddress(ushort newPort, char* newAddress,
+                       ushort newFamily = AF_INET);
+    void SetNetworkAddress(char* addressDottedDecimal);
+    static ulong ConvertAddress(char far* address);
     static short IsAddressDottedDecimal(char far* address);
+
 };
 
 // Generic definitions/compiler options (eg. alignment) following the 
 // definition of classes
 #include <services/posclass.h>
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //----------------------------------------------------------------------------
 // Inline implementations
@@ -140,6 +158,30 @@ inline ulong
 TINetSocketAddress::GetNode(ulong subnet) const
 {
   return GetNetworkAddress() & ~subnet;
+}
+
+
+//
+//  Obsolete functions replaced by versions that make 
+//  use of const
+//
+
+inline void
+TINetSocketAddress::SetNetworkAddress(char* addressDottedDecimal)
+{
+  SetNetworkAddress(CONST_CAST(const char*, addressDottedDecimal));
+}
+
+inline static ulong
+TINetSocketAddress::ConvertAddress(char far* address)
+{
+  return ConvertAddress(CONST_CAST(const char far*, address));
+}
+
+inline static short
+TINetSocketAddress::IsAddressDottedDecimal(char far* address)
+{
+  return IsAddressDottedDecimal(CONST_CAST(const char far*, address));
 }
 
 #endif  // OWL_WSKADDR_H

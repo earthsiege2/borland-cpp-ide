@@ -1,9 +1,20 @@
-##\\"class [[ClassName]] : public TDialog {" ClassDef
+##\\"class [[ClassName]] : public TDialog, public TView" ClassDef
 ##:     ? ClassDef [[Search2]]
-##Search2 == FALSE
-##:         %\\"[[ClassName]] missing class derived from TDialog.  "
-##*
-##Search2 == TRUE
+##--BEGIN-- Search2 == TRUE
 ##^BOL
 ##^DELL
+class [[ClassName]] : public TDialog, public TView, public TVbxEventHandler {
+##--END-- Search2 == TRUE
+##--BEGIN-- Search2 == FALSE
+##\\"class [[ClassName]] : public TDialog" ClassDef
+##TRUE [[Search3]]
+##:     ? ClassDef Search3
+## Search3 == FALSE
+##:         %\\"[[ClassName]] missing class derived from TDialog.  "
+##*
+## Search3 == TRUE
+##:^BOL
+##:^DELL
 class [[ClassName]] : public TDialog, public TVbxEventHandler {
+##--END-- Search2 == FALSE
+

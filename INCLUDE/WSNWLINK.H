@@ -29,9 +29,12 @@
 
 #ifndef _WSNWLINK_
 #define _WSNWLINK_
+#pragma option -b
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <pshpack8.h>
+#pragma option -b
 #endif
 
 /*
@@ -279,8 +282,11 @@ typedef struct _IPX_SPXCONNSTATUS_DATA {
 #define IPX_IMMEDIATESPXACK     0x4010
 
 #ifdef __BORLANDC__
+#pragma option -b.
   #include <poppack.h>
+#pragma option -b
 #endif
 
+#pragma option -b.
 #endif
 

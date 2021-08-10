@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.16  $
+//$Revision:   10.20  $
 //
 // Implementation of class TRichEdit.
 //----------------------------------------------------------------------------
@@ -29,6 +29,8 @@
 #if !defined(CLASSLIB_FILENAME_H)
 # include <classlib/filename.h>
 #endif
+
+OWL_DIAGINFO;
 
 // Range of the editor's font size
 //
@@ -513,8 +515,9 @@ TRichEdit::TRichEdit(TWindow*        parent,
 
   // Undo the styles specific to "EDIT" controls; add richedit styles
   //
-  ModifyStyle(ES_LOWERCASE|ES_PASSWORD|ES_OEMCONVERT|ES_UPPERCASE,
-              ES_LEFT | ES_AUTOHSCROLL | WS_BORDER | WS_TABSTOP);
+  ModifyStyle(ES_LOWERCASE|ES_PASSWORD|ES_OEMCONVERT|
+              ES_UPPERCASE|ES_AUTOHSCROLL,
+              ES_LEFT | WS_BORDER | WS_TABSTOP);
 }
 
 //

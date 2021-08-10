@@ -6,16 +6,18 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <stdio.h>
 #include <_printf.h>
 #include <_stdio.h>
+#include <_tchar.h>
 
 /*---------------------------------------------------------------------*
 
@@ -29,12 +31,12 @@ Description     see printf
 
 *---------------------------------------------------------------------*/
 
-int _RTLENTRYF _EXPFUNC vprintf (const char *fmt, va_list ap)
+int _RTLENTRYF _EXPFUNC _vtprintf (const _TCHAR *fmt, va_list ap)
 {
     int ret;
 
     _lock_stream(stdout);
-     ret =  __vprinter ((putnF *)__fputn, stdout, fmt, ap);
+     ret =  __vprintert ((putnF *)__fputnt, stdout, fmt, ap);
     _unlock_stream(stdout);
     return (ret);
 }

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.5  $
+//$Revision:   10.7  $
 //
 // Message handler signature templates
 //----------------------------------------------------------------------------
@@ -12,6 +12,11 @@
 #if !defined(OWL_DEFS_H)
 # include <owl/defs.h>
 #endif
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 class _OWLCLASS TCommandEnabler;
 class _OWLCLASS TDocument;
 class _OWLCLASS TView;
@@ -125,6 +130,12 @@ inline void _CALLCNVN (T::*v_HELPINFO_Sig(void _CALLCNVN (T::*pmf)(HELPINFO&)))(
 }
 
 #endif  // defined(BI_PLAT_WIN32)
+
+template <class T>
+inline void _CALLCNVN (T::*v_HRGN_Sig(void _CALLCNVN (T::*pmf)(HRGN)))(HRGN)
+{
+  return pmf;
+}
 
 template <class T>
 inline void _CALLCNVN (T::*v_B_I_I_Sig(void _CALLCNVN (T::*pmf)(bool, int, int)))(bool, int, int)
@@ -563,6 +574,10 @@ inline void _CALLCNVN (T::*v_WINDOWPOS_Sig(void _CALLCNVN (T::*pmf)(WINDOWPOS fa
 {
   return pmf;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 //
 // Aliases for compatibility

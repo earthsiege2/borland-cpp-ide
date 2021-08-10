@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.25  $
+//$Revision:   10.34  $
 //
 // Implementation of TPropertyPage and TPropertySheet classes
 //----------------------------------------------------------------------------
@@ -26,11 +26,13 @@
 # include <winsys/uimetric.h>
 #endif
 
+OWL_DIAGINFO;
+
 //----------------------------------------------------------------------------
 // TPropertySheet
 //----------------------------------------------------------------------------
-
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+                
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
 
 // The caption of the PropertySheet buttons are loaded from a resource (to
 // facilitate localization). However, we have default text.
@@ -44,7 +46,8 @@ static struct TSheetBtnInfo {
   {IDCANCEL,  IDS_CANCEL, "Cancel"},
   {IDOK,      IDS_OK,     "OK"}
 }
-;
+,hlpBtn = {IDHELP,    IDS_HELP,   "Help"};
+
 const int  defBtnSz  = sizeof(defBtn)/sizeof(defBtn[0]);
 const char CloseStr[]= "Close";
 #endif
@@ -55,11 +58,8 @@ const char CloseStr[]= "Close";
 TPropertySheet::TPropertySheet(TWindow* parent, const char far* title,
                                uint startPage, bool isWizard,
                                uint32 flags, TModule* module)
-:
-  TWindow(parent, title, module), IsWizard(isWizard), SubClassSheet(false)
-#if !defined(OWL_NATIVECTRL_ALWAYS)
-  ,Tab(0), Font(0), ActiveIndex(-1), ApplyEnabled(false)
-#endif
+               : TWindow(parent, title, module), IsWizard(isWizard), 
+                 SubClassSheet(false)
 {
   // Initialize the structure representing the property sheet
   //
@@ -72,12 +72,17 @@ TPropertySheet::TPropertySheet(TWindow* parent, const char far* title,
   HeaderInfo.pszCaption = title;
   HeaderInfo.nStartPage = startPage;
 
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
+
+  Tab = 0;
+  Font = 0;
+  ActiveIndex = -1;
+  ApplyEnabled = false;
+
   // By default, we'll use the native implementation if it's available
   //
   UseNative = TCommCtrl::IsAvailable();
 
-#if !defined(OWL_NATIVECTRL_ALWAYS)
-  //
   // ObjectWindows will provide the underlying implementation of
   // PropertySheet/TabControl under environments without the Common 
   // Control Library support
@@ -91,23 +96,15 @@ TPropertySheet::TPropertySheet(TWindow* parent, const char far* title,
                           WS_VISIBLE|DS_MODALFRAME);
     SetExStyle(WS_EX_DLGMODALFRAME);
   }
-
-#else // [OWL_NATIVECTRL_ALWAYS is defined]
-  //
-  // The Common Control Library must be available when the
-  // ObjectWindows does not provide the underlying implementation
-  // of PropertySheet/PropertyPage.
-  //
-  PRECONDITION(TCommCtrl::IsAvailable());
 #endif
 }
 
 //
-// Clean up resources used by PropertySheet objecct
+// Clean up resources used by PropertySheet object
 //
 TPropertySheet::~TPropertySheet()
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   delete Font;
 #endif  
 }
@@ -118,7 +115,7 @@ TPropertySheet::~TPropertySheet()
 void
 TPropertySheet::SetCaption(const char far* title)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   //
   // When not using the system's underlying implementation of
   // PropertySheets, TWindow's SetCaption is sufficient.
@@ -149,7 +146,7 @@ TPropertySheet::SetCaption(const char far* title)
 int
 TPropertySheet::Execute()
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   //
   // When ObjectWindows is providing the underlying implementation
   // of PropertySheet, we'll simply invoke TWindow's Execute method
@@ -170,7 +167,7 @@ TPropertySheet::Execute()
 bool
 TPropertySheet::Create()
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   //
   // When ObjectWindows is providing the underlying implementation
   // of PropertySheet, we'll simply invoke TWindow's Create method
@@ -182,6 +179,17 @@ TPropertySheet::Create()
   // Use CommCtrl via 'Run' helper method
   //
   return Run(false) != 0;
+}
+
+//
+// Internal routine use allow each page to register the classes
+// of it's children
+//
+void
+TPropertyPage::RegisterPageChildObjects(TPropertyPage* page, void*)
+{
+  CHECK(page);
+  page->RegisterChildObjects();
 }
 
 //
@@ -209,12 +217,22 @@ TPropertySheet::Run(bool modal)
   HeaderInfo.phpage = pHandle;
   GetPageHandles();
 
+  // Have each page register the window classes of it's children
+  //
+  ForEachPage(TActionPageFunc(TPropertyPage::RegisterPageChildObjects), 0);
+
   // Flag modal vs. modeless sheet
   //
-  if (modal)
+  if (modal) {
     HeaderInfo.dwFlags &= ~PSH_MODELESS;
-  else
+  }
+  else {
+    // Subclass the control so that this window will receive
+    // button click notifications
+    //
+    EnableSubclass(true);
     HeaderInfo.dwFlags |= PSH_MODELESS;
+  }
 
   // Display property sheet
   //
@@ -315,12 +333,34 @@ TPropertySheet::FirstPageThat(TCondPageFunc test, void* paramList)
 }
 
 //
+// Internal callback used to count the number of pages within
+// a Property Sheet.
+//
+static void
+countPages(TPropertyPage* /*page*/, int* pCount)
+{
+  (*pCount)++;
+}
+
+//
+// Retrieves the number of pages within a particular sheet
+//
+int
+TPropertySheet::GetPageCount() const
+{
+  int pageCount = 0;
+  CONST_CAST(TPropertySheet*,
+             this)->ForEachPage(TActionPageFunc(countPages), &pageCount);
+  return pageCount;
+}
+
+//
 // Updates the 'HWINDOW' data member of the PropertySheet Object.
 // NOTE: This method is called from the InitHandle method of a
 //       page of the sheet.
 //
 void
-TPropertySheet::InitHandle(THandle sheetHandle)
+TPropertySheet::InitHandle(HWND sheetHandle)
 {
   PRECONDITION(GetHandle()==0);
   PRECONDITION(::IsWindow(sheetHandle));
@@ -335,9 +375,15 @@ TPropertySheet::InitHandle(THandle sheetHandle)
   // detect when the sheet is resized (i.e. receiving WM_SIZE messages) to
   // allow the frame to adjust.
   //
-  if (SubClassSheet)
+  if (SubClassSheet) {
     SubclassWindowFunction();
+    GetHWndState(true);
+  }
 
+  // Here we 'fake' a SetupWindow call - The typical OWL run-through
+  // (i.e. SetupWindow invoked off WM_CREATE) fails in this case since
+  // the sheet is created indirectly.
+  //
   SetupWindow();
 }
 
@@ -358,7 +404,7 @@ TPropertySheet::AddPage(TPropertyPage& pg)
   if (pg.GetParentO() != this)
     pg.SetParent(this);
 
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
 
   if (!UseNative) {
     // Create the page
@@ -388,11 +434,11 @@ TPropertySheet::AddPage(TPropertyPage& pg)
 
   // Inform sheet about new page
   //
-  CHECK(THandle(*this));
+  CHECK(HWND(*this));
   SendMessage(PSM_ADDPAGE, 0, TParam2(HPROPSHEETPAGE(pg)));
 }
 
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
 //
 // Internal routine used to send notifications to each page
 //
@@ -419,7 +465,7 @@ sendApply(TPropertyPage* pPage, TPshNotify* notInfo)
 bool
 TPropertySheet::Apply()
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     TPropertyPage* activePg = GetActivePage();
     TPshNotify info(*this, 0, PSN_KILLACTIVE, 0);
@@ -441,7 +487,7 @@ TPropertySheet::Apply()
   }
 #endif
 
-  CHECK(THandle(*this));
+  CHECK(HWND(*this));
   return SendMessage(PSM_APPLY) != 0;
 }
 
@@ -453,7 +499,7 @@ TPropertySheet::Apply()
 void
 TPropertySheet::CancelToClose()
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     TAPointer<char> p = new char[_MAX_PATH];
     SetDlgItemText(IDOK, GetModule()->LoadString(IDS_CLOSE, p, _MAX_PATH) ? 
@@ -462,7 +508,8 @@ TPropertySheet::CancelToClose()
     return;
   }
 #endif
-  CHECK(THandle(*this));
+
+  CHECK(HWND(*this));
   SendMessage(PSM_CANCELTOCLOSE);
 }
 
@@ -473,7 +520,7 @@ TPropertySheet::CancelToClose()
 void
 TPropertySheet::PageChanged(const TPropertyPage& pg)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     HWND btn = GetDlgItem(ID_APPLY);
     if (btn) {
@@ -483,6 +530,7 @@ TPropertySheet::PageChanged(const TPropertyPage& pg)
     return;
   }
 #endif
+
   PRECONDITION(HPROPSHEETPAGE(pg));
   SendMessage(PSM_CHANGED, TParam1(pg.GetHandle()));
 }
@@ -493,12 +541,13 @@ TPropertySheet::PageChanged(const TPropertyPage& pg)
 HWND
 TPropertySheet::GetCurrentPage() const
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     TPropertyPage* activePage = GetActivePage();
     return activePage ? activePage->GetHandle() : 0;  
   }
 #endif
+
   return HWND(CONST_CAST(TPropertySheet*,
                          this)->SendMessage(PSM_GETCURRENTPAGEHWND));
 }
@@ -509,12 +558,13 @@ TPropertySheet::GetCurrentPage() const
 HWND
 TPropertySheet::GetTabControl() const
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     PRECONDITION(Tab);
     return Tab->GetHandle();
   }
 #endif
+
   CHECK(GetHandle());
   return HWND(CONST_CAST(TPropertySheet*,
                          this)->SendMessage(PSM_GETTABCONTROL));
@@ -526,9 +576,9 @@ TPropertySheet::GetTabControl() const
 // Returns true if the message was processed or false otherwise.
 //
 bool
-TPropertySheet::IsDialogMessage(MSG far& msg)
+TPropertySheet::IsDialogMessage(MSG& msg)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     // Not necessary when OWL provides underlying implementation since
     // TPropertySheet can use the 'PreProcessMsg' method to intercept
@@ -537,6 +587,7 @@ TPropertySheet::IsDialogMessage(MSG far& msg)
     return false;
   }
 #endif
+
   CHECK(GetHandle());
   return SendMessage(PSM_ISDIALOGMESSAGE, 0, TParam2(&msg)) != 0;
 }
@@ -556,7 +607,7 @@ TPropertySheet::IsDialogMessage(MSG far& msg)
 void
 TPropertySheet::PressButton(int button)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     uint id = 0;
     switch (button) {
@@ -581,7 +632,7 @@ TPropertySheet::PressButton(int button)
   SendMessage(PSM_PRESSBUTTON, TParam1(button));
 }
 
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
 //
 // Internal routine used to send notifications to each page
 //
@@ -608,7 +659,7 @@ sendQuerySiblings(TPropertyPage* pPage, MSG* msg)
 int
 TPropertySheet::QuerySiblings(TParam1 p1, TParam2 p2)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     MSG msg;
     msg.message = PSM_QUERYSIBLINGS;
@@ -635,13 +686,14 @@ TPropertySheet::QuerySiblings(TParam1 p1, TParam2 p2)
 void
 TPropertySheet::RebootSystem()
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     if (IsFlagSet(wfModalWindow))
       CloseWindow(ID_PSREBOOTSYSTEM);
     return;
   }
 #endif
+
   CHECK(GetHandle());
   SendMessage(PSM_REBOOTSYSTEM);
 }
@@ -652,7 +704,7 @@ TPropertySheet::RebootSystem()
 void
 TPropertySheet::RemovePage(TPropertyPage& pg)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     if (pg.GetSheet() == this) {
       int index = IndexOfPage(&pg);
@@ -666,6 +718,7 @@ TPropertySheet::RemovePage(TPropertyPage& pg)
     return;
   }
 #endif
+
   PRECONDITION(HPROPSHEETPAGE(pg));
   CHECK(GetHandle());
   SendMessage(PSM_REMOVEPAGE, 0, TParam2(HPROPSHEETPAGE(pg)));
@@ -680,7 +733,7 @@ TPropertySheet::RemovePage(TPropertyPage& pg)
 void
 TPropertySheet::RemovePage(int pgIndex)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     TPropertyPage* page = PageAtIndex(pgIndex);
     if (page)
@@ -688,6 +741,7 @@ TPropertySheet::RemovePage(int pgIndex)
     return;
   }
 #endif
+
   CHECK(GetHandle());
   SendMessage(PSM_REMOVEPAGE, pgIndex);
   //
@@ -707,13 +761,14 @@ TPropertySheet::RemovePage(int pgIndex)
 void
 TPropertySheet::RestartWindows()
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     if (IsFlagSet(wfModalWindow))
       CloseWindow(ID_PSRESTARTWINDOWS);
     return;
   }
 #endif
+
   CHECK(GetHandle());
   SendMessage(PSM_RESTARTWINDOWS);
 }
@@ -728,7 +783,7 @@ TPropertySheet::RestartWindows()
 bool
 TPropertySheet::SelectPage(TPropertyPage& pg)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     TPshNotify info(*this, 0, PSN_KILLACTIVE, 0);
     TPropertyPage* page = GetActivePage();
@@ -745,6 +800,7 @@ TPropertySheet::SelectPage(TPropertyPage& pg)
     return false;
   }
 #endif
+
   PRECONDITION(GetHandle());
   PRECONDITION(HPROPSHEETPAGE(pg));
   return SendMessage(PSM_SETCURSEL, 0, TParam2(HPROPSHEETPAGE(pg))) != 0;
@@ -760,7 +816,7 @@ TPropertySheet::SelectPage(TPropertyPage& pg)
 bool
 TPropertySheet::SelectPage(int pgIndex)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     PRECONDITION(pgIndex < GetPageCount());
     TPropertyPage* page = PageAtIndex(pgIndex);
@@ -769,6 +825,7 @@ TPropertySheet::SelectPage(int pgIndex)
     return false;
   }
 #endif
+
   PRECONDITION(GetHandle());
   return SendMessage(PSM_SETCURSEL, TParam1(pgIndex)) != 0;
 }
@@ -783,13 +840,14 @@ TPropertySheet::SelectPage(int pgIndex)
 bool
 TPropertySheet::SelectPage(TResId pgRes)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     // This flavour of page selection is not supported by the ObjectWindows
     // emulation of PropertySheet/PropertyPage. 
     return false;
   }
 #endif
+
   CHECK(GetHandle());
   return SendMessage(PSM_SETCURSELID, 0, TParam2((char far*)pgRes));
 }
@@ -802,7 +860,7 @@ TPropertySheet::SelectPage(TResId pgRes)
 void
 TPropertySheet::SetFinishText(const char far* txt)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     HWND finish = GetDlgItem(ID_FINISH);
     HWND next   = GetDlgItem(ID_NEXT);
@@ -816,6 +874,7 @@ TPropertySheet::SetFinishText(const char far* txt)
     return;
   }
 #endif
+
   CHECK(GetHandle());
   SendMessage(PSM_SETFINISHTEXT, 0, TParam2(txt));
 }
@@ -829,12 +888,13 @@ TPropertySheet::SetFinishText(const char far* txt)
 void
 TPropertySheet::SetTitle(const char far* txt, uint32 style)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     SetWindowText(txt);
     return;
   }
 #endif
+
   CHECK(GetHandle());
   SendMessage(PSM_SETTITLE, TParam1(style), TParam2(txt));
 }
@@ -851,7 +911,7 @@ TPropertySheet::SetTitle(const char far* txt, uint32 style)
 void
 TPropertySheet::SetWizButtons(uint32 flags)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     HWND finish = GetDlgItem(ID_FINISH);
     HWND next   = GetDlgItem(ID_NEXT);
@@ -865,11 +925,12 @@ TPropertySheet::SetWizButtons(uint32 flags)
     return;
   }
 #endif
+
   CHECK(GetHandle());
   SendMessage(PSM_SETWIZBUTTONS, 0, TParam2(flags));
 }
 
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
 //
 // Internal routine used to check if there's a dirty page
 //
@@ -889,7 +950,7 @@ isModified(TPropertyPage* pPage, void*)
 void
 TPropertySheet::PageUnchanged(TPropertyPage& pg)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
 
     // Update the specified page
@@ -911,24 +972,47 @@ TPropertySheet::PageUnchanged(TPropertyPage& pg)
     return;
   }
 #endif
+
   PRECONDITION(HPROPSHEETPAGE(pg));
   CHECK(GetHandle());
-  SendMessage(PSM_UNCHANGED, TParam1(HPROPSHEETPAGE(pg)));
+  SendMessage(PSM_UNCHANGED, TParam1(pg.GetHandle()));
 }
 
+//
+//
+//
+bool
+TPropertySheet::PreProcessMsg(MSG& msg) {
+
+  // If current page = 0, then it's time to close the property sheet.
+  // 
+  HWND page = GetCurrentPage();
+  if (!page) {
+    CloseWindow();
+    return false;
+  } 
+  else {
+    return TWindow::PreProcessMsg(msg);
+  }
+}
 
 // ---------------------------------------------------------------------------
 //  TPropertyPage
 // ---------------------------------------------------------------------------
 
 DEFINE_RESPONSE_TABLE1(TPropertyPage, TDialog)
-  EV_PSN_APPLY(Apply),
-  EV_PSN_KILLACTIVE(KillActive),
-  EV_PSN_HELP(Help),
   EV_PSN_SETACTIVE(SetActive),
+  EV_PSN_KILLACTIVE(KillActive),
+  EV_PSN_APPLY(Apply),
+  EV_PSN_RESET(Reset),
+  EV_PSN_HELP(Help),
   EV_PSN_WIZBACK(WizBack),
   EV_PSN_WIZFINISH(WizFinish),
   EV_PSN_WIZNEXT(WizNext),
+  EV_PSN_QUERYCANCEL(QueryCancel),
+
+  EV_COMMAND(IDOK, CmOk),
+  EV_COMMAND(IDCANCEL, CmCancel),
 END_RESPONSE_TABLE;
 
 //
@@ -938,12 +1022,8 @@ END_RESPONSE_TABLE;
 TPropertyPage::TPropertyPage(TPropertySheet* parent, TResId resId,
                              const char far* title, TResId iconRes,
                              TModule* module)
-:
-  TDialog(parent, resId, module),
-#if !defined(OWL_NATIVECTRL_ALWAYS)
-  Modified(false),
-#endif
-  HPropPage(0)
+: 
+  TDialog(parent, resId, module), HPropPage(0)
 {
   // Initialize the PROPSHEETPAGE structure
   // NOTE: We're storing the 'this' pointer in the application-defined
@@ -965,13 +1045,16 @@ TPropertyPage::TPropertyPage(TPropertySheet* parent, TResId resId,
   PageInfo.pfnDlgProc = PropDlgProc;
   PageInfo.lParam = LPARAM(this);
 
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
+
+  Modified = false;
+
   // By default, we'll use the native implementation if it's available
   //
   UseNative = TCommCtrl::IsAvailable();
 
-#if defined(OWL_NATIVECTRL_ALWAYS)
-
-  // When OWL is built with the NATIVECTRL_ALWAYS option, the
+#else
+  // When OWL is built with the NATIVECTRL_ALWAYS option or in 32-bit the
   // Common Control library MUST be available....
   //
   CHECK(TCommCtrl::IsAvailable());
@@ -984,7 +1067,18 @@ TPropertyPage::TPropertyPage(TPropertySheet* parent, TResId resId,
 // ObjectWindows provides implementation of property pages.
 //
 TPropertyPage::~TPropertyPage()
+{}
+
+//
+// Specifies flags to be used in creating the property page.  These
+// are the flags that belong in PROPSHEETPAGE.dwFlags.  If used, this 
+// method should be called immediately after the TPropertyPage is 
+// constructed.
+//
+void
+TPropertyPage::SetFlags(uint32 flags)
 {
+  PageInfo.dwFlags = flags;
 }
 
 //
@@ -1044,7 +1138,7 @@ TPropertyPage::SetTitle(int txtResId)
 //       id of the sender.
 //
 TResult
-TPropertyPage::EvNotify(uint id, TNotify far& notifyInfo)
+TPropertyPage::EvNotify(uint id, TNotify& notifyInfo)
 {
   if (notifyInfo.code <= PSN_FIRST && notifyInfo.code >= PSN_LAST) {
     // Property sheet notifications require special handling since the
@@ -1053,6 +1147,12 @@ TPropertyPage::EvNotify(uint id, TNotify far& notifyInfo)
     //
     notifyInfo.idFrom = PropPageID;
     id = PropPageID;
+
+    // Also make sure we don't reflect the message back to what looks like
+    // the 'child' sender but is really the sheet. We achieve this by
+    // NULLing out the HWND of the sender.
+    //
+    notifyInfo.hwndFrom = 0;
   }
   return TDialog::EvNotify(id, notifyInfo);
 }
@@ -1075,7 +1175,7 @@ TPropertyPage::PropDlgProc(HWND hDlg, uint msg, WPARAM wParam, LPARAM lParam)
           break;
 
     case WM_NOTIFY: {
-          TNotify far& notifyInfo= *(REINTERPRET_CAST(TNotify far*, lParam));
+          TNotify& notifyInfo= *(REINTERPRET_CAST(TNotify*, lParam));
           if (notifyInfo.code <= PSN_FIRST && notifyInfo.code >= PSN_LAST) {
 
               // Property sheet notifications require special handling
@@ -1107,7 +1207,7 @@ TPropertyPage::DialogFunction(uint msg, TParam1 p1, TParam2 p2)
 {
   switch(msg) {
     case WM_NOTIFY: {
-           NMHDR far& nmhdr = *(REINTERPRET_CAST(NMHDR far*, p2));
+           NMHDR& nmhdr = *(REINTERPRET_CAST(NMHDR far*, p2));
            if (nmhdr.code >= PSN_LAST && nmhdr.code <= PSN_FIRST) {
              CHECK(p1 != 0);
              CHECK(nmhdr.idFrom != 0);
@@ -1165,14 +1265,14 @@ TPropertyPage::DestroyPropertyPage()
 bool
 TPropertyPage::Create()
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   //
   // If we're using ObjectWindows' implementation of PropertySheet/Page,
   // simply chain to the default TDialog::Create method
   //
   if (!UseNative)
     return TDialog::Create();
-#endif  //  !OWL_NATIVECTRL_ALWAYS
+#endif
 
   // When using the system's implementation if PropertyDialogs, the page
   // is actually created behind the scene when the PropertySheet is
@@ -1200,7 +1300,7 @@ TPropertyPage::Create()
 //     a WM_INITDIALOG message.
 //
 void
-TPropertyPage::InitHandle(THandle pageHandle, LPPROPSHEETPAGE ppsp)
+TPropertyPage::InitHandle(HWND pageHandle, LPPROPSHEETPAGE ppsp)
 {
   // First check that the lParam data member of the PROPSHEETPAGE
   // contains a 'this' pointer to an OWL TPropertyPage object
@@ -1223,10 +1323,10 @@ TPropertyPage::InitHandle(THandle pageHandle, LPPROPSHEETPAGE ppsp)
     // We can now retrieve the pointer to the sheet object
     // and initialize the latter if necessary.
     //
-    TPropertySheet* sheet = TYPESAFE_DOWNCAST(page->Parent, TPropertySheet);
+    TPropertySheet* sheet = page->GetSheet();
     if (sheet) {
       if (!sheet->GetHandle()) {
-        THandle sheetHandle = ::GetParent(pageHandle);
+        HWND sheetHandle = ::GetParent(pageHandle);
         if (sheetHandle)
           sheet->InitHandle(sheetHandle);
       }
@@ -1283,6 +1383,7 @@ TPropertyPage::PropCallback(HWND hwnd, uint uMsg, LPPROPSHEETPAGE ppsp)
   return 1;
 }
 
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
 //
 // Returns the caption of a PropertyPage
 // May be used for PropertyPages with or without an underlying
@@ -1329,6 +1430,8 @@ TPropertyPage::SetPageCaption(char far* caption)
   ResCaption = nstrnewdup(caption);
 }
 
+#endif
+
 // Default implementation of PropertySheet notifications.. Derived classes
 // will override - most likely.
 //
@@ -1337,9 +1440,9 @@ TPropertyPage::SetPageCaption(char far* caption)
 //
 //
 int
-TPropertyPage::Apply(TNotify far&)
+TPropertyPage::Apply(TNotify&)
 {
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
   if (!UseNative) {
     // Clear modified flag 
     //
@@ -1347,16 +1450,23 @@ TPropertyPage::Apply(TNotify far&)
   }
 #endif
 
+  // Check if it's OK to close and attempt to retrieve data
   //
+  if (CanClose()) {
+    TransferData(tdGetData);
+    return PSNRET_NOERROR;
+  }
+
+  // It's not OK to proceed - return focus to this page
   //
-  return PSNRET_NOERROR;
+  return PSNRET_INVALID_NOCHANGEPAGE;
 }
 
 //
 //
 //
 bool
-TPropertyPage::KillActive(TNotify far&)
+TPropertyPage::KillActive(TNotify&)
 {
   return false;
 }
@@ -1365,7 +1475,7 @@ TPropertyPage::KillActive(TNotify far&)
 //
 //
 void
-TPropertyPage::Help(TNotify far&)
+TPropertyPage::Help(TNotify&)
 {
 }
 
@@ -1373,7 +1483,7 @@ TPropertyPage::Help(TNotify far&)
 //
 //
 void
-TPropertyPage::Reset(TNotify far&)
+TPropertyPage::Reset(TNotify&)
 {
 }
 
@@ -1381,7 +1491,7 @@ TPropertyPage::Reset(TNotify far&)
 //
 //
 int
-TPropertyPage::SetActive(TNotify far&)
+TPropertyPage::SetActive(TNotify&)
 {
   return 0;
 }
@@ -1390,7 +1500,7 @@ TPropertyPage::SetActive(TNotify far&)
 //
 //
 int
-TPropertyPage::WizBack(TNotify far&)
+TPropertyPage::WizBack(TNotify&)
 {
   return 0;
 }
@@ -1399,26 +1509,62 @@ TPropertyPage::WizBack(TNotify far&)
 //
 //
 bool
-TPropertyPage::WizFinish(TNotify far&)
+TPropertyPage::WizFinish(TNotify&)
 {
-  return 0;
+  return false;
 }
 
 //
 //
 //
 int
-TPropertyPage::WizNext(TNotify far&)
+TPropertyPage::WizNext(TNotify&)
 {
   return 0;
 }
 
+//
+//
+//
+bool
+TPropertyPage::QueryCancel(TNotify&)
+{
+  return false;
+}
 
 // ------------------------------------------------------------------------
 // The following routines are used by ObjectWindows when it
 // provides the underlying support for PropertyPage
 // ------------------------------------------------------------------------
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
+
+//
+// Responds to an incoming notification message from a button with
+// an Id equal to IDOK
+//
+void
+TPropertyPage::CmOk()
+{
+  if (!UseNative) {
+    TPropertySheet* sheet = GetSheet();
+    if (sheet) {
+      sheet->Apply();
+      sheet->CloseWindow(IDOK);
+    }
+  }
+  else
+    DefaultProcessing();
+}
+
+//
+//
+void
+TPropertyPage::CmCancel()
+{
+  TPropertySheet* sheet = GetSheet();
+  if (sheet)
+    sheet->CloseWindow(IDCANCEL);
+}
 
 //
 // Update the style/size of the dialog [PropertyPage]
@@ -1426,32 +1572,40 @@ TPropertyPage::WizNext(TNotify far&)
 void
 TPropertyPage::SetupWindow()
 {
+  // Chain to base class' version - (Allows base class to perform
+  // initialization such as transfer of control data)
+  //
   TDialog::SetupWindow();
 
   if (!UseNative) {
+    // Does this dialog have a caption
+    //
+    bool hasCaption = (GetStyle() & WS_CAPTION) != 0;
+
     // Strip off and add undesirable and desirable styles respectively
     //
     ModifyStyle(WS_BORDER|WS_CAPTION|WS_VISIBLE, WS_GROUP|WS_TABSTOP);
     ModifyExStyle(WS_EX_WINDOWEDGE, 0, SWP_DRAWFRAME);
 
-    // Adjust dialog's height since we've truncated the caption
-    // and border...
+    // Adjust dialog's height if we've truncated the caption
     //
-    TRect dlgRect;
-    GetWindowRect(dlgRect);
-    dlgRect.bottom -= TUIMetric::CyCaption - TUIMetric::CyBorder;
-    SetWindowPos(HWND_BOTTOM, dlgRect, SWP_NOACTIVATE|SWP_NOMOVE);
+    if (hasCaption) {
+      TRect dlgRect;
+      GetWindowRect(dlgRect);
+      dlgRect.bottom -= TUIMetric::CyCaption - TUIMetric::CyBorder;
+      SetWindowPos(HWND_BOTTOM, dlgRect, SWP_NOACTIVATE|SWP_NOMOVE);
+    }
   }
 }
 
 
-#endif  //  !OWL_NATIVECTRL_ALWAYS;
+#endif  
 
 // ------------------------------------------------------------------------
 // The following routines are used by ObjectWindows when it
 // provides the underlying support for PropertySheet
 // ------------------------------------------------------------------------
-#if !defined(OWL_NATIVECTRL_ALWAYS)
+#if !defined(OWL_NATIVECTRL_ALWAYS) && !defined(BI_PLAT_WIN32)
 
 const int MaxTabTextLen = 100;
 const int ID_TabControl = 0x1000;
@@ -1522,6 +1676,10 @@ TPropertySheet::SetupWindow()
       Tab->SetStyle(Tab->GetStyle() | TCS_MULTILINE);
     Tab->Create();
 
+    // Initialize Tab's attributes
+    //
+    if (Font)
+      Tab->SetWindowFont(*Font, true);
 
     // Retrieve the size of biggest page/dialog
     // NOTE: As a side-effect, 'findDlgResInfo' also retrieves the
@@ -1570,7 +1728,7 @@ TPropertySheet::SetupWindow()
     CreateButtons();
     UpdateButtons();
 
-    // Set Focus to tab control
+    // Set Focus to tab control [Is this the desired behaviour?]
     //
     Tab->SetFocus();
   }
@@ -1603,28 +1761,6 @@ TPropertySheet::PageAtIndex(int index) const
                 this)->FirstPageThat(TCondPageFunc(matchPageIndex), counts);
   CHECK(page == PageAtTabIndex(index));
   return page;
-}
-
-//
-// Internal callback used to count the number of pages within
-// a Property Sheet.
-//
-static void
-countPages(TPropertyPage* /*page*/, int* pCount)
-{
-  (*pCount)++;
-}
-
-//
-// Retrieves the number of pages within a particular sheet
-//
-int
-TPropertySheet::GetPageCount() const
-{
-  int pageCount = 0;
-  CONST_CAST(TPropertySheet*,
-             this)->ForEachPage(TActionPageFunc(countPages), &pageCount);
-  return pageCount;
 }
 
 //
@@ -1685,12 +1821,11 @@ DEFINE_RESPONSE_TABLE1(TPropertySheet, TWindow)
   EV_COMMAND_AND_ID(IDHELP,    ButtonClicked),
 END_RESPONSE_TABLE;
 
-
 //
 // Returns a unique name under which the PropertSheet will be
 // registered..
 //
-char far*
+char*
 TPropertySheet::GetClassName()
 {
   // When encapsulating the Common Control's implementation we're
@@ -1746,7 +1881,7 @@ TPropertySheet::EvActivate(uint active, bool minimized, THandle other)
 // WM_SETFOCUS Handler
 //
 void
-TPropertySheet::EvSetFocus(THandle hWndLostFocus)
+TPropertySheet::EvSetFocus(HWND hWndLostFocus)
 {
   if (!UseNative) {
     // Restore focus to the saved 'Focus' window
@@ -1775,7 +1910,7 @@ TPropertySheet::EvGetFont()
 // TCN_SELCHANGE Handler
 //
 void
-TPropertySheet::TabSelChange(TNotify far&)
+TPropertySheet::TabSelChange(TNotify&)
 {
   if (!UseNative) {
     int index = Tab->GetSel();
@@ -1790,7 +1925,7 @@ TPropertySheet::TabSelChange(TNotify far&)
 // TCN_SELCHANGING Handler
 //
 bool
-TPropertySheet::TabSelChanging(TNotify far&)
+TPropertySheet::TabSelChanging(TNotify&)
 {
   if (!UseNative) {
     // Do not veto any tab changes
@@ -1806,7 +1941,7 @@ TPropertySheet::TabSelChanging(TNotify far&)
 // TCN_KEYDOWN Handler
 //
 void
-TPropertySheet::TabKeyDown(TTabKeyDown far&)
+TPropertySheet::TabKeyDown(TTabKeyDown&)
 {
   if (!UseNative) {
     //
@@ -1840,7 +1975,14 @@ TPropertySheet::ButtonClicked(uint id)
             Apply();
             break;
 
+      case  IDHELP:
+            TPropertyPage *activePg = GetActivePage();
+            if (activePg != NULL) {
+              TPshNotify info(*this, 0, PSN_HELP, 0);
+              activePg->SendNotification(PropPageID, info);
+            }
             break;
+
     }
   }
 }
@@ -1868,12 +2010,34 @@ TPropertySheet::CreateButtons()
   for (int i=0; i<size; i++) {
     char* p = GetModule()->LoadString(info[i].strId, rc, sizeof(rc)) ? 
                                       rc : info[i].defStr;
+
+    // Special case PSH_NOAPPLYNOW
+    //
+    if (info[i].id == int(ID_APPLY) && 
+       (HeaderInfo.dwFlags & PSH_NOAPPLYNOW))
+      continue;
+
+    // Create button and initialize its attributes
+    //
     HWND btn = CreateButton(defBtn[i].id, p);
     if (!btn)
       return false;
     if (Font)
       ::SendMessage(btn, WM_SETFONT, WPARAM(HFONT(*Font)), TRUE);  
   }
+
+  // If user requested HASHELP style, create a Help button.
+  //
+  if (HeaderInfo.dwFlags & PSH_HASHELP) {
+    char* p = GetModule()->LoadString(hlpBtn.strId, rc, sizeof(rc))
+      ? rc : hlpBtn.defStr;
+    HWND btn = CreateButton(hlpBtn.id, p);
+    if (!btn)
+      return false;
+    if (Font)
+      ::SendMessage(btn, WM_SETFONT, WPARAM(HFONT(*Font)), TRUE);
+  }
+
   return true;
 }
 
@@ -1887,13 +2051,27 @@ TPropertySheet::UpdateButtons()
   int x = rect.right  - (Margin+ButtonSize.cx);
   int y = rect.bottom - (Margin+ButtonSize.cy);
   HWND btn;
+  
+  // If there is a Help button, position it.
+  //
+  if (HeaderInfo.dwFlags & PSH_HASHELP) {
+    btn = GetDlgItem(hlpBtn.id);
+    if (btn) {
+      ::MoveWindow(btn, x, y, ButtonSize.cx, ButtonSize.cy, TRUE);
+      x -= (Margin+ButtonSize.cx);
+      ::EnableWindow(btn, 
+                     (bool)(GetActivePage()->PageInfo.dwFlags & PSP_HASHELP));
+    }
+  }
+  
   for (int i=0; i<sizeof(defBtn)/sizeof(defBtn[0]); i++) {
     btn = GetDlgItem(defBtn[i].id);
     if (btn) {
       ::MoveWindow(btn, x, y, ButtonSize.cx, ButtonSize.cy, TRUE);
       x -= (Margin+ButtonSize.cx);
     }
-  }      
+  }     
+
   
   btn = GetDlgItem(ID_APPLY);
   if (btn)
@@ -1962,6 +2140,15 @@ TPropertySheet::SetActivePage(int index)
   // Update 'ActiveIndex'
   //
   ActiveIndex = index;
+
+  // Enable or disable the Help button, if present, according the the
+  // style flags of the newly selected page.
+  //
+  HWND btn = GetDlgItem(IDHELP);
+  if (btn) {
+    ::EnableWindow(btn, (bool)(page->PageInfo.dwFlags & PSP_HASHELP));
+  }
+
   return true;
 }
 
@@ -2128,7 +2315,4 @@ TPropertySheet::PageAtTabIndex(int index) const
   }
   return 0;
 }
-#endif  // !OWL_NATIVECTRL_ALWAYS
-
-
-
+#endif

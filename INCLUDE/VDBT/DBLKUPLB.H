@@ -41,10 +41,10 @@ class _DBAWARECLASS TDBLookupList : public TDBControl {
     DECLARE_DB_PROP_RW2( TDataSource,LookupSource );
     DECLARE_DB_PROP_RW2( TField,     LookupField );
     DECLARE_DB_PROP_RW2( string,LookupDisplay );
-    DECLARE_DB_PROP_RW1( int, TDBLookupListOptions
+    DECLARE_DB_PROP_RW1( USHORT, TDBLookupListOptions
                                ,Options,      Prop_TDBLookupList_Options );
     DECLARE_DB_PROP_RW0( Bool,  ReadOnly,     Prop_TDBLookupList_ReadOnly );
-    DECLARE_DB_PROP_RW2( string,SelectedField );
+    DECLARE_DB_PROP_RO2( TField,SelectedField );
     DECLARE_DB_PROP_RW0( int,   SelectedIndex,Prop_TDBLookupList_SelectedIndex );
     DECLARE_DB_PROP_RW0( Bool,  Sorted,        Prop_TDBLookupList_Sorted );
     DECLARE_DB_PROP_RW1( ENUM, TListBoxStyle
@@ -111,10 +111,10 @@ class _DBAWARECLASS TDBLookupList : public TDBControl {
     DECLARE_SOURCE( OnKeyUp,    TDBLookupListKey );
 
     // Event Handlers
-    EVENT( OnClick,    TDBControl, TNotifyEvent );
-    EVENT( OnDragDrop, TDBControl, TDragEvent );
-    EVENT( OnDragOver, TDBControl, TDragOverEvent );
-    EVENT( OnEndDrag,  TDBControl, TDragEvent );
+    DECLARE_DB_EVENT( OnClick,    TNotifyEvent );
+    DECLARE_DB_EVENT( OnDragDrop, TDragEvent );
+    DECLARE_DB_EVENT( OnDragOver, TDragOverEvent );
+    DECLARE_DB_EVENT( OnEndDrag,  TDragEvent );
     DECLARE_DB_EVENT( OnDblClick, TNotifyEvent );
     DECLARE_DB_EVENT( OnEnter,    TNotifyEvent );
     DECLARE_DB_EVENT( OnExit,     TNotifyEvent );
@@ -132,14 +132,23 @@ class _DBAWARECLASS TDBLookupList : public TDBControl {
 
 // Inlines
 // Properties
-DEFINE_DB_PROP_DATAFIELD( TDBLookupList )
-DEFINE_DB_PROP_LOOKUPFIELD( TDBLookupList )
+DEFINE_DB_PROP_DATAFIELD( TDBLookupList, _TDBLookupList )
+DEFINE_DB_PROP_LOOKUPFIELD( TDBLookupList, _TDBLookupList )
 DEFINE_DB_PROP_LOOKUPSOURCE( TDBLookupList )
-DEFINE_DB_PROP_STRING( TDBLookupList, FontName );
-DEFINE_DB_PROP_STRING( TDBLookupList, Caption );
-DEFINE_DB_PROP_STRING( TDBLookupList, DisplayValue );
-DEFINE_DB_PROP_STRING( TDBLookupList, LookupDisplay );
-DEFINE_DB_PROP_STRING( TDBLookupList, Value );
+DEFINE_DB_PROP_STRING( TDBLookupList, _TDBLookupList, FontName );
+DEFINE_DB_PROP_STRING( TDBLookupList, _TDBLookupList, Caption );
+DEFINE_DB_PROP_STRING( TDBLookupList, _TDBLookupList, DisplayValue );
+DEFINE_DB_PROP_STRING( TDBLookupList, _TDBLookupList, LookupDisplay );
+DEFINE_DB_PROP_STRING( TDBLookupList, _TDBLookupList, Value );
+
+inline TField* TDBLookupList::prSelectedField::Get()
+{
+  TDBLookupList *c = DBOUTER( SelectedField );
+
+  return p = ::GetField( c, Prop_TDBLookupList_SelectedField
+                       , c->LookupSource, p );
+}
+
 
 // Methods
 inline char far* TDBLookupList::GetClassName()

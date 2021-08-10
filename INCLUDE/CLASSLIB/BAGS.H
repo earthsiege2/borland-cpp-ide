@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Borland BIDS Container Library
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   5.4  $
+//$Revision:   5.7  $
 //
 //----------------------------------------------------------------------------
 #if !defined( CLASSLIB_BAGS_H )
@@ -24,6 +24,10 @@
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
 # pragma option -po-
+#endif
+
+#if defined(BI_NAMESPACE)
+namespace ClassLib {
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -157,8 +161,8 @@ public:
                  TShouldDelete::DeleteType dt = TShouldDelete::NoDelete )
         { Detach( t ); }
     int hasMember( const T& t ) const { return HasMember(t); }
-    T findMember( const T& t ) const 
-    { 
+    T findMember( const T& t ) const
+    {
     PRECONDITION( HasMember(t) );
     return *Find(t);
     }
@@ -461,6 +465,10 @@ public:
         }
 
 };
+
+#if defined(BI_NAMESPACE)
+}   // namespace ClassLib
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po.

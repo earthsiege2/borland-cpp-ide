@@ -9,6 +9,7 @@
 
 #ifndef _WINDEF_
 #define _WINDEF_
+#pragma option -b
 
 
 #ifdef __cplusplus
@@ -154,7 +155,9 @@ typedef unsigned int        UINT;
 typedef unsigned int        *PUINT;
 
 #ifndef NT_INCLUDED
+#pragma option -b.
 #include <winnt.h>
+#pragma option -b
 #endif /* NT_INCLUDED */
 
 /* Types use for passing & returning polymorphic values */
@@ -321,4 +324,5 @@ typedef struct tagPOINTS
 #endif
 
 
+#pragma option -b.
 #endif /* _WINDEF_ */

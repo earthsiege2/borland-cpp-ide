@@ -6,27 +6,32 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 2.0
+ *      C/C++ Run Time Library - Version 8.0
  *
- *      Copyright (c) 1991, 1996 by Borland International
+ *      Copyright (c) 1991, 1997 by Borland International
  *      All Rights Reserved.
  *
  */
+/* $Revision:   8.3  $        */
 
 #include <ntbc.h>
 
 #include <stdio.h>
 #include <_io.h>
+#include <_tchar.h>
 
 /*-----------------------------------------------------------------------*
 
-Name            rename - renames a file
+Name            _trename used as rename and _wrename
+                rename   - renames a file
+                _wrename - renames a file
 
 Usage           int rename(const char *oldname, const char *newname);
+                int _wrename(const wchar_t *oldname, const wchar_t *newname);
 
 Prototype in    stdio.h
 
-Description     rename changes the name of a file from oldname to
+Description     _trename changes the name of a file from oldname to
                 newname. If a drive specifier is given in newname, the
                 specifier must be the same as that given in oldname.
 
@@ -34,7 +39,7 @@ Description     rename changes the name of a file from oldname to
                 used to move a file from one directory to another. Wildcards
                 are not allowed.
 
-Return value    On successfully renaming the file, rename returns
+Return value    On successfully renaming the file, _trename returns
                 0. In the event of error, -1 is returned, and errno is set
                 to one of the following:
 
@@ -44,8 +49,8 @@ Return value    On successfully renaming the file, rename returns
 
 *------------------------------------------------------------------------*/
 
-int _RTLENTRYF _EXPFUNC rename(const char *oldname, const char *newname)
+int _RTLENTRYF _EXPFUNC _trename(const _TCHAR *oldname, const _TCHAR *newname)
 {
-    return (MoveFile((char *)oldname,(char *)newname) == TRUE ?
+    return (MoveFile(oldname,newname) == TRUE ?
                 0 : __NTerror());
 }

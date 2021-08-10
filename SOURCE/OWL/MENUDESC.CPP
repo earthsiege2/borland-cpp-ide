@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1997 by Borland International, All Rights Reserved
 //
-//$Revision:   10.4  $
+//$Revision:   10.6  $
 //
 // Implementation of class TMenuDescr
 //----------------------------------------------------------------------------
@@ -14,6 +14,8 @@
 #if !defined(OWL_MODULE_H)
 # include <owl/module.h>
 #endif
+
+OWL_DIAGINFO;
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -225,9 +227,15 @@ TMenuDescr::Merge(const TMenuDescr& srcMenuDescr, TMenu& dstMenu)
 }
 
 #endif
+
 #if !defined(SECTION) || SECTION == 2
 
 #if !defined(BI_NO_OBJ_STREAMING)
+
+#if defined(BI_NAMESPACE)
+namespace OWL {
+#endif
+
 //
 // Extract the menu descriptor from the persistent stream.
 //
@@ -253,6 +261,10 @@ operator <<(opstream& os, const TMenuDescr& m)
     os << m.GroupCount[i];
   return os;
 }
+
+#if defined(BI_NAMESPACE)
+} // namespace OWL
+#endif
 
 #endif  // #if !defined(BI_NO_OBJ_STREAMING)
 
