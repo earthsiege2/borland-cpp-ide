@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -138,7 +138,6 @@ STDMETHODIMP CEnumArray::XEnumVOID::Next(
 	ASSERT(celt == 1 || pceltFetched != NULL);
 
 	BYTE* pchCur = (BYTE*)reelt;
-	ULONG nFetched = 0;
 
 	ULONG celtT = celt;
 	SCODE sc = E_UNEXPECTED;

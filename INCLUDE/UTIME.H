@@ -5,27 +5,20 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1991, 1997 by Borland International
+ *      Copyright (c) 1991, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.4  $ */
+
+/* $Revision:   9.3  $ */
 
 #ifndef __UTIME_H
 #define __UTIME_H
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
-#endif
-
-#ifndef __cplusplus
-#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
-#define _WCHAR_T
-#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
-typedef unsigned short wchar_t;
-#endif
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
 
 #if !defined(RC_INVOKED)
@@ -34,9 +27,7 @@ typedef unsigned short wchar_t;
 #pragma warn -nak
 #endif
 
-#if defined(__FLAT__)
 #pragma pack(push, 1)
-#endif
 
 #endif  /* !RC_INVOKED */
 
@@ -50,15 +41,13 @@ typedef long time_t;
  */
 struct utimbuf
 {
-        time_t  actime;         /* access time (not used on DOS) */
+        time_t  actime;         /* access time (used on NTFS) */
         time_t  modtime;        /* modification time */
 };
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#if defined(__FLAT__)
 
 int    _RTLENTRY _EXPFUNC _utime(const char * __path,
                                  const struct utimbuf *__times);
@@ -70,10 +59,7 @@ int    _RTLENTRY _EXPFUNC utime(const char * __path,
                                 const struct utimbuf *__times);
 #endif
 
-#else  /* __FLAT__  */
-int    _Cdecl _FARFUNC utime(const char _FAR *__path,
-                             const struct utimbuf _FAR *__times);
-#endif
+int _RTLENTRY _EXPFUNC _futime(int __fd, const struct utimbuf *__times);
 
 #ifdef __cplusplus
 }
@@ -82,9 +68,7 @@ int    _Cdecl _FARFUNC utime(const char _FAR *__path,
 
 #if !defined(RC_INVOKED)
 
-#if defined(__FLAT__)
 #pragma pack(pop)       /* restore default packing */
-#endif
 
 #if defined(__STDC__)
 #pragma warn .nak

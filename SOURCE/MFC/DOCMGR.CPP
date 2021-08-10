@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -19,36 +19,78 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#ifndef _MAC
-static const TCHAR szShellOpenFmt[] = _T("%s\\shell\\open\\%s");
-static const TCHAR szShellPrintFmt[] = _T("%s\\shell\\print\\%s");
-static const TCHAR szShellPrintToFmt[] = _T("%s\\shell\\printto\\%s");
-static const TCHAR szDefaultIconFmt[] = _T("%s\\DefaultIcon");
-static const TCHAR szShellNewFmt[] = _T("%s\\ShellNew");
+AFX_STATIC_DATA const TCHAR _afxShellOpenFmt[] = _T("%s\\shell\\open\\%s");
+AFX_STATIC_DATA const TCHAR _afxShellPrintFmt[] = _T("%s\\shell\\print\\%s");
+AFX_STATIC_DATA const TCHAR _afxShellPrintToFmt[] = _T("%s\\shell\\printto\\%s");
+AFX_STATIC_DATA const TCHAR _afxDefaultIconFmt[] = _T("%s\\DefaultIcon");
+AFX_STATIC_DATA const TCHAR _afxShellNewFmt[] = _T("%s\\ShellNew");
 
 #define DEFAULT_ICON_INDEX 0
 
-static const TCHAR szIconIndexFmt[] = _T(",%d");
-static const TCHAR szCommand[] = _T("command");
-static const TCHAR szOpenArg[] = _T(" \"%1\"");
-static const TCHAR szPrintArg[] = _T(" /p \"%1\"");
-static const TCHAR szPrintToArg[] = _T(" /pt \"%1\" \"%2\" \"%3\" \"%4\"");
-static const TCHAR szDDEArg[] = _T(" /dde");
+AFX_STATIC_DATA const TCHAR _afxIconIndexFmt[] = _T(",%d");
+AFX_STATIC_DATA const TCHAR _afxCommand[] = _T("command");
+AFX_STATIC_DATA const TCHAR _afxOpenArg[] = _T(" \"%1\"");
+AFX_STATIC_DATA const TCHAR _afxPrintArg[] = _T(" /p \"%1\"");
+AFX_STATIC_DATA const TCHAR _afxPrintToArg[] = _T(" /pt \"%1\" \"%2\" \"%3\" \"%4\"");
+AFX_STATIC_DATA const TCHAR _afxDDEArg[] = _T(" /dde");
 
-static const TCHAR szDDEExec[] = _T("ddeexec");
-static const TCHAR szDDEOpen[] = _T("[open(\"%1\")]");
-static const TCHAR szDDEPrint[] = _T("[print(\"%1\")]");
-static const TCHAR szDDEPrintTo[] = _T("[printto(\"%1\",\"%2\",\"%3\",\"%4\")]");
+AFX_STATIC_DATA const TCHAR _afxDDEExec[] = _T("ddeexec");
+AFX_STATIC_DATA const TCHAR _afxDDEOpen[] = _T("[open(\"%1\")]");
+AFX_STATIC_DATA const TCHAR _afxDDEPrint[] = _T("[print(\"%1\")]");
+AFX_STATIC_DATA const TCHAR _afxDDEPrintTo[] = _T("[printto(\"%1\",\"%2\",\"%3\",\"%4\")]");
 
-static const TCHAR szShellNewValueName[] = _T("NullFile");
-static const TCHAR szShellNewValue[] = _T("");
+AFX_STATIC_DATA const TCHAR _afxShellNewValueName[] = _T("NullFile");
+AFX_STATIC_DATA const TCHAR _afxShellNewValue[] = _T("");
 
-static BOOL AFXAPI SetRegKey(LPCTSTR lpszKey, LPCTSTR lpszValue, LPCTSTR lpszValueName = NULL)
+// recursively remove a registry key if and only if it has no subkeys
+
+BOOL AFXAPI _AfxDeleteRegKey(LPCTSTR lpszKey)
+{
+	// copy the string
+	LPTSTR lpszKeyCopy = _tcsdup(lpszKey);
+	LPTSTR lpszLast = lpszKeyCopy + lstrlen(lpszKeyCopy);
+
+	// work until the end of the string
+	while (lpszLast != NULL)
+	{
+		*lpszLast = '\0';
+		lpszLast = _tcsdec(lpszKeyCopy, lpszLast);
+
+		// try to open that key
+		HKEY hKey;
+		if (::RegOpenKey(HKEY_CLASSES_ROOT, lpszKeyCopy, &hKey) != ERROR_SUCCESS)
+			break;
+
+		// enumerate the keys underneath
+		TCHAR szScrap[_MAX_PATH+1];
+		DWORD dwLen = _countof(szScrap);
+		BOOL bItExists = FALSE;
+
+		if (::RegEnumKey(hKey, 0, szScrap, dwLen) == ERROR_SUCCESS)
+			bItExists = TRUE;
+		::RegCloseKey(hKey);
+
+		// found one?  quit looping
+		if (bItExists)
+			break;
+
+		// otherwise, delete and find the previous backwhack
+		::RegDeleteKey(HKEY_CLASSES_ROOT, lpszKeyCopy);
+		lpszLast = _tcsrchr(lpszKeyCopy, '\\');
+	}
+
+	// release the string and return
+	free(lpszKeyCopy);
+	return TRUE;
+}
+
+AFX_STATIC BOOL AFXAPI
+_AfxSetRegKey(LPCTSTR lpszKey, LPCTSTR lpszValue, LPCTSTR lpszValueName = NULL)
 {
 	if (lpszValueName == NULL)
 	{
 		if (::RegSetValue(HKEY_CLASSES_ROOT, lpszKey, REG_SZ,
-			  lpszValue, lstrlen(lpszValue)) != ERROR_SUCCESS)
+			  lpszValue, lstrlen(lpszValue) * sizeof(TCHAR)) != ERROR_SUCCESS)
 		{
 			TRACE1("Warning: registration database update failed for key '%s'.\n",
 				lpszKey);
@@ -63,7 +105,7 @@ static BOOL AFXAPI SetRegKey(LPCTSTR lpszKey, LPCTSTR lpszValue, LPCTSTR lpszVal
 		if(::RegCreateKey(HKEY_CLASSES_ROOT, lpszKey, &hKey) == ERROR_SUCCESS)
 		{
 			LONG lResult = ::RegSetValueEx(hKey, lpszValueName, 0, REG_SZ,
-				(CONST BYTE*)lpszValue, lstrlen(lpszValue) + sizeof(TCHAR) );
+				(CONST BYTE*)lpszValue, (lstrlen(lpszValue) + 1) * sizeof(TCHAR));
 
 			if(::RegCloseKey(hKey) == ERROR_SUCCESS && lResult == ERROR_SUCCESS)
 				return TRUE;
@@ -72,14 +114,99 @@ static BOOL AFXAPI SetRegKey(LPCTSTR lpszKey, LPCTSTR lpszValue, LPCTSTR lpszVal
 		return FALSE;
 	}
 }
-#endif
 
 CDocManager::CDocManager()
 {
 }
 
-#ifndef _MAC
-void CDocManager::RegisterShellFileTypes(BOOL bWin95)
+void CDocManager::UnregisterShellFileTypes()
+{
+	ASSERT(!m_templateList.IsEmpty());  // must have some doc templates
+
+	CString strPathName, strTemp;
+
+	AfxGetModuleShortFileName(AfxGetInstanceHandle(), strPathName);
+
+	POSITION pos = m_templateList.GetHeadPosition();
+	for (int nTemplateIndex = 1; pos != NULL; nTemplateIndex++)
+	{
+		CDocTemplate* pTemplate = (CDocTemplate*)m_templateList.GetNext(pos);
+
+		CString strFilterExt, strFileTypeId, strFileTypeName;
+		if (pTemplate->GetDocString(strFileTypeId,
+		   CDocTemplate::regFileTypeId) && !strFileTypeId.IsEmpty())
+		{
+			// enough info to register it
+			if (!pTemplate->GetDocString(strFileTypeName,
+			   CDocTemplate::regFileTypeName))
+				strFileTypeName = strFileTypeId;    // use id name
+
+			ASSERT(strFileTypeId.Find(' ') == -1);  // no spaces allowed
+
+			strTemp.Format(_afxDefaultIconFmt, (LPCTSTR)strFileTypeId);
+			_AfxDeleteRegKey(strTemp);
+
+			// If MDI Application
+			if (!pTemplate->GetDocString(strTemp, CDocTemplate::windowTitle) ||
+				strTemp.IsEmpty())
+			{
+				// path\shell\open\ddeexec = [open("%1")]
+				strTemp.Format(_afxShellOpenFmt, (LPCTSTR)strFileTypeId,
+					(LPCTSTR)_afxDDEExec);
+				_AfxDeleteRegKey(strTemp);
+
+				// path\shell\print\ddeexec = [print("%1")]
+				strTemp.Format(_afxShellPrintFmt, (LPCTSTR)strFileTypeId,
+					(LPCTSTR)_afxDDEExec);
+				_AfxDeleteRegKey(strTemp);
+
+				// path\shell\printto\ddeexec = [printto("%1","%2","%3","%4")]
+				strTemp.Format(_afxShellPrintToFmt, (LPCTSTR)strFileTypeId,
+					(LPCTSTR)_afxDDEExec);
+				_AfxDeleteRegKey(strTemp);
+			}
+
+			// path\shell\open\command = path filename
+			strTemp.Format(_afxShellOpenFmt, (LPCTSTR)strFileTypeId,
+				(LPCTSTR)_afxCommand);
+			_AfxDeleteRegKey(strTemp);
+
+			// path\shell\print\command = path /p filename
+			strTemp.Format(_afxShellPrintFmt, (LPCTSTR)strFileTypeId,
+				(LPCTSTR)_afxCommand);
+			_AfxDeleteRegKey(strTemp);
+
+			// path\shell\printto\command = path /pt filename printer driver port
+			strTemp.Format(_afxShellPrintToFmt, (LPCTSTR)strFileTypeId,
+				(LPCTSTR)_afxCommand);
+			_AfxDeleteRegKey(strTemp);
+
+			pTemplate->GetDocString(strFilterExt, CDocTemplate::filterExt);
+			if (!strFilterExt.IsEmpty())
+			{
+				ASSERT(strFilterExt[0] == '.');
+
+				LONG lSize = _MAX_PATH * 2;
+				LONG lResult = ::RegQueryValue(HKEY_CLASSES_ROOT, strFilterExt,
+					strTemp.GetBuffer(lSize), &lSize);
+				strTemp.ReleaseBuffer();
+
+				if (lResult != ERROR_SUCCESS || strTemp.IsEmpty() ||
+					strTemp == strFileTypeId)
+				{
+					strTemp.Format(_afxShellNewFmt, (LPCTSTR)strFilterExt);
+					_AfxDeleteRegKey(strTemp);
+
+					// no association for that suffix
+					_AfxDeleteRegKey(strFilterExt);
+				}
+			}
+		}
+	}
+}
+
+
+void CDocManager::RegisterShellFileTypes(BOOL bCompat)
 {
 	ASSERT(!m_templateList.IsEmpty());  // must have some doc templates
 
@@ -97,18 +224,18 @@ void CDocManager::RegisterShellFileTypes(BOOL bWin95)
 		CString strPrintToCommandLine = strPathName;
 		CString strDefaultIconCommandLine = strPathName;
 
-		if (bWin95)
+		if (bCompat)
 		{
 			CString strIconIndex;
-			HICON hIcon = AfxDllExtractIcon(AfxGetInstanceHandle(), strPathName, nTemplateIndex);
+			HICON hIcon = ::ExtractIcon(AfxGetInstanceHandle(), strPathName, nTemplateIndex);
 			if (hIcon != NULL)
 			{
-				strIconIndex.Format(szIconIndexFmt, nTemplateIndex);
+				strIconIndex.Format(_afxIconIndexFmt, nTemplateIndex);
 				DestroyIcon(hIcon);
 			}
 			else
 			{
-				strIconIndex.Format(szIconIndexFmt, DEFAULT_ICON_INDEX);
+				strIconIndex.Format(_afxIconIndexFmt, DEFAULT_ICON_INDEX);
 			}
 			strDefaultIconCommandLine += strIconIndex;
 		}
@@ -124,15 +251,15 @@ void CDocManager::RegisterShellFileTypes(BOOL bWin95)
 
 			ASSERT(strFileTypeId.Find(' ') == -1);  // no spaces allowed
 
-			// first register the type ID with our server
-			if (!SetRegKey(strFileTypeId, strFileTypeName))
+			// first register the type ID of our server
+			if (!_AfxSetRegKey(strFileTypeId, strFileTypeName))
 				continue;       // just skip it
 
-			if (bWin95)
+			if (bCompat)
 			{
 				// path\DefaultIcon = path,1
-				strTemp.Format(szDefaultIconFmt, (LPCTSTR)strFileTypeId);
-				if (!SetRegKey(strTemp, strDefaultIconCommandLine))
+				strTemp.Format(_afxDefaultIconFmt, (LPCTSTR)strFileTypeId);
+				if (!_AfxSetRegKey(strTemp, strDefaultIconCommandLine))
 					continue;       // just skip it
 			}
 
@@ -141,35 +268,35 @@ void CDocManager::RegisterShellFileTypes(BOOL bWin95)
 				strTemp.IsEmpty())
 			{
 				// path\shell\open\ddeexec = [open("%1")]
-				strTemp.Format(szShellOpenFmt, (LPCTSTR)strFileTypeId,
-					(LPCTSTR)szDDEExec);
-				if (!SetRegKey(strTemp, szDDEOpen))
+				strTemp.Format(_afxShellOpenFmt, (LPCTSTR)strFileTypeId,
+					(LPCTSTR)_afxDDEExec);
+				if (!_AfxSetRegKey(strTemp, _afxDDEOpen))
 					continue;       // just skip it
 
-				if (bWin95)
+				if (bCompat)
 				{
 					// path\shell\print\ddeexec = [print("%1")]
-					strTemp.Format(szShellPrintFmt, (LPCTSTR)strFileTypeId,
-						(LPCTSTR)szDDEExec);
-					if (!SetRegKey(strTemp, szDDEPrint))
+					strTemp.Format(_afxShellPrintFmt, (LPCTSTR)strFileTypeId,
+						(LPCTSTR)_afxDDEExec);
+					if (!_AfxSetRegKey(strTemp, _afxDDEPrint))
 						continue;       // just skip it
 
 					// path\shell\printto\ddeexec = [printto("%1","%2","%3","%4")]
-					strTemp.Format(szShellPrintToFmt, (LPCTSTR)strFileTypeId,
-						(LPCTSTR)szDDEExec);
-					if (!SetRegKey(strTemp, szDDEPrintTo))
+					strTemp.Format(_afxShellPrintToFmt, (LPCTSTR)strFileTypeId,
+						(LPCTSTR)_afxDDEExec);
+					if (!_AfxSetRegKey(strTemp, _afxDDEPrintTo))
 						continue;       // just skip it
 
 					// path\shell\open\command = path /dde
 					// path\shell\print\command = path /dde
 					// path\shell\printto\command = path /dde
-					strOpenCommandLine += szDDEArg;
-					strPrintCommandLine += szDDEArg;
-					strPrintToCommandLine += szDDEArg;
+					strOpenCommandLine += _afxDDEArg;
+					strPrintCommandLine += _afxDDEArg;
+					strPrintToCommandLine += _afxDDEArg;
 				}
 				else
 				{
-					strOpenCommandLine += szOpenArg;
+					strOpenCommandLine += _afxOpenArg;
 				}
 			}
 			else
@@ -177,32 +304,32 @@ void CDocManager::RegisterShellFileTypes(BOOL bWin95)
 				// path\shell\open\command = path filename
 				// path\shell\print\command = path /p filename
 				// path\shell\printto\command = path /pt filename printer driver port
-				strOpenCommandLine += szOpenArg;
-				if (bWin95)
+				strOpenCommandLine += _afxOpenArg;
+				if (bCompat)
 				{
-					strPrintCommandLine += szPrintArg;
-					strPrintToCommandLine += szPrintToArg;
+					strPrintCommandLine += _afxPrintArg;
+					strPrintToCommandLine += _afxPrintToArg;
 				}
 			}
 
 			// path\shell\open\command = path filename
-			strTemp.Format(szShellOpenFmt, (LPCTSTR)strFileTypeId,
-				(LPCTSTR)szCommand);
-			if (!SetRegKey(strTemp, strOpenCommandLine))
+			strTemp.Format(_afxShellOpenFmt, (LPCTSTR)strFileTypeId,
+				(LPCTSTR)_afxCommand);
+			if (!_AfxSetRegKey(strTemp, strOpenCommandLine))
 				continue;       // just skip it
 
-			if (bWin95)
+			if (bCompat)
 			{
 				// path\shell\print\command = path /p filename
-				strTemp.Format(szShellPrintFmt, (LPCTSTR)strFileTypeId,
-					(LPCTSTR)szCommand);
-				if (!SetRegKey(strTemp, strPrintCommandLine))
+				strTemp.Format(_afxShellPrintFmt, (LPCTSTR)strFileTypeId,
+					(LPCTSTR)_afxCommand);
+				if (!_AfxSetRegKey(strTemp, strPrintCommandLine))
 					continue;       // just skip it
 
 				// path\shell\printto\command = path /pt filename printer driver port
-				strTemp.Format(szShellPrintToFmt, (LPCTSTR)strFileTypeId,
-					(LPCTSTR)szCommand);
-				if (!SetRegKey(strTemp, strPrintToCommandLine))
+				strTemp.Format(_afxShellPrintToFmt, (LPCTSTR)strFileTypeId,
+					(LPCTSTR)_afxCommand);
+				if (!_AfxSetRegKey(strTemp, strPrintToCommandLine))
 					continue;       // just skip it
 			}
 
@@ -220,26 +347,25 @@ void CDocManager::RegisterShellFileTypes(BOOL bWin95)
 					strTemp == strFileTypeId)
 				{
 					// no association for that suffix
-					if (!SetRegKey(strFilterExt, strFileTypeId))
+					if (!_AfxSetRegKey(strFilterExt, strFileTypeId))
 						continue;
 
-					if (bWin95)
+					if (bCompat)
 					{
-						strTemp.Format(szShellNewFmt, (LPCTSTR)strFilterExt);
-						(void)SetRegKey(strTemp, szShellNewValue, szShellNewValueName);
+						strTemp.Format(_afxShellNewFmt, (LPCTSTR)strFilterExt);
+						(void)_AfxSetRegKey(strTemp, _afxShellNewValue, _afxShellNewValueName);
 					}
 				}
 			}
 		}
 	}
 }
-#endif
 
 #ifdef AFX_CORE3_SEG
 #pragma code_seg(AFX_CORE3_SEG)
 #endif
 
-static void AppendFilterSuffix(CString& filter, OPENFILENAME& ofn,
+AFX_STATIC void AFXAPI _AfxAppendFilterSuffix(CString& filter, OPENFILENAME& ofn,
 	CDocTemplate* pTemplate, CString* pstrDefaultExt)
 {
 	ASSERT_VALID(pTemplate);
@@ -252,17 +378,11 @@ static void AppendFilterSuffix(CString& filter, OPENFILENAME& ofn,
 	 !strFilterName.IsEmpty())
 	{
 		// a file based document template - add to filter list
-#ifndef _MAC
 		ASSERT(strFilterExt[0] == '.');
-#endif
 		if (pstrDefaultExt != NULL)
 		{
 			// set the default extension
-#ifndef _MAC
 			*pstrDefaultExt = ((LPCTSTR)strFilterExt) + 1;  // skip the '.'
-#else
-			*pstrDefaultExt = strFilterExt;
-#endif
 			ofn.lpstrDefExt = (LPTSTR)(LPCTSTR)(*pstrDefaultExt);
 			ofn.nFilterIndex = ofn.nMaxCustFilter + 1;  // 1 based number
 		}
@@ -271,9 +391,7 @@ static void AppendFilterSuffix(CString& filter, OPENFILENAME& ofn,
 		filter += strFilterName;
 		ASSERT(!filter.IsEmpty());  // must have a file type name
 		filter += (TCHAR)'\0';  // next string please
-#ifndef _MAC
 		filter += (TCHAR)'*';
-#endif
 		filter += strFilterExt;
 		filter += (TCHAR)'\0';  // next string please
 		ofn.nMaxCustFilter++;
@@ -465,7 +583,7 @@ BOOL CDocManager::DoPromptFileName(CString& fileName, UINT nIDSTitle, DWORD lFla
 	if (pTemplate != NULL)
 	{
 		ASSERT_VALID(pTemplate);
-		AppendFilterSuffix(strFilter, dlgFile.m_ofn, pTemplate, &strDefault);
+		_AfxAppendFilterSuffix(strFilter, dlgFile.m_ofn, pTemplate, &strDefault);
 	}
 	else
 	{
@@ -475,7 +593,7 @@ BOOL CDocManager::DoPromptFileName(CString& fileName, UINT nIDSTitle, DWORD lFla
 		while (pos != NULL)
 		{
 			CDocTemplate* pTemplate = (CDocTemplate*)m_templateList.GetNext(pos);
-			AppendFilterSuffix(strFilter, dlgFile.m_ofn, pTemplate,
+			_AfxAppendFilterSuffix(strFilter, dlgFile.m_ofn, pTemplate,
 				bFirst ? &strDefault : NULL);
 			bFirst = FALSE;
 		}
@@ -486,36 +604,47 @@ BOOL CDocManager::DoPromptFileName(CString& fileName, UINT nIDSTitle, DWORD lFla
 	VERIFY(allFilter.LoadString(AFX_IDS_ALLFILTER));
 	strFilter += allFilter;
 	strFilter += (TCHAR)'\0';   // next string please
-#ifndef _MAC
 	strFilter += _T("*.*");
-#else
-	strFilter += _T("****");
-#endif
 	strFilter += (TCHAR)'\0';   // last string
 	dlgFile.m_ofn.nMaxCustFilter++;
 
 	dlgFile.m_ofn.lpstrFilter = strFilter;
-#ifndef _MAC
 	dlgFile.m_ofn.lpstrTitle = title;
-#else
-	dlgFile.m_ofn.lpstrPrompt = title;
-#endif
 	dlgFile.m_ofn.lpstrFile = fileName.GetBuffer(_MAX_PATH);
 
-	BOOL bResult = dlgFile.DoModal() == IDOK ? TRUE : FALSE;
+	int nResult = dlgFile.DoModal();
 	fileName.ReleaseBuffer();
-	return bResult;
+	return nResult == IDOK;
 }
 
-#ifndef _MAC
+int CDocManager::GetDocumentCount()
+{
+	// count all documents
+	int nCount = 0;
+	POSITION pos = m_templateList.GetHeadPosition();
+	while (pos != NULL)
+	{
+		CDocTemplate* pTemplate = (CDocTemplate*)m_templateList.GetNext(pos);
+		POSITION pos2 = pTemplate->GetFirstDocPosition();
+		while (pos2 != NULL)
+		{
+			pTemplate->GetNextDoc(pos2);
+			++nCount;
+		}
+	}
+	return nCount;
+}
+
 BOOL CDocManager::OnDDECommand(LPTSTR lpszCommand)
 {
 	CString strCommand = lpszCommand;
+	CDocument* pDoc = NULL;
 
 	// open format is "[open("%s")]" - no whitespace allowed, one per line
 	// print format is "[print("%s")]" - no whitespace allowed, one per line
 	// print to format is "[printto("%s","%s","%s","%s")]" - no whitespace allowed, one per line
 	CCommandLineInfo cmdInfo;
+	cmdInfo.m_nShellCommand = CCommandLineInfo::FileDDE;
 
 	if (strCommand.Left(7) == _T("[open(\""))
 	{
@@ -542,12 +671,17 @@ BOOL CDocManager::OnDDECommand(LPTSTR lpszCommand)
 	cmdInfo.m_strFileName = strCommand.Left(i);
 	strCommand = strCommand.Right(strCommand.GetLength() - i);
 
+	CCommandLineInfo* pOldInfo = NULL;
+	BOOL bRetVal = TRUE;
+
 	// If we were started up for DDE retrieve the Show state
 	if (AfxGetApp()->m_pCmdInfo != NULL)
 	{
 		AfxGetApp()->m_nCmdShow = (int)AfxGetApp()->m_pCmdInfo;
-		AfxGetApp()->m_pCmdInfo = NULL;
+		AfxGetApp()->m_pCmdInfo = &cmdInfo;
 	}
+	else
+		pOldInfo = AfxGetApp()->m_pCmdInfo;
 
 	if (cmdInfo.m_nShellCommand == CCommandLineInfo::FileOpen)
 	{
@@ -574,20 +708,25 @@ BOOL CDocManager::OnDDECommand(LPTSTR lpszCommand)
 
 		// next time, show the window as default
 		AfxGetApp()->m_nCmdShow = -1;
-
-		return TRUE;
+		goto RestoreAndReturn;
 	}
 
 	if (cmdInfo.m_nShellCommand == CCommandLineInfo::FilePrintTo)
 	{
 		if (strCommand.Left(3) != _T("\",\""))
-			return FALSE; // illegally formated
+		{
+			bRetVal = FALSE;
+			goto RestoreAndReturn;
+		}
 		else
 		{
 			strCommand = strCommand.Right(strCommand.GetLength() - 3);
 			i = strCommand.Find('"');
 			if (i == -1)
-				return FALSE; // illegally terminated
+			{
+				bRetVal = FALSE;
+				goto RestoreAndReturn;
+			}
 			else
 			{
 				cmdInfo.m_strPrinterName = strCommand.Left(i);
@@ -596,13 +735,19 @@ BOOL CDocManager::OnDDECommand(LPTSTR lpszCommand)
 		}
 
 		if (strCommand.Left(3) != _T("\",\""))
-			return FALSE; // illegally formated
+		{
+			bRetVal = FALSE;
+			goto RestoreAndReturn;
+		}
 		else
 		{
 			strCommand = strCommand.Right(strCommand.GetLength() - 3);
 			i = strCommand.Find('"');
 			if (i == -1)
-				return FALSE; // illegally terminated
+			{
+				bRetVal = FALSE;
+				goto RestoreAndReturn;
+			}
 			else
 			{
 				cmdInfo.m_strDriverName = strCommand.Left(i);
@@ -611,13 +756,19 @@ BOOL CDocManager::OnDDECommand(LPTSTR lpszCommand)
 		}
 
 		if (strCommand.Left(3) != _T("\",\""))
-			return FALSE; // illegally formated
+		{
+			bRetVal = FALSE;
+			goto RestoreAndReturn;
+		}
 		else
 		{
 			strCommand = strCommand.Right(strCommand.GetLength() - 3);
 			i = strCommand.Find('"');
 			if (i == -1)
-				return FALSE; // illegally terminated
+			{
+				bRetVal = FALSE;
+				goto RestoreAndReturn;
+			}
 			else
 			{
 				cmdInfo.m_strPortName = strCommand.Left(i);
@@ -626,20 +777,27 @@ BOOL CDocManager::OnDDECommand(LPTSTR lpszCommand)
 		}
 	}
 
-	AfxGetApp()->m_nCmdShow = SW_HIDE; // Hide everything if we are only printing
-	CDocument* pDoc = AfxGetApp()->OpenDocumentFile(cmdInfo.m_strFileName);
+	// get document count before opening it
+	int nOldCount; nOldCount = GetDocumentCount();
+
+	// open the document, then print it.
+	pDoc = AfxGetApp()->OpenDocumentFile(cmdInfo.m_strFileName);
 	AfxGetApp()->m_pCmdInfo = &cmdInfo;
 	AfxGetApp()->m_pMainWnd->SendMessage(WM_COMMAND, ID_FILE_PRINT_DIRECT);
 	AfxGetApp()->m_pCmdInfo = NULL;
-	pDoc->OnCloseDocument();
+
+	// close the document if it wasn't open previously (based on doc count)
+	if (GetDocumentCount() > nOldCount)
+		pDoc->OnCloseDocument();
 
 	 // if the app was only started to process this command then close
 	 if (!AfxOleGetUserCtrl())
 		AfxGetApp()->m_pMainWnd->PostMessage(WM_CLOSE);
 
-	return TRUE;
+RestoreAndReturn:
+	AfxGetApp()->m_pCmdInfo = pOldInfo;
+	return bRetVal;
 }
-#endif
 
 void CDocManager::OnFileNew()
 {
@@ -659,11 +817,7 @@ void CDocManager::OnFileNew()
 		int nID = dlg.DoModal();
 		if (nID == IDOK)
 			pTemplate = dlg.m_pSelectedTemplate;
-#ifndef _MAC
 		else
-#else
-		else if (nID != IDCANCEL || GetLastError() != ERROR_INTERACTION_NOT_ALLOWED)
-#endif
 			return;     // none - cancel operation
 	}
 
@@ -734,7 +888,6 @@ CDocument* CDocManager::OpenDocumentFile(LPCTSTR lpszFileName)
 
 	TCHAR szPath[_MAX_PATH];
 	ASSERT(lstrlen(lpszFileName) < _countof(szPath));
-#ifndef _MAC
 	TCHAR szTemp[_MAX_PATH];
 	if (lpszFileName[0] == '\"')
 		++lpszFileName;
@@ -747,16 +900,6 @@ CDocument* CDocManager::OpenDocumentFile(LPCTSTR lpszFileName)
 	if (AfxResolveShortcut(AfxGetMainWnd(), szPath, szLinkName, _MAX_PATH))
 		lstrcpy(szPath, szLinkName);
 
-#else
-	lstrcpyn(szPath, lpszFileName, _MAX_PATH);
-	WIN32_FIND_DATA fileData;
-	HANDLE hFind = FindFirstFile(lpszFileName, &fileData);
-	if (hFind != INVALID_HANDLE_VALUE)
-		VERIFY(FindClose(hFind));
-	else
-		fileData.dwFileType = 0;    // won't match any type
-#endif
-
 	while (pos != NULL)
 	{
 		CDocTemplate* pTemplate = (CDocTemplate*)m_templateList.GetNext(pos);
@@ -764,11 +907,7 @@ CDocument* CDocManager::OpenDocumentFile(LPCTSTR lpszFileName)
 
 		CDocTemplate::Confidence match;
 		ASSERT(pOpenDocument == NULL);
-#ifndef _MAC
 		match = pTemplate->MatchDocType(szPath, pOpenDocument);
-#else
-		match = pTemplate->MatchDocType(szPath, fileData.dwFileType, pOpenDocument);
-#endif
 		if (match > bestMatch)
 		{
 			bestMatch = match;

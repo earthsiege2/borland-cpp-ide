@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -127,6 +127,25 @@ struct tm* CTime::GetLocalTm(struct tm* ptm) const
 	else
 		return localtime(&m_time);
 }
+
+BOOL CTime::GetAsSystemTime(SYSTEMTIME& timeDest) const
+{
+	struct tm* ptm = GetLocalTm(NULL);
+	if (ptm == NULL)
+		return FALSE;
+
+	timeDest.wYear = (WORD) (1900 + ptm->tm_year);
+	timeDest.wMonth = (WORD) (1 + ptm->tm_mon);
+	timeDest.wDayOfWeek = (WORD) ptm->tm_wday;
+	timeDest.wDay = (WORD) ptm->tm_mday;
+	timeDest.wHour = (WORD) ptm->tm_hour;
+	timeDest.wMinute = (WORD) ptm->tm_min;
+	timeDest.wSecond = (WORD) ptm->tm_sec;
+	timeDest.wMilliseconds = 0;
+
+	return TRUE;
+}
+
 
 #ifdef _DEBUG
 CDumpContext& AFXAPI operator <<(CDumpContext& dc, CTime time)
@@ -304,5 +323,23 @@ CString CTimeSpan::Format(LPCSTR pFormat) const
 	return Format((LPCTSTR)strFormat);
 }
 #endif // _UNICODE
+
+////////////////////////////////////////////////////////////////////////////
+// out-of-line inlines for binary compatibility
+
+#ifdef _AFXDLL
+#ifndef _DEBUG
+
+CTime::CTime()
+	{ }
+
+CTime::CTime(const CTime& timeSrc)
+	{ m_time = timeSrc.m_time; }
+
+CTimeSpan::CTimeSpan()
+	{ }
+
+#endif
+#endif
 
 /////////////////////////////////////////////////////////////////////////////

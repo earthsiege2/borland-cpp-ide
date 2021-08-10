@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -30,35 +30,23 @@ END
 
 AFX_IDC_MAGNIFY         CURSOR  DISCARDABLE     "res\\magnify.cur"
 
-#ifndef _MAC
 AFX_IDD_PRINTDLG DIALOG DISCARDABLE  6, 18, 133, 95
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | 0x04
-#else
-AFX_IDD_PRINTDLG DIALOG DISCARDABLE  6, 18, 133, 84
-STYLE DS_MODALFRAME | WS_POPUP
-#endif
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Shell Dlg"
 BEGIN
 	CTEXT           "Printing",IDC_STATIC,0,9,133,8
 	CTEXT           "",AFX_IDC_PRINT_DOCNAME,0,19,133,8
-#ifndef _MAC
 	CTEXT           "on the",IDC_STATIC,0,29,133,8
 	CTEXT           "",AFX_IDC_PRINT_PRINTERNAME,0,39,133,8
 	CTEXT           "",AFX_IDC_PRINT_PORTNAME,0,49,133,8
 	CTEXT           "",AFX_IDC_PRINT_PAGENUM,0,59,133,8
 	PUSHBUTTON      "Cancel",IDCANCEL,46,74,40,14
-#else
-	CTEXT           "",AFX_IDC_PRINT_PAGENUM,0,30,133,8
-	PUSHBUTTON      "Cancel",IDCANCEL,46,45,40,15
-	CTEXT           "Press Cmd-. to cancel.",IDC_STATIC,0,63,133,16
-#endif
 END
 
 // Preview Toolbar Dialog
-#ifndef _MAC
 AFX_IDD_PREVIEW_TOOLBAR DIALOG PRELOAD DISCARDABLE  0, 0, 330, 16
 STYLE WS_CHILD | 0x04
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Shell Dlg"
 BEGIN
 	PUSHBUTTON      "&Print...",AFX_ID_PREVIEW_PRINT,2,2,44,12
 	PUSHBUTTON      "&Next Page",AFX_ID_PREVIEW_NEXT,48,2,44,12
@@ -68,34 +56,6 @@ BEGIN
 	PUSHBUTTON      "Zoom &Out",AFX_ID_PREVIEW_ZOOMOUT,232,2,44,12
 	PUSHBUTTON      "&Close",AFX_ID_PREVIEW_CLOSE,278,2,44,12
 END
-#else
-// standard toolbar for 14 inch and larger screens
-// width *must* be 320 or less so that this is used on 640x480 screens
-AFX_IDD_PREVIEW_TOOLBAR DIALOG PRELOAD DISCARDABLE  0, 0, 320, 19
-STYLE WS_CHILD | CBRS_TOP
-BEGIN
-	PUSHBUTTON      "&Print...",AFX_ID_PREVIEW_PRINT,1,2,44,15
-	PUSHBUTTON      "&Next Page",AFX_ID_PREVIEW_NEXT,46,2,44,15
-	PUSHBUTTON      "Pre&v Page",AFX_ID_PREVIEW_PREV,91,2,44,15
-	PUSHBUTTON      "",AFX_ID_PREVIEW_NUMPAGE,136,2,44,15
-	PUSHBUTTON      "Zoom &In",AFX_ID_PREVIEW_ZOOMIN,181,2,44,15
-	PUSHBUTTON      "Zoom &Out",AFX_ID_PREVIEW_ZOOMOUT,226,2,44,15
-	PUSHBUTTON      "&Close",AFX_ID_PREVIEW_CLOSE,271,2,44,15
-END
-
-// short toolbar for 9 inch and 12 inch screens
-AFX_IDD_PREVIEW_SHORTTOOLBAR DIALOG PRELOAD DISCARDABLE  0, 0, 270, 19
-STYLE WS_CHILD | CBRS_TOP
-BEGIN
-	PUSHBUTTON      "&Print...",AFX_ID_PREVIEW_PRINT,1,2,44,15
-	PUSHBUTTON      "&Next",AFX_ID_PREVIEW_NEXT,46,2,29,15
-	PUSHBUTTON      "Pre&v",AFX_ID_PREVIEW_PREV,76,2,29,15
-	PUSHBUTTON      "",AFX_ID_PREVIEW_NUMPAGE,106,2,44,15
-	PUSHBUTTON      "&In",AFX_ID_PREVIEW_ZOOMIN,151,2,29,15
-	PUSHBUTTON      "&Out",AFX_ID_PREVIEW_ZOOMOUT,181,2,29,15
-	PUSHBUTTON      "&Close",AFX_ID_PREVIEW_CLOSE,211,2,44,15
-END
-#endif
 
 // Printing strings
 STRINGTABLE DISCARDABLE

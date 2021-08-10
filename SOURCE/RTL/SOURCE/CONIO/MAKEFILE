@@ -14,7 +14,7 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
-# $Revision:   8.2  $                                                                #
+# $Revision:   9.2  $                                                                #
 #                                                                           #
 #############################################################################
 
@@ -22,7 +22,36 @@
 # Build the object module lists.                                            #
 #############################################################################
 OBJS =               \
-        constrea.obj
+        _wherexy.obj \
+        cgets.obj    \
+        clreol.obj   \
+        clrscr.obj   \
+        color.obj    \
+        constrea.obj \
+        cprintf.obj  \
+        cputn.obj    \
+        cputs.obj    \
+        crtinit.obj  \
+        cscanf.obj   \
+        cursor.obj   \
+        getch.obj    \
+        getche.obj   \
+        getpass.obj  \
+        gotoxy.obj   \
+        gptext.obj   \
+        insline.obj  \
+        kbhit.obj    \
+        movecurs.obj \
+        movetext.obj \
+        putch.obj    \
+        scroll.obj   \
+        textmode.obj \
+        validxy.obj  \
+        vidinfo.obj  \
+        vram.obj     \
+        wherexy.obj  \
+        window.obj   \
+        wscroll.obj
 
 #############################################################################
 # Configure the environment appropriately.                                  #

@@ -1,0 +1,23 @@
+/*-----------------------------------------------------------------------*
+ * filename - wcsstr.c
+ *
+ * function(s)
+ *        wcsstr - scans a wide-character string for the occurrence of a
+ *			given wide-character string
+ *-----------------------------------------------------------------------*/
+
+/*
+ *      C/C++ Run Time Library - Version 10.0
+ *
+ *      Copyright (c) 1996, 2000 by Inprise Corporation
+ *      All Rights Reserved.
+ *
+ */
+
+/* $Revision:   9.0  $        */
+
+#define _UNICODE
+#include "strstr.c"
+
+
+

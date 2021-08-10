@@ -1,0 +1,19 @@
+LIBRARY WINCSV32
+EXPORTS
+
+    ACSSVC                                   = 'WINCSV32.DLL'.*
+    ACSSVC_C                                 = 'WINCSV32.DLL'.*
+    ACSSVC_C_ext                             = 'WINCSV32.DLL'.*
+    ACSSVC_P                                 = 'WINCSV32.DLL'.*
+    ACSSVC_P_ext                             = 'WINCSV32.DLL'.*
+    ACSSVC_ext                               = 'WINCSV32.DLL'.*
+    GetCsvReturnCode                         = 'WINCSV32.DLL'.*
+    GetCsvReturnCode_ext                     = 'WINCSV32.DLL'.*
+    WinAsyncCSV                              = 'WINCSV32.DLL'.*
+    WinAsyncCSV_ext                          = 'WINCSV32.DLL'.*
+    WinCSV                                   = 'WINCSV32.DLL'.*
+    WinCSVCleanup                            = 'WINCSV32.DLL'.*
+    WinCSVCleanup_ext                        = 'WINCSV32.DLL'.*
+    WinCSVStartup                            = 'WINCSV32.DLL'.*
+    WinCSVStartup_ext                        = 'WINCSV32.DLL'.*
+    WinCSV_ext                               = 'WINCSV32.DLL'.*

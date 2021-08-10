@@ -1,0 +1,5 @@
+LIBRARY MTXDM
+EXPORTS
+
+    _GetDispenserManager                     = 'MTXDM.DLL'.GetDispenserManager
+    _GetDispenserManagerDriver               = 'MTXDM.DLL'.GetDispenserManagerDriver

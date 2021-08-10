@@ -1,0 +1,13 @@
+Ver 2.0,QBE - Integra Visual Database Builder,0, 10, 2048, 1442,,,,,
+ , , - Distinct & Quote,,,,,
+    1, - Number of Tables,-1, -1, 484, 404, 476, 159,,,,
+CUSTOMER.DB,CUSTOMER,20, 10, 137, 135,,,,,
+    1, - Number of Columns,,,,,,
+*,CUSTOMER,                   1,     ,1,,,
+     , - Number of Criteria,,,,,,
+     , - Number of Joins,,,,,,
+
+"SELECT Statement"
+,,,,,,,
+SELECT	*
+FROM	"CUSTOMER.DB" CUSTOMER,,,,,,,

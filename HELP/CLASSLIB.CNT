@@ -1,8 +1,0 @@
-:TITLE Borland C++ Class Libraries Guide
-:INDEX Borland C++ Programmer's Guide = BCPP.HLP
-:INDEX Borland C++ Class Libraries Guide = CLASSLIB.HLP
-:INDEX Standard C++ Library Guide = STL.HLP
-:INCLUDE CLSLIBPG.TOC
-:INCLUDE STLPG.TOC
-:INCLUDE CLSLIBRG.TOC
-:INCLUDE STLREF.TOC

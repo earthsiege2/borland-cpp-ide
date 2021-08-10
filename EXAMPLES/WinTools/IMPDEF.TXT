@@ -1,0 +1,83 @@
+IMPDEF Help
+
+IMPDEF takes as input a DLL name, and produces as output a module definition file with an
+export section containing the names of functions exported by the DLL.
+The syntax is:
+
+IMPDEF DestName.DEF SourceName.DLL
+
+This creates a module definition file named DestName.DEF from the file SourceName.DLL. The
+resulting module definition file would look something like this:
+
+LIBRARY     FileName
+DESCRIPTION 'Description'
+EXPORTS
+            ExportFuncName              @Ordinal
+        .
+        .
+        .
+            ExportFuncName              @Ordinal
+
+where:
+
+FileName is the DLL's root file name
+     Description is the value of the DESCRIPTION statement if the DLL was previously
+linked with a module definition file that included a DESCRIPTION statement
+     ExportFuncName names an exported function
+     Ordinal is that function's ordinal value (an integer).
+
+IMPDEF is useful for a DLL that uses C++ classes. If you use the _export keyword when
+defining a class, all of the non-inline member functions and static data members for that class are
+exported. It's easier to let IMPDEF make a module definition file for you because it lists all the
+exported functions, and automatically includes the member functions and static data members.
+Since the names of these functions are mangled, it would be tedious to list them all in the
+EXPORTS section of a module definition file simply to create an import library from the module
+definition file. If you use IMPDEF to create the module definition file, it will include the ordinal
+value for each exported function. If the exported name is mangled, IMPDEF will also include
+that function's unmangled, original name as a comment following the function entry. So, for
+instance, the module definition file created by IMPDEF for a DLL that used C++ classes would
+look something like this:
+
+LIBRARY     FileName
+DESCRIPTION 'Description'
+EXPORTS
+            MangledExportFuncName  @Ordinal ; ExportFuncName
+        .
+        .
+        .
+            MangledExportFuncName  @Ordinal ; ExportFuncName
+
+where
+
+FileName is the DLL's root file name
+     Description is the value of the DESCRIPTION statement if the DLL was previously
+linked with a module definition file that included a DESCRIPTION statement
+     MangledExportFuncName provides the mangled name
+     Ordinal is that function's ordinal value (an integer)
+     ExportFuncName gives the function's original name.
+
+IMPDEF creates an editable source file that lists all the exported functions in the DLL. You can
+edit this .DEF file to contain only those functions that you want to make available to a particular
+application, then run IMPLIB on the edited .DEF file. This results in an import library that
+contains import information for a specific subset of a DLL's export functions.
+Suppose you're distributing a DLL that provides functions to be used by several applications.
+Every export function in the DLL is defined with _export. Now, if all the applications used all
+the DLL's exports, then you could use IMPLIB to make one import library for the DLL. You
+could deliver that import library with the DLL, and it would provide import information for all of
+the DLL's exports. The import library could be linked to any application, thus eliminating the
+need for the particular application to list every DLL function it uses in the IMPORTS section of
+its module definition file.
+
+But let's say you want to give only a few of the DLL's exports to a particular application. Ideally,
+you want a customized import library to be linked to that application--an import library that
+provides import information only for the subset of functions that the application will use. All of
+the other export functions in the DLL will be hidden to that client application.
+To create an import library that satisfies these conditions, run IMPDEF on the compiled and
+linked DLL. IMPDEF produces a module definition file that contains an EXPORT section listing
+all of the DLL's export functions. You can edit that module definition file, remove the
+EXPORTS section entries for those functions you don't want in the customized import library,
+and then run IMPLIB on the module definition file. The result will be an import library that
+contains import information for only those export functions listed in the EXPORTS section of
+the module definition file.
+
+Copyright   1998 Borland International.

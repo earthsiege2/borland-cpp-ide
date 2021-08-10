@@ -7,15 +7,18 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
 
+
 #pragma inline
 #include <mbstring.h>
+
+extern int _mbcsCodePage;
 
 /*---------------------------------------------------------------------*
 
@@ -29,7 +32,7 @@ Prototype in    mbstring.h
 Desctiption     _mbcjmstojis converts c from Shift-JIS code to JIS code.
 
 Return value    Returns converted code.Returns 0 if it can not be
-		converted.
+                converted.
 
 *---------------------------------------------------------------------*/
 
@@ -37,6 +40,9 @@ Return value    Returns converted code.Returns 0 if it can not be
 unsigned int _RTLENTRY _EXPFUNC _mbcjmstojis(unsigned int c)
 {
     register int c1, c2;
+
+    if (_mbcsCodePage  != _KANJI_CP)
+        return (c);
 
 #if defined(__FLAT__)
     if (c & 0xFFFF0000)

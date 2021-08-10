@@ -5,20 +5,26 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.9  $ */
+
+/* $Revision:   9.9  $ */
 
 #ifndef __TIME_H
 #define __TIME_H
+#define _INC_TIME  /* MSC Guard name */
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
+
+#ifdef __cplusplus
+namespace std {
+#endif /* __cplusplus */
 
 #if !defined(RC_INVOKED)
 
@@ -31,22 +37,13 @@
 #endif  /* !RC_INVOKED */
 
 
-#ifndef _SIZE_T
-#define _SIZE_T
-typedef unsigned size_t;
-#endif
-
-#ifndef __cplusplus
-#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
-#define _WCHAR_T
-#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
-typedef unsigned short wchar_t;
-#endif
-#endif
-
 #ifndef  _TIME_T
-#define  _TIME_T
 typedef long time_t;
+#ifdef __cplusplus
+#  define _TIME_T std::time_t
+#else
+#  define _TIME_T time_t
+#endif /* __cplusplus */
 #endif
 
 #ifndef  _CLOCK_T
@@ -73,63 +70,43 @@ struct tm
 #ifdef __cplusplus
 extern "C" {
 #endif
-char _FAR * _RTLENTRY _EXPFUNC   asctime(const struct tm _FAR *__tblock);
-char _FAR * _RTLENTRY _EXPFUNC   ctime(const time_t _FAR *__time);
-double      _RTLENTRY _EXPFUNC32 difftime(time_t __time2, time_t __time1);
-struct tm _FAR * _RTLENTRY _EXPFUNC gmtime(const time_t _FAR *__timer);
-struct tm _FAR * _RTLENTRY _EXPFUNC localtime(const time_t _FAR *__timer);
-time_t      _RTLENTRY _EXPFUNC32 time(time_t _FAR *__timer);
-time_t      _RTLENTRY _EXPFUNC   mktime(struct tm _FAR *__timeptr);
-clock_t     _RTLENTRY _EXPFUNC32 clock(void);
-size_t      _RTLENTRY _EXPFUNC   strftime(char _FAR *__s, size_t __maxsize,
-                                          const char _FAR *__fmt, const struct tm _FAR *__t);
-size_t      _RTLENTRY _EXPFUNC   _lstrftim(char _FAR *__s, size_t __maxsize,
-                                            const char _FAR *__fmt, const struct tm _FAR *__t);
-#if defined(__FLAT__)
-wchar_t   * _RTLENTRY _EXPFUNC   _wasctime(const struct tm *__tblock);
-wchar_t   * _RTLENTRY _EXPFUNC   _wctime(const time_t *__time);
-wchar_t   * _RTLENTRY _EXPFUNC   _wstrdate(wchar_t *datestr);
-wchar_t   * _RTLENTRY _EXPFUNC   _wstrtime(wchar_t *timestr);
-size_t      _RTLENTRY _EXPFUNC   wcsftime(wchar_t *__s, size_t __maxsize,
-                                          const wchar_t *__fmt, const struct tm *__t);
-void        _RTLENTRY  _EXPFUNC  _wtzset(void);
-#endif
-
-
-/* NOTE: The old daylight, timezone, tzname definitions are no longer used.
-         If you need them for backwards compatibility, you'll have to proto-
-         type them yourself, and include obsolete.lib
-*/
-
-#if !defined(_RTLDLL) || defined(__FLAT__)
+char  *     _RTLENTRY _EXPFUNC asctime(const struct tm *__tblock);
+char  *     _RTLENTRY _EXPFUNC ctime(const time_t *__time);
+double      _RTLENTRY _EXPFUNC difftime(time_t __time2, time_t __time1);
+struct tm * _RTLENTRY _EXPFUNC gmtime(const time_t *__timer);
+struct tm * _RTLENTRY _EXPFUNC localtime(const time_t *__timer);
+time_t      _RTLENTRY _EXPFUNC time(time_t *__timer);
+time_t      _RTLENTRY _EXPFUNC mktime(struct tm *__timeptr);
+clock_t     _RTLENTRY _EXPFUNC clock(void);
+_SIZE_T     _RTLENTRY _EXPFUNC strftime(char *__s, _SIZE_T __maxsize,
+                                        const char *__fmt, const struct tm *__t);
+_SIZE_T     _RTLENTRY _EXPFUNC _lstrftim(char  *__s, _SIZE_T __maxsize,
+                                          const char *__fmt, const struct tm *__t);
+wchar_t   * _RTLENTRY _EXPFUNC _wasctime(const struct tm *__tblock);
+wchar_t   * _RTLENTRY _EXPFUNC _wctime(const time_t *__time);
+wchar_t   * _RTLENTRY _EXPFUNC _wstrdate(wchar_t *__datestr);
+wchar_t   * _RTLENTRY _EXPFUNC _wstrtime(wchar_t *__timestr);
+_SIZE_T     _RTLENTRY _EXPFUNC wcsftime(wchar_t *__s, _SIZE_T __maxsize,
+                                        const wchar_t *__fmt, const struct tm *__t);
+void        _RTLENTRY _EXPFUNC _wtzset(void);
 
 extern int               _RTLENTRY _EXPDATA _daylight;
 extern long              _RTLENTRY _EXPDATA _timezone;
-extern char _FAR * const _RTLENTRY _EXPDATA _tzname[2];
-#if defined(__FLAT__)
-extern wchar_t   * const _RTLENTRY _EXPDATA _wtzname[2];
-#endif
+extern char *    const   _RTLENTRY _EXPDATA _tzname[2];
+extern wchar_t * const   _RTLENTRY _EXPDATA _wtzname[2];
 
-#else
-
-int  _FAR *        _RTLENTRY _EXPFUNC __getDaylight(void);
-long _FAR *        _RTLENTRY _EXPFUNC __getTimezone(void);
-char _FAR * _FAR * _RTLENTRY _EXPFUNC __getTzname(void);
-
-#define _daylight (*__getDaylight())
-#define _tzname   ( __getTzname())
-#define _timezone (*__getTimezone())
-
-#endif  /* _RTLDLL */
-
-int         _RTLENTRY           stime(time_t _FAR *__tp);
-void        _RTLENTRY  _EXPFUNC _tzset(void);
-char _FAR * _RTLENTRY  _EXPFUNC _strdate(char _FAR *datestr);
-char _FAR * _RTLENTRY  _EXPFUNC _strtime(char _FAR *timestr);
-
+int         _RTLENTRY          stime(time_t *__tp);
+void        _RTLENTRY _EXPFUNC _tzset(void);
+char  *     _RTLENTRY _EXPFUNC _strdate(char *__datestr);
+char  *     _RTLENTRY _EXPFUNC _strtime(char *__timestr);
 
 #if !defined(__STDC__)
 void        _RTLENTRY  _EXPFUNC tzset(void);
+
+/* MSC compatible routines: */
+unsigned int _RTLENTRY _EXPFUNC _getsystime(struct tm *__timeptr);
+unsigned int _RTLENTRY _EXPFUNC _setsystime(struct tm *__timeptr, unsigned int __ms);
+
 #endif  /* __STDC__  */
 
 #ifdef __cplusplus
@@ -148,5 +125,45 @@ void        _RTLENTRY  _EXPFUNC tzset(void);
 
 #endif  /* !RC_INVOKED */
 
+#ifdef __cplusplus
+} // std
+#endif
 
 #endif  /* __TIME_H */
+
+#if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__TIME_H_USING_LIST)
+#define __TIME_H_USING_LIST
+     using std::time_t;
+     using std::clock_t;
+     using std::tm;
+     using std::asctime;
+     using std::ctime;
+     using std::difftime;
+     using std::gmtime;
+     using std::localtime;
+     using std::time;
+     using std::mktime;
+     using std::clock;
+     using std::strftime;
+     using std::_lstrftim;
+     using std::_wasctime;
+     using std::_wctime;
+     using std::_wstrdate;
+     using std::_wstrtime;
+     using std::wcsftime;
+     using std::_wtzset;
+     using std::stime;
+     using std::_tzset;
+     using std::_strdate;
+     using std::_strtime;
+     using std::_daylight;
+     using std::_timezone;
+     using std::_tzname;
+     using std::_wtzname;
+#if !defined(__STDC__)
+     using std::tzset;
+     using std::_getsystime;
+     using std::_setsystime;
+#endif
+#endif /* __USING_CNAME__ */
+

@@ -2,16 +2,17 @@
  * filename - mbsinc.c
  *
  * function(s)
- *        _mbsinc - Goes a string pointer forward to 1 byte next. 
+ *        _mbsinc - Goes a string pointer forward to 1 byte next.
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -27,6 +28,7 @@ Prototype in    mbstring.h
 Description     _mbsinc goes a string pointer p forward to 1 byte next.
 
 Return value    Returns a pointer forwarded 1 byte.
+
 *---------------------------------------------------------------------*/
 
 #if defined(__FARFUNCS__)

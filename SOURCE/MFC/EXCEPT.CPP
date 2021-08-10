@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -15,11 +15,31 @@
 #endif
 
 #ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
+void PASCAL CException::operator delete(void* pbData)
+{
+	// check for proper exception object deletion
+	CException* pException = (CException*)pbData;
+	// use: pException->Delete(), do not use: delete pException
+	ASSERT(pException->m_bReadyForDelete);
+	ASSERT(pException->m_bAutoDelete > 0);
+
+	// avoid crash when assert above is ignored
+	if (pException->m_bReadyForDelete && pException->m_bAutoDelete > 0)
+		CObject::operator delete(pbData);
+}
+
+#if 0 // _MSC_VER >= 1200
+void PASCAL CException::operator delete(void* pbData,
+	LPCSTR /* lpszFileName */, int /* nLine */)
+{
+	operator delete(pbData);
+}
 #endif
 
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // AFX_EXCEPTION_CONTEXT (thread global state)
@@ -80,7 +100,7 @@ BOOL CException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
 int CException::ReportError(UINT nType /* = MB_OK */,
 	UINT nError /* = 0 */)
 {
-	TCHAR   szErrorMessage[128];
+	TCHAR   szErrorMessage[512];
 	int     nDisposition;
 	UINT    nHelpContext;
 
@@ -94,22 +114,6 @@ int CException::ReportError(UINT nType /* = MB_OK */,
 	}
 	return nDisposition;
 }
-
-
-#ifdef _DEBUG
-void PASCAL CException::operator delete(void* pbData)
-{
-	// check for proper exception object deletion
-	CException* pException = (CException*)pbData;
-	// use: pException->Delete(), do not use: delete pException
-	ASSERT(pException->m_bReadyForDelete);
-	ASSERT(pException->m_bAutoDelete > 0);
-
-	// avoid crash when assert above is ignored
-	if (pException->m_bReadyForDelete && pException->m_bAutoDelete > 0)
-		CObject::operator delete(pbData);
-}
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // AFX_EXCEPTION_LINK linked 'jmpbuf' and out-of-line helpers
@@ -170,14 +174,14 @@ void AFXAPI AfxThrowLastCleanup()
 void AFXAPI AfxTerminate()
 {
 	TRACE0("AfxTerminate called.\n");
-	(*AfxGetModuleProcessState()->m_pfnTerminate)();
+	(*AfxGetModuleState()->m_pfnTerminate)();
 }
 
 AFX_TERM_PROC AFXAPI AfxSetTerminate(AFX_TERM_PROC pfnNew)
 {
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
-	AFX_TERM_PROC pfnOld = pState->m_pfnTerminate;
-	pState->m_pfnTerminate = pfnNew;
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	AFX_TERM_PROC pfnOld = pModuleState->m_pfnTerminate;
+	pModuleState->m_pfnTerminate = pfnNew;
 	return pfnOld;
 }
 
@@ -304,19 +308,30 @@ BOOL CSimpleException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
 	return m_bLoaded;
 }
 
-
 void AFXAPI AfxThrowMemoryException()
 {
-	THROW((CMemoryException*)&_simpleMemoryException);
+	THROW(&_simpleMemoryException);
 }
 
 void AFXAPI AfxThrowNotSupportedException()
 {
-	THROW((CNotSupportedException*)&_simpleNotSupportedException);
+	THROW(&_simpleNotSupportedException);
 }
 
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
+#endif
+
+////////////////////////////////////////////////////////////////////////////
+// out-of-line inlines for binary compatibility
+
+#ifdef _AFXDLL
+#ifndef _DEBUG
+
+CSimpleException::~CSimpleException()
+	{ }
+
+#endif
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

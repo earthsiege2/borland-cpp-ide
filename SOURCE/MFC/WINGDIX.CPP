@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -19,17 +19,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-static HBRUSH halftoneBrush;
+AFX_STATIC_DATA HBRUSH _afxHalftoneBrush = 0;
 
-struct _AFX_WINGDIX_TERM
+void AFX_CDECL AfxWingdixTerm()
 {
-	~_AFX_WINGDIX_TERM()
-	{
-		AfxDeleteObject((HGDIOBJ*)&halftoneBrush);
-	}
-};
-
-static const _AFX_WINGDIX_TERM wingdixTerm;
+	AfxDeleteObject((HGDIOBJ*)&_afxHalftoneBrush);
+}
+char _afxWingdixTerm = (char)atexit(&AfxWingdixTerm);
 
 /////////////////////////////////////////////////////////////////////////////
 // More coordinate transforms (in separate file to avoid transitive refs)
@@ -128,7 +124,7 @@ void CDC::HIMETRICtoLP(LPSIZE lpSize) const
 CBrush* PASCAL CDC::GetHalftoneBrush()
 {
 	AfxLockGlobals(CRIT_HALFTONEBRUSH);
-	if (halftoneBrush == NULL)
+	if (_afxHalftoneBrush == NULL)
 	{
 		WORD grayPattern[8];
 		for (int i = 0; i < 8; i++)
@@ -136,12 +132,12 @@ CBrush* PASCAL CDC::GetHalftoneBrush()
 		HBITMAP grayBitmap = CreateBitmap(8, 8, 1, 1, &grayPattern);
 		if (grayBitmap != NULL)
 		{
-			halftoneBrush = ::CreatePatternBrush(grayBitmap);
+			_afxHalftoneBrush = ::CreatePatternBrush(grayBitmap);
 			DeleteObject(grayBitmap);
 		}
 	}
 	AfxUnlockGlobals(CRIT_HALFTONEBRUSH);
-	return CBrush::FromHandle(halftoneBrush);
+	return CBrush::FromHandle(_afxHalftoneBrush);
 }
 
 void CDC::DrawDragRect(LPCRECT lpRect, SIZE size,
@@ -270,8 +266,8 @@ BOOL CFont::CreatePointFontIndirect(const LOGFONT* lpLogFont, CDC* pDC)
 	if (pDC != NULL)
 	{
 		ASSERT_VALID(pDC);
-		ASSERT(pDC->m_hDC != NULL);
-		hDC = pDC->m_hDC;
+		ASSERT(pDC->m_hAttribDC != NULL);
+		hDC = pDC->m_hAttribDC;
 	}
 	else
 		hDC = ::GetDC(NULL);

@@ -7,14 +7,17 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
 
+
 #include <mbstring.h>
+
+extern int _mbcsCodePage;
 
 /*---------------------------------------------------------------------*
 
@@ -35,5 +38,6 @@ Return value    Returns a value excepting 0 if it is a 2-bytes comma,
 
 int _RTLENTRY _EXPFUNC _ismbcsymbol(unsigned int c)
 {
-    return (c >= 0x8141 && c <= 0x81AC && c != 0x817F);
+    return (_mbcsCodePage == _KANJI_CP &&
+            c >= 0x8141 && c <= 0x81AC && c != 0x817F);
 }

@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0004    // Increment this if a change has global effects
 
+Copyright (c) 1985-95, Microsoft Corporation
+
 Module Name:
 
     glaux.h
@@ -11,18 +13,9 @@ Abstract:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 8.0
- *
- *      Copyright (c) 1994, 1997 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef __GLAUX_H__
+#pragma option push -b -a8 -pc -A- /*P_O_Push_S*/
 #define __GLAUX_H__
-#define __GLAUX_H
-#pragma option -b
 
 /*
  * (c) Copyright 1993, Silicon Graphics, Inc.
@@ -61,15 +54,9 @@ Abstract:
  * OpenGL(TM) is a trademark of Silicon Graphics, Inc.
  */
 
-#pragma option -b.
 #include <windows.h>
-#pragma option -b
-#pragma option -b.
 #include <GL/gl.h>
-#pragma option -b
-#pragma option -b.
 #include <GL/glu.h>
-#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -90,11 +77,12 @@ extern "C" {
 
 #define AUX_ACCUM           8
 #define AUX_ALPHA           16
-#define AUX_DEPTH           32      /* 32-bit depth buffer */
+#define AUX_DEPTH24         32      /* 24-bit depth buffer */
 #define AUX_STENCIL         64
 #define AUX_AUX             128
 #define AUX_DEPTH16         256     /* 16-bit depth buffer */
 #define AUX_FIXED_332_PAL   512
+#define AUX_DEPTH           AUX_DEPTH16 /* default is 16-bit depth buffer */
 
 /* 
 ** Window Masks
@@ -108,7 +96,7 @@ extern "C" {
 #define AUX_WIND_IS_DIRECT(x)   (((x) & AUX_INDIRECT) == 0)
 #define AUX_WIND_HAS_ACCUM(x)   (((x) & AUX_ACCUM) != 0)
 #define AUX_WIND_HAS_ALPHA(x)   (((x) & AUX_ALPHA) != 0)
-#define AUX_WIND_HAS_DEPTH(x)   (((x) & (AUX_DEPTH | AUX_DEPTH16)) != 0)
+#define AUX_WIND_HAS_DEPTH(x)   (((x) & (AUX_DEPTH24 | AUX_DEPTH16)) != 0)
 #define AUX_WIND_HAS_STENCIL(x) (((x) & AUX_STENCIL) != 0)
 #define AUX_WIND_USES_FIXED_332_PAL(x)  (((x) & AUX_FIXED_332_PAL) != 0)
 
@@ -364,9 +352,24 @@ HWND  APIENTRY auxGetHWND(void);
 HDC   APIENTRY auxGetHDC(void);
 HGLRC APIENTRY auxGetHGLRC(void);
 
+/*
+** Viewperf support functions and constants
+*/
+/* Display Mode Selection Criteria */
+enum {
+    AUX_USE_ID = 1,
+    AUX_EXACT_MATCH,
+    AUX_MINIMUM_CRITERIA
+};
+void   APIENTRY auxInitDisplayModePolicy(GLenum);
+GLenum APIENTRY auxInitDisplayModeID(GLint);
+GLenum APIENTRY auxGetDisplayModePolicy(void);
+GLint  APIENTRY auxGetDisplayModeID(void);
+GLenum APIENTRY auxGetDisplayMode(void);
+
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* __GLAUX_H__ */

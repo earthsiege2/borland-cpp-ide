@@ -1,6 +1,6 @@
-# BFCNET.MAK - Borland makefile for BFCN40*.DLL
+# BFCNET.MAK - Borland makefile for BFCN42*.DLL
 #
-# BFCN40[D].DLL is a DLL
+# BFCN42[D].DLL is a DLL
 #  which exports all the MFC/NET classes
 #
 
@@ -10,7 +10,7 @@ DBGINFO=0
 !endif
 
 !ifndef LIBNAME
-LIBNAME=BFCN40
+LIBNAME=BFCN42
 !endif
 
 !if "$(DEBUG)" != "0"
@@ -19,13 +19,20 @@ CRTDLL=cw32mti.lib
 CRTDLL=cw32mti.lib
 !endif
 
+!if "$(CG)" == "1"
+CGLIB=cg32.lib
+!else
+CGLIB=
+!endif
+
 TARGET=w
 DLL=2
 TARG=$(LIBNAME)
 TARGDEFS=/D_AFX_NET_IMPL
-MFCDLL=BFC40
-LFLAGS=/n /m /s /w-inq $(LFLAGS)
-RCFLAGS=@brcc32.cfg $(RCFLAGS)
+MFCDLL=BFC42
+LFLAGS= /n /m /s $(LFLAGS)
+RCFLAGS=-I$(BCINCL);$(MFCINCL)
+
 
 !if "$(DBGINFO)" != "0"
 LFLAGS=$(LFLAGS) /v
@@ -34,7 +41,7 @@ LFLAGS=$(LFLAGS) /v
 !if "$(DEBUG)" != "0"
 # Debug DLL build
 RCDEFINES=/D_DEBUG
-PCH_FILE=stdafxn.csm
+PCH_FILE=$(D)\stdafxn.csm
 PCH_CPP=dllnet
 TARG=$(TARG)D
 MFCDLL=$(MFCDLL)D
@@ -43,7 +50,7 @@ MFCDLL=$(MFCDLL)D
 # Release DLL build
 RCDEFINES=
 LFLAGS=$(LFLAGS)
-PCH_FILE=stdafxn.csm
+PCH_FILE=$(D)\stdafxn.csm
 PCH_CPP=dllnet
 !ENDIF
 
@@ -58,7 +65,6 @@ LFLAGS=$(LFLAGS) /release
 
 LFLAGS=$(LFLAGS) /Tpd
 
-LIBS=$(MFCDLL) $(CRTDLL) ole2w32.lib import32.lib
 
 bfcnet_goal: dll_goal
 
@@ -70,26 +76,34 @@ bfcnet_goal: dll_goal
 dll_goal: create.dir create.rsp $(TARG).dll $(LIBDIR)\$(TARG).lib
 
 #############################################################################
+# Define linker libs
+
+LIBS=$(CGLIB) $(MFCDLL) $(CRTDLL) ole2w32.lib $(IMPORT_LIBS)
+
+#############################################################################
 # Build target
 
-$D\$(TARG).res: mfcnet.rc build_.h
-	brcc32 /r $(RCFLAGS) $(RCDEFINES) /fo $D\$(TARG).res mfcnet.rc
+$(D)\$(TARG).res: mfcnet.rc build_.h
+	brcc32 /r $(RCFLAGS) $(RCDEFINES) /fo $(D)\$(TARG).res mfcnet.rc
 
 DLL_OBJS=$(SOCKETS)
 
-$(TARG).dll:: $(DEFFILE) $D\$(TARG).res
+$(DEFFILE): $(DLL_OBJS)
+	$(GENDEFS) $(TARG) $(D)\ > $(DEFFILE)
+
+$(TARG).dll:: $(DEFFILE) $(D)\$(TARG).res
 
 $(TARG).dll:: $(PCH_CPP).obj $(DLL_OBJS) 
-    tlink32 @&&!
+    $(LINK32) @&&!
 $(LFLAGS) +
 C0D32.OBJ +
 $(**: = +^
 )
 $(TARG).DLL
-$D\$(TARG).MAP
+$(D)\$(TARG).MAP
 $(LIBS)
 $(DEFFILE)
-$D\$(TARG).res
+$(D)\$(TARG).res
 !
 
 $(LIBDIR)\$(TARG).lib: $(TARG).DLL

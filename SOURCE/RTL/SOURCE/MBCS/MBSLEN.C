@@ -6,19 +6,20 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
 
 /*-----------------------------------------------------------------------*
 
-Name            _mbslen - Caluclates the length of a string.
+Name            _mbslen - Calculates the length of a string.
 
 Usage           size_t _mbslen(const unsigned char *str);
 
@@ -28,13 +29,13 @@ Description     Returns the number of characters in stirng with
                 null-terminating character.
 
                 If the second byte of 2-bytes character is null,
-		the first byte of this character is regarded as null. 
+                the first byte of this character is regarded as null.
 
                 This function is a Japanese version of strlen.
                 strlen returns the byte size of the character
                 even if the string includes 2-bytes character.
                 _mbslen caluclate 2-byte character
-                as one character(1byte). 
+                as one character(1byte).
 
 Return value    Returns the number of characters.
 

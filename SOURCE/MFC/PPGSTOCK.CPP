@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -43,6 +43,7 @@ void _AfxSizeComboToContent(CComboBox* pCombo)
 CStockPropPage::CStockPropPage(UINT idDlg, UINT idCaption) :
 	COlePropertyPage(idDlg, idCaption)
 {
+	m_lcid = 0;
 }
 
 void CStockPropPage::FillPropnameList(REFGUID guid, int nIndirect, CComboBox& combo)
@@ -66,11 +67,10 @@ void CStockPropPage::FillPropnameList(REFGUID guid, int nIndirect, CComboBox& co
 		UINT cName;
 
 		// Get the property sheet locale
-		LCID lcid = 0;
 		LPPROPERTYPAGESITE pPageSite;
 		if ((pPageSite = GetPageSite()) != NULL)
-			if (FAILED(pPageSite->GetLocaleID(&lcid)))
-				lcid = 0;
+			if (FAILED(pPageSite->GetLocaleID(&m_lcid)))
+				m_lcid = 0;
 
 		// Iterate through all objects.
 
@@ -78,7 +78,7 @@ void CStockPropPage::FillPropnameList(REFGUID guid, int nIndirect, CComboBox& co
 		{
 			pTypeInfo = NULL;
 			if ((ppDisp[iObj] != NULL) &&
-				SUCCEEDED(ppDisp[iObj]->GetTypeInfo(0, lcid, &pTypeInfo)))
+				SUCCEEDED(ppDisp[iObj]->GetTypeInfo(0, m_lcid, &pTypeInfo)))
 			{
 				ASSERT(pTypeInfo != NULL);
 				pTypeAttr = NULL;
@@ -222,8 +222,7 @@ BOOL AFXAPI AfxOleTypeMatchGuid(
 				if (cIndirectionLevels == 0)
 					bMatch = IsEqualGUID(pTypeAttr->guid, guidType);
 
-				if ((bMatch == FALSE) &&
-					(pTypeAttr->typekind == TKIND_ALIAS))
+				if (!bMatch && pTypeAttr->typekind == TKIND_ALIAS)
 				{
 					// GUIDs didn't match, but type expanded to another alias!
 					bMatch = AfxOleTypeMatchGuid(pTypeInfoRef,

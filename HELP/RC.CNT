@@ -1,4 +1,0 @@
-:TITLE Microsoft RPC Programmer's Reference
-:INDEX Microsoft RPC Programmer's Reference = rpc.hlp
-:INCLUDE WIN32SDK.CFG
-:INCLUDE RPC.TOC

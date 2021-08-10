@@ -1,0 +1,31 @@
+LIBRARY NDDEAPI
+EXPORTS
+
+    NDdeGetErrorStringA                      = 'NDDEAPI.DLL'.* @505 @504
+    NDdeGetErrorStringW                      = 'NDDEAPI.DLL'.* @605 @604
+    NDdeGetShareSecurityA                    = 'NDDEAPI.DLL'.* @509 @508
+    NDdeGetShareSecurityW                    = 'NDDEAPI.DLL'.* @609 @608
+    NDdeGetTrustedShareA                     = 'NDDEAPI.DLL'.* @511 @510
+    NDdeGetTrustedShareW                     = 'NDDEAPI.DLL'.* @611 @610
+    NDdeIsValidAppTopicListA                 = 'NDDEAPI.DLL'.* @507 @506
+    NDdeIsValidAppTopicListW                 = 'NDDEAPI.DLL'.* @607 @606
+    NDdeIsValidShareNameA                    = 'NDDEAPI.DLL'.* @506 @505
+    NDdeIsValidShareNameW                    = 'NDDEAPI.DLL'.* @606 @605
+    NDdeSetShareSecurityA                    = 'NDDEAPI.DLL'.* @510 @509
+    NDdeSetShareSecurityW                    = 'NDDEAPI.DLL'.* @610 @609
+    NDdeSetTrustedShareA                     = 'NDDEAPI.DLL'.* @512 @511
+    NDdeSetTrustedShareW                     = 'NDDEAPI.DLL'.* @612 @611
+    NDdeShareAddA                            = 'NDDEAPI.DLL'.* @500 @499
+    NDdeShareAddW                            = 'NDDEAPI.DLL'.* @600 @599
+    NDdeShareDelA                            = 'NDDEAPI.DLL'.* @501 @500
+    NDdeShareDelW                            = 'NDDEAPI.DLL'.* @601 @600
+    NDdeShareEnumA                           = 'NDDEAPI.DLL'.* @502 @501
+    NDdeShareEnumW                           = 'NDDEAPI.DLL'.* @602 @601
+    NDdeShareGetInfoA                        = 'NDDEAPI.DLL'.* @503 @502
+    NDdeShareGetInfoW                        = 'NDDEAPI.DLL'.* @603 @602
+    NDdeShareSetInfoA                        = 'NDDEAPI.DLL'.* @504 @503
+    NDdeShareSetInfoW                        = 'NDDEAPI.DLL'.* @604 @603
+    NDdeSpecialCommandA                      = 'NDDEAPI.DLL'.* @508 @507
+    NDdeSpecialCommandW                      = 'NDDEAPI.DLL'.* @608 @607
+    NDdeTrustedShareEnumA                    = 'NDDEAPI.DLL'.* @513 @512
+    NDdeTrustedShareEnumW                    = 'NDDEAPI.DLL'.* @613 @612

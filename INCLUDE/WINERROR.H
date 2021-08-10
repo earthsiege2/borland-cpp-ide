@@ -2,13 +2,13 @@
 *                                                                       *
 *   winerror.h --  error code definitions for the Win32 API functions   *
 *                                                                       *
-*   Copyright (c) 1991-1996, Microsoft Corp. All rights reserved.       *
+*   Copyright (c) 1991-1999, Microsoft Corp. All rights reserved.       *
 *                                                                       *
 ************************************************************************/
 
 #ifndef _WINERROR_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINERROR_
-#pragma option -b
 
 
 //
@@ -41,16 +41,24 @@
 // Define the facility codes
 //
 #define FACILITY_WINDOWS                 8
+#define FACILITY_URT                     19
 #define FACILITY_STORAGE                 3
-#define FACILITY_RPC                     1
 #define FACILITY_SSPI                    9
+#define FACILITY_SCARD                   16
+#define FACILITY_SETUPAPI                15
+#define FACILITY_SECURITY                9
+#define FACILITY_RPC                     1
 #define FACILITY_WIN32                   7
 #define FACILITY_CONTROL                 10
 #define FACILITY_NULL                    0
+#define FACILITY_MSMQ                    14
+#define FACILITY_MEDIASERVER             13
 #define FACILITY_INTERNET                12
 #define FACILITY_ITF                     4
 #define FACILITY_DISPATCH                2
+#define FACILITY_COMPLUS                 17
 #define FACILITY_CERT                    11
+#define FACILITY_AAF                     18
 
 
 //
@@ -68,6 +76,7 @@
 #define ERROR_SUCCESS                    0L
 
 #define NO_ERROR 0L                                                 // dderror
+#define SEC_E_OK                         ((HRESULT)0x00000000L)
 
 //
 // MessageId: ERROR_INVALID_FUNCTION
@@ -164,8 +173,7 @@
 //
 // MessageText:
 //
-//  An attempt was made to load a program with an
-//  incorrect format.
+//  An attempt was made to load a program with an incorrect format.
 //
 #define ERROR_BAD_FORMAT                 11L
 
@@ -219,8 +227,7 @@
 //
 // MessageText:
 //
-//  The system cannot move the file
-//  to a different disk drive.
+//  The system cannot move the file to a different disk drive.
 //
 #define ERROR_NOT_SAME_DEVICE            17L
 
@@ -274,7 +281,7 @@
 //
 // MessageText:
 //
-//  Data error (cyclic redundancy check)
+//  Data error (cyclic redundancy check).
 //
 #define ERROR_CRC                        23L
 
@@ -283,8 +290,7 @@
 //
 // MessageText:
 //
-//  The program issued a command but the
-//  command length is incorrect.
+//  The program issued a command but the command length is incorrect.
 //
 #define ERROR_BAD_LENGTH                 24L
 
@@ -293,8 +299,7 @@
 //
 // MessageText:
 //
-//  The drive cannot locate a specific
-//  area or track on the disk.
+//  The drive cannot locate a specific area or track on the disk.
 //
 #define ERROR_SEEK                       25L
 
@@ -357,8 +362,7 @@
 //
 // MessageText:
 //
-//  The process cannot access the file because
-//  it is being used by another process.
+//  The process cannot access the file because it is being used by another process.
 //
 #define ERROR_SHARING_VIOLATION          32L
 
@@ -367,8 +371,7 @@
 //
 // MessageText:
 //
-//  The process cannot access the file because
-//  another process has locked a portion of the file.
+//  The process cannot access the file because another process has locked a portion of the file.
 //
 #define ERROR_LOCK_VIOLATION             33L
 
@@ -397,7 +400,7 @@
 //
 // MessageText:
 //
-//  Reached end of file.
+//  Reached the end of the file.
 //
 #define ERROR_HANDLE_EOF                 38L
 
@@ -460,8 +463,7 @@
 //
 // MessageText:
 //
-//  The specified network resource or device is no longer
-//  available.
+//  The specified network resource or device is no longer available.
 //
 #define ERROR_DEV_NOT_EXIST              55L    // dderror
 
@@ -488,8 +490,7 @@
 //
 // MessageText:
 //
-//  The specified server cannot perform the requested
-//  operation.
+//  The specified server cannot perform the requested operation.
 //
 #define ERROR_BAD_NET_RESP               58L
 
@@ -525,8 +526,7 @@
 //
 // MessageText:
 //
-//  Space to store the file waiting to be printed is
-//  not available on the server.
+//  Space to store the file waiting to be printed is not available on the server.
 //
 #define ERROR_NO_SPOOL_SPACE             62L
 
@@ -580,8 +580,7 @@
 //
 // MessageText:
 //
-//  The name limit for the local computer network
-//  adapter card was exceeded.
+//  The name limit for the local computer network adapter card was exceeded.
 //
 #define ERROR_TOO_MANY_NAMES             68L
 
@@ -599,8 +598,7 @@
 //
 // MessageText:
 //
-//  The remote server has been paused or is in the
-//  process of being started.
+//  The remote server has been paused or is in the process of being started.
 //
 #define ERROR_SHARING_PAUSED             70L
 
@@ -609,8 +607,7 @@
 //
 // MessageText:
 //
-//  No more connections can be made to this remote computer at this time
-//  because there are already as many connections as the computer can accept.
+//  No more connections can be made to this remote computer at this time because there are already as many connections as the computer can accept.
 //
 #define ERROR_REQ_NOT_ACCEP              71L
 
@@ -646,7 +643,7 @@
 //
 // MessageText:
 //
-//  Fail on INT 24
+//  Fail on INT 24.
 //
 #define ERROR_FAIL_I24                   83L
 
@@ -700,8 +697,7 @@
 //
 // MessageText:
 //
-//  The system cannot start another process at
-//  this time.
+//  The system cannot start another process at this time.
 //
 #define ERROR_NO_PROC_SLOTS              89L
 
@@ -773,7 +769,7 @@
 //
 // MessageText:
 //
-//  Program stopped because alternate diskette was not inserted.
+//  The program stopped because an alternate diskette was not inserted.
 //
 #define ERROR_DISK_CHANGE                107L
 
@@ -847,8 +843,7 @@
 //
 // MessageText:
 //
-//  The IOCTL call made by the application program is
-//  not correct.
+//  The IOCTL call made by the application program is not correct.
 //
 #define ERROR_INVALID_CATEGORY           117L
 
@@ -857,8 +852,7 @@
 //
 // MessageText:
 //
-//  The verify-on-write switch parameter value is not
-//  correct.
+//  The verify-on-write switch parameter value is not correct.
 //
 #define ERROR_INVALID_VERIFY_SWITCH      118L
 
@@ -876,7 +870,7 @@
 //
 // MessageText:
 //
-//  This function is only valid in Windows NT mode.
+//  This function is not supported on this system.
 //
 #define ERROR_CALL_NOT_IMPLEMENTED       120L
 
@@ -894,8 +888,7 @@
 //
 // MessageText:
 //
-//  The data area passed to a system call is too
-//  small.
+//  The data area passed to a system call is too small.
 //
 #define ERROR_INSUFFICIENT_BUFFER        122L    // dderror
 
@@ -906,7 +899,7 @@
 //
 //  The filename, directory name, or volume label syntax is incorrect.
 //
-#define ERROR_INVALID_NAME               123L
+#define ERROR_INVALID_NAME               123L    // dderror
 
 //
 // MessageId: ERROR_INVALID_LEVEL
@@ -958,7 +951,7 @@
 //
 // MessageText:
 //
-//  The %1 application cannot be run in Windows NT mode.
+//  The %1 application cannot be run in Win32 mode.
 //
 #define ERROR_CHILD_NOT_COMPLETE         129L
 
@@ -967,8 +960,7 @@
 //
 // MessageText:
 //
-//  Attempt to use a file handle to an open disk partition for an
-//  operation other than raw disk I/O.
+//  Attempt to use a file handle to an open disk partition for an operation other than raw disk I/O.
 //
 #define ERROR_DIRECT_ACCESS_HANDLE       130L
 
@@ -995,9 +987,7 @@
 //
 // MessageText:
 //
-//  A JOIN or SUBST command
-//  cannot be used for a drive that
-//  contains previously joined drives.
+//  A JOIN or SUBST command cannot be used for a drive that contains previously joined drives.
 //
 #define ERROR_IS_JOIN_TARGET             133L
 
@@ -1006,9 +996,7 @@
 //
 // MessageText:
 //
-//  An attempt was made to use a
-//  JOIN or SUBST command on a drive that has
-//  already been joined.
+//  An attempt was made to use a JOIN or SUBST command on a drive that has already been joined.
 //
 #define ERROR_IS_JOINED                  134L
 
@@ -1017,9 +1005,7 @@
 //
 // MessageText:
 //
-//  An attempt was made to use a
-//  JOIN or SUBST command on a drive that has
-//  already been substituted.
+//  An attempt was made to use a JOIN or SUBST command on a drive that has already been substituted.
 //
 #define ERROR_IS_SUBSTED                 135L
 
@@ -1028,8 +1014,7 @@
 //
 // MessageText:
 //
-//  The system tried to delete
-//  the JOIN of a drive that is not joined.
+//  The system tried to delete the JOIN of a drive that is not joined.
 //
 #define ERROR_NOT_JOINED                 136L
 
@@ -1038,8 +1023,7 @@
 //
 // MessageText:
 //
-//  The system tried to delete the
-//  substitution of a drive that is not substituted.
+//  The system tried to delete the substitution of a drive that is not substituted.
 //
 #define ERROR_NOT_SUBSTED                137L
 
@@ -1048,8 +1032,7 @@
 //
 // MessageText:
 //
-//  The system tried to join a drive
-//  to a directory on a joined drive.
+//  The system tried to join a drive to a directory on a joined drive.
 //
 #define ERROR_JOIN_TO_JOIN               138L
 
@@ -1058,8 +1041,7 @@
 //
 // MessageText:
 //
-//  The system tried to substitute a
-//  drive to a directory on a substituted drive.
+//  The system tried to substitute a drive to a directory on a substituted drive.
 //
 #define ERROR_SUBST_TO_SUBST             139L
 
@@ -1068,8 +1050,7 @@
 //
 // MessageText:
 //
-//  The system tried to join a drive to
-//  a directory on a substituted drive.
+//  The system tried to join a drive to a directory on a substituted drive.
 //
 #define ERROR_JOIN_TO_SUBST              140L
 
@@ -1078,8 +1059,7 @@
 //
 // MessageText:
 //
-//  The system tried to SUBST a drive
-//  to a directory on a joined drive.
+//  The system tried to SUBST a drive to a directory on a joined drive.
 //
 #define ERROR_SUBST_TO_JOIN              141L
 
@@ -1097,8 +1077,7 @@
 //
 // MessageText:
 //
-//  The system cannot join or substitute a
-//  drive to or for a directory on the same drive.
+//  The system cannot join or substitute a drive to or for a directory on the same drive.
 //
 #define ERROR_SAME_DRIVE                 143L
 
@@ -1125,8 +1104,7 @@
 //
 // MessageText:
 //
-//  The path specified is being used in
-//  a substitute.
+//  The path specified is being used in a substitute.
 //
 #define ERROR_IS_SUBST_PATH              146L
 
@@ -1135,8 +1113,7 @@
 //
 // MessageText:
 //
-//  Not enough resources are available to
-//  process this command.
+//  Not enough resources are available to process this command.
 //
 #define ERROR_IS_JOIN_PATH               147L
 
@@ -1154,10 +1131,7 @@
 //
 // MessageText:
 //
-//  An attempt was made to join
-//  or substitute a drive for which a directory
-//  on the drive is the target of a previous
-//  substitute.
+//  An attempt was made to join or substitute a drive for which a directory on the drive is the target of a previous substitute.
 //
 #define ERROR_IS_SUBST_TARGET            149L
 
@@ -1166,8 +1140,7 @@
 //
 // MessageText:
 //
-//  System trace information was not specified in your
-//  CONFIG.SYS file, or tracing is disallowed.
+//  System trace information was not specified in your CONFIG.SYS file, or tracing is disallowed.
 //
 #define ERROR_SYSTEM_TRACE               150L
 
@@ -1176,8 +1149,7 @@
 //
 // MessageText:
 //
-//  The number of specified semaphore events for
-//  DosMuxSemWait is not correct.
+//  The number of specified semaphore events for DosMuxSemWait is not correct.
 //
 #define ERROR_INVALID_EVENT_COUNT        151L
 
@@ -1186,8 +1158,7 @@
 //
 // MessageText:
 //
-//  DosMuxSemWait did not execute; too many semaphores
-//  are already set.
+//  DosMuxSemWait did not execute; too many semaphores are already set.
 //
 #define ERROR_TOO_MANY_MUXWAITERS        152L
 
@@ -1404,7 +1375,7 @@
 //
 // MessageText:
 //
-//  Cannot run %1 in Windows NT mode.
+//  Cannot run %1 in Win32 mode.
 //
 #define ERROR_INVALID_EXE_SIGNATURE      191L
 
@@ -1422,7 +1393,7 @@
 //
 // MessageText:
 //
-//  %1 is not a valid Windows NT application.
+//  %1 is not a valid Win32 application.
 //
 #define ERROR_BAD_EXE_FORMAT             193L
 
@@ -1449,8 +1420,7 @@
 //
 // MessageText:
 //
-//  The operating system cannot run this
-//  application program.
+//  The operating system cannot run this application program.
 //
 #define ERROR_DYNLINK_FROM_INVALID_RING  196L
 
@@ -1459,8 +1429,7 @@
 //
 // MessageText:
 //
-//  The operating system is not presently
-//  configured to run this application.
+//  The operating system is not presently configured to run this application.
 //
 #define ERROR_IOPL_NOT_ENABLED           197L
 
@@ -1478,8 +1447,7 @@
 //
 // MessageText:
 //
-//  The operating system cannot run this
-//  application program.
+//  The operating system cannot run this application program.
 //
 #define ERROR_AUTODATASEG_EXCEEDS_64k    199L
 
@@ -1488,7 +1456,7 @@
 //
 // MessageText:
 //
-//  The code segment cannot be greater than or equal to 64KB.
+//  The code segment cannot be greater than or equal to 64K.
 //
 #define ERROR_RING2SEG_MUST_BE_MOVABLE   200L
 
@@ -1553,8 +1521,7 @@
 //
 // MessageText:
 //
-//  The global filename characters, * or ?, are entered
-//  incorrectly or too many global filename characters are specified.
+//  The global filename characters, * or ?, are entered incorrectly or too many global filename characters are specified.
 //
 #define ERROR_META_EXPANSION_TOO_LONG    208L
 
@@ -1590,8 +1557,7 @@
 //
 // MessageText:
 //
-//  Too many dynamic link modules are attached to this
-//  program or dynamic link module.
+//  Too many dynamic-link modules are attached to this program or dynamic-link module.
 //
 #define ERROR_TOO_MANY_MODULES           214L
 
@@ -1600,7 +1566,7 @@
 //
 // MessageText:
 //
-//  Can't nest calls to LoadModule.
+//  Cannot nest calls to LoadModule.
 //
 #define ERROR_NESTING_NOT_ALLOWED        215L
 
@@ -1609,8 +1575,7 @@
 //
 // MessageText:
 //
-//  The image file %1 is valid, but is for a machine type other
-//  than the current machine.
+//  The image file %1 is valid, but is for a machine type other than the current machine.
 //
 #define ERROR_EXE_MACHINE_TYPE_MISMATCH  216L
 
@@ -1664,7 +1629,7 @@
 //
 // MessageText:
 //
-//  The session was cancelled.
+//  The session was canceled.
 //
 #define ERROR_VC_DISCONNECTED            240L
 
@@ -1687,6 +1652,15 @@
 #define ERROR_EA_LIST_INCONSISTENT       255L
 
 //
+// MessageId: WAIT_TIMEOUT
+//
+// MessageText:
+//
+//  The wait operation timed out.
+//
+#define WAIT_TIMEOUT                     258L
+
+//
 // MessageId: ERROR_NO_MORE_ITEMS
 //
 // MessageText:
@@ -1700,7 +1674,7 @@
 //
 // MessageText:
 //
-//  The Copy API cannot be used.
+//  The copy functions cannot be used.
 //
 #define ERROR_CANNOT_COPY                266L
 
@@ -1781,17 +1755,34 @@
 //
 // MessageText:
 //
-//  Only part of a Read/WriteProcessMemory request was completed.
+//  Only part of a ReadProcessMemory or WriteProcessMemory request was completed.
 //
 #define ERROR_PARTIAL_COPY               299L
+
+//
+// MessageId: ERROR_OPLOCK_NOT_GRANTED
+//
+// MessageText:
+//
+//  The oplock request is denied.
+//
+#define ERROR_OPLOCK_NOT_GRANTED         300L
+
+//
+// MessageId: ERROR_INVALID_OPLOCK_PROTOCOL
+//
+// MessageText:
+//
+//  An invalid oplock acknowledgment was received by the system.
+//
+#define ERROR_INVALID_OPLOCK_PROTOCOL    301L
 
 //
 // MessageId: ERROR_MR_MID_NOT_FOUND
 //
 // MessageText:
 //
-//  The system cannot find message for message number 0x%1
-//  in message file for %2.
+//  The system cannot find message text for message number 0x%1 in the message file for %2.
 //
 #define ERROR_MR_MID_NOT_FOUND           317L
 
@@ -1845,8 +1836,7 @@
 //
 // MessageText:
 //
-//  The I/O operation has been aborted because of either a thread exit
-//  or an application request.
+//  The I/O operation has been aborted because of either a thread exit or an application request.
 //
 #define ERROR_OPERATION_ABORTED          995L
 
@@ -1855,7 +1845,7 @@
 //
 // MessageText:
 //
-//  Overlapped I/O event is not in a signalled state.
+//  Overlapped I/O event is not in a signaled state.
 //
 #define ERROR_IO_INCOMPLETE              996L
 
@@ -1891,7 +1881,7 @@
 //
 // MessageText:
 //
-//  Recursion too deep, stack overflowed.
+//  Recursion too deep; the stack overflowed.
 //
 #define ERROR_STACK_OVERFLOW             1001L
 
@@ -1928,8 +1918,7 @@
 // MessageText:
 //
 //  The volume does not contain a recognized file system.
-//  Please make sure that all required file system drivers are loaded and that the
-//  volume is not corrupt.
+//  Please make sure that all required file system drivers are loaded and that the volume is not corrupted.
 //
 #define ERROR_UNRECOGNIZED_VOLUME        1005L
 
@@ -1938,8 +1927,7 @@
 //
 // MessageText:
 //
-//  The volume for a file has been externally altered such that the
-//  opened file is no longer valid.
+//  The volume for a file has been externally altered so that the opened file is no longer valid.
 //
 #define ERROR_FILE_INVALID               1006L
 
@@ -2011,8 +1999,7 @@
 //
 // MessageText:
 //
-//  One of the files in the Registry database had to be recovered
-//  by use of a log or alternate copy.  The recovery was successful.
+//  One of the files in the registry database had to be recovered by use of a log or alternate copy. The recovery was successful.
 //
 #define ERROR_REGISTRY_RECOVERED         1014L
 
@@ -2021,10 +2008,7 @@
 //
 // MessageText:
 //
-//  The Registry is corrupt. The structure of one of the files that contains
-//  Registry data is corrupt, or the system's image of the file in memory
-//  is corrupt, or the file could not be recovered because the alternate
-//  copy or log was absent or corrupt.
+//  The registry is corrupted. The structure of one of the files containing registry data is corrupted, or the system's memory image of the file is corrupted, or the file could not be recovered because the alternate copy or log was absent or corrupted.
 //
 #define ERROR_REGISTRY_CORRUPT           1015L
 
@@ -2033,9 +2017,7 @@
 //
 // MessageText:
 //
-//  An I/O operation initiated by the Registry failed unrecoverably.
-//  The Registry could not read in, or write out, or flush, one of the files
-//  that contain the system's image of the Registry.
+//  An I/O operation initiated by the registry failed unrecoverably. The registry could not read in, or write out, or flush, one of the files that contain the system's image of the registry.
 //
 #define ERROR_REGISTRY_IO_FAILED         1016L
 
@@ -2044,8 +2026,7 @@
 //
 // MessageText:
 //
-//  The system has attempted to load or restore a file into the Registry, but the
-//  specified file is not in a Registry file format.
+//  The system has attempted to load or restore a file into the registry, but the specified file is not in a registry file format.
 //
 #define ERROR_NOT_REGISTRY_FILE          1017L
 
@@ -2054,7 +2035,7 @@
 //
 // MessageText:
 //
-//  Illegal operation attempted on a Registry key which has been marked for deletion.
+//  Illegal operation attempted on a registry key that has been marked for deletion.
 //
 #define ERROR_KEY_DELETED                1018L
 
@@ -2063,7 +2044,7 @@
 //
 // MessageText:
 //
-//  System could not allocate the required space in a Registry log.
+//  System could not allocate the required space in a registry log.
 //
 #define ERROR_NO_LOG_SPACE               1019L
 
@@ -2072,8 +2053,7 @@
 //
 // MessageText:
 //
-//  Cannot create a symbolic link in a Registry key that already
-//  has subkeys or values.
+//  Cannot create a symbolic link in a registry key that already has subkeys or values.
 //
 #define ERROR_KEY_HAS_CHILDREN           1020L
 
@@ -2091,9 +2071,7 @@
 //
 // MessageText:
 //
-//  A notify change request is being completed and the information
-//  is not being returned in the caller's buffer. The caller now
-//  needs to enumerate the files to find the changes.
+//  A notify change request is being completed and the information is not being returned in the caller's buffer. The caller now needs to enumerate the files to find the changes.
 //
 #define ERROR_NOTIFY_ENUM_DIR            1022L
 
@@ -2102,8 +2080,7 @@
 //
 // MessageText:
 //
-//  A stop control has been sent to a service which other running services
-//  are dependent on.
+//  A stop control has been sent to a service that other running services are dependent on.
 //
 #define ERROR_DEPENDENT_SERVICES_RUNNING 1051L
 
@@ -2112,7 +2089,7 @@
 //
 // MessageText:
 //
-//  The requested control is not valid for this service
+//  The requested control is not valid for this service.
 //
 #define ERROR_INVALID_SERVICE_CONTROL    1052L
 
@@ -2121,8 +2098,7 @@
 //
 // MessageText:
 //
-//  The service did not respond to the start or control request in a timely
-//  fashion.
+//  The service did not respond to the start or control request in a timely fashion.
 //
 #define ERROR_SERVICE_REQUEST_TIMEOUT    1053L
 
@@ -2158,7 +2134,7 @@
 //
 // MessageText:
 //
-//  The account name is invalid or does not exist.
+//  The account name is invalid or does not exist, or the password is invalid for the account name specified.
 //
 #define ERROR_INVALID_SERVICE_ACCOUNT    1057L
 
@@ -2167,7 +2143,7 @@
 //
 // MessageText:
 //
-//  The specified service is disabled and cannot be started.
+//  The service cannot be started, either because it is disabled or because it has no enabled devices associated with it.
 //
 #define ERROR_SERVICE_DISABLED           1058L
 
@@ -2320,8 +2296,7 @@
 //
 // MessageText:
 //
-//  The dependency service does not exist or has been marked for
-//  deletion.
+//  The dependency service does not exist or has been marked for deletion.
 //
 #define ERROR_SERVICE_DEPENDENCY_DELETED 1075L
 
@@ -2330,8 +2305,7 @@
 //
 // MessageText:
 //
-//  The current boot has already been accepted for use as the
-//  last-known-good control set.
+//  The current boot has already been accepted for use as the last-known-good control set.
 //
 #define ERROR_BOOT_ALREADY_ACCEPTED      1076L
 
@@ -2349,8 +2323,7 @@
 //
 // MessageText:
 //
-//  The name is already in use as either a service name or a service display
-//  name.
+//  The name is already in use as either a service name or a service display name.
 //
 #define ERROR_DUPLICATE_SERVICE_NAME     1078L
 
@@ -2359,10 +2332,46 @@
 //
 // MessageText:
 //
-//  The account specified for this service is different from the account
-//  specified for other services running in the same process.
+//  The account specified for this service is different from the account specified for other services running in the same process.
 //
 #define ERROR_DIFFERENT_SERVICE_ACCOUNT  1079L
+
+//
+// MessageId: ERROR_CANNOT_DETECT_DRIVER_FAILURE
+//
+// MessageText:
+//
+//  Failure actions can only be set for Win32 services, not for drivers.
+//
+#define ERROR_CANNOT_DETECT_DRIVER_FAILURE 1080L
+
+//
+// MessageId: ERROR_CANNOT_DETECT_PROCESS_ABORT
+//
+// MessageText:
+//
+//  This service runs in the same process as the service control manager.
+//  Therefore, the service control manager cannot take action if this service's process terminates unexpectedly.
+//
+#define ERROR_CANNOT_DETECT_PROCESS_ABORT 1081L
+
+//
+// MessageId: ERROR_NO_RECOVERY_PROGRAM
+//
+// MessageText:
+//
+//  No recovery program has been configured for this service.
+//
+#define ERROR_NO_RECOVERY_PROGRAM        1082L
+
+//
+// MessageId: ERROR_SERVICE_NOT_IN_EXE
+//
+// MessageText:
+//
+//  The executable program that this service is configured to run in does not implement the service.
+//
+#define ERROR_SERVICE_NOT_IN_EXE         1083L
 
 //
 // MessageId: ERROR_END_OF_MEDIA
@@ -2387,7 +2396,7 @@
 //
 // MessageText:
 //
-//  Beginning of tape or partition was encountered.
+//  The beginning of the tape or a partition was encountered.
 //
 #define ERROR_BEGINNING_OF_MEDIA         1102L
 
@@ -2423,8 +2432,7 @@
 //
 // MessageText:
 //
-//  When accessing a new tape of a multivolume partition, the current
-//  blocksize is incorrect.
+//  When accessing a new tape of a multivolume partition, the current block size is incorrect.
 //
 #define ERROR_INVALID_BLOCK_LENGTH       1106L
 
@@ -2460,7 +2468,7 @@
 //
 // MessageText:
 //
-//  Media in drive may have changed.
+//  The media in the drive may have changed.
 //
 #define ERROR_MEDIA_CHANGED              1110L
 
@@ -2532,7 +2540,7 @@
 //
 // MessageText:
 //
-//  No serial device was successfully initialized.  The serial driver will unload.
+//  No serial device was successfully initialized. The serial driver will unload.
 //
 #define ERROR_SERIAL_NO_DEVICE           1118L
 
@@ -2541,9 +2549,7 @@
 //
 // MessageText:
 //
-//  Unable to open a device that was sharing an interrupt request (IRQ)
-//  with other devices. At least one other device that uses that IRQ
-//  was already opened.
+//  Unable to open a device that was sharing an interrupt request (IRQ) with other devices. At least one other device that uses that IRQ was already opened.
 //
 #define ERROR_IRQ_BUSY                   1119L
 
@@ -2562,7 +2568,7 @@
 //
 // MessageText:
 //
-//  A serial I/O operation completed because the time-out period expired.
+//  A serial I/O operation completed because the timeout period expired.
 //  (The IOCTL_SERIAL_XOFF_COUNTER did not reach zero.)
 //
 #define ERROR_COUNTER_TIMEOUT            1121L
@@ -2581,8 +2587,7 @@
 //
 // MessageText:
 //
-//  Mismatch between the floppy disk sector ID field and the floppy disk
-//  controller track address.
+//  Mismatch between the floppy disk sector ID field and the floppy disk controller track address.
 //
 #define ERROR_FLOPPY_WRONG_CYLINDER      1123L
 
@@ -2591,8 +2596,7 @@
 //
 // MessageText:
 //
-//  The floppy disk controller reported an error that is not recognized
-//  by the floppy disk driver.
+//  The floppy disk controller reported an error that is not recognized by the floppy disk driver.
 //
 #define ERROR_FLOPPY_UNKNOWN_ERROR       1124L
 
@@ -2628,8 +2632,7 @@
 //
 // MessageText:
 //
-//  While accessing the hard disk, a disk controller reset was needed, but
-//  even that failed.
+//  While accessing the hard disk, a disk controller reset was needed, but even that failed.
 //
 #define ERROR_DISK_RESET_FAILED          1128L
 
@@ -2665,8 +2668,7 @@
 //
 // MessageText:
 //
-//  The base address or the file offset specified does not have the proper
-//  alignment.
+//  The base address or the file offset specified does not have the proper alignment.
 //
 #define ERROR_MAPPED_ALIGNMENT           1132L
 
@@ -2675,8 +2677,7 @@
 //
 // MessageText:
 //
-//  An attempt to change the system power state was vetoed by another
-//  application or driver.
+//  An attempt to change the system power state was vetoed by another application or driver.
 //
 #define ERROR_SET_POWER_STATE_VETOED     1140L
 
@@ -2694,8 +2695,7 @@
 //
 // MessageText:
 //
-//  An attempt was made to create more links on a file than
-//  the file system supports.
+//  An attempt was made to create more links on a file than the file system supports.
 //
 #define ERROR_TOO_MANY_LINKS             1142L
 
@@ -2731,7 +2731,7 @@
 //
 // MessageText:
 //
-//  The specified program was written for an older version of Windows.
+//  The specified program was written for an earlier version of Windows.
 //
 #define ERROR_RMODE_APP                  1153L
 
@@ -2771,60 +2771,221 @@
 //
 #define ERROR_DLL_NOT_FOUND              1157L
 
-
-
-
-///////////////////////////
-//                       //
-// Winnet32 Status Codes //
-//                       //
-///////////////////////////
-
-
 //
-// MessageId: ERROR_BAD_USERNAME
+// MessageId: ERROR_NO_MORE_USER_HANDLES
 //
 // MessageText:
 //
-//  The specified username is invalid.
+//  The current process has used all of its system allowance of handles for Window Manager objects.
 //
-#define ERROR_BAD_USERNAME               2202L
+#define ERROR_NO_MORE_USER_HANDLES       1158L
 
 //
-// MessageId: ERROR_NOT_CONNECTED
+// MessageId: ERROR_MESSAGE_SYNC_ONLY
 //
 // MessageText:
 //
-//  This network connection does not exist.
+//  The message can be used only with synchronous operations.
 //
-#define ERROR_NOT_CONNECTED              2250L
+#define ERROR_MESSAGE_SYNC_ONLY          1159L
 
 //
-// MessageId: ERROR_OPEN_FILES
+// MessageId: ERROR_SOURCE_ELEMENT_EMPTY
 //
 // MessageText:
 //
-//  This network connection has files open or requests pending.
+//  The indicated source element has no media.
 //
-#define ERROR_OPEN_FILES                 2401L
+#define ERROR_SOURCE_ELEMENT_EMPTY       1160L
 
 //
-// MessageId: ERROR_ACTIVE_CONNECTIONS
+// MessageId: ERROR_DESTINATION_ELEMENT_FULL
 //
 // MessageText:
 //
-//  Active connections still exist.
+//  The indicated destination element already contains media.
 //
-#define ERROR_ACTIVE_CONNECTIONS         2402L
+#define ERROR_DESTINATION_ELEMENT_FULL   1161L
 
 //
-// MessageId: ERROR_DEVICE_IN_USE
+// MessageId: ERROR_ILLEGAL_ELEMENT_ADDRESS
 //
 // MessageText:
 //
-//  The device is in use by an active process and cannot be disconnected.
+//  The indicated element does not exist.
 //
-#define ERROR_DEVICE_IN_USE              2404L
+#define ERROR_ILLEGAL_ELEMENT_ADDRESS    1162L
+
+//
+// MessageId: ERROR_MAGAZINE_NOT_PRESENT
+//
+// MessageText:
+//
+//  The indicated element is part of a magazine that is not present.
+//
+#define ERROR_MAGAZINE_NOT_PRESENT       1163L
+
+//
+// MessageId: ERROR_DEVICE_REINITIALIZATION_NEEDED
+//
+// MessageText:
+//
+//  The indicated device requires reinitialization due to hardware errors.
+//
+#define ERROR_DEVICE_REINITIALIZATION_NEEDED 1164L    // dderror
+
+//
+// MessageId: ERROR_DEVICE_REQUIRES_CLEANING
+//
+// MessageText:
+//
+//  The device has indicated that cleaning is required before further operations are attempted.
+//
+#define ERROR_DEVICE_REQUIRES_CLEANING   1165L
+
+//
+// MessageId: ERROR_DEVICE_DOOR_OPEN
+//
+// MessageText:
+//
+//  The device has indicated that its door is open.
+//
+#define ERROR_DEVICE_DOOR_OPEN           1166L
+
+//
+// MessageId: ERROR_DEVICE_NOT_CONNECTED
+//
+// MessageText:
+//
+//  The device is not connected.
+//
+#define ERROR_DEVICE_NOT_CONNECTED       1167L
+
+//
+// MessageId: ERROR_NOT_FOUND
+//
+// MessageText:
+//
+//  Element not found.
+//
+#define ERROR_NOT_FOUND                  1168L
+
+//
+// MessageId: ERROR_NO_MATCH
+//
+// MessageText:
+//
+//  There was no match for the specified key in the index.
+//
+#define ERROR_NO_MATCH                   1169L
+
+//
+// MessageId: ERROR_SET_NOT_FOUND
+//
+// MessageText:
+//
+//  The property set specified does not exist on the object.
+//
+#define ERROR_SET_NOT_FOUND              1170L
+
+//
+// MessageId: ERROR_POINT_NOT_FOUND
+//
+// MessageText:
+//
+//  The point passed to GetMouseMovePoints is not in the buffer.
+//
+#define ERROR_POINT_NOT_FOUND            1171L
+
+//
+// MessageId: ERROR_NO_TRACKING_SERVICE
+//
+// MessageText:
+//
+//  The tracking (workstation) service is not running.
+//
+#define ERROR_NO_TRACKING_SERVICE        1172L
+
+//
+// MessageId: ERROR_NO_VOLUME_ID
+//
+// MessageText:
+//
+//  The Volume ID could not be found.
+//
+#define ERROR_NO_VOLUME_ID               1173L
+
+//
+// MessageId: ERROR_INVALID_VLM_OPERATION
+//
+// MessageText:
+//
+//  The specified Very Large Memory (64-bit) operation is invalid.
+//
+#define ERROR_INVALID_VLM_OPERATION      1174L
+
+//
+// MessageId: ERROR_UNABLE_TO_REMOVE_REPLACED
+//
+// MessageText:
+//
+//  Unable to remove the file to be replaced.
+//
+#define ERROR_UNABLE_TO_REMOVE_REPLACED  1175L
+
+//
+// MessageId: ERROR_UNABLE_TO_MOVE_REPLACEMENT
+//
+// MessageText:
+//
+//  Unable to move the replacement file to the file to be replaced. The file to be replaced has retained its original name.
+//
+#define ERROR_UNABLE_TO_MOVE_REPLACEMENT 1176L
+
+//
+// MessageId: ERROR_UNABLE_TO_MOVE_REPLACEMENT_2
+//
+// MessageText:
+//
+//  Unable to move the replacement file to the file to be replaced. The file to be replaced has been renamed using the backup name.
+//
+#define ERROR_UNABLE_TO_MOVE_REPLACEMENT_2 1177L
+
+//
+// MessageId: ERROR_JOURNAL_DELETE_IN_PROGRESS
+//
+// MessageText:
+//
+//  The volume change journal is being deleted.
+//
+#define ERROR_JOURNAL_DELETE_IN_PROGRESS 1178L
+
+//
+// MessageId: ERROR_JOURNAL_NOT_ACTIVE
+//
+// MessageText:
+//
+//  The volume change journal service is not active.
+//
+#define ERROR_JOURNAL_NOT_ACTIVE         1179L
+
+//
+// MessageId: ERROR_POTENTIAL_FILE_FOUND
+//
+// MessageText:
+//
+//  A file was found, but it may not be the correct file.
+//
+#define ERROR_POTENTIAL_FILE_FOUND       1180L
+
+//
+// MessageId: ERROR_JOURNAL_ENTRY_DELETED
+//
+// MessageText:
+//
+//  The journal entry has been deleted from the journal.
+//
+#define ERROR_JOURNAL_ENTRY_DELETED      1181L
 
 //
 // MessageId: ERROR_BAD_DEVICE
@@ -2885,7 +3046,7 @@
 //
 // MessageText:
 //
-//  The network connection profile is corrupt.
+//  The network connection profile is corrupted.
 //
 #define ERROR_BAD_PROFILE                1206L
 
@@ -2894,7 +3055,7 @@
 //
 // MessageText:
 //
-//  Cannot enumerate a non-container.
+//  Cannot enumerate a noncontainer.
 //
 #define ERROR_NOT_CONTAINER              1207L
 
@@ -3011,8 +3172,7 @@
 //
 // MessageText:
 //
-//  An attempt was made to establish a session to a network server, but there
-//  are already too many sessions established to that server.
+//  An attempt was made to establish a session to a network server, but there are already too many sessions established to that server.
 //
 #define ERROR_REMOTE_SESSION_LIMIT_EXCEEDED 1220L
 
@@ -3021,8 +3181,7 @@
 //
 // MessageText:
 //
-//  The workgroup or domain name is already in use by another computer on the
-//  network.
+//  The workgroup or domain name is already in use by another computer on the network.
 //
 #define ERROR_DUP_DOMAINNAME             1221L
 
@@ -3040,7 +3199,7 @@
 //
 // MessageText:
 //
-//  The operation was cancelled by the user.
+//  The operation was canceled by the user.
 //
 #define ERROR_CANCELLED                  1223L
 
@@ -3049,7 +3208,7 @@
 //
 // MessageText:
 //
-//  The requested operation cannot be performed on a file with a user mapped section open.
+//  The requested operation cannot be performed on a file with a user-mapped section open.
 //
 #define ERROR_USER_MAPPED_FILE           1224L
 
@@ -3094,7 +3253,7 @@
 //
 // MessageText:
 //
-//  An operation was attempted on a non-existent network connection.
+//  An operation was attempted on a nonexistent network connection.
 //
 #define ERROR_CONNECTION_INVALID         1229L
 
@@ -3112,7 +3271,7 @@
 //
 // MessageText:
 //
-//  The remote network is not reachable by the transport.
+//  The network location cannot be reached. For information about network troubleshooting, see Windows Help.
 //
 #define ERROR_NETWORK_UNREACHABLE        1231L
 
@@ -3121,7 +3280,7 @@
 //
 // MessageText:
 //
-//  The remote system is not reachable by the transport.
+//  The network location cannot be reached. For information about network troubleshooting, see Windows Help.
 //
 #define ERROR_HOST_UNREACHABLE           1232L
 
@@ -3130,7 +3289,7 @@
 //
 // MessageText:
 //
-//  The remote system does not support the transport protocol.
+//  The network location cannot be reached. For information about network troubleshooting, see Windows Help.
 //
 #define ERROR_PROTOCOL_UNREACHABLE       1233L
 
@@ -3139,8 +3298,7 @@
 //
 // MessageText:
 //
-//  No service is operating at the destination network endpoint
-//  on the remote system.
+//  No service is operating at the destination network endpoint on the remote system.
 //
 #define ERROR_PORT_UNREACHABLE           1234L
 
@@ -3167,7 +3325,7 @@
 //
 // MessageText:
 //
-//  The operation could not be completed.  A retry should be performed.
+//  The operation could not be completed. A retry should be performed.
 //
 #define ERROR_RETRY                      1237L
 
@@ -3176,8 +3334,7 @@
 //
 // MessageText:
 //
-//  A connection to the server could not be made because the limit on the number of
-//  concurrent connections for this account has been reached.
+//  A connection to the server could not be made because the limit on the number of concurrent connections for this account has been reached.
 //
 #define ERROR_CONNECTION_COUNT_LIMIT     1238L
 
@@ -3186,7 +3343,7 @@
 //
 // MessageText:
 //
-//  Attempting to login during an unauthorized time of day for this account.
+//  Attempting to log in during an unauthorized time of day for this account.
 //
 #define ERROR_LOGIN_TIME_RESTRICTION     1239L
 
@@ -3195,7 +3352,7 @@
 //
 // MessageText:
 //
-//  The account is not authorized to login from this station.
+//  The account is not authorized to log in from this station.
 //
 #define ERROR_LOGIN_WKSTA_RESTRICTION    1240L
 
@@ -3231,8 +3388,7 @@
 //
 // MessageText:
 //
-//  The operation being requested was not performed because the user
-//  has not been authenticated.
+//  The operation being requested was not performed because the user has not been authenticated.
 //
 #define ERROR_NOT_AUTHENTICATED          1244L
 
@@ -3241,8 +3397,7 @@
 //
 // MessageText:
 //
-//  The operation being requested was not performed because the user
-//  has not logged on to the network.
+//  The operation being requested was not performed because the user has not logged on to the network.
 //  The specified service does not exist.
 //
 #define ERROR_NOT_LOGGED_ON              1245L
@@ -3252,17 +3407,16 @@
 //
 // MessageText:
 //
-//  Return that wants caller to continue with work in progress.
+//  Continue with work in progress.
 //
-#define ERROR_CONTINUE                   1246L
+#define ERROR_CONTINUE                   1246L    // dderror
 
 //
 // MessageId: ERROR_ALREADY_INITIALIZED
 //
 // MessageText:
 //
-//  An attempt was made to perform an initialization operation when
-//  initialization has already been completed.
+//  An attempt was made to perform an initialization operation when initialization has already been completed.
 //
 #define ERROR_ALREADY_INITIALIZED        1247L
 
@@ -3273,8 +3427,61 @@
 //
 //  No more local devices.
 //
-#define ERROR_NO_MORE_DEVICES            1248L
+#define ERROR_NO_MORE_DEVICES            1248L    // dderror
 
+//
+// MessageId: ERROR_NO_SUCH_SITE
+//
+// MessageText:
+//
+//  The specified site does not exist.
+//
+#define ERROR_NO_SUCH_SITE               1249L
+
+//
+// MessageId: ERROR_DOMAIN_CONTROLLER_EXISTS
+//
+// MessageText:
+//
+//  A domain controller with the specified name already exists.
+//
+#define ERROR_DOMAIN_CONTROLLER_EXISTS   1250L
+
+//
+// MessageId: ERROR_ONLY_IF_CONNECTED
+//
+// MessageText:
+//
+//  This operation is supported only when you are connected to the server.
+//
+#define ERROR_ONLY_IF_CONNECTED          1251L
+
+//
+// MessageId: ERROR_OVERRIDE_NOCHANGES
+//
+// MessageText:
+//
+//  The group policy framework should call the extension even if there are no changes.
+//
+#define ERROR_OVERRIDE_NOCHANGES         1252L
+
+//
+// MessageId: ERROR_BAD_USER_PROFILE
+//
+// MessageText:
+//
+//  The specified user does not have a valid profile.
+//
+#define ERROR_BAD_USER_PROFILE           1253L
+
+//
+// MessageId: ERROR_NOT_SUPPORTED_ON_SBS
+//
+// MessageText:
+//
+//  This operation is not supported on a Microsoft Small Business Server
+//
+#define ERROR_NOT_SUPPORTED_ON_SBS       1254L
 
 
 
@@ -3317,7 +3524,7 @@
 //
 // MessageText:
 //
-//  No encryption key is available.  A well-known encryption key was returned.
+//  No encryption key is available. A well-known encryption key was returned.
 //
 #define ERROR_LOCAL_USER_SESSION_KEY     1303L
 
@@ -3326,8 +3533,7 @@
 //
 // MessageText:
 //
-//  The NT password is too complex to be converted to a LAN Manager
-//  password.  The LAN Manager password returned is a NULL string.
+//  The password is too complex to be converted to a LAN Manager password. The LAN Manager password returned is a NULL string.
 //
 #define ERROR_NULL_LM_PASSWORD           1304L
 
@@ -3372,8 +3578,7 @@
 //
 // MessageText:
 //
-//  An attempt has been made to operate on an impersonation token
-//  by a thread that is not currently impersonating a client.
+//  An attempt has been made to operate on an impersonation token by a thread that is not currently impersonating a client.
 //
 #define ERROR_NO_IMPERSONATION_TOKEN     1309L
 
@@ -3391,8 +3596,7 @@
 //
 // MessageText:
 //
-//  There are currently no logon servers available to service the logon
-//  request.
+//  There are currently no logon servers available to service the logon request.
 //
 #define ERROR_NO_LOGON_SERVERS           1311L
 
@@ -3401,8 +3605,7 @@
 //
 // MessageText:
 //
-//   A specified logon session does not exist.  It may already have
-//   been terminated.
+//  A specified logon session does not exist. It may already have been terminated.
 //
 #define ERROR_NO_SUCH_LOGON_SESSION      1312L
 
@@ -3411,7 +3614,7 @@
 //
 // MessageText:
 //
-//   A specified privilege does not exist.
+//  A specified privilege does not exist.
 //
 #define ERROR_NO_SUCH_PRIVILEGE          1313L
 
@@ -3420,7 +3623,7 @@
 //
 // MessageText:
 //
-//   A required privilege is not held by the client.
+//  A required privilege is not held by the client.
 //
 #define ERROR_PRIVILEGE_NOT_HELD         1314L
 
@@ -3474,9 +3677,7 @@
 //
 // MessageText:
 //
-//  Either the specified user account is already a member of the specified
-//  group, or the specified group cannot be deleted because it contains
-//  a member.
+//  Either the specified user account is already a member of the specified group, or the specified group cannot be deleted because it contains a member.
 //
 #define ERROR_MEMBER_IN_GROUP            1320L
 
@@ -3494,8 +3695,7 @@
 //
 // MessageText:
 //
-//  The last remaining administration account cannot be disabled
-//  or deleted.
+//  The last remaining administration account cannot be disabled or deleted.
 //
 #define ERROR_LAST_ADMIN                 1322L
 
@@ -3504,8 +3704,7 @@
 //
 // MessageText:
 //
-//  Unable to update the password.  The value provided as the current
-//  password is incorrect.
+//  Unable to update the password. The value provided as the current password is incorrect.
 //
 #define ERROR_WRONG_PASSWORD             1323L
 
@@ -3514,8 +3713,7 @@
 //
 // MessageText:
 //
-//  Unable to update the password.  The value provided for the new password
-//  contains values that are not allowed in passwords.
+//  Unable to update the password. The value provided for the new password contains values that are not allowed in passwords.
 //
 #define ERROR_ILL_FORMED_PASSWORD        1324L
 
@@ -3524,8 +3722,7 @@
 //
 // MessageText:
 //
-//  Unable to update the password because a password update rule has been
-//  violated.
+//  Unable to update the password. The value provided for the new password does not meet the length, complexity, or history requirement of the domain.
 //
 #define ERROR_PASSWORD_RESTRICTION       1325L
 
@@ -3651,8 +3848,7 @@
 //
 // MessageText:
 //
-//  The inherited access control list (ACL) or access control entry (ACE)
-//  could not be built.
+//  The inherited access control list (ACL) or access control entry (ACE) could not be built.
 //
 #define ERROR_BAD_INHERITANCE_ACL        1340L
 
@@ -3697,8 +3893,7 @@
 //
 // MessageText:
 //
-//  The specified attributes are invalid, or incompatible with the
-//  attributes for the group as a whole.
+//  The specified attributes are invalid, or incompatible with the attributes for the group as a whole.
 //
 #define ERROR_INVALID_GROUP_ATTRIBUTES   1345L
 
@@ -3707,8 +3902,7 @@
 //
 // MessageText:
 //
-//  Either a required impersonation level was not provided, or the
-//  provided impersonation level is invalid.
+//  Either a required impersonation level was not provided, or the provided impersonation level is invalid.
 //
 #define ERROR_BAD_IMPERSONATION_LEVEL    1346L
 
@@ -3744,8 +3938,7 @@
 //
 // MessageText:
 //
-//  Unable to perform a security operation on an object
-//  which has no associated security.
+//  Unable to perform a security operation on an object that has no associated security.
 //
 #define ERROR_NO_SECURITY_ON_OBJECT      1350L
 
@@ -3754,9 +3947,7 @@
 //
 // MessageText:
 //
-//  Indicates a Windows NT Server could not be contacted or that
-//  objects within the domain are protected such that necessary
-//  information could not be retrieved.
+//  Configuration information could not be read from the domain controller, either because the machine is unavailable, or access has been denied.
 //
 #define ERROR_CANT_ACCESS_DOMAIN_INFO    1351L
 
@@ -3765,9 +3956,7 @@
 //
 // MessageText:
 //
-//  The security account manager (SAM) or local security
-//  authority (LSA) server was in the wrong state to perform
-//  the security operation.
+//  The security account manager (SAM) or local security authority (LSA) server was in the wrong state to perform the security operation.
 //
 #define ERROR_INVALID_SERVER_STATE       1352L
 
@@ -3794,7 +3983,7 @@
 //
 // MessageText:
 //
-//  The specified domain did not exist.
+//  The specified domain either does not exist or could not be contacted.
 //
 #define ERROR_NO_SUCH_DOMAIN             1355L
 
@@ -3821,8 +4010,7 @@
 //
 // MessageText:
 //
-//  Unable to complete the requested operation because of either a
-//  catastrophic media failure or a data structure corruption on the disk.
+//  Unable to complete the requested operation because of either a catastrophic media failure or a data structure corruption on the disk.
 //
 #define ERROR_INTERNAL_DB_CORRUPTION     1358L
 
@@ -3831,7 +4019,7 @@
 //
 // MessageText:
 //
-//  The security account database contains an internal inconsistency.
+//  An internal error occurred.
 //
 #define ERROR_INTERNAL_ERROR             1359L
 
@@ -3840,8 +4028,7 @@
 //
 // MessageText:
 //
-//  Generic access types were contained in an access mask which should
-//  already be mapped to non-generic types.
+//  Generic access types were contained in an access mask which should already be mapped to nongeneric types.
 //
 #define ERROR_GENERIC_NOT_MAPPED         1360L
 
@@ -3859,8 +4046,7 @@
 //
 // MessageText:
 //
-//  The requested action is restricted for use by logon processes
-//  only.  The calling process has not registered as a logon process.
+//  The requested action is restricted for use by logon processes only. The calling process has not registered as a logon process.
 //
 #define ERROR_NOT_LOGON_PROCESS          1362L
 
@@ -3887,8 +4073,7 @@
 //
 // MessageText:
 //
-//  The logon session is not in a state that is consistent with the
-//  requested operation.
+//  The logon session is not in a state that is consistent with the requested operation.
 //
 #define ERROR_BAD_LOGON_SESSION_STATE    1365L
 
@@ -3915,8 +4100,7 @@
 //
 // MessageText:
 //
-//  Unable to impersonate via a named pipe until data has been read
-//  from that pipe.
+//  Unable to impersonate using a named pipe until data has been read from that pipe.
 //
 #define ERROR_CANNOT_IMPERSONATE         1368L
 
@@ -3925,8 +4109,7 @@
 //
 // MessageText:
 //
-//  The transaction state of a Registry subtree is incompatible with the
-//  requested operation.
+//  The transaction state of a registry subtree is incompatible with the requested operation.
 //
 #define ERROR_RXACT_INVALID_STATE        1369L
 
@@ -3971,8 +4154,7 @@
 //
 // MessageText:
 //
-//  The user cannot be removed from a group because the group
-//  is currently the user's primary group.
+//  The user cannot be removed from a group because the group is currently the user's primary group.
 //
 #define ERROR_MEMBERS_PRIMARY_GROUP      1374L
 
@@ -4026,8 +4208,7 @@
 //
 // MessageText:
 //
-//  Logon failure: the user has not been granted the requested
-//  logon type at this computer.
+//  Logon failure: the user has not been granted the requested logon type at this computer.
 //
 #define ERROR_LOGON_NOT_GRANTED          1380L
 
@@ -4036,8 +4217,7 @@
 //
 // MessageText:
 //
-//  The maximum number of secrets that may be stored in a single system has been
-//  exceeded.
+//  The maximum number of secrets that may be stored in a single system has been exceeded.
 //
 #define ERROR_TOO_MANY_SECRETS           1381L
 
@@ -4064,8 +4244,7 @@
 //
 // MessageText:
 //
-//  During a logon attempt, the user's security context accumulated too many
-//  security IDs.
+//  During a logon attempt, the user's security context accumulated too many security IDs.
 //
 #define ERROR_TOO_MANY_CONTEXT_IDS       1384L
 
@@ -4074,8 +4253,7 @@
 //
 // MessageText:
 //
-//  Logon failure: the user has not been granted the requested logon type
-//  at this computer.
+//  Logon failure: the user has not been granted the requested logon type at this computer.
 //
 #define ERROR_LOGON_TYPE_NOT_GRANTED     1385L
 
@@ -4093,8 +4271,7 @@
 //
 // MessageText:
 //
-//  A new member could not be added to a local group because the member does
-//  not exist.
+//  A member could not be added to or removed from the local group because the member does not exist.
 //
 #define ERROR_NO_SUCH_MEMBER             1387L
 
@@ -4103,8 +4280,7 @@
 //
 // MessageText:
 //
-//  A new member could not be added to a local group because the member has the
-//  wrong account type.
+//  A new member could not be added to a local group because the member has the wrong account type.
 //
 #define ERROR_INVALID_MEMBER             1388L
 
@@ -4131,7 +4307,7 @@
 //
 // MessageText:
 //
-//  Indicates an ACL contains no inheritable components
+//  Indicates an ACL contains no inheritable components.
 //
 #define ERROR_NO_INHERITANCE             1391L
 
@@ -4140,7 +4316,7 @@
 //
 // MessageText:
 //
-//  The file or directory is corrupt and non-readable.
+//  The file or directory is corrupted and unreadable.
 //
 #define ERROR_FILE_CORRUPT               1392L
 
@@ -4149,7 +4325,7 @@
 //
 // MessageText:
 //
-//  The disk structure is corrupt and non-readable.
+//  The disk structure is corrupted and unreadable.
 //
 #define ERROR_DISK_CORRUPT               1393L
 
@@ -4168,10 +4344,36 @@
 // MessageText:
 //
 //  The service being accessed is licensed for a particular number of connections.
-//  No more connections can be made to the service at this time
-//  because there are already as many connections as the service can accept.
+//  No more connections can be made to the service at this time because there are already as many connections as the service can accept.
 //
 #define ERROR_LICENSE_QUOTA_EXCEEDED     1395L
+
+//
+// MessageId: ERROR_WRONG_TARGET_NAME
+//
+// MessageText:
+//
+//  Logon Failure: The target account name is incorrect.
+//
+#define ERROR_WRONG_TARGET_NAME          1396L
+
+//
+// MessageId: ERROR_MUTUAL_AUTH_FAILED
+//
+// MessageText:
+//
+//  Mutual Authentication failed. The server's password is out of date at the domain controller.
+//
+#define ERROR_MUTUAL_AUTH_FAILED         1397L
+
+//
+// MessageId: ERROR_TIME_SKEW
+//
+// MessageText:
+//
+//  There is a time difference between the client and server.
+//
+#define ERROR_TIME_SKEW                  1398L
 
 // End of security error codes
 
@@ -4261,7 +4463,7 @@
 //
 // MessageText:
 //
-//  Invalid window, belongs to other thread.
+//  Invalid window; it belongs to other thread.
 //
 #define ERROR_WINDOW_OF_OTHER_THREAD     1408L
 
@@ -4333,7 +4535,7 @@
 //
 // MessageText:
 //
-//  The listbox identifier was not found.
+//  The list box identifier was not found.
 //
 #define ERROR_LISTBOX_ID_NOT_FOUND       1416L
 
@@ -4441,7 +4643,7 @@
 //
 // MessageText:
 //
-//  Cannot set non-local hook without a module handle.
+//  Cannot set nonlocal hook without a module handle.
 //
 #define ERROR_HOOK_NEEDS_HMOD            1428L
 
@@ -4477,7 +4679,7 @@
 //
 // MessageText:
 //
-//  Invalid message for single-selection listbox.
+//  Invalid message for single-selection list box.
 //
 #define ERROR_INVALID_LB_MESSAGE         1432L
 
@@ -4486,7 +4688,7 @@
 //
 // MessageText:
 //
-//  LB_SETCOUNT sent to non-lazy listbox.
+//  LB_SETCOUNT sent to non-lazy list box.
 //
 #define ERROR_SETCOUNT_ON_BAD_LB         1433L
 
@@ -4558,8 +4760,7 @@
 //
 // MessageText:
 //
-//  All handles to windows in a multiple-window position structure must
-//  have the same parent.
+//  All handles to windows in a multiple-window position structure must have the same parent.
 //
 #define ERROR_HWNDS_HAVE_DIFF_PARENT     1441L
 
@@ -4595,8 +4796,7 @@
 //
 // MessageText:
 //
-//  Cannot process a message from a window that is not a multiple document
-//  interface (MDI) window.
+//  Cannot process a message from a window that is not a multiple document interface (MDI) window.
 //
 #define ERROR_NON_MDICHILD_WINDOW        1445L
 
@@ -4623,7 +4823,7 @@
 //
 // MessageText:
 //
-//  Scroll bar range cannot be greater than 0x7FFF.
+//  Scroll bar range cannot be greater than MAXLONG.
 //
 #define ERROR_INVALID_SCROLLBAR_RANGE    1448L
 
@@ -4722,7 +4922,7 @@
 //
 // MessageText:
 //
-//  This operation requires an interactive windowstation.
+//  This operation requires an interactive window station.
 //
 #define ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION 1459L
 
@@ -4734,6 +4934,15 @@
 //  This operation returned because the timeout period expired.
 //
 #define ERROR_TIMEOUT                    1460L
+
+//
+// MessageId: ERROR_INVALID_MONITOR_HANDLE
+//
+// MessageText:
+//
+//  Invalid monitor handle.
+//
+#define ERROR_INVALID_MONITOR_HANDLE     1461L
 
 // End of WinUser error codes
 
@@ -4751,7 +4960,7 @@
 //
 // MessageText:
 //
-//  The event log file is corrupt.
+//  The event log file is corrupted.
 //
 #define ERROR_EVENTLOG_FILE_CORRUPT      1500L
 
@@ -4778,11 +4987,400 @@
 //
 // MessageText:
 //
-//  The event log file has changed between reads.
+//  The event log file has changed between read operations.
 //
 #define ERROR_EVENTLOG_FILE_CHANGED      1503L
 
 // End of eventlog error codes
+
+
+
+///////////////////////////
+//                       //
+// MSI Error Codes       //
+//                       //
+///////////////////////////
+
+
+//
+// MessageId: ERROR_INSTALL_SERVICE_FAILURE
+//
+// MessageText:
+//
+//  The Windows Installer service could not be accessed.  Contact your support personnel to verify that the Windows Installer service is properly registered.
+//
+#define ERROR_INSTALL_SERVICE_FAILURE    1601L
+
+//
+// MessageId: ERROR_INSTALL_USEREXIT
+//
+// MessageText:
+//
+//  User cancelled installation.
+//
+#define ERROR_INSTALL_USEREXIT           1602L
+
+//
+// MessageId: ERROR_INSTALL_FAILURE
+//
+// MessageText:
+//
+//  Fatal error during installation.
+//
+#define ERROR_INSTALL_FAILURE            1603L
+
+//
+// MessageId: ERROR_INSTALL_SUSPEND
+//
+// MessageText:
+//
+//  Installation suspended, incomplete.
+//
+#define ERROR_INSTALL_SUSPEND            1604L
+
+//
+// MessageId: ERROR_UNKNOWN_PRODUCT
+//
+// MessageText:
+//
+//  This action is only valid for products that are currently installed.
+//
+#define ERROR_UNKNOWN_PRODUCT            1605L
+
+//
+// MessageId: ERROR_UNKNOWN_FEATURE
+//
+// MessageText:
+//
+//  Feature ID not registered.
+//
+#define ERROR_UNKNOWN_FEATURE            1606L
+
+//
+// MessageId: ERROR_UNKNOWN_COMPONENT
+//
+// MessageText:
+//
+//  Component ID not registered.
+//
+#define ERROR_UNKNOWN_COMPONENT          1607L
+
+//
+// MessageId: ERROR_UNKNOWN_PROPERTY
+//
+// MessageText:
+//
+//  Unknown property.
+//
+#define ERROR_UNKNOWN_PROPERTY           1608L
+
+//
+// MessageId: ERROR_INVALID_HANDLE_STATE
+//
+// MessageText:
+//
+//  Handle is in an invalid state.
+//
+#define ERROR_INVALID_HANDLE_STATE       1609L
+
+//
+// MessageId: ERROR_BAD_CONFIGURATION
+//
+// MessageText:
+//
+//  The configuration data for this product is corrupt.  Contact your support personnel.
+//
+#define ERROR_BAD_CONFIGURATION          1610L
+
+//
+// MessageId: ERROR_INDEX_ABSENT
+//
+// MessageText:
+//
+//  Component qualifier not present.
+//
+#define ERROR_INDEX_ABSENT               1611L
+
+//
+// MessageId: ERROR_INSTALL_SOURCE_ABSENT
+//
+// MessageText:
+//
+//  The installation source for this product is not available.  Verify that the source exists and that you can access it.
+//
+#define ERROR_INSTALL_SOURCE_ABSENT      1612L
+
+//
+// MessageId: ERROR_INSTALL_PACKAGE_VERSION
+//
+// MessageText:
+//
+//  This installation package cannot be installed by the Windows Installer service.  You must install a Windows service pack that contains a newer version of the Windows Installer service.
+//
+#define ERROR_INSTALL_PACKAGE_VERSION    1613L
+
+//
+// MessageId: ERROR_PRODUCT_UNINSTALLED
+//
+// MessageText:
+//
+//  Product is uninstalled.
+//
+#define ERROR_PRODUCT_UNINSTALLED        1614L
+
+//
+// MessageId: ERROR_BAD_QUERY_SYNTAX
+//
+// MessageText:
+//
+//  SQL query syntax invalid or unsupported.
+//
+#define ERROR_BAD_QUERY_SYNTAX           1615L
+
+//
+// MessageId: ERROR_INVALID_FIELD
+//
+// MessageText:
+//
+//  Record field does not exist.
+//
+#define ERROR_INVALID_FIELD              1616L
+
+//
+// MessageId: ERROR_DEVICE_REMOVED
+//
+// MessageText:
+//
+//  The device has been removed.
+//
+#define ERROR_DEVICE_REMOVED             1617L
+
+//
+// MessageId: ERROR_INSTALL_ALREADY_RUNNING
+//
+// MessageText:
+//
+//  Another installation is already in progress.  Complete that installation before proceeding with this install.
+//
+#define ERROR_INSTALL_ALREADY_RUNNING    1618L
+
+//
+// MessageId: ERROR_INSTALL_PACKAGE_OPEN_FAILED
+//
+// MessageText:
+//
+//  This installation package could not be opened.  Verify that the package exists and that you can access it, or contact the application vendor to verify that this is a valid Windows Installer package.
+//
+#define ERROR_INSTALL_PACKAGE_OPEN_FAILED 1619L
+
+//
+// MessageId: ERROR_INSTALL_PACKAGE_INVALID
+//
+// MessageText:
+//
+//  This installation package could not be opened.  Contact the application vendor to verify that this is a valid Windows Installer package.
+//
+#define ERROR_INSTALL_PACKAGE_INVALID    1620L
+
+//
+// MessageId: ERROR_INSTALL_UI_FAILURE
+//
+// MessageText:
+//
+//  There was an error starting the Windows Installer service user interface.  Contact your support personnel.
+//
+#define ERROR_INSTALL_UI_FAILURE         1621L
+
+//
+// MessageId: ERROR_INSTALL_LOG_FAILURE
+//
+// MessageText:
+//
+//  Error opening installation log file. Verify that the specified log file location exists and that you can write to it.
+//
+#define ERROR_INSTALL_LOG_FAILURE        1622L
+
+//
+// MessageId: ERROR_INSTALL_LANGUAGE_UNSUPPORTED
+//
+// MessageText:
+//
+//  The language of this installation package is not supported by your system.
+//
+#define ERROR_INSTALL_LANGUAGE_UNSUPPORTED 1623L
+
+//
+// MessageId: ERROR_INSTALL_TRANSFORM_FAILURE
+//
+// MessageText:
+//
+//  Error applying transforms.  Verify that the specified transform paths are valid.
+//
+#define ERROR_INSTALL_TRANSFORM_FAILURE  1624L
+
+//
+// MessageId: ERROR_INSTALL_PACKAGE_REJECTED
+//
+// MessageText:
+//
+//  This installation is forbidden by system policy.  Contact your system administrator.
+//
+#define ERROR_INSTALL_PACKAGE_REJECTED   1625L
+
+//
+// MessageId: ERROR_FUNCTION_NOT_CALLED
+//
+// MessageText:
+//
+//  Function could not be executed.
+//
+#define ERROR_FUNCTION_NOT_CALLED        1626L
+
+//
+// MessageId: ERROR_FUNCTION_FAILED
+//
+// MessageText:
+//
+//  Function failed during execution.
+//
+#define ERROR_FUNCTION_FAILED            1627L
+
+//
+// MessageId: ERROR_INVALID_TABLE
+//
+// MessageText:
+//
+//  Invalid or unknown table specified.
+//
+#define ERROR_INVALID_TABLE              1628L
+
+//
+// MessageId: ERROR_DATATYPE_MISMATCH
+//
+// MessageText:
+//
+//  Data supplied is of wrong type.
+//
+#define ERROR_DATATYPE_MISMATCH          1629L
+
+//
+// MessageId: ERROR_UNSUPPORTED_TYPE
+//
+// MessageText:
+//
+//  Data of this type is not supported.
+//
+#define ERROR_UNSUPPORTED_TYPE           1630L
+
+//
+// MessageId: ERROR_CREATE_FAILED
+//
+// MessageText:
+//
+//  The Windows Installer service failed to start.  Contact your support personnel.
+//
+#define ERROR_CREATE_FAILED              1631L
+
+//
+// MessageId: ERROR_INSTALL_TEMP_UNWRITABLE
+//
+// MessageText:
+//
+//  The temp folder is either full or inaccessible.  Verify that the temp folder exists and that you can write to it.
+//
+#define ERROR_INSTALL_TEMP_UNWRITABLE    1632L
+
+//
+// MessageId: ERROR_INSTALL_PLATFORM_UNSUPPORTED
+//
+// MessageText:
+//
+//  This installation package is not supported by this processor type. Contact your product vendor.
+//
+#define ERROR_INSTALL_PLATFORM_UNSUPPORTED 1633L
+
+//
+// MessageId: ERROR_INSTALL_NOTUSED
+//
+// MessageText:
+//
+//  Component not used on this computer.
+//
+#define ERROR_INSTALL_NOTUSED            1634L
+
+//
+// MessageId: ERROR_PATCH_PACKAGE_OPEN_FAILED
+//
+// MessageText:
+//
+//  This patch package could not be opened.  Verify that the patch package exists and that you can access it, or contact the application vendor to verify that this is a valid Windows Installer patch package.
+//
+#define ERROR_PATCH_PACKAGE_OPEN_FAILED  1635L
+
+//
+// MessageId: ERROR_PATCH_PACKAGE_INVALID
+//
+// MessageText:
+//
+//  This patch package could not be opened.  Contact the application vendor to verify that this is a valid Windows Installer patch package.
+//
+#define ERROR_PATCH_PACKAGE_INVALID      1636L
+
+//
+// MessageId: ERROR_PATCH_PACKAGE_UNSUPPORTED
+//
+// MessageText:
+//
+//  This patch package cannot be processed by the Windows Installer service.  You must install a Windows service pack that contains a newer version of the Windows Installer service.
+//
+#define ERROR_PATCH_PACKAGE_UNSUPPORTED  1637L
+
+//
+// MessageId: ERROR_PRODUCT_VERSION
+//
+// MessageText:
+//
+//  Another version of this product is already installed.  Installation of this version cannot continue.  To configure or remove the existing version of this product, use Add/Remove Programs on the Control Panel.
+//
+#define ERROR_PRODUCT_VERSION            1638L
+
+//
+// MessageId: ERROR_INVALID_COMMAND_LINE
+//
+// MessageText:
+//
+//  Invalid command line argument.  Consult the Windows Installer SDK for detailed command line help.
+//
+#define ERROR_INVALID_COMMAND_LINE       1639L
+
+//
+// MessageId: ERROR_INSTALL_REMOTE_DISALLOWED
+//
+// MessageText:
+//
+//  Only administrators have permission to add, remove, or configure server software during a Terminal services remote session. If you want to install or configure software on the server, contact your network administrator.
+//
+#define ERROR_INSTALL_REMOTE_DISALLOWED  1640L
+
+//
+// MessageId: ERROR_SUCCESS_REBOOT_INITIATED
+//
+// MessageText:
+//
+//  The requested operation completed successfully.  The system will be restarted so the changes can take effect.
+//
+#define ERROR_SUCCESS_REBOOT_INITIATED   1641L
+
+//
+// MessageId: ERROR_PATCH_TARGET_NOT_FOUND
+//
+// MessageText:
+//
+//  The upgrade patch cannot be installed by the Windows Installer service because the program to be upgraded may be missing, or the upgrade patch may update a different version of the program. Verify that the program to be upgraded exists on your computer and that you have the correct upgrade patch.
+//
+#define ERROR_PATCH_TARGET_NOT_FOUND     1642L
+
+// End of MSI error codes
 
 
 
@@ -5023,7 +5621,7 @@
 //
 // MessageText:
 //
-//  There is not a remote procedure call active in this thread.
+//  There are no remote procedure calls active on this thread.
 //
 #define RPC_S_NO_CALL_ACTIVE             1725L
 
@@ -5122,8 +5720,7 @@
 //
 // MessageText:
 //
-//  No network address is available to use to construct a universal
-//  unique identifier (UUID).
+//  No network address is available to use to construct a universal unique identifier (UUID).
 //
 #define RPC_S_UUID_NO_ADDRESS            1739L
 
@@ -5420,8 +6017,7 @@
 //
 // MessageText:
 //
-//  The list of RPC servers available for the binding of auto handles
-//  has been exhausted.
+//  The list of RPC servers available for the binding of auto handles has been exhausted.
 //
 #define RPC_X_NO_MORE_ENTRIES            1772L
 
@@ -5439,8 +6035,7 @@
 //
 // MessageText:
 //
-//  The file containing the character translation table has fewer than
-//  512 bytes.
+//  The file containing the character translation table has fewer than 512 bytes.
 //
 #define RPC_X_SS_CHAR_TRANS_SHORT_FILE   1774L
 
@@ -5449,8 +6044,7 @@
 //
 // MessageText:
 //
-//  A null context handle was passed from the client to the host during
-//  a remote procedure call.
+//  A null context handle was passed from the client to the host during a remote procedure call.
 //
 #define RPC_X_SS_IN_NULL_CONTEXT         1775L
 
@@ -5531,7 +6125,7 @@
 //
 // MessageText:
 //
-//  The disk media is not recognized.  It may not be formatted.
+//  The disk media is not recognized. It may not be formatted.
 //
 #define ERROR_UNRECOGNIZED_MEDIA         1785L
 
@@ -5549,8 +6143,7 @@
 //
 // MessageText:
 //
-//  The SAM database on the Windows NT Server does not have a computer
-//  account for this workstation trust relationship.
+//  The security database on the server does not have a computer account for this workstation trust relationship.
 //
 #define ERROR_NO_TRUST_SAM_ACCOUNT       1787L
 
@@ -5559,8 +6152,7 @@
 //
 // MessageText:
 //
-//  The trust relationship between the primary domain and the trusted
-//  domain failed.
+//  The trust relationship between the primary domain and the trusted domain failed.
 //
 #define ERROR_TRUSTED_DOMAIN_FAILURE     1788L
 
@@ -5569,8 +6161,7 @@
 //
 // MessageText:
 //
-//  The trust relationship between this workstation and the primary
-//  domain failed.
+//  The trust relationship between this workstation and the primary domain failed.
 //
 #define ERROR_TRUSTED_RELATIONSHIP_FAILURE 1789L
 
@@ -5714,7 +6305,7 @@
 //
 // MessageText:
 //
-//  The Environment specified is invalid.
+//  The environment specified is invalid.
 //
 #define ERROR_INVALID_ENVIRONMENT        1805L
 
@@ -5732,7 +6323,7 @@
 //
 // MessageText:
 //
-//  The account used is an interdomain trust account.  Use your global user account or local user account to access this server.
+//  The account used is an interdomain trust account. Use your global user account or local user account to access this server.
 //
 #define ERROR_NOLOGON_INTERDOMAIN_TRUST_ACCOUNT 1807L
 
@@ -5741,7 +6332,7 @@
 //
 // MessageText:
 //
-//  The account used is a Computer Account.  Use your global user account or local user account to access this server.
+//  The account used is a computer account. Use your global user account or local user account to access this server.
 //
 #define ERROR_NOLOGON_WORKSTATION_TRUST_ACCOUNT 1808L
 
@@ -5750,7 +6341,7 @@
 //
 // MessageText:
 //
-//  The account used is an server trust account.  Use your global user account or local user account to access this server.
+//  The account used is a server trust account. Use your global user account or local user account to access this server.
 //
 #define ERROR_NOLOGON_SERVER_TRUST_ACCOUNT 1809L
 
@@ -5759,8 +6350,7 @@
 //
 // MessageText:
 //
-//  The name or security ID (SID) of the domain specified is inconsistent
-//  with the trust information for that domain.
+//  The name or security ID (SID) of the domain specified is inconsistent with the trust information for that domain.
 //
 #define ERROR_DOMAIN_TRUST_INCONSISTENT  1810L
 
@@ -5787,7 +6377,7 @@
 //
 // MessageText:
 //
-//  The specified resource type can not be found in the image file.
+//  The specified resource type cannot be found in the image file.
 //
 #define ERROR_RESOURCE_TYPE_NOT_FOUND    1813L
 
@@ -5796,7 +6386,7 @@
 //
 // MessageText:
 //
-//  The specified resource name can not be found in the image file.
+//  The specified resource name cannot be found in the image file.
 //
 #define ERROR_RESOURCE_NAME_NOT_FOUND    1814L
 
@@ -5832,7 +6422,7 @@
 //
 // MessageText:
 //
-//  The server was altered while processing this call.
+//  The remote procedure call was cancelled.
 //
 #define RPC_S_CALL_CANCELLED             1818L
 
@@ -5850,7 +6440,7 @@
 //
 // MessageText:
 //
-//  Communications failure.
+//  A communications failure occurred during a remote procedure call.
 //
 #define RPC_S_COMM_FAILURE               1820L
 
@@ -5877,7 +6467,7 @@
 //
 // MessageText:
 //
-//  The error specified is not a valid Windows NT RPC error code.
+//  The error specified is not a valid Windows RPC error code.
 //
 #define RPC_S_NOT_RPC_ERROR              1823L
 
@@ -5904,7 +6494,7 @@
 //
 // MessageText:
 //
-//  Thread is not cancelled.
+//  Thread is not canceled.
 //
 #define RPC_S_NOT_CANCELLED              1826L
 
@@ -5940,25 +6530,25 @@
 //
 // MessageText:
 //
-//  The idl pipe object is invalid or corrupted.
+//  The RPC pipe object is invalid or corrupted.
 //
 #define RPC_X_INVALID_PIPE_OBJECT        1830L
 
 //
-// MessageId: RPC_X_INVALID_PIPE_OPERATION
+// MessageId: RPC_X_WRONG_PIPE_ORDER
 //
 // MessageText:
 //
-//  The operation is invalid for a given idl pipe object.
+//  An invalid operation was attempted on an RPC pipe object.
 //
-#define RPC_X_INVALID_PIPE_OPERATION     1831L
+#define RPC_X_WRONG_PIPE_ORDER           1831L
 
 //
 // MessageId: RPC_X_WRONG_PIPE_VERSION
 //
 // MessageText:
 //
-//  The idl pipe version is not supported.
+//  Unsupported RPC pipe version.
 //
 #define RPC_X_WRONG_PIPE_VERSION         1832L
 
@@ -5976,7 +6566,7 @@
 //
 // MessageText:
 //
-//  The endpoint mapper database could not be created.
+//  The endpoint mapper database entry could not be created.
 //
 #define EPT_S_CANT_CREATE                1899L
 
@@ -6003,7 +6593,7 @@
 //
 // MessageText:
 //
-//  The specified Form name is invalid.
+//  The specified form name is invalid.
 //
 #define ERROR_INVALID_FORM_NAME          1902L
 
@@ -6012,7 +6602,7 @@
 //
 // MessageText:
 //
-//  The specified Form size is invalid
+//  The specified form size is invalid.
 //
 #define ERROR_INVALID_FORM_SIZE          1903L
 
@@ -6021,7 +6611,7 @@
 //
 // MessageText:
 //
-//  The specified Printer handle is already being waited on
+//  The specified printer handle is already being waited on
 //
 #define ERROR_ALREADY_WAITING            1904L
 
@@ -6030,7 +6620,7 @@
 //
 // MessageText:
 //
-//  The specified Printer has been deleted
+//  The specified printer has been deleted.
 //
 #define ERROR_PRINTER_DELETED            1905L
 
@@ -6039,7 +6629,7 @@
 //
 // MessageText:
 //
-//  The state of the Printer is invalid
+//  The state of the printer is invalid.
 //
 #define ERROR_INVALID_PRINTER_STATE      1906L
 
@@ -6048,7 +6638,7 @@
 //
 // MessageText:
 //
-//  The user must change his password before he logs on the first time.
+//  The user's password must be changed before logging on the first time.
 //
 #define ERROR_PASSWORD_MUST_CHANGE       1907L
 
@@ -6105,6 +6695,150 @@
 //  Some data remains to be sent in the request buffer.
 //
 #define RPC_S_SEND_INCOMPLETE            1913L
+
+//
+// MessageId: RPC_S_INVALID_ASYNC_HANDLE
+//
+// MessageText:
+//
+//  Invalid asynchronous remote procedure call handle.
+//
+#define RPC_S_INVALID_ASYNC_HANDLE       1914L
+
+//
+// MessageId: RPC_S_INVALID_ASYNC_CALL
+//
+// MessageText:
+//
+//  Invalid asynchronous RPC call handle for this operation.
+//
+#define RPC_S_INVALID_ASYNC_CALL         1915L
+
+//
+// MessageId: RPC_X_PIPE_CLOSED
+//
+// MessageText:
+//
+//  The RPC pipe object has already been closed.
+//
+#define RPC_X_PIPE_CLOSED                1916L
+
+//
+// MessageId: RPC_X_PIPE_DISCIPLINE_ERROR
+//
+// MessageText:
+//
+//  The RPC call completed before all pipes were processed.
+//
+#define RPC_X_PIPE_DISCIPLINE_ERROR      1917L
+
+//
+// MessageId: RPC_X_PIPE_EMPTY
+//
+// MessageText:
+//
+//  No more data is available from the RPC pipe.
+//
+#define RPC_X_PIPE_EMPTY                 1918L
+
+//
+// MessageId: ERROR_NO_SITENAME
+//
+// MessageText:
+//
+//  No site name is available for this machine.
+//
+#define ERROR_NO_SITENAME                1919L
+
+//
+// MessageId: ERROR_CANT_ACCESS_FILE
+//
+// MessageText:
+//
+//  The file can not be accessed by the system.
+//
+#define ERROR_CANT_ACCESS_FILE           1920L
+
+//
+// MessageId: ERROR_CANT_RESOLVE_FILENAME
+//
+// MessageText:
+//
+//  The name of the file cannot be resolved by the system.
+//
+#define ERROR_CANT_RESOLVE_FILENAME      1921L
+
+//
+// MessageId: RPC_S_ENTRY_TYPE_MISMATCH
+//
+// MessageText:
+//
+//  The entry is not of the expected type.
+//
+#define RPC_S_ENTRY_TYPE_MISMATCH        1922L
+
+//
+// MessageId: RPC_S_NOT_ALL_OBJS_EXPORTED
+//
+// MessageText:
+//
+//  Not all object UUIDs could be exported to the specified entry.
+//
+#define RPC_S_NOT_ALL_OBJS_EXPORTED      1923L
+
+//
+// MessageId: RPC_S_INTERFACE_NOT_EXPORTED
+//
+// MessageText:
+//
+//  Interface could not be exported to the specified entry.
+//
+#define RPC_S_INTERFACE_NOT_EXPORTED     1924L
+
+//
+// MessageId: RPC_S_PROFILE_NOT_ADDED
+//
+// MessageText:
+//
+//  The specified profile entry could not be added.
+//
+#define RPC_S_PROFILE_NOT_ADDED          1925L
+
+//
+// MessageId: RPC_S_PRF_ELT_NOT_ADDED
+//
+// MessageText:
+//
+//  The specified profile element could not be added.
+//
+#define RPC_S_PRF_ELT_NOT_ADDED          1926L
+
+//
+// MessageId: RPC_S_PRF_ELT_NOT_REMOVED
+//
+// MessageText:
+//
+//  The specified profile element could not be removed.
+//
+#define RPC_S_PRF_ELT_NOT_REMOVED        1927L
+
+//
+// MessageId: RPC_S_GRP_ELT_NOT_ADDED
+//
+// MessageText:
+//
+//  The group element could not be added.
+//
+#define RPC_S_GRP_ELT_NOT_ADDED          1928L
+
+//
+// MessageId: RPC_S_GRP_ELT_NOT_REMOVED
+//
+// MessageText:
+//
+//  The group element could not be removed.
+//
+#define RPC_S_GRP_ELT_NOT_REMOVED        1929L
 
 //
 // MessageId: ERROR_NO_BROWSER_SERVERS_FOUND
@@ -6181,6 +6915,195 @@
 
 // End of OpenGL error codes
 
+
+
+///////////////////////////////////////////
+//                                       //
+//   Image Color Management Error Code   //
+//                                       //
+///////////////////////////////////////////
+
+
+//
+// MessageId: ERROR_INVALID_CMM
+//
+// MessageText:
+//
+//  The specified color management module is invalid.
+//
+#define ERROR_INVALID_CMM                2010L
+
+//
+// MessageId: ERROR_INVALID_PROFILE
+//
+// MessageText:
+//
+//  The specified color profile is invalid.
+//
+#define ERROR_INVALID_PROFILE            2011L
+
+//
+// MessageId: ERROR_TAG_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified tag was not found.
+//
+#define ERROR_TAG_NOT_FOUND              2012L
+
+//
+// MessageId: ERROR_TAG_NOT_PRESENT
+//
+// MessageText:
+//
+//  A required tag is not present.
+//
+#define ERROR_TAG_NOT_PRESENT            2013L
+
+//
+// MessageId: ERROR_DUPLICATE_TAG
+//
+// MessageText:
+//
+//  The specified tag is already present.
+//
+#define ERROR_DUPLICATE_TAG              2014L
+
+//
+// MessageId: ERROR_PROFILE_NOT_ASSOCIATED_WITH_DEVICE
+//
+// MessageText:
+//
+//  The specified color profile is not associated with any device.
+//
+#define ERROR_PROFILE_NOT_ASSOCIATED_WITH_DEVICE 2015L
+
+//
+// MessageId: ERROR_PROFILE_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified color profile was not found.
+//
+#define ERROR_PROFILE_NOT_FOUND          2016L
+
+//
+// MessageId: ERROR_INVALID_COLORSPACE
+//
+// MessageText:
+//
+//  The specified color space is invalid.
+//
+#define ERROR_INVALID_COLORSPACE         2017L
+
+//
+// MessageId: ERROR_ICM_NOT_ENABLED
+//
+// MessageText:
+//
+//  Image Color Management is not enabled.
+//
+#define ERROR_ICM_NOT_ENABLED            2018L
+
+//
+// MessageId: ERROR_DELETING_ICM_XFORM
+//
+// MessageText:
+//
+//  There was an error while deleting the color transform.
+//
+#define ERROR_DELETING_ICM_XFORM         2019L
+
+//
+// MessageId: ERROR_INVALID_TRANSFORM
+//
+// MessageText:
+//
+//  The specified color transform is invalid.
+//
+#define ERROR_INVALID_TRANSFORM          2020L
+
+//
+// MessageId: ERROR_COLORSPACE_MISMATCH
+//
+// MessageText:
+//
+//  The specified transform does not match the bitmap's color space.
+//
+#define ERROR_COLORSPACE_MISMATCH        2021L
+
+//
+// MessageId: ERROR_INVALID_COLORINDEX
+//
+// MessageText:
+//
+//  The specified named color index is not present in the profile.
+//
+#define ERROR_INVALID_COLORINDEX         2022L
+
+
+
+
+///////////////////////////
+//                       //
+// Winnet32 Status Codes //
+//                       //
+///////////////////////////
+
+
+//
+// MessageId: ERROR_CONNECTED_OTHER_PASSWORD
+//
+// MessageText:
+//
+//  The network connection was made successfully, but the user had to be prompted for a password other than the one originally specified.
+//
+#define ERROR_CONNECTED_OTHER_PASSWORD   2108L
+
+//
+// MessageId: ERROR_BAD_USERNAME
+//
+// MessageText:
+//
+//  The specified username is invalid.
+//
+#define ERROR_BAD_USERNAME               2202L
+
+//
+// MessageId: ERROR_NOT_CONNECTED
+//
+// MessageText:
+//
+//  This network connection does not exist.
+//
+#define ERROR_NOT_CONNECTED              2250L
+
+//
+// MessageId: ERROR_OPEN_FILES
+//
+// MessageText:
+//
+//  This network connection has files open or requests pending.
+//
+#define ERROR_OPEN_FILES                 2401L
+
+//
+// MessageId: ERROR_ACTIVE_CONNECTIONS
+//
+// MessageText:
+//
+//  Active connections still exist.
+//
+#define ERROR_ACTIVE_CONNECTIONS         2402L
+
+//
+// MessageId: ERROR_DEVICE_IN_USE
+//
+// MessageText:
+//
+//  The device is in use by an active process and cannot be disconnected.
+//
+#define ERROR_DEVICE_IN_USE              2404L
 
 
 ////////////////////////////////////
@@ -6283,7 +7206,7 @@
 //
 // MessageText:
 //
-//  The requested operation is successful.  Changes will not be effective until the system is rebooted.
+//  The requested operation is successful. Changes will not be effective until the system is rebooted.
 //
 #define ERROR_SUCCESS_REBOOT_REQUIRED    3010L
 
@@ -6292,9 +7215,18 @@
 //
 // MessageText:
 //
-//  The requested operation is successful.  Changes will not be effective until the service is restarted.
+//  The requested operation is successful. Changes will not be effective until the service is restarted.
 //
 #define ERROR_SUCCESS_RESTART_REQUIRED   3011L
+
+//
+// MessageId: ERROR_PRINTER_NOT_FOUND
+//
+// MessageText:
+//
+//  No printers were found.
+//
+#define ERROR_PRINTER_NOT_FOUND          3012L
 
 ////////////////////////////////////
 //                                //
@@ -6333,7 +7265,7 @@
 //
 // MessageText:
 //
-//  The backup Failed.  Was a full backup done before ?
+//  The backup failed. Was a full backup done before?
 //
 #define ERROR_INC_BACKUP                 4003L
 
@@ -6342,7 +7274,7 @@
 //
 // MessageText:
 //
-//  The backup Failed.  Check the directory that you are backing the database to.
+//  The backup failed. Check the directory to which you are backing the database.
 //
 #define ERROR_FULL_BACKUP                4004L
 
@@ -6360,20 +7292,6654 @@
 //
 // MessageText:
 //
-//  Replication with a non-configured partner is not allowed.
+//  Replication with a nonconfigured partner is not allowed.
 //
 #define ERROR_RPL_NOT_ALLOWED            4006L
 
 ////////////////////////////////////
 //                                //
-//     OLE Error Codes            //
+//     DHCP Error Codes           //
+//                                //
+////////////////////////////////////
+//
+// MessageId: ERROR_DHCP_ADDRESS_CONFLICT
+//
+// MessageText:
+//
+//  The DHCP client has obtained an IP address that is already in use on the network. The local interface will be disabled until the DHCP client can obtain a new address.
+//
+#define ERROR_DHCP_ADDRESS_CONFLICT      4100L
+
+////////////////////////////////////
+//                                //
+//     WMI Error Codes            //
+//                                //
+////////////////////////////////////
+//
+// MessageId: ERROR_WMI_GUID_NOT_FOUND
+//
+// MessageText:
+//
+//  The GUID passed was not recognized as valid by a WMI data provider.
+//
+#define ERROR_WMI_GUID_NOT_FOUND         4200L
+
+//
+// MessageId: ERROR_WMI_INSTANCE_NOT_FOUND
+//
+// MessageText:
+//
+//  The instance name passed was not recognized as valid by a WMI data provider.
+//
+#define ERROR_WMI_INSTANCE_NOT_FOUND     4201L
+
+//
+// MessageId: ERROR_WMI_ITEMID_NOT_FOUND
+//
+// MessageText:
+//
+//  The data item ID passed was not recognized as valid by a WMI data provider.
+//
+#define ERROR_WMI_ITEMID_NOT_FOUND       4202L
+
+//
+// MessageId: ERROR_WMI_TRY_AGAIN
+//
+// MessageText:
+//
+//  The WMI request could not be completed and should be retried.
+//
+#define ERROR_WMI_TRY_AGAIN              4203L
+
+//
+// MessageId: ERROR_WMI_DP_NOT_FOUND
+//
+// MessageText:
+//
+//  The WMI data provider could not be located.
+//
+#define ERROR_WMI_DP_NOT_FOUND           4204L
+
+//
+// MessageId: ERROR_WMI_UNRESOLVED_INSTANCE_REF
+//
+// MessageText:
+//
+//  The WMI data provider references an instance set that has not been registered.
+//
+#define ERROR_WMI_UNRESOLVED_INSTANCE_REF 4205L
+
+//
+// MessageId: ERROR_WMI_ALREADY_ENABLED
+//
+// MessageText:
+//
+//  The WMI data block or event notification has already been enabled.
+//
+#define ERROR_WMI_ALREADY_ENABLED        4206L
+
+//
+// MessageId: ERROR_WMI_GUID_DISCONNECTED
+//
+// MessageText:
+//
+//  The WMI data block is no longer available.
+//
+#define ERROR_WMI_GUID_DISCONNECTED      4207L
+
+//
+// MessageId: ERROR_WMI_SERVER_UNAVAILABLE
+//
+// MessageText:
+//
+//  The WMI data service is not available.
+//
+#define ERROR_WMI_SERVER_UNAVAILABLE     4208L
+
+//
+// MessageId: ERROR_WMI_DP_FAILED
+//
+// MessageText:
+//
+//  The WMI data provider failed to carry out the request.
+//
+#define ERROR_WMI_DP_FAILED              4209L
+
+//
+// MessageId: ERROR_WMI_INVALID_MOF
+//
+// MessageText:
+//
+//  The WMI MOF information is not valid.
+//
+#define ERROR_WMI_INVALID_MOF            4210L
+
+//
+// MessageId: ERROR_WMI_INVALID_REGINFO
+//
+// MessageText:
+//
+//  The WMI registration information is not valid.
+//
+#define ERROR_WMI_INVALID_REGINFO        4211L
+
+//
+// MessageId: ERROR_WMI_ALREADY_DISABLED
+//
+// MessageText:
+//
+//  The WMI data block or event notification has already been disabled.
+//
+#define ERROR_WMI_ALREADY_DISABLED       4212L
+
+//
+// MessageId: ERROR_WMI_READ_ONLY
+//
+// MessageText:
+//
+//  The WMI data item or data block is read only.
+//
+#define ERROR_WMI_READ_ONLY              4213L
+
+//
+// MessageId: ERROR_WMI_SET_FAILURE
+//
+// MessageText:
+//
+//  The WMI data item or data block could not be changed.
+//
+#define ERROR_WMI_SET_FAILURE            4214L
+
+//////////////////////////////////////////
+//                                      //
+// NT Media Services (RSM) Error Codes  //
+//                                      //
+//////////////////////////////////////////
+//
+// MessageId: ERROR_INVALID_MEDIA
+//
+// MessageText:
+//
+//  The media identifier does not represent a valid medium.
+//
+#define ERROR_INVALID_MEDIA              4300L
+
+//
+// MessageId: ERROR_INVALID_LIBRARY
+//
+// MessageText:
+//
+//  The library identifier does not represent a valid library.
+//
+#define ERROR_INVALID_LIBRARY            4301L
+
+//
+// MessageId: ERROR_INVALID_MEDIA_POOL
+//
+// MessageText:
+//
+//  The media pool identifier does not represent a valid media pool.
+//
+#define ERROR_INVALID_MEDIA_POOL         4302L
+
+//
+// MessageId: ERROR_DRIVE_MEDIA_MISMATCH
+//
+// MessageText:
+//
+//  The drive and medium are not compatible or exist in different libraries.
+//
+#define ERROR_DRIVE_MEDIA_MISMATCH       4303L
+
+//
+// MessageId: ERROR_MEDIA_OFFLINE
+//
+// MessageText:
+//
+//  The medium currently exists in an offline library and must be online to perform this operation.
+//
+#define ERROR_MEDIA_OFFLINE              4304L
+
+//
+// MessageId: ERROR_LIBRARY_OFFLINE
+//
+// MessageText:
+//
+//  The operation cannot be performed on an offline library.
+//
+#define ERROR_LIBRARY_OFFLINE            4305L
+
+//
+// MessageId: ERROR_EMPTY
+//
+// MessageText:
+//
+//  The library, drive, or media pool is empty.
+//
+#define ERROR_EMPTY                      4306L
+
+//
+// MessageId: ERROR_NOT_EMPTY
+//
+// MessageText:
+//
+//  The library, drive, or media pool must be empty to perform this operation.
+//
+#define ERROR_NOT_EMPTY                  4307L
+
+//
+// MessageId: ERROR_MEDIA_UNAVAILABLE
+//
+// MessageText:
+//
+//  No media is currently available in this media pool or library.
+//
+#define ERROR_MEDIA_UNAVAILABLE          4308L
+
+//
+// MessageId: ERROR_RESOURCE_DISABLED
+//
+// MessageText:
+//
+//  A resource required for this operation is disabled.
+//
+#define ERROR_RESOURCE_DISABLED          4309L
+
+//
+// MessageId: ERROR_INVALID_CLEANER
+//
+// MessageText:
+//
+//  The media identifier does not represent a valid cleaner.
+//
+#define ERROR_INVALID_CLEANER            4310L
+
+//
+// MessageId: ERROR_UNABLE_TO_CLEAN
+//
+// MessageText:
+//
+//  The drive cannot be cleaned or does not support cleaning.
+//
+#define ERROR_UNABLE_TO_CLEAN            4311L
+
+//
+// MessageId: ERROR_OBJECT_NOT_FOUND
+//
+// MessageText:
+//
+//  The object identifier does not represent a valid object.
+//
+#define ERROR_OBJECT_NOT_FOUND           4312L
+
+//
+// MessageId: ERROR_DATABASE_FAILURE
+//
+// MessageText:
+//
+//  Unable to read from or write to the database.
+//
+#define ERROR_DATABASE_FAILURE           4313L
+
+//
+// MessageId: ERROR_DATABASE_FULL
+//
+// MessageText:
+//
+//  The database is full.
+//
+#define ERROR_DATABASE_FULL              4314L
+
+//
+// MessageId: ERROR_MEDIA_INCOMPATIBLE
+//
+// MessageText:
+//
+//  The medium is not compatible with the device or media pool.
+//
+#define ERROR_MEDIA_INCOMPATIBLE         4315L
+
+//
+// MessageId: ERROR_RESOURCE_NOT_PRESENT
+//
+// MessageText:
+//
+//  The resource required for this operation does not exist.
+//
+#define ERROR_RESOURCE_NOT_PRESENT       4316L
+
+//
+// MessageId: ERROR_INVALID_OPERATION
+//
+// MessageText:
+//
+//  The operation identifier is not valid.
+//
+#define ERROR_INVALID_OPERATION          4317L
+
+//
+// MessageId: ERROR_MEDIA_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  The media is not mounted or ready for use.
+//
+#define ERROR_MEDIA_NOT_AVAILABLE        4318L
+
+//
+// MessageId: ERROR_DEVICE_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  The device is not ready for use.
+//
+#define ERROR_DEVICE_NOT_AVAILABLE       4319L
+
+//
+// MessageId: ERROR_REQUEST_REFUSED
+//
+// MessageText:
+//
+//  The operator or administrator has refused the request.
+//
+#define ERROR_REQUEST_REFUSED            4320L
+
+//
+// MessageId: ERROR_INVALID_DRIVE_OBJECT
+//
+// MessageText:
+//
+//  The drive identifier does not represent a valid drive.
+//
+#define ERROR_INVALID_DRIVE_OBJECT       4321L
+
+//
+// MessageId: ERROR_LIBRARY_FULL
+//
+// MessageText:
+//
+//  Library is full.  No slot is available for use.
+//
+#define ERROR_LIBRARY_FULL               4322L
+
+//
+// MessageId: ERROR_MEDIUM_NOT_ACCESSIBLE
+//
+// MessageText:
+//
+//  The transport cannot access the medium.
+//
+#define ERROR_MEDIUM_NOT_ACCESSIBLE      4323L
+
+//
+// MessageId: ERROR_UNABLE_TO_LOAD_MEDIUM
+//
+// MessageText:
+//
+//  Unable to load the medium into the drive.
+//
+#define ERROR_UNABLE_TO_LOAD_MEDIUM      4324L
+
+//
+// MessageId: ERROR_UNABLE_TO_INVENTORY_DRIVE
+//
+// MessageText:
+//
+//  Unable to retrieve the drive status.
+//
+#define ERROR_UNABLE_TO_INVENTORY_DRIVE  4325L
+
+//
+// MessageId: ERROR_UNABLE_TO_INVENTORY_SLOT
+//
+// MessageText:
+//
+//  Unable to retrieve the slot status.
+//
+#define ERROR_UNABLE_TO_INVENTORY_SLOT   4326L
+
+//
+// MessageId: ERROR_UNABLE_TO_INVENTORY_TRANSPORT
+//
+// MessageText:
+//
+//  Unable to retrieve status about the transport.
+//
+#define ERROR_UNABLE_TO_INVENTORY_TRANSPORT 4327L
+
+//
+// MessageId: ERROR_TRANSPORT_FULL
+//
+// MessageText:
+//
+//  Cannot use the transport because it is already in use.
+//
+#define ERROR_TRANSPORT_FULL             4328L
+
+//
+// MessageId: ERROR_CONTROLLING_IEPORT
+//
+// MessageText:
+//
+//  Unable to open or close the inject/eject port.
+//
+#define ERROR_CONTROLLING_IEPORT         4329L
+
+//
+// MessageId: ERROR_UNABLE_TO_EJECT_MOUNTED_MEDIA
+//
+// MessageText:
+//
+//  Unable to eject the medium because it is in a drive.
+//
+#define ERROR_UNABLE_TO_EJECT_MOUNTED_MEDIA 4330L
+
+//
+// MessageId: ERROR_CLEANER_SLOT_SET
+//
+// MessageText:
+//
+//  A cleaner slot is already reserved.
+//
+#define ERROR_CLEANER_SLOT_SET           4331L
+
+//
+// MessageId: ERROR_CLEANER_SLOT_NOT_SET
+//
+// MessageText:
+//
+//  A cleaner slot is not reserved.
+//
+#define ERROR_CLEANER_SLOT_NOT_SET       4332L
+
+//
+// MessageId: ERROR_CLEANER_CARTRIDGE_SPENT
+//
+// MessageText:
+//
+//  The cleaner cartridge has performed the maximum number of drive cleanings.
+//
+#define ERROR_CLEANER_CARTRIDGE_SPENT    4333L
+
+//
+// MessageId: ERROR_UNEXPECTED_OMID
+//
+// MessageText:
+//
+//  Unexpected on-medium identifier.
+//
+#define ERROR_UNEXPECTED_OMID            4334L
+
+//
+// MessageId: ERROR_CANT_DELETE_LAST_ITEM
+//
+// MessageText:
+//
+//  The last remaining item in this group or resource cannot be deleted.
+//
+#define ERROR_CANT_DELETE_LAST_ITEM      4335L
+
+//
+// MessageId: ERROR_MESSAGE_EXCEEDS_MAX_SIZE
+//
+// MessageText:
+//
+//  The message provided exceeds the maximum size allowed for this parameter.
+//
+#define ERROR_MESSAGE_EXCEEDS_MAX_SIZE   4336L
+
+//
+// MessageId: ERROR_VOLUME_CONTAINS_SYS_FILES
+//
+// MessageText:
+//
+//  The volume contains system or paging files.
+//
+#define ERROR_VOLUME_CONTAINS_SYS_FILES  4337L
+
+//
+// MessageId: ERROR_INDIGENOUS_TYPE
+//
+// MessageText:
+//
+//  The media type cannot be removed from this library since at least one drive in the library reports it can support this media type.
+//
+#define ERROR_INDIGENOUS_TYPE            4338L
+
+//
+// MessageId: ERROR_NO_SUPPORTING_DRIVES
+//
+// MessageText:
+//
+//  This offline media cannot be mounted on this system since no enabled drives are present which can be used.
+//
+#define ERROR_NO_SUPPORTING_DRIVES       4339L
+
+////////////////////////////////////////////
+//                                        //
+// NT Remote Storage Service Error Codes  //
+//                                        //
+////////////////////////////////////////////
+//
+// MessageId: ERROR_FILE_OFFLINE
+//
+// MessageText:
+//
+//  The remote storage service was not able to recall the file.
+//
+#define ERROR_FILE_OFFLINE               4350L
+
+//
+// MessageId: ERROR_REMOTE_STORAGE_NOT_ACTIVE
+//
+// MessageText:
+//
+//  The remote storage service is not operational at this time.
+//
+#define ERROR_REMOTE_STORAGE_NOT_ACTIVE  4351L
+
+//
+// MessageId: ERROR_REMOTE_STORAGE_MEDIA_ERROR
+//
+// MessageText:
+//
+//  The remote storage service encountered a media error.
+//
+#define ERROR_REMOTE_STORAGE_MEDIA_ERROR 4352L
+
+////////////////////////////////////////////
+//                                        //
+// NT Reparse Points Error Codes          //
+//                                        //
+////////////////////////////////////////////
+//
+// MessageId: ERROR_NOT_A_REPARSE_POINT
+//
+// MessageText:
+//
+//  The file or directory is not a reparse point.
+//
+#define ERROR_NOT_A_REPARSE_POINT        4390L
+
+//
+// MessageId: ERROR_REPARSE_ATTRIBUTE_CONFLICT
+//
+// MessageText:
+//
+//  The reparse point attribute cannot be set because it conflicts with an existing attribute.
+//
+#define ERROR_REPARSE_ATTRIBUTE_CONFLICT 4391L
+
+//
+// MessageId: ERROR_INVALID_REPARSE_DATA
+//
+// MessageText:
+//
+//  The data present in the reparse point buffer is invalid.
+//
+#define ERROR_INVALID_REPARSE_DATA       4392L
+
+//
+// MessageId: ERROR_REPARSE_TAG_INVALID
+//
+// MessageText:
+//
+//  The tag present in the reparse point buffer is invalid.
+//
+#define ERROR_REPARSE_TAG_INVALID        4393L
+
+//
+// MessageId: ERROR_REPARSE_TAG_MISMATCH
+//
+// MessageText:
+//
+//  There is a mismatch between the tag specified in the request and the tag present in the reparse point.
+//  
+//
+#define ERROR_REPARSE_TAG_MISMATCH       4394L
+
+////////////////////////////////////////////
+//                                        //
+// NT Single Instance Store Error Codes   //
+//                                        //
+////////////////////////////////////////////
+//
+// MessageId: ERROR_VOLUME_NOT_SIS_ENABLED
+//
+// MessageText:
+//
+//  Single Instance Storage is not available on this volume.
+//
+#define ERROR_VOLUME_NOT_SIS_ENABLED     4500L
+
+////////////////////////////////////
+//                                //
+//     Cluster Error Codes        //
+//                                //
+////////////////////////////////////
+//
+// MessageId: ERROR_DEPENDENT_RESOURCE_EXISTS
+//
+// MessageText:
+//
+//  The cluster resource cannot be moved to another group because other resources are dependent on it.
+//
+#define ERROR_DEPENDENT_RESOURCE_EXISTS  5001L
+
+//
+// MessageId: ERROR_DEPENDENCY_NOT_FOUND
+//
+// MessageText:
+//
+//  The cluster resource dependency cannot be found.
+//
+#define ERROR_DEPENDENCY_NOT_FOUND       5002L
+
+//
+// MessageId: ERROR_DEPENDENCY_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  The cluster resource cannot be made dependent on the specified resource because it is already dependent.
+//
+#define ERROR_DEPENDENCY_ALREADY_EXISTS  5003L
+
+//
+// MessageId: ERROR_RESOURCE_NOT_ONLINE
+//
+// MessageText:
+//
+//  The cluster resource is not online.
+//
+#define ERROR_RESOURCE_NOT_ONLINE        5004L
+
+//
+// MessageId: ERROR_HOST_NODE_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  A cluster node is not available for this operation.
+//
+#define ERROR_HOST_NODE_NOT_AVAILABLE    5005L
+
+//
+// MessageId: ERROR_RESOURCE_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  The cluster resource is not available.
+//
+#define ERROR_RESOURCE_NOT_AVAILABLE     5006L
+
+//
+// MessageId: ERROR_RESOURCE_NOT_FOUND
+//
+// MessageText:
+//
+//  The cluster resource could not be found.
+//
+#define ERROR_RESOURCE_NOT_FOUND         5007L
+
+//
+// MessageId: ERROR_SHUTDOWN_CLUSTER
+//
+// MessageText:
+//
+//  The cluster is being shut down.
+//
+#define ERROR_SHUTDOWN_CLUSTER           5008L
+
+//
+// MessageId: ERROR_CANT_EVICT_ACTIVE_NODE
+//
+// MessageText:
+//
+//  A cluster node cannot be evicted from the cluster while it is online.
+//
+#define ERROR_CANT_EVICT_ACTIVE_NODE     5009L
+
+//
+// MessageId: ERROR_OBJECT_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  The object already exists.
+//
+#define ERROR_OBJECT_ALREADY_EXISTS      5010L
+
+//
+// MessageId: ERROR_OBJECT_IN_LIST
+//
+// MessageText:
+//
+//  The object is already in the list.
+//
+#define ERROR_OBJECT_IN_LIST             5011L
+
+//
+// MessageId: ERROR_GROUP_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  The cluster group is not available for any new requests.
+//
+#define ERROR_GROUP_NOT_AVAILABLE        5012L
+
+//
+// MessageId: ERROR_GROUP_NOT_FOUND
+//
+// MessageText:
+//
+//  The cluster group could not be found.
+//
+#define ERROR_GROUP_NOT_FOUND            5013L
+
+//
+// MessageId: ERROR_GROUP_NOT_ONLINE
+//
+// MessageText:
+//
+//  The operation could not be completed because the cluster group is not online.
+//
+#define ERROR_GROUP_NOT_ONLINE           5014L
+
+//
+// MessageId: ERROR_HOST_NODE_NOT_RESOURCE_OWNER
+//
+// MessageText:
+//
+//  The cluster node is not the owner of the resource.
+//
+#define ERROR_HOST_NODE_NOT_RESOURCE_OWNER 5015L
+
+//
+// MessageId: ERROR_HOST_NODE_NOT_GROUP_OWNER
+//
+// MessageText:
+//
+//  The cluster node is not the owner of the group.
+//
+#define ERROR_HOST_NODE_NOT_GROUP_OWNER  5016L
+
+//
+// MessageId: ERROR_RESMON_CREATE_FAILED
+//
+// MessageText:
+//
+//  The cluster resource could not be created in the specified resource monitor.
+//
+#define ERROR_RESMON_CREATE_FAILED       5017L
+
+//
+// MessageId: ERROR_RESMON_ONLINE_FAILED
+//
+// MessageText:
+//
+//  The cluster resource could not be brought online by the resource monitor.
+//
+#define ERROR_RESMON_ONLINE_FAILED       5018L
+
+//
+// MessageId: ERROR_RESOURCE_ONLINE
+//
+// MessageText:
+//
+//  The operation could not be completed because the cluster resource is online.
+//
+#define ERROR_RESOURCE_ONLINE            5019L
+
+//
+// MessageId: ERROR_QUORUM_RESOURCE
+//
+// MessageText:
+//
+//  The cluster resource could not be deleted or brought offline because it is the quorum resource.
+//
+#define ERROR_QUORUM_RESOURCE            5020L
+
+//
+// MessageId: ERROR_NOT_QUORUM_CAPABLE
+//
+// MessageText:
+//
+//  The cluster could not make the specified resource a quorum resource because it is not capable of being a quorum resource.
+//
+#define ERROR_NOT_QUORUM_CAPABLE         5021L
+
+//
+// MessageId: ERROR_CLUSTER_SHUTTING_DOWN
+//
+// MessageText:
+//
+//  The cluster software is shutting down.
+//
+#define ERROR_CLUSTER_SHUTTING_DOWN      5022L
+
+//
+// MessageId: ERROR_INVALID_STATE
+//
+// MessageText:
+//
+//  The group or resource is not in the correct state to perform the requested operation.
+//
+#define ERROR_INVALID_STATE              5023L
+
+//
+// MessageId: ERROR_RESOURCE_PROPERTIES_STORED
+//
+// MessageText:
+//
+//  The properties were stored but not all changes will take effect until the next time the resource is brought online.
+//
+#define ERROR_RESOURCE_PROPERTIES_STORED 5024L
+
+//
+// MessageId: ERROR_NOT_QUORUM_CLASS
+//
+// MessageText:
+//
+//  The cluster could not make the specified resource a quorum resource because it does not belong to a shared storage class.
+//
+#define ERROR_NOT_QUORUM_CLASS           5025L
+
+//
+// MessageId: ERROR_CORE_RESOURCE
+//
+// MessageText:
+//
+//  The cluster resource could not be deleted since it is a core resource.
+//
+#define ERROR_CORE_RESOURCE              5026L
+
+//
+// MessageId: ERROR_QUORUM_RESOURCE_ONLINE_FAILED
+//
+// MessageText:
+//
+//  The quorum resource failed to come online.
+//
+#define ERROR_QUORUM_RESOURCE_ONLINE_FAILED 5027L
+
+//
+// MessageId: ERROR_QUORUMLOG_OPEN_FAILED
+//
+// MessageText:
+//
+//  The quorum log could not be created or mounted successfully.
+//
+#define ERROR_QUORUMLOG_OPEN_FAILED      5028L
+
+//
+// MessageId: ERROR_CLUSTERLOG_CORRUPT
+//
+// MessageText:
+//
+//  The cluster log is corrupt.
+//
+#define ERROR_CLUSTERLOG_CORRUPT         5029L
+
+//
+// MessageId: ERROR_CLUSTERLOG_RECORD_EXCEEDS_MAXSIZE
+//
+// MessageText:
+//
+//  The record could not be written to the cluster log since it exceeds the maximum size.
+//
+#define ERROR_CLUSTERLOG_RECORD_EXCEEDS_MAXSIZE 5030L
+
+//
+// MessageId: ERROR_CLUSTERLOG_EXCEEDS_MAXSIZE
+//
+// MessageText:
+//
+//  The cluster log exceeds its maximum size.
+//
+#define ERROR_CLUSTERLOG_EXCEEDS_MAXSIZE 5031L
+
+//
+// MessageId: ERROR_CLUSTERLOG_CHKPOINT_NOT_FOUND
+//
+// MessageText:
+//
+//  No checkpoint record was found in the cluster log.
+//
+#define ERROR_CLUSTERLOG_CHKPOINT_NOT_FOUND 5032L
+
+//
+// MessageId: ERROR_CLUSTERLOG_NOT_ENOUGH_SPACE
+//
+// MessageText:
+//
+//  The minimum required disk space needed for logging is not available.
+//
+#define ERROR_CLUSTERLOG_NOT_ENOUGH_SPACE 5033L
+
+//
+// MessageId: ERROR_QUORUM_OWNER_ALIVE
+//
+// MessageText:
+//
+//  The cluster node failed to take control of the quorum resource because the resource is owned by another active node.
+//
+#define ERROR_QUORUM_OWNER_ALIVE         5034L
+
+//
+// MessageId: ERROR_NETWORK_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  A cluster network is not available for this operation.
+//
+#define ERROR_NETWORK_NOT_AVAILABLE      5035L
+
+//
+// MessageId: ERROR_NODE_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  A cluster node is not available for this operation.
+//
+#define ERROR_NODE_NOT_AVAILABLE         5036L
+
+//
+// MessageId: ERROR_ALL_NODES_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  All cluster nodes must be running to perform this operation.
+//
+#define ERROR_ALL_NODES_NOT_AVAILABLE    5037L
+
+//
+// MessageId: ERROR_RESOURCE_FAILED
+//
+// MessageText:
+//
+//  A cluster resource failed.
+//
+#define ERROR_RESOURCE_FAILED            5038L
+
+//
+// MessageId: ERROR_CLUSTER_INVALID_NODE
+//
+// MessageText:
+//
+//  The cluster node is not valid.
+//
+#define ERROR_CLUSTER_INVALID_NODE       5039L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_EXISTS
+//
+// MessageText:
+//
+//  The cluster node already exists.
+//
+#define ERROR_CLUSTER_NODE_EXISTS        5040L
+
+//
+// MessageId: ERROR_CLUSTER_JOIN_IN_PROGRESS
+//
+// MessageText:
+//
+//  A node is in the process of joining the cluster.
+//
+#define ERROR_CLUSTER_JOIN_IN_PROGRESS   5041L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_NOT_FOUND
+//
+// MessageText:
+//
+//  The cluster node was not found.
+//
+#define ERROR_CLUSTER_NODE_NOT_FOUND     5042L
+
+//
+// MessageId: ERROR_CLUSTER_LOCAL_NODE_NOT_FOUND
+//
+// MessageText:
+//
+//  The cluster local node information was not found.
+//
+#define ERROR_CLUSTER_LOCAL_NODE_NOT_FOUND 5043L
+
+//
+// MessageId: ERROR_CLUSTER_NETWORK_EXISTS
+//
+// MessageText:
+//
+//  The cluster network already exists.
+//
+#define ERROR_CLUSTER_NETWORK_EXISTS     5044L
+
+//
+// MessageId: ERROR_CLUSTER_NETWORK_NOT_FOUND
+//
+// MessageText:
+//
+//  The cluster network was not found.
+//
+#define ERROR_CLUSTER_NETWORK_NOT_FOUND  5045L
+
+//
+// MessageId: ERROR_CLUSTER_NETINTERFACE_EXISTS
+//
+// MessageText:
+//
+//  The cluster network interface already exists.
+//
+#define ERROR_CLUSTER_NETINTERFACE_EXISTS 5046L
+
+//
+// MessageId: ERROR_CLUSTER_NETINTERFACE_NOT_FOUND
+//
+// MessageText:
+//
+//  The cluster network interface was not found.
+//
+#define ERROR_CLUSTER_NETINTERFACE_NOT_FOUND 5047L
+
+//
+// MessageId: ERROR_CLUSTER_INVALID_REQUEST
+//
+// MessageText:
+//
+//  The cluster request is not valid for this object.
+//
+#define ERROR_CLUSTER_INVALID_REQUEST    5048L
+
+//
+// MessageId: ERROR_CLUSTER_INVALID_NETWORK_PROVIDER
+//
+// MessageText:
+//
+//  The cluster network provider is not valid.
+//
+#define ERROR_CLUSTER_INVALID_NETWORK_PROVIDER 5049L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_DOWN
+//
+// MessageText:
+//
+//  The cluster node is down.
+//
+#define ERROR_CLUSTER_NODE_DOWN          5050L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_UNREACHABLE
+//
+// MessageText:
+//
+//  The cluster node is not reachable.
+//
+#define ERROR_CLUSTER_NODE_UNREACHABLE   5051L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_NOT_MEMBER
+//
+// MessageText:
+//
+//  The cluster node is not a member of the cluster.
+//
+#define ERROR_CLUSTER_NODE_NOT_MEMBER    5052L
+
+//
+// MessageId: ERROR_CLUSTER_JOIN_NOT_IN_PROGRESS
+//
+// MessageText:
+//
+//  A cluster join operation is not in progress.
+//
+#define ERROR_CLUSTER_JOIN_NOT_IN_PROGRESS 5053L
+
+//
+// MessageId: ERROR_CLUSTER_INVALID_NETWORK
+//
+// MessageText:
+//
+//  The cluster network is not valid.
+//
+#define ERROR_CLUSTER_INVALID_NETWORK    5054L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_UP
+//
+// MessageText:
+//
+//  The cluster node is up.
+//
+#define ERROR_CLUSTER_NODE_UP            5056L
+
+//
+// MessageId: ERROR_CLUSTER_IPADDR_IN_USE
+//
+// MessageText:
+//
+//  The cluster IP address is already in use.
+//
+#define ERROR_CLUSTER_IPADDR_IN_USE      5057L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_NOT_PAUSED
+//
+// MessageText:
+//
+//  The cluster node is not paused.
+//
+#define ERROR_CLUSTER_NODE_NOT_PAUSED    5058L
+
+//
+// MessageId: ERROR_CLUSTER_NO_SECURITY_CONTEXT
+//
+// MessageText:
+//
+//  No cluster security context is available.
+//
+#define ERROR_CLUSTER_NO_SECURITY_CONTEXT 5059L
+
+//
+// MessageId: ERROR_CLUSTER_NETWORK_NOT_INTERNAL
+//
+// MessageText:
+//
+//  The cluster network is not configured for internal cluster communication.
+//
+#define ERROR_CLUSTER_NETWORK_NOT_INTERNAL 5060L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_ALREADY_UP
+//
+// MessageText:
+//
+//  The cluster node is already up.
+//
+#define ERROR_CLUSTER_NODE_ALREADY_UP    5061L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_ALREADY_DOWN
+//
+// MessageText:
+//
+//  The cluster node is already down.
+//
+#define ERROR_CLUSTER_NODE_ALREADY_DOWN  5062L
+
+//
+// MessageId: ERROR_CLUSTER_NETWORK_ALREADY_ONLINE
+//
+// MessageText:
+//
+//  The cluster network is already online.
+//
+#define ERROR_CLUSTER_NETWORK_ALREADY_ONLINE 5063L
+
+//
+// MessageId: ERROR_CLUSTER_NETWORK_ALREADY_OFFLINE
+//
+// MessageText:
+//
+//  The cluster network is already offline.
+//
+#define ERROR_CLUSTER_NETWORK_ALREADY_OFFLINE 5064L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_ALREADY_MEMBER
+//
+// MessageText:
+//
+//  The cluster node is already a member of the cluster.
+//
+#define ERROR_CLUSTER_NODE_ALREADY_MEMBER 5065L
+
+//
+// MessageId: ERROR_CLUSTER_LAST_INTERNAL_NETWORK
+//
+// MessageText:
+//
+//  The cluster network is the only one configured for internal cluster communication between two or more active cluster nodes. The internal communication capability cannot be removed from the network.
+//
+#define ERROR_CLUSTER_LAST_INTERNAL_NETWORK 5066L
+
+//
+// MessageId: ERROR_CLUSTER_NETWORK_HAS_DEPENDENTS
+//
+// MessageText:
+//
+//  One or more cluster resources depend on the network to provide service to clients. The client access capability cannot be removed from the network.
+//
+#define ERROR_CLUSTER_NETWORK_HAS_DEPENDENTS 5067L
+
+//
+// MessageId: ERROR_INVALID_OPERATION_ON_QUORUM
+//
+// MessageText:
+//
+//  This operation cannot be performed on the cluster resource as it the quorum resource. You may not bring the quorum resource offline or modify its possible owners list.
+//
+#define ERROR_INVALID_OPERATION_ON_QUORUM 5068L
+
+//
+// MessageId: ERROR_DEPENDENCY_NOT_ALLOWED
+//
+// MessageText:
+//
+//  The cluster quorum resource is not allowed to have any dependencies.
+//
+#define ERROR_DEPENDENCY_NOT_ALLOWED     5069L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_PAUSED
+//
+// MessageText:
+//
+//  The cluster node is paused.
+//
+#define ERROR_CLUSTER_NODE_PAUSED        5070L
+
+//
+// MessageId: ERROR_NODE_CANT_HOST_RESOURCE
+//
+// MessageText:
+//
+//  The cluster resource cannot be brought online. The owner node cannot run this resource.
+//
+#define ERROR_NODE_CANT_HOST_RESOURCE    5071L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_NOT_READY
+//
+// MessageText:
+//
+//  The cluster node is not ready to perform the requested operation.
+//
+#define ERROR_CLUSTER_NODE_NOT_READY     5072L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_SHUTTING_DOWN
+//
+// MessageText:
+//
+//  The cluster node is shutting down.
+//
+#define ERROR_CLUSTER_NODE_SHUTTING_DOWN 5073L
+
+//
+// MessageId: ERROR_CLUSTER_JOIN_ABORTED
+//
+// MessageText:
+//
+//  The cluster join operation was aborted.
+//
+#define ERROR_CLUSTER_JOIN_ABORTED       5074L
+
+//
+// MessageId: ERROR_CLUSTER_INCOMPATIBLE_VERSIONS
+//
+// MessageText:
+//
+//  The cluster join operation failed due to incompatible software versions between the joining node and its sponsor.
+//
+#define ERROR_CLUSTER_INCOMPATIBLE_VERSIONS 5075L
+
+//
+// MessageId: ERROR_CLUSTER_MAXNUM_OF_RESOURCES_EXCEEDED
+//
+// MessageText:
+//
+//  This resource cannot be created because the cluster has reached the limit on the number of resources it can monitor.
+//
+#define ERROR_CLUSTER_MAXNUM_OF_RESOURCES_EXCEEDED 5076L
+
+//
+// MessageId: ERROR_CLUSTER_SYSTEM_CONFIG_CHANGED
+//
+// MessageText:
+//
+//  The system configuration changed during the cluster join or form operation. The join or form operation was aborted.
+//
+#define ERROR_CLUSTER_SYSTEM_CONFIG_CHANGED 5077L
+
+//
+// MessageId: ERROR_CLUSTER_RESOURCE_TYPE_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified resource type was not found.
+//
+#define ERROR_CLUSTER_RESOURCE_TYPE_NOT_FOUND 5078L
+
+//
+// MessageId: ERROR_CLUSTER_RESTYPE_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The specified node does not support a resource of this type.  This may be due to version inconsistencies or due to the absence of the resource DLL on this node.
+//
+#define ERROR_CLUSTER_RESTYPE_NOT_SUPPORTED 5079L
+
+//
+// MessageId: ERROR_CLUSTER_RESNAME_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified resource name is not supported by this resource DLL. This may be due to a bad (or changed) name supplied to the resource DLL.
+//
+#define ERROR_CLUSTER_RESNAME_NOT_FOUND  5080L
+
+//
+// MessageId: ERROR_CLUSTER_NO_RPC_PACKAGES_REGISTERED
+//
+// MessageText:
+//
+//  No authentication package could be registered with the RPC server.
+//
+#define ERROR_CLUSTER_NO_RPC_PACKAGES_REGISTERED 5081L
+
+//
+// MessageId: ERROR_CLUSTER_OWNER_NOT_IN_PREFLIST
+//
+// MessageText:
+//
+//  You cannot bring the group online because the owner of the group is not in the preferred list for the group. To change the owner node for the group, move the group.
+//
+#define ERROR_CLUSTER_OWNER_NOT_IN_PREFLIST 5082L
+
+//
+// MessageId: ERROR_CLUSTER_DATABASE_SEQMISMATCH
+//
+// MessageText:
+//
+//  The join operation failed because the cluster database sequence number has changed or is incompatible with the locker node. This may happen during a join operation if the cluster database was changing during the join.
+//
+#define ERROR_CLUSTER_DATABASE_SEQMISMATCH 5083L
+
+//
+// MessageId: ERROR_RESMON_INVALID_STATE
+//
+// MessageText:
+//
+//  The resource monitor will not allow the fail operation to be performed while the resource is in its current state. This may happen if the resource is in a pending state.
+//
+#define ERROR_RESMON_INVALID_STATE       5084L
+
+//
+// MessageId: ERROR_CLUSTER_GUM_NOT_LOCKER
+//
+// MessageText:
+//
+//  A non locker code got a request to reserve the lock for making global updates.
+//
+#define ERROR_CLUSTER_GUM_NOT_LOCKER     5085L
+
+//
+// MessageId: ERROR_QUORUM_DISK_NOT_FOUND
+//
+// MessageText:
+//
+//  The quorum disk could not be located by the cluster service.
+//
+#define ERROR_QUORUM_DISK_NOT_FOUND      5086L
+
+//
+// MessageId: ERROR_DATABASE_BACKUP_CORRUPT
+//
+// MessageText:
+//
+//  The backed up cluster database is possibly corrupt.
+//
+#define ERROR_DATABASE_BACKUP_CORRUPT    5087L
+
+//
+// MessageId: ERROR_CLUSTER_NODE_ALREADY_HAS_DFS_ROOT
+//
+// MessageText:
+//
+//  A DFS root already exists in this cluster node.
+//
+#define ERROR_CLUSTER_NODE_ALREADY_HAS_DFS_ROOT 5088L
+
+//
+// MessageId: ERROR_RESOURCE_PROPERTY_UNCHANGEABLE
+//
+// MessageText:
+//
+//  An attempt to modify a resource property failed because it conflicts with another existing property.
+//
+#define ERROR_RESOURCE_PROPERTY_UNCHANGEABLE 5089L
+
+////////////////////////////////////
+//                                //
+//     EFS Error Codes            //
+//                                //
+////////////////////////////////////
+//
+// MessageId: ERROR_ENCRYPTION_FAILED
+//
+// MessageText:
+//
+//  The specified file could not be encrypted.
+//
+#define ERROR_ENCRYPTION_FAILED          6000L
+
+//
+// MessageId: ERROR_DECRYPTION_FAILED
+//
+// MessageText:
+//
+//  The specified file could not be decrypted.
+//
+#define ERROR_DECRYPTION_FAILED          6001L
+
+//
+// MessageId: ERROR_FILE_ENCRYPTED
+//
+// MessageText:
+//
+//  The specified file is encrypted and the user does not have the ability to decrypt it.
+//
+#define ERROR_FILE_ENCRYPTED             6002L
+
+//
+// MessageId: ERROR_NO_RECOVERY_POLICY
+//
+// MessageText:
+//
+//  There is no valid encryption recovery policy configured for this system.
+//
+#define ERROR_NO_RECOVERY_POLICY         6003L
+
+//
+// MessageId: ERROR_NO_EFS
+//
+// MessageText:
+//
+//  The required encryption driver is not loaded for this system.
+//
+#define ERROR_NO_EFS                     6004L
+
+//
+// MessageId: ERROR_WRONG_EFS
+//
+// MessageText:
+//
+//  The file was encrypted with a different encryption driver than is currently loaded.
+//
+#define ERROR_WRONG_EFS                  6005L
+
+//
+// MessageId: ERROR_NO_USER_KEYS
+//
+// MessageText:
+//
+//  There are no EFS keys defined for the user.
+//
+#define ERROR_NO_USER_KEYS               6006L
+
+//
+// MessageId: ERROR_FILE_NOT_ENCRYPTED
+//
+// MessageText:
+//
+//  The specified file is not encrypted.
+//
+#define ERROR_FILE_NOT_ENCRYPTED         6007L
+
+//
+// MessageId: ERROR_NOT_EXPORT_FORMAT
+//
+// MessageText:
+//
+//  The specified file is not in the defined EFS export format.
+//
+#define ERROR_NOT_EXPORT_FORMAT          6008L
+
+//
+// MessageId: ERROR_FILE_READ_ONLY
+//
+// MessageText:
+//
+//  The specified file is read only.
+//
+#define ERROR_FILE_READ_ONLY             6009L
+
+//
+// MessageId: ERROR_DIR_EFS_DISALLOWED
+//
+// MessageText:
+//
+//  The directory has been disabled for encryption.
+//
+#define ERROR_DIR_EFS_DISALLOWED         6010L
+
+//
+// MessageId: ERROR_EFS_SERVER_NOT_TRUSTED
+//
+// MessageText:
+//
+//  The server is not trusted for remote encryption operation.
+//
+#define ERROR_EFS_SERVER_NOT_TRUSTED     6011L
+
+//////////////////////////////////////////////////////////////////
+//                                                              //
+// Task Scheduler Error Codes that NET START must understand    //
+//                                                              //
+//////////////////////////////////////////////////////////////////
+//
+// MessageId: SCHED_E_SERVICE_NOT_LOCALSYSTEM
+//
+// MessageText:
+//
+//  The Task Scheduler service must be configured to run in the System account to function properly.  Individual tasks may be configured to run in other accounts.
+//
+#define SCHED_E_SERVICE_NOT_LOCALSYSTEM  6200L
+
+////////////////////////////////////
+//                                //
+// Terminal Server Error Codes    //
+//                                //
+////////////////////////////////////
+//
+// MessageId: ERROR_CTX_WINSTATION_NAME_INVALID
+//
+// MessageText:
+//
+//  The specified session name is invalid.
+//
+#define ERROR_CTX_WINSTATION_NAME_INVALID 7001L
+
+//
+// MessageId: ERROR_CTX_INVALID_PD
+//
+// MessageText:
+//
+//  The specified protocol driver is invalid.
+//
+#define ERROR_CTX_INVALID_PD             7002L
+
+//
+// MessageId: ERROR_CTX_PD_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified protocol driver was not found in the system path.
+//
+#define ERROR_CTX_PD_NOT_FOUND           7003L
+
+//
+// MessageId: ERROR_CTX_WD_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified terminal connection driver was not found in the system path.
+//
+#define ERROR_CTX_WD_NOT_FOUND           7004L
+
+//
+// MessageId: ERROR_CTX_CANNOT_MAKE_EVENTLOG_ENTRY
+//
+// MessageText:
+//
+//  A registry key for event logging could not be created for this session.
+//
+#define ERROR_CTX_CANNOT_MAKE_EVENTLOG_ENTRY 7005L
+
+//
+// MessageId: ERROR_CTX_SERVICE_NAME_COLLISION
+//
+// MessageText:
+//
+//  A service with the same name already exists on the system.
+//
+#define ERROR_CTX_SERVICE_NAME_COLLISION 7006L
+
+//
+// MessageId: ERROR_CTX_CLOSE_PENDING
+//
+// MessageText:
+//
+//  A close operation is pending on the session.
+//
+#define ERROR_CTX_CLOSE_PENDING          7007L
+
+//
+// MessageId: ERROR_CTX_NO_OUTBUF
+//
+// MessageText:
+//
+//  There are no free output buffers available.
+//
+#define ERROR_CTX_NO_OUTBUF              7008L
+
+//
+// MessageId: ERROR_CTX_MODEM_INF_NOT_FOUND
+//
+// MessageText:
+//
+//  The MODEM.INF file was not found.
+//
+#define ERROR_CTX_MODEM_INF_NOT_FOUND    7009L
+
+//
+// MessageId: ERROR_CTX_INVALID_MODEMNAME
+//
+// MessageText:
+//
+//  The modem name was not found in MODEM.INF.
+//
+#define ERROR_CTX_INVALID_MODEMNAME      7010L
+
+//
+// MessageId: ERROR_CTX_MODEM_RESPONSE_ERROR
+//
+// MessageText:
+//
+//  The modem did not accept the command sent to it. Verify that the configured modem name matches the attached modem.
+//
+#define ERROR_CTX_MODEM_RESPONSE_ERROR   7011L
+
+//
+// MessageId: ERROR_CTX_MODEM_RESPONSE_TIMEOUT
+//
+// MessageText:
+//
+//  The modem did not respond to the command sent to it. Verify that the modem is properly cabled and powered on.
+//
+#define ERROR_CTX_MODEM_RESPONSE_TIMEOUT 7012L
+
+//
+// MessageId: ERROR_CTX_MODEM_RESPONSE_NO_CARRIER
+//
+// MessageText:
+//
+//  Carrier detect has failed or carrier has been dropped due to disconnect.
+//
+#define ERROR_CTX_MODEM_RESPONSE_NO_CARRIER 7013L
+
+//
+// MessageId: ERROR_CTX_MODEM_RESPONSE_NO_DIALTONE
+//
+// MessageText:
+//
+//  Dial tone not detected within the required time. Verify that the phone cable is properly attached and functional.
+//
+#define ERROR_CTX_MODEM_RESPONSE_NO_DIALTONE 7014L
+
+//
+// MessageId: ERROR_CTX_MODEM_RESPONSE_BUSY
+//
+// MessageText:
+//
+//  Busy signal detected at remote site on callback.
+//
+#define ERROR_CTX_MODEM_RESPONSE_BUSY    7015L
+
+//
+// MessageId: ERROR_CTX_MODEM_RESPONSE_VOICE
+//
+// MessageText:
+//
+//  Voice detected at remote site on callback.
+//
+#define ERROR_CTX_MODEM_RESPONSE_VOICE   7016L
+
+//
+// MessageId: ERROR_CTX_TD_ERROR
+//
+// MessageText:
+//
+//  Transport driver error
+//
+#define ERROR_CTX_TD_ERROR               7017L
+
+//
+// MessageId: ERROR_CTX_WINSTATION_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified session cannot be found.
+//
+#define ERROR_CTX_WINSTATION_NOT_FOUND   7022L
+
+//
+// MessageId: ERROR_CTX_WINSTATION_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  The specified session name is already in use.
+//
+#define ERROR_CTX_WINSTATION_ALREADY_EXISTS 7023L
+
+//
+// MessageId: ERROR_CTX_WINSTATION_BUSY
+//
+// MessageText:
+//
+//  The requested operation cannot be completed because the terminal connection is currently busy processing a connect, disconnect, reset, or delete operation.
+//
+#define ERROR_CTX_WINSTATION_BUSY        7024L
+
+//
+// MessageId: ERROR_CTX_BAD_VIDEO_MODE
+//
+// MessageText:
+//
+//  An attempt has been made to connect to a session whose video mode is not supported by the current client.
+//
+#define ERROR_CTX_BAD_VIDEO_MODE         7025L
+
+//
+// MessageId: ERROR_CTX_GRAPHICS_INVALID
+//
+// MessageText:
+//
+//  The application attempted to enable DOS graphics mode.
+//  DOS graphics mode is not supported.
+//
+#define ERROR_CTX_GRAPHICS_INVALID       7035L
+
+//
+// MessageId: ERROR_CTX_LOGON_DISABLED
+//
+// MessageText:
+//
+//  Your interactive logon privilege has been disabled.
+//  Please contact your administrator.
+//
+#define ERROR_CTX_LOGON_DISABLED         7037L
+
+//
+// MessageId: ERROR_CTX_NOT_CONSOLE
+//
+// MessageText:
+//
+//  The requested operation can be performed only on the system console.
+//  This is most often the result of a driver or system DLL requiring direct console access.
+//
+#define ERROR_CTX_NOT_CONSOLE            7038L
+
+//
+// MessageId: ERROR_CTX_CLIENT_QUERY_TIMEOUT
+//
+// MessageText:
+//
+//  The client failed to respond to the server connect message.
+//
+#define ERROR_CTX_CLIENT_QUERY_TIMEOUT   7040L
+
+//
+// MessageId: ERROR_CTX_CONSOLE_DISCONNECT
+//
+// MessageText:
+//
+//  Disconnecting the console session is not supported.
+//
+#define ERROR_CTX_CONSOLE_DISCONNECT     7041L
+
+//
+// MessageId: ERROR_CTX_CONSOLE_CONNECT
+//
+// MessageText:
+//
+//  Reconnecting a disconnected session to the console is not supported.
+//
+#define ERROR_CTX_CONSOLE_CONNECT        7042L
+
+//
+// MessageId: ERROR_CTX_SHADOW_DENIED
+//
+// MessageText:
+//
+//  The request to control another session remotely was denied.
+//
+#define ERROR_CTX_SHADOW_DENIED          7044L
+
+//
+// MessageId: ERROR_CTX_WINSTATION_ACCESS_DENIED
+//
+// MessageText:
+//
+//  The requested session access is denied.
+//
+#define ERROR_CTX_WINSTATION_ACCESS_DENIED 7045L
+
+//
+// MessageId: ERROR_CTX_INVALID_WD
+//
+// MessageText:
+//
+//  The specified terminal connection driver is invalid.
+//
+#define ERROR_CTX_INVALID_WD             7049L
+
+//
+// MessageId: ERROR_CTX_SHADOW_INVALID
+//
+// MessageText:
+//
+//  The requested session cannot be controlled remotely.
+//  This may be because the session is disconnected or does not currently have a user logged on. Also, you cannot control a session remotely from the system console or control the system console remotely. And you cannot remote control your own current session.
+//
+#define ERROR_CTX_SHADOW_INVALID         7050L
+
+//
+// MessageId: ERROR_CTX_SHADOW_DISABLED
+//
+// MessageText:
+//
+//  The requested session is not configured to allow remote control.
+//
+#define ERROR_CTX_SHADOW_DISABLED        7051L
+
+//
+// MessageId: ERROR_CTX_CLIENT_LICENSE_IN_USE
+//
+// MessageText:
+//
+//  Your request to connect to this Terminal Server has been rejected. Your Terminal Server client license number is currently being used by another user.
+//  Please call your system administrator to obtain a new copy of the Terminal Server client with a valid, unique license number.
+//
+#define ERROR_CTX_CLIENT_LICENSE_IN_USE  7052L
+
+//
+// MessageId: ERROR_CTX_CLIENT_LICENSE_NOT_SET
+//
+// MessageText:
+//
+//  Your request to connect to this Terminal Server has been rejected. Your Terminal Server client license number has not been entered for this copy of the Terminal Server client.
+//  Please call your system administrator for help in entering a valid, unique license number for this Terminal Server client.
+//
+#define ERROR_CTX_CLIENT_LICENSE_NOT_SET 7053L
+
+//
+// MessageId: ERROR_CTX_LICENSE_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  The system has reached its licensed logon limit.
+//  Please try again later.
+//
+#define ERROR_CTX_LICENSE_NOT_AVAILABLE  7054L
+
+//
+// MessageId: ERROR_CTX_LICENSE_CLIENT_INVALID
+//
+// MessageText:
+//
+//  The client you are using is not licensed to use this system.  Your logon request is denied.
+//
+#define ERROR_CTX_LICENSE_CLIENT_INVALID 7055L
+
+//
+// MessageId: ERROR_CTX_LICENSE_EXPIRED
+//
+// MessageText:
+//
+//  The system license has expired.  Your logon request is denied.
+//
+#define ERROR_CTX_LICENSE_EXPIRED        7056L
+
+///////////////////////////////////////////////////
+//                                                /
+//             Traffic Control Error Codes        /
+//                                                /
+//                  7500 to  7999                 /
+//                                                /
+//         defined in: tcerror.h                  /
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+//                                                /
+//             Active Directory Error Codes       /
+//                                                /
+//                  8000 to  8999                 /
+///////////////////////////////////////////////////
+// *****************
+// FACILITY_FILE_REPLICATION_SERVICE
+// *****************
+//
+// MessageId: FRS_ERR_INVALID_API_SEQUENCE
+//
+// MessageText:
+//
+//  The file replication service API was called incorrectly.
+//
+#define FRS_ERR_INVALID_API_SEQUENCE     8001L
+
+//
+// MessageId: FRS_ERR_STARTING_SERVICE
+//
+// MessageText:
+//
+//  The file replication service cannot be started.
+//
+#define FRS_ERR_STARTING_SERVICE         8002L
+
+//
+// MessageId: FRS_ERR_STOPPING_SERVICE
+//
+// MessageText:
+//
+//  The file replication service cannot be stopped.
+//
+#define FRS_ERR_STOPPING_SERVICE         8003L
+
+//
+// MessageId: FRS_ERR_INTERNAL_API
+//
+// MessageText:
+//
+//  The file replication service API terminated the request.
+//  The event log may have more information.
+//
+#define FRS_ERR_INTERNAL_API             8004L
+
+//
+// MessageId: FRS_ERR_INTERNAL
+//
+// MessageText:
+//
+//  The file replication service terminated the request.
+//  The event log may have more information.
+//
+#define FRS_ERR_INTERNAL                 8005L
+
+//
+// MessageId: FRS_ERR_SERVICE_COMM
+//
+// MessageText:
+//
+//  The file replication service cannot be contacted.
+//  The event log may have more information.
+//
+#define FRS_ERR_SERVICE_COMM             8006L
+
+//
+// MessageId: FRS_ERR_INSUFFICIENT_PRIV
+//
+// MessageText:
+//
+//  The file replication service cannot satisfy the request because the user has insufficient privileges.
+//  The event log may have more information.
+//
+#define FRS_ERR_INSUFFICIENT_PRIV        8007L
+
+//
+// MessageId: FRS_ERR_AUTHENTICATION
+//
+// MessageText:
+//
+//  The file replication service cannot satisfy the request because authenticated RPC is not available.
+//  The event log may have more information.
+//
+#define FRS_ERR_AUTHENTICATION           8008L
+
+//
+// MessageId: FRS_ERR_PARENT_INSUFFICIENT_PRIV
+//
+// MessageText:
+//
+//  The file replication service cannot satisfy the request because the user has insufficient privileges on the domain controller.
+//  The event log may have more information.
+//
+#define FRS_ERR_PARENT_INSUFFICIENT_PRIV 8009L
+
+//
+// MessageId: FRS_ERR_PARENT_AUTHENTICATION
+//
+// MessageText:
+//
+//  The file replication service cannot satisfy the request because authenticated RPC is not available on the domain controller.
+//  The event log may have more information.
+//
+#define FRS_ERR_PARENT_AUTHENTICATION    8010L
+
+//
+// MessageId: FRS_ERR_CHILD_TO_PARENT_COMM
+//
+// MessageText:
+//
+//  The file replication service cannot communicate with the file replication service on the domain controller.
+//  The event log may have more information.
+//
+#define FRS_ERR_CHILD_TO_PARENT_COMM     8011L
+
+//
+// MessageId: FRS_ERR_PARENT_TO_CHILD_COMM
+//
+// MessageText:
+//
+//  The file replication service on the domain controller cannot communicate with the file replication service on this computer.
+//  The event log may have more information.
+//
+#define FRS_ERR_PARENT_TO_CHILD_COMM     8012L
+
+//
+// MessageId: FRS_ERR_SYSVOL_POPULATE
+//
+// MessageText:
+//
+//  The file replication service cannot populate the system volume because of an internal error.
+//  The event log may have more information.
+//
+#define FRS_ERR_SYSVOL_POPULATE          8013L
+
+//
+// MessageId: FRS_ERR_SYSVOL_POPULATE_TIMEOUT
+//
+// MessageText:
+//
+//  The file replication service cannot populate the system volume because of an internal timeout.
+//  The event log may have more information.
+//
+#define FRS_ERR_SYSVOL_POPULATE_TIMEOUT  8014L
+
+//
+// MessageId: FRS_ERR_SYSVOL_IS_BUSY
+//
+// MessageText:
+//
+//  The file replication service cannot process the request. The system volume is busy with a previous request.
+//
+#define FRS_ERR_SYSVOL_IS_BUSY           8015L
+
+//
+// MessageId: FRS_ERR_SYSVOL_DEMOTE
+//
+// MessageText:
+//
+//  The file replication service cannot stop replicating the system volume because of an internal error.
+//  The event log may have more information.
+//
+#define FRS_ERR_SYSVOL_DEMOTE            8016L
+
+//
+// MessageId: FRS_ERR_INVALID_SERVICE_PARAMETER
+//
+// MessageText:
+//
+//  The file replication service detected an invalid parameter.
+//
+#define FRS_ERR_INVALID_SERVICE_PARAMETER 8017L
+
+// *****************
+// FACILITY DIRECTORY SERVICE
+// *****************
+#define DS_S_SUCCESS NO_ERROR
+//
+// MessageId: ERROR_DS_NOT_INSTALLED
+//
+// MessageText:
+//
+//  An error occurred while installing the directory service. For more information, see the event log.
+//
+#define ERROR_DS_NOT_INSTALLED           8200L
+
+//
+// MessageId: ERROR_DS_MEMBERSHIP_EVALUATED_LOCALLY
+//
+// MessageText:
+//
+//  The directory service evaluated group memberships locally.
+//
+#define ERROR_DS_MEMBERSHIP_EVALUATED_LOCALLY 8201L
+
+//
+// MessageId: ERROR_DS_NO_ATTRIBUTE_OR_VALUE
+//
+// MessageText:
+//
+//  The specified directory service attribute or value does not exist.
+//
+#define ERROR_DS_NO_ATTRIBUTE_OR_VALUE   8202L
+
+//
+// MessageId: ERROR_DS_INVALID_ATTRIBUTE_SYNTAX
+//
+// MessageText:
+//
+//  The attribute syntax specified to the directory service is invalid.
+//
+#define ERROR_DS_INVALID_ATTRIBUTE_SYNTAX 8203L
+
+//
+// MessageId: ERROR_DS_ATTRIBUTE_TYPE_UNDEFINED
+//
+// MessageText:
+//
+//  The attribute type specified to the directory service is not defined.
+//
+#define ERROR_DS_ATTRIBUTE_TYPE_UNDEFINED 8204L
+
+//
+// MessageId: ERROR_DS_ATTRIBUTE_OR_VALUE_EXISTS
+//
+// MessageText:
+//
+//  The specified directory service attribute or value already exists.
+//
+#define ERROR_DS_ATTRIBUTE_OR_VALUE_EXISTS 8205L
+
+//
+// MessageId: ERROR_DS_BUSY
+//
+// MessageText:
+//
+//  The directory service is busy.
+//
+#define ERROR_DS_BUSY                    8206L
+
+//
+// MessageId: ERROR_DS_UNAVAILABLE
+//
+// MessageText:
+//
+//  The directory service is unavailable.
+//
+#define ERROR_DS_UNAVAILABLE             8207L
+
+//
+// MessageId: ERROR_DS_NO_RIDS_ALLOCATED
+//
+// MessageText:
+//
+//  The directory service was unable to allocate a relative identifier.
+//
+#define ERROR_DS_NO_RIDS_ALLOCATED       8208L
+
+//
+// MessageId: ERROR_DS_NO_MORE_RIDS
+//
+// MessageText:
+//
+//  The directory service has exhausted the pool of relative identifiers.
+//
+#define ERROR_DS_NO_MORE_RIDS            8209L
+
+//
+// MessageId: ERROR_DS_INCORRECT_ROLE_OWNER
+//
+// MessageText:
+//
+//  The requested operation could not be performed because the directory service is not the master for that type of operation.
+//
+#define ERROR_DS_INCORRECT_ROLE_OWNER    8210L
+
+//
+// MessageId: ERROR_DS_RIDMGR_INIT_ERROR
+//
+// MessageText:
+//
+//  The directory service was unable to initialize the subsystem that allocates relative identifiers.
+//
+#define ERROR_DS_RIDMGR_INIT_ERROR       8211L
+
+//
+// MessageId: ERROR_DS_OBJ_CLASS_VIOLATION
+//
+// MessageText:
+//
+//  The requested operation did not satisfy one or more constraints associated with the class of the object.
+//
+#define ERROR_DS_OBJ_CLASS_VIOLATION     8212L
+
+//
+// MessageId: ERROR_DS_CANT_ON_NON_LEAF
+//
+// MessageText:
+//
+//  The directory service can perform the requested operation only on a leaf object.
+//
+#define ERROR_DS_CANT_ON_NON_LEAF        8213L
+
+//
+// MessageId: ERROR_DS_CANT_ON_RDN
+//
+// MessageText:
+//
+//  The directory service cannot perform the requested operation on the RDN attribute of an object.
+//
+#define ERROR_DS_CANT_ON_RDN             8214L
+
+//
+// MessageId: ERROR_DS_CANT_MOD_OBJ_CLASS
+//
+// MessageText:
+//
+//  The directory service detected an attempt to modify the object class of an object.
+//
+#define ERROR_DS_CANT_MOD_OBJ_CLASS      8215L
+
+//
+// MessageId: ERROR_DS_CROSS_DOM_MOVE_ERROR
+//
+// MessageText:
+//
+//  The requested cross-domain move operation could not be performed.
+//
+#define ERROR_DS_CROSS_DOM_MOVE_ERROR    8216L
+
+//
+// MessageId: ERROR_DS_GC_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  Unable to contact the global catalog server.
+//
+#define ERROR_DS_GC_NOT_AVAILABLE        8217L
+
+//
+// MessageId: ERROR_SHARED_POLICY
+//
+// MessageText:
+//
+//  The policy object is shared and can only be modified at the root.
+//
+#define ERROR_SHARED_POLICY              8218L
+
+//
+// MessageId: ERROR_POLICY_OBJECT_NOT_FOUND
+//
+// MessageText:
+//
+//  The policy object does not exist.
+//
+#define ERROR_POLICY_OBJECT_NOT_FOUND    8219L
+
+//
+// MessageId: ERROR_POLICY_ONLY_IN_DS
+//
+// MessageText:
+//
+//  The requested policy information is only in the directory service.
+//
+#define ERROR_POLICY_ONLY_IN_DS          8220L
+
+//
+// MessageId: ERROR_PROMOTION_ACTIVE
+//
+// MessageText:
+//
+//  A domain controller promotion is currently active.
+//
+#define ERROR_PROMOTION_ACTIVE           8221L
+
+//
+// MessageId: ERROR_NO_PROMOTION_ACTIVE
+//
+// MessageText:
+//
+//  A domain controller promotion is not currently active
+//
+#define ERROR_NO_PROMOTION_ACTIVE        8222L
+
+// 8223 unused
+//
+// MessageId: ERROR_DS_OPERATIONS_ERROR
+//
+// MessageText:
+//
+//  An operations error occurred.
+//
+#define ERROR_DS_OPERATIONS_ERROR        8224L
+
+//
+// MessageId: ERROR_DS_PROTOCOL_ERROR
+//
+// MessageText:
+//
+//  A protocol error occurred.
+//
+#define ERROR_DS_PROTOCOL_ERROR          8225L
+
+//
+// MessageId: ERROR_DS_TIMELIMIT_EXCEEDED
+//
+// MessageText:
+//
+//  The time limit for this request was exceeded.
+//
+#define ERROR_DS_TIMELIMIT_EXCEEDED      8226L
+
+//
+// MessageId: ERROR_DS_SIZELIMIT_EXCEEDED
+//
+// MessageText:
+//
+//  The size limit for this request was exceeded.
+//
+#define ERROR_DS_SIZELIMIT_EXCEEDED      8227L
+
+//
+// MessageId: ERROR_DS_ADMIN_LIMIT_EXCEEDED
+//
+// MessageText:
+//
+//  The administrative limit for this request was exceeded.
+//
+#define ERROR_DS_ADMIN_LIMIT_EXCEEDED    8228L
+
+//
+// MessageId: ERROR_DS_COMPARE_FALSE
+//
+// MessageText:
+//
+//  The compare response was false.
+//
+#define ERROR_DS_COMPARE_FALSE           8229L
+
+//
+// MessageId: ERROR_DS_COMPARE_TRUE
+//
+// MessageText:
+//
+//  The compare response was true.
+//
+#define ERROR_DS_COMPARE_TRUE            8230L
+
+//
+// MessageId: ERROR_DS_AUTH_METHOD_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The requested authentication method is not supported by the server.
+//
+#define ERROR_DS_AUTH_METHOD_NOT_SUPPORTED 8231L
+
+//
+// MessageId: ERROR_DS_STRONG_AUTH_REQUIRED
+//
+// MessageText:
+//
+//  A more secure authentication method is required for this server.
+//
+#define ERROR_DS_STRONG_AUTH_REQUIRED    8232L
+
+//
+// MessageId: ERROR_DS_INAPPROPRIATE_AUTH
+//
+// MessageText:
+//
+//  Inappropriate authentication.
+//
+#define ERROR_DS_INAPPROPRIATE_AUTH      8233L
+
+//
+// MessageId: ERROR_DS_AUTH_UNKNOWN
+//
+// MessageText:
+//
+//  The authentication mechanism is unknown.
+//
+#define ERROR_DS_AUTH_UNKNOWN            8234L
+
+//
+// MessageId: ERROR_DS_REFERRAL
+//
+// MessageText:
+//
+//  A referral was returned from the server.
+//
+#define ERROR_DS_REFERRAL                8235L
+
+//
+// MessageId: ERROR_DS_UNAVAILABLE_CRIT_EXTENSION
+//
+// MessageText:
+//
+//  The server does not support the requested critical extension.
+//
+#define ERROR_DS_UNAVAILABLE_CRIT_EXTENSION 8236L
+
+//
+// MessageId: ERROR_DS_CONFIDENTIALITY_REQUIRED
+//
+// MessageText:
+//
+//  This request requires a secure connection.
+//
+#define ERROR_DS_CONFIDENTIALITY_REQUIRED 8237L
+
+//
+// MessageId: ERROR_DS_INAPPROPRIATE_MATCHING
+//
+// MessageText:
+//
+//  Inappropriate matching.
+//
+#define ERROR_DS_INAPPROPRIATE_MATCHING  8238L
+
+//
+// MessageId: ERROR_DS_CONSTRAINT_VIOLATION
+//
+// MessageText:
+//
+//  A constraint violation occurred.
+//
+#define ERROR_DS_CONSTRAINT_VIOLATION    8239L
+
+//
+// MessageId: ERROR_DS_NO_SUCH_OBJECT
+//
+// MessageText:
+//
+//  There is no such object on the server.
+//
+#define ERROR_DS_NO_SUCH_OBJECT          8240L
+
+//
+// MessageId: ERROR_DS_ALIAS_PROBLEM
+//
+// MessageText:
+//
+//  There is an alias problem.
+//
+#define ERROR_DS_ALIAS_PROBLEM           8241L
+
+//
+// MessageId: ERROR_DS_INVALID_DN_SYNTAX
+//
+// MessageText:
+//
+//  An invalid dn syntax has been specified.
+//
+#define ERROR_DS_INVALID_DN_SYNTAX       8242L
+
+//
+// MessageId: ERROR_DS_IS_LEAF
+//
+// MessageText:
+//
+//  The object is a leaf object.
+//
+#define ERROR_DS_IS_LEAF                 8243L
+
+//
+// MessageId: ERROR_DS_ALIAS_DEREF_PROBLEM
+//
+// MessageText:
+//
+//  There is an alias dereferencing problem.
+//
+#define ERROR_DS_ALIAS_DEREF_PROBLEM     8244L
+
+//
+// MessageId: ERROR_DS_UNWILLING_TO_PERFORM
+//
+// MessageText:
+//
+//  The server is unwilling to process the request.
+//
+#define ERROR_DS_UNWILLING_TO_PERFORM    8245L
+
+//
+// MessageId: ERROR_DS_LOOP_DETECT
+//
+// MessageText:
+//
+//  A loop has been detected.
+//
+#define ERROR_DS_LOOP_DETECT             8246L
+
+//
+// MessageId: ERROR_DS_NAMING_VIOLATION
+//
+// MessageText:
+//
+//  There is a naming violation.
+//
+#define ERROR_DS_NAMING_VIOLATION        8247L
+
+//
+// MessageId: ERROR_DS_OBJECT_RESULTS_TOO_LARGE
+//
+// MessageText:
+//
+//  The result set is too large.
+//
+#define ERROR_DS_OBJECT_RESULTS_TOO_LARGE 8248L
+
+//
+// MessageId: ERROR_DS_AFFECTS_MULTIPLE_DSAS
+//
+// MessageText:
+//
+//  The operation affects multiple DSAs
+//
+#define ERROR_DS_AFFECTS_MULTIPLE_DSAS   8249L
+
+//
+// MessageId: ERROR_DS_SERVER_DOWN
+//
+// MessageText:
+//
+//  The server is not operational.
+//
+#define ERROR_DS_SERVER_DOWN             8250L
+
+//
+// MessageId: ERROR_DS_LOCAL_ERROR
+//
+// MessageText:
+//
+//  A local error has occurred.
+//
+#define ERROR_DS_LOCAL_ERROR             8251L
+
+//
+// MessageId: ERROR_DS_ENCODING_ERROR
+//
+// MessageText:
+//
+//  An encoding error has occurred.
+//
+#define ERROR_DS_ENCODING_ERROR          8252L
+
+//
+// MessageId: ERROR_DS_DECODING_ERROR
+//
+// MessageText:
+//
+//  A decoding error has occurred.
+//
+#define ERROR_DS_DECODING_ERROR          8253L
+
+//
+// MessageId: ERROR_DS_FILTER_UNKNOWN
+//
+// MessageText:
+//
+//  The search filter cannot be recognized.
+//
+#define ERROR_DS_FILTER_UNKNOWN          8254L
+
+//
+// MessageId: ERROR_DS_PARAM_ERROR
+//
+// MessageText:
+//
+//  One or more parameters are illegal.
+//
+#define ERROR_DS_PARAM_ERROR             8255L
+
+//
+// MessageId: ERROR_DS_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The specified method is not supported.
+//
+#define ERROR_DS_NOT_SUPPORTED           8256L
+
+//
+// MessageId: ERROR_DS_NO_RESULTS_RETURNED
+//
+// MessageText:
+//
+//  No results were returned.
+//
+#define ERROR_DS_NO_RESULTS_RETURNED     8257L
+
+//
+// MessageId: ERROR_DS_CONTROL_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified control is not supported by the server.
+//
+#define ERROR_DS_CONTROL_NOT_FOUND       8258L
+
+//
+// MessageId: ERROR_DS_CLIENT_LOOP
+//
+// MessageText:
+//
+//  A referral loop was detected by the client.
+//
+#define ERROR_DS_CLIENT_LOOP             8259L
+
+//
+// MessageId: ERROR_DS_REFERRAL_LIMIT_EXCEEDED
+//
+// MessageText:
+//
+//  The preset referral limit was exceeded.
+//
+#define ERROR_DS_REFERRAL_LIMIT_EXCEEDED 8260L
+
+//
+// MessageId: ERROR_DS_ROOT_MUST_BE_NC
+//
+// MessageText:
+//
+//  The root object must be the head of a naming context. The root object cannot have an instantiated parent.
+//
+#define ERROR_DS_ROOT_MUST_BE_NC         8301L
+
+//
+// MessageId: ERROR_DS_ADD_REPLICA_INHIBITED
+//
+// MessageText:
+//
+//  The add replica operation cannot be performed. The naming context must be writable in order to create the replica.
+//
+#define ERROR_DS_ADD_REPLICA_INHIBITED   8302L
+
+//
+// MessageId: ERROR_DS_ATT_NOT_DEF_IN_SCHEMA
+//
+// MessageText:
+//
+//  A reference to an attribute that is not defined in the schema occurred.
+//
+#define ERROR_DS_ATT_NOT_DEF_IN_SCHEMA   8303L
+
+//
+// MessageId: ERROR_DS_MAX_OBJ_SIZE_EXCEEDED
+//
+// MessageText:
+//
+//  The maximum size of an object has been exceeded.
+//
+#define ERROR_DS_MAX_OBJ_SIZE_EXCEEDED   8304L
+
+//
+// MessageId: ERROR_DS_OBJ_STRING_NAME_EXISTS
+//
+// MessageText:
+//
+//  An attempt was made to add an object to the directory with a name that is already in use.
+//
+#define ERROR_DS_OBJ_STRING_NAME_EXISTS  8305L
+
+//
+// MessageId: ERROR_DS_NO_RDN_DEFINED_IN_SCHEMA
+//
+// MessageText:
+//
+//  An attempt was made to add an object of a class that does not have an RDN defined in the schema.
+//
+#define ERROR_DS_NO_RDN_DEFINED_IN_SCHEMA 8306L
+
+//
+// MessageId: ERROR_DS_RDN_DOESNT_MATCH_SCHEMA
+//
+// MessageText:
+//
+//  An attempt was made to add an object using an RDN that is not the RDN defined in the schema.
+//
+#define ERROR_DS_RDN_DOESNT_MATCH_SCHEMA 8307L
+
+//
+// MessageId: ERROR_DS_NO_REQUESTED_ATTS_FOUND
+//
+// MessageText:
+//
+//  None of the requested attributes were found on the objects.
+//
+#define ERROR_DS_NO_REQUESTED_ATTS_FOUND 8308L
+
+//
+// MessageId: ERROR_DS_USER_BUFFER_TO_SMALL
+//
+// MessageText:
+//
+//  The user buffer is too small.
+//
+#define ERROR_DS_USER_BUFFER_TO_SMALL    8309L
+
+//
+// MessageId: ERROR_DS_ATT_IS_NOT_ON_OBJ
+//
+// MessageText:
+//
+//  The attribute specified in the operation is not present on the object.
+//
+#define ERROR_DS_ATT_IS_NOT_ON_OBJ       8310L
+
+//
+// MessageId: ERROR_DS_ILLEGAL_MOD_OPERATION
+//
+// MessageText:
+//
+//  Illegal modify operation. Some aspect of the modification is not permitted.
+//
+#define ERROR_DS_ILLEGAL_MOD_OPERATION   8311L
+
+//
+// MessageId: ERROR_DS_OBJ_TOO_LARGE
+//
+// MessageText:
+//
+//  The specified object is too large.
+//
+#define ERROR_DS_OBJ_TOO_LARGE           8312L
+
+//
+// MessageId: ERROR_DS_BAD_INSTANCE_TYPE
+//
+// MessageText:
+//
+//  The specified instance type is not valid.
+//
+#define ERROR_DS_BAD_INSTANCE_TYPE       8313L
+
+//
+// MessageId: ERROR_DS_MASTERDSA_REQUIRED
+//
+// MessageText:
+//
+//  The operation must be performed at a master DSA.
+//
+#define ERROR_DS_MASTERDSA_REQUIRED      8314L
+
+//
+// MessageId: ERROR_DS_OBJECT_CLASS_REQUIRED
+//
+// MessageText:
+//
+//  The object class attribute must be specified.
+//
+#define ERROR_DS_OBJECT_CLASS_REQUIRED   8315L
+
+//
+// MessageId: ERROR_DS_MISSING_REQUIRED_ATT
+//
+// MessageText:
+//
+//  A required attribute is missing.
+//
+#define ERROR_DS_MISSING_REQUIRED_ATT    8316L
+
+//
+// MessageId: ERROR_DS_ATT_NOT_DEF_FOR_CLASS
+//
+// MessageText:
+//
+//  An attempt was made to modify an object to include an attribute that is not legal for its class.
+//
+#define ERROR_DS_ATT_NOT_DEF_FOR_CLASS   8317L
+
+//
+// MessageId: ERROR_DS_ATT_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  The specified attribute is already present on the object.
+//
+#define ERROR_DS_ATT_ALREADY_EXISTS      8318L
+
+// 8319 unused
+//
+// MessageId: ERROR_DS_CANT_ADD_ATT_VALUES
+//
+// MessageText:
+//
+//  The specified attribute is not present, or has no values.
+//
+#define ERROR_DS_CANT_ADD_ATT_VALUES     8320L
+
+//
+// MessageId: ERROR_DS_SINGLE_VALUE_CONSTRAINT
+//
+// MessageText:
+//
+//  Mutliple values were specified for an attribute that can have only one value.
+//
+#define ERROR_DS_SINGLE_VALUE_CONSTRAINT 8321L
+
+//
+// MessageId: ERROR_DS_RANGE_CONSTRAINT
+//
+// MessageText:
+//
+//  A value for the attribute was not in the acceptable range of values.
+//
+#define ERROR_DS_RANGE_CONSTRAINT        8322L
+
+//
+// MessageId: ERROR_DS_ATT_VAL_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  The specified value already exists.
+//
+#define ERROR_DS_ATT_VAL_ALREADY_EXISTS  8323L
+
+//
+// MessageId: ERROR_DS_CANT_REM_MISSING_ATT
+//
+// MessageText:
+//
+//  The attribute cannot be removed because it is not present on the object.
+//
+#define ERROR_DS_CANT_REM_MISSING_ATT    8324L
+
+//
+// MessageId: ERROR_DS_CANT_REM_MISSING_ATT_VAL
+//
+// MessageText:
+//
+//  The attribute value cannot be removed because it is not present on the object.
+//
+#define ERROR_DS_CANT_REM_MISSING_ATT_VAL 8325L
+
+//
+// MessageId: ERROR_DS_ROOT_CANT_BE_SUBREF
+//
+// MessageText:
+//
+//  The specified root object cannot be a subref.
+//
+#define ERROR_DS_ROOT_CANT_BE_SUBREF     8326L
+
+//
+// MessageId: ERROR_DS_NO_CHAINING
+//
+// MessageText:
+//
+//  Chaining is not permitted.
+//
+#define ERROR_DS_NO_CHAINING             8327L
+
+//
+// MessageId: ERROR_DS_NO_CHAINED_EVAL
+//
+// MessageText:
+//
+//  Chained evaluation is not permitted.
+//
+#define ERROR_DS_NO_CHAINED_EVAL         8328L
+
+//
+// MessageId: ERROR_DS_NO_PARENT_OBJECT
+//
+// MessageText:
+//
+//  The operation could not be performed because the object's parent is either uninstantiated or deleted.
+//
+#define ERROR_DS_NO_PARENT_OBJECT        8329L
+
+//
+// MessageId: ERROR_DS_PARENT_IS_AN_ALIAS
+//
+// MessageText:
+//
+//  Having a parent that is an alias is not permitted. Aliases are leaf objects.
+//
+#define ERROR_DS_PARENT_IS_AN_ALIAS      8330L
+
+//
+// MessageId: ERROR_DS_CANT_MIX_MASTER_AND_REPS
+//
+// MessageText:
+//
+//  The object and parent must be of the same type, either both masters or
+//  both replicas.
+//
+#define ERROR_DS_CANT_MIX_MASTER_AND_REPS 8331L
+
+//
+// MessageId: ERROR_DS_CHILDREN_EXIST
+//
+// MessageText:
+//
+//  The operation cannot be performed because child objects exist. This operation can only be performed on a leaf object.
+//
+#define ERROR_DS_CHILDREN_EXIST          8332L
+
+//
+// MessageId: ERROR_DS_OBJ_NOT_FOUND
+//
+// MessageText:
+//
+//  Directory object not found.
+//
+#define ERROR_DS_OBJ_NOT_FOUND           8333L
+
+//
+// MessageId: ERROR_DS_ALIASED_OBJ_MISSING
+//
+// MessageText:
+//
+//  The aliased object is missing.
+//
+#define ERROR_DS_ALIASED_OBJ_MISSING     8334L
+
+//
+// MessageId: ERROR_DS_BAD_NAME_SYNTAX
+//
+// MessageText:
+//
+//  The object name has bad syntax.
+//
+#define ERROR_DS_BAD_NAME_SYNTAX         8335L
+
+//
+// MessageId: ERROR_DS_ALIAS_POINTS_TO_ALIAS
+//
+// MessageText:
+//
+//  It is not permitted for an alias to refer to another alias.
+//
+#define ERROR_DS_ALIAS_POINTS_TO_ALIAS   8336L
+
+//
+// MessageId: ERROR_DS_CANT_DEREF_ALIAS
+//
+// MessageText:
+//
+//  The alias cannot be dereferenced.
+//
+#define ERROR_DS_CANT_DEREF_ALIAS        8337L
+
+//
+// MessageId: ERROR_DS_OUT_OF_SCOPE
+//
+// MessageText:
+//
+//  The operation is out of scope.
+//
+#define ERROR_DS_OUT_OF_SCOPE            8338L
+
+// 8339 unused
+//
+// MessageId: ERROR_DS_CANT_DELETE_DSA_OBJ
+//
+// MessageText:
+//
+//  The DSA object cannot be deleted.
+//
+#define ERROR_DS_CANT_DELETE_DSA_OBJ     8340L
+
+//
+// MessageId: ERROR_DS_GENERIC_ERROR
+//
+// MessageText:
+//
+//  A directory service error has occurred.
+//
+#define ERROR_DS_GENERIC_ERROR           8341L
+
+//
+// MessageId: ERROR_DS_DSA_MUST_BE_INT_MASTER
+//
+// MessageText:
+//
+//  The operation can only be performed on an internal master DSA object.
+//
+#define ERROR_DS_DSA_MUST_BE_INT_MASTER  8342L
+
+//
+// MessageId: ERROR_DS_CLASS_NOT_DSA
+//
+// MessageText:
+//
+//  The object must be of class DSA.
+//
+#define ERROR_DS_CLASS_NOT_DSA           8343L
+
+//
+// MessageId: ERROR_DS_INSUFF_ACCESS_RIGHTS
+//
+// MessageText:
+//
+//  Insufficient access rights to perform the operation.
+//
+#define ERROR_DS_INSUFF_ACCESS_RIGHTS    8344L
+
+//
+// MessageId: ERROR_DS_ILLEGAL_SUPERIOR
+//
+// MessageText:
+//
+//  The object cannot be added because the parent is not on the list of possible superiors.
+//
+#define ERROR_DS_ILLEGAL_SUPERIOR        8345L
+
+//
+// MessageId: ERROR_DS_ATTRIBUTE_OWNED_BY_SAM
+//
+// MessageText:
+//
+//  Access to the attribute is not permitted because the attribute is owned by the Security Accounts Manager (SAM).
+//
+#define ERROR_DS_ATTRIBUTE_OWNED_BY_SAM  8346L
+
+//
+// MessageId: ERROR_DS_NAME_TOO_MANY_PARTS
+//
+// MessageText:
+//
+//  The name has too many parts.
+//
+#define ERROR_DS_NAME_TOO_MANY_PARTS     8347L
+
+//
+// MessageId: ERROR_DS_NAME_TOO_LONG
+//
+// MessageText:
+//
+//  The name is too long.
+//
+#define ERROR_DS_NAME_TOO_LONG           8348L
+
+//
+// MessageId: ERROR_DS_NAME_VALUE_TOO_LONG
+//
+// MessageText:
+//
+//  The name value is too long.
+//
+#define ERROR_DS_NAME_VALUE_TOO_LONG     8349L
+
+//
+// MessageId: ERROR_DS_NAME_UNPARSEABLE
+//
+// MessageText:
+//
+//  The directory service encountered an error parsing a name.
+//
+#define ERROR_DS_NAME_UNPARSEABLE        8350L
+
+//
+// MessageId: ERROR_DS_NAME_TYPE_UNKNOWN
+//
+// MessageText:
+//
+//  The directory service cannot get the attribute type for a name.
+//
+#define ERROR_DS_NAME_TYPE_UNKNOWN       8351L
+
+//
+// MessageId: ERROR_DS_NOT_AN_OBJECT
+//
+// MessageText:
+//
+//  The name does not identify an object; the name identifies a phantom.
+//
+#define ERROR_DS_NOT_AN_OBJECT           8352L
+
+//
+// MessageId: ERROR_DS_SEC_DESC_TOO_SHORT
+//
+// MessageText:
+//
+//  The security descriptor is too short.
+//
+#define ERROR_DS_SEC_DESC_TOO_SHORT      8353L
+
+//
+// MessageId: ERROR_DS_SEC_DESC_INVALID
+//
+// MessageText:
+//
+//  The security descriptor is invalid.
+//
+#define ERROR_DS_SEC_DESC_INVALID        8354L
+
+//
+// MessageId: ERROR_DS_NO_DELETED_NAME
+//
+// MessageText:
+//
+//  Failed to create name for deleted object.
+//
+#define ERROR_DS_NO_DELETED_NAME         8355L
+
+//
+// MessageId: ERROR_DS_SUBREF_MUST_HAVE_PARENT
+//
+// MessageText:
+//
+//  The parent of a new subref must exist.
+//
+#define ERROR_DS_SUBREF_MUST_HAVE_PARENT 8356L
+
+//
+// MessageId: ERROR_DS_NCNAME_MUST_BE_NC
+//
+// MessageText:
+//
+//  The object must be a naming context.
+//
+#define ERROR_DS_NCNAME_MUST_BE_NC       8357L
+
+//
+// MessageId: ERROR_DS_CANT_ADD_SYSTEM_ONLY
+//
+// MessageText:
+//
+//  It is not permitted to add an attribute which is owned by the system.
+//
+#define ERROR_DS_CANT_ADD_SYSTEM_ONLY    8358L
+
+//
+// MessageId: ERROR_DS_CLASS_MUST_BE_CONCRETE
+//
+// MessageText:
+//
+//  The class of the object must be structural; you cannot instantiate an abstract class.
+//
+#define ERROR_DS_CLASS_MUST_BE_CONCRETE  8359L
+
+//
+// MessageId: ERROR_DS_INVALID_DMD
+//
+// MessageText:
+//
+//  The schema object could not be found.
+//
+#define ERROR_DS_INVALID_DMD             8360L
+
+//
+// MessageId: ERROR_DS_OBJ_GUID_EXISTS
+//
+// MessageText:
+//
+//  A local object with this GUID (dead or alive) already exists.
+//
+#define ERROR_DS_OBJ_GUID_EXISTS         8361L
+
+//
+// MessageId: ERROR_DS_NOT_ON_BACKLINK
+//
+// MessageText:
+//
+//  The operation cannot be performed on a back link.
+//
+#define ERROR_DS_NOT_ON_BACKLINK         8362L
+
+//
+// MessageId: ERROR_DS_NO_CROSSREF_FOR_NC
+//
+// MessageText:
+//
+//  The cross reference for the specified naming context could not be found.
+//
+#define ERROR_DS_NO_CROSSREF_FOR_NC      8363L
+
+//
+// MessageId: ERROR_DS_SHUTTING_DOWN
+//
+// MessageText:
+//
+//  The operation could not be performed because the directory service is shutting down.
+//
+#define ERROR_DS_SHUTTING_DOWN           8364L
+
+//
+// MessageId: ERROR_DS_UNKNOWN_OPERATION
+//
+// MessageText:
+//
+//  The directory service request is invalid.
+//
+#define ERROR_DS_UNKNOWN_OPERATION       8365L
+
+//
+// MessageId: ERROR_DS_INVALID_ROLE_OWNER
+//
+// MessageText:
+//
+//  The role owner attribute could not be read.
+//
+#define ERROR_DS_INVALID_ROLE_OWNER      8366L
+
+//
+// MessageId: ERROR_DS_COULDNT_CONTACT_FSMO
+//
+// MessageText:
+//
+//  The requested FSMO operation failed. The current FSMO holder could not be contacted.
+//
+#define ERROR_DS_COULDNT_CONTACT_FSMO    8367L
+
+//
+// MessageId: ERROR_DS_CROSS_NC_DN_RENAME
+//
+// MessageText:
+//
+//  Modification of a DN across a naming context is not permitted.
+//
+#define ERROR_DS_CROSS_NC_DN_RENAME      8368L
+
+//
+// MessageId: ERROR_DS_CANT_MOD_SYSTEM_ONLY
+//
+// MessageText:
+//
+//  The attribute cannot be modified because it is owned by the system.
+//
+#define ERROR_DS_CANT_MOD_SYSTEM_ONLY    8369L
+
+//
+// MessageId: ERROR_DS_REPLICATOR_ONLY
+//
+// MessageText:
+//
+//  Only the replicator can perform this function.
+//
+#define ERROR_DS_REPLICATOR_ONLY         8370L
+
+//
+// MessageId: ERROR_DS_OBJ_CLASS_NOT_DEFINED
+//
+// MessageText:
+//
+//  The specified class is not defined.
+//
+#define ERROR_DS_OBJ_CLASS_NOT_DEFINED   8371L
+
+//
+// MessageId: ERROR_DS_OBJ_CLASS_NOT_SUBCLASS
+//
+// MessageText:
+//
+//  The specified class is not a subclass.
+//
+#define ERROR_DS_OBJ_CLASS_NOT_SUBCLASS  8372L
+
+//
+// MessageId: ERROR_DS_NAME_REFERENCE_INVALID
+//
+// MessageText:
+//
+//  The name reference is invalid.
+//
+#define ERROR_DS_NAME_REFERENCE_INVALID  8373L
+
+//
+// MessageId: ERROR_DS_CROSS_REF_EXISTS
+//
+// MessageText:
+//
+//  A cross reference already exists.
+//
+#define ERROR_DS_CROSS_REF_EXISTS        8374L
+
+//
+// MessageId: ERROR_DS_CANT_DEL_MASTER_CROSSREF
+//
+// MessageText:
+//
+//  It is not permitted to delete a master cross reference.
+//
+#define ERROR_DS_CANT_DEL_MASTER_CROSSREF 8375L
+
+//
+// MessageId: ERROR_DS_SUBTREE_NOTIFY_NOT_NC_HEAD
+//
+// MessageText:
+//
+//  Subtree notifications are only supported on NC heads.
+//
+#define ERROR_DS_SUBTREE_NOTIFY_NOT_NC_HEAD 8376L
+
+//
+// MessageId: ERROR_DS_NOTIFY_FILTER_TOO_COMPLEX
+//
+// MessageText:
+//
+//  Notification filter is too complex.
+//
+#define ERROR_DS_NOTIFY_FILTER_TOO_COMPLEX 8377L
+
+//
+// MessageId: ERROR_DS_DUP_RDN
+//
+// MessageText:
+//
+//  Schema update failed: duplicate RDN.
+//
+#define ERROR_DS_DUP_RDN                 8378L
+
+//
+// MessageId: ERROR_DS_DUP_OID
+//
+// MessageText:
+//
+//  Schema update failed: duplicate OID.
+//
+#define ERROR_DS_DUP_OID                 8379L
+
+//
+// MessageId: ERROR_DS_DUP_MAPI_ID
+//
+// MessageText:
+//
+//  Schema update failed: duplicate MAPI identifier.
+//
+#define ERROR_DS_DUP_MAPI_ID             8380L
+
+//
+// MessageId: ERROR_DS_DUP_SCHEMA_ID_GUID
+//
+// MessageText:
+//
+//  Schema update failed: duplicate schema-id GUID.
+//
+#define ERROR_DS_DUP_SCHEMA_ID_GUID      8381L
+
+//
+// MessageId: ERROR_DS_DUP_LDAP_DISPLAY_NAME
+//
+// MessageText:
+//
+//  Schema update failed: duplicate LDAP display name.
+//
+#define ERROR_DS_DUP_LDAP_DISPLAY_NAME   8382L
+
+//
+// MessageId: ERROR_DS_SEMANTIC_ATT_TEST
+//
+// MessageText:
+//
+//  Schema update failed: range-lower less than range upper.
+//
+#define ERROR_DS_SEMANTIC_ATT_TEST       8383L
+
+//
+// MessageId: ERROR_DS_SYNTAX_MISMATCH
+//
+// MessageText:
+//
+//  Schema update failed: syntax mismatch.
+//
+#define ERROR_DS_SYNTAX_MISMATCH         8384L
+
+//
+// MessageId: ERROR_DS_EXISTS_IN_MUST_HAVE
+//
+// MessageText:
+//
+//  Schema deletion failed: attribute is used in must-contain.
+//
+#define ERROR_DS_EXISTS_IN_MUST_HAVE     8385L
+
+//
+// MessageId: ERROR_DS_EXISTS_IN_MAY_HAVE
+//
+// MessageText:
+//
+//  Schema deletion failed: attribute is used in may-contain.
+//
+#define ERROR_DS_EXISTS_IN_MAY_HAVE      8386L
+
+//
+// MessageId: ERROR_DS_NONEXISTENT_MAY_HAVE
+//
+// MessageText:
+//
+//  Schema update failed: attribute in may-contain does not exist.
+//
+#define ERROR_DS_NONEXISTENT_MAY_HAVE    8387L
+
+//
+// MessageId: ERROR_DS_NONEXISTENT_MUST_HAVE
+//
+// MessageText:
+//
+//  Schema update failed: attribute in must-contain does not exist.
+//
+#define ERROR_DS_NONEXISTENT_MUST_HAVE   8388L
+
+//
+// MessageId: ERROR_DS_AUX_CLS_TEST_FAIL
+//
+// MessageText:
+//
+//  Schema update failed: class in aux-class list does not exist or is not an auxiliary class.
+//
+#define ERROR_DS_AUX_CLS_TEST_FAIL       8389L
+
+//
+// MessageId: ERROR_DS_NONEXISTENT_POSS_SUP
+//
+// MessageText:
+//
+//  Schema update failed: class in poss-superiors does not exist.
+//
+#define ERROR_DS_NONEXISTENT_POSS_SUP    8390L
+
+//
+// MessageId: ERROR_DS_SUB_CLS_TEST_FAIL
+//
+// MessageText:
+//
+//  Schema update failed: class in subclassof list does not exist or does not satisfy hierarchy rules.
+//
+#define ERROR_DS_SUB_CLS_TEST_FAIL       8391L
+
+//
+// MessageId: ERROR_DS_BAD_RDN_ATT_ID_SYNTAX
+//
+// MessageText:
+//
+//  Schema update failed: Rdn-Att-Id has wrong syntax.
+//
+#define ERROR_DS_BAD_RDN_ATT_ID_SYNTAX   8392L
+
+//
+// MessageId: ERROR_DS_EXISTS_IN_AUX_CLS
+//
+// MessageText:
+//
+//  Schema deletion failed: class is used as auxiliary class.
+//
+#define ERROR_DS_EXISTS_IN_AUX_CLS       8393L
+
+//
+// MessageId: ERROR_DS_EXISTS_IN_SUB_CLS
+//
+// MessageText:
+//
+//  Schema deletion failed: class is used as sub class.
+//
+#define ERROR_DS_EXISTS_IN_SUB_CLS       8394L
+
+//
+// MessageId: ERROR_DS_EXISTS_IN_POSS_SUP
+//
+// MessageText:
+//
+//  Schema deletion failed: class is used as poss superior.
+//
+#define ERROR_DS_EXISTS_IN_POSS_SUP      8395L
+
+//
+// MessageId: ERROR_DS_RECALCSCHEMA_FAILED
+//
+// MessageText:
+//
+//  Schema update failed in recalculating validation cache.
+//
+#define ERROR_DS_RECALCSCHEMA_FAILED     8396L
+
+//
+// MessageId: ERROR_DS_TREE_DELETE_NOT_FINISHED
+//
+// MessageText:
+//
+//  The tree deletion is not finished.  The request must be made again to continue deleting the tree.
+//
+#define ERROR_DS_TREE_DELETE_NOT_FINISHED 8397L
+
+//
+// MessageId: ERROR_DS_CANT_DELETE
+//
+// MessageText:
+//
+//  The requested delete operation could not be performed.
+//
+#define ERROR_DS_CANT_DELETE             8398L
+
+//
+// MessageId: ERROR_DS_ATT_SCHEMA_REQ_ID
+//
+// MessageText:
+//
+//  Cannot read the governs class identifier for the schema record.
+//
+#define ERROR_DS_ATT_SCHEMA_REQ_ID       8399L
+
+//
+// MessageId: ERROR_DS_BAD_ATT_SCHEMA_SYNTAX
+//
+// MessageText:
+//
+//  The attribute schema has bad syntax.
+//
+#define ERROR_DS_BAD_ATT_SCHEMA_SYNTAX   8400L
+
+//
+// MessageId: ERROR_DS_CANT_CACHE_ATT
+//
+// MessageText:
+//
+//  The attribute could not be cached.
+//
+#define ERROR_DS_CANT_CACHE_ATT          8401L
+
+//
+// MessageId: ERROR_DS_CANT_CACHE_CLASS
+//
+// MessageText:
+//
+//  The class could not be cached.
+//
+#define ERROR_DS_CANT_CACHE_CLASS        8402L
+
+//
+// MessageId: ERROR_DS_CANT_REMOVE_ATT_CACHE
+//
+// MessageText:
+//
+//  The attribute could not be removed from the cache.
+//
+#define ERROR_DS_CANT_REMOVE_ATT_CACHE   8403L
+
+//
+// MessageId: ERROR_DS_CANT_REMOVE_CLASS_CACHE
+//
+// MessageText:
+//
+//  The class could not be removed from the cache.
+//
+#define ERROR_DS_CANT_REMOVE_CLASS_CACHE 8404L
+
+//
+// MessageId: ERROR_DS_CANT_RETRIEVE_DN
+//
+// MessageText:
+//
+//  The distinguished name attribute could not be read.
+//
+#define ERROR_DS_CANT_RETRIEVE_DN        8405L
+
+//
+// MessageId: ERROR_DS_MISSING_SUPREF
+//
+// MessageText:
+//
+//  A required subref is missing.
+//
+#define ERROR_DS_MISSING_SUPREF          8406L
+
+//
+// MessageId: ERROR_DS_CANT_RETRIEVE_INSTANCE
+//
+// MessageText:
+//
+//  The instance type attribute could not be retrieved.
+//
+#define ERROR_DS_CANT_RETRIEVE_INSTANCE  8407L
+
+//
+// MessageId: ERROR_DS_CODE_INCONSISTENCY
+//
+// MessageText:
+//
+//  An internal error has occurred.
+//
+#define ERROR_DS_CODE_INCONSISTENCY      8408L
+
+//
+// MessageId: ERROR_DS_DATABASE_ERROR
+//
+// MessageText:
+//
+//  A database error has occurred.
+//
+#define ERROR_DS_DATABASE_ERROR          8409L
+
+//
+// MessageId: ERROR_DS_GOVERNSID_MISSING
+//
+// MessageText:
+//
+//  The attribute GOVERNSID is missing.
+//
+#define ERROR_DS_GOVERNSID_MISSING       8410L
+
+//
+// MessageId: ERROR_DS_MISSING_EXPECTED_ATT
+//
+// MessageText:
+//
+//  An expected attribute is missing.
+//
+#define ERROR_DS_MISSING_EXPECTED_ATT    8411L
+
+//
+// MessageId: ERROR_DS_NCNAME_MISSING_CR_REF
+//
+// MessageText:
+//
+//  The specified naming context is missing a cross reference.
+//
+#define ERROR_DS_NCNAME_MISSING_CR_REF   8412L
+
+//
+// MessageId: ERROR_DS_SECURITY_CHECKING_ERROR
+//
+// MessageText:
+//
+//  A security checking error has occurred.
+//
+#define ERROR_DS_SECURITY_CHECKING_ERROR 8413L
+
+//
+// MessageId: ERROR_DS_SCHEMA_NOT_LOADED
+//
+// MessageText:
+//
+//  The schema is not loaded.
+//
+#define ERROR_DS_SCHEMA_NOT_LOADED       8414L
+
+//
+// MessageId: ERROR_DS_SCHEMA_ALLOC_FAILED
+//
+// MessageText:
+//
+//  Schema allocation failed. Please check if the machine is running low on memory.
+//
+#define ERROR_DS_SCHEMA_ALLOC_FAILED     8415L
+
+//
+// MessageId: ERROR_DS_ATT_SCHEMA_REQ_SYNTAX
+//
+// MessageText:
+//
+//  Failed to obtain the required syntax for the attribute schema.
+//
+#define ERROR_DS_ATT_SCHEMA_REQ_SYNTAX   8416L
+
+//
+// MessageId: ERROR_DS_GCVERIFY_ERROR
+//
+// MessageText:
+//
+//  The global catalog verification failed. The global catalog is not available or does not support the operation. Some part of the directory is currently not available.
+//
+#define ERROR_DS_GCVERIFY_ERROR          8417L
+
+//
+// MessageId: ERROR_DS_DRA_SCHEMA_MISMATCH
+//
+// MessageText:
+//
+//  The replication operation failed because of a schema mismatch between the servers involved.
+//
+#define ERROR_DS_DRA_SCHEMA_MISMATCH     8418L
+
+//
+// MessageId: ERROR_DS_CANT_FIND_DSA_OBJ
+//
+// MessageText:
+//
+//  The DSA object could not be found.
+//
+#define ERROR_DS_CANT_FIND_DSA_OBJ       8419L
+
+//
+// MessageId: ERROR_DS_CANT_FIND_EXPECTED_NC
+//
+// MessageText:
+//
+//  The naming context could not be found.
+//
+#define ERROR_DS_CANT_FIND_EXPECTED_NC   8420L
+
+//
+// MessageId: ERROR_DS_CANT_FIND_NC_IN_CACHE
+//
+// MessageText:
+//
+//  The naming context could not be found in the cache.
+//
+#define ERROR_DS_CANT_FIND_NC_IN_CACHE   8421L
+
+//
+// MessageId: ERROR_DS_CANT_RETRIEVE_CHILD
+//
+// MessageText:
+//
+//  The child object could not be retrieved.
+//
+#define ERROR_DS_CANT_RETRIEVE_CHILD     8422L
+
+//
+// MessageId: ERROR_DS_SECURITY_ILLEGAL_MODIFY
+//
+// MessageText:
+//
+//  The modification was not permitted for security reasons.
+//
+#define ERROR_DS_SECURITY_ILLEGAL_MODIFY 8423L
+
+//
+// MessageId: ERROR_DS_CANT_REPLACE_HIDDEN_REC
+//
+// MessageText:
+//
+//  The operation cannot replace the hidden record.
+//
+#define ERROR_DS_CANT_REPLACE_HIDDEN_REC 8424L
+
+//
+// MessageId: ERROR_DS_BAD_HIERARCHY_FILE
+//
+// MessageText:
+//
+//  The hierarchy file is invalid.
+//
+#define ERROR_DS_BAD_HIERARCHY_FILE      8425L
+
+//
+// MessageId: ERROR_DS_BUILD_HIERARCHY_TABLE_FAILED
+//
+// MessageText:
+//
+//  The attempt to build the hierarchy table failed.
+//
+#define ERROR_DS_BUILD_HIERARCHY_TABLE_FAILED 8426L
+
+//
+// MessageId: ERROR_DS_CONFIG_PARAM_MISSING
+//
+// MessageText:
+//
+//  The directory configuration parameter is missing from the registry.
+//
+#define ERROR_DS_CONFIG_PARAM_MISSING    8427L
+
+//
+// MessageId: ERROR_DS_COUNTING_AB_INDICES_FAILED
+//
+// MessageText:
+//
+//  The attempt to count the address book indices failed.
+//
+#define ERROR_DS_COUNTING_AB_INDICES_FAILED 8428L
+
+//
+// MessageId: ERROR_DS_HIERARCHY_TABLE_MALLOC_FAILED
+//
+// MessageText:
+//
+//  The allocation of the hierarchy table failed.
+//
+#define ERROR_DS_HIERARCHY_TABLE_MALLOC_FAILED 8429L
+
+//
+// MessageId: ERROR_DS_INTERNAL_FAILURE
+//
+// MessageText:
+//
+//  The directory service encountered an internal failure.
+//
+#define ERROR_DS_INTERNAL_FAILURE        8430L
+
+//
+// MessageId: ERROR_DS_UNKNOWN_ERROR
+//
+// MessageText:
+//
+//  The directory service encountered an unknown failure.
+//
+#define ERROR_DS_UNKNOWN_ERROR           8431L
+
+//
+// MessageId: ERROR_DS_ROOT_REQUIRES_CLASS_TOP
+//
+// MessageText:
+//
+//  A root object requires a class of 'top'.
+//
+#define ERROR_DS_ROOT_REQUIRES_CLASS_TOP 8432L
+
+//
+// MessageId: ERROR_DS_REFUSING_FSMO_ROLES
+//
+// MessageText:
+//
+//  This directory server is shutting down, and cannot take ownership of new floating single-master operation roles.
+//
+#define ERROR_DS_REFUSING_FSMO_ROLES     8433L
+
+//
+// MessageId: ERROR_DS_MISSING_FSMO_SETTINGS
+//
+// MessageText:
+//
+//  The directory service is missing mandatory configuration information, and is unable to determine the ownership of floating single-master operation roles.
+//
+#define ERROR_DS_MISSING_FSMO_SETTINGS   8434L
+
+//
+// MessageId: ERROR_DS_UNABLE_TO_SURRENDER_ROLES
+//
+// MessageText:
+//
+//  The directory service was unable to transfer ownership of one or more floating single-master operation roles to other servers.
+//
+#define ERROR_DS_UNABLE_TO_SURRENDER_ROLES 8435L
+
+//
+// MessageId: ERROR_DS_DRA_GENERIC
+//
+// MessageText:
+//
+//  The replication operation failed.
+//
+#define ERROR_DS_DRA_GENERIC             8436L
+
+//
+// MessageId: ERROR_DS_DRA_INVALID_PARAMETER
+//
+// MessageText:
+//
+//  An invalid parameter was specified for this replication operation.
+//
+#define ERROR_DS_DRA_INVALID_PARAMETER   8437L
+
+//
+// MessageId: ERROR_DS_DRA_BUSY
+//
+// MessageText:
+//
+//  The directory service is too busy to complete the replication operation at this time.
+//
+#define ERROR_DS_DRA_BUSY                8438L
+
+//
+// MessageId: ERROR_DS_DRA_BAD_DN
+//
+// MessageText:
+//
+//  The distinguished name specified for this replication operation is invalid.
+//
+#define ERROR_DS_DRA_BAD_DN              8439L
+
+//
+// MessageId: ERROR_DS_DRA_BAD_NC
+//
+// MessageText:
+//
+//  The naming context specified for this replication operation is invalid.
+//
+#define ERROR_DS_DRA_BAD_NC              8440L
+
+//
+// MessageId: ERROR_DS_DRA_DN_EXISTS
+//
+// MessageText:
+//
+//  The distinguished name specified for this replication operation already exists.
+//
+#define ERROR_DS_DRA_DN_EXISTS           8441L
+
+//
+// MessageId: ERROR_DS_DRA_INTERNAL_ERROR
+//
+// MessageText:
+//
+//  The replication system encountered an internal error.
+//
+#define ERROR_DS_DRA_INTERNAL_ERROR      8442L
+
+//
+// MessageId: ERROR_DS_DRA_INCONSISTENT_DIT
+//
+// MessageText:
+//
+//  The replication operation encountered a database inconsistency.
+//
+#define ERROR_DS_DRA_INCONSISTENT_DIT    8443L
+
+//
+// MessageId: ERROR_DS_DRA_CONNECTION_FAILED
+//
+// MessageText:
+//
+//  The server specified for this replication operation could not be contacted.
+//
+#define ERROR_DS_DRA_CONNECTION_FAILED   8444L
+
+//
+// MessageId: ERROR_DS_DRA_BAD_INSTANCE_TYPE
+//
+// MessageText:
+//
+//  The replication operation encountered an object with an invalid instance type.
+//
+#define ERROR_DS_DRA_BAD_INSTANCE_TYPE   8445L
+
+//
+// MessageId: ERROR_DS_DRA_OUT_OF_MEM
+//
+// MessageText:
+//
+//  The replication operation failed to allocate memory.
+//
+#define ERROR_DS_DRA_OUT_OF_MEM          8446L
+
+//
+// MessageId: ERROR_DS_DRA_MAIL_PROBLEM
+//
+// MessageText:
+//
+//  The replication operation encountered an error with the mail system.
+//
+#define ERROR_DS_DRA_MAIL_PROBLEM        8447L
+
+//
+// MessageId: ERROR_DS_DRA_REF_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  The replication reference information for the target server already exists.
+//
+#define ERROR_DS_DRA_REF_ALREADY_EXISTS  8448L
+
+//
+// MessageId: ERROR_DS_DRA_REF_NOT_FOUND
+//
+// MessageText:
+//
+//  The replication reference information for the target server does not exist.
+//
+#define ERROR_DS_DRA_REF_NOT_FOUND       8449L
+
+//
+// MessageId: ERROR_DS_DRA_OBJ_IS_REP_SOURCE
+//
+// MessageText:
+//
+//  The naming context cannot be removed because it is replicated to another server.
+//
+#define ERROR_DS_DRA_OBJ_IS_REP_SOURCE   8450L
+
+//
+// MessageId: ERROR_DS_DRA_DB_ERROR
+//
+// MessageText:
+//
+//  The replication operation encountered a database error.
+//
+#define ERROR_DS_DRA_DB_ERROR            8451L
+
+//
+// MessageId: ERROR_DS_DRA_NO_REPLICA
+//
+// MessageText:
+//
+//  The naming context is in the process of being removed or is not replicated from the specified server.
+//
+#define ERROR_DS_DRA_NO_REPLICA          8452L
+
+//
+// MessageId: ERROR_DS_DRA_ACCESS_DENIED
+//
+// MessageText:
+//
+//  Replication access was denied.
+//
+#define ERROR_DS_DRA_ACCESS_DENIED       8453L
+
+//
+// MessageId: ERROR_DS_DRA_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The requested operation is not supported by this version of the directory service.
+//
+#define ERROR_DS_DRA_NOT_SUPPORTED       8454L
+
+//
+// MessageId: ERROR_DS_DRA_RPC_CANCELLED
+//
+// MessageText:
+//
+//  The replication remote procedure call was cancelled.
+//
+#define ERROR_DS_DRA_RPC_CANCELLED       8455L
+
+//
+// MessageId: ERROR_DS_DRA_SOURCE_DISABLED
+//
+// MessageText:
+//
+//  The source server is currently rejecting replication requests.
+//
+#define ERROR_DS_DRA_SOURCE_DISABLED     8456L
+
+//
+// MessageId: ERROR_DS_DRA_SINK_DISABLED
+//
+// MessageText:
+//
+//  The destination server is currently rejecting replication requests.
+//
+#define ERROR_DS_DRA_SINK_DISABLED       8457L
+
+//
+// MessageId: ERROR_DS_DRA_NAME_COLLISION
+//
+// MessageText:
+//
+//  The replication operation failed due to a collision of object names.
+//
+#define ERROR_DS_DRA_NAME_COLLISION      8458L
+
+//
+// MessageId: ERROR_DS_DRA_SOURCE_REINSTALLED
+//
+// MessageText:
+//
+//  The replication source has been reinstalled.
+//
+#define ERROR_DS_DRA_SOURCE_REINSTALLED  8459L
+
+//
+// MessageId: ERROR_DS_DRA_MISSING_PARENT
+//
+// MessageText:
+//
+//  The replication operation failed because a required parent object is missing.
+//
+#define ERROR_DS_DRA_MISSING_PARENT      8460L
+
+//
+// MessageId: ERROR_DS_DRA_PREEMPTED
+//
+// MessageText:
+//
+//  The replication operation was preempted.
+//
+#define ERROR_DS_DRA_PREEMPTED           8461L
+
+//
+// MessageId: ERROR_DS_DRA_ABANDON_SYNC
+//
+// MessageText:
+//
+//  The replication synchronization attempt was abandoned because of a lack of updates.
+//
+#define ERROR_DS_DRA_ABANDON_SYNC        8462L
+
+//
+// MessageId: ERROR_DS_DRA_SHUTDOWN
+//
+// MessageText:
+//
+//  The replication operation was terminated because the system is shutting down.
+//
+#define ERROR_DS_DRA_SHUTDOWN            8463L
+
+//
+// MessageId: ERROR_DS_DRA_INCOMPATIBLE_PARTIAL_SET
+//
+// MessageText:
+//
+//  The replication synchronization attempt failed as the destination partial attribute set is not a subset of source partial attribute set.
+//
+#define ERROR_DS_DRA_INCOMPATIBLE_PARTIAL_SET 8464L
+
+//
+// MessageId: ERROR_DS_DRA_SOURCE_IS_PARTIAL_REPLICA
+//
+// MessageText:
+//
+//  The replication synchronization attempt failed because a master replica attempted to sync from a partial replica.
+//
+#define ERROR_DS_DRA_SOURCE_IS_PARTIAL_REPLICA 8465L
+
+//
+// MessageId: ERROR_DS_DRA_EXTN_CONNECTION_FAILED
+//
+// MessageText:
+//
+//  The server specified for this replication operation was contacted, but that server was unable to contact an additional server needed to complete the operation.
+//
+#define ERROR_DS_DRA_EXTN_CONNECTION_FAILED 8466L
+
+//
+// MessageId: ERROR_DS_INSTALL_SCHEMA_MISMATCH
+//
+// MessageText:
+//
+//  A schema mismatch is detected between the source and the build used during a replica install. The replica cannot be installed.
+//
+#define ERROR_DS_INSTALL_SCHEMA_MISMATCH 8467L
+
+//
+// MessageId: ERROR_DS_DUP_LINK_ID
+//
+// MessageText:
+//
+//  Schema update failed: An attribute with the same link identifier already exists.
+//
+#define ERROR_DS_DUP_LINK_ID             8468L
+
+//
+// MessageId: ERROR_DS_NAME_ERROR_RESOLVING
+//
+// MessageText:
+//
+//  Name translation: Generic processing error.
+//
+#define ERROR_DS_NAME_ERROR_RESOLVING    8469L
+
+//
+// MessageId: ERROR_DS_NAME_ERROR_NOT_FOUND
+//
+// MessageText:
+//
+//  Name translation: Could not find the name or insufficient right to see name.
+//
+#define ERROR_DS_NAME_ERROR_NOT_FOUND    8470L
+
+//
+// MessageId: ERROR_DS_NAME_ERROR_NOT_UNIQUE
+//
+// MessageText:
+//
+//  Name translation: Input name mapped to more than one output name.
+//
+#define ERROR_DS_NAME_ERROR_NOT_UNIQUE   8471L
+
+//
+// MessageId: ERROR_DS_NAME_ERROR_NO_MAPPING
+//
+// MessageText:
+//
+//  Name translation: Input name found, but not the associated output format.
+//
+#define ERROR_DS_NAME_ERROR_NO_MAPPING   8472L
+
+//
+// MessageId: ERROR_DS_NAME_ERROR_DOMAIN_ONLY
+//
+// MessageText:
+//
+//  Name translation: Unable to resolve completely, only the domain was found.
+//
+#define ERROR_DS_NAME_ERROR_DOMAIN_ONLY  8473L
+
+//
+// MessageId: ERROR_DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING
+//
+// MessageText:
+//
+//  Name translation: Unable to perform purely syntactical mapping at the client without going out to the wire.
+//
+#define ERROR_DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING 8474L
+
+//
+// MessageId: ERROR_DS_CONSTRUCTED_ATT_MOD
+//
+// MessageText:
+//
+//  Modification of a constructed att is not allowed.
+//
+#define ERROR_DS_CONSTRUCTED_ATT_MOD     8475L
+
+//
+// MessageId: ERROR_DS_WRONG_OM_OBJ_CLASS
+//
+// MessageText:
+//
+//  The OM-Object-Class specified is incorrect for an attribute with the specified syntax.
+//
+#define ERROR_DS_WRONG_OM_OBJ_CLASS      8476L
+
+//
+// MessageId: ERROR_DS_DRA_REPL_PENDING
+//
+// MessageText:
+//
+//  The replication request has been posted; waiting for reply.
+//
+#define ERROR_DS_DRA_REPL_PENDING        8477L
+
+//
+// MessageId: ERROR_DS_DS_REQUIRED
+//
+// MessageText:
+//
+//  The requested operation requires a directory service, and none was available.
+//
+#define ERROR_DS_DS_REQUIRED             8478L
+
+//
+// MessageId: ERROR_DS_INVALID_LDAP_DISPLAY_NAME
+//
+// MessageText:
+//
+//  The LDAP display name of the class or attribute contains non-ASCII characters.
+//
+#define ERROR_DS_INVALID_LDAP_DISPLAY_NAME 8479L
+
+//
+// MessageId: ERROR_DS_NON_BASE_SEARCH
+//
+// MessageText:
+//
+//  The requested search operation is only supported for base searches.
+//
+#define ERROR_DS_NON_BASE_SEARCH         8480L
+
+//
+// MessageId: ERROR_DS_CANT_RETRIEVE_ATTS
+//
+// MessageText:
+//
+//  The search failed to retrieve attributes from the database.
+//
+#define ERROR_DS_CANT_RETRIEVE_ATTS      8481L
+
+//
+// MessageId: ERROR_DS_BACKLINK_WITHOUT_LINK
+//
+// MessageText:
+//
+//  The schema update operation tried to add a backward link attribute that has no corresponding forward link.
+//
+#define ERROR_DS_BACKLINK_WITHOUT_LINK   8482L
+
+//
+// MessageId: ERROR_DS_EPOCH_MISMATCH
+//
+// MessageText:
+//
+//  Source and destination of a cross-domain move do not agree on the object's epoch number.  Either source or destination does not have the latest version of the object.
+//
+#define ERROR_DS_EPOCH_MISMATCH          8483L
+
+//
+// MessageId: ERROR_DS_SRC_NAME_MISMATCH
+//
+// MessageText:
+//
+//  Source and destination of a cross-domain move do not agree on the object's current name.  Either source or destination does not have the latest version of the object.
+//
+#define ERROR_DS_SRC_NAME_MISMATCH       8484L
+
+//
+// MessageId: ERROR_DS_SRC_AND_DST_NC_IDENTICAL
+//
+// MessageText:
+//
+//  Source and destination for the cross-domain move operation are identical.  Caller should use local move operation instead of cross-domain move operation.
+//
+#define ERROR_DS_SRC_AND_DST_NC_IDENTICAL 8485L
+
+//
+// MessageId: ERROR_DS_DST_NC_MISMATCH
+//
+// MessageText:
+//
+//  Source and destination for a cross-domain move are not in agreement on the naming contexts in the forest.  Either source or destination does not have the latest version of the Partitions container.
+//
+#define ERROR_DS_DST_NC_MISMATCH         8486L
+
+//
+// MessageId: ERROR_DS_NOT_AUTHORITIVE_FOR_DST_NC
+//
+// MessageText:
+//
+//  Destination of a cross-domain move is not authoritative for the destination naming context.
+//
+#define ERROR_DS_NOT_AUTHORITIVE_FOR_DST_NC 8487L
+
+//
+// MessageId: ERROR_DS_SRC_GUID_MISMATCH
+//
+// MessageText:
+//
+//  Source and destination of a cross-domain move do not agree on the identity of the source object.  Either source or destination does not have the latest version of the source object.
+//
+#define ERROR_DS_SRC_GUID_MISMATCH       8488L
+
+//
+// MessageId: ERROR_DS_CANT_MOVE_DELETED_OBJECT
+//
+// MessageText:
+//
+//  Object being moved across-domains is already known to be deleted by the destination server.  The source server does not have the latest version of the source object.
+//
+#define ERROR_DS_CANT_MOVE_DELETED_OBJECT 8489L
+
+//
+// MessageId: ERROR_DS_PDC_OPERATION_IN_PROGRESS
+//
+// MessageText:
+//
+//  Another operation which requires exclusive access to the PDC FSMO is already in progress.
+//
+#define ERROR_DS_PDC_OPERATION_IN_PROGRESS 8490L
+
+//
+// MessageId: ERROR_DS_CROSS_DOMAIN_CLEANUP_REQD
+//
+// MessageText:
+//
+//  A cross-domain move operation failed such that two versions of the moved object exist - one each in the source and destination domains.  The destination object needs to be removed to restore the system to a consistent state.
+//
+#define ERROR_DS_CROSS_DOMAIN_CLEANUP_REQD 8491L
+
+//
+// MessageId: ERROR_DS_ILLEGAL_XDOM_MOVE_OPERATION
+//
+// MessageText:
+//
+//  This object may not be moved across domain boundaries either because cross-domain moves for this class are disallowed, or the object has some special characteristics, eg: trust account or restricted RID, which prevent its move.
+//
+#define ERROR_DS_ILLEGAL_XDOM_MOVE_OPERATION 8492L
+
+//
+// MessageId: ERROR_DS_CANT_WITH_ACCT_GROUP_MEMBERSHPS
+//
+// MessageText:
+//
+//  Can't move objects with memberships across domain boundaries as once moved, this would violate the membership conditions of the account group.  Remove the object from any account group memberships and retry.
+//
+#define ERROR_DS_CANT_WITH_ACCT_GROUP_MEMBERSHPS 8493L
+
+//
+// MessageId: ERROR_DS_NC_MUST_HAVE_NC_PARENT
+//
+// MessageText:
+//
+//  A naming context head must be the immediate child of another naming context head, not of an interior node.
+//
+#define ERROR_DS_NC_MUST_HAVE_NC_PARENT  8494L
+
+//
+// MessageId: ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE
+//
+// MessageText:
+//
+//  The directory cannot validate the proposed naming context name because it does not hold a replica of the naming context above the proposed naming context.  Please ensure that the domain naming master role is held by a server that is configured as a global catalog server, and that the server is up to date with its replication partners.
+//
+#define ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE 8495L
+
+//
+// MessageId: ERROR_DS_DST_DOMAIN_NOT_NATIVE
+//
+// MessageText:
+//
+//  Destination domain must be in native mode.
+//
+#define ERROR_DS_DST_DOMAIN_NOT_NATIVE   8496L
+
+//
+// MessageId: ERROR_DS_MISSING_INFRASTRUCTURE_CONTAINER
+//
+// MessageText:
+//
+//  The operation can not be performed because the server does not have an infrastructure container in the domain of interest.
+//
+#define ERROR_DS_MISSING_INFRASTRUCTURE_CONTAINER 8497L
+
+//
+// MessageId: ERROR_DS_CANT_MOVE_ACCOUNT_GROUP
+//
+// MessageText:
+//
+//  Cross-domain move of account groups is not allowed.
+//
+#define ERROR_DS_CANT_MOVE_ACCOUNT_GROUP 8498L
+
+//
+// MessageId: ERROR_DS_CANT_MOVE_RESOURCE_GROUP
+//
+// MessageText:
+//
+//  Cross-domain move of resource groups is not allowed.
+//
+#define ERROR_DS_CANT_MOVE_RESOURCE_GROUP 8499L
+
+//
+// MessageId: ERROR_DS_INVALID_SEARCH_FLAG
+//
+// MessageText:
+//
+//  The search flags for the attribute are invalid. The ANR bit is valid only on attributes of Unicode or Teletex strings.
+//
+#define ERROR_DS_INVALID_SEARCH_FLAG     8500L
+
+//
+// MessageId: ERROR_DS_NO_TREE_DELETE_ABOVE_NC
+//
+// MessageText:
+//
+//  Tree deletions starting at an object which has an NC head as a descendant are not allowed.
+//
+#define ERROR_DS_NO_TREE_DELETE_ABOVE_NC 8501L
+
+//
+// MessageId: ERROR_DS_COULDNT_LOCK_TREE_FOR_DELETE
+//
+// MessageText:
+//
+//  The directory service failed to lock a tree in preparation for a tree deletion because the tree was in use.
+//
+#define ERROR_DS_COULDNT_LOCK_TREE_FOR_DELETE 8502L
+
+//
+// MessageId: ERROR_DS_COULDNT_IDENTIFY_OBJECTS_FOR_TREE_DELETE
+//
+// MessageText:
+//
+//  The directory service failed to identify the list of objects to delete while attempting a tree deletion.
+//
+#define ERROR_DS_COULDNT_IDENTIFY_OBJECTS_FOR_TREE_DELETE 8503L
+
+//
+// MessageId: ERROR_DS_SAM_INIT_FAILURE
+//
+// MessageText:
+//
+//  Security Accounts Manager initialization failed because of the following error: %1.
+//  Error Status: 0x%2. Click OK to shut down the system and reboot into Directory Services Restore Mode. Check the event log for detailed information.
+//
+#define ERROR_DS_SAM_INIT_FAILURE        8504L
+
+//
+// MessageId: ERROR_DS_SENSITIVE_GROUP_VIOLATION
+//
+// MessageText:
+//
+//  Only an administrator can modify the membership list of an administrative group.
+//
+#define ERROR_DS_SENSITIVE_GROUP_VIOLATION 8505L
+
+//
+// MessageId: ERROR_DS_CANT_MOD_PRIMARYGROUPID
+//
+// MessageText:
+//
+//  Cannot change the primary group ID of a domain controller account.
+//
+#define ERROR_DS_CANT_MOD_PRIMARYGROUPID 8506L
+
+//
+// MessageId: ERROR_DS_ILLEGAL_BASE_SCHEMA_MOD
+//
+// MessageText:
+//
+//  An attempt is made to modify the base schema.
+//
+#define ERROR_DS_ILLEGAL_BASE_SCHEMA_MOD 8507L
+
+//
+// MessageId: ERROR_DS_NONSAFE_SCHEMA_CHANGE
+//
+// MessageText:
+//
+//  Adding a new mandatory attribute to an existing class, deleting a mandatory attribute from an existing class, or adding an optional attribute to the special class Top that is not a backlink attribute (directly or through inheritance, for example, by adding or deleting an auxiliary class) is not allowed.
+//
+#define ERROR_DS_NONSAFE_SCHEMA_CHANGE   8508L
+
+//
+// MessageId: ERROR_DS_SCHEMA_UPDATE_DISALLOWED
+//
+// MessageText:
+//
+//  Schema update is not allowed on this DC. Either the registry key is not set or the DC is not the schema FSMO Role Owner.
+//
+#define ERROR_DS_SCHEMA_UPDATE_DISALLOWED 8509L
+
+//
+// MessageId: ERROR_DS_CANT_CREATE_UNDER_SCHEMA
+//
+// MessageText:
+//
+//  An object of this class cannot be created under the schema container. You can only create attribute-schema and class-schema objects under the schema container.
+//
+#define ERROR_DS_CANT_CREATE_UNDER_SCHEMA 8510L
+
+//
+// MessageId: ERROR_DS_INSTALL_NO_SRC_SCH_VERSION
+//
+// MessageText:
+//
+//  The replica/child install failed to get the objectVersion attribute on the schema container on the source DC. Either the attribute is missing on the schema container or the credentials supplied do not have permission to read it.
+//
+#define ERROR_DS_INSTALL_NO_SRC_SCH_VERSION 8511L
+
+//
+// MessageId: ERROR_DS_INSTALL_NO_SCH_VERSION_IN_INIFILE
+//
+// MessageText:
+//
+//  The replica/child install failed to read the objectVersion attribute in the SCHEMA section of the file schema.ini in the system32 directory.
+//
+#define ERROR_DS_INSTALL_NO_SCH_VERSION_IN_INIFILE 8512L
+
+//
+// MessageId: ERROR_DS_INVALID_GROUP_TYPE
+//
+// MessageText:
+//
+//  The specified group type is invalid.
+//
+#define ERROR_DS_INVALID_GROUP_TYPE      8513L
+
+//
+// MessageId: ERROR_DS_NO_NEST_GLOBALGROUP_IN_MIXEDDOMAIN
+//
+// MessageText:
+//
+//  You cannot nest global groups in a mixed domain if the group is security-enabled.
+//
+#define ERROR_DS_NO_NEST_GLOBALGROUP_IN_MIXEDDOMAIN 8514L
+
+//
+// MessageId: ERROR_DS_NO_NEST_LOCALGROUP_IN_MIXEDDOMAIN
+//
+// MessageText:
+//
+//  You cannot nest local groups in a mixed domain if the group is security-enabled.
+//
+#define ERROR_DS_NO_NEST_LOCALGROUP_IN_MIXEDDOMAIN 8515L
+
+//
+// MessageId: ERROR_DS_GLOBAL_CANT_HAVE_LOCAL_MEMBER
+//
+// MessageText:
+//
+//  A global group cannot have a local group as a member.
+//
+#define ERROR_DS_GLOBAL_CANT_HAVE_LOCAL_MEMBER 8516L
+
+//
+// MessageId: ERROR_DS_GLOBAL_CANT_HAVE_UNIVERSAL_MEMBER
+//
+// MessageText:
+//
+//  A global group cannot have a universal group as a member.
+//
+#define ERROR_DS_GLOBAL_CANT_HAVE_UNIVERSAL_MEMBER 8517L
+
+//
+// MessageId: ERROR_DS_UNIVERSAL_CANT_HAVE_LOCAL_MEMBER
+//
+// MessageText:
+//
+//  A universal group cannot have a local group as a member.
+//
+#define ERROR_DS_UNIVERSAL_CANT_HAVE_LOCAL_MEMBER 8518L
+
+//
+// MessageId: ERROR_DS_GLOBAL_CANT_HAVE_CROSSDOMAIN_MEMBER
+//
+// MessageText:
+//
+//  A global group cannot have a cross-domain member.
+//
+#define ERROR_DS_GLOBAL_CANT_HAVE_CROSSDOMAIN_MEMBER 8519L
+
+//
+// MessageId: ERROR_DS_LOCAL_CANT_HAVE_CROSSDOMAIN_LOCAL_MEMBER
+//
+// MessageText:
+//
+//  A local group cannot have another cross domain local group as a member.
+//
+#define ERROR_DS_LOCAL_CANT_HAVE_CROSSDOMAIN_LOCAL_MEMBER 8520L
+
+//
+// MessageId: ERROR_DS_HAVE_PRIMARY_MEMBERS
+//
+// MessageText:
+//
+//  A group with primary members cannot change to a security-disabled group.
+//
+#define ERROR_DS_HAVE_PRIMARY_MEMBERS    8521L
+
+//
+// MessageId: ERROR_DS_STRING_SD_CONVERSION_FAILED
+//
+// MessageText:
+//
+//  The schema cache load failed to convert the string default SD on a class-schema object.
+//
+#define ERROR_DS_STRING_SD_CONVERSION_FAILED 8522L
+
+//
+// MessageId: ERROR_DS_NAMING_MASTER_GC
+//
+// MessageText:
+//
+//  Only DSAs configured to be Global Catalog servers should be allowed to hold the Domain Naming Master FSMO role.
+//
+#define ERROR_DS_NAMING_MASTER_GC        8523L
+
+//
+// MessageId: ERROR_DS_DNS_LOOKUP_FAILURE
+//
+// MessageText:
+//
+//  The DSA operation is unable to proceed because of a DNS lookup failure.
+//
+#define ERROR_DS_DNS_LOOKUP_FAILURE      8524L
+
+//
+// MessageId: ERROR_DS_COULDNT_UPDATE_SPNS
+//
+// MessageText:
+//
+//  While processing a change to the DNS Host Name for an object, the Service Principal Name values could not be kept in sync.
+//
+#define ERROR_DS_COULDNT_UPDATE_SPNS     8525L
+
+//
+// MessageId: ERROR_DS_CANT_RETRIEVE_SD
+//
+// MessageText:
+//
+//  The Security Descriptor attribute could not be read.
+//
+#define ERROR_DS_CANT_RETRIEVE_SD        8526L
+
+//
+// MessageId: ERROR_DS_KEY_NOT_UNIQUE
+//
+// MessageText:
+//
+//  The object requested was not found, but an object with that key was found.
+//
+#define ERROR_DS_KEY_NOT_UNIQUE          8527L
+
+//
+// MessageId: ERROR_DS_WRONG_LINKED_ATT_SYNTAX
+//
+// MessageText:
+//
+//  The syntax of the linked attribute being added is incorrect. Forward links can only have syntax 2.5.5.1, 2.5.5.7, and 2.5.5.14, and backlinks can only have syntax 2.5.5.1
+//
+#define ERROR_DS_WRONG_LINKED_ATT_SYNTAX 8528L
+
+//
+// MessageId: ERROR_DS_SAM_NEED_BOOTKEY_PASSWORD
+//
+// MessageText:
+//
+//  Security Account Manager needs to get the boot password.
+//
+#define ERROR_DS_SAM_NEED_BOOTKEY_PASSWORD 8529L
+
+//
+// MessageId: ERROR_DS_SAM_NEED_BOOTKEY_FLOPPY
+//
+// MessageText:
+//
+//  Security Account Manager needs to get the boot key from floppy disk.
+//
+#define ERROR_DS_SAM_NEED_BOOTKEY_FLOPPY 8530L
+
+//
+// MessageId: ERROR_DS_CANT_START
+//
+// MessageText:
+//
+//  Directory Service cannot start.
+//
+#define ERROR_DS_CANT_START              8531L
+
+//
+// MessageId: ERROR_DS_INIT_FAILURE
+//
+// MessageText:
+//
+//  Directory Services could not start.
+//
+#define ERROR_DS_INIT_FAILURE            8532L
+
+//
+// MessageId: ERROR_DS_NO_PKT_PRIVACY_ON_CONNECTION
+//
+// MessageText:
+//
+//  The connection between client and server requires packet privacy or better.
+//
+#define ERROR_DS_NO_PKT_PRIVACY_ON_CONNECTION 8533L
+
+//
+// MessageId: ERROR_DS_SOURCE_DOMAIN_IN_FOREST
+//
+// MessageText:
+//
+//  The source domain may not be in the same forest as destination.
+//
+#define ERROR_DS_SOURCE_DOMAIN_IN_FOREST 8534L
+
+//
+// MessageId: ERROR_DS_DESTINATION_DOMAIN_NOT_IN_FOREST
+//
+// MessageText:
+//
+//  The destination domain must be in the forest.
+//
+#define ERROR_DS_DESTINATION_DOMAIN_NOT_IN_FOREST 8535L
+
+//
+// MessageId: ERROR_DS_DESTINATION_AUDITING_NOT_ENABLED
+//
+// MessageText:
+//
+//  The operation requires that destination domain auditing be enabled.
+//
+#define ERROR_DS_DESTINATION_AUDITING_NOT_ENABLED 8536L
+
+//
+// MessageId: ERROR_DS_CANT_FIND_DC_FOR_SRC_DOMAIN
+//
+// MessageText:
+//
+//  The operation couldn't locate a DC for the source domain.
+//
+#define ERROR_DS_CANT_FIND_DC_FOR_SRC_DOMAIN 8537L
+
+//
+// MessageId: ERROR_DS_SRC_OBJ_NOT_GROUP_OR_USER
+//
+// MessageText:
+//
+//  The source object must be a group or user.
+//
+#define ERROR_DS_SRC_OBJ_NOT_GROUP_OR_USER 8538L
+
+//
+// MessageId: ERROR_DS_SRC_SID_EXISTS_IN_FOREST
+//
+// MessageText:
+//
+//  The source object's SID already exists in destination forest.
+//
+#define ERROR_DS_SRC_SID_EXISTS_IN_FOREST 8539L
+
+//
+// MessageId: ERROR_DS_SRC_AND_DST_OBJECT_CLASS_MISMATCH
+//
+// MessageText:
+//
+//  The source and destination object must be of the same type.
+//
+#define ERROR_DS_SRC_AND_DST_OBJECT_CLASS_MISMATCH 8540L
+
+//
+// MessageId: ERROR_SAM_INIT_FAILURE
+//
+// MessageText:
+//
+//  Security Accounts Manager initialization failed because of the following error: %1.
+//  Error Status: 0x%2. Click OK to shut down the system and reboot into Safe Mode. Check the event log for detailed information.
+//
+#define ERROR_SAM_INIT_FAILURE           8541L
+
+//
+// MessageId: ERROR_DS_DRA_SCHEMA_INFO_SHIP
+//
+// MessageText:
+//
+//  Schema information could not be included in the replication request.
+//
+#define ERROR_DS_DRA_SCHEMA_INFO_SHIP    8542L
+
+//
+// MessageId: ERROR_DS_DRA_SCHEMA_CONFLICT
+//
+// MessageText:
+//
+//  The replication operation could not be completed due to a schema
+//  incompatibility.
+//
+#define ERROR_DS_DRA_SCHEMA_CONFLICT     8543L
+
+//
+// MessageId: ERROR_DS_DRA_EARLIER_SCHEMA_CONFLICT
+//
+// MessageText:
+//
+//  The replication operation could not be completed due to a previous schema incompatibility.
+//
+#define ERROR_DS_DRA_EARLIER_SCHEMA_CONFLICT 8544L
+
+//
+// MessageId: ERROR_DS_DRA_OBJ_NC_MISMATCH
+//
+// MessageText:
+//
+//  The replication update could not be applied because either the source or the destination has not yet received information regarding a recent cross-domain move operation.
+//
+#define ERROR_DS_DRA_OBJ_NC_MISMATCH     8545L
+
+//
+// MessageId: ERROR_DS_NC_STILL_HAS_DSAS
+//
+// MessageText:
+//
+//  The requested domain could not be deleted because there exist domain controllers that still host this domain.
+//
+#define ERROR_DS_NC_STILL_HAS_DSAS       8546L
+
+//
+// MessageId: ERROR_DS_GC_REQUIRED
+//
+// MessageText:
+//
+//  The requested operation can be performed only on a global catalog server.
+//
+#define ERROR_DS_GC_REQUIRED             8547L
+
+//
+// MessageId: ERROR_DS_LOCAL_MEMBER_OF_LOCAL_ONLY
+//
+// MessageText:
+//
+//  A local group can only be a member of other local groups in the same domain.
+//
+#define ERROR_DS_LOCAL_MEMBER_OF_LOCAL_ONLY 8548L
+
+//
+// MessageId: ERROR_DS_NO_FPO_IN_UNIVERSAL_GROUPS
+//
+// MessageText:
+//
+//  Foreign security principals cannot be members of universal groups.
+//
+#define ERROR_DS_NO_FPO_IN_UNIVERSAL_GROUPS 8549L
+
+//
+// MessageId: ERROR_DS_CANT_ADD_TO_GC
+//
+// MessageText:
+//
+//  The attribute is not allowed to be replicated to the GC because of security reasons.
+//
+#define ERROR_DS_CANT_ADD_TO_GC          8550L
+
+//
+// MessageId: ERROR_DS_NO_CHECKPOINT_WITH_PDC
+//
+// MessageText:
+//
+//  The checkpoint with the PDC could not be taken because there too many modifications being processed currently.
+//
+#define ERROR_DS_NO_CHECKPOINT_WITH_PDC  8551L
+
+//
+// MessageId: ERROR_DS_SOURCE_AUDITING_NOT_ENABLED
+//
+// MessageText:
+//
+//  The operation requires that source domain auditing be enabled.
+//
+#define ERROR_DS_SOURCE_AUDITING_NOT_ENABLED 8552L
+
+//
+// MessageId: ERROR_DS_CANT_CREATE_IN_NONDOMAIN_NC
+//
+// MessageText:
+//
+//  Security principal objects can only be created inside domain naming contexts.
+//
+#define ERROR_DS_CANT_CREATE_IN_NONDOMAIN_NC 8553L
+
+//
+// MessageId: ERROR_DS_INVALID_NAME_FOR_SPN
+//
+// MessageText:
+//
+//  A Service Principal Name (SPN) could not be constructed because the provided hostname is not in the necessary format.
+//
+#define ERROR_DS_INVALID_NAME_FOR_SPN    8554L
+
+//
+// MessageId: ERROR_DS_FILTER_USES_CONTRUCTED_ATTRS
+//
+// MessageText:
+//
+//  A Filter was passed that uses constructed attributes.
+//
+#define ERROR_DS_FILTER_USES_CONTRUCTED_ATTRS 8555L
+
+//
+// MessageId: ERROR_DS_UNICODEPWD_NOT_IN_QUOTES
+//
+// MessageText:
+//
+//  The unicodePwd attribute value must be enclosed in double quotes.
+//
+#define ERROR_DS_UNICODEPWD_NOT_IN_QUOTES 8556L
+
+//
+// MessageId: ERROR_DS_MACHINE_ACCOUNT_QUOTA_EXCEEDED
+//
+// MessageText:
+//
+//  Your computer could not be joined to the domain. You have exceeded the maximum number of computer accounts you are allowed to create in this domain. Contact your system administrator to have this limit reset or increased.
+//
+#define ERROR_DS_MACHINE_ACCOUNT_QUOTA_EXCEEDED 8557L
+
+//
+// MessageId: ERROR_DS_MUST_BE_RUN_ON_DST_DC
+//
+// MessageText:
+//
+//  For security reasons, the operation must be run on the destination DC.
+//
+#define ERROR_DS_MUST_BE_RUN_ON_DST_DC   8558L
+
+//
+// MessageId: ERROR_DS_SRC_DC_MUST_BE_SP4_OR_GREATER
+//
+// MessageText:
+//
+//  For security reasons, the source DC must be Service Pack 4 or greater.
+//
+#define ERROR_DS_SRC_DC_MUST_BE_SP4_OR_GREATER 8559L
+
+//
+// MessageId: ERROR_DS_CANT_TREE_DELETE_CRITICAL_OBJ
+//
+// MessageText:
+//
+//  Critical Directory Service System objects cannot be deleted during tree delete operations.  The tree delete may have been partially performed.
+//
+#define ERROR_DS_CANT_TREE_DELETE_CRITICAL_OBJ 8560L
+
+///////////////////////////////////////////////////
+//                                                /
+//     End of Active Directory Error Codes        /
+//                                                /
+//                  8000 to  8999                 /
+///////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////
+//                                               //
+//                  DNS Error Codes              //
+//                                               //
+//                   9000 to 9999                //
+///////////////////////////////////////////////////
+
+// =============================
+// Facility DNS Error Messages
+// =============================
+
+//
+//  DNS response codes.
+//
+
+#define DNS_ERROR_RESPONSE_CODES_BASE 9000
+
+#define DNS_ERROR_RCODE_NO_ERROR NO_ERROR
+
+#define DNS_ERROR_MASK 0x00002328 // 9000 or DNS_ERROR_RESPONSE_CODES_BASE
+
+// DNS_ERROR_RCODE_FORMAT_ERROR          0x00002329
+//
+// MessageId: DNS_ERROR_RCODE_FORMAT_ERROR
+//
+// MessageText:
+//
+//  DNS server unable to interpret format.
+//
+#define DNS_ERROR_RCODE_FORMAT_ERROR     9001L
+
+// DNS_ERROR_RCODE_SERVER_FAILURE        0x0000232a
+//
+// MessageId: DNS_ERROR_RCODE_SERVER_FAILURE
+//
+// MessageText:
+//
+//  DNS server failure.
+//
+#define DNS_ERROR_RCODE_SERVER_FAILURE   9002L
+
+// DNS_ERROR_RCODE_NAME_ERROR            0x0000232b
+//
+// MessageId: DNS_ERROR_RCODE_NAME_ERROR
+//
+// MessageText:
+//
+//  DNS name does not exist.
+//
+#define DNS_ERROR_RCODE_NAME_ERROR       9003L
+
+// DNS_ERROR_RCODE_NOT_IMPLEMENTED       0x0000232c
+//
+// MessageId: DNS_ERROR_RCODE_NOT_IMPLEMENTED
+//
+// MessageText:
+//
+//  DNS request not supported by name server.
+//
+#define DNS_ERROR_RCODE_NOT_IMPLEMENTED  9004L
+
+// DNS_ERROR_RCODE_REFUSED               0x0000232d
+//
+// MessageId: DNS_ERROR_RCODE_REFUSED
+//
+// MessageText:
+//
+//  DNS operation refused.
+//
+#define DNS_ERROR_RCODE_REFUSED          9005L
+
+// DNS_ERROR_RCODE_YXDOMAIN              0x0000232e
+//
+// MessageId: DNS_ERROR_RCODE_YXDOMAIN
+//
+// MessageText:
+//
+//  DNS name that ought not exist, does exist.
+//
+#define DNS_ERROR_RCODE_YXDOMAIN         9006L
+
+// DNS_ERROR_RCODE_YXRRSET               0x0000232f
+//
+// MessageId: DNS_ERROR_RCODE_YXRRSET
+//
+// MessageText:
+//
+//  DNS RR set that ought not exist, does exist.
+//
+#define DNS_ERROR_RCODE_YXRRSET          9007L
+
+// DNS_ERROR_RCODE_NXRRSET               0x00002330
+//
+// MessageId: DNS_ERROR_RCODE_NXRRSET
+//
+// MessageText:
+//
+//  DNS RR set that ought to exist, does not exist.
+//
+#define DNS_ERROR_RCODE_NXRRSET          9008L
+
+// DNS_ERROR_RCODE_NOTAUTH               0x00002331
+//
+// MessageId: DNS_ERROR_RCODE_NOTAUTH
+//
+// MessageText:
+//
+//  DNS server not authoritative for zone.
+//
+#define DNS_ERROR_RCODE_NOTAUTH          9009L
+
+// DNS_ERROR_RCODE_NOTZONE               0x00002332
+//
+// MessageId: DNS_ERROR_RCODE_NOTZONE
+//
+// MessageText:
+//
+//  DNS name in update or prereq is not in zone.
+//
+#define DNS_ERROR_RCODE_NOTZONE          9010L
+
+// DNS_ERROR_RCODE_BADSIG                0x00002338
+//
+// MessageId: DNS_ERROR_RCODE_BADSIG
+//
+// MessageText:
+//
+//  DNS signature failed to verify.
+//
+#define DNS_ERROR_RCODE_BADSIG           9016L
+
+// DNS_ERROR_RCODE_BADKEY                0x00002339
+//
+// MessageId: DNS_ERROR_RCODE_BADKEY
+//
+// MessageText:
+//
+//  DNS bad key.
+//
+#define DNS_ERROR_RCODE_BADKEY           9017L
+
+// DNS_ERROR_RCODE_BADTIME               0x0000233a
+//
+// MessageId: DNS_ERROR_RCODE_BADTIME
+//
+// MessageText:
+//
+//  DNS signature validity expired.
+//
+#define DNS_ERROR_RCODE_BADTIME          9018L
+
+#define DNS_ERROR_RCODE_LAST DNS_ERROR_RCODE_BADTIME
+
+
+//
+//  Packet format
+//
+
+#define DNS_ERROR_PACKET_FMT_BASE 9500
+
+// DNS_INFO_NO_RECORDS                   0x0000251d
+//
+// MessageId: DNS_INFO_NO_RECORDS
+//
+// MessageText:
+//
+//  No records found for given DNS query.
+//
+#define DNS_INFO_NO_RECORDS              9501L
+
+// DNS_ERROR_BAD_PACKET                  0x0000251e
+//
+// MessageId: DNS_ERROR_BAD_PACKET
+//
+// MessageText:
+//
+//  Bad DNS packet.
+//
+#define DNS_ERROR_BAD_PACKET             9502L
+
+// DNS_ERROR_NO_PACKET                   0x0000251f
+//
+// MessageId: DNS_ERROR_NO_PACKET
+//
+// MessageText:
+//
+//  No DNS packet.
+//
+#define DNS_ERROR_NO_PACKET              9503L
+
+// DNS_ERROR_RCODE                       0x00002520
+//
+// MessageId: DNS_ERROR_RCODE
+//
+// MessageText:
+//
+//  DNS error, check rcode.
+//
+#define DNS_ERROR_RCODE                  9504L
+
+// DNS_ERROR_UNSECURE_PACKET             0x00002521
+//
+// MessageId: DNS_ERROR_UNSECURE_PACKET
+//
+// MessageText:
+//
+//  Unsecured DNS packet.
+//
+#define DNS_ERROR_UNSECURE_PACKET        9505L
+
+#define DNS_STATUS_PACKET_UNSECURE DNS_ERROR_UNSECURE_PACKET
+
+
+//
+//  General API errors
+//
+
+#define DNS_ERROR_NO_MEMORY            ERROR_OUTOFMEMORY
+#define DNS_ERROR_INVALID_NAME         ERROR_INVALID_NAME
+#define DNS_ERROR_INVALID_DATA         ERROR_INVALID_DATA
+
+#define DNS_ERROR_GENERAL_API_BASE 9550
+
+// DNS_ERROR_INVALID_TYPE                0x0000254f
+//
+// MessageId: DNS_ERROR_INVALID_TYPE
+//
+// MessageText:
+//
+//  Invalid DNS type.
+//
+#define DNS_ERROR_INVALID_TYPE           9551L
+
+// DNS_ERROR_INVALID_IP_ADDRESS          0x00002550
+//
+// MessageId: DNS_ERROR_INVALID_IP_ADDRESS
+//
+// MessageText:
+//
+//  Invalid IP address.
+//
+#define DNS_ERROR_INVALID_IP_ADDRESS     9552L
+
+// DNS_ERROR_INVALID_PROPERTY            0x00002551
+//
+// MessageId: DNS_ERROR_INVALID_PROPERTY
+//
+// MessageText:
+//
+//  Invalid property.
+//
+#define DNS_ERROR_INVALID_PROPERTY       9553L
+
+// DNS_ERROR_TRY_AGAIN_LATER             0x00002552
+//
+// MessageId: DNS_ERROR_TRY_AGAIN_LATER
+//
+// MessageText:
+//
+//  Try DNS operation again later.
+//
+#define DNS_ERROR_TRY_AGAIN_LATER        9554L
+
+// DNS_ERROR_NOT_UNIQUE                  0x00002553
+//
+// MessageId: DNS_ERROR_NOT_UNIQUE
+//
+// MessageText:
+//
+//  Record for given name and type is not unique.
+//
+#define DNS_ERROR_NOT_UNIQUE             9555L
+
+// DNS_ERROR_NON_RFC_NAME                0x00002554
+//
+// MessageId: DNS_ERROR_NON_RFC_NAME
+//
+// MessageText:
+//
+//  DNS name does not comply with RFC specifications.
+//
+#define DNS_ERROR_NON_RFC_NAME           9556L
+
+// DNS_STATUS_FQDN                       0x00002555
+//
+// MessageId: DNS_STATUS_FQDN
+//
+// MessageText:
+//
+//  DNS name is a fully-qualified DNS name.
+//
+#define DNS_STATUS_FQDN                  9557L
+
+// DNS_STATUS_DOTTED_NAME                0x00002556
+//
+// MessageId: DNS_STATUS_DOTTED_NAME
+//
+// MessageText:
+//
+//  DNS name is dotted (multi-label).
+//
+#define DNS_STATUS_DOTTED_NAME           9558L
+
+// DNS_STATUS_SINGLE_PART_NAME           0x00002557
+//
+// MessageId: DNS_STATUS_SINGLE_PART_NAME
+//
+// MessageText:
+//
+//  DNS name is a single-part name.
+//
+#define DNS_STATUS_SINGLE_PART_NAME      9559L
+
+// DNS_ERROR_INVALID_NAME_CHAR           0x00002558
+//
+// MessageId: DNS_ERROR_INVALID_NAME_CHAR
+//
+// MessageText:
+//
+//  DNS name contains an invalid character.
+//
+#define DNS_ERROR_INVALID_NAME_CHAR      9560L
+
+// DNS_ERROR_NUMERIC_NAME                0x00002559
+//
+// MessageId: DNS_ERROR_NUMERIC_NAME
+//
+// MessageText:
+//
+//  DNS name is entirely numeric.
+//
+#define DNS_ERROR_NUMERIC_NAME           9561L
+
+
+//
+//  Zone errors
+//
+
+#define DNS_ERROR_ZONE_BASE 9600
+
+// DNS_ERROR_ZONE_DOES_NOT_EXIST         0x00002581
+//
+// MessageId: DNS_ERROR_ZONE_DOES_NOT_EXIST
+//
+// MessageText:
+//
+//  DNS zone does not exist.
+//
+#define DNS_ERROR_ZONE_DOES_NOT_EXIST    9601L
+
+// DNS_ERROR_NO_ZONE_INFO                0x00002582
+//
+// MessageId: DNS_ERROR_NO_ZONE_INFO
+//
+// MessageText:
+//
+//  DNS zone information not available.
+//
+#define DNS_ERROR_NO_ZONE_INFO           9602L
+
+// DNS_ERROR_INVALID_ZONE_OPERATION      0x00002583
+//
+// MessageId: DNS_ERROR_INVALID_ZONE_OPERATION
+//
+// MessageText:
+//
+//  Invalid operation for DNS zone.
+//
+#define DNS_ERROR_INVALID_ZONE_OPERATION 9603L
+
+// DNS_ERROR_ZONE_CONFIGURATION_ERROR    0x00002584
+//
+// MessageId: DNS_ERROR_ZONE_CONFIGURATION_ERROR
+//
+// MessageText:
+//
+//  Invalid DNS zone configuration.
+//
+#define DNS_ERROR_ZONE_CONFIGURATION_ERROR 9604L
+
+// DNS_ERROR_ZONE_HAS_NO_SOA_RECORD      0x00002585
+//
+// MessageId: DNS_ERROR_ZONE_HAS_NO_SOA_RECORD
+//
+// MessageText:
+//
+//  DNS zone has no start of authority (SOA) record.
+//
+#define DNS_ERROR_ZONE_HAS_NO_SOA_RECORD 9605L
+
+// DNS_ERROR_ZONE_HAS_NO_NS_RECORDS      0x00002586
+//
+// MessageId: DNS_ERROR_ZONE_HAS_NO_NS_RECORDS
+//
+// MessageText:
+//
+//  DNS zone has no Name Server (NS) record.
+//
+#define DNS_ERROR_ZONE_HAS_NO_NS_RECORDS 9606L
+
+// DNS_ERROR_ZONE_LOCKED                 0x00002587
+//
+// MessageId: DNS_ERROR_ZONE_LOCKED
+//
+// MessageText:
+//
+//  DNS zone is locked.
+//
+#define DNS_ERROR_ZONE_LOCKED            9607L
+
+// DNS_ERROR_ZONE_CREATION_FAILED        0x00002588
+//
+// MessageId: DNS_ERROR_ZONE_CREATION_FAILED
+//
+// MessageText:
+//
+//  DNS zone creation failed.
+//
+#define DNS_ERROR_ZONE_CREATION_FAILED   9608L
+
+// DNS_ERROR_ZONE_ALREADY_EXISTS         0x00002589
+//
+// MessageId: DNS_ERROR_ZONE_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  DNS zone already exists.
+//
+#define DNS_ERROR_ZONE_ALREADY_EXISTS    9609L
+
+// DNS_ERROR_AUTOZONE_ALREADY_EXISTS     0x0000258a
+//
+// MessageId: DNS_ERROR_AUTOZONE_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  DNS automatic zone already exists.
+//
+#define DNS_ERROR_AUTOZONE_ALREADY_EXISTS 9610L
+
+// DNS_ERROR_INVALID_ZONE_TYPE           0x0000258b
+//
+// MessageId: DNS_ERROR_INVALID_ZONE_TYPE
+//
+// MessageText:
+//
+//  Invalid DNS zone type.
+//
+#define DNS_ERROR_INVALID_ZONE_TYPE      9611L
+
+// DNS_ERROR_SECONDARY_REQUIRES_MASTER_IP 0x0000258c
+//
+// MessageId: DNS_ERROR_SECONDARY_REQUIRES_MASTER_IP
+//
+// MessageText:
+//
+//  Secondary DNS zone requires master IP address.
+//
+#define DNS_ERROR_SECONDARY_REQUIRES_MASTER_IP 9612L
+
+// DNS_ERROR_ZONE_NOT_SECONDARY          0x0000258d
+//
+// MessageId: DNS_ERROR_ZONE_NOT_SECONDARY
+//
+// MessageText:
+//
+//  DNS zone not secondary.
+//
+#define DNS_ERROR_ZONE_NOT_SECONDARY     9613L
+
+// DNS_ERROR_NEED_SECONDARY_ADDRESSES    0x0000258e
+//
+// MessageId: DNS_ERROR_NEED_SECONDARY_ADDRESSES
+//
+// MessageText:
+//
+//  Need secondary IP address.
+//
+#define DNS_ERROR_NEED_SECONDARY_ADDRESSES 9614L
+
+// DNS_ERROR_WINS_INIT_FAILED            0x0000258f
+//
+// MessageId: DNS_ERROR_WINS_INIT_FAILED
+//
+// MessageText:
+//
+//  WINS initialization failed.
+//
+#define DNS_ERROR_WINS_INIT_FAILED       9615L
+
+// DNS_ERROR_NEED_WINS_SERVERS           0x00002590
+//
+// MessageId: DNS_ERROR_NEED_WINS_SERVERS
+//
+// MessageText:
+//
+//  Need WINS servers.
+//
+#define DNS_ERROR_NEED_WINS_SERVERS      9616L
+
+// DNS_ERROR_NBSTAT_INIT_FAILED          0x00002591
+//
+// MessageId: DNS_ERROR_NBSTAT_INIT_FAILED
+//
+// MessageText:
+//
+//  NBTSTAT initialization call failed.
+//
+#define DNS_ERROR_NBSTAT_INIT_FAILED     9617L
+
+// DNS_ERROR_SOA_DELETE_INVALID          0x00002592
+//
+// MessageId: DNS_ERROR_SOA_DELETE_INVALID
+//
+// MessageText:
+//
+//  Invalid delete of start of authority (SOA)
+//
+#define DNS_ERROR_SOA_DELETE_INVALID     9618L
+
+
+//
+//  Datafile errors
+//
+
+#define DNS_ERROR_DATAFILE_BASE 9650
+
+// DNS                                   0x000025b3
+//
+// MessageId: DNS_ERROR_PRIMARY_REQUIRES_DATAFILE
+//
+// MessageText:
+//
+//  Primary DNS zone requires datafile.
+//
+#define DNS_ERROR_PRIMARY_REQUIRES_DATAFILE 9651L
+
+// DNS                                   0x000025b4
+//
+// MessageId: DNS_ERROR_INVALID_DATAFILE_NAME
+//
+// MessageText:
+//
+//  Invalid datafile name for DNS zone.
+//
+#define DNS_ERROR_INVALID_DATAFILE_NAME  9652L
+
+// DNS                                   0x000025b5
+//
+// MessageId: DNS_ERROR_DATAFILE_OPEN_FAILURE
+//
+// MessageText:
+//
+//  Failed to open datafile for DNS zone.
+//
+#define DNS_ERROR_DATAFILE_OPEN_FAILURE  9653L
+
+// DNS                                   0x000025b6
+//
+// MessageId: DNS_ERROR_FILE_WRITEBACK_FAILED
+//
+// MessageText:
+//
+//  Failed to write datafile for DNS zone.
+//
+#define DNS_ERROR_FILE_WRITEBACK_FAILED  9654L
+
+// DNS                                   0x000025b7
+//
+// MessageId: DNS_ERROR_DATAFILE_PARSING
+//
+// MessageText:
+//
+//  Failure while reading datafile for DNS zone.
+//
+#define DNS_ERROR_DATAFILE_PARSING       9655L
+
+
+//
+//  Database errors
+//
+
+#define DNS_ERROR_DATABASE_BASE 9700
+
+// DNS_ERROR_RECORD_DOES_NOT_EXIST       0x000025e5
+//
+// MessageId: DNS_ERROR_RECORD_DOES_NOT_EXIST
+//
+// MessageText:
+//
+//  DNS record does not exist.
+//
+#define DNS_ERROR_RECORD_DOES_NOT_EXIST  9701L
+
+// DNS_ERROR_RECORD_FORMAT               0x000025e6
+//
+// MessageId: DNS_ERROR_RECORD_FORMAT
+//
+// MessageText:
+//
+//  DNS record format error.
+//
+#define DNS_ERROR_RECORD_FORMAT          9702L
+
+// DNS_ERROR_NODE_CREATION_FAILED        0x000025e7
+//
+// MessageId: DNS_ERROR_NODE_CREATION_FAILED
+//
+// MessageText:
+//
+//  Node creation failure in DNS.
+//
+#define DNS_ERROR_NODE_CREATION_FAILED   9703L
+
+// DNS_ERROR_UNKNOWN_RECORD_TYPE         0x000025e8
+//
+// MessageId: DNS_ERROR_UNKNOWN_RECORD_TYPE
+//
+// MessageText:
+//
+//  Unknown DNS record type.
+//
+#define DNS_ERROR_UNKNOWN_RECORD_TYPE    9704L
+
+// DNS_ERROR_RECORD_TIMED_OUT            0x000025e9
+//
+// MessageId: DNS_ERROR_RECORD_TIMED_OUT
+//
+// MessageText:
+//
+//  DNS record timed out.
+//
+#define DNS_ERROR_RECORD_TIMED_OUT       9705L
+
+// DNS_ERROR_NAME_NOT_IN_ZONE            0x000025ea
+//
+// MessageId: DNS_ERROR_NAME_NOT_IN_ZONE
+//
+// MessageText:
+//
+//  Name not in DNS zone.
+//
+#define DNS_ERROR_NAME_NOT_IN_ZONE       9706L
+
+// DNS_ERROR_CNAME_LOOP                  0x000025eb
+//
+// MessageId: DNS_ERROR_CNAME_LOOP
+//
+// MessageText:
+//
+//  CNAME loop detected.
+//
+#define DNS_ERROR_CNAME_LOOP             9707L
+
+// DNS_ERROR_NODE_IS_CNAME               0x000025ec
+//
+// MessageId: DNS_ERROR_NODE_IS_CNAME
+//
+// MessageText:
+//
+//  Node is a CNAME DNS record.
+//
+#define DNS_ERROR_NODE_IS_CNAME          9708L
+
+// DNS_ERROR_CNAME_COLLISION             0x000025ed
+//
+// MessageId: DNS_ERROR_CNAME_COLLISION
+//
+// MessageText:
+//
+//  A CNAME record already exists for given name.
+//
+#define DNS_ERROR_CNAME_COLLISION        9709L
+
+// DNS_ERROR_RECORD_ONLY_AT_ZONE_ROOT    0x000025ee
+//
+// MessageId: DNS_ERROR_RECORD_ONLY_AT_ZONE_ROOT
+//
+// MessageText:
+//
+//  Record only at DNS zone root.
+//
+#define DNS_ERROR_RECORD_ONLY_AT_ZONE_ROOT 9710L
+
+// DNS_ERROR_RECORD_ALREADY_EXISTS       0x000025ef
+//
+// MessageId: DNS_ERROR_RECORD_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  DNS record already exists.
+//
+#define DNS_ERROR_RECORD_ALREADY_EXISTS  9711L
+
+// DNS_ERROR_SECONDARY_DATA              0x000025f0
+//
+// MessageId: DNS_ERROR_SECONDARY_DATA
+//
+// MessageText:
+//
+//  Secondary DNS zone data error.
+//
+#define DNS_ERROR_SECONDARY_DATA         9712L
+
+// DNS_ERROR_NO_CREATE_CACHE_DATA        0x000025f1
+//
+// MessageId: DNS_ERROR_NO_CREATE_CACHE_DATA
+//
+// MessageText:
+//
+//  Could not create DNS cache data.
+//
+#define DNS_ERROR_NO_CREATE_CACHE_DATA   9713L
+
+// DNS_ERROR_NAME_DOES_NOT_EXIST         0x000025f2
+//
+// MessageId: DNS_ERROR_NAME_DOES_NOT_EXIST
+//
+// MessageText:
+//
+//  DNS name does not exist.
+//
+#define DNS_ERROR_NAME_DOES_NOT_EXIST    9714L
+
+// DNS_WARNING_PTR_CREATE_FAILED         0x000025f3
+//
+// MessageId: DNS_WARNING_PTR_CREATE_FAILED
+//
+// MessageText:
+//
+//  Could not create pointer (PTR) record.
+//
+#define DNS_WARNING_PTR_CREATE_FAILED    9715L
+
+// DNS_WARNING_DOMAIN_UNDELETED          0x000025f4
+//
+// MessageId: DNS_WARNING_DOMAIN_UNDELETED
+//
+// MessageText:
+//
+//  DNS domain was undeleted.
+//
+#define DNS_WARNING_DOMAIN_UNDELETED     9716L
+
+// DNS_ERROR_DS_UNAVAILABLE              0x000025f5
+//
+// MessageId: DNS_ERROR_DS_UNAVAILABLE
+//
+// MessageText:
+//
+//  The directory service is unavailable.
+//
+#define DNS_ERROR_DS_UNAVAILABLE         9717L
+
+// DNS_ERROR_DS_ZONE_ALREADY_EXISTS      0x000025f6
+//
+// MessageId: DNS_ERROR_DS_ZONE_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  DNS zone already exists in the directory service.
+//
+#define DNS_ERROR_DS_ZONE_ALREADY_EXISTS 9718L
+
+// DNS_ERROR_NO_BOOTFILE_IF_DS_ZONE      0x000025f7
+//
+// MessageId: DNS_ERROR_NO_BOOTFILE_IF_DS_ZONE
+//
+// MessageText:
+//
+//  DNS server not creating or reading the boot file for the directory service integrated DNS zone.
+//
+#define DNS_ERROR_NO_BOOTFILE_IF_DS_ZONE 9719L
+
+
+//
+//  Operation errors
+//
+
+#define DNS_ERROR_OPERATION_BASE 9750
+
+// DNS_INFO_AXFR_COMPLETE                0x00002617
+//
+// MessageId: DNS_INFO_AXFR_COMPLETE
+//
+// MessageText:
+//
+//  DNS AXFR (zone transfer) complete.
+//
+#define DNS_INFO_AXFR_COMPLETE           9751L
+
+// DNS_ERROR_AXFR                        0x00002618
+//
+// MessageId: DNS_ERROR_AXFR
+//
+// MessageText:
+//
+//  DNS zone transfer failed.
+//
+#define DNS_ERROR_AXFR                   9752L
+
+// DNS_INFO_ADDED_LOCAL_WINS             0x00002619
+//
+// MessageId: DNS_INFO_ADDED_LOCAL_WINS
+//
+// MessageText:
+//
+//  Added local WINS server.
+//
+#define DNS_INFO_ADDED_LOCAL_WINS        9753L
+
+
+//
+//  Secure update
+//
+
+#define DNS_ERROR_SECURE_BASE 9800
+
+// DNS_STATUS_CONTINUE_NEEDED            0x00002649
+//
+// MessageId: DNS_STATUS_CONTINUE_NEEDED
+//
+// MessageText:
+//
+//  Secure update call needs to continue update request.
+//
+#define DNS_STATUS_CONTINUE_NEEDED       9801L
+
+
+//
+//  Setup errors
+//
+
+#define DNS_ERROR_SETUP_BASE 9850
+
+// DNS_ERROR_NO_TCPIP                    0x0000267b
+//
+// MessageId: DNS_ERROR_NO_TCPIP
+//
+// MessageText:
+//
+//  TCP/IP network protocol not installed.
+//
+#define DNS_ERROR_NO_TCPIP               9851L
+
+// DNS_ERROR_NO_DNS_SERVERS              0x0000267c
+//
+// MessageId: DNS_ERROR_NO_DNS_SERVERS
+//
+// MessageText:
+//
+//  No DNS servers configured for local system.
+//
+#define DNS_ERROR_NO_DNS_SERVERS         9852L
+
+///////////////////////////////////////////////////
+//                                               //
+//             End of DNS Error Codes            //
+//                                               //
+//                  9000 to 9999                 //
+///////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////
+//                                               //
+//               WinSock Error Codes             //
+//                                               //
+//                 10000 to 11999                //
+///////////////////////////////////////////////////
+
+//
+// WinSock error codes are also defined in WinSock.h
+// and WinSock2.h, hence the IFDEF
+//
+#ifndef WSABASEERR
+#define WSABASEERR 10000
+//
+// MessageId: WSAEINTR
+//
+// MessageText:
+//
+//  A blocking operation was interrupted by a call to WSACancelBlockingCall.
+//
+#define WSAEINTR                         10004L
+
+//
+// MessageId: WSAEBADF
+//
+// MessageText:
+//
+//  The file handle supplied is not valid.
+//
+#define WSAEBADF                         10009L
+
+//
+// MessageId: WSAEACCES
+//
+// MessageText:
+//
+//  An attempt was made to access a socket in a way forbidden by its access permissions.
+//
+#define WSAEACCES                        10013L
+
+//
+// MessageId: WSAEFAULT
+//
+// MessageText:
+//
+//  The system detected an invalid pointer address in attempting to use a pointer argument in a call.
+//
+#define WSAEFAULT                        10014L
+
+//
+// MessageId: WSAEINVAL
+//
+// MessageText:
+//
+//  An invalid argument was supplied.
+//
+#define WSAEINVAL                        10022L
+
+//
+// MessageId: WSAEMFILE
+//
+// MessageText:
+//
+//  Too many open sockets.
+//
+#define WSAEMFILE                        10024L
+
+//
+// MessageId: WSAEWOULDBLOCK
+//
+// MessageText:
+//
+//  A non-blocking socket operation could not be completed immediately.
+//
+#define WSAEWOULDBLOCK                   10035L
+
+//
+// MessageId: WSAEINPROGRESS
+//
+// MessageText:
+//
+//  A blocking operation is currently executing.
+//
+#define WSAEINPROGRESS                   10036L
+
+//
+// MessageId: WSAEALREADY
+//
+// MessageText:
+//
+//  An operation was attempted on a non-blocking socket that already had an operation in progress.
+//
+#define WSAEALREADY                      10037L
+
+//
+// MessageId: WSAENOTSOCK
+//
+// MessageText:
+//
+//  An operation was attempted on something that is not a socket.
+//
+#define WSAENOTSOCK                      10038L
+
+//
+// MessageId: WSAEDESTADDRREQ
+//
+// MessageText:
+//
+//  A required address was omitted from an operation on a socket.
+//
+#define WSAEDESTADDRREQ                  10039L
+
+//
+// MessageId: WSAEMSGSIZE
+//
+// MessageText:
+//
+//  A message sent on a datagram socket was larger than the internal message buffer or some other network limit, or the buffer used to receive a datagram into was smaller than the datagram itself.
+//
+#define WSAEMSGSIZE                      10040L
+
+//
+// MessageId: WSAEPROTOTYPE
+//
+// MessageText:
+//
+//  A protocol was specified in the socket function call that does not support the semantics of the socket type requested.
+//
+#define WSAEPROTOTYPE                    10041L
+
+//
+// MessageId: WSAENOPROTOOPT
+//
+// MessageText:
+//
+//  An unknown, invalid, or unsupported option or level was specified in a getsockopt or setsockopt call.
+//
+#define WSAENOPROTOOPT                   10042L
+
+//
+// MessageId: WSAEPROTONOSUPPORT
+//
+// MessageText:
+//
+//  The requested protocol has not been configured into the system, or no implementation for it exists.
+//
+#define WSAEPROTONOSUPPORT               10043L
+
+//
+// MessageId: WSAESOCKTNOSUPPORT
+//
+// MessageText:
+//
+//  The support for the specified socket type does not exist in this address family.
+//
+#define WSAESOCKTNOSUPPORT               10044L
+
+//
+// MessageId: WSAEOPNOTSUPP
+//
+// MessageText:
+//
+//  The attempted operation is not supported for the type of object referenced.
+//
+#define WSAEOPNOTSUPP                    10045L
+
+//
+// MessageId: WSAEPFNOSUPPORT
+//
+// MessageText:
+//
+//  The protocol family has not been configured into the system or no implementation for it exists.
+//
+#define WSAEPFNOSUPPORT                  10046L
+
+//
+// MessageId: WSAEAFNOSUPPORT
+//
+// MessageText:
+//
+//  An address incompatible with the requested protocol was used.
+//
+#define WSAEAFNOSUPPORT                  10047L
+
+//
+// MessageId: WSAEADDRINUSE
+//
+// MessageText:
+//
+//  Only one usage of each socket address (protocol/network address/port)
+//  is normally permitted.
+//
+#define WSAEADDRINUSE                    10048L
+
+//
+// MessageId: WSAEADDRNOTAVAIL
+//
+// MessageText:
+//
+//  The requested address is not valid in its context.
+//
+#define WSAEADDRNOTAVAIL                 10049L
+
+//
+// MessageId: WSAENETDOWN
+//
+// MessageText:
+//
+//  A socket operation encountered a dead network.
+//
+#define WSAENETDOWN                      10050L
+
+//
+// MessageId: WSAENETUNREACH
+//
+// MessageText:
+//
+//  A socket operation was attempted to an unreachable network.
+//
+#define WSAENETUNREACH                   10051L
+
+//
+// MessageId: WSAENETRESET
+//
+// MessageText:
+//
+//  The connection has been broken due to keep-alive activity detecting a failure while the operation was in progress.
+//
+#define WSAENETRESET                     10052L
+
+//
+// MessageId: WSAECONNABORTED
+//
+// MessageText:
+//
+//  An established connection was aborted by the software in your host machine.
+//
+#define WSAECONNABORTED                  10053L
+
+//
+// MessageId: WSAECONNRESET
+//
+// MessageText:
+//
+//  An existing connection was forcibly closed by the remote host.
+//
+#define WSAECONNRESET                    10054L
+
+//
+// MessageId: WSAENOBUFS
+//
+// MessageText:
+//
+//  An operation on a socket could not be performed because the system lacked sufficient buffer space or because a queue was full.
+//
+#define WSAENOBUFS                       10055L
+
+//
+// MessageId: WSAEISCONN
+//
+// MessageText:
+//
+//  A connect request was made on an already connected socket.
+//
+#define WSAEISCONN                       10056L
+
+//
+// MessageId: WSAENOTCONN
+//
+// MessageText:
+//
+//  A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using a sendto call) no address was supplied.
+//
+#define WSAENOTCONN                      10057L
+
+//
+// MessageId: WSAESHUTDOWN
+//
+// MessageText:
+//
+//  A request to send or receive data was disallowed because the socket had already been shut down in that direction with a previous shutdown call.
+//
+#define WSAESHUTDOWN                     10058L
+
+//
+// MessageId: WSAETOOMANYREFS
+//
+// MessageText:
+//
+//  Too many references to some kernel object.
+//
+#define WSAETOOMANYREFS                  10059L
+
+//
+// MessageId: WSAETIMEDOUT
+//
+// MessageText:
+//
+//  A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+//
+#define WSAETIMEDOUT                     10060L
+
+//
+// MessageId: WSAECONNREFUSED
+//
+// MessageText:
+//
+//  No connection could be made because the target machine actively refused it.
+//
+#define WSAECONNREFUSED                  10061L
+
+//
+// MessageId: WSAELOOP
+//
+// MessageText:
+//
+//  Cannot translate name.
+//
+#define WSAELOOP                         10062L
+
+//
+// MessageId: WSAENAMETOOLONG
+//
+// MessageText:
+//
+//  Name component or name was too long.
+//
+#define WSAENAMETOOLONG                  10063L
+
+//
+// MessageId: WSAEHOSTDOWN
+//
+// MessageText:
+//
+//  A socket operation failed because the destination host was down.
+//
+#define WSAEHOSTDOWN                     10064L
+
+//
+// MessageId: WSAEHOSTUNREACH
+//
+// MessageText:
+//
+//  A socket operation was attempted to an unreachable host.
+//
+#define WSAEHOSTUNREACH                  10065L
+
+//
+// MessageId: WSAENOTEMPTY
+//
+// MessageText:
+//
+//  Cannot remove a directory that is not empty.
+//
+#define WSAENOTEMPTY                     10066L
+
+//
+// MessageId: WSAEPROCLIM
+//
+// MessageText:
+//
+//  A Windows Sockets implementation may have a limit on the number of applications that may use it simultaneously.
+//
+#define WSAEPROCLIM                      10067L
+
+//
+// MessageId: WSAEUSERS
+//
+// MessageText:
+//
+//  Ran out of quota.
+//
+#define WSAEUSERS                        10068L
+
+//
+// MessageId: WSAEDQUOT
+//
+// MessageText:
+//
+//  Ran out of disk quota.
+//
+#define WSAEDQUOT                        10069L
+
+//
+// MessageId: WSAESTALE
+//
+// MessageText:
+//
+//  File handle reference is no longer available.
+//
+#define WSAESTALE                        10070L
+
+//
+// MessageId: WSAEREMOTE
+//
+// MessageText:
+//
+//  Item is not available locally.
+//
+#define WSAEREMOTE                       10071L
+
+//
+// MessageId: WSASYSNOTREADY
+//
+// MessageText:
+//
+//  WSAStartup cannot function at this time because the underlying system it uses to provide network services is currently unavailable.
+//
+#define WSASYSNOTREADY                   10091L
+
+//
+// MessageId: WSAVERNOTSUPPORTED
+//
+// MessageText:
+//
+//  The Windows Sockets version requested is not supported.
+//
+#define WSAVERNOTSUPPORTED               10092L
+
+//
+// MessageId: WSANOTINITIALISED
+//
+// MessageText:
+//
+//  Either the application has not called WSAStartup, or WSAStartup failed.
+//
+#define WSANOTINITIALISED                10093L
+
+//
+// MessageId: WSAEDISCON
+//
+// MessageText:
+//
+//  Returned by WSARecv or WSARecvFrom to indicate the remote party has initiated a graceful shutdown sequence.
+//
+#define WSAEDISCON                       10101L
+
+//
+// MessageId: WSAENOMORE
+//
+// MessageText:
+//
+//  No more results can be returned by WSALookupServiceNext.
+//
+#define WSAENOMORE                       10102L
+
+//
+// MessageId: WSAECANCELLED
+//
+// MessageText:
+//
+//  A call to WSALookupServiceEnd was made while this call was still processing. The call has been canceled.
+//
+#define WSAECANCELLED                    10103L
+
+//
+// MessageId: WSAEINVALIDPROCTABLE
+//
+// MessageText:
+//
+//  The procedure call table is invalid.
+//
+#define WSAEINVALIDPROCTABLE             10104L
+
+//
+// MessageId: WSAEINVALIDPROVIDER
+//
+// MessageText:
+//
+//  The requested service provider is invalid.
+//
+#define WSAEINVALIDPROVIDER              10105L
+
+//
+// MessageId: WSAEPROVIDERFAILEDINIT
+//
+// MessageText:
+//
+//  The requested service provider could not be loaded or initialized.
+//
+#define WSAEPROVIDERFAILEDINIT           10106L
+
+//
+// MessageId: WSASYSCALLFAILURE
+//
+// MessageText:
+//
+//  A system call that should never fail has failed.
+//
+#define WSASYSCALLFAILURE                10107L
+
+//
+// MessageId: WSASERVICE_NOT_FOUND
+//
+// MessageText:
+//
+//  No such service is known. The service cannot be found in the specified name space.
+//
+#define WSASERVICE_NOT_FOUND             10108L
+
+//
+// MessageId: WSATYPE_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified class was not found.
+//
+#define WSATYPE_NOT_FOUND                10109L
+
+//
+// MessageId: WSA_E_NO_MORE
+//
+// MessageText:
+//
+//  No more results can be returned by WSALookupServiceNext.
+//
+#define WSA_E_NO_MORE                    10110L
+
+//
+// MessageId: WSA_E_CANCELLED
+//
+// MessageText:
+//
+//  A call to WSALookupServiceEnd was made while this call was still processing. The call has been canceled.
+//
+#define WSA_E_CANCELLED                  10111L
+
+//
+// MessageId: WSAEREFUSED
+//
+// MessageText:
+//
+//  A database query failed because it was actively refused.
+//
+#define WSAEREFUSED                      10112L
+
+//
+// MessageId: WSAHOST_NOT_FOUND
+//
+// MessageText:
+//
+//  No such host is known.
+//
+#define WSAHOST_NOT_FOUND                11001L
+
+//
+// MessageId: WSATRY_AGAIN
+//
+// MessageText:
+//
+//  This is usually a temporary error during hostname resolution and means that the local server did not receive a response from an authoritative server.
+//
+#define WSATRY_AGAIN                     11002L
+
+//
+// MessageId: WSANO_RECOVERY
+//
+// MessageText:
+//
+//  A non-recoverable error occurred during a database lookup.
+//
+#define WSANO_RECOVERY                   11003L
+
+//
+// MessageId: WSANO_DATA
+//
+// MessageText:
+//
+//  The requested name is valid and was found in the database, but it does not have the correct associated data being resolved for.
+//
+#define WSANO_DATA                       11004L
+
+//
+// MessageId: WSA_QOS_RECEIVERS
+//
+// MessageText:
+//
+//  At least one reserve has arrived.
+//
+#define WSA_QOS_RECEIVERS                11005L
+
+//
+// MessageId: WSA_QOS_SENDERS
+//
+// MessageText:
+//
+//  At least one path has arrived.
+//
+#define WSA_QOS_SENDERS                  11006L
+
+//
+// MessageId: WSA_QOS_NO_SENDERS
+//
+// MessageText:
+//
+//  There are no senders.
+//
+#define WSA_QOS_NO_SENDERS               11007L
+
+//
+// MessageId: WSA_QOS_NO_RECEIVERS
+//
+// MessageText:
+//
+//  There are no receivers.
+//
+#define WSA_QOS_NO_RECEIVERS             11008L
+
+//
+// MessageId: WSA_QOS_REQUEST_CONFIRMED
+//
+// MessageText:
+//
+//  Reserve has been confirmed.
+//
+#define WSA_QOS_REQUEST_CONFIRMED        11009L
+
+//
+// MessageId: WSA_QOS_ADMISSION_FAILURE
+//
+// MessageText:
+//
+//  Error due to lack of resources.
+//
+#define WSA_QOS_ADMISSION_FAILURE        11010L
+
+//
+// MessageId: WSA_QOS_POLICY_FAILURE
+//
+// MessageText:
+//
+//  Rejected for administrative reasons - bad credentials.
+//
+#define WSA_QOS_POLICY_FAILURE           11011L
+
+//
+// MessageId: WSA_QOS_BAD_STYLE
+//
+// MessageText:
+//
+//  Unknown or conflicting style.
+//
+#define WSA_QOS_BAD_STYLE                11012L
+
+//
+// MessageId: WSA_QOS_BAD_OBJECT
+//
+// MessageText:
+//
+//  Problem with some part of the filterspec or providerspecific buffer in general.
+//
+#define WSA_QOS_BAD_OBJECT               11013L
+
+//
+// MessageId: WSA_QOS_TRAFFIC_CTRL_ERROR
+//
+// MessageText:
+//
+//  Problem with some part of the flowspec.
+//
+#define WSA_QOS_TRAFFIC_CTRL_ERROR       11014L
+
+//
+// MessageId: WSA_QOS_GENERIC_ERROR
+//
+// MessageText:
+//
+//  General QOS error.
+//
+#define WSA_QOS_GENERIC_ERROR            11015L
+
+//
+// MessageId: WSA_QOS_ESERVICETYPE
+//
+// MessageText:
+//
+//  An invalid or unrecognized service type was found in the flowspec.
+//
+#define WSA_QOS_ESERVICETYPE             11016L
+
+//
+// MessageId: WSA_QOS_EFLOWSPEC
+//
+// MessageText:
+//
+//  An invalid or inconsistent flowspec was found in the QOS structure.
+//
+#define WSA_QOS_EFLOWSPEC                11017L
+
+//
+// MessageId: WSA_QOS_EPROVSPECBUF
+//
+// MessageText:
+//
+//  Invalid QOS provider-specific buffer.
+//
+#define WSA_QOS_EPROVSPECBUF             11018L
+
+//
+// MessageId: WSA_QOS_EFILTERSTYLE
+//
+// MessageText:
+//
+//  An invalid QOS filter style was used.
+//
+#define WSA_QOS_EFILTERSTYLE             11019L
+
+//
+// MessageId: WSA_QOS_EFILTERTYPE
+//
+// MessageText:
+//
+//  An invalid QOS filter type was used.
+//
+#define WSA_QOS_EFILTERTYPE              11020L
+
+//
+// MessageId: WSA_QOS_EFILTERCOUNT
+//
+// MessageText:
+//
+//  An incorrect number of QOS FILTERSPECs were specified in the FLOWDESCRIPTOR.
+//
+#define WSA_QOS_EFILTERCOUNT             11021L
+
+//
+// MessageId: WSA_QOS_EOBJLENGTH
+//
+// MessageText:
+//
+//  An object with an invalid ObjectLength field was specified in the QOS provider-specific buffer.
+//
+#define WSA_QOS_EOBJLENGTH               11022L
+
+//
+// MessageId: WSA_QOS_EFLOWCOUNT
+//
+// MessageText:
+//
+//  An incorrect number of flow descriptors was specified in the QOS structure.
+//
+#define WSA_QOS_EFLOWCOUNT               11023L
+
+//
+// MessageId: WSA_QOS_EUNKOWNPSOBJ
+//
+// MessageText:
+//
+//  An unrecognized object was found in the QOS provider-specific buffer.
+//
+#define WSA_QOS_EUNKOWNPSOBJ             11024L
+
+//
+// MessageId: WSA_QOS_EPOLICYOBJ
+//
+// MessageText:
+//
+//  An invalid policy object was found in the QOS provider-specific buffer.
+//
+#define WSA_QOS_EPOLICYOBJ               11025L
+
+//
+// MessageId: WSA_QOS_EFLOWDESC
+//
+// MessageText:
+//
+//  An invalid QOS flow descriptor was found in the flow descriptor list.
+//
+#define WSA_QOS_EFLOWDESC                11026L
+
+//
+// MessageId: WSA_QOS_EPSFLOWSPEC
+//
+// MessageText:
+//
+//  An invalid or inconsistent flowspec was found in the QOS provider specific buffer.
+//
+#define WSA_QOS_EPSFLOWSPEC              11027L
+
+//
+// MessageId: WSA_QOS_EPSFILTERSPEC
+//
+// MessageText:
+//
+//  An invalid FILTERSPEC was found in the QOS provider-specific buffer.
+//
+#define WSA_QOS_EPSFILTERSPEC            11028L
+
+//
+// MessageId: WSA_QOS_ESDMODEOBJ
+//
+// MessageText:
+//
+//  An invalid shape discard mode object was found in the QOS provider specific buffer.
+//
+#define WSA_QOS_ESDMODEOBJ               11029L
+
+//
+// MessageId: WSA_QOS_ESHAPERATEOBJ
+//
+// MessageText:
+//
+//  An invalid shaping rate object was found in the QOS provider-specific buffer.
+//
+#define WSA_QOS_ESHAPERATEOBJ            11030L
+
+//
+// MessageId: WSA_QOS_RESERVED_PETYPE
+//
+// MessageText:
+//
+//  A reserved policy element was found in the QOS provider-specific buffer.
+//
+#define WSA_QOS_RESERVED_PETYPE          11031L
+
+#endif // defined(WSABASEERR)
+
+///////////////////////////////////////////////////
+//                                               //
+//           End of WinSock Error Codes          //
+//                                               //
+//                 10000 to 11999                //
+///////////////////////////////////////////////////
+
+
+////////////////////////////////////
+//                                //
+//     COM Error Codes            //
 //                                //
 ////////////////////////////////////
 
 //
-// OLE error definitions and values
-//
-// The return value of OLE APIs and methods is an HRESULT.
+// The return value of COM functions and methods is an HRESULT.
 // This is not a handle to anything, but is merely a 32-bit value
 // with several fields encoded in the value.  The parts of an
 // HRESULT are shown below.
@@ -6484,7 +14050,7 @@
 // Define bits here so macros are guaranteed to work
 
 #define FACILITY_NT_BIT                 0x10000000
-#define HRESULT_FROM_WIN32(x)   (x ? ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000)) : 0 )
+#define HRESULT_FROM_WIN32(x) ((HRESULT)(x) <= 0 ? ((HRESULT)(x)) : ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000)))
 
 //
 // Map an NT status value into a HRESULT
@@ -6973,6 +14539,33 @@
 //
 #define CO_E_NOT_SUPPORTED               _HRESULT_TYPEDEF_(0x80004021L)
 
+//
+// MessageId: CO_E_RELOAD_DLL
+//
+// MessageText:
+//
+//  A dll must be loaded.
+//
+#define CO_E_RELOAD_DLL                  _HRESULT_TYPEDEF_(0x80004022L)
+
+//
+// MessageId: CO_E_MSI_ERROR
+//
+// MessageText:
+//
+//  A Microsoft Software Installer error was encountered.
+//
+#define CO_E_MSI_ERROR                   _HRESULT_TYPEDEF_(0x80004023L)
+
+//
+// MessageId: CO_E_ATTEMPT_TO_CREATE_OUTSIDE_CLIENT_CONTEXT
+//
+// MessageText:
+//
+//  The specified activation could not occur in the client context as specified.
+//
+#define CO_E_ATTEMPT_TO_CREATE_OUTSIDE_CLIENT_CONTEXT _HRESULT_TYPEDEF_(0x80004024L)
+
 
 //
 // Success codes
@@ -7115,7 +14708,7 @@
 //
 // MessageText:
 //
-//  User cancelled out of save dialog
+//  User canceled out of save dialog
 //
 #define OLE_E_PROMPTSAVECANCELLED        _HRESULT_TYPEDEF_(0x8004000CL)
 
@@ -7170,7 +14763,6 @@
 // MessageText:
 //
 //  Not able to perform the operation because object is not given storage yet
-//  
 //
 #define OLE_E_NOSTORAGE                  _HRESULT_TYPEDEF_(0x80040012L)
 
@@ -7317,6 +14909,15 @@
 //
 #define CLASS_E_CLASSNOTAVAILABLE        _HRESULT_TYPEDEF_(0x80040111L)
 
+//
+// MessageId: CLASS_E_NOTLICENSED
+//
+// MessageText:
+//
+//  Class is not licensed for use
+//
+#define CLASS_E_NOTLICENSED              _HRESULT_TYPEDEF_(0x80040112L)
+
 #define MARSHAL_E_FIRST  0x80040120L
 #define MARSHAL_E_LAST   0x8004012FL
 #define MARSHAL_S_FIRST  0x00040120L
@@ -7395,6 +14996,150 @@
 //  Interface not registered
 //
 #define REGDB_E_IIDNOTREG                _HRESULT_TYPEDEF_(0x80040155L)
+
+//
+// MessageId: REGDB_E_BADTHREADINGMODEL
+//
+// MessageText:
+//
+//  Threading model entry is not valid
+//
+#define REGDB_E_BADTHREADINGMODEL        _HRESULT_TYPEDEF_(0x80040156L)
+
+#define CAT_E_FIRST     0x80040160L
+#define CAT_E_LAST      0x80040161L
+//
+// MessageId: CAT_E_CATIDNOEXIST
+//
+// MessageText:
+//
+//  CATID does not exist
+//
+#define CAT_E_CATIDNOEXIST               _HRESULT_TYPEDEF_(0x80040160L)
+
+//
+// MessageId: CAT_E_NODESCRIPTION
+//
+// MessageText:
+//
+//  Description not found
+//
+#define CAT_E_NODESCRIPTION              _HRESULT_TYPEDEF_(0x80040161L)
+
+////////////////////////////////////
+//                                //
+//     Class Store Error Codes    //
+//                                //
+////////////////////////////////////
+#define CS_E_FIRST     0x80040164L
+#define CS_E_LAST      0x8004016FL
+//
+// MessageId: CS_E_PACKAGE_NOTFOUND
+//
+// MessageText:
+//
+//  No package in the software installation data in the Active Directory meets this criteria.
+//
+#define CS_E_PACKAGE_NOTFOUND            _HRESULT_TYPEDEF_(0x80040164L)
+
+//
+// MessageId: CS_E_NOT_DELETABLE
+//
+// MessageText:
+//
+//  Deleting this will break the referential integrity of the software installation data in the Active Directory.
+//
+#define CS_E_NOT_DELETABLE               _HRESULT_TYPEDEF_(0x80040165L)
+
+//
+// MessageId: CS_E_CLASS_NOTFOUND
+//
+// MessageText:
+//
+//  The CLSID was not found in the software installation data in the Active Directory.
+//
+#define CS_E_CLASS_NOTFOUND              _HRESULT_TYPEDEF_(0x80040166L)
+
+//
+// MessageId: CS_E_INVALID_VERSION
+//
+// MessageText:
+//
+//  The software installation data in the Active Directory is corrupt.
+//
+#define CS_E_INVALID_VERSION             _HRESULT_TYPEDEF_(0x80040167L)
+
+//
+// MessageId: CS_E_NO_CLASSSTORE
+//
+// MessageText:
+//
+//  There is no software installation data in the Active Directory.
+//
+#define CS_E_NO_CLASSSTORE               _HRESULT_TYPEDEF_(0x80040168L)
+
+//
+// MessageId: CS_E_OBJECT_NOTFOUND
+//
+// MessageText:
+//
+//  There is no software installation data object in the Active Directory.
+//
+#define CS_E_OBJECT_NOTFOUND             _HRESULT_TYPEDEF_(0x80040169L)
+
+//
+// MessageId: CS_E_OBJECT_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  The software installation data object in the Active Directory already exists.
+//
+#define CS_E_OBJECT_ALREADY_EXISTS       _HRESULT_TYPEDEF_(0x8004016AL)
+
+//
+// MessageId: CS_E_INVALID_PATH
+//
+// MessageText:
+//
+//  The path to the software installation data in the Active Directory is not correct.
+//
+#define CS_E_INVALID_PATH                _HRESULT_TYPEDEF_(0x8004016BL)
+
+//
+// MessageId: CS_E_NETWORK_ERROR
+//
+// MessageText:
+//
+//  A network error interrupted the operation.
+//
+#define CS_E_NETWORK_ERROR               _HRESULT_TYPEDEF_(0x8004016CL)
+
+//
+// MessageId: CS_E_ADMIN_LIMIT_EXCEEDED
+//
+// MessageText:
+//
+//  The size of this object exceeds the maximum size set by the Administrator.
+//
+#define CS_E_ADMIN_LIMIT_EXCEEDED        _HRESULT_TYPEDEF_(0x8004016DL)
+
+//
+// MessageId: CS_E_SCHEMA_MISMATCH
+//
+// MessageText:
+//
+//  The schema for the software installation data in the Active Directory does not match the required schema.
+//
+#define CS_E_SCHEMA_MISMATCH             _HRESULT_TYPEDEF_(0x8004016EL)
+
+//
+// MessageId: CS_E_INTERNAL_ERROR
+//
+// MessageText:
+//
+//  An error occurred in the software installation data in the Active Directory.
+//
+#define CS_E_INTERNAL_ERROR              _HRESULT_TYPEDEF_(0x8004016FL)
 
 #define CACHE_E_FIRST     0x80040170L
 #define CACHE_E_LAST      0x8004017FL
@@ -7874,6 +15619,266 @@
 //
 #define CO_E_RELEASED                    _HRESULT_TYPEDEF_(0x800401FFL)
 
+#define EVENT_E_FIRST        0x80040200L
+#define EVENT_E_LAST         0x8004021FL
+#define EVENT_S_FIRST        0x00040200L
+#define EVENT_S_LAST         0x0004021FL
+//
+// MessageId: EVENT_S_SOME_SUBSCRIBERS_FAILED
+//
+// MessageText:
+//
+//  An event was able to invoke some but not all of the subscribers
+//
+#define EVENT_S_SOME_SUBSCRIBERS_FAILED  _HRESULT_TYPEDEF_(0x00040200L)
+
+//
+// MessageId: EVENT_E_ALL_SUBSCRIBERS_FAILED
+//
+// MessageText:
+//
+//  An event was unable to invoke any of the subscribers
+//
+#define EVENT_E_ALL_SUBSCRIBERS_FAILED   _HRESULT_TYPEDEF_(0x80040201L)
+
+//
+// MessageId: EVENT_S_NOSUBSCRIBERS
+//
+// MessageText:
+//
+//  An event was delivered but there were no subscribers
+//
+#define EVENT_S_NOSUBSCRIBERS            _HRESULT_TYPEDEF_(0x00040202L)
+
+//
+// MessageId: EVENT_E_QUERYSYNTAX
+//
+// MessageText:
+//
+//  A syntax error occurred trying to evaluate a query string
+//
+#define EVENT_E_QUERYSYNTAX              _HRESULT_TYPEDEF_(0x80040203L)
+
+//
+// MessageId: EVENT_E_QUERYFIELD
+//
+// MessageText:
+//
+//  An invalid field name was used in a query string
+//
+#define EVENT_E_QUERYFIELD               _HRESULT_TYPEDEF_(0x80040204L)
+
+//
+// MessageId: EVENT_E_INTERNALEXCEPTION
+//
+// MessageText:
+//
+//  An unexpected exception was raised
+//
+#define EVENT_E_INTERNALEXCEPTION        _HRESULT_TYPEDEF_(0x80040205L)
+
+//
+// MessageId: EVENT_E_INTERNALERROR
+//
+// MessageText:
+//
+//  An unexpected internal error was detected
+//
+#define EVENT_E_INTERNALERROR            _HRESULT_TYPEDEF_(0x80040206L)
+
+//
+// MessageId: EVENT_E_INVALID_PER_USER_SID
+//
+// MessageText:
+//
+//  The owner SID on a per-user subscription doesn't exist
+//
+#define EVENT_E_INVALID_PER_USER_SID     _HRESULT_TYPEDEF_(0x80040207L)
+
+//
+// MessageId: EVENT_E_USER_EXCEPTION
+//
+// MessageText:
+//
+//  A user-supplied component or subscriber raised an exception
+//
+#define EVENT_E_USER_EXCEPTION           _HRESULT_TYPEDEF_(0x80040208L)
+
+//
+// MessageId: EVENT_E_TOO_MANY_METHODS
+//
+// MessageText:
+//
+//  An interface has too many methods to fire events from
+//
+#define EVENT_E_TOO_MANY_METHODS         _HRESULT_TYPEDEF_(0x80040209L)
+
+//
+// MessageId: EVENT_E_MISSING_EVENTCLASS
+//
+// MessageText:
+//
+//  A subscription cannot be stored unless its event class already exists
+//
+#define EVENT_E_MISSING_EVENTCLASS       _HRESULT_TYPEDEF_(0x8004020AL)
+
+//
+// MessageId: EVENT_E_NOT_ALL_REMOVED
+//
+// MessageText:
+//
+//  Not all the objects requested could be removed
+//
+#define EVENT_E_NOT_ALL_REMOVED          _HRESULT_TYPEDEF_(0x8004020BL)
+
+//
+// MessageId: EVENT_E_COMPLUS_NOT_INSTALLED
+//
+// MessageText:
+//
+//  COM+ is required for this operation, but is not installed
+//
+#define EVENT_E_COMPLUS_NOT_INSTALLED    _HRESULT_TYPEDEF_(0x8004020CL)
+
+#define CONTEXT_E_FIRST        0x8004E000L
+#define CONTEXT_E_LAST         0x8004E02FL
+#define CONTEXT_S_FIRST        0x0004E000L
+#define CONTEXT_S_LAST         0x0004E02FL
+//
+// MessageId: CONTEXT_E_ABORTED
+//
+// MessageText:
+//
+//  The root transaction wanted to commit, but transaction aborted
+//
+#define CONTEXT_E_ABORTED                _HRESULT_TYPEDEF_(0x8004E002L)
+
+//
+// MessageId: CONTEXT_E_ABORTING
+//
+// MessageText:
+//
+//  You made a method call on a COM+ component that has a transaction that has already aborted or in the process of aborting.
+//
+#define CONTEXT_E_ABORTING               _HRESULT_TYPEDEF_(0x8004E003L)
+
+//
+// MessageId: CONTEXT_E_NOCONTEXT
+//
+// MessageText:
+//
+//  There is no MTS object context
+//
+#define CONTEXT_E_NOCONTEXT              _HRESULT_TYPEDEF_(0x8004E004L)
+
+//
+// MessageId: CONTEXT_E_SYNCH_TIMEOUT
+//
+// MessageText:
+//
+//  The component is configured to use synchronization and a thread has timed out waiting to enter the context.
+//
+#define CONTEXT_E_SYNCH_TIMEOUT          _HRESULT_TYPEDEF_(0x8004E006L)
+
+//
+// MessageId: CONTEXT_E_OLDREF
+//
+// MessageText:
+//
+//  You made a method call on a COM+ component that has a transaction that has already committed or aborted.
+//
+#define CONTEXT_E_OLDREF                 _HRESULT_TYPEDEF_(0x8004E007L)
+
+//
+// MessageId: CONTEXT_E_ROLENOTFOUND
+//
+// MessageText:
+//
+//  The specified role was not configured for the application
+//
+#define CONTEXT_E_ROLENOTFOUND           _HRESULT_TYPEDEF_(0x8004E00CL)
+
+//
+// MessageId: CONTEXT_E_TMNOTAVAILABLE
+//
+// MessageText:
+//
+//  COM+ was unable to talk to the Microsoft Distributed Transaction Coordinator
+//
+#define CONTEXT_E_TMNOTAVAILABLE         _HRESULT_TYPEDEF_(0x8004E00FL)
+
+//
+// MessageId: CO_E_ACTIVATIONFAILED
+//
+// MessageText:
+//
+//  An unexpected error occurred during COM+ Activation.
+//
+#define CO_E_ACTIVATIONFAILED            _HRESULT_TYPEDEF_(0x8004E021L)
+
+//
+// MessageId: CO_E_ACTIVATIONFAILED_EVENTLOGGED
+//
+// MessageText:
+//
+//  COM+ Activation failed. Check the event log for more information
+//
+#define CO_E_ACTIVATIONFAILED_EVENTLOGGED _HRESULT_TYPEDEF_(0x8004E022L)
+
+//
+// MessageId: CO_E_ACTIVATIONFAILED_CATALOGERROR
+//
+// MessageText:
+//
+//  COM+ Activation failed due to a catalog or configuration error.
+//
+#define CO_E_ACTIVATIONFAILED_CATALOGERROR _HRESULT_TYPEDEF_(0x8004E023L)
+
+//
+// MessageId: CO_E_ACTIVATIONFAILED_TIMEOUT
+//
+// MessageText:
+//
+//  COM+ activation failed because the activation could not be completed in the specified amount of time.
+//
+#define CO_E_ACTIVATIONFAILED_TIMEOUT    _HRESULT_TYPEDEF_(0x8004E024L)
+
+//
+// MessageId: CO_E_INITIALIZATIONFAILED
+//
+// MessageText:
+//
+//  COM+ Activation failed because an initialization function failed.  Check the event log for more information.
+//
+#define CO_E_INITIALIZATIONFAILED        _HRESULT_TYPEDEF_(0x8004E025L)
+
+//
+// MessageId: CONTEXT_E_NOJIT
+//
+// MessageText:
+//
+//  The requested operation requires that JIT be in the current context and it is not
+//
+#define CONTEXT_E_NOJIT                  _HRESULT_TYPEDEF_(0x8004E026L)
+
+//
+// MessageId: CONTEXT_E_NOTRANSACTION
+//
+// MessageText:
+//
+//  The requested operation requires that the current context have a Transaction, and it does not
+//
+#define CONTEXT_E_NOTRANSACTION          _HRESULT_TYPEDEF_(0x8004E027L)
+
+//
+// MessageId: CO_E_THREADINGMODEL_CHANGED
+//
+// MessageText:
+//
+//  The components threading model has changed after install into a COM+ Application.  Please re-install component.
+//
+#define CO_E_THREADINGMODEL_CHANGED      _HRESULT_TYPEDEF_(0x8004E028L)
+
 //
 // Old OLE Success Codes
 //
@@ -8065,6 +16070,207 @@
 //  Moniker is already registered in running object table
 //
 #define MK_S_MONIKERALREADYREGISTERED    _HRESULT_TYPEDEF_(0x000401E7L)
+
+//
+// Task Scheduler errors
+//
+//
+// MessageId: SCHED_S_TASK_READY
+//
+// MessageText:
+//
+//  The task is ready to run at its next scheduled time.
+//
+#define SCHED_S_TASK_READY               _HRESULT_TYPEDEF_(0x00041300L)
+
+//
+// MessageId: SCHED_S_TASK_RUNNING
+//
+// MessageText:
+//
+//  The task is currently running.
+//
+#define SCHED_S_TASK_RUNNING             _HRESULT_TYPEDEF_(0x00041301L)
+
+//
+// MessageId: SCHED_S_TASK_DISABLED
+//
+// MessageText:
+//
+//  The task will not run at the scheduled times because it has been disabled.
+//
+#define SCHED_S_TASK_DISABLED            _HRESULT_TYPEDEF_(0x00041302L)
+
+//
+// MessageId: SCHED_S_TASK_HAS_NOT_RUN
+//
+// MessageText:
+//
+//  The task has not yet run.
+//
+#define SCHED_S_TASK_HAS_NOT_RUN         _HRESULT_TYPEDEF_(0x00041303L)
+
+//
+// MessageId: SCHED_S_TASK_NO_MORE_RUNS
+//
+// MessageText:
+//
+//  There are no more runs scheduled for this task.
+//
+#define SCHED_S_TASK_NO_MORE_RUNS        _HRESULT_TYPEDEF_(0x00041304L)
+
+//
+// MessageId: SCHED_S_TASK_NOT_SCHEDULED
+//
+// MessageText:
+//
+//  One or more of the properties that are needed to run this task on a schedule have not been set.
+//
+#define SCHED_S_TASK_NOT_SCHEDULED       _HRESULT_TYPEDEF_(0x00041305L)
+
+//
+// MessageId: SCHED_S_TASK_TERMINATED
+//
+// MessageText:
+//
+//  The last run of the task was terminated by the user.
+//
+#define SCHED_S_TASK_TERMINATED          _HRESULT_TYPEDEF_(0x00041306L)
+
+//
+// MessageId: SCHED_S_TASK_NO_VALID_TRIGGERS
+//
+// MessageText:
+//
+//  Either the task has no triggers or the existing triggers are disabled or not set.
+//
+#define SCHED_S_TASK_NO_VALID_TRIGGERS   _HRESULT_TYPEDEF_(0x00041307L)
+
+//
+// MessageId: SCHED_S_EVENT_TRIGGER
+//
+// MessageText:
+//
+//  Event triggers don't have set run times.
+//
+#define SCHED_S_EVENT_TRIGGER            _HRESULT_TYPEDEF_(0x00041308L)
+
+//
+// MessageId: SCHED_E_TRIGGER_NOT_FOUND
+//
+// MessageText:
+//
+//  Trigger not found.
+//
+#define SCHED_E_TRIGGER_NOT_FOUND        _HRESULT_TYPEDEF_(0x80041309L)
+
+//
+// MessageId: SCHED_E_TASK_NOT_READY
+//
+// MessageText:
+//
+//  One or more of the properties that are needed to run this task have not been set.
+//
+#define SCHED_E_TASK_NOT_READY           _HRESULT_TYPEDEF_(0x8004130AL)
+
+//
+// MessageId: SCHED_E_TASK_NOT_RUNNING
+//
+// MessageText:
+//
+//  There is no running instance of the task to terminate.
+//
+#define SCHED_E_TASK_NOT_RUNNING         _HRESULT_TYPEDEF_(0x8004130BL)
+
+//
+// MessageId: SCHED_E_SERVICE_NOT_INSTALLED
+//
+// MessageText:
+//
+//  The Task Scheduler Service is not installed on this computer.
+//
+#define SCHED_E_SERVICE_NOT_INSTALLED    _HRESULT_TYPEDEF_(0x8004130CL)
+
+//
+// MessageId: SCHED_E_CANNOT_OPEN_TASK
+//
+// MessageText:
+//
+//  The task object could not be opened.
+//
+#define SCHED_E_CANNOT_OPEN_TASK         _HRESULT_TYPEDEF_(0x8004130DL)
+
+//
+// MessageId: SCHED_E_INVALID_TASK
+//
+// MessageText:
+//
+//  The object is either an invalid task object or is not a task object.
+//
+#define SCHED_E_INVALID_TASK             _HRESULT_TYPEDEF_(0x8004130EL)
+
+//
+// MessageId: SCHED_E_ACCOUNT_INFORMATION_NOT_SET
+//
+// MessageText:
+//
+//  No account information could be found in the Task Scheduler security database for the task indicated.
+//
+#define SCHED_E_ACCOUNT_INFORMATION_NOT_SET _HRESULT_TYPEDEF_(0x8004130FL)
+
+//
+// MessageId: SCHED_E_ACCOUNT_NAME_NOT_FOUND
+//
+// MessageText:
+//
+//  Unable to establish existence of the account specified.
+//
+#define SCHED_E_ACCOUNT_NAME_NOT_FOUND   _HRESULT_TYPEDEF_(0x80041310L)
+
+//
+// MessageId: SCHED_E_ACCOUNT_DBASE_CORRUPT
+//
+// MessageText:
+//
+//  Corruption was detected in the Task Scheduler security database; the database has been reset.
+//
+#define SCHED_E_ACCOUNT_DBASE_CORRUPT    _HRESULT_TYPEDEF_(0x80041311L)
+
+//
+// MessageId: SCHED_E_NO_SECURITY_SERVICES
+//
+// MessageText:
+//
+//  Task Scheduler security services are available only on Windows NT.
+//
+#define SCHED_E_NO_SECURITY_SERVICES     _HRESULT_TYPEDEF_(0x80041312L)
+
+//
+// MessageId: SCHED_E_UNKNOWN_OBJECT_VERSION
+//
+// MessageText:
+//
+//  The task object version is either unsupported or invalid.
+//
+#define SCHED_E_UNKNOWN_OBJECT_VERSION   _HRESULT_TYPEDEF_(0x80041313L)
+
+//
+// MessageId: SCHED_E_UNSUPPORTED_ACCOUNT_OPTION
+//
+// MessageText:
+//
+//  The task has been configured with an unsupported combination of account settings and run time options.
+//
+#define SCHED_E_UNSUPPORTED_ACCOUNT_OPTION _HRESULT_TYPEDEF_(0x80041314L)
+
+//
+// MessageId: SCHED_E_SERVICE_NOT_RUNNING
+//
+// MessageText:
+//
+//  The Task Scheduler Service is not running.
+//
+#define SCHED_E_SERVICE_NOT_RUNNING      _HRESULT_TYPEDEF_(0x80041315L)
 
 // ******************
 // FACILITY_WINDOWS
@@ -8329,6 +16535,24 @@
 #define DISP_E_NOTACOLLECTION            _HRESULT_TYPEDEF_(0x80020011L)
 
 //
+// MessageId: DISP_E_DIVBYZERO
+//
+// MessageText:
+//
+//  Division by zero.
+//
+#define DISP_E_DIVBYZERO                 _HRESULT_TYPEDEF_(0x80020012L)
+
+//
+// MessageId: DISP_E_BUFFERTOOSMALL
+//
+// MessageText:
+//
+//  Buffer too small
+//
+#define DISP_E_BUFFERTOOSMALL            _HRESULT_TYPEDEF_(0x80020013L)
+
+//
 // MessageId: TYPE_E_BUFFERTOOSMALL
 //
 // MessageText:
@@ -8336,6 +16560,15 @@
 //  Buffer too small.
 //
 #define TYPE_E_BUFFERTOOSMALL            _HRESULT_TYPEDEF_(0x80028016L)
+
+//
+// MessageId: TYPE_E_FIELDNOTFOUND
+//
+// MessageText:
+//
+//  Field name not defined in the record.
+//
+#define TYPE_E_FIELDNOTFOUND             _HRESULT_TYPEDEF_(0x80028017L)
 
 //
 // MessageId: TYPE_E_INVDATAREAD
@@ -8881,6 +17114,24 @@
 #define STG_E_BADBASEADDRESS             _HRESULT_TYPEDEF_(0x80030110L)
 
 //
+// MessageId: STG_E_DOCFILETOOLARGE
+//
+// MessageText:
+//
+//  The compound file is too large for the current implementation
+//
+#define STG_E_DOCFILETOOLARGE            _HRESULT_TYPEDEF_(0x80030111L)
+
+//
+// MessageId: STG_E_NOTSIMPLEFORMAT
+//
+// MessageText:
+//
+//  The compound file was not created with the STGM_SIMPLE flag
+//
+#define STG_E_NOTSIMPLEFORMAT            _HRESULT_TYPEDEF_(0x80030112L)
+
+//
 // MessageId: STG_E_INCOMPLETE
 //
 // MessageText:
@@ -8934,11 +17185,38 @@
 //
 #define STG_S_MONITORING                 _HRESULT_TYPEDEF_(0x00030203L)
 
+//
+// MessageId: STG_S_MULTIPLEOPENS
+//
+// MessageText:
+//
+//  Multiple opens prevent consolidated. (commit succeeded).
+//
+#define STG_S_MULTIPLEOPENS              _HRESULT_TYPEDEF_(0x00030204L)
+
+//
+// MessageId: STG_S_CONSOLIDATIONFAILED
+//
+// MessageText:
+//
+//  Consolidation of the storage file failed. (commit succeeded).
+//
+#define STG_S_CONSOLIDATIONFAILED        _HRESULT_TYPEDEF_(0x00030205L)
+
+//
+// MessageId: STG_S_CANNOTCONSOLIDATE
+//
+// MessageText:
+//
+//  Consolidation of the storage file is inappropriate. (commit succeeded).
+//
+#define STG_S_CANNOTCONSOLIDATE          _HRESULT_TYPEDEF_(0x00030206L)
+
 // ******************
 // FACILITY_RPC
 // ******************
 //
-// Codes 0x0-0x11 are propogated from 16 bit OLE.
+// Codes 0x0-0x11 are propagated from 16 bit OLE.
 //
 //
 // MessageId: RPC_E_CALL_REJECTED
@@ -8963,8 +17241,7 @@
 //
 // MessageText:
 //
-//  The caller is dispatching an intertask SendMessage call and
-//  cannot call out via PostMessage.
+//  The caller is dispatching an intertask SendMessage call and cannot call out via PostMessage.
 //
 #define RPC_E_CANTPOST_INSENDCALL        _HRESULT_TYPEDEF_(0x80010003L)
 
@@ -8973,8 +17250,7 @@
 //
 // MessageText:
 //
-//  The caller is dispatching an asynchronous call and cannot
-//  make an outgoing call on behalf of this call.
+//  The caller is dispatching an asynchronous call and cannot make an outgoing call on behalf of this call.
 //
 #define RPC_E_CANTCALLOUT_INASYNCCALL    _HRESULT_TYPEDEF_(0x80010004L)
 
@@ -8992,9 +17268,7 @@
 //
 // MessageText:
 //
-//  The connection terminated or is in a bogus state
-//  and cannot be used any more. Other connections
-//  are still valid.
+//  The connection terminated or is in a bogus state and cannot be used any more. Other connections are still valid.
 //
 #define RPC_E_CONNECTION_TERMINATED      _HRESULT_TYPEDEF_(0x80010006L)
 
@@ -9003,9 +17277,7 @@
 //
 // MessageText:
 //
-//  The callee (server [not server application]) is not available
-//  and disappeared; all connections are invalid.  The call may
-//  have executed.
+//  The callee (server [not server application]) is not available and disappeared; all connections are invalid. The call may have executed.
 //
 #define RPC_E_SERVER_DIED                _HRESULT_TYPEDEF_(0x80010007L)
 
@@ -9014,8 +17286,7 @@
 //
 // MessageText:
 //
-//  The caller (client) disappeared while the callee (server) was
-//  processing a call.
+//  The caller (client) disappeared while the callee (server) was processing a call.
 //
 #define RPC_E_CLIENT_DIED                _HRESULT_TYPEDEF_(0x80010008L)
 
@@ -9033,8 +17304,7 @@
 //
 // MessageText:
 //
-//  The call was not transmitted properly; the message queue
-//  was full and was not emptied after yielding.
+//  The call was not transmitted properly; the message queue was full and was not emptied after yielding.
 //
 #define RPC_E_CANTTRANSMIT_CALL          _HRESULT_TYPEDEF_(0x8001000AL)
 
@@ -9106,8 +17376,7 @@
 //
 // MessageText:
 //
-//  The callee (server [not server application]) is not available
-//  and disappeared; all connections are invalid.  The call did not execute.
+//  The callee (server [not server application]) is not available and disappeared; all connections are invalid. The call did not execute.
 //
 #define RPC_E_SERVER_DIED_DNE            _HRESULT_TYPEDEF_(0x80010012L)
 
@@ -9341,8 +17610,7 @@
 //
 // MessageText:
 //
-//  Security must be initialized before any interfaces are marshalled or
-//  unmarshalled.  It cannot be changed once initialized.
+//  Security must be initialized before any interfaces are marshalled or unmarshalled. It cannot be changed once initialized.
 //
 #define RPC_E_TOO_LATE                   _HRESULT_TYPEDEF_(0x80010119L)
 
@@ -9351,8 +17619,7 @@
 //
 // MessageText:
 //
-//  No security packages are installed on this machine or the user is not logged
-//  on or there are no compatible security packages between the client and server.
+//  No security packages are installed on this machine or the user is not logged on or there are no compatible security packages between the client and server.
 //
 #define RPC_E_NO_GOOD_SECURITY_PACKAGES  _HRESULT_TYPEDEF_(0x8001011AL)
 
@@ -9382,6 +17649,312 @@
 //  The marshaled interface data packet (OBJREF) has an invalid or unknown format.
 //
 #define RPC_E_INVALID_OBJREF             _HRESULT_TYPEDEF_(0x8001011DL)
+
+//
+// MessageId: RPC_E_NO_CONTEXT
+//
+// MessageText:
+//
+//  No context is associated with this call. This happens for some custom marshalled calls and on the client side of the call.
+//
+#define RPC_E_NO_CONTEXT                 _HRESULT_TYPEDEF_(0x8001011EL)
+
+//
+// MessageId: RPC_E_TIMEOUT
+//
+// MessageText:
+//
+//  This operation returned because the timeout period expired.
+//
+#define RPC_E_TIMEOUT                    _HRESULT_TYPEDEF_(0x8001011FL)
+
+//
+// MessageId: RPC_E_NO_SYNC
+//
+// MessageText:
+//
+//  There are no synchronize objects to wait on.
+//
+#define RPC_E_NO_SYNC                    _HRESULT_TYPEDEF_(0x80010120L)
+
+//
+// MessageId: RPC_E_FULLSIC_REQUIRED
+//
+// MessageText:
+//
+//  Full subject issuer chain SSL principal name expected from the server.
+//
+#define RPC_E_FULLSIC_REQUIRED           _HRESULT_TYPEDEF_(0x80010121L)
+
+//
+// MessageId: RPC_E_INVALID_STD_NAME
+//
+// MessageText:
+//
+//  Principal name is not a valid MSSTD name.
+//
+#define RPC_E_INVALID_STD_NAME           _HRESULT_TYPEDEF_(0x80010122L)
+
+//
+// MessageId: CO_E_FAILEDTOIMPERSONATE
+//
+// MessageText:
+//
+//  Unable to impersonate DCOM client
+//
+#define CO_E_FAILEDTOIMPERSONATE         _HRESULT_TYPEDEF_(0x80010123L)
+
+//
+// MessageId: CO_E_FAILEDTOGETSECCTX
+//
+// MessageText:
+//
+//  Unable to obtain server's security context
+//
+#define CO_E_FAILEDTOGETSECCTX           _HRESULT_TYPEDEF_(0x80010124L)
+
+//
+// MessageId: CO_E_FAILEDTOOPENTHREADTOKEN
+//
+// MessageText:
+//
+//  Unable to open the access token of the current thread
+//
+#define CO_E_FAILEDTOOPENTHREADTOKEN     _HRESULT_TYPEDEF_(0x80010125L)
+
+//
+// MessageId: CO_E_FAILEDTOGETTOKENINFO
+//
+// MessageText:
+//
+//  Unable to obtain user info from an access token
+//
+#define CO_E_FAILEDTOGETTOKENINFO        _HRESULT_TYPEDEF_(0x80010126L)
+
+//
+// MessageId: CO_E_TRUSTEEDOESNTMATCHCLIENT
+//
+// MessageText:
+//
+//  The client who called IAccessControl::IsAccessPermitted was not the trustee provided to the method
+//
+#define CO_E_TRUSTEEDOESNTMATCHCLIENT    _HRESULT_TYPEDEF_(0x80010127L)
+
+//
+// MessageId: CO_E_FAILEDTOQUERYCLIENTBLANKET
+//
+// MessageText:
+//
+//  Unable to obtain the client's security blanket
+//
+#define CO_E_FAILEDTOQUERYCLIENTBLANKET  _HRESULT_TYPEDEF_(0x80010128L)
+
+//
+// MessageId: CO_E_FAILEDTOSETDACL
+//
+// MessageText:
+//
+//  Unable to set a discretionary ACL into a security descriptor
+//
+#define CO_E_FAILEDTOSETDACL             _HRESULT_TYPEDEF_(0x80010129L)
+
+//
+// MessageId: CO_E_ACCESSCHECKFAILED
+//
+// MessageText:
+//
+//  The system function, AccessCheck, returned false
+//
+#define CO_E_ACCESSCHECKFAILED           _HRESULT_TYPEDEF_(0x8001012AL)
+
+//
+// MessageId: CO_E_NETACCESSAPIFAILED
+//
+// MessageText:
+//
+//  Either NetAccessDel or NetAccessAdd returned an error code.
+//
+#define CO_E_NETACCESSAPIFAILED          _HRESULT_TYPEDEF_(0x8001012BL)
+
+//
+// MessageId: CO_E_WRONGTRUSTEENAMESYNTAX
+//
+// MessageText:
+//
+//  One of the trustee strings provided by the user did not conform to the <Domain>\<Name> syntax and it was not the "*" string
+//
+#define CO_E_WRONGTRUSTEENAMESYNTAX      _HRESULT_TYPEDEF_(0x8001012CL)
+
+//
+// MessageId: CO_E_INVALIDSID
+//
+// MessageText:
+//
+//  One of the security identifiers provided by the user was invalid
+//
+#define CO_E_INVALIDSID                  _HRESULT_TYPEDEF_(0x8001012DL)
+
+//
+// MessageId: CO_E_CONVERSIONFAILED
+//
+// MessageText:
+//
+//  Unable to convert a wide character trustee string to a multibyte trustee string
+//
+#define CO_E_CONVERSIONFAILED            _HRESULT_TYPEDEF_(0x8001012EL)
+
+//
+// MessageId: CO_E_NOMATCHINGSIDFOUND
+//
+// MessageText:
+//
+//  Unable to find a security identifier that corresponds to a trustee string provided by the user
+//
+#define CO_E_NOMATCHINGSIDFOUND          _HRESULT_TYPEDEF_(0x8001012FL)
+
+//
+// MessageId: CO_E_LOOKUPACCSIDFAILED
+//
+// MessageText:
+//
+//  The system function, LookupAccountSID, failed
+//
+#define CO_E_LOOKUPACCSIDFAILED          _HRESULT_TYPEDEF_(0x80010130L)
+
+//
+// MessageId: CO_E_NOMATCHINGNAMEFOUND
+//
+// MessageText:
+//
+//  Unable to find a trustee name that corresponds to a security identifier provided by the user
+//
+#define CO_E_NOMATCHINGNAMEFOUND         _HRESULT_TYPEDEF_(0x80010131L)
+
+//
+// MessageId: CO_E_LOOKUPACCNAMEFAILED
+//
+// MessageText:
+//
+//  The system function, LookupAccountName, failed
+//
+#define CO_E_LOOKUPACCNAMEFAILED         _HRESULT_TYPEDEF_(0x80010132L)
+
+//
+// MessageId: CO_E_SETSERLHNDLFAILED
+//
+// MessageText:
+//
+//  Unable to set or reset a serialization handle
+//
+#define CO_E_SETSERLHNDLFAILED           _HRESULT_TYPEDEF_(0x80010133L)
+
+//
+// MessageId: CO_E_FAILEDTOGETWINDIR
+//
+// MessageText:
+//
+//  Unable to obtain the Windows directory
+//
+#define CO_E_FAILEDTOGETWINDIR           _HRESULT_TYPEDEF_(0x80010134L)
+
+//
+// MessageId: CO_E_PATHTOOLONG
+//
+// MessageText:
+//
+//  Path too long
+//
+#define CO_E_PATHTOOLONG                 _HRESULT_TYPEDEF_(0x80010135L)
+
+//
+// MessageId: CO_E_FAILEDTOGENUUID
+//
+// MessageText:
+//
+//  Unable to generate a uuid.
+//
+#define CO_E_FAILEDTOGENUUID             _HRESULT_TYPEDEF_(0x80010136L)
+
+//
+// MessageId: CO_E_FAILEDTOCREATEFILE
+//
+// MessageText:
+//
+//  Unable to create file
+//
+#define CO_E_FAILEDTOCREATEFILE          _HRESULT_TYPEDEF_(0x80010137L)
+
+//
+// MessageId: CO_E_FAILEDTOCLOSEHANDLE
+//
+// MessageText:
+//
+//  Unable to close a serialization handle or a file handle.
+//
+#define CO_E_FAILEDTOCLOSEHANDLE         _HRESULT_TYPEDEF_(0x80010138L)
+
+//
+// MessageId: CO_E_EXCEEDSYSACLLIMIT
+//
+// MessageText:
+//
+//  The number of ACEs in an ACL exceeds the system limit.
+//
+#define CO_E_EXCEEDSYSACLLIMIT           _HRESULT_TYPEDEF_(0x80010139L)
+
+//
+// MessageId: CO_E_ACESINWRONGORDER
+//
+// MessageText:
+//
+//  Not all the DENY_ACCESS ACEs are arranged in front of the GRANT_ACCESS ACEs in the stream.
+//
+#define CO_E_ACESINWRONGORDER            _HRESULT_TYPEDEF_(0x8001013AL)
+
+//
+// MessageId: CO_E_INCOMPATIBLESTREAMVERSION
+//
+// MessageText:
+//
+//  The version of ACL format in the stream is not supported by this implementation of IAccessControl
+//
+#define CO_E_INCOMPATIBLESTREAMVERSION   _HRESULT_TYPEDEF_(0x8001013BL)
+
+//
+// MessageId: CO_E_FAILEDTOOPENPROCESSTOKEN
+//
+// MessageText:
+//
+//  Unable to open the access token of the server process
+//
+#define CO_E_FAILEDTOOPENPROCESSTOKEN    _HRESULT_TYPEDEF_(0x8001013CL)
+
+//
+// MessageId: CO_E_DECODEFAILED
+//
+// MessageText:
+//
+//  Unable to decode the ACL in the stream provided by the user
+//
+#define CO_E_DECODEFAILED                _HRESULT_TYPEDEF_(0x8001013DL)
+
+//
+// MessageId: CO_E_ACNOTINITIALIZED
+//
+// MessageText:
+//
+//  The COM IAccessControl object is not initialized
+//
+#define CO_E_ACNOTINITIALIZED            _HRESULT_TYPEDEF_(0x8001013FL)
+
+//
+// MessageId: CO_E_CANCEL_DISABLED
+//
+// MessageText:
+//
+//  Call Cancellation is disabled
+//
+#define CO_E_CANCEL_DISABLED             _HRESULT_TYPEDEF_(0x80010140L)
 
 //
 // MessageId: RPC_E_UNEXPECTED
@@ -9696,6 +18269,1816 @@
 //
 #define NTE_SYS_ERR                      _HRESULT_TYPEDEF_(0x80090021L)
 
+//
+// MessageId: NTE_SILENT_CONTEXT
+//
+// MessageText:
+//
+//  Provider could not perform the action since the context was acquired as silent.
+//
+#define NTE_SILENT_CONTEXT               _HRESULT_TYPEDEF_(0x80090022L)
+
+//
+// MessageId: NTE_TOKEN_KEYSET_STORAGE_FULL
+//
+// MessageText:
+//
+//  The security token does not have storage space available for an additional container.
+//
+#define NTE_TOKEN_KEYSET_STORAGE_FULL    _HRESULT_TYPEDEF_(0x80090023L)
+
+//
+// MessageId: NTE_TEMPORARY_PROFILE
+//
+// MessageText:
+//
+//  The profile for the user is a temporary profile.
+//
+#define NTE_TEMPORARY_PROFILE            _HRESULT_TYPEDEF_(0x80090024L)
+
+//
+// MessageId: NTE_FIXEDPARAMETER
+//
+// MessageText:
+//
+//  The key parameters could not be set because the CSP uses fixed parameters.
+//
+#define NTE_FIXEDPARAMETER               _HRESULT_TYPEDEF_(0x80090025L)
+
+//
+// MessageId: SEC_E_INSUFFICIENT_MEMORY
+//
+// MessageText:
+//
+//  Not enough memory is available to complete this request
+//
+#define SEC_E_INSUFFICIENT_MEMORY        _HRESULT_TYPEDEF_(0x80090300L)
+
+//
+// MessageId: SEC_E_INVALID_HANDLE
+//
+// MessageText:
+//
+//  The handle specified is invalid
+//
+#define SEC_E_INVALID_HANDLE             _HRESULT_TYPEDEF_(0x80090301L)
+
+//
+// MessageId: SEC_E_UNSUPPORTED_FUNCTION
+//
+// MessageText:
+//
+//  The function requested is not supported
+//
+#define SEC_E_UNSUPPORTED_FUNCTION       _HRESULT_TYPEDEF_(0x80090302L)
+
+//
+// MessageId: SEC_E_TARGET_UNKNOWN
+//
+// MessageText:
+//
+//  The specified target is unknown or unreachable
+//
+#define SEC_E_TARGET_UNKNOWN             _HRESULT_TYPEDEF_(0x80090303L)
+
+//
+// MessageId: SEC_E_INTERNAL_ERROR
+//
+// MessageText:
+//
+//  The Local Security Authority cannot be contacted
+//
+#define SEC_E_INTERNAL_ERROR             _HRESULT_TYPEDEF_(0x80090304L)
+
+//
+// MessageId: SEC_E_SECPKG_NOT_FOUND
+//
+// MessageText:
+//
+//  The requested security package does not exist
+//
+#define SEC_E_SECPKG_NOT_FOUND           _HRESULT_TYPEDEF_(0x80090305L)
+
+//
+// MessageId: SEC_E_NOT_OWNER
+//
+// MessageText:
+//
+//  The caller is not the owner of the desired credentials
+//
+#define SEC_E_NOT_OWNER                  _HRESULT_TYPEDEF_(0x80090306L)
+
+//
+// MessageId: SEC_E_CANNOT_INSTALL
+//
+// MessageText:
+//
+//  The security package failed to initialize, and cannot be installed
+//
+#define SEC_E_CANNOT_INSTALL             _HRESULT_TYPEDEF_(0x80090307L)
+
+//
+// MessageId: SEC_E_INVALID_TOKEN
+//
+// MessageText:
+//
+//  The token supplied to the function is invalid
+//
+#define SEC_E_INVALID_TOKEN              _HRESULT_TYPEDEF_(0x80090308L)
+
+//
+// MessageId: SEC_E_CANNOT_PACK
+//
+// MessageText:
+//
+//  The security package is not able to marshall the logon buffer, so the logon attempt has failed
+//
+#define SEC_E_CANNOT_PACK                _HRESULT_TYPEDEF_(0x80090309L)
+
+//
+// MessageId: SEC_E_QOP_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The per-message Quality of Protection is not supported by the security package
+//
+#define SEC_E_QOP_NOT_SUPPORTED          _HRESULT_TYPEDEF_(0x8009030AL)
+
+//
+// MessageId: SEC_E_NO_IMPERSONATION
+//
+// MessageText:
+//
+//  The security context does not allow impersonation of the client
+//
+#define SEC_E_NO_IMPERSONATION           _HRESULT_TYPEDEF_(0x8009030BL)
+
+//
+// MessageId: SEC_E_LOGON_DENIED
+//
+// MessageText:
+//
+//  The logon attempt failed
+//
+#define SEC_E_LOGON_DENIED               _HRESULT_TYPEDEF_(0x8009030CL)
+
+//
+// MessageId: SEC_E_UNKNOWN_CREDENTIALS
+//
+// MessageText:
+//
+//  The credentials supplied to the package were not recognized
+//
+#define SEC_E_UNKNOWN_CREDENTIALS        _HRESULT_TYPEDEF_(0x8009030DL)
+
+//
+// MessageId: SEC_E_NO_CREDENTIALS
+//
+// MessageText:
+//
+//  No credentials are available in the security package
+//
+#define SEC_E_NO_CREDENTIALS             _HRESULT_TYPEDEF_(0x8009030EL)
+
+//
+// MessageId: SEC_E_MESSAGE_ALTERED
+//
+// MessageText:
+//
+//  The message or signature supplied for verification has been altered
+//
+#define SEC_E_MESSAGE_ALTERED            _HRESULT_TYPEDEF_(0x8009030FL)
+
+//
+// MessageId: SEC_E_OUT_OF_SEQUENCE
+//
+// MessageText:
+//
+//  The message supplied for verification is out of sequence
+//
+#define SEC_E_OUT_OF_SEQUENCE            _HRESULT_TYPEDEF_(0x80090310L)
+
+//
+// MessageId: SEC_E_NO_AUTHENTICATING_AUTHORITY
+//
+// MessageText:
+//
+//  No authority could be contacted for authentication.
+//
+#define SEC_E_NO_AUTHENTICATING_AUTHORITY _HRESULT_TYPEDEF_(0x80090311L)
+
+//
+// MessageId: SEC_I_CONTINUE_NEEDED
+//
+// MessageText:
+//
+//  The function completed successfully, but must be called again to complete the context
+//
+#define SEC_I_CONTINUE_NEEDED            _HRESULT_TYPEDEF_(0x00090312L)
+
+//
+// MessageId: SEC_I_COMPLETE_NEEDED
+//
+// MessageText:
+//
+//  The function completed successfully, but CompleteToken must be called
+//
+#define SEC_I_COMPLETE_NEEDED            _HRESULT_TYPEDEF_(0x00090313L)
+
+//
+// MessageId: SEC_I_COMPLETE_AND_CONTINUE
+//
+// MessageText:
+//
+//  The function completed successfully, but both CompleteToken and this function must be called to complete the context
+//
+#define SEC_I_COMPLETE_AND_CONTINUE      _HRESULT_TYPEDEF_(0x00090314L)
+
+//
+// MessageId: SEC_I_LOCAL_LOGON
+//
+// MessageText:
+//
+//  The logon was completed, but no network authority was available. The logon was made using locally known information
+//
+#define SEC_I_LOCAL_LOGON                _HRESULT_TYPEDEF_(0x00090315L)
+
+//
+// MessageId: SEC_E_BAD_PKGID
+//
+// MessageText:
+//
+//  The requested security package does not exist
+//
+#define SEC_E_BAD_PKGID                  _HRESULT_TYPEDEF_(0x80090316L)
+
+//
+// MessageId: SEC_E_CONTEXT_EXPIRED
+//
+// MessageText:
+//
+//  The context has expired and can no longer be used.
+//
+#define SEC_E_CONTEXT_EXPIRED            _HRESULT_TYPEDEF_(0x80090317L)
+
+//
+// MessageId: SEC_E_INCOMPLETE_MESSAGE
+//
+// MessageText:
+//
+//  The supplied message is incomplete.  The signature was not verified.
+//
+#define SEC_E_INCOMPLETE_MESSAGE         _HRESULT_TYPEDEF_(0x80090318L)
+
+//
+// MessageId: SEC_E_INCOMPLETE_CREDENTIALS
+//
+// MessageText:
+//
+//  The credentials supplied were not complete, and could not be verified. The context could not be initialized.
+//
+#define SEC_E_INCOMPLETE_CREDENTIALS     _HRESULT_TYPEDEF_(0x80090320L)
+
+//
+// MessageId: SEC_E_BUFFER_TOO_SMALL
+//
+// MessageText:
+//
+//  The buffers supplied to a function was too small.
+//
+#define SEC_E_BUFFER_TOO_SMALL           _HRESULT_TYPEDEF_(0x80090321L)
+
+//
+// MessageId: SEC_I_INCOMPLETE_CREDENTIALS
+//
+// MessageText:
+//
+//  The credentials supplied were not complete, and could not be verified. Additional information can be returned from the context.
+//
+#define SEC_I_INCOMPLETE_CREDENTIALS     _HRESULT_TYPEDEF_(0x00090320L)
+
+//
+// MessageId: SEC_I_RENEGOTIATE
+//
+// MessageText:
+//
+//  The context data must be renegotiated with the peer.
+//
+#define SEC_I_RENEGOTIATE                _HRESULT_TYPEDEF_(0x00090321L)
+
+//
+// MessageId: SEC_E_WRONG_PRINCIPAL
+//
+// MessageText:
+//
+//  The target principal name is incorrect.
+//
+#define SEC_E_WRONG_PRINCIPAL            _HRESULT_TYPEDEF_(0x80090322L)
+
+//
+// MessageId: SEC_I_NO_LSA_CONTEXT
+//
+// MessageText:
+//
+//  There is no LSA mode context associated with this context.
+//
+#define SEC_I_NO_LSA_CONTEXT             _HRESULT_TYPEDEF_(0x00090323L)
+
+//
+// MessageId: SEC_E_TIME_SKEW
+//
+// MessageText:
+//
+//  The clocks on the client and server machines are skewed.
+//
+#define SEC_E_TIME_SKEW                  _HRESULT_TYPEDEF_(0x80090324L)
+
+//
+// MessageId: SEC_E_UNTRUSTED_ROOT
+//
+// MessageText:
+//
+//  The certificate chain was issued by an untrusted authority.
+//
+#define SEC_E_UNTRUSTED_ROOT             _HRESULT_TYPEDEF_(0x80090325L)
+
+//
+// MessageId: SEC_E_ILLEGAL_MESSAGE
+//
+// MessageText:
+//
+//  The message received was unexpected or badly formatted.
+//
+#define SEC_E_ILLEGAL_MESSAGE            _HRESULT_TYPEDEF_(0x80090326L)
+
+//
+// MessageId: SEC_E_CERT_UNKNOWN
+//
+// MessageText:
+//
+//  An unknown error occurred while processing the certificate.
+//
+#define SEC_E_CERT_UNKNOWN               _HRESULT_TYPEDEF_(0x80090327L)
+
+//
+// MessageId: SEC_E_CERT_EXPIRED
+//
+// MessageText:
+//
+//  The received certificate has expired.
+//
+#define SEC_E_CERT_EXPIRED               _HRESULT_TYPEDEF_(0x80090328L)
+
+//
+// MessageId: SEC_E_ENCRYPT_FAILURE
+//
+// MessageText:
+//
+//  The specified data could not be encrypted.
+//
+#define SEC_E_ENCRYPT_FAILURE            _HRESULT_TYPEDEF_(0x80090329L)
+
+//
+// MessageId: SEC_E_DECRYPT_FAILURE
+//
+// MessageText:
+//
+//  The specified data could not be decrypted.
+//  
+//
+#define SEC_E_DECRYPT_FAILURE            _HRESULT_TYPEDEF_(0x80090330L)
+
+//
+// MessageId: SEC_E_ALGORITHM_MISMATCH
+//
+// MessageText:
+//
+//  The client and server cannot communicate, because they do not possess a common algorithm.
+//
+#define SEC_E_ALGORITHM_MISMATCH         _HRESULT_TYPEDEF_(0x80090331L)
+
+//
+// MessageId: SEC_E_SECURITY_QOS_FAILED
+//
+// MessageText:
+//
+//  The security context could not be established due to a failure in the requested quality of service (e.g. mutual authentication or delegation).
+//
+#define SEC_E_SECURITY_QOS_FAILED        _HRESULT_TYPEDEF_(0x80090332L)
+
+//
+// Provided for backwards compatibility
+//
+
+#define SEC_E_NO_SPM SEC_E_INTERNAL_ERROR
+#define SEC_E_NOT_SUPPORTED SEC_E_UNSUPPORTED_FUNCTION
+
+//
+// MessageId: CRYPT_E_MSG_ERROR
+//
+// MessageText:
+//
+//  An error occurred while performing an operation on a cryptographic message.
+//
+#define CRYPT_E_MSG_ERROR                _HRESULT_TYPEDEF_(0x80091001L)
+
+//
+// MessageId: CRYPT_E_UNKNOWN_ALGO
+//
+// MessageText:
+//
+//  Unknown cryptographic algorithm.
+//
+#define CRYPT_E_UNKNOWN_ALGO             _HRESULT_TYPEDEF_(0x80091002L)
+
+//
+// MessageId: CRYPT_E_OID_FORMAT
+//
+// MessageText:
+//
+//  The object identifier is poorly formatted.
+//
+#define CRYPT_E_OID_FORMAT               _HRESULT_TYPEDEF_(0x80091003L)
+
+//
+// MessageId: CRYPT_E_INVALID_MSG_TYPE
+//
+// MessageText:
+//
+//  Invalid cryptographic message type.
+//
+#define CRYPT_E_INVALID_MSG_TYPE         _HRESULT_TYPEDEF_(0x80091004L)
+
+//
+// MessageId: CRYPT_E_UNEXPECTED_ENCODING
+//
+// MessageText:
+//
+//  Unexpected cryptographic message encoding.
+//
+#define CRYPT_E_UNEXPECTED_ENCODING      _HRESULT_TYPEDEF_(0x80091005L)
+
+//
+// MessageId: CRYPT_E_AUTH_ATTR_MISSING
+//
+// MessageText:
+//
+//  The cryptographic message does not contain an expected authenticated attribute.
+//
+#define CRYPT_E_AUTH_ATTR_MISSING        _HRESULT_TYPEDEF_(0x80091006L)
+
+//
+// MessageId: CRYPT_E_HASH_VALUE
+//
+// MessageText:
+//
+//  The hash value is not correct.
+//
+#define CRYPT_E_HASH_VALUE               _HRESULT_TYPEDEF_(0x80091007L)
+
+//
+// MessageId: CRYPT_E_INVALID_INDEX
+//
+// MessageText:
+//
+//  The index value is not valid.
+//
+#define CRYPT_E_INVALID_INDEX            _HRESULT_TYPEDEF_(0x80091008L)
+
+//
+// MessageId: CRYPT_E_ALREADY_DECRYPTED
+//
+// MessageText:
+//
+//  The content of the cryptographic message has already been decrypted.
+//
+#define CRYPT_E_ALREADY_DECRYPTED        _HRESULT_TYPEDEF_(0x80091009L)
+
+//
+// MessageId: CRYPT_E_NOT_DECRYPTED
+//
+// MessageText:
+//
+//  The content of the cryptographic message has not been decrypted yet.
+//
+#define CRYPT_E_NOT_DECRYPTED            _HRESULT_TYPEDEF_(0x8009100AL)
+
+//
+// MessageId: CRYPT_E_RECIPIENT_NOT_FOUND
+//
+// MessageText:
+//
+//  The enveloped-data message does not contain the specified recipient.
+//
+#define CRYPT_E_RECIPIENT_NOT_FOUND      _HRESULT_TYPEDEF_(0x8009100BL)
+
+//
+// MessageId: CRYPT_E_CONTROL_TYPE
+//
+// MessageText:
+//
+//  Invalid control type.
+//
+#define CRYPT_E_CONTROL_TYPE             _HRESULT_TYPEDEF_(0x8009100CL)
+
+//
+// MessageId: CRYPT_E_ISSUER_SERIALNUMBER
+//
+// MessageText:
+//
+//  Invalid issuer and/or serial number.
+//
+#define CRYPT_E_ISSUER_SERIALNUMBER      _HRESULT_TYPEDEF_(0x8009100DL)
+
+//
+// MessageId: CRYPT_E_SIGNER_NOT_FOUND
+//
+// MessageText:
+//
+//  Cannot find the original signer.
+//
+#define CRYPT_E_SIGNER_NOT_FOUND         _HRESULT_TYPEDEF_(0x8009100EL)
+
+//
+// MessageId: CRYPT_E_ATTRIBUTES_MISSING
+//
+// MessageText:
+//
+//  The cryptographic message does not contain all of the requested attributes.
+//
+#define CRYPT_E_ATTRIBUTES_MISSING       _HRESULT_TYPEDEF_(0x8009100FL)
+
+//
+// MessageId: CRYPT_E_STREAM_MSG_NOT_READY
+//
+// MessageText:
+//
+//  The streamed cryptographic message is not ready to return data.
+//
+#define CRYPT_E_STREAM_MSG_NOT_READY     _HRESULT_TYPEDEF_(0x80091010L)
+
+//
+// MessageId: CRYPT_E_STREAM_INSUFFICIENT_DATA
+//
+// MessageText:
+//
+//  The streamed cryptographic message requires more data to complete the decode operation.
+//
+#define CRYPT_E_STREAM_INSUFFICIENT_DATA _HRESULT_TYPEDEF_(0x80091011L)
+
+//
+// MessageId: CRYPT_E_BAD_LEN
+//
+// MessageText:
+//
+//  The length specified for the output data was insufficient.
+//
+#define CRYPT_E_BAD_LEN                  _HRESULT_TYPEDEF_(0x80092001L)
+
+//
+// MessageId: CRYPT_E_BAD_ENCODE
+//
+// MessageText:
+//
+//  An error occurred during encode or decode operation.
+//
+#define CRYPT_E_BAD_ENCODE               _HRESULT_TYPEDEF_(0x80092002L)
+
+//
+// MessageId: CRYPT_E_FILE_ERROR
+//
+// MessageText:
+//
+//  An error occurred while reading or writing to a file.
+//
+#define CRYPT_E_FILE_ERROR               _HRESULT_TYPEDEF_(0x80092003L)
+
+//
+// MessageId: CRYPT_E_NOT_FOUND
+//
+// MessageText:
+//
+//  Cannot find object or property.
+//
+#define CRYPT_E_NOT_FOUND                _HRESULT_TYPEDEF_(0x80092004L)
+
+//
+// MessageId: CRYPT_E_EXISTS
+//
+// MessageText:
+//
+//  The object or property already exists.
+//
+#define CRYPT_E_EXISTS                   _HRESULT_TYPEDEF_(0x80092005L)
+
+//
+// MessageId: CRYPT_E_NO_PROVIDER
+//
+// MessageText:
+//
+//  No provider was specified for the store or object.
+//
+#define CRYPT_E_NO_PROVIDER              _HRESULT_TYPEDEF_(0x80092006L)
+
+//
+// MessageId: CRYPT_E_SELF_SIGNED
+//
+// MessageText:
+//
+//  The specified certificate is self signed.
+//
+#define CRYPT_E_SELF_SIGNED              _HRESULT_TYPEDEF_(0x80092007L)
+
+//
+// MessageId: CRYPT_E_DELETED_PREV
+//
+// MessageText:
+//
+//  The previous certificate or CRL context was deleted.
+//
+#define CRYPT_E_DELETED_PREV             _HRESULT_TYPEDEF_(0x80092008L)
+
+//
+// MessageId: CRYPT_E_NO_MATCH
+//
+// MessageText:
+//
+//  Cannot find the requested object.
+//
+#define CRYPT_E_NO_MATCH                 _HRESULT_TYPEDEF_(0x80092009L)
+
+//
+// MessageId: CRYPT_E_UNEXPECTED_MSG_TYPE
+//
+// MessageText:
+//
+//  The certificate does not have a property that references a private key.
+//
+#define CRYPT_E_UNEXPECTED_MSG_TYPE      _HRESULT_TYPEDEF_(0x8009200AL)
+
+//
+// MessageId: CRYPT_E_NO_KEY_PROPERTY
+//
+// MessageText:
+//
+//  Cannot find the certificate and private key for decryption.
+//
+#define CRYPT_E_NO_KEY_PROPERTY          _HRESULT_TYPEDEF_(0x8009200BL)
+
+//
+// MessageId: CRYPT_E_NO_DECRYPT_CERT
+//
+// MessageText:
+//
+//  Cannot find the certificate and private key to use for decryption.
+//
+#define CRYPT_E_NO_DECRYPT_CERT          _HRESULT_TYPEDEF_(0x8009200CL)
+
+//
+// MessageId: CRYPT_E_BAD_MSG
+//
+// MessageText:
+//
+//  Not a cryptographic message or the cryptographic message is not formatted correctly.
+//
+#define CRYPT_E_BAD_MSG                  _HRESULT_TYPEDEF_(0x8009200DL)
+
+//
+// MessageId: CRYPT_E_NO_SIGNER
+//
+// MessageText:
+//
+//  The signed cryptographic message does not have a signer for the specified signer index.
+//
+#define CRYPT_E_NO_SIGNER                _HRESULT_TYPEDEF_(0x8009200EL)
+
+//
+// MessageId: CRYPT_E_PENDING_CLOSE
+//
+// MessageText:
+//
+//  Final closure is pending until additional frees or closes.
+//
+#define CRYPT_E_PENDING_CLOSE            _HRESULT_TYPEDEF_(0x8009200FL)
+
+//
+// MessageId: CRYPT_E_REVOKED
+//
+// MessageText:
+//
+//  The certificate is revoked.
+//
+#define CRYPT_E_REVOKED                  _HRESULT_TYPEDEF_(0x80092010L)
+
+//
+// MessageId: CRYPT_E_NO_REVOCATION_DLL
+//
+// MessageText:
+//
+//  No Dll or exported function was found to verify revocation.
+//
+#define CRYPT_E_NO_REVOCATION_DLL        _HRESULT_TYPEDEF_(0x80092011L)
+
+//
+// MessageId: CRYPT_E_NO_REVOCATION_CHECK
+//
+// MessageText:
+//
+//  The revocation function was unable to check revocation for the certificate.
+//
+#define CRYPT_E_NO_REVOCATION_CHECK      _HRESULT_TYPEDEF_(0x80092012L)
+
+//
+// MessageId: CRYPT_E_REVOCATION_OFFLINE
+//
+// MessageText:
+//
+//  The revocation function was unable to check revocation because the revocation server was offline.
+//
+#define CRYPT_E_REVOCATION_OFFLINE       _HRESULT_TYPEDEF_(0x80092013L)
+
+//
+// MessageId: CRYPT_E_NOT_IN_REVOCATION_DATABASE
+//
+// MessageText:
+//
+//  The certificate is not in the revocation server's database.
+//
+#define CRYPT_E_NOT_IN_REVOCATION_DATABASE _HRESULT_TYPEDEF_(0x80092014L)
+
+//
+// MessageId: CRYPT_E_INVALID_NUMERIC_STRING
+//
+// MessageText:
+//
+//  The string contains a non-numeric character.
+//
+#define CRYPT_E_INVALID_NUMERIC_STRING   _HRESULT_TYPEDEF_(0x80092020L)
+
+//
+// MessageId: CRYPT_E_INVALID_PRINTABLE_STRING
+//
+// MessageText:
+//
+//  The string contains a non-printable character.
+//
+#define CRYPT_E_INVALID_PRINTABLE_STRING _HRESULT_TYPEDEF_(0x80092021L)
+
+//
+// MessageId: CRYPT_E_INVALID_IA5_STRING
+//
+// MessageText:
+//
+//  The string contains a character not in the 7 bit ASCII character set.
+//
+#define CRYPT_E_INVALID_IA5_STRING       _HRESULT_TYPEDEF_(0x80092022L)
+
+//
+// MessageId: CRYPT_E_INVALID_X500_STRING
+//
+// MessageText:
+//
+//  The string contains an invalid X500 name attribute key, oid, value or delimiter.
+//
+#define CRYPT_E_INVALID_X500_STRING      _HRESULT_TYPEDEF_(0x80092023L)
+
+//
+// MessageId: CRYPT_E_NOT_CHAR_STRING
+//
+// MessageText:
+//
+//  The dwValueType for the CERT_NAME_VALUE is not one of the character strings.  Most likely it is either a CERT_RDN_ENCODED_BLOB or CERT_TDN_OCTED_STRING.
+//
+#define CRYPT_E_NOT_CHAR_STRING          _HRESULT_TYPEDEF_(0x80092024L)
+
+//
+// MessageId: CRYPT_E_FILERESIZED
+//
+// MessageText:
+//
+//  The Put operation can not continue.  The file needs to be resized.  However, there is already a signature present.  A complete signing operation must be done.
+//
+#define CRYPT_E_FILERESIZED              _HRESULT_TYPEDEF_(0x80092025L)
+
+//
+// MessageId: CRYPT_E_SECURITY_SETTINGS
+//
+// MessageText:
+//
+//  The cryptographic operation failed due to a local security option setting.
+//
+#define CRYPT_E_SECURITY_SETTINGS        _HRESULT_TYPEDEF_(0x80092026L)
+
+//
+// MessageId: CRYPT_E_NO_VERIFY_USAGE_DLL
+//
+// MessageText:
+//
+//  No DLL or exported function was found to verify subject usage.
+//
+#define CRYPT_E_NO_VERIFY_USAGE_DLL      _HRESULT_TYPEDEF_(0x80092027L)
+
+//
+// MessageId: CRYPT_E_NO_VERIFY_USAGE_CHECK
+//
+// MessageText:
+//
+//  The called function was unable to do a usage check on the subject.
+//
+#define CRYPT_E_NO_VERIFY_USAGE_CHECK    _HRESULT_TYPEDEF_(0x80092028L)
+
+//
+// MessageId: CRYPT_E_VERIFY_USAGE_OFFLINE
+//
+// MessageText:
+//
+//  Since the server was offline, the called function was unable to complete the usage check.
+//
+#define CRYPT_E_VERIFY_USAGE_OFFLINE     _HRESULT_TYPEDEF_(0x80092029L)
+
+//
+// MessageId: CRYPT_E_NOT_IN_CTL
+//
+// MessageText:
+//
+//  The subject was not found in a Certificate Trust List (CTL).
+//
+#define CRYPT_E_NOT_IN_CTL               _HRESULT_TYPEDEF_(0x8009202AL)
+
+//
+// MessageId: CRYPT_E_NO_TRUSTED_SIGNER
+//
+// MessageText:
+//
+//  None of the signers of the cryptographic message or certificate trust list is trusted.
+//
+#define CRYPT_E_NO_TRUSTED_SIGNER        _HRESULT_TYPEDEF_(0x8009202BL)
+
+//
+// MessageId: CRYPT_E_MISSING_PUBKEY_PARA
+//
+// MessageText:
+//
+//  The public key's algorithm parameters are missing.
+//
+#define CRYPT_E_MISSING_PUBKEY_PARA      _HRESULT_TYPEDEF_(0x8009202CL)
+
+//
+// MessageId: CRYPT_E_OSS_ERROR
+//
+// MessageText:
+//
+//  OSS Certificate encode/decode error code base
+//  
+//  See asn1code.h for a definition of the OSS runtime errors. The OSS
+//  error values are offset by CRYPT_E_OSS_ERROR.
+//
+#define CRYPT_E_OSS_ERROR                _HRESULT_TYPEDEF_(0x80093000L)
+
+//
+// MessageId: OSS_MORE_BUF
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Output Buffer is too small.
+//
+#define OSS_MORE_BUF                     _HRESULT_TYPEDEF_(0x80093001L)
+
+//
+// MessageId: OSS_NEGATIVE_UINTEGER
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Signed integer is encoded as a unsigned integer.
+//
+#define OSS_NEGATIVE_UINTEGER            _HRESULT_TYPEDEF_(0x80093002L)
+
+//
+// MessageId: OSS_PDU_RANGE
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Unknown ASN.1 data type.
+//
+#define OSS_PDU_RANGE                    _HRESULT_TYPEDEF_(0x80093003L)
+
+//
+// MessageId: OSS_MORE_INPUT
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Output buffer is too small, the decoded data has been truncated.
+//
+#define OSS_MORE_INPUT                   _HRESULT_TYPEDEF_(0x80093004L)
+
+//
+// MessageId: OSS_DATA_ERROR
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_DATA_ERROR                   _HRESULT_TYPEDEF_(0x80093005L)
+
+//
+// MessageId: OSS_BAD_ARG
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid argument.
+//
+#define OSS_BAD_ARG                      _HRESULT_TYPEDEF_(0x80093006L)
+
+//
+// MessageId: OSS_BAD_VERSION
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Encode/Decode version mismatch.
+//
+#define OSS_BAD_VERSION                  _HRESULT_TYPEDEF_(0x80093007L)
+
+//
+// MessageId: OSS_OUT_MEMORY
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Out of memory.
+//
+#define OSS_OUT_MEMORY                   _HRESULT_TYPEDEF_(0x80093008L)
+
+//
+// MessageId: OSS_PDU_MISMATCH
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Encode/Decode Error.
+//
+#define OSS_PDU_MISMATCH                 _HRESULT_TYPEDEF_(0x80093009L)
+
+//
+// MessageId: OSS_LIMITED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Internal Error.
+//
+#define OSS_LIMITED                      _HRESULT_TYPEDEF_(0x8009300AL)
+
+//
+// MessageId: OSS_BAD_PTR
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_BAD_PTR                      _HRESULT_TYPEDEF_(0x8009300BL)
+
+//
+// MessageId: OSS_BAD_TIME
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_BAD_TIME                     _HRESULT_TYPEDEF_(0x8009300CL)
+
+//
+// MessageId: OSS_INDEFINITE_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Unsupported BER indefinite-length encoding.
+//
+#define OSS_INDEFINITE_NOT_SUPPORTED     _HRESULT_TYPEDEF_(0x8009300DL)
+
+//
+// MessageId: OSS_MEM_ERROR
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Access violation.
+//
+#define OSS_MEM_ERROR                    _HRESULT_TYPEDEF_(0x8009300EL)
+
+//
+// MessageId: OSS_BAD_TABLE
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_BAD_TABLE                    _HRESULT_TYPEDEF_(0x8009300FL)
+
+//
+// MessageId: OSS_TOO_LONG
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_TOO_LONG                     _HRESULT_TYPEDEF_(0x80093010L)
+
+//
+// MessageId: OSS_CONSTRAINT_VIOLATED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_CONSTRAINT_VIOLATED          _HRESULT_TYPEDEF_(0x80093011L)
+
+//
+// MessageId: OSS_FATAL_ERROR
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Internal Error.
+//
+#define OSS_FATAL_ERROR                  _HRESULT_TYPEDEF_(0x80093012L)
+
+//
+// MessageId: OSS_ACCESS_SERIALIZATION_ERROR
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Multi-threading conflict.
+//
+#define OSS_ACCESS_SERIALIZATION_ERROR   _HRESULT_TYPEDEF_(0x80093013L)
+
+//
+// MessageId: OSS_NULL_TBL
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_NULL_TBL                     _HRESULT_TYPEDEF_(0x80093014L)
+
+//
+// MessageId: OSS_NULL_FCN
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_NULL_FCN                     _HRESULT_TYPEDEF_(0x80093015L)
+
+//
+// MessageId: OSS_BAD_ENCRULES
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_BAD_ENCRULES                 _HRESULT_TYPEDEF_(0x80093016L)
+
+//
+// MessageId: OSS_UNAVAIL_ENCRULES
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Encode/Decode function not implemented.
+//
+#define OSS_UNAVAIL_ENCRULES             _HRESULT_TYPEDEF_(0x80093017L)
+
+//
+// MessageId: OSS_CANT_OPEN_TRACE_WINDOW
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Trace file error.
+//
+#define OSS_CANT_OPEN_TRACE_WINDOW       _HRESULT_TYPEDEF_(0x80093018L)
+
+//
+// MessageId: OSS_UNIMPLEMENTED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Function not implemented.
+//
+#define OSS_UNIMPLEMENTED                _HRESULT_TYPEDEF_(0x80093019L)
+
+//
+// MessageId: OSS_OID_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_OID_DLL_NOT_LINKED           _HRESULT_TYPEDEF_(0x8009301AL)
+
+//
+// MessageId: OSS_CANT_OPEN_TRACE_FILE
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Trace file error.
+//
+#define OSS_CANT_OPEN_TRACE_FILE         _HRESULT_TYPEDEF_(0x8009301BL)
+
+//
+// MessageId: OSS_TRACE_FILE_ALREADY_OPEN
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Trace file error.
+//
+#define OSS_TRACE_FILE_ALREADY_OPEN      _HRESULT_TYPEDEF_(0x8009301CL)
+
+//
+// MessageId: OSS_TABLE_MISMATCH
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_TABLE_MISMATCH               _HRESULT_TYPEDEF_(0x8009301DL)
+
+//
+// MessageId: OSS_TYPE_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Invalid data.
+//
+#define OSS_TYPE_NOT_SUPPORTED           _HRESULT_TYPEDEF_(0x8009301EL)
+
+//
+// MessageId: OSS_REAL_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_REAL_DLL_NOT_LINKED          _HRESULT_TYPEDEF_(0x8009301FL)
+
+//
+// MessageId: OSS_REAL_CODE_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_REAL_CODE_NOT_LINKED         _HRESULT_TYPEDEF_(0x80093020L)
+
+//
+// MessageId: OSS_OUT_OF_RANGE
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_OUT_OF_RANGE                 _HRESULT_TYPEDEF_(0x80093021L)
+
+//
+// MessageId: OSS_COPIER_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_COPIER_DLL_NOT_LINKED        _HRESULT_TYPEDEF_(0x80093022L)
+
+//
+// MessageId: OSS_CONSTRAINT_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_CONSTRAINT_DLL_NOT_LINKED    _HRESULT_TYPEDEF_(0x80093023L)
+
+//
+// MessageId: OSS_COMPARATOR_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_COMPARATOR_DLL_NOT_LINKED    _HRESULT_TYPEDEF_(0x80093024L)
+
+//
+// MessageId: OSS_COMPARATOR_CODE_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_COMPARATOR_CODE_NOT_LINKED   _HRESULT_TYPEDEF_(0x80093025L)
+
+//
+// MessageId: OSS_MEM_MGR_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_MEM_MGR_DLL_NOT_LINKED       _HRESULT_TYPEDEF_(0x80093026L)
+
+//
+// MessageId: OSS_PDV_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_PDV_DLL_NOT_LINKED           _HRESULT_TYPEDEF_(0x80093027L)
+
+//
+// MessageId: OSS_PDV_CODE_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_PDV_CODE_NOT_LINKED          _HRESULT_TYPEDEF_(0x80093028L)
+
+//
+// MessageId: OSS_API_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_API_DLL_NOT_LINKED           _HRESULT_TYPEDEF_(0x80093029L)
+
+//
+// MessageId: OSS_BERDER_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_BERDER_DLL_NOT_LINKED        _HRESULT_TYPEDEF_(0x8009302AL)
+
+//
+// MessageId: OSS_PER_DLL_NOT_LINKED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_PER_DLL_NOT_LINKED           _HRESULT_TYPEDEF_(0x8009302BL)
+
+//
+// MessageId: OSS_OPEN_TYPE_ERROR
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Program link error.
+//
+#define OSS_OPEN_TYPE_ERROR              _HRESULT_TYPEDEF_(0x8009302CL)
+
+//
+// MessageId: OSS_MUTEX_NOT_CREATED
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: System resource error.
+//
+#define OSS_MUTEX_NOT_CREATED            _HRESULT_TYPEDEF_(0x8009302DL)
+
+//
+// MessageId: OSS_CANT_CLOSE_TRACE_FILE
+//
+// MessageText:
+//
+//  OSS ASN.1 Error: Trace file error.
+//
+#define OSS_CANT_CLOSE_TRACE_FILE        _HRESULT_TYPEDEF_(0x8009302EL)
+
+//
+// MessageId: CRYPT_E_ASN1_ERROR
+//
+// MessageText:
+//
+//  ASN1 Certificate encode/decode error code base.
+//  
+//  The ASN1 error values are offset by CRYPT_E_ASN1_ERROR.
+//
+#define CRYPT_E_ASN1_ERROR               _HRESULT_TYPEDEF_(0x80093100L)
+
+//
+// MessageId: CRYPT_E_ASN1_INTERNAL
+//
+// MessageText:
+//
+//  ASN1 internal encode or decode error.
+//
+#define CRYPT_E_ASN1_INTERNAL            _HRESULT_TYPEDEF_(0x80093101L)
+
+//
+// MessageId: CRYPT_E_ASN1_EOD
+//
+// MessageText:
+//
+//  ASN1 unexpected end of data.
+//
+#define CRYPT_E_ASN1_EOD                 _HRESULT_TYPEDEF_(0x80093102L)
+
+//
+// MessageId: CRYPT_E_ASN1_CORRUPT
+//
+// MessageText:
+//
+//  ASN1 corrupted data.
+//
+#define CRYPT_E_ASN1_CORRUPT             _HRESULT_TYPEDEF_(0x80093103L)
+
+//
+// MessageId: CRYPT_E_ASN1_LARGE
+//
+// MessageText:
+//
+//  ASN1 value too large.
+//
+#define CRYPT_E_ASN1_LARGE               _HRESULT_TYPEDEF_(0x80093104L)
+
+//
+// MessageId: CRYPT_E_ASN1_CONSTRAINT
+//
+// MessageText:
+//
+//  ASN1 constraint violated.
+//
+#define CRYPT_E_ASN1_CONSTRAINT          _HRESULT_TYPEDEF_(0x80093105L)
+
+//
+// MessageId: CRYPT_E_ASN1_MEMORY
+//
+// MessageText:
+//
+//  ASN1 out of memory.
+//
+#define CRYPT_E_ASN1_MEMORY              _HRESULT_TYPEDEF_(0x80093106L)
+
+//
+// MessageId: CRYPT_E_ASN1_OVERFLOW
+//
+// MessageText:
+//
+//  ASN1 buffer overflow.
+//
+#define CRYPT_E_ASN1_OVERFLOW            _HRESULT_TYPEDEF_(0x80093107L)
+
+//
+// MessageId: CRYPT_E_ASN1_BADPDU
+//
+// MessageText:
+//
+//  ASN1 function not supported for this PDU.
+//
+#define CRYPT_E_ASN1_BADPDU              _HRESULT_TYPEDEF_(0x80093108L)
+
+//
+// MessageId: CRYPT_E_ASN1_BADARGS
+//
+// MessageText:
+//
+//  ASN1 bad arguments to function call.
+//
+#define CRYPT_E_ASN1_BADARGS             _HRESULT_TYPEDEF_(0x80093109L)
+
+//
+// MessageId: CRYPT_E_ASN1_BADREAL
+//
+// MessageText:
+//
+//  ASN1 bad real value.
+//
+#define CRYPT_E_ASN1_BADREAL             _HRESULT_TYPEDEF_(0x8009310AL)
+
+//
+// MessageId: CRYPT_E_ASN1_BADTAG
+//
+// MessageText:
+//
+//  ASN1 bad tag value met.
+//
+#define CRYPT_E_ASN1_BADTAG              _HRESULT_TYPEDEF_(0x8009310BL)
+
+//
+// MessageId: CRYPT_E_ASN1_CHOICE
+//
+// MessageText:
+//
+//  ASN1 bad choice value.
+//
+#define CRYPT_E_ASN1_CHOICE              _HRESULT_TYPEDEF_(0x8009310CL)
+
+//
+// MessageId: CRYPT_E_ASN1_RULE
+//
+// MessageText:
+//
+//  ASN1 bad encoding rule.
+//
+#define CRYPT_E_ASN1_RULE                _HRESULT_TYPEDEF_(0x8009310DL)
+
+//
+// MessageId: CRYPT_E_ASN1_UTF8
+//
+// MessageText:
+//
+//  ASN1 bad unicode (UTF8).
+//
+#define CRYPT_E_ASN1_UTF8                _HRESULT_TYPEDEF_(0x8009310EL)
+
+//
+// MessageId: CRYPT_E_ASN1_PDU_TYPE
+//
+// MessageText:
+//
+//  ASN1 bad PDU type.
+//
+#define CRYPT_E_ASN1_PDU_TYPE            _HRESULT_TYPEDEF_(0x80093133L)
+
+//
+// MessageId: CRYPT_E_ASN1_NYI
+//
+// MessageText:
+//
+//  ASN1 not yet implemented.
+//
+#define CRYPT_E_ASN1_NYI                 _HRESULT_TYPEDEF_(0x80093134L)
+
+//
+// MessageId: CRYPT_E_ASN1_EXTENDED
+//
+// MessageText:
+//
+//  ASN1 skipped unknown extension(s).
+//
+#define CRYPT_E_ASN1_EXTENDED            _HRESULT_TYPEDEF_(0x80093201L)
+
+//
+// MessageId: CRYPT_E_ASN1_NOEOD
+//
+// MessageText:
+//
+//  ASN1 end of data expected
+//
+#define CRYPT_E_ASN1_NOEOD               _HRESULT_TYPEDEF_(0x80093202L)
+
+//
+// MessageId: CERTSRV_E_BAD_REQUESTSUBJECT
+//
+// MessageText:
+//
+//  The request subject name is invalid or too long.
+//
+#define CERTSRV_E_BAD_REQUESTSUBJECT     _HRESULT_TYPEDEF_(0x80094001L)
+
+//
+// MessageId: CERTSRV_E_NO_REQUEST
+//
+// MessageText:
+//
+//  The request does not exist.
+//
+#define CERTSRV_E_NO_REQUEST             _HRESULT_TYPEDEF_(0x80094002L)
+
+//
+// MessageId: CERTSRV_E_BAD_REQUESTSTATUS
+//
+// MessageText:
+//
+//  The request's current status does not allow this operation.
+//
+#define CERTSRV_E_BAD_REQUESTSTATUS      _HRESULT_TYPEDEF_(0x80094003L)
+
+//
+// MessageId: CERTSRV_E_PROPERTY_EMPTY
+//
+// MessageText:
+//
+//  The requested property value is empty.
+//
+#define CERTSRV_E_PROPERTY_EMPTY         _HRESULT_TYPEDEF_(0x80094004L)
+
+//
+// MessageId: CERTSRV_E_INVALID_CA_CERTIFICATE
+//
+// MessageText:
+//
+//  The certification authority's certificate contains invalid data.
+//
+#define CERTSRV_E_INVALID_CA_CERTIFICATE _HRESULT_TYPEDEF_(0x80094005L)
+
+//
+// MessageId: CERTSRV_E_SERVER_SUSPENDED
+//
+// MessageText:
+//
+//  Certificate service has been suspended for a database restore operation.
+//
+#define CERTSRV_E_SERVER_SUSPENDED       _HRESULT_TYPEDEF_(0x80094006L)
+
+//
+// MessageId: CERTSRV_E_ENCODING_LENGTH
+//
+// MessageText:
+//
+//  The certificate contains an encoded length that is potentially incompatible with older enrollment software.
+//
+#define CERTSRV_E_ENCODING_LENGTH        _HRESULT_TYPEDEF_(0x80094007L)
+
+//
+// MessageId: CERTSRV_E_UNSUPPORTED_CERT_TYPE
+//
+// MessageText:
+//
+//  The requested certificate template is not supported by this CA.
+//
+#define CERTSRV_E_UNSUPPORTED_CERT_TYPE  _HRESULT_TYPEDEF_(0x80094800L)
+
+//
+// MessageId: CERTSRV_E_NO_CERT_TYPE
+//
+// MessageText:
+//
+//  The request contains no certificate template information.
+//
+#define CERTSRV_E_NO_CERT_TYPE           _HRESULT_TYPEDEF_(0x80094801L)
+
+//
+// MessageId: TRUST_E_SYSTEM_ERROR
+//
+// MessageText:
+//
+//  A system-level error occurred while verifying trust.
+//
+#define TRUST_E_SYSTEM_ERROR             _HRESULT_TYPEDEF_(0x80096001L)
+
+//
+// MessageId: TRUST_E_NO_SIGNER_CERT
+//
+// MessageText:
+//
+//  The certificate for the signer of the message is invalid or not found.
+//
+#define TRUST_E_NO_SIGNER_CERT           _HRESULT_TYPEDEF_(0x80096002L)
+
+//
+// MessageId: TRUST_E_COUNTER_SIGNER
+//
+// MessageText:
+//
+//  One of the counter signatures was invalid.
+//
+#define TRUST_E_COUNTER_SIGNER           _HRESULT_TYPEDEF_(0x80096003L)
+
+//
+// MessageId: TRUST_E_CERT_SIGNATURE
+//
+// MessageText:
+//
+//  The signature of the certificate can not be verified.
+//
+#define TRUST_E_CERT_SIGNATURE           _HRESULT_TYPEDEF_(0x80096004L)
+
+//
+// MessageId: TRUST_E_TIME_STAMP
+//
+// MessageText:
+//
+//  The timestamp signature and/or certificate could not be verified or is malformed.
+//
+#define TRUST_E_TIME_STAMP               _HRESULT_TYPEDEF_(0x80096005L)
+
+//
+// MessageId: TRUST_E_BAD_DIGEST
+//
+// MessageText:
+//
+//  The digital signature of the object did not verify.
+//
+#define TRUST_E_BAD_DIGEST               _HRESULT_TYPEDEF_(0x80096010L)
+
+//
+// MessageId: TRUST_E_BASIC_CONSTRAINTS
+//
+// MessageText:
+//
+//  A certificate's basic constraint extension has not been observed.
+//
+#define TRUST_E_BASIC_CONSTRAINTS        _HRESULT_TYPEDEF_(0x80096019L)
+
+//
+// MessageId: TRUST_E_FINANCIAL_CRITERIA
+//
+// MessageText:
+//
+//  The certificate does not meet or contain the Authenticode financial extensions.
+//
+#define TRUST_E_FINANCIAL_CRITERIA       _HRESULT_TYPEDEF_(0x8009601EL)
+
+//
+//  Error codes for mssipotf.dll
+//  Most of the error codes can only occur when an error occurs
+//    during font file signing
+//
+//
+//
+// MessageId: MSSIPOTF_E_OUTOFMEMRANGE
+//
+// MessageText:
+//
+//  Tried to reference a part of the file outside the proper range.
+//
+#define MSSIPOTF_E_OUTOFMEMRANGE         _HRESULT_TYPEDEF_(0x80097001L)
+
+//
+// MessageId: MSSIPOTF_E_CANTGETOBJECT
+//
+// MessageText:
+//
+//  Could not retrieve an object from the file.
+//
+#define MSSIPOTF_E_CANTGETOBJECT         _HRESULT_TYPEDEF_(0x80097002L)
+
+//
+// MessageId: MSSIPOTF_E_NOHEADTABLE
+//
+// MessageText:
+//
+//  Could not find the head table in the file.
+//
+#define MSSIPOTF_E_NOHEADTABLE           _HRESULT_TYPEDEF_(0x80097003L)
+
+//
+// MessageId: MSSIPOTF_E_BAD_MAGICNUMBER
+//
+// MessageText:
+//
+//  The magic number in the head table is incorrect.
+//
+#define MSSIPOTF_E_BAD_MAGICNUMBER       _HRESULT_TYPEDEF_(0x80097004L)
+
+//
+// MessageId: MSSIPOTF_E_BAD_OFFSET_TABLE
+//
+// MessageText:
+//
+//  The offset table has incorrect values.
+//
+#define MSSIPOTF_E_BAD_OFFSET_TABLE      _HRESULT_TYPEDEF_(0x80097005L)
+
+//
+// MessageId: MSSIPOTF_E_TABLE_TAGORDER
+//
+// MessageText:
+//
+//  Duplicate table tags or tags out of alphabetical order.
+//
+#define MSSIPOTF_E_TABLE_TAGORDER        _HRESULT_TYPEDEF_(0x80097006L)
+
+//
+// MessageId: MSSIPOTF_E_TABLE_LONGWORD
+//
+// MessageText:
+//
+//  A table does not start on a long word boundary.
+//
+#define MSSIPOTF_E_TABLE_LONGWORD        _HRESULT_TYPEDEF_(0x80097007L)
+
+//
+// MessageId: MSSIPOTF_E_BAD_FIRST_TABLE_PLACEMENT
+//
+// MessageText:
+//
+//  First table does not appear after header information.
+//
+#define MSSIPOTF_E_BAD_FIRST_TABLE_PLACEMENT _HRESULT_TYPEDEF_(0x80097008L)
+
+//
+// MessageId: MSSIPOTF_E_TABLES_OVERLAP
+//
+// MessageText:
+//
+//  Two or more tables overlap.
+//
+#define MSSIPOTF_E_TABLES_OVERLAP        _HRESULT_TYPEDEF_(0x80097009L)
+
+//
+// MessageId: MSSIPOTF_E_TABLE_PADBYTES
+//
+// MessageText:
+//
+//  Too many pad bytes between tables or pad bytes are not 0.
+//
+#define MSSIPOTF_E_TABLE_PADBYTES        _HRESULT_TYPEDEF_(0x8009700AL)
+
+//
+// MessageId: MSSIPOTF_E_FILETOOSMALL
+//
+// MessageText:
+//
+//  File is too small to contain the last table.
+//
+#define MSSIPOTF_E_FILETOOSMALL          _HRESULT_TYPEDEF_(0x8009700BL)
+
+//
+// MessageId: MSSIPOTF_E_TABLE_CHECKSUM
+//
+// MessageText:
+//
+//  A table checksum is incorrect.
+//
+#define MSSIPOTF_E_TABLE_CHECKSUM        _HRESULT_TYPEDEF_(0x8009700CL)
+
+//
+// MessageId: MSSIPOTF_E_FILE_CHECKSUM
+//
+// MessageText:
+//
+//  The file checksum is incorrect.
+//
+#define MSSIPOTF_E_FILE_CHECKSUM         _HRESULT_TYPEDEF_(0x8009700DL)
+
+//
+// MessageId: MSSIPOTF_E_FAILED_POLICY
+//
+// MessageText:
+//
+//  The signature does not have the correct attributes for the policy.
+//
+#define MSSIPOTF_E_FAILED_POLICY         _HRESULT_TYPEDEF_(0x80097010L)
+
+//
+// MessageId: MSSIPOTF_E_FAILED_HINTS_CHECK
+//
+// MessageText:
+//
+//  The file did not pass the hints check.
+//
+#define MSSIPOTF_E_FAILED_HINTS_CHECK    _HRESULT_TYPEDEF_(0x80097011L)
+
+//
+// MessageId: MSSIPOTF_E_NOT_OPENTYPE
+//
+// MessageText:
+//
+//  The file is not an OpenType file.
+//
+#define MSSIPOTF_E_NOT_OPENTYPE          _HRESULT_TYPEDEF_(0x80097012L)
+
+//
+// MessageId: MSSIPOTF_E_FILE
+//
+// MessageText:
+//
+//  Failed on a file operation (open, map, read, write).
+//
+#define MSSIPOTF_E_FILE                  _HRESULT_TYPEDEF_(0x80097013L)
+
+//
+// MessageId: MSSIPOTF_E_CRYPT
+//
+// MessageText:
+//
+//  A call to a CryptoAPI function failed.
+//
+#define MSSIPOTF_E_CRYPT                 _HRESULT_TYPEDEF_(0x80097014L)
+
+//
+// MessageId: MSSIPOTF_E_BADVERSION
+//
+// MessageText:
+//
+//  There is a bad version number in the file.
+//
+#define MSSIPOTF_E_BADVERSION            _HRESULT_TYPEDEF_(0x80097015L)
+
+//
+// MessageId: MSSIPOTF_E_DSIG_STRUCTURE
+//
+// MessageText:
+//
+//  The structure of the DSIG table is incorrect.
+//
+#define MSSIPOTF_E_DSIG_STRUCTURE        _HRESULT_TYPEDEF_(0x80097016L)
+
+//
+// MessageId: MSSIPOTF_E_PCONST_CHECK
+//
+// MessageText:
+//
+//  A check failed in a partially constant table.
+//
+#define MSSIPOTF_E_PCONST_CHECK          _HRESULT_TYPEDEF_(0x80097017L)
+
+//
+// MessageId: MSSIPOTF_E_STRUCTURE
+//
+// MessageText:
+//
+//  Some kind of structural error.
+//
+#define MSSIPOTF_E_STRUCTURE             _HRESULT_TYPEDEF_(0x80097018L)
+
 #define NTE_OP_OK 0
 
 //
@@ -9709,7 +20092,7 @@
 //
 // MessageText:
 //
-//  The specified trust provider is not known on this system.
+//  Unknown trust provider.
 //
 #define TRUST_E_PROVIDER_UNKNOWN         _HRESULT_TYPEDEF_(0x800B0001L)
 
@@ -9817,18 +20200,18 @@
 //
 // MessageText:
 //
-//  A required certificate is not within its validity period.
+//  A required certificate is not within its validity period when verifying against the current system clock or the timestamp in the signed file.
 //
 #define CERT_E_EXPIRED                   _HRESULT_TYPEDEF_(0x800B0101L)
 
 //
-// MessageId: CERT_E_VALIDIYPERIODNESTING
+// MessageId: CERT_E_VALIDITYPERIODNESTING
 //
 // MessageText:
 //
 //  The validity periods of the certification chain do not nest correctly.
 //
-#define CERT_E_VALIDIYPERIODNESTING      _HRESULT_TYPEDEF_(0x800B0102L)
+#define CERT_E_VALIDITYPERIODNESTING     _HRESULT_TYPEDEF_(0x800B0102L)
 
 //
 // MessageId: CERT_E_ROLE
@@ -9853,7 +20236,7 @@
 //
 // MessageText:
 //
-//  An extension of unknown type that is labeled 'critical' is present in a certificate.
+//  A certificate contains an unknown extension that is marked 'critical'.
 //
 #define CERT_E_CRITICAL                  _HRESULT_TYPEDEF_(0x800B0105L)
 
@@ -9862,7 +20245,7 @@
 //
 // MessageText:
 //
-//  A certificate is being used for a purpose other than that for which it is permitted.
+//  A certificate being used for a purpose other than the ones specified by its CA.
 //
 #define CERT_E_PURPOSE                   _HRESULT_TYPEDEF_(0x800B0106L)
 
@@ -9889,7 +20272,7 @@
 //
 // MessageText:
 //
-//  A certification chain processed correctly, but terminated in a root certificate which isn't trusted by the trust provider.
+//  A certificate chain processed correctly, but terminated in a root certificate which is not trusted by the trust provider.
 //
 #define CERT_E_UNTRUSTEDROOT             _HRESULT_TYPEDEF_(0x800B0109L)
 
@@ -9898,9 +20281,1710 @@
 //
 // MessageText:
 //
-//  A chain of certs didn't chain as they should in a certain application of chaining.
+//  An internal certificate chaining error has occurred.
 //
 #define CERT_E_CHAINING                  _HRESULT_TYPEDEF_(0x800B010AL)
 
-#pragma option -b.
-#endif // _WINERROR_
+//
+// MessageId: TRUST_E_FAIL
+//
+// MessageText:
+//
+//  Generic trust failure.
+//
+#define TRUST_E_FAIL                     _HRESULT_TYPEDEF_(0x800B010BL)
+
+//
+// MessageId: CERT_E_REVOKED
+//
+// MessageText:
+//
+//  A certificate was explicitly revoked by its issuer.
+//
+#define CERT_E_REVOKED                   _HRESULT_TYPEDEF_(0x800B010CL)
+
+//
+// MessageId: CERT_E_UNTRUSTEDTESTROOT
+//
+// MessageText:
+//
+//  The certification path terminates with the test root which is not trusted with the current policy settings.
+//
+#define CERT_E_UNTRUSTEDTESTROOT         _HRESULT_TYPEDEF_(0x800B010DL)
+
+//
+// MessageId: CERT_E_REVOCATION_FAILURE
+//
+// MessageText:
+//
+//  The revocation process could not continue - the certificate(s) could not be checked.
+//
+#define CERT_E_REVOCATION_FAILURE        _HRESULT_TYPEDEF_(0x800B010EL)
+
+//
+// MessageId: CERT_E_CN_NO_MATCH
+//
+// MessageText:
+//
+//  The certificate's CN name does not match the passed value.
+//
+#define CERT_E_CN_NO_MATCH               _HRESULT_TYPEDEF_(0x800B010FL)
+
+//
+// MessageId: CERT_E_WRONG_USAGE
+//
+// MessageText:
+//
+//  The certificate is not valid for the requested usage.
+//
+#define CERT_E_WRONG_USAGE               _HRESULT_TYPEDEF_(0x800B0110L)
+
+//
+// MessageId: TRUST_E_EXPLICIT_DISTRUST
+//
+// MessageText:
+//
+//  The certificate was explicitly marked as untrusted by the user.
+//
+#define TRUST_E_EXPLICIT_DISTRUST        _HRESULT_TYPEDEF_(0x800B0111L)
+
+//
+// MessageId: CERT_E_UNTRUSTEDCA
+//
+// MessageText:
+//
+//  A certification chain processed correctly, but one of the CA certificates is not trusted by the policy provider.
+//
+#define CERT_E_UNTRUSTEDCA               _HRESULT_TYPEDEF_(0x800B0112L)
+
+// *****************
+// FACILITY_SETUPAPI
+// *****************
+//
+// Since these error codes aren't in the standard Win32 range (i.e., 0-64K), define a
+// macro to map either Win32 or SetupAPI error codes into an HRESULT.
+//
+#define HRESULT_FROM_SETUPAPI(x) ((((x) & (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR)) == (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR)) \
+                                 ? ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_SETUPAPI << 16) | 0x80000000))                               \
+                                 : HRESULT_FROM_WIN32(x))
+//
+// MessageId: SPAPI_E_EXPECTED_SECTION_NAME
+//
+// MessageText:
+//
+//  A non-empty line was encountered in the INF before the start of a section.
+//
+#define SPAPI_E_EXPECTED_SECTION_NAME    _HRESULT_TYPEDEF_(0x800F0000L)
+
+//
+// MessageId: SPAPI_E_BAD_SECTION_NAME_LINE
+//
+// MessageText:
+//
+//  A section name marker in the INF is not complete, or does not exist on a line by itself.
+//
+#define SPAPI_E_BAD_SECTION_NAME_LINE    _HRESULT_TYPEDEF_(0x800F0001L)
+
+//
+// MessageId: SPAPI_E_SECTION_NAME_TOO_LONG
+//
+// MessageText:
+//
+//  An INF section was encountered whose name exceeds the maximum section name length.
+//
+#define SPAPI_E_SECTION_NAME_TOO_LONG    _HRESULT_TYPEDEF_(0x800F0002L)
+
+//
+// MessageId: SPAPI_E_GENERAL_SYNTAX
+//
+// MessageText:
+//
+//  The syntax of the INF is invalid.
+//
+#define SPAPI_E_GENERAL_SYNTAX           _HRESULT_TYPEDEF_(0x800F0003L)
+
+//
+// MessageId: SPAPI_E_WRONG_INF_STYLE
+//
+// MessageText:
+//
+//  The style of the INF is different than what was requested.
+//
+#define SPAPI_E_WRONG_INF_STYLE          _HRESULT_TYPEDEF_(0x800F0100L)
+
+//
+// MessageId: SPAPI_E_SECTION_NOT_FOUND
+//
+// MessageText:
+//
+//  The required section was not found in the INF.
+//
+#define SPAPI_E_SECTION_NOT_FOUND        _HRESULT_TYPEDEF_(0x800F0101L)
+
+//
+// MessageId: SPAPI_E_LINE_NOT_FOUND
+//
+// MessageText:
+//
+//  The required line was not found in the INF.
+//
+#define SPAPI_E_LINE_NOT_FOUND           _HRESULT_TYPEDEF_(0x800F0102L)
+
+//
+// MessageId: SPAPI_E_NO_BACKUP
+//
+// MessageText:
+//
+//  The files affected by the installation of this file queue have not been backed up for uninstall.
+//
+#define SPAPI_E_NO_BACKUP                _HRESULT_TYPEDEF_(0x800F0103L)
+
+//
+// MessageId: SPAPI_E_NO_ASSOCIATED_CLASS
+//
+// MessageText:
+//
+//  The INF or the device information set or element does not have an associated install class.
+//
+#define SPAPI_E_NO_ASSOCIATED_CLASS      _HRESULT_TYPEDEF_(0x800F0200L)
+
+//
+// MessageId: SPAPI_E_CLASS_MISMATCH
+//
+// MessageText:
+//
+//  The INF or the device information set or element does not match the specified install class.
+//
+#define SPAPI_E_CLASS_MISMATCH           _HRESULT_TYPEDEF_(0x800F0201L)
+
+//
+// MessageId: SPAPI_E_DUPLICATE_FOUND
+//
+// MessageText:
+//
+//  An existing device was found that is a duplicate of the device being manually installed.
+//
+#define SPAPI_E_DUPLICATE_FOUND          _HRESULT_TYPEDEF_(0x800F0202L)
+
+//
+// MessageId: SPAPI_E_NO_DRIVER_SELECTED
+//
+// MessageText:
+//
+//  There is no driver selected for the device information set or element.
+//
+#define SPAPI_E_NO_DRIVER_SELECTED       _HRESULT_TYPEDEF_(0x800F0203L)
+
+//
+// MessageId: SPAPI_E_KEY_DOES_NOT_EXIST
+//
+// MessageText:
+//
+//  The requested device registry key does not exist.
+//
+#define SPAPI_E_KEY_DOES_NOT_EXIST       _HRESULT_TYPEDEF_(0x800F0204L)
+
+//
+// MessageId: SPAPI_E_INVALID_DEVINST_NAME
+//
+// MessageText:
+//
+//  The device instance name is invalid.
+//
+#define SPAPI_E_INVALID_DEVINST_NAME     _HRESULT_TYPEDEF_(0x800F0205L)
+
+//
+// MessageId: SPAPI_E_INVALID_CLASS
+//
+// MessageText:
+//
+//  The install class is not present or is invalid.
+//
+#define SPAPI_E_INVALID_CLASS            _HRESULT_TYPEDEF_(0x800F0206L)
+
+//
+// MessageId: SPAPI_E_DEVINST_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  The device instance cannot be created because it already exists.
+//
+#define SPAPI_E_DEVINST_ALREADY_EXISTS   _HRESULT_TYPEDEF_(0x800F0207L)
+
+//
+// MessageId: SPAPI_E_DEVINFO_NOT_REGISTERED
+//
+// MessageText:
+//
+//  The operation cannot be performed on a device information element that has not been registered.
+//
+#define SPAPI_E_DEVINFO_NOT_REGISTERED   _HRESULT_TYPEDEF_(0x800F0208L)
+
+//
+// MessageId: SPAPI_E_INVALID_REG_PROPERTY
+//
+// MessageText:
+//
+//  The device property code is invalid.
+//
+#define SPAPI_E_INVALID_REG_PROPERTY     _HRESULT_TYPEDEF_(0x800F0209L)
+
+//
+// MessageId: SPAPI_E_NO_INF
+//
+// MessageText:
+//
+//  The INF from which a driver list is to be built does not exist.
+//
+#define SPAPI_E_NO_INF                   _HRESULT_TYPEDEF_(0x800F020AL)
+
+//
+// MessageId: SPAPI_E_NO_SUCH_DEVINST
+//
+// MessageText:
+//
+//  The device instance does not exist in the hardware tree.
+//
+#define SPAPI_E_NO_SUCH_DEVINST          _HRESULT_TYPEDEF_(0x800F020BL)
+
+//
+// MessageId: SPAPI_E_CANT_LOAD_CLASS_ICON
+//
+// MessageText:
+//
+//  The icon representing this install class cannot be loaded.
+//
+#define SPAPI_E_CANT_LOAD_CLASS_ICON     _HRESULT_TYPEDEF_(0x800F020CL)
+
+//
+// MessageId: SPAPI_E_INVALID_CLASS_INSTALLER
+//
+// MessageText:
+//
+//  The class installer registry entry is invalid.
+//
+#define SPAPI_E_INVALID_CLASS_INSTALLER  _HRESULT_TYPEDEF_(0x800F020DL)
+
+//
+// MessageId: SPAPI_E_DI_DO_DEFAULT
+//
+// MessageText:
+//
+//  The class installer has indicated that the default action should be performed for this installation request.
+//
+#define SPAPI_E_DI_DO_DEFAULT            _HRESULT_TYPEDEF_(0x800F020EL)
+
+//
+// MessageId: SPAPI_E_DI_NOFILECOPY
+//
+// MessageText:
+//
+//  The operation does not require any files to be copied.
+//
+#define SPAPI_E_DI_NOFILECOPY            _HRESULT_TYPEDEF_(0x800F020FL)
+
+//
+// MessageId: SPAPI_E_INVALID_HWPROFILE
+//
+// MessageText:
+//
+//  The specified hardware profile does not exist.
+//
+#define SPAPI_E_INVALID_HWPROFILE        _HRESULT_TYPEDEF_(0x800F0210L)
+
+//
+// MessageId: SPAPI_E_NO_DEVICE_SELECTED
+//
+// MessageText:
+//
+//  There is no device information element currently selected for this device information set.
+//
+#define SPAPI_E_NO_DEVICE_SELECTED       _HRESULT_TYPEDEF_(0x800F0211L)
+
+//
+// MessageId: SPAPI_E_DEVINFO_LIST_LOCKED
+//
+// MessageText:
+//
+//  The operation cannot be performed because the device information set is locked.
+//
+#define SPAPI_E_DEVINFO_LIST_LOCKED      _HRESULT_TYPEDEF_(0x800F0212L)
+
+//
+// MessageId: SPAPI_E_DEVINFO_DATA_LOCKED
+//
+// MessageText:
+//
+//  The operation cannot be performed because the device information element is locked.
+//
+#define SPAPI_E_DEVINFO_DATA_LOCKED      _HRESULT_TYPEDEF_(0x800F0213L)
+
+//
+// MessageId: SPAPI_E_DI_BAD_PATH
+//
+// MessageText:
+//
+//  The specified path does not contain any applicable device INFs.
+//
+#define SPAPI_E_DI_BAD_PATH              _HRESULT_TYPEDEF_(0x800F0214L)
+
+//
+// MessageId: SPAPI_E_NO_CLASSINSTALL_PARAMS
+//
+// MessageText:
+//
+//  No class installer parameters have been set for the device information set or element.
+//
+#define SPAPI_E_NO_CLASSINSTALL_PARAMS   _HRESULT_TYPEDEF_(0x800F0215L)
+
+//
+// MessageId: SPAPI_E_FILEQUEUE_LOCKED
+//
+// MessageText:
+//
+//  The operation cannot be performed because the file queue is locked.
+//
+#define SPAPI_E_FILEQUEUE_LOCKED         _HRESULT_TYPEDEF_(0x800F0216L)
+
+//
+// MessageId: SPAPI_E_BAD_SERVICE_INSTALLSECT
+//
+// MessageText:
+//
+//  A service installation section in this INF is invalid.
+//
+#define SPAPI_E_BAD_SERVICE_INSTALLSECT  _HRESULT_TYPEDEF_(0x800F0217L)
+
+//
+// MessageId: SPAPI_E_NO_CLASS_DRIVER_LIST
+//
+// MessageText:
+//
+//  There is no class driver list for the device information element.
+//
+#define SPAPI_E_NO_CLASS_DRIVER_LIST     _HRESULT_TYPEDEF_(0x800F0218L)
+
+//
+// MessageId: SPAPI_E_NO_ASSOCIATED_SERVICE
+//
+// MessageText:
+//
+//  The installation failed because a function driver was not specified for this device instance.
+//
+#define SPAPI_E_NO_ASSOCIATED_SERVICE    _HRESULT_TYPEDEF_(0x800F0219L)
+
+//
+// MessageId: SPAPI_E_NO_DEFAULT_DEVICE_INTERFACE
+//
+// MessageText:
+//
+//  There is presently no default device interface designated for this interface class.
+//
+#define SPAPI_E_NO_DEFAULT_DEVICE_INTERFACE _HRESULT_TYPEDEF_(0x800F021AL)
+
+//
+// MessageId: SPAPI_E_DEVICE_INTERFACE_ACTIVE
+//
+// MessageText:
+//
+//  The operation cannot be performed because the device interface is currently active.
+//
+#define SPAPI_E_DEVICE_INTERFACE_ACTIVE  _HRESULT_TYPEDEF_(0x800F021BL)
+
+//
+// MessageId: SPAPI_E_DEVICE_INTERFACE_REMOVED
+//
+// MessageText:
+//
+//  The operation cannot be performed because the device interface has been removed from the system.
+//
+#define SPAPI_E_DEVICE_INTERFACE_REMOVED _HRESULT_TYPEDEF_(0x800F021CL)
+
+//
+// MessageId: SPAPI_E_BAD_INTERFACE_INSTALLSECT
+//
+// MessageText:
+//
+//  An interface installation section in this INF is invalid.
+//
+#define SPAPI_E_BAD_INTERFACE_INSTALLSECT _HRESULT_TYPEDEF_(0x800F021DL)
+
+//
+// MessageId: SPAPI_E_NO_SUCH_INTERFACE_CLASS
+//
+// MessageText:
+//
+//  This interface class does not exist in the system.
+//
+#define SPAPI_E_NO_SUCH_INTERFACE_CLASS  _HRESULT_TYPEDEF_(0x800F021EL)
+
+//
+// MessageId: SPAPI_E_INVALID_REFERENCE_STRING
+//
+// MessageText:
+//
+//  The reference string supplied for this interface device is invalid.
+//
+#define SPAPI_E_INVALID_REFERENCE_STRING _HRESULT_TYPEDEF_(0x800F021FL)
+
+//
+// MessageId: SPAPI_E_INVALID_MACHINENAME
+//
+// MessageText:
+//
+//  The specified machine name does not conform to UNC naming conventions.
+//
+#define SPAPI_E_INVALID_MACHINENAME      _HRESULT_TYPEDEF_(0x800F0220L)
+
+//
+// MessageId: SPAPI_E_REMOTE_COMM_FAILURE
+//
+// MessageText:
+//
+//  A general remote communication error occurred.
+//
+#define SPAPI_E_REMOTE_COMM_FAILURE      _HRESULT_TYPEDEF_(0x800F0221L)
+
+//
+// MessageId: SPAPI_E_MACHINE_UNAVAILABLE
+//
+// MessageText:
+//
+//  The machine selected for remote communication is not available at this time.
+//
+#define SPAPI_E_MACHINE_UNAVAILABLE      _HRESULT_TYPEDEF_(0x800F0222L)
+
+//
+// MessageId: SPAPI_E_NO_CONFIGMGR_SERVICES
+//
+// MessageText:
+//
+//  The Plug and Play service is not available on the remote machine.
+//
+#define SPAPI_E_NO_CONFIGMGR_SERVICES    _HRESULT_TYPEDEF_(0x800F0223L)
+
+//
+// MessageId: SPAPI_E_INVALID_PROPPAGE_PROVIDER
+//
+// MessageText:
+//
+//  The property page provider registry entry is invalid.
+//
+#define SPAPI_E_INVALID_PROPPAGE_PROVIDER _HRESULT_TYPEDEF_(0x800F0224L)
+
+//
+// MessageId: SPAPI_E_NO_SUCH_DEVICE_INTERFACE
+//
+// MessageText:
+//
+//  The requested device interface is not present in the system.
+//
+#define SPAPI_E_NO_SUCH_DEVICE_INTERFACE _HRESULT_TYPEDEF_(0x800F0225L)
+
+//
+// MessageId: SPAPI_E_DI_POSTPROCESSING_REQUIRED
+//
+// MessageText:
+//
+//  The device's co-installer has additional work to perform after installation is complete.
+//
+#define SPAPI_E_DI_POSTPROCESSING_REQUIRED _HRESULT_TYPEDEF_(0x800F0226L)
+
+//
+// MessageId: SPAPI_E_INVALID_COINSTALLER
+//
+// MessageText:
+//
+//  The device's co-installer is invalid.
+//
+#define SPAPI_E_INVALID_COINSTALLER      _HRESULT_TYPEDEF_(0x800F0227L)
+
+//
+// MessageId: SPAPI_E_NO_COMPAT_DRIVERS
+//
+// MessageText:
+//
+//  There are no compatible drivers for this device.
+//
+#define SPAPI_E_NO_COMPAT_DRIVERS        _HRESULT_TYPEDEF_(0x800F0228L)
+
+//
+// MessageId: SPAPI_E_NO_DEVICE_ICON
+//
+// MessageText:
+//
+//  There is no icon that represents this device or device type.
+//
+#define SPAPI_E_NO_DEVICE_ICON           _HRESULT_TYPEDEF_(0x800F0229L)
+
+//
+// MessageId: SPAPI_E_INVALID_INF_LOGCONFIG
+//
+// MessageText:
+//
+//  A logical configuration specified in this INF is invalid.
+//
+#define SPAPI_E_INVALID_INF_LOGCONFIG    _HRESULT_TYPEDEF_(0x800F022AL)
+
+//
+// MessageId: SPAPI_E_DI_DONT_INSTALL
+//
+// MessageText:
+//
+//  The class installer has denied the request to install or upgrade this device.
+//
+#define SPAPI_E_DI_DONT_INSTALL          _HRESULT_TYPEDEF_(0x800F022BL)
+
+//
+// MessageId: SPAPI_E_INVALID_FILTER_DRIVER
+//
+// MessageText:
+//
+//  One of the filter drivers installed for this device is invalid.
+//
+#define SPAPI_E_INVALID_FILTER_DRIVER    _HRESULT_TYPEDEF_(0x800F022CL)
+
+//
+// MessageId: SPAPI_E_NON_WINDOWS_NT_DRIVER
+//
+// MessageText:
+//
+//  The driver selected for this device does not support Windows 2000.
+//
+#define SPAPI_E_NON_WINDOWS_NT_DRIVER    _HRESULT_TYPEDEF_(0x800F022DL)
+
+//
+// MessageId: SPAPI_E_NON_WINDOWS_DRIVER
+//
+// MessageText:
+//
+//  The driver selected for this device does not support Windows.
+//
+#define SPAPI_E_NON_WINDOWS_DRIVER       _HRESULT_TYPEDEF_(0x800F022EL)
+
+//
+// MessageId: SPAPI_E_NO_CATALOG_FOR_OEM_INF
+//
+// MessageText:
+//
+//  The third-party INF does not contain digital signature information.
+//
+#define SPAPI_E_NO_CATALOG_FOR_OEM_INF   _HRESULT_TYPEDEF_(0x800F022FL)
+
+//
+// MessageId: SPAPI_E_DEVINSTALL_QUEUE_NONNATIVE
+//
+// MessageText:
+//
+//  An invalid attempt was made to use a device installation file queue for verification of digital signatures relative to other platforms.
+//
+#define SPAPI_E_DEVINSTALL_QUEUE_NONNATIVE _HRESULT_TYPEDEF_(0x800F0230L)
+
+//
+// MessageId: SPAPI_E_NOT_DISABLEABLE
+//
+// MessageText:
+//
+//  The device cannot be disabled.
+//
+#define SPAPI_E_NOT_DISABLEABLE          _HRESULT_TYPEDEF_(0x800F0231L)
+
+//
+// MessageId: SPAPI_E_CANT_REMOVE_DEVINST
+//
+// MessageText:
+//
+//  The device could not be dynamically removed.
+//
+#define SPAPI_E_CANT_REMOVE_DEVINST      _HRESULT_TYPEDEF_(0x800F0232L)
+
+//
+// MessageId: SPAPI_E_ERROR_NOT_INSTALLED
+//
+// MessageText:
+//
+//  No installed components were detected.
+//
+#define SPAPI_E_ERROR_NOT_INSTALLED      _HRESULT_TYPEDEF_(0x800F1000L)
+
+// *****************
+// FACILITY_SCARD
+// *****************
+//
+// =============================
+// Facility SCARD Error Messages
+// =============================
+//
+#define SCARD_S_SUCCESS NO_ERROR
+//
+// MessageId: SCARD_F_INTERNAL_ERROR
+//
+// MessageText:
+//
+//  An internal consistency check failed.
+//
+#define SCARD_F_INTERNAL_ERROR           _HRESULT_TYPEDEF_(0x80100001L)
+
+//
+// MessageId: SCARD_E_CANCELLED
+//
+// MessageText:
+//
+//  The action was cancelled by an SCardCancel request.
+//
+#define SCARD_E_CANCELLED                _HRESULT_TYPEDEF_(0x80100002L)
+
+//
+// MessageId: SCARD_E_INVALID_HANDLE
+//
+// MessageText:
+//
+//  The supplied handle was invalid.
+//
+#define SCARD_E_INVALID_HANDLE           _HRESULT_TYPEDEF_(0x80100003L)
+
+//
+// MessageId: SCARD_E_INVALID_PARAMETER
+//
+// MessageText:
+//
+//  One or more of the supplied parameters could not be properly interpreted.
+//
+#define SCARD_E_INVALID_PARAMETER        _HRESULT_TYPEDEF_(0x80100004L)
+
+//
+// MessageId: SCARD_E_INVALID_TARGET
+//
+// MessageText:
+//
+//  Registry startup information is missing or invalid.
+//
+#define SCARD_E_INVALID_TARGET           _HRESULT_TYPEDEF_(0x80100005L)
+
+//
+// MessageId: SCARD_E_NO_MEMORY
+//
+// MessageText:
+//
+//  Not enough memory available to complete this command.
+//
+#define SCARD_E_NO_MEMORY                _HRESULT_TYPEDEF_(0x80100006L)
+
+//
+// MessageId: SCARD_F_WAITED_TOO_LONG
+//
+// MessageText:
+//
+//  An internal consistency timer has expired.
+//
+#define SCARD_F_WAITED_TOO_LONG          _HRESULT_TYPEDEF_(0x80100007L)
+
+//
+// MessageId: SCARD_E_INSUFFICIENT_BUFFER
+//
+// MessageText:
+//
+//  The data buffer to receive returned data is too small for the returned data.
+//
+#define SCARD_E_INSUFFICIENT_BUFFER      _HRESULT_TYPEDEF_(0x80100008L)
+
+//
+// MessageId: SCARD_E_UNKNOWN_READER
+//
+// MessageText:
+//
+//  The specified reader name is not recognized.
+//
+#define SCARD_E_UNKNOWN_READER           _HRESULT_TYPEDEF_(0x80100009L)
+
+//
+// MessageId: SCARD_E_TIMEOUT
+//
+// MessageText:
+//
+//  The user-specified timeout value has expired.
+//
+#define SCARD_E_TIMEOUT                  _HRESULT_TYPEDEF_(0x8010000AL)
+
+//
+// MessageId: SCARD_E_SHARING_VIOLATION
+//
+// MessageText:
+//
+//  The smart card cannot be accessed because of other connections outstanding.
+//
+#define SCARD_E_SHARING_VIOLATION        _HRESULT_TYPEDEF_(0x8010000BL)
+
+//
+// MessageId: SCARD_E_NO_SMARTCARD
+//
+// MessageText:
+//
+//  The operation requires a Smart Card, but no Smart Card is currently in the device.
+//
+#define SCARD_E_NO_SMARTCARD             _HRESULT_TYPEDEF_(0x8010000CL)
+
+//
+// MessageId: SCARD_E_UNKNOWN_CARD
+//
+// MessageText:
+//
+//  The specified smart card name is not recognized.
+//
+#define SCARD_E_UNKNOWN_CARD             _HRESULT_TYPEDEF_(0x8010000DL)
+
+//
+// MessageId: SCARD_E_CANT_DISPOSE
+//
+// MessageText:
+//
+//  The system could not dispose of the media in the requested manner.
+//
+#define SCARD_E_CANT_DISPOSE             _HRESULT_TYPEDEF_(0x8010000EL)
+
+//
+// MessageId: SCARD_E_PROTO_MISMATCH
+//
+// MessageText:
+//
+//  The requested protocols are incompatible with the protocol currently in use with the smart card.
+//
+#define SCARD_E_PROTO_MISMATCH           _HRESULT_TYPEDEF_(0x8010000FL)
+
+//
+// MessageId: SCARD_E_NOT_READY
+//
+// MessageText:
+//
+//  The reader or smart card is not ready to accept commands.
+//
+#define SCARD_E_NOT_READY                _HRESULT_TYPEDEF_(0x80100010L)
+
+//
+// MessageId: SCARD_E_INVALID_VALUE
+//
+// MessageText:
+//
+//  One or more of the supplied parameters values could not be properly interpreted.
+//
+#define SCARD_E_INVALID_VALUE            _HRESULT_TYPEDEF_(0x80100011L)
+
+//
+// MessageId: SCARD_E_SYSTEM_CANCELLED
+//
+// MessageText:
+//
+//  The action was cancelled by the system, presumably to log off or shut down.
+//
+#define SCARD_E_SYSTEM_CANCELLED         _HRESULT_TYPEDEF_(0x80100012L)
+
+//
+// MessageId: SCARD_F_COMM_ERROR
+//
+// MessageText:
+//
+//  An internal communications error has been detected.
+//
+#define SCARD_F_COMM_ERROR               _HRESULT_TYPEDEF_(0x80100013L)
+
+//
+// MessageId: SCARD_F_UNKNOWN_ERROR
+//
+// MessageText:
+//
+//  An internal error has been detected, but the source is unknown.
+//
+#define SCARD_F_UNKNOWN_ERROR            _HRESULT_TYPEDEF_(0x80100014L)
+
+//
+// MessageId: SCARD_E_INVALID_ATR
+//
+// MessageText:
+//
+//  An ATR obtained from the registry is not a valid ATR string.
+//
+#define SCARD_E_INVALID_ATR              _HRESULT_TYPEDEF_(0x80100015L)
+
+//
+// MessageId: SCARD_E_NOT_TRANSACTED
+//
+// MessageText:
+//
+//  An attempt was made to end a non-existent transaction.
+//
+#define SCARD_E_NOT_TRANSACTED           _HRESULT_TYPEDEF_(0x80100016L)
+
+//
+// MessageId: SCARD_E_READER_UNAVAILABLE
+//
+// MessageText:
+//
+//  The specified reader is not currently available for use.
+//
+#define SCARD_E_READER_UNAVAILABLE       _HRESULT_TYPEDEF_(0x80100017L)
+
+//
+// MessageId: SCARD_P_SHUTDOWN
+//
+// MessageText:
+//
+//  The operation has been aborted to allow the server application to exit.
+//
+#define SCARD_P_SHUTDOWN                 _HRESULT_TYPEDEF_(0x80100018L)
+
+//
+// MessageId: SCARD_E_PCI_TOO_SMALL
+//
+// MessageText:
+//
+//  The PCI Receive buffer was too small.
+//
+#define SCARD_E_PCI_TOO_SMALL            _HRESULT_TYPEDEF_(0x80100019L)
+
+//
+// MessageId: SCARD_E_READER_UNSUPPORTED
+//
+// MessageText:
+//
+//  The reader driver does not meet minimal requirements for support.
+//
+#define SCARD_E_READER_UNSUPPORTED       _HRESULT_TYPEDEF_(0x8010001AL)
+
+//
+// MessageId: SCARD_E_DUPLICATE_READER
+//
+// MessageText:
+//
+//  The reader driver did not produce a unique reader name.
+//
+#define SCARD_E_DUPLICATE_READER         _HRESULT_TYPEDEF_(0x8010001BL)
+
+//
+// MessageId: SCARD_E_CARD_UNSUPPORTED
+//
+// MessageText:
+//
+//  The smart card does not meet minimal requirements for support.
+//
+#define SCARD_E_CARD_UNSUPPORTED         _HRESULT_TYPEDEF_(0x8010001CL)
+
+//
+// MessageId: SCARD_E_NO_SERVICE
+//
+// MessageText:
+//
+//  The Smart card resource manager is not running.
+//
+#define SCARD_E_NO_SERVICE               _HRESULT_TYPEDEF_(0x8010001DL)
+
+//
+// MessageId: SCARD_E_SERVICE_STOPPED
+//
+// MessageText:
+//
+//  The Smart card resource manager has shut down.
+//
+#define SCARD_E_SERVICE_STOPPED          _HRESULT_TYPEDEF_(0x8010001EL)
+
+//
+// MessageId: SCARD_E_UNEXPECTED
+//
+// MessageText:
+//
+//  An unexpected card error has occurred.
+//
+#define SCARD_E_UNEXPECTED               _HRESULT_TYPEDEF_(0x8010001FL)
+
+//
+// MessageId: SCARD_E_ICC_INSTALLATION
+//
+// MessageText:
+//
+//  No Primary Provider can be found for the smart card.
+//
+#define SCARD_E_ICC_INSTALLATION         _HRESULT_TYPEDEF_(0x80100020L)
+
+//
+// MessageId: SCARD_E_ICC_CREATEORDER
+//
+// MessageText:
+//
+//  The requested order of object creation is not supported.
+//
+#define SCARD_E_ICC_CREATEORDER          _HRESULT_TYPEDEF_(0x80100021L)
+
+//
+// MessageId: SCARD_E_UNSUPPORTED_FEATURE
+//
+// MessageText:
+//
+//  This smart card does not support the requested feature.
+//
+#define SCARD_E_UNSUPPORTED_FEATURE      _HRESULT_TYPEDEF_(0x80100022L)
+
+//
+// MessageId: SCARD_E_DIR_NOT_FOUND
+//
+// MessageText:
+//
+//  The identified directory does not exist in the smart card.
+//
+#define SCARD_E_DIR_NOT_FOUND            _HRESULT_TYPEDEF_(0x80100023L)
+
+//
+// MessageId: SCARD_E_FILE_NOT_FOUND
+//
+// MessageText:
+//
+//  The identified file does not exist in the smart card.
+//
+#define SCARD_E_FILE_NOT_FOUND           _HRESULT_TYPEDEF_(0x80100024L)
+
+//
+// MessageId: SCARD_E_NO_DIR
+//
+// MessageText:
+//
+//  The supplied path does not represent a smart card directory.
+//
+#define SCARD_E_NO_DIR                   _HRESULT_TYPEDEF_(0x80100025L)
+
+//
+// MessageId: SCARD_E_NO_FILE
+//
+// MessageText:
+//
+//  The supplied path does not represent a smart card file.
+//
+#define SCARD_E_NO_FILE                  _HRESULT_TYPEDEF_(0x80100026L)
+
+//
+// MessageId: SCARD_E_NO_ACCESS
+//
+// MessageText:
+//
+//  Access is denied to this file.
+//
+#define SCARD_E_NO_ACCESS                _HRESULT_TYPEDEF_(0x80100027L)
+
+//
+// MessageId: SCARD_E_WRITE_TOO_MANY
+//
+// MessageText:
+//
+//  An attempt was made to write more data than would fit in the target object.
+//
+#define SCARD_E_WRITE_TOO_MANY           _HRESULT_TYPEDEF_(0x80100028L)
+
+//
+// MessageId: SCARD_E_BAD_SEEK
+//
+// MessageText:
+//
+//  There was an error trying to set the smart card file object pointer.
+//
+#define SCARD_E_BAD_SEEK                 _HRESULT_TYPEDEF_(0x80100029L)
+
+//
+// MessageId: SCARD_E_INVALID_CHV
+//
+// MessageText:
+//
+//  The supplied PIN is incorrect.
+//
+#define SCARD_E_INVALID_CHV              _HRESULT_TYPEDEF_(0x8010002AL)
+
+//
+// MessageId: SCARD_E_UNKNOWN_RES_MNG
+//
+// MessageText:
+//
+//  An unrecognized error code was returned from a layered component.
+//
+#define SCARD_E_UNKNOWN_RES_MNG          _HRESULT_TYPEDEF_(0x8010002BL)
+
+//
+// MessageId: SCARD_E_NO_SUCH_CERTIFICATE
+//
+// MessageText:
+//
+//  The requested certificate does not exist.
+//
+#define SCARD_E_NO_SUCH_CERTIFICATE      _HRESULT_TYPEDEF_(0x8010002CL)
+
+//
+// MessageId: SCARD_E_CERTIFICATE_UNAVAILABLE
+//
+// MessageText:
+//
+//  The requested certificate could not be obtained.
+//
+#define SCARD_E_CERTIFICATE_UNAVAILABLE  _HRESULT_TYPEDEF_(0x8010002DL)
+
+//
+// MessageId: SCARD_E_NO_READERS_AVAILABLE
+//
+// MessageText:
+//
+//  Cannot find a smart card reader.
+//
+#define SCARD_E_NO_READERS_AVAILABLE     _HRESULT_TYPEDEF_(0x8010002EL)
+
+//
+// MessageId: SCARD_E_COMM_DATA_LOST
+//
+// MessageText:
+//
+//  A communications error with the smart card has been detected.  Retry the operation.
+//
+#define SCARD_E_COMM_DATA_LOST           _HRESULT_TYPEDEF_(0x8010002FL)
+
+//
+// These are warning codes.
+//
+//
+// MessageId: SCARD_W_UNSUPPORTED_CARD
+//
+// MessageText:
+//
+//  The reader cannot communicate with the smart card, due to ATR configuration conflicts.
+//
+#define SCARD_W_UNSUPPORTED_CARD         _HRESULT_TYPEDEF_(0x80100065L)
+
+//
+// MessageId: SCARD_W_UNRESPONSIVE_CARD
+//
+// MessageText:
+//
+//  The smart card is not responding to a reset.
+//
+#define SCARD_W_UNRESPONSIVE_CARD        _HRESULT_TYPEDEF_(0x80100066L)
+
+//
+// MessageId: SCARD_W_UNPOWERED_CARD
+//
+// MessageText:
+//
+//  Power has been removed from the smart card, so that further communication is not possible.
+//
+#define SCARD_W_UNPOWERED_CARD           _HRESULT_TYPEDEF_(0x80100067L)
+
+//
+// MessageId: SCARD_W_RESET_CARD
+//
+// MessageText:
+//
+//  The smart card has been reset, so any shared state information is invalid.
+//
+#define SCARD_W_RESET_CARD               _HRESULT_TYPEDEF_(0x80100068L)
+
+//
+// MessageId: SCARD_W_REMOVED_CARD
+//
+// MessageText:
+//
+//  The smart card has been removed, so that further communication is not possible.
+//
+#define SCARD_W_REMOVED_CARD             _HRESULT_TYPEDEF_(0x80100069L)
+
+//
+// MessageId: SCARD_W_SECURITY_VIOLATION
+//
+// MessageText:
+//
+//  Access was denied because of a security violation.
+//
+#define SCARD_W_SECURITY_VIOLATION       _HRESULT_TYPEDEF_(0x8010006AL)
+
+//
+// MessageId: SCARD_W_WRONG_CHV
+//
+// MessageText:
+//
+//  The card cannot be accessed because the wrong PIN was presented.
+//
+#define SCARD_W_WRONG_CHV                _HRESULT_TYPEDEF_(0x8010006BL)
+
+//
+// MessageId: SCARD_W_CHV_BLOCKED
+//
+// MessageText:
+//
+//  The card cannot be accessed because the maximum number of PIN entry attempts has been reached.
+//
+#define SCARD_W_CHV_BLOCKED              _HRESULT_TYPEDEF_(0x8010006CL)
+
+//
+// MessageId: SCARD_W_EOF
+//
+// MessageText:
+//
+//  The end of the smart card file has been reached.
+//
+#define SCARD_W_EOF                      _HRESULT_TYPEDEF_(0x8010006DL)
+
+//
+// MessageId: SCARD_W_CANCELLED_BY_USER
+//
+// MessageText:
+//
+//  The action was cancelled by the user.
+//
+#define SCARD_W_CANCELLED_BY_USER        _HRESULT_TYPEDEF_(0x8010006EL)
+
+// *****************
+// FACILITY_COMPLUS
+// *****************
+//
+// ===============================
+// Facility COMPLUS Error Messages
+// ===============================
+//
+//
+// COMPLUS Admin errors
+//
+//
+// MessageId: COMADMIN_E_OBJECTERRORS
+//
+// MessageText:
+//
+//  Errors occurred accessing one or more objects - the ErrorInfo collection may have more detail
+//
+#define COMADMIN_E_OBJECTERRORS          _HRESULT_TYPEDEF_(0x80110401L)
+
+//
+// MessageId: COMADMIN_E_OBJECTINVALID
+//
+// MessageText:
+//
+//  One or more of the object's properties are missing or invalid
+//
+#define COMADMIN_E_OBJECTINVALID         _HRESULT_TYPEDEF_(0x80110402L)
+
+//
+// MessageId: COMADMIN_E_KEYMISSING
+//
+// MessageText:
+//
+//  The object was not found in the catalog
+//
+#define COMADMIN_E_KEYMISSING            _HRESULT_TYPEDEF_(0x80110403L)
+
+//
+// MessageId: COMADMIN_E_ALREADYINSTALLED
+//
+// MessageText:
+//
+//  The object is already registered
+//
+#define COMADMIN_E_ALREADYINSTALLED      _HRESULT_TYPEDEF_(0x80110404L)
+
+//
+// MessageId: COMADMIN_E_APP_FILE_WRITEFAIL
+//
+// MessageText:
+//
+//  Error occurred writing to the application file
+//
+#define COMADMIN_E_APP_FILE_WRITEFAIL    _HRESULT_TYPEDEF_(0x80110407L)
+
+//
+// MessageId: COMADMIN_E_APP_FILE_READFAIL
+//
+// MessageText:
+//
+//  Error occurred reading the application file
+//
+#define COMADMIN_E_APP_FILE_READFAIL     _HRESULT_TYPEDEF_(0x80110408L)
+
+//
+// MessageId: COMADMIN_E_APP_FILE_VERSION
+//
+// MessageText:
+//
+//  Invalid version number in application file
+//
+#define COMADMIN_E_APP_FILE_VERSION      _HRESULT_TYPEDEF_(0x80110409L)
+
+//
+// MessageId: COMADMIN_E_BADPATH
+//
+// MessageText:
+//
+//  The file path is invalid
+//
+#define COMADMIN_E_BADPATH               _HRESULT_TYPEDEF_(0x8011040AL)
+
+//
+// MessageId: COMADMIN_E_APPLICATIONEXISTS
+//
+// MessageText:
+//
+//  The application is already installed
+//
+#define COMADMIN_E_APPLICATIONEXISTS     _HRESULT_TYPEDEF_(0x8011040BL)
+
+//
+// MessageId: COMADMIN_E_ROLEEXISTS
+//
+// MessageText:
+//
+//  The role already exists
+//
+#define COMADMIN_E_ROLEEXISTS            _HRESULT_TYPEDEF_(0x8011040CL)
+
+//
+// MessageId: COMADMIN_E_CANTCOPYFILE
+//
+// MessageText:
+//
+//  An error occurred copying the file
+//
+#define COMADMIN_E_CANTCOPYFILE          _HRESULT_TYPEDEF_(0x8011040DL)
+
+//
+// MessageId: COMADMIN_E_NOUSER
+//
+// MessageText:
+//
+//  One or more users are not valid
+//
+#define COMADMIN_E_NOUSER                _HRESULT_TYPEDEF_(0x8011040FL)
+
+//
+// MessageId: COMADMIN_E_INVALIDUSERIDS
+//
+// MessageText:
+//
+//  One or more users in the application file are not valid
+//
+#define COMADMIN_E_INVALIDUSERIDS        _HRESULT_TYPEDEF_(0x80110410L)
+
+//
+// MessageId: COMADMIN_E_NOREGISTRYCLSID
+//
+// MessageText:
+//
+//  The component's CLSID is missing or corrupt
+//
+#define COMADMIN_E_NOREGISTRYCLSID       _HRESULT_TYPEDEF_(0x80110411L)
+
+//
+// MessageId: COMADMIN_E_BADREGISTRYPROGID
+//
+// MessageText:
+//
+//  The component's progID is missing or corrupt
+//
+#define COMADMIN_E_BADREGISTRYPROGID     _HRESULT_TYPEDEF_(0x80110412L)
+
+//
+// MessageId: COMADMIN_E_AUTHENTICATIONLEVEL
+//
+// MessageText:
+//
+//  Unable to set required authentication level for update request
+//
+#define COMADMIN_E_AUTHENTICATIONLEVEL   _HRESULT_TYPEDEF_(0x80110413L)
+
+//
+// MessageId: COMADMIN_E_USERPASSWDNOTVALID
+//
+// MessageText:
+//
+//  The identity or password set on the application is not valid
+//
+#define COMADMIN_E_USERPASSWDNOTVALID    _HRESULT_TYPEDEF_(0x80110414L)
+
+//
+// MessageId: COMADMIN_E_CLSIDORIIDMISMATCH
+//
+// MessageText:
+//
+//  Application file CLSIDs or IIDs do not match corresponding DLLs
+//
+#define COMADMIN_E_CLSIDORIIDMISMATCH    _HRESULT_TYPEDEF_(0x80110418L)
+
+//
+// MessageId: COMADMIN_E_REMOTEINTERFACE
+//
+// MessageText:
+//
+//  Interface information is either missing or changed
+//
+#define COMADMIN_E_REMOTEINTERFACE       _HRESULT_TYPEDEF_(0x80110419L)
+
+//
+// MessageId: COMADMIN_E_DLLREGISTERSERVER
+//
+// MessageText:
+//
+//  DllRegisterServer failed on component install
+//
+#define COMADMIN_E_DLLREGISTERSERVER     _HRESULT_TYPEDEF_(0x8011041AL)
+
+//
+// MessageId: COMADMIN_E_NOSERVERSHARE
+//
+// MessageText:
+//
+//  No server file share available
+//
+#define COMADMIN_E_NOSERVERSHARE         _HRESULT_TYPEDEF_(0x8011041BL)
+
+//
+// MessageId: COMADMIN_E_DLLLOADFAILED
+//
+// MessageText:
+//
+//  DLL could not be loaded
+//
+#define COMADMIN_E_DLLLOADFAILED         _HRESULT_TYPEDEF_(0x8011041DL)
+
+//
+// MessageId: COMADMIN_E_BADREGISTRYLIBID
+//
+// MessageText:
+//
+//  The registered TypeLib ID is not valid
+//
+#define COMADMIN_E_BADREGISTRYLIBID      _HRESULT_TYPEDEF_(0x8011041EL)
+
+//
+// MessageId: COMADMIN_E_APPDIRNOTFOUND
+//
+// MessageText:
+//
+//  Application install directory not found
+//
+#define COMADMIN_E_APPDIRNOTFOUND        _HRESULT_TYPEDEF_(0x8011041FL)
+
+//
+// MessageId: COMADMIN_E_REGISTRARFAILED
+//
+// MessageText:
+//
+//  Errors occurred while in the component registrar
+//
+#define COMADMIN_E_REGISTRARFAILED       _HRESULT_TYPEDEF_(0x80110423L)
+
+//
+// MessageId: COMADMIN_E_COMPFILE_DOESNOTEXIST
+//
+// MessageText:
+//
+//  The file does not exist
+//
+#define COMADMIN_E_COMPFILE_DOESNOTEXIST _HRESULT_TYPEDEF_(0x80110424L)
+
+//
+// MessageId: COMADMIN_E_COMPFILE_LOADDLLFAIL
+//
+// MessageText:
+//
+//  The DLL could not be loaded
+//
+#define COMADMIN_E_COMPFILE_LOADDLLFAIL  _HRESULT_TYPEDEF_(0x80110425L)
+
+//
+// MessageId: COMADMIN_E_COMPFILE_GETCLASSOBJ
+//
+// MessageText:
+//
+//  GetClassObject failed in the DLL
+//
+#define COMADMIN_E_COMPFILE_GETCLASSOBJ  _HRESULT_TYPEDEF_(0x80110426L)
+
+//
+// MessageId: COMADMIN_E_COMPFILE_CLASSNOTAVAIL
+//
+// MessageText:
+//
+//  The DLL does not support the components listed in the TypeLib
+//
+#define COMADMIN_E_COMPFILE_CLASSNOTAVAIL _HRESULT_TYPEDEF_(0x80110427L)
+
+//
+// MessageId: COMADMIN_E_COMPFILE_BADTLB
+//
+// MessageText:
+//
+//  The TypeLib could not be loaded
+//
+#define COMADMIN_E_COMPFILE_BADTLB       _HRESULT_TYPEDEF_(0x80110428L)
+
+//
+// MessageId: COMADMIN_E_COMPFILE_NOTINSTALLABLE
+//
+// MessageText:
+//
+//  The file does not contain components or component information
+//
+#define COMADMIN_E_COMPFILE_NOTINSTALLABLE _HRESULT_TYPEDEF_(0x80110429L)
+
+//
+// MessageId: COMADMIN_E_NOTCHANGEABLE
+//
+// MessageText:
+//
+//  Changes to this object and its sub-objects have been disabled
+//
+#define COMADMIN_E_NOTCHANGEABLE         _HRESULT_TYPEDEF_(0x8011042AL)
+
+//
+// MessageId: COMADMIN_E_NOTDELETEABLE
+//
+// MessageText:
+//
+//  The delete function has been disabled for this object
+//
+#define COMADMIN_E_NOTDELETEABLE         _HRESULT_TYPEDEF_(0x8011042BL)
+
+//
+// MessageId: COMADMIN_E_SESSION
+//
+// MessageText:
+//
+//  The server catalog version is not supported
+//
+#define COMADMIN_E_SESSION               _HRESULT_TYPEDEF_(0x8011042CL)
+
+//
+// MessageId: COMADMIN_E_COMP_MOVE_LOCKED
+//
+// MessageText:
+//
+//  The component move was disallowed, because the source or destination application is either a system application or currently locked against changes
+//
+#define COMADMIN_E_COMP_MOVE_LOCKED      _HRESULT_TYPEDEF_(0x8011042DL)
+
+//
+// MessageId: COMADMIN_E_COMP_MOVE_BAD_DEST
+//
+// MessageText:
+//
+//  The component move failed because the destination application no longer exists
+//
+#define COMADMIN_E_COMP_MOVE_BAD_DEST    _HRESULT_TYPEDEF_(0x8011042EL)
+
+//
+// MessageId: COMADMIN_E_REGISTERTLB
+//
+// MessageText:
+//
+//  The system was unable to register the TypeLib
+//
+#define COMADMIN_E_REGISTERTLB           _HRESULT_TYPEDEF_(0x80110430L)
+
+//
+// MessageId: COMADMIN_E_SYSTEMAPP
+//
+// MessageText:
+//
+//  This operation can not be performed on the system application
+//
+#define COMADMIN_E_SYSTEMAPP             _HRESULT_TYPEDEF_(0x80110433L)
+
+//
+// MessageId: COMADMIN_E_COMPFILE_NOREGISTRAR
+//
+// MessageText:
+//
+//  The component registrar referenced in this file is not available
+//
+#define COMADMIN_E_COMPFILE_NOREGISTRAR  _HRESULT_TYPEDEF_(0x80110434L)
+
+//
+// MessageId: COMADMIN_E_COREQCOMPINSTALLED
+//
+// MessageText:
+//
+//  A component in the same DLL is already installed
+//
+#define COMADMIN_E_COREQCOMPINSTALLED    _HRESULT_TYPEDEF_(0x80110435L)
+
+//
+// MessageId: COMADMIN_E_SERVICENOTINSTALLED
+//
+// MessageText:
+//
+//  The service is not installed
+//
+#define COMADMIN_E_SERVICENOTINSTALLED   _HRESULT_TYPEDEF_(0x80110436L)
+
+//
+// MessageId: COMADMIN_E_PROPERTYSAVEFAILED
+//
+// MessageText:
+//
+//  One or more property settings are either invalid or in conflict with each other
+//
+#define COMADMIN_E_PROPERTYSAVEFAILED    _HRESULT_TYPEDEF_(0x80110437L)
+
+//
+// MessageId: COMADMIN_E_OBJECTEXISTS
+//
+// MessageText:
+//
+//  The object you are attempting to add or rename already exists
+//
+#define COMADMIN_E_OBJECTEXISTS          _HRESULT_TYPEDEF_(0x80110438L)
+
+//
+// MessageId: COMADMIN_E_REGFILE_CORRUPT
+//
+// MessageText:
+//
+//  The registration file is corrupt
+//
+#define COMADMIN_E_REGFILE_CORRUPT       _HRESULT_TYPEDEF_(0x8011043BL)
+
+//
+// MessageId: COMADMIN_E_PROPERTY_OVERFLOW
+//
+// MessageText:
+//
+//  The property value is too large
+//
+#define COMADMIN_E_PROPERTY_OVERFLOW     _HRESULT_TYPEDEF_(0x8011043CL)
+
+//
+// MessageId: COMADMIN_E_NOTINREGISTRY
+//
+// MessageText:
+//
+//  Object was not found in registry
+//
+#define COMADMIN_E_NOTINREGISTRY         _HRESULT_TYPEDEF_(0x8011043EL)
+
+//
+// MessageId: COMADMIN_E_OBJECTNOTPOOLABLE
+//
+// MessageText:
+//
+//  This object is not poolable
+//
+#define COMADMIN_E_OBJECTNOTPOOLABLE     _HRESULT_TYPEDEF_(0x8011043FL)
+
+//
+// MessageId: COMADMIN_E_APPLID_MATCHES_CLSID
+//
+// MessageText:
+//
+//  A CLSID with the same GUID as the new application ID is already installed on this machine
+//
+#define COMADMIN_E_APPLID_MATCHES_CLSID  _HRESULT_TYPEDEF_(0x80110446L)
+
+//
+// MessageId: COMADMIN_E_ROLE_DOES_NOT_EXIST
+//
+// MessageText:
+//
+//  A role assigned to a component, interface, or method did not exist in the application
+//
+#define COMADMIN_E_ROLE_DOES_NOT_EXIST   _HRESULT_TYPEDEF_(0x80110447L)
+
+//
+// MessageId: COMADMIN_E_START_APP_NEEDS_COMPONENTS
+//
+// MessageText:
+//
+//  You must have components in an application in order to start the application
+//
+#define COMADMIN_E_START_APP_NEEDS_COMPONENTS _HRESULT_TYPEDEF_(0x80110448L)
+
+//
+// MessageId: COMADMIN_E_REQUIRES_DIFFERENT_PLATFORM
+//
+// MessageText:
+//
+//  This operation is not enabled on this platform
+//
+#define COMADMIN_E_REQUIRES_DIFFERENT_PLATFORM _HRESULT_TYPEDEF_(0x80110449L)
+
+//
+// MessageId: COMADMIN_E_CAN_NOT_EXPORT_APP_PROXY
+//
+// MessageText:
+//
+//  Application Proxy is not exportable
+//
+#define COMADMIN_E_CAN_NOT_EXPORT_APP_PROXY _HRESULT_TYPEDEF_(0x8011044AL)
+
+//
+// MessageId: COMADMIN_E_CAN_NOT_START_APP
+//
+// MessageText:
+//
+//  Failed to start application because it is either a library application or an application proxy
+//
+#define COMADMIN_E_CAN_NOT_START_APP     _HRESULT_TYPEDEF_(0x8011044BL)
+
+//
+// MessageId: COMADMIN_E_CAN_NOT_EXPORT_SYS_APP
+//
+// MessageText:
+//
+//  System application is not exportable
+//
+#define COMADMIN_E_CAN_NOT_EXPORT_SYS_APP _HRESULT_TYPEDEF_(0x8011044CL)
+
+//
+// MessageId: COMADMIN_E_CANT_SUBSCRIBE_TO_COMPONENT
+//
+// MessageText:
+//
+//  Can not subscribe to this component (the component may have been imported)
+//
+#define COMADMIN_E_CANT_SUBSCRIBE_TO_COMPONENT _HRESULT_TYPEDEF_(0x8011044DL)
+
+//
+// MessageId: COMADMIN_E_OBJECT_PARENT_MISSING
+//
+// MessageText:
+//
+//  One of the objects being inserted or updated does not belong to a valid parent collection
+//
+#define COMADMIN_E_OBJECT_PARENT_MISSING _HRESULT_TYPEDEF_(0x80110808L)
+
+//
+// MessageId: COMADMIN_E_OBJECT_DOES_NOT_EXIST
+//
+// MessageText:
+//
+//  One of the specified objects cannot be found
+//
+#define COMADMIN_E_OBJECT_DOES_NOT_EXIST _HRESULT_TYPEDEF_(0x80110809L)
+
+//
+// COMPLUS Queued component errors
+//
+//
+// MessageId: COMQC_E_APPLICATION_NOT_QUEUED
+//
+// MessageText:
+//
+//  Only COM+ applications marked "queued" can be created using the "queue" moniker.
+//
+#define COMQC_E_APPLICATION_NOT_QUEUED   _HRESULT_TYPEDEF_(0x80110600L)
+
+//
+// MessageId: COMQC_E_NO_QUEUEABLE_INTERFACES
+//
+// MessageText:
+//
+//  At least one interface must be marked 'queued" in order to create a queued component instance with the "queue" moniker.
+//
+#define COMQC_E_NO_QUEUEABLE_INTERFACES  _HRESULT_TYPEDEF_(0x80110601L)
+
+//
+// MessageId: COMQC_E_QUEUING_SERVICE_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  MSMQ, which is required for the requested operation, is not installed.
+//
+#define COMQC_E_QUEUING_SERVICE_NOT_AVAILABLE _HRESULT_TYPEDEF_(0x80110602L)
+
+#pragma option pop /*P_O_Pop*/
+#endif//_WINERROR_

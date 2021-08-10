@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -33,14 +33,14 @@ SCODE AFXAPI AfxDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 	for (COleObjectFactory* pFactory = pModuleState->m_factoryList;
 		pFactory != NULL; pFactory = pFactory->m_pNextFactory)
 	{
-		if (pFactory->m_bRegistered != 0 && 
+		if (pFactory->m_bRegistered != 0 &&
 			lData1 == pFactory->m_clsid.Data1 &&
 			((DWORD*)&rclsid)[1] == ((DWORD*)&pFactory->m_clsid)[1] &&
 			((DWORD*)&rclsid)[2] == ((DWORD*)&pFactory->m_clsid)[2] &&
 			((DWORD*)&rclsid)[3] == ((DWORD*)&pFactory->m_clsid)[3])
 		{
 			// found suitable class factory -- query for correct interface
-			SCODE sc = pFactory->ExternalQueryInterface(&riid, ppv);
+			SCODE sc = pFactory->InternalQueryInterface(&riid, ppv);
 			AfxUnlockGlobals(CRIT_OBJECTFACTORYLIST);
 			return sc;
 		}
@@ -49,14 +49,13 @@ SCODE AFXAPI AfxDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 #ifdef _AFXDLL
 	AfxLockGlobals(CRIT_DYNLINKLIST);
 	// search factories defined in extension DLLs
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		for (pFactory = pDLL->m_factoryList;
 			pFactory != NULL; pFactory = pFactory->m_pNextFactory)
 		{
-			if (pFactory->m_bRegistered != 0 && 
+			if (pFactory->m_bRegistered != 0 &&
 				lData1 == pFactory->m_clsid.Data1 &&
 				((DWORD*)&rclsid)[1] == ((DWORD*)&pFactory->m_clsid)[1] &&
 				((DWORD*)&rclsid)[2] == ((DWORD*)&pFactory->m_clsid)[2] &&
@@ -98,8 +97,7 @@ SCODE AFXAPI AfxDllCanUnloadNow(void)
 #ifdef _AFXDLL
 	AfxLockGlobals(CRIT_DYNLINKLIST);
 	// search factories defined in extension DLLs
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		for (pFactory = pDLL->m_factoryList;

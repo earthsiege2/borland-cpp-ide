@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project --><PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="experts.dll"/>
+    <OBJFILES value="EXPERTS.obj filters.obj dlg.obj app.obj"/>
+    <RESFILES value="experts.res exptbmps.res strings.res"/>
+    <IDLFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) filters.dfm dlg.dfm app.dfm"/>
+    <LIBFILES value="Memmgr.lib"/>
+    <LIBRARIES value="vclx50.lib vcl50.lib"/>
+    <SPARELIBS value="vcl50.lib vclx50.lib"/>
+    <PACKAGES value=""/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT;_RTLDLL"/>
+    <MAINSOURCE value="EXPERTS.cpp"/>
+    <INCLUDEPATH value="$(BCB)\bin;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="$(BCB)\bin;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value=" -w-8026 -w-8027 -w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\bin -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-WD -Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c 
+      -b- -tWM"/>
+    <PFLAGS value="-$YD -v -JPHNV -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w0 /zd"/>
+    <LFLAGS value="-aa -Tpd -GD -s"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0d32.obj Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+FileVersion=1.0.0.0
+
+[HistoryLists\hlIncludePath]
+Count=1
+Item0=$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=1
+Item0=$(BCB)\lib\obj;$(BCB)\lib
+
+[Debugging]
+DebugSourceDirs=
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+InMemoryExe=0
+ShowInfoMsgs=0
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

@@ -1,9 +1,0 @@
-#define IDD_MDIDIALOG	101
-#define IDD_ABOUT     102
-#define IDC_NAME	    101
-#define IDC_PHONE	    102
-#define IDC_ENABLEHELP	105
-#define IDC_ENABLENUMBER	104
-#define IDC_NUMBER	  103
-#define IDM_MDIMENU   100
-#define CM_ABOUT      200

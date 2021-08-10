@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 
 /////////////////////////////////////////////////////////////////////////////
-// CPlexNew - CPlex without nCur and nMax members
+// CPlex
 
 CPlex* PASCAL CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
 {
@@ -46,41 +46,3 @@ void CPlex::FreeDataChain()     // free this one and links
 		p = pNext;
 	}
 }
-
-/////////////////////////////////////////////////////////////////////////////
-// CPlexOld - backward compatibility with 5198 build
-
-struct CPlexOld  // warning variable length structure
-{
-	CPlexOld* pNext;
-	UINT nMax;
-	UINT nCur;
-#if (_AFX_PACKING >= 8)
-	DWORD dwReserved[1];    // align on 8 byte boundary
-#endif
-	// BYTE data[maxNum*elementSize];
-
-#ifdef _DEBUG
-	void* data();
-#endif
-
-	static CPlexOld* PASCAL Create(CPlexOld*& head, UINT nMax, UINT cbElement);
-			// like 'calloc' but no zero fill
-			// may throw memory exceptions
-};
-
-CPlexOld* PASCAL CPlexOld::Create(CPlexOld*& pHead, UINT nMax, UINT cbElement)
-{
-	ASSERT(nMax > 0 && cbElement > 0);
-	CPlexOld* p = (CPlexOld*) new BYTE[sizeof(CPlexOld) + nMax * cbElement];
-			// may throw exception
-	p->pNext = pHead;
-	p->nMax = nMax;
-	p->nCur = 0;
-	pHead = p;  // change head (adds in reverse order for simplicity)
-	return p;
-}
-
-#ifdef _DEBUG
-void* CPlexOld::data() { return this+1; }
-#endif

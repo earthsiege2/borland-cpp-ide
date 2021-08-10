@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,7 +37,9 @@ BOOL AFXAPI AfxVerifyLicFile(HINSTANCE hInstance, LPCTSTR pszLicFileName,
 	LPTSTR pszFileName = _tcsrchr(szPathName, '\\') + 1;
 	lstrcpy(pszFileName, pszLicFileName);
 
+#ifndef OLE2ANSI
 	LPSTR pszKey = NULL;
+#endif
 	LPBYTE pbContent = NULL;
 
 	TRY
@@ -47,18 +49,26 @@ BOOL AFXAPI AfxVerifyLicFile(HINSTANCE hInstance, LPCTSTR pszLicFileName,
 		CFile file(szPathName, CFile::modeRead);
 
 		if (cch == -1)
+#ifdef OLE2ANSI
+			cch = lstrlen(pszLicFileContents);
+#else
 			cch = wcslen(pszLicFileContents);
 
 		pszKey = (char*)_alloca(cch*2 + 1);
 		cch = _wcstombsz(pszKey, pszLicFileContents, cch*2 + 1);
+#endif
 
 		if (cch != 0)
 		{
-			--cch;	// license file won't contain the terminating null char
+			--cch;  // license file won't contain the terminating null char
 			pbContent = (BYTE*)_alloca(cch);
 			file.Read(pbContent, cch);
 
+#ifndef OLE2ANSI
 			if (memcmp(pszKey, pbContent, (size_t)cch) == 0)
+#else
+			if (memcmp(pszLicFileContents, pbContent, (size_t)cch) == 0)
+#endif
 				bVerified = TRUE;
 		}
 	}

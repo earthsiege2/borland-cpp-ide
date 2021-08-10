@@ -1,0 +1,8 @@
+USEUNIT("mainfrm.cpp");
+USEUNIT("cube.cpp");
+USEUNIT("cubedoc.cpp");
+USEUNIT("cubeview.cpp");
+USEUNIT("stdafx.cpp");
+USERC("cube.rc");
+
+#define WinMain

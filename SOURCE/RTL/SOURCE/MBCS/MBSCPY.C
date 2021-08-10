@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <string.h>
 #include <mbstring.h>
@@ -29,11 +30,11 @@ Description     _mbscpy copies string src to dest,stopping after the
                 terminating null character. dest is requied the size
                 for the length of src and null character at least.
 
-		It doesn't check whether null pointer or not,so dont't
-		pass it.
+                It doesn't check whether null pointer or not,so dont't
+                pass it.
 
-		If the second byte of 2-bytes character is null,the first
-		byte character isn't regarded as null.It is equal with strcpy().
+                If the second byte of 2-bytes character is null,the first
+                byte character isn't regarded as null.It is equal with strcpy().
 
 Return value    Returns a pointer to dest.
 

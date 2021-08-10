@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,59 +22,33 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CWinApp Settings Helpers
 
-// INI strings are not localized
-static const TCHAR szSoftware[] = _T("Software");
-
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
 
 void CWinApp::SetRegistryKey(LPCTSTR lpszRegistryKey)
 {
-	UNUSED(lpszRegistryKey); // not used in release mac builds
-
 	ASSERT(m_pszRegistryKey == NULL);
 	ASSERT(lpszRegistryKey != NULL);
 	ASSERT(m_pszAppName != NULL);
 
-#ifndef _MAC
-	// Win32s does not implement the registry completely, so applications
-	//   must use standard .INI files.
-	if (afxData.bWin31)
-		return;
-
-	// Note: this will leak the original m_pszProfileName, but it
-	//  will be freed when the application exits.  No assumptions
-	//  can be made on how m_pszProfileName was allocated.
 	BOOL bEnable = AfxEnableMemoryTracking(FALSE);
-	if (!afxContextIsDLL)
-	{
-		m_pszRegistryKey = _tcsdup(lpszRegistryKey);
-		m_pszProfileName = _tcsdup(m_pszAppName);
-	}
-	else
-	{
-		m_pszRegistryKey = AfxGlobalDupString(lpszRegistryKey);
-		m_pszProfileName = AfxGlobalDupString(m_pszAppName);
-	}
+	free((void*)m_pszRegistryKey);
+	m_pszRegistryKey = _tcsdup(lpszRegistryKey);
+	free((void*)m_pszProfileName);
+	m_pszProfileName = _tcsdup(m_pszAppName);
 	AfxEnableMemoryTracking(bEnable);
-#endif
 }
 
 void CWinApp::SetRegistryKey(UINT nIDRegistryKey)
 {
 	ASSERT(m_pszRegistryKey == NULL);
 
-#ifndef _MAC
 	TCHAR szRegistryKey[256];
 	VERIFY(AfxLoadString(nIDRegistryKey, szRegistryKey));
 	SetRegistryKey(szRegistryKey);
-#else
-	UNUSED_ALWAYS(nIDRegistryKey);
-#endif
 }
 
-#ifndef _MAC
 // returns key for HKEY_CURRENT_USER\"Software"\RegistryKey\ProfileName
 // creating it if it doesn't exist
 // responsibility of the caller to call RegCloseKey() on the returned HKEY
@@ -86,7 +60,7 @@ HKEY CWinApp::GetAppRegistryKey()
 	HKEY hAppKey = NULL;
 	HKEY hSoftKey = NULL;
 	HKEY hCompanyKey = NULL;
-	if (RegOpenKeyEx(HKEY_CURRENT_USER, szSoftware, 0, KEY_WRITE|KEY_READ,
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, _T("software"), 0, KEY_WRITE|KEY_READ,
 		&hSoftKey) == ERROR_SUCCESS)
 	{
 		DWORD dw;
@@ -127,14 +101,12 @@ HKEY CWinApp::GetSectionKey(LPCTSTR lpszSection)
 	RegCloseKey(hAppKey);
 	return hSectionKey;
 }
-#endif //!_MAC
 
 UINT CWinApp::GetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 	int nDefault)
 {
 	ASSERT(lpszSection != NULL);
 	ASSERT(lpszEntry != NULL);
-#ifndef _MAC
 	if (m_pszRegistryKey != NULL) // use registry
 	{
 		HKEY hSecKey = GetSectionKey(lpszSection);
@@ -155,7 +127,6 @@ UINT CWinApp::GetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 		return nDefault;
 	}
 	else
-#endif
 	{
 		ASSERT(m_pszProfileName != NULL);
 		return ::GetPrivateProfileInt(lpszSection, lpszEntry, nDefault,
@@ -168,7 +139,6 @@ CString CWinApp::GetProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 {
 	ASSERT(lpszSection != NULL);
 	ASSERT(lpszEntry != NULL);
-#ifndef _MAC
 	if (m_pszRegistryKey != NULL)
 	{
 		HKEY hSecKey = GetSectionKey(lpszSection);
@@ -194,7 +164,6 @@ CString CWinApp::GetProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 		return lpszDefault;
 	}
 	else
-#endif
 	{
 		ASSERT(m_pszProfileName != NULL);
 
@@ -217,10 +186,8 @@ BOOL CWinApp::GetProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 	ASSERT(pBytes != NULL);
 	*ppData = NULL;
 	*pBytes = 0;
-#ifndef _MAC
 	if (m_pszRegistryKey != NULL)
 	{
-		LPBYTE lpByte = NULL;
 		HKEY hSecKey = GetSectionKey(lpszSection);
 		if (hSecKey == NULL)
 			return FALSE;
@@ -250,7 +217,6 @@ BOOL CWinApp::GetProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 		return FALSE;
 	}
 	else
-#endif
 	{
 		ASSERT(m_pszProfileName != NULL);
 
@@ -279,7 +245,6 @@ BOOL CWinApp::WriteProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 {
 	ASSERT(lpszSection != NULL);
 	ASSERT(lpszEntry != NULL);
-#ifndef _MAC
 	if (m_pszRegistryKey != NULL)
 	{
 		HKEY hSecKey = GetSectionKey(lpszSection);
@@ -291,7 +256,6 @@ BOOL CWinApp::WriteProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 		return lResult == ERROR_SUCCESS;
 	}
 	else
-#endif
 	{
 		ASSERT(m_pszProfileName != NULL);
 
@@ -306,7 +270,6 @@ BOOL CWinApp::WriteProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 			LPCTSTR lpszValue)
 {
 	ASSERT(lpszSection != NULL);
-#ifndef _MAC
 	if (m_pszRegistryKey != NULL)
 	{
 		LONG lResult;
@@ -339,7 +302,6 @@ BOOL CWinApp::WriteProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 		return lResult == ERROR_SUCCESS;
 	}
 	else
-#endif
 	{
 		ASSERT(m_pszProfileName != NULL);
 		ASSERT(lstrlen(m_pszProfileName) < 4095); // can't read in bigger
@@ -352,7 +314,6 @@ BOOL CWinApp::WriteProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 	LPBYTE pData, UINT nBytes)
 {
 	ASSERT(lpszSection != NULL);
-#ifndef _MAC
 	if (m_pszRegistryKey != NULL)
 	{
 		LONG lResult;
@@ -364,7 +325,7 @@ BOOL CWinApp::WriteProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 		RegCloseKey(hSecKey);
 		return lResult == ERROR_SUCCESS;
 	}
-#endif
+
 	// convert to string and write out
 	LPTSTR lpsz = new TCHAR[nBytes*2+1];
 	for (UINT i = 0; i < nBytes; i++)

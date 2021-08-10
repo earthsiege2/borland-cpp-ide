@@ -1,9 +1,0 @@
-:Base BCERRMSG.HLP
-0 Borland C++ Error Messages and Warnings
-1 About error and warning messages = ErrorAndWarningMessagesOverview
-1 List of error messages and warnings = ErrorsAndWarnings
-1 ObjectScripting error messages = ObjectScriptingErrors@SCRIPT.HLP
-1 MAKE Errors = MAKEErrors
-1 Resource Linker error messages and warnings = Messages_RLINK32
-1 Resource Workshop error messages and warnings = IXABCErrors
-

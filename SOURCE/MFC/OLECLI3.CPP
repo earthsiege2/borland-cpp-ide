@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -187,7 +187,7 @@ DROPEFFECT COleClientItem::DoDragDrop(LPCRECT lpItemRect, CPoint ptOffset,
 		formatEtc.ptd = NULL;
 		formatEtc.dwAspect = DVASPECT_CONTENT;
 		formatEtc.lindex = -1;
-		formatEtc.tymed = (TYMED)-1;
+		formatEtc.tymed = (DWORD) -1;
 		if (lpDataObject->QueryGetData(&formatEtc) == S_OK)
 			dwEffects |= DROPEFFECT_LINK;
 
@@ -250,67 +250,33 @@ void COleClientItem::GetClipboardData(COleDataSource* pDataSource,
 
 BOOL PASCAL COleClientItem::CanPaste()
 {
-	if (afxData.bWin31)
-	{
-		// We must use OleQueryCreateFromData on Win32s
-		BOOL bCanPaste = FALSE;
-		LPDATAOBJECT lpDataObject;
-		if (::OleGetClipboard(&lpDataObject) == S_OK)
-		{
-			ASSERT(lpDataObject != NULL);
-			SCODE sc = GetScode(::OleQueryCreateFromData(lpDataObject));
-			bCanPaste = !FAILED(sc) && sc != S_FALSE;
-			lpDataObject->Release();
-		}
-		return bCanPaste;
-	}
-	else
-	{
-		// it is faster and more reliable to use the Windows clipboard
-		//  APIs instead of OleQueryCreateFromData.
-		return IsClipboardFormatAvailable(_oleData.cfEmbedSource) ||
-			IsClipboardFormatAvailable(_oleData.cfEmbeddedObject) ||
-			IsClipboardFormatAvailable(_oleData.cfFileName) ||
-			IsClipboardFormatAvailable(_oleData.cfFileNameW) ||
-			IsClipboardFormatAvailable(CF_METAFILEPICT) ||
-			IsClipboardFormatAvailable(CF_DIB) ||
-			IsClipboardFormatAvailable(CF_BITMAP) ||
-			(IsClipboardFormatAvailable(_oleData.cfOwnerLink) &&
-				IsClipboardFormatAvailable(_oleData.cfNative));
-	}
+	// it is faster and more reliable to use the Windows clipboard
+	//  APIs instead of OleQueryCreateFromData.
+	return IsClipboardFormatAvailable(_oleData.cfEmbedSource) ||
+		IsClipboardFormatAvailable(_oleData.cfEmbeddedObject) ||
+		IsClipboardFormatAvailable(_oleData.cfFileName) ||
+		IsClipboardFormatAvailable(_oleData.cfFileNameW) ||
+		IsClipboardFormatAvailable(CF_METAFILEPICT) ||
+		IsClipboardFormatAvailable(CF_DIB) ||
+		IsClipboardFormatAvailable(CF_BITMAP) ||
+		(IsClipboardFormatAvailable(_oleData.cfOwnerLink) &&
+			IsClipboardFormatAvailable(_oleData.cfNative));
 }
 
 BOOL PASCAL COleClientItem::CanPasteLink()
 {
-	if (afxData.bWin31)
-	{
-		// We must use OleQueryLinkFromData on Win32s
-		BOOL bCanPasteLink = FALSE;
-		LPDATAOBJECT lpDataObject;
-		if (::OleGetClipboard(&lpDataObject) == S_OK)
-		{
-			ASSERT(lpDataObject != NULL);
-			SCODE sc = GetScode(::OleQueryLinkFromData(lpDataObject));
-			bCanPasteLink = !FAILED(sc) && sc != S_FALSE;
-			lpDataObject->Release();
-		}
-		return bCanPasteLink;
-	}
-	else
-	{
-		// it is faster and more reliable to use the Windows clipboard
-		//  APIs instead of OleQueryCreateFromData.
-		return IsClipboardFormatAvailable(_oleData.cfLinkSource) ||
-			IsClipboardFormatAvailable(_oleData.cfFileName) ||
-			IsClipboardFormatAvailable(_oleData.cfFileNameW) ||
-			IsClipboardFormatAvailable(_oleData.cfObjectLink);
-	}
+	// it is faster and more reliable to use the Windows clipboard
+	//  APIs instead of OleQueryCreateFromData.
+	return IsClipboardFormatAvailable(_oleData.cfLinkSource) ||
+		IsClipboardFormatAvailable(_oleData.cfFileName) ||
+		IsClipboardFormatAvailable(_oleData.cfFileNameW) ||
+		IsClipboardFormatAvailable(_oleData.cfObjectLink);
 }
 
 BOOL PASCAL
 COleClientItem::CanCreateFromData(const COleDataObject* pDataObject)
 {
-	if (!afxData.bWin31 && pDataObject->m_bClipboard)
+	if (pDataObject->m_bClipboard)
 		return COleClientItem::CanPaste();
 
 	((COleDataObject*)pDataObject)->EnsureClipboardObject();
@@ -324,7 +290,7 @@ COleClientItem::CanCreateFromData(const COleDataObject* pDataObject)
 BOOL PASCAL
 COleClientItem::CanCreateLinkFromData(const COleDataObject* pDataObject)
 {
-	if (!afxData.bWin31 && pDataObject->m_bClipboard)
+	if (pDataObject->m_bClipboard)
 		return COleClientItem::CanPasteLink();
 
 	((COleDataObject*)pDataObject)->EnsureClipboardObject();

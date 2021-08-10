@@ -1,6 +1,6 @@
 
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -137,6 +137,14 @@ void CStringList::FreeNode(CStringList::CNode* pNode)
 
 POSITION CStringList::AddHead(LPCTSTR newElement)
 {
+
+	return AddHead(CString(newElement));
+
+}
+
+
+POSITION CStringList::AddHead(const CString& newElement)
+{
 	ASSERT_VALID(this);
 
 	CNode* pNewNode = NewNode(NULL, m_pNodeHead);
@@ -149,7 +157,16 @@ POSITION CStringList::AddHead(LPCTSTR newElement)
 	return (POSITION) pNewNode;
 }
 
+
 POSITION CStringList::AddTail(LPCTSTR newElement)
+{
+
+	return AddTail(CString(newElement));
+
+}
+
+
+POSITION CStringList::AddTail(const CString& newElement)
 {
 	ASSERT_VALID(this);
 
@@ -162,6 +179,7 @@ POSITION CStringList::AddTail(LPCTSTR newElement)
 	m_pNodeTail = pNewNode;
 	return (POSITION) pNewNode;
 }
+
 
 void CStringList::AddHead(CStringList* pNewList)
 {
@@ -228,6 +246,14 @@ CString CStringList::RemoveTail()
 
 POSITION CStringList::InsertBefore(POSITION position, LPCTSTR newElement)
 {
+
+	return InsertBefore(position, CString(newElement));
+
+}
+
+
+POSITION CStringList::InsertBefore(POSITION position, const CString& newElement)
+{
 	ASSERT_VALID(this);
 
 	if (position == NULL)
@@ -252,7 +278,16 @@ POSITION CStringList::InsertBefore(POSITION position, LPCTSTR newElement)
 	return (POSITION) pNewNode;
 }
 
+
 POSITION CStringList::InsertAfter(POSITION position, LPCTSTR newElement)
+{
+
+	return InsertAfter(position, CString(newElement));
+
+}
+
+
+POSITION CStringList::InsertAfter(POSITION position, const CString& newElement)
 {
 	ASSERT_VALID(this);
 
@@ -278,6 +313,7 @@ POSITION CStringList::InsertAfter(POSITION position, LPCTSTR newElement)
 	pOldNode->pNext = pNewNode;
 	return (POSITION) pNewNode;
 }
+
 
 void CStringList::RemoveAt(POSITION position)
 {
@@ -315,9 +351,8 @@ void CStringList::RemoveAt(POSITION position)
 POSITION CStringList::FindIndex(int nIndex) const
 {
 	ASSERT_VALID(this);
-	ASSERT(nIndex >= 0);
 
-	if (nIndex >= m_nCount)
+	if (nIndex >= m_nCount || nIndex < 0)
 		return NULL;  // went too far
 
 	CNode* pNode = m_pNodeHead;

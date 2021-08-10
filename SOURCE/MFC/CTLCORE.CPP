@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,21 +28,21 @@ static char THIS_FILE[] = __FILE__;
 
 #define ON_WM_PAINT_SPECIAL() \
 	{ WM_PAINT, 0, 0, 0, AfxSig_vD, \
-		(AFX_PMSG)(AFX_PMSGW)(void (AFX_MSG_CALL CWnd::*)(CDC*))OnPaint },
+		(AFX_PMSG)(AFX_PMSGW)(void (AFX_MSG_CALL CWnd::*)(CDC*))&OnPaint },
 
 /////////////////////////////////////////////////////////////////////////////
 // Window to serve as "parking space" for not-yet-activated subclassed controls
 
 AFX_MODULE_STATE* AFXAPI _AfxGetOleModuleState();
 
-static HWND PASCAL GetParkingWindow()
+AFX_STATIC HWND AFXAPI _AfxGetParkingWindow()
 {
 	_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
 	ASSERT(pThreadState != NULL);
 	if (pThreadState->m_pWndPark == NULL)
 	{
 		AFX_MANAGE_STATE(_AfxGetOleModuleState());
-		CWnd* pWndTmp;
+		CWnd* pWndTmp = NULL;
 
 		TRY
 		{
@@ -51,7 +51,9 @@ static HWND PASCAL GetParkingWindow()
 #endif
 			pWndTmp = new CParkingWnd;
 			ASSERT(pWndTmp->m_hWnd != NULL);
+#ifdef _DEBUG
 			ASSERT(hWndActive == ::GetActiveWindow());
+#endif
 		}
 		CATCH_ALL(e)
 		{
@@ -66,7 +68,7 @@ static HWND PASCAL GetParkingWindow()
 	return pThreadState->m_pWndPark->GetSafeHwnd();
 }
 
-static void PASCAL ReleaseParkingWindow()
+AFX_STATIC void AFXAPI _AfxReleaseParkingWindow()
 {
 	_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
 	ASSERT(pThreadState != NULL);
@@ -89,13 +91,16 @@ static void PASCAL ReleaseParkingWindow()
 // COleControl interface map
 
 BEGIN_INTERFACE_MAP(COleControl, CCmdTarget)
+	INTERFACE_PART(COleControl, IID_IQuickActivate, QuickActivate)
 	INTERFACE_PART(COleControl, IID_IOleObject, OleObject)
-	INTERFACE_PART(COleControl, IID_IConnectionPointContainer, ConnPtContainer)
-	INTERFACE_PART(COleControl, IID_IOleControl, OleControl)
-	INTERFACE_PART(COleControl, IID_IPersist, PersistStorage)
+	INTERFACE_PART(COleControl, IID_IViewObjectEx, ViewObject)
 	INTERFACE_PART(COleControl, IID_IPersistMemory, PersistMemory)
 	INTERFACE_PART(COleControl, IID_IPersistStreamInit, PersistStreamInit)
+	INTERFACE_PART(COleControl, IID_IProvideClassInfo2, ProvideClassInfo)
+	INTERFACE_PART(COleControl, IID_IConnectionPointContainer, ConnPtContainer)
+	INTERFACE_PART(COleControl, IID_IOleControl, OleControl)
 	INTERFACE_PART(COleControl, IID_IOleInPlaceObject, OleInPlaceObject)
+	INTERFACE_PART(COleControl, IID_IOleInPlaceObjectWindowless, OleInPlaceObject)
 	INTERFACE_PART(COleControl, IID_IOleInPlaceActiveObject, OleInPlaceActiveObject)
 	INTERFACE_PART(COleControl, IID_IDispatch, Dispatch)
 	INTERFACE_PART(COleControl, IID_IOleCache, OleCache)
@@ -106,7 +111,7 @@ BEGIN_INTERFACE_MAP(COleControl, CCmdTarget)
 	INTERFACE_PART(COleControl, IID_ISpecifyPropertyPages, SpecifyPropertyPages)
 	INTERFACE_PART(COleControl, IID_IPerPropertyBrowsing, PerPropertyBrowsing)
 	INTERFACE_PART(COleControl, IID_IProvideClassInfo, ProvideClassInfo)
-	INTERFACE_PART(COleControl, IID_IProvideClassInfo2, ProvideClassInfo)
+	INTERFACE_PART(COleControl, IID_IPersist, PersistStorage)
 	INTERFACE_PART(COleControl, IID_IPersistStorage, PersistStorage)
 END_INTERFACE_MAP()
 
@@ -121,10 +126,30 @@ const AFX_EVENTMAP COleControl::eventMap = { NULL, NULL };
 BEGIN_MESSAGE_MAP(COleControl, CWnd)
 	ON_WM_PAINT_SPECIAL()
 	//{{AFX_MSG_MAP(COleControl)
-	ON_WM_KEYDOWN()
-	ON_WM_KEYUP()
-	ON_WM_CHAR()
+	ON_WM_ERASEBKGND()
+	ON_WM_NCCREATE()
+	ON_WM_NCCALCSIZE()
+	ON_WM_SIZE()
+	ON_WM_MOVE()
+	ON_WM_SHOWWINDOW()
+	ON_WM_CREATE()
+	ON_MESSAGE(WM_SETTEXT, OnSetText)
+	ON_WM_NCPAINT()
+	ON_WM_DESTROY()
+	ON_WM_ENTERIDLE()
+	ON_WM_KILLFOCUS()
+	ON_WM_SETFOCUS()
+	ON_MESSAGE(OCM_CTLCOLORBTN, OnOcmCtlColorBtn)
+	ON_MESSAGE(OCM_CTLCOLORDLG, OnOcmCtlColorDlg)
+	ON_MESSAGE(OCM_CTLCOLOREDIT, OnOcmCtlColorEdit)
+	ON_MESSAGE(OCM_CTLCOLORLISTBOX, OnOcmCtlColorListBox)
+	ON_MESSAGE(OCM_CTLCOLORMSGBOX, OnOcmCtlColorMsgBox)
+	ON_MESSAGE(OCM_CTLCOLORSCROLLBAR, OnOcmCtlColorScrollBar)
+	ON_MESSAGE(OCM_CTLCOLORSTATIC, OnOcmCtlColorStatic)
 	ON_WM_MOUSEMOVE()
+	ON_WM_NCHITTEST()
+	ON_WM_MOUSEACTIVATE()
+	ON_WM_NCLBUTTONDOWN()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDBLCLK()
@@ -134,40 +159,29 @@ BEGIN_MESSAGE_MAP(COleControl, CWnd)
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
 	ON_WM_RBUTTONDBLCLK()
-	ON_WM_INITMENUPOPUP()
-	ON_WM_MENUSELECT()
-	ON_MESSAGE(WM_SETMESSAGESTRING, OnSetMessageString)
-	ON_WM_ENTERIDLE()
-	ON_WM_CANCELMODE()
+	ON_WM_KEYDOWN()
+	ON_WM_KEYUP()
+	ON_WM_CHAR()
 	ON_WM_SYSKEYDOWN()
 	ON_WM_SYSKEYUP()
-	ON_WM_MOUSEACTIVATE()
-	ON_MESSAGE(WM_SETTEXT, OnSetText)
-	ON_WM_NCCREATE()
-	ON_WM_DESTROY()
-	ON_WM_KILLFOCUS()
-	ON_WM_SETFOCUS()
-	ON_WM_NCPAINT()
-	ON_WM_NCCALCSIZE()
-	ON_WM_NCHITTEST()
-	ON_WM_NCLBUTTONDOWN()
+	ON_WM_INITMENUPOPUP()
+	ON_WM_MENUSELECT()
+	ON_WM_CANCELMODE()
 	ON_WM_SETCURSOR()
 	ON_WM_GETDLGCODE()
+	ON_MESSAGE(WM_SETMESSAGESTRING, OnSetMessageString)
 	//}}AFX_MSG_MAP
-	ON_MESSAGE(OCM_CTLCOLORBTN, OnOcmCtlColorBtn)
-	ON_MESSAGE(OCM_CTLCOLORDLG, OnOcmCtlColorDlg)
-	ON_MESSAGE(OCM_CTLCOLOREDIT, OnOcmCtlColorEdit)
-	ON_MESSAGE(OCM_CTLCOLORLISTBOX, OnOcmCtlColorListBox)
-	ON_MESSAGE(OCM_CTLCOLORMSGBOX, OnOcmCtlColorMsgBox)
-	ON_MESSAGE(OCM_CTLCOLORSCROLLBAR, OnOcmCtlColorScrollBar)
-	ON_MESSAGE(OCM_CTLCOLORSTATIC, OnOcmCtlColorStatic)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // COleControl implementation
 
 COleControl::COleControl() :
+#ifdef _AFXDLL
 	m_font(&m_xFontNotification)
+#else
+	m_font(NULL)
+#endif
 {
 	// add to parking window reference count
 	_AFX_THREAD_STATE* pState = AfxGetThreadState();
@@ -179,6 +193,7 @@ COleControl::COleControl() :
 	m_bUIDead = FALSE;
 
 	m_pReflect = NULL;
+	m_pRectTracker = NULL;
 
 	m_pClientSite = NULL;
 	m_pOleAdviseHolder = NULL;
@@ -201,9 +216,11 @@ COleControl::COleControl() :
 
 	m_bInPlaceActive = FALSE;
 	m_bUIActive = FALSE;
-	m_bOpen = FALSE;
 	m_bPendingUIActivation = FALSE;
+#ifdef _AFXDLL
+	m_bOpen = FALSE;
 	m_pWndOpenFrame = NULL;
+#endif
 	m_bInitialized = FALSE;
 
 	m_dwVersionLoaded = 0;
@@ -213,12 +230,10 @@ COleControl::COleControl() :
 	m_iButtonState = 0;
 	m_iDblClkState = 0;
 
-	m_dwStockEventMask = 0;
-	m_dwStockPropMask = 0;
-
 	m_sBorderStyle = 0;
 	m_sAppearance = 0;
 	m_bEnabled = TRUE;
+	m_lReadyState = READYSTATE_COMPLETE;
 
 	m_hFontPrev = NULL;
 
@@ -232,6 +247,15 @@ COleControl::COleControl() :
 	m_ptOffset.x = 0;
 	m_ptOffset.y = 0;
 
+	m_bNoRedraw = FALSE;
+
+	m_bInPlaceSiteEx = FALSE;
+	m_bInPlaceSiteWndless = FALSE;
+
+	m_bOptimizedDraw = FALSE;
+
+	m_bDataPathPropertiesLoaded = TRUE;
+
 	SetInitialSize(100, 50);
 
 	// Wire up aggregation support
@@ -243,7 +267,7 @@ COleControl::COleControl() :
 	// Wire up connection map support
 	EnableConnections();
 
-	SetInitialDataFormats();
+	m_pDataSource = NULL;
 
 	AfxOleLockApp();
 }
@@ -251,12 +275,33 @@ COleControl::COleControl() :
 
 COleControl::~COleControl()
 {
+	if (m_pDataSource != NULL)
+		delete m_pDataSource;
+
 	if (m_pReflect != NULL)
 		m_pReflect->DestroyWindow();
 
+#ifdef _AFXDLL
 	if (m_pWndOpenFrame != NULL)
 		m_pWndOpenFrame->DestroyWindow();
+#endif
 
+	ReleaseCaches();
+
+	if (m_hWnd != NULL)
+		DestroyWindow();
+
+	// release parking window if reference count is now zero
+	_AFX_THREAD_STATE* pState = AfxGetThreadState();
+	ASSERT(pState != NULL);
+	if (pState->m_nCtrlRef == 0 || --pState->m_nCtrlRef == 0)
+		_AfxReleaseParkingWindow();
+
+	AfxOleUnlockApp();
+}
+
+void COleControl::ReleaseCaches()
+{
 	RELEASE(m_pClientSite);
 	RELEASE(m_pOleAdviseHolder);
 	RELEASE(m_pDataAdviseHolder);
@@ -273,40 +318,30 @@ COleControl::~COleControl()
 	if (m_pDefIPersistStorage != NULL)
 	{
 		pUnk->AddRef();
-		m_pDefIPersistStorage->Release();
+		RELEASE(m_pDefIPersistStorage);
 	}
 
 	if (m_pDefIViewObject != NULL)
 	{
 		pUnk->AddRef();
-		m_pDefIViewObject->Release();
+		RELEASE(m_pDefIViewObject);
 	}
 
 	if (m_pDefIOleCache != NULL)
 	{
 		pUnk->AddRef();
-		m_pDefIOleCache->Release();
+		RELEASE(m_pDefIOleCache);
 	}
 
 	if (m_pAdviseInfo != NULL)
 	{
 		RELEASE(m_pAdviseInfo->m_pAdvSink);
 		delete m_pAdviseInfo;
+		m_pAdviseInfo = NULL;
 	}
 
 	RELEASE(m_pDefIUnknown);
 	InterlockedDecrement(&m_dwRef);
-
-	if (m_hWnd != NULL)
-		DestroyWindow();
-
-	// release parking window if reference count is now zero
-	_AFX_THREAD_STATE* pState = AfxGetThreadState();
-	ASSERT(pState != NULL);
-	if (pState->m_nCtrlRef == 0 || --pState->m_nCtrlRef == 0)
-		ReleaseParkingWindow();
-
-	AfxOleUnlockApp();
 }
 
 void COleControl::OnFinalRelease()
@@ -314,6 +349,8 @@ void COleControl::OnFinalRelease()
 	if (!m_bFinalReleaseCalled)
 	{
 		m_bFinalReleaseCalled = TRUE;
+
+		ReleaseCaches();
 
 		if (m_hWnd != NULL)
 			DestroyWindow();
@@ -326,10 +363,15 @@ LPUNKNOWN COleControl::GetInterfaceHook(const void* piid)
 {
 	ASSERT_POINTER(piid, IID);
 
-	if ((m_piidPrimary != NULL) &&
-		IsEqualIID(*m_piidPrimary, *(IID*)piid))
+	if (m_piidPrimary != NULL && _AfxIsEqualGUID(*m_piidPrimary, *(IID*)piid))
 	{
 		return GetInterface((void*)&IID_IDispatch);
+	}
+
+	if (_AfxIsEqualGUID(IID_IPointerInactive, *(IID*)piid) &&
+		(GetControlFlags() & pointerInactive))
+	{
+		return &m_xPointerInactive;
 	}
 
 	return NULL;
@@ -413,12 +455,7 @@ void AFXAPI _AfxDumpGuid(CDumpContext& dc, const GUID* pGuid)
 
 	OLECHAR szGuid[40];
 	::StringFromGUID2(*pGuid, szGuid, 40);
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-	OLE2CT(szGuid);
-	dc << (LPCSTR)pBAfxConv;
-#else    // __BORLANDC__
 	dc << OLE2CT(szGuid);
-#endif   // __BORLANDC__
 }
 
 void AFXAPI _AfxDumpHex(CDumpContext& dc, DWORD dw)
@@ -431,7 +468,9 @@ void AFXAPI _AfxDumpHex(CDumpContext& dc, DWORD dw)
 void COleControl::Dump(CDumpContext& dc) const
 {
 	CWnd::Dump(dc);
+#ifdef _AFXDLL
 	dc << "\nm_pModuleState = " << m_pModuleState;
+#endif
 	dc << "\nm_piidPrimary = ";
 	_AfxDumpGuid(dc, m_piidPrimary);
 	dc << "\nm_piidEvents =  ";
@@ -450,7 +489,9 @@ void COleControl::Dump(CDumpContext& dc) const
 	dc << "\nm_bInPlaceActive = " << m_bInPlaceActive;
 	dc << "\nm_bUIActive = " << m_bUIActive;
 	dc << "\nm_bPendingUIActivation = " << m_bPendingUIActivation;
+#ifdef _AFXDLL
 	dc << "\nm_bOpen = " << m_bOpen;
+#endif
 	dc << "\nm_bChangingExtent = " << m_bChangingExtent;
 	dc << "\nm_bConvertVBX = " << m_bConvertVBX;
 	dc << "\nm_bSimpleFrame = " << m_bSimpleFrame;
@@ -520,36 +561,15 @@ void COleControl::DoSuperclassPaint(CDC* pDC, const CRect& rcBounds)
 BOOL COleControl::IsSubclassedControl()
 {
 	// This default implementation provides some degree of backward
-	// compatibility with old controls. New controls should just
+	// compatibility with old controls. New subclassed controls should just
 	// override IsSubclassedControl and return TRUE.
-	return (GetSuperWndProcAddr() != CWnd::GetSuperWndProcAddr());
+	return m_pfnSuper == NULL &&
+		GetSuperWndProcAddr() != CWnd::GetSuperWndProcAddr();
 }
-
-BOOL COleControl::ContainerReflectsMessages()
-{
-	BOOL bReflect;
-
-	if (!GetAmbientProperty(DISPID_AMBIENT_MESSAGEREFLECT, VT_BOOL, &bReflect))
-		bReflect = FALSE;
-	return bReflect;
-}
-
-BOOL COleControl::ContainerClips()
-{
-	BOOL bReflect;
-
-	if (!GetAmbientProperty(DISPID_AMBIENT_AUTOCLIP, VT_BOOL, &bReflect))
-		bReflect = FALSE;
-	return bReflect;
-}
-
 
 BOOL COleControl::CreateControlWindow(HWND hWndParent, const CRect& rcPos,
-	LPCRECT prcClipped)
+	LPCRECT prcClip)
 {
-	if (prcClipped == NULL)
-		prcClipped = &rcPos;
-
 	if (m_hWnd == NULL)
 	{
 		// If window doesn't exist, create it.
@@ -558,28 +578,25 @@ BOOL COleControl::CreateControlWindow(HWND hWndParent, const CRect& rcPos,
 		// we're not subclassing a Windows control, or
 		// container reflects messages for us...
 
-		DWORD dwStyle = WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+		DWORD dwStyle = WS_VISIBLE|WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN;
 		if (m_sBorderStyle)
 			dwStyle |= WS_BORDER;
 		if (!m_bEnabled)
 			dwStyle |= WS_DISABLED;
-		DWORD dwExStyle = 0;
+		DWORD dwExStyle = WS_EX_NOPARENTNOTIFY;
 		if (m_sAppearance)
 			dwExStyle |= WS_EX_CLIENTEDGE;
 
 		// we create normally if:
 		//       (we're not subclassing -or- the container reflects)
 		// -and- the container autoclips for us
-		if ((!IsSubclassedControl() || ContainerReflectsMessages()) &&
-			ContainerClips())
+		if ((!IsSubclassedControl() || m_bMsgReflect) && m_bAutoClip)
 		{
 			// Just create the control's window.
-			CreateEx(dwExStyle, NULL, m_strText, dwStyle,
-					rcPos.left, rcPos.top,
-					rcPos.Width(), rcPos.Height(),
-					hWndParent, 0);
-			if (m_hWnd != NULL)
-				::ShowWindow(m_hWnd, SW_SHOW);
+			VERIFY(AfxDeferRegisterClass(AFX_WNDOLECONTROL_REG));
+			CreateEx(dwExStyle, AFX_WNDOLECONTROL, m_strText, dwStyle,
+				rcPos.left, rcPos.top, rcPos.Width(), rcPos.Height(),
+				hWndParent, 0);
 		}
 		else    // ...we're subclassing a Windows control.
 		{
@@ -587,7 +604,9 @@ BOOL COleControl::CreateControlWindow(HWND hWndParent, const CRect& rcPos,
 			{
 				// Create a window to reflect notification messages.
 				m_pReflect = new CReflectorWnd;
-				if (!m_pReflect->Create(prcClipped, hWndParent))
+				if (prcClip == NULL)
+					prcClip = rcPos;
+				if (!m_pReflect->Create(prcClip, hWndParent))
 				{
 					// If m_pReflect->Create failed, then m_pReflect deleted itself.
 					m_pReflect = NULL;
@@ -597,34 +616,25 @@ BOOL COleControl::CreateControlWindow(HWND hWndParent, const CRect& rcPos,
 			{
 				// Reflector window already exists... just reparent it.
 				if (m_pReflect->m_hWnd != NULL)
+				{
 					::SetParent(m_pReflect->m_hWnd, hWndParent);
+					::SetWindowPos(m_pReflect->m_hWnd, NULL, 0, 0, 0, 0,
+						SWP_NOZORDER|SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|
+						SWP_SHOWWINDOW);
+				}
 			}
 
-			if (m_pReflect != NULL)
+			if (m_pReflect != NULL && m_pReflect->m_hWnd != NULL)
 			{
-				if (m_pReflect->m_hWnd != NULL)
-				{
-					// Create the control's window.
-					CreateEx(dwExStyle, NULL, m_strText, dwStyle,
-						m_ptOffset.x, m_ptOffset.y,
-						rcPos.Width(), rcPos.Height(),
-						m_pReflect->m_hWnd, 0);
-				}
-
-				if (m_hWnd != NULL)
-				{
-					// Make both windows visible.
-					m_pReflect->ShowWindow(SW_SHOW);
-					::ShowWindow(m_hWnd, SW_SHOW);
-				}
-				else
+				// Create the control's window.
+				CreateEx(dwExStyle, NULL, m_strText, dwStyle,
+					m_ptOffset.x, m_ptOffset.y, rcPos.Width(), rcPos.Height(),
+					m_pReflect->m_hWnd, 0);
+				if (m_hWnd == NULL)
 				{
 					// Window creation failed: cleanup.
-					if (m_pReflect != NULL)
-					{
-						m_pReflect->DestroyWindow();
-						m_pReflect = NULL;
-					}
+					m_pReflect->DestroyWindow();
+					m_pReflect = NULL;
 				}
 			}
 		}
@@ -634,24 +644,19 @@ BOOL COleControl::CreateControlWindow(HWND hWndParent, const CRect& rcPos,
 	}
 	else
 	{
-		// If window does exist, reparent and reposition it.
-		CWnd* pwndOuter = GetOuterWindow();
-		ASSERT(pwndOuter != NULL);
+		// If window does exist, reparent it...
+		CWnd* pWndOuter = GetOuterWindow();
+		ASSERT(pWndOuter != NULL);
 
-		if (::GetParent(pwndOuter->m_hWnd) != hWndParent)
-			ReparentControlWindow(pwndOuter->m_hWnd, hWndParent);
+		if (::GetParent(pWndOuter->m_hWnd) != hWndParent)
+			ReparentControlWindow(pWndOuter->m_hWnd, hWndParent);
 
-		::ShowWindow(pwndOuter->m_hWnd, SW_SHOW);
+		::SetWindowPos(pWndOuter->m_hWnd, NULL, 0, 0, 0, 0,
+			SWP_NOZORDER|SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|
+			SWP_SHOWWINDOW);
 
-		if (m_pReflect == NULL)
-			::MoveWindow(m_hWnd, rcPos.left, rcPos.top,
-				rcPos.Width(), rcPos.Height(), TRUE);
-		else
-		{
-			pwndOuter->MoveWindow(prcClipped, TRUE);
-			::MoveWindow(m_hWnd, m_ptOffset.x, m_ptOffset.y,
-				rcPos.Width(), rcPos.Height(), TRUE);
-		}
+		// And then reposition it...
+		OnSetObjectRects(rcPos, prcClip);
 	}
 
 	ASSERT(m_hWnd != NULL);
@@ -688,15 +693,6 @@ BOOL COleControl::SetControlSize(int cx, int cy)
 	return SUCCEEDED(m_xOleObject.SetExtent(DVASPECT_CONTENT, &szlHimetric));
 }
 
-void COleControl::ResizeOpenControl(int cx, int cy)
-{
-	CWnd* pWndOuter = GetOuterWindow();
-	if ((pWndOuter != NULL) && (pWndOuter->m_hWnd != NULL))
-		::SetWindowPos(pWndOuter->m_hWnd, NULL, 0, 0, cx, cy,
-					SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER);
-	ResizeFrameWindow(cx, cy);
-}
-
 BOOL COleControl::SetRectInContainer(LPCRECT lpRect)
 {
 	if ((m_pInPlaceSite != NULL) && m_bInPlaceActive)
@@ -704,12 +700,14 @@ BOOL COleControl::SetRectInContainer(LPCRECT lpRect)
 		m_pInPlaceSite->OnPosRectChange(lpRect);
 		return TRUE;
 	}
+#ifdef _AFXDLL
 	else if (m_bOpen)
 	{
 		ResizeOpenControl(lpRect->right - lpRect->left,
 				lpRect->bottom - lpRect->top);
 		return TRUE;
 	}
+#endif
 
 	return FALSE;
 }
@@ -720,6 +718,13 @@ void COleControl::OnResetState()
 	DoPropExchange(&px);
 	InvalidateControl();
 }
+
+#ifndef BDR_INNER
+#define BDR_INNER   0x000c
+#endif
+#ifndef BDR_OUTER
+#define BDR_OUTER   0x0003
+#endif
 
 void AFXAPI _AfxDrawBorders(CDC* pDC, CRect& rc, BOOL bBorder, BOOL bClientEdge)
 {
@@ -736,7 +741,9 @@ void COleControl::DrawContent(CDC* pDC, CRect& rc)
 	// Map into device coordinates.
 
 	pDC->LPtoDP(&rc);
-	int iSaveDC = pDC->SaveDC();
+	int iSaveDC = 0;
+	if (! m_bOptimizedDraw)
+		iSaveDC = pDC->SaveDC();
 	pDC->SetViewportOrg(0, 0);
 	pDC->SetWindowOrg(0, 0);
 	pDC->SetMapMode(MM_TEXT);
@@ -744,16 +751,20 @@ void COleControl::DrawContent(CDC* pDC, CRect& rc)
 	if (pDC->GetDeviceCaps(TECHNOLOGY) == DT_RASDISPLAY)
 		_AfxDrawBorders(pDC, rc, (m_sBorderStyle == 1), (m_sAppearance == 1));
 	OnDraw(pDC, rc, rc);
-	pDC->RestoreDC(iSaveDC);
+	if (! m_bOptimizedDraw && iSaveDC != 0)
+		pDC->RestoreDC(iSaveDC);
 }
 
 void COleControl::DrawMetafile(CDC* pDC, CRect& rc)
 {
-	int iSaveDC = pDC->SaveDC();
+	int iSaveDC = 0;
+	if (! m_bOptimizedDraw)
+		iSaveDC = pDC->SaveDC();
 	m_rcBounds = rc;
 	_AfxDrawBorders(pDC, rc, (m_sBorderStyle == 1), (m_sAppearance == 1));
 	OnDrawMetafile(pDC, rc);
-	pDC->RestoreDC(iSaveDC);
+	if (! m_bOptimizedDraw && iSaveDC != 0)
+		pDC->RestoreDC(iSaveDC);
 }
 
 void COleControl::OnDraw(CDC*, const CRect&, const CRect&)
@@ -879,14 +890,36 @@ LPVOID COleControl::QueryDefHandler(REFIID iid)
 	return pNew;
 }
 
-void COleControl::InvalidateControl(LPCRECT lpRect)
+void COleControl::InvalidateControl(LPCRECT lpRect, BOOL bErase)
 {
-	if (m_bInPlaceActive || m_bOpen)
-		InvalidateRect(lpRect, TRUE);
+	if (m_bInPlaceActive && m_bInPlaceSiteWndless)
+	{
+		CRect rect;
+		if (lpRect != NULL)
+		{
+			CPoint point(0, 0);
+			ClientToParent(m_rcPos, &point);
+			rect.CopyRect(lpRect);
+			rect.OffsetRect(point);
+			lpRect = &rect;
+		}
+		m_pInPlaceSiteWndless->InvalidateRect(lpRect, bErase);
+	}
+#ifdef _AFXDLL
+	else if (m_bInPlaceActive || m_bOpen)
+#else
+	else if (m_bInPlaceActive)
+#endif
+	{
+		InvalidateRect(lpRect, bErase);
+	}
 	else
+	{
 		SendAdvise(OBJECTCODE_VIEWCHANGED);
+	}
 
-	SendAdvise(OBJECTCODE_DATACHANGED);
+	if (m_bModified)
+		SendAdvise(OBJECTCODE_DATACHANGED);
 }
 
 CWnd* COleControl::GetOuterWindow() const
@@ -950,6 +983,9 @@ HRESULT COleControl::LoadState(IStream* pstm)
 
 	// Properties have been initialized
 	m_bInitialized = TRUE;
+
+	// Uncache cached ambient properties
+	_afxAmbientCache->Cache(NULL);
 
 	return hr;
 }
@@ -1016,43 +1052,39 @@ void COleControl::SendAdvise(UINT uCode)
 
 HRESULT COleControl::OnHide()
 {
+#ifdef _AFXDLL
 	CWnd* pWnd = m_bOpen ? m_pWndOpenFrame : GetOuterWindow();
+#else
+	CWnd* pWnd = GetOuterWindow();
+#endif
 	if (pWnd != NULL && pWnd->m_hWnd != NULL)
-	{
 		::ShowWindow(pWnd->m_hWnd, SW_HIDE);
-		pWnd->SetParent(NULL);
-	}
 
 	RELEASE(m_pInPlaceFrame);
 	RELEASE(m_pInPlaceDoc);
 
+#ifdef _AFXDLL
 	if (m_bOpen)
 		SendAdvise(OBJECTCODE_HIDEWINDOW);
+#endif
 
 	return S_OK;
 }
 
-void COleControl::ResizeFrameWindow(int cxCtrl, int cyCtrl)
-{
-	m_pWndOpenFrame->SetWindowPos(NULL, 0, 0, 100, 100,
-				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER);
-	CRect rectClient;
-	m_pWndOpenFrame->GetClientRect(&rectClient);
-	CRect rectWindow;
-	m_pWndOpenFrame->GetWindowRect(&rectWindow);
-	int cx = cxCtrl + rectWindow.Width()  - rectClient.Width();
-	int cy = cyCtrl + rectWindow.Height() - rectClient.Height();
-	m_pWndOpenFrame->SetWindowPos(NULL, 0, 0, cx, cy,
-				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER);
-}
-
 HRESULT COleControl::OnOpen(BOOL bTryInPlace, LPMSG pMsg)
 {
+#ifndef _AFXDLL
+	ASSERT(bTryInPlace);    // fully-open mode not supported in static builds
+	UNUSED_ALWAYS(bTryInPlace);
+#endif
+
+#ifndef _AFXDLL
+	return OnActivateInPlace(TRUE, pMsg);
+#else
 	if (!m_bOpen)
 	{
 		// If not already open, try in-place activating.
-
-		if (bTryInPlace && SUCCEEDED(OnActivateInPlace(TRUE, pMsg)))
+		if (bTryInPlace && SUCCEEDED(OnActivateInPlace(bTryInPlace, pMsg)))
 			return S_OK;
 
 		// If already in-place active, deactivate first.
@@ -1079,7 +1111,7 @@ HRESULT COleControl::OnOpen(BOOL bTryInPlace, LPMSG pMsg)
 			// Create and/or reparent the control's window.
 			CRect rectClient;
 			m_pWndOpenFrame->GetClientRect(&rectClient);
-			if (!CreateControlWindow(m_pWndOpenFrame->m_hWnd, rectClient))
+			if (!CreateControlWindow(m_pWndOpenFrame->m_hWnd, rectClient, rectClient))
 				return E_FAIL;
 		}
 	}
@@ -1089,10 +1121,11 @@ HRESULT COleControl::OnOpen(BOOL bTryInPlace, LPMSG pMsg)
 	m_pWndOpenFrame->ShowWindow(SW_SHOW);
 	m_pWndOpenFrame->SetActiveWindow();
 	SendAdvise(OBJECTCODE_SHOWWINDOW);
-
 	return S_OK;
+#endif
 }
 
+#ifdef _AFXDLL
 CControlFrameWnd* COleControl::CreateFrameWindow()
 {
 	TCHAR szUserType[256];
@@ -1112,10 +1145,11 @@ void COleControl::OnFrameClose()
 {
 	// Reparent control to prevent its window from being destroyed.
 	CWnd* pWnd = GetOuterWindow();
-
 	if (pWnd != NULL)
 	{
-		::ShowWindow(pWnd->m_hWnd, SW_HIDE);
+		::SetWindowPos(pWnd->m_hWnd, NULL, 0, 0, 0, 0,
+			SWP_NOZORDER|SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|
+			SWP_HIDEWINDOW);
 		pWnd->SetParent(NULL);
 	}
 
@@ -1127,6 +1161,31 @@ void COleControl::OnFrameClose()
 	SendAdvise(OBJECTCODE_HIDEWINDOW);
 	SendAdvise(OBJECTCODE_CLOSED);
 }
+
+void COleControl::ResizeOpenControl(int cx, int cy)
+{
+	CWnd* pWndOuter = GetOuterWindow();
+	if ((pWndOuter != NULL) && (pWndOuter->m_hWnd != NULL))
+		::SetWindowPos(pWndOuter->m_hWnd, NULL, 0, 0, cx, cy,
+					SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER);
+	ResizeFrameWindow(cx, cy);
+}
+
+void COleControl::ResizeFrameWindow(int cxCtrl, int cyCtrl)
+{
+	m_pWndOpenFrame->SetWindowPos(NULL, 0, 0, 100, 100,
+				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER);
+	CRect rectClient;
+	m_pWndOpenFrame->GetClientRect(&rectClient);
+	CRect rectWindow;
+	m_pWndOpenFrame->GetWindowRect(&rectWindow);
+	int cx = cxCtrl + rectWindow.Width()  - rectClient.Width();
+	int cy = cyCtrl + rectWindow.Height() - rectClient.Height();
+	m_pWndOpenFrame->SetWindowPos(NULL, 0, 0, cx, cy,
+				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER);
+}
+
+#endif //_AFXDLL
 
 BOOL COleControl::GetRectInContainer(LPRECT lpRect)
 {
@@ -1172,8 +1231,7 @@ BOOL COleControl::OnProperties(LPMSG, HWND hWndParent, LPCRECT)
 		FAILED(hr = m_pControlSite->ShowPropertyFrame()))
 	{
 		LPUNKNOWN pUnk = GetIDispatch(FALSE);
-		CWnd* pWndOwner = CWnd::GetSafeOwner(CWnd::FromHandle(hWndParent));
-		HWND hWndOwner = pWndOwner->GetSafeHwnd();
+		HWND hWndOwner = CWnd::GetSafeOwner_(hWndParent, NULL);
 
 		LCID lcid = AmbientLocaleID();
 
@@ -1189,31 +1247,41 @@ BOOL COleControl::OnProperties(LPMSG, HWND hWndParent, LPCRECT)
 		GetUserType(szUserType);
 
 		PreModalDialog(hWndOwner);
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(szUserType);
-		hr = OleCreatePropertyFrame(hWndOwner, rectParent.left - rectTop.left,
-				rectParent.top - rectTop.top, (LPCWSTR)pBAfxConv, 1, &pUnk,
-				cPropPages, pclsidPropPages, lcid, NULL, 0);
-#else    // __BORLANDC__
-		hr = OleCreatePropertyFrame(hWndOwner, rectParent.left - rectTop.left,
+		hr = ::OleCreatePropertyFrame(hWndOwner, rectParent.left - rectTop.left,
 				rectParent.top - rectTop.top, T2COLE(szUserType), 1, &pUnk,
 				cPropPages, pclsidPropPages, lcid, NULL, 0);
-#endif   // __BORLANDC__
 		PostModalDialog(hWndOwner);
 	}
 
 	return SUCCEEDED(hr);
 }
 
+DWORD COleControl::GetControlFlags()
+{
+	return clipPaintDC;
+}
+
 void COleControl::OnPaint(CDC* pDC)
 {
+	if (m_bNoRedraw)
+	{
+		// flicker-free activation: no need to repaint
+		ValidateRect(NULL);
+		m_bNoRedraw = FALSE;    // one time only
+		return;
+	}
+
 	AfxLockTempMaps();
 
 	GetWindowRect(m_rcBounds);
 	m_rcBounds.OffsetRect(-m_rcBounds.left, -m_rcBounds.top);
 
 	// Adjust bounds for size of UI Active tracker, if any.
+#ifdef _AFXDLL
 	if (!m_bOpen && (m_pRectTracker != NULL))
+#else
+	if (m_pRectTracker != NULL)
+#endif
 	{
 		int nHandleSize = (int)m_pRectTracker->m_nHandleSize - 1;
 		m_rcBounds.InflateRect(-nHandleSize, -nHandleSize);
@@ -1231,12 +1299,26 @@ void COleControl::OnPaint(CDC* pDC)
 	}
 	else
 	{
-		// Create a device context for painting.
+#ifdef _DEBUG
+		int nFlags = GetControlFlags();
+		if (nFlags & fastBeginPaint)
+			TRACE0("Warning: COleControl::fastBeginPaint is obsolete.\n");
+#endif
+
 		CPaintDC dc(this);
 		OnDraw(&dc, rcClient, &dc.m_ps.rcPaint);
 	}
 
 	AfxUnlockTempMaps();
+}
+
+BOOL COleControl::OnEraseBkgnd(CDC* pDC)
+{
+	// do nothing -- controls erase their background in their OnDraw
+	if (IsSubclassedControl())
+		return CWnd::OnEraseBkgnd(pDC);
+	else
+		return TRUE;
 }
 
 void  COleControl::Serialize(CArchive& ar)
@@ -1401,7 +1483,12 @@ void COleControl::OnFreezeEvents(BOOL)
 
 void COleControl::OnSetClientSite()
 {
-	// Subclass can override to provide additional code to be run.
+	if (!m_bDataPathPropertiesLoaded)
+	{
+		CAsyncPropExchange PX(m_dwDataPathVersionToReport);
+		DoPropExchange(&PX);
+		m_bDataPathPropertiesLoaded=TRUE;
+	}
 }
 
 LPOLECLIENTSITE COleControl::GetClientSite()
@@ -1412,7 +1499,7 @@ LPOLECLIENTSITE COleControl::GetClientSite()
 COLORREF COleControl::TranslateColor(OLE_COLOR clrColor, HPALETTE hpal)
 {
 	COLORREF cr = RGB(0x00,0x00,0x00);
-	OleTranslateColor(clrColor, hpal, &cr);
+	::OleTranslateColor(clrColor, hpal, &cr);
 	return cr;
 }
 
@@ -1445,16 +1532,18 @@ void COleControl::RecreateControlWindow()
 		DestroyWindow();
 		OnActivateInPlace(bUIActive, NULL);
 	}
+#ifdef _AFXDLL
 	else if (m_bOpen)
 	{
 		DestroyWindow();
 		CRect rectClient;
 		m_pWndOpenFrame->GetClientRect(&rectClient);
-		CreateControlWindow(m_pWndOpenFrame->m_hWnd, rectClient);
+		CreateControlWindow(m_pWndOpenFrame->m_hWnd, rectClient, rectClient);
 	}
+#endif //_AFXDLL
 	else
 	{
-		HWND hWndParent = GetParkingWindow();
+		HWND hWndParent = _AfxGetParkingWindow();
 		if (hWndParent != NULL)
 		{
 			DestroyWindow();
@@ -1475,7 +1564,7 @@ void COleControl::CreateWindowForSubclassedControl()
 		// for it now, in case the window is needed by the DoSuperclassPaint
 		// implementation.
 
-		HWND hWndParent = GetParkingWindow();
+		HWND hWndParent = _AfxGetParkingWindow();
 		if (hWndParent != NULL)
 		{
 			SIZEL szlHimetric;
@@ -1494,7 +1583,7 @@ int COleControl::OnMouseActivate(CWnd *pDesktopWnd, UINT nHitTest, UINT message)
 	if (m_bInPlaceActive && !m_bUIActive)
 		m_bPendingUIActivation = TRUE;
 
-	return CWnd::OnMouseActivate(pDesktopWnd, nHitTest, message );
+	return CWnd::OnMouseActivate(pDesktopWnd, nHitTest, message);
 }
 
 void COleControl::PreModalDialog(HWND hWndParent)
@@ -1634,6 +1723,40 @@ LRESULT COleControl::WindowProc(UINT msg, WPARAM wParam, LPARAM lParam)
 	ExternalRelease();
 
 	return lResult;
+}
+
+LRESULT COleControl::DefWindowProc(UINT nMsg, WPARAM wParam, LPARAM lParam)
+{
+	if (m_hWnd != NULL)
+		return CWnd::DefWindowProc(nMsg, wParam, lParam);
+	else
+		return 0;
+}
+
+int COleControl::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (IsSubclassedControl())
+		return CWnd::OnCreate(lpCreateStruct);
+	else
+		return 0;
+}
+
+void COleControl::OnSize(UINT nType, int cx, int cy)
+{
+	if (IsSubclassedControl())
+		CWnd::OnSize(nType, cx, cy);
+}
+
+void COleControl::OnMove(int x, int y)
+{
+	if (IsSubclassedControl())
+		CWnd::OnMove(x, y);
+}
+
+void COleControl::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	if (IsSubclassedControl())
+		CWnd::OnShowWindow(bShow, nStatus);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1793,12 +1916,7 @@ LRESULT COleControl::OnSetMessageString(WPARAM wParam, LPARAM lParam)
 		}
 
 		// notify container of new status text
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(lpsz);
-		m_pInPlaceFrame->SetStatusText((LPCWSTR)pBAfxConv);
-#else    // __BORLANDC__
 		m_pInPlaceFrame->SetStatusText(T2COLE(lpsz));
-#endif   // __BORLANDC__
 	}
 
 	UINT nIDLast = m_nIDLastMessage;
@@ -1853,17 +1971,27 @@ STDMETHODIMP COleControl::XSpecifyPropertyPages::GetPages(CAUUID* pPages)
 	pPages->cElems = 0;
 	pPages->pElems = NULL;
 
-	HRESULT hr = E_OUTOFMEMORY;
+	HRESULT hr = S_OK;
 	ULONG cElems;
 	LPCLSID pClassID = pThis->GetPropPageIDs(cElems);
 
-	if ((pPages->pElems = (LPCLSID)(CoTaskMemAlloc(cElems * sizeof(CLSID)))) != NULL)
+	if (cElems > 0)
 	{
-		ASSERT(pPages->pElems != NULL);
-		pPages->cElems = cElems;
-		memcpy(pPages->pElems, pClassID, (int)(cElems * sizeof(CLSID)));
-		hr = S_OK;
+		if ((pPages->pElems = (LPCLSID)(CoTaskMemAlloc(cElems * sizeof(CLSID)))) != NULL)
+		{
+			ASSERT(pPages->pElems != NULL);
+			pPages->cElems = cElems;
+			memcpy(pPages->pElems, pClassID, (int)(cElems * sizeof(CLSID)));
+		}
+		else
+			hr = E_OUTOFMEMORY;
 	}
+	else
+	{
+		pPages->cElems = 0;
+		pPages->pElems = NULL;
+	}
+
 	return hr;
 }
 

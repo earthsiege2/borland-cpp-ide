@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -27,13 +27,13 @@ BEGIN_MESSAGE_MAP(CRecordView, CFormView)
 	//{{AFX_MSG_MAP(CRecordView)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
 	//}}AFX_MSG_MAP
-	ON_COMMAND_EX(ID_RECORD_FIRST, OnMove)
+	ON_COMMAND_EX(ID_RECORD_FIRST, _CallOnMove)  // __BORLANDC__ MS-BUG
 	ON_UPDATE_COMMAND_UI(ID_RECORD_FIRST, OnUpdateRecordFirst)
-	ON_COMMAND_EX(ID_RECORD_PREV, OnMove)
+	ON_COMMAND_EX(ID_RECORD_PREV, _CallOnMove) // __BORLANDC__ MS-BUG
 	ON_UPDATE_COMMAND_UI(ID_RECORD_PREV, OnUpdateRecordPrev)
-	ON_COMMAND_EX(ID_RECORD_NEXT, OnMove)
+	ON_COMMAND_EX(ID_RECORD_NEXT, _CallOnMove) // __BORLANDC__ MS-BUG
 	ON_UPDATE_COMMAND_UI(ID_RECORD_NEXT, OnUpdateRecordNext)
-	ON_COMMAND_EX(ID_RECORD_LAST, OnMove)
+	ON_COMMAND_EX(ID_RECORD_LAST, _CallOnMove) // __BORLANDC__ MS-BUG
 	ON_UPDATE_COMMAND_UI(ID_RECORD_LAST, OnUpdateRecordLast)
 END_MESSAGE_MAP()
 
@@ -88,17 +88,8 @@ BOOL CRecordView::IsOnLastRecord()
 
 BOOL CRecordView::OnMove(UINT nIDMoveCommand)
 {
-	if (CDatabase::InWaitForDataSource())
-	{
-#ifdef _DEBUG
-		if (afxTraceFlags & traceDatabase)
-			TRACE0("Warning: ignored move request.\n");
-#endif
-		return TRUE;
-	}
-
 	CRecordset* pSet = OnGetRecordset();
-	if (pSet->CanUpdate())
+	if (pSet->CanUpdate() && !pSet->IsDeleted())
 	{
 		pSet->Edit();
 		if (!UpdateData())
@@ -148,8 +139,7 @@ void CRecordView::OnUpdateRecordFirst(CCmdUI* pCmdUI)
 	CRecordset* prs = OnGetRecordset();
 
 	// enable if opened, can scroll backwards,
-	pCmdUI->Enable(!CDatabase::InWaitForDataSource() &&
-		prs->IsOpen() && prs->CanScroll() &&
+	pCmdUI->Enable(prs->IsOpen() && prs->CanScroll() &&
 		// >= 1 records present and not already on first record
 		!(prs->IsEOF() && prs->IsBOF()) && !IsOnFirstRecord());
 }
@@ -164,8 +154,7 @@ void CRecordView::OnUpdateRecordNext(CCmdUI* pCmdUI)
 	CRecordset* prs = OnGetRecordset();
 
 	// enable if opened and >= 1 records present
-	pCmdUI->Enable(!CDatabase::InWaitForDataSource() &&
-		prs->IsOpen() && !(prs->IsEOF() && prs->IsBOF())
+	pCmdUI->Enable(prs->IsOpen() && !(prs->IsEOF() && prs->IsBOF())
 		// and not already on last record
 		&& !IsOnLastRecord());
 }
@@ -175,8 +164,7 @@ void CRecordView::OnUpdateRecordLast(CCmdUI* pCmdUI)
 	CRecordset* prs = OnGetRecordset();
 
 	// enable if opened, can scroll,
-	pCmdUI->Enable(!CDatabase::InWaitForDataSource() &&
-		prs->IsOpen() && prs->CanScroll() &&
+	pCmdUI->Enable(prs->IsOpen() && prs->CanScroll() &&
 		// >= 1 records present and not already on last record
 		!(prs->IsEOF() && prs->IsBOF()) && !IsOnLastRecord());
 }
@@ -216,6 +204,12 @@ BOOL AFXAPI AfxFieldText(CDataExchange* pDX, int nIDC, void* pv,
 		{
 			szT[0] = '\0';
 			AfxSetWindowText(hWndCtrl, szT);
+			return TRUE;
+		}
+		else if (pRecordset->IsDeleted())
+		{
+			CString strDeleted(MAKEINTRESOURCE(AFX_IDS_DELETED));
+			AfxSetWindowText(hWndCtrl, strDeleted);
 			return TRUE;
 		}
 	}
@@ -290,10 +284,41 @@ void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, CString& value,
 			pRecordset->SetFieldNull(&value, FALSE);
 		}
 	}
+	else if (pRecordset->IsDeleted())
+	{
+		CString strDeleted(MAKEINTRESOURCE(AFX_IDS_DELETED));
+		AfxSetWindowText(hWndCtrl, strDeleted);
+	}
 	else
 	{
 		AfxSetWindowText(hWndCtrl, value);
 	}
+}
+
+void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, LPTSTR pstrValue,
+	int nMaxLength, CRecordset* pRecordset)
+{
+	ASSERT_VALID(pRecordset);
+	HWND hWndCtrl = pDX->PrepareEditCtrl(nIDC);
+	if (pDX->m_bSaveAndValidate)
+	{
+		int nLen = ::GetWindowText(hWndCtrl, pstrValue, nMaxLength);
+
+		if (nLen == 0)
+		{
+			if (pRecordset->IsFieldNullable(pstrValue))
+				pRecordset->SetFieldNull(pstrValue, TRUE);
+		}
+		else
+			pRecordset->SetFieldNull(pstrValue, FALSE);
+	}
+	else if (pRecordset->IsDeleted())
+	{
+		CString strDeleted(MAKEINTRESOURCE(AFX_IDS_DELETED));
+		AfxSetWindowText(hWndCtrl, strDeleted);
+	}
+	else
+		AfxSetWindowText(hWndCtrl, pstrValue);
 }
 
 void AFXAPI DDX_FieldLBString(CDataExchange* pDX, int nIDC, CString& value,

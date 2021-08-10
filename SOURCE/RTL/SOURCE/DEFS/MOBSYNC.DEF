@@ -1,0 +1,6 @@
+LIBRARY MOBSYNC
+EXPORTS
+
+    RunDllRegister                           = 'MOBSYNC.DLL'.* @6 @5
+    SyncMgrResolveConflictA                  = 'MOBSYNC.DLL'.*
+    SyncMgrResolveConflictW                  = 'MOBSYNC.DLL'.*

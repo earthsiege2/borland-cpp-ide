@@ -1,0 +1,53 @@
+package Dss50;
+
+{$R *.RES}
+{$ALIGN ON}
+{ ASSERTIONS OFF}
+{$BOOLEVAL OFF}
+{ DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{ LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $4088FFF3}
+{$DESCRIPTION 'Borland Decision Cube Components'}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  vcl50,
+  vcldb50,
+  vclbde50,
+  tee50;
+
+contains
+  mxgrid in 'mxgrid.pas',
+  mxbutton in 'mxbutton.pas',
+  mxDB in 'mxDB.pas',
+  mxConsts in 'mxConsts.pas',
+  mxstore in 'mxstore.pas',
+  mxtables in 'mxtables.pas',
+  mxqparse in 'mxqparse.pas',
+  mxcommon in 'mxcommon.pas',
+  mxqedcom in 'mxqedcom.pas',
+  mxarrays in 'mxarrays.pas',
+  mxpivsrc in 'mxpivsrc.pas',
+  mxdcube in 'mxdcube.pas',
+  mxdsql in 'mxdsql.pas',
+  mxpbar in 'mxpbar.pas',
+  mxgraph in 'mxgraph.pas';
+
+end.
+

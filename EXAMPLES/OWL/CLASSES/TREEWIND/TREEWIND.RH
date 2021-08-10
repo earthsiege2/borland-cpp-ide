@@ -1,3 +1,0 @@
-#define CM_GETSTATE	200
-#define CM_SETSTATE	100
-#define IDM_MAINMENU	1

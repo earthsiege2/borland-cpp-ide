@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -76,6 +76,16 @@ void COleCntrFrameWnd::OnIdleUpdateCmdUI()
 	}
 }
 
+BOOL COleCntrFrameWnd::OnCmdMsg(UINT nID, int nCode, void* pExtra,
+	AFX_CMDHANDLERINFO* pHandlerInfo)
+{
+	ASSERT_VALID(m_pInPlaceFrame);
+
+	// pump through inplace frame
+	CPushRoutingFrame push(this);
+	return m_pInPlaceFrame->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+}
+
 void COleCntrFrameWnd::PostNcDestroy()
 {
 	// do nothing to avoid destroying window
@@ -127,7 +137,6 @@ COleIPFrameWnd::COleIPFrameWnd()
 	m_hSharedMenu = NULL;
 	m_pMainFrame = NULL;
 	m_pDocFrame = NULL;
-
 	ASSERT_VALID(this);
 }
 
@@ -247,13 +256,8 @@ LRESULT COleIPFrameWnd::OnSetMessageString(WPARAM wParam, LPARAM lParam)
 
 		// notify container of new status text
 		if (lpsz == NULL)
-			lpsz = &afxChNil;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(lpsz);
-		m_lpFrame->SetStatusText((LPCWSTR)pBAfxConv);
-#else    // __BORLANDC__
+			lpsz = _T("");
 		m_lpFrame->SetStatusText(T2COLE(lpsz));
-#endif   // __BORLANDC__
 	}
 
 	UINT nIDLast = m_nIDLastMessage;
@@ -334,6 +338,12 @@ void COleIPFrameWnd::OnRequestPositionChange(LPCRECT lpRect)
 	ASSERT_VALID(pDoc);
 	ASSERT_KINDOF(COleServerDoc, pDoc);
 
+	// DocObjects don't need to generate OnPosRectChange calls,
+	// so we can just return if this is a DoCobject
+
+	if (pDoc->IsDocObject())
+		return;
+
 	// The default behavior is to not affect the extent during the
 	//  call to RequestPositionChange.  This results in consistent
 	//  scaling behavior.
@@ -360,6 +370,18 @@ void COleIPFrameWnd::RecalcLayout(BOOL /*bNotify*/)
 	// better have a parent window (only used for inplace)
 	CWnd* pParentWnd = GetParent();
 	ASSERT_VALID(pParentWnd);
+
+	// see if this frame is supporting a normal in-place object or
+	// a DocObject. DocObjects put scrollbars on the inside of the rect
+
+	UINT nAdjustType = CWnd::adjustBorder;
+	COleServerDoc* pDoc = (COleServerDoc*) GetActiveDocument();
+	if (pDoc != NULL)
+	{
+		ASSERT_VALID(pDoc);
+		if (pDoc->IsDocObject())
+			nAdjustType = CWnd::adjustOutside;
+	}
 
 	// first call reposition bars with arbitarily large rect just to
 	//  see how much space the bars will take up
@@ -389,7 +411,7 @@ void COleIPFrameWnd::RecalcLayout(BOOL /*bNotify*/)
 	}
 
 	// adjust for non-client area on the frame window
-	CalcWindowRect(&rect, CWnd::adjustOutside);
+	CalcWindowRect(&rect, nAdjustType);
 
 	// the frame window must be clipped to the visible part in the container
 	CRect rectVis;
@@ -564,17 +586,12 @@ BOOL COleIPFrameWnd::BuildSharedMenu()
 		return TRUE;
 
 	// insert our menu popups amongst the container menus
-	AfxMergeMenus(CMenu::FromHandle(m_hSharedMenu),
-		CMenu::FromHandle(hMenu), &m_menuWidths.width[0], 1);
+	AfxMergeMenus(m_hSharedMenu, hMenu, &m_menuWidths.width[0], 1);
 
-#ifndef _MAC
 	// finally create the special OLE menu descriptor
 	m_hOleMenu = ::OleCreateMenuDescriptor(m_hSharedMenu, &m_menuWidths);
 
 	return m_hOleMenu != NULL;
-#else
-	return TRUE;
-#endif
 }
 
 void COleIPFrameWnd::DestroySharedMenu()
@@ -591,7 +608,7 @@ void COleIPFrameWnd::DestroySharedMenu()
 		return;
 
 	// remove our menu popups from the shared menu
-	AfxUnmergeMenus(CMenu::FromHandle(m_hSharedMenu), CMenu::FromHandle(hMenu));
+	AfxUnmergeMenus(m_hSharedMenu, hMenu);
 
 	// allow container to remove its items from the menu
 	ASSERT(m_lpFrame != NULL);
@@ -601,13 +618,11 @@ void COleIPFrameWnd::DestroySharedMenu()
 	::DestroyMenu(m_hSharedMenu);
 	m_hSharedMenu = NULL;
 
-#ifndef _MAC
 	if (m_hOleMenu != NULL)
 	{
 		VERIFY(::OleDestroyMenuDescriptor(m_hOleMenu) == S_OK);
 		m_hOleMenu = NULL;
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////

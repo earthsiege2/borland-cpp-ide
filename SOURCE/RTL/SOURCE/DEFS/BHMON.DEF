@@ -1,0 +1,6 @@
+LIBRARY BHMON
+EXPORTS
+
+    BhClosePerformanceData                   = 'BHMON.DLL'.*
+    BhCollectPerformanceData                 = 'BHMON.DLL'.*
+    BhOpenPerformanceData                    = 'BHMON.DLL'.*

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,12 +22,18 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-static const UINT nMsgLBSELCHANGE = ::RegisterWindowMessage(LBSELCHSTRING);
-static const UINT nMsgSHAREVI = ::RegisterWindowMessage(SHAREVISTRING);
-static const UINT nMsgFILEOK = ::RegisterWindowMessage(FILEOKSTRING);
-static const UINT nMsgCOLOROK = ::RegisterWindowMessage(COLOROKSTRING);
-static const UINT nMsgHELP = ::RegisterWindowMessage(HELPMSGSTRING);
-const UINT _afxNMsgSETRGB = ::RegisterWindowMessage(SETRGBSTRING);
+AFX_COMDAT UINT _afxMsgLBSELCHANGE = 0;
+AFX_COMDAT UINT _afxMsgSHAREVI = 0;
+AFX_COMDAT UINT _afxMsgFILEOK = 0;
+AFX_COMDAT UINT _afxMsgCOLOROK = 0;
+AFX_COMDAT UINT _afxMsgHELP = 0;
+AFX_COMDAT UINT _afxMsgSETRGB = 0;
+
+BEGIN_MESSAGE_MAP(CCommonDialog, CDialog)
+	//{{AFX_MSG_MAP(CCommonDialog)
+	ON_WM_HELPINFO()
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
 
 UINT CALLBACK
 _AfxCommDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -35,7 +41,7 @@ _AfxCommDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (hWnd == NULL)
 		return 0;
 
-	_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
+	_AFX_THREAD_STATE* pThreadState = _afxThreadState.GetData();
 	if (pThreadState->m_pAlternateWndInit != NULL)
 	{
 		ASSERT_KINDOF(CFileDialog,pThreadState->m_pAlternateWndInit);
@@ -45,9 +51,17 @@ _AfxCommDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	ASSERT(pThreadState->m_pAlternateWndInit == NULL);
 
 	if (message == WM_INITDIALOG)
+	{
+		_afxMsgLBSELCHANGE = ::RegisterWindowMessage(LBSELCHSTRING);
+		_afxMsgSHAREVI = ::RegisterWindowMessage(SHAREVISTRING);
+		_afxMsgFILEOK = ::RegisterWindowMessage(FILEOKSTRING);
+		_afxMsgCOLOROK = ::RegisterWindowMessage(COLOROKSTRING);
+		_afxMsgHELP = ::RegisterWindowMessage(HELPMSGSTRING);
+		_afxMsgSETRGB = ::RegisterWindowMessage(SETRGBSTRING);
 		return (UINT)AfxDlgProc(hWnd, message, wParam, lParam);
+	}
 
-	if (message == nMsgHELP ||
+	if (message == _afxMsgHELP ||
 	   (message == WM_COMMAND && LOWORD(wParam) == pshHelp))
 	{
 		// just translate the message into the AFX standard help command.
@@ -78,12 +92,12 @@ _AfxCommDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	// while in these handlers
 
 	// Dispatch special commdlg messages through our virtual callbacks
-	if (message == nMsgSHAREVI)
+	if (message == _afxMsgSHAREVI)
 	{
 		ASSERT_KINDOF(CFileDialog, pDlg);
 		return ((CFileDialog*)pDlg)->OnShareViolation((LPCTSTR)lParam);
 	}
-	else if (message == nMsgFILEOK)
+	else if (message == _afxMsgFILEOK)
 	{
 		ASSERT_KINDOF(CFileDialog, pDlg);
 
@@ -96,19 +110,19 @@ _AfxCommDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		return bResult;
 	}
-	else if (message == nMsgLBSELCHANGE)
+	else if (message == _afxMsgLBSELCHANGE)
 	{
 		ASSERT_KINDOF(CFileDialog, pDlg);
 		((CFileDialog*)pDlg)->OnLBSelChangedNotify(wParam, LOWORD(lParam),
 				HIWORD(lParam));
 		return 0;
 	}
-	else if (message == nMsgCOLOROK)
+	else if (message == _afxMsgCOLOROK)
 	{
 		ASSERT_KINDOF(CColorDialog, pDlg);
 		return ((CColorDialog*)pDlg)->OnColorOK();
 	}
-	else if (message == _afxNMsgSETRGB)
+	else if (message == _afxMsgSETRGB)
 	{
 		// nothing to do here, since this is a SendMessage
 		return 0;
@@ -140,6 +154,11 @@ void CCommonDialog::OnCancel()
 
 	// Common dialogs do not require ::EndDialog
 	Default();
+}
+
+BOOL CCommonDialog::OnHelpInfo(HELPINFO*)
+{
+	return Default();
 }
 
 ////////////////////////////////////////////////////////////////////////////

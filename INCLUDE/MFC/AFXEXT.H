@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -44,6 +44,7 @@
 				class CStatusBar;       // status bar
 				class CToolBar;         // toolbar
 				class CDialogBar;       // dialog as control bar
+				class CReBar;           // ie40 dock bar
 
 			class CSplitterWnd;         // splitter manager
 
@@ -126,7 +127,11 @@ struct AFX_SIZEPARENTPARAMS;
 #define LM_LENGTHY  0x20    // Set if nLength is a Height instead of a Width
 #define LM_COMMIT   0x40    // Remember MRUWidth
 
+#ifdef _AFXDLL
 class CControlBar : public CWnd
+#else
+class AFX_NOVTABLE CControlBar : public CWnd
+#endif
 {
 	DECLARE_DYNAMIC(CControlBar)
 // Construction
@@ -142,6 +147,11 @@ public:
 	void SetBarStyle(DWORD dwStyle);
 
 	BOOL m_bAutoDelete;
+
+	// getting and setting border space
+	void SetBorders(LPCRECT lpRect);
+	void SetBorders(int cxLeft = 0, int cyTop = 0, int cxRight = 0, int cyBottom = 0);
+	CRect GetBorders() const;
 
 	CFrameWnd* GetDockingFrame() const;
 	BOOL IsFloating() const;
@@ -174,9 +184,6 @@ public:
 	int m_cyTopBorder, m_cyBottomBorder;
 	int m_cxDefaultGap;         // default gap value
 	UINT m_nMRUWidth;   // For dynamic resizing.
-#ifdef _MAC
-	BOOL m_bMonochrome;         // whether to draw in monochrome or color
-#endif
 
 	// array of elements
 	int m_nCount;
@@ -200,6 +207,7 @@ public:
 
 	virtual void DoPaint(CDC* pDC);
 	void DrawBorders(CDC* pDC, CRect& rect);
+	void DrawGripper(CDC* pDC, const CRect& rect);
 
 	// implementation helpers
 	virtual LRESULT WindowProc(UINT nMsg, WPARAM wParam, LPARAM lParam);
@@ -209,10 +217,6 @@ public:
 	void ResetTimer(UINT nEvent, UINT nTime);
 	void EraseNonClient();
 
-#ifdef _MAC
-	void OnReposition();
-	BOOL CheckMonochrome();
-#endif
 	void GetBarInfo(CControlBarInfo* pInfo);
 	void SetBarInfo(CControlBarInfo* pInfo, CFrameWnd* pFrameWnd);
 
@@ -231,13 +235,6 @@ public:
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint pt);
 	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT nMsg);
 	//}}AFX_MSG
-#ifdef _MAC
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg LRESULT OnMacintosh(WPARAM wParam, LPARAM lParam);
-	afx_msg void OnSysColorChange();
-	afx_msg void OnMove(int x, int y);
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-#endif
 	DECLARE_MESSAGE_MAP()
 
 	friend class CFrameWnd;
@@ -260,10 +257,16 @@ public:
 	BOOL Create(CWnd* pParentWnd,
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | CBRS_BOTTOM,
 		UINT nID = AFX_IDW_STATUS_BAR);
+	BOOL CreateEx(CWnd* pParentWnd, DWORD dwCtrlStyle = 0,
+		DWORD dwStyle = WS_CHILD | WS_VISIBLE | CBRS_BOTTOM,
+		UINT nID = AFX_IDW_STATUS_BAR);
 	BOOL SetIndicators(const UINT* lpIDArray, int nIDCount);
 
 // Attributes
 public:
+	void SetBorders(LPCRECT lpRect);
+	void SetBorders(int cxLeft = 0, int cyTop = 0, int cxRight = 0, int cyBottom = 0);
+
 	// standard control bar things
 	int CommandToIndex(UINT nIDFind) const;
 	UINT GetItemID(int nIndex) const;
@@ -347,6 +350,10 @@ public:
 	BOOL Create(CWnd* pParentWnd,
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | CBRS_TOP,
 		UINT nID = AFX_IDW_TOOLBAR);
+	BOOL CreateEx(CWnd* pParentWnd, DWORD dwCtrlStyle = TBSTYLE_FLAT,
+		DWORD dwStyle = WS_CHILD | WS_VISIBLE | CBRS_ALIGN_TOP,
+		CRect rcBorders = CRect(0, 0, 0, 0),
+		UINT nID = AFX_IDW_TOOLBAR);
 
 	void SetSizes(SIZE sizeButton, SIZE sizeImage);
 		// button size should be bigger than image
@@ -413,6 +420,7 @@ protected:
 	CSize CalcSize(TBBUTTON* pData, int nCount);
 	int WrapToolBar(TBBUTTON* pData, int nCount, int nWidth);
 	void SizeToolBar(TBBUTTON* pData, int nCount, int nLength, BOOL bVert = FALSE);
+	void Layout(); // called for for delayed button layout
 
 	//{{AFX_MSG(CToolBar)
 	afx_msg UINT OnNcHitTest(CPoint);
@@ -423,10 +431,13 @@ protected:
 	afx_msg void OnSysColorChange();
 	afx_msg LRESULT OnSetButtonSize(WPARAM, LPARAM);
 	afx_msg LRESULT OnSetBitmapSize(WPARAM, LPARAM);
+	afx_msg LRESULT OnPreserveZeroBorderHelper(WPARAM, LPARAM);
 	afx_msg BOOL OnNcCreate(LPCREATESTRUCT);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+
+	LRESULT OnSetSizeHelper(CSize& size, LPARAM lParam);
 };
 
 // Styles for toolbar buttons
@@ -435,6 +446,9 @@ protected:
 #define TBBS_CHECKBOX   MAKELONG(TBSTYLE_CHECK, 0)  // this is an auto check button
 #define TBBS_GROUP      MAKELONG(TBSTYLE_GROUP, 0)  // marks the start of a group
 #define TBBS_CHECKGROUP (TBBS_GROUP|TBBS_CHECKBOX)  // normal use of TBBS_GROUP
+#define TBBS_DROPDOWN   MAKELONG(TBSTYLE_DROPDOWN, 0) // drop down style
+#define TBBS_AUTOSIZE   MAKELONG(TBSTYLE_AUTOSIZE, 0) // autocalc button width
+#define TBBS_NOPREFIX   MAKELONG(TBSTYLE_NOPREFIX, 0) // no accel prefix for this button
 
 // styles for display states
 #define TBBS_CHECKED    MAKELONG(0, TBSTATE_CHECKED)    // button is checked/down
@@ -443,6 +457,8 @@ protected:
 #define TBBS_INDETERMINATE  MAKELONG(0, TBSTATE_INDETERMINATE)  // third state
 #define TBBS_HIDDEN     MAKELONG(0, TBSTATE_HIDDEN) // button is hidden
 #define TBBS_WRAPPED    MAKELONG(0, TBSTATE_WRAP)   // button is wrapped at this point
+#define TBBS_ELLIPSES   MAKELONG(0, TBSTATE_ELIPSES)
+#define TBBS_MARKED     MAKELONG(0, TBSTATE_MARKED)
 
 ////////////////////////////////////////////
 // CDialogBar control
@@ -475,9 +491,66 @@ protected:
 	_AFX_OCC_DIALOG_INFO* m_pOccDialogInfo;
 	LPCTSTR m_lpszTemplateName;
 	virtual BOOL SetOccDialogInfo(_AFX_OCC_DIALOG_INFO* pOccDialogInfo);
-	afx_msg LRESULT HandleInitDialog(WPARAM, LPARAM);
+
+	//{{AFX_MSG(CDialogBar)
 	DECLARE_MESSAGE_MAP()
+	//}}AFX_MSG
+	afx_msg LRESULT HandleInitDialog(WPARAM, LPARAM);
 #endif
+};
+
+////////////////////////////////////////////
+// CReBar control
+
+class CReBarCtrl;
+
+class CReBar : public CControlBar
+{
+	DECLARE_DYNAMIC(CReBar)
+
+// Construction
+public:
+	CReBar();
+	BOOL Create(CWnd* pParentWnd, DWORD dwCtrlStyle = RBS_BANDBORDERS,
+		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_TOP,
+		UINT nID = AFX_IDW_REBAR);
+
+// Attributes
+public:
+	// for direct access to the underlying common control
+	CReBarCtrl& GetReBarCtrl() const;
+
+// Operations
+public:
+	BOOL AddBar(CWnd* pBar, LPCTSTR pszText = NULL, CBitmap* pbmp = NULL,
+		DWORD dwStyle = RBBS_GRIPPERALWAYS | RBBS_FIXEDBMP);
+	BOOL AddBar(CWnd* pBar, COLORREF clrFore, COLORREF clrBack,
+		LPCTSTR pszText = NULL, DWORD dwStyle = RBBS_GRIPPERALWAYS);
+
+// Implementation
+	virtual void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler);
+	virtual int OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
+	virtual CSize CalcFixedLayout(BOOL bStretch, BOOL bHorz);
+	virtual CSize CalcDynamicLayout(int nLength, DWORD nMode);
+#ifdef _DEBUG
+	void EnableDocking(DWORD dwDockStyle);
+#endif
+
+protected:
+	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+	BOOL _AddBar(CWnd* pBar, REBARBANDINFO* pRBBI);
+
+	//{{AFX_MSG(CReBar)
+	afx_msg BOOL OnNcCreate(LPCREATESTRUCT);
+	afx_msg void OnPaint();
+	afx_msg void OnHeightChange(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNcPaint();
+	afx_msg void OnNcCalcSize(BOOL, NCCALCSIZE_PARAMS*);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg LRESULT OnShowBand(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnRecalcParent();
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -567,7 +640,7 @@ public:
 	virtual void ActivateNext(BOOL bPrev = FALSE);
 	virtual BOOL DoKeyboardSplit();
 
-	// syncronized scrolling
+	// synchronized scrolling
 	virtual BOOL DoScroll(CView* pViewFrom, UINT nScrollCode,
 		BOOL bDoScroll = TRUE);
 	virtual BOOL DoScrollBy(CView* pViewFrom, CSize sizeScroll,
@@ -616,13 +689,13 @@ protected:
 
 	// implementation routines
 	BOOL CreateCommon(CWnd* pParentWnd, SIZE sizeMin, DWORD dwStyle, UINT nID);
-	int HitTest(CPoint pt) const;
-	void GetInsideRect(CRect& rect) const;
-	void GetHitRect(int ht, CRect& rect);
-	void TrackRowSize(int y, int row);
-	void TrackColumnSize(int x, int col);
-	void DrawAllSplitBars(CDC* pDC, int cxInside, int cyInside);
-	void SetSplitCursor(int ht);
+	virtual int HitTest(CPoint pt) const;
+	virtual void GetInsideRect(CRect& rect) const;
+	virtual void GetHitRect(int ht, CRect& rect);
+	virtual void TrackRowSize(int y, int row);
+	virtual void TrackColumnSize(int x, int col);
+	virtual void DrawAllSplitBars(CDC* pDC, int cxInside, int cyInside);
+	virtual void SetSplitCursor(int ht);
 	CWnd* GetSizingParent();
 
 	// starting and stopping tracking
@@ -645,6 +718,7 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpcs);
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnDisplayChange();
@@ -720,9 +794,7 @@ public:
 	// presentation attributes
 	CFont* GetPrinterFont() const;
 	void SetPrinterFont(CFont* pFont);
-#ifndef _MAC
 	void SetTabStops(int nTabStops);
-#endif
 
 	// other attributes
 	void GetSelectedText(CString& strResult) const;
@@ -765,9 +837,7 @@ public:
 		// maximum number of characters supported
 
 protected:
-#ifndef _MAC
 	int m_nTabStops;            // tab stops in dialog units
-#endif
 	LPTSTR m_pShadowBuffer;     // special shadow buffer only used in Win32s
 	UINT m_nShadowSize;
 
@@ -827,16 +897,12 @@ class CMetaFileDC : public CDC
 public:
 	CMetaFileDC();
 	BOOL Create(LPCTSTR lpszFilename = NULL);
-#ifndef _MAC
 	BOOL CreateEnhanced(CDC* pDCRef, LPCTSTR lpszFileName,
 		LPCRECT lpBounds, LPCTSTR lpszDescription);
-#endif
 
 // Operations
 	HMETAFILE Close();
-#ifndef _MAC
 	HENHMETAFILE CloseEnhanced();
-#endif
 
 // Implementation
 public:
@@ -963,6 +1029,7 @@ struct CPrintInfo // Printing information structure
 
 	CPrintDialog* m_pPD;     // pointer to print dialog
 
+	BOOL m_bDocObject;       // TRUE if printing by IPrint interface
 	BOOL m_bPreview;         // TRUE if in preview mode
 	BOOL m_bDirect;          // TRUE if bypassing Print Dialog
 	BOOL m_bContinuePrinting;// set to FALSE to prematurely end printing
@@ -972,12 +1039,17 @@ struct CPrintInfo // Printing information structure
 	LPVOID m_lpUserData;     // pointer to user created struct
 	CRect m_rectDraw;        // rectangle defining current usable page area
 
+	// these only valid if m_bDocObject
+	UINT m_nOffsetPage;      // offset of first page in combined IPrint job
+	DWORD m_dwFlags;         // flags passed to IPrint::Print
+
 	void SetMinPage(UINT nMinPage);
 	void SetMaxPage(UINT nMaxPage);
 	UINT GetMinPage() const;
 	UINT GetMaxPage() const;
 	UINT GetFromPage() const;
 	UINT GetToPage() const;
+	UINT GetOffsetPage() const;
 };
 
 struct CPrintPreviewState   // Print Preview context/state
@@ -1019,7 +1091,7 @@ struct CCreateContext   // Creation information structure
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXEXT_INLINE inline
+#define _AFXEXT_INLINE AFX_INLINE
 #include <afxext.inl>
 #endif
 

@@ -1,6 +1,6 @@
-# BFCOLE.MAK - Borland makefile for BFCO40*.DLL
+# BFCOLE.MAK - Borland makefile for BFCO42*.DLL
 #
-# BFCO40[D].DLL is a DLL
+# BFCO42[D].DLL is a DLL
 #  which exports all the MFC/OLE classes
 #
 
@@ -10,7 +10,7 @@ DBGINFO=0
 !endif
 
 !ifndef LIBNAME
-LIBNAME=BFCO40
+LIBNAME=BFCO42
 !endif
 
 !if "$(DEBUG)" != "0"
@@ -19,13 +19,19 @@ CRTDLL=cw32mti.lib
 CRTDLL=cw32mti.lib
 !endif
 
+!if "$(CG)" == "1"
+CGLIB=cg32.lib
+!else
+CGLIB=
+!endif
+
 TARGET=w
 DLL=2
 TARG=$(LIBNAME)
 TARGDEFS=/D_AFX_OLE_IMPL
-MFCDLL=BFC40
-LFLAGS=/n /m /s /w-inq $(LFLAGS)
-RCFLAGS=@brcc32.cfg $(RCFLAGS)
+MFCDLL=BFC42
+LFLAGS= /n /m /s $(LFLAGS)
+RCFLAGS=-I$(BCINCL);$(MFCINCL)
 
 !if "$(DBGINFO)" != "0"
 LFLAGS=$(LFLAGS) /v
@@ -34,7 +40,7 @@ LFLAGS=$(LFLAGS) /v
 !if "$(DEBUG)" != "0"
 # Debug DLL build
 RCDEFINES=/D_DEBUG
-PCH_FILE=stdafxo.csm
+PCH_FILE=$(D)\stdafxo.csm
 PCH_CPP=dllole
 TARG=$(TARG)D
 MFCDLL=$(MFCDLL)D
@@ -43,7 +49,7 @@ MFCDLL=$(MFCDLL)D
 # Release DLL build
 RCDEFINES=
 LFLAGS=$(LFLAGS)
-PCH_FILE=stdafxo.csm
+PCH_FILE=$(D)\stdafxo.csm
 PCH_CPP=dllole
 !ENDIF
 
@@ -58,8 +64,6 @@ LFLAGS=$(LFLAGS) /release
 
 LFLAGS=$(LFLAGS) /Tpd
 
-LIBS=$(MFCDLL) $(CRTDLL) ole2w32.lib import32.lib
-
 bfcole_goal: dll_goal
 
 #############################################################################
@@ -69,27 +73,37 @@ bfcole_goal: dll_goal
 
 dll_goal: create.dir create.rsp $(TARG).dll $(LIBDIR)\$(TARG).lib
 
+
+#############################################################################
+# Define linker libs
+
+LIBS=$(CGLIB) $(MFCDLL) $(CRTDLL) ole2w32.lib $(IMPORT_LIBS)
+
 #############################################################################
 # Build target
 
-$D\$(TARG).res: mfcole.rc build_.h
-	brcc32 $(RCFLAGS) $(RCDEFINES) /fo $D\$(TARG).res mfcole.rc
+$(D)\$(TARG).res: mfcole.rc build_.h
+	brcc32 $(RCFLAGS) $(RCDEFINES) /fo $(D)\$(TARG).res mfcole.rc
 
 DLL_OBJS=$(OLEDLL)
 
-$(TARG).dll:: $(DEFFILE) $D\$(TARG).res $(MRC_RESOURCES)
+$(DEFFILE): $(DLL_OBJS)
+	$(GENDEFS) $(TARG) $(D)\ > $(DEFFILE)
 
-$(TARG).dll:: $(PCH_CPP).obj $(DLL_OBJS)
-	tlink32 @&&!
+$(TARG).dll:: $(DEFFILE) $(D)\$(TARG).res $(MRC_RESOURCES)
+
+#$(TARG).dll:: $(PCH_CPP).obj $(DLL_OBJS)
+$(TARG).dll:: $(PCH_TARGETS).obj $(DLL_OBJS)
+	$(LINK32) @&&!
 $(LFLAGS) +
 C0D32.OBJ +
 $(**: = +^
 )
 $(TARG).DLL
-$D\$(TARG).MAP
+$(D)\$(TARG).MAP
 $(LIBS)
 $(DEFFILE)
-$D\$(TARG).res
+$(D)\$(TARG).res
 !
 
 $(LIBDIR)\$(TARG).lib: $(TARG).dll

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -8,7 +8,9 @@
 // See these sources for detailed information regarding the
 // Microsoft Foundation Classes product.
 
+#ifdef _AFXDLL
 #include "stdafx.h"
+#endif
 #include <afxisapi.h>
 
 // Note: because of the nature of these functions, it is not possible
@@ -22,6 +24,10 @@ extern "C" {
 // Intel 386 version
 
 #ifdef _X86_
+
+#ifdef AFX_INET_SEG
+#pragma code_seg(AFX_INET_SEG)
+#endif
 
 __declspec(naked) void AFXISAPI
 _AfxParseCall(AFX_PISAPICMD /*pfn*/, void* /*pArgs*/, UINT /*nSizeArgs*/)
@@ -73,32 +79,6 @@ _AfxParseCall(AFX_PMSG /*pfn*/, void* /*pArgs*/, UINT /*nSizeArgs*/)
 //  must be build separately with the ASAXP assembler.
 
 #endif // _ALPHA_
-
-/////////////////////////////////////////////////////////////////////////////
-// 680x0 version
-
-#ifdef _68K_
-
-// Note: Mac68k version is in src\m68k\inetcal_.obj
-
-// The 68k compiler does not support inline assembly, so it
-//  has been build separate and included as an object
-
-
-#endif // _68K_
-
-/////////////////////////////////////////////////////////////////////////////
-// PowerMac version
-
-#ifdef _MPPC_
-
-// Note: MacPPC version is in src\mppc\inetcal_.obj
-
-// The Mac PowerPC compiler does not support inline assembly, so it
-//  has been build separate and included as an object
-
-#endif // _MPPC_
-
 
 } // end extern "C" block
 

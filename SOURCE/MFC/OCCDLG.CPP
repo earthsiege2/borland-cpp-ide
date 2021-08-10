@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -29,19 +29,19 @@ static char THIS_FILE[] = __FILE__;
 #define WS_TYPEMASK 0xC0000000
 #define BS_TYPEMASK 0x0000000F
 
-inline DWORD TestStyle(CWnd* pWnd, DWORD dwStyle)
+static inline DWORD TestStyle(CWnd* pWnd, DWORD dwStyle)
 	{ return GetWindowLong(pWnd->m_hWnd, GWL_STYLE) & dwStyle; }
 
-inline DWORD TestExStyle(CWnd* pWnd, DWORD dwExStyle)
+static inline DWORD TestExStyle(CWnd* pWnd, DWORD dwExStyle)
 	{ return GetWindowLong(pWnd->m_hWnd, GWL_EXSTYLE) & dwExStyle; }
 
-inline BOOL HasChildStyle(CWnd* pWnd)
+static inline BOOL HasChildStyle(CWnd* pWnd)
 	{ return TestStyle(pWnd, WS_TYPEMASK) == WS_CHILD; }
 
-inline BOOL IsControlParent(CWnd* pWnd)
+static inline BOOL IsControlParent(CWnd* pWnd)
 	{ return TestExStyle(pWnd, WS_EX_CONTROLPARENT); }
 
-static DWORD GetDlgCode(CWnd* pWnd, LPMSG lpMsg=NULL)
+AFX_STATIC DWORD AFXAPI _AfxGetDlgCode(CWnd* pWnd, LPMSG lpMsg=NULL)
 {
 	if (pWnd == NULL)
 		return 0;
@@ -52,17 +52,17 @@ static DWORD GetDlgCode(CWnd* pWnd, LPMSG lpMsg=NULL)
 		wParam, (LPARAM)(LPMSG)lpMsg);
 }
 
-static void AFX_CDECL DlgSetFocus(CWnd* pWnd)
+AFX_STATIC void AFXAPI _AfxDlgSetFocus(CWnd* pWnd)
 {
 	// Select all text in an edit control.
-	if (GetDlgCode(pWnd) & DLGC_HASSETSEL)
-		pWnd->SendMessage(EM_SETSEL, 0, MAKELPARAM(0, 0xFFFE));
+	if (_AfxGetDlgCode(pWnd) & DLGC_HASSETSEL)
+		pWnd->SendMessage(EM_SETSEL, 0, -1);
 
 	// Set focus as normal.
 	pWnd->SetFocus();
 }
 
-static CWnd* AFX_CDECL GetChildControl(CWnd* pWndRoot, CWnd* pWndChild)
+AFX_STATIC CWnd* AFXAPI _AfxGetChildControl(CWnd* pWndRoot, CWnd* pWndChild)
 {
 	CWnd* pWndControl = NULL;
 
@@ -75,11 +75,10 @@ static CWnd* AFX_CDECL GetChildControl(CWnd* pWndRoot, CWnd* pWndChild)
 		if (IsControlParent(pWndChild))
 			break;
 	}
-
 	return pWndControl;
 }
 
-static CWnd* AFX_CDECL NextControl(CWnd* pWndRoot, CWnd* pWndStart, UINT uFlags)
+AFX_STATIC CWnd* AFXAPI _AfxNextControl(CWnd* pWndRoot, CWnd* pWndStart, UINT uFlags)
 {
 	// if pWndStart is already equal to pWndRoot, this confuses this function
 	// badly.
@@ -101,7 +100,7 @@ FirstChild:
 		{
 			// Popup to previous real ancestor.  pWndStart will be NULL,
 			// pWndRoot, or the child of a recursive dialog.
-			pWndStart = GetChildControl(pWndRoot, pWndStart->GetParent());
+			pWndStart = _AfxGetChildControl(pWndRoot, pWndStart->GetParent());
 			if ((pWndStart == NULL) || (pWndStart == pWndRoot))
 			{
 				goto FirstChild;
@@ -117,9 +116,9 @@ Found:
 	{
 		if (((uFlags & CWP_SKIPINVISIBLE) && !pWndStart->IsWindowVisible()) ||
 			((uFlags & CWP_SKIPDISABLED) && !pWndStart->IsWindowEnabled()))
-			pWndStart = NextControl(pWndRoot, pWndStart, uFlags);
+			pWndStart = _AfxNextControl(pWndRoot, pWndStart, uFlags);
 		else
-			pWndStart = NextControl(pWndStart, NULL, uFlags);
+			pWndStart = _AfxNextControl(pWndStart, NULL, uFlags);
 	}
 
 	return pWndStart;
@@ -131,14 +130,14 @@ BOOL AFX_CDECL COccManager::IsMatchingMnemonic(CWnd* pWnd, LPMSG lpMsg)
 		pWnd->m_pCtrlSite->IsMatchingMnemonic(lpMsg);
 }
 
-static CWnd* AFX_CDECL FindNextMnem(CWnd* pWndDlg, CWnd* pWnd, LPMSG lpMsg)
+AFX_STATIC CWnd* AFXAPI _AfxFindNextMnem(CWnd* pWndDlg, CWnd* pWnd, LPMSG lpMsg)
 {
 	CWnd* pWndStart;
 	CWnd* pWndT;
 	int i = 0;
 
 	// Check if we are in a group box so we can find local mnemonics.
-	pWndStart = GetChildControl(pWndDlg, pWnd);
+	pWndStart = _AfxGetChildControl(pWndDlg, pWnd);
 
 	while ((pWndT = pWndDlg->GetNextDlgGroupItem(pWndStart)) != NULL)
 	{
@@ -154,11 +153,11 @@ static CWnd* AFX_CDECL FindNextMnem(CWnd* pWndDlg, CWnd* pWnd, LPMSG lpMsg)
 			return pWndT;
 	}
 
-	pWnd = pWndStart = GetChildControl(pWndDlg, pWnd);
+	pWnd = pWndStart = _AfxGetChildControl(pWndDlg, pWnd);
 
 	while (TRUE)
 	{
-		pWnd = NextControl(pWndDlg, pWnd, CWP_SKIPINVISIBLE | CWP_SKIPDISABLED);
+		pWnd = _AfxNextControl(pWndDlg, pWnd, CWP_SKIPINVISIBLE | CWP_SKIPDISABLED);
 
 		if (COccManager::IsMatchingMnemonic(pWnd, lpMsg))
 			break;
@@ -176,7 +175,7 @@ BOOL AFX_CDECL COccManager::IsLabelControl(CWnd* pWnd)
 		pWnd->m_pCtrlSite->m_dwMiscStatus & OLEMISC_ACTSLIKELABEL;
 }
 
-static CWnd* AFX_CDECL GetNextMnem(CWnd* pWndDlg, CWnd* pWnd, LPMSG lpMsg)
+AFX_STATIC CWnd* AFXAPI _AfxGetNextMnem(CWnd* pWndDlg, CWnd* pWnd, LPMSG lpMsg)
 {
 	CWnd* pWndFirstFound = NULL;
 
@@ -184,7 +183,7 @@ static CWnd* AFX_CDECL GetNextMnem(CWnd* pWndDlg, CWnd* pWnd, LPMSG lpMsg)
 	for (int count = 0; count < 256*2; count++)
 	{
 		// If the dialog box doesn't has the mnemonic specified, return NULL.
-		if ((pWnd = FindNextMnem(pWndDlg, pWnd, lpMsg)) == NULL)
+		if ((pWnd = _AfxFindNextMnem(pWndDlg, pWnd, lpMsg)) == NULL)
 			return NULL;
 
 		// If a non-disabled static item, then jump ahead to nearest tabstop.
@@ -239,7 +238,7 @@ void AFX_CDECL COccManager::UIActivateControl(CWnd* pWndNewFocus)
 void AFX_CDECL COccManager::UIDeactivateIfNecessary(CWnd* pWndOldFocus,
 	CWnd* pWndNewFocus)
 {
-	if (pWndOldFocus == NULL)
+	if (pWndOldFocus == NULL || !::IsWindow(pWndOldFocus->m_hWnd))
 		return;
 
 	// Find the nearest control container in the window parent chain.
@@ -278,7 +277,7 @@ void AFX_CDECL COccManager::UIDeactivateIfNecessary(CWnd* pWndOldFocus,
 	pCtrlCont->OnUIActivate(NULL);
 }
 
-CWnd* AFX_CDECL FindDlgItem(CWnd* pWndParent, DWORD id)
+CWnd* AFXAPI _AfxFindDlgItem(CWnd* pWndParent, DWORD id)
 {
 	CWnd* pWndChild;
 	CWnd* pWndOrig;
@@ -288,7 +287,7 @@ CWnd* AFX_CDECL FindDlgItem(CWnd* pWndParent, DWORD id)
 	if (pWndChild != NULL)
 		return pWndChild;
 
-	pWndOrig = NextControl(pWndParent, NULL, CWP_SKIPINVISIBLE);
+	pWndOrig = _AfxNextControl(pWndParent, NULL, CWP_SKIPINVISIBLE);
 	if (pWndOrig == pWndParent)
 		return NULL;
 
@@ -299,7 +298,7 @@ CWnd* AFX_CDECL FindDlgItem(CWnd* pWndParent, DWORD id)
 		if ((DWORD)pWndChild->GetDlgCtrlID() == id)
 			return(pWndChild);
 
-		pWndChild = NextControl(pWndParent, pWndChild, CWP_SKIPINVISIBLE);
+		pWndChild = _AfxNextControl(pWndParent, pWndChild, CWP_SKIPINVISIBLE);
 	}
 	while ((pWndChild != NULL) && (pWndChild != pWndOrig));
 
@@ -314,7 +313,7 @@ void COccManager::SetDefaultButton(CWnd* pWnd, BOOL bDefault)
 	}
 	else
 	{
-		DWORD code = GetDlgCode(pWnd);
+		DWORD code = _AfxGetDlgCode(pWnd);
 		if (code & (bDefault ? DLGC_UNDEFPUSHBUTTON : DLGC_DEFPUSHBUTTON))
 			pWnd->SendMessage(BM_SETSTYLE,
 				(WPARAM)(bDefault ? BS_DEFPUSHBUTTON : BS_PUSHBUTTON),
@@ -330,15 +329,15 @@ DWORD AFX_CDECL COccManager::GetDefBtnCode(CWnd* pWnd)
 	if (pWnd->m_pCtrlSite != NULL)
 		return pWnd->m_pCtrlSite->GetDefBtnCode();
 
-	return GetDlgCode(pWnd) & (DLGC_UNDEFPUSHBUTTON | DLGC_DEFPUSHBUTTON);
+	return _AfxGetDlgCode(pWnd) & (DLGC_UNDEFPUSHBUTTON | DLGC_DEFPUSHBUTTON);
 }
 
-static void AFX_CDECL RemoveDefaultButton(CWnd* pWndRoot, CWnd* pWndStart)
+AFX_STATIC void AFXAPI _AfxRemoveDefaultButton(CWnd* pWndRoot, CWnd* pWndStart)
 {
 	if ((pWndStart == NULL) || IsControlParent(pWndStart))
-		pWndStart = NextControl(pWndRoot, NULL, CWP_SKIPINVISIBLE | CWP_SKIPDISABLED);
+		pWndStart = _AfxNextControl(pWndRoot, NULL, CWP_SKIPINVISIBLE | CWP_SKIPDISABLED);
 	else
-		pWndStart = GetChildControl(pWndRoot, pWndStart);
+		pWndStart = _AfxGetChildControl(pWndRoot, pWndStart);
 
 	if (pWndStart == NULL)
 		return;
@@ -349,19 +348,19 @@ static void AFX_CDECL RemoveDefaultButton(CWnd* pWndRoot, CWnd* pWndStart)
 	do
 	{
 		COccManager::SetDefaultButton(pWnd, FALSE);
-		pWndNext = NextControl(pWndRoot, pWnd, 0);
+		pWndNext = _AfxNextControl(pWndRoot, pWnd, 0);
 		pWnd = pWndNext;
 	}
 	while ((pWnd != NULL) && (pWnd != pWndStart));
 }
 
-static int AFX_CDECL OriginalDefButton(CWnd* pWndRoot)
+AFX_STATIC int AFXAPI _AfxOriginalDefButton(CWnd* pWndRoot)
 {
 	LRESULT lResult = pWndRoot->SendMessage(DM_GETDEFID, 0, 0L);
 	return HIWORD(lResult) == DC_HASDEFID ? LOWORD(lResult) : IDOK;
 }
 
-static void AFX_CDECL CheckDefPushButton(CWnd* pWndRoot, CWnd* pWndOldFocus,
+AFX_STATIC void AFXAPI _AfxCheckDefPushButton(CWnd* pWndRoot, CWnd* pWndOldFocus,
 	CWnd* pWndNewFocus)
 {
 	DWORD code = 0;
@@ -389,12 +388,12 @@ static void AFX_CDECL CheckDefPushButton(CWnd* pWndRoot, CWnd* pWndOldFocus,
 		{
 			if (pWndOldFocus != NULL)
 			{
-				pWndOldFocus = FindDlgItem(pWndRoot, OriginalDefButton(pWndRoot));
+				pWndOldFocus = _AfxFindDlgItem(pWndRoot, _AfxOriginalDefButton(pWndRoot));
 				if ((pWndOldFocus != NULL) && (pWndOldFocus != pWndNewFocus))
 				{
 					if (COccManager::GetDefBtnCode(pWndOldFocus) & DLGC_DEFPUSHBUTTON)
 					{
-						RemoveDefaultButton(pWndRoot, pWndOldFocus);
+						_AfxRemoveDefaultButton(pWndRoot, pWndOldFocus);
 						goto SetNewDefault;
 					}
 				}
@@ -410,12 +409,12 @@ static void AFX_CDECL CheckDefPushButton(CWnd* pWndRoot, CWnd* pWndOldFocus,
 	if (((pWndOldFocus != NULL) && (COccManager::GetDefBtnCode(pWndOldFocus) != 0)) ||
 		((pWndNewFocus != NULL) && (code != 0)))
 	{
-		RemoveDefaultButton(pWndRoot, pWndNewFocus);
+		_AfxRemoveDefaultButton(pWndRoot, pWndNewFocus);
 	}
 
 SetNewDefault:
 	// If moving to a button, make that button the default.
-	if (code & DLGC_UNDEFPUSHBUTTON)
+	if (code & (DLGC_UNDEFPUSHBUTTON | DLGC_DEFPUSHBUTTON))
 	{
 		COccManager::SetDefaultButton(pWndNewFocus, TRUE);
 	}
@@ -424,7 +423,7 @@ SetNewDefault:
 		// Otherwise, make sure the original default button is default
 
 		// Get the original default button
-		pWndT = FindDlgItem(pWndRoot, OriginalDefButton(pWndRoot));
+		pWndT = _AfxFindDlgItem(pWndRoot, _AfxOriginalDefButton(pWndRoot));
 
 		if ((COccManager::GetDefBtnCode(pWndT) & DLGC_UNDEFPUSHBUTTON) &&
 			pWndT->IsWindowEnabled())
@@ -441,17 +440,38 @@ BOOL COccManager::IsDialogMessage(CWnd* pWndDlg, LPMSG lpMsg)
 
 	CWnd* pWndFocus = CWnd::GetFocus();
 	HWND hWndFocus = pWndFocus->GetSafeHwnd();
+	HWND hWndDlg = pWndDlg->GetSafeHwnd();
 	UINT uMsg = lpMsg->message;
 
 	if (((uMsg >= WM_KEYFIRST) && (uMsg <= WM_KEYLAST)) ||
 		((uMsg >= WM_MOUSEFIRST) && (uMsg <= WM_MOUSELAST)))
 	{
-		if ((pWndFocus != NULL) && (pWndFocus->m_pCtrlSite != NULL) &&
-			(pWndFocus->m_pCtrlSite->m_pActiveObject != NULL) &&
-			(pWndFocus->m_pCtrlSite->m_pActiveObject->TranslateAccelerator(
-				lpMsg) == S_OK))
+		CWnd* pWndCtrl = pWndFocus;
+
+		// Walk up the parent chain, until we find an OLE control.
+		while ((pWndCtrl != NULL) && (pWndCtrl->m_pCtrlSite == NULL) &&
+			(pWndCtrl->GetParent() != pWndDlg))
+		{
+			pWndCtrl = pWndCtrl->GetParent();
+		}
+
+		// let the control attempt to translate the message
+		if (pWndCtrl != NULL && pWndCtrl->m_pCtrlSite != NULL &&
+			pWndCtrl->m_pCtrlSite->m_pActiveObject != NULL &&
+			pWndCtrl->m_pCtrlSite->m_pActiveObject->TranslateAccelerator(lpMsg) == S_OK)
 		{
 			return TRUE;
+		}
+
+		// handle CTRLINFO_EATS_RETURN and CTRLINFO_EATS_ESCAPE flags
+		if ((uMsg == WM_KEYUP || uMsg == WM_KEYDOWN || uMsg == WM_CHAR) &&
+			pWndCtrl != NULL && pWndCtrl->m_pCtrlSite != NULL &&
+			((LOWORD(lpMsg->wParam) == VK_RETURN &&
+			 (pWndCtrl->m_pCtrlSite->m_ctlInfo.dwFlags & CTRLINFO_EATS_RETURN)) ||
+			(LOWORD(lpMsg->wParam) == VK_ESCAPE &&
+			 (pWndCtrl->m_pCtrlSite->m_ctlInfo.dwFlags & CTRLINFO_EATS_ESCAPE))))
+		{
+			return FALSE;
 		}
 	}
 
@@ -479,23 +499,22 @@ BOOL COccManager::IsDialogMessage(CWnd* pWndDlg, LPMSG lpMsg)
 		if (pWndMsg == pWndDlg)
 			return TRUE;
 
-		code = GetDlgCode(pWndMsg, lpMsg);
+		code = _AfxGetDlgCode(pWndMsg, lpMsg);
 
 		// If the control wants to process the message, then don't check
 		// for possible mnemonic key.
-		if ((lpMsg->message == WM_CHAR) &&
-				(code & (DLGC_WANTCHARS | DLGC_WANTMESSAGE)))
+		if (uMsg == WM_CHAR && (code & (DLGC_WANTCHARS|DLGC_WANTMESSAGE)))
 			break;
 
 		// If the control wants tabs, then don't let tab fall thru here
-		if ((LOWORD(lpMsg->wParam) == VK_TAB) && (code & DLGC_WANTTAB))
+		if (LOWORD(lpMsg->wParam) == VK_TAB && (code & DLGC_WANTTAB))
 			break;
 
 		// Don't handle space as a mnemonic
 		if (LOWORD(lpMsg->wParam) == VK_SPACE)
 			return TRUE;
 
-		if ((pWndNext = GetNextMnem(pWndDlg, pWndMsg, lpMsg)) != NULL)
+		if ((pWndNext = _AfxGetNextMnem(pWndDlg, pWndMsg, lpMsg)) != NULL)
 		{
 			if (pWndNext->m_pCtrlSite != NULL)
 			{
@@ -507,7 +526,7 @@ BOOL COccManager::IsDialogMessage(CWnd* pWndDlg, LPMSG lpMsg)
 		break;
 
 	case WM_KEYDOWN:
-		code = GetDlgCode(pWndMsg, lpMsg);
+		code = _AfxGetDlgCode(pWndMsg, lpMsg);
 		switch (LOWORD(lpMsg->wParam))
 		{
 		case VK_TAB:
@@ -519,7 +538,7 @@ BOOL COccManager::IsDialogMessage(CWnd* pWndDlg, LPMSG lpMsg)
 
 			if (pWndNext != NULL)
 			{
-				DlgSetFocus(pWndNext);
+				_AfxDlgSetFocus(pWndNext);
 				UIDeactivateIfNecessary(pWndFocus, pWndNext);
 			}
 
@@ -533,13 +552,13 @@ BOOL COccManager::IsDialogMessage(CWnd* pWndDlg, LPMSG lpMsg)
 
 		case VK_RIGHT:
 		case VK_DOWN:
-			if (GetDlgCode(pWndFocus, lpMsg) & DLGC_WANTARROWS)
+			if (_AfxGetDlgCode(pWndFocus, lpMsg) & DLGC_WANTARROWS)
 				break;
 
 			pWndNext = pWndDlg->GetNextDlgGroupItem(pWndFocus, bBack);
 			if ((pWndNext != NULL) && (pWndNext->m_pCtrlSite != NULL))
 			{
-				DlgSetFocus(pWndNext);
+				_AfxDlgSetFocus(pWndNext);
 				bResult = TRUE;
 			}
 			break;
@@ -554,33 +573,35 @@ BOOL COccManager::IsDialogMessage(CWnd* pWndDlg, LPMSG lpMsg)
 			}
 			else
 			{
-				iOK = OriginalDefButton(pWndDlg);
+				iOK = _AfxOriginalDefButton(pWndDlg);
 			}
 			// FALL THRU
 
 		case VK_ESCAPE:
 		case VK_CANCEL:
 			if (pWndNext == NULL)
-				pWndNext = FindDlgItem(pWndDlg, iOK);
+			{
+				pWndNext = _AfxFindDlgItem(pWndDlg, iOK);
+				if (pWndNext == NULL)
+					break;
+			}
+			ASSERT(pWndNext != NULL);
 
 			// Make sure button is not disabled.
-			if ((pWndNext != NULL) && !pWndNext->IsWindowEnabled())
+			if (!pWndNext->IsWindowEnabled())
 			{
 				MessageBeep(0);
 			}
-			else
+			else if (pWndNext->m_pCtrlSite != NULL)
 			{
-				if ((pWndNext != NULL) && (pWndNext->m_pCtrlSite != NULL))
+				// "push" the pWndNext control.
+				TRY
 				{
-					TRY
-					{
-						pWndNext->InvokeHelper(DISPID_DOCLICK, DISPATCH_METHOD,
-							VT_EMPTY, NULL, VTS_NONE);
-					}
-					END_TRY
-
-					bResult = TRUE;
+					pWndNext->InvokeHelper(DISPID_DOCLICK, DISPATCH_METHOD,
+						VT_EMPTY, NULL, VTS_NONE);
 				}
+				END_TRY
+				bResult = TRUE;
 			}
 			break;
 		}
@@ -598,8 +619,11 @@ BOOL COccManager::IsDialogMessage(CWnd* pWndDlg, LPMSG lpMsg)
 	if (::IsWindow(hWndFocus))
 	{
 		UIDeactivateIfNecessary(pWndFocus, CWnd::GetFocus());
-		CheckDefPushButton(pWndDlg, pWndFocus, CWnd::GetFocus());
+		if (::IsWindow(hWndDlg))
+			_AfxCheckDefPushButton(pWndDlg, pWndFocus, CWnd::GetFocus());
 	}
 
 	return bResult;
 }
+
+/////////////////////////////////////////////////////////////////////////////

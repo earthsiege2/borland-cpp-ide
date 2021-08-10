@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -31,7 +31,6 @@
 #endif
 
 #ifndef _AFX_NOFORCE_LIBS
-#ifndef _MAC
 
 /////////////////////////////////////////////////////////////////////////////
 // Win32 libraries
@@ -39,21 +38,15 @@
 #ifdef _AFXDLL
 	#if defined(_DEBUG) && !defined(_AFX_MONOLITHIC)
 		#ifndef _UNICODE
-			#pragma comment(lib, "mfcn40d.lib")
+			#pragma comment(lib, "mfcn42d.lib")
 		#else
-			#pragma comment(lib, "mfcn40ud.lib")
+			#pragma comment(lib, "mfcn42ud.lib")
 		#endif
 	#endif
 #endif
 
 #pragma comment(lib, "wsock32.lib")
 
-#else //!_MAC
-
-/////////////////////////////////////////////////////////////////////////////
-// Mac libraries
-
-#endif //_MAC
 #endif //!_AFX_NOFORCE_LIBS
 
 /////////////////////////////////////////////////////////////////////////////
@@ -264,6 +257,8 @@ public:
 	int SendChunk(const void* lpBuf, int nBufLen, int nFlags);
 
 protected:
+	friend class CSocketWnd;
+
 	BOOL* m_pbBlocking;
 	int m_nConnectError;
 
@@ -335,7 +330,7 @@ void AFXAPI AfxSocketTerm();
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXSOCK_INLINE inline
+#define _AFXSOCK_INLINE AFX_INLINE
 #include <afxsock.inl>
 #undef _AFXSOCK_INLINE
 #endif

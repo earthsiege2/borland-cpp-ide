@@ -8,12 +8,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -34,7 +35,7 @@ Description     _mbscspn scans str1,and counts the number of characters
                 of str2.
 
                 If the second byte of 2-bytes character is null,
-                that character is regarded as null.  
+                that character is regarded as null.
 
 Return value    _mbscspn searchs str2 until any one of the characters
                 contained in str1 is found. The number of characters which

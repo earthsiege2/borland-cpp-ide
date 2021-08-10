@@ -1,36 +1,42 @@
-#pragma option -b
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
+
+#pragma warning( disable: 4049 )  /* more than 64k source lines */
+
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
-/* File created by MIDL compiler version 3.00.39 */
-/* at Sat Jul 13 21:56:58 1996
+ /* File created by MIDL compiler version 5.03.0279 */
+/* at Fri Jul 30 19:37:23 1999
  */
-/* Compiler settings for c:\oa\src\idl\ocidl.idl:
-    Oic (OptLev=i1), W1, Zp8, env=Win32, ms_ext, c_ext
+/* Compiler settings for ocidl.idl:
+    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
+    VC __declspec() decoration level: 
+         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
+         DECLSPEC_UUID(), MIDL_INTERFACE()
 */
 //@@MIDL_FILE_HEADING(  )
-#pragma option -b.
+
+
+/* verify that the <rpcndr.h> version is high enough to compile this file*/
+#ifndef __REQUIRED_RPCNDR_H_VERSION__
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
+#endif
+
 #include "rpc.h"
-#pragma option -b
-#pragma option -b.
 #include "rpcndr.h"
-#pragma option -b
+
+#ifndef __RPCNDR_H_VERSION__
+#error this stub requires an updated version of <rpcndr.h>
+#endif // __RPCNDR_H_VERSION__
+
 #ifndef COM_NO_WINDOWS_H
-#pragma option -b.
 #include "windows.h"
-#pragma option -b
-#pragma option -b.
 #include "ole2.h"
-#pragma option -b
 #endif /*COM_NO_WINDOWS_H*/
 
 #ifndef __ocidl_h__
 #define __ocidl_h__
-
-#ifdef __cplusplus
-extern "C"{
-#endif 
 
 /* Forward Declarations */ 
 
@@ -74,6 +80,12 @@ typedef interface IProvideClassInfo IProvideClassInfo;
 #define __IProvideClassInfo2_FWD_DEFINED__
 typedef interface IProvideClassInfo2 IProvideClassInfo2;
 #endif 	/* __IProvideClassInfo2_FWD_DEFINED__ */
+
+
+#ifndef __IProvideMultipleClassInfo_FWD_DEFINED__
+#define __IProvideMultipleClassInfo_FWD_DEFINED__
+typedef interface IProvideMultipleClassInfo IProvideMultipleClassInfo;
+#endif 	/* __IProvideMultipleClassInfo_FWD_DEFINED__ */
 
 
 #ifndef __IOleControl_FWD_DEFINED__
@@ -154,6 +166,12 @@ typedef interface IPicture IPicture;
 #endif 	/* __IPicture_FWD_DEFINED__ */
 
 
+#ifndef __IFontEventsDisp_FWD_DEFINED__
+#define __IFontEventsDisp_FWD_DEFINED__
+typedef interface IFontEventsDisp IFontEventsDisp;
+#endif 	/* __IFontEventsDisp_FWD_DEFINED__ */
+
+
 #ifndef __IFontDisp_FWD_DEFINED__
 #define __IFontDisp_FWD_DEFINED__
 typedef interface IFontDisp IFontDisp;
@@ -164,12 +182,6 @@ typedef interface IFontDisp IFontDisp;
 #define __IPictureDisp_FWD_DEFINED__
 typedef interface IPictureDisp IPictureDisp;
 #endif 	/* __IPictureDisp_FWD_DEFINED__ */
-
-
-#ifndef __IAdviseSinkEx_FWD_DEFINED__
-#define __IAdviseSinkEx_FWD_DEFINED__
-typedef interface IAdviseSinkEx IAdviseSinkEx;
-#endif 	/* __IAdviseSinkEx_FWD_DEFINED__ */
 
 
 #ifndef __IOleInPlaceObjectWindowless_FWD_DEFINED__
@@ -220,12 +232,6 @@ typedef interface IOleUndoManager IOleUndoManager;
 #endif 	/* __IOleUndoManager_FWD_DEFINED__ */
 
 
-#ifndef __IQuickActivate_FWD_DEFINED__
-#define __IQuickActivate_FWD_DEFINED__
-typedef interface IQuickActivate IQuickActivate;
-#endif 	/* __IQuickActivate_FWD_DEFINED__ */
-
-
 #ifndef __IPointerInactive_FWD_DEFINED__
 #define __IPointerInactive_FWD_DEFINED__
 typedef interface IPointerInactive IPointerInactive;
@@ -238,49 +244,61 @@ typedef interface IObjectWithSite IObjectWithSite;
 #endif 	/* __IObjectWithSite_FWD_DEFINED__ */
 
 
-#ifndef __IErrorLog_FWD_DEFINED__
-#define __IErrorLog_FWD_DEFINED__
-typedef interface IErrorLog IErrorLog;
-#endif 	/* __IErrorLog_FWD_DEFINED__ */
-
-
-#ifndef __IPropertyBag_FWD_DEFINED__
-#define __IPropertyBag_FWD_DEFINED__
-typedef interface IPropertyBag IPropertyBag;
-#endif 	/* __IPropertyBag_FWD_DEFINED__ */
-
-
 #ifndef __IPerPropertyBrowsing_FWD_DEFINED__
 #define __IPerPropertyBrowsing_FWD_DEFINED__
 typedef interface IPerPropertyBrowsing IPerPropertyBrowsing;
 #endif 	/* __IPerPropertyBrowsing_FWD_DEFINED__ */
 
 
+#ifndef __IPropertyBag2_FWD_DEFINED__
+#define __IPropertyBag2_FWD_DEFINED__
+typedef interface IPropertyBag2 IPropertyBag2;
+#endif 	/* __IPropertyBag2_FWD_DEFINED__ */
+
+
+#ifndef __IPersistPropertyBag2_FWD_DEFINED__
+#define __IPersistPropertyBag2_FWD_DEFINED__
+typedef interface IPersistPropertyBag2 IPersistPropertyBag2;
+#endif 	/* __IPersistPropertyBag2_FWD_DEFINED__ */
+
+
+#ifndef __IAdviseSinkEx_FWD_DEFINED__
+#define __IAdviseSinkEx_FWD_DEFINED__
+typedef interface IAdviseSinkEx IAdviseSinkEx;
+#endif 	/* __IAdviseSinkEx_FWD_DEFINED__ */
+
+
+#ifndef __IQuickActivate_FWD_DEFINED__
+#define __IQuickActivate_FWD_DEFINED__
+typedef interface IQuickActivate IQuickActivate;
+#endif 	/* __IQuickActivate_FWD_DEFINED__ */
+
+
 /* header files for imported files */
-#pragma option -b.
 #include "oleidl.h"
-#pragma option -b
-#pragma option -b.
 #include "oaidl.h"
-#pragma option -b
+#include "servprov.h"
+#include "urlmon.h"
+
+#ifdef __cplusplus
+extern "C"{
+#endif 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface __MIDL_itf_ocidl_0000 */
 /* [local] */ 
-
 
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1996.
+//  Copyright (C) Microsoft Corporation, 1993-1999.
 //
 //--------------------------------------------------------------------------
+#if ( _MSC_VER >= 1020 )
+#pragma once
+#endif
 
 
 
@@ -320,19 +338,18 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 
 
-extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
+
+
+
+
+extern RPC_IF_HANDLE __MIDL_itf_ocidl_0000_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_ocidl_0000_v0_0_s_ifspec;
 
 #ifndef __IOleControlTypes_INTERFACE_DEFINED__
 #define __IOleControlTypes_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleControlTypes
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleControlTypes */
 /* [auto_handle][unique][version] */ 
-
 
 typedef /* [v1_enum] */ 
 enum tagUASFLAGS
@@ -352,57 +369,6 @@ enum tagREADYSTATE
 	READYSTATE_COMPLETE	= 4
     }	READYSTATE;
 
-typedef /* [represent_as] */ struct  tagUserHWND
-    {
-    wireHWND pRemHwnd;
-    }	UserHWND;
-
-typedef /* [represent_as] */ struct tagUserHWND UserHACCEL;
-
-typedef /* [represent_as] */ struct tagUserHWND UserHDC;
-
-typedef /* [represent_as] */ struct tagUserHWND UserHFONT;
-
-typedef /* [represent_as] */ struct  tagUserMSG
-    {
-    wireHWND pRemHwnd;
-    UINT message;
-    WPARAM wParam;
-    LPARAM lParam;
-    DWORD time;
-    POINT pt;
-    }	UserMSG;
-
-typedef /* [represent_as] */ struct  tagUserBSTR
-    {
-    wireBSTR pBstrBlob;
-    }	UserBSTR;
-
-typedef struct  tagVARIANT_BLOB
-    {
-    DWORD clSize;
-    DWORD rpcReserved;
-    /* [size_is] */ ULONGLONG ahData[ 1 ];
-    }	__RPC_FAR *wireVARIANT_BLOB;
-
-typedef /* [represent_as] */ struct  tagUserVARIANT
-    {
-    wireVARIANT_BLOB pVarBlob;
-    }	UserVARIANT;
-
-typedef /* [represent_as] */ struct  tagUserEXCEPINFO
-    {
-    WORD wCode;
-    WORD wReserved;
-    wireBSTR bstrSource;
-    wireBSTR bstrDescription;
-    wireBSTR bstrHelpFile;
-    DWORD dwHelpContext;
-    ULONG pvReserved;
-    ULONG pfnDeferredFillIn;
-    SCODE scode;
-    }	UserEXCEPINFO;
-
 
 
 extern RPC_IF_HANDLE IOleControlTypes_v1_0_c_ifspec;
@@ -412,19 +378,14 @@ extern RPC_IF_HANDLE IOleControlTypes_v1_0_s_ifspec;
 #ifndef __IEnumConnections_INTERFACE_DEFINED__
 #define __IEnumConnections_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumConnections
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IEnumConnections */
 /* [unique][uuid][object] */ 
-
 
 typedef IEnumConnections __RPC_FAR *PENUMCONNECTIONS;
 
 typedef IEnumConnections __RPC_FAR *LPENUMCONNECTIONS;
 
-typedef struct  tagCONNECTDATA
+typedef struct tagCONNECTDATA
     {
     IUnknown __RPC_FAR *pUnk;
     DWORD dwCookie;
@@ -439,7 +400,8 @@ EXTERN_C const IID IID_IEnumConnections;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IEnumConnections : public IUnknown
+    MIDL_INTERFACE("B196B287-BAB4-101A-B69C-00AA00341D07")
+    IEnumConnections : public IUnknown
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
@@ -589,13 +551,8 @@ void __RPC_STUB IEnumConnections_Clone_Stub(
 #ifndef __IConnectionPoint_INTERFACE_DEFINED__
 #define __IConnectionPoint_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IConnectionPoint
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IConnectionPoint */
 /* [unique][uuid][object] */ 
-
 
 typedef IConnectionPoint __RPC_FAR *PCONNECTIONPOINT;
 
@@ -606,7 +563,8 @@ EXTERN_C const IID IID_IConnectionPoint;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IConnectionPoint : public IUnknown
+    MIDL_INTERFACE("B196B286-BAB4-101A-B69C-00AA00341D07")
+    IConnectionPoint : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetConnectionInterface( 
@@ -778,13 +736,8 @@ void __RPC_STUB IConnectionPoint_EnumConnections_Stub(
 #ifndef __IEnumConnectionPoints_INTERFACE_DEFINED__
 #define __IEnumConnectionPoints_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumConnectionPoints
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IEnumConnectionPoints */
 /* [unique][uuid][object] */ 
-
 
 typedef IEnumConnectionPoints __RPC_FAR *PENUMCONNECTIONPOINTS;
 
@@ -795,7 +748,8 @@ EXTERN_C const IID IID_IEnumConnectionPoints;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IEnumConnectionPoints : public IUnknown
+    MIDL_INTERFACE("B196B285-BAB4-101A-B69C-00AA00341D07")
+    IEnumConnectionPoints : public IUnknown
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
@@ -945,13 +899,8 @@ void __RPC_STUB IEnumConnectionPoints_Clone_Stub(
 #ifndef __IConnectionPointContainer_INTERFACE_DEFINED__
 #define __IConnectionPointContainer_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IConnectionPointContainer
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IConnectionPointContainer */
 /* [unique][uuid][object] */ 
-
 
 typedef IConnectionPointContainer __RPC_FAR *PCONNECTIONPOINTCONTAINER;
 
@@ -962,7 +911,8 @@ EXTERN_C const IID IID_IConnectionPointContainer;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IConnectionPointContainer : public IUnknown
+    MIDL_INTERFACE("B196B284-BAB4-101A-B69C-00AA00341D07")
+    IConnectionPointContainer : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumConnectionPoints( 
@@ -1068,17 +1018,12 @@ void __RPC_STUB IConnectionPointContainer_FindConnectionPoint_Stub(
 #ifndef __IClassFactory2_INTERFACE_DEFINED__
 #define __IClassFactory2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IClassFactory2
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IClassFactory2 */
 /* [unique][uuid][object] */ 
-
 
 typedef IClassFactory2 __RPC_FAR *LPCLASSFACTORY2;
 
-typedef struct  tagLICINFO
+typedef struct tagLICINFO
     {
     LONG cbLicInfo;
     BOOL fRuntimeKeyAvail;
@@ -1092,7 +1037,8 @@ EXTERN_C const IID IID_IClassFactory2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IClassFactory2 : public IClassFactory
+    MIDL_INTERFACE("B196B28F-BAB4-101A-B69C-00AA00341D07")
+    IClassFactory2 : public IClassFactory
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetLicInfo( 
@@ -1247,13 +1193,8 @@ void __RPC_STUB IClassFactory2_RemoteCreateInstanceLic_Stub(
 #ifndef __IProvideClassInfo_INTERFACE_DEFINED__
 #define __IProvideClassInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IProvideClassInfo
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IProvideClassInfo */
 /* [unique][uuid][object] */ 
-
 
 typedef IProvideClassInfo __RPC_FAR *LPPROVIDECLASSINFO;
 
@@ -1262,7 +1203,8 @@ EXTERN_C const IID IID_IProvideClassInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IProvideClassInfo : public IUnknown
+    MIDL_INTERFACE("B196B283-BAB4-101A-B69C-00AA00341D07")
+    IProvideClassInfo : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassInfo( 
@@ -1343,13 +1285,8 @@ void __RPC_STUB IProvideClassInfo_GetClassInfo_Stub(
 #ifndef __IProvideClassInfo2_INTERFACE_DEFINED__
 #define __IProvideClassInfo2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IProvideClassInfo2
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IProvideClassInfo2 */
 /* [unique][uuid][object] */ 
-
 
 typedef IProvideClassInfo2 __RPC_FAR *LPPROVIDECLASSINFO2;
 
@@ -1363,7 +1300,8 @@ EXTERN_C const IID IID_IProvideClassInfo2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IProvideClassInfo2 : public IProvideClassInfo
+    MIDL_INTERFACE("A6BC3AC0-DBAA-11CE-9DE3-00AA004BB851")
+    IProvideClassInfo2 : public IProvideClassInfo
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetGUID( 
@@ -1452,20 +1390,169 @@ void __RPC_STUB IProvideClassInfo2_GetGUID_Stub(
 #endif 	/* __IProvideClassInfo2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IProvideMultipleClassInfo_INTERFACE_DEFINED__
+#define __IProvideMultipleClassInfo_INTERFACE_DEFINED__
+
+/* interface IProvideMultipleClassInfo */
+/* [unique][uuid][object] */ 
+
+#define MULTICLASSINFO_GETTYPEINFO           0x00000001
+#define MULTICLASSINFO_GETNUMRESERVEDDISPIDS 0x00000002
+#define MULTICLASSINFO_GETIIDPRIMARY         0x00000004
+#define MULTICLASSINFO_GETIIDSOURCE          0x00000008
+#define TIFLAGS_EXTENDDISPATCHONLY           0x00000001
+typedef IProvideMultipleClassInfo __RPC_FAR *LPPROVIDEMULTIPLECLASSINFO;
+
+
+EXTERN_C const IID IID_IProvideMultipleClassInfo;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("A7ABA9C1-8983-11cf-8F20-00805F2CD064")
+    IProvideMultipleClassInfo : public IProvideClassInfo2
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetMultiTypeInfoCount( 
+            /* [out] */ ULONG __RPC_FAR *pcti) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetInfoOfIndex( 
+            /* [in] */ ULONG iti,
+            /* [in] */ DWORD dwFlags,
+            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptiCoClass,
+            /* [out] */ DWORD __RPC_FAR *pdwTIFlags,
+            /* [out] */ ULONG __RPC_FAR *pcdispidReserved,
+            /* [out] */ IID __RPC_FAR *piidPrimary,
+            /* [out] */ IID __RPC_FAR *piidSource) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IProvideMultipleClassInfoVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IProvideMultipleClassInfo __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IProvideMultipleClassInfo __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IProvideMultipleClassInfo __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassInfo )( 
+            IProvideMultipleClassInfo __RPC_FAR * This,
+            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTI);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGUID )( 
+            IProvideMultipleClassInfo __RPC_FAR * This,
+            /* [in] */ DWORD dwGuidKind,
+            /* [out] */ GUID __RPC_FAR *pGUID);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMultiTypeInfoCount )( 
+            IProvideMultipleClassInfo __RPC_FAR * This,
+            /* [out] */ ULONG __RPC_FAR *pcti);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoOfIndex )( 
+            IProvideMultipleClassInfo __RPC_FAR * This,
+            /* [in] */ ULONG iti,
+            /* [in] */ DWORD dwFlags,
+            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptiCoClass,
+            /* [out] */ DWORD __RPC_FAR *pdwTIFlags,
+            /* [out] */ ULONG __RPC_FAR *pcdispidReserved,
+            /* [out] */ IID __RPC_FAR *piidPrimary,
+            /* [out] */ IID __RPC_FAR *piidSource);
+        
+        END_INTERFACE
+    } IProvideMultipleClassInfoVtbl;
+
+    interface IProvideMultipleClassInfo
+    {
+        CONST_VTBL struct IProvideMultipleClassInfoVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IProvideMultipleClassInfo_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IProvideMultipleClassInfo_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IProvideMultipleClassInfo_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IProvideMultipleClassInfo_GetClassInfo(This,ppTI)	\
+    (This)->lpVtbl -> GetClassInfo(This,ppTI)
+
+
+#define IProvideMultipleClassInfo_GetGUID(This,dwGuidKind,pGUID)	\
+    (This)->lpVtbl -> GetGUID(This,dwGuidKind,pGUID)
+
+
+#define IProvideMultipleClassInfo_GetMultiTypeInfoCount(This,pcti)	\
+    (This)->lpVtbl -> GetMultiTypeInfoCount(This,pcti)
+
+#define IProvideMultipleClassInfo_GetInfoOfIndex(This,iti,dwFlags,pptiCoClass,pdwTIFlags,pcdispidReserved,piidPrimary,piidSource)	\
+    (This)->lpVtbl -> GetInfoOfIndex(This,iti,dwFlags,pptiCoClass,pdwTIFlags,pcdispidReserved,piidPrimary,piidSource)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IProvideMultipleClassInfo_GetMultiTypeInfoCount_Proxy( 
+    IProvideMultipleClassInfo __RPC_FAR * This,
+    /* [out] */ ULONG __RPC_FAR *pcti);
+
+
+void __RPC_STUB IProvideMultipleClassInfo_GetMultiTypeInfoCount_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IProvideMultipleClassInfo_GetInfoOfIndex_Proxy( 
+    IProvideMultipleClassInfo __RPC_FAR * This,
+    /* [in] */ ULONG iti,
+    /* [in] */ DWORD dwFlags,
+    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptiCoClass,
+    /* [out] */ DWORD __RPC_FAR *pdwTIFlags,
+    /* [out] */ ULONG __RPC_FAR *pcdispidReserved,
+    /* [out] */ IID __RPC_FAR *piidPrimary,
+    /* [out] */ IID __RPC_FAR *piidSource);
+
+
+void __RPC_STUB IProvideMultipleClassInfo_GetInfoOfIndex_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IProvideMultipleClassInfo_INTERFACE_DEFINED__ */
+
+
 #ifndef __IOleControl_INTERFACE_DEFINED__
 #define __IOleControl_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleControl
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleControl */
 /* [unique][uuid][object] */ 
-
 
 typedef IOleControl __RPC_FAR *LPOLECONTROL;
 
-typedef struct  tagCONTROLINFO
+typedef struct tagCONTROLINFO
     {
     ULONG cb;
     HACCEL hAccel;
@@ -1486,7 +1573,8 @@ EXTERN_C const IID IID_IOleControl;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IOleControl : public IUnknown
+    MIDL_INTERFACE("B196B288-BAB4-101A-B69C-00AA00341D07")
+    IOleControl : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetControlInfo( 
@@ -1633,17 +1721,12 @@ void __RPC_STUB IOleControl_FreezeEvents_Stub(
 #ifndef __IOleControlSite_INTERFACE_DEFINED__
 #define __IOleControlSite_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleControlSite
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleControlSite */
 /* [unique][uuid][object] */ 
-
 
 typedef IOleControlSite __RPC_FAR *LPOLECONTROLSITE;
 
-typedef struct  tagPOINTF
+typedef struct tagPOINTF
     {
     FLOAT x;
     FLOAT y;
@@ -1656,7 +1739,8 @@ enum tagXFORMCOORDS
     {	XFORMCOORDS_POSITION	= 0x1,
 	XFORMCOORDS_SIZE	= 0x2,
 	XFORMCOORDS_HIMETRICTOCONTAINER	= 0x4,
-	XFORMCOORDS_CONTAINERTOHIMETRIC	= 0x8
+	XFORMCOORDS_CONTAINERTOHIMETRIC	= 0x8,
+	XFORMCOORDS_EVENTCOMPAT	= 0x10
     }	XFORMCOORDS;
 
 
@@ -1664,7 +1748,8 @@ EXTERN_C const IID IID_IOleControlSite;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IOleControlSite : public IUnknown
+    MIDL_INTERFACE("B196B289-BAB4-101A-B69C-00AA00341D07")
+    IOleControlSite : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnControlInfoChanged( void) = 0;
@@ -1880,17 +1965,12 @@ void __RPC_STUB IOleControlSite_ShowPropertyFrame_Stub(
 #ifndef __IPropertyPage_INTERFACE_DEFINED__
 #define __IPropertyPage_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPropertyPage
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPropertyPage */
 /* [unique][uuid][object] */ 
-
 
 typedef IPropertyPage __RPC_FAR *LPPROPERTYPAGE;
 
-typedef struct  tagPROPPAGEINFO
+typedef struct tagPROPPAGEINFO
     {
     ULONG cb;
     LPOLESTR pszTitle;
@@ -1907,7 +1987,8 @@ EXTERN_C const IID IID_IPropertyPage;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPropertyPage : public IUnknown
+    MIDL_INTERFACE("B196B28D-BAB4-101A-B69C-00AA00341D07")
+    IPropertyPage : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetPageSite( 
@@ -2208,13 +2289,8 @@ void __RPC_STUB IPropertyPage_TranslateAccelerator_Stub(
 #ifndef __IPropertyPage2_INTERFACE_DEFINED__
 #define __IPropertyPage2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPropertyPage2
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPropertyPage2 */
 /* [unique][uuid][object] */ 
-
 
 typedef IPropertyPage2 __RPC_FAR *LPPROPERTYPAGE2;
 
@@ -2223,7 +2299,8 @@ EXTERN_C const IID IID_IPropertyPage2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPropertyPage2 : public IPropertyPage
+    MIDL_INTERFACE("01E44665-24AC-101B-84ED-08002B2EC713")
+    IPropertyPage2 : public IPropertyPage
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EditProperty( 
@@ -2382,13 +2459,8 @@ void __RPC_STUB IPropertyPage2_EditProperty_Stub(
 #ifndef __IPropertyPageSite_INTERFACE_DEFINED__
 #define __IPropertyPageSite_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPropertyPageSite
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPropertyPageSite */
 /* [unique][uuid][object] */ 
-
 
 typedef IPropertyPageSite __RPC_FAR *LPPROPERTYPAGESITE;
 
@@ -2404,7 +2476,8 @@ EXTERN_C const IID IID_IPropertyPageSite;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPropertyPageSite : public IUnknown
+    MIDL_INTERFACE("B196B28C-BAB4-101A-B69C-00AA00341D07")
+    IPropertyPageSite : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStatusChange( 
@@ -2551,13 +2624,8 @@ void __RPC_STUB IPropertyPageSite_TranslateAccelerator_Stub(
 #ifndef __IPropertyNotifySink_INTERFACE_DEFINED__
 #define __IPropertyNotifySink_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPropertyNotifySink
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPropertyNotifySink */
 /* [unique][uuid][object] */ 
-
 
 typedef IPropertyNotifySink __RPC_FAR *LPPROPERTYNOTIFYSINK;
 
@@ -2566,7 +2634,8 @@ EXTERN_C const IID IID_IPropertyNotifySink;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPropertyNotifySink : public IUnknown
+    MIDL_INTERFACE("9BFBBC02-EFF1-101A-84ED-00AA00341D07")
+    IPropertyNotifySink : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnChanged( 
@@ -2669,17 +2738,12 @@ void __RPC_STUB IPropertyNotifySink_OnRequestEdit_Stub(
 #ifndef __ISpecifyPropertyPages_INTERFACE_DEFINED__
 #define __ISpecifyPropertyPages_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ISpecifyPropertyPages
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ISpecifyPropertyPages */
 /* [unique][uuid][object] */ 
-
 
 typedef ISpecifyPropertyPages __RPC_FAR *LPSPECIFYPROPERTYPAGES;
 
-typedef struct  tagCAUUID
+typedef struct tagCAUUID
     {
     ULONG cElems;
     /* [size_is] */ GUID __RPC_FAR *pElems;
@@ -2692,7 +2756,8 @@ EXTERN_C const IID IID_ISpecifyPropertyPages;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ISpecifyPropertyPages : public IUnknown
+    MIDL_INTERFACE("B196B28B-BAB4-101A-B69C-00AA00341D07")
+    ISpecifyPropertyPages : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPages( 
@@ -2773,13 +2838,8 @@ void __RPC_STUB ISpecifyPropertyPages_GetPages_Stub(
 #ifndef __IPersistMemory_INTERFACE_DEFINED__
 #define __IPersistMemory_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPersistMemory
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPersistMemory */
 /* [unique][uuid][object] */ 
-
 
 typedef IPersistMemory __RPC_FAR *LPPERSISTMEMORY;
 
@@ -2788,7 +2848,8 @@ EXTERN_C const IID IID_IPersistMemory;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPersistMemory : public IPersist
+    MIDL_INTERFACE("BD1AE5E0-A6AE-11CE-BD37-504200C10000")
+    IPersistMemory : public IPersist
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsDirty( void) = 0;
@@ -2798,7 +2859,7 @@ EXTERN_C const IID IID_IPersistMemory;
             /* [in] */ ULONG cbSize) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Save( 
-            /* [size_is][in] */ LPVOID pMem,
+            /* [size_is][out] */ LPVOID pMem,
             /* [in] */ BOOL fClearDirty,
             /* [in] */ ULONG cbSize) = 0;
         
@@ -2840,7 +2901,7 @@ EXTERN_C const IID IID_IPersistMemory;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
             IPersistMemory __RPC_FAR * This,
-            /* [size_is][in] */ LPVOID pMem,
+            /* [size_is][out] */ LPVOID pMem,
             /* [in] */ BOOL fClearDirty,
             /* [in] */ ULONG cbSize);
         
@@ -2926,7 +2987,7 @@ void __RPC_STUB IPersistMemory_RemoteLoad_Stub(
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IPersistMemory_RemoteSave_Proxy( 
     IPersistMemory __RPC_FAR * This,
-    /* [size_is][in] */ BYTE __RPC_FAR *pMem,
+    /* [size_is][out] */ BYTE __RPC_FAR *pMem,
     /* [in] */ BOOL fClearDirty,
     /* [in] */ ULONG cbSize);
 
@@ -2968,13 +3029,8 @@ void __RPC_STUB IPersistMemory_InitNew_Stub(
 #ifndef __IPersistStreamInit_INTERFACE_DEFINED__
 #define __IPersistStreamInit_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPersistStreamInit
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPersistStreamInit */
 /* [unique][uuid][object] */ 
-
 
 typedef IPersistStreamInit __RPC_FAR *LPPERSISTSTREAMINIT;
 
@@ -2983,7 +3039,8 @@ EXTERN_C const IID IID_IPersistStreamInit;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPersistStreamInit : public IPersist
+    MIDL_INTERFACE("7FD52380-4E07-101B-AE2D-08002B2EC713")
+    IPersistStreamInit : public IPersist
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsDirty( void) = 0;
@@ -3157,13 +3214,8 @@ void __RPC_STUB IPersistStreamInit_InitNew_Stub(
 #ifndef __IPersistPropertyBag_INTERFACE_DEFINED__
 #define __IPersistPropertyBag_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPersistPropertyBag
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPersistPropertyBag */
 /* [unique][uuid][object] */ 
-
 
 typedef IPersistPropertyBag __RPC_FAR *LPPERSISTPROPERTYBAG;
 
@@ -3172,7 +3224,8 @@ EXTERN_C const IID IID_IPersistPropertyBag;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPersistPropertyBag : public IPersist
+    MIDL_INTERFACE("37D84F60-42CB-11CE-8135-00AA004BB851")
+    IPersistPropertyBag : public IPersist
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitNew( void) = 0;
@@ -3311,13 +3364,8 @@ void __RPC_STUB IPersistPropertyBag_Save_Stub(
 #ifndef __ISimpleFrameSite_INTERFACE_DEFINED__
 #define __ISimpleFrameSite_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ISimpleFrameSite
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ISimpleFrameSite */
 /* [unique][uuid][object] */ 
-
 
 typedef ISimpleFrameSite __RPC_FAR *LPSIMPLEFRAMESITE;
 
@@ -3326,7 +3374,8 @@ EXTERN_C const IID IID_ISimpleFrameSite;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ISimpleFrameSite : public IUnknown
+    MIDL_INTERFACE("742B0E01-14E6-101B-914E-00AA00300CAB")
+    ISimpleFrameSite : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PreMessageFilter( 
@@ -3459,13 +3508,8 @@ void __RPC_STUB ISimpleFrameSite_PostMessageFilter_Stub(
 #ifndef __IFont_INTERFACE_DEFINED__
 #define __IFont_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IFont
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IFont */
 /* [unique][uuid][object] */ 
-
 
 typedef IFont __RPC_FAR *LPFONT;
 
@@ -3482,7 +3526,8 @@ EXTERN_C const IID IID_IFont;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IFont : public IUnknown
+    MIDL_INTERFACE("BEF6E002-A874-101A-8BBA-00AA00300CAB")
+    IFont : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_Name( 
@@ -4072,13 +4117,8 @@ void __RPC_STUB IFont_SetHdc_Stub(
 #ifndef __IPicture_INTERFACE_DEFINED__
 #define __IPicture_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPicture
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPicture */
 /* [unique][uuid][object] */ 
-
 
 typedef IPicture __RPC_FAR *LPPICTURE;
 
@@ -4103,7 +4143,8 @@ EXTERN_C const IID IID_IPicture;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPicture : public IUnknown
+    MIDL_INTERFACE("7BF80980-BF32-101A-8BBB-00AA00300CAB")
+    IPicture : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_Handle( 
@@ -4503,16 +4544,123 @@ void __RPC_STUB IPicture_get_Attributes_Stub(
 #endif 	/* __IPicture_INTERFACE_DEFINED__ */
 
 
+#ifndef __IFontEventsDisp_INTERFACE_DEFINED__
+#define __IFontEventsDisp_INTERFACE_DEFINED__
+
+/* interface IFontEventsDisp */
+/* [unique][uuid][object] */ 
+
+typedef IFontEventsDisp __RPC_FAR *LPFONTEVENTS;
+
+
+EXTERN_C const IID IID_IFontEventsDisp;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("4EF6100A-AF88-11D0-9846-00C04FC29993")
+    IFontEventsDisp : public IDispatch
+    {
+    public:
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IFontEventsDispVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IFontEventsDisp __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IFontEventsDisp __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IFontEventsDisp __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
+            IFontEventsDisp __RPC_FAR * This,
+            /* [out] */ UINT __RPC_FAR *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
+            IFontEventsDisp __RPC_FAR * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
+            IFontEventsDisp __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+            IFontEventsDisp __RPC_FAR * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
+            /* [out] */ VARIANT __RPC_FAR *pVarResult,
+            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
+            /* [out] */ UINT __RPC_FAR *puArgErr);
+        
+        END_INTERFACE
+    } IFontEventsDispVtbl;
+
+    interface IFontEventsDisp
+    {
+        CONST_VTBL struct IFontEventsDispVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IFontEventsDisp_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IFontEventsDisp_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IFontEventsDisp_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IFontEventsDisp_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IFontEventsDisp_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IFontEventsDisp_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IFontEventsDisp_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IFontEventsDisp_INTERFACE_DEFINED__ */
+
+
 #ifndef __IFontDisp_INTERFACE_DEFINED__
 #define __IFontDisp_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IFontDisp
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IFontDisp */
 /* [unique][uuid][object] */ 
-
 
 typedef IFontDisp __RPC_FAR *LPFONTDISP;
 
@@ -4521,7 +4669,8 @@ EXTERN_C const IID IID_IFontDisp;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IFontDisp : public IDispatch
+    MIDL_INTERFACE("BEF6E003-A874-101A-8BBA-00AA00300CAB")
+    IFontDisp : public IDispatch
     {
     public:
     };
@@ -4622,13 +4771,8 @@ EXTERN_C const IID IID_IFontDisp;
 #ifndef __IPictureDisp_INTERFACE_DEFINED__
 #define __IPictureDisp_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPictureDisp
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPictureDisp */
 /* [unique][uuid][object] */ 
-
 
 typedef IPictureDisp __RPC_FAR *LPPICTUREDISP;
 
@@ -4637,7 +4781,8 @@ EXTERN_C const IID IID_IPictureDisp;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPictureDisp : public IDispatch
+    MIDL_INTERFACE("7BF80981-BF32-101A-8BBB-00AA00300CAB")
+    IPictureDisp : public IDispatch
     {
     public:
     };
@@ -4735,148 +4880,11 @@ EXTERN_C const IID IID_IPictureDisp;
 #endif 	/* __IPictureDisp_INTERFACE_DEFINED__ */
 
 
-#ifndef __IAdviseSinkEx_INTERFACE_DEFINED__
-#define __IAdviseSinkEx_INTERFACE_DEFINED__
-
-/****************************************
- * Generated header for interface: IAdviseSinkEx
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
-/* [uuid][unique][object] */ 
-
-
-typedef IAdviseSinkEx __RPC_FAR *LPADVISESINKEX;
-
-
-EXTERN_C const IID IID_IAdviseSinkEx;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    interface IAdviseSinkEx : public IAdviseSink
-    {
-    public:
-        virtual /* [local] */ void STDMETHODCALLTYPE OnViewStatusChange( 
-            /* [in] */ DWORD dwViewStatus) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAdviseSinkExVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAdviseSinkEx __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAdviseSinkEx __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAdviseSinkEx __RPC_FAR * This);
-        
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnDataChange )( 
-            IAdviseSinkEx __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed);
-        
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnViewChange )( 
-            IAdviseSinkEx __RPC_FAR * This,
-            /* [in] */ DWORD dwAspect,
-            /* [in] */ LONG lindex);
-        
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnRename )( 
-            IAdviseSinkEx __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pmk);
-        
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnSave )( 
-            IAdviseSinkEx __RPC_FAR * This);
-        
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnClose )( 
-            IAdviseSinkEx __RPC_FAR * This);
-        
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnViewStatusChange )( 
-            IAdviseSinkEx __RPC_FAR * This,
-            /* [in] */ DWORD dwViewStatus);
-        
-        END_INTERFACE
-    } IAdviseSinkExVtbl;
-
-    interface IAdviseSinkEx
-    {
-        CONST_VTBL struct IAdviseSinkExVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAdviseSinkEx_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAdviseSinkEx_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAdviseSinkEx_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IAdviseSinkEx_OnDataChange(This,pFormatetc,pStgmed)	\
-    (This)->lpVtbl -> OnDataChange(This,pFormatetc,pStgmed)
-
-#define IAdviseSinkEx_OnViewChange(This,dwAspect,lindex)	\
-    (This)->lpVtbl -> OnViewChange(This,dwAspect,lindex)
-
-#define IAdviseSinkEx_OnRename(This,pmk)	\
-    (This)->lpVtbl -> OnRename(This,pmk)
-
-#define IAdviseSinkEx_OnSave(This)	\
-    (This)->lpVtbl -> OnSave(This)
-
-#define IAdviseSinkEx_OnClose(This)	\
-    (This)->lpVtbl -> OnClose(This)
-
-
-#define IAdviseSinkEx_OnViewStatusChange(This,dwViewStatus)	\
-    (This)->lpVtbl -> OnViewStatusChange(This,dwViewStatus)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-/* [async][call_as] */ void STDMETHODCALLTYPE IAdviseSinkEx_RemoteOnViewStatusChange_Proxy( 
-    IAdviseSinkEx __RPC_FAR * This,
-    /* [in] */ DWORD dwViewStatus);
-
-
-void __RPC_STUB IAdviseSinkEx_RemoteOnViewStatusChange_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IAdviseSinkEx_INTERFACE_DEFINED__ */
-
-
 #ifndef __IOleInPlaceObjectWindowless_INTERFACE_DEFINED__
 #define __IOleInPlaceObjectWindowless_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleInPlaceObjectWindowless
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleInPlaceObjectWindowless */
 /* [uuid][unique][object][local] */ 
-
 
 typedef IOleInPlaceObjectWindowless __RPC_FAR *LPOLEINPLACEOBJECTWINDOWLESS;
 
@@ -4885,7 +4893,8 @@ EXTERN_C const IID IID_IOleInPlaceObjectWindowless;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IOleInPlaceObjectWindowless : public IOleInPlaceObject
+    MIDL_INTERFACE("1C2056CC-5EF4-101B-8BC8-00AA003E3B29")
+    IOleInPlaceObjectWindowless : public IOleInPlaceObject
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnWindowMessage( 
@@ -5039,13 +5048,8 @@ void __RPC_STUB IOleInPlaceObjectWindowless_GetDropTarget_Stub(
 #ifndef __IOleInPlaceSiteEx_INTERFACE_DEFINED__
 #define __IOleInPlaceSiteEx_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleInPlaceSiteEx
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleInPlaceSiteEx */
 /* [uuid][unique][object] */ 
-
 
 typedef IOleInPlaceSiteEx __RPC_FAR *LPOLEINPLACESITEEX;
 
@@ -5059,7 +5063,8 @@ EXTERN_C const IID IID_IOleInPlaceSiteEx;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IOleInPlaceSiteEx : public IOleInPlaceSite
+    MIDL_INTERFACE("9C2CAD80-3424-11CF-B670-00AA004CD6D8")
+    IOleInPlaceSiteEx : public IOleInPlaceSite
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnInPlaceActivateEx( 
@@ -5268,13 +5273,8 @@ void __RPC_STUB IOleInPlaceSiteEx_RequestUIActivate_Stub(
 #ifndef __IOleInPlaceSiteWindowless_INTERFACE_DEFINED__
 #define __IOleInPlaceSiteWindowless_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleInPlaceSiteWindowless
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleInPlaceSiteWindowless */
 /* [uuid][unique][object][local] */ 
-
 
 typedef IOleInPlaceSiteWindowless __RPC_FAR *LPOLEINPLACESITEWINDOWLESS;
 
@@ -5290,7 +5290,8 @@ EXTERN_C const IID IID_IOleInPlaceSiteWindowless;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IOleInPlaceSiteWindowless : public IOleInPlaceSiteEx
+    MIDL_INTERFACE("922EADA0-3424-11CF-B670-00AA004CD6D8")
+    IOleInPlaceSiteWindowless : public IOleInPlaceSiteEx
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CanWindowlessActivate( void) = 0;
@@ -5740,13 +5741,8 @@ void __RPC_STUB IOleInPlaceSiteWindowless_OnDefWindowMessage_Stub(
 #ifndef __IViewObjectEx_INTERFACE_DEFINED__
 #define __IViewObjectEx_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IViewObjectEx
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IViewObjectEx */
 /* [uuid][unique][object][local] */ 
-
 
 typedef IViewObjectEx __RPC_FAR *LPVIEWOBJECTEX;
 
@@ -5755,7 +5751,9 @@ enum tagVIEWSTATUS
     {	VIEWSTATUS_OPAQUE	= 1,
 	VIEWSTATUS_SOLIDBKGND	= 2,
 	VIEWSTATUS_DVASPECTOPAQUE	= 4,
-	VIEWSTATUS_DVASPECTTRANSPARENT	= 8
+	VIEWSTATUS_DVASPECTTRANSPARENT	= 8,
+	VIEWSTATUS_SURFACE	= 16,
+	VIEWSTATUS_3DSURFACE	= 32
     }	VIEWSTATUS;
 
 typedef /* [v1_enum] */ 
@@ -5772,7 +5770,7 @@ enum tagDVASPECT2
 	DVASPECT_TRANSPARENT	= 32
     }	DVASPECT2;
 
-typedef struct  tagExtentInfo
+typedef struct tagExtentInfo
     {
     ULONG cb;
     DWORD dwExtentMode;
@@ -5790,7 +5788,7 @@ enum tagAspectInfoFlag
     {	DVASPECTINFOFLAG_CANOPTIMIZE	= 1
     }	DVASPECTINFOFLAG;
 
-typedef struct  tagAspectInfo
+typedef struct tagAspectInfo
     {
     ULONG cb;
     DWORD dwFlags;
@@ -5801,7 +5799,8 @@ EXTERN_C const IID IID_IViewObjectEx;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IViewObjectEx : public IViewObject2
+    MIDL_INTERFACE("3AF24292-0C96-11CE-A0CF-00AA00600AB8")
+    IViewObjectEx : public IViewObject2
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRect( 
@@ -5863,8 +5862,8 @@ EXTERN_C const IID IID_IViewObjectEx;
             /* [in] */ LPCRECTL lprcBounds,
             /* [unique][in] */ LPCRECTL lprcWBounds,
             /* [in] */ BOOL ( STDMETHODCALLTYPE __RPC_FAR *pfnContinue )( 
-                DWORD dwContinue),
-            /* [in] */ DWORD dwContinue);
+                ULONG_PTR dwContinue),
+            /* [in] */ ULONG_PTR dwContinue);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColorSet )( 
             IViewObjectEx __RPC_FAR * This,
@@ -5892,10 +5891,10 @@ EXTERN_C const IID IID_IViewObjectEx;
             /* [in] */ DWORD advf,
             /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAdvise )( 
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAdvise )( 
             IViewObjectEx __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pAspects,
-            /* [out] */ DWORD __RPC_FAR *pAdvf,
+            /* [unique][out] */ DWORD __RPC_FAR *pAspects,
+            /* [unique][out] */ DWORD __RPC_FAR *pAdvf,
             /* [out] */ IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExtent )( 
@@ -6088,13 +6087,8 @@ void __RPC_STUB IViewObjectEx_GetNaturalExtent_Stub(
 #ifndef __IOleUndoUnit_INTERFACE_DEFINED__
 #define __IOleUndoUnit_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleUndoUnit
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleUndoUnit */
 /* [uuid][unique][object] */ 
-
 
 typedef IOleUndoUnit __RPC_FAR *LPOLEUNDOUNIT;
 
@@ -6103,7 +6097,8 @@ EXTERN_C const IID IID_IOleUndoUnit;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IOleUndoUnit : public IUnknown
+    MIDL_INTERFACE("894AD3B0-EF97-11CE-9BC9-00AA00608E01")
+    IOleUndoUnit : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Do( 
@@ -6250,13 +6245,8 @@ void __RPC_STUB IOleUndoUnit_OnNextAdd_Stub(
 #ifndef __IOleParentUndoUnit_INTERFACE_DEFINED__
 #define __IOleParentUndoUnit_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleParentUndoUnit
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleParentUndoUnit */
 /* [uuid][unique][object] */ 
-
 
 typedef IOleParentUndoUnit __RPC_FAR *LPOLEPARENTUNDOUNIT;
 
@@ -6265,7 +6255,8 @@ EXTERN_C const IID IID_IOleParentUndoUnit;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IOleParentUndoUnit : public IOleUndoUnit
+    MIDL_INTERFACE("A1FAF330-EF97-11CE-9BC9-00AA00608E01")
+    IOleParentUndoUnit : public IOleUndoUnit
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
@@ -6466,13 +6457,8 @@ void __RPC_STUB IOleParentUndoUnit_GetParentState_Stub(
 #ifndef __IEnumOleUndoUnits_INTERFACE_DEFINED__
 #define __IEnumOleUndoUnits_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumOleUndoUnits
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IEnumOleUndoUnits */
 /* [uuid][unique][object] */ 
-
 
 typedef IEnumOleUndoUnits __RPC_FAR *LPENUMOLEUNDOUNITS;
 
@@ -6481,7 +6467,8 @@ EXTERN_C const IID IID_IEnumOleUndoUnits;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IEnumOleUndoUnits : public IUnknown
+    MIDL_INTERFACE("B3E7C340-EF97-11CE-9BC9-00AA00608E01")
+    IEnumOleUndoUnits : public IUnknown
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
@@ -6631,15 +6618,10 @@ void __RPC_STUB IEnumOleUndoUnits_Clone_Stub(
 #ifndef __IOleUndoManager_INTERFACE_DEFINED__
 #define __IOleUndoManager_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleUndoManager
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleUndoManager */
 /* [uuid][unique][object] */ 
 
-
-#define SID_SOleUndoManager IID_IOleUndoManager;
+#define SID_SOleUndoManager IID_IOleUndoManager
 typedef IOleUndoManager __RPC_FAR *LPOLEUNDOMANAGER;
 
 
@@ -6647,7 +6629,8 @@ EXTERN_C const IID IID_IOleUndoManager;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IOleUndoManager : public IUnknown
+    MIDL_INTERFACE("D001F200-EF97-11CE-9BC9-00AA00608E01")
+    IOleUndoManager : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
@@ -6970,201 +6953,11 @@ void __RPC_STUB IOleUndoManager_Enable_Stub(
 #endif 	/* __IOleUndoManager_INTERFACE_DEFINED__ */
 
 
-#ifndef __IQuickActivate_INTERFACE_DEFINED__
-#define __IQuickActivate_INTERFACE_DEFINED__
-
-/****************************************
- * Generated header for interface: IQuickActivate
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
-/* [uuid][unique][object][local] */ 
-
-
-typedef IQuickActivate __RPC_FAR *LPQUICKACTIVATE;
-
-typedef /* [v1_enum] */ 
-enum tagQACONTAINERFLAGS
-    {	QACONTAINER_SHOWHATCHING	= 0x1,
-	QACONTAINER_SHOWGRABHANDLES	= 0x2,
-	QACONTAINER_USERMODE	= 0x4,
-	QACONTAINER_DISPLAYASDEFAULT	= 0x8,
-	QACONTAINER_UIDEAD	= 0x10,
-	QACONTAINER_AUTOCLIP	= 0x20,
-	QACONTAINER_MESSAGEREFLECT	= 0x40,
-	QACONTAINER_SUPPORTSMNEMONICS	= 0x80
-    }	QACONTAINERFLAGS;
-
-typedef DWORD OLE_COLOR;
-
-typedef struct  tagQACONTAINER
-    {
-    ULONG cbSize;
-    IOleClientSite __RPC_FAR *pClientSite;
-    IAdviseSinkEx __RPC_FAR *pAdviseSink;
-    IPropertyNotifySink __RPC_FAR *pPropertyNotifySink;
-    IUnknown __RPC_FAR *pUnkEventSink;
-    DWORD dwAmbientFlags;
-    OLE_COLOR colorFore;
-    OLE_COLOR colorBack;
-    IFont __RPC_FAR *pFont;
-    IOleUndoManager __RPC_FAR *pUndoMgr;
-    DWORD dwAppearance;
-    LONG lcid;
-    HPALETTE hpal;
-    struct IBindHost __RPC_FAR *pBindHost;
-    }	QACONTAINER;
-
-typedef struct  tagQACONTROL
-    {
-    ULONG cbSize;
-    DWORD dwMiscStatus;
-    DWORD dwViewStatus;
-    DWORD dwEventCookie;
-    DWORD dwPropNotifyCookie;
-    DWORD dwPointerActivationPolicy;
-    }	QACONTROL;
-
-
-EXTERN_C const IID IID_IQuickActivate;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    interface IQuickActivate : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE QuickActivate( 
-            /* [in] */ QACONTAINER __RPC_FAR *pQaContainer,
-            /* [out] */ QACONTROL __RPC_FAR *pQaControl) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetContentExtent( 
-            LPSIZEL pSizel) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetContentExtent( 
-            LPSIZEL pSizel) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IQuickActivateVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IQuickActivate __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IQuickActivate __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IQuickActivate __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QuickActivate )( 
-            IQuickActivate __RPC_FAR * This,
-            /* [in] */ QACONTAINER __RPC_FAR *pQaContainer,
-            /* [out] */ QACONTROL __RPC_FAR *pQaControl);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetContentExtent )( 
-            IQuickActivate __RPC_FAR * This,
-            LPSIZEL pSizel);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetContentExtent )( 
-            IQuickActivate __RPC_FAR * This,
-            LPSIZEL pSizel);
-        
-        END_INTERFACE
-    } IQuickActivateVtbl;
-
-    interface IQuickActivate
-    {
-        CONST_VTBL struct IQuickActivateVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IQuickActivate_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IQuickActivate_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IQuickActivate_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IQuickActivate_QuickActivate(This,pQaContainer,pQaControl)	\
-    (This)->lpVtbl -> QuickActivate(This,pQaContainer,pQaControl)
-
-#define IQuickActivate_SetContentExtent(This,pSizel)	\
-    (This)->lpVtbl -> SetContentExtent(This,pSizel)
-
-#define IQuickActivate_GetContentExtent(This,pSizel)	\
-    (This)->lpVtbl -> GetContentExtent(This,pSizel)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IQuickActivate_QuickActivate_Proxy( 
-    IQuickActivate __RPC_FAR * This,
-    /* [in] */ QACONTAINER __RPC_FAR *pQaContainer,
-    /* [out] */ QACONTROL __RPC_FAR *pQaControl);
-
-
-void __RPC_STUB IQuickActivate_QuickActivate_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IQuickActivate_SetContentExtent_Proxy( 
-    IQuickActivate __RPC_FAR * This,
-    LPSIZEL pSizel);
-
-
-void __RPC_STUB IQuickActivate_SetContentExtent_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IQuickActivate_GetContentExtent_Proxy( 
-    IQuickActivate __RPC_FAR * This,
-    LPSIZEL pSizel);
-
-
-void __RPC_STUB IQuickActivate_GetContentExtent_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IQuickActivate_INTERFACE_DEFINED__ */
-
-
 #ifndef __IPointerInactive_INTERFACE_DEFINED__
 #define __IPointerInactive_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPointerInactive
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPointerInactive */
 /* [uuid][unique][object] */ 
-
 
 typedef IPointerInactive __RPC_FAR *LPPOINTERINACTIVE;
 
@@ -7180,7 +6973,8 @@ EXTERN_C const IID IID_IPointerInactive;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPointerInactive : public IUnknown
+    MIDL_INTERFACE("55980BA0-35AA-11CF-B671-00AA004CD6D8")
+    IPointerInactive : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetActivationPolicy( 
@@ -7326,13 +7120,8 @@ void __RPC_STUB IPointerInactive_OnInactiveSetCursor_Stub(
 #ifndef __IObjectWithSite_INTERFACE_DEFINED__
 #define __IObjectWithSite_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IObjectWithSite
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IObjectWithSite */
 /* [unique][uuid][object] */ 
-
 
 typedef IObjectWithSite __RPC_FAR *LPOBJECTWITHSITE;
 
@@ -7341,7 +7130,8 @@ EXTERN_C const IID IID_IObjectWithSite;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IObjectWithSite : public IUnknown
+    MIDL_INTERFACE("FC4801A3-2BA9-11CF-A229-00AA003D7352")
+    IObjectWithSite : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSite( 
@@ -7444,248 +7234,15 @@ void __RPC_STUB IObjectWithSite_GetSite_Stub(
 #endif 	/* __IObjectWithSite_INTERFACE_DEFINED__ */
 
 
-#ifndef __IErrorLog_INTERFACE_DEFINED__
-#define __IErrorLog_INTERFACE_DEFINED__
-
-/****************************************
- * Generated header for interface: IErrorLog
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
-/* [unique][uuid][object] */ 
-
-
-typedef IErrorLog __RPC_FAR *LPERRORLOG;
-
-
-EXTERN_C const IID IID_IErrorLog;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    interface IErrorLog : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE AddError( 
-            /* [in] */ LPCOLESTR pszPropName,
-            /* [in] */ EXCEPINFO __RPC_FAR *pExcepInfo) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IErrorLogVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IErrorLog __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IErrorLog __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IErrorLog __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddError )( 
-            IErrorLog __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszPropName,
-            /* [in] */ EXCEPINFO __RPC_FAR *pExcepInfo);
-        
-        END_INTERFACE
-    } IErrorLogVtbl;
-
-    interface IErrorLog
-    {
-        CONST_VTBL struct IErrorLogVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IErrorLog_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IErrorLog_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IErrorLog_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IErrorLog_AddError(This,pszPropName,pExcepInfo)	\
-    (This)->lpVtbl -> AddError(This,pszPropName,pExcepInfo)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IErrorLog_AddError_Proxy( 
-    IErrorLog __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszPropName,
-    /* [in] */ EXCEPINFO __RPC_FAR *pExcepInfo);
-
-
-void __RPC_STUB IErrorLog_AddError_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IErrorLog_INTERFACE_DEFINED__ */
-
-
-#ifndef __IPropertyBag_INTERFACE_DEFINED__
-#define __IPropertyBag_INTERFACE_DEFINED__
-
-/****************************************
- * Generated header for interface: IPropertyBag
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
-/* [unique][uuid][object] */ 
-
-
-typedef IPropertyBag __RPC_FAR *LPPROPERTYBAG;
-
-
-EXTERN_C const IID IID_IPropertyBag;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    interface IPropertyBag : public IUnknown
-    {
-    public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read( 
-            /* [in] */ LPCOLESTR pszPropName,
-            /* [out][in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ IErrorLog __RPC_FAR *pErrorLog) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Write( 
-            /* [in] */ LPCOLESTR pszPropName,
-            /* [in] */ VARIANT __RPC_FAR *pVar) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IPropertyBagVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPropertyBag __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPropertyBag __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPropertyBag __RPC_FAR * This);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
-            IPropertyBag __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszPropName,
-            /* [out][in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ IErrorLog __RPC_FAR *pErrorLog);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
-            IPropertyBag __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszPropName,
-            /* [in] */ VARIANT __RPC_FAR *pVar);
-        
-        END_INTERFACE
-    } IPropertyBagVtbl;
-
-    interface IPropertyBag
-    {
-        CONST_VTBL struct IPropertyBagVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IPropertyBag_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IPropertyBag_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IPropertyBag_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IPropertyBag_Read(This,pszPropName,pVar,pErrorLog)	\
-    (This)->lpVtbl -> Read(This,pszPropName,pVar,pErrorLog)
-
-#define IPropertyBag_Write(This,pszPropName,pVar)	\
-    (This)->lpVtbl -> Write(This,pszPropName,pVar)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IPropertyBag_RemoteRead_Proxy( 
-    IPropertyBag __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszPropName,
-    /* [out] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ IErrorLog __RPC_FAR *pErrorLog,
-    /* [in] */ DWORD varType,
-    /* [in] */ IUnknown __RPC_FAR *pUnkObj);
-
-
-void __RPC_STUB IPropertyBag_RemoteRead_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IPropertyBag_Write_Proxy( 
-    IPropertyBag __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszPropName,
-    /* [in] */ VARIANT __RPC_FAR *pVar);
-
-
-void __RPC_STUB IPropertyBag_Write_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IPropertyBag_INTERFACE_DEFINED__ */
-
-
 #ifndef __IPerPropertyBrowsing_INTERFACE_DEFINED__
 #define __IPerPropertyBrowsing_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPerPropertyBrowsing
- * at Sat Jul 13 21:56:58 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IPerPropertyBrowsing */
 /* [unique][uuid][object] */ 
-
 
 typedef IPerPropertyBrowsing __RPC_FAR *LPPERPROPERTYBROWSING;
 
-typedef struct  tagCALPOLESTR
+typedef struct tagCALPOLESTR
     {
     ULONG cElems;
     /* [size_is] */ LPOLESTR __RPC_FAR *pElems;
@@ -7693,7 +7250,7 @@ typedef struct  tagCALPOLESTR
 
 typedef struct tagCALPOLESTR __RPC_FAR *LPCALPOLESTR;
 
-typedef struct  tagCADWORD
+typedef struct tagCADWORD
     {
     ULONG cElems;
     /* [size_is] */ DWORD __RPC_FAR *pElems;
@@ -7706,7 +7263,8 @@ EXTERN_C const IID IID_IPerPropertyBrowsing;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IPerPropertyBrowsing : public IUnknown
+    MIDL_INTERFACE("376BD3AA-3845-101B-84ED-08002B2EC713")
+    IPerPropertyBrowsing : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDisplayString( 
@@ -7868,48 +7426,764 @@ void __RPC_STUB IPerPropertyBrowsing_GetPredefinedValue_Stub(
 #endif 	/* __IPerPropertyBrowsing_INTERFACE_DEFINED__ */
 
 
+#ifndef __IPropertyBag2_INTERFACE_DEFINED__
+#define __IPropertyBag2_INTERFACE_DEFINED__
+
+/* interface IPropertyBag2 */
+/* [unique][uuid][object] */ 
+
+typedef IPropertyBag2 __RPC_FAR *LPPROPERTYBAG2;
+
+typedef /* [v1_enum] */ 
+enum tagPROPBAG2_TYPE
+    {	PROPBAG2_TYPE_UNDEFINED	= 0,
+	PROPBAG2_TYPE_DATA	= 1,
+	PROPBAG2_TYPE_URL	= 2,
+	PROPBAG2_TYPE_OBJECT	= 3,
+	PROPBAG2_TYPE_STREAM	= 4,
+	PROPBAG2_TYPE_STORAGE	= 5,
+	PROPBAG2_TYPE_MONIKER	= 6
+    }	PROPBAG2_TYPE;
+
+typedef struct tagPROPBAG2
+    {
+    DWORD dwType;
+    VARTYPE vt;
+    CLIPFORMAT cfType;
+    DWORD dwHint;
+    LPOLESTR pstrName;
+    CLSID clsid;
+    }	PROPBAG2;
+
+
+EXTERN_C const IID IID_IPropertyBag2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("22F55882-280B-11d0-A8A9-00A0C90C2004")
+    IPropertyBag2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Read( 
+            /* [in] */ ULONG cProperties,
+            /* [in] */ PROPBAG2 __RPC_FAR *pPropBag,
+            /* [in] */ IErrorLog __RPC_FAR *pErrLog,
+            /* [out] */ VARIANT __RPC_FAR *pvarValue,
+            /* [out] */ HRESULT __RPC_FAR *phrError) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Write( 
+            /* [in] */ ULONG cProperties,
+            /* [in] */ PROPBAG2 __RPC_FAR *pPropBag,
+            /* [in] */ VARIANT __RPC_FAR *pvarValue) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountProperties( 
+            /* [out] */ ULONG __RPC_FAR *pcProperties) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPropertyInfo( 
+            /* [in] */ ULONG iProperty,
+            /* [in] */ ULONG cProperties,
+            /* [out] */ PROPBAG2 __RPC_FAR *pPropBag,
+            /* [out] */ ULONG __RPC_FAR *pcProperties) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE LoadObject( 
+            /* [in] */ LPCOLESTR pstrName,
+            /* [in] */ DWORD dwHint,
+            /* [in] */ IUnknown __RPC_FAR *pUnkObject,
+            /* [in] */ IErrorLog __RPC_FAR *pErrLog) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IPropertyBag2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IPropertyBag2 __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IPropertyBag2 __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IPropertyBag2 __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
+            IPropertyBag2 __RPC_FAR * This,
+            /* [in] */ ULONG cProperties,
+            /* [in] */ PROPBAG2 __RPC_FAR *pPropBag,
+            /* [in] */ IErrorLog __RPC_FAR *pErrLog,
+            /* [out] */ VARIANT __RPC_FAR *pvarValue,
+            /* [out] */ HRESULT __RPC_FAR *phrError);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
+            IPropertyBag2 __RPC_FAR * This,
+            /* [in] */ ULONG cProperties,
+            /* [in] */ PROPBAG2 __RPC_FAR *pPropBag,
+            /* [in] */ VARIANT __RPC_FAR *pvarValue);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountProperties )( 
+            IPropertyBag2 __RPC_FAR * This,
+            /* [out] */ ULONG __RPC_FAR *pcProperties);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyInfo )( 
+            IPropertyBag2 __RPC_FAR * This,
+            /* [in] */ ULONG iProperty,
+            /* [in] */ ULONG cProperties,
+            /* [out] */ PROPBAG2 __RPC_FAR *pPropBag,
+            /* [out] */ ULONG __RPC_FAR *pcProperties);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadObject )( 
+            IPropertyBag2 __RPC_FAR * This,
+            /* [in] */ LPCOLESTR pstrName,
+            /* [in] */ DWORD dwHint,
+            /* [in] */ IUnknown __RPC_FAR *pUnkObject,
+            /* [in] */ IErrorLog __RPC_FAR *pErrLog);
+        
+        END_INTERFACE
+    } IPropertyBag2Vtbl;
+
+    interface IPropertyBag2
+    {
+        CONST_VTBL struct IPropertyBag2Vtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IPropertyBag2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IPropertyBag2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IPropertyBag2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IPropertyBag2_Read(This,cProperties,pPropBag,pErrLog,pvarValue,phrError)	\
+    (This)->lpVtbl -> Read(This,cProperties,pPropBag,pErrLog,pvarValue,phrError)
+
+#define IPropertyBag2_Write(This,cProperties,pPropBag,pvarValue)	\
+    (This)->lpVtbl -> Write(This,cProperties,pPropBag,pvarValue)
+
+#define IPropertyBag2_CountProperties(This,pcProperties)	\
+    (This)->lpVtbl -> CountProperties(This,pcProperties)
+
+#define IPropertyBag2_GetPropertyInfo(This,iProperty,cProperties,pPropBag,pcProperties)	\
+    (This)->lpVtbl -> GetPropertyInfo(This,iProperty,cProperties,pPropBag,pcProperties)
+
+#define IPropertyBag2_LoadObject(This,pstrName,dwHint,pUnkObject,pErrLog)	\
+    (This)->lpVtbl -> LoadObject(This,pstrName,dwHint,pUnkObject,pErrLog)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IPropertyBag2_Read_Proxy( 
+    IPropertyBag2 __RPC_FAR * This,
+    /* [in] */ ULONG cProperties,
+    /* [in] */ PROPBAG2 __RPC_FAR *pPropBag,
+    /* [in] */ IErrorLog __RPC_FAR *pErrLog,
+    /* [out] */ VARIANT __RPC_FAR *pvarValue,
+    /* [out] */ HRESULT __RPC_FAR *phrError);
+
+
+void __RPC_STUB IPropertyBag2_Read_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IPropertyBag2_Write_Proxy( 
+    IPropertyBag2 __RPC_FAR * This,
+    /* [in] */ ULONG cProperties,
+    /* [in] */ PROPBAG2 __RPC_FAR *pPropBag,
+    /* [in] */ VARIANT __RPC_FAR *pvarValue);
+
+
+void __RPC_STUB IPropertyBag2_Write_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IPropertyBag2_CountProperties_Proxy( 
+    IPropertyBag2 __RPC_FAR * This,
+    /* [out] */ ULONG __RPC_FAR *pcProperties);
+
+
+void __RPC_STUB IPropertyBag2_CountProperties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IPropertyBag2_GetPropertyInfo_Proxy( 
+    IPropertyBag2 __RPC_FAR * This,
+    /* [in] */ ULONG iProperty,
+    /* [in] */ ULONG cProperties,
+    /* [out] */ PROPBAG2 __RPC_FAR *pPropBag,
+    /* [out] */ ULONG __RPC_FAR *pcProperties);
+
+
+void __RPC_STUB IPropertyBag2_GetPropertyInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IPropertyBag2_LoadObject_Proxy( 
+    IPropertyBag2 __RPC_FAR * This,
+    /* [in] */ LPCOLESTR pstrName,
+    /* [in] */ DWORD dwHint,
+    /* [in] */ IUnknown __RPC_FAR *pUnkObject,
+    /* [in] */ IErrorLog __RPC_FAR *pErrLog);
+
+
+void __RPC_STUB IPropertyBag2_LoadObject_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IPropertyBag2_INTERFACE_DEFINED__ */
+
+
+#ifndef __IPersistPropertyBag2_INTERFACE_DEFINED__
+#define __IPersistPropertyBag2_INTERFACE_DEFINED__
+
+/* interface IPersistPropertyBag2 */
+/* [unique][uuid][object] */ 
+
+typedef IPersistPropertyBag2 __RPC_FAR *LPPERSISTPROPERTYBAG2;
+
+
+EXTERN_C const IID IID_IPersistPropertyBag2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("22F55881-280B-11d0-A8A9-00A0C90C2004")
+    IPersistPropertyBag2 : public IPersist
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE InitNew( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Load( 
+            /* [in] */ IPropertyBag2 __RPC_FAR *pPropBag,
+            /* [in] */ IErrorLog __RPC_FAR *pErrLog) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Save( 
+            /* [in] */ IPropertyBag2 __RPC_FAR *pPropBag,
+            /* [in] */ BOOL fClearDirty,
+            /* [in] */ BOOL fSaveAllProperties) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsDirty( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IPersistPropertyBag2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IPersistPropertyBag2 __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IPersistPropertyBag2 __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IPersistPropertyBag2 __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassID )( 
+            IPersistPropertyBag2 __RPC_FAR * This,
+            /* [out] */ CLSID __RPC_FAR *pClassID);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitNew )( 
+            IPersistPropertyBag2 __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Load )( 
+            IPersistPropertyBag2 __RPC_FAR * This,
+            /* [in] */ IPropertyBag2 __RPC_FAR *pPropBag,
+            /* [in] */ IErrorLog __RPC_FAR *pErrLog);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
+            IPersistPropertyBag2 __RPC_FAR * This,
+            /* [in] */ IPropertyBag2 __RPC_FAR *pPropBag,
+            /* [in] */ BOOL fClearDirty,
+            /* [in] */ BOOL fSaveAllProperties);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDirty )( 
+            IPersistPropertyBag2 __RPC_FAR * This);
+        
+        END_INTERFACE
+    } IPersistPropertyBag2Vtbl;
+
+    interface IPersistPropertyBag2
+    {
+        CONST_VTBL struct IPersistPropertyBag2Vtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IPersistPropertyBag2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IPersistPropertyBag2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IPersistPropertyBag2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IPersistPropertyBag2_GetClassID(This,pClassID)	\
+    (This)->lpVtbl -> GetClassID(This,pClassID)
+
+
+#define IPersistPropertyBag2_InitNew(This)	\
+    (This)->lpVtbl -> InitNew(This)
+
+#define IPersistPropertyBag2_Load(This,pPropBag,pErrLog)	\
+    (This)->lpVtbl -> Load(This,pPropBag,pErrLog)
+
+#define IPersistPropertyBag2_Save(This,pPropBag,fClearDirty,fSaveAllProperties)	\
+    (This)->lpVtbl -> Save(This,pPropBag,fClearDirty,fSaveAllProperties)
+
+#define IPersistPropertyBag2_IsDirty(This)	\
+    (This)->lpVtbl -> IsDirty(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IPersistPropertyBag2_InitNew_Proxy( 
+    IPersistPropertyBag2 __RPC_FAR * This);
+
+
+void __RPC_STUB IPersistPropertyBag2_InitNew_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IPersistPropertyBag2_Load_Proxy( 
+    IPersistPropertyBag2 __RPC_FAR * This,
+    /* [in] */ IPropertyBag2 __RPC_FAR *pPropBag,
+    /* [in] */ IErrorLog __RPC_FAR *pErrLog);
+
+
+void __RPC_STUB IPersistPropertyBag2_Load_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IPersistPropertyBag2_Save_Proxy( 
+    IPersistPropertyBag2 __RPC_FAR * This,
+    /* [in] */ IPropertyBag2 __RPC_FAR *pPropBag,
+    /* [in] */ BOOL fClearDirty,
+    /* [in] */ BOOL fSaveAllProperties);
+
+
+void __RPC_STUB IPersistPropertyBag2_Save_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IPersistPropertyBag2_IsDirty_Proxy( 
+    IPersistPropertyBag2 __RPC_FAR * This);
+
+
+void __RPC_STUB IPersistPropertyBag2_IsDirty_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IPersistPropertyBag2_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAdviseSinkEx_INTERFACE_DEFINED__
+#define __IAdviseSinkEx_INTERFACE_DEFINED__
+
+/* interface IAdviseSinkEx */
+/* [uuid][unique][object] */ 
+
+typedef IAdviseSinkEx __RPC_FAR *LPADVISESINKEX;
+
+
+EXTERN_C const IID IID_IAdviseSinkEx;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("3AF24290-0C96-11CE-A0CF-00AA00600AB8")
+    IAdviseSinkEx : public IAdviseSink
+    {
+    public:
+        virtual /* [local] */ void STDMETHODCALLTYPE OnViewStatusChange( 
+            /* [in] */ DWORD dwViewStatus) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAdviseSinkExVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAdviseSinkEx __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAdviseSinkEx __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAdviseSinkEx __RPC_FAR * This);
+        
+        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnDataChange )( 
+            IAdviseSinkEx __RPC_FAR * This,
+            /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
+            /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed);
+        
+        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnViewChange )( 
+            IAdviseSinkEx __RPC_FAR * This,
+            /* [in] */ DWORD dwAspect,
+            /* [in] */ LONG lindex);
+        
+        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnRename )( 
+            IAdviseSinkEx __RPC_FAR * This,
+            /* [in] */ IMoniker __RPC_FAR *pmk);
+        
+        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnSave )( 
+            IAdviseSinkEx __RPC_FAR * This);
+        
+        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnClose )( 
+            IAdviseSinkEx __RPC_FAR * This);
+        
+        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnViewStatusChange )( 
+            IAdviseSinkEx __RPC_FAR * This,
+            /* [in] */ DWORD dwViewStatus);
+        
+        END_INTERFACE
+    } IAdviseSinkExVtbl;
+
+    interface IAdviseSinkEx
+    {
+        CONST_VTBL struct IAdviseSinkExVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAdviseSinkEx_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAdviseSinkEx_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAdviseSinkEx_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAdviseSinkEx_OnDataChange(This,pFormatetc,pStgmed)	\
+    (This)->lpVtbl -> OnDataChange(This,pFormatetc,pStgmed)
+
+#define IAdviseSinkEx_OnViewChange(This,dwAspect,lindex)	\
+    (This)->lpVtbl -> OnViewChange(This,dwAspect,lindex)
+
+#define IAdviseSinkEx_OnRename(This,pmk)	\
+    (This)->lpVtbl -> OnRename(This,pmk)
+
+#define IAdviseSinkEx_OnSave(This)	\
+    (This)->lpVtbl -> OnSave(This)
+
+#define IAdviseSinkEx_OnClose(This)	\
+    (This)->lpVtbl -> OnClose(This)
+
+
+#define IAdviseSinkEx_OnViewStatusChange(This,dwViewStatus)	\
+    (This)->lpVtbl -> OnViewStatusChange(This,dwViewStatus)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSinkEx_RemoteOnViewStatusChange_Proxy( 
+    IAdviseSinkEx __RPC_FAR * This,
+    /* [in] */ DWORD dwViewStatus);
+
+
+void __RPC_STUB IAdviseSinkEx_RemoteOnViewStatusChange_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAdviseSinkEx_INTERFACE_DEFINED__ */
+
+
+#ifndef __IQuickActivate_INTERFACE_DEFINED__
+#define __IQuickActivate_INTERFACE_DEFINED__
+
+/* interface IQuickActivate */
+/* [uuid][unique][object] */ 
+
+typedef IQuickActivate __RPC_FAR *LPQUICKACTIVATE;
+
+typedef /* [v1_enum] */ 
+enum tagQACONTAINERFLAGS
+    {	QACONTAINER_SHOWHATCHING	= 0x1,
+	QACONTAINER_SHOWGRABHANDLES	= 0x2,
+	QACONTAINER_USERMODE	= 0x4,
+	QACONTAINER_DISPLAYASDEFAULT	= 0x8,
+	QACONTAINER_UIDEAD	= 0x10,
+	QACONTAINER_AUTOCLIP	= 0x20,
+	QACONTAINER_MESSAGEREFLECT	= 0x40,
+	QACONTAINER_SUPPORTSMNEMONICS	= 0x80
+    }	QACONTAINERFLAGS;
+
+typedef DWORD OLE_COLOR;
+
+typedef struct tagQACONTAINER
+    {
+    ULONG cbSize;
+    IOleClientSite __RPC_FAR *pClientSite;
+    IAdviseSinkEx __RPC_FAR *pAdviseSink;
+    IPropertyNotifySink __RPC_FAR *pPropertyNotifySink;
+    IUnknown __RPC_FAR *pUnkEventSink;
+    DWORD dwAmbientFlags;
+    OLE_COLOR colorFore;
+    OLE_COLOR colorBack;
+    IFont __RPC_FAR *pFont;
+    IOleUndoManager __RPC_FAR *pUndoMgr;
+    DWORD dwAppearance;
+    LONG lcid;
+    HPALETTE hpal;
+    IBindHost __RPC_FAR *pBindHost;
+    IOleControlSite __RPC_FAR *pOleControlSite;
+    IServiceProvider __RPC_FAR *pServiceProvider;
+    }	QACONTAINER;
+
+typedef struct tagQACONTROL
+    {
+    ULONG cbSize;
+    DWORD dwMiscStatus;
+    DWORD dwViewStatus;
+    DWORD dwEventCookie;
+    DWORD dwPropNotifyCookie;
+    DWORD dwPointerActivationPolicy;
+    }	QACONTROL;
+
+
+EXTERN_C const IID IID_IQuickActivate;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("CF51ED10-62FE-11CF-BF86-00A0C9034836")
+    IQuickActivate : public IUnknown
+    {
+    public:
+        virtual /* [local] */ HRESULT STDMETHODCALLTYPE QuickActivate( 
+            /* [in] */ QACONTAINER __RPC_FAR *pQaContainer,
+            /* [out][in] */ QACONTROL __RPC_FAR *pQaControl) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetContentExtent( 
+            /* [in] */ LPSIZEL pSizel) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetContentExtent( 
+            /* [out] */ LPSIZEL pSizel) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IQuickActivateVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IQuickActivate __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IQuickActivate __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IQuickActivate __RPC_FAR * This);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QuickActivate )( 
+            IQuickActivate __RPC_FAR * This,
+            /* [in] */ QACONTAINER __RPC_FAR *pQaContainer,
+            /* [out][in] */ QACONTROL __RPC_FAR *pQaControl);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetContentExtent )( 
+            IQuickActivate __RPC_FAR * This,
+            /* [in] */ LPSIZEL pSizel);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetContentExtent )( 
+            IQuickActivate __RPC_FAR * This,
+            /* [out] */ LPSIZEL pSizel);
+        
+        END_INTERFACE
+    } IQuickActivateVtbl;
+
+    interface IQuickActivate
+    {
+        CONST_VTBL struct IQuickActivateVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IQuickActivate_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IQuickActivate_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IQuickActivate_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IQuickActivate_QuickActivate(This,pQaContainer,pQaControl)	\
+    (This)->lpVtbl -> QuickActivate(This,pQaContainer,pQaControl)
+
+#define IQuickActivate_SetContentExtent(This,pSizel)	\
+    (This)->lpVtbl -> SetContentExtent(This,pSizel)
+
+#define IQuickActivate_GetContentExtent(This,pSizel)	\
+    (This)->lpVtbl -> GetContentExtent(This,pSizel)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [call_as] */ HRESULT STDMETHODCALLTYPE IQuickActivate_RemoteQuickActivate_Proxy( 
+    IQuickActivate __RPC_FAR * This,
+    /* [in] */ QACONTAINER __RPC_FAR *pQaContainer,
+    /* [out] */ QACONTROL __RPC_FAR *pQaControl);
+
+
+void __RPC_STUB IQuickActivate_RemoteQuickActivate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IQuickActivate_SetContentExtent_Proxy( 
+    IQuickActivate __RPC_FAR * This,
+    /* [in] */ LPSIZEL pSizel);
+
+
+void __RPC_STUB IQuickActivate_SetContentExtent_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IQuickActivate_GetContentExtent_Proxy( 
+    IQuickActivate __RPC_FAR * This,
+    /* [out] */ LPSIZEL pSizel);
+
+
+void __RPC_STUB IQuickActivate_GetContentExtent_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IQuickActivate_INTERFACE_DEFINED__ */
+
+
 /* Additional Prototypes for ALL interfaces */
 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-void __RPC_USER UserHWND_from_local( HWND __RPC_FAR *, UserHWND __RPC_FAR * __RPC_FAR * );
-void __RPC_USER UserHWND_to_local( UserHWND __RPC_FAR *, HWND __RPC_FAR * );
- void __RPC_USER UserHWND_free_inst( UserHWND __RPC_FAR * );
-void __RPC_USER UserHWND_free_local( HWND __RPC_FAR * );
+unsigned long             __RPC_USER  CLIPFORMAT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , CLIPFORMAT __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  CLIPFORMAT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, CLIPFORMAT __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  CLIPFORMAT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, CLIPFORMAT __RPC_FAR * ); 
+void                      __RPC_USER  CLIPFORMAT_UserFree(     unsigned long __RPC_FAR *, CLIPFORMAT __RPC_FAR * ); 
 
-void __RPC_USER UserHACCEL_from_local( HACCEL __RPC_FAR *, UserHACCEL __RPC_FAR * __RPC_FAR * );
-void __RPC_USER UserHACCEL_to_local( UserHACCEL __RPC_FAR *, HACCEL __RPC_FAR * );
- void __RPC_USER UserHACCEL_free_inst( UserHACCEL __RPC_FAR * );
-void __RPC_USER UserHACCEL_free_local( HACCEL __RPC_FAR * );
+unsigned long             __RPC_USER  HACCEL_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HACCEL __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HACCEL_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HACCEL __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HACCEL_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HACCEL __RPC_FAR * ); 
+void                      __RPC_USER  HACCEL_UserFree(     unsigned long __RPC_FAR *, HACCEL __RPC_FAR * ); 
 
-void __RPC_USER UserHDC_from_local( HDC __RPC_FAR *, UserHDC __RPC_FAR * __RPC_FAR * );
-void __RPC_USER UserHDC_to_local( UserHDC __RPC_FAR *, HDC __RPC_FAR * );
- void __RPC_USER UserHDC_free_inst( UserHDC __RPC_FAR * );
-void __RPC_USER UserHDC_free_local( HDC __RPC_FAR * );
+unsigned long             __RPC_USER  HDC_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HDC __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HDC_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HDC __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HDC_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HDC __RPC_FAR * ); 
+void                      __RPC_USER  HDC_UserFree(     unsigned long __RPC_FAR *, HDC __RPC_FAR * ); 
 
-void __RPC_USER UserHFONT_from_local( HFONT __RPC_FAR *, UserHFONT __RPC_FAR * __RPC_FAR * );
-void __RPC_USER UserHFONT_to_local( UserHFONT __RPC_FAR *, HFONT __RPC_FAR * );
- void __RPC_USER UserHFONT_free_inst( UserHFONT __RPC_FAR * );
-void __RPC_USER UserHFONT_free_local( HFONT __RPC_FAR * );
+unsigned long             __RPC_USER  HFONT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HFONT __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HFONT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HFONT __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HFONT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HFONT __RPC_FAR * ); 
+void                      __RPC_USER  HFONT_UserFree(     unsigned long __RPC_FAR *, HFONT __RPC_FAR * ); 
 
-void __RPC_USER UserMSG_from_local( MSG __RPC_FAR *, UserMSG __RPC_FAR * __RPC_FAR * );
-void __RPC_USER UserMSG_to_local( UserMSG __RPC_FAR *, MSG __RPC_FAR * );
- void __RPC_USER UserMSG_free_inst( UserMSG __RPC_FAR * );
-void __RPC_USER UserMSG_free_local( MSG __RPC_FAR * );
+unsigned long             __RPC_USER  HPALETTE_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HPALETTE __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HPALETTE_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HPALETTE __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HPALETTE_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HPALETTE __RPC_FAR * ); 
+void                      __RPC_USER  HPALETTE_UserFree(     unsigned long __RPC_FAR *, HPALETTE __RPC_FAR * ); 
 
-void __RPC_USER UserBSTR_from_local( BSTR __RPC_FAR *, UserBSTR __RPC_FAR * __RPC_FAR * );
-void __RPC_USER UserBSTR_to_local( UserBSTR __RPC_FAR *, BSTR __RPC_FAR * );
- void __RPC_USER UserBSTR_free_inst( UserBSTR __RPC_FAR * );
-void __RPC_USER UserBSTR_free_local( BSTR __RPC_FAR * );
+unsigned long             __RPC_USER  HWND_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HWND __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HWND_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  HWND_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
+void                      __RPC_USER  HWND_UserFree(     unsigned long __RPC_FAR *, HWND __RPC_FAR * ); 
 
-void __RPC_USER UserVARIANT_from_local( VARIANT __RPC_FAR *, UserVARIANT __RPC_FAR * __RPC_FAR * );
-void __RPC_USER UserVARIANT_to_local( UserVARIANT __RPC_FAR *, VARIANT __RPC_FAR * );
- void __RPC_USER UserVARIANT_free_inst( UserVARIANT __RPC_FAR * );
-void __RPC_USER UserVARIANT_free_local( VARIANT __RPC_FAR * );
-
-void __RPC_USER UserEXCEPINFO_from_local( EXCEPINFO __RPC_FAR *, UserEXCEPINFO __RPC_FAR * __RPC_FAR * );
-void __RPC_USER UserEXCEPINFO_to_local( UserEXCEPINFO __RPC_FAR *, EXCEPINFO __RPC_FAR * );
- void __RPC_USER UserEXCEPINFO_free_inst( UserEXCEPINFO __RPC_FAR * );
-void __RPC_USER UserEXCEPINFO_free_local( EXCEPINFO __RPC_FAR * );
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumConnections_Next_Proxy( 
     IEnumConnections __RPC_FAR * This,
@@ -7965,25 +8239,16 @@ void __RPC_USER UserEXCEPINFO_free_local( EXCEPINFO __RPC_FAR * );
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IPersistMemory_Save_Proxy( 
     IPersistMemory __RPC_FAR * This,
-    /* [size_is][in] */ LPVOID pMem,
+    /* [size_is][out] */ LPVOID pMem,
     /* [in] */ BOOL fClearDirty,
     /* [in] */ ULONG cbSize);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IPersistMemory_Save_Stub( 
     IPersistMemory __RPC_FAR * This,
-    /* [size_is][in] */ BYTE __RPC_FAR *pMem,
+    /* [size_is][out] */ BYTE __RPC_FAR *pMem,
     /* [in] */ BOOL fClearDirty,
     /* [in] */ ULONG cbSize);
-
-/* [local] */ void STDMETHODCALLTYPE IAdviseSinkEx_OnViewStatusChange_Proxy( 
-    IAdviseSinkEx __RPC_FAR * This,
-    /* [in] */ DWORD dwViewStatus);
-
-
-/* [async][call_as] */ void STDMETHODCALLTYPE IAdviseSinkEx_OnViewStatusChange_Stub( 
-    IAdviseSinkEx __RPC_FAR * This,
-    /* [in] */ DWORD dwViewStatus);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumOleUndoUnits_Next_Proxy( 
     IEnumOleUndoUnits __RPC_FAR * This,
@@ -7998,20 +8263,25 @@ void __RPC_USER UserEXCEPINFO_free_local( EXCEPINFO __RPC_FAR * );
     /* [length_is][size_is][out] */ IOleUndoUnit __RPC_FAR *__RPC_FAR *rgElt,
     /* [out] */ ULONG __RPC_FAR *pcEltFetched);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IPropertyBag_Read_Proxy( 
-    IPropertyBag __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszPropName,
-    /* [out][in] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ IErrorLog __RPC_FAR *pErrorLog);
+/* [local] */ void STDMETHODCALLTYPE IAdviseSinkEx_OnViewStatusChange_Proxy( 
+    IAdviseSinkEx __RPC_FAR * This,
+    /* [in] */ DWORD dwViewStatus);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IPropertyBag_Read_Stub( 
-    IPropertyBag __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszPropName,
-    /* [out] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ IErrorLog __RPC_FAR *pErrorLog,
-    /* [in] */ DWORD varType,
-    /* [in] */ IUnknown __RPC_FAR *pUnkObj);
+/* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSinkEx_OnViewStatusChange_Stub( 
+    IAdviseSinkEx __RPC_FAR * This,
+    /* [in] */ DWORD dwViewStatus);
+
+/* [local] */ HRESULT STDMETHODCALLTYPE IQuickActivate_QuickActivate_Proxy( 
+    IQuickActivate __RPC_FAR * This,
+    /* [in] */ QACONTAINER __RPC_FAR *pQaContainer,
+    /* [out][in] */ QACONTROL __RPC_FAR *pQaControl);
+
+
+/* [call_as] */ HRESULT STDMETHODCALLTYPE IQuickActivate_QuickActivate_Stub( 
+    IQuickActivate __RPC_FAR * This,
+    /* [in] */ QACONTAINER __RPC_FAR *pQaContainer,
+    /* [out] */ QACONTROL __RPC_FAR *pQaControl);
 
 
 
@@ -8022,4 +8292,6 @@ void __RPC_USER UserEXCEPINFO_free_local( EXCEPINFO __RPC_FAR * );
 #endif
 
 #endif
-#pragma option -b.
+
+
+#pragma option pop /*P_O_Pop*/

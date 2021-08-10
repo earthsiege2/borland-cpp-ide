@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -65,20 +65,16 @@ BOOL CDockBar::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
 	ASSERT_KINDOF(CFrameWnd, pParentWnd);
 
 	// save the style
-	m_dwStyle = (UINT)dwStyle;
+	m_dwStyle = (dwStyle & CBRS_ALL);
 
-	if (!AfxDeferRegisterClass(AFX_WNDCONTROLBAR_REG))
-		return FALSE;
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCONTROLBAR_REG));
 
 	// create the HWND
 	CRect rect;
 	rect.SetRectEmpty();
-	if (!CWnd::Create(_afxWndControlBar, NULL, dwStyle, rect, pParentWnd, nID))
-		return FALSE;
 
 	// Note: Parent must resize itself for control bar to be resized
-
-	return TRUE;
+	return CWnd::Create(_afxWndControlBar, NULL, dwStyle, rect, pParentWnd, nID);
 }
 
 BOOL CDockBar::IsDockBar() const
@@ -152,6 +148,15 @@ void CDockBar::DockControlBar(CControlBar* pBar, LPCRECT lpRect)
 
 	pBar->SetBarStyle(dwStyle);
 
+	// hide first if changing to a new docking site to avoid flashing
+	BOOL bShow = FALSE;
+	if (pBar->m_pDockBar != this && pBar->IsWindowVisible())
+	{
+		pBar->SetWindowPos(NULL, 0, 0, 0, 0,
+			SWP_NOSIZE|SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE|SWP_HIDEWINDOW);
+		bShow = TRUE;
+	}
+
 	int nPos = -1;
 	if (lpRect != NULL)
 	{
@@ -182,8 +187,15 @@ void CDockBar::DockControlBar(CControlBar* pBar, LPCRECT lpRect)
 	if (pBar->m_pDockBar == this)
 		pBar->m_pDockBar->RemoveControlBar(pBar, nPos);
 	else if (pBar->m_pDockBar != NULL)
-		pBar->m_pDockBar->RemoveControlBar(pBar);
+		pBar->m_pDockBar->RemoveControlBar(pBar, -1, m_bFloating && !pBar->m_pDockBar->m_bFloating);
 	pBar->m_pDockBar = this;
+
+	if (bShow)
+	{
+		ASSERT(!pBar->IsWindowVisible());
+		pBar->SetWindowPos(NULL, 0, 0, 0, 0,
+			SWP_NOSIZE|SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE|SWP_SHOWWINDOW);
+	}
 
 	// remove any place holder for pBar in this dockbar
 	RemovePlaceHolder(pBar);
@@ -198,7 +210,7 @@ void CDockBar::ReDockControlBar(CControlBar* pBar, LPCRECT lpRect)
 	ASSERT_VALID(this);
 	ASSERT_VALID(pBar);
 	ASSERT_KINDOF(CControlBar, pBar);
-	ASSERT(pBar->m_pDockBar != this); // can't redock here if alredy docked here
+	ASSERT(pBar->m_pDockBar != this); // can't redock here if already docked here
 
 	CRect rectBar;
 	pBar->GetWindowRect(&rectBar);
@@ -242,10 +254,12 @@ void CDockBar::ReDockControlBar(CControlBar* pBar, LPCRECT lpRect)
 	{
 		CRect rect(lpRect);
 		ScreenToClient(&rect);
-		CPoint ptMid(rect.left + rect.Width()/2, rect.top + rect.Height()/2);
 
 		if (nPos < 1)
+		{
+			CPoint ptMid(rect.left + rect.Width()/2, rect.top + rect.Height()/2);
 			nPos = Insert(pBar, rect, ptMid);
+		}
 
 		// position at requested position
 		pBar->SetWindowPos(NULL, rect.left, rect.top, rect.Width(),
@@ -269,10 +283,7 @@ void CDockBar::ReDockControlBar(CControlBar* pBar, LPCRECT lpRect)
 	if (pBar->GetParent() != this)
 		pBar->SetParent(this);
 	if (pBar->m_pDockBar != NULL)
-	{
-		if (!pBar->m_pDockBar->RemoveControlBar(pBar))
-			pBar->m_pDockBar->RemovePlaceHolder(pBar);
-	}
+		pBar->m_pDockBar->RemoveControlBar(pBar);
 	pBar->m_pDockBar = this;
 
 	// get parent frame for recalc layout
@@ -283,7 +294,9 @@ void CDockBar::ReDockControlBar(CControlBar* pBar, LPCRECT lpRect)
 void CDockBar::RemovePlaceHolder(CControlBar* pBar)
 {
 	// remove remembered docking position
-	int nOldPos = FindBar((CControlBar*)_AfxGetDlgCtrlID(pBar->m_hWnd));
+	if (HIWORD(pBar) != 0)
+		pBar = (CControlBar*)_AfxGetDlgCtrlID(pBar->m_hWnd);
+	int nOldPos = FindBar(pBar);
 	if (nOldPos > 0)
 	{
 		m_arrBars.RemoveAt(nOldPos);
@@ -294,24 +307,38 @@ void CDockBar::RemovePlaceHolder(CControlBar* pBar)
 	}
 }
 
-BOOL CDockBar::RemoveControlBar(CControlBar* pBar, int nPosExclude)
+BOOL CDockBar::RemoveControlBar(CControlBar* pBar, int nPosExclude, int nAddPlaceHolder)
 {
+	ASSERT(nAddPlaceHolder == 1 || nAddPlaceHolder == 0 || nAddPlaceHolder == -1);
 	ASSERT_VALID(this);
 	ASSERT(pBar != NULL);
 	int nPos = FindBar(pBar, nPosExclude);
 	ASSERT(nPos > 0);
 
-	m_arrBars[nPos] = (void*)_AfxGetDlgCtrlID(pBar->m_hWnd);
+	if (nAddPlaceHolder == 1)
+	{
+		m_arrBars[nPos] = (void*)_AfxGetDlgCtrlID(pBar->m_hWnd);
 
-	// check for already existing place holder
-	int nPosOld = FindBar((CControlBar*)m_arrBars[nPos], nPos);
-	if (nPosOld > 0)
+		// check for already existing place holder
+		int nPosOld = FindBar((CControlBar*)m_arrBars[nPos], nPos);
+		if (nPosOld > 0)
+		{
+			m_arrBars.RemoveAt(nPos);
+
+			// remove section indicator (NULL) if nothing else in section
+			if (m_arrBars[nPos-1] == NULL && m_arrBars[nPos] == NULL)
+				m_arrBars.RemoveAt(nPos);
+		}
+	}
+	else
 	{
 		m_arrBars.RemoveAt(nPos);
-
-		// remove section indicator (NULL) if nothing else in section
 		if (m_arrBars[nPos-1] == NULL && m_arrBars[nPos] == NULL)
 			m_arrBars.RemoveAt(nPos);
+
+		// Remove any pre-existing place holders.
+		if (nAddPlaceHolder != -1)
+			RemovePlaceHolder(pBar);
 	}
 
 	// don't do anything more in the shutdown case!
@@ -574,7 +601,7 @@ void CDockBar::DoPaint(CDC*)
 
 void CDockBar::OnPaint()
 {
-	// background is already filled in grey
+	// background is already filled in gray
 	CPaintDC dc(this);
 	if (IsVisible() && GetDockedVisibleCount() != 0)
 		DoPaint(&dc);       // delegate to paint helper
@@ -632,7 +659,7 @@ int CDockBar::Insert(CControlBar* pBarIns, CRect rect, CPoint ptMid)
 	int nPosInsAfter = 0;
 	int nWidth = 0;
 	int nTotalWidth = 0;
-	BOOL bHorz = m_dwStyle & CBRS_ORIENT_HORZ ? TRUE : FALSE;
+	BOOL bHorz = m_dwStyle & CBRS_ORIENT_HORZ;
 
 	for (nPos = 0; nPos < m_arrBars.GetSize(); nPos++)
 	{
@@ -721,9 +748,6 @@ BEGIN_MESSAGE_MAP(CMiniDockFrameWnd, CMiniFrameWnd)
 	ON_WM_NCLBUTTONDOWN()
 	ON_WM_NCLBUTTONDBLCLK()
 	//}}AFX_MSG_MAP
-#ifdef _MAC
-	ON_WM_ERASEBKGND()
-#endif
 	ON_WM_MOUSEACTIVATE()
 END_MESSAGE_MAP()
 
@@ -753,13 +777,6 @@ BOOL CMiniDockFrameWnd::Create(CWnd* pParent, DWORD dwBarStyle)
 		dwStyle &= ~MFS_MOVEFRAME;
 
 	DWORD dwExStyle = 0;
-#ifdef _MAC
-	if (dwBarStyle & CBRS_SIZE_DYNAMIC)
-		dwExStyle |= WS_EX_FORCESIZEBOX;
-	else
-		dwStyle &= ~(MFS_MOVEFRAME|MFS_4THICKFRAME);
-#endif
-
 	if (!CMiniFrameWnd::CreateEx(dwExStyle,
 		NULL, &afxChNil, dwStyle, rectDefault, pParent))
 	{
@@ -771,6 +788,9 @@ BOOL CMiniDockFrameWnd::Create(CWnd* pParent, DWORD dwBarStyle)
 	dwStyle |= dwBarStyle & CBRS_FLOAT_MULTI;
 	CMenu* pSysMenu = GetSystemMenu(FALSE);
 	pSysMenu->DeleteMenu(SC_SIZE, MF_BYCOMMAND);
+	pSysMenu->DeleteMenu(SC_MINIMIZE, MF_BYCOMMAND);
+	pSysMenu->DeleteMenu(SC_MAXIMIZE, MF_BYCOMMAND);
+	pSysMenu->DeleteMenu(SC_RESTORE, MF_BYCOMMAND);
 	CString strHide;
 	if (strHide.LoadString(AFX_IDS_HIDE))
 	{
@@ -857,9 +877,6 @@ void CMiniDockFrameWnd::OnNcLButtonDown(UINT nHitTest, CPoint point)
 
 void CMiniDockFrameWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 {
-	// Note: This option is disabled for the Mac version because
-	//  it does not work well with the WindowShade control panel.
-#ifndef _MAC
 	if (nHitTest == HTCAPTION)
 	{
 		// special activation for floating toolbars
@@ -880,19 +897,8 @@ void CMiniDockFrameWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 			return;
 		}
 	}
-#endif
 	CMiniFrameWnd::OnNcLButtonDblClk(nHitTest, point);
 }
-
-#ifdef _MAC
-BOOL CMiniDockFrameWnd::OnEraseBkgnd(CDC* pDC)
-{
-	CRect rect;
-	GetClientRect(rect);
-	pDC->FillSolidRect(rect, ::GetSysColor(COLOR_3DLIGHT));
-	return TRUE;
-}
-#endif
 
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)

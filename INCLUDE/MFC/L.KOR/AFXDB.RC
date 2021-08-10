@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -77,6 +77,12 @@ BEGIN
 		"새로 고침 또는 삭제 실패"
 	AFX_IDP_SQL_DYNAMIC_CURSOR_NOT_SUPPORTED
 		"동적 커서는 ODBC 드라이버에 의해 지원되지 않습니다."
+	AFX_IDP_SQL_FIELD_NOT_FOUND
+		"필드 이름 또는 필드 색인이 잘못되었습니다."
+	AFX_IDP_SQL_BOOKMARKS_NOT_SUPPORTED
+		"ODBC 드라이버에는 책갈피가 지원되지 않습니다."
+	AFX_IDP_SQL_BOOKMARKS_NOT_ENABLED
+		"레코드 집합에서는 책갈피를 사용할 수 없습니다."
 	AFX_IDP_DAO_ENGINE_INITIALIZATION
 		"DAO/Jet db 엔진 초기화 불능. "
 	AFX_IDP_DAO_DFX_BIND

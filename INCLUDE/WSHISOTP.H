@@ -1,6 +1,7 @@
 /* File: .streams.include.src/mod  wshisotp.h            Version: Initial */
 /*
  *   wshisotp.h
+ *   Copyright (c) 1994-1999, Microsoft Corp. All rights reserved.
  *
  *   Windows Sockets include file for ISO TP4.  This file contains all
  *   standardized ISO TP4 information.  Include this header file after
@@ -10,18 +11,13 @@
  *   created by Alcatel TITN Inc.
  */
 
-/*
- *      C/C++ Run Time Library - Version 8.0
- *
- *      Copyright (c) 1994, 1997 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WSHISOTP_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSHISOTP_
-#define __WSHISOTP_H
-#pragma option -b
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 /*
  * Protocol values for ISO transport protocols.
@@ -70,7 +66,7 @@
 
 typedef struct sockaddr_tp {
    u_short tp_family;          /* Always AF_ISO */
-   u_short tp_addr_type;       /* ISO_HIERARCHICAL or ISO_NON_HIERARCHICAL 
+   u_short tp_addr_type;       /* ISO_HIERARCHICAL or ISO_NON_HIERARCHICAL
 */
    u_short tp_taddr_len;       /* Length of transport address, <= 52 */
    u_short tp_tsel_len;        /* Length of transport selector, <= 32 */
@@ -96,6 +92,6 @@ typedef struct sockaddr_tp {
 #define ISO_EXP_DATA_USE  00    /* Use of Expedited Data */
 #define ISO_EXP_DATA_NUSE 01    /* Non-use of Expedited Data */
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif
 

@@ -1,8 +1,8 @@
-#pragma option -b
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
+//  Copyright (C) Microsoft Corporation, 1992-1999.
 //
 //  File:       objbase.h
 //
@@ -10,19 +10,17 @@
 //
 //----------------------------------------------------------------------------
 
-#pragma option -b.
 #include <rpc.h>
-#pragma option -b
-#pragma option -b.
 #include <rpcndr.h>
-#pragma option -b
 
 #if !defined( _OBJBASE_H_ )
 #define _OBJBASE_H_
 
-#pragma option -b.
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
 #include <pshpack8.h>
-#pragma option -b
 
 #ifdef _MAC
 #ifndef _WLM_NOFORCE_LIBS
@@ -60,53 +58,6 @@
 
 #endif // !_WLM_NOFORCE_LIBS
 #endif // _MAC
-
-// Component Object Model defines, and macros
-
-#ifdef __cplusplus
-    #define EXTERN_C    extern "C"
-#else
-    #define EXTERN_C    extern
-#endif
-
-#if defined(_WIN32) || defined(_MPPC_)
-
-// Win32 doesn't support __export
-
-#ifdef _68K_
-#define STDMETHODCALLTYPE       __cdecl
-#else
-#define STDMETHODCALLTYPE       __stdcall
-#endif
-#define STDMETHODVCALLTYPE      __cdecl
-
-#define STDAPICALLTYPE          __stdcall
-#define STDAPIVCALLTYPE         __cdecl
-
-#else
-
-#define STDMETHODCALLTYPE       __export __stdcall
-#define STDMETHODVCALLTYPE      __export __cdecl
-
-#define STDAPICALLTYPE          __export __stdcall
-#define STDAPIVCALLTYPE         __export __cdecl
-
-#endif
-
-
-#define STDAPI                  EXTERN_C HRESULT STDAPICALLTYPE
-#define STDAPI_(type)           EXTERN_C type STDAPICALLTYPE
-
-#define STDMETHODIMP            HRESULT STDMETHODCALLTYPE
-#define STDMETHODIMP_(type)     type STDMETHODCALLTYPE
-
-// The 'V' versions allow Variable Argument lists.
-
-#define STDAPIV                 EXTERN_C HRESULT STDAPIVCALLTYPE
-#define STDAPIV_(type)          EXTERN_C type STDAPIVCALLTYPE
-
-#define STDMETHODIMPV           HRESULT STDMETHODVCALLTYPE
-#define STDMETHODIMPV_(type)    type STDMETHODVCALLTYPE
 
 #ifdef _OLE32_
 #define WINOLEAPI        STDAPI
@@ -222,11 +173,13 @@
 #define interface struct
 #define STDMETHOD(method)       virtual HRESULT STDMETHODCALLTYPE method
 #define STDMETHOD_(type,method) virtual type STDMETHODCALLTYPE method
+#define STDMETHODV(method)       virtual HRESULT STDMETHODVCALLTYPE method
+#define STDMETHODV_(type,method) virtual type STDMETHODVCALLTYPE method
 #define PURE                    = 0
 #define THIS_
 #define THIS                    void
-#define DECLARE_INTERFACE(iface)    interface iface
-#define DECLARE_INTERFACE_(iface, baseiface)    interface iface : public baseiface
+#define DECLARE_INTERFACE(iface)    interface DECLSPEC_NOVTABLE iface
+#define DECLARE_INTERFACE_(iface, baseiface)    interface DECLSPEC_NOVTABLE iface : public baseiface
 
 
 #if !defined(BEGIN_INTERFACE)
@@ -247,6 +200,8 @@
 
 #define STDMETHOD(method)       HRESULT (STDMETHODCALLTYPE * method)
 #define STDMETHOD_(type,method) type (STDMETHODCALLTYPE * method)
+#define STDMETHODV(method)       HRESULT (STDMETHODVCALLTYPE * method)
+#define STDMETHODV_(type,method) type (STDMETHODVCALLTYPE * method)
 
 #if !defined(BEGIN_INTERFACE)
 #if defined(_MPPC_)
@@ -314,17 +269,15 @@
 #endif
 #endif
 
-#pragma option -b.
 #include <stdlib.h>
-#pragma option -b
 
-#if defined(_ANONYMOUS_STRUCT)
 #define LISet32(li, v) ((li).HighPart = (v) < 0 ? -1 : 0, (li).LowPart = (v))
+
 #define ULISet32(li, v) ((li).HighPart = 0, (li).LowPart = (v))
-#else
-#define LISet32(li, v) ((li).u.HighPart = (v) < 0 ? -1 : 0, (li).u.LowPart = (v))
-#define ULISet32(li, v) ((li).u.HighPart = 0, (li).u.LowPart = (v))
-#endif
+
+
+
+
 
 
 #define CLSCTX_INPROC           (CLSCTX_INPROC_SERVER|CLSCTX_INPROC_HANDLER)
@@ -354,8 +307,11 @@ typedef enum tagREGCLS
                                 // and local automatically goes into inproc tbl.
     REGCLS_MULTI_SEPARATE = 2,  // multiple use, but separate control over each
                                 // context.
-    REGCLS_SUSPENDED      = 4   // register is as suspended, will be activated
+    REGCLS_SUSPENDED      = 4,  // register is as suspended, will be activated
                                 // when app calls CoResumeClassObjects
+    REGCLS_SURROGATE      = 8   // must be used when a surrogate process
+                                // is registering a class object that will be
+                                // loaded in the surrogate
 } REGCLS;
 
 // interface marshaling definitions
@@ -396,6 +352,9 @@ typedef enum tagREGCLS
 #define STGM_FAILIFTHERE        0x00000000L
 
 #define STGM_NOSNAPSHOT         0x00200000L
+#if (_WIN32_WINNT >= 0x0500)
+#define STGM_DIRECT_SWMR        0x00400000L
+#endif
 
 /*  flags for internet asyncronous and layout docfile */
 #define ASYNC_MODE_COMPATIBILITY    0x00000001L
@@ -407,127 +366,36 @@ typedef enum tagREGCLS
 #define STG_LAYOUT_SEQUENTIAL       0x00000000L
 #define STG_LAYOUT_INTERLEAVED      0x00000001L
 
+#define STGFMT_STORAGE          0
+#define STGFMT_NATIVE           1
+#define STGFMT_FILE             3
+#define STGFMT_ANY              4
+#define STGFMT_DOCFILE          5
 
-
+// This is a legacy define to allow old component to builds
+#define STGFMT_DOCUMENT         0
 
 /* here is where we pull in the MIDL generated headers for the interfaces */
 typedef interface    IRpcStubBuffer     IRpcStubBuffer;
 typedef interface    IRpcChannelBuffer  IRpcChannelBuffer;
 
-#pragma option -b.
 #include <wtypes.h>
-#pragma option -b
-#pragma option -b.
 #include <unknwn.h>
-#pragma option -b
-#pragma option -b.
 #include <objidl.h>
-#pragma option -b
-
-
-// macros to define byte pattern for a GUID.
-//      Example: DEFINE_GUID(GUID_XXX, a, b, c, ...);
-//
-// Each dll/exe must initialize the GUIDs once.  This is done in one of
-// two ways.  If you are not using precompiled headers for the file(s) which
-// initializes the GUIDs, define INITGUID before including objbase.h.  This
-// is how OLE builds the initialized versions of the GUIDs which are included
-// in ole2.lib.  The GUIDs in ole2.lib are all defined in the same text
-// segment GUID_TEXT.
-//
-// The alternative (which some versions of the compiler don't handle properly;
-// they wind up with the initialized GUIDs in a data, not a text segment),
-// is to use a precompiled version of objbase.h and then include initguid.h
-// after objbase.h followed by one or more of the guid defintion files.
-
-#ifndef INITGUID
-#define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-    EXTERN_C const GUID FAR name
-#else
-
-#define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-        EXTERN_C const GUID name \
-                = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
-#endif // INITGUID
-
-#define DEFINE_OLEGUID(name, l, w1, w2) \
-    DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
 
 #ifdef _OLE32_
-
-
-// Faster (but makes code fatter) inline version...use sparingly
-#ifdef __cplusplus
-inline BOOL  InlineIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
-{
-   return (
-      ((PLONG) &rguid1)[0] == ((PLONG) &rguid2)[0] &&
-      ((PLONG) &rguid1)[1] == ((PLONG) &rguid2)[1] &&
-      ((PLONG) &rguid1)[2] == ((PLONG) &rguid2)[2] &&
-      ((PLONG) &rguid1)[3] == ((PLONG) &rguid2)[3]);
-}
-#else   // ! __cplusplus
-#define InlineIsEqualGUID(rguid1, rguid2)  \
-        (((PLONG) rguid1)[0] == ((PLONG) rguid2)[0] &&   \
-        ((PLONG) rguid1)[1] == ((PLONG) rguid2)[1] &&    \
-        ((PLONG) rguid1)[2] == ((PLONG) rguid2)[2] &&    \
-        ((PLONG) rguid1)[3] == ((PLONG) rguid2)[3])
-#endif  // __cplusplus
-
 #ifdef _OLE32PRIV_
 BOOL _fastcall wIsEqualGUID(REFGUID rguid1, REFGUID rguid2);
 #define IsEqualGUID(rguid1, rguid2) wIsEqualGUID(rguid1, rguid2)
 #else
-#define IsEqualGUID(rguid1, rguid2) InlineIsEqualGUID(rguid1, rguid2)
+#define __INLINE_ISEQUAL_GUID
 #endif  // _OLE32PRIV_
+#endif  // _OLE32_
 
-#else   // ! _OLE32_
-#ifdef __cplusplus
-inline BOOL IsEqualGUID(REFGUID rguid1, REFGUID rguid2)
-{
-    return !memcmp(&rguid1, &rguid2, sizeof(GUID));
-}
-#else   //  ! __cplusplus
-#define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID)))
-#endif  //  __cplusplus
-#endif  //  _OLE32_
-
-#define IsEqualIID(riid1, riid2) IsEqualGUID(riid1, riid2)
-#define IsEqualCLSID(rclsid1, rclsid2) IsEqualGUID(rclsid1, rclsid2)
-
-#ifdef __cplusplus
-
-// because GUID is defined elsewhere in WIN32 land, the operator == and !=
-// are moved outside the class to global scope.
-
-#ifdef _OLE32_
-inline BOOL operator==(const GUID& guidOne, const GUID& guidOther)
-{
-    return IsEqualGUID(guidOne,guidOther);
-}
-#else   // !_OLE32_
-inline BOOL operator==(const GUID& guidOne, const GUID& guidOther)
-{
-#ifdef _WIN32
-    return !memcmp(&guidOne,&guidOther,sizeof(GUID));
-#else
-    return !_fmemcmp(&guidOne,&guidOther,sizeof(GUID)); }
-#endif
-}
-#endif // _OLE32_
-
-inline BOOL operator!=(const GUID& guidOne, const GUID& guidOther)
-{
-    return !(guidOne == guidOther);
-}
-
-#endif // __cpluscplus
-
+#include <guiddef.h>
 
 #ifndef INITGUID
-#pragma option -b.
 #include <cguid.h>
-#pragma option -b
 #endif
 
 // COM initialization flags; passed to CoInitialize.
@@ -553,16 +421,16 @@ WINOLEAPI_(DWORD) CoBuildVersion( VOID );
 
 /* init/uninit */
 
-WINOLEAPI  CoInitialize(LPVOID pvReserved);
+WINOLEAPI  CoInitialize(IN LPVOID pvReserved);
 WINOLEAPI_(void)  CoUninitialize(void);
-WINOLEAPI  CoGetMalloc(DWORD dwMemContext, LPMALLOC FAR* ppMalloc);
+WINOLEAPI  CoGetMalloc(IN DWORD dwMemContext, OUT LPMALLOC FAR* ppMalloc);
 WINOLEAPI_(DWORD) CoGetCurrentProcess(void);
-WINOLEAPI  CoRegisterMallocSpy(LPMALLOCSPY pMallocSpy);
+WINOLEAPI  CoRegisterMallocSpy(IN LPMALLOCSPY pMallocSpy);
 WINOLEAPI  CoRevokeMallocSpy(void);
-WINOLEAPI  CoCreateStandardMalloc(DWORD memctx, IMalloc FAR* FAR* ppMalloc);
+WINOLEAPI  CoCreateStandardMalloc(IN DWORD memctx, OUT IMalloc FAR* FAR* ppMalloc);
 
 #if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
-WINOLEAPI  CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit);
+WINOLEAPI  CoInitializeEx(IN LPVOID pvReserved, IN DWORD dwCoInit);
 #endif // DCOM
 
 #if DBG == 1
@@ -570,53 +438,71 @@ WINOLEAPI_(ULONG) DebugCoGetRpcFault( void );
 WINOLEAPI_(void) DebugCoSetRpcFault( ULONG );
 #endif
 
+/* COM+ APIs */
+
+WINOLEAPI     CoGetObjectContext(IN REFIID riid, OUT LPVOID FAR* ppv);
+
 /* register/revoke/get class objects */
 
-WINOLEAPI  CoGetClassObject(REFCLSID rclsid, DWORD dwClsContext, LPVOID pvReserved,
-                    REFIID riid, LPVOID FAR* ppv);
-WINOLEAPI  CoRegisterClassObject(REFCLSID rclsid, LPUNKNOWN pUnk,
-                    DWORD dwClsContext, DWORD flags, LPDWORD lpdwRegister);
-WINOLEAPI  CoRevokeClassObject(DWORD dwRegister);
+WINOLEAPI  CoGetClassObject(IN REFCLSID rclsid, IN DWORD dwClsContext, IN LPVOID pvReserved,
+                    IN REFIID riid, OUT LPVOID FAR* ppv);
+WINOLEAPI  CoRegisterClassObject(IN REFCLSID rclsid, IN LPUNKNOWN pUnk,
+                    IN DWORD dwClsContext, IN DWORD flags, OUT LPDWORD lpdwRegister);
+WINOLEAPI  CoRevokeClassObject(IN DWORD dwRegister);
 WINOLEAPI  CoResumeClassObjects(void);
 WINOLEAPI  CoSuspendClassObjects(void);
 WINOLEAPI_(ULONG) CoAddRefServerProcess(void);
 WINOLEAPI_(ULONG) CoReleaseServerProcess(void);
-WINOLEAPI  CoGetPSClsid(REFIID riid, CLSID *pClsid);
-WINOLEAPI  CoRegisterPSClsid(REFIID riid, REFCLSID rclsid);
+WINOLEAPI  CoGetPSClsid(IN REFIID riid, OUT CLSID *pClsid);
+WINOLEAPI  CoRegisterPSClsid(IN REFIID riid, IN REFCLSID rclsid);
+
+// Registering surrogate processes
+WINOLEAPI  CoRegisterSurrogate(IN LPSURROGATE pSurrogate);
 
 /* marshaling interface pointers */
 
-WINOLEAPI CoGetMarshalSizeMax(ULONG *pulSize, REFIID riid, LPUNKNOWN pUnk,
-                    DWORD dwDestContext, LPVOID pvDestContext, DWORD mshlflags);
-WINOLEAPI CoMarshalInterface(LPSTREAM pStm, REFIID riid, LPUNKNOWN pUnk,
-                    DWORD dwDestContext, LPVOID pvDestContext, DWORD mshlflags);
-WINOLEAPI CoUnmarshalInterface(LPSTREAM pStm, REFIID riid, LPVOID FAR* ppv);
-WINOLEAPI CoMarshalHresult(LPSTREAM pstm, HRESULT hresult);
-WINOLEAPI CoUnmarshalHresult(LPSTREAM pstm, HRESULT FAR * phresult);
-WINOLEAPI CoReleaseMarshalData(LPSTREAM pStm);
-WINOLEAPI CoDisconnectObject(LPUNKNOWN pUnk, DWORD dwReserved);
-WINOLEAPI CoLockObjectExternal(LPUNKNOWN pUnk, BOOL fLock, BOOL fLastUnlockReleases);
-WINOLEAPI CoGetStandardMarshal(REFIID riid, LPUNKNOWN pUnk,
-                    DWORD dwDestContext, LPVOID pvDestContext, DWORD mshlflags,
-                    LPMARSHAL FAR* ppMarshal);
+WINOLEAPI CoGetMarshalSizeMax(OUT ULONG *pulSize, IN REFIID riid, IN LPUNKNOWN pUnk,
+                    IN DWORD dwDestContext, IN LPVOID pvDestContext, IN DWORD mshlflags);
+WINOLEAPI CoMarshalInterface(IN LPSTREAM pStm, IN REFIID riid, IN LPUNKNOWN pUnk,
+                    IN DWORD dwDestContext, IN LPVOID pvDestContext, IN DWORD mshlflags);
+WINOLEAPI CoUnmarshalInterface(IN LPSTREAM pStm, IN REFIID riid, OUT LPVOID FAR* ppv);
+WINOLEAPI CoMarshalHresult(IN LPSTREAM pstm, IN HRESULT hresult);
+WINOLEAPI CoUnmarshalHresult(IN LPSTREAM pstm, OUT HRESULT FAR * phresult);
+WINOLEAPI CoReleaseMarshalData(IN LPSTREAM pStm);
+WINOLEAPI CoDisconnectObject(IN LPUNKNOWN pUnk, IN DWORD dwReserved);
+WINOLEAPI CoLockObjectExternal(IN LPUNKNOWN pUnk, IN BOOL fLock, IN BOOL fLastUnlockReleases);
+WINOLEAPI CoGetStandardMarshal(IN REFIID riid, IN LPUNKNOWN pUnk,
+                    IN DWORD dwDestContext, IN LPVOID pvDestContext, IN DWORD mshlflags,
+                    OUT LPMARSHAL FAR* ppMarshal);
 
-WINOLEAPI_(BOOL) CoIsHandlerConnected(LPUNKNOWN pUnk);
-WINOLEAPI_(BOOL) CoHasStrongExternalConnections(LPUNKNOWN pUnk);
+
+WINOLEAPI CoGetStdMarshalEx(IN LPUNKNOWN pUnkOuter, IN DWORD smexflags,
+                            OUT LPUNKNOWN FAR* ppUnkInner);
+
+/* flags for CoGetStdMarshalEx */
+typedef enum tagSTDMSHLFLAGS
+{
+    SMEXF_SERVER     = 0x01,       // server side aggregated std marshaler
+    SMEXF_HANDLER    = 0x02        // client side (handler) agg std marshaler
+} STDMSHLFLAGS;
+
+
+WINOLEAPI_(BOOL) CoIsHandlerConnected(IN LPUNKNOWN pUnk);
 
 // Apartment model inter-thread interface passing helpers
-WINOLEAPI CoMarshalInterThreadInterfaceInStream(REFIID riid, LPUNKNOWN pUnk,
-                    LPSTREAM *ppStm);
+WINOLEAPI CoMarshalInterThreadInterfaceInStream(IN REFIID riid, IN LPUNKNOWN pUnk,
+                    OUT LPSTREAM *ppStm);
 
-WINOLEAPI CoGetInterfaceAndReleaseStream(LPSTREAM pStm, REFIID iid,
-                    LPVOID FAR* ppv);
+WINOLEAPI CoGetInterfaceAndReleaseStream(IN LPSTREAM pStm, IN REFIID iid,
+                    OUT LPVOID FAR* ppv);
 
-WINOLEAPI CoCreateFreeThreadedMarshaler(LPUNKNOWN  punkOuter,
-                    LPUNKNOWN *ppunkMarshal);
+WINOLEAPI CoCreateFreeThreadedMarshaler(IN LPUNKNOWN  punkOuter,
+                    OUT LPUNKNOWN *ppunkMarshal);
 
 /* dll loading helpers; keeps track of ref counts and unloads all on exit */
 
-WINOLEAPI_(HINSTANCE) CoLoadLibrary(LPOLESTR lpszLibName, BOOL bAutoFree);
-WINOLEAPI_(void) CoFreeLibrary(HINSTANCE hInst);
+WINOLEAPI_(HINSTANCE) CoLoadLibrary(IN LPOLESTR lpszLibName, IN BOOL bAutoFree);
+WINOLEAPI_(void) CoFreeLibrary(IN HINSTANCE hInst);
 WINOLEAPI_(void) CoFreeAllLibraries(void);
 WINOLEAPI_(void) CoFreeUnusedLibraries(void);
 
@@ -626,126 +512,159 @@ WINOLEAPI_(void) CoFreeUnusedLibraries(void);
 /* Call Security. */
 
 WINOLEAPI CoInitializeSecurity(
-                    PSECURITY_DESCRIPTOR         pSecDesc,
-                    LONG                         cAuthSvc,
-                    SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-                    void                        *pReserved1,
-                    DWORD                        dwAuthnLevel,
-                    DWORD                        dwImpLevel,
-                    void                        *pReserved2,
-                    DWORD                        dwCapabilities,
-                    void                        *pReserved3 );
-WINOLEAPI CoGetCallContext( REFIID riid, void **ppInterface );
+                    IN PSECURITY_DESCRIPTOR         pSecDesc,
+                    IN LONG                         cAuthSvc,
+                    IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
+                    IN void                        *pReserved1,
+                    IN DWORD                        dwAuthnLevel,
+                    IN DWORD                        dwImpLevel,
+                    IN void                        *pAuthList,
+                    IN DWORD                        dwCapabilities,
+                    IN void                        *pReserved3 );
+WINOLEAPI CoGetCallContext( IN REFIID riid, OUT void **ppInterface );
 WINOLEAPI CoQueryProxyBlanket(
-    IUnknown                  *pProxy,
-    DWORD                     *pwAuthnSvc,
-    DWORD                     *pAuthzSvc,
-    OLECHAR                  **pServerPrincName,
-    DWORD                     *pAuthnLevel,
-    DWORD                     *pImpLevel,
-    RPC_AUTH_IDENTITY_HANDLE  *pAuthInfo,
-    DWORD                     *pCapabilites );
+    IN  IUnknown                  *pProxy,
+    OUT DWORD                     *pwAuthnSvc,
+    OUT DWORD                     *pAuthzSvc,
+    OUT OLECHAR                  **pServerPrincName,
+    OUT DWORD                     *pAuthnLevel,
+    OUT DWORD                     *pImpLevel,
+    OUT RPC_AUTH_IDENTITY_HANDLE  *pAuthInfo,
+    OUT DWORD                     *pCapabilites );
 WINOLEAPI CoSetProxyBlanket(
-    IUnknown                 *pProxy,
-    DWORD                     dwAuthnSvc,
-    DWORD                     dwAuthzSvc,
-    OLECHAR                  *pServerPrincName,
-    DWORD                     dwAuthnLevel,
-    DWORD                     dwImpLevel,
-    RPC_AUTH_IDENTITY_HANDLE  pAuthInfo,
-    DWORD                     dwCapabilities );
+    IN IUnknown                 *pProxy,
+    IN DWORD                     dwAuthnSvc,
+    IN DWORD                     dwAuthzSvc,
+    IN OLECHAR                  *pServerPrincName,
+    IN DWORD                     dwAuthnLevel,
+    IN DWORD                     dwImpLevel,
+    IN RPC_AUTH_IDENTITY_HANDLE  pAuthInfo,
+    IN DWORD                     dwCapabilities );
 WINOLEAPI CoCopyProxy(
-    IUnknown    *pProxy,
-    IUnknown   **ppCopy );
+    IN  IUnknown    *pProxy,
+    OUT IUnknown   **ppCopy );
 WINOLEAPI CoQueryClientBlanket(
-    DWORD             *pAuthnSvc,
-    DWORD             *pAuthzSvc,
-    OLECHAR          **pServerPrincName,
-    DWORD             *pAuthnLevel,
-    DWORD             *pImpLevel,
-    RPC_AUTHZ_HANDLE  *pPrivs,
-    DWORD             *pCapabilities );
+    OUT DWORD             *pAuthnSvc,
+    OUT DWORD             *pAuthzSvc,
+    OUT OLECHAR          **pServerPrincName,
+    OUT DWORD             *pAuthnLevel,
+    OUT DWORD             *pImpLevel,
+    OUT RPC_AUTHZ_HANDLE  *pPrivs,
+    OUT DWORD             *pCapabilities );
 WINOLEAPI CoImpersonateClient();
 WINOLEAPI CoRevertToSelf();
 WINOLEAPI CoQueryAuthenticationServices(
-    DWORD *pcAuthSvc,
-    SOLE_AUTHENTICATION_SERVICE **asAuthSvc );
-WINOLEAPI CoSwitchCallContext( IUnknown *pNewObject, IUnknown **ppOldObject );
+    OUT DWORD *pcAuthSvc,
+    OUT SOLE_AUTHENTICATION_SERVICE **asAuthSvc );
+WINOLEAPI CoSwitchCallContext( IN IUnknown *pNewObject, OUT IUnknown **ppOldObject );
 
 #define COM_RIGHTS_EXECUTE 1
+#define COM_RIGHTS_SAFE_FOR_SCRIPTING 2
 
 #endif // DCOM
 
 /* helper for creating instances */
 
-WINOLEAPI CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
-                    DWORD dwClsContext, REFIID riid, LPVOID FAR* ppv);
+WINOLEAPI CoCreateInstance(IN REFCLSID rclsid, IN LPUNKNOWN pUnkOuter,
+                    IN DWORD dwClsContext, IN REFIID riid, OUT LPVOID FAR* ppv);
 
 
 #if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
 
 WINOLEAPI CoGetInstanceFromFile(
-    COSERVERINFO *              pServerInfo,
-    CLSID       *               pClsid,
-    IUnknown    *               punkOuter, // only relevant locally
-    DWORD                       dwClsCtx,
-    DWORD                       grfMode,
-    OLECHAR *                   pwszName,
-    DWORD                       dwCount,
-    MULTI_QI        *           pResults );
+    IN COSERVERINFO *              pServerInfo,
+    IN CLSID       *               pClsid,
+    IN IUnknown    *               punkOuter, // only relevant locally
+    IN DWORD                       dwClsCtx,
+    IN DWORD                       grfMode,
+    IN OLECHAR *                   pwszName,
+    IN DWORD                       dwCount,
+    IN OUT MULTI_QI    *           pResults );
 
 WINOLEAPI CoGetInstanceFromIStorage(
-    COSERVERINFO *              pServerInfo,
-    CLSID       *               pClsid,
-    IUnknown    *               punkOuter, // only relevant locally
-    DWORD                       dwClsCtx,
-    struct IStorage *           pstg,
-    DWORD                       dwCount,
-    MULTI_QI        *           pResults );
+    IN COSERVERINFO *              pServerInfo,
+    IN CLSID       *               pClsid,
+    IN IUnknown    *               punkOuter, // only relevant locally
+    IN DWORD                       dwClsCtx,
+    IN struct IStorage *           pstg,
+    IN DWORD                       dwCount,
+    IN OUT MULTI_QI    *           pResults );
 
 WINOLEAPI CoCreateInstanceEx(
-    REFCLSID                    Clsid,
-    IUnknown    *               punkOuter, // only relevant locally
-    DWORD                       dwClsCtx,
-    COSERVERINFO *              pServerInfo,
-    DWORD                       dwCount,
-    MULTI_QI        *           pResults );
+    IN REFCLSID                    Clsid,
+    IN IUnknown    *               punkOuter, // only relevant locally
+    IN DWORD                       dwClsCtx,
+    IN COSERVERINFO *              pServerInfo,
+    IN DWORD                       dwCount,
+    IN OUT MULTI_QI    *           pResults );
 
 #endif // DCOM
 
+/* Call related APIs */
+#if (_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM) // DCOM
+
+WINOLEAPI CoGetCancelObject(IN DWORD dwThreadId, IN REFIID iid, OUT void **ppUnk);
+WINOLEAPI CoSetCancelObject(IN IUnknown *pUnk);
+WINOLEAPI CoCancelCall(IN DWORD dwThreadId, IN ULONG ulTimeout);
+WINOLEAPI CoTestCancel();
+WINOLEAPI CoEnableCallCancellation(IN LPVOID pReserved);
+WINOLEAPI CoDisableCallCancellation(IN LPVOID pReserved);
+
+
+#endif
 
 /* other helpers */
 
-WINOLEAPI StringFromCLSID(REFCLSID rclsid, LPOLESTR FAR* lplpsz);
-WINOLEAPI CLSIDFromString(LPOLESTR lpsz, LPCLSID pclsid);
-WINOLEAPI StringFromIID(REFIID rclsid, LPOLESTR FAR* lplpsz);
-WINOLEAPI IIDFromString(LPOLESTR lpsz, LPIID lpiid);
-WINOLEAPI_(BOOL) CoIsOle1Class(REFCLSID rclsid);
-WINOLEAPI ProgIDFromCLSID (REFCLSID clsid, LPOLESTR FAR* lplpszProgID);
-WINOLEAPI CLSIDFromProgID (LPCOLESTR lpszProgID, LPCLSID lpclsid);
-WINOLEAPI_(int) StringFromGUID2(REFGUID rguid, LPOLESTR lpsz, int cbMax);
+WINOLEAPI StringFromCLSID(IN REFCLSID rclsid, OUT LPOLESTR FAR* lplpsz);
+WINOLEAPI CLSIDFromString(IN LPOLESTR lpsz, OUT LPCLSID pclsid);
+WINOLEAPI StringFromIID(IN REFIID rclsid, OUT LPOLESTR FAR* lplpsz);
+WINOLEAPI IIDFromString(IN LPOLESTR lpsz, OUT LPIID lpiid);
+WINOLEAPI_(BOOL) CoIsOle1Class(IN REFCLSID rclsid);
+WINOLEAPI ProgIDFromCLSID (IN REFCLSID clsid, OUT LPOLESTR FAR* lplpszProgID);
+WINOLEAPI CLSIDFromProgID (IN LPCOLESTR lpszProgID, OUT LPCLSID lpclsid);
+WINOLEAPI CLSIDFromProgIDEx (IN LPCOLESTR lpszProgID, OUT LPCLSID lpclsid);
+WINOLEAPI_(int) StringFromGUID2(IN REFGUID rguid, OUT LPOLESTR lpsz, IN int cchMax);
 
-WINOLEAPI CoCreateGuid(GUID FAR *pguid);
+WINOLEAPI CoCreateGuid(OUT GUID FAR *pguid);
 
 WINOLEAPI_(BOOL) CoFileTimeToDosDateTime(
-                 FILETIME FAR* lpFileTime, LPWORD lpDosDate, LPWORD lpDosTime);
+                 IN FILETIME FAR* lpFileTime, OUT LPWORD lpDosDate, OUT LPWORD lpDosTime);
 WINOLEAPI_(BOOL) CoDosDateTimeToFileTime(
-                       WORD nDosDate, WORD nDosTime, FILETIME FAR* lpFileTime);
-WINOLEAPI  CoFileTimeNow( FILETIME FAR* lpFileTime );
+                       IN WORD nDosDate, IN WORD nDosTime, OUT FILETIME FAR* lpFileTime);
+WINOLEAPI  CoFileTimeNow( OUT FILETIME FAR* lpFileTime );
 
 
-WINOLEAPI CoRegisterMessageFilter( LPMESSAGEFILTER lpMessageFilter,
-                                LPMESSAGEFILTER FAR* lplpMessageFilter );
+WINOLEAPI CoRegisterMessageFilter( IN LPMESSAGEFILTER lpMessageFilter,
+                                OUT LPMESSAGEFILTER FAR* lplpMessageFilter );
 
 #if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
-WINOLEAPI CoRegisterChannelHook( REFGUID ExtensionUuid, IChannelHook *pChannelHook );
+WINOLEAPI CoRegisterChannelHook( IN REFGUID ExtensionUuid, IN IChannelHook *pChannelHook );
+#endif // DCOM
+
+#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
+/* Synchronization API */
+
+WINOLEAPI CoWaitForMultipleHandles (IN DWORD dwFlags,
+                                    IN DWORD dwTimeout,
+                                    IN ULONG cHandles,
+                                    IN LPHANDLE pHandles,
+                                    OUT LPDWORD  lpdwindex);
+
+/* Flags for Synchronization API and Classes */
+
+typedef enum tagCOWAIT_FLAGS
+{
+  COWAIT_WAITALL = 1,
+  COWAIT_ALERTABLE = 2
+}COWAIT_FLAGS;
+
 #endif // DCOM
 
 
 /* TreatAs APIS */
 
-WINOLEAPI CoGetTreatAsClass(REFCLSID clsidOld, LPCLSID pClsidNew);
-WINOLEAPI CoTreatAsClass(REFCLSID clsidOld, REFCLSID clsidNew);
+WINOLEAPI CoGetTreatAsClass(IN REFCLSID clsidOld, OUT LPCLSID pClsidNew);
+WINOLEAPI CoTreatAsClass(IN REFCLSID clsidOld, IN REFCLSID clsidNew);
 
 
 /* the server dlls must define their DllGetClassObject and DllCanUnloadNow
@@ -765,23 +684,23 @@ typedef HRESULT (STDAPICALLTYPE * LPFNGETCLASSOBJECT) (REFCLSID, REFIID, LPVOID 
 typedef HRESULT (STDAPICALLTYPE * LPFNCANUNLOADNOW)(void);
 //#endif
 
-STDAPI  DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppv);
+STDAPI  DllGetClassObject(IN REFCLSID rclsid, IN REFIID riid, OUT LPVOID FAR* ppv);
 
 STDAPI  DllCanUnloadNow(void);
 
 
 /****** Default Memory Allocation ******************************************/
-WINOLEAPI_(LPVOID) CoTaskMemAlloc(ULONG cb);
-WINOLEAPI_(LPVOID) CoTaskMemRealloc(LPVOID pv, ULONG cb);
-WINOLEAPI_(void)   CoTaskMemFree(LPVOID pv);
+WINOLEAPI_(LPVOID) CoTaskMemAlloc(IN SIZE_T cb);
+WINOLEAPI_(LPVOID) CoTaskMemRealloc(IN LPVOID pv, IN SIZE_T cb);
+WINOLEAPI_(void)   CoTaskMemFree(IN LPVOID pv);
 
 /****** DV APIs ***********************************************************/
 
 
-WINOLEAPI CreateDataAdviseHolder(LPDATAADVISEHOLDER FAR* ppDAHolder);
+WINOLEAPI CreateDataAdviseHolder(OUT LPDATAADVISEHOLDER FAR* ppDAHolder);
 
-WINOLEAPI CreateDataCache(LPUNKNOWN pUnkOuter, REFCLSID rclsid,
-                                        REFIID iid, LPVOID FAR* ppv);
+WINOLEAPI CreateDataCache(IN LPUNKNOWN pUnkOuter, IN REFCLSID rclsid,
+                                        IN REFIID iid, OUT LPVOID FAR* ppv);
 
 
 
@@ -789,89 +708,134 @@ WINOLEAPI CreateDataCache(LPUNKNOWN pUnkOuter, REFCLSID rclsid,
 /****** Storage API Prototypes ********************************************/
 
 
-WINOLEAPI StgCreateDocfile(const OLECHAR FAR* pwcsName,
-            DWORD grfMode,
-            DWORD reserved,
-            IStorage FAR * FAR *ppstgOpen);
+WINOLEAPI StgCreateDocfile(IN const OLECHAR FAR* pwcsName,
+            IN DWORD grfMode,
+            IN DWORD reserved,
+            OUT IStorage FAR * FAR *ppstgOpen);
 
-WINOLEAPI StgCreateDocfileOnILockBytes(ILockBytes FAR *plkbyt,
-                    DWORD grfMode,
-                    DWORD reserved,
-                    IStorage FAR * FAR *ppstgOpen);
+WINOLEAPI StgCreateDocfileOnILockBytes(IN ILockBytes FAR *plkbyt,
+                    IN DWORD grfMode,
+                    IN DWORD reserved,
+                    OUT IStorage FAR * FAR *ppstgOpen);
 
-WINOLEAPI StgOpenStorage(const OLECHAR FAR* pwcsName,
-              IStorage FAR *pstgPriority,
-              DWORD grfMode,
-              SNB snbExclude,
-              DWORD reserved,
-              IStorage FAR * FAR *ppstgOpen);
-WINOLEAPI StgOpenStorageOnILockBytes(ILockBytes FAR *plkbyt,
-                  IStorage FAR *pstgPriority,
-                  DWORD grfMode,
-                  SNB snbExclude,
-                  DWORD reserved,
-                  IStorage FAR * FAR *ppstgOpen);
+WINOLEAPI StgOpenStorage(IN const OLECHAR FAR* pwcsName,
+              IN  IStorage FAR *pstgPriority,
+              IN  DWORD grfMode,
+              IN  SNB snbExclude,
+              IN  DWORD reserved,
+              OUT IStorage FAR * FAR *ppstgOpen);
+WINOLEAPI StgOpenStorageOnILockBytes(IN ILockBytes FAR *plkbyt,
+                  IN  IStorage FAR *pstgPriority,
+                  IN  DWORD grfMode,
+                  IN  SNB snbExclude,
+                  IN  DWORD reserved,
+                  OUT IStorage FAR * FAR *ppstgOpen);
 
-WINOLEAPI StgIsStorageFile(const OLECHAR FAR* pwcsName);
-WINOLEAPI StgIsStorageILockBytes(ILockBytes FAR* plkbyt);
+WINOLEAPI StgIsStorageFile(IN const OLECHAR FAR* pwcsName);
+WINOLEAPI StgIsStorageILockBytes(IN ILockBytes FAR* plkbyt);
 
-WINOLEAPI StgSetTimes(OLECHAR const FAR* lpszName,
-                   FILETIME const FAR* pctime,
-                   FILETIME const FAR* patime,
-                   FILETIME const FAR* pmtime);
+WINOLEAPI StgSetTimes(IN OLECHAR const FAR* lpszName,
+                   IN FILETIME const FAR* pctime,
+                   IN FILETIME const FAR* patime,
+                   IN FILETIME const FAR* pmtime);
 
-WINOLEAPI StgOpenAsyncDocfileOnIFillLockBytes( IFillLockBytes *pflb,
-             DWORD grfMode,
-             DWORD asyncFlags,
-             IStorage **ppstgOpen);
+WINOLEAPI StgOpenAsyncDocfileOnIFillLockBytes( IN IFillLockBytes *pflb,
+             IN  DWORD grfMode,
+             IN  DWORD asyncFlags,
+             OUT IStorage **ppstgOpen);
 
-WINOLEAPI StgGetIFillLockBytesOnILockBytes( ILockBytes *pilb,
-             IFillLockBytes **ppflb);
+WINOLEAPI StgGetIFillLockBytesOnILockBytes( IN ILockBytes *pilb,
+             OUT IFillLockBytes **ppflb);
 
-WINOLEAPI StgGetIFillLockBytesOnFile(OLECHAR const *pwcsName,
-             IFillLockBytes **ppflb);
+WINOLEAPI StgGetIFillLockBytesOnFile(IN OLECHAR const *pwcsName,
+             OUT IFillLockBytes **ppflb);
 
 
-WINOLEAPI StgOpenLayoutDocfile(OLECHAR const *pwcsDfName,
-             DWORD grfMode,
-             DWORD reserved,
-             IStorage **ppstgOpen);
+WINOLEAPI StgOpenLayoutDocfile(IN OLECHAR const *pwcsDfName,
+             IN  DWORD grfMode,
+             IN  DWORD reserved,
+             OUT IStorage **ppstgOpen);
 
+// STG initialization options for StgCreateStorageEx and StgOpenStorageEx
+#define STGOPTIONS_VERSION 1
+
+typedef struct tagSTGOPTIONS
+{
+    USHORT usVersion;            // Version 1
+    USHORT reserved;             // must be 0 for padding
+    ULONG ulSectorSize;          // docfile header sector size (512)
+} STGOPTIONS;
+
+WINOLEAPI StgCreateStorageEx (IN const WCHAR* pwcsName,
+            IN  DWORD grfMode,
+            IN  DWORD stgfmt,              // enum
+            IN  DWORD grfAttrs,             // reserved
+            IN  STGOPTIONS * pStgOptions,
+            IN  void * reserved,
+            IN  REFIID riid,
+            OUT void ** ppObjectOpen);
+
+WINOLEAPI StgOpenStorageEx (IN const WCHAR* pwcsName,
+            IN  DWORD grfMode,
+            IN  DWORD stgfmt,              // enum
+            IN  DWORD grfAttrs,             // reserved
+            IN  STGOPTIONS * pStgOptions,
+            IN  void * reserved,
+            IN  REFIID riid,
+            OUT void ** ppObjectOpen);
 
 
 //
 //  Moniker APIs
 //
 
-WINOLEAPI  BindMoniker(LPMONIKER pmk, DWORD grfOpt, REFIID iidResult, LPVOID FAR* ppvResult);
-WINOLEAPI  CoGetObject(LPCWSTR pszName, BIND_OPTS *pBindOptions, REFIID riid, void **ppv);
-WINOLEAPI  MkParseDisplayName(LPBC pbc, LPCOLESTR szUserName,
-                ULONG FAR * pchEaten, LPMONIKER FAR * ppmk);
-WINOLEAPI  MonikerRelativePathTo(LPMONIKER pmkSrc, LPMONIKER pmkDest, LPMONIKER
-                FAR* ppmkRelPath, BOOL dwReserved);
-WINOLEAPI  MonikerCommonPrefixWith(LPMONIKER pmkThis, LPMONIKER pmkOther,
-                LPMONIKER FAR* ppmkCommon);
-WINOLEAPI  CreateBindCtx(DWORD reserved, LPBC FAR* ppbc);
-WINOLEAPI  CreateGenericComposite(LPMONIKER pmkFirst, LPMONIKER pmkRest,
-    LPMONIKER FAR* ppmkComposite);
-WINOLEAPI  GetClassFile (LPCOLESTR szFilename, CLSID FAR* pclsid);
+WINOLEAPI  BindMoniker(IN LPMONIKER pmk, IN DWORD grfOpt, IN REFIID iidResult, OUT LPVOID FAR* ppvResult);
 
-WINOLEAPI  CreateClassMoniker(REFCLSID rclsid, LPMONIKER FAR* ppmk);
+WINOLEAPI  CoInstall(
+    IN  IBindCtx     * pbc,
+    IN  DWORD          dwFlags,
+    IN  uCLSSPEC     * pClassSpec,
+    IN  QUERYCONTEXT * pQuery,
+    IN  LPWSTR         pszCodeBase);
 
-WINOLEAPI  CreateFileMoniker(LPCOLESTR lpszPathName, LPMONIKER FAR* ppmk);
+WINOLEAPI  CoGetObject(IN LPCWSTR pszName, IN BIND_OPTS *pBindOptions, IN REFIID riid, OUT void **ppv);
+WINOLEAPI  MkParseDisplayName(IN LPBC pbc, IN LPCOLESTR szUserName,
+                OUT ULONG FAR * pchEaten, OUT LPMONIKER FAR * ppmk);
+WINOLEAPI  MonikerRelativePathTo(IN LPMONIKER pmkSrc, IN LPMONIKER pmkDest, OUT LPMONIKER
+                FAR* ppmkRelPath, IN BOOL dwReserved);
+WINOLEAPI  MonikerCommonPrefixWith(IN LPMONIKER pmkThis, IN LPMONIKER pmkOther,
+                OUT LPMONIKER FAR* ppmkCommon);
+WINOLEAPI  CreateBindCtx(IN DWORD reserved, OUT LPBC FAR* ppbc);
+WINOLEAPI  CreateGenericComposite(IN LPMONIKER pmkFirst, IN LPMONIKER pmkRest,
+    OUT LPMONIKER FAR* ppmkComposite);
+WINOLEAPI  GetClassFile (IN LPCOLESTR szFilename, OUT CLSID FAR* pclsid);
 
-WINOLEAPI  CreateItemMoniker(LPCOLESTR lpszDelim, LPCOLESTR lpszItem,
-    LPMONIKER FAR* ppmk);
-WINOLEAPI  CreateAntiMoniker(LPMONIKER FAR* ppmk);
-WINOLEAPI  CreatePointerMoniker(LPUNKNOWN punk, LPMONIKER FAR* ppmk);
+WINOLEAPI  CreateClassMoniker(IN REFCLSID rclsid, OUT LPMONIKER FAR* ppmk);
 
-WINOLEAPI  GetRunningObjectTable( DWORD reserved, LPRUNNINGOBJECTTABLE FAR* pprot);
+WINOLEAPI  CreateFileMoniker(IN LPCOLESTR lpszPathName, OUT LPMONIKER FAR* ppmk);
+
+WINOLEAPI  CreateItemMoniker(IN LPCOLESTR lpszDelim, IN LPCOLESTR lpszItem,
+    OUT LPMONIKER FAR* ppmk);
+WINOLEAPI  CreateAntiMoniker(OUT LPMONIKER FAR* ppmk);
+WINOLEAPI  CreatePointerMoniker(IN LPUNKNOWN punk, OUT LPMONIKER FAR* ppmk);
+WINOLEAPI  CreateObjrefMoniker(IN LPUNKNOWN punk, OUT LPMONIKER FAR * ppmk);
+
+WINOLEAPI  GetRunningObjectTable( IN DWORD reserved, OUT LPRUNNINGOBJECTTABLE FAR* pprot);
+
+#include <urlmon.h>
+#include <propidl.h>
+
+//
+// Standard Progress Indicator impolementation
+//
+WINOLEAPI CreateStdProgressIndicator(IN HWND hwndParent,
+                                   IN  LPCOLESTR pszTitle,
+                                   IN  IBindStatusCallback * pIbscCaller,
+                                   OUT IBindStatusCallback ** ppIbsc);
 
 #ifndef RC_INVOKED
-#pragma option -b.
 #include <poppack.h>
-#pragma option -b
 #endif // RC_INVOKED
 
 #endif     // __OBJBASE_H__
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/

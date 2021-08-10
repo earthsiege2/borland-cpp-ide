@@ -1,0 +1,3325 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Version]
+DbXName="SQL Explorer"
+
+
+
+
+
+
+
+
+DbXDR=True
+DbXVersion=3.00
+
+[Properties]
+DEFAULT DRIVER:Values=Closed,PARADOX,DBASE,FOXPRO,ASCIIDRV
+NET PROTOCOL:Values1=Closed,TNS,TCP/IP,SPX/IPX,NETBIOS,NAMED PIPES,DECNET,3270,VINES
+NET PROTOCOL:Values2=APPC,ASYNC
+OPEN MODE:Values=Closed,READ/WRITE,READ ONLY
+SHARE MODE:Values=Closed,EXCLUSIVE,SHARED
+STRICTINTEGRTY:Values=Closed,FALSE,TRUE
+SQLPASSTHRU MODE:Values=Closed,NOT SHARED,SHARED AUTOCOMMIT,SHARED NOAUTOCOMMIT
+LIST SYNONYMS:Values=Closed,NONE,ALL,PRIVATE
+BLOB EDIT LOGGING:Values=Closed,FALSE,TRUE
+ENABLE SCHEMA CACHE:Values=Closed,FALSE,TRUE
+ENABLE BCD:Values=Closed,FALSE,TRUE
+ENABLE INTEGERS:Values=Closed,FALSE,TRUE
+LOCAL SHARE:Values=Closed,FALSE,TRUE
+MTS POOLING:Values=Closed,FALSE,TRUE
+OBJECT MODE:Values=Closed,FALSE,TRUE
+AUTO ODBC:Values=Closed,FALSE,TRUE
+FOURDIGITYEAR:Values=Closed,FALSE,TRUE
+YEARBIASED:Values=Closed,FALSE,TRUE
+LEADINGZEROM:Values=Closed,FALSE,TRUE
+LEADINGZEROD:Values=Closed,FALSE,TRUE
+TWELVEHOUR:Values=Closed,FALSE,TRUE
+SECONDS:Values=Closed,FALSE,TRUE
+MILSECONDS:Values=Closed,FALSE,TRUE
+LEADINGZERON:Values=Closed,FALSE,TRUE
+COLLCHAR:Values=Closed,0,1,2
+DBNLS:Values=Closed,0,1,2
+SQLQRYMODE:Values=Closed,LOCAL,SERVER
+
+:HelpContext=4039
+DB2:HelpContext=4038
+INFORMIX:HelpContext=4035
+INTRBASE:HelpContext=4037
+MSACCESS:HelpContext=4042
+MSSQL:HelpContext=4036
+ORACLE:HelpContext=4034
+STANDARD:HelpContext=4045
+SYBASE:HelpContext=4033
+
+MSSQL:Identity=select substring(@@version,1,charindex(char(0x0a),@@version)-1)
+MSSQL:IdentityRE=SQL Server [^0-9]*([0-9]+)\.
+
+SYBASE:Identity=select @@version
+SYBASE:IdentityRE=[SQL Server][Adaptive Server Enterprise]/([0-9]+)\.
+SYBASE:IdentityMap:11=10
+
+ORACLE:Identity=select 'Oracle ' || VERSION_TEXT from SM$VERSION
+ORACLE:IdentityRE=([0-9]+\.[0-9]*)
+ORACLE:IdentityMap:7.3=7.2
+
+INFORMIX:Identity=select 'Informix ' || owner from informix.systables where tabid=99
+INFORMIX:IdentityRE=([0-9]+)\.
+
+DB2:IdentityMap:DB2/2=Common Server
+DB2:IdentityMap:DB2/NT=Common Server
+DB2:IdentityMap:DB2/AIX=Common Server
+
+[DATAREP Properties]
+BDETypes:Values1=Closed,1=ZString,2=Date,3=Blob,4=Bool,5=Int16,6=Int32
+BDETypes:Values2=7=Float,8=BCD,9=Bytes,10=Time,11=TimeStamp,12=UInt16
+BDETypes:Values3=13=UInt32,14=IEEE Float,15=VarBytes,16=LockInfo
+BDETypes:Values4=17=Cursor,18=Int64,19=UInt64,20=ADT,21=Array,22=Ref,23=Table
+
+BDESubTypes:Values1=Closed,0=,1=Password,21=Money,22=Memo,23=Binary
+BDESubTypes:Values2=24=Formatted Memo,25=OLE Object,26=Graphic
+BDESubTypes:Values3=27=DBase OLE Object,28=Typed Binary,29=Auto Increment
+
+TScale:Values=Open,0=
+TBooleanTF:Values=Closed,0=False,-1=True
+TAlignment:Values=Closed,0=taLeftJustify,1=taRightJustify,2=taCenter
+
+TFieldType:Values1=Closed,0=ftUnknown,1=ftString,2=ftSmallint,3=ftInteger
+TFieldType:Values2=4=ftWord,5=ftBoolean,6=ftFloat,7=ftCurrency,8=ftBCD
+TFieldType:Values3=9=ftDate,10=ftTime,11=ftDateTime,12=ftBytes
+TFieldType:Values4=13=ftVarBytes,14=ftAutoInc,15=ftBlob,16=ftMemo
+TFieldType:Values5=17=ftGraphic,18=ftFmtMemo,19=ftParadoxOle
+TFieldType:Values6=20=ftDBaseOle,21=ftTypedBinary
+
+TBlobType:Values1=Closed,15=ftBlob,16=ftMemo,17=ftGraphic,18=ftFmtMemo
+TBlobType:Values2=19=ftParadoxOle,20=ftDBaseOle,21=ftTypedBinary
+
+DRDATABASES:Reference="Databases"
+DREXTFIELDS:Reference="Attribute Sets"
+DBTABLES:Reference="Tables"
+TABLEFLDS:Reference="Fields"
+FLDEXTFIELD:Reference="Attribute Set"
+EXTFIELDFLDS:Reference="Referencing Fields"
+PARENTEXTFIELD:Reference="Based On"
+CHILDEXTFIELD:Reference="Referencing Attribute Sets"
+
+DATABASE:Category=Database
+DATABASE:NameRE=.*
+DATABASE:Attrs=DBPATH="Path":0:-E,DBTYPE="Type"::-E
+
+TABLE:Category=Dataset
+TABLE:NameRE=.*
+TABLE:Attrs=PATH=:0,DRIVERTYPE="Type"::-E,ISFILE=:0,ISVIEW=:0,ISSYNONYM=:0
+
+FIELD:Category=Column
+FIELD:Attrs1=PHYTYPE="Physical Type"::-E
+FIELD:Attrs2=LOGTYPE="Logical Type"::-E:::VM=BDETypes
+FIELD:Attrs3=LOGSUBTYPE="Logical Subtype"::-E:::VM=BDESubTypes
+FIELD:Attrs4=UNITS1="Size"::-E
+FIELD:Attrs5=UNITS2="Scale"::-E:::VM=TScale
+FIELD:Attrs6=DEFVAL=:2:-E
+FIELD:Attrs7=MINVAL=:2:-E
+FIELD:Attrs8=MAXVAL=:2:-E
+FIELD:Attrs9=REQUIRED=:2:-E:::VM=TBooleanTF
+FIELD:Attrs10=READONLY=:2:-E:::VM=TBooleanTF
+
+EXTFIELD:NameRE=.*
+EXTFIELD:Attrs1=FIELDCLASS=:1
+EXTFIELD:Attrs2=CONTROLCLASS=:1
+EXTFIELD:Attrs3=ALIGNMENT=:2::::VM=TAlignment
+EXTFIELD:Attrs4=DISPLABEL=:2
+EXTFIELD:Attrs5=DISPWIDTH=:2
+EXTFIELD:Attrs6=READONLY=:2::::VM=TBooleanTF
+EXTFIELD:Attrs7=REQUIRED=:2::::VM=TBooleanTF
+EXTFIELD:Attrs8=VISIBLE=:2::::VM=TBooleanTF
+EXTFIELD:Attrs9=TRANSLITERATE=:2::::VM=TBooleanTF
+EXTFIELD:Attrs10=EDITMASK=:2
+EXTFIELD:Attrs11=DISPFORMAT=:2
+EXTFIELD:Attrs12=EDITFORMAT=:2
+EXTFIELD:Attrs13=MINVAL=:2
+EXTFIELD:Attrs14=MAXVAL=:2
+EXTFIELD:Attrs15=CURRENCY=:2::::VM=TBooleanTF
+EXTFIELD:Attrs16=PRECISION=:2
+EXTFIELD:Attrs17=DISPLAYVALUES=:2
+EXTFIELD:Attrs18=BLOBTYPE=:2::::VM=TBlobType
+
+[DATAREP 20 Properties]
+TABLECONSTRS:Reference="Check Constraints"
+
+CONSTRAINT:NameRE=.*
+CONSTRAINT:Attrs1=SRVCHECK=:2:-E
+CONSTRAINT:Attrs2=LOCCHECK=:2
+CONSTRAINT:Attrs3=ERRORSTR=:2
+
+EXTFIELD:Attrs1=SRVDOMAINNAME=:1:-E
+EXTFIELD:Attrs2=FIELDCLASS=:1
+EXTFIELD:Attrs3=CONTROLCLASS=:1
+EXTFIELD:Attrs4=ALIGNMENT=:2::::VM=TAlignment
+EXTFIELD:Attrs5=DISPLABEL=:2
+EXTFIELD:Attrs6=DISPWIDTH=:2
+EXTFIELD:Attrs7=READONLY=:2::::VM=TBooleanTF
+EXTFIELD:Attrs8=REQUIRED=:2::::VM=TBooleanTF
+EXTFIELD:Attrs9=VISIBLE=:2::::VM=TBooleanTF
+EXTFIELD:Attrs10=TRANSLITERATE=:2::::VM=TBooleanTF
+EXTFIELD:Attrs11=EDITMASK=:2
+EXTFIELD:Attrs12=DISPFORMAT=:2
+EXTFIELD:Attrs13=EDITFORMAT=:2
+EXTFIELD:Attrs14=MINVAL=:2
+EXTFIELD:Attrs15=MAXVAL=:2
+EXTFIELD:Attrs16=CURRENCY=:2::::VM=TBooleanTF
+EXTFIELD:Attrs17=PRECISION=:2
+EXTFIELD:Attrs18=DISPLAYVALUES=:2
+EXTFIELD:Attrs19=BLOBTYPE=:2::::VM=TBlobType
+EXTFIELD:Attrs20=DEFAULT=:2
+EXTFIELD:Attrs21=SRVCHECK=:2:-E
+EXTFIELD:Attrs22=LOCCHECK=:2
+EXTFIELD:Attrs23=ERRORSTR=:2
+
+[STANDARD Properties]
+DriverType:Values=Closed,PARADOX="Paradox",DBASE="dBase",FOXPRO="FoxPro"
+BooleanYN:Values=Closed,0="No",-1="Yes",1="Yes"
+FieldVChecks:Values=Closed,0="",1="Has Validity Checks",2=""
+FieldRights:Values=Closed,0="Read/Write",1="Read Only",2="None",3=""
+LookupType:Values1=Closed,0="None",1="Current Field",2="All Corresponding"
+LookupType:Values2=3="Current Field & Help",4="All Corresponding & Help"
+ReferenceType:Values=Closed,0="Master Of",1="Detail Of"
+ReferenceQual:Values=Closed,0="Restrict",1="Cascade"
+PrivilegeType:Values1=Closed,0="None",1="Read Only",3="Modify/Read",7="Insert/Modify/Read"
+PrivilegeType:Values2=15="Delete/Insert/Modify/Read",31="All Rights",255=
+FamilyRightsType:Values=Closed,0="None",1="Form",2="Reports",4="Validity Checks",8="Settings"
+FamilyMemberType:Values1=Closed,0="Unknown",1="Table",2="Index",3="Form",4="Report"
+FamilyMemberType:Values2=5="Validity Checks",6="Secondary Index",7="Secondary Index"
+FamilyMemberType:Values3=8="Blob File"
+
+STANDARD:Objects=O:C:0M::"Tables":Table
+
+Table:Dataset1=NAME=String:261,FILENAME=String:261,EXTENSION=String:4,TYPE=String:32
+Table:Dataset2=DATE=Date,TIME=Time,SIZE=Integer,VIEW=Word,SYNONYM=Word
+Table:Dataset3=STRUCTURE=String:32,VERSION=Word,RECORDSIZE=Word,FIELDS=Word
+Table:Dataset4=INDEXES=Word,VALCHECKS=Word,REFCHECKS=Word,RECORDS=Integer
+Table:Dataset5=PROTECTED=Word,VALID=Word
+
+Table:Category=Dataset
+Table:Attrs1=TYPE="Type"::NR:::VM=DriverType
+Table:Attrs2=DATE="Date"
+Table:Attrs3=TIME="Time"
+Table:Attrs4=VERSION="Version":2
+Table:Attrs5=VALID="Valid":2::::VM=BooleanYN
+Table:Attrs6=STRUCTURE="Structure":2
+Table:Attrs7=PROTECTED="Protected":2::::VM=BooleanYN
+Table:Name=FILENAME,EXTENSION
+Table:Objects1=O:P:1M::"Fields":Column
+Table:Objects2=O:O:0M::"Indices":Index
+Table:Objects3=O:O:0M::"Validity Checks":ValCheck
+Table:Objects4=O:O:0M::"Referential Constraints":Reference
+Table:Objects5=O:O:0M::"Security Specs":Security
+Table:Objects6=O:C:1M::"Family Members":Family
+
+Column:Dataset1=FIELDNUM=Word,NAME=String:32,TYPE=Word,SUBTYPE=Word
+Column:Dataset2=UNITS1=SmallInt,UNITS2=SmallInt,OFFSET=Word,LENGTH=Word
+Column:Dataset3=NULLOFFSET=Word,VCheck=Word,Rights=Word,CALCFIELD=Boolean
+
+Column:Category=Column
+Column:Order=FIELDNUM
+Column:Attrs1=FIELDNUM="Order":2:NR
+Column:Attrs2=TYPE="Type":1:NR
+Column:Attrs3=UNITS1="Size":1:N
+Column:Attrs4=UNITS2="Scale":1:N
+Column:Attrs5=LENGTH="Physical Length"
+Column:Name=NAME
+
+Index:Dataset1=NAME=String:261,INDEXID=Word,TAGNAME=String:32,FORMAT=String:32
+Index:Dataset2=PRIMARY=Boolean,UNIQUE=Boolean,DESCENDING=Boolean,AUTO=Boolean
+Index:Dataset3=SUBSET=Boolean,KEYISEXP=Boolean,COST=Word,FIELDS=Word,KEYLEN=Word
+Index:Dataset4=OUTOFDATE=Boolean,EXPTYPE=Word,FIELDARRAY=Bytes:32
+Index:Dataset5=EXPRESSION=String:221,CONDITION=String:221,CASEINSENSITIVE=Boolean
+Index:Dataset6=BLOCKSIZE=Word,RESTRNUM=Word,DESCENDINGARRAY=Bytes:32
+
+Index:Category=Index
+Index:Attrs1=NAME=Name:0,TAGNAME=Tag:0,RESTRNUM="Version":2
+Index:Attrs2=PRIMARY="Primary Key":::::VM=BooleanYN
+Index:Attrs3=UNIQUE="Unique"::NR:::VM=BooleanYN
+Index:Attrs4=AUTO="Maintained":2::::VM=BooleanYN
+Index:Attrs5=OUTOFDATE="Out of Date":2::::VM=BooleanYN
+Index:Attrs6=FORMAT="Format":2
+Index:Attrs7=BLOCKSIZE="Block Size":2
+Index:Attrs8=CASEINSENSITIVE="Case Insensitive":2:NR:::VM=BooleanYN
+Index:Attrs9=DESCENDING="Descending":2:NR:::VM=BooleanYN
+Index:Attrs10=EXPRESSION="Expression":2:N
+Index:Attrs11=CONDITION="Subset Condition":2:N
+Index:Name=NAME
+Index:OnAfterLoad=GetIndexInfo
+
+ValCheck:Dataset1=FIELDNUM=Word,REQUIRED=Boolean,HASMINVAL=Boolean
+ValCheck:Dataset2=HASMAXVAL=Boolean,HASDEFVAL=Boolean,MINVALUE=String:256
+ValCheck:Dataset3=MAXVALUE=String:256,DEFAULT=String:256,PICTURE=String:176
+ValCheck:Dataset4=LOOKUPTYPE=Integer,LOOKUPTABLE=String:261
+
+ValCheck:Attrs1=FIELDNUM="Field":2:NR
+ValCheck:Attrs2=REQUIRED="Required":1:NR:::VM=BooleanYN
+ValCheck:Attrs3=MINVALUE="Min Value":1:N
+ValCheck:Attrs4=MAXVALUE="Max Value":1:N
+ValCheck:Attrs5=DEFAULT="Default Value":1:N
+ValCheck:Attrs6=PICTURE="Picture":2:N
+ValCheck:Name=FIELDNUM
+
+Family:Dataset=NAME=String:32,ID=Word,TYPE=Integer,FILENAME=String:261
+
+Family:Attrs1=TYPE="Type":1::::VM=FamilyMemberType
+Family:Attrs2=NAME="Object Name":1
+Family:Name=FILENAME
+
+Reference:Dataset1=REFINTNUM=Word,NAME=String:32,TYPE=Integer
+Reference:Dataset2=OTHERTABLE=String:261,MODOP=Integer,DELOP=Integer
+Reference:Dataset3=FIELDCOUNT=Word,FIELDARRAY=Bytes:32,OTHERFIELDARRAY=Bytes:32
+
+Reference:Attrs1=TYPE="Reference Type":1::::VM=ReferenceType
+Reference:Attrs2=OTHERTABLE="Reference To":1:NR
+Reference:Attrs3=MODOP="Modify Operation":1:NR:::VM=ReferenceQual
+Reference:Attrs4=DELOP="Delete Operation":1:NR:::VM=ReferenceQual
+Reference:Name=NAME
+Reference:OnAfterLoad=GetReferenceInfo
+
+Security:Dataset1=ID=Word,TYPE=Integer,FAMRIGHTS=Word,PASSWORD=String:32
+Security:Dataset2=FIELDPRVARRAY=Bytes:1020
+
+Security:Attrs1=TYPE="Table Rights":1:NR:::VM=PrivilegeType
+Security:Attrs2=FAMRIGHTS="Family Rights":1:NR:::VS=FamilyRightsType:$0F
+Security:Name=PASSWORD
+
+[MSACCESS Properties]
+DriverType:Values=Closed,PARADOX="Paradox",DBASE="dBase",FOXPRO="FoxPro"
+BooleanYN:Values=Closed,0="No",-1="Yes",1="Yes"
+FieldVChecks:Values=Closed,0="",1="Has Validity Checks",2=""
+FieldRights:Values=Closed,0="Read/Write",1="Read Only",2="None",3=""
+LookupType:Values1=Closed,0="None",1="Current Field",2="All Corresponding"
+LookupType:Values2=3="Current Field & Help",4="All Corresponding & Help"
+ReferenceType:Values=Closed,0="Master Of",1="Detail Of"
+ReferenceQual:Values=Closed,0="Restrict",1="Cascade"
+PrivilegeType:Values1=Closed,0="None",1="Read Only",3="Modify/Read",7="Insert/Modify/Read"
+PrivilegeType:Values2=15="Delete/Insert/Modify/Read",31="All Rights",255=
+FamilyRightsType:Values=Closed,0="None",1="Form",2="Reports",4="Validity Checks",8="Settings"
+
+MSACCESS:Objects=O:C:0M::"Tables":Table
+
+Table:Dataset1=NAME=String:261,FILENAME=String:261,EXTENSION=String:4,TYPE=String:32
+Table:Dataset2=DATE=Date,TIME=Time,SIZE=Integer,VIEW=Word,SYNONYM=Word
+Table:Dataset3=STRUCTURE=String:32,VERSION=Word,RECORDSIZE=Word,FIELDS=Word
+Table:Dataset4=INDEXES=Word,VALCHECKS=Word,REFCHECKS=Word,RECORDS=Integer
+Table:Dataset5=PROTECTED=Word,VALID=Word
+
+Table:Category=Dataset
+Table:Attrs1=TYPE="Type"::NR:::VM=DriverType
+Table:Attrs2=DATE="Date"
+Table:Attrs3=TIME="Time"
+Table:Attrs4=VERSION="Version":2
+Table:Attrs5=VALID="Valid":2::::VM=BooleanYN
+Table:Attrs6=STRUCTURE="Structure":2
+Table:Attrs7=PROTECTED="Protected":2::::VM=BooleanYN
+Table:Name=FILENAME,EXTENSION
+Table:Objects1=O:P:1M::"Fields":Column
+Table:Objects2=O:O:0M::"Indices":Index
+Table:Objects3=O:O:0M::"Validity Checks":ValCheck
+Table:Objects4=O:O:0M::"Referential Constraints":Reference
+Table:Objects5=O:O:0M::"Security Specs":Security
+
+Column:Dataset1=FIELDNUM=Word,NAME=String:32,TYPE=Word,SUBTYPE=Word
+Column:Dataset2=UNITS1=SmallInt,UNITS2=SmallInt,OFFSET=Word,LENGTH=Word
+Column:Dataset3=NULLOFFSET=Word,VCheck=Word,Rights=Word,CALCFIELD=Boolean
+
+Column:Category=Column
+Column:Attrs1=TYPE="Type":1:NR,UNITS1="Size":1:N,UNITS2="Scale":1:N
+Column:Attrs2=LENGTH="Physical Length"
+Column:Name=NAME
+
+Index:Dataset1=NAME=String:261,INDEXID=Word,TAGNAME=String:32,FORMAT=String:32
+Index:Dataset2=PRIMARY=Boolean,UNIQUE=Boolean,DESCENDING=Boolean,AUTO=Boolean
+Index:Dataset3=SUBSET=Boolean,KEYISEXP=Boolean,COST=Word,FIELDS=Word,KEYLEN=Word
+Index:Dataset4=OUTOFDATE=Boolean,EXPTYPE=Word,FIELDARRAY=Bytes:32
+Index:Dataset5=EXPRESSION=String:221,CONDITION=String:221,CASEINSENSITIVE=Boolean
+Index:Dataset6=BLOCKSIZE=Word,RESTRNUM=Word,DESCENDINGARRAY=Bytes:32
+
+Index:Category=Index
+Index:Attrs1=NAME=Name:0,TAGNAME=Tag:0,RESTRNUM="Version":2
+Index:Attrs2=PRIMARY="Primary Key":::::VM=BooleanYN
+Index:Attrs3=UNIQUE="Unique"::NR:::VM=BooleanYN
+Index:Attrs4=AUTO="Maintained":2::::VM=BooleanYN
+Index:Attrs5=OUTOFDATE="Out of Date":2::::VM=BooleanYN
+Index:Attrs6=FORMAT="Format":2
+Index:Attrs7=BLOCKSIZE="Block Size":2
+Index:Attrs8=CASEINSENSITIVE="Case Insensitive":2:NR:::VM=BooleanYN
+Index:Attrs9=DESCENDING="Descending":2:NR:::VM=BooleanYN
+Index:Attrs10=EXPRESSION="Expression":2:N
+Index:Attrs11=CONDITION="Subset Condition":2:N
+Index:Name=NAME
+Index:OnAfterLoad=GetIndexInfo
+
+ValCheck:Dataset1=FIELDNUM=Word,REQUIRED=Boolean,HASMINVAL=Boolean
+ValCheck:Dataset2=HASMAXVAL=Boolean,HASDEFVAL=Boolean,MINVALUE=String:256
+ValCheck:Dataset3=MAXVALUE=String:256,DEFAULT=String:256,PICTURE=String:176
+ValCheck:Dataset4=LOOKUPTYPE=Integer,LOOKUPTABLE=String:261
+
+ValCheck:Attrs1=FIELDNUM="Field":2:NR
+ValCheck:Attrs2=REQUIRED="Required":1:NR:::VM=BooleanYN
+ValCheck:Attrs3=MINVALUE="Min Value":1:N
+ValCheck:Attrs4=MAXVALUE="Max Value":1:N
+ValCheck:Attrs5=DEFAULT="Default Value":1:N
+ValCheck:Attrs6=PICTURE="Picture":2:N
+ValCheck:Name=FIELDNUM
+
+Reference:Dataset1=REFINTNUM=Word,NAME=String:32,TYPE=Integer
+Reference:Dataset2=OTHERTABLE=String:261,MODOP=Integer,DELOP=Integer
+Reference:Dataset3=FIELDCOUNT=Word,FIELDARRAY=Bytes:32,OTHERFIELDARRAY=Bytes:32
+
+Reference:Attrs1=TYPE="Reference Type":1::::VM=ReferenceType
+Reference:Attrs2=OTHERTABLE="Reference To":1:NR
+Reference:Attrs3=MODOP="Modify Operation":1:NR:::VM=ReferenceQual
+Reference:Attrs4=DELOP="Delete Operation":1:NR:::VM=ReferenceQual
+Reference:Name=NAME
+Reference:OnAfterLoad=GetReferenceInfo
+
+Security:Dataset1=ID=Word,TYPE=Integer,FAMRIGHTS=Word,PASSWORD=String:32
+Security:Dataset2=FIELDPRVARRAY=Bytes:1020
+
+Security:Attrs1=TYPE="Table Rights":1:NR:::VM=PrivilegeType
+Security:Attrs2=FAMRIGHTS="Family Rights":1:NR:::VS=FamilyRightsType:$0F
+Security:Name=PASSWORD
+
+[ODBC Properties]
+DriverType:Values=Closed,PARADOX="Paradox",DBASE="dBase",FOXPRO="FoxPro"
+BooleanYN:Values=Closed,0="No",-1="Yes",1="Yes"
+FieldVChecks:Values=Closed,0=,1="Has Validity Checks",2=
+FieldRights:Values=Closed,0="Read/Write",1="Read Only",2="None",3=
+LookupType:Values1=Closed,0="None",1="Current Field",2="All Corresponding"
+LookupType:Values2=3="Current Field & Help",4="All Corresponding & Help"
+ReferenceType:Values=Closed,0="Master Of",1="Detail Of"
+ReferenceQual:Values=Closed,0="Restrict",1="Cascade"
+PrivilegeType:Values1=Closed,0="None",1="Read Only",3="Modify/Read",7="Insert/Modify/Read"
+PrivilegeType:Values2=15="Delete/Insert/Modify/Read",31="All Rights",255=
+FamilyRightsType:Values=Closed,0="None",1="Form",2="Reports",4="Validity Checks",8="Settings"
+
+ODBC:Objects1=O:C:0M::"Tables":Table
+ODBC:Objects2=O:C:0M::"Procedures":Procedure
+
+Table:Dataset1=NAME=String:261,FILENAME=String:261,EXTENSION=String:4,TYPE=String:32
+Table:Dataset2=DATE=Date,TIME=Time,SIZE=Integer,VIEW=Word,SYNONYM=Word
+Table:Dataset3=STRUCTURE=String:32,VERSION=Word,RECORDSIZE=Word,FIELDS=Word
+Table:Dataset4=INDEXES=Word,VALCHECKS=Word,REFCHECKS=Word,RECORDS=Integer
+Table:Dataset5=PROTECTED=Word,VALID=Word
+
+Table:Category=Dataset
+Table:Attrs1=TYPE="Type"::NR:::VM=DriverType
+Table:Attrs2=DATE="Date"
+Table:Attrs3=TIME="Time"
+Table:Attrs4=VERSION="Version":2
+Table:Attrs5=VALID="Valid":2::::VM=BooleanYN
+Table:Attrs6=STRUCTURE="Structure":2
+Table:Attrs7=PROTECTED="Protected":2::::VM=BooleanYN
+Table:Name=FILENAME,EXTENSION
+Table:Objects1=O:P:1M::"Fields":Column
+Table:Objects2=O:O:0M::"Indices":Index
+Table:Objects3=O:O:0M::"Validity Checks":ValCheck
+Table:Objects4=O:O:0M::"Referential Constraints":Reference
+Table:Objects5=O:O:0M::"Security Specs":Security
+
+Column:Dataset1=FIELDNUM=Word,NAME=String:32,TYPE=Word,SUBTYPE=Word
+Column:Dataset2=UNITS1=SmallInt,UNITS2=SmallInt,OFFSET=Word,LENGTH=Word
+Column:Dataset3=NULLOFFSET=Word,VCheck=Word,Rights=Word,CALCFIELD=Boolean
+
+Column:Category=Column
+Column:Order=FIELDNUM
+Column:Attrs1=FIELDNUM="Order":2:NR
+Column:Attrs2=TYPE="Type":1:NR
+Column:Attrs3=UNITS1="Size":1:N
+Column:Attrs4=UNITS2="Scale":1:N
+Column:Attrs5=LENGTH="Physical Length"
+Column:Name=NAME
+
+Index:Dataset1=NAME=String:261,INDEXID=Word,TAGNAME=String:32,FORMAT=String:32
+Index:Dataset2=PRIMARY=Boolean,UNIQUE=Boolean,DESCENDING=Boolean,AUTO=Boolean
+Index:Dataset3=SUBSET=Boolean,KEYISEXP=Boolean,COST=Word,FIELDS=Word,KEYLEN=Word
+Index:Dataset4=OUTOFDATE=Boolean,EXPTYPE=Word,FIELDARRAY=Bytes:32
+Index:Dataset5=EXPRESSION=String:221,CONDITION=String:221,CASEINSENSITIVE=Boolean
+Index:Dataset6=BLOCKSIZE=Word,RESTRNUM=Word,DESCENDINGARRAY=Bytes:32
+
+Index:Category=Index
+Index:Attrs1=NAME=Name:0,TAGNAME=Tag:0,RESTRNUM="Version":2
+Index:Attrs2=PRIMARY="Primary Key":::::VM=BooleanYN
+Index:Attrs3=UNIQUE="Unique"::NR:::VM=BooleanYN
+Index:Attrs4=AUTO="Maintained":2::::VM=BooleanYN
+Index:Attrs5=OUTOFDATE="Out of Date":2::::VM=BooleanYN
+Index:Attrs6=FORMAT="Format":2
+Index:Attrs7=BLOCKSIZE="Block Size":2
+Index:Attrs8=CASEINSENSITIVE="Case Insensitive":2:NR:::VM=BooleanYN
+Index:Attrs9=DESCENDING="Descending":2:NR:::VM=BooleanYN
+Index:Attrs10=EXPRESSION="Expression":2:N
+Index:Attrs11=CONDITION="Subset Condition":2:N
+Index:Name=NAME
+Index:OnAfterLoad=GetIndexInfo
+
+ValCheck:Dataset1=FIELDNUM=Word,REQUIRED=Boolean,HASMINVAL=Boolean
+ValCheck:Dataset2=HASMAXVAL=Boolean,HASDEFVAL=Boolean,MINVALUE=String:256
+ValCheck:Dataset3=MAXVALUE=String:256,DEFAULT=String:256,PICTURE=String:176
+ValCheck:Dataset4=LOOKUPTYPE=Integer,LOOKUPTABLE=String:261
+
+ValCheck:Attrs1=FIELDNUM="Field":2:NR
+ValCheck:Attrs2=REQUIRED="Required":1:NR:::VM=BooleanYN
+ValCheck:Attrs3=MINVALUE="Min Value":1:N
+ValCheck:Attrs4=MAXVALUE="Max Value":1:N
+ValCheck:Attrs5=DEFAULT="Default Value":1:N
+ValCheck:Attrs6=PICTURE="Picture":2:N
+ValCheck:Name=FIELDNUM
+
+Reference:Dataset1=REFINTNUM=Word,NAME=String:32,TYPE=Integer
+Reference:Dataset2=OTHERTABLE=String:261,MODOP=Integer,DELOP=Integer
+Reference:Dataset3=FIELDCOUNT=Word,FIELDARRAY=Bytes:32,OTHERFIELDARRAY=Bytes:32
+
+Reference:Attrs1=TYPE="Reference Type":1::::VM=ReferenceType
+Reference:Attrs2=OTHERTABLE="Reference To":1:NR
+Reference:Attrs3=MODOP="Modify Operation":1:NR:::VM=ReferenceQual
+Reference:Attrs4=DELOP="Delete Operation":1:NR:::VM=ReferenceQual
+Reference:Name=NAME
+Reference:OnAfterLoad=GetReferenceInfo
+
+Security:Dataset1=ID=Word,TYPE=Integer,FAMRIGHTS=Word,PASSWORD=String:32
+Security:Dataset2=FIELDPRVARRAY=Bytes:1020
+
+Security:Attrs1=TYPE="Table Rights":1:NR:::VM=PrivilegeType
+Security:Attrs2=FAMRIGHTS="Family Rights":1:NR:::VS=FamilyRightsType:$0F
+Security:Name=PASSWORD
+
+Procedure:Dataset=NAME=String,DATE=Date,TIME=Time
+
+Procedure:Category=Executable
+Procedure:Attrs=DATE="Date":1,TIME="Time":1
+Procedure:EAttrs=Data
+Procedure:Name=NAME
+
+[ORACLE Properties]
+TBooleanNY:Values=Closed,N="No",Y="Yes"
+TBlank0:Values=Open,0=
+TValid:Values=Closed,INVALID=:"No",VALID=:"Yes"
+TDisabled:Values=Closed,ENABLED=ENABLE:"No",DISABLED=DISABLE:"Yes"
+TDataType:Values1=Open,CHAR=`'CHAR('=Length')'`:CHAR
+TDataType:Values2=DATE=DATE
+TDataType:Values3=FLOAT=FLOAT
+TDataType:Values4=LONG=LONG
+TDataType:Values5=LONG RAW=LONG RAW
+TDataType:Values6=MLSLABEL=MLSLABEL
+TDataType:Values7=NUMBER=NUMBER
+TDataType:Values8=RAW=`'RAW('=Length')'`:RAW
+TDataType:Values9=ROWID=ROWID
+TDataType:Values10=VARCHAR2=`'VARCHAR2('=Length')'`:VARCHAR2
+TUnique:Values=Closed,NONUNIQUE=:"No",UNIQUE=UNIQUE:"Yes"
+TNulls:Values=Closed,N=NOT NULL:"No",Y=:"Yes"
+TBeforeAfter:Values=Closed,0=BEFORE:"Before",-1=AFTER:"After"
+TRowStatement:Values1=Closed,STATEMENT=:"For each statement"
+TRowStatement:Values2=ROW=FOR EACH ROW:"For each row"
+TMaxValue:Values=Open,=`'MAXVALUE ' @MaxValue`:`:MaxValue`,1E+27=NOMAXVALUE:"None"
+TMinValue:Values=Open,=`'MINVALUE ' @MinValue`:`:MinValue`,1E+27=NOMINVALUE:"None"
+TCycle:Values=Closed,N=NOCYCLE:"No",Y=CYCLE:"Yes"
+TOrder:Values=Closed,N=NOORDER:"No",Y=ORDER:"Yes"
+TCache:Values=Open,=`'CACHE ' @Cache`:`:Cache`,0=NOCACHE:"None"
+TTSStatus:Values1=Closed,ONLINE=ONLINE:"Online",OFFLINE=OFFLINE:"Offline"
+TTSStatus:Values2=READ ONLY=:"Read Only",INVALID=:"Invalid"
+TCluster:Values=Closed,INDEX=INDEX:"Index",HASH=HASH:"Hash"
+THashFn:Values1=Closed,COLUMN=:"Column",DEFAULT=:"Default",HASH EXPRESSION=:"Expression"
+THashFn:Values2=DEFAULT2=:"Default2"
+TRefresh:Values=Closed,FAST=FAST:"Fast",COMPLETE=COMPLETE:"Complete",FORCE=FORCE:"Force"
+
+Template:Storage1=`! \N '    INITIAL ' =INITIAL_EXTENT`
+Template:Storage2=`! \N '    NEXT ' =NEXT_EXTENT`
+Template:Storage3=`! \N '    MINEXTENTS ' =MIN_EXTENTS`
+Template:Storage4=`! \N '    MAXEXTENTS ' =MAX_EXTENTS`
+Template:Storage5=`! \N '    PCTINCREASE ' =PCT_INCREASE`
+
+Template:ObjectStorage=`ETemplates Storage`
+
+ORACLE:UserName=select user from dual
+ORACLE:Comments=--;/*,*/
+
+ORACLE:Objects1=O:C:0M::"Tables":Table
+ORACLE:Objects2=O:C:0M::"Views":View
+ORACLE:Objects3=O:C:0M::"Synonyms":Synonym
+ORACLE:Objects4=O:C:0M::"Snapshots":Snapshot
+ORACLE:Objects5=O:C:0M::"Clusters":Cluster
+ORACLE:Objects6=O:C:0M::"TableSpaces":TableSpace
+ORACLE:Objects7=O:C:0M::"Sequences":Sequence
+ORACLE:Objects8=O:C:0M::"Procedures":Procedure
+ORACLE:Objects9=O:C:0M::"Functions":Function
+ORACLE:Objects10=O:C:0M::"Packages":Package
+ORACLE:Objects11=O:C:0M::"Package Bodies":PackageBody
+
+SYS.ALL_OBJECTS:Name=OWNER,OBJECT_NAME
+SYS.ALL_OBJECTS:Attrs1=STATUS="Valid":::::VM=TValid
+SYS.ALL_OBJECTS:Attrs2=CREATED="Created"
+SYS.ALL_OBJECTS:Attrs3=LAST_DDL_TIME="Modified"
+SYS.ALL_OBJECTS:FilterSystemObjects=A.OWNER <> 'SYS'
+
+SYS.ALL_TABLES:Name=OWNER,TABLE_NAME
+SYS.ALL_TABLES:Objects1=T:P:1M::"Columns":Column
+SYS.ALL_TABLES:Objects2=T:O:0M::"Indices":Index
+SYS.ALL_TABLES:Objects3=T:O:01::"Primary Key":PrimaryKey
+SYS.ALL_TABLES:Objects4=T:O:0M::"Referential Constraints":ForeignKey
+SYS.ALL_TABLES:Objects5=T:O:0M::"Unique Constraints":UniqueConstraint
+SYS.ALL_TABLES:Objects6=T:O:0M::"Check Constraints":CheckConstraint
+SYS.ALL_TABLES:Objects7=T:O:0M::"Triggers":Trigger
+SYS.ALL_TABLES:Objects8=P:R:M1::"TableSpace":TableSpace
+SYS.ALL_TABLES:Objects9=P:R:M1::"Cluster":Cluster
+SYS.ALL_TABLES:Attrs1=BACKED_UP="Backed Up":::::VM=TBooleanNY
+SYS.ALL_TABLES:Attrs2=PCT_FREE="Block Min % Free":2:E
+SYS.ALL_TABLES:Attrs3=PCT_USED="Block Min % Used":2:E
+SYS.ALL_TABLES:Attrs4=INI_TRANS="Initial Transactions":2:E:::VM=TBlank0
+SYS.ALL_TABLES:Attrs5=MAX_TRANS="Maximum Transactions":2:E:::VM=TBlank0
+SYS.ALL_TABLES:Attrs6=INITIAL_EXTENT="Initial Extent (B)":2:E
+SYS.ALL_TABLES:Attrs7=NEXT_EXTENT="Next Extent (B)":2:E
+SYS.ALL_TABLES:Attrs8=MIN_EXTENTS="Min Extents":2:E
+SYS.ALL_TABLES:Attrs9=MAX_EXTENTS="Max Extents":2:E
+SYS.ALL_TABLES:Attrs10=PCT_INCREASE="Extent Size % Increase":2:E
+SYS.ALL_TABLES:Attrs11=NUM_ROWS="Row Count":2
+SYS.ALL_TABLES:Attrs12=CHAIN_CNT="Chained Rows":2
+SYS.ALL_TABLES:Attrs13=BLOCKS="Data Block Count":2
+SYS.ALL_TABLES:Attrs14=EMPTY_BLOCKS="Empty Data Blocks":2
+SYS.ALL_TABLES:Attrs15=AVG_SPACE="Avg Bytes Free / Block":2
+SYS.ALL_TABLES:Attrs16=AVG_ROW_LEN="Avg Row Length":2
+SYS.ALL_TABLES:Reference:"TableSpace"=TABLESPACE_NAME
+SYS.ALL_TABLES:Reference:"Cluster"=CLUSTER_NAME
+SYS.ALL_TABLES:FilterSystemObjects=A.OWNER <> 'SYS'
+
+SYS.ALL_SYNONYMS:Name=OWNER,SYNONYM_NAME
+SYS.ALL_SYNONYMS:Attrs1=TABLE_OWNER="Target Owner"::E
+SYS.ALL_SYNONYMS:Attrs2=TABLE_NAME="Target Object"::ER
+SYS.ALL_SYNONYMS:Attrs3=DB_LINK="Database"::E
+SYS.ALL_SYNONYMS:Reference:"Target"=TABLE_OWNER,TABLE_NAME
+
+SYS.ALL_SNAPSHOTS:Name=OWNER,NAME
+SYS.ALL_SNAPSHOTS:Objects=P:R:M1::"Snapshot Table":Table
+SYS.ALL_SNAPSHOTS:Attrs1=TYPE="Refresh Type"::E:::VM=TRefresh
+; !!! First Refresh::E
+SYS.ALL_SNAPSHOTS:Attrs2=START_WITH="First Refresh"
+SYS.ALL_SNAPSHOTS:Attrs3=NEXT="Next Refresh"::E
+SYS.ALL_SNAPSHOTS:Attrs4=QUERY="Snapshot Query":2:ER
+SYS.ALL_SNAPSHOTS:Attrs5=ERROR="Error"
+SYS.ALL_SNAPSHOTS:Attrs6=LAST_REFRESH="Last Refresh"
+SYS.ALL_SNAPSHOTS:Attrs7=MASTER_LINK="Master Database":2
+SYS.ALL_SNAPSHOTS:Attrs8=MASTER_OWNER="Master Owner":2
+SYS.ALL_SNAPSHOTS:Attrs9=MASTER_VIEW="Master View":2
+SYS.ALL_SNAPSHOTS:Attrs10=MASTER="Master Table":2
+SYS.ALL_SNAPSHOTS:Attrs11=UPDATABLE="Updatable":2
+SYS.ALL_SNAPSHOTS:Attrs12=CAN_USE_LOG="Snapshot Log":2
+SYS.ALL_SNAPSHOTS:Reference:"Snapshot Table"=OWNER,TABLE_NAME
+
+SYS.ALL_INDEXES:Key=TABLE_OWNER,TABLE_NAME,OWNER,INDEX_NAME
+SYS.ALL_INDEXES:Name=OWNER,INDEX_NAME
+SYS.ALL_INDEXES:Objects1=T:P:1M::"Columns":IndexColumn
+SYS.ALL_INDEXES:Objects2=P:R:M1::"TableSpace":TableSpace
+SYS.ALL_INDEXES:Attrs1=STATUS="Valid":::::VM=TValid
+SYS.ALL_INDEXES:Attrs2=UNIQUENESS="Unique"::E:::VM=TUnique
+SYS.ALL_INDEXES:Attrs3=INITIAL_EXTENT="Initial Extent (B)":2:E
+SYS.ALL_INDEXES:Attrs4=NEXT_EXTENT="Other Extents (B)":2:E
+SYS.ALL_INDEXES:Attrs5=MIN_EXTENTS="Minimum Extents":2:E
+SYS.ALL_INDEXES:Attrs6=MAX_EXTENTS="Maximum Extents":2:E
+SYS.ALL_INDEXES:Attrs7=PCT_INCREASE="% Increase":2:E
+SYS.ALL_INDEXES:Attrs8=PCT_FREE="Minimum % Free":2:E
+SYS.ALL_INDEXES:Attrs9=INI_TRANS="Initial Transactions":2:E:::VM=TBlank0
+SYS.ALL_INDEXES:Attrs10=MAX_TRANS="Maximum Transactions":2:E:::VM=TBlank0
+SYS.ALL_INDEXES:Reference:"TableSpace"=TABLESPACE_NAME
+
+SYS.ALL_IND_COLUMNS:Key=TABLE_OWNER,TABLE_NAME,INDEX_OWNER,INDEX_NAME,COLUMN_NAME
+SYS.ALL_IND_COLUMNS:Name=Column
+SYS.ALL_IND_COLUMNS:Order=COLUMN_POSITION
+SYS.ALL_IND_COLUMNS:Objects1=P:R:M1::"Column":Column:<<>Column
+SYS.ALL_IND_COLUMNS:Attrs1=COLUMN_POSITION="Order":2:ER
+SYS.ALL_IND_COLUMNS:Reference:"Column"=TABLE_OWNER,TABLE_NAME,COLUMN_NAME
+; !!! ASC/DESC information is lost in system catalog
+
+SYS.ALL_TAB_COLUMNS:Key=OWNER,TABLE_NAME,COLUMN_NAME
+SYS.ALL_TAB_COLUMNS:Name=COLUMN_NAME
+SYS.ALL_TAB_COLUMNS:Order=COLUMN_ID
+SYS.ALL_TAB_COLUMNS:Attrs1=COLUMN_ID="Order":2:ER
+SYS.ALL_TAB_COLUMNS:Attrs2=DATA_TYPE=Type="Type"::ER:::VM=TDataType
+SYS.ALL_TAB_COLUMNS:Attrs3=DATA_LENGTH=Length="Length"::E
+SYS.ALL_TAB_COLUMNS:Attrs4=DATA_PRECISION=Precision="Precision"::E
+SYS.ALL_TAB_COLUMNS:Attrs5=DATA_SCALE=Scale="Scale"::E
+SYS.ALL_TAB_COLUMNS:Attrs6=NULLABLE=Null="Nulls"::E:::VM=TNulls
+SYS.ALL_TAB_COLUMNS:Attrs7=DATA_DEFAULT=Default="Default":2:E
+
+SYS.ALL_SEQUENCES:Name=SEQUENCE_OWNER,SEQUENCE_NAME
+SYS.ALL_SEQUENCES:Attrs1=LAST_NUMBER="Last Value"::E
+SYS.ALL_SEQUENCES:Attrs2=INCREMENT_BY="Increment By"::E
+SYS.ALL_SEQUENCES:Attrs3=CYCLE_FLAG=Cycle="Cycle"::E:::VM=TCycle
+SYS.ALL_SEQUENCES:Attrs4=ORDER_FLAG=Order="In Order"::E:::VM=TOrder
+SYS.ALL_SEQUENCES:Attrs5=MIN_VALUE=MinValue="Minimum Value":2:E:::VM=TMinValue
+SYS.ALL_SEQUENCES:Attrs6=MAX_VALUE=MaxValue="Maximum Value":2:E:::VM=TMaxValue
+SYS.ALL_SEQUENCES:Attrs7=CACHE_SIZE=Cache="Cache Size":2:E:::VM=TCache
+
+SYS.ALL_TRIGGERS:Key=TABLE_OWNER,TABLE_NAME,OWNER,TRIGGER_NAME
+SYS.ALL_TRIGGERS:Name=OWNER,TRIGGER_NAME
+SYS.ALL_TRIGGERS:Attrs1=TRIGGERING_EVENT="Events"::ER
+SYS.ALL_TRIGGERS:Attrs2=TRIGGER_TYPE="Type"::E:::VM=TRowStatement
+SYS.ALL_TRIGGERS:Attrs3=REFERENCING_NAMES="Referencing Names":0:E
+SYS.ALL_TRIGGERS:Attrs4=WHEN_CLAUSE="When":2:E::PStripWhen
+SYS.ALL_TRIGGERS:Attrs5=DESCRIPTION="Description":0
+SYS.ALL_TRIGGERS:Attrs6=TRIGGER_BODY="Text":3:ER
+; !!! Fix REFERENCING_NAMES
+
+SYS.ALL_CONSTRAINTS:Key=OWNER,TABLE_NAME,CONSTRAINT_NAME
+SYS.ALL_CONSTRAINTS:Name=CONSTRAINT_NAME
+SYS.ALL_CONSTRAINTS:Attrs1=STATUS="Disabled"::E:::VM=TDisabled
+
+SYS.ALL_CONS_COLUMNS:Key=OWNER,TABLE_NAME,CONSTRAINT_NAME,COLUMN_NAME
+SYS.ALL_CONS_COLUMNS:Name=Column
+SYS.ALL_CONS_COLUMNS:Order=POSITION
+SYS.ALL_CONS_COLUMNS:Objects1=P:R:M1::"Column":Column:<<>Column
+SYS.ALL_CONS_COLUMNS:Attrs1=POSITION="Order":2:ER
+SYS.ALL_CONS_COLUMNS:Reference:"Column"=OWNER,TABLE_NAME,COLUMN_NAME
+
+SYS.SYSFILES:Key=TSNAME,FNAME
+SYS.SYSFILES:Name=FNAME
+SYS.SYSFILES:Attrs=FNAME=:3,BLOCKS="Blocks"
+
+SYS.USER_CLUSTERS:Name=CLUSTER_NAME
+SYS.USER_CLUSTERS:Objects1=T:P:1M::"Columns":ClusterColumn
+SYS.USER_CLUSTERS:Objects2=P:R:M1::"TableSpace":TableSpace
+SYS.USER_CLUSTERS:Attrs1=CLUSTER_TYPE="Type":::::VM=TCluster
+SYS.USER_CLUSTERS:Attrs2=FUNCTION="Hash Fn":::::VM=THashFn
+SYS.USER_CLUSTERS:Attrs3=PCT_FREE="Block Min % Free":2
+SYS.USER_CLUSTERS:Attrs4=PCT_USED="Block Min % Used":2
+SYS.USER_CLUSTERS:Attrs5=INI_TRANS="Initial Transactions":2::::VM=TBlank0
+SYS.USER_CLUSTERS:Attrs6=MAX_TRANS="Maximum Transactions":2::::VM=TBlank0
+SYS.USER_CLUSTERS:Attrs7=INITIAL_EXTENT="Initial Extent (B)":2
+SYS.USER_CLUSTERS:Attrs8=NEXT_EXTENT="Other Extents (B)":2
+SYS.USER_CLUSTERS:Attrs9=MIN_EXTENTS="Minimum Extents":2
+SYS.USER_CLUSTERS:Attrs10=MAX_EXTENTS="Maximum Extents":2
+SYS.USER_CLUSTERS:Attrs11=PCT_INCREASE="Extent Size % Increase":2
+SYS.USER_CLUSTERS:Attrs12=KEY_SIZE="Key Size":2
+SYS.USER_CLUSTERS:Attrs13=HASHKEYS="Hash Keys":2
+SYS.USER_CLUSTERS:Attrs14=AVG_BLOCKS_PER_KEY="Blocks / Key":2
+SYS.USER_CLUSTERS:Reference:"TableSpace"=TABLESPACE_NAME
+
+SYS.USER_CLU_COLUMNS:Key=CLUSTER_NAME,CLU_COLUMN_NAME
+SYS.USER_CLU_COLUMNS:Name=CLU_COLUMN_NAME
+SYS.USER_CLU_COLUMNS:Attrs1=TABLE_NAME="Table"
+SYS.USER_CLU_COLUMNS:Attrs2=TAB_COLUMN_NAME="Column"
+
+SYS.USER_TABLESPACES:Name=TABLESPACE_NAME
+SYS.USER_TABLESPACES:Attrs1=STATUS="Status":::::VM=TTSStatus
+SYS.USER_TABLESPACES:Attrs2=INITIAL_EXTENT="Initial Extent (B)":2:E
+SYS.USER_TABLESPACES:Attrs3=NEXT_EXTENT="Other Extents (B)":2:E
+SYS.USER_TABLESPACES:Attrs4=MIN_EXTENTS="Minimum Extents":2:E
+SYS.USER_TABLESPACES:Attrs5=MAX_EXTENTS="Maximum Extents":2:E
+SYS.USER_TABLESPACES:Attrs6=PCT_INCREASE="% Increase":2:E
+
+CheckConstraint:Definition=Root=SYS.ALL_CONSTRAINTS
+CheckConstraint:Category=Expression
+CheckConstraint:Values=A.CONSTRAINT_TYPE = 'C'
+CheckConstraint:Attrs1=SEARCH_CONDITION=Text="Constraint Text":2:ER
+CheckConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+CheckConstraint:Text:Init=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `EDefaultName \N`  CHECK ()
+CheckConstraint:Text:Get=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `N` `\N`  CHECK (`=Text`)
+CheckConstraint:Text:RE=ALTER\_+TABLE\_+(\w+)\_+ADD\_+CONSTRAINT\_+(\w+)\_+CHECK\_*\((.*)\)
+CheckConstraint:Text:Set=1=`{<}N`,Text=3,*N=2
+CheckConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+Cluster:Definition=Root=SYS.USER_CLUSTERS
+Cluster:EAttrs=
+
+ClusterColumn:Definition=Root=SYS.USER_CLU_COLUMNS
+ClusterColumn:EAttrs=
+
+Column:Definition=Root=SYS.ALL_TAB_COLUMNS
+Column:Category=Column
+Column:EAttrs=Text,New,Delete,Modify,Rename
+Column:Text:Get=`N ' ' EType``! ' DEFAULT ' =Default``! ' ' =Null`
+
+KeyColumn:Definition=Root=SYS.ALL_CONS_COLUMNS
+KeyColumn:Category=ColumnReference
+KeyColumn:Attrs:R=Column:::2:ER
+KeyColumn:EAttrs=Text,New,Delete,Modify,Rename
+KeyColumn:Text:Get=`N`
+
+ForeignKey:Definition=Root=SYS.ALL_CONSTRAINTS
+ForeignKey:Category=ForeignKey
+ForeignKey:Values=A.CONSTRAINT_TYPE = 'R'
+ForeignKey:Objects1=T:P:1M::"Columns":KeyColumn
+ForeignKey:Objects2=P:R:M1::"Reference Table":Table
+ForeignKey:Attrs=DELETE_RULE="Delete Rule":2
+; !!! Fix Attrs:T self-joins and convert Q to T
+ForeignKey:Attrs:Q=ReferenceTable=String:::0
+ForeignKey:Attrs:R=Table::::ER
+ForeignKey:AttrReference:ReferenceTable1=SELECT TABLE_NAME FROM SYS.ALL_CONSTRAINTS
+ForeignKey:AttrReference:ReferenceTable2=WHERE CONSTRAINT_TYPE IN ('P', 'U')
+ForeignKey:AttrReference:ReferenceTable3=AND OWNER=`:R_OWNER`
+ForeignKey:AttrReference:ReferenceTable4=AND CONSTRAINT_NAME=`:R_CONSTRAINT_NAME`
+ForeignKey:Reference:"Reference Table"=R_OWNER,ReferenceTable
+ForeignKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+ForeignKey:Text:Get1=ALTER TABLE `{<}N` ADD CONSTRAINT `N`
+ForeignKey:Text:Get2=`\N`  FOREIGN KEY `'(' [KeyColumn:%s, %s:N] ')'`
+ForeignKey:Text:Get3=`\N`  REFERENCES `=Table`
+ForeignKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+Parameter:Definition=Root=SYS.ALL_TAB_COLUMNS
+Parameter:Category=Column
+Parameter:EAttrs=Text
+Parameter:Text:Get=`N`
+
+Function:Definition=Root=SYS.ALL_OBJECTS
+Function:Category=Executable
+Function:Values=A.OBJECT_TYPE = 'FUNCTION'
+Function:Objects=T:P:0M::"Parameters":Parameter
+Function:Attrs:Q=Text=Memo::"Text"::ER
+Function:AttrReference:Text1=select TEXT from SYS.ALL_SOURCE
+Function:AttrReference:Text2=where OWNER=`OQ0` and NAME=`OQ1`
+Function:AttrReference:Text3=order by LINE
+Function:Warning=Loss
+Function:EAttrs=Text,New,Delete,Modify,Rename,Save
+Function:Text:Get=CREATE `=Text`
+Function:Text:Init1=CREATE FUNCTION `EDefaultName`
+Function:Text:Init2=RETURN datatype AS `\N`BEGIN`\N`END;
+Function:Text:NameRE=Text:FUNCTION\_(\_*\w+)
+Function:Text:NameSet=1=`N`
+Function:Text:RE=CREATE\_+(OR\_+REPLACE\_+)?(FUNCTION\_+(\w+)\_.*)
+Function:Text:Set=1=`''`,Text=2,*N=3
+Function:Modify:RE=(CREATE)\_+FUNCTION
+Function:Modify:Set=1=`'CREATE OR REPLACE'`
+Function:Delete:Text=DROP FUNCTION `O`
+Function:Actions="Compile"
+Function:"Compile":Text=ALTER FUNCTION `N` COMPILE
+
+Index:Definition=Root=SYS.ALL_INDEXES
+Index:Category=Index
+Index:Attrs:R=TableSpace::INITIAL_EXTENT:2:E
+Index:EAttrs=Text,New,Delete,Modify,Rename,Save
+Index:Text:Get1=CREATE `=UNIQUENESS` INDEX `N`
+Index:Text:Get2=ON `{<}N` (`[IndexColumn:%s, %s:N]`)
+Index:Text:Get3=`! \N '  TABLESPACE ' =TableSpace`
+Index:Text:Get4=`! \N '  PCTFREE ' =PCT_FREE`
+Index:Text:Get5=`! \N '  INITRANS ' =INI_TRANS`
+Index:Text:Get6=`! \N '  MAXTRANS ' =MAX_TRANS`
+Index:Text:Get7=`! \N '  STORAGE (' ETemplates ObjectStorage ')'`
+Index:Text:RE=CREATE.*\_INDEX\_+(\w+)\_+ON\_+(\w+).*(\(.*\))
+Index:Text:Set=*N=1,2=`{<}N`,*>IndexColumn=3
+Index:Delete:Text=DROP INDEX `O`
+
+IndexColumn:Definition=Root=SYS.ALL_IND_COLUMNS
+IndexColumn:Category=ColumnReference
+IndexColumn:Attrs:R=Column:::2:ER
+IndexColumn:EAttrs=Text,New,Delete,Modify,Rename
+IndexColumn:Text:Get=`N`
+
+Package:Definition=Root=SYS.ALL_OBJECTS
+Package:Values=A.OBJECT_TYPE = 'PACKAGE'
+Package:Objects=P:R:M0::"Package Body":PackageBody
+Package:Attrs:Q=Text=Memo::"Text"::ER
+Package:AttrReference:Text1=select TEXT from SYS.ALL_SOURCE
+Package:AttrReference:Text2=where OWNER=`OQ0` and NAME=`OQ1`
+Package:AttrReference:Text3=and TYPE=`:OBJECT_TYPE` order by LINE
+Package:Warning=Loss
+Package:EAttrs=Text,New,Delete,Modify,Rename,Save
+Package:Text:Get=CREATE `=Text`
+Package:Text:Init=CREATE PACKAGE `EDefaultName` AS`\N`END;
+Package:Text:NameRE=Text:PACKAGE\_(\_*\w+)
+Package:Text:NameSet=1=`N`
+Package:Text:RE=CREATE\_+(OR\_+REPLACE\_+)?(PACKAGE\_+(\w+)\_.*)
+Package:Text:Set=1=`''`,Text=2,*N=3
+Package:Modify:RE=(CREATE)\_+PACKAGE
+Package:Modify:Set=1=`'CREATE OR REPLACE'`
+Package:Delete:Text=DROP PACKAGE `O`
+Package:Actions="Compile","Compile All":';'
+Package:"Compile All":Text1=ALTER PACKAGE `N` COMPILE PACKAGE;
+Package:"Compile All":Text2=ALTER PACKAGE `N` COMPILE BODY
+Package:"Compile":Text=ALTER PACKAGE `N` COMPILE PACKAGE
+
+PackageBody:Definition=Root=SYS.ALL_OBJECTS
+PackageBody:Values=A.OBJECT_TYPE = 'PACKAGE BODY'
+PackageBody:Objects=P:R:M0::"Package":Package
+PackageBody:Attrs:Q=Text=Memo::"Text"::ER
+PackageBody:AttrReference:Text1=select TEXT from SYS.ALL_SOURCE
+PackageBody:AttrReference:Text2=where OWNER=`OQ0` and NAME=`OQ1`
+PackageBody:AttrReference:Text3=and TYPE=`:OBJECT_TYPE` order by LINE
+PackageBody:Warning=Loss
+PackageBody:EAttrs=Text,New,Delete,Modify,Rename,Save
+PackageBody:Text:Get=CREATE `=Text`
+PackageBody:Text:Init=CREATE PACKAGE BODY `EDefaultName` AS`\N`END;
+PackageBody:Text:NameRE=Text:PACKAGE\_+BODY\_(\_*\w+)
+PackageBody:Text:NameSet=1=`N`
+PackageBody:Text:RE=CREATE\_+(OR\_+REPLACE\_+)?(PACKAGE\_+BODY\_+(\w+)\_.*)
+PackageBody:Text:Set=1=`''`,Text=2,*N=3
+PackageBody:Modify:RE=(CREATE)\_+PACKAGE\_+BODY
+PackageBody:Modify:Set=1=`'CREATE OR REPLACE'`
+PackageBody:Delete:Text=DROP PACKAGE BODY `O`
+PackageBody:Actions="Compile"
+PackageBody:"Compile":Text=ALTER PACKAGE `N` COMPILE BODY
+
+PrimaryKey:Definition=Root=SYS.ALL_CONSTRAINTS
+PrimaryKey:Category=PrimaryKey
+PrimaryKey:Values=A.CONSTRAINT_TYPE = 'P'
+PrimaryKey:Objects=T:P:1M::"Columns":KeyColumn
+PrimaryKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+PrimaryKey:Text:Get1=ALTER TABLE `{<}N` ADD CONSTRAINT `N`
+PrimaryKey:Text:Get2=`\N`  PRIMARY KEY `'(' [KeyColumn:%s, %s:N] ')'`
+PrimaryKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+Procedure:Definition=Root=SYS.ALL_OBJECTS
+Procedure:Category=Executable
+Procedure:Values=A.OBJECT_TYPE = 'PROCEDURE'
+Procedure:Objects=T:P:0M::"Parameters":Parameter
+Procedure:Attrs:Q=Text=Memo::"Text"::ER
+Procedure:AttrReference:Text1=select TEXT from SYS.ALL_SOURCE
+Procedure:AttrReference:Text2=where OWNER=`OQ0` and NAME=`OQ1`
+Procedure:AttrReference:Text3=order by LINE
+Procedure:Warning=Loss
+Procedure:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Procedure:Text:Get=CREATE `=Text`
+Procedure:Text:Init=CREATE PROCEDURE `EDefaultName` AS `\N`BEGIN`\N`END;
+Procedure:Text:NameRE=Text:PROCEDURE\_(\_*\w+)
+Procedure:Text:NameSet=1=`N`
+Procedure:Text:RE=CREATE\_+(OR\_+REPLACE\_+)?(PROCEDURE\_+(\w+)\_.*)
+Procedure:Text:Set=1=`''`,Text=2,*N=3
+Procedure:Modify:RE=(CREATE)\_+PROCEDURE
+Procedure:Modify:Set=1=`'CREATE OR REPLACE'`
+Procedure:Delete:Text=DROP PROCEDURE `O`
+Procedure:Actions="Compile"
+Procedure:"Compile":Text=ALTER PROCEDURE `N` COMPILE
+
+Sequence:Definition=Root=SYS.ALL_SEQUENCES
+Sequence:Attrs:T1=SYS.ALL_OBJECTS.STATUS=::LAST_NUMBER
+Sequence:Attrs:T2=SYS.ALL_OBJECTS.CREATED=::LAST_NUMBER
+Sequence:Attrs:T3=SYS.ALL_OBJECTS.LAST_DDL_TIME=::LAST_NUMBER
+Sequence:Warning=Loss
+Sequence:EAttrs=Text,New,Delete,Modify,Rename,Save
+Sequence:Text:Get1=CREATE SEQUENCE `N`
+Sequence:Text:Get2=`! \N '  START WITH ' =LAST_NUMBER`
+Sequence:Text:Get3=`! \N '  INCREMENT BY ' =INCREMENT_BY`
+Sequence:Text:Get4=`! \N '  ' =MaxValue`
+Sequence:Text:Get5=`! \N '  ' =MinValue`
+Sequence:Text:Get6=`! \N '  ' =Cycle`
+Sequence:Text:Get7=`! \N '  ' =Cache`
+Sequence:Text:Get8=`! \N '  ' =Order`
+Sequence:Delete:Text=DROP SEQUENCE `O`
+
+Snapshot:Definition=Root=SYS.ALL_SNAPSHOTS
+Snapshot:Warning=DataLoss
+Snapshot:EAttrs=Text,New,Delete,Modify,Rename,Save
+Snapshot:Text:Get1=CREATE SNAPSHOT `N \N` `! ' REFRESH ' =TYPE \N`
+; Snapshot:Text:Get1.5=`! ' START WITH ' =START_WITH \N`
+Snapshot:Text:Get2=`! ' NEXT ' =NEXT \N` AS `=QUERY`
+Snapshot:Delete:Text=DROP SNAPSHOT `O`
+Snapshot:OnAfterLoad=SnapshotLoaded
+
+Synonym:Definition=Root=SYS.ALL_SYNONYMS
+Synonym:Category=Dataset
+Synonym:Attrs:T1=SYS.ALL_OBJECTS.STATUS=::TABLE_OWNER
+Synonym:Attrs:T2=SYS.ALL_OBJECTS.CREATED=::TABLE_OWNER
+Synonym:Attrs:T3=SYS.ALL_OBJECTS.LAST_DDL_TIME=::TABLE_OWNER
+Synonym:Warning=Loss
+Synonym:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Synonym:Text:Init=CREATE SYNONYM `EDefaultName \N`FOR "owner"."object"
+Synonym:Text:Get1=CREATE `ESynonymName N \N`FOR "`=TABLE_OWNER`"."`=TABLE_NAME`"
+Synonym:Delete:Text=DROP `ESynonymName O`
+
+Table:Definition=Root=SYS.ALL_TABLES
+Table:Category=Dataset
+Table:Attrs:T1=SYS.ALL_OBJECTS.STATUS=::BACKED_UP
+Table:Attrs:T2=SYS.ALL_OBJECTS.CREATED=::BACKED_UP
+Table:Attrs:T3=SYS.ALL_OBJECTS.LAST_DDL_TIME=::BACKED_UP
+Table:Attrs:R1=TableSpace::PCT_FREE:2:E
+Table:Attrs:R2=Cluster::PCT_FREE:2:E
+Table:Warning=DataLoss
+Table:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Table:Text:Get1=CREATE TABLE `N` (`[Column:%s,%s:\N '  ' *] \N`)
+Table:Text:Get2=`! \N '  TABLESPACE ' =TableSpace`
+Table:Text:Get3=`! \N '  PCTFREE ' =PCT_FREE`
+Table:Text:Get4=`! \N '  PCTUSED ' =PCT_USED`
+Table:Text:Get5=`! \N '  INITRANS ' =INI_TRANS`
+Table:Text:Get6=`! \N '  MAXTRANS ' =MAX_TRANS`
+Table:Text:Get7=`! \N '  STORAGE (' ETemplates ObjectStorage ')'`
+Table:Rename:Text=RENAME "`O1`" TO "`N1`"
+Table:Delete:Text=DROP TABLE `O`
+
+Trigger:Definition=Root=SYS.ALL_TRIGGERS
+Trigger:Category=Executable
+Trigger:Attrs:P=WhenEvent=Boolean::"Event Time":1:ER:::VM=TBeforeAfter
+Trigger:Attrs:R=WhenEvent::"Event"
+Trigger:OnAfterLoad=TriggerLoaded
+Trigger:EAttrs=Text,New,Delete,Modify,Rename,Save
+Trigger:Text:Init1=CREATE TRIGGER `EDefaultName`
+Trigger:Text:Init2=AFTER INSERT OR DELETE OR UPDATE`\N`
+Trigger:Text:Init3=ON `{<}N \N`
+Trigger:Text:Init4=FOR EACH ROW`\N`
+Trigger:Text:Init5=BEGIN`\N`END;
+Trigger:Text:Get1=CREATE TRIGGER `N ' ' =WhenEvent ' ' =TRIGGERING_EVENT`
+Trigger:Text:Get2=`\N`ON `{<}N``! \N =TRIGGER_TYPE`
+Trigger:Text:Get3=`! \N 'WHEN (' =WHEN_CLAUSE ')'`` \N =TRIGGER_BODY`
+Trigger:Text:RE1=CREATE\_+(OR\_+REPLACE\_+)?TRIGGER\_+(\w+)\_+(\w+)\_+(.*)\_ON
+Trigger:Text:RE2=(\_*\w+)\_*(FOR EACH ROW)?\_*(WHEN\_*\(.*\)\_+)?(BEGIN\_.*)
+Trigger:Text:Set1=1=`''`,*N=2,WhenEvent=3,-TRIGGERING_EVENT=4,5=`{<}N`
+Trigger:Text:Set2=TRIGGER_TYPE=6,WHEN_CLAUSE=7,TRIGGER_BODY=8
+Trigger:Modify:RE=(CREATE)\_+TRIGGER
+Trigger:Modify:Set=1=`'CREATE OR REPLACE'`
+Trigger:Delete:Text=DROP TRIGGER `O`
+
+UniqueConstraint:Definition=Root=SYS.ALL_CONSTRAINTS
+UniqueConstraint:Category=UniqueConstraint
+UniqueConstraint:Values=A.CONSTRAINT_TYPE = 'U'
+UniqueConstraint:Objects=T:P:1M::"Columns":KeyColumn
+UniqueConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+UniqueConstraint:Text:Get1=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `N`
+UniqueConstraint:Text:Get2=`\N`  UNIQUE `'(' [KeyColumn:%s, %s:N] ')'`
+UniqueConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+View:Definition=Root=SYS.ALL_OBJECTS
+View:Category=Dataset
+View:Values=A.OBJECT_TYPE = 'VIEW'
+View:Objects=T:P:0M:NMDR:"Columns":Column
+View:Attrs:Q=Text=Memo::"Text"::ER
+View:AttrReference:Text1=select TEXT from SYS.ALL_VIEWS
+View:AttrReference:Text2=where OWNER=`OQ0` and VIEW_NAME=`OQ1`
+View:Warning=Loss
+View:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+View:Text:Init=CREATE VIEW `EDefaultName` AS `\N`  SELECT * FROM "owner"."object"
+View:Text:Get=CREATE VIEW `N` AS `\N '  ' =Text`
+View:Text:RE=CREATE\_+VIEW\_+(\w+)\_+AS\_+(.*)
+View:Text:Set=Text=2,*N=1
+View:Rename:Text=RENAME "`O1`" TO "`N1`"
+View:Delete:Text=DROP VIEW `O`
+
+TableSpace:Definition=Root=SYS.USER_TABLESPACES
+TableSpace:Objects=T:C:1M::"Files":File
+TableSpace:Reference:"Files":Text=`[File:%s,%s:\N '    ' \Q * \Q]`
+TableSpace:Warning=Loss
+TableSpace:EAttrs=Text
+TableSpace:Text:Get1=CREATE TABLESPACE `N \N`
+TableSpace:Text:Get2= DATAFILE `{>File}*\N`
+TableSpace:Text:Get3=`! ' DEFAULT STORAGE (' ETemplates Storage ')' \N`
+TableSpace:Text:Get9=`! ' ' =STATUS \N`
+TableSpace:Delete:Text=DROP TABLESPACE `O`
+
+File:Definition=Root=SYS.SYSFILES
+File:Category=System
+File:NameRE=.*
+File:EAttrs=Text
+File:Text:Get=`N`
+
+[Oracle 7.2 Properties]
+
+SYS.ALL_CLUSTERS:Name=OWNER,CLUSTER_NAME
+SYS.ALL_CLUSTERS:Objects1=T:P:1M::"Columns":ClusterColumn
+SYS.ALL_CLUSTERS:Objects1=P:R:M1::"TableSpace":TableSpace
+SYS.ALL_CLUSTERS:Attrs1=CLUSTER_TYPE="Type":::::VM=TCluster
+SYS.ALL_CLUSTERS:Attrs2=FUNCTION="Hash Fn":::::VM=THashFn
+SYS.ALL_CLUSTERS:Attrs3=PCT_FREE="Block Min % Free":2
+SYS.ALL_CLUSTERS:Attrs4=PCT_USED="Block Min % Used":2
+SYS.ALL_CLUSTERS:Attrs5=INI_TRANS="Initial Transactions":2::::VM=TBlank0
+SYS.ALL_CLUSTERS:Attrs6=MAX_TRANS="Maximum Transactions":2::::VM=TBlank0
+SYS.ALL_CLUSTERS:Attrs7=INITIAL_EXTENT="Initial Extent (B)":2
+SYS.ALL_CLUSTERS:Attrs8=NEXT_EXTENT="Other Extents (B)":2
+SYS.ALL_CLUSTERS:Attrs9=MIN_EXTENTS="Minimum Extents":2
+SYS.ALL_CLUSTERS:Attrs10=MAX_EXTENTS="Maximum Extents":2
+SYS.ALL_CLUSTERS:Attrs11=PCT_INCREASE="Extent Size % Increase":2
+SYS.ALL_CLUSTERS:Attrs12=KEY_SIZE="Key Size":2
+SYS.ALL_CLUSTERS:Attrs13=HASHKEYS="Hash Keys":2
+SYS.ALL_CLUSTERS:Attrs14=AVG_BLOCKS_PER_KEY="Blocks / Key":2
+SYS.ALL_CLUSTERS:Reference:"ClusterColumn"=CLUSTER_NAME
+SYS.ALL_CLUSTERS:Reference:"TableSpace"=TABLESPACE_NAME
+
+; Add FREELISTS and FREELIST_GROUPS for Oracle 7.2+
+
+Template:ObjectStorage1=`ETemplates Storage`
+Template:ObjectStorage2=`! \N '    FREELISTS ' =FREELISTS`
+Template:ObjectStorage3=`! \N '    FREELIST GROUPS ' =FREELIST_GROUPS`
+
+SYS.ALL_TABLES:Attrs1=BACKED_UP="Backed Up":::::VM=TBooleanNY
+SYS.ALL_TABLES:Attrs2=PCT_FREE="Block Min % Free":2:E
+SYS.ALL_TABLES:Attrs3=PCT_USED="Block Min % Used":2:E
+SYS.ALL_TABLES:Attrs4=INI_TRANS="Initial Transactions":2:E:::VM=TBlank0
+SYS.ALL_TABLES:Attrs5=MAX_TRANS="Maximum Transactions":2:E:::VM=TBlank0
+SYS.ALL_TABLES:Attrs6=INITIAL_EXTENT="Initial Extent (B)":2:E
+SYS.ALL_TABLES:Attrs7=NEXT_EXTENT="Next Extent (B)":2:E
+SYS.ALL_TABLES:Attrs8=MIN_EXTENTS="Min Extents":2:E
+SYS.ALL_TABLES:Attrs9=MAX_EXTENTS="Max Extents":2:E
+SYS.ALL_TABLES:Attrs10=PCT_INCREASE="Extent Size % Increase":2:E
+SYS.ALL_TABLES:Attrs11=FREELISTS="Free Lists":2:E
+SYS.ALL_TABLES:Attrs12=FREELIST_GROUPS="Free List Groups":2:E
+SYS.ALL_TABLES:Attrs13=NUM_ROWS="Row Count":2
+SYS.ALL_TABLES:Attrs14=CHAIN_CNT="Chained Rows":2
+SYS.ALL_TABLES:Attrs15=BLOCKS="Data Block Count":2
+SYS.ALL_TABLES:Attrs16=EMPTY_BLOCKS="Empty Data Blocks":2
+SYS.ALL_TABLES:Attrs17=AVG_SPACE="Avg Bytes Free / Block":2
+SYS.ALL_TABLES:Attrs18=AVG_ROW_LEN="Avg Row Length":2
+
+; !!! Use ALL_CLUSTERS instead of USER_CLUSTERS for 7.2+
+; Need DBA_CLU_COLUMNS (or ALL_CLU_COLUMNS) owner to fully qualify
+; which is not defined in 7.2
+; Cluster:Definition=Root=SYS.ALL_CLUSTERS
+; SYS.ALL_TABLES:Reference:"Cluster"=OWNER,CLUSTER_NAME
+
+
+[MSSQL Properties]
+TBooleanYN:Values=Closed,0="No",-1="Yes"
+TPhysicalType:Values1=Closed,34=image:"Image",35=text:"Text"
+TPhysicalType:Values2=37=varbinary:"VarBinary"
+TPhysicalType:Values3=38=int:"Int"
+TPhysicalType:Values4=39=varchar:"VarChar"
+TPhysicalType:Values5=45=binary:"Binary"
+TPhysicalType:Values6=47=char:"Char"
+TPhysicalType:Values7=48=tinyint:"TinyInt"
+TPhysicalType:Values8=50=bit:"Bit"
+TPhysicalType:Values9=52=smallint:"SmallInt"
+TPhysicalType:Values10=55=decimal:"Decimal"
+TPhysicalType:Values11=56=int:"Int"
+TPhysicalType:Values12=58=smalldatetime:"SmallDateTime"
+TPhysicalType:Values13=59=real:"Real"
+TPhysicalType:Values14=60=money:"Money"
+TPhysicalType:Values15=61=datetime:"DateTime"
+TPhysicalType:Values16=62=float:"Float"
+TPhysicalType:Values17=63=numeric:"Numeric"
+TPhysicalType:Values18=106=decimal:"Decimal"
+TPhysicalType:Values19=108=numeric:"Numeric"
+TPhysicalType:Values20=109=float:"Float"
+TPhysicalType:Values21=110=money:"Money"
+TPhysicalType:Values22=111=datetime:"DateTime"
+TPhysicalType:Values23=122=smallmoney:"SmallMoney"
+TNull01:Values=Closed,0=not null:"No",-1=null:"Yes"
+TObjectType:Values1=Closed,S="System Table",U="Table",V="View",L="Log",P="Procedure",
+TObjectType:Values2=R="Rule",D="Default",TR="Trigger",RI="Referential Constraint"
+TObjectStatus:Values=Closed,256="Read Only",4096="RamboIX"
+TColumnStatus:Values=Closed,8=NULL:"Null"
+TIndexStatus:Values1=Closed,2=UNIQUE:"Unique",16=CLUSTERED:"Clustered"
+TIndexStatus:Values2=1=:"Dup Key Abort",4=:"Dup Row Abort"
+TIndexStatus:Values3=64=:"Allow Dup Rows",32768=:"Suspect"
+TLoginStatus:Values=Closed,1=:"Small Password",2=:"Locked account",4=:"Password Expired"
+TDeviceType:Values1=Closed,0=0:"Database",2=2:"Disk Dump",3=3:"Tape Dump",4=4:"Tape Dump"
+TDeviceType:Values2=5=5:"Tape Dump",6=6:"Tape Dump",7=7:"Tape Dump",8=8:"Tape Dump"
+TDeviceStatus:Values1=Closed,1=:"Default",2=:"Physical Disk",4=:"Logical Disk"
+TDeviceStatus:Values2=8=:"Skip Header",16=:"Dump Device",32=:"Serial Writes"
+TDeviceStatus:Values3=64=:"Device Mirrored",128=:"Reads Mirrored"
+TDeviceStatus:Values4=256=:"Half-Mirrored",512=:"Mirror Enabled"
+TSegmentStatus:Values=Closed,1=:"Default"
+
+MSSQL:UserName=select user_name()
+MSSQL:Comments=--;/*,*/
+
+MSSQL:Objects1=O:C:0M::"Data Types":Type
+MSSQL:Objects2=O:C:0M::"Tables":Table
+MSSQL:Objects3=O:C:0M::"Views":View
+MSSQL:Objects4=O:C:0M::"Procedures":Procedure
+MSSQL:Objects5=O:C:0M::"Defaults":Default
+MSSQL:Objects6=O:C:0M::"Rules":Rule
+MSSQL:Objects7=O:C:0M::"Logins":Login
+MSSQL:Objects8=O:C:0M::"Groups":Group
+MSSQL:Objects9=O:C:0M::"Users":User
+MSSQL:Objects10=O:C:0M::"Segments":Segment
+MSSQL:Objects11=O:C:0M::"Devices":Device
+
+dbo.sysobjects:Key=id
+dbo.sysobjects:Name=Owner,name
+dbo.sysobjects:Attrs1=crdate="Creation Date"
+dbo.sysobjects:Attrs2=sysstat="Status":::::VS=TObjectStatus:$1100
+; dbo.sysobjects:FilterSystemObjects=user_name(A.uid) <> 'dbo'
+; Allow defaults, etc to have dbo name
+
+dbo.syscolumns:Key=id,colid
+dbo.syscolumns:Name=name
+dbo.syscolumns:Order=colid
+dbo.syscolumns:Objects1=P:R:M1::"Type":Type
+dbo.syscolumns:Objects2=P:R:M1::"Default Value":Default
+dbo.syscolumns:Objects3=P:R:M1::"Domain Rule":Rule
+dbo.syscolumns:Reference:"Type"=usertype
+dbo.syscolumns:Reference:"Default Value"=cdefault
+dbo.syscolumns:Reference:"Domain Rule"=domain
+dbo.syscolumns:Attrs1=colid="Order":2:ER
+dbo.syscolumns:Attrs2=length=Length="Length"::E
+dbo.syscolumns:Attrs3=status="Status"::E:::VS=TColumnStatus:$8
+
+dbo.sysindexes:Key=id,indid
+dbo.sysindexes:Name=name
+dbo.sysindexes:Objects=Q:P:1M::"Columns":IndexColumn
+dbo.sysindexes:Attrs1=status="Status":::::VS=TIndexStatus:$F77F
+dbo.sysindexes:Attrs2=indid="Index Id":2
+dbo.sysindexes:Attrs3=rowpage="Rows per page":2
+dbo.sysindexes:Attrs4=minlen="Minimum row size":2
+dbo.sysindexes:Attrs5=maxlen="Maximum row size":2
+
+dbo.systypes:Key=usertype
+dbo.systypes:Name=name
+dbo.systypes:Objects1=P:R:M1::"Default Value":Default
+dbo.systypes:Objects2=P:R:M1::"Domain Rule":Rule
+dbo.systypes:Attrs1=type=Type="Physical Type"::ER:::VM=TPhysicalType
+dbo.systypes:Attrs2=length=Length="Length"::E
+dbo.systypes:Attrs3=allownulls=Null="Nulls"::E:::VM=TNull01
+dbo.systypes:Attrs4=variable="Variable Length":::::VM=TBooleanYN
+dbo.systypes:Reference:"Default Value"=tdefault
+dbo.systypes:Reference:"Domain Rule"=domain
+
+dbo.syssegments:Key=segment
+dbo.syssegments:Name=name
+dbo.syssegments:Attrs1=status="Status":::::VS=TSegmentStatus:$FFFF
+
+dbo.sysusers:Key=uid
+dbo.sysusers:Name=name
+
+master.dbo.syslogins:Dataset1=suid,status,accdate,totcpu,totio,spacelimit
+master.dbo.syslogins:Dataset2=timelimit,resultlimit,dbname,name,language
+master.dbo.syslogins:Key=suid
+master.dbo.syslogins:Name=name
+master.dbo.syslogins:Attrs1=dbname="Default Database"
+master.dbo.syslogins:Attrs2=accdate="Last Access"
+master.dbo.syslogins:Attrs3=status="Status":::::VS=TLoginStatus:$FFF7
+master.dbo.syslogins:Attrs4=language="Default Language"
+master.dbo.syslogins:Attrs5=totcpu="Total CPU":2
+master.dbo.syslogins:Attrs6=totio="Total IO":2
+
+master.dbo.sysdevices:Name=name
+master.dbo.sysdevices:Attrs1=cntrltype="Type":::::VM=TDeviceType
+master.dbo.sysdevices:Attrs2=status="Status":::::VS=TDeviceStatus:$FFFF
+master.dbo.sysdevices:Attrs3=phyname="Physical Name"
+master.dbo.sysdevices:Attrs4=mirrorname="Mirror Name"
+master.dbo.sysdevices:Attrs5=low="First Page"
+master.dbo.sysdevices:Attrs6=high="Last Page"
+
+Table:Definition=Root=dbo.sysobjects
+View:Definition=Root=dbo.sysobjects
+Procedure:Definition=Root=dbo.sysobjects
+Default:Definition=Root=dbo.sysobjects
+Rule:Definition=Root=dbo.sysobjects
+Trigger:Definition=Root=dbo.sysobjects
+Type:Definition=Root=dbo.systypes
+Index:Definition=Root=dbo.sysindexes
+Column:Definition=Root=dbo.syscolumns
+Parameter:Definition=Root=dbo.syscolumns
+Segment:Definition=Root=dbo.syssegments
+User:Definition=Root=dbo.sysusers
+Group:Definition=Root=dbo.sysusers
+Database:Definition=Root=master.dbo.sysdatabases
+Login:Definition=Root=master.dbo.syslogins
+Device:Definition=Root=master.dbo.sysdevices
+
+Table:Category=Dataset
+Table:Values=A.type IN ('U', 'S')
+Table:Objects1=T:P:1M::"Columns":Column
+Table:Objects2=T:O:0M::"Indices":Index
+Table:Objects3=T:O:0M::"Triggers":Trigger
+Table:Reference:"Columns":Text=`[Column:%s,%s:\N '  ' *] \N`
+Table:Reference:"Triggers"=id=deltrig
+Table:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Table:AttrReference:Owner=uid=uid
+Table:FilterSystemObjects=A.type <> 'S'
+Table:Warning=DataLoss
+Table:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Table:Text:Get=CREATE TABLE `N` (`{>Column}*`)
+Table:Delete:Text=DROP TABLE `O`
+Table:Rename:Text=`ESetUser O0`  exec sp_rename '`O1`','`N1`'  `ESetUser`
+
+View:Category=Dataset
+View:Values=A.type = 'V'
+View:Objects1=T:P:0M:NMDR:"Columns":Column
+View:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+View:Attrs:Q=Text=String:255:"Text"::ER
+View:AttrReference:Owner=uid=uid
+View:AttrReference:Text1=select text from dbo.syscomments
+View:AttrReference:Text2=where id=`:id` order by colid
+View:Warning=Loss
+View:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+View:Text:Init=CREATE VIEW `EDefaultName` AS `\N`  SELECT * FROM owner.object
+View:Text:Get=`=Text`
+View:Text:NameRE=Text:VIEW\_(\_*\w+)
+View:Text:NameSet=1=`N`
+View:Text:RE=^(.*\_)?CREATE\_+VIEW\_+(\w+)\_.*$
+View:Text:Set=Text=0,*N=2
+View:Delete:Text=DROP VIEW `O`
+
+Procedure:Category=Executable
+Procedure:Values=A.type = 'P'
+Procedure:Objects=T:P:0M::"Parameters":Parameter
+Procedure:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Procedure:Attrs:Q=Text=String:255:"Text"::ER
+Procedure:AttrReference:Owner=uid=uid
+Procedure:AttrReference:Text1=select text from dbo.syscomments
+Procedure:AttrReference:Text2=where id=`:id` order by colid
+Procedure:Warning=Loss
+Procedure:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Procedure:Text:Init=CREATE PROCEDURE `EDefaultName` AS
+Procedure:Text:Get=`=Text`
+Procedure:Text:NameRE=Text:PROC(EDURE)?\_(\_*\w+)
+Procedure:Text:NameSet=2=`N`
+Procedure:Text:RE=^(.*\_)?CREATE\_+(PROC(EDURE)?)\_+(\w+)\_.*$
+Procedure:Text:Set=2=`'PROCEDURE'`,Text=0,*N=4
+Procedure:Delete:Text=DROP PROCEDURE `O`
+Procedure:Rename:Text=`ESetUser O0`  exec sp_rename '`O1`','`N1`'  `ESetUser`
+
+Default:Category=Expression
+Default:Values=A.type = 'D'
+Default:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Default:Attrs:Q=Text=String:255:"Text":2:ER:PGetDefaultText
+Default:AttrReference:Owner=uid=uid
+Default:AttrReference:Text1=select text from dbo.syscomments
+Default:AttrReference:Text2=where id=`:id` order by colid
+Default:Warning=Loss
+Default:EAttrs=Text,New,Delete,Modify,Rename,Save
+Default:Text:Init=CREATE DEFAULT `EDefaultName` AS NULL
+Default:Text:Get=CREATE DEFAULT `N` AS `=Text`
+Default:Text:NameRE=Text:DEFAULT\_(\_*\w+)
+Default:Text:NameSet=1=`N`
+Default:Text:RE=CREATE\_+DEFAULT\_+(\w+)\_+AS\_(.*)
+Default:Text:Set=*N=1,Text=2
+Default:Delete:Text=DROP DEFAULT `O`
+
+Rule:Category=Expression
+Rule:Values=A.type = 'R'
+Rule:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Rule:Attrs:Q=Text=String:255:"Text"::ER
+Rule:AttrReference:Owner=uid=uid
+Rule:AttrReference:Text1=select text from dbo.syscomments
+Rule:AttrReference:Text2=where id=`:id` order by colid
+Rule:EAttrs=Text,New,Delete,Modify,Rename,Save
+Rule:Text:Init=CREATE RULE `EDefaultName` AS NULL
+Rule:Text:Get=`=Text`
+Rule:Text:NameRE=Text:RULE\_+(\w+)
+Rule:Text:NameSet=1=`N`
+Rule:Text:RE=^(.*\_)?CREATE\_+RULE\_+(\w+)\_+.*$
+Rule:Text:Set=*N=2,Text=0
+Rule:Delete:Text=DROP RULE `O`
+
+Trigger:Category=Executable
+Trigger:Values=A.type = 'TR'
+Trigger:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Trigger:Attrs:Q=Text=String:255:"Text"::ER:PROOName
+Trigger:AttrReference:Owner=uid=uid
+Trigger:AttrReference:Text1=select text from dbo.syscomments
+Trigger:AttrReference:Text2=where id=`:id` order by colid
+Trigger:EAttrs=Text,New,Delete,Modify,Rename,Save
+Trigger:Text:Init=CREATE TRIGGER `EDefaultName` ON `{<}N` FOR INSERT, UPDATE, DELETE AS`\N`
+Trigger:Text:Get=`=Text`
+Trigger:Text:NameRE=Text:TRIGGER\_+(\w+)\_+ON\_+(\w+)
+Trigger:Text:NameSet=1=`N`,2=`{<}N`
+Trigger:Text:RE=^(.*\_)?CREATE\_+TRIGGER\_+(\w+)\_+ON\_+(\w+).*$
+Trigger:Text:Set=*N=2,3=`{<}N`,Text=0
+Trigger:Delete:Text=DROP TRIGGER `O`
+
+RIConstraint:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+RIConstraint:AttrReference:Owner=uid=uid
+
+Column:Category=Column
+Column:Attrs:R=Type:"Type":"Length":1:ER
+Column:EAttrs=Text,New,Delete,Modify,Rename
+Column:Text:Get=`N ' ' EType EDefault``! ' ' =status`
+
+Index:Category=Index
+Index:Values=A.keycnt > 0
+Index:Attrs:R=status::::+E
+Index:EAttrs=Text,New,Delete,Modify,Rename,Save
+Index:Text:Get1=CREATE `=status` INDEX `N`
+Index:Text:Get2=ON `{<}N` (`[IndexColumn:%s, %s:N]`)
+Index:Text:RE=CREATE.*\_INDEX\_+(\w+)\_+ON\_+(\w+).*(\(.*\))
+Index:Text:Set=*N=1,2=`{<}N`,*>IndexColumn=3
+Index:Delete:Text=DROP INDEX `{<}O`.`O`
+
+IndexColumn:Category=ColumnReference
+IndexColumn:Name=Column
+IndexColumn:Order=Id
+IndexColumn:Definition1=Dataset=
+IndexColumn:Definition2=select Id=c.colid, TabId=c.id, ColId=i.colid
+IndexColumn:Definition3=from sysindexes x, syscolumns c, syscolumns i
+IndexColumn:Definition4=where (x.id=`:id`) and (x.id=c.id) and (x.id=i.id) and
+IndexColumn:Definition5=(x.name=`OQ`) and (c.colid<=keycnt) and
+IndexColumn:Definition6=(i.name=INDEX_COL(`{<}OQ`,x.indid,c.colid))
+IndexColumn:Dataset=Id=Word,TabId=Word,ColId=Word
+IndexColumn:Objects1=P:R:M1::"Column":Column:<<>Column
+IndexColumn:Attrs1=Id="Order":2:ER
+IndexColumn:Attrs:R=Column:::2:ER
+IndexColumn:Reference:"Column"=TabId,ColId
+IndexColumn:EAttrs=Text,New,Delete,Modify,Rename
+IndexColumn:Text:Get=`N`
+
+Parameter:Category=Column
+Parameter:Attrs:R=Type:"Type":"Length":1
+Parameter:EAttrs=
+
+Type:Category=Type
+Type:Attrs:T=dbo.sysusers.name=Owner:"Owner":Type:1
+Type:AttrReference:Owner=uid=uid
+Type:Warning=Loss
+Type:EAttrs=Text,New,Delete,Modify,Rename,Save
+Type:Text:Init=sp_addtype "`EDefaultName`", "varchar(255)", "null"
+Type:Text:Get=sp_addtype "`N`", "`EType`"`! ', "' =Null '"'`
+Type:Delete:Text=sp_droptype "`O`"
+
+Login:Attrs:P=Password=String
+Login:Attrs:R=Password:"Password":"Default Language":2
+Login:EAttrs=Text
+Login:Text:Get=sp_addlogin "`N`", "`=Password`", "`=dbname`", "`=language`"
+Login:Delete:Text=sp_droplogin "`O`"
+
+Group:Values=A.uid = A.gid
+; !!! Group:Objects=P:R:0M::"Users":User
+Group:Reference:"Users"=uid=gid
+Group:EAttrs=Text
+Group:Text:Get=sp_addgroup "`N`"
+Group:Delete:Text=sp_dropgroup "`O`"
+
+User:Values=A.uid <> A.gid
+User:Objects1=P:R:M1::"Login":Login
+User:Objects2=P:R:M1::"Group":Group
+User:Reference:"Login"=suid
+User:Reference:"Group"=gid
+User:EAttrs=Text
+User:Text:Get=sp_adduser "`=Login`", "`N`", "`=Group`"
+User:Delete:Text=sp_dropuser "`O`"
+
+Segment:Objects=P:R:M0::"Device":Device
+Segment:Attrs:P=DeviceName=String:::0
+Segment:Reference:"Device"=DeviceName
+Segment:EAttrs=Text
+Segment:Text:Get=sp_addsegment "`N`","`=Device`"
+Segment:Delete:Text=sp_dropsegment "`O`"
+
+Device:EAttrs=Text
+Device:Text:Get1=DISK INIT NAME="`N`",`\N'  '`PHYSNAME="`=phyname`",
+Device:Text:Get2=`\N'  '`VDEVNO=?,`\N'  '`SIZE=?,
+Device:Text:Get3=`\N'  '`CNTRLTYPE=`=cntrltype`
+Device:Delete:Text=sp_dropdevice "`O`"
+
+[MSSQL 6 Properties]
+MSSQL:Objects1=O:C:0M::"Data Types":Type
+MSSQL:Objects2=O:C:0M::"Tables":Table
+MSSQL:Objects3=O:C:0M::"Views":View
+MSSQL:Objects4=O:C:0M::"Procedures":Procedure
+MSSQL:Objects5=O:C:0M::"Extended Procedures":ExtendedProcedure
+MSSQL:Objects6=O:C:0M::"Defaults":Default
+MSSQL:Objects7=O:C:0M::"Rules":Rule
+MSSQL:Objects8=O:C:0M::"Logins":Login
+MSSQL:Objects9=O:C:0M::"Groups":Group
+MSSQL:Objects10=O:C:0M::"Users":User
+MSSQL:Objects11=O:C:0M::"Segments":Segment
+MSSQL:Objects12=O:C:0M::"Devices":Device
+
+dbo.systypes:Attrs1=type=Type="Physical Type"::ER:::VM=TPhysicalType
+dbo.systypes:Attrs2=length=Length="Length"::E
+dbo.systypes:Attrs3=prec=Precision="Precision":2:E
+dbo.systypes:Attrs4=scale=Scale="Scale":2:E
+dbo.systypes:Attrs5=allownulls=Null="Nulls"::E:::VM=TNull01
+dbo.systypes:Attrs6=variable="Variable Length":::::VM=TBooleanYN
+
+dbo.syscolumns:Attrs1=colid="Order":2:ER
+dbo.syscolumns:Attrs2=length=Length="Length"::E
+dbo.syscolumns:Attrs3=prec=Precision="Precision":2:E
+dbo.syscolumns:Attrs4=scale=Scale="Scale":2:E
+dbo.syscolumns:Attrs5=status="Status"::E:::VS=TColumnStatus:$8
+
+dbo.sysconstraints:Key=id,constid
+dbo.sysconstraints:Name=name
+
+dbo.sysreferences:Key=fkeyid,constid
+dbo.sysreferences:Name=name
+
+Table:Objects1=T:P:1M::"Columns":Column
+Table:Objects2=T:O:0M::"Indices":Index
+Table:Objects3=T:O:01::"Primary Key":PrimaryKey
+Table:Objects4=T:O:0M::"Referential Constraints":ForeignKey
+Table:Objects5=T:O:0M::"Unique Constraints":UniqueConstraint
+Table:Objects6=T:O:0M::"Check Constraints":CheckConstraint
+Table:Objects7=T:O:0M::"Triggers":Trigger
+
+KeyColumn:Category=ColumnReference
+KeyColumn:Definition=Dataset
+KeyColumn:Dataset=ItemNo=Integer,ColNo=Integer
+KeyColumn:Name=Column
+KeyColumn:Order=ItemNo
+KeyColumn:Objects1=P:R:M1::"Column":Column:<<>Column
+KeyColumn:Attrs1=ItemNo="Order":2:ER
+KeyColumn:Attrs:R=Column:::2:ER
+KeyColumn:Reference:"Column"=,ColNo
+KeyColumn:EAttrs=Text,New,Delete,Modify,Rename
+KeyColumn:Text:Get=`N`
+
+PrimaryKey:Definition=Root=dbo.sysconstraints
+PrimaryKey:Category=PrimaryKey
+PrimaryKey:Values=A.status & 15 = 1
+; B.type = 'K'
+PrimaryKey:Objects1=P:R:M1::"Index":Index:<>Index
+PrimaryKey:Objects2=Q:P:1M::"Columns":IndexColumn
+PrimaryKey:Attrs:T1=dbo.sysobjects.name=name:::0
+PrimaryKey:Attrs:T2=dbo.sysobjects.crdate=crdate
+PrimaryKey:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+PrimaryKey:Attrs:T4=dbo.sysindexes.indid=indid:::0
+PrimaryKey:Reference:"Index"=,indid
+PrimaryKey:Reference:"Columns":Text=`[IndexColumn:%s, %s:*]`
+PrimaryKey:AttrReference:name=constid=id
+PrimaryKey:AttrReference:crdate=constid=id
+PrimaryKey:AttrReference:sysstat=constid=id
+PrimaryKey:AttrReference:indid=B.name=name
+; and status & 0x1800 <> 0
+PrimaryKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+PrimaryKey:Text:Init1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`
+PrimaryKey:Text:Init2= PRIMARY KEY (`{>IndexColumn}*`)
+PrimaryKey:Text:Get1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`
+PrimaryKey:Text:Get2= PRIMARY KEY (`{>IndexColumn}*`)
+PrimaryKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+ForeignKey:Definition=Root=dbo.sysreferences
+ForeignKey:Category=ForeignKey
+; ForeignKey:Values=(B.status & 15 = 3) and (C.type = 'RI')
+ForeignKey:Objects1=M:P:1M::"Columns":KeyColumn:GetKeyColumns
+ForeignKey:Objects2=P:R:M1::"Reference Table":Table
+ForeignKey:Attrs:T1=dbo.sysobjects.name=name:::0
+ForeignKey:Attrs:T2=dbo.sysobjects.crdate=crdate
+ForeignKey:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+ForeignKey:Attrs:R=Table::::ER
+ForeignKey:Reference:"Columns":Text=`[KeyColumn:%s, %s:*]`
+ForeignKey:Reference:"Reference Table"=rkeyid
+ForeignKey:AttrReference:name=constid=id
+ForeignKey:AttrReference:crdate=constid=id
+ForeignKey:AttrReference:sysstat=constid=id
+ForeignKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+ForeignKey:Text:Init1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`
+ForeignKey:Text:Init2= FOREIGN KEY (`{>KeyColumn}*`) `\N`
+ForeignKey:Text:Init3= REFERENCES `=Table`
+ForeignKey:Text:Get1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`
+ForeignKey:Text:Get2= FOREIGN KEY (`{>KeyColumn}*`) `\N`
+ForeignKey:Text:Get3= REFERENCES `=Table`
+ForeignKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+UniqueConstraint:Definition=Root=dbo.sysconstraints
+UniqueConstraint:Category=UniqueConstraint
+UniqueConstraint:Values=A.status & 15 = 2
+; B.type = 'K'
+UniqueConstraint:Objects1=P:R:M1::"Index":Index:<>Index
+UniqueConstraint:Objects2=Q:P:1M::"Columns":IndexColumn
+UniqueConstraint:Attrs:T1=dbo.sysobjects.name=name:::0
+UniqueConstraint:Attrs:T2=dbo.sysobjects.crdate=crdate
+UniqueConstraint:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+UniqueConstraint:Attrs:T4=dbo.sysindexes.indid=indid:::0
+UniqueConstraint:Reference:"Index"=,indid
+UniqueConstraint:Reference:"Columns":Text=`[IndexColumn:%s, %s:*]`
+UniqueConstraint:AttrReference:name=constid=id
+UniqueConstraint:AttrReference:crdate=constid=id
+UniqueConstraint:AttrReference:sysstat=constid=id
+UniqueConstraint:AttrReference:indid=B.name=name
+; and status & 0x1800 <> 0
+UniqueConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+UniqueConstraint:Text:Init1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`
+UniqueConstraint:Text:Init2= UNIQUE (`{>IndexColumn}*`)
+UniqueConstraint:Text:Get1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`
+UniqueConstraint:Text:Get2= UNIQUE (`{>IndexColumn}*`)
+UniqueConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+CheckConstraint:Definition=Root=dbo.sysconstraints
+CheckConstraint:Values=A.status & 15 = 4
+; B.type = 'C'
+CheckConstraint:Category=Expression
+CheckConstraint:Attrs:T1=dbo.sysobjects.name=name:::0
+CheckConstraint:Attrs:T2=dbo.sysobjects.crdate=crdate
+CheckConstraint:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+CheckConstraint:Attrs:Q=Text=String:255:"Constraint Text":2:ER:PStripParens
+CheckConstraint:AttrReference:name=constid=id
+CheckConstraint:AttrReference:crdate=constid=id
+CheckConstraint:AttrReference:sysstat=constid=id
+CheckConstraint:AttrReference:Text1=select text from dbo.syscomments
+CheckConstraint:AttrReference:Text2=where id=`:constid` order by colid
+CheckConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+CheckConstraint:Text:Init=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`  CHECK ()
+CheckConstraint:Text:Get=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`  CHECK (`=Text`)
+CheckConstraint:Text:RE=ALTER\_+TABLE\_+(\w+)\_+ADD\_+CONSTRAINT\_+(\w+)\_+CHECK\_*\((.*)\)
+CheckConstraint:Text:Set=1=`{<}N`,*N=2,Text=3
+CheckConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+ExtendedProcedure:Definition=Root=dbo.sysobjects
+ExtendedProcedure:Category=Executable
+ExtendedProcedure:Values=A.type = 'X'
+ExtendedProcedure:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+ExtendedProcedure:Attrs:Q=DLLName=String:255:"DLL Name":2:ER
+ExtendedProcedure:AttrReference:Owner=uid=uid
+ExtendedProcedure:AttrReference:DLLName1=select text from dbo.syscomments
+ExtendedProcedure:AttrReference:DLLName2=where id=`:id` order by colid
+ExtendedProcedure:Warning=Loss
+ExtendedProcedure:EAttrs=Text,New,Delete,Modify,Rename,Save
+ExtendedProcedure:Text:Init=sp_addextendedproc '`EDefaultName`', 'dllname.dll'
+ExtendedProcedure:Text:Get=sp_addextendedproc `NQ`, `:DLLName`
+ExtendedProcedure:Text:RE=sp_addextendedproc\_+'(\w+)',\_+'(\w+)'
+ExtendedProcedure:Text:Set=*N=1,DLLName=2
+ExtendedProcedure:Delete:Text=sp_dropextendedproc `OQ`
+
+[MSSQL 7 Properties]
+MSSQL:Objects1=O:C:0M::"Data Types":Type
+MSSQL:Objects2=O:C:0M::"Tables":Table
+MSSQL:Objects3=O:C:0M::"Views":View
+MSSQL:Objects4=O:C:0M::"Procedures":Procedure
+MSSQL:Objects5=O:C:0M::"Extended Procedures":ExtendedProcedure
+MSSQL:Objects6=O:C:0M::"Defaults":Default
+MSSQL:Objects7=O:C:0M::"Rules":Rule
+MSSQL:Objects8=O:C:0M::"Logins":Login
+MSSQL:Objects9=O:C:0M::"Groups":Group
+MSSQL:Objects10=O:C:0M::"Users":User
+
+dbo.sysindexes:Key=id,indid
+dbo.sysindexes:Name=name
+dbo.sysindexes:Objects=Q:P:1M::"Columns":IndexColumn
+dbo.sysindexes:Attrs1=status="Status":::::VS=TIndexStatus:$F77F
+dbo.sysindexes:Attrs2=indid="Index Id":2
+dbo.sysindexes:Attrs3=minlen="Minimum row size":2
+dbo.sysindexes:Attrs4=maxlen="Maximum row size":2
+
+dbo.systypes:Attrs1=type=Type="Physical Type"::ER:::VM=TPhysicalType
+dbo.systypes:Attrs2=length=Length="Length"::E
+dbo.systypes:Attrs3=prec=Precision="Precision":2:E
+dbo.systypes:Attrs4=scale=Scale="Scale":2:E
+dbo.systypes:Attrs5=allownulls=Null="Nulls"::E:::VM=TNull01
+dbo.systypes:Attrs6=variable="Variable Length":::::VM=TBooleanYN
+
+dbo.syscolumns:Attrs1=colid="Order":2:ER
+dbo.syscolumns:Attrs2=length=Length="Length"::E
+dbo.syscolumns:Attrs3=prec=Precision="Precision":2:E
+dbo.syscolumns:Attrs4=scale=Scale="Scale":2:E
+dbo.syscolumns:Attrs5=status="Status"::E:::VS=TColumnStatus:$8
+
+dbo.sysconstraints:Key=id,constid
+dbo.sysconstraints:Name=name
+
+dbo.sysreferences:Key=fkeyid,constid
+dbo.sysreferences:Name=name
+
+Table:Objects1=T:P:1M::"Columns":Column
+Table:Objects2=T:O:0M::"Indices":Index
+Table:Objects3=T:O:01::"Primary Key":PrimaryKey
+Table:Objects4=T:O:0M::"Referential Constraints":ForeignKey
+Table:Objects5=T:O:0M::"Unique Constraints":UniqueConstraint
+Table:Objects6=T:O:0M::"Check Constraints":CheckConstraint
+Table:Objects7=T:O:0M::"Triggers":Trigger
+
+KeyColumn:Category=ColumnReference
+KeyColumn:Definition=Dataset
+KeyColumn:Dataset=ItemNo=Integer,ColNo=Integer
+KeyColumn:Name=Column
+KeyColumn:Order=ItemNo
+KeyColumn:Objects1=P:R:M1::"Column":Column:<<>Column
+KeyColumn:Attrs1=ItemNo="Order":2:ER
+KeyColumn:Attrs:R=Column:::2:ER
+KeyColumn:Reference:"Column"=,ColNo
+KeyColumn:EAttrs=Text,New,Delete,Modify,Rename
+KeyColumn:Text:Get=`N`
+
+PrimaryKey:Definition=Root=dbo.sysconstraints
+PrimaryKey:Category=PrimaryKey
+PrimaryKey:Values=A.status & 15 = 1
+; B.type = 'K'
+PrimaryKey:Objects1=P:R:M1::"Index":Index:<>Index
+PrimaryKey:Objects2=Q:P:1M::"Columns":IndexColumn
+PrimaryKey:Attrs:T1=dbo.sysobjects.name=name:::0
+PrimaryKey:Attrs:T2=dbo.sysobjects.crdate=crdate
+PrimaryKey:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+PrimaryKey:Attrs:T4=dbo.sysindexes.indid=indid:::0
+PrimaryKey:Reference:"Index"=,indid
+PrimaryKey:Reference:"Columns":Text=`[IndexColumn:%s, %s:*]`
+PrimaryKey:AttrReference:name=constid=id
+PrimaryKey:AttrReference:crdate=constid=id
+PrimaryKey:AttrReference:sysstat=constid=id
+PrimaryKey:AttrReference:indid=B.name=name
+; and status & 0x1800 <> 0
+PrimaryKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+PrimaryKey:Text:Init1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`
+PrimaryKey:Text:Init2= PRIMARY KEY (`{>IndexColumn}*`)
+PrimaryKey:Text:Get1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`
+PrimaryKey:Text:Get2= PRIMARY KEY (`{>IndexColumn}*`)
+PrimaryKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+ForeignKey:Definition=Root=dbo.sysreferences
+ForeignKey:Category=ForeignKey
+; ForeignKey:Values=(B.status & 15 = 3) and (C.type = 'RI')
+ForeignKey:Objects1=M:P:1M::"Columns":KeyColumn:GetKeyColumns
+ForeignKey:Objects2=P:R:M1::"Reference Table":Table
+ForeignKey:Attrs:T1=dbo.sysobjects.name=name:::0
+ForeignKey:Attrs:T2=dbo.sysobjects.crdate=crdate
+ForeignKey:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+ForeignKey:Attrs:R=Table::::ER
+ForeignKey:Reference:"Columns":Text=`[KeyColumn:%s, %s:*]`
+ForeignKey:Reference:"Reference Table"=rkeyid
+ForeignKey:AttrReference:name=constid=id
+ForeignKey:AttrReference:crdate=constid=id
+ForeignKey:AttrReference:sysstat=constid=id
+ForeignKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+ForeignKey:Text:Init1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`
+ForeignKey:Text:Init2= FOREIGN KEY (`{>KeyColumn}*`) `\N`
+ForeignKey:Text:Init3= REFERENCES `=Table`
+ForeignKey:Text:Get1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`
+ForeignKey:Text:Get2= FOREIGN KEY (`{>KeyColumn}*`) `\N`
+ForeignKey:Text:Get3= REFERENCES `=Table`
+ForeignKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+UniqueConstraint:Definition=Root=dbo.sysconstraints
+UniqueConstraint:Category=UniqueConstraint
+UniqueConstraint:Values=A.status & 15 = 2
+; B.type = 'K'
+UniqueConstraint:Objects1=P:R:M1::"Index":Index:<>Index
+UniqueConstraint:Objects2=Q:P:1M::"Columns":IndexColumn
+UniqueConstraint:Attrs:T1=dbo.sysobjects.name=name:::0
+UniqueConstraint:Attrs:T2=dbo.sysobjects.crdate=crdate
+UniqueConstraint:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+UniqueConstraint:Attrs:T4=dbo.sysindexes.indid=indid:::0
+UniqueConstraint:Reference:"Index"=,indid
+UniqueConstraint:Reference:"Columns":Text=`[IndexColumn:%s, %s:*]`
+UniqueConstraint:AttrReference:name=constid=id
+UniqueConstraint:AttrReference:crdate=constid=id
+UniqueConstraint:AttrReference:sysstat=constid=id
+UniqueConstraint:AttrReference:indid=B.name=name
+; and status & 0x1800 <> 0
+UniqueConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+UniqueConstraint:Text:Init1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`
+UniqueConstraint:Text:Init2= UNIQUE (`{>IndexColumn}*`)
+UniqueConstraint:Text:Get1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`
+UniqueConstraint:Text:Get2= UNIQUE (`{>IndexColumn}*`)
+UniqueConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+CheckConstraint:Definition=Root=dbo.sysconstraints
+CheckConstraint:Values=A.status & 15 = 4
+; B.type = 'C'
+CheckConstraint:Category=Expression
+CheckConstraint:Attrs:T1=dbo.sysobjects.name=name:::0
+CheckConstraint:Attrs:T2=dbo.sysobjects.crdate=crdate
+CheckConstraint:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+CheckConstraint:Attrs:Q=Text=String:255:"Constraint Text":2:ER:PStripParens
+CheckConstraint:AttrReference:name=constid=id
+CheckConstraint:AttrReference:crdate=constid=id
+CheckConstraint:AttrReference:sysstat=constid=id
+CheckConstraint:AttrReference:Text1=select text from dbo.syscomments
+CheckConstraint:AttrReference:Text2=where id=`:constid` order by colid
+CheckConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+CheckConstraint:Text:Init=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`  CHECK ()
+CheckConstraint:Text:Get=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`  CHECK (`=Text`)
+CheckConstraint:Text:RE=ALTER\_+TABLE\_+(\w+)\_+ADD\_+CONSTRAINT\_+(\w+)\_+CHECK\_*\((.*)\)
+CheckConstraint:Text:Set=1=`{<}N`,*N=2,Text=3
+CheckConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+ExtendedProcedure:Definition=Root=dbo.sysobjects
+ExtendedProcedure:Category=Executable
+ExtendedProcedure:Values=A.type = 'X'
+ExtendedProcedure:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+ExtendedProcedure:Attrs:Q=DLLName=String:255:"DLL Name":2:ER
+ExtendedProcedure:AttrReference:Owner=uid=uid
+ExtendedProcedure:AttrReference:DLLName1=select text from dbo.syscomments
+ExtendedProcedure:AttrReference:DLLName2=where id=`:id` order by colid
+ExtendedProcedure:Warning=Loss
+ExtendedProcedure:EAttrs=Text,New,Delete,Modify,Rename,Save
+ExtendedProcedure:Text:Init=sp_addextendedproc '`EDefaultName`', 'dllname.dll'
+ExtendedProcedure:Text:Get=sp_addextendedproc `NQ`, `:DLLName`
+ExtendedProcedure:Text:RE=sp_addextendedproc\_+'(\w+)',\_+'(\w+)'
+ExtendedProcedure:Text:Set=*N=1,DLLName=2
+ExtendedProcedure:Delete:Text=sp_dropextendedproc `OQ`
+
+[SYBASE Properties]
+TBooleanYN:Values=Closed,0="No",-1="Yes"
+TPhysicalType:Values1=Closed,34=image:"Image",35=text:"Text"
+TPhysicalType:Values2=37=varbinary:"VarBinary"
+TPhysicalType:Values3=38=int:"Int"
+TPhysicalType:Values4=39=varchar:"VarChar"
+TPhysicalType:Values5=45=binary:"Binary"
+TPhysicalType:Values6=47=char:"Char"
+TPhysicalType:Values7=48=tinyint:"TinyInt"
+TPhysicalType:Values8=50=bit:"Bit"
+TPhysicalType:Values9=52=smallint:"SmallInt"
+TPhysicalType:Values10=55=decimal:"Decimal"
+TPhysicalType:Values11=56=int:"Int"
+TPhysicalType:Values12=58=smalldatetime:"SmallDateTime"
+TPhysicalType:Values13=59=real:"Real"
+TPhysicalType:Values14=60=money:"Money"
+TPhysicalType:Values15=61=datetime:"DateTime"
+TPhysicalType:Values16=62=float:"Float"
+TPhysicalType:Values17=63=numeric:"Numeric"
+TPhysicalType:Values18=106=decimal:"Decimal"
+TPhysicalType:Values19=108=numeric:"Numeric"
+TPhysicalType:Values20=109=float:"Float"
+TPhysicalType:Values21=110=money:"Money"
+TPhysicalType:Values22=111=datetime:"DateTime"
+TPhysicalType:Values23=122=smallmoney:"SmallMoney"
+TNull01:Values=Closed,0=not null:"No",-1=null:"Yes"
+TObjectType:Values1=Closed,S="System Table",U="Table",V="View",L="Log",P="Procedure",
+TObjectType:Values2=R="Rule",D="Default",TR="Trigger",RI="Referential Constraint"
+TObjectStatus:Values=Closed,256="Read Only",4096="RamboIX"
+TColumnStatus:Values=Closed,8=NULL:"Null"
+TIndexStatus:Values1=Closed,2=UNIQUE:"Unique",16=CLUSTERED:"Clustered"
+TIndexStatus:Values2=1=:"Dup Key Abort",4=:"Dup Row Abort"
+TIndexStatus:Values3=64=:"Allow Dup Rows",32768=:"Suspect"
+TLoginStatus:Values=Closed,1=:"Small Password",2=:"Locked account",4=:"Password Expired"
+TDeviceType:Values1=Closed,0=0:"Database",2=2:"Disk Dump",3=3:"Tape Dump",4=4:"Tape Dump"
+TDeviceType:Values2=5=5:"Tape Dump",6=6:"Tape Dump",7=7:"Tape Dump",8=8:"Tape Dump"
+TDeviceStatus:Values1=Closed,1=:"Default",2=:"Physical Disk",4=:"Logical Disk"
+TDeviceStatus:Values2=8=:"Skip Header",16=:"Dump Device",32=:"Serial Writes"
+TDeviceStatus:Values3=64=:"Device Mirrored",128=:"Reads Mirrored"
+TDeviceStatus:Values4=256=:"Half-Mirrored",512=:"Mirror Enabled"
+TSegmentStatus:Values=Closed,1=:"Default"
+
+SYBASE:UserName=select user_name()
+SYBASE:Comments=--;/*,*/
+
+SYBASE:Objects1=O:C:0M::"Data Types":Type
+SYBASE:Objects2=O:C:0M::"Tables":Table
+SYBASE:Objects3=O:C:0M::"Views":View
+SYBASE:Objects4=O:C:0M::"Procedures":Procedure
+SYBASE:Objects5=O:C:0M::"Defaults":Default
+SYBASE:Objects6=O:C:0M::"Rules":Rule
+SYBASE:Objects7=O:C:0M::"Logins":Login
+SYBASE:Objects8=O:C:0M::"Groups":Group
+SYBASE:Objects9=O:C:0M::"Users":User
+SYBASE:Objects10=O:C:0M::"Segments":Segment
+SYBASE:Objects11=O:C:0M::"Devices":Device
+
+dbo.sysobjects:Key=id
+dbo.sysobjects:Name=Owner,name
+dbo.sysobjects:Attrs1=crdate="Creation Date"
+dbo.sysobjects:Attrs2=sysstat="Status":::::VS=TObjectStatus:$1100
+dbo.sysobjects:FilterSystemObjects=user_name(A.uid) <> 'dbo'
+dbo.sysobjects:Dataset1=name,id,uid,type,userstat,sysstat,indexdel,
+dbo.sysobjects:Dataset2=crdate,expdate,deltrig,instrig,updtrig,seltrig
+
+dbo.syscolumns:Key=id,colid
+dbo.syscolumns:Name=name
+dbo.syscolumns:Order=colid
+dbo.syscolumns:Objects1=P:R:M1::"Type":Type
+dbo.syscolumns:Objects2=P:R:M1::"Default Value":Default
+dbo.syscolumns:Objects3=P:R:M1::"Domain Rule":Rule
+dbo.syscolumns:Reference:"Type"=usertype
+dbo.syscolumns:Reference:"Default Value"=cdefault
+dbo.syscolumns:Reference:"Domain Rule"=domain
+dbo.syscolumns:Attrs1=colid="Order":2:ER
+dbo.syscolumns:Attrs2=length=Length="Length"::E
+dbo.syscolumns:Attrs3=status="Status"::E:::VS=TColumnStatus:$8
+
+dbo.sysindexes:Key=id,indid
+dbo.sysindexes:Name=name
+dbo.sysindexes:Objects=Q:P:1M::"Columns":IndexColumn
+dbo.sysindexes:Reference:"Columns":Text=`[IndexColumn:%s, %s:*]`
+dbo.sysindexes:Attrs1=status="Status":::::VS=TIndexStatus:$8077
+dbo.sysindexes:Attrs2=minlen="Minimum row size":2
+dbo.sysindexes:Attrs3=maxlen="Maximum row size":2
+
+dbo.systypes:Key=usertype
+dbo.systypes:Name=name
+dbo.systypes:Objects1=P:R:M1::"Default Value":Default
+dbo.systypes:Objects2=P:R:M1::"Domain Rule":Rule
+dbo.systypes:Attrs1=type=Type="Physical Type"::ER:::VM=TPhysicalType
+dbo.systypes:Attrs2=length=Length="Length"::E
+dbo.systypes:Attrs3=allownulls=Null="Nulls"::E:::VM=TNull01
+dbo.systypes:Attrs4=variable="Variable Length":::::VM=TBooleanYN
+dbo.systypes:Reference:"Default Value"=tdefault
+dbo.systypes:Reference:"Domain Rule"=domain
+
+dbo.syssegments:Key=segment
+dbo.syssegments:Name=name
+dbo.syssegments:Attrs1=status="Status":::::VS=TSegmentStatus:$FFFF
+
+dbo.sysusers:Key=uid
+dbo.sysusers:Name=name
+
+master.dbo.syslogins:Dataset1=suid,status,accdate,totcpu,totio,spacelimit
+master.dbo.syslogins:Dataset2=timelimit,resultlimit,dbname,name,language
+master.dbo.syslogins:Key=suid
+master.dbo.syslogins:Name=name
+master.dbo.syslogins:Attrs1=dbname="Default Database"
+master.dbo.syslogins:Attrs2=accdate="Last Access"
+master.dbo.syslogins:Attrs3=status="Status":::::VS=TLoginStatus:$FFF7
+master.dbo.syslogins:Attrs4=language="Default Language"
+master.dbo.syslogins:Attrs5=totcpu="Total CPU":2
+master.dbo.syslogins:Attrs6=totio="Total IO":2
+
+master.dbo.sysdevices:Name=name
+master.dbo.sysdevices:Attrs1=cntrltype="Type":::::VM=TDeviceType
+master.dbo.sysdevices:Attrs2=status="Status":::::VS=TDeviceStatus:$FFFF
+master.dbo.sysdevices:Attrs3=phyname="Physical Name"
+master.dbo.sysdevices:Attrs4=mirrorname="Mirror Name"
+master.dbo.sysdevices:Attrs5=low="First Page"
+master.dbo.sysdevices:Attrs6=high="Last Page"
+
+Table:Definition=Root=dbo.sysobjects
+View:Definition=Root=dbo.sysobjects
+Procedure:Definition=Root=dbo.sysobjects
+Default:Definition=Root=dbo.sysobjects
+Rule:Definition=Root=dbo.sysobjects
+Trigger:Definition=Root=dbo.sysobjects
+Type:Definition=Root=dbo.systypes
+Index:Definition=Root=dbo.sysindexes
+Column:Definition=Root=dbo.syscolumns
+Parameter:Definition=Root=dbo.syscolumns
+Segment:Definition=Root=dbo.syssegments
+User:Definition=Root=dbo.sysusers
+Group:Definition=Root=dbo.sysusers
+Database:Definition=Root=master.dbo.sysdatabases
+Login:Definition=Root=master.dbo.syslogins
+Device:Definition=Root=master.dbo.sysdevices
+
+Table:Category=Dataset
+Table:Values=A.type IN ('U', 'S')
+Table:Objects1=T:P:1M::"Columns":Column
+Table:Objects2=T:O:0M::"Indices":Index
+Table:Objects3=T:O:0M::"Triggers":Trigger
+Table:Reference:"Columns":Text=`[Column:%s,%s:\N '  ' *] \N`
+Table:Reference:"Triggers"=id=deltrig
+Table:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Table:AttrReference:Owner=uid=uid
+Table:FilterSystemObjects=A.type <> 'S'
+Table:Warning=DataLoss
+Table:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Table:Text:Get=CREATE TABLE `N` (`{>Column}*`)
+Table:Delete:Text=DROP TABLE `O`
+Table:Rename:Text=`ESetUser O0`  exec sp_rename '`O1`','`N1`'  `ESetUser`
+
+View:Category=Dataset
+View:Values=A.type = 'V'
+View:Objects1=T:P:0M:NMDR:"Columns":Column
+View:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+View:Attrs:Q=Text=String:255:"Text"::ER
+View:AttrReference:Owner=uid=uid
+View:AttrReference:Text1=select text from dbo.syscomments
+View:AttrReference:Text2=where id=`:id` order by colid
+View:Warning=Loss
+View:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+View:Text:Init=CREATE VIEW `EDefaultName` AS `\N`  SELECT * FROM owner.table
+View:Text:Get=`=Text`
+View:Text:NameRE=Text:VIEW\_(\_*\w+)
+View:Text:NameSet=1=`N`
+View:Text:RE=^(.*\_)?CREATE\_+VIEW\_+(\w+)\_.*$
+View:Text:Set=Text=0,*N=2
+View:Delete:Text=DROP VIEW `O`
+
+Procedure:Category=Executable
+Procedure:Values=A.type = 'P'
+Procedure:Objects=T:P:0M::"Parameters":Parameter
+Procedure:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Procedure:Attrs:Q=Text=String:255:"Text"::ER
+Procedure:AttrReference:Owner=uid=uid
+Procedure:AttrReference:Text1=select text from dbo.syscomments
+Procedure:AttrReference:Text2=where id=`:id` order by colid
+Procedure:Warning=Loss
+Procedure:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Procedure:Text:Init=CREATE PROCEDURE `EDefaultName` AS
+Procedure:Text:Get=`=Text`
+Procedure:Text:NameRE=Text:PROC(EDURE)?\_(\_*\w+)
+Procedure:Text:NameSet=2=`N`
+Procedure:Text:RE=^(.*\_)?CREATE\_+(PROC(EDURE)?)\_+(\w+)\_.*$
+Procedure:Text:Set=2=`'PROCEDURE'`,Text=0,*N=4
+Procedure:Delete:Text=DROP PROCEDURE `O`
+Procedure:Rename:Text=`ESetUser O0`  exec sp_rename '`O1`','`N1`'  `ESetUser`
+
+Default:Category=Expression
+Default:Values=A.type = 'D'
+Default:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Default:Attrs:Q=Text=String:255:"Text":2:ER:PGetDefaultText
+Default:AttrReference:Owner=uid=uid
+Default:AttrReference:Text1=select text from dbo.syscomments
+Default:AttrReference:Text2=where id=`:id` order by colid
+Default:Warning=Loss
+Default:EAttrs=Text,New,Delete,Modify,Rename,Save
+Default:Text:Init=CREATE DEFAULT `EDefaultName` AS NULL
+Default:Text:Get=CREATE DEFAULT `N` AS `=Text`
+Default:Text:NameRE=Text:DEFAULT\_(\_*\w+)
+Default:Text:NameSet=1=`N`
+Default:Text:RE=CREATE\_+DEFAULT\_+(\w+)\_+AS\_(.*)
+Default:Text:Set=*N=1,Text=2
+Default:Delete:Text=DROP DEFAULT `O`
+
+Rule:Category=Expression
+Rule:Values=A.type = 'R'
+Rule:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Rule:Attrs:Q=Text=String:255:"Text"::ER
+Rule:AttrReference:Owner=uid=uid
+Rule:AttrReference:Text1=select text from dbo.syscomments
+Rule:AttrReference:Text2=where id=`:id` order by colid
+Rule:EAttrs=Text,New,Delete,Modify,Rename,Save
+Rule:Text:Init=CREATE RULE `EDefaultName` AS NULL
+Rule:Text:Get=`=Text`
+Rule:Text:NameRE=Text:RULE\_+(\w+)
+Rule:Text:NameSet=1=`N`
+Rule:Text:RE=^(.*\_)?CREATE\_+RULE\_+(\w+)\_+.*$
+Rule:Text:Set=*N=2,Text=0
+Rule:Delete:Text=DROP RULE `O`
+
+Trigger:Category=Executable
+Trigger:Values=A.type = 'TR'
+Trigger:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+Trigger:Attrs:Q=Text=String:255:"Text"::ER:PROOName
+Trigger:AttrReference:Owner=uid=uid
+Trigger:AttrReference:Text1=select text from dbo.syscomments
+Trigger:AttrReference:Text2=where id=`:id` order by colid
+Trigger:EAttrs=Text,New,Delete,Modify,Rename,Save
+Trigger:Text:Init=CREATE TRIGGER `EDefaultName` ON `{<}N` FOR INSERT, UPDATE, DELETE AS`\N`
+Trigger:Text:Get=`=Text`
+Trigger:Text:NameRE=Text:TRIGGER\_+(\w+)\_+ON\_+(\w+)
+Trigger:Text:NameSet=1=`N`,2=`{<}N`
+Trigger:Text:RE=^(.*\_)?CREATE\_+TRIGGER\_+(\w+)\_+ON\_+(\w+).*$
+Trigger:Text:Set=*N=2,3=`{<}N`,Text=0
+Trigger:Delete:Text=DROP TRIGGER `O`
+
+RIConstraint:Attrs:T=dbo.sysusers.name=Owner:"Owner":name:0
+RIConstraint:AttrReference:Owner=uid=uid
+
+Column:Category=Column
+Column:Attrs:R=Type:"Type":"Length":1:ER
+Column:EAttrs=Text,New,Delete,Modify,Rename
+Column:Text:Get=`N ' ' EType EDefault``! ' ' =status`
+
+Index:Category=Index
+Index:Values=A.keycnt > 0
+Index:Attrs:R=status::::+E
+Index:EAttrs=Text,New,Delete,Modify,Rename,Save
+Index:Text:Get1=CREATE `=status` INDEX `N`
+Index:Text:Get2=ON `{<}N` (`{>IndexColumn}*`)
+Index:Text:RE=CREATE.*\_INDEX\_+(\w+)\_+ON\_+(\w+).*(\(.*\))
+Index:Text:Set=*N=1,2=`{<}N`,*>IndexColumn=3
+Index:Delete:Text=DROP INDEX `{<}O`.`O`
+
+IndexColumn:Category=ColumnReference
+IndexColumn:Name=Column
+IndexColumn:Order=Id
+IndexColumn:Definition1=Dataset=
+IndexColumn:Definition2=select Id=c.colid, TabId=c.id, ColId=i.colid
+IndexColumn:Definition3=from sysindexes x, syscolumns c, syscolumns i
+IndexColumn:Definition4=where (x.id=`:id`) and (x.id=c.id) and (x.id=i.id) and
+IndexColumn:Definition5=(x.name=`OQ`) and (c.colid<=keycnt) and
+IndexColumn:Definition6=(i.name=INDEX_COL(`{<}OQ`,x.indid,c.colid))
+IndexColumn:Dataset=Id=Word,TabId=Word,ColId=Word
+IndexColumn:Objects1=P:R:M1::"Column":Column:<<>Column
+IndexColumn:Attrs1=Id="Order":2:ER
+IndexColumn:Attrs:R=Column:::2:ER
+IndexColumn:Reference:"Column"=TabId,ColId
+IndexColumn:EAttrs=Text,New,Delete,Modify,Rename
+IndexColumn:Text:Get=`N`
+
+Parameter:Category=Column
+Parameter:Attrs:R=Type:"Type":"Length":1
+Parameter:EAttrs=
+
+Type:Category=Type
+Type:Attrs:T=dbo.sysusers.name=Owner:"Owner":Type:1
+Type:AttrReference:Owner=uid=uid
+Type:Warning=Loss
+Type:EAttrs=Text,New,Delete,Modify,Rename,Save
+Type:Text:Init=sp_addtype "`EDefaultName`", "varchar(255)", "null"
+Type:Text:Get=sp_addtype "`N`", "`EType`"`! ', "' =Null '"'`
+Type:Delete:Text=sp_droptype "`O`"
+
+Login:Attrs:P=Password=String
+Login:Attrs:R=Password:"Password":"Default Language":2
+Login:EAttrs=Text
+Login:Text:Get=sp_addlogin "`N`", "`=Password`", "`=dbname`", "`=language`"
+Login:Delete:Text=sp_droplogin "`O`"
+
+Group:Values=A.uid = A.gid
+; !!! Group:Objects=P:R:0M::"Users":User
+Group:Reference:"Users"=uid=gid
+Group:EAttrs=Text
+Group:Text:Get=sp_addgroup "`N`"
+Group:Delete:Text=sp_dropgroup "`O`"
+
+User:Values=A.uid <> A.gid
+User:Objects1=P:R:M1::"Login":Login
+User:Objects2=P:R:M1::"Group":Group
+User:Reference:"Login"=suid
+User:Reference:"Group"=gid
+User:EAttrs=Text
+User:Text:Get=sp_adduser "`=Login`", "`N`", "`=Group`"
+User:Delete:Text=sp_dropuser "`O`"
+
+Segment:Objects=P:R:M0::"Device":Device
+Segment:Attrs:P=DeviceName=String:::0
+Segment:Reference:"Device"=DeviceName
+Segment:EAttrs=Text
+Segment:Text:Get=sp_addsegment "`N`","`=Device`"
+Segment:Delete:Text=sp_dropsegment "`O`"
+
+Device:EAttrs=Text
+Device:Text:Get1=DISK INIT NAME="`N`",`\N'  '`PHYSNAME="`=phyname`",
+Device:Text:Get2=`\N'  '`VDEVNO=?,`\N'  '`SIZE=?,
+Device:Text:Get3=`\N'  '`CNTRLTYPE=`=cntrltype`
+Device:Delete:Text=sp_dropdevice "`O`"
+
+[SYBASE 10 Properties]
+dbo.systypes:Attrs1=type=Type="Physical Type"::ER:::VM=TPhysicalType
+dbo.systypes:Attrs2=length=Length="Length"::E
+dbo.systypes:Attrs3=prec=Precision="Precision":2:E
+dbo.systypes:Attrs4=scale=Scale="Scale":2:E
+dbo.systypes:Attrs5=allownulls=Null="Nulls"::E:::VM=TNull01
+dbo.systypes:Attrs6=variable="Variable Length":::::VM=TBooleanYN
+
+dbo.syscolumns:Attrs1=colid="Order":2:ER
+dbo.syscolumns:Attrs2=length=Length="Length"::E
+dbo.syscolumns:Attrs3=prec=Precision="Precision":2:E
+dbo.syscolumns:Attrs4=scale=Scale="Scale":2:E
+dbo.syscolumns:Attrs5=status="Status"::E:::VS=TColumnStatus:$8
+
+dbo.sysconstraints:Key=tableid,constrid
+dbo.sysconstraints:Name=name
+
+dbo.sysreferences:Key=tableid,constrid
+dbo.sysreferences:Name=name
+
+Table:Objects1=T:P:1M::"Columns":Column
+Table:Objects2=T:O:0M::"Indices":Index
+Table:Objects3=T:O:01::"Primary Key":PrimaryKey
+Table:Objects4=T:O:0M::"Referential Constraints":ForeignKey
+Table:Objects5=T:O:0M::"Unique Constraints":UniqueConstraint
+Table:Objects6=T:O:0M::"Check Constraints":CheckConstraint
+Table:Objects7=T:O:0M::"Triggers":Trigger
+
+KeyColumn:Category=ColumnReference
+KeyColumn:Definition=Dataset
+KeyColumn:Dataset=ItemNo=Integer,ColNo=Integer
+KeyColumn:Name=Column
+KeyColumn:Order=ItemNo
+KeyColumn:Objects1=P:R:M1::"Column":Column:<<>Column
+KeyColumn:Attrs1=ItemNo="Order":2:ER
+KeyColumn:Attrs:R=Column:::2:ER
+KeyColumn:Reference:"Column"=,ColNo
+KeyColumn:EAttrs=Text,New,Delete,Modify,Rename
+KeyColumn:Text:Get=`N`
+
+PrimaryKey:Definition=Root=dbo.sysindexes
+PrimaryKey:Category=PrimaryKey
+PrimaryKey:Values=(A.status2 & 2 <> 0) and (A.status & 2048 <> 0)
+PrimaryKey:Objects1=P:R:M1::"Index":Index:<>Index
+PrimaryKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+PrimaryKey:Text:Init1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`
+PrimaryKey:Text:Init2= PRIMARY KEY (`{>IndexColumn}*`)
+PrimaryKey:Text:Get1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`
+PrimaryKey:Text:Get2= PRIMARY KEY (`{>IndexColumn}*`)
+PrimaryKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+ForeignKey:Definition=Root=dbo.sysreferences
+ForeignKey:Category=ForeignKey
+; ForeignKey:Values=C.type = 'RI'
+ForeignKey:Objects1=M:P:1M::"Columns":KeyColumn:GetKeyColumns
+ForeignKey:Objects2=P:R:M1::"Reference Table":Table
+ForeignKey:Attrs:T1=dbo.sysobjects.name=name:::0
+ForeignKey:Attrs:T2=dbo.sysobjects.crdate=crdate
+ForeignKey:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+ForeignKey:Attrs:R=Table::::ER
+ForeignKey:Reference:"Columns":Text=`[KeyColumn:%s,%s:*]`
+ForeignKey:Reference:"Reference Table"=reftabid
+ForeignKey:AttrReference:name=constrid=id
+ForeignKey:AttrReference:crdate=constrid=id
+ForeignKey:AttrReference:sysstat=constrid=id
+ForeignKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+ForeignKey:Text:Init1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`
+ForeignKey:Text:Init2= FOREIGN KEY (`{>KeyColumn}*`) `\N`
+ForeignKey:Text:Init3= REFERENCES `=Table`
+ForeignKey:Text:Get1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`
+ForeignKey:Text:Get2= FOREIGN KEY (`{>KeyColumn}*`) `\N`
+ForeignKey:Text:Get3= REFERENCES `=Table`
+ForeignKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+UniqueConstraint:Definition=Root=dbo.sysindexes
+UniqueConstraint:Category=UniqueConstraint
+UniqueConstraint:Values=(A.status2 & 2 <> 0) and (A.status & 2048 = 0)
+UniqueConstraint:Objects1=P:R:M1::"Index":Index:<>Index
+UniqueConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+UniqueConstraint:Text:Init1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`
+UniqueConstraint:Text:Init2= UNIQUE (`{>IndexColumn}*`)
+UniqueConstraint:Text:Get1=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`
+UniqueConstraint:Text:Get2= UNIQUE (`{>IndexColumn}*`)
+UniqueConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+CheckConstraint:Definition=Root=dbo.sysconstraints
+CheckConstraint:Values=B.sysstat & 15 = 7
+; B.type = 'R'
+CheckConstraint:Category=Expression
+CheckConstraint:Attrs:T1=dbo.sysobjects.name=name:::0
+CheckConstraint:Attrs:T2=dbo.sysobjects.crdate=crdate
+CheckConstraint:Attrs:T3=dbo.sysobjects.sysstat=sysstat
+CheckConstraint:Attrs:Q=Text=String:255:"Constraint Text":2:ER:PStripCheck
+CheckConstraint:AttrReference:name=constrid=id
+CheckConstraint:AttrReference:crdate=constrid=id
+CheckConstraint:AttrReference:sysstat=constrid=id
+CheckConstraint:AttrReference:Text1=select text from dbo.syscomments
+CheckConstraint:AttrReference:Text2=where id=`:constrid` order by colid
+CheckConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+CheckConstraint:Text:Init=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N`  CHECK ()
+CheckConstraint:Text:Get=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`  CHECK (`=Text`)
+CheckConstraint:Text:RE=ALTER\_+TABLE\_+(\w+)\_+ADD\_+CONSTRAINT\_+(\w+)\_+CHECK\_*\((.*)\)
+CheckConstraint:Text:Set=1=`{<}N`,*N=2,Text=3
+CheckConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+[INTRBASE Properties]
+TFieldType:Values1=Closed,7=SMALLINT,8=INTEGER,9=QUAD,10=FLOAT
+TFieldType:Values2=11=DOUBLE PRECISION,14=`'CHAR('=Length')'`:CHAR,27=NUMERIC
+TFieldType:Values3=35=DATE,37=`'VARCHAR('=Length')'`:VARCHAR
+TFieldType:Values4=40=`'CSTRING('=Length')'`:CSTRING
+TFieldType:Values5=261=`'BLOB'``!' SUB_TYPE ' =SubType`:BLOB
+TFieldSubType:Values1=Closed,0=0:,1=1:"Text",2=2:"BLR",3=3:"ACL",4=4:"Ranges",5=5:"Summary"
+TFieldSubType:Values2=6=6:"Format",7=7:"Transaction Desc",8=8:"Ext File Desc"
+TNulls:Values=Closed,=:"Yes",1=NOT NULL:"No"
+TUniqueIndex:Values=Closed,=:"No",0=:"No",1=UNIQUE:"Yes"
+TDescendingIndex:Values=Closed,=ASCENDING:"No",1=DESCENDING:"Yes"
+TTriggerType:Values1=Closed,1=BEFORE INSERT,2=AFTER INSERT,3=BEFORE UPDATE
+TTriggerType:Values2=4=AFTER UPDATE,5=BEFORE DELETE,6=AFTER DELETE
+TParamKind:Values=Closed,0=:"Input",1=:"Output"
+TFnParamKind:Values=Closed,0=BY VALUE:"Value",1=:"Reference",3=:"Handle"
+
+INTRBASE:Comments=/*,*/
+
+INTRBASE:Objects1=O:C:0M::"Domains":Type
+INTRBASE:Objects2=O:C:0M::"Tables":Table
+INTRBASE:Objects3=O:C:0M::"Views":View
+INTRBASE:Objects4=O:C:0M::"Procedures":Procedure
+INTRBASE:Objects5=O:C:0M::"Functions":Function
+INTRBASE:Objects6=O:C:0M::"Generators":Generator
+INTRBASE:Objects7=O:C:0M::"Exceptions":Exception
+INTRBASE:Objects8=O:C:0M::"Blob Filters":BlobFilter
+
+RDB$RELATIONS:Name=RDB$RELATION_NAME
+RDB$RELATIONS:Attrs1=RDB$OWNER_NAME="Owner"
+RDB$RELATIONS:Attrs2=RDB$DESCRIPTION="Description"
+RDB$RELATIONS:FilterSystemObjects=A.RDB$SYSTEM_FLAG <> 1 or A.RDB$SYSTEM_FLAG IS NULL
+
+RDB$RELATION_FIELDS:Key=RDB$RELATION_NAME,RDB$FIELD_NAME
+RDB$RELATION_FIELDS:Name=RDB$FIELD_NAME
+RDB$RELATION_FIELDS:Order=RDB$FIELD_POSITION
+RDB$RELATION_FIELDS:Objects=P:R:M1::"Domain":Type
+RDB$RELATION_FIELDS:Attrs1=RDB$FIELD_POSITION="Order":2:ER
+RDB$RELATION_FIELDS:Attrs2=RDB$DEFAULT_SOURCE=Default="Default"::E
+RDB$RELATION_FIELDS:Attrs3=RDB$NULL_FLAG=Null="Nulls"::E:::VM=TNulls
+RDB$RELATION_FIELDS:Reference:"Domain"=RDB$FIELD_SOURCE
+
+RDB$FIELDS:Name=RDB$FIELD_NAME
+RDB$FIELDS:Attrs1=RDB$FIELD_TYPE=FieldType="Type"::ER:::VM=TFieldType
+RDB$FIELDS:Attrs2=RDB$FIELD_SUB_TYPE=SubType="Subtype"::E:::VM=TFieldSubType
+RDB$FIELDS:Attrs3=RDB$FIELD_LENGTH=Length="Length"::E
+RDB$FIELDS:Attrs4=RDB$FIELD_SCALE=Scale="Scale"::E
+RDB$FIELDS:Attrs5=RDB$NULL_FLAG=Null="Nulls"::E:::VM=TNulls
+RDB$FIELDS:Attrs6=RDB$SEGMENT_LENGTH=SegmentSize="Segment Size":2:E
+RDB$FIELDS:Attrs7=RDB$DEFAULT_SOURCE=Default="Default":2:E
+RDB$FIELDS:Attrs8=RDB$VALIDATION_SOURCE=Rule="Constraint":2:E
+RDB$FIELDS:Attrs9=RDB$DESCRIPTION=Description="Description"
+
+RDB$FIELD_DIMENSIONS:Key=RDB$FIELD_NAME,RDB$DIMENSION
+RDB$FIELD_DIMENSIONS:Name=RDB$DIMENSION
+RDB$FIELD_DIMENSIONS:Order=RDB$DIMENSION
+RDB$FIELD_DIMENSIONS:Attrs1=RDB$DIMENSION="Order":2:ER
+RDB$FIELD_DIMENSIONS:Attrs2=RDB$LOWER_BOUND=LowerBound="Lower Bound"::ER
+RDB$FIELD_DIMENSIONS:Attrs3=RDB$UPPER_BOUND=UpperBound="Upper Bound"::ER
+
+RDB$FUNCTIONS:Name=RDB$FUNCTION_NAME
+RDB$FUNCTIONS:Attrs1=RDB$MODULE_NAME=Module="Module"::ER
+RDB$FUNCTIONS:Attrs2=RDB$ENTRYPOINT=Entry="Entry"::ER
+RDB$FUNCTIONS:Attrs3=RDB$QUERY_NAME=AlternateName="Alternate Name"
+RDB$FUNCTIONS:Attrs4=RDB$DESCRIPTION=Description="Description":2
+RDB$FUNCTIONS:FilterSystemObjects=A.RDB$SYSTEM_FLAG <> 1 or A.RDB$SYSTEM_FLAG IS NULL
+
+RDB$FUNCTION_ARGUMENTS:Key=RDB$FUNCTION_NAME,RDB$ARGUMENT_POSITION
+RDB$FUNCTION_ARGUMENTS:Name=RDB$ARGUMENT_POSITION
+RDB$FUNCTION_ARGUMENTS:Order=RDB$ARGUMENT_POSITION
+RDB$FUNCTION_ARGUMENTS:Attrs1=RDB$ARGUMENT_POSITION="Order":2:ER
+RDB$FUNCTION_ARGUMENTS:Attrs2=RDB$FIELD_TYPE=FieldType="Type"::ER:::VM=TFieldType
+RDB$FUNCTION_ARGUMENTS:Attrs3=RDB$FIELD_SUB_TYPE=SubType="Subtype"::E:::VM=TFieldSubType
+RDB$FUNCTION_ARGUMENTS:Attrs4=RDB$FIELD_LENGTH=Length="Length"::E
+RDB$FUNCTION_ARGUMENTS:Attrs5=RDB$FIELD_SCALE=Scale="Scale"::E
+
+RDB$FILTERS:Name=RDB$FUNCTION_NAME
+RDB$FILTERS:Attrs1=RDB$MODULE_NAME=Module="Module"::ER
+RDB$FILTERS:Attrs2=RDB$ENTRYPOINT=Entry="Entry"::ER
+RDB$FILTERS:Attrs3=RDB$INPUT_SUB_TYPE=InputType="Input"::ER:::VM=TFieldSubType
+RDB$FILTERS:Attrs4=RDB$OUTPUT_SUB_TYPE=OutputType="Output"::ER:::VM=TFieldSubType
+RDB$FILTERS:Attrs5=RDB$DESCRIPTION=Description="Description":2
+RDB$FILTERS:FilterSystemObjects=A.RDB$SYSTEM_FLAG <> 1 or A.RDB$SYSTEM_FLAG IS NULL
+
+RDB$INDICES:Name=RDB$INDEX_NAME
+RDB$INDICES:Objects=T:P:1M::"Columns":IndexColumn
+RDB$INDICES:Attrs1=RDB$UNIQUE_FLAG=Unique="Unique"::E:::VM=TUniqueIndex
+RDB$INDICES:Attrs2=RDB$INDEX_TYPE=Descending="Descending"::E:::VM=TDescendingIndex
+RDB$INDICES:FilterSystemObjects=A.RDB$SYSTEM_FLAG <> 1 or A.RDB$SYSTEM_FLAG IS NULL
+
+RDB$INDEX_SEGMENTS:Key=RDB$INDEX_NAME,RDB$FIELD_NAME
+RDB$INDEX_SEGMENTS:Name=Column
+RDB$INDEX_SEGMENTS:Order=RDB$FIELD_POSITION
+RDB$INDEX_SEGMENTS:Objects1=P:R:M1::"Column":Column:<<>Column
+RDB$INDEX_SEGMENTS:Attrs1=RDB$FIELD_POSITION="Order":2:ER
+RDB$INDEX_SEGMENTS:Reference:"Column"=,RDB$FIELD_NAME
+
+RDB$PROCEDURES:Name=RDB$PROCEDURE_NAME
+RDB$PROCEDURES:Attrs1=RDB$OWNER_NAME="Owner"
+RDB$PROCEDURES:FilterSystemObjects=A.RDB$SYSTEM_FLAG <> 1 or A.RDB$SYSTEM_FLAG IS NULL
+
+RDB$PROCEDURE_PARAMETERS:Key=RDB$PROCEDURE_NAME,RDB$PARAMETER_NAME
+RDB$PROCEDURE_PARAMETERS:Name=RDB$PARAMETER_NAME
+RDB$PROCEDURE_PARAMETERS:Order=RDB$PARAMETER_NUMBER
+RDB$PROCEDURE_PARAMETERS:Objects=P:R:M1::"Domain":Type
+RDB$PROCEDURE_PARAMETERS:Attrs1=RDB$PARAMETER_NUMBER="Order":2
+RDB$PROCEDURE_PARAMETERS:Attrs2=RDB$PARAMETER_TYPE=Kind="Kind":1:ER:::VM=TParamKind
+RDB$PROCEDURE_PARAMETERS:Reference:"Domain"=RDB$FIELD_SOURCE
+
+RDB$TYPES:Key=RDB$FIELD_NAME,RDB$TYPE
+RDB$TYPES:Name=RDB$TYPE_NAME
+RDB$TYPES:Order=RDB$TYPE
+RDB$TYPES:Attrs=RDB$TYPE="Value"
+
+RDB$GENERATORS:Name=RDB$GENERATOR_NAME
+RDB$GENERATORS:FilterSystemObjects=A.RDB$SYSTEM_FLAG <> 1 or A.RDB$SYSTEM_FLAG IS NULL
+
+RDB$EXCEPTIONS:Name=RDB$EXCEPTION_NAME
+RDB$EXCEPTIONS:Attrs1=RDB$MESSAGE=Message="Message"::E
+
+RDB$TRIGGERS:Key=RDB$RELATION_NAME,RDB$TRIGGER_NAME
+RDB$TRIGGERS:Name=RDB$TRIGGER_NAME
+RDB$TRIGGERS:Attrs1=RDB$TRIGGER_TYPE=Type="Type"::ER:::VM=TTriggerType
+RDB$TRIGGERS:Attrs2=RDB$TRIGGER_SEQUENCE=Position="Position"::ER
+RDB$TRIGGERS:FilterSystemObjects=A.RDB$SYSTEM_FLAG <> 1 or A.RDB$SYSTEM_FLAG IS NULL
+
+RDB$RELATION_CONSTRAINTS:Key=RDB$RELATION_NAME,RDB$CONSTRAINT_NAME
+RDB$RELATION_CONSTRAINTS:Name=RDB$CONSTRAINT_NAME
+RDB$RELATION_CONSTRAINTS:Attrs1=RDB$DEFERRABLE="Can Defer"
+RDB$RELATION_CONSTRAINTS:Attrs2=RDB$INITIALLY_DEFERRED="Initially Deferred"
+RDB$RELATION_CONSTRAINTS:Reference:"Columns"=RDB$INDEX_NAME
+
+RDB$REF_CONSTRAINTS:Name=RDB$CONSTRAINT_NAME
+RDB$REF_CONSTRAINTS:Objects1=P:R:01::"Primary Key":PrimaryKey
+RDB$REF_CONSTRAINTS:Objects2=P:R:11::"Foreign Key":ForeignKey
+RDB$REF_CONSTRAINTS:Attrs1=RDB$CONSTRAINT_NAME="Foreign Key"
+RDB$REF_CONSTRAINTS:Attrs2=RDB$CONST_NAME_UQ="Primary Key"
+RDB$REF_CONSTRAINTS:Attrs3=RDB$MATCH_OPTION="Match Option"
+RDB$REF_CONSTRAINTS:Attrs4=RDB$UPDATE_RULE="Update Rule"
+RDB$REF_CONSTRAINTS:Attrs5=RDB$DELETE_RULE="Delete Rule"
+RDB$REF_CONSTRAINTS:Reference:"PrimaryKey"=RDB$CONST_NAME_UQ=RDB$CONSTRAINT_NAME
+RDB$REF_CONSTRAINTS:Reference:"ForeignKey"=RDB$CONSTRAINT_NAME=RDB$CONSTRAINT_NAME
+
+RDB$CHECK_CONSTRAINTS:Name=RDB$CONSTRAINT_NAME
+RDB$CHECK_CONSTRAINTS:Attrs=RDB$TRIGGER_NAME="Trigger"
+
+Table:Definition=Root=RDB$RELATIONS
+View:Definition=Root=RDB$RELATIONS
+Procedure:Definition=Root=RDB$PROCEDURES
+Function:Definition=Root=RDB$FUNCTIONS
+Trigger:Definition=Root=RDB$TRIGGERS
+PrimaryKey:Definition=Root=RDB$RELATION_CONSTRAINTS
+ForeignKey:Definition=Root=RDB$RELATION_CONSTRAINTS
+UniqueConstraint:Definition=Root=RDB$RELATION_CONSTRAINTS
+CheckConstraint:Definition=Root=RDB$RELATION_CONSTRAINTS
+Exception:Definition=Root=RDB$EXCEPTIONS
+Generator:Definition=Root=RDB$GENERATORS
+Index:Definition=Root=RDB$INDICES
+IndexColumn:Definition=Root=RDB$INDEX_SEGMENTS
+Column:Definition=Root=RDB$RELATION_FIELDS
+Type:Definition=Root=RDB$FIELDS
+Enumeration:Definition=Root=RDB$TYPES
+Parameter:Definition=Root=RDB$PROCEDURE_PARAMETERS
+FunctionParameter:Definition=Root=RDB$FUNCTION_ARGUMENTS
+FunctionResult:Definition=Root=RDB$FUNCTION_ARGUMENTS
+BlobFilter:Definition=Root=RDB$FILTERS
+Dimension:Definition=Root=RDB$FIELD_DIMENSIONS
+
+Exception:Warning=Loss
+Exception:EAttrs=Text,New,Delete,Modify,Rename,Save
+Exception:Text:Get=CREATE EXCEPTION `\N '  ' N \N`  "`=Message`"
+Exception:Text:RE=CREATE EXCEPTION\_+(\w+)\_+"(.*)"
+Exception:Text:Set=*N=1,Message=2
+Exception:Delete:Text=DROP EXCEPTION `O`
+
+Generator:Attrs:Q=gen_id=Integer::"Current Value":2:ER
+Generator:AttrReference:gen_id=select distinct gen_id(`O`, 0) from RDB$GENERATORS
+Generator:Warning=Loss
+Generator:EAttrs=Text,New:';',Delete,Modify,Rename,Save
+Generator:Text:Init1=CREATE GENERATOR `EDefaultName ';' \N`
+Generator:Text:Init2=SET GENERATOR `EDefaultName` TO 0
+Generator:Text:Get=CREATE GENERATOR `N`;`\N 'SET GENERATOR ' N ' TO ' =gen_id`
+Generator:Text:RE=CREATE GENERATOR\_+(\w+);(\_*SET GENERATOR \w+ TO (\w*))?\_*$
+Generator:Text:Set=*N=1,gen_id=3
+Generator:Delete:Text1=DELETE FROM RDB$GENERATORS
+Generator:Delete:Text2=WHERE RDB$GENERATOR_NAME=`OQ`
+
+Table:Category=Dataset
+Table:Values=A.RDB$VIEW_SOURCE IS NULL
+Table:Objects1=T:P:1M::"Columns":Column
+Table:Objects2=T:O:0M::"Indices":Index
+Table:Objects3=T:O:01::"Primary Key":PrimaryKey
+Table:Objects4=T:O:0M::"Referential Constraints":ForeignKey
+Table:Objects5=T:O:0M::"Unique Constraints":UniqueConstraint
+Table:Objects6=T:O:0M::"Check Constraints":CheckConstraint
+Table:Objects7=T:O:0M::"Triggers":Trigger
+Table:Reference:"Indices"=RDB$RELATION_NAME=RDB$RELATION_NAME
+Table:Warning=DataLoss
+Table:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Table:Text:Get=CREATE TABLE `N` (`[Column:%s,%s:\N '  ' *] \N`)
+Table:Text:RE=CREATE TABLE\_+(\w+)\_*(\(.*\))
+Table:Text:Set=*N=1
+Table:Delete:Text=DROP TABLE `O`
+
+View:Category=Dataset
+View:Values=A.RDB$VIEW_SOURCE IS NOT NULL
+View:Objects=T:P:0M:NMDR:"Columns":Column
+View:Attrs:Q=Text=Memo::"Text"::ER
+View:AttrReference:Text1=select RDB$VIEW_SOURCE from RDB$RELATIONS
+View:AttrReference:Text2=where RDB$RELATION_ID=`:RDB$RELATION_ID`
+View:Warning=Loss
+View:EAttrs=Data,Text,New,Modify,Rename,Delete,Save
+View:Text:Init=CREATE VIEW `EDefaultName` AS SELECT
+View:Text:Get=CREATE VIEW `N` `'('[Column:%s,%s:\N '  ' N] \N ') '`AS`=Text`
+View:Text:RE=CREATE VIEW\_+(\w+)\_*(\(.*\))?\_+AS(.*)
+View:Text:Set=Text=3,*N=1
+View:Delete:Text=DROP VIEW `O`
+
+Index:Category=Index
+Index:EAttrs=Text,New,Delete,Modify,Rename,Save
+Index:Text:Get1=CREATE `!=Unique ' ' ``!=Descending ' ' `INDEX `N`
+Index:Text:Get2=ON `{<}N` (`[IndexColumn:%s, %s:*]`)
+Index:Text:RE=CREATE.*\_INDEX\_+(\w+)\_+ON\_+(\w+).*(\(.*\))
+Index:Text:Set=*N=1,2=`{<}N`,*>IndexColumn=3
+Index:Delete:Text=DROP INDEX `O`
+
+Column:Category=Column
+Column:Attrs:T1=RDB$FIELDS.RDB$FIELD_TYPE=FieldType:"Type":"Default":1:E::PResetType
+Column:Attrs:T2=RDB$FIELDS.RDB$FIELD_SUB_TYPE=SubType:"Subtype":"Default":1:E::PResetType
+Column:Attrs:T3=RDB$FIELDS.RDB$FIELD_LENGTH=Length:"Length":"Default":1:E::PResetType
+Column:Attrs:T4=RDB$FIELDS.RDB$FIELD_SCALE=Scale:"Scale":"Default":1:E::PResetType
+Column:Attrs:R=Type:"Domain":"Type":1:E::PSetType
+Column:OnAfterLoad=ColumnLoaded
+Column:OnCopyFrom=CopyWithDomain
+Column:AttrReference:FieldType=RDB$FIELD_SOURCE
+Column:AttrReference:SubType=RDB$FIELD_SOURCE
+Column:AttrReference:Length=RDB$FIELD_SOURCE
+Column:AttrReference:Scale=RDB$FIELD_SOURCE
+Column:EAttrs=Text,New,Delete,Modify,Rename
+Column:Text:Get=`N ' ' EType``! ' DEFAULT ' =Default``! ' ' =Null`
+
+IndexColumn:Category=ColumnReference
+IndexColumn:Attrs:R=Column:::2:ER
+IndexColumn:EAttrs=Text,New,Delete,Modify,Rename
+IndexColumn:Text:Get=`N`
+
+Type:Category=Type
+Type:Objects1=T:P:0M::"Dimensions":Dimension
+Type:Objects2=T:C:0M::"Values":Enumeration
+; Convert DEFAULT (.*) in Default and CHECK \((.*)\) in Rule
+Type:OnAfterLoad=TypeLoaded
+Type:Reference:"Dimensions":Text=`' [' [Dimension:%s, %s:*] ']'`
+Type:Warning=Loss
+Type:EAttrs=Text,New,Delete,Modify,Rename,Save
+Type:Text:Get1=CREATE DOMAIN `N` AS` \N '  ' EPhysicalType`
+Type:Text:Get2=`!\N '  DEFAULT '=Default`
+Type:Text:Get3=`!\N '  ' =Null`
+Type:Text:Get4=`!\N '  CHECK (' =Rule ')'`
+Type:Delete:Text=DROP DOMAIN `O`
+
+Dimension:EAttrs=Text,New,Delete,Modify,Rename
+Dimension:Text:Get=`=LowerBound ':' =UpperBound`
+
+Procedure:Category=Executable
+Procedure:Objects=T:P:0M::"Parameters":Parameter
+Procedure:Reference:"Parameters":Text1=`!'(' \N {>Parameter} EParametersIn \N')'`
+Procedure:Reference:"Parameters":Text2=`!'RETURNS (' \N {>Parameter} EParametersOut \N ')'`
+Procedure:Attrs:Q=Text=Memo::"Text"::ER
+Procedure:AttrReference:Text1=select RDB$PROCEDURE_SOURCE from RDB$PROCEDURES
+Procedure:AttrReference:Text2=where RDB$PROCEDURE_NAME=`OQ`
+Procedure:Warning=Loss
+Procedure:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Procedure:Text:Init=CREATE PROCEDURE `EDefaultName` AS`\N`BEGIN`\N`END
+Procedure:Text:Get1=CREATE PROCEDURE `N`
+Procedure:Text:Get2=`{>Parameter} *`
+Procedure:Text:Get3=AS `=Text`
+Procedure:Text:RE=CREATE PROCEDURE\_+(\w+)\_*(.*)\_AS\_(.*)
+Procedure:Text:Set=Text=3,*>Parameter=2,*N=1
+Procedure:Modify:RE=(CREATE)\_+PROCEDURE
+Procedure:Modify:Set=1=`'ALTER'`
+Procedure:Delete:Text=DROP PROCEDURE `O`
+
+Parameter:Category=Column
+Parameter:Attrs:T1=RDB$FIELDS.RDB$FIELD_TYPE=FieldType:"Type":"Default":1:-E::PResetType
+Parameter:Attrs:T2=RDB$FIELDS.RDB$FIELD_SUB_TYPE=SubType:"Subtype":"Default":1:-E::PResetType
+Parameter:Attrs:T3=RDB$FIELDS.RDB$FIELD_LENGTH=Length:"Length":"Default":1:-E::PResetType
+Parameter:Attrs:T4=RDB$FIELDS.RDB$FIELD_SCALE=Scale:"Scale":"Default":1:-E::PResetType
+Parameter:Attrs:R=Type:"Domain":"Type":1:::PSetType
+Parameter:AttrReference:FieldType=RDB$FIELD_SOURCE
+Parameter:AttrReference:SubType=RDB$FIELD_SOURCE
+Parameter:AttrReference:Length=RDB$FIELD_SOURCE
+Parameter:AttrReference:Scale=RDB$FIELD_SOURCE
+Parameter:EAttrs=Text
+Parameter:Text:Get=`N ' ' EType`
+Parameter:OnAfterLoad=AdjustTypeInfo
+Parameter:OnCopyFrom=CopyWithDomain
+
+Function:Category=Executable
+Function:Objects1=T:P:0M::"Parameters":FunctionParameter
+Function:Objects2=T:P:11::"Result":FunctionResult
+Function:Reference:"Parameters":Text=`[FunctionParameter:%s, %s:*]`
+Function:Reference:"Result":Text=`[FunctionResult::*]`
+Function:Warning=Loss
+Function:EAttrs=Text,New,Delete,Modify,Rename,Save
+Function:Text:Get1=DECLARE EXTERNAL FUNCTION `N \N`
+Function:Text:Get2=`!'  ' {>FunctionParameter} * \N`
+Function:Text:Get3=`'  RETURNS ' {>FunctionResult} * \N`
+Function:Text:Get4= ENTRY_POINT "`=Entry`"  MODULE_NAME "`=Module`"
+Function:Delete:Text=DROP EXTERNAL FUNCTION `O`
+
+FunctionParameter:Category=Column
+FunctionParameter:Values=A.RDB$ARGUMENT_POSITION <> `:RDB$RETURN_ARGUMENT`
+FunctionParameter:EAttrs=Text,New,Delete,Modify,Rename
+FunctionParameter:Text:Get=`EPhysicalType`
+
+FunctionResult:Category=Column
+FunctionResult:Values=A.RDB$ARGUMENT_POSITION = `:RDB$RETURN_ARGUMENT`
+FunctionResult:Attrs=RDB$MECHANISM=Kind="Kind"::E:::VM=TFnParamKind
+FunctionResult:EAttrs=Text,New,Delete,Modify,Rename
+FunctionResult:Text:Get=`EPhysicalType``! ' ' =Kind`
+
+BlobFilter:Category=Executable
+BlobFilter:Warning=Loss
+BlobFilter:EAttrs=Text,New,Delete,Modify,Rename,Save
+BlobFilter:Text:Get1=DECLARE FILTER `N \N`
+BlobFilter:Text:Get2= INPUT_TYPE `=InputType`  OUTPUT_TYPE `=OutputType``\N`
+BlobFilter:Text:Get3= ENTRY_POINT "`=Entry`"  MODULE_NAME "`=Module`"
+BlobFilter:Delete:Text=DROP FILTER `O`
+
+CheckConstraint:Category=Expression
+CheckConstraint:Values=A.RDB$CONSTRAINT_TYPE = 'CHECK'
+CheckConstraint:Attrs:Q=Text=Memo::"Constraint Text":2:ER:PStripCheck
+CheckConstraint:AttrReference:Text1=select t.RDB$TRIGGER_SOURCE
+CheckConstraint:AttrReference:Text2=from RDB$TRIGGERS t, RDB$CHECK_CONSTRAINTS c
+CheckConstraint:AttrReference:Text3=where t.RDB$TRIGGER_NAME=c.RDB$TRIGGER_NAME and
+CheckConstraint:AttrReference:Text4=t.RDB$TRIGGER_TYPE=1 and
+CheckConstraint:AttrReference:Text5=c.RDB$CONSTRAINT_NAME=`OQ`
+CheckConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+CheckConstraint:Text:Init=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `EDefaultName \N`  CHECK ()
+CheckConstraint:Text:Get=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `N\N`  CHECK (`=Text`)
+CheckConstraint:Text:RE=ALTER\_+TABLE\_+(\w+)\_+ADD\_+CONSTRAINT\_+(\w+)\_+CHECK\_*\((.*)\)
+CheckConstraint:Text:Set=1=`{<}N`,Text=3,*N=2
+CheckConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+UniqueConstraint:Category=UniqueConstraint
+UniqueConstraint:Values=A.RDB$CONSTRAINT_TYPE = 'UNIQUE'
+UniqueConstraint:Objects1=T:P:1M::"Columns":IndexColumn
+UniqueConstraint:Objects2=P:R:M1::"Index":Index:<>Index
+UniqueConstraint:Reference:"Columns"=RDB$INDEX_NAME
+UniqueConstraint:Reference:"Index"=RDB$INDEX_NAME
+UniqueConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+UniqueConstraint:Text:Get1=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `N`
+UniqueConstraint:Text:Get2=`\N`  UNIQUE `'(' [IndexColumn:%s, %s:N] ')'`
+UniqueConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+PrimaryKey:Category=PrimaryKey
+PrimaryKey:Values=A.RDB$CONSTRAINT_TYPE = 'PRIMARY KEY'
+PrimaryKey:Objects1=T:P:1M::"Columns":IndexColumn
+PrimaryKey:Objects2=P:R:M1::"Index":Index:<>Index
+PrimaryKey:Reference:"Columns"=RDB$INDEX_NAME
+PrimaryKey:Reference:"Index"=RDB$INDEX_NAME
+PrimaryKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+PrimaryKey:Text:Get1=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `N`
+PrimaryKey:Text:Get2=`\N`  PRIMARY KEY `'(' [IndexColumn:%s, %s:N] ')'`
+PrimaryKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+ForeignKey:Category=ForeignKey
+ForeignKey:Values=A.RDB$CONSTRAINT_TYPE = 'FOREIGN KEY'
+ForeignKey:Objects1=P:R:M1::"Index":Index:<>Index
+ForeignKey:Objects2=T:P:1M::"Columns":IndexColumn
+ForeignKey:Objects3=P:R:M1::"Reference Table":Table
+ForeignKey:Reference:"Index"=RDB$INDEX_NAME
+ForeignKey:Reference:"Columns"=RDB$INDEX_NAME
+ForeignKey:Reference:"Reference Table"=ReferenceTable
+ForeignKey:Attrs:T1=RDB$REF_CONSTRAINTS.RDB$MATCH_OPTION=MatchOption
+ForeignKey:Attrs:T2=RDB$REF_CONSTRAINTS.RDB$UPDATE_RULE=UpdateRule
+ForeignKey:Attrs:T3=RDB$REF_CONSTRAINTS.RDB$DELETE_RULE=DeleteRule
+ForeignKey:Attrs:Q=ReferenceTable=String:::0
+ForeignKey:Attrs:R=Table::::ER
+ForeignKey:AttrReference:ReferenceTable1=select RDB$RELATION_NAME
+ForeignKey:AttrReference:ReferenceTable2=from RDB$REF_CONSTRAINTS A, RDB$RELATION_CONSTRAINTS B
+ForeignKey:AttrReference:ReferenceTable3=where A.RDB$CONST_NAME_UQ = B.RDB$CONSTRAINT_NAME
+ForeignKey:AttrReference:ReferenceTable4=and A.RDB$CONSTRAINT_NAME = `:RDB$CONSTRAINT_NAME`
+ForeignKey:AttrReference:MatchOption=RDB$CONSTRAINT_NAME=RDB$CONSTRAINT_NAME
+ForeignKey:AttrReference:UpdateRule=RDB$CONSTRAINT_NAME=RDB$CONSTRAINT_NAME
+ForeignKey:AttrReference:DeleteRule=RDB$CONSTRAINT_NAME=RDB$CONSTRAINT_NAME
+ForeignKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+ForeignKey:Text:Get1=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `N`
+ForeignKey:Text:Get2=`\N`  FOREIGN KEY `'(' [IndexColumn:%s, %s:N] ')'`
+ForeignKey:Text:Get3=`\N`  REFERENCES `=Table`
+ForeignKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+Trigger:Category=Executable
+Trigger:Attrs:Q=Text=Memo::"Text"::ER:PROOName
+Trigger:AttrReference:Text1=select RDB$TRIGGER_SOURCE from RDB$TRIGGERS
+Trigger:AttrReference:Text2=where RDB$TRIGGER_NAME=`OQ`
+Trigger:EAttrs=Text,New,Delete,Modify,Rename,Save
+Trigger:Text:Init1=CREATE TRIGGER `EDefaultName` FOR `{<}N`
+Trigger:Text:Init2=AFTER UPDATE POSITION 0 AS`\N`BEGIN`\N`END
+Trigger:Text:Get1=CREATE TRIGGER `N` FOR `{<}N`
+Trigger:Text:Get2=`=Type` POSITION `=Position` `=Text`
+Trigger:Text:RE=CREATE\_+TRIGGER\_+(\w+)\_+FOR\_+(\w+)\_+(\w+\_\w+)\_+POSITION\_+(\w+)\_+(.*)
+Trigger:Text:Set=*N=1,2=`{<}N`,Type=3,Position=4,Text=5
+Trigger:Delete:Text=DROP TRIGGER `O`
+
+[INFORMIX Properties]
+TLockMode:Values=Closed,B=PAGE:"Page",P=PAGE:"Page",R=ROW:"Row"
+TUnique:Values=Closed,-=:"No",U=UNIQUE:"Yes",D=:"No"
+TClustered:Values=Closed,=:"No",-=:"No",C=CLUSTER:"Yes"
+TDescending:Values=Closed,1=ASC:"No",-1=DESC:"Yes"
+TMode:Values=Closed,P=DBA,O=Owner
+TRule:Values=Closed,R=RESTRICT:"Restrict"
+TDataType:Values1=Closed,0=`'CHAR(' =Length ')'`:CHAR,1=SMALLINT,2=INTEGER,3=FLOAT
+TDataType:Values2=4=SMALLFLOAT,5=DECIMAL,6=SERIAL(1):SERIAL,7=DATE
+TDataType:Values3=8=MONEY,10=DATETIME,11=BYTE,12=TEXT,13=VARCHAR,14=INTERVAL
+TNull01:Values=Closed,0=:"Yes",1=NOT NULL:"No"
+
+INFORMIX:UserName=select user from informix.systables where tabid=99
+INFORMIX:Comments=--
+
+INFORMIX:Objects1=O:C:0M::"Tables":Table
+INFORMIX:Objects2=O:C:0M::"Views":View
+INFORMIX:Objects3=O:C:0M::"Synonyms":Synonym
+INFORMIX:Objects4=O:C:0M::"Procedures":Procedure
+
+informix.systables:Key=tabid
+informix.systables:Name=owner,tabname
+informix.systables:Attrs1=created="Created"
+informix.systables:Attrs2=locklevel="Lock Mode":2::::VM=TLockMode
+informix.systables:Attrs3=fextsize="Initial Extent (K)":2
+informix.systables:Attrs4=nextsize="Extent (K)":2
+informix.systables:Attrs5=rowsize="Row Size":2
+informix.systables:Attrs6=nrows="Rows":2
+informix.systables:Attrs7=npused="Pages":2
+
+informix.sysconstraints:Key=tabid,constrid
+informix.sysconstraints:Name=owner,constrname
+
+informix.sysindexes:Key=tabid,owner,idxname
+informix.sysindexes:Name=owner,idxname
+informix.sysindexes:Attrs1=idxtype="Unique"::E:::VM=TUnique
+informix.sysindexes:Attrs2=clustered="Clustered"::E:::VM=TClustered
+informix.sysindexes:Attrs3=levels="Levels":2,leaves="Leaves":2
+informix.sysindexes:Attrs4=clust="Clustering Factor":2
+
+informix.sysprocedures:Key=procid
+informix.sysprocedures:Name=owner,procname
+informix.sysprocedures:Attrs1=mode="Mode":::::VM=TMode
+informix.sysprocedures:Attrs2=codesize="Code Size"
+informix.sysprocedures:Attrs3=datasize="Data Size"
+informix.sysprocedures:Attrs4=retsize="Values Size":2
+informix.sysprocedures:Attrs5=symsize="Symbols Size":2
+
+Table:Definition=Root=informix.systables
+View:Definition=Root=informix.systables
+Synonym:Definition=Root=informix.systables
+Index:Definition=Root=informix.sysindexes
+PrimaryKey:Definition=Root=informix.sysconstraints
+ForeignKey:Definition=Root=informix.sysconstraints
+UniqueConstraint:Definition=Root=informix.sysconstraints
+CheckConstraint:Definition=Root=informix.sysconstraints
+Procedure:Definition=Root=informix.sysprocedures
+
+Table:Category=Dataset
+Table:Values=A.tabtype = 'T'
+Table:Objects1=Q:P:1M::"Columns":Column
+Table:Objects2=T:O:0M::"Indices":Index
+Table:Objects3=T:O:01::"Primary Key":PrimaryKey
+Table:Objects4=T:O:0M::"Referential Constraints":ForeignKey
+Table:Objects5=T:O:0M::"Unique Constraints":UniqueConstraint
+Table:Objects6=T:O:0M::"Check Constraints":CheckConstraint
+Table:Attrs:R=locklevel::::E,fextsize::::E,nextsize::::E
+Table:Reference:"Columns":Text=`[Column:%s,%s:\N '  ' *]\N`
+Table:Warning=DataLoss
+Table:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Table:Text:Get1=CREATE TABLE `N` (`{>Column}*`)
+Table:Text:Get2=`! ' EXTENT SIZE ' =fextsize``! ' NEXT SIZE ' =nextsize`
+Table:Text:Get3=`! ' LOCK MODE ' =locklevel`
+Table:Delete:Text=DROP TABLE `O`
+Table:Rename:Text=RENAME TABLE `O` TO `N1`
+
+View:Category=Dataset
+View:Values=A.tabtype = 'V'
+View:Objects=Q:P:0M:NMDR:"Columns":Column
+View:Attrs:Q=Text=String::"Text"::ER
+View:AttrReference:Text1=select viewtext, seqno from informix.sysviews
+View:AttrReference:Text2=where tabid=`:tabid` order by seqno
+View:Warning=Loss
+View:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+View:Text:Init=CREATE VIEW `EDefaultName` AS SELECT
+View:Text:Get=`=Text`
+View:Text:NameRE=Text:VIEW\_(\_*\w+)
+View:Text:NameSet=1=`N`
+View:Text:RE=^(.*\_)?CREATE\_+VIEW\_+(\w+)\_.*$
+View:Text:Set=Text=0,*N=2
+View:Delete:Text=DROP VIEW `O`
+
+Synonym:Category=Dataset
+Synonym:Values=A.tabtype IN ('P', 'S')
+Synonym:Objects=P:R:M1::"Local Target":Table
+Synonym:Attrs:T1=informix.syssyntable.servername=SName:"Server":::E
+Synonym:Attrs:T2=informix.syssyntable.dbname=SDatabase:"Database":::E
+Synonym:Attrs:T3=informix.syssyntable.owner=SOwner:"Owner":::E
+Synonym:Attrs:T4=informix.syssyntable.tabname=STable:"Table":::E
+Synonym:Attrs:T5=informix.syssyntable.btabid=TargetId:::0
+Synonym:Attrs:R=Table::::E
+Synonym:AttrReference:SName=tabid=tabid
+Synonym:AttrReference:SDatabase=tabid=tabid
+Synonym:AttrReference:SOwner=tabid=tabid
+Synonym:AttrReference:STable=tabid=tabid
+Synonym:AttrReference:TargetId=tabid=tabid
+Synonym:Reference:"Local Target"=TargetId
+Synonym:Warning=Loss
+Synonym:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Synonym:Text:Get1=CREATE SYNONYM `N` FOR
+Synonym:Text:Get2=`!=SName'@'``!=SDatabase'.'``!=SOwner'.'``=STable``=Table`
+Synonym:Text:RE=CREATE\_+SYNONYM\_+(\w+)
+Synonym:Text:Set=*N=1
+Synonym:Delete:Text=DROP SYNONYM `O`
+
+Column:Definition1=Dataset=
+Column:Definition2=SELECT tabid,colno,colname,collength as Length,colmin,colmax,
+Column:Definition3=coltype-trunc(coltype/256)*256 as Type,trunc(coltype/256) as Null
+Column:Definition4=FROM informix.syscolumns WHERE tabid=`=tabid`
+Column:Dataset1=tabid=Integer,colname=String,colno=Word,Length=Integer
+Column:Dataset2=colmin=Integer,colmax=Integer,Type=Word,Null=Word
+Column:Category=Column
+Column:Key=tabid,colno
+Column:Name=colname
+Column:Order=colno
+Column:Attrs1=colno="Order":2:ER
+Column:Attrs2=Type="Type"::ER:::VM=TDataType
+Column:Attrs3=Length="Length"::E
+Column:Attrs4=Null="Nulls"::E:::VM=TNull01
+Column:EAttrs=Text,New,Delete,Modify,Rename
+Column:Text:Get=`N ' ' EType``! ' ' =Null`
+
+Index:Category=Index
+Index:Objects=M:P:1M::"Columns":IndexColumn:GetIndexColumns
+Index:EAttrs=Text,New,Delete,Modify,Rename,Save
+Index:Text:Get1=CREATE `=idxtype``! ' ' =clustered` INDEX `N`
+Index:Text:Get2=ON `{<}N` (`{>IndexColumn}*`)
+Index:Text:RE=CREATE.*\_INDEX\_+(\w+)\_+ON\_+(\w+).*(\(.*\))
+Index:Text:Set=*N=1,2=`{<}N`,*>IndexColumn=3
+Index:Delete:Text=DROP INDEX `O`
+Index:Reference:"Columns":Text=`[IndexColumn:%s,%s:\N '  ' *]`
+
+IndexColumn:Category=ColumnReference
+IndexColumn:Definition=Dataset
+IndexColumn:Dataset=ItemNo=Integer,ColNo=Integer,Descending=Integer
+IndexColumn:Name=Column
+IndexColumn:Order=ItemNo
+IndexColumn:Objects1=P:R:M1::"Column":Column:<<>Column
+IndexColumn:Attrs1=ItemNo="Order":2:ER
+IndexColumn:Attrs2=Descending="Descending"::E:::VM=TDescending
+IndexColumn:Attrs:R=Column::Descending:2:ER
+IndexColumn:Reference:"Column"=,ColNo
+IndexColumn:EAttrs=Text,New,Delete,Modify,Rename
+IndexColumn:Text:Get=`N ' ' =Descending`
+
+KeyColumn:Category=ColumnReference
+KeyColumn:Definition=Dataset
+KeyColumn:Dataset=ItemNo=Integer,ColNo=Integer,Descending=Integer
+KeyColumn:Name=Column
+KeyColumn:Order=ItemNo
+KeyColumn:Objects1=P:R:M1::"Column":Column:<<>Column
+KeyColumn:Attrs1=ItemNo="Order":2:ER
+KeyColumn:Attrs:R=Column::Descending:2:ER
+KeyColumn:Reference:"Column"=,ColNo
+KeyColumn:EAttrs=Text,New,Delete,Modify,Rename
+KeyColumn:Text:Get=`N`
+
+PrimaryKey:Category=PrimaryKey
+PrimaryKey:Values=A.constrtype = 'P'
+PrimaryKey:Objects1=P:R:M1::"Index":Index:<>Index
+PrimaryKey:Objects2=M:P:1M::"Columns":IndexColumn:GetKeyColumns
+PrimaryKey:Reference:"Index"=owner=owner,idxname=idxname
+PrimaryKey:Reference:"Columns":Text=`[IndexColumn:%s,%s:N]`
+PrimaryKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+PrimaryKey:Text:Init1=ALTER TABLE `{<}N\N` ADD CONSTRAINT `\N`
+PrimaryKey:Text:Init2=PRIMARY KEY (`{>IndexColumn}*`) `\N`
+PrimaryKey:Text:Init3=CONSTRAINT `EDefaultName`
+PrimaryKey:Text:Get1=ALTER TABLE `{<}N` ADD CONSTRAINT `\N`
+PrimaryKey:Text:Get2=PRIMARY KEY (`{>IndexColumn}*`) `\N`
+PrimaryKey:Text:Get3=CONSTRAINT `N`
+PrimaryKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+ForeignKey:Category=ForeignKey
+ForeignKey:Values=A.constrtype = 'R'
+ForeignKey:Objects1=P:R:M1::"Index":Index:<>Index
+ForeignKey:Objects2=M:P:1M::"Columns":IndexColumn:GetKeyColumns
+ForeignKey:Objects3=P:R:M1::"Reference Table":Table
+ForeignKey:Attrs:T1=informix.sysreferences.ptabid=ReferenceTable:::0
+ForeignKey:Attrs:T2=informix.sysreferences.primary=ReferenceConstraint:::0
+ForeignKey:Attrs:R=Table::::ER
+ForeignKey:Reference:"Index"=owner=owner,idxname=idxname
+ForeignKey:Reference:"Columns":Text=`[IndexColumn:%s,%s:N]`
+ForeignKey:Reference:"Reference Table"=ReferenceTable
+ForeignKey:AttrReference:ReferenceTable=constrid=constrid
+ForeignKey:AttrReference:ReferenceConstraint=constrid=constrid
+ForeignKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+ForeignKey:Text:Init1=ALTER TABLE `{<}N\N` ADD CONSTRAINT `\N`
+ForeignKey:Text:Init2=FOREIGN KEY (`{>IndexColumn}*`)
+ForeignKey:Text:Init3=REFERENCES `=Table \N`
+ForeignKey:Text:Init4=CONSTRAINT `EDefaultName`
+ForeignKey:Text:Get1=ALTER TABLE `{<}N` ADD CONSTRAINT `\N`
+ForeignKey:Text:Get2=FOREIGN KEY (`{>IndexColumn}*`) `\N`
+ForeignKey:Text:Get3=REFERENCES `=Table \N`
+ForeignKey:Text:Get4=CONSTRAINT `N`
+ForeignKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+CheckConstraint:Category=Expression
+CheckConstraint:Values=A.constrtype = 'C'
+CheckConstraint:Attrs:Q=Text=String::"Constraint Text":2:ER:PStripParens
+CheckConstraint:AttrReference:Text1=select checktext, seqno from "informix".syschecks
+CheckConstraint:AttrReference:Text2=where constrid=`:constrid` and type='T'
+CheckConstraint:AttrReference:Text3=order by seqno
+CheckConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+CheckConstraint:Text:Init1=ALTER TABLE `{<}N\N` ADD CONSTRAINT `\N`
+CheckConstraint:Text:Init2=CHECK () `\N`
+CheckConstraint:Text:Init3=CONSTRAINT `EDefaultName`
+CheckConstraint:Text:Get1=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `\N`
+CheckConstraint:Text:Get2=CHECK (`=Text`) `\N`
+CheckConstraint:Text:Get3=CONSTRAINT `N`
+CheckConstraint:Text:RE=ALTER\_+TABLE\_+(\w+)\_+ADD\_+CONSTRAINT\_+CHECK\_*\((.*)\)\_+CONSTRAINT\_+(\w+)
+CheckConstraint:Text:Set=1=`{<}N`,Text=2,*N=3
+CheckConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+UniqueConstraint:Category=UniqueConstraint
+UniqueConstraint:Values=A.constrtype = 'U'
+UniqueConstraint:Objects1=P:R:M1::"Index":Index:<>Index
+UniqueConstraint:Objects2=M:P:1M::"Columns":IndexColumn:GetKeyColumns
+UniqueConstraint:Reference:"Index"=owner=owner,idxname=idxname
+UniqueConstraint:Reference:"Columns":Text=`[IndexColumn:%s,%s:N]`
+UniqueConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+UniqueConstraint:Text:Init1=ALTER TABLE `{<}N\N` ADD CONSTRAINT `\N`
+UniqueConstraint:Text:Init2=UNIQUE (`{>IndexColumn}*`) `\N`
+UniqueConstraint:Text:Init3=CONSTRAINT `EDefaultName`
+UniqueConstraint:Text:Get1=ALTER TABLE `{<}N` ADD CONSTRAINT `\N`
+UniqueConstraint:Text:Get2=UNIQUE (`{>IndexColumn}*`) `\N`
+UniqueConstraint:Text:Get3=CONSTRAINT `N`
+UniqueConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+Procedure:Category=Executable
+Procedure:Attrs:Q=Text=Memo::"Text"::ER
+Procedure:AttrReference:Text1=select data, datakey, seqno from informix.sysprocbody
+Procedure:AttrReference:Text2=where procid=`:procid` and datakey='T'
+Procedure:AttrReference:Text3=order by datakey, seqno
+Procedure:Warning=Loss
+Procedure:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Procedure:Text:Init=CREATE PROCEDURE `EDefaultName`
+Procedure:Text:Get=`=Text`
+Procedure:Text:NameRE=Text:PROCEDURE\_(\_*\w+)
+Procedure:Text:NameSet=1=`N`
+Procedure:Text:RE=CREATE(\_+DBA)?\_+PROCEDURE\_+(\w+).*
+Procedure:Text:Set=Text=0,*N=2
+Procedure:Delete:Text=DROP PROCEDURE `O`
+
+[DB2 Common Server Properties]
+TBooleanNY:Values=Closed,N=:"No",Y=:"Yes"
+TBoolean01:Values=Closed,0=:"No",1=:"Yes"
+TUpdateStatistics:Values=Closed,-1=
+TNullNY:Values=Closed,N=NOT NULL:"No",Y=:"Yes"
+TLoggedNY:Values=Closed,N=NOT LOGGED:"No",Y=LOGGED:"Yes"
+TCompactNY:Values=Closed,N=NOT COMPACT:"No",Y=COMPACT:"Yes"
+TDescending:Values=Closed,+=ASC:"No",-=DESC:"Yes"
+TTypeKind:Values=Closed,S=:"System",T=:"Distinct"
+TTypeId:Values1=Closed,124=BLOB,112=BOOLEAN,60=CHARACTER,44=CLOB,100=DATE,16=DECIMAL
+TTypeId:Values2=8=DOUBLE,24=INTEGER,52=LONG VARCHAR,28=SMALLINT,104=TIME
+TTypeId:Values3=108=TIMESTAMP,56=VARCHAR
+TFunctionKind:Values=Closed,B=:"Built-in",E=:"External",U=:"Derived External",S=:"Generated"
+TFunctionScalar:Values=Closed,C=:"No",S=:"Yes"
+TVariantNY:Values=Closed,N=NOT VARIANT:"No",Y=VARIANT:"Yes"
+TFencedNY:Values=Closed,N=NOT FENCED:"No",Y=FENCED:"Yes"
+TNullCallNY:Values=Closed,N=NOT NULL CALL:"No",Y=NULL CALL:"Yes"
+TExternalActionNY:Values=Closed,N=NO EXTERNAL ACTION:"No",E=EXTERNAL ACTION:"Yes"
+TScratchPadNY:Values=Closed,N=NO SCRATCHPAD:"No",Y=SCRATCHPAD:"Yes"
+TFinalCallNY:Values=Closed,N=NO FINAL CALL:"No",Y=FINAL CALL:"Yes"
+TUnique:Values=Closed,D=:"No",U=UNIQUE:"Yes"
+TValid:Values=Closed,N=:"No",Y=:"Yes",X=:"Rebind"
+TDTFormat:Values=Closed,0=:"Country Code",1=:"USA",2=:"EUR",3=:"ISO",4=:"JIS",5="Local"
+TIsolation:Values1=Closed,RR=:"Repeatable Read",RS=:"Read Stability"
+TIsolation:Values2=CS=:"Cursor Stability",UR=:"Uncommitted Read"
+TCursorBlocking:Values=Closed,N=:"No",U=:"Unambiguous",B=:"All"
+TLanguageLevel:Values=Closed,0=SAA1,1=MIA
+TExplainLevel:Values=Closed,A="All",P="Package"
+TRule:Values1=Closed,A=NO ACTION:"No Action",C=CASCADE:"Cascade"
+TRule:Values2=N=SET NULL:"Set Null",R=RESTRICT:"Restrict"
+TTableStatus:Values=Closed,N=,C=:"Check pending",X=:"Inoperative"
+TDataCaptureNY:Values=Closed,N=NONE:"No",Y=CHANGES:"Yes"
+TTableSpaceType:Values1=Closed,S=SYSTEM USING ('filepath'):"System"
+TTableSpaceType:Values2=D=DATABASE USING (DEVICE 'devicepath' size):"Database"
+TTableSpaceData:Values=Closed,A=REGULAR:"All Permanent",L=LONG:"Long Data",T=TEMPORARY:"Temporary"
+TTriggerValid:Values=Closed,X=:"No",Y=:"Yes"
+TTriggerOrder:Values=Closed,B=:"Before",A=:"After"
+TTriggerEvent:Values=Closed,I=:"On Insert",D=:"On Delete",U=:"On Update"
+TTriggerGranularity:Values=Closed,S=:"Statement",R=:"Row"
+TViewCheck:Values=Closed,N=,L=:"Local",C=:"Cascade"
+
+DB2:UserName=select distinct user from syscat.datatypes
+DB2:Comments=--
+
+DB2:Objects1=O:C:0M::"Data Types":Type
+DB2:Objects2=O:C:0M::"Tables":Table
+DB2:Objects3=O:C:0M::"Views":View
+DB2:Objects4=O:C:0M::"TableSpaces":TableSpace
+DB2:Objects4=O:C:0M::"Aliases":Synonym
+DB2:Objects5=O:C:0M::"Packages":Package
+DB2:Objects6=O:C:0M::"Functions":Function
+
+SYSCAT.CHECKS:Key=TABSCHEMA,TABNAME,CONSTNAME
+SYSCAT.CHECKS:Name=CONSTNAME
+SYSCAT.CHECKS:Attrs1=DEFINER="Owner"
+SYSCAT.CHECKS:Attrs2=CREATE_TIME="Created"
+SYSCAT.CHECKS:Attrs3=FUNC_PATH="Function Path":2
+SYSCAT.CHECKS:Attrs4=TEXT="Constraint Text":2:ER
+
+SYSCAT.COLCHECKS:Key=TABSCHEMA,TABNAME,CONSTNAME
+SYSCAT.COLCHECKS:Name=CONSTNAME
+
+SYSCAT.COLUMNS:Key=TABSCHEMA,TABNAME,COLNAME
+SYSCAT.COLUMNS:Name=COLNAME
+SYSCAT.COLUMNS:Order=COLNO
+SYSCAT.COLUMNS:Objects=P:R:M1::"Type":Type
+SYSCAT.COLUMNS:Attrs1=COLNO="Order":2:ER
+SYSCAT.COLUMNS:Attrs2=LENGTH=Length="Length"::E
+SYSCAT.COLUMNS:Attrs3=SCALE=Scale="Scale"::E
+SYSCAT.COLUMNS:Attrs4=NULLS=Null="Nulls"::E:::VM=TNullNY
+SYSCAT.COLUMNS:Attrs5=DEFAULT=Default="Default":2:E
+SYSCAT.COLUMNS:Attrs6=LOGGED="Logged":2:E:::VM=TLoggedNY
+SYSCAT.COLUMNS:Attrs7=COMPACT="Compacted":2:E:::VM=TCompactNY
+SYSCAT.COLUMNS:Attrs8=CODEPAGE="Code Page":2
+SYSCAT.COLUMNS:Attrs9=REMARKS="Comments":2
+SYSCAT.COLUMNS:Reference:"Type"=TYPESCHEMA,TYPENAME
+
+SYSCAT.DATATYPES:Name=TYPESCHEMA,TYPENAME
+SYSCAT.DATATYPES:Attrs1=DEFINER="Owner"
+SYSCAT.DATATYPES:Attrs2=METATYPE="Kind":::::VM=TTypeKind
+SYSCAT.DATATYPES:Attrs3=LENGTH=Length="Length"::E
+SYSCAT.DATATYPES:Attrs4=SCALE=Scale="Scale"::E
+SYSCAT.DATATYPES:Attrs5=CREATE_TIME="Created"
+SYSCAT.DATATYPES:Attrs6=CODEPAGE="Code Page":2
+SYSCAT.DATATYPES:Attrs7=REMARKS="Comments":2
+
+SYSCAT.FUNCPARMS:Key=FUNCSCHEMA,SPECIFICNAME,ORDINAL
+SYSCAT.FUNCPARMS:Name=ORDINAL
+SYSCAT.FUNCPARMS:Objects=P:R:M1::"Type":Type
+SYSCAT.FUNCPARMS:Attrs1=LENGTH=Length="Length"::E
+SYSCAT.FUNCPARMS:Attrs2=SCALE=Scale="Scale"::E
+SYSCAT.FUNCPARMS:Attrs3=CODEPAGE="Code Page":2
+SYSCAT.FUNCPARMS:Reference:"Type"=TYPESCHEMA,TYPENAME
+
+SYSCAT.FUNCTIONS:Key=FUNCSCHEMA,SPECIFICNAME
+SYSCAT.FUNCTIONS:Name=FUNCSCHEMA,SPECIFICNAME
+SYSCAT.FUNCTIONS:Objects1=T:P:0M::"Parameters":FunctionParameter
+SYSCAT.FUNCTIONS:Objects2=T:P:0M::"Result":Result
+SYSCAT.FUNCTIONS:Attrs1=FUNCNAME="Function"
+SYSCAT.FUNCTIONS:Attrs2=DEFINER="Owner"
+SYSCAT.FUNCTIONS:Attrs3=ORIGIN="Origin":::::VM=TFunctionKind
+SYSCAT.FUNCTIONS:Attrs4=TYPE="Scalar":::::VM=TFunctionScalar
+SYSCAT.FUNCTIONS:Attrs5=CREATE_TIME="Created"
+SYSCAT.FUNCTIONS:Attrs6=LANGUAGE="Language":2
+SYSCAT.FUNCTIONS:Attrs7=IMPLEMENTATION="Implementation":2
+SYSCAT.FUNCTIONS:Attrs8=VARIANT="Variant":2::::VM=TVariantNY
+SYSCAT.FUNCTIONS:Attrs9=SIDE_EFFECTS="Side Effects":2::::VM=TExternalActionNY
+SYSCAT.FUNCTIONS:Attrs10=FENCED="Fenced":2::::VM=TFencedNY
+SYSCAT.FUNCTIONS:Attrs11=NULLCALL="NullCall":2::::VM=TNullCallNY
+SYSCAT.FUNCTIONS:Attrs12=CAST_FUNCTION="Cast":2::::VM=TBooleanNY
+SYSCAT.FUNCTIONS:Attrs13=ASSIGN_FUNCTION="Assignment":2::::VM=TBooleanNY
+SYSCAT.FUNCTIONS:Attrs14=SCRATCHPAD="ScratchPad":2::::VM=TScratchPadNY
+SYSCAT.FUNCTIONS:Attrs15=FINAL_CALL="Final Call":2::::VM=TFinalCallNY
+SYSCAT.FUNCTIONS:Attrs16=REMARKS="Comments":2
+SYSCAT.FUNCTIONS:Reference:"Parameters":Text=`[FunctionParameter:%s,%s:*]`
+SYSCAT.FUNCTIONS:Reference:"Result":Text=`[Result:%s CAST FROM %s:*]`
+
+SYSCAT.INDEXES:Name=INDSCHEMA,INDNAME
+SYSCAT.INDEXES:Attrs1=DEFINER="Owner"
+SYSCAT.INDEXES:Attrs2=UNIQUERULE="Unique"::E:::VM=TUnique
+SYSCAT.INDEXES:Attrs3=USER_DEFINED="User Defined":::::VM=TBoolean01
+SYSCAT.INDEXES:Attrs4=SYSTEM_REQUIRED="System Required":::::VM=TBoolean01
+SYSCAT.INDEXES:Attrs5=CREATE_TIME="Created"
+SYSCAT.INDEXES:Attrs6=STATS_TIME="Last Update Statistics"
+SYSCAT.INDEXES:Attrs7=REMARKS="Comments":2
+SYSCAT.INDEXES:Attrs8=NLEAF="Leaf Pages":2::::VM=TUpdateStatistics
+SYSCAT.INDEXES:Attrs9=NLEVELS="Index Levels":2::::VM=TUpdateStatistics
+SYSCAT.INDEXES:Attrs10=FIRSTKEYCARD="Distinct First Values":2::::VM=TUpdateStatistics
+SYSCAT.INDEXES:Attrs11=FULLKEYCARD="Distinct Values":2::::VM=TUpdateStatistics
+SYSCAT.INDEXES:Attrs12=CLUSTERRATIO="Cluster Ratio":2::::VM=TUpdateStatistics
+SYSCAT.INDEXES:Attrs13=CLUSTERFACTOR="Cluster Factor":2::::VM=TUpdateStatistics
+SYSCAT.INDEXES:Attrs14=COLNAMES=:4
+
+SYSCAT.KEYCOLUSE:Key=TABSCHEMA,TABNAME,CONSTNAME,COLNAME
+SYSCAT.KEYCOLUSE:Name=Column
+SYSCAT.KEYCOLUSE:Order=COLSEQ
+SYSCAT.KEYCOLUSE:Objects1=P:R:M1::"Column":Column:<<>Column
+SYSCAT.KEYCOLUSE:Attrs1=COLSEQ="Order":2:ER
+SYSCAT.KEYCOLUSE:Reference:"Column"=,,COLNAME
+
+SYSCAT.PACKAGES:Name=PKGSCHEMA,PKGNAME
+SYSCAT.PACKAGES:Objects=Q:C:0M::"Sections":Section
+SYSCAT.PACKAGES:Attrs1=BOUNDBY="Bound By"
+SYSCAT.PACKAGES:Attrs2=VALID="Valid":::::VM=TValid
+SYSCAT.PACKAGES:Attrs3=TOTAL_SECT="Sections"
+SYSCAT.PACKAGES:Attrs4=LAST_BIND_TIME="Last Bind"
+SYSCAT.PACKAGES:Attrs5=EXPLICIT_BIND_TIME="Explicit Bind"
+SYSCAT.PACKAGES:Attrs6=ISOLATION="Isolation Level":2::::VM=TIsolation
+SYSCAT.PACKAGES:Attrs7=BLOCKING="Cursor Blocking":2::::VM=TCursorBlocking
+SYSCAT.PACKAGES:Attrs8=LANG_LEVEL="Language Level":2::::VM=TLanguageLevel
+SYSCAT.PACKAGES:Attrs9=FUNC_PATH="Function Path":2
+SYSCAT.PACKAGES:Attrs10=FORMAT="Date Time Format":2::::VM=TDTFormat
+SYSCAT.PACKAGES:Attrs11=CODEPAGE="Code Page":2
+SYSCAT.PACKAGES:Attrs12=SQLWARN="SQL Warnings On":2::::VM=TBooleanNY
+SYSCAT.PACKAGES:Attrs13=QUERYOPT="Optimization Class":2
+SYSCAT.PACKAGES:Attrs14=EXPLAIN_LEVEL="Explain Level":2::::VM=TExplainLevel
+SYSCAT.PACKAGES:Attrs15=EXPLAIN_SNAPSHOT="Explain Snapshot Active":2::::VM=TBooleanNY
+SYSCAT.PACKAGES:Attrs16=REMARKS="Comments":2
+
+SYSCAT.TABCONST:Key=TABSCHEMA,TABNAME,CONSTNAME
+SYSCAT.TABCONST:Name=CONSTNAME
+SYSCAT.TABCONST:Attrs1=DEFINER="Owner"
+SYSCAT.TABCONST:Attrs2=REMARKS="Comments":2
+
+SYSCAT.REFERENCES:Key=TABSCHEMA,TABNAME,CONSTNAME
+SYSCAT.REFERENCES:Name=CONSTNAME
+SYSCAT.REFERENCES:Objects1=T:P:1M::"Columns":KeyColumn
+SYSCAT.REFERENCES:Objects2=P:R:M1::"Reference Table":Table
+SYSCAT.REFERENCES:Attrs1=DEFINER="Owner"
+SYSCAT.REFERENCES:Attrs2=CREATE_TIME="Created"
+SYSCAT.REFERENCES:Attrs3=REFKEYNAME="Primary Key":2
+SYSCAT.REFERENCES:Attrs4=DELETERULE="Delete Rule":2:E:::VM=TRule
+SYSCAT.REFERENCES:Attrs5=UPDATERULE="Update Rule":2:E:::VM=TRule
+SYSCAT.REFERENCES:Reference:"Columns":Text=`[KeyColumn:%s,%s:*]`
+SYSCAT.REFERENCES:Reference:"Reference Table"=REFTABSCHEMA,REFTABNAME
+
+SYSCAT.TABLES:Name=TABSCHEMA,TABNAME
+SYSCAT.TABLES:Attrs1=DEFINER="Owner"
+SYSCAT.TABLES:Attrs2=STATUS="Status":::::VM=TTableStatus
+SYSCAT.TABLES:Attrs3=CREATE_TIME="Created"
+
+SYSCAT.TABLESPACES:Name=TBSPACE
+SYSCAT.TABLESPACES:Attrs1=DEFINER="Owner"
+SYSCAT.TABLESPACES:Attrs2=TBSPACETYPE="Type":::::VM=TTableSpaceType
+SYSCAT.TABLESPACES:Attrs3=DATATYPE="Data":::::VM=TTableSpaceData
+SYSCAT.TABLESPACES:Attrs4=CREATE_TIME="Created"
+SYSCAT.TABLESPACES:Attrs5=EXTENTSIZE="Extent Size":2
+SYSCAT.TABLESPACES:Attrs6=PREFETCHSIZE="Prefetch Size":2
+SYSCAT.TABLESPACES:Attrs7=OVERHEAD="Overhead":2
+SYSCAT.TABLESPACES:Attrs8=TRANSFERRATE="Transfer Rate":2
+SYSCAT.TABLESPACES:Attrs9=REMARKS="Comments":2
+
+SYSCAT.TRIGGERS:Name=TRIGSCHEMA,TRIGNAME
+SYSCAT.TRIGGERS:Attrs1=DEFINER="Owner"
+SYSCAT.TRIGGERS:Attrs2=CREATE_TIME="Created"
+SYSCAT.TRIGGERS:Attrs3=VALID="Valid":::::VM=TTriggerValid
+SYSCAT.TRIGGERS:Attrs4=TRIGTIME="Order":::::VM=TTriggerOrder
+SYSCAT.TRIGGERS:Attrs5=TRIGEVENT="On Event":::::VM=TTriggerEvent
+SYSCAT.TRIGGERS:Attrs6=GRANULARITY="Granularity":::::VM=TTriggerGranularity
+SYSCAT.TRIGGERS:Attrs7=FUNC_PATH="Function Path":2
+SYSCAT.TRIGGERS:Attrs8=REMARKS="Comments":2
+
+SYSCAT.VIEWS:Name=VIEWSCHEMA,VIEWNAME
+SYSCAT.VIEWS:Attrs1=VIEWCHECK="Check Option":::::VM=TViewCheck
+SYSCAT.VIEWS:Attrs2=READONLY="Read Only":::::VM=TBooleanNY
+SYSCAT.VIEWS:Attrs3=FUNC_PATH="Function Path"
+
+CheckConstraint:Category=Expression
+CheckConstraint:Definition=Root=SYSCAT.TABCONST
+CheckConstraint:Values=A.TYPE = 'K'
+CheckConstraint:Attrs:T1=SYSCAT.CHECKS.CREATE_TIME=Created::REMARKS
+CheckConstraint:Attrs:T2=SYSCAT.CHECKS.FUNC_PATH=FunctionPath::REMARKS
+CheckConstraint:Attrs:T3=SYSCAT.CHECKS.TEXT=Text::REMARKS
+CheckConstraint:EAttrs=Text,New,Delete,Modify,Rename,Save
+CheckConstraint:Text:Init=ALTER TABLE `{<}N\N` ADD CONSTRAINT `EDefaultName` CHECK ()
+CheckConstraint:Text:Get=ALTER TABLE `{<}N\N`  ADD CONSTRAINT `N\N`  CHECK (`=Text`)
+CheckConstraint:Text:RE=ALTER\_+TABLE\_+(\w+)\_+ADD\_+CONSTRAINT\_+(\w+)\_+CHECK\_*\((.*)\)
+CheckConstraint:Text:Set=1=`{<}N`,*N=2,Text=3
+CheckConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+Column:Category=Column
+Column:Definition=Root=SYSCAT.COLUMNS
+Column:Attrs:R=Type:"Type":"Length":1:ER
+Column:EAttrs=Text,New,Delete,Modify,Rename
+Column:Text:Get=`N` `EType``! ' ' =Null``! ' WITH DEFAULT ' =Default``! ' ' =LOGGED``! ' ' =COMPACT`
+Column:New:Text=ALTER TABLE `{<}N` ADD COLUMN `*`
+
+Type:Category=Type
+Type:Definition=Root=SYSCAT.DATATYPES
+Type:Objects=P:R:M1::"Base Type":Type
+Type:Attrs:R=Type::"Length":1:ER
+Type:Warning=Loss
+Type:EAttrs=Text,New,Delete,Modify,Rename,Save
+Type:Reference:"Base Type"=SOURCESCHEMA,SOURCENAME
+Type:Text:Init=CREATE DISTINCT TYPE `EDefaultName` AS `EType`
+Type:Text:Get=CREATE DISTINCT TYPE `N` AS `EType`
+Type:Delete:Text=DROP DISTINCT TYPE `O`
+
+FunctionParameter:Category=Column
+FunctionParameter:Definition=Root=SYSCAT.FUNCPARMS
+FunctionParameter:Values=A.ROWTYPE = 'P'
+FunctionParameter:Order=ORDINAL
+FunctionParameter:Attrs1=ORDINAL="Order":2:ER
+FunctionParameter:EAttrs=Text
+FunctionParameter:Text:Get=`EType`
+
+Result:Category=Column
+Result:Definition=Root=SYSCAT.FUNCPARMS
+Result:Values=A.ROWTYPE IN ('R', 'C')
+Result:EAttrs=Text
+Result:Text:Get=`EType`
+
+Function:Category=Executable
+Function:Definition=Root=SYSCAT.FUNCTIONS
+Function:Objects=P:R:M1::"Source":Function
+Function:Warning=Loss
+Function:EAttrs=Text
+Function:Text:Get1=CREATE FUNCTION `=FUNCNAME` (`{>FunctionParameter}*`)`\N ' '`
+Function:Text:Get2=`' RETURNS ' {>Result}*` SPECIFIC `N``\N '  '`
+Function:Text:Get3=`!'EXTERNAL NAME ' \Q =IMPLEMENTATION \Q`
+Function:Text:Get4=`!' LANGUAGE ' =LANGUAGE ' PARAMETER STYLE DB2SQL ' =VARIANT ' ' =FENCED ' ' =NULLCALL ' NO SQL ' =SIDE_EFFECTS ' ' =SCRATCHPAD ' ' =FINAL_CALL`
+Function:Text:Get5=`!'SOURCE SPECIFIC ' =Function`
+Function:Delete:Text=DROP SPECIFIC FUNCTION `O`
+
+Index:Category=Index
+Index:Definition=Root=SYSCAT.INDEXES
+Index:Objects=M:P:1M::"Columns":IndexColumn:GetIndexColumns
+Index:Values=A.UNIQUERULE <> 'P'
+Index:EAttrs=Text,New,Delete,Modify,Rename,Save
+Index:Text:Get1=CREATE `=UNIQUERULE` INDEX `N`
+Index:Text:Get2=ON `{<}N` (`{>IndexColumn}*`)
+Index:Text:RE=CREATE.*\_INDEX\_+(\w+)\_+ON\_+(\w+).*(\(.*\))
+Index:Text:Set=*N=1,2=`{<}N`,*>IndexColumn=3
+Index:Delete:Text=DROP INDEX `O`
+Index:Reference:"Columns":Text=`[IndexColumn:%s,%s:*]`
+
+IndexColumn:Category=ColumnReference
+IndexColumn:Definition=Dataset
+IndexColumn:Dataset1=ItemNo=Integer,ColName=String,Descending=String:1
+IndexColumn:Name=Column
+IndexColumn:Order=ItemNo
+IndexColumn:Objects1=P:R:M1::"Column":Column:<<>Column
+IndexColumn:Attrs1=ItemNo="Order":2:ER
+IndexColumn:Attrs2=Descending="Descending"::E:::VM=TDescending
+IndexColumn:Attrs:R=Column::Descending:2:ER
+IndexColumn:Reference:"Column"=,,ColName
+IndexColumn:EAttrs=Text,New,Delete,Modify,Rename
+IndexColumn:Text:Get=`N ' ' =Descending`
+
+Package:Definition=Root=SYSCAT.PACKAGES
+Package:EAttrs=Delete,Save
+Package:Delete:Text=DROP PACKAGE `O`
+
+Section:Key=PKGSCHEMA,PKGNAME,SECTNO
+Section:Name=SECTNO
+Section:Definition1=Dataset=
+Section:Definition2=SELECT SECTNO FROM SYSCAT.STATEMENTS
+Section:Definition3=WHERE PKGSCHEMA=`OQ0` AND PKGNAME=`OQ1`
+Section:Dataset=SECTNO=Integer
+Section:Objects=Q:C:0M::"Statements":Statement
+Section:EAttrs=
+
+Statement:Name=STMTNO
+Statement:Definition1=Dataset=
+Statement:Definition2=SELECT STMTNO FROM SYSCAT.STATEMENTS
+Statement:Definition3=WHERE PKGSCHEMA=`{<}OQ0` AND PKGNAME=`{<}OQ1` AND
+Statement:Definition4=SECTNO=`:SECTNO`
+Statement:Dataset=STMTNO=Integer
+Statement:Attrs:Q=Text=Memo::"Text"
+Statement:EAttrs=Text
+Statement:Text:Get=`=Text`
+Statement:AttrReference:Text1=SELECT TEXT, SEQNO FROM SYSCAT.STATEMENTS
+Statement:AttrReference:Text2=WHERE PKGSCHEMA=`{<<}OQ0` AND PKGNAME=`{<<}OQ1`
+Statement:AttrReference:Text3=AND SECTNO=`{<}:SECTNO` AND STMTNO=`:STMTNO`
+Statement:AttrReference:Text4=ORDER BY SEQNO
+
+PrimaryKey:Category=PrimaryKey
+PrimaryKey:Definition=Root=SYSCAT.TABCONST
+PrimaryKey:Values=A.TYPE = 'P'
+PrimaryKey:Objects=T:P:1M::"Columns":KeyColumn
+PrimaryKey:Reference:"Columns":Text=`[KeyColumn:%s,%s:*]`
+PrimaryKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+PrimaryKey:Text:Init1=ALTER TABLE `{<}N \N '  '`ADD CONSTRAINT `EDefaultName \N '  '`
+PrimaryKey:Text:Init2=PRIMARY KEY (`{>KeyColumn}*`)
+PrimaryKey:Text:Get1=ALTER TABLE `{<}N \N '  '`ADD CONSTRAINT `N \N '  '`
+PrimaryKey:Text:Get2=PRIMARY KEY (`{>KeyColumn}*`)
+PrimaryKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+ForeignKey:Category=ForeignKey
+ForeignKey:Definition=Root=SYSCAT.REFERENCES
+ForeignKey:Attrs:T=SYSCAT.TABCONST.REMARKS=Comments
+ForeignKey:Attrs:R=Table::::ER
+ForeignKey:EAttrs=Text,New,Delete,Modify,Rename,Save
+ForeignKey:Text:Init1=ALTER TABLE `{<}N \N '  '`ADD CONSTRAINT `EDefaultName`
+ForeignKey:Text:Init2=`\N`  FOREIGN KEY (`{>KeyColumn}*`) REFERENCES `=Table`
+ForeignKey:Text:Init3=`\N`  ON DELETE RESTRICT ON UPDATE RESTRICT
+ForeignKey:Text:Get1=ALTER TABLE `{<}N \N '  '`ADD CONSTRAINT `N`
+ForeignKey:Text:Get2=`\N`  FOREIGN KEY (`{>KeyColumn}*`) REFERENCES `=Table \N`
+ForeignKey:Text:Get3= ON DELETE `=DELETERULE \N '  '`ON UPDATE `=UPDATERULE`
+ForeignKey:Text:RE=ALTER\_+TABLE\_+(\w+)\_+ADD\_+CONSTRAINT\_+(\w+)\_+.*REFERENCES\_+(\w+)?.*\_ON\_+DELETE\_+(.*)\_ON\_+UPDATE\_+(.*)
+ForeignKey:Text:Set=1=`{<}N`,*N=2,Table=3,DELETERULE=4,UPDATERULE=5
+ForeignKey:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+KeyColumn:Category=ColumnReference
+KeyColumn:Definition=Root=SYSCAT.KEYCOLUSE
+KeyColumn:Attrs:R=Column:::2:ER
+KeyColumn:EAttrs=Text,New,Delete,Modify,Rename
+KeyColumn:Text:Get=`N`
+
+Table:Category=Dataset
+Table:Definition=Root=SYSCAT.TABLES
+Table:Values=A.TYPE = 'T'
+Table:Objects1=T:P:1M::"Columns":Column
+Table:Objects2=T:O:0M::"Indices":Index
+Table:Objects3=T:O:01::"Primary Key":PrimaryKey
+Table:Objects4=T:O:0M::"Referential Constraints":ForeignKey
+Table:Objects5=T:O:0M::"Check Constraints":CheckConstraint
+Table:Objects6=T:O:0M::"Triggers":Trigger
+Table:Objects7=P:R:M1::"Table Space":TableSpace
+Table:Objects8=P:R:M1::"Index Space":TableSpace
+Table:Objects9=P:R:M1::"Long Space":TableSpace
+Table:Attrs1=DATACAPTURE="Data Capture":2:E:::VM=TDataCaptureNY
+Table:Attrs2=STATS_TIME="Update Statistics":2
+Table:Attrs3=CARD="Row Count":2::::VM=TUpdateStatistics
+Table:Attrs4=NPAGES="Used Pages":2::::VM=TUpdateStatistics
+Table:Attrs5=FPAGES="Total Pages":2::::VM=TUpdateStatistics
+Table:Attrs6=OVERFLOW="Overflow Rows":2::::VM=TUpdateStatistics
+Table:Attrs7=REMARKS="Comments":2
+Table:Attrs:R1="Table Space"::::E
+Table:Attrs:R2="Index Space"::::E
+Table:Attrs:R3="Long Space"::::E
+Table:Warning=DataLoss
+Table:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Table:Reference:"Columns":Text=`[Column:%s,%s:\N '  ' *]\N`
+Table:Reference:"Indices"=TABSCHEMA=TABSCHEMA,TABNAME=TABNAME
+Table:Reference:"Triggers"=TABSCHEMA=TABSCHEMA,TABNAME=TABNAME
+Table:Reference:"Table Space"=TBSPACE
+Table:Reference:"Index Space"=INDEX_TBSPACE
+Table:Reference:"Long Space"=LONG_TBSPACE
+Table:Text:Get1=CREATE TABLE `N` (`{>Column}*`)
+Table:Text:Get2=`!\N'  DATA CAPTURE ' =DATACAPTURE`
+Table:Text:Get3=`!\N'  IN ' ="Table Space"`
+Table:Text:Get4=`!\N'  INDEX IN ' ="Index Space"`
+Table:Text:Get5=`!\N'  LONG IN ' ="Long Space"`
+Table:Delete:Text=DROP TABLE `O`
+
+TableSpace:Definition=Root=SYSCAT.TABLESPACES
+TableSpace:Warning=Loss
+TableSpace:EAttrs=Text
+TableSpace:Text:Get1=CREATE `=DATATYPE` TABLESPACE `N\N`
+TableSpace:Text:Get2=MANAGED BY `=TBSPACETYPE`
+TableSpace:Text:Get3=`! ' EXTENTSIZE ' =EXTENTSIZE`
+TableSpace:Text:Get4=`! ' PREFETCHSIZE ' =PREFETCHSIZE`
+TableSpace:Text:Get5=`! ' OVERHEAD ' =OVERHEAD`
+TableSpace:Text:Get6=`! ' TRANSFERRATE ' =TRANSFERRATE`
+TableSpace:Delete:Text=DROP TABLESPACE `O`
+
+Synonym:Category=Dataset
+Synonym:Definition=Root=SYSCAT.TABLES
+Synonym:Values=A.TYPE = 'A'
+Synonym:Attrs1=BASE_TABSCHEMA="Target Schema"
+Synonym:Attrs2=BASE_TABNAME="Target Object"
+Synonym:Attrs3=REMARKS="Comments":2
+Synonym:Warning=Loss
+Synonym:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+Synonym:Text:Get1=CREATE ALIAS `N` FOR `' '`
+Synonym:Text:Get2=`! '"' =BASE_TABSCHEMA '".' ``'"' =BASE_TABNAME '"'`
+Synonym:Delete:Text=DROP ALIAS `O`
+
+View:Category=Dataset
+View:Definition=Root=SYSCAT.TABLES
+View:Values=A.TYPE = 'V'
+View:Objects=T:P:0M:NMDR:"Columns":Column
+View:Attrs=REMARKS="Comments":2
+View:Attrs:T1=SYSCAT.VIEWS.VIEWCHECK=ViewCheck
+View:Attrs:T2=SYSCAT.VIEWS.READONLY=ReadOnly
+View:Attrs:T3=SYSCAT.VIEWS.FUNC_PATH=FunctionPath
+View:Attrs:Q=Text=Memo::"Text"::ER
+View:AttrReference:Text1=SELECT TEXT, SEQNO FROM SYSCAT.VIEWS
+View:AttrReference:Text2=WHERE VIEWSCHEMA=`OQ0` AND VIEWNAME=`OQ1`
+View:AttrReference:Text3=ORDER BY SEQNO
+View:Warning=Loss
+View:EAttrs=Data,Text,New,Delete,Modify,Rename,Save
+View:Text:Init=CREATE VIEW `EDefaultName` AS `\N`  SELECT * FROM "owner"."table"
+View:Text:Get=`=Text`
+View:Text:NameRE=Text:VIEW\_(\_*\w+)
+View:Text:NameSet=1=`N`
+View:Text:RE=^(.*\_)?CREATE\_+VIEW\_+(\w+)\_.*$
+View:Text:Set=Text=0,*N=2
+View:Delete:Text=DROP VIEW `O`
+
+Trigger:Category=Executable
+Trigger:Definition=Root=SYSCAT.TRIGGERS
+Trigger:Attrs:Q=Text=Memo::"Text"::ER:PROOName
+Trigger:AttrReference:Text1=SELECT TEXT FROM SYSCAT.TRIGGERS
+Trigger:AttrReference:Text2=WHERE TRIGSCHEMA=`OQ0` AND TRIGNAME=`OQ1`
+Trigger:EAttrs=Text,New,Delete,Modify,Rename,Save
+Trigger:Text:Init1=CREATE TRIGGER `EDefaultName`
+Trigger:Text:Init2=AFTER INSERT `\N`
+Trigger:Text:Init3=ON `{<}N \N`
+Trigger:Text:Init4=FOR EACH ROW  MODE DB2SQL`\N`
+Trigger:Text:Init5=BEGIN ATOMIC`\N '   <statement>;' \N` END
+Trigger:Text:Get=`=Text`
+Trigger:Text:RE=^(.*\_)?CREATE\_+TRIGGER\_+(\w+)\_.*\_ON\_+(\w+)\_.*$
+Trigger:Text:Set=*N=2,3=`{<}N`,Text=0
+Trigger:Text:NameRE=Text:TRIGGER\_(\_*\w+)
+Trigger:Text:NameSet=1=`N`
+Trigger:Delete:Text=DROP TRIGGER `O`
+

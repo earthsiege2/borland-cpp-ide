@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -61,8 +61,8 @@ _AFXCTL_UIACTIVE_INFO::_AFXCTL_UIACTIVE_INFO(HMENU hInPlaceMenu,
 			if (hInPlaceMenu != NULL)
 			{
 				// Insert our menu popups amongst the container menus
-				AfxMergeMenus(CMenu::FromHandle(m_hSharedMenu),
-					CMenu::FromHandle(hInPlaceMenu), &m_menuWidths.width[0], 1);
+				AfxMergeMenus(m_hSharedMenu, hInPlaceMenu,
+					&m_menuWidths.width[0], 1);
 			}
 		}
 	}
@@ -105,12 +105,14 @@ void AFXAPI _GetClippingCoordinates(LPCRECT pPosRect, LPCRECT pClipRect,
 
 HRESULT COleControl::OnActivateInPlace(BOOL bUIActivate, LPMSG pMsg)
 {
+#ifdef _AFXDLL
 	if (m_bOpen)
 	{
 		m_pWndOpenFrame->SetActiveWindow();
 		SendAdvise(OBJECTCODE_SHOWWINDOW);
 		return S_OK;
 	}
+#endif
 
 	// Initialize pointer to in-place site, if necessary.
 	if (m_pInPlaceSite == NULL)
@@ -118,8 +120,24 @@ HRESULT COleControl::OnActivateInPlace(BOOL bUIActivate, LPMSG pMsg)
 		if (m_pClientSite == NULL)
 			return E_UNEXPECTED;
 
-		if (FAILED(m_pClientSite->QueryInterface(IID_IOleInPlaceSite,
+		if ((GetControlFlags() & windowlessActivate) &&
+			SUCCEEDED(m_pClientSite->QueryInterface(IID_IOleInPlaceSiteWindowless,
+			reinterpret_cast<void**>(&m_pInPlaceSiteWndless))))
+		{
+			m_bInPlaceSiteWndless = m_bInPlaceSiteEx = TRUE;
+		}
+		else if ((GetControlFlags() & noFlickerActivate) &&
+			SUCCEEDED(m_pClientSite->QueryInterface(IID_IOleInPlaceSiteEx,
+			reinterpret_cast<void**>(&m_pInPlaceSiteEx))))
+		{
+			m_bInPlaceSiteEx = TRUE;
+		}
+		else if (SUCCEEDED(m_pClientSite->QueryInterface(IID_IOleInPlaceSite,
 			reinterpret_cast<void**>(&m_pInPlaceSite))))
+		{
+			m_bInPlaceSiteEx = FALSE;
+		}
+		else
 		{
 			m_pInPlaceSite = NULL;
 			return E_FAIL;
@@ -136,29 +154,54 @@ HRESULT COleControl::OnActivateInPlace(BOOL bUIActivate, LPMSG pMsg)
 			SUCCEEDED(m_pInPlaceSite->GetWindow(&hwndParent)) &&
 			(hwndParent == ::GetParent(pWndOuter->m_hWnd)))
 		{
-			::ShowWindow(pWndOuter->m_hWnd, SW_SHOW);   // Make sure window is visible
+			::SetWindowPos(pWndOuter->m_hWnd, NULL, 0, 0, 0, 0,
+				SWP_NOZORDER|SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|
+				SWP_SHOWWINDOW);
+			OnSetObjectRects(m_rcPos, NULL);
 			return S_OK;
 		}
+	}
+
+	// Check if container allows windowless activation.
+	if (m_bInPlaceSiteWndless)
+	{
+		if (m_pInPlaceSiteWndless->CanWindowlessActivate() != S_OK)
+			m_bInPlaceSiteWndless = FALSE;
 	}
 
 	HRESULT hr = E_FAIL;
 	if (m_pInPlaceSite != NULL)
 		hr = m_pInPlaceSite->CanInPlaceActivate();
 
-	if (FAILED(hr) || (GetScode(hr) == S_FALSE))
+	if (hr != NOERROR)
 	{
 		// Site doesn't allow in-place activation.
 		return OnOpen(FALSE, pMsg);
 	}
 
 	if (!m_bInPlaceActive)
-		m_pInPlaceSite->OnInPlaceActivate();
+	{
+		if (m_bInPlaceSiteEx)
+		{
+			// flicker-free and/or windowless activation
+			BOOL bNoRedraw;
+			m_pInPlaceSiteEx->OnInPlaceActivateEx(&bNoRedraw,
+				m_bInPlaceSiteWndless ? ACTIVATE_WINDOWLESS : 0);
+			if (GetControlFlags() & noFlickerActivate)
+				m_bNoRedraw = bNoRedraw;
+		}
+		else
+		{
+			// old-style activation
+			m_pInPlaceSite->OnInPlaceActivate();
+		}
+	}
 
 	HWND hwndParent = NULL;
 
 	if (SUCCEEDED(m_pInPlaceSite->GetWindow(&hwndParent)))
 	{
-		RECT rcClip;
+		CRect rcClip;
 		m_frameInfo.cb = sizeof(OLEINPLACEFRAMEINFO);
 
 		RELEASE(m_pInPlaceFrame);
@@ -170,42 +213,60 @@ HRESULT COleControl::OnActivateInPlace(BOOL bUIActivate, LPMSG pMsg)
 		{
 			ASSERT(m_pInPlaceFrame != NULL);
 
-			CRect rectClipped;
-			_GetClippingCoordinates(&m_rcPos, &rcClip, rectClipped,
-				&m_ptOffset);
-
-			if (CreateControlWindow(hwndParent, m_rcPos, rectClipped))
+			CRect rectClip;
+			if (!m_bInPlaceSiteWndless)
+			{
+				_GetClippingCoordinates(&m_rcPos, &rcClip, rectClip,
+					&m_ptOffset);
+				m_bInPlaceActive = CreateControlWindow(hwndParent, m_rcPos,
+					rectClip);
+			}
+			else
 			{
 				m_bInPlaceActive = TRUE;
+			}
 
+			if (m_bInPlaceActive)
+			{
 				if (bUIActivate)
 				{
+					if (m_bInPlaceSiteEx)
+					{
+						if (m_pInPlaceSiteEx->RequestUIActivate() != S_OK)
+							m_pInPlaceSite->OnUIDeactivate(FALSE);
+					}
+
 					BuildSharedMenu();
 
-					m_pInPlaceSite->OnUIActivate();
 					m_bUIActive = TRUE;
+					m_pInPlaceSite->OnUIActivate();
 
 					m_pInPlaceFrame->SetActiveObject(
 						&m_xOleInPlaceActiveObject, NULL);
-
 					if (m_pInPlaceDoc != NULL)
 						m_pInPlaceDoc->SetActiveObject(
 							&m_xOleInPlaceActiveObject, NULL);
 
-					BOOL bHandles = AmbientShowGrabHandles();
-					BOOL bHatching = AmbientShowHatching();
+					if (m_hWnd != NULL)
+					{
+						BOOL bHandles = AmbientShowGrabHandles();
+						BOOL bHatching = AmbientShowHatching();
 
-					if (bHandles || bHatching)
-						CreateTracker(bHandles, bHatching);
+						if (bHandles || bHatching)
+							CreateTracker(bHandles, bHatching, rcClip);
+					}
 
 					AddFrameLevelUI();
 
-					if ((m_hWnd != NULL) && !IsChild(GetFocus()))
+					if (bUIActivate != -1 &&
+						(m_hWnd != NULL) && !IsChild(GetFocus()))
+					{
 						SetFocus();
+					}
 				}
 
 				// Pass thru the window message that caused us to be activated
-				if ((m_hWnd != NULL) && (pMsg != NULL))
+				if ((m_hWnd != NULL || m_bInPlaceSiteWndless) && (pMsg != NULL))
 					ForwardActivationMsg(pMsg);
 
 				// Send appropriate notifications...
@@ -227,16 +288,36 @@ void COleControl::ForwardActivationMsg(LPMSG pMsg)
 	UINT uMsg = pMsg->message;
 	LPARAM lParam = pMsg->lParam;
 
-	// For mouse messages, convert to this window's coordinates
-	if ((uMsg >= WM_MOUSEFIRST) && (uMsg <= WM_MOUSELAST) && m_bEnabled)
+	if (m_bInPlaceSiteWndless)
 	{
-		POINT ptNew = pMsg->pt;
-		ScreenToClient(&ptNew);
-		lParam = MAKELONG((short)ptNew.x, (short)ptNew.y);
-	}
+		// For mouse messages, convert to container window's coordinates
+		if ((uMsg >= WM_MOUSEFIRST) && (uMsg <= WM_MOUSELAST))
+		{
+			POINT ptNew = pMsg->pt;
+			HWND hWndContainer = NULL;
+			if (SUCCEEDED(m_pInPlaceSite->GetWindow(&hWndContainer)))
+			{
+				::ScreenToClient(hWndContainer, &ptNew);
+				lParam = MAKELONG((short)ptNew.x, (short)ptNew.y);
+			}
+		}
 
-	// Pass the message along to the control's window
-	SendMessage(uMsg, pMsg->wParam, lParam);
+		// Process message on behalf of windowless control
+		OnWindowlessMessage(uMsg, pMsg->wParam, lParam, NULL);
+	}
+	else
+	{
+		// For mouse messages, convert to this window's coordinates
+		if ((uMsg >= WM_MOUSEFIRST) && (uMsg <= WM_MOUSELAST))
+		{
+			POINT ptNew = pMsg->pt;
+			ScreenToClient(&ptNew);
+			lParam = MAKELONG((short)ptNew.x, (short)ptNew.y);
+		}
+
+		// Pass the message along to the control's window
+		SendMessage(uMsg, pMsg->wParam, lParam);
+	}
 }
 
 HMENU COleControl::OnGetInPlaceMenu()
@@ -276,8 +357,7 @@ void COleControl::DestroySharedMenu()
 		((hInPlaceMenu = OnGetInPlaceMenu()) != NULL))
 	{
 		// remove our menu popups from the shared menu
-		AfxUnmergeMenus(CMenu::FromHandle(m_pUIActiveInfo->m_hSharedMenu),
-			CMenu::FromHandle(hInPlaceMenu));
+		AfxUnmergeMenus(m_pUIActiveInfo->m_hSharedMenu, hInPlaceMenu);
 
 		// allow container to remove its items from the menu
 		ASSERT(m_pInPlaceFrame != NULL);
@@ -351,17 +431,8 @@ STDMETHODIMP COleControl::XOleInPlaceObject::QueryInterface(
 STDMETHODIMP COleControl::XOleInPlaceObject::GetWindow(HWND* lphwnd)
 {
 	METHOD_PROLOGUE_EX_(COleControl, OleInPlaceObject)
-
-	if (pThis->m_bInPlaceActive)
-	{
-		*lphwnd = pThis->GetOuterWindow()->m_hWnd;
-		return S_OK;
-	}
-	else
-	{
-		*lphwnd = NULL;
-		return E_FAIL;
-	}
+	*lphwnd = pThis->m_bInPlaceActive ? pThis->GetOuterWindow()->m_hWnd : NULL;
+	return (*lphwnd != NULL) ? S_OK : E_FAIL;
 }
 
 STDMETHODIMP COleControl::XOleInPlaceObject::ContextSensitiveHelp(BOOL)
@@ -382,8 +453,24 @@ STDMETHODIMP COleControl::XOleInPlaceObject::InPlaceDeactivate()
 		UIDeactivate();
 
 	// hide the window
-	pThis->OnHide();
-	pThis->m_pInPlaceSite->OnInPlaceDeactivate();
+
+	if (pThis->m_bInPlaceSiteEx &&
+		(pThis->GetControlFlags() & noFlickerActivate))
+	{
+		// flicker-free deactivation
+		if (! pThis->m_bInPlaceSiteWndless)
+		{
+			pThis->UpdateWindow();
+			pThis->OnHide();
+		}
+		pThis->m_pInPlaceSiteEx->OnInPlaceDeactivateEx(TRUE);
+	}
+	else
+	{
+		// old-style deactivation
+		pThis->OnHide();
+		pThis->m_pInPlaceSite->OnInPlaceDeactivate();
+	}
 
 	return S_OK;
 }
@@ -392,11 +479,11 @@ STDMETHODIMP COleControl::XOleInPlaceObject::UIDeactivate()
 {
 	METHOD_PROLOGUE_EX(COleControl, OleInPlaceObject)
 
+	pThis->m_bPendingUIActivation = FALSE;
 	if (!pThis->m_bUIActive)
 		return S_OK;
 
 	pThis->DestroyTracker();
-
 	pThis->m_bUIActive = FALSE;
 
 	if (pThis->m_pInPlaceDoc != NULL)
@@ -422,37 +509,41 @@ STDMETHODIMP COleControl::XOleInPlaceObject::SetObjectRects(LPCRECT lprcPosRect,
 
 BOOL COleControl::OnSetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect)
 {
-	CRect rectClipper;
-	_GetClippingCoordinates(lprcPosRect, lprcClipRect, rectClipper, &m_ptOffset);
+	ASSERT(lprcPosRect != NULL);
 
-	CopyRect(&m_rcPos, lprcPosRect);
-	CWnd* pWndOuter = GetOuterWindow();
+	// Remember the position rectangle for later
+	m_rcPos = *lprcPosRect;
 
-	if ((pWndOuter != NULL) && (pWndOuter->m_hWnd != NULL))
+	// Calculate complete rectangle including the tracker (if present)
+	CRect rectPos = m_rcPos;
+	if (m_bUIActive && m_pRectTracker != NULL)
 	{
-		if (m_bUIActive && (m_pRectTracker != NULL))
-		{
-			// Adjust tracker rectangle to new dimensions
-			CRect rectTmp = m_rcPos;
-			rectTmp.OffsetRect(-rectTmp.left, -rectTmp.top);
-			m_pRectTracker->m_rect = rectTmp;
+		// Save new clipping rectangle (for DestroyTracker)
+		if (lprcClipRect != NULL)
+			m_pRectTracker->m_rectClip = *lprcClipRect;
 
-			// Adjust the "true" rectangle to include handles/hatching
-			rectTmp = m_rcPos;
-			UINT nHandleSize = m_pRectTracker->m_nHandleSize - 1;
-			rectTmp.InflateRect(nHandleSize, nHandleSize);
-			::MoveWindow(pWndOuter->m_hWnd, rectTmp.left, rectTmp.top,
-				rectTmp.Width(), rectTmp.Height(), TRUE);
-		}
-		else
-		{
-			::MoveWindow(pWndOuter->m_hWnd, rectClipper.left, rectClipper.top,
-				rectClipper.Width(), rectClipper.Height(), TRUE);
+		// Adjust tracker rectangle to new dimensions
+		CRect rectTmp = rectPos;
+		rectTmp.OffsetRect(-rectTmp.left, -rectTmp.top);
+		m_pRectTracker->m_rect = rectTmp;
 
-			if (m_hWnd != NULL && pWndOuter != this)
-				::MoveWindow(m_hWnd, m_ptOffset.x, m_ptOffset.y,
-					m_rcPos.Width(), m_rcPos.Height(), TRUE);
-		}
+		// Adjust the "true" rectangle to include handles/hatching
+		UINT nHandleSize = m_pRectTracker->m_nHandleSize - 1;
+		rectPos.InflateRect(nHandleSize, nHandleSize);
+	}
+
+	// Now clip that rectangle as appropriate
+	CRect rectClip;
+	_GetClippingCoordinates(rectPos, lprcClipRect, rectClip, &m_ptOffset);
+
+	// Move outer window first. then inner window
+
+	if (!m_bInPlaceSiteWndless)
+	{
+		CWnd* pWndOuter = GetOuterWindow();
+		pWndOuter->MoveWindow(rectClip);
+		if (pWndOuter != this)
+			MoveWindow(m_ptOffset.x, m_ptOffset.y, rectPos.Width(), rectPos.Height());
 	}
 
 	return TRUE;

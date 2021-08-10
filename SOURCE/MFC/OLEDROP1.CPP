@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,11 +9,6 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
-#ifdef _MAC
-#include <macname1.h>
-#include <Events.h>     // for GetDblTime()
-#include <macname2.h>
-#endif
 
 #ifdef AFX_OLE4_SEG
 #pragma code_seg(AFX_OLE4_SEG)
@@ -42,7 +37,6 @@ COleDropSource::COleDropSource()
 	static BOOL bInitialized;
 	if (!bInitialized)
 	{
-#ifndef _MAC
 		// get drag metrics from win.ini
 		static const TCHAR szWindows[] = _T("windows");
 		static const TCHAR szDragMinDist[] = _T("DragMinDist");
@@ -50,10 +44,6 @@ COleDropSource::COleDropSource()
 
 		nDragMinDist = GetProfileInt(szWindows, szDragMinDist, DD_DEFDRAGMINDIST);
 		nDragDelay = GetProfileInt(szWindows, szDragDelay, DD_DEFDRAGDELAY);
-#else
-		nDragMinDist = DD_DEFDRAGMINDIST;
-		nDragDelay = (GetDblTime() * 1000) / 60;    // convert ticks to milliseconds
-#endif
 
 		// now initialized, no need to call Initialize any more
 		bInitialized = TRUE;
@@ -74,15 +64,9 @@ SCODE COleDropSource::QueryContinueDrag(BOOL bEscapePressed, DWORD dwKeyState)
 		return DRAGDROP_S_CANCEL;
 	}
 
-#ifndef _MAC
 	// check left-button up to end drag/drop and do the drop
 	if ((dwKeyState & m_dwButtonDrop) == 0)
 		return m_bDragStarted ? DRAGDROP_S_DROP : DRAGDROP_S_CANCEL;
-#else
-	// check the current state of the mouse
-	if (!Button())
-		return m_bDragStarted ? DRAGDROP_S_DROP : DRAGDROP_S_CANCEL;
-#endif
 
 	// otherwise, keep polling...
 	return S_OK;
@@ -103,7 +87,6 @@ BOOL COleDropSource::OnBeginDrag(CWnd* pWnd)
 	m_bDragStarted = FALSE;
 
 	// opposite button cancels drag operation
-#ifndef _MAC
 	m_dwButtonCancel = 0;
 	m_dwButtonDrop = 0;
 	if (GetKeyState(VK_LBUTTON) < 0)
@@ -116,7 +99,6 @@ BOOL COleDropSource::OnBeginDrag(CWnd* pWnd)
 		m_dwButtonDrop |= MK_RBUTTON;
 		m_dwButtonCancel |= MK_LBUTTON;
 	}
-#endif
 
 	DWORD dwLastTick = GetTickCount();
 	pWnd->SetCapture();
@@ -251,11 +233,7 @@ DROPEFFECT COleDataSource::DoDragDrop(DWORD dwEffects,
 	LPDROPSOURCE lpDropSource =
 		(LPDROPSOURCE)pDropSource->GetInterface(&IID_IDropSource);
 	DWORD dwResultEffect = DROPEFFECT_NONE;
-#ifdef _AFXDLL
-	_afxOLE.pfnDoDragDrop[0](lpDataObject, lpDropSource, dwEffects, &dwResultEffect);
-#else
 	::DoDragDrop(lpDataObject, lpDropSource, dwEffects, &dwResultEffect);
-#endif
 	return dwResultEffect;
 }
 

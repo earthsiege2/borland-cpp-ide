@@ -1,6 +1,6 @@
 
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -172,6 +172,26 @@ CMapPtrToPtr::GetAssocAt(void* key, UINT& nHash) const
 	return NULL;
 }
 
+
+void* CMapPtrToPtr::GetValueAt(void* key) const
+// find value (or return NULL -- NULL values not different as a result)
+{
+	if (m_pHashTable == NULL)
+		return NULL;
+
+	UINT nHash = HashKey(key) % m_nHashTableSize;
+
+	// see if it exists
+	CAssoc* pAssoc;
+	for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL; pAssoc = pAssoc->pNext)
+	{
+		if (pAssoc->key == key)
+			return pAssoc->value;
+	}
+	return NULL;
+}
+
+
 /////////////////////////////////////////////////////////////////////////////
 
 BOOL CMapPtrToPtr::Lookup(void* key, void*& rValue) const
@@ -200,7 +220,7 @@ void*& CMapPtrToPtr::operator[](void* key)
 
 		// it doesn't exist, add a new Association
 		pAssoc = NewAssoc();
-		pAssoc->nHashValue = nHash;
+
 		pAssoc->key = key;
 		// 'pAssoc->value' is a constructed object, nothing more
 
@@ -266,7 +286,9 @@ void CMapPtrToPtr::GetNextAssoc(POSITION& rNextPosition,
 	if ((pAssocNext = pAssocRet->pNext) == NULL)
 	{
 		// go to next bucket
-		for (UINT nBucket = pAssocRet->nHashValue + 1;
+
+		for (UINT nBucket = (HashKey(pAssocRet->key) % m_nHashTableSize) + 1;
+
 		  nBucket < m_nHashTableSize; nBucket++)
 			if ((pAssocNext = m_pHashTable[nBucket]) != NULL)
 				break;

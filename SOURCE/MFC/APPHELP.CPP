@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -45,9 +45,16 @@ void AFXAPI AfxFormatStrings(CString& rString, LPCTSTR lpszFormat,
 	LPCTSTR pchSrc = lpszFormat;
 	while (*pchSrc != '\0')
 	{
-		if (pchSrc[0] == '%' && (pchSrc[1] >= '1' && pchSrc[1] <= '9'))
+		if (pchSrc[0] == '%' &&
+			 ( (pchSrc[1] >= '0' && pchSrc[1] <= '9') ||
+				(pchSrc[1] >= 'A' && pchSrc[1] <= 'Z')) )
 		{
-			int i = pchSrc[1] - '1';
+			// %A comes after %9 -- we'll need it someday
+			int i;
+			if (pchSrc[1] > '9')
+				i = 9 + (pchSrc[1] - 'A');
+			else
+				i = pchSrc[1] - '1';
 			pchSrc += 2;
 			if (i >= nString)
 				++nTotalLen;
@@ -67,9 +74,16 @@ void AFXAPI AfxFormatStrings(CString& rString, LPCTSTR lpszFormat,
 	LPTSTR pchDest = rString.GetBuffer(nTotalLen);
 	while (*pchSrc != '\0')
 	{
-		if (pchSrc[0] == '%' && (pchSrc[1] >= '1' && pchSrc[1] <= '9'))
+		if (pchSrc[0] == '%' &&
+			 ( (pchSrc[1] >= '0' && pchSrc[1] <= '9') ||
+				(pchSrc[1] >= 'A' && pchSrc[1] <= 'Z')) )
 		{
-			int i = pchSrc[1] - '1';
+			// %A comes after %9 -- we'll need it someday
+			int i;
+			if (pchSrc[1] > '9')
+				i = 9 + (pchSrc[1] - 'A');
+			else
+				i = pchSrc[1] - '1';
 			pchSrc += 2;
 			if (i >= nString)
 			{

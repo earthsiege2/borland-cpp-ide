@@ -1,0 +1,14 @@
+LIBRARY COMSVCS
+EXPORTS
+
+    CoCreateInstanceWithClassInfo            = 'COMSVCS.DLL'.*
+    CoCreateStdTrustable                     = 'COMSVCS.DLL'.*
+    CoLoadServices                           = 'COMSVCS.DLL'.*
+    CoVerifyTrust                            = 'COMSVCS.DLL'.*
+    ComSvcsExceptionFilter                   = 'COMSVCS.DLL'.*
+    ComSvcsLogError                          = 'COMSVCS.DLL'.*
+    CreateActivityInMTA                      = 'COMSVCS.DLL'.* @7 @6
+    DllUnregisterServerWeReallyMeanIt        = 'COMSVCS.DLL'.* @6 @5
+    _GetObjectContext                        = 'COMSVCS.DLL'.GetObjectContext
+    MTSCreateActivity                        = 'COMSVCS.DLL'.*
+    _SafeRef                                 = 'COMSVCS.DLL'.SafeRef

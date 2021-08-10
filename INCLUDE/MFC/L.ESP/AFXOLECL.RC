@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,15 +37,15 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
-	AFX_IDP_STATIC_OBJECT           "Imposible activar un objeto OLE estático."
+	AFX_IDP_STATIC_OBJECT           "No se puede activar un objeto ActiveX estático."
 	AFX_IDP_FAILED_TO_CONNECT       "Imposible conectar.\nVínculo puede estar roto."
 	AFX_IDP_SERVER_BUSY             "Imposible procesar el comando, servidor ocupado."
 	AFX_IDP_BAD_VERB                "Imposible efectuar operación del servidor."
 	AFX_IDP_FAILED_TO_LAUNCH        "Imposible ejecutar la aplicación del servidor."
-	AFX_IDS_UPDATING_ITEMS          "Actualizando objetos OLE"
-	AFX_IDP_FAILED_TO_CONVERT       "Imposible convertir objeto OLE."
-	AFX_IDP_ASK_TO_DISCARD          "¡Imposible guardar objetos OLE al salir de Windows!\n¿Descartar todos los cambios a %1?"
-	AFX_IDP_FAILED_TO_CREATE        "Failed to create object.  Make sure the application is entered in the system registry."
+	AFX_IDS_UPDATING_ITEMS          "Actualizando objetos ActiveX"
+	AFX_IDP_FAILED_TO_CONVERT       "No se puede convertir el objeto ActiveX."
+	AFX_IDP_ASK_TO_DISCARD          "No se pueden guardar objetos ActiveX al salir de Windows.\n¿Descartar todos los cambios de %1?"
+	AFX_IDP_FAILED_TO_CREATE        "No se puede crear objeto. Compruebe que la aplicación está registrada en el sistema."
 
 	AFX_IDS_METAFILE_FORMAT         "Imagen (Metarchivo)\nuna imagen"
 	AFX_IDS_DIB_FORMAT              "Mapa de bits independiente de dispositivos\nun mapa de bits independiente de dispositivos"

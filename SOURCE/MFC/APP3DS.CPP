@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -10,8 +10,6 @@
 
 #include "stdafx.h"
 
-#if !defined(_MAC)
-
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
@@ -21,12 +19,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#ifndef _AFX_NO_CTL3D_SUPPORT
+
 #include "ctl3d.h"
 #ifdef __BORLANDC__
   #pragma comment(lib, "ctl3d32.lib")
 #else
   #pragma comment(lib, "ctl3d32s.lib")
 #endif
+
 /////////////////////////////////////////////////////////////////////////////
 // Support for CTL3D32.LIB (3D controls static library)
 
@@ -77,6 +78,6 @@ BOOL CWinApp::Enable3dControlsStatic()
 	return (*pCtl3dState->m_pfnAutoSubclass)(AfxGetInstanceHandle());
 }
 
-#endif // !_MAC
+#endif //!_AFX_NO_CTL3D_SUPPORT
 
 /////////////////////////////////////////////////////////////////////////////

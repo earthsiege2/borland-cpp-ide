@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -23,6 +23,10 @@
 
 #ifndef _INC_MALLOC
 	#include <malloc.h>
+#endif
+
+#ifndef __AFXEXT_H__
+	#include <afxext.h>
 #endif
 
 #ifdef _AFX_MINREBUILD
@@ -58,9 +62,6 @@ struct AFX_CMDHANDLERINFO;      // Command routing implementation
 				class CMiniDockFrameWnd;
 
 class CDockContext;                     // for dragging control bars
-
-//IStream
-	class CArchiveStream;
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -150,26 +151,39 @@ class CDockContext;                     // for dragging control bars
 // same as WM_SETMESSAGESTRING except not popped if IsTracking()
 #define WM_POPMESSAGESTRING 0x0375
 
+// WM_HELPPROMPTADDR is used internally to get the address of
+//  m_dwPromptContext from the associated frame window. This is used
+//  during message boxes to setup for F1 help while that msg box is
+//  displayed. lResult is the address of m_dwPromptContext.
+#define WM_HELPPROMPTADDR   0x0376
+
 // Constants used in DLGINIT resources for OLE control containers
-#define WM_OCC_LOADFROMSTREAM   0x0376
-#define WM_OCC_LOADFROMSTORAGE  0x0377
-#define WM_OCC_INITNEW          0x0378
+// NOTE: These are NOT real Windows messages they are simply tags
+// used in the control resource and are never used as 'messages'
+#define WM_OCC_LOADFROMSTREAM           0x0376
+#define WM_OCC_LOADFROMSTORAGE          0x0377
+#define WM_OCC_INITNEW                  0x0378
+#define WM_OCC_LOADFROMSTREAM_EX        0x037A
+#define WM_OCC_LOADFROMSTORAGE_EX       0x037B
 
 // Marker used while rearranging the message queue
 #define WM_QUEUE_SENTINEL   0x0379
 
-// Note: Messages 0x037A - 0x37F reserved for future MFC use.
-#define WM_RESERVED_037A    0x037A
-#define WM_RESERVED_037B    0x037B
+// Note: Messages 0x037C - 0x37E reserved for future MFC use.
 #define WM_RESERVED_037C    0x037C
 #define WM_RESERVED_037D    0x037D
 #define WM_RESERVED_037E    0x037E
-#define WM_RESERVED_037F    0x037F
+
+// WM_FORWARDMSG - used by ATL to forward a message to another window for processing
+//  WPARAM - DWORD dwUserData - defined by user
+//  LPARAM - LPMSG pMsg - a pointer to the MSG structure
+//  return value - 0 if the message was not processed, nonzero if it was
+#define WM_FORWARDMSG       0x037F
 
 // like ON_MESSAGE but no return value
 #define ON_MESSAGE_VOID(message, memberFxn) \
 	{ message, 0, 0, 0, AfxSig_vv, \
-		(AFX_PMSG)(AFX_PMSGW)(void (AFX_MSG_CALL CWnd::*)(void))memberFxn },
+		(AFX_PMSG)(AFX_PMSGW)(void (AFX_MSG_CALL CWnd::*)(void))&memberFxn },
 
 // special struct for WM_SIZEPARENT
 struct AFX_SIZEPARENTPARAMS
@@ -199,42 +213,6 @@ struct AFX_CMDHANDLERINFO
 };
 
 /////////////////////////////////////////////////////////////////////////////
-// Implementation of event sink handling
-
-#ifndef _AFX_NO_OLE_SUPPORT
-#ifdef _OBJBASE_H_
-
-struct AFX_EVENT
-{
-	enum { event, propRequest, propChanged };
-
-	AFX_EVENT(int eventKind, DISPID dispid, DISPPARAMS* pDispParams = NULL,
-		EXCEPINFO* pExcepInfo = NULL, UINT* puArgError = NULL);
-
-	int m_eventKind;
-	DISPID m_dispid;
-	DISPPARAMS* m_pDispParams;
-	EXCEPINFO* m_pExcepInfo;
-	UINT* m_puArgError;
-	BOOL m_bPropChanged;
-	HRESULT m_hResult;
-};
-
-inline AFX_EVENT::AFX_EVENT(int eventKind, DISPID dispid,
-	DISPPARAMS* pDispParams, EXCEPINFO* pExcepInfo, UINT* puArgError)
-{
-	m_eventKind = eventKind;
-	m_dispid = dispid;
-	m_pDispParams = pDispParams;
-	m_pExcepInfo = pExcepInfo;
-	m_puArgError = puArgError;
-	m_hResult = NOERROR;
-}
-
-#endif
-#endif // _AFX_NO_OLE_SUPPORT
-
-/////////////////////////////////////////////////////////////////////////////
 // Robust file save support
 // opens a temp file if modeCreate specified and enough free space
 // renaming, etc occurs automatically if everything succeeds
@@ -247,6 +225,7 @@ public:
 	virtual void Close();
 	virtual BOOL Open(LPCTSTR lpszFileName, UINT nOpenFlags,
 		CFileException* pError = NULL);
+	static CString GetTempName(LPCTSTR pstrOriginalFile, BOOL bCreate);
 
 protected:
 	CString m_strMirrorName;
@@ -340,10 +319,6 @@ protected:
 	CSize m_sizeTopLeft;// Offset for top left corner of page
 	HFONT m_hFont;      // Font selected into the screen DC (NULL if none)
 	HFONT m_hPrinterFont; // Font selected into the print DC
-#ifdef _MAC
-	int m_aCharWidthsDraw[256];   // character widths for m_hDC
-	int m_aCharWidthsAttrib[256]; // character widths for m_hAttribDC
-#endif
 
 	CSize m_sizeWinExt; // cached window extents computed for screen
 	CSize m_sizeVpExt;  // cached viewport extents computed for screen
@@ -398,9 +373,6 @@ public:
 	void AssertValid() const;
 	void Dump(CDumpContext& dc) const;
 #endif
-#ifdef _MAC
-	virtual void CalcWindowRect(LPRECT lpClientRect);
-#endif
 
 protected:
 	//{{AFX_MSG(CPreviewView)
@@ -435,6 +407,7 @@ protected:
 
 	struct PAGE_INFO
 	{
+		PAGE_INFO();
 		CRect rectScreen; // screen rect (screen device units)
 		CSize sizeUnscaled; // unscaled screen rect (screen device units)
 		CSize sizeScaleRatio; // scale ratio (cx/cy)
@@ -469,6 +442,27 @@ protected:
 #define ZOOM_OUT    0
 #define ZOOM_MIDDLE 1
 #define ZOOM_IN     2
+
+/////////////////////////////////////////////////////////////////////////////
+// mirroring support
+
+//WINBUG: some mirroring stuff will be in wingdi.h someday
+
+// __BORLANDC__ BUG: wingdi.h doesn't contain LAYOUT_LTR, so we'll add it here
+#ifndef LAYOUT_LTR
+#define LAYOUT_LTR                         0x00000000
+#endif
+
+#ifndef LAYOUT_RTL
+#define LAYOUT_RTL                         0x00000001
+#define NOMIRRORBITMAP                     0x80000000
+#endif
+
+//WINBUG: some mirroring stuff will be in winuser.h someday
+#ifndef WS_EX_LAYOUTRTL
+#define WS_EX_LAYOUTRTL                    0x00400000L
+#endif
+
 
 /////////////////////////////////////////////////////////////////////////////
 // toolbar docking support
@@ -552,7 +546,7 @@ public:
 	BOOL m_bVisible;    // visibility of this bar
 	BOOL m_bFloating;   // whether floating or not
 	BOOL m_bHorz;       // orientation of floating dockbar
-	BOOL m_bDockBar;    // true if a dockbar
+	BOOL m_bDockBar;    // TRUE if a dockbar
 	CPoint m_pointPos;  // topleft point of window
 
 	UINT m_nMRUWidth;   // MRUWidth for Dynamic Toolbars
@@ -579,7 +573,7 @@ class CDockBar : public CControlBar
 
 // Construction
 public:
-	CDockBar(BOOL bFloating = FALSE);   //true if attached to CMiniDockFrameWnd
+	CDockBar(BOOL bFloating = FALSE);   // TRUE if attached to CMiniDockFrameWnd
 	BOOL Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID);
 
 // Attributes
@@ -592,7 +586,7 @@ public:
 // Operations
 	void DockControlBar(CControlBar* pBar, LPCRECT lpRect = NULL);
 	void ReDockControlBar(CControlBar* pBar, LPCRECT lpRect = NULL);
-	BOOL RemoveControlBar(CControlBar*, int nPosExclude = -1);
+	BOOL RemoveControlBar(CControlBar*, int nPosExclude = -1, int nAddPlaceHolder = 0);
 	void RemovePlaceHolder(CControlBar* pBar);
 
 // Implementation
@@ -611,8 +605,8 @@ public:
 	int FindBar(CControlBar* pBar, int nPosExclude = -1);
 	void ShowAll(BOOL bShow);
 
-protected:
 	CPtrArray m_arrBars;    // each element is a CControlBar
+protected:
 	BOOL m_bLayoutQuery;
 	CRect m_rectLayout;
 
@@ -655,9 +649,6 @@ public:
 	afx_msg void OnNcLButtonDown(UINT nHitTest, CPoint point);
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
 	//}}AFX_MSG
-#ifdef _MAC
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-#endif
 	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
 	DECLARE_MESSAGE_MAP()
 };
@@ -682,67 +673,15 @@ public:
 	virtual ~COleCntrFrameWnd();
 	virtual void RecalcLayout(BOOL bNotify = TRUE);
 	void OnIdleUpdateCmdUI();
+	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra,
+		AFX_CMDHANDLERINFO* pHandlerInfo);
 #ifdef _DEBUG
 	void AssertValid() const;
 #endif
 };
 
 /////////////////////////////////////////////////////////////////////////////
-// COleControlLock
-
-#ifdef __AFXDISP_H__
-
-class COleControlLock
-{
-// Constructors
-public:
-	COleControlLock(REFCLSID clsid);
-
-// Attributes
-	CLSID m_clsid;
-	LPCLASSFACTORY m_pClassFactory;
-	COleControlLock* m_pNextLock;
-
-// Implementation
-public:
-	virtual ~COleControlLock();
-};
-
-/////////////////////////////////////////////////////////////////////////////
-// CArchiveStream
-
-class CArchiveStream : public IStream
-{
-public:
-	CArchiveStream(CArchive* pArchive);
-
-// Implementation
-	CArchive* m_pArchive;
-
-	STDMETHOD_(ULONG, AddRef)();
-	STDMETHOD_(ULONG, Release)();
-	STDMETHOD(QueryInterface)(REFIID, LPVOID*);
-
-	STDMETHOD(Read)(void*, ULONG, ULONG*);
-	STDMETHOD(Write)(const void*, ULONG cb, ULONG*);
-	STDMETHOD(Seek)(LARGE_INTEGER, DWORD, ULARGE_INTEGER*);
-	STDMETHOD(SetSize)(ULARGE_INTEGER);
-	STDMETHOD(CopyTo)(LPSTREAM, ULARGE_INTEGER, ULARGE_INTEGER*,
-		ULARGE_INTEGER*);
-	STDMETHOD(Commit)(DWORD);
-	STDMETHOD(Revert)();
-	STDMETHOD(LockRegion)(ULARGE_INTEGER, ULARGE_INTEGER,DWORD);
-	STDMETHOD(UnlockRegion)(ULARGE_INTEGER, ULARGE_INTEGER, DWORD);
-	STDMETHOD(Stat)(STATSTG*, DWORD);
-	STDMETHOD(Clone)(LPSTREAM*);
-};
-
-#endif // __AFX_DISP_H__
-
-/////////////////////////////////////////////////////////////////////////////
 // CDialogTemplate
-
-#ifndef _MAC
 
 class CDialogTemplate
 {
@@ -780,8 +719,6 @@ protected:
 	BOOL SetTemplate(const DLGTEMPLATE* pTemplate, UINT cb);
 };
 
-#endif //!_MAC
-
 /////////////////////////////////////////////////////////////////////////////
 // WM_NOTIFY support
 
@@ -816,226 +753,13 @@ void AFXAPI AfxFailMaxChars(CDataExchange* pDX, int nChars);
 void AFXAPI AfxFailRadio(CDataExchange* pDX);
 
 // DLL load helpers
-HINSTANCE AFXAPI AfxLoadDll(HINSTANCE& hInst, LPCSTR lpszDLL);
-HINSTANCE AFXAPI AfxLoadDll(HINSTANCE& hInst, LPCSTR lpszDLL,
+HINSTANCE AFXAPI AfxLoadDll(HINSTANCE* volatile hInst, LPCSTR lpszDLL);
+HINSTANCE AFXAPI AfxLoadDll(HINSTANCE* volatile hInst, LPCSTR lpszDLL,
 	FARPROC* pProcPtrs, LPCSTR lpszProcName);
 
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
-
-LPDEVMODEW AFXAPI AfxDevModeA2W(LPDEVMODEW lpDevModeW, LPDEVMODEA lpDevModeA);
-LPDEVMODEA AFXAPI AfxDevModeW2A(LPDEVMODEA lpDevModeA, LPDEVMODEW lpDevModeW);
-
-//
-// Using alloca as a parameter to a function results in the stack becoming
-// misaligned. Not a problem for VC++ as it special cases usage of alloca.
-//
-
-#ifdef __BORLANDC__
-
-#define DEVMODEW2A(lpw)\
-   (pBAfxConv = alloca(sizeof(DEVMODEA)+lpw->dmDriverExtra),\
-	((lpw == NULL) ? NULL : AfxDevModeW2A((LPDEVMODEA)pBAfxConv, lpw)))
-#define DEVMODEA2W(lpa)\
-   (pBAfxConv = alloca(sizeof(DEVMODEW)+lpa->dmDriverExtra),\
-	((lpa == NULL) ? NULL : AfxDevModeA2W((LPDEVMODEW)pBAfxConv, lpa)))
-
-#else    // __BORLANDC__
-
-#define DEVMODEW2A(lpw)\
-	((lpw == NULL) ? NULL : AfxDevModeW2A((LPDEVMODEA)alloca(sizeof(DEVMODEA)+lpw->dmDriverExtra), lpw))
-#define DEVMODEA2W(lpa)\
-	((lpa == NULL) ? NULL : AfxDevModeA2W((LPDEVMODEW)alloca(sizeof(DEVMODEW)+lpa->dmDriverExtra), lpa))
-
-#endif   // __BORLANDC__
-
-LPTEXTMETRICW AFXAPI AfxTextMetricA2W(LPTEXTMETRICW lptmW, LPTEXTMETRICA pltmA);
-LPTEXTMETRICA AFXAPI AfxTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW pltmW);
-
-#ifdef __BORLANDC__
-
-#define TEXTMETRICW2A(lptmw)\
-   (pBAfxConv = alloca(sizeof(TEXTMETRICA)),\
-	((lptmw == NULL) ? NULL : AfxTextMetricW2A((LPTEXTMETRICA)pBAfxConv, lptmw)))
-#define TEXTMETRICA2W(lptma)\
-   (pBAfxConv = alloca(sizeof(TEXTMETRICW)),\
-	((lptma == NULL) ? NULL : AfxTextMetricA2W((LPTEXTMETRICW)pBAfxConv, lptma)))
-
-#else    // __BORLANDC__
-
-#define TEXTMETRICW2A(lptmw)\
-	((lptmw == NULL) ? NULL : AfxTextMetricW2A((LPTEXTMETRICA)alloca(sizeof(TEXTMETRICA)), lptmw))
-#define TEXTMETRICA2W(lptma)\
-	((lptma == NULL) ? NULL : AfxTextMetricA2W((LPTEXTMETRICW)alloca(sizeof(TEXTMETRICW)), lptma))
-
-#endif   // __BORLANDC__
-
-LPWSTR AFXAPI AfxA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars);
-LPSTR AFXAPI AfxW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars);
-
-#ifdef __BORLANDC__
-
-#define A2CW(lpa) (\
-	((LPCSTR)lpa == NULL) ? NULL : (\
-		_convert = (strlen(lpa)+1),\
-      pBAfxConv = alloca(_convert*2),\
-		(LPCWSTR)AfxA2WHelper((LPWSTR)pBAfxConv, lpa, _convert)\
-	)\
-)
-
-#define A2W(lpa) (\
-	((LPCSTR)lpa == NULL) ? NULL : (\
-		_convert = (strlen(lpa)+1),\
-      pBAfxConv = alloca(_convert*2),\
-		AfxA2WHelper((LPWSTR)pBAfxConv, lpa, _convert)\
-	)\
-)
-
-#define W2CA(lpw) (\
-	((LPCWSTR)lpw == NULL) ? NULL : (\
-		_convert = (wcslen(lpw)+1)*2,\
-      pBAfxConv = alloca(_convert),\
-		(LPCSTR)AfxW2AHelper((LPSTR)pBAfxConv, lpw, _convert)\
-	)\
-)
-
-#define W2A(lpw) (\
-	((LPCWSTR)lpw == NULL) ? NULL : (\
-		_convert = (wcslen(lpw)+1)*2,\
-      pBAfxConv = alloca(_convert),\
-		AfxW2AHelper((LPSTR)pBAfxConv, lpw, _convert)\
-	)\
-)
-
-#else // __BORLANDC__
-
-#define A2CW(lpa) (\
-	((LPCSTR)lpa == NULL) ? NULL : (\
-		_convert = (strlen(lpa)+1),\
-		(LPCWSTR)AfxA2WHelper((LPWSTR) alloca(_convert*2), lpa, _convert)\
-	)\
-)
-
-#define A2W(lpa) (\
-	((LPCSTR)lpa == NULL) ? NULL : (\
-		_convert = (strlen(lpa)+1),\
-		AfxA2WHelper((LPWSTR) alloca(_convert*2), lpa, _convert)\
-	)\
-)
-
-#define W2CA(lpw) (\
-	((LPCWSTR)lpw == NULL) ? NULL : (\
-		_convert = (wcslen(lpw)+1)*2,\
-		(LPCSTR)AfxW2AHelper((LPSTR) alloca(_convert), lpw, _convert)\
-	)\
-)
-
-#define W2A(lpw) (\
-	((LPCWSTR)lpw == NULL) ? NULL : (\
-		_convert = (wcslen(lpw)+1)*2,\
-		AfxW2AHelper((LPSTR) alloca(_convert), lpw, _convert)\
-	)\
-)
-
-#endif   // __BORLANDC__
-
-#ifdef __BORLANDC__
-#  ifndef _DEBUG
-#     define USES_CONVERSION void * pBAfxConv=0; int _convert;
-#  else
-#     define USES_CONVERSION void * pBAfxConv=0; int _convert = 0;
-#  endif
-#else    // __BORLANDC__
-#  ifndef _DEBUG
-#     define USES_CONVERSION int _convert; _convert
-#  else
-#     define USES_CONVERSION int _convert = 0;
-#  endif
-#endif   // __BORLANDC__
-
-#ifdef __AFXDISP_H__
-
-void AFXAPI AfxBSTR2CString(CString* pStr, BSTR bstr);
-
-#if !defined(_UNICODE) && !defined(OLE2ANSI)
-BSTR AFXAPI AfxBSTR2ABSTR(BSTR bstrW);
-LPWSTR AFXAPI AfxTaskStringA2W(LPCSTR lpa);
-LPSTR AFXAPI AfxTaskStringW2A(LPCWSTR lpw);
+#ifndef __AFXCONV_H__
+#include <afxconv.h>
 #endif
-
-#define OLESTDDELIMOLE OLESTR("\\")
-
-#if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
-	#define DEVMODEOLE DEVMODEW
-	#define LPDEVMODEOLE LPDEVMODEW
-	#define TEXTMETRICOLE TEXTMETRICW
-	#define LPTEXTMETRICOLE LPTEXTMETRICW
-	inline size_t ocslen(LPCOLESTR x) { return wcslen(x); }
-	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) { return wcscpy(dest, src); }
-	inline LPCOLESTR T2COLE(LPCTSTR lp) { return lp; }
-	inline LPCTSTR OLE2CT(LPCOLESTR lp) { return lp; }
-	inline LPOLESTR T2OLE(LPTSTR lp) { return lp; }
-	inline LPTSTR OLE2T(LPOLESTR lp) { return lp; }
-	inline LPOLESTR TASKSTRINGT2OLE(LPOLESTR lp) { return lp; }
-	inline LPTSTR TASKSTRINGOLE2T(LPOLESTR lp) { return lp; }
-	inline LPDEVMODEW DEVMODEOLE2T(LPDEVMODEOLE lp) { return lp; }
-	inline LPDEVMODEOLE DEVMODET2OLE(LPDEVMODEW lp) { return lp; }
-	inline LPTEXTMETRICW TEXTMETRICOLE2T(LPTEXTMETRICOLE lp) { return lp; }
-	inline LPTEXTMETRICOLE TEXTMETRICT2OLE(LPTEXTMETRICW lp) { return lp; }
-	inline BSTR BSTR2TBSTR(BSTR bstr) { return bstr;}
-#elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
-	#define DEVMODEOLE DEVMODEA
-	#define LPDEVMODEOLE LPDEVMODEA
-	#define TEXTMETRICOLE TEXTMETRICA
-	#define LPTEXTMETRICOLE LPTEXTMETRICA
-	inline size_t ocslen(LPCOLESTR x) { return strlen(x); }
-	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) { return strcpy(dest, src); }
-	inline LPCOLESTR T2COLE(LPCTSTR lp) { return lp; }
-	inline LPCTSTR OLE2CT(LPCOLESTR lp) { return lp; }
-	inline LPOLESTR T2OLE(LPTSTR lp) { return lp; }
-	inline LPTSTR OLE2T(LPOLESTR lp) { return lp; }
-	inline LPOLESTR TASKSTRINGT2OLE(LPOLESTR lp) { return lp; }
-	inline LPTSTR TASKSTRINGOLE2T(LPOLESTR lp) { return lp; }
-	inline LPDEVMODE DEVMODEOLE2T(LPDEVMODEOLE lp) { return lp; }
-	inline LPDEVMODEOLE DEVMODET2OLE(LPDEVMODE lp) { return lp; }
-	inline LPTEXTMETRIC TEXTMETRICOLE2T(LPTEXTMETRICOLE lp) { return lp; }
-	inline LPTEXTMETRICOLE TEXTMETRICT2OLE(LPTEXTMETRIC lp) { return lp; }
-	inline BSTR BSTR2TBSTR(BSTR bstr) { return bstr; }
-#else
-	#define DEVMODEOLE DEVMODEW
-	#define LPDEVMODEOLE LPDEVMODEW
-	#define TEXTMETRICOLE TEXTMETRICW
-	#define LPTEXTMETRICOLE LPTEXTMETRICW
-	inline size_t ocslen(LPCOLESTR x) { return wcslen(x); }
-	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) { return wcscpy(dest, src); }
-	#define T2COLE(lpa) A2CW(lpa)
-	#define T2OLE(lpa) A2W(lpa)
-	#define OLE2CT(lpo) W2CA(lpo)
-	#define OLE2T(lpo) W2A(lpo)
-	#define TASKSTRINGT2OLE(lpa)    AfxTaskStringA2W(lpa)
-	#define TASKSTRINGOLE2T(lpo) AfxTaskStringW2A(lpo)
-	#define DEVMODEOLE2T(lpo) DEVMODEW2A(lpo)
-	#define DEVMODET2OLE(lpa) DEVMODEA2W(lpa)
-	#define TEXTMETRICOLE2T(lptmw) TEXTMETRICW2A(lptmw)
-	#define TEXTMETRICT2OLE(lptma) TEXTMETRICA2W(lptma)
-	#define BSTR2TBSTR(bstr) AfxBSTR2ABSTR(bstr)
-#endif
-
-#ifdef _UNICODE
-	#define T2A W2A
-	#define A2T A2W
-	#define T2W(x)  (x)
-	#define W2T(x)  (x)
-#else
-	#define T2W A2W
-	#define W2T W2A
-	#define T2A(x)  (x)
-	#define A2T(x)  (x)
-#endif
-
-#endif //__AFXDISP_H__
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1056,3 +780,7 @@ LPSTR AFXAPI AfxTaskStringW2A(LPCWSTR lpw);
 #endif // __AFXPRIV_H__
 
 /////////////////////////////////////////////////////////////////////////////
+
+#ifndef __AFXPRIV2_H__
+#include <afxpriv2.h>
+#endif

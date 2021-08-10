@@ -1,0 +1,11 @@
+USEUNIT("mainfrm.cpp");
+USEUNIT("oldbars.cpp");
+USEUNIT("globals.cpp");
+USEUNIT("oldbadoc.cpp");
+USEUNIT("oldbavw.cpp");
+USEUNIT("statbar.cpp");
+USEUNIT("toolbar.cpp");
+USEUNIT("stdafx.cpp");
+USERC("oldbars.rc");
+
+#define WinMain

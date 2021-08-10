@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -20,7 +21,7 @@
 /*---------------------------------------------------------------------*
 
 Name            _mbschr - Scans a string for the first occurrence of
-			  a given character.
+                          a given character.
 
 Usage           unsigned char *_mbschr(const unsigned char *str,
                                        unsigned int c);
@@ -29,7 +30,7 @@ Prototype in    mbstring.h
 
 Description     _mbschr scans stirng s and returns a pointer for
                 the first occurrence of the character c in s.
-              
+
                 The null-terminator is considered to be part of
                 the string, for example;
 

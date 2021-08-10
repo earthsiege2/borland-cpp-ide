@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -27,13 +27,10 @@ static char THIS_FILE[] = __FILE__;
 BOOL CReflectorWnd::Create(const CRect& rect, HWND hWndParent)
 {
 	// make sure the default window class is registered
-	if (!AfxDeferRegisterClass(AFX_WND_REG))
-		return FALSE;
-
-	static const TCHAR szAfxWnd[] = AFX_WND;
-	return CreateEx(0, szAfxWnd, NULL, WS_CHILD | WS_CLIPSIBLINGS,
-		rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
-		hWndParent, 0);
+	VERIFY(AfxDeferRegisterClass(AFX_WNDOLECONTROL_REG));
+	return CreateEx(0, AFX_WNDOLECONTROL, NULL,
+		WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect.left, rect.top,
+		rect.right - rect.left, rect.bottom - rect.top, hWndParent, 0);
 }
 
 void CReflectorWnd::PostNcDestroy()
@@ -76,11 +73,6 @@ LRESULT CReflectorWnd::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 		break;
-
-	case WM_SIZE:
-		if (m_pCtrl != NULL)
-			m_pCtrl->MoveWindow(0, 0, LOWORD(lParam), HIWORD(lParam));
-		break;
 	}
 
 	return CWnd::WindowProc(uMsg, wParam, lParam);
@@ -121,7 +113,7 @@ LRESULT CParkingWnd::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_MEASUREITEM:
-		m_idMap.Lookup(HIWORD(wParam), (void*&)hWndSource);
+		m_idMap.Lookup((void*)(DWORD)HIWORD(wParam), (void*&)hWndSource);
 		break;
 
 	case WM_DELETEITEM:
@@ -136,17 +128,17 @@ LRESULT CParkingWnd::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		switch (LOWORD(wParam))
 		{
 		case WM_CREATE:
-			m_idMap.SetAt(HIWORD(wParam), (HWND)lParam);
+			m_idMap.SetAt((void*)(DWORD)HIWORD(wParam), (HWND)lParam);
 			hWndSource = (HWND)lParam;
 			break;
 
 		case WM_DESTROY:
-			m_idMap.RemoveKey(HIWORD(wParam));
+			m_idMap.RemoveKey((void*)(DWORD)HIWORD(wParam));
 			hWndSource = (HWND)lParam;
 			break;
 
 		default:
-			m_idMap.Lookup(HIWORD(wParam), (void*&)hWndSource);
+			m_idMap.Lookup((void*)(DWORD)HIWORD(wParam), (void*&)hWndSource);
 			break;
 		}
 	}

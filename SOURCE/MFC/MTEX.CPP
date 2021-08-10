@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -115,7 +115,9 @@ BOOL CSingleLock::Unlock()
 	ASSERT(m_pObject != NULL);
 	if (m_bAcquired)
 		m_bAcquired = !m_pObject->Unlock();
-	return m_bAcquired;
+
+	// successfully unlocking means it isn't acquired
+	return !m_bAcquired;
 }
 
 BOOL CSingleLock::Unlock(LONG lCount, LPLONG lpPrevCount /* = NULL */)
@@ -123,6 +125,8 @@ BOOL CSingleLock::Unlock(LONG lCount, LPLONG lpPrevCount /* = NULL */)
 	ASSERT(m_pObject != NULL);
 	if (m_bAcquired)
 		m_bAcquired = !m_pObject->Unlock(lCount, lpPrevCount);
+
+	// successfully unlocking means it isn't acquired
 	return !m_bAcquired;
 }
 
@@ -138,8 +142,8 @@ CMultiLock::CMultiLock(CSyncObject* pObjects[], DWORD dwCount,
 	m_ppObjectArray = pObjects;
 	m_dwCount = dwCount;
 
-	// as an optimization, skip alloacating array if
-	// we can use a small, predeallocated bunch of handles
+	// as an optimization, skip allocating array if
+	// we can use a small, preallocated bunch of handles
 
 	if (m_dwCount > _countof(m_hPreallocated))
 	{
@@ -174,7 +178,10 @@ CMultiLock::~CMultiLock()
 {
 	Unlock();
 	if (m_pHandleArray != m_hPreallocated)
+	{
+		delete[] m_bLockedArray;
 		delete[] m_pHandleArray;
+	}
 }
 
 DWORD CMultiLock::Lock(DWORD dwTimeOut /* = INFINITE */,
@@ -212,6 +219,25 @@ BOOL CMultiLock::Unlock()
 			m_bLockedArray[i] = !m_ppObjectArray[i]->Unlock();
 	}
 	return TRUE;
+}
+
+BOOL CMultiLock::Unlock(LONG lCount, LPLONG lpPrevCount /* =NULL */)
+{
+	BOOL bGotOne = FALSE;
+	for (DWORD i=0; i < m_dwCount; i++)
+	{
+		if (m_bLockedArray[i])
+		{
+			CSemaphore* pSemaphore = STATIC_DOWNCAST(CSemaphore, m_ppObjectArray[i]);
+			if (pSemaphore != NULL)
+			{
+				bGotOne = TRUE;
+				m_bLockedArray[i] = !m_ppObjectArray[i]->Unlock(lCount, lpPrevCount);
+			}
+		}
+	}
+
+	return bGotOne;
 }
 
 #ifdef AFX_INIT_SEG

@@ -1,0 +1,18 @@
+LIBRARY MSSHLSTF
+EXPORTS
+
+    CleanupTrap                              = 'MSSHLSTF.DLL'.*
+    DontShowFrameInitially                   = 'MSSHLSTF.DLL'.*
+    FRestoreCursor                           = 'MSSHLSTF.DLL'.*
+    FSetAbout                                = 'MSSHLSTF.DLL'.*
+    FSetBitmap                               = 'MSSHLSTF.DLL'.*
+    FSetSymbolSubst                          = 'MSSHLSTF.DLL'.*
+    FSetSymbolSubsym                         = 'MSSHLSTF.DLL'.*
+    FSetSymbolValue                          = 'MSSHLSTF.DLL'.*
+    FrameWndProc                             = 'MSSHLSTF.DLL'.*
+    HSetup                                   = 'MSSHLSTF.DLL'.*
+    HShowWaitCursor                          = 'MSSHLSTF.DLL'.*
+    HinstFrame                               = 'MSSHLSTF.DLL'.*
+    HwndFrame                                = 'MSSHLSTF.DLL'.*
+    InitializeFrame                          = 'MSSHLSTF.DLL'.*
+    TerminateFrame                           = 'MSSHLSTF.DLL'.*

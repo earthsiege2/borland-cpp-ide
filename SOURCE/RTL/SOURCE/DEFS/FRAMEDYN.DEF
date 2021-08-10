@@ -1,0 +1,4 @@
+LIBRARY FRAMEDYN
+EXPORTS
+
+    DoCmd                                    = 'FRAMEDYN.DLL'._DoCmd@16

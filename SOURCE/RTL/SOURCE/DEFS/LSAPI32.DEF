@@ -1,0 +1,13 @@
+LIBRARY LSAPI32
+EXPORTS
+
+    LSEnumProviders                          = 'LSAPI32.DLL'.*
+    LSFreeHandle                             = 'LSAPI32.DLL'.*
+    LSGetMessage                             = 'LSAPI32.DLL'.*
+    LSInstall                                = 'LSAPI32.DLL'.*
+    LSLicenseUnitsGet                        = 'LSAPI32.DLL'.*
+    LSLicenseUnitsSet                        = 'LSAPI32.DLL'.*
+    LSQuery                                  = 'LSAPI32.DLL'.*
+    LSRelease                                = 'LSAPI32.DLL'.*
+    LSRequest                                = 'LSAPI32.DLL'.*
+    LSUpdate                                 = 'LSAPI32.DLL'.*

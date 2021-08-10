@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -41,7 +41,7 @@ CLIPFORMAT AFXAPI _AfxRegisterClipFormat(REFCLSID clsid)
 
 CLIPFORMAT AFXAPI _AfxGetClipboardFormatConvertVBX()
 {
-	static CLIPFORMAT _cfConvertVBX = 0;
+	static CLIPFORMAT _cfConvertVBX;
 	if (_cfConvertVBX == 0)
 		_cfConvertVBX = _AfxRegisterClipFormat(CLSID_ConvertVBX);
 	ASSERT(_cfConvertVBX != NULL);
@@ -50,7 +50,7 @@ CLIPFORMAT AFXAPI _AfxGetClipboardFormatConvertVBX()
 
 CLIPFORMAT AFXAPI _AfxGetClipboardFormatPersistPropset()
 {
-	static CLIPFORMAT _cfPersistPropset = 0;
+	static CLIPFORMAT _cfPersistPropset;
 	if (_cfPersistPropset == 0)
 		_cfPersistPropset = _AfxRegisterClipFormat(CLSID_PersistPropset);
 	ASSERT(_cfPersistPropset != NULL);
@@ -103,27 +103,47 @@ STDMETHODIMP COleControl::XDataObject::GetData(LPFORMATETC pformatetcIn,
 	LPSTGMEDIUM pmedium )
 {
 	METHOD_PROLOGUE_EX_(COleControl, DataObject)
-	return pThis->m_dataSource.m_xDataObject.GetData(pformatetcIn, pmedium);
+
+	CControlDataSource* pDataSource = pThis->GetDataSource();
+	if (pDataSource == NULL)
+		return E_OUTOFMEMORY;
+
+	return pDataSource->m_xDataObject.GetData(pformatetcIn, pmedium);
 }
 
 STDMETHODIMP COleControl::XDataObject::GetDataHere(LPFORMATETC pformatetc,
 	LPSTGMEDIUM pmedium )
 {
 	METHOD_PROLOGUE_EX_(COleControl, DataObject)
-	return pThis->m_dataSource.m_xDataObject.GetDataHere(pformatetc, pmedium);
+
+	CControlDataSource* pDataSource = pThis->GetDataSource();
+	if (pDataSource == NULL)
+		return E_OUTOFMEMORY;
+
+	return pDataSource->m_xDataObject.GetDataHere(pformatetc, pmedium);
 }
 
 STDMETHODIMP COleControl::XDataObject::QueryGetData(LPFORMATETC pformatetc )
 {
 	METHOD_PROLOGUE_EX_(COleControl, DataObject)
-	return pThis->m_dataSource.m_xDataObject.QueryGetData(pformatetc);
+
+	CControlDataSource* pDataSource = pThis->GetDataSource();
+	if (pDataSource == NULL)
+		return E_OUTOFMEMORY;
+
+	return pDataSource->m_xDataObject.QueryGetData(pformatetc);
 }
 
 STDMETHODIMP COleControl::XDataObject::GetCanonicalFormatEtc(
 	LPFORMATETC pformatetc, LPFORMATETC pformatetcOut)
 {
 	METHOD_PROLOGUE_EX_(COleControl, DataObject)
-	return pThis->m_dataSource.m_xDataObject.GetCanonicalFormatEtc(pformatetc,
+
+	CControlDataSource* pDataSource = pThis->GetDataSource();
+	if (pDataSource == NULL)
+		return E_OUTOFMEMORY;
+
+	return pDataSource->m_xDataObject.GetCanonicalFormatEtc(pformatetc,
 		pformatetcOut);
 }
 
@@ -131,15 +151,24 @@ STDMETHODIMP COleControl::XDataObject::SetData(LPFORMATETC pformatetc,
 	STGMEDIUM * pmedium, BOOL fRelease)
 {
 	METHOD_PROLOGUE_EX_(COleControl, DataObject)
-	return pThis->m_dataSource.m_xDataObject.SetData(pformatetc, pmedium,
-		fRelease);
+
+	CControlDataSource* pDataSource = pThis->GetDataSource();
+	if (pDataSource == NULL)
+		return E_OUTOFMEMORY;
+
+	return pDataSource->m_xDataObject.SetData(pformatetc, pmedium, fRelease);
 }
 
 STDMETHODIMP COleControl::XDataObject::EnumFormatEtc(DWORD dwDirection,
 	LPENUMFORMATETC* ppenumFormatEtc)
 {
 	METHOD_PROLOGUE_EX_(COleControl, DataObject)
-	return pThis->m_dataSource.m_xDataObject.EnumFormatEtc(dwDirection,
+
+	CControlDataSource* pDataSource = pThis->GetDataSource();
+	if (pDataSource == NULL)
+		return E_OUTOFMEMORY;
+
+	return pDataSource->m_xDataObject.EnumFormatEtc(dwDirection,
 		ppenumFormatEtc);
 }
 
@@ -188,14 +217,17 @@ STDMETHODIMP COleControl::XDataObject::EnumDAdvise(
 /////////////////////////////////////////////////////////////////////////////
 // COleControl::CControlDataSource
 
+COleControl::CControlDataSource::CControlDataSource(COleControl* pCtrl) :
+	m_pCtrl(pCtrl)
+{
+	m_nGrowBy = 4;  // By default, control puts 4 entries in cache.
+}
+
 BOOL COleControl::CControlDataSource::OnRenderGlobalData(
 	LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal)
 {
 	ASSERT_VALID(this);
-	COleControl* pCtrl = (COleControl*)
-		((BYTE*)this - offsetof(COleControl, m_dataSource));
-
-	return pCtrl->OnRenderGlobalData(lpFormatEtc, phGlobal);
+	return m_pCtrl->OnRenderGlobalData(lpFormatEtc, phGlobal);
 	// Note: COleDataSource has no implementation
 }
 
@@ -203,10 +235,7 @@ BOOL COleControl::CControlDataSource::OnRenderFileData(
 	LPFORMATETC lpFormatEtc, CFile* pFile)
 {
 	ASSERT_VALID(this);
-	COleControl* pCtrl = (COleControl*)
-		((BYTE*)this - offsetof(COleControl, m_dataSource));
-
-	return pCtrl->OnRenderFileData(lpFormatEtc, pFile);
+	return m_pCtrl->OnRenderFileData(lpFormatEtc, pFile);
 	// Note: COleDataSource has no implementation
 }
 
@@ -214,10 +243,7 @@ BOOL COleControl::CControlDataSource::OnRenderData(
 	LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium)
 {
 	ASSERT_VALID(this);
-	COleControl* pCtrl = (COleControl*)
-		((BYTE*)this - offsetof(COleControl, m_dataSource));
-
-	if (pCtrl->OnRenderData(lpFormatEtc, lpStgMedium))
+	if (m_pCtrl->OnRenderData(lpFormatEtc, lpStgMedium))
 		return TRUE;
 
 	return COleDataSource::OnRenderData(lpFormatEtc, lpStgMedium);
@@ -227,10 +253,7 @@ BOOL COleControl::CControlDataSource::OnSetData(LPFORMATETC lpFormatEtc,
 	LPSTGMEDIUM lpStgMedium, BOOL bRelease)
 {
 	ASSERT_VALID(this);
-	COleControl* pCtrl = (COleControl*)
-		((BYTE*)this - offsetof(COleControl, m_dataSource));
-
-	return pCtrl->OnSetData(lpFormatEtc, lpStgMedium, bRelease);
+	return m_pCtrl->OnSetData(lpFormatEtc, lpStgMedium, bRelease);
 	// Note: COleDataSource has no implementation
 }
 
@@ -241,8 +264,8 @@ BOOL COleControl::OnRenderGlobalData(LPFORMATETC lpFormatEtc,
 	HGLOBAL* phGlobal)
 {
 #ifndef _DEBUG
-	UNUSED(lpFormatEtc); // unused in retail builds
-	UNUSED(phGlobal);    // unused in retail builds
+	UNUSED(lpFormatEtc); // unused in release builds
+	UNUSED(phGlobal);    // unused in release builds
 #endif
 
 	ASSERT_VALID(this);
@@ -255,8 +278,8 @@ BOOL COleControl::OnRenderGlobalData(LPFORMATETC lpFormatEtc,
 BOOL COleControl::OnRenderFileData(LPFORMATETC lpFormatEtc, CFile* pFile)
 {
 #ifndef _DEBUG
-	UNUSED(lpFormatEtc); // unused in retail builds
-	UNUSED(pFile);       // unused in retail builds
+	UNUSED(lpFormatEtc); // unused in release builds
+	UNUSED(pFile);       // unused in release builds
 #endif
 
 	ASSERT_VALID(this);
@@ -313,6 +336,26 @@ BOOL COleControl::OnSetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium,
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// COleControl::GetDataSource
+
+COleControl::CControlDataSource* COleControl::GetDataSource()
+{
+	TRY
+	{
+		if (m_pDataSource == NULL)
+		{
+			AFX_MANAGE_STATE(m_pModuleState);
+			m_pDataSource = new CControlDataSource(this);
+			ASSERT(m_pDataSource != NULL);
+			SetInitialDataFormats();
+		}
+	}
+	END_TRY
+
+	return m_pDataSource;
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // COleControl::SetInitialDataFormats
 
 void COleControl::SetInitialDataFormats()
@@ -324,7 +367,7 @@ void COleControl::SetInitialDataFormats()
 	formatEtc.dwAspect = DVASPECT_CONTENT;
 	formatEtc.lindex = -1;
 	formatEtc.tymed = TYMED_MFPICT;
-	m_dataSource.DelayRenderData(0, &formatEtc);
+	m_pDataSource->DelayRenderData(0, &formatEtc);
 
 	// by default a COleControl supports persistent propset format
 	// (GetData or SetData)
@@ -333,13 +376,13 @@ void COleControl::SetInitialDataFormats()
 	formatEtc.dwAspect = DVASPECT_CONTENT;
 	formatEtc.lindex = -1;
 	formatEtc.tymed = TYMED_ISTREAM | TYMED_ISTORAGE;
-	m_dataSource.DelayRenderData(0, &formatEtc);
-	m_dataSource.DelaySetData(0, &formatEtc);
+	m_pDataSource->DelayRenderData(0, &formatEtc);
+	m_pDataSource->DelaySetData(0, &formatEtc);
 
 	// by default a COleControl supports VBX conversion propset format
 	// (SetData only)
 	formatEtc.cfFormat = _AfxGetClipboardFormatConvertVBX();
-	m_dataSource.DelaySetData(0, &formatEtc);
+	m_pDataSource->DelaySetData(0, &formatEtc);
 }
 
 

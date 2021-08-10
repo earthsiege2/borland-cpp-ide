@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,7 +22,6 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 // Page Setup dialog
 
@@ -179,12 +178,11 @@ UINT CALLBACK CPageSetupDialog::PaintHookProc(HWND hWnd, UINT message, WPARAM wP
 	}
 	return 0;
 }
-#endif // !_MAC
 
 /////////////////////////////////////////////////////////////////////////////
 // Print/Print Setup dialog
 
-BEGIN_MESSAGE_MAP(CPrintDialog, CDialog)
+BEGIN_MESSAGE_MAP(CPrintDialog, CCommonDialog)
 	//{{AFX_MSG_MAP(CPrintDialog)
 	ON_COMMAND(psh1, OnPrintSetup) // print setup button when print is displayed
 	//}}AFX_MSG_MAP
@@ -197,11 +195,13 @@ CPrintDialog::CPrintDialog(BOOL bPrintSetupOnly,
 	memset(&m_pdActual, 0, sizeof(m_pdActual));
 
 	m_pd.lStructSize = sizeof(m_pdActual);
-	m_pd.Flags = (dwFlags | PD_ENABLEPRINTHOOK | PD_ENABLESETUPHOOK);
+	m_pd.Flags = dwFlags;
 	if (!afxData.bWin4 && AfxHelpEnabled())
-		m_pd.Flags |= PD_SHOWHELP;
-	m_pd.lpfnPrintHook = (COMMDLGPROC)_AfxCommDlgProc;
-	m_pd.lpfnSetupHook = (COMMDLGPROC)_AfxCommDlgProc;
+	{
+		m_pd.Flags |= PD_SHOWHELP | PD_ENABLEPRINTHOOK | PD_ENABLESETUPHOOK;
+		m_pd.lpfnPrintHook = (COMMDLGPROC)_AfxCommDlgProc;
+		m_pd.lpfnSetupHook = (COMMDLGPROC)_AfxCommDlgProc;
+	}
 
 	if (bPrintSetupOnly)
 	{
@@ -258,10 +258,6 @@ void CPrintDialog::OnPrintSetup()
 int CPrintDialog::DoModal()
 {
 	ASSERT_VALID(this);
-	ASSERT(m_pd.Flags & PD_ENABLEPRINTHOOK);
-	ASSERT(m_pd.Flags & PD_ENABLESETUPHOOK);
-	ASSERT(m_pd.lpfnPrintHook != NULL); // can still be a user hook
-	ASSERT(m_pd.lpfnSetupHook != NULL); // can still be a user hook
 
 	m_pd.hwndOwner = PreModal();
 	int nResult = ::PrintDlg(&m_pd);
@@ -394,8 +390,6 @@ HDC AFXAPI AfxCreateDC(HGLOBAL hDevNames, HGLOBAL hDevMode)
 #endif
 
 IMPLEMENT_DYNAMIC(CPrintDialog, CDialog)
-#ifndef _MAC
 IMPLEMENT_DYNAMIC(CPageSetupDialog, CDialog)
-#endif
 
 ////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -26,6 +26,7 @@ _AFXCOLL_INLINE BYTE CByteArray::GetAt(int nIndex) const
 _AFXCOLL_INLINE void CByteArray::SetAt(int nIndex, BYTE newElement)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		m_pData[nIndex] = newElement; }
+
 _AFXCOLL_INLINE BYTE& CByteArray::ElementAt(int nIndex)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		return m_pData[nIndex]; }
@@ -37,6 +38,7 @@ _AFXCOLL_INLINE int CByteArray::Add(BYTE newElement)
 	{ int nIndex = m_nSize;
 		SetAtGrow(nIndex, newElement);
 		return nIndex; }
+
 _AFXCOLL_INLINE BYTE CByteArray::operator[](int nIndex) const
 	{ return GetAt(nIndex); }
 _AFXCOLL_INLINE BYTE& CByteArray::operator[](int nIndex)
@@ -57,6 +59,7 @@ _AFXCOLL_INLINE WORD CWordArray::GetAt(int nIndex) const
 _AFXCOLL_INLINE void CWordArray::SetAt(int nIndex, WORD newElement)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		m_pData[nIndex] = newElement; }
+
 _AFXCOLL_INLINE WORD& CWordArray::ElementAt(int nIndex)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		return m_pData[nIndex]; }
@@ -68,6 +71,7 @@ _AFXCOLL_INLINE int CWordArray::Add(WORD newElement)
 	{ int nIndex = m_nSize;
 		SetAtGrow(nIndex, newElement);
 		return nIndex; }
+
 _AFXCOLL_INLINE WORD CWordArray::operator[](int nIndex) const
 	{ return GetAt(nIndex); }
 _AFXCOLL_INLINE WORD& CWordArray::operator[](int nIndex)
@@ -88,6 +92,7 @@ _AFXCOLL_INLINE DWORD CDWordArray::GetAt(int nIndex) const
 _AFXCOLL_INLINE void CDWordArray::SetAt(int nIndex, DWORD newElement)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		m_pData[nIndex] = newElement; }
+
 _AFXCOLL_INLINE DWORD& CDWordArray::ElementAt(int nIndex)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		return m_pData[nIndex]; }
@@ -99,6 +104,7 @@ _AFXCOLL_INLINE int CDWordArray::Add(DWORD newElement)
 	{ int nIndex = m_nSize;
 		SetAtGrow(nIndex, newElement);
 		return nIndex; }
+
 _AFXCOLL_INLINE DWORD CDWordArray::operator[](int nIndex) const
 	{ return GetAt(nIndex); }
 _AFXCOLL_INLINE DWORD& CDWordArray::operator[](int nIndex)
@@ -119,6 +125,7 @@ _AFXCOLL_INLINE UINT CUIntArray::GetAt(int nIndex) const
 _AFXCOLL_INLINE void CUIntArray::SetAt(int nIndex, UINT newElement)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		m_pData[nIndex] = newElement; }
+
 _AFXCOLL_INLINE UINT& CUIntArray::ElementAt(int nIndex)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		return m_pData[nIndex]; }
@@ -130,6 +137,7 @@ _AFXCOLL_INLINE int CUIntArray::Add(UINT newElement)
 	{ int nIndex = m_nSize;
 		SetAtGrow(nIndex, newElement);
 		return nIndex; }
+
 _AFXCOLL_INLINE UINT CUIntArray::operator[](int nIndex) const
 	{ return GetAt(nIndex); }
 _AFXCOLL_INLINE UINT& CUIntArray::operator[](int nIndex)
@@ -150,6 +158,7 @@ _AFXCOLL_INLINE void* CPtrArray::GetAt(int nIndex) const
 _AFXCOLL_INLINE void CPtrArray::SetAt(int nIndex, void* newElement)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		m_pData[nIndex] = newElement; }
+
 _AFXCOLL_INLINE void*& CPtrArray::ElementAt(int nIndex)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		return m_pData[nIndex]; }
@@ -161,6 +170,7 @@ _AFXCOLL_INLINE int CPtrArray::Add(void* newElement)
 	{ int nIndex = m_nSize;
 		SetAtGrow(nIndex, newElement);
 		return nIndex; }
+
 _AFXCOLL_INLINE void* CPtrArray::operator[](int nIndex) const
 	{ return GetAt(nIndex); }
 _AFXCOLL_INLINE void*& CPtrArray::operator[](int nIndex)
@@ -181,6 +191,7 @@ _AFXCOLL_INLINE CObject* CObArray::GetAt(int nIndex) const
 _AFXCOLL_INLINE void CObArray::SetAt(int nIndex, CObject* newElement)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		m_pData[nIndex] = newElement; }
+
 _AFXCOLL_INLINE CObject*& CObArray::ElementAt(int nIndex)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		return m_pData[nIndex]; }
@@ -192,6 +203,7 @@ _AFXCOLL_INLINE int CObArray::Add(CObject* newElement)
 	{ int nIndex = m_nSize;
 		SetAtGrow(nIndex, newElement);
 		return nIndex; }
+
 _AFXCOLL_INLINE CObject* CObArray::operator[](int nIndex) const
 	{ return GetAt(nIndex); }
 _AFXCOLL_INLINE CObject*& CObArray::operator[](int nIndex)
@@ -212,6 +224,11 @@ _AFXCOLL_INLINE CString CStringArray::GetAt(int nIndex) const
 _AFXCOLL_INLINE void CStringArray::SetAt(int nIndex, LPCTSTR newElement)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		m_pData[nIndex] = newElement; }
+
+_AFXCOLL_INLINE void CStringArray::SetAt(int nIndex, const CString& newElement)
+	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
+		m_pData[nIndex] = newElement; }
+
 _AFXCOLL_INLINE CString& CStringArray::ElementAt(int nIndex)
 	{ ASSERT(nIndex >= 0 && nIndex < m_nSize);
 		return m_pData[nIndex]; }
@@ -223,6 +240,12 @@ _AFXCOLL_INLINE int CStringArray::Add(LPCTSTR newElement)
 	{ int nIndex = m_nSize;
 		SetAtGrow(nIndex, newElement);
 		return nIndex; }
+
+_AFXCOLL_INLINE int CStringArray::Add(const CString& newElement)
+	{ int nIndex = m_nSize;
+		SetAtGrow(nIndex, newElement);
+		return nIndex; }
+
 _AFXCOLL_INLINE CString CStringArray::operator[](int nIndex) const
 	{ return GetAt(nIndex); }
 _AFXCOLL_INLINE CString& CStringArray::operator[](int nIndex)
@@ -285,6 +308,7 @@ _AFXCOLL_INLINE void CPtrList::SetAt(POSITION pos, void* newElement)
 		pNode->data = newElement; }
 
 
+
 ////////////////////////////////////////////////////////////////////////////
 
 _AFXCOLL_INLINE int CObList::GetCount() const
@@ -341,6 +365,7 @@ _AFXCOLL_INLINE void CObList::SetAt(POSITION pos, CObject* newElement)
 		pNode->data = newElement; }
 
 
+
 ////////////////////////////////////////////////////////////////////////////
 
 _AFXCOLL_INLINE int CStringList::GetCount() const
@@ -395,6 +420,12 @@ _AFXCOLL_INLINE void CStringList::SetAt(POSITION pos, LPCTSTR newElement)
 	{ CNode* pNode = (CNode*) pos;
 		ASSERT(AfxIsValidAddress(pNode, sizeof(CNode)));
 		pNode->data = newElement; }
+
+_AFXCOLL_INLINE void CStringList::SetAt(POSITION pos, const CString& newElement)
+	{ CNode* pNode = (CNode*) pos;
+		ASSERT(AfxIsValidAddress(pNode, sizeof(CNode)));
+		pNode->data = newElement; }
+
 
 
 ////////////////////////////////////////////////////////////////////////////

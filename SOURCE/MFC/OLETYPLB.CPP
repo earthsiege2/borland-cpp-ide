@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -74,12 +74,7 @@ HRESULT CCmdTarget::GetTypeInfoOfGuid(LCID lcid, REFGUID guid,
 				TCHAR szPath[_MAX_PATH];
 				GetModuleFileName(AfxGetInstanceHandle(), szPath, _MAX_PATH);
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-            T2COLE(szPath);
-				if (FAILED(LoadTypeLib((LPCWSTR)pBAfxConv, &pTypeLib)))
-#else    // __BORLANDC__
 				if (FAILED(LoadTypeLib(T2COLE(szPath), &pTypeLib)))
-#endif   // __BORLANDC__
 					pTypeLib = NULL;
 			}
 
@@ -103,71 +98,68 @@ HRESULT CCmdTarget::GetTypeInfoOfGuid(LCID lcid, REFGUID guid,
 /////////////////////////////////////////////////////////////////////////////
 // AfxGetTypeLibCache
 
-CTypeLibCache* AFXAPI AfxGetTypeLibCache(const GUID* ptlid)
+CTypeLibCache* AFXAPI AfxGetTypeLibCache(const GUID* pTypeLibID)
 {
-	CMapPtrToPtr* pMap = AfxGetExtraDataMap();
-	ASSERT_VALID(pMap);
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	ASSERT(pModuleState != NULL);
 
-	AfxLockGlobals(CRIT_TYPELIBCACHE);
+	if (pModuleState->m_pTypeLibCacheMap == NULL)
+	{
+		const GUID* pCachedTypeLibID = pModuleState->m_typeLibCache.m_pTypeLibID;
 
+		if (pCachedTypeLibID == NULL)
+		{
+			// Cache not initialized yet; initialize it now
+			pModuleState->m_typeLibCache.m_pTypeLibID = pTypeLibID;
+			return &pModuleState->m_typeLibCache;
+		}
+		else if (pCachedTypeLibID == pTypeLibID)
+		{
+			// This is the cache we need; return it
+			return &pModuleState->m_typeLibCache;
+		}
+		else
+		{
+			// Another cache is needed; initialize the map
+			pModuleState->m_pTypeLibCacheMap = new CTypeLibCacheMap;
+			pModuleState->m_pTypeLibCacheMap->SetAt(
+				(void*)(const void*)pModuleState->m_typeLibCache.m_pTypeLibID,
+				&pModuleState->m_typeLibCache);
+
+			// FALL THRU
+		}
+	}
+
+	ASSERT(pModuleState->m_pTypeLibCacheMap != NULL);
+
+	// Try to locate cache in the map
 	CTypeLibCache* pCache;
-	if (!pMap->Lookup((void*)(const void*) ptlid, (void*&) pCache))
-		pCache = new CTypeLibCache(ptlid);  // Adds itself to extra map
-	
-	AfxUnlockGlobals(CRIT_TYPELIBCACHE);
+	if (!pModuleState->m_pTypeLibCacheMap->Lookup((void*)(const void*)pTypeLibID,
+		(void*&)pCache))
+	{
+		// Create new cache and add it to the map
+		pCache = new CTypeLibCache;
+		pCache->m_pTypeLibID = pTypeLibID;
+		pModuleState->m_pTypeLibCacheMap->SetAt((void*)(const void*)pTypeLibID, pCache);
+	}
 
+	ASSERT(pCache != NULL);
+	ASSERT(pCache->m_pTypeLibID == pTypeLibID);
 	return pCache;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CTypeLibCache
-
-CTypeLibCache::CTypeLibCache(const GUID* ptlid)
-{
-	m_ptlid = ptlid;
-	m_lcid = (LCID)-1;
-	m_ptlib = NULL;
-	m_guidInfo = GUID_NULL;
-	m_ptinfo = NULL;
-	m_cRef = 0;
-
-	CMapPtrToPtr* pMap = AfxGetExtraDataMap();
-	ASSERT_VALID(pMap);
-
-#ifdef _DEBUG
-	BOOL bEnable = AfxEnableMemoryTracking(FALSE);
-#endif
-	pMap->SetAt((void*)(const void*) m_ptlid, this);
-#ifdef _DEBUG
-	AfxEnableMemoryTracking(bEnable);
-#endif
-}
-
-CTypeLibCache::~CTypeLibCache()
-{
-	RELEASE(m_ptinfo);
-	RELEASE(m_ptlib);
-
-	CMapPtrToPtr* pMap = AfxGetExtraDataMap();
-	ASSERT_VALID(pMap);
-
-	pMap->RemoveKey((void*)(const void*) m_ptlid);
-}
+// (Note: CTypeLibCache::Unlock is implemented in afxstate.cpp)
 
 void CTypeLibCache::Lock()
 {
 	ASSERT(m_cRef >= 0);
+
+	if (m_cRef == 0)
+		m_lcid = (LCID)-1;
+
 	InterlockedIncrement(&m_cRef);
-}
-
-void CTypeLibCache::Unlock()
-{
-	ASSERT(m_cRef > 0);
-
-	if (InterlockedDecrement(&m_cRef) == 0)
-	{
-		delete this;
-	}
 }
 
 BOOL CTypeLibCache::Lookup(LCID lcid, LPTYPELIB* pptlib)
@@ -202,7 +194,8 @@ void CTypeLibCache::Cache(LCID lcid, LPTYPELIB ptlib)
 BOOL CTypeLibCache::LookupTypeInfo(LCID lcid, REFGUID guid,
 	LPTYPEINFO* pptinfo)
 {
-	if ((m_lcid != -1) && (m_lcid == lcid) && IsEqualGUID(m_guidInfo, guid))
+	if ((m_lcid != -1) && (m_lcid == lcid) && (m_ptinfo != NULL) &&
+		IsEqualGUID(m_guidInfo, guid))
 	{
 		ASSERT(m_ptlib != NULL);
 		ASSERT(m_ptinfo != NULL);

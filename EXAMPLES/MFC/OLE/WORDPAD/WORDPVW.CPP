@@ -1,7 +1,7 @@
 // wordpvw.cpp : implementation of the CWordPadView class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -74,7 +74,7 @@ BOOL CParaFormat::operator==(PARAFORMAT& pf)
 
 IMPLEMENT_DYNCREATE(CWordPadView, CRichEditView)
 
-//WM_WININICHANGE -- default printer might have changed
+//WM_SETTINGCHANGE -- default printer might have changed
 //WM_FONTCHANGE -- pool of fonts changed
 //WM_DEVMODECHANGE -- printer settings changes
 
@@ -116,7 +116,7 @@ BEGIN_MESSAGE_MAP(CWordPadView, CRichEditView)
 	ON_COMMAND(ID_PEN_TAB, OnPenTab)
 	ON_WM_PALETTECHANGED()
 	ON_WM_QUERYNEWPALETTE()
-	ON_WM_WININICHANGE()
+	ON_WM_SETTINGCHANGE()
 	//}}AFX_MSG_MAP
 	// Standard printing commands
 	ON_COMMAND(ID_INSERT_BULLET, CRichEditView::OnBullet)
@@ -462,7 +462,7 @@ void CWordPadView::GetDefaultFont(CCharFormat& cf, UINT nFontNameID)
 	cf.bCharSet = 0;
 	cf.bPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
 	ASSERT(strDefFont.GetLength() < LF_FACESIZE);
-	lstrcpynA(cf.szFaceName, T2A(strDefFont), LF_FACESIZE);
+	lstrcpynA(cf.szFaceName, T2A((LPTSTR) (LPCTSTR) strDefFont), LF_FACESIZE);
 	cf.dwMask |= CFM_FACE;
 }
 
@@ -829,9 +829,9 @@ BOOL CWordPadView::OnQueryNewPalette()
 	return CRichEditView::OnQueryNewPalette();
 }
 
-void CWordPadView::OnWinIniChange(LPCTSTR lpszSection) 
+void CWordPadView::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
-	CRichEditView::OnWinIniChange(lpszSection);
+	CRichEditView::OnSettingChange(uFlags, lpszSection);
 	//printer might have changed
 	if (!m_bInPrint)
 	{

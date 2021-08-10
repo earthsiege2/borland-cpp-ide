@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP(CMDIFrameWnd, CFrameWnd)
 	ON_COMMAND(ID_WINDOW_NEW, OnWindowNew)
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
+	ON_WM_MENUCHAR()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -78,11 +79,8 @@ BOOL CMDIFrameWnd::OnCmdMsg(UINT nID, int nCode, void* pExtra,
 	// pump through active child FIRST
 	if (pActiveChild != NULL)
 	{
-		_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
-		CFrameWnd* pOldRoutingFrame = pThreadState->m_pRoutingFrame;
-		BOOL bResult = pActiveChild->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
-		pThreadState->m_pRoutingFrame = pOldRoutingFrame;
-		if (bResult)
+		CPushRoutingFrame push(this);
+		if (pActiveChild->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 			return TRUE;
 	}
 
@@ -111,8 +109,12 @@ LRESULT CMDIFrameWnd::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 
 	if (lParam != 0)
 	{
-		AfxGetApp()->WinHelp(lParam);
-		return TRUE;
+		CWinApp* pApp = AfxGetApp();
+		if (pApp != NULL)
+		{
+			AfxGetApp()->WinHelp(lParam);
+			return TRUE;
+		}
 	}
 	return FALSE;
 }
@@ -120,7 +122,6 @@ LRESULT CMDIFrameWnd::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 BOOL CMDIFrameWnd::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext*)
 {
 	CMenu* pMenu = NULL;
-#ifndef _MAC
 	if (m_hMenuDefault == NULL)
 	{
 		// default implementation for MFC V1 backward compatibility
@@ -139,7 +140,7 @@ BOOL CMDIFrameWnd::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext*)
 		pMenu = pMenu->GetSubMenu(iMenu);
 		ASSERT(pMenu != NULL);
 	}
-#endif
+
 	return CreateClient(lpcs, pMenu);
 }
 
@@ -181,7 +182,8 @@ BOOL CMDIFrameWnd::CreateClient(LPCREATESTRUCT lpCreateStruct,
 		dwStyle, 0, 0, 0, 0, m_hWnd, (HMENU)AFX_IDW_PANE_FIRST,
 		AfxGetInstanceHandle(), (LPVOID)&ccs)) == NULL)
 	{
-		TRACE0("Warning: CMDIFrameWnd::OnCreateClient: failed to create MDICLIENT.\n");
+		TRACE(_T("Warning: CMDIFrameWnd::OnCreateClient: failed to create MDICLIENT.")
+			_T(" GetLastError returns 0x%8.8X\n"), ::GetLastError());
 		return FALSE;
 	}
 	// Move it to the top of z-order
@@ -271,9 +273,7 @@ BOOL CMDIFrameWnd::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if (cs.lpszClass == NULL)
 	{
-		if (!AfxDeferRegisterClass(AFX_WNDMDIFRAME_REG))
-			return FALSE;
-
+		VERIFY(AfxDeferRegisterClass(AFX_WNDMDIFRAME_REG));
 		cs.lpszClass = _afxWndMDIFrame;
 	}
 	return TRUE;
@@ -315,6 +315,15 @@ void CMDIFrameWnd::OnSize(UINT nType, int, int)
 		RecalcLayout();
 }
 
+LRESULT CMDIFrameWnd::OnMenuChar(UINT nChar, UINT, CMenu*)
+{
+	// do not call Default() for Alt+(-) when in print preview mode
+	if (m_lpfnCloseProc != NULL && nChar == (UINT)'-')
+		return 0;
+	else
+		return Default();
+}
+
 CMDIChildWnd* CMDIFrameWnd::MDIGetActive(BOOL* pbMaximized) const
 {
 	// check first for MDI client window not created
@@ -342,6 +351,38 @@ CMDIChildWnd* CMDIFrameWnd::MDIGetActive(BOOL* pbMaximized) const
 			*pbMaximized = FALSE;
 	}
 	return pWnd;
+}
+
+
+CMDIChildWnd* CMDIFrameWnd::CreateNewChild(CRuntimeClass* pClass,
+		UINT nResources, HMENU hMenu /* = NULL */, HACCEL hAccel /* = NULL */)
+{
+	ASSERT(pClass != NULL);
+	CMDIChildWnd* pFrame = (CMDIChildWnd*) pClass->CreateObject();
+	ASSERT_KINDOF(CMDIChildWnd, pFrame);
+
+	// load the frame
+	CCreateContext context;
+	context.m_pCurrentFrame = this;
+
+	if (!pFrame->LoadFrame(nResources,
+			WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL, &context))
+	{
+		TRACE0("Couldn't load frame window.\n");
+		delete pFrame;
+		return NULL;
+	}
+
+	CString strFullString, strTitle;
+	if (strFullString.LoadString(nResources))
+		AfxExtractSubString(strTitle, strFullString, CDocTemplate::docName);
+
+	// set the handles and redraw the frame and parent
+	pFrame->SetHandles(hMenu, hAccel);
+	pFrame->SetTitle(strTitle);
+	pFrame->InitialUpdateFrame(NULL, TRUE);
+
+	return pFrame;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -379,6 +420,8 @@ BEGIN_MESSAGE_MAP(CMDIChildWnd, CFrameWnd)
 	ON_WM_NCCREATE()
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
+	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
+	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -539,22 +582,6 @@ BOOL CMDIChildWnd::Create(LPCTSTR lpszClassName,
 		::SendMessage(pParentWnd->m_hWndMDIClient, WM_MDIREFRESHMENU, 0, 0);
 	}
 
-#ifdef _MAC
-	// force the size box to be visible
-	ModifyStyleEx(0, WS_EX_FORCESIZEBOX);
-
-	// if the window is already visible, we need to redraw the area covered by
-	// the sizebox so that the sizebox is drawn
-	if (IsWindowVisible())
-	{
-		RECT rc;
-		GetClientRect(&rc);
-		rc.left = rc.right - (GetSystemMetrics(SM_CXVSCROLL) - 1);
-		rc.top = rc.bottom - (GetSystemMetrics(SM_CYHSCROLL) - 1);
-		RedrawWindow(&rc, NULL, RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW);
-	}
-#endif
-
 	ASSERT(hWnd == m_hWnd);
 	return TRUE;
 }
@@ -705,6 +732,23 @@ int CMDIChildWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message
 	return nResult;
 }
 
+BOOL CMDIChildWnd::OnToolTipText(UINT msg, NMHDR* pNMHDR, LRESULT* pResult)
+{
+	ASSERT(pNMHDR->code == TTN_NEEDTEXTA || pNMHDR->code == TTN_NEEDTEXTW);
+	UNUSED(pNMHDR);
+
+	// check to see if the message is going directly to this window or not
+	const MSG* pMsg = GetCurrentMessage();
+	if (pMsg->hwnd != m_hWnd)
+	{
+		// let top level frame handle this for us
+		return FALSE;
+	}
+
+	// otherwise, handle it ourselves
+	return CFrameWnd::OnToolTipText(msg, pNMHDR, pResult);
+}
+
 void CMDIChildWnd::ActivateFrame(int nCmdShow)
 {
 	BOOL bVisibleThen = (GetStyle() & WS_VISIBLE) != 0;
@@ -775,6 +819,12 @@ void CMDIChildWnd::ActivateFrame(int nCmdShow)
 		OnMDIActivate(TRUE, this, NULL);
 		ASSERT(!m_bPseudoInactive); // should get set in OnMDIActivate!
 	}
+}
+
+void CMDIChildWnd::SetHandles(HMENU hMenu, HACCEL hAccel)
+{
+	m_hMenuShared = hMenu;
+	m_hAccelTable = hAccel;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -884,10 +934,13 @@ void CMDIChildWnd::OnUpdateFrameTitle(BOOL bAddToTitle)
 		return;     // leave child window alone!
 
 	CDocument* pDocument = GetActiveDocument();
-	if (bAddToTitle && pDocument != NULL)
+	if (bAddToTitle)
 	{
 		TCHAR szText[256+_MAX_PATH];
-		lstrcpy(szText, pDocument->GetTitle());
+		if (pDocument == NULL)
+			lstrcpy(szText, m_strTitle);
+		else
+			lstrcpy(szText, pDocument->GetTitle());
 		if (m_nWindow > 0)
 			wsprintf(szText + lstrlen(szText), _T(":%d"), m_nWindow);
 
@@ -1010,7 +1063,7 @@ void CMDIFrameWnd::OnUpdateFrameTitle(BOOL bAddToTitle)
 		return;
 #endif
 
-	CMDIChildWnd* pActiveChild;
+	CMDIChildWnd* pActiveChild = NULL;
 	CDocument* pDocument = GetActiveDocument();
 	if (bAddToTitle &&
 	  (pActiveChild = MDIGetActive()) != NULL &&
@@ -1019,7 +1072,18 @@ void CMDIFrameWnd::OnUpdateFrameTitle(BOOL bAddToTitle)
 	   (pDocument = pActiveChild->GetActiveDocument()) != NULL))
 		UpdateFrameTitleForDocument(pDocument->GetTitle());
 	else
-		UpdateFrameTitleForDocument(NULL);
+	{
+		LPCTSTR lpstrTitle = NULL;
+		CString strTitle;
+
+		if (pActiveChild != NULL)
+		{
+			strTitle = pActiveChild->GetTitle();
+			if (!strTitle.IsEmpty())
+				lpstrTitle = strTitle;
+		}
+		UpdateFrameTitleForDocument(lpstrTitle);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////

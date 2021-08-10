@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,6 +28,7 @@ END
 /////////////////////////////////////////////////////////////////////////////
 // OLE Control Resources
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
@@ -154,9 +155,11 @@ BEGIN
 	AFX_IDS_COLOR_ACTIVEBORDER "활성 경계선"
 	AFX_IDS_COLOR_INACTIVEBORDER "비활성 경계선"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
 STRINGTABLE DISCARDABLE
 BEGIN
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_WNDFRAME  "윈도우 프레임"
 	AFX_IDS_COLOR_SCROLLBARS "이동줄"
 	AFX_IDS_COLOR_BTNFACE   "버튼 정면"
@@ -171,6 +174,7 @@ BEGIN
 	AFX_IDS_ITALIC          "기울임꼴"
 	AFX_IDS_BOLDITALIC      "굵은 기울임꼴"
 	AFX_IDS_SAMPLETEXT      "AaBbYyZz"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_DISPLAYSTRING_FONT "(글꼴)"
 	AFX_IDS_DISPLAYSTRING_COLOR "(색)"
 END
@@ -178,18 +182,22 @@ END
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_DISPLAYSTRING_PICTURE "(그림 - %s)"
-	AFX_IDS_PICTUREFILTER   "모든 그림 종류|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|비트맵 (*.bmp;*.dib)|*.bmp;*.dib|아이콘/커서 (*.ico;*.cur)|*.ico| 메타파일(*.wmf;*.emf)|*.emf;*.wmf|모든 파일 (*.*)|*.*||"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
+	AFX_IDS_PICTUREFILTER   "모든 그림 종류|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|비트맵 (*.bmp;*.dib)|*.bmp;*.dib|아이콘/커서 (*.ico;*.cur)|*.ico;*.cur| 메타파일(*.wmf;*.emf)|*.wmf;*.emf|모든 파일 (*.*)|*.*||"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_PICTYPE_UNKNOWN "미지의"
 	AFX_IDS_PICTYPE_NONE    "없음"
 	AFX_IDS_PICTYPE_BITMAP  "비트맵"
 	AFX_IDS_PICTYPE_METAFILE "메타파일"
 	AFX_IDS_PICTYPE_ICON    "아이콘"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_PPG       "색 특성 페이지"
 	AFX_IDS_COLOR_PPG_CAPTION "색"
 	AFX_IDS_FONT_PPG        "글꼴 특성 페이지"
 	AFX_IDS_FONT_PPG_CAPTION "글꼴"
 	AFX_IDS_PICTURE_PPG     "그림 특성 페이지"
 	AFX_IDS_PICTURE_PPG_CAPTION "그림"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_BORDERSTYLE_0   "0 - 없음"
 	AFX_IDS_BORDERSTYLE_1   "1 - 고정 단일"
 END
@@ -200,6 +208,7 @@ BEGIN
 	AFX_IDS_VERB_PROPERTIES "특성(&P)..."
 END
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_PICTURECANTOPEN "그림 파일 %1을(를) 열 수 없음. 이 파일이 없거나 읽을 수 없음."
@@ -213,7 +222,9 @@ STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_PICTUREBROWSETITLE "그림 찾아보기"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
+#ifndef _AFX_NO_CTLERROR_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_E_ILLEGALFUNCTIONCALL "잘못된 기능 호출"
@@ -267,6 +278,7 @@ BEGIN
 	AFX_IDP_E_SEARCHTEXTNOTFOUND "검색 텍스트를 찾을 수 없음"
 	AFX_IDP_E_REPLACEMENTSTOOLONG "대체 텍스트가 너무 길음"
 END
+#endif //!_AFX_NO_CTLERROR_RESOURCES
 
 #endif //!_AFXDLL
 #endif //__AFXOLECL_RC__

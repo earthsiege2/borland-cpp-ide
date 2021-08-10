@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -77,6 +77,12 @@ BEGIN
 		"Aggiornamento o cancellazione non riusciti."
 	AFX_IDP_SQL_DYNAMIC_CURSOR_NOT_SUPPORTED
 		"Cursore dinamico non supportato dal driver ODBC."
+	AFX_IDP_SQL_FIELD_NOT_FOUND
+		"Nome di campo o indice non valido."
+	AFX_IDP_SQL_BOOKMARKS_NOT_SUPPORTED
+		"Segnalibro non supportato per il driver ODBC."
+	AFX_IDP_SQL_BOOKMARKS_NOT_ENABLED
+		"Segnalibro non attivo sul recordset."
 	AFX_IDP_DAO_ENGINE_INITIALIZATION
 		"Non è possibile inizializzare il motore del db DAO/Jet."
 	AFX_IDP_DAO_DFX_BIND

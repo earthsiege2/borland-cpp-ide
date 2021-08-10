@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -155,7 +155,7 @@ STDMETHODIMP COlePropertiesDialog::XOleUIObjInfo::GetObjectInfo(
 	if (lplpszLabel != NULL)
 	{
 		TCHAR szFormatLink[128];
-		AfxLoadString(AFX_IDS_PASTELINKEDTYPE, szFormatLink);
+		AfxLoadString(AFX_IDS_PASTELINKEDTYPE, szFormatLink, _countof(szFormatLink));
 		TCHAR szFormatObj[] = _T("%s");
 		LPTSTR lpszFormat = bIsLink ? szFormatLink : szFormatObj;
 		CString strType;

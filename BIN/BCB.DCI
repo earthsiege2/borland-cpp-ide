@@ -1,0 +1,121 @@
+[switchs | switch statement]
+switch (|)
+{
+  case : ;
+  break;
+  case : ;
+  break;
+}
+
+[switche | switch statement (with default)]
+switch (|)
+{
+  case : ;
+  break;
+  case : ;
+  break;
+  default: ;
+}
+
+[classf | class declaration (all parts)]
+class T| : public T
+{
+private:
+
+protected:
+
+public:
+
+__published:
+
+};
+
+[classd | class declaration (no parts)]
+class T| : public T
+{
+};
+
+[classc | class declaration (with constructor/desctructor)]
+class T| : public T
+{
+private:
+
+protected:
+
+public:
+  __fastcall T();
+  __fastcall ~T();
+__published:
+
+};
+
+[struct | structure declaration]
+struct |
+{
+};
+
+[templ | template class declaration]
+template <class T>
+class |
+{
+};
+
+[fors | for (no opening/closing braces)]
+for (|; ;)
+
+[forb | for statement]
+for (|; ;)
+{
+
+}
+
+[function | function declaration]
+|()
+{
+
+}
+
+[ifs | if (no opening/closing braces)]
+if (|)
+
+[ifb | if statement]
+if (|)
+{
+
+}
+
+[ife | if (no opening/closing braces) else (no opening/closing braces)]
+if (|)
+
+else
+
+[ifeb | if else]
+if (|)
+{
+
+}
+else
+{
+
+}
+
+
+[trye | try catch]
+try
+{
+  |
+}
+catch()
+{
+}
+
+[whileb | while statement]
+while (|)
+{
+
+}
+
+[whiles | while (no opening/closing braces)]
+while (|)
+
+

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -25,19 +25,19 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-static const UINT nMsgFindReplace = ::RegisterWindowMessage(FINDMSGSTRING);
+AFX_STATIC const UINT _afxMsgFindReplace = ::RegisterWindowMessage(FINDMSGSTRING);
 
 #ifdef _UNICODE
-static HFONT hUnicodeFont;
-struct _AFX_EDITVIEW_TERM
+
+AFX_STATIC_DATA HFONT _afxUnicodeFont = 0;
+
+void AFX_CDECL AfxEditviewTerm()
 {
-	~_AFX_EDITVIEW_TERM()
-	{
-		AfxDeleteObject((HGDIOBJ*)&hUnicodeFont);
-	}
-};
-static const _AFX_EDITVIEW_TERM editviewTerm;
-#endif
+	AfxDeleteObject((HGDIOBJ*)&_afxUnicodeFont);
+}
+char _afxEditviewTerm = (char)atexit(&AfxEditviewTerm);
+
+#endif //_UNICODE
 
 BEGIN_MESSAGE_MAP(CEditView, CCtrlView)
 	//{{AFX_MSG_MAP(CEditView)
@@ -65,7 +65,7 @@ BEGIN_MESSAGE_MAP(CEditView, CCtrlView)
 	ON_WM_DESTROY()
 	//}}AFX_MSG_MAP
 	// Special registered message for Find and Replace
-	ON_REGISTERED_MESSAGE(nMsgFindReplace, OnFindReplaceCmd)
+	ON_REGISTERED_MESSAGE(_afxMsgFindReplace, OnFindReplaceCmd)
 	// Standard Print commands (print only - not preview)
 	ON_COMMAND(ID_FILE_PRINT, CCtrlView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, CCtrlView::OnFilePrint)
@@ -78,11 +78,7 @@ const AFX_DATADEF DWORD CEditView::dwStyleDefault =
 	ES_MULTILINE | ES_NOHIDESEL;
 
 // Operating system specific maximum buffer limit
-#ifndef _MAC
-	const AFX_DATADEF UINT CEditView::nMaxSize = 1024U*1024U-1;
-#else
-	const AFX_DATADEF UINT CEditView::nMaxSize = 32U*1024U-1;
-#endif
+const AFX_DATADEF UINT CEditView::nMaxSize = 1024U*1024U-1;
 
 /////////////////////////////////////////////////////////////////////////////
 // _AFX_EDIT_STATE
@@ -106,9 +102,7 @@ EXTERN_PROCESS_LOCAL(_AFX_EDIT_STATE, _afxEditState)
 // pass a NULL style because dwStyleDefault stays for backward compatibility
 CEditView::CEditView() : CCtrlView(_T("EDIT"), NULL)
 {
-#ifndef _MAC
 	m_nTabStops = 8*4;  // default 8 character positions
-#endif
 	m_hPrinterFont = NULL;
 	m_hMirrorFont = NULL;
 	m_pShadowBuffer = NULL;
@@ -118,7 +112,7 @@ CEditView::CEditView() : CCtrlView(_T("EDIT"), NULL)
 CEditView::~CEditView()
 {
 	ASSERT(m_hWnd == NULL);
-	ASSERT(m_pShadowBuffer == NULL || afxData.bWin32s);
+	ASSERT(m_pShadowBuffer == NULL || afxData.bWin95);
 	delete[] m_pShadowBuffer;
 }
 
@@ -135,7 +129,7 @@ int CEditView::OnCreate(LPCREATESTRUCT lpcs)
 
 #ifdef _UNICODE
 	AfxLockGlobals(CRIT_EDITVIEW);
-	if (hUnicodeFont == NULL)
+	if (_afxUnicodeFont == NULL)
 	{
 		// get unicode font same size as system font
 		HFONT hSystemFont = (HFONT)GetStockObject(SYSTEM_FONT);
@@ -151,20 +145,18 @@ int CEditView::OnCreate(LPCREATESTRUCT lpcs)
 		AfxCustomLogFont(AFX_IDS_UNICODE_FONT, &logFont);
 
 		// attempt to create the font
-		hUnicodeFont = ::CreateFontIndirect(&logFont);
-		if (hUnicodeFont == NULL)
+		_afxUnicodeFont = ::CreateFontIndirect(&logFont);
+		if (_afxUnicodeFont == NULL)
 			TRACE1("Unable to create unicode font '%s'.\n", logFont.lfFaceName);
 	}
 	AfxUnlockGlobals(CRIT_EDITVIEW);
 	// set unicode font instead of using system font
-	if (hUnicodeFont != NULL)
-		SendMessage(WM_SETFONT, (WPARAM)hUnicodeFont);
+	if (_afxUnicodeFont != NULL)
+		SendMessage(WM_SETFONT, (WPARAM)_afxUnicodeFont);
 #endif
 
 	GetEditCtrl().LimitText(nMaxSize);
-#ifndef _MAC
 	GetEditCtrl().SetTabStops(m_nTabStops);
-#endif
 
 	return 0;
 }
@@ -250,7 +242,7 @@ void CEditView::ReadFromArchive(CArchive& ar, UINT nLen)
 	// Replace the editing edit buffer with the newly loaded data
 	lpszText[nLen] = '\0';
 #ifndef _UNICODE
-	if (afxData.bWin32s)
+	if (afxData.bWin95)
 	{
 		// set the text with SetWindowText, then free
 		BOOL bResult = ::SetWindowText(m_hWnd, lpszText);
@@ -327,42 +319,35 @@ void CEditView::SerializeRaw(CArchive& ar)
 /////////////////////////////////////////////////////////////////////////////
 // CEditView Printing Helpers
 
-static UINT AFXAPI EndOfLine(LPCTSTR lpszText, UINT nLen, UINT nIndex)
+AFX_STATIC UINT AFXAPI _AfxEndOfLine(LPCTSTR lpszText, UINT nLen, UINT nIndex)
 {
 	ASSERT(AfxIsValidAddress(lpszText, nLen, FALSE));
 	LPCTSTR lpsz = lpszText + nIndex;
 	LPCTSTR lpszStop = lpszText + nLen;
-#ifndef _MAC
 	while (lpsz < lpszStop && *lpsz != '\r')
-#else
-	while (lpsz < lpszStop && *lpsz != '\n')
-#endif
 		++lpsz;
 	return lpsz - lpszText;
 }
 
-static UINT AFXAPI NextLine(LPCTSTR lpszText, UINT nLen, UINT nIndex)
+AFX_STATIC UINT AFXAPI _AfxNextLine(LPCTSTR lpszText, UINT nLen, UINT nIndex)
 {
 	ASSERT(AfxIsValidAddress(lpszText, nLen, FALSE));
 	LPCTSTR lpsz = lpszText + nIndex;
 	LPCTSTR lpszStop = lpszText + nLen;
-#ifndef _MAC
 	while (lpsz < lpszStop && *lpsz == '\r')
 		++lpsz;
-#endif
 	if (lpsz < lpszStop && *lpsz == '\n')
 		++lpsz;
 	return lpsz - lpszText;
 }
 
-static UINT AFXAPI
-ClipLine(CDC* pDC, int aCharWidths[256], int cxLine, int nTabStop,
+AFX_STATIC UINT AFXAPI
+_AfxClipLine(CDC* pDC, int aCharWidths[256], int cxLine, int nTabStop,
 	LPCTSTR lpszText, UINT nIndex, UINT nIndexEnd)
 {
 	ASSERT_VALID(pDC);
 	ASSERT(nIndex < nIndexEnd);
 	ASSERT(AfxIsValidAddress(lpszText, nIndexEnd, FALSE));
-	UNUSED_ALWAYS(nTabStop);    // unused in Mac build
 
 	TEXTMETRIC tm;
 	::GetTextMetrics(pDC->m_hDC, &tm);
@@ -374,11 +359,9 @@ ClipLine(CDC* pDC, int aCharWidths[256], int cxLine, int nTabStop,
 	LPCTSTR lpsz = lpszStart;
 	while (lpsz < lpszStop)
 	{
-#ifndef _MAC
 		if (*lpsz == '\t')
 			cx += nTabStop - (cx % nTabStop);
 		else
-#endif
 		{
 #ifdef _UNICODE
 			if (*lpsz <= 0xFF)
@@ -401,11 +384,7 @@ ClipLine(CDC* pDC, int aCharWidths[256], int cxLine, int nTabStop,
 	}
 
 	// adjust for errors in the guess
-#ifndef _MAC
 	cx = pDC->GetTabbedTextExtent(lpszStart, lpsz-lpszStart, 1, &nTabStop).cx;
-#else
-	cx = pDC->GetTextExtent(lpszStart, lpsz-lpszStart).cx;
-#endif
 	if (cx > cxLine)
 	{
 		// remove characters until it fits
@@ -416,11 +395,7 @@ ClipLine(CDC* pDC, int aCharWidths[256], int cxLine, int nTabStop,
 				lpsz = _tcsdec(lpszStart, lpsz);
 			else
 				--lpsz;
-#ifndef _MAC
 			cx = pDC->GetTabbedTextExtent(lpszStart, lpsz-lpszStart, 1, &nTabStop).cx;
-#else
-			cx = pDC->GetTextExtent(lpszStart, lpsz-lpszStart).cx;
-#endif
 		} while (cx > cxLine);
 	}
 	else if (cx < cxLine)
@@ -430,11 +405,7 @@ ClipLine(CDC* pDC, int aCharWidths[256], int cxLine, int nTabStop,
 		{
 			lpsz = _tcsinc(lpsz);
 			ASSERT(lpsz <= lpszStop);
-#ifndef _MAC
 			cx = pDC->GetTabbedTextExtent(lpszStart, lpsz-lpszStart, 1, &nTabStop).cx;
-#else
-			cx = pDC->GetTextExtent(lpszStart, lpsz-lpszStart).cx;
-#endif
 			if (cx > cxLine)
 			{
 				if (_afxDBCS)
@@ -566,12 +537,8 @@ UINT CEditView::PrintInsideRect(CDC* pDC, RECT& rectLayout,
 	TEXTMETRIC tm;
 	pDC->GetTextMetrics(&tm);
 	int cyChar = tm.tmHeight + tm.tmExternalLeading;
-#ifndef _MAC
 	int nTabStop = m_nTabStops *
 		pDC->GetTabbedTextExtent(_T("\t"), 1, 0, NULL).cx / 8 / 4;
-#else
-	int nTabStop = pDC->GetTextExtent(_T("\t"), 1).cx;
-#endif
 	int aCharWidths[256];
 	pDC->GetCharWidth(0, 255, aCharWidths);
 
@@ -584,7 +551,7 @@ UINT CEditView::PrintInsideRect(CDC* pDC, RECT& rectLayout,
 
 	do
 	{
-		UINT nIndexEnd = EndOfLine(lpszText, nIndexStop, nIndex);
+		UINT nIndexEnd = _AfxEndOfLine(lpszText, nIndexStop, nIndex);
 		if (nIndex == nIndexEnd)
 		{
 			y += cyChar;
@@ -594,13 +561,13 @@ UINT CEditView::PrintInsideRect(CDC* pDC, RECT& rectLayout,
 			// word-wrap printing
 			do
 			{
-				UINT nIndexWrap = ClipLine(pDC, aCharWidths,
+				UINT nIndexWrap = _AfxClipLine(pDC, aCharWidths,
 					cx, nTabStop, lpszText, nIndex, nIndexEnd);
 				UINT nIndexWord = nIndexWrap;
 				if (nIndexWord != nIndexEnd)
 				{
 					while (nIndexWord > nIndex &&
-					  !isspace(lpszText[nIndexWord]))
+					  !_istspace(lpszText[nIndexWord]))
 					{
 						nIndexWord--;
 					}
@@ -610,18 +577,13 @@ UINT CEditView::PrintInsideRect(CDC* pDC, RECT& rectLayout,
 				CRect rect(rectLayout.left, y, rectLayout.right, y+cyChar);
 				if (!bLayoutOnly && pDC->RectVisible(rect))
 				{
-#ifndef _MAC
 					pDC->TabbedTextOut(rect.left, y,
 						(LPCTSTR)(lpszText+nIndex), nIndexWord-nIndex, 1,
 						&nTabStop, rect.left);
-#else
-					pDC->TextOut(rect.left, y,
-						(LPCTSTR)(lpszText+nIndex), nIndexWord-nIndex);
-#endif
 				}
 				y += cyChar;
 				nIndex = nIndexWord;
-				while (nIndex < nIndexEnd && isspace(lpszText[nIndex]))
+				while (nIndex < nIndexEnd && _istspace(lpszText[nIndex]))
 					nIndex++;
 			} while (nIndex < nIndexEnd && y+cyChar <= rectLayout.bottom);
 
@@ -633,7 +595,7 @@ UINT CEditView::PrintInsideRect(CDC* pDC, RECT& rectLayout,
 			CRect rect(rectLayout.left, y, rectLayout.right, y+cyChar);
 			if (!bLayoutOnly && pDC->RectVisible(rect))
 			{
-				UINT nIndexClip = ClipLine(pDC, aCharWidths, cx, nTabStop,
+				UINT nIndexClip = _AfxClipLine(pDC, aCharWidths, cx, nTabStop,
 					lpszText, nIndex, nIndexEnd);
 				if (nIndexClip < nIndexEnd)
 				{
@@ -641,18 +603,13 @@ UINT CEditView::PrintInsideRect(CDC* pDC, RECT& rectLayout,
 						nIndexClip++;
 					nIndexClip++;
 				}
-#ifndef _MAC
 				pDC->TabbedTextOut(rect.left, y,
 					(LPCTSTR)(lpszText+nIndex), nIndexClip-nIndex, 1,
 					&nTabStop, rect.left);
-#else
-				pDC->TextOut(rect.left, y,
-					(LPCTSTR)(lpszText+nIndex), nIndexClip-nIndex);
-#endif
 			}
 			y += cyChar;
 		}
-		nIndex = NextLine(lpszText, nIndexStop, nIndexEnd);
+		nIndex = _AfxNextLine(lpszText, nIndexStop, nIndexEnd);
 	}
 	while (nIndex < nIndexStop && y+cyChar <= rectLayout.bottom);
 
@@ -811,9 +768,7 @@ LRESULT CEditView::OnSetFont(WPARAM, LPARAM)
 {
 	ASSERT_VALID(this);
 	Default();
-#ifndef _MAC
 	GetEditCtrl().SetTabStops(m_nTabStops);
-#endif
 	ASSERT_VALID(this);
 	return 0;
 }
@@ -839,7 +794,7 @@ LPCTSTR CEditView::LockBuffer() const
 	ASSERT_VALID(this);
 	ASSERT(m_hWnd != NULL);
 #ifndef _UNICODE
-	if (afxData.bWin32s)
+	if (afxData.bWin95)
 	{
 		// under Win32s, it is necessary to maintain a shadow buffer
 		//  it is only updated when the control contents have been changed.
@@ -883,7 +838,7 @@ void CEditView::UnlockBuffer() const
 	ASSERT_VALID(this);
 	ASSERT(m_hWnd != NULL);
 #ifndef _UNICODE
-	if (afxData.bWin32s)
+	if (afxData.bWin95)
 		return;
 #endif
 	HLOCAL hLocal = GetEditCtrl().GetHandle();
@@ -909,7 +864,7 @@ void CEditView::GetSelectedText(CString& strResult) const
 	GetEditCtrl().GetSel(nStartChar, nEndChar);
 	ASSERT((UINT)nEndChar <= GetBufferLength());
 	LPCTSTR lpszText = ((CEditView*)this)->LockBuffer();
-	UINT nLen = EndOfLine(lpszText, nEndChar, nStartChar) - nStartChar;
+	UINT nLen = _AfxEndOfLine(lpszText, nEndChar, nStartChar) - nStartChar;
 	memcpy(strResult.GetBuffer(nLen), lpszText + nStartChar,
 		nLen * sizeof(TCHAR));
 	strResult.ReleaseBuffer(nLen);
@@ -1296,7 +1251,6 @@ void CEditView::OnTextNotFound(LPCTSTR)
 	MessageBeep(0);
 }
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 // CEditView Tab Stops
 
@@ -1308,7 +1262,6 @@ void CEditView::SetTabStops(int nTabStops)
 	Invalidate();
 	ASSERT_VALID(this);
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // CEditView diagnostics
@@ -1331,9 +1284,7 @@ void CEditView::Dump(CDumpContext& dc) const
 {
 	CCtrlView::Dump(dc);
 
-#ifndef _MAC
 	dc << "m_nTabStops = " << m_nTabStops;
-#endif
 	if (m_hPrinterFont != NULL)
 		dc << "\nm_hPrinterFont " << (UINT)m_hPrinterFont;
 	if (m_hMirrorFont != NULL)

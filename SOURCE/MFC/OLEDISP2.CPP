@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -30,23 +30,10 @@ HRESULT AFXAPI AfxGetClassIDFromString(LPCTSTR lpsz, LPCLSID lpClsID)
 	USES_CONVERSION;
 
 	HRESULT hr;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-	if (lpsz[0] == '{')
-   {
-      T2COLE(lpsz);
-		hr = CLSIDFromString((LPWSTR)pBAfxConv, lpClsID);
-   }
-	else
-   {
-      T2COLE(lpsz);
-		hr = CLSIDFromProgID((LPCWSTR)pBAfxConv, lpClsID);
-   }
-#else    // __BORLANDC__
 	if (lpsz[0] == '{')
 		hr = CLSIDFromString((LPOLESTR)T2COLE(lpsz), lpClsID);
 	else
 		hr = CLSIDFromProgID(T2COLE(lpsz), lpClsID);
-#endif   // __BORLANDC__
 	return hr;
 }
 
@@ -96,8 +83,14 @@ BOOL COleDispatchDriver::CreateDispatch(REFCLSID clsid, COleException* pError)
 
 	// create an instance of the object
 	LPUNKNOWN lpUnknown = NULL;
-	SCODE sc = CoCreateInstance(clsid, NULL, CLSCTX_ALL, IID_IUnknown,
-		(LPLP)&lpUnknown);
+	SCODE sc = CoCreateInstance(clsid, NULL, CLSCTX_ALL | CLSCTX_REMOTE_SERVER,
+		IID_IUnknown, (LPLP)&lpUnknown);
+	if (sc == E_INVALIDARG)
+	{
+		// may not support CLSCTX_REMOTE_SERVER, so try without
+		sc = CoCreateInstance(clsid, NULL, CLSCTX_ALL & ~CLSCTX_REMOTE_SERVER,
+			IID_IUnknown, (LPLP)&lpUnknown);
+	}
 	if (FAILED(sc))
 		goto Failed;
 
@@ -173,13 +166,6 @@ LPDISPATCH COleDispatchDriver::DetachDispatch()
 /////////////////////////////////////////////////////////////////////////////
 // COleDispatchDriver implementation
 
-#if defined(_68K_) || defined(_X86_)
-	#define DOUBLE_ARG  _AFX_DOUBLE
-#else
-	#define DOUBLE_ARG  double
-#endif
-
-
 void COleDispatchDriver::InvokeHelperV(DISPID dwDispID, WORD wFlags,
 	VARTYPE vtRet, void* pvRet, const BYTE* pbParamInfo, va_list argList)
 {
@@ -230,28 +216,23 @@ void COleDispatchDriver::InvokeHelperV(DISPID dwDispID, WORD wFlags,
 			}
 			switch (pArg->vt)
 			{
+			case VT_UI1:
+				pArg->bVal = va_arg(argList, BYTE);
+				break;
 			case VT_I2:
-#ifdef _MAC
-				pArg->iVal = (short)va_arg(argList, int);
-#else
 				pArg->iVal = va_arg(argList, short);
-#endif
 				break;
 			case VT_I4:
 				pArg->lVal = va_arg(argList, long);
 				break;
 			case VT_R4:
-				// Note: All float arguments to vararg functions are passed
-				//  as doubles instead.  Thats why they are passed as VT_R8
-				//  instead of VT_R4.
-				pArg->vt = VT_R8;
-				*(DOUBLE_ARG*)&pArg->dblVal = va_arg(argList, DOUBLE_ARG);
+				pArg->fltVal = (float)va_arg(argList, double);
 				break;
 			case VT_R8:
-				*(DOUBLE_ARG*)&pArg->dblVal = va_arg(argList, DOUBLE_ARG);
+				pArg->dblVal = va_arg(argList, double);
 				break;
 			case VT_DATE:
-				*(DOUBLE_ARG*)&pArg->date = va_arg(argList, DOUBLE_ARG);
+				pArg->date = va_arg(argList, DATE);
 				break;
 			case VT_CY:
 				pArg->cyVal = *va_arg(argList, CY*);
@@ -294,6 +275,9 @@ void COleDispatchDriver::InvokeHelperV(DISPID dwDispID, WORD wFlags,
 			case VT_I2|VT_BYREF:
 				pArg->piVal = va_arg(argList, short*);
 				break;
+			case VT_UI1|VT_BYREF:
+				pArg->pbVal = va_arg(argList, BYTE*);
+				break;
 			case VT_I4|VT_BYREF:
 				pArg->plVal = va_arg(argList, long*);
 				break;
@@ -321,13 +305,9 @@ void COleDispatchDriver::InvokeHelperV(DISPID dwDispID, WORD wFlags,
 			case VT_BOOL|VT_BYREF:
 				{
 					// coerce BOOL into VARIANT_BOOL
-					BOOL* pbool = va_arg(argList, BOOL*);
-#ifndef _MAC
-					*pbool = *pbool ? MAKELONG(-1, 0) : 0;
-#else
-					*pbool = *pbool ? MAKELONG(0, -1) : 0;
-#endif
-					pArg->pbool = (VARIANT_BOOL*)pbool;
+					BOOL* pboolVal = va_arg(argList, BOOL*);
+					*pboolVal = *pboolVal ? MAKELONG(-1, 0) : 0;
+					pArg->pboolVal = (VARIANT_BOOL*)pboolVal;
 				}
 				break;
 			case VT_VARIANT|VT_BYREF:
@@ -445,6 +425,9 @@ void COleDispatchDriver::InvokeHelperV(DISPID dwDispID, WORD wFlags,
 		// copy return value into return spot!
 		switch (vtRet)
 		{
+		case VT_UI1:
+			*(BYTE*)pvRet = vaResult.bVal;
+			break;
 		case VT_I2:
 			*(short*)pvRet = vaResult.iVal;
 			break;
@@ -511,9 +494,6 @@ void AFX_CDECL COleDispatchDriver::SetProperty(DISPID dwDispID, VARTYPE vtProp, 
 {
 	va_list argList;    // really only one arg, but...
 	va_start(argList, vtProp);
-#ifdef _MAC
-	argList -= 2;
-#endif
 
 	BYTE rgbParams[2];
 	if (vtProp & VT_BYREF)

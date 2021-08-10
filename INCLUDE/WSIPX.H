@@ -2,7 +2,7 @@
  *   wsipx.h
  *
  *   Microsoft Windows
- *   Copyright (C) Microsoft Corporation, 1992 - 1995.
+ *   Copyright (C) Microsoft Corporation, 1992-1999.
  *
  *   Windows Sockets include file for IPX/SPX.  This file contains all
  *   standardized IPX/SPX information.  Include this header file after
@@ -31,13 +31,11 @@
  */
 
 #ifndef _WSIPX_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSIPX_
-#pragma option -b
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <pshpack8.h>
-#pragma option -b
+#if _MSC_VER > 1000
+#pragma once
 #endif
 
 /*
@@ -61,12 +59,6 @@ typedef struct sockaddr_ipx {
 #define NSPROTO_SPX      1256
 #define NSPROTO_SPXII    1257
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <poppack.h>
-#pragma option -b
-#endif
-
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif
 

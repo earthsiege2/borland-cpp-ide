@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -40,8 +40,8 @@ COleMessageFilter::COleMessageFilter()
 	m_nBusyReply = SERVERCALL_RETRYLATER;
 		// effective only when m_nBusyCount != 0
 
-	m_nRetryReply = 10000;	// default is 10 sec
-	m_nTimeout = 8000;	// default is 8 sec
+	m_nRetryReply = 10000;  // default is 10 sec
+	m_nTimeout = 8000;  // default is 8 sec
 
 	m_bUnblocking = FALSE;
 		// TRUE to avoid re-entrancy when busy dialog is up
@@ -124,46 +124,38 @@ void COleMessageFilter::Revoke()
 #pragma code_seg(AFX_OLE4_SEG)
 #endif
 
-BOOL COleMessageFilter::OnMessagePending(const MSG* pMsg)
+BOOL COleMessageFilter::OnMessagePending(const MSG* /*pMsg*/)
 {
 	// By default we rely on OLE's default message handling for every message
 	//  except WM_PAINT messages.  WM_PAINT messages should not generate
 	//  out-going calls.
 
 	BOOL bEatMessage = FALSE;
-
-	switch (pMsg->message)
+	MSG msg;
+	while (::PeekMessage(&msg, NULL, WM_PAINT, WM_PAINT, PM_REMOVE|PM_NOYIELD))
 	{
-	case WM_PAINT:
-		DispatchMessage(pMsg);
 		bEatMessage = TRUE;
-		break;
-	}
-
-	if (bEatMessage)
-	{
-		MSG msg;
-		::PeekMessage(&msg, NULL, pMsg->message, pMsg->message,
-			PM_REMOVE|PM_NOYIELD);
+		DispatchMessage(&msg);
 	}
 	return bEatMessage;
 }
 
+AFX_STATIC_DATA const UINT _afxSignificantMsgs[] =
+{
+	WM_KEYDOWN, WM_SYSKEYDOWN,  WM_TIMER,
+	WM_LBUTTONDOWN, WM_RBUTTONDOWN, WM_MBUTTONDOWN,
+	WM_NCLBUTTONDOWN, WM_NCRBUTTONDOWN, WM_NCMBUTTONDOWN,
+	WM_LBUTTONDBLCLK, WM_RBUTTONDBLCLK, WM_MBUTTONDBLCLK,
+	WM_NCLBUTTONDBLCLK, WM_NCRBUTTONDBLCLK, WM_NCMBUTTONDBLCLK
+};
+
 BOOL COleMessageFilter::IsSignificantMessage(MSG*)
 {
 	// check for "significant" messages in the queue
-	UINT rgnMsgs[] =
-	{
-		WM_KEYDOWN, WM_SYSKEYDOWN,
-		WM_LBUTTONDOWN, WM_RBUTTONDOWN, WM_MBUTTONDOWN,
-		WM_NCLBUTTONDOWN, WM_NCRBUTTONDOWN, WM_NCMBUTTONDOWN,
-		WM_LBUTTONDBLCLK, WM_RBUTTONDBLCLK, WM_MBUTTONDBLCLK,
-		WM_NCLBUTTONDBLCLK, WM_NCRBUTTONDBLCLK, WM_NCMBUTTONDBLCLK
-	};
 	MSG msg;
-	for (int i = 0; i < _countof(rgnMsgs); i++)
+	for (int i = 0; i < _countof(_afxSignificantMsgs); i++)
 	{
-		if (::PeekMessage(&msg, NULL, rgnMsgs[i], rgnMsgs[i],
+		if (::PeekMessage(&msg, NULL, _afxSignificantMsgs[i], _afxSignificantMsgs[i],
 			PM_NOREMOVE|PM_NOYIELD))
 		{
 			if ((msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN) &&
@@ -338,12 +330,8 @@ STDMETHODIMP_(DWORD) COleMessageFilter::XMessageFilter::MessagePending(
 		return PENDINGMSG_WAITDEFPROCESS;
 
 	// allow application to process pending message
-	if (::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE|PM_NOYIELD) &&
-		pThis->OnMessagePending(&msg))
-	{
-		// app has processed the message (and removed it from the queue)
-		return PENDINGMSG_WAITNOPROCESS;
-	}
+	if (::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE|PM_NOYIELD))
+		pThis->OnMessagePending(&msg);
 
 	// by default we return pending MSG wait
 	return PENDINGMSG_WAITNOPROCESS;

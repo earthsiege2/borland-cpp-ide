@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -39,7 +39,6 @@ COleDropTarget::COleDropTarget()
 	static BOOL bInitialized;
 	if (!bInitialized)
 	{
-#ifndef _MAC
 		// get scroll metrics from win.ini
 		static const TCHAR szWindows[] = _T("windows");
 		static const TCHAR szScrollDelay[] = _T("DragScrollDelay");
@@ -50,11 +49,7 @@ COleDropTarget::COleDropTarget()
 		nScrollDelay = GetProfileInt(szWindows, szScrollDelay, DD_DEFSCROLLDELAY);
 		nScrollInterval = GetProfileInt(szWindows, szScrollInterval,
 			DD_DEFSCROLLINTERVAL);
-#else
-		nScrollInset = DD_DEFSCROLLINSET;
-		nScrollDelay = DD_DEFSCROLLDELAY;
-		nScrollInterval = DD_DEFSCROLLINTERVAL;
-#endif
+
 		// now initialized, no need to call Initialize any more
 		bInitialized = TRUE;
 	}
@@ -215,18 +210,10 @@ DROPEFFECT COleDropTarget::OnDragScroll(CWnd* pWnd, DWORD dwKeyState,
 
 	m_nTimerID = nTimerID;
 	// check for force link
-#ifndef _MAC
 	if ((dwKeyState & (MK_CONTROL|MK_SHIFT)) == (MK_CONTROL|MK_SHIFT))
-#else
-	if ((dwKeyState & (MK_OPTION|MK_SHIFT)) == (MK_OPTION|MK_SHIFT))
-#endif
 		dropEffect = DROPEFFECT_SCROLL|DROPEFFECT_LINK;
 	// check for force copy
-#ifndef _MAC
 	else if ((dwKeyState & MK_CONTROL) == MK_CONTROL)
-#else
-	else if ((dwKeyState & MK_OPTION) == MK_OPTION)
-#endif
 		dropEffect = DROPEFFECT_SCROLL|DROPEFFECT_COPY;
 	// check for force move
 	else if ((dwKeyState & MK_ALT) == MK_ALT ||
@@ -338,8 +325,8 @@ STDMETHODIMP COleDropTarget::XDropTarget::QueryInterface(
 }
 
 // helper to filter out invalid DROPEFFECTs
-static DROPEFFECT AFXAPI
-FilterDropEffect(DROPEFFECT dropEffect, DROPEFFECT dwEffects)
+AFX_STATIC DROPEFFECT AFXAPI
+_AfxFilterDropEffect(DROPEFFECT dropEffect, DROPEFFECT dwEffects)
 {
 	// return allowed dropEffect and DROPEFFECT_NONE
 	if ((dropEffect & dwEffects) != 0)
@@ -400,7 +387,7 @@ STDMETHODIMP COleDropTarget::XDropTarget::DragEnter(THIS_ LPDATAOBJECT lpDataObj
 			dropEffect = pThis->OnDragEnter(pWnd, &dataObject, dwKeyState,
 				point);
 		}
-		*pdwEffect = FilterDropEffect(dropEffect, *pdwEffect);
+		*pdwEffect = _AfxFilterDropEffect(dropEffect, *pdwEffect);
 		sc = S_OK;
 	}
 	END_TRY
@@ -435,7 +422,7 @@ STDMETHODIMP COleDropTarget::XDropTarget::DragOver(THIS_ DWORD dwKeyState,
 			dropEffect = pThis->OnDragOver(pWnd, &dataObject, dwKeyState,
 				point);
 		}
-		*pdwEffect = FilterDropEffect(dropEffect, *pdwEffect);
+		*pdwEffect = _AfxFilterDropEffect(dropEffect, *pdwEffect);
 		sc = S_OK;
 	}
 	END_TRY
@@ -489,7 +476,7 @@ STDMETHODIMP COleDropTarget::XDropTarget::Drop(THIS_ LPDATAOBJECT lpDataObject,
 		pWnd->ScreenToClient(&point);
 
 		// verify that drop is legal
-		DROPEFFECT dropEffect = FilterDropEffect(pThis->OnDragOver(pWnd,
+		DROPEFFECT dropEffect = _AfxFilterDropEffect(pThis->OnDragOver(pWnd,
 			&dataObject, dwKeyState, point), *pdwEffect);
 
 		// execute the drop (try OnDropEx then OnDrop for backward compatibility)

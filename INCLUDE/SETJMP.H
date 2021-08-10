@@ -5,25 +5,30 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.3  $ */
 
 #ifndef __SETJMP_H
 #define __SETJMP_H
+#define _INC_SETJMP  /* MSC Guard name */
 
 #if !defined(___DEFS_H)
 #include <_defs.h>
 #endif
 
 #ifdef __cplusplus
+  namespace std {
+#endif /* __cplusplus */
+
+#ifdef __cplusplus
 extern "C" {
 #endif
-
 
 #if !defined(RC_INVOKED)
 
@@ -34,38 +39,6 @@ extern "C" {
 #pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
-
-
-#if !defined(__FLAT__)
-
-typedef struct __jmp_buf {
-    unsigned    j_sp;
-    unsigned    j_ss;
-    unsigned    j_flag;
-    unsigned    j_cs;
-    unsigned    j_ip;
-    unsigned    j_bp;
-    unsigned    j_di;
-    unsigned    j_es;
-    unsigned    j_si;
-    unsigned    j_ds;
-
-#if !defined(__TINY__)
-    unsigned    j_excep;
-    unsigned    j_context;
-#endif  /* !__TINY__ */
-
-}   jmp_buf[1];
-
-#if !defined( _Windows )
-void    _CType longjmp(jmp_buf __jmpb, int __retval);
-int     _CType setjmp(jmp_buf __jmpb);
-#else
-void __far __pascal longjmp( struct __jmp_buf __far *__jmpb, int __retval );
-int __far __pascal setjmp( struct __jmp_buf __far *__jmpb);
-#endif
-
-#else    /* defined __FLAT__ */
 
 typedef struct __jmp_buf {
     unsigned    j_ebp;
@@ -81,12 +54,9 @@ typedef struct __jmp_buf {
 void    _RTLENTRYF _EXPFUNC longjmp(jmp_buf __jmpb, int __retval);
 int     _RTLENTRYF _EXPFUNC setjmp(jmp_buf __jmpb);
 
-#endif  /* __FLAT__ */
-
 #ifdef __cplusplus
 }
 #endif
-
 
 #if !defined(RC_INVOKED)
 
@@ -99,6 +69,15 @@ int     _RTLENTRYF _EXPFUNC setjmp(jmp_buf __jmpb);
 
 #endif  /* !RC_INVOKED */
 
+#ifdef __cplusplus
+} // std
+#endif /* __cplusplus */
 
 #endif  /* __SETJMP_H */
 
+#if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__SETJMP_H_USING_LIST)
+#define __SETJMP_H_USING_LIST
+     using std::jmp_buf;
+     using std::longjmp;
+     using std::setjmp;
+#endif /* __USING_CNAME__ */

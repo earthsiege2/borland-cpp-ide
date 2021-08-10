@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // MAPI implementation helpers and globals
 
-static BOOL _afxIsMailAvail = (BOOL)-1;    // start out not determined
+AFX_STATIC_DATA BOOL _afxIsMailAvail = (BOOL)-1;    // start out not determined
 
 /////////////////////////////////////////////////////////////////////////////
 // _AFX_MAIL_STATE

@@ -1,0 +1,7 @@
+:Base tasm.hlp>main
+:Title Turbo Assembler Help
+:Index Turbo Assembler Help=TASM.HLP
+
+;CNT section
+;============
+:INCLUDE TASM.TOC

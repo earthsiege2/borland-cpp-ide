@@ -1,38 +1,66 @@
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1995, 1997 by Borland International
+ *      Copyright (c) 1995, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.58  $ */
+
+/* $Revision:   9.21  $ */
 
 #if !defined(__TCHAR_H)
 #define __TCHAR_H
+#define _INC_TCHAR  /* MSC Guard name */
 
-#if !defined(__STDDEF_H)
-#include <stddef.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
-#endif
+/*
+    This file is parsed with a tool that will spit out a table of
+    function mappings for the online help.  The format is as follows:
 
-#if !defined(__STRING_H)
-#include <string.h>
+    Inside a single-line slash-star comment, there will be a command:
+
+    @+(col_name[,col]) ..descrip..   Define (start) current column block(s)
+    @-                               Stop the current block(s)
+    @:..descrip..                    Change description for the current block(s)
+    @!:portable_name                 Adds in a brute force entry with no equiv.
+    @!(portable_name,cur_col_name)   Adds in a brute force entry
+
+    The lines following these commands will then be processed:
+      #define portable_name cur_col_name
+      typedef cur_col_name portable_name
+
+    #defines that are macros (have parens) or are more than two words are
+    ignored.
+*/
+
+#if defined(__USING_CNAME__)
+#  undef __USING_CNAME__
+#  include <string.h>
+#  define __USING_CNAME__
+#else
+#  include <string.h>
 #endif
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-#if defined(_MBCS)
+#if defined(_MBCS) && !defined(__MBSTRING_H)
 #include <mbstring.h>
 #endif
 
 #if !defined(_UNICODE)
 
-/* Common functions between SBCS & MBCS */
+#ifdef __cplusplus
+namespace std {
+#endif
+
+/* @+(SBCS) Types */
+
+#if !defined(_MBCS)
 
 #ifndef __TCHAR_DEFINED
 typedef char            _TCHAR;
@@ -42,20 +70,14 @@ typedef char            _TXCHAR;
 typedef int             _TINT;
 #define __TCHAR_DEFINED
 #endif
+#endif /* _MBCS */
 
-#if !defined(__FLAT__)
-#define _tfdopen        fdopen
-#define _fputtchar      fputchar
-#define _fgettchar      fgetchar
-#define _tmktemp        mktemp
-#define _tunlink        unlink
-#define _ttempnam       tempnam
-#define _trmdir         rmdir
-#define _tmkdir         mkdir
-#define _tutime         utime
-#define _ltot           ltoa
-#define _tsopen         sopen
-#else
+#ifdef __cplusplus
+} // std
+#endif
+
+/* @: misc. functions */
+
 #define _tfdopen        _fdopen
 #define _fputtchar      _fputchar
 #define _fgettchar      _fgetchar
@@ -67,16 +89,15 @@ typedef int             _TINT;
 #define _tutime         _utime
 #define _ltot           _ltoa
 #define _tsopen         _sopen
-#endif
 
-/* program specific mappings*/
+/* @: program specific functions */
 
 #define _tmain          main
 #define _tWinMain       WinMain
 #define _tenviron       _environ
 #define _targv          _argv
 
-/*  Path / Environment  specific mappings  */
+/* @: path/environment specific functions */
 
 #define _tfullpath      _fullpath
 #define _tmakepath      _makepath
@@ -89,7 +110,7 @@ typedef int             _TINT;
 #define _tfnsplit       fnsplit
 #define _tfnmerge       fnmerge
 
-/* directory functions */
+/* @: directory functions */
 
 #define _topendir       opendir
 #define _treaddir       readdir
@@ -98,7 +119,7 @@ typedef int             _TINT;
 #define _tDIR           DIR
 #define _tdirent        dirent
 
-/* stdio functions   */
+/* @: stdio functions */
 
 #define _tpopen         _popen
 #define _tfsopen        _fsopen
@@ -107,7 +128,7 @@ typedef int             _TINT;
 #define _tperror        perror
 #define _ttmpnam        tmpnam
 
-/* Time functions     */
+/* @: time functions */
 
 #define _tstrdate       _strdate
 #define _tstrtime       _strtime
@@ -117,7 +138,7 @@ typedef int             _TINT;
 #define _ttzset         _tzset
 #define _ttzname        _tzname
 
-/*  I/O functions   */
+/* @: I/O functions */
 
 #define _taccess        access
 #define _tchmod         chmod
@@ -125,15 +146,25 @@ typedef int             _TINT;
 #define _trtl_creat     _rtl_creat
 #define _trtl_chmod     _rtl_chmod
 #define _tcreat         creat
+#define __tcreat        _creat
 #define _tfindfirst     findfirst
 #define _tfindnext      findnext
+#define _tfindclose     findclose
+#define __tfindfirsti64 _findfirsti64
+#define __tfindnexti64  _findnexti64
+#define __tfinddatai64_t _finddatai64_t
+#define __tfinddata_t   _finddata_t
+
+#define __tfindfirst    _findfirst
+#define __tfindnext     _findnext
 #define _topen          open
+#define __topen         _open
 #define _tremove        remove
 #define _trename        rename
 
 #define _tffblk         ffblk
 
-/* string conversion functions */
+/* @: string conversion functions */
 
 #define _ttof           atof
 #define _ttoi           atoi
@@ -149,7 +180,7 @@ typedef int             _TINT;
 #define _i64tot         _i64toa
 #define _ui64tot        _ui64toa
 
-/* string functions  */
+/* @: generic string functions  */
 
 #define _tcscat         strcat
 #define _tcscpy         strcpy
@@ -157,14 +188,14 @@ typedef int             _TINT;
 #define _tcslen         strlen
 #define _tcsdup         strdup
 
-/* directory functions */
+/* @: directory functions */
 
 #define _tchdir         chdir
 #define _tgetcurdir     getcurdir
 #define _tgetcwd        getcwd
 #define _tgetdcwd       _getdcwd
 
-/* Execute functions */
+/* @: process execution functions */
 
 #define _texecl     execl
 #define _texecle    execle
@@ -186,7 +217,7 @@ typedef int             _TINT;
 
 #define _tsystem    system
 
-/* Unformated I/O */
+/* @: unformated I/O */
 
 #define _fgettc         fgetc
 #define _fgetts         fgets
@@ -200,7 +231,7 @@ typedef int             _TINT;
 #define _putts          puts
 #define _ungettc        ungetc
 
-/* Formated I/O */
+/* @: formated I/O functions */
 
 #define _ftprintf       fprintf
 #define _tprintf        printf
@@ -208,52 +239,70 @@ typedef int             _TINT;
 #define _vtprintf       vprintf
 #define _vftprintf      vfprintf
 #define _vstprintf      vsprintf
+#define _sntprintf      snprintf
+#define _vsntprintf     vsnprintf
+#define __sntprintf     _snprintf       // MSC compat.
+#define __vsntprintf    _vsnprintf      // MSC compat.
+
 
 #define _tscanf         scanf
 #define _stscanf        sscanf
 #define _ftscanf        fscanf
-#define _stscanf        sscanf
 #define _vstscanf       vsscanf
 #define _vtscanf        vscanf
 #define _vftscanf       vfscanf
 
-/* Stat functions */
+/* @: stat functions */
 
 #define _tstat          _stat
 #define _tstati64       _stati64
 
-/* Setlocale functions */
+/* @: setlocale functions */
 
 #define _tsetlocale setlocale
 
-/* memory functions */
+/* @: memory functions */
 
 #define _tmemcpy        memcpy
 #define _tmemchr        memchr
 #define _tmemset        memset
 
-/* Generic Text macros */
+/* @: generic text macros */
+/* @!:__T */
+/* @!:_TEXT */
+/* @!:_T */
 
-#define __T(x)          x
-#define _TEXT(x)        __T(x)
-#define _T(x)           __T(x)
+#define __T(__x)          __x
+#define _TEXT(__x)        __T(__x)
+#define _T(__x)           __T(__x)
 #define _TEOF           EOF
 
 #if defined(_MBCS)
 
 /* ----------------- MBCS functions -------------------------- */
 
+#ifdef __cplusplus
+namespace std {
+#endif
+
+/* @+(MBCS) Types */
+
 #ifndef __TCHAR_DEFINED
 typedef char            _TCHAR;
 typedef signed char     _TSCHAR;
 typedef unsigned char   _TUCHAR;
 typedef unsigned char   _TXCHAR;
-typedef unsigned int    _TINT;
+/* typedef unsigned int    _TINT; */ /* HACK: for now */
+typedef int    _TINT;
 #define __TCHAR_DEFINED
 #endif
 
+#ifdef __cplusplus
+} // std
+#endif
+
 #ifdef _MBC_USE_MACROS
-/* string functions */
+/* @: string functions */
 
 #define _tcschr         _mbschr
 #define _tcscspn        _mbscspn
@@ -283,14 +332,14 @@ typedef unsigned int    _TINT;
 #define _tcsnicoll      _mbsnbicoll
 #define _tcsncicoll     _mbsnicoll
 
-/* logical-character mappings */
+/* @: logical-character functions */
 
 #define _tcsclen        _mbslen
 #define _tcsnccat       _mbsncat
 #define _tcsnccpy       _mbsncpy
 #define _tcsncset       _mbsnset
 
-/* MBCS specific mappings */
+/* @: misc. functions */
 
 #define _tcsdec         _mbsdec
 #define _tcsinc         _mbsinc
@@ -305,7 +354,10 @@ typedef unsigned int    _TINT;
 
 #define _tclen          _mbclen
 #define _tccpy          _mbccpy
-#define _tccmp(a,b)     _mbsncmp(a,b,1)
+
+/* @!(_tccmp,_mbsncmp) */
+/* @- */
+#define _tccmp(__a,__b) _mbsncmp(__a,__b,1)
 
 #else /* _MBC_USE_MACROS */
 
@@ -314,124 +366,131 @@ typedef unsigned int    _TINT;
 /* String functions */
 
 char * _RTLENTRY  _EXPFUNC _tcschr(const char *, unsigned int);
-size_t _RTLENTRY  _EXPFUNC _tcscspn(const char *, const char *);
-char * _RTLENTRY  _EXPFUNC _tcsncat(char *, const char *, size_t);
-char * _RTLENTRY  _EXPFUNC _tcsncpy(char *, const char *, size_t);
+_SIZE_T _RTLENTRY  _EXPFUNC _tcscspn(const char *, const char *);
+char * _RTLENTRY  _EXPFUNC _tcsncat(char *, const char *, _SIZE_T);
+char * _RTLENTRY  _EXPFUNC _tcsncpy(char *, const char *, _SIZE_T);
 char * _RTLENTRY  _EXPFUNC _tcspbrk(const char *, const char *);
 char * _RTLENTRY  _EXPFUNC _tcsrchr(const char *, int);
-size_t _RTLENTRY  _EXPFUNC _tcsspn(const char *, const char *);
+_SIZE_T _RTLENTRY  _EXPFUNC _tcsspn(const char *, const char *);
 char * _RTLENTRY  _EXPFUNC _tcsstr(const char *, const char *);
 char * _RTLENTRY  _EXPFUNC _tcstok(char *, const char *);
 
-char * _RTLENTRY  _EXPFUNC _tcsnset(char *, unsigned int, size_t);
+char * _RTLENTRY  _EXPFUNC _tcsnset(char *, unsigned int, _SIZE_T);
 char * _RTLENTRY  _EXPFUNC _tcsrev(char *);
 char * _RTLENTRY  _EXPFUNC _tcsset(char *, unsigned int);
 
 int _RTLENTRY  _EXPFUNC _tcscmp(const char *, const char *);
 int _RTLENTRY  _EXPFUNC _tcsicmp(const char *, const char *);
-int _RTLENTRY  _EXPFUNC _tcsnccmp(const char *, const char *, size_t);
-int _RTLENTRY  _EXPFUNC _tcsncmp(const char *, const char *, size_t);
-int _RTLENTRY  _EXPFUNC _tcsncicmp(const char *, const char *, size_t);
-int _RTLENTRY  _EXPFUNC _tcsnicmp(const char *, const char *, size_t);
+int _RTLENTRY  _EXPFUNC _tcsnccmp(const char *, const char *, _SIZE_T);
+int _RTLENTRY  _EXPFUNC _tcsncmp(const char *, const char *, _SIZE_T);
+int _RTLENTRY  _EXPFUNC _tcsncicmp(const char *, const char *, _SIZE_T);
+int _RTLENTRY  _EXPFUNC _tcsnicmp(const char *, const char *, _SIZE_T);
 
 int _RTLENTRY  _EXPFUNC _tcscoll(const char *, const char *);
 int _RTLENTRY  _EXPFUNC _tcsicoll(const char *, const char *);
-int _RTLENTRY  _EXPFUNC _tcsnccoll(const char *, const char *, size_t);
-int _RTLENTRY  _EXPFUNC _tcsncoll(const char *, const char *, size_t);
-int _RTLENTRY  _EXPFUNC _tcsncicoll(const char *, const char *, size_t);
-int _RTLENTRY  _EXPFUNC _tcsnicoll(const char *, const char *, size_t);
+int _RTLENTRY  _EXPFUNC _tcsnccoll(const char *, const char *, _SIZE_T);
+int _RTLENTRY  _EXPFUNC _tcsncoll(const char *, const char *, _SIZE_T);
+int _RTLENTRY  _EXPFUNC _tcsncicoll(const char *, const char *, _SIZE_T);
+int _RTLENTRY  _EXPFUNC _tcsnicoll(const char *, const char *, _SIZE_T);
 
 
-/* "logical-character" mappings */
+/* "logical-character" functions */
 
-size_t _RTLENTRY  _EXPFUNC _tcsclen(const char *);
-char * _RTLENTRY  _EXPFUNC _tcsnccat(char *, const char *, size_t);
-char * _RTLENTRY  _EXPFUNC _tcsnccpy(char *, const char *, size_t);
-char * _RTLENTRY  _EXPFUNC _tcsncset(char *, unsigned int, size_t);
+_SIZE_T _RTLENTRY  _EXPFUNC _tcsclen(const char *);
+char * _RTLENTRY  _EXPFUNC _tcsnccat(char *, const char *, _SIZE_T);
+char * _RTLENTRY  _EXPFUNC _tcsnccpy(char *, const char *, _SIZE_T);
+char * _RTLENTRY  _EXPFUNC _tcsncset(char *, unsigned int, _SIZE_T);
 
 
-/* MBCS-specific mappings */
+/* MBCS-specific functions */
 
 char * _RTLENTRY  _EXPFUNC _tcsdec(const char *, const char *);
 char * _RTLENTRY  _EXPFUNC _tcsinc(const char *);
-size_t _RTLENTRY  _EXPFUNC _tcsnbcnt(const char *, size_t);
-size_t _RTLENTRY  _EXPFUNC _tcsnccnt(const char *, size_t);
+_SIZE_T _RTLENTRY  _EXPFUNC _tcsnbcnt(const char *, _SIZE_T);
+_SIZE_T _RTLENTRY  _EXPFUNC _tcsnccnt(const char *, _SIZE_T);
 unsigned int _RTLENTRY  _EXPFUNC _tcsnextc (const char *);
-char * _RTLENTRY  _EXPFUNC _tcsninc(const char *, size_t);
+char * _RTLENTRY  _EXPFUNC _tcsninc(const char *, _SIZE_T);
 char * _RTLENTRY  _EXPFUNC _tcsspnp(const char *, const char *);
 
 char * _RTLENTRY  _EXPFUNC _tcslwr(char *);
 char * _RTLENTRY  _EXPFUNC _tcsupr(char *);
 
-size_t _RTLENTRY  _EXPFUNC _tclen(const char *);
+_SIZE_T _RTLENTRY  _EXPFUNC _tclen(const char *);
 void   _RTLENTRY  _EXPFUNC _tccpy(char *, const char *);
-int    _RTLENTRY  _EXPFUNC _tccmp(const char *s1, const char *s2);
+int    _RTLENTRY  _EXPFUNC _tccmp(const char *, const char *);
 
 #else  /* (!defined( __cplusplus) || defined( _NO_INLINING )) */
 
-inline char * _tcschr(const char * s1,unsigned int c) {return (char *)_mbschr((const unsigned char *)s1,c);}
-inline size_t _tcscspn(const char * s1,const char * s2) {return _mbscspn((const unsigned char *)s1,(const unsigned char *)s2);}
-inline char * _tcsncat(char * s1,const char * s2,size_t n) {return (char *)_mbsnbcat((unsigned char *)s1,(const unsigned char *)s2,n);}
-inline char * _tcsncpy(char * s1,const char * s2,size_t n) {return (char *)_mbsnbcpy((unsigned char *)s1,(const unsigned char *)s2,n);}
-inline char * _tcspbrk(const char * s1,const char * s2) {return (char *)_mbspbrk((const unsigned char *)s1,(const unsigned char *)s2);}
-inline char * _tcsrchr(const char * s1,unsigned int c) {return (char *)_mbsrchr((const unsigned char *)s1,c);}
-inline size_t _tcsspn(const char * s1,const char * s2) {return _mbsspn((const unsigned char *)s1,(const unsigned char *)s2);}
-inline char * _tcsstr(const char * s1,const char * s2) {return (char *)_mbsstr((const unsigned char *)s1,(const unsigned char *)s2);}
-inline char * _tcstok(char * s1,const char * s2) {return (char *)_mbstok((unsigned char *)s1,(const unsigned char *)s2);}
+inline char * _tcschr(const char * __s1,unsigned int __c) {return (char *)_mbschr((const unsigned char *)__s1,__c);}
+inline _SIZE_T _tcscspn(const char * __s1,const char * __s2) {return _mbscspn((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline char * _tcsncat(char * __s1,const char * __s2,_SIZE_T __n) {return (char *)_mbsnbcat((unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline char * _tcsncpy(char * __s1,const char * __s2,_SIZE_T __n) {return (char *)_mbsnbcpy((unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline char * _tcspbrk(const char * __s1,const char * __s2) {return (char *)_mbspbrk((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline char * _tcsrchr(const char * __s1,unsigned int __c) {return (char *)_mbsrchr((const unsigned char *)__s1,__c);}
+inline _SIZE_T _tcsspn(const char * __s1,const char * __s2) {return _mbsspn((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline char * _tcsstr(const char * __s1,const char * __s2) {return (char *)_mbsstr((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline char * _tcstok(char * __s1,const char * __s2) {return (char *)_mbstok((unsigned char *)__s1,(const unsigned char *)__s2);}
 
-inline char * _tcsnset(char * s1,unsigned int c,size_t n) {return (char *)_mbsnbset((unsigned char *)s1,c,n);}
-inline char * _tcsrev(char * s1) {return (char *)_mbsrev((unsigned char *)s1);}
-inline char * _tcsset(char * s1,unsigned int c) {return (char *)_mbsset((unsigned char *)s1,c);}
+inline char * _tcsnset(char * __s1,unsigned int __c,_SIZE_T __n) {return (char *)_mbsnbset((unsigned char *)__s1,__c,__n);}
+inline char * _tcsrev(char * __s1) {return (char *)_mbsrev((unsigned char *)__s1);}
+inline char * _tcsset(char * __s1,unsigned int __c) {return (char *)_mbsset((unsigned char *)__s1,__c);}
 
-inline int _tcscmp(const char * s1,const char * s2) {return _mbscmp((const unsigned char *)s1,(const unsigned char *)s2);}
-inline int _tcsicmp(const char * s1,const char * s2) {return _mbsicmp((const unsigned char *)s1,(const unsigned char *)s2);}
-inline int _tcsnccmp(const char * s1,const char * s2,size_t n) {return _mbsncmp((const unsigned char *)s1,(const unsigned char *)s2,n);}
-inline int _tcsncmp(const char * s1,const char * s2,size_t n) {return _mbsnbcmp((const unsigned char *)s1,(const unsigned char *)s2,n);}
-inline int _tcsncicmp(const char * s1,const char * s2,size_t n) {return _mbsnicmp((const unsigned char *)s1,(const unsigned char *)s2,n);}
-inline int _tcsnicmp(const char * s1,const char * s2,size_t n) {return _mbsnbicmp((const unsigned char *)s1,(const unsigned char *)s2,n);}
+inline int _tcscmp(const char * __s1,const char * __s2) {return _mbscmp((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline int _tcsicmp(const char * __s1,const char * __s2) {return _mbsicmp((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline int _tcsnccmp(const char * __s1,const char * __s2,_SIZE_T __n) {return _mbsncmp((const unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline int _tcsncmp(const char * __s1,const char * __s2,_SIZE_T __n) {return _mbsnbcmp((const unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline int _tcsncicmp(const char * __s1,const char * __s2,_SIZE_T __n) {return _mbsnicmp((const unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline int _tcsnicmp(const char * __s1,const char * __s2,_SIZE_T __n) {return _mbsnbicmp((const unsigned char *)__s1,(const unsigned char *)__s2,__n);}
 
-inline int _tcscoll(const char * s1,const char * s2) {return _mbscoll((const unsigned char *)s1,(const unsigned char *)s2);}
-inline int _tcsicoll(const char * s1,const char * s2) {return _mbsicoll((const unsigned char *)s1,(const unsigned char *)s2);}
-inline int _tcsnccoll(const char * s1,const char * s2,size_t n) {return _mbsncoll((const unsigned char *)s1,(const unsigned char *)s2,n);}
-inline int _tcsncoll(const char * s1,const char * s2,size_t n) {return _mbsnbcoll((const unsigned char *)s1,(const unsigned char *)s2,n);}
-inline int _tcsncicoll(const char * s1,const char * s2,size_t n) {return _mbsnicoll((const unsigned char *)s1,(const unsigned char *)s2,n);}
-inline int _tcsnicoll(const char * s1,const char * s2,size_t n) {return _mbsnbicoll((const unsigned char *)s1,(const unsigned char *)s2,n);}
-
-
-/* logical-character mappings */
-
-inline size_t _tcsclen(const char * s1) {return _mbslen((const unsigned char *)s1);}
-inline char * _tcsnccat(char * s1,const char * s2,size_t n) {return (char *)_mbsncat((unsigned char *)s1,(const unsigned char *)s2,n);}
-inline char * _tcsnccpy(char * s1,const char * s2,size_t n) {return (char *)_mbsncpy((unsigned char *)s1,(const unsigned char *)s2,n);}
-inline char * _tcsncset(char * s1,unsigned int c,size_t n) {return (char *)_mbsnset((unsigned char *)s1,c,n);}
+inline int _tcscoll(const char * __s1,const char * __s2) {return _mbscoll((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline int _tcsicoll(const char * __s1,const char * __s2) {return _mbsicoll((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline int _tcsnccoll(const char * __s1,const char * __s2,_SIZE_T __n) {return _mbsncoll((const unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline int _tcsncoll(const char * __s1,const char * __s2,_SIZE_T __n) {return _mbsnbcoll((const unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline int _tcsncicoll(const char * __s1,const char * __s2,_SIZE_T __n) {return _mbsnicoll((const unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline int _tcsnicoll(const char * __s1,const char * __s2,_SIZE_T __n) {return _mbsnbicoll((const unsigned char *)__s1,(const unsigned char *)__s2,__n);}
 
 
-/* MBCS-specific mappings */
+/* logical-character functions */
 
-inline char * _tcsdec(const char * s1,const char * s2) {return (char *)_mbsdec((const unsigned char *)s1,(const unsigned char *)s2);}
-inline char * _tcsinc(const char * s1) {return (char *)_mbsinc((const unsigned char *)s1);}
-inline size_t _tcsnbcnt(const char * s1,size_t n) {return _mbsnbcnt((const unsigned char *)s1,n);}
-inline size_t _tcsnccnt(const char * s1,size_t n) {return _mbsnccnt((const unsigned char *)s1,n);}
+inline _SIZE_T _tcsclen(const char * __s1) {return _mbslen((const unsigned char *)__s1);}
+inline char * _tcsnccat(char * __s1,const char * __s2,_SIZE_T __n) {return (char *)_mbsncat((unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline char * _tcsnccpy(char * __s1,const char * __s2,_SIZE_T __n) {return (char *)_mbsncpy((unsigned char *)__s1,(const unsigned char *)__s2,__n);}
+inline char * _tcsncset(char * __s1,unsigned int __c,_SIZE_T __n) {return (char *)_mbsnset((unsigned char *)__s1,__c,__n);}
 
-inline unsigned int _tcsnextc(const char * s1) {unsigned int n=0; if (_ismbblead((unsigned int)*(unsigned char *)s1)) n=((unsigned int)*s1++)<<8; n+=(unsigned int)*s1; return(n);}
 
-inline char * _tcsninc(const char * s1,size_t n) {return (char *)_mbsninc((const unsigned char *)s1,n);}
-inline char * _tcsspnp(const char * s1,const char * s2) {return (char *)_mbsspnp((const unsigned char *)s1,(const unsigned char *)s2);}
-inline char * _tcslwr(char * s1) {return (char *)_mbslwr((unsigned char *)s1);}
-inline char * _tcsupr(char * s1) {return (char *)_mbsupr((unsigned char *)s1);}
+/* MBCS-specific functions */
 
-inline size_t _tclen(const char * s1) {return _mbclen((const unsigned char *)s1);}
-inline void   _tccpy(char * s1,const char * s2) {_mbccpy((unsigned char *)s1,(const unsigned char *)s2); return;}
-inline int    _tccmp(const char *s1, const char *s2){ return  _mbsncmp((const unsigned char *)s1,(const unsigned char *)s2,1);}
+inline char * _tcsdec(const char * __s1,const char * __s2) {return (char *)_mbsdec((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline char * _tcsinc(const char * __s1) {return (char *)_mbsinc((const unsigned char *)__s1);}
+inline _SIZE_T _tcsnbcnt(const char * __s1,_SIZE_T __n) {return _mbsnbcnt((const unsigned char *)__s1,__n);}
+inline _SIZE_T _tcsnccnt(const char * __s1,_SIZE_T __n) {return _mbsnccnt((const unsigned char *)__s1,__n);}
+
+inline unsigned int _tcsnextc(const char * __s1)
+{
+   const unsigned char *__p = (const unsigned char *) __s1;
+   return (_ismbblead(*__p)) ? (((unsigned int)*__p << 8) | __p[0]) : *__p;
+}
+
+inline char * _tcsninc(const char * __s1,_SIZE_T __n) {return (char *)_mbsninc((const unsigned char *)__s1,__n);}
+inline char * _tcsspnp(const char * __s1,const char * __s2) {return (char *)_mbsspnp((const unsigned char *)__s1,(const unsigned char *)__s2);}
+inline char * _tcslwr(char * __s1) {return (char *)_mbslwr((unsigned char *)__s1);}
+inline char * _tcsupr(char * __s1) {return (char *)_mbsupr((unsigned char *)__s1);}
+
+inline _SIZE_T _tclen(const char * __s1) {return _mbclen((const unsigned char *)__s1);}
+inline void   _tccpy(char * __s1,const char * __s2) {_mbccpy((unsigned char *)__s1,(const unsigned char *)__s2); return;}
+inline int    _tccmp(const char *__s1, const char *__s2){ return  _mbsncmp((const unsigned char *)__s1,(const unsigned char *)__s2,1);}
 
 #endif  /* (!defined ( __cplusplus) || defined( _NO_INLINING )) */
 
 #endif  /* _MBC_USE_MACROS */
 
+/* @+(MBCS) comparison functions */
+
 #define _tcscmpi        _tcsicmp
 #define _tcsncmpi       _tcsnicmp
 
-/* ctype functions */
+/* @: ctype functions */
+
 #define _istalnum       _ismbcalnum
 #define _istalpha       _ismbcalpha
 #define _istdigit       _ismbcdigit
@@ -449,12 +508,13 @@ inline int    _tccmp(const char *s1, const char *s2){ return  _mbsncmp((const un
 #define _istlead        _ismbblead
 #define _istleadbyte    _ismbblead
 
+/* @- */
 #else  /* _MBCS */
 
 /* ------------------- SBCS functions ----------------------- */
 
 
-/* string functions */
+/* @+(SBCS) string functions */
 
 #define _tcschr         strchr
 #define _tcscspn        strcspn
@@ -495,7 +555,7 @@ inline int    _tccmp(const char *s1, const char *s2){ return  _mbsncmp((const un
 #define _ltcsnicoll     _lstrnicoll
 #define _ltcsxfrm       _lstrxfrm
 
-/* MBCS specific functions */
+/* A few MBCS-like functions */
 
 #define _tcsdec         _strdec
 #define _tcsinc         _strinc
@@ -508,33 +568,41 @@ inline int    _tccmp(const char *s1, const char *s2){ return  _mbsncmp((const un
 #define _tcslwr         strlwr
 #define _tcsupr         strupr
 
-#define _istlegal(a)    (1)
-#define _istlead(a)     (0)
-#define _istleadbyte(a) (0)
+/* @!:_istlegal */
+/* @!:_istlead */
+/* @!:_istleadbyte */
+
+#define _istlegal(__a)    (1)
+#define _istlead(__a)     (0)
+#define _istleadbyte(__a) (0)
 
 
 #if (!defined ( __cplusplus) || defined( _NO_INLINING ))
 
-#define _tclen(a)       (1)
-#define _tccpy(a,b)     ((*(a))=(*(b)))
-#define _tccmp(a,b)     ((*(a))-(*(b)))
+/* @!:_tclen */
+/* @!:_tccpy */
+/* @!:_tccmp */
+
+#define _tclen(__a)         (1)
+#define _tccpy(__a,__b)     ((*(__a))=(*(__b)))
+#define _tccmp(__a,__b)     ((*(__a))-(*(__b)))
 
 #else  /* (!defined ( __cplusplus) || defined( _NO_INLINING )) */
 
-inline size_t _RTLENTRY _tclen(const char *s ){return (1); }
-inline void   _RTLENTRY _tccpy(char *s1, const char *s2) {*(s1) = *(s2); }
-inline int    _RTLENTRY _tccmp(const char *s1, const char *s2){ return (int) ( ((unsigned char*)s1)-((unsigned char*)s2)); }
+inline _SIZE_T _RTLENTRY _tclen(const char *__s ){return (1); }
+inline void   _RTLENTRY _tccpy(char *__s1, const char *__s2) {*(__s1) = *(__s2); }
+inline int    _RTLENTRY _tccmp(const char *__s1, const char *__s2){ return (int) ( ((unsigned char*)__s1)-((unsigned char*)__s2)); }
 
 #endif  /* (!defined ( __cplusplus) || defined( _NO_INLINING )) */
 
-/* logical-character mappings */
+/* @: logical-character functions */
 
 #define _tcsclen        strlen
 #define _tcsnccat       strncat
 #define _tcsnccpy       strncpy
 #define _tcsncset       strnset
 
-/* ctype functions */
+/* @: ctype functions */
 
 #define _istalnum       isalnum
 #define _istalpha       isalpha
@@ -554,64 +622,63 @@ inline int    _RTLENTRY _tccmp(const char *s1, const char *s2){ return (int) ( (
 
 #if (!defined (__cplusplus) || defined( _NO_INLINING ))
 
-#define _strinc(a)       ((a)+1)
-#define _strdec(a, b)    ((b)-1)
-#define _strnextc(a)     ((unsigned int) *(a))
-#define _strninc(a, b)   ((a)+(b))
-#define _strncnt(a, b)   ((strlen(a)>b) ? b : strlen(a))
-#define _strspnp(a, b)   ((*((a)+strspn(a,b))) ? ((a)+strspn(a,b)) : NULL)
+#define _strinc(__a)       ((__a)+1)
+#define _strdec(__a, __b)    ((__b)-1)
+#define _strnextc(__a)     ((unsigned int) ((__a) ? (__a)[0] : 0))
+#define _strninc(__a, __b)   ((__a)+(__b))
+#define _strncnt(__a, __b)   ((strlen(__a)>__b) ? __b : strlen(__a))
+#define _strspnp(__a, __b)   ((*((__a)+strspn(__a,__b))) ? ((__a)+strspn(__a,__b)) : NULL)
 
 #else  /* (!defined( __cplusplus) || defined( _NO_INLINING )) */
 
-inline char * _RTLENTRY strinc(const char * s) { return (char *)(s+1); }
-inline char * _RTLENTRY strdec(const char * s1, const char * s2) { return (char *)(s1,(s2-1)); }
+inline char * _RTLENTRY strinc(const char * __s) { return (char *)(__s+1); }
+inline char * _RTLENTRY strdec(const char * __s1, const char * __s2) { return (char *)(__s1,(__s2-1)); }
 
-inline char * _RTLENTRY _strinc(const char * s) { return (char *)(s+1); }
-inline char * _RTLENTRY _strdec(const char * s1, const char * s2) { return (char *)(s1,(s2-1)); }
-inline unsigned int _RTLENTRY _strnextc(const char *s) { return (unsigned int)*s; }
-inline char * _RTLENTRY _strninc(const char * s, size_t n) { return (char *)(s+n); }
-inline size_t _RTLENTRY _strncnt( const char * s, size_t n) { size_t len; len = strlen(s); return (len>n) ? n : len; }
-inline char * _RTLENTRY _strspnp( const char * s1, const char * s2) { return (*(s1 += strspn(s1,s2))!='\0') ? (char*)s1 : NULL; }
+inline char * _RTLENTRY _strinc(const char * __s) { return (char *)(__s+1); }
+inline char * _RTLENTRY _strdec(const char * __s1, const char * __s2) { return (char *)(__s1,(__s2-1)); }
+inline unsigned int _RTLENTRY _strnextc(const char *__s) { return (unsigned int) (__s ? __s[0] : 0); }
+inline char * _RTLENTRY _strninc(const char * __s, _SIZE_T __n) { return (char *)(__s+__n); }
+inline _SIZE_T _RTLENTRY _strncnt( const char * __s, _SIZE_T __n) { _SIZE_T __len; __len = strlen(__s); return (__len>__n) ? __n : __len; }
+inline char * _RTLENTRY _strspnp( const char * __s1, const char * __s2) { return (*(__s1 += strspn(__s1,__s2))!='\0') ? (char*)__s1 : NULL; }
 
 #endif /* (!defined (__cplusplus) || defined( _NO_INLINING )) */
 
 #endif /* _MBCS */
 
+/* @- */
+
 #else  /* _UNICODE */
 
-#ifndef __cplusplus
-#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
-#define _WCHAR_T
-#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
-typedef unsigned short wchar_t;
-#endif
+#ifdef __cplusplus
+namespace std {
 #endif
 
-#if !defined(_WINT_T)
-typedef wchar_t wint_t;
-#define _WINT_T
-#endif
-
-#ifndef _WCTYPE_T_DEFINED
-typedef wchar_t wctype_t;
-#define _WCTYPE_T_DEFINED
-#endif
+/* @+(UNICODE) types */
 
 #ifndef __TCHAR_DEFINED
 typedef wchar_t         _TCHAR;
 typedef wchar_t         _TSCHAR;
 typedef wchar_t         _TUCHAR;
 typedef wchar_t         _TXCHAR;
-typedef wint_t          _TINT;
+typedef _WINT_T          _TINT;
 #define __TCHAR_DEFINED
 #endif
 
-#define _TEOF           WEOF
-#define __T(x)          L ## x
-#define _TEXT(x)        __T(x)
-#define _T(x)           __T(x)
+#ifdef __cplusplus
+} // std
+#endif
 
-/* string functions */
+/* @: generic text macros */
+/* @!:__T */
+/* @!:_TEXT */
+/* @!:_T */
+
+#define _TEOF             WEOF
+#define __T(__x)          L ## __x
+#define _TEXT(__x)        __T(__x)
+#define _T(__x)           __T(__x)
+
+/* @: string functions */
 
 #define _tcschr         wcschr
 #define _tcscspn        wcscspn
@@ -640,6 +707,9 @@ typedef wint_t          _TINT;
 #define _tcsdup         _wcsdup
 #define _tcslwr         _wcslwr
 #define _tcsupr         _wcsupr
+#define _totlower       towlower
+#define _totupper       towupper
+
 
 #define _tcsdec         _wcsdec
 #define _tcsinc         _wcsinc
@@ -665,7 +735,7 @@ typedef wint_t          _TINT;
 #define _ltcsnicoll     _lwcsnicoll
 #define _ltcsxfrm       _lwcsxfrm
 
-/* time functions */
+/* @: time functions */
 
 #define _tasctime       _wasctime
 #define _tutime         _wutime
@@ -676,7 +746,7 @@ typedef wint_t          _TINT;
 #define _ttzset         _wtzset
 #define _ttzname        _wtzname
 
-/* ctype functions */
+/* @: ctype functions */
 
 #define _istalnum       iswalnum
 #define _istalpha       iswalpha
@@ -691,14 +761,15 @@ typedef wint_t          _TINT;
 #define _istcntrl       iswcntrl
 #define _istxdigit      iswxdigit
 
-#define _istlegal(a)    (1)
-#define _istlead(a)     (0)
-#define _istleadbyte(a) (0)
+/* @!:_istlegal */
+/* @!:_istlead */
+/* @!:_istleadbyte */
 
-#define _totlower       towlower
-#define _totupper       towupper
+#define _istlegal(__a)    (1)
+#define _istlead(__a)     (0)
+#define _istleadbyte(__a) (0)
 
-/* Execute functions */
+/* @: process execution functions */
 
 #define _texecl     _wexecl
 #define _texecle    _wexecle
@@ -721,7 +792,7 @@ typedef wint_t          _TINT;
 
 #define _tsystem        _wsystem
 
-/*  Path / Environment  specific mappings  */
+/* @: path/environment specific functions  */
 
 #define _tfullpath      _wfullpath
 #define _tsplitpath     _wsplitpath
@@ -734,7 +805,7 @@ typedef wint_t          _TINT;
 #define _tgetenv        _wgetenv
 #define _tputenv        _wputenv
 
-/*  I/O functions   */
+/* @: I/O functions   */
 
 #define _taccess        _waccess
 #define _tchmod         _wchmod
@@ -742,10 +813,20 @@ typedef wint_t          _TINT;
 #define _trtl_creat     _wrtl_creat
 #define _trtl_chmod     _wrtl_chmod
 #define _tcreat         _wcreat
+#define __tcreat        __wcreat
 #define _tfindfirst     _wfindfirst
 #define _tfindnext      _wfindnext
+#define _tfindclose     _wfindclose
+#define __tfindfirsti64 _wfindfirsti64
+#define __tfindnexti64  _wfindnexti64
+#define __tfinddatai64_t _wfinddatai64_t
+#define __tfinddata_t   _wfinddata_t
+#define __tfindfirst    __wfindfirst
+#define __tfindnext     __wfindnext
+
 #define _tmktemp        _wmktemp
 #define _topen          _wopen
+#define __topen         __wopen
 #define _tremove        _wremove
 #define _trename        _wrename
 #define _tsopen         _wsopen
@@ -753,7 +834,7 @@ typedef wint_t          _TINT;
 
 #define _tffblk         _wffblk
 
-/* directory functions */
+/* @: directory functions */
 
 #define _topendir       wopendir
 #define _treaddir       wreaddir
@@ -762,7 +843,7 @@ typedef wint_t          _TINT;
 #define _tDIR           wDIR
 #define _tdirent        wdirent
 
-/* stdio functions   */
+/* @: stdio functions   */
 
 #define _tpopen         _wpopen
 #define _tfopen         _wfopen
@@ -773,14 +854,14 @@ typedef wint_t          _TINT;
 #define _ttmpnam        _wtmpnam
 #define _ttempnam       _wtempnam
 
-/* program specific mappings*/
+/* @: program specific functions */
 
 #define _tmain          wmain
 #define _tWinMain       wWinMain
 #define _tenviron       _wenviron
 #define _targv          _wargv
 
-/* Directory functions */
+/* @: directory functions */
 
 #define _tchdir     _wchdir
 #define _tgetcurdir _wgetcurdir
@@ -789,7 +870,7 @@ typedef wint_t          _TINT;
 #define _tmkdir     _wmkdir
 #define _trmdir     _wrmdir
 
-/* string conversion functions */
+/* @: string conversion functions */
 
 #define _ttof           _wtof
 #define _ttoi           _wtoi
@@ -806,22 +887,22 @@ typedef wint_t          _TINT;
 #define _i64tot         _i64tow
 #define _ui64tot        _ui64tow
 
-/* Stat functions */
+/* @: stat functions */
 
 #define _tstat          _wstat
 #define _tstati64       _wstati64
 
-/* Setlocale functions */
+/* @: setlocale functions */
 
 #define _tsetlocale _wsetlocale
 
-/* memory functions */
+/* @: memory functions */
 
 #define _tmemcpy        _wmemcpy
 #define _tmemchr        _wmemchr
 #define _tmemset        _wmemset
 
-/* Unformated I/O */
+/* @: unformated I/O */
 
 #define _fgettc         fgetwc
 #define _gettc          getwc
@@ -837,13 +918,18 @@ typedef wint_t          _TINT;
 #define _putts          _putws
 #define _ungettc        ungetwc
 
-/* Formated I/O */
+/* @: formated I/O */
+
 #define _tprintf        wprintf
 #define _vstprintf      vswprintf
 #define _stprintf       swprintf
 #define _ftprintf       fwprintf
 #define _vftprintf      vfwprintf
 #define _vtprintf       vwprintf
+#define _sntprintf      snwprintf
+#define _vsntprintf     vsnwprintf
+#define __sntprintf     _snwprintf     // MSC compat.
+#define __vsntprintf    _vsnwprintf    // MSC compat.
 
 
 #define _tscanf         wscanf
@@ -854,17 +940,26 @@ typedef wint_t          _TINT;
 #define _ftscanf        fwscanf
 
 
-#define _wcsinc(a)       ((a)+1)
-#define _wcsdec(a, b)    ((b)-1)
-#define _wcsnextc(a)     ((wchar_t) *(a))
-#define _wcsninc(a, b)   ((a)+(b))
-#define _wcsncnt(a, b)   ((wcslen(a)>b) ? b : wcslen(a))
-#define _wcsspnp(a, b)   ((*((a)+wcsspn(a,b))) ? ((a)+wcsspn(a,b)) : NULL)
+#define _wcsinc(__a)         ((__a)+1)
+#define _wcsdec(__a, __b)    ((__b)-1)
+#define _wcsnextc(__a)       ((wchar_t) ((__a) ? (__a)[0] : 0))
+#define _wcsninc(__a, __b)   ((__a)+(__b))
+#define _wcsncnt(__a, __b)   ((wcslen(__a)>__b) ? __b : wcslen(__a))
+#define _wcsspnp(__a, __b)   ((*((__a)+wcsspn(__a,__b))) ? ((__a)+wcsspn(__a,__b)) : NULL)
 
-#endif /* _UNCODE */
+/* @- */
+
+#endif /* _UNICODE */
+
+#define __targv _targv  /* MS Compatibility */
 
 #ifdef __cplusplus
 }
+    using std::_TCHAR;
+    using std::_TSCHAR;
+    using std::_TUCHAR;
+    using std::_TXCHAR;
+    using std::_TINT;
 #endif
 
 #endif  /* __TCHAR_H */

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -26,17 +26,16 @@ static char THIS_FILE[] = __FILE__;
 #ifdef _AFXDLL
 CRuntimeClass* PASCAL CObject::_GetBaseClass()
 	{ return NULL; }
-AFX_DATADEF struct CRuntimeClass CObject::classCObject =
+AFX_COMDAT const AFX_DATADEF struct CRuntimeClass CObject::classCObject =
 	{ "CObject", sizeof(CObject), 0xffff, NULL, &CObject::_GetBaseClass, NULL };
 #else
-AFX_DATADEF struct CRuntimeClass CObject::classCObject =
+AFX_COMDAT const AFX_DATADEF struct CRuntimeClass CObject::classCObject =
 	{ "CObject", sizeof(CObject), 0xffff, NULL, NULL, NULL };
 #endif
-static const AFX_CLASSINIT _init_CObject(&CObject::classCObject);
 
 CRuntimeClass* CObject::GetRuntimeClass() const
 {
-	return &CObject::classCObject;
+	return RUNTIME_CLASS(CObject);
 }
 
 BOOL CObject::IsKindOf(const CRuntimeClass* pClass) const
@@ -98,7 +97,7 @@ void AFXAPI AfxAssertValidObject(const CObject* pOb,
 		return;     // quick escape
 	}
 
-	if (!AfxIsValidAddress(pOb, pOb->GetRuntimeClass()->m_nObjectSize))
+	if (!AfxIsValidAddress(pOb, pOb->GetRuntimeClass()->m_nObjectSize, FALSE))
 	{
 		TRACE0("ASSERT_VALID fails with illegal pointer.\n");
 		if (AfxAssertFailedLine(lpszFileName, nLine))
@@ -153,20 +152,28 @@ BOOL CObject::IsSerializable() const
 	return (GetRuntimeClass()->m_wSchema != 0xffff);
 }
 
-AFX_CLASSINIT::AFX_CLASSINIT(register CRuntimeClass* pNewClass)
+void AFXAPI AfxClassInit(CRuntimeClass* pNewClass)
 {
-	AFX_MODULE_STATE* pState = AfxGetModuleState();
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
 	AfxLockGlobals(CRIT_RUNTIMECLASSLIST);
-	pState->m_classList.AddHead(pNewClass);
+	pModuleState->m_classList.AddHead(pNewClass);
+	AfxUnlockGlobals(CRIT_RUNTIMECLASSLIST);
+}
+
+AFX_CLASSINIT_COMPAT::AFX_CLASSINIT_COMPAT(CRuntimeClass* pNewClass)
+{
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	AfxLockGlobals(CRIT_RUNTIMECLASSLIST);
+	pModuleState->m_classList.AddHead(pNewClass);
 	AfxUnlockGlobals(CRIT_RUNTIMECLASSLIST);
 }
 
 BOOL CRuntimeClass::IsDerivedFrom(const CRuntimeClass* pBaseClass) const
 {
 	ASSERT(this != NULL);
-	ASSERT(AfxIsValidAddress(this, sizeof(CRuntimeClass)));
+	ASSERT(AfxIsValidAddress(this, sizeof(CRuntimeClass), FALSE));
 	ASSERT(pBaseClass != NULL);
-	ASSERT(AfxIsValidAddress(pBaseClass, sizeof(CRuntimeClass)));
+	ASSERT(AfxIsValidAddress(pBaseClass, sizeof(CRuntimeClass), FALSE));
 
 	// simple SI case
 	const CRuntimeClass* pClassThis = this;
@@ -202,8 +209,7 @@ void AFXAPI AfxDoForAllClasses(void (AFX_CDECL *pfn)(const CRuntimeClass*, void*
 #ifdef _AFXDLL
 	// walk through the list of dynlink library registered classes
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		for (pClass = pDLL->m_classList; pClass != NULL;

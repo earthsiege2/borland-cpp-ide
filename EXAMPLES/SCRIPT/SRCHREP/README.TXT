@@ -1,1 +1,0 @@
-This DLL is for use with the example script SRCHALL.SPP.

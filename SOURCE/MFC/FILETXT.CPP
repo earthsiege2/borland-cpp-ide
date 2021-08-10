@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -15,10 +15,6 @@
 
 #ifdef AFX_CORE1_SEG
 #pragma code_seg(AFX_CORE1_SEG)
-#endif
-
-#ifdef _MAC
-#define _doserrno   TranslateFileError((short) _macerrno)
 #endif
 
 #ifdef _DEBUG
@@ -39,11 +35,7 @@ CStdioFile::CStdioFile()
 CStdioFile::CStdioFile(FILE* pOpenStream) : CFile(hFileNull)
 {
 	m_pStream = pOpenStream;
-#ifndef _MAC
 	m_hFile = (UINT)_get_osfhandle(_fileno(pOpenStream));
-#else
-	VERIFY(WrapFileHandle((short)_get_osfhandle(_fileno(pOpenStream)), (HANDLE*)&m_hFile));
-#endif
 	ASSERT(!m_bCloseOnDelete);
 }
 
@@ -114,15 +106,8 @@ BOOL CStdioFile::Open(LPCTSTR lpszFileName, UINT nOpenFlags,
 		szMode[nMode++] = 't';
 	szMode[nMode++] = '\0';
 
-#ifndef _MAC
 	// open a C-runtime low-level file handle
 	int nHandle = _open_osfhandle(m_hFile, nFlags);
-#else
-	int nHandle = -1;
-	short nRefNum;
-	if (GetMacFileInformation((HANDLE)m_hFile, &nRefNum, NULL))
-		nHandle = _open_osfhandle(nRefNum, nFlags);
-#endif
 
 	// open a C-runtime stream from that handle
 	if (nHandle != -1)
@@ -208,7 +193,7 @@ BOOL CStdioFile::ReadString(CString& rString)
 	const int nMaxSize = 128;
 	LPTSTR lpsz = rString.GetBuffer(nMaxSize);
 	LPTSTR lpszResult;
-	int nLen;
+	int nLen = 0;
 	for (;;)
 	{
 		lpszResult = _fgetts(lpsz, nMaxSize+1, m_pStream);
@@ -226,9 +211,7 @@ BOOL CStdioFile::ReadString(CString& rString)
 		if (lpszResult == NULL ||
 			(nLen = lstrlen(lpsz)) < nMaxSize ||
 			lpsz[nLen-1] == '\n')
-		{
 			break;
-		}
 
 		nLen = rString.GetLength();
 		lpsz = rString.GetBuffer(nMaxSize + nLen) + nLen;
@@ -288,7 +271,7 @@ void CStdioFile::Close()
 	if (m_pStream != NULL)
 		nErr = fclose(m_pStream);
 
-	m_hFile = hFileNull;
+	m_hFile = (UINT) hFileNull;
 	m_bCloseOnDelete = FALSE;
 	m_pStream = NULL;
 
@@ -303,7 +286,7 @@ void CStdioFile::Abort()
 
 	if (m_pStream != NULL && m_bCloseOnDelete)
 		fclose(m_pStream);  // close but ignore errors
-	m_hFile = hFileNull;
+	m_hFile = (UINT) hFileNull;
 	m_pStream = NULL;
 	m_bCloseOnDelete = FALSE;
 }

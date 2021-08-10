@@ -1,5 +1,5 @@
 /* WINSOCK.H--definitions to be used with the WINSOCK.DLL
- * Copyright (c) 1993-1996, Microsoft Corp. All rights reserved.
+ * Copyright (c) 1993-1999, Microsoft Corp. All rights reserved.
  *
  * This header file corresponds to version 1.1 of the Windows Sockets specification.
  *
@@ -11,16 +11,18 @@
  */
 
 #ifndef _WINSOCKAPI_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINSOCKAPI_
-#pragma option -b
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 /*
  * Pull in WINDOWS.H if necessary
  */
 #ifndef _INC_WINDOWS
-#pragma option -b.
 #include <windows.h>
-#pragma option -b
 #endif /* _INC_WINDOWS */
 
 /*
@@ -35,7 +37,8 @@ typedef unsigned long   u_long;
  * The new type to be used in all
  * instances which refer to sockets.
  */
-typedef u_int           SOCKET;
+
+typedef UINT_PTR        SOCKET;
 
 /*
  * Select uses arrays of SOCKETs.  These macros manipulate such
@@ -171,8 +174,13 @@ struct  netent {
 struct  servent {
         char    FAR * s_name;           /* official service name */
         char    FAR * FAR * s_aliases;  /* alias list */
+#ifdef _WIN64
+        char    FAR * s_proto;          /* protocol to use */
+        short   s_port;                 /* port # */
+#else
         short   s_port;                 /* port # */
         char    FAR * s_proto;          /* protocol to use */
+#endif
 };
 
 struct  protoent {
@@ -322,11 +330,19 @@ struct sockaddr_in {
 typedef struct WSAData {
         WORD                    wVersion;
         WORD                    wHighVersion;
+#ifdef _WIN64
+        unsigned short          iMaxSockets;
+        unsigned short          iMaxUdpDg;
+        char FAR *              lpVendorInfo;
+        char                    szDescription[WSADESCRIPTION_LEN+1];
+        char                    szSystemStatus[WSASYS_STATUS_LEN+1];
+#else
         char                    szDescription[WSADESCRIPTION_LEN+1];
         char                    szSystemStatus[WSASYS_STATUS_LEN+1];
         unsigned short          iMaxSockets;
         unsigned short          iMaxUdpDg;
         char FAR *              lpVendorInfo;
+#endif
 } WSADATA;
 
 typedef WSADATA FAR *LPWSADATA;
@@ -559,6 +575,12 @@ struct  linger {
 #define FD_CLOSE        0x20
 
 /*
+ * WinSock error codes are also defined in winerror.h
+ * Hence the IFDEF.
+ */
+#ifndef WSABASEERR
+
+/*
  * All Windows Sockets error constants are biased by WSABASEERR from
  * the "normal"
  */
@@ -634,24 +656,35 @@ struct  linger {
  * compatibility purposes.
  */
 
-#define h_errno         WSAGetLastError()
 
 /* Authoritative Answer: Host not found */
 #define WSAHOST_NOT_FOUND       (WSABASEERR+1001)
-#define HOST_NOT_FOUND          WSAHOST_NOT_FOUND
 
 /* Non-Authoritative: Host not found, or SERVERFAIL */
 #define WSATRY_AGAIN            (WSABASEERR+1002)
-#define TRY_AGAIN               WSATRY_AGAIN
 
 /* Non recoverable errors, FORMERR, REFUSED, NOTIMP */
 #define WSANO_RECOVERY          (WSABASEERR+1003)
-#define NO_RECOVERY             WSANO_RECOVERY
 
 /* Valid name, no data record of requested type */
 #define WSANO_DATA              (WSABASEERR+1004)
-#define NO_DATA                 WSANO_DATA
 
+/*
+ * WinSock error codes are also defined in winerror.h
+ * Hence the IFDEF.
+ */
+#endif /* ifdef WSABASEERR */
+
+/*
+ * Compatibility macros.
+ */
+
+
+#define h_errno         WSAGetLastError()
+#define HOST_NOT_FOUND          WSAHOST_NOT_FOUND
+#define TRY_AGAIN               WSATRY_AGAIN
+#define NO_RECOVERY             WSANO_RECOVERY
+#define NO_DATA                 WSANO_DATA
 /* no address, look for MX record */
 #define WSANO_ADDRESS           WSANO_DATA
 #define NO_ADDRESS              WSANO_ADDRESS
@@ -707,85 +740,146 @@ struct  linger {
 extern "C" {
 #endif
 
-SOCKET PASCAL FAR accept (SOCKET s, struct sockaddr FAR *addr,
-                          int FAR *addrlen);
+SOCKET PASCAL FAR accept (
+                          IN SOCKET s,
+                          OUT struct sockaddr FAR *addr,
+                          IN OUT int FAR *addrlen);
 
-int PASCAL FAR bind (SOCKET s, const struct sockaddr FAR *addr, int namelen);
+int PASCAL FAR bind (
+                     IN SOCKET s,
+                     IN const struct sockaddr FAR *addr,
+                     IN int namelen);
 
-int PASCAL FAR closesocket (SOCKET s);
+int PASCAL FAR closesocket ( IN SOCKET s);
 
-int PASCAL FAR connect (SOCKET s, const struct sockaddr FAR *name, int namelen);
+int PASCAL FAR connect (
+                        IN SOCKET s,
+                        IN const struct sockaddr FAR *name,
+                        IN int namelen);
 
-int PASCAL FAR ioctlsocket (SOCKET s, long cmd, u_long FAR *argp);
+int PASCAL FAR ioctlsocket (
+                            IN SOCKET s,
+                            IN long cmd,
+                            IN OUT u_long FAR *argp);
 
-int PASCAL FAR getpeername (SOCKET s, struct sockaddr FAR *name,
-                            int FAR * namelen);
+int PASCAL FAR getpeername (
+                            IN SOCKET s,
+                            OUT struct sockaddr FAR *name,
+                            IN OUT int FAR * namelen);
 
-int PASCAL FAR getsockname (SOCKET s, struct sockaddr FAR *name,
-                            int FAR * namelen);
+int PASCAL FAR getsockname (
+                            IN SOCKET s,
+                            OUT struct sockaddr FAR *name,
+                            IN OUT int FAR * namelen);
 
-int PASCAL FAR getsockopt (SOCKET s, int level, int optname,
-                           char FAR * optval, int FAR *optlen);
+int PASCAL FAR getsockopt (
+                           IN SOCKET s,
+                           IN int level,
+                           IN int optname,
+                           OUT char FAR * optval,
+                           IN OUT int FAR *optlen);
 
-u_long PASCAL FAR htonl (u_long hostlong);
+u_long PASCAL FAR htonl ( IN u_long hostlong);
 
-u_short PASCAL FAR htons (u_short hostshort);
+u_short PASCAL FAR htons (IN u_short hostshort);
 
-unsigned long PASCAL FAR inet_addr (const char FAR * cp);
+unsigned long PASCAL FAR inet_addr (IN const char FAR * cp);
 
-char FAR * PASCAL FAR inet_ntoa (struct in_addr in);
+char FAR * PASCAL FAR inet_ntoa (IN struct in_addr in);
 
-int PASCAL FAR listen (SOCKET s, int backlog);
+int PASCAL FAR listen (
+                       IN SOCKET s,
+                       IN int backlog);
 
-u_long PASCAL FAR ntohl (u_long netlong);
+u_long PASCAL FAR ntohl (IN u_long netlong);
 
-u_short PASCAL FAR ntohs (u_short netshort);
+u_short PASCAL FAR ntohs (IN u_short netshort);
 
-int PASCAL FAR recv (SOCKET s, char FAR * buf, int len, int flags);
+int PASCAL FAR recv (
+                     IN SOCKET s,
+                     OUT char FAR * buf,
+                     IN int len,
+                     IN int flags);
 
-int PASCAL FAR recvfrom (SOCKET s, char FAR * buf, int len, int flags,
-                         struct sockaddr FAR *from, int FAR * fromlen);
+int PASCAL FAR recvfrom (
+                         IN SOCKET s,
+                         OUT char FAR * buf,
+                         IN int len,
+                         IN int flags,
+                         OUT struct sockaddr FAR *from,
+                         IN OUT int FAR * fromlen);
 
-int PASCAL FAR select (int nfds, fd_set FAR *readfds, fd_set FAR *writefds,
-                       fd_set FAR *exceptfds, const struct timeval FAR *timeout);
+int PASCAL FAR select (
+                        IN int nfds,
+                        IN OUT fd_set FAR *readfds,
+                        IN OUT fd_set FAR *writefds,
+                        IN OUT fd_set FAR *exceptfds,
+                        IN const struct timeval FAR *timeout);
 
-int PASCAL FAR send (SOCKET s, const char FAR * buf, int len, int flags);
+int PASCAL FAR send (
+                     IN SOCKET s,
+                     IN const char FAR * buf,
+                     IN int len,
+                     IN int flags);
 
-int PASCAL FAR sendto (SOCKET s, const char FAR * buf, int len, int flags,
-                       const struct sockaddr FAR *to, int tolen);
+int PASCAL FAR sendto (
+                       IN SOCKET s,
+                       IN const char FAR * buf,
+                       IN int len,
+                       IN int flags,
+                       IN const struct sockaddr FAR *to,
+                       IN int tolen);
 
-int PASCAL FAR setsockopt (SOCKET s, int level, int optname,
-                           const char FAR * optval, int optlen);
+int PASCAL FAR setsockopt (
+                           IN SOCKET s,
+                           IN int level,
+                           IN int optname,
+                           IN const char FAR * optval,
+                           IN int optlen);
 
-int PASCAL FAR shutdown (SOCKET s, int how);
+int PASCAL FAR shutdown (
+                         IN SOCKET s,
+                         IN int how);
 
-SOCKET PASCAL FAR socket (int af, int type, int protocol);
+SOCKET PASCAL FAR socket (
+                          IN int af,
+                          IN int type,
+                          IN int protocol);
 
 /* Database function prototypes */
 
-struct hostent FAR * PASCAL FAR gethostbyaddr(const char FAR * addr,
-                                              int len, int type);
+struct hostent FAR * PASCAL FAR gethostbyaddr(
+                                              IN const char FAR * addr,
+                                              IN int len,
+                                              IN int type);
 
-struct hostent FAR * PASCAL FAR gethostbyname(const char FAR * name);
+struct hostent FAR * PASCAL FAR gethostbyname(IN const char FAR * name);
 
-int PASCAL FAR gethostname (char FAR * name, int namelen);
+int PASCAL FAR gethostname (
+                            OUT char FAR * name,
+                            IN int namelen);
 
-struct servent FAR * PASCAL FAR getservbyport(int port, const char FAR * proto);
+struct servent FAR * PASCAL FAR getservbyport(
+                                              IN int port,
+                                              IN const char FAR * proto);
 
-struct servent FAR * PASCAL FAR getservbyname(const char FAR * name,
-                                              const char FAR * proto);
+struct servent FAR * PASCAL FAR getservbyname(
+                                              IN const char FAR * name,
+                                              IN const char FAR * proto);
 
-struct protoent FAR * PASCAL FAR getprotobynumber(int proto);
+struct protoent FAR * PASCAL FAR getprotobynumber(IN int proto);
 
-struct protoent FAR * PASCAL FAR getprotobyname(const char FAR * name);
+struct protoent FAR * PASCAL FAR getprotobyname(IN const char FAR * name);
 
 /* Microsoft Windows Extension function prototypes */
 
-int PASCAL FAR WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData);
+int PASCAL FAR WSAStartup(
+                          IN WORD wVersionRequired,
+                          OUT LPWSADATA lpWSAData);
 
 int PASCAL FAR WSACleanup(void);
 
-void PASCAL FAR WSASetLastError(int iError);
+void PASCAL FAR WSASetLastError(IN int iError);
 
 int PASCAL FAR WSAGetLastError(void);
 
@@ -793,43 +887,70 @@ BOOL PASCAL FAR WSAIsBlocking(void);
 
 int PASCAL FAR WSAUnhookBlockingHook(void);
 
-FARPROC PASCAL FAR WSASetBlockingHook(FARPROC lpBlockFunc);
+FARPROC PASCAL FAR WSASetBlockingHook(IN FARPROC lpBlockFunc);
 
 int PASCAL FAR WSACancelBlockingCall(void);
 
-HANDLE PASCAL FAR WSAAsyncGetServByName(HWND hWnd, u_int wMsg,
-                                        const char FAR * name,
-                                        const char FAR * proto,
-                                        char FAR * buf, int buflen);
+HANDLE PASCAL FAR WSAAsyncGetServByName(
+                                        IN HWND hWnd,
+                                        IN u_int wMsg,
+                                        IN const char FAR * name,
+                                        IN const char FAR * proto,
+                                        OUT char FAR * buf,
+                                        IN int buflen);
 
-HANDLE PASCAL FAR WSAAsyncGetServByPort(HWND hWnd, u_int wMsg, int port,
-                                        const char FAR * proto, char FAR * buf,
-                                        int buflen);
+HANDLE PASCAL FAR WSAAsyncGetServByPort(
+                                        IN HWND hWnd,
+                                        IN u_int wMsg,
+                                        IN int port,
+                                        IN const char FAR * proto,
+                                        OUT char FAR * buf,
+                                        IN int buflen);
 
-HANDLE PASCAL FAR WSAAsyncGetProtoByName(HWND hWnd, u_int wMsg,
-                                         const char FAR * name, char FAR * buf,
-                                         int buflen);
+HANDLE PASCAL FAR WSAAsyncGetProtoByName(
+                                         IN HWND hWnd,
+                                         IN u_int wMsg,
+                                         IN const char FAR * name,
+                                         OUT char FAR * buf,
+                                         IN int buflen);
 
-HANDLE PASCAL FAR WSAAsyncGetProtoByNumber(HWND hWnd, u_int wMsg,
-                                           int number, char FAR * buf,
-                                           int buflen);
+HANDLE PASCAL FAR WSAAsyncGetProtoByNumber(
+                                           IN HWND hWnd,
+                                           IN u_int wMsg,
+                                           IN int number,
+                                           OUT char FAR * buf,
+                                           IN int buflen);
 
-HANDLE PASCAL FAR WSAAsyncGetHostByName(HWND hWnd, u_int wMsg,
-                                        const char FAR * name, char FAR * buf,
-                                        int buflen);
+HANDLE PASCAL FAR WSAAsyncGetHostByName(
+                                        IN HWND hWnd,
+                                        IN u_int wMsg,
+                                        IN const char FAR * name,
+                                        OUT char FAR * buf,
+                                        IN int buflen);
 
-HANDLE PASCAL FAR WSAAsyncGetHostByAddr(HWND hWnd, u_int wMsg,
-                                        const char FAR * addr, int len, int type,
-                                        char FAR * buf, int buflen);
+HANDLE PASCAL FAR WSAAsyncGetHostByAddr(
+                                        IN HWND hWnd,
+                                        IN u_int wMsg,
+                                        IN const char FAR * addr,
+                                        IN int len,
+                                        IN int type,
+                                        OUT char FAR * buf,
+                                        IN int buflen);
 
-int PASCAL FAR WSACancelAsyncRequest(HANDLE hAsyncTaskHandle);
+int PASCAL FAR WSACancelAsyncRequest(IN HANDLE hAsyncTaskHandle);
 
-int PASCAL FAR WSAAsyncSelect(SOCKET s, HWND hWnd, u_int wMsg,
-                               long lEvent);
+int PASCAL FAR WSAAsyncSelect(
+                              IN SOCKET s,
+                              IN HWND hWnd,
+                              IN u_int wMsg,
+                              IN long lEvent);
 
-int PASCAL FAR WSARecvEx (SOCKET s, char FAR * buf, int len, int FAR *flags);
+int PASCAL FAR WSARecvEx (
+                          IN SOCKET s,
+                          OUT char FAR * buf,
+                          IN int len,
+                          IN OUT int FAR *flags);
 
-#if defined(__BORLANDC__) && defined(__FLAT__)
 typedef struct _TRANSMIT_FILE_BUFFERS {
     PVOID Head;
     DWORD HeadLength;
@@ -878,7 +999,6 @@ GetAcceptExSockaddrs (
     OUT struct sockaddr **RemoteSockaddr,
     OUT LPINT RemoteSockaddrLength
     );
-#endif /* __BORLANDC__ && __FLAT__ */
 
 #ifdef __cplusplus
 }
@@ -959,7 +1079,7 @@ typedef struct timeval FAR *LPTIMEVAL;
  */
 #define WSAGETSELECTERROR(lParam)           HIWORD(lParam)
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif  /* _WINSOCKAPI_ */
 
 

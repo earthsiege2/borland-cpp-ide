@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbstring.h>
 
@@ -23,7 +24,7 @@ Usage           unsigned char *_mbsset(unsigned char *s, unsigned int c);
 
 Prototype in    mbstring.h
 
-Description     Fills the character c into the string s. 
+Description     Fills the character c into the string s.
                 If c is 2-bytes character and the size of s is odd
                 number of bytes, _mbsset fills 0x20(1-byte space
                 character) for the gap between them.

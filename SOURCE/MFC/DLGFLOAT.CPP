@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 //  see "dlgdata.cpp" for non-floating point support
 /////////////////////////////////////////////////////////////////////////////
 
-static BOOL AFXAPI AfxSimpleFloatParse(LPCTSTR lpszText, double& d)
+AFX_STATIC BOOL AFXAPI _AfxSimpleFloatParse(LPCTSTR lpszText, double& d)
 {
 	ASSERT(lpszText != NULL);
 	while (*lpszText == ' ' || *lpszText == '\t')
@@ -55,7 +55,7 @@ void AFXAPI AfxTextFloatFormat(CDataExchange* pDX, int nIDC,
 	{
 		::GetWindowText(hWndCtrl, szBuffer, _countof(szBuffer));
 		double d;
-		if (!AfxSimpleFloatParse(szBuffer, d))
+		if (!_AfxSimpleFloatParse(szBuffer, d))
 		{
 			AfxMessageBox(AFX_IDP_PARSE_REAL);
 			pDX->Fail();            // throws exception
@@ -85,7 +85,7 @@ void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, double& value)
 /////////////////////////////////////////////////////////////////////////////
 // Validation procs
 
-static void AFXAPI FailMinMaxReal(CDataExchange* pDX,
+AFX_STATIC void AFXAPI _AfxFailMinMaxReal(CDataExchange* pDX,
 	 double minVal, double maxVal, int precision, UINT nIDPrompt)
 	// error string must have '%1' and '%2' in it
 {
@@ -110,7 +110,7 @@ void AFXAPI DDV_MinMaxFloat(CDataExchange* pDX, float const& value, float minVal
 {
 	ASSERT(minVal <= maxVal);
 	if (value < minVal || value > maxVal)
-		FailMinMaxReal(pDX, (double)minVal, (double)maxVal, FLT_DIG,
+		_AfxFailMinMaxReal(pDX, (double)minVal, (double)maxVal, FLT_DIG,
 			AFX_IDP_PARSE_REAL_RANGE);
 }
 
@@ -118,7 +118,7 @@ void AFXAPI DDV_MinMaxDouble(CDataExchange* pDX, double const& value, double min
 {
 	ASSERT(minVal <= maxVal);
 	if (value < minVal || value > maxVal)
-		FailMinMaxReal(pDX, (double)minVal, (double)maxVal, DBL_DIG,
+		_AfxFailMinMaxReal(pDX, (double)minVal, (double)maxVal, DBL_DIG,
 			AFX_IDP_PARSE_REAL_RANGE);
 }
 

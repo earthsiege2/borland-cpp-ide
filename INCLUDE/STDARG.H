@@ -6,24 +6,30 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.2  $ */
 
 #ifndef __STDARG_H
 #define __STDARG_H
+#define _INC_STDARG  /* MSC Guard name */
 
 #ifdef __VARARGS_H
 #error Can't include both STDARG.H and VARARGS.H
 #endif
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
+
+#ifdef __cplusplus
+namespace std {
+#endif /* __cplusplus */
 
 typedef void _FAR *va_list;
 
@@ -37,4 +43,13 @@ typedef void _FAR *va_list;
 #define _va_ptr             (...)
 #endif
 
+#ifdef __cplusplus
+} // std
+#endif /* __cplusplus */
+
 #endif  /* __STDARG_H */
+
+#if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__STDARG_H_USING_LIST)
+#define __STDARG_H_USING_LIST
+     using std::va_list;
+#endif /* __USING_CNAME__ */

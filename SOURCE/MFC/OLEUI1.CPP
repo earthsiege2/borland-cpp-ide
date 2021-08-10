@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -101,7 +101,8 @@ BOOL COleDocument::OnCmdMsg(UINT nID, int nCode, void* pExtra,
 
 	if (nCode == CN_COMMAND && nID >= ID_OLE_VERB_FIRST && nID <= ID_OLE_VERB_LAST)
 	{
-		COleClientItem* pSel = GetPrimarySelectedItem(GetRoutingView());
+		CView* pRoutingView = GetRoutingView_();
+		COleClientItem* pSel = GetPrimarySelectedItem(pRoutingView);
 		if (pSel != NULL)
 		{
 			if (pHandlerInfo != NULL)       // routing test
@@ -112,7 +113,7 @@ BOOL COleDocument::OnCmdMsg(UINT nID, int nCode, void* pExtra,
 
 			// activate the current selection with the appropriate verb
 			CWaitCursor wait;
-			pSel->DoVerb(nID - ID_OLE_VERB_FIRST, GetRoutingView());
+			pSel->DoVerb(nID - ID_OLE_VERB_FIRST, pRoutingView);
 			return TRUE;    // handled
 		}
 	}

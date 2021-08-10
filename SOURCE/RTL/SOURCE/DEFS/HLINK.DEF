@@ -1,0 +1,31 @@
+LIBRARY HLINK
+EXPORTS
+
+    HlinkClone                               = 'HLINK.DLL'.*
+    HlinkCreateBrowseContext                 = 'HLINK.DLL'.*
+    HlinkCreateExtensionServices             = 'HLINK.DLL'.*
+    HlinkCreateFromData                      = 'HLINK.DLL'.*
+    HlinkCreateFromMoniker                   = 'HLINK.DLL'.*
+    HlinkCreateFromString                    = 'HLINK.DLL'.*
+    HlinkCreateShortcut                      = 'HLINK.DLL'.*
+    HlinkCreateShortcutFromMoniker           = 'HLINK.DLL'.*
+    HlinkCreateShortcutFromString            = 'HLINK.DLL'.*
+    HlinkGetSpecialReference                 = 'HLINK.DLL'.*
+    HlinkGetValueFromParams                  = 'HLINK.DLL'.*
+    HlinkIsShortcut                          = 'HLINK.DLL'.*
+    HlinkNavigate                            = 'HLINK.DLL'.*
+    HlinkNavigateToStringReference           = 'HLINK.DLL'.*
+    HlinkOnNavigate                          = 'HLINK.DLL'.*
+    HlinkOnRenameDocument                    = 'HLINK.DLL'.*
+    HlinkParseDisplayName                    = 'HLINK.DLL'.*
+    HlinkPreprocessMoniker                   = 'HLINK.DLL'.*
+    HlinkQueryCreateFromData                 = 'HLINK.DLL'.*
+    HlinkResolveMonikerForData               = 'HLINK.DLL'.*
+    HlinkResolveShortcut                     = 'HLINK.DLL'.*
+    HlinkResolveShortcutToMoniker            = 'HLINK.DLL'.*
+    HlinkResolveShortcutToString             = 'HLINK.DLL'.*
+    HlinkResolveStringForData                = 'HLINK.DLL'.*
+    HlinkSetSpecialReference                 = 'HLINK.DLL'.*
+    HlinkTranslateURL                        = 'HLINK.DLL'.*
+    HlinkUpdateStackItem                     = 'HLINK.DLL'.*
+    OleSaveToStreamEx                        = 'HLINK.DLL'.*

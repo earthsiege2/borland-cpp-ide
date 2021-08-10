@@ -1,6 +1,6 @@
 
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -26,7 +26,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
+#include "elements.h"  // used for special creation
 
 #define new DEBUG_NEW
 
@@ -90,7 +90,7 @@ void CMapStringToPtr::RemoveAll()
 			for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL;
 			  pAssoc = pAssoc->pNext)
 			{
-				pAssoc->key.Empty();  // free up string data
+				DestructElement(&pAssoc->key);  // free up string data
 
 			}
 		}
@@ -153,7 +153,7 @@ CMapStringToPtr::NewAssoc()
 
 void CMapStringToPtr::FreeAssoc(CMapStringToPtr::CAssoc* pAssoc)
 {
-	pAssoc->key.Empty();  // free up string data
+	DestructElement(&pAssoc->key);  // free up string data
 
 	pAssoc->pNext = m_pFreeList;
 	m_pFreeList = pAssoc;

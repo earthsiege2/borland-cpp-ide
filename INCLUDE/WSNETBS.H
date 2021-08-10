@@ -1,6 +1,6 @@
 /*
  *   wsnetbs.h
- *   Copyright (c) 1994-1995, Microsoft Corp. All rights reserved.
+ *   Copyright (c) 1994-1999, Microsoft Corp. All rights reserved.
  *
  *   Windows Sockets include file for NETBIOS.  This file contains all
  *   standardized NETBIOS information.  Include this header file after
@@ -9,8 +9,12 @@
  */
 
 #ifndef _WSNETBS_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSNETBS_
-#pragma option -b
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 /*
  *   This is the structure of the SOCKADDR structure for NETBIOS.
@@ -66,6 +70,6 @@ typedef struct sockaddr_nb {
  */
 
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif
 

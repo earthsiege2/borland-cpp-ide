@@ -2,24 +2,38 @@
 *                                                                           *
 * windef.h -- Basic Windows Type Definitions                                *
 *                                                                           *
-* Copyright (c) 1985-1995, Microsoft Corp. All rights reserved.             *
+* Copyright (c) 1985-1998, Microsoft Corp. All rights reserved.             *
 *                                                                           *
 ****************************************************************************/
 
 
 #ifndef _WINDEF_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINDEF_
-#pragma option -b
 
+#ifndef NO_STRICT
+#ifndef STRICT
+#define STRICT 1
+#endif
+#endif /* NO_STRICT */
+
+// Win32 defines _WIN32 automatically,
+// but Macintosh doesn't, so if we are using
+// Win32 Functions, we must do it here
+
+#ifdef _MAC
+#ifndef _WIN32
+#define _WIN32
+#endif
+#endif //_MAC
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #ifndef WINVER
-#define WINVER 0x0400
-#endif
-
+#define WINVER 0x0500
+#endif /* WINVER */
 
 /*
  * BASETYPES is defined in ntdef.h if these types are already defined
@@ -39,7 +53,7 @@ typedef char *PSZ;
 #define MAX_PATH          260
 
 #ifndef NULL
-#if defined(__cplusplus) || defined(_Windows)
+#ifdef __cplusplus
 #define NULL    0
 #else
 #define NULL    ((void *)0)
@@ -70,33 +84,15 @@ typedef char *PSZ;
 #undef near
 #undef pascal
 
-#if defined(__BORLANDC__)
-#define _STDCALL_SUPPORTED
-#define _PUSHPOP_SUPPORTED
-#if (__BORLANDC__ < 0x500)
-#define _M_IX86 300
-#ifndef _WIN32
-#define _WIN32
-#endif
-#ifndef __cplusplus
-#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
-#define _WCHAR_T
-#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
-typedef unsigned short wchar_t;
-#endif
-#endif
-#endif
-#endif
-
 #define far
 #define near
-#if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
+#if (!defined(_MAC)) && ((_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED))
 #define pascal __stdcall
 #else
 #define pascal
 #endif
 
-#if defined(DOSWIN32) || defined(__BORLANDC__)
+#if defined(DOSWIN32) || defined(_MAC)
 #define cdecl _cdecl
 #ifndef CDECL
 #define CDECL _cdecl
@@ -108,7 +104,18 @@ typedef unsigned short wchar_t;
 #endif
 #endif
 
-#if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
+#ifdef _MAC
+#define CALLBACK    PASCAL
+#define WINAPI      CDECL
+#define WINAPIV     CDECL
+#define APIENTRY    WINAPI
+#define APIPRIVATE  CDECL
+#ifdef _68K_
+#define PASCAL      __pascal
+#else
+#define PASCAL
+#endif
+#elif (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
 #define CALLBACK    __stdcall
 #define WINAPI      __stdcall
 #define WINAPIV     __cdecl
@@ -124,6 +131,8 @@ typedef unsigned short wchar_t;
 #define PASCAL      pascal
 #endif
 
+#undef FAR
+#undef  NEAR
 #define FAR                 far
 #define NEAR                near
 #ifndef CONST
@@ -155,17 +164,15 @@ typedef unsigned int        UINT;
 typedef unsigned int        *PUINT;
 
 #ifndef NT_INCLUDED
-#pragma option -b.
 #include <winnt.h>
-#pragma option -b
 #endif /* NT_INCLUDED */
 
 /* Types use for passing & returning polymorphic values */
-typedef UINT WPARAM;
-typedef LONG LPARAM;
-typedef LONG LRESULT;
+typedef UINT_PTR            WPARAM;
+typedef LONG_PTR            LPARAM;
+typedef LONG_PTR            LRESULT;
 
-#if !defined(NOMINMAX) && !defined(__cplusplus)
+#ifndef NOMINMAX
 
 #ifndef max
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
@@ -175,19 +182,22 @@ typedef LONG LRESULT;
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-#endif  /* NOMINMAX && !__cplusplus */
+#endif  /* NOMINMAX */
 
-#define MAKEWORD(a, b)      ((WORD)(((BYTE)(a)) | (((WORD)((BYTE)(b))) << 8)))
-#define MAKELONG(a, b)      ((LONG)(((WORD)(a)) | (((DWORD)((WORD)(b))) << 16)))
-#define LOWORD(l)           ((WORD)(l))
-#define HIWORD(l)           ((WORD)(((DWORD)(l) >> 16) & 0xFFFF))
-#define LOBYTE(w)           ((BYTE)(w))
-#define HIBYTE(w)           ((BYTE)(((WORD)(w) >> 8) & 0xFF))
+#define MAKEWORD(a, b)      ((WORD)(((BYTE)((DWORD_PTR)(a) & 0xff)) | ((WORD)((BYTE)((DWORD_PTR)(b) & 0xff))) << 8))
+#define MAKELONG(a, b)      ((LONG)(((WORD)((DWORD_PTR)(a) & 0xffff)) | ((DWORD)((WORD)((DWORD_PTR)(b) & 0xffff))) << 16))
+#define LOWORD(l)           ((WORD)((DWORD_PTR)(l) & 0xffff))
+#define HIWORD(l)           ((WORD)((DWORD_PTR)(l) >> 16))
+#define LOBYTE(w)           ((BYTE)((DWORD_PTR)(w) & 0xff))
+#define HIBYTE(w)           ((BYTE)((DWORD_PTR)(w) >> 8))
 
 
 #ifndef WIN_INTERNAL
 DECLARE_HANDLE            (HWND);
 DECLARE_HANDLE            (HHOOK);
+#ifdef WINABLE
+DECLARE_HANDLE            (HEVENT);
+#endif
 #endif
 
 typedef WORD                ATOM;
@@ -198,34 +208,63 @@ typedef HANDLE              HGLOBAL;
 typedef HANDLE              HLOCAL;
 typedef HANDLE              GLOBALHANDLE;
 typedef HANDLE              LOCALHANDLE;
+#ifndef _MAC
+#ifdef _WIN64
+typedef INT_PTR (FAR WINAPI *FARPROC)();
+typedef INT_PTR (NEAR WINAPI *NEARPROC)();
+typedef INT_PTR (WINAPI *PROC)();
+#else
 typedef int (FAR WINAPI *FARPROC)();
 typedef int (NEAR WINAPI *NEARPROC)();
 typedef int (WINAPI *PROC)();
+#endif  // _WIN64
+#else
+typedef int (CALLBACK *FARPROC)();
+typedef int (CALLBACK *NEARPROC)();
+typedef int (CALLBACK *PROC)();
+#endif
 
+#if !defined(_MAC) || !defined(GDI_INTERNAL)
 #ifdef STRICT
 typedef void NEAR* HGDIOBJ;
 #else
 DECLARE_HANDLE(HGDIOBJ);
 #endif
+#endif
 
+DECLARE_HANDLE(HKEY);
+typedef HKEY *PHKEY;
+
+#if !defined(_MAC) || !defined(WIN_INTERNAL)
 DECLARE_HANDLE(HACCEL);
+#endif
+#if !defined(_MAC) || !defined(GDI_INTERNAL)
 DECLARE_HANDLE(HBITMAP);
 DECLARE_HANDLE(HBRUSH);
+#endif
 #if(WINVER >= 0x0400)
 DECLARE_HANDLE(HCOLORSPACE);
 #endif /* WINVER >= 0x0400 */
+#if !defined(_MAC) || !defined(GDI_INTERNAL)
 DECLARE_HANDLE(HDC);
+#endif
 DECLARE_HANDLE(HGLRC);          // OpenGL
 DECLARE_HANDLE(HDESK);
 DECLARE_HANDLE(HENHMETAFILE);
+#if !defined(_MAC) || !defined(GDI_INTERNAL)
 DECLARE_HANDLE(HFONT);
+#endif
 DECLARE_HANDLE(HICON);
+#if !defined(_MAC) || !defined(WIN_INTERNAL)
 DECLARE_HANDLE(HMENU);
+#endif
 DECLARE_HANDLE(HMETAFILE);
 DECLARE_HANDLE(HINSTANCE);
 typedef HINSTANCE HMODULE;      /* HMODULEs can be used in place of HINSTANCEs */
+#if !defined(_MAC) || !defined(GDI_INTERNAL)
 DECLARE_HANDLE(HPALETTE);
 DECLARE_HANDLE(HPEN);
+#endif
 DECLARE_HANDLE(HRGN);
 DECLARE_HANDLE(HRSRC);
 DECLARE_HANDLE(HSTR);
@@ -233,8 +272,20 @@ DECLARE_HANDLE(HTASK);
 DECLARE_HANDLE(HWINSTA);
 DECLARE_HANDLE(HKL);
 
+#if(WINVER >= 0x0500)
+#ifndef _MAC
+DECLARE_HANDLE(HMONITOR);
+DECLARE_HANDLE(HWINEVENTHOOK);
+#endif
+#endif /* WINVER >= 0x0500 */
+
+#ifndef _MAC
 typedef int HFILE;
 typedef HICON HCURSOR;      /* HICONs & HCURSORs are polymorphic */
+#else
+typedef short HFILE;
+DECLARE_HANDLE(HCURSOR);    /* HICONs & HCURSORs are not polymorphic */
+#endif
 
 typedef DWORD   COLORREF;
 typedef DWORD   *LPCOLORREF;
@@ -284,8 +335,13 @@ typedef SIZE               *PSIZEL, *LPSIZEL;
 
 typedef struct tagPOINTS
 {
+#ifndef _MAC
     SHORT   x;
     SHORT   y;
+#else
+    SHORT   y;
+    SHORT   x;
+#endif
 } POINTS, *PPOINTS, *LPPOINTS;
 
 /* mode selections for the device mode function */
@@ -323,6 +379,6 @@ typedef struct tagPOINTS
 }
 #endif
 
-
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* _WINDEF_ */
+

@@ -6,12 +6,13 @@
   *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 
@@ -35,7 +36,7 @@ Return value    Returns a converted value. If the code is not convertible,
 
 unsigned int _RTLENTRY _EXPFUNC _mbctokata(unsigned int c)
 {
-    if (c >= 0x829F && c <= 0x82F1)
+    if (_ismbchira(c))
     {
         c += 0x00A1;
         if (c >= 0x837F)

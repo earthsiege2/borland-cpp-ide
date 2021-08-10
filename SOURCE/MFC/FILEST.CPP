@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -109,8 +109,25 @@ BOOL CFile::GetStatus(CFileStatus& rStatus) const
 		if ((rStatus.m_size = ::GetFileSize((HANDLE)m_hFile, NULL)) == (DWORD)-1L)
 			return FALSE;
 
-		// Win32 won't give us this from just an HFILE, need the path name
-		rStatus.m_attribute = 0;
+		if (m_strFileName.IsEmpty())
+			rStatus.m_attribute = 0;
+		else
+		{
+			DWORD dwAttribute = ::GetFileAttributes(m_strFileName);
+
+			// don't return an error for this because previous versions of MFC didn't
+			if (dwAttribute == 0xFFFFFFFF)
+				rStatus.m_attribute = 0;
+			else
+			{
+				rStatus.m_attribute = (BYTE) dwAttribute;
+#ifdef _DEBUG
+				// MFC BUG: m_attribute is only a BYTE wide
+				if (dwAttribute & ~0xFF)
+					TRACE0("Warning: CFile::GetStatus() returns m_attribute without high-order flags.\n");
+#endif
+			}
+		}
 
 		// convert times as appropriate
 		rStatus.m_ctime = CTime(ftCreate);

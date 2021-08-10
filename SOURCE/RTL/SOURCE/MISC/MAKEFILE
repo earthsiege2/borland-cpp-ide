@@ -14,27 +14,50 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
-# $Revision:   8.2  $                                                                #
+# $Revision:   9.8  $                                                                #
 #                                                                           #
 #############################################################################
 
 #############################################################################
-# In order to build the OBJ list for 16 bit platforms, a definition of      #
-# MODEL is required.                                                        #
-#############################################################################
-!if ($(OS) == DOS || $(OS) == WIN16) && !$d(MODEL)
-!    error MODEL is required
-!endif
-
-#############################################################################
 # Build the object module lists.                                            #
 #############################################################################
-!if $(MODEL) != t || !$d(MODEL)
-    OBJS =             \
-            checks.obj
+OBJS =           \
+    assert.obj   \
+    assertf.obj  \
+    bsearch.obj  \
+    borutil.obj  \
+    castmptr.obj \
+    checks.obj   \
+    ddvt.obj     \
+    delayhlp.obj \
+    ermsghlp.obj \
+    errno.obj    \
+    errormsg.obj \
+    getstrm.obj  \
+    lsearch.obj  \
+    match.obj    \
+    platform.obj \
+    pureerr.obj  \
+    qsort.obj    \
+    regexp.obj   \
+    swab.obj     \
+    version.obj  \
+    seterrmd.obj \
+    um.obj
 
-    MISC = $(LIBDIR)\obsolete.lib
+
+!if $d(DLL)
+    RES  = version.res
+
+    IMPOBJS =            \
+            ddvt.obj     \
+            pureerr.obj
+!else
+    MISC = $(LIBDIR)\gp.obj
 !endif
+
+
+MISC = $(MISC) $(LIBDIR)\obsolete.lib
 
 #############################################################################
 # Configure the environment appropriately.                                  #
@@ -50,3 +73,5 @@ $(LIBDIR)\obsolete.lib : obsolete.obj
     $(TLIB) $(LIBDIR)\$&+$**
     if exist $(LIBDIR)\$&.bak del $(LIBDIR)\$&.bak
 
+$(LIBDIR)\gp.obj : gp.obj
+    copy $** $(LIBDIR)\$.

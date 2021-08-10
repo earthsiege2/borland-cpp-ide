@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -43,18 +43,19 @@ BOOL CALLBACK AfxDlgProc(HWND hWnd, UINT message, WPARAM, LPARAM)
 // CDialog - Modeless and Modal
 
 BEGIN_MESSAGE_MAP(CDialog, CWnd)
-	//{{AFX_MSG_MAP(CDialog)
+#ifndef _AFX_NO_GRAYDLG_SUPPORT
 	ON_WM_CTLCOLOR()
+#endif
+	//{{AFX_MSG_MAP(CDialog)
 	ON_COMMAND(IDOK, OnOK)
 	ON_COMMAND(IDCANCEL, OnCancel)
 	ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
 	ON_MESSAGE(WM_HELPHITTEST, OnHelpHitTest)
-	ON_MESSAGE(WM_QUERY3DCONTROLS, OnQuery3dControls)
 	ON_MESSAGE(WM_INITDIALOG, HandleInitDialog)
 	ON_MESSAGE(WM_SETFONT, HandleSetFont)
 	//}}AFX_MSG_MAP
-#ifdef _MAC
-	ON_WM_SYSCOLORCHANGE()
+#ifndef _AFX_NO_CTL3D_SUPPORT
+	ON_MESSAGE(WM_QUERY3DCONTROLS, OnQuery3dControls)
 #endif
 END_MESSAGE_MAP()
 
@@ -72,6 +73,20 @@ BOOL CDialog::PreTranslateMessage(MSG* pMsg)
 	if (pFrameWnd != NULL && pFrameWnd->m_bHelpMode)
 		return FALSE;
 
+	// fix around for VK_ESCAPE in a multiline Edit that is on a Dialog
+	// that doesn't have a cancel or the cancel is disabled.
+	if (pMsg->message == WM_KEYDOWN &&
+		(pMsg->wParam == VK_ESCAPE || pMsg->wParam == VK_CANCEL) &&
+		(::GetWindowLong(pMsg->hwnd, GWL_STYLE) & ES_MULTILINE) &&
+		_AfxCompareClassName(pMsg->hwnd, _T("Edit")))
+	{
+		HWND hItem = ::GetDlgItem(m_hWnd, IDCANCEL);
+		if (hItem == NULL || ::IsWindowEnabled(hItem))
+		{
+			SendMessage(WM_COMMAND, IDCANCEL, 0);
+			return TRUE;
+		}
+	}
 	// filter both messages to dialog and from children
 	return PreTranslateInput(pMsg);
 }
@@ -164,12 +179,7 @@ BOOL CDialog::Create(LPCTSTR lpszTemplateName, CWnd* pParentWnd)
 	HINSTANCE hInst = AfxFindResourceHandle(lpszTemplateName, RT_DIALOG);
 	HRSRC hResource = ::FindResource(hInst, lpszTemplateName, RT_DIALOG);
 	HGLOBAL hTemplate = LoadResource(hInst, hResource);
-#ifdef _AFXDLL
-	BOOL bResult = CreateIndirect(hTemplate, pParentWnd,
-		AfxGetModuleState()->m_dwVersion >= 0x410 ? hInst : NULL);
-#else
 	BOOL bResult = CreateIndirect(hTemplate, pParentWnd, hInst);
-#endif
 	FreeResource(hTemplate);
 
 	return bResult;
@@ -225,12 +235,7 @@ BOOL CWnd::CreateDlg(LPCTSTR lpszTemplateName, CWnd* pParentWnd)
 	ASSERT(lpDialogTemplate != NULL);
 
 	// create a modeless dialog
-#ifdef _AFXDLL
-	BOOL bSuccess = CreateDlgIndirect(lpDialogTemplate, pParentWnd,
-		AfxGetModuleState()->m_dwVersion >= 0x410 ? hInst : NULL);
-#else
 	BOOL bSuccess = CreateDlgIndirect(lpDialogTemplate, pParentWnd, hInst);
-#endif
 
 	// free resource
 	UnlockResource(hDialogTemplate);
@@ -255,69 +260,88 @@ BOOL CWnd::CreateDlgIndirect(LPCDLGTEMPLATE lpDialogTemplate,
 	if (hInst == NULL)
 		hInst = AfxGetInstanceHandle();
 
-	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
-
 #ifndef _AFX_NO_OCC_SUPPORT
 	_AFX_OCC_DIALOG_INFO occDialogInfo;
-
-	// separately create OLE controls in the dialog template
 	COccManager* pOccManager = afxOccManager;
-	if (pOccManager != NULL)
+#endif
+
+	HGLOBAL hTemplate = NULL;
+
+	HWND hWnd = NULL;
+#ifdef _DEBUG
+	DWORD dwError = 0;
+#endif
+
+	TRY
 	{
-		if (!SetOccDialogInfo(&occDialogInfo))
+		VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+		AfxDeferRegisterClass(AFX_WNDCOMMCTLSNEW_REG);
+
+#ifndef _AFX_NO_OCC_SUPPORT
+		// separately create OLE controls in the dialog template
+		if (pOccManager != NULL)
+		{
+			if (!SetOccDialogInfo(&occDialogInfo))
+				return FALSE;
+
+			lpDialogTemplate = pOccManager->PreCreateDialog(&occDialogInfo,
+				lpDialogTemplate);
+		}
+
+		if (lpDialogTemplate == NULL)
 			return FALSE;
-
-		lpDialogTemplate = pOccManager->PreCreateDialog(&occDialogInfo,
-			lpDialogTemplate);
-	}
-
-	if (lpDialogTemplate == NULL)
-		return FALSE;
 #endif //!_AFX_NO_OCC_SUPPORT
 
-#ifndef _MAC
-	// If no font specified, set the system font.
-	HGLOBAL hTemplate = NULL;
-	CString strFace;
-	WORD wSize = 0;
-	BOOL bSetSysFont = !CDialogTemplate::GetFont(lpDialogTemplate, strFace,
-		wSize);
+		// If no font specified, set the system font.
+		CString strFace;
+		WORD wSize = 0;
+		BOOL bSetSysFont = !CDialogTemplate::GetFont(lpDialogTemplate, strFace,
+			wSize);
 
-	// On DBCS systems, also change "MS Sans Serif" or "Helv" to system font.
-	if ((!bSetSysFont) && GetSystemMetrics(SM_DBCSENABLED))
-	{
-		bSetSysFont = ((strFace == _T("MS Sans Serif")) ||
-			(strFace == _T("Helv")));
-		if (bSetSysFont && (wSize == 8))
-			wSize = 0;
+		// On DBCS systems, also change "MS Sans Serif" or "Helv" to system font.
+		if ((!bSetSysFont) && GetSystemMetrics(SM_DBCSENABLED))
+		{
+			bSetSysFont = (strFace == _T("MS Shell Dlg") ||
+				strFace == _T("MS Sans Serif") || strFace == _T("Helv"));
+			if (bSetSysFont && (wSize == 8))
+				wSize = 0;
+		}
+
+		if (bSetSysFont)
+		{
+			CDialogTemplate dlgTemp(lpDialogTemplate);
+			dlgTemp.SetSystemFont(wSize);
+			hTemplate = dlgTemp.Detach();
+		}
+
+		if (hTemplate != NULL)
+			lpDialogTemplate = (DLGTEMPLATE*)GlobalLock(hTemplate);
+
+		// setup for modal loop and creation
+		m_nModalResult = -1;
+		m_nFlags |= WF_CONTINUEMODAL;
+
+		// create modeless dialog
+		AfxHookWindowCreate(this);
+		hWnd = ::CreateDialogIndirect(hInst, lpDialogTemplate,
+			pParentWnd->GetSafeHwnd(), AfxDlgProc);
+#ifdef _DEBUG
+		dwError = ::GetLastError();
+#endif
 	}
-
-	if (bSetSysFont)
+	CATCH_ALL(e)
 	{
-		CDialogTemplate dlgTemp(lpDialogTemplate);
-		dlgTemp.SetSystemFont(wSize);
-		hTemplate = dlgTemp.Detach();
+		DELETE_EXCEPTION(e);
+		m_nModalResult = -1;
 	}
-
-	if (hTemplate != NULL)
-		lpDialogTemplate = (DLGTEMPLATE*)GlobalLock(hTemplate);
-#endif //!_MAC
-
-	// setup for modal loop and creation
-	m_nModalResult = -1;
-	m_nFlags |= WF_CONTINUEMODAL;
-
-	// create modeless dialog
-	AfxHookWindowCreate(this);
-	HWND hWnd = ::CreateDialogIndirect(hInst, lpDialogTemplate,
-		pParentWnd->GetSafeHwnd(), AfxDlgProc);
+	END_CATCH_ALL
 
 #ifndef _AFX_NO_OCC_SUPPORT
 	if (pOccManager != NULL)
 	{
 		pOccManager->PostCreateDialog(&occDialogInfo);
-		SetOccDialogInfo(NULL);
+		if (hWnd != NULL)
+			SetOccDialogInfo(NULL);
 	}
 #endif //!_AFX_NO_OCC_SUPPORT
 
@@ -325,30 +349,32 @@ BOOL CWnd::CreateDlgIndirect(LPCDLGTEMPLATE lpDialogTemplate,
 		PostNcDestroy();        // cleanup if Create fails too soon
 
 	// handle EndDialog calls during OnInitDialog
-	if (!(m_nFlags & WF_CONTINUEMODAL))
+	if (hWnd != NULL && !(m_nFlags & WF_CONTINUEMODAL))
 	{
 		::DestroyWindow(hWnd);
 		hWnd = NULL;
 	}
 
-#ifndef _MAC
 	if (hTemplate != NULL)
 	{
 		GlobalUnlock(hTemplate);
 		GlobalFree(hTemplate);
 	}
-#endif //!_MAC
 
-	if (hWnd == NULL)
+	// help with error diagnosis (only if WM_INITDIALOG didn't EndDialog())
+	if (hWnd == NULL && (m_nFlags & WF_CONTINUEMODAL))
 	{
 #ifdef _DEBUG
-		TRACE0("Warning: Dialog creation failed!\n");
 #ifndef _AFX_NO_OCC_SUPPORT
 		if (afxOccManager == NULL)
 		{
 			TRACE0(">>> If this dialog has OLE controls:\n");
 			TRACE0(">>> AfxEnableControlContainer has not been called yet.\n");
 			TRACE0(">>> You should call it in your app's InitInstance function.\n");
+		}
+		else if (dwError != 0)
+		{
+			TRACE1("Warning: Dialog creation failed!  GetLastError returns 0x%8.8X\n", dwError);
 		}
 #endif //!_AFX_NO_OCC_SUPPORT
 #endif //_DEBUG
@@ -360,12 +386,6 @@ BOOL CWnd::CreateDlgIndirect(LPCDLGTEMPLATE lpDialogTemplate,
 }
 
 #ifndef _AFX_NO_OCC_SUPPORT
-
-BOOL CWnd::SetOccDialogInfo(_AFX_OCC_DIALOG_INFO*)
-{
-	ASSERT(FALSE); // this class doesn't support dialog creation
-	return FALSE;
-}
 
 BOOL CDialog::SetOccDialogInfo(_AFX_OCC_DIALOG_INFO* pOccDialogInfo)
 {
@@ -439,16 +459,18 @@ HWND CDialog::PreModal()
 	ASSERT(m_hWnd == NULL);
 
 	// allow OLE servers to disable themselves
-	AfxGetApp()->EnableModeless(FALSE);
+	CWinApp* pApp = AfxGetApp();
+	if (pApp != NULL)
+		pApp->EnableModeless(FALSE);
 
 	// find parent HWND
-	CWnd* pWnd = CWnd::GetSafeOwner(m_pParentWnd, &m_hWndTop);
+	HWND hWnd = CWnd::GetSafeOwner_(m_pParentWnd->GetSafeHwnd(), &m_hWndTop);
 
 	// hook for creation of dialog
 	AfxHookWindowCreate(this);
 
 	// return window to use as parent for dialog
-	return pWnd->GetSafeHwnd();
+	return hWnd;
 }
 
 void CDialog::PostModal()
@@ -460,7 +482,9 @@ void CDialog::PostModal()
 	if (::IsWindow(m_hWndTop))
 		::EnableWindow(m_hWndTop, TRUE);
 	m_hWndTop = NULL;
-	AfxGetApp()->EnableModeless(TRUE);
+	CWinApp* pApp = AfxGetApp();
+	if (pApp != NULL)
+		pApp->EnableModeless(TRUE);
 }
 
 int CDialog::DoModal()
@@ -489,35 +513,41 @@ int CDialog::DoModal()
 	// disable parent (before creating dialog)
 	HWND hWndParent = PreModal();
 	AfxUnhookWindowCreate();
-	CWnd* pParentWnd = CWnd::FromHandle(hWndParent);
 	BOOL bEnableParent = FALSE;
 	if (hWndParent != NULL && ::IsWindowEnabled(hWndParent))
 	{
 		::EnableWindow(hWndParent, FALSE);
 		bEnableParent = TRUE;
 	}
-	// create modeless dialog
-	AfxHookWindowCreate(this);
-#ifdef _AFXDLL
-	if (CreateDlgIndirect(lpDialogTemplate, CWnd::FromHandle(hWndParent),
-		AfxGetModuleState()->m_dwVersion >= 0x410 ? hInst : NULL))
-#else
-	if (CreateDlgIndirect(lpDialogTemplate, CWnd::FromHandle(hWndParent), hInst))
-#endif
-	{
-		if (m_nFlags & WF_CONTINUEMODAL)
-		{
-			// enter modal loop
-			DWORD dwFlags = MLF_SHOWONIDLE;
-			if (GetStyle() & DS_NOIDLEMSG)
-				dwFlags |= MLF_NOIDLEMSG;
-			VERIFY(RunModalLoop(dwFlags) == m_nModalResult);
-		}
 
-		// hide the window before enabling the parent, etc.
-		SetWindowPos(NULL, 0, 0, 0, 0, SWP_HIDEWINDOW|
-			SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_NOZORDER);
+	TRY
+	{
+		// create modeless dialog
+		AfxHookWindowCreate(this);
+		if (CreateDlgIndirect(lpDialogTemplate,
+						CWnd::FromHandle(hWndParent), hInst))
+		{
+			if (m_nFlags & WF_CONTINUEMODAL)
+			{
+				// enter modal loop
+				DWORD dwFlags = MLF_SHOWONIDLE;
+				if (GetStyle() & DS_NOIDLEMSG)
+					dwFlags |= MLF_NOIDLEMSG;
+				VERIFY(RunModalLoop(dwFlags) == m_nModalResult);
+			}
+
+			// hide the window before enabling the parent, etc.
+			if (m_hWnd != NULL)
+				SetWindowPos(NULL, 0, 0, 0, 0, SWP_HIDEWINDOW|
+					SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_NOZORDER);
+		}
 	}
+	CATCH_ALL(e)
+	{
+		DELETE_EXCEPTION(e);
+		m_nModalResult = -1;
+	}
+	END_CATCH_ALL
 
 	if (bEnableParent)
 		::EnableWindow(hWndParent, TRUE);
@@ -728,24 +758,13 @@ BOOL CDialog::CheckAutoCenter()
 /////////////////////////////////////////////////////////////////////////////
 // Gray background support
 
+#ifndef _AFX_NO_GRAYDLG_SUPPORT
 HBRUSH CDialog::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
 	// use helper in CWnd
 	return OnGrayCtlColor(pDC, pWnd, nCtlColor);
 }
-
-#ifdef _MAC
-void CDialog::OnSysColorChange()
-{
-	// redetermine the solid color to be used for the gray background brush
-	_AFX_WIN_STATE* pWinState = _afxWinState;
-	if (pWinState->m_crDlgTextClr != (COLORREF)-1)
-	{
-		AfxGetApp()->SetDialogBkColor(pWinState->m_crDlgBkClr,
-			pWinState->m_crDlgTextClr);
-	}
-}
-#endif
+#endif //!_AFX_NO_GRAYDLG_SUPPORT
 
 /////////////////////////////////////////////////////////////////////////////
 // CDialog support for context sensitive help.
@@ -756,7 +775,9 @@ LRESULT CDialog::OnCommandHelp(WPARAM, LPARAM lParam)
 		lParam = HID_BASE_RESOURCE + m_nIDHelp;
 	if (lParam != 0)
 	{
-		AfxGetApp()->WinHelp(lParam);
+		CWinApp* pApp = AfxGetApp();
+		if (pApp != NULL)
+			pApp->WinHelp(lParam);
 		return TRUE;
 	}
 	return FALSE;

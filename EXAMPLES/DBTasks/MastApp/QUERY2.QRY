@@ -1,0 +1,40 @@
+Ver 2.0,QBE - Integra Visual Database Builder,0, 10, 2048, 1498,,,,,
+ , , - Distinct & Quote,,,,,
+    2, - Number of Tables,-1, -1, 750, 537, 742, 225,,,,
+CUSTOMER.DB,CUSTOMER,20, 10, 137, 210,,,,,
+ORDERS.DB,ORDERS,184, 11, 301, 214,,,,,
+    6, - Number of Columns,,,,,,
+OrderNo,ORDERS,                  65,     , ,,1,1
+     , - Number of Criteria,,,,,,
+Company,CUSTOMER,                   1,     , ,,,
+     , - Number of Criteria,,,,,,
+LastInvoiceDate,CUSTOMER,                   1,     , ,,,
+     , - Number of Criteria,,,,,,
+TotalAmt,,                   1,    1, ,,,
+ORDERS.ItemsTotal  * ( 1+ORDERS.TaxRate )  + ORDERS.Freight,,,,,,,
+     , - Number of Criteria,,,,,,
+AmountPaid,ORDERS,                   1,     , ,,,
+     , - Number of Criteria,,,,,,
+AmountDue,,                   1,    2, ,,,
+ORDERS.ItemsTotal *  ( 1 + ORDERS.TaxRate )  + ORDERS.Freight - ORDERS.AmountPaid,,,,,,,
+    1, - Number of Criteria,,,,,,
+>0.01,    6,,,,,,
+    1, - Number of Joins,,,,,,
+CustNo,CUSTOMER,CustNo,ORDERS,          ,          ,,
+
+"SELECT Statement"
+,,,,,,,
+SELECT	ORDERS."OrderNo" , CUSTOMER."Company" , 
+	CUSTOMER."LastInvoiceDate" , 
+	( ORDERS.ItemsTotal  * ( 1+ORDERS.TaxRate )  + ORDERS.Freight )  as TotalAmt , 
+	ORDERS."AmountPaid" , 
+	( ORDERS.ItemsTotal *  ( 1 + ORDERS.TaxRate )  + ORDERS.Freight - ORDERS.AmountPaid )  as AmountDue
+FROM	"CUSTOMER.DB" CUSTOMER , "ORDERS.DB" ORDERS
+WHERE	( CUSTOMER.CustNo = ORDERS.CustNo )
+		AND
+	(
+	( ( ORDERS.ItemsTotal *  ( 1 + ORDERS.TaxRate )  + ORDERS.Freight - ORDERS.AmountPaid ) >0.01 )
+	)
+ORDER BY
+	ORDE,,,,,,,
+RS."OrderNo" desc,,,,,,,

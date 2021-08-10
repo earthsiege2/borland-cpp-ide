@@ -1,0 +1,126 @@
+
+<HTML>
+<HEAD><TITLE>DirectDraw Examples</TITLE></HEAD>
+<BODY>
+
+<A Name="Top">
+<H1> DirectDraw Examples</H1>
+
+<A HREF="#Overview">Overview</A><BR>
+<A HREF="#DirectDraw">Things you need to know about DirectDraw</A><BR>
+<A HREF="#MS">Compiling the examples for the MS DirectDraw SDK</A><BR>
+
+
+<A Name="Overview">
+<H3>Overview</H3>
+
+<p>The five programs beneath this directory demonstrate how to use 
+DirectDraw in CBuilder. The code shown here is meant to get you up
+and running with this high performance graphics technology.</p>
+
+<p>All of the programs in these directories run in exclusive mode.
+Programs that run in exclusive mode take over the screen entirely,
+and no other Windows or DOS programs may run while they are active.
+If an exception occurs during the run of one of these programs, then
+your machine may appear to lock up. The problem is that any dialog
+boxes or other warnings that might be displayed will not be able to
+show themselves on screen, since the running program has exclusive
+rights to the video memory. If you are able to close these hidden
+dialogs then you can usually continue the program. If you can't close
+the dialogs displaying an error message,then your Windows 95 session
+will probably need to be rebooted. Windowns NT sessions can usually
+be saved by using the task manager to remove either the offending 
+program, or else BCB itself. 
+</p>
+
+<A HREF="#Top">Goto Top</A><BR>
+
+<A Name="DirectDraw">
+<H3>About DirectDraw</H3>
+
+<p>These are DirectDraw example programs. DirectDraw programs require that you
+have the DirectDraw runtime on your system. The runtime files are available
+from Microsoft's web site, though many machines will have them on them
+already, as they ship with a wide variety of products, including games, the
+future operating systems Windows 98 and Windows NT 5.0. If you are using NT 4,
+you should upgrade to at least Service Pack 3, so that you can have access
+to DirectDraw 3.0, which is part of that Service Pack. Don't
+try to install the DirectDraw runtime on a Windows NT system, instead, get
+the latest Service Pack. The runtime install is meant only for Windows 95 or
+98. One way to tell if you have DirectDraw on your system is to look in the
+Windows/System directory or Winnt/System32 directory for the files DDRAW.DLL
+and DSOUND.DLL.</p>
+
+<p>The purpose of DirectDraw is to allow you to perform very fast graphics
+operations inside the Windows environment. In particular, DirectDraw can
+give you direct access to the video buffers on a video card. For best
+results, you should have at least 2 MB of memory on your video card.
+DirectDraw allows you to create a backbuffer, draw to it, and then
+flip it to the visible area in your video memory. Assuming that you are
+in exclusive mode, and have enough video memory to keep both your primary
+surface and back surface in video RAM, then the flip operation is
+not a copy procedure, but simply changes the address of the block of
+memory referenced by the visible area of your video card's memory. In short
+the operation is very fast, and is guarenteed to happen in sync with
+the refresh operations on your monitor. As a result, you can use DirectDraw
+to perform very smooth animations. For a complete explanation, go to the
+DirectDraw area on Microsoft's web site, or visit my web site at
+http://users.aol.com/charliecal.</p>
+
+<A HREF="#Top">Goto Top</A><BR>
+
+<A Name="MS">
+<H3>Converting the MS DDEX Examples to CBuilder</H3>
+
+<pre>
+
+In the DirectX SDK there are five example programs designed to get 
+programmers up and running using DirectDraw. These are the programs
+from which most developers learn the basics of DirectDraw programming.
+All five programs will compile unchanged under C++Builder. All you
+need to do is start a new project and compile them.
+
+Just for the sake of clarity, I will take a few paragraphs to
+explain exactly what you have to do. For many users, this explanation
+will be unnecessary, but I want to make things as clear as possible,
+especially for programmers who are new CBuilder.
+
+To get started, create a new directory. Start a new project and remove
+the main form. Save your project to the new directory. Into that
+same directory, copy the core files from the DDEX? directories found
+with the MS DirectX SDK. For instance, if you want to compile the third
+example, the copy the following files from the DDEX1 directory:
+
+DDEX3.CPP
+DDEX3.RC
+FRNTBACK.BMP
+RESOURCE.H
+
+From the MISC directory, you should also copy DDUTIL.H and DDUTIL.CPP.
+
+Go to the C++Builder menu and select View | Project Source. delete the
+entire contents of the Project Source file and replace it with the 
+contents of DDEX3.CPP. At the top of this file, add the following 
+statement:
+
+#include <vcl.h>
+
+This syntax is added solely so you can legally use the standard USEUNIT
+and USERC directives that CBUILDER employees when adding a module to
+a project. 
+
+Now select Project | Add to Project from the menu, and add DDEX3.RC 
+and DDUTIL.CPP to your project. 
+
+At this stage you can compile and run the example program. You will get
+a few warnings from the compiler, but you can ignore all of them. This 
+same process can be followed for all of the examples except DDEX1. This
+first example program does not require that you add an RC or the DDUTIL
+file to your project.
+
+<pre>
+
+<A HREF="#Top">Goto Top</A><BR>
+
+</BODY>
+</HTML>

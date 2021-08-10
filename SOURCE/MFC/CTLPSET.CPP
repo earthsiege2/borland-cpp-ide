@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -21,21 +21,15 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-#ifdef _MAC
-#define OSTYPE 1    // Mac
-#else
 #define OSTYPE 2    // Win32
-#endif
 
-static const OLECHAR _szPropStream[] = OLESTR("Contents");
-static LARGE_INTEGER liZero = {0,0};
+AFX_STATIC_DATA LARGE_INTEGER _afxLargeZero = { 0,0 };
 
 // Old class IDs for font and picture types
-static const CLSID CLSID_StdFont_V1 =
+AFX_STATIC_DATA const CLSID _afx_CLSID_StdFont_V1 =
 	{ 0xfb8f0823,0x0164,0x101b, { 0x84,0xed,0x08,0x00,0x2b,0x2e,0xc7,0x13 } };
-static const CLSID CLSID_StdPicture_V1 =
+AFX_STATIC_DATA const CLSID _afx_CLSID_StdPicture_V1 =
 	{ 0xfb8f0824,0x0164,0x101b, { 0x84,0xed,0x08,0x00,0x2b,0x2e,0xc7,0x13 } };
-
 
 LPSTREAM AFXAPI _AfxCreateMemoryStream()
 {
@@ -121,7 +115,7 @@ BOOL COleControl::GetPropsetData(LPFORMATETC lpFormatEtc,
 		ASSERT_POINTER(lpStorage, IStorage);
 
 		// Create a stream within the storage.
-		if (FAILED(lpStorage->CreateStream(_szPropStream,
+		if (FAILED(lpStorage->CreateStream(OLESTR("Contents"),
 				STGM_SHARE_EXCLUSIVE|STGM_CREATE|STGM_READWRITE, 0, 0,
 				&lpStream)))
 		{
@@ -224,7 +218,7 @@ BOOL COleControl::GetPropsetData(LPFORMATETC lpFormatEtc,
 BOOL COleControl::SetPropsetData(LPFORMATETC lpFormatEtc,
 		LPSTGMEDIUM lpStgMedium, REFCLSID fmtid)
 {
-	UNUSED(lpFormatEtc); // unused in retail builds
+	UNUSED(lpFormatEtc); // unused in release builds
 
 	ASSERT_VALID(this);
 	ASSERT(AfxIsValidAddress(lpFormatEtc, sizeof(FORMATETC), FALSE));
@@ -241,7 +235,7 @@ BOOL COleControl::SetPropsetData(LPFORMATETC lpFormatEtc,
 		{
 			lpStorage = lpStgMedium->pstg;
 			ASSERT_POINTER(lpStorage, IStorage);
-			if (FAILED(lpStorage->OpenStream(_szPropStream, 0,
+			if (FAILED(lpStorage->OpenStream(OLESTR("Contents"), 0,
 					STGM_SHARE_EXCLUSIVE|STGM_READ, 0, &lpStream)))
 			{
 				TRACE0("Failed to open content stream.\n");
@@ -293,6 +287,10 @@ BOOL COleControl::SetPropsetData(LPFORMATETC lpFormatEtc,
 	}
 	END_TRY
 
+	// Properties have probably changed
+	BoundPropertyChanged(DISPID_UNKNOWN);
+	InvalidateControl();
+
 	m_bConvertVBX = FALSE;
 
 	// Clear the modified flag.
@@ -325,7 +323,7 @@ CPropsetPropExchange::CPropsetPropExchange(CPropertySection& psec,
 	m_bLoading = bLoading;
 }
 
-static size_t PASCAL _AfxGetSizeOfVarType(VARTYPE vt)
+AFX_STATIC size_t AFXAPI _AfxGetSizeOfVarType(VARTYPE vt)
 {
 	switch (vt)
 	{
@@ -399,6 +397,9 @@ BOOL AFXAPI _AfxIsSamePropValue(VARTYPE vtProp, const void* pv1, const void* pv2
 	case VT_BSTR:
 		bSame = ((CString*)pv1)->Compare(*(CString*)pv2) == 0;
 		break;
+	case VT_LPSTR:
+		bSame = ((CString*)pv1)->Compare((LPCTSTR)pv2) == 0;
+		break;
 
 	case VT_BOOL:
 	case VT_I2:
@@ -465,6 +466,7 @@ BOOL CPropsetPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 
 			switch (vtProp)
 			{
+			case VT_LPSTR:
 			case VT_BSTR:
 				bSuccess = _AfxCopyPropValue(VT_BSTR, pvProp, &strTmp);
 				break;
@@ -521,6 +523,7 @@ BOOL CPropsetPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 
 			switch (vtProp)
 			{
+			case VT_LPSTR:
 			case VT_BSTR:
 				pvData = (LPVOID)(LPCTSTR)*(CString*)pvProp;
 				break;
@@ -630,8 +633,8 @@ BOOL AFXAPI _AfxSaveStreamDataAsBlobProp(LPSTREAM pstm, CPropertySection& psec,
 
 	// Note:  Stream length must fit in a DWORD.
 
-	if (SUCCEEDED(pstm->Seek(liZero, STREAM_SEEK_CUR, &uliStart)) &&
-		SUCCEEDED(pstm->Seek(liZero, STREAM_SEEK_END, &uliEnd)) &&
+	if (SUCCEEDED(pstm->Seek(_afxLargeZero, STREAM_SEEK_CUR, &uliStart)) &&
+		SUCCEEDED(pstm->Seek(_afxLargeZero, STREAM_SEEK_END, &uliEnd)) &&
 		SUCCEEDED(pstm->Seek(*(LARGE_INTEGER*)&uliStart, STREAM_SEEK_SET,
 			NULL)))
 	{
@@ -682,7 +685,7 @@ BOOL AFXAPI _AfxInitStreamDataFromBlobProp(LPSTREAM pstm, CProperty* pprop)
 	return bSuccess;
 }
 
-static const FONTDESC _fdDefault =
+AFX_STATIC_DATA const FONTDESC _afxFontDescHelv =
 	{ sizeof(FONTDESC), OLESTR("Helv"), FONTSIZE(12), FW_NORMAL,
 	  DEFAULT_CHARSET, FALSE, FALSE, FALSE };
 
@@ -698,10 +701,10 @@ LPFONT AFXAPI _AfxCreateFontFromStream(LPSTREAM pstm)
 		HRESULT hr;
 
 		if (IsEqualCLSID(clsid, CLSID_StdFont) ||
-			IsEqualCLSID(clsid, CLSID_StdFont_V1))
+			IsEqualCLSID(clsid, _afx_CLSID_StdFont_V1))
 		{
 			// We know this kind of font; create it using the API.
-			hr = OleCreateFontIndirect((LPFONTDESC)&_fdDefault, IID_IFont,
+			hr = ::OleCreateFontIndirect((LPFONTDESC)&_afxFontDescHelv, IID_IFont,
 					(LPVOID*)&pFont);
 		}
 		else
@@ -786,7 +789,7 @@ BOOL AFXAPI _AfxGetClassIDFromStreamedPropset(LPCLSID lpClsid, LPSTREAM lpStream
 	LARGE_INTEGER liClsidOffset;
 	LISet32(liClsidOffset, 8);
 
-	if (SUCCEEDED(lpStream->Seek(liZero, STREAM_SEEK_CUR, &uliSave)))
+	if (SUCCEEDED(lpStream->Seek(_afxLargeZero, STREAM_SEEK_CUR, &uliSave)))
 	{
 		if (SUCCEEDED(lpStream->Seek(liClsidOffset, STREAM_SEEK_CUR, NULL)) &&
 			SUCCEEDED(lpStream->Read(lpClsid, sizeof(CLSID), NULL)))
@@ -809,9 +812,9 @@ LPUNKNOWN AFXAPI _AfxCreateObjectFromStreamedPropset(LPSTREAM lpStream, REFGUID 
 	{
 		// Special case: we know how to create font objects
 		if (IsEqualCLSID(clsid, CLSID_StdFont) ||
-			IsEqualCLSID(clsid, CLSID_StdFont_V1))
+			IsEqualCLSID(clsid, _afx_CLSID_StdFont_V1))
 		{
-			if (FAILED(OleCreateFontIndirect((LPFONTDESC)&_fdDefault, iid,
+			if (FAILED(::OleCreateFontIndirect((LPFONTDESC)&_afxFontDescHelv, iid,
 					(LPVOID*)&pUnk)))
 			{
 				pUnk = NULL;
@@ -819,9 +822,9 @@ LPUNKNOWN AFXAPI _AfxCreateObjectFromStreamedPropset(LPSTREAM lpStream, REFGUID 
 		}
 		// Special case: we know how to create picture objects
 		else if (IsEqualCLSID(clsid, CLSID_StdPicture) ||
-			IsEqualCLSID(clsid, CLSID_StdPicture_V1))
+			IsEqualCLSID(clsid, _afx_CLSID_StdPicture_V1))
 		{
-			if (FAILED(OleCreatePictureIndirect(NULL, iid, FALSE,
+			if (FAILED(::OleCreatePictureIndirect(NULL, iid, FALSE,
 					(LPVOID*)&pUnk)))
 			{
 				pUnk = NULL;
@@ -915,7 +918,7 @@ BOOL AFXAPI _AfxSaveObjectInPropset(LPUNKNOWN pUnk, CPropertySection& psec,
 				LPSTREAM pstm = stgMedium.pstm;
 
 				// Seek to start of stream.
-				if (SUCCEEDED(pstm->Seek(liZero, STREAM_SEEK_SET, NULL)))
+				if (SUCCEEDED(pstm->Seek(_afxLargeZero, STREAM_SEEK_SET, NULL)))
 				{
 					// Create a "blobbed" propset from the stream
 					bSuccess = _AfxSaveStreamDataAsBlobProp(stgMedium.pstm,
@@ -944,7 +947,7 @@ BOOL AFXAPI _AfxSaveObjectInPropset(LPUNKNOWN pUnk, CPropertySection& psec,
 		if (pstm != NULL)
 		{
 			if (SUCCEEDED(::OleSaveToStream(pPersStm, pstm)) &&
-				SUCCEEDED(pstm->Seek(liZero, STREAM_SEEK_SET, NULL)))
+				SUCCEEDED(pstm->Seek(_afxLargeZero, STREAM_SEEK_SET, NULL)))
 			{
 				bSuccess = _AfxSaveStreamDataAsBlobProp(pstm, psec,
 					dwPropID, VT_BLOB);
@@ -986,7 +989,7 @@ BOOL CPropsetPropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
 				if (_AfxPeekAtClassIDInStream(pstm, &clsid))
 				{
 					if (IsEqualCLSID(clsid, CLSID_StdPicture) ||
-						IsEqualCLSID(clsid, CLSID_StdPicture_V1))
+						IsEqualCLSID(clsid, _afx_CLSID_StdPicture_V1))
 					{
 						// Special case: load the picture directly.
 						bSuccess = SUCCEEDED(::ReadClassStm(pstm, &clsid)) &&

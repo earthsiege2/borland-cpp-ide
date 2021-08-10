@@ -2,7 +2,7 @@
 # diagnostic information.
 #
 #     MAKE              - default build (shipping build)
-#     MAKE Dbg          - Turbo Debugger information only
+#     MAKE Dbg          - IDE Debugging information only
 #     MAKE Diags        - Diagnostics only
 #     MAKE DbgDiags     - both
 #
@@ -19,23 +19,20 @@ BCLIBDIR = $(MAKEDIR)\..\lib
 !endif
 
 Default:
-   make -B -l -fborland.mak DEBUG=0 DBGINFO=0 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcdll.mak  DEBUG=0 DBGINFO=0 LIBDIR=$(BCLIBDIR)
+   make -B -fborland.mak DEBUG=0 DBGINFO=0 LIBDIR=$(BCLIBDIR)
+   make -B -fbfcdll.mak  DEBUG=0 DBGINFO=0 LIBDIR=$(BCLIBDIR)
 
 Dbg:
-   make -B -l -fborland.mak DEBUG=0 DBGINFO=1 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcdll.mak  DEBUG=0 DBGINFO=1 LIBDIR=$(BCLIBDIR)
+   make -B -fborland.mak DEBUG=0 DBGINFO=1 LIBDIR=$(BCLIBDIR)
+   make -B -fbfcdll.mak  DEBUG=0 DBGINFO=1 LIBDIR=$(BCLIBDIR)
 
 Diags:
-   make -B -l -fborland.mak DEBUG=1 DBGINFO=0 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcdll.mak  DEBUG=1 DBGINFO=0 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcole.mak  DEBUG=1 DBGINFO=0 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcnet.mak  DEBUG=1 DBGINFO=0 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcdb.mak   DEBUG=1 DBGINFO=0 LIBDIR=$(BCLIBDIR)
+   make -B -fborland.mak DEBUG=1 DBGINFO=0 LIBDIR=$(BCLIBDIR)
+   make -B -fbfcdll.mak  DEBUG=1 DBGINFO=0 LIBDIR=$(BCLIBDIR)
 
 DbgDiags:
-   make -B -l -fborland.mak DEBUG=1 DBGINFO=1 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcdll.mak  DEBUG=1 DBGINFO=1 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcole.mak  DEBUG=1 DBGINFO=1 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcnet.mak  DEBUG=1 DBGINFO=1 LIBDIR=$(BCLIBDIR)
-   make -B -l -fbfcdb.mak   DEBUG=1 DBGINFO=1 LIBDIR=$(BCLIBDIR)
+   make -B -fborland.mak DEBUG=1 DBGINFO=1 LIBDIR=$(BCLIBDIR)
+   make -B -fbfcdll.mak  DEBUG=1 DBGINFO=1 LIBDIR=$(BCLIBDIR)
+
+clean: 
+   make -fborland.mak clean

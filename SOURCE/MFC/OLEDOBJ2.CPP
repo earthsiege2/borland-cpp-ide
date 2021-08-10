@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -284,6 +284,8 @@ void COleDataSource::DelaySetData(CLIPFORMAT cfFormat, LPFORMATETC lpFormatEtc)
 AFX_DATACACHE_ENTRY* COleDataSource::Lookup(
 	LPFORMATETC lpFormatEtc, DATADIR nDataDir) const
 {
+	AFX_DATACACHE_ENTRY* pLast = NULL;
+
 	// look for suitable match to lpFormatEtc in cache
 	for (UINT nIndex = 0; nIndex < m_nSize; nIndex++)
 	{
@@ -294,16 +296,34 @@ AFX_DATACACHE_ENTRY* COleDataSource::Lookup(
 		// check for match
 		if (pCacheFormat->cfFormat == lpFormatEtc->cfFormat &&
 			(pCacheFormat->tymed & lpFormatEtc->tymed) != 0 &&
-			pCacheFormat->lindex == lpFormatEtc->lindex &&
+			(pCache->m_stgMedium.tymed == TYMED_NULL ||
+				pCacheFormat->lindex == lpFormatEtc->lindex) &&
 			pCacheFormat->dwAspect == lpFormatEtc->dwAspect &&
 			pCache->m_nDataDir == nDataDir)
 		{
-			// return that cache entry
-			return pCache;
+			// for backward compatibility we match even if we never
+			// find an exact match for the DVTARGETDEVICE
+			pLast = pCache;
+			DVTARGETDEVICE* ptd1 = pCacheFormat->ptd;
+			DVTARGETDEVICE* ptd2 = lpFormatEtc->ptd;
+
+			if (ptd1 == NULL && ptd2 == NULL)
+			{
+				// both target devices are NULL (exact match), so return it
+				break;
+			}
+			if (ptd1 != NULL && ptd2 != NULL &&
+				ptd1->tdSize == ptd2->tdSize &&
+				memcmp(ptd1, ptd2, ptd1->tdSize) == 0)
+			{
+				// exact match, so return it
+				break;
+			}
+			// continue looking for better match
 		}
 	}
 
-	return NULL;    // not found
+	return pLast;    // not found
 }
 
 /////////////////////////////////////////////////////////////////////////////

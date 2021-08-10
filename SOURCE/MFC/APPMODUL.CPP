@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -21,11 +21,7 @@ static char THIS_FILE[] = __FILE__;
 extern int AFXAPI AfxWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPTSTR lpCmdLine, int nCmdShow);
 
-#ifdef _MAC
-extern "C" int PASCAL
-#else
 extern "C" int WINAPI
-#endif
 _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPTSTR lpCmdLine, int nCmdShow)
 {
@@ -38,49 +34,53 @@ _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 BOOL AFXAPI AfxInitialize(BOOL bDLL, DWORD dwVersion)
 {
-	AFX_MODULE_STATE* pState = AfxGetModuleState();
-	pState->m_bDLL = (BYTE)bDLL;
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	pModuleState->m_bDLL = (BYTE)bDLL;
 	ASSERT(dwVersion <= _MFC_VER);
 	UNUSED(dwVersion);  // not used in release build
 #ifdef _AFXDLL
-	pState->m_dwVersion = dwVersion;
+	pModuleState->m_dwVersion = dwVersion;
 #endif
-#ifndef _MAC
 #ifdef _MBCS
 	// set correct multi-byte code-page for Win32 apps
 	if (!bDLL)
 		_setmbcp(_MB_CP_ANSI);
 #endif //_MBCS
-#endif //!_MAC
 	return TRUE;
 }
-
-class _AFX_TERM_APP_STATE
-{
-public:
-	_AFX_TERM_APP_STATE();
-#ifndef _AFXDLL
-	~_AFX_TERM_APP_STATE();
-#endif
-};
-
-_AFX_TERM_APP_STATE::_AFX_TERM_APP_STATE()
-{
-	// initialize this module as an application
-	AfxInitialize(FALSE, _MFC_VER);
-}
-
-#ifndef _AFXDLL
-_AFX_TERM_APP_STATE::~_AFX_TERM_APP_STATE()
-{
-	AfxTermLocalData(NULL);
-}
-#endif
 
 // force initialization early
 #pragma warning(disable: 4074)
 #pragma init_seg(lib)
 
-_AFX_TERM_APP_STATE _afxTermAppState;
+#ifndef _AFXDLL
+void AFX_CDECL _AfxTermAppState()
+{
+	// terminate local data and critical sections
+	AfxTermLocalData(NULL, TRUE);
+	AfxCriticalTerm();
+
+	// release the reference to thread local storage data
+	AfxTlsRelease();
+}
+#endif
+
+#ifdef __BORLANDC__
+char _afxInitAppState = (char)(AfxInitialize(FALSE, _MFC_VER));
+
+#ifndef _AFXDLL
+void _borland_exit(void)
+{
+#pragma exit _borland_exit 10 // correct shut down priority for Borland version
+	_AfxTermAppState();
+}
+#endif
+#else // __BORLANDC__
+#ifndef _AFXDLL
+char _afxInitAppState = (char)(AfxInitialize(FALSE, _MFC_VER), atexit(&_AfxTermAppState));
+#else
+char _afxInitAppState = (char)(AfxInitialize(FALSE, _MFC_VER));
+#endif
+#endif // __BORLANDC__
 
 /////////////////////////////////////////////////////////////////////////////

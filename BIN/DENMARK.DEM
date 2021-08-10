@@ -1,0 +1,9 @@
+Phone | 48140001 | 00 09 99 99;1;_
+Phone with Country | 48140001 | \+45 00 00 00 00;1;_
+Social Security | 1234567890 | 000000\-0000;1;_
+Zip Code | 3450 | 0000;1;_
+Zip Code with Country | DK3450 | !>LL\-0000;1;_
+Date | 260195 | 90\.90\.\1\900;1;_
+Date (Windows) | 260195 | 90/90/00;1;_
+Long Time | 210515 | !90:00:00;1;_
+Short Time | 1345 | !90:00;1;_

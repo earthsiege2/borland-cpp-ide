@@ -1,0 +1,69 @@
+
+{*******************************************************}
+{                                                       }
+{       Borland Delphi Visual Component Library         }
+{                                                       }
+{       Copyright (c) 1995,99 Inprise Corporation       }
+{                                                       }
+{*******************************************************}
+
+unit DsgnWnds;
+
+interface
+
+uses Messages, SysUtils, Classes, Controls, Forms, LibIntf, DsgnIntf;
+
+type
+  IDesignWindowActions = interface
+    ['{A0BF324F-D5A2-11D2-B726-00C04FA35D12}']
+    procedure WindowHide;
+    procedure WindowShow;
+  end;
+
+  IDesignEditQuery = interface
+    ['{32501230-D336-11D2-B725-00C04FA35D12}']
+    function GetEditState: TEditState;
+    procedure EditAction(Action: TEditAction);
+  end;
+
+  TDesignWindow = class(TForm, IUnknown, IDesignNotification, IDesignEditQuery)
+  protected
+    procedure Activated; dynamic;
+    procedure ActivateInspector(Ch: Char);
+    function ClipboardComponents: Boolean;
+    procedure CopyComponents(Root: TComponent; Components: TDesignerSelectionList);
+    procedure PasteComponents(AOwner, AParent: TComponent;
+      Components: TDesignerSelectionList);
+    procedure SetSelection(Components: TDesignerSelectionList);
+    function UniqueName(Component: TComponent): string; virtual; abstract;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    // IDesignEditQuery
+    function GetEditState: TEditState; virtual;
+    procedure EditAction(Action: TEditAction); virtual;
+
+    // IDesignNotification
+    procedure ItemDeleted(const Item: IPersistent);
+    procedure ItemInserted(const Item: IPersistent);
+    procedure SelectionChanged(const ASelection: IDesignerSelections); overload;
+    procedure DesignerInitialized(const Designer: IUnknown);
+    procedure DesignerClosed(const Designer: IUnknown);
+    procedure ItemsModified(const Designer: IUnknown);
+    // old versions
+    procedure ComponentDeleted(Component: IPersistent); virtual;
+    procedure ComponentInserted(Component: IPersistent); virtual;
+    procedure SelectionChanged(ASelection: TDesignerSelectionList); overload; virtual; 
+    procedure FormClosed(AForm: TCustomForm); virtual;
+    procedure FormModified; virtual;
+
+    // IDesignWindowActions
+    procedure WindowHide; virtual;
+    procedure WindowShow; virtual;
+
+    property Active: Boolean;
+    property Designer: IFormDesigner;
+  end;
+
+implementation

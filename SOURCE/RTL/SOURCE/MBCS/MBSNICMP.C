@@ -7,9 +7,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
@@ -17,10 +17,6 @@
 #include <ctype.h>
 #include <mbctype.h>
 #include <mbstring.h>
-
-#if 0
-extern int _mbascii;
-#endif
 
 /*---------------------------------------------------------------------*
 
@@ -49,7 +45,7 @@ Return value    _mbsnicmp returns an int value based on the result of
                         ASCII <  1 byte Kana <  2 bytes character
 
                 If the second byte of 2-bytes character is null,
-		that character is regarded as null. 
+                that character is regarded as null.
 
 *---------------------------------------------------------------------*/
 
@@ -70,38 +66,20 @@ int _RTLENTRY _EXPFUNC _mbsnicmp(const unsigned char *s1, const unsigned char *s
             if (*s1 == '\0')
                 c1 = 0;
             else
-            {
                 c1 = (c1 << 8) | *s1++;
-#if 0
-                if (_mbascii && c1 >= 0x8281 && c1 <= 0x829A)
-                    c1 -= 0x21;
-#endif
-            }
         }
         else
-        {
-            if (islower(c1))
-                c1 -= 0x20;
-        }
+            c1 = _ltoupper(c1);
         c2 = *s2++;
         if (_ismbblead(c2))
         {
             if (*s2 == '\0')
                 c2 = 0;
             else
-            {
                 c2 = (c2 << 8) | *s2++;
-#if 0
-                if (_mbascii && c2 >= 0x8281 && c2 <= 0x829A)
-                    c2 -= 0x21;
-#endif
-            }
         }
         else
-        {
-            if (islower(c2))
-                c2 -= 0x20;
-        }
+            c2 = _ltoupper(c2);
         if (c1 != c2)
             return (c1 < c2) ? -1 : 1;
         if (c1 == 0)

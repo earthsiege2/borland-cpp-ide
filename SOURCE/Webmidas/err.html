@@ -1,0 +1,135 @@
+<HTML>
+<HEAD>
+<TITLE> </TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" link="#000066" text="#000000" vlink="#666666">
+<H2> Update error </H2><P>
+ 
+
+<SCRIPT language=JavaScript type="text/javascript" SRC="xmldom.js"></SCRIPT>
+<SCRIPT language=JavaScript type="text/javascript" SRC="xmldb.js"></SCRIPT>
+ 
+<SCRIPT language=JavaScript type="text/javascript" SRC="xmlerrdisp.js"></SCRIPT>
+<SCRIPT language=JavaScript type="text/javascript" SRC="xmlshow.js"></SCRIPT>
+ 
+ 
+ 
+<FORM name="FORM1">
+
+<H3>
+Error message : <input type=textarea name="ErrMessage" size=58 readonly onfocus='blur();'> on <input type=text name="ErrAction" size=12 readonly onfocus='blur();'>
+</H3>
+<P/>
+<Table name="tbl1" bgcolor=#dddddd border=1 cellpadding=1 > 
+<thead>
+<th>FieldName</th>
+<th>Submitted Value</th>
+<th>Conflicting Value</th>
+<th>Original Value</th>
+</thead>
+<tr>
+   <td valign=top><div><input type=text name="tbl1_FieldName" size=18 maxlength=64   onFocus='blur();'  ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Modified"  size=24  onFocus='grid1.xfocus(this);'   ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Conflicting" size=24   onFocus='blur();' ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Original" size=24   onFocus='blur();'></div></td>
+<tr>
+   <td valign=top><div><input type=text name="tbl1_FieldName" size=18 maxlength=64   onFocus='blur();'  ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Modified"  size=24  onFocus='grid1.xfocus(this);'   ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Conflicting" size=24   onFocus='blur();' ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Original" size=24   onFocus='blur();'></div></td>
+
+<tr>
+   <td valign=top><div><input type=text name="tbl1_FieldName" size=18 maxlength=64  onFocus='blur();'  ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Modified"  size=24  onFocus='grid1.xfocus(this);'   ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Conflicting" size=24   onFocus='blur();' ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Original" size=24 d  onFocus='blur();'></div></td>
+ 
+<tr>
+   <td valign=top><div><input type=text name="tbl1_FieldName" size=18 maxlength=64   onFocus='blur();'  ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Modified"  size=24  onFocus='grid1.xfocus(this);'   ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Conflicting" size=24   onFocus='blur();' ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Original" size=24  onFocus='blur();'></div></td>
+   
+<tr>
+   <td valign=top><div><input type=text name="tbl1_FieldName" size=18 maxlength=64   onFocus='blur();'  ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Modified"  size=24  onFocus='grid1.xfocus(this);'   ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Conflicting" size=24   onFocus='blur();' ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Original" size=24  onFocus='blur();'></div></td>
+   
+<tr>
+   <td valign=top><div><input type=text name="tbl1_FieldName" size=18 maxlength=64  onFocus='blur();'  ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Modified"  size=24  onFocus='grid1.xfocus(this);'   ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Conflicting" size=24  onFocus='blur();' ></div></td>
+   <td valign=top><div><input type=text name="tbl1_Original" size=24   onFocus='blur();'></div></td>
+    
+</Table>
+
+</FORM>
+
+ 
+
+<P>
+<FORM>
+<H3> Reconcile Action : </H3>
+<H5> 
+<input type=radio name="action" value="Cancel" onclick='grid1.cancel();'/> Cancel
+<input type=radio name="action" value="Correct" onclick='grid1.correct();'/> Correct
+<input type=radio name="action" value="Merge" onclick='grid1.merge();'/> Merge 
+</H5>
+<br/>
+
+<input type=button value="<" onclick='grid1.up();' />
+<input type=button value=">" onclick='grid1.down();' />
+<input type=button value="Post/Next" onclick='grid1.post();'/>
+ 
+ 
+</FORM>
+<P>
+
+<P>
+<FORM>
+<input type=button value="Adjust Delta" onclick='grid1.DeltaAdjustAll(grid1.srcD);' >
+<input type=button value="Show Delta-xml" onclick='ShowXML(rowsetDelta.root);' >
+<input type=button value="Show Error-xml" onclick='ShowXML(rowsetErr.root);' >
+</FORM>
+<P>
+
+ 
+
+<FORM name="SUBMITFORM1" action="submit" method="post" >
+  <input type=button value="Reapply updates" onclick='grid1.Reapply(submitfrm1, submitfrm1.postdelta);' >
+  <input type=hidden name="htmlname" value="Country">
+  <input type=hidden name="postdelta">
+</FORM>
+
+ 
+
+
+<SCRIPT language=JavaScript type="text/javascript">
+
+<#XMLEMBED_VAR_ERR  varid=xmlstrErr>
+<#XMLEMBED_VAR_DELTA  varid=xmlstrDelta>
+
+var docErr = new Document(xmlstrErr);
+var docDelta = new Document(xmlstrDelta);
+
+var rowsetErr = new xmlRowSet(docErr, null, null);
+var rowsetDelta = new xmlRowSet(docDelta, null, null);
+
+ 
+var frm1 = document.forms['FORM1'];
+
+var grid1 = new ErrReconcile(rowsetDelta,rowsetErr,
+    new Array(frm1.tbl1_FieldName,frm1.tbl1_Modified,frm1.tbl1_Conflicting,frm1.tbl1_Original),
+    new Array("FieldName","Modified","Conflicting","Original"),
+    frm1.ErrMessage,frm1.ErrAction);
+
+
+var submitfrm1 = document.forms['SUBMITFORM1'];
+
+</SCRIPT>
+ 
+
+
+</BODY>
+</HTML>

@@ -1,0 +1,61 @@
+
+#define VERSIONINFO_1	1
+VERSIONINFO_1 VERSIONINFO
+
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+{
+ BLOCK "StringFileInfo"
+ {
+  BLOCK "040704E4"
+  {
+   VALUE "CompanyName", "Unicode: Der Firmenname\000\000"
+   VALUE "FileDescription", "Unicode: Eine Dateibeschreibung\000"
+   VALUE "FileVersion", "1.00\000\000"
+   VALUE "ProductName", "Unicode: Testanwendung für die TVersionInfo Komponente\000"
+   VALUE "ProductVersion", "1.00\000\000"
+   VALUE "InternalName", "Unicode: Interner Dateiname\000"
+   VALUE "LegalCopyright", "Unicode: Irgendein Copyright im Jahre 2000 AD\000\000"
+   VALUE "OriginalFilename", "Unicode: Der Dateiname der EXE-Datei\000"
+   VALUE "MindBoggler", "Naja, irgenwie muß man ja eine Testanwendung schreiben, oder?"
+  }
+
+  BLOCK "040904E4"
+  {
+   VALUE "CompanyName", "The company name\000\000"
+   VALUE "FileDescription", "Some file description\000"
+   VALUE "FileVersion", "1.00\000\000"
+   VALUE "ProductName", "TVersionInfo component - test case\000"
+   VALUE "ProductVersion", "1.00\000\000"
+   VALUE "InternalName", "The binary's internal name\000"
+   VALUE "LegalCopyright", "Copyright © some copyright holder -around the year 2000\000\000"
+   VALUE "OriginalFilename", "The .exe file name\000"
+   VALUE "MindBoggler", "You don't expect a translation of the German text - do you?\000"
+  }
+
+  BLOCK "04070000"
+  {
+   VALUE "CompanyName", "Der Firmenname\000\000"
+   VALUE "FileDescription", "Eine Dateibeschreibung\000"
+   VALUE "FileVersion", "1.00\000\000"
+   VALUE "ProductName", "TVersionInfo-Komponente\000"
+   VALUE "ProductVersion", "1.00\000\000"
+   VALUE "InternalName", "Der Name der Anwendung\000"
+   VALUE "LegalCopyright", "Irgendein Copyright 2000\000\000"
+   VALUE "OriginalFilename", "Der Dateiname der EXE-Datei\000"
+   VALUE "MindBoggler", "Langsam wird es aber langweilig...\000"
+  }
+
+ }
+
+ BLOCK "VarFileInfo"
+ {
+  VALUE "Translation", 0x409, 0x04E4
+    0x407, 0
+    0x407, 0x04E4
+ }
+
+}

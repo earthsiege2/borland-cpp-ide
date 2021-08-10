@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -77,6 +77,12 @@ BEGIN
 		"Echec de la mise à jour ou de la suppression."
 	AFX_IDP_SQL_DYNAMIC_CURSOR_NOT_SUPPORTED
 		"Curseurs dynamiques non pris en charge par le pilote ODBC."
+	AFX_IDP_SQL_FIELD_NOT_FOUND
+		"Nom ou index de champ non valide"
+	AFX_IDP_SQL_BOOKMARKS_NOT_SUPPORTED
+		"Les onglets ne sont pas compatibles avec le pilote ODBC."
+	AFX_IDP_SQL_BOOKMARKS_NOT_ENABLED
+		"Les onglets ne sont pas activés sur le recordset."
 	AFX_IDP_DAO_ENGINE_INITIALIZATION
 		"Impossible d'initialiser le moteur de base de données DAO/Jet."
 	AFX_IDP_DAO_DFX_BIND

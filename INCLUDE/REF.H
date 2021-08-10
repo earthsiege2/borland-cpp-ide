@@ -5,13 +5,14 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.1  $ */
 
 #ifndef __cplusplus
 #error Must use C++ for REF.H
@@ -30,16 +31,7 @@
 #include <_defs.h>
 #endif
 
-
 #if !defined(RC_INVOKED)
-
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-     // disable Object data calling convention
-#endif
-#endif
-
-#pragma option -Vo-
 
 #if defined(__STDC__)
 #pragma warn -nak
@@ -76,22 +68,12 @@ private:
 #define BI_Reference TReference
 #endif
 
-
 #if !defined(RC_INVOKED)
 
 #if defined(__STDC__)
 #pragma warn .nak
 #endif
 
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po.     // restore Object data calling convention
-#endif
-#endif
-
-#pragma option -Vo.
-
 #endif  /* !RC_INVOKED */
-
 
 #endif  // __REF_H

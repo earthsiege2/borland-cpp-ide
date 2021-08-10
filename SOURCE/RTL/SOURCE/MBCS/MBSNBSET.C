@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -26,7 +27,7 @@ Usage           unsigned char *_mbsnbset(unsigned char *s, unsigned int c,
 Prototype in    mbstring.h
 
 Description     Fills the character c into the first maxlen bytes of
-                the string s. 
+                the string s.
 
                 If string(s) < maxlen, _mbsnbset fills c up to s.
                 If string(s) > maxlen, _mbsnbset fills c into the first
@@ -35,7 +36,7 @@ Description     Fills the character c into the first maxlen bytes of
                 number of bytes, _mbsnbset fills 0x20(1-byte space
                 character) for the gap between them.
 
-Return value    Returns a pointer same as an argument s.    
+Return value    Returns a pointer same as an argument s.
 
 *---------------------------------------------------------------------*/
 

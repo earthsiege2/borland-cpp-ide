@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -55,21 +55,24 @@ STDMETHODIMP COleControl::XOleObject::SetClientSite(LPOLECLIENTSITE pClientSite)
 	RELEASE(pThis->m_pClientSite);
 	pThis->m_pClientSite = pClientSite;
 
-	LPVOID pInterface;
-
-	// Initialize pointer to ambient property dispinterface.
+	// Release existing pointer to ambient property dispinterface.
 	pThis->m_ambientDispDriver.ReleaseDispatch();
-	if (pClientSite != NULL &&
-		SUCCEEDED(pClientSite->QueryInterface(IID_IDispatch, &pInterface)))
+
+	if (pClientSite != NULL)
 	{
-		ASSERT(pInterface != NULL);
-		pThis->m_ambientDispDriver.AttachDispatch((LPDISPATCH) pInterface);
+		BOOL bValue;
+		pThis->m_bAutoClip =
+			pThis->GetAmbientProperty(DISPID_AMBIENT_AUTOCLIP, VT_BOOL, &bValue) ? bValue : 0;
+		pThis->m_bMsgReflect =
+			pThis->GetAmbientProperty(DISPID_AMBIENT_MESSAGEREFLECT, VT_BOOL, &bValue) ? bValue : 0;
+		pThis->m_bUIDead = (BYTE)(pThis->AmbientUIDead());
 	}
 
 	// Release existing pointer to in-place site, if any.
 	RELEASE(pThis->m_pInPlaceSite);
 
 	// Initialize pointer to control site
+	LPVOID pInterface;
 	if (pClientSite == NULL ||
 		FAILED(pClientSite->QueryInterface(IID_IOleControlSite, &pInterface)))
 	{
@@ -91,8 +94,6 @@ STDMETHODIMP COleControl::XOleObject::SetClientSite(LPOLECLIENTSITE pClientSite)
 
 	// Let the control run its own code here.
 	pThis->OnSetClientSite();
-
-	pThis->m_bUIDead = (BYTE)(pThis->AmbientUIDead());
 
 	// Unless IPersist*::Load or IPersist*::InitNew is called after this,
 	// we can't count on ambient properties being available while loading.
@@ -189,21 +190,28 @@ STDMETHODIMP COleControl::XOleObject::DoVerb(LONG iVerb, LPMSG lpmsg,
 
 
 	case OLEIVERB_SHOW:
-		return pThis->OnOpen(TRUE, lpmsg);      // Try in-place first
+		return pThis->OnOpen(-1, lpmsg);      // Try in-place first
 
 	case OLEIVERB_UIACTIVATE:
 	case OLEIVERB_INPLACEACTIVATE:
+#ifdef _AFXDLL
 		if (pThis->m_bOpen)
 			return OLE_E_NOT_INPLACEACTIVE;    // Already open
+#endif
 
 		// FALL THRU
 
 	case OLEIVERB_PRIMARY:
-		CopyRect(&pThis->m_rcPos, lprcPosRect);
+		if (lprcPosRect != NULL)
+			CopyRect(&pThis->m_rcPos, lprcPosRect);
+		else
+			memset(&pThis->m_rcPos, 0, sizeof(pThis->m_rcPos));
 		return pThis->OnActivateInPlace((iVerb != OLEIVERB_INPLACEACTIVATE), lpmsg);
 
+#ifdef _AFXDLL
 	case OLEIVERB_OPEN:
 		return pThis->OnOpen(FALSE, lpmsg);     // Don't try in-place
+#endif
 
 	case OLEIVERB_PROPERTIES:
 		return pThis->OnProperties(lpmsg, hwndParent, lprcPosRect) ?
@@ -319,11 +327,13 @@ BOOL COleControl::OnSetExtent(LPSIZEL lpSizeL)
 		// If the control is in-place active, tell the container to resize.
 		m_pInPlaceSite->OnPosRectChange(&rectNew);
 	}
+#ifdef _AFXDLL
 	else if (m_bOpen)
 	{
 		// If the control is open, resize it.
 		ResizeOpenControl((int)szlPixels.cx, (int)szlPixels.cy);
 	}
+#endif
 	else
 	{
 		CopyRect(m_rcPos, rectNew);

@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -35,7 +36,7 @@ Description     _mbbyte desides the character type of code, c, according
 
 Return value    Returns any character type as following;
 
-                symbol       value meaning 
+                symbol       value meaning
                 --------------------------------------------------------
                  _MBC_SINGLE    0   1 byte code(excepting 2 byte code)
                  _MBC_LEAD      1   the first byte of 2 byte code

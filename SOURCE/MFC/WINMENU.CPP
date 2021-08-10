@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -24,9 +24,15 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // Map from HMENU to CMenu *
 
-static CHandleMap* afxMapHMENU(BOOL bCreate = FALSE);
+#include "fixalloc.h"
 
-static CHandleMap* afxMapHMENU(BOOL bCreate)
+class CTempMenu : public CMenu
+{
+	DECLARE_DYNCREATE(CTempMenu)
+	DECLARE_FIXED_ALLOC(CTempMenu);
+};
+
+CHandleMap* PASCAL afxMapHMENU(BOOL bCreate)
 {
 	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
 	if (pState->m_pmapHMENU == NULL && bCreate)
@@ -35,7 +41,7 @@ static CHandleMap* afxMapHMENU(BOOL bCreate)
 #ifndef _AFX_PORTABLE
 		_PNH pnhOldHandler = AfxSetNewHandler(&AfxCriticalNewHandler);
 #endif
-		pState->m_pmapHMENU = new CHandleMap(RUNTIME_CLASS(CMenu),
+		pState->m_pmapHMENU = new CHandleMap(RUNTIME_CLASS(CTempMenu),
 			offsetof(CMenu, m_hMenu)),
 
 #ifndef _AFX_PORTABLE
@@ -44,13 +50,6 @@ static CHandleMap* afxMapHMENU(BOOL bCreate)
 		AfxEnableMemoryTracking(bEnable);
 	}
 	return pState->m_pmapHMENU;
-}
-
-void PASCAL CMenu::DeleteTempMap()
-{
-	CHandleMap* pMap = afxMapHMENU();
-	if (pMap != NULL)
-		pMap->DeleteTemp();
 }
 
 CMenu* PASCAL CMenu::FromHandle(HMENU hMenu)
@@ -69,7 +68,7 @@ CMenu* PASCAL CMenu::FromHandlePermanent(HMENU hMenu)
 	if (pMap != NULL)
 	{
 		// only look in the permanent map - does no allocations
-		pMap->LookupPermanent(hMenu, (CObject*&)pMenu);
+		pMenu = (CMenu*)pMap->LookupPermanent(hMenu);
 		ASSERT(pMenu == NULL || pMenu->m_hMenu == hMenu);
 	}
 	return pMenu;
@@ -143,5 +142,11 @@ void CMenu::MeasureItem(LPMEASUREITEMSTRUCT /* lpMeasureItemStruct */)
 #endif
 
 IMPLEMENT_DYNCREATE(CMenu, CObject)
+
+IMPLEMENT_DYNCREATE(CTempMenu, CMenu);
+
+#pragma warning(disable: 4074)
+#pragma init_seg(compiler)
+IMPLEMENT_FIXED_ALLOC(CTempMenu, 64);
 
 /////////////////////////////////////////////////////////////////////////////

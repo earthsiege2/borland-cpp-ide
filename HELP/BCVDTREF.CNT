@@ -1,9 +1,0 @@
-:Base bcvdtref.hlp
-:Title Visual Database Tools Help
-:Index Visual Database Tools Help =BCVDTREF.HLP
-;:Index Borland C++ Programmers Guide =BCPP.HLP
-;:Index ObjectWindows 5.0 Reference =OWL50.HLP
-;:Index Resource Workshop Users Guide=WORKSHOP.HLP
-:include OPENHELP.CFG
-:include BCVDTGUI.TOC
-:include BCVDTREF.TOC

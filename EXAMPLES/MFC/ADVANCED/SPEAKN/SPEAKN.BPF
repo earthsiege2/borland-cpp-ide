@@ -1,0 +1,5 @@
+USEUNIT("speakn.cpp");
+USEUNIT("stdafx.cpp");
+USERC("speakn.rc");
+
+#define WinMain

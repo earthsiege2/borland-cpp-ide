@@ -5,45 +5,49 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
 
-#ifndef __cplusplus
-#error Must use C++ for except.h
-#endif
+/* $Revision:   9.16  $ */
+
 
 #ifndef __EXCEPT_H
 #define __EXCEPT_H
+#pragma option push -b -a8 -pc -Vx- -Ve- -w-inl -w-aus -w-sig
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef __cplusplus
+#  error Must use C++ for except.h
 #endif
 
 #if !defined(___STDLIB_H)
-#include <stdlib.h>
+#  include <stdlib.h>
 #endif
 
+#if !defined(__STD_EXCEPTION)
+#  include <exception>
+#endif
+
+// forward declare string
+namespace std {
+
+template<class charT> struct _RWSTDExportTemplate char_traits;
+template<class T> class _RWSTDExportTemplate allocator;
+
+template<class charT, class traits, class Allocator> class _RWSTDExportTemplate
+basic_string;
+
+typedef basic_string<char, char_traits<char>, allocator<char> > string;
+
+}
 
 #if !defined(RC_INVOKED)
 
 #pragma pack(push, 1)
-
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-     // disable Object data calling convention
-#endif
-#endif
-
-#if !defined(__TINY__)
-#pragma option -RT
-#endif
-
-#pragma option -Vo-     // set standard C++ options
+#pragma option push -Vo-     // set standard C++ options
 
 #if defined(__STDC__)
 #pragma warn -nak
@@ -52,62 +56,87 @@
 #endif  /* !RC_INVOKED */
 
 
-typedef void (_RTLENTRY *terminate_function)();
-typedef void (_RTLENTRY *unexpected_function)();
+namespace std {
+typedef void (_RTLENTRY *terminate_handler)();
+typedef void (_RTLENTRY *unexpected_handler)();
 
-terminate_function  _RTLENTRY set_terminate(terminate_function);
-unexpected_function _RTLENTRY set_unexpected(unexpected_function);
+
+terminate_handler  _RTLENTRY set_terminate(terminate_handler);
+unexpected_handler _RTLENTRY set_unexpected(unexpected_handler);
 
 void  _RTLENTRY terminate();
 void  _RTLENTRY unexpected();
+bool  _RTLENTRY uncaught_exception();
+} // std
 
-extern  char _FAR * _RTLENTRY __ThrowFileName();
+#ifndef __STDC__
+// For backwards compatibility ...
+typedef std::unexpected_handler unexpected_function;
+typedef std::terminate_handler terminate_function;
+#pragma obsolete terminate_function
+#pragma obsolete unexpected_function
+#endif // !__STDC__
+
+
+extern  char *      _RTLENTRY __ThrowFileName();
 extern  unsigned    _RTLENTRY __ThrowLineNumber();
-extern  char _FAR * _RTLENTRY __ThrowExceptionName();
+extern  char *      _RTLENTRY __ThrowExceptionName();
 
 #define  __throwFileName      __ThrowFileName()
 #define  __throwLineNumber    __ThrowLineNumber()
 #define  __throwExceptionName __ThrowExceptionName()
 
-class _EXPCLASS string;
-
-class _EXPCLASS xmsg
+class _EXPCLASS xmsg : public std::exception
 {
 public:
-    _RTLENTRY xmsg(const string _FAR &msg);
-    _RTLENTRY xmsg(const xmsg _FAR &msg);
-    _RTLENTRY ~xmsg();
+    xmsg(const std::string &msg);
+    xmsg(const xmsg &);
+    virtual ~xmsg() throw();
+    xmsg & operator=(const xmsg &);
 
-    const string _FAR & _RTLENTRY why() const;
-    void                _RTLENTRY raise() throw(xmsg);
-    xmsg&               _RTLENTRY operator=(const xmsg _FAR &src);
+    virtual const char * what() const throw();
+    const std::string & why() const;
+    void                raise() throw(xmsg);
 
 private:
-    string _FAR *str;
+    std::string *str;
 };
 
-inline const string _FAR & _RTLENTRY xmsg::why() const
+inline const std::string & xmsg::why() const
 {
     return *str;
 };
 
+/* The xalloc class is here for backwards compatibility ONLY!  Operator new
+   will not throw one of these anymore.  Operator new now throws a bad_alloc
+   instead.
+*/
+
 class _EXPCLASS xalloc : public xmsg
 {
 public:
-    _RTLENTRY xalloc(const string _FAR &msg, size_t size);
+    xalloc(const std::string &msg, _SIZE_T size);
 
-    size_t _RTLENTRY requested() const;
-    void   _RTLENTRY raise() throw(xalloc);
+    _SIZE_T requested() const;
+    void    raise() throw(xalloc);
 
 private:
-    size_t siz;
+    _SIZE_T siz;
 };
 
-inline size_t _RTLENTRY xalloc::requested() const
+
+inline xalloc::xalloc(const std::string &msg, _SIZE_T size)
+	: xmsg(msg), siz(size)
+{
+}
+
+inline _SIZE_T xalloc::requested() const
 {
     return siz;
 }
 
+#pragma obsolete xalloc
+#pragma obsolete xmsg
 
 #if !defined(RC_INVOKED)
 
@@ -115,22 +144,11 @@ inline size_t _RTLENTRY xalloc::requested() const
 #pragma warn .nak
 #endif
 
-#pragma option -Vo.     // restore user C++ options
-
-#if !defined(__TINY__)
-#pragma option -RT.
-#endif
-
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po.     // restore Object data calling convention
-#endif
-#endif
-
+#pragma option pop      // restore user C++ options
 /* restore default packing */
 #pragma pack(pop)
 
 #endif  /* !RC_INVOKED */
 
-
+#pragma option pop
 #endif  // __EXCEPT_H

@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -38,7 +39,7 @@ Description     Fills the character c into the first maxlen character of
                 And if c is filled till the first byte of 2-bytes character,
                 _mbsnset fills 0x20.
 
-Return value    Returns a pointer same as an argument s. 
+Return value    Returns a pointer same as an argument s.
 
                 The second byte of the 2-bytes character in string s
                 is null, the first byte of this character is regarded

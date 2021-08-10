@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -30,6 +30,9 @@
 #ifndef _RICHOLE_
 	#include <richole.h>
 	#define _RICHOLE_
+#endif
+#ifndef __AFXCMN_H__
+	#include <afxcmn.h>
 #endif
 
 #ifdef _AFX_MINREBUILD
@@ -101,7 +104,7 @@ public:
 	CHARFORMAT& GetCharFormatSelection();
 	PARAFORMAT& GetParaFormatSelection();
 	void SetCharFormat(CHARFORMAT cf);
-	void SetParaFormat(PARAFORMAT& pf);
+	BOOL SetParaFormat(PARAFORMAT& pf);
 	CRichEditCntrItem* GetSelectedItem() const;
 	CRichEditCntrItem* GetInPlaceActiveItem() const;
 
@@ -280,7 +283,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 // CRichEditDoc
 
+#ifdef _AFXDLL
 class CRichEditDoc : public COleServerDoc
+#else
+class AFX_NOVTABLE CRichEditDoc : public COleServerDoc
+#endif
 {
 protected: // create from serialization only
 	CRichEditDoc();
@@ -292,7 +299,7 @@ public:
 
 	virtual CRichEditCntrItem* CreateClientItem(REOBJECT* preo = NULL) const = 0;
 
-	CRichEditView* GetView() const;
+	virtual CRichEditView* GetView() const;
 	int GetStreamFormat() const;
 
 // Implementation
@@ -332,8 +339,8 @@ class CRichEditCntrItem : public COleClientItem
 // Constructors
 public:
 	CRichEditCntrItem(REOBJECT* preo = NULL, CRichEditDoc* pContainer = NULL);
-		// Note: pContainer is allowed to be NULL to enable IMPLEMENT_SERIALIZE.
-		//  IMPLEMENT_SERIALIZE requires the class have a constructor with
+		// Note: pContainer is allowed to be NULL to enable IMPLEMENT_SERIAL.
+		//  IMPLEMENT_SERIAL requires the class have a constructor with
 		//  zero arguments.  Normally, OLE items are constructed with a
 		//  non-NULL document pointer.
 
@@ -377,7 +384,7 @@ protected:
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXRICH_INLINE inline
+#define _AFXRICH_INLINE AFX_INLINE
 #include <afxrich.inl>
 #endif
 

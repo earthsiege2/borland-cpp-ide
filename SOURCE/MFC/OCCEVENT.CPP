@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -27,8 +27,10 @@ static char THIS_FILE[] = __FILE__;
 
 typedef BOOL (AFX_MSG_CALL CCmdTarget::*PFN_CHANGED)();
 typedef BOOL (AFX_MSG_CALL CCmdTarget::*PFN_REQUEST)(BOOL*);
+typedef BOOL (AFX_MSG_CALL CCmdTarget::*PFN_DSCNOTIFY)(DSCSTATE, DSCREASON, BOOL*);
 typedef BOOL (AFX_MSG_CALL CCmdTarget::*PFN_CHANGED_RANGE)(UINT);
 typedef BOOL (AFX_MSG_CALL CCmdTarget::*PFN_REQUEST_RANGE)(UINT, BOOL*);
+typedef BOOL (AFX_MSG_CALL CCmdTarget::*PFN_DSCNOTIFY_RANGE)(UINT, DSCSTATE, DSCREASON, BOOL*);
 
 BOOL CCmdTarget::OnEvent(UINT idCtrl, AFX_EVENT* pEvent,
 	AFX_CMDHANDLERINFO* pHandlerInfo)
@@ -76,6 +78,7 @@ BOOL CCmdTarget::OnEvent(UINT idCtrl, AFX_EVENT* pEvent,
 			AfxVariantInit(&var);
 
 			DISPPARAMS dispparams;
+			dispparams.rgvarg = NULL;
 
 			if (bRange)
 			{
@@ -128,6 +131,27 @@ BOOL CCmdTarget::OnEvent(UINT idCtrl, AFX_EVENT* pEvent,
 				{
 					PFN_REQUEST pfn = (PFN_REQUEST)pEntry->dispEntry.pfn;
 					bHandled = (this->*pfn)(&bAllow);
+				}
+
+				hResult = bAllow ? S_OK : S_FALSE;
+			}
+			break;
+
+		case AFX_EVENT::propDSCNotify:
+			{
+				BOOL bAllow = TRUE;
+
+				if (bRange)
+				{
+					PFN_DSCNOTIFY_RANGE pfn = (PFN_DSCNOTIFY_RANGE)pEntry->dispEntry.pfn;
+					bHandled = (this->*pfn)(idCtrl, pEvent->m_nDSCState,
+						pEvent->m_nDSCReason, &bAllow);
+				}
+				else
+				{
+					PFN_DSCNOTIFY pfn = (PFN_DSCNOTIFY)pEntry->dispEntry.pfn;
+					bHandled = (this->*pfn)(pEvent->m_nDSCState,
+						pEvent->m_nDSCReason, &bAllow);
 				}
 
 				hResult = bAllow ? S_OK : S_FALSE;

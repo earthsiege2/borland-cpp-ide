@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,14 +37,14 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
-	AFX_IDP_STATIC_OBJECT           "Impossibile attivare un oggetto statico OLE."
+	AFX_IDP_STATIC_OBJECT           "Impossibile attivare un oggetto statico ActiveX."
 	AFX_IDP_FAILED_TO_CONNECT       "Connessione non riuscita.\nIl collegamento potrebbe essere interrotto."
 	AFX_IDP_SERVER_BUSY             "Impossibile elaborare il comando, il server è impegnato."
 	AFX_IDP_BAD_VERB                "Impossibile eseguire l'operazione sul server."
 	AFX_IDP_FAILED_TO_LAUNCH        "Impossibile avviare l'applicazione sul server."
-	AFX_IDS_UPDATING_ITEMS          "Aggiornamento di oggetti OLE"
-	AFX_IDP_FAILED_TO_CONVERT       "Impossibile convertire l'oggetto OLE."
-	AFX_IDP_ASK_TO_DISCARD          "Non è possibile salvare gli oggetti OLE durante l'uscita da Windows.\nScartare tutte le modifiche a %1?"
+	AFX_IDS_UPDATING_ITEMS          "Aggiornamento in corso oggetti ActiveX"
+	AFX_IDP_FAILED_TO_CONVERT       "Conversione dell'oggetto ActiveX fallita."
+	AFX_IDP_ASK_TO_DISCARD          "Impossiblie salvare oggetti ActiveX durante l'uscita da Windows!\nAnnullare tutte le modifiche a %1?"
 	AFX_IDP_FAILED_TO_CREATE        "Errore nel creare l'oggetto.  Assicurarsi che l'applicazione sia inclusa nel registro del sistema."
 
 	AFX_IDS_METAFILE_FORMAT         "Illustrazione (Metafile)\na illustrazione "

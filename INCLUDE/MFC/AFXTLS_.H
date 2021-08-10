@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,9 +22,10 @@
 
 class CSimpleList;
 class CThreadSlotData;                  // for manipulationg thread local storage
-class CThreadLocalObject;               // for storing thread/process local data
-class CProcessLocalObject;
+class CThreadLocalObject;               // for storing thread local data
+class CProcessLocalObject;              // for storing thread local data
 class CNoTrackObject;
+
 // template class CTypedSimpleList<>
 // template class CThreadLocal<>
 // template class CProcessLocal<>
@@ -53,19 +54,19 @@ public:
 	void** GetNextPtr(void* p) const;   // somewhat trusting...
 };
 
-inline CSimpleList::CSimpleList(int nNextOffset)
+AFX_INLINE CSimpleList::CSimpleList(int nNextOffset)
 	{ m_pHead = NULL; m_nNextOffset = nNextOffset; }
-inline void CSimpleList::Construct(int nNextOffset)
+AFX_INLINE void CSimpleList::Construct(int nNextOffset)
 	{ ASSERT(m_pHead == NULL); m_nNextOffset = nNextOffset; }
-inline BOOL CSimpleList::IsEmpty() const
+AFX_INLINE BOOL CSimpleList::IsEmpty() const
 	{ return m_pHead == NULL; }
-inline void** CSimpleList::GetNextPtr(void* p) const
+AFX_INLINE void** CSimpleList::GetNextPtr(void* p) const
 	{ ASSERT(p != NULL); return (void**)((BYTE*)p+m_nNextOffset); }
-inline void CSimpleList::RemoveAll()
+AFX_INLINE void CSimpleList::RemoveAll()
 	{ m_pHead = NULL; }
-inline void* CSimpleList::GetHead() const
+AFX_INLINE void* CSimpleList::GetHead() const
 	{ return m_pHead; }
-inline void* CSimpleList::GetNext(void* prevElement) const
+AFX_INLINE void* CSimpleList::GetNext(void* prevElement) const
 	{ return *GetNextPtr(prevElement); }
 
 template<class TYPE>
@@ -95,19 +96,20 @@ struct CSlotData;   // private to implementation
 class CThreadSlotData
 {
 public:
-	CThreadSlotData(BOOL bThreadLocal);
+	CThreadSlotData();
 
 // Operations
 	int AllocSlot();
 	void FreeSlot(int nSlot);
 	void* GetValue(int nSlot);
 	void SetValue(int nSlot, void* pValue);
-	void DeleteValues(HINSTANCE hInst); // delete all values in process/thread
+	// delete all values in process/thread
+	void DeleteValues(HINSTANCE hInst, BOOL bAll = FALSE);
+	// assign instance handle to just constructed slots
 	void AssignInstance(HINSTANCE hInst);
 
 // Implementation
-	DWORD m_tlsIndex;   // used if bThreadLocal == TRUE
-	CThreadData* m_pData;   // used if bThreadLocal == FALSE
+	DWORD m_tlsIndex;   // used to access system thread-local storage
 
 	int m_nAlloc;       // number of slots allocated (in UINTs)
 	int m_nRover;       // (optimization) for quick finding of free slots
@@ -119,10 +121,11 @@ public:
 	void* GetThreadValue(int nSlot); // special version for threads only!
 	void* PASCAL operator new(size_t, void* p)
 		{ return p; }
+	void DeleteValues(CThreadData* pData, HINSTANCE hInst);
 	~CThreadSlotData();
 };
 
-class CNoTrackObject
+class AFX_NOVTABLE CNoTrackObject
 {
 public:
 	void* PASCAL operator new(size_t nSize);
@@ -130,11 +133,14 @@ public:
 
 #if defined(_DEBUG) && !defined(_AFX_NO_DEBUG_CRT)
 	void* PASCAL operator new(size_t nSize, LPCSTR, int);
+#if _MSC_VER >= 1200
+	void PASCAL operator delete(void* pObject, LPCSTR, int);
+#endif
 #endif
 	virtual ~CNoTrackObject() { }
 };
 
-class CThreadLocalObject
+class AFX_NOVTABLE CThreadLocalObject
 {
 public:
 // Attributes
@@ -146,15 +152,14 @@ public:
 	~CThreadLocalObject();
 };
 
-class CProcessLocalObject
+class AFX_NOVTABLE CProcessLocalObject
 {
 public:
 // Attributes
 	CNoTrackObject* GetData(CNoTrackObject* (AFXAPI* pfnCreateObject)());
-	CNoTrackObject* GetDataNA();
 
 // Implementation
-	int m_nSlot;
+	CNoTrackObject* volatile m_pObject;
 	~CProcessLocalObject();
 };
 
@@ -163,20 +168,20 @@ class CThreadLocal : public CThreadLocalObject
 {
 // Attributes
 public:
-	inline TYPE* GetData()
+	AFX_INLINE TYPE* GetData()
 	{
 		TYPE* pData = (TYPE*)CThreadLocalObject::GetData(&CreateObject);
 		ASSERT(pData != NULL);
 		return pData;
 	}
-	inline TYPE* GetDataNA()
+	AFX_INLINE TYPE* GetDataNA()
 	{
 		TYPE* pData = (TYPE*)CThreadLocalObject::GetDataNA();
 		return pData;
 	}
-	inline operator TYPE*()
+	AFX_INLINE operator TYPE*()
 		{ return GetData(); }
-	inline TYPE* operator->()
+	AFX_INLINE TYPE* operator->()
 		{ return GetData(); }
 
 // Implementation
@@ -195,20 +200,17 @@ class CProcessLocal : public CProcessLocalObject
 {
 // Attributes
 public:
-	inline TYPE* GetData()
+	AFX_INLINE TYPE* GetData()
 	{
 		TYPE* pData = (TYPE*)CProcessLocalObject::GetData(&CreateObject);
 		ASSERT(pData != NULL);
 		return pData;
 	}
-	inline TYPE* GetDataNA()
-	{
-		TYPE* pData = (TYPE*)CProcessLocalObject::GetDataNA();
-		return pData;
-	}
-	inline operator TYPE*()
+	AFX_INLINE TYPE* GetDataNA()
+		{ return (TYPE*)m_pObject; }
+	AFX_INLINE operator TYPE*()
 		{ return GetData(); }
-	inline TYPE* operator->()
+	AFX_INLINE TYPE* operator->()
 		{ return GetData(); }
 
 // Implementation
@@ -225,7 +227,7 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 
 void AFXAPI AfxInitLocalData(HINSTANCE hInstInit);
-void AFXAPI AfxTermLocalData(HINSTANCE hInstTerm);
+void AFXAPI AfxTermLocalData(HINSTANCE hInstTerm, BOOL bAll = FALSE);
 void AFXAPI AfxTlsAddRef();
 void AFXAPI AfxTlsRelease();
 

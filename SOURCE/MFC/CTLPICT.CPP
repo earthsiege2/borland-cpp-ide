@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,7 +37,7 @@ BOOL CPictureHolder::CreateEmpty()
 	PICTDESC pdesc;
 	pdesc.cbSizeofstruct = sizeof(pdesc);
 	pdesc.picType = PICTYPE_NONE;
-	return SUCCEEDED(OleCreatePictureIndirect(&pdesc, IID_IPicture, FALSE,
+	return SUCCEEDED(::OleCreatePictureIndirect(&pdesc, IID_IPicture, FALSE,
 		(LPVOID*)&m_pPict));
 }
 
@@ -75,7 +75,7 @@ BOOL CPictureHolder::CreateFromBitmap(HBITMAP hbm, HPALETTE hpal,
 	pdesc.picType = PICTYPE_BITMAP;
 	pdesc.bmp.hbitmap = hbm;
 	pdesc.bmp.hpal = hpal;
-	return SUCCEEDED(OleCreatePictureIndirect(&pdesc, IID_IPicture,
+	return SUCCEEDED(::OleCreatePictureIndirect(&pdesc, IID_IPicture,
 		bTransferOwnership, (LPVOID*)&m_pPict));
 }
 
@@ -89,7 +89,7 @@ BOOL CPictureHolder::CreateFromMetafile(HMETAFILE hmf, int xExt,
 	pdesc.wmf.hmeta = hmf;
 	pdesc.wmf.xExt = xExt;
 	pdesc.wmf.yExt = yExt;
-	return SUCCEEDED(OleCreatePictureIndirect(&pdesc, IID_IPicture,
+	return SUCCEEDED(::OleCreatePictureIndirect(&pdesc, IID_IPicture,
 		bTransferOwnership, (LPVOID*)&m_pPict));
 }
 
@@ -106,7 +106,7 @@ BOOL CPictureHolder::CreateFromIcon(HICON hicon, BOOL bTransferOwnership)
 	pdesc.cbSizeofstruct = sizeof(pdesc);
 	pdesc.picType = PICTYPE_ICON;
 	pdesc.icon.hicon = hicon;
-	return SUCCEEDED(OleCreatePictureIndirect(&pdesc, IID_IPicture,
+	return SUCCEEDED(::OleCreatePictureIndirect(&pdesc, IID_IPicture,
 		bTransferOwnership, (LPVOID*)&m_pPict));
 }
 

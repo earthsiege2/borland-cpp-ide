@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -32,6 +32,12 @@ CFontHolder::CFontHolder(LPPROPERTYNOTIFYSINK pNotify) :
 	ASSERT_NULL_OR_POINTER(pNotify, IPropertyNotifySink);
 }
 
+void CFontHolder::SetFontNotifySink(LPPROPERTYNOTIFYSINK pNotify)
+{
+	ASSERT_NULL_OR_POINTER(pNotify, IPropertyNotifySink);
+	m_pNotify = pNotify;
+}
+
 CFontHolder::~CFontHolder()
 {
 	ReleaseFont();
@@ -48,7 +54,7 @@ void CFontHolder::ReleaseFont()
 	RELEASE(m_pFont);
 }
 
-static const FONTDESC _fdDefault =
+AFX_STATIC_DATA const FONTDESC _afxFontDescDefault =
 	{ sizeof(FONTDESC), OLESTR("MS Sans Serif"), FONTSIZE(12), FW_NORMAL,
 	  DEFAULT_CHARSET, FALSE, FALSE, FALSE };
 
@@ -82,9 +88,9 @@ void CFontHolder::InitializeFont(const FONTDESC* pFontDesc,
 	{
 		// Create the font.
 		if (pFontDesc == NULL)
-			pFontDesc = &_fdDefault;
+			pFontDesc = &_afxFontDescDefault;
 
-		if (FAILED(OleCreateFontIndirect((LPFONTDESC)pFontDesc, IID_IFont,
+		if (FAILED(::OleCreateFontIndirect((LPFONTDESC)pFontDesc, IID_IFont,
 				(LPVOID *)&pFontNew)))
 			pFontNew = NULL;
 	}
@@ -116,7 +122,7 @@ BOOL AFXAPI _AfxIsSameFont(CFontHolder& font, const FONTDESC* pFontDesc,
 	else
 	{
 		if (pFontDesc == NULL)
-			pFontDesc = &_fdDefault;
+			pFontDesc = &_afxFontDescDefault;
 
 		bSame = TRUE;
 		BOOL bFlag;
@@ -174,9 +180,7 @@ BOOL AFXAPI _AfxIsSameFont(CFontHolder& font, const FONTDESC* pFontDesc,
 HFONT CFontHolder::GetFontHandle()
 {
 	// Assume a screen DC for logical/himetric ratio.
-	CDC dc;
-	dc.CreateCompatibleDC(NULL);
-	return GetFontHandle((long)dc.GetDeviceCaps(LOGPIXELSY), HIMETRIC_PER_INCH);
+	return GetFontHandle(afxData.cyPixelsPerInch, HIMETRIC_PER_INCH);
 }
 
 HFONT CFontHolder::GetFontHandle(long cyLogical, long cyHimetric)
@@ -223,6 +227,7 @@ void CFontHolder::QueryTextMetrics(LPTEXTMETRIC lptm)
 	if (m_pFont != NULL)
 	{
 #if defined(_UNICODE) || defined(OLE2ANSI)
+		// no conversion necessary
 		m_pFont->QueryTextMetrics(lptm);
 #else
 		TEXTMETRICW tmw;

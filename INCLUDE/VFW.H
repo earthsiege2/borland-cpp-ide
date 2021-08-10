@@ -1,6 +1,6 @@
-/*******************0000*****************************************************
+/****************************************************************************
  *
- *      VfW.H - Video for Windows include file
+ *      VfW.H - Video for windows include file for WIN32
  *
  *      Copyright (c) 1991-1995, Microsoft Corp.  All rights reserved.
  *
@@ -38,8 +38,8 @@
  ****************************************************************************/
 
 #ifndef _INC_VFW
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_VFW
-#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -51,13 +51,8 @@ extern "C" {            /* Assume C declarations for C++ */
  *
  ***************************************************************************/
 
-#ifdef _WIN32
 #define VFWAPI  WINAPI
 #define VFWAPIV WINAPIV
-#else
-#define VFWAPI  FAR PASCAL
-#define VFWAPIV FAR CDECL
-#endif
 
 /****************************************************************************
  *
@@ -76,6 +71,11 @@ DWORD FAR PASCAL VideoForWindowsVersion(void);
 LONG VFWAPI InitVFW(void);
 LONG VFWAPI TermVFW(void);
 
+#ifdef __cplusplus
+} // extern "C"
+#endif  /* __cplusplus */
+
+
 /****************************************************************************
  *
  *  do we need MMSYSTEM?
@@ -83,10 +83,12 @@ LONG VFWAPI TermVFW(void);
  ****************************************************************************/
 
 #if !defined(_INC_MMSYSTEM) && (!defined(NOVIDEO) || !defined(NOAVICAP))
-#pragma option -b.
     #include <mmsystem.h>
-#pragma option -b
 #endif
+
+#ifdef __cplusplus
+extern "C" {            /* Assume C declarations for C++ */
+#endif  /* __cplusplus */
 
 /****************************************************************************/
 /*                                                                          */
@@ -113,7 +115,6 @@ LONG VFWAPI TermVFW(void);
  ****************************************************************************/
 
 #ifndef NOCOMPMAN
-#ifdef _WIN32
 
 #define ICVERSION       0x0104
 
@@ -173,6 +174,10 @@ DECLARE_HANDLE(HIC);     /* Handle to a Installable Compressor */
 #define ICMODE_FASTCOMPRESS     5
 #define ICMODE_DRAW             8
 #endif
+#ifndef _WIN32					// ;Internal
+#define ICMODE_INTERNALF_FUNCTION32	0x8000	// ;Internal
+#define ICMODE_INTERNALF_MASK		0x8000	// ;Internal
+#endif						// ;Internal
 
 /* Flags for AVI file index */
 #define AVIIF_LIST	0x00000001L
@@ -205,6 +210,10 @@ DECLARE_HANDLE(HIC);     /* Handle to a Installable Compressor */
 
 #define ICM_CONFIGURE               (ICM_RESERVED+10)   // show the configure dialog
 #define ICM_ABOUT                   (ICM_RESERVED+11)   // show the about box
+
+#define ICM_GETERRORTEXT            (ICM_RESERVED+12)   // get error text TBD ;Internal
+#define ICM_GETFORMATNAME	    (ICM_RESERVED+20)	// get a name for a format ;Internal
+#define ICM_ENUMFORMATS		    (ICM_RESERVED+21)	// cycle through formats ;Internal
 
 #define ICM_GETDEFAULTQUALITY       (ICM_RESERVED+30)   // get the default value for quality
 #define ICM_GETQUALITY              (ICM_RESERVED+31)   // get the current value for quality
@@ -241,8 +250,10 @@ DECLARE_HANDLE(HIC);     /* Handle to a Installable Compressor */
 #define ICM_DRAW_QUERY              (ICM_USER+31)   // query support for dempress
 #define ICM_DRAW_BEGIN              (ICM_USER+15)   // start a series of draw calls
 #define ICM_DRAW_GET_PALETTE        (ICM_USER+16)   // get the palette needed for drawing
+#define ICM_DRAW_UPDATE             (ICM_USER+17)   // update screen with current frame ;Internal
 #define ICM_DRAW_START              (ICM_USER+18)   // start decompress clock
 #define ICM_DRAW_STOP               (ICM_USER+19)   // stop decompress clock
+#define ICM_DRAW_BITS               (ICM_USER+20)   // decompress a frame to screen ;Internal
 #define ICM_DRAW_END                (ICM_USER+21)   // end a series of draw calls
 #define ICM_DRAW_GETTIME            (ICM_USER+32)   // get value of decompress clock
 #define ICM_DRAW                    (ICM_USER+33)   // generalized "render" message
@@ -258,9 +269,12 @@ DECLARE_HANDLE(HIC);     /* Handle to a Installable Compressor */
 #define ICM_DRAW_SUGGESTFORMAT      (ICM_USER+50)   // Like ICGetDisplayFormat
 #define ICM_DRAW_CHANGEPALETTE      (ICM_USER+51)   // for animating palette
 
+#define ICM_DRAW_IDLE               (ICM_USER+52)   // send each frame time ;Internal
+
 #define ICM_GETBUFFERSWANTED        (ICM_USER+41)   // ask about prebuffering
 
 #define ICM_GETDEFAULTKEYFRAMERATE  (ICM_USER+42)   // get the default value for key frames
+
 
 #define ICM_DECOMPRESSEX_BEGIN      (ICM_USER+60)   // start a series of decompress calls
 #define ICM_DECOMPRESSEX_QUERY      (ICM_USER+61)   // start a series of decompress calls
@@ -268,6 +282,7 @@ DECLARE_HANDLE(HIC);     /* Handle to a Installable Compressor */
 #define ICM_DECOMPRESSEX_END        (ICM_USER+63)   // end a series of decompress calls
 
 #define ICM_COMPRESS_FRAMES_INFO    (ICM_USER+70)   // tell about compress to come
+#define ICM_COMPRESS_FRAMES         (ICM_USER+71)   // compress a bunch of frames ;Internal
 #define ICM_SET_STATUS_PROC	        (ICM_USER+72)   // set status callback
 
 /************************************************************************
@@ -510,26 +525,83 @@ typedef struct {
     LPPALETTEENTRY      lppe;       // palette
 } ICPALETTE;
 
+
 /************************************************************************
 
     ICM function declarations
 	
 ************************************************************************/
 
-BOOL    VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo);
-BOOL    VFWAPI ICInstall(DWORD fccType, DWORD fccHandler, LPARAM lParam, LPSTR szDesc, UINT wFlags);
-BOOL    VFWAPI ICRemove(DWORD fccType, DWORD fccHandler, UINT wFlags);
-LRESULT VFWAPI ICGetInfo(HIC hic, ICINFO FAR *picinfo, DWORD cb);
+BOOL
+VFWAPI
+ICInfo(
+    IN DWORD fccType,
+    IN DWORD fccHandler,
+    OUT ICINFO FAR * lpicinfo
+    );
 
-HIC     VFWAPI ICOpen(DWORD fccType, DWORD fccHandler, UINT wMode);
-HIC     VFWAPI ICOpenFunction(DWORD fccType, DWORD fccHandler, UINT wMode, FARPROC lpfnHandler);
-LRESULT VFWAPI ICClose(HIC hic);
+BOOL
+VFWAPI
+ICInstall(
+    IN DWORD fccType,
+    IN DWORD fccHandler,
+    IN LPARAM lParam,
+    IN LPSTR szDesc,
+    IN UINT wFlags
+    );
 
-LRESULT VFWAPI  ICSendMessage(HIC hic, UINT msg, DWORD dw1, DWORD dw2);
+BOOL
+VFWAPI
+ICRemove(
+    IN DWORD fccType,
+    IN DWORD fccHandler,
+    IN UINT wFlags
+    );
+
+LRESULT
+VFWAPI
+ICGetInfo(
+    IN HIC hic,
+    OUT ICINFO FAR *picinfo,
+    IN DWORD cb
+    );
+
+HIC
+VFWAPI
+ICOpen(
+    IN DWORD fccType,
+    IN DWORD fccHandler,
+    IN UINT wMode
+    );
+
+HIC
+VFWAPI
+ICOpenFunction(
+    IN DWORD fccType,
+    IN DWORD fccHandler,
+    IN UINT wMode,
+    IN FARPROC lpfnHandler
+    );
+
+LRESULT
+VFWAPI
+ICClose(
+    IN HIC hic
+    );
+
+LRESULT
+VFWAPI
+ICSendMessage(
+    IN HIC hic,
+    IN UINT msg,
+    IN DWORD_PTR dw1,
+    IN DWORD_PTR dw2
+    );
 #ifndef _WIN32
 //this function is unsupported on Win32 as it is non-portable.
 LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 #endif
+
 
 /* Values for wFlags of ICInstall() */
 #define ICINSTALL_UNICODE       0x8000
@@ -549,16 +621,16 @@ LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 #define ICMF_ABOUT_QUERY         0x00000001
 
 #define ICQueryAbout(hic) \
-    (ICSendMessage(hic, ICM_ABOUT, (DWORD) -1, ICMF_ABOUT_QUERY) == ICERR_OK)
+    (ICSendMessage(hic, ICM_ABOUT, (DWORD_PTR) -1, ICMF_ABOUT_QUERY) == ICERR_OK)
 
 #define ICAbout(hic, hwnd) \
-    ICSendMessage(hic, ICM_ABOUT, (DWORD)(UINT)(hwnd), 0)
+    ICSendMessage(hic, ICM_ABOUT, (DWORD_PTR)(UINT_PTR)(hwnd), 0)
 
 #define ICQueryConfigure(hic) \
-    (ICSendMessage(hic, ICM_CONFIGURE, (DWORD) -1, ICMF_CONFIGURE_QUERY) == ICERR_OK)
+    (ICSendMessage(hic, ICM_CONFIGURE, (DWORD_PTR) -1, ICMF_CONFIGURE_QUERY) == ICERR_OK)
 
 #define ICConfigure(hic, hwnd) \
-    ICSendMessage(hic, ICM_CONFIGURE, (DWORD)(UINT)(hwnd), 0)
+    ICSendMessage(hic, ICM_CONFIGURE, (DWORD_PTR)(UINT_PTR)(hwnd), 0)
 
 /************************************************************************
 
@@ -567,13 +639,13 @@ LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 ************************************************************************/
 
 #define ICGetState(hic, pv, cb) \
-    ICSendMessage(hic, ICM_GETSTATE, (DWORD)(LPVOID)(pv), (DWORD)(cb))
+    ICSendMessage(hic, ICM_GETSTATE, (DWORD_PTR)(LPVOID)(pv), (DWORD_PTR)(cb))
 
 #define ICSetState(hic, pv, cb) \
-    ICSendMessage(hic, ICM_SETSTATE, (DWORD)(LPVOID)(pv), (DWORD)(cb))
+    ICSendMessage(hic, ICM_SETSTATE, (DWORD_PTR)(LPVOID)(pv), (DWORD_PTR)(cb))
 
 #define ICGetStateSize(hic) \
-    ICGetState(hic, NULL, 0)
+    (DWORD) ICGetState(hic, NULL, 0)
 
 /************************************************************************
 
@@ -583,10 +655,10 @@ LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 static DWORD dwICValue;
 
 #define ICGetDefaultQuality(hic) \
-    (ICSendMessage(hic, ICM_GETDEFAULTQUALITY, (DWORD)(LPVOID)&dwICValue, sizeof(DWORD)), dwICValue)
+    (ICSendMessage(hic, ICM_GETDEFAULTQUALITY, (DWORD_PTR)(LPVOID)&dwICValue, sizeof(DWORD)), dwICValue)
 
 #define ICGetDefaultKeyFrameRate(hic) \
-    (ICSendMessage(hic, ICM_GETDEFAULTKEYFRAMERATE, (DWORD)(LPVOID)&dwICValue, sizeof(DWORD)), dwICValue)
+    (ICSendMessage(hic, ICM_GETDEFAULTKEYFRAMERATE, (DWORD_PTR)(LPVOID)&dwICValue, sizeof(DWORD)), dwICValue)
 
 /************************************************************************
 
@@ -594,7 +666,7 @@ static DWORD dwICValue;
 	
 ************************************************************************/
 #define ICDrawWindow(hic, prc) \
-    ICSendMessage(hic, ICM_DRAW_WINDOW, (DWORD)(LPVOID)(prc), sizeof(RECT))
+    ICSendMessage(hic, ICM_DRAW_WINDOW, (DWORD_PTR)(LPVOID)(prc), sizeof(RECT))
 
 /************************************************************************
 
@@ -607,20 +679,23 @@ static DWORD dwICValue;
  *  compress a single frame
  *
  */
-DWORD VFWAPIV ICCompress(
-    HIC                 hic,
-    DWORD               dwFlags,        // flags
-    LPBITMAPINFOHEADER  lpbiOutput,     // output format
-    LPVOID              lpData,         // output data
-    LPBITMAPINFOHEADER  lpbiInput,      // format of frame to compress
-    LPVOID              lpBits,         // frame data to compress
-    LPDWORD             lpckid,         // ckid for data in AVI file
-    LPDWORD             lpdwFlags,      // flags in the AVI index.
-    LONG                lFrameNum,      // frame number of seq.
-    DWORD               dwFrameSize,    // reqested size in bytes. (if non zero)
-    DWORD               dwQuality,      // quality within one frame
-    LPBITMAPINFOHEADER  lpbiPrev,       // format of previous frame
-    LPVOID              lpPrev);        // previous frame
+DWORD
+VFWAPIV
+ICCompress(
+    IN     HIC                 hic,
+    IN     DWORD               dwFlags,        // flags
+    IN     LPBITMAPINFOHEADER  lpbiOutput,     // output format
+    OUT    LPVOID              lpData,         // output data
+    IN     LPBITMAPINFOHEADER  lpbiInput,      // format of frame to compress
+    IN     LPVOID              lpBits,         // frame data to compress
+    OUT    LPDWORD             lpckid,         // ckid for data in AVI file
+    OUT    LPDWORD             lpdwFlags,      // flags in the AVI index.
+    IN     LONG                lFrameNum,      // frame number of seq.
+    IN     DWORD               dwFrameSize,    // reqested size in bytes. (if non zero)
+    IN     DWORD               dwQuality,      // quality within one frame
+    IN     LPBITMAPINFOHEADER  lpbiPrev,       // format of previous frame
+    IN     LPVOID              lpPrev          // previous frame
+    );
 
 /*
  *  ICCompressBegin()
@@ -630,7 +705,7 @@ DWORD VFWAPIV ICCompress(
  *
  */
 #define ICCompressBegin(hic, lpbiInput, lpbiOutput) \
-    ICSendMessage(hic, ICM_COMPRESS_BEGIN, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
+    ICSendMessage(hic, ICM_COMPRESS_BEGIN, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
 /*
  *  ICCompressQuery()
@@ -640,7 +715,7 @@ DWORD VFWAPIV ICCompress(
  *
  */
 #define ICCompressQuery(hic, lpbiInput, lpbiOutput) \
-    ICSendMessage(hic, ICM_COMPRESS_QUERY, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
+    ICSendMessage(hic, ICM_COMPRESS_QUERY, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
 /*
  *  ICCompressGetFormat()
@@ -650,10 +725,10 @@ DWORD VFWAPIV ICCompress(
  *
  */
 #define ICCompressGetFormat(hic, lpbiInput, lpbiOutput) \
-    ICSendMessage(hic, ICM_COMPRESS_GET_FORMAT, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
+    ICSendMessage(hic, ICM_COMPRESS_GET_FORMAT, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
 #define ICCompressGetFormatSize(hic, lpbi) \
-    ICCompressGetFormat(hic, lpbi, NULL)
+    (DWORD) ICCompressGetFormat(hic, lpbi, NULL)
 
 /*
  *  ICCompressSize()
@@ -662,7 +737,7 @@ DWORD VFWAPIV ICCompress(
  *
  */
 #define ICCompressGetSize(hic, lpbiInput, lpbiOutput) \
-    ICSendMessage(hic, ICM_COMPRESS_GET_SIZE, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
+    (DWORD) ICSendMessage(hic, ICM_COMPRESS_GET_SIZE, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
 #define ICCompressEnd(hic) \
     ICSendMessage(hic, ICM_COMPRESS_END, 0, 0)
@@ -681,14 +756,17 @@ DWORD VFWAPIV ICCompress(
  */
 #define ICDECOMPRESS_HURRYUP    0x80000000L     // don't draw just buffer (hurry up!)
 
-DWORD VFWAPIV ICDecompress(
-    HIC                 hic,
-    DWORD               dwFlags,    // flags (from AVI index...)
-    LPBITMAPINFOHEADER  lpbiFormat, // BITMAPINFO of compressed data
-                                    // biSizeImage has the chunk size
-    LPVOID              lpData,     // data
-    LPBITMAPINFOHEADER  lpbi,       // DIB to decompress to
-    LPVOID              lpBits);
+DWORD
+VFWAPIV
+ICDecompress(
+    IN  HIC                 hic,
+    IN  DWORD               dwFlags,    // flags (from AVI index...)
+    IN  LPBITMAPINFOHEADER  lpbiFormat, // BITMAPINFO of compressed data
+                                        // biSizeImage has the chunk size
+    IN  LPVOID              lpData,     // data
+    IN  LPBITMAPINFOHEADER  lpbi,       // DIB to decompress to
+    OUT LPVOID              lpBits
+    );
 
 /*
  *  ICDecompressBegin()
@@ -698,7 +776,7 @@ DWORD VFWAPIV ICDecompress(
  *
  */
 #define ICDecompressBegin(hic, lpbiInput, lpbiOutput) \
-    ICSendMessage(hic, ICM_DECOMPRESS_BEGIN, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
+    ICSendMessage(hic, ICM_DECOMPRESS_BEGIN, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
 /*
  *  ICDecompressQuery()
@@ -708,7 +786,7 @@ DWORD VFWAPIV ICDecompress(
  *
  */
 #define ICDecompressQuery(hic, lpbiInput, lpbiOutput) \
-    ICSendMessage(hic, ICM_DECOMPRESS_QUERY, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
+    ICSendMessage(hic, ICM_DECOMPRESS_QUERY, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
 /*
  *  ICDecompressGetFormat()
@@ -718,7 +796,7 @@ DWORD VFWAPIV ICDecompress(
  *
  */
 #define ICDecompressGetFormat(hic, lpbiInput, lpbiOutput) \
-    ((LONG) ICSendMessage(hic, ICM_DECOMPRESS_GET_FORMAT, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput)))
+    ((LONG) ICSendMessage(hic, ICM_DECOMPRESS_GET_FORMAT, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput)))
 
 #define ICDecompressGetFormatSize(hic, lpbi) \
     ICDecompressGetFormat(hic, lpbi, NULL)
@@ -730,10 +808,10 @@ DWORD VFWAPIV ICDecompress(
  *
  */
 #define ICDecompressGetPalette(hic, lpbiInput, lpbiOutput) \
-    ICSendMessage(hic, ICM_DECOMPRESS_GET_PALETTE, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
+    ICSendMessage(hic, ICM_DECOMPRESS_GET_PALETTE, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
 #define ICDecompressSetPalette(hic, lpbiPalette) \
-    ICSendMessage(hic, ICM_DECOMPRESS_SET_PALETTE, (DWORD)(LPVOID)(lpbiPalette), 0)
+    ICSendMessage(hic, ICM_DECOMPRESS_SET_PALETTE, (DWORD_PTR)(LPVOID)(lpbiPalette), 0)
 
 #define ICDecompressEnd(hic) \
     ICSendMessage(hic, ICM_DECOMPRESS_END, 0, 0)
@@ -743,6 +821,7 @@ DWORD VFWAPIV ICDecompress(
     decompression (ex) functions
 
 ************************************************************************/
+
 
 //
 // on Win16 these functions are macros that call ICMessage. ICMessage will
@@ -791,8 +870,9 @@ ICDecompressEx(
 
     // note that ICM swaps round the length and pointer
     // length in lparam2, pointer in lparam1
-    return ICSendMessage(hic, ICM_DECOMPRESSEX, (DWORD)&ic, sizeof(ic));
+    return ICSendMessage(hic, ICM_DECOMPRESSEX, (DWORD_PTR)&ic, sizeof(ic));
 }
+
 
 /*
  *  ICDecompressExBegin()
@@ -836,7 +916,7 @@ ICDecompressExBegin(
 
     // note that ICM swaps round the length and pointer
     // length in lparam2, pointer in lparam1
-    return ICSendMessage(hic, ICM_DECOMPRESSEX_BEGIN, (DWORD)&ic, sizeof(ic));
+    return ICSendMessage(hic, ICM_DECOMPRESSEX_BEGIN, (DWORD_PTR)&ic, sizeof(ic));
 }
 
 /*
@@ -878,8 +958,9 @@ ICDecompressExQuery(
 
     // note that ICM swaps round the length and pointer
     // length in lparam2, pointer in lparam1
-    return ICSendMessage(hic, ICM_DECOMPRESSEX_QUERY, (DWORD)&ic, sizeof(ic));
+    return ICSendMessage(hic, ICM_DECOMPRESSEX_QUERY, (DWORD_PTR)&ic, sizeof(ic));
 }
+
 
 #define ICDecompressExEnd(hic) \
     ICSendMessage(hic, ICM_DECOMPRESSEX_END, 0, 0)
@@ -903,23 +984,26 @@ ICDecompressExQuery(
 #define ICDRAW_FULLSCREEN   0x00000002L   // draw to full screen
 #define ICDRAW_HDC          0x00000004L   // draw to a HDC/HWND
 
-DWORD VFWAPIV ICDrawBegin(
-        HIC                 hic,
-        DWORD               dwFlags,        // flags
-        HPALETTE            hpal,           // palette to draw with
-        HWND                hwnd,           // window to draw to
-        HDC                 hdc,            // HDC to draw to
-        int                 xDst,           // destination rectangle
-        int                 yDst,
-        int                 dxDst,
-        int                 dyDst,
-        LPBITMAPINFOHEADER  lpbi,           // format of frame to draw
-        int                 xSrc,           // source rectangle
-        int                 ySrc,
-        int                 dxSrc,
-        int                 dySrc,
-        DWORD               dwRate,         // frames/second = (dwRate/dwScale)
-        DWORD               dwScale);
+DWORD
+VFWAPIV
+ICDrawBegin(
+    IN HIC                 hic,
+    IN DWORD               dwFlags,        // flags
+    IN HPALETTE            hpal,           // palette to draw with
+    IN HWND                hwnd,           // window to draw to
+    IN HDC                 hdc,            // HDC to draw to
+    IN int                 xDst,           // destination rectangle
+    IN int                 yDst,
+    IN int                 dxDst,
+    IN int                 dyDst,
+    IN LPBITMAPINFOHEADER  lpbi,           // format of frame to draw
+    IN int                 xSrc,           // source rectangle
+    IN int                 ySrc,
+    IN int                 dxSrc,
+    IN int                 dySrc,
+    IN DWORD               dwRate,         // frames/second = (dwRate/dwScale)
+    IN DWORD               dwScale
+    );
 
 /*
  *  ICDraw()
@@ -931,13 +1015,17 @@ DWORD VFWAPIV ICDrawBegin(
 #define ICDRAW_HURRYUP      0x80000000L   // don't draw just buffer (hurry up!)
 #define ICDRAW_UPDATE       0x40000000L   // don't draw just update screen
 
-DWORD VFWAPIV ICDraw(
-        HIC                 hic,
-        DWORD               dwFlags,        // flags
-        LPVOID		    lpFormat,       // format of frame to decompress
-        LPVOID              lpData,         // frame data to decompress
-        DWORD               cbData,         // size of data
-        LONG                lTime);         // time to draw this frame
+DWORD
+VFWAPIV
+ICDraw(
+    IN HIC                 hic,
+    IN DWORD               dwFlags,        // flags
+    IN LPVOID              lpFormat,       // format of frame to decompress
+    IN LPVOID              lpData,         // frame data to decompress
+    IN DWORD               cbData,         // size of data
+    IN LONG                lTime           // time to draw this frame
+    );
+
 
 // ICMessage is not supported on Win32, so provide a static inline function
 // to do the same job
@@ -964,8 +1052,9 @@ ICDrawSuggestFormat(
 
     // note that ICM swaps round the length and pointer
     // length in lparam2, pointer in lparam1
-    return ICSendMessage(hic, ICM_DRAW_SUGGESTFORMAT, (DWORD)&ic, sizeof(ic));
+    return ICSendMessage(hic, ICM_DRAW_SUGGESTFORMAT, (DWORD_PTR)&ic, sizeof(ic));
 }
+
 
 /*
  *  ICDrawQuery()
@@ -974,13 +1063,13 @@ ICDrawSuggestFormat(
  *
  */
 #define ICDrawQuery(hic, lpbiInput) \
-    ICSendMessage(hic, ICM_DRAW_QUERY, (DWORD)(LPVOID)(lpbiInput), 0L)
+    ICSendMessage(hic, ICM_DRAW_QUERY, (DWORD_PTR)(LPVOID)(lpbiInput), 0L)
 
 #define ICDrawChangePalette(hic, lpbiInput) \
-    ICSendMessage(hic, ICM_DRAW_CHANGEPALETTE, (DWORD)(LPVOID)(lpbiInput), 0L)
+    ICSendMessage(hic, ICM_DRAW_CHANGEPALETTE, (DWORD_PTR)(LPVOID)(lpbiInput), 0L)
 
 #define ICGetBuffersWanted(hic, lpdwBuffers) \
-    ICSendMessage(hic, ICM_GETBUFFERSWANTED, (DWORD)(LPVOID)(lpdwBuffers), 0)
+    ICSendMessage(hic, ICM_GETBUFFERSWANTED, (DWORD_PTR)(LPVOID)(lpdwBuffers), 0)
 
 #define ICDrawEnd(hic) \
     ICSendMessage(hic, ICM_DRAW_END, 0, 0)
@@ -989,7 +1078,7 @@ ICDrawSuggestFormat(
     ICSendMessage(hic, ICM_DRAW_START, 0, 0)
 
 #define ICDrawStartPlay(hic, lFrom, lTo) \
-    ICSendMessage(hic, ICM_DRAW_START_PLAY, (DWORD)(lFrom), (DWORD)(lTo))
+    ICSendMessage(hic, ICM_DRAW_START_PLAY, (DWORD_PTR)(lFrom), (DWORD_PTR)(lTo))
 
 #define ICDrawStop(hic) \
     ICSendMessage(hic, ICM_DRAW_STOP, 0, 0)
@@ -998,13 +1087,13 @@ ICDrawSuggestFormat(
     ICSendMessage(hic, ICM_DRAW_STOP_PLAY, 0, 0)
 
 #define ICDrawGetTime(hic, lplTime) \
-    ICSendMessage(hic, ICM_DRAW_GETTIME, (DWORD)(LPVOID)(lplTime), 0)
+    ICSendMessage(hic, ICM_DRAW_GETTIME, (DWORD_PTR)(LPVOID)(lplTime), 0)
 
 #define ICDrawSetTime(hic, lTime) \
-    ICSendMessage(hic, ICM_DRAW_SETTIME, (DWORD)lTime, 0)
+    ICSendMessage(hic, ICM_DRAW_SETTIME, (DWORD_PTR)lTime, 0)
 
 #define ICDrawRealize(hic, hdc, fBackground) \
-    ICSendMessage(hic, ICM_DRAW_REALIZE, (DWORD)(UINT)(HDC)(hdc), (DWORD)(BOOL)(fBackground))
+    ICSendMessage(hic, ICM_DRAW_REALIZE, (DWORD_PTR)(UINT_PTR)(HDC)(hdc), (DWORD_PTR)(BOOL)(fBackground))
 
 #define ICDrawFlush(hic) \
     ICSendMessage(hic, ICM_DRAW_FLUSH, 0, 0)
@@ -1025,6 +1114,7 @@ ICDrawSuggestFormat(
  *
  */
 
+
 // ICMessage is not supported on NT
 static __inline LRESULT VFWAPI
 ICSetStatusProc(
@@ -1041,8 +1131,9 @@ ICSetStatusProc(
 
     // note that ICM swaps round the length and pointer
     // length in lparam2, pointer in lparam1
-    return ICSendMessage(hic, ICM_SET_STATUS_PROC, (DWORD)&ic, sizeof(ic));
+    return ICSendMessage(hic, ICM_SET_STATUS_PROC, (DWORD_PTR)&ic, sizeof(ic));
 }
+
 
 /************************************************************************
 
@@ -1056,28 +1147,52 @@ helper routines for DrawDib and MCIAVI...
 #define ICDrawOpen(fccType, fccHandler, lpbiIn) \
     ICLocate(fccType, fccHandler, lpbiIn, NULL, ICMODE_DRAW)
 
-HIC  VFWAPI ICLocate(DWORD fccType, DWORD fccHandler, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut, WORD wFlags);
-HIC  VFWAPI ICGetDisplayFormat(HIC hic, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut, int BitDepth, int dx, int dy);
+HIC
+VFWAPI
+ICLocate(
+    IN DWORD fccType,
+    IN DWORD fccHandler,
+    IN LPBITMAPINFOHEADER lpbiIn,
+    IN LPBITMAPINFOHEADER lpbiOut,
+    IN WORD wFlags
+    );
+
+HIC
+VFWAPI
+ICGetDisplayFormat(
+    IN HIC hic,
+    IN LPBITMAPINFOHEADER lpbiIn,
+    OUT LPBITMAPINFOHEADER lpbiOut,
+    IN int BitDepth,
+    IN int dx,
+    IN int dy
+    );
 
 /************************************************************************
 Higher level functions
 ************************************************************************/
 
-HANDLE VFWAPI ICImageCompress(
-        HIC                 hic,        // compressor to use
-        UINT                uiFlags,    // flags (none yet)
-        LPBITMAPINFO	    lpbiIn,     // format to compress from
-        LPVOID              lpBits,     // data to compress
-        LPBITMAPINFO        lpbiOut,    // compress to this (NULL ==> default)
-        LONG                lQuality,   // quality to use
-        LONG FAR *          plSize);     // compress to this size (0=whatever)
+HANDLE
+VFWAPI
+ICImageCompress(
+    IN HIC                 hic,        // compressor to use
+    IN UINT                uiFlags,    // flags (none yet)
+    IN LPBITMAPINFO        lpbiIn,     // format to compress from
+    IN LPVOID              lpBits,     // data to compress
+    IN LPBITMAPINFO        lpbiOut,    // compress to this (NULL ==> default)
+    IN LONG                lQuality,   // quality to use
+    IN OUT LONG FAR *      plSize      // compress to this size (0=whatever)
+    );
 
-HANDLE VFWAPI ICImageDecompress(
-        HIC                 hic,        // compressor to use
-        UINT                uiFlags,    // flags (none yet)
-        LPBITMAPINFO        lpbiIn,     // format to decompress from
-        LPVOID              lpBits,     // data to decompress
-        LPBITMAPINFO        lpbiOut);   // decompress to this (NULL ==> default)
+HANDLE
+VFWAPI
+ICImageDecompress(
+    IN HIC                 hic,        // compressor to use
+    IN UINT                uiFlags,    // flags (none yet)
+    IN LPBITMAPINFO        lpbiIn,     // format to decompress from
+    IN LPVOID              lpBits,     // data to decompress
+    IN LPBITMAPINFO        lpbiOut     // decompress to this (NULL ==> default)
+    );
 
 //
 // Structure used by ICSeqCompressFrame and ICCompressorChoose routines
@@ -1111,13 +1226,16 @@ typedef struct {
 //
 //  allows user to choose compressor, quality etc...
 //
-BOOL VFWAPI ICCompressorChoose(
-        HWND        hwnd,               // parent window for dialog
-        UINT        uiFlags,            // flags
-        LPVOID      pvIn,               // input format (optional)
-        LPVOID      lpData,             // input data (optional)
-        PCOMPVARS   pc,                 // data about the compressor/dlg
-        LPSTR       lpszTitle);         // dialog title (optional)
+BOOL
+VFWAPI
+ICCompressorChoose(
+    IN     HWND        hwnd,               // parent window for dialog
+    IN     UINT        uiFlags,            // flags
+    IN     LPVOID      pvIn,               // input format (optional)
+    IN     LPVOID      lpData,             // input data (optional)
+    IN OUT PCOMPVARS   pc,                 // data about the compressor/dlg
+    IN     LPSTR       lpszTitle           // dialog title (optional)
+    );
 
 // defines for uiFlags
 #define ICMF_CHOOSE_KEYFRAME	0x0001	// show KeyFrame Every box
@@ -1127,23 +1245,35 @@ BOOL VFWAPI ICCompressorChoose(
 						// can handle the input format
 						// or input data
 
-BOOL VFWAPI ICSeqCompressFrameStart(PCOMPVARS pc, LPBITMAPINFO lpbiIn);
-void VFWAPI ICSeqCompressFrameEnd(PCOMPVARS pc);
+BOOL
+VFWAPI
+ICSeqCompressFrameStart(
+    IN PCOMPVARS pc,
+    IN LPBITMAPINFO lpbiIn
+    );
 
-LPVOID VFWAPI ICSeqCompressFrame(
-    PCOMPVARS               pc,         // set by ICCompressorChoose
-    UINT                    uiFlags,    // flags
-    LPVOID                  lpBits,     // input DIB bits
-    BOOL FAR 		    *pfKey,	// did it end up being a key frame?
-    LONG FAR		    *plSize);	// size to compress to/of returned image
+void
+VFWAPI
+ICSeqCompressFrameEnd(
+    IN PCOMPVARS pc
+    );
 
-void VFWAPI ICCompressorFree(PCOMPVARS pc);
+LPVOID
+VFWAPI
+ICSeqCompressFrame(
+    IN  PCOMPVARS               pc,         // set by ICCompressorChoose
+    IN  UINT                    uiFlags,    // flags
+    IN  LPVOID                  lpBits,     // input DIB bits
+    OUT BOOL FAR                *pfKey,     // did it end up being a key frame?
+    IN OUT LONG FAR             *plSize     // size to compress to/of returned image
+    );
 
-#else
-#pragma option -b.
-    #include <compman.h>
-#pragma option -b
-#endif  /* not _WIN32 */
+void
+VFWAPI
+ICCompressorFree(
+    IN PCOMPVARS pc
+    );
+
 #endif  /* NOCOMPMAN */
 
 /**************************************************************************
@@ -1153,7 +1283,6 @@ void VFWAPI ICCompressorFree(PCOMPVARS pc);
  *************************************************************************/
 
 #ifndef NODRAWDIB
-#ifdef _WIN32
 
 typedef HANDLE HDRAWDIB; /* hdd */
 
@@ -1162,6 +1291,7 @@ typedef HANDLE HDRAWDIB; /* hdd */
   DrawDib Flags
 
 **********************************************************************/
+#define DDF_0001            0x0001          /* ;Internal */
 #define DDF_UPDATE          0x0002          /* re-draw the last DIB */
 #define DDF_SAME_HDC        0x0004          /* HDC same as last call (all setup) */
 #define DDF_SAME_DRAW       0x0008          /* draw params are the same */
@@ -1174,6 +1304,7 @@ typedef HANDLE HDRAWDIB; /* hdd */
 #define DDF_NOTKEYFRAME     0x0400          /* this is a partial frame update, hint */
 #define DDF_HURRYUP         0x0800          /* hurry up please! */
 #define DDF_HALFTONE        0x1000          /* always halftone */
+#define DDF_2000            0x2000          /* ;Internal */
 
 #define DDF_PREROLL         DDF_DONTDRAW    /* Builing up a non-keyframe */
 #define DDF_SAME_DIB        DDF_SAME_DRAW
@@ -1184,6 +1315,12 @@ typedef HANDLE HDRAWDIB; /* hdd */
     DrawDib functions
 	
 *********************************************************************/
+/*							// ;Internal
+**  DrawDibInit()					// ;Internal
+**							// ;Internal
+*/							// ;Internal
+extern BOOL VFWAPI DrawDibInit(void);			// ;Internal
+							// ;Internal
 /*
 **  DrawDibOpen()
 **
@@ -1194,21 +1331,45 @@ extern HDRAWDIB VFWAPI DrawDibOpen(void);
 **  DrawDibClose()
 **
 */
-extern BOOL VFWAPI DrawDibClose(HDRAWDIB hdd);
+extern
+BOOL
+VFWAPI
+DrawDibClose(
+    IN HDRAWDIB hdd
+    );
 
 /*
 ** DrawDibGetBuffer()
 **
 */
-extern LPVOID VFWAPI DrawDibGetBuffer(HDRAWDIB hdd, LPBITMAPINFOHEADER lpbi, DWORD dwSize, DWORD dwFlags);
+extern
+LPVOID
+VFWAPI
+DrawDibGetBuffer(
+    IN HDRAWDIB hdd,
+    OUT LPBITMAPINFOHEADER lpbi,
+    IN DWORD dwSize,
+    IN DWORD dwFlags
+    );
 
+/*							// ;Internal
+**  DrawDibError()					// ;Internal
+*/							// ;Internal
+extern UINT VFWAPI DrawDibError(HDRAWDIB hdd);		// ;Internal
+							// ;Internal
 /*
 **  DrawDibGetPalette()
 **
 **  get the palette used for drawing DIBs
 **
 */
-extern HPALETTE VFWAPI DrawDibGetPalette(HDRAWDIB hdd);
+extern
+HPALETTE
+VFWAPI
+DrawDibGetPalette(
+    IN HDRAWDIB hdd
+    );
+
 
 /*
 **  DrawDibSetPalette()
@@ -1216,12 +1377,26 @@ extern HPALETTE VFWAPI DrawDibGetPalette(HDRAWDIB hdd);
 **  get the palette used for drawing DIBs
 **
 */
-extern BOOL VFWAPI DrawDibSetPalette(HDRAWDIB hdd, HPALETTE hpal);
+extern
+BOOL
+VFWAPI
+DrawDibSetPalette(
+    IN HDRAWDIB hdd,
+    IN HPALETTE hpal
+    );
 
 /*
 **  DrawDibChangePalette()
 */
-extern BOOL VFWAPI DrawDibChangePalette(HDRAWDIB hdd, int iStart, int iLen, LPPALETTEENTRY lppe);
+extern
+BOOL
+VFWAPI
+DrawDibChangePalette(
+    IN HDRAWDIB hdd,
+    IN int iStart,
+    IN int iLen,
+    IN LPPALETTEENTRY lppe
+    );
 
 /*
 **  DrawDibRealize()
@@ -1229,7 +1404,14 @@ extern BOOL VFWAPI DrawDibChangePalette(HDRAWDIB hdd, int iStart, int iLen, LPPA
 **  realize the palette in a HDD
 **
 */
-extern UINT VFWAPI DrawDibRealize(HDRAWDIB hdd, HDC hdc, BOOL fBackground);
+extern
+UINT
+VFWAPI
+DrawDibRealize(
+    IN HDRAWDIB hdd,
+    IN HDC hdc,
+    IN BOOL fBackground
+    );
 
 /*
 **  DrawDibStart()
@@ -1237,7 +1419,13 @@ extern UINT VFWAPI DrawDibRealize(HDRAWDIB hdd, HDC hdc, BOOL fBackground);
 **  start of streaming playback
 **
 */
-extern BOOL VFWAPI DrawDibStart(HDRAWDIB hdd, DWORD rate);
+extern
+BOOL
+VFWAPI
+DrawDibStart(
+    IN HDRAWDIB hdd,
+    IN DWORD rate
+    );
 
 /*
 **  DrawDibStop()
@@ -1245,7 +1433,12 @@ extern BOOL VFWAPI DrawDibStart(HDRAWDIB hdd, DWORD rate);
 **  start of streaming playback
 **
 */
-extern BOOL VFWAPI DrawDibStop(HDRAWDIB hdd);
+extern
+BOOL
+VFWAPI
+DrawDibStop(
+    IN HDRAWDIB hdd
+    );
 
 /*
 **  DrawDibBegin()
@@ -1253,33 +1446,44 @@ extern BOOL VFWAPI DrawDibStop(HDRAWDIB hdd);
 **  prepare to draw
 **
 */
-extern BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
-                                    HDC      hdc,
-                                    int      dxDst,
-                                    int      dyDst,
-                                    LPBITMAPINFOHEADER lpbi,
-                                    int      dxSrc,
-                                    int      dySrc,
-                                    UINT     wFlags);
+extern
+BOOL
+VFWAPI
+DrawDibBegin(
+    IN HDRAWDIB hdd,
+    IN HDC      hdc,
+    IN int      dxDst,
+    IN int      dyDst,
+    IN LPBITMAPINFOHEADER lpbi,
+    IN int      dxSrc,
+    IN int      dySrc,
+    IN UINT     wFlags
+    );
+
 /*
 **  DrawDibDraw()
 **
 **  actualy draw a DIB to the screen.
 **
 */
-extern BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
-                                   HDC      hdc,
-                                   int      xDst,
-                                   int      yDst,
-                                   int      dxDst,
-                                   int      dyDst,
-                                   LPBITMAPINFOHEADER lpbi,
-                                   LPVOID   lpBits,
-                                   int      xSrc,
-                                   int      ySrc,
-                                   int      dxSrc,
-                                   int      dySrc,
-                                   UINT     wFlags);
+extern
+BOOL
+VFWAPI
+DrawDibDraw(
+    IN HDRAWDIB hdd,
+    IN HDC      hdc,
+    IN int      xDst,
+    IN int      yDst,
+    IN int      dxDst,
+    IN int      dyDst,
+    IN LPBITMAPINFOHEADER lpbi,
+    IN LPVOID   lpBits,
+    IN int      xSrc,
+    IN int      ySrc,
+    IN int      dxSrc,
+    IN int      dySrc,
+    IN UINT     wFlags
+    );
 
 /*
 **  DrawDibUpdate()
@@ -1292,7 +1496,12 @@ extern BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 /*
 **  DrawDibEnd()
 */
-extern BOOL VFWAPI DrawDibEnd(HDRAWDIB hdd);
+extern
+BOOL
+VFWAPI
+DrawDibEnd(
+    IN HDRAWDIB hdd
+    );
 
 /*
 **  DrawDibTime()  [for debugging purposes only]
@@ -1307,7 +1516,12 @@ typedef struct {
     LONG    timeSetDIBits;
 }   DRAWDIBTIME, FAR *LPDRAWDIBTIME;
 
-BOOL VFWAPI DrawDibTime(HDRAWDIB hdd, LPDRAWDIBTIME lpddtime);
+BOOL
+VFWAPI
+DrawDibTime(
+    IN HDRAWDIB hdd,
+    OUT LPDRAWDIBTIME lpddtime
+    );
 
 /* display profiling */
 #define PD_CAN_DRAW_DIB         0x0001      /* if you can draw at all */
@@ -1316,13 +1530,12 @@ BOOL VFWAPI DrawDibTime(HDRAWDIB hdd, LPDRAWDIBTIME lpddtime);
 #define PD_STRETCHDIB_1_2_OK    0x0008      /* ... */
 #define PD_STRETCHDIB_1_N_OK    0x0010      /* ... */
 
-DWORD VFWAPI DrawDibProfileDisplay(LPBITMAPINFOHEADER lpbi);
+LRESULT
+VFWAPI
+DrawDibProfileDisplay(
+    IN LPBITMAPINFOHEADER lpbi
+    );
 
-#else
-#pragma option -b.
-    #include <drawdib.h>
-#pragma option -b
-#endif  /* not _WIN32 */
 #endif  /* NODRAWDIB */
 
 /****************************************************************************
@@ -1335,29 +1548,27 @@ DWORD VFWAPI DrawDibProfileDisplay(LPBITMAPINFOHEADER lpbi);
     #ifndef _INC_MMSYSTEM
         typedef DWORD FOURCC;
     #endif
-#ifdef _WIN32
-
 #ifdef _MSC_VER
 #pragma warning(disable:4200)
 #endif
-    
+
 /* The following is a short description of the AVI file format.  Please
  * see the accompanying documentation for a full explanation.
  *
  * An AVI file is the following RIFF form:
  *
- *	RIFF('AVI' 
+ *	RIFF('AVI'
  *	      LIST('hdrl'
  *		    avih(<MainAVIHeader>)
  *                  LIST ('strl'
  *                      strh(<Stream header>)
  *                      strf(<Stream format>)
  *                      ... additional header data
- *            LIST('movi'	 
- *      	  { LIST('rec' 
+ *            LIST('movi'	
+ *      	  { LIST('rec'
  *      		      SubChunk...
  *      		   )
- *      	      | SubChunk } ....	    
+ *      	      | SubChunk } ....	
  *            )
  *            [ <AVIIndex> ]
  *      )
@@ -1369,7 +1580,7 @@ DWORD VFWAPI DrawDibProfileDisplay(LPBITMAPINFOHEADER lpbi);
  *	be a BITMAPINFO structure, including palette.  For an audio stream,
  *	this should be a WAVEFORMAT (or PCMWAVEFORMAT) structure.
  *
- *	The actual data is contained in subchunks within the 'movi' LIST 
+ *	The actual data is contained in subchunks within the 'movi' LIST
  *	chunk.  The first two characters of each data chunk are the
  *	stream number with which that data is associated.
  *
@@ -1384,17 +1595,17 @@ DWORD VFWAPI DrawDibProfileDisplay(LPBITMAPINFOHEADER lpbi);
  *
  * The grouping into LIST 'rec' chunks implies only that the contents of
  *   the chunk should be read into memory at the same time.  This
- *   grouping is used for files specifically intended to be played from 
+ *   grouping is used for files specifically intended to be played from
  *   CD-ROM.
  *
- * The index chunk at the end of the file should contain one entry for 
+ * The index chunk at the end of the file should contain one entry for
  *   each data chunk in the file.
- *       
+ *
  * Limitations for the current software:
  *	Only one video stream and one audio stream are allowed.
  *	The streams must start at the beginning of the file.
  *
- * 
+ *
  * To register codec types please obtain a copy of the Multimedia
  * Developer Registration Kit from:
  *
@@ -1405,6 +1616,7 @@ DWORD VFWAPI DrawDibProfileDisplay(LPBITMAPINFOHEADER lpbi);
  *  Redmond, WA 98052-6399
  *
  */
+
 
 #ifndef mmioFOURCC
 #define mmioFOURCC( ch0, ch1, ch2, ch3 )				\
@@ -1451,6 +1663,7 @@ typedef WORD TWOCC;
 /* Chunk id to use for extra chunks for padding. */
 #define ckidAVIPADDING          mmioFOURCC('J', 'U', 'N', 'K')
 
+
 /*
 ** Useful macros
 **
@@ -1474,15 +1687,15 @@ typedef WORD TWOCC;
         MAKELONG((ToHex((stream) & 0x0f) << 8) | \
 			    (ToHex(((stream) & 0xf0) >> 4)), tcc)
 
+
 /*
-** Main AVI File Header 
-*/	     
-		     
+** Main AVI File Header
+*/	
+		
 /* flags for use in <dwFlags> in AVIFileHdr */
 #define AVIF_HASINDEX		0x00000010	// Index at end of file?
 #define AVIF_MUSTUSEINDEX	0x00000020
 #define AVIF_ISINTERLEAVED	0x00000100
-#define AVIF_TRUSTCKTYPE	0x00000800	// Use CKType to find key frames?
 #define AVIF_WASCAPTUREFILE	0x00010000
 #define AVIF_COPYRIGHTED	0x00020000
 
@@ -1500,12 +1713,13 @@ typedef struct
     DWORD		dwInitialFrames;
     DWORD		dwStreams;
     DWORD		dwSuggestedBufferSize;
-    
+
     DWORD		dwWidth;
     DWORD		dwHeight;
-    
+
     DWORD		dwReserved[4];
 } MainAVIHeader;
+
 
 /*
 ** Stream header
@@ -1535,6 +1749,9 @@ typedef struct {
 /* Flags for index */
 #define AVIIF_LIST          0x00000001L // chunk is a 'LIST'
 #define AVIIF_KEYFRAME      0x00000010L // this frame is a key frame.
+#define AVIIF_FIRSTPART     0x00000020L // this frame is the start of a partial frame.
+#define AVIIF_LASTPART      0x00000040L // this frame is the end of a partial frame.
+#define AVIIF_MIDPART       (AVIIF_LASTPART|AVIIF_FIRSTPART)
 
 #define AVIIF_NOTIME	    0x00000100L // this frame doesn't take any time
 #define AVIIF_COMPUSE       0x0FFF0000L // these bits are for compressor use
@@ -1546,6 +1763,7 @@ typedef struct
     DWORD		dwChunkOffset;		// Position of chunk
     DWORD		dwChunkLength;		// Length of chunk
 } AVIINDEXENTRY;
+
 
 /*
 ** Palette change chunk
@@ -1560,12 +1778,11 @@ typedef struct
     PALETTEENTRY	peNew[];	/* New color specifications */
 } AVIPALCHANGE;
 
-#else
-#pragma option -b.
-    #include <avifmt.h>
-#pragma option -b
-#endif  /* not _WIN32 */
 #endif /* NOAVIFMT */
+
+#ifdef __cplusplus
+} // extern "C"
+#endif  /* __cplusplus */
 
 /****************************************************************************
  *
@@ -1573,18 +1790,16 @@ typedef struct
  *
  ***************************************************************************/
 
-#ifdef _WIN32
 #ifndef RC_INVOKED
-#pragma option -b.
 #include "pshpack8.h"
-#pragma option -b
-#endif
 #endif
 #ifndef NOMMREG
-#pragma option -b.
     #include <mmreg.h>
-#pragma option -b
 #endif
+
+#ifdef __cplusplus
+extern "C" {            /* Assume C declarations for C++ */
+#endif  /* __cplusplus */
 
 /****************************************************************************
  *
@@ -1593,7 +1808,6 @@ typedef struct
  ***************************************************************************/
 
 #ifndef NOAVIFILE
-#ifdef _WIN32
 
 /*
  * Ansi - Unicode thunking.
@@ -1698,6 +1912,7 @@ typedef struct _AVISTREAMINFOA {
 #define LPAVISTREAMINFO	LPAVISTREAMINFOA
 #endif
 
+
 #define AVISTREAMINFO_DISABLED			0x00000001
 #define AVISTREAMINFO_FORMATCHANGES		0x00010000
 
@@ -1705,6 +1920,7 @@ typedef struct _AVISTREAMINFOA {
  * --- AVIFILEINFO ----------------------------------------------------
  *
  */
+
 
 typedef struct _AVIFILEINFOW {
     DWORD		dwMaxBytesPerSec;	// max. transfer rate
@@ -1752,6 +1968,7 @@ typedef struct _AVIFILEINFOA {
 #define LPAVIFILEINFO	LPAVIFILEINFOA
 #endif
 
+
 // Flags for dwFlags
 #define AVIFILEINFO_HASINDEX		0x00000010
 #define AVIFILEINFO_MUSTUSEINDEX	0x00000020
@@ -1797,11 +2014,18 @@ typedef struct {
 #define AVICOMPRESSF_KEYFRAMES		0x00000004    // use keyframes
 #define AVICOMPRESSF_VALID		0x00000008    // has valid data?
 
-#pragma option -b.
+#ifdef __cplusplus
+} // extern "C"
+#endif  /* __cplusplus */
+
 #include <ole2.h>
-#pragma option -b
+
+#ifdef __cplusplus
+extern "C" {            /* Assume C declarations for C++ */
+#endif  /* __cplusplus */
 
 /*	-	-	-	-	-	-	-	-	*/
+
 
 /****** AVI Stream Interface *******************************************/
 
@@ -1848,6 +2072,7 @@ DECLARE_INTERFACE_(IAVIStream, IUnknown)
 
 typedef       IAVIStream FAR* PAVISTREAM;
 
+
 #undef  INTERFACE
 #define INTERFACE   IAVIStreaming
 
@@ -1868,6 +2093,7 @@ DECLARE_INTERFACE_(IAVIStreaming, IUnknown)
 };
 
 typedef       IAVIStreaming FAR* PAVISTREAMING;
+
 
 #undef  INTERFACE
 #define INTERFACE   IAVIEditStream
@@ -1898,7 +2124,9 @@ DECLARE_INTERFACE_(IAVIEditStream, IUnknown)
 
 typedef       IAVIEditStream FAR* PAVIEDITSTREAM;
 
+
 /****** AVI File Interface *******************************************/
+
 
 #undef  INTERFACE
 #define INTERFACE   IAVIFile
@@ -2013,6 +2241,7 @@ STDAPI AVIFileOpenW       (PAVIFILE FAR * ppfile, LPCWSTR szFile,
 #else // win16
 STDAPI AVIFileOpen       (PAVIFILE FAR * ppfile, LPCSTR szFile,
 			  UINT uMode, LPCLSID lpHandler);
+#define AVIFileOpenW	AVIFileOpen	    /* ;Internal */
 #endif
 
 #ifdef _WIN32
@@ -2025,9 +2254,12 @@ STDAPI AVIFileInfoA (PAVIFILE pfile, LPAVIFILEINFOA pfi, LONG lSize);
 #endif
 #else //win16 version
 STDAPI AVIFileInfo (PAVIFILE pfile, LPAVIFILEINFO pfi, LONG lSize);
+#define AVIFileInfoW AVIFileInfo	    /* ;Internal */
 #endif
 
+
 STDAPI AVIFileGetStream     (PAVIFILE pfile, PAVISTREAM FAR * ppavi, DWORD fccType, LONG lParam);
+
 
 #ifdef _WIN32
 STDAPI AVIFileCreateStreamW (PAVIFILE pfile, PAVISTREAM FAR *ppavi, AVISTREAMINFOW FAR * psi);
@@ -2039,6 +2271,7 @@ STDAPI AVIFileCreateStreamA (PAVIFILE pfile, PAVISTREAM FAR *ppavi, AVISTREAMINF
 #endif
 #else //win16 version
 STDAPI AVIFileCreateStream(PAVIFILE pfile, PAVISTREAM FAR *ppavi, AVISTREAMINFO FAR * psi);
+#define AVIFileCreateStreamW AVIFileCreateStream	    /* ;Internal */
 #endif
 
 STDAPI AVIFileWriteData	(PAVIFILE pfile,
@@ -2090,6 +2323,7 @@ STDAPI_(LONG) AVIStreamLength       (PAVISTREAM pavi);
 STDAPI_(LONG) AVIStreamTimeToSample (PAVISTREAM pavi, LONG lTime);
 STDAPI_(LONG) AVIStreamSampleToTime (PAVISTREAM pavi, LONG lSample);
 
+
 STDAPI AVIStreamBeginStreaming(PAVISTREAM pavi, LONG lStart, LONG lEnd, LONG lRate);
 STDAPI AVIStreamEndStreaming(PAVISTREAM pavi);
 
@@ -2101,8 +2335,11 @@ STDAPI_(PGETFRAME) AVIStreamGetFrameOpen(PAVISTREAM pavi,
 STDAPI_(LPVOID) AVIStreamGetFrame(PGETFRAME pg, LONG lPos);
 STDAPI AVIStreamGetFrameClose(PGETFRAME pg);
 
+
 // !!! We need some way to place an advise on a stream....
 // STDAPI AVIStreamHasChanged   (PAVISTREAM pavi);
+
+
 
 // Shortcut function
 STDAPI AVIStreamOpenFromFileA(PAVISTREAM FAR *ppavi, LPCSTR szFile,
@@ -2120,6 +2357,8 @@ STDAPI AVIStreamOpenFromFileW(PAVISTREAM FAR *ppavi, LPCWSTR szFile,
 // Use to create disembodied streams
 STDAPI AVIStreamCreate(PAVISTREAM FAR *ppavi, LONG lParam1, LONG lParam2,
 		       CLSID FAR *pclsidHandler);
+
+
 
 // PHANDLER    AVIAPI AVIGetHandler         (PAVISTREAM pavi, PAVISTREAMHANDLER psh);
 // PAVISTREAM  AVIAPI AVIGetStream          (PHANDLER p);
@@ -2143,6 +2382,7 @@ STDAPI AVIStreamCreate(PAVISTREAM FAR *ppavi, LONG lParam1, LONG lParam2,
 #define FIND_OFFSET     0x00002000L     // return physical position
 #define FIND_SIZE       0x00003000L     // return physical size
 #define FIND_INDEX      0x00004000L     // return physical index position
+
 
 //
 //  stuff to support backward compat.
@@ -2279,7 +2519,9 @@ STDAPI AVISaveVW(LPCWSTR               szFile,
 #define AVISaveV	AVISaveVA
 #endif
 
-STDAPI_(BOOL) AVISaveOptions(HWND hwnd,
+
+
+STDAPI_(INT_PTR) AVISaveOptions(HWND hwnd,
 			     UINT	uiFlags,
 			     int	nStreams,
 			     PAVISTREAM FAR *ppavi,
@@ -2336,6 +2578,7 @@ STDAPI EditStreamPaste(PAVISTREAM pavi, LONG FAR *plPos, LONG FAR *plLength, PAV
 
 STDAPI EditStreamClone(PAVISTREAM pavi, PAVISTREAM FAR *ppResult);
 
+
 STDAPI EditStreamSetNameA(PAVISTREAM pavi, LPCSTR lpszName);
 STDAPI EditStreamSetNameW(PAVISTREAM pavi, LPCWSTR lpszName);
 STDAPI EditStreamSetInfoW(PAVISTREAM pavi, LPAVISTREAMINFOW lpInfo, LONG cbInfo);
@@ -2378,11 +2621,6 @@ STDAPI EditStreamSetInfoA(PAVISTREAM pavi, LPAVISTREAMINFOA lpInfo, LONG cbInfo)
 #define AVIERR_USERABORT        MAKE_AVIERR(198)
 #define AVIERR_ERROR            MAKE_AVIERR(199)
 #endif
-#else
-#pragma option -b.
-    #include <avifile.h>
-#pragma option -b
-#endif  /* not _WIN32 */
 #endif  /* NOAVIFILE */
 
 /****************************************************************************
@@ -2392,7 +2630,6 @@ STDAPI EditStreamSetInfoA(PAVISTREAM pavi, LPAVISTREAMINFOA lpInfo, LONG cbInfo)
  ***************************************************************************/
 
 #ifndef NOMCIWND
-#ifdef _WIN32
 /*----------------------------------------------------------------------------*\
  *
  *  MCIWnd
@@ -2429,6 +2666,20 @@ STDAPI EditStreamSetInfoA(PAVISTREAM pavi, LPAVISTREAMINFOA lpInfo, LONG cbInfo)
  *
  *    (C) Copyright Microsoft Corp. 1991-1995.  All rights reserved.
  *
+ *    You have a royalty-free right to use, modify, reproduce and
+ *    distribute the Sample Files (and/or any modified version) in
+ *    any way you find useful, provided that you agree that
+ *    Microsoft has no warranty obligations or liability for any
+ *    Sample Application Files.
+ *
+ *    If you did not get this from Microsoft Sources, then it may not be the
+ *    most current version.  This sample code in particular will be updated
+ *    and include more documentation.
+ *
+ *    Sources are:
+ *       CompuServe: WINSDK forum, MDK section.
+ *       Anonymous FTP from ftp.uu.net vendor\microsoft\multimedia
+ *
  * WIN32:
  *
  *    MCIWnd supports both ansi and unicode interfaces. For any message that
@@ -2461,16 +2712,30 @@ STDAPI EditStreamSetInfoA(PAVISTREAM pavi, LPAVISTREAMINFOA lpInfo, LONG cbInfo)
 #define MCIWndSM SendMessage    /* SendMessage in C */
 #endif  /* __cplusplus */
 #define MCIWND_WINDOW_CLASS TEXT("MCIWndClass")
-HWND VFWAPIV MCIWndCreateA(HWND hwndParent, HINSTANCE hInstance,
-		      DWORD dwStyle,LPCSTR szFile);
-HWND VFWAPIV MCIWndCreateW(HWND hwndParent, HINSTANCE hInstance,
-		      DWORD dwStyle,LPCWSTR szFile);
+HWND
+VFWAPIV
+MCIWndCreateA(
+    IN HWND hwndParent,
+    IN HINSTANCE hInstance,
+    IN DWORD dwStyle,
+    IN LPCSTR szFile
+    );
+
+HWND
+VFWAPIV
+MCIWndCreateW(
+    IN HWND hwndParent,
+    IN HINSTANCE hInstance,
+    IN DWORD dwStyle,
+    IN LPCWSTR szFile
+    );
+
 #ifdef UNICODE
 #define MCIWndCreate    MCIWndCreateW
 #else
 #define MCIWndCreate    MCIWndCreateA
 #endif
-BOOL VFWAPIV MCIWndRegisterClass();
+BOOL VFWAPIV MCIWndRegisterClass(void);
 
 // Flags for the MCIWndOpen command
 #define MCIWNDOPENF_NEW	            0x0001  // open a new file
@@ -2493,6 +2758,7 @@ BOOL VFWAPIV MCIWndRegisterClass();
 
 #define MCIWNDF_NOTIFYANSI	   0x0080
 
+
 // The MEDIA notification includes a text string.
 // To receive notifications in ANSI instead of unicode set the
 // MCIWNDF_NOTIFYANSI style bit. The macro below includes this bit
@@ -2507,9 +2773,14 @@ BOOL VFWAPIV MCIWndRegisterClass();
 #define MCIWNDF_NOTIFYMEDIA         MCIWNDF_NOTIFYMEDIAA
 #endif
 
+
+
 #define MCIWNDF_RECORD              0x2000  // Give a record button
 #define MCIWNDF_NOERRORDLG          0x4000  // Show Error Dlgs for MCI cmds?
 #define MCIWNDF_NOOPEN		    0x8000  // Don't allow user to open things
+
+
+
 
 // can macros
 
@@ -2615,6 +2886,7 @@ BOOL VFWAPIV MCIWndRegisterClass();
 
 #define MCIWndSetOwner(hwnd, hwndP)  (LONG)MCIWndSM(hwnd, MCIWNDM_SETOWNER, (WPARAM)(hwndP), 0)
 
+
 // Messages an app will send to MCIWND
 
 // all the text-related messages are defined out of order above (they need
@@ -2661,6 +2933,8 @@ BOOL VFWAPIV MCIWndRegisterClass();
 #define MCIWNDM_PALETTEKICK     (WM_USER + 150)
 #define MCIWNDM_OPENINTERFACE	(WM_USER + 151)
 #define MCIWNDM_SETOWNER	(WM_USER + 152)
+
+
 
 //define both A and W messages
 #define MCIWNDM_SENDSTRINGA	(WM_USER + 101)
@@ -2719,7 +2993,14 @@ BOOL VFWAPIV MCIWndRegisterClass();
 // in win32 mapped to MCIWNDM_SENDSTRINGW), and MCIWNDM_SENDSTRINGA (the
 // win32 ansi thunk).
 
+
+
+
+
+
+
 // Messages MCIWND will send to an app
+// !!! Use less messages and use a code instead to indicate the type of notify? /* ;Internal */
 #define MCIWNDM_NOTIFYMODE      (WM_USER + 200)  // wp = hwnd, lp = mode
 #define MCIWNDM_NOTIFYPOS	(WM_USER + 201)  // wp = hwnd, lp = pos
 #define MCIWNDM_NOTIFYSIZE	(WM_USER + 202)  // wp = hwnd
@@ -2762,11 +3043,6 @@ BOOL VFWAPIV MCIWndRegisterClass();
     #define MCI_MODE_OPEN           (530)
 #endif
 
-#else
-#pragma option -b.
-    #include <mciwnd.h>
-#pragma option -b
-#endif  /* not _WIN32 */
 #endif  /* NOAVIFILE */
 
 /****************************************************************************
@@ -2774,10 +3050,11 @@ BOOL VFWAPIV MCIWndRegisterClass();
  *  VIDEO - Video Capture Driver Interface
  *
  ****************************************************************************/
+
 #if !defined(NOAVICAP) || !defined(NOVIDEO)
-#ifdef _WIN32
 
 #ifndef _RCINVOKED
+
 
 /* video data types */
 DECLARE_HANDLE(HVIDEO);                 // generic handle
@@ -2836,6 +3113,9 @@ DWORD FAR PASCAL VideoForWindowsVersion(void);
 #define DV_ERR_PROTECT_ONLY     (DV_ERR_BASE + 27)   /* Can not run in standard mode */
 #define DV_ERR_LASTERROR        (DV_ERR_BASE + 27)
 
+//#define DV_IDS_PROFILING        (DV_ERR_BASE + 900)
+//#define DV_IDS_LISTBOX          (DV_ERR_BASE + 901)
+
 #define DV_ERR_USER_MSG         (DV_ERR_BASE + 1000) /* Hardware specific errors */
 
 /****************************************************************************
@@ -2873,7 +3153,7 @@ typedef struct videohdr_tag {
     DWORD       dwTimeCaptured;         /* Milliseconds from start of stream */
     DWORD       dwUser;                 /* for client's use */
     DWORD       dwFlags;                /* assorted flags (see defines) */
-    DWORD       dwReserved[4];          /* reserved for driver */
+    DWORD_PTR   dwReserved[4];          /* reserved for driver */
 } VIDEOHDR, NEAR *PVIDEOHDR, FAR * LPVIDEOHDR;
 
 /* dwFlags field of VIDEOHDR */
@@ -2881,6 +3161,7 @@ typedef struct videohdr_tag {
 #define VHDR_PREPARED   0x00000002  /* Set if this header has been prepared */
 #define VHDR_INQUEUE    0x00000004  /* Reserved for driver */
 #define VHDR_KEYFRAME   0x00000008  /* Key Frame */
+#define VHDR_VALID      0x0000000F  /* valid flags */     /* ;Internal */
 
 /* Channel capabilities structure */
 typedef struct channel_caps_tag {
@@ -2900,6 +3181,7 @@ typedef struct channel_caps_tag {
 #define VCAPS_SRC_CAN_CLIP  0x00000002      /* src rect can clip */
 #define VCAPS_DST_CAN_CLIP  0x00000004      /* dst rect can clip */
 #define VCAPS_CAN_SCALE     0x00000008      /* allows src != dst */
+
 
 /****************************************************************************
 
@@ -2949,11 +3231,6 @@ typedef struct channel_caps_tag {
 
 #endif  /* ifndef _RCINVOKED */
 
-#else
-#pragma option -b.
-    #include <msvideo.h>
-#pragma option -b
-#endif  /* not _WIN32 */
 #endif  /* NOVIDEO */
 
 /****************************************************************************
@@ -2963,10 +3240,9 @@ typedef struct channel_caps_tag {
  ***************************************************************************/
 
 #ifndef NOAVICAP
-#ifdef _WIN32
 #ifdef __cplusplus
 /* SendMessage in C++*/
-#define AVICapSM(hwnd,m,w,l) ( (IsWindow(hwnd)) ? ::SendMessage(hwnd,m,w,l) : 0)
+#define AVICapSM(hwnd,m,w,l) ( (::IsWindow(hwnd)) ? ::SendMessage(hwnd,m,w,l) : 0)
 #else
 /* SendMessage in C */
 #define AVICapSM(hwnd,m,w,l) ( (IsWindow(hwnd)) ?   SendMessage(hwnd,m,w,l) : 0)
@@ -2977,6 +3253,8 @@ typedef struct channel_caps_tag {
 // ------------------------------------------------------------------
 //  Window Messages  WM_CAP... which can be sent to an AVICAP window
 // ------------------------------------------------------------------
+
+
 
 // UNICODE
 //
@@ -2989,6 +3267,9 @@ typedef struct channel_caps_tag {
 // The 32-bit AVICAP on NT uses unicode exclusively internally.
 // ApiNameA() will be implemented as a call to ApiNameW() together with
 // translation of strings.
+
+
+
 
 // Defines start of the message range
 #define WM_CAP_START                    WM_USER
@@ -3009,6 +3290,7 @@ typedef struct channel_caps_tag {
 #define WM_CAP_SET_CALLBACK_ERROR       WM_CAP_SET_CALLBACK_ERRORA
 #define WM_CAP_SET_CALLBACK_STATUS      WM_CAP_SET_CALLBACK_STATUSA
 #endif
+
 
 #define WM_CAP_SET_CALLBACK_YIELD       (WM_CAP_START+  4)
 #define WM_CAP_SET_CALLBACK_FRAME       (WM_CAP_START+  5)
@@ -3097,6 +3379,8 @@ typedef struct channel_caps_tag {
 #define WM_CAP_GET_MCI_DEVICE           WM_CAP_GET_MCI_DEVICEA
 #endif
 
+
+
 #define WM_CAP_STOP                     (WM_CAP_START+  68)
 #define WM_CAP_ABORT                    (WM_CAP_START+  69)
 
@@ -3122,6 +3406,7 @@ typedef struct channel_caps_tag {
 
 // Following added post VFW 1.1
 #define WM_CAP_SET_CALLBACK_CAPCONTROL  (WM_CAP_START+  85)
+
 
 // Defines end of the message range
 #define WM_CAP_UNICODE_END              WM_CAP_PAL_SAVEW
@@ -3294,6 +3579,7 @@ typedef struct tagCapInfoChunk {
     LONG        cbData;                     // size of lpData
 } CAPINFOCHUNK, *PCAPINFOCHUNK, FAR *LPCAPINFOCHUNK;
 
+
 // ------------------------------------------------------------------
 //  Callback Definitions
 // ------------------------------------------------------------------
@@ -3412,6 +3698,7 @@ BOOL VFWAPI capGetDriverDescriptionW (UINT wDriverIndex,
 #define IDS_CAP_AVI_DRAWDIB_ERROR   439  /* "Error: Unable to draw this data format." */
 #define IDS_CAP_COMPRESSOR_ERROR    440  /* "Error: Unable to initialize compressor." */
 #define IDS_CAP_AUDIO_DROP_ERROR    441  /* "Error: Audio data was lost during capture, reduce capture rate." */
+#define IDS_CAP_AUDIO_DROP_COMPERROR 442  /* "Error: Audio data was lost during capture.  Try capturing without compressing." */
 
 /* status string IDs */
 #define IDS_CAP_STAT_LIVE_MODE      500  /* "Live window" */
@@ -3428,12 +3715,11 @@ BOOL VFWAPI capGetDriverDescriptionW (UINT wDriverIndex,
 #define IDS_CAP_STAT_VIDEOAUDIO     511  /* "Captured %d.%03d sec.  %ld frames (%ld dropped) (%d.%03d fps).  %ld audio bytes (%d,%03d sps)" */
 #define IDS_CAP_STAT_VIDEOONLY      512  /* "Captured %d.%03d sec.  %ld frames (%ld dropped) (%d.%03d fps)" */
 #define IDS_CAP_STAT_FRAMESDROPPED  513  /* "Dropped %ld of %ld frames (%d.%02d%%) during capture." */
-#else
-#pragma option -b.
-    #include <avicap.h>
-#pragma option -b
-#endif  /* not _WIN32 */
 #endif  /* NOAVIFILE */
+
+#ifdef __cplusplus
+} // extern "C"
+#endif  /* __cplusplus */
 
 /****************************************************************************
  *
@@ -3442,24 +3728,43 @@ BOOL VFWAPI capGetDriverDescriptionW (UINT wDriverIndex,
  ***************************************************************************/
 
 #ifndef NOMSACM
-#pragma option -b.
     #include <msacm.h>
-#pragma option -b
 #endif
+
+#ifdef __cplusplus
+extern "C" {            /* Assume C declarations for C++ */
+#endif  /* __cplusplus */
 
 /****************************************************************************
  *
  *  FilePreview dialog.
  *
  ***************************************************************************/
-#ifdef _WIN32
 #ifdef OFN_READONLY
 
-    BOOL VFWAPI GetOpenFileNamePreviewA(LPOPENFILENAMEA lpofn);
-    BOOL VFWAPI GetSaveFileNamePreviewA(LPOPENFILENAMEA lpofn);
+    BOOL
+    VFWAPI
+    GetOpenFileNamePreviewA(
+        IN OUT LPOPENFILENAMEA lpofn
+        );
 
-    BOOL VFWAPI GetOpenFileNamePreviewW(LPOPENFILENAMEW lpofn);
-    BOOL VFWAPI GetSaveFileNamePreviewW(LPOPENFILENAMEW lpofn);
+    BOOL
+    VFWAPI
+    GetSaveFileNamePreviewA(
+        IN OUT LPOPENFILENAMEA lpofn
+        );
+
+    BOOL
+    VFWAPI
+    GetOpenFileNamePreviewW(
+        IN OUT LPOPENFILENAMEW lpofn
+        );
+
+    BOOL
+    VFWAPI
+    GetSaveFileNamePreviewW(
+        IN OUT LPOPENFILENAMEW lpofn
+        );
 
     #ifdef UNICODE
         #define GetOpenFileNamePreview          GetOpenFileNamePreviewW
@@ -3472,21 +3777,12 @@ BOOL VFWAPI capGetDriverDescriptionW (UINT wDriverIndex,
 #endif // OFN_READONLY
 
 #ifndef RC_INVOKED
-#pragma option -b.
 #include "poppack.h"
-#pragma option -b
 #endif
-
-#else
-#ifdef OFN_READONLY
-    BOOL VFWAPI GetOpenFileNamePreview(LPOPENFILENAME lpofn);
-    BOOL VFWAPI GetSaveFileNamePreview(LPOPENFILENAME lpofn);
-#endif
-#endif  /* not _WIN32 */
 
 #ifdef __cplusplus
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif  /* _INC_VFW */

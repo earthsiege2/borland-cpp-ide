@@ -1,7 +1,7 @@
 // afxv_cfg.h - target configuration control for non-Microsoft compilers
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -15,7 +15,7 @@
 //  other compilers.
 
 #define _AFX_PORTABLE
-#define _AFX_NOFORCE_LIBS
-#define _CRT_PORTABLE
-#define _AFX_NO_DEBUG_CRT
-#define _AFX_NO_DAO_SUPPORT
+#define _AFX_NO_DAO_SUPPORT // __BORLANDC__
+#define _AFX_NO_DEBUG_CRT   // __BORLANDC__
+#define _AFX_PACKING 8      // __BORLANDC__
+#define _AFX_NO_CTL3D_SUPPORT // __BORLANDC__

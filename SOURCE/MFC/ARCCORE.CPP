@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,6 +9,7 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
+#include <afxtempl.h>
 
 #ifdef AFX_CORE2_SEG
 #pragma code_seg(AFX_CORE2_SEG)
@@ -25,7 +26,7 @@ static char THIS_FILE[] = __FILE__;
 // Serialize member functions for low level classes put here
 // for code swapping improvements
 
-#ifdef _MAC
+#ifdef _AFX_BYTESWAP
 CArchive& CArchive::operator<<(WORD w)
 {
 	if (m_lpBufCur + sizeof(WORD) > m_lpBufMax)
@@ -149,7 +150,7 @@ CArchive& CArchive::operator>>(double& d)
 
 	return *this;
 }
-#endif
+#endif //_AFX_BYTESWAP
 
 // CString serialization code
 // String format:
@@ -186,7 +187,7 @@ CArchive& AFXAPI operator<<(CArchive& ar, const CString& string)
 }
 
 // return string length or -1 if UNICODE string is found in the archive
-static UINT AFXAPI ReadStringLength(CArchive& ar)
+AFX_STATIC UINT AFXAPI _AfxReadStringLength(CArchive& ar)
 {
 	DWORD nNewLen;
 
@@ -223,11 +224,11 @@ CArchive& AFXAPI operator>>(CArchive& ar, CString& string)
 	int nConvert = 0;   // if we get UNICODE, convert
 #endif
 
-	UINT nNewLen = ReadStringLength(ar);
+	UINT nNewLen = _AfxReadStringLength(ar);
 	if (nNewLen == (UINT)-1)
 	{
 		nConvert = 1 - nConvert;
-		nNewLen = ReadStringLength(ar);
+		nNewLen = _AfxReadStringLength(ar);
 		ASSERT(nNewLen != -1);
 	}
 
@@ -237,7 +238,7 @@ CArchive& AFXAPI operator>>(CArchive& ar, CString& string)
 	string.GetBufferSetLength((int)nNewLen);
 	nByteLen += nByteLen * (1 - nConvert);  // bytes to read
 #else
-	nByteLen += nByteLen * nConvert;	// bytes to read
+	nByteLen += nByteLen * nConvert;    // bytes to read
 	if (nNewLen == 0)
 		string.GetBufferSetLength(0);
 	else
@@ -253,7 +254,6 @@ CArchive& AFXAPI operator>>(CArchive& ar, CString& string)
 		if (ar.Read(string.m_pchData, nByteLen) != nByteLen)
 			AfxThrowArchiveException(CArchiveException::endOfFile);
 
-#ifndef _MAC
 		// convert the data if as necessary
 		if (nConvert != 0)
 		{
@@ -269,13 +269,16 @@ CArchive& AFXAPI operator>>(CArchive& ar, CString& string)
 			string = lpsz;   // convert with operator=(LPWCSTR)
 			delete[] (BYTE*)pOldData;
 		}
-#endif
 	}
 	return ar;
 }
 
 // specialized version of SerializeElements for CString (used in collections)
+#if _MSC_VER >= 1100
+template <> void AFXAPI SerializeElements<CString> (CArchive& ar, CString* pElements, int nCount)
+#else
 void AFXAPI SerializeElements(CArchive& ar, CString* pElements, int nCount)
+#endif
 {
 	ASSERT(nCount == 0 ||
 		AfxIsValidAddress(pElements, nCount * sizeof(CString)));
@@ -327,8 +330,7 @@ CRuntimeClass* PASCAL CRuntimeClass::Load(CArchive& ar, UINT* pwSchemaNum)
 #ifdef _AFXDLL
 	// search classes in shared DLLs
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		for (pClass = pDLL->m_classList; pClass != NULL;
@@ -459,6 +461,7 @@ void CArchive::Abort()
 		ASSERT(!m_bDirectBuffer);
 		delete[] m_lpBufStart;
 		m_lpBufStart = NULL;
+		m_lpBufCur = NULL;
 	}
 
 	delete m_pSchemaMap;
@@ -631,30 +634,29 @@ void CArchive::Flush()
 	if (IsLoading())
 	{
 		// unget the characters in the buffer, seek back unused amount
-		if (m_lpBufMax - m_lpBufCur != 0)
+		if (m_lpBufMax != m_lpBufCur)
 			m_pFile->Seek(-(m_lpBufMax - m_lpBufCur), CFile::current);
 		m_lpBufCur = m_lpBufMax;    // empty
 	}
 	else
 	{
-		if (m_lpBufStart == NULL || m_lpBufCur != m_lpBufStart)
+		if (!m_bDirectBuffer)
 		{
-			if (!m_bDirectBuffer)
-			{
-				// write out the current buffer to file
+			// write out the current buffer to file
+			if (m_lpBufCur != m_lpBufStart)
 				m_pFile->Write(m_lpBufStart, m_lpBufCur - m_lpBufStart);
-			}
-			else
-			{
-				// commit current buffer
-				m_pFile->GetBufferPtr(CFile::bufferCommit, m_lpBufCur - m_lpBufStart);
-				// get next buffer
-				VERIFY(m_pFile->GetBufferPtr(CFile::bufferWrite, m_nBufSize,
-					(void**)&m_lpBufStart, (void**)&m_lpBufMax) == (UINT)m_nBufSize);
-				ASSERT((UINT)m_nBufSize == (UINT)(m_lpBufMax - m_lpBufStart));
-			}
-			m_lpBufCur = m_lpBufStart;
 		}
+		else
+		{
+			// commit current buffer
+			if (m_lpBufCur != m_lpBufStart)
+				m_pFile->GetBufferPtr(CFile::bufferCommit, m_lpBufCur - m_lpBufStart);
+			// get next buffer
+			VERIFY(m_pFile->GetBufferPtr(CFile::bufferWrite, m_nBufSize,
+				(void**)&m_lpBufStart, (void**)&m_lpBufMax) == (UINT)m_nBufSize);
+			ASSERT((UINT)m_nBufSize == (UINT)(m_lpBufMax - m_lpBufStart));
+		}
+		m_lpBufCur = m_lpBufStart;
 	}
 }
 
@@ -671,6 +673,9 @@ void CArchive::FillBuffer(UINT nBytesNeeded)
 	ASSERT(m_lpBufCur == NULL ||
 		AfxIsValidAddress(m_lpBufCur, m_lpBufMax - m_lpBufCur, FALSE));
 
+	UINT nUnused = m_lpBufMax - m_lpBufCur;
+	ULONG nTotalNeeded = ((ULONG)nBytesNeeded) + nUnused;
+
 	// fill up the current buffer from file
 	if (!m_bDirectBuffer)
 	{
@@ -681,12 +686,11 @@ void CArchive::FillBuffer(UINT nBytesNeeded)
 		if (m_lpBufCur > m_lpBufStart)
 		{
 			// copy unused
-			UINT nUnused = m_lpBufMax - m_lpBufCur;
 			if ((int)nUnused > 0)
 			{
 				memmove(m_lpBufStart, m_lpBufCur, nUnused);
 				m_lpBufCur = m_lpBufStart;
-				m_lpBufMax -= nUnused;
+				m_lpBufMax = m_lpBufStart + nUnused;
 			}
 
 			// read to satisfy nBytesNeeded or nLeft if possible
@@ -710,8 +714,8 @@ void CArchive::FillBuffer(UINT nBytesNeeded)
 	else
 	{
 		// seek to unused portion and get the buffer starting there
-		if (m_lpBufMax - m_lpBufCur != 0)
-			m_pFile->Seek(-(m_lpBufMax - m_lpBufCur), CFile::current);
+		if (nUnused != 0)
+			m_pFile->Seek(-(LONG)nUnused, CFile::current);
 		UINT nActual = m_pFile->GetBufferPtr(CFile::bufferRead, m_nBufSize,
 			(void**)&m_lpBufStart, (void**)&m_lpBufMax);
 		ASSERT(nActual == (UINT)(m_lpBufMax - m_lpBufStart));
@@ -719,7 +723,7 @@ void CArchive::FillBuffer(UINT nBytesNeeded)
 	}
 
 	// not enough data to fill request?
-	if ((UINT)(m_lpBufMax - m_lpBufCur) < nBytesNeeded)
+	if ((ULONG)(m_lpBufMax - m_lpBufCur) < nTotalNeeded)
 		AfxThrowArchiveException(CArchiveException::endOfFile);
 }
 
@@ -816,7 +820,7 @@ BOOL CArchive::ReadString(CString& rString)
 
 		// if string is read completely or EOF
 		if (lpszResult == NULL ||
-			(nLen = lstrlen(lpsz)) < nMaxSize || 
+			(nLen = lstrlen(lpsz)) < nMaxSize ||
 			lpsz[nLen-1] == '\n')
 		{
 			break;

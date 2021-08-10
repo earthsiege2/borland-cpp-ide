@@ -1,17 +1,18 @@
 /*-----------------------------------------------------------------------*
  * filename - mbscoll.c
  *
- * variables(s)
- *
+ * function(s)
+ *        _mbscoll -
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <_locale.h>
@@ -27,7 +28,8 @@ Usage           int _RTLENTRY _EXPFUNC _mbscoll( const unsigned char *__S1, cons
 Prototype in    mbstring.h
 
 Description     _mbscoll() performs a case sensitive comparison of the
-					 strings according to the current locale in use
+                strings according to the current locale in use.
+
 *-----------------------------------------------------------------------*/
 
 int _RTLENTRY _EXPFUNC _mbscoll( const unsigned char *__S1, const unsigned char *__S2)

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -32,12 +32,20 @@ const AFX_DATADEF CRect CFrameWnd::rectDefault(
 /////////////////////////////////////////////////////////////////////////////
 // CFrameWnd
 
+// register for Windows 95 or Windows NT 3.51
+AFX_STATIC UINT _afxMsgMouseWheel =
+   (((::GetVersion() & 0x80000000) && LOBYTE(LOWORD(::GetVersion()) == 4)) ||
+	 (!(::GetVersion() & 0x80000000) && LOBYTE(LOWORD(::GetVersion()) == 3)))
+	 ? ::RegisterWindowMessage(MSH_MOUSEWHEEL) : 0;
+
 BEGIN_MESSAGE_MAP(CFrameWnd, CWnd)
 	//{{AFX_MSG_MAP(CFrameWnd)
+	ON_WM_INITMENU()
 	ON_WM_INITMENUPOPUP()
 	ON_WM_MENUSELECT()
 	ON_MESSAGE(WM_POPMESSAGESTRING, OnPopMessageString)
 	ON_MESSAGE(WM_SETMESSAGESTRING, OnSetMessageString)
+	ON_MESSAGE(WM_HELPPROMPTADDR, OnHelpPromptAddr)
 	ON_MESSAGE_VOID(WM_IDLEUPDATECMDUI, OnIdleUpdateCmdUI)
 	ON_WM_ENTERIDLE()
 	ON_WM_HSCROLL()
@@ -67,6 +75,8 @@ BEGIN_MESSAGE_MAP(CFrameWnd, CWnd)
 	ON_COMMAND_EX(ID_VIEW_STATUS_BAR, OnBarCheck)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_TOOLBAR, OnUpdateControlBarMenu)
 	ON_COMMAND_EX(ID_VIEW_TOOLBAR, OnBarCheck)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_REBAR, OnUpdateControlBarMenu)
+	ON_COMMAND_EX(ID_VIEW_REBAR, OnBarCheck)
 	// turning on and off standard mode indicators
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_CAPS, OnUpdateKeyIndicator)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_NUM, OnUpdateKeyIndicator)
@@ -78,18 +88,11 @@ BEGIN_MESSAGE_MAP(CFrameWnd, CWnd)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
 	//}}AFX_MSG_MAP
-#ifndef _MAC
 	// message handling for standard DDE commands
 	ON_MESSAGE(WM_DDE_INITIATE, OnDDEInitiate)
 	ON_MESSAGE(WM_DDE_EXECUTE, OnDDEExecute)
 	ON_MESSAGE(WM_DDE_TERMINATE, OnDDETerminate)
-#else
-	// special handling of app activation
-	ON_WM_ACTIVATEAPP()
-	// special handling for uncovered areas of the client area caused by
-	// Macintosh sizebox
-	ON_WM_PAINT()
-#endif
+	ON_REGISTERED_MESSAGE(_afxMsgMouseWheel, OnRegisteredMouseWheel)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -131,19 +134,21 @@ CFrameWnd::CFrameWnd()
 CFrameWnd::~CFrameWnd()
 {
 	RemoveFrameWnd();
+	if (m_phWndDisable != NULL)
+		delete[] (void*)m_phWndDisable;
 }
 
 void CFrameWnd::AddFrameWnd()
 {
 	// hook it into the CFrameWnd list
-	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
+	AFX_MODULE_THREAD_STATE* pState = _AFX_CMDTARGET_GETSTATE()->m_thread;
 	pState->m_frameList.AddHead(this);
 }
 
 void CFrameWnd::RemoveFrameWnd()
 {
 	// remove this frame window from the list of frame windows
-	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
+	AFX_MODULE_THREAD_STATE* pState = _AFX_CMDTARGET_GETSTATE()->m_thread;
 	pState->m_frameList.Remove(this);
 }
 
@@ -274,7 +279,9 @@ LRESULT CFrameWnd::OnCommandHelp(WPARAM, LPARAM lParam)
 	}
 	if (lParam != 0)
 	{
-		AfxGetApp()->WinHelp(lParam);
+		CWinApp* pApp = AfxGetApp();
+		if (pApp != NULL)
+			pApp->WinHelp(lParam);
 		return TRUE;
 	}
 	return FALSE;
@@ -515,9 +522,7 @@ BOOL CFrameWnd::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if (cs.lpszClass == NULL)
 	{
-		if (!AfxDeferRegisterClass(AFX_WNDFRAMEORVIEW_REG))
-			return FALSE;
-
+		VERIFY(AfxDeferRegisterClass(AFX_WNDFRAMEORVIEW_REG));
 		cs.lpszClass = _afxWndFrameOrView;  // COLOR_WINDOW background
 	}
 
@@ -554,10 +559,6 @@ BOOL CFrameWnd::Create(LPCTSTR lpszClassName,
 
 	m_strTitle = lpszWindowName;    // save title for later
 
-#ifdef _MAC
-	dwExStyle |= WS_EX_FORCESIZEBOX;
-#endif
-
 	if (!CreateEx(dwExStyle, lpszClassName, lpszWindowName, dwStyle,
 		rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
 		pParentWnd->GetSafeHwnd(), hMenu, (LPVOID)pContext))
@@ -567,23 +568,6 @@ BOOL CFrameWnd::Create(LPCTSTR lpszClassName,
 			DestroyMenu(hMenu);
 		return FALSE;
 	}
-
-#ifdef _MAC
-	CMenu* pMenu = GetSystemMenu(FALSE);
-	if (pMenu != NULL)
-	{
-		CString strAbout;
-		TCHAR szFormat[256];
-		LPCTSTR pszAppName = AfxGetAppName();
-
-		// a statically linked dialog-based app might not have included afxres.rc
-		if (!AfxLoadString(AFX_IDS_ABOUT, szFormat))
-			_tcscpy(szFormat, _T("About %1..."));
-
-		AfxFormatStrings(strAbout, szFormat, &pszAppName, 1);
-		pMenu->ModifyMenu(0, MF_BYPOSITION | MF_STRING, ID_APP_ABOUT, strAbout);
-	}
-#endif
 
 	return TRUE;
 }
@@ -702,8 +686,7 @@ BOOL CFrameWnd::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle,
 	if (strFullString.LoadString(nIDResource))
 		AfxExtractSubString(m_strTitle, strFullString, 0);    // first sub-string
 
-	if (!AfxDeferRegisterClass(AFX_WNDFRAMEORVIEW_REG))
-		return FALSE;
+	VERIFY(AfxDeferRegisterClass(AFX_WNDFRAMEORVIEW_REG));
 
 	// attempt to create the window
 	LPCTSTR lpszClass = GetIconWndClass(dwDefaultStyle, nIDResource);
@@ -770,7 +753,7 @@ void CFrameWnd::InitialUpdateFrame(CDocument* pDoc, BOOL bMakeVisible)
 		// (send the default show command unless the main desktop window)
 		int nCmdShow = -1;      // default
 		CWinApp* pApp = AfxGetApp();
-		if (this == pApp->m_pMainWnd)
+		if (pApp != NULL && pApp->m_pMainWnd == this)
 		{
 			nCmdShow = pApp->m_nCmdShow; // use the parameter from WinMain
 			pApp->m_nCmdShow = -1; // set to default after first time
@@ -802,7 +785,7 @@ void CFrameWnd::OnClose()
 		return;
 	}
 	CWinApp* pApp = AfxGetApp();
-	if (pApp->m_pMainWnd == this)
+	if (pApp != NULL && pApp->m_pMainWnd == this)
 	{
 		// attempt to save all documents
 		if (pDocument == NULL && !pApp->SaveAllModified())
@@ -876,7 +859,8 @@ void CFrameWnd::OnDestroy()
 	}
 
 	// Automatically quit when the main window is destroyed.
-	if (AfxGetApp()->m_pMainWnd == this)
+	CWinApp* pApp = AfxGetApp();
+	if (pApp != NULL && pApp->m_pMainWnd == this)
 	{
 		// closing the main application window
 		::WinHelp(m_hWnd, NULL, HELP_QUIT, 0L);
@@ -899,6 +883,8 @@ void CFrameWnd::RemoveControlBar(CControlBar *pBar)
 BOOL CFrameWnd::OnCmdMsg(UINT nID, int nCode, void* pExtra,
 	AFX_CMDHANDLERINFO* pHandlerInfo)
 {
+	CPushRoutingFrame push(this);
+
 	// pump through current view FIRST
 	CView* pView = GetActiveView();
 	if (pView != NULL && pView->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
@@ -939,16 +925,6 @@ void CFrameWnd::OnVScroll(UINT, UINT, CScrollBar*)
 
 LRESULT CFrameWnd::OnActivateTopLevel(WPARAM wParam, LPARAM lParam)
 {
-#ifdef _MAC
-	BOOL bActive = (LOWORD(wParam) != WA_INACTIVE && !HIWORD(wParam));
-
-	if(!bActive && afxData.bOleIgnoreSuspend)
-	{
-		afxData.bOleIgnoreSuspend = FALSE;
-		return 0;
-	}
-#endif
-
 	CWnd::OnActivateTopLevel(wParam, lParam);
 
 	// exit Shift+F1 help mode on activation changes
@@ -958,15 +934,9 @@ LRESULT CFrameWnd::OnActivateTopLevel(WPARAM wParam, LPARAM lParam)
 	// allow OnFrameWindowActivate to be sent to in-place items
 	if (m_pNotifyHook != NULL)
 	{
-#ifdef _MAC
-		if (::GetWinActiveMode() != WAM_OLEIPCONTAINER)
-#endif
-		{
-			// activate when active and when not minimized
-			m_pNotifyHook->OnActivate(
-				LOWORD(wParam) != WA_INACTIVE && !HIWORD(wParam));
-		}
-
+		// activate when active and when not minimized
+		m_pNotifyHook->OnActivate(
+			LOWORD(wParam) != WA_INACTIVE && !HIWORD(wParam));
 	}
 #endif
 
@@ -979,6 +949,10 @@ LRESULT CFrameWnd::OnActivateTopLevel(WPARAM wParam, LPARAM lParam)
 		if (pActiveView != NULL)
 			pActiveView->OnActivateView(FALSE, pActiveView, pActiveView);
 	}
+
+	// force idle processing to update any key state indicators
+	PostMessage(WM_KICKIDLE);
+
 	return 0;
 }
 
@@ -1034,59 +1008,8 @@ BOOL CFrameWnd::OnNcActivate(BOOL bActive)
 	return (BOOL)DefWindowProc(WM_NCACTIVATE, bActive, 0L);
 }
 
-#ifdef _MAC
-void CFrameWnd::OnActivateApp(BOOL bActive, HTASK hTask)
-{
-#ifndef _AFX_NO_OLE_SUPPORT
-	// allow OnFrameWindowActivate to be sent to in-place items
-	if (m_pNotifyHook != NULL && bActive)
-	{
-		if (::GetWinActiveMode() == WAM_OLEIPCONTAINER)
-		{
-			// ok, the container has an activate msg while the server is still
-			// UIVisible.  This implies that the user has ESCaped the IP session.
-			CView* pActiveView = GetActiveView();
-			if (pActiveView == NULL)
-				pActiveView = GetActiveFrame()->GetActiveView();
-			ASSERT(pActiveView != NULL);
-			pActiveView->PostMessage(WM_KEYDOWN, VK_ESCAPE, 0);
-		}
-		else
-		{
-			m_pNotifyHook->OnActivate(TRUE);
-		}
-	}
-#endif
-
-	CWnd::OnActivateApp(bActive, hTask);
-
-	// The Macintosh DefFrameProc hides toolbars, status bars, etc. when
-	// a frame window is deactivated, and shows them again on activation.
-	// If the frame window changes size while it's deactivated (say because
-	// it's on a Radius Pivot monitor that's pivoted) then RecalcLayout is
-	// called while the control bars are hidden. In this case, we need to
-	// recalc the layout again when the window is reactivated and the
-	// controlbars shown again. Note that we must do the recalc *after*
-	// CWnd::OnActivateApp because it's inside that function that DefFrameProc
-	// gets called to re-show the controlbars.
-
-	if (bActive)
-		RecalcLayout();
-}
-#endif
-
 void CFrameWnd::OnSysCommand(UINT nID, LONG lParam)
 {
-#ifdef _MAC
-	// the frame window's system menu is mapped to the Apple menu on the
-	// Macintosh, so choosing About MyApp results in a WM_SYSCOMMAND
-	if (nID == ID_APP_ABOUT)
-	{
-		OnCommand(ID_APP_ABOUT, 0);
-		return;
-	}
-#endif
-
 	CFrameWnd* pFrameWnd = GetTopLevelFrame();
 	ASSERT_VALID(pFrameWnd);
 
@@ -1128,6 +1051,7 @@ void CFrameWnd::OnDropFiles(HDROP hDropInfo)
 	UINT nFiles = ::DragQueryFile(hDropInfo, (UINT)-1, NULL, 0);
 
 	CWinApp* pApp = AfxGetApp();
+	ASSERT(pApp != NULL);
 	for (UINT iFile = 0; iFile < nFiles; iFile++)
 	{
 		TCHAR szFileName[_MAX_PATH];
@@ -1141,7 +1065,7 @@ void CFrameWnd::OnDropFiles(HDROP hDropInfo)
 BOOL CFrameWnd::OnQueryEndSession()
 {
 	CWinApp* pApp = AfxGetApp();
-	if (pApp->m_pMainWnd == this)
+	if (pApp != NULL && pApp->m_pMainWnd == this)
 		return pApp->SaveAllModified();
 
 	return TRUE;
@@ -1150,9 +1074,11 @@ BOOL CFrameWnd::OnQueryEndSession()
 // when Windows session ends, close all documents
 void CFrameWnd::OnEndSession(BOOL bEnding)
 {
+	if (!bEnding)
+		return;
+
 	CWinApp* pApp = AfxGetApp();
-	ASSERT_VALID(pApp);
-	if (bEnding && pApp->m_pMainWnd == this)
+	if (pApp != NULL && pApp->m_pMainWnd == this)
 	{
 		AfxOleSetUserCtrl(TRUE);    // keeps from randomly shutting down
 		pApp->CloseAllDocuments(TRUE);
@@ -1162,15 +1088,14 @@ void CFrameWnd::OnEndSession(BOOL bEnding)
 	}
 }
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 // Support for Shell DDE Execute messages
 
 LRESULT CFrameWnd::OnDDEInitiate(WPARAM wParam, LPARAM lParam)
 {
 	CWinApp* pApp = AfxGetApp();
-	ASSERT_VALID(pApp);
-	if (LOWORD(lParam) != 0 && HIWORD(lParam) != 0 &&
+	if (pApp != NULL &&
+		LOWORD(lParam) != 0 && HIWORD(lParam) != 0 &&
 		(ATOM)LOWORD(lParam) == pApp->m_atomApp &&
 		(ATOM)HIWORD(lParam) == pApp->m_atomSystemTopic)
 	{
@@ -1229,7 +1154,6 @@ LRESULT CFrameWnd::OnDDETerminate(WPARAM wParam, LPARAM lParam)
 	::PostMessage((HWND)wParam, WM_DDE_TERMINATE, (WPARAM)m_hWnd, lParam);
 	return 0L;
 }
-#endif  //!_MAC
 
 /////////////////////////////////////////////////////////////////////////////
 // CFrameWnd attributes
@@ -1319,7 +1243,7 @@ void CFrameWnd::ShowControlBar(CControlBar* pBar, BOOL bShow, BOOL bDelay)
 	if (pBar->IsFloating())
 	{
 		int nVisCount = pBar->m_pDockBar != NULL ?
-			pBar->m_pDockBar->GetDockedVisibleCount() : bShow != FALSE;
+			pBar->m_pDockBar->GetDockedVisibleCount() : bShow ? 1 : 0;
 		if (nVisCount == 1 && bShow)
 		{
 			pParentFrame->m_nShowDelay = -1;
@@ -1350,12 +1274,42 @@ void CFrameWnd::ShowControlBar(CControlBar* pBar, BOOL bShow, BOOL bDelay)
 /////////////////////////////////////////////////////////////////////////////
 // Command prompts
 
-void CFrameWnd::OnInitMenuPopup(CMenu* pMenu, UINT, BOOL bSysMenu)
+void CFrameWnd::OnInitMenu(CMenu* pMenu)
+{
+#ifndef _AFX_NO_OLE_SUPPORT
+	// allow hook to consume message
+	if (m_pNotifyHook != NULL)
+	{
+#ifdef _AFXDLL
+		ASSERT(m_pModuleState != NULL);
+		if (m_pModuleState->m_dwVersion >= 0x423)
+#endif
+			m_pNotifyHook->OnInitMenu(pMenu);
+#endif
+	}
+
+	Default();
+}
+
+void CFrameWnd::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
 {
 	AfxCancelModes(m_hWnd);
 
 	if (bSysMenu)
 		return;     // don't support system menu
+
+#ifndef _AFX_NO_OLE_SUPPORT
+	// allow hook to consume message
+	if (m_pNotifyHook != NULL)
+	{
+#ifdef _AFXDLL
+		ASSERT(m_pModuleState != NULL);
+		if (m_pModuleState->m_dwVersion >= 0x423)
+#endif
+			if (m_pNotifyHook->OnInitMenuPopup(pMenu, nIndex, bSysMenu))
+				return;
+	}
+#endif
 
 	ASSERT(pMenu != NULL);
 	// check the enabled state of various menu items
@@ -1436,10 +1390,23 @@ void CFrameWnd::OnInitMenuPopup(CMenu* pMenu, UINT, BOOL bSysMenu)
 	}
 }
 
-void CFrameWnd::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU /*hSysMenu*/)
+void CFrameWnd::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
 {
 	CFrameWnd* pFrameWnd = GetTopLevelFrame();
 	ASSERT_VALID(pFrameWnd);
+
+#ifndef _AFX_NO_OLE_SUPPORT
+	// allow hook to consume message
+	if (m_pNotifyHook != NULL)
+	{
+#ifdef _AFXDLL
+		ASSERT(m_pModuleState != NULL);
+		if (m_pModuleState->m_dwVersion >= 0x423)
+#endif
+			if (m_pNotifyHook->OnMenuSelect(nItemID, nFlags, hSysMenu))
+				return;
+	}
+#endif
 
 	// set the tracking state (update on idle)
 	if (nFlags == 0xFFFF)
@@ -1465,12 +1432,6 @@ void CFrameWnd::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU /*hSysMenu*/)
 			// nothing should be displayed
 			m_nIDTracking = 0;
 		}
-#ifdef _MAC
-		else if (nItemID == SC_DESKACCESSORY)
-		{
-			m_nIDTracking = AFX_IDS_DESKACCESSORY;
-		}
-#endif
 		else if (nItemID >= 0xF000 && nItemID < 0xF1F0) // max of 31 SC_s
 		{
 			// special strings table entries for system commands
@@ -1567,6 +1528,11 @@ LRESULT CFrameWnd::OnSetMessageString(WPARAM wParam, LPARAM lParam)
 	return nIDLast;
 }
 
+LRESULT CFrameWnd::OnHelpPromptAddr(WPARAM, LPARAM)
+{
+	return (LRESULT)&m_dwPromptContext;
+}
+
 CWnd* CFrameWnd::GetMessageBar()
 {
 	return GetDescendantWindow(AFX_IDW_STATUS_BAR, TRUE);
@@ -1634,7 +1600,6 @@ CControlBar* CFrameWnd::GetControlBar(UINT nID)
 	{
 		CControlBar* pBar = (CControlBar*)m_listControlBars.GetNext(pos);
 		ASSERT(pBar != NULL);
-		ASSERT_VALID(pBar);
 		if (_AfxGetDlgCtrlID(pBar->m_hWnd) == nID)
 		{
 			ASSERT_KINDOF(CControlBar, pBar);
@@ -1648,6 +1613,7 @@ void CFrameWnd::OnUpdateControlBarMenu(CCmdUI* pCmdUI)
 {
 	ASSERT(ID_VIEW_STATUS_BAR == AFX_IDW_STATUS_BAR);
 	ASSERT(ID_VIEW_TOOLBAR == AFX_IDW_TOOLBAR);
+	ASSERT(ID_VIEW_REBAR == AFX_IDW_REBAR);
 
 	CControlBar* pBar = GetControlBar(pCmdUI->m_nID);
 	if (pBar != NULL)
@@ -1662,6 +1628,7 @@ BOOL CFrameWnd::OnBarCheck(UINT nID)
 {
 	ASSERT(ID_VIEW_STATUS_BAR == AFX_IDW_STATUS_BAR);
 	ASSERT(ID_VIEW_TOOLBAR == AFX_IDW_TOOLBAR);
+	ASSERT(ID_VIEW_REBAR == AFX_IDW_REBAR);
 
 	CControlBar* pBar = GetControlBar(nID);
 	if (pBar != NULL)
@@ -1675,10 +1642,6 @@ BOOL CFrameWnd::OnBarCheck(UINT nID)
 BOOL CFrameWnd::OnToolTipText(UINT, NMHDR* pNMHDR, LRESULT* pResult)
 {
 	ASSERT(pNMHDR->code == TTN_NEEDTEXTA || pNMHDR->code == TTN_NEEDTEXTW);
-
-	// allow top level routing frame to handle the message
-	if (GetRoutingFrame() != NULL)
-		return FALSE;
 
 	// need to handle both ANSI and UNICODE versions of the message
 	TOOLTIPTEXTA* pTTTA = (TOOLTIPTEXTA*)pNMHDR;
@@ -1695,8 +1658,11 @@ BOOL CFrameWnd::OnToolTipText(UINT, NMHDR* pNMHDR, LRESULT* pResult)
 
 	if (nID != 0) // will be zero on a separator
 	{
-		AfxLoadString(nID, szFullText);
-			// this is the command id, not the button index
+		// don't handle the message if no string resource found
+		if (AfxLoadString(nID, szFullText) == 0)
+			return FALSE;
+
+		// this is the command id, not the button index
 		AfxExtractSubString(strTipText, szFullText, 1, '\n');
 	}
 #ifndef _UNICODE
@@ -1714,7 +1680,7 @@ BOOL CFrameWnd::OnToolTipText(UINT, NMHDR* pNMHDR, LRESULT* pResult)
 
 	// bring the tooltip window above other popup windows
 	::SetWindowPos(pNMHDR->hwndFrom, HWND_TOP, 0, 0, 0, 0,
-		SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOMOVE);
+		SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOMOVE|SWP_NOOWNERZORDER);
 
 	return TRUE;    // message was handled
 }
@@ -1746,7 +1712,7 @@ void CFrameWnd::OnUpdateKeyIndicator(CCmdUI* pCmdUI)
 		// WINBUG: Special case for Windows 3.x.  The wrong bit was toggled
 		// in those systems so this must be special cased.  This is fixed
 		// on systems whose version is 4.x or greater.
-		if (afxData.bWin31)
+		if (!afxData.bWin4)
 			flag = 0x8000;
 		break;
 
@@ -2030,21 +1996,6 @@ BOOL CFrameWnd::NegotiateBorderSpace(UINT nBorderCmd, LPRECT lpRectBorder)
 	{
 	case borderGet:
 		ASSERT(lpRectBorder != NULL);
-#ifdef _MAC
-		if (m_pViewActive->GetParentFrame() == GetTopLevelFrame())
-		{
-			// SDI
-			ASSERT((GetExStyle() & WS_EX_MDIFRAME) == 0);
-
-			lpRectBorder->left = 0;
-			lpRectBorder->top = GetSystemMetrics(SM_CYMENU);
-			lpRectBorder->right = GetSystemMetrics(SM_CXSCREEN) - 1;
-			lpRectBorder->bottom = GetSystemMetrics(SM_CYSCREEN) - 1 + GetSystemMetrics(SM_CYMENU);
-			ScreenToClient((POINT*)lpRectBorder);
-			ScreenToClient((POINT*)lpRectBorder + 1);
-			return TRUE;
-		}
-#endif
 		RepositionBars(0, 0xffff, AFX_IDW_PANE_FIRST, reposQuery,
 			lpRectBorder);
 		break;
@@ -2058,44 +2009,15 @@ BOOL CFrameWnd::NegotiateBorderSpace(UINT nBorderCmd, LPRECT lpRectBorder)
 			if (!m_rectBorder.IsRectNull())
 			{
 				// releasing all border space -- recalc needed
-#ifdef _MAC
-				if (m_pViewActive->GetParentFrame() == GetTopLevelFrame())
-				{
-					// SDI
-					ASSERT((GetExStyle() & WS_EX_MDIFRAME) == 0);
-
-					CRect rcNew;
-					GetWindowRect(&rcNew);
-					rcNew += &m_rectBorder;
-					m_bInRecalcLayout = TRUE;
-					MoveWindow(rcNew);
-					m_bInRecalcLayout = FALSE;
-				}
-#endif
 				m_rectBorder.SetRectEmpty();
 				return TRUE;
 			}
 			// original rect is empty & lpRectBorder is NULL, no recalc needed
 			return FALSE;
 		}
-		if (!_AfxIdenticalRect(m_rectBorder, lpRectBorder))
+		if (!::EqualRect(m_rectBorder, lpRectBorder))
 		{
 			// the rects are different -- recalc needed
-#ifdef _MAC
-			if (m_pViewActive->GetParentFrame() == GetTopLevelFrame())
-			{
-				// SDI
-				ASSERT((GetExStyle() & WS_EX_MDIFRAME) == 0);
-
-				CRect rcNew;
-				GetWindowRect(&rcNew);
-				rcNew += &m_rectBorder;
-				rcNew -= lpRectBorder;
-				MoveWindow(rcNew);
-				m_rectBorder.CopyRect(lpRectBorder);
-				return FALSE;
-			}
-#endif
 			m_rectBorder.CopyRect(lpRectBorder);
 			return TRUE;
 		}
@@ -2123,51 +2045,31 @@ BOOL CFrameWnd::OnEraseBkgnd(CDC* pDC)
 	return CWnd::OnEraseBkgnd(pDC);
 }
 
-
-#ifdef _MAC
-// With Macintosh sizeboxes, it's possible for there to be uncovered areas on
-// the frame's client area after RepositionBars.  We add this paint handler
-// to redraw only those uncovered areas.  Because we may not be a
-// WS_CLIPCHILDREN window, we go to some effort to avoid drawing on top of
-// our children
-void CFrameWnd::OnPaint()
+LRESULT CFrameWnd::OnRegisteredMouseWheel(WPARAM wParam, LPARAM lParam)
 {
-	if (m_pViewActive == NULL)
+	// convert from MSH_MOUSEWHEEL to WM_MOUSEWHEEL
+
+	WORD keyState = 0;
+	keyState |= (::GetKeyState(VK_CONTROL) < 0) ? MK_CONTROL : 0;
+	keyState |= (::GetKeyState(VK_SHIFT) < 0) ? MK_SHIFT : 0;
+
+	LRESULT lResult;
+	HWND hwFocus = ::GetFocus();
+	const HWND hwDesktop = ::GetDesktopWindow();
+
+	if (hwFocus == NULL)
+		lResult = SendMessage(WM_MOUSEWHEEL, (wParam << 16) | keyState, lParam);
+	else
 	{
-		CWnd::OnPaint();
-		return;
+		do {
+			lResult = ::SendMessage(hwFocus, WM_MOUSEWHEEL,
+				(wParam << 16) | keyState, lParam);
+			hwFocus = ::GetParent(hwFocus);
+		}
+		while (lResult == 0 && hwFocus != NULL && hwFocus != hwDesktop);
 	}
-
-	CWnd* pWnd;
-	CRgn rgnUpdate;
-	CRgn rgn;
-	CRect rect;
-
-	CPaintDC dc(this);
-
-	// compute the area not covered by child windows in screen coordinates
-	rect = dc.m_ps.rcPaint;
-	ClientToScreen(&rect);
-	rgnUpdate.CreateRectRgnIndirect(&rect);
-	rgn.CreateRectRgn(0, 0, 0, 0);
-	for (pWnd = GetWindow(GW_CHILD); pWnd != NULL;
-		pWnd = pWnd->GetWindow(GW_HWNDNEXT))
-	{
-		pWnd->GetWindowRect(&rect);
-		rgn.SetRectRgn(&rect);
-		if (rgnUpdate.CombineRgn(&rgnUpdate, &rgn, RGN_DIFF) == NULLREGION)
-			return;
-	}
-
-	// convert the bounding box of the uncovered region into client
-	// coordinates and fill it with a nice color
-	rgnUpdate.GetRgnBox(&rect);
-	BOOL bMono = AfxCheckMonochrome(&rect);
-	ScreenToClient(&rect);
-	dc.FillSolidRect(rect, bMono ? RGB(0xFF, 0xFF, 0xFF) : afxData.clrBtnFace);
+	return lResult;
 }
-#endif
-
 
 void CFrameWnd::ActivateFrame(int nCmdShow)
 	// nCmdShow is the normal show mode this frame should be in

@@ -1,0 +1,44 @@
+IMPLIB Help
+
+The IMPLIB utility creates import library. IMPLIB takes as input DLLs, module definition files,
+or both, and produces an import library as output.
+If you've created a Windows application, you've already used at least one import library,
+IMPORT32.LIB, the import library for the standard Windows DLLs. (IMPORT.LIB is linked
+automatically when you build a Windows application in the IDE and when using BCC32 to link.
+You have to explicitly link with IMPORT32.LIB only if you're using TLINK32 to link
+separately.)
+
+An import library lists some or all of the exported functions for one or more DLLs. IMPLIB
+creates an import library directly from DLLs or from module definition files for DLLs (or a
+combination of the two).
+
+Creating an Import Library for a DLL
+
+Options must be lowercase and preceded by either a hyphen or a slash.
+Type:
+
+IMPLIB Options LibName [ DefFiles... | DLLs... ] [@ResponseFile]
+
+where Options is an optional list of one or more IMPLIB options, LibName is the name for the
+new import library, DefFiles is a list of one or more existing module definition files for one or
+more DLLs, and DLLs is a list of one or more existing DLLs. You must specify at least one DLL
+or module definition file.
+You can also use a response file to list the .DEF and .DLL files that you want to process. A
+response file is an ACSII text file that contains a list of files. The files must be separated by
+either spaces or new lines in the file. To specify a response file on the command line, precede the
+response filename with an "at" sign (@). For example,
+
+implib  foo.lib  @respon.txt
+
+Note:     A DLL can also have an extension of .EXE or .DRV, not just .DLL.
+
+Option    Description
+
+-c   Warnings on case sensitive symbols
+-f   Force imports by name
+-i   Tells IMPLIB to ignore WEP, the Windows exit procedure required to end a DLL. Use
+this option if you are specifying more than one DLL on the IMPLIB command line.
+-o   Remove module extensions. (16-bit Windows only)
+-w   No warnings.
+
+Copyright   1998 Borland International.

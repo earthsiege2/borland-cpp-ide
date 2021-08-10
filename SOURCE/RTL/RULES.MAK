@@ -5,27 +5,12 @@
 #                                                                           #
 #      DLL - Used to build the DLL version of the RTL.                      #
 #                                                                           #
-#    MODEL - Used to indicate a memory model under DOS, and WIN16.  The     #
-#            default is the small model.  It should be one of:              #
-#              t = Tiny model     (DOS)                                     #
-#              s = Small model    (DOS,WIN16)                               #
-#              m = Medium model   (DOS,WIN16)                               #
-#              c = Compact model  (DOS,WIN16)                               #
-#              l = Large model    (DOS,DPMI16,WIN16)                        #
-#              h = Huge model     (DOS)                                     #
-#                                                                           #
 #       MT - Used to include multiple thread support.  This is only allowed #
-#            for WIN32 and OS2.                                             #
+#            for WIN32.                                                     #
 #                                                                           #
-#       OS - Used to indicate the OS.  The default is DOS.  It should be    #
+# TARGET_OS- Used to indicate the OS.  The default is WIN32.  It should be  #
 #            one of the following:                                          #
-#              DOS    = 16 bit DOS                                          #
-#              DPMI16 = 16 bit DPMI                                         #
-#              WIN16  = 16 bit Windows                                      #
-#              DPMI32 = 32 bit DPMI                                         #
-#              WIN32S = 32 bit Windows on 16 bit Windows (Win32s)           #
 #              WIN32  = 32 bit Windows on 32 bit Windows (NT,Chicago,Cairo) #
-#              OS2    = 32 bit OS/2                                         #
 #                                                                           #
 #      PCH - Used to turn on precompiled headers                            #
 #                                                                           #
@@ -34,74 +19,50 @@
 #############################################################################
 # Setup some reasonable defaults.                                           #
 #############################################################################
-!if !$d(OS)
-    OS = dos
+!if !$d(TARGET_OS)
+    TARGET_OS=WIN32
 !endif
 
-!if !$d(BCROOT)
-    !include $(MAKEDIR)\bcroot.inc
-!endif
-!if !$d(RTLROOT)
-    RTLROOT = $(BCROOT)\source\rtl
+!if $d(RTLSOURCE)
+! if !$d(BCB)
+     BCB = $(MAKEDIR)\..
+! endif
+! if !$d(RTLROOT)
+     RTLROOT = $(BCB)\source\rtl
+! endif
+!else
+! if !$d(RTLROOT)
+!  if !$d(RTLHOME)
+!   error RTLHOME is not defined!!!
+!  else
+     RTLROOT = $(RTLHOME)
+!  endif
+! endif
 !endif
 #############################################################################
 # Setup some useful directories.                                            #
 #############################################################################
 SRCBASE   = $(RTLROOT)\source
-OBJBASE   = $(RTLROOT)\obj\$(OS)
+OBJBASE   = $(RTLROOT)\obj\$(TARGET_OS)
 LIBDIR    = $(RTLROOT)\lib
-EXTDIR    = $(RTLROOT)\external
-DEFDIR    = $(SRCBASE)\defs\$(OS)
-BCINCL    = $(BCROOT)\include
+PSDKDIR   = $(LIBDIR)\psdk
+!if $d(RTLSOURCE)
+BCINCL    = $(BCB)\include;$(BCB)\include\vcl
 INCLBASE  = $(RTLROOT)
-
-!if $d(MAGIC) && $d(DLL)
-EXTLIB=$(EXTDIR)\vcl.lib
+!else
+INCLBASE  = $(RTLROOT)\include
 !endif
+EXTDIR    = $(RTLROOT)\external
+
 #############################################################################
 # Guard against illegal variable combinations and obtain the operating      #
 # platform specific build rules.                                            #
 #############################################################################
-!if $(OS) != DOS && $(OS) != WIN16 && $(OS) != DPMI16 &&     $(OS) != DPMI32 && $(OS) != WIN32 && $(OS) != OS2
-!    error Unknown OS
+!if "$(TARGET_OS)" != "WIN32"
+!    error Unknown TARGET_OS
 !endif
 
-!if $(OS) == DOS
-!    if !$d(MODEL)
-	 MODEL = s
-!    elif $(MODEL) != t && $(MODEL) != s && $(MODEL) != m &&\
-	  $(MODEL) != c && $(MODEL) != l && $(MODEL) != h
-!        error Invalid memory model
-!    endif
-!elif $(OS) == DPMI16 || $(OS) == WIN16
-!    if $(OS) == DPMI16
-!        if !$d(MODEL)
-	     MODEL = l
-!        elif $(MODEL) != l
-!            error Invalid MODEL
-!        endif
-!    else
-!        if !$d(MODEL)
-	     MODEL = s
-!        elif $(MODEL) != s && $(MODEL) != m && $(MODEL) != c && $(MODEL) != l
-!            error Invalid MODEL
-!        endif
-!    endif
-!elif $d(MODEL)
-!    error The chosen OS does not support MODEL
-!endif
-
-!if $d(MT)
-!    if $(OS) != WIN32 && $(OS) != OS2
-!        error The chosen OS does not support MT
-!    endif
-!endif
-
-!if $(OS) == DOS && $d(DLL)
-!    error The chosen OS does not support DLL
-!endif
-
-!include $(OS).mak
+!include $(TARGET_OS).mak
 
 #############################################################################
 # Configure the output paths.                                               #
@@ -109,13 +70,14 @@ EXTLIB=$(EXTDIR)\vcl.lib
 .PATH.lib = $(LIBDIR)
 .PATH.obj = $(OBJDIR)
 .PATH.res = $(OBJDIR)
+.PATH.fst = $(OBJDIR)
 
 #############################################################################
 # Adjust switches accordingly.                                              #
 #############################################################################
 !if $d(DEBUG)
-    CC   = $(CC) -v
-    ASM  = $(ASM) -zi
+    CC   = $(CC) -v -vi -D__DEBUG__
+    ASM  = $(ASM) -zi /D__DEBUG__
     LINK = $(LINK) -v
 !endif
 
@@ -135,15 +97,24 @@ EXTLIB=$(EXTDIR)\vcl.lib
     $(CC) {$< }
 
 .c.i :
-    $(CPP) -Sd {$< }
+!if $d(JOHNS_CPP32)
+    $(CPP) -Sr -P- -n. {$< }
+!else
+    $(CPP) -Sk -Ss -Sd -P -n. {$< }
+!endif
 
 .cpp.i :
-    $(CPP) -Sd {$< }
+!if $d(JOHNS_CPP32)
+    $(CPP) -Sr -P- -n. {$< }
+!else
+    $(CPP) -Sk -Ss -Sd -P -n. {$< }
+!endif
 
 .def.fst:
-    $(IMPLIB) $&.lib $&.def
-    fastlib $&.lib $&.fst
-    del $&.lib
+    $(IMPLIB) $(OBJDIR)\$&.lib $&.def
+    fastlib $(OBJDIR)\$&.lib $(OBJDIR)\$&.fst
+    copy $(OBJDIR)\$&.fst $(PSDKDIR)\$&.lib
+    del $(OBJDIR)\$&.lib
 
 .rc.res :
     $(BRCC) @&&|
@@ -166,7 +137,11 @@ tasm.cfg :
 |   $@
 
 delcfg :
+!if $d(KEEP_TASM_CFG)
+    @if exist tasm.cfg echo KEEP_TASM_CFG specified and TASM.CFG found.
+!else
     if exist tasm.cfg del tasm.cfg
+!endif
 
 cfg : $(OBJDIR)\rtl.cfg
 
@@ -183,49 +158,83 @@ librsp :
 #############################################################################
 lib : librsp
     $(TLIB) $(LIBDIR)\$(LIBNAME)$(MTSUFFIX).lib @tlib.rsp,temp.lst
-!if ($(OS) == WIN16 && $(MODEL) == l) || $(OS) == WIN32 || $(OS) == DPMI16
+# The TLIB_NO_PURGE statement is a temp. workaround for a TASM32 bug which will
+# be fixed later.
+    $(TLIB_NO_PURGE) $(LIBDIR)\$(LIBNAME)$(MTSUFFIX).lib -+$(OBJDIR)\xx.obj
     $(PUBTOOL) $(EXTDIR)\$(PUBNAME) $(LIBDIR)\$(LIBNAME)$(MTSUFFIX).lib
-!endif
     if exist $(LIBDIR)\$(LIBNAME)$(MTSUFFIX).bak del $(LIBDIR)\$(LIBNAME)$(MTSUFFIX).bak
     del temp.lst
 
 #############################################################################
-# The rules for building response files for RTL DLL and import library      #
+# The rules for building response files for RTLDLL and import library       #
 # creation                                                                  #
 #############################################################################
+
+#
+# build the rsp file for linking the RTLDLL
+#
 dllrsp :
    makersp "$(OBJDIR:\=\\)\\!s+\n" &&|
    $(OBJS)
 |  >> $(LIBDIR)\dll.rsp
 
+#
+# build the rsp file for CW32I and the CP32MTI version of CC32xxMT.DLL
+#
 importrsp :
    makersp "-+$(OBJDIR:\=\\)\\!s &\n" &&|
-   $(IMPOBJS)
+   $(IMPOBJS) $(IMPOBJS_P_ONLY)
 |  >> $(LIBDIR)\import.rsp
+#   @echo IMPOBJS = $(IMPOBJS)
+#   @echo IMPOBJS_P_ONLY = $(IMPOBJS_P_ONLY)
+
+#
+# build the rsp file for the CW32MTI version of CC32xxMT.DLL
+#
+importrsp_w :
+   makersp "-+$(OBJDIR:\=\\)\\!s &\n" &&|
+   $(IMPOBJS) $(IMPOBJS_W_ONLY)
+|  >> $(LIBDIR)\import_w.rsp
+#   @echo IMPOBJS = $(IMPOBJS)
+#   @echo IMPOBJS_W_ONLY = $(IMPOBJS_W_ONLY)
+
 
 #############################################################################
-# The rule for building the RTL DLL.                                        #
+# The rule for building the RTL DLL and it's import librarie(s)             #
 #############################################################################
 dll : $(LIBDIR)\dll.rsp $(LIBDIR)\import.rsp $(OBJDIR)\version.res
-    $(LINK) -j$(EXTDIR) @dll.rsp,$(DLLNAME),,$(IMPORT) $(EXTLIB),$(DEFDIR)\$(DLLDEF),$(OBJDIR)\version
-    implib $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).lib $(DLLNAME).dll
+    $(LINK) $(LINKEROPTS) -j$(EXTDIR) @dll.rsp,$(DLLNAME),,$(IMPORT) $(EXTLIB),,$(OBJDIR)\version
+    $(IMPLIB) $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).lib $(DLLNAME).dll
     fastlib $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).lib $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
-    $(TLIB) $(IMPLIBNAME)-+$(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
+#------------------------------------------------------------------------------
+# The import libs for the RTLDLL are now created in the following order:
+#   First, the IMPOBJS files are TLIBed in (so the linker will see them first)
+#   Then the impdefs for the DLLs' exports are added.  This is the reverse of
+#   the way they used to be inserted into the import libs prior to BCB 3.0.
     $(TLIB) $(IMPLIBNAME) @import.rsp,nul
-!if $(OS) == WIN32
-    $(PUBTOOL) $(EXTDIR)\$(PUBNAME) $(IMPLIBNAME).lib
+    $(TLIB) $(IMPLIBNAME)-+$(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
+#------------------------------------------------------------------------------
+!if $d(MAGIC)
+    $(TLIB) $(IMPLIBNAME_W) @import_w.rsp,nul
+    $(TLIB) $(IMPLIBNAME_W)-+$(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
+    $(PUBTOOL) $(EXTDIR)\$(PUBNAME) $(IMPLIBNAME_W).lib
 !endif
+#------------------------------------------------------------------------------
+    $(PUBTOOL) $(EXTDIR)\$(PUBNAME) $(IMPLIBNAME).lib
     del $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).lib
     del $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
-    del $(IMPLIBNAME).bak
+    if exist $(IMPLIBNAME).bak del $(IMPLIBNAME).bak
+    if exist $(IMPLIBNAME_W).bak del $(IMPLIBNAME_W).bak
 
 #############################################################################
-# The crux of the build process is to build the required response files     #
+# The crux of the build process is to build the required response files for #
 # either the static or dynamic RTLs.  As the process scans each directory,  #
 # the needed objs are built and placed into $(OBJDIR).  The rule below      #
 # makes this possible.                                                      #
 #############################################################################
-ALL = $(OBJDIR)\rtl.cfg
+RTLCFG = $(OBJDIR)\rtl.cfg
+
+ALL = rtl_cfg
 
 !if $d(OBJS)
     ALL = $(ALL) $(OBJS)
@@ -245,7 +254,19 @@ ALL = $(OBJDIR)\rtl.cfg
 	 ALL = $(ALL) $(RES)
 !    endif
 !    if $d(IMPOBJS)
-	 ALL = $(ALL) $(IMPOBJS) importrsp
+	 ALL = $(ALL) $(IMPOBJS)
+!    endif
+!    if $d(IMPOBJS_W_ONLY)
+	 ALL = $(ALL) $(IMPOBJS_W_ONLY)
+!    endif
+!    if $d(IMPOBJS_P_ONLY)
+	 ALL = $(ALL) $(IMPOBJS_P_ONLY)
+!    endif
+!    if $d(IMPOBJS) || $d(IMPOBJS_P_ONLY)
+	 ALL = $(ALL) importrsp
+!    endif
+!    if $d(MAGIC)
+	 ALL = $(ALL) importrsp_w
 !    endif
 !endif
 
@@ -255,3 +276,4 @@ ALL = $(OBJDIR)\rtl.cfg
 
 objs : $(ALL)
 
+rtl_cfg: $(RTLCFG)

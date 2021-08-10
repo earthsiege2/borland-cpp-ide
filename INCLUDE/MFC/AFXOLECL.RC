@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,14 +37,14 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
-	AFX_IDP_STATIC_OBJECT           "Can not activate a static OLE object."
+	AFX_IDP_STATIC_OBJECT           "Can not activate a static ActiveX object."
 	AFX_IDP_FAILED_TO_CONNECT       "Failed to connect.\nLink may be broken."
 	AFX_IDP_SERVER_BUSY             "Unable to process command, server busy."
 	AFX_IDP_BAD_VERB                "Failed to perform server operation."
 	AFX_IDP_FAILED_TO_LAUNCH        "Failed to launch server application."
-	AFX_IDS_UPDATING_ITEMS          "Updating OLE objects"
-	AFX_IDP_FAILED_TO_CONVERT       "Failed to convert OLE object."
-	AFX_IDP_ASK_TO_DISCARD          "OLE objects cannot be saved while exiting Windows!\nDiscard all changes to %1?"
+	AFX_IDS_UPDATING_ITEMS          "Updating ActiveX objects"
+	AFX_IDP_FAILED_TO_CONVERT       "Failed to convert ActiveX object."
+	AFX_IDP_ASK_TO_DISCARD          "ActiveX objects cannot be saved while exiting Windows!\nDiscard all changes to %1?"
 	AFX_IDP_FAILED_TO_CREATE        "Failed to create object.  Make sure the application is entered in the system registry."
 
 	AFX_IDS_METAFILE_FORMAT         "Picture (Metafile)\na picture"

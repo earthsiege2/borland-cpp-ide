@@ -1,0 +1,325 @@
+//---------------------------------------------------------------------------
+// Borland C++Builder
+// Copyright (c) 1987, 1999 Inprise Corporation.  All Rights Reserved.
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+#include <vcl.h>
+#pragma hdrstop
+//---------------------------------------------------------------------------
+USEFORM("Main.cpp", MainForm);
+USERES("%s.res");
+//---------------------------------------------------------------------
+WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+{
+	Application->Initialize();
+	Application->CreateForm(__classid(TMainForm), &MainForm);
+	Application->Run();
+
+	return 0;
+}
+//---------------------------------------------------------------------------
+|//---------------------------------------------------------------------------
+#ifndef MainH
+#define MainH
+//---------------------------------------------------------------------------
+#include <sysutils.hpp>
+#include <windows.hpp>
+#include <messages.hpp>
+#include <sysutils.hpp>
+#include <classes.hpp>
+#include <graphics.hpp>
+#include <controls.hpp>
+#include <forms.hpp>
+#include <dialogs.hpp>
+#include <stdctrls.hpp>
+#include <buttons.hpp>
+#include <extctrls.hpp>
+#include <menus.hpp>
+//---------------------------------------------------------------------------
+class TMainForm : public TForm
+{
+__published:   
+|private:        // private user declarations
+public:         // public user declarations
+	virtual __fastcall TMainForm(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern TMainForm *MainForm;
+//---------------------------------------------------------------------------
+#endif
+|//---------------------------------------------------------------------------
+#include <vcl.h>
+#pragma hdrstop
+
+#pragma package(smart_init);
+
+#include "Main.h"
+//---------------------------------------------------------------------------
+#pragma resource "*.dfm"
+TMainForm *MainForm;
+//---------------------------------------------------------------------------
+__fastcall TMainForm::TMainForm(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+|
+{
+	Application->OnHint = ShowHint;
+}
+|
+{
+	StatusLine->SimpleText = Application->Hint;
+}
+|
+{
+	//--- Add code to create a new file ---
+}
+|
+{
+	if (OpenDialog->Execute())
+	{
+		//---- Add code to open OpenDialog->FileName ----
+	}
+}
+|
+{
+	//---- Add code to save current file under current name ----
+}
+|
+{
+	if (SaveDialog->Execute())
+	{
+		//--- Add code to save current file under SaveDialog->FileName ---
+	}
+}
+|
+{
+	if (PrintDialog->Execute())
+	{
+		//---- Add code to print current file ----
+	}
+}
+|
+{
+	PrintSetupDialog->Execute();
+}
+|
+{
+	Close();
+}
+|
+{
+	//---- Add code to perform Edit Undo ----
+}
+|
+{
+	//---- Add code to perform Edit Cut ----
+}
+|
+{
+	//--- Add code to perform Edit Copy ----
+}
+|
+{
+	//---- Add code to perform Edit Paste ----
+}
+|
+{
+	Tile();
+}
+|
+{
+	Cascade();
+}
+|
+{
+	ArrangeIcons();
+}
+|
+{
+	Application->HelpCommand(HELP_CONTENTS, 0);
+}
+|
+{
+	Application->HelpCommand(HELP_PARTIALKEY, Longint(""));
+}
+|
+{
+	Application->HelpCommand(HELP_HELPONHELP, 0);
+}
+|
+{
+	//---- Add code to show program's About Box ----
+}
+|object MainForm: TMainForm
+  Left = 214
+  Top = 112
+  Width = 409
+  Height = 249
+  Caption = 'MainForm'
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Default'
+  PixelsPerInch = 96
+  TextHeight = 13
+|  Menu = MainMenu
+|  OnCreate = FormCreate
+|  FormStyle = fsMDIForm
+|  ShowHint = True
+|  object MainMenu: TMainMenu
+    Left = 220
+    Top = 40
+|    object FileMenu: TMenuItem
+      Caption = '&File'
+      object FileNewItem: TMenuItem
+        Caption = '&New'
+        Hint = 'Create a new file'
+        OnClick = FileNew
+      end
+      object FileOpenItem: TMenuItem
+        Caption = '&Open...'
+        Hint = 'Open an existing file'
+        OnClick = FileOpen
+      end
+      object FileSaveItem: TMenuItem
+        Caption = '&Save'
+        Hint = 'Save current file'
+        OnClick = FileSave
+      end
+      object FileSaveAsItem: TMenuItem
+        Caption = 'Save &As...'
+        Hint = 'Save current file under a new name'
+        OnClick = FileSaveAs
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object FilePrintItem: TMenuItem
+        Caption = '&Print'
+        Hint = 'Print current file'
+        OnClick = FilePrint
+      end
+      object FilePrintSetupItem: TMenuItem
+        Caption = 'P&rint Setup...'
+        Hint = 'Change printer setup'
+        OnClick = FilePrintSetup
+      end
+      object N4: TMenuItem
+        Caption = '-'
+      end
+      object FileExitItem: TMenuItem
+        Caption = 'E&xit'
+        Hint = 'Exit this application'
+        OnClick = FileExit
+      end
+    end
+|    object EditMenu: TMenuItem
+      Caption = '&Edit'
+      object EditUndoItem: TMenuItem
+        Caption = '&Undo'
+        Hint = 'Undo the last action'
+        OnClick = EditUndo
+      end
+      object N2: TMenuItem
+        Caption = '-'
+      end
+      object EditCutItem: TMenuItem
+        Caption = 'Cu&t'
+        Hint = 'Delete selected item'
+        OnClick = EditCut
+      end
+      object EditCopyItem: TMenuItem
+        Caption = '&Copy'
+        Hint = 'Copy selected item to clipboard'
+        OnClick = EditCopy
+      end
+      object EditPasteItem: TMenuItem
+        Caption = '&Paste'
+        Hint = 'Paste contents of clipboard'
+        OnClick = EditPaste
+      end
+    end
+|    object WindowMenu: TMenuItem
+      Caption = '&Window'
+      object WindowTileItem: TMenuItem
+        Caption = '&Tile'
+        Hint = 'Tile all windows'
+        OnClick = WindowTile
+      end
+      object WindowCascadeItem: TMenuItem
+        Caption = '&Cascade'
+        Hint = 'Cascade all windows'
+        OnClick = WindowCascade
+      end
+      object WindowArrangeItem: TMenuItem
+        Caption = '&Arrange All'
+        Hint = 'Arrange minimized windows'
+        OnClick = WindowArrange
+      end
+    end
+|    object HelpMenu: TMenuItem
+      Caption = '&Help'
+      object HelpContentsItem: TMenuItem
+        Caption = '&Contents'
+        Hint = 'Display the help contents screen'
+        OnClick = HelpContents
+      end
+      object HelpSearchItem: TMenuItem
+        Caption = '&Search for Help On...'
+        Hint = 'Search help file for a topic'
+        OnClick = HelpSearch
+      end
+      object HelpHowToUseItem: TMenuItem
+        Caption = '&How to Use Help'
+        Hint = 'Help on using the help system'
+        OnClick = HelpHowToUse
+      end
+      object N3: TMenuItem
+        Caption = '-'
+      end
+      object HelpAboutItem: TMenuItem
+        Caption = '&About...'
+        Hint = 'Show program information'
+        OnClick = HelpAbout
+      end
+    end
+|  object OpenDialog: TOpenDialog
+    Filter = '%s'
+    Left = 230
+    Top = 87
+  end
+|  object SaveDialog: TSaveDialog
+    Filter = '%s'
+    Left = 204
+    Top = 125
+  end
+|  object PrintDialog: TPrintDialog
+    Left = 262
+    Top = 127
+  end
+|  object PrintSetupDialog: TPrinterSetupDialog
+    Left = 276
+    Top = 93
+  end
+|  object StatusLine: TStatusBar
+    Align = alBottom
+    Height = 23
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    ParentFont = False
+    SimplePanel = True
+  end
+|  object SpeedBar: TPanel
+    Align = alTop
+    Height = 33
+|    object SpeedButton%d: TSpeedButton
+      Left = %d
+      Top = 4
+      Width = 25
+      Height = 25
+      OnClick = %s
+      Hint = '%s'   
+      NumGlyphs = 2
+      Glyph.Data = {
+|

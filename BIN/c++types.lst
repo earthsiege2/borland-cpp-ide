@@ -1,0 +1,26 @@
+void
+bool
+char
+signed char
+unsigned char
+short
+signed short
+unsigned short
+short int
+signed short int
+unsigned short int
+int
+signed int
+unsigned int
+long
+signed long
+unsigned long
+long int
+signed long int
+unsigned long int
+__int64
+signed __int64
+unsigned __int64
+float
+double
+long double

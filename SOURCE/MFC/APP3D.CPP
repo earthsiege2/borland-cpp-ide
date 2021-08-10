@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,6 +22,8 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // _AFX_CTL3D_STATE
 
+#ifndef _AFX_NO_CTL3D_SUPPORT
+
 _AFX_CTL3D_STATE::~_AFX_CTL3D_STATE()
 {
 	if (m_pfnUnregister != NULL)
@@ -40,8 +42,6 @@ _AFX_CTL3D_THREAD::~_AFX_CTL3D_THREAD()
 
 /////////////////////////////////////////////////////////////////////////////
 // Support for CTL3D32.DLL (3D controls DLL)
-
-#if !defined(_MAC)
 
 BOOL CWinApp::Enable3dControls()
 {
@@ -116,8 +116,6 @@ BOOL CWinApp::Enable3dControls()
 	return (*pCtl3dState->m_pfnAutoSubclass)(AfxGetInstanceHandle());
 }
 
-#endif
-
 _AFX_CTL3D_STATE* AFXAPI AfxGetCtl3dState()
 {
 	return _afxCtl3dState.GetData();
@@ -128,5 +126,7 @@ _AFX_CTL3D_STATE* AFXAPI AfxGetCtl3dState()
 
 THREAD_LOCAL(_AFX_CTL3D_THREAD, _afxCtl3dThread)
 PROCESS_LOCAL(_AFX_CTL3D_STATE, _afxCtl3dState)
+
+#endif //!_AFX_NO_CTL3D_SUPPORT
 
 /////////////////////////////////////////////////////////////////////////////

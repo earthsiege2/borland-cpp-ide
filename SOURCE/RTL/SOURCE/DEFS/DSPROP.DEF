@@ -1,0 +1,10 @@
+LIBRARY DSPROP
+EXPORTS
+
+    ADsPropCheckIfWritable                   = 'DSPROP.DLL'.*
+    ADsPropCreateNotifyObj                   = 'DSPROP.DLL'.*
+    ADsPropGetInitInfo                       = 'DSPROP.DLL'.*
+    ADsPropSetHwnd                           = 'DSPROP.DLL'.*
+    BringSheetToForeground                   = 'DSPROP.DLL'.*
+    IsSheetAlreadyUp                         = 'DSPROP.DLL'.*
+    PostADsPropSheet                         = 'DSPROP.DLL'.*

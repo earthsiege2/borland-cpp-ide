@@ -1,0 +1,5 @@
+LIBRARY FMISTR32
+EXPORTS
+
+    GetFmiReturnCode                         = 'FMISTR32.DLL'.*
+    GetFmiReturnCode_ext                     = 'FMISTR32.DLL'.*

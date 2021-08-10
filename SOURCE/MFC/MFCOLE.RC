@@ -1,7 +1,7 @@
 // mfcole.rc : Defines the resources for the MFC OLE DLL
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1996 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,15 +22,14 @@
 // Version stamp for this .DLL
 
 #include "winver.h"
-#include "build_.h"
+#include "afxbld_.h"
 
-#ifndef _MAC
 #ifdef _DEBUG
 
-// Version Info for MFCO40D.DLL
+// Version Info for MFCO42D.DLL
 VS_VERSION_INFO     VERSIONINFO
-  FILEVERSION       4,1,0,_MFC_BUILD
-  PRODUCTVERSION    4,1,0,0
+  FILEVERSION       6,0,_MFC_BUILD,_MFC_RBLD
+  PRODUCTVERSION    6,0,0,0
   FILEFLAGSMASK     VS_FFI_FILEFLAGSMASK
 #ifndef RELEASE
   FILEFLAGS         VS_FF_DEBUG|VS_FF_PRERELEASE
@@ -47,13 +46,13 @@ BEGIN
 		BEGIN
 			VALUE "CompanyName",     "Microsoft Corporation\0"
 			VALUE "FileDescription", "MFCOLE Shared Library - Debug Version\0"
-			VALUE "FileVersion",     "4.1." _MFC_USER_BUILD "\0"
+			VALUE "FileVersion",     "6.00." _MFC_USER_BUILD "." _MFC_USER_RBLD "\0"
 			VALUE "InternalName",    "MFCOLED\0"
-			VALUE "LegalCopyright",  "Copyright (C) Microsoft Corp. 1993-1995\0"
+			VALUE "LegalCopyright",  "Copyright (C) Microsoft Corp. 1993-1998\0"
 			VALUE "LegalTrademarks", "\0"
-			VALUE "OriginalFilename","MFCO40D.DLL\0"
+			VALUE "OriginalFilename","MFCO42D.DLL\0"
 			VALUE "ProductName",     "Microsoft (R) Visual C++\0"
-			VALUE "ProductVersion",  "4.1.000\0"
+			VALUE "ProductVersion",  "6.0.000\0"
 			VALUE "OLESelfRegister", "\0"
 		END
 	END
@@ -66,10 +65,10 @@ END
 
 #else // RETAIL
 
-// Version Info for MFCO40.DLL
+// Version Info for MFCO42.DLL
 VS_VERSION_INFO     VERSIONINFO
-  FILEVERSION       4,1,0,_MFC_BUILD
-  PRODUCTVERSION    4,1,0,0
+  FILEVERSION       6,0,_MFC_BUILD,_MFC_RBLD
+  PRODUCTVERSION    6,0,0,0
   FILEFLAGSMASK     VS_FFI_FILEFLAGSMASK
 #ifndef RELEASE
   FILEFLAGS         VS_FF_PRERELEASE
@@ -86,13 +85,13 @@ BEGIN
 		BEGIN
 			VALUE "CompanyName",     "Microsoft Corporation\0"
 			VALUE "FileDescription", "MFCOLE Shared Library - Retail Version\0"
-			VALUE "FileVersion",     "4.1." _MFC_USER_BUILD "\0"
+			VALUE "FileVersion",     "6.00." _MFC_USER_BUILD "." _MFC_USER_RBLD "\0"
 			VALUE "InternalName",    "MFCOLE\0"
-			VALUE "LegalCopyright",  "Copyright (C) Microsoft Corp. 1993-1995\0"
+			VALUE "LegalCopyright",  "Copyright (C) Microsoft Corp. 1993-1998\0"
 			VALUE "LegalTrademarks", "\0"
-			VALUE "OriginalFilename","MFCO40.DLL\0"
+			VALUE "OriginalFilename","MFCO42.DLL\0"
 			VALUE "ProductName",     "Microsoft (R) Visual C++\0"
-			VALUE "ProductVersion",  "4.1.000\0"
+			VALUE "ProductVersion",  "6.0.000\0"
 			VALUE "OLESelfRegister", "\0"
 		END
 	END
@@ -104,5 +103,5 @@ BEGIN
 END
 
 #endif // _DEBUG
-#endif // _MAC
+
 /////////////////////////////////////////////////////////////////////////////

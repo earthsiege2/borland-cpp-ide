@@ -1,0 +1,108 @@
+BCC32 Help
+
+Note: For a more indepth description of the Compiler switches use the BCB online help.
+
+              Using the C++ command-line compiler
+
+C++Builder includes BCC32.EXE, the Borland C++ command-line compiler.
+
+Command-line compiler syntax
+
+The syntax for BCC32 is:
+
+	BCC32 [option [option...]] filename [filename...]
+
+Where:
+
+	Items enclosed in brackets are optional.
+	option refers to the command-line options.
+	filename refers to the source-code files you want to compile.
+
+To see a list of the commonly used compiler options, type BCC32 at the command line (without any options or file names), then press Enter. This list displays the options that are enabled by default.
+
+The command-line compiler name, each option, and the file names must all be separated by at least one space. Precede each option by either a hyphen (-) or a forward slash (/). For example:
+
+	BCC32 -Ic:\code\hfiles
+
+Options and file names entered on the command line override settings in configuration files.
+
+You can use BCC32 to send .OBJ files to TLINK32 or .ASM files to TASM32 (if you have TASM32 installed on your machine).
+
+Default settings
+
+BCC32.EXE has specific options that are on by default. To turn off a default option or to override options in a configuration file, follow the option with a minus (-) sign.
+
+Files with the .CPP extension compile as C++ files. Files with a .C extension, with no extension, or with extensions other than .CPP, .OBJ, .LIB, or .ASM compile as C files.
+
+The compiler tries to link with a module-definition file with the same name as the executable.
+
+
+Using compiler configuration files
+
+If you repeatedly use a certain set of options, you can list them in a configuration file instead of continually typing them on the command line. A configuration file is a standard ASCII text file that contains one or more command-line options. Each option must be separated by a space or a new line.
+
+Whenever you issue a compile command, BCC32.EXE searches for a configuration file called BCC32.CFG. The compiler looks for the .CFG file first in the directory where you issue the compile command, then in the directory where the compiler is located.
+
+You can create and use multiple configuration files in addition to using the default .CFG file. To use a configuration file, use the following syntax where you would place the compiler options:
+
+	+[path]filename
+
+For example, you could use the following command line to use a configuration file called MYCONFIG.CFG:
+
+	BCC32 +C:\MYPROJ\MYCONFIG.CFG mycode.cpp
+
+Options typed on the command line override settings stored in configuration files.
+
+
+Using compiler response files
+
+Response files let you list both compiler options and file names in a single file (unlike configuration files, which accept only compiler options). A response file is a standard ASCII text file that contains one or more command-line options and/or file names, with each entry in the file separated by a space or a new line. In addition to simplifying your compile commands, response files let you issue a longer command line than most operating systems allow.
+
+The syntax for using a single response file is:
+
+	BCC32 @[path]respfile.txt
+
+The syntax for using multiple response files is:
+
+	BCC32 @[path]respfile.txt @[path]otheresp.txt
+
+Response files shipped with C++Builder have an .RSP extension.
+
+Options typed at the command line override any option or file name in a response file.
+
+Entering directories for command-line options
+
+
+
+C++Builder can search multiple directories for include and library files. This means that the syntax for the library directories (-L) and include directories (-I) command-line options, like that of the #define option (-D), allows multiple listings of a given option. Here is the syntax for these options:
+
+	-Ldirname[;dirname;...]
+
+	-Idirname[;dirname;...]
+
+The parameter dirname used with -L and -I can be any directory or directory path. You can enter these multiple directories on the command line in the following ways:
+
+	You can stack multiple entries with a single -L or -I option by using a semicolon:
+
+	BCC32.EXE -Ldirname1;dirname2;dirname3 -Iinc1;inc2;inc3 myfile.c
+
+	You can place more than one of each option on the command line, like this:
+
+	BCC32.EXE -Ldirname1 -Ldirname2 -Ldirname3 -Iinc1 -Iinc2 -Iinc3 myfile.c
+
+	You can mix listings:
+
+	BCC32.EXE -Ldirname1;dirname2 -Ldirname3 -Iinc1;inc2 -Iinc3 myfile.c
+
+If you list multiple -L or -I options on the command line, the result is cumulative: The compiler searches all the directories listed, in order from left to right.
+
+Note:	The C++Builder environment also supports multiple library directories. Use the Project Options and the Environment Options dialog boxes to enter the directories.
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -30,11 +30,7 @@ BOOL _afxDiagnosticInit = AfxDiagnosticInit();
 /////////////////////////////////////////////////////////////////////////////
 // _AFX_DEBUG_STATE implementation
 
-#ifndef _MAC
 static const TCHAR szIniFile[] = _T("AFX.INI");
-#else
-static const TCHAR szIniFile[] = _T("AFX Preferences");
-#endif
 static const TCHAR szDiagSection[] = _T("Diagnostics");
 static const TCHAR szTraceEnabled[] = _T("TraceEnabled");
 static const TCHAR szTraceFlags[] = _T("TraceFlags");
@@ -48,7 +44,7 @@ void __cdecl _AfxCrtDumpClient(void * pvData, unsigned int nBytes)
 	char sz[256];
 	CObject* pObject = (CObject*)pvData;
 
-#if !defined(_MAC) && !defined(_AFX_PORTABLE)
+#ifndef _AFX_PORTABLE
 	// use SEH (structured exception handling) to catch even GPFs
 	//  that result from partially valid objects.
 	__try
@@ -56,7 +52,7 @@ void __cdecl _AfxCrtDumpClient(void * pvData, unsigned int nBytes)
 	{
 		// with vtable, verify that object and vtable are valid
 		if (!AfxIsValidAddress(*(void**)pObject, sizeof(void*), FALSE) ||
-			!AfxIsValidAddress(pObject, pObject->GetRuntimeClass()->m_nObjectSize))
+			!AfxIsValidAddress(pObject, pObject->GetRuntimeClass()->m_nObjectSize, FALSE))
 		{
 			// short form for invalid objects
 			wsprintfA(sz, "an invalid object at $%08lX, %u bytes long\n",
@@ -77,7 +73,7 @@ void __cdecl _AfxCrtDumpClient(void * pvData, unsigned int nBytes)
 			afxDump << sz;
 		}
 	}
-#if !defined(_MAC) && !defined(_AFX_PORTABLE)
+#ifndef _AFX_PORTABLE
 	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
 		// short form for trashed objects
@@ -115,7 +111,7 @@ int __cdecl _AfxCrtReportHook(int nRptType, char *szMsg, int* pResult)
 _AFX_DEBUG_STATE::_AFX_DEBUG_STATE()
 {
 	afxTraceEnabled = ::GetPrivateProfileInt(szDiagSection, szTraceEnabled,
-		!afxData.bWin31, szIniFile);
+		TRUE, szIniFile);
 	afxTraceFlags = ::GetPrivateProfileInt(szDiagSection, szTraceFlags,
 		0, szIniFile);
 

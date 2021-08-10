@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -21,7 +22,7 @@
 
 Name            _ismbclegal - Tests a character wheter it is a 2-bytes
                               character or not.
- 
+
 Usage           int _ismbclegal(unsigned int c);
 
 Prototype in    mbstring.h

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -36,11 +36,9 @@
 typedef LPVOID* LPLPVOID;
 
 /////////////////////////////////////////////////////////////////////////////
-// Macros
-
-/////////////////////////////////////////////////////////////////////////////
 // Functions
 
+LPSTREAM AFXAPI _AfxGetArchiveStream(CArchive& ar, CArchiveStream& stm);
 CLIPFORMAT AFXAPI _AfxGetClipboardFormatConvertVBX();
 CLIPFORMAT AFXAPI _AfxGetClipboardFormatPersistPropset();
 BOOL AFXAPI _AfxOleMatchPropsetClipFormat(CLIPFORMAT cfFormat, LPCLSID lpFmtID);
@@ -69,6 +67,30 @@ struct _AFXCTL_ADVISE_INFO
 
 	_AFXCTL_ADVISE_INFO() : m_dwAspects(0), m_dwAdvf(0), m_pAdvSink(NULL) {}
 };
+
+/////////////////////////////////////////////////////////////////////////////
+// _AFXCTL_AMBIENT_CACHE - cache of common ambient property values
+
+class _AFXCTL_AMBIENT_CACHE : public CNoTrackObject
+{
+// Constructor
+public:
+	_AFXCTL_AMBIENT_CACHE();
+
+// Attributes
+	BOOL m_bValid;
+	DWORD m_dwAmbientFlags;
+	OLE_COLOR m_colorFore;
+	OLE_COLOR m_colorBack;
+	IFont* m_pFont;
+	void* m_pReserved;
+	DWORD m_dwAppearance;
+
+// Operations
+	void Cache(QACONTAINER* pQAContainer);
+};
+
+EXTERN_THREAD_LOCAL(_AFXCTL_AMBIENT_CACHE, _afxAmbientCache)
 
 /////////////////////////////////////////////////////////////////////////////
 // CControlFrameWnd - used for a control's "open" (non-in-place) state.
@@ -119,14 +141,14 @@ class CParkingWnd : public CWnd
 {
 public:
 	CParkingWnd()
-		{ AfxDeferRegisterClass(AFX_WND_REG);
+		{ AfxDeferRegisterClass(AFX_WNDOLECONTROL_REG);
 		  CreateEx(WS_EX_NOPARENTNOTIFY|WS_EX_TOOLWINDOW,
-			AFX_WND, NULL, WS_VISIBLE|WS_CHILD,
+			AFX_WNDOLECONTROL, NULL, WS_VISIBLE|WS_CHILD,
 			-1000, -1000, 1, 1, ::GetDesktopWindow(), 0); }
 	virtual LRESULT WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
-	CMapWordToPtr m_idMap;
+	CMapPtrToPtr m_idMap;
 };
 
 
@@ -164,7 +186,7 @@ typedef struct tagFORMATIDOFFSET
 /////////////////////////////////////////////////////////////////////////////
 // CProperty
 
-class CProperty : public CObject
+class CProperty
 {
 	friend class CPropertySet ;
 	friend class CPropertySection ;
@@ -207,7 +229,7 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 // CPropertySection
 
-class CPropertySection : public CObject
+class CPropertySection
 {
 	friend class CPropertySet ;
 	friend class CProperty ;
@@ -233,7 +255,7 @@ public:
 
 	DWORD   GetSize( void ) ;
 	DWORD   GetCount( void ) ;
-	CObList* GetList( void ) ;
+	CPtrList* GetList( void ) ;
 
 	BOOL    GetID( LPCTSTR pszName, DWORD* pdwPropID ) ;
 	BOOL    SetName( DWORD dwPropID, LPCTSTR pszName ) ;
@@ -252,7 +274,7 @@ private:
 	CLSID           m_FormatID ;
 	SECTIONHEADER   m_SH ;
 	// List of properties (CProperty)
-	CObList         m_PropList ;
+	CPtrList         m_PropList ;
 	// Dictionary of property names
 	CMapStringToPtr m_NameDict ;
 	CString         m_strSectionName;
@@ -265,7 +287,7 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 // CPropertySet
 
-class CPropertySet : public CObject
+class CPropertySet
 {
 	friend class CPropertySection ;
 	friend class CProperty ;
@@ -298,7 +320,7 @@ public:
 	CLSID   GetClassID( void ) ;
 	void    SetClassID( CLSID clsid ) ;
 	DWORD   GetCount( void ) ;
-	CObList* GetList( void ) ;
+	CPtrList* GetList( void ) ;
 
 // Operations
 	BOOL    WriteToStream( IStream* pIStream ) ;
@@ -307,7 +329,7 @@ public:
 // Implementation
 private:
 	PROPHEADER      m_PH ;
-	CObList         m_SectionList ;
+	CPtrList         m_SectionList ;
 
 public:
 	~CPropertySet();
@@ -386,6 +408,31 @@ public:
 	DWORD m_dwPropID;
 };
 
+/////////////////////////////////////////////////////////////////////////////
+// CAsyncPropExchange - for launching asynchronous downloads set.
+
+class CAsyncPropExchange : public CPropExchange
+{
+// Constructors
+public:
+	CAsyncPropExchange(DWORD dwVersion);
+
+// Operations
+public:
+	virtual BOOL ExchangeVersion(DWORD& dwVersionLoaded,
+		DWORD dwVersionDefault, BOOL bConvert);
+
+	virtual BOOL ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
+				void* pvProp, const void* pvDefault = NULL);
+	virtual BOOL ExchangeBlobProp(LPCTSTR pszPropName, HGLOBAL* phBlob,
+				HGLOBAL hBlobDefault = NULL);
+	virtual BOOL ExchangeFontProp(LPCTSTR pszPropName, CFontHolder& font,
+				const FONTDESC* pFontDesc,
+				LPFONTDISP pFontDispAmbient);
+	virtual BOOL ExchangePersistentProp(LPCTSTR pszPropName,
+				LPUNKNOWN* ppUnk, REFIID iid, LPUNKNOWN pUnkDefault);
+};
+
 
 /////////////////////////////////////////////////////////////////////////////
 // COleDispatchExceptionEx - dispatch exception that includes an SCODE
@@ -394,275 +441,6 @@ class COleDispatchExceptionEx : public COleDispatchException
 {
 public:
 	COleDispatchExceptionEx(LPCTSTR lpszDescription, UINT nHelpID, SCODE sc);
-};
-
-/////////////////////////////////////////////////////////////////////////////
-//  CStockPropPage
-
-class CStockPropPage : public COlePropertyPage
-{
-	DECLARE_DYNAMIC(CStockPropPage)
-
-// Constructor
-public:
-	CStockPropPage(UINT idDlg, UINT idCaption);
-
-// Implementation
-protected:
-	void FillPropnameList(REFGUID guid, int nIndirect, CComboBox& combo);
-	void OnSelchangePropname(CComboBox& combo);
-	BOOL OnEditProperty(DISPID dispid, CComboBox& combo);
-
-	CString m_strPropName;
-	int m_iPropName;
-
-	DECLARE_MESSAGE_MAP()
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// CColorButton: used by CColorPropPage
-
-class CColorButton : public CButton
-{
-public:
-	CColorButton(void);
-	void SetFaceColor(COLORREF colFace);
-	COLORREF colGetFaceColor(void);
-	void SetState(BOOL fSelected);
-	static UINT idClicked;
-protected:
-	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
-private:
-	BOOL m_fSelected;
-	COLORREF m_colFace;
-};
-
-/////////////////////////////////////////////////////////////////////////////
-// CColorPropPage
-
-#define NB_COLORS   (16)
-
-class CColorPropPage : public CStockPropPage
-{
-	DECLARE_DYNCREATE(CColorPropPage)
-	DECLARE_OLECREATE_EX(CColorPropPage)
-
-// Construction
-public:
-	CColorPropPage();   // Constructor
-
-// Dialog Data
-	//{{AFX_DATA(CColorPropPage)
-	enum { IDD = AFX_IDD_PROPPAGE_COLOR };
-	CComboBox   m_SysColors;
-	CComboBox   m_ColorProp;
-	//}}AFX_DATA
-
-// Implementation
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);        // DDX/DDV support
-	virtual BOOL OnInitDialog(void);
-	virtual BOOL OnEditProperty(DISPID dispid);
-	virtual void OnObjectsChanged();
-	void FillSysColors();
-	BOOL SetColorProp(CDataExchange* pDX, COLORREF color, LPCTSTR pszPropName);
-	BOOL GetColorProp(CDataExchange* pDX, COLORREF* pcolor, LPCTSTR pszPropName);
-
-private:
-	CColorButton m_Buttons[NB_COLORS];
-	CColorButton *m_pSelectedButton;
-
-	void SetButton(CColorButton *Button);
-
-	// Generated message map functions
-	//{{AFX_MSG(CColorPropPage)
-	afx_msg void OnSelchangeColorprop();
-	afx_msg void OnSelect(void);
-	afx_msg void OnSelchangeSystemcolors();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
-
-// Stores all the information about a font
-typedef struct tagFONTOBJECT
-{
-	CString strName;
-	CY  cySize;
-	BOOL bBold;
-	BOOL bItalic;
-	BOOL bUnderline;
-	BOOL bStrikethrough;
-	short sWeight;
-} FONTOBJECT;
-
-// Merge objects are used when trying to consolidate multiple font properties.
-// If the characteristics of these multiple properties differ then this is
-// represented in the merge object.
-typedef struct tagMERGEOBJECT
-{
-	BOOL bNameOK;
-	BOOL bSizeOK;
-	BOOL bStyleOK;
-	BOOL bUnderlineOK;
-	BOOL bStrikethroughOK;
-} MERGEOBJECT;
-
-/////////////////////////////////////////////////////////////////////////////
-// CSizeComboBox window
-
-class CSizeComboBox : public CComboBox
-{
-// Operations
-public:
-	int AddSize(int PointSize, LONG lfHeight);
-
-	void            GetPointSize(CY& cy);
-	LONG            GetHeight(int sel=-1);
-	void            UpdateLogFont( LPLOGFONT lpLF, int sel=-1 );
-};
-
-/////////////////////////////////////////////////////////////////////////////
-// CFontComboBox window
-
-struct FONTITEM_PPG
-{
-	DWORD dwFontType;
-	LOGFONT lf;
-};
-
-class CFontComboBox : public CComboBox
-{
-// Construction
-public:
-	CFontComboBox();
-	virtual ~CFontComboBox();
-
-// Operations
-public:
-	int AddFont(LOGFONT *, DWORD);
-	CString GetCurrentName();
-
-	FONTITEM_PPG* GetFontItem(int sel=-1);
-	LPLOGFONT GetLogFont(int sel=-1);
-	DWORD GetFontType(int sel=-1);
-
-// Implementation
-public:
-	virtual void DrawItem(LPDRAWITEMSTRUCT lpDIS);
-	virtual void DeleteItem(LPDELETEITEMSTRUCT lpDIS);
-
-protected:
-	CBitmap m_bmpTrueType;
-	CBitmap m_bmpMask;
-};
-
-///////////////////////////////////////////////////////////////////////////
-// CFontPropPage class
-
-class CFontPropPage : public CStockPropPage
-{
-	DECLARE_DYNCREATE(CFontPropPage)
-	DECLARE_OLECREATE_EX(CFontPropPage)
-
-public:
-	CFontPropPage();
-
-	// Dialog Data
-	//{{AFX_DATA(CFontPropPage)
-	enum { IDD = AFX_IDD_PROPPAGE_FONT };
-	CComboBox   m_FontProp;
-	CStatic m_SampleBox;
-	CComboBox   m_FontStyles;
-	CSizeComboBox   m_FontSizes;
-	CFontComboBox   m_FontNames;
-	//}}AFX_DATA
-
-// Attributes
-protected:
-	int nPixelsY;
-	CFont SampleFont;
-	DWORD m_nCurrentStyle;
-	DWORD m_nActualStyle;
-	DWORD m_nStyles;
-	BOOL m_bStrikeOut;
-	BOOL m_bUnderline;
-	CString m_strFontSize;
-
-// Implementation
-protected:
-
-	void FillFacenameList();
-	void FillSizeList();
-	virtual void DoDataExchange(CDataExchange* pDX);
-	virtual void OnPaint();
-	virtual BOOL OnEditProperty(DISPID dispid);
-	virtual void OnObjectsChanged();
-	void UpdateSampleFont();
-	void SelectFontFromList(CString strFaceName, MERGEOBJECT* pmobj);
-
-	//{{AFX_MSG(CFontPropPage)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnEditupdateFontnames();
-	afx_msg void OnEditupdateFontsizes();
-	afx_msg void OnSelchangeFontnames();
-	afx_msg void OnSelchangeFontsizes();
-	afx_msg void OnSelchangeFontstyles();
-	afx_msg void OnEditchangeFontstyles();
-	afx_msg void OnStrikeout();
-	afx_msg void OnUnderline();
-	afx_msg void OnSelchangeFontprop();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-
-	static int CALLBACK EnumFontFamiliesCallBack(ENUMLOGFONT* lpelf, NEWTEXTMETRIC* lpntm, int FontType, LPARAM lParam);
-	static int CALLBACK EnumFontFamiliesCallBack2(ENUMLOGFONT* lpelf, NEWTEXTMETRIC* lpntm, int FontType, LPARAM lParam);
-
-	BOOL SetFontProps(CDataExchange* pDX, FONTOBJECT fobj, LPCTSTR pszPropName);
-	BOOL GetFontProps(CDataExchange* pDX, FONTOBJECT*  pfobj, LPCTSTR pszPropName, MERGEOBJECT* pmobj);
-};
-
-////////////////////////////////////////////////////////////////////////////
-//  CPicturePropPage
-
-class CPicturePropPage : public CStockPropPage
-{
-	DECLARE_DYNCREATE(CPicturePropPage)
-	DECLARE_OLECREATE_EX(CPicturePropPage)
-
-// Construction
-public:
-	CPicturePropPage(); // standard constructor
-	~CPicturePropPage();
-
-// Dialog Data
-	//{{AFX_DATA(CPicturePropPage)
-	enum { IDD = AFX_IDD_PROPPAGE_PICTURE };
-	CComboBox   m_PropName;
-	CStatic m_Static;
-	//}}AFX_DATA
-
-// Implementation
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	virtual BOOL OnInitDialog(void);
-	virtual BOOL OnEditProperty(DISPID dispid);
-	virtual void OnObjectsChanged();
-
-	BOOL SetPictureProp(CDataExchange* pDX, LPPICTUREDISP pPictDisp, LPCTSTR pszPropName);
-	BOOL GetPictureProp(CDataExchange* pDX, LPPICTUREDISP* ppPictDisp, LPCTSTR pszPropName);
-	void ChangePicture(LPPICTURE pPict);
-
-	LPPICTUREDISP m_pPictDisp;
-
-// Generated message map functions
-protected:
-	//{{AFX_MSG(CPicturePropPage)
-	afx_msg void OnPaint();
-	afx_msg void OnBrowse();
-	afx_msg void OnClear();
-	afx_msg void OnSelchangePictProp();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

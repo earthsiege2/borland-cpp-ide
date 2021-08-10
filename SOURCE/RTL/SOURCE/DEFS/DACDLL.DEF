@@ -1,0 +1,9 @@
+LIBRARY DACDLL
+EXPORTS
+
+    _DoDACAdvanced                           = 'DACDLL.DLL'.DoDACAdvanced
+    _DoDACPropSheet                          = 'DACDLL.DLL'.DoDACPropSheet
+    _GetDACStatsMinMaxInfo                   = 'DACDLL.DLL'.GetDACStatsMinMaxInfo
+    _InitDACDLL                              = 'DACDLL.DLL'.InitDACDLL
+    _TermDACDLL                              = 'DACDLL.DLL'.TermDACDLL
+    _TermDACInstance                         = 'DACDLL.DLL'.TermDACInstance

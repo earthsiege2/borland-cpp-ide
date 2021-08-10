@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -46,8 +46,10 @@ void AFX_CDECL AfxTrace(LPCTSTR lpszFormat, ...)
 	int nBuf;
 	TCHAR szBuffer[512];
 
-	nBuf = _vstprintf(szBuffer, lpszFormat, args);
-	ASSERT(nBuf < _countof(szBuffer));
+	nBuf = _vsntprintf(szBuffer, _countof(szBuffer), lpszFormat, args);
+
+	// was there an error? was the expanded string too long?
+	ASSERT(nBuf >= 0);
 
 	if ((afxTraceFlags & traceMultiApp) && (AfxGetApp() != NULL))
 		afxDump << AfxGetApp()->m_pszExeName << ": ";

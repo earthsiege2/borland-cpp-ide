@@ -1,0 +1,7 @@
+USEUNIT("fire.cpp");
+USEUNIT("firedlg.cpp");
+USEUNIT("firewnd.cpp");
+USEUNIT("stdafx.cpp");
+USERC("fire.rc");
+
+#define WinMain

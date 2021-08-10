@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -51,6 +51,7 @@ public:
 
 // Constructor
 	CDynLinkLibrary(AFX_EXTENSION_MODULE& state, BOOL bSystem = FALSE);
+	CDynLinkLibrary(HINSTANCE hModule, HINSTANCE hResource);
 
 // Attributes
 	HMODULE m_hModule;
@@ -79,7 +80,7 @@ void AFXAPI AfxTermExtensionModule(AFX_EXTENSION_MODULE&, BOOL bAll = FALSE);
 
 // special function(s) for stand-alone DLLs (and controls)
 void AFXAPI AfxCoreInitModule();
-#if (defined(_DEBUG) || defined(_MAC)) && !defined(_AFX_MONOLITHIC)
+#if defined(_DEBUG) && !defined(_AFX_MONOLITHIC)
 void AFXAPI AfxOleInitModule();
 void AFXAPI AfxNetInitModule();
 void AFXAPI AfxDbInitModule();

@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0003    // Increment this if a change has global effects
 
-Copyright (c) 1985-1996, Microsoft Corporation
+Copyright (c) 1985 - 1999, Microsoft Corporation
 
 Module Name:
 
@@ -14,18 +14,13 @@ Abstract:
 --*/
 
 #ifndef _IME_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _IME_
-#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <pshpack8.h>
-#pragma option -b
-#endif
 
 #ifndef _WINDEF_
 typedef unsigned int UINT;
@@ -33,8 +28,8 @@ typedef unsigned int UINT;
 
 #define IME_MAXPROCESS 32
 
-LRESULT WINAPI SendIMEMessageExA(HWND, LPARAM);
-LRESULT WINAPI SendIMEMessageExW(HWND, LPARAM);
+LRESULT WINAPI SendIMEMessageExA( IN HWND, IN LPARAM);
+LRESULT WINAPI SendIMEMessageExW( IN HWND, IN LPARAM);
 #ifdef UNICODE
 #define SendIMEMessageEx  SendIMEMessageExW
 #else
@@ -57,33 +52,15 @@ typedef struct tagIMESTRUCT {
 
 
 
-#ifdef KOREA     // BeomOh - 10/05/92
 #define CP_HWND                 0
 #define CP_OPEN                 1
 #define CP_DIRECT               2
 #define CP_LEVEL                3
 
-#define lpSource(lpks) (LPSTR)((LPSTR)lpks+lpks->dchSource)
-#define lpDest(lpks)   (LPSTR)((LPSTR)lpks+lpks->dchDest)
-#endif // KOREA
 
 //
 //      Virtual Keys
 //
-#ifdef KOREA    // BeomOh - 9/29/92
-#define VK_FINAL        0x18    /* dummy VK to make final on mouse down */
-#define VK_CONVERT      0x1C
-#define VK_NONCONVERT   0x1D
-#define VK_ACCEPT       0x1E
-#define VK_MODECHANGE   0x1F
-#else // KOREA
-#define VK_KANA         0x15
-#define VK_KANJI        0x19
-
-#define VK_CONVERT      0x1C
-#define VK_NONCONVERT   0x1D
-#define VK_ACCEPT       0x1E
-#define VK_MODECHANGE   0x1F
 
 #define VK_DBE_ALPHANUMERIC              0x0f0
 #define VK_DBE_KATAKANA                  0x0f1
@@ -99,7 +76,7 @@ typedef struct tagIMESTRUCT {
 #define VK_DBE_NOCODEINPUT               0x0fb
 #define VK_DBE_DETERMINESTRING           0x0fc
 #define VK_DBE_ENTERDLGCONVERSIONMODE    0x0fd
-#endif // KOREA
+
 
 
 //
@@ -117,13 +94,16 @@ typedef struct tagIMESTRUCT {
 //       and IME_GETCONVERSIONMODE
 //
 #define IME_MODE_ALPHANUMERIC   0x0001
+
 #ifdef KOREA    // BeomOh - 9/29/92
 #define IME_MODE_SBCSCHAR       0x0002
-#define IME_MODE_HANJACONVERT   0x0004
-#else  // !KOREA
+#else
+#define IME_MODE_SBCSCHAR       0x0008
+#endif
+
 #define IME_MODE_KATAKANA       0x0002
 #define IME_MODE_HIRAGANA       0x0004
-#define IME_MODE_SBCSCHAR       0x0008
+#define IME_MODE_HANJACONVERT   0x0004
 #define IME_MODE_DBCSCHAR       0x0010
 #define IME_MODE_ROMAN          0x0020
 #define IME_MODE_NOROMAN        0x0040
@@ -131,7 +111,6 @@ typedef struct tagIMESTRUCT {
 #define IME_MODE_NOCODEINPUT    0x0100
 //
 //
-#endif // !KOREA
 
 //
 //     IME APIs
@@ -141,63 +120,42 @@ typedef struct tagIMESTRUCT {
 #define IME_GETOPEN               0x05
 #define IME_GETVERSION            0x07
 #define IME_SETCONVERSIONWINDOW   0x08
-#ifdef  KOREA
-#define IME_MOVEIMEWINDOW         IME_SETCONVERSIONWINDOW
-#else
-#endif
+#define IME_MOVEIMEWINDOW         IME_SETCONVERSIONWINDOW       // KOREA only
 #define IME_SETCONVERSIONMODE     0x10
-#ifdef KOREA    // BeomOh - 10/23/92
-#define IME_SET_MODE              0x12
-#else
-#endif
+
 #define IME_GETCONVERSIONMODE     0x11
+#define IME_SET_MODE              0x12          // KOREA only
 #define IME_SENDVKEY              0x13
 #define IME_ENTERWORDREGISTERMODE 0x18
 #define IME_SETCONVERSIONFONTEX   0x19
-#ifdef  KOREA   // 01/12/93 KDLee MSCH
-#endif
 
-
-#ifdef KOREA    // BeomOh - 9/29/92
 //
 // IME_CODECONVERT subfunctions
 //
-#define IME_BANJAtoJUNJA        0x13
-#define IME_JUNJAtoBANJA        0x14
-#define IME_JOHABtoKS           0x15
-#define IME_KStoJOHAB           0x16
+#define IME_BANJAtoJUNJA        0x13            // KOREA only
+#define IME_JUNJAtoBANJA        0x14            // KOREA only
+#define IME_JOHABtoKS           0x15            // KOREA only
+#define IME_KStoJOHAB           0x16            // KOREA only
 
 //
 // IME_AUTOMATA subfunctions
 //
-#define IMEA_INIT               0x01
-#define IMEA_NEXT               0x02
-#define IMEA_PREV               0x03
+#define IMEA_INIT               0x01            // KOREA only
+#define IMEA_NEXT               0x02            // KOREA only
+#define IMEA_PREV               0x03            // KOREA only
 
 //
 // IME_HANJAMODE subfunctions
 //
-#define IME_REQUEST_CONVERT     0x01
-#define IME_ENABLE_CONVERT      0x02
+#define IME_REQUEST_CONVERT     0x01            // KOREA only
+#define IME_ENABLE_CONVERT      0x02            // KOREA only
 
 //
 // IME_MOVEIMEWINDOW subfunctions
 //
-#define INTERIM_WINDOW          0x00
-#define MODE_WINDOW             0x01
-#define HANJA_WINDOW            0x02
-#endif // KOREA
-
-//
-//
-
-
-
-
-
-
-
-// CTRL_MODIFY is "or" all modify bits, but now only one
+#define INTERIM_WINDOW          0x00            // KOREA only
+#define MODE_WINDOW             0x01            // KOREA only
+#define HANJA_WINDOW            0x02            // KOREA only
 
 //
 //    error code
@@ -244,8 +202,6 @@ typedef struct tagIMESTRUCT {
 #define WM_IMEKEYUP             0x291
 
 
-
-
 //
 // UNDETERMINESTRING structure for IR_UNDETERMINE
 //
@@ -275,26 +231,10 @@ typedef struct tagSTRINGEXSTRUCT {
     UINT     uYomiDelimPos;
 } STRINGEXSTRUCT,NEAR *NPSTRINGEXSTRUCT,FAR *LPSTRINGEXSTRUCT;
 
-
-#if 0
-#define IMEMODE_CCHMAXTEXT 256
-typedef struct tagIMEMODEINFO {
-     DWORD     cchSystemTextLength;
-     CHAR_INFO aciSystemText[IMEMODE_CCHMAXTEXT];
-     DWORD     cchModeTextLength;
-     CHAR_INFO aciModeText[IMEMODE_CCHMAXTEXT];
-} IMEMODEINFO,*PIMEMODEINFO,*LPIMEMODEINFO;
-#endif
-
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <poppack.h>
-#pragma option -b
-#endif
-
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif // _IME_
+

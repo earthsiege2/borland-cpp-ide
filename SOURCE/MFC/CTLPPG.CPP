@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -39,8 +39,10 @@ END_INTERFACE_MAP()
 BEGIN_MESSAGE_MAP(COlePropertyPage, CDialog)
 	//{{AFX_MSG_MAP(COlePropertyPage)
 	ON_WM_CTLCOLOR()
-	ON_MESSAGE(WM_QUERY3DCONTROLS, OnQuery3dControls)
 	//}}AFX_MSG_MAP
+#ifndef _AFX_NO_CTL3D_SUPPORT
+	ON_MESSAGE(WM_QUERY3DCONTROLS, OnQuery3dControls)
+#endif
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -73,7 +75,7 @@ AFX_DDPDATA::AFX_DDPDATA(LPVOID lpHandler, int nCtrlId, BOOL bEditCtrl,
 /////////////////////////////////////////////////////////////////////////////
 // cleanup helper function
 
-static void _CleanupDDPs(CPtrArray& arrayDDP)
+AFX_STATIC void AFXAPI _AfxCleanupDDPs(CPtrArray& arrayDDP)
 {
 	int cDDP = arrayDDP.GetSize();
 	for (int i = 0; i < cDDP; i++)
@@ -139,7 +141,8 @@ void _ValidatePageDialog(CDialogTemplate& dt, CString& strPage,
 	}
 
 	if ((wFontSize != 8) ||
-		((strFontName != _T("MS Sans Serif")) && (strFontName != _T("Helv"))))
+		(strFontName != _T("MS Sans Serif") && strFontName != _T("Helv") &&
+		strFontName != _T("MS Shell Dlg")))
 	{
 		pszTmp = new TCHAR[strPage.GetLength() + 128];
 
@@ -218,7 +221,8 @@ void COlePropertyPage::OnSetPageSite()
 	{
 		CString strFace;
 		dt.GetFont(strFace, wSize);
-		bSetSysFont = ((strFace == _T("MS Sans Serif")) || (strFace == _T("Helv")));
+		bSetSysFont = (strFace == _T("MS Shell Dlg") ||
+			strFace == _T("MS Sans Serif") || strFace == _T("Helv"));
 	}
 
 	// Here is where we actually set the font.
@@ -251,7 +255,7 @@ BOOL COlePropertyPage::PreTranslateMessage(LPMSG lpMsg)
 			IsChild(pWndFocus) &&
 			(pWndFocus->GetStyle() & ES_WANTRETURN) &&
 			GetClassName(pWndFocus->m_hWnd, szClass, 10) &&
-			(_tcsicmp(szClass, _T("EDIT")) == 0))
+			(lstrcmpi(szClass, _T("EDIT")) == 0))
 		{
 			pWndFocus->SendMessage(WM_CHAR, lpMsg->wParam, lpMsg->lParam);
 			return TRUE;
@@ -313,7 +317,7 @@ COlePropertyPage::~COlePropertyPage()
 	}
 
 	// Clean out any leftovers in the DDP map.
-	_CleanupDDPs(m_arrayDDP);
+	_AfxCleanupDDPs(m_arrayDDP);
 
 	RELEASE(m_pPageSite);
 	CleanupObjectArray();
@@ -333,7 +337,7 @@ LRESULT COlePropertyPage::WindowProc(UINT msg, WPARAM wParam, LPARAM lParam)
 	AFX_MANAGE_STATE(m_pModuleState);
 
 	// Forward WM_SYSCOMMAND messages to the frame for translation
-	if ((msg == WM_SYSCOMMAND) && (m_pPageSite != NULL))
+	if (msg == WM_SYSCOMMAND && (wParam & 0xFFF0) != SC_KEYMENU && m_pPageSite != NULL)
 	{
 		if (m_pPageSite->TranslateAccelerator((LPMSG)GetCurrentMessage())
 			== S_OK)
@@ -464,7 +468,7 @@ int COlePropertyPage::MessageBox(LPCTSTR lpszText, LPCTSTR lpszCaption,
 		lpszCaption = m_strPageName;
 
 	// start message box on safe owner of the page
-	return CWnd::GetSafeOwner(this)->MessageBox(lpszText, lpszCaption, nType);
+	return ::MessageBox(GetSafeOwner_(m_hWnd, NULL), lpszText, lpszCaption, nType);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -496,11 +500,13 @@ STDMETHODIMP COlePropertyPage::XPropertyPage::SetPageSite(
 	ASSERT_VALID(pThis);
 	ASSERT_POINTER(pPageSite, IPropertyPageSite);
 
+	RELEASE(pThis->m_pPageSite);            // release the old one
+
 	pThis->m_pPageSite = pPageSite;
-	pThis->m_pPageSite->AddRef();           // Bump the reference count
+	if (pPageSite != NULL)
+		pThis->m_pPageSite->AddRef();       // Bump the reference count
 
 	pThis->OnSetPageSite();
-
 	return S_OK;
 }
 
@@ -688,32 +694,38 @@ STDMETHODIMP COlePropertyPage::XPropertyPage::Apply()
 	METHOD_PROLOGUE_EX(COlePropertyPage, PropertyPage)
 	ASSERT_VALID(pThis);
 
-	HRESULT hr = E_FAIL;
+	HRESULT hr = S_OK;
 	BOOL bClean = FALSE;
 
-	if (pThis->UpdateData(TRUE))
+	if (pThis->m_bDirty)
 	{
-		pThis->m_bDirty = FALSE;
-		bClean = TRUE;
-		hr = S_OK;
-	}
-
-	if (pThis->m_bPropsChanged)
-	{
-		pThis->UpdateData(FALSE);
-		bClean = TRUE;
-		pThis->m_bPropsChanged = FALSE;
-	}
-
-	if (bClean)
-	{
-		// Set the dirty status of all the controls on this page to false.
-		if (pThis->m_pStatus != NULL)
+		if (pThis->UpdateData(TRUE))
 		{
-			for (int nControl = 0; nControl < pThis->m_nControls; nControl++)
-				pThis->m_pStatus[nControl].bDirty = FALSE;
+			pThis->m_bDirty = FALSE;
+			bClean = TRUE;
+		}
+		else
+			hr = E_FAIL;
+
+		if (pThis->m_bPropsChanged)
+		{
+			pThis->UpdateData(FALSE);
+			pThis->m_bPropsChanged = FALSE;
+			bClean = TRUE;
+		}
+
+		if (bClean)
+		{
+			// Set the dirty status of all the controls on this page to FALSE.
+			if (pThis->m_pStatus != NULL)
+			{
+				for (int nControl = 0; nControl < pThis->m_nControls; nControl++)
+					pThis->m_pStatus[nControl].bDirty = FALSE;
+			}
 		}
 	}
+	else
+		ASSERT(!pThis->m_bPropsChanged);
 
 	return hr;
 }
@@ -726,12 +738,7 @@ STDMETHODIMP COlePropertyPage::XPropertyPage::Help(LPCOLESTR lpszHelpDir)
 
 	USES_CONVERSION;
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   OLE2CT(lpszHelpDir);
-	if (!pThis->OnHelp((LPCSTR)pBAfxConv))
-#else    // __BORLANDC__
 	if (!pThis->OnHelp(OLE2CT(lpszHelpDir)))
-#endif   // __BORLANDC__
 		return S_FALSE;
 	else
 		return S_OK;
@@ -794,7 +801,7 @@ STDMETHODIMP COlePropertyPage::XPropertyPage::TranslateAccelerator(LPMSG lpMsg)
 
 				// Pass focus to the frame by letting the page site handle
 				// this message.
-				if (pThis->m_pPageSite)
+				if (pThis->m_pPageSite != NULL)
 					bHandled =
 						pThis->m_pPageSite->TranslateAccelerator(lpMsg) ==
 						S_OK;
@@ -910,31 +917,22 @@ STDMETHODIMP COlePropertyPage::XPropNotifySink::OnChanged(DISPID)
 /////////////////////////////////////////////////////////////////////////////
 // Handle control notifications
 
-#if !defined(ENTRIES)
-#define ENTRIES(a)  (sizeof(a)/sizeof(*a))
-#endif
-
-static const TCHAR _szEdit[] =     _T("Edit");
-static const TCHAR _szButton[] =   _T("Button");
-static const TCHAR _szComboBox[] = _T("ComboBox");
-static const TCHAR _szListBox[] =  _T("ListBox");
-
-static const NotifyInfo NotifyList[] = {
-	{ _szEdit,      EN_CHANGE },
-	{ _szButton,    BN_CLICKED },
-	{ _szButton,    BN_DOUBLECLICKED },
-	{ _szComboBox,  CBN_EDITCHANGE },
-	{ _szComboBox,  CBN_SELCHANGE },
-	{ _szListBox,   LBN_SELCHANGE },
+AFX_STATIC_DATA const NotifyInfo _afxNotifyList[] = {
+	{ _T("edit"),       EN_CHANGE },
+	{ _T("button"),     BN_CLICKED },
+	{ _T("button"),     BN_DOUBLECLICKED },
+	{ _T("combobox"),   CBN_EDITCHANGE },
+	{ _T("combobox"),   CBN_SELCHANGE },
+	{ _T("listbox"),    LBN_SELCHANGE },
 };
 
-static const NotifyInfo UpdateList[] = {
-	{ _szEdit,      EN_KILLFOCUS },
-	{ _szButton,    BN_CLICKED },
-	{ _szButton,    BN_DOUBLECLICKED },
-	{ _szComboBox,  CBN_SELCHANGE },
-	{ _szComboBox,  CBN_KILLFOCUS },
-	{ _szListBox,   LBN_SELCHANGE },
+AFX_STATIC_DATA const NotifyInfo _afxUpdateList[] = {
+	{ _T("edit"),       EN_KILLFOCUS },
+	{ _T("button"),     BN_CLICKED },
+	{ _T("button"),     BN_DOUBLECLICKED },
+	{ _T("combobox"),   CBN_SELCHANGE },
+	{ _T("combobox"),   CBN_KILLFOCUS },
+	{ _T("listbox"),    LBN_SELCHANGE },
 };
 
 BOOL AFXAPI _AfxIsRadioButton(HWND hWnd)
@@ -953,7 +951,7 @@ BOOL COlePropertyPage::OnCommand(WPARAM wParam, LPARAM lParam)
 	if (m_bInitializing || m_ppDisp == NULL)
 		return bSuccess;
 
-	WORD wID = LOWORD(wParam);
+	UINT nID = (UINT)LOWORD(wParam);
 	HWND hWndCtl = (HWND)lParam;
 	WORD wNotifyCode = HIWORD(wParam);
 
@@ -964,8 +962,8 @@ BOOL COlePropertyPage::OnCommand(WPARAM wParam, LPARAM lParam)
 		BOOL bIgnoreControl = FALSE;
 		for (int count = 0; count < m_IDArray.GetSize(); count++)
 		{
-			WORD wNotID = m_IDArray.GetAt(count);
-			if (wID == wNotID)
+			UINT nNotID = m_IDArray.GetAt(count);
+			if (nID == nNotID)
 				bIgnoreControl = TRUE;
 		}
 
@@ -976,12 +974,12 @@ BOOL COlePropertyPage::OnCommand(WPARAM wParam, LPARAM lParam)
 			// We have a control message - check type of control and message
 			::GetClassName(hWndCtl, (LPTSTR)szClassName, MAX_CLASS_NAME);
 
-			for (int iNotify = 0; iNotify < ENTRIES(NotifyList); iNotify++)
+			for (int iNotify = 0; iNotify < _countof(_afxNotifyList); iNotify++)
 			{
-				if (_tcscmp(NotifyList[iNotify].szClassName, szClassName) == 0
-				 && NotifyList[iNotify].wNotifyCode == wNotifyCode )
+				if (lstrcmpi(_afxNotifyList[iNotify].szClassName, szClassName) == 0
+				 && _afxNotifyList[iNotify].wNotifyCode == wNotifyCode )
 				{
-					if ((_tcscmp(szClassName, _szButton) == 0) &&
+					if ((lstrcmpi(szClassName, _T("button")) == 0) &&
 						_AfxIsRadioButton(hWndCtl))
 					{
 						// Special case for radio buttons:
@@ -1000,12 +998,12 @@ BOOL COlePropertyPage::OnCommand(WPARAM wParam, LPARAM lParam)
 
 						// Mark first radio button as dirty
 						if (hWndCtl != NULL)
-							wID = (WORD)::GetWindowLong(hWndCtl, GWL_ID);
+							nID = ::GetWindowLong(hWndCtl, GWL_ID);
 					}
 
 					// Control has been modified
 					m_bDirty = TRUE;
-					SetControlStatus(wID, TRUE);
+					SetControlStatus(nID, TRUE);
 
 					flags = PROPPAGESTATUS_DIRTY;
 					break;
@@ -1014,11 +1012,11 @@ BOOL COlePropertyPage::OnCommand(WPARAM wParam, LPARAM lParam)
 
 			if (m_bDirty)
 			{
-				for (int iNotify=0; iNotify < ENTRIES(UpdateList); iNotify++)
+				for (int iNotify=0; iNotify < _countof(_afxUpdateList); iNotify++)
 				{
-					if (_tcscmp(UpdateList[iNotify].szClassName, szClassName)==0 &&
-						UpdateList[iNotify].wNotifyCode == wNotifyCode &&
-						GetControlStatus(wID))
+					if (lstrcmpi(_afxUpdateList[iNotify].szClassName, szClassName)==0 &&
+						_afxUpdateList[iNotify].wNotifyCode == wNotifyCode &&
+						GetControlStatus(nID))
 					{
 						flags |= PROPPAGESTATUS_VALIDATE;
 					}
@@ -1038,7 +1036,7 @@ BOOL COlePropertyPage::OnCommand(WPARAM wParam, LPARAM lParam)
 
 void COlePropertyPage::IgnoreApply(UINT nID)
 {
-	m_IDArray.Add((WORD)nID);
+	m_IDArray.Add(nID);
 }
 
 BOOL COlePropertyPage::GetControlStatus(UINT nID)
@@ -1098,12 +1096,12 @@ BOOL COlePropertyPage::GetPropText(LPCTSTR pszPropName, ctype *data ) \
 		if (SUCCEEDED(m_ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr, 1, 0, &dwDispID))) \
 		{ \
 			ctype dataTemp; \
-			static ctype nil; \
+			static ctype fill; \
 			PropDispDriver.AttachDispatch(m_ppDisp[i], FALSE); \
 			PropDispDriver.GetProperty(dwDispID, vttype, &dataTemp); \
 			PropDispDriver.DetachDispatch(); \
 			if (i == 0) *data = dataTemp; \
-			if (*data != dataTemp) *data = nil; \
+			if (*data != dataTemp) *data = fill; \
 			bSuccess = TRUE; \
 		} \
 	} \
@@ -1114,6 +1112,7 @@ BOOL COlePropertyPage::GetPropText(LPCTSTR pszPropName, ctype *data ) \
 // DDP_ property get/set helpers
 
 DEFINE_GET_SET_PROP( BYTE, BYTE, VT_UI1 );
+DEFINE_GET_SET_PROP( short, short, VT_I2 );
 DEFINE_GET_SET_PROP( int, int, VT_I4 );
 DEFINE_GET_SET_PROP( UINT, UINT, VT_I4 );
 DEFINE_GET_SET_PROP( long, long, VT_I4 );
@@ -1315,6 +1314,7 @@ void AFXAPI DDP_##group(CDataExchange* pDX, int nCtrlId, \
 // DDP Functions (Pseudo Template Generation)
 
 DEFINE_DDP_(Text,BYTE,VT_UI1,TRUE);
+DEFINE_DDP_(Text,short,VT_I2,TRUE);
 DEFINE_DDP_(Text,int,VT_I4,TRUE);
 DEFINE_DDP_(Text,UINT,VT_UI4,TRUE);
 DEFINE_DDP_(Text,long,VT_I4,TRUE);
@@ -1330,7 +1330,7 @@ DEFINE_DDP_(Radio,int,VT_I4,FALSE);
 
 void AFXAPI DDP_PostProcessing(CDataExchange*pDX)
 {
-	if ( pDX->m_bSaveAndValidate )
+	if (pDX->m_bSaveAndValidate)
 	{
 		CPtrArray &arrayDDP =
 			((COlePropertyPage *)pDX->m_pDlgWnd)->m_arrayDDP;
@@ -1439,12 +1439,13 @@ void AFXAPI DDP_PostProcessing(CDataExchange*pDX)
 			CATCH(COleDispatchException, e)
 			{
 				// Dleanup before pDX->Fail() throws exception.
-				_CleanupDDPs(arrayDDP);
+				_AfxCleanupDDPs(arrayDDP);
 
 				// Display message box for dispatch exceptions.
 				COlePropertyPage* pPropPage = (COlePropertyPage*)pDX->m_pDlgWnd;
 				pPropPage->MessageBox((LPCTSTR)e->m_strDescription, NULL,
 					MB_ICONEXCLAMATION | MB_OK);
+				DELETE_EXCEPTION(e);
 				pDX->Fail();
 			}
 			AND_CATCH_ALL(e)
@@ -1455,7 +1456,7 @@ void AFXAPI DDP_PostProcessing(CDataExchange*pDX)
 			END_CATCH_ALL
 		}
 
-		_CleanupDDPs(arrayDDP);
+		_AfxCleanupDDPs(arrayDDP);
 	}
 }
 

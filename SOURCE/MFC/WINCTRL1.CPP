@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -250,89 +250,6 @@ BOOL CScrollBar::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 CScrollBar::~CScrollBar()
 {
 	DestroyWindow();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// Extra CWnd support for dynamic subclassing of controls
-
-BOOL CWnd::SubclassWindow(HWND hWnd)
-{
-	if (!Attach(hWnd))
-		return FALSE;
-
-	// allow any other subclassing to occur
-	PreSubclassWindow();
-
-	// now hook into the AFX WndProc
-	WNDPROC* lplpfn = GetSuperWndProcAddr();
-	WNDPROC oldWndProc = (WNDPROC)::SetWindowLong(hWnd, GWL_WNDPROC,
-		(DWORD)AfxGetAfxWndProc());
-	ASSERT(oldWndProc != (WNDPROC)AfxGetAfxWndProc);
-
-	if (*lplpfn == NULL)
-		*lplpfn = oldWndProc;   // the first control of that type created
-#ifdef _DEBUG
-	else if (*lplpfn != oldWndProc)
-	{
-		TRACE0("Error: Trying to use SubclassWindow with incorrect CWnd\n");
-		TRACE0("\tderived class.\n");
-		TRACE3("\thWnd = $%04X (nIDC=$%04X) is not a %hs.\n", (UINT)hWnd,
-			_AfxGetDlgCtrlID(hWnd), GetRuntimeClass()->m_lpszClassName);
-		ASSERT(FALSE);
-		// undo the subclassing if continuing after assert
-		::SetWindowLong(hWnd, GWL_WNDPROC, (DWORD)oldWndProc);
-	}
-#endif
-
-	return TRUE;
-}
-
-BOOL CWnd::SubclassDlgItem(UINT nID, CWnd* pParent)
-{
-	ASSERT(pParent != NULL);
-	ASSERT(::IsWindow(pParent->m_hWnd));
-
-	// check for normal dialog control first
-	HWND hWndControl = ::GetDlgItem(pParent->m_hWnd, nID);
-	if (hWndControl != NULL)
-		return SubclassWindow(hWndControl);
-
-#ifndef _AFX_NO_OCC_SUPPORT
-	if (pParent->m_pCtrlCont != NULL)
-	{
-		// normal dialog control not found
-		COleControlSite* pSite = pParent->m_pCtrlCont->FindItem(nID);
-		if (pSite != NULL)
-		{
-			ASSERT(pSite->m_hWnd != NULL);
-			VERIFY(SubclassWindow(pSite->m_hWnd));
-
-#ifndef _AFX_NO_OCC_SUPPORT
-			// If the control has reparented itself (e.g., invisible control),
-			// make sure that the CWnd gets properly wired to its control site.
-			if (pParent->m_hWnd != ::GetParent(pSite->m_hWnd))
-				AttachControlSite(pParent);
-#endif //!_AFX_NO_OCC_SUPPORT
-
-			return TRUE;
-		}
-	}
-#endif
-
-	return FALSE;   // control not found
-}
-
-HWND CWnd::UnsubclassWindow()
-{
-	ASSERT(::IsWindow(m_hWnd));
-
-	// set WNDPROC back to original value
-	WNDPROC* lplpfn = GetSuperWndProcAddr();
-	SetWindowLong(m_hWnd, GWL_WNDPROC, (LONG)*lplpfn);
-	*lplpfn = NULL;
-
-	// and Detach the HWND from the CWnd object
-	return Detach();
 }
 
 #ifdef AFX_INIT_SEG

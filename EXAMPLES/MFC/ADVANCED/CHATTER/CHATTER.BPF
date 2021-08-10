@@ -1,0 +1,12 @@
+USEUNIT("mainfrm.cpp");
+USEUNIT("chatter.cpp");
+USEUNIT("chatdoc.cpp");
+USEUNIT("chatsock.cpp");
+USEUNIT("chatvw.cpp");
+USEUNIT("msg.cpp");
+USEUNIT("sendvw.cpp");
+USEUNIT("setupdlg.cpp");
+USEUNIT("stdafx.cpp");
+USERC("chatter.rc");
+
+#define WinMain

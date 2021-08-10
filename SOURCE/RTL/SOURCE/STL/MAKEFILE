@@ -1,33 +1,74 @@
-#  $Revision:   8.2  $
+#############################################################################
+#									    #
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#  $Revision:   9.7  $                                                               #
+#                                                                           #
+#############################################################################
 
-!if $(OS)==WIN32
-ENVIRON=WIN32
-!elif $(OS)==WIN16
-ENVIRON=WIN16
-!endif
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
 
-!if $d(DLL)
-BINDING=DLL
-!else
-BINDING=STATIC
-!endif
+STLOBJS=               \
+         bitset.obj    \
+         complex.obj   \
+         fstream.obj   \
+         instance.obj  \
+         iomanip.obj   \
+         ios.obj       \
+         iostream.obj  \
+         istream.obj   \
+         ostream.obj   \
+         sstream.obj   \
+         streambu.obj  \
+         strstrea.obj  \
+         wstream.obj   \
+         limits.obj    \
+         byname.obj    \
+         char.obj      \
+         charby.obj    \
+         locinst.obj   \
+         messages.obj  \
+         money.obj     \
+         rwcats.obj    \
+         rwlocale.obj  \
+         rwstderr.obj  \
+         rwtime.obj    \
+         vendor.obj    \
+         wchar.obj     \
+         wcharby.obj   \
+         wmoney.obj    \
+         wtime.obj     \
+         stdexcpt.obj  \
+         memory.obj    \
+         random.obj    \
+         tempbuf.obj   \
+         tree.obj      \
+         vecbool.obj   \
+         string.obj    \
+         valarray.obj
 
-!if $d(MT)
-THREAD=MULTI
-!else
-THREAD=SINGLE
-!endif
 
-BMODE=RELEASE
+OBJS = $(OBJS) $(STLOBJS)
 
-objs: clean
-!if $d(DLL) && $(OS)==WIN16
-        echo ** Skipping WIN16 DLL build **
-!else
-        make -DENVIRON=$(ENVIRON) -DBINDING=$(BINDING) -DTHREAD=$(THREAD) -DBMODE=$(BMODE) -f makefile.bcc
-        copy lib \rtl\lib
-!endif
+.path.cpp=bitset;complex;iostream;limits;locale;stdexcpt;stl;string;valarray
 
-clean:
-        make -f makefile.bcc clean
 
+#############################################################################
+# Configure the environment apprpriately.                                   #
+#############################################################################
+!include rules.mak
+!include stlopts.inc

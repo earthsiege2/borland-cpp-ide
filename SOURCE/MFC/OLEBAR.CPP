@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -48,19 +48,13 @@ BOOL COleResizeBar::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
 	// force WS_CLIPSIBLINGS (avoids SetWindowPos bugs)
 	dwStyle |= WS_CLIPSIBLINGS;
 
-	if (!AfxDeferRegisterClass(AFX_WNDCONTROLBAR_REG))
-		return FALSE;
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCONTROLBAR_REG));
 
 	// create the HWND
 	CRect rect;
 	rect.SetRectEmpty();
-	static const TCHAR szAfxControlBar[] = AFX_WNDCONTROLBAR;
-	if (!CWnd::Create(szAfxControlBar, NULL, dwStyle, rect, pParentWnd, nID))
-		return FALSE;
-
 	// Note: Parent must resize itself for control bar to be resized
-
-	return TRUE;
+	return CWnd::Create(AFX_WNDCONTROLBAR, NULL, dwStyle, rect, pParentWnd, nID);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -130,13 +124,11 @@ void COleResizeBar::OnLButtonDown(UINT /*nFlags*/, CPoint point)
 	{
 		pParent->UpdateWindow();    // always update before tracking
 
-#ifndef _MAC
 		// clip cursor to parent window
 		CRect rect;
 		pParent->GetClientRect(&rect);
 		pParent->ClientToScreen(&rect);
 		::ClipCursor(&rect);
-#endif
 	}
 
 	// save the rect, track, then restore
@@ -145,10 +137,8 @@ void COleResizeBar::OnLButtonDown(UINT /*nFlags*/, CPoint point)
 	CRect rectNew = m_tracker.m_rect;
 	m_tracker.m_rect = rectSave;
 
-#ifndef _MAC
 	// allow full mouse movement again
 	::ClipCursor(NULL);
-#endif
 
 	// notify owner window if tracker changed
 	if (bNotify)

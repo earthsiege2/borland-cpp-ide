@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,14 +9,6 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
-#ifdef _MAC
-#include <macname1.h>
-#include <Types.h>
-#include <QuickDraw.h>
-#include <Events.h>
-#include <Menus.h>
-#include <macname2.h>
-#endif
 
 #ifdef AFX_CORE3_SEG
 #pragma code_seg(AFX_CORE3_SEG)
@@ -32,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 #define HORZF(dw) (dw & CBRS_ORIENT_HORZ)
 #define VERTF(dw) (dw & CBRS_ORIENT_VERT)
 
-static void AdjustRectangle(CRect& rect, CPoint pt)
+AFX_STATIC void AFXAPI _AfxAdjustRectangle(CRect& rect, CPoint pt)
 {
 	int nXOffset = (pt.x < rect.left) ? (pt.x - rect.left) :
 					(pt.x > rect.right) ? (pt.x - rect.right) : 0;
@@ -71,7 +63,7 @@ CDockContext::~CDockContext()
 {
 	ASSERT(m_pBar != NULL);
 	if (m_pBar->m_pDockBar != NULL)
-		m_pBar->m_pDockBar->RemoveControlBar(m_pBar);
+		m_pBar->m_pDockBar->RemoveControlBar(m_pBar, -1, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -83,6 +75,14 @@ void CDockContext::StartDrag(CPoint pt)
 	m_bDragging = TRUE;
 
 	InitLoop();
+
+	// GetWindowRect returns screen coordinates(not mirrored),
+	// so if the desktop is mirrored then turn off mirroring
+	// for the desktop dc so that we get correct focus rect drawn.
+	// This layout change should be remembered, just in case ...
+
+	if (m_pDC->GetLayout() & LAYOUT_RTL)
+		m_pDC->SetLayout(LAYOUT_LTR);
 
 	if (m_pBar->m_dwStyle & CBRS_SIZE_DYNAMIC)
 	{
@@ -101,15 +101,9 @@ void CDockContext::StartDrag(CPoint pt)
 		m_rectFrameDragHorz = CRect(rect.TopLeft(), sizeFloat);
 		m_rectFrameDragVert = CRect(rect.TopLeft(), sizeFloat);
 
-#ifdef _MAC
-		CMiniFrameWnd::CalcBorders(&m_rectFrameDragHorz,
-			WS_THICKFRAME | WS_CAPTION, WS_EX_FORCESIZEBOX);
-		CMiniFrameWnd::CalcBorders(&m_rectFrameDragVert,
-			WS_THICKFRAME | WS_CAPTION, WS_EX_FORCESIZEBOX);
-#else
 		CMiniFrameWnd::CalcBorders(&m_rectFrameDragHorz);
 		CMiniFrameWnd::CalcBorders(&m_rectFrameDragVert);
-#endif
+
 		m_rectFrameDragHorz.InflateRect(-afxData.cxBorder2, -afxData.cyBorder2);
 		m_rectFrameDragVert.InflateRect(-afxData.cxBorder2, -afxData.cyBorder2);
 	}
@@ -164,10 +158,10 @@ void CDockContext::StartDrag(CPoint pt)
 	}
 
 	// adjust rectangles so that point is inside
-	AdjustRectangle(m_rectDragHorz, pt);
-	AdjustRectangle(m_rectDragVert, pt);
-	AdjustRectangle(m_rectFrameDragHorz, pt);
-	AdjustRectangle(m_rectFrameDragVert, pt);
+	_AfxAdjustRectangle(m_rectDragHorz, pt);
+	_AfxAdjustRectangle(m_rectDragVert, pt);
+	_AfxAdjustRectangle(m_rectFrameDragHorz, pt);
+	_AfxAdjustRectangle(m_rectFrameDragVert, pt);
 
 	// initialize tracking state and enter tracking loop
 	m_dwOverDockStyle = CanDock();
@@ -178,31 +172,6 @@ void CDockContext::StartDrag(CPoint pt)
 void CDockContext::Move(CPoint pt)
 {
 	CPoint ptOffset = pt - m_ptLast;
-
-#ifdef _MAC
-	// prevent dragging the floating window completely under the menu bar
-	GDHandle hgd = _AfxFindDevice(pt.x, pt.y);
-	if (hgd == NULL || hgd == GetMainDevice() ||
-			TestDeviceAttribute(hgd, hasAuxMenuBar))
-	{
-		CRect rect;
-		if ((HORZF(m_dwStyle) && !m_bFlip) || (VERTF(m_dwStyle) && m_bFlip))
-			rect = m_rectFrameDragHorz;
-		else
-			rect = m_rectFrameDragVert;
-
-		// determine our new position
-		rect.OffsetRect(ptOffset);
-
-		// keep us on the screen if we were getting too close to the menu bar
-		int yMBarBottom = (*hgd)->gdRect.top + GetMBarHeight() + 4;
-		if (rect.bottom < yMBarBottom)
-		{
-			pt.y += yMBarBottom - rect.bottom;
-			ptOffset.y += yMBarBottom - rect.bottom;
-		}
-	}
-#endif
 
 	// offset all drag rects to new position
 	m_rectDragHorz.OffsetRect(ptOffset);
@@ -282,6 +251,13 @@ void CDockContext::StartResize(int nHitTest, CPoint pt)
 
 	InitLoop();
 
+	// GetWindowRect returns screen coordinates(not mirrored)
+	// So if the desktop is mirrored then turn off mirroring
+	// for the desktop dc so that we draw correct focus rect
+
+	if (m_pDC->GetLayout() & LAYOUT_RTL)
+		m_pDC->SetLayout(LAYOUT_LTR);
+
 	// get true bar size (including borders)
 	CRect rect;
 	m_pBar->GetWindowRect(rect);
@@ -294,12 +270,7 @@ void CDockContext::StartResize(int nHitTest, CPoint pt)
 	m_rectActualFrameSize = CRect(rect.TopLeft(), size);
 
 	// calculate frame rectangle
-#ifdef _MAC
-	CMiniFrameWnd::CalcBorders(&m_rectActualFrameSize,
-		WS_THICKFRAME | WS_CAPTION, WS_EX_FORCESIZEBOX);
-#else
 	CMiniFrameWnd::CalcBorders(&m_rectActualFrameSize);
-#endif
 	m_rectActualFrameSize.InflateRect(-afxData.cxBorder2, -afxData.cyBorder2);
 
 	m_rectFrameBorders = CRect(CPoint(0,0),
@@ -338,23 +309,41 @@ void CDockContext::Stretch(CPoint pt)
 	nLength = (nLength >= 0) ? nLength : 0;
 
 	CSize size = m_pBar->CalcDynamicLayout(nLength, dwMode);
+
+	CRect rectDesk;
+	HWND hWndDesk = ::GetDesktopWindow();
+	::GetWindowRect(hWndDesk, &rectDesk);
+	CRect rectTemp = m_rectActualFrameSize;
+
 	if (m_nHitTest == HTLEFT || m_nHitTest == HTTOP)
 	{
-		m_rectActualSize.left = m_rectActualSize.right - size.cx;
-		m_rectActualSize.top = m_rectActualSize.bottom - size.cy;
-		m_rectActualFrameSize.left = m_rectActualFrameSize.right -
+		rectTemp.left = rectTemp.right -
 			(size.cx + m_rectFrameBorders.Width());
-		m_rectActualFrameSize.top = m_rectActualFrameSize.bottom -
+		rectTemp.top = rectTemp.bottom -
 			(size.cy + m_rectFrameBorders.Height());
+		CRect rect;
+		if (rect.IntersectRect(rectDesk, rectTemp))
+		{
+			m_rectActualSize.left = m_rectActualSize.right - size.cx;
+			m_rectActualSize.top = m_rectActualSize.bottom - size.cy;
+			m_rectActualFrameSize.left = rectTemp.left;
+			m_rectActualFrameSize.top = rectTemp.top;
+		}
 	}
 	else
 	{
-		m_rectActualSize.right = m_rectActualSize.left + size.cx;
-		m_rectActualSize.bottom = m_rectActualSize.top + size.cy;
-		m_rectActualFrameSize.right = m_rectActualFrameSize.left +
+		rectTemp.right = rectTemp.left +
 			(size.cx + m_rectFrameBorders.Width());
-		m_rectActualFrameSize.bottom = m_rectActualFrameSize.top +
+		rectTemp.bottom = rectTemp.top +
 			(size.cy + m_rectFrameBorders.Height());
+		CRect rect;
+		if (rect.IntersectRect(rectDesk, rectTemp))
+		{
+			m_rectActualSize.right = m_rectActualSize.left + size.cx;
+			m_rectActualSize.bottom = m_rectActualSize.top + size.cy;
+			m_rectActualFrameSize.right = rectTemp.right;
+			m_rectActualFrameSize.bottom = rectTemp.bottom;
+		}
 	}
 	m_ptLast = pt;
 
@@ -437,11 +426,9 @@ void CDockContext::InitLoop()
 	// lock window update while dragging
 	ASSERT(m_pDC == NULL);
 	CWnd* pWnd = CWnd::GetDesktopWindow();
-#ifndef _MAC
 	if (pWnd->LockWindowUpdate())
 		m_pDC = pWnd->GetDCEx(NULL, DCX_WINDOW|DCX_CACHE|DCX_LOCKWINDOWUPDATE);
 	else
-#endif
 		m_pDC = pWnd->GetDCEx(NULL, DCX_WINDOW|DCX_CACHE);
 	ASSERT(m_pDC != NULL);
 }
@@ -452,9 +439,7 @@ void CDockContext::CancelLoop()
 	ReleaseCapture();
 
 	CWnd* pWnd = CWnd::GetDesktopWindow();
-#ifndef _MAC
 	pWnd->UnlockWindowUpdate();
-#endif
 	if (m_pDC != NULL)
 	{
 		pWnd->ReleaseDC(m_pDC);
@@ -484,11 +469,9 @@ void CDockContext::DrawFocusRect(BOOL bRemoveRect)
 		rect = m_rectDragVert;
 	else
 	{
-#ifndef _MAC
 		// use thick frame instead
 		size.cx = GetSystemMetrics(SM_CXFRAME) - CX_BORDER;
 		size.cy = GetSystemMetrics(SM_CYFRAME) - CY_BORDER;
-#endif
 		if ((HORZF(m_dwStyle) && !m_bFlip) || (VERTF(m_dwStyle) && m_bFlip))
 			rect = m_rectFrameDragHorz;
 		else
@@ -602,7 +585,6 @@ BOOL CDockContext::Track()
 	m_pBar->SetCapture();
 	ASSERT(m_pBar == CWnd::GetCapture());
 
-#ifndef _MAC
 	// get messages until capture lost or cancelled/accepted
 	while (CWnd::GetCapture() == m_pBar)
 	{
@@ -650,63 +632,7 @@ BOOL CDockContext::Track()
 			break;
 		}
 	}
-#else
-	Point   ptCur = {0};
 
-	// get messages until capture lost or cancelled/accepted
-	while (CWnd::GetCapture() == m_pBar)
-	{
-		EventRecord     er;
-
-		if (OSEventAvail(everyEvent, &er))
-		{
-			GetNextEvent(everyEvent, &er);
-			switch (er.what)
-			{
-			case mouseUp:
-				if (m_bDragging)
-					EndDrag();
-				else
-					EndResize();
-				return TRUE;
-
-			case keyDown:
-			case keyUp:
-			case autoKey:
-			case app2Evt:
-			{
-				MSG     msg;
-
-				if (WrapEvent(&er, &msg, PM_REMOVE))
-				{
-					if (m_bDragging)
-						OnKey((int)msg.wParam, msg.message == WM_KEYDOWN);
-					if (msg.message == WM_KEYUP && msg.wParam == VK_ESCAPE)
-					{
-						CancelLoop();
-						return FALSE;
-					}
-				}
-				break;
-			}
-
-			default:
-				break;
-			}
-		}
-		else
-		{
-			if (!EqualPt(er.where, ptCur))
-			{
-				POINT pt = {er.where.h, er.where.v};
-				if (m_bDragging)
-					Move(pt);
-				else
-					Stretch(pt);
-			}
-		}
-	}
-#endif
 	CancelLoop();
 
 	return FALSE;

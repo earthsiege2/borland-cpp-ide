@@ -1,7 +1,7 @@
 // padview.cpp : implementation of the CPadView class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -474,6 +474,7 @@ void CPadView::OnChoosePrintFont()
 		lf = dlg.m_lf;
 		::ScaleLogFont(&lf, dcScreen, dcPrint);
 
+		SetPrinterFont(NULL);
 		m_fontPrint.DeleteObject();
 		if (m_fontPrint.CreateFontIndirect(&lf))
 		{

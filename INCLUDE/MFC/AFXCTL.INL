@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -15,6 +15,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // COleControl inlines
+_AFXCTL_INLINE BOOL COleControl::IsOptimizedDraw()
+	{ return m_bOptimizedDraw; }
 _AFXCTL_INLINE BOOL COleControl::IsConvertingVBX()
 	{ return m_bConvertVBX; }
 _AFXCTL_INLINE void COleControl::FireKeyDown(USHORT* pnChar, short nShiftState)
@@ -44,17 +46,51 @@ _AFXCTL_INLINE void COleControl::FireClick()
 	{ FireEvent(DISPID_CLICK, EVENT_PARAM(VTS_NONE)); }
 _AFXCTL_INLINE void COleControl::FireDblClick()
 	{ FireEvent(DISPID_DBLCLICK, EVENT_PARAM(VTS_NONE)); }
+_AFXCTL_INLINE void COleControl::FireReadyStateChange()
+	{ FireEvent(DISPID_READYSTATECHANGE, EVENT_PARAM(VTS_I4), m_lReadyState); }
+_AFXCTL_INLINE void COleControl::InternalSetReadyState(long lNewReadyState)
+	{ ASSERT((lNewReadyState >=0) && (lNewReadyState <= READYSTATE_COMPLETE));
+	  if (m_lReadyState != lNewReadyState)
+		{m_lReadyState = lNewReadyState; FireReadyStateChange(); } }
 _AFXCTL_INLINE BOOL COleControl::ExchangeVersion(
 	CPropExchange* pPX, DWORD dwVersionDefault, BOOL bConvert)
 	{ return pPX->ExchangeVersion(m_dwVersionLoaded, dwVersionDefault, bConvert); }
+_AFXCTL_INLINE DWORD COleControl::GetStockEventMask() const
+	{ return *GetEventMap()->lpStockEventMask; }
+_AFXCTL_INLINE DWORD COleControl::GetStockPropMask() const
+	{ return *GetDispatchMap()->lpStockPropMask; }
+_AFXCTL_INLINE void COleControl::RequestAsynchronousExchange(DWORD dwVersion)
+	{ m_bDataPathPropertiesLoaded = FALSE; m_dwDataPathVersionToReport = dwVersion; }
 
 // CPropExchange inlines
-_AFXCTL_INLINE CPropExchange::CPropExchange() : m_dwVersion(0)
+_AFXCTL_INLINE CPropExchange::CPropExchange() : m_dwVersion(0), m_bAsync(FALSE)
 	{ }
 _AFXCTL_INLINE BOOL CPropExchange::IsLoading()
 	{ return m_bLoading; }
 _AFXCTL_INLINE DWORD CPropExchange::GetVersion()
 	{ return m_dwVersion; }
+_AFXCTL_INLINE BOOL CPropExchange::IsAsynchronous()
+	{ return m_bAsync; }
+
+// CDataPathProperty inlines
+_AFXCTL_INLINE CDataPathProperty::CDataPathProperty(COleControl* pControl)
+	: m_pControl(pControl) {}
+_AFXCTL_INLINE CDataPathProperty::CDataPathProperty(LPCTSTR lpszPath, COleControl* pControl)
+	: m_pControl(pControl), m_strPath(lpszPath) {}
+_AFXCTL_INLINE void CDataPathProperty::SetPath(LPCTSTR lpszPath)
+	{ ASSERT_VALID(this); m_strPath = lpszPath; }
+_AFXCTL_INLINE CString CDataPathProperty::GetPath() const
+	{ ASSERT_VALID(this); return m_strPath; }
+_AFXCTL_INLINE COleControl* CDataPathProperty::GetControl()
+	{ ASSERT_VALID(this); return m_pControl; }
+_AFXCTL_INLINE void CDataPathProperty::SetControl(COleControl* pControl)
+	{ ASSERT_VALID(this); m_pControl=pControl; }
+
+// CCachedDataPathProperty inlines
+_AFXCTL_INLINE CCachedDataPathProperty::CCachedDataPathProperty(COleControl* pControl)
+	: CDataPathProperty(pControl) {}
+_AFXCTL_INLINE CCachedDataPathProperty::CCachedDataPathProperty(LPCTSTR lpszPath, COleControl* pControl)
+	: CDataPathProperty(lpszPath, pControl) {}
 
 // inline DDP_ routines
 _AFXCTL_INLINE void AFXAPI DDP_LBString(CDataExchange* pDX, int id,

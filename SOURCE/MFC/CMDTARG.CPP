@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,16 +28,9 @@ static char THIS_FILE[] = __FILE__;
 CCmdTarget::CCmdTarget()
 {
 	// capture module state where object was constructed
-#ifdef __BORLANDC__
 #ifdef _AFXDLL
 	m_pModuleState = AfxGetModuleState();
 	ASSERT(m_pModuleState != NULL);
-#endif
-#else
-#if _AFXDLL
-	m_pModuleState = AfxGetModuleState();
-	ASSERT(m_pModuleState != NULL);
-#endif
 #endif
 
 	// initialize state
@@ -66,28 +59,7 @@ CCmdTarget::~CCmdTarget()
 /////////////////////////////////////////////////////////////////////////////
 // CCmdTarget windows message dispatching
 
-union MessageMapFunctions
-{
-	AFX_PMSG pfn;   // generic member function pointer
-
-	// specific type safe variants
-	void (AFX_MSG_CALL CCmdTarget::*pfn_COMMAND)();
-	BOOL (AFX_MSG_CALL CCmdTarget::*pfn_bCOMMAND)();
-	void (AFX_MSG_CALL CCmdTarget::*pfn_COMMAND_RANGE)(UINT);
-	BOOL (AFX_MSG_CALL CCmdTarget::*pfn_COMMAND_EX)(UINT);
-
-	void (AFX_MSG_CALL CCmdTarget::*pfn_UPDATE_COMMAND_UI)(CCmdUI*);
-	void (AFX_MSG_CALL CCmdTarget::*pfn_UPDATE_COMMAND_UI_RANGE)(CCmdUI*, UINT);
-	void (AFX_MSG_CALL CCmdTarget::*pfn_OTHER)(void*);
-	BOOL (AFX_MSG_CALL CCmdTarget::*pfn_OTHER_EX)(void*);
-
-	void (AFX_MSG_CALL CCmdTarget::*pfn_NOTIFY)(NMHDR*, LRESULT*);
-	BOOL (AFX_MSG_CALL CCmdTarget::*pfn_bNOTIFY)(NMHDR*, LRESULT*);
-	void (AFX_MSG_CALL CCmdTarget::*pfn_NOTIFY_RANGE)(UINT, NMHDR*, LRESULT*);
-	BOOL (AFX_MSG_CALL CCmdTarget::*pfn_NOTIFY_EX)(UINT, NMHDR*, LRESULT*);
-};
-
-static BOOL DispatchCmdMsg(CCmdTarget* pTarget, UINT nID, int nCode,
+AFX_STATIC BOOL AFXAPI _AfxDispatchCmdMsg(CCmdTarget* pTarget, UINT nID, int nCode,
 	AFX_PMSG pfn, void* pExtra, UINT nSig, AFX_CMDHANDLERINFO* pHandlerInfo)
 		// return TRUE to stop routing
 {
@@ -175,8 +147,9 @@ static BOOL DispatchCmdMsg(CCmdTarget* pTarget, UINT nID, int nCode,
 		break;
 	case AfxSig_cmdui:
 		{
-			// ON_UPDATE_COMMAND_UI case
-			ASSERT(nCode == CN_UPDATE_COMMAND_UI);
+			// ON_UPDATE_COMMAND_UI or ON_UPDATE_COMMAND_UI_REFLECT case
+			ASSERT(CN_UPDATE_COMMAND_UI == (UINT)-1);
+			ASSERT(nCode == CN_UPDATE_COMMAND_UI || nCode == 0xFFFF);
 			ASSERT(pExtra != NULL);
 			CCmdUI* pCmdUI = (CCmdUI*)pExtra;
 			ASSERT(!pCmdUI->m_bContinueRouting);    // idle - not set
@@ -215,6 +188,15 @@ static BOOL DispatchCmdMsg(CCmdTarget* pTarget, UINT nID, int nCode,
 	return bResult;
 }
 
+// compare two pointers to GUIDs -- TRUE if both pointers are NULL
+// or both pointers point to same GUID; FALSE otherwise
+
+#define IsEqualNULLGuid(pGuid1, pGuid2) \
+	(((pGuid1) == NULL && (pGuid2) == NULL) || \
+	 ((pGuid1) != NULL && (pGuid2) != NULL && \
+		IsEqualGUID(*(pGuid1), *(pGuid2))))
+
+
 BOOL CCmdTarget::OnCmdMsg(UINT nID, int nCode, void* pExtra,
 	AFX_CMDHANDLERINFO* pHandlerInfo)
 {
@@ -231,11 +213,49 @@ BOOL CCmdTarget::OnCmdMsg(UINT nID, int nCode, void* pExtra,
 	const AFX_MSGMAP* pMessageMap;
 	const AFX_MSGMAP_ENTRY* lpEntry;
 	UINT nMsg = 0;
+
+#ifndef _AFX_NO_DOCOBJECT_SUPPORT
+	if (nCode == CN_OLECOMMAND)
+	{
+		BOOL bResult = FALSE;
+
+		const AFX_OLECMDMAP* pOleCommandMap;
+		const AFX_OLECMDMAP_ENTRY* pEntry;
+
+		COleCmdUI* pUI = (COleCmdUI*) pExtra;
+		const GUID* pguidCmdGroup = pUI->m_pguidCmdGroup;
+
+#ifdef _AFXDLL
+		for (pOleCommandMap = GetCommandMap(); pOleCommandMap != NULL && !bResult;
+			pOleCommandMap = pOleCommandMap->pfnGetBaseMap())
+#else
+		for (pOleCommandMap = GetCommandMap(); pOleCommandMap != NULL && !bResult;
+			pOleCommandMap = pOleCommandMap->pBaseMap)
+#endif
+		{
+			for (pEntry = pOleCommandMap->lpEntries;
+				pEntry->cmdID != 0 && pEntry->nID != 0 && !bResult;
+				pEntry++)
+			{
+				if (nID == pEntry->cmdID &&
+					IsEqualNULLGuid(pguidCmdGroup, pEntry->pguid))
+				{
+					pUI->m_nID = pEntry->nID;
+					bResult = TRUE;
+				}
+			}
+		}
+
+		return bResult;
+	}
+#endif
+
 	if (nCode != CN_UPDATE_COMMAND_UI)
 	{
 		nMsg = HIWORD(nCode);
 		nCode = LOWORD(nCode);
 	}
+
 	// for backward compatibility HIWORD(nCode)==0 is WM_COMMAND
 	if (nMsg == 0)
 		nMsg = WM_COMMAND;
@@ -278,7 +298,7 @@ BOOL CCmdTarget::OnCmdMsg(UINT nID, int nCode, void* pExtra,
 				}
 			}
 #endif //_DEBUG
-			return DispatchCmdMsg(this, nID, nCode,
+			return _AfxDispatchCmdMsg(this, nID, nCode,
 				lpEntry->pfn, pExtra, lpEntry->nSig, pHandlerInfo);
 		}
 	}
@@ -374,6 +394,7 @@ const AFX_MSGMAP_ENTRY CCmdTarget::_messageEntries[] =
 #ifndef _AFX_NO_OLE_SUPPORT
 
 UINT CCmdTarget::_dispatchEntryCount = (UINT)-1;
+DWORD CCmdTarget::_dwStockPropMask = (DWORD)-1;
 
 const AFX_DISPMAP CCmdTarget::dispatchMap =
 {
@@ -383,7 +404,8 @@ const AFX_DISPMAP CCmdTarget::dispatchMap =
 	NULL,
 #endif
 	&CCmdTarget::_dispatchEntries[0],
-	&CCmdTarget::_dispatchEntryCount
+	&CCmdTarget::_dispatchEntryCount,
+	&CCmdTarget::_dwStockPropMask
 };
 
 #ifdef _AFXDLL
@@ -473,14 +495,10 @@ const AFX_INTERFACEMAP CCmdTarget::interfaceMap =
 	&CCmdTarget::_interfaceEntries[0]
 };
 
-// private IID_IDispatch to avoid linking to UUID.LIB in non-OLE apps
-static const IID _afx_IID_IDispatch =
-	{ 0x00020400, 0, 0, { 0xC0, 0, 0, 0, 0, 0, 0, 0x46 } };
-
 const AFX_INTERFACEMAP_ENTRY CCmdTarget::_interfaceEntries[] =
 {
 #ifndef _AFX_NO_OLE_SUPPORT
-	INTERFACE_PART(CCmdTarget, _afx_IID_IDispatch, Dispatch)
+	INTERFACE_PART(CCmdTarget, IID_IDispatch, Dispatch)
 #endif
 	{ NULL, (size_t)-1 }    // end of entries
 };
@@ -558,22 +576,50 @@ BOOL CCmdTarget::GetExtraConnectionPoints(CPtrArray*)
 #endif //!_AFX_NO_OLE_SUPPORT
 
 /////////////////////////////////////////////////////////////////////////////
+// Root of command target maps
+
+#ifndef _AFX_NO_DOCOBJECT_SUPPORT
+
+#ifdef _AFXDLL
+const AFX_OLECMDMAP* CCmdTarget::_GetBaseCommandMap()
+{
+	return NULL;
+}
+#endif
+
+const AFX_OLECMDMAP CCmdTarget::commandMap =
+{
+#ifdef _AFXDLL
+	&CCmdTarget::_GetBaseCommandMap,
+#else
+	NULL,
+#endif
+	&CCmdTarget::_commandEntries[0]
+};
+
+const AFX_OLECMDMAP_ENTRY CCmdTarget::_commandEntries[] =
+{
+	{ NULL, 0, 0 }    // end of entries
+};
+
+const AFX_OLECMDMAP* CCmdTarget::GetCommandMap() const
+{
+	return &CCmdTarget::commandMap;
+}
+
+#endif //!_AFX_NO_DOCOBJECT_SUPPORT
+
+/////////////////////////////////////////////////////////////////////////////
 // Special access to view routing info
 
 CView* CCmdTarget::GetRoutingView()
 {
-	CView* pView = AfxGetThreadState()->m_pRoutingView;
-	if (pView != NULL)
-		ASSERT_VALID(pView);
-	return pView;
+	return GetRoutingView_();
 }
 
 CFrameWnd* CCmdTarget::GetRoutingFrame()
 {
-	CFrameWnd* pFrame = AfxGetThreadState()->m_pRoutingFrame;
-	if (pFrame != NULL)
-		ASSERT_VALID(pFrame);
-	return pFrame;
+	return GetRoutingFrame_();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -639,7 +685,7 @@ void CCmdUI::SetCheck(int nCheck)
 	}
 }
 
-static void AFXAPI _AfxLoadDotBitmap(); // for swap tuning
+AFX_STATIC void AFXAPI _AfxLoadDotBitmap(); // for swap tuning
 
 void CCmdUI::SetRadio(BOOL bOn)
 {
@@ -722,12 +768,12 @@ BOOL CCmdUI::DoUpdate(CCmdTarget* pTarget, BOOL bDisableIfNoHndler)
 #pragma code_seg(AFX_INIT_SEG)
 #endif
 
-static const BYTE rgbDot[] =
+AFX_STATIC_DATA const BYTE _afxDot[] =
 	{ 0x6, 0xF, 0xF, 0xF, 0x6 }; // simple byte bitmap, 1=> bit on
 #define DOT_WIDTH   4
 #define DOT_HEIGHT  5
 
-static void AFXAPI _AfxLoadDotBitmap()
+AFX_STATIC void AFXAPI _AfxLoadDotBitmap()
 {
 	ASSERT(afxData.hbmMenuDot == NULL);
 	// attempt to load special bitmap, else default to arrow
@@ -750,7 +796,7 @@ static void AFXAPI _AfxLoadDotBitmap()
 
 	BYTE* pbOut = &rgbBitmap[iwRow * sizeof(WORD) *
 							((size.cy - (DOT_HEIGHT+1)) >> 1)];
-	const BYTE* pbIn = rgbDot;
+	const BYTE* pbIn = _afxDot;
 	for (int y = 0; y < DOT_HEIGHT; y++)
 	{
 		WORD w = (WORD)~(((DWORD)*pbIn++) << nShift);

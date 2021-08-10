@@ -1,5 +1,7 @@
 /* WS2SPI.H -- definitions to be used with the WinSock service provider.
  *
+ * Copyright (c) 1997-1999  Microsoft Corporation
+ *
  * This header file corresponds to version 2.2.x of the WinSock SPI
  * specification.
  *
@@ -10,28 +12,32 @@
  */
 
 #ifndef _WINSOCK2SPI_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINSOCK2SPI_
-#pragma option -b
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 /*
  * Ensure structures are packed consistently.
  */
 
-#pragma option -b.
+#if !defined(_WIN64)
 #include <pshpack4.h>
-#pragma option -b
+#endif
 
 /*
  * Pull in WINSOCK2.H if necessary
  */
 
 #ifndef _WINSOCK2API_
-#pragma option -b.
 #include <winsock2.h>
-#pragma option -b
 #endif /* _WINSOCK2API_ */
 
 #define WSPDESCRIPTION_LEN 255
+
+#define WSS_OPERATION_IN_PROGRESS 0x00000103L
 
 typedef struct WSPData {
     WORD         wVersion;
@@ -40,8 +46,8 @@ typedef struct WSPData {
 } WSPDATA, FAR * LPWSPDATA;
 
 typedef struct _WSATHREADID {
-    HANDLE ThreadHandle;
-    DWORD Reserved;
+    HANDLE      ThreadHandle;
+    DWORD_PTR    Reserved;
 } WSATHREADID, FAR * LPWSATHREADID;
 
 /*
@@ -65,7 +71,7 @@ extern "C" {
 typedef
 BOOL
 (CALLBACK FAR * LPBLOCKINGCALLBACK)(
-    DWORD dwContext
+    DWORD_PTR dwContext
     );
 
 /*
@@ -77,7 +83,7 @@ BOOL
 typedef
 VOID
 (CALLBACK FAR * LPWSAUSERAPC)(
-    DWORD dwContext
+    DWORD_PTR dwContext
     );
 
 /*
@@ -91,7 +97,7 @@ SOCKET
     struct sockaddr FAR * addr,
     LPINT addrlen,
     LPCONDITIONPROC lpfnCondition,
-    DWORD dwCallbackData,
+    DWORD_PTR dwCallbackData,
     LPINT lpErrno
     );
 
@@ -468,7 +474,7 @@ typedef
 SOCKET
 (WSPAPI * LPWPUCREATESOCKETHANDLE)(
     DWORD dwCatalogEntryId,
-    DWORD dwContext,
+    DWORD_PTR dwContext,
     LPINT lpErrno
     );
 
@@ -476,7 +482,7 @@ typedef
 int
 (WSPAPI * LPWPUFDISSET)(
     SOCKET s,
-    fd_set FAR * set
+    fd_set FAR * fdset
     );
 
 typedef
@@ -510,7 +516,7 @@ int
 (WSPAPI * LPWPUQUERYBLOCKINGCALLBACK)(
     DWORD dwCatalogEntryId,
     LPBLOCKINGCALLBACK FAR * lplpfnCallback,
-    LPDWORD lpdwContext,
+    PDWORD_PTR lpdwContext,
     LPINT lpErrno
     );
 
@@ -518,7 +524,7 @@ typedef
 int
 (WSPAPI * LPWPUQUERYSOCKETHANDLECONTEXT)(
     SOCKET s,
-    LPDWORD lpContext,
+    PDWORD_PTR lpContext,
     LPINT lpErrno
     );
 
@@ -527,7 +533,7 @@ int
 (WSPAPI * LPWPUQUEUEAPC)(
     LPWSATHREADID lpThreadId,
     LPWSAUSERAPC lpfnUserApc,
-    DWORD dwContext,
+    DWORD_PTR dwContext,
     LPINT lpErrno
     );
 
@@ -558,6 +564,18 @@ int
     LPWSATHREADID lpThreadId,
     LPINT lpErrno
     );
+
+
+// Available only directly from ws2_32.dll
+typedef
+int
+(WSPAPI * LPWPUCOMPLETEOVERLAPPEDREQUEST) (
+    IN SOCKET s, 	
+    LPWSAOVERLAPPED lpOverlapped, 	
+    DWORD dwError, 	
+    DWORD cbTransferred, 	
+    LPINT lpErrno
+);
 
 /*
  * The upcall table. This structure is passed by value to the service
@@ -591,11 +609,11 @@ typedef struct _WSPUPCALLTABLE {
 int
 WSPAPI
 WSPStartup(
-    WORD wVersionRequested,
-    LPWSPDATA lpWSPData,
-    LPWSAPROTOCOL_INFOW lpProtocolInfo,
-    WSPUPCALLTABLE UpcallTable,
-    LPWSPPROC_TABLE lpProcTable
+    IN WORD wVersionRequested,
+    OUT LPWSPDATA lpWSPData,
+    IN LPWSAPROTOCOL_INFOW lpProtocolInfo,
+    IN WSPUPCALLTABLE UpcallTable,
+    OUT LPWSPPROC_TABLE lpProcTable
     );
 
 typedef
@@ -615,10 +633,10 @@ int
 int
 WSPAPI
 WSCEnumProtocols(
-    LPINT lpiProtocols,
-    LPWSAPROTOCOL_INFOW lpProtocolBuffer,
-    LPDWORD lpdwBufferLength,
-    LPINT lpErrno
+    IN LPINT lpiProtocols,
+    OUT LPWSAPROTOCOL_INFOW lpProtocolBuffer,
+    IN OUT LPDWORD lpdwBufferLength,
+    OUT LPINT lpErrno
     );
 
 typedef
@@ -633,8 +651,8 @@ int
 int
 WSPAPI
 WSCDeinstallProvider(
-    LPGUID lpProviderId,
-    LPINT lpErrno
+    IN LPGUID lpProviderId,
+    OUT LPINT lpErrno
     );
 
 typedef
@@ -647,11 +665,11 @@ int
 int
 WSPAPI
 WSCInstallProvider(
-    LPGUID lpProviderId,
-    const WCHAR FAR * lpszProviderDllPath,
-    const LPWSAPROTOCOL_INFOW lpProtocolInfoList,
-    DWORD dwNumberOfEntries,
-    LPINT lpErrno
+    IN LPGUID lpProviderId,
+    IN const WCHAR FAR * lpszProviderDllPath,
+    IN const LPWSAPROTOCOL_INFOW lpProtocolInfoList,
+    IN DWORD dwNumberOfEntries,
+    OUT LPINT lpErrno
     );
 
 typedef
@@ -667,10 +685,10 @@ int
 int
 WSPAPI
 WSCGetProviderPath(
-    LPGUID lpProviderId,
-    WCHAR FAR * lpszProviderDllPath,
-    LPINT lpProviderDllPathLen,
-    LPINT lpErrno
+    IN LPGUID lpProviderId,
+    OUT WCHAR FAR * lpszProviderDllPath,
+    IN OUT LPINT lpProviderDllPathLen,
+    OUT LPINT lpErrno
     );
 
 typedef
@@ -682,6 +700,36 @@ int
     LPINT lpErrno
     );
 
+int
+WSPAPI
+WSCInstallQOSTemplate (
+    IN  const LPGUID    Guid,
+    IN  LPWSABUF        QosName,
+    IN  LPQOS           Qos
+    );
+
+typedef
+int
+(WSPAPI * LPWSCINSTALLQOSTEMPLATE)(
+    const LPGUID    Guid,
+    LPWSABUF        QosName,
+    LPQOS           Qos
+    );
+
+int
+WSPAPI
+WSCRemoveQOSTemplate (
+    IN  const LPGUID    Guid,
+    IN  LPWSABUF        QosName
+    );
+
+typedef
+int
+(WSPAPI * LPWSCREMOVEQOSTEMPLATE)(
+    const LPGUID    Guid,
+    LPWSABUF        QosName
+    );
+
 /*
  *  The following upcall function prototypes are only used by WinSock 2 DLL and
  *  should not be used by any service providers.
@@ -690,103 +738,113 @@ int
 BOOL
 WSPAPI
 WPUCloseEvent(
-    WSAEVENT hEvent,
-    LPINT lpErrno
+    IN WSAEVENT hEvent,
+    OUT LPINT lpErrno
     );
 
 int
 WSPAPI
 WPUCloseSocketHandle(
-    SOCKET s,
-    LPINT lpErrno
+    IN SOCKET s,
+    OUT LPINT lpErrno
     );
 
 WSAEVENT
 WSPAPI
 WPUCreateEvent(
-    LPINT lpErrno
+    OUT LPINT lpErrno
     );
 
 SOCKET
 WSPAPI
 WPUCreateSocketHandle(
-    DWORD dwCatalogEntryId,
-    DWORD dwContext,
-    LPINT lpErrno
+    IN DWORD dwCatalogEntryId,
+    IN DWORD_PTR dwContext,
+    OUT LPINT lpErrno
     );
 
 int
 WSPAPI
 WPUFDIsSet(
-    SOCKET s,
-    fd_set FAR * set
+    IN SOCKET s,
+    IN fd_set FAR * fdset
     );
 
 int
 WSPAPI
 WPUGetProviderPath(
-    LPGUID lpProviderId,
-    WCHAR FAR * lpszProviderDllPath,
-    LPINT lpProviderDllPathLen,
-    LPINT lpErrno
+    IN LPGUID lpProviderId,
+    OUT WCHAR FAR * lpszProviderDllPath,
+    IN OUT LPINT lpProviderDllPathLen,
+    OUT LPINT lpErrno
     );
 
 SOCKET
 WSPAPI
 WPUModifyIFSHandle(
-    DWORD dwCatalogEntryId,
-    SOCKET ProposedHandle,
-    LPINT lpErrno
+    IN DWORD dwCatalogEntryId,
+    IN SOCKET ProposedHandle,
+    OUT LPINT lpErrno
     );
 
 BOOL
 WSPAPI
 WPUPostMessage(
-    HWND hWnd,
-    UINT Msg,
-    WPARAM wParam,
-    LPARAM lParam
+    IN HWND hWnd,
+    IN UINT Msg,
+    IN WPARAM wParam,
+    IN LPARAM lParam
     );
 
 int
 WSPAPI
 WPUQueryBlockingCallback(
-    DWORD dwCatalogEntryId,
-    LPBLOCKINGCALLBACK FAR * lplpfnCallback,
-    LPDWORD lpdwContext,
-    LPINT lpErrno
+    IN DWORD dwCatalogEntryId,
+    OUT LPBLOCKINGCALLBACK FAR * lplpfnCallback,
+    OUT PDWORD_PTR lpdwContext,
+    OUT LPINT lpErrno
     );
 
 int
 WSPAPI
 WPUQuerySocketHandleContext(
-    SOCKET s,
-    LPDWORD lpContext,
-    LPINT lpErrno
+    IN SOCKET s,
+    OUT PDWORD_PTR lpContext,
+    OUT LPINT lpErrno
     );
 
 int
 WSPAPI
 WPUQueueApc(
-    LPWSATHREADID lpThreadId,
-    LPWSAUSERAPC lpfnUserApc,
-    DWORD dwContext,
-    LPINT lpErrno
+    IN LPWSATHREADID lpThreadId,
+    IN LPWSAUSERAPC lpfnUserApc,
+    IN DWORD_PTR dwContext,
+    OUT LPINT lpErrno
     );
 
 BOOL
 WSPAPI
 WPUResetEvent(
-    WSAEVENT hEvent,
-    LPINT lpErrno
+    IN WSAEVENT hEvent,
+    OUT LPINT lpErrno
     );
 
 BOOL
 WSPAPI
 WPUSetEvent(
-    WSAEVENT hEvent,
-    LPINT lpErrno
+    IN WSAEVENT hEvent,
+    OUT LPINT lpErrno
     );
+
+int
+WSPAPI
+WPUCompleteOverlappedRequest (
+    SOCKET s, 	
+    LPWSAOVERLAPPED lpOverlapped, 	
+    DWORD dwError, 	
+    DWORD cbTransferred, 	
+    LPINT lpErrno
+);
 
 /*
  * Installing and uninstalling name space providers.
@@ -795,11 +853,11 @@ WPUSetEvent(
 INT
 WSPAPI
 WSCInstallNameSpace (
-    LPWSTR lpszIdentifier,
-    LPWSTR lpszPathName,
-    DWORD dwNameSpace,
-    DWORD dwVersion,
-    LPGUID lpProviderId
+    IN LPWSTR lpszIdentifier,
+    IN LPWSTR lpszPathName,
+    IN DWORD dwNameSpace,
+    IN DWORD dwVersion,
+    IN LPGUID lpProviderId
     );
 
 typedef
@@ -815,7 +873,7 @@ INT
 INT
 WSPAPI
 WSCUnInstallNameSpace (
-    LPGUID lpProviderId
+    IN LPGUID lpProviderId
     );
 
 typedef
@@ -827,8 +885,8 @@ INT
 INT
 WSPAPI
 WSCEnableNSProvider (
-    LPGUID lpProviderId,
-    BOOL fEnable
+    IN LPGUID lpProviderId,
+    IN BOOL fEnable
     );
 
 typedef
@@ -952,12 +1010,10 @@ INT
 }
 #endif
 
-
-#pragma option -b.
+#if !defined(_WIN64)
 #include <poppack.h>
-#pragma option -b
+#endif
 
-
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif  /* _WINSOCK2SPI_ */
 

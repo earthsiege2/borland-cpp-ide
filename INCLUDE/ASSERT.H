@@ -5,19 +5,18 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
 
+/* $Revision:   9.3  $ */
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
-
 
 #if !defined(RC_INVOKED)
 
@@ -27,38 +26,9 @@
 
 #endif  /* !RC_INVOKED */
 
-
-#if !defined(__FLAT__)
-
 #ifdef __cplusplus
-extern "C" {
+namespace std {
 #endif
-
-void _Cdecl _FARFUNC __assertfail( char _FAR *__msg,
-                                   char _FAR *__cond,
-                                   char _FAR *__file,
-                                   int __line);
-
-#ifdef  __cplusplus
-}
-#endif
-
-#undef assert
-
-#ifdef NDEBUG
-#  define assert(p)   ((void)0)
-#else
-#  if defined(_Windows) && !defined(__DPMI16__)
-#    define _ENDL
-#  else
-#    define _ENDL "\n"
-#  endif
-#  define assert(p) ((p) ? (void)0 : (void) __assertfail( \
-                    "Assertion failed: %s, file %s, line %d" _ENDL, \
-                    #p, __FILE__, __LINE__ ) )
-#endif
-
-#else  /* defined __FLAT__ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -75,6 +45,10 @@ void _RTLENTRY _EXPFUNC __assertfail(char * __msg, char * __cond,
 }
 #endif
 
+#ifdef __cplusplus
+} // std
+#endif /* __cplusplus */
+
 #undef assert
 
 #ifdef NDEBUG
@@ -82,10 +56,6 @@ void _RTLENTRY _EXPFUNC __assertfail(char * __msg, char * __cond,
 #else
 #define assert(p)   ((p) ? (void)0 : _assert(#p, __FILE__, __LINE__))
 #endif
-
-
-#endif  /* __FLAT__  */
-
 
 #if !defined(RC_INVOKED)
 
@@ -95,3 +65,8 @@ void _RTLENTRY _EXPFUNC __assertfail(char * __msg, char * __cond,
 
 #endif  /* !RC_INVOKED */
 
+#if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__ASSERT_H_USING_LIST)
+#define __ASSERT_H_USING_LIST
+     using std::_assert;
+     using std::__assertfail;
+#endif /* __USING_CNAME__ */

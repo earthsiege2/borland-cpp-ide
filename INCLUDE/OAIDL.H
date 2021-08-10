@@ -1,37 +1,42 @@
-#pragma option -b
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
+
+#pragma warning( disable: 4049 )  /* more than 64k source lines */
+
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
-/* File created by MIDL compiler version 3.00.39 */
-/* at Sat Jul 13 21:56:52 1996
+ /* File created by MIDL compiler version 5.03.0279 */
+/* at Fri Jul 30 19:37:37 1999
  */
-/* Compiler settings for c:\oa\src\idl\oaidl.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
+/* Compiler settings for oaidl.idl:
+    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
+    VC __declspec() decoration level: 
+         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
+         DECLSPEC_UUID(), MIDL_INTERFACE()
 */
 //@@MIDL_FILE_HEADING(  )
-#pragma option -b.
+
+
+/* verify that the <rpcndr.h> version is high enough to compile this file*/
+#ifndef __REQUIRED_RPCNDR_H_VERSION__
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
+#endif
+
 #include "rpc.h"
-#pragma option -b
-#pragma option -b.
 #include "rpcndr.h"
-#pragma option -b
+
+#ifndef __RPCNDR_H_VERSION__
+#error this stub requires an updated version of <rpcndr.h>
+#endif // __RPCNDR_H_VERSION__
+
 #ifndef COM_NO_WINDOWS_H
-#pragma option -b.
 #include "windows.h"
-#pragma option -b
-#pragma option -b.
 #include "ole2.h"
-#pragma option -b
 #endif /*COM_NO_WINDOWS_H*/
 
 #ifndef __oaidl_h__
 #define __oaidl_h__
-
-#ifdef __cplusplus
-#define _FORCENAMELESSUNION
-extern "C"{
-#endif 
 
 /* Forward Declarations */ 
 
@@ -125,28 +130,64 @@ typedef interface ISupportErrorInfo ISupportErrorInfo;
 #endif 	/* __ISupportErrorInfo_FWD_DEFINED__ */
 
 
+#ifndef __ITypeFactory_FWD_DEFINED__
+#define __ITypeFactory_FWD_DEFINED__
+typedef interface ITypeFactory ITypeFactory;
+#endif 	/* __ITypeFactory_FWD_DEFINED__ */
+
+
+#ifndef __ITypeMarshal_FWD_DEFINED__
+#define __ITypeMarshal_FWD_DEFINED__
+typedef interface ITypeMarshal ITypeMarshal;
+#endif 	/* __ITypeMarshal_FWD_DEFINED__ */
+
+
+#ifndef __IRecordInfo_FWD_DEFINED__
+#define __IRecordInfo_FWD_DEFINED__
+typedef interface IRecordInfo IRecordInfo;
+#endif 	/* __IRecordInfo_FWD_DEFINED__ */
+
+
+#ifndef __IErrorLog_FWD_DEFINED__
+#define __IErrorLog_FWD_DEFINED__
+typedef interface IErrorLog IErrorLog;
+#endif 	/* __IErrorLog_FWD_DEFINED__ */
+
+
+#ifndef __IPropertyBag_FWD_DEFINED__
+#define __IPropertyBag_FWD_DEFINED__
+typedef interface IPropertyBag IPropertyBag;
+#endif 	/* __IPropertyBag_FWD_DEFINED__ */
+
+
 /* header files for imported files */
-#pragma option -b.
 #include "objidl.h"
-#pragma option -b
+
+#ifdef __cplusplus
+extern "C"{
+#endif 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface __MIDL_itf_oaidl_0000 */
 /* [local] */ 
-
 
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
+//  Copyright (C) Microsoft Corporation, 1992-1999.
 //
 //--------------------------------------------------------------------------
+#if ( _MSC_VER >= 800 )
+#if _MSC_VER >= 1200
+#pragma warning(push)
+#endif
+#pragma warning(disable:4201)    /* Nameless struct/union */
+#endif
+#if ( _MSC_VER >= 1020 )
+#pragma once
+#endif
 
 
 
@@ -164,23 +205,21 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 
 
-extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
+
+
+
+extern RPC_IF_HANDLE __MIDL_itf_oaidl_0000_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_oaidl_0000_v0_0_s_ifspec;
 
 #ifndef __IOleAutomationTypes_INTERFACE_DEFINED__
 #define __IOleAutomationTypes_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IOleAutomationTypes
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IOleAutomationTypes */
 /* [auto_handle][unique][version] */ 
-
 
 typedef CY CURRENCY;
 
-typedef struct  tagSAFEARRAYBOUND
+typedef struct tagSAFEARRAYBOUND
     {
     ULONG cElements;
     LONG lLbound;
@@ -188,33 +227,47 @@ typedef struct  tagSAFEARRAYBOUND
 
 typedef struct tagSAFEARRAYBOUND __RPC_FAR *LPSAFEARRAYBOUND;
 
-#if defined(_OLEAUT32_)
 /* the following is what MIDL knows how to remote */
 typedef /* [unique] */ struct _wireVARIANT __RPC_FAR *wireVARIANT;
 
-typedef struct  _wireSAFEARR_BSTR
+typedef /* [unique] */ struct _wireBRECORD __RPC_FAR *wireBRECORD;
+
+typedef struct _wireSAFEARR_BSTR
     {
     ULONG Size;
     /* [ref][size_is] */ wireBSTR __RPC_FAR *aBstr;
     }	SAFEARR_BSTR;
 
-typedef struct  _wireSAFEARR_UNKNOWN
+typedef struct _wireSAFEARR_UNKNOWN
     {
     ULONG Size;
     /* [ref][size_is] */ IUnknown __RPC_FAR *__RPC_FAR *apUnknown;
     }	SAFEARR_UNKNOWN;
 
-typedef struct  _wireSAFEARR_DISPATCH
+typedef struct _wireSAFEARR_DISPATCH
     {
     ULONG Size;
     /* [ref][size_is] */ IDispatch __RPC_FAR *__RPC_FAR *apDispatch;
     }	SAFEARR_DISPATCH;
 
-typedef struct  _wireSAFEARR_VARIANT
+typedef struct _wireSAFEARR_VARIANT
     {
     ULONG Size;
     /* [ref][size_is] */ wireVARIANT __RPC_FAR *aVariant;
     }	SAFEARR_VARIANT;
+
+typedef struct _wireSAFEARR_BRECORD
+    {
+    ULONG Size;
+    /* [ref][size_is] */ wireBRECORD __RPC_FAR *aRecord;
+    }	SAFEARR_BRECORD;
+
+typedef struct _wireSAFEARR_HAVEIID
+    {
+    ULONG Size;
+    /* [ref][size_is] */ IUnknown __RPC_FAR *__RPC_FAR *apUnknown;
+    IID iid;
+    }	SAFEARR_HAVEIID;
 
 typedef /* [v1_enum] */ 
 enum tagSF_TYPE
@@ -226,10 +279,12 @@ enum tagSF_TYPE
 	SF_BSTR	= VT_BSTR,
 	SF_UNKNOWN	= VT_UNKNOWN,
 	SF_DISPATCH	= VT_DISPATCH,
-	SF_VARIANT	= VT_VARIANT
+	SF_VARIANT	= VT_VARIANT,
+	SF_RECORD	= VT_RECORD,
+	SF_HAVEIID	= VT_UNKNOWN | VT_RESERVED
     }	SF_TYPE;
 
-typedef struct  _wireSAFEARRAY_UNION
+typedef struct _wireSAFEARRAY_UNION
     {
     ULONG sfType;
     /* [switch_is] */ /* [switch_type] */ union __MIDL_IOleAutomationTypes_0001
@@ -238,15 +293,16 @@ typedef struct  _wireSAFEARRAY_UNION
         /* [case()] */ SAFEARR_UNKNOWN UnknownStr;
         /* [case()] */ SAFEARR_DISPATCH DispatchStr;
         /* [case()] */ SAFEARR_VARIANT VariantStr;
+        /* [case()] */ SAFEARR_BRECORD RecordStr;
+        /* [case()] */ SAFEARR_HAVEIID HaveIidStr;
         /* [case()] */ BYTE_SIZEDARR ByteStr;
         /* [case()] */ WORD_SIZEDARR WordStr;
         /* [case()] */ DWORD_SIZEDARR LongStr;
         /* [case()] */ HYPER_SIZEDARR HyperStr;
-        /* [default] */  /* Empty union arm */ 
         }	u;
     }	SAFEARRAYUNION;
 
-typedef /* [unique] */ struct  _wireSAFEARRAY
+typedef /* [unique] */ struct _wireSAFEARRAY
     {
     USHORT cDims;
     USHORT fFeatures;
@@ -258,8 +314,7 @@ typedef /* [unique] */ struct  _wireSAFEARRAY
 
 typedef /* [unique] */ wireSAFEARRAY __RPC_FAR *wirePSAFEARRAY;
 
-#endif /* _OLEAUT32_ */
-typedef struct  tagSAFEARRAY
+typedef struct tagSAFEARRAY
     {
     USHORT cDims;
     USHORT fFeatures;
@@ -279,6 +334,12 @@ typedef /* [wire_marshal] */ SAFEARRAY __RPC_FAR *LPSAFEARRAY;
 
 #define	FADF_FIXEDSIZE	( 0x10 )
 
+#define	FADF_RECORD	( 0x20 )
+
+#define	FADF_HAVEIID	( 0x40 )
+
+#define	FADF_HAVEVARTYPE	( 0x80 )
+
 #define	FADF_BSTR	( 0x100 )
 
 #define	FADF_UNKNOWN	( 0x200 )
@@ -287,7 +348,7 @@ typedef /* [wire_marshal] */ SAFEARRAY __RPC_FAR *LPSAFEARRAY;
 
 #define	FADF_VARIANT	( 0x800 )
 
-#define	FADF_RESERVED	( 0xf0e8 )
+#define	FADF_RESERVED	( 0xf008 )
 
 /* VARIANT STRUCTURE
  *
@@ -296,6 +357,8 @@ typedef /* [wire_marshal] */ SAFEARRAY __RPC_FAR *LPSAFEARRAY;
  *  WORD wReserved2;
  *  WORD wReserved3;
  *  union {
+ *    ULONGLONG      VT_UI8
+ *    LONGLONG       VT_I8
  *    LONG           VT_I4
  *    BYTE           VT_UI1
  *    SHORT          VT_I2
@@ -312,6 +375,7 @@ typedef /* [wire_marshal] */ SAFEARRAY __RPC_FAR *LPSAFEARRAY;
  *    BYTE *         VT_BYREF|VT_UI1
  *    SHORT *        VT_BYREF|VT_I2
  *    LONG *         VT_BYREF|VT_I4
+ *    LONGLONG *     VT_BYREF|VT_I8
  *    FLOAT *        VT_BYREF|VT_R4
  *    DOUBLE *       VT_BYREF|VT_R8
  *    VARIANT_BOOL * VT_BYREF|VT_BOOL
@@ -333,46 +397,47 @@ typedef /* [wire_marshal] */ SAFEARRAY __RPC_FAR *LPSAFEARRAY;
  *    CHAR *         VT_BYREF|VT_I1
  *    USHORT *       VT_BYREF|VT_UI2
  *    ULONG *        VT_BYREF|VT_UI4
+ *    ULONGLONG *    VT_BYREF|VT_UI8
  *    INT *          VT_BYREF|VT_INT
  *    UINT *         VT_BYREF|VT_UINT
  *  }
  */
-#if (__STDC__ || !defined(_FORCENAMELESSUNION)) || defined(NONAMELESSUNION)
+#if (__STDC__ && !defined(_FORCENAMELESSUNION)) || defined(NONAMELESSUNION)
 #define __VARIANT_NAME_1 n1
 #define __VARIANT_NAME_2 n2
 #define __VARIANT_NAME_3 n3
+#define __VARIANT_NAME_4 brecVal
 #else
 #define __tagVARIANT
 #define __VARIANT_NAME_1
 #define __VARIANT_NAME_2
 #define __VARIANT_NAME_3
+#define __tagBRECORD
+#define __VARIANT_NAME_4
 #endif
 typedef /* [wire_marshal] */ struct tagVARIANT VARIANT;
 
-#if defined(_FORCENAMELESSUNION)
-#pragma anon_struct on
-#endif
-struct  tagVARIANT
+struct tagVARIANT
     {
     union 
         {
-        struct  __tagVARIANT
+        struct __tagVARIANT
             {
             VARTYPE vt;
             WORD wReserved1;
             WORD wReserved2;
             WORD wReserved3;
-            union
+            union 
                 {
+                ULONGLONG ullVal;
+                LONGLONG llVal;
                 LONG lVal;
                 BYTE bVal;
                 SHORT iVal;
                 FLOAT fltVal;
                 DOUBLE dblVal;
                 VARIANT_BOOL boolVal;
-#if !defined (__BORLANDC__)
                 _VARIANT_BOOL bool;
-#endif
                 SCODE scode;
                 CY cyVal;
                 DATE date;
@@ -383,6 +448,7 @@ struct  tagVARIANT
                 BYTE __RPC_FAR *pbVal;
                 SHORT __RPC_FAR *piVal;
                 LONG __RPC_FAR *plVal;
+                LONGLONG __RPC_FAR *pllVal;
                 FLOAT __RPC_FAR *pfltVal;
                 DOUBLE __RPC_FAR *pdblVal;
                 VARIANT_BOOL __RPC_FAR *pboolVal;
@@ -405,26 +471,34 @@ struct  tagVARIANT
                 CHAR __RPC_FAR *pcVal;
                 USHORT __RPC_FAR *puiVal;
                 ULONG __RPC_FAR *pulVal;
+                ULONGLONG __RPC_FAR *pullVal;
                 INT __RPC_FAR *pintVal;
                 UINT __RPC_FAR *puintVal;
+                struct __tagBRECORD
+                    {
+                    PVOID pvRecord;
+                    IRecordInfo __RPC_FAR *pRecInfo;
+                    }	__VARIANT_NAME_4;
                 }	__VARIANT_NAME_3;
             }	__VARIANT_NAME_2;
         DECIMAL decVal;
         }	__VARIANT_NAME_1;
     };
-#if defined(_FORCENAMELESSUNION)
-#pragma anon_struct off
-#endif
-
 typedef VARIANT __RPC_FAR *LPVARIANT;
 
 typedef VARIANT VARIANTARG;
 
 typedef VARIANT __RPC_FAR *LPVARIANTARG;
 
-#if defined(_OLEAUT32_)
 /* the following is what MIDL knows how to remote */
-struct  _wireVARIANT
+struct _wireBRECORD
+    {
+    ULONG fFlags;
+    ULONG clSize;
+    IRecordInfo __RPC_FAR *pRecInfo;
+    /* [size_is] */ byte __RPC_FAR *pRecord;
+    };
+struct _wireVARIANT
     {
     DWORD clSize;
     DWORD rpcReserved;
@@ -446,7 +520,8 @@ struct  _wireVARIANT
         /* [case()] */ wireBSTR bstrVal;
         /* [case()] */ IUnknown __RPC_FAR *punkVal;
         /* [case()] */ IDispatch __RPC_FAR *pdispVal;
-        /* [case()] */ wireSAFEARRAY parray;
+        /* [case()] */ wirePSAFEARRAY parray;
+        /* [case()] */ wireBRECORD brecVal;
         /* [case()] */ BYTE __RPC_FAR *pbVal;
         /* [case()] */ SHORT __RPC_FAR *piVal;
         /* [case()] */ LONG __RPC_FAR *plVal;
@@ -459,7 +534,7 @@ struct  _wireVARIANT
         /* [case()] */ wireBSTR __RPC_FAR *pbstrVal;
         /* [case()] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkVal;
         /* [case()] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispVal;
-        /* [case()] */ wireSAFEARRAY __RPC_FAR *pparray;
+        /* [case()] */ wirePSAFEARRAY __RPC_FAR *pparray;
         /* [case()] */ wireVARIANT __RPC_FAR *pvarVal;
         /* [case()] */ CHAR cVal;
         /* [case()] */ USHORT uiVal;
@@ -477,7 +552,6 @@ struct  _wireVARIANT
         /* [case()] */  /* Empty union arm */ 
         }	;
     };
-#endif /* _OLEAUT32_ */
 typedef LONG DISPID;
 
 typedef DISPID MEMBERID;
@@ -497,7 +571,7 @@ enum tagTYPEKIND
 	TKIND_MAX	= TKIND_UNION + 1
     }	TYPEKIND;
 
-typedef struct  tagTYPEDESC
+typedef struct tagTYPEDESC
     {
     /* [switch_is][switch_type] */ union 
         {
@@ -509,14 +583,14 @@ typedef struct  tagTYPEDESC
     VARTYPE vt;
     }	TYPEDESC;
 
-typedef struct  tagARRAYDESC
+typedef struct tagARRAYDESC
     {
     TYPEDESC tdescElem;
     USHORT cDims;
     /* [size_is] */ SAFEARRAYBOUND rgbounds[ 1 ];
     }	ARRAYDESC;
 
-typedef struct  tagPARAMDESCEX
+typedef struct tagPARAMDESCEX
     {
     ULONG cBytes;
     VARIANTARG varDefaultValue;
@@ -524,7 +598,7 @@ typedef struct  tagPARAMDESCEX
 
 typedef struct tagPARAMDESCEX __RPC_FAR *LPPARAMDESCEX;
 
-typedef struct  tagPARAMDESC
+typedef struct tagPARAMDESC
     {
     LPPARAMDESCEX pparamdescex;
     USHORT wParamFlags;
@@ -546,9 +620,11 @@ typedef struct tagPARAMDESC __RPC_FAR *LPPARAMDESC;
 
 #define	PARAMFLAG_FHASDEFAULT	( 0x20 )
 
-typedef struct  tagIDLDESC
+#define	PARAMFLAG_FHASCUSTDATA	( 0x40 )
+
+typedef struct tagIDLDESC
     {
-    ULONG dwReserved;
+    ULONG_PTR dwReserved;
     USHORT wIDLFlags;
     }	IDLDESC;
 
@@ -564,15 +640,17 @@ typedef struct tagIDLDESC __RPC_FAR *LPIDLDESC;
 
 #define	IDLFLAG_FRETVAL	( PARAMFLAG_FRETVAL )
 
+//;begin_internal
 #if 0
 /* the following is what MIDL knows how to remote */
-typedef struct  tagELEMDESC
+typedef struct tagELEMDESC
     {
     TYPEDESC tdesc;
     PARAMDESC paramdesc;
     }	ELEMDESC;
 
 #else /* 0 */
+//;end_internal
 typedef struct tagELEMDESC {
     TYPEDESC tdesc;             /* the type of the element */
     union {
@@ -580,8 +658,10 @@ typedef struct tagELEMDESC {
         PARAMDESC paramdesc;    /* info about the parameter */
     };
 } ELEMDESC, * LPELEMDESC;
+//;begin_internal
 #endif /* 0 */
-typedef struct  tagTYPEATTR
+//;end_internal
+typedef struct tagTYPEATTR
     {
     GUID guid;
     LCID lcid;
@@ -605,7 +685,7 @@ typedef struct  tagTYPEATTR
 
 typedef struct tagTYPEATTR __RPC_FAR *LPTYPEATTR;
 
-typedef struct  tagDISPPARAMS
+typedef struct tagDISPPARAMS
     {
     /* [size_is] */ VARIANTARG __RPC_FAR *rgvarg;
     /* [size_is] */ DISPID __RPC_FAR *rgdispidNamedArgs;
@@ -613,9 +693,10 @@ typedef struct  tagDISPPARAMS
     UINT cNamedArgs;
     }	DISPPARAMS;
 
+//;begin_internal
 #if 0
 /* the following is what MIDL knows how to remote */
-typedef struct  tagEXCEPINFO
+typedef struct tagEXCEPINFO
     {
     WORD wCode;
     WORD wReserved;
@@ -629,6 +710,7 @@ typedef struct  tagEXCEPINFO
     }	EXCEPINFO;
 
 #else /* 0 */
+//;end_internal
 typedef struct tagEXCEPINFO {
     WORD  wCode;
     WORD  wReserved;
@@ -640,7 +722,9 @@ typedef struct tagEXCEPINFO {
     HRESULT (__stdcall *pfnDeferredFillIn)(struct tagEXCEPINFO *);
     SCODE scode;
 } EXCEPINFO, * LPEXCEPINFO;
+//;begin_internal
 #endif /* 0 */
+//;end_internal
 typedef /* [v1_enum] */ 
 enum tagCALLCONV
     {	CC_FASTCALL	= 0,
@@ -673,7 +757,7 @@ enum tagINVOKEKIND
 	INVOKE_PROPERTYPUTREF	= 8
     }	INVOKEKIND;
 
-typedef struct  tagFUNCDESC
+typedef struct tagFUNCDESC
     {
     MEMBERID memid;
     /* [size_is] */ SCODE __RPC_FAR *lprgscode;
@@ -707,7 +791,7 @@ enum tagVARKIND
 
 #define	IMPLTYPEFLAG_FDEFAULTVTABLE	( 0x8 )
 
-typedef struct  tagVARDESC
+typedef struct tagVARDESC
     {
     MEMBERID memid;
     LPOLESTR lpstrSchema;
@@ -738,7 +822,8 @@ enum tagTYPEFLAGS
 	TYPEFLAG_FAGGREGATABLE	= 0x400,
 	TYPEFLAG_FREPLACEABLE	= 0x800,
 	TYPEFLAG_FDISPATCHABLE	= 0x1000,
-	TYPEFLAG_FREVERSEBIND	= 0x2000
+	TYPEFLAG_FREVERSEBIND	= 0x2000,
+	TYPEFLAG_FPROXY	= 0x4000
     }	TYPEFLAGS;
 
 typedef 
@@ -775,14 +860,14 @@ enum tagVARFLAGS
 	VARFLAG_FIMMEDIATEBIND	= 0x1000
     }	VARFLAGS;
 
-typedef /* [wire_marshal] */ struct  tagCLEANLOCALSTORAGE
+typedef /* [wire_marshal] */ struct tagCLEANLOCALSTORAGE
     {
     IUnknown __RPC_FAR *pInterface;
     PVOID pStorage;
     DWORD flags;
     }	CLEANLOCALSTORAGE;
 
-typedef struct  tagCUSTDATAITEM
+typedef struct tagCUSTDATAITEM
     {
     GUID guid;
     VARIANTARG varValue;
@@ -790,7 +875,7 @@ typedef struct  tagCUSTDATAITEM
 
 typedef struct tagCUSTDATAITEM __RPC_FAR *LPCUSTDATAITEM;
 
-typedef struct  tagCUSTDATA
+typedef struct tagCUSTDATA
     {
     DWORD cCustData;
     /* [size_is] */ LPCUSTDATAITEM prgCustData;
@@ -807,13 +892,8 @@ extern RPC_IF_HANDLE IOleAutomationTypes_v1_0_s_ifspec;
 #ifndef __ICreateTypeInfo_INTERFACE_DEFINED__
 #define __ICreateTypeInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICreateTypeInfo
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ICreateTypeInfo */
 /* [local][unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ICreateTypeInfo __RPC_FAR *LPCREATETYPEINFO;
 
@@ -822,7 +902,8 @@ EXTERN_C const IID IID_ICreateTypeInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ICreateTypeInfo : public IUnknown
+    MIDL_INTERFACE("00020405-0000-0000-C000-000000000046")
+    ICreateTypeInfo : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetGuid( 
@@ -1432,13 +1513,8 @@ void __RPC_STUB ICreateTypeInfo_LayOut_Stub(
 #ifndef __ICreateTypeInfo2_INTERFACE_DEFINED__
 #define __ICreateTypeInfo2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICreateTypeInfo2
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ICreateTypeInfo2 */
 /* [local][unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ICreateTypeInfo2 __RPC_FAR *LPCREATETYPEINFO2;
 
@@ -1447,7 +1523,8 @@ EXTERN_C const IID IID_ICreateTypeInfo2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ICreateTypeInfo2 : public ICreateTypeInfo
+    MIDL_INTERFACE("0002040E-0000-0000-C000-000000000046")
+    ICreateTypeInfo2 : public ICreateTypeInfo
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeleteFuncDesc( 
@@ -2049,13 +2126,8 @@ void __RPC_STUB ICreateTypeInfo2_SetName_Stub(
 #ifndef __ICreateTypeLib_INTERFACE_DEFINED__
 #define __ICreateTypeLib_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICreateTypeLib
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ICreateTypeLib */
 /* [local][unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ICreateTypeLib __RPC_FAR *LPCREATETYPELIB;
 
@@ -2064,7 +2136,8 @@ EXTERN_C const IID IID_ICreateTypeLib;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ICreateTypeLib : public IUnknown
+    MIDL_INTERFACE("00020406-0000-0000-C000-000000000046")
+    ICreateTypeLib : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateTypeInfo( 
@@ -2349,13 +2422,8 @@ void __RPC_STUB ICreateTypeLib_SaveAllChanges_Stub(
 #ifndef __ICreateTypeLib2_INTERFACE_DEFINED__
 #define __ICreateTypeLib2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICreateTypeLib2
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ICreateTypeLib2 */
 /* [local][unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ICreateTypeLib2 __RPC_FAR *LPCREATETYPELIB2;
 
@@ -2364,7 +2432,8 @@ EXTERN_C const IID IID_ICreateTypeLib2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ICreateTypeLib2 : public ICreateTypeLib
+    MIDL_INTERFACE("0002040F-0000-0000-C000-000000000046")
+    ICreateTypeLib2 : public ICreateTypeLib
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeleteTypeInfo( 
@@ -2587,13 +2656,8 @@ void __RPC_STUB ICreateTypeLib2_SetHelpStringDll_Stub(
 #ifndef __IDispatch_INTERFACE_DEFINED__
 #define __IDispatch_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDispatch
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IDispatch */
 /* [unique][uuid][object] */ 
-
 
 typedef /* [unique] */ IDispatch __RPC_FAR *LPDISPATCH;
 
@@ -2624,13 +2688,17 @@ typedef /* [unique] */ IDispatch __RPC_FAR *LPDISPATCH;
 /* The range -500 through -999 is reserved for Controls */
 /* The range 0x80010000 through 0x8001FFFF is reserved for Controls */
 /* The range -5000 through -5499 is reserved for ActiveX Accessability */
+/* The range -2000 through -2499 is reserved for VB5 */
+/* The range -3900 through -3999 is reserved for Forms */
+/* The range -5500 through -5550 is reserved for Forms */
 /* The remainder of the negative DISPIDs are reserved for future use */
 
 EXTERN_C const IID IID_IDispatch;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IDispatch : public IUnknown
+    MIDL_INTERFACE("00020400-0000-0000-C000-000000000046")
+    IDispatch : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount( 
@@ -2819,13 +2887,8 @@ void __RPC_STUB IDispatch_RemoteInvoke_Stub(
 #ifndef __IEnumVARIANT_INTERFACE_DEFINED__
 #define __IEnumVARIANT_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumVARIANT
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface IEnumVARIANT */
 /* [unique][uuid][object] */ 
-
 
 typedef /* [unique] */ IEnumVARIANT __RPC_FAR *LPENUMVARIANT;
 
@@ -2834,7 +2897,8 @@ EXTERN_C const IID IID_IEnumVARIANT;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IEnumVARIANT : public IUnknown
+    MIDL_INTERFACE("00020404-0000-0000-C000-000000000046")
+    IEnumVARIANT : public IUnknown
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
@@ -2984,13 +3048,8 @@ void __RPC_STUB IEnumVARIANT_Clone_Stub(
 #ifndef __ITypeComp_INTERFACE_DEFINED__
 #define __ITypeComp_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITypeComp
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ITypeComp */
 /* [unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ITypeComp __RPC_FAR *LPTYPECOMP;
 
@@ -3018,7 +3077,8 @@ EXTERN_C const IID IID_ITypeComp;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ITypeComp : public IUnknown
+    MIDL_INTERFACE("00020403-0000-0000-C000-000000000046")
+    ITypeComp : public IUnknown
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Bind( 
@@ -3147,13 +3207,8 @@ void __RPC_STUB ITypeComp_RemoteBindType_Stub(
 #ifndef __ITypeInfo_INTERFACE_DEFINED__
 #define __ITypeInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITypeInfo
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ITypeInfo */
 /* [unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ITypeInfo __RPC_FAR *LPTYPEINFO;
 
@@ -3162,7 +3217,8 @@ EXTERN_C const IID IID_ITypeInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ITypeInfo : public IUnknown
+    MIDL_INTERFACE("00020401-0000-0000-C000-000000000046")
+    ITypeInfo : public IUnknown
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetTypeAttr( 
@@ -3193,7 +3249,7 @@ EXTERN_C const IID IID_ITypeInfo;
             /* [in] */ UINT index,
             /* [out] */ INT __RPC_FAR *pImplTypeFlags) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames( 
+        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetIDsOfNames( 
             /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
             /* [in] */ UINT cNames,
             /* [size_is][out] */ MEMBERID __RPC_FAR *pMemId) = 0;
@@ -3306,7 +3362,7 @@ EXTERN_C const IID IID_ITypeInfo;
             /* [in] */ UINT index,
             /* [out] */ INT __RPC_FAR *pImplTypeFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITypeInfo __RPC_FAR * This,
             /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
             /* [in] */ UINT cNames,
@@ -3558,35 +3614,22 @@ void __RPC_STUB ITypeInfo_GetImplTypeFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITypeInfo_GetIDsOfNames_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-    /* [in] */ UINT cNames,
-    /* [size_is][out] */ MEMBERID __RPC_FAR *pMemId);
+/* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_LocalGetIDsOfNames_Proxy( 
+    ITypeInfo __RPC_FAR * This);
 
 
-void __RPC_STUB ITypeInfo_GetIDsOfNames_Stub(
+void __RPC_STUB ITypeInfo_LocalGetIDsOfNames_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_RemoteInvoke_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pIUnk,
-    /* [in] */ MEMBERID memid,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DISPPARAMS __RPC_FAR *pDispParams,
-    /* [out] */ VARIANT __RPC_FAR *pVarResult,
-    /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-    /* [out] */ UINT __RPC_FAR *pArgErr,
-    /* [in] */ UINT cVarRef,
-    /* [size_is][in] */ UINT __RPC_FAR *rgVarRefIdx,
-    /* [size_is][out][in] */ VARIANTARG __RPC_FAR *rgVarRef);
+/* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_LocalInvoke_Proxy( 
+    ITypeInfo __RPC_FAR * This);
 
 
-void __RPC_STUB ITypeInfo_RemoteInvoke_Stub(
+void __RPC_STUB ITypeInfo_LocalInvoke_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -3730,13 +3773,8 @@ void __RPC_STUB ITypeInfo_LocalReleaseVarDesc_Stub(
 #ifndef __ITypeInfo2_INTERFACE_DEFINED__
 #define __ITypeInfo2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITypeInfo2
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ITypeInfo2 */
 /* [unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ITypeInfo2 __RPC_FAR *LPTYPEINFO2;
 
@@ -3745,7 +3783,8 @@ EXTERN_C const IID IID_ITypeInfo2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ITypeInfo2 : public ITypeInfo
+    MIDL_INTERFACE("00020412-0000-0000-C000-000000000046")
+    ITypeInfo2 : public ITypeInfo
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTypeKind( 
@@ -3869,7 +3908,7 @@ EXTERN_C const IID IID_ITypeInfo2;
             /* [in] */ UINT index,
             /* [out] */ INT __RPC_FAR *pImplTypeFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITypeInfo2 __RPC_FAR * This,
             /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
             /* [in] */ UINT cNames,
@@ -4365,19 +4404,15 @@ void __RPC_STUB ITypeInfo2_GetAllImplTypeCustData_Stub(
 #ifndef __ITypeLib_INTERFACE_DEFINED__
 #define __ITypeLib_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITypeLib
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ITypeLib */
 /* [unique][uuid][object] */ 
-
 
 typedef /* [v1_enum] */ 
 enum tagSYSKIND
     {	SYS_WIN16	= 0,
 	SYS_WIN32	= SYS_WIN16 + 1,
-	SYS_MAC	= SYS_WIN32 + 1
+	SYS_MAC	= SYS_WIN32 + 1,
+	SYS_WIN64	= SYS_WIN32
     }	SYSKIND;
 
 typedef /* [v1_enum] */ 
@@ -4390,7 +4425,7 @@ enum tagLIBFLAGS
 
 typedef /* [unique] */ ITypeLib __RPC_FAR *LPTYPELIB;
 
-typedef struct  tagTLIBATTR
+typedef struct tagTLIBATTR
     {
     GUID guid;
     LCID lcid;
@@ -4407,7 +4442,8 @@ EXTERN_C const IID IID_ITypeLib;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ITypeLib : public IUnknown
+    MIDL_INTERFACE("00020402-0000-0000-C000-000000000046")
+    ITypeLib : public IUnknown
     {
     public:
         virtual /* [local] */ UINT STDMETHODCALLTYPE GetTypeInfoCount( void) = 0;
@@ -4726,13 +4762,8 @@ void __RPC_STUB ITypeLib_LocalReleaseTLibAttr_Stub(
 #ifndef __ITypeLib2_INTERFACE_DEFINED__
 #define __ITypeLib2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITypeLib2
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ITypeLib2 */
 /* [unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ITypeLib2 __RPC_FAR *LPTYPELIB2;
 
@@ -4741,7 +4772,8 @@ EXTERN_C const IID IID_ITypeLib2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ITypeLib2 : public ITypeLib
+    MIDL_INTERFACE("00020411-0000-0000-C000-000000000046")
+    ITypeLib2 : public ITypeLib
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCustData( 
@@ -4990,13 +5022,8 @@ void __RPC_STUB ITypeLib2_GetAllCustData_Stub(
 #ifndef __ITypeChangeEvents_INTERFACE_DEFINED__
 #define __ITypeChangeEvents_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITypeChangeEvents
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ITypeChangeEvents */
 /* [local][unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ITypeChangeEvents __RPC_FAR *LPTYPECHANGEEVENTS;
 
@@ -5017,7 +5044,8 @@ EXTERN_C const IID IID_ITypeChangeEvents;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ITypeChangeEvents : public IUnknown
+    MIDL_INTERFACE("00020410-0000-0000-C000-000000000046")
+    ITypeChangeEvents : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RequestTypeChange( 
@@ -5135,13 +5163,8 @@ void __RPC_STUB ITypeChangeEvents_AfterTypeChange_Stub(
 #ifndef __IErrorInfo_INTERFACE_DEFINED__
 #define __IErrorInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IErrorInfo
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
-/* [local][unique][uuid][object] */ 
-
+/* interface IErrorInfo */
+/* [unique][uuid][object] */ 
 
 typedef /* [unique] */ IErrorInfo __RPC_FAR *LPERRORINFO;
 
@@ -5150,7 +5173,8 @@ EXTERN_C const IID IID_IErrorInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface IErrorInfo : public IUnknown
+    MIDL_INTERFACE("1CF2B120-547D-101B-8E65-08002B2BD119")
+    IErrorInfo : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetGUID( 
@@ -5319,13 +5343,8 @@ void __RPC_STUB IErrorInfo_GetHelpContext_Stub(
 #ifndef __ICreateErrorInfo_INTERFACE_DEFINED__
 #define __ICreateErrorInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICreateErrorInfo
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
-/* [local][unique][uuid][object] */ 
-
+/* interface ICreateErrorInfo */
+/* [unique][uuid][object] */ 
 
 typedef /* [unique] */ ICreateErrorInfo __RPC_FAR *LPCREATEERRORINFO;
 
@@ -5334,7 +5353,8 @@ EXTERN_C const IID IID_ICreateErrorInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ICreateErrorInfo : public IUnknown
+    MIDL_INTERFACE("22F03340-547D-101B-8E65-08002B2BD119")
+    ICreateErrorInfo : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetGUID( 
@@ -5503,13 +5523,8 @@ void __RPC_STUB ICreateErrorInfo_SetHelpContext_Stub(
 #ifndef __ISupportErrorInfo_INTERFACE_DEFINED__
 #define __ISupportErrorInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ISupportErrorInfo
- * at Sat Jul 13 21:56:52 1996
- * using MIDL 3.00.39
- ****************************************/
+/* interface ISupportErrorInfo */
 /* [unique][uuid][object] */ 
-
 
 typedef /* [unique] */ ISupportErrorInfo __RPC_FAR *LPSUPPORTERRORINFO;
 
@@ -5518,7 +5533,8 @@ EXTERN_C const IID IID_ISupportErrorInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    interface ISupportErrorInfo : public IUnknown
+    MIDL_INTERFACE("DF0B3D60-548F-101B-8E65-08002B2BD119")
+    ISupportErrorInfo : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo( 
@@ -5595,6 +5611,990 @@ void __RPC_STUB ISupportErrorInfo_InterfaceSupportsErrorInfo_Stub(
 
 #endif 	/* __ISupportErrorInfo_INTERFACE_DEFINED__ */
 
+
+#ifndef __ITypeFactory_INTERFACE_DEFINED__
+#define __ITypeFactory_INTERFACE_DEFINED__
+
+/* interface ITypeFactory */
+/* [uuid][object] */ 
+
+
+EXTERN_C const IID IID_ITypeFactory;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("0000002E-0000-0000-C000-000000000046")
+    ITypeFactory : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE CreateFromTypeInfo( 
+            /* [in] */ ITypeInfo __RPC_FAR *pTypeInfo,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct ITypeFactoryVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            ITypeFactory __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            ITypeFactory __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            ITypeFactory __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateFromTypeInfo )( 
+            ITypeFactory __RPC_FAR * This,
+            /* [in] */ ITypeInfo __RPC_FAR *pTypeInfo,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv);
+        
+        END_INTERFACE
+    } ITypeFactoryVtbl;
+
+    interface ITypeFactory
+    {
+        CONST_VTBL struct ITypeFactoryVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define ITypeFactory_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define ITypeFactory_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define ITypeFactory_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define ITypeFactory_CreateFromTypeInfo(This,pTypeInfo,riid,ppv)	\
+    (This)->lpVtbl -> CreateFromTypeInfo(This,pTypeInfo,riid,ppv)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE ITypeFactory_CreateFromTypeInfo_Proxy( 
+    ITypeFactory __RPC_FAR * This,
+    /* [in] */ ITypeInfo __RPC_FAR *pTypeInfo,
+    /* [in] */ REFIID riid,
+    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv);
+
+
+void __RPC_STUB ITypeFactory_CreateFromTypeInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __ITypeFactory_INTERFACE_DEFINED__ */
+
+
+#ifndef __ITypeMarshal_INTERFACE_DEFINED__
+#define __ITypeMarshal_INTERFACE_DEFINED__
+
+/* interface ITypeMarshal */
+/* [uuid][object][local] */ 
+
+
+EXTERN_C const IID IID_ITypeMarshal;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("0000002D-0000-0000-C000-000000000046")
+    ITypeMarshal : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Size( 
+            /* [in] */ PVOID pvType,
+            /* [in] */ DWORD dwDestContext,
+            /* [in] */ PVOID pvDestContext,
+            /* [out] */ ULONG __RPC_FAR *pSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Marshal( 
+            /* [in] */ PVOID pvType,
+            /* [in] */ DWORD dwDestContext,
+            /* [in] */ PVOID pvDestContext,
+            /* [in] */ ULONG cbBufferLength,
+            /* [out] */ BYTE __RPC_FAR *pBuffer,
+            /* [out] */ ULONG __RPC_FAR *pcbWritten) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Unmarshal( 
+            /* [out] */ PVOID pvType,
+            /* [in] */ DWORD dwFlags,
+            /* [in] */ ULONG cbBufferLength,
+            /* [in] */ BYTE __RPC_FAR *pBuffer,
+            /* [out] */ ULONG __RPC_FAR *pcbRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Free( 
+            /* [in] */ PVOID pvType) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct ITypeMarshalVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            ITypeMarshal __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            ITypeMarshal __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            ITypeMarshal __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Size )( 
+            ITypeMarshal __RPC_FAR * This,
+            /* [in] */ PVOID pvType,
+            /* [in] */ DWORD dwDestContext,
+            /* [in] */ PVOID pvDestContext,
+            /* [out] */ ULONG __RPC_FAR *pSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Marshal )( 
+            ITypeMarshal __RPC_FAR * This,
+            /* [in] */ PVOID pvType,
+            /* [in] */ DWORD dwDestContext,
+            /* [in] */ PVOID pvDestContext,
+            /* [in] */ ULONG cbBufferLength,
+            /* [out] */ BYTE __RPC_FAR *pBuffer,
+            /* [out] */ ULONG __RPC_FAR *pcbWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unmarshal )( 
+            ITypeMarshal __RPC_FAR * This,
+            /* [out] */ PVOID pvType,
+            /* [in] */ DWORD dwFlags,
+            /* [in] */ ULONG cbBufferLength,
+            /* [in] */ BYTE __RPC_FAR *pBuffer,
+            /* [out] */ ULONG __RPC_FAR *pcbRead);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Free )( 
+            ITypeMarshal __RPC_FAR * This,
+            /* [in] */ PVOID pvType);
+        
+        END_INTERFACE
+    } ITypeMarshalVtbl;
+
+    interface ITypeMarshal
+    {
+        CONST_VTBL struct ITypeMarshalVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define ITypeMarshal_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define ITypeMarshal_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define ITypeMarshal_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define ITypeMarshal_Size(This,pvType,dwDestContext,pvDestContext,pSize)	\
+    (This)->lpVtbl -> Size(This,pvType,dwDestContext,pvDestContext,pSize)
+
+#define ITypeMarshal_Marshal(This,pvType,dwDestContext,pvDestContext,cbBufferLength,pBuffer,pcbWritten)	\
+    (This)->lpVtbl -> Marshal(This,pvType,dwDestContext,pvDestContext,cbBufferLength,pBuffer,pcbWritten)
+
+#define ITypeMarshal_Unmarshal(This,pvType,dwFlags,cbBufferLength,pBuffer,pcbRead)	\
+    (This)->lpVtbl -> Unmarshal(This,pvType,dwFlags,cbBufferLength,pBuffer,pcbRead)
+
+#define ITypeMarshal_Free(This,pvType)	\
+    (This)->lpVtbl -> Free(This,pvType)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE ITypeMarshal_Size_Proxy( 
+    ITypeMarshal __RPC_FAR * This,
+    /* [in] */ PVOID pvType,
+    /* [in] */ DWORD dwDestContext,
+    /* [in] */ PVOID pvDestContext,
+    /* [out] */ ULONG __RPC_FAR *pSize);
+
+
+void __RPC_STUB ITypeMarshal_Size_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE ITypeMarshal_Marshal_Proxy( 
+    ITypeMarshal __RPC_FAR * This,
+    /* [in] */ PVOID pvType,
+    /* [in] */ DWORD dwDestContext,
+    /* [in] */ PVOID pvDestContext,
+    /* [in] */ ULONG cbBufferLength,
+    /* [out] */ BYTE __RPC_FAR *pBuffer,
+    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+
+
+void __RPC_STUB ITypeMarshal_Marshal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE ITypeMarshal_Unmarshal_Proxy( 
+    ITypeMarshal __RPC_FAR * This,
+    /* [out] */ PVOID pvType,
+    /* [in] */ DWORD dwFlags,
+    /* [in] */ ULONG cbBufferLength,
+    /* [in] */ BYTE __RPC_FAR *pBuffer,
+    /* [out] */ ULONG __RPC_FAR *pcbRead);
+
+
+void __RPC_STUB ITypeMarshal_Unmarshal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE ITypeMarshal_Free_Proxy( 
+    ITypeMarshal __RPC_FAR * This,
+    /* [in] */ PVOID pvType);
+
+
+void __RPC_STUB ITypeMarshal_Free_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __ITypeMarshal_INTERFACE_DEFINED__ */
+
+
+#ifndef __IRecordInfo_INTERFACE_DEFINED__
+#define __IRecordInfo_INTERFACE_DEFINED__
+
+/* interface IRecordInfo */
+/* [uuid][object][local] */ 
+
+typedef /* [unique] */ IRecordInfo __RPC_FAR *LPRECORDINFO;
+
+
+EXTERN_C const IID IID_IRecordInfo;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("0000002F-0000-0000-C000-000000000046")
+    IRecordInfo : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE RecordInit( 
+            /* [out] */ PVOID pvNew) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RecordClear( 
+            /* [in] */ PVOID pvExisting) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RecordCopy( 
+            /* [in] */ PVOID pvExisting,
+            /* [out] */ PVOID pvNew) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetGuid( 
+            /* [out] */ GUID __RPC_FAR *pguid) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetName( 
+            /* [out] */ BSTR __RPC_FAR *pbstrName) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSize( 
+            /* [out] */ ULONG __RPC_FAR *pcbSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetTypeInfo( 
+            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTypeInfo) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetField( 
+            /* [in] */ PVOID pvData,
+            /* [in] */ LPCOLESTR szFieldName,
+            /* [out] */ VARIANT __RPC_FAR *pvarField) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFieldNoCopy( 
+            /* [in] */ PVOID pvData,
+            /* [in] */ LPCOLESTR szFieldName,
+            /* [out] */ VARIANT __RPC_FAR *pvarField,
+            /* [out] */ PVOID __RPC_FAR *ppvDataCArray) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PutField( 
+            /* [in] */ ULONG wFlags,
+            /* [out][in] */ PVOID pvData,
+            /* [in] */ LPCOLESTR szFieldName,
+            /* [in] */ VARIANT __RPC_FAR *pvarField) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PutFieldNoCopy( 
+            /* [in] */ ULONG wFlags,
+            /* [out][in] */ PVOID pvData,
+            /* [in] */ LPCOLESTR szFieldName,
+            /* [in] */ VARIANT __RPC_FAR *pvarField) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFieldNames( 
+            /* [out][in] */ ULONG __RPC_FAR *pcNames,
+            /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames) = 0;
+        
+        virtual BOOL STDMETHODCALLTYPE IsMatchingType( 
+            /* [in] */ IRecordInfo __RPC_FAR *pRecordInfo) = 0;
+        
+        virtual PVOID STDMETHODCALLTYPE RecordCreate( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RecordCreateCopy( 
+            /* [in] */ PVOID pvSource,
+            /* [out] */ PVOID __RPC_FAR *ppvDest) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RecordDestroy( 
+            /* [in] */ PVOID pvRecord) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IRecordInfoVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IRecordInfo __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IRecordInfo __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordInit )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [out] */ PVOID pvNew);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordClear )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ PVOID pvExisting);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordCopy )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ PVOID pvExisting,
+            /* [out] */ PVOID pvNew);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGuid )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [out] */ GUID __RPC_FAR *pguid);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [out] */ BSTR __RPC_FAR *pbstrName);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [out] */ ULONG __RPC_FAR *pcbSize);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTypeInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetField )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ PVOID pvData,
+            /* [in] */ LPCOLESTR szFieldName,
+            /* [out] */ VARIANT __RPC_FAR *pvarField);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFieldNoCopy )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ PVOID pvData,
+            /* [in] */ LPCOLESTR szFieldName,
+            /* [out] */ VARIANT __RPC_FAR *pvarField,
+            /* [out] */ PVOID __RPC_FAR *ppvDataCArray);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutField )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ ULONG wFlags,
+            /* [out][in] */ PVOID pvData,
+            /* [in] */ LPCOLESTR szFieldName,
+            /* [in] */ VARIANT __RPC_FAR *pvarField);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFieldNoCopy )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ ULONG wFlags,
+            /* [out][in] */ PVOID pvData,
+            /* [in] */ LPCOLESTR szFieldName,
+            /* [in] */ VARIANT __RPC_FAR *pvarField);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFieldNames )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [out][in] */ ULONG __RPC_FAR *pcNames,
+            /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames);
+        
+        BOOL ( STDMETHODCALLTYPE __RPC_FAR *IsMatchingType )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ IRecordInfo __RPC_FAR *pRecordInfo);
+        
+        PVOID ( STDMETHODCALLTYPE __RPC_FAR *RecordCreate )( 
+            IRecordInfo __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordCreateCopy )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ PVOID pvSource,
+            /* [out] */ PVOID __RPC_FAR *ppvDest);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordDestroy )( 
+            IRecordInfo __RPC_FAR * This,
+            /* [in] */ PVOID pvRecord);
+        
+        END_INTERFACE
+    } IRecordInfoVtbl;
+
+    interface IRecordInfo
+    {
+        CONST_VTBL struct IRecordInfoVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IRecordInfo_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IRecordInfo_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IRecordInfo_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IRecordInfo_RecordInit(This,pvNew)	\
+    (This)->lpVtbl -> RecordInit(This,pvNew)
+
+#define IRecordInfo_RecordClear(This,pvExisting)	\
+    (This)->lpVtbl -> RecordClear(This,pvExisting)
+
+#define IRecordInfo_RecordCopy(This,pvExisting,pvNew)	\
+    (This)->lpVtbl -> RecordCopy(This,pvExisting,pvNew)
+
+#define IRecordInfo_GetGuid(This,pguid)	\
+    (This)->lpVtbl -> GetGuid(This,pguid)
+
+#define IRecordInfo_GetName(This,pbstrName)	\
+    (This)->lpVtbl -> GetName(This,pbstrName)
+
+#define IRecordInfo_GetSize(This,pcbSize)	\
+    (This)->lpVtbl -> GetSize(This,pcbSize)
+
+#define IRecordInfo_GetTypeInfo(This,ppTypeInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,ppTypeInfo)
+
+#define IRecordInfo_GetField(This,pvData,szFieldName,pvarField)	\
+    (This)->lpVtbl -> GetField(This,pvData,szFieldName,pvarField)
+
+#define IRecordInfo_GetFieldNoCopy(This,pvData,szFieldName,pvarField,ppvDataCArray)	\
+    (This)->lpVtbl -> GetFieldNoCopy(This,pvData,szFieldName,pvarField,ppvDataCArray)
+
+#define IRecordInfo_PutField(This,wFlags,pvData,szFieldName,pvarField)	\
+    (This)->lpVtbl -> PutField(This,wFlags,pvData,szFieldName,pvarField)
+
+#define IRecordInfo_PutFieldNoCopy(This,wFlags,pvData,szFieldName,pvarField)	\
+    (This)->lpVtbl -> PutFieldNoCopy(This,wFlags,pvData,szFieldName,pvarField)
+
+#define IRecordInfo_GetFieldNames(This,pcNames,rgBstrNames)	\
+    (This)->lpVtbl -> GetFieldNames(This,pcNames,rgBstrNames)
+
+#define IRecordInfo_IsMatchingType(This,pRecordInfo)	\
+    (This)->lpVtbl -> IsMatchingType(This,pRecordInfo)
+
+#define IRecordInfo_RecordCreate(This)	\
+    (This)->lpVtbl -> RecordCreate(This)
+
+#define IRecordInfo_RecordCreateCopy(This,pvSource,ppvDest)	\
+    (This)->lpVtbl -> RecordCreateCopy(This,pvSource,ppvDest)
+
+#define IRecordInfo_RecordDestroy(This,pvRecord)	\
+    (This)->lpVtbl -> RecordDestroy(This,pvRecord)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_RecordInit_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [out] */ PVOID pvNew);
+
+
+void __RPC_STUB IRecordInfo_RecordInit_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_RecordClear_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [in] */ PVOID pvExisting);
+
+
+void __RPC_STUB IRecordInfo_RecordClear_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_RecordCopy_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [in] */ PVOID pvExisting,
+    /* [out] */ PVOID pvNew);
+
+
+void __RPC_STUB IRecordInfo_RecordCopy_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_GetGuid_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [out] */ GUID __RPC_FAR *pguid);
+
+
+void __RPC_STUB IRecordInfo_GetGuid_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_GetName_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [out] */ BSTR __RPC_FAR *pbstrName);
+
+
+void __RPC_STUB IRecordInfo_GetName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_GetSize_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [out] */ ULONG __RPC_FAR *pcbSize);
+
+
+void __RPC_STUB IRecordInfo_GetSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_GetTypeInfo_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTypeInfo);
+
+
+void __RPC_STUB IRecordInfo_GetTypeInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_GetField_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [in] */ PVOID pvData,
+    /* [in] */ LPCOLESTR szFieldName,
+    /* [out] */ VARIANT __RPC_FAR *pvarField);
+
+
+void __RPC_STUB IRecordInfo_GetField_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_GetFieldNoCopy_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [in] */ PVOID pvData,
+    /* [in] */ LPCOLESTR szFieldName,
+    /* [out] */ VARIANT __RPC_FAR *pvarField,
+    /* [out] */ PVOID __RPC_FAR *ppvDataCArray);
+
+
+void __RPC_STUB IRecordInfo_GetFieldNoCopy_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_PutField_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [in] */ ULONG wFlags,
+    /* [out][in] */ PVOID pvData,
+    /* [in] */ LPCOLESTR szFieldName,
+    /* [in] */ VARIANT __RPC_FAR *pvarField);
+
+
+void __RPC_STUB IRecordInfo_PutField_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_PutFieldNoCopy_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [in] */ ULONG wFlags,
+    /* [out][in] */ PVOID pvData,
+    /* [in] */ LPCOLESTR szFieldName,
+    /* [in] */ VARIANT __RPC_FAR *pvarField);
+
+
+void __RPC_STUB IRecordInfo_PutFieldNoCopy_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_GetFieldNames_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [out][in] */ ULONG __RPC_FAR *pcNames,
+    /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames);
+
+
+void __RPC_STUB IRecordInfo_GetFieldNames_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+BOOL STDMETHODCALLTYPE IRecordInfo_IsMatchingType_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [in] */ IRecordInfo __RPC_FAR *pRecordInfo);
+
+
+void __RPC_STUB IRecordInfo_IsMatchingType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+PVOID STDMETHODCALLTYPE IRecordInfo_RecordCreate_Proxy( 
+    IRecordInfo __RPC_FAR * This);
+
+
+void __RPC_STUB IRecordInfo_RecordCreate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_RecordCreateCopy_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [in] */ PVOID pvSource,
+    /* [out] */ PVOID __RPC_FAR *ppvDest);
+
+
+void __RPC_STUB IRecordInfo_RecordCreateCopy_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IRecordInfo_RecordDestroy_Proxy( 
+    IRecordInfo __RPC_FAR * This,
+    /* [in] */ PVOID pvRecord);
+
+
+void __RPC_STUB IRecordInfo_RecordDestroy_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IRecordInfo_INTERFACE_DEFINED__ */
+
+
+#ifndef __IErrorLog_INTERFACE_DEFINED__
+#define __IErrorLog_INTERFACE_DEFINED__
+
+/* interface IErrorLog */
+/* [unique][uuid][object] */ 
+
+typedef IErrorLog __RPC_FAR *LPERRORLOG;
+
+
+EXTERN_C const IID IID_IErrorLog;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("3127CA40-446E-11CE-8135-00AA004BB851")
+    IErrorLog : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE AddError( 
+            /* [in] */ LPCOLESTR pszPropName,
+            /* [in] */ EXCEPINFO __RPC_FAR *pExcepInfo) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IErrorLogVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IErrorLog __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IErrorLog __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IErrorLog __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddError )( 
+            IErrorLog __RPC_FAR * This,
+            /* [in] */ LPCOLESTR pszPropName,
+            /* [in] */ EXCEPINFO __RPC_FAR *pExcepInfo);
+        
+        END_INTERFACE
+    } IErrorLogVtbl;
+
+    interface IErrorLog
+    {
+        CONST_VTBL struct IErrorLogVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IErrorLog_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IErrorLog_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IErrorLog_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IErrorLog_AddError(This,pszPropName,pExcepInfo)	\
+    (This)->lpVtbl -> AddError(This,pszPropName,pExcepInfo)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IErrorLog_AddError_Proxy( 
+    IErrorLog __RPC_FAR * This,
+    /* [in] */ LPCOLESTR pszPropName,
+    /* [in] */ EXCEPINFO __RPC_FAR *pExcepInfo);
+
+
+void __RPC_STUB IErrorLog_AddError_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IErrorLog_INTERFACE_DEFINED__ */
+
+
+#ifndef __IPropertyBag_INTERFACE_DEFINED__
+#define __IPropertyBag_INTERFACE_DEFINED__
+
+/* interface IPropertyBag */
+/* [unique][uuid][object] */ 
+
+typedef IPropertyBag __RPC_FAR *LPPROPERTYBAG;
+
+
+EXTERN_C const IID IID_IPropertyBag;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("55272A00-42CB-11CE-8135-00AA004BB851")
+    IPropertyBag : public IUnknown
+    {
+    public:
+        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read( 
+            /* [in] */ LPCOLESTR pszPropName,
+            /* [out][in] */ VARIANT __RPC_FAR *pVar,
+            /* [in] */ IErrorLog __RPC_FAR *pErrorLog) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Write( 
+            /* [in] */ LPCOLESTR pszPropName,
+            /* [in] */ VARIANT __RPC_FAR *pVar) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IPropertyBagVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IPropertyBag __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IPropertyBag __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IPropertyBag __RPC_FAR * This);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
+            IPropertyBag __RPC_FAR * This,
+            /* [in] */ LPCOLESTR pszPropName,
+            /* [out][in] */ VARIANT __RPC_FAR *pVar,
+            /* [in] */ IErrorLog __RPC_FAR *pErrorLog);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
+            IPropertyBag __RPC_FAR * This,
+            /* [in] */ LPCOLESTR pszPropName,
+            /* [in] */ VARIANT __RPC_FAR *pVar);
+        
+        END_INTERFACE
+    } IPropertyBagVtbl;
+
+    interface IPropertyBag
+    {
+        CONST_VTBL struct IPropertyBagVtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IPropertyBag_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IPropertyBag_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IPropertyBag_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IPropertyBag_Read(This,pszPropName,pVar,pErrorLog)	\
+    (This)->lpVtbl -> Read(This,pszPropName,pVar,pErrorLog)
+
+#define IPropertyBag_Write(This,pszPropName,pVar)	\
+    (This)->lpVtbl -> Write(This,pszPropName,pVar)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [call_as] */ HRESULT STDMETHODCALLTYPE IPropertyBag_RemoteRead_Proxy( 
+    IPropertyBag __RPC_FAR * This,
+    /* [in] */ LPCOLESTR pszPropName,
+    /* [out] */ VARIANT __RPC_FAR *pVar,
+    /* [in] */ IErrorLog __RPC_FAR *pErrorLog,
+    /* [in] */ DWORD varType,
+    /* [in] */ IUnknown __RPC_FAR *pUnkObj);
+
+
+void __RPC_STUB IPropertyBag_RemoteRead_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IPropertyBag_Write_Proxy( 
+    IPropertyBag __RPC_FAR * This,
+    /* [in] */ LPCOLESTR pszPropName,
+    /* [in] */ VARIANT __RPC_FAR *pVar);
+
+
+void __RPC_STUB IPropertyBag_Write_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IPropertyBag_INTERFACE_DEFINED__ */
+
+
+/* interface __MIDL_itf_oaidl_0103 */
+/* [local] */ 
+
+#if ( _MSC_VER >= 800 )
+#if _MSC_VER >= 1200
+#pragma warning(pop)
+#else
+#pragma warning(default:4201) /* Nameless struct/union */
+#endif
+#endif
+
+
+extern RPC_IF_HANDLE __MIDL_itf_oaidl_0103_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_oaidl_0103_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
@@ -5737,6 +6737,16 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
     /* [in] */ UINT cMaxNames,
     /* [out] */ UINT __RPC_FAR *pcNames);
 
+/* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetIDsOfNames_Proxy( 
+    ITypeInfo __RPC_FAR * This,
+    /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+    /* [in] */ UINT cNames,
+    /* [size_is][out] */ MEMBERID __RPC_FAR *pMemId);
+
+
+/* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetIDsOfNames_Stub( 
+    ITypeInfo __RPC_FAR * This);
+
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_Invoke_Proxy( 
     ITypeInfo __RPC_FAR * This,
     /* [in] */ PVOID pvInstance,
@@ -5748,18 +6758,8 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
     /* [out] */ UINT __RPC_FAR *puArgErr);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_Invoke_Stub( 
-    ITypeInfo __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pIUnk,
-    /* [in] */ MEMBERID memid,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DISPPARAMS __RPC_FAR *pDispParams,
-    /* [out] */ VARIANT __RPC_FAR *pVarResult,
-    /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-    /* [out] */ UINT __RPC_FAR *pArgErr,
-    /* [in] */ UINT cVarRef,
-    /* [size_is][in] */ UINT __RPC_FAR *rgVarRefIdx,
-    /* [size_is][out][in] */ VARIANTARG __RPC_FAR *rgVarRef);
+/* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_Invoke_Stub( 
+    ITypeInfo __RPC_FAR * This);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetDocumentation_Proxy( 
     ITypeInfo __RPC_FAR * This,
@@ -5977,6 +6977,21 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
     /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
     /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll);
 
+/* [local] */ HRESULT STDMETHODCALLTYPE IPropertyBag_Read_Proxy( 
+    IPropertyBag __RPC_FAR * This,
+    /* [in] */ LPCOLESTR pszPropName,
+    /* [out][in] */ VARIANT __RPC_FAR *pVar,
+    /* [in] */ IErrorLog __RPC_FAR *pErrorLog);
+
+
+/* [call_as] */ HRESULT STDMETHODCALLTYPE IPropertyBag_Read_Stub( 
+    IPropertyBag __RPC_FAR * This,
+    /* [in] */ LPCOLESTR pszPropName,
+    /* [out] */ VARIANT __RPC_FAR *pVar,
+    /* [in] */ IErrorLog __RPC_FAR *pErrorLog,
+    /* [in] */ DWORD varType,
+    /* [in] */ IUnknown __RPC_FAR *pUnkObj);
+
 
 
 /* end of Additional Prototypes */
@@ -5986,4 +7001,6 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 #endif
-#pragma option -b.
+
+
+#pragma option pop /*P_O_Pop*/

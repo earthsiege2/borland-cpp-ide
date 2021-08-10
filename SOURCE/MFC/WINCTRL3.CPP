@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -38,7 +38,11 @@ _AFX_CHECKLIST_STATE::_AFX_CHECKLIST_STATE()
 {
 	CBitmap bitmap;
 
+#ifndef _AFX_NO_CTL3D_SUPPORT
 	if (afxData.bWin4 || AfxGetCtl3dState()->m_pfnSubclassDlgEx != NULL)
+#else
+	if (afxData.bWin4)
+#endif
 		VERIFY(bitmap.LoadBitmap(AFX_IDB_CHECKLISTBOX_95));
 	else
 		VERIFY(bitmap.LoadBitmap(AFX_IDB_CHECKLISTBOX_NT));
@@ -107,8 +111,9 @@ BOOL CCheckListBox::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UI
 
 void CCheckListBox::SetCheckStyle(UINT nStyle)
 {
-	ASSERT(nStyle == 0 | nStyle == BS_CHECKBOX | nStyle == BS_AUTOCHECKBOX |
-		nStyle == BS_AUTO3STATE | nStyle == BS_3STATE);
+	ASSERT(nStyle == 0 || nStyle == BS_CHECKBOX ||
+		nStyle == BS_AUTOCHECKBOX || nStyle == BS_AUTO3STATE ||
+		nStyle == BS_3STATE);
 
 	m_nStyle = nStyle;
 }
@@ -300,7 +305,7 @@ void CCheckListBox::PreDrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		pDC->SetBkColor(oldBkColor);
 	}
 
-	if (drawItem.itemData != 0)
+	if (drawItem.itemData != 0 && drawItem.itemData != LB_ERR)
 	{
 		AFX_CHECK_DATA* pState = (AFX_CHECK_DATA*)drawItem.itemData;
 		drawItem.itemData = pState->m_dwUserData;
@@ -333,7 +338,7 @@ void CCheckListBox::PreMeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 		// WINBUG: This is only done in the LBS_OWNERDRAWVARIABLE case
 		// because Windows 95 does not initialize itemData to zero in the
 		// case of LBS_OWNERDRAWFIXED list boxes (it is stack garbage).
-		if (measureItem.itemData != 0)
+		if (measureItem.itemData != 0 && measureItem.itemData != LB_ERR)
 		{
 			AFX_CHECK_DATA* pState = (AFX_CHECK_DATA*)measureItem.itemData;
 			measureItem.itemData = pState->m_dwUserData;
@@ -351,12 +356,12 @@ int CCheckListBox::PreCompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct)
 	COMPAREITEMSTRUCT compareItem;
 	memcpy(&compareItem, lpCompareItemStruct, sizeof(COMPAREITEMSTRUCT));
 
-	if (compareItem.itemData1 != 0)
+	if (compareItem.itemData1 != 0 && compareItem.itemData1 != LB_ERR)
 	{
 		AFX_CHECK_DATA* pState = (AFX_CHECK_DATA*)compareItem.itemData1;
 		compareItem.itemData1 = pState->m_dwUserData;
 	}
-	if (compareItem.itemData2 != 0)
+	if (compareItem.itemData2 != 0 && compareItem.itemData2 != LB_ERR)
 	{
 		AFX_CHECK_DATA* pState = (AFX_CHECK_DATA*)compareItem.itemData2;
 		compareItem.itemData2 = pState->m_dwUserData;
@@ -378,7 +383,7 @@ void CCheckListBox::PreDeleteItem(LPDELETEITEMSTRUCT lpDeleteItemStruct)
 			deleteItem.itemData = (UINT)lResult;
 	}
 
-	if (deleteItem.itemData != 0)
+	if (deleteItem.itemData != 0 && deleteItem.itemData != LB_ERR)
 	{
 		AFX_CHECK_DATA* pState = (AFX_CHECK_DATA*)deleteItem.itemData;
 		deleteItem.itemData = pState->m_dwUserData;
@@ -467,90 +472,132 @@ void CCheckListBox::InvalidateItem(int nIndex)
 	InvalidateRect(rect, FALSE);
 }
 
-void CCheckListBox::OnLButtonDown(UINT nFlags, CPoint point)
+int CCheckListBox::CheckFromPoint(CPoint point, BOOL& bInCheck)
 {
-	SetFocus();
+	// assume did not hit anything
+	bInCheck = FALSE;
+	int nIndex = -1;
 
-	if (GetStyle() & LBS_OWNERDRAWFIXED)
+	_AFX_CHECKLIST_STATE* pChecklistState = _afxChecklistState;
+	if ((GetStyle() & (LBS_OWNERDRAWFIXED|LBS_MULTICOLUMN)) == LBS_OWNERDRAWFIXED)
 	{
+		// optimized case for ownerdraw fixed, single column
 		int cyItem = GetItemHeight(0);
 		if (point.y < cyItem * GetCount())
 		{
-			int nIndex = GetTopIndex() + point.y / cyItem;
-
-			if (IsEnabled(nIndex))
-			{
-				if (m_nStyle != BS_CHECKBOX && m_nStyle != BS_3STATE)
-				{
-					_AFX_CHECKLIST_STATE* pChecklistState = _afxChecklistState;
-					if (point.x < pChecklistState->m_sizeCheck.cx + 2)
-					{
-						CWnd*   pParent = GetParent();
-						ASSERT_VALID(pParent);
-
-						int nModulo = (m_nStyle == BS_AUTO3STATE) ? 3 : 2;
-						int nCheck = GetCheck(nIndex);
-						nCheck = (nCheck == nModulo) ? nCheck - 1 : nCheck;
-						SetCheck(nIndex, (nCheck + 1) % nModulo);
-
-						InvalidateCheck(nIndex);
-
-						CListBox::OnLButtonDown(nFlags, point);
-
-						// Inform of check
-						pParent->SendMessage(WM_COMMAND,
-							MAKEWPARAM(GetDlgCtrlID(), CLBN_CHKCHANGE),
-							(LPARAM)m_hWnd);
-						return;
-					}
-				}
-			}
-			else
-				return; // Swallow LButtons for disabled items
+			nIndex = GetTopIndex() + point.y / cyItem;
+			if (point.x < pChecklistState->m_sizeCheck.cx + 2)
+				++bInCheck;
 		}
 	}
 	else
 	{
-		CRect rectCheck;
-
-		for (int nIndex = GetTopIndex(); (rectCheck.bottom < point.y) || (nIndex < GetCount()); nIndex++)
+		// general case for ownerdraw variable or multiple column
+		for (int i = GetTopIndex(); i < GetCount(); i++)
 		{
-			GetItemRect(nIndex, rectCheck);
-			if (rectCheck.PtInRect(point))
+			CRect itemRect;
+			GetItemRect(i, &itemRect);
+			if (itemRect.PtInRect(point))
 			{
-				if (IsEnabled(nIndex))
-				{
-					if (m_nStyle != BS_CHECKBOX && m_nStyle != BS_3STATE)
-					{
-						_AFX_CHECKLIST_STATE* pChecklistState = _afxChecklistState;
-						if (point.x < pChecklistState->m_sizeCheck.cx + 2)
-						{
-							CWnd*   pParent = GetParent();
-							ASSERT_VALID(pParent);
-
-							int nModulo = (m_nStyle == BS_AUTO3STATE) ? 3 : 2;
-							int nCheck = GetCheck(nIndex);
-							nCheck = (nCheck == nModulo) ? nCheck - 1 : nCheck;
-							SetCheck(nIndex, (nCheck + 1) % nModulo);
-
-							InvalidateCheck(nIndex);
-
-							CListBox::OnLButtonDown(nFlags, point);
-
-							// Inform of check
-							pParent->SendMessage(WM_COMMAND,
-								MAKEWPARAM(GetDlgCtrlID(), CLBN_CHKCHANGE),
-								(LPARAM)m_hWnd);
-							return;
-						}
-					}
-				}
-				else
-					return; // Swallow LButtons for disabled items
+				nIndex = i;
+				if (point.x < itemRect.left + pChecklistState->m_sizeCheck.cx + 2)
+					++bInCheck;
+				break;
 			}
 		}
 	}
-	CListBox::OnLButtonDown(nFlags, point);
+	return nIndex;
+}
+
+void CCheckListBox::SetSelectionCheck( int nCheck )
+{
+   int* piSelectedItems;
+   int nSelectedItems;
+   int iSelectedItem;
+
+   nSelectedItems = GetSelCount();
+   if( nSelectedItems > 0 )
+   {
+	  piSelectedItems = (int*)_alloca( nSelectedItems*sizeof( int ) );
+	  GetSelItems( nSelectedItems, piSelectedItems );
+	  for( iSelectedItem = 0; iSelectedItem < nSelectedItems; iSelectedItem++ )
+	  {
+		 if( IsEnabled( piSelectedItems[iSelectedItem] ) )
+		 {
+			SetCheck( piSelectedItems[iSelectedItem], nCheck );
+			InvalidateCheck( piSelectedItems[iSelectedItem] );
+		 }
+	  }
+   }
+}
+
+void CCheckListBox::OnLButtonDown(UINT nFlags, CPoint point)
+{
+   SetFocus();
+
+   // determine where the click is
+   BOOL bInCheck;
+   int nIndex = CheckFromPoint(point, bInCheck);
+
+   // if the item is disabled, then eat the click
+   if (!IsEnabled(nIndex))
+	  return;
+
+   if (m_nStyle != BS_CHECKBOX && m_nStyle != BS_3STATE)
+   {
+	  // toggle the check mark automatically if the check mark was hit
+	  if (bInCheck)
+	  {
+		 CWnd* pParent = GetParent();
+		 ASSERT_VALID( pParent );
+
+			int nModulo = (m_nStyle == BS_AUTO3STATE) ? 3 : 2;
+		 int nCheck;
+		 int nNewCheck;
+
+		 nCheck = GetCheck( nIndex );
+		 nCheck = (nCheck == nModulo) ? nCheck-1 : nCheck;
+		 nNewCheck = (nCheck+1)%nModulo;
+		 SetCheck( nIndex, nNewCheck );
+		 InvalidateCheck( nIndex );
+
+		 if( (GetStyle()&(LBS_EXTENDEDSEL|LBS_MULTIPLESEL)) && GetSel(
+			nIndex ) )
+		 {
+			// The listbox is a multi-select listbox, and the user clicked on
+			// a selected check, so change the check on all of the selected
+			// items.
+			SetSelectionCheck( nNewCheck );
+		 }
+		 else
+		 {
+			CListBox::OnLButtonDown( nFlags, point );
+		 }
+
+		 // Inform parent of check
+		 pParent->SendMessage( WM_COMMAND, MAKEWPARAM( GetDlgCtrlID(),
+			CLBN_CHKCHANGE ), (LPARAM)m_hWnd );
+		 return;
+	  }
+   }
+
+	// do default listbox selection logic
+   CListBox::OnLButtonDown( nFlags, point );
+}
+
+void CCheckListBox::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	BOOL bInCheck;
+	CheckFromPoint(point, bInCheck);
+
+	if (bInCheck)
+	{
+		// Double and single clicks act the same on the check box!
+		OnLButtonDown(nFlags, point);
+		return;
+	}
+
+	CListBox::OnLButtonDblClk(nFlags, point);
 }
 
 void CCheckListBox::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -599,9 +646,18 @@ void CCheckListBox::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 						int nModulo = (m_nStyle == BS_AUTO3STATE) ? 3 : 2;
 						int nCheck = GetCheck(nIndex);
 						nCheck = (nCheck == nModulo) ? nCheck - 1 : nCheck;
-						SetCheck(nIndex, (nCheck + 1) % nModulo);
+				  int nNewCheck = (nCheck+1)%nModulo;
+						SetCheck(nIndex, nNewCheck);
 
 						InvalidateCheck(nIndex);
+
+				  if( GetStyle()&LBS_EXTENDEDSEL )
+				  {
+					 // The listbox is a multi-select listbox, and the user
+					 // clicked on a selected check, so change the check on all
+					 // of the selected items.
+					 SetSelectionCheck( nNewCheck );
+				  }
 
 						// Inform of check
 						pParent->SendMessage(WM_COMMAND,
@@ -629,18 +685,6 @@ int CCheckListBox::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		SetItemHeight(0, CalcMinimumItemHeight());
 
 	return 0;
-}
-
-void CCheckListBox::OnLButtonDblClk(UINT nFlags, CPoint point)
-{
-	_AFX_CHECKLIST_STATE* pChecklistState = _afxChecklistState;
-	if (point.x < pChecklistState->m_sizeCheck.cx)
-	{
-		// Double and single clicks act the same on the check box!
-		OnLButtonDown(nFlags, point);
-		return;
-	}
-	CListBox::OnLButtonDblClk(nFlags, point);
 }
 
 LRESULT CCheckListBox::OnSetFont(WPARAM , LPARAM)
@@ -796,7 +840,7 @@ LRESULT CCheckListBox::OnLBSetItemData(WPARAM wParam, LPARAM lParam)
 
 LRESULT CCheckListBox::OnLBSetItemHeight(WPARAM wParam, LPARAM lParam)
 {
-	int nHeight = max(CalcMinimumItemHeight(),(int)HIWORD(lParam));
+	int nHeight = max(CalcMinimumItemHeight(),(int)LOWORD(lParam));
 	return DefWindowProc(LB_SETITEMHEIGHT, wParam, MAKELPARAM(nHeight,0));
 }
 

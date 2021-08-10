@@ -1,9 +1,0 @@
-:BASE BCTOOLS.HLP
-:Title Borland C++ Tools & Utilities
-:INDEX Borland C++ Tools & Utilities = BCTOOLS.HLP
-:INDEX Borland C++ User's Guide = BCW.HLP
-:INDEX WinSight User's Guide = WINSIGHT.HLP
-:INDEX WinSpector User's Guide = WINSPCTR.HLP
-
-:INCLUDE OPENHELP.CFG
-:INCLUDE BCTOOLS.TOC

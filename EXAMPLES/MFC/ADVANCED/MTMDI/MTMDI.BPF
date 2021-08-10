@@ -1,0 +1,9 @@
+USEUNIT("bounce.cpp");
+USEUNIT("hello.cpp");
+USEUNIT("mainfrm.cpp");
+USEUNIT("mdi.cpp");
+USEUNIT("mtbounce.cpp");
+USEUNIT("stdafx.cpp");
+USERC("mtmdi.rc");
+
+#define WinMain

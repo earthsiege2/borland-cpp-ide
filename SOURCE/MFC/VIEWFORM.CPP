@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,8 +28,10 @@ BEGIN_MESSAGE_MAP(CFormView, CScrollView)
 	//{{AFX_MSG_MAP(CFormView)
 	ON_WM_SETFOCUS()
 	ON_WM_CREATE()
-	ON_MESSAGE(WM_QUERY3DCONTROLS, OnQuery3dControls)
 	//}}AFX_MSG_MAP
+#ifndef _AFX_NO_CTL3D_SUPPORT
+	ON_MESSAGE(WM_QUERY3DCONTROLS, OnQuery3dControls)
+#endif
 #ifndef _AFX_NO_OCC_SUPPORT
 	ON_MESSAGE(WM_INITDIALOG, HandleInitDialog)
 #endif
@@ -70,13 +72,9 @@ BOOL CFormView::Create(LPCTSTR /*lpszClassName*/, LPCTSTR /*lpszWindowName*/,
 	}
 #endif //_DEBUG
 
-#ifdef _MAC
-	HINSTANCE hInst = AfxFindResourceHandle(m_lpszTemplateName, RT_DIALOG);
-	_AfxStripDialogCaption(hInst, m_lpszTemplateName);
-#endif
-
 	// initialize common controls
 	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	AfxDeferRegisterClass(AFX_WNDCOMMCTLSNEW_REG);
 
 	// call PreCreateWindow to get prefered extended style
 	CREATESTRUCT cs; memset(&cs, 0, sizeof(CREATESTRUCT));
@@ -95,8 +93,7 @@ BOOL CFormView::Create(LPCTSTR /*lpszClassName*/, LPCTSTR /*lpszWindowName*/,
 	// we use the style from the template - but make sure that
 	//  the WS_BORDER bit is correct
 	// the WS_BORDER bit will be whatever is in dwRequestedStyle
-	ModifyStyle(WS_BORDER|WS_CAPTION,
-		dwRequestedStyle & (WS_BORDER|WS_CAPTION));
+	ModifyStyle(WS_BORDER|WS_CAPTION, cs.style & (WS_BORDER|WS_CAPTION));
 	ModifyStyleEx(WS_EX_CLIENTEDGE, cs.dwExStyle & WS_EX_CLIENTEDGE);
 
 	SetDlgCtrlID(nID);
@@ -120,37 +117,6 @@ BOOL CFormView::Create(LPCTSTR /*lpszClassName*/, LPCTSTR /*lpszWindowName*/,
 
 	return TRUE;
 }
-
-#ifdef _MAC
-// Helper function that strips out the caption bit from dialog templates.
-// This is done so that WLM creates a true child window instead of a
-// top-level child window.
-void AFXAPI _AfxStripDialogCaption(HINSTANCE hInst, LPCTSTR lpszResource)
-{
-	ASSERT(lpszResource != NULL);
-
-	HRSRC hResource = ::FindResource(hInst, lpszResource, RT_DIALOG);
-	if (hResource == NULL)
-		return;
-
-	HGLOBAL hTemplate = LoadResource(hInst, hResource);
-	if (hTemplate == NULL)
-		return;
-
-	DLGTEMPLATE* pTemplate = (DLGTEMPLATE*)LockResource(hTemplate);
-
-	// strip back to a simple border if the dialog was captioned
-	if (((DLGTEMPLATEEX*) pTemplate)->signature == 0xFFFF)
-	{
-		if ((((DLGTEMPLATEEX*) pTemplate)->style & WS_CAPTION) == WS_CAPTION)
-			((DLGTEMPLATEEX*) pTemplate)->style &= ~WS_DLGFRAME;
-	}
-	else if ((pTemplate->style & WS_CAPTION) == WS_CAPTION)
-		pTemplate->style &= ~WS_DLGFRAME;
-
-	// do not free the resource - we want it to remain in memory with our changes
-}
-#endif
 
 void CFormView::OnInitialUpdate()
 {
@@ -199,7 +165,7 @@ BOOL CFormView::SaveFocusControl()
 
 void CFormView::OnSetFocus(CWnd*)
 {
-	if (!::IsWindow(m_hWndFocus))
+	if (!::IsWindow(m_hWndFocus) || !::IsChild(m_hWnd, m_hWndFocus))
 	{
 		// invalid or unknown focus window... let windows handle it
 		m_hWndFocus = NULL;
@@ -238,6 +204,10 @@ BOOL CFormView::PreTranslateMessage(MSG* pMsg)
 		pFrameWnd = pFrameWnd->GetParentFrame();
 	}
 
+	// don't call IsDialogMessage if form is empty
+	if (::GetWindow(m_hWnd, GW_CHILD) == NULL)
+		return FALSE;
+
 	// filter both messages to dialog and from children
 	return PreTranslateInput(pMsg);
 }
@@ -274,7 +244,7 @@ LRESULT CFormView::HandleInitDialog(WPARAM, LPARAM)
 		}
 	}
 
-	return FALSE;	// don't set focus until later
+	return FALSE;   // don't set focus until later
 }
 
 BOOL CFormView::SetOccDialogInfo(_AFX_OCC_DIALOG_INFO* pOccDialogInfo)

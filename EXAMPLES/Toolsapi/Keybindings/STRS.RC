@@ -1,0 +1,13 @@
+#include "strindx.rh"
+
+STRINGTABLE
+{
+  sBufferList "Buffer List"
+  sNewIDEClassic "New IDE Classic"
+  sBlockCopied "Block copied"
+  sBlockMoved "Block moved"
+  sBlockDeleted "Block deleted"
+  sLiteralKeyInserted "Literal key inserted"
+  sInsertLiteralChar "Inserting literal character"
+  sNoBlockMarked "No block marked"
+}

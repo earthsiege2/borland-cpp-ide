@@ -2,17 +2,18 @@
  * filename - mbsnbcmp.c
  *
  * function(s)
- *        _mbsnbcmp - Compares a portrion of one string to a portion 
+ *        _mbsnbcmp - Compares a portrion of one string to a portion
  *                    of another.
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -43,7 +44,7 @@ Return value    _mbsnbcmp returns an int value based on the result of
                         ASCII <  1 byte Kana <  2 bytes character
 
                 If the second byte of 2-bytes character is null,
-                that character is regarded as null. 
+                that character is regarded as null.
 
 *---------------------------------------------------------------------*/
 

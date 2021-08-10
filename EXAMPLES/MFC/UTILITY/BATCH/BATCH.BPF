@@ -1,0 +1,12 @@
+USEUNIT("batch.cpp");
+USEUNIT("batchdoc.cpp");
+USEUNIT("batchvw.cpp");
+USEUNIT("compress.cpp");
+USEUNIT("destdird.cpp");
+USEUNIT("interlea.cpp");
+USEUNIT("mainfrm.cpp");
+USEUNIT("stdafx.cpp");
+USELIB("odbc32.lib");
+USERC("batch.rc");
+
+#define WinMain

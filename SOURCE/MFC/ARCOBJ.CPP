@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -113,7 +113,7 @@ void CArchive::WriteObject(const CObject* pOb)
 CObject* CArchive::ReadObject(const CRuntimeClass* pClassRefRequested)
 {
 	ASSERT(pClassRefRequested == NULL ||
-		AfxIsValidAddress(pClassRefRequested, sizeof(struct CRuntimeClass), FALSE));
+		AfxIsValidAddress(pClassRefRequested, sizeof(CRuntimeClass), FALSE));
 	ASSERT(IsLoading());    // proper direction
 	ASSERT(wNullTag == 0);
 	ASSERT((wClassTag << 16) == dwBigClassTag);
@@ -261,7 +261,7 @@ CRuntimeClass* CArchive::ReadClass(const CRuntimeClass* pClassRefRequested,
 	UINT* pSchema, DWORD* pObTag)
 {
 	ASSERT(pClassRefRequested == NULL ||
-		AfxIsValidAddress(pClassRefRequested, sizeof(struct CRuntimeClass), FALSE));
+		AfxIsValidAddress(pClassRefRequested, sizeof(CRuntimeClass), FALSE));
 	ASSERT(IsLoading());    // proper direction
 
 	if (pClassRefRequested != NULL && pClassRefRequested->m_wSchema == 0xFFFF)
@@ -335,11 +335,17 @@ CRuntimeClass* CArchive::ReadClass(const CRuntimeClass* pClassRefRequested,
 
 		// determine schema stored against objects of this type
 		void* pTemp;
-		if (m_pSchemaMap != NULL && m_pSchemaMap->Lookup(pClassRef, pTemp))
-			nSchema = (UINT)pTemp;
-		else
+		BOOL bFound = FALSE;
+		nSchema = 0;
+		if (m_pSchemaMap != NULL)
+		{
+			bFound = m_pSchemaMap->Lookup( pClassRef, pTemp );
+			if (bFound)
+				nSchema = (UINT)pTemp;
+		}
+		if (!bFound)
 			nSchema = pClassRef->m_wSchema & ~VERSIONABLE_SCHEMA;
-	}
+   }
 
 	// check for correct derivation
 	if (pClassRefRequested != NULL &&

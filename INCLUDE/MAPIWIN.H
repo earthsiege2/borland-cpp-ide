@@ -56,22 +56,14 @@
  */
 
 #ifndef __MAPIWIN_H__
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __MAPIWIN_H__
-#pragma option -b
-
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <pshpack8.h>
-#pragma option -b
-#endif
 
 #if defined (WIN32) && !defined (_WIN32)
 #define _WIN32
 #endif
 
-#pragma option -b.
 #include "mapinls.h"
-#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
@@ -156,9 +148,7 @@ extern LPVOID pinstX;
 #if defined(WIN16) || defined(_MAC)
 
 #ifndef _MAC
-#pragma option -b.
 #include <error.h>              /*  for GetLastError() */
-#pragma option -b
 #endif
 
 typedef int                 INT;
@@ -438,11 +428,5 @@ BOOL WINAPI IsBadBoundedStringPtr(const void FAR* lpsz, UINT cchMax);
 }
 #endif
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <poppack.h>
-#pragma option -b
-#endif
-
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* __MAPIWIN_H__ */

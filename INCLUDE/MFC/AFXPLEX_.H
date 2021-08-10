@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -10,6 +10,10 @@
 
 #ifndef __AFXPLEX_H__
 #define __AFXPLEX_H__
+
+#ifndef __AFX_H__
+	#include <afx.h>
+#endif
 
 #ifdef _AFX_PACKING
 #pragma pack(push, _AFX_PACKING)

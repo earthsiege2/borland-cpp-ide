@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -35,12 +36,12 @@ Return value    _mbccmp returns a int value as following;
                         = 0  str1 is the same as str2
                         > 0  str1 is the same as str2
 
-                The relation for conparison is, 
+                The relation for conparison is,
 
-                ASCII < 1 byte Kana < 2 bytes character			 
+                ASCII < 1 byte Kana < 2 bytes character
 
                 If the second byte of 2-bytes character is null,
-		that character is regarded as null.    
+                that character is regarded as null.
 
 *---------------------------------------------------------------------*/
 

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -31,7 +31,7 @@ _AFXSOCK_INLINE BOOL CAsyncSocket::Bind(const SOCKADDR* lpSockAddr, int nSockAdd
 _AFXSOCK_INLINE BOOL CAsyncSocket::Connect(const SOCKADDR* lpSockAddr, int nSockAddrLen)
 	{ return ConnectHelper(lpSockAddr, nSockAddrLen); }
 _AFXSOCK_INLINE BOOL CAsyncSocket::IOCtl(long lCommand, DWORD* lpArgument)
-	{ *lpArgument = 0; return (SOCKET_ERROR != ioctlsocket(m_hSocket, lCommand, lpArgument)); }
+	{ return (SOCKET_ERROR != ioctlsocket(m_hSocket, lCommand, lpArgument)); }
 _AFXSOCK_INLINE BOOL CAsyncSocket::Listen(int nConnectionBacklog)
 	{ return (SOCKET_ERROR != listen(m_hSocket, nConnectionBacklog)); }
 _AFXSOCK_INLINE int CAsyncSocket::ReceiveFrom(void* lpBuf, int nBufLen, SOCKADDR* lpSockAddr, int* lpSockAddrLen, int nFlags)

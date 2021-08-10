@@ -84,15 +84,15 @@
             mbsnicol.obj \
             mbsncoll.obj \
             mbsicoll.obj \
-	    mbsnbcol.obj \
-	    mbsnbico.obj \
-	    ismbalnm.obj \
+            mbsnbcol.obj \
+            mbsnbico.obj \
+            ismbalnm.obj \
             ismbgrph.obj \
-	    ismbpunc.obj \
-	    mbscat.obj \
-	    mbscpy.obj \
-	    mbsdup.obj \
-	    tthunks.obj
+            ismbpunc.obj \
+            mbscat.obj   \
+            mbscpy.obj   \
+            mbsdup.obj   \
+            tthunks.obj
 
 #############################################################################
 # Configure the environment apprpriately.                                   #

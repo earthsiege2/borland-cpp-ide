@@ -1,0 +1,9 @@
+LIBRARY WINTRUST
+EXPORTS
+
+    OssX509SpcIndirectDataContentDecode      = 'WINTRUST.DLL'.*
+    OssX509SpcIndirectDataContentEncode      = 'WINTRUST.DLL'.*
+    WinLoadTrustProvider                     = 'WINTRUST.DLL'.*
+    WinSubmitCertificate                     = 'WINTRUST.DLL'.*
+    WinTrustProviderClientInitialize         = 'WINTRUST.DLL'.*
+    WinVerifyTrust                           = 'WINTRUST.DLL'.*

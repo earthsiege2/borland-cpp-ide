@@ -1,17 +1,18 @@
 /*-----------------------------------------------------------------------*
  * filename - mbsicoll.c
  *
- * variables(s)
- *
+ * function(s)
+ *        _mbsicoll -
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <_locale.h>
@@ -27,7 +28,8 @@ Usage           _mbsicoll ( const unsigned char * String1,const unsigned char * 
 Prototype in    mbsicoll.h
 
 Description     _mbsicoll() performs a case-insensitive comparison of the
-					 strings according to the current locale in use
+                strings according to the current locale in use.
+
 *--------------------------------------------------------------------------*/
 
 int _RTLENTRY _EXPFUNC _mbsicoll( const unsigned char *__S1, const unsigned char *__S2 )

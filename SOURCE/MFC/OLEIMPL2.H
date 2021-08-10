@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -47,6 +47,9 @@ public:
 	virtual BOOL OnUpdateFrameTitle();
 	virtual void OnPaletteChanged(CWnd* pFocusWnd);
 	virtual BOOL OnQueryNewPalette();
+	virtual BOOL OnInitMenuPopup(CMenu* pMenu, int nIndex, BOOL bSysMenu);
+	virtual void OnInitMenu(CMenu* pMenu);
+	virtual BOOL OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 
 	// implementation helpers
 	BOOL NotifyAllInPlace(
@@ -56,6 +59,10 @@ public:
 
 // Interface Maps
 public:
+#ifdef _AFXDLL
+	virtual LPUNKNOWN GetInterfaceHook(const void*);
+#endif
+
 	BEGIN_INTERFACE_PART(OleInPlaceFrame, IOleInPlaceFrame)
 		INIT_INTERFACE_PART(COleFrameHook, OleInPlaceFrame)
 		STDMETHOD(GetWindow)(HWND*);
@@ -72,34 +79,19 @@ public:
 		STDMETHOD(TranslateAccelerator)(LPMSG, WORD);
 	END_INTERFACE_PART(OleInPlaceFrame)
 
+	//WINBUG: this interface is here because some applications
+	// are broken and require IOleCommandTarget to be
+	// implemented before they'll properly activate
+	BEGIN_INTERFACE_PART(OleCommandTarget, IOleCommandTarget)
+		INIT_INTERFACE_PART(COleFrameHook, OleCommandTarget)
+		STDMETHOD(Exec)(const GUID*, DWORD, DWORD,
+		   VARIANTARG*, VARIANTARG*);
+		STDMETHOD(QueryStatus)(const GUID*, ULONG, OLECMD[], OLECMDTEXT*);
+	END_INTERFACE_PART(OleCommandTarget)
+
 	DECLARE_INTERFACE_MAP()
 
 	friend COleClientItem;
-};
-
-/////////////////////////////////////////////////////////////////////////////
-// Type library cache - AFX_INTERNAL
-
-class CTypeLibCache
-{
-public:
-	CTypeLibCache(const GUID* ptlid);
-	~CTypeLibCache();
-
-	void Lock();
-	virtual void Unlock();
-	BOOL Lookup(LCID lcid, LPTYPELIB* pptlib);
-	void Cache(LCID lcid, LPTYPELIB ptlib);
-	BOOL LookupTypeInfo(LCID lcid, REFGUID guid, LPTYPEINFO* pptinfo);
-	void CacheTypeInfo(LCID lcid, REFGUID guid, LPTYPEINFO ptinfo);
-
-protected:
-	const GUID* m_ptlid;
-	LCID m_lcid;
-	LPTYPELIB m_ptlib;
-	GUID m_guidInfo;
-	LPTYPEINFO m_ptinfo;
-	long m_cRef;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -223,35 +215,38 @@ public:
 	_AFX_OLE_STATE();
 	virtual ~_AFX_OLE_STATE();
 
-	BOOL m_bNeedTerm;
-
 	CView* m_pActivateView;         // activation view
 	COleDataSource* m_pClipboardSource;
 
-	DWORD m_dwReserved;				// was "parking space" window
-	CMapPtrToPtr m_mapExtraData;    // Extra data for OLE controls.
+	DWORD m_dwReserved;             // was "parking space" window
 #ifdef _AFXDLL
 	HINSTANCE m_hInstOLE;       // handle of OLE32.DLL
 	HINSTANCE m_hInstOLEAUT;    // handle of OLEAUT32.DLL
 	HINSTANCE m_hInstOLEDLG;    // handle of OLEDLG.DLL
-#ifdef _MAC
-	HINSTANCE m_hInstWLMOLE;    // handle of WLM OLE layer
+	HINSTANCE m_hInstUrlMon;
 #endif
-#endif
-	long m_nReserved;			// was reference count on parking window
+	long m_nReserved;           // was reference count on parking window
 };
 
 EXTERN_PROCESS_LOCAL(_AFX_OLE_STATE, _afxOleState)
-
-#define AfxGetExtraDataMap() (&_afxOleState.GetData()->m_mapExtraData)
 
 /////////////////////////////////////////////////////////////////////////////
 // Global helper functions
 
 // menu merging/unmerging
-void AFXAPI AfxMergeMenus(CMenu* pMenuShared, CMenu* pMenuSource,
-	LONG* lpMenuWidths, int iWidthIndex);
-void AFXAPI AfxUnmergeMenus(CMenu* pMenuShared, CMenu* pMenuSource);
+HMENU AFXAPI AfxMergeMenus(HMENU hMenuShared, HMENU hMenuSource,
+	LONG* lpMenuWidths, int iWidthIndex, BOOL bMergeHelpMenus = FALSE);
+void AFXAPI AfxUnmergeMenus(HMENU hMenuShared, HMENU hMenuSource,
+	HMENU hHelpMenuPopup = NULL);
+
+// helpers for IOleCommandTarget
+
+HRESULT AFXAPI _AfxQueryStatusOleCommandHelper(CCmdTarget* pTarget,
+	const GUID* pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[],
+   OLECMDTEXT* pcmdtext);
+HRESULT AFXAPI _AfxExecOleCommandHelper(CCmdTarget* pTarget,
+   const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt,
+   VARIANTARG* pvarargIn, VARIANTARG* pvarargOut);
 
 // helpers for exceptions
 void AFXAPI _AfxFillOleFileException(CFileException*, SCODE sc);
@@ -305,6 +300,17 @@ LPUNKNOWN AFXAPI _AfxQueryInterface(LPUNKNOWN lpUnknown, REFIID riid);
 #define HIMETRIC_PER_INCH   2540
 #define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
 #define MAP_LOGHIM_TO_PIX(x,ppli)   MulDiv((ppli), (x), HIMETRIC_PER_INCH)
+
+// helper for GUID comparison
+inline BOOL _AfxIsEqualGUID(REFGUID guid1, REFGUID guid2)
+{
+	return ((DWORD*)&guid1)[0] == ((DWORD*)&guid2)[0] &&
+		((DWORD*)&guid1)[1] == ((DWORD*)&guid2)[1] &&
+		((DWORD*)&guid1)[2] == ((DWORD*)&guid2)[2] &&
+		((DWORD*)&guid1)[3] == ((DWORD*)&guid2)[3];
+}
+
+HRESULT AFXAPI _AfxReadFromStream(LPSTREAM pStream, void* lpBuf, UINT nCount, DWORD& nRead);
 
 /////////////////////////////////////////////////////////////////////////////
 // implementation types and constants

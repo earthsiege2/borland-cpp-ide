@@ -1,0 +1,24 @@
+LIBRARY DDRAW
+EXPORTS
+
+    DDHAL32_VidMemAlloc                      = 'DDRAW.DLL'.*
+    DDHAL32_VidMemFree                       = 'DDRAW.DLL'.*
+    DDInternalLock                           = 'DDRAW.DLL'.*
+    DDInternalUnlock                         = 'DDRAW.DLL'.*
+    DSoundHelp                               = 'DDRAW.DLL'.*
+    DirectDrawCreate                         = 'DDRAW.DLL'.*
+    DirectDrawCreateClipper                  = 'DDRAW.DLL'.*
+    DirectDrawEnumerateA                     = 'DDRAW.DLL'.*
+    DirectDrawEnumerateW                     = 'DDRAW.DLL'.*
+    _GetNextMipMap                           = 'DDRAW.DLL'.GetNextMipMap
+    GetSurfaceFromDC                         = 'DDRAW.DLL'.*
+    HeapVidMemAllocAligned                   = 'DDRAW.DLL'.*
+    _InternalLock                            = 'DDRAW.DLL'.InternalLock
+    _InternalUnlock                          = 'DDRAW.DLL'.InternalUnlock
+    LateAllocateSurfaceMem                   = 'DDRAW.DLL'.*
+    VidMemAlloc                              = 'DDRAW.DLL'.*
+    VidMemAmountFree                         = 'DDRAW.DLL'.*
+    VidMemFini                               = 'DDRAW.DLL'.*
+    VidMemFree                               = 'DDRAW.DLL'.*
+    VidMemInit                               = 'DDRAW.DLL'.*
+    VidMemLargestFree                        = 'DDRAW.DLL'.*

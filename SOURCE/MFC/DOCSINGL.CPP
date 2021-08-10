@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -191,12 +191,7 @@ CDocument* CSingleDocTemplate::OpenDocumentFile(LPCTSTR lpszPathName,
 			}
 			return NULL;        // open failed
 		}
-#ifdef _MAC
-		// if the document is dirty, we must have opened a stationery pad - don't
-		// change the pathname because we want to treat the document as untitled
-		if (!pDocument->IsModified())
-#endif
-			pDocument->SetPathName(lpszPathName);
+		pDocument->SetPathName(lpszPathName);
 	}
 
 	CWinThread* pThread = AfxGetThread();

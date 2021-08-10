@@ -12,8 +12,8 @@
 //==========================================================================;
 
 #ifndef _INC_ACM
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_ACM        /* #defined if msacm.h has been included */
-#pragma option -b
 
 #if !defined(_INC_MMREG) || (_INC_MMREG < 142)
 #ifndef RC_INVOKED
@@ -35,11 +35,9 @@
 #define _UNICODE
 #endif
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <pshpack1.h>
-#pragma option -b
-#endif
+#ifndef RC_INVOKED
+#pragma pack(1)         /* Assume byte packing throughout */
+#endif  /* RC_INVOKED */
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -87,7 +85,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #ifdef _WIN32
     #define ACMAPI              WINAPI
 #else
-#if defined(_WINDLL) || defined(__DLL__)
+#ifdef _WINDLL
     #define ACMAPI              _far _pascal _loadds
 #else
     #define ACMAPI              _far _pascal
@@ -1884,15 +1882,13 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
 );
                                        
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <poppack.h>
-#pragma option -b
-#endif
+#ifndef RC_INVOKED
+#pragma pack()          /* Revert to default packing */
+#endif  /* RC_INVOKED */
 
 #ifdef __cplusplus
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif  /* _INC_ACM */

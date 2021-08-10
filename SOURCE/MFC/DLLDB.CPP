@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -33,41 +33,40 @@ extern "C" BOOL (WINAPI* _pRawDllMain)(HINSTANCE, DWORD, LPVOID) = &RawDllMain;
 #ifdef _DEBUG
 #ifndef _UNICODE
 #ifdef __BORLANDC__
-  #define MFC40_DLL   "BFC40D.DLL"
-  #define MFCO40_DLL  "BFCO40D.DLL"
+  #define MFC42_DLL   "BFC42D.DLL"
+  #define MFCO42_DLL  "BFCO42D.DLL"
 #else
-  #define MFC40_DLL   "MFC40D.DLL"
-  #define MFCO40_DLL  "MFCO40D.DLL"
+  #define MFC42_DLL   "MFC42D.DLL"
+  #define MFCO42_DLL  "MFCO42D.DLL"
 #endif // __BORLANDC__
 #else
-#define MFC40_DLL   "MFC40UD.DLL"
-#define MFCO40_DLL  "MFCO40UD.DLL"
+#define MFC42_DLL   "MFC42UD.DLL"
+#define MFCO42_DLL  "MFCO42UD.DLL"
 #endif
 #else
 #ifndef _UNICODE
 #ifdef __BORLANDC__
-  #define MFC40_DLL   "BFC40.DLL"
-  #define MFCO40_DLL  "BFCO40.DLL"
+  #define MFC42_DLL   "BFC42.DLL"
+  #define MFCO42_DLL  "BFCO42.DLL"
 #else
-  #define MFC40_DLL   "MFC40.DLL"
-  #define MFCO40_DLL  "MFCO40.DLL"
+  #define MFC42_DLL   "MFC42.DLL"
+  #define MFCO42_DLL  "MFCO42.DLL"
 #endif // __BORLANDC__
 #else
-#define MFC40_DLL   "MFC40U.DLL"
-#define MFCO40_DLL  "MFCO40U.DLL"
+#define MFC42_DLL   "MFC42U.DLL"
+#define MFCO42_DLL  "MFCO42U.DLL"
 #endif
 #endif
 
 extern "C"
-BOOL WINAPI RawDllMain(HINSTANCE, DWORD dwReason, LPVOID)
+BOOL WINAPI RawDllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
 {
+	UNUSED_ALWAYS(hInstance);
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-#ifndef _MAC
 		// Prevent the MFC DLLs from being unloaded prematurely
-		LoadLibraryA(MFC40_DLL);
-		LoadLibraryA(MFCO40_DLL);
-#endif
+		LoadLibraryA(MFC42_DLL);
+		LoadLibraryA(MFCO42_DLL);
 
 		// make sure we have enough memory to attempt to start (8kb)
 		void* pMinHeap = LocalAlloc(NONZEROLPTR, 0x2000);
@@ -84,11 +83,9 @@ BOOL WINAPI RawDllMain(HINSTANCE, DWORD dwReason, LPVOID)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
-#ifndef _MAC
 		// Now it's OK for the MFC DLLs to be unloaded (see LoadLibrary above)
-		FreeLibrary(GetModuleHandleA(MFCO40_DLL));
-		FreeLibrary(GetModuleHandleA(MFC40_DLL));
-#endif
+		FreeLibrary(GetModuleHandleA(MFCO42_DLL));
+		FreeLibrary(GetModuleHandleA(MFC42_DLL));
 	}
 	return TRUE;    // ok
 }
@@ -98,8 +95,6 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-		DisableThreadLibraryCalls(hInstance);
-
 		// shared initialization
 		VERIFY(AfxInitExtensionModule(extensionDLL, hInstance));
 
@@ -110,6 +105,10 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
 		AfxTermExtensionModule(extensionDLL);
+	}
+	else if (dwReason == DLL_THREAD_DETACH)
+	{
+		AfxTermThread(hInstance);
 	}
 	return TRUE;    // ok
 }

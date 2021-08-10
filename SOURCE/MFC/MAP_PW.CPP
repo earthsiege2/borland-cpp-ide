@@ -1,6 +1,6 @@
 
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -172,6 +172,8 @@ CMapPtrToWord::GetAssocAt(void* key, UINT& nHash) const
 	return NULL;
 }
 
+
+
 /////////////////////////////////////////////////////////////////////////////
 
 BOOL CMapPtrToWord::Lookup(void* key, WORD& rValue) const
@@ -200,7 +202,7 @@ WORD& CMapPtrToWord::operator[](void* key)
 
 		// it doesn't exist, add a new Association
 		pAssoc = NewAssoc();
-		pAssoc->nHashValue = nHash;
+
 		pAssoc->key = key;
 		// 'pAssoc->value' is a constructed object, nothing more
 
@@ -266,7 +268,9 @@ void CMapPtrToWord::GetNextAssoc(POSITION& rNextPosition,
 	if ((pAssocNext = pAssocRet->pNext) == NULL)
 	{
 		// go to next bucket
-		for (UINT nBucket = pAssocRet->nHashValue + 1;
+
+		for (UINT nBucket = (HashKey(pAssocRet->key) % m_nHashTableSize) + 1;
+
 		  nBucket < m_nHashTableSize; nBucket++)
 			if ((pAssocNext = m_pHashTable[nBucket]) != NULL)
 				break;

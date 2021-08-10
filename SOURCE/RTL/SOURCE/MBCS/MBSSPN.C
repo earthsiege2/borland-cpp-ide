@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -20,7 +21,7 @@
 /*---------------------------------------------------------------------*
 
 Name            _mbsspn - Scans a string for the first segment that is
-                          a subset of a given set of characters.                         
+                          a subset of a given set of characters.
 
 Usage           size_t _mbsspn(const unsigned char *str1,
                                const unsigned char *str2);

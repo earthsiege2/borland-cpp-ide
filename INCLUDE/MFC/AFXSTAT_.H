@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -46,6 +46,7 @@ EXTERN_PROCESS_LOCAL(_AFX_DEBUG_STATE, afxDebugState)
 
 class _AFX_WIN_STATE : public CNoTrackObject
 {
+#ifndef _AFX_NO_GRAYDLG_SUPPORT
 public:
 	_AFX_WIN_STATE();
 	virtual ~_AFX_WIN_STATE();
@@ -53,10 +54,9 @@ public:
 	// gray dialog support
 	HBRUSH m_hDlgBkBrush; // dialog and message box background brush
 	COLORREF m_crDlgTextClr;
-#ifdef _MAC
-	COLORREF m_crDlgBkClr;
-#endif
+#endif //!_AFX_NO_GRAYDLG_SUPPORT
 
+public:
 	// printing abort
 	BOOL m_bUserAbort;
 };
@@ -64,56 +64,45 @@ public:
 EXTERN_PROCESS_LOCAL(_AFX_WIN_STATE, _afxWinState)
 
 /////////////////////////////////////////////////////////////////////////////
-// AFX_MODULE_STATE : portion of state that is pushed/popped
+// Type library cache - AFX_INTERNAL
 
-// forward references required for AFX_MODULE_PROCESS_STATE definition
-class CWnd;
+#ifndef _AFX_NO_OLE_SUPPORT
 
-#ifdef _AFXDLL
-class CDynLinkLibrary;
+struct ITypeInfo;
+typedef ITypeInfo* LPTYPEINFO;
+
+struct ITypeLib;
+typedef ITypeLib* LPTYPELIB;
+
+typedef struct _GUID GUID;
+#ifndef _REFCLSID_DEFINED
+#define REFGUID const GUID &
 #endif
 
-#ifndef _AFX_NO_OCC_SUPPORT
-class COccManager;
-class COleControlLock;
-#endif
-
-#ifndef _AFX_NO_DAO_SUPPORT
-class _AFX_DAO_STATE;
-#endif
-
-// AFX_MODULE_PROCESS_STATE (local to process *and* module)
-class AFX_MODULE_PROCESS_STATE : public CNoTrackObject
+class CTypeLibCache
 {
 public:
-	AFX_MODULE_PROCESS_STATE();
-	virtual ~AFX_MODULE_PROCESS_STATE();
+	CTypeLibCache() : m_cRef(0), m_lcid((LCID)-1), m_ptlib(NULL), m_ptinfo(NULL) {}
+	void Lock();
+	void Unlock();
+	BOOL Lookup(LCID lcid, LPTYPELIB* pptlib);
+	void Cache(LCID lcid, LPTYPELIB ptlib);
+	BOOL LookupTypeInfo(LCID lcid, REFGUID guid, LPTYPEINFO* pptinfo);
+	void CacheTypeInfo(LCID lcid, REFGUID guid, LPTYPEINFO ptinfo);
+	const GUID* m_pTypeLibID;
 
-#ifdef _AFX_OLD_EXCEPTIONS
-	// exceptions
-	AFX_TERM_PROC m_pfnTerminate;
-#endif
-	void (PASCAL *m_pfnFilterToolTipMessage)(MSG*, CWnd*);
-
-#ifdef _AFXDLL
-	// CDynLinkLibrary objects (for resource chain)
-	CTypedSimpleList<CDynLinkLibrary*> m_libraryList;
-
-	// special case for MFCxxLOC.DLL (localized MFC resources)
-	HINSTANCE m_appLangDLL;
-#endif
-
-#ifndef _AFX_NO_OCC_SUPPORT
-	// OLE control container manager
-	COccManager* m_pOccManager;
-	// locked OLE controls
-	CTypedSimpleList<COleControlLock*> m_lockList;
-#endif
-
-#ifndef _AFX_NO_DAO_SUPPORT
-	_AFX_DAO_STATE* m_pDaoState;
-#endif
+protected:
+	LCID m_lcid;
+	LPTYPELIB m_ptlib;
+	GUID m_guidInfo;
+	LPTYPEINFO m_ptinfo;
+	long m_cRef;
 };
+
+#endif //!_AFX_NO_OLE_SUPPORT
+
+/////////////////////////////////////////////////////////////////////////////
+// AFX_MODULE_STATE : portion of state that is pushed/popped
 
 // forward references required for AFX_MODULE_THREAD_STATE definition
 class CWinThread;
@@ -124,6 +113,15 @@ class CFrameWnd;
 typedef int (__cdecl * _PNH)( size_t );
 #define _PNH_DEFINED
 #endif
+
+template<class TYPE>
+class CEmbeddedButActsLikePtr
+{
+public:
+	AFX_INLINE TYPE* operator->() { return &m_data; }
+	AFX_INLINE operator TYPE*() { return &m_data; }
+	TYPE m_data;
+};
 
 // AFX_MODULE_THREAD_STATE (local to thread *and* module)
 class AFX_MODULE_THREAD_STATE : public CNoTrackObject
@@ -152,15 +150,42 @@ public:
 #ifndef _AFX_NO_SOCKET_SUPPORT
 	// WinSock specific thread state
 	HWND m_hSocketWindow;
-	CMapPtrToPtr m_mapSocketHandle;
-	CMapPtrToPtr m_mapDeadSockets;
-	CPtrList m_listSocketNotifications;
+#ifdef _AFXDLL
+	CEmbeddedButActsLikePtr<CMapPtrToPtr> m_pmapSocketHandle;
+	CEmbeddedButActsLikePtr<CMapPtrToPtr> m_pmapDeadSockets;
+	CEmbeddedButActsLikePtr<CPtrList> m_plistSocketNotifications;
+#else
+	CMapPtrToPtr* m_pmapSocketHandle;
+	CMapPtrToPtr* m_pmapDeadSockets;
+	CPtrList* m_plistSocketNotifications;
+#endif
 #endif
 };
 
 // forward references required for AFX_MODULE_STATE definition
 class CWinApp;
 class COleObjectFactory;
+
+class CWnd;
+
+#ifdef _AFXDLL
+class CDynLinkLibrary;
+#endif
+
+#ifndef _AFX_NO_OCC_SUPPORT
+class COccManager;
+class COleControlLock;
+#endif
+
+#ifndef _AFX_NO_DAO_SUPPORT
+class _AFX_DAO_STATE;
+#endif
+
+class CTypeLibCacheMap : public CMapPtrToPtr
+{
+public:
+	virtual void RemoveAll(void* pExcept);
+};
 
 // AFX_MODULE_STATE (global data for a module)
 class AFX_MODULE_STATE : public CNoTrackObject
@@ -173,6 +198,7 @@ public:
 #else
 	AFX_MODULE_STATE(BOOL bDLL);
 #endif
+	~AFX_MODULE_STATE();
 
 	CWinApp* m_pCurrentWinApp;
 	HINSTANCE m_hCurrentInstanceHandle;
@@ -182,7 +208,7 @@ public:
 	BYTE m_bSystem; // TRUE if module is a "system" module, FALSE if not
 	BYTE m_bReserved[2]; // padding
 
-	short m_fRegisteredClasses; // flags for registered window classes
+	DWORD m_fRegisteredClasses; // flags for registered window classes
 
 	// runtime class data
 #ifdef _AFXDLL
@@ -208,8 +234,40 @@ public:
 	DWORD m_dwVersion;  // version that module linked against
 #endif
 
-	// define process local/thread local portions of module state
-	PROCESS_LOCAL(AFX_MODULE_PROCESS_STATE, m_process)
+	// variables related to a given process in a module
+	//  (used to be AFX_MODULE_PROCESS_STATE)
+#ifdef _AFX_OLD_EXCEPTIONS
+	// exceptions
+	AFX_TERM_PROC m_pfnTerminate;
+#endif
+	void (PASCAL *m_pfnFilterToolTipMessage)(MSG*, CWnd*);
+
+#ifdef _AFXDLL
+	// CDynLinkLibrary objects (for resource chain)
+	CTypedSimpleList<CDynLinkLibrary*> m_libraryList;
+
+	// special case for MFCxxLOC.DLL (localized MFC resources)
+	HINSTANCE m_appLangDLL;
+#endif
+
+#ifndef _AFX_NO_OCC_SUPPORT
+	// OLE control container manager
+	COccManager* m_pOccManager;
+	// locked OLE controls
+	CTypedSimpleList<COleControlLock*> m_lockList;
+#endif
+
+#ifndef _AFX_NO_DAO_SUPPORT
+	_AFX_DAO_STATE* m_pDaoState;
+#endif
+
+#ifndef _AFX_NO_OLE_SUPPORT
+	// Type library caches
+	CTypeLibCache m_typeLibCache;
+	CTypeLibCacheMap* m_pTypeLibCacheMap;
+#endif
+
+	// define thread local portions of module state
 	THREAD_LOCAL(AFX_MODULE_THREAD_STATE, m_thread)
 };
 
@@ -220,8 +278,13 @@ AFX_MODULE_STATE* AFXAPI AfxSetModuleState(AFX_MODULE_STATE* pNewState);
 AFX_MODULE_STATE* AFXAPI AfxGetModuleState();
 AFX_MODULE_STATE* AFXAPI AfxGetStaticModuleState();
 
-AFX_MODULE_PROCESS_STATE* AFXAPI AfxGetModuleProcessState();
 AFX_MODULE_THREAD_STATE* AFXAPI AfxGetModuleThreadState();
+
+#ifdef _AFXDLL
+#define _AFX_CMDTARGET_GETSTATE() (m_pModuleState)
+#else
+#define _AFX_CMDTARGET_GETSTATE() (AfxGetModuleState())
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // macros & classes to manage pushing/popping the module state
@@ -235,7 +298,18 @@ struct AFX_MAINTAIN_STATE
 protected:
 	AFX_MODULE_STATE* m_pPrevModuleState;
 };
-#define AFX_MANAGE_STATE(p) AFX_MAINTAIN_STATE _ctlState(p);
+
+class _AFX_THREAD_STATE;
+struct AFX_MAINTAIN_STATE2
+{
+	AFX_MAINTAIN_STATE2(AFX_MODULE_STATE* pModuleState);
+	~AFX_MAINTAIN_STATE2();
+
+protected:
+	AFX_MODULE_STATE* m_pPrevModuleState;
+	_AFX_THREAD_STATE* m_pThreadState;
+};
+#define AFX_MANAGE_STATE(p) AFX_MAINTAIN_STATE2 _ctlState(p);
 #else  // _AFXDLL
 #define AFX_MANAGE_STATE(p)
 #endif //!_AFXDLL
@@ -271,7 +345,6 @@ public:
 	DWORD m_dwPropExStyle;
 	HWND m_hWndInit;
 	BOOL m_bDlgCreate;
-	HHOOK m_hHookOldSendMsg;
 	HHOOK m_hHookOldCbtFilter;
 	HHOOK m_hHookOldMsgFilter;
 
@@ -299,8 +372,9 @@ public:
 	CControlBar* m_pLastStatus; // last flyby status control bar
 
 	// OLE control thread-local data
-	CWnd* m_pWndPark;		// "parking space" window
-	long m_nCtrlRef;		// reference count on parking window
+	CWnd* m_pWndPark;       // "parking space" window
+	long m_nCtrlRef;        // reference count on parking window
+	BOOL m_bNeedTerm;       // TRUE if OleUninitialize needs to be called
 };
 
 EXTERN_THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadState)

@@ -1,0 +1,105 @@
+CPP32 Help
+
+CPP32.EXE produces a file that lists a C program, in which all #include files and #define macros have been expanded. While you do not need to use the preprocessors during normal compilation, you may find the list file helpful for debugging purposes.
+Often, when the compiler reports an error inside a macro or an include file, you can get more information about what the error is if you can see the include files or the results of the macro expansions. In many multi-pass compilers, a separate pass performs this work, and the results of the pass can be examined. Because the Borland C++ compiler is an integrated single-pass compiler, use CPP32 to get the first-pass functionality found in other compilers.
+
+The preprocessor has a set of command-line options which control its output. For a list of these options, type CPP32 at the command line.
+For each file processed by CPP32, the output is written to a file in the current directory (or the output directory named by the -n option) with the same name as the source name but with an extension of .I.
+This output file is a text file containing each line of the source file and any include files. Any preprocessing directive lines have been removed, along with any conditional text lines excluded from the compile. Unless you use a command-line option to specify otherwise, text lines are prefixed with the file name and line number of the source or include file the line came from. Within a text line, any macros are replaced with their expansion text.
+
+The resulting output of CPP32 cannot be compiled because of the file name and line number prefix attached to each source line. However, use the -P- option to produce a file which doesn't have line numbers. You can then pass this file to the compiler (use the -P compiler option to force a C++ compile).
+
+CPP32.EXE uses the following command-line syntax and options:
+
+Syntax
+
+CPP32 [ options ] file[s]
+
+Options
+
+The following options can be used with CPP32:
+
+Option	Description
+
+-Ax	Specify language extensions
+-C	Allow nested comments
+-Dname	Define macro
+-gnnn	Stop after N warnings
+-innn	Maximum identifier length N
+
+-Ipath	Include files directory
+-jnnn	Stop after N errors
+-npath	Output file directory
+-ofilename	Output file name
+-p	Pascal calls
+
+-P	Include source line info (on by default)
+-Uname	Undefine macro
+-w	Enable all warnings
+-w-xxx	Disable warning xxx
+-wxxx	Enable warning xxx
+The -P option tells CPP32 to prefix each line with the source file name and line number. With the -P- option, CPP32 can be used as a macro preprocessor; the resulting .I file can then be compiled with BCC32. (Note that you can also use the BCC32 option -P to set default file extensions.)
+The following simple program illustrates how CPP32 preprocesses a file, first with -P selected, then with -P-
+.
+
+Source file: HELLOFB.C
+
+#define NAME "Frank Borland"
+#define BEGIN {
+#define END   }
+
+main()
+BEGIN
+  printf("%s\n", NAME);
+END
+
+CPP32 command line:   CPP32 HELLOFB.C
+Output:
+
+HELLOAJ.c 1:
+HELLOAJ.c 2:
+HELLOAJ.c 3:
+HELLOAJ.c 4:
+HELLOAJ.c 5: main()
+HELLOAJ.c 6: {
+HELLOAJ.c 7:    printf("%s\n","Frank Borland");
+HELLOAJ.c 8: }
+
+CPP32 command line:   CPP32 -P- HELLOFB.C
+Output:
+
+main()
+{
+
+printf("%s\n","Frank Borland");
+
+}
+
+MIDL (Microsoft Interface Definition Language) is an RPC compiler. In order to use MIDL, with the Borland C++ preprocessor (CPP32.EXE), you must use the following MIDL command:
+
+MIDL -cpp_cmd {CPP32} -cpp_opt "-P- -oCON {CPP32 options}" {MIDL options} {idl/.acf}
+
+Option	Description
+
+-cpp_cmd {CPP32}	Tells MIDL which preprocessor to use when processing an .IDL or .ACF file. MIDL calls the preprocessor to expand macros within source files.
+-cpp_opt "{options}"	Specifies the command- line options for the preprocessor. The -P- removes line number and file name information from each line of the preprocessed output. The -oCON indicates that preprocessed output should go to standard output, instead of to file. The preprocessor banner and the current file that is being processed are not emitted. Including -oCON within a .CFG file processed by the preprocessor causes the banner to be emitted.
+
+{CPP32 options}	Passes the options to CPP32.
+{MIDL options}	Any MIDL command-line options.
+{.idl/.acf file}	The source file that MIDL processes.
+In some cases, CPP32 does not accept valid UUIDs. For example, a valid UUID statement is:
+
+uuid(5630EAA0-CA48-1067-B320-00DD010662DB)
+
+
+When CPP32 encounters 5630EAA0, it is classified as a floating-point number, and since it is an invalid floating point number, the preprocessor emits an error. To work around this problem, enclose the UUID within quotes and use the -ms_ext MIDL option. The UUID statement becomes:
+
+uuid("5630EAA0-CA48-1067-B320-00DD010662DB")
+
+and the MIDL command line becomes:
+
+MIDL -ms_ext -cpp_cmd {CPP|CPP32} -cpp_opt "-P- -oCON
+
+{CPP32 options}" {MIDL options} {.idl/.acf file}
+
+Copyright © 1998 Borland International.

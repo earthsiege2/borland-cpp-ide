@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,6 +9,8 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
+
+#ifdef _AFXDLL
 
 #ifdef AFXCTL_CORE3_SEG
 #pragma code_seg(AFXCTL_CORE3_SEG)
@@ -42,8 +44,7 @@ CControlFrameWnd::CControlFrameWnd(COleControl* pCtrl) :
 BOOL CControlFrameWnd::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// make sure the default window class is registered
-	if (!AfxDeferRegisterClass(AFX_WND_REG))
-		return FALSE;
+	VERIFY(AfxDeferRegisterClass(AFX_WND_REG));
 
 	if (cs.lpszClass == NULL)
 		cs.lpszClass = AFX_WND;
@@ -92,3 +93,5 @@ void CControlFrameWnd::OnActivate(UINT nState, CWnd* pWndOther,
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
+
+#endif //_AFXDLL

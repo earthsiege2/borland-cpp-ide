@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -36,33 +36,28 @@ static char THIS_FILE[] = __FILE__;
 	RGBQUAD is byte-order-dependent, so we need different
 	code depending on the byte order we're targeting.
 */
-#ifndef _MAC
 #define RGB_TO_RGBQUAD(r,g,b)   (RGB(b,g,r))
 #define CLR_TO_RGBQUAD(clr)     (RGB(GetBValue(clr), GetGValue(clr), GetRValue(clr)))
-#else
-#define RGB_TO_RGBQUAD(r,g,b)   (RGB(r,g,b) << 8)
-#define CLR_TO_RGBQUAD(clr)     (clr << 8)
-#endif
+
+struct AFX_COLORMAP
+{
+	// use DWORD instead of RGBQUAD so we can compare two RGBQUADs easily
+	DWORD rgbqFrom;
+	int iSysColorTo;
+};
+
+AFX_STATIC_DATA const AFX_COLORMAP _afxSysColorMap[] =
+{
+	// mapping from color in DIB to system color
+	{ RGB_TO_RGBQUAD(0x00, 0x00, 0x00),  COLOR_BTNTEXT },       // black
+	{ RGB_TO_RGBQUAD(0x80, 0x80, 0x80),  COLOR_BTNSHADOW },     // dark gray
+	{ RGB_TO_RGBQUAD(0xC0, 0xC0, 0xC0),  COLOR_BTNFACE },       // bright gray
+	{ RGB_TO_RGBQUAD(0xFF, 0xFF, 0xFF),  COLOR_BTNHIGHLIGHT }   // white
+};
 
 HBITMAP AFXAPI
 AfxLoadSysColorBitmap(HINSTANCE hInst, HRSRC hRsrc, BOOL bMono)
 {
-	struct COLORMAP
-	{
-		// use DWORD instead of RGBQUAD so we can compare two RGBQUADs easily
-		DWORD rgbqFrom;
-		int iSysColorTo;
-	};
-	static const COLORMAP sysColorMap[] =
-	{
-		// mapping from color in DIB to system color
-		{ RGB_TO_RGBQUAD(0x00, 0x00, 0x00),  COLOR_BTNTEXT },       // black
-		{ RGB_TO_RGBQUAD(0x80, 0x80, 0x80),  COLOR_BTNSHADOW },     // dark grey
-		{ RGB_TO_RGBQUAD(0xC0, 0xC0, 0xC0),  COLOR_BTNFACE },       // bright grey
-		{ RGB_TO_RGBQUAD(0xFF, 0xFF, 0xFF),  COLOR_BTNHIGHLIGHT }   // white
-	};
-	const int nMaps = 4;
-
 	HGLOBAL hglb;
 	if ((hglb = LoadResource(hInst, hRsrc)) == NULL)
 		return NULL;
@@ -86,19 +81,19 @@ AfxLoadSysColorBitmap(HINSTANCE hInst, HRSRC hRsrc, BOOL bMono)
 	for (int iColor = 0; iColor < nColorTableSize; iColor++)
 	{
 		// look for matching RGBQUAD color in original
-		for (int i = 0; i < nMaps; i++)
+		for (int i = 0; i < _countof(_afxSysColorMap); i++)
 		{
-			if (pColorTable[iColor] == sysColorMap[i].rgbqFrom)
+			if (pColorTable[iColor] == _afxSysColorMap[i].rgbqFrom)
 			{
 				if (bMono)
 				{
 					// all colors except text become white
-					if (sysColorMap[i].iSysColorTo != COLOR_BTNTEXT)
+					if (_afxSysColorMap[i].iSysColorTo != COLOR_BTNTEXT)
 						pColorTable[iColor] = RGB_TO_RGBQUAD(255, 255, 255);
 				}
 				else
 					pColorTable[iColor] =
-						CLR_TO_RGBQUAD(::GetSysColor(sysColorMap[i].iSysColorTo));
+						CLR_TO_RGBQUAD(::GetSysColor(_afxSysColorMap[i].iSysColorTo));
 				break;
 			}
 		}
@@ -121,13 +116,6 @@ AfxLoadSysColorBitmap(HINSTANCE hInst, HRSRC hRsrc, BOOL bMono)
 		StretchDIBits(hDCGlyphs, 0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight,
 			lpBits, (LPBITMAPINFO)lpBitmapInfo, DIB_RGB_COLORS, SRCCOPY);
 		SelectObject(hDCGlyphs, hbmOld);
-
-#ifdef _MAC
-		// We don't change this bitmap any more, so get rid of the big,
-		// wasteful Macintosh port
-		::SetBitmapReadOnly(hbm, BRO_READONLY);
-#endif
-
 		::DeleteDC(hDCGlyphs);
 	}
 	::ReleaseDC(NULL, hDCScreen);
@@ -142,6 +130,74 @@ AfxLoadSysColorBitmap(HINSTANCE hInst, HRSRC hRsrc, BOOL bMono)
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
+
+struct AFX_DLLVERSIONINFO
+{
+		DWORD cbSize;
+		DWORD dwMajorVersion;                   // Major version
+		DWORD dwMinorVersion;                   // Minor version
+		DWORD dwBuildNumber;                    // Build number
+		DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
+};
+
+typedef HRESULT (CALLBACK* AFX_DLLGETVERSIONPROC)(AFX_DLLVERSIONINFO *);
+
+int _afxComCtlVersion = -1;
+
+DWORD AFXAPI _AfxGetComCtlVersion()
+{
+	// return cached version if already determined...
+	if (_afxComCtlVersion != -1)
+		return _afxComCtlVersion;
+
+	// otherwise determine comctl32.dll version via DllGetVersion
+	HINSTANCE hInst = ::GetModuleHandleA("COMCTL32.DLL");
+	ASSERT(hInst != NULL);
+	AFX_DLLGETVERSIONPROC pfn;
+	pfn = (AFX_DLLGETVERSIONPROC)GetProcAddress(hInst, "DllGetVersion");
+	DWORD dwVersion = VERSION_WIN4;
+	if (pfn != NULL)
+	{
+		AFX_DLLVERSIONINFO dvi;
+		memset(&dvi, 0, sizeof(dvi));
+		dvi.cbSize = sizeof(dvi);
+		HRESULT hr = (*pfn)(&dvi);
+		if (SUCCEEDED(hr))
+		{
+			ASSERT(dvi.dwMajorVersion <= 0xFFFF);
+			ASSERT(dvi.dwMinorVersion <= 0xFFFF);
+			dwVersion = MAKELONG(dvi.dwMinorVersion, dvi.dwMajorVersion);
+		}
+	}
+	_afxComCtlVersion = dwVersion;
+	return dwVersion;
+}
+
+int _afxDropDownWidth = -1;
+
+int AFXAPI _AfxGetDropDownWidth()
+{
+	// return cached version if already determined...
+	if (_afxDropDownWidth != -1)
+		return _afxDropDownWidth;
+
+	// otherwise calculate it...
+	HDC hDC = GetDC(NULL);
+	ASSERT(hDC != NULL);
+	HFONT hFont;
+	if ((hFont = CreateFont(GetSystemMetrics(SM_CYMENUCHECK), 0, 0, 0,
+		FW_NORMAL, 0, 0, 0, SYMBOL_CHARSET, 0, 0, 0, 0, _T("Marlett"))) != NULL)
+		hFont = (HFONT)SelectObject(hDC, hFont);
+	VERIFY(GetCharWidth(hDC, '6', '6', &_afxDropDownWidth));
+	if (hFont != NULL)
+	{
+		SelectObject(hDC, hFont);
+		DeleteObject(hFont);
+	}
+	ReleaseDC(NULL, hDC);
+	ASSERT(_afxDropDownWidth != -1);
+	return _afxDropDownWidth;
+}
 
 CToolBar::CToolBar()
 {
@@ -175,29 +231,48 @@ CToolBar::~CToolBar()
 
 BOOL CToolBar::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
 {
+	return CreateEx(pParentWnd, 0, dwStyle,
+		CRect(m_cxLeftBorder, m_cyTopBorder, m_cxRightBorder, m_cyBottomBorder), nID);
+}
+
+BOOL CToolBar::CreateEx(CWnd* pParentWnd, DWORD dwCtrlStyle, DWORD dwStyle, CRect rcBorders, UINT nID)
+{
 	ASSERT_VALID(pParentWnd);   // must have a parent
 	ASSERT (!((dwStyle & CBRS_SIZE_FIXED) && (dwStyle & CBRS_SIZE_DYNAMIC)));
 
+	SetBorders(rcBorders);
+
 	// save the style
-	m_dwStyle = dwStyle;
+	m_dwStyle = (dwStyle & CBRS_ALL);
 	if (nID == AFX_IDW_TOOLBAR)
 		m_dwStyle |= CBRS_HIDE_INPLACE;
 
 	dwStyle &= ~CBRS_ALL;
 	dwStyle |= CCS_NOPARENTALIGN|CCS_NOMOVEY|CCS_NODIVIDER|CCS_NORESIZE;
+	dwStyle |= dwCtrlStyle;
 
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_BAR_REG));
+	_AfxGetComCtlVersion();
+	ASSERT(_afxComCtlVersion != -1);
+	_AfxGetDropDownWidth();
+	ASSERT(_afxDropDownWidth != -1);
 
 	// create the HWND
 	CRect rect; rect.SetRectEmpty();
 	if (!CWnd::Create(TOOLBARCLASSNAME, NULL, dwStyle, rect, pParentWnd, nID))
 		return FALSE;
 
+	// sync up the sizes
+	SetSizes(m_sizeButton, m_sizeImage);
+
 	// Note: Parent must resize itself for control bar to be resized
 
 	return TRUE;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// CToolBar
 
 BOOL CToolBar::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -226,23 +301,31 @@ void CToolBar::SetOwner(CWnd* pOwnerWnd)
 void CToolBar::SetSizes(SIZE sizeButton, SIZE sizeImage)
 {
 	ASSERT_VALID(this);
-	ASSERT(::IsWindow(m_hWnd));
 
 	// sizes must be non-zero and positive
 	ASSERT(sizeButton.cx > 0 && sizeButton.cy > 0);
 	ASSERT(sizeImage.cx > 0 && sizeImage.cy > 0);
 
-	// button must be big enough to hold image 
+	// button must be big enough to hold image
 	//   + 7 pixels on x
 	//   + 6 pixels on y
 	ASSERT(sizeButton.cx >= sizeImage.cx + 7);
 	ASSERT(sizeButton.cy >= sizeImage.cy + 6);
 
-	// set the sizes via TB_SETBITMAPSIZE and TB_SETBUTTONSIZE
-	VERIFY(SendMessage(TB_SETBITMAPSIZE, 0, MAKELONG(sizeImage.cx, sizeImage.cy)));
-	VERIFY(SendMessage(TB_SETBUTTONSIZE, 0, MAKELONG(sizeButton.cx, sizeButton.cy)));
+	if (::IsWindow(m_hWnd))
+	{
+		// set the sizes via TB_SETBITMAPSIZE and TB_SETBUTTONSIZE
+		VERIFY(SendMessage(TB_SETBITMAPSIZE, 0, MAKELONG(sizeImage.cx, sizeImage.cy)));
+		VERIFY(SendMessage(TB_SETBUTTONSIZE, 0, MAKELONG(sizeButton.cx, sizeButton.cy)));
 
-	Invalidate();   // just to be nice if called when toolbar is visible
+		Invalidate();   // just to be nice if called when toolbar is visible
+	}
+	else
+	{
+		// just set our internal values for later
+		m_sizeButton = sizeButton;
+		m_sizeImage = sizeImage;
+	}
 }
 
 void CToolBar::SetHeight(int cyHeight)
@@ -339,11 +422,7 @@ BOOL CToolBar::LoadBitmap(LPCTSTR lpszResourceName)
 
 	// load the bitmap
 	HBITMAP hbmImageWell;
-#ifndef _MAC
 	hbmImageWell = AfxLoadSysColorBitmap(hInstImageWell, hRsrcImageWell);
-#else
-	hbmImageWell = AfxLoadSysColorBitmap(hInstImageWell, hRsrcImageWell, m_bMonochrome);
-#endif
 
 	// tell common control toolbar about the new bitmap
 	if (!AddReplaceBitmap(hbmImageWell))
@@ -417,10 +496,11 @@ BOOL CToolBar::SetButtons(const UINT* lpIDArray, int nIDCount)
 	while (nCount--)
 		VERIFY(DefWindowProc(TB_DELETEBUTTON, 0, 0));
 
+	TBBUTTON button; memset(&button, 0, sizeof(TBBUTTON));
+	button.iString = -1;
 	if (lpIDArray != NULL)
 	{
 		// add new buttons to the common control
-		TBBUTTON button; memset(&button, 0, sizeof(TBBUTTON));
 		int iImage = 0;
 		for (int i = 0; i < nIDCount; i++)
 		{
@@ -430,7 +510,11 @@ BOOL CToolBar::SetButtons(const UINT* lpIDArray, int nIDCount)
 				// separator
 				button.fsStyle = TBSTYLE_SEP;
 				// width of separator includes 8 pixel overlap
-				button.iBitmap = 8;
+				ASSERT(_afxComCtlVersion != -1);
+				if ((GetStyle() & TBSTYLE_FLAT) || _afxComCtlVersion == VERSION_IE4)
+					button.iBitmap = 6;
+				else
+					button.iBitmap = 8;
 			}
 			else
 			{
@@ -445,7 +529,6 @@ BOOL CToolBar::SetButtons(const UINT* lpIDArray, int nIDCount)
 	else
 	{
 		// add 'blank' buttons
-		TBBUTTON button; memset(&button, 0, sizeof(TBBUTTON));
 		button.fsState = TBSTATE_ENABLED;
 		for (int i = 0; i < nIDCount; i++)
 		{
@@ -455,7 +538,6 @@ BOOL CToolBar::SetButtons(const UINT* lpIDArray, int nIDCount)
 		}
 	}
 	m_nCount = (int)DefWindowProc(TB_BUTTONCOUNT, 0, 0);
-
 	m_bDelayedButtonLayout = TRUE;
 
 	return TRUE;
@@ -505,14 +587,14 @@ void CToolBar::_SetButton(int nIndex, TBBUTTON* pButton)
 			((pButton->fsStyle & TBSTYLE_SEP) && pButton->iBitmap != button.iBitmap))
 		{
 			// changing a separator
-			Invalidate(FALSE);
+			Invalidate();
 		}
 		else
 		{
 			// invalidate just the button
 			CRect rect;
 			if (DefWindowProc(TB_GETITEMRECT, nIndex, (LPARAM)&rect))
-				InvalidateRect(rect, FALSE);    // don't erase background
+				InvalidateRect(rect);
 		}
 	}
 }
@@ -541,24 +623,29 @@ void CToolBar::GetItemRect(int nIndex, LPRECT lpRect) const
 	ASSERT_VALID(this);
 	ASSERT(::IsWindow(m_hWnd));
 
+	// handle any delayed layout
 	if (m_bDelayedButtonLayout)
-	{   // REVEW: how do I comment on casting away the const below?
-		// The only way m_bDelayedButtonLayout gets set to TRUE
-		// is in a non const function.  Since we are just delaying
-		// a calculation that should have occured already this function
-		// is still theoretically const
-		BOOL bHorz = (m_dwStyle & CBRS_ORIENT_HORZ) != 0;
-		if ((m_dwStyle & CBRS_FLOATING) && (m_dwStyle & CBRS_SIZE_DYNAMIC))
-			((CToolBar*)this)->CalcDynamicLayout(0, LM_HORZ | LM_MRUWIDTH | LM_COMMIT);
-		else if (bHorz)
-			((CToolBar*)this)->CalcDynamicLayout(0, LM_HORZ | LM_HORZDOCK | LM_COMMIT);
-		else
-			((CToolBar*)this)->CalcDynamicLayout(0, LM_VERTDOCK | LM_COMMIT);
-	}
+		((CToolBar*)this)->Layout();
 
+	// now it is safe to get the item rectangle
 	CToolBar* pBar = (CToolBar*)this;
 	if (!pBar->DefWindowProc(TB_GETITEMRECT, nIndex, (LPARAM)lpRect))
 		SetRectEmpty(lpRect);
+}
+
+void CToolBar::Layout()
+{
+	ASSERT(m_bDelayedButtonLayout);
+
+	m_bDelayedButtonLayout = FALSE;
+
+	BOOL bHorz = (m_dwStyle & CBRS_ORIENT_HORZ) != 0;
+	if ((m_dwStyle & CBRS_FLOATING) && (m_dwStyle & CBRS_SIZE_DYNAMIC))
+		((CToolBar*)this)->CalcDynamicLayout(0, LM_HORZ | LM_MRUWIDTH | LM_COMMIT);
+	else if (bHorz)
+		((CToolBar*)this)->CalcDynamicLayout(0, LM_HORZ | LM_HORZDOCK | LM_COMMIT);
+	else
+		((CToolBar*)this)->CalcDynamicLayout(0, LM_VERTDOCK | LM_COMMIT);
 }
 
 UINT CToolBar::GetButtonStyle(int nIndex) const
@@ -578,18 +665,16 @@ void CToolBar::SetButtonStyle(int nIndex, UINT nStyle)
 
 	TBBUTTON button;
 	_GetButton(nIndex, &button);
-	button.fsStyle = (BYTE)LOWORD(nStyle);
-	button.fsState = (BYTE)HIWORD(nStyle);
-	_SetButton(nIndex, &button);
-
-	m_bDelayedButtonLayout = TRUE;
+	if (button.fsStyle != (BYTE)LOWORD(nStyle) || button.fsState != (BYTE)HIWORD(nStyle))
+	{
+		button.fsStyle = (BYTE)LOWORD(nStyle);
+		button.fsState = (BYTE)HIWORD(nStyle);
+		_SetButton(nIndex, &button);
+		m_bDelayedButtonLayout = TRUE;
+	}
 }
 
-#ifdef _MAC
-	#define CX_OVERLAP  1
-#else
-	#define CX_OVERLAP  0
-#endif
+#define CX_OVERLAP  0
 
 CSize CToolBar::CalcSize(TBBUTTON* pData, int nCount)
 {
@@ -598,36 +683,57 @@ CSize CToolBar::CalcSize(TBBUTTON* pData, int nCount)
 	CPoint cur(0,0);
 	CSize sizeResult(0,0);
 
+	DWORD dwExtendedStyle = DefWindowProc(TB_GETEXTENDEDSTYLE, 0, 0);
+
 	for (int i = 0; i < nCount; i++)
 	{
+		//WINBUG: The IE4 version of COMCTL32.DLL calculates the separation
+		//  on a TBSTYLE_WRAP button as 100% of the value in iBitmap compared
+		//  to the other versions which calculate it at 2/3 of that value.
+		//  This is actually a bug which should be fixed in IE 4.01, so we
+		//  only do the 100% calculation specifically for IE4.
+		int cySep = pData[i].iBitmap;
+		ASSERT(_afxComCtlVersion != -1);
+		if (!(GetStyle() & TBSTYLE_FLAT) && _afxComCtlVersion != VERSION_IE4)
+			cySep = cySep * 2 / 3;
+
 		if (pData[i].fsState & TBSTATE_HIDDEN)
 			continue;
 
+		int cx = m_sizeButton.cx;
 		if (pData[i].fsStyle & TBSTYLE_SEP)
 		{
-			// A separator represents either a height or width
+			// a separator represents either a height or width
 			if (pData[i].fsState & TBSTATE_WRAP)
-				sizeResult.cy = max(cur.y + m_sizeButton.cy + pData[i].iBitmap * 2 / 3, sizeResult.cy);
+				sizeResult.cy = max(cur.y + m_sizeButton.cy + cySep, sizeResult.cy);
 			else
 				sizeResult.cx = max(cur.x + pData[i].iBitmap, sizeResult.cx);
 		}
 		else
 		{
-			sizeResult.cx = max(cur.x + m_sizeButton.cx, sizeResult.cx);
+			// check for dropdown style, but only if the buttons are being drawn
+			if ((pData[i].fsStyle & TBSTYLE_DROPDOWN) &&
+				(dwExtendedStyle & TBSTYLE_EX_DRAWDDARROWS))
+			{
+				// add size of drop down
+				ASSERT(_afxDropDownWidth != -1);
+				cx += _afxDropDownWidth;
+			}
+			sizeResult.cx = max(cur.x + cx, sizeResult.cx);
 			sizeResult.cy = max(cur.y + m_sizeButton.cy, sizeResult.cy);
 		}
 
 		if (pData[i].fsStyle & TBSTYLE_SEP)
 			cur.x += pData[i].iBitmap;
 		else
-			cur.x += m_sizeButton.cx - CX_OVERLAP;
+			cur.x += cx - CX_OVERLAP;
 
 		if (pData[i].fsState & TBSTATE_WRAP)
 		{
 			cur.x = 0;
 			cur.y += m_sizeButton.cy;
 			if (pData[i].fsStyle & TBSTYLE_SEP)
-				cur.y += pData[i].iBitmap * 2 / 3;
+				cur.y += cySep;
 		}
 	}
 	return sizeResult;
@@ -790,10 +896,10 @@ CSize CToolBar::CalcLayout(DWORD dwMode, int nLength)
 		ASSERT(dwMode & LM_HORZ);
 
 	int nCount;
-	TBBUTTON* pData;
+	TBBUTTON* pData = NULL;
 	CSize sizeResult(0,0);
 
-	// Load Buttons
+	//BLOCK: Load Buttons
 	{
 		nCount = DefWindowProc(TB_BUTTONCOUNT, 0, 0);
 		if (nCount != 0)
@@ -841,7 +947,7 @@ CSize CToolBar::CalcLayout(DWORD dwMode, int nLength)
 			BOOL bIsDelayed = m_bDelayedButtonLayout;
 			m_bDelayedButtonLayout = FALSE;
 
-			for(int i = 0; i < nCount; i++)
+			for (int i = 0; i < nCount; i++)
 				if ((pData[i].fsStyle & TBSTYLE_SEP) && (pData[i].idCommand != 0))
 					nControlCount++;
 
@@ -944,13 +1050,17 @@ void CToolBar::SetButtonInfo(int nIndex, UINT nID, UINT nStyle, int iImage)
 
 	TBBUTTON button;
 	_GetButton(nIndex, &button);
+	TBBUTTON save;
+	memcpy(&save, &button, sizeof(save));
 	button.idCommand = nID;
 	button.iBitmap = iImage;
 	button.fsStyle = (BYTE)LOWORD(nStyle);
 	button.fsState = (BYTE)HIWORD(nStyle);
-	_SetButton(nIndex, &button);
-
-	m_bDelayedButtonLayout = TRUE;
+	if (memcmp(&save, &button, sizeof(save)) != 0)
+	{
+		_SetButton(nIndex, &button);
+		m_bDelayedButtonLayout = TRUE;
+	}
 }
 
 int CToolBar::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
@@ -970,21 +1080,25 @@ int CToolBar::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
 	{
 		CRect rect;
 		TBBUTTON button;
-		if (pBar->DefWindowProc(TB_GETITEMRECT, i, (LPARAM)&rect) &&
-			rect.PtInRect(point) &&
-			pBar->DefWindowProc(TB_GETBUTTON, i, (LPARAM)&button) &&
-			!(button.fsStyle & TBSTYLE_SEP))
+		if (pBar->DefWindowProc(TB_GETITEMRECT, i, (LPARAM)&rect))
 		{
-			int nHit = GetItemID(i);
-			if (pTI != NULL)
+			++rect.bottom;
+			++rect.right;
+			if (rect.PtInRect(point) &&
+				pBar->DefWindowProc(TB_GETBUTTON, i, (LPARAM)&button) &&
+				!(button.fsStyle & TBSTYLE_SEP))
 			{
-				pTI->hwnd = m_hWnd;
-				pTI->rect = rect;
-				pTI->uId = nHit;
-				pTI->lpszText = LPSTR_TEXTCALLBACK;
+				int nHit = GetItemID(i);
+				if (pTI != NULL && pTI->cbSize >= sizeof(AFX_OLDTOOLINFO))
+				{
+					pTI->hwnd = m_hWnd;
+					pTI->rect = rect;
+					pTI->uId = nHit;
+					pTI->lpszText = LPSTR_TEXTCALLBACK;
+				}
+				// found matching rect, return the ID of the button
+				return nHit != 0 ? nHit : -1;
 			}
-			// found matching rect, return the ID of the button
-			return nHit != 0 ? nHit : -1;
 		}
 	}
 	return -1;
@@ -1001,19 +1115,20 @@ BOOL CToolBar::SetButtonText(int nIndex, LPCTSTR lpszText)
 	// add new string if not already in map
 	if (nString == -1)
 	{
-		// add new string to toolbar list
-		CString strTemp = lpszText;
-		strTemp += '\0';
-		nString = (int)DefWindowProc(TB_ADDSTRING, 0, (LPARAM)(LPCTSTR)strTemp);
-	}
-	if (nString == -1)
-		return FALSE;
+		// initialize map if necessary
+		if (m_pStringMap == NULL)
+			m_pStringMap = new CMapStringToPtr;
 
-	// cache string away in string map
-	if (m_pStringMap == NULL)
-		m_pStringMap = new CMapStringToPtr;
-	m_pStringMap->SetAt(lpszText, (void*)nString);
-	ASSERT(m_pStringMap->Lookup(lpszText, p));
+		// add new string to toolbar list
+		CString strTemp(lpszText, lstrlen(lpszText)+1);
+		nString = (int)DefWindowProc(TB_ADDSTRING, 0, (LPARAM)(LPCTSTR)strTemp);
+		if (nString == -1)
+			return FALSE;
+
+		// cache string away in string map
+		m_pStringMap->SetAt(lpszText, (void*)nString);
+		ASSERT(m_pStringMap->Lookup(lpszText, p));
+	}
 
 	// change the toolbar button description
 	TBBUTTON button;
@@ -1069,6 +1184,8 @@ BEGIN_MESSAGE_MAP(CToolBar, CControlBar)
 	ON_WM_NCCREATE()
 	ON_MESSAGE(TB_SETBITMAPSIZE, OnSetBitmapSize)
 	ON_MESSAGE(TB_SETBUTTONSIZE, OnSetButtonSize)
+	ON_MESSAGE(WM_SETTINGCHANGE, OnPreserveZeroBorderHelper)
+	ON_MESSAGE(WM_SETFONT, OnPreserveZeroBorderHelper)
 	ON_WM_SYSCOLORCHANGE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -1089,11 +1206,15 @@ void CToolBar::OnNcCalcSize(BOOL /*bCalcValidRects*/, NCCALCSIZE_PARAMS* lpncsp)
 	CRect rect; rect.SetRectEmpty();
 	BOOL bHorz = (m_dwStyle & CBRS_ORIENT_HORZ) != 0;
 	CControlBar::CalcInsideRect(rect, bHorz);
-	ASSERT(rect.top >= 2);
+	ASSERT(_afxComCtlVersion != -1);
+	ASSERT(_afxComCtlVersion >= VERSION_IE4 || rect.top >= 2);
 
 	// adjust non-client area for border space
 	lpncsp->rgrc[0].left += rect.left;
-	lpncsp->rgrc[0].top += rect.top - 2;
+	lpncsp->rgrc[0].top += rect.top;
+	// previous versions of COMCTL32.DLL had a built-in 2 pixel border
+	if (_afxComCtlVersion < VERSION_IE4)
+		lpncsp->rgrc[0].top -= 2;
 	lpncsp->rgrc[0].right += rect.right;
 	lpncsp->rgrc[0].bottom += rect.bottom;
 }
@@ -1150,51 +1271,77 @@ void CToolBar::OnWindowPosChanging(LPWINDOWPOS lpWndPos)
 void CToolBar::OnPaint()
 {
 	if (m_bDelayedButtonLayout)
-	{
-		m_bDelayedButtonLayout = FALSE;
-		BOOL bHorz = (m_dwStyle & CBRS_ORIENT_HORZ) != 0;
-		if ((m_dwStyle & CBRS_FLOATING) && (m_dwStyle & CBRS_SIZE_DYNAMIC))
-			CalcDynamicLayout(0, LM_HORZ | LM_MRUWIDTH | LM_COMMIT);
-		else if (bHorz)
-			CalcDynamicLayout(0, LM_HORZ | LM_HORZDOCK | LM_COMMIT);
-		else
-			CalcDynamicLayout(0, LM_VERTDOCK | LM_COMMIT);
-	}
+		Layout();
+
 	Default();
 }
 
 LRESULT CToolBar::OnSetButtonSize(WPARAM, LPARAM lParam)
 {
-	LRESULT lResult = Default();
-	if (lResult)
-		m_sizeButton = lParam;
-	return lResult;
+	return OnSetSizeHelper(m_sizeButton, lParam);
 }
 
 LRESULT CToolBar::OnSetBitmapSize(WPARAM, LPARAM lParam)
 {
+	return OnSetSizeHelper(m_sizeImage, lParam);
+}
+
+LRESULT CToolBar::OnSetSizeHelper(CSize& size, LPARAM lParam)
+{
+	//WINBUG: The IE4 version of COMCTL32.DLL supports a zero border, but
+	//  only if TBSTYLE_TRANSPARENT is on during the the TB_SETBITMAPSIZE
+	//  and/or TB_SETBUTTONSIZE messages.  In order to enable this feature
+	//  all the time (so we get consistent border behavior, dependent only
+	//  on the version of COMCTL32.DLL) we turn on TBSTYLE_TRANSPARENT
+	//  whenever these messages go through.  It would be nice that in a
+	//  future version, the system toolbar would just allow you to set
+	//  the top and left borders to anything you please.
+
+	BOOL bModify = FALSE;
+	ASSERT(_afxComCtlVersion != -1);
+	DWORD dwStyle = 0;
+	if (_afxComCtlVersion >= VERSION_IE4)
+	{
+		dwStyle = GetStyle();
+		bModify = ModifyStyle(0, TBSTYLE_TRANSPARENT|TBSTYLE_FLAT);
+	}
+
 	LRESULT lResult = Default();
 	if (lResult)
-		m_sizeImage = lParam;
+		size = lParam;
+
+	if (bModify)
+		SetWindowLong(m_hWnd, GWL_STYLE, dwStyle);
+
+	return lResult;
+}
+
+LRESULT CToolBar::OnPreserveZeroBorderHelper(WPARAM, LPARAM)
+{
+	BOOL bModify = FALSE;
+	ASSERT(_afxComCtlVersion != -1);
+	DWORD dwStyle = 0;
+	if (_afxComCtlVersion >= VERSION_IE4)
+	{
+		dwStyle = GetStyle();
+		bModify = ModifyStyle(0, TBSTYLE_TRANSPARENT|TBSTYLE_FLAT);
+	}
+
+	LRESULT lResult = Default();
+
+	if (bModify)
+		SetWindowLong(m_hWnd, GWL_STYLE, dwStyle);
+
 	return lResult;
 }
 
 void CToolBar::OnSysColorChange()
 {
-#ifdef _MAC
-	CControlBar::OnSysColorChange();
-#endif
-
 	// re-color bitmap for toolbar
 	if (m_hInstImageWell != NULL && m_hbmImageWell != NULL)
 	{
 		HBITMAP hbmNew;
-#ifndef _MAC
 		hbmNew = AfxLoadSysColorBitmap(m_hInstImageWell, m_hRsrcImageWell);
-#else
-		hbmNew = AfxLoadSysColorBitmap(m_hInstImageWell, m_hRsrcImageWell,
-			m_bMonochrome);
-#endif
 		if (hbmNew != NULL)
 			AddReplaceBitmap(hbmNew);
 	}
@@ -1272,6 +1419,12 @@ void CToolBar::OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler)
 		// ignore separators
 		if (!(button.fsStyle & TBSTYLE_SEP))
 		{
+			// allow reflections
+			if (CWnd::OnCmdMsg(0,
+				MAKELONG((int)CN_UPDATE_COMMAND_UI, WM_COMMAND+WM_REFLECT_BASE),
+				&state, NULL))
+				continue;
+
 			// allow the toolbar itself to have update handlers
 			if (CWnd::OnCmdMsg(state.m_nID, CN_UPDATE_COMMAND_UI, &state, NULL))
 				continue;
@@ -1295,7 +1448,7 @@ void CToolBar::AssertValid() const
 	//  m_nCount and m_pData to be in sync, which they are not in CToolBar.
 
 	ASSERT(m_hbmImageWell == NULL ||
-		(afxData.bWin32s || ::GetObjectType(m_hbmImageWell) == OBJ_BITMAP));
+		(afxData.bWin95 || ::GetObjectType(m_hbmImageWell) == OBJ_BITMAP));
 
 	if (m_hInstImageWell != NULL && m_hbmImageWell != NULL)
 		ASSERT(m_hRsrcImageWell != NULL);

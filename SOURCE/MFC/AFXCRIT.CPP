@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -19,20 +19,22 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#pragma warning(disable: 4706) // assignment within conditional
+
 /////////////////////////////////////////////////////////////////////////////
 // global thread protection
 
 #ifdef _MT
 
-static BOOL _afxCriticalInit;   // set _afxGlobalLock, _afxTempLock init
-static BOOL _afxCriticalWin32s;
+AFX_STATIC_DATA BOOL _afxCriticalInit = 0;   // set _afxGlobalLock, _afxTempLock init
+AFX_STATIC_DATA BOOL _afxCriticalWin32s = 0;
 
 // _afxResourceLock and _afxLockInit are used to lock each MFC global resource
-static CRITICAL_SECTION _afxResourceLock[CRIT_MAX];
-static CRITICAL_SECTION _afxLockInitLock;
-static BOOL _afxLockInit[CRIT_MAX];
+AFX_STATIC_DATA CRITICAL_SECTION _afxResourceLock[CRIT_MAX] = { { 0 } };
+AFX_STATIC_DATA CRITICAL_SECTION _afxLockInitLock = { 0 };
+AFX_STATIC_DATA BOOL _afxLockInit[CRIT_MAX] = { 0 };
 #ifdef _DEBUG
-static BOOL _afxResourceLocked[CRIT_MAX];
+AFX_STATIC_DATA BOOL _afxResourceLocked[CRIT_MAX] = { 0 };
 #endif
 
 BOOL AFXAPI AfxCriticalInit()
@@ -68,7 +70,9 @@ void AFXAPI AfxCriticalTerm()
 			// delete specific resource critical sections
 			for (int i = 0; i < CRIT_MAX; i++)
 			{
+#ifdef _DEBUG
 				ASSERT(!_afxResourceLocked[i]);
+#endif
 				if (_afxLockInit[i])
 				{
 					DeleteCriticalSection(&_afxResourceLock[i]);
@@ -108,7 +112,9 @@ void AFXAPI AfxLockGlobals(int nLockType)
 
 	// lock specific resource
 	EnterCriticalSection(&_afxResourceLock[nLockType]);
+#ifdef _DEBUG
 	ASSERT(++_afxResourceLocked[nLockType] > 0);
+#endif
 }
 
 void AFXAPI AfxUnlockGlobals(int nLockType)
@@ -122,7 +128,9 @@ void AFXAPI AfxUnlockGlobals(int nLockType)
 
 	// unlock specific resource
 	ASSERT(_afxLockInit[nLockType]);
+#ifdef _DEBUG
 	ASSERT(--_afxResourceLocked[nLockType] >= 0);
+#endif
 	LeaveCriticalSection(&_afxResourceLock[nLockType]);
 }
 

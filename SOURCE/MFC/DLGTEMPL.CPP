@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -21,12 +21,10 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-#ifndef _MAC
-
 /////////////////////////////////////////////////////////////////////////////
-// ConvertDialogUnitsToPixels
+// _AfxConvertDialogUnitsToPixels
 
-static void ConvertDialogUnitsToPixels(LPCTSTR pszFontFace, WORD wFontSize,
+AFX_STATIC void AFXAPI _AfxConvertDialogUnitsToPixels(LPCTSTR pszFontFace, WORD wFontSize,
 	int cxDlg, int cyDlg, SIZE* pSizePixel)
 {
 	// Attempt to create the font to be used in the dialog box
@@ -35,7 +33,7 @@ static void ConvertDialogUnitsToPixels(LPCTSTR pszFontFace, WORD wFontSize,
 	HDC hDC = ::GetDC(NULL);
 	memset(&lf, 0, sizeof(LOGFONT));
 	lf.lfHeight = -MulDiv(wFontSize, GetDeviceCaps(hDC, LOGPIXELSY), 72);
-	lf.lfWeight = (!afxData.bWin31 ? FW_NORMAL : FW_BOLD);
+	lf.lfWeight = FW_NORMAL;
 	lf.lfCharSet = DEFAULT_CHARSET;
 	lstrcpy(lf.lfFaceName, pszFontFace);
 
@@ -47,7 +45,7 @@ static void ConvertDialogUnitsToPixels(LPCTSTR pszFontFace, WORD wFontSize,
 		GetTextMetrics(hDC, &tm);
 		cySysChar = tm.tmHeight + tm.tmExternalLeading;
 		SIZE size;
-		::GetTextExtentPoint(hDC,
+		::GetTextExtentPoint32(hDC,
 			_T("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"), 52,
 			&size);
 		cxSysChar = (size.cx + 26) / 52;
@@ -70,7 +68,7 @@ static void ConvertDialogUnitsToPixels(LPCTSTR pszFontFace, WORD wFontSize,
 /////////////////////////////////////////////////////////////////////////////
 // IsDialogEx
 
-inline static BOOL IsDialogEx(const DLGTEMPLATE* pTemplate)
+AFX_STATIC inline BOOL IsDialogEx(const DLGTEMPLATE* pTemplate)
 {
 	return ((DLGTEMPLATEEX*)pTemplate)->signature == 0xFFFF;
 }
@@ -78,7 +76,7 @@ inline static BOOL IsDialogEx(const DLGTEMPLATE* pTemplate)
 /////////////////////////////////////////////////////////////////////////////
 // HasFont
 
-inline static BOOL HasFont(const DLGTEMPLATE* pTemplate)
+AFX_STATIC inline BOOL HasFont(const DLGTEMPLATE* pTemplate)
 {
 	return (DS_SETFONT &
 		(IsDialogEx(pTemplate) ? ((DLGTEMPLATEEX*)pTemplate)->style :
@@ -88,7 +86,7 @@ inline static BOOL HasFont(const DLGTEMPLATE* pTemplate)
 /////////////////////////////////////////////////////////////////////////////
 // FontAttrSize
 
-inline static int FontAttrSize(BOOL bDialogEx)
+AFX_STATIC inline int FontAttrSize(BOOL bDialogEx)
 {
 	return sizeof(WORD) * (bDialogEx ? 3 : 1);
 }
@@ -221,8 +219,8 @@ UINT AFX_CDECL CDialogTemplate::GetTemplateSize(const DLGTEMPLATE* pTemplate)
 		pb += 2 * (wcslen((WCHAR*)pb) + 1);
 	}
 
-	BYTE nCtrl = bDialogEx ? (BYTE)((DLGTEMPLATEEX*)pTemplate)->cDlgItems :
-		(BYTE)pTemplate->cdit;
+	WORD nCtrl = bDialogEx ? (WORD)((DLGTEMPLATEEX*)pTemplate)->cDlgItems :
+		(WORD)pTemplate->cdit;
 
 	while (nCtrl > 0)
 	{
@@ -316,8 +314,8 @@ BOOL CDialogTemplate::SetFont(LPCTSTR lpFaceName, WORD nFontSize)
 	BYTE* pOldControls = (BYTE*)(((DWORD)pb + cbOld + 3) & ~3);
 	BYTE* pNewControls = (BYTE*)(((DWORD)pb + cbNew + 3) & ~3);
 
-	BYTE nCtrl = bDialogEx ? (BYTE)((DLGTEMPLATEEX*)pTemplate)->cDlgItems :
-		(BYTE)pTemplate->cdit;
+	WORD nCtrl = bDialogEx ? (WORD)((DLGTEMPLATEEX*)pTemplate)->cDlgItems :
+		(WORD)pTemplate->cdit;
 
 	if (cbNew != cbOld && nCtrl > 0)
 		memmove(pNewControls, pOldControls, (size_t)(m_dwTemplateSize - (pOldControls - (BYTE*)pTemplate)));
@@ -400,8 +398,6 @@ void CDialogTemplate::GetSizeInPixels(SIZE* pSize) const
 
 		SIZE size;
 		GetSizeInDialogUnits(&size);
-		ConvertDialogUnitsToPixels(strFace, wSize, size.cx, size.cy, pSize);
+		_AfxConvertDialogUnitsToPixels(strFace, wSize, size.cx, size.cy, pSize);
 	}
 }
-
-#endif //!_MAC

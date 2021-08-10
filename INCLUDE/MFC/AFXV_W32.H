@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -107,15 +107,6 @@
 
 #endif //VC_EXTRALEAN
 
-#ifdef _MAC
-#define _WIN32NLS
-#define _WIN32REG
-#define _WLM_NOFORCE_LIBS
-#ifdef _AFXDLL
-#define _WLMDLL
-#endif
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // Turn off warnings for /W4
 // To resume any of these warning: #pragma warning(default: 4xxx)
@@ -125,13 +116,32 @@
 #pragma warning(disable: 4201)  // winnt.h uses nameless structs
 #endif
 
+#define _WIN32_WINDOWS 0x0500
 #include <windows.h>
+
+#undef WM_MOUSELAST
+#define WM_MOUSELAST 0x0209
+
+#include <zmouse.h>
 
 struct HKEY__;
 typedef struct HKEY__ *HKEY;
 
 #ifndef _INC_COMMCTRL
 	#include <commctrl.h>
+
+	// Note: We must avoid using TB_ADDBUTTONW and TB_INSERTBUTTONW in the Unicode
+	//  build or else MFC42U.DLL will not be compatible with pre-IE4 versions of
+	//  COMCTL32.DLL.
+	#ifdef TB_ADDBUTTONSA
+		#undef TB_ADDBUTTONS
+		#define TB_ADDBUTTONS TB_ADDBUTTONSA
+	#endif
+
+	#ifdef TB_INSERTBUTTONA
+		#undef TB_INSERTBUTTON
+		#define TB_INSERTBUTTON TB_INSERTBUTTONA
+	#endif
 #endif
 
 #ifndef EXPORT
@@ -159,21 +169,21 @@ typedef struct HKEY__ *HKEY;
 // Win32 uses macros with parameters for this, which breaks C++ code.
 #ifdef GetWindowTask
 #undef GetWindowTask
-inline HTASK GetWindowTask(HWND hWnd)
+AFX_INLINE HTASK GetWindowTask(HWND hWnd)
 	{ return (HTASK)::GetWindowThreadProcessId(hWnd, NULL); }
 #endif
 
 // Win32 uses macros with parameters for this, which breaks C++ code.
 #ifdef GetNextWindow
 #undef GetNextWindow
-inline HWND GetNextWindow(HWND hWnd, UINT nDirection)
+AFX_INLINE HWND GetNextWindow(HWND hWnd, UINT nDirection)
 	{ return ::GetWindow(hWnd, nDirection); }
 #endif
 
 // Avoid Win95 mapping CToolBar::DrawState to DrawState[A/W]
 #ifdef DrawState
 #undef DrawState
-inline BOOL WINAPI DrawState(HDC hdc, HBRUSH hbr, DRAWSTATEPROC lpOutputFunc,
+AFX_INLINE BOOL WINAPI DrawState(HDC hdc, HBRUSH hbr, DRAWSTATEPROC lpOutputFunc,
 	LPARAM lData, WPARAM wData, int x, int y, int cx, int cy, UINT fuFlags)
 #ifdef UNICODE
 	{ return ::DrawStateW(hdc, hbr, lpOutputFunc, lData, wData, x, y, cx, cy,
@@ -187,7 +197,7 @@ inline BOOL WINAPI DrawState(HDC hdc, HBRUSH hbr, DRAWSTATEPROC lpOutputFunc,
 // Avoid Win95 mapping CStatusBar::DrawStatusText to DrawStatusText[A/W]
 #ifdef DrawStatusText
 #undef DrawStatusText
-inline void WINAPI DrawStatusText(HDC hDC, LPRECT lprc, LPCTSTR szText,
+AFX_INLINE void WINAPI DrawStatusText(HDC hDC, LPRECT lprc, LPCTSTR szText,
 	UINT uFlags)
 #ifdef UNICODE
 	{ ::DrawStatusTextW(hDC, lprc, szText, uFlags); }
@@ -196,13 +206,11 @@ inline void WINAPI DrawStatusText(HDC hDC, LPRECT lprc, LPCTSTR szText,
 #endif
 #endif
 
-#ifndef _MAC
-// FreeResource is not required except on Mac platforms
+// FreeResource is not required on Win32 platforms
 #undef FreeResource
-inline BOOL WINAPI FreeResource(HGLOBAL) { return TRUE; }
-// UnlockResource is not required except on Mac platforms
+AFX_INLINE BOOL WINAPI FreeResource(HGLOBAL) { return TRUE; }
+// UnlockResource is not required on Win32 platforms
 #undef UnlockResource
-inline int WINAPI UnlockResource(HGLOBAL) { return 0; }
-#endif
+AFX_INLINE int WINAPI UnlockResource(HGLOBAL) { return 0; }
 
 /////////////////////////////////////////////////////////////////////////////

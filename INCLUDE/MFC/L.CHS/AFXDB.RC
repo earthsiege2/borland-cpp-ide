@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -77,6 +77,12 @@ BEGIN
 		"更新或删除操作失败。"
 	AFX_IDP_SQL_DYNAMIC_CURSOR_NOT_SUPPORTED
 		"“ODBC驱动程序不支持动态指针。”"
+	AFX_IDP_SQL_FIELD_NOT_FOUND
+		"无效的字段名或字段索引。"
+	AFX_IDP_SQL_BOOKMARKS_NOT_SUPPORTED
+		"书签不被 ODBC 驱动程序支持。"
+	AFX_IDP_SQL_BOOKMARKS_NOT_ENABLED
+		"书签在记录集中未激活。"
 	AFX_IDP_DAO_ENGINE_INITIALIZATION
 		"“无法对DAO/Jet db引擎进行初始化。”"
 	AFX_IDP_DAO_DFX_BIND

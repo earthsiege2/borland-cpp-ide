@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -253,7 +253,9 @@ void CMemFile::Flush()
 
 void CMemFile::Close()
 {
-	ASSERT_VALID(this);
+	ASSERT((m_lpBuffer == NULL && m_nBufferSize == 0) ||
+		!m_bAutoDelete || AfxIsValidAddress(m_lpBuffer, (UINT)m_nBufferSize, FALSE));
+	ASSERT(m_nFileSize <= m_nBufferSize);
 
 	m_nGrowBytes = 0;
 	m_nPosition = 0;
@@ -328,6 +330,8 @@ UINT CMemFile::GetBufferPtr(UINT nCommand, UINT nCount,
 		*ppBufMax = m_lpBuffer + min(m_nBufferSize, m_nPosition + nCount);
 	else
 	{
+		if (nCount == (UINT)-1)
+			nCount = m_nBufferSize - m_nPosition;
 		*ppBufMax = m_lpBuffer + min(m_nFileSize, m_nPosition + nCount);
 		m_nPosition += LPBYTE(*ppBufMax) - LPBYTE(*ppBufStart);
 	}

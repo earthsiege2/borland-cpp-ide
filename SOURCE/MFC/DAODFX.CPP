@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -27,8 +27,8 @@ static char THIS_FILE[] = __FILE__;
 // Helpers
 
 // Helpers for floating point operations
-static const float afxFloatPseudoNull = AFX_RFX_SINGLE_PSEUDO_NULL;
-static const double afxDoublePseudoNull = AFX_RFX_DOUBLE_PSEUDO_NULL;
+AFX_STATIC_DATA const float _afxFloatPseudoNull = AFX_RFX_SINGLE_PSEUDO_NULL;
+AFX_STATIC_DATA const double _afxDoublePseudoNull = AFX_RFX_DOUBLE_PSEUDO_NULL;
 
 // Long binary allocation helper
 void AFX_CDECL AllocLongBinary(CLongBinary& lb, DWORD dwDataLength);
@@ -134,12 +134,11 @@ void CDaoFieldExchange::AppendParamType(CString& strParamList,
 
 CDaoFieldCache* CDaoFieldExchange::GetCacheValue(CDaoRecordset* prs, void* pv)
 {
-		void* pvCache;
-
-		// Lookup storage locations
-		if (!prs->m_pMapFieldCache->Lookup(pv, pvCache))
-			AfxThrowDaoException(AFX_DAO_ERROR_DFX_BIND);
-		return (CDaoFieldCache*)pvCache;
+	// Lookup storage locations
+	void* pvCache;
+	if (!prs->m_pMapFieldCache->Lookup(pv, pvCache))
+		AfxThrowDaoException(AFX_DAO_ERROR_DFX_BIND);
+	return (CDaoFieldCache*)pvCache;
 }
 
 void CDaoFieldExchange::SetNullValue(void* pv, DWORD dwDataType)
@@ -183,11 +182,11 @@ void CDaoFieldExchange::SetNullValue(void* pv, DWORD dwDataType)
 		break;
 
 	case AFX_RFX_SINGLE:
-		*(float*)pv = afxFloatPseudoNull;
+		*(float*)pv = _afxFloatPseudoNull;
 		break;
 
 	case AFX_RFX_DOUBLE:
-		*(double*)pv = afxDoublePseudoNull;
+		*(double*)pv = _afxDoublePseudoNull;
 		break;
 
 	case AFX_RFX_DATE:
@@ -247,12 +246,12 @@ BOOL CDaoFieldExchange::IsNullValue(void* pv, DWORD dwDataType)
 		break;
 
 	case AFX_RFX_SINGLE:
-		if (*(float*)pv == afxFloatPseudoNull)
+		if (*(float*)pv == _afxFloatPseudoNull)
 			bNull = TRUE;
 		break;
 
 	case AFX_RFX_DOUBLE:
-		if (*(double*)pv == afxDoublePseudoNull)
+		if (*(double*)pv == _afxDoublePseudoNull)
 			bNull = TRUE;
 		break;
 
@@ -294,22 +293,18 @@ void CDaoFieldExchange::AllocCacheValue(CDaoFieldCache*& pCache,
 		break;
 
 	case AFX_RFX_BOOL:
-		pCache->m_pvData = new BOOL;
 		pCache->m_nDataType = AFX_RFX_BOOL;
 		break;
 
 	case AFX_RFX_BYTE:
-		pCache->m_pvData = new BYTE;
 		pCache->m_nDataType = AFX_RFX_BYTE;
 		break;
 
 	case AFX_RFX_SHORT:
-		pCache->m_pvData = new short;
 		pCache->m_nDataType = AFX_RFX_SHORT;
 		break;
 
 	case AFX_RFX_LONG:
-		pCache->m_pvData = new long;
 		pCache->m_nDataType = AFX_RFX_LONG;
 		break;
 
@@ -319,7 +314,6 @@ void CDaoFieldExchange::AllocCacheValue(CDaoFieldCache*& pCache,
 		break;
 
 	case AFX_RFX_SINGLE:
-		pCache->m_pvData = new float;
 		pCache->m_nDataType = AFX_RFX_SINGLE;
 		break;
 
@@ -357,27 +351,14 @@ void CDaoFieldExchange::DeleteCacheValue(CDaoFieldCache* pCache,
 		break;
 
 	case AFX_RFX_BOOL:
-		delete (BOOL*)pCache->m_pvData;
-		break;
-
 	case AFX_RFX_BYTE:
-		delete (BYTE*)pCache->m_pvData;
-		break;
-
 	case AFX_RFX_SHORT:
-		delete (short*)pCache->m_pvData;
-		break;
-
 	case AFX_RFX_LONG:
-		delete (long*)pCache->m_pvData;
+	case AFX_RFX_SINGLE:
 		break;
 
 	case AFX_RFX_CURRENCY:
 		delete (COleCurrency*)pCache->m_pvData;
-		break;
-
-	case AFX_RFX_SINGLE:
-		delete (float*)pCache->m_pvData;
 		break;
 
 	case AFX_RFX_DOUBLE:
@@ -482,10 +463,17 @@ BOOL CDaoFieldExchange::CompareValue(void* pvSrc, void* pvDest,
 		{
 			CByteArray* pByteArraySrc = (CByteArray*)pvSrc;
 			CByteArray* pByteArrayDest = (CByteArray*)pvDest;
-			int nSize = pByteArraySrc->GetSize();
 
-			if (memcmp(&pByteArrayDest[0], &pByteArraySrc[0], nSize) != 0)
+			int nSize = pByteArraySrc->GetSize();
+			// If sizes don't compare, must be dirty
+			if (nSize != pByteArrayDest->GetSize())
 				bDirty = TRUE;
+			else
+			{
+				// If sizes compare, compare the data
+				if (memcmp(&pByteArrayDest[0], &pByteArraySrc[0], nSize) != 0)
+					bDirty = TRUE;
+			}
 		}
 		break;
 
@@ -497,8 +485,18 @@ BOOL CDaoFieldExchange::CompareValue(void* pvSrc, void* pvDest,
 			BYTE* pbSrc = (BYTE*)::GlobalLock(pLongBinarySrc->m_hData);
 			BYTE* pbDest = (BYTE*)::GlobalLock(pLongBinaryDest->m_hData);
 
-			if (memcmp(pbDest, pbSrc, pLongBinarySrc->m_dwDataLength) != 0)
+			// If sizes don't compare, must be dirty
+			if (pLongBinarySrc->m_dwDataLength !=
+				pLongBinaryDest->m_dwDataLength)
+			{
 				bDirty = TRUE;
+			}
+			else
+			{
+				// If sizes compare, compare the data
+				if (memcmp(pbDest, pbSrc, pLongBinarySrc->m_dwDataLength) != 0)
+					bDirty = TRUE;
+			}
 
 			::GlobalUnlock(pLongBinarySrc->m_hData);
 			::GlobalUnlock(pLongBinaryDest->m_hData);
@@ -630,7 +628,7 @@ void CDaoFieldExchange::Default(LPCTSTR lpszName, void* pv,
 	case BindField:
 		{
 			// Query parser needs "[" & "]", GetRows can't tolerate them.
-			LPTSTR lpszNoBracketName = new TCHAR[_tcslen(lpszName) + 1];
+			LPTSTR lpszNoBracketName = new TCHAR[lstrlen(lpszName) + 1];
 			m_prs->StripBrackets(lpszName, lpszNoBracketName);
 
 			// Finish setting up column binding info struct
@@ -704,7 +702,10 @@ void CDaoFieldExchange::Default(LPCTSTR lpszName, void* pv,
 			CDaoFieldCache* pCache = GetCacheValue(m_prs, pv);
 
 			// Copy the data to the cache
-			CopyValue(pv, pCache->m_pvData, dwColumnType);
+			if (dwBindOptions & AFX_DAO_CACHE_BY_VALUE)
+				CopyValue(pv, (void*)&pCache->m_pvData, dwColumnType);
+			else
+				CopyValue(pv, pCache->m_pvData, dwColumnType);
 
 			// Cache the NULL status
 			if (m_prs->IsFieldStatusNull(m_nField-1))
@@ -720,7 +721,10 @@ void CDaoFieldExchange::Default(LPCTSTR lpszName, void* pv,
 			CDaoFieldCache* pCache = GetCacheValue(m_prs, pv);
 
 			// Copy the data from the cache
-			CopyValue(pCache->m_pvData, pv, dwColumnType);
+			if (dwBindOptions & AFX_DAO_CACHE_BY_VALUE)
+				CopyValue((void*)&pCache->m_pvData, pv, dwColumnType);
+			else
+				CopyValue(pCache->m_pvData, pv, dwColumnType);
 
 			// Set the NULL status from the cache
 			if (pCache->m_nStatus & AFX_DAO_FIELD_FLAG_NULL)
@@ -778,10 +782,16 @@ void CDaoFieldExchange::Default(LPCTSTR lpszName, void* pv,
 				BOOL bNullField = m_prs->IsFieldStatusNull(m_nField-1);
 				BOOL bNullCache = pCache->m_nStatus & AFX_DAO_FIELD_FLAG_NULL;
 
+				void* pvData;
+				if (dwBindOptions & AFX_DAO_CACHE_BY_VALUE)
+					pvData = &pCache->m_pvData;
+				else
+					pvData = pCache->m_pvData;
+
 				// Mark dirty if NULL status differs or value differs
 				if ( (bNullCache && !bNullField) ||
 					(!bNullCache && bNullField) ||
-					CompareValue(pv, pCache->m_pvData, dwColumnType))
+					CompareValue(pv, pvData, dwColumnType))
 				{
 					m_prs->SetDirtyFieldStatus(m_nField-1);
 				}
@@ -810,7 +820,7 @@ void CDaoFieldExchange::Default(LPCTSTR lpszName, void* pv,
 				LPTSTR lpszModifiedName = NULL;
 				if (*lpszName == '[')
 				{
-					lpszModifiedName = new TCHAR[_tcslen(lpszName) + 1];
+					lpszModifiedName = new TCHAR[lstrlen(lpszName) + 1];
 
 					// Copy the name with no brackets, and reset lpszName
 					m_prs->StripBrackets(lpszName, lpszModifiedName);
@@ -892,9 +902,9 @@ void AFXAPI DFX_Text(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 		}
 		else
 		{
-			// Make sure length correct (and doesn't include NULL terminator)
+			// Make sure length correct
 			value.GetBufferSetLength(
-				pFX->m_prs->m_pulColumnLengths[pFX->m_nField-1] - 1);
+				((pFX->m_prs->m_pulColumnLengths[pFX->m_nField-1])/sizeof(TCHAR))-1);
 		}
 
 		pFX->Default(lpszName, (void*)&value,
@@ -1008,6 +1018,9 @@ void AFXAPI DFX_Bool(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 	if (!pFX->IsValidOperation())
 		return;
 
+	// Mark as CACHE_BY_VALUE (size <= sizeof(void*))
+	dwBindOptions |= AFX_DAO_CACHE_BY_VALUE;
+
 	switch (pFX->m_nOperation)
 	{
 	case CDaoFieldExchange::BindField:
@@ -1034,7 +1047,7 @@ void AFXAPI DFX_Bool(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 		value = (value != AFX_DAO_FALSE);
 
 		pFX->Default(lpszName, (void*)&value,
-			AFX_RFX_LONGBINARY, dwBindOptions);
+			AFX_RFX_BOOL, dwBindOptions);
 		return;
 
 #ifdef _DEBUG
@@ -1054,6 +1067,9 @@ void AFXAPI DFX_Byte(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 	// Do nothing if op not supported for outputColumn or param type
 	if (!pFX->IsValidOperation())
 		return;
+
+	// Mark as CACHE_BY_VALUE (size <= sizeof(void*))
+	dwBindOptions |= AFX_DAO_CACHE_BY_VALUE;
 
 	switch (pFX->m_nOperation)
 	{
@@ -1094,6 +1110,9 @@ void AFXAPI DFX_Short(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 	if (!pFX->IsValidOperation())
 		return;
 
+	// Mark as CACHE_BY_VALUE (size <= sizeof(void*))
+	dwBindOptions |= AFX_DAO_CACHE_BY_VALUE;
+
 	switch (pFX->m_nOperation)
 	{
 	case CDaoFieldExchange::BindField:
@@ -1132,6 +1151,9 @@ void AFXAPI DFX_Long(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 	// Do nothing if op not supported for outputColumn or param type
 	if (!pFX->IsValidOperation())
 		return;
+
+	// Mark as CACHE_BY_VALUE (size <= sizeof(void*))
+	dwBindOptions |= AFX_DAO_CACHE_BY_VALUE;
 
 	switch (pFX->m_nOperation)
 	{
@@ -1223,6 +1245,9 @@ void AFXAPI DFX_Single(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 	// Do nothing if op not supported for outputColumn or param type
 	if (!pFX->IsValidOperation())
 		return;
+
+	// Mark as CACHE_BY_VALUE (size <= sizeof(void*))
+	dwBindOptions |= AFX_DAO_CACHE_BY_VALUE;
 
 	switch (pFX->m_nOperation)
 	{
@@ -1362,8 +1387,7 @@ STDAPI DaoStringAllocCallback(DWORD dwLen, DWORD pData, void** ppv)
 	TRY
 	{
 		// Only re-allocate if necessary
-		lpsz = pstr->GetBuffer(dwLen);
-		pstr->ReleaseBuffer(dwLen);
+		lpsz = pstr->GetBufferSetLength(dwLen/sizeof(TCHAR));
 		*ppv = (void*)(dwLen > 0 ? lpsz : NULL);
 	}
 	CATCH_ALL(e)
@@ -1450,10 +1474,14 @@ void AFX_CDECL AllocLongBinary(CLongBinary& lb, DWORD dwDataLength)
 	}
 	else if (::GlobalSize(lb.m_hData) < dwDataLength)
 	{
+		// Save the old address in case ReAlloc fails
+		HGLOBAL hOldData = lb.m_hData;
+
 		// Alloc more mem, free up mem and throw exception if not possible
-		if (::GlobalReAlloc(lb.m_hData, dwDataLength, 0) == NULL)
+		lb.m_hData = ::GlobalReAlloc(hOldData, dwDataLength, GMEM_MOVEABLE);
+		if (lb.m_hData == NULL)
 		{
-			::GlobalFree(lb.m_hData);
+			lb.m_hData = hOldData;
 			AfxThrowMemoryException();
 		}
 	}

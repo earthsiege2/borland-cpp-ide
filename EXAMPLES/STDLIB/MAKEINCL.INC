@@ -2,8 +2,6 @@
 #
 #  makeincl.bcc - header file Borland C++ makefiles
 #
-#  $Id: makeincl.bcc,v 1.37 1995/10/02 23:25:10 smithey Exp $
-#
 #==========================================================================
 #
 #  (c) Copyright 1994, 1995 Rogue Wave Software, Inc.
@@ -104,7 +102,7 @@ BINDING = STATIC
 !endif
 
 !ifndef THREAD
-THREAD = SINGLE
+THREAD = MULTI
 !endif
 
 !ifndef BMODE
@@ -138,8 +136,9 @@ BMODE = RELEASE
 
 !if $(ENVIRON) == WIN32
 CPP        = bcc32
+CPP32      = cpp32
 LIBRARIAN  = tlib /P128
-LINKER     = tlink32
+LINKER     = ilink32
 RC         = brc32
 ENVNAME    =
 !endif
@@ -149,12 +148,18 @@ ENVNAME    =
 # Set the various flags:
 
 !if $(BMODE) == DEBUG
-DBGOPT= -v -N -x -xp -DRWDEBUG=1
-LINKOPT = /v /c
-CCLINKOPT = vc
+DBGOPT= -v -N -x -xp
+CCLINKOPT = -lGn
 !else
-LINKOPT = /c
-CCLINKOPT = c
+CCLINKOPT = -lGn
+!endif
+
+!if $(THREAD) == MULTI
+CCLINKOPT = $(CCLINKOPT) -tWM
+LIBSUF=mt
+!else
+CCLINKOPT = $(CCLINKOPT) -tWM-
+LIBSUF=
 !endif
 
 ###################################################################
@@ -164,15 +169,25 @@ CCLINKOPT = c
 DEFOPTS =
 
 !if $(BINDING) == DLL
-DEFOPTS = $(DEFOPTS) -D_RWSTDDLL;_RTLDLL
+DEFOPTS=$(DEFOPTS) -tWCR
+TARGSUF=R
+LIBSUF=$(LIBSUF)i
+!else
+DEFOPTS = $(DEFOPTS) -tWC
+LIBSUF=$(LIBSUF)
+TARGSUF=
 !endif
 
 ###################################################################
 #
 # Set any compiler options
 
-CCOPTS = -DRWQE_STANDARD_LIBRARY -w-
+PCHROOT=stl_pch
+CCOPTS = -w- -jb -j1 -Hc -H=$(PCHROOT).csm
 
 #Compile flags:
-CPPFLAGS= $(CCOPTS) $(DBGOPT)  $(ENVOPTS) $(DEFOPTS) $(THROPTS)
-
+CPPFLAGS= $(CCOPTS) $(DBGOPT)  $(ENVOPTS) $(DEFOPTS) $(THROPTS) $(CCLINKOPT)
+LINKFLAGS= -Gn -Gi -Tpd -aa -L$(MAKEDIR)\..\lib -x
+LINKSTARTUP= c0d32.obj
+LINKLIBS=import32.lib cw32$(LIBSUF).lib
+RCFLAGS= -r -i$(MAKEDIR)\..\include;$(MAKEDIR)\..\include\windows

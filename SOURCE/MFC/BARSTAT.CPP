@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -76,19 +76,25 @@ CStatusBar::~CStatusBar()
 
 BOOL CStatusBar::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
 {
+	return CreateEx(pParentWnd, 0, dwStyle, nID);
+}
+
+BOOL CStatusBar::CreateEx(CWnd* pParentWnd, DWORD dwCtrlStyle, DWORD dwStyle, UINT nID)
+{
 	ASSERT_VALID(pParentWnd);   // must have a parent
 
 	// save the style (some of these style bits are MFC specific)
-	m_dwStyle = (UINT)dwStyle;
+	m_dwStyle = (dwStyle & CBRS_ALL);
 
 	// translate MFC style bits to windows style bits
 	dwStyle &= ~CBRS_ALL;
 	dwStyle |= CCS_NOPARENTALIGN|CCS_NOMOVEY|CCS_NODIVIDER|CCS_NORESIZE;
 	if (pParentWnd->GetStyle() & WS_THICKFRAME)
 		dwStyle |= SBARS_SIZEGRIP;
+	dwStyle |= dwCtrlStyle;
 
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_BAR_REG));
 
 	// create the HWND
 	CRect rect; rect.SetRectEmpty();
@@ -176,7 +182,7 @@ BOOL CStatusBar::AllocElements(int nElements, int cbElement)
 	AFX_STATUSPANE* pSBP = _GetPanePtr(0);
 	for (int i = 0; i < m_nCount; i++)
 	{
-		pSBP->strText.Empty();
+		pSBP->strText.~CString();
 		++pSBP;
 	}
 
@@ -333,18 +339,18 @@ void CStatusBar::SetPaneStyle(int nIndex, UINT nStyle)
 	AFX_STATUSPANE* pSBP = _GetPanePtr(nIndex);
 	if (pSBP->nStyle != nStyle)
 	{
-		// use SetPaneText, since it updates the style and text
+		// if the pane is changing SBPS_STRETCH, then...
 		if ((pSBP->nStyle ^ nStyle) & SBPS_STRETCH)
 		{
+			// ... we need to re-layout the panes
 			pSBP->nStyle = nStyle;
 			UpdateAllPanes(TRUE, FALSE);
 		}
-		else
-		{
-			pSBP->nStyle = nStyle;
-			pSBP->nFlags |= SBPF_UPDATE;
-			SetPaneText(nIndex, pSBP->strText);
-		}
+
+		// use SetPaneText, since it updates the style and text
+		pSBP->nStyle = nStyle;
+		pSBP->nFlags |= SBPF_UPDATE;
+		SetPaneText(nIndex, pSBP->strText);
 	}
 }
 
@@ -642,8 +648,7 @@ LRESULT CStatusBar::OnGetTextLength(WPARAM, LPARAM)
 LRESULT CStatusBar::OnSetMinHeight(WPARAM wParam, LPARAM)
 {
 	LRESULT lResult = Default();
-	if (lResult)
-		m_nMinHeight = wParam;
+	m_nMinHeight = wParam;
 	return lResult;
 }
 

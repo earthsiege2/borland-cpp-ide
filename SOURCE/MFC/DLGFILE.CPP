@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -43,7 +43,7 @@ CFileDialog::CFileDialog(BOOL bOpenFileDialog,
 	m_ofn.lpstrDefExt = lpszDefExt;
 	m_ofn.lpstrFileTitle = (LPTSTR)m_szFileTitle;
 	m_ofn.nMaxFileTitle = _countof(m_szFileTitle);
-	m_ofn.Flags |= dwFlags | OFN_ENABLEHOOK;
+	m_ofn.Flags |= dwFlags | OFN_ENABLEHOOK | OFN_ENABLESIZING;
 	if (!afxData.bWin4 && AfxHelpEnabled())
 		m_ofn.Flags |= OFN_SHOWHELP;
 	if (afxData.bWin4)
@@ -75,9 +75,12 @@ int CFileDialog::DoModal()
 	ASSERT_VALID(this);
 	ASSERT(m_ofn.Flags & OFN_ENABLEHOOK);
 	ASSERT(m_ofn.lpfnHook != NULL); // can still be a user hook
-#ifdef _MAC
-	ASSERT((m_ofn.Flags & OFN_ALLOWMULTISELECT) == 0);
-#endif
+
+	// zero out the file buffer for consistent parsing later
+	ASSERT(AfxIsValidAddress(m_ofn.lpstrFile, m_ofn.nMaxFile));
+	DWORD nOffset = lstrlen(m_ofn.lpstrFile)+1;
+	ASSERT(nOffset <= m_ofn.nMaxFile);
+	memset(m_ofn.lpstrFile+nOffset, 0, (m_ofn.nMaxFile-nOffset)*sizeof(TCHAR));
 
 	// WINBUG: This is a special case for the file open/save dialog,
 	//  which sometimes pumps while it is coming up but before it has
@@ -122,7 +125,6 @@ int CFileDialog::DoModal()
 
 CString CFileDialog::GetPathName() const
 {
-#ifndef _MAC
 	if ((m_ofn.Flags & OFN_EXPLORER) && m_hWnd != NULL)
 	{
 		ASSERT(::IsWindow(m_hWnd));
@@ -150,18 +152,10 @@ CString CFileDialog::GetPathName() const
 		}
 	}
 	return m_ofn.lpstrFile;
-#else
-	CString strResult;
-	LPSTR pstr;
-	::GetFullPathName(m_ofn.lpstrFile, MAX_PATH, strResult.GetBuffer(MAX_PATH), &pstr);
-	strResult.ReleaseBuffer();
-	return strResult;
-#endif
 }
 
 CString CFileDialog::GetFileName() const
 {
-#ifndef _MAC
 	if ((m_ofn.Flags & OFN_EXPLORER) && m_hWnd != NULL)
 	{
 		ASSERT(::IsWindow(m_hWnd));
@@ -177,13 +171,11 @@ CString CFileDialog::GetFileName() const
 			return strResult;
 		}
 	}
-#endif
 	return m_ofn.lpstrFileTitle;
 }
 
 CString CFileDialog::GetFileExt() const
 {
-#ifndef _MAC
 	if ((m_ofn.Flags & OFN_EXPLORER) && m_hWnd != NULL)
 	{
 		ASSERT(::IsWindow(m_hWnd));
@@ -201,7 +193,6 @@ CString CFileDialog::GetFileExt() const
 		}
 		return strResult;
 	}
-#endif
 
 	if (m_pofnTemp != NULL)
 		if (m_pofnTemp->nFileExtension == 0)
@@ -217,22 +208,18 @@ CString CFileDialog::GetFileExt() const
 
 CString CFileDialog::GetFileTitle() const
 {
-#ifndef _MAC
 	CString strResult = GetFileName();
 	int pos = strResult.ReverseFind('.');
 	if (pos >= 0)
 		return strResult.Left(pos);
 	return strResult;
-#else
-	return GetFileName();
-#endif
 }
 
 CString CFileDialog::GetNextPathName(POSITION& pos) const
 {
-#ifndef _MAC
+	BOOL bExplorer = m_ofn.Flags & OFN_EXPLORER;
 	TCHAR chDelimiter;
-	if (afxData.bWin4)
+	if (bExplorer)
 		chDelimiter = '\0';
 	else
 		chDelimiter = ' ';
@@ -252,7 +239,7 @@ CString CFileDialog::GetNextPathName(POSITION& pos) const
 		lpsz = _tcsinc(lpsz);
 
 		// if single selection then return only selection
-		if ((lpsz - m_ofn.lpstrFile) > m_ofn.nFileOffset)
+		if (*lpsz == 0)
 		{
 			pos = NULL;
 			return m_ofn.lpstrFile;
@@ -260,7 +247,7 @@ CString CFileDialog::GetNextPathName(POSITION& pos) const
 	}
 
 	CString strPath = m_ofn.lpstrFile;
-	if (!afxData.bWin4)
+	if (!bExplorer)
 	{
 		LPTSTR lpszPath = m_ofn.lpstrFile;
 		while(*lpszPath != chDelimiter)
@@ -275,11 +262,11 @@ CString CFileDialog::GetNextPathName(POSITION& pos) const
 	while(*lpsz != chDelimiter && *lpsz != '\0')
 		lpsz = _tcsinc(lpsz);
 
-	if (!afxData.bWin4 && *lpsz == '\0')
+	if (!bExplorer && *lpsz == '\0')
 		pos = NULL;
 	else
 	{
-		if (!afxData.bWin4)
+		if (!bExplorer)
 			strFileName = strFileName.Left(lpsz - lpszFileName);
 
 		lpsz = _tcsinc(lpsz);
@@ -297,7 +284,7 @@ CString CFileDialog::GetNextPathName(POSITION& pos) const
 		if (lpsz == NULL)
 			lpsz = _tcsrchr(strPath, '/');
 		// if it is also the last character, then we don't need an extra
-		if (lpsz != NULL && 
+		if (lpsz != NULL &&
 			(lpsz - (LPCTSTR)strPath) == strPath.GetLength()-1)
 		{
 			ASSERT(*lpsz == '\\' || *lpsz == '/');
@@ -305,27 +292,17 @@ CString CFileDialog::GetNextPathName(POSITION& pos) const
 		}
 	}
 	return strPath + '\\' + strFileName;
-#else
-	pos = NULL;
-	return m_ofn.lpstrFile;
-#endif
 }
 
 void CFileDialog::SetTemplate(LPCTSTR lpWin3ID, LPCTSTR lpWin4ID)
 {
-#ifndef _MAC
 	if (m_ofn.Flags & OFN_EXPLORER)
 		m_ofn.lpTemplateName = lpWin4ID;
 	else
 		m_ofn.lpTemplateName = lpWin3ID;
 	m_ofn.Flags |= OFN_ENABLETEMPLATE;
-#else
-	UNUSED_ALWAYS(lpWin3ID);
-	UNUSED_ALWAYS(lpWin4ID);
-#endif
 }
 
-#ifndef _MAC
 CString CFileDialog::GetFolderPath() const
 {
 	ASSERT(::IsWindow(m_hWnd));
@@ -359,7 +336,6 @@ void CFileDialog::SetDefExt(LPCSTR lpsz)
 	ASSERT(m_ofn.Flags & OFN_EXPLORER);
 	GetParent()->SendMessage(CDM_SETDEFEXT, 0, (LPARAM)lpsz);
 }
-#endif //!_MAC
 
 UINT CFileDialog::OnShareViolation(LPCTSTR)
 {
@@ -426,7 +402,6 @@ BOOL CFileDialog::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 	if (CCommonDialog::OnNotify(wParam, lParam, pResult))
 		return TRUE;
 
-#ifndef _MAC
 	OFNOTIFY* pNotify = (OFNOTIFY*)lParam;
 	switch(pNotify->hdr.code)
 	{
@@ -453,7 +428,6 @@ BOOL CFileDialog::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 		OnTypeChange();
 		return TRUE;
 	}
-#endif
 
 	return FALSE;   // not handled
 }

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -56,14 +56,8 @@ SCODE _AfxParseDisplayName(LPMONIKER lpmk, LPBC lpbc, LPTSTR lpszRemainder,
 	if (lpbc != NULL)
 	{
 		// ask moniker to parse the display name itself
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2OLE(lpszRemainder);
-		sc = lpmk->ParseDisplayName(lpbc, NULL, (LPWSTR)pBAfxConv, cchEaten,
-			plpmkOut);
-#else    // __BORLANDC__
 		sc = lpmk->ParseDisplayName(lpbc, NULL, T2OLE(lpszRemainder), cchEaten,
 			plpmkOut);
-#endif   // __BORLANDC__
 	}
 	else
 	{
@@ -92,12 +86,7 @@ SCODE _AfxParseDisplayName(LPMONIKER lpmk, LPBC lpbc, LPTSTR lpszRemainder,
 			++cEaten;
 		}
 		*cchEaten = cEaten;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(szItemName);
-		sc = CreateItemMoniker(OLESTDDELIMOLE, (LPCWSTR)pBAfxConv, plpmkOut);
-#else    // __BORLANDC__
 		sc = CreateItemMoniker(OLESTDDELIMOLE, T2COLE(szItemName), plpmkOut);
-#endif   // __BORLANDC__
 	}
 
 	return sc;
@@ -231,12 +220,7 @@ STDMETHODIMP COleUILinkInfo::SetLinkSource(
 	TCHAR szName[_MAX_PATH];
 	lstrcpyn(szName, lpszDisplayName, (int)lenFileName + 1);
 	LPMONIKER lpmk = NULL;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(szName);
-	SCODE sc = CreateFileMoniker((LPCWSTR)pBAfxConv, &lpmk);
-#else    // __BORLANDC__
 	SCODE sc = CreateFileMoniker(T2COLE(szName), &lpmk);
-#endif   // __BORLANDC__
 	if (lpmk == NULL)
 		return sc;
 
@@ -533,6 +517,152 @@ COleInsertDialog::COleInsertDialog(DWORD dwFlags, CWnd* pParentWnd)
 COleInsertDialog::~COleInsertDialog()
 {
 	_AfxDeleteMetafilePict(m_io.hMetaPict);
+}
+
+void COleInsertDialog::AddClassIDToList(LPCLSID& lpList,
+	int& nListCount, int& nBufferLen, LPCLSID lpNewID)
+{
+	// if the list doesn't exist, create it
+
+	if (lpList == NULL)
+	{
+		nListCount = 0;
+		nBufferLen = 16;
+		lpList = new CLSID[nBufferLen];
+	}
+
+	// if the list isn't big enough grow it by twice
+
+	if (nListCount == nBufferLen)
+	{
+		LPCLSID lpOldList = lpList;
+		nBufferLen <<= 2;
+		lpList = new CLSID[nBufferLen];
+		memcpy(lpList, lpOldList, sizeof(CLSID) * nListCount);
+		delete [] lpOldList;
+	}
+
+	lpList[nListCount] = *lpNewID;
+	nListCount++;
+
+	return;
+}
+
+int COleInsertDialog::DoModal(DWORD dwFlags)
+{
+	LPCLSID lpNewExcludeList = NULL;
+	int nNewExcludeCount = 0;
+	int nNewExcludeLen = 0;
+
+	// support for controls is built-in
+	// support doc objects by filtering what the dialog shows
+
+	if (dwFlags == ControlsOnly)
+		m_io.dwFlags |= IOF_SELECTCREATECONTROL | IOF_SHOWINSERTCONTROL;
+	else if (dwFlags == DocObjectsOnly)
+	{
+		m_io.dwFlags |= IOF_DISABLEDISPLAYASICON | IOF_DISABLELINK;
+
+		HKEY hkClassesRoot;
+		HKEY hkCLSID;
+		HKEY hkItem;
+		HKEY hkDocObject;
+		DWORD dwIndex = 0;
+		TCHAR szName[MAX_PATH+1];
+
+		if (RegOpenKeyEx(HKEY_CLASSES_ROOT, NULL, 0, KEY_READ,
+				&hkClassesRoot) == ERROR_SUCCESS)
+		{
+			if(RegOpenKeyEx(hkClassesRoot, _T("CLSID"), 0,
+				KEY_ENUMERATE_SUB_KEYS, &hkCLSID) == ERROR_SUCCESS)
+			{
+				while(RegEnumKey(hkCLSID, dwIndex++,
+							szName, sizeof(szName)) == ERROR_SUCCESS)
+				{
+					if (RegOpenKeyEx(hkCLSID, szName, 0,
+							KEY_READ, &hkItem) == ERROR_SUCCESS)
+					{
+						if ((RegOpenKeyEx(hkItem, _T("Insertable"), 0,
+								KEY_READ, &hkDocObject) == ERROR_SUCCESS) ||
+							 (RegOpenKeyEx(hkItem, _T("Ole1Class"),0,
+								KEY_READ, &hkDocObject) == ERROR_SUCCESS))
+						{
+							RegCloseKey(hkDocObject);
+							if ((RegOpenKeyEx(hkItem, _T("DocObject"), 0,
+									KEY_READ, &hkDocObject) != ERROR_SUCCESS ) )
+							{
+								USES_CONVERSION;
+
+								CLSID clsid;
+								CLSIDFromString(T2OLE(szName), &clsid);
+								AddClassIDToList(lpNewExcludeList,
+									nNewExcludeCount, nNewExcludeLen, &clsid);
+								RegCloseKey(hkItem);
+							}
+							RegCloseKey(hkDocObject);
+						}
+					}
+				}
+				RegCloseKey(hkCLSID);
+			}
+		}
+		RegCloseKey(hkClassesRoot);
+	}
+
+	UINT cOldClsidExclude = m_io.cClsidExclude;
+	LPCLSID lpOldClsidExclude = m_io.lpClsidExclude;
+
+	if (lpNewExcludeList != NULL)
+	{
+		m_io.lpClsidExclude = lpNewExcludeList;
+		m_io.cClsidExclude = nNewExcludeCount;
+	}
+
+QueryAgain:
+	int nDisposition = DoModal();
+
+	if (nDisposition == IDOK && GetSelectionType() == insertFromFile &&
+		dwFlags == DocObjectsOnly)
+	{
+		USES_CONVERSION;
+
+		// Double-check that the requested file really is serviced by a
+		// DocObject server.
+
+		CLSID clsidFile;
+		BOOL bIsDocObject = FALSE;
+		if (GetClassFile(T2COLE(m_io.lpszFile), &clsidFile) == S_OK)
+		{
+			CString strKey;
+			CString strCLSID = AfxStringFromCLSID(clsidFile);
+			strKey.Format(_T("CLSID\\%s\\DocObject"), strCLSID);
+
+			HKEY hKey;
+			if (ERROR_SUCCESS ==
+				RegOpenKeyEx(HKEY_CLASSES_ROOT, strKey, 0, KEY_QUERY_VALUE, &hKey))
+			{
+				RegCloseKey(hKey);
+				bIsDocObject = TRUE;
+			}
+		}
+
+		if (!bIsDocObject)
+		{
+			nDisposition =
+				AfxMessageBox(AFX_IDS_NOT_DOCOBJECT, MB_RETRYCANCEL | MB_ICONHAND);
+			if (nDisposition == IDRETRY)
+				goto QueryAgain;
+			else
+				nDisposition = IDCANCEL;
+		}
+	}
+
+	delete [] lpNewExcludeList;
+
+	m_io.cClsidExclude = cOldClsidExclude;
+	m_io.lpClsidExclude = lpOldClsidExclude;
+
+	return nDisposition;
 }
 
 int COleInsertDialog::DoModal()

@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0003    // Increment this if a change has global effects
 
-Copyright (c) 1985-96, Microsoft Corporation
+Copyright (c) 1985-1998, Microsoft Corporation
 
 Module Name:
 
@@ -8,24 +8,18 @@ Module Name:
 
 Abstract:
 
-    Procedure declarations, constant definitions and macros for the NLS
-    component.
+    Procedure declarations, constant definitions and macros for the
+    Windows NT 3.x compatible FarEast IMM component.
 
 --*/
 
 #ifndef _WINNLS32_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINNLS32_
-#pragma option -b
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <pshpack8.h>
-#pragma option -b
-#endif
 
 typedef struct _tagDATETIME {
     WORD    year;
@@ -43,10 +37,6 @@ typedef struct _tagIMEPROA {
     BYTE        szDescription[50];
     BYTE        szName[80];
     BYTE        szOptions[30];
-#if defined(TAIWAN)
-    BYTE        szUsrFontName[80];
-    BOOL        fEnable;
-#endif
 } IMEPROA,*PIMEPROA,NEAR *NPIMEPROA,FAR *LPIMEPROA;
 typedef struct _tagIMEPROW {
     HWND        hWnd;
@@ -55,10 +45,6 @@ typedef struct _tagIMEPROW {
     WCHAR       szDescription[50];
     WCHAR       szName[80];
     WCHAR       szOptions[30];
-#if defined(TAIWAN)
-    WCHAR       szUsrFontName[80];
-    BOOL        fEnable;
-#endif
 } IMEPROW,*PIMEPROW,NEAR *NPIMEPROW,FAR *LPIMEPROW;
 #ifdef UNICODE
 typedef IMEPROW IMEPRO;
@@ -72,66 +58,36 @@ typedef NPIMEPROA NPIMEPRO;
 typedef LPIMEPROA LPIMEPRO;
 #endif // UNICODE
 
-BOOL  WINAPI IMPGetIMEA(HWND, LPIMEPROA);
-BOOL  WINAPI IMPGetIMEW(HWND, LPIMEPROW);
+BOOL  WINAPI IMPGetIMEA( IN HWND, OUT LPIMEPROA);
+BOOL  WINAPI IMPGetIMEW( IN HWND, OUT LPIMEPROW);
 #ifdef UNICODE
 #define IMPGetIME  IMPGetIMEW
 #else
 #define IMPGetIME  IMPGetIMEA
 #endif // !UNICODE
-
-BOOL  WINAPI IMPQueryIMEA(LPIMEPROA);
-BOOL  WINAPI IMPQueryIMEW(LPIMEPROW);
+BOOL  WINAPI IMPQueryIMEA( IN OUT LPIMEPROA);
+BOOL  WINAPI IMPQueryIMEW( IN OUT LPIMEPROW);
 #ifdef UNICODE
 #define IMPQueryIME  IMPQueryIMEW
 #else
 #define IMPQueryIME  IMPQueryIMEA
 #endif // !UNICODE
-
-BOOL  WINAPI IMPSetIMEA(HWND, LPIMEPROA);
-BOOL  WINAPI IMPSetIMEW(HWND, LPIMEPROW);
+BOOL  WINAPI IMPSetIMEA( IN HWND, IN LPIMEPROA);
+BOOL  WINAPI IMPSetIMEW( IN HWND, IN LPIMEPROW);
 #ifdef UNICODE
 #define IMPSetIME  IMPSetIMEW
 #else
 #define IMPSetIME  IMPSetIMEA
 #endif // !UNICODE
 
-#if defined(TAIWAN) //dchiang 022894 update for $(SDKINC)\winnls32.h
-
-BOOL  WINAPI IMPRetrieveIMEA(LPIMEPROA, DWORD);
-BOOL  WINAPI IMPRetrieveIMEW(LPIMEPROW, DWORD);
-#ifdef UNICODE
-#define IMPRetrieveIME  IMPRetrieveIMEW
-#else
-#define IMPRetrieveIME  IMPRetrieveIMEA
-#endif // !UNICODE
-BOOL  WINAPI WINNLSDefIMEProc(HWND, HDC, DWORD, DWORD, DWORD, DWORD);
-BOOL  WINAPI ControlIMEMessageA(HWND, LPIMEPROA, DWORD, DWORD, DWORD);
-BOOL  WINAPI ControlIMEMessageW(HWND, LPIMEPROW, DWORD, DWORD, DWORD);
-#ifdef UNICODE
-#define ControlIMEMessage  ControlIMEMessageW
-#else
-#define ControlIMEMessage  ControlIMEMessageA
-#endif // !UNICODE
-
-#endif //dchiang 022894 TAIWAN
-
-UINT  WINAPI WINNLSGetIMEHotkey(HWND);
-BOOL  WINAPI WINNLSEnableIME(HWND, BOOL);
-BOOL  WINAPI WINNLSGetEnableStatus(HWND);
-
-//
-//
-
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <poppack.h>
-#pragma option -b
-#endif
+UINT  WINAPI WINNLSGetIMEHotkey( IN HWND);
+BOOL  WINAPI WINNLSEnableIME( IN HWND, IN BOOL);
+BOOL  WINAPI WINNLSGetEnableStatus( IN HWND);
 
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif // _WINNLS32_
+

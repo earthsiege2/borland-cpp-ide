@@ -1,6 +1,6 @@
 /*==========================================================================;
  *
- *  Copyright (C) 1995-1996 Microsoft Corporation.  All Rights Reserved.
+ *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
  *
  *  File:       d3drm.h
  *  Content:    Direct3DRM include file
@@ -8,15 +8,11 @@
  ***************************************************************************/
 
 #ifndef __D3DRMDEFS_H__
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __D3DRMDEFS_H__
-#pragma option -b
 
-#pragma option -b.
 #include <stddef.h>
-#pragma option -b
-#pragma option -b.
 #include "d3dtypes.h"
-#pragma option -b
 
 #ifdef WIN32
 #define D3DRMAPI  __stdcall
@@ -43,6 +39,11 @@ typedef struct _D3DRMQUATERNION
 {   D3DVALUE s;
     D3DVECTOR v;
 } D3DRMQUATERNION, *LPD3DRMQUATERNION;
+
+typedef struct _D3DRMRAY
+{   D3DVECTOR dvDir;
+    D3DVECTOR dvPos;
+} D3DRMRAY, *LPD3DRMRAY;
 
 typedef struct _D3DRMBOX
 {   D3DVECTOR min, max;
@@ -93,6 +94,12 @@ typedef DWORD D3DRMRENDERQUALITY, *LPD3DRMRENDERQUALITY;
 #define D3DRMRENDER_GOURAUD     (D3DRMSHADE_GOURAUD+D3DRMLIGHT_ON+D3DRMFILL_SOLID)
 #define D3DRMRENDER_PHONG       (D3DRMSHADE_PHONG+D3DRMLIGHT_ON+D3DRMFILL_SOLID)
 
+#define D3DRMRENDERMODE_BLENDEDTRANSPARENCY     1
+#define D3DRMRENDERMODE_SORTEDTRANSPARENCY      2
+#define D3DRMRENDERMODE_LIGHTINMODELSPACE       8
+#define D3DRMRENDERMODE_VIEWDEPENDENTSPECULAR   16
+#define D3DRMRENDERMODE_DISABLESORTEDALPHAZWRITE 32
+
 typedef enum _D3DRMTEXTUREQUALITY
 {   D3DRMTEXTURE_NEAREST,               /* choose nearest texel */
     D3DRMTEXTURE_LINEAR,                /* interpolate 4 texels */
@@ -101,6 +108,24 @@ typedef enum _D3DRMTEXTUREQUALITY
     D3DRMTEXTURE_LINEARMIPNEAREST,      /* interpolate 4 texels in nearest mipmap */
     D3DRMTEXTURE_LINEARMIPLINEAR        /* interpolate 8 texels from 2 mipmaps */
 } D3DRMTEXTUREQUALITY, *LPD3DRMTEXTUREQUALITY;
+
+/*
+ * Texture flags
+ */
+#define D3DRMTEXTURE_FORCERESIDENT          0x00000001 /* texture should be kept in video memory */
+#define D3DRMTEXTURE_STATIC                 0x00000002 /* texture will not change */
+#define D3DRMTEXTURE_DOWNSAMPLEPOINT        0x00000004 /* point filtering should be used when downsampling */
+#define D3DRMTEXTURE_DOWNSAMPLEBILINEAR     0x00000008 /* bilinear filtering should be used when downsampling */
+#define D3DRMTEXTURE_DOWNSAMPLEREDUCEDEPTH  0x00000010 /* reduce bit depth when downsampling */
+#define D3DRMTEXTURE_DOWNSAMPLENONE         0x00000020 /* texture should never be downsampled */
+#define D3DRMTEXTURE_CHANGEDPIXELS          0x00000040 /* pixels have changed */
+#define D3DRMTEXTURE_CHANGEDPALETTE         0x00000080 /* palette has changed */
+#define D3DRMTEXTURE_INVALIDATEONLY         0x00000100 /* dirty regions are invalid */
+
+/*
+ * Shadow flags
+ */
+#define D3DRMSHADOW_TRUEALPHA               0x00000001 /* shadow should render without artifacts when true alpha is on */
 
 typedef enum _D3DRMCOMBINETYPE
 {   D3DRMCOMBINE_REPLACE,
@@ -159,16 +184,27 @@ typedef enum _D3DRMWRAPTYPE
 {   D3DRMWRAP_FLAT,
     D3DRMWRAP_CYLINDER,
     D3DRMWRAP_SPHERE,
-    D3DRMWRAP_CHROME
+    D3DRMWRAP_CHROME,
+    D3DRMWRAP_SHEET,
+    D3DRMWRAP_BOX
 } D3DRMWRAPTYPE, *LPD3DRMWRAPTYPE;
 
 #define D3DRMWIREFRAME_CULL             1 /* cull backfaces */
 #define D3DRMWIREFRAME_HIDDENLINE       2 /* lines are obscured by closer objects */
 
+/*
+ * Do not use righthanded perspective in Viewport2::SetProjection().
+ * Set up righthanded mode by using IDirect3DRM3::SetOptions().
+ */
 typedef enum _D3DRMPROJECTIONTYPE
 {   D3DRMPROJECT_PERSPECTIVE,
-    D3DRMPROJECT_ORTHOGRAPHIC
+    D3DRMPROJECT_ORTHOGRAPHIC,
+    D3DRMPROJECT_RIGHTHANDPERSPECTIVE, /* Only valid pre-DX6 */
+    D3DRMPROJECT_RIGHTHANDORTHOGRAPHIC /* Only valid pre-DX6 */
 } D3DRMPROJECTIONTYPE, *LPD3DRMPROJECTIONTYPE;
+
+#define D3DRMOPTIONS_LEFTHANDED  0x00000001L /* Default */
+#define D3DRMOPTIONS_RIGHTHANDED 0x00000002L
 
 typedef enum _D3DRMXOFFORMAT
 {   D3DRMXOF_BINARY,
@@ -182,6 +218,8 @@ typedef DWORD D3DRMSAVEOPTIONS;
 #define D3DRMXOFSAVE_MATERIALS 4
 #define D3DRMXOFSAVE_TEXTURENAMES 8
 #define D3DRMXOFSAVE_ALL 15
+#define D3DRMXOFSAVE_TEMPLATES 16
+#define D3DRMXOFSAVE_TEXTURETOPOLOGY 32
 
 typedef enum _D3DRMCOLORSOURCE
 {   D3DRMCOLOR_FROMFACE,
@@ -219,6 +257,139 @@ typedef enum _D3DRMSORTMODE {
     D3DRMSORT_BACKTOFRONT       /* sort child frames back-to-front */
 } D3DRMSORTMODE, *LPD3DRMSORTMODE;
 
+typedef struct _D3DRMMATERIALOVERRIDE
+{
+    DWORD         dwSize;       /* Size of this structure */
+    DWORD         dwFlags;      /* Indicate which fields are valid */
+    D3DCOLORVALUE dcDiffuse;    /* RGBA */
+    D3DCOLORVALUE dcAmbient;    /* RGB */
+    D3DCOLORVALUE dcEmissive;   /* RGB */
+    D3DCOLORVALUE dcSpecular;   /* RGB */
+    D3DVALUE      dvPower;
+    LPUNKNOWN     lpD3DRMTex;
+} D3DRMMATERIALOVERRIDE, *LPD3DRMMATERIALOVERRIDE;
+
+#define D3DRMMATERIALOVERRIDE_DIFFUSE_ALPHAONLY     0x00000001L
+#define D3DRMMATERIALOVERRIDE_DIFFUSE_RGBONLY       0x00000002L
+#define D3DRMMATERIALOVERRIDE_DIFFUSE               0x00000003L
+#define D3DRMMATERIALOVERRIDE_AMBIENT               0x00000004L
+#define D3DRMMATERIALOVERRIDE_EMISSIVE              0x00000008L
+#define D3DRMMATERIALOVERRIDE_SPECULAR              0x00000010L
+#define D3DRMMATERIALOVERRIDE_POWER                 0x00000020L
+#define D3DRMMATERIALOVERRIDE_TEXTURE               0x00000040L
+#define D3DRMMATERIALOVERRIDE_DIFFUSE_ALPHAMULTIPLY 0x00000080L
+#define D3DRMMATERIALOVERRIDE_ALL                   0x000000FFL
+
+#define D3DRMFPTF_ALPHA                           0x00000001L
+#define D3DRMFPTF_NOALPHA                         0x00000002L
+#define D3DRMFPTF_PALETTIZED                      0x00000004L
+#define D3DRMFPTF_NOTPALETTIZED                   0x00000008L
+
+#define D3DRMSTATECHANGE_UPDATEONLY               0x000000001L
+#define D3DRMSTATECHANGE_VOLATILE                 0x000000002L
+#define D3DRMSTATECHANGE_NONVOLATILE              0x000000004L
+#define D3DRMSTATECHANGE_RENDER                   0x000000020L
+#define D3DRMSTATECHANGE_LIGHT                    0x000000040L
+
+/*
+ * Values for flags in RM3::CreateDeviceFromSurface
+ */
+#define D3DRMDEVICE_NOZBUFFER           0x00000001L
+
+/*
+ * Values for flags in Object2::SetClientData
+ */
+#define D3DRMCLIENTDATA_NONE            0x00000001L
+#define D3DRMCLIENTDATA_LOCALFREE       0x00000002L
+#define D3DRMCLIENTDATA_IUNKNOWN        0x00000004L
+
+/*
+ * Values for flags in Frame2::AddMoveCallback.
+ */
+#define D3DRMCALLBACK_PREORDER          0
+#define D3DRMCALLBACK_POSTORDER         1
+
+/*
+ * Values for flags in MeshBuilder2::RayPick.
+ */
+#define D3DRMRAYPICK_ONLYBOUNDINGBOXES          1
+#define D3DRMRAYPICK_IGNOREFURTHERPRIMITIVES    2
+#define D3DRMRAYPICK_INTERPOLATEUV              4
+#define D3DRMRAYPICK_INTERPOLATECOLOR           8
+#define D3DRMRAYPICK_INTERPOLATENORMAL          0x10    
+
+/*
+ * Values for flags in MeshBuilder3::AddFacesIndexed.
+ */
+#define D3DRMADDFACES_VERTICESONLY              1
+
+/*
+ * Values for flags in MeshBuilder2::GenerateNormals.
+ */
+#define D3DRMGENERATENORMALS_PRECOMPACT         1
+#define D3DRMGENERATENORMALS_USECREASEANGLE     2
+
+/*
+ * Values for MeshBuilder3::GetParentMesh
+ */
+#define D3DRMMESHBUILDER_DIRECTPARENT           1
+#define D3DRMMESHBUILDER_ROOTMESH               2
+
+/*
+ * Flags for MeshBuilder3::Enable
+ */
+#define D3DRMMESHBUILDER_RENDERENABLE   0x00000001L
+#define D3DRMMESHBUILDER_PICKENABLE     0x00000002L
+
+/*
+ * Flags for MeshBuilder3::AddMeshBuilder
+ */
+#define D3DRMADDMESHBUILDER_DONTCOPYAPPDATA     1
+#define D3DRMADDMESHBUILDER_FLATTENSUBMESHES    2
+#define D3DRMADDMESHBUILDER_NOSUBMESHES         4
+
+/*
+ * Flags for Object2::GetAge when used with MeshBuilders
+ */
+#define D3DRMMESHBUILDERAGE_GEOMETRY    0x00000001L
+#define D3DRMMESHBUILDERAGE_MATERIALS   0x00000002L
+#define D3DRMMESHBUILDERAGE_TEXTURES    0x00000004L
+
+/*
+ * Format flags for MeshBuilder3::AddTriangles.
+ */
+#define D3DRMFVF_TYPE                   0x00000001L
+#define D3DRMFVF_NORMAL                 0x00000002L
+#define D3DRMFVF_COLOR                  0x00000004L
+#define D3DRMFVF_TEXTURECOORDS          0x00000008L
+
+#define D3DRMVERTEX_STRIP               0x00000001L
+#define D3DRMVERTEX_FAN                 0x00000002L
+#define D3DRMVERTEX_LIST                0x00000004L
+
+/*
+ * Values for flags in Viewport2::Clear2
+ */
+#define D3DRMCLEAR_TARGET               0x00000001L
+#define D3DRMCLEAR_ZBUFFER              0x00000002L
+#define D3DRMCLEAR_DIRTYRECTS           0x00000004L
+#define D3DRMCLEAR_ALL                  (D3DRMCLEAR_TARGET | \
+                                         D3DRMCLEAR_ZBUFFER | \
+                                         D3DRMCLEAR_DIRTYRECTS)
+
+/*
+ * Values for flags in Frame3::SetSceneFogMethod
+ */
+#define D3DRMFOGMETHOD_VERTEX          0x00000001L
+#define D3DRMFOGMETHOD_TABLE           0x00000002L
+#define D3DRMFOGMETHOD_ANY             0x00000004L
+
+/*
+ * Values for flags in Frame3::SetTraversalOptions
+ */
+#define D3DRMFRAME_RENDERENABLE        0x00000001L
+#define D3DRMFRAME_PICKENABLE          0x00000002L
+
 typedef DWORD D3DRMANIMATIONOPTIONS;
 #define D3DRMANIMATION_OPEN 0x01L
 #define D3DRMANIMATION_CLOSED 0x02L
@@ -227,12 +398,22 @@ typedef DWORD D3DRMANIMATIONOPTIONS;
 #define D3DRMANIMATION_SCALEANDROTATION 0x00000010L
 #define D3DRMANIMATION_POSITION 0x00000020L
 
+typedef DWORD D3DRMINTERPOLATIONOPTIONS;
+#define D3DRMINTERPOLATION_OPEN 0x01L
+#define D3DRMINTERPOLATION_CLOSED 0x02L
+#define D3DRMINTERPOLATION_NEAREST 0x0100L
+#define D3DRMINTERPOLATION_LINEAR 0x04L
+#define D3DRMINTERPOLATION_SPLINE 0x08L
+#define D3DRMINTERPOLATION_VERTEXCOLOR 0x40L
+#define D3DRMINTERPOLATION_SLERPNORMALS 0x80L
+
 typedef DWORD D3DRMLOADOPTIONS;
 
 #define D3DRMLOAD_FROMFILE  0x00L
 #define D3DRMLOAD_FROMRESOURCE 0x01L
 #define D3DRMLOAD_FROMMEMORY 0x02L
 #define D3DRMLOAD_FROMSTREAM 0x04L
+#define D3DRMLOAD_FROMURL 0x08L
 
 #define D3DRMLOAD_BYNAME 0x10L
 #define D3DRMLOAD_BYPOSITION 0x20L
@@ -241,6 +422,8 @@ typedef DWORD D3DRMLOADOPTIONS;
 
 #define D3DRMLOAD_INSTANCEBYREFERENCE 0x100L
 #define D3DRMLOAD_INSTANCEBYCOPYING 0x200L
+
+#define D3DRMLOAD_ASYNCHRONOUS 0x400L
 
 typedef struct _D3DRMLOADRESOURCE {
   HMODULE hModule;
@@ -253,10 +436,110 @@ typedef struct _D3DRMLOADMEMORY {
   DWORD dSize;
 } D3DRMLOADMEMORY, *LPD3DRMLOADMEMORY;
 
+#define D3DRMPMESHSTATUS_VALID 0x01L
+#define D3DRMPMESHSTATUS_INTERRUPTED 0x02L
+#define D3DRMPMESHSTATUS_BASEMESHCOMPLETE 0x04L
+#define D3DRMPMESHSTATUS_COMPLETE 0x08L
+#define D3DRMPMESHSTATUS_RENDERABLE 0x10L
+
+#define D3DRMPMESHEVENT_BASEMESH 0x01L
+#define D3DRMPMESHEVENT_COMPLETE 0x02L
+
+typedef struct _D3DRMPMESHLOADSTATUS {
+  DWORD dwSize;            // Size of this structure
+  DWORD dwPMeshSize;       // Total Size (bytes)
+  DWORD dwBaseMeshSize;    // Total Size of the Base Mesh
+  DWORD dwBytesLoaded;     // Total bytes loaded
+  DWORD dwVerticesLoaded;  // Number of vertices loaded
+  DWORD dwFacesLoaded;     // Number of faces loaded
+  HRESULT dwLoadResult;    // Result of the load operation
+  DWORD dwFlags;
+} D3DRMPMESHLOADSTATUS, *LPD3DRMPMESHLOADSTATUS;
+
 typedef enum _D3DRMUSERVISUALREASON {
     D3DRMUSERVISUAL_CANSEE,
     D3DRMUSERVISUAL_RENDER
 } D3DRMUSERVISUALREASON, *LPD3DRMUSERVISUALREASON;
+
+
+typedef struct _D3DRMANIMATIONKEY 
+{
+    DWORD dwSize;
+    DWORD dwKeyType;
+    D3DVALUE dvTime;
+    DWORD dwID;
+#if (!defined __cplusplus) || (!defined D3D_OVERLOADS)
+    union 
+    {
+        D3DRMQUATERNION dqRotateKey;
+        D3DVECTOR dvScaleKey;
+        D3DVECTOR dvPositionKey;
+    };
+#else
+    /*
+     * We do this as D3D_OVERLOADS defines constructors for D3DVECTOR,
+     * this can then not be used in a union.  Use the inlines provided
+     * to extract and set the required component.
+     */
+    D3DVALUE dvK[4];
+#endif
+} D3DRMANIMATIONKEY;
+typedef D3DRMANIMATIONKEY *LPD3DRMANIMATIONKEY;
+
+#if (defined __cplusplus) && (defined D3D_OVERLOADS)
+inline VOID
+D3DRMAnimationGetRotateKey(const D3DRMANIMATIONKEY& rmKey,
+                           D3DRMQUATERNION& rmQuat)
+{
+    rmQuat.s = rmKey.dvK[0];
+    rmQuat.v = D3DVECTOR(rmKey.dvK[1], rmKey.dvK[2], rmKey.dvK[3]);
+}
+
+inline VOID
+D3DRMAnimationGetScaleKey(const D3DRMANIMATIONKEY& rmKey,
+                          D3DVECTOR& dvVec)
+{
+    dvVec = D3DVECTOR(rmKey.dvK[0], rmKey.dvK[1], rmKey.dvK[2]);
+}
+
+inline VOID
+D3DRMAnimationGetPositionKey(const D3DRMANIMATIONKEY& rmKey,
+                             D3DVECTOR& dvVec)
+{
+    dvVec = D3DVECTOR(rmKey.dvK[0], rmKey.dvK[1], rmKey.dvK[2]);
+}
+inline VOID
+D3DRMAnimationSetRotateKey(D3DRMANIMATIONKEY& rmKey,
+                           const D3DRMQUATERNION& rmQuat)
+{
+    rmKey.dvK[0] = rmQuat.s;
+    rmKey.dvK[1] = rmQuat.v.x;
+    rmKey.dvK[2] = rmQuat.v.y;
+    rmKey.dvK[3] = rmQuat.v.z;
+}
+
+inline VOID
+D3DRMAnimationSetScaleKey(D3DRMANIMATIONKEY& rmKey,
+                          const D3DVECTOR& dvVec)
+{
+    rmKey.dvK[0] = dvVec.x;
+    rmKey.dvK[1] = dvVec.y;
+    rmKey.dvK[2] = dvVec.z;
+}
+
+inline VOID
+D3DRMAnimationSetPositionKey(D3DRMANIMATIONKEY& rmKey,
+                             const D3DVECTOR& dvVec)
+{
+    rmKey.dvK[0] = dvVec.x;
+    rmKey.dvK[1] = dvVec.y;
+    rmKey.dvK[2] = dvVec.z;
+}
+#endif
+
+#define D3DRMANIMATION_ROTATEKEY 0x01
+#define D3DRMANIMATION_SCALEKEY 0x02
+#define D3DRMANIMATION_POSITIONKEY 0x03
 
 
 typedef DWORD D3DRMMAPPING, D3DRMMAPPINGFLAG, *LPD3DRMMAPPING;
@@ -399,10 +682,16 @@ extern LPD3DRMQUATERNION D3DRMAPI D3DRMQuaternionSlerp(LPD3DRMQUATERNION q,
  */
 extern void             D3DRMAPI D3DRMMatrixFromQuaternion(D3DRMMATRIX4D dmMat, LPD3DRMQUATERNION lpDqQuat);
 
+/*
+ * Calculate the quaternion that corresponds to a rotation matrix
+ */
+extern LPD3DRMQUATERNION D3DRMAPI D3DRMQuaternionFromMatrix(LPD3DRMQUATERNION, D3DRMMATRIX4D);
+
 
 #if defined(__cplusplus)
 };
 #endif
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif
+

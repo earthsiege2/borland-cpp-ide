@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -35,9 +35,7 @@ void AFXAPI AfxOleOnReleaseAllObjects()
 
 	// shut down the application
 	CWinApp* pApp = AfxGetApp();
-	ASSERT_VALID(pApp);
-
-	if (pApp->m_pMainWnd != NULL)
+	if (pApp != NULL && pApp->m_pMainWnd != NULL)
 	{
 		// destroy the main window (only if enabled)
 		if (pApp->m_pMainWnd->IsWindowEnabled())
@@ -55,21 +53,21 @@ void AFXAPI AfxOleOnReleaseAllObjects()
 
 BOOL AFXAPI AfxOleCanExitApp()
 {
-	AFX_MODULE_STATE* pState = AfxGetModuleState();
-	return pState->m_nObjectCount == 0;
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	return pModuleState->m_nObjectCount == 0;
 }
 
 void AFXAPI AfxOleLockApp()
 {
-	AFX_MODULE_STATE* pState = AfxGetModuleState();
-	InterlockedIncrement(&pState->m_nObjectCount);
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	InterlockedIncrement(&pModuleState->m_nObjectCount);
 }
 
 void AFXAPI AfxOleUnlockApp()
 {
-	AFX_MODULE_STATE* pState = AfxGetModuleState();
-	ASSERT(pState->m_nObjectCount != 0);
-	if (InterlockedDecrement(&pState->m_nObjectCount) == 0)
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	ASSERT(pModuleState->m_nObjectCount != 0);
+	if (InterlockedDecrement(&pModuleState->m_nObjectCount) == 0)
 	{
 		// allow application to shut down when all the objects have
 		//  been released
@@ -82,11 +80,11 @@ void AFXAPI AfxOleUnlockApp()
 
 void AFXAPI AfxOleSetUserCtrl(BOOL bUserCtrl)
 {
-	AFX_MODULE_STATE* pState = AfxGetModuleState();
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
 #ifdef _DEBUG
 	CWinApp* pApp = AfxGetApp();
-	if (bUserCtrl && !pState->m_bUserCtrl &&
-		(pApp->m_pMainWnd == NULL ||
+	if (bUserCtrl && !pModuleState->m_bUserCtrl &&
+		(pApp == NULL || pApp->m_pMainWnd == NULL ||
 		!pApp->m_pMainWnd->IsWindowVisible()))
 	{
 		// If the user gets control while the application window is
@@ -95,13 +93,13 @@ void AFXAPI AfxOleSetUserCtrl(BOOL bUserCtrl)
 		TRACE0("Warning: AfxOleSetUserCtrl(TRUE) called with application window hidden.\n");
 	}
 #endif
-	pState->m_bUserCtrl = bUserCtrl;
+	pModuleState->m_bUserCtrl = bUserCtrl;
 }
 
 BOOL AFXAPI AfxOleGetUserCtrl()
 {
-	AFX_MODULE_STATE* pState = AfxGetModuleState();
-	return pState->m_bUserCtrl;
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	return pModuleState->m_bUserCtrl;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -121,18 +121,37 @@ void CFrameWnd::ReDockControlBar(CControlBar* pBar, CDockBar* pDockBar, LPCRECT 
 
 	if (pDockBar == NULL)
 	{
+		// Search for the place holder.
+
+		// In case we don't find a place holder, find a bar with the correct alignment
+		// and keep it in pPossibleBar.
+		CDockBar* pPossibleBar = NULL;
 		for (int i = 0; i < 4; i++)
 		{
+			CDockBar* pTempBar = (CDockBar*)GetControlBar(dwDockBarMap[i][0]);
+			if (pTempBar != NULL)
+			{
+				// Is this the same bar we docked with before?
+				if (pTempBar->FindBar((CControlBar*)_AfxGetDlgCtrlID(pBar->m_hWnd)) > 0)
+				{
+					pDockBar = pTempBar;
+					break;
+				}
+			}
+
 			if ((dwDockBarMap[i][1] & CBRS_ALIGN_ANY) ==
 				(pBar->m_dwStyle & CBRS_ALIGN_ANY))
 			{
-				pDockBar = (CDockBar*)GetControlBar(dwDockBarMap[i][0]);
-				ASSERT(pDockBar != NULL);
+				pPossibleBar = (CDockBar*)GetControlBar(dwDockBarMap[i][0]);
+				ASSERT(pPossibleBar != NULL);
 				// assert fails when initial CBRS_ of bar does not
 				// match available docking sites, as set by EnableDocking()
-				break;
 			}
 		}
+
+		// Did we find the place holder?
+		if (pDockBar == NULL)
+			pDockBar = pPossibleBar;
 	}
 	ASSERT(pDockBar != NULL);
 	ASSERT(m_listControlBars.Find(pBar) != NULL);
@@ -199,8 +218,11 @@ void CFrameWnd::FloatControlBar(CControlBar* pBar, CPoint point, DWORD dwStyle)
 
 	pDockBar->DockControlBar(pBar);
 	pDockFrame->RecalcLayout(TRUE);
-	pDockFrame->ShowWindow(SW_SHOWNA);
-	pDockFrame->UpdateWindow();
+	if (GetWindowLong(pBar->m_hWnd, GWL_STYLE) & WS_VISIBLE)
+	{
+		pDockFrame->ShowWindow(SW_SHOWNA);
+		pDockFrame->UpdateWindow();
+	}
 }
 
 DWORD CFrameWnd::CanDock(CRect rect, DWORD dwDockStyle, CDockBar** ppDockBar)

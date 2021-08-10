@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,6 +28,7 @@ END
 /////////////////////////////////////////////////////////////////////////////
 // OLE Control Resources
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
@@ -154,9 +155,11 @@ BEGIN
 	AFX_IDS_COLOR_ACTIVEBORDER "Bordure active"
 	AFX_IDS_COLOR_INACTIVEBORDER "Bordure inactive"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
 STRINGTABLE DISCARDABLE
 BEGIN
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_WNDFRAME  "Cadre de la fenêtre"
 	AFX_IDS_COLOR_SCROLLBARS "Barres de défilement"
 	AFX_IDS_COLOR_BTNFACE   "Face du bouton"
@@ -171,6 +174,7 @@ BEGIN
 	AFX_IDS_ITALIC          "Italique"
 	AFX_IDS_BOLDITALIC      "Italique gras"
 	AFX_IDS_SAMPLETEXT      "AaBbYyZz"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_DISPLAYSTRING_FONT "(Police)"
 	AFX_IDS_DISPLAYSTRING_COLOR "(Couleur)"
 END
@@ -178,18 +182,22 @@ END
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_DISPLAYSTRING_PICTURE "(Image - %s)"
-	AFX_IDS_PICTUREFILTER   "Tous les type d'images|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|Images en mode point (*.bmp;*.dib)|*.bmp;*.dib|Icônes/Curseurs (*.ico;*.cur)|*.ico|Métafichiers (*.wmf;*.emf)|*.emf;*.wmf|Tous les fichiers (*.*)|*.*||"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
+	AFX_IDS_PICTUREFILTER   "Tous les type d'images|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|Images en mode point (*.bmp;*.dib)|*.bmp;*.dib|Icônes/Curseurs (*.ico;*.cur)|*.ico;*.cur|Métafichiers (*.wmf;*.emf)|*.wmf;*.emf|Tous les fichiers (*.*)|*.*||"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_PICTYPE_UNKNOWN "Inconnu"
 	AFX_IDS_PICTYPE_NONE    "Aucun"
 	AFX_IDS_PICTYPE_BITMAP  "Image en mode point"
 	AFX_IDS_PICTYPE_METAFILE "Métafichier"
 	AFX_IDS_PICTYPE_ICON    "Icône"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_PPG       "Page de propriété de couleur"
 	AFX_IDS_COLOR_PPG_CAPTION "Couleurs"
 	AFX_IDS_FONT_PPG        "Page de propriété de police"
 	AFX_IDS_FONT_PPG_CAPTION "Polices"
 	AFX_IDS_PICTURE_PPG     "Page de propriété d'image"
 	AFX_IDS_PICTURE_PPG_CAPTION "Images"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_BORDERSTYLE_0   "0 - Aucun"
 	AFX_IDS_BORDERSTYLE_1   "1 - Trait simple"
 END
@@ -200,6 +208,7 @@ BEGIN
 	AFX_IDS_VERB_PROPERTIES "&Propriétés..."
 END
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_PICTURECANTOPEN "Impossible d'ouvrir le fichier image %1. Le fichier peut ne pas exister, ou peut ne pas être lisible."
@@ -213,7 +222,9 @@ STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_PICTUREBROWSETITLE "Parcourir les images"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
+#ifndef _AFX_NO_CTLERROR_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_E_ILLEGALFUNCTIONCALL "Appel de fonction incorrect"
@@ -267,6 +278,7 @@ BEGIN
 	AFX_IDP_E_SEARCHTEXTNOTFOUND "Texte recherché introuvable"
 	AFX_IDP_E_REPLACEMENTSTOOLONG "Texte de remplacement trop long"
 END
+#endif //!_AFX_NO_CTLERROR_RESOURCES
 
 #endif //!_AFXDLL
 #endif //__AFXOLECL_RC__

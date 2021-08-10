@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -40,34 +40,28 @@ _AFX_COLOR_STATE::_AFX_COLOR_STATE()
 		m_crSavedCustom[i] = RGB(255, 255, 255);
 }
 
-BEGIN_MESSAGE_MAP(CColorDialog, CDialog)
+#ifndef _AFX_NO_GRAYDLG_SUPPORT
+BEGIN_MESSAGE_MAP(CColorDialog, CCommonDialog)
 	//{{AFX_MSG_MAP(CColorDialog)
 	ON_WM_CTLCOLOR()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
+#endif //!_AFX_NO_GRAYDLG_SUPPORT
 
 EXTERN_PROCESS_LOCAL(_AFX_COLOR_STATE, _afxClrState)
 
 CColorDialog::CColorDialog(COLORREF clrInit, DWORD dwFlags,
 	CWnd* pParentWnd) : CCommonDialog(pParentWnd)
 {
-#ifdef _MAC
-	UNUSED_ALWAYS(dwFlags);
-#endif
-
 	memset(&m_cc, 0, sizeof(m_cc));
 	m_nIDHelp = AFX_IDD_COLOR;
 
 	m_cc.lStructSize = sizeof(m_cc);
 	m_cc.lpCustColors = GetSavedCustomColors();
-#ifndef _MAC
 	m_cc.Flags = dwFlags | CC_ENABLEHOOK;
-#endif
 	if (!afxData.bWin4 && AfxHelpEnabled())
 		m_cc.Flags |= CC_SHOWHELP;
-#ifndef _MAC
 	m_cc.lpfnHook = (COMMDLGPROC)_AfxCommDlgProc;
-#endif
 
 	if ((m_cc.rgbResult = clrInit) != 0)
 		m_cc.Flags |= CC_RGBINIT;
@@ -76,10 +70,8 @@ CColorDialog::CColorDialog(COLORREF clrInit, DWORD dwFlags,
 int CColorDialog::DoModal()
 {
 	ASSERT_VALID(this);
-#ifndef _MAC
 	ASSERT(m_cc.Flags & CC_ENABLEHOOK);
 	ASSERT(m_cc.lpfnHook != NULL); // can still be a user hook
-#endif
 
 	m_cc.hwndOwner = PreModal();
 	int nResult = ::ChooseColor(&m_cc);
@@ -99,7 +91,7 @@ void CColorDialog::SetCurrentColor(COLORREF clr)
 	ASSERT_VALID(this);
 	ASSERT(m_hWnd != NULL);
 
-	SendMessage(_afxNMsgSETRGB, 0, (DWORD)clr);
+	SendMessage(_afxMsgSETRGB, 0, (DWORD)clr);
 }
 
 COLORREF* PASCAL CColorDialog::GetSavedCustomColors()
@@ -107,13 +99,15 @@ COLORREF* PASCAL CColorDialog::GetSavedCustomColors()
 	return &_afxClrState->m_crSavedCustom[0];
 }
 
-// The color tracker in the COMMDLG.DLL can't handle grey backgrounds,
+// The color tracker in the COMMDLG.DLL can't handle gray backgrounds,
 //  so we force the default with this override.
 
+#ifndef _AFX_NO_GRAYDLG_SUPPORT
 HBRUSH CColorDialog::OnCtlColor(CDC*, CWnd*, UINT)
 {
 	return (HBRUSH)Default();
 }
+#endif //!_AFX_NO_GRAYDLG_SUPPORT
 
 ////////////////////////////////////////////////////////////////////////////
 // CColorDialog diagnostics

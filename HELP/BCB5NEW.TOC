@@ -1,0 +1,170 @@
+:BASE bcb5new.hlp>main
+:TITLE What's New in Borland C++Builder
+;
+1 What's New
+2 Overview of new features=HC_MHelpWhatsNew
+
+2 Database enhancements
+3 ADOExpress=D5ADODataset
+3 InterBase Express=InterBaseExpress
+3 Data Module Designer=AboutTheDataModuleDesigner@bcb5.hlp>main
+3 MIDAS enhancements=MIDASEnhancements
+
+2 IDE enhancements
+3 Overview of IDE enhancements=IDEEnhancements
+3 Customizable desktop settings=wnCustomizableDesktopSettings
+3 To-Do Lists=wnToDoLists
+3 Property categories in the Object Inspector=PropertyCategoriesInTheObjectInspector
+3 Images in drop down lists in the Object Inspector=wnImagesInDropDownListsInTheObjectInspector
+3 Code Editor enhancements=wnCodeEditorEnhancements
+3 Function divider lines in Code Editor=wnFunctionDividerLinesInCodeEditor
+3 Forms now saved as text=wnFormsNowSavedAsText
+3 Option to auto create forms=wnOptionToAutoCreateForms
+3 IDE command line options=wnIDECommandLineOptions
+3 NetMasters components=wnNetMastersComponents
+3 Help menu changes=wnHelpMenuChanges
+3 Background compiling=wnBackgroundCompiling
+3 Data Module Designer=wnDataModuleDesigner
+
+2 Projects and Project Manager enhancements
+3 Overview of Project Manager enhancements=ProjManager
+3 Node level options=NodeLevelOptions
+3 Header file dependencies=HeaderFileDependencies
+3 New project file format=NewProjectFileFormat
+3 Project wrapping=ProjectWrapping
+3 Converting a project file to a MAKE file=Proj2Make
+3 Handling the .CPP and .H files as a set=wnCPPandHfiles 
+
+2 Compiler enhancements
+3 Overview of compiler enhancements=CompilerEnhancements
+3 Background compiling=BackgroundCompiling
+3 Microsoft compatibility enhancements=wnMsCompatibility
+3 Compiler option for extended error info=wnCompilerOptionForExtendedErrorInfo
+
+2 Linker enhancements
+3 Overview of linker enhancements=LinkerEnhancements
+3 Delayed loading of DLLs=wnDelayedLoadingOfDlls
+3 Advanced linker options=AdvancedLinkerOptions
+3 ALIAS record support=AliasRecordSupport
+3 Linker warnings=LinkerWarnings
+3 Import/Export by ordinal=ImportExportByOrdinal
+3 New switches=NewSwitches
+
+2 New debugging features
+3 Overview of new debugging features=D5DebuggerEnhancements
+3 New debugging views=wnNewDebuggingViews
+3 Breakpoint features=wnBreakpointFeatures
+3 New debugging commands and options=wnNewDebuggingCommandsAndOptions
+3 Debugging usability enhancements=wnDebuggingUsabilityEnhancements
+
+2 VCL enhancements
+3 Overview of VCL enhancements=D5VCLEnhancements
+3 Common control updates=CommonControlUpdates
+3 Web enhancements=WebEnhancements
+3 Custom draw events=CustomDrawEvents
+3 Control panel applet wizard components=ControlPanelApplet
+3 Miscellaneous VCL enhancements=MiscellaneousVCLEnhancements
+3 VCL Documentation enhancements=VCLDocumentationEnhancements
+3 Frames=wnWorkingWithFrames
+
+2 COM/COM+ enhancements
+3 Overview of COM/COM+ enhancements=ComEnhancements
+3 COM+ support=wnComPlusSupport
+3 ActiveX Enhancements=wnActivexEnhancements2
+3 COM wizard and implementing existing interfaces=wnComWizardAndImplementingExistingInterfaces2
+
+2 Tools and wizards
+3 Overview of tools and wizards=ToolsAndWizards
+3 TeamSource=AboutTeamSource
+3 International tools=InternationalTools
+3 CodeGuard=wnCodeGuard
+3 New application wizards=wnNewApplicationWizards
+3 COM wizard and implementing existing interfaces=ComWizardAndImplementingExistingInterfaces
+3 New tools macro=wnNewToolsMacro
+
+2 Miscellaneous new features and enhancements
+3 Overview of miscellaneous new features and enhancements=wnMiscNewItems
+3 Fast math operations=wnFastMath
+3 ActiveX Enhancements=wnActivexEnhancements
+3 Performance tuning=wnPerformanceTuning
+3 Diagnostic library files=wnDiagnosticLibraryFiles
+
+; ------------------------------------------
+
+1 Upgrading to Borland C++Builder 5
+2 Summary of compatibility issues=UpgradingToCBuilder5
+
+2 IDE and its facilities
+3 Overview of IDE changes=upIdeAndItsFacilities 
+3 New form file format=NewFormFileFormat
+
+2 VCL and global functions
+3 Overview of VCL changes=upVCLAndGlobalFunctions
+3 Properties as image list indexes=upPropertiesAsImageListIndexes
+3 3 New parameter for TCustomTreeview::CustomDrawItem=upNewParameterForTCustomTreeviewCustomDrawItem
+3 Double pop-up menus=CBuilder5SupportWMCONTEXTMENU
+3 FMTBCDToCurr and CurrToFMTBCD replaced=upFMTBCDToCurrAndCurrToFMTBCDReplaced
+3 Additional TFieldType values=upAdditionalTFieldTypeValues
+3 QuickReports and BeforePrint=upQuickReportsAndBeforePrint
+3 TPoint changes=TPointChange
+3 TMenu::AutoHotKeys behavior=AutoHotKeysConsiderations
+3 PServiceController name change=upPServiceControllerNameChange
+3 TPropertyEditor constructor change=upTPropertyEditorConstructorChange
+3 Compiling pakages with DsgnIntf.pas=upDesignInterFacePackages
+
+2 Units and class origins
+3 Overview of units and class origins changes=upUnitsAndClassOrigins
+3 TChangeLink=upTChangeLink
+3 TDesignerSelectionList=upTDesignerSelectionList
+3 TComponentList=upTComponentList
+
+2 Projects and their files
+3 Overview of project changes=upProjectsAndTheirFiles
+3 Loading old projects=upLoadingOldProjects
+3 Symbol files from previous versions=upSymbolFilesFromPreviousVersions
+3 Auto-created resource files=upAutoCreatedResourceFiles
+3 STDVCL32.DLL versus STDVCL40.DLL=upSTDVCL32versusSTDVCL40
+3 Packages and units referencing non-units=upPackagesAndUnitsReferencingNonunits
+3 Auto-generated sentinels=upAutoGeneratedSentinels
+3 Packages and name changes=upPackageNames
+
+2 Programming
+3 Overview of programming changes=upProgramming
+3 DLL initialization code=DLLInitialization
+3 Exporting overloaded functions=upExportingOverloadedFunctions
+3 Code generation and importing type libraries=upCodeGenerationAndImportingTypeLibraries
+3 New semantics for printf() and sprintf()=upPrintfAndSprintf
+
+2 MIDAS
+3 Overview of MIDAS changes=upMIDAS
+3 Converting MIDAS applications=ConvertingMIDASApplications
+3 Changes to MIDAS support=ChangesToMIDASSupport
+3 Changes to MIDAS security=ChangesToMIDASSecurity
+
+2 Internet components and programming
+3 Overview of Internet changes=upInternetComponentsAndProgramming
+3 TCppWebBrowser and THTML=upTCppWebBrowserandTHTML
+3 Packages and ISAPI/NSAPI=BuildingWebBroker
+3 Code signing change=MappingSymbols
+
+2 Database components and programming
+3 Overview of database programming changes=upDatabaseComponentsAndProgramming
+3 TLoginEvent renamed=upTLoginEventRenamed
+3 DBError and DBErrorFmt functions discontinued=upDBErrorAndDBErrorFmtFunctionsDiscontinued
+
+2 Wizards
+3 Overview of Wizard changes=upWizards
+3 Resource DLL wizard=upResourceDllWizard
+
+2 Miscellaneous
+3 Overview of miscellaneous changes=upMiscellaneous
+3 TwoDigitYearCenturyWindow variable change=upTwoDigitYearCenturyWindow
+3 FIF libraries removed=upFifLibrariesRemoved
+3 GraphicsServer component removed=upGraphicsServerComponentRemoved
+
+2 Object Pascal Issues
+3 Overview of Object Pascal changes=upObjectPascalIssues
+3 Default alignment and records=upDefaultAlignment
+3 Upgrading WebBroker applications=upUpgradingWebBrokerApplications
+
+;; end of TOC

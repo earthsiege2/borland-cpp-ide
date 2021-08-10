@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project --><PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="batch.exe"/>
+    <OBJFILES value="stdafx.obj batch.obj batchdoc.obj batchvw.obj compress.obj destdird.obj interlea.obj mainfrm.obj"/>
+    <RESFILES value=" batch.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value=" odbc32.lib"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value=""/>
+    <PACKAGES value=""/>
+    <PATHCPP value=".;;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="_NO_VCL;_RTLDLL;_AFXDLL;_DLL;_X86_;_WINDOWS;_AFX_PORTABLE;_AFX_NOFORCE_LIBS;_MT;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;_MSC_VER=1100;"/>
+    <MAINSOURCE value="batch.bpf"/>
+    <INCLUDEPATH value="$(BCB)\include\atl;$(BCB)\include;$(BCB)\INCLUDE;$(BCB)\INCLUDE\MFC"/>
+    <LIBPATH value="$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\LIB;$(BCB)\lib\psdk;"/>
+    <WARNINGS value="-w-8026 -w-8027 -w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I$(BCB)\include"/>
+    <CFLAG1 value="-Od -Hc -w -k -r- -y -v -vi- -c  -g0 -WM -W -VF "/>
+    <PFLAGS value="-$YD -$W -$O- -v -jphnd -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-aa -Tpe -x -v -Gn "/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES)  bfcs42.lib bfc42.lib odbc32.lib import32.lib cw32mti.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=0
+
+[HistoryLists\hlLibraryPath]
+Count=0
+
+[HistoryLists\hlDebugSourcePath]
+Count=0
+
+[HistoryLists\hlConditionals]
+Count=
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+  </IDEOPTIONS>
+  <FILES>
+    
+  </FILES>
+</PROJECT>
+

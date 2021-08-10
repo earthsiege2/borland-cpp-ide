@@ -1,5 +1,0 @@
-The Sounder example demonstrates the use of Multimedia commands in 
-a Windows application. 
-
-This example requires a sound card and an appropriate driver to be
-installed on your system.

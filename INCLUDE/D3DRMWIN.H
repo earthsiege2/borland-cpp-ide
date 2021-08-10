@@ -1,6 +1,6 @@
 /*==========================================================================;
  *
- *  Copyright (C) 1995-1996 Microsoft Corporation.  All Rights Reserved.
+ *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
  *
  *  File:       d3drm.h
  *  Content:    Direct3DRM include file
@@ -8,22 +8,17 @@
  ***************************************************************************/
 
 #ifndef __D3DRMWIN_H__
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __D3DRMWIN_H__
-#pragma option -b
 
 #ifndef WIN32
 #define WIN32
 #endif
 
-#pragma option -b.
 #include "d3drm.h"
-#pragma option -b
-#pragma option -b.
+
 #include "ddraw.h"
-#pragma option -b
-#pragma option -b.
 #include "d3d.h"
-#pragma option -b
 
 /*
  * GUIDS used by Direct3DRM Windows interface
@@ -52,5 +47,6 @@ DECLARE_INTERFACE_(IDirect3DRMWinDevice, IDirect3DRMObject)
 };
 
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif
+

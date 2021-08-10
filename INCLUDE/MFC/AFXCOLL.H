@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -84,6 +84,7 @@ public:
 	// Accessing elements
 	BYTE GetAt(int nIndex) const;
 	void SetAt(int nIndex, BYTE newElement);
+
 	BYTE& ElementAt(int nIndex);
 
 	// Direct Access to the element data (may return NULL)
@@ -92,7 +93,9 @@ public:
 
 	// Potentially growing the array
 	void SetAtGrow(int nIndex, BYTE newElement);
+
 	int Add(BYTE newElement);
+
 	int Append(const CByteArray& src);
 	void Copy(const CByteArray& src);
 
@@ -102,6 +105,7 @@ public:
 
 	// Operations that move elements around
 	void InsertAt(int nIndex, BYTE newElement, int nCount = 1);
+
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CByteArray* pNewArray);
 
@@ -111,6 +115,7 @@ protected:
 	int m_nSize;     // # of elements (upperBound - 1)
 	int m_nMaxSize;  // max allocated
 	int m_nGrowBy;   // grow amount
+
 
 public:
 	~CByteArray();
@@ -152,6 +157,7 @@ public:
 	// Accessing elements
 	WORD GetAt(int nIndex) const;
 	void SetAt(int nIndex, WORD newElement);
+
 	WORD& ElementAt(int nIndex);
 
 	// Direct Access to the element data (may return NULL)
@@ -160,7 +166,9 @@ public:
 
 	// Potentially growing the array
 	void SetAtGrow(int nIndex, WORD newElement);
+
 	int Add(WORD newElement);
+
 	int Append(const CWordArray& src);
 	void Copy(const CWordArray& src);
 
@@ -170,6 +178,7 @@ public:
 
 	// Operations that move elements around
 	void InsertAt(int nIndex, WORD newElement, int nCount = 1);
+
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CWordArray* pNewArray);
 
@@ -179,6 +188,7 @@ protected:
 	int m_nSize;     // # of elements (upperBound - 1)
 	int m_nMaxSize;  // max allocated
 	int m_nGrowBy;   // grow amount
+
 
 public:
 	~CWordArray();
@@ -220,6 +230,7 @@ public:
 	// Accessing elements
 	DWORD GetAt(int nIndex) const;
 	void SetAt(int nIndex, DWORD newElement);
+
 	DWORD& ElementAt(int nIndex);
 
 	// Direct Access to the element data (may return NULL)
@@ -228,7 +239,9 @@ public:
 
 	// Potentially growing the array
 	void SetAtGrow(int nIndex, DWORD newElement);
+
 	int Add(DWORD newElement);
+
 	int Append(const CDWordArray& src);
 	void Copy(const CDWordArray& src);
 
@@ -238,6 +251,7 @@ public:
 
 	// Operations that move elements around
 	void InsertAt(int nIndex, DWORD newElement, int nCount = 1);
+
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CDWordArray* pNewArray);
 
@@ -247,6 +261,7 @@ protected:
 	int m_nSize;     // # of elements (upperBound - 1)
 	int m_nMaxSize;  // max allocated
 	int m_nGrowBy;   // grow amount
+
 
 public:
 	~CDWordArray();
@@ -288,6 +303,7 @@ public:
 	// Accessing elements
 	UINT GetAt(int nIndex) const;
 	void SetAt(int nIndex, UINT newElement);
+
 	UINT& ElementAt(int nIndex);
 
 	// Direct Access to the element data (may return NULL)
@@ -296,7 +312,9 @@ public:
 
 	// Potentially growing the array
 	void SetAtGrow(int nIndex, UINT newElement);
+
 	int Add(UINT newElement);
+
 	int Append(const CUIntArray& src);
 	void Copy(const CUIntArray& src);
 
@@ -306,6 +324,7 @@ public:
 
 	// Operations that move elements around
 	void InsertAt(int nIndex, UINT newElement, int nCount = 1);
+
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CUIntArray* pNewArray);
 
@@ -315,6 +334,7 @@ protected:
 	int m_nSize;     // # of elements (upperBound - 1)
 	int m_nMaxSize;  // max allocated
 	int m_nGrowBy;   // grow amount
+
 
 public:
 	~CUIntArray();
@@ -354,6 +374,7 @@ public:
 	// Accessing elements
 	void* GetAt(int nIndex) const;
 	void SetAt(int nIndex, void* newElement);
+
 	void*& ElementAt(int nIndex);
 
 	// Direct Access to the element data (may return NULL)
@@ -362,7 +383,9 @@ public:
 
 	// Potentially growing the array
 	void SetAtGrow(int nIndex, void* newElement);
+
 	int Add(void* newElement);
+
 	int Append(const CPtrArray& src);
 	void Copy(const CPtrArray& src);
 
@@ -372,6 +395,7 @@ public:
 
 	// Operations that move elements around
 	void InsertAt(int nIndex, void* newElement, int nCount = 1);
+
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CPtrArray* pNewArray);
 
@@ -381,6 +405,7 @@ protected:
 	int m_nSize;     // # of elements (upperBound - 1)
 	int m_nMaxSize;  // max allocated
 	int m_nGrowBy;   // grow amount
+
 
 public:
 	~CPtrArray();
@@ -420,6 +445,7 @@ public:
 	// Accessing elements
 	CObject* GetAt(int nIndex) const;
 	void SetAt(int nIndex, CObject* newElement);
+
 	CObject*& ElementAt(int nIndex);
 
 	// Direct Access to the element data (may return NULL)
@@ -428,7 +454,9 @@ public:
 
 	// Potentially growing the array
 	void SetAtGrow(int nIndex, CObject* newElement);
+
 	int Add(CObject* newElement);
+
 	int Append(const CObArray& src);
 	void Copy(const CObArray& src);
 
@@ -438,6 +466,7 @@ public:
 
 	// Operations that move elements around
 	void InsertAt(int nIndex, CObject* newElement, int nCount = 1);
+
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CObArray* pNewArray);
 
@@ -447,6 +476,7 @@ protected:
 	int m_nSize;     // # of elements (upperBound - 1)
 	int m_nMaxSize;  // max allocated
 	int m_nGrowBy;   // grow amount
+
 
 public:
 	~CObArray();
@@ -488,6 +518,9 @@ public:
 	// Accessing elements
 	CString GetAt(int nIndex) const;
 	void SetAt(int nIndex, LPCTSTR newElement);
+
+	void SetAt(int nIndex, const CString& newElement);
+
 	CString& ElementAt(int nIndex);
 
 	// Direct Access to the element data (may return NULL)
@@ -496,7 +529,13 @@ public:
 
 	// Potentially growing the array
 	void SetAtGrow(int nIndex, LPCTSTR newElement);
+
+	void SetAtGrow(int nIndex, const CString& newElement);
+
 	int Add(LPCTSTR newElement);
+
+	int Add(const CString& newElement);
+
 	int Append(const CStringArray& src);
 	void Copy(const CStringArray& src);
 
@@ -506,6 +545,9 @@ public:
 
 	// Operations that move elements around
 	void InsertAt(int nIndex, LPCTSTR newElement, int nCount = 1);
+
+	void InsertAt(int nIndex, const CString& newElement, int nCount = 1);
+
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CStringArray* pNewArray);
 
@@ -515,6 +557,9 @@ protected:
 	int m_nSize;     // # of elements (upperBound - 1)
 	int m_nMaxSize;  // max allocated
 	int m_nGrowBy;   // grow amount
+
+	void InsertEmpty(int nIndex, int nCount);
+
 
 public:
 	~CStringArray();
@@ -571,6 +616,7 @@ public:
 	POSITION AddHead(void* newElement);
 	POSITION AddTail(void* newElement);
 
+
 	// add another list of elements before head or after tail
 	void AddHead(CPtrList* pNewList);
 	void AddTail(CPtrList* pNewList);
@@ -590,11 +636,13 @@ public:
 	void*& GetAt(POSITION position);
 	void* GetAt(POSITION position) const;
 	void SetAt(POSITION pos, void* newElement);
+
 	void RemoveAt(POSITION position);
 
 	// inserting before or after a given position
 	POSITION InsertBefore(POSITION position, void* newElement);
 	POSITION InsertAfter(POSITION position, void* newElement);
+
 
 	// helper functions (note: O(n) speed)
 	POSITION Find(void* searchValue, POSITION startAfter = NULL) const;
@@ -666,6 +714,7 @@ public:
 	POSITION AddHead(CObject* newElement);
 	POSITION AddTail(CObject* newElement);
 
+
 	// add another list of elements before head or after tail
 	void AddHead(CObList* pNewList);
 	void AddTail(CObList* pNewList);
@@ -685,11 +734,13 @@ public:
 	CObject*& GetAt(POSITION position);
 	CObject* GetAt(POSITION position) const;
 	void SetAt(POSITION pos, CObject* newElement);
+
 	void RemoveAt(POSITION position);
 
 	// inserting before or after a given position
 	POSITION InsertBefore(POSITION position, CObject* newElement);
 	POSITION InsertAfter(POSITION position, CObject* newElement);
+
 
 	// helper functions (note: O(n) speed)
 	POSITION Find(CObject* searchValue, POSITION startAfter = NULL) const;
@@ -763,6 +814,10 @@ public:
 	POSITION AddHead(LPCTSTR newElement);
 	POSITION AddTail(LPCTSTR newElement);
 
+	POSITION AddHead(const CString& newElement);
+	POSITION AddTail(const CString& newElement);
+
+
 	// add another list of elements before head or after tail
 	void AddHead(CStringList* pNewList);
 	void AddTail(CStringList* pNewList);
@@ -782,11 +837,18 @@ public:
 	CString& GetAt(POSITION position);
 	CString GetAt(POSITION position) const;
 	void SetAt(POSITION pos, LPCTSTR newElement);
+
+	void SetAt(POSITION pos, const CString& newElement);
+
 	void RemoveAt(POSITION position);
 
 	// inserting before or after a given position
 	POSITION InsertBefore(POSITION position, LPCTSTR newElement);
 	POSITION InsertAfter(POSITION position, LPCTSTR newElement);
+
+	POSITION InsertBefore(POSITION position, const CString& newElement);
+	POSITION InsertAfter(POSITION position, const CString& newElement);
+
 
 	// helper functions (note: O(n) speed)
 	POSITION Find(LPCTSTR searchValue, POSITION startAfter = NULL) const;
@@ -832,7 +894,7 @@ protected:
 	struct CAssoc
 	{
 		CAssoc* pNext;
-		UINT nHashValue;  // needed for efficient iteration
+
 		WORD key;
 		void* value;
 	};
@@ -893,6 +955,7 @@ public:
 	void AssertValid() const;
 #endif
 
+
 protected:
 	// local typedefs for CTypedPtrMap class template
 	typedef WORD BASE_KEY;
@@ -913,7 +976,7 @@ protected:
 	struct CAssoc
 	{
 		CAssoc* pNext;
-		UINT nHashValue;  // needed for efficient iteration
+
 		void* key;
 		WORD value;
 	};
@@ -974,6 +1037,7 @@ public:
 	void AssertValid() const;
 #endif
 
+
 protected:
 	// local typedefs for CTypedPtrMap class template
 	typedef void* BASE_KEY;
@@ -994,7 +1058,7 @@ protected:
 	struct CAssoc
 	{
 		CAssoc* pNext;
-		UINT nHashValue;  // needed for efficient iteration
+
 		void* key;
 		void* value;
 	};
@@ -1055,6 +1119,9 @@ public:
 	void AssertValid() const;
 #endif
 
+	void* GetValueAt(void* key) const;
+
+
 protected:
 	// local typedefs for CTypedPtrMap class template
 	typedef void* BASE_KEY;
@@ -1075,7 +1142,7 @@ protected:
 	struct CAssoc
 	{
 		CAssoc* pNext;
-		UINT nHashValue;  // needed for efficient iteration
+
 		WORD key;
 		CObject* value;
 	};
@@ -1137,6 +1204,7 @@ public:
 	void Dump(CDumpContext&) const;
 	void AssertValid() const;
 #endif
+
 
 protected:
 	// local typedefs for CTypedPtrMap class template
@@ -1396,18 +1464,6 @@ protected:
 	typedef LPCTSTR BASE_ARG_VALUE;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Special include for Win32s compatibility
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -1421,7 +1477,7 @@ protected:
 // Inline function declarations
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXCOLL_INLINE inline
+#define _AFXCOLL_INLINE AFX_INLINE
 #include <afxcoll.inl>
 #endif
 

@@ -5,23 +5,25 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1997 by Borland International
+ *      Copyright (c) 1997, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.4  $ */
+
+/* $Revision:   9.4  $ */
 
 #ifndef __MBCTYPE_H
 #define __MBCTYPE_H
+#define _INC_MBCTYPE  /* MSC Guard name */
+
+#ifndef ___STDDEF_H
+#include <_stddef.h>
+#endif
 
 #ifndef __CTYPE_H
 #include <ctype.h>
-#endif
-
-#if !defined(___DEFS_H)
-#include <_defs.h>
 #endif
 
 #define __MBBS ((unsigned char)0x01) /* Non-punctuation of single byte set   */
@@ -40,10 +42,18 @@ extern unsigned char _RTLENTRY _EXPDATA _mbctype[];    /* character type array *
 /* Japanese code page */
 #define _KANJI_CP 932
 
+/* values used in _setmbcp() */
+#define _MB_CP_SBCS       0
+#define _MB_CP_OEM      (-2)
+#define _MB_CP_ANSI     (-3)
+#define _MB_CP_LOCALE   (-4)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+int _RTLENTRY _EXPFUNC _setmbcp(int newCodePage);
+int _RTLENTRY _EXPFUNC _getmbcp(void);
 
 int _RTLENTRY _ismbbkalpha(unsigned int __c);
 int _RTLENTRY _ismbbkpunct(unsigned int __c);
@@ -60,13 +70,6 @@ int _RTLENTRY _ismbblead  (unsigned int __c);
 int _RTLENTRY _ismbbtrail (unsigned int __c);
 int _RTLENTRY _ismbslead  (const unsigned char _FAR *__s1, const unsigned char _FAR *__s2);
 int _RTLENTRY _ismbstrail (const unsigned char _FAR *__s1, const unsigned char _FAR *__s2);
-#if !defined(__FLAT__)
-/* Model-independent functions */
-#if !__STDC__
-int _RTLENTRY __far _fismbslead (const unsigned char __far *__s1, const unsigned char __far *__s2);
-int _RTLENTRY __far _fismbstrail(const unsigned char __far *__s1, const unsigned char __far *__s2);
-#endif  /* ! __STDC__ */
-#endif  /* ! __FLAT__ */
 #endif  /* ! __MBCS_LEADTRAIL */
 
 #ifdef __cplusplus

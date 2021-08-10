@@ -14,16 +14,40 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
-# $Revision:   8.2  $                                                                #
+# $Revision:   9.1  $                                                                #
 #                                                                           #
 #############################################################################
 
 #############################################################################
 # Build the object module lists.                                            #
 #############################################################################
+OBJS =          \
+        tls.obj
+
+!if $d(DLL)
+    OBJS =  $(OBJS)      \
+            tlsdyn.obj
+
+!else
+    OBJS =  $(OBJS)      \
+            tlsstat.obj
+
+!endif
+
 !if $d(MT)
-    OBJS =  $(OBJS)     \
-            thrdbuf.obj
+    OBJS =  $(OBJS)      \
+            thrdbuf.obj  \
+            threadid.obj \
+            thrddata.obj \
+            thread.obj   \
+            fiber.obj    \
+            _lock.obj
+
+    IMPOBJS = 		 \
+	    fasttls.obj
+
+    TASMCFG = 1        # Force tasm.cfg creation
+
 !endif
 
 #############################################################################

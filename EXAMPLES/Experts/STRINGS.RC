@@ -1,0 +1,159 @@
+// include codegen.txt as RCData
+
+SNIPETS RCDATA CODEGEN.TXT
+
+// string tables
+
+STRINGTABLE DISCARDABLE
+{
+
+    1  "Dialog Wizard"
+    2  "Dialog Wizard from demonstration Wizard DLL."
+    3  "Application Wizard"
+    4  "Application Wizard from demonstration Wizard DLL"
+    5  "&Finish"
+    6  "&Next >"
+    7  "An application name is required!"
+    8  "The application name is not a valid identifier."
+    9  "The path entered does not exist."
+    10 "Main.h"
+    11 "Main.cpp"
+    12 "Main.dfm"
+    13 "Main.txt"
+
+// variable names
+
+    20 "StatusLine"
+    21 "OpenDialog"
+    22 "SaveDialog"
+    23 "MainMenu"
+    24 "MainForm"
+    25 "SpeedButton%d"
+    26 "PrintDialog"
+    27 "PrintSetupDialog"
+    28 "SpeedBar"
+
+// misc method names
+    30 "ShowHint"
+    31 "FormCreate"
+
+// Button captions
+    50 "OK"
+    51 "Cancel"
+    52 "&Help"
+        
+// Menu text
+
+    80 "&File"
+    81 "&Edit"
+    82 "&Window"
+    83 "&Help"
+
+// Menu names
+
+    90 "FileMenu"
+    91 "EditMenu"
+    92 "WindowMenu"
+    93 "HelpMenu"
+
+// Menu item text
+
+    100 "&New"
+    101 "&Open..."
+    102 "&Save"
+    103 "Save &As..."
+    104 "&Print..."
+    105 "P&rint Setup..."
+    106 "E&xit"
+
+    107 "&Undo"
+    108 "Cu&t"
+    109 "&Copy"
+    110 "&Paste"
+
+    111 "&Tile"
+    112 "&Cascade"
+    113 "&Arrange All"
+
+    114 "&Contents"
+    115 "&Search for Help On..."
+    116 "&How to Use Help"
+    117 "&About..."
+
+// Menu item names
+
+    200 "FileNewItem"
+    201 "FileOpenItem"
+    202 "FileSaveItem"
+    203 "FileSaveAsItem"
+    204 "FilePrintItem"
+    205 "FilePrintSetupItem"
+    206 "FileExitItem"
+
+    207 "EditUndoItem"
+    208 "EditCutItem"
+    209 "EditCopyItem"
+    210 "EditPasteItem"
+
+    211 "WindowTileItem"
+    212 "WindowCascadeItem"
+    213 "WindowArrangeItem"
+
+    214 "HelpContentsItem"
+    215 "HelpSearchItem"
+    216 "HelpHowToUseItem"
+    217 "HelpAboutItem"
+
+// procedure names for menus
+
+    300 "FileNew"
+    301 "FileOpen"
+    302 "FileSave"
+    303 "FileSaveAs"
+    304 "FilePrint"
+    305 "FilePrintSetup"
+    306 "FileExit"
+
+    307 "EditUndo"
+    308 "EditCut"
+    309 "EditCopy"
+    310 "EditPaste"
+
+    311 "WindowTile"
+    312 "WindowCascade"
+    313 "WindowArrange"
+
+    314 "HelpContents"
+    315 "HelpSearch"
+    316 "HelpHowToUse"
+    317 "HelpAbout"
+
+// fly-by hints for speedbar
+
+    400 "New"
+    401 "Open"
+    402 "Save"
+    403 "Save As"
+    404 "Print"
+    405 "Print Setup"
+    406 "Exit"
+
+    407 "Undo"
+    408 "Cut"
+    409 "Copy"
+    410 "Paste"
+
+    411 "Tile"
+    412 "Cascade"
+    413 "Arrange"
+
+    414 "Help Contents"
+    415 "Topic Search"
+    416 "How to Use Help"
+    417 "About"
+
+    500 "Dialogs"
+    501 "Projects"
+}
+
+

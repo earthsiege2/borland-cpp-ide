@@ -1,17 +1,18 @@
 /*-----------------------------------------------------------------------*
  * filename - mbsnicol.c
  *
- * variables(s)
- *
+ * function(s)
+ *        _mbsnicoll -
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <_locale.h>
@@ -28,7 +29,8 @@ Prototype in    mbstring.h
 
 Description     _mbsnicoll() Collates up to n characters of 2 MBCS strings.
                 This performs a case insensitive comparison of the strings
-                according to the current locale in use
+                according to the current locale in use.
+
 *-------------------------------------------------------------------------*/
 
 int _RTLENTRY _EXPFUNC _mbsnicoll( const unsigned char *__S1, const unsigned char *__S2, size_t n )

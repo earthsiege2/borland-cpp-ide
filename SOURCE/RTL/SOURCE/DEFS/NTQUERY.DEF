@@ -1,0 +1,20 @@
+LIBRARY NTQUERY
+EXPORTS
+
+    BindIFilterFromStorage                   = 'QUERY.DLL'.*
+    BindIFilterFromStream                    = 'QUERY.DLL'.*
+    CIBuildQueryNode                         = 'QUERY.DLL'.*
+    CIBuildQueryTree                         = 'QUERY.DLL'.*
+    CICreateCommand                          = 'QUERY.DLL'.*
+    CIMakeICommand                           = 'QUERY.DLL'.*
+    CIRestrictionToFullTree                  = 'QUERY.DLL'.*
+    CIState                                  = 'QUERY.DLL'.*
+    CITextToFullTree                         = 'QUERY.DLL'.*
+    CITextToFullTreeEx                       = 'QUERY.DLL'.*
+    CITextToSelectTree                       = 'QUERY.DLL'.*
+    CITextToSelectTreeEx                     = 'QUERY.DLL'.*
+    LoadIFilter                              = 'QUERY.DLL'.*
+    LocateCatalogs                           = 'QUERY.DLL'.*
+    LocateCatalogsA                          = 'QUERY.DLL'.*
+    LocateCatalogsW                          = 'QUERY.DLL'.*
+    SetCatalogState                          = 'QUERY.DLL'.*

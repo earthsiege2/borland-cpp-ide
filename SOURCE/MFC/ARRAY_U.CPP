@@ -1,6 +1,6 @@
 
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -187,8 +187,13 @@ void CUIntArray::SetAtGrow(int nIndex, UINT newElement)
 	m_pData[nIndex] = newElement;
 }
 
+
+
+
+
 void CUIntArray::InsertAt(int nIndex, UINT newElement, int nCount)
 {
+
 	ASSERT_VALID(this);
 	ASSERT(nIndex >= 0);    // will expand to meet need
 	ASSERT(nCount > 0);     // zero or negative size not allowed
@@ -215,9 +220,16 @@ void CUIntArray::InsertAt(int nIndex, UINT newElement, int nCount)
 
 	// insert new value in the gap
 	ASSERT(nIndex + nCount <= m_nSize);
+
+
+
+	// copy elements into the empty space
 	while (nCount--)
 		m_pData[nIndex++] = newElement;
+
 }
+
+
 
 void CUIntArray::RemoveAt(int nIndex, int nCount)
 {
@@ -230,7 +242,7 @@ void CUIntArray::RemoveAt(int nIndex, int nCount)
 	int nMoveCount = m_nSize - (nIndex + nCount);
 
 	if (nMoveCount)
-		memcpy(&m_pData[nIndex], &m_pData[nIndex + nCount],
+		memmove(&m_pData[nIndex], &m_pData[nIndex + nCount],
 			nMoveCount * sizeof(UINT));
 	m_nSize -= nCount;
 }

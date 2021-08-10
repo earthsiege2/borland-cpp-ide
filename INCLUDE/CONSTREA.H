@@ -11,39 +11,24 @@
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+/* $Revision:   9.5  $ */
 
 #if !defined(__CONSTREA_H)
 #define __CONSTREA_H
 
-#if !defined(__IOSTREAM_H)
-#include <iostream.h>
-#endif  // __IOSTREAM_H
-
-#if !defined(__IOMANIP_H)
+#include <iosfwd.h>
+#include <strstrea.h>
 #include <iomanip.h>
-#endif  // __IOMANIP_H
 
 #if !defined(__CONIO_H)
 #include <conio.h>
 #endif  // __CONIO_H
 
-
 #if !defined(RC_INVOKED)
 
 #pragma pack(push, 1)
 
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-     // disable Object data calling convention
-#endif
-#endif
-
-#if !defined(__TINY__)
-#pragma option -RT
-#endif
-
-#pragma option -Vo-     // set standard C++ options
+#pragma option push -RT -Vo-
 
 #if defined(__STDC__)
 #pragma warn -nak
@@ -236,7 +221,6 @@ public:
 
 private:
 
-    static long isCon_;
     conbuf buf;
     ostream* oldtie;
 };
@@ -268,8 +252,25 @@ inline void _RTLENTRY constream::textmode( int m )
 
 inline int _RTLENTRY constream::isCon( ostream& o )
 {
-    return (o.flags() & isCon_) != 0;
+    if (dynamic_cast <constream *> (&o) == NULL)
+        return 0;
+    return 1;
 }
+
+template<class T1> class omanip1
+{
+
+public:
+    omanip1<T1>(ostream& (_RTLENTRY *_f)(ostream&, T1), T1 _z1) :
+        _fn(_f), _ag1(_z1){ }
+    friend ostream& _RTLENTRY operator<<(ostream& _s, const omanip1<T1>& _f)
+        { return(*_f._fn)(_s, _f._ag1); }
+
+private:
+    ostream& _RTLENTRY (*_fn)(ostream&, T1);
+    T1 _ag1;
+};
+
 
 template<class T1, class T2> class omanip2
 {
@@ -277,7 +278,7 @@ template<class T1, class T2> class omanip2
 public:
     omanip2<T1,T2>(ostream& (_RTLENTRY *_f)(ostream&, T1, T2 ), T1 _z1, T2 _z2 ) :
         _fn(_f), _ag1(_z1), _ag2(_z2) { }
-    friend ostream& _RTLENTRY operator<<(ostream& _s, omanip2<T1,T2>& _f)
+    friend ostream& _RTLENTRY operator<<(ostream& _s, const omanip2<T1,T2>& _f)
         { return(*_f._fn)(_s, _f._ag1, _f._ag2); }
 
 private:
@@ -293,26 +294,16 @@ ostream& _RTLENTRY normvideo( ostream& );
 ostream& _RTLENTRY delline( ostream& );
 ostream& _RTLENTRY insline( ostream& );
 
-omanip<int> _RTLENTRY setcrsrtype( int );
-omanip<int> _RTLENTRY setattr( int );
-omanip<int> _RTLENTRY setbk( int );
-omanip<int> _RTLENTRY setclr( int );
+omanip1<int> _RTLENTRY setcrsrtype( int );
+omanip1<int> _RTLENTRY setattr( int );
+omanip1<int> _RTLENTRY setbk( int );
+omanip1<int> _RTLENTRY setclr( int );
 omanip2<int,int> _RTLENTRY setxy( int, int );
 
 
 #if !defined(RC_INVOKED)
 
-#pragma option -Vo.     // restore user C++ options
-
-#if !defined(__TINY__)
-#pragma option -RT.
-#endif
-
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po.     // restore Object data calling convention
-#endif
-#endif
+#pragma option pop     // restore options
 
 /* restore default packing */
 #pragma pack(pop)

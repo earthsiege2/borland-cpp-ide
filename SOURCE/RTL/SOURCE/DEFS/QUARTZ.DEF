@@ -1,0 +1,7 @@
+LIBRARY QUARTZ
+EXPORTS
+
+    AMGetErrorTextA                          = 'QUARTZ.DLL'.*
+    AMGetErrorTextW                          = 'QUARTZ.DLL'.*
+    AmpFactorToDB                            = 'QUARTZ.DLL'.*
+    DBToAmpFactor                            = 'QUARTZ.DLL'.*

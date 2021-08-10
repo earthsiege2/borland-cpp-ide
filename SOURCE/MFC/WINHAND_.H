@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -48,9 +48,15 @@ private:    // implementation
 	size_t m_nOffset;       // offset of handles in the object
 	int m_nHandles;         // 1 or 2 (for CDC)
 
-// Constructors
+// Constructor/Destructor
 public:
 	CHandleMap(CRuntimeClass* pClass, size_t nOffset, int nHandles = 1);
+#ifdef _AFXDLL
+	~CHandleMap()
+#else
+	virtual ~CHandleMap()
+#endif
+		{ DeleteTemp(); }
 
 // Operations
 public:
@@ -60,8 +66,9 @@ public:
 	void SetPermanent(HANDLE h, CObject* permOb);
 	void RemoveHandle(HANDLE h);
 
-	BOOL LookupPermanent(HANDLE h, CObject*& pObject);
-	BOOL LookupTemporary(HANDLE h, CObject*& pObject);
+	CObject* LookupPermanent(HANDLE h);
+	CObject* LookupTemporary(HANDLE h);
+
 
 	friend class CWinThread;
 };
@@ -79,7 +86,7 @@ inline void CHandleMap::RemoveHandle(HANDLE h)
 }
 #endif
 
-inline BOOL CHandleMap::LookupPermanent(HANDLE h, CObject*& pObject)
-	{ return m_permanentMap.Lookup((LPVOID)h, (void*&)pObject); }
-inline BOOL CHandleMap::LookupTemporary(HANDLE h, CObject*& pObject)
-	{ return m_temporaryMap.Lookup((LPVOID)h, (void*&)pObject); }
+inline CObject* CHandleMap::LookupPermanent(HANDLE h)
+	{ return (CObject*)m_permanentMap.GetValueAt((LPVOID)h); }
+inline CObject* CHandleMap::LookupTemporary(HANDLE h)
+	{ return (CObject*)m_temporaryMap.GetValueAt((LPVOID)h); }

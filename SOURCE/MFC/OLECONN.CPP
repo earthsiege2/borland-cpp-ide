@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -30,27 +30,70 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CConnectionPoint
 
-CConnectionPoint::CConnectionPoint()
+CConnectionPoint::CConnectionPoint() :
+	m_pUnkFirstConnection(NULL),
+	m_pConnections(NULL)
 {
 }
 
 CConnectionPoint::~CConnectionPoint()
 {
-	int cConnections = m_Connections.GetSize();
-	LPUNKNOWN pConnection;
-
-	while (cConnections-- > 0)
+	POSITION pos = GetStartPosition();
+	while (pos != NULL)
 	{
-		pConnection = (LPUNKNOWN)m_Connections.GetAt(cConnections);
-		if (pConnection != NULL)
-			pConnection->Release();
+		LPUNKNOWN pUnk = GetNextConnection(pos);
+		ASSERT(pUnk != NULL);
+		pUnk->Release();
 	}
+
+	if (m_pConnections != NULL)
+		delete m_pConnections;
+}
+
+POSITION CConnectionPoint::GetStartPosition() const
+{
+	ASSERT(m_pConnections == NULL || m_pUnkFirstConnection == NULL);
+
+	if (m_pUnkFirstConnection != NULL)
+		return (POSITION)-1;
+
+	if (m_pConnections == NULL || m_pConnections->GetSize() == 0)
+		return NULL;
+
+	return (POSITION)1;
+}
+
+LPUNKNOWN CConnectionPoint::GetNextConnection(POSITION& pos) const
+{
+	ASSERT(pos != NULL);
+
+	if (pos == (POSITION)-1)
+	{
+		ASSERT(m_pUnkFirstConnection != NULL);
+		ASSERT(m_pConnections == NULL);
+
+		pos = NULL;
+		return m_pUnkFirstConnection;
+	}
+
+	ASSERT(m_pConnections != NULL);
+	ASSERT((long)pos > 0 && (long)pos <= m_pConnections->GetSize());
+
+	int nIndex = (long)pos - 1;
+	pos = (POSITION)((long)pos + 1);
+	if ((long)pos > m_pConnections->GetSize())
+		pos = NULL;
+	return (LPUNKNOWN)m_pConnections->GetAt(nIndex);
 }
 
 const CPtrArray* CConnectionPoint::GetConnections()
 {
 	ASSERT_VALID(this);
-	return &m_Connections;
+	if (m_pConnections == NULL)
+		CreateConnectionArray();
+
+	ASSERT(m_pConnections != NULL);
+	return m_pConnections;
 }
 
 void CConnectionPoint::OnAdvise(BOOL)
@@ -83,22 +126,56 @@ LPCONNECTIONPOINTCONTAINER CConnectionPoint::GetContainer()
 	return pCPC;
 }
 
+void CConnectionPoint::CreateConnectionArray()
+{
+	ASSERT(m_pConnections == NULL);
+
+	m_pConnections = new CPtrArray;
+	if (m_pUnkFirstConnection != NULL)
+	{
+		m_pConnections->Add(m_pUnkFirstConnection);
+		m_pUnkFirstConnection = NULL;
+	}
+
+	ASSERT(m_pConnections != NULL);
+	ASSERT(m_pUnkFirstConnection == NULL);
+}
+
+int CConnectionPoint::GetConnectionCount()
+{
+	if (m_pUnkFirstConnection != NULL)
+		return 1;
+
+	if (m_pConnections == NULL)
+		return 0;
+
+	return m_pConnections->GetSize();
+}
+
+LPUNKNOWN CConnectionPoint::QuerySinkInterface(LPUNKNOWN pUnkSink)
+{
+	LPUNKNOWN pUnkReturn = NULL;
+	pUnkSink->QueryInterface(GetIID(), reinterpret_cast<void**>(&pUnkReturn));
+	return pUnkReturn;
+}
+
 STDMETHODIMP_(ULONG) CConnectionPoint::XConnPt::Release()
 {
 	METHOD_PROLOGUE_EX_(CConnectionPoint, ConnPt)
-	return (ULONG)pThis->ExternalRelease();
+	return (ULONG)pThis->InternalRelease();
 }
 
 STDMETHODIMP_(ULONG) CConnectionPoint::XConnPt::AddRef()
 {
 	METHOD_PROLOGUE_EX_(CConnectionPoint, ConnPt)
-	return (ULONG)pThis->ExternalAddRef();
+	return (ULONG)pThis->InternalAddRef();
 }
 
 STDMETHODIMP CConnectionPoint::XConnPt::QueryInterface(
 	REFIID iid, LPVOID* ppvObj)
 {
 	METHOD_PROLOGUE_EX_(CConnectionPoint, ConnPt)
+
 	ASSERT(AfxIsValidAddress(ppvObj, sizeof(LPVOID), FALSE));
 
 	if (IsEqualIID(iid, IID_IUnknown) ||
@@ -146,18 +223,27 @@ STDMETHODIMP CConnectionPoint::XConnPt::Advise(
 	LPUNKNOWN lpInterface;
 
 	int cMaxConn = pThis->GetMaxConnections();
-	if ((cMaxConn >=0) && (pThis->m_Connections.GetSize() == cMaxConn))
+	if ((cMaxConn >= 0) && (pThis->GetConnectionCount() == cMaxConn))
 	{
 		return CONNECT_E_ADVISELIMIT;
 	}
 
-	if (SUCCEEDED(pUnkSink->QueryInterface(pThis->GetIID(),
-			(LPVOID*)&lpInterface)))
+	if ((lpInterface = pThis->QuerySinkInterface(pUnkSink)) != NULL)
 	{
-		pThis->m_Connections.Add(lpInterface);
-		int iSink = pThis->m_Connections.GetSize() - 1;
+		if (pThis->m_pUnkFirstConnection == NULL &&
+			pThis->m_pConnections == NULL)
+		{
+			pThis->m_pUnkFirstConnection = lpInterface;
+		}
+		else
+		{
+			if (pThis->m_pConnections == NULL)
+				pThis->CreateConnectionArray();
+
+			pThis->m_pConnections->Add(lpInterface);
+		}
+
 		pThis->OnAdvise(TRUE);
-		lpInterface = (LPUNKNOWN)pThis->m_Connections.GetAt(iSink);
 		if (pdwCookie != NULL)
 			*pdwCookie = (DWORD)lpInterface;
 		return S_OK;
@@ -170,17 +256,33 @@ STDMETHODIMP CConnectionPoint::XConnPt::Unadvise(DWORD dwCookie)
 {
 	METHOD_PROLOGUE_EX_(CConnectionPoint, ConnPt)
 
-	LPUNKNOWN pUnkSink;
-
-	int i;
-	int cConnections = pThis->m_Connections.GetSize();
-	for (i = 0; i < cConnections; i++)
+	if (pThis->m_pUnkFirstConnection != NULL)
 	{
-		pUnkSink = (LPUNKNOWN)(pThis->m_Connections.GetAt(i));
+		if ((DWORD)pThis->m_pUnkFirstConnection == dwCookie)
+		{
+			pThis->m_pUnkFirstConnection->Release();
+			pThis->m_pUnkFirstConnection = NULL;
+			pThis->OnAdvise(FALSE);
+			return S_OK;
+		}
+		else
+		{
+			return CONNECT_E_NOCONNECTION;
+		}
+	}
+
+	if (pThis->m_pConnections == NULL)
+		return CONNECT_E_NOCONNECTION;
+
+	LPUNKNOWN pUnkSink;
+	int cConnections = pThis->m_pConnections->GetSize();
+	for (int i = 0; i < cConnections; i++)
+	{
+		pUnkSink = (LPUNKNOWN)(pThis->m_pConnections->GetAt(i));
 		if ((DWORD)pUnkSink == dwCookie)
 		{
 			pUnkSink->Release();
-			pThis->m_Connections.RemoveAt(i);
+			pThis->m_pConnections->RemoveAt(i);
 			pThis->OnAdvise(FALSE);
 			return S_OK;
 		}
@@ -189,9 +291,147 @@ STDMETHODIMP CConnectionPoint::XConnPt::Unadvise(DWORD dwCookie)
 	return CONNECT_E_NOCONNECTION;
 }
 
-STDMETHODIMP CConnectionPoint::XConnPt::EnumConnections(LPENUMCONNECTIONS*)
+/////////////////////////////////////////////////////////////////////////////
+// CEnumConnections
+
+class CEnumConnections : public CEnumArray
 {
-	return E_NOTIMPL;
+public:
+	CEnumConnections(const void* pvEnum, UINT nSize);
+	~CEnumConnections();
+	void AddConnection(CONNECTDATA* pConn);
+
+protected:
+	virtual BOOL OnNext(void* pv);
+	virtual CEnumArray* OnClone();
+
+	UINT m_nMaxSize;    // number of items allocated (>= m_nSize)
+
+	DECLARE_INTERFACE_MAP()
+};
+
+BEGIN_INTERFACE_MAP(CEnumConnections, CEnumArray)
+	INTERFACE_PART(CEnumConnections, IID_IEnumConnections, EnumVOID)
+END_INTERFACE_MAP()
+
+
+CEnumConnections::CEnumConnections(const void* pvEnum, UINT nSize) :
+	CEnumArray(sizeof(CONNECTDATA), pvEnum, nSize, TRUE)
+{
+	m_nMaxSize = 0;
+}
+
+CEnumConnections::~CEnumConnections()
+{
+	if (m_pClonedFrom == NULL)
+	{
+		UINT iCP;
+		CONNECTDATA* ppCP = (CONNECTDATA*)(VOID *)m_pvEnum;
+		for (iCP = 0; iCP < m_nSize; iCP++)
+			RELEASE(ppCP[iCP].pUnk);
+	}
+	// destructor will free the actual array (if it was not a clone)
+}
+
+BOOL CEnumConnections::OnNext(void* pv)
+{
+	if (!CEnumArray::OnNext(pv))
+		return FALSE;
+
+	// outgoing connection point needs to be AddRef'ed
+	//  (the caller has responsibility to release it)
+
+	((CONNECTDATA*)pv)->pUnk->AddRef();
+	return TRUE;
+}
+
+CEnumArray* CEnumConnections::OnClone()
+{
+	ASSERT_VALID(this);
+	CEnumConnections* pClone;
+	pClone = new CEnumConnections(m_pvEnum, m_nSize);
+	pClone->m_bNeedFree = FALSE;
+	ASSERT(pClone != NULL);
+	ASSERT(!pClone->m_bNeedFree);   // clones should never free themselves
+	pClone->m_nCurPos = m_nCurPos;
+
+	// finally, return the clone to OLE
+	ASSERT_VALID(pClone);
+	return pClone;
+}
+
+void CEnumConnections::AddConnection(CONNECTDATA* pConn)
+{
+	ASSERT(m_nSize <= m_nMaxSize);
+
+	if (m_nSize == m_nMaxSize)
+	{
+		// not enough space for new item -- allocate more
+		CONNECTDATA* pListNew = new CONNECTDATA[m_nSize+2];
+		m_nMaxSize += 2;
+		if (m_nSize > 0)
+			memcpy(pListNew, m_pvEnum, m_nSize*sizeof(CONNECTDATA));
+		delete m_pvEnum;
+#ifdef _WIN32
+		m_pvEnum = (BYTE*)pListNew;
+#else
+		m_pvEnum = (char*)pListNew;
+#endif
+	}
+
+	// add this item to the list
+	ASSERT(m_nSize < m_nMaxSize);
+	((CONNECTDATA*)m_pvEnum)[m_nSize] = *pConn;
+	pConn->pUnk->AddRef();
+	++m_nSize;
+}
+
+STDMETHODIMP CConnectionPoint::XConnPt::EnumConnections(LPENUMCONNECTIONS* ppEnum)
+{
+	METHOD_PROLOGUE_EX(CConnectionPoint, ConnPt)
+	CEnumConnections* pEnum = NULL;
+	CONNECTDATA cd;
+
+	TRY
+	{
+		pEnum = new CEnumConnections(NULL, 0);
+
+		if (pThis->m_pUnkFirstConnection != NULL)
+		{
+			cd.pUnk = pThis->m_pUnkFirstConnection;
+			cd.dwCookie = (DWORD)cd.pUnk;
+			pEnum->AddConnection(&cd);
+		}
+
+		if (pThis->m_pConnections != NULL)
+		{
+			int cConnections = pThis->m_pConnections->GetSize();
+			for (int i = 0; i < cConnections; i++)
+			{
+				cd.pUnk = (LPUNKNOWN)(pThis->m_pConnections->GetAt(i));
+				cd.dwCookie = (DWORD)cd.pUnk;
+				pEnum->AddConnection(&cd);
+			}
+		}
+	}
+	CATCH (CException, e)
+	{
+		delete pEnum;
+		pEnum = NULL;
+	}
+	END_CATCH
+
+	if (pEnum != NULL)
+	{
+		// create and return the IEnumConnectionPoints object
+		*ppEnum = (IEnumConnections*)&pEnum->m_xEnumVOID;
+	}
+	else
+	{
+		// no connections: return NULL
+		*ppEnum = NULL;
+	}
+	return (pEnum != NULL) ? S_OK : E_OUTOFMEMORY;
 }
 
 

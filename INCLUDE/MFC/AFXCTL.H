@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -14,18 +14,9 @@
 #ifndef __AFXCTL_H__
 #define __AFXCTL_H__
 
-#ifndef _AFXDLL
-	#error Please define _AFXDLL when including afxctl.h
-#endif
-
 // make sure afxole.h is included first
-#ifndef __AFXOLE_H_
+#ifndef __AFXOLE_H__
 	#include <afxole.h>
-#endif
-
-// include OLE Control header
-#ifndef _OLECTL_H_
-	#include <olectl.h>
 #endif
 
 #ifdef _AFX_MINREBUILD
@@ -49,8 +40,16 @@ class CPictureHolder;               // For manipulating picture objects
 
 //CDialog
 	class COlePropertyPage;         // OLE Property page
+		class CStockPropPage;
+			class CColorPropPage;
+			class CFontPropPage;
+			class CPicturePropPage;
 
 class CPropExchange;                // Abstract base for property exchange
+
+//CAsyncMonikerFile
+	class CDataPathProperty;        // Asynchronous properties for OLE Controls
+		class CCachedDataPathProperty;  // Cached asynchronous properties for OLE Controls
 
 /////////////////////////////////////////////////////////////////////////////
 // Set structure packing
@@ -113,11 +112,13 @@ struct AFX_EVENTMAP
 {
 	const AFX_EVENTMAP* lpBaseEventMap;
 	const AFX_EVENTMAP_ENTRY* lpEntries;
+	DWORD* lpStockEventMask;
 };
 
 #define DECLARE_EVENT_MAP() \
 private: \
 	static const AFX_DATA AFX_EVENTMAP_ENTRY _eventEntries[]; \
+	static DWORD _dwStockEventMask; \
 protected: \
 	static const AFX_DATA AFX_EVENTMAP eventMap; \
 	virtual const AFX_EVENTMAP* GetEventMap() const;
@@ -126,8 +127,10 @@ protected: \
 	const AFX_EVENTMAP* theClass::GetEventMap() const \
 		{ return &eventMap; } \
 	const AFX_DATADEF AFX_EVENTMAP theClass::eventMap = \
-		{ &(baseClass::eventMap), theClass::_eventEntries }; \
-	const AFX_DATADEF AFX_EVENTMAP_ENTRY theClass::_eventEntries[] = \
+		{ &(baseClass::eventMap), theClass::_eventEntries, \
+			&theClass::_dwStockEventMask }; \
+	AFX_COMDAT DWORD theClass::_dwStockEventMask = (DWORD)-1; \
+	AFX_COMDAT const AFX_DATADEF AFX_EVENTMAP_ENTRY theClass::_eventEntries[] = \
 	{
 
 #define END_EVENT_MAP() \
@@ -176,6 +179,10 @@ protected: \
 	{ afxEventStock, DISPID_ERROREVENT, _T("Error"), \
 	  VTS_I2 VTS_PBSTR VTS_SCODE VTS_BSTR VTS_BSTR VTS_I4 VTS_PBOOL },
 
+#define EVENT_STOCK_READYSTATECHANGE() \
+	{ afxEventStock, DISPID_READYSTATECHANGE, _T("ReadyStateChange"), \
+	  VTS_I4 },
+
 // Shift state values for mouse and keyboard events
 #define SHIFT_MASK      0x01
 #define CTRL_MASK       0x02
@@ -191,8 +198,8 @@ protected: \
 
 #define DISP_PROPERTY_STOCK(theClass, szExternalName, dispid, pfnGet, pfnSet, vtPropType) \
 	{ _T(szExternalName), dispid, NULL, vtPropType, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnGet, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnSet, 0, afxDispStock }, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnGet, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnSet, 0, afxDispStock }, \
 
 #define DISP_STOCKPROP_APPEARANCE() \
 	DISP_PROPERTY_STOCK(COleControl, "Appearance", DISPID_APPEARANCE, \
@@ -230,12 +237,16 @@ protected: \
 	DISP_PROPERTY_STOCK(COleControl, "Text", DISPID_TEXT, \
 		COleControl::GetText, COleControl::SetText, VT_BSTR)
 
+#define DISP_STOCKPROP_READYSTATE() \
+	DISP_PROPERTY_STOCK(COleControl, "ReadyState", DISPID_READYSTATE, \
+		COleControl::GetReadyState, SetNotSupported, VT_I4)
+
 /////////////////////////////////////////////////////////////////////////////
 // Stock methods
 
 #define DISP_FUNCTION_STOCK(theClass, szExternalName, dispid, pfnMember, vtRetVal, vtsParams) \
 	{ _T(szExternalName), dispid, vtsParams, vtRetVal, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnMember, (AFX_PMSG)0, 0, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnMember, (AFX_PMSG)0, 0, \
 		afxDispStock }, \
 
 #define DISP_STOCKFUNC_REFRESH() \
@@ -274,7 +285,7 @@ public: \
 
 #define IMPLEMENT_OLECREATE_EX(class_name, external_name, \
 			l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-	static const TCHAR _szProgID_##class_name[] = _T(external_name); \
+	const TCHAR _szProgID_##class_name[] = _T(external_name); \
 	AFX_DATADEF class_name::class_name##Factory class_name::factory( \
 		class_name::guid, RUNTIME_CLASS(class_name), FALSE, \
 		_szProgID_##class_name); \
@@ -303,7 +314,7 @@ public: \
 
 #define BEGIN_PROPPAGEIDS(class_name, count) \
 	static CLSID _rgPropPageIDs_##class_name[count]; \
-	static ULONG _cPropPages_##class_name = (ULONG)-1; \
+	AFX_COMDAT ULONG _cPropPages_##class_name = (ULONG)-1; \
 	LPCLSID class_name::GetPropPageIDs(ULONG& cPropPages) { \
 		if (_cPropPages_##class_name == (ULONG)-1) { \
 			_cPropPages_##class_name = count; \
@@ -350,6 +361,7 @@ public:
 // Implementation
 public:
 	~CFontHolder();
+	void SetFontNotifySink(LPPROPERTYNOTIFYSINK pNotify);
 
 protected:
 	DWORD m_dwConnectCookie;
@@ -395,12 +407,111 @@ public:
 };
 
 /////////////////////////////////////////////////////////////////////////////
+// CDataPathProperty - Asynchonous properties for OLE Controls
+
+class CDataPathProperty: public CAsyncMonikerFile
+{
+	DECLARE_DYNAMIC(CDataPathProperty)
+// Constructors
+public:
+	CDataPathProperty(COleControl* pControl = NULL);
+	CDataPathProperty(LPCTSTR lpszPath, COleControl* pControl = NULL);
+	// Calls SetPath(pControl) and SetPath(lpszPath) as appropriate.
+
+// Attributes
+public:
+	void SetPath(LPCTSTR lpszPath);
+	// Sets the path to be opened by Open(COleControl*) and Open()
+	// lpszPath may be NULL.
+
+	CString GetPath() const;
+	// Returns the current path setting.  Result may be empty.
+
+	COleControl* GetControl();
+	// Returns a Pointer to the control.  Result may be NULL.
+
+	void SetControl(COleControl* pControl);
+	// Sets the control which will be used with Open.  pControl may be NULL.
+
+// Operations
+public:
+	// Overloads of Open takings some or all of: a path, a control,
+	// and a CFileException
+	// Overloads taking a COleControl call SetControl(pControl)
+	// Overloads taking an LPCTSTR cal SetPath(lpszPath)
+	virtual BOOL Open(COleControl* pControl, CFileException* pError = NULL);
+	virtual BOOL Open(LPCTSTR lpszPath, COleControl* pControl,
+		CFileException* pError = NULL);
+	virtual BOOL Open(LPCTSTR lpszPath, CFileException* pError = NULL);
+	virtual BOOL Open(CFileException* pError = NULL);
+	// Attempts to obtain an IBindHost* from the control returned by
+	// GetControl(). Calls CAsyncMonikerFile::Open with the path returned by
+	// GetPath() and, if it was obtained, the IBindHost*.
+	// Returns TRUE if successful.
+
+// Overridables
+public:
+	virtual void ResetData();
+	// Derived classes should overide this.
+
+// Implementation
+public:
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+
+private:
+	COleControl* m_pControl;
+	CString m_strPath;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// CCachedDataPathProperty - Cached asynchonous properties for OLE Controls
+
+class CCachedDataPathProperty : public CDataPathProperty
+{
+	DECLARE_DYNAMIC(CCachedDataPathProperty)
+//Constructors
+public:
+	CCachedDataPathProperty(COleControl* pControl = NULL);
+	CCachedDataPathProperty(LPCTSTR lpszPath, COleControl* pControl = NULL);
+
+// Attributes
+public:
+	CMemFile m_Cache;
+
+// Implementation
+public:
+	virtual void OnDataAvailable(DWORD dwSize, DWORD bscfFlag);
+	virtual void Close();
+	virtual void ResetData();
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+};
+
+/////////////////////////////////////////////////////////////////////////////
 // COleControl - base class for a control implemented in C++ with MFC
 
 struct _AFXCTL_ADVISE_INFO;     // implementation class
 struct _AFXCTL_UIACTIVE_INFO;   // implementation class
 
+class CControlRectTracker : public CRectTracker
+{
+// Implementation
+public:
+	CControlRectTracker(LPCRECT lpSrcRect, UINT nStyle)
+		: CRectTracker(lpSrcRect, nStyle) { }
+	CRect m_rectClip;   // saves the original clipping rectangle
+};
+
+#ifdef _AFXDLL
 class COleControl : public CWnd
+#else
+class AFX_NOVTABLE COleControl : public CWnd
+#endif
 {
 	DECLARE_DYNAMIC(COleControl)
 
@@ -415,7 +526,7 @@ public:
 	void InitializeIIDs(const IID* piidPrimary, const IID* piidEvents);
 
 	// Invalidating
-	void InvalidateControl(LPCRECT lpRect = NULL);
+	void InvalidateControl(LPCRECT lpRect = NULL, BOOL bErase = TRUE);
 
 	// Modified flag
 	BOOL IsModified();
@@ -423,13 +534,22 @@ public:
 
 	// Drawing operations
 	void DoSuperclassPaint(CDC* pDC, const CRect& rcBounds);
+	BOOL IsOptimizedDraw();
 
 	// Property exchange
-	BOOL ExchangeExtent(CPropExchange* pPX);
-	void ExchangeStockProps(CPropExchange* pPX);
 	BOOL ExchangeVersion(CPropExchange* pPX, DWORD dwVersionDefault,
 		BOOL bConvert = TRUE);
+	BOOL ExchangeExtent(CPropExchange* pPX);
+	void ExchangeStockProps(CPropExchange* pPX);
 	BOOL IsConvertingVBX();
+
+	DWORD SerializeVersion(CArchive& ar, DWORD dwVersionDefault,
+		BOOL bConvert = TRUE);
+	void SerializeExtent(CArchive& ar);
+	void SerializeStockProps(CArchive& ar);
+
+	void ResetVersion(DWORD dwVersionDefault);
+	void ResetStockProps();
 
 	// Stock methods
 	void Refresh();
@@ -453,6 +573,8 @@ public:
 	const CString& InternalGetText();
 	BSTR GetText();
 	void SetText(LPCTSTR);
+	long GetReadyState();
+	void InternalSetReadyState(long lNewReadyState);
 
 	// Using colors
 	COLORREF TranslateColor(OLE_COLOR clrColor, HPALETTE hpal = NULL);
@@ -500,6 +622,7 @@ public:
 	void FireClick();
 	void FireDblClick();
 	void FireError(SCODE scode, LPCTSTR lpszDescription, UINT nHelpID = 0);
+	void FireReadyStateChange();
 
 	// Changing size and/or rectangle
 	BOOL GetRectInContainer(LPRECT lpRect);
@@ -534,6 +657,20 @@ public:
 
 	// Simple frame
 	void EnableSimpleFrame();
+
+	// Windowless operations
+	CWnd* SetCapture();
+	BOOL ReleaseCapture();
+	CWnd* GetCapture();
+	CWnd* SetFocus();
+	CWnd* GetFocus();
+	CDC* GetDC(LPCRECT lprcRect = NULL, DWORD dwFlags = OLEDC_PAINTBKGND);
+	int ReleaseDC(CDC* pDC);
+	void InvalidateRgn(CRgn* pRgn, BOOL bErase = TRUE);
+	void ScrollWindow(int xAmount, int yAmount, LPCRECT lpRect = NULL,
+		LPCRECT lpClipRect = NULL);
+	BOOL ClipCaretRect(LPRECT lpRect);
+	virtual void GetClientRect(LPRECT lpRect) const;
 
 // Overridables
 	virtual void DoPropExchange(CPropExchange* pPX);
@@ -594,6 +731,17 @@ public:
 	// IViewObject
 	virtual BOOL OnGetColorSet(DVTARGETDEVICE* ptd, HDC hicTargetDev,
 				LPLOGPALETTE* ppColorSet);
+	virtual BOOL OnGetViewExtent(DWORD dwDrawAspect, LONG lindex,
+		DVTARGETDEVICE* ptd, LPSIZEL lpsizel);
+	virtual BOOL OnGetViewRect(DWORD dwAspect, LPRECTL pRect);
+	virtual DWORD OnGetViewStatus();
+	virtual BOOL OnQueryHitPoint(DWORD dwAspect, LPCRECT pRectBounds,
+		POINT ptlLoc, LONG lCloseHint, DWORD* pHitResult);
+	virtual BOOL OnQueryHitRect(DWORD dwAspect, LPCRECT pRectBounds,
+		LPCRECT prcLoc, LONG lCloseHint, DWORD* pHitResult);
+	virtual BOOL OnGetNaturalExtent(DWORD dwAspect, LONG lindex,
+		DVTARGETDEVICE* ptd, HDC hicTargetDev, DVEXTENTINFO* pExtentInfo,
+		LPSIZEL psizel);
 
 	// IDataObject - see COleDataSource for a description of these overridables
 	virtual BOOL OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal);
@@ -626,8 +774,42 @@ public:
 	// Window procedure
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 
+	// General-purpose flags
+	enum ControlFlags {
+		fastBeginPaint      = 0x0001,
+		clipPaintDC         = 0x0002,
+		pointerInactive     = 0x0004,
+		noFlickerActivate   = 0x0008,
+		windowlessActivate  = 0x0010,
+		canOptimizeDraw     = 0x0020,
+	};
+	virtual DWORD GetControlFlags();
+
+	// Inactive pointer handling
+	virtual DWORD GetActivationPolicy();
+	virtual BOOL OnInactiveSetCursor(LPCRECT lprcBounds, long x, long y,
+		DWORD dwMouseMsg, BOOL bSetAlways);
+	virtual void OnInactiveMouseMove(LPCRECT lprcBounds, long x, long y,
+		DWORD dwKeyState);
+
+	// Windowless activation handling
+	virtual BOOL OnWindowlessMessage(UINT msg, WPARAM wParam, LPARAM lParam,
+		LRESULT* plResult);
+	virtual IDropTarget* GetWindowlessDropTarget();
+
+	// Inactive/windowless helper functions
+	virtual void GetClientOffset(long* pdxOffset, long* pdyOffset) const;
+	virtual UINT ParentToClient(LPCRECT lprcBounds, LPPOINT pPoint,
+		BOOL bHitTest = FALSE) const;
+	virtual void ClientToParent(LPCRECT lprcBounds, LPPOINT pPoint) const;
+
+	// Asynchronous properties
+	void Load(LPCTSTR strNewPath, CDataPathProperty& prop);
+
 // Implementation
+public:
 	~COleControl();
+	void RequestAsynchronousExchange(DWORD dwVersion);
 
 #ifdef _DEBUG
 	void AssertValid() const;
@@ -645,13 +827,15 @@ protected:
 
 	// Shutdown
 	virtual void OnFinalRelease();
+	void ReleaseCaches();
 
 	// Window management
-	BOOL CreateControlWindow(HWND hWndParent, const CRect& rcPos,
+	virtual BOOL CreateControlWindow(HWND hWndParent, const CRect& rcPos,
 		LPCRECT prcClipped = NULL);
 	void CreateWindowForSubclassedControl();
 	BOOL IgnoreWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam,
 		LRESULT* plResult);
+	virtual LRESULT DefWindowProc(UINT nMsg, WPARAM wParam, LPARAM lParam);
 
 	// Serialization
 	HRESULT SaveState(IStream* pStm);
@@ -663,8 +847,25 @@ protected:
 	void DrawMetafile(CDC* pDC, CRect& rc);
 	BOOL GetMetafileData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
 
+	// Implementation of IDataObject
+	// CControlDataSource implements OnRender reflections to COleControl
+	class CControlDataSource : public COleDataSource
+	{
+	public:
+		CControlDataSource(COleControl* pCtrl);
+	protected:
+		virtual BOOL OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal);
+		virtual BOOL OnRenderFileData(LPFORMATETC lpFormatEtc, CFile* pFile);
+		virtual BOOL OnRenderData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
+		virtual BOOL OnSetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium,
+			BOOL bRelease);
+		COleControl* m_pCtrl;
+	};
+	friend class CControlDataSource;
+
 	// IDataObject formats
-	void SetInitialDataFormats();
+	CControlDataSource* GetDataSource();
+	virtual void SetInitialDataFormats();
 	BOOL GetPropsetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium,
 		REFCLSID fmtid);
 	BOOL SetPropsetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium,
@@ -695,10 +896,10 @@ protected:
 	// Masks to identify which stock events and properties are used
 	void InitStockEventMask();
 	void InitStockPropMask();
+	DWORD GetStockEventMask() const;
+	DWORD GetStockPropMask() const;
 
 	// Support for subclassing a Windows control
-	BOOL ContainerReflectsMessages();
-	BOOL ContainerClips();
 	CWnd* GetOuterWindow() const;       // m_pReflect if any, otherwise this
 	virtual void OnReflectorDestroyed();
 
@@ -711,10 +912,12 @@ protected:
 
 	// Non-in-place activation
 	virtual HRESULT OnOpen(BOOL bTryInPlace, LPMSG pMsg);
+#ifdef _AFXDLL
 	void ResizeOpenControl(int cx, int cy);
 	virtual CControlFrameWnd* CreateFrameWindow();
 	virtual void ResizeFrameWindow(int cx, int cy);
 	virtual void OnFrameClose();
+#endif
 	virtual HRESULT OnHide();
 
 	// In-place activation
@@ -735,23 +938,27 @@ protected:
 
 	// Rectangle tracker
 	void CreateTracker(BOOL bHandles, BOOL bHatching);
+	void CreateTracker(BOOL bHandles, BOOL bHatching, LPCRECT prcClip);
 	void DestroyTracker();
 
 	// Automation
 	BOOL IsInvokeAllowed(DISPID dispid);
+
+	// Ambient property interface initialization
+	COleDispatchDriver* GetAmbientDispatchDriver();
 
 	// Data members
 	const IID* m_piidPrimary;           // IID for control automation
 	const IID* m_piidEvents;            // IID for control events
 	DWORD m_dwVersionLoaded;            // Version number of loaded state
 	COleDispatchDriver m_ambientDispDriver; // Driver for ambient properties
-	DWORD m_dwStockEventMask;           // Which stock events are used?
-	DWORD m_dwStockPropMask;            // Which stock properties are used?
 	ULONG m_cEventsFrozen;              // Event freeze count (>0 means frozen)
 	union
 	{
+#ifdef _AFXDLL
 		CControlFrameWnd* m_pWndOpenFrame;  // Open frame window.
-		CRectTracker* m_pRectTracker;       // Tracker for UI active control
+#endif
+		CControlRectTracker* m_pRectTracker;       // Tracker for UI active control
 	};
 	CRect m_rcPos;                      // Control's position rectangle
 	CRect m_rcBounds;                   // Bounding rectangle for drawing
@@ -761,21 +968,29 @@ protected:
 	class CReflectorWnd* m_pReflect;    // Reflector window
 	UINT m_nIDTracking;                 // Tracking command ID or string IDS
 	UINT m_nIDLastMessage;              // Last displayed message string IDS
-	BYTE m_bAutoMenuEnable;             // Disable menu items without handlers?
-	BYTE m_bFinalReleaseCalled;         // Are we handling the final Release?
-	BYTE m_bModified;                   // "Dirty" bit.
-	BYTE m_bCountOnAmbients;            // Can we count on Ambients during load?
-	BYTE m_iButtonState;                // Which buttons are down?
-	BYTE m_iDblClkState;                // Which buttons involved in dbl click?
-	BYTE m_bInPlaceActive;              // Are we in-place active?
-	BYTE m_bUIActive;                   // Are we UI active?
-	BYTE m_bPendingUIActivation;        // Are we about to become UI active?
-	BYTE m_bOpen;                       // Are we open (non-in-place)?
-	BYTE m_bChangingExtent;             // Extent is currently being changed
-	BYTE m_bConvertVBX;                 // VBX conversion in progress
-	BYTE m_bSimpleFrame;                // Simple frame support
-	BYTE m_bUIDead;                     // UIDead ambient property value
-	BYTE m_bInitialized;                // Was IPersist*::{InitNew,Load} called?
+	unsigned m_bAutoMenuEnable : 1;     // Disable menu items without handlers?
+	unsigned m_bFinalReleaseCalled : 1; // Are we handling the final Release?
+	unsigned m_bModified : 1;           // "Dirty" bit.
+	unsigned m_bCountOnAmbients : 1;    // Can we count on Ambients during load?
+	unsigned m_iButtonState : 3;        // Which buttons are down?
+	unsigned m_iDblClkState : 3;        // Which buttons involved in dbl click?
+	unsigned m_bInPlaceActive : 1;      // Are we in-place active?
+	unsigned m_bUIActive : 1;           // Are we UI active?
+	unsigned m_bPendingUIActivation : 1; // Are we about to become UI active?
+#ifdef _AFXDLL
+	unsigned m_bOpen : 1;               // Are we open (non-in-place)?
+#endif
+	unsigned m_bChangingExtent : 1;     // Extent is currently being changed
+	unsigned m_bConvertVBX : 1;         // VBX conversion in progress
+	unsigned m_bSimpleFrame : 1;        // Simple frame support
+	unsigned m_bUIDead : 1;             // UIDead ambient property value
+	unsigned m_bInitialized : 1;        // Was IPersist*::{InitNew,Load} called?
+	unsigned m_bAutoClip : 1;           // Does container automatically clip?
+	unsigned m_bMsgReflect : 1;         // Does container reflect messages?
+	unsigned m_bInPlaceSiteEx : 1;      // Extended in-place site?
+	unsigned m_bInPlaceSiteWndless : 1; // Windowless in-place site?
+	unsigned m_bNoRedraw : 1;           // Should we skip OnPaint this time?
+	unsigned m_bOptimizedDraw : 1;      // Is optimized drawing possible?
 
 	// Stock properties
 	OLE_COLOR m_clrBackColor;           // BackColor
@@ -786,6 +1001,7 @@ protected:
 	short m_sAppearance;                // Appearance
 	short m_sBorderStyle;               // BorderStyle
 	BOOL m_bEnabled;                    // Enabled
+	long m_lReadyState;                 // ReadyState
 
 	// UI Active info (shared OLE menu data)
 	_AFXCTL_UIACTIVE_INFO* m_pUIActiveInfo;
@@ -799,7 +1015,12 @@ protected:
 
 	// OLE client site interfaces
 	LPOLECLIENTSITE m_pClientSite;          // Client site
-	LPOLEINPLACESITE m_pInPlaceSite;        // In-place site
+	union
+	{
+		LPOLEINPLACESITE m_pInPlaceSite;    // In-place site
+		LPOLEINPLACESITEEX m_pInPlaceSiteEx;
+		LPOLEINPLACESITEWINDOWLESS m_pInPlaceSiteWndless;
+	};
 	LPOLECONTROLSITE m_pControlSite;        // Control site
 	LPOLEADVISEHOLDER m_pOleAdviseHolder;   // Advise holder
 	LPDATAADVISEHOLDER m_pDataAdviseHolder; // Data advise holder
@@ -810,20 +1031,12 @@ protected:
 	OLEINPLACEFRAMEINFO m_frameInfo;
 	LPOLEINPLACEUIWINDOW m_pInPlaceDoc;
 
-	// Implementation of IDataObject
-	// CControlDataSource implements OnRender reflections to COleControl
-	class CControlDataSource : public COleDataSource
-	{
-	protected:
-		virtual BOOL OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal);
-		virtual BOOL OnRenderFileData(LPFORMATETC lpFormatEtc, CFile* pFile);
-		virtual BOOL OnRenderData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
+	// OLE data source
+	CControlDataSource* m_pDataSource;
 
-		virtual BOOL OnSetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium,
-			BOOL bRelease);
-	};
-	CControlDataSource m_dataSource;
-	friend class CControlDataSource;
+	// OLE data path load data
+	BOOL m_bDataPathPropertiesLoaded;
+	DWORD m_dwDataPathVersionToReport;
 
 // Message Maps
 protected:
@@ -847,6 +1060,7 @@ protected:
 	afx_msg void OnEnterIdle(UINT nWhy, CWnd* pWho);
 	afx_msg void OnCancelMode();
 	afx_msg void OnPaint(CDC* pDC);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnSysKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg int  OnMouseActivate(CWnd *pDesktopWnd, UINT nHitTest, UINT message);
@@ -861,6 +1075,10 @@ protected:
 	afx_msg void OnNcLButtonDown(UINT nHitTest, CPoint point);
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg UINT OnGetDlgCode();
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnMove(int x, int y);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	//}}AFX_MSG
 
 	afx_msg LRESULT OnOcmCtlColorBtn(WPARAM wParam, LPARAM lParam);
@@ -872,6 +1090,11 @@ protected:
 	afx_msg LRESULT OnOcmCtlColorStatic(WPARAM wParam, LPARAM lParam);
 
 	DECLARE_MESSAGE_MAP()
+
+	// button handler helpers
+	void OnButtonUp(USHORT nButton, UINT nFlags, CPoint point);
+	void OnButtonDown(USHORT nButton, UINT nFlags, CPoint point);
+	void OnButtonDblClk(USHORT nButton, UINT nFlags, CPoint point);
 
 // Interface Maps
 public:
@@ -885,7 +1108,7 @@ public:
 		STDMETHOD(Save)(LPSTORAGE, BOOL);
 		STDMETHOD(SaveCompleted)(LPSTORAGE);
 		STDMETHOD(HandsOffStorage)();
-	END_INTERFACE_PART(PersistStorage)
+	END_INTERFACE_PART_STATIC(PersistStorage)
 
 	// IPersistStreamInit
 	BEGIN_INTERFACE_PART(PersistStreamInit, IPersistStreamInit)
@@ -896,7 +1119,7 @@ public:
 		STDMETHOD(Save)(LPSTREAM, BOOL);
 		STDMETHOD(GetSizeMax)(ULARGE_INTEGER *);
 		STDMETHOD(InitNew)();
-	END_INTERFACE_PART(PersistStreamInit)
+	END_INTERFACE_PART_STATIC(PersistStreamInit)
 
 	// IPersistMemory
 	BEGIN_INTERFACE_PART(PersistMemory, IPersistMemory)
@@ -907,7 +1130,7 @@ public:
 		STDMETHOD(Save)(LPVOID, BOOL, ULONG);
 		STDMETHOD(GetSizeMax)(ULONG*);
 		STDMETHOD(InitNew)();
-	END_INTERFACE_PART(PersistMemory)
+	END_INTERFACE_PART_STATIC(PersistMemory)
 
 	// IPersistPropertyBag
 	BEGIN_INTERFACE_PART(PersistPropertyBag, IPersistPropertyBag)
@@ -916,7 +1139,7 @@ public:
 		STDMETHOD(InitNew)();
 		STDMETHOD(Load)(LPPROPERTYBAG, LPERRORLOG);
 		STDMETHOD(Save)(LPPROPERTYBAG, BOOL, BOOL);
-	END_INTERFACE_PART(PersistPropertyBag)
+	END_INTERFACE_PART_STATIC(PersistPropertyBag)
 
 	// IOleObject
 	BEGIN_INTERFACE_PART(OleObject, IOleObject)
@@ -944,8 +1167,8 @@ public:
 		STDMETHOD(SetColorScheme)(LPLOGPALETTE);
 	END_INTERFACE_PART(OleObject)
 
-	// IViewObject2
-	BEGIN_INTERFACE_PART(ViewObject, IViewObject2)
+	// IViewObjectEx
+	BEGIN_INTERFACE_PART(ViewObject, IViewObjectEx)
 		INIT_INTERFACE_PART(COleControl, ViewObject)
 		STDMETHOD(Draw)(DWORD, LONG, void*, DVTARGETDEVICE*, HDC, HDC,
 			LPCRECTL, LPCRECTL, BOOL (CALLBACK*)(DWORD), DWORD);
@@ -956,6 +1179,12 @@ public:
 		STDMETHOD(SetAdvise)(DWORD, DWORD, LPADVISESINK);
 		STDMETHOD(GetAdvise)(DWORD*, DWORD*, LPADVISESINK*);
 		STDMETHOD(GetExtent) (DWORD, LONG, DVTARGETDEVICE*, LPSIZEL);
+		STDMETHOD(GetRect)(DWORD, LPRECTL);
+		STDMETHOD(GetViewStatus)(DWORD*);
+		STDMETHOD(QueryHitPoint)(DWORD, LPCRECT, POINT, LONG, DWORD*);
+		STDMETHOD(QueryHitRect)(DWORD, LPCRECT, LPCRECT, LONG, DWORD*);
+		STDMETHOD(GetNaturalExtent)(DWORD, LONG, DVTARGETDEVICE*, HDC,
+			DVEXTENTINFO*, LPSIZEL);
 	END_INTERFACE_PART(ViewObject)
 
 	// IDataObject
@@ -970,10 +1199,10 @@ public:
 		STDMETHOD(DAdvise)(LPFORMATETC, DWORD, LPADVISESINK, LPDWORD);
 		STDMETHOD(DUnadvise)(DWORD);
 		STDMETHOD(EnumDAdvise)(LPENUMSTATDATA*);
-	END_INTERFACE_PART(DataObject)
+	END_INTERFACE_PART_STATIC(DataObject)
 
 	// IOleInPlaceObject
-	BEGIN_INTERFACE_PART(OleInPlaceObject, IOleInPlaceObject)
+	BEGIN_INTERFACE_PART(OleInPlaceObject, IOleInPlaceObjectWindowless)
 		INIT_INTERFACE_PART(COleControl, OleInPlaceObject)
 		STDMETHOD(GetWindow)(HWND*);
 		STDMETHOD(ContextSensitiveHelp)(BOOL);
@@ -981,6 +1210,9 @@ public:
 		STDMETHOD(UIDeactivate)();
 		STDMETHOD(SetObjectRects)(LPCRECT, LPCRECT);
 		STDMETHOD(ReactivateAndUndo)();
+		STDMETHOD(OnWindowMessage)(UINT msg, WPARAM wParam, LPARAM lparam,
+			LRESULT* plResult);
+		STDMETHOD(GetDropTarget)(IDropTarget **ppDropTarget);
 	END_INTERFACE_PART(OleInPlaceObject)
 
 	// IOleInPlaceActiveObject
@@ -1003,7 +1235,7 @@ public:
 		STDMETHOD(EnumCache)(LPENUMSTATDATA*);
 		STDMETHOD(InitCache)(LPDATAOBJECT);
 		STDMETHOD(SetData)(LPFORMATETC, STGMEDIUM*, BOOL);
-	END_INTERFACE_PART(OleCache)
+	END_INTERFACE_PART_STATIC(OleCache)
 
 	// IOleControl
 	BEGIN_INTERFACE_PART(OleControl, IOleControl)
@@ -1019,13 +1251,13 @@ public:
 		INIT_INTERFACE_PART(COleControl, ProvideClassInfo)
 		STDMETHOD(GetClassInfo)(LPTYPEINFO* ppTypeInfo);
 		STDMETHOD(GetGUID)(DWORD dwGuidKind, GUID* pGUID);
-	END_INTERFACE_PART(ProvideClassInfo)
+	END_INTERFACE_PART_STATIC(ProvideClassInfo)
 
 	// ISpecifyPropertyPages
 	BEGIN_INTERFACE_PART(SpecifyPropertyPages, ISpecifyPropertyPages)
 		INIT_INTERFACE_PART(COleControl, SpecifyPropertyPages)
 		STDMETHOD(GetPages)(CAUUID*);
-	END_INTERFACE_PART(SpecifyPropertyPages)
+	END_INTERFACE_PART_STATIC(SpecifyPropertyPages)
 
 	// IPerPropertyBrowsing
 	BEGIN_INTERFACE_PART(PerPropertyBrowsing, IPerPropertyBrowsing)
@@ -1036,14 +1268,30 @@ public:
 			CALPOLESTR* lpcaStringsOut, CADWORD* lpcaCookiesOut);
 		STDMETHOD(GetPredefinedValue)(DISPID dispid, DWORD dwCookie,
 			VARIANT* lpvarOut);
-	END_INTERFACE_PART(PerPropertyBrowsing)
+	END_INTERFACE_PART_STATIC(PerPropertyBrowsing)
 
 	// IPropertyNotifySink for font updates (not exposed via QueryInterface)
 	BEGIN_INTERFACE_PART(FontNotification, IPropertyNotifySink)
 		INIT_INTERFACE_PART(COleControl, FontNotification)
 		STDMETHOD(OnChanged)(DISPID dispid);
 		STDMETHOD(OnRequestEdit)(DISPID dispid);
-	END_INTERFACE_PART(FontNotification)
+	END_INTERFACE_PART_STATIC(FontNotification)
+
+	// IQuickActivate
+	BEGIN_INTERFACE_PART(QuickActivate, IQuickActivate)
+		STDMETHOD(QuickActivate)(QACONTAINER *pQAContainer, QACONTROL *pqacontrol);
+		STDMETHOD(SetContentExtent)(LPSIZEL lpsizel);
+		STDMETHOD(GetContentExtent)(LPSIZEL lpsizel);
+	END_INTERFACE_PART_STATIC(QuickActivate)
+
+	// IPointerInactive
+	BEGIN_INTERFACE_PART(PointerInactive, IPointerInactive)
+		STDMETHOD(GetActivationPolicy)(DWORD* pdwPolicy);
+		STDMETHOD(OnInactiveSetCursor)(LPCRECT lprcBounds, long x, long y,
+			DWORD dwMouseMsg, BOOL bSetAlways);
+		STDMETHOD(OnInactiveMouseMove)(LPCRECT lprcBounds, long x, long y,
+			DWORD dwKeyState);
+	END_INTERFACE_PART_STATIC(PointerInactive)
 
 	DECLARE_INTERFACE_MAP()
 
@@ -1053,6 +1301,7 @@ protected:
 	BEGIN_CONNECTION_PART(COleControl, EventConnPt)
 		virtual void OnAdvise(BOOL bAdvise);
 		virtual REFIID GetIID();
+		virtual LPUNKNOWN QuerySinkInterface(LPUNKNOWN pUnkSink);
 	END_CONNECTION_PART(EventConnPt)
 
 	// Connection point for property notifications
@@ -1068,14 +1317,16 @@ protected:
 
 enum AFX_REG_FLAGS
 {
-	afxRegInsertable			= 0x0001,
-	afxRegApartmentThreading	= 0x0002,
+	afxRegDefault               = 0x0000,
+	afxRegInsertable            = 0x0001,
+	afxRegApartmentThreading    = 0x0002,
 };
 
 BOOL AFXAPI AfxOleRegisterTypeLib(HINSTANCE hInstance, REFGUID tlid,
 	LPCTSTR pszFileName = NULL, LPCTSTR pszHelpDir = NULL);
 
-BOOL AFXAPI AfxOleUnregisterTypeLib(REFGUID tlid);
+BOOL AFXAPI AfxOleUnregisterTypeLib(REFGUID tlid, WORD wVerMajor = 0,
+	WORD wVerMinor = 0, LCID lcid = 0);
 
 BOOL AFXAPI AfxOleRegisterControlClass(HINSTANCE hInstance, REFCLSID clsid,
 	LPCTSTR pszProgID, UINT idTypeName, UINT idBitmap, int nRegFlags,
@@ -1098,13 +1349,22 @@ BOOL AFXAPI AfxVerifyLicFile(HINSTANCE hInstance, LPCTSTR pszLicFileName,
 /////////////////////////////////////////////////////////////////////////////
 // CPropExchange - Abstract base class for property exchange
 
+#ifdef _AFXDLL
 class CPropExchange
+#else
+class AFX_NOVTABLE CPropExchange
+#endif
 {
 // Operations
 public:
 	BOOL IsLoading();
 	DWORD GetVersion();
-	BOOL ExchangeVersion(DWORD& dwVersionLoaded, DWORD dwVersionDefault,
+
+	BOOL IsAsynchronous();
+	// FALSE -> Do Sync stuff, and start async stuff if possible
+	// TRUE -> Do not do Sync stuff.  Always start Async stuff
+
+	virtual BOOL ExchangeVersion(DWORD& dwVersionLoaded, DWORD dwVersionDefault,
 		BOOL bConvert);
 
 	virtual BOOL ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
@@ -1121,6 +1381,7 @@ public:
 protected:
 	CPropExchange();
 	BOOL m_bLoading;
+	BOOL m_bAsync;
 	DWORD m_dwVersion;
 };
 
@@ -1161,6 +1422,8 @@ BOOL AFX_CDECL PX_String(CPropExchange* pPX, LPCTSTR pszPropName, CString& strVa
 
 BOOL AFX_CDECL PX_String(CPropExchange* pPX, LPCTSTR pszPropName, CString& strValue,
 	const CString& strDefault);
+BOOL AFX_CDECL PX_String(CPropExchange* pPX, LPCTSTR pszPropName, CString& strValue,
+	LPCTSTR lpszDefault);
 
 BOOL AFX_CDECL PX_Currency(CPropExchange* pPX, LPCTSTR pszPropName, CY& cyValue);
 
@@ -1195,6 +1458,12 @@ BOOL AFX_CDECL PX_IUnknown(CPropExchange* pPX, LPCTSTR pszPropName, LPUNKNOWN& p
 
 BOOL AFX_CDECL PX_VBXFontConvert(CPropExchange* pPX, CFontHolder& font);
 
+BOOL AFX_CDECL PX_DataPath(CPropExchange* pPX, LPCTSTR pszPropName,
+	CDataPathProperty& dataPathProp, LPCTSTR pszDefault = NULL);
+
+BOOL AFX_CDECL PX_DataPath(CPropExchange* pPX, LPCTSTR pszPropName,
+	CDataPathProperty& dataPathProp, const CString& strDefault);
+
 /////////////////////////////////////////////////////////////////////////////
 // Structures used by COlePropertyPage
 
@@ -1208,7 +1477,11 @@ typedef struct tagAFX_PPFIELDSTATUS
 /////////////////////////////////////////////////////////////////////////////
 // Property Page Dialog Class
 
+#ifdef _AFXDLL
 class COlePropertyPage : public CDialog
+#else
+class AFX_NOVTABLE COlePropertyPage : public CDialog
+#endif
 {
 	DECLARE_DYNAMIC(COlePropertyPage)
 
@@ -1246,6 +1519,8 @@ public:
 	// DDP_ property get/set helper routines
 	BOOL SetPropText(LPCTSTR pszPropName, BYTE &Value);
 	BOOL GetPropText(LPCTSTR pszPropName, BYTE* pValue);
+	BOOL SetPropText(LPCTSTR pszPropName, short &Value);
+	BOOL GetPropText(LPCTSTR pszPropName, short* pValue);
 	BOOL SetPropText(LPCTSTR pszPropName, int &Value);
 	BOOL GetPropText(LPCTSTR pszPropName, int* pValue);
 	BOOL SetPropText(LPCTSTR pszPropName, UINT &Value);
@@ -1310,13 +1585,14 @@ private:
 	AFX_PPFIELDSTATUS* m_pStatus;   // Array containing information on
 									// which fields are dirty
 
-	CWordArray m_IDArray;       // Array containing information on which
+	CDWordArray m_IDArray;      // Array containing information on which
 								// controls to ignore when deciding if
 								// the apply button is to be enabled
 
 	HGLOBAL m_hDialog;          // Handle of the dialog resource
 
 #ifdef _DEBUG
+protected:
 	BOOL m_bNonStandardSize;
 #endif
 
@@ -1355,10 +1631,293 @@ public:
 };
 
 /////////////////////////////////////////////////////////////////////////////
+//  CStockPropPage
+
+#ifdef _AFXDLL
+class CStockPropPage : public COlePropertyPage
+#else
+class AFX_NOVTABLE CStockPropPage : public COlePropertyPage
+#endif
+{
+	DECLARE_DYNAMIC(CStockPropPage)
+
+// Constructor
+public:
+	CStockPropPage(UINT idDlg, UINT idCaption);
+
+// Implementation
+protected:
+	void FillPropnameList(REFGUID guid, int nIndirect, CComboBox& combo);
+	void OnSelchangePropname(CComboBox& combo);
+	BOOL OnEditProperty(DISPID dispid, CComboBox& combo);
+
+	LCID m_lcid;
+	CString m_strPropName;
+	int m_iPropName;
+
+	DECLARE_MESSAGE_MAP()
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// CColorButton: used by CColorPropPage
+
+class CColorButton : public CButton
+{
+public:
+	CColorButton(void);
+	void SetFaceColor(COLORREF colFace);
+	COLORREF colGetFaceColor(void);
+	void SetState(BOOL fSelected);
+	static UINT idClicked;
+protected:
+	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
+private:
+	BOOL m_fSelected;
+	COLORREF m_colFace;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// CColorPropPage
+
+class CColorPropPage : public CStockPropPage
+{
+	DECLARE_DYNCREATE(CColorPropPage)
+#ifdef _AFXDLL
+	DECLARE_OLECREATE_EX(CColorPropPage)
+#endif
+
+// Construction
+public:
+	CColorPropPage();   // Constructor
+
+// Dialog Data
+	//{{AFX_DATA(CColorPropPage)
+	enum { IDD = AFX_IDD_PROPPAGE_COLOR };
+	CComboBox   m_SysColors;
+	CComboBox   m_ColorProp;
+	//}}AFX_DATA
+
+// Implementation
+public:
+	enum { NBUTTONS = 16 };
+
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);        // DDX/DDV support
+	virtual BOOL OnInitDialog(void);
+	virtual BOOL OnEditProperty(DISPID dispid);
+	virtual void OnObjectsChanged();
+	void FillSysColors();
+	BOOL SetColorProp(CDataExchange* pDX, COLORREF color, LPCTSTR pszPropName);
+	BOOL GetColorProp(CDataExchange* pDX, COLORREF* pcolor, LPCTSTR pszPropName);
+
+private:
+	CColorButton m_Buttons[NBUTTONS];
+	CColorButton *m_pSelectedButton;
+
+	void SetButton(CColorButton *Button);
+
+	// Generated message map functions
+	//{{AFX_MSG(CColorPropPage)
+	afx_msg void OnSelchangeColorprop();
+	afx_msg void OnSelect(void);
+	afx_msg void OnSelchangeSystemcolors();
+	//}}AFX_MSG
+
+	DECLARE_MESSAGE_MAP()
+};
+
+// Stores all the information about a font
+typedef struct tagFONTOBJECT
+{
+	CString strName;
+	CY  cySize;
+	BOOL bBold;
+	BOOL bItalic;
+	BOOL bUnderline;
+	BOOL bStrikethrough;
+	short sWeight;
+} FONTOBJECT;
+
+// Merge objects are used when trying to consolidate multiple font properties.
+// If the characteristics of these multiple properties differ then this is
+// represented in the merge object.
+typedef struct tagMERGEOBJECT
+{
+	BOOL bNameOK;
+	BOOL bSizeOK;
+	BOOL bStyleOK;
+	BOOL bUnderlineOK;
+	BOOL bStrikethroughOK;
+} MERGEOBJECT;
+
+/////////////////////////////////////////////////////////////////////////////
+// CSizeComboBox window
+
+class CSizeComboBox : public CComboBox
+{
+// Operations
+public:
+	int AddSize(int PointSize, LONG lfHeight);
+
+	void            GetPointSize(CY& cy);
+	LONG            GetHeight(int sel=-1);
+	void            UpdateLogFont( LPLOGFONT lpLF, int sel=-1 );
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// CFontComboBox window
+
+struct FONTITEM_PPG
+{
+	DWORD dwFontType;
+	LOGFONT lf;
+};
+
+class CFontComboBox : public CComboBox
+{
+// Construction
+public:
+	CFontComboBox();
+	virtual ~CFontComboBox();
+
+// Operations
+public:
+	int AddFont(LOGFONT *, DWORD);
+	CString GetCurrentName();
+
+	FONTITEM_PPG* GetFontItem(int sel=-1);
+	LPLOGFONT GetLogFont(int sel=-1);
+	DWORD GetFontType(int sel=-1);
+
+// Implementation
+public:
+	virtual void DrawItem(LPDRAWITEMSTRUCT lpDIS);
+	virtual void DeleteItem(LPDELETEITEMSTRUCT lpDIS);
+
+protected:
+	CBitmap m_bmpTrueType;
+	CBitmap m_bmpMask;
+};
+
+///////////////////////////////////////////////////////////////////////////
+// CFontPropPage class
+
+class CFontPropPage : public CStockPropPage
+{
+	DECLARE_DYNCREATE(CFontPropPage)
+#ifdef _AFXDLL
+	DECLARE_OLECREATE_EX(CFontPropPage)
+#endif
+
+public:
+	CFontPropPage();
+
+	// Dialog Data
+	//{{AFX_DATA(CFontPropPage)
+	enum { IDD = AFX_IDD_PROPPAGE_FONT };
+	CComboBox   m_FontProp;
+	CStatic m_SampleBox;
+	CComboBox   m_FontStyles;
+	CSizeComboBox   m_FontSizes;
+	CFontComboBox   m_FontNames;
+	//}}AFX_DATA
+
+// Attributes
+protected:
+	int nPixelsY;
+	CFont SampleFont;
+	DWORD m_nCurrentStyle;
+	DWORD m_nActualStyle;
+	DWORD m_nStyles;
+	BOOL m_bStrikeOut;
+	BOOL m_bUnderline;
+	CString m_strFontSize;
+
+// Implementation
+protected:
+
+	void FillFacenameList();
+	void FillSizeList();
+	virtual void DoDataExchange(CDataExchange* pDX);
+	virtual void OnPaint();
+	virtual BOOL OnEditProperty(DISPID dispid);
+	virtual void OnObjectsChanged();
+	void UpdateSampleFont();
+	void SelectFontFromList(CString strFaceName, MERGEOBJECT* pmobj);
+
+	//{{AFX_MSG(CFontPropPage)
+	virtual BOOL OnInitDialog();
+	afx_msg void OnEditupdateFontnames();
+	afx_msg void OnEditupdateFontsizes();
+	afx_msg void OnSelchangeFontnames();
+	afx_msg void OnSelchangeFontsizes();
+	afx_msg void OnSelchangeFontstyles();
+	afx_msg void OnEditchangeFontstyles();
+	afx_msg void OnStrikeout();
+	afx_msg void OnUnderline();
+	afx_msg void OnSelchangeFontprop();
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+
+	static int CALLBACK EnumFontFamiliesCallBack(ENUMLOGFONT* lpelf, NEWTEXTMETRIC* lpntm, int FontType, LPARAM lParam);
+	static int CALLBACK EnumFontFamiliesCallBack2(ENUMLOGFONT* lpelf, NEWTEXTMETRIC* lpntm, int FontType, LPARAM lParam);
+
+	BOOL SetFontProps(CDataExchange* pDX, FONTOBJECT fobj, LPCTSTR pszPropName);
+	BOOL GetFontProps(CDataExchange* pDX, FONTOBJECT*  pfobj, LPCTSTR pszPropName, MERGEOBJECT* pmobj);
+};
+
+////////////////////////////////////////////////////////////////////////////
+//  CPicturePropPage
+
+class CPicturePropPage : public CStockPropPage
+{
+	DECLARE_DYNCREATE(CPicturePropPage)
+#ifdef _AFXDLL
+	DECLARE_OLECREATE_EX(CPicturePropPage)
+#endif
+
+// Construction
+public:
+	CPicturePropPage(); // standard constructor
+	~CPicturePropPage();
+
+// Dialog Data
+	//{{AFX_DATA(CPicturePropPage)
+	enum { IDD = AFX_IDD_PROPPAGE_PICTURE };
+	CComboBox   m_PropName;
+	CStatic m_Static;
+	//}}AFX_DATA
+
+// Implementation
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual BOOL OnInitDialog(void);
+	virtual BOOL OnEditProperty(DISPID dispid);
+	virtual void OnObjectsChanged();
+
+	BOOL SetPictureProp(CDataExchange* pDX, LPPICTUREDISP pPictDisp, LPCTSTR pszPropName);
+	BOOL GetPictureProp(CDataExchange* pDX, LPPICTUREDISP* ppPictDisp, LPCTSTR pszPropName);
+	void ChangePicture(LPPICTURE pPict);
+
+	LPPICTUREDISP m_pPictDisp;
+
+// Generated message map functions
+protected:
+	//{{AFX_MSG(CPicturePropPage)
+	afx_msg void OnPaint();
+	afx_msg void OnBrowse();
+	afx_msg void OnClear();
+	afx_msg void OnSelchangePictProp();
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+};
+
+/////////////////////////////////////////////////////////////////////////////
 // Property Page Dialog Data Exchange routines
 
 // simple text operations
 void AFXAPI DDP_Text(CDataExchange*pDX, int id, BYTE& member, LPCTSTR pszPropName);
+void AFXAPI DDP_Text(CDataExchange*pDX, int id, short& member, LPCTSTR pszPropName);
 void AFXAPI DDP_Text(CDataExchange*pDX, int id, int& member, LPCTSTR pszPropName);
 void AFXAPI DDP_Text(CDataExchange*pDX, int id, UINT& member, LPCTSTR pszPropName);
 void AFXAPI DDP_Text(CDataExchange*pDX, int id, long& member, LPCTSTR pszPropName);
@@ -1391,7 +1950,7 @@ BOOL AFXAPI AfxOleTypeMatchGuid(LPTYPEINFO pTypeInfo,
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXCTL_INLINE inline
+#define _AFXCTL_INLINE AFX_INLINE
 #include <afxctl.inl>
 #endif
 

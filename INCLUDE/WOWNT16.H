@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1995-1996, Microsoft Corporation
+Copyright (c) 1995-1999, Microsoft Corporation
 
 Module Name:
 
@@ -13,17 +13,15 @@ Abstract:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 8.0
- *
- *      Copyright (c) 1997 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WOWNT16_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WOWNT16_
-#pragma option -b
+
+#if defined(_MSC_VER)
+#if _MSC_VER > 1000
+#pragma once
+#endif
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -134,5 +132,5 @@ DWORD FAR CDECL CallProcEx32W( DWORD, DWORD, DWORD, ... );
 }
 #endif
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* !_WOWNT16_ */

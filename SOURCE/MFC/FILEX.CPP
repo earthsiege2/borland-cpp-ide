@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -56,15 +56,9 @@ void PASCAL CFileException::ThrowOsError(LONG lOsError,
 void PASCAL CFileException::ThrowErrno(int nErrno,
 	LPCTSTR lpszFileName /* = NULL */)
 {
-#ifndef _MAC
 	if (nErrno != 0)
 		AfxThrowFileException(CFileException::ErrnoToException(nErrno),
 			_doserrno, lpszFileName);
-#else
-	if (nErrno != 0)
-		AfxThrowFileException(CFileException::ErrnoToException(nErrno),
-			GetLastError(), lpszFileName);
-#endif
 }
 
 BOOL CFileException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError,

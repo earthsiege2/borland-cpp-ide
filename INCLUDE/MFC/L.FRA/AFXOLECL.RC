@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,14 +37,14 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
-	AFX_IDP_STATIC_OBJECT           "Impossible d'activer un objet OLE statique."
+	AFX_IDP_STATIC_OBJECT           "Impossible d'activer un objet ActiveX statique."
 	AFX_IDP_FAILED_TO_CONNECT       "La connexion a échoué. \nLa liaison est peut être rompue."
 	AFX_IDP_SERVER_BUSY             "Impossible d'exécuter la commande, le serveur est occupé."
 	AFX_IDP_BAD_VERB                "Erreur lors de l'exécution de l'opération par l'application serveur."
 	AFX_IDP_FAILED_TO_LAUNCH        "Erreur lors du démarrage d'une application serveur."
-	AFX_IDS_UPDATING_ITEMS          "Mise à jour des objets OLE"
-	AFX_IDP_FAILED_TO_CONVERT       "La conversion de l'objet OLE a échoué."
-	AFX_IDP_ASK_TO_DISCARD          "Impossible d'enregistrer des objets OLE lorsque vous quittez Windows!\nSupprimer toutes les modifications apportées à %1?"
+	AFX_IDS_UPDATING_ITEMS          "Mise à jour des objets ActiveX"
+	AFX_IDP_FAILED_TO_CONVERT       "Echec de conversion de l'objet ActiveX."
+	AFX_IDP_ASK_TO_DISCARD          "Impossible de sauvegarder les objets ActiveX en quittant Windows !\nRejeter tous les modifications sur %1?"
 	AFX_IDP_FAILED_TO_CREATE        "Echec de création de l'objet. Vérifiez que l'application est entrée dans le registre du système."
 
 	AFX_IDS_METAFILE_FORMAT         "Image (métafichier)\na image"

@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <ctype.h>
 #include <mbctype.h>
@@ -32,7 +33,7 @@ Description     _ismbcprint tests whether c is a printer font
                 2-bytes code) or not.
 
 Return value    Returns the value excepting 0 if it is a printer font,
-		and returns 0 if it is not.
+                and returns 0 if it is not.
 
 *---------------------------------------------------------------------*/
 

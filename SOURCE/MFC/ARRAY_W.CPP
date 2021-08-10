@@ -1,6 +1,6 @@
 
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -187,8 +187,13 @@ void CWordArray::SetAtGrow(int nIndex, WORD newElement)
 	m_pData[nIndex] = newElement;
 }
 
+
+
+
+
 void CWordArray::InsertAt(int nIndex, WORD newElement, int nCount)
 {
+
 	ASSERT_VALID(this);
 	ASSERT(nIndex >= 0);    // will expand to meet need
 	ASSERT(nCount > 0);     // zero or negative size not allowed
@@ -215,9 +220,16 @@ void CWordArray::InsertAt(int nIndex, WORD newElement, int nCount)
 
 	// insert new value in the gap
 	ASSERT(nIndex + nCount <= m_nSize);
+
+
+
+	// copy elements into the empty space
 	while (nCount--)
 		m_pData[nIndex++] = newElement;
+
 }
+
+
 
 void CWordArray::RemoveAt(int nIndex, int nCount)
 {
@@ -230,7 +242,7 @@ void CWordArray::RemoveAt(int nIndex, int nCount)
 	int nMoveCount = m_nSize - (nIndex + nCount);
 
 	if (nMoveCount)
-		memcpy(&m_pData[nIndex], &m_pData[nIndex + nCount],
+		memmove(&m_pData[nIndex], &m_pData[nIndex + nCount],
 			nMoveCount * sizeof(WORD));
 	m_nSize -= nCount;
 }
@@ -266,11 +278,11 @@ void CWordArray::Serialize(CArchive& ar)
 	if (ar.IsStoring())
 	{
 		ar.WriteCount(m_nSize);
-#ifdef _MAC
+#ifdef _AFX_BYTESWAP
 		if (!ar.IsByteSwapping())
 #endif
 		ar.Write(m_pData, m_nSize * sizeof(WORD));
-#ifdef _MAC
+#ifdef _AFX_BYTESWAP
 		else
 		{
 			// write each item individually so that it will be byte-swapped
@@ -284,7 +296,7 @@ void CWordArray::Serialize(CArchive& ar)
 		DWORD nOldSize = ar.ReadCount();
 		SetSize(nOldSize);
 		ar.Read(m_pData, m_nSize * sizeof(WORD));
-#ifdef _MAC
+#ifdef _AFX_BYTESWAP
 		if (ar.IsByteSwapping())
 		{
 			for (int i = 0; i < m_nSize; i++)

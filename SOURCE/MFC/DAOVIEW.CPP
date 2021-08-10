@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -124,7 +124,10 @@ BOOL CDaoRecordView::OnMove(UINT nIDMoveCommand)
 		if (!UpdateData())
 			return TRUE;
 
-		pSet->Update();
+		if (pSet->IsFieldDirty(NULL))
+			pSet->Update();
+		else
+			pSet->CancelUpdate();
 	}
 
 	BOOL bBookmarkable = pSet->CanBookmark();
@@ -398,11 +401,18 @@ void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, COleDateTime& value,
 		DDX_Text(pDX, nIDC, value);
 }
 
-void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, CString& value,
+void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, CString &value,
 	CDaoRecordset* pRecordset)
 {
 	if (!AfxFieldText(pDX, nIDC, &value, pRecordset))
 		DDX_Text(pDX, nIDC, value);
+}
+
+void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, LPTSTR pstrValue,
+	int nMaxLen, CDaoRecordset* pRecordset)
+{
+	if (!AfxFieldText(pDX, nIDC, &pstrValue, pRecordset))
+		DDX_Text(pDX, nIDC, pstrValue, nMaxLen);
 }
 
 void AFXAPI DDX_FieldLBString(CDataExchange* pDX, int nIDC, CString& value,
@@ -510,7 +520,7 @@ void AFXAPI DDX_FieldCBString(CDataExchange* pDX, int nIDC, CString& value,
 		else
 		{
 			// for drop lists GetWindowTextLength does not work - assume
-			//	preallocated length (or 256, whichever is larger)
+			//  preallocated length (or 256, whichever is larger)
 			nLen = value.GetAllocLength();
 			if (nLen < 256)
 				nLen = 256;
@@ -624,6 +634,21 @@ void AFXAPI DDX_FieldScroll(CDataExchange* pDX, int nIDC, int& value,
 	}
 	else
 		DDX_Scroll(pDX, nIDC, value);
+}
+
+void AFXAPI DDX_FieldSlider(CDataExchange* pDX, int nIDC, int& value,
+	CDaoRecordset* pRecordset)
+{
+	ASSERT_VALID(pRecordset);
+
+	if (!pDX->m_bSaveAndValidate &&
+		(!pRecordset->IsOpen() || pRecordset->IsFieldNull(&value)))
+	{
+		int nValue = 0;
+		DDX_Slider(pDX, nIDC, nValue);
+	}
+	else
+		DDX_Slider(pDX, nIDC, value);
 }
 
 /////////////////////////////////////////////////////////////////////////////

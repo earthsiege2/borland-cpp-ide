@@ -1,0 +1,33 @@
+LIBRARY NTDSBCLI
+EXPORTS
+
+    DsBackupClose                            = 'NTDSBCLI.DLL'.*
+    DsBackupEnd                              = 'NTDSBCLI.DLL'.*
+    DsBackupFree                             = 'NTDSBCLI.DLL'.*
+    DsBackupGetBackupLogsA                   = 'NTDSBCLI.DLL'.*
+    DsBackupGetBackupLogsW                   = 'NTDSBCLI.DLL'.*
+    DsBackupGetDatabaseNamesA                = 'NTDSBCLI.DLL'.*
+    DsBackupGetDatabaseNamesW                = 'NTDSBCLI.DLL'.*
+    DsBackupOpenFileA                        = 'NTDSBCLI.DLL'.*
+    DsBackupOpenFileW                        = 'NTDSBCLI.DLL'.*
+    DsBackupPrepareA                         = 'NTDSBCLI.DLL'.*
+    DsBackupPrepareW                         = 'NTDSBCLI.DLL'.*
+    DsBackupRead                             = 'NTDSBCLI.DLL'.*
+    DsBackupTruncateLogs                     = 'NTDSBCLI.DLL'.*
+    DsIsNTDSOnlineA                          = 'NTDSBCLI.DLL'.*
+    DsIsNTDSOnlineW                          = 'NTDSBCLI.DLL'.*
+    DsRestoreCheckExpiryToken                = 'NTDSBCLI.DLL'.*
+    DsRestoreEnd                             = 'NTDSBCLI.DLL'.*
+    DsRestoreGetDatabaseLocationsA           = 'NTDSBCLI.DLL'.*
+    DsRestoreGetDatabaseLocationsW           = 'NTDSBCLI.DLL'.*
+    DsRestorePrepareA                        = 'NTDSBCLI.DLL'.*
+    DsRestorePrepareW                        = 'NTDSBCLI.DLL'.*
+    DsRestoreRegisterA                       = 'NTDSBCLI.DLL'.*
+    DsRestoreRegisterComplete                = 'NTDSBCLI.DLL'.*
+    DsRestoreRegisterW                       = 'NTDSBCLI.DLL'.*
+    DsSetAuthIdentityA                       = 'NTDSBCLI.DLL'.*
+    DsSetAuthIdentityW                       = 'NTDSBCLI.DLL'.*
+    DsSetCurrentBackupLogA                   = 'NTDSBCLI.DLL'.*
+    DsSetCurrentBackupLogW                   = 'NTDSBCLI.DLL'.*
+    I_DsCheckBackupLogs                      = 'NTDSBCLI.DLL'.*
+    I_DsRestoreW                             = 'NTDSBCLI.DLL'.*

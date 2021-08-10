@@ -1,6 +1,5 @@
-:Title Borland C++ 5.02 Documentation
-
-:INCLUDE OPENHELP.CFG
-:INCLUDE WHATSNEW.TOC
+:Base OPENHELP.HLP>main
+:Title Borland OpenHelp Help
+:Index Borland OpenHelp Help=OPENHELP.HLP
+:INCLUDE BCB5XTRA.OHL
 :INCLUDE OPENHELP.TOC
-

@@ -1,4 +1,0 @@
-//
-// Obsolete header directory. Use winsys
-//
-#include <winsys/lclstrng.rh>

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -56,10 +56,31 @@ CDynLinkLibrary::CDynLinkLibrary(AFX_EXTENSION_MODULE& state, BOOL bSystem)
 	m_bSystem = bSystem;
 
 	// insert at the head of the list (extensions will go in front of core DLL)
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
 	DEBUG_ONLY(m_pNextDLL = NULL);
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	pState->m_libraryList.AddHead(this);
+	m_pModuleState->m_libraryList.AddHead(this);
+	AfxUnlockGlobals(CRIT_DYNLINKLIST);
+}
+
+CDynLinkLibrary::CDynLinkLibrary(HINSTANCE hModule, HINSTANCE hResource)
+{
+#ifndef _AFX_NO_OLE_SUPPORT
+	m_factoryList.Construct(offsetof(COleObjectFactory, m_pNextFactory));
+#endif
+	m_classList.Construct(offsetof(CRuntimeClass, m_pNextClass));
+
+	m_hModule = hModule;
+	m_hResource = hResource;
+	m_classList.m_pHead = NULL;
+#ifndef _AFX_NO_OLE_SUPPORT
+	m_factoryList.m_pHead = NULL;
+#endif
+	m_bSystem = FALSE;
+
+	// insert at the head of the list (extensions will go in front of core DLL)
+	DEBUG_ONLY(m_pNextDLL = NULL);
+	AfxLockGlobals(CRIT_DYNLINKLIST);
+	m_pModuleState->m_libraryList.AddHead(this);
 	AfxUnlockGlobals(CRIT_DYNLINKLIST);
 }
 
@@ -70,9 +91,8 @@ CDynLinkLibrary::CDynLinkLibrary(AFX_EXTENSION_MODULE& state, BOOL bSystem)
 CDynLinkLibrary::~CDynLinkLibrary()
 {
 	// remove this frame window from the list of frame windows
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	pState->m_libraryList.Remove(this);
+	m_pModuleState->m_libraryList.Remove(this);
 	AfxUnlockGlobals(CRIT_DYNLINKLIST);
 }
 
@@ -159,9 +179,9 @@ void AFXAPI AfxTermExtensionModule(AFX_EXTENSION_MODULE& state, BOOL bAll)
 
 	// search for CDynLinkLibrary matching state.hModule and delete it
 	ASSERT(state.hModule != NULL);
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL; )
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL; )
 	{
 		CDynLinkLibrary* pNextDLL = pDLL->m_pNextDLL;
 		if (bAll || pDLL->m_hModule == state.hModule)
@@ -171,7 +191,7 @@ void AFXAPI AfxTermExtensionModule(AFX_EXTENSION_MODULE& state, BOOL bAll)
 	AfxUnlockGlobals(CRIT_DYNLINKLIST);
 
 	// delete any local storage attached to this module
-	AfxTermLocalData(state.hModule);
+	AfxTermLocalData(state.hModule, TRUE);
 
 	// remove any entries from the CWnd message map cache
 	AfxResetMsgCache();
@@ -221,9 +241,8 @@ HINSTANCE AFXAPI AfxFindResourceHandle(LPCTSTR lpszName, LPCTSTR lpszType)
 	}
 
 	// check for non-system DLLs in proper order
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		if (!pDLL->m_bSystem && pDLL->m_hResource != NULL &&
@@ -237,7 +256,7 @@ HINSTANCE AFXAPI AfxFindResourceHandle(LPCTSTR lpszName, LPCTSTR lpszType)
 	AfxUnlockGlobals(CRIT_DYNLINKLIST);
 
 	// check language specific resource next
-	hInst = pState->m_appLangDLL;
+	hInst = pModuleState->m_appLangDLL;
 	if (hInst != NULL && ::FindResource(hInst, lpszName, lpszType) != NULL)
 		return hInst;
 
@@ -251,7 +270,7 @@ HINSTANCE AFXAPI AfxFindResourceHandle(LPCTSTR lpszName, LPCTSTR lpszType)
 
 	// check for system DLLs in proper order
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	for (pDLL = pState->m_libraryList; pDLL != NULL; pDLL = pDLL->m_pNextDLL)
+	for (pDLL = pModuleState->m_libraryList; pDLL != NULL; pDLL = pDLL->m_pNextDLL)
 	{
 		if (pDLL->m_bSystem && pDLL->m_hResource != NULL &&
 			::FindResource(pDLL->m_hResource, lpszName, lpszType) != NULL)
@@ -291,9 +310,8 @@ int AFXAPI AfxLoadString(UINT nID, LPTSTR lpszBuf, UINT nMaxBuf)
 	}
 
 	// check non-system DLLs in proper order
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		if (!pDLL->m_bSystem && (hInst = pDLL->m_hResource) != NULL &&
@@ -307,7 +325,7 @@ int AFXAPI AfxLoadString(UINT nID, LPTSTR lpszBuf, UINT nMaxBuf)
 	AfxUnlockGlobals(CRIT_DYNLINKLIST);
 
 	// check language specific DLL next
-	hInst = pState->m_appLangDLL;
+	hInst = pModuleState->m_appLangDLL;
 	if (hInst != NULL && ::FindResource(hInst, lpszName, RT_STRING) != NULL &&
 		(nLen = ::LoadString(hInst, nID, lpszBuf, nMaxBuf)) != 0)
 	{
@@ -329,7 +347,7 @@ int AFXAPI AfxLoadString(UINT nID, LPTSTR lpszBuf, UINT nMaxBuf)
 
 	// check system DLLs in proper order
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	for (pDLL = pState->m_libraryList; pDLL != NULL; pDLL = pDLL->m_pNextDLL)
+	for (pDLL = pModuleState->m_libraryList; pDLL != NULL; pDLL = pDLL->m_pNextDLL)
 	{
 		if (pDLL->m_bSystem && (hInst = pDLL->m_hResource) != NULL &&
 		  ::FindResource(hInst, lpszName, RT_STRING) != NULL &&
@@ -350,15 +368,16 @@ int AFXAPI AfxLoadString(UINT nID, LPTSTR lpszBuf, UINT nMaxBuf)
 // Library initialization and cleanup
 
 #ifdef __BORLANDC__
-  // Other compiler venders have RTL DLL's besides Microsoft!
-  #define MSVCRT_DLL "CW3220MT.DLL"
+   // Other compiler venders have RTL DLL's besides Microsoft!
+#  define MSVCRT_DLL "CW3230MT.DLL"
+#else  // __BORLANDC__
+#ifdef _DEBUG
+#define MSVCRT_DLL "MSVCRTD.DLL"
 #else
-  #ifdef _DEBUG
-    #define MSVCRT_DLL "MSVCR40D.DLL"
-  #else
-    #define MSVCRT_DLL "MSVCRT40.DLL"
-  #endif
-#endif // __BORLANDC__
+#define MSVCRT_DLL "MSVCRT.DLL"
+#endif
+#endif  // __BORLANDC__
+
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
@@ -367,14 +386,12 @@ extern "C" BOOL WINAPI RawDllMain(HINSTANCE, DWORD dwReason, LPVOID);
 extern "C" BOOL (WINAPI* _pRawDllMain)(HINSTANCE, DWORD, LPVOID) = &RawDllMain;
 
 extern "C"
-BOOL WINAPI RawDllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
+BOOL WINAPI RawDllMain(HINSTANCE /*hInstance*/, DWORD dwReason, LPVOID)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-#ifndef _MAC
 		// Prevent the C runtime DLL from being unloaded prematurely
 		LoadLibraryA(MSVCRT_DLL);
-#endif
 
 #ifdef _UNICODE
 		// give error message and exit if running Unicode on non-Unicode system
@@ -390,8 +407,8 @@ BOOL WINAPI RawDllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
 		}
 #endif
 
-		DisableThreadLibraryCalls(hInstance);
-		SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
+		SetErrorMode(SetErrorMode(0) |
+			SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 
 		// add a reference to thread local storage data
 		AfxTlsAddRef();
@@ -429,14 +446,13 @@ BOOL WINAPI RawDllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
 		// free up the _afxCriticalSection
 		AfxCriticalTerm();
 
-#ifndef _MAC
 		// Now it's OK for C runtime DLL to be unloaded (see LoadLibrary above)
 		FreeLibrary(GetModuleHandleA(MSVCRT_DLL));
-#endif
 
 		// remove reference from thread local data
 		AfxTlsRelease();
 	}
+
 	return TRUE;    // ok
 }
 
@@ -481,31 +497,29 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
 
 		// load language specific DLL
 		// the DLL must be in the "system directory"
-		static const char szPrefix[] = "\\MFC40";
+		static const char szPrefix[] = "\\MFC42";
 		static const char szLOC[] = "LOC";
 		static const char szDLL[] = ".DLL";
 		char szLangDLL[_MAX_PATH+14]; // Note: 8.3 name
 		GetSystemDirectoryA(szLangDLL, _countof(szLangDLL));
 		lstrcatA(szLangDLL, szPrefix);
 
-		// try MFC40LOC.DLL
+		// try MFC42LOC.DLL
 		lstrcatA(szLangDLL, szLOC);
 		lstrcatA(szLangDLL, szDLL);
 		HINSTANCE hLangDLL = LoadLibraryA(szLangDLL);
-		AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
+		AFX_MODULE_STATE* pState = AfxGetModuleState();
 		pState->m_appLangDLL = hLangDLL;
 
 #ifdef _AFX_OLE_IMPL
 		// copy it to the private OLE state too
-		pState = pModuleState->m_process.GetData();
-		ASSERT(pState != NULL);
-		pState->m_appLangDLL = hLangDLL;
+		pModuleState->m_appLangDLL = hLangDLL;
 #endif
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
 		// free language specific DLL
-		AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
+		AFX_MODULE_STATE* pState = AfxGetModuleState();
 		if (pState->m_appLangDLL != NULL)
 		{
 			::FreeLibrary(pState->m_appLangDLL);
@@ -532,7 +546,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
 		AfxTermExtensionModule(coreDLL, TRUE);
 
 		// free any local data for this process/thread
-		AfxTermLocalData(NULL);
+		AfxTermLocalData(NULL, TRUE);
+	}
+	else if (dwReason == DLL_THREAD_DETACH)
+	{
+		AfxTermThread();
 	}
 
 	return TRUE;    // ok
@@ -551,10 +569,10 @@ void AFXAPI AfxCoreInitModule()
 	pDLL->m_factoryList.m_pHead = NULL;
 
 	// borrow resources from language specific DLL if loaded
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
-	AFX_MODULE_PROCESS_STATE* pAppState = AfxGetAppModuleState()->m_process.GetData();
-	if (pState->m_appLangDLL == NULL)
-		pState->m_appLangDLL = pAppState->m_appLangDLL;
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	AFX_MODULE_STATE* pAppState = AfxGetAppModuleState();
+	if (pModuleState->m_appLangDLL == NULL)
+		pModuleState->m_appLangDLL = pAppState->m_appLangDLL;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -634,7 +652,9 @@ AFX_MODULE_STATE* AFXAPI _AfxGetOleModuleState()
 #endif
 static void _AfxForceVectorDelete()
 {
+#ifdef _DEBUG
 	ASSERT(FALSE);  // never called
+#endif
 
 	new CBitmap[2];
 	new CBitmapButton[2];
@@ -645,11 +665,13 @@ static void _AfxForceVectorDelete()
 	new CComboBox[2];
 	new CDC[2];
 	new CDWordArray[2];
+	new CDialog[2];
 	new CDialogBar[2];
 	new CEdit[2];
 	new CFile[2];
 	new CFont[2];
 	new CFrameWnd[2];
+	new CGdiObject[2];
 	new CListBox[2];
 	new CCheckListBox[2];
 	new CMapPtrToPtr[2];
@@ -679,12 +701,16 @@ static void _AfxForceVectorDelete()
 	new CString[2];
 	new CStringArray[2];
 	new CStringList[2];
+	new CThreadSlotData[2];
 	new CTime[2];
 	new CTimeSpan[2];
 	new CToolBar[2];
 	new CUIntArray[2];
 	new CWnd[2];
 	new CWordArray[2];
+
+	new CFileFind[2];
+	new CInternetSession[2];
 
 	new CDragListBox[2];
 	new CStatusBarCtrl[2];
@@ -710,28 +736,31 @@ static void _AfxForceVectorDelete()
 	new CCommandLineInfo[2];
 	new CDocManager[2];
 
-#ifndef _MAC
 	new CPageSetupDialog[2];
 
 	new CSemaphore[2];
 	new CMutex[2];
 	new CEvent[2];
 	new CCriticalSection[2];
-#endif
 
 #ifdef _AFX_OLE_IMPL
 	new COleDataSource[2];
 	new COleDispatchDriver[2];
 	new COleDropSource[2];
+	new CMonikerFile[2];
 	new COleResizeBar[2];
+	new CAsyncMonikerFile[2];
+	new CCachedDataPathProperty[2];
+	new CDataPathProperty[2];
 	new COleStreamFile[2];
 	new COleTemplateServer[2];
 	new COleDataObject[2];
 	new COleDropTarget[2];
 	new COleIPFrameWnd[2];
 
-	new COleVariant[2];
+	new COleDocIPFrameWnd[2];
 
+	new COleVariant[2];
 	new CRichEditView[2];
 	new CRichEditCntrItem[2];
 #endif
@@ -741,7 +770,7 @@ static void _AfxForceVectorDelete()
 	new CLongBinary[2];
 #endif
 
-#ifdef _AFX_DAO_IMPL
+#if defined(__BORLANDC__) && defined( _AFX_DAO_IMPL)
 	new CDaoWorkspace[2];
 	new CDaoException[2];
 	new CDaoDatabase[2];
@@ -750,13 +779,23 @@ static void _AfxForceVectorDelete()
 
 // Net
 #ifdef _AFX_NET_IMPL
-#ifndef _MAC
 	new CAsyncSocket[2];
 	new CSocket[2];
-#endif
 #endif
 
 }
 void (*_afxForceVectorDelete_mfc)() = &_AfxForceVectorDelete;
+
+void _AfxBinaryCompatibleStubFunction()
+{
+	ASSERT(FALSE);
+}
+
+#ifndef _UNICODE
+HINSTANCE AFXAPI AfxGetResourceHandleCompat()
+{
+	return AfxGetResourceHandle();
+}
+#endif
 
 /////////////////////////////////////////////////////////////////////////////

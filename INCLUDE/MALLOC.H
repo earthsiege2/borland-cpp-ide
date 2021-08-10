@@ -5,23 +5,24 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1991, 1997 by Borland International
+ *      Copyright (c) 1991, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.3  $ */
 
 #ifndef __MALLOC_H
 #define __MALLOC_H
+#define _INC_MALLOC  /* MSC Guard name */
 
 #include <alloc.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 #if !defined(RC_INVOKED)
 
@@ -30,19 +31,6 @@ extern "C" {
 #endif
 
 #endif  /* !RC_INVOKED */
-
-
-#if !defined(__FLAT__) && !defined(__ALLOC_H)
-#include <alloc.h>
-#endif
-
-
-#ifndef _SIZE_T
-  #define _SIZE_T
-  typedef unsigned size_t;
-#endif
-
-#if !defined(_Windows) || defined(__FLAT__)
 
 #if !defined(RC_INVOKED)
 #pragma pack(push, 1)
@@ -54,7 +42,7 @@ typedef struct _heapinfo
 {
     int     *_pentry;
     int     *__pentry;
-    size_t  _size;
+    _SIZE_T  _size;
     int     _useflag;
 } _HEAPINFO;
 
@@ -64,94 +52,36 @@ typedef struct _heapinfo
 #pragma pack(pop)
 #endif
 
-#endif  /* _Windows */
-
-
-#if !defined(__FLAT__)
-
-#if defined(__TINY__) || defined(__SMALL__) || defined(__MEDIUM__)
-
-/* Near heap functions currently allowed only in small data models */
-
-#define _nmalloc(size)          malloc(size)
-#define _nfree(block)           free(block)
-#define _nrealloc(block,size)   realloc(block,size)
-#define _ncalloc(num,size)      calloc(num,size)
-#define _nheapmin()             0
-#if !defined(_Windows)
-#define _memavl()               coreleft()
-#endif
-
-#endif  /* small data models */
-
-/* Model-independent functions */
-
-#define _fmalloc(size)          farmalloc((unsigned long)(size))
-#define _ffree(block)           farfree(block)
-#define _frealloc(block,size)   farrealloc(block,(unsigned long)(size))
-#define _fcalloc(num,size)      farcalloc((unsigned long)(num),(unsigned long)(size))
-#define halloc(num,size)        (void huge *)farmalloc((unsigned long)(num)*(size))
-#define hfree(block)            farfree((void far *)(block))
-#define _heapmin()              0
-#define _fheapmin()             0
-
-#if !defined(_Windows)
-int         _RTLENTRY _EXPFUNC _heapwalk   (_HEAPINFO *__entry);
-#endif
-
 /* Prototypes */
 
-void *      _Cdecl alloca     (size_t __size);
-void *      _Cdecl __alloca__ (size_t __size);
-
-#if defined(__BCOPT__ ) && !defined(_Windows)
-#undef      alloca      /* to remove a redefinition warning */
-#define     alloca(__size)  __alloca__(__size)
-#endif
-
-size_t      _Cdecl stackavail (void);
-
-#else  /* __FLAT__ */
-
-/* Prototypes */
-
-void *      __cdecl   _EXPFUNC alloca( size_t __size );
-void *      __cdecl            __alloca__ (size_t __size);
+void *      __cdecl   _EXPFUNC alloca( _SIZE_T __size );
+void *      __cdecl            __alloca__ (_SIZE_T __size);
 
 #if (__CGVER__ >= 0x200)
-  #define alloca(__size)       __alloca__(__size)
-  #if defined(__MFC_COMPAT__)
-    #define _alloca(__size)    __alloca__(__size)
-  #endif
+#  define alloca(__size)       __alloca__(__size)
+#  define _alloca(__size)      __alloca__(__size)  /* MSC compatible version */
 #else
-  #if defined(__MFC_COMPAT__)
-    #define _alloca alloca
-  #endif
+#  define _alloca alloca                           /* MSC compatible version */
 #endif
 
-
-size_t      _RTLENTRY _EXPFUNC stackavail  (void);
-int         _RTLENTRY _EXPFUNC _heapadd    (void * __block, size_t __size);
+_SIZE_T      _RTLENTRY _EXPFUNC stackavail  (void);
+int         _RTLENTRY _EXPFUNC _heapadd    (void * __block, _SIZE_T __size);
 int         _RTLENTRY _EXPFUNC _heapchk    (void);
 int         _RTLENTRY _EXPFUNC _heapmin    (void);
 int         _RTLENTRY _EXPFUNC _heapset    (unsigned int __fill);
 int         _RTLENTRY _EXPFUNC _heapwalk   (_HEAPINFO *__entry);
 int         _RTLENTRY _EXPFUNC _rtl_heapwalk (_HEAPINFO *__entry);
-void *      _RTLENTRY _EXPFUNC _expand     (void * __block, size_t __size);
-size_t      _RTLENTRY _EXPFUNC _msize      (void * __block );
-
-
-#endif  /* __FLAT__ */
+void *      _RTLENTRY _EXPFUNC _expand     (void * __block, _SIZE_T __size);
+_SIZE_T      _RTLENTRY _EXPFUNC _msize      (void * __block );
 
 #ifdef __cplusplus
 }
 #endif
 
 /* Obsolete functions */
-#if !defined(RC_INVOKED) && (!defined(_Windows) || defined(__FLAT__))
+#if !defined(RC_INVOKED)
 #pragma obsolete _heapwalk
 #endif
-
 
 #if !defined(RC_INVOKED)
 

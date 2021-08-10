@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -34,7 +34,7 @@ BEGIN
 	AFX_IDP_ASK_TO_UPDATE,              "%1 vor dem Fortfahren aktualisieren?"
 	AFX_IDP_FAILED_TO_UPDATE,           "Client konnte nicht aktualisiert werden."
 
-	AFX_IDP_FAILED_TO_REGISTER,         "Fehler bei der Registrierung. Die OLE-Funktionen arbeiten eventuell nicht richtig."
+	AFX_IDP_FAILED_TO_REGISTER,         "Registrierung nicht möglich. ActiveX-Features möglicherweise defekt."
 	AFX_IDP_FAILED_TO_AUTO_REGISTER,    "Fehler bei der Aktualisierung der Systemregistrierung.\nVersuchen Sie REGEDIT zu benutzen."
 END
 

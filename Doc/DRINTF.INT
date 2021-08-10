@@ -1,0 +1,138 @@
+
+{*******************************************************}
+{                                                       }
+{       Borland Delphi Visual Component Library         }
+{                                                       }
+{       Copyright (c) 1995,99 Inprise Corporation       }
+{                                                       }
+{*******************************************************}
+
+unit DRIntf;
+
+interface
+
+uses
+  SysUtils, Windows, Messages, Classes, Graphics, Controls, Forms,
+  Dialogs, BDE, Db, DBTables;
+
+type
+  TID = packed record Reserved: array[1..6] of Byte; end;
+  TDatabaseID = type TID;
+  TTableID = type TID;
+  TFieldID = type TID;
+  TAttrID = type TID;
+
+const
+  NullID: TID = ();
+  NullAttrID: TAttrID = ();
+  NullDatabaseID: TDatabaseID = ();
+  NullTableID: TTableID = ();
+  NullFieldID: TFieldID = ();
+
+function DictionaryActive: Boolean;
+
+procedure DictionaryDeactivate;
+
+function CurrentDictionary: HDBIDR;
+
+{ IsIDNull - Returns true if the given ID is a null ID }
+function IsNullID(const ID): Boolean;
+
+{ FindDatabaseID - Finds the ID for the given database.  Returns NullDatabaseID
+  the given database is not in the dictionary. }
+function FindDatabaseID(const Database: string): TDatabaseID;
+
+{ FindTableID - Finds the ID for the given table in the given database .
+  Returns NullTableID the given table is not in the dictionary. }
+function FindTableID(const Database: TDatabaseID; const Table: string): TTableID;
+
+{ FindFieldID - Find the ID for the given field in the given table.
+  Returns NullFieldID if the field is not in the dictionary }
+function FindFieldID(const Table: TTableID; const Field: string): TFieldID;
+
+{ FindAttrID - Finds the attribute set with the name EFAName.  Returns 0
+  if no attributes set by that name is found }
+function FindAttrID(const AttrName: string): TAttrID;
+
+{ GetAttrName - Returns the name of the attribute set AttrID }
+function GetAttrName(const AttrID: TAttrID): string;
+
+{ GetAttrNames - Calls Proc with the name of each attribute set in the
+  dictionary }
+procedure GetAttrNames(Proc: TGetStrProc);
+
+{ GetAttrID - Returns the ID of the attribute set associated with the given
+  field.  Returns null if the FieldID is null or is not valid, or if no
+  attribute set is associated with the field. }
+function GetAttrID(const FieldID: TFieldID): TAttrID;
+
+{ NewAttr - Creates a new attribute set from the given field component and
+  returns AttrID.  The new attribute set will inherit values from the
+  given Parent set, only differences between the sets are recorded.  If
+  Parent is a null string the attribute set is a root attribute set
+  and all the values in Field are recorded.  If FieldID is not 0 then
+  the new attribute set is associated with the field. }
+function NewAttr(Field: TField; const FieldID: TFieldID; const AttrName: string;
+  const Parent: TAttrID): TAttrID;
+
+{ UpdateAttr - Updates the AttrID attribute set.  If field is in the
+  Field dictionary then it the FieldID for the field should be supplied
+  since the attributes sets shouldn't store information that is the
+  matches the attributes field derived from the physical database.
+  If FieldID is supplied AttrID can be 0 which will update the attribute
+  set associated with the FieldID }
+procedure UpdateAttr(Field: TField; const FieldID: TFieldID;
+  const AttrID: TAttrID);
+
+{ CreateField - Creates a new field object from the information stored in
+  the field dictionary.  The new field is created owned by Owner and
+  belonging to Dataset.  The type and properties of the field are derived from
+  the field dictionary information.  Both FieldID and AttrID can be 0.
+  If FieldID is not 0 and AttrID is, the attribute set associated with FieldID
+  is used.  The Origin is the value of the Origin property for the new TField.
+  This can also be left blank ('') }
+function CreateField(Owner: TComponent; Dataset: TDataset; const FullName,
+  Origin: string; const FieldID: TFieldID; const AttrID: TAttrID): TField;
+
+{ UpdateField - Changes the properties of the given field to match the
+  attributes given field attribute set }
+procedure UpdateField(Field: TField; const FieldID: TFieldID;
+ const AttrID: TAttrID);
+
+{ AssociateAttr - Associates the given AttrID with the given FieldID }
+procedure AssociateAttr(const AttrID: TAttrID; const FieldID: TFieldID);
+
+{ UnassociateAttr - Removes the attribute set association for FieldID }
+procedure UnassociateAttr(const FieldID: TFieldID);
+
+{ GetControlClass - Returns the control class to create or '' if no control
+  class was specified }
+function GetControlClass(const AttrID: TAttrID): string;
+
+{ Returns a fully (user name) qualified table name if the database's tables are
+  stored in the dictionary qualified by user name }
+function QualifyTableName(Database: TDatabase; const TableName: string): string;
+
+{ Equivelent to QualifyTableName but first looks up the database by name
+  after finding the corresponding session. }
+function QualifyTableNameByName(const SessionName, DatabaseName, TableName: string): string;
+
+{ Returns whether the dataset has constraints recorded in the dictionary }
+function HasConstraints(Dataset: TDBDataset): Boolean;
+
+{ Will remove constraints marked FromDictionary and replace them with the
+  constraints recorded in the dictionary }
+procedure UpdateConstraints(Dataset: TDBDataset; Constraints: TCheckConstraints);
+
+{ UpdateDataset updates the given dataset to the current settings and
+  constraints in the dataset.  For a TTable it will update the fields associated
+  with that table and all of the constraints for that table.  For a query or
+  stored procedure, it will use the AttributeSet property of the TField's to
+  determine which attribute set to update the field with.  It will also parse
+  the query to for the associated tables and update the field record constraints
+  from the included tables. This is progromatically equivilent to using
+  "Retrieve attributes" for all of the fields in the fields editor followed by
+  "Read From Dictionary" in the Constraint's property editor. }
+procedure UpdateDataset(Dataset: TDBDataset);
+
+implementation

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -19,231 +19,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-static void AbbreviateName(LPTSTR lpszCanon, int cchMax, BOOL bAtLeastName);
-
-/////////////////////////////////////////////////////////////////////////////
-// CRecentFileList
-
-CRecentFileList::CRecentFileList(UINT nStart, LPCTSTR lpszSection,
-	LPCTSTR lpszEntryFormat, int nSize, int nMaxDispLen)
-{
-	ASSERT(nSize != 0);
-	m_arrNames = new CString[nSize];
-	m_nSize = nSize;
-
-	m_nStart = nStart;
-	m_strSectionName = lpszSection;
-	m_strEntryFormat = lpszEntryFormat;
-	m_nMaxDisplayLength = nMaxDispLen;
-}
-
-CRecentFileList::~CRecentFileList()
-{
-	delete[] m_arrNames;
-}
-
-// Operations
-void CRecentFileList::Add(LPCTSTR lpszPathName)
-{
-	ASSERT(m_arrNames != NULL);
-	ASSERT(lpszPathName != NULL);
-	ASSERT(AfxIsValidString(lpszPathName));
-
-	// fully qualify the path name
-	TCHAR szTemp[_MAX_PATH];
-	AfxFullPath(szTemp, lpszPathName);
-
-	// update the MRU list, if an existing MRU string matches file name
-	for (int iMRU = 0; iMRU < m_nSize-1; iMRU++)
-	{
-		if (AfxComparePath(m_arrNames[iMRU], szTemp))
-			break;      // iMRU will point to matching entry
-	}
-	// move MRU strings before this one down
-	for (; iMRU > 0; iMRU--)
-	{
-		ASSERT(iMRU > 0);
-		ASSERT(iMRU < m_nSize);
-		m_arrNames[iMRU] = m_arrNames[iMRU-1];
-	}
-	// place this one at the beginning
-	m_arrNames[0] = lpszPathName;
-}
-
-void CRecentFileList::Remove(int nIndex)
-{
-	ASSERT(nIndex >= 0);
-	ASSERT(nIndex < m_nSize);
-
-	m_arrNames[nIndex].Empty();
-	for (int iMRU = nIndex; iMRU < m_nSize-1; iMRU++)
-		m_arrNames[iMRU] = m_arrNames[iMRU+1];
-
-	ASSERT(iMRU < m_nSize);
-	m_arrNames[iMRU].Empty();
-}
-
-BOOL CRecentFileList::GetDisplayName(CString& strName, int nIndex,
-	LPCTSTR lpszCurDir, int nCurDir, BOOL bAtLeastName) const
-{
-	UNUSED(nCurDir); // not used in release mac builds
-	UNUSED(lpszCurDir); // not used in release mac builds
-	ASSERT(lpszCurDir == NULL || AfxIsValidString(lpszCurDir, nCurDir));
-
-	ASSERT(m_arrNames != NULL);
-	ASSERT(nIndex < m_nSize);
-	if (m_arrNames[nIndex].IsEmpty())
-		return FALSE;
-
-	LPTSTR lpch = strName.GetBuffer(_MAX_PATH);
-#ifndef _MAC
-	lstrcpy(lpch, m_arrNames[nIndex]);
-	// nLenDir is the length of the directory part of the full path
-	int nLenDir = lstrlen(lpch) - (AfxGetFileName(lpch, NULL, 0) - 1);
-	BOOL bSameDir = FALSE;
-	if (nLenDir == nCurDir)
-	{
-		TCHAR chSave = lpch[nLenDir];
-		lpch[nCurDir] = 0;  // terminate at same location as current dir
-		bSameDir = lstrcmpi(lpszCurDir, lpch) == 0;
-		lpch[nLenDir] = chSave;
-	}
-	// copy the full path, otherwise abbreviate the name
-	if (bSameDir)
-	{
-		// copy file name only since directories are same
-		TCHAR szTemp[_MAX_PATH];
-		AfxGetFileTitle(lpch+nCurDir, szTemp, _countof(szTemp));
-		lstrcpyn(lpch, szTemp, _MAX_PATH);
-	}
-	else if (m_nMaxDisplayLength != -1)
-	{
-		// strip the extension if the system calls for it
-		TCHAR szTemp[_MAX_PATH];
-		AfxGetFileTitle(lpch+nLenDir, szTemp, _countof(szTemp));
-		lstrcpyn(lpch+nLenDir, szTemp, _MAX_PATH-nLenDir);
-
-		// abbreviate name based on what will fit in limited space
-		AbbreviateName(lpch, m_nMaxDisplayLength, bAtLeastName);
-	}
-#else
-	UNUSED_ALWAYS(bAtLeastName);
-
-	// for Mac just show the file title name without path
-	AfxGetFileTitle(m_arrNames[nIndex], lpch, _MAX_PATH);
-#endif
-	strName.ReleaseBuffer();
-	return TRUE;
-}
-
-void CRecentFileList::UpdateMenu(CCmdUI* pCmdUI)
-{
-	ASSERT(m_arrNames != NULL);
-
-	CMenu* pMenu = pCmdUI->m_pMenu;
-	if (m_strOriginal.IsEmpty() && pMenu != NULL)
-		pMenu->GetMenuString(pCmdUI->m_nID, m_strOriginal, MF_BYCOMMAND);
-
-	if (m_arrNames[0].IsEmpty())
-	{
-		// no MRU files
-		if (!m_strOriginal.IsEmpty())
-			pCmdUI->SetText(m_strOriginal);
-		pCmdUI->Enable(FALSE);
-		return;
-	}
-
-	if (pCmdUI->m_pMenu == NULL)
-		return;
-
-	for (int iMRU = 0; iMRU < m_nSize; iMRU++)
-		pCmdUI->m_pMenu->DeleteMenu(pCmdUI->m_nID + iMRU, MF_BYCOMMAND);
-
-#ifndef _MAC
-	TCHAR szCurDir[_MAX_PATH];
-	GetCurrentDirectory(_MAX_PATH, szCurDir);
-	int nCurDir = lstrlen(szCurDir);
-	ASSERT(nCurDir >= 0);
-	szCurDir[nCurDir] = '\\';
-	szCurDir[++nCurDir] = '\0';
-#endif
-
-	CString strName;
-	CString strTemp;
-	for (iMRU = 0; iMRU < m_nSize; iMRU++)
-	{
-#ifndef _MAC
-		if (!GetDisplayName(strName, iMRU, szCurDir, nCurDir))
-			break;
-#else
-		if (!GetDisplayName(strName, iMRU, NULL, 0))
-			break;
-#endif
-		// double up any '&' characters so they are not underlined
-		LPCTSTR lpszSrc = strName;
-		LPTSTR lpszDest = strTemp.GetBuffer(strName.GetLength()*2);
-		while (*lpszSrc != 0)
-		{
-			if (*lpszSrc == '&')
-				*lpszDest++ = '&';
-			if (_istlead(*lpszSrc))
-				*lpszDest++ = *lpszSrc++;
-			*lpszDest++ = *lpszSrc++;
-		}
-		*lpszDest = 0;
-		strTemp.ReleaseBuffer();
-
-		// insert mnemonic + the file name
-		TCHAR buf[10];
-		wsprintf(buf, _T("&%d "), (iMRU+1+m_nStart) % 10);
-		pCmdUI->m_pMenu->InsertMenu(pCmdUI->m_nIndex++,
-			MF_STRING | MF_BYPOSITION, pCmdUI->m_nID++,
-			CString(buf) + strTemp);
-	}
-
-	// update end menu count
-	pCmdUI->m_nIndex--; // point to last menu added
-	pCmdUI->m_nIndexMax = pCmdUI->m_pMenu->GetMenuItemCount();
-
-	pCmdUI->m_bEnableChanged = TRUE;    // all the added items are enabled
-}
-
-void CRecentFileList::WriteList()
-{
-	ASSERT(m_arrNames != NULL);
-	ASSERT(!m_strSectionName.IsEmpty());
-	ASSERT(!m_strEntryFormat.IsEmpty());
-	LPTSTR pszEntry = new TCHAR[m_strEntryFormat.GetLength()+5];
-	CWinApp* pApp = AfxGetApp();
-	pApp->WriteProfileString(m_strSectionName, NULL, NULL);
-	for (int iMRU = 0; iMRU < m_nSize; iMRU++)
-	{
-		wsprintf(pszEntry, m_strEntryFormat, iMRU + 1);
-		if (!m_arrNames[iMRU].IsEmpty())
-		{
-			pApp->WriteProfileString(m_strSectionName, pszEntry,
-				m_arrNames[iMRU]);
-		}
-	}
-	delete[] pszEntry;
-}
-
-void CRecentFileList::ReadList()
-{
-	ASSERT(m_arrNames != NULL);
-	ASSERT(!m_strSectionName.IsEmpty());
-	ASSERT(!m_strEntryFormat.IsEmpty());
-	LPTSTR pszEntry = new TCHAR[m_strEntryFormat.GetLength()+5];
-	CWinApp* pApp = AfxGetApp();
-	for (int iMRU = 0; iMRU < m_nSize; iMRU++)
-	{
-		wsprintf(pszEntry, m_strEntryFormat, iMRU + 1);
-		m_arrNames[iMRU] = pApp->GetProfileString(
-			m_strSectionName, pszEntry, &afxChNil);
-	}
-	delete[] pszEntry;
-}
-
 /////////////////////////////////////////////////////////////////////////////
 // lpszCanon = C:\MYAPP\DEBUGS\C\TESWIN.C
 //
@@ -257,8 +32,7 @@ void CRecentFileList::ReadList()
 // 24-25    x   C:\...\DEBUGS\C\TESWIN.C
 // 26+      x   C:\MYAPP\DEBUGS\C\TESWIN.C
 
-#ifndef _MAC
-static void AbbreviateName(LPTSTR lpszCanon, int cchMax, BOOL bAtLeastName)
+AFX_STATIC void AFXAPI _AfxAbbreviateName(LPTSTR lpszCanon, int cchMax, BOOL bAtLeastName)
 {
 	int cchFullPath, cchFileName, cchVolName;
 	const TCHAR* lpszCur;
@@ -344,6 +118,213 @@ static void AbbreviateName(LPTSTR lpszCanon, int cchMax, BOOL bAtLeastName)
 	lstrcat(lpszCanon, _T("\\..."));
 	lstrcat(lpszCanon, lpszCur);
 }
-#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// CRecentFileList
+
+CRecentFileList::CRecentFileList(UINT nStart, LPCTSTR lpszSection,
+	LPCTSTR lpszEntryFormat, int nSize, int nMaxDispLen)
+{
+	ASSERT(nSize != 0);
+	m_arrNames = new CString[nSize];
+	m_nSize = nSize;
+
+	m_nStart = nStart;
+	m_strSectionName = lpszSection;
+	m_strEntryFormat = lpszEntryFormat;
+	m_nMaxDisplayLength = nMaxDispLen;
+}
+
+CRecentFileList::~CRecentFileList()
+{
+	delete[] m_arrNames;
+}
+
+// Operations
+void CRecentFileList::Add(LPCTSTR lpszPathName)
+{
+	ASSERT(m_arrNames != NULL);
+	ASSERT(lpszPathName != NULL);
+	ASSERT(AfxIsValidString(lpszPathName));
+
+	// fully qualify the path name
+	TCHAR szTemp[_MAX_PATH];
+	AfxFullPath(szTemp, lpszPathName);
+
+	// update the MRU list, if an existing MRU string matches file name
+	for (int iMRU = 0; iMRU < m_nSize-1; iMRU++)
+	{
+		if (AfxComparePath(m_arrNames[iMRU], szTemp))
+			break;      // iMRU will point to matching entry
+	}
+	// move MRU strings before this one down
+	for (; iMRU > 0; iMRU--)
+	{
+		ASSERT(iMRU > 0);
+		ASSERT(iMRU < m_nSize);
+		m_arrNames[iMRU] = m_arrNames[iMRU-1];
+	}
+	// place this one at the beginning
+	m_arrNames[0] = szTemp;
+}
+
+void CRecentFileList::Remove(int nIndex)
+{
+	ASSERT(nIndex >= 0);
+	ASSERT(nIndex < m_nSize);
+
+	m_arrNames[nIndex].Empty();
+	for (int iMRU = nIndex; iMRU < m_nSize-1; iMRU++)
+		m_arrNames[iMRU] = m_arrNames[iMRU+1];
+
+	ASSERT(iMRU < m_nSize);
+	m_arrNames[iMRU].Empty();
+}
+
+BOOL CRecentFileList::GetDisplayName(CString& strName, int nIndex,
+	LPCTSTR lpszCurDir, int nCurDir, BOOL bAtLeastName) const
+{
+	ASSERT(lpszCurDir == NULL || AfxIsValidString(lpszCurDir, nCurDir));
+
+	ASSERT(m_arrNames != NULL);
+	ASSERT(nIndex < m_nSize);
+	if (m_arrNames[nIndex].IsEmpty())
+		return FALSE;
+
+	LPTSTR lpch = strName.GetBuffer(_MAX_PATH);
+	lstrcpy(lpch, m_arrNames[nIndex]);
+	// nLenDir is the length of the directory part of the full path
+	int nLenDir = lstrlen(lpch) - (AfxGetFileName(lpch, NULL, 0) - 1);
+	BOOL bSameDir = FALSE;
+	if (nLenDir == nCurDir)
+	{
+		TCHAR chSave = lpch[nLenDir];
+		lpch[nCurDir] = 0;  // terminate at same location as current dir
+		bSameDir = lstrcmpi(lpszCurDir, lpch) == 0;
+		lpch[nLenDir] = chSave;
+	}
+	// copy the full path, otherwise abbreviate the name
+	if (bSameDir)
+	{
+		// copy file name only since directories are same
+		TCHAR szTemp[_MAX_PATH];
+		AfxGetFileTitle(lpch+nCurDir, szTemp, _countof(szTemp));
+		lstrcpyn(lpch, szTemp, _MAX_PATH);
+	}
+	else if (m_nMaxDisplayLength != -1)
+	{
+		// strip the extension if the system calls for it
+		TCHAR szTemp[_MAX_PATH];
+		AfxGetFileTitle(lpch+nLenDir, szTemp, _countof(szTemp));
+		lstrcpyn(lpch+nLenDir, szTemp, _MAX_PATH-nLenDir);
+
+		// abbreviate name based on what will fit in limited space
+		_AfxAbbreviateName(lpch, m_nMaxDisplayLength, bAtLeastName);
+	}
+	strName.ReleaseBuffer();
+	return TRUE;
+}
+
+void CRecentFileList::UpdateMenu(CCmdUI* pCmdUI)
+{
+	ASSERT(m_arrNames != NULL);
+
+	CMenu* pMenu = pCmdUI->m_pMenu;
+	if (m_strOriginal.IsEmpty() && pMenu != NULL)
+		pMenu->GetMenuString(pCmdUI->m_nID, m_strOriginal, MF_BYCOMMAND);
+
+	if (m_arrNames[0].IsEmpty())
+	{
+		// no MRU files
+		if (!m_strOriginal.IsEmpty())
+			pCmdUI->SetText(m_strOriginal);
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+
+	if (pCmdUI->m_pMenu == NULL)
+		return;
+
+	for (int iMRU = 0; iMRU < m_nSize; iMRU++)
+		pCmdUI->m_pMenu->DeleteMenu(pCmdUI->m_nID + iMRU, MF_BYCOMMAND);
+
+	TCHAR szCurDir[_MAX_PATH];
+	GetCurrentDirectory(_MAX_PATH, szCurDir);
+	int nCurDir = lstrlen(szCurDir);
+	ASSERT(nCurDir >= 0);
+	szCurDir[nCurDir] = '\\';
+	szCurDir[++nCurDir] = '\0';
+
+	CString strName;
+	CString strTemp;
+	for (iMRU = 0; iMRU < m_nSize; iMRU++)
+	{
+		if (!GetDisplayName(strName, iMRU, szCurDir, nCurDir))
+			break;
+
+		// double up any '&' characters so they are not underlined
+		LPCTSTR lpszSrc = strName;
+		LPTSTR lpszDest = strTemp.GetBuffer(strName.GetLength()*2);
+		while (*lpszSrc != 0)
+		{
+			if (*lpszSrc == '&')
+				*lpszDest++ = '&';
+			if (_istlead(*lpszSrc))
+				*lpszDest++ = *lpszSrc++;
+			*lpszDest++ = *lpszSrc++;
+		}
+		*lpszDest = 0;
+		strTemp.ReleaseBuffer();
+
+		// insert mnemonic + the file name
+		TCHAR buf[10];
+		wsprintf(buf, _T("&%d "), (iMRU+1+m_nStart) % 10);
+		pCmdUI->m_pMenu->InsertMenu(pCmdUI->m_nIndex++,
+			MF_STRING | MF_BYPOSITION, pCmdUI->m_nID++,
+			CString(buf) + strTemp);
+	}
+
+	// update end menu count
+	pCmdUI->m_nIndex--; // point to last menu added
+	pCmdUI->m_nIndexMax = pCmdUI->m_pMenu->GetMenuItemCount();
+
+	pCmdUI->m_bEnableChanged = TRUE;    // all the added items are enabled
+}
+
+void CRecentFileList::WriteList()
+{
+	ASSERT(m_arrNames != NULL);
+	ASSERT(!m_strSectionName.IsEmpty());
+	ASSERT(!m_strEntryFormat.IsEmpty());
+	LPTSTR pszEntry = new TCHAR[m_strEntryFormat.GetLength()+5];
+	CWinApp* pApp = AfxGetApp();
+	pApp->WriteProfileString(m_strSectionName, NULL, NULL);
+	for (int iMRU = 0; iMRU < m_nSize; iMRU++)
+	{
+		wsprintf(pszEntry, m_strEntryFormat, iMRU + 1);
+		if (!m_arrNames[iMRU].IsEmpty())
+		{
+			pApp->WriteProfileString(m_strSectionName, pszEntry,
+				m_arrNames[iMRU]);
+		}
+	}
+	delete[] pszEntry;
+}
+
+void CRecentFileList::ReadList()
+{
+	ASSERT(m_arrNames != NULL);
+	ASSERT(!m_strSectionName.IsEmpty());
+	ASSERT(!m_strEntryFormat.IsEmpty());
+	LPTSTR pszEntry = new TCHAR[m_strEntryFormat.GetLength()+5];
+	CWinApp* pApp = AfxGetApp();
+	for (int iMRU = 0; iMRU < m_nSize; iMRU++)
+	{
+		wsprintf(pszEntry, m_strEntryFormat, iMRU + 1);
+		m_arrNames[iMRU] = pApp->GetProfileString(
+			m_strSectionName, pszEntry, &afxChNil);
+	}
+	delete[] pszEntry;
+}
 
 /////////////////////////////////////////////////////////////////////////////

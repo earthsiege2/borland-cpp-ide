@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -427,7 +427,6 @@ BOOL COleException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
 	if (pnHelpContext != NULL)
 		*pnHelpContext = 0;
 
-#ifndef _MAC
 	LPTSTR lpBuffer;
 	if (::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
 				FORMAT_MESSAGE_FROM_SYSTEM,
@@ -444,12 +443,6 @@ BOOL COleException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
 		LocalFree(lpBuffer);
 		return TRUE;
 	}
-
-#else
-	UNUSED_ALWAYS(nMaxError);
-	*lpszError = '\0';
-	return FALSE;
-#endif // _MAC
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -473,11 +466,17 @@ SCODE PASCAL COleException::Process(const CException* pAnyException)
 /////////////////////////////////////////////////////////////////////////////
 // Implementation helpers
 
-void AFXAPI AfxMergeMenus(CMenu* pMenuShared, CMenu* pMenuSource,
-	LONG* lpMenuWidths, int iWidthIndex)
+HMENU AFXAPI AfxMergeMenus(HMENU hMenuShared, HMENU hMenuSource,
+	LONG* lpMenuWidths, int iWidthIndex, BOOL bMergeHelpMenus /* = FALSE */)
 {
+	ASSERT(hMenuShared != NULL && IsMenu(hMenuShared));
+	ASSERT(hMenuSource != NULL && IsMenu(hMenuSource));
+
+	BOOL bHelpMergedAsSubMenu = FALSE;
+	HMENU hHelpSubMenu = NULL;
+
 	// copy the popups from the pMenuSource
-	int cMenuItems = pMenuSource->GetMenuItemCount();
+	int cMenuItems = GetMenuItemCount(hMenuSource);
 	int cGroupWidth = 0;
 	int nPosition = 0;
 
@@ -489,10 +488,10 @@ void AFXAPI AfxMergeMenus(CMenu* pMenuShared, CMenu* pMenuSource,
 	for (int i = 0; i < cMenuItems; i++)
 	{
 		// get the HMENU of the popup
-		HMENU hMenuPopup = ::GetSubMenu(pMenuSource->m_hMenu, i);
+		HMENU hMenuPopup = ::GetSubMenu(hMenuSource, i);
 
 		// separators move us to next group
-		UINT state = pMenuSource->GetMenuState(i, MF_BYPOSITION);
+		UINT state = GetMenuState(hMenuSource, i, MF_BYPOSITION);
 		if (hMenuPopup == NULL && (state & MF_SEPARATOR) != 0)
 		{
 			ASSERT(iWidthIndex <= 5);   // servers should not touch past 5
@@ -504,21 +503,55 @@ void AFXAPI AfxMergeMenus(CMenu* pMenuShared, CMenu* pMenuSource,
 		}
 		else
 		{
+			HMENU hHelpMenu = NULL;
+
+			// are we processing the help menu group?
+
+			if (bMergeHelpMenus && iWidthIndex == 5)
+			{
+				// if so, see if the container has Help any menu items
+				if (lpMenuWidths[iWidthIndex] == 1)
+				{
+					// get the help menu from the container
+					hHelpMenu = GetSubMenu(hMenuShared, nPosition);
+				}
+			}
+
 			// get the menu item text
 			TCHAR szItemText[256];
-			int nLen = pMenuSource->GetMenuString(i, szItemText,
+			int nLen = GetMenuString(hMenuSource, i, szItemText,
 				sizeof szItemText, MF_BYPOSITION);
 
 			// popups are handled differently than normal menu items
 			if (hMenuPopup != NULL)
 			{
-				if (::GetMenuItemCount(hMenuPopup) != 0)
+				if (hHelpMenu != NULL)
+				{
+					CString strTearOff = AfxGetAppName();
+					if (!strTearOff.IsEmpty())
+						strTearOff += ' ';
+					strTearOff += szItemText;
+
+					// container has help items -- add ours to its submenu
+					AppendMenu(hHelpMenu, MF_STRING | MF_POPUP,
+						(UINT)hMenuPopup, strTearOff);
+
+					// clear the count of Help group items and add
+					// the help menu to the window group
+
+					lpMenuWidths[iWidthIndex] = 0;
+					lpMenuWidths[iWidthIndex-1]++;
+
+					bHelpMergedAsSubMenu = TRUE;
+					hHelpSubMenu = hMenuPopup;
+				}
+				else if (::GetMenuItemCount(hMenuPopup) != 0)
 				{
 					// strip the HIBYTE because it contains a count of items
 					state = LOBYTE(state) | MF_POPUP;   // must be popup
 
 					// non-empty popup -- add it to the shared menu bar
-					pMenuShared->InsertMenu(nPosition, state | MF_BYPOSITION,
+					InsertMenu(hMenuShared, nPosition, state | MF_BYPOSITION,
 						(UINT)hMenuPopup, szItemText);
 					++nPosition;
 					++cGroupWidth;
@@ -530,8 +563,8 @@ void AFXAPI AfxMergeMenus(CMenu* pMenuShared, CMenu* pMenuSource,
 				ASSERT(szItemText[0] != 0);
 
 				// here the state does not contain a count in the HIBYTE
-				pMenuShared->InsertMenu(nPosition, state | MF_BYPOSITION,
-					pMenuSource->GetMenuItemID(i), szItemText);
+				InsertMenu(hMenuShared, nPosition, state | MF_BYPOSITION,
+					GetMenuItemID(hMenuSource, i), szItemText);
 				++nPosition;
 				++cGroupWidth;
 			}
@@ -539,29 +572,60 @@ void AFXAPI AfxMergeMenus(CMenu* pMenuShared, CMenu* pMenuSource,
 	}
 
 	// set the last group width
-	ASSERT(iWidthIndex <= 5);   // servers should not touch past 5
-	lpMenuWidths[iWidthIndex] = cGroupWidth;
+
+	if (!bHelpMergedAsSubMenu)
+	{
+		ASSERT(iWidthIndex <= 5);   // servers should not touch past 5
+		lpMenuWidths[iWidthIndex] = cGroupWidth;
+	}
+
+	return hHelpSubMenu;
 }
 
-void AFXAPI AfxUnmergeMenus(CMenu* pMenuShared, CMenu* pMenuSource)
+void AFXAPI AfxUnmergeMenus(HMENU hMenuShared, HMENU hMenuSource,
+	HMENU hHelpMenuPopup /* = NULL */)
 {
-	int cOurItems = pMenuSource->GetMenuItemCount();
-	int cMenuItems = pMenuShared->GetMenuItemCount();
+	ASSERT(hMenuShared != NULL && IsMenu(hMenuShared));
+	ASSERT(hMenuSource != NULL && IsMenu(hMenuSource));
+	ASSERT(hHelpMenuPopup == NULL || IsMenu(hHelpMenuPopup));
+
+	int cOurItems = GetMenuItemCount(hMenuSource);
+	int cMenuItems = GetMenuItemCount(hMenuShared);
 
 	for (int i = cMenuItems-1; i >= 0; i--)
 	{
 		// check out the popup menus
-		HMENU hMenuPopup = ::GetSubMenu(pMenuShared->m_hMenu, i);
+		HMENU hMenuPopup = ::GetSubMenu(hMenuShared, i);
 		if (hMenuPopup != NULL)
 		{
-			// if it is one of ours, remove it from the pMenuShared
-			for (int j = 0; j < cOurItems; j++)
+			// if we have a Help submenu, check to see if it appears in this
+			// submenu someplace... this normally happens only in
+			// DocObject frame windows
+
+			if (hHelpMenuPopup != NULL)
 			{
-				if (::GetSubMenu(pMenuSource->m_hMenu, j) == hMenuPopup)
+				int cPopupItems = ::GetMenuItemCount(hMenuPopup);
+				for (int k = 0; k < cPopupItems; k++)
 				{
-					// remove the menu from pMenuShared
-					pMenuShared->RemoveMenu(i, MF_BYPOSITION);
-					break;
+					if (::GetSubMenu(hMenuPopup, k) == hHelpMenuPopup)
+					{
+						::RemoveMenu(hMenuPopup, k, MF_BYPOSITION);
+						hHelpMenuPopup = NULL;  // can only have one
+						break;
+					}
+				}
+			}
+			else
+			{
+				// if it is one of ours, remove it from the pMenuShared
+				for (int j = 0; j < cOurItems; j++)
+				{
+					if (::GetSubMenu(hMenuSource, j) == hMenuPopup)
+					{
+						// remove the menu from pMenuShared
+						RemoveMenu(hMenuShared, i, MF_BYPOSITION);
+						break;
+					}
 				}
 			}
 		}
@@ -580,12 +644,12 @@ LPFORMATETC AFXAPI _AfxFillFormatEtc(
 		lpFormatEtc->ptd = NULL;
 		lpFormatEtc->dwAspect = DVASPECT_CONTENT;
 		lpFormatEtc->lindex = -1;
-		lpFormatEtc->tymed = (TYMED)-1;
+		lpFormatEtc->tymed = (DWORD) -1;
 	}
 	return lpFormatEtc;
 }
 
-static HGLOBAL AFXAPI CopyGlobalMemory(HGLOBAL hDest, HGLOBAL hSource)
+AFX_STATIC HGLOBAL AFXAPI _AfxCopyGlobalMemory(HGLOBAL hDest, HGLOBAL hSource)
 {
 	ASSERT(hSource != NULL);
 
@@ -646,7 +710,7 @@ BOOL AFXAPI _AfxCopyStgMedium(
 		case TYMED_MFPICT:
 			{
 				// copy LPMETAFILEPICT struct + embedded HMETAFILE
-				HGLOBAL hDest = ::CopyGlobalMemory(NULL, lpSource->hGlobal);
+				HGLOBAL hDest = _AfxCopyGlobalMemory(NULL, lpSource->hGlobal);
 				if (hDest == NULL)
 					return FALSE;
 				LPMETAFILEPICT lpPict = (LPMETAFILEPICT)::GlobalLock(hDest);
@@ -671,6 +735,20 @@ BOOL AFXAPI _AfxCopyStgMedium(
 			lpDest->hGlobal = NULL;
 			break;
 
+		case TYMED_FILE:
+			{
+				USES_CONVERSION;
+				lpDest->tymed = TYMED_FILE;
+				ASSERT(lpSource->lpszFileName != NULL);
+				UINT cbSrc = ocslen(lpSource->lpszFileName);
+				LPOLESTR szFileName = (LPOLESTR)CoTaskMemAlloc(cbSrc*sizeof(OLECHAR));
+				lpDest->lpszFileName = szFileName;
+				if (szFileName == NULL)
+					return FALSE;
+				memcpy(szFileName, lpSource->lpszFileName,  (cbSrc+1)*sizeof(OLECHAR));
+				return TRUE;
+			}
+
 		// unable to create + copy other TYMEDs
 		default:
 			return FALSE;
@@ -682,7 +760,7 @@ BOOL AFXAPI _AfxCopyStgMedium(
 	{
 	case TYMED_HGLOBAL:
 		{
-			HGLOBAL hDest = ::CopyGlobalMemory(lpDest->hGlobal,
+			HGLOBAL hDest = _AfxCopyGlobalMemory(lpDest->hGlobal,
 				lpSource->hGlobal);
 			if (hDest == NULL)
 				return FALSE;
@@ -734,6 +812,15 @@ BOOL AFXAPI _AfxCopyStgMedium(
 				return FALSE;
 		}
 		return TRUE;
+
+	case TYMED_FILE:
+		{
+			USES_CONVERSION;
+			ASSERT(lpSource->lpszFileName != NULL);
+			ASSERT(lpDest->lpszFileName != NULL);
+			return CopyFile(OLE2T(lpSource->lpszFileName), OLE2T(lpDest->lpszFileName), FALSE);
+		}
+
 
 	case TYMED_ENHMF:
 	case TYMED_GDI:
@@ -856,7 +943,7 @@ HGLOBAL AFXAPI _AfxOleGetObjectDescriptorData(
 
 	// query for IOleLink
 	lpOleLink = QUERYINTERFACE(lpOleObj, IOleLink);
-	fIsLink = (lpOleLink ? TRUE : FALSE);
+	fIsLink = lpOleLink != NULL;
 
 	// query for IViewObject2
 	lpViewObj2 = QUERYINTERFACE(lpOleObj, IViewObject2);
@@ -1015,7 +1102,7 @@ SCODE AFXAPI _AfxOleDoTreatAsClass(
 		StringFromCLSID(rclsid, &lpOleStr);
 		lpszCLSID = TASKSTRINGOLE2T(lpOleStr);
 		RegSetValue(hKey, lpszCLSID, REG_SZ, lpszUserType,
-			lstrlen(lpszUserType));
+			lstrlen(lpszUserType) * sizeof(TCHAR));
 
 		CoTaskMemFree(lpszCLSID);
 		sc = CoTreatAsClass(rclsid, rclsidNew);
@@ -1201,16 +1288,8 @@ HDC WINAPI _AfxOleCreateDC(DVTARGETDEVICE* ptd)
 	lpszDeviceName = (LPOLESTR)((BYTE*)ptd + ptd->tdDeviceNameOffset);
 	lpszPortName   = (LPOLESTR)((BYTE*)ptd + ptd->tdPortNameOffset);
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   LPCSTR pBAfxTemp1 = OLE2CT(lpszDriverName);
-   LPCSTR pBAfxTemp2 = OLE2CT(lpszDeviceName);
-   LPCSTR pBAfxTemp3 = OLE2CT(lpszPortName);
-   DEVMODEOLE2T(lpDevMode);
-	return ::CreateDC(pBAfxTemp1, pBAfxTemp2, pBAfxTemp3, (LPDEVMODEA)pBAfxConv);
-#else    // __BORLANDC__
 	return ::CreateDC(OLE2CT(lpszDriverName), OLE2CT(lpszDeviceName),
 		OLE2CT(lpszPortName), DEVMODEOLE2T(lpDevMode));
-#endif   // __BORLANDC__
 }
 
 void AFXAPI _AfxDeleteMetafilePict(HGLOBAL hMetaPict)

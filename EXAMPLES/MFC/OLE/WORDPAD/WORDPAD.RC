@@ -621,7 +621,7 @@ BEGIN
             VALUE "FileDescription", "WordPad MFC Application\0"
             VALUE "FileVersion", "1.0\0"
             VALUE "InternalName", "wordpad\0"
-            VALUE "LegalCopyright", "Copyright © Microsoft Corp. 1995\0"
+            VALUE "LegalCopyright", "Copyright © Microsoft Corp. 1997\0"
             VALUE "OriginalFilename", "WORDPAD.EXE\0"
             VALUE "ProductName", "Microsoft® Windows (TM) Operating System\0"
             VALUE "ProductVersion", "4.0\0"

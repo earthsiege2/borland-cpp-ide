@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -67,12 +67,7 @@ LPMONIKER COleLinkingDoc::GetMoniker(OLEGETMONIKER nAssign)
 
 	// return file moniker based on current path name
 	LPMONIKER lpMoniker;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(m_strMoniker);
-	CreateFileMoniker((LPCWSTR)pBAfxConv, &lpMoniker);
-#else    // __BORLANDC__
 	CreateFileMoniker(T2COLE(m_strMoniker), &lpMoniker);
-#endif   // __BORLANDC__
 	return lpMoniker;
 }
 
@@ -97,12 +92,7 @@ BOOL COleLinkingDoc::Register(COleObjectFactory* pFactory, LPCTSTR lpszPathName)
 	m_strMoniker.Empty();
 	if (lpszPathName != NULL)
 	{
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(lpszPathName);
-		if (CreateFileMoniker((LPCWSTR)pBAfxConv, &m_lpMonikerROT) != S_OK)
-#else    // __BORLANDC__
 		if (CreateFileMoniker(T2COLE(lpszPathName), &m_lpMonikerROT) != S_OK)
-#endif   // __BORLANDC__
 			bResult = FALSE;
 	}
 
@@ -199,7 +189,16 @@ BOOL COleLinkingDoc::OnOpenDocument(LPCTSTR lpszPathName)
 		return FALSE;
 	}
 
-	AfxOleSetUserCtrl(TRUE);
+	// if the app was started only to print, don't set user control
+
+	CWinApp* pApp = AfxGetApp();
+	ASSERT(pApp != NULL);
+	if (pApp->m_pCmdInfo == NULL ||
+		(pApp->m_pCmdInfo->m_nShellCommand != CCommandLineInfo::FileDDE &&
+		 pApp->m_pCmdInfo->m_nShellCommand != CCommandLineInfo::FilePrint))
+	{
+		AfxOleSetUserCtrl(TRUE);
+	}
 
 	return TRUE;
 }
@@ -396,8 +395,21 @@ void COleLinkingDoc::ReportSaveLoadException(LPCTSTR lpszPathName,
 	// watch out for special mode
 	if (m_bDeferErrors)
 	{
-		// save the exception for later
+		// Note: CException::Delete does not treat m_bAutoDelete as a
+		// traditional  BOOL. Only if it is greater than zero does it
+		// take on a TRUE quality.  (that is, all tests are for
+		// m_bAutoDelete > 0).  So, if m_bAutoDelete is already "true"
+		// (1) this will make it false, and if it is already "false"
+		//  it is still considered "false".  Valid values for
+		// m_bAutoDelete are thus negative, 0, and 1.  Values greater
+		// than 1, although not explicitly asserted in CException,
+		// would be invalid.  In short, by using increment  and
+		// decrement operations, we enable this to work with both
+		// self-deleting and non-self-deleting CException classes.
+
 		--e->m_bAutoDelete;
+
+		// save the exception for later
 		m_pLastException = e;
 		return;
 	}
@@ -416,7 +428,13 @@ SCODE COleLinkingDoc::EndDeferErrors(SCODE sc)
 		ASSERT_VALID(m_pLastException);
 		if (sc == S_OK)
 			sc = COleException::Process(m_pLastException);
+
+		// Note: See note above in ReportSaveLoadException for
+		// a comment regarding the special treatment of m_bAutoDelete.
+
 		++m_pLastException->m_bAutoDelete;
+
+		// now get rid of the exception that we saved
 		m_pLastException->Delete();
 		m_pLastException = NULL;
 	}
@@ -499,7 +517,7 @@ STDMETHODIMP COleLinkingDoc::XPersistFile::Load(
 		if (!pThis->OnOpenDocument(lpszFileNameT))
 		{
 			AfxOleSetUserCtrl(bUserCtrl);
-			return S_FALSE;
+			return sc;
 		}
 		pThis->SendInitialUpdate();
 
@@ -530,14 +548,9 @@ STDMETHODIMP COleLinkingDoc::XPersistFile::Save(
 	TRY
 	{
 		// delegate to file-based Save/Save As implementation
-		ASSERT(pThis->m_bRemember == TRUE);
+		ASSERT(pThis->m_bRemember);
 		pThis->m_bRemember = fRemember;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      OLE2CT(lpszFileName);
-		pThis->OnSaveDocument((LPCSTR)pBAfxConv);
-#else    // __BORLANDC__
 		pThis->OnSaveDocument(OLE2CT(lpszFileName));
-#endif   // __BORLANDC__
 		sc = S_OK;
 	}
 	END_TRY
@@ -557,12 +570,7 @@ STDMETHODIMP COleLinkingDoc::XPersistFile::SaveCompleted(LPCOLESTR lpszFileName)
 	TRY
 	{
 		// set the path name, but don't add to MRU list
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      OLE2CT(lpszFileName);
-		pThis->SetPathName((LPCSTR)pBAfxConv, FALSE);
-#else    // __BORLANDC__
 		pThis->SetPathName(OLE2CT(lpszFileName), FALSE);
-#endif   // __BORLANDC__
 	}
 	END_TRY
 
@@ -663,25 +671,14 @@ STDMETHODIMP COleLinkingDoc::XOleItemContainer::ParseDisplayName(LPBC lpbc,
 
 	// attempt to get the object
 	LPUNKNOWN lpUnknown;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2OLE(szItemName);
-	SCODE sc = GetObject((LPWSTR)pBAfxConv, BINDSPEED_INDEFINITE, lpbc,
-		IID_IUnknown, (LPLP)&lpUnknown);
-#else    // __BORLANDC__
 	SCODE sc = GetObject(T2OLE(szItemName), BINDSPEED_INDEFINITE, lpbc,
 		IID_IUnknown, (LPLP)&lpUnknown);
-#endif   // __BORLANDC__
 	if (sc != S_OK)
 		return sc;
 
 	// item name found -- create item moniker for it
 	lpUnknown->Release();
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(szItemName);
-	return CreateItemMoniker(OLESTDDELIMOLE, (LPCWSTR)pBAfxConv, ppMoniker);
-#else    // __BORLANDC__
 	return CreateItemMoniker(OLESTDDELIMOLE, T2COLE(szItemName), ppMoniker);
-#endif   // __BORLANDC__
 }
 
 STDMETHODIMP COleLinkingDoc::XOleItemContainer::LockContainer(BOOL fLock)
@@ -771,12 +768,7 @@ STDMETHODIMP COleLinkingDoc::XOleItemContainer::GetObjectStorage(
 		return E_UNEXPECTED;
 
 	// check for link to embedding
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   OLE2CT(lpszItem);
-	COleClientItem* pClientItem = pThis->OnFindEmbeddedItem((LPCSTR)pBAfxConv);
-#else    // __BORLANDC__
 	COleClientItem* pClientItem = pThis->OnFindEmbeddedItem(OLE2CT(lpszItem));
-#endif   // __BORLANDC__
 	if (pClientItem != NULL)
 	{
 		ASSERT_VALID(pClientItem);

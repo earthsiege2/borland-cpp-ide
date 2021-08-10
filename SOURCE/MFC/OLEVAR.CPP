@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -20,11 +20,179 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // helpers
 
-static void PASCAL CheckError(SCODE sc);
-static BOOL PASCAL CompareSafeArrays(SAFEARRAY* parray1, SAFEARRAY* parray2);
-static void PASCAL CreateOneDimArray(VARIANT& varSrc, DWORD dwSize);
-static void PASCAL CopyBinaryData(SAFEARRAY* parray,
-	const void* pSrc, DWORD dwSize);
+void AFXAPI AfxCheckError(SCODE sc)
+{
+	if (FAILED(sc))
+	{
+		if (sc == E_OUTOFMEMORY)
+			AfxThrowMemoryException();
+		else
+			AfxThrowOleException(sc);
+	}
+}
+
+AFX_STATIC BOOL AFXAPI _AfxCompareSafeArrays(SAFEARRAY* parray1, SAFEARRAY* parray2)
+{
+	BOOL bCompare = FALSE;
+
+	// If one is NULL they must both be NULL to compare
+	if (parray1 == NULL || parray2 == NULL)
+	{
+		return parray1 == parray2;
+	}
+
+	// Dimension must match and if 0, then arrays compare
+	DWORD dwDim1 = ::SafeArrayGetDim(parray1);
+	DWORD dwDim2 = ::SafeArrayGetDim(parray2);
+	if (dwDim1 != dwDim2)
+		return FALSE;
+	else if (dwDim1 == 0)
+		return TRUE;
+
+	// Element size must match
+	DWORD dwSize1 = ::SafeArrayGetElemsize(parray1);
+	DWORD dwSize2 = ::SafeArrayGetElemsize(parray2);
+	if (dwSize1 != dwSize2)
+		return FALSE;
+
+	long* pLBound1 = NULL;
+	long* pLBound2 = NULL;
+	long* pUBound1 = NULL;
+	long* pUBound2 = NULL;
+
+	void* pData1 = NULL;
+	void* pData2 = NULL;
+
+	TRY
+	{
+		// Bounds must match
+		pLBound1 = new long[dwDim1];
+		pLBound2 = new long[dwDim2];
+		pUBound1 = new long[dwDim1];
+		pUBound2 = new long[dwDim2];
+
+		size_t nTotalElements = 1;
+
+		// Get and compare bounds
+		for (DWORD dwIndex = 0; dwIndex < dwDim1; dwIndex++)
+		{
+			AfxCheckError(::SafeArrayGetLBound(
+				parray1, dwIndex+1, &pLBound1[dwIndex]));
+			AfxCheckError(::SafeArrayGetLBound(
+				parray2, dwIndex+1, &pLBound2[dwIndex]));
+			AfxCheckError(::SafeArrayGetUBound(
+				parray1, dwIndex+1, &pUBound1[dwIndex]));
+			AfxCheckError(::SafeArrayGetUBound(
+				parray2, dwIndex+1, &pUBound2[dwIndex]));
+
+			// Check the magnitude of each bound
+			if (pUBound1[dwIndex] - pLBound1[dwIndex] !=
+				pUBound2[dwIndex] - pLBound2[dwIndex])
+			{
+				delete[] pLBound1;
+				delete[] pLBound2;
+				delete[] pUBound1;
+				delete[] pUBound2;
+
+				return FALSE;
+			}
+
+			// Increment the element count
+			nTotalElements *= pUBound1[dwIndex] - pLBound1[dwIndex] + 1;
+		}
+
+		// Access the data
+		AfxCheckError(::SafeArrayAccessData(parray1, &pData1));
+		AfxCheckError(::SafeArrayAccessData(parray2, &pData2));
+
+		// Calculate the number of bytes of data and compare
+		size_t nSize = nTotalElements * dwSize1;
+		int nOffset = memcmp(pData1, pData2, nSize);
+		bCompare = nOffset == 0;
+
+		// Release the array locks
+		AfxCheckError(::SafeArrayUnaccessData(parray1));
+		AfxCheckError(::SafeArrayUnaccessData(parray2));
+	}
+	CATCH_ALL(e)
+	{
+		// Clean up bounds arrays
+		delete[] pLBound1;
+		delete[] pLBound2;
+		delete[] pUBound1;
+		delete[] pUBound2;
+
+		// Release the array locks
+		if (pData1 != NULL)
+			AfxCheckError(::SafeArrayUnaccessData(parray1));
+		if (pData2 != NULL)
+			AfxCheckError(::SafeArrayUnaccessData(parray2));
+
+		THROW_LAST();
+	}
+	END_CATCH_ALL
+
+	// Clean up bounds arrays
+	delete[] pLBound1;
+	delete[] pLBound2;
+	delete[] pUBound1;
+	delete[] pUBound2;
+
+	return bCompare;
+}
+
+AFX_STATIC void AFXAPI _AfxCreateOneDimArray(VARIANT& varSrc, DWORD dwSize)
+{
+	UINT nDim;
+
+	// Clear VARIANT and re-create SafeArray if necessary
+	if (varSrc.vt != (VT_UI1 | VT_ARRAY) ||
+		(nDim = ::SafeArrayGetDim(varSrc.parray)) != 1)
+	{
+		VERIFY(::VariantClear(&varSrc) == NOERROR);
+		varSrc.vt = VT_UI1 | VT_ARRAY;
+
+		SAFEARRAYBOUND bound;
+		bound.cElements = dwSize;
+		bound.lLbound = 0;
+		varSrc.parray = ::SafeArrayCreate(VT_UI1, 1, &bound);
+		if (varSrc.parray == NULL)
+			AfxThrowMemoryException();
+	}
+	else
+	{
+		// Must redimension array if necessary
+		long lLower, lUpper;
+		AfxCheckError(::SafeArrayGetLBound(varSrc.parray, 1, &lLower));
+		AfxCheckError(::SafeArrayGetUBound(varSrc.parray, 1, &lUpper));
+
+		// Upper bound should always be greater than lower bound
+		long lSize = lUpper - lLower;
+		if (lSize < 0)
+		{
+			ASSERT(FALSE);
+			lSize = 0;
+
+		}
+
+		if ((DWORD)lSize != dwSize)
+		{
+			SAFEARRAYBOUND bound;
+			bound.cElements = dwSize;
+			bound.lLbound = lLower;
+			AfxCheckError(::SafeArrayRedim(varSrc.parray, &bound));
+		}
+	}
+}
+
+AFX_STATIC void AFXAPI _AfxCopyBinaryData(SAFEARRAY* parray, const void* pvSrc, DWORD dwSize)
+{
+	// Access the data, copy it and unaccess it.
+	void* pDest;
+	AfxCheckError(::SafeArrayAccessData(parray, &pDest));
+	memcpy(pDest, pvSrc, dwSize);
+	AfxCheckError(::SafeArrayUnaccessData(parray));
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // COleVariant class
@@ -32,19 +200,19 @@ static void PASCAL CopyBinaryData(SAFEARRAY* parray,
 COleVariant::COleVariant(const VARIANT& varSrc)
 {
 	AfxVariantInit(this);
-	CheckError(VariantCopy(this, (LPVARIANT)&varSrc));
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)&varSrc));
 }
 
 COleVariant::COleVariant(LPCVARIANT pSrc)
 {
 	AfxVariantInit(this);
-	CheckError(VariantCopy(this, (LPVARIANT)pSrc));
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)pSrc));
 }
 
 COleVariant::COleVariant(const COleVariant& varSrc)
 {
 	AfxVariantInit(this);
-	CheckError(VariantCopy(this, (LPVARIANT)&varSrc));
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)&varSrc));
 }
 
 COleVariant::COleVariant(LPCTSTR lpszSrc, VARTYPE vtSrc)
@@ -62,16 +230,20 @@ COleVariant::COleVariant(LPCTSTR lpszSrc, VARTYPE vtSrc)
 		if (vtSrc == VT_BSTRT)
 		{
 			int nLen = lstrlen(lpszSrc);
-			bstrVal = SysAllocStringByteLen(lpszSrc, nLen);
+			bstrVal = ::SysAllocStringByteLen(lpszSrc, nLen);
 		}
 		else
 #endif
-			bstrVal = SysAllocString(T2COLE(lpszSrc));
+		{
+			bstrVal = ::SysAllocString(T2COLE(lpszSrc));
+		}
 
 		if (bstrVal == NULL)
 			AfxThrowMemoryException();
 	}
 }
+
+
 
 void COleVariant::SetString(LPCTSTR lpszSrc, VARTYPE vtSrc)
 {
@@ -91,12 +263,12 @@ void COleVariant::SetString(LPCTSTR lpszSrc, VARTYPE vtSrc)
 		if (vtSrc == VT_BSTRT)
 		{
 			int nLen = lstrlen(lpszSrc);
-			bstrVal = SysAllocStringByteLen(lpszSrc, nLen);
+			bstrVal = ::SysAllocStringByteLen(lpszSrc, nLen);
 		}
 		else
 #endif
 		{
-			bstrVal = SysAllocString(T2COLE(lpszSrc));
+			bstrVal = ::SysAllocString(T2COLE(lpszSrc));
 		}
 
 		if (bstrVal == NULL)
@@ -111,7 +283,7 @@ COleVariant::COleVariant(short nSrc, VARTYPE vtSrc)
 	if (vtSrc == VT_BOOL)
 	{
 		vt = VT_BOOL;
-		if (nSrc == FALSE)
+		if (!nSrc)
 			V_BOOL(this) = AFX_OLE_FALSE;
 		else
 			V_BOOL(this) = AFX_OLE_TRUE;
@@ -135,7 +307,7 @@ COleVariant::COleVariant(long lSrc, VARTYPE vtSrc)
 	else if (vtSrc == VT_BOOL)
 	{
 		vt = VT_BOOL;
-		if (lSrc == FALSE)
+		if (!lSrc)
 			V_BOOL(this) = AFX_OLE_FALSE;
 		else
 			V_BOOL(this) = AFX_OLE_TRUE;
@@ -148,9 +320,9 @@ COleVariant::COleVariant(long lSrc, VARTYPE vtSrc)
 }
 
 // Operations
-void COleVariant::Clear()
+void COleVariant::_ClearCompat()
 {
-	VERIFY(VariantClear(this) == NOERROR);
+	Clear();
 }
 
 void COleVariant::ChangeType(VARTYPE vartype, LPVARIANT pSrc)
@@ -159,7 +331,17 @@ void COleVariant::ChangeType(VARTYPE vartype, LPVARIANT pSrc)
 	if (pSrc == NULL)
 		pSrc = this;
 	if (pSrc != this || vartype != vt)
-		CheckError(VariantChangeType(this, pSrc, 0, vartype));
+		AfxCheckError(::VariantChangeType(this, pSrc, 0, vartype));
+}
+
+void COleVariant::Attach(VARIANT& varSrc)
+{
+	// Free up previous VARIANT
+	Clear();
+
+	// give control of data to COleVariant
+	memcpy(this, &varSrc, sizeof(varSrc));
+	varSrc.vt = VT_EMPTY;
 }
 
 VARIANT COleVariant::Detach()
@@ -223,7 +405,7 @@ BOOL COleVariant::operator==(const VARIANT& var) const
 
 	default:
 		if (vt & VT_ARRAY && !(vt & VT_BYREF))
-			return CompareSafeArrays(var.parray, parray);
+			return _AfxCompareSafeArrays(var.parray, parray);
 		else
 			ASSERT(FALSE);  // VT_BYREF not supported
 		// fall through
@@ -234,19 +416,19 @@ BOOL COleVariant::operator==(const VARIANT& var) const
 
 const COleVariant& COleVariant::operator=(const VARIANT& varSrc)
 {
-	CheckError(VariantCopy(this, (LPVARIANT)&varSrc));
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)&varSrc));
 	return *this;
 }
 
 const COleVariant& COleVariant::operator=(LPCVARIANT pSrc)
 {
-	CheckError(VariantCopy(this, (LPVARIANT)pSrc));
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)pSrc));
 	return *this;
 }
 
 const COleVariant& COleVariant::operator=(const COleVariant& varSrc)
 {
-	CheckError(VariantCopy(this, (LPVARIANT)&varSrc));
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)&varSrc));
 	return *this;
 }
 
@@ -261,7 +443,7 @@ const COleVariant& COleVariant::operator=(const LPCTSTR lpszSrc)
 		bstrVal = NULL;
 	else
 	{
-		bstrVal = SysAllocString(T2COLE(lpszSrc));
+		bstrVal = ::SysAllocString(T2COLE(lpszSrc));
 		if (bstrVal == NULL)
 			AfxThrowMemoryException();
 	}
@@ -275,7 +457,7 @@ const COleVariant& COleVariant::operator=(const CString& strSrc)
 	Clear();
 
 	vt = VT_BSTR;
-	bstrVal = SysAllocString(T2COLE(strSrc));
+	bstrVal = ::SysAllocString(T2COLE(strSrc));
 	if (bstrVal == NULL)
 		AfxThrowMemoryException();
 
@@ -301,7 +483,7 @@ const COleVariant& COleVariant::operator=(short nSrc)
 		iVal = nSrc;
 	else if (vt == VT_BOOL)
 	{
-		if (nSrc == FALSE)
+		if (!nSrc)
 			V_BOOL(this) = AFX_OLE_FALSE;
 		else
 			V_BOOL(this) = AFX_OLE_TRUE;
@@ -325,7 +507,7 @@ const COleVariant& COleVariant::operator=(long lSrc)
 		scode = lSrc;
 	else if (vt == VT_BOOL)
 	{
-		if (lSrc == FALSE)
+		if (!lSrc)
 			V_BOOL(this) = AFX_OLE_FALSE;
 		else
 			V_BOOL(this) = AFX_OLE_TRUE;
@@ -398,28 +580,26 @@ const COleVariant& COleVariant::operator=(const CByteArray& arrSrc)
 	int nSize = arrSrc.GetSize();
 
 	// Set the correct type and make sure SafeArray can hold data
-	CreateOneDimArray(*this, (DWORD)nSize);
+	_AfxCreateOneDimArray(*this, (DWORD)nSize);
 
 	// Copy the data into the SafeArray
-	CopyBinaryData(parray, arrSrc.GetData(), (DWORD)nSize);
+	_AfxCopyBinaryData(parray, arrSrc.GetData(), (DWORD)nSize);
 
 	return *this;
 }
 
-#ifndef __BORLANDC__
 const COleVariant& COleVariant::operator=(const CLongBinary& lbSrc)
 {
 	// Set the correct type and make sure SafeArray can hold data
-	CreateOneDimArray(*this, lbSrc.m_dwDataLength);
+	_AfxCreateOneDimArray(*this, lbSrc.m_dwDataLength);
 
 	// Copy the data into the SafeArray
 	BYTE* pData = (BYTE*)::GlobalLock(lbSrc.m_hData);
-	CopyBinaryData(parray, pData, lbSrc.m_dwDataLength);
+	_AfxCopyBinaryData(parray, pData, lbSrc.m_dwDataLength);
 	::GlobalUnlock(lbSrc.m_hData);
 
 	return *this;
 }
-#endif
 
 void AFXAPI AfxVariantInit(LPVARIANT pVar)
 {
@@ -459,7 +639,7 @@ CDumpContext& AFXAPI operator <<(CDumpContext& dc, COleVariant varSrc)
 		{
 			COleVariant var(varSrc);
 			var.ChangeType(VT_BSTR);
-			return dc << "\n\t cyVal = " << (LPCTSTR)var.bstrVal;
+			return dc << "\n\t cyVal = " << var.bstrVal;
 		}
 
 	case VT_R4:
@@ -472,11 +652,11 @@ CDumpContext& AFXAPI operator <<(CDumpContext& dc, COleVariant varSrc)
 		{
 			COleVariant var(varSrc);
 			var.ChangeType(VT_BSTR);
-			return dc << "\n\t date = " << (LPCTSTR)var.bstrVal;
+			return dc << "\n\t date = " << var.bstrVal;
 		}
 
 	case VT_BSTR:
-		return dc << "\n\t bstrVal = " << (LPCTSTR)pSrc->bstrVal;
+		return dc << "\n\t bstrVal = " << pSrc->bstrVal;
 
 	case VT_ERROR:
 		return dc << "\n\t scode = " << pSrc->scode;
@@ -560,20 +740,20 @@ CArchive& AFXAPI operator<<(CArchive& ar, COleVariant varSrc)
 				sc = pSrc->punkVal->QueryInterface(
 					IID_IPersistStreamInit, (void**)&pPersistStream);
 #endif
-			CheckError(sc);
+			AfxCheckError(sc);
 
 			TRY
 			{
 				// Get and archive the CLSID (GUID)
 				CLSID clsid;
-				CheckError(pPersistStream->GetClassID(&clsid));
+				AfxCheckError(pPersistStream->GetClassID(&clsid));
 				ar << clsid.Data1;
 				ar << clsid.Data2;
 				ar << clsid.Data3;
 				ar.Write(&clsid.Data4[0], sizeof clsid.Data4);
 
 				// Always assume object is dirty
-				CheckError(pPersistStream->Save(&stm, TRUE));
+				AfxCheckError(pPersistStream->Save(&stm, TRUE));
 			}
 			CATCH_ALL(e)
 			{
@@ -670,25 +850,34 @@ CArchive& AFXAPI operator>>(CArchive& ar, COleVariant& varSrc)
 			ar >> clsid.Data3;
 			ar.Read(&clsid.Data4[0], sizeof clsid.Data4);
 
-
-			CheckError(CoCreateInstance(clsid, NULL, CLSCTX_ALL,
+			// Create the object
+			SCODE sc = CoCreateInstance(clsid, NULL, CLSCTX_ALL | CLSCTX_REMOTE_SERVER,
 				pSrc->vt == VT_UNKNOWN ? IID_IUnknown : IID_IDispatch,
-				(VOID**)&pSrc->punkVal));
+				(void**)&pSrc->punkVal);
+			if (sc == E_INVALIDARG)
+			{
+				// may not support CLSCTX_REMOTE_SERVER, so try without
+				sc = CoCreateInstance(clsid, NULL,
+					CLSCTX_ALL & ~CLSCTX_REMOTE_SERVER,
+					pSrc->vt == VT_UNKNOWN ? IID_IUnknown : IID_IDispatch,
+					(void**)&pSrc->punkVal);
+			}
+			AfxCheckError(sc);
 
 			TRY
 			{
 				// QI for IPersistStream or IPeristStreamInit
-				SCODE sc = pSrc->punkVal->QueryInterface(
+				sc = pSrc->punkVal->QueryInterface(
 					IID_IPersistStream, (void**)&pPersistStream);
 #ifndef _AFX_NO_OCC_SUPPORT
 				if (FAILED(sc))
 					sc = pSrc->punkVal->QueryInterface(
 						IID_IPersistStreamInit, (void**)&pPersistStream);
 #endif
-				CheckError(sc);
+				AfxCheckError(sc);
 
 				// Always assumes object is dirty
-				CheckError(pPersistStream->Load(&stm));
+				AfxCheckError(pPersistStream->Load(&stm));
 			}
 			CATCH_ALL(e)
 			{
@@ -719,7 +908,11 @@ CArchive& AFXAPI operator>>(CArchive& ar, COleVariant& varSrc)
 /////////////////////////////////////////////////////////////////////////////
 // COleVariant Helpers
 
+#if _MSC_VER >= 1100
+template <> void AFXAPI ConstructElements<COleVariant> (COleVariant* pElements, int nCount)
+#else
 void AFXAPI ConstructElements(COleVariant* pElements, int nCount)
+#endif
 {
 	ASSERT(nCount == 0 ||
 		AfxIsValidAddress(pElements, nCount * sizeof(COleVariant)));
@@ -728,7 +921,11 @@ void AFXAPI ConstructElements(COleVariant* pElements, int nCount)
 		new(pElements) COleVariant;
 }
 
+#if _MSC_VER >= 1100
+template <> void AFXAPI DestructElements<COleVariant> (COleVariant* pElements, int nCount)
+#else
 void AFXAPI DestructElements(COleVariant* pElements, int nCount)
+#endif
 {
 	ASSERT(nCount == 0 ||
 		AfxIsValidAddress(pElements, nCount * sizeof(COleVariant)));
@@ -737,8 +934,11 @@ void AFXAPI DestructElements(COleVariant* pElements, int nCount)
 		pElements->~COleVariant();
 }
 
-#if defined(__BORLANDC__) && defined(_DEBUG)
+#if _MSC_VER >= 1100
+template <> void AFXAPI CopyElements<COleVariant> (COleVariant* pDest, const COleVariant* pSrc, int nCount)
+#else
 void AFXAPI CopyElements(COleVariant* pDest, const COleVariant* pSrc, int nCount)
+#endif
 {
 	ASSERT(nCount == 0 ||
 		AfxIsValidAddress(pDest, nCount * sizeof(COleVariant)));
@@ -748,9 +948,12 @@ void AFXAPI CopyElements(COleVariant* pDest, const COleVariant* pSrc, int nCount
 	for (; nCount--; ++pDest, ++pSrc)
 		*pDest = *pSrc;
 }
-#endif
 
+#if _MSC_VER >= 1100
+template <> void AFXAPI SerializeElements<COleVariant> (CArchive& ar, COleVariant* pElements, int nCount)
+#else
 void AFXAPI SerializeElements(CArchive& ar, COleVariant* pElements, int nCount)
+#endif
 {
 	ASSERT(nCount == 0 ||
 		AfxIsValidAddress(pElements, nCount * sizeof(COleVariant)));
@@ -768,15 +971,22 @@ void AFXAPI SerializeElements(CArchive& ar, COleVariant* pElements, int nCount)
 }
 
 #ifdef _DEBUG
-void AFXAPI DumpElements(CDumpContext& dc, COleVariant* pElements, int nCount)
+#if _MSC_VER >= 1100
+template <> void AFXAPI DumpElements<COleVariant> (CDumpContext& dc, const COleVariant* pElements, int nCount)
+#else
+void AFXAPI DumpElements(CDumpContext& dc, const COleVariant* pElements, int nCount)
+#endif
 {
 	for (; nCount--; ++pElements)
 		dc << *pElements;
 }
 #endif // _DEBUG
 
-#ifndef __BORLANDC__
+#if _MSC_VER >= 1100
+template<> UINT AFXAPI HashKey<const struct tagVARIANT&> (const struct tagVARIANT& var)
+#else
 UINT AFXAPI HashKey(const struct tagVARIANT& var)
+#endif
 {
 	switch (var.vt)
 	{
@@ -784,210 +994,58 @@ UINT AFXAPI HashKey(const struct tagVARIANT& var)
 	case VT_NULL:
 		return 0;
 	case VT_I2:
+#if _MSC_VER >= 1100
+		return HashKey<DWORD>((DWORD)var.iVal);
+#else
 		return HashKey((DWORD)var.iVal);
+#endif
 	case VT_I4:
+#if _MSC_VER >= 1100
+		return HashKey<DWORD>((DWORD)var.lVal);
+#else
 		return HashKey((DWORD)var.lVal);
+#endif
 	case VT_R4:
 		return (UINT)(var.fltVal / 16);
 	case VT_R8:
 	case VT_CY:
 		return (UINT)(var.dblVal / 16);
 	case VT_BOOL:
+#if _MSC_VER >= 1100
+		return HashKey<DWORD>((DWORD)V_BOOL(&var));
+#else
 		return HashKey((DWORD)V_BOOL(&var));
+#endif
 	case VT_ERROR:
+#if _MSC_VER >= 1100
+		return HashKey<DWORD>((DWORD)var.scode);
+#else
 		return HashKey((DWORD)var.scode);
+#endif
 	case VT_DATE:
 		return (UINT)(var.date / 16);
 	case VT_BSTR:
-		return HashKey(var.bstrVal);
+#if _MSC_VER >= 1100
+		return HashKey<LPCOLESTR>(var.bstrVal);
+#else
+		return HashKey((LPCOLESTR)var.bstrVal);
+#endif
 	case VT_DISPATCH:
 	case VT_UNKNOWN:
+#if _MSC_VER >= 1100
+		return HashKey<DWORD>((DWORD)var.punkVal);
+#else
 		return HashKey((DWORD)var.punkVal);
+#endif
 
 	default:
-		// No support for VT_BYREF & VT_ARRAY
+		// No support for VT_BYREF, VT_ARRAY, VT_VARIANT, VT_DECIMAL, & VT_UI1
 		ASSERT(FALSE);
 
 		// Fall through
 	}
 
 	return 0;
-}
-#endif
-
-static void PASCAL CheckError(SCODE sc)
-{
-	if (FAILED(sc))
-	{
-		if (sc == E_OUTOFMEMORY)
-			AfxThrowMemoryException();
-		else
-			AfxThrowOleException(sc);
-	}
-}
-
-static BOOL PASCAL CompareSafeArrays(SAFEARRAY* parray1, SAFEARRAY* parray2)
-{
-	BOOL bCompare = FALSE;
-
-	// If one is NULL they must both be NULL to compare
-	if (parray1 == NULL || parray2 == NULL)
-	{
-		return parray1 == parray2;
-	}
-
-	// Dimension must match and if 0, then arrays comare
-	DWORD dwDim1 = SafeArrayGetDim(parray1);
-	DWORD dwDim2 = SafeArrayGetDim(parray2);
-	if (dwDim1 != dwDim2)
-		return FALSE;
-	else if (dwDim1 == 0)
-		return TRUE;
-
-	// Element size must match
-	DWORD dwSize1 = SafeArrayGetElemsize(parray1);
-	DWORD dwSize2 = SafeArrayGetElemsize(parray2);
-	if (dwSize1 != dwSize2)
-		return FALSE;
-
-	long* pLBound1 = NULL;
-	long* pLBound2 = NULL;
-	long* pUBound1 = NULL;
-	long* pUBound2 = NULL;
-
-	void* pData1 = NULL;
-	void* pData2 = NULL;
-
-	TRY
-	{
-		// Bounds must match
-		pLBound1 = new long[dwDim1];
-		pLBound2 = new long[dwDim2];
-		pUBound1 = new long[dwDim1];
-		pUBound2 = new long[dwDim2];
-
-		size_t nTotalElements = 1;
-
-		// Get and compare bounds
-		for (DWORD dwIndex = 0; dwIndex < dwDim1; dwIndex++)
-		{
-			CheckError(SafeArrayGetLBound(
-				parray1, dwIndex+1, &pLBound1[dwIndex]));
-			CheckError(SafeArrayGetLBound(
-				parray2, dwIndex+1, &pLBound2[dwIndex]));
-			CheckError(SafeArrayGetUBound(
-				parray1, dwIndex+1, &pUBound1[dwIndex]));
-			CheckError(SafeArrayGetUBound(
-				parray2, dwIndex+1, &pUBound2[dwIndex]));
-
-			// Check the magnitude of each bound
-			if (pUBound1[dwIndex] - pLBound1[dwIndex] !=
-				pUBound2[dwIndex] - pLBound2[dwIndex])
-			{
-				delete[] pLBound1;
-				delete[] pLBound2;
-				delete[] pUBound1;
-				delete[] pUBound2;
-
-				return FALSE;
-			}
-
-			// Increment the element count
-			nTotalElements *=
-				(pUBound1[dwIndex] - pLBound1[dwIndex] + 1)/dwSize1;
-		}
-
-		// Access the data
-		CheckError(SafeArrayAccessData(parray1, &pData1));
-		CheckError(SafeArrayAccessData(parray2, &pData2));
-
-		// Calculate the number of bytes of data and compare
-		size_t nSize = nTotalElements * dwSize1;
-		int nOffset = memcmp(pData1, pData2, nSize);
-		bCompare = nOffset == 0;
-
-		// Release the array locks
-		CheckError(SafeArrayUnaccessData(parray1));
-		CheckError(SafeArrayUnaccessData(parray2));
-	}
-	CATCH_ALL(e)
-	{
-		// Clean up bounds arrays
-		delete[] pLBound1;
-		delete[] pLBound2;
-		delete[] pUBound1;
-		delete[] pUBound2;
-
-		// Release the array locks
-		if (pData1 != NULL)
-			CheckError(SafeArrayUnaccessData(parray1));
-		if (pData2 != NULL)
-			CheckError(SafeArrayUnaccessData(parray2));
-
-		THROW_LAST();
-	}
-	END_CATCH_ALL
-
-	// Clean up bounds arrays
-	delete[] pLBound1;
-	delete[] pLBound2;
-	delete[] pUBound1;
-	delete[] pUBound2;
-
-	return bCompare;
-}
-
-static void PASCAL CreateOneDimArray(VARIANT& varSrc, DWORD dwSize)
-{
-	UINT nDim;
-
-	// Clear VARIANT and re-create SafeArray if necessary
-	if (varSrc.vt != (VT_UI1 | VT_ARRAY) ||
-		(nDim = SafeArrayGetDim(varSrc.parray)) != 1)
-	{
-		VERIFY(VariantClear(&varSrc) == NOERROR);
-		varSrc.vt = VT_UI1 | VT_ARRAY;
-
-		SAFEARRAYBOUND bound;
-		bound.cElements = dwSize;
-		bound.lLbound = 0;
-		varSrc.parray = SafeArrayCreate(VT_UI1, 1, &bound);
-		if (varSrc.parray == NULL)
-			AfxThrowMemoryException();
-	}
-	else
-	{
-		// Must redimension array if necessary
-		long lLower, lUpper;
-		CheckError(SafeArrayGetLBound(varSrc.parray, 1, &lLower));
-		CheckError(SafeArrayGetUBound(varSrc.parray, 1, &lUpper));
-
-		// Upper bound should always be greater than lower bound
-		long lSize = lUpper - lLower;
-		if (lSize < 0)
-		{
-			ASSERT(FALSE);
-			lSize = 0;
-
-		}
-
-		if ((DWORD)lSize != dwSize)
-		{
-			SAFEARRAYBOUND bound;
-			bound.cElements = dwSize;
-			bound.lLbound = lLower;
-			CheckError(SafeArrayRedim(varSrc.parray, &bound));
-		}
-	}
-}
-
-static void PASCAL CopyBinaryData(SAFEARRAY* parray, const void* pvSrc, DWORD dwSize)
-{
-	// Access the data, copy it and unaccess it.
-	void* pDest;
-	CheckError(SafeArrayAccessData(parray, &pDest));
-	memcpy(pDest, pvSrc, dwSize);
-	CheckError(SafeArrayUnaccessData(parray));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -998,7 +1056,7 @@ static void PASCAL CopyBinaryData(SAFEARRAY* parray, const void* pvSrc, DWORD dw
 	do \
 	{ \
 		if (dwTarget != 0) \
-			for (wBit = 32; (dwTarget & (0x00000001 << wBit-1)) == 0; wBit--);\
+			for (wBit = 32; (dwTarget & (0x00000001 << (wBit-1))) == 0; wBit--);\
 		else \
 			wBit = 0; \
 	} while (0)
@@ -1285,9 +1343,19 @@ COleCurrency COleCurrency::operator*(long nOperand) const
 	dwRes32 = wCy3 * wL2;
 	dwRes41 = wCy4 * wL1;
 
-	// Add up all the pieces
-	curResult.m_cur.Lo = dwRes11 + (dwRes12<<16) + (dwRes21<<16);
-	curResult.m_cur.Hi = dwRes31 + (dwRes32<<16) + (dwRes41<<16) +
+	// Add up low order pieces
+	dwRes11 += dwRes12<<16;
+	curResult.m_cur.Lo = dwRes11 + (dwRes21<<16);
+	curResult.m_cur.Hi = 0;
+
+	// Check if carry required
+	if (dwRes11 < dwRes12<<16)
+		curResult.m_cur.Hi++;
+	if ((DWORD)curResult.m_cur.Lo < dwRes11)
+		curResult.m_cur.Hi++;
+
+	// Add up the high order pieces
+	curResult.m_cur.Hi += dwRes31 + (dwRes32<<16) + (dwRes41<<16) +
 		dwRes22 + (dwRes12>>16) + (dwRes21>>16);
 
 	// Compute result sign
@@ -1412,13 +1480,8 @@ BOOL COleCurrency::ParseCurrency(LPCTSTR lpszCurrency,
 	CString strCurrency = lpszCurrency;
 
 	SCODE sc;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(strCurrency);
-	if ( FAILED(sc = VarCyFromStr((LPWSTR)pBAfxConv, lcid, dwFlags, &m_cur)))
-#else    // __BORLANDC__
 	if ( FAILED(sc = VarCyFromStr((LPOLESTR)T2COLE(strCurrency),
 		lcid, dwFlags, &m_cur)))
-#endif   // __BORLANDC__
 	{
 		if (sc == DISP_E_TYPEMISMATCH)
 		{
@@ -1468,10 +1531,9 @@ CString COleCurrency::Format(DWORD dwFlags, LCID lcid) const
 
 	COleVariant var;
 	// Don't need to trap error. Should not fail due to type mismatch
-	CheckError(VarBstrFromCy(m_cur, lcid, dwFlags, &V_BSTR(&var)));
+	AfxCheckError(VarBstrFromCy(m_cur, lcid, dwFlags, &V_BSTR(&var)));
 	var.vt = VT_BSTR;
-   OLE2CT(V_BSTR(&var));
-	return (LPCSTR)pBAfxConv;
+	return OLE2CT(V_BSTR(&var));
 }
 
 
@@ -1484,7 +1546,7 @@ CDumpContext& AFXAPI operator<<(CDumpContext& dc, COleCurrency curSrc)
 
 	COleVariant var(curSrc);
 	var.ChangeType(VT_CY);
-	return dc << "\n\tCurrency = " << (LPCTSTR)var.bstrVal;
+	return dc << "\n\tCurrency = " << var.bstrVal;
 }
 #endif // _DEBUG
 
@@ -1515,645 +1577,15 @@ CArchive& AFXAPI operator>>(CArchive& ar, COleCurrency& curSrc)
 #define HALF_SECOND  (1.0/172800.0)
 
 // One-based array of days in year at month start
-static int rgMonthDays[13] =
+AFX_STATIC_DATA int _afxMonthDays[13] =
 	{0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
-
-static BOOL OleDateFromTm(WORD wYear, WORD wMonth, WORD wDay,
-	WORD wHour, WORD wMinute, WORD wSecond, DATE& dtDest);
-static BOOL TmFromOleDate(DATE dtSrc, struct tm& tmDest);
-static void TmConvertToStandardFormat(struct tm& tmSrc);
-static double DoubleFromDate(DATE dt);
-static DATE DateFromDouble(double dbl);
-
-/////////////////////////////////////////////////////////////////////////////
-// COleDateTime class
-
-COleDateTime PASCAL COleDateTime::GetCurrentTime()
-{
-	return COleDateTime(::time(NULL));
-}
-
-int COleDateTime::GetYear() const
-{
-	struct tm tmTemp;
-
-	if (GetStatus() == valid && TmFromOleDate(m_dt, tmTemp))
-		return tmTemp.tm_year;
-	else
-		return AFX_OLE_DATETIME_ERROR;
-}
-
-int COleDateTime::GetMonth() const
-{
-	struct tm tmTemp;
-
-	if (GetStatus() == valid && TmFromOleDate(m_dt, tmTemp))
-		return tmTemp.tm_mon;
-	else
-		return AFX_OLE_DATETIME_ERROR;
-}
-
-int COleDateTime::GetDay() const
-{
-	struct tm tmTemp;
-
-	if (GetStatus() == valid && TmFromOleDate(m_dt, tmTemp))
-		return tmTemp.tm_mday;
-	else
-		return AFX_OLE_DATETIME_ERROR;
-}
-
-int COleDateTime::GetHour() const
-{
-	struct tm tmTemp;
-
-	if (GetStatus() == valid && TmFromOleDate(m_dt, tmTemp))
-		return tmTemp.tm_hour;
-	else
-		return AFX_OLE_DATETIME_ERROR;
-}
-
-int COleDateTime::GetMinute() const
-{
-	struct tm tmTemp;
-
-	if (GetStatus() == valid && TmFromOleDate(m_dt, tmTemp))
-		return tmTemp.tm_min;
-	else
-		return AFX_OLE_DATETIME_ERROR;
-}
-
-int COleDateTime::GetSecond() const
-{
-	struct tm tmTemp;
-
-	if (GetStatus() == valid && TmFromOleDate(m_dt, tmTemp))
-		return tmTemp.tm_sec;
-	else
-		return AFX_OLE_DATETIME_ERROR;
-}
-
-int COleDateTime::GetDayOfWeek() const
-{
-	struct tm tmTemp;
-
-	if (GetStatus() == valid && TmFromOleDate(m_dt, tmTemp))
-		return tmTemp.tm_wday;
-	else
-		return AFX_OLE_DATETIME_ERROR;
-}
-
-int COleDateTime::GetDayOfYear() const
-{
-	struct tm tmTemp;
-
-	if (GetStatus() == valid && TmFromOleDate(m_dt, tmTemp))
-		return tmTemp.tm_yday;
-	else
-		return AFX_OLE_DATETIME_ERROR;
-}
-
-const COleDateTime& COleDateTime::operator=(const VARIANT& varSrc)
-{
-	if (varSrc.vt != VT_DATE)
-	{
-		TRY
-		{
-			COleVariant varTemp(varSrc);
-			varTemp.ChangeType(VT_DATE);
-			m_dt = varTemp.date;
-			SetStatus(valid);
-		}
-		// Catch COleException from ChangeType, but not CMemoryException
-		CATCH(COleException, e)
-		{
-			// Not able to convert VARIANT to DATE
-			DELETE_EXCEPTION(e);
-			m_dt = 0;
-			SetStatus(invalid);
-		}
-		END_CATCH
-	}
-	else
-	{
-		m_dt = varSrc.date;
-		SetStatus(valid);
-	}
-
-	return *this;
-}
-
-const COleDateTime& COleDateTime::operator=(DATE dtSrc)
-{
-	m_dt = dtSrc;
-	SetStatus(valid);
-
-	return *this;
-}
-
-const COleDateTime& COleDateTime::operator=(const time_t& timeSrc)
-{
-	// Convert time_t to struct tm
-	tm *ptm = localtime(&timeSrc);
-
-	if (ptm != NULL)
-	{
-		m_status = OleDateFromTm((WORD)ptm->tm_year,
-			(WORD)(ptm->tm_mon + 1), (WORD)ptm->tm_mday,
-			(WORD)ptm->tm_hour, (WORD)ptm->tm_min,
-			(WORD)ptm->tm_sec, m_dt) ? valid : invalid;
-	}
-	else
-	{
-		// Local time must have failed (timsSrc before 1/1/70 12am)
-		SetStatus(invalid);
-		ASSERT(FALSE);
-	}
-
-	return *this;
-}
-
-const COleDateTime& COleDateTime::operator=(const SYSTEMTIME& systimeSrc)
-{
-	m_status = OleDateFromTm(systimeSrc.wYear, systimeSrc.wMonth,
-		systimeSrc.wDay, systimeSrc.wHour, systimeSrc.wMinute,
-		systimeSrc.wSecond, m_dt) ? valid : invalid;
-
-	return *this;
-}
-
-const COleDateTime& COleDateTime::operator=(const FILETIME& filetimeSrc)
-{
-	// Assume UTC FILETIME, so convert to LOCALTIME
-	FILETIME filetimeLocal;
-	if (!FileTimeToLocalFileTime( &filetimeSrc, &filetimeLocal))
-	{
-#ifdef _DEBUG
-		DWORD dwError = GetLastError();
-		TRACE1("\nFileTimeToLocalFileTime failed. Error = %lu.\n\t", dwError);
-#endif // _DEBUG
-		m_status = invalid;
-	}
-	else
-	{
-		// Take advantage of SYSTEMTIME -> FILETIME conversion
-		SYSTEMTIME systime;
-		m_status = FileTimeToSystemTime(&filetimeLocal, &systime) ?
-			valid : invalid;
-
-		// At this point systime should always be valid, but...
-		if (GetStatus() == valid)
-		{
-			m_status = OleDateFromTm(systime.wYear, systime.wMonth,
-				systime.wDay, systime.wHour, systime.wMinute,
-				systime.wSecond, m_dt) ? valid : invalid;
-		}
-	}
-
-	return *this;
-}
-
-BOOL COleDateTime::operator<(const COleDateTime& date) const
-{
-	ASSERT(GetStatus() == valid);
-	ASSERT(date.GetStatus() == valid);
-
-	// Handle negative dates
-	return DoubleFromDate(m_dt) < DoubleFromDate(date.m_dt);
-}
-
-BOOL COleDateTime::operator>(const COleDateTime& date) const
-{   ASSERT(GetStatus() == valid);
-	ASSERT(date.GetStatus() == valid);
-
-	// Handle negative dates
-	return DoubleFromDate(m_dt) > DoubleFromDate(date.m_dt);
-}
-
-BOOL COleDateTime::operator<=(const COleDateTime& date) const
-{
-	ASSERT(GetStatus() == valid);
-	ASSERT(date.GetStatus() == valid);
-
-	// Handle negative dates
-	return DoubleFromDate(m_dt) <= DoubleFromDate(date.m_dt);
-}
-
-BOOL COleDateTime::operator>=(const COleDateTime& date) const
-{
-	ASSERT(GetStatus() == valid);
-	ASSERT(date.GetStatus() == valid);
-
-	// Handle negative dates
-	return DoubleFromDate(m_dt) >= DoubleFromDate(date.m_dt);
-}
-
-COleDateTime COleDateTime::operator+(const COleDateTimeSpan& dateSpan) const
-{
-	COleDateTime dateResult;    // Initializes m_status to valid
-
-	// If either operand NULL, result NULL
-	if (GetStatus() == null || dateSpan.GetStatus() == null)
-	{
-		dateResult.SetStatus(null);
-		return dateResult;
-	}
-
-	// If either operand invalid, result invalid
-	if (GetStatus() == invalid || dateSpan.GetStatus() == invalid)
-	{
-		dateResult.SetStatus(invalid);
-		return dateResult;
-	}
-
-	// Compute the actual date difference by adding underlying dates
-	dateResult = DateFromDouble(DoubleFromDate(m_dt) + dateSpan.m_span);
-
-	// Validate within range
-	dateResult.CheckRange();
-
-	return dateResult;
-}
-
-COleDateTime COleDateTime::operator-(const COleDateTimeSpan& dateSpan) const
-{
-	COleDateTime dateResult;    // Initializes m_status to valid
-
-	// If either operand NULL, result NULL
-	if (GetStatus() == null || dateSpan.GetStatus() == null)
-	{
-		dateResult.SetStatus(null);
-		return dateResult;
-	}
-
-	// If either operand invalid, result invalid
-	if (GetStatus() == invalid || dateSpan.GetStatus() == invalid)
-	{
-		dateResult.SetStatus(invalid);
-		return dateResult;
-	}
-
-	// Compute the actual date difference by subtracting underlying dates
-	dateResult = DateFromDouble(DoubleFromDate(m_dt) - dateSpan.m_span);
-
-	// Validate within range
-	dateResult.CheckRange();
-
-	return dateResult;
-}
-
-COleDateTimeSpan COleDateTime::operator-(const COleDateTime& date) const
-{
-	COleDateTimeSpan spanResult;
-
-	// If either operand NULL, result NULL
-	if (GetStatus() == null || date.GetStatus() == null)
-	{
-		spanResult.SetStatus(COleDateTimeSpan::null);
-		return spanResult;
-	}
-
-	// If either operand invalid, result invalid
-	if (GetStatus() == invalid || date.GetStatus() == invalid)
-	{
-		spanResult.SetStatus(COleDateTimeSpan::invalid);
-		return spanResult;
-	}
-
-	// Return result (span can't be invalid, so don't check range)
-	return DoubleFromDate(m_dt) - DoubleFromDate(date.m_dt);
-}
-
-BOOL COleDateTime::SetDateTime(int nYear, int nMonth, int nDay,
-	int nHour, int nMin, int nSec)
-{
-	return m_status = OleDateFromTm((WORD)nYear, (WORD)nMonth,
-		(WORD)nDay, (WORD)nHour, (WORD)nMin, (WORD)nSec, m_dt) ?
-		valid : invalid;
-}
-
-BOOL COleDateTime::ParseDateTime(LPCTSTR lpszDate, DWORD dwFlags, LCID lcid)
-{
-	USES_CONVERSION;
-	CString strDate = lpszDate;
-
-	SCODE sc;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(strDate);
-	if (FAILED(sc = VarDateFromStr((LPWSTR)pBAfxConv, lcid, dwFlags, &m_dt)))
-#else    // __BORLANDC__
-	if (FAILED(sc = VarDateFromStr((LPOLESTR)T2COLE(strDate), lcid,
-		dwFlags, &m_dt)))
-#endif   // __BORLANDC__
-	{
-		if (sc == DISP_E_TYPEMISMATCH)
-		{
-			// Can't convert string to date, set 0 and invalidate
-			m_dt = 0;
-			SetStatus(invalid);
-			return FALSE;
-		}
-		else if (sc == DISP_E_OVERFLOW)
-		{
-			// Can't convert string to date, set -1 and invalidate
-			m_dt = -1;
-			SetStatus(invalid);
-			return FALSE;
-		}
-		else
-		{
-			TRACE0("\nCOleDateTime VarDateFromStr call failed.\n\t");
-			if (sc == E_OUTOFMEMORY)
-				AfxThrowMemoryException();
-			else
-				AfxThrowOleException(sc);
-		}
-	}
-
-	SetStatus(valid);
-	return TRUE;
-}
-
-CString COleDateTime::Format(DWORD dwFlags, LCID lcid) const
-{
-	USES_CONVERSION;
-	CString strDate;
-
-	// If null, return empty string
-	if (GetStatus() == null)
-		return strDate;
-
-	// If invalid, return DateTime resource string
-	if (GetStatus() == invalid)
-	{
-		VERIFY(strDate.LoadString(AFX_IDS_INVALID_DATETIME));
-		return strDate;
-	}
-
-	COleVariant var;
-	// Don't need to trap error. Should not fail due to type mismatch
-	CheckError(VarBstrFromDate(m_dt, lcid, dwFlags, &V_BSTR(&var)));
-	var.vt = VT_BSTR;
-	OLE2CT(V_BSTR(&var));
-	return (LPCSTR)pBAfxConv;
-}
-
-CString COleDateTime::Format(LPCTSTR pFormat) const
-{
-	CString strDate;
-	struct tm tmTemp;
-
-	// If null, return empty string
-	if (GetStatus() == null)
-		return strDate;
-
-	// If invalid, return DateTime resource string
-	if (GetStatus() == invalid || !TmFromOleDate(m_dt, tmTemp))
-	{
-		VERIFY(strDate.LoadString(AFX_IDS_INVALID_DATETIME));
-		return strDate;
-	}
-
-	// Convert tm from afx internal format to standard format
-	TmConvertToStandardFormat(tmTemp);
-
-	// Fill in the buffer, disregard return value as it's not necessary
-	LPTSTR lpszTemp = strDate.GetBufferSetLength(MAX_TIME_BUFFER_SIZE);
-	_tcsftime(lpszTemp, strDate.GetLength(), pFormat, &tmTemp);
-	strDate.ReleaseBuffer();
-
-	return strDate;
-}
-
-CString COleDateTime::Format(UINT nFormatID) const
-{
-	CString strFormat;
-	VERIFY(strFormat.LoadString(nFormatID) != 0);
-	return Format(strFormat);
-}
-
-void COleDateTime::CheckRange()
-{
-	if (m_dt > MAX_DATE || m_dt < MIN_DATE) // about year 100 to about 9999
-		SetStatus(invalid);
-}
-
-// serialization
-#ifdef _DEBUG
-CDumpContext& AFXAPI operator<<(CDumpContext& dc, COleDateTime dateSrc)
-{
-	dc << "\nCOleDateTime Object:";
-	dc << "\n\tm_status = " << (long)dateSrc.m_status;
-
-	COleVariant var(dateSrc);
-	var.ChangeType(VT_BSTR);
-
-	return dc << "\n\tdate = " << (LPCTSTR)var.bstrVal;
-}
-#endif // _DEBUG
-
-CArchive& AFXAPI operator<<(CArchive& ar, COleDateTime dateSrc)
-{
-	ar << (long)dateSrc.m_status;
-	return ar << dateSrc.m_dt;
-}
-
-CArchive& AFXAPI operator>>(CArchive& ar, COleDateTime& dateSrc)
-{
-	ar >> (long&)dateSrc.m_status;
-	return ar >> dateSrc.m_dt;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// COleDateTimeSpan class helpers
-
-#define MAX_DAYS_IN_SPAN    3615897L
-
-/////////////////////////////////////////////////////////////////////////////
-// COleDateTimeSpan class
-long COleDateTimeSpan::GetHours() const
-{
-	ASSERT(GetStatus() == valid);
-
-	double dblTemp;
-
-	// Truncate days and scale up
-	dblTemp = modf(m_span, &dblTemp);
-	return (long)(dblTemp * 24);
-}
-
-long COleDateTimeSpan::GetMinutes() const
-{
-	ASSERT(GetStatus() == valid);
-
-	double dblTemp;
-
-	// Truncate hours and scale up
-	dblTemp = modf(m_span * 24, &dblTemp);
-	return (long)(dblTemp * 60);
-}
-
-long COleDateTimeSpan::GetSeconds() const
-{
-	ASSERT(GetStatus() == valid);
-
-	double dblTemp;
-
-	// Truncate minutes and scale up
-	dblTemp = modf(m_span * 24 * 60, &dblTemp);
-	return (long)(dblTemp * 60);
-}
-
-const COleDateTimeSpan& COleDateTimeSpan::operator=(double dblSpanSrc)
-{
-	m_span = dblSpanSrc;
-	SetStatus(valid);
-	return *this;
-}
-
-const COleDateTimeSpan& COleDateTimeSpan::operator=(const COleDateTimeSpan& dateSpanSrc)
-{
-	m_span = dateSpanSrc.m_span;
-	m_status = dateSpanSrc.m_status;
-	return *this;
-}
-
-COleDateTimeSpan COleDateTimeSpan::operator+(const COleDateTimeSpan& dateSpan) const
-{
-	COleDateTimeSpan dateSpanTemp;
-
-	// If either operand Null, result Null
-	if (GetStatus() == null || dateSpan.GetStatus() == null)
-	{
-		dateSpanTemp.SetStatus(null);
-		return dateSpanTemp;
-	}
-
-	// If either operand Invalid, result Invalid
-	if (GetStatus() == invalid || dateSpan.GetStatus() == invalid)
-	{
-		dateSpanTemp.SetStatus(invalid);
-		return dateSpanTemp;
-	}
-
-	// Add spans and validate within legal range
-	dateSpanTemp.m_span = m_span + dateSpan.m_span;
-	dateSpanTemp.CheckRange();
-
-	return dateSpanTemp;
-}
-
-COleDateTimeSpan COleDateTimeSpan::operator-(const COleDateTimeSpan& dateSpan) const
-{
-	COleDateTimeSpan dateSpanTemp;
-
-	// If either operand Null, result Null
-	if (GetStatus() == null || dateSpan.GetStatus() == null)
-	{
-		dateSpanTemp.SetStatus(null);
-		return dateSpanTemp;
-	}
-
-	// If either operand Invalid, result Invalid
-	if (GetStatus() == invalid || dateSpan.GetStatus() == invalid)
-	{
-		dateSpanTemp.SetStatus(invalid);
-		return dateSpanTemp;
-	}
-
-	// Subtract spans and validate within legal range
-	dateSpanTemp.m_span = m_span - dateSpan.m_span;
-	dateSpanTemp.CheckRange();
-
-	return dateSpanTemp;
-}
-
-void COleDateTimeSpan::SetDateTimeSpan(
-	long lDays, int nHours, int nMins, int nSecs)
-{
-	// Set date span by breaking into fractional days (all input ranges valid)
-	m_span = lDays + ((double)nHours)/24 + ((double)nMins)/(24*60) +
-		((double)nSecs)/(24*60*60);
-
-	SetStatus(valid);
-}
-
-CString COleDateTimeSpan::Format(LPCTSTR pFormat) const
-{
-	CString strSpan;
-	struct tm tmTemp;
-
-	// If null, return empty string
-	if (GetStatus() == null)
-		return strSpan;
-
-	// If invalid, return DateTimeSpan resource string
-	if (GetStatus() == invalid || !TmFromOleDate(m_span, tmTemp))
-	{
-		VERIFY(strSpan.LoadString(AFX_IDS_INVALID_DATETIMESPAN));
-		return strSpan;
-	}
-
-	// Convert tm from afx internal format to standard format
-	TmConvertToStandardFormat(tmTemp);
-
-	// Fill in the buffer, disregard return value as it's not necessary
-	LPTSTR lpszTemp = strSpan.GetBufferSetLength(MAX_TIME_BUFFER_SIZE);
-	_tcsftime(lpszTemp, strSpan.GetLength(), pFormat, &tmTemp);
-	strSpan.ReleaseBuffer();
-
-	return strSpan;
-}
-
-CString COleDateTimeSpan::Format(UINT nFormatID) const
-{
-	CString strFormat;
-	VERIFY(strFormat.LoadString(nFormatID) != 0);
-	return Format(strFormat);
-}
-
-void COleDateTimeSpan::CheckRange()
-{
-	if(m_span < -MAX_DAYS_IN_SPAN || m_span > MAX_DAYS_IN_SPAN)
-		SetStatus(invalid);
-}
-
-// serialization
-#ifdef _DEBUG
-CDumpContext& AFXAPI operator<<(CDumpContext& dc, COleDateTimeSpan dateSpanSrc)
-{
-	dc << "\nCOleDateTimeSpan Object:";
-	dc << "\n\tm_status = " << (long)dateSpanSrc.m_status;
-
-	COleVariant var(dateSpanSrc.m_span);
-	var.ChangeType(VT_BSTR);
-
-	return dc << "\n\tdateSpan = " << (LPCTSTR)var.bstrVal;
-}
-#endif // _DEBUG
-
-CArchive& AFXAPI operator<<(CArchive& ar, COleDateTimeSpan dateSpanSrc)
-{
-	ar << (long)dateSpanSrc.m_status;
-	return ar << dateSpanSrc.m_span;
-}
-
-CArchive& AFXAPI operator>>(CArchive& ar, COleDateTimeSpan& dateSpanSrc)
-{
-	ar >> (long&)dateSpanSrc.m_status;
-	return ar >> dateSpanSrc.m_span;
-}
 
 /////////////////////////////////////////////////////////////////////////////
 // COleDateTime class HELPERS - implementation
 
-BOOL OleDateFromTm(WORD wYear, WORD wMonth, WORD wDay,
+AFX_STATIC BOOL AFXAPI _AfxOleDateFromTm(WORD wYear, WORD wMonth, WORD wDay,
 	WORD wHour, WORD wMinute, WORD wSecond, DATE& dtDest)
 {
-	// Assume 2 digit years are in 20th century
-	if (wYear < 100)
-		wYear += 1900;
-
 	// Validate year and month (ignore day of week and milliseconds)
 	if (wYear > 9999 || wMonth < 1 || wMonth > 12)
 		return FALSE;
@@ -2163,7 +1595,7 @@ BOOL OleDateFromTm(WORD wYear, WORD wMonth, WORD wDay,
 		((wYear % 100) != 0 || (wYear % 400) == 0);
 
 	int nDaysInMonth =
-		rgMonthDays[wMonth] - rgMonthDays[wMonth-1] +
+		_afxMonthDays[wMonth] - _afxMonthDays[wMonth-1] +
 		((bLeapYear && wDay == 29 && wMonth == 2) ? 1 : 0);
 
 	// Finish validating the date
@@ -2180,7 +1612,7 @@ BOOL OleDateFromTm(WORD wYear, WORD wMonth, WORD wDay,
 
 	//It is a valid date; make Jan 1, 1AD be 1
 	nDate = wYear*365L + wYear/4 - wYear/100 + wYear/400 +
-		rgMonthDays[wMonth-1] + wDay;
+		_afxMonthDays[wMonth-1] + wDay;
 
 	//  If leap year and it's before March, subtract 1:
 	if (wMonth <= 2 && bLeapYear)
@@ -2198,7 +1630,7 @@ BOOL OleDateFromTm(WORD wYear, WORD wMonth, WORD wDay,
 	return TRUE;
 }
 
-BOOL TmFromOleDate(DATE dtSrc, struct tm& tmDest)
+AFX_STATIC BOOL AFXAPI _AfxTmFromOleDate(DATE dtSrc, struct tm& tmDest)
 {
 	// The legal range does not actually span year 0 to 9999.
 	if (dtSrc > MAX_DATE || dtSrc < MIN_DATE) // about year 100 to about 9999
@@ -2308,9 +1740,9 @@ BOOL TmFromOleDate(DATE dtSrc, struct tm& tmDest)
 
 	// Month number always >= n/32, so save some loop time */
 	for (tmDest.tm_mon = (n4Day >> 5) + 1;
-		n4Day > rgMonthDays[tmDest.tm_mon]; tmDest.tm_mon++);
+		n4Day > _afxMonthDays[tmDest.tm_mon]; tmDest.tm_mon++);
 
-	tmDest.tm_mday = (int)(n4Day - rgMonthDays[tmDest.tm_mon-1]);
+	tmDest.tm_mday = (int)(n4Day - _afxMonthDays[tmDest.tm_mon-1]);
 
 DoTime:
 	if (nSecsInDay == 0)
@@ -2326,7 +1758,7 @@ DoTime:
 	return TRUE;
 }
 
-void TmConvertToStandardFormat(struct tm& tmSrc)
+AFX_STATIC void AFXAPI _AfxTmConvertToStandardFormat(struct tm& tmSrc)
 {
 	// Convert afx internal tm to format expected by runtimes (_tcsftime, etc)
 	tmSrc.tm_year -= 1900;  // year is based on 1900
@@ -2335,28 +1767,1210 @@ void TmConvertToStandardFormat(struct tm& tmSrc)
 	tmSrc.tm_yday -= 1;     // day of year is 0-based
 }
 
-double DoubleFromDate(DATE dt)
+AFX_STATIC double AFXAPI _AfxDoubleFromDate(DATE dt)
 {
 	// No problem if positive
-	if(dt >= 0)
+	if (dt >= 0)
 		return dt;
 
 	// If negative, must convert since negative dates not continuous
 	// (examples: -1.25 to -.75, -1.50 to -.50, -1.75 to -.25)
-	double dblWhole = modf(dt, &dt);    // dt is now fractional part
-	return dblWhole - dt;
+	double temp = ceil(dt);
+	return temp - (dt - temp);
 }
 
-DATE DateFromDouble(double dbl)
+AFX_STATIC DATE AFXAPI _AfxDateFromDouble(double dbl)
 {
 	// No problem if positive
-	if(dbl >= 0)
+	if (dbl >= 0)
 		return dbl;
 
 	// If negative, must convert since negative dates not continuous
 	// (examples: -.75 to -1.25, -.50 to -1.50, -.25 to -1.75)
-	DATE dtWhole = modf(dbl, &dbl); // dbl is now fractional part
-	return dtWhole - dbl;
+	double temp = floor(dbl); // dbl is now whole part
+	return temp + (temp - dbl);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// COleDateTime class
+
+COleDateTime PASCAL COleDateTime::GetCurrentTime()
+{
+	return COleDateTime(::time(NULL));
+}
+
+BOOL COleDateTime::GetAsSystemTime(SYSTEMTIME& sysTime) const
+{
+	BOOL bRetVal = FALSE;
+	if (GetStatus() == valid)
+	{
+		struct tm tmTemp;
+		if (_AfxTmFromOleDate(m_dt, tmTemp))
+		{
+			sysTime.wYear = (WORD) tmTemp.tm_year;
+			sysTime.wMonth = (WORD) tmTemp.tm_mon;
+			sysTime.wDayOfWeek = (WORD) (tmTemp.tm_wday - 1);
+			sysTime.wDay = (WORD) tmTemp.tm_mday;
+			sysTime.wHour = (WORD) tmTemp.tm_hour;
+			sysTime.wMinute = (WORD) tmTemp.tm_min;
+			sysTime.wSecond = (WORD) tmTemp.tm_sec;
+			sysTime.wMilliseconds = 0;
+
+			bRetVal = TRUE;
+		}
+	}
+
+	return bRetVal;
+}
+
+int COleDateTime::GetYear() const
+{
+	struct tm tmTemp;
+
+	if (GetStatus() == valid && _AfxTmFromOleDate(m_dt, tmTemp))
+		return tmTemp.tm_year;
+	else
+		return AFX_OLE_DATETIME_ERROR;
+}
+
+int COleDateTime::GetMonth() const
+{
+	struct tm tmTemp;
+
+	if (GetStatus() == valid && _AfxTmFromOleDate(m_dt, tmTemp))
+		return tmTemp.tm_mon;
+	else
+		return AFX_OLE_DATETIME_ERROR;
+}
+
+int COleDateTime::GetDay() const
+{
+	struct tm tmTemp;
+
+	if (GetStatus() == valid && _AfxTmFromOleDate(m_dt, tmTemp))
+		return tmTemp.tm_mday;
+	else
+		return AFX_OLE_DATETIME_ERROR;
+}
+
+int COleDateTime::GetHour() const
+{
+	struct tm tmTemp;
+
+	if (GetStatus() == valid && _AfxTmFromOleDate(m_dt, tmTemp))
+		return tmTemp.tm_hour;
+	else
+		return AFX_OLE_DATETIME_ERROR;
+}
+
+int COleDateTime::GetMinute() const
+{
+	struct tm tmTemp;
+
+	if (GetStatus() == valid && _AfxTmFromOleDate(m_dt, tmTemp))
+		return tmTemp.tm_min;
+	else
+		return AFX_OLE_DATETIME_ERROR;
+}
+
+int COleDateTime::GetSecond() const
+{
+	struct tm tmTemp;
+
+	if (GetStatus() == valid && _AfxTmFromOleDate(m_dt, tmTemp))
+		return tmTemp.tm_sec;
+	else
+		return AFX_OLE_DATETIME_ERROR;
+}
+
+int COleDateTime::GetDayOfWeek() const
+{
+	struct tm tmTemp;
+
+	if (GetStatus() == valid && _AfxTmFromOleDate(m_dt, tmTemp))
+		return tmTemp.tm_wday;
+	else
+		return AFX_OLE_DATETIME_ERROR;
+}
+
+int COleDateTime::GetDayOfYear() const
+{
+	struct tm tmTemp;
+
+	if (GetStatus() == valid && _AfxTmFromOleDate(m_dt, tmTemp))
+		return tmTemp.tm_yday;
+	else
+		return AFX_OLE_DATETIME_ERROR;
+}
+
+const COleDateTime& COleDateTime::operator=(const VARIANT& varSrc)
+{
+	if (varSrc.vt != VT_DATE)
+	{
+		TRY
+		{
+			COleVariant varTemp(varSrc);
+			varTemp.ChangeType(VT_DATE);
+			m_dt = varTemp.date;
+			SetStatus(valid);
+		}
+		// Catch COleException from ChangeType, but not CMemoryException
+		CATCH(COleException, e)
+		{
+			// Not able to convert VARIANT to DATE
+			DELETE_EXCEPTION(e);
+			m_dt = 0;
+			SetStatus(invalid);
+		}
+		END_CATCH
+	}
+	else
+	{
+		m_dt = varSrc.date;
+		SetStatus(valid);
+	}
+
+	return *this;
+}
+
+const COleDateTime& COleDateTime::operator=(DATE dtSrc)
+{
+	m_dt = dtSrc;
+	SetStatus(valid);
+
+	return *this;
+}
+
+const COleDateTime& COleDateTime::operator=(const time_t& timeSrc)
+{
+	// Convert time_t to struct tm
+	tm *ptm = localtime(&timeSrc);
+
+	if (ptm != NULL)
+	{
+		m_status = _AfxOleDateFromTm((WORD)(ptm->tm_year + 1900),
+			(WORD)(ptm->tm_mon + 1), (WORD)ptm->tm_mday,
+			(WORD)ptm->tm_hour, (WORD)ptm->tm_min,
+			(WORD)ptm->tm_sec, m_dt) ? valid : invalid;
+	}
+	else
+	{
+		// Local time must have failed (timsSrc before 1/1/70 12am)
+		SetStatus(invalid);
+		ASSERT(FALSE);
+	}
+
+	return *this;
+}
+
+const COleDateTime& COleDateTime::operator=(const SYSTEMTIME& systimeSrc)
+{
+	m_status = _AfxOleDateFromTm(systimeSrc.wYear, systimeSrc.wMonth,
+		systimeSrc.wDay, systimeSrc.wHour, systimeSrc.wMinute,
+		systimeSrc.wSecond, m_dt) ? valid : invalid;
+
+	return *this;
+}
+
+const COleDateTime& COleDateTime::operator=(const FILETIME& filetimeSrc)
+{
+	// Assume UTC FILETIME, so convert to LOCALTIME
+	FILETIME filetimeLocal;
+	if (!FileTimeToLocalFileTime( &filetimeSrc, &filetimeLocal))
+	{
+#ifdef _DEBUG
+		DWORD dwError = GetLastError();
+		TRACE1("\nFileTimeToLocalFileTime failed. Error = %lu.\n\t", dwError);
+#endif // _DEBUG
+		m_status = invalid;
+	}
+	else
+	{
+		// Take advantage of SYSTEMTIME -> FILETIME conversion
+		SYSTEMTIME systime;
+		m_status = FileTimeToSystemTime(&filetimeLocal, &systime) ?
+			valid : invalid;
+
+		// At this point systime should always be valid, but...
+		if (GetStatus() == valid)
+		{
+			m_status = _AfxOleDateFromTm(systime.wYear, systime.wMonth,
+				systime.wDay, systime.wHour, systime.wMinute,
+				systime.wSecond, m_dt) ? valid : invalid;
+		}
+	}
+
+	return *this;
+}
+
+BOOL COleDateTime::operator<(const COleDateTime& date) const
+{
+	ASSERT(GetStatus() == valid);
+	ASSERT(date.GetStatus() == valid);
+
+	// Handle negative dates
+	return _AfxDoubleFromDate(m_dt) < _AfxDoubleFromDate(date.m_dt);
+}
+
+BOOL COleDateTime::operator>(const COleDateTime& date) const
+{   ASSERT(GetStatus() == valid);
+	ASSERT(date.GetStatus() == valid);
+
+	// Handle negative dates
+	return _AfxDoubleFromDate(m_dt) > _AfxDoubleFromDate(date.m_dt);
+}
+
+BOOL COleDateTime::operator<=(const COleDateTime& date) const
+{
+	ASSERT(GetStatus() == valid);
+	ASSERT(date.GetStatus() == valid);
+
+	// Handle negative dates
+	return _AfxDoubleFromDate(m_dt) <= _AfxDoubleFromDate(date.m_dt);
+}
+
+BOOL COleDateTime::operator>=(const COleDateTime& date) const
+{
+	ASSERT(GetStatus() == valid);
+	ASSERT(date.GetStatus() == valid);
+
+	// Handle negative dates
+	return _AfxDoubleFromDate(m_dt) >= _AfxDoubleFromDate(date.m_dt);
+}
+
+COleDateTime COleDateTime::operator+(const COleDateTimeSpan& dateSpan) const
+{
+	COleDateTime dateResult;    // Initializes m_status to valid
+
+	// If either operand NULL, result NULL
+	if (GetStatus() == null || dateSpan.GetStatus() == null)
+	{
+		dateResult.SetStatus(null);
+		return dateResult;
+	}
+
+	// If either operand invalid, result invalid
+	if (GetStatus() == invalid || dateSpan.GetStatus() == invalid)
+	{
+		dateResult.SetStatus(invalid);
+		return dateResult;
+	}
+
+	// Compute the actual date difference by adding underlying dates
+	dateResult = _AfxDateFromDouble(_AfxDoubleFromDate(m_dt) + dateSpan.m_span);
+
+	// Validate within range
+	dateResult.CheckRange();
+
+	return dateResult;
+}
+
+COleDateTime COleDateTime::operator-(const COleDateTimeSpan& dateSpan) const
+{
+	COleDateTime dateResult;    // Initializes m_status to valid
+
+	// If either operand NULL, result NULL
+	if (GetStatus() == null || dateSpan.GetStatus() == null)
+	{
+		dateResult.SetStatus(null);
+		return dateResult;
+	}
+
+	// If either operand invalid, result invalid
+	if (GetStatus() == invalid || dateSpan.GetStatus() == invalid)
+	{
+		dateResult.SetStatus(invalid);
+		return dateResult;
+	}
+
+	// Compute the actual date difference by subtracting underlying dates
+	dateResult = _AfxDateFromDouble(_AfxDoubleFromDate(m_dt) - dateSpan.m_span);
+
+	// Validate within range
+	dateResult.CheckRange();
+
+	return dateResult;
+}
+
+COleDateTimeSpan COleDateTime::operator-(const COleDateTime& date) const
+{
+	COleDateTimeSpan spanResult;
+
+	// If either operand NULL, result NULL
+	if (GetStatus() == null || date.GetStatus() == null)
+	{
+		spanResult.SetStatus(COleDateTimeSpan::null);
+		return spanResult;
+	}
+
+	// If either operand invalid, result invalid
+	if (GetStatus() == invalid || date.GetStatus() == invalid)
+	{
+		spanResult.SetStatus(COleDateTimeSpan::invalid);
+		return spanResult;
+	}
+
+	// Return result (span can't be invalid, so don't check range)
+	return _AfxDoubleFromDate(m_dt) - _AfxDoubleFromDate(date.m_dt);
+}
+
+int COleDateTime::SetDateTime(int nYear, int nMonth, int nDay,
+	int nHour, int nMin, int nSec)
+{
+	return m_status = _AfxOleDateFromTm((WORD)nYear, (WORD)nMonth,
+		(WORD)nDay, (WORD)nHour, (WORD)nMin, (WORD)nSec, m_dt) ?
+		valid : invalid;
+}
+
+BOOL COleDateTime::ParseDateTime(LPCTSTR lpszDate, DWORD dwFlags, LCID lcid)
+{
+	USES_CONVERSION;
+	CString strDate = lpszDate;
+
+	SCODE sc;
+	if (FAILED(sc = VarDateFromStr((LPOLESTR)T2COLE(strDate), lcid,
+		dwFlags, &m_dt)))
+	{
+		if (sc == DISP_E_TYPEMISMATCH)
+		{
+			// Can't convert string to date, set 0 and invalidate
+			m_dt = 0;
+			SetStatus(invalid);
+			return FALSE;
+		}
+		else if (sc == DISP_E_OVERFLOW)
+		{
+			// Can't convert string to date, set -1 and invalidate
+			m_dt = -1;
+			SetStatus(invalid);
+			return FALSE;
+		}
+		else
+		{
+			TRACE0("\nCOleDateTime VarDateFromStr call failed.\n\t");
+			if (sc == E_OUTOFMEMORY)
+				AfxThrowMemoryException();
+			else
+				AfxThrowOleException(sc);
+		}
+	}
+
+	SetStatus(valid);
+	return TRUE;
+}
+
+CString COleDateTime::Format(DWORD dwFlags, LCID lcid) const
+{
+	USES_CONVERSION;
+	CString strDate;
+
+	// If null, return empty string
+	if (GetStatus() == null)
+		return strDate;
+
+	// If invalid, return DateTime resource string
+	if (GetStatus() == invalid)
+	{
+		VERIFY(strDate.LoadString(AFX_IDS_INVALID_DATETIME));
+		return strDate;
+	}
+
+	COleVariant var;
+	// Don't need to trap error. Should not fail due to type mismatch
+	AfxCheckError(VarBstrFromDate(m_dt, lcid, dwFlags, &V_BSTR(&var)));
+	var.vt = VT_BSTR;
+	return OLE2CT(V_BSTR(&var));
+}
+
+CString COleDateTime::Format(LPCTSTR pFormat) const
+{
+	CString strDate;
+	struct tm tmTemp;
+
+	// If null, return empty string
+	if (GetStatus() == null)
+		return strDate;
+
+	// If invalid, return DateTime resource string
+	if (GetStatus() == invalid || !_AfxTmFromOleDate(m_dt, tmTemp))
+	{
+		VERIFY(strDate.LoadString(AFX_IDS_INVALID_DATETIME));
+		return strDate;
+	}
+
+	// Convert tm from afx internal format to standard format
+	_AfxTmConvertToStandardFormat(tmTemp);
+
+	// Fill in the buffer, disregard return value as it's not necessary
+	LPTSTR lpszTemp = strDate.GetBufferSetLength(MAX_TIME_BUFFER_SIZE);
+	_tcsftime(lpszTemp, strDate.GetLength(), pFormat, &tmTemp);
+	strDate.ReleaseBuffer();
+
+	return strDate;
+}
+
+CString COleDateTime::Format(UINT nFormatID) const
+{
+	CString strFormat;
+	VERIFY(strFormat.LoadString(nFormatID) != 0);
+	return Format(strFormat);
+}
+
+void COleDateTime::CheckRange()
+{
+	if (m_dt > MAX_DATE || m_dt < MIN_DATE) // about year 100 to about 9999
+		SetStatus(invalid);
+}
+
+// serialization
+#ifdef _DEBUG
+CDumpContext& AFXAPI operator<<(CDumpContext& dc, COleDateTime dateSrc)
+{
+	dc << "\nCOleDateTime Object:";
+	dc << "\n\tm_status = " << (long)dateSrc.m_status;
+
+	COleVariant var(dateSrc);
+	var.ChangeType(VT_BSTR);
+
+	return dc << "\n\tdate = " << var.bstrVal;
+}
+#endif // _DEBUG
+
+CArchive& AFXAPI operator<<(CArchive& ar, COleDateTime dateSrc)
+{
+	ar << (long)dateSrc.m_status;
+	return ar << dateSrc.m_dt;
+}
+
+CArchive& AFXAPI operator>>(CArchive& ar, COleDateTime& dateSrc)
+{
+	ar >> (long&)dateSrc.m_status;
+	return ar >> dateSrc.m_dt;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// COleDateTimeSpan class helpers
+
+#define MAX_DAYS_IN_SPAN    3615897L
+
+/////////////////////////////////////////////////////////////////////////////
+// COleDateTimeSpan class
+long COleDateTimeSpan::GetHours() const
+{
+	ASSERT(GetStatus() == valid);
+
+	double dblTemp;
+
+	// Truncate days and scale up
+	dblTemp = modf(m_span, &dblTemp);
+
+	long lReturns = (long)((dblTemp + AFX_OLE_DATETIME_HALFSECOND) * 24);
+	if (lReturns >= 24)
+		lReturns -= 24;
+
+	return lReturns;
+}
+
+long COleDateTimeSpan::GetMinutes() const
+{
+	ASSERT(GetStatus() == valid);
+
+	double dblTemp;
+
+	// Truncate hours and scale up
+	dblTemp = modf(m_span * 24, &dblTemp);
+
+	long lReturns = (long) ((dblTemp + AFX_OLE_DATETIME_HALFSECOND) * 60);
+	if (lReturns >= 60)
+		lReturns -= 60;
+
+	return lReturns;
+}
+
+long COleDateTimeSpan::GetSeconds() const
+{
+	ASSERT(GetStatus() == valid);
+
+	double dblTemp;
+
+	// Truncate minutes and scale up
+	dblTemp = modf(m_span * 24 * 60, &dblTemp);
+
+	long lReturns = (long) ((dblTemp + AFX_OLE_DATETIME_HALFSECOND) * 60);
+	if (lReturns >= 60)
+		lReturns -= 60;
+
+	return lReturns;
+}
+
+const COleDateTimeSpan& COleDateTimeSpan::operator=(double dblSpanSrc)
+{
+	m_span = dblSpanSrc;
+	SetStatus(valid);
+	return *this;
+}
+
+const COleDateTimeSpan& COleDateTimeSpan::operator=(const COleDateTimeSpan& dateSpanSrc)
+{
+	m_span = dateSpanSrc.m_span;
+	m_status = dateSpanSrc.m_status;
+	return *this;
+}
+
+COleDateTimeSpan COleDateTimeSpan::operator+(const COleDateTimeSpan& dateSpan) const
+{
+	COleDateTimeSpan dateSpanTemp;
+
+	// If either operand Null, result Null
+	if (GetStatus() == null || dateSpan.GetStatus() == null)
+	{
+		dateSpanTemp.SetStatus(null);
+		return dateSpanTemp;
+	}
+
+	// If either operand Invalid, result Invalid
+	if (GetStatus() == invalid || dateSpan.GetStatus() == invalid)
+	{
+		dateSpanTemp.SetStatus(invalid);
+		return dateSpanTemp;
+	}
+
+	// Add spans and validate within legal range
+	dateSpanTemp.m_span = m_span + dateSpan.m_span;
+	dateSpanTemp.CheckRange();
+
+	return dateSpanTemp;
+}
+
+COleDateTimeSpan COleDateTimeSpan::operator-(const COleDateTimeSpan& dateSpan) const
+{
+	COleDateTimeSpan dateSpanTemp;
+
+	// If either operand Null, result Null
+	if (GetStatus() == null || dateSpan.GetStatus() == null)
+	{
+		dateSpanTemp.SetStatus(null);
+		return dateSpanTemp;
+	}
+
+	// If either operand Invalid, result Invalid
+	if (GetStatus() == invalid || dateSpan.GetStatus() == invalid)
+	{
+		dateSpanTemp.SetStatus(invalid);
+		return dateSpanTemp;
+	}
+
+	// Subtract spans and validate within legal range
+	dateSpanTemp.m_span = m_span - dateSpan.m_span;
+	dateSpanTemp.CheckRange();
+
+	return dateSpanTemp;
+}
+
+void COleDateTimeSpan::SetDateTimeSpan(
+	long lDays, int nHours, int nMins, int nSecs)
+{
+	// Set date span by breaking into fractional days (all input ranges valid)
+	m_span = lDays + ((double)nHours)/24 + ((double)nMins)/(24*60) +
+		((double)nSecs)/(24*60*60);
+
+	SetStatus(valid);
+}
+
+CString COleDateTimeSpan::Format(LPCTSTR pFormat) const
+{
+	CString strSpan;
+	struct tm tmTemp;
+
+	// If null, return empty string
+	if (GetStatus() == null)
+		return strSpan;
+
+	// If invalid, return DateTimeSpan resource string
+	if (GetStatus() == invalid || !_AfxTmFromOleDate(m_span, tmTemp))
+	{
+		VERIFY(strSpan.LoadString(AFX_IDS_INVALID_DATETIMESPAN));
+		return strSpan;
+	}
+
+	// Convert tm from afx internal format to standard format
+	_AfxTmConvertToStandardFormat(tmTemp);
+
+	// _tcsftime() doesn't handle %D, so do it here
+
+	CString strPreParsed;
+	LPCTSTR pstrSource = pFormat;
+	int nTargetChar = 0;
+	int nAccumulatedLength = lstrlen(pFormat);
+	LPTSTR pstrTarget = strPreParsed.GetBuffer(nAccumulatedLength);
+
+	while (*pstrSource)
+	{
+		if (*pstrSource == '%' && pstrSource[1] == 'D')
+		{
+			TCHAR szDay[12];
+			_itot(GetDays(), szDay, 10);
+			strPreParsed.ReleaseBuffer(nTargetChar);
+			strPreParsed += szDay;
+			int nTemp = lstrlen(szDay);
+			nAccumulatedLength += nTemp;
+			nTargetChar += nTemp;
+			pstrTarget = strPreParsed.GetBuffer(nAccumulatedLength)
+				+ nTargetChar;
+			pstrSource = _tcsinc(pstrSource);
+			pstrSource = _tcsinc(pstrSource);
+		}
+		*pstrTarget = *pstrSource;
+		nTargetChar++;
+		pstrSource = _tcsinc(pstrSource);
+		pstrTarget = _tcsinc(pstrTarget);
+	}
+	strPreParsed.ReleaseBuffer(nTargetChar);
+
+	// Fill in the buffer, disregard return value as it's not necessary
+	LPTSTR lpszTemp = strSpan.GetBufferSetLength(MAX_TIME_BUFFER_SIZE);
+	_tcsftime(lpszTemp, strSpan.GetLength(), (LPCTSTR) strPreParsed, &tmTemp);
+	strSpan.ReleaseBuffer();
+
+	return strSpan;
+}
+
+CString COleDateTimeSpan::Format(UINT nFormatID) const
+{
+	CString strFormat;
+	VERIFY(strFormat.LoadString(nFormatID) != 0);
+	return Format(strFormat);
+}
+
+void COleDateTimeSpan::CheckRange()
+{
+	if(m_span < -MAX_DAYS_IN_SPAN || m_span > MAX_DAYS_IN_SPAN)
+		SetStatus(invalid);
+}
+
+// serialization
+#ifdef _DEBUG
+CDumpContext& AFXAPI operator<<(CDumpContext& dc, COleDateTimeSpan dateSpanSrc)
+{
+	dc << "\nCOleDateTimeSpan Object:";
+	dc << "\n\tm_status = " << (long)dateSpanSrc.m_status;
+
+	COleVariant var(dateSpanSrc.m_span);
+	var.ChangeType(VT_BSTR);
+
+	return dc << "\n\tdateSpan = " << var.bstrVal;
+}
+#endif // _DEBUG
+
+CArchive& AFXAPI operator<<(CArchive& ar, COleDateTimeSpan dateSpanSrc)
+{
+	ar << (long)dateSpanSrc.m_status;
+	return ar << dateSpanSrc.m_span;
+}
+
+CArchive& AFXAPI operator>>(CArchive& ar, COleDateTimeSpan& dateSpanSrc)
+{
+	ar >> (long&)dateSpanSrc.m_status;
+	return ar >> dateSpanSrc.m_span;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// COleSafeArray class
+
+COleSafeArray::COleSafeArray(const SAFEARRAY& saSrc, VARTYPE vtSrc)
+{
+	AfxSafeArrayInit(this);
+	vt = (VARTYPE)(vtSrc | VT_ARRAY);
+	AfxCheckError(::SafeArrayCopy((LPSAFEARRAY)&saSrc, &parray));
+	m_dwDims = GetDim();
+	m_dwElementSize = GetElemSize();
+}
+
+COleSafeArray::COleSafeArray(LPCSAFEARRAY pSrc, VARTYPE vtSrc)
+{
+	AfxSafeArrayInit(this);
+	vt = (VARTYPE)(vtSrc | VT_ARRAY);
+	AfxCheckError(::SafeArrayCopy((LPSAFEARRAY)pSrc, &parray));
+	m_dwDims = GetDim();
+	m_dwElementSize = GetElemSize();
+}
+
+COleSafeArray::COleSafeArray(const COleSafeArray& saSrc)
+{
+	AfxSafeArrayInit(this);
+	*this = saSrc;
+	m_dwDims = GetDim();
+	m_dwElementSize = GetElemSize();
+}
+
+COleSafeArray::COleSafeArray(const VARIANT& varSrc)
+{
+	AfxSafeArrayInit(this);
+	*this = varSrc;
+	m_dwDims = GetDim();
+	m_dwElementSize = GetElemSize();
+}
+
+COleSafeArray::COleSafeArray(LPCVARIANT pSrc)
+{
+	AfxSafeArrayInit(this);
+	*this = pSrc;
+	m_dwDims = GetDim();
+	m_dwElementSize = GetElemSize();
+}
+
+// Operations
+void COleSafeArray::Attach(VARIANT& varSrc)
+{
+	ASSERT(varSrc.vt & VT_ARRAY);
+
+	// Free up previous safe array if necessary
+	Clear();
+
+	// give control of data to COleSafeArray
+	memcpy(this, &varSrc, sizeof(varSrc));
+	varSrc.vt = VT_EMPTY;
+}
+
+VARIANT COleSafeArray::Detach()
+{
+	VARIANT varResult = *this;
+	vt = VT_EMPTY;
+	return varResult;
+}
+
+// Assignment operators
+COleSafeArray& COleSafeArray::operator=(const COleSafeArray& saSrc)
+{
+	ASSERT(saSrc.vt & VT_ARRAY);
+
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)&saSrc));
+	return *this;
+}
+
+COleSafeArray& COleSafeArray::operator=(const VARIANT& varSrc)
+{
+	ASSERT(varSrc.vt & VT_ARRAY);
+
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)&varSrc));
+	return *this;
+}
+
+COleSafeArray& COleSafeArray::operator=(LPCVARIANT pSrc)
+{
+	ASSERT(pSrc->vt & VT_ARRAY);
+
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)pSrc));
+	return *this;
+}
+
+COleSafeArray& COleSafeArray::operator=(const COleVariant& varSrc)
+{
+	ASSERT(varSrc.vt & VT_ARRAY);
+
+	AfxCheckError(::VariantCopy(this, (LPVARIANT)&varSrc));
+	return *this;
+}
+
+// Comparison operators
+BOOL COleSafeArray::operator==(const SAFEARRAY& saSrc) const
+{
+	return _AfxCompareSafeArrays(parray, (LPSAFEARRAY)&saSrc);
+}
+
+BOOL COleSafeArray::operator==(LPCSAFEARRAY pSrc) const
+{
+	return _AfxCompareSafeArrays(parray, (LPSAFEARRAY)pSrc);
+}
+
+BOOL COleSafeArray::operator==(const COleSafeArray& saSrc) const
+{
+	if (vt != saSrc.vt)
+		return FALSE;
+
+	return _AfxCompareSafeArrays(parray, saSrc.parray);
+}
+
+BOOL COleSafeArray::operator==(const VARIANT& varSrc) const
+{
+	if (vt != varSrc.vt)
+		return FALSE;
+
+	return _AfxCompareSafeArrays(parray, varSrc.parray);
+}
+
+BOOL COleSafeArray::operator==(LPCVARIANT pSrc) const
+{
+	if (vt != pSrc->vt)
+		return FALSE;
+
+	return _AfxCompareSafeArrays(parray, pSrc->parray);
+}
+
+BOOL COleSafeArray::operator==(const COleVariant& varSrc) const
+{
+	if (vt != varSrc.vt)
+		return FALSE;
+
+	return _AfxCompareSafeArrays(parray, varSrc.parray);
+}
+
+#ifdef _DEBUG
+void _AfxDumpSafeArrayElement(CDumpContext& dc, COleSafeArray& saSrc,
+   long* piIndices)
+{
+   BYTE* pbData;
+
+   pbData = (BYTE*)_alloca( saSrc.GetElemSize() );
+
+   saSrc.GetElement(piIndices, pbData);
+   switch(saSrc.vt&(~VT_ARRAY))
+   {
+   case VT_BOOL:
+	  dc << *((VARIANT_BOOL*)pbData);
+	  break;
+
+   case VT_I1:
+	  dc << *((char*)pbData);
+	  break;
+
+   case VT_I2:
+	  dc << *((short*)pbData);
+	  break;
+
+   case VT_I4:
+	  dc << *((long*)pbData);
+	  break;
+
+   case VT_UI1:
+	  dc << *((BYTE*)pbData);
+	  break;
+
+   case VT_UI2:
+	  dc << *((WORD*)pbData);
+	  break;
+
+   case VT_UI4:
+	  dc << *((DWORD*)pbData);
+	  break;
+
+   case VT_R4:
+	  dc << *((float*)pbData);
+	  break;
+
+   case VT_R8:
+	  dc << *((double*)pbData);
+	  break;
+
+   case VT_CY:
+	  {
+		 COleVariant var;
+
+		 var.vt = VT_CY;
+		 var.cyVal = *((CY*)pbData);
+		 var.ChangeType(VT_BSTR);
+		 dc << var.bstrVal;
+	  }
+	  break;
+
+   case VT_DATE:
+	  {
+		 COleVariant var;
+		 var.vt = VT_DATE;
+		 var.date = *((DATE*)pbData);
+		 var.ChangeType(VT_BSTR);
+		 dc << var.bstrVal;
+	  }
+
+   case VT_BSTR:
+	  dc << *((BSTR*)pbData);
+	  break;
+
+   case VT_ERROR:
+	  dc << *((SCODE*)pbData);
+	  break;
+
+   case VT_DISPATCH:
+   case VT_UNKNOWN:
+	  dc << *((IUnknown**)pbData);
+	  break;
+
+   case VT_VARIANT:
+	  {
+		 COleVariant var;
+
+		 var = *((VARIANT*)pbData);
+		 dc << var;
+	  }
+	  break;
+
+   default:
+	  ASSERT(FALSE);
+	  break;
+   }
+}
+
+CDumpContext& AFXAPI operator<<(CDumpContext& dc, COleSafeArray& saSrc)
+{
+   long iDimension;
+   long nDimensions;
+   long* piLBounds;
+   long* piUBounds;
+   long* piIndices;
+   BOOL bWrapped;
+
+   dc << "\nCOleSafeArray Object:";
+   dc << "\n\tvt = " << saSrc.vt;
+   dc << "\n\tbounds:";
+
+   nDimensions = saSrc.GetDim();
+   piLBounds = (long*)_alloca( nDimensions*sizeof( long ) );
+   piUBounds = (long*)_alloca( nDimensions*sizeof( long ) );
+   piIndices = (long*)_alloca( nDimensions*sizeof( long ) );
+   // Dump the bounds
+   for( iDimension = 0; iDimension < nDimensions; iDimension++ )
+   {
+	  saSrc.GetLBound( iDimension+1, &piLBounds[iDimension] );
+	  saSrc.GetUBound( iDimension+1, &piUBounds[iDimension] );
+	  dc << "\n\t(" << piLBounds[iDimension] << ", " <<
+		 piUBounds[iDimension] << ")";
+   }
+
+   if( dc.GetDepth() > 0 )
+   {
+	  // Dump the contents of the array.
+	  for( iDimension = 0; iDimension < nDimensions; iDimension++ )
+	  {
+		 piIndices[iDimension] = piLBounds[iDimension];
+	  }
+
+	  while( piIndices[0] <= piUBounds[0] )
+	  {
+		 dc << "\n\t";
+		 for( iDimension = 0; iDimension < nDimensions; iDimension++ )
+		 {
+			dc << "[" << piIndices[iDimension] << "]";
+		 }
+		 dc << " = ";
+
+		 // Dump the value of the element
+		 _AfxDumpSafeArrayElement(dc, saSrc, piIndices);
+
+		 // Increment the rightmost index, with wraparound and carry logic
+		 iDimension = nDimensions-1;
+		 bWrapped = TRUE;
+		 do
+		 {
+			bWrapped = FALSE;
+			piIndices[iDimension]++;
+			if( piIndices[iDimension] > piUBounds[iDimension] )
+			{
+			   if( iDimension > 0 )
+			   {
+				  // We've overstepped the bounds of this dimension, so wrap
+				  // around to the lower bound and make sure to increment the
+				  // next dimension to the left.
+				  bWrapped = TRUE;
+				  piIndices[iDimension] = piLBounds[iDimension];
+				  iDimension--;
+			   }
+			}
+		 } while( bWrapped && (iDimension >= 0) );
+	  }
+   }
+
+   return dc;
+}
+#endif // _DEBUG
+
+void COleSafeArray::CreateOneDim(VARTYPE vtSrc, DWORD dwElements,
+	const void* pvSrcData, long nLBound)
+{
+	ASSERT(dwElements > 0);
+
+	// Setup the bounds and create the array
+	SAFEARRAYBOUND rgsabound;
+	rgsabound.cElements = dwElements;
+	rgsabound.lLbound = nLBound;
+	Create(vtSrc, 1, &rgsabound);
+
+	// Copy over the data if neccessary
+	if (pvSrcData != NULL)
+	{
+		void* pvDestData;
+		AccessData(&pvDestData);
+		memcpy(pvDestData, pvSrcData, GetElemSize() * dwElements);
+		UnaccessData();
+	}
+}
+
+DWORD COleSafeArray::GetOneDimSize()
+{
+	ASSERT(GetDim() == 1);
+
+	long nUBound, nLBound;
+
+	GetUBound(1, &nUBound);
+	GetLBound(1, &nLBound);
+
+	return nUBound + 1 - nLBound;
+}
+
+void COleSafeArray::ResizeOneDim(DWORD dwElements)
+{
+	ASSERT(GetDim() == 1);
+
+	SAFEARRAYBOUND rgsabound;
+
+	rgsabound.cElements = dwElements;
+	rgsabound.lLbound = 0;
+
+	Redim(&rgsabound);
+}
+
+void COleSafeArray::Create(VARTYPE vtSrc, DWORD dwDims, DWORD* rgElements)
+{
+	ASSERT(rgElements != NULL);
+
+	// Allocate and fill proxy array of bounds (with lower bound of zero)
+	SAFEARRAYBOUND* rgsaBounds = new SAFEARRAYBOUND[dwDims];
+
+	for (DWORD dwIndex = 0; dwIndex < dwDims; dwIndex++)
+	{
+		// Assume lower bound is 0 and fill in element count
+		rgsaBounds[dwIndex].lLbound = 0;
+		rgsaBounds[dwIndex].cElements = rgElements[dwIndex];
+	}
+
+	TRY
+	{
+		Create(vtSrc, dwDims, rgsaBounds);
+	}
+	CATCH_ALL(e)
+	{
+		// Must free up memory
+		delete[] rgsaBounds;
+		THROW_LAST();
+	}
+	END_CATCH_ALL
+
+	delete[] rgsaBounds;
+}
+
+void COleSafeArray::Create(VARTYPE vtSrc, DWORD dwDims, SAFEARRAYBOUND* rgsabound)
+{
+	ASSERT(dwDims > 0);
+	ASSERT(rgsabound != NULL);
+
+	// Validate the VARTYPE for SafeArrayCreate call
+	ASSERT(!(vtSrc & VT_ARRAY));
+	ASSERT(!(vtSrc & VT_BYREF));
+	ASSERT(!(vtSrc & VT_VECTOR));
+	ASSERT(vtSrc != VT_EMPTY);
+	ASSERT(vtSrc != VT_NULL);
+
+	// Free up old safe array if necessary
+	Clear();
+
+	parray = ::SafeArrayCreate(vtSrc, dwDims, rgsabound);
+
+	if (parray == NULL)
+		AfxThrowMemoryException();
+
+#ifdef __BORLANDC__
+	vt = (unsigned short)(vtSrc | VT_ARRAY);
+#else
+	vt = unsigned short(vtSrc | VT_ARRAY);
+#endif //__BORLANDC__
+	m_dwDims = dwDims;
+	m_dwElementSize = GetElemSize();
+}
+
+void COleSafeArray::AccessData(void** ppvData)
+{
+	AfxCheckError(::SafeArrayAccessData(parray, ppvData));
+}
+
+void COleSafeArray::UnaccessData()
+{
+	AfxCheckError(::SafeArrayUnaccessData(parray));
+}
+
+void COleSafeArray::AllocData()
+{
+	AfxCheckError(::SafeArrayAllocData(parray));
+}
+
+void COleSafeArray::AllocDescriptor(DWORD dwDims)
+{
+	AfxCheckError(::SafeArrayAllocDescriptor(dwDims, &parray));
+}
+
+void COleSafeArray::Copy(LPSAFEARRAY* ppsa)
+{
+	AfxCheckError(::SafeArrayCopy(parray, ppsa));
+}
+
+void COleSafeArray::GetLBound(DWORD dwDim, long* pLbound)
+{
+	AfxCheckError(::SafeArrayGetLBound(parray, dwDim, pLbound));
+}
+
+void COleSafeArray::GetUBound(DWORD dwDim, long* pUbound)
+{
+	AfxCheckError(::SafeArrayGetUBound(parray, dwDim, pUbound));
+}
+
+void COleSafeArray::GetElement(long* rgIndices, void* pvData)
+{
+	AfxCheckError(::SafeArrayGetElement(parray, rgIndices, pvData));
+}
+
+void COleSafeArray::PtrOfIndex(long* rgIndices, void** ppvData)
+{
+	AfxCheckError(::SafeArrayPtrOfIndex(parray, rgIndices, ppvData));
+}
+
+void COleSafeArray::PutElement(long* rgIndices, void* pvData)
+{
+	AfxCheckError(::SafeArrayPutElement(parray, rgIndices, pvData));
+}
+
+void COleSafeArray::Redim(SAFEARRAYBOUND* psaboundNew)
+{
+	AfxCheckError(::SafeArrayRedim(parray, psaboundNew));
+}
+
+void COleSafeArray::Lock()
+{
+	AfxCheckError(::SafeArrayLock(parray));
+}
+
+void COleSafeArray::Unlock()
+{
+	AfxCheckError(::SafeArrayUnlock(parray));
+}
+
+void COleSafeArray::Destroy()
+{
+	AfxCheckError(::SafeArrayDestroy(parray));
+}
+
+void COleSafeArray::DestroyData()
+{
+	AfxCheckError(::SafeArrayDestroyData(parray));
+}
+
+void COleSafeArray::DestroyDescriptor()
+{
+	AfxCheckError(::SafeArrayDestroyDescriptor(parray));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// COleSafeArray Helpers
+void AFXAPI AfxSafeArrayInit(COleSafeArray* psa)
+{
+	memset(psa, 0, sizeof(*psa));
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,17 +9,9 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
-#ifndef _MAC
 #include <winnetwk.h>
 #include <shlobj.h>
 #include <shellapi.h>
-#endif
-#ifdef _MAC
-#include <macname1.h>
-#include <Files.h>
-#include <ToolUtils.h>
-#include <macname2.h>
-#endif
 
 #ifdef AFX_CORE1_SEG
 #pragma code_seg(AFX_CORE1_SEG)
@@ -32,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-static inline BOOL IsDirSep(TCHAR ch)
+AFX_STATIC inline BOOL IsDirSep(TCHAR ch)
 {
 	return (ch == '\\' || ch == '/');
 }
@@ -40,32 +32,21 @@ static inline BOOL IsDirSep(TCHAR ch)
 #ifndef _AFX_NO_OLE_SUPPORT
 
 #undef DEFINE_GUID
-#undef DEFINE_OLEGUID
 
-#ifndef _MAC
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-		EXTERN_C const GUID CDECL afx##name \
+		EXTERN_C AFX_COMDAT const GUID afx##name \
 				= { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
-#else
-#define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-		EXTERN_C const GUID afx##name \
-				= { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
-#endif /* _MAC */
 
-#define DEFINE_OLEGUID(name, l, w1, w2) DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
 #define DEFINE_SHLGUID(name, l, w1, w2) DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
 
-DEFINE_OLEGUID(IID_IClassFactory, 1, 0, 0);
-DEFINE_OLEGUID(IID_IPersistFile, 0x10b, 0, 0);
 DEFINE_SHLGUID(CLSID_ShellLink, 0x00021401L, 0, 0);
 #ifndef _UNICODE
 DEFINE_SHLGUID(IID_IShellLinkA, 0x000214EEL, 0, 0);
 #else
 DEFINE_SHLGUID(IID_IShellLinkW, 0x000214F9L, 0, 0);
 #endif
-#define IID_IClassFactory afxIID_IClassFactory
-#define IID_IPersistFile afxIID_IPersistFile
 #define CLSID_ShellLink afxCLSID_ShellLink
+
 #undef IID_IShellLink
 #undef IShellLink
 #ifndef _UNICODE
@@ -83,23 +64,20 @@ DEFINE_SHLGUID(IID_IShellLinkW, 0x000214F9L, 0, 0);
 
 CFile::CFile()
 {
-	m_hFile = hFileNull;
+	m_hFile = (UINT) hFileNull;
 	m_bCloseOnDelete = FALSE;
-	m_strFileName.Empty();
 }
 
 CFile::CFile(int hFile)
 {
 	m_hFile = hFile;
 	m_bCloseOnDelete = FALSE;
-	m_strFileName.Empty();
 }
 
 CFile::CFile(LPCTSTR lpszFileName, UINT nOpenFlags)
 {
 	ASSERT(AfxIsValidString(lpszFileName));
 
-	m_strFileName.Empty();
 	CFileException e;
 	if (!Open(lpszFileName, nOpenFlags, &e))
 		AfxThrowFileException(e.m_cause, e.m_lOsError, e.m_strFileName);
@@ -155,7 +133,7 @@ BOOL CFile::Open(LPCTSTR lpszFileName, UINT nOpenFlags,
 
 	// map read/write mode
 	ASSERT((modeRead|modeWrite|modeReadWrite) == 3);
-	DWORD dwAccess;
+	DWORD dwAccess = 0;
 	switch (nOpenFlags & 3)
 	{
 	case modeRead:
@@ -172,10 +150,12 @@ BOOL CFile::Open(LPCTSTR lpszFileName, UINT nOpenFlags,
 	}
 
 	// map share mode
-	DWORD dwShareMode;
-	switch (nOpenFlags & 0x70)
+	DWORD dwShareMode = 0;
+	switch (nOpenFlags & 0x70)    // map compatibility mode to exclusive
 	{
-	case shareCompat:       // map compatibility mode to exclusive
+	default:
+		ASSERT(FALSE);  // invalid share mode?
+	case shareCompat:
 	case shareExclusive:
 		dwShareMode = 0;
 		break;
@@ -188,8 +168,6 @@ BOOL CFile::Open(LPCTSTR lpszFileName, UINT nOpenFlags,
 	case shareDenyNone:
 		dwShareMode = FILE_SHARE_WRITE|FILE_SHARE_READ;
 		break;
-	default:
-		ASSERT(FALSE);  // invalid share mode?
 	}
 
 	// Note: typeText and typeBinary are used in derived classes only.
@@ -320,7 +298,7 @@ void CFile::Close()
 	if (m_hFile != (UINT)hFileNull)
 		bError = !::CloseHandle((HANDLE)m_hFile);
 
-	m_hFile = hFileNull;
+	m_hFile = (UINT) hFileNull;
 	m_bCloseOnDelete = FALSE;
 	m_strFileName.Empty();
 
@@ -336,9 +314,8 @@ void CFile::Abort()
 		// close but ignore errors
 		::CloseHandle((HANDLE)m_hFile);
 		m_hFile = (UINT)hFileNull;
-
-		m_strFileName.Empty();
 	}
+	m_strFileName.Empty();
 }
 
 void CFile::LockRange(DWORD dwPos, DWORD dwCount)
@@ -415,24 +392,22 @@ void PASCAL CFile::Remove(LPCTSTR lpszFileName)
 #undef AfxGetFileName
 #endif
 
-#ifndef _MAC
 #ifndef _AFX_NO_OLE_SUPPORT
-
-AFX_COM::~AFX_COM()
-{
-	if (m_hInst != NULL)
-		FreeLibrary(m_hInst);
-}
 
 HRESULT AFX_COM::CreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
 	REFIID riid, LPVOID* ppv)
 {
+	// find the object's class factory
 	LPCLASSFACTORY pf = NULL;
 	HRESULT hRes = GetClassObject(rclsid, IID_IClassFactory, (LPVOID*)&pf);
 	if (FAILED(hRes))
 		return hRes;
+
+	// call it to create the instance
 	ASSERT(pf != NULL);
 	hRes = pf->CreateInstance(pUnkOuter, riid, ppv);
+
+	// let go of the factory
 	pf->Release();
 	return hRes;
 }
@@ -441,16 +416,27 @@ HRESULT AFX_COM::GetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	*ppv = NULL;
 	HINSTANCE hInst = NULL;
+
+	// find server name for this class ID
+
 	CString strCLSID = AfxStringFromCLSID(rclsid);
 	CString strServer;
 	if (!AfxGetInProcServer(strCLSID, strServer))
 		return REGDB_E_CLASSNOTREG;
+
+	// try to load it
 	hInst = LoadLibrary(strServer);
 	if (hInst == NULL)
 		return REGDB_E_CLASSNOTREG;
+
+#pragma warning(disable:4191)
+	// get its entry point
 	HRESULT (STDAPICALLTYPE* pfn)(REFCLSID rclsid, REFIID riid, LPVOID* ppv);
 	pfn = (HRESULT (STDAPICALLTYPE*)(REFCLSID rclsid, REFIID riid, LPVOID* ppv))
 		GetProcAddress(hInst, "DllGetClassObject");
+#pragma warning(default:4191)
+
+	// call it, if it worked
 	if (pfn != NULL)
 		return pfn(rclsid, riid, ppv);
 	return CO_E_ERRORINDLL;
@@ -494,7 +480,7 @@ BOOL AFXAPI AfxGetInProcServer(LPCTSTR lpszCLSID, CString& str)
 	}
 	return b;
 }
-#endif
+#endif  //!_AFX_NO_OLE_SUPPORT
 
 
 BOOL AFXAPI AfxResolveShortcut(CWnd* pWnd, LPCTSTR lpszFileIn,
@@ -503,13 +489,7 @@ BOOL AFXAPI AfxResolveShortcut(CWnd* pWnd, LPCTSTR lpszFileIn,
 	USES_CONVERSION;
 	AFX_COM com;
 	IShellLink* psl;
-	*lpszFileOut = 0;	// assume failure
-
-	// WINBUG: Win32s versions prior to Win32s 1.3b do not restore the
-	//	 stack pointer correctly in SHGetFileInfo.	All it does is return
-	//	 failure anyway on Win32s, so here we just avoid calling it.
-	if (afxData.bWin31)
-		return FALSE;
+	*lpszFileOut = 0;   // assume failure
 
 	SHFILEINFO info;
 	if ((SHGetFileInfo(lpszFileIn, 0, &info, sizeof(info),
@@ -527,24 +507,15 @@ BOOL AFXAPI AfxResolveShortcut(CWnd* pWnd, LPCTSTR lpszFileIn,
 	IPersistFile *ppf;
 	if (SUCCEEDED(psl->QueryInterface(IID_IPersistFile, (LPVOID*)&ppf)))
 	{
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(lpszFileIn);
-		if (SUCCEEDED(ppf->Load((LPCWSTR)pBAfxConv, STGM_READ)))
-#else    // __BORLANDC__
 		if (SUCCEEDED(ppf->Load(T2COLE(lpszFileIn), STGM_READ)))
-#endif   // __BORLANDC__
 		{
 			/* Resolve the link, this may post UI to find the link */
 			if (SUCCEEDED(psl->Resolve(pWnd->GetSafeHwnd(),
 				SLR_ANY_MATCH)))
 			{
-#ifndef _UNICODE
 				psl->GetPath(lpszFileOut, cchPath, NULL, 0);
-#else
-				char szTemp[_MAX_PATH];
-				psl->GetPath(szTemp, _MAX_PATH, NULL, 0);
-				_mbstowcsz(lpszFileOut, szTemp, cchPath);
-#endif
+				ppf->Release();
+				psl->Release();
 				return TRUE;
 			}
 		}
@@ -553,7 +524,6 @@ BOOL AFXAPI AfxResolveShortcut(CWnd* pWnd, LPCTSTR lpszFileIn,
 	psl->Release();
 	return FALSE;
 }
-#endif  //_MAC
 
 // turn a file, relative path or other into an absolute path
 BOOL AFXAPI AfxFullPath(LPTSTR lpszPathOut, LPCTSTR lpszFileIn)
@@ -575,7 +545,6 @@ BOOL AFXAPI AfxFullPath(LPTSTR lpszPathOut, LPCTSTR lpszFileIn)
 		return FALSE;
 	}
 
-#ifndef _MAC
 	CString strRoot;
 	// determine the root name of the volume
 	AfxGetRoot(lpszPathOut, strRoot);
@@ -605,7 +574,6 @@ BOOL AFXAPI AfxFullPath(LPTSTR lpszPathOut, LPCTSTR lpszFileIn)
 			lstrcpy(lpszFilePart, data.cFileName);
 		}
 	}
-#endif
 	return TRUE;
 }
 
@@ -653,15 +621,6 @@ void AFXAPI AfxGetRoot(LPCTSTR lpszPath, CString& strRoot)
 
 BOOL AFXAPI AfxComparePath(LPCTSTR lpszPath1, LPCTSTR lpszPath2)
 {
-#ifdef _MAC
-	FSSpec fssTemp1;
-	FSSpec fssTemp2;
-	if (!UnwrapFile(lpszPath1, &fssTemp1) || !UnwrapFile(lpszPath2, &fssTemp2))
-		return FALSE;
-	return fssTemp1.vRefNum == fssTemp2.vRefNum &&
-		fssTemp1.parID == fssTemp2.parID &&
-		EqualString(fssTemp1.name, fssTemp2.name, false, true);
-#else
 	// use case insensitive compare as a starter
 	if (lstrcmpi(lpszPath1, lpszPath2) != 0)
 		return FALSE;
@@ -699,7 +658,9 @@ BOOL AFXAPI AfxComparePath(LPCTSTR lpszPath1, LPCTSTR lpszPath2)
 		// check for C3_FULLWIDTH characters only
 		if (aCharType13[i] & C3_FULLWIDTH)
 		{
+#ifdef _DEBUG
 			ASSERT(aCharType23[i] & C3_FULLWIDTH); // should always match!
+#endif
 
 			// if CT_CTYPE1 is different then file system considers these
 			// file names different.
@@ -709,16 +670,14 @@ BOOL AFXAPI AfxComparePath(LPCTSTR lpszPath1, LPCTSTR lpszPath2)
 		++i; // look at next character type
 	}
 	return TRUE; // otherwise file name is truly the same
-#endif
 }
 
 UINT AFXAPI AfxGetFileTitle(LPCTSTR lpszPathName, LPTSTR lpszTitle, UINT nMax)
 {
 	ASSERT(lpszTitle == NULL ||
 		AfxIsValidAddress(lpszTitle, _MAX_FNAME));
-	ASSERT(AfxIsValidString(lpszPathName, FALSE));
+	ASSERT(AfxIsValidString(lpszPathName));
 
-#ifndef _MAC
 	// use a temporary to avoid bugs in ::GetFileTitle when lpszTitle is NULL
 	TCHAR szTemp[_MAX_PATH];
 	LPTSTR lpszTemp = lpszTitle;
@@ -727,23 +686,16 @@ UINT AFXAPI AfxGetFileTitle(LPCTSTR lpszPathName, LPTSTR lpszTitle, UINT nMax)
 		lpszTemp = szTemp;
 		nMax = _countof(szTemp);
 	}
-	if (AfxDllGetFileTitle(lpszPathName, lpszTemp, (WORD)nMax) != 0)
+	if (::GetFileTitle(lpszPathName, lpszTemp, (WORD)nMax) != 0)
 	{
 		// when ::GetFileTitle fails, use cheap imitation
 		return AfxGetFileName(lpszPathName, lpszTitle, nMax);
 	}
 	return lpszTitle == NULL ? lstrlen(lpszTemp)+1 : 0;
-#else
-	return AfxDllGetFileTitle(lpszPathName, lpszTitle, (WORD)nMax);
-#endif
 }
 
 void AFXAPI AfxGetModuleShortFileName(HINSTANCE hInst, CString& strShortName)
 {
-#ifdef _MAC
-	::GetModuleFileName(hInst, strShortName.GetBuffer(_MAX_PATH), _MAX_PATH);
-	strShortName.ReleaseBuffer();
-#else
 	TCHAR szLongPathName[_MAX_PATH];
 	::GetModuleFileName(hInst, szLongPathName, _MAX_PATH);
 	if (::GetShortPathName(szLongPathName,
@@ -753,7 +705,6 @@ void AFXAPI AfxGetModuleShortFileName(HINSTANCE hInst, CString& strShortName)
 		strShortName = szLongPathName;
 	}
 	strShortName.ReleaseBuffer();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////

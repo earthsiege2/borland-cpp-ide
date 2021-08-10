@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -21,8 +21,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 // Helpers for floating point operations
-static const float afxFloatPseudoNull = AFX_RFX_SINGLE_PSEUDO_NULL;
-static const double afxDoublePseudoNull = AFX_RFX_DOUBLE_PSEUDO_NULL;
+const float afxFloatPseudoNull = AFX_RFX_SINGLE_PSEUDO_NULL;
+const double afxDoublePseudoNull = AFX_RFX_DOUBLE_PSEUDO_NULL;
 
 extern void AFXAPI AfxTextFloatFormat(CDataExchange* pDX, int nIDC,
 	void* pData, double value, int nSizeGcvt);
@@ -40,19 +40,22 @@ void AFXAPI RFX_Single(CFieldExchange* pFX, LPCTSTR szName,
 	if (!pFX->IsFieldType(&nField))
 		return;
 
-	LONG* plLength = pFX->m_prs->GetFieldLength(pFX);
+	LONG* plLength = pFX->m_prs->GetFieldLengthBuffer(nField - 1, pFX->m_nFieldType);
 	switch (pFX->m_nOperation)
 	{
 	case CFieldExchange::BindFieldToColumn:
 		{
 #ifdef _DEBUG
-			int nSqlType = pFX->GetColumnType(nField);
-			if (nSqlType != SQL_C_FLOAT)
+			// Assumes all bound fields BEFORE unbound fields
+			CODBCFieldInfo* pODBCInfo =
+				&pFX->m_prs->m_rgODBCFieldInfos[nField - 1];
+
+			if (pODBCInfo->m_nSQLType != SQL_C_FLOAT)
 			{
 				// Warn of possible field schema mismatch
 				if (afxTraceFlags & traceDatabase)
 					TRACE1("Warning: float converted from SQL type %ld.\n",
-						nSqlType);
+						pODBCInfo->m_nSQLType);
 			}
 #endif
 		}
@@ -67,8 +70,7 @@ LDefault:
 	case CFieldExchange::Fixup:
 		if (*plLength == SQL_NULL_DATA)
 		{
-			pFX->m_prs->SetFieldFlags(nField,
-				AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
+			pFX->m_prs->SetNullFieldStatus(nField - 1);
 			value = afxFloatPseudoNull;
 		}
 		return;
@@ -80,62 +82,41 @@ LDefault:
 		{
 			if (pFX->m_bField)
 			{
-				pFX->m_prs->SetFieldFlags(nField,
-					AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
+				pFX->m_prs->SetNullFieldStatus(nField - 1);
 				value = afxFloatPseudoNull;
 				*plLength = SQL_NULL_DATA;
 			}
 			else
 			{
-				pFX->m_prs->ClearFieldFlags(nField,
-					AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
+				pFX->m_prs->ClearNullFieldStatus(nField - 1);
 				*plLength = sizeof(value);
 			}
 #ifdef _DEBUG
-			pFX->m_bFieldFound = TRUE;
+			pFX->m_nFieldFound = nField;
 #endif
 		}
 		return;
 
 	case CFieldExchange::MarkForAddNew:
 		// can force writing of psuedo-null value (as a non-null) by setting field dirty
-		if (!pFX->m_prs->IsFieldFlagDirty(nField, pFX->m_nFieldType))
+		if (value != afxFloatPseudoNull)
 		{
-			if (value != afxFloatPseudoNull)
-			{
-				pFX->m_prs->SetFieldFlags(nField,
-					AFX_SQL_FIELD_FLAG_DIRTY, pFX->m_nFieldType);
-				pFX->m_prs->ClearFieldFlags(nField,
-					AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
-			}
+			pFX->m_prs->SetDirtyFieldStatus(nField - 1);
+			pFX->m_prs->ClearNullFieldStatus(nField - 1);
 		}
 		return;
 
 	case CFieldExchange::MarkForUpdate:
 		if (value != afxFloatPseudoNull)
-			pFX->m_prs->ClearFieldFlags(nField,
-				AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
+			pFX->m_prs->ClearNullFieldStatus(nField - 1);
 		goto LDefault;
 
-	case CFieldExchange::GetFieldInfoValue:
-		if (pFX->m_pfi->pv == &value)
+	case CFieldExchange::AllocCache:
 		{
-			pFX->m_pfi->nField = nField-1;
-			goto LFieldFound;
-		}
-		return;
+			CFieldInfo* pInfo = &pFX->m_prs->m_rgFieldInfos[nField - 1];
 
-	case CFieldExchange::GetFieldInfoOrdinal:
-		if (nField-1 == pFX->m_pfi->nField)
-		{
-LFieldFound:
-			pFX->m_pfi->nDataType = AFX_RFX_SINGLE;
-			pFX->m_pfi->strName = szName;
-			pFX->m_pfi->pv = &value;
-			pFX->m_pfi->dwSize = sizeof(value);
-			// Make sure field found only once
-			ASSERT(pFX->m_bFieldFound == FALSE);
-			pFX->m_bFieldFound = TRUE;
+			// Data cached by value, no allocation necessary
+			pInfo->m_nDataType = AFX_RFX_SINGLE;
 		}
 		return;
 
@@ -161,19 +142,23 @@ void AFXAPI RFX_Double(CFieldExchange* pFX, LPCTSTR szName,
 	if (!pFX->IsFieldType(&nField))
 		return;
 
-	LONG* plLength = pFX->m_prs->GetFieldLength(pFX);
+	LONG* plLength = pFX->m_prs->GetFieldLengthBuffer(nField - 1, pFX->m_nFieldType);
 	switch (pFX->m_nOperation)
 	{
 	case CFieldExchange::BindFieldToColumn:
 		{
 #ifdef _DEBUG
-			int nSqlType = pFX->GetColumnType(nField);
-			if (nSqlType != SQL_C_DOUBLE && nSqlType != SQL_FLOAT)
+			// Assumes all bound fields BEFORE unbound fields
+			CODBCFieldInfo* pODBCInfo =
+				&pFX->m_prs->m_rgODBCFieldInfos[nField - 1];
+
+			if (pODBCInfo->m_nSQLType != SQL_C_DOUBLE &&
+				pODBCInfo->m_nSQLType != SQL_FLOAT)
 			{
 				// Warn of possible field schema mismatch
 				if (afxTraceFlags & traceDatabase)
 					TRACE1("Warning: double converted from SQL type %ld.\n",
-						nSqlType);
+						pODBCInfo->m_nSQLType);
 			}
 #endif
 		}
@@ -188,8 +173,7 @@ LDefault:
 	case CFieldExchange::Fixup:
 		if (*plLength == SQL_NULL_DATA)
 		{
-			pFX->m_prs->SetFieldFlags(nField,
-				AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
+			pFX->m_prs->SetNullFieldStatus(nField - 1);
 			value = afxDoublePseudoNull;
 		}
 		return;
@@ -201,62 +185,40 @@ LDefault:
 		{
 			if (pFX->m_bField)
 			{
-				pFX->m_prs->SetFieldFlags(nField,
-					AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
+				pFX->m_prs->SetNullFieldStatus(nField - 1);
 				value = afxDoublePseudoNull;
 				*plLength = SQL_NULL_DATA;
 			}
 			else
 			{
-				pFX->m_prs->ClearFieldFlags(nField,
-					AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
+				pFX->m_prs->ClearNullFieldStatus(nField - 1);
 				*plLength = sizeof(value);
 			}
 #ifdef _DEBUG
-			pFX->m_bFieldFound = TRUE;
+			pFX->m_nFieldFound = nField;
 #endif
 		}
 		return;
 
 	case CFieldExchange::MarkForAddNew:
 		// can force writing of psuedo-null value (as a non-null) by setting field dirty
-		if (!pFX->m_prs->IsFieldFlagDirty(nField, pFX->m_nFieldType))
+		if (value != afxDoublePseudoNull)
 		{
-			if (value != afxDoublePseudoNull)
-			{
-				pFX->m_prs->SetFieldFlags(nField,
-					AFX_SQL_FIELD_FLAG_DIRTY, pFX->m_nFieldType);
-				pFX->m_prs->ClearFieldFlags(nField,
-					AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
-			}
+			pFX->m_prs->SetDirtyFieldStatus(nField - 1);
+			pFX->m_prs->ClearNullFieldStatus(nField - 1);
 		}
 		return;
 
 	case CFieldExchange::MarkForUpdate:
 		if (value != afxDoublePseudoNull)
-			pFX->m_prs->ClearFieldFlags(nField,
-				AFX_SQL_FIELD_FLAG_NULL, pFX->m_nFieldType);
+			pFX->m_prs->ClearNullFieldStatus(nField - 1);
 		goto LDefault;
 
-	case CFieldExchange::GetFieldInfoValue:
-		if (pFX->m_pfi->pv == &value)
+	case CFieldExchange::AllocCache:
 		{
-			pFX->m_pfi->nField = nField-1;
-			goto LFieldFound;
-		}
-		return;
-
-	case CFieldExchange::GetFieldInfoOrdinal:
-		if (nField-1 == pFX->m_pfi->nField)
-		{
-LFieldFound:
-			pFX->m_pfi->nDataType = AFX_RFX_DOUBLE;
-			pFX->m_pfi->strName = szName;
-			pFX->m_pfi->pv = &value;
-			pFX->m_pfi->dwSize = sizeof(value);
-			// Make sure field found only once
-			ASSERT(pFX->m_bFieldFound == FALSE);
-			pFX->m_bFieldFound = TRUE;
+			CFieldInfo* pInfo = &pFX->m_prs->m_rgFieldInfos[nField - 1];
+			pInfo->m_pvDataCache = new double;
+			pInfo->m_nDataType = AFX_RFX_DOUBLE;
 		}
 		return;
 
@@ -270,6 +232,94 @@ LFieldFound:
 
 	}
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+void AFXAPI RFX_Single_Bulk(CFieldExchange* pFX, LPCTSTR szName,
+	float** prgFltVals, long** prgLengths)
+{
+	ASSERT(AfxIsValidAddress(pFX, sizeof(CFieldExchange)));
+	ASSERT(AfxIsValidString(szName));
+
+	UINT nField;
+	if (!pFX->IsFieldType(&nField))
+		return;
+
+	switch (pFX->m_nOperation)
+	{
+	case CFieldExchange::AllocMultiRowBuffer:
+		{
+			// The buffer pointer better be initialized to NULL
+			// or cleanup in exceptional cases mail fail
+			ASSERT(*prgFltVals == NULL);
+			ASSERT(*prgLengths == NULL);
+
+			int nRowsetSize = pFX->m_prs->GetRowsetSize();
+
+			// Allocate buffers to hold data and length
+			*prgFltVals = new float[nRowsetSize];
+			*prgLengths = new long[nRowsetSize];
+		}
+		break;
+
+	case CFieldExchange::DeleteMultiRowBuffer:
+		delete [] *prgFltVals;
+		*prgFltVals = NULL;
+
+		delete [] *prgLengths;
+		*prgLengths = NULL;
+		break;
+
+	default:
+		AfxRFXBulkDefault(pFX, szName, *prgFltVals, *prgLengths,
+			SQL_C_FLOAT, sizeof(float));
+		break;
+	}
+}
+
+void AFXAPI RFX_Double_Bulk(CFieldExchange* pFX, LPCTSTR szName,
+	double** prgDblVals, long** prgLengths)
+{
+	ASSERT(AfxIsValidAddress(pFX, sizeof(CFieldExchange)));
+	ASSERT(AfxIsValidString(szName));
+
+	UINT nField;
+	if (!pFX->IsFieldType(&nField))
+		return;
+
+	switch (pFX->m_nOperation)
+	{
+	case CFieldExchange::AllocMultiRowBuffer:
+		{
+			// The buffer pointer better be initialized to NULL
+			// or cleanup in exceptional cases mail fail
+			ASSERT(*prgDblVals == NULL);
+			ASSERT(*prgLengths == NULL);
+
+			int nRowsetSize = pFX->m_prs->GetRowsetSize();
+
+			// Allocate buffers to hold data and length
+			*prgDblVals = new double[nRowsetSize];
+			*prgLengths = new long[nRowsetSize];
+		}
+		break;
+
+	case CFieldExchange::DeleteMultiRowBuffer:
+		delete [] *prgDblVals;
+		*prgDblVals = NULL;
+
+		delete [] *prgLengths;
+		*prgLengths = NULL;
+		break;
+
+	default:
+		AfxRFXBulkDefault(pFX, szName, *prgDblVals, *prgLengths,
+			SQL_C_DOUBLE, sizeof(double));
+		break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
 
 void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, float& value,
 	CRecordset* pRecordset)

@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project --><PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="gdscc.exe"/>
+    <OBJFILES value="GDSCC.obj DataMod.obj customdm.obj ..\OBJREPOS\BASEMOD.obj 
+      CustMod.obj HomeMod.obj TermMod.obj"/>
+    <RESFILES value="Gdscc.res"/>
+    <IDLFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) DataMod.dfm ..\OBJREPOS\BASEMOD.dfm 
+      CustMod.dfm HomeMod.dfm TermMod.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="vcldb50.lib vcl50.lib vclbde50.lib"/>
+    <SPARELIBS value="vcl50.lib vcldb50.lib vclbde50.lib"/>
+    <PACKAGES value=""/>
+    <PATHCPP value=".;..\OBJREPOS"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT;_ATL_SINGLE_THREADED"/>
+    <MAINSOURCE value="GDSCC.cpp"/>
+    <INCLUDEPATH value="$(BCB)\objrepos;$(BCB)\examples\dbtasks\jump\objrepos;..\OBJREPOS;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="$(BCB)\objrepos;$(BCB)\examples\dbtasks\jump\objrepos;..\OBJREPOS;$(BCB)\lib\obj;$(BCB)\teechart;$(BCB)\quickrpt;$(BCB);$(BCB)\lib;$(BCB)\units;$(BCB)\emuvcl;$(BCB)\db;$(BCB)\vcl"/>
+    <WARNINGS value=" -w-8026 -w-8027 -w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\objrepos -I$(BCB)\examples\dbtasks\jump\objrepos 
+      -I..\OBJREPOS -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- -tW"/>
+    <PFLAGS value="-$YD -v -JPHNV -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-aa -Tpe -x -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[HistoryLists\hlIncludePath]
+Count=0
+
+[HistoryLists\hlLibraryPath]
+Count=0
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_ATL_SINGLE_THREADED
+
+[Debugging]
+DebugSourceDirs=
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+InMemoryExe=0
+ShowInfoMsgs=0
+LinkDebugVcl=1
+  </IDEOPTIONS>
+</PROJECT>

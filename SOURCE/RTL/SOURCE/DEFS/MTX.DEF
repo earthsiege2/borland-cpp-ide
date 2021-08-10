@@ -1,0 +1,6 @@
+LIBRARY MTX
+EXPORTS
+
+    _GetObjectContext                        = 'MTXEX.DLL'.GetObjectContext
+    MTSCreateActivity                        = 'MTXEX.DLL'.*
+    _SafeRef                                 = 'MTXEX.DLL'.SafeRef

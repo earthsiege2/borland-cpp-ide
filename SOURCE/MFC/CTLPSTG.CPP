@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -20,8 +20,6 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #define new DEBUG_NEW
-
-static LPCOLESTR s_szContents = OLESTR("Contents");
 
 /////////////////////////////////////////////////////////////////////////////
 // COleControl::XPersistStorage
@@ -84,6 +82,9 @@ STDMETHODIMP COleControl::XPersistStorage::InitNew(LPSTORAGE pStg)
 	// Properties have been initialized
 	pThis->m_bInitialized = TRUE;
 
+	// Uncache cached ambient properties
+	_afxAmbientCache->Cache(NULL);
+
 	return S_OK;
 }
 
@@ -119,7 +120,7 @@ STDMETHODIMP COleControl::XPersistStorage::Load(LPSTORAGE pStg)
 		// Open the "Contents" stream of the supplied storage object, and
 		// then delegate to same implementation as IPersistStreamInit::Load.
 		LPSTREAM pStm = NULL;
-		hr = pStg->OpenStream(s_szContents, NULL,
+		hr = pStg->OpenStream(OLESTR("Contents"), NULL,
 			STGM_READ | STGM_SHARE_EXCLUSIVE, 0, &pStm);
 
 		ASSERT(FAILED(hr) || pStm != NULL);
@@ -156,7 +157,7 @@ STDMETHODIMP COleControl::XPersistStorage::Save(LPSTORAGE pStg,
 		return S_OK;
 
 	LPSTREAM pStm = NULL;
-	HRESULT hr = pStg->CreateStream(s_szContents,
+	HRESULT hr = pStg->CreateStream(OLESTR("Contents"),
 		STGM_CREATE | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 0, 0, &pStm);
 
 	ASSERT(FAILED(hr) || pStm != NULL);

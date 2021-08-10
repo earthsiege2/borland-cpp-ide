@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -36,9 +36,16 @@ AFX_MODULE_STATE* AFXAPI AfxSetModuleState(AFX_MODULE_STATE* pNewState)
 }
 
 AFX_MAINTAIN_STATE::~AFX_MAINTAIN_STATE()
-{  
+{
 	_AFX_THREAD_STATE* pState = _afxThreadState;
 	pState->m_pModuleState = m_pPrevModuleState;
+}
+
+AFX_MAINTAIN_STATE2::AFX_MAINTAIN_STATE2(AFX_MODULE_STATE* pNewState)
+{
+	m_pThreadState = _afxThreadState;
+	m_pPrevModuleState = m_pThreadState->m_pModuleState;
+	m_pThreadState->m_pModuleState = pNewState;
 }
 #endif //_AFXDLL
 
@@ -104,9 +111,17 @@ AFX_MODULE_STATE::AFX_MODULE_STATE(BOOL bDLL)
 	m_bSystem = (BYTE)bSystem;
 #endif
 
-#ifndef _MAC
 	// app starts out in "user control"
 	m_bUserCtrl = TRUE;
+
+#ifndef _AFX_NO_OCC_SUPPORT
+	m_lockList.Construct(offsetof(COleControlLock, m_pNextLock));
+#endif
+#ifdef _AFXDLL
+	m_libraryList.Construct(offsetof(CDynLinkLibrary, m_pNextDLL));
+#endif
+#ifdef _AFX_OLD_EXCEPTIONS
+	m_pfnTerminate = AfxAbort;
 #endif
 }
 
@@ -119,26 +134,31 @@ AFX_MODULE_STATE::AFX_MODULE_STATE(BOOL bDLL, WNDPROC pfnAfxWndProc,
 }
 #endif
 
-AFX_MODULE_PROCESS_STATE::AFX_MODULE_PROCESS_STATE()
-{
-#ifndef _AFX_NO_OCC_SUPPORT
-	m_lockList.Construct(offsetof(COleControlLock, m_pNextLock));
-#endif
-#ifdef _AFXDLL
-	m_libraryList.Construct(offsetof(CDynLinkLibrary, m_pNextDLL));
-#endif
-#ifdef _AFX_OLD_EXCEPTIONS
-	m_pfnTerminate = AfxAbort;
-#endif
-}
-
-AFX_MODULE_PROCESS_STATE::~AFX_MODULE_PROCESS_STATE()
+AFX_MODULE_STATE::~AFX_MODULE_STATE()
 {
 #ifndef _AFX_NO_DAO_SUPPORT
-#ifndef __BORLANDC__
 	delete m_pDaoState;
 #endif
-#endif
+
+	// clean up type lib cache map, if any
+	if (m_pTypeLibCacheMap != NULL)
+	{
+		m_pTypeLibCacheMap->RemoveAll(&m_typeLibCache);
+		delete m_pTypeLibCacheMap;
+	}
+}
+
+void CTypeLibCacheMap::RemoveAll(void* pExcept)
+{
+	POSITION pos = GetStartPosition();
+	void* pTypeLibID;
+	CTypeLibCache* pCache;
+	while (pos != NULL)
+	{
+		GetNextAssoc(pos, pTypeLibID, (void*&)pCache);
+		if (pCache != pExcept)
+			delete pCache;
+	}
 }
 
 AFX_MODULE_THREAD_STATE::AFX_MODULE_THREAD_STATE()
@@ -160,25 +180,22 @@ AFX_MODULE_THREAD_STATE::~AFX_MODULE_THREAD_STATE()
 
 #ifndef _AFX_NO_SOCKET_SUPPORT
 	// cleanup socket notification list
-	while (!m_listSocketNotifications.IsEmpty())
-		delete m_listSocketNotifications.RemoveHead();
+	if (m_plistSocketNotifications != NULL)
+		while (!m_plistSocketNotifications->IsEmpty())
+			delete m_plistSocketNotifications->RemoveHead();
+#ifndef _AFXDLL
+	// cleanup dynamically allocated socket maps
+	delete m_pmapSocketHandle;
+	delete m_pmapDeadSockets;
+	delete m_plistSocketNotifications;
 #endif
+#endif //!_AFX_NO_SOCKET_SUPPORT
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // AFX_MODULE_STATE for base application
 
-#ifdef _AFXDLL
-
-#undef AfxWndProc
-LRESULT CALLBACK
-AfxWndProcBase(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
-{
-	AFX_MANAGE_STATE(AfxGetAppModuleState());
-	return AfxWndProc(hWnd, nMsg, wParam, lParam);
-}
-
-#endif
+LRESULT CALLBACK AfxWndProcBase(HWND, UINT, WPARAM, LPARAM);
 
 class _AFX_BASE_MODULE_STATE : public AFX_MODULE_STATE
 {
@@ -192,6 +209,18 @@ public:
 };
 
 PROCESS_LOCAL(_AFX_BASE_MODULE_STATE, _afxBaseModuleState)
+
+#ifdef _AFXDLL
+
+#undef AfxWndProc
+LRESULT CALLBACK
+AfxWndProcBase(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
+{
+	AFX_MANAGE_STATE(_afxBaseModuleState.GetData());
+	return AfxWndProc(hWnd, nMsg, wParam, lParam);
+}
+
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // helper functions for module state
@@ -213,15 +242,10 @@ AFX_MODULE_STATE* AFXAPI AfxGetModuleState()
 	else
 	{
 		// otherwise, use global app state
-		pResult = AfxGetAppModuleState();
+		pResult = _afxBaseModuleState.GetData();
 	}
 	ASSERT(pResult != NULL);
 	return pResult;
-}
-
-AFX_MODULE_PROCESS_STATE* AFXAPI AfxGetModuleProcessState()
-{
-	return AfxGetModuleState()->m_process.GetData();
 }
 
 AFX_MODULE_THREAD_STATE* AFXAPI AfxGetModuleThreadState()
@@ -230,3 +254,24 @@ AFX_MODULE_THREAD_STATE* AFXAPI AfxGetModuleThreadState()
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// CTypeLibCache::Unlock
+// (Note: the rest of CTypeLibCache is implemented in oletyplb.cpp)
+
+void CTypeLibCache::Unlock()
+{
+	ASSERT(m_cRef > 0);
+
+	if (InterlockedDecrement(&m_cRef) == 0)
+	{
+		if (m_ptinfo != NULL)
+		{
+			m_ptinfo->Release();
+			m_ptinfo = NULL;
+		}
+		if (m_ptlib != NULL)
+		{
+			m_ptlib->Release();
+			m_ptlib = NULL;
+		}
+	}
+}

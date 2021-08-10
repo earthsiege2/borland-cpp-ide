@@ -1,161 +1,225 @@
-/*  iomanip.h -- streams I/O manipulator declarations
-
-*/
-
-/*
- *      C/C++ Run Time Library - Version 8.0
- *
- *      Copyright (c) 1990, 1997 by Borland International
- *      All Rights Reserved.
- *
- */
-/* $Revision:   8.2  $ */
-
-#ifndef __cplusplus
-#error Must use C++ for the io stream manipulators.
-#endif
-
 #ifndef __IOMANIP_H
 #define __IOMANIP_H
+#pragma option push -b -a8 -pc -Vx- -Ve- -w-inl -w-aus -w-sig
+// -*- C++ -*-
+#ifndef __STD_IOMANIP__
+#define __STD_IOMANIP__
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+/***************************************************************************
+ *
+ * iomanip - Declarations for the iomanip classes
+ *
+ ***************************************************************************
+ *
+ * Copyright (c) 1994-1999 Rogue Wave Software, Inc.  All Rights Reserved.
+ *
+ * This computer software is owned by Rogue Wave Software, Inc. and is
+ * protected by U.S. copyright laws and other laws and by international
+ * treaties.  This computer software is furnished by Rogue Wave Software,
+ * Inc. pursuant to a written license agreement and may be used, copied,
+ * transmitted, and stored only in accordance with the terms of such
+ * license and with the inclusion of the above copyright notice.  This
+ * computer software or any other copies thereof may not be provided or
+ * otherwise made available to any other person.
+ *
+ * U.S. Government Restricted Rights.  This computer software is provided
+ * with Restricted Rights.  Use, duplication, or disclosure by the
+ * Government is subject to restrictions as set forth in subparagraph (c)
+ * (1) (ii) of The Rights in Technical Data and Computer Software clause
+ * at DFARS 252.227-7013 or subparagraphs (c) (1) and (2) of the
+ * Commercial Computer Software – Restricted Rights at 48 CFR 52.227-19,
+ * as applicable.  Manufacturer is Rogue Wave Software, Inc., 5500
+ * Flatiron Parkway, Boulder, Colorado 80301 USA.
+ *
+ **************************************************************************/
+
+#include <stdcomp.h>
+#include <iostream> 
+
+#ifndef _RWSTD_NO_NAMESPACE
+namespace std {
+#endif
+  
+  /*
+   * class smanip
+   */
+
+  template<class T>
+  class smanip {
+
+  public:
+    smanip(ios_base& (*pf)(ios_base&, T), T manarg)
+      : __pf(pf)
+      , __manarg(manarg)
+    { ; }
+      
+    ios_base&           (*__pf)(ios_base&, T);
+    T              __manarg;
+  protected:
+
+  private:
+  };
+
+  /*
+   * class smanip_fill
+   */
+
+  template<class T, class traits>
+  class smanip_fill {
+
+  public:
+    smanip_fill(basic_ios< T, traits >& (*pf)(basic_ios< T, traits >&, T), T manarg)
+      : __pf(pf)
+      , __manarg(manarg)
+    { ; }
+
+    basic_ios< T, traits >&   (*__pf)(basic_ios< T, traits >&, T);
+    T              __manarg;
+  protected:
+
+  private:
+  };
+ 
+  /*
+   * global manipulators
+   */
+
+  inline ios_base& rsios(ios_base& str, ios_base::fmtflags mask)
+  {
+    str.setf((ios_base::fmtflags)0, mask);
+    return str;
+  }
+
+  inline ios_base& sios(ios_base& str, ios_base::fmtflags mask)
+  {
+    str.setf(mask);
+    return str;
+  }
+
+  inline ios_base& sbase(ios_base& str, int base)
+  {
+    str.setf(base == 8 ? ios_base::oct :
+             base == 10 ? ios_base::dec :
+             base == 16 ? ios_base::hex :
+             ios_base::fmtflags(0), ios_base::basefield);
+
+    return str;
+  }
+
+  template < class charT, class traits >
+  inline basic_ios< charT, traits >& sfill( basic_ios< charT, traits >& str, charT c)
+  {
+    str.fill(c);
+    return str;
+  }
+
+  inline ios_base& sprec(ios_base& str, int n)
+  {
+    str.precision(n);
+    return str;
+  }
+
+  inline ios_base& swidth(ios_base& str, int n)
+  {
+    str.width(n);
+    return str;
+  }
+ 
+  inline smanip<ios_base::fmtflags> resetiosflags(ios_base::fmtflags mask )
+  { return smanip<ios_base::fmtflags>(rsios, mask); }
+ 
+  inline smanip<ios_base::fmtflags> setiosflags(ios_base::fmtflags mask )
+  { return smanip<ios_base::fmtflags>(sios, mask); }
+
+  inline smanip<int> setbase(int base)
+  { return smanip<int>(sbase, base); }
+
+  template < class charT >
+  inline smanip_fill<charT, char_traits<charT> > setfill( charT c)
+  { return smanip_fill<charT, char_traits<charT> >((basic_ios< charT, char_traits<charT> >& (*)(basic_ios< charT, char_traits<charT> >&, charT))sfill, c); 
+  }
+
+  inline smanip<int> setprecision(int n)
+  { return smanip<int>(sprec, n); }
+
+  inline smanip<int> setw(int n)
+  { return smanip<int>(swidth, n); }
+
+  template<class charT, class traits, class T>
+  inline basic_istream<charT, traits>& operator>>(basic_istream<charT, traits>& is, const smanip<T>& a)
+  {
+#ifndef _RWSTD_NO_EXCEPTIONS
+    try {
+      (*a.__pf)(is, a.__manarg);
+    }
+    catch(...) {
+      is.setstate(ios_base::failbit);
+    }
+#else
+    (*a.__pf)(is, a.__manarg);
+#endif // _RWSTD_NO_EXCEPTIONS
+  
+    return is;
+  }
+
+  template<class charT, class traits, class T>
+  inline basic_ostream<charT, traits>& operator<<(basic_ostream<charT, traits>& os, const smanip<T>& a)
+  {
+#ifndef _RWSTD_NO_EXCEPTIONS
+    try {
+      (*a.__pf)(os, a.__manarg);
+    }
+    catch(...) {
+      os.setstate(ios_base::failbit);
+    }
+#else
+    (*a.__pf)(os, a.__manarg);
+#endif // _RWSTD_NO_EXCEPTIONS
+  
+    return os;
+  }
+
+  template<class T, class traits>
+  inline basic_istream<T, traits>& operator>>(basic_istream<T, traits>& is, const smanip_fill<T, traits>& a)
+  {
+#ifndef _RWSTD_NO_EXCEPTIONS
+    try {
+      (*a.__pf)(is, a.__manarg);
+    }
+    catch(...) {
+      is.setstate(ios_base::failbit);
+    }
+#else
+    (*a.__pf)(is, a.__manarg);
+#endif // _RWSTD_NO_EXCEPTIONS
+  
+    return is;
+  }
+
+  template<class T, class traits>
+  inline basic_ostream<T, traits>& operator<<(basic_ostream<T, traits>& os, const smanip_fill<T, traits>& a)
+  {
+#ifndef _RWSTD_NO_EXCEPTIONS
+    try {
+      (*a.__pf)(os, a.__manarg);
+    }
+    catch(...) {
+      os.setstate(ios_base ::failbit);
+    }
+#else
+    (*a.__pf)(os, a.__manarg);
+#endif // _RWSTD_NO_EXCEPTIONS
+  
+    return os;
+  }
+#ifndef _RWSTD_NO_NAMESPACE
+}
 #endif
 
-#if !defined(__IOSTREAM_H)
-#include <iostream.h>
+#endif // __STD__IOMANIP__ 
+#ifndef __USING_STD_NAMES__
+  using namespace std;
 #endif
 
-
-#if !defined(RC_INVOKED)
-
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-     // disable Object data calling convention
-#endif
-#endif
-
-#pragma option -Vo-
-
-#if defined(__STDC__)
-#pragma warn -nak
-#endif
-
-#endif  /* !RC_INVOKED */
-
-
-template<class _typ> class _EXPCLASS smanip {
-        ios _FAR & (_RTLENTRY *_fn)(ios _FAR &, _typ);
-        _typ _ag;
-public:
-        _RTLENTRY smanip(ios _FAR & (_RTLENTRY *_f)(ios _FAR &, _typ), _typ _a) :
-                _fn(_f), _ag(_a) { }
-        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, const smanip<_typ> _FAR & _f) {
-                        (*_f._fn)(_s, _f._ag); return _s; }
-        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, const smanip<_typ> _FAR & _f) {
-                        (*_f._fn)(_s, _f._ag); return _s; }
-        };
-
-template<class _typ> class _EXPCLASS sapp {
-        ios _FAR & (_RTLENTRY *_fn)(ios _FAR &, _typ);
-public:
-        sapp(ios _FAR & (_RTLENTRY *_f)(ios _FAR &, _typ)) : _fn(_f) { }
-        smanip<_typ> _RTLENTRY operator()(_typ _z)
-                { return smanip<_typ>(_fn, _z); }
-        };
-
-template<class _typ> class _EXPCLASS imanip {
-        istream _FAR & (_RTLENTRY *_fn)(istream _FAR &, _typ);
-        _typ _ag;
-public:
-        _RTLENTRY imanip(istream _FAR & (_RTLENTRY *_f)(istream _FAR &, _typ), _typ _z ) :
-                _fn(_f), _ag(_z) { }
-        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, const imanip<_typ> _FAR & _f) {
-                return(*_f._fn)(_s, _f._ag); }
-        };
-
-template<class _typ> class _EXPCLASS iapply {
-        istream _FAR & (_RTLENTRY *_fn)(istream _FAR &, _typ);
-public:
-        _RTLENTRY iapply(istream _FAR & (_RTLENTRY *_f)(istream _FAR &, _typ)) :
-                _fn(_f) { }
-        imanip<_typ> _RTLENTRY operator()(_typ _z) {
-                return IMANIP(_typ)(_fn, _z); }
-        };
-
-template<class _typ> class _EXPCLASS omanip {
-        ostream _FAR & (_RTLENTRY *_fn)(ostream _FAR &, _typ);
-        _typ _ag;
-public:
-        _RTLENTRY omanip(ostream _FAR & (_RTLENTRY *_f)(ostream _FAR &, _typ), _typ _z ) :
-                _fn(_f), _ag(_z) { }
-        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, const omanip<_typ> _FAR & _f) {
-                return(*_f._fn)(_s, _f._ag); }
-        };
-
-template<class _typ> class _EXPCLASS oapp {
-        ostream _FAR & (_RTLENTRY *_fn)(ostream _FAR &, _typ);
-public:
-        _RTLENTRY oapp(ostream _FAR & (_RTLENTRY *_f)(ostream _FAR &, _typ)) :
-                _fn(_f) { }
-        omanip<_typ> _RTLENTRY operator()(_typ _z) {
-                return omanip<_typ>(_fn, _z); }
-        };
-
-template<class _typ> class _EXPCLASS iomanip {
-        iostream _FAR & (_RTLENTRY *_fn)(iostream _FAR &, _typ);
-        _typ _ag;
-public:
-        _RTLENTRY iomanip(iostream _FAR & (_RTLENTRY *_f)(iostream _FAR &, _typ), _typ _z ) :
-                _fn(_f), _ag(_z) { }
-        friend istream _FAR & _RTLENTRY operator>>(iostream _FAR & _s, const iomanip<_typ> _FAR & _f) {
-                return(*_f._fn)(_s, _f._ag); }
-        friend ostream _FAR & _RTLENTRY operator<<(iostream _FAR & _s, const iomanip<_typ> _FAR & _f) {
-                return(*_f._fn)(_s, _f._ag); }
-        };
-
-template<class _typ> class _EXPCLASS ioapp {
-        iostream _FAR & (_RTLENTRY *_fn)(iostream _FAR &, _typ);
-public:
-        _RTLENTRY ioapp(iostream _FAR & (_RTLENTRY *_f)(iostream _FAR &, _typ)) : _fn(_f) { }
-        iomanip<_typ> _RTLENTRY operator()(_typ _z) {
-                return iomanip<_typ>(_fn, _z); }
-        };
-
-// set the conversion base to 0, 8, 10, or 16
-smanip<int>     _RTLENTRY _EXPFUNC setbase(int _b);
-
-// clear the flags bitvector according to the bits set in b
-smanip<long>    _RTLENTRY _EXPFUNC resetiosflags(long _b);
-
-// set the flags bitvector according to the bits set in b
-smanip<long>    _RTLENTRY _EXPFUNC setiosflags(long _b);
-
-// set fill character for padding a field
-smanip<int>     _RTLENTRY _EXPFUNC setfill(int _f);
-
-// set the floating-point precision to n digits
-smanip<int>     _RTLENTRY _EXPFUNC setprecision(int _n);
-
-// set the field width to n
-smanip<int>     _RTLENTRY _EXPFUNC setw(int _n);
-
-
-#if !defined(RC_INVOKED)
-
-#if defined(__STDC__)
-#pragma warn .nak
-#endif
-
-#pragma option -Vo.
-
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po.     // restore Object data calling convention
-#endif
-#endif
-
-#endif  /* !RC_INVOKED */
-
-
-#endif  /* __IOMANIP_H */
+#pragma option pop
+#endif /* __IOMANIP_H */

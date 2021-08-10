@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -19,23 +19,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#pragma warning(disable: 4706) // assignment within conditional
+
 /////////////////////////////////////////////////////////////////////////////
 // CMiniFrameWnd global data
 
-static HBITMAP hbmMiniSys;
-static HFONT hfontMiniSys;
-static SIZE sizeMiniSys;
+AFX_STATIC_DATA HBITMAP _afx_hbmMiniSys = 0;
+AFX_STATIC_DATA HFONT _afx_hfontMiniSys = 0;
+AFX_STATIC_DATA SIZE _afx_sizeMiniSys = { 0, 0 };
 
-struct _AFX_WINMINI_TERM
+void AFX_CDECL _AfxWinminiTerm()
 {
-	~_AFX_WINMINI_TERM()
-	{
-		AfxDeleteObject((HGDIOBJ*)&hbmMiniSys);
-		AfxDeleteObject((HGDIOBJ*)&hfontMiniSys);
-	}
-};
-
-static const _AFX_WINMINI_TERM winminiTerm;
+	AfxDeleteObject((HGDIOBJ*)&_afx_hbmMiniSys);
+	AfxDeleteObject((HGDIOBJ*)&_afx_hfontMiniSys);
+}
+int _afxWinminiTerm = atexit(_AfxWinminiTerm);
 
 /////////////////////////////////////////////////////////////////////////////
 // CMiniFrameWnd
@@ -78,23 +76,23 @@ void AFX_CDECL CMiniFrameWnd::Initialize()
 		return;
 
 	AfxLockGlobals(CRIT_MINIFRAMEWND);
-	if (hbmMiniSys == NULL)
+	if (_afx_hbmMiniSys == NULL)
 	{
 		HINSTANCE hInst = AfxFindResourceHandle(
 			MAKEINTRESOURCE(AFX_IDB_MINIFRAME_MENU), RT_BITMAP);
-		VERIFY(hbmMiniSys =
+		VERIFY(_afx_hbmMiniSys =
 			LoadBitmap(hInst, MAKEINTRESOURCE(AFX_IDB_MINIFRAME_MENU)));
 		BITMAP bmStruct;
-		if (::GetObject(hbmMiniSys, sizeof(BITMAP), &bmStruct))
+		if (::GetObject(_afx_hbmMiniSys, sizeof(BITMAP), &bmStruct))
 		{
-			sizeMiniSys.cx = bmStruct.bmWidth;
-			sizeMiniSys.cy = bmStruct.bmHeight;
+			_afx_sizeMiniSys.cx = bmStruct.bmWidth;
+			_afx_sizeMiniSys.cy = bmStruct.bmHeight;
 		}
 	}
-	if (hfontMiniSys == NULL)
+	if (_afx_hfontMiniSys == NULL)
 	{
 		LOGFONT logFont; memset(&logFont, 0, sizeof(LOGFONT));
-		logFont.lfHeight = -(sizeMiniSys.cy-1);
+		logFont.lfHeight = -(_afx_sizeMiniSys.cy-1);
 		logFont.lfCharSet = DEFAULT_CHARSET;
 		logFont.lfWeight = FW_NORMAL;
 		if (GetSystemMetrics(SM_DBCSENABLED))
@@ -103,19 +101,19 @@ void AFX_CDECL CMiniFrameWnd::Initialize()
 			lstrcpy(logFont.lfFaceName, _T("Small Fonts"));
 		if (!AfxCustomLogFont(AFX_IDS_MINI_FONT, &logFont))
 			logFont.lfPitchAndFamily = DEFAULT_PITCH | FF_SWISS;
-		hfontMiniSys = ::CreateFontIndirect(&logFont);
+		_afx_hfontMiniSys = ::CreateFontIndirect(&logFont);
 	}
 
-	if (hfontMiniSys != NULL)
+	if (_afx_hfontMiniSys != NULL)
 	{
 		CClientDC dc(NULL);
 		TEXTMETRIC tm;
-		HFONT hFontOld = (HFONT)dc.SelectObject(hfontMiniSys);
+		HFONT hFontOld = (HFONT)dc.SelectObject(_afx_hfontMiniSys);
 		BOOL bResult = dc.GetTextMetrics(&tm);
 		dc.SelectObject(hFontOld);
 
-		if (!bResult || tm.tmHeight - tm.tmInternalLeading > sizeMiniSys.cy)
-			AfxDeleteObject((HGDIOBJ*)&hfontMiniSys);
+		if (!bResult || tm.tmHeight - tm.tmInternalLeading > _afx_sizeMiniSys.cy)
+			AfxDeleteObject((HGDIOBJ*)&_afx_hfontMiniSys);
 	}
 	AfxUnlockGlobals(CRIT_MINIFRAMEWND);
 }
@@ -241,7 +239,7 @@ void CMiniFrameWnd::OnNcCalcSize(BOOL, NCCALCSIZE_PARAMS *lpParams)
 			-GetSystemMetrics(SM_CXBORDER), -GetSystemMetrics(SM_CYBORDER));
 	}
 	if (dwStyle & WS_CAPTION)
-		lpParams->rgrc[0].top += sizeMiniSys.cy;
+		lpParams->rgrc[0].top += _afx_sizeMiniSys.cy;
 }
 
 UINT CMiniFrameWnd::OnNcHitTest(CPoint point)
@@ -265,32 +263,6 @@ UINT CMiniFrameWnd::OnNcHitTest(CPoint point)
 			if (GetKeyState(VK_RBUTTON) < 0)
 				return HTNOWHERE;
 		}
-
-#ifdef _MAC
-		DWORD dwExStyle = GetExStyle();
-		if ((nHit == HTCLIENT) && (dwExStyle & WS_EX_FORCESIZEBOX))
-		{
-			NCCALCSIZE_PARAMS Params;
-			Params.rgrc[0].top = rectWindow.top;
-			Params.rgrc[0].left = rectWindow.left;
-			Params.rgrc[0].bottom = rectWindow.bottom;
-			Params.rgrc[0].right = rectWindow.right;
-			OnNcCalcSize(FALSE, &Params);
-
-			CRect rcClient(Params.rgrc);
-
-			rcClient.left = rcClient.right - GetSystemMetrics(SM_CXVSCROLL);
-
-			DWORD dwStyle = GetStyle();
-			if (dwStyle & (MFS_4THICKFRAME | WS_THICKFRAME | MFS_THICKFRAME))
-				rcClient.left -= GetSystemMetrics(SM_CXFRAME);
-			else
-				rcClient.left -= GetSystemMetrics(SM_CXBORDER);
-
-			if (rcClient.PtInRect(point))
-				return HTCAPTION;
-		}
-#endif
 
 		if ((nHit < HTSIZEFIRST || nHit > HTSIZELAST) && nHit != HTGROWBOX)
 			return nHit;
@@ -340,8 +312,8 @@ UINT CMiniFrameWnd::OnNcHitTest(CPoint point)
 	if (dwStyle & (MFS_4THICKFRAME | MFS_THICKFRAME | WS_THICKFRAME))
 	{
 		UINT ht = HTNOWHERE;
-		CSize sizeOffset(sizeFrame.cx + sizeMiniSys.cx - sizeBorder.cx * 3,
-			sizeFrame.cy + sizeMiniSys.cy - sizeBorder.cy * 2);
+		CSize sizeOffset(sizeFrame.cx + _afx_sizeMiniSys.cx - sizeBorder.cx * 3,
+			sizeFrame.cy + _afx_sizeMiniSys.cy - sizeBorder.cy * 2);
 
 		if (point.y < rectWindow.top + sizeFrame.cy)
 		{
@@ -394,10 +366,10 @@ UINT CMiniFrameWnd::OnNcHitTest(CPoint point)
 		rectWindow.InflateRect(-sizeFrame.cx, -sizeFrame.cy);
 	}
 
-	rectWindow.bottom = rectWindow.top + sizeMiniSys.cy + sizeBorder.cy;
+	rectWindow.bottom = rectWindow.top + _afx_sizeMiniSys.cy + sizeBorder.cy;
 	if (rectWindow.PtInRect(point))
 	{
-		if (point.x < rectWindow.left + (sizeMiniSys.cx - 2) &&
+		if (point.x < rectWindow.left + (_afx_sizeMiniSys.cx - 2) &&
 			(dwStyle & WS_SYSMENU))
 			return HTSYSMENU;
 
@@ -470,7 +442,7 @@ void CMiniFrameWnd::InvertSysMenu()
 		GetSystemMetrics(SM_CYFRAME));
 
 	CRect rect(sizeBorder.cx, sizeBorder.cy,
-		sizeMiniSys.cx - sizeBorder.cx, sizeMiniSys.cy);
+		_afx_sizeMiniSys.cx - sizeBorder.cx, _afx_sizeMiniSys.cy);
 	if (GetStyle() & (MFS_4THICKFRAME | MFS_THICKFRAME | WS_THICKFRAME))
 		rect.OffsetRect(sizeFrame.cx - sizeBorder.cx, sizeFrame.cy - sizeBorder.cy);
 
@@ -480,13 +452,14 @@ void CMiniFrameWnd::InvertSysMenu()
 }
 
 
-// DrawFrame: [static]
+// _AfxDrawFrame: [static]
 // Draws a frame in a given brush, with a given width for the lines.
 // Works like the doors to a cabinet: two tall stiles up and down the sides
 // and two short spacers across the top and bottom.  The thickness of the
 // lines are painted inside the rectangle.
 //
-static void DrawFrame(CDC* dc, LPCRECT lpRect, int nWidth, int nHeight, CBrush& br)
+AFX_STATIC void AFXAPI
+_AfxDrawFrame(CDC* dc, LPCRECT lpRect, int nWidth, int nHeight, CBrush& br)
 {
 	CRect rect;
 
@@ -546,9 +519,9 @@ void CMiniFrameWnd::OnNcPaint()
 	// Draw the thickframe.  Remove it from the rect.
 	if (dwStyle & (MFS_4THICKFRAME | WS_THICKFRAME | MFS_THICKFRAME))
 	{
-		DrawFrame(&dc, rect, sizeBorder.cx, sizeBorder.cy, brFrame);
+		_AfxDrawFrame(&dc, rect, sizeBorder.cx, sizeBorder.cy, brFrame);
 		rect.InflateRect(-sizeBorder.cx, -sizeBorder.cy);
-		DrawFrame(&dc, rect, sizeFrame.cx - sizeBorder.cx,
+		_AfxDrawFrame(&dc, rect, sizeFrame.cx - sizeBorder.cx,
 			sizeFrame.cy - sizeBorder.cy, brBorder);
 
 		CSize sizeTick(sizeFrame.cx - sizeBorder.cx * 2,
@@ -556,8 +529,8 @@ void CMiniFrameWnd::OnNcPaint()
 
 		if (!(dwStyle & MFS_4THICKFRAME))
 		{
-			CSize sizeOffset(sizeFrame.cx + sizeMiniSys.cx - sizeBorder.cx * 3,
-				sizeFrame.cy + sizeMiniSys.cy - sizeBorder.cy * 2);
+			CSize sizeOffset(sizeFrame.cx + _afx_sizeMiniSys.cx - sizeBorder.cx * 3,
+				sizeFrame.cy + _afx_sizeMiniSys.cy - sizeBorder.cy * 2);
 
 			dc.FillSolidRect(rect.left, rect.top + sizeOffset.cy,
 				sizeTick.cx, 1, RGB(0, 0, 0));
@@ -585,9 +558,9 @@ void CMiniFrameWnd::OnNcPaint()
 	if (dwStyle & WS_CAPTION)
 	{
 		rectCaption = rect;
-		rectCaption.bottom = rectCaption.top + sizeMiniSys.cy + sizeBorder.cy;
+		rectCaption.bottom = rectCaption.top + _afx_sizeMiniSys.cy + sizeBorder.cy;
 
-		DrawFrame(&dc, rectCaption, sizeBorder.cx, sizeBorder.cy, brFrame);
+		_AfxDrawFrame(&dc, rectCaption, sizeBorder.cx, sizeBorder.cy, brFrame);
 		rectCaption.InflateRect(-sizeBorder.cx, -sizeBorder.cy);
 
 		dc.FillRect(&rectCaption, &brCaption);
@@ -595,16 +568,16 @@ void CMiniFrameWnd::OnNcPaint()
 		// Draw the border around the client area.
 		// At this point, rc==rcClient.InflateRect(cxBorder, cyBorder).
 		//
-		DrawFrame(&dc, rect, sizeBorder.cx, sizeBorder.cy, brFrame);
+		_AfxDrawFrame(&dc, rect, sizeBorder.cx, sizeBorder.cy, brFrame);
 
-		if (hfontMiniSys != NULL)
+		if (_afx_hfontMiniSys != NULL)
 		{
-			HFONT hFontOld = (HFONT)dc.SelectObject(hfontMiniSys);
+			HFONT hFontOld = (HFONT)dc.SelectObject(_afx_hfontMiniSys);
 
 			CString strTitle;
 			GetWindowText(strTitle);
 			int xLeft = rectCaption.left +
-				(dwStyle & WS_SYSMENU ? sizeMiniSys.cx : 0);
+				(dwStyle & WS_SYSMENU ? _afx_sizeMiniSys.cx : 0);
 
 			CSize sizeText = dc.GetTextExtent(strTitle, strTitle.GetLength());
 			if (sizeText.cx <= rectCaption.Width())
@@ -635,8 +608,8 @@ void CMiniFrameWnd::OnNcPaint()
 			HBITMAP hBitmapOld;
 			if (!dcBitmap.CreateCompatibleDC(&dc))
 				return;
-			hBitmapOld = (HBITMAP)dcBitmap.SelectObject(hbmMiniSys);
-			dc.BitBlt(rect.left, rect.top, sizeMiniSys.cx, sizeMiniSys.cy,
+			hBitmapOld = (HBITMAP)dcBitmap.SelectObject(_afx_hbmMiniSys);
+			dc.BitBlt(rect.left, rect.top, _afx_sizeMiniSys.cx, _afx_sizeMiniSys.cy,
 				&dcBitmap, 0, 0, SRCCOPY);
 			dcBitmap.SelectObject(hBitmapOld);
 		}
@@ -647,7 +620,7 @@ void CMiniFrameWnd::OnNcPaint()
 	{
 		// Draw the border around the client area.
 		// At this point, rect == rcClient.InflateRect(cxBorder, cyBorder).
-		DrawFrame(&dc, rect, sizeBorder.cx, sizeBorder.cy, brFrame);
+		_AfxDrawFrame(&dc, rect, sizeBorder.cx, sizeBorder.cy, brFrame);
 	}
 }
 
@@ -669,12 +642,6 @@ void CMiniFrameWnd::CalcWindowRect(LPRECT lpClientRect, UINT nAdjustType)
 {
 	if (afxData.bSmCaption)
 	{
-#ifdef _MAC
-		DWORD dwExStyle = GetExStyle();
-		if (dwExStyle & WS_EX_FORCESIZEBOX)
-			lpClientRect->right += GetSystemMetrics(SM_CXVSCROLL);
-#endif
-
 		CFrameWnd::CalcWindowRect(lpClientRect, nAdjustType);
 		return;
 	}
@@ -692,19 +659,16 @@ void CMiniFrameWnd::CalcWindowRect(LPRECT lpClientRect, UINT nAdjustType)
 	}
 
 	if (dwStyle & WS_CAPTION)
-		lpClientRect->top -= sizeMiniSys.cy;
+		lpClientRect->top -= _afx_sizeMiniSys.cy;
 }
 
-void CMiniFrameWnd::CalcBorders(LPRECT lpClientRect, DWORD dwStyle, DWORD dwExStyle)
+void PASCAL CMiniFrameWnd::CalcBorders(
+	LPRECT lpClientRect, DWORD dwStyle, DWORD dwExStyle)
 {
 	UNUSED_ALWAYS(dwExStyle);
 
 	if (afxData.bSmCaption)
 	{
-#ifdef _MAC
-		if (dwExStyle & WS_EX_FORCESIZEBOX)
-			lpClientRect->right += GetSystemMetrics(SM_CXVSCROLL);
-#endif
 		AdjustWindowRectEx(lpClientRect, dwStyle, FALSE, WS_EX_PALETTEWINDOW);
 		return;
 	}
@@ -723,7 +687,7 @@ void CMiniFrameWnd::CalcBorders(LPRECT lpClientRect, DWORD dwStyle, DWORD dwExSt
 	if (dwStyle & WS_CAPTION)
 	{
 		Initialize();
-		lpClientRect->top -= sizeMiniSys.cy;
+		lpClientRect->top -= _afx_sizeMiniSys.cy;
 	}
 }
 

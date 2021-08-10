@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -29,7 +30,7 @@ Description     _mbsdec returns a pointer p indicating the character
                 in string s back to 1 byte backward.
 
                 If there is no more character before string p(it is the
-                same position as s),returns null pointer. 
+                same position as s),returns null pointer.
 
 Return value    Returns a pointer back to 1 byte, or null pointer if
                 there is no character before.

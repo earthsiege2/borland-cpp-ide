@@ -5,25 +5,21 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.5  $ */
+
+/* $Revision:   9.8  $ */
 
 #if !defined(__PROCESS_H)
 #define __PROCESS_H
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
-
-#if !defined(__STDDEF_H)
-#include <stddef.h>
-#endif
-
 
 #if !defined(RC_INVOKED)
 
@@ -33,56 +29,46 @@
 
 #endif  /* !RC_INVOKED */
 
+#ifdef __cplusplus
+namespace std {
+#endif /* __cplusplus */
 
 /*  Modes available as first argument to the spawnxx functions. */
+#define P_WAIT           0  /* child runs separately, parent waits until exit */
+#define P_NOWAIT         1  /* both child & parent run concurrently */
+#define P_OVERLAY        2  /* child replaces parent, parent no longer exists */
+#define P_NOWAITO        3  /* ASYNCH,       toss RC    */
+#define P_DETACH         4  /* DETACHED,     toss RC    */
 
-#define P_WAIT    0 /* child runs separately, parent waits until exit */
-#define P_NOWAIT  1 /* both concurrent -- not implemented */
-#define P_OVERLAY 2 /* child replaces parent, parent no longer exists */
+/* MSC versions of the spawnxx modes */
+#define _P_WAIT          0
+#define _P_NOWAIT        1
+#define _P_OVERLAY       2
+#define _P_NOWAITO       3
+/*      _P_DETACH           // This one conflicts with the Flag version below */
 
-#define P_NOWAITO 3 /* ASYNCH,       toss RC    */
-#define P_DETACH  4 /* DETACHED,     toss RC    */
+/* Flags that can be or'ed into the base spawnxx mode parameter */
+#define _P_MASK         (0x07)  /* used to mask off the P_xxx values */
 
-#define WAIT_CHILD       0
-#define WAIT_GRANDCHILD      1
+#define _P_DETACH       (0x0010) /* Run child as a detached process (or'able version of P_DETACH) */
+#define _P_NEWCONSOLE   (0x0020) /* Run child in a new console window */
+#define _P_NEWPROCGROUP (0x0040) /* Child is the root of a new Process Group */
+#define _P_SUSPENDED    (0x0080) /* Child's main thread is created suspended */
+#define _P_NOCLOSE      (0x0100) /* Prevents the child's hProcess or hThread from being closed */
+#define _P_NEWWIN16     (0x0200) /* Run Win16 apps in a private WOW VDM */
+#define _P_SHAREDWIN16  (0x0400) /* Run all Win16 apps the same WOW VDM */
+#define _P_DEFERRORMODE (0x0800) /* Child does not inherit error mode of parent */
+#define _P_PRIO_IDLE    (0x1000) /* Run in IDLE priority class */
+#define _P_PRIO_NORM    (0x2000) /* Run in NORMAL priority class */
+#define _P_PRIO_HIGH    (0x4000) /* Run in HIGH priority class */
+#define _P_PRIO_REAL    (0x8000) /* Run in REALTIME priority class */
+
+#define WAIT_CHILD      (0)
+#define WAIT_GRANDCHILD (1)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#if !defined(__FLAT__)
-extern  unsigned _Cdecl _psp;    /* provided unconditionally in dos.h */
-#define  getpid()   (_psp)
-
-void _Cdecl abort(void);
-void _Cdecl _cexit(void);
-void _Cdecl _c_exit(void);
-void _Cdecl exit(int __status);
-void _Cdecl _exit(int __status);
-
-#if defined(__DPMI16__) || !defined(_Windows)
-
-int  _Cdecl execl(char _FAR *__path, char _FAR *__arg0, ...);
-int  _Cdecl execle(char _FAR *__path, char _FAR *__arg0, ...);
-int  _Cdecl execlp(char _FAR *__path, char _FAR *__arg0, ...);
-int  _Cdecl execlpe(char _FAR *__path, char _FAR *__arg0, ...);
-int  _Cdecl execv(char _FAR *__path, char _FAR *__argv[]);
-int  _Cdecl execve(char _FAR *__path, char _FAR *__argv[], char _FAR *_FAR *__env);
-int  _Cdecl execvp(char _FAR *__path, char _FAR *__argv[]);
-int  _Cdecl execvpe(char _FAR *__path, char _FAR *__argv[], char _FAR *_FAR *__env);
-int  _Cdecl spawnl(int __mode, char _FAR *__path, char _FAR *__arg0, ...);
-int  _Cdecl spawnle(int __mode, char _FAR *__path, char _FAR *__arg0, ...);
-int  _Cdecl spawnlp(int __mode, char _FAR *__path, char _FAR *__arg0, ...);
-int  _Cdecl spawnlpe(int __mode, char _FAR *__path, char _FAR *__arg0, ...);
-int  _Cdecl spawnv(int __mode, char _FAR *__path, char _FAR *__argv[]);
-int  _Cdecl spawnve(int __mode, char _FAR *__path, char _FAR *__argv[], char _FAR *_FAR *__env);
-int  _Cdecl spawnvp(int __mode, char _FAR *__path, char _FAR *__argv[]);
-int  _Cdecl spawnvpe(int __mode, char _FAR *__path, char _FAR *__argv[], char _FAR *_FAR *__env);
-int  _Cdecl _FARFUNC system(const char _FAR *__command);
-
-#endif /* __DPMI16__ || !_Windows */
-
-#else  /* defined __FLAT__ */
 
 int  _RTLENTRY _EXPFUNC getpid(void);
 void _RTLENTRY _EXPFUNC abort(void);
@@ -138,12 +124,14 @@ int  _RTLENTRY _EXPFUNC _wsystem(const wchar_t * __command);
 
 #if defined(__MT__)
 
-#if defined(__OS2__)
-int _RTLENTRY _EXPFUNC _beginthread(void (_USERENTRY *__start)(void *),
-                                    unsigned __stksize, void *__arg);
-#endif  /* __OS2__ */
+struct _thread_adoption_data_s { char __dummy; };
+typedef struct _thread_adoption_data_s* _PTHREAD_ADOPTION_DATA;
 
-#if defined(__WIN32__)
+void                    _RTLENTRY _EXPFUNC     _unadopt_thread(_PTHREAD_ADOPTION_DATA __thd);
+_PTHREAD_ADOPTION_DATA  _RTLENTRY _EXPFUNC     _adopt_thread(void (_USERENTRY *__start_address)(void *),
+                                                             void *__arglist,
+                                                              int __free_flag);
+
 unsigned long _RTLENTRY _EXPFUNC _beginthread  (void (_USERENTRY *__start)(void *),
                                                 unsigned __stksize, void *__arg);
 unsigned long _RTLENTRY _EXPFUNC _beginthreadNT(void (_USERENTRY *__start)(void *),
@@ -152,30 +140,20 @@ unsigned long _RTLENTRY _EXPFUNC _beginthreadNT(void (_USERENTRY *__start)(void 
                                                 unsigned long __create_flags,
                                                 unsigned long *__thread_id);
 
-#endif  /* __WIN32__ */
+unsigned long _RTLENTRY _EXPFUNC _beginthreadex(void *__security_attr,
+                                                unsigned __stksize,
+                                                unsigned (__stdcall *__start)(void *),
+                                                void *__arg,
+                                                unsigned __create_flags,
+                                                unsigned *__thread_id);
 
-void _RTLENTRY _EXPFUNC _endthread     (void);
-
-/* Support for MSC or MFC source code */
-#define _beginthreadex(security,stksize,startaddr,arglist,initflag,threadaddr)\
-        _beginthreadNT(                                                       \
-                       ((void(_USERENTRY *)(void *))startaddr),               \
-                       (stksize),                                             \
-                       (arglist),                                             \
-                       (security),                                            \
-                       ((unsigned long)initflag),                             \
-                       ((unsigned long *)threadaddr)                          \
-                      ) /* End of _beginthreadex definition */
-#define _endthreadex(a) _endthread()
+void          _RTLENTRY _EXPFUNC _endthread    (void);
+void          _RTLENTRY _EXPFUNC _endthreadex  (unsigned __thread_retval);
 
 #endif  /* __MT__ */
 
-#if defined(__OS2__) || defined(__WIN32__)
 int  _RTLENTRY _EXPFUNC cwait          (int *__term_stat, int __pid, int __action);
 int  _RTLENTRY _EXPFUNC wait           (int *__term_stat);
-#endif  /* __OS2__ || __WIN32__ */
-
-#endif  /* __FLAT__ */
 
 #ifdef __cplusplus
 }
@@ -190,6 +168,66 @@ int  _RTLENTRY _EXPFUNC wait           (int *__term_stat);
 
 #endif  /* !RC_INVOKED */
 
+#ifdef __cplusplus
+} // std
+#endif /* __cplusplus */
 
 #endif  /* __PROCESS_H */
+
+#if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__PROCESS_H_USING_LIST)
+#define __PROCESS_H_USING_LIST
+    using std::getpid;
+    using std::abort;
+    using std::_cexit;
+    using std::_c_exit;
+    using std::execl;
+    using std::execle;
+    using std::execlp;
+    using std::execlpe;
+    using std::execv;
+    using std::execve;
+    using std::execvp;
+    using std::execvpe;
+    using std::exit;
+    using std::_exit;
+    using std::spawnl;
+    using std::spawnle;
+    using std::spawnlp;
+    using std::spawnlpe;
+    using std::spawnv;
+    using std::spawnve;
+    using std::spawnvp;
+    using std::spawnvpe;
+    using std::system;
+    using std::_wexecl;
+    using std::_wexecle;
+    using std::_wexeclp;
+    using std::_wexeclpe;
+    using std::_wexecv;
+    using std::_wexecve;
+    using std::_wexecvp;
+    using std::_wexecvpe;
+    using std::_wspawnl;
+    using std::_wspawnle;
+    using std::_wspawnlp;
+    using std::_wspawnlpe;
+    using std::_wspawnv;
+    using std::_wspawnve;
+    using std::_wspawnvp;
+    using std::_wspawnvpe;
+    using std::_wsystem;
+#if defined(__MT__)
+    using std::_PTHREAD_ADOPTION_DATA;
+    using std::_adopt_thread;
+    using std::_unadopt_thread;
+    using std::_beginthread;
+    using std::_beginthreadNT;
+    using std::_beginthreadex;
+    using std::_endthread;
+    using std::_endthreadex;
+#endif // __MT__
+    using std::cwait;
+    using std::wait;
+#endif /* __USING_CNAME__ */
+
 

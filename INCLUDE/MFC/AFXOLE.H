@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,6 +28,20 @@
 	#include <ole2.h>
 #endif
 
+// ActiveX Document support
+#ifndef __docobj_h__
+	#include <docobj.h>
+#endif
+
+// URL Monikers support
+#ifndef __urlmon_h__
+	#include <urlmon.h>
+#endif
+
+#ifndef __AFXCOM_H__
+#include <afxcom_.h>
+#endif
+
 #ifdef _AFX_MINREBUILD
 #pragma component(minrebuild, off)
 #endif
@@ -39,6 +53,13 @@
 #pragma pack(push, _AFX_PACKING)
 #endif
 
+
+#ifndef _AFX_NOFORCE_LIBS
+
+#pragma comment(lib, "urlmon.lib")
+
+#endif // !_AFX_NOFORCE_LIBS
+
 /////////////////////////////////////////////////////////////////////////////
 // AFXOLE.H - MFC OLE support
 
@@ -48,10 +69,12 @@
 	class COleDocument;             // OLE container document
 		class COleLinkingDoc;       // supports links to embeddings
 			class COleServerDoc;    // OLE server document
+	class CDocObjectServer;         // might be owned by a COleServerDoc
 
 //CCmdTarget
 	class CDocItem;                 // part of a document
 		class COleClientItem;       // embedded ole object from outside
+			class COleDocObjectItem;// ActiveX Document item
 		class COleServerItem;       // ole object to export
 	class COleDataSource;           // clipboard data source mechanism
 	class COleDropSource;           // drag/drop source
@@ -66,6 +89,8 @@
 
 //CFile
 	class COleStreamFile;           // CFile wrapper for IStream interface
+		class CMonikerFile;         // bound to via IMoniker
+			class CAsyncMonikerFile;// asynchronous IMoniker
 
 class COleDataObject;               // wrapper for IDataObject interface
 
@@ -254,7 +279,11 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 // DocItem support
 
+#ifdef _AFXDLL
 class CDocItem : public CCmdTarget
+#else
+class AFX_NOVTABLE CDocItem : public CCmdTarget
+#endif
 {
 	DECLARE_SERIAL(CDocItem)
 
@@ -380,9 +409,11 @@ protected:
 	CDocItem* GetNextItemOfKind(POSITION& pos, CRuntimeClass* pClass) const;
 
 	// command handling
+public:
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra,
 		AFX_CMDHANDLERINFO* pHandlerInfo);
 
+protected:
 	afx_msg void OnUpdatePasteMenu(CCmdUI* pCmdUI);
 	afx_msg void OnUpdatePasteLinkMenu(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateEditLinksMenu(CCmdUI* pCmdUI);
@@ -401,7 +432,7 @@ protected:
 // COleClientItem - Supports OLE2 non-inplace editing.
 //      implements IOleClientSite, IAdviseSink, and IOleInPlaceSite
 
-class COleFrameHook;    // forward reference (see ..\src\oleimpl.h)
+class COleFrameHook;    // forward reference (see ..\src\oleimpl2.h)
 
 class COleClientItem : public CDocItem
 {
@@ -447,6 +478,8 @@ public:
 
 // General Attributes
 public:
+	HICON GetIconFromRegistry() const;
+	static HICON GetIconFromRegistry(CLSID& clsid);
 	SCODE GetLastStatus() const;
 	OLE_OBJTYPE GetType() const; // OT_LINK, OT_EMBEDDED, OT_STATIC
 	void GetClassID(CLSID* pClassID) const;
@@ -732,10 +765,64 @@ public:
 	friend class COleLinkingDoc;
 };
 
+class COleDocObjectItem : public COleClientItem
+{
+	friend class COleFrameHook;
+	DECLARE_DYNAMIC(COleDocObjectItem)
+
+// Constructors
+public:
+	COleDocObjectItem(COleDocument* pContainerDoc = NULL);
+
+//Overridables
+public:
+	LPOLEDOCUMENTVIEW GetActiveView() const;
+	virtual void Release(OLECLOSE dwCloseOption = OLECLOSE_NOSAVE);
+	virtual void OnInsertMenus(CMenu* pMenuShared,
+		LPOLEMENUGROUPWIDTHS lpMenuWidths);
+	virtual void OnRemoveMenus(CMenu *pMenuShared);
+
+// Operations
+public:
+	static BOOL OnPreparePrinting(CView* pCaller, CPrintInfo* pInfo,
+		BOOL bPrintAll = TRUE);
+	static void OnPrint(CView* pCaller, CPrintInfo* pInfo,
+		BOOL bPrintAll = TRUE);
+	BOOL GetPageCount(LPLONG pnFirstPage, LPLONG pcPages);
+	HRESULT ExecCommand(DWORD nCmdID,
+		DWORD nCmdExecOpt = OLECMDEXECOPT_DONTPROMPTUSER,
+		const GUID* pguidCmdGroup = NULL);
+
+// Implementation
+public:
+	virtual ~COleDocObjectItem();
+	CMenu* m_pHelpPopupMenu;
+
+protected:
+	virtual void OnGetItemPosition(CRect& rPosition);
+	virtual CMenu* GetHelpMenu(UINT& nPosition);
+	void ActivateAndShow();
+	LPOLEDOCUMENTVIEW m_pActiveView;
+	LPPRINT m_pIPrint;
+	BOOL SupportsIPrint();
+	BOOL m_bInHelpMenu;
+
+	BEGIN_INTERFACE_PART(OleDocumentSite, IOleDocumentSite)
+		INIT_INTERFACE_PART(COleDocObjectItem, OleDocumentSite)
+		STDMETHOD(ActivateMe)(LPOLEDOCUMENTVIEW pViewToActivate);
+	END_INTERFACE_PART(OleDocumentSite)
+
+	DECLARE_INTERFACE_MAP()
+};
+
 /////////////////////////////////////////////////////////////////////////////
 // COleServerItem - IOleObject & IDataObject OLE component
 
+#ifdef _AFXDLL
 class COleServerItem : public CDocItem
+#else
+class AFX_NOVTABLE COleServerItem : public CDocItem
+#endif
 {
 	DECLARE_DYNAMIC(COleServerItem)
 protected:
@@ -1042,7 +1129,11 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 // COleServerDoc - registered server document containing COleServerItems
 
+#ifdef _AFXDLL
 class COleServerDoc : public COleLinkingDoc
+#else
+class AFX_NOVTABLE COleServerDoc : public COleLinkingDoc
+#endif
 {
 	DECLARE_DYNAMIC(COleServerDoc)
 
@@ -1052,6 +1143,7 @@ public:
 
 // Attributes
 	BOOL IsEmbedded() const;    // TRUE if document is an embedding
+	BOOL IsDocObject() const;   // TRUE if document is a DocObject
 	COleServerItem* GetEmbeddedItem();
 		// return embedded item for document (will allocate if necessary)
 
@@ -1083,6 +1175,7 @@ public:
 
 	// specific to in-place activation
 	BOOL ActivateInPlace();
+	void ActivateDocObject();
 	void RequestPositionChange(LPCRECT lpPosRect);
 	BOOL ScrollContainerBy(CSize sizeScroll);
 	BOOL DeactivateAndUndo();
@@ -1100,8 +1193,12 @@ protected:
 // Overridables you do not have to implement
 	virtual void OnClose(OLECLOSE dwCloseOption);
 	virtual void OnSetHostNames(LPCTSTR lpszHost, LPCTSTR lpszHostObj);
+	virtual HRESULT OnExecOleCmd(const GUID* pguidCmdGroup, DWORD nCmdID,
+		DWORD nCmdExecOpt, VARIANTARG* pvarargIn, VARIANTARG* pvarargOut);
+	virtual CDocObjectServer* GetDocObjectServer(LPOLEDOCUMENTSITE pDocSite);
 
 // Advanced overridables
+	LPUNKNOWN GetInterfaceHook(const void* piid);
 	virtual void OnShowDocument(BOOL bShow);
 		// show first frame for document or hide all frames for document
 
@@ -1135,6 +1232,8 @@ protected:
 	CWnd* m_pOrigParent;                // not NULL if existing view used
 	DWORD m_dwOrigStyle;                // original style of in-place view
 	DWORD m_dwOrigStyleEx;              // original extended style
+
+	CDocObjectServer* m_pDocObjectServer;  // if DocObject, ptr to doc site
 
 public:
 	virtual ~COleServerDoc();
@@ -1255,6 +1354,7 @@ public:
 
 	friend class COleServer;
 	friend class COleServerItem;
+	friend class CDocObjectServer;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1312,6 +1412,8 @@ protected:
 	CRect m_rectClip;           // area to which frame should be clipped
 	BOOL m_bInsideRecalc;
 
+	HMENU _m_Reserved;
+
 	// Advanced: in-place activation virtual implementation
 	virtual BOOL BuildSharedMenu();
 	virtual void DestroySharedMenu();
@@ -1337,6 +1439,7 @@ protected:
 
 	friend class COleServerDoc;
 	friend class COleCntrFrameWnd;
+	friend class CDocObjectServer;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1400,6 +1503,9 @@ public:
 	void Attach(LPSTREAM lpStream);
 	LPSTREAM Detach();
 
+	IStream* GetStream() const;
+	// Returns the current stream
+
 // Implementation
 public:
 	LPSTREAM m_lpStream;
@@ -1430,6 +1536,191 @@ public:
 
 protected:
 	CString m_strStorageName;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// CMonikerFile - implementation of COleStreamFile that uses an IMoniker to
+//                get the IStream
+
+class CMonikerFile: public COleStreamFile
+{
+	DECLARE_DYNAMIC(CMonikerFile)
+
+public:
+	CMonikerFile();
+
+	virtual BOOL Open(LPCTSTR lpszURL, CFileException* pError=NULL);
+	// Uses synchronous URLMonikers to create a moniker.
+	// Opens the URL specified.
+	// If provided, pError will be set in case of error.
+	// Return value: TRUE if successful, FALSE otherwise.
+
+	virtual BOOL Open(IMoniker* pMoniker, CFileException* pError=NULL);
+	// Binds to the provided moniker to obtain a stream.
+	// If provided, pError will be set in case of error.
+	// Return value: TRUE if successful, FALSE otherwise.
+
+	virtual void Close();
+	// Detaches the stream, Release()s it, and the moniker.  Close may be
+	// called on unopened, or already closed streams.
+
+	BOOL Detach(CFileException* pError = NULL);
+	// Closes the stream.  If there is an error when closing, then the
+	// error code will be placed in pError and the function will return FALSE.
+
+	IMoniker* GetMoniker() const;
+	// Returns the current moniker.  The moniker returned is not AddRef()'ed.
+
+protected:
+// Overidables
+	IBindCtx* CreateBindContext(CFileException* pError);
+	// A hook so users can provide a particular IBindCtx, potentially one
+	// on which the user has registered one or more objects.
+
+// Implementation
+protected:
+	virtual BOOL Open(LPCTSTR lpszUrl, IBindHost* pBindHost,
+		IBindStatusCallback* pBSC, IBindCtx* pBindCtx, CFileException* pError);
+	BOOL Attach(LPCTSTR lpszUrl, IBindHost* pBindHost,
+		IBindStatusCallback* pBSC, IBindCtx* pBindCtx, CFileException* pError);
+	virtual BOOL Open(IMoniker* pMoniker, IBindHost* pBindHost,
+		IBindStatusCallback* pBSC, IBindCtx* pBindCtx, CFileException* pError);
+
+	BOOL Attach(IMoniker* pMoniker, IBindHost* pBindHost,
+		IBindStatusCallback* pBSC, IBindCtx* pBindCtx, CFileException* pError);
+
+	virtual BOOL PostBindToStream(CFileException* pError);
+
+	static IBindHost* CreateBindHost();
+public:
+	virtual ~CMonikerFile();
+	// Closes the stream, and releases the moniker if needed.
+
+	virtual void Flush();
+
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+	// Calls COleStreamFile::Dump(), and prints out moniker value.
+#endif
+
+protected:
+	IPTR(IMoniker) m_Moniker;
+	// The moniker provided or created to which this class is bound.
+
+	CMonikerFile(const CMonikerFile&);
+	// Prevents copying.
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// CAsyncMonikerFile - implementation of COleStreamFile that uses an
+//                     asynchronous IMoniker to get the IStream
+
+class _AfxBindStatusCallback; // Forward declaration
+
+class CAsyncMonikerFile: public CMonikerFile
+{
+	DECLARE_DYNAMIC(CAsyncMonikerFile)
+
+public:
+	CAsyncMonikerFile();
+	// Creates the IBindStatusCallback used internally to provide asynchronous
+	// operation.
+
+	//All Open overloads call one of these two.
+	virtual BOOL Open(LPCTSTR lpszURL, IBindHost* pBindHost,
+		CFileException* pError=NULL);
+	virtual BOOL Open(IMoniker* pMoniker, IBindHost* pBindHost,
+		CFileException* pError=NULL);
+
+	//Open overloads that take monikers
+	virtual BOOL Open(IMoniker* pMoniker, CFileException* pError=NULL);
+	virtual BOOL Open(IMoniker* pMoniker, IServiceProvider* pServiceProvider,
+		CFileException* pError=NULL);
+	virtual BOOL Open(IMoniker* pMoniker, IUnknown* pUnknown,
+		CFileException* pError=NULL);
+
+	//Open overloads that take strings
+	virtual BOOL Open(LPCTSTR lpszURL, CFileException* pError=NULL);
+	virtual BOOL Open(LPCTSTR lpszURL, IServiceProvider* pServiceProvider,
+		CFileException* pError=NULL);
+	virtual BOOL Open(LPCTSTR lpszURL, IUnknown* pUnknown,
+		CFileException* pError=NULL);
+
+	virtual void Close();
+
+	IBinding* GetBinding() const;
+	// Returns the binding provided when the asychronous transfer begins.
+	// With the IBinding*, the user may abort, or pause the transfer.
+	// NULL may be returned if for any reason the transfer could not be
+	// made asynchronous, or if the IBinding* has not yet been provided by
+	// the system.
+
+	FORMATETC* GetFormatEtc() const;
+	// Returns the FORMATETC for the currently opened stream.  NULL will be
+	// returned if this is called from outside the context of OnDataAvailable.
+	// If you want to keep the FORMATETC beyond this call, make a copy of it.
+	// The FORMATETC indicates the format of the data in the stream.
+
+protected:
+// Overidables
+	virtual IUnknown* CreateBindStatusCallback(IUnknown* pUnkControlling);
+
+	virtual DWORD GetBindInfo() const;
+	// Returns the settings returned by IBindStatusCallback::GetBindInfo.
+	// The default values returned should work for most cases and should not
+	// be changed lightly.
+
+	virtual LONG GetPriority() const;
+	// Returns the priority at which the asynchronous transfer will take
+	// place.  The value is one of the standard thread priority flags.
+	// By default THREAD_PRIORITY_NORMAL is returned.
+
+	virtual void OnDataAvailable(DWORD dwSize, DWORD bscfFlag);
+	// Called when there is data available to be read.  dwSize indicates
+	// the cumulative number of bytes which can be read.  The bscfFlag may be used
+	// to identify first, last, and intermediate blocks of data.
+
+	virtual void OnLowResource();
+	// This is called when resources are low.
+
+	virtual void OnStartBinding();
+	// Called when the binding is starting up.
+
+	virtual void OnProgress(ULONG ulProgress, ULONG ulProgressMax,
+		ULONG ulStatusCode, LPCTSTR szStatusText);
+
+	virtual void OnStopBinding(HRESULT hresult, LPCTSTR szError);
+	// Called when the transfer is stopped.  This function releases the
+	// IBinding and should nearly always be call when overidden.
+
+// Implementation
+public:
+	virtual ~CAsyncMonikerFile();
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+	// Calls CMonikerFile::Dump(), and prints out IBinding,
+	// IBindStatusCallback, and m_pFormatEtc values.
+#endif
+	virtual UINT Read(void* lpBuf, UINT nCount);
+
+protected:
+	friend class _AfxBindStatusCallback;
+	_AfxBindStatusCallback* m_pAfxBSCCurrent;
+	BOOL m_bStopBindingReceived;
+	void EndCallbacks();
+
+	IPTR(IBinding) m_Binding;
+	FORMATETC* m_pFormatEtc;
+
+	void SetBinding(IBinding* pBinding);
+	// Sets and AddRefs m_Binding
+
+	void SetFormatEtc(FORMATETC* pFormatEtc);
+	// Sets the FORMATETC for the current stream.
+
+	virtual BOOL PostBindToStream(CFileException* pError);
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1608,11 +1899,11 @@ public:
 
 #define ON_STDOLEVERB(iVerb, memberFxn) \
 	{ 0xC002, 0, (UINT)iVerb, (UINT)iVerb, (UINT)-1, \
-		(AFX_PMSG)(BOOL (AFX_MSG_CALL CCmdTarget::*)(LPMSG, HWND, LPCRECT))memberFxn },
+		(AFX_PMSG)(BOOL (AFX_MSG_CALL CCmdTarget::*)(LPMSG, HWND, LPCRECT))&memberFxn },
 
 #define ON_OLEVERB(idsVerbName, memberFxn) \
 	{ 0xC002, 0, 1, 1, idsVerbName, \
-		(AFX_PMSG)(BOOL (AFX_MSG_CALL CCmdTarget::*)(LPMSG, HWND, LPCRECT))memberFxn },
+		(AFX_PMSG)(BOOL (AFX_MSG_CALL CCmdTarget::*)(LPMSG, HWND, LPCRECT))&memberFxn },
 
 /////////////////////////////////////////////////////////////////////////////
 // global helpers and debugging
@@ -1640,15 +1931,17 @@ LPCTSTR AFXAPI AfxGetIIDString(REFIID iid);
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXOLE_INLINE inline
-#define _AFXOLECLI_INLINE inline
-#define _AFXOLESVR_INLINE inline
-#define _AFXOLEDOBJ_INLINE inline
+#define _AFXOLE_INLINE AFX_INLINE
+#define _AFXOLECLI_INLINE AFX_INLINE
+#define _AFXOLESVR_INLINE AFX_INLINE
+#define _AFXOLEDOBJ_INLINE AFX_INLINE
+#define _AFXOLEMONIKER_INLINE AFX_INLINE
 #include <afxole.inl>
 #undef _AFXOLE_INLINE
 #undef _AFXOLECLI_INLINE
-#undef _AFXOLEDOBJ_INLINE
 #undef _AFXOLESVR_INLINE
+#undef _AFXOLEDOBJ_INLINE
+#undef _AFXOLEMONIKER_INLINE
 #endif
 
 #undef AFX_DATA
@@ -1663,4 +1956,4 @@ LPCTSTR AFXAPI AfxGetIIDString(REFIID iid);
 
 #endif //__AFXOLE_H__
 
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////x

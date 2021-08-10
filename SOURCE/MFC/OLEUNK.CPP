@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,18 +28,30 @@ static char THIS_FILE[] = __FILE__;
 // Helper for converting IID into useful string.  Only for debugging.
 LPCTSTR AFXAPI AfxGetIIDString(REFIID iid)
 {
+	static TCHAR szUnfamiliar[80];
+	TCHAR szByte[3];
+
 	struct IID_ENTRY
 	{
 		const IID* piid;
 		LPCTSTR lpszName;
 	};
-	#define MAKE_IID_ENTRY(name) { &name, _T(#name) }
+
+#define MAKE_IID_ENTRY(name) { &name, _T(#name) }
+
 	static const IID_ENTRY iidNameTable[] =
 	{
 		MAKE_IID_ENTRY(IID_IAdviseSink),
 		MAKE_IID_ENTRY(IID_IAdviseSink2),
 		MAKE_IID_ENTRY(IID_IBindCtx),
 		MAKE_IID_ENTRY(IID_IClassFactory),
+		MAKE_IID_ENTRY(IID_IContinueCallback),
+		MAKE_IID_ENTRY(IID_IEnumOleDocumentViews),
+		MAKE_IID_ENTRY(IID_IOleCommandTarget),
+		MAKE_IID_ENTRY(IID_IOleDocument),
+		MAKE_IID_ENTRY(IID_IOleDocumentSite),
+		MAKE_IID_ENTRY(IID_IOleDocumentView),
+		MAKE_IID_ENTRY(IID_IPrint),
 		MAKE_IID_ENTRY(IID_IDataAdviseHolder),
 		MAKE_IID_ENTRY(IID_IDataObject),
 		MAKE_IID_ENTRY(IID_IDebug),
@@ -107,7 +119,7 @@ LPCTSTR AFXAPI AfxGetIIDString(REFIID iid)
 		MAKE_IID_ENTRY(IID_IViewObject2),
 		MAKE_IID_ENTRY(IID_NULL),
 	};
-	#undef MAKE_IID_ENTRY
+#undef MAKE_IID_ENTRY
 
 	// look for it in the table
 	for (int i = 0; i < _countof(iidNameTable); i++)
@@ -116,7 +128,16 @@ LPCTSTR AFXAPI AfxGetIIDString(REFIID iid)
 			return iidNameTable[i].lpszName;
 	}
 	// if we get here, it is some IID_ we haven't heard of...
-	return _T("*Unfamiliar IID*");
+
+	wsprintf(szUnfamiliar, _T("%8.8X-%4.4X-%4.4X-"),
+		iid.Data1, iid.Data2, iid.Data3);
+	for (int nIndex = 0; nIndex < 8; nIndex++)
+	{
+		wsprintf(szByte, _T("%2.2X"), iid.Data4[nIndex]);
+		lstrcat(szUnfamiliar, szByte);
+	}
+
+	return szUnfamiliar;
 }
 #endif
 
@@ -194,13 +215,13 @@ DWORD CCmdTarget::InternalRelease()
 	if (m_dwRef == 0)
 		return 0;
 
-	if (InterlockedDecrement(&m_dwRef) == 0)
+	LONG lResult = InterlockedDecrement(&m_dwRef);
+	if (lResult == 0)
 	{
 		AFX_MANAGE_STATE(m_pModuleState);
 		OnFinalRelease();
-		return 0;
 	}
-	return m_dwRef;
+	return lResult;
 }
 
 DWORD CCmdTarget::ExternalRelease()

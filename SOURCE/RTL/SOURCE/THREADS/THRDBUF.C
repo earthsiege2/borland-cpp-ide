@@ -6,16 +6,18 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1991, 1997 by Borland International
+ *      Copyright (c) 1991, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.2  $        */
+
+/* $Revision:   9.1  $        */
 
 #include <stdlib.h>
 #include <_thread.h>
+#include <_malloc.h>
 
 /*---------------------------------------------------------------------*
 
@@ -23,7 +25,7 @@ Name            _thread_buf - allocate buffer for a thread
 
 Usage           void * _thread_buf(int offset, int size);
 
-Prototype in    
+Prototype in
 
 Description     This function returns the address of a "static" buffer
                 for the current thread.  The offset must be the offset
@@ -41,7 +43,7 @@ void * _thread_buf(int offset, int size)
     THREAD_DATA *th;
     char        *buf;
     char        **memberp;
-   
+
     /* First make sure this thread has a thread data structure.
      */
     if ((th = _thread_data()) == NULL)
@@ -56,7 +58,7 @@ void * _thread_buf(int offset, int size)
      */
     if ((buf = *memberp) == NULL)
     {
-        if ((buf = malloc(size)) == NULL)
+        if ((buf = __org_malloc(size)) == NULL)
             return (NULL);
         *memberp = buf;
     }

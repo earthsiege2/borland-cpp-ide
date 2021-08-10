@@ -1,8 +1,0 @@
-//----------------------------------------------------------------------------
-// ObjectWindows
-// Copyright (C) 1995, 1995 by Borland International, All Rights Reserved
-//----------------------------------------------------------------------------
-#include "chesspcs.rh"
-
-#define IDM_MAIN              0x4000
-#define CM_COLOR              0x100

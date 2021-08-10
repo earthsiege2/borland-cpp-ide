@@ -59,7 +59,7 @@ ROOT=.
 !endif
 
 !ifndef DEBUG
-DEBUG=1
+DEBUG=0
 !endif
 
 !ifndef DBGINFO
@@ -159,11 +159,11 @@ MFCDEFS=$(MFCDEFS) /D_DEBUG
 !endif
 
 !if "$(DEBUG)" == "0"
-DEBUGFLAGS=/O1
+DEBUGFLAGS=/O1 
 !endif # DEBUG == 0
 
 !if "$(DBGINFO)" == "1"
-DEBUGFLAGS=$(DEBUGFLAGS) -v -vi
+DEBUGFLAGS=$(DEBUGFLAGS) -v -vi -r-
 LINKDEBUG=/v
 !endif
 
@@ -171,10 +171,12 @@ LINKDEBUG=/v
 DLL_SUFFIX=u
 !endif
 
+MFCDEFS = $(MFCDEFS) /D_NO_VCL
+
 !if "$(AFXDLL)" == "1"
-MFCDEFS=$(MFCDEFS) /D_RTLDLL;_AFXDLL;_X86_;_WINDOWS;_MSC_VER=900;_AFX_PORTABLE;_AFX_NOFORCE_LIBS;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;
+MFCDEFS=$(MFCDEFS) /D_RTLDLL;_AFXDLL;_X86_;_WINDOWS;_MSC_VER=1200;_AFX_PORTABLE;_AFX_NOFORCE_LIBS;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;
 !else
-MFCDEFS=$(MFCDEFS) /D_X86_;_WINDOWS;_MSC_VER=900;_AFX_PORTABLE;_AFX_NOFORCE_LIBS;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;
+MFCDEFS=$(MFCDEFS) /D_X86_;_WINDOWS;_MSC_VER=1100;_AFX_PORTABLE;_AFX_NOFORCE_LIBS;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;
 !endif
 
 !if "$(USRDLL)" == "1"
@@ -196,9 +198,14 @@ MFCFLAGS=$(MFCFLAGS) -tWE
 MFCDEFS=$(MFCDEFS) /D_UNICODE
 !endif
 
+!if !$d(PREPROCESS_ONLY)
 CPP=bcc32
-BORINCL=$(MAKEDIR)\..\include
-CFLAGS=-X -c -g0 -j1 -w-hid -w-par -w-aus -w-inl -VF -Vd -tWM -I$(BORINCL);$(BORINCL)\mfc $(DEBUGFLAGS) $(MFCFLAGS) $(MFCDEFS) $(CFLAGS)
+!else
+CPP=cpp32 -Sd -Sk
+!endif
+
+BORINCL=$(MAKEDIR)\..\include;$(MAKEDIR)\..\include\mfc;$(MAKEDIR)\..\include\atl;$(BORINCL)
+CFLAGS=-X -c -g0 -j1 -w-hid -w-par -w-aus -w-inl -VF -Vd -tWM -I$(BORINCL) $(DEBUGFLAGS) $(MFCFLAGS) $(MFCDEFS) $(CFLAGS)
 CPPMAIN_FLAGS=$(CFLAGS)
 
 !if "$(NO_PCH)" == "1"
@@ -209,9 +216,9 @@ PCH_FILE=$(PCHDIR)\$(STDAFX).csm
 CPPFLAGS=$(CPPMAIN_FLAGS) -H -Hc -H=$(PCH_FILE)
 !endif
 
-BORLIB=$(MAKEDIR)\..\lib
-LINKFLAGS=/n /m /s /w-inq $(LINKDEBUG) /L$(BORLIB);$(OTHERLIBPATH) $(LINKFLAGS) 
-LINKCMD=tlink32
+BORLIB=$(MAKEDIR)\..\lib;$(BORLIB)
+LINKFLAGS= /Gn /n /m /s $(LINKDEBUG) /L$(BORLIB);$(OTHERLIBPATH) $(LINKFLAGS)
+LINKCMD=ilink32
 !if "$(USES_OLE)" == "1"
   OTHERLIBS=ole2w32.lib $(OTHERLIBS)
 !endif
@@ -222,9 +229,10 @@ LINKCMD=tlink32
 
 !if "$(AFXDLL)" == "1"
 !if "$(DEBUG)" == "1"
-LIBRARIES=BFC40D.lib BFCS40D.lib bfcd40d.lib bfco40d.lib bfcn40d.lib $(OTHERLIBS) cw32mti.lib import32.lib
+#LIBRARIES=BFC42D.lib BFCS42D.lib bfcd42d.lib bfco42d.lib bfcn42d.lib $(OTHERLIBS) cw32mti.lib import32.lib
+LIBRARIES=BFC42D.lib BFCS42D.lib $(OTHERLIBS) cw32mti.lib import32.lib
 !else
-LIBRARIES=BFC40.lib BFCS40.lib $(OTHERLIBS) cw32mti.lib import32.lib
+LIBRARIES=BFC42.lib BFCS42.lib $(OTHERLIBS) cw32mti.lib import32.lib
 !endif
 !else
 LIBRARIES=nafxcw$(DEBUG_SUFFIX).lib $(OTHERLIBS) cw32mt.lib import32.lib
@@ -253,7 +261,7 @@ BORRSP=bor.rsp
 	$(CPP) @$(BORRSP) { $< }
 
 .rc.res:
-	$(RC) -I$(BORINCL);$(BORINCL)\mfc -r @&&~
+	$(RC) -I$(BORINCL) -r @&&~
 $(MFCDEFS) /fo $@ $<
 ~
 #############################################################################
@@ -378,6 +386,7 @@ printdebuginfo:
 clean::
 	@if exist $(PROJ).exe erase $(PROJ).exe
 	@if exist $(PROJ).dll erase $(PROJ).dll
+	@if exist *.?0? erase *.?0?
 	@if exist *.csm erase *.csm
 	@if exist *.map erase *.map
 	@if exist *.obj erase *.obj
@@ -385,6 +394,8 @@ clean::
 	@if exist *.map erase *.map
 	@if exist *.lib erase *.lib
 	@if exist *.res erase *.res
+	@if exist *.tds erase *.tds
+	@if exist *.il? erase *.il?
 	@if exist $(BORRSP) erase $(BORRSP)
 
 #############################################################################

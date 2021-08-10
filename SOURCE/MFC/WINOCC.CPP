@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -375,11 +375,34 @@ void AFX_CDECL CWnd::SetProperty(DISPID dwDispID, VARTYPE vtProp, ...)
 
 	va_list argList;    // really only one arg, but...
 	va_start(argList, vtProp);
-#ifdef _MAC
-	arglist -= 2;
-#endif
 	m_pCtrlSite->SetPropertyV(dwDispID, vtProp, argList);
 	va_end(argList);
+}
+
+IUnknown* CWnd::GetDSCCursor()
+{
+	ASSERT(m_pCtrlSite != NULL);    // not an OLE control (not yet, at least)
+	if (m_pCtrlSite == NULL)
+		return NULL;
+
+	m_pCtrlSite->EnableDSC();
+
+	IUnknown* pCursor = m_pCtrlSite->m_pDataSourceControl->GetCursor();
+	ASSERT(pCursor != NULL);  // data source control has no cursor
+
+	return pCursor;
+}
+
+void CWnd::BindDefaultProperty(DISPID dwDispID, VARTYPE vtProp, LPCTSTR szFieldName, CWnd* pDSCWnd)
+{
+	ASSERT(m_pCtrlSite != NULL); // not an OLE control (not yet, at least)
+	m_pCtrlSite->BindDefaultProperty(dwDispID, vtProp, szFieldName, pDSCWnd);
+}
+
+void CWnd::BindProperty(DISPID dwDispId, CWnd* pWndDSC)
+{
+	ASSERT(m_pCtrlSite != NULL); // not an OLE control (not yet, at least)
+	m_pCtrlSite->BindProperty(dwDispId, pWndDSC);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -390,33 +413,44 @@ void CWnd::AttachControlSite(CHandleMap* pMap)
 	if (this != NULL && m_pCtrlSite == NULL)
 	{
 		// Determine if parent is an OLE control container
-		CWnd* pWndParent;
-		if (pMap->LookupPermanent(::GetParent(m_hWnd), (CObject*&)pWndParent))
-			AttachControlSite(pWndParent);
+		CWnd* pWndParent = (CWnd*)pMap->LookupPermanent(::GetParent(m_hWnd));
+		if (pWndParent != NULL && pWndParent->m_pCtrlCont != NULL)
+		{
+			// delegate through helper in COleControlSite
+			pWndParent->m_pCtrlCont->AttachControlSite(this);
+		}
 	}
 }
 
 void CWnd::AttachControlSite(CWnd* pWndParent)
 {
-	if (this != NULL && m_pCtrlSite == NULL)
-	{
-		// Determine if parent is an OLE control container
-		if ((pWndParent != NULL) && (pWndParent->m_pCtrlCont != NULL))
-		{
-			// If a matching control site exists, it's an OLE control
-			COleControlSite* pSite;
-			if (pWndParent->m_pCtrlCont->m_siteMap.Lookup(m_hWnd, (void*&)pSite))
-			{
-				// detach any existing CWnd from this site (last one wins)
-				CWnd* pOldCtrl = pSite->m_pWndCtrl;
-				if (pOldCtrl != NULL && pOldCtrl->m_pCtrlSite == pSite)
-					pOldCtrl->m_pCtrlSite = NULL;
+	ASSERT(this != NULL);
+	ASSERT(pWndParent != NULL);
 
-				// now wire the site and CWnd together
-				m_pCtrlSite = pSite;
-				pSite->m_pWndCtrl = this;
-			}
-		}
+	if (m_pCtrlSite == NULL && pWndParent->m_pCtrlCont != NULL)
+	{
+		// delegate through helper in COleControlSite
+		pWndParent->m_pCtrlCont->AttachControlSite(this);
+	}
+}
+
+void COleControlContainer::AttachControlSite(CWnd* pWnd)
+{
+	ASSERT(this != NULL);
+	ASSERT(pWnd != NULL);
+
+	// If a matching control site exists, it's an OLE control
+	COleControlSite* pSite = (COleControlSite*)m_siteMap.GetValueAt(pWnd->m_hWnd);
+	if (pSite != NULL)
+	{
+		// detach any existing CWnd from this site (last one wins)
+		CWnd* pOldCtrl = pSite->m_pWndCtrl;
+		if (pOldCtrl != NULL && pOldCtrl->m_pCtrlSite == pSite)
+			pOldCtrl->m_pCtrlSite = NULL;
+
+		// now wire the site and CWnd together
+		pWnd->m_pCtrlSite = pSite;
+		pSite->m_pWndCtrl = pWnd;
 	}
 }
 

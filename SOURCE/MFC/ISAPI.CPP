@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -13,15 +13,18 @@
 #include <limits.h>
 
 #ifdef __BORLANDC__
-  #include <afx.h>
-  #ifdef _AFXDLL
-    #include <afxwin.h>
-  #endif
+#  include <afx.h>
+#  ifdef _AFXDLL
+#    include <afxwin.h>
+#    include <afxdb.h>
+#  endif
 #else
-  #ifdef _AFXDLL
-    #include <afx.h>
-    #include <afxwin.h>
-  #endif
+#  ifdef _AFXDLL
+#    include <afx.h>
+#    include <afxwin.h>
+#    include <afxdb.h>
+#    include <afxpriv.h>
+#  endif
 #endif
 
 #include <afxisapi.h>
@@ -54,28 +57,29 @@ static const TCHAR szEndTitle[] = _T("</title></head><body>");
 static const TCHAR szDefaultTitle[] = _T("Default MFC Web Server Extension");
 
 // error texts
+// these aren't localized as they are part of the HTTP spec
 
 typedef struct _httpstatinfo {
-	DWORD	dwCode;
-	LPCTSTR	pstrString;
+	DWORD   dwCode;
+	LPCTSTR pstrString;
 } HTTPStatusInfo;
 
 static HTTPStatusInfo statusStrings[] = {
- 	{ HTTP_STATUS_OK, 				_T("OK") },
-	{ HTTP_STATUS_CREATED, 			_T("Created") },
-	{ HTTP_STATUS_ACCEPTED, 		_T("Accepted") },
-	{ HTTP_STATUS_NO_CONTENT, 		_T("No Content") },
-	{ HTTP_STATUS_TEMP_REDIRECT, 	_T("Moved Temporarily") },
-	{ HTTP_STATUS_REDIRECT, 		_T("Moved Permanently") }, 
-	{ HTTP_STATUS_NOT_MODIFIED, 	_T("Not Modified") },
-	{ HTTP_STATUS_BAD_REQUEST, 		_T("Bad Request") },
-	{ HTTP_STATUS_AUTH_REQUIRED, 	_T("Unauthorized") },
-	{ HTTP_STATUS_FORBIDDEN, 		_T("Forbidden") },
-	{ HTTP_STATUS_NOT_FOUND, 		_T("Not Found") },
-	{ HTTP_STATUS_SERVER_ERROR, 	_T("Internal Server Error") },
-	{ HTTP_STATUS_NOT_IMPLEMENTED,	_T("Not Implemented") },
-	{ HTTP_STATUS_BAD_GATEWAY, 		_T("Bad Gateway") },
-	{ HTTP_STATUS_SERVICE_NA, 		_T("Service Unavailable") },
+	{ HTTP_STATUS_OK,               _T("OK") },
+	{ HTTP_STATUS_CREATED,          _T("Created") },
+	{ HTTP_STATUS_ACCEPTED,         _T("Accepted") },
+	{ HTTP_STATUS_NO_CONTENT,       _T("No Content") },
+	{ HTTP_STATUS_TEMP_REDIRECT,    _T("Moved Temporarily") },
+	{ HTTP_STATUS_REDIRECT,         _T("Moved Permanently") },
+	{ HTTP_STATUS_NOT_MODIFIED,     _T("Not Modified") },
+	{ HTTP_STATUS_BAD_REQUEST,      _T("Bad Request") },
+	{ HTTP_STATUS_AUTH_REQUIRED,    _T("Unauthorized") },
+	{ HTTP_STATUS_FORBIDDEN,        _T("Forbidden") },
+	{ HTTP_STATUS_NOT_FOUND,        _T("Not Found") },
+	{ HTTP_STATUS_SERVER_ERROR,     _T("Internal Server Error") },
+	{ HTTP_STATUS_NOT_IMPLEMENTED,  _T("Not Implemented") },
+	{ HTTP_STATUS_BAD_GATEWAY,      _T("Bad Gateway") },
+	{ HTTP_STATUS_SERVICE_NA,       _T("Service Unavailable") },
 	{ 0, NULL }
 };
 
@@ -95,7 +99,7 @@ const AFXIS_DATADEF AFX_PARSEMAP CHttpServer::parseMap =
 
 AFX_PARSEMAP_ENTRY CHttpServer::_parseEntries[] =
 {
-	{ NULL, NULL, NULL }	// nothing here
+	{ NULL, NULL, NULL }    // nothing here
 };
 
 #ifdef _AFXDLL
@@ -120,7 +124,7 @@ AFX_PARSEMAP::~AFX_PARSEMAP()
 	// walk through parse map to find any dying parsed parameter entries
 
 	UINT iEntry;
- 	UINT cEntries = (*pfnGetNumMapEntries)();
+	UINT cEntries = (*pfnGetNumMapEntries)();
 	AFX_PARSEMAP_ENTRY* pCurrent = (AFX_PARSEMAP_ENTRY*) lpEntries;
 
 	for (iEntry = 0; iEntry < cEntries; iEntry++, pCurrent++)
@@ -129,15 +133,18 @@ AFX_PARSEMAP::~AFX_PARSEMAP()
 		{
 			delete (AFX_PARSEMAP_ENTRY_PARAMS*) pCurrent->pszFnName;
 			pCurrent->pszFnName = NULL;
+
+			free(pCurrent->pszParamInfo);
+			pCurrent->pszParamInfo = NULL;
 		}
 	}
 }
 
 AFX_PARSEMAP_ENTRY_PARAMS::~AFX_PARSEMAP_ENTRY_PARAMS()
 {
-	delete ppszInfo;
-	delete ppszDefaults;
-	delete ppszValues;
+	delete [] ppszInfo;
+	delete [] ppszDefaults;
+	delete [] ppszValues;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -154,7 +161,7 @@ extern "C" DWORD WINAPI HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pECB)
 	if (pServer == NULL)
 	{
 		dwRet = HSE_STATUS_ERROR;
-	    pECB->dwHttpStatusCode = HTTP_STATUS_SERVER_ERROR;
+		pECB->dwHttpStatusCode = HTTP_STATUS_SERVER_ERROR;
 	}
 	else
 		dwRet = pServer->HttpExtensionProc(pECB);
@@ -178,6 +185,72 @@ extern "C" BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO *pVer)
 	return bRet;
 }
 
+extern "C" BOOL WINAPI TerminateExtension(DWORD dwFlags)
+{
+#ifdef _AFXDLL
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+#endif
+
+	if (pServer == NULL)
+		return TRUE;
+	return pServer->TerminateExtension(dwFlags);
+}
+
+///////////////////////////////////////////////////////////////////////
+// CHttpAsyncContext implementation
+
+class CHttpAsyncContext
+{
+public:
+	CHttpAsyncContext(HANDLE hFile, LPVOID pvHeader, DWORD dwHeaderLen,
+					LPVOID pvTail, DWORD dwTailLen);
+	virtual ~CHttpAsyncContext();
+
+protected:
+	LPVOID m_pvHeader;
+	DWORD   m_dwHeaderLen;
+	LPVOID m_pvTail;
+	DWORD m_dwTailLen;
+	HANDLE m_hFile;
+};
+
+CHttpAsyncContext::CHttpAsyncContext(HANDLE hFile, LPVOID pvHeader,
+		DWORD dwHeaderLen, LPVOID pvTail, DWORD dwTailLen)
+	: m_hFile(hFile)
+{
+	if (pvHeader == NULL || dwHeaderLen == 0)
+	{
+		m_pvHeader = NULL;
+		dwHeaderLen = 0;
+	}
+	else
+	{
+		m_pvHeader = new BYTE[dwHeaderLen+1];
+		memcpy(m_pvHeader, pvHeader, dwHeaderLen);
+		m_dwHeaderLen = dwHeaderLen;
+	}
+
+	if (pvTail == NULL || dwTailLen == 0)
+	{
+		m_pvTail = NULL;
+		dwTailLen = 0;
+	}
+	else
+	{
+		m_pvTail = new BYTE[dwTailLen+1];
+		memcpy(m_pvTail, pvTail, dwTailLen);
+		m_dwTailLen = dwTailLen;
+	}
+}
+
+CHttpAsyncContext::~CHttpAsyncContext()
+{
+	if (m_hFile != NULL && m_hFile != INVALID_HANDLE_VALUE)
+		CloseHandle(m_hFile);
+
+	delete [] m_pvTail;
+	delete [] m_pvHeader;
+}
 
 ///////////////////////////////////////////////////////////////////////
 // CHttpServerContext implementation
@@ -190,42 +263,155 @@ void CHttpServerContext::Reset()
 	m_pStream->Reset();
 }
 
+DWORD CHttpServerContext::SetChunkSize(DWORD dwNewSize)
+{
+	DWORD dwReturn = m_dwChunkSize;
+	m_dwChunkSize = dwNewSize;
+	return dwReturn;
+}
+
+DWORD CHttpServerContext::GetChunkSize() const
+{
+	return m_dwChunkSize;
+}
+
+VOID WINAPI AfxIOCallback(EXTENSION_CONTROL_BLOCK* pECB,
+	PVOID pvContext, DWORD /* cbIO */, DWORD /* dwError */)
+{
+	if (!pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_DONE_WITH_SESSION, NULL, NULL, NULL))
+		ISAPITRACE("HttpExtensionProc io callback error\n");
+
+	CHttpAsyncContext* pInfo = (CHttpAsyncContext*) pvContext;
+	delete pInfo;
+}
+
+BOOL CHttpServerContext::TransmitFile(HANDLE hFile,
+	DWORD dwFlags /* = HSE_IO_DISCONNECT_AFTER_SEND */,
+	LPVOID pvHeader /* = NULL */, DWORD dwHeaderLen /* = 0 */,
+	LPVOID pvTail /* = NULL */, DWORD dwTailLen /* = 0 */)
+{
+	if (hFile == INVALID_HANDLE_VALUE)
+		return FALSE;
+
+	ISAPIASSERT(dwHeaderLen == 0 || pvHeader != NULL);
+	ISAPIASSERT(dwTailLen == 0 || pvTail != NULL);
+
+	if (dwTailLen == 0 && pvTail != NULL)
+		dwTailLen = lstrlen((LPCTSTR) pvTail);
+
+	if (dwHeaderLen == 0 && pvHeader != NULL)
+		dwHeaderLen = lstrlen((LPCTSTR) pvHeader);
+
+	CHttpAsyncContext* pInfo =
+		new CHttpAsyncContext(hFile, pvHeader, dwTailLen, pvTail, dwHeaderLen);
+
+	HSE_TF_INFO info;
+
+	info.pszStatusCode = NULL;
+	info.hFile = hFile;
+	info.dwFlags = dwFlags;
+	info.BytesToWrite = 0;
+	info.Offset = 0;
+	info.pfnHseIO = AfxIOCallback;
+	info.pContext = pInfo;
+	info.pHead = pvHeader;
+	info.HeadLength = dwHeaderLen;
+	info.pTail = pvTail;
+	info.TailLength = dwTailLen;
+
+	BOOL bResult = ServerSupportFunction(HSE_REQ_TRANSMIT_FILE, &info, 0, 0);
+
+	if (bResult)
+	{
+		m_dwStatusCode = HSE_STATUS_PENDING;
+		m_bSendHeaders = FALSE;
+	}
+	else
+		delete pInfo;
+
+	return bResult;
+}
 
 ///////////////////////////////////////////////////////////////////////
 // CHttpServer implementation
 
-LPTSTR CHttpServer::GetQuery(CHttpServerContext* pCtxt,
-	LPTSTR lpszQuery, DWORD cbQuery)
+BOOL CHttpServer::TerminateExtension(DWORD /* dwFlags */)
 {
-	DWORD cbRemaining;
+	// okay to unload at any time, by default
+	return TRUE;
+}
 
-    //
-    //  If the request is a GET, then the lpszQueryString member of the ECB
-    //  contains the query string.
-    //
-    //  If the request is a POST, then you have to get all of the data, both
-    //  from the lpbData member, and then read the rest of the data via the
-    //  ReadClient() call.
-    //
-    if (cbQuery < pCtxt->m_pECB->cbTotalBytes)
-		return NULL;
+LPTSTR CHttpServer::GetQuery(CHttpServerContext* pCtxt, LPTSTR lpszQuery)
+{
+	// If the request is a POST, get all of the data.  First get what's
+	// already available, then read any additional data via the
+	// ReadClient() call.
 
-    _tcscpy(lpszQuery, (LPCTSTR) pCtxt->m_pECB->lpbData);
+	memcpy(lpszQuery, (LPCTSTR) pCtxt->m_pECB->lpbData, pCtxt->m_pECB->cbAvailable);
+	lpszQuery[pCtxt->m_pECB->cbAvailable] = '\0';
 
-    if ((cbRemaining = pCtxt->m_pECB->cbTotalBytes - pCtxt->m_pECB->cbAvailable) > 0)
-        pCtxt->ReadClient((LPVOID) (lpszQuery + pCtxt->m_pECB->cbAvailable), 
-						 &cbRemaining);
+	if (pCtxt->m_pECB->cbAvailable < pCtxt->m_pECB->cbTotalBytes)
+	{
+		LPCTSTR pstrTarget = lpszQuery + pCtxt->m_pECB->cbAvailable;
+		DWORD cbRemaining = pCtxt->m_pECB->cbTotalBytes - pCtxt->m_pECB->cbAvailable;
+		DWORD cbRead;
+
+		while (cbRemaining > 0)
+		{
+			cbRead = cbRemaining;
+			if (!pCtxt->ReadClient((LPVOID) pstrTarget, &cbRead))
+			{
+				ISAPITRACE("Error: only %d of %d bytes read!\n",
+					pCtxt->m_pECB->cbTotalBytes - cbRemaining,
+					pCtxt->m_pECB->cbTotalBytes);
+				return NULL;
+			}
+
+			if (cbRead == 0)
+				break;
+
+			pstrTarget += cbRead;
+			cbRemaining -= cbRead;
+		}
+	}
+
+	pCtxt->m_dwBytesReceived = pCtxt->m_pECB->cbTotalBytes;
 	return lpszQuery;
 }
- 
+
+BOOL CHttpServer::OnWriteBody(CHttpServerContext* pCtxt, LPBYTE pbContent,
+								DWORD dwSize, DWORD dwReserved /* = 0 */)
+{
+	BOOL bRetVal;
+
+	if (pCtxt->m_dwChunkSize == 0)
+		bRetVal = pCtxt->WriteClient(pbContent, &dwSize, dwReserved);
+	else
+	{
+		LPBYTE pbStart = pbContent;
+		DWORD dwBytesLeft = dwSize;
+		bRetVal = TRUE;
+
+		while (bRetVal && (dwBytesLeft > 0))
+		{
+			DWORD dwThisChunk = min(dwBytesLeft, pCtxt->m_dwChunkSize);
+			bRetVal = pCtxt->WriteClient(pbStart, &dwThisChunk, dwReserved);
+			pbStart += dwThisChunk;
+			dwBytesLeft -= dwThisChunk;
+		}
+	}
+
+	return bRetVal;
+}
+
 DWORD CHttpServer::HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pECB)
 {
 	DWORD dwRet = HSE_STATUS_SUCCESS;
-	BOOL bDefault = FALSE;
 	LPTSTR pszPostBuffer = NULL;
 	LPTSTR pszQuery;
 	LPTSTR pszCommand = NULL;
 	int nMethodRet;
+	LPTSTR pstrLastChar;
 	DWORD cbStream = 0;
 	BYTE* pbStream = NULL;
 	CHttpServerContext ctxtCall(pECB);
@@ -233,27 +419,29 @@ DWORD CHttpServer::HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pECB)
 	pECB->dwHttpStatusCode = 0;
 
 	ISAPIASSERT(NULL != pServer);
-	if (pServer == NULL)	
+	if (pServer == NULL)
 	{
 		dwRet = HSE_STATUS_ERROR;
 		goto CleanUp;
 	}
 
-	if (_tcsicmp(pECB->lpszMethod, szGet) == 0)
+	// get the query
+
+	if (lstrcmpi(pECB->lpszMethod, szGet) == 0)
 	{
 		pszQuery = pECB->lpszQueryString;
+		ctxtCall.m_dwBytesReceived = lstrlen(pszQuery);
 	}
-	else if (_tcsicmp(pECB->lpszMethod, szPost) == 0)
+	else if (lstrcmpi(pECB->lpszMethod, szPost) == 0)
 	{
-		if (pECB->cbTotalBytes == 0)
+		pszCommand = pECB->lpszQueryString;
+		pszPostBuffer = new TCHAR[pECB->cbTotalBytes + 1];
+		pszQuery =  GetQuery(&ctxtCall, pszPostBuffer);
+		if (pszQuery == NULL)
 		{
 			dwRet = HSE_STATUS_ERROR;
 			goto CleanUp;
 		}
-
-		pszCommand = pECB->lpszQueryString;
-		pszPostBuffer = new TCHAR[pECB->cbAvailable + 1];
-		pszQuery = GetQuery(&ctxtCall, pszPostBuffer, pECB->cbAvailable);
 	}
 	else
 	{
@@ -261,6 +449,17 @@ DWORD CHttpServer::HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pECB)
 		dwRet = HSE_STATUS_ERROR;
 		goto CleanUp;
 	}
+
+	// trim junk that some browsers put at the very end
+
+	pstrLastChar = pszQuery + ctxtCall.m_dwBytesReceived -1;
+	while ((*pstrLastChar == ' ' || *pstrLastChar == '\n' ||
+		   *pstrLastChar == '\r') && pstrLastChar > pszQuery)
+	{
+		*pstrLastChar-- = '\0';
+	}
+
+	// do something about it
 
 	if (!pServer->InitInstance(&ctxtCall))
 		dwRet = HSE_STATUS_ERROR;
@@ -309,7 +508,7 @@ DWORD CHttpServer::HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pECB)
 		// the error, prepare to spit out the generated HTML
 
 		if (nMethodRet == callOK ||
-			OnParseError(&ctxtCall, nMethodRet) == TRUE)
+			OnParseError(&ctxtCall, nMethodRet))
 		{
 			cbStream = ctxtCall.m_pStream->GetStreamSize();
 			pbStream = ctxtCall.m_pStream->Detach();
@@ -322,40 +521,52 @@ CleanUp:
 	BuildStatusCode(szResponse, pECB->dwHttpStatusCode);
 
 	DWORD dwSize = cbStream - ctxtCall.m_dwEndOfHeaders;
-	BYTE* pbContent = NULL;
-	BYTE cSaved;
+	LPBYTE pbContent = NULL;
+	BYTE cSaved = 0;
 
-	if (pbStream != NULL)
+	if (pbStream != NULL && ctxtCall.m_bSendHeaders)
 	{
 		cSaved = pbStream[ctxtCall.m_dwEndOfHeaders];
 		pbStream[ctxtCall.m_dwEndOfHeaders] = '\0';
 		pbContent = &pbStream[ctxtCall.m_dwEndOfHeaders];
 	}
 
-	if (!ctxtCall.ServerSupportFunction(
-		HSE_REQ_SEND_RESPONSE_HEADER, szResponse, 0, (LPDWORD) pbStream))
+	if (ctxtCall.m_bSendHeaders &&
+		!ctxtCall.ServerSupportFunction(HSE_REQ_SEND_RESPONSE_HEADER,
+			szResponse, 0, (LPDWORD) pbStream) &&
+		::GetLastError() != 10054)  // WSAECONNRESET
 	{
 		pECB->dwHttpStatusCode = HTTP_STATUS_SERVER_ERROR;
 		dwRet = HSE_STATUS_ERROR;
 #ifdef _DEBUG
 		DWORD dwCause = ::GetLastError();
-		ISAPITRACE1("Error: Unable to write headers: %8.8X!\n", dwCause);
+		ISAPITRACE1("Error: Unable to write headers: 0x%8.8X!\n", dwCause);
 #endif
 	}
 	else
 	{
 		if (pbContent != NULL)
 		{
+			BOOL bWorked = TRUE;
+
 			// write a newline to separate content from headers
 
-			*pbContent = cSaved;
-			DWORD dwNewLineSize = 2;
-			if (!ctxtCall.WriteClient(_T("\r\n"), &dwNewLineSize, 0) ||
-				!ctxtCall.WriteClient(pbContent, &dwSize, 0))
+			if (ctxtCall.m_bSendHeaders)
+			{
+				*pbContent = cSaved;
+				DWORD dwNewLineSize = 2;
+				bWorked = ctxtCall.WriteClient(_T("\r\n"), &dwNewLineSize, 0);
+			}
+
+			if (!bWorked || !OnWriteBody(&ctxtCall, pbContent, dwSize))
 			{
 				dwRet = HSE_STATUS_ERROR;
 				pECB->dwHttpStatusCode = HTTP_STATUS_SERVER_ERROR;
-				ISAPITRACE("Error: Unable to write content body!\n");
+#ifdef _DEBUG
+				DWORD dwCause = ::GetLastError();
+				ISAPITRACE1("Error: Unable to write content body: 0x%8.8X!\n",
+					dwCause);
+#endif
 			}
 		}
 		else
@@ -365,6 +576,8 @@ CleanUp:
 	if (pbStream != NULL)
 		ctxtCall.m_pStream->Free(pbStream);
 
+	if (ctxtCall.m_dwStatusCode != DWORD(-1))
+		dwRet = ctxtCall.m_dwStatusCode;
 	if (dwRet == HSE_STATUS_SUCCESS)
 		pECB->dwHttpStatusCode = HTTP_STATUS_OK;
 
@@ -407,10 +620,12 @@ BOOL CHttpServer::GetExtensionVersion(HSE_VERSION_INFO *pVer)
 CHttpServer::CHttpServer(TCHAR cDelimiter /* = '&' */)
 	: m_cTokenDelimiter(cDelimiter)
 {
-	ISAPIASSERT(pServer == NULL);	// only one server instance
+	ISAPIASSERT(pServer == NULL);   // only one server instance
 	pServer = this;
 
-	m_pCritSec = new CRITICAL_SECTION;
+	// allocate our critical section directly to avoid bogus traces
+	m_pCritSec = (LPCRITICAL_SECTION)
+		LocalAlloc(LPTR, sizeof(CRITICAL_SECTION));
 	::InitializeCriticalSection(m_pCritSec);
 }
 
@@ -419,7 +634,7 @@ CHttpServer::~CHttpServer()
 	if (m_pCritSec != NULL)
 	{
 		::DeleteCriticalSection(m_pCritSec);
-		delete m_pCritSec;
+		LocalFree(m_pCritSec);
 	}
 	pServer = NULL;
 }
@@ -427,7 +642,7 @@ CHttpServer::~CHttpServer()
 BOOL CHttpServer::OnParseError(CHttpServerContext* pCtxt, int nMethodRet)
 {
 	UNUSED(nMethodRet);
-	UINT nResource;
+	UINT nResource = 0;
 
 	if (pCtxt->m_pStream != NULL)
 	{
@@ -476,8 +691,13 @@ BOOL CHttpServer::OnParseError(CHttpServerContext* pCtxt, int nMethodRet)
 		HINSTANCE hRes;
 		hRes = AfxGetResourceHandle();
 
+#ifdef _AFXDLL
+		if (AfxLoadString(nResource, szBuffer, sizeof(szBuffer)/sizeof(szBuffer[0])) > 0)
+#else
+
 		if (::LoadString(hRes, nResource, szBuffer,
 			sizeof(szBuffer)/sizeof(szBuffer[0])) > 0)
+#endif
 		{
 			pCtxt->Reset();
 			CHttpServer::StartContent(pCtxt);
@@ -509,7 +729,7 @@ BOOL CHttpServer::OnParseError(CHttpServerContext* pCtxt, int nMethodRet)
 	if (nResource == 0)
 		ISAPITRACE1("Error: Unhandled parsing error code %d\n", nMethodRet);
 
-	return (nResource == 0) ? FALSE : TRUE;
+	return nResource != 0;
 }
 
 void CHttpServer::AddHeader(CHttpServerContext* pCtxt,
@@ -517,7 +737,7 @@ void CHttpServer::AddHeader(CHttpServerContext* pCtxt,
 {
 #ifdef _DEBUG
 	// Can't call AddHeader() after writing directly to the stream.
-    ISAPIASSERT(pCtxt->m_dwOldEndOfHeaders == pCtxt->m_pStream->GetStreamSize());
+	ISAPIASSERT(pCtxt->m_dwOldEndOfHeaders == pCtxt->m_pStream->GetStreamSize());
 #endif
 
 	*pCtxt << pszString;
@@ -578,6 +798,43 @@ int CHttpServer::CallFunction(CHttpServerContext* pCtxt,
 			LPTSTR pszMethod;
 			LPTSTR pszParams;
 
+			// did the user specify a command via "MfcISAPICommand"?
+
+			LPTSTR pszHiddenCommand = _tcschr(pszQuery, '=');
+			if (pszHiddenCommand != NULL)
+			{
+				*pszHiddenCommand = '\0';
+
+				// is it there?
+
+				if (lstrcmpi(pszQuery, _T("MfcISAPICommand")) == 0)
+				{
+					// did they have a method, too?
+
+					pszMethod = pszHiddenCommand+1;
+					if (*pszMethod == '\0')
+						pszParams = pszMethod;
+					else
+					{
+						pszParams = _tcschr(pszMethod, m_cTokenDelimiter);
+						if (pszParams != NULL && *pszParams != '\0')
+							*pszParams++ = '\0';
+					}
+
+					// if we find it, we can call it
+
+					pFn = LookUp(pszMethod, pMap, pParams);
+					if (pFn != NULL)
+						goto MakeTheCall;
+				}
+
+				// we didn't find the command, or we didn't have
+				// "MfcISAPICommand", so we'll try and process things
+				// normally...
+
+				*pszHiddenCommand = '=';
+			}
+
 			if (pszCommand == NULL)
 			{
 				// got something via a GET method
@@ -592,7 +849,17 @@ int CHttpServer::CallFunction(CHttpServerContext* pCtxt,
 				// Parameters start at the first delimiter
 
 				if (pszParams == NULL || (pszQMark != NULL && (pszQMark < pszParams)))
+				{
 					pszParams = pszQMark;
+
+					// if the command ends in question mark
+					// and nothing else, ignore it
+					if (pszQMark != NULL && pszQMark[1] == '\0')
+					{
+						*pszQMark = '\0';
+						pszParams = NULL;
+					}
+				}
 
 				// Does an equals sign show up before the first delimiter?
 
@@ -606,17 +873,17 @@ int CHttpServer::CallFunction(CHttpServerContext* pCtxt,
 					pszMethod = pszQuery;
 					if (*pszMethod != '\0')
 					{
-						TCHAR cTemp;
+						TCHAR cTemp = 0;
 						if (pszParams != NULL)
 						{
 							cTemp = *pszParams;
 							*pszParams++ = '\0';
 						}
-				
-					 	pFn = LookUp(pszMethod, pMap, pParams);
+
+						pFn = LookUp(pszMethod, pMap, pParams);
 						if (pFn != NULL)
 							goto MakeTheCall;
-						
+
 						if (pszParams != NULL)
 							*--pszParams = cTemp;
 					}
@@ -644,11 +911,11 @@ int CHttpServer::CallFunction(CHttpServerContext* pCtxt,
 			}
 
 			// is it a default verb?
-			if (pszMethod != NULL && _tcslen(pszMethod) == 0)
+			if (pszMethod != NULL && lstrlen(pszMethod) == 0)
 				pszMethod = NULL;
 
 			// is it a useless parameter?
-			if (pszParams != NULL && _tcslen(pszParams) == 0)
+			if (pszParams != NULL && lstrlen(pszParams) == 0)
 				pszParams = NULL;
 
 			pFn = LookUp(pszMethod, pMap, pParams);
@@ -712,7 +979,7 @@ const AFX_PARSEMAP_ENTRY* CHttpServer::LookUp(LPCTSTR pszMethod,
 				if (pszMethod == NULL && pCurrent->pszArgs == NULL)
 					pRet = pCurrent;
 				else if (pszMethod != NULL && pCurrent->pszArgs != NULL
-					&& _tcsicmp(pszFnName, pszMethod) == 0)
+					&& lstrcmpi(pszFnName, pszMethod) == 0)
 					pRet = pCurrent;
 			}
 			else if (pCurrent->pfn == pCmdDefault && pCurrent->pszArgs != NULL)
@@ -721,11 +988,11 @@ const AFX_PARSEMAP_ENTRY* CHttpServer::LookUp(LPCTSTR pszMethod,
 			if (pRet != NULL)
 			{
 				// if we need the default, recurse to find it by name
-                if (pszMethod == NULL && pCmdDefault == NULL)
+				if (pszMethod == NULL && pCmdDefault == NULL)
 					return LookUp(NULL, pMap, pParams, pCurrent->pfn);
 
 				// found it!  see if there are parameters
-				
+
 				if (iEntry+1 >= cEntries || pCurrent[1].pfn != NULL)
 				{
 					pParams = NULL;
@@ -733,7 +1000,7 @@ const AFX_PARSEMAP_ENTRY* CHttpServer::LookUp(LPCTSTR pszMethod,
 				}
 				else
 				{
-					pParams = (AFX_PARSEMAP_ENTRY*)	&(pCurrent[1]);
+					pParams = (AFX_PARSEMAP_ENTRY*) &(pCurrent[1]);
 					pMap = pParseMap;
 				}
 			}
@@ -752,7 +1019,7 @@ const AFX_PARSEMAP_ENTRY* CHttpServer::LookUp(LPCTSTR pszMethod,
 
 	// no matching entry ?
 	if (pRet == NULL)
-		ISAPITRACE1("Warning: no handler for command '%s'\n", pszMethod); 
+		ISAPITRACE1("Warning: no handler for command '%s'\n", pszMethod);
 	return pRet;
 }
 
@@ -767,6 +1034,7 @@ UINT PASCAL CHttpServer::GetStackSize(const BYTE* pbParams)
 		sizeof(_STACK_DOUBLE),      // ITS_R8
 		sizeof(LPCTSTR),            // ITS_PSTR
 		0,                          // ITS_EMPTY
+		sizeof(LPCTSTR)+sizeof(_STACK_INT),     // ITS_RAW
 	};
 	// sizeof 'this' pointer
 	UINT nCount = sizeof(CHttpServer*);
@@ -822,6 +1090,8 @@ int CHttpServer::CallMemberFunc(CHttpServerContext* pCtxt,
 
 	// get default function and parameters
 	BYTE bNoParams = 0;
+
+	::EnterCriticalSection(m_pCritSec);
 	const BYTE* pbParams = (const BYTE*)pEntry->pszArgs;
 	if (NULL == pbParams)
 		pbParams = &bNoParams;
@@ -830,13 +1100,12 @@ int CHttpServer::CallMemberFunc(CHttpServerContext* pCtxt,
 	AFX_PARSEMAP_ENTRY_PARAMS *pDefaultParams = NULL;
 	if (pParams != NULL)
 	{
-		::EnterCriticalSection(m_pCritSec);
 		if (pParams->pszFnName == NULL)
 			nRet = ParseDefaultParams(pParams, nParams, pDefaultParams, pbParams);
 		else
 			pDefaultParams = (AFX_PARSEMAP_ENTRY_PARAMS*) pParams->pszFnName;
-		::LeaveCriticalSection(m_pCritSec);
 	}
+	::LeaveCriticalSection(m_pCritSec);
 
 	if (nRet == callOK)
 	{
@@ -867,9 +1136,9 @@ int CHttpServer::CallMemberFunc(CHttpServerContext* pCtxt,
 #endif
 		else
 #ifndef _SHADOW_DOUBLES
-	    	nRet = PushStackArgs(pStack, pCtxt, pbParams, pszParams);
+			nRet = PushStackArgs(pStack, pCtxt, pbParams, pszParams);
 #else
-	    	nRet = PushStackArgs(pStack, pCtxt, pbParams, pszParams, nSizeArgs);
+			nRet = PushStackArgs(pStack, pCtxt, pbParams, pszParams, nSizeArgs);
 #endif
 		pStack += _STACK_OFFSET;
 
@@ -907,7 +1176,6 @@ int CHttpServer::CountParams(LPCTSTR pszCommandLine, int& nCount)
 				}
 
 				if (!_istspace(*pszWalker))
-
 				{
 					nCount++;
 					bInSpace = FALSE;
@@ -921,7 +1189,7 @@ int CHttpServer::CountParams(LPCTSTR pszCommandLine, int& nCount)
 					(_istspace(*pszWalker) || *pszWalker == m_cTokenDelimiter))
 					bInSpace = TRUE;
 			}
-		
+
 			pszWalker++;
 		}
 
@@ -932,10 +1200,10 @@ int CHttpServer::CountParams(LPCTSTR pszCommandLine, int& nCount)
 			ISAPIASSERT(nCount > 0 || !bInSpace);
 		}
 		// unclosed quoted string?
-		else if (bInQuote == TRUE)
+		else if (bInQuote)
 		{
 			nRetCode = callMissingQuote;
-			ISAPIASSERT(bInQuote == FALSE);
+			ISAPIASSERT(!bInQuote);
 		}
 	}
 
@@ -953,22 +1221,35 @@ int CHttpServer::ParseDefaultParams(AFX_PARSEMAP_ENTRY* pParams,
 	BOOL bInEquals;
 	BOOL bMandatory = TRUE;
 
+	// only if we haven't done it already
+
 	if (pParams->pszFnName == NULL)
 	{
-		AFX_PARSEMAP_ENTRY_PARAMS* pParBlock = new AFX_PARSEMAP_ENTRY_PARAMS;
-		pBlock = pParBlock;
-		memset(pParBlock, 0, sizeof(AFX_PARSEMAP_ENTRY_PARAMS));
-		pParams->pszFnName = (LPTSTR) pParBlock;
+		AFX_PARSEMAP_ENTRY_PARAMS* pParBlock = NULL;
+		ISAPIASSERT(pParams->pszParamInfo == NULL);
 
 		// can't have empty param string
 		ISAPIASSERT(*pParams->pszArgs != '\0');
-		if (*pParams->pszArgs == '\0')
-			nRet = callMissingParams;
-		else
-			nRet = CountParams(pParams->pszArgs, pParBlock->nParams);
 
-		if (nRet != callOK)
+		if (*pParams->pszArgs != '\0')
+		{
+			pParBlock = new AFX_PARSEMAP_ENTRY_PARAMS;
+			pBlock = pParBlock;
+			memset(pParBlock, 0, sizeof(AFX_PARSEMAP_ENTRY_PARAMS));
+			pParams->pszFnName = (LPTSTR) pParBlock;
+
+			// start by finding how many parameters we have
+			nRet = CountParams(pParams->pszArgs, pParBlock->nParams);
+			if (nRet == callOK)
+				pParams->pszParamInfo = _tcsdup(pParams->pszArgs);
+		}
+
+		if (pParBlock == NULL || nRet != callOK)
+		{
+			if (nRet == callOK)
+				nRet = callMissingParams;
 			goto CleanUp;
+		}
 
 		// wrong number of parameters?
 		if (nParams != pParBlock->nParams)
@@ -979,16 +1260,20 @@ int CHttpServer::ParseDefaultParams(AFX_PARSEMAP_ENTRY* pParams,
 		// it's a winner!
 		else
 		{
-			pParBlock->ppszInfo = new LPTSTR[pParBlock->nParams *2];
-			pParBlock->ppszDefaults = new BYTE[pParBlock->nParams * sizeof(double)];
-			pParBlock->ppszValues = new BYTE[pParBlock->nParams * sizeof(double)];
+			pParBlock->ppszInfo =
+				new LPTSTR[pParBlock->nParams *2];
+			pParBlock->ppszDefaults =
+				new BYTE[pParBlock->nParams * sizeof(double)];
+			pParBlock->ppszValues =
+				new BYTE[pParBlock->nParams * sizeof(double)];
 
 			bInQuote = FALSE;
 			bInSpace = TRUE;
 			bInEquals = FALSE;
 			int nStorage = 0;
 
-			for (pszWalker = pParams->pszArgs; *pszWalker != '\0'; pszWalker++)
+			for (pszWalker = pParams->pszParamInfo;
+				*pszWalker != '\0'; pszWalker++)
 			{
 				if (bInSpace)
 				{
@@ -996,7 +1281,7 @@ int CHttpServer::ParseDefaultParams(AFX_PARSEMAP_ENTRY* pParams,
 					ISAPIASSERT(*pszWalker != '\'' && *pszWalker != '=');
 					if (*pszWalker == '\'' || *pszWalker == '=')
 					{
-						nRet = callMissingQuote; 
+						nRet = callMissingQuote;
 						break;
 					}
 
@@ -1041,7 +1326,7 @@ int CHttpServer::ParseDefaultParams(AFX_PARSEMAP_ENTRY* pParams,
 								nRet = callBadParam;
 								goto CleanUp;
 							}
-								
+
 							*pszWalker = '\0';
 							bInSpace = TRUE;
 							pParBlock->ppszInfo[nStorage++] = NULL;
@@ -1107,11 +1392,19 @@ int CHttpServer::PushDefaultStackArgs(BYTE* pStack,
 	AFX_PARSEMAP_ENTRY_PARAMS* pDefParams, int nSizeArgs)
 #endif
 {
-	LPTSTR pszCurParam = NULL;
 	ISAPIASSERT(pStack != NULL);
+
+	LPTSTR pszCurParam = NULL;
 	int nExplicit = 0;
+	LPBYTE pFlags;
 	int nPushedExplicit = 0;
+	int nRetVal = callOK;
 	LPTSTR pszLineEnd;
+
+	// keep a list of flags to know what's pushed and what's not
+
+	pFlags = new BYTE[pDefParams->nParams];
+	memset(pFlags, 0, pDefParams->nParams);
 
 	// C++ member functions use the __thiscall convention, where parameters
 	//  are pushed last to first.  Assuming the stack grows down, this means
@@ -1136,7 +1429,7 @@ int CHttpServer::PushDefaultStackArgs(BYTE* pStack,
 
 	if (pszParams != NULL)
 	{
-		pszLineEnd = pszParams + _tcslen(pszParams);
+		pszLineEnd = pszParams + lstrlen(pszParams);
 
 		TCHAR szTokens[2];
 		szTokens[0] = m_cTokenDelimiter;
@@ -1165,12 +1458,12 @@ int CHttpServer::PushDefaultStackArgs(BYTE* pStack,
 				*pszValue++ = '\0';
 
 				// find the parameter in our param block
- 
+
 				int nIndex;
 				BOOL bFound = FALSE;
 				for (nIndex = 0; nIndex < pDefParams->nParams; nIndex++)
 				{
-					if (_tcsicmp(pDefParams->ppszInfo[nIndex*2], pszCurParam) == 0)
+					if (lstrcmpi(pDefParams->ppszInfo[nIndex*2], pszCurParam) == 0)
 					{
 						bFound = TRUE;
 						break;
@@ -1179,31 +1472,56 @@ int CHttpServer::PushDefaultStackArgs(BYTE* pStack,
 
 				// something we don't recognize?
 				if (!bFound)
-					return callBadParam;
+				{
+					nRetVal = callBadParam;
+					goto CleanUp;
+				}
 
-				pszParams = pszValue + _tcslen(pszValue);
+				pszParams = pszValue + lstrlen(pszValue);
 				if (pszParams != pszLineEnd)
 					pszParams++;
 
+				// if this parameter has a default and there's
+				// no value for the parameter after the equal sign,
+				// let the default value prevail
+
+				if (*pszValue != '\0' ||
+					pDefParams->ppszInfo[2*nIndex+1] == NULL)
+				{
 #ifndef _SHADOW_DOUBLES
-		 		StoreStackParameter(&(pDefParams->ppszValues[nIndex*sizeof(double)]),
-					pbParams[nIndex], pszValue);
+					StoreStackParameter(
+						&(pDefParams->ppszValues[nIndex*sizeof(double)]),
+						pbParams[nIndex], pszValue);
 #else
-		 		StoreStackParameter(&(pDefParams->ppszValues[nIndex*sizeof(double)]),
-					pbParams[nIndex], pszValue, 0, FALSE);
+					StoreStackParameter(
+						&(pDefParams->ppszValues[nIndex*sizeof(double)]),
+						pbParams[nIndex], pszValue, 0, FALSE);
 #endif
 
-				// if this has no default, it counts as explicit, too
-				if (pDefParams->ppszInfo[2*nIndex+1] == NULL)
-					nExplicit++;
+					// if this has no default, it counts as explicit, too
+					if (pDefParams->ppszInfo[2*nIndex+1] == NULL)
+						nExplicit++;
+				}
+
+				// if we've already pushed this parameter, or if we've
+				// already pushed this many explicit params, make an error
+				if (pFlags[nIndex] != 0 || nIndex < nPushedExplicit)
+				{
+					nRetVal = callBadParam;
+					goto CleanUp;
+				}
+				pFlags[nIndex] = 1;
 			}
 			else
 			{
 				// not allowed to have optional params before required params
 				if (nExplicit != 0)
-					return callBadParam;
+				{
+					nRetVal = callBadParam;
+					goto CleanUp;
+				}
 
-				pszParams += _tcslen(pszCurParam);
+				pszParams += lstrlen(pszCurParam);
 				if (pszParams != pszLineEnd)
 					pszParams++;
 
@@ -1213,6 +1531,13 @@ int CHttpServer::PushDefaultStackArgs(BYTE* pStack,
 				pStack = StoreStackParameter(pStack, *pb, pszCurParam,
 					nSizeArgs, TRUE);
 #endif
+
+				if (pFlags[nPushedExplicit] != 0)
+				{
+					nRetVal = callBadParam;
+					goto CleanUp;
+				}
+				pFlags[nPushedExplicit] = 1;
 				nPushedExplicit++;
 			}
 		}
@@ -1223,31 +1548,38 @@ int CHttpServer::PushDefaultStackArgs(BYTE* pStack,
 		pszMoreParams = _tcschr(pszParams, m_cTokenDelimiter);
 
 		if (*pb == '\0' && (pszMoreParams != NULL || *pszParams != '\0'))
-			return callBadParamCount;
+		{
+			nRetVal = callBadParamCount;
+			goto CleanUp;
+		}
 	}
 
 	// were any arguments without defaults missed?
-	int nRetCode = callOK;
 	if (nPushedExplicit + nExplicit < pDefParams->nRequired)
-		nRetCode = callBadParamCount;
+	{
+		nRetVal = callBadParamCount;
+	}
 	else if (nPushedExplicit < pDefParams->nParams)
 	{
 		int nIndex;
 		for (nIndex = nPushedExplicit; nIndex < pDefParams->nParams; nIndex++)
 		{
 #ifndef _SHADOW_DOUBLES
-			pStack = StoreRawStackParameter(pStack, 
-		 		pbParams[nIndex],
+			pStack = StoreRawStackParameter(pStack,
+				pbParams[nIndex],
 				&(pDefParams->ppszValues[nIndex*sizeof(double)]));
 #else
-			pStack = StoreRawStackParameter(pStack, 
-		 		pbParams[nIndex],
+			pStack = StoreRawStackParameter(pStack,
+				pbParams[nIndex],
 				&(pDefParams->ppszValues[nIndex*sizeof(double)]), 0);
 #endif
 		}
 	}
 
-	return nRetCode;
+CleanUp:
+	if (pFlags != NULL)
+		delete [] pFlags;
+	return nRetVal;
 }
 
 
@@ -1291,7 +1623,7 @@ int CHttpServer::PushStackArgs(BYTE* pStack, CHttpServerContext* pCtxt,
 	else if (pszParams != NULL)
 	{
 		LPTSTR pszLineEnd;
-		pszLineEnd = pszParams + _tcslen(pszParams);
+		pszLineEnd = pszParams + lstrlen(pszParams);
 
 		ISAPIASSERT(pbParams != NULL);
 		for (pb = pbParams; *pb != '\0'; ++pb)
@@ -1300,7 +1632,31 @@ int CHttpServer::PushStackArgs(BYTE* pStack, CHttpServerContext* pCtxt,
 			{
 				// can't have ITS_EMPTY with other types!
 				ISAPIASSERT(pb == pbParams);
+				if (pb != pbParams)
+					nRetCode = callBadParam;
 				break;
+			}
+
+			if (*pb == IT_RAW)
+			{
+				// can't have ITS_RAW with other types!
+				ISAPIASSERT(pb == pbParams);
+				if (pb != pbParams)
+					nRetCode = callBadParam;
+				else
+				{
+					BYTE* pbParam = (BYTE*) &pszParams;
+#ifndef _SHADOW_DOUBLES
+					pStack = StoreRawStackParameter(pStack, IT_PSTR, pbParam);
+					pStack = StoreRawStackParameter(pStack, IT_I4,
+						(BYTE*) &(pCtxt->m_dwBytesReceived));
+#else
+					pStack = StoreRawStackParameter(pStack, IT_PSTR, pbParam);
+					pStack = StoreRawStackParameter(pStack, IT_I4,
+						(BYTE*) &(pCtxt->m_dwBytesReceived));
+#endif
+				}
+				return nRetCode;
 			}
 
 			if (pszParams == NULL)
@@ -1309,7 +1665,7 @@ int CHttpServer::PushStackArgs(BYTE* pStack, CHttpServerContext* pCtxt,
 			if (pszCurParam == NULL)
 				break;
 
-			pszParams = pszCurParam + _tcslen(pszCurParam);
+			pszParams = pszCurParam + lstrlen(pszCurParam);
 			if (pszParams != pszLineEnd)
 				pszParams++;
 
@@ -1321,14 +1677,17 @@ int CHttpServer::PushStackArgs(BYTE* pStack, CHttpServerContext* pCtxt,
 		}
 
 		// check that all source arguments were consumed
-	
-		LPTSTR pszMoreParams;
-		pszMoreParams = _tcschr(pszParams, m_cTokenDelimiter);
 
-		if (*pb != '\0' && pszMoreParams == NULL)
-			nRetCode = callBadParamCount;
-		else if (*pb == '\0' && (pszMoreParams != NULL || *pszParams != '\0'))
-			nRetCode = callBadParamCount;
+		if (nRetCode == callOK)
+		{
+			LPTSTR pszMoreParams;
+			pszMoreParams = _tcschr(pszParams, m_cTokenDelimiter);
+
+			if (*pb != '\0' && pszMoreParams == NULL)
+				nRetCode = callBadParamCount;
+			else if (*pb == '\0' && (pszMoreParams != NULL || *pszParams != '\0'))
+				nRetCode = callBadParamCount;
+		}
 	}
 	else
 	{
@@ -1506,7 +1865,7 @@ LPVOID CHttpServer::PreprocessString(LPTSTR psz)
 					nValue = (TCHAR) (((pszHigh - szHex) << 4) +
 									(pszLow - szHex));
 				}
-				
+
 			}
 
 			*pszDest++ = nValue;
@@ -1542,7 +1901,11 @@ CHtmlStream::CHtmlStream(BYTE* lpBuffer, UINT nBufferSize,
 	m_nGrowBytes = nGrowBytes;
 	m_nPosition = 0;
 	m_nBufferSize = nBufferSize;
+
+	// if the caller provides a grow-by size, use it;
+	// otherwise, incrememt by the initial buffer size
 	m_nStreamSize = nGrowBytes == 0 ? nBufferSize : 0;
+
 	m_lpBuffer = lpBuffer;
 	m_bAutoDelete = FALSE;
 }
@@ -1554,16 +1917,25 @@ void CHtmlStream::Attach(BYTE* lpBuffer, UINT nBufferSize, UINT nGrowBytes)
 	m_nGrowBytes = nGrowBytes;
 	m_nPosition = 0;
 	m_nBufferSize = nBufferSize;
+
+	// if the caller provides a grow-by size, use it;
+	// otherwise, incrememt by the initial buffer size
 	m_nStreamSize = nGrowBytes == 0 ? nBufferSize : 0;
+
 	m_lpBuffer = lpBuffer;
 	m_bAutoDelete = FALSE;
 }
 
 BYTE* CHtmlStream::Detach()
 {
-	BYTE* lpBuffer = m_lpBuffer;
-	lpBuffer[m_nStreamSize] = '\0';
-	m_lpBuffer = NULL;
+	BYTE* lpBuffer = NULL;
+	if (m_lpBuffer != NULL)
+	{
+		TCHAR chZero = 0;
+		Write(&chZero, sizeof(TCHAR));
+		lpBuffer = m_lpBuffer;
+		m_lpBuffer = NULL;
+	}
 	m_nBufferSize = 0;
 	m_nStreamSize = 0;
 	m_nPosition = 0;
@@ -1680,7 +2052,7 @@ CHtmlStream& CHtmlStream::operator<<(double d)
 	return *this;
 }
 
-CHtmlStream& CHtmlStream::operator<<(CHtmlStream& stream)
+CHtmlStream& CHtmlStream::operator<<(const CHtmlStream& stream)
 {
 	DWORD dwSourceLen = stream.GetStreamSize();
 	Write(stream.m_lpBuffer, dwSourceLen);
@@ -1707,7 +2079,6 @@ void CHtmlStream::Write(const void* lpBuf, UINT nCount)
 {
 	if (nCount == 0)
 		return;
-
 	ISAPIASSERT(lpBuf != NULL);
 
 	if (m_nPosition + nCount > m_nBufferSize)
@@ -1737,8 +2108,8 @@ void CHtmlStream::InitStream()
 ///////////////////////////////////////////////////////////////////////
 // HTTP Filter entry points
 
-extern "C" DWORD WINAPI HttpFilterProc(PHTTP_FILTER_CONTEXT pfc,	
-    DWORD dwNotificationType, LPVOID pvNotification)
+extern "C" DWORD WINAPI HttpFilterProc(PHTTP_FILTER_CONTEXT pfc,
+	DWORD dwNotificationType, LPVOID pvNotification)
 {
 #ifdef _AFXDLL
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1796,8 +2167,8 @@ BOOL CHttpFilter::GetFilterVersion(PHTTP_FILTER_VERSION pVer)
 	return TRUE;
 }
 
-DWORD CHttpFilter::HttpFilterProc(PHTTP_FILTER_CONTEXT pfc,	
-    DWORD dwNotificationType, LPVOID pvNotification)
+DWORD CHttpFilter::HttpFilterProc(PHTTP_FILTER_CONTEXT pfc,
+	DWORD dwNotificationType, LPVOID pvNotification)
 {
 	DWORD dwRet = SF_STATUS_REQ_NEXT_NOTIFICATION;
 	CHttpFilterContext callCtxt(pfc);
@@ -1832,6 +2203,10 @@ DWORD CHttpFilter::HttpFilterProc(PHTTP_FILTER_CONTEXT pfc,
 
 	case SF_NOTIFY_END_OF_NET_SESSION:
 		dwRet = OnEndOfNetSession(&callCtxt);
+		break;
+
+	case SF_NOTIFY_END_OF_REQUEST:
+		dwRet = OnEndOfRequest(&callCtxt);
 		break;
 
 	default:
@@ -1880,7 +2255,34 @@ DWORD CHttpFilter::OnEndOfNetSession(CHttpFilterContext*)
 	return SF_STATUS_REQ_NEXT_NOTIFICATION;
 }
 
+DWORD CHttpFilter::OnEndOfRequest(CHttpFilterContext*)
+{
+	return SF_STATUS_REQ_NEXT_NOTIFICATION;
+}
 
+
+///////////////////////////////////////////////////////////////////////
+// tracing helper function for linking without MFC
+
+#ifndef _AFX
+#ifdef _DEBUG
+
+void AFXISAPI_CDECL AfxISAPITrace(LPCTSTR lpszFormat, ...)
+{
+	va_list args;
+	va_start(args, lpszFormat);
+
+	// if the trace has been set to go to a window and the user
+	// presses RETRY, we will break to the debugger here
+
+	if (_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, lpszFormat, args) == 1)
+		_CrtDbgBreak();
+
+	va_end(args);
+}
+
+#endif
+#endif
 
 ///////////////////////////////////////////////////////////////////////
 // handle inline functions
@@ -1894,5 +2296,3 @@ static const char _szAfxWinInl[] = "isapi.inl";
 #include "afxisapi.inl"
 
 #endif //!_AFX_ENABLE_INLINES
-
-

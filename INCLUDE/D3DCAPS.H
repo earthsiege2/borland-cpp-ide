@@ -1,6 +1,5 @@
 /*==========================================================================;
  *
- *  Copyright (C) 1995-1996 Microsoft Corporation.  All Rights Reserved.
  *
  *  File:       d3dcaps.h
  *  Content:    Direct3D capabilities include file
@@ -8,15 +7,17 @@
  ***************************************************************************/
 
 #ifndef _D3DCAPS_H
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _D3DCAPS_H
-#pragma option -b
 
-/* 
+/*
  *  Pull in DirectDraw include file automatically:
  */
-#pragma option -b.
-#include <ddraw.h>
-#pragma option -b
+#include "ddraw.h"
+
+#ifndef DIRECT3D_VERSION
+#define DIRECT3D_VERSION         0x0700
+#endif
 
 #pragma pack(4)
 
@@ -44,8 +45,12 @@ typedef struct _D3DLIGHTINGCAPS {
 #define D3DLIGHTCAPS_POINT              0x00000001L /* Point lights supported */
 #define D3DLIGHTCAPS_SPOT               0x00000002L /* Spot lights supported */
 #define D3DLIGHTCAPS_DIRECTIONAL        0x00000004L /* Directional lights supported */
+#if(DIRECT3D_VERSION < 0x700)
 #define D3DLIGHTCAPS_PARALLELPOINT      0x00000008L /* Parallel point lights supported */
+#endif
+#if(DIRECT3D_VERSION < 0x500)
 #define D3DLIGHTCAPS_GLSPOT             0x00000010L /* GL syle spot lights supported */
+#endif
 
 /* Description of capabilities for each primitive type */
 
@@ -78,16 +83,32 @@ typedef struct _D3DPrimCaps {
 
 /* D3DPRIMCAPS dwRasterCaps */
 
-#define D3DPRASTERCAPS_DITHER           0x00000001L
-#define D3DPRASTERCAPS_ROP2             0x00000002L
-#define D3DPRASTERCAPS_XOR              0x00000004L
-#define D3DPRASTERCAPS_PAT              0x00000008L
-#define D3DPRASTERCAPS_ZTEST            0x00000010L
-#define D3DPRASTERCAPS_SUBPIXEL         0x00000020L
-#define D3DPRASTERCAPS_SUBPIXELX        0x00000040L
-#define D3DPRASTERCAPS_FOGVERTEX        0x00000080L
-#define D3DPRASTERCAPS_FOGTABLE         0x00000100L
-#define D3DPRASTERCAPS_STIPPLE          0x00000200L
+#define D3DPRASTERCAPS_DITHER                   0x00000001L
+#define D3DPRASTERCAPS_ROP2                     0x00000002L
+#define D3DPRASTERCAPS_XOR                      0x00000004L
+#define D3DPRASTERCAPS_PAT                      0x00000008L
+#define D3DPRASTERCAPS_ZTEST                    0x00000010L
+#define D3DPRASTERCAPS_SUBPIXEL                 0x00000020L
+#define D3DPRASTERCAPS_SUBPIXELX                0x00000040L
+#define D3DPRASTERCAPS_FOGVERTEX                0x00000080L
+#define D3DPRASTERCAPS_FOGTABLE                 0x00000100L
+#define D3DPRASTERCAPS_STIPPLE                  0x00000200L
+#if(DIRECT3D_VERSION >= 0x0500)
+#define D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT   0x00000400L
+#define D3DPRASTERCAPS_ANTIALIASSORTINDEPENDENT 0x00000800L
+#define D3DPRASTERCAPS_ANTIALIASEDGES           0x00001000L
+#define D3DPRASTERCAPS_MIPMAPLODBIAS            0x00002000L
+#define D3DPRASTERCAPS_ZBIAS                    0x00004000L
+#define D3DPRASTERCAPS_ZBUFFERLESSHSR           0x00008000L
+#define D3DPRASTERCAPS_FOGRANGE                 0x00010000L
+#define D3DPRASTERCAPS_ANISOTROPY               0x00020000L
+#endif /* DIRECT3D_VERSION >= 0x0500 */
+#if(DIRECT3D_VERSION >= 0x0600)
+#define D3DPRASTERCAPS_WBUFFER                      0x00040000L
+#define D3DPRASTERCAPS_TRANSLUCENTSORTINDEPENDENT   0x00080000L
+#define D3DPRASTERCAPS_WFOG                         0x00100000L
+#define D3DPRASTERCAPS_ZFOG                         0x00200000L
+#endif /* DIRECT3D_VERSION >= 0x0600 */
 
 /* D3DPRIMCAPS dwZCmpCaps, dwAlphaCmpCaps */
 
@@ -145,12 +166,74 @@ typedef struct _D3DPrimCaps {
 
 /* D3DPRIMCAPS dwTextureCaps */
 
+/*
+ * Perspective-correct texturing is supported
+ */
 #define D3DPTEXTURECAPS_PERSPECTIVE     0x00000001L
+
+/*
+ * Power-of-2 texture dimensions are required
+ */
 #define D3DPTEXTURECAPS_POW2            0x00000002L
+
+/*
+ * Alpha in texture pixels is supported
+ */
 #define D3DPTEXTURECAPS_ALPHA           0x00000004L
+
+/*
+ * Color-keyed textures are supported
+ */
 #define D3DPTEXTURECAPS_TRANSPARENCY    0x00000008L
+
+/*
+ * obsolete, see D3DPTADDRESSCAPS_BORDER
+ */
 #define D3DPTEXTURECAPS_BORDER          0x00000010L
+
+/*
+ * Only square textures are supported
+ */
 #define D3DPTEXTURECAPS_SQUAREONLY      0x00000020L
+
+#if(DIRECT3D_VERSION >= 0x0600)
+/*
+ * Texture indices are not scaled by the texture size prior
+ * to interpolation.
+ */
+#define D3DPTEXTURECAPS_TEXREPEATNOTSCALEDBYSIZE 0x00000040L
+
+/*
+ * Device can draw alpha from texture palettes
+ */
+#define D3DPTEXTURECAPS_ALPHAPALETTE    0x00000080L
+
+/*
+ * Device can use non-POW2 textures if:
+ *  1) D3DTEXTURE_ADDRESS is set to CLAMP for this texture's stage
+ *  2) D3DRS_WRAP(N) is zero for this texture's coordinates
+ *  3) mip mapping is not enabled (use magnification filter only)
+ */
+#define D3DPTEXTURECAPS_NONPOW2CONDITIONAL  0x00000100L
+
+#endif /* DIRECT3D_VERSION >= 0x0600 */
+#if(DIRECT3D_VERSION >= 0x0700)
+
+// 0x00000200L unused
+
+/*
+ * Device can divide transformed texture coordinates by the
+ * COUNTth texture coordinate (can do D3DTTFF_PROJECTED)
+ */
+#define D3DPTEXTURECAPS_PROJECTED  0x00000400L
+
+/*
+ * Device can do cubemap textures
+ */
+#define D3DPTEXTURECAPS_CUBEMAP           0x00000800L
+
+#define D3DPTEXTURECAPS_COLORKEYBLEND     0x00001000L
+#endif /* DIRECT3D_VERSION >= 0x0700 */
 
 /* D3DPRIMCAPS dwTextureFilterCaps */
 
@@ -161,6 +244,24 @@ typedef struct _D3DPrimCaps {
 #define D3DPTFILTERCAPS_LINEARMIPNEAREST 0x00000010L
 #define D3DPTFILTERCAPS_LINEARMIPLINEAR 0x00000020L
 
+#if(DIRECT3D_VERSION >= 0x0600)
+/* Device3 Min Filter */
+#define D3DPTFILTERCAPS_MINFPOINT       0x00000100L
+#define D3DPTFILTERCAPS_MINFLINEAR      0x00000200L
+#define D3DPTFILTERCAPS_MINFANISOTROPIC 0x00000400L
+
+/* Device3 Mip Filter */
+#define D3DPTFILTERCAPS_MIPFPOINT       0x00010000L
+#define D3DPTFILTERCAPS_MIPFLINEAR      0x00020000L
+
+/* Device3 Mag Filter */
+#define D3DPTFILTERCAPS_MAGFPOINT         0x01000000L
+#define D3DPTFILTERCAPS_MAGFLINEAR        0x02000000L
+#define D3DPTFILTERCAPS_MAGFANISOTROPIC   0x04000000L
+#define D3DPTFILTERCAPS_MAGFAFLATCUBIC    0x08000000L
+#define D3DPTFILTERCAPS_MAGFGAUSSIANCUBIC 0x10000000L
+#endif /* DIRECT3D_VERSION >= 0x0600 */
+
 /* D3DPRIMCAPS dwTextureBlendCaps */
 
 #define D3DPTBLENDCAPS_DECAL            0x00000001L
@@ -170,11 +271,65 @@ typedef struct _D3DPrimCaps {
 #define D3DPTBLENDCAPS_DECALMASK        0x00000010L
 #define D3DPTBLENDCAPS_MODULATEMASK     0x00000020L
 #define D3DPTBLENDCAPS_COPY             0x00000040L
+#if(DIRECT3D_VERSION >= 0x0500)
+#define D3DPTBLENDCAPS_ADD              0x00000080L
+#endif /* DIRECT3D_VERSION >= 0x0500 */
 
 /* D3DPRIMCAPS dwTextureAddressCaps */
 #define D3DPTADDRESSCAPS_WRAP           0x00000001L
 #define D3DPTADDRESSCAPS_MIRROR         0x00000002L
 #define D3DPTADDRESSCAPS_CLAMP          0x00000004L
+#if(DIRECT3D_VERSION >= 0x0500)
+#define D3DPTADDRESSCAPS_BORDER         0x00000008L
+#define D3DPTADDRESSCAPS_INDEPENDENTUV  0x00000010L
+#endif /* DIRECT3D_VERSION >= 0x0500 */
+
+#if(DIRECT3D_VERSION >= 0x0600)
+
+/* D3DDEVICEDESC dwStencilCaps */
+
+#define D3DSTENCILCAPS_KEEP     0x00000001L
+#define D3DSTENCILCAPS_ZERO     0x00000002L
+#define D3DSTENCILCAPS_REPLACE  0x00000004L
+#define D3DSTENCILCAPS_INCRSAT  0x00000008L
+#define D3DSTENCILCAPS_DECRSAT  0x00000010L
+#define D3DSTENCILCAPS_INVERT   0x00000020L
+#define D3DSTENCILCAPS_INCR     0x00000040L
+#define D3DSTENCILCAPS_DECR     0x00000080L
+
+/* D3DDEVICEDESC dwTextureOpCaps */
+
+#define D3DTEXOPCAPS_DISABLE                    0x00000001L
+#define D3DTEXOPCAPS_SELECTARG1                 0x00000002L
+#define D3DTEXOPCAPS_SELECTARG2                 0x00000004L
+#define D3DTEXOPCAPS_MODULATE                   0x00000008L
+#define D3DTEXOPCAPS_MODULATE2X                 0x00000010L
+#define D3DTEXOPCAPS_MODULATE4X                 0x00000020L
+#define D3DTEXOPCAPS_ADD                        0x00000040L
+#define D3DTEXOPCAPS_ADDSIGNED                  0x00000080L
+#define D3DTEXOPCAPS_ADDSIGNED2X                0x00000100L
+#define D3DTEXOPCAPS_SUBTRACT                   0x00000200L
+#define D3DTEXOPCAPS_ADDSMOOTH                  0x00000400L
+#define D3DTEXOPCAPS_BLENDDIFFUSEALPHA          0x00000800L
+#define D3DTEXOPCAPS_BLENDTEXTUREALPHA          0x00001000L
+#define D3DTEXOPCAPS_BLENDFACTORALPHA           0x00002000L
+#define D3DTEXOPCAPS_BLENDTEXTUREALPHAPM        0x00004000L
+#define D3DTEXOPCAPS_BLENDCURRENTALPHA          0x00008000L
+#define D3DTEXOPCAPS_PREMODULATE                0x00010000L
+#define D3DTEXOPCAPS_MODULATEALPHA_ADDCOLOR     0x00020000L
+#define D3DTEXOPCAPS_MODULATECOLOR_ADDALPHA     0x00040000L
+#define D3DTEXOPCAPS_MODULATEINVALPHA_ADDCOLOR  0x00080000L
+#define D3DTEXOPCAPS_MODULATEINVCOLOR_ADDALPHA  0x00100000L
+#define D3DTEXOPCAPS_BUMPENVMAP                 0x00200000L
+#define D3DTEXOPCAPS_BUMPENVMAPLUMINANCE        0x00400000L
+#define D3DTEXOPCAPS_DOTPRODUCT3                0x00800000L
+
+/* D3DDEVICEDESC dwFVFCaps flags */
+
+#define D3DFVFCAPS_TEXCOORDCOUNTMASK    0x0000ffffL /* mask for texture coordinate count field */
+#define D3DFVFCAPS_DONOTSTRIPELEMENTS   0x00080000L /* Device prefers that vertex elements not be stripped */
+
+#endif /* DIRECT3D_VERSION >= 0x0600 */
 
 /*
  * Description for a device.
@@ -195,9 +350,92 @@ typedef struct _D3DDeviceDesc {
     DWORD            dwDeviceZBufferBitDepth;/* One of DDBD_16, 32, etc.. */
     DWORD            dwMaxBufferSize;        /* Maximum execute buffer size */
     DWORD            dwMaxVertexCount;       /* Maximum vertex count */
+#if(DIRECT3D_VERSION >= 0x0500)
+    // *** New fields for DX5 *** //
+
+    // Width and height caps are 0 for legacy HALs.
+    DWORD        dwMinTextureWidth, dwMinTextureHeight;
+    DWORD        dwMaxTextureWidth, dwMaxTextureHeight;
+    DWORD        dwMinStippleWidth, dwMaxStippleWidth;
+    DWORD        dwMinStippleHeight, dwMaxStippleHeight;
+#endif /* DIRECT3D_VERSION >= 0x0500 */
+
+#if(DIRECT3D_VERSION >= 0x0600)
+    // New fields for DX6
+    DWORD       dwMaxTextureRepeat;
+    DWORD       dwMaxTextureAspectRatio;
+    DWORD       dwMaxAnisotropy;
+
+    // Guard band that the rasterizer can accommodate
+    // Screen-space vertices inside this space but outside the viewport
+    // will get clipped properly.
+    D3DVALUE    dvGuardBandLeft;
+    D3DVALUE    dvGuardBandTop;
+    D3DVALUE    dvGuardBandRight;
+    D3DVALUE    dvGuardBandBottom;
+
+    D3DVALUE    dvExtentsAdjust;
+    DWORD       dwStencilCaps;
+
+    DWORD       dwFVFCaps;
+    DWORD       dwTextureOpCaps;
+    WORD        wMaxTextureBlendStages;
+    WORD        wMaxSimultaneousTextures;
+#endif /* DIRECT3D_VERSION >= 0x0600 */
 } D3DDEVICEDESC, *LPD3DDEVICEDESC;
 
-typedef HRESULT (FAR PASCAL * LPD3DENUMDEVICESCALLBACK)(LPGUID lpGuid, LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC, LPD3DDEVICEDESC, LPVOID);
+#if(DIRECT3D_VERSION >= 0x0700)
+typedef struct _D3DDeviceDesc7 {
+    DWORD            dwDevCaps;              /* Capabilities of device */
+    D3DPRIMCAPS      dpcLineCaps;
+    D3DPRIMCAPS      dpcTriCaps;
+    DWORD            dwDeviceRenderBitDepth; /* One of DDBB_8, 16, etc.. */
+    DWORD            dwDeviceZBufferBitDepth;/* One of DDBD_16, 32, etc.. */
+
+    DWORD       dwMinTextureWidth, dwMinTextureHeight;
+    DWORD       dwMaxTextureWidth, dwMaxTextureHeight;
+
+    DWORD       dwMaxTextureRepeat;
+    DWORD       dwMaxTextureAspectRatio;
+    DWORD       dwMaxAnisotropy;
+
+    D3DVALUE    dvGuardBandLeft;
+    D3DVALUE    dvGuardBandTop;
+    D3DVALUE    dvGuardBandRight;
+    D3DVALUE    dvGuardBandBottom;
+
+    D3DVALUE    dvExtentsAdjust;
+    DWORD       dwStencilCaps;
+
+    DWORD       dwFVFCaps;
+    DWORD       dwTextureOpCaps;
+    WORD        wMaxTextureBlendStages;
+    WORD        wMaxSimultaneousTextures;
+
+    DWORD       dwMaxActiveLights;
+    D3DVALUE    dvMaxVertexW;
+    GUID        deviceGUID;
+
+    WORD        wMaxUserClipPlanes;
+    WORD        wMaxVertexBlendMatrices;
+
+    DWORD       dwVertexProcessingCaps;
+
+    DWORD       dwReserved1;
+    DWORD       dwReserved2;
+    DWORD       dwReserved3;
+    DWORD       dwReserved4;
+} D3DDEVICEDESC7, *LPD3DDEVICEDESC7;
+#endif /* DIRECT3D_VERSION >= 0x0700 */
+
+#define D3DDEVICEDESCSIZE (sizeof(D3DDEVICEDESC))
+#define D3DDEVICEDESC7SIZE (sizeof(D3DDEVICEDESC7))
+
+typedef HRESULT (CALLBACK * LPD3DENUMDEVICESCALLBACK)(GUID FAR *lpGuid, LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC, LPD3DDEVICEDESC, LPVOID);
+
+#if(DIRECT3D_VERSION >= 0x0700)
+typedef HRESULT (CALLBACK * LPD3DENUMDEVICESCALLBACK7)(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7, LPVOID);
+#endif /* DIRECT3D_VERSION >= 0x0700 */
 
 /* D3DDEVICEDESC dwFlags indicating valid fields */
 
@@ -217,8 +455,8 @@ typedef HRESULT (FAR PASCAL * LPD3DENUMDEVICESCALLBACK)(LPGUID lpGuid, LPSTR lpD
 
 #define D3DDEVCAPS_FLOATTLVERTEX        0x00000001L /* Device accepts floating point */
                                                     /* for post-transform vertex data */
-#define D3DDEVCAPS_SORTINCREASINGZ      0x00000002L /* Device needs data sorted for increasing Z*/
-#define D3DDEVCAPS_SORTDECREASINGZ      0X00000004L /* Device needs data sorted for decreasing Z*/
+#define D3DDEVCAPS_SORTINCREASINGZ      0x00000002L /* Device needs data sorted for increasing Z */
+#define D3DDEVCAPS_SORTDECREASINGZ      0X00000004L /* Device needs data sorted for decreasing Z */
 #define D3DDEVCAPS_SORTEXACT            0x00000008L /* Device needs data sorted exactly */
 
 #define D3DDEVCAPS_EXECUTESYSTEMMEMORY  0x00000010L /* Device can use execute buffers from system memory */
@@ -227,6 +465,39 @@ typedef HRESULT (FAR PASCAL * LPD3DENUMDEVICESCALLBACK)(LPGUID lpGuid, LPSTR lpD
 #define D3DDEVCAPS_TLVERTEXVIDEOMEMORY  0x00000080L /* Device can use TL buffers from video memory */
 #define D3DDEVCAPS_TEXTURESYSTEMMEMORY  0x00000100L /* Device can texture from system memory */
 #define D3DDEVCAPS_TEXTUREVIDEOMEMORY   0x00000200L /* Device can texture from device memory */
+#if(DIRECT3D_VERSION >= 0x0500)
+#define D3DDEVCAPS_DRAWPRIMTLVERTEX     0x00000400L /* Device can draw TLVERTEX primitives */
+#define D3DDEVCAPS_CANRENDERAFTERFLIP   0x00000800L /* Device can render without waiting for flip to complete */
+#define D3DDEVCAPS_TEXTURENONLOCALVIDMEM 0x00001000L /* Device can texture from nonlocal video memory */
+#endif /* DIRECT3D_VERSION >= 0x0500 */
+#if(DIRECT3D_VERSION >= 0x0600)
+#define D3DDEVCAPS_DRAWPRIMITIVES2         0x00002000L /* Device can support DrawPrimitives2 */
+#define D3DDEVCAPS_SEPARATETEXTUREMEMORIES 0x00004000L /* Device is texturing from separate memory pools */
+#define D3DDEVCAPS_DRAWPRIMITIVES2EX       0x00008000L /* Device can support Extended DrawPrimitives2 i.e. DX7 compliant driver*/
+#endif /* DIRECT3D_VERSION >= 0x0600 */
+#if(DIRECT3D_VERSION >= 0x0700)
+#define D3DDEVCAPS_HWTRANSFORMANDLIGHT     0x00010000L /* Device can support transformation and lighting in hardware and DRAWPRIMITIVES2EX must be also */
+#define D3DDEVCAPS_CANBLTSYSTONONLOCAL     0x00020000L /* Device supports a Tex Blt from system memory to non-local vidmem */
+#define D3DDEVCAPS_HWRASTERIZATION         0x00080000L /* Device has HW acceleration for rasterization */
+
+/*
+ * These are the flags in the D3DDEVICEDESC7.dwVertexProcessingCaps field
+ */
+
+/* device can do texgen */
+#define D3DVTXPCAPS_TEXGEN              0x00000001L
+/* device can do IDirect3DDevice7 colormaterialsource ops */
+#define D3DVTXPCAPS_MATERIALSOURCE7     0x00000002L
+/* device can do vertex fog */
+#define D3DVTXPCAPS_VERTEXFOG           0x00000004L
+/* device can do directional lights */
+#define D3DVTXPCAPS_DIRECTIONALLIGHTS   0x00000008L
+/* device can do positional lights (includes point and spot) */
+#define D3DVTXPCAPS_POSITIONALLIGHTS    0x00000010L
+/* device can do local viewer */
+#define D3DVTXPCAPS_LOCALVIEWER         0x00000020L
+
+#endif /* DIRECT3D_VERSION >= 0x0700 */
 
 #define D3DFDS_COLORMODEL        0x00000001L /* Match color model */
 #define D3DFDS_GUID              0x00000002L /* Match guid */
@@ -261,7 +532,7 @@ typedef struct _D3DFINDDEVICESEARCH {
 typedef struct _D3DFINDDEVICERESULT {
     DWORD               dwSize;
     GUID                guid;           /* guid which matched */
-    D3DDEVICEDESC       ddHwDesc;               /* hardware D3DDEVICEDESC */
+    D3DDEVICEDESC       ddHwDesc;       /* hardware D3DDEVICEDESC */
     D3DDEVICEDESC       ddSwDesc;       /* software D3DDEVICEDESC */
 } D3DFINDDEVICERESULT, *LPD3DFINDDEVICERESULT;
 
@@ -288,7 +559,37 @@ typedef struct _D3DExecuteBufferDesc {
 #define D3DDEBCAPS_VIDEOMEMORY  0x00000002l     /* buffer in device memory */
 #define D3DDEBCAPS_MEM (D3DDEBCAPS_SYSTEMMEMORY|D3DDEBCAPS_VIDEOMEMORY)
 
+#if(DIRECT3D_VERSION >= 0x0700)
+typedef struct _D3DDEVINFO_TEXTUREMANAGER {
+    BOOL    bThrashing;                 /* indicates if thrashing */
+    DWORD   dwApproxBytesDownloaded;    /* Approximate number of bytes downloaded by texture manager */
+    DWORD   dwNumEvicts;                /* number of textures evicted */
+    DWORD   dwNumVidCreates;            /* number of textures created in video memory */
+    DWORD   dwNumTexturesUsed;          /* number of textures used */
+    DWORD   dwNumUsedTexInVid;          /* number of used textures present in video memory */
+    DWORD   dwWorkingSet;               /* number of textures in video memory */
+    DWORD   dwWorkingSetBytes;          /* number of bytes in video memory */
+    DWORD   dwTotalManaged;             /* total number of managed textures */
+    DWORD   dwTotalBytes;               /* total number of bytes of managed textures */
+    DWORD   dwLastPri;                  /* priority of last texture evicted */
+} D3DDEVINFO_TEXTUREMANAGER, *LPD3DDEVINFO_TEXTUREMANAGER;
+
+typedef struct _D3DDEVINFO_TEXTURING {
+    DWORD   dwNumLoads;                 /* counts Load() API calls */
+    DWORD   dwApproxBytesLoaded;        /* Approximate number bytes loaded via Load() */
+    DWORD   dwNumPreLoads;              /* counts PreLoad() API calls */
+    DWORD   dwNumSet;                   /* counts SetTexture() API calls */
+    DWORD   dwNumCreates;               /* counts texture creates */
+    DWORD   dwNumDestroys;              /* counts texture destroys */
+    DWORD   dwNumSetPriorities;         /* counts SetPriority() API calls */
+    DWORD   dwNumSetLODs;               /* counts SetLOD() API calls */
+    DWORD   dwNumLocks;                 /* counts number of texture locks */
+    DWORD   dwNumGetDCs;                /* counts number of GetDCs to textures */
+} D3DDEVINFO_TEXTURING, *LPD3DDEVINFO_TEXTURING;
+#endif /* DIRECT3D_VERSION >= 0x0700 */
+
 #pragma pack()
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* _D3DCAPS_H_ */
+

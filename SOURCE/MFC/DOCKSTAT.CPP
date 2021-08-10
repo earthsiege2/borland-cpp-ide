@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -24,29 +24,29 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CDockState
 
-static const TCHAR szVisible[] = _T("Visible");
-static const TCHAR szBarSection[] = _T("%s-Bar%d");
-static const TCHAR szSummarySection[] = _T("%s-Summary");
-static const TCHAR szXPos[] = _T("XPos");
-static const TCHAR szYPos[] = _T("YPos");
-static const TCHAR szMRUWidth[] = _T("MRUWidth");
-static const TCHAR szDocking[] = _T("Docking");
-static const TCHAR szMRUDockID[] = _T("MRUDockID");
-static const TCHAR szMRUDockLeftPos[] = _T("MRUDockLeftPos");
-static const TCHAR szMRUDockRightPos[] = _T("MRUDockRightPos");
-static const TCHAR szMRUDockTopPos[] = _T("MRUDockTopPos");
-static const TCHAR szMRUDockBottomPos[] = _T("MRUDockBottomPos");
-static const TCHAR szMRUFloatStyle[] = _T("MRUFloatStyle");
-static const TCHAR szMRUFloatXPos[] = _T("MRUFloatXPos");
-static const TCHAR szMRUFloatYPos[] = _T("MRUFloatYPos");
+AFX_STATIC_DATA const TCHAR _afxVisible[] = _T("Visible");
+AFX_STATIC_DATA const TCHAR _afxBarSection[] = _T("%s-Bar%d");
+AFX_STATIC_DATA const TCHAR _afxSummarySection[] = _T("%s-Summary");
+AFX_STATIC_DATA const TCHAR _afxXPos[] = _T("XPos");
+AFX_STATIC_DATA const TCHAR _afxYPos[] = _T("YPos");
+AFX_STATIC_DATA const TCHAR _afxMRUWidth[] = _T("MRUWidth");
+AFX_STATIC_DATA const TCHAR _afxDocking[] = _T("Docking");
+AFX_STATIC_DATA const TCHAR _afxMRUDockID[] = _T("MRUDockID");
+AFX_STATIC_DATA const TCHAR _afxMRUDockLeftPos[] = _T("MRUDockLeftPos");
+AFX_STATIC_DATA const TCHAR _afxMRUDockRightPos[] = _T("MRUDockRightPos");
+AFX_STATIC_DATA const TCHAR _afxMRUDockTopPos[] = _T("MRUDockTopPos");
+AFX_STATIC_DATA const TCHAR _afxMRUDockBottomPos[] = _T("MRUDockBottomPos");
+AFX_STATIC_DATA const TCHAR _afxMRUFloatStyle[] = _T("MRUFloatStyle");
+AFX_STATIC_DATA const TCHAR _afxMRUFloatXPos[] = _T("MRUFloatXPos");
+AFX_STATIC_DATA const TCHAR _afxMRUFloatYPos[] = _T("MRUFloatYPos");
 
-static const TCHAR szBarID[] = _T("BarID");
-static const TCHAR szHorz[] = _T("Horz");
-static const TCHAR szFloating[] = _T("Floating");
-static const TCHAR szBars[] = _T("Bars");
-static const TCHAR szScreenCX[] = _T("ScreenCX");
-static const TCHAR szScreenCY[] = _T("ScreenCY");
-static const TCHAR szBar[] = _T("Bar#%d");
+AFX_STATIC_DATA const TCHAR _afxBarID[] = _T("BarID");
+AFX_STATIC_DATA const TCHAR _afxHorz[] = _T("Horz");
+AFX_STATIC_DATA const TCHAR _afxFloating[] = _T("Floating");
+AFX_STATIC_DATA const TCHAR _afxBars[] = _T("Bars");
+AFX_STATIC_DATA const TCHAR _afxScreenCX[] = _T("ScreenCX");
+AFX_STATIC_DATA const TCHAR _afxScreenCY[] = _T("ScreenCY");
+AFX_STATIC_DATA const TCHAR _afxBar[] = _T("Bar#%d");
 
 CControlBarInfo::CControlBarInfo()
 {
@@ -91,12 +91,12 @@ void CControlBarInfo::Serialize(CArchive& ar, CDockState* pDockState)
 		ar << (WORD)m_arrBarID.GetSize();
 		if (m_arrBarID.GetSize() != 0)
 		{
-#ifdef _MAC
+#ifdef _AFX_BYTESWAP
 			if (!ar.IsByteSwapping())
 #endif
 			ar.Write(&m_arrBarID.ElementAt(0),
 				m_arrBarID.GetSize()*sizeof(DWORD));
-#ifdef _MAC
+#ifdef _AFX_BYTESWAP
 			else
 			{
 				// write each ID individually so that it will be byte-swapped
@@ -148,7 +148,7 @@ void CControlBarInfo::Serialize(CArchive& ar, CDockState* pDockState)
 		{
 			ar.Read(&m_arrBarID.ElementAt(0),
 				m_arrBarID.GetSize()*sizeof(DWORD));
-#ifdef _MAC
+#ifdef _AFX_BYTESWAP
 			if (ar.IsByteSwapping())
 			{
 				for (int i = 0; i < m_arrBarID.GetSize(); i++)
@@ -164,44 +164,43 @@ BOOL CControlBarInfo::LoadState(LPCTSTR lpszProfileName, int nIndex, CDockState*
 	ASSERT(pDockState != NULL);
 
 	CWinApp* pApp = AfxGetApp();
-
 	TCHAR szSection[256];
-	wsprintf(szSection, szBarSection, lpszProfileName, nIndex);
+	wsprintf(szSection, _afxBarSection, lpszProfileName, nIndex);
 
-	m_nBarID = pApp->GetProfileInt(szSection, szBarID, 0);
-	m_bVisible = (BOOL) pApp->GetProfileInt(szSection, szVisible, TRUE);
-	m_bHorz = (BOOL) pApp->GetProfileInt(szSection, szHorz, TRUE);
-	m_bFloating = (BOOL) pApp->GetProfileInt(szSection, szFloating, FALSE);
+	m_nBarID = pApp->GetProfileInt(szSection, _afxBarID, 0);
+	m_bVisible = (BOOL) pApp->GetProfileInt(szSection, _afxVisible, TRUE);
+	m_bHorz = (BOOL) pApp->GetProfileInt(szSection, _afxHorz, TRUE);
+	m_bFloating = (BOOL) pApp->GetProfileInt(szSection, _afxFloating, FALSE);
 	m_pointPos = CPoint(
-		pApp->GetProfileInt(szSection, szXPos, -1),
-		pApp->GetProfileInt(szSection, szYPos, -1));
+		pApp->GetProfileInt(szSection, _afxXPos, -1),
+		pApp->GetProfileInt(szSection, _afxYPos, -1));
 	pDockState->ScalePoint(m_pointPos);
-	m_nMRUWidth = pApp->GetProfileInt(szSection, szMRUWidth, 32767);
-	m_bDocking = pApp->GetProfileInt(szSection, szDocking, 0);
+	m_nMRUWidth = pApp->GetProfileInt(szSection, _afxMRUWidth, 32767);
+	m_bDocking = pApp->GetProfileInt(szSection, _afxDocking, 0);
 	if (m_bDocking)
 	{
-		m_uMRUDockID = pApp->GetProfileInt(szSection, szMRUDockID, 0);
+		m_uMRUDockID = pApp->GetProfileInt(szSection, _afxMRUDockID, 0);
 
 		m_rectMRUDockPos = CRect(
-			pApp->GetProfileInt(szSection, szMRUDockLeftPos, 0),
-			pApp->GetProfileInt(szSection, szMRUDockTopPos, 0),
-			pApp->GetProfileInt(szSection, szMRUDockRightPos, 0),
-			pApp->GetProfileInt(szSection, szMRUDockBottomPos, 0));
+			pApp->GetProfileInt(szSection, _afxMRUDockLeftPos, 0),
+			pApp->GetProfileInt(szSection, _afxMRUDockTopPos, 0),
+			pApp->GetProfileInt(szSection, _afxMRUDockRightPos, 0),
+			pApp->GetProfileInt(szSection, _afxMRUDockBottomPos, 0));
 		pDockState->ScaleRectPos(m_rectMRUDockPos);
 
-		m_dwMRUFloatStyle = pApp->GetProfileInt(szSection, szMRUFloatStyle, 0);
+		m_dwMRUFloatStyle = pApp->GetProfileInt(szSection, _afxMRUFloatStyle, 0);
 
 		m_ptMRUFloatPos = CPoint(
-			pApp->GetProfileInt(szSection, szMRUFloatXPos, 0),
-			pApp->GetProfileInt(szSection, szMRUFloatYPos, 0));
+			pApp->GetProfileInt(szSection, _afxMRUFloatXPos, 0),
+			pApp->GetProfileInt(szSection, _afxMRUFloatYPos, 0));
 		pDockState->ScalePoint(m_ptMRUFloatPos);
 	}
 
-	int nBars = pApp->GetProfileInt(szSection, szBars, 0);
+	int nBars = pApp->GetProfileInt(szSection, _afxBars, 0);
 	for (int i=0; i < nBars; i++)
 	{
 		TCHAR buf[16];
-		wsprintf(buf, szBar, i);
+		wsprintf(buf, _afxBar, i);
 		m_arrBarID.Add((void*)pApp->GetProfileInt(szSection, buf, 0));
 	}
 
@@ -210,12 +209,11 @@ BOOL CControlBarInfo::LoadState(LPCTSTR lpszProfileName, int nIndex, CDockState*
 
 BOOL CControlBarInfo::SaveState(LPCTSTR lpszProfileName, int nIndex)
 {
-	CWinApp* pApp = AfxGetApp();
-
 	TCHAR szSection[256];
-	wsprintf(szSection, szBarSection, lpszProfileName, nIndex);
+	wsprintf(szSection, _afxBarSection, lpszProfileName, nIndex);
 
 	// delete the section
+	CWinApp* pApp = AfxGetApp();
 	pApp->WriteProfileString(szSection, NULL, NULL);
 
 	if (m_bDockBar && m_bVisible && !m_bFloating && m_pointPos.x == -1 &&
@@ -224,40 +222,40 @@ BOOL CControlBarInfo::SaveState(LPCTSTR lpszProfileName, int nIndex)
 		return FALSE;
 	}
 
-	pApp->WriteProfileInt(szSection, szBarID, m_nBarID);
+	pApp->WriteProfileInt(szSection, _afxBarID, m_nBarID);
 	if (!m_bVisible)
-		pApp->WriteProfileInt(szSection, szVisible, m_bVisible);
+		pApp->WriteProfileInt(szSection, _afxVisible, m_bVisible);
 	if (m_bFloating)
 	{
-		pApp->WriteProfileInt(szSection, szHorz, m_bHorz);
-		pApp->WriteProfileInt(szSection, szFloating, m_bFloating);
+		pApp->WriteProfileInt(szSection, _afxHorz, m_bHorz);
+		pApp->WriteProfileInt(szSection, _afxFloating, m_bFloating);
 	}
 	if (m_pointPos.x != -1)
-		pApp->WriteProfileInt(szSection, szXPos, m_pointPos.x);
+		pApp->WriteProfileInt(szSection, _afxXPos, m_pointPos.x);
 	if (m_pointPos.y != -1)
-		pApp->WriteProfileInt(szSection, szYPos, m_pointPos.y);
+		pApp->WriteProfileInt(szSection, _afxYPos, m_pointPos.y);
 	if (m_nMRUWidth != 32767)
-		pApp->WriteProfileInt(szSection, szMRUWidth, m_nMRUWidth);
+		pApp->WriteProfileInt(szSection, _afxMRUWidth, m_nMRUWidth);
 	if (m_bDocking)
 	{
-		pApp->WriteProfileInt(szSection, szDocking, m_bDocking);
-		pApp->WriteProfileInt(szSection, szMRUDockID, m_uMRUDockID);
-		pApp->WriteProfileInt(szSection, szMRUDockLeftPos, m_rectMRUDockPos.left);
-		pApp->WriteProfileInt(szSection, szMRUDockTopPos, m_rectMRUDockPos.top);
-		pApp->WriteProfileInt(szSection, szMRUDockRightPos, m_rectMRUDockPos.right);
-		pApp->WriteProfileInt(szSection, szMRUDockBottomPos, m_rectMRUDockPos.bottom);
-		pApp->WriteProfileInt(szSection, szMRUFloatStyle, m_dwMRUFloatStyle);
-		pApp->WriteProfileInt(szSection, szMRUFloatXPos, m_ptMRUFloatPos.x);
-		pApp->WriteProfileInt(szSection, szMRUFloatYPos, m_ptMRUFloatPos.y);
+		pApp->WriteProfileInt(szSection, _afxDocking, m_bDocking);
+		pApp->WriteProfileInt(szSection, _afxMRUDockID, m_uMRUDockID);
+		pApp->WriteProfileInt(szSection, _afxMRUDockLeftPos, m_rectMRUDockPos.left);
+		pApp->WriteProfileInt(szSection, _afxMRUDockTopPos, m_rectMRUDockPos.top);
+		pApp->WriteProfileInt(szSection, _afxMRUDockRightPos, m_rectMRUDockPos.right);
+		pApp->WriteProfileInt(szSection, _afxMRUDockBottomPos, m_rectMRUDockPos.bottom);
+		pApp->WriteProfileInt(szSection, _afxMRUFloatStyle, m_dwMRUFloatStyle);
+		pApp->WriteProfileInt(szSection, _afxMRUFloatXPos, m_ptMRUFloatPos.x);
+		pApp->WriteProfileInt(szSection, _afxMRUFloatYPos, m_ptMRUFloatPos.y);
 	}
 
 	if (m_arrBarID.GetSize() > 1) //if ==1 then still empty
 	{
-		pApp->WriteProfileInt(szSection, szBars, m_arrBarID.GetSize());
+		pApp->WriteProfileInt(szSection, _afxBars, m_arrBarID.GetSize());
 		for (int i = 0; i < m_arrBarID.GetSize(); i++)
 		{
 			TCHAR buf[16];
-			wsprintf(buf, szBar, i);
+			wsprintf(buf, _afxBar, i);
 			pApp->WriteProfileInt(szSection, buf, (int)m_arrBarID[i]);
 		}
 	}
@@ -332,14 +330,13 @@ void CDockState::Serialize(CArchive& ar)
 void CDockState::LoadState(LPCTSTR lpszProfileName)
 {
 	CWinApp* pApp = AfxGetApp();
-
 	TCHAR szSection[256];
-	wsprintf(szSection, szSummarySection, lpszProfileName);
-	int nBars = pApp->GetProfileInt(szSection, szBars, 0);
+	wsprintf(szSection, _afxSummarySection, lpszProfileName);
+	int nBars = pApp->GetProfileInt(szSection, _afxBars, 0);
 
 	CSize size;
-	size.cx = pApp->GetProfileInt(szSection, szScreenCX, 0);
-	size.cy = pApp->GetProfileInt(szSection, szScreenCY, 0);
+	size.cx = pApp->GetProfileInt(szSection, _afxScreenCX, 0);
+	size.cy = pApp->GetProfileInt(szSection, _afxScreenCY, 0);
 	SetScreenSize(size);
 
 	for (int i = 0; i < nBars; i++)
@@ -352,8 +349,6 @@ void CDockState::LoadState(LPCTSTR lpszProfileName)
 
 void CDockState::SaveState(LPCTSTR lpszProfileName)
 {
-	CWinApp* pApp = AfxGetApp();
-
 	int nIndex = 0;
 	for (int i = 0;i < m_arrBarInfo.GetSize(); i++)
 	{
@@ -362,13 +357,14 @@ void CDockState::SaveState(LPCTSTR lpszProfileName)
 		if (pInfo->SaveState(lpszProfileName, nIndex))
 			nIndex++;
 	}
+	CWinApp* pApp = AfxGetApp();
 	TCHAR szSection[256];
-	wsprintf(szSection, szSummarySection, lpszProfileName);
-	pApp->WriteProfileInt(szSection, szBars, nIndex);
+	wsprintf(szSection, _afxSummarySection, lpszProfileName);
+	pApp->WriteProfileInt(szSection, _afxBars, nIndex);
 
 	CSize size = GetScreenSize();
-	pApp->WriteProfileInt(szSection, szScreenCX, size.cx);
-	pApp->WriteProfileInt(szSection, szScreenCY, size.cy);
+	pApp->WriteProfileInt(szSection, _afxScreenCX, size.cx);
+	pApp->WriteProfileInt(szSection, _afxScreenCY, size.cy);
 }
 
 void CDockState::Clear()
@@ -647,7 +643,7 @@ void CDockBar::SetBarInfo(CControlBarInfo* pInfo, CFrameWnd* pFrameWnd)
 				if (pBar->GetParent() != this)
 					pBar->SetParent(this);
 				if (pBar->m_pDockBar != NULL)
-					pBar->m_pDockBar->RemoveControlBar(pBar);
+					pBar->m_pDockBar->RemoveControlBar(pBar, -1, -1);
 				//remove the ID place holder if it exists in this dockbar
 				RemovePlaceHolder(pBar);
 				pBar->m_pDockBar = this;
@@ -694,6 +690,7 @@ void CDockBar::SetBarInfo(CControlBarInfo* pInfo, CFrameWnd* pFrameWnd)
 		{
 			WORD w = LOWORD(((DWORD)pInfo->m_arrBarID[i]));
 			pBar = (CControlBar*)(MAKELONG(w, 0));
+			RemovePlaceHolder(pBar);
 		}
 		m_arrBars.InsertAt(i, pBar);
 	}

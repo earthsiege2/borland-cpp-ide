@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -35,6 +35,10 @@
 	#include <afxdb_.h> // shared header with ODBC database classes
 #endif
 
+#ifndef __AFXEXT_H__
+	#include <afxext.h> // for CFormView
+#endif
+
 #ifdef _AFX_MINREBUILD
 #pragma component(minrebuild, off)
 #endif
@@ -43,7 +47,6 @@
 #endif
 
 #ifndef _AFX_NOFORCE_LIBS
-#ifndef _MAC
 
 /////////////////////////////////////////////////////////////////////////////
 // Win32 libraries
@@ -51,25 +54,18 @@
 #ifdef _AFXDLL
 	#if defined(_DEBUG) && !defined(_AFX_MONOLITHIC)
 		#ifndef _UNICODE
-			#pragma comment(lib, "mfco40d.lib")
-			#pragma comment(lib, "mfcd40d.lib")
+			#pragma comment(lib, "mfco42d.lib")
+			#pragma comment(lib, "mfcd42d.lib")
 		#else
-			#pragma comment(lib, "mfco40ud.lib")
-			#pragma comment(lib, "mfcd40ud.lib")
+			#pragma comment(lib, "mfco42ud.lib")
+			#pragma comment(lib, "mfcd42ud.lib")
 		#endif
 	#endif
 
 #endif
 
-// DAO GUIDs in uuid2.lib
-#pragma comment(lib, "uuid2.lib")
+#pragma comment(lib, "daouuid.lib")
 
-#else //!_MAC
-
-/////////////////////////////////////////////////////////////////////////////
-// Macintosh libraries
-
-#endif //_MAC
 #endif //!_AFX_NOFORCE_LIBS
 
 #ifdef _AFX_PACKING
@@ -337,6 +333,7 @@ struct CDaoParameterInfo
 // Flag used for DFX functions dwBindOptions bitmask
 #define AFX_DAO_ENABLE_FIELD_CACHE      0x01
 #define AFX_DAO_DISABLE_FIELD_CACHE     0
+#define AFX_DAO_CACHE_BY_VALUE          0x80    // MFC Internal
 
 // Field Flags, used to indicate status of fields
 #define AFX_DAO_FIELD_FLAG_DIRTY            0x01
@@ -518,6 +515,8 @@ void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, COleDateTime& value,
 	CDaoRecordset* pRecordset);
 void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, CString& value,
 	CDaoRecordset* pRecordset);
+void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, LPTSTR pstrValue,
+	int nMaxLen, CDaoRecordset* pRecordset);
 
 // special control types
 void AFXAPI DDX_FieldCheck(CDataExchange* pDX, int nIDC, int& value,
@@ -541,6 +540,8 @@ void AFXAPI DDX_FieldLBStringExact(CDataExchange* pDX, int nIDC, CString& value,
 void AFXAPI DDX_FieldCBStringExact(CDataExchange* pDX, int nIDC, CString& value,
 	CDaoRecordset* pRecordset);
 void AFXAPI DDX_FieldScroll(CDataExchange* pDX, int nIDC, int& value,
+	CDaoRecordset* pRecordset);
+void AFXAPI DDX_FieldSlider(CDataExchange* pDX, int nIDC, int& value,
 	CDaoRecordset* pRecordset);
 
 ////////////////////////////////////////////////////////////////////////
@@ -626,6 +627,7 @@ public:
 	int m_nStatus;
 
 	CMapPtrToPtr m_mapDatabases;        // Map of all Open CDaoDatabases
+	BOOL IsNew() const;
 
 protected:
 	BOOL m_bOpen;
@@ -1022,8 +1024,8 @@ public:
 	BOOL CanBookmark();
 
 	BOOL IsOpen() const;
-	BOOL IsBOF();
-	BOOL IsEOF();
+	BOOL IsBOF() const;
+	BOOL IsEOF() const;
 	BOOL IsDeleted() const;
 
 	BOOL IsFieldDirty(void* pv);
@@ -1080,8 +1082,8 @@ public:
 	virtual void CancelUpdate();
 
 	// field operations
-	virtual COleVariant GetFieldValue(LPCTSTR lpszName);
-	virtual COleVariant GetFieldValue(int nIndex);
+	virtual void GetFieldValue(LPCTSTR lpszName, COleVariant& varValue);
+	virtual void GetFieldValue(int nIndex, COleVariant& varValue);
 	virtual void SetFieldValue(LPCTSTR lpszName,
 		const COleVariant& varValue);
 	virtual void SetFieldValue(int nIndex,
@@ -1140,6 +1142,10 @@ public:
 public:
 	virtual ~CDaoRecordset();
 
+	// Out-of-date functions kept for backward compatability
+	virtual COleVariant GetFieldValue(LPCTSTR lpszName);
+	virtual COleVariant GetFieldValue(int nIndex);
+
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -1153,9 +1159,7 @@ public:
 	DAOFields* m_pDAOFields;
 	DAOIndexes* m_pDAOIndexes;
 
-	void ResetCursor();
 	void SetCursorAttributes();
-	void ResetCursorAttributes();
 	void GetDataAndFixupNulls();
 	DWORD GetFieldLength(int nFieldIndex);
 
@@ -1234,7 +1238,11 @@ protected:
 /////////////////////////////////////////////////////////////////////////////
 // CDaoRecordView - form for viewing data records
 
+#ifdef _AFXDLL
 class CDaoRecordView : public CFormView
+#else
+class AFX_NOVTABLE CDaoRecordView : public CFormView
+#endif
 {
 	DECLARE_DYNAMIC(CDaoRecordView)
 
@@ -1294,9 +1302,9 @@ void AFXAPI AfxDaoTerm();
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXDAOCORE_INLINE inline
-#define _AFXDAODFX_INLINE inline
-#define _AFXDAOVIEW_INLINE inline
+#define _AFXDAOCORE_INLINE AFX_INLINE
+#define _AFXDAODFX_INLINE AFX_INLINE
+#define _AFXDAOVIEW_INLINE AFX_INLINE
 #include <afxdao.inl>
 #undef _AFXDAOCORE_INLINE
 #undef _AFXDAODFX_INLINE

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -30,29 +30,35 @@ void AFXAPI AfxLockTempMaps()
 	++pState->m_nTempMapLock;
 }
 
-BOOL AFXAPI AfxUnlockTempMaps()
+BOOL AFXAPI AfxUnlockTempMaps(BOOL bDeleteTemps)
 {
 	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
 	if (pState->m_nTempMapLock != 0 && --pState->m_nTempMapLock == 0)
 	{
-		CWinApp* pApp = AfxGetApp();
-		if (pApp != NULL)
+		if (bDeleteTemps)
 		{
-			// cleanup CWinApp data (free libraries)
-			if (pApp->m_lpfnOleTermOrFreeLib != NULL)
-				(*pApp->m_lpfnOleTermOrFreeLib)(FALSE, FALSE);
+			if (bDeleteTemps != -1)
+			{
+				// allow COM libraries to be freed
+				CWinThread* pThread = AfxGetThread();
+				if (pThread != NULL && pThread->m_lpfnOleTermOrFreeLib != NULL)
+					(*pThread->m_lpfnOleTermOrFreeLib)(FALSE, FALSE);
+			}
+
+			// clean up temp objects
+			pState->m_pmapHGDIOBJ->DeleteTemp();
+			pState->m_pmapHDC->DeleteTemp();
+			pState->m_pmapHMENU->DeleteTemp();
+			pState->m_pmapHWND->DeleteTemp();
+			pState->m_pmapHIMAGELIST->DeleteTemp();
 		}
 
-		// clean up temp objects
-		CGdiObject::DeleteTempMap();
-		CDC::DeleteTempMap();
-		CMenu::DeleteTempMap();
-		CWnd::DeleteTempMap();
-
 #ifndef _AFX_PORTABLE
-		_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
+		CWinApp* pApp = AfxGetApp();
+		_AFX_THREAD_STATE* pThreadState = _afxThreadState.GetData();
 		// restore safety pool after temp objects destroyed
-		if ((pThreadState->m_pSafetyPoolBuffer == NULL ||
+		if (pApp != NULL &&
+			 (pThreadState->m_pSafetyPoolBuffer == NULL ||
 			 _msize(pThreadState->m_pSafetyPoolBuffer) < pApp->m_nSafetyPoolSize) &&
 			pApp->m_nSafetyPoolSize != 0)
 		{
@@ -65,6 +71,7 @@ BOOL AFXAPI AfxUnlockTempMaps()
 			}
 
 			// undo handler trap for the following allocation
+			BOOL bEnable = AfxEnableMemoryTracking(FALSE);
 			pThreadState->m_pSafetyPoolBuffer = malloc(pApp->m_nSafetyPoolSize);
 			if (pThreadState->m_pSafetyPoolBuffer == NULL)
 			{
@@ -78,6 +85,7 @@ BOOL AFXAPI AfxUnlockTempMaps()
 					ASSERT(pThreadState->m_pSafetyPoolBuffer != NULL);
 				}
 			}
+			AfxEnableMemoryTracking(bEnable);
 		}
 #endif  // !_AFX_PORTABLE
 	}
@@ -110,10 +118,10 @@ CObject* CHandleMap::FromHandle(HANDLE h)
 	if (h == NULL)
 		return NULL;
 
-	CObject* pObject;
-	if (LookupPermanent(h, pObject))
+	CObject* pObject = LookupPermanent(h);
+	if (pObject != NULL)
 		return pObject;   // return permanent one
-	else if (LookupTemporary(h, pObject))
+	else if ((pObject = LookupTemporary(h)) != NULL)
 	{
 		HANDLE* ph = (HANDLE*)((BYTE*)pObject + m_nOffset);
 		ASSERT(ph[0] == h || ph[0] == NULL);
@@ -135,8 +143,24 @@ CObject* CHandleMap::FromHandle(HANDLE h)
 	_PNH pnhOldHandler = AfxSetNewHandler(&AfxCriticalNewHandler);
 #endif
 
-	CObject* pTemp = m_pClass->CreateObject();
-	m_temporaryMap.SetAt((LPVOID)h, pTemp);
+	CObject* pTemp = NULL;
+	TRY
+	{
+		pTemp = m_pClass->CreateObject();
+		if (pTemp == NULL)
+			AfxThrowMemoryException();
+
+		m_temporaryMap.SetAt((LPVOID)h, pTemp);
+	}
+	CATCH_ALL(e)
+	{
+#ifndef _AFX_PORTABLE
+		AfxSetNewHandler(pnhOldHandler);
+#endif
+		AfxEnableMemoryTracking(bEnable);
+		THROW_LAST();
+	}
+	END_CATCH_ALL
 
 #ifndef _AFX_PORTABLE
 	AfxSetNewHandler(pnhOldHandler);
@@ -148,6 +172,7 @@ CObject* CHandleMap::FromHandle(HANDLE h)
 	ph[0] = h;
 	if (m_nHandles == 2)
 		ph[1] = h;
+
 	return pTemp;
 }
 
@@ -164,8 +189,8 @@ void CHandleMap::SetPermanent(HANDLE h, CObject* permOb)
 void CHandleMap::RemoveHandle(HANDLE h)
 {
 	// make sure the handle entry is consistent before deleting
-	CObject* pTemp;
-	if (LookupTemporary(h, pTemp))
+	CObject* pTemp = LookupTemporary(h);
+	if (pTemp != NULL)
 	{
 		// temporary objects must have correct handle values
 		HANDLE* ph = (HANDLE*)((BYTE*)pTemp + m_nOffset);  // after CObject
@@ -173,7 +198,8 @@ void CHandleMap::RemoveHandle(HANDLE h)
 		if (m_nHandles == 2)
 			ASSERT(ph[1] == h);
 	}
-	if (LookupPermanent(h, pTemp))
+	pTemp = LookupPermanent(h);
+	if (pTemp != NULL)
 	{
 		HANDLE* ph = (HANDLE*)((BYTE*)pTemp + m_nOffset);  // after CObject
 		ASSERT(ph[0] == h);
@@ -187,6 +213,9 @@ void CHandleMap::RemoveHandle(HANDLE h)
 
 void CHandleMap::DeleteTemp()
 {
+	if (this == NULL)
+		return;
+
 	POSITION pos = m_temporaryMap.GetStartPosition();
 	while (pos != NULL)
 	{
@@ -211,3 +240,33 @@ void CHandleMap::DeleteTemp()
 }
 
 /////////////////////////////////////////////////////////////////////////////
+
+void PASCAL CWnd::DeleteTempMap()
+{
+	CHandleMap* pMap = AfxGetModuleThreadState()->m_pmapHWND;
+	pMap->DeleteTemp();
+}
+
+void PASCAL CImageList::DeleteTempMap()
+{
+	CHandleMap* pMap = AfxGetModuleThreadState()->m_pmapHIMAGELIST;
+	pMap->DeleteTemp();
+}
+
+void PASCAL CDC::DeleteTempMap()
+{
+	CHandleMap* pMap = AfxGetModuleThreadState()->m_pmapHDC;
+	pMap->DeleteTemp();
+}
+
+void PASCAL CGdiObject::DeleteTempMap()
+{
+	CHandleMap* pMap = AfxGetModuleThreadState()->m_pmapHGDIOBJ;
+	pMap->DeleteTemp();
+}
+
+void PASCAL CMenu::DeleteTempMap()
+{
+	CHandleMap* pMap = AfxGetModuleThreadState()->m_pmapHMENU;
+	pMap->DeleteTemp();
+}

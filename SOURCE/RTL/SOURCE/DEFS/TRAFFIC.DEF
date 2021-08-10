@@ -1,0 +1,24 @@
+LIBRARY TRAFFIC
+EXPORTS
+
+    TcAddClassMap                            = 'TRAFFIC.DLL'.*
+    TcAddFilter                              = 'TRAFFIC.DLL'.*
+    TcAddFlow                                = 'TRAFFIC.DLL'.*
+    TcCloseInterface                         = 'TRAFFIC.DLL'.*
+    TcDeleteFilter                           = 'TRAFFIC.DLL'.*
+    TcDeleteFlow                             = 'TRAFFIC.DLL'.*
+    TcDeregisterClient                       = 'TRAFFIC.DLL'.*
+    TcEnumerateFlows                         = 'TRAFFIC.DLL'.*
+    TcEnumerateInterfaces                    = 'TRAFFIC.DLL'.*
+    TcGetFlowNameA                           = 'TRAFFIC.DLL'.*
+    TcGetFlowNameW                           = 'TRAFFIC.DLL'.*
+    TcModifyFlow                             = 'TRAFFIC.DLL'.*
+    TcOpenInterfaceA                         = 'TRAFFIC.DLL'.*
+    TcOpenInterfaceW                         = 'TRAFFIC.DLL'.*
+    TcQueryFlowA                             = 'TRAFFIC.DLL'.*
+    TcQueryFlowW                             = 'TRAFFIC.DLL'.*
+    TcQueryInterface                         = 'TRAFFIC.DLL'.*
+    TcRegisterClient                         = 'TRAFFIC.DLL'.*
+    TcSetFlowA                               = 'TRAFFIC.DLL'.*
+    TcSetFlowW                               = 'TRAFFIC.DLL'.*
+    TcSetInterface                           = 'TRAFFIC.DLL'.*

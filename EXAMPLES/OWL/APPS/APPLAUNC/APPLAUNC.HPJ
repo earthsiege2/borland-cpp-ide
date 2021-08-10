@@ -1,9 +1,0 @@
-
-[OPTIONS]
-TITLE=AppLauncher Help
-
-[FILES]
-applaunc.rtf
-
-[CONFIG]
-BrowseButtons()

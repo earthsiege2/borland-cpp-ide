@@ -7,18 +7,21 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
 
+
 #include <mbstring.h>
+
+extern int _mbcsCodePage;
 
 /*---------------------------------------------------------------------*
 
-Name            _ismbchira - Tests a character whehter it is a 
+Name            _ismbchira - Tests a character whehter it is a
                              2-bytes Hiragana or not.
 
 Usage           int _ismbchira(unsigned int c);
@@ -26,14 +29,14 @@ Usage           int _ismbchira(unsigned int c);
 Prototype in    mbstring.h
 
 Description     _ismbchira judges whether c is a 2-bytes Hiragana char
-		or not.
+                or not.
 
 Return value    Returns the value excepting 0 if it is a 2-bytes Hiragana,
-		and returns 0 if it is not.Åi0x829F ÅÖ c ÅÖ 0x82F1Åj 
+                and returns 0 if it is not. (0x829F <= c <= 0x82F1)
 
 *---------------------------------------------------------------------*/
 
 int _RTLENTRY _EXPFUNC _ismbchira(unsigned int c)
 {
-    return (c >= 0x829F && c <= 0x82F1);
+    return (_mbcsCodePage == _KANJI_CP && c >= 0x829F && c <= 0x82F1);
 }

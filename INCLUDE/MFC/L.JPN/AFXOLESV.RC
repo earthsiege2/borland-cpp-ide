@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -34,7 +34,7 @@ BEGIN
 	AFX_IDP_ASK_TO_UPDATE,              "先に %1 を更新しますか？"
 	AFX_IDP_FAILED_TO_UPDATE,           "ｸﾗｲｱﾝﾄを更新できませんでした。"
 
-	AFX_IDP_FAILED_TO_REGISTER,         "登録に失敗しました。OLE の機能は正常に動作しない可能性があります。"
+	AFX_IDP_FAILED_TO_REGISTER,         "登録に失敗しました。 ActiveX の機能は正しく動作しない可能性があります。"
 	AFX_IDP_FAILED_TO_AUTO_REGISTER,    "ｼｽﾃﾑ ﾚｼﾞｽﾄﾘの更新に失敗しました。\nREGEDIT を使用して更新してください。"
 END
 

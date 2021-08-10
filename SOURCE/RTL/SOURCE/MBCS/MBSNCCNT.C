@@ -3,24 +3,25 @@
  *
  * function(s)
  *        _mbsnccnt - Count a number of characters starting with the first
- *                    N bytes in a string.     
+ *                    N bytes in a string.
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
 
 /*---------------------------------------------------------------------*
 
-Name            _mbsnccnt - Counts a number of characters starting with 
-                            the first bytes in a string. 
+Name            _mbsnccnt - Counts a number of characters starting with
+                            the first bytes in a string.
 
 Usage           size_t _mbsnccnt(const unsigned char *s, size_t nbytes);
 

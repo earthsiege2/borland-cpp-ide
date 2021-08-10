@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -100,12 +100,7 @@ void COleClientItem::Delete(BOOL bAutoDelete)
 			GetItemName(szItemName);
 
 			// attempt to remove it from the storage, ignore errors
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-         T2COLE(szItemName);
-			pDoc->m_lpRootStg->DestroyElement((LPCWSTR)pBAfxConv);
-#else    // __BORLANDC__
 			pDoc->m_lpRootStg->DestroyElement(T2COLE(szItemName));
-#endif   // __BORLANDC__
 		}
 	}
 
@@ -129,7 +124,14 @@ void COleClientItem::Release(OLECLOSE dwCloseOption)
 	if (m_lpViewObject != NULL)
 	{
 		DWORD dwAspect;
-		VERIFY(m_lpViewObject->GetAdvise(&dwAspect, NULL, NULL) == S_OK);
+	  IAdviseSink* pAdviseSink;
+
+	  pAdviseSink = NULL;
+		VERIFY(m_lpViewObject->GetAdvise(&dwAspect, NULL, &pAdviseSink) == S_OK);
+	  if( pAdviseSink != NULL )
+	  {
+		 RELEASE( pAdviseSink );
+	  }
 		VERIFY(m_lpViewObject->SetAdvise(dwAspect, 0, NULL) == S_OK);
 		RELEASE(m_lpViewObject);
 	}
@@ -181,19 +183,7 @@ void COleClientItem::Close(OLECLOSE dwCloseOption)
 	m_bClosing = TRUE;
 
 	// attempt to close the object
-#ifdef _MAC
-	// Some Mac servers (Excel) fail to allow the IP deactivation task switch
-	// to finish before issuing an RPC call, which gets Mac LRPC out of sync.
-	// Effectively suspend this thread until the RPC channel gets back in sync
-	int nTries = 0;
-	do
-	{
-		m_scLast = m_lpObject->Close(dwCloseOption);
-		nTries++;
-	} while (FAILED(m_scLast) && nTries < 10);
-#else
 	m_scLast = m_lpObject->Close(dwCloseOption);
-#endif
 
 	// remove external lock placed on item during in-place activation
 	if (m_bLocked)
@@ -271,6 +261,122 @@ void COleClientItem::GetItemName(LPTSTR lpszItemName) const
 	ASSERT(lstrlen(lpszItemName) < OLE_MAXITEMNAME);
 }
 
+// extracts icon resource ID and path name from registry "file.exe,35" format
+static void AfxGetIconInfo(LPCTSTR lpszRegInfo, LPTSTR lpszImagePath,
+	UINT& nIndex)
+{
+	LPTSTR pstrTarget = lpszImagePath;
+	LPCTSTR pstrSource = lpszRegInfo;
+	while (*pstrSource != ',' && *pstrSource != '\0')
+	{
+		*pstrTarget = *pstrSource;
+		pstrTarget = _tcsinc(pstrTarget);
+		pstrSource = _tcsinc(pstrSource);
+	}
+	*pstrTarget = '\0';
+
+	// extract the index
+	if (*pstrSource != '\0')
+	{
+		LPTSTR pstrIndex = _tcsinc(pstrSource);
+		nIndex = (UINT) _ttol(pstrIndex);
+	}
+	else
+		nIndex = 0;
+}
+
+HICON COleClientItem::GetIconFromRegistry() const
+{
+	CLSID clsid;
+	GetClassID(&clsid);
+	if (clsid == CLSID_NULL)
+		return NULL;
+
+	return GetIconFromRegistry(clsid);
+}
+
+HICON COleClientItem::GetIconFromRegistry(CLSID& clsid)
+{
+	// This function will extract the icon registered as the DefaultIcon
+	// for the server referred to by clsid.  We get the ProgID for the server
+	// and then extract \\hkcr\progid\DefaultIcon.  If that doesn't exist, we
+	// get a default icon from \\hkcr\DocShortcut\DefaultIcon and if that fails
+	// we just return 0.
+
+	USES_CONVERSION;
+
+	HICON hIcon = NULL;
+	HRESULT hr;
+	OLECHAR *szCLSID;
+	DWORD dwType = 0;
+	TCHAR szName[MAX_PATH+1];
+	TCHAR szPathName[MAX_PATH+1];
+	HKEY hkeyObj;
+	HKEY hkeyDefIcon;
+	HKEY hkeyCLSID;
+	UINT nIndex;
+
+	hr = ::StringFromCLSID(clsid, &szCLSID);
+	if (!SUCCEEDED(hr))
+		return NULL;
+
+	// first, try for the real icon
+	if (RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("clsid"), 0, KEY_READ, &hkeyCLSID) == ERROR_SUCCESS)
+	{
+		if (RegOpenKeyEx(hkeyCLSID, OLE2T(szCLSID), 0, KEY_READ, &hkeyObj) == ERROR_SUCCESS)
+		{
+			if (RegOpenKeyEx(hkeyObj, _T("DefaultIcon"), 0, KEY_READ, &hkeyDefIcon) == ERROR_SUCCESS)
+			{
+				DWORD dwCount;
+				dwCount = sizeof(szName);
+				if (RegQueryValueEx(hkeyDefIcon, NULL, NULL, &dwType, (BYTE*) szName, &dwCount) == ERROR_SUCCESS)
+				{
+					AfxGetIconInfo(szName, szPathName, nIndex);
+
+					// Load the icon
+					hIcon = ::ExtractIcon(AfxGetApp()->m_hInstance, szPathName, nIndex);
+
+					// ExtractIcon() failure case means NULL return
+					if (int(hIcon) == 1)
+						hIcon = NULL;
+				}
+				RegCloseKey(hkeyDefIcon);
+			}
+			RegCloseKey(hkeyObj);
+		}
+		RegCloseKey(hkeyCLSID);
+	}
+
+	// if we didn't get the real icon, try the default icon
+	if (hIcon == NULL)
+	{
+		if (RegOpenKeyEx(HKEY_CLASSES_ROOT, _T("DocShortcut"), 0, KEY_READ,&hkeyObj) == ERROR_SUCCESS)
+		{
+			if (RegOpenKeyEx(hkeyObj, _T("DefaultIcon"), 0, KEY_READ, &hkeyDefIcon) == ERROR_SUCCESS)
+			{
+				DWORD dwCount;
+				dwCount = sizeof(szName);
+				if (RegQueryValueEx(hkeyDefIcon, NULL, NULL, &dwType, (BYTE*) szName, &dwCount) == ERROR_SUCCESS)
+				{
+					AfxGetIconInfo(szName, szPathName, nIndex);
+
+					// Load the icon
+					hIcon = ::ExtractIcon(AfxGetApp()->m_hInstance, szPathName, nIndex);
+
+					// ExtractIcon() failure case means NULL return
+					if (int(hIcon) == 1)
+						hIcon = NULL;
+				}
+				RegCloseKey(hkeyDefIcon);
+			}
+			RegCloseKey(hkeyObj);
+		}
+	}
+
+	::CoTaskMemFree(szCLSID);
+	return hIcon;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // COleClientItem creation helpers
 
@@ -290,17 +396,15 @@ void COleClientItem::UpdateItemType()
 
 	// check for static object
 	DWORD dwStatus;
-	if (m_lpObject->GetMiscStatus(DVASPECT_CONTENT, &dwStatus) == S_OK)
+	if (m_lpObject->GetMiscStatus(DVASPECT_CONTENT, &dwStatus) == S_OK
+		&& (dwStatus & OLEMISC_STATIC) == 0)
 	{
-		if (dwStatus & OLEMISC_STATIC)
-		{
-			m_nItemType = OT_STATIC;
-			return;
-		}
+		m_nItemType = OT_EMBEDDED;
+		return;
 	}
 
-	// not static, not link -- must be embedded
-	m_nItemType = OT_EMBEDDED;
+	// not not link, not embedding -- must be static
+	m_nItemType = OT_STATIC;
 }
 
 BOOL COleClientItem::FinishCreate(SCODE sc)
@@ -348,14 +452,8 @@ BOOL COleClientItem::FinishCreate(SCODE sc)
 
 			// the server shows these in its user-interface
 			//  (as document title and in File Exit menu)
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-         LPCWSTR pBAfxTemp = T2COLE(m_pDocument->GetTitle());
-         T2COLE(AfxGetAppName());
-			m_lpObject->SetHostNames((LPCWSTR)pBAfxConv, pBAfxTemp);
-#else    // __BORLANDC__
 			m_lpObject->SetHostNames(T2COLE(AfxGetAppName()),
 				T2COLE(m_pDocument->GetTitle()));
-#endif   // __BORLANDC__
 		}
 
 		// all items are "contained" -- this makes our reference to this object
@@ -560,16 +658,9 @@ BOOL COleClientItem::CreateFromFile(LPCTSTR lpszFileName, REFCLSID clsid,
 
 	// attempt to create the object
 	LPOLECLIENTSITE lpClientSite = GetClientSite();
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(lpszFileName);
-	SCODE sc = ::OleCreateFromFile(clsid, (LPCWSTR)pBAfxConv,
-		IID_IUnknown, render, lpFormatEtc, lpClientSite, m_lpStorage,
-		(LPLP)&m_lpObject);
-#else    // __BORLANDC__
 	SCODE sc = ::OleCreateFromFile(clsid, T2COLE(lpszFileName),
 		IID_IUnknown, render, lpFormatEtc, lpClientSite, m_lpStorage,
 		(LPLP)&m_lpObject);
-#endif   // __BORLANDC__
 	BOOL bResult = FinishCreate(sc);
 
 	ASSERT_VALID(this);
@@ -598,16 +689,9 @@ BOOL COleClientItem::CreateLinkFromFile(LPCTSTR lpszFileName,
 
 	// attempt to create the link
 	LPOLECLIENTSITE lpClientSite = GetClientSite();
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(lpszFileName);
-	SCODE sc = ::OleCreateLinkToFile((LPCWSTR)pBAfxConv,
-		IID_IUnknown, render, lpFormatEtc, lpClientSite, m_lpStorage,
-		(LPLP)&m_lpObject);
-#else    // __BORLANDC__
 	SCODE sc = ::OleCreateLinkToFile(T2COLE(lpszFileName),
 		IID_IUnknown, render, lpFormatEtc, lpClientSite, m_lpStorage,
 		(LPLP)&m_lpObject);
-#endif   // __BORLANDC__
 	BOOL bResult = FinishCreate(sc);
 
 	ASSERT_VALID(this);
@@ -675,7 +759,14 @@ BOOL COleClientItem::CreateCloneFrom(const COleClientItem* pSrcItem)
 	// get information on the view advise type
 	ASSERT(pSrcItem->m_lpViewObject != NULL);
 	DWORD dwAspect;
-	VERIFY(pSrcItem->m_lpViewObject->GetAdvise(&dwAspect, NULL, NULL) == S_OK);
+   IAdviseSink* pAdviseSink;
+   pAdviseSink = NULL;
+	VERIFY(pSrcItem->m_lpViewObject->GetAdvise(&dwAspect, NULL, &pAdviseSink) ==
+	  S_OK);
+   if( pAdviseSink != NULL )
+   {
+	  RELEASE(pAdviseSink);
+   }
 
 	// then load the new object from the new storage
 	LPOLECLIENTSITE lpClientSite = GetClientSite();
@@ -692,15 +783,43 @@ BOOL COleClientItem::CreateCloneFrom(const COleClientItem* pSrcItem)
 
 BOOL COleClientItem::IsModified() const
 {
+   SCODE sc;
+
 	ASSERT_VALID(this);
 	ASSERT(m_lpObject != NULL);
 
 	// get IPersistStorage interface, and call IsDirty
 	LPPERSISTSTORAGE lpPersistStorage =
 		QUERYINTERFACE(m_lpObject, IPersistStorage);
-	ASSERT(lpPersistStorage != NULL);
-	SCODE sc = lpPersistStorage->IsDirty();
-	lpPersistStorage->Release();
+   if( lpPersistStorage != NULL )
+   {
+	   sc = lpPersistStorage->IsDirty();
+	   lpPersistStorage->Release();
+   }
+   else
+   {
+	  LPPERSISTSTREAMINIT lpPersistStreamInit;
+	  lpPersistStreamInit = QUERYINTERFACE( m_lpObject, IPersistStreamInit );
+	  if( lpPersistStreamInit != NULL )
+	  {
+		 sc = lpPersistStreamInit->IsDirty();
+		 lpPersistStreamInit->Release();
+	  }
+	  else
+	  {
+		 LPPERSISTSTREAM lpPersistStream;
+		 lpPersistStream = QUERYINTERFACE( m_lpObject, IPersistStream );
+		 if( lpPersistStream != NULL )
+		 {
+			sc = lpPersistStream->IsDirty();
+			lpPersistStream->Release();
+		 }
+		 else
+		 {
+			sc = E_NOINTERFACE;
+		 }
+	  }
+   }
 
 	// S_OK == S_TRUE, therefore object dirty!
 	return sc == S_OK || FAILED(sc);
@@ -832,10 +951,6 @@ void COleClientItem::WriteItemFlat(CArchive& ar)
 	ASSERT(lpBuf != NULL);
 	ar.Write(lpBuf, (UINT)dwBytes);
 	::GlobalUnlock(hStorage);
-#ifdef _MAC
-	char **ppch;
-	UnwrapHandle(hStorage, &ppch);
-#endif
 }
 
 void COleClientItem::GetItemStorageCompound()
@@ -863,16 +978,9 @@ void COleClientItem::GetItemStorageCompound()
 
 	// create storage for this item
 	LPSTORAGE lpStorage;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(szItemName);
-	SCODE sc = pDoc->m_lpRootStg->CreateStorage((LPCWSTR)pBAfxConv,
-		STGM_CREATE|STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE,
-		0, 0, &lpStorage);
-#else    // __BORLANDC__
 	SCODE sc = pDoc->m_lpRootStg->CreateStorage(T2COLE(szItemName),
 		STGM_CREATE|STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE,
 		0, 0, &lpStorage);
-#endif   // __BORLANDC__
 	if (sc != S_OK)
 	{
 		TRACE1("Warning: unable to create child storage %s.\n", szItemName);
@@ -928,16 +1036,9 @@ void COleClientItem::ReadItemCompound(CArchive& ar)
 
 		// open storage for this item
 		LPSTORAGE lpStorage;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(szItemName);
-		SCODE sc = pDoc->m_lpRootStg->OpenStorage((LPCWSTR)pBAfxConv, NULL,
-			STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE,
-			0, 0, &lpStorage);
-#else    // __BORLANDC__
 		SCODE sc = pDoc->m_lpRootStg->OpenStorage(T2COLE(szItemName), NULL,
 			STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE,
 			0, 0, &lpStorage);
-#endif   // __BORLANDC__
 		if (sc != S_OK)
 		{
 			TRACE1("Warning: unable to open child storage %s.\n", szItemName);
@@ -1000,16 +1101,9 @@ void COleClientItem::WriteItemCompound(CArchive& ar)
 	if (!pDoc->m_bSameAsLoad)
 	{
 		// need to create new storage for this item
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(szItemName);
-		SCODE sc = pDoc->m_lpRootStg->CreateStorage((LPCWSTR)pBAfxConv,
-			STGM_CREATE|STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE,
-			0, 0, &lpStorage);
-#else    // __BORLANDC__
 		SCODE sc = pDoc->m_lpRootStg->CreateStorage(T2COLE(szItemName),
 			STGM_CREATE|STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE,
 			0, 0, &lpStorage);
-#endif   // __BORLANDC__
 		if (sc != S_OK)
 		{
 			TRACE1("Warning: unable to create child storage %s.\n",
@@ -1120,7 +1214,13 @@ void COleClientItem::Serialize(CArchive& ar)
 		// write the view advise type to storage
 		ASSERT(m_lpViewObject != NULL);
 		DWORD dwAspect;
-		VERIFY(m_lpViewObject->GetAdvise(&dwAspect, NULL, NULL) == S_OK);
+	  IAdviseSink* pAdviseSink;
+	  pAdviseSink = NULL;
+		VERIFY(m_lpViewObject->GetAdvise(&dwAspect, NULL, &pAdviseSink) == S_OK);
+	  if( pAdviseSink != NULL )
+	  {
+		 RELEASE(pAdviseSink);
+	  }
 		ar << dwAspect;         // save the display aspect
 
 		// write flag indicating whether to create moniker upon load
@@ -1413,12 +1513,7 @@ HGLOBAL COleClientItem::GetIconicMetafile()
 				if (lpszDisplayName != NULL)
 				{
 					szTemp[0] = 0;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-               OLE2CT(lpszDisplayName);
-					AfxGetFileTitle((LPCSTR)pBAfxConv, szTemp, _countof(szTemp));
-#else    // __BORLANDC__
 					AfxGetFileTitle(OLE2CT(lpszDisplayName), szTemp, _countof(szTemp));
-#endif   // __BORLANDC__
 					if (szTemp[0] != '\0')
 						lpszLabel = szTemp;
 					CoTaskMemFree(lpszDisplayName);
@@ -1427,12 +1522,7 @@ HGLOBAL COleClientItem::GetIconicMetafile()
 			}
 		}
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2OLE(lpszLabel);
-		HGLOBAL hMetaPict = OleGetIconOfClass(clsid, (LPWSTR)pBAfxConv, lpszLabel == NULL);
-#else    // __BORLANDC__
 		HGLOBAL hMetaPict = OleGetIconOfClass(clsid, T2OLE(lpszLabel), lpszLabel == NULL);
-#endif   // __BORLANDC__
 		if (hMetaPict != NULL)
 		{
 			// cache it for later GetData (or drawing)
@@ -1789,9 +1879,7 @@ void COleClientItem::GetObjectDescriptorData(
 	{
 		pointT.x = lpOffset->x;
 		pointT.y = lpOffset->y;
-#ifndef _MAC
 		((CDC*)NULL)->DPtoHIMETRIC((SIZE*)&pointT);
-#endif
 	}
 	else
 	{
@@ -1804,9 +1892,7 @@ void COleClientItem::GetObjectDescriptorData(
 	{
 		sizeT.cx = lpSize->cx;
 		sizeT.cy = lpSize->cy;
-#ifndef _MAC
 		((CDC*)NULL)->DPtoHIMETRIC(&sizeT);
-#endif
 	}
 	else
 	{
@@ -1818,14 +1904,8 @@ void COleClientItem::GetObjectDescriptorData(
 
 	// get the object descriptor for the IOleObject
 	InterlockedIncrement(&m_dwRef);
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(pDoc->GetPathName());
-	HGLOBAL hGlobal = _AfxOleGetObjectDescriptorData(
-		m_lpObject, (LPCWSTR)pBAfxConv, m_nDrawAspect, pointT, &sizeT);
-#else    // __BORLANDC__
 	HGLOBAL hGlobal = _AfxOleGetObjectDescriptorData(
 		m_lpObject, T2COLE(pDoc->GetPathName()), m_nDrawAspect, pointT, &sizeT);
-#endif   // __BORLANDC__
 	InterlockedDecrement(&m_dwRef);
 
 	if (hGlobal == NULL)
@@ -1849,14 +1929,8 @@ void COleClientItem::SetHostNames(LPCTSTR lpszHost, LPCTSTR lpszHostObj)
 	ASSERT(AfxIsValidString(lpszHost));
 
 	ASSERT(AfxIsValidString(lpszHostObj));
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   LPCWSTR pBAfxTemp = T2COLE(lpszHostObj);
-   T2COLE(lpszHost);
-	CheckGeneral(m_lpObject->SetHostNames((LPCWSTR)pBAfxConv, pBAfxTemp));
-#else    // __BORLANDC__
 	CheckGeneral(m_lpObject->SetHostNames(T2COLE(lpszHost),
 		T2COLE(lpszHostObj)));
-#endif   // __BORLANDC__
 }
 
 void COleClientItem::SetExtent(const CSize& size, DVASPECT nDrawAspect)
@@ -1910,9 +1984,9 @@ STDMETHODIMP COleClientItem::XOleClientSite::SaveObject()
 	SCODE sc = S_OK;
 	if (lpPersistStorage->IsDirty() == S_OK)
 	{
-		// S_OK == S_OK != S_FALSE, therefore object is dirty!
+		// S_OK == S_TRUE != S_FALSE, therefore object is dirty!
 		sc = ::OleSave(lpPersistStorage, pThis->m_lpStorage, TRUE);
-		if (sc != S_OK)
+		if (sc == S_OK)
 			sc = lpPersistStorage->SaveCompleted(NULL);
 
 		// mark the document as dirty, if save sucessful.
@@ -1967,21 +2041,16 @@ STDMETHODIMP COleClientItem::XOleClientSite::GetMoniker(
 					// create item moniker from item name
 					TCHAR szItemName[OLE_MAXITEMNAME];
 					pThis->GetItemName(szItemName);
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-               T2COLE(szItemName);
-					CreateItemMoniker(OLESTDDELIMOLE, (LPCWSTR)pBAfxConv, ppMoniker);
-#else    // __BORLANDC__
 					CreateItemMoniker(OLESTDDELIMOLE, T2COLE(szItemName),
 						ppMoniker);
-#endif   // __BORLANDC__
 
 					// notify the object of the assignment
 					if (dwAssign != OLEGETMONIKER_TEMPFORUSER &&
 						*ppMoniker != NULL && !pThis->m_bMoniker)
 					{
+						pThis->m_bMoniker = TRUE;
 						VERIFY(pThis->m_lpObject->SetMoniker(
 							OLEWHICHMK_OBJREL, *ppMoniker) == S_OK);
-						pThis->m_bMoniker = TRUE;
 						ASSERT_VALID(pThis->m_pDocument);
 						pThis->m_pDocument->SetModifiedFlag();
 					}

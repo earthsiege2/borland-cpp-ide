@@ -1,19 +1,14 @@
-
 #
-# Borland C++ - (C) Copyright 1993 by Borland International
+# Inprise C++Builder - (C) Copyright 1999 by Borland International
 #
 
-# default is to target 16BIT
-# pass -DWIN32 to make to target 32BIT
-
-!if !$d(WIN32)
-CC       = bcc
-RC       = brcc
-AS       = tasm
-!else
 CC       = bcc32
 RC       = brcc32
 AS       = tasm32
+
+!if $d(__NMAKE__)
+CXX      = bcc32 -P
+CPP      = bcc32 -P
 !endif
 
 .asm.obj:

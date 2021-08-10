@@ -1,0 +1,128 @@
+[OKCANCL1]
+Type=FormTemplate
+Name=Standard Dialog (Horizontal)
+Page=Dialogs
+Icon=OKCANCL1.ICO
+Description=OK, Cancel along bottom of dialog.
+Author=Borland
+DefaultMainForm=0
+DefaultNewForm=0
+Ancestor=
+
+[OKCNHLP1]
+Type=FormTemplate
+Name=Dialog with Help (Horizontal)
+Page=Dialogs
+Icon=OKCNHLP1.ICO
+Description=OK, Cancel, Help along bottom of dialog. This is an Inherited Form.
+Author=Borland
+DefaultMainForm=0
+DefaultNewForm=0
+Ancestor=OKCANCL1
+
+[OKCANCL2]
+Type=FormTemplate
+Name=Standard Dialog (Vertical)
+Page=Dialogs
+Icon=OKCANCL2.ICO
+Description=OK, Cancel along right edge.
+Author=Borland
+DefaultMainForm=0
+DefaultNewForm=0
+Ancestor=
+
+[OKCNHLP2]
+Type=FormTemplate
+Name=Dialog with Help (Vertical)
+Page=Dialogs
+Icon=OKCNHLP2.ICO
+Description=OK, Cancel, Help along right edge. This is an Inherited Form.
+Author=Borland
+DefaultMainForm=0
+DefaultNewForm=0
+Ancestor=OKCANCL2
+
+[ABOUT]
+Type=FormTemplate
+Name=About box
+Page=Forms
+Icon=ABOUT.ICO
+Description=Generic About box dialog.
+Author=Borland
+DefaultMainForm=0
+DefaultNewForm=0
+Ancestor=
+
+[TABPGDLG]
+Type=FormTemplate
+Name=Tabbed pages
+Page=Forms
+Icon=TABPGDLG.ICO
+Description=Generic tabbed pages dialog with OK, Cancel, and Help buttons.
+Author=Borland
+DefaultMainForm=0
+DefaultNewForm=0
+Ancestor=
+
+[PASSWORD]
+Type=FormTemplate
+Name=Password Dialog
+Page=Dialogs
+Icon=PASSWORD.ICO
+Description=Generic password entry form.
+Author=Borland
+DefaultMainForm=0
+DefaultNewForm=0
+Ancestor=
+
+[DUALLIST]
+Type=FormTemplate
+Name=Dual list box
+Page=Forms
+Icon=DUALLIST.ICO
+Description=Dialog box with two list boxes. Supports moving items from one list to the other.
+Author=Borland
+DefaultMainForm=0
+DefaultNewForm=0
+Ancestor=
+
+[MDIAPP]
+Type=ProjectTemplate
+Name=MDI Application
+Page=Projects
+Icon=MDIAPP.ICO
+Description=Standard MDI application frame.
+Author=Borland
+DefaultProject=0
+
+[SDIAPP]
+Type=ProjectTemplate
+Name=SDI Application
+Page=Projects
+Icon=SDIAPP.ICO
+Description=Generic SDI style application.
+Author=Borland
+DefaultProject=0
+
+[LOGOAPP]
+Type=ProjectTemplate
+Name=Win95/98 Logo Application
+Page=Projects
+Icon=LOGOAPP.ICO
+Description=Application that meets minimum Windows95/98 Logo requirements.
+Author=Borland
+DefaultProject=0
+
+[WIN2kAPP]
+Type=ProjectTemplate
+Name=Win2000 Client Application
+Page=Projects
+Icon=WIN2kAPP.ICO
+Description=Client application for Windows2000.
+Author=Borland
+DefaultProject=0
+
+[Repository Pages]
+Forms=
+Dialogs=
+Projects=

@@ -1,0 +1,15 @@
+#define sOpShortPtr 64256
+#define sOpIntPtr 64257
+#define sOpFloatPtr 64258
+#define sOpDoublePtr 64258
+#define sOpCurrencyPtr 64260
+#define sOpTDateTimePtr 64261
+#define sOpBoolPtr 64262
+#define sOpBytePtr 64263
+#define sOpWCharTPtr 64264
+#define sVarRangeArray 64265
+#define sAcGatRange 64266
+#define sAcGnatRange 64267
+#define sAcGpRange 64268
+#define sAcGnpRange 64269
+#define sAcGnpnRange 64270

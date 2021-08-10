@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -38,6 +38,28 @@ _AFXOLE_INLINE void COleMessageFilter::EnableNotRespondingDialog(BOOL bEnable)
 #endif //_AFXOLE_INLINE
 
 /////////////////////////////////////////////////////////////////////////////
+// OLE Moniker inlines
+
+#ifdef _AFXOLEMONIKER_INLINE
+
+// CMonikerFile
+_AFXOLEMONIKER_INLINE CMonikerFile::CMonikerFile() { }
+_AFXOLEMONIKER_INLINE IMoniker* CMonikerFile::GetMoniker() const
+	{ ASSERT_VALID(this); return m_Moniker; }
+
+// CAsyncMonikerFile
+_AFXOLEMONIKER_INLINE IBinding* CAsyncMonikerFile::GetBinding() const
+	{ ASSERT_VALID(this); return m_Binding; }
+_AFXOLEMONIKER_INLINE void CAsyncMonikerFile::SetBinding(IBinding* pBinding)
+	{ ASSERT_VALID(this); m_Binding=pBinding; }
+_AFXOLEMONIKER_INLINE void CAsyncMonikerFile::SetFormatEtc(FORMATETC* pFormatEtc)
+	{ ASSERT_VALID(this); m_pFormatEtc=pFormatEtc; }
+_AFXOLEMONIKER_INLINE FORMATETC* CAsyncMonikerFile::GetFormatEtc() const
+	{ ASSERT_VALID(this); return m_pFormatEtc; }
+
+#endif //_AFXOLEMONIKER_INLINE
+
+/////////////////////////////////////////////////////////////////////////////
 // OLE automation inlines
 
 #ifdef _AFXDISP_INLINE
@@ -68,7 +90,9 @@ _AFXDISP_INLINE COleDispatchDriver::operator LPDISPATCH()
 _AFXDISP_INLINE COleVariant::COleVariant()
 	{ AfxVariantInit(this); }
 _AFXDISP_INLINE COleVariant::~COleVariant()
-	{ VariantClear(this); }
+	{ VERIFY(::VariantClear(this) == NOERROR); }
+_AFXDISP_INLINE void COleVariant::Clear()
+	{ VERIFY(::VariantClear(this) == NOERROR); }
 _AFXDISP_INLINE COleVariant::COleVariant(LPCTSTR lpszSrc)
 	{ vt = VT_EMPTY; *this = lpszSrc; }
 _AFXDISP_INLINE COleVariant::COleVariant(CString& strSrc)
@@ -85,10 +109,8 @@ _AFXDISP_INLINE COleVariant::COleVariant(const COleDateTime& dateSrc)
 	{ vt = VT_DATE; date = dateSrc.m_dt; }
 _AFXDISP_INLINE COleVariant::COleVariant(const CByteArray& arrSrc)
 	{ vt = VT_EMPTY; *this = arrSrc; }
-#ifndef __BORLANDC__
 _AFXDISP_INLINE COleVariant::COleVariant(const CLongBinary& lbSrc)
 	{ vt = VT_EMPTY; *this = lbSrc; }
-#endif
 _AFXDISP_INLINE BOOL COleVariant::operator==(LPCVARIANT pSrc) const
 	{ return *this == *pSrc; }
 _AFXDISP_INLINE COleVariant::operator LPVARIANT()
@@ -165,9 +187,9 @@ _AFXDISP_INLINE const COleDateTime& COleDateTime::operator-=(
 	{ *this = *this - dateSpan; return *this; }
 _AFXDISP_INLINE COleDateTime::operator DATE() const
 	{ return m_dt; }
-_AFXDISP_INLINE COleDateTime::SetDate(int nYear, int nMonth, int nDay)
+_AFXDISP_INLINE int COleDateTime::SetDate(int nYear, int nMonth, int nDay)
 	{ return SetDateTime(nYear, nMonth, nDay, 0, 0, 0); }
-_AFXDISP_INLINE COleDateTime::SetTime(int nHour, int nMin, int nSec)
+_AFXDISP_INLINE int COleDateTime::SetTime(int nHour, int nMin, int nSec)
 	// Set date to zero date - 12/30/1899
 	{ return SetDateTime(1899, 12, 30, nHour, nMin, nSec); }
 
@@ -189,11 +211,21 @@ _AFXDISP_INLINE void COleDateTimeSpan::SetStatus(DateTimeSpanStatus status)
 _AFXDISP_INLINE double COleDateTimeSpan::GetTotalDays() const
 	{ ASSERT(GetStatus() == valid); return m_span; }
 _AFXDISP_INLINE double COleDateTimeSpan::GetTotalHours() const
-	{ ASSERT(GetStatus() == valid); return m_span * 24; }
+	{ ASSERT(GetStatus() == valid);
+		long lReturns = (long)(m_span * 24 + AFX_OLE_DATETIME_HALFSECOND);
+		return lReturns;
+	}
 _AFXDISP_INLINE double COleDateTimeSpan::GetTotalMinutes() const
-	{ ASSERT(GetStatus() == valid); return m_span * 24 * 60; }
+	{ ASSERT(GetStatus() == valid);
+		long lReturns = (long)(m_span * 24 * 60 + AFX_OLE_DATETIME_HALFSECOND);
+		return lReturns;
+	}
 _AFXDISP_INLINE double COleDateTimeSpan::GetTotalSeconds() const
-	{ ASSERT(GetStatus() == valid); return m_span * 24 * 60 * 60; }
+	{ ASSERT(GetStatus() == valid);
+		long lReturns = (long)(m_span * 24 * 60 * 60 + AFX_OLE_DATETIME_HALFSECOND);
+		return lReturns;
+	}
+
 _AFXDISP_INLINE long COleDateTimeSpan::GetDays() const
 	{ ASSERT(GetStatus() == valid); return (long)m_span; }
 _AFXDISP_INLINE BOOL COleDateTimeSpan::operator==(
@@ -234,6 +266,23 @@ _AFXDISP_INLINE COleDateTimeSpan COleDateTimeSpan::operator-() const
 	{ return -this->m_span; }
 _AFXDISP_INLINE COleDateTimeSpan::operator double() const
 	{ return m_span; }
+
+// COleSafeArray
+_AFXDISP_INLINE COleSafeArray::COleSafeArray()
+	{ AfxSafeArrayInit(this);
+		vt = VT_EMPTY; }
+_AFXDISP_INLINE COleSafeArray::~COleSafeArray()
+	{ Clear(); }
+_AFXDISP_INLINE void COleSafeArray::Clear()
+	{ VERIFY(::VariantClear(this) == NOERROR); }
+_AFXDISP_INLINE COleSafeArray::operator LPVARIANT()
+	{ return this; }
+_AFXDISP_INLINE COleSafeArray::operator LPCVARIANT() const
+	{ return this; }
+_AFXDISP_INLINE DWORD COleSafeArray::GetDim()
+	{ return ::SafeArrayGetDim(parray); }
+_AFXDISP_INLINE DWORD COleSafeArray::GetElemSize()
+	{ return ::SafeArrayGetElemsize(parray); }
 
 #endif //_AFXDISP_INLINE
 
@@ -367,9 +416,10 @@ _AFXOLESVR_INLINE void COleServerDoc::NotifySaved()
 	{ ASSERT_VALID(this); NotifyAllItems(OLE_SAVED, 0); }
 _AFXOLESVR_INLINE BOOL COleServerDoc::IsEmbedded() const
 	{ ASSERT_VALID(this); return m_bEmbedded; }
+_AFXOLESVR_INLINE BOOL COleServerDoc::IsDocObject() const
+	{ ASSERT_VALID(this); return m_pDocObjectServer != NULL; }
 _AFXOLESVR_INLINE BOOL COleServerDoc::IsInPlaceActive() const
 	{ ASSERT_VALID(this); return m_pInPlaceFrame != NULL; }
-
 #endif //_AFXOLESVR_INLINE
 
 /////////////////////////////////////////////////////////////////////////////

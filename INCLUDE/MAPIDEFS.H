@@ -7,14 +7,8 @@
  */
 
 #ifndef MAPIDEFS_H
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define MAPIDEFS_H
-#pragma option -b
-
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <pshpack8.h>
-#pragma option -b
-#endif
 
 #if defined (WIN32) && !defined (_WIN32)
 #define _WIN32
@@ -25,35 +19,25 @@
 #define INC_OLE2 /* Get the OLE2 stuff */
 #define INC_RPC  /* harmless on Windows NT; Windows 95 needs it */
 #define _INC_OLE /* Windows 95 will include OLE1 without this */
-#pragma option -b.
 #include <windows.h>
-#pragma option -b
 #endif
 
 #ifndef _OLEERROR_H_
-#pragma option -b.
 #include <winerror.h>
-#pragma option -b
 #endif
 #ifndef _OBJBASE_H_
-#pragma option -b.
 #include <objbase.h>
-#pragma option -b
 #endif
 #endif
 
 #if defined (WIN16) || defined (DOS) || defined (DOS16)
 #ifndef _COMPOBJ_H_
-#pragma option -b.
 #include <compobj.h>
-#pragma option -b
 #endif
 #endif
 
 #ifndef _INC_STDDEF
-#pragma option -b.
 #include <stddef.h>
-#pragma option -b
 #endif
 
 /* Array dimension for structures with variable-sized arrays at the end. */
@@ -86,7 +70,11 @@ extern "C" {
 
 #if !defined (MIDL_PASS) /* MIDL doesn't want to see these */
 
+#ifdef __BORLANDC__
+typedef wchar_t             WCHAR;
+#else
 typedef WORD                WCHAR;
+#endif
 
 #ifdef UNICODE
 typedef WCHAR               TCHAR;
@@ -2662,11 +2650,5 @@ DECLARE_MAPI_INTERFACE_(IProviderAdmin, IUnknown)
 }       /*  extern "C" */
 #endif
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <poppack.h>
-#pragma option -b
-#endif
-
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* MAPIDEFS_H */

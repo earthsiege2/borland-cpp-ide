@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -107,8 +107,8 @@ int COleBusyDialog::DoModal()
 
 	// find parent HWND
 	HWND hWndTop;
-	CWnd* pParent = CWnd::GetSafeOwner(m_pParentWnd, &hWndTop);
-	m_bz.hWndOwner = pParent->GetSafeHwnd();
+	HWND hParent = CWnd::GetSafeOwner_(m_pParentWnd->GetSafeHwnd(), &hWndTop);
+	m_bz.hWndOwner = hParent;
 
 	// run the dialog
 	AfxHookWindowCreate(this);

@@ -1,0 +1,11 @@
+LIBRARY IPROP
+EXPORTS
+
+    FmtIdToPropStgName                       = 'IPROP.DLL'.*
+    FreePropVariantArray                     = 'IPROP.DLL'.*
+    PropStgNameToFmtId                       = 'IPROP.DLL'.*
+    PropVariantClear                         = 'IPROP.DLL'.*
+    PropVariantCopy                          = 'IPROP.DLL'.*
+    StgCreatePropSetStg                      = 'IPROP.DLL'.*
+    StgCreatePropStg                         = 'IPROP.DLL'.*
+    StgOpenPropStg                           = 'IPROP.DLL'.*

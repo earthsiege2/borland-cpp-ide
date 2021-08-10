@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,7 +9,11 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
+#ifdef MACOCX
+#define DBINITCONSTANTS
+#endif
 #include "occimpl.h"
+#include "ocdb.h"
 
 #ifdef AFX_OCC_SEG
 #pragma code_seg(AFX_OCC_SEG)
@@ -29,20 +33,23 @@ static char THIS_FILE[] = __FILE__;
 
 PROCESS_LOCAL(COccManager, _afxOccManager)
 
-void AFX_CDECL AfxEnableControlContainer()
+void AFX_CDECL AfxEnableControlContainer(COccManager* pOccManager)
 {
-	afxOccManager = _afxOccManager.GetData();
+	if (pOccManager == NULL)
+		afxOccManager = _afxOccManager.GetData();
+	else
+		afxOccManager = pOccManager;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Helper functions for cracking dialog templates
 
-inline static BOOL IsDialogEx(const DLGTEMPLATE* pTemplate)
+static inline BOOL IsDialogEx(const DLGTEMPLATE* pTemplate)
 {
 	return ((DLGTEMPLATEEX*)pTemplate)->signature == 0xFFFF;
 }
 
-inline static WORD& DlgTemplateItemCount(DLGTEMPLATE* pTemplate)
+static inline WORD& DlgTemplateItemCount(DLGTEMPLATE* pTemplate)
 {
 	if (IsDialogEx(pTemplate))
 		return reinterpret_cast<DLGTEMPLATEEX*>(pTemplate)->cDlgItems;
@@ -50,7 +57,7 @@ inline static WORD& DlgTemplateItemCount(DLGTEMPLATE* pTemplate)
 		return pTemplate->cdit;
 }
 
-inline static const WORD& DlgTemplateItemCount(const DLGTEMPLATE* pTemplate)
+static inline const WORD& DlgTemplateItemCount(const DLGTEMPLATE* pTemplate)
 {
 	if (IsDialogEx(pTemplate))
 		return reinterpret_cast<const DLGTEMPLATEEX*>(pTemplate)->cDlgItems;
@@ -58,7 +65,7 @@ inline static const WORD& DlgTemplateItemCount(const DLGTEMPLATE* pTemplate)
 		return pTemplate->cdit;
 }
 
-static DLGITEMTEMPLATE* FindFirstDlgItem(const DLGTEMPLATE* pTemplate)
+AFX_STATIC DLGITEMTEMPLATE* AFXAPI _AfxFindFirstDlgItem(const DLGTEMPLATE* pTemplate)
 {
 	DWORD dwStyle = pTemplate->style;
 	BOOL bDialogEx = IsDialogEx(pTemplate);
@@ -96,7 +103,7 @@ static DLGITEMTEMPLATE* FindFirstDlgItem(const DLGTEMPLATE* pTemplate)
 	return (DLGITEMTEMPLATE*)(((DWORD)pw + 3) & ~3);
 }
 
-static DLGITEMTEMPLATE* FindNextDlgItem(DLGITEMTEMPLATE* pItem, BOOL bDialogEx)
+AFX_STATIC DLGITEMTEMPLATE* AFXAPI _AfxFindNextDlgItem(DLGITEMTEMPLATE* pItem, BOOL bDialogEx)
 {
 	WORD* pw;
 
@@ -130,6 +137,18 @@ BOOL COccManager::OnEvent(CCmdTarget* pCmdTarget, UINT idCtrl,
 	return pCmdTarget->OnEvent(idCtrl, pEvent, pHandlerInfo);
 }
 
+COleControlContainer* COccManager::CreateContainer(CWnd* pWnd)
+{
+	// advanced control container apps may want to override
+	return new COleControlContainer(pWnd);
+}
+
+COleControlSite* COccManager::CreateSite(COleControlContainer* pCtrlCont)
+{
+	// advanced control container apps may want to override
+	return new COleControlSite(pCtrlCont);
+}
+
 const DLGTEMPLATE* COccManager::PreCreateDialog(_AFX_OCC_DIALOG_INFO* pDlgInfo,
 	const DLGTEMPLATE* pOrigTemplate)
 {
@@ -161,7 +180,7 @@ void COccManager::PostCreateDialog(_AFX_OCC_DIALOG_INFO* pDlgInfo)
 DLGTEMPLATE* COccManager::SplitDialogTemplate(const DLGTEMPLATE* pTemplate,
 	DLGITEMTEMPLATE** ppOleDlgItems)
 {
-	DLGITEMTEMPLATE* pFirstItem = FindFirstDlgItem(pTemplate);
+	DLGITEMTEMPLATE* pFirstItem = _AfxFindFirstDlgItem(pTemplate);
 	ULONG cbHeader = (BYTE*)pFirstItem - (BYTE*)pTemplate;
 	ULONG cbNewTemplate = cbHeader;
 
@@ -171,7 +190,11 @@ DLGTEMPLATE* COccManager::SplitDialogTemplate(const DLGTEMPLATE* pTemplate,
 	int nItems = (int)DlgTemplateItemCount(pTemplate);
 	DLGITEMTEMPLATE* pItem = pFirstItem;
 	DLGITEMTEMPLATE* pNextItem = pItem;
+#ifndef OLE2ANSI
 	LPWSTR pszClassName;
+#else
+	LPSTR pszClassName;
+#endif
 	BOOL bHasOleControls = FALSE;
 
 	// Make first pass through the dialog template.  On this pass, we're
@@ -182,13 +205,22 @@ DLGTEMPLATE* COccManager::SplitDialogTemplate(const DLGTEMPLATE* pTemplate,
 
 	for (iItem = 0; iItem < nItems; iItem++)
 	{
-		pNextItem = FindNextDlgItem(pItem, bDialogEx);
+		pNextItem = _AfxFindNextDlgItem(pItem, bDialogEx);
 
 		pszClassName = bDialogEx ?
+#ifndef OLE2ANSI
 			(LPWSTR)(((DLGITEMTEMPLATEEX*)pItem) + 1) :
 			(LPWSTR)(pItem + 1);
+#else
+			(LPSTR)(((DLGITEMTEMPLATEEX*)pItem) + 1) :
+			(LPSTR)(pItem + 1);
+#endif
 
+#ifndef OLE2ANSI
 		if (pszClassName[0] == L'{')
+#else
+		if (pszClassName[0] == '{')
+#endif
 		{
 			// Item is an OLE control.
 			bHasOleControls = TRUE;
@@ -227,13 +259,20 @@ DLGTEMPLATE* COccManager::SplitDialogTemplate(const DLGTEMPLATE* pTemplate,
 
 	for (iItem = 0; iItem < nItems; iItem++)
 	{
-		pNextItem = FindNextDlgItem(pItem, bDialogEx);
+		pNextItem = _AfxFindNextDlgItem(pItem, bDialogEx);
 
 		pszClassName = bDialogEx ?
+#ifndef OLE2ANSI
 			(LPWSTR)(((DLGITEMTEMPLATEEX*)pItem) + 1) :
 			(LPWSTR)(pItem + 1);
 
 		if (pszClassName[0] == L'{')
+#else
+			(LPSTR)(((DLGITEMTEMPLATEEX*)pItem) + 1) :
+			(LPSTR)(pItem + 1);
+
+		if (pszClassName[0] == '{')
+#endif
 		{
 			// Item is OLE control: add it to the array.
 			ppOleDlgItems[iItem] = pItem;
@@ -329,6 +368,9 @@ BOOL COccManager::CreateDlgControls(CWnd* pWndParent, void* lpResource,
 	if (pOccDlgInfo->m_pNewTemplate == NULL)
 		return TRUE;
 
+	ASSERT(pWndParent != NULL);
+	HWND hwParent = pWndParent->GetSafeHwnd();
+
 	BOOL bDialogEx = IsDialogEx(pOccDlgInfo->m_pNewTemplate);
 	BOOL bSuccess = TRUE;
 	if (lpResource != NULL)
@@ -340,38 +382,28 @@ BOOL COccManager::CreateDlgControls(CWnd* pWndParent, void* lpResource,
 
 		UNALIGNED WORD* lpnRes = (WORD*)lpResource;
 		int iItem = 0;
-		const CWnd* pWndAfter = &CWnd::wndTop;
+		HWND hwAfter = HWND_TOP;
 		while (bSuccess && *lpnRes != 0)
 		{
-#ifndef _MAC
 			WORD nIDC = *lpnRes++;
 			WORD nMsg = *lpnRes++;
 			DWORD dwLen = *((UNALIGNED DWORD*&)lpnRes)++;
-#else
-			// Unfortunately we can't count on these values being
-			// word-aligned (and dwLen is word-swapped besides), so
-			// we have to pull them out a byte at a time to avoid
-			// address errors on 68000s.
-			WORD nIDC;
-			WORD nMsg;
-			DWORD dwLen;
 
-			memcpy(&nIDC, lpnRes++, sizeof(WORD));
-			memcpy(&nMsg, lpnRes++, sizeof(WORD));
-			memcpy((WORD*)&dwLen + 1, lpnRes++, sizeof(WORD));
-			memcpy(&dwLen, lpnRes++, sizeof(WORD));
-#endif
 			#define WIN16_LB_ADDSTRING  0x0401
 			#define WIN16_CB_ADDSTRING  0x0403
 
 			ASSERT(nMsg == LB_ADDSTRING || nMsg == CB_ADDSTRING ||
 				nMsg == WIN16_LB_ADDSTRING || nMsg == WIN16_CB_ADDSTRING ||
 				nMsg == WM_OCC_LOADFROMSTREAM ||
+				nMsg == WM_OCC_LOADFROMSTREAM_EX ||
 				nMsg == WM_OCC_LOADFROMSTORAGE ||
+				nMsg == WM_OCC_LOADFROMSTORAGE_EX ||
 				nMsg == WM_OCC_INITNEW);
 
 			if (nMsg == WM_OCC_LOADFROMSTREAM ||
+				nMsg == WM_OCC_LOADFROMSTREAM_EX ||
 				nMsg == WM_OCC_LOADFROMSTORAGE ||
+				nMsg == WM_OCC_LOADFROMSTORAGE_EX ||
 				nMsg == WM_OCC_INITNEW)
 			{
 				// Locate the DLGITEMTEMPLATE for the new control, and the control
@@ -380,17 +412,17 @@ BOOL COccManager::CreateDlgControls(CWnd* pWndParent, void* lpResource,
 				while (((pDlgItem = ppOleDlgItems[iItem++]) == NULL) &&
 					(pDlgItem != (DLGITEMTEMPLATE*)(-1)))
 				{
-					if (pWndAfter == &CWnd::wndTop)
-						pWndAfter = pWndParent->GetWindow(GW_CHILD);
+					if (hwAfter == HWND_TOP)
+						hwAfter = GetWindow(hwParent, GW_CHILD);
 					else
-						pWndAfter = pWndAfter->GetWindow(GW_HWNDNEXT);
+						hwAfter = GetWindow(hwAfter, GW_HWNDNEXT);
 
-					ASSERT(pWndAfter != NULL);  // enough non-OLE controls?
+					ASSERT(hwAfter != NULL);  // enough non-OLE controls?
 				}
 
 				ASSERT(pDlgItem != NULL);   // enough dialog item templates?
 
-				CWnd* pWndNew = NULL;
+				HWND hwNew = NULL;
 				if (pDlgItem != (DLGITEMTEMPLATE*)(-1))
 				{
 #ifdef _DEBUG
@@ -401,19 +433,20 @@ BOOL COccManager::CreateDlgControls(CWnd* pWndParent, void* lpResource,
 #endif
 
 					// Create the OLE control now.
-					pWndNew = CreateDlgControl(pWndParent, pWndAfter, bDialogEx,
+					hwNew = CreateDlgControl(pWndParent, hwAfter, bDialogEx,
 						pDlgItem, nMsg, (BYTE*)lpnRes, dwLen);
 				}
 
-				if (pWndNew != NULL)
+				if (hwNew != NULL)
 				{
-					if (pWndNew->GetParent() == pWndParent)
-						pWndAfter = pWndNew;
+					if (bDialogEx)
+						SetWindowContextHelpId(hwNew,
+							((DLGITEMTEMPLATEEX*)pDlgItem)->helpID);
+					if (GetParent(hwNew) == hwParent)
+						hwAfter = hwNew;
 				}
 				else
-				{
 					bSuccess = FALSE;
-				}
 			}
 
 			// skip past data
@@ -421,13 +454,85 @@ BOOL COccManager::CreateDlgControls(CWnd* pWndParent, void* lpResource,
 		}
 	}
 
+	if (bSuccess)
+	{
+		// unfreeze events now that all controls are loaded
+		if (pWndParent->m_pCtrlCont != NULL)
+			pWndParent->m_pCtrlCont->FreezeAllEvents(FALSE);
+
+		BindControls(pWndParent);
+	}
+
 	return bSuccess;
 }
 
-CWnd* COccManager::CreateDlgControl(CWnd* pWndParent, const CWnd* pWndAfter,
+
+void COccManager::BindControls(CWnd* pWndParent)
+{
+	HWND hWnd;
+	COleControlSite* pSite;
+
+	if (pWndParent->m_pCtrlCont != NULL)
+	{
+		// Now initialize bound controls
+		POSITION pos = pWndParent->m_pCtrlCont->m_siteMap.GetStartPosition();
+		while (pos != NULL)
+		{
+			pWndParent->m_pCtrlCont->m_siteMap.GetNextAssoc(pos, (void*&)hWnd, (void*&)pSite);
+
+			// For each cursor bound property initialize pClientSite ptr and bind to DSC
+			CDataBoundProperty* pBinding = pSite->m_pBindings;
+			if(pBinding)
+			{
+				while(pBinding)
+				{
+					pBinding->SetClientSite(pSite);
+					if (pBinding->m_ctlid != 0)
+					{
+						CWnd* pWnd = pWndParent->GetDlgItem(pBinding->m_ctlid);
+						ASSERT(pWnd);
+						ASSERT(pWnd->m_pCtrlSite);
+						pBinding->SetDSCSite(pWnd->m_pCtrlSite);
+					}
+					pBinding = pSite->m_pBindings->GetNext();
+				}
+			}
+
+			// Bind default bound property
+			if (pSite->m_ctlidRowSource != NULL)
+			{
+				CWnd* pWnd = pWndParent->GetDlgItem(pSite->m_ctlidRowSource);
+				ASSERT(pWnd);  // gotta be a legitimate control id
+				ASSERT(pWnd->m_pCtrlSite);  // and it has to be an OLE Control
+
+				pWnd->m_pCtrlSite->EnableDSC();
+
+				ASSERT(pWnd->m_pCtrlSite->m_pDataSourceControl);  // and a Data Source Control
+				pSite->m_pDSCSite = pWnd->m_pCtrlSite;
+				pWnd->m_pCtrlSite->m_pDataSourceControl->BindProp(pSite);
+			}
+		}
+
+		// Finally, set up bindings on all DataSource controls
+		pos = pWndParent->m_pCtrlCont->m_siteMap.GetStartPosition();
+		while (pos != NULL)
+		{
+			pWndParent->m_pCtrlCont->m_siteMap.GetNextAssoc(pos, (void*&)hWnd, (void*&)pSite);
+			if (pSite->m_pDataSourceControl)
+				pSite->m_pDataSourceControl->BindColumns();
+		}
+	}
+}
+
+
+HWND COccManager::CreateDlgControl(CWnd* pWndParent, HWND hwAfter,
 	BOOL bDialogEx, LPDLGITEMTEMPLATE pItem, WORD nMsg, BYTE* lpData, DWORD cb)
 {
+#ifndef OLE2ANSI
 	LPWSTR pszClass = (LPWSTR)(pItem + 1);
+#else
+	LPSTR pszClass = (LPSTR)(pItem + 1);
+#endif
 	DLGITEMTEMPLATE dlgItemTmp;
 
 	if (bDialogEx)
@@ -443,7 +548,11 @@ CWnd* COccManager::CreateDlgControl(CWnd* pWndParent, const CWnd* pWndAfter,
 		dlgItemTmp.cy = pItemEx->cy;
 		dlgItemTmp.id = (WORD)pItemEx->id;
 		pItem = &dlgItemTmp;
+#ifndef OLE2ANSI
 		pszClass = (LPWSTR)(pItemEx + 1);
+#else
+		pszClass = (LPSTR)(pItemEx + 1);
+#endif
 	}
 
 	CRect rect(pItem->x, pItem->y, pItem->x + pItem->cx, pItem->y + pItem->cy);
@@ -468,9 +577,76 @@ CWnd* COccManager::CreateDlgControl(CWnd* pWndParent, const CWnd* pWndAfter,
 	// If WM_OCC_INITNEW, we should have exhausted all of the data by now.
 	ASSERT((nMsg != WM_OCC_INITNEW) || (cb == 0));
 
+	CDataBoundProperty* pBindings = NULL;
+	CString strDataField;
+	WORD ctlidRowSource = 0;
+	DISPID defdispid = 0;
+	UINT dwType = 0;
+
+	if (nMsg == WM_OCC_LOADFROMSTREAM_EX ||
+		nMsg == WM_OCC_LOADFROMSTORAGE_EX)
+	{
+		// Read the size of the section
+		ULONG cbOffset = *(UNALIGNED ULONG*)lpData;
+		ULONG cbBindInfo = cbOffset - sizeof(DWORD);
+		lpData += sizeof(DWORD);
+
+		ULONG dwFlags = *(UNALIGNED ULONG*)lpData;
+		cbBindInfo -= sizeof(DWORD);
+		lpData += sizeof(DWORD);
+		ASSERT(dwFlags == 1);
+
+		// ULONG cbBinding = *(UNALIGNED ULONG*)lpData;
+		cbBindInfo -= sizeof(DWORD);
+		lpData += sizeof(DWORD);
+
+		while (cbBindInfo > 0)
+		{
+			DISPID dispid;
+			UWORD ctlid;
+
+			dispid = *(UNALIGNED DISPID *)lpData;
+			lpData += sizeof(DISPID);
+			cbBindInfo -= sizeof(DISPID);
+			ctlid =  *(UNALIGNED WORD *)lpData;
+			lpData += sizeof(WORD);
+			cbBindInfo -= sizeof(WORD);
+
+			if(dispid == DISPID_DATASOURCE)
+			{
+				defdispid = *(UNALIGNED ULONG*)lpData;
+				cbBindInfo -= sizeof(DISPID);
+				lpData += sizeof(DISPID);
+				dwType = *(UNALIGNED ULONG*)lpData;
+				cbBindInfo -= sizeof(DWORD);
+				lpData += sizeof(DWORD);
+
+				ASSERT(*(UNALIGNED DISPID *)lpData == DISPID_DATAFIELD);
+				lpData += sizeof(DISPID);
+				cbBindInfo -= sizeof(DISPID);
+				// Skip the string length
+				lpData += sizeof(DWORD);
+				cbBindInfo -= sizeof(DWORD);
+				strDataField = (char *)lpData;
+				lpData += strDataField.GetLength()+1;
+				cbBindInfo -= strDataField.GetLength()+1;
+				ctlidRowSource = ctlid;
+			} else
+				pBindings = new CDataBoundProperty(pBindings, dispid, ctlid);
+		}
+		cb -= cbOffset;
+
+		// From now on act as a regular type
+		nMsg -= (WM_OCC_LOADFROMSTREAM_EX - WM_OCC_LOADFROMSTREAM);
+	}
+
 	GUID clsid;
 	HRESULT hr;
+#ifndef OLE2ANSI
 	if (pszClass[0] == L'{')
+#else
+	if (pszClass[0] == '{')
+#endif
 		hr = CLSIDFromString(pszClass, &clsid);
 	else
 		hr = CLSIDFromProgID(pszClass, &clsid);
@@ -478,7 +654,11 @@ CWnd* COccManager::CreateDlgControl(CWnd* pWndParent, const CWnd* pWndAfter,
 #ifdef _DEBUG
 	if (FAILED(hr))
 	{
+#ifndef OLE2ANSI
 		TRACE1("Unable to convert \"%ls\" to a class ID.\n", pszClass);
+#else
+		TRACE1("Unable to convert \"%s\" to a class ID.\n", pszClass);
+#endif
 		TRACE1(">>> Result code: 0x%08lx\n", hr);
 		if (pszClass[0] != L'{')
 			TRACE0(">>> Is the control properly registered?\n");
@@ -488,7 +668,6 @@ CWnd* COccManager::CreateDlgControl(CWnd* pWndParent, const CWnd* pWndAfter,
 	CMemFile memFile(lpData, cb);
 	CMemFile* pMemFile = (nMsg == WM_OCC_INITNEW) ? NULL : &memFile;
 
-	CWnd* pWndNew = NULL;
 	COleControlSite* pSite = NULL;
 
 	if (SUCCEEDED(hr) &&
@@ -498,15 +677,25 @@ CWnd* COccManager::CreateDlgControl(CWnd* pWndParent, const CWnd* pWndAfter,
 			bstrLicKey, &pSite))
 	{
 		ASSERT(pSite != NULL);
-		pWndNew = CWnd::FromHandle(pSite->m_hWnd);
-		pWndNew->SetWindowPos(pWndAfter, 0, 0, 0, 0,
+
+		// freeze events until all controls are loaded
+		pSite->FreezeEvents(TRUE);
+
+		// set ZOrder only!
+		SetWindowPos(pSite->m_hWnd, hwAfter, 0, 0, 0, 0,
 			SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+
+		pSite->m_pBindings = pBindings;
+		pSite->m_strDataField = strDataField;
+		pSite->m_ctlidRowSource = ctlidRowSource;
+		pSite->m_defdispid = defdispid;
+		pSite->m_dwType = dwType;
 	}
 
 	if (bstrLicKey != NULL)
 		SysFreeString(bstrLicKey);
 
-	return pWndNew;
+	return (pSite != NULL) ? pSite->m_hWnd : NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -527,5 +716,6 @@ CWnd* CDataExchange::PrepareOleCtrl(int nIDC)
 	m_bEditLastControl = FALSE; // not an edit item by default
 	return pWndCtrl;
 }
+
 
 #endif //!_AFX_NO_OCC_SUPPORT

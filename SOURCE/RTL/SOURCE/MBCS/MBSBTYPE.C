@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -27,12 +28,12 @@ Usage           #include <mbctype.h>
 
 Prototype in    mbstring.h
 
-Description     _mbsbtype returns the type of character of  Nth byte 
-		from the beginning of a string inculuding 2-bytes code.
+Description     _mbsbtype returns the type of character of  Nth byte
+                from the beginning of a string inculuding 2-bytes code.
 
 Return value    Returns any type of character as following;
 
-                 symbol	     value  meaning
+                 symbol      value  meaning
                 --------------------------------------------------------
                  _MBC_SINGLE    0   1-byte code(excepting 2-bytes code)
                  _MBC_LEAD      1   the first byte of 2-bytes code

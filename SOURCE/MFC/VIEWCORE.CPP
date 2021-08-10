@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -66,8 +66,7 @@ BOOL CView::PreCreateWindow(CREATESTRUCT & cs)
 
 	if (cs.lpszClass == NULL)
 	{
-		if (!AfxDeferRegisterClass(AFX_WNDFRAMEORVIEW_REG))
-			return FALSE;
+		VERIFY(AfxDeferRegisterClass(AFX_WNDFRAMEORVIEW_REG));
 		cs.lpszClass = _afxWndFrameOrView;  // COLOR_WINDOW background
 	}
 
@@ -161,18 +160,14 @@ BOOL CView::OnCmdMsg(UINT nID, int nCode, void* pExtra,
 		return TRUE;
 
 	// then pump through document
-	BOOL bHandled = FALSE;
 	if (m_pDocument != NULL)
 	{
 		// special state for saving view before routing to document
-		_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
-		CView* pOldRoutingView = pThreadState->m_pRoutingView;
-		pThreadState->m_pRoutingView = this;
-		bHandled = m_pDocument->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
-		pThreadState->m_pRoutingView = pOldRoutingView;
+		CPushRoutingView push(this);
+		return m_pDocument->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 	}
 
-	return bHandled;
+	return FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -458,9 +453,8 @@ void CView::OnEndPrintPreview(CDC* pDC, CPrintInfo* pInfo,
 	if (pView->m_pPrintView != NULL)
 		pView->m_pPrintView->OnEndPrinting(pDC, pInfo);
 
-	CFrameWnd* pParent = (CFrameWnd*)AfxGetThread()->m_pMainWnd;
+	CFrameWnd* pParent = STATIC_DOWNCAST(CFrameWnd, AfxGetMainWnd());
 	ASSERT_VALID(pParent);
-	ASSERT_KINDOF(CFrameWnd, pParent);
 
 	// restore the old main window
 	pParent->OnSetPreviewMode(FALSE, pView->m_pPreviewState);
@@ -515,6 +509,10 @@ BOOL CCtrlView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	ASSERT(cs.lpszClass == NULL);
 	cs.lpszClass = m_strClass;
+
+	// initialize common controls
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	AfxDeferRegisterClass(AFX_WNDCOMMCTLSNEW_REG);
 
 	// map default CView style to default style
 	// WS_BORDER is insignificant

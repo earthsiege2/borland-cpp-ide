@@ -1,4 +1,3 @@
-#pragma option -b
 /****************************************************************************/
 /*                                                                          */
 /*        DISPDIB.H - Include file for DisplayDib() function.               */
@@ -8,6 +7,10 @@
 /*        Copyright (c) 1990-1995, Microsoft Corp.  All rights reserved.    */
 /*                                                                          */
 /****************************************************************************/
+
+#ifndef __DISPDIB_H__
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
+#define __DISPDIB_H__
 
 // DisplayDib() error return codes
 #define DISPLAYDIB_NOERROR          0x0000  // success
@@ -173,7 +176,7 @@ UINT FAR PASCAL DisplayDibEx(LPBITMAPINFOHEADER lpbi, int x, int y, LPSTR lpBits
 //
 // inline function to send a message to a DisplayDibWindow
 //
-static __inline UINT DisplayDibWindowMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, DWORD cbSize)
+__inline UINT DisplayDibWindowMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, DWORD cbSize)
 {
 #if defined(_WIN32) || defined(WIN32)
         COPYDATASTRUCT cds;
@@ -189,7 +192,7 @@ static __inline UINT DisplayDibWindowMessage(HWND hwnd, UINT msg, WPARAM wParam,
 //
 // inline function to create a DisplayDibWindow
 //
-static __inline HWND DisplayDibWindowCreateEx(HWND hwndParent, HINSTANCE hInstance, DWORD dwStyle)
+__inline HWND DisplayDibWindowCreateEx(HWND hwndParent, HINSTANCE hInstance, DWORD dwStyle)
 {
 #if defined(_WIN32) || defined(WIN32)
     DWORD show = 2;
@@ -275,4 +278,6 @@ static __inline HWND DisplayDibWindowCreateEx(HWND hwndParent, HINSTANCE hInstan
 #define DisplayDibWindowEndEx(hwnd)                     SendMessage(hwnd, DDM_END, 0, 0)
 #define DisplayDibWindowClose(hwnd)                     SendMessage(hwnd, DDM_CLOSE, 0, 0)
 #endif
-#pragma option -b.
+
+#pragma option pop /*P_O_Pop*/
+#endif // _DISPDIB_H

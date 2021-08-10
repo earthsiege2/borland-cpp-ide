@@ -1,6 +1,6 @@
 
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -129,6 +129,7 @@ void CPtrList::FreeNode(CPtrList::CNode* pNode)
 
 POSITION CPtrList::AddHead(void* newElement)
 {
+
 	ASSERT_VALID(this);
 
 	CNode* pNewNode = NewNode(NULL, m_pNodeHead);
@@ -139,10 +140,14 @@ POSITION CPtrList::AddHead(void* newElement)
 		m_pNodeTail = pNewNode;
 	m_pNodeHead = pNewNode;
 	return (POSITION) pNewNode;
+
 }
+
+
 
 POSITION CPtrList::AddTail(void* newElement)
 {
+
 	ASSERT_VALID(this);
 
 	CNode* pNewNode = NewNode(m_pNodeTail, NULL);
@@ -153,7 +158,10 @@ POSITION CPtrList::AddTail(void* newElement)
 		m_pNodeHead = pNewNode;
 	m_pNodeTail = pNewNode;
 	return (POSITION) pNewNode;
+
 }
+
+
 
 void CPtrList::AddHead(CPtrList* pNewList)
 {
@@ -220,6 +228,7 @@ void* CPtrList::RemoveTail()
 
 POSITION CPtrList::InsertBefore(POSITION position, void* newElement)
 {
+
 	ASSERT_VALID(this);
 
 	if (position == NULL)
@@ -242,10 +251,14 @@ POSITION CPtrList::InsertBefore(POSITION position, void* newElement)
 	}
 	pOldNode->pPrev = pNewNode;
 	return (POSITION) pNewNode;
+
 }
+
+
 
 POSITION CPtrList::InsertAfter(POSITION position, void* newElement)
 {
+
 	ASSERT_VALID(this);
 
 	if (position == NULL)
@@ -269,7 +282,10 @@ POSITION CPtrList::InsertAfter(POSITION position, void* newElement)
 	}
 	pOldNode->pNext = pNewNode;
 	return (POSITION) pNewNode;
+
 }
+
+
 
 void CPtrList::RemoveAt(POSITION position)
 {
@@ -307,9 +323,8 @@ void CPtrList::RemoveAt(POSITION position)
 POSITION CPtrList::FindIndex(int nIndex) const
 {
 	ASSERT_VALID(this);
-	ASSERT(nIndex >= 0);
 
-	if (nIndex >= m_nCount)
+	if (nIndex >= m_nCount || nIndex < 0)
 		return NULL;  // went too far
 
 	CNode* pNode = m_pNodeHead;

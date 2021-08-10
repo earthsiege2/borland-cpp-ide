@@ -17,41 +17,13 @@
 #############################################################################
 
 #############################################################################
-# In order to build the obj list for 16 bit platforms, a definition of      #
-# MODEL is required.                                                        #
-#############################################################################
-!if ($(OS) == DOS || $(OS) == WIN16) && !$d(MODEL)
-!    error MODEL is required
-!endif
-
-#############################################################################
 # Build the object module lists                                             #
 #############################################################################
 NOEHOBJS =       \
     setnewnx.obj \
     noxx.obj
 
-!if $(OS) != WIN32
-NOEHOBJS =       \
-    $(NOEHOBJS)  \
-    setjmpnx.obj
-!endif
-
-!if $(OS) == WIN16
-!   if $d(DLL)
-        MISC = win16dll
-!   else
-        MISC = noehw$(MODEL).lib
-!   endif
-!endif
-
-!if $(OS) == WIN32
-    MISC = noeh32.lib
-!endif
-
-!if $(OS) == DOS && $(MODEL) != t
-    MISC = noeh$(MODEL).lib
-!endif
+MISC = noeh32.lib
 
 #############################################################################
 # Configure the environment appropriately.                                  #
@@ -61,42 +33,6 @@ NOEHOBJS =       \
 #############################################################################
 # MISC explicit rules.                                                      #
 #############################################################################
-win16dll : $(LIBDIR)\dll.rsp $(LIBDIR)\import.rsp $(OBJDIR)\version.res
-    echo $(OBJDIR)\\dummy.obj >> dll.rsp
-    $(TLIB) $(IMPLIBNAME) @import.rsp,temp.lst
-    copy &&|
-    $(DEFDIR)\$(DLLDEF), $(OBJDIR)\version
-|   dll1.rsp
-    $(LINK) /c /C @dll.rsp,$(DLLNAME),,$(IMPORT) $(IMPLIBNAME), @dll1.rsp
-    implib $(LIBNAME).lib $(DLLNAME).dll
-    $(LINK) @dll.rsp,$(DLLNAME),,$(IMPORT) $(IMPLIBNAME), @dll1.rsp
-#    fastlib $(LIBNAME).lib $(LIBNAME).fst
-#    $(TLIB) $(IMPLIBNAME)-+$(LIBNAME).fst
-    $(TLIB) $(IMPLIBNAME)-+$(LIBNAME).lib
-    $(PUBTOOL) $(EXTDIR)\$(PUBNAME) $(IMPLIBNAME).lib -o
-    del $(LIBNAME).lib
-    del $(IMPLIBNAME).bak
-#    del $(LIBNAME).fst
-    del temp.lst
-    del dll1.rsp
-
-noeh$(MODEL).lib : $(NOEHOBJS)
-    makersp "-+%s &\n" &&|
-            $?
-|   >> $(LIBDIR)\noeh.rsp
-    $(TLIB) $(LIBDIR)\$& @$(LIBDIR)\noeh.rsp, $(LIBDIR)\temp.lst
-    if exist $(LIBDIR)\$&.bak del $(LIBDIR)\$&.bak
-    del $(LIBDIR)\temp.lst
-    del $(LIBDIR)\noeh.rsp
-
-noehw$(MODEL).lib : $(NOEHOBJS)
-    makersp "-+%s &\n" &&|
-            $?
-|   >> $(LIBDIR)\noeh.rsp
-    $(TLIB) $(LIBDIR)\$& @$(LIBDIR)\noeh.rsp, $(LIBDIR)\temp.lst
-    if exist $(LIBDIR)\$&.bak del $(LIBDIR)\$&.bak
-    del $(LIBDIR)\temp.lst
-    del $(LIBDIR)\noeh.rsp
 
 noeh32.lib : $(NOEHOBJS)
     makersp "-+%s &\n" &&|

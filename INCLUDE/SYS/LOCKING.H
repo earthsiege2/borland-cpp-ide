@@ -5,13 +5,14 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1990, 1997 by Borland International
+ *      Copyright (c) 1990, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.0  $ */
 
 #if !defined(__LOCKING_H)
 #define __LOCKING_H

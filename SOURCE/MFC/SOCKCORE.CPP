@@ -1,5 +1,6 @@
+
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -25,223 +26,15 @@ static char THIS_FILE[] = __FILE__;
 #define _afxSockThreadState AfxGetModuleThreadState()
 #define _AFX_SOCK_THREAD_STATE AFX_MODULE_THREAD_STATE
 
-#ifdef _AFXDLL
+#pragma comment(lib, "wsock32.lib")
 
-inline HINSTANCE AfxLoadSock(FARPROC* proc, LPCSTR lpsz)
-#ifndef _MAC
-	{ return AfxLoadDll(_afxSockState->m_hInstSOCK, "WSOCK32.DLL", proc, lpsz); }
-#elif defined(_DEBUG)
-	{ return AfxLoadDll(_afxSockState->m_hInstSOCK, "DebugMicrosoftSocketsLib", proc, lpsz); }
-#else
-	{ return AfxLoadDll(_afxSockState->m_hInstSOCK, "MicrosoftSocketsLib", proc, lpsz); }
-#endif
-
-#define SOCKLOAD(x) \
-	AfxLoadSock((FARPROC*)_afxSOCK.pfn##x, #x);
-
-SOCKET PASCAL AfxThunkaccept(SOCKET s, struct sockaddr FAR *addr, int FAR *addrlen)
-{
-	SOCKLOAD(accept);
-	return _afxSOCK.pfnaccept[1](s, addr, addrlen);
-}
-
-u_short PASCAL AfxThunkhtons(u_short hostshort)
-{
-	SOCKLOAD(htons);
-	return _afxSOCK.pfnhtons[1](hostshort);
-}
-
-unsigned long PASCAL AfxThunkinet_addr(const char FAR * cp)
-{
-	SOCKLOAD(inet_addr);
-	return _afxSOCK.pfninet_addr[1](cp);
-}
-
-int PASCAL AfxThunkclosesocket(SOCKET s)
-{
-	SOCKLOAD(closesocket);
-	return _afxSOCK.pfnclosesocket[1](s);
-}
-
-int PASCAL AfxThunkgetsockname(SOCKET s, struct sockaddr FAR *name, int FAR * namelen)
-{
-	SOCKLOAD(getsockname);
-	return _afxSOCK.pfngetsockname[1](s, name, namelen);
-}
-
-int PASCAL AfxThunkgetpeername(SOCKET s, struct sockaddr FAR *name, int FAR * namelen)
-{
-	SOCKLOAD(getpeername);
-	return _afxSOCK.pfngetpeername[1](s, name, namelen);
-}
-
-u_short PASCAL AfxThunkntohs(u_short netshort)
-{
-	SOCKLOAD(ntohs);
-	return _afxSOCK.pfnntohs[1](netshort);
-}
-
-char* PASCAL AfxThunkinet_ntoa(struct in_addr in)
-{
-	SOCKLOAD(inet_ntoa);
-	return _afxSOCK.pfninet_ntoa[1](in);
-}
-
-int PASCAL AfxThunkWSAGetLastError(void)
-{
-	SOCKLOAD(WSAGetLastError);
-	return _afxSOCK.pfnWSAGetLastError[1]();
-}
-
-void PASCAL AfxThunkWSASetLastError(int iError)
-{
-	SOCKLOAD(WSASetLastError);
-	_afxSOCK.pfnWSASetLastError[1](iError);
-}
-
-int PASCAL AfxThunkWSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData)
-{
-	SOCKLOAD(WSAStartup);
-	return _afxSOCK.pfnWSAStartup[1](wVersionRequired, lpWSAData);
-}
-
-int PASCAL AfxThunkWSACleanup(void)
-{
-	SOCKLOAD(WSACleanup);
-	return _afxSOCK.pfnWSACleanup[1]();
-}
-
-u_long PASCAL AfxThunkhtonl(u_long hostlong)
-{
-	SOCKLOAD(htonl);
-	return _afxSOCK.pfnhtonl[1](hostlong);
-}
-
-SOCKET PASCAL AfxThunksocket(int af, int type, int protocol)
-{
-	SOCKLOAD(socket);
-	return _afxSOCK.pfnsocket[1](af, type, protocol);
-}
-
-struct hostent* PASCAL AfxThunkgethostbyname(const char FAR * name)
-{
-	SOCKLOAD(gethostbyname);
-	return _afxSOCK.pfngethostbyname[1](name);
-}
-
-int PASCAL AfxThunkrecv(SOCKET s, char FAR * buf, int len, int flags)
-{
-	SOCKLOAD(recv);
-	return _afxSOCK.pfnrecv[1](s, buf, len, flags);
-}
-
-int PASCAL AfxThunksend(SOCKET s, const char FAR * buf, int len, int flags)
-{
-	SOCKLOAD(send);
-	return _afxSOCK.pfnsend[1](s, buf, len, flags);
-}
-
-int PASCAL AfxThunkWSAAsyncSelect(SOCKET s, HWND hWnd, u_int wMsg, long lEvent)
-{
-	SOCKLOAD(WSAAsyncSelect);
-	return _afxSOCK.pfnWSAAsyncSelect[1](s, hWnd, wMsg, lEvent);
-}
-
-int PASCAL AfxThunkrecvfrom(SOCKET s, char FAR * buf, int len, int flags, struct sockaddr FAR *from, int FAR * fromlen)
-{
-	SOCKLOAD(recvfrom);
-	return _afxSOCK.pfnrecvfrom[1](s, buf, len, flags, from, fromlen);
-}
-
-int PASCAL AfxThunksendto(SOCKET s, const char FAR * buf, int len, int flags, const struct sockaddr FAR *to, int tolen)
-{
-	SOCKLOAD(sendto);
-	return _afxSOCK.pfnsendto[1](s, buf, len, flags, to, tolen);
-}
-
-int PASCAL AfxThunkconnect(SOCKET s, const struct sockaddr FAR *name, int namelen)
-{
-	SOCKLOAD(connect);
-	return _afxSOCK.pfnconnect[1](s, name, namelen);
-}
-
-int PASCAL AfxThunkbind(SOCKET s, const struct sockaddr FAR *addr, int namelen)
-{
-	SOCKLOAD(bind);
-	return _afxSOCK.pfnbind[1](s, addr, namelen);
-}
-
-int PASCAL AfxThunksetsockopt(SOCKET s, int level, int optname, const char FAR * optval, int optlen)
-{
-	SOCKLOAD(setsockopt);
-	return _afxSOCK.pfnsetsockopt[1](s, level, optname, optval, optlen);
-}
-
-int PASCAL AfxThunkgetsockopt(SOCKET s, int level, int optname, char FAR * optval, int FAR *optlen)
-{
-	SOCKLOAD(getsockopt);
-	return _afxSOCK.pfngetsockopt[1](s, level, optname, optval, optlen);
-}
-
-int PASCAL AfxThunkioctlsocket(SOCKET s, long cmd, u_long FAR *argp)
-{
-	SOCKLOAD(ioctlsocket);
-	return _afxSOCK.pfnioctlsocket[1](s, cmd, argp);
-}
-
-int PASCAL AfxThunklisten(SOCKET s, int backlog)
-{
-	SOCKLOAD(listen);
-	return _afxSOCK.pfnlisten[1](s, backlog);
-}
-
-int PASCAL AfxThunkshutdown(SOCKET s, int how)
-{
-	SOCKLOAD(shutdown);
-	return _afxSOCK.pfnshutdown[1](s, how);
-}
-
-AFX_DATADEF AFX_SOCK_CALL _afxSOCK =
-{
-	{ AfxThunkaccept, },
-	{ AfxThunkhtons, },
-	{ AfxThunkinet_addr, },
-	{ AfxThunkclosesocket, },
-	{ AfxThunkgetsockname, },
-	{ AfxThunkgetpeername, },
-	{ AfxThunkntohs, },
-	{ AfxThunkinet_ntoa, },
-	{ AfxThunkWSAGetLastError, },
-	{ AfxThunkWSASetLastError, },
-	{ AfxThunkWSAStartup, },
-	{ AfxThunkWSACleanup, },
-	{ AfxThunkhtonl, },
-	{ AfxThunksocket, },
-	{ AfxThunkgethostbyname, },
-	{ AfxThunkrecv, },
-	{ AfxThunksend, },
-	{ AfxThunkWSAAsyncSelect, },
-	{ AfxThunkrecvfrom, },
-	{ AfxThunksendto, },
-	{ AfxThunkconnect, },
-	{ AfxThunkbind, },
-	{ AfxThunksetsockopt, },
-	{ AfxThunkgetsockopt, },
-	{ AfxThunkioctlsocket, },
-	{ AfxThunklisten, },
-	{ AfxThunkshutdown, },
-};
-
-#endif
+/////////////////////////////////////////////////////////////////////////////
+// socket state cleanup
 
 _AFX_SOCK_STATE::~_AFX_SOCK_STATE()
 {
-	if (m_hInstSOCK != NULL)
-	{
-		if (m_pfnSockTerm != NULL)
-			WSACleanup();
-		FreeLibrary(m_hInstSOCK);       // handle of WSOCK32.DLL
-	}
+	if (m_pfnSockTerm != NULL)
+		m_pfnSockTerm();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -249,7 +42,14 @@ _AFX_SOCK_STATE::~_AFX_SOCK_STATE()
 
 void AFXAPI AfxSocketTerm()
 {
-	// Note: a no-op now: WSACleanup is done above before freeing the WSOCK32.DLL
+	_AFX_SOCK_STATE* pState = _afxSockState.GetData();
+	if (pState->m_hInstSOCK != NULL)
+	{
+		if (pState->m_pfnSockTerm != NULL)
+			WSACleanup();
+		FreeLibrary(pState->m_hInstSOCK);// handle of WSOCK32.DLL
+		pState->m_hInstSOCK = NULL;
+	}
 }
 
 BOOL AFXAPI AfxSocketInit(WSADATA* lpwsaData)
@@ -257,6 +57,7 @@ BOOL AFXAPI AfxSocketInit(WSADATA* lpwsaData)
 	_AFX_SOCK_STATE* pState = _afxSockState.GetData();
 	if (pState->m_pfnSockTerm == NULL)
 	{
+		// initialize Winsock library
 		WSADATA wsaData;
 		if (lpwsaData == NULL)
 			lpwsaData = &wsaData;
@@ -271,7 +72,20 @@ BOOL AFXAPI AfxSocketInit(WSADATA* lpwsaData)
 			WSACleanup();
 			return FALSE;
 		}
+
+		// setup for termination of sockets
 		pState->m_pfnSockTerm = &AfxSocketTerm;
+
+#ifndef _AFXDLL
+		// setup maps and lists specific to socket state
+		_AFX_SOCK_THREAD_STATE* pState = _afxSockThreadState;
+		if (pState->m_pmapSocketHandle == NULL)
+			pState->m_pmapSocketHandle = new CMapPtrToPtr;
+		if (pState->m_pmapDeadSockets == NULL)
+			pState->m_pmapDeadSockets = new CMapPtrToPtr;
+		if (pState->m_plistSocketNotifications == NULL)
+			pState->m_plistSocketNotifications = new CPtrList;
+#endif
 	}
 
 	return TRUE;
@@ -369,8 +183,10 @@ BOOL CAsyncSocket::Accept(CAsyncSocket& rConnectedSocket,
 
 	if (hTemp == INVALID_SOCKET)
 	{
+		DWORD dwProblem = GetLastError();
 		CAsyncSocket::DetachHandle(rConnectedSocket.m_hSocket, FALSE);
 		rConnectedSocket.m_hSocket = INVALID_SOCKET;
+		SetLastError(dwProblem);
 	}
 	else if (CAsyncSocket::FromHandle(INVALID_SOCKET) != NULL)
 	{
@@ -389,7 +205,7 @@ BOOL CAsyncSocket::Bind(UINT nSocketPort, LPCTSTR lpszSocketAddress)
 	SOCKADDR_IN sockAddr;
 	memset(&sockAddr,0,sizeof(sockAddr));
 
-	LPSTR lpszAscii = (LPSTR)T2A(lpszSocketAddress);
+	LPSTR lpszAscii = T2A((LPTSTR)lpszSocketAddress);
 	sockAddr.sin_family = AF_INET;
 
 	if (lpszAscii == NULL)
@@ -429,7 +245,7 @@ BOOL CAsyncSocket::Connect(LPCTSTR lpszHostAddress, UINT nHostPort)
 	SOCKADDR_IN sockAddr;
 	memset(&sockAddr,0,sizeof(sockAddr));
 
-	LPSTR lpszAscii = (LPSTR)T2A(lpszHostAddress);
+	LPSTR lpszAscii = T2A((LPTSTR)lpszHostAddress);
 	sockAddr.sin_family = AF_INET;
 	sockAddr.sin_addr.s_addr = inet_addr(lpszAscii);
 
@@ -485,7 +301,7 @@ int CAsyncSocket::SendTo(const void* lpBuf, int nBufLen, UINT nHostPort, LPCTSTR
 
 	memset(&sockAddr,0,sizeof(sockAddr));
 
-	LPSTR lpszAscii = (LPSTR)T2A(lpszHostAddress);
+	LPSTR lpszAscii = T2A((LPTSTR)lpszHostAddress);
 	sockAddr.sin_family = AF_INET;
 
 	if (lpszAscii == NULL)
@@ -502,7 +318,7 @@ int CAsyncSocket::SendTo(const void* lpBuf, int nBufLen, UINT nHostPort, LPCTSTR
 			else
 			{
 				WSASetLastError(WSAEINVAL);
-				return FALSE;
+				return SOCKET_ERROR;
 			}
 		}
 	}
@@ -561,17 +377,20 @@ CAsyncSocket::~CAsyncSocket()
 
 CAsyncSocket* PASCAL CAsyncSocket::LookupHandle(SOCKET hSocket, BOOL bDead)
 {
-	CAsyncSocket* pSocket = NULL;
-
+	CAsyncSocket* pSocket;
 	_AFX_SOCK_THREAD_STATE* pState = _afxSockThreadState;
 	if (!bDead)
 	{
-		if (pState->m_mapSocketHandle.Lookup((void*)hSocket, (void*&)pSocket))
+		pSocket = (CAsyncSocket*)
+			pState->m_pmapSocketHandle->GetValueAt((void*)hSocket);
+		if (pSocket != NULL)
 			return pSocket;
 	}
 	else
 	{
-		if (pState->m_mapDeadSockets.Lookup((void*)hSocket, (void*&)pSocket))
+		pSocket = (CAsyncSocket*)
+			pState->m_pmapDeadSockets->GetValueAt((void*)hSocket);
+		if (pSocket != NULL)
 			return pSocket;
 	}
 	return NULL;
@@ -586,9 +405,9 @@ void PASCAL CAsyncSocket::AttachHandle(
 	if (!bDead)
 	{
 		ASSERT(CAsyncSocket::LookupHandle(hSocket, bDead) == NULL);
-		if (pState->m_mapSocketHandle.IsEmpty())
+		if (pState->m_pmapSocketHandle->IsEmpty())
 		{
-			ASSERT(pState->m_mapDeadSockets.IsEmpty());
+			ASSERT(pState->m_pmapDeadSockets->IsEmpty());
 			ASSERT(pState->m_hSocketWindow == NULL);
 
 			CSocketWnd* pWnd = new CSocketWnd;
@@ -604,16 +423,16 @@ void PASCAL CAsyncSocket::AttachHandle(
 			ASSERT(CWnd::FromHandlePermanent(pWnd->m_hWnd) == pWnd);
 			pState->m_hSocketWindow = pWnd->m_hWnd;
 		}
-		pState->m_mapSocketHandle.SetAt((void*)hSocket, pSocket);
+		pState->m_pmapSocketHandle->SetAt((void*)hSocket, pSocket);
 	}
 	else
 	{
 		int nCount;
-		if (pState->m_mapDeadSockets.Lookup((void*)hSocket, (void*&)nCount))
+		if (pState->m_pmapDeadSockets->Lookup((void*)hSocket, (void*&)nCount))
 			nCount++;
 		else
 			nCount = 1;
-		pState->m_mapDeadSockets.SetAt((void*)hSocket, (void*)nCount);
+		pState->m_pmapDeadSockets->SetAt((void*)hSocket, (void*)nCount);
 	}
 	AfxEnableMemoryTracking(bEnable);
 }
@@ -623,11 +442,10 @@ void PASCAL CAsyncSocket::DetachHandle(SOCKET hSocket, BOOL bDead)
 	ASSERT(CAsyncSocket::LookupHandle(hSocket, bDead) != NULL);
 
 	_AFX_SOCK_THREAD_STATE* pState = _afxSockThreadState;
-
 	if (!bDead)
 	{
-		pState->m_mapSocketHandle.RemoveKey((void*)hSocket);
-		if (pState->m_mapSocketHandle.IsEmpty())
+		pState->m_pmapSocketHandle->RemoveKey((void*)hSocket);
+		if (pState->m_pmapSocketHandle->IsEmpty())
 		{
 			ASSERT(pState->m_hSocketWindow != NULL);
 			CWnd* pWnd =
@@ -639,22 +457,22 @@ void PASCAL CAsyncSocket::DetachHandle(SOCKET hSocket, BOOL bDead)
 
 			pState->m_hSocketWindow = NULL;
 
-			pState->m_mapDeadSockets.RemoveAll();
+			pState->m_pmapDeadSockets->RemoveAll();
 
-			while (!pState->m_listSocketNotifications.IsEmpty())
-				delete pState->m_listSocketNotifications.RemoveHead();
+			while (!pState->m_plistSocketNotifications->IsEmpty())
+				delete pState->m_plistSocketNotifications->RemoveHead();
 		}
 	}
 	else
 	{
 		int nCount;
-		if (pState->m_mapDeadSockets.Lookup((void*)hSocket, (void*&)nCount))
+		if (pState->m_pmapDeadSockets->Lookup((void*)hSocket, (void*&)nCount))
 		{
 			nCount--;
 			if (nCount == 0)
-				pState->m_mapDeadSockets.RemoveKey((void*)hSocket);
+				pState->m_pmapDeadSockets->RemoveKey((void*)hSocket);
 			else
-				pState->m_mapDeadSockets.SetAt((void*)hSocket, (void*)nCount);
+				pState->m_pmapDeadSockets->SetAt((void*)hSocket, (void*)nCount);
 		}
 	}
 }
@@ -701,7 +519,13 @@ void PASCAL CAsyncSocket::DoCallBack(WPARAM wParam, LPARAM lParam)
 	switch (WSAGETSELECTEVENT(lParam))
 	{
 	case FD_READ:
-		pSocket->OnReceive(nErrorCode);
+		{
+			DWORD nBytes;
+			if (!pSocket->IOCtl(FIONREAD, &nBytes))
+				nErrorCode = WSAGetLastError();
+			if (nBytes != 0 || nErrorCode != 0)
+				pSocket->OnReceive(nErrorCode);
+		}
 		break;
 	case FD_WRITE:
 		pSocket->OnSend(nErrorCode);
@@ -961,7 +785,7 @@ int CSocket::SendToHelper(const void* lpBuf, int nBufLen, const SOCKADDR* lpSock
 	if (m_pbBlocking != NULL)
 	{
 		WSASetLastError(WSAEINPROGRESS);
-		return  FALSE;
+		return SOCKET_ERROR;
 	}
 	int nResult;
 	while ((nResult = CAsyncSocket::SendToHelper(lpBuf, nBufLen, lpSockAddr, nSockAddrLen, nFlags)) == SOCKET_ERROR)
@@ -981,15 +805,15 @@ int PASCAL CSocket::ProcessAuxQueue()
 {
 	_AFX_SOCK_THREAD_STATE* pState = _afxSockThreadState;
 
-	if (pState->m_listSocketNotifications.IsEmpty())
+	if (pState->m_plistSocketNotifications->IsEmpty())
 		return 0;
 
 	int nCount = 0;
-	while(!pState->m_listSocketNotifications.IsEmpty())
+	while(!pState->m_plistSocketNotifications->IsEmpty())
 	{
 		nCount++;
 
-		MSG* pMsg = (MSG*)pState->m_listSocketNotifications.RemoveHead();
+		MSG* pMsg = (MSG*)pState->m_plistSocketNotifications->RemoveHead();
 		ASSERT(pMsg != NULL);
 		if (pMsg->message == WM_SOCKET_NOTIFY)
 		{
@@ -1013,7 +837,7 @@ void PASCAL CSocket::AuxQueueAdd(UINT message, WPARAM wParam, LPARAM lParam)
 	pMsg->message = message;
 	pMsg->wParam = wParam;
 	pMsg->lParam = lParam;
-	pState->m_listSocketNotifications.AddTail(pMsg);
+	pState->m_plistSocketNotifications->AddTail(pMsg);
 }
 
 BOOL CSocket::PumpMessages(UINT uStopFlag)
@@ -1031,10 +855,12 @@ BOOL CSocket::PumpMessages(UINT uStopFlag)
 
 	// This is not a timeout in the WinSock sense, but more
 	// like a WM_KICKIDLE to keep message pumping alive
-	UINT nTimerID = ::SetTimer(NULL, 0, m_nTimeOut, NULL);
+	UINT nTimerID = ::SetTimer(pState->m_hSocketWindow, 1, m_nTimeOut, NULL);
 
 	if (nTimerID == 0)
 		AfxThrowResourceException();
+
+	BOOL bPeek = TRUE;
 
 	while (bBlocking)
 	{
@@ -1059,37 +885,44 @@ BOOL CSocket::PumpMessages(UINT uStopFlag)
 				}
 				if (msg.wParam != 0 || msg.lParam != 0)
 					CSocket::AuxQueueAdd(msg.message, msg.wParam, msg.lParam);
+
+				bPeek = TRUE;
 			}
-			else if (::PeekMessage(&msg, NULL, WM_TIMER, WM_TIMER, PM_NOREMOVE))
+			else if (::PeekMessage(&msg, pState->m_hSocketWindow,
+						WM_TIMER, WM_TIMER, PM_REMOVE))
 			{
-				if (msg.wParam == nTimerID)
-				{
-					::PeekMessage(&msg, NULL, WM_TIMER, WM_TIMER, PM_REMOVE);
-					break;
-				}
+			break;
 			}
 
-			if (::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE) &&
-				OnMessagePending())
+			if (bPeek && ::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
 			{
-				// allow user-interface updates
-				pThread->OnIdle(-1);
+				if (OnMessagePending())
+				{
+					// allow user-interface updates
+					pThread->OnIdle(-1);
+				}
+				else
+				{
+					bPeek = FALSE;
+				}
 			}
 			else
 			{
 				// no work to do -- allow CPU to sleep
 				WaitMessage();
+				bPeek = TRUE;
 			}
 		}
 		CATCH_ALL(e)
 		{
 			TRACE0("Error: caught exception in PumpMessage - continuing.\n");
 			DELETE_EXCEPTION(e);
+			bPeek = TRUE;
 		}
 		END_CATCH_ALL
 	}
 
-	::KillTimer(NULL, nTimerID);
+	::KillTimer(pState->m_hSocketWindow, nTimerID);
 
 	if (!bBlocking)
 	{
@@ -1098,7 +931,7 @@ BOOL CSocket::PumpMessages(UINT uStopFlag)
 	}
 	m_pbBlocking = NULL;
 
-	::PostMessage(pState->m_hSocketWindow,WM_SOCKET_NOTIFY,0,0);
+	::PostMessage(pState->m_hSocketWindow, WM_SOCKET_NOTIFY, 0, 0);
 
 	return TRUE;
 }
@@ -1288,18 +1121,15 @@ CSocketWnd::CSocketWnd()
 
 LRESULT CSocketWnd::OnSocketNotify(WPARAM wParam, LPARAM lParam)
 {
+	CSocket::AuxQueueAdd(WM_SOCKET_NOTIFY, wParam, lParam);
 	CSocket::ProcessAuxQueue();
-	CAsyncSocket::DoCallBack(wParam, lParam);
 	return 0L;
 }
 
-LRESULT CSocketWnd::OnSocketDead(WPARAM wParam, LPARAM)
+LRESULT CSocketWnd::OnSocketDead(WPARAM wParam, LPARAM lParam)
 {
+	CSocket::AuxQueueAdd(WM_SOCKET_DEAD, wParam, lParam);
 	CSocket::ProcessAuxQueue();
-
-	ASSERT(CAsyncSocket::LookupHandle((SOCKET)wParam, TRUE) != NULL);
-	CAsyncSocket::DetachHandle((SOCKET)wParam, TRUE);
-
 	return 0L;
 }
 

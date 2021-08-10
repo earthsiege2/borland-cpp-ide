@@ -1,0 +1,18 @@
+USEUNIT("animctrl.cpp");
+USEUNIT("toolpage.cpp");
+USEUNIT("toolbar2.cpp");
+USEUNIT("toolbar1.cpp");
+USEUNIT("spinctrl.cpp");
+USEUNIT("slidctrl.cpp");
+USEUNIT("propsht.cpp");
+USEUNIT("progctrl.cpp");
+USEUNIT("notifwdw.cpp");
+USEUNIT("mtreectl.cpp");
+USEUNIT("mlistctl.cpp");
+USEUNIT("listcpg.cpp");
+USEUNIT("ctrldemo.cpp");
+USEUNIT("treecpg.cpp");
+USEUNIT("stdafx.cpp");
+USERC("cmnctrls.rc");
+
+#define WinMain

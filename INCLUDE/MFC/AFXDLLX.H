@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -31,7 +31,7 @@
 #endif
 
 // The following symbol used to force inclusion of this module for _AFXEXT
-#if defined(_X86_) || defined(_MAC)
+#if defined(_X86_)
 extern "C" { int _afxForceEXTDLL; }
 #else
 extern "C" { int __afxForceEXTDLL; }

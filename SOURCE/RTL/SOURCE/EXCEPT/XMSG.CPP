@@ -1,42 +1,50 @@
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1993, 1997 by Borland International
+ *      Copyright (c) 1993, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.2  $        */
 
+/* $Revision:   9.3  $ */
+
+#define _USE_OLD_XMSG
+#include <string>
 #include <except.h>
-#include <cstring.h>
 
-_RTLENTRY xmsg::xmsg(const string _FAR & msg)
+_RTLENTRY xmsg::xmsg(const std::string &s)
 {
-    str = new string(msg);
-};
-
-_RTLENTRY xmsg::xmsg(const xmsg _FAR & msg)
-{
-    str = new string(msg.why());
+    str = new std::string(s);
 }
 
-_RTLENTRY xmsg::~xmsg()
+_RTLENTRY xmsg::xmsg(const xmsg &c)
+{
+    str = new std::string(c.why());
+}
+
+_RTLENTRY xmsg::~xmsg() throw()
 {
     delete str;
 }
+
+xmsg & _RTLENTRY xmsg::operator=(const xmsg &c)
+{
+    if (this != &c) {
+        std::exception::operator=(c);
+        delete str;
+        str = new std::string(c.why());
+    }
+    
+    return *this;
+}
+
+const char * xmsg::what() const throw()
+{
+    return str->c_str();
+}
+
 
 void _RTLENTRY xmsg::raise() throw( xmsg )
 {
     throw *this;
 }
-
-xmsg _FAR & _RTLENTRY xmsg::operator=(const xmsg _FAR & src)
-{
-   if(this!=&src)
-   {
-      delete str;
-      str = new string(src.why());
-   }
-   return(*this);
-}
-

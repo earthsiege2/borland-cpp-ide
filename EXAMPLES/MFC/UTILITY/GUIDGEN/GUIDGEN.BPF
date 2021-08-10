@@ -1,0 +1,6 @@
+USEUNIT("guidgdlg.cpp");
+USEUNIT("guidgen.cpp");
+USEUNIT("stdafx.cpp");
+USERC("guidgen.rc");
+
+#define WinMain

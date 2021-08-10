@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -79,9 +79,8 @@ BOOL CView::DoPrintPreview(UINT nIDResource, CView* pPrintView,
 	ASSERT(pPreviewViewClass->IsDerivedFrom(RUNTIME_CLASS(CPreviewView)));
 	ASSERT(pState != NULL);
 
-	CFrameWnd* pParent = (CFrameWnd*)AfxGetThread()->m_pMainWnd;
+	CFrameWnd* pParent = STATIC_DOWNCAST(CFrameWnd, AfxGetMainWnd());
 	ASSERT_VALID(pParent);
-	ASSERT_KINDOF(CFrameWnd, pParent);
 
 	CCreateContext context;
 	context.m_pCurrentFrame = pParent;
@@ -99,38 +98,6 @@ BOOL CView::DoPrintPreview(UINT nIDResource, CView* pPrintView,
 	pView->m_pPreviewState = pState;        // save pointer
 
 	pParent->OnSetPreviewMode(TRUE, pState);    // Take over Frame Window
-
-#ifdef _MAC
-	if (nIDResource == AFX_IDD_PREVIEW_TOOLBAR)
-	{
-		HINSTANCE hInst = AfxFindResourceHandle(
-			MAKEINTRESOURCE(AFX_IDD_PREVIEW_TOOLBAR), RT_DIALOG);
-		HRSRC hResource = FindResource(hInst,
-			MAKEINTRESOURCE(AFX_IDD_PREVIEW_TOOLBAR), RT_DIALOG);
-
-		HGLOBAL hdt = NULL;
-		if (hResource != NULL)
-			hdt = LoadResource(hInst, hResource);
-
-		DLGTEMPLATE* pdt = NULL;
-		if (hdt != NULL)
-			pdt = (DLGTEMPLATE*)LockResource(hdt);
-
-		if (pdt != NULL)
-		{
-			CRect rectParent;
-			pParent->GetClientRect(&rectParent);
-
-			int cxToolbar = MulDiv(LOWORD(GetDialogBaseUnits()), pdt->cx, 4);
-
-			if (cxToolbar > rectParent.Width())
-				nIDResource = AFX_IDD_PREVIEW_SHORTTOOLBAR;
-
-			UnlockResource(hdt);
-			FreeResource(hdt);
-		}
-	}
-#endif
 
 	// Create the toolbar from the dialog resource
 	pView->m_pToolBar = new CDialogBar;
@@ -245,6 +212,10 @@ CPreviewView::CPreviewView()
 	m_nMapMode = MM_TEXT;
 }
 
+CPreviewView::PAGE_INFO::PAGE_INFO()
+{
+}
+
 CPreviewView::~CPreviewView()
 {
 	m_dcPrint.Detach();         // print DC is deleted by CPrintInfo destructor
@@ -275,43 +246,6 @@ int CPreviewView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	return retVal;
 }
-
-#ifdef _MAC
-void CPreviewView::CalcWindowRect(LPRECT lpClientRect)
-{
-	CView::CalcWindowRect(lpClientRect);
-
-	// The preview view is created with the WS_BORDER style, and when
-	// the view is repositioned, these borders will by default be placed
-	// outside the main monitor. If there are other monitors adjacent to
-	// the main monitor, the border shows up on those monitors, which looks
-	// sloppy. To prevent this we resize the window rect as necessary to
-	// keep the borders inside the MDI parent frame window's client area.
-
-	// Also note that we can't just get rid of the borders entirely because
-	// this looks bad on a PowerBook where the edges of the screen are
-	// white instead of black - if there aren't any borders, there's no
-	// dividing line between the edge of the preview view's scrollbars
-	// and the non-drawing areas of the screen.
-
-	CWnd* pParent = GetParent();
-	if (pParent->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
-	{
-		RECT rect;
-
-		pParent->GetClientRect(&rect);
-		if (lpClientRect->left < rect.left)
-			lpClientRect->left = rect.left;
-		if (lpClientRect->right > rect.right)
-			lpClientRect->right = rect.right;
-		if (lpClientRect->bottom > rect.bottom)
-			lpClientRect->bottom = rect.bottom;
-
-		// top not needed because it will be adjacent to the print
-		// preview toolbar
-	}
-}
-#endif
 
 BOOL CPreviewView::SetPrintView(CView* pPrintView)
 {
@@ -374,8 +308,15 @@ BOOL CPreviewView::SetPrintView(CView* pPrintView)
 
 	if (m_pPreviewInfo->GetMaxPage() < 0x8000 &&
 		m_pPreviewInfo->GetMaxPage() - m_pPreviewInfo->GetMinPage() <= 32767U)
-		SetScrollRange(SB_VERT, m_pPreviewInfo->GetMinPage(),
-				m_pPreviewInfo->GetMaxPage(), FALSE);
+	{
+		SCROLLINFO info;
+		info.fMask = SIF_PAGE|SIF_RANGE;
+		info.nMin = m_pPreviewInfo->GetMinPage();
+		info.nMax = m_pPreviewInfo->GetMaxPage();
+		info.nPage = 1;
+		if (!SetScrollInfo(SB_VERT, &info, FALSE))
+			SetScrollRange(SB_VERT, info.nMin, info.nMax, FALSE);
+	}
 	else
 		ShowScrollBar(SB_VERT, FALSE);      // if no range specified, or too
 											// large don't show
@@ -418,12 +359,6 @@ void CPreviewView::OnActivateView(BOOL bActivate, CView*, CView*)
 			m_pToolBar->GetDlgItem(AFX_ID_PREVIEW_PRINT)->SetFocus();
 		}
 	}
-
-#ifdef _MAC
-		// Make sure the preview frame's activation matches that of the frame
-		// window so that scroll bars are drawn with the correct visibility.
-		SendMessage(WM_NCACTIVATE, bActivate, 0);
-#endif
 }
 
 void CPreviewView::OnPreviewClose()
@@ -809,7 +744,6 @@ void CPreviewView::OnPrevPage()
 
 void CPreviewView::OnPreviewPrint()
 {
-	CView* pOrigView = m_pOrigView;
 	OnPreviewClose();               // force close of Preview
 
 	// cause print (can be overridden by catching the command)
@@ -892,10 +826,13 @@ void CPreviewView::DoZoom(UINT nPage, CPoint point)
 
 		if (bShowBar)
 		{
-			SetScrollRange(SB_VERT, m_pPreviewInfo->GetMinPage(),
-								m_pPreviewInfo->GetMaxPage(), FALSE);
-
-			SetScrollPos(SB_VERT, m_nCurrentPage, TRUE);
+			SCROLLINFO info;
+			info.fMask = SIF_PAGE|SIF_RANGE;
+			info.nMin = m_pPreviewInfo->GetMinPage();
+			info.nMax = m_pPreviewInfo->GetMaxPage();
+			info.nPage = 1;
+			if (!SetScrollInfo(SB_VERT, &info, FALSE))
+				SetScrollRange(SB_VERT, info.nMin, info.nMax, FALSE);
 		}
 
 		SetCurrentPage(m_nCurrentPage, TRUE);
@@ -956,18 +893,22 @@ void CPreviewView::OnDisplayPageNumber(UINT nPage, UINT nPagesDisplayed)
 	ASSERT_VALID(pParent);
 	ASSERT_KINDOF(CFrameWnd, pParent);
 
+	int nSubString = (nPagesDisplayed == 1) ? 0 : 1;
+
 	CString s;
-	if (AfxExtractSubString(s, m_pPreviewInfo->m_strPageDesc,
-												nPagesDisplayed - 1))
+	if (AfxExtractSubString(s, m_pPreviewInfo->m_strPageDesc, nSubString))
 	{
 		TCHAR szBuf[80];
-		wsprintf(szBuf, s, nPage, nEndPage);
+		if (nSubString == 0)
+			wsprintf(szBuf, s, nPage);
+		else
+			wsprintf(szBuf, s, nPage, nEndPage);
 		pParent->SendMessage(WM_SETMESSAGESTRING, 0, (LPARAM)(LPVOID)szBuf);
 	}
 	else
 	{
 		TRACE1("Malformed Page Description string. Could not get string %d.\n",
-			nPagesDisplayed);
+			nSubString);
 	}
 }
 

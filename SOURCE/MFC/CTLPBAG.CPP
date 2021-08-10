@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -85,12 +85,12 @@ STDMETHODIMP CBlobProperty::QueryInterface(REFIID riid, LPVOID* ppvObj)
 	return E_NOINTERFACE;
 }
 
-static const CLSID _clsidBlobProperty =
+AFX_STATIC_DATA const CLSID _afx_CLSID_BlobProperty =
 { 0xf6f07540, 0x42ec, 0x11ce, { 0x81, 0x35, 0x0, 0xaa, 0x0, 0x4b, 0xb8, 0x51 } };
 
 STDMETHODIMP CBlobProperty::GetClassID(LPCLSID pClsid)
 {
-	*pClsid = _clsidBlobProperty;
+	*pClsid = _afx_CLSID_BlobProperty;
 	return S_OK;
 }
 
@@ -233,18 +233,20 @@ BOOL CPropbagPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 	AfxVariantInit(&var);
 	V_VT(&var) = vtProp;
 
+	if (vtProp == VT_LPSTR)
+		V_VT(&var) = VT_BSTR;
+
 	if (m_bLoading)
 	{
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(pszPropName);
-		if (FAILED(m_pPropBag->Read((LPCWSTR)pBAfxConv, &var, m_pErrorLog)))
-#else    // __BORLANDC__
 		if (FAILED(m_pPropBag->Read(T2COLE(pszPropName), &var, m_pErrorLog)))
-#endif   // __BORLANDC__
 			return _AfxCopyPropValue(vtProp, pvProp, pvDefault);
 
 		switch (vtProp)
 		{
+		case VT_UI1:
+			*(BYTE*)pvProp = V_UI1(&var);
+			break;
+
 		case VT_I2:
 			*(short*)pvProp = V_I2(&var);
 			break;
@@ -257,13 +259,9 @@ BOOL CPropbagPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 			*(BOOL*)pvProp = (BOOL)V_BOOL(&var);
 			break;
 
+		case VT_LPSTR:
 		case VT_BSTR:
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-         OLE2CT(V_BSTR(&var));
-			*(CString*)pvProp = (LPCSTR)pBAfxConv;
-#else    // __BORLANDC__
 			*(CString*)pvProp = OLE2CT(V_BSTR(&var));
-#endif   // __BORLANDC__
 			break;
 
 		case VT_CY:
@@ -289,6 +287,10 @@ BOOL CPropbagPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 		{
 			switch (vtProp)
 			{
+			case VT_UI1:
+				V_UI1(&var) = *(BYTE*)pvProp;
+				break;
+
 			case VT_I2:
 				V_I2(&var) = *(short*)pvProp;
 				break;
@@ -301,6 +303,7 @@ BOOL CPropbagPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 				V_BOOL(&var) = (VARIANT_BOOL)*(BOOL*)pvProp;
 				break;
 
+			case VT_LPSTR:
 			case VT_BSTR:
 				V_BSTR(&var) = SysAllocString(T2COLE(*(CString*)pvProp));
 				break;
@@ -320,12 +323,7 @@ BOOL CPropbagPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 			default:
 				return FALSE;
 			}
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-         T2COLE(pszPropName);
-			bSuccess = SUCCEEDED(m_pPropBag->Write((LPCWSTR)pBAfxConv, &var));
-#else    // __BORLANDC__
 			bSuccess = SUCCEEDED(m_pPropBag->Write(T2COLE(pszPropName), &var));
-#endif   // __BORLANDC__
 		}
 	}
 
@@ -358,12 +356,7 @@ BOOL CPropbagPropExchange::ExchangeBlobProp(LPCTSTR pszPropName,
 		CBlobProperty* pBlobProp = new CBlobProperty;
 		V_UNKNOWN(&var) = pBlobProp;
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(pszPropName);
-		if (SUCCEEDED(m_pPropBag->Read((LPCWSTR)pBAfxConv, &var, m_pErrorLog)))
-#else    // __BORLANDC__
 		if (SUCCEEDED(m_pPropBag->Read(T2COLE(pszPropName), &var, m_pErrorLog)))
-#endif   // __BORLANDC__
 		{
 			*phBlob = pBlobProp->GetBlob();
 			bSuccess = TRUE;
@@ -380,12 +373,7 @@ BOOL CPropbagPropExchange::ExchangeBlobProp(LPCTSTR pszPropName,
 	{
 		CBlobProperty* pBlobProp = new CBlobProperty(*phBlob);
 		V_UNKNOWN(&var) = pBlobProp;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(pszPropName);
-		bSuccess = SUCCEEDED(m_pPropBag->Write((LPCWSTR)pBAfxConv, &var));
-#else    // __BORLANDC__
 		bSuccess = SUCCEEDED(m_pPropBag->Write(T2COLE(pszPropName), &var));
-#endif   // __BORLANDC__
 		pBlobProp->Release();
 	}
 	return bSuccess;
@@ -412,20 +400,11 @@ BOOL CPropbagPropExchange::ExchangeFontProp(LPCTSTR pszPropName,
 	{
 		LPFONT pFont = NULL;
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(pszPropName);
-		bSuccess =
-			SUCCEEDED(m_pPropBag->Read((LPCWSTR)pBAfxConv, &var,
-				m_pErrorLog)) &&
-			SUCCEEDED(V_UNKNOWN(&var)->QueryInterface(IID_IFont,
-				(LPVOID*)&pFont));
-#else    // __BORLANDC__
 		bSuccess =
 			SUCCEEDED(m_pPropBag->Read(T2COLE(pszPropName), &var,
 				m_pErrorLog)) &&
 			SUCCEEDED(V_UNKNOWN(&var)->QueryInterface(IID_IFont,
 				(LPVOID*)&pFont));
-#endif   // __BORLANDC__
 
 		if (bSuccess)
 		{
@@ -450,12 +429,7 @@ BOOL CPropbagPropExchange::ExchangeFontProp(LPCTSTR pszPropName,
 		else
 		{
 			V_UNKNOWN(&var) = font.m_pFont;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-         T2COLE(pszPropName);
-			bSuccess = SUCCEEDED(m_pPropBag->Write((LPCWSTR)pBAfxConv, &var));
-#else    // __BORLANDC__
 			bSuccess = SUCCEEDED(m_pPropBag->Write(T2COLE(pszPropName), &var));
-#endif   // __BORLANDC__
 		}
 	}
 
@@ -482,18 +456,10 @@ BOOL CPropbagPropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
 		RELEASE(*ppUnk);
 		*ppUnk = NULL;
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      T2COLE(pszPropName);
-		bSuccess =
-			SUCCEEDED(m_pPropBag->Read((LPCWSTR)pBAfxConv, &var,
-				m_pErrorLog)) &&
-			SUCCEEDED(V_UNKNOWN(&var)->QueryInterface(iid, (LPVOID*)ppUnk));
-#else    // __BORLANDC__
 		bSuccess =
 			SUCCEEDED(m_pPropBag->Read(T2COLE(pszPropName), &var,
 				m_pErrorLog)) &&
 			SUCCEEDED(V_UNKNOWN(&var)->QueryInterface(iid, (LPVOID*)ppUnk));
-#endif   // __BORLANDC__
 
 		if (!bSuccess)
 		{
@@ -521,12 +487,7 @@ BOOL CPropbagPropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
 		else
 		{
 			V_UNKNOWN(&var) = *ppUnk;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-         T2COLE(pszPropName);
-			bSuccess = SUCCEEDED(m_pPropBag->Write((LPCWSTR)pBAfxConv, &var));
-#else    // __BORLANDC__
 			bSuccess = SUCCEEDED(m_pPropBag->Write(T2COLE(pszPropName), &var));
-#endif   // __BORLANDC__
 		}
 	}
 
@@ -575,6 +536,9 @@ STDMETHODIMP COleControl::XPersistPropertyBag::InitNew()
 	// Properties have been initialized
 	pThis->m_bInitialized = TRUE;
 
+	// Uncache cached ambient properties
+	_afxAmbientCache->Cache(NULL);
+
 	return S_OK;
 }
 
@@ -598,11 +562,18 @@ STDMETHODIMP COleControl::XPersistPropertyBag::Load(LPPROPERTYBAG pPropBag,
 	}
 	END_CATCH_ALL
 
+	// Properties have probably changed
+	pThis->BoundPropertyChanged(DISPID_UNKNOWN);
+	pThis->InvalidateControl();
+
 	// Clear the modified flag.
 	pThis->m_bModified = FALSE;
 
 	// Properties have been initialized
 	pThis->m_bInitialized = TRUE;
+
+	// Uncache cached ambient properties
+	_afxAmbientCache->Cache(NULL);
 
 	return hr;
 }

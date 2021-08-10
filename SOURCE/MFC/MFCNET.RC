@@ -1,7 +1,7 @@
 // mfcnet.rc : Defines the resources for the MFC NET DLL
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -17,14 +17,14 @@
 // Version stamp for this .DLL
 
 #include "winver.h"
-#include "build_.h"
+#include "afxbld_.h"
 
 #ifdef _DEBUG
 
-// Version Info for MFCN40D.DLL
+// Version Info for MFCN42D.DLL
 VS_VERSION_INFO     VERSIONINFO
-  FILEVERSION       4,1,0,_MFC_BUILD
-  PRODUCTVERSION    4,1,0,0
+  FILEVERSION       6,0,_MFC_BUILD,_MFC_RBLD
+  PRODUCTVERSION    6,0,0,0
   FILEFLAGSMASK     VS_FFI_FILEFLAGSMASK
 #ifndef RELEASE
   FILEFLAGS         VS_FF_DEBUG|VS_FF_PRERELEASE
@@ -41,13 +41,13 @@ BEGIN
 		BEGIN
 			VALUE "CompanyName",     "Microsoft Corporation\0"
 			VALUE "FileDescription", "MFCNET Shared Library - Debug Version\0"
-			VALUE "FileVersion",     "4.1." _MFC_USER_BUILD "\0"
+			VALUE "FileVersion",     "6.00." _MFC_USER_BUILD "." _MFC_USER_RBLD "\0"
 			VALUE "InternalName",    "MFCNETD\0"
-			VALUE "LegalCopyright",  "Copyright (C) Microsoft Corp. 1994-1995\0"
+			VALUE "LegalCopyright",  "Copyright (C) Microsoft Corp. 1994-1998\0"
 			VALUE "LegalTrademarks", "\0"
-			VALUE "OriginalFilename","MFCN40D.DLL\0"
+			VALUE "OriginalFilename","MFCN42D.DLL\0"
 			VALUE "ProductName",     "Microsoft (R) Visual C++\0"
-			VALUE "ProductVersion",  "4.1.000\0"
+			VALUE "ProductVersion",  "6.0.000\0"
 		END
 	END
 	BLOCK "VarFileInfo"
@@ -59,10 +59,10 @@ END
 
 #else // RETAIL
 
-// Version Info for MFCN40.DLL
+// Version Info for MFCN42.DLL
 VS_VERSION_INFO     VERSIONINFO
-  FILEVERSION       4,1,0,_MFC_BUILD
-  PRODUCTVERSION    4,1,0,0
+  FILEVERSION       6,0,_MFC_BUILD,_MFC_RBLD
+  PRODUCTVERSION    6,0,0,0
   FILEFLAGSMASK     VS_FFI_FILEFLAGSMASK
 #ifndef RELEASE
   FILEFLAGS         VS_FF_PRERELEASE
@@ -79,13 +79,13 @@ BEGIN
 		BEGIN
 			VALUE "CompanyName",     "Microsoft Corporation\0"
 			VALUE "FileDescription", "MFCNET Shared Library - Retail Version\0"
-			VALUE "FileVersion",     "4.1." _MFC_USER_BUILD "\0"
+			VALUE "FileVersion",     "6.00." _MFC_USER_BUILD "." _MFC_USER_RBLD "\0"
 			VALUE "InternalName",    "MFCNET\0"
-			VALUE "LegalCopyright",  "Copyright (C) Microsoft Corp. 1994-1995\0"
+			VALUE "LegalCopyright",  "Copyright (C) Microsoft Corp. 1994-1998\0"
 			VALUE "LegalTrademarks", "\0"
-			VALUE "OriginalFilename","MFCN40.DLL\0"
+			VALUE "OriginalFilename","MFCN42.DLL\0"
 			VALUE "ProductName",     "Microsoft (R) Visual C++\0"
-			VALUE "ProductVersion",  "4.1.000\0"
+			VALUE "ProductVersion",  "6.0.000\0"
 		END
 	END
 	BLOCK "VarFileInfo"

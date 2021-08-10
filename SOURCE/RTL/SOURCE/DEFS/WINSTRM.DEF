@@ -1,0 +1,10 @@
+LIBRARY WINSTRM
+EXPORTS
+
+    OpenStream                               = 'WINSTRM.DLL'.*
+    getmsg                                   = 'WINSTRM.DLL'.*
+    poll                                     = 'WINSTRM.DLL'.*
+    putmsg                                   = 'WINSTRM.DLL'.*
+    s_ioctl                                  = 'WINSTRM.DLL'.*
+    s_open                                   = 'WINSTRM.DLL'.*
+    s_perror                                 = 'WINSTRM.DLL'.*

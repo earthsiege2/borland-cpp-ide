@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -27,7 +27,7 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // Helper functions used by CProperty, CPropertySection, CPropertySet classes
 
-static LPVOID CountPrefixedStringA(LPCSTR lpsz)
+AFX_STATIC LPVOID AFXAPI _AfxCountPrefixedStringA(LPCSTR lpsz)
 {
 	DWORD cb = (lstrlenA(lpsz) + 1);
 	LPDWORD lp = (LPDWORD)malloc((int)cb + sizeof(DWORD));
@@ -41,7 +41,8 @@ static LPVOID CountPrefixedStringA(LPCSTR lpsz)
 }
 
 
-static LPVOID CountPrefixedStringW(LPCWSTR lpsz)
+#ifndef OLE2ANSI
+AFX_STATIC LPVOID AFXAPI _AfxCountPrefixedStringW(LPCWSTR lpsz)
 {
 	DWORD cb = (wcslen(lpsz) + 1);
 	LPDWORD lp = (LPDWORD)malloc((int)cb * sizeof(WCHAR) + sizeof(DWORD));
@@ -53,12 +54,12 @@ static LPVOID CountPrefixedStringW(LPCWSTR lpsz)
 
 	return (LPVOID)lp;
 }
-
+#endif
 
 #ifdef _UNICODE
-#define CountPrefixedStringT CountPrefixedStringW
+#define _AfxCountPrefixedString _AfxCountPrefixedStringW
 #else
-#define CountPrefixedStringT CountPrefixedStringA
+#define _AfxCountPrefixedString _AfxCountPrefixedStringA
 #endif
 
 
@@ -66,7 +67,7 @@ static LPVOID CountPrefixedStringW(LPCWSTR lpsz)
 
 #define MAX_STRLEN 1024
 
-static LPBYTE ConvertStringProp(LPBYTE pbProp, DWORD dwType, ULONG nReps,
+AFX_STATIC LPBYTE AFXAPI _AfxConvertStringProp(LPBYTE pbProp, DWORD dwType, ULONG nReps,
 	size_t cbCharSize)
 {
 	LPBYTE pbResult = NULL; // Return value
@@ -222,7 +223,7 @@ BOOL CProperty::Set(const  LPVOID pVal)
 		{
 			case VT_LPSTR:          // null terminated string
 				pValueOrig = pValue;
-				pValue = CountPrefixedStringA((LPSTR)pValueOrig);
+				pValue = _AfxCountPrefixedStringA((LPSTR)pValueOrig);
 				pCur = (LPBYTE)pValue;
 				break;
 
@@ -232,15 +233,17 @@ BOOL CProperty::Set(const  LPVOID pVal)
 			case VT_STREAMED_OBJECT:// Stream contains an object
 			case VT_STORED_OBJECT:  // Storage contains an object
 				pValueOrig = pValue;
-				pValue = CountPrefixedStringT((LPTSTR)pValueOrig);
+				pValue = _AfxCountPrefixedString((LPTSTR)pValueOrig);
 				pCur = (LPBYTE)pValue;
 				break;
 
+#ifndef OLE2ANSI
 			case VT_LPWSTR:         // UNICODE string
 				pValueOrig = pValue;
-				pValue = CountPrefixedStringW((LPWSTR)pValueOrig);
+				pValue = _AfxCountPrefixedStringW((LPWSTR)pValueOrig);
 				pCur = (LPBYTE)pValue;
 				break;
+#endif
 		}
 	}
 
@@ -479,7 +482,7 @@ BOOL CProperty::WriteToStream(IStream* pIStream)
 		case VT_STORED_OBJECT:  // Storage contains an object
 		case VT_STREAMED_PROPSET:// Stream contains a propset
 		case VT_STORED_PROPSET: // Storage contains a propset
-			pValue = ConvertStringProp(pCur, m_dwType, nReps, sizeof(char));
+			pValue = _AfxConvertStringProp(pCur, m_dwType, nReps, sizeof(char));
 			if (m_dwType & VT_VECTOR)
 				pCur = pValue + sizeof(DWORD);
 			break;
@@ -703,7 +706,7 @@ BOOL CProperty::ReadFromStream(IStream* pIStream)
 		case VT_STORED_PROPSET: // Storage contains a propset
 			pTmp = (LPBYTE)malloc((int)cbValue);
 			pIStream->Read(pTmp, cbValue, &cb);
-			m_pValue = ConvertStringProp(pTmp, m_dwType, nReps, sizeof(WCHAR));
+			m_pValue = _AfxConvertStringProp(pTmp, m_dwType, nReps, sizeof(WCHAR));
 			free(pTmp);
 			break;
 
@@ -813,20 +816,19 @@ LPVOID CPropertySection::Get(DWORD dwPropID, DWORD* pcb)
 
 void CPropertySection::Remove(DWORD dwID)
 {
-	POSITION pos;
-	POSITION posRemove = m_PropList.GetHeadPosition();
-	CProperty*  pProp;
-	while (posRemove != NULL)
+	POSITION pos = m_PropList.GetHeadPosition();
+	CProperty* pProp;
+	while (pos != NULL)
 	{
+		POSITION posRemove = pos;
 		pProp = (CProperty*)m_PropList.GetNext(pos);
 		if (pProp->m_dwPropID == dwID)
 		{
-				m_PropList.RemoveAt(posRemove);
+			m_PropList.RemoveAt(posRemove);
 			delete pProp;
 			m_SH.cProperties--;
 			return;
 		}
-		posRemove = pos;
 	}
 }
 
@@ -865,7 +867,7 @@ DWORD CPropertySection::GetSize()
 DWORD CPropertySection::GetCount()
 {   return m_PropList.GetCount();  }
 
-CObList* CPropertySection::GetList()
+CPtrList* CPropertySection::GetList()
 {   return &m_PropList;  }
 
 BOOL CPropertySection::WriteToStream(IStream* pIStream)
@@ -977,6 +979,10 @@ BOOL CPropertySection::WriteToStream(IStream* pIStream)
 		TRACE0("Write of section header failed (2).\n");
 		return FALSE;
 	}
+
+	// Now seek to end of of the now written section
+	LISet32(li, ulSeek.LowPart);
+	pIStream->Seek(li, STREAM_SEEK_SET, NULL);
 
 	return TRUE;
 }
@@ -1164,7 +1170,7 @@ BOOL CPropertySection::ReadNameDictFromStream(IStream* pIStream)
 	return TRUE;
 }
 
-static BOOL WriteNameDictEntry(IStream* pIStream, DWORD dwPropID, CString& strName)
+AFX_STATIC BOOL AFXAPI _AfxWriteNameDictEntry(IStream* pIStream, DWORD dwPropID, CString& strName)
 {
 	ULONG cb;
 	ULONG cbWritten = 0;
@@ -1209,7 +1215,7 @@ BOOL CPropertySection::WriteNameDictToStream(IStream* pIStream)
 	void* pvID;
 
 	// Write out section's "name" with dwPropID == 0 first
-	if (!WriteNameDictEntry(pIStream, 0, m_strSectionName))
+	if (!_AfxWriteNameDictEntry(pIStream, 0, m_strSectionName))
 		return FALSE;
 
 	// Enumerate contents of dictionary and write out (dwPropID, cb, name).
@@ -1217,7 +1223,7 @@ BOOL CPropertySection::WriteNameDictToStream(IStream* pIStream)
 	while (pos != NULL)
 	{
 		m_NameDict.GetNextAssoc(pos, strName, pvID);
-		if (!WriteNameDictEntry(pIStream, (DWORD)pvID, strName))
+		if (!_AfxWriteNameDictEntry(pIStream, (DWORD)pvID, strName))
 			return FALSE;
 	}
 
@@ -1305,8 +1311,8 @@ void CPropertySet::Remove(CLSID FormatID, DWORD dwPropID)
 void CPropertySet::Remove(CLSID FormatID)
 {
 	CPropertySection* pSect;
-	POSITION pos;
 	POSITION posRemove = m_SectionList.GetHeadPosition();
+	POSITION pos = posRemove;
 	while (posRemove != NULL)
 	{
 		pSect = (CPropertySection*)m_SectionList.GetNext(pos);
@@ -1403,7 +1409,7 @@ void CPropertySet::SetClassID(CLSID clsID)
 DWORD CPropertySet::GetCount()
 {   return m_SectionList.GetCount();  }
 
-CObList* CPropertySet::GetList()
+CPtrList* CPropertySet::GetList()
 {   return &m_SectionList;  }
 
 

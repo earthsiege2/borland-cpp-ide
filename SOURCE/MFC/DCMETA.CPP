@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -114,7 +114,7 @@ BOOL CMetaFileDC::ExtTextOut(int x, int y, UINT nOptions, LPCRECT lpRect,
 	ASSERT(lpszString != NULL);
 	ASSERT(lpDxWidths == NULL ||
 			AfxIsValidAddress(lpDxWidths, sizeof(int) * nCount, FALSE));
-	ASSERT(AfxIsValidAddress(lpszString, nCount));
+	ASSERT(AfxIsValidAddress(lpszString, nCount, FALSE));
 
 	BOOL bSuccess = ::ExtTextOut(m_hDC, x, y, nOptions, lpRect,
 			  lpszString, nCount, lpDxWidths);
@@ -176,7 +176,7 @@ CSize CMetaFileDC::TabbedTextOut(int x, int y, LPCTSTR lpszString,
 
 		// advance by its extent
 		CSize size;
-		::GetTextExtentPoint(m_hAttribDC, lpszString, nChars, &size);
+		::GetTextExtentPoint32(m_hAttribDC, lpszString, nChars, &size);
 		x += size.cx;
 
 		// advance current x co-ordinate based on tab stops

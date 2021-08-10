@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -10,7 +10,7 @@
 
 #include "stdafx.h"
 
-HINSTANCE _hOlePropLib = NULL;
+HINSTANCE volatile _hOlePropLib = NULL;
 HRESULT (STDAPICALLTYPE *_pfnOleCreatePropertyFrame)(HWND, UINT, UINT,
 	LPCOLESTR, ULONG, LPUNKNOWN*, ULONG, LPCLSID, LCID, DWORD, LPVOID) =
 	NULL;
@@ -27,18 +27,28 @@ HRESULT (STDAPICALLTYPE *_pfnOleLoadPicture)(LPSTREAM, LONG, BOOL, REFIID,
 
 FARPROC AFXAPI _GetOlePropLibFunc(LPCSTR pszFuncName)
 {
-	FARPROC pfnProc = NULL;
-
 	if (_hOlePropLib == NULL)
-		_hOlePropLib = LoadLibraryA("OLEPRO32.DLL");
+	{
+		AfxLockGlobals(CRIT_DYNDLLLOAD);
+		if (_hOlePropLib == NULL)
+		{
+#ifndef _MAC
+			_hOlePropLib = LoadLibraryA("OLEPRO32.DLL");
+#else
+			_hOlePropLib = LoadLibraryEx("OLEPRO32.DLL", NULL, LOAD_BY_FRAGMENT_NAME);
+#endif
+		}
+		AfxUnlockGlobals(CRIT_DYNDLLLOAD);
+	}
 
+	FARPROC pfnProc = NULL;
 	if (_hOlePropLib != NULL)
 		pfnProc = GetProcAddress(_hOlePropLib, pszFuncName);
 
 	return pfnProc;
 }
 
-STDAPI OleCreatePropertyFrame(HWND hwndOwner, UINT x, UINT y,
+STDAPI _AfxOleCreatePropertyFrame(HWND hwndOwner, UINT x, UINT y,
 	LPCOLESTR lpszCaption, ULONG cObjects, LPUNKNOWN* ppUnk, ULONG cPages,
 	LPCLSID pPageClsID, LCID lcid, DWORD dwReserved, LPVOID pvReserved)
 {
@@ -55,7 +65,7 @@ STDAPI OleCreatePropertyFrame(HWND hwndOwner, UINT x, UINT y,
 		cObjects, ppUnk, cPages, pPageClsID, lcid, dwReserved, pvReserved);
 }
 
-STDAPI OleCreatePropertyFrameIndirect(LPOCPFIPARAMS lpParams)
+STDAPI _AfxOleCreatePropertyFrameIndirect(LPOCPFIPARAMS lpParams)
 {
 	if (_pfnOleCreatePropertyFrameIndirect == NULL)
 	{
@@ -69,7 +79,8 @@ STDAPI OleCreatePropertyFrameIndirect(LPOCPFIPARAMS lpParams)
 	return (*_pfnOleCreatePropertyFrameIndirect)(lpParams);
 }
 
-STDAPI OleTranslateColor(OLE_COLOR clr, HPALETTE hpal, COLORREF* lpcolorref)
+STDAPI _AfxOleTranslateColor(OLE_COLOR clr, HPALETTE hpal,
+	COLORREF* lpcolorref)
 {
 	if (_pfnOleTranslateColor == NULL)
 	{
@@ -83,7 +94,7 @@ STDAPI OleTranslateColor(OLE_COLOR clr, HPALETTE hpal, COLORREF* lpcolorref)
 	return (*_pfnOleTranslateColor)(clr, hpal, lpcolorref);
 }
 
-STDAPI OleCreateFontIndirect(LPFONTDESC lpFontDesc, REFIID riid,
+STDAPI _AfxOleCreateFontIndirect(LPFONTDESC lpFontDesc, REFIID riid,
 	LPVOID* lplpvObj)
 {
 	if (_pfnOleCreateFontIndirect == NULL)
@@ -98,8 +109,8 @@ STDAPI OleCreateFontIndirect(LPFONTDESC lpFontDesc, REFIID riid,
 	return (*_pfnOleCreateFontIndirect)(lpFontDesc, riid, lplpvObj);
 }
 
-STDAPI OleCreatePictureIndirect(LPPICTDESC lpPictDesc, REFIID riid, BOOL fOwn,
-	LPVOID* lplpvObj)
+STDAPI _AfxOleCreatePictureIndirect(LPPICTDESC lpPictDesc, REFIID riid,
+	BOOL fOwn, LPVOID* lplpvObj)
 {
 	if (_pfnOleCreatePictureIndirect == NULL)
 	{
@@ -113,7 +124,7 @@ STDAPI OleCreatePictureIndirect(LPPICTDESC lpPictDesc, REFIID riid, BOOL fOwn,
 	return (*_pfnOleCreatePictureIndirect)(lpPictDesc, riid, fOwn, lplpvObj);
 }
 
-STDAPI OleLoadPicture(LPSTREAM lpstream, LONG lSize, BOOL fRunmode,
+STDAPI _AfxOleLoadPicture(LPSTREAM lpstream, LONG lSize, BOOL fRunmode,
 	REFIID riid, LPVOID* lplpvObj)
 {
 	if (_pfnOleLoadPicture == NULL)

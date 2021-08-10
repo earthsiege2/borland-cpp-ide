@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -10,16 +10,6 @@
 
 #include "stdafx.h"
 #include <malloc.h>
-#ifdef _MAC
-#include <macname1.h>
-#include <Types.h>
-#include <QuickDraw.h>
-#include <Fonts.h>
-#include <macos\Windows.h>
-#include <GestaltEqu.h>
-#include <Script.h>
-#include <macname2.h>
-#endif
 
 #ifdef AFX_CORE3_SEG
 #pragma code_seg(AFX_CORE3_SEG)
@@ -53,15 +43,11 @@ BEGIN_MESSAGE_MAP(CControlBar, CWnd)
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
 	ON_MESSAGE_VOID(WM_INITIALUPDATE, OnInitialUpdate)
-	ON_MESSAGE(WM_QUERY3DCONTROLS, OnQuery3dControls)
 	ON_MESSAGE(WM_HELPHITTEST, OnHelpHitTest)
 	ON_WM_ERASEBKGND()
 	//}}AFX_MSG_MAP
-#ifdef _MAC
-	ON_WM_SIZE()
-	ON_WM_SYSCOLORCHANGE()
-	ON_WM_MOVE()
-	ON_MESSAGE(WM_MACINTOSH, OnMacintosh)
+#ifndef _AFX_NO_CTL3D_SUPPORT
+	ON_MESSAGE(WM_QUERY3DCONTROLS, OnQuery3dControls)
 #endif
 END_MESSAGE_MAP()
 
@@ -85,12 +71,22 @@ CControlBar::CControlBar()
 	m_pDockSite = NULL;
 	m_pDockBar = NULL;
 	m_pDockContext = NULL;
+	m_dwStyle = 0;
 	m_dwDockStyle = 0;
 	m_nMRUWidth = 32767;
+}
 
-#ifdef _MAC
-	m_bMonochrome = FALSE;      // will be set correctly by OnSize()
-#endif
+void CControlBar::SetBorders(int cxLeft, int cyTop, int cxRight, int cyBottom)
+{
+	ASSERT(cxLeft >= 0);
+	ASSERT(cyTop >= 0);
+	ASSERT(cxRight >= 0);
+	ASSERT(cyBottom >= 0);
+
+	m_cxLeftBorder = cxLeft;
+	m_cyTopBorder = cyTop;
+	m_cxRightBorder = cxRight;
+	m_cyBottomBorder = cyBottom;
 }
 
 BOOL CControlBar::PreCreateWindow(CREATESTRUCT& cs)
@@ -135,6 +131,8 @@ BOOL CControlBar::PreCreateWindow(CREATESTRUCT& cs)
 
 void CControlBar::SetBarStyle(DWORD dwStyle)
 {
+	ASSERT((dwStyle & CBRS_ALL) == dwStyle);
+
 	EnableToolTips(dwStyle & CBRS_TOOLTIPS);
 
 	if (m_dwStyle != dwStyle)
@@ -368,7 +366,7 @@ BOOL CControlBar::PreTranslateMessage(MSG* pMsg)
 		CPoint point = pMsg->pt;
 		ScreenToClient(&point);
 		TOOLINFO ti; memset(&ti, 0, sizeof(TOOLINFO));
-		ti.cbSize = sizeof(TOOLINFO);
+		ti.cbSize = sizeof(AFX_OLDTOOLINFO);
 		int nHit = OnToolHitTest(point, &ti);
 		if (ti.lpszText != LPSTR_TEXTCALLBACK)
 			free(ti.lpszText);
@@ -444,7 +442,28 @@ LRESULT CControlBar::WindowProc(UINT nMsg, WPARAM wParam, LPARAM lParam)
 		if (OnWndMsg(nMsg, wParam, lParam, &lResult))
 			return lResult;
 		else
-			return GetOwner()->SendMessage(nMsg, wParam, lParam);
+		{
+			// try owner next
+			lResult = GetOwner()->SendMessage(nMsg, wParam, lParam);
+
+			// special case for TTN_NEEDTEXTA and TTN_NEEDTEXTW
+			if(nMsg == WM_NOTIFY)
+			{
+				NMHDR* pNMHDR = (NMHDR*)lParam;
+				if (pNMHDR->code == TTN_NEEDTEXTA || pNMHDR->code == TTN_NEEDTEXTW)
+				{
+					TOOLTIPTEXTA* pTTTA = (TOOLTIPTEXTA*)pNMHDR;
+					TOOLTIPTEXTW* pTTTW = (TOOLTIPTEXTW*)pNMHDR;
+					if ((pNMHDR->code == TTN_NEEDTEXTA && (!pTTTA->lpszText || !*pTTTA->lpszText)) ||
+						(pNMHDR->code == TTN_NEEDTEXTW && (!pTTTW->lpszText || !*pTTTW->lpszText)))
+					{
+						// not handled by owner, so let bar itself handle it
+						lResult = CWnd::WindowProc(nMsg, wParam, lParam);
+					}
+				}
+			}
+			return lResult;
+		}
 	}
 
 	// otherwise, just handle in default way
@@ -466,7 +485,13 @@ LRESULT CControlBar::OnHelpHitTest(WPARAM, LPARAM lParam)
 
 void CControlBar::OnWindowPosChanging(LPWINDOWPOS lpWndPos)
 {
-	CWnd::OnWindowPosChanging(lpWndPos);
+	// WINBUG: We call DefWindowProc here instead of CWnd::OnWindowPosChanging
+	//  (which calls CWnd::Default, which calls through the super wndproc)
+	//  because certain control bars that are system implemented (such as
+	//  CToolBar with TBSTYLE_FLAT) do not implement WM_WINDOWPOSCHANGING
+	//  correctly, causing repaint problems.  This code bypasses that whole
+	//  mess.
+	::DefWindowProc(m_hWnd, WM_WINDOWPOSCHANGING, 0, (LPARAM)lpWndPos);
 
 	if (lpWndPos->flags & SWP_NOSIZE)
 		return;
@@ -552,7 +577,7 @@ int CControlBar::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT nMsg)
 
 void CControlBar::OnPaint()
 {
-	// background is already filled in grey
+	// background is already filled in gray
 	CPaintDC dc(this);
 
 	// erase background now
@@ -579,6 +604,9 @@ void CControlBar::EraseNonClient()
 	// erase parts not drawn
 	dc.IntersectClipRect(rectWindow);
 	SendMessage(WM_ERASEBKGND, (WPARAM)dc.m_hDC);
+
+	// draw gripper in non-client area
+	DrawGripper(&dc, rectWindow);
 }
 
 HBRUSH CControlBar::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
@@ -587,7 +615,7 @@ HBRUSH CControlBar::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	if (pWnd->SendChildNotifyLastMsg(&lResult))
 		return (HBRUSH)lResult;     // eat it
 
-	// force black text on grey background all the time
+	// force black text on gray background all the time
 	if (!GrayCtlColor(pDC->m_hDC, pWnd->GetSafeHwnd(), nCtlColor,
 	   afxData.hbrBtnFace, afxData.clrBtnText))
 		return (HBRUSH)Default();
@@ -767,34 +795,6 @@ LRESULT CControlBar::OnSizeParent(WPARAM, LPARAM lParam)
 		rect.right = rect.left + size.cx;
 		rect.bottom = rect.top + size.cy;
 
-#ifdef _MAC
-		// account for the Macintosh grow box, if there is one
-		CWnd* pWnd = GetParentFrame();
-		if (pWnd != NULL)
-		{
-			DWORD dwWndStyle = pWnd->GetStyle();
-			DWORD dwExStyle = pWnd->GetExStyle();
-
-			if (!(dwExStyle & (WS_EX_MDIFRAME|WS_EX_FORCESIZEBOX)) &&
-				!(dwWndStyle & (WS_VSCROLL|WS_HSCROLL)))
-			{
-				CRect rectParent;
-				pWnd->GetClientRect(rectParent);
-
-				if (dwStyle & CBRS_ALIGN_BOTTOM)
-				{
-					if (rect.bottom > rectParent.bottom - afxData.cxVScroll + 1)
-						rect.right -= (afxData.cxVScroll - 1);
-				}
-				else if (dwStyle & CBRS_ALIGN_RIGHT)
-				{
-					if (rect.bottom > rectParent.bottom - afxData.cyHScroll + 1)
-						rect.bottom -= (afxData.cxVScroll - 1);
-				}
-			}
-		}
-#endif
-
 		// only resize the window if doing layout and not just rect query
 		if (lpLayout->hDWP != NULL)
 			AfxRepositionWindow(lpLayout, m_hWnd, &rect);
@@ -831,6 +831,7 @@ void CControlBar::DoPaint(CDC* pDC)
 	CRect rect;
 	GetClientRect(rect);
 	DrawBorders(pDC, rect);
+	DrawGripper(pDC, rect);
 }
 
 void CControlBar::DrawBorders(CDC* pDC, CRect& rect)
@@ -900,6 +901,34 @@ void CControlBar::DrawBorders(CDC* pDC, CRect& rect)
 		rect.bottom -= afxData.cyBorder2;
 }
 
+#define CX_GRIPPER  3
+#define CY_GRIPPER  3
+#define CX_BORDER_GRIPPER 2
+#define CY_BORDER_GRIPPER 2
+
+void CControlBar::DrawGripper(CDC* pDC, const CRect& rect)
+{
+	// only draw the gripper if not floating and gripper is specified
+	if ((m_dwStyle & (CBRS_GRIPPER|CBRS_FLOATING)) == CBRS_GRIPPER)
+	{
+		// draw the gripper in the border
+		if (m_dwStyle & CBRS_ORIENT_HORZ)
+		{
+			pDC->Draw3dRect(rect.left+CX_BORDER_GRIPPER,
+				rect.top+m_cyTopBorder,
+				CX_GRIPPER, rect.Height()-m_cyTopBorder-m_cyBottomBorder,
+				afxData.clrBtnHilite, afxData.clrBtnShadow);
+		}
+		else
+		{
+			pDC->Draw3dRect(rect.left+m_cyTopBorder,
+				rect.top+CY_BORDER_GRIPPER,
+				rect.Width()-m_cyTopBorder-m_cyBottomBorder, CY_GRIPPER,
+				afxData.clrBtnHilite, afxData.clrBtnShadow);
+		}
+	}
+}
+
 // input CRect should be client rectangle size
 void CControlBar::CalcInsideRect(CRect& rect, BOOL bHorz) const
 {
@@ -922,6 +951,8 @@ void CControlBar::CalcInsideRect(CRect& rect, BOOL bHorz) const
 		rect.top += m_cyTopBorder;
 		rect.right -= m_cxRightBorder;
 		rect.bottom -= m_cyBottomBorder;
+		if ((m_dwStyle & (CBRS_GRIPPER|CBRS_FLOATING)) == CBRS_GRIPPER)
+			rect.left += CX_BORDER_GRIPPER+CX_GRIPPER+CX_BORDER_GRIPPER;
 	}
 	else
 	{
@@ -929,6 +960,8 @@ void CControlBar::CalcInsideRect(CRect& rect, BOOL bHorz) const
 		rect.top += m_cxLeftBorder;
 		rect.right -= m_cyBottomBorder;
 		rect.bottom -= m_cxRightBorder;
+		if ((m_dwStyle & (CBRS_GRIPPER|CBRS_FLOATING)) == CBRS_GRIPPER)
+			rect.top += CY_BORDER_GRIPPER+CY_GRIPPER+CY_BORDER_GRIPPER;
 	}
 }
 
@@ -941,6 +974,7 @@ void CControlBar::AssertValid() const
 	CWnd::AssertValid();
 
 	ASSERT(m_nCount == 0 || m_pData != NULL);
+	ASSERT((m_dwStyle & CBRS_ALL) == m_dwStyle);
 }
 
 void CControlBar::Dump(CDumpContext& dc) const
@@ -958,139 +992,5 @@ void CControlBar::Dump(CDumpContext& dc) const
 	dc << "\n";
 }
 #endif
-
-/////////////////////////////////////////////////////////////////////////////
-// Macintosh specifics
-
-#ifdef _MAC
-void CControlBar::OnSize(UINT /*nType*/, int /*cx*/, int /*cy*/)
-{
-	OnReposition();
-}
-
-BOOL CControlBar::OnEraseBkgnd(CDC* pDC)
-{
-	if (!m_bMonochrome)
-		return (BOOL)Default();
-
-	CRect rect;
-	GetClientRect(rect);
-	pDC->FillSolidRect(rect, RGB(0xFF, 0xFF, 0xFF));
-	return TRUE;
-}
-
-LRESULT CControlBar::OnMacintosh(WPARAM wParam, LPARAM)
-{
-	// The ancestor of the control bar may have moved from one monitor to
-	//  another, so we need to redetermine whether to draw in monochrome
-	//  or color.
-	if (LOWORD(wParam) == WLM_CHILDOFFSET)
-		OnReposition();
-
-	return Default();
-}
-
-void CControlBar::OnSysColorChange()
-{
-	Default();  // toolbar control must be notified also
-	m_bMonochrome = CheckMonochrome();
-}
-
-void CControlBar::OnMove(int, int)
-{
-	OnReposition();
-}
-
-void CControlBar::OnReposition()
-{
-	if (CheckMonochrome() != m_bMonochrome)
-	{
-		SendMessage(WM_SYSCOLORCHANGE, 0, 0);
-		RedrawWindow(NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
-	}
-}
-
-BOOL CControlBar::CheckMonochrome()
-{
-	RECT rectClient;
-	GetClientRect(&rectClient);
-	MapWindowPoints(GetDesktopWindow(), &rectClient);
-	return AfxCheckMonochrome(&rectClient);
-}
-
-BOOL AFXAPI AfxCheckMonochrome(const RECT* pRect)
-{
-	long versionQD;
-	if (Gestalt(gestaltQuickdrawVersion, &versionQD) != noErr ||
-			versionQD < gestalt8BitQD)
-		return TRUE;
-
-	// We draw all toolbars in monochrome if the main monitor is monochrome
-	// because the main monitor is what determines the button face color
-	// and button shadow color, and if those aren't grays, we won't get
-	// reasonable output no matter how deep a monitor we're drawing on.
-	if (GetSysColor(COLOR_BTNFACE) == RGB(255, 255, 255))
-		return TRUE;
-
-	Rect rectMacClient;
-	rectMacClient.top = (short)pRect->top;
-	rectMacClient.left = (short)pRect->left;
-	rectMacClient.bottom = (short)pRect->bottom;
-	rectMacClient.right = (short)pRect->right;
-
-	for (GDHandle hgd = GetDeviceList(); hgd != NULL; hgd = GetNextDevice(hgd))
-	{
-		if (!TestDeviceAttribute(hgd, screenDevice) ||
-				!TestDeviceAttribute(hgd, screenActive))
-			continue;
-
-		// ignore devices that the toolbar isn't drawn on
-		Rect rect;
-		if (!SectRect(&rectMacClient, &(*hgd)->gdRect, &rect))
-			continue;
-
-		// we require 2-bit grayscale or 4-bit color to draw in color
-		int pixelSize = (*(*hgd)->gdPMap)->pixelSize;
-		if (pixelSize == 1 || (pixelSize == 2 &&
-				TestDeviceAttribute(hgd, gdDevType)))
-			return TRUE;
-	}
-
-	return FALSE;
-}
-
-#if USESCODEFRAGMENTS
-#undef PtInRect
-#define MacPtInRect PtInRect
-extern "C" pascal Boolean PtInRect(Point pt, const Rect *r);
-#endif
-GDHandle AFXAPI _AfxFindDevice(int x, int y)
-{
-	long lResult;
-	Point pt;
-	GDHandle hgd;
-
-	if (Gestalt(gestaltQuickdrawVersion, &lResult) != noErr ||
-			lResult < gestalt8BitQD)
-		return NULL;
-
-	pt.h = (short) x;
-	pt.v = (short) y;
-
-	hgd = GetDeviceList();
-	while (hgd != NULL)
-	{
-		if (MacPtInRect(pt, &(*hgd)->gdRect))
-			return hgd;
-
-		hgd = GetNextDevice(hgd);
-	}
-
-	return NULL;
-}
-#if USESCODEFRAGMENTS
-#define PtInRect AfxPtInRect
-#endif
-#endif //_MAC
 
 /////////////////////////////////////////////////////////////////////////////

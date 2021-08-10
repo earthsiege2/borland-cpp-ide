@@ -1,0 +1,11 @@
+module CBuilder{
+ interface Customers{
+      exception CustomerException{
+         string s;
+      };
+      // Get the data packet for a single customer
+      any GetCustomers(in boolean metadata);
+      // Apply a delta packet to the customer table
+      any ApplyCustomerUpdates(in any Delta, out long ErrorCount);
+   };
+};

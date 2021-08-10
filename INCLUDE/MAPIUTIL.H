@@ -8,14 +8,8 @@
  */
 
 #ifndef _MAPIUTIL_H_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MAPIUTIL_H_
-#pragma option -b
-
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <pshpack8.h>
-#pragma option -b
-#endif
 
 #if defined (WIN32) && !defined (_WIN32)
 #define _WIN32
@@ -26,15 +20,11 @@ extern "C" {
 #endif
 
 #ifndef MAPIX_H
-#pragma option -b.
 #include <mapix.h>
-#pragma option -b
 #endif
 
 #ifdef WIN16
-#pragma option -b.
 #include <storage.h>
-#pragma option -b
 #endif
 
 #ifndef BEGIN_INTERFACE
@@ -890,11 +880,5 @@ typedef CREATECONVERSATIONINDEX FAR *LPCREATECONVERSATIONINDEX;
 }
 #endif
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <poppack.h>
-#pragma option -b
-#endif
-
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* _MAPIUTIL_H_ */

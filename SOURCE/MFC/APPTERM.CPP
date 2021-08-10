@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -23,25 +23,11 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // other globals (internal library use)
 
-#ifdef _MAC
-AEEventHandlerUPP _afxPfnOpenApp;
-AEEventHandlerUPP _afxPfnOpenDoc;
-AEEventHandlerUPP _afxPfnPrintDoc;
-AEEventHandlerUPP _afxPfnQuit;
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // Standard cleanup called by WinMain and AfxAbort
 
 void AFXAPI AfxWinTerm(void)
 {
-#ifdef _MAC
-	AERemoveEventHandler(kCoreEventClass, kAEOpenApplication, _afxPfnOpenApp, false);
-	AERemoveEventHandler(kCoreEventClass, kAEOpenDocuments, _afxPfnOpenDoc, false);
-	AERemoveEventHandler(kCoreEventClass, kAEPrintDocuments, _afxPfnPrintDoc, false);
-	AERemoveEventHandler(kCoreEventClass, kAEQuitApplication, _afxPfnQuit, false);
-#endif
-
 	// unregister Window classes
 	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
 	AfxLockGlobals(CRIT_REGCLASSLIST);
@@ -58,13 +44,12 @@ void AFXAPI AfxWinTerm(void)
 	AfxUnlockGlobals(CRIT_REGCLASSLIST);
 
 	// cleanup OLE if required
-	CWinApp* pApp = AfxGetApp();
-	if (pApp != NULL && pApp->m_lpfnOleTermOrFreeLib != NULL)
-		(*pApp->m_lpfnOleTermOrFreeLib)(TRUE, FALSE);
+	CWinThread* pThread = AfxGetApp();
+	if (pThread != NULL && pThread->m_lpfnOleTermOrFreeLib != NULL)
+		(*pThread->m_lpfnOleTermOrFreeLib)(TRUE, FALSE);
 
 	// cleanup thread local tooltip window
 	_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
-
 	if (pThreadState->m_pToolTip != NULL)
 	{
 		if (pThreadState->m_pToolTip->DestroyToolTipCtrl())

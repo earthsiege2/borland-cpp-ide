@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -57,6 +57,8 @@ BEGIN_MESSAGE_MAP(CSplitterWnd, CWnd)
 	ON_WM_CANCELMODE()
 	ON_MESSAGE_VOID(WM_DISPLAYCHANGE, OnDisplayChange)
 	ON_MESSAGE_VOID(WM_WININICHANGE, OnDisplayChange)
+	ON_MESSAGE_VOID(WM_SETTINGCHANGE, OnDisplayChange)
+	ON_WM_MOUSEWHEEL()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -179,8 +181,7 @@ BOOL CSplitterWnd::CreateCommon(CWnd* pParentWnd,
 	if (afxData.bWin4)
 		dwCreateStyle &= ~WS_BORDER;
 
-	if (!AfxDeferRegisterClass(AFX_WNDMDIFRAME_REG))
-		return FALSE;
+	VERIFY(AfxDeferRegisterClass(AFX_WNDMDIFRAME_REG));
 
 	// create with the same wnd-class as MDI-Frame (no erase bkgnd)
 	if (!CreateEx(0, _afxWndMDIFrame, NULL, dwCreateStyle, 0, 0, 0, 0,
@@ -245,7 +246,7 @@ BOOL CSplitterWnd::CreateView(int row, int col,
 	ASSERT(col >= 0 && col < m_nCols);
 	ASSERT(pViewClass != NULL);
 	ASSERT(pViewClass->IsDerivedFrom(RUNTIME_CLASS(CWnd)));
-	ASSERT(AfxIsValidAddress(pViewClass, sizeof(CRuntimeClass)));
+	ASSERT(AfxIsValidAddress(pViewClass, sizeof(CRuntimeClass), FALSE));
 
 	if (GetDlgItem(IdFromRowCol(row, col)) != NULL)
 	{
@@ -327,10 +328,18 @@ BOOL CSplitterWnd::CreateScrollBarCtrl(DWORD dwStyle, UINT nID)
 	ASSERT_VALID(this);
 	ASSERT(m_hWnd != NULL);
 
-	return (::CreateWindow(_T("SCROLLBAR"), NULL,
+	HWND hWnd = ::CreateWindow(_T("SCROLLBAR"), NULL,
 		dwStyle | WS_VISIBLE | WS_CHILD,
 		0, 0, 1, 1, m_hWnd, (HMENU)nID,
-		AfxGetInstanceHandle(), NULL) != NULL);
+		AfxGetInstanceHandle(), NULL);
+
+#ifdef _DEBUG
+	if (hWnd == NULL)
+		TRACE1("Warning: Window creation failed: GetLastError returns 0x%8.8X\n",
+			GetLastError());
+#endif
+
+	return hWnd != NULL;
 }
 
 int CSplitterWnd::IdFromRowCol(int row, int col) const
@@ -541,7 +550,6 @@ void CSplitterWnd::OnDrawSplitter(CDC* pDC, ESplitType nType,
 		pDC->Draw3dRect(rect, afxData.clrBtnShadow, afxData.clrBtnHilite);
 		rect.InflateRect(-CX_BORDER, -CY_BORDER);
 		pDC->Draw3dRect(rect, afxData.clrWindowFrame, afxData.clrBtnFace);
-		rect.InflateRect(-CX_BORDER, -CY_BORDER);
 		return;
 
 	case splitIntersection:
@@ -572,18 +580,13 @@ void CSplitterWnd::OnDrawSplitter(CDC* pDC, ESplitType nType,
 
 	// fill the middle
 	COLORREF clr = afxData.clrBtnFace;
-#ifdef _MAC
-	// just use white for interior if less than 16 colors
-	if (pDC->GetDeviceCaps(NUMCOLORS) < 16)
-		clr = RGB(0xFF, 0xFF, 0xFF);
-#endif
 	pDC->FillSolidRect(rect, clr);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Dynamic row/col split etc
 
-static int AFXAPI CanSplitRowCol(CSplitterWnd::CRowColInfo* pInfoBefore,
+AFX_STATIC int AFXAPI _AfxCanSplitRowCol(CSplitterWnd::CRowColInfo* pInfoBefore,
 	int nBeforeSize, int nSizeSplitter)
 	// request to split Before row at point nBeforeSize
 	// returns size of new pane (nBeforeSize will be new size of Before pane)
@@ -623,7 +626,7 @@ BOOL CSplitterWnd::SplitRow(int cyBefore)
 
 	cyBefore -= m_cyBorder;
 	int rowNew = m_nRows;
-	int cyNew = CanSplitRowCol(&m_pRowInfo[rowNew-1], cyBefore, m_cySplitter);
+	int cyNew = _AfxCanSplitRowCol(&m_pRowInfo[rowNew-1], cyBefore, m_cySplitter);
 	if (cyNew == -1)
 		return FALSE;   // too small to split
 
@@ -672,7 +675,7 @@ BOOL CSplitterWnd::SplitColumn(int cxBefore)
 
 	cxBefore -= m_cxBorder;
 	int colNew = m_nCols;
-	int cxNew = CanSplitRowCol(&m_pColInfo[colNew-1], cxBefore, m_cxSplitter);
+	int cxNew = _AfxCanSplitRowCol(&m_pColInfo[colNew-1], cxBefore, m_cxSplitter);
 	if (cxNew == -1)
 		return FALSE;   // too small to split
 
@@ -1179,7 +1182,6 @@ BOOL CSplitterWnd::DoKeyboardSplit()
 	// start tracking
 	StartTracking(ht);
 
-#ifndef _MAC
 	CRect rect;
 	rect.left = m_rectTracker.Width() / 2;
 	rect.top = m_rectTracker.Height() / 2;
@@ -1190,7 +1192,6 @@ BOOL CSplitterWnd::DoKeyboardSplit()
 	rect.OffsetRect(-m_ptTrackOffset.x, -m_ptTrackOffset.y);
 	ClientToScreen(&rect);
 	SetCursorPos(rect.left, rect.top);
-#endif
 
 	return TRUE;
 }
@@ -1215,7 +1216,7 @@ void CSplitterWnd::OnSize(UINT nType, int cx, int cy)
 // Generic routine:
 //  for X direction: pInfo = m_pColInfo, nMax = m_nMaxCols, nSize = cx
 //  for Y direction: pInfo = m_pRowInfo, nMax = m_nMaxRows, nSize = cy
-static void AFXAPI LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray,
+AFX_STATIC void AFXAPI _AfxLayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray,
 	int nMax, int nSize, int nSizeSplitter)
 {
 	ASSERT(pInfoArray != NULL);
@@ -1308,7 +1309,7 @@ static void AFXAPI LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray,
 // repositions client area of specified window
 // assumes everything has WS_BORDER or is inset like it does
 //  (includes scroll bars)
-static void AFXAPI DeferClientPos(AFX_SIZEPARENTPARAMS* lpLayout,
+AFX_STATIC void AFXAPI _AfxDeferClientPos(AFX_SIZEPARENTPARAMS* lpLayout,
 	CWnd* pWnd, int x, int y, int cx, int cy, BOOL bScrollBar)
 {
 	ASSERT(pWnd != NULL);
@@ -1394,8 +1395,8 @@ void CSplitterWnd::RecalcLayout()
 	GetInsideRect(rectInside);
 
 	// layout columns (restrict to possible sizes)
-	LayoutRowCol(m_pColInfo, m_nCols, rectInside.Width(), m_cxSplitterGap);
-	LayoutRowCol(m_pRowInfo, m_nRows, rectInside.Height(), m_cySplitterGap);
+	_AfxLayoutRowCol(m_pColInfo, m_nCols, rectInside.Width(), m_cxSplitterGap);
+	_AfxLayoutRowCol(m_pRowInfo, m_nRows, rectInside.Height(), m_cySplitterGap);
 
 	// adjust the panes (and optionally scroll bars)
 
@@ -1422,7 +1423,7 @@ void CSplitterWnd::RecalcLayout()
 		pScrollBar->EnableWindow(bSizingParent);
 
 		// reposition the size box
-		DeferClientPos(&layout, pScrollBar,
+		_AfxDeferClientPos(&layout, pScrollBar,
 			rectInside.right + afxData.bNotWin4,
 			rectInside.bottom + afxData.bNotWin4, cx, cy, TRUE);
 	}
@@ -1440,7 +1441,7 @@ void CSplitterWnd::RecalcLayout()
 			int cx = m_pColInfo[col].nCurSize;
 			if (col == 0 && m_nCols < m_nMaxCols)
 				x += cxSplitterBox, cx -= cxSplitterBox;
-			DeferClientPos(&layout, pScrollBar, x, y, cx, cy, TRUE);
+			_AfxDeferClientPos(&layout, pScrollBar, x, y, cx, cy, TRUE);
 			x += cx + m_cxSplitterGap;
 		}
 	}
@@ -1457,7 +1458,7 @@ void CSplitterWnd::RecalcLayout()
 			int cy = m_pRowInfo[row].nCurSize;
 			if (row == 0 && m_nRows < m_nMaxRows)
 				y += cySplitterBox, cy -= cySplitterBox;
-			DeferClientPos(&layout, pScrollBar, x, y, cx, cy, TRUE);
+			_AfxDeferClientPos(&layout, pScrollBar, x, y, cx, cy, TRUE);
 			y += cy + m_cySplitterGap;
 		}
 	}
@@ -1473,7 +1474,7 @@ void CSplitterWnd::RecalcLayout()
 			{
 				int cy = m_pRowInfo[row].nCurSize;
 				CWnd* pWnd = GetPane(row, col);
-				DeferClientPos(&layout, pWnd, x, y, cx, cy, FALSE);
+				_AfxDeferClientPos(&layout, pWnd, x, y, cx, cy, FALSE);
 				y += cy + m_cySplitterGap;
 			}
 			x += cx + m_cxSplitterGap;
@@ -1605,14 +1606,13 @@ BOOL CSplitterWnd::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 	return CWnd::OnSetCursor(pWnd, nHitTest, message);
 }
 
+// cache of last needed cursor
+AFX_STATIC_DATA HCURSOR _afx_hcurLast = NULL;
+AFX_STATIC_DATA HCURSOR _afx_hcurDestroy = NULL;
+AFX_STATIC_DATA UINT _afx_idcPrimaryLast = 0; // store the primary IDC
+
 void CSplitterWnd::SetSplitCursor(int ht)
 {
-	// cache of last needed cursor
-	static HCURSOR hcurLast = NULL;
-	static HCURSOR hcurDestroy = NULL;
-	static UINT idcPrimaryLast = 0; // store the primary IDC
-
-
 	UINT idcPrimary;        // app supplied cursor
 	LPCTSTR idcSecondary;    // system supplied cursor (MAKEINTRESOURCE)
 
@@ -1645,13 +1645,13 @@ void CSplitterWnd::SetSplitCursor(int ht)
 	if (idcPrimary != 0)
 	{
 		HCURSOR hcurToDestroy = NULL;
-		if (idcPrimary != idcPrimaryLast)
+		if (idcPrimary != _afx_idcPrimaryLast)
 		{
 			HINSTANCE hInst = AfxFindResourceHandle(
 				MAKEINTRESOURCE(idcPrimary), RT_GROUP_CURSOR);
 
 			// load in another cursor
-			hcurToDestroy = hcurDestroy;
+			hcurToDestroy = _afx_hcurDestroy;
 
 			// Note: If this LoadCursor call fails, it is likely that
 			//  _AFX_NO_SPLITTER_RESOURCES is defined in your .RC file.
@@ -1660,21 +1660,21 @@ void CSplitterWnd::SetSplitCursor(int ht)
 			//      #define _AFX_NO_SPLITTER_RESOURCES
 			// This should be done using the Resource.Set Includes... command.
 
-			if ((hcurDestroy = hcurLast =
+			if ((_afx_hcurDestroy = _afx_hcurLast =
 			   ::LoadCursor(hInst, MAKEINTRESOURCE(idcPrimary))) == NULL)
 			{
 				// will not look as good
 				TRACE0("Warning: Could not find splitter cursor - using system provided alternative.\n");
 
-				ASSERT(hcurDestroy == NULL);    // will not get destroyed
-				hcurLast = ::LoadCursor(NULL, idcSecondary);
-				ASSERT(hcurLast != NULL);
+				ASSERT(_afx_hcurDestroy == NULL);    // will not get destroyed
+				_afx_hcurLast = ::LoadCursor(NULL, idcSecondary);
+				ASSERT(_afx_hcurLast != NULL);
 			}
-			idcPrimaryLast = idcPrimary;
+			_afx_idcPrimaryLast = idcPrimary;
 		}
-		ASSERT(hcurLast != NULL);
-		::SetCursor(hcurLast);
-		ASSERT(hcurLast != hcurToDestroy);
+		ASSERT(_afx_hcurLast != NULL);
+		::SetCursor(_afx_hcurLast);
+		ASSERT(_afx_hcurLast != hcurToDestroy);
 		if (hcurToDestroy != NULL)
 			::DestroyCursor(hcurToDestroy); // destroy after being set
 	}
@@ -1840,7 +1840,6 @@ void CSplitterWnd::OnKeyDown(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
 		StopTracking(TRUE);
 		return;
 
-#ifndef _MAC
 	case VK_LEFT:
 		dx = -1;
 		break;
@@ -1853,7 +1852,6 @@ void CSplitterWnd::OnKeyDown(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
 	case VK_DOWN:
 		dy = +1;
 		break;
-#endif
 
 	default:
 		Default();  // pass other keys through
@@ -1889,10 +1887,8 @@ void CSplitterWnd::OnKeyDown(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
 		pt.x = m_rectLimit.right;
 	ClientToScreen(&pt);
 
-#ifndef _MAC
 	// cause WM_MOUSEMOVE to filter through
 	SetCursorPos(pt.x, pt.y);
-#endif
 }
 
 void CSplitterWnd::OnSysCommand(UINT nID, LPARAM lParam)
@@ -1934,6 +1930,51 @@ BOOL CSplitterWnd::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 /////////////////////////////////////////////////////////////////////////////
 // Scroll messages
 
+BOOL CSplitterWnd::OnMouseWheel(UINT fFlags, short zDelta, CPoint point)
+{
+	BOOL bRetVal = FALSE;
+	int row;
+	int col;
+
+	// find panes in the splitter that has scroll bars
+	// and have them do their scrolling
+
+	for (row = 0; row < m_nRows; row++)
+	{
+		for (col = 0; col < m_nCols; col++)
+		{
+			// only do the scrolling if the window is-a CScrollView
+
+			CWnd* pPane = GetPane(row, col);
+			CScrollView* pView = DYNAMIC_DOWNCAST(CScrollView, pPane);
+			if (pView != NULL)
+			{
+				// prefer to scroll vertically if available
+
+				CScrollBar* pBar = pView->GetScrollBarCtrl(SB_VERT);
+				if (pBar == NULL)
+				{
+					pBar = pView->GetScrollBarCtrl(SB_HORZ);
+					if (pBar == NULL)
+						continue;
+				}
+
+				// get the old position, do the scrolling, and
+				// then trigger the repaint
+
+				int nOldPos = pBar->GetScrollPos();
+				if (pView->DoMouseWheel(fFlags, zDelta, point))
+					bRetVal = TRUE;
+
+				if (col < m_nCols -1)
+					pBar->SetScrollPos(nOldPos, FALSE);
+			}
+		}
+	}
+
+	return TRUE;
+}
+
 void CSplitterWnd::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	ASSERT(pScrollBar != NULL);
@@ -1951,11 +1992,13 @@ void CSplitterWnd::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 			MAKELONG(nSBCode, nPos), (LPARAM)pScrollBar->m_hWnd);
 #ifdef _DEBUG
 		if (row == 0)
-			nNewPos = pScrollBar->GetScrollPos();
-		if (pScrollBar->GetScrollPos() != nNewPos)
 		{
-			TRACE0("Warning: scroll panes setting different scroll positions.\n");
-			// stick with the last one set
+			nNewPos = pScrollBar->GetScrollPos();
+			if (pScrollBar->GetScrollPos() != nNewPos)
+			{
+				TRACE0("Warning: scroll panes setting different scroll positions.\n");
+				// stick with the last one set
+			}
 		}
 #endif //_DEBUG
 		// set the scroll pos to the value it was originally for the next pane
@@ -1981,11 +2024,13 @@ void CSplitterWnd::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 			MAKELONG(nSBCode, nPos), (LPARAM)pScrollBar->m_hWnd);
 #ifdef _DEBUG
 		if (col == 0)
-			nNewPos = pScrollBar->GetScrollPos();
-		if (pScrollBar->GetScrollPos() != nNewPos)
 		{
-			TRACE0("Warning: scroll panes setting different scroll positions.\n");
-			// stick with the last one set
+			nNewPos = pScrollBar->GetScrollPos();
+			if (pScrollBar->GetScrollPos() != nNewPos)
+			{
+				TRACE0("Warning: scroll panes setting different scroll positions.\n");
+				// stick with the last one set
+			}
 		}
 #endif //_DEBUG
 		// set the scroll pos to the value it was originally for the next pane
@@ -1994,7 +2039,7 @@ void CSplitterWnd::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	}
 }
 
-// syncronized scrolling
+// synchronized scrolling
 BOOL CSplitterWnd::DoScroll(CView* pViewFrom, UINT nScrollCode, BOOL bDoScroll)
 {
 	ASSERT_VALID(pViewFrom);
@@ -2006,11 +2051,11 @@ BOOL CSplitterWnd::DoScroll(CView* pViewFrom, UINT nScrollCode, BOOL bDoScroll)
 	BOOL bResult = FALSE;
 
 	// save original positions
-	int nOldVert;
+	int nOldVert = 0;
 	CScrollBar* pScrollVert = pViewFrom->GetScrollBarCtrl(SB_VERT);
 	if (pScrollVert != NULL)
 		nOldVert = pScrollVert->GetScrollPos();
-	int nOldHorz;
+	int nOldHorz = 0;
 	CScrollBar* pScrollHorz = pViewFrom->GetScrollBarCtrl(SB_HORZ);
 	if (pScrollHorz != NULL)
 		nOldHorz = pScrollHorz->GetScrollPos();
@@ -2099,11 +2144,11 @@ BOOL CSplitterWnd::DoScrollBy(CView* pViewFrom, CSize sizeScroll, BOOL bDoScroll
 	BOOL bResult = FALSE;
 
 	// save original positions
-	int nOldVert;
+	int nOldVert = 0;
 	CScrollBar* pScrollVert = pViewFrom->GetScrollBarCtrl(SB_VERT);
 	if (pScrollVert != NULL)
 		nOldVert = pScrollVert->GetScrollPos();
-	int nOldHorz;
+	int nOldHorz = 0;
 	CScrollBar* pScrollHorz = pViewFrom->GetScrollBarCtrl(SB_HORZ);
 	if (pScrollHorz != NULL)
 		nOldHorz = pScrollHorz->GetScrollPos();
@@ -2294,7 +2339,8 @@ void CSplitterWnd::Dump(CDumpContext& dc) const
 {
 	CWnd::Dump(dc);
 
-	dc << "m_pDynamicViewClass = " << m_pDynamicViewClass->m_lpszClassName;
+	if (m_pDynamicViewClass != NULL)
+		dc << "m_pDynamicViewClass = " << m_pDynamicViewClass->m_lpszClassName;
 	dc << "\nm_nMaxRows = " << m_nMaxRows;
 	dc << "\nm_nMaxCols = " << m_nMaxCols;
 	dc << "\nm_nRows = " << m_nRows;

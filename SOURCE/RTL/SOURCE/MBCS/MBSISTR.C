@@ -2,17 +2,18 @@
  * filename - mbsistr.c
  *
  * function(s)
- *        _ismbstrail - Tests a character whether it is the second byte 
+ *        _ismbstrail - Tests a character whether it is the second byte
  *                      of 2-bytes character or not.
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -29,7 +30,7 @@ Prototype in    mbctype.h
 
 Description     Tests a byte data positioned str2 which starting from
                 str1 whether it is the second byte of 2-bytes character
-                or not. 
+                or not.
 
 Return value    Returns the value excepting 0 if the byte data of ser2
                 is the second byte of 2-bytes character, and return 0

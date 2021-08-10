@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -40,9 +40,24 @@ BOOL CWnd::CreateControl(LPCTSTR lpszClass, LPCTSTR lpszWindowName,
 		pPersist, bStorage, bstrLicKey);
 }
 
+BOOL CWnd::CreateControl( REFCLSID clsid, LPCTSTR lpszWindowName,
+   DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID,
+   CFile* pPersist, BOOL bStorage, BSTR bstrLicKey )
+{
+   CRect rect2( rect );
+   CPoint pt;
+   CSize size;
+
+   pt = rect2.TopLeft();
+   size = rect2.Size();
+
+   return( CreateControl( clsid, lpszWindowName, dwStyle, &pt, &size,
+	  pParentWnd, nID, pPersist, bStorage, bstrLicKey ) );
+}
+
 BOOL CWnd::CreateControl(REFCLSID clsid, LPCTSTR lpszWindowName, DWORD dwStyle,
-	const RECT& rect, CWnd* pParentWnd, UINT nID, CFile* pPersist,
-	BOOL bStorage, BSTR bstrLicKey)
+	const POINT* ppt, const SIZE* psize, CWnd* pParentWnd, UINT nID,
+   CFile* pPersist, BOOL bStorage, BSTR bstrLicKey)
 {
 	ASSERT(pParentWnd != NULL);
 
@@ -58,7 +73,7 @@ BOOL CWnd::CreateControl(REFCLSID clsid, LPCTSTR lpszWindowName, DWORD dwStyle,
 		return FALSE;
 
 	return pParentWnd->m_pCtrlCont->CreateControl(this, clsid, lpszWindowName,
-		dwStyle, rect, nID, pPersist, bStorage, bstrLicKey);
+		dwStyle, ppt, psize, nID, pPersist, bStorage, bstrLicKey);
 }
 
 BOOL CWnd::InitControlContainer()
@@ -66,7 +81,7 @@ BOOL CWnd::InitControlContainer()
 	TRY
 	{
 		if (m_pCtrlCont == NULL)
-			m_pCtrlCont = new COleControlContainer(this);
+			m_pCtrlCont = afxOccManager->CreateContainer(this);
 	}
 	END_TRY
 
@@ -78,7 +93,7 @@ BOOL CWnd::InitControlContainer()
 		{
 			pWnd->m_nFlags |= WF_OLECTLCONTAINER;
 			pWnd = pWnd->GetParent();
-			if (!GetWindowLong(pWnd->GetSafeHwnd(), GWL_STYLE) & WS_CHILD)
+			if (! (GetWindowLong(pWnd->GetSafeHwnd(), GWL_STYLE) & WS_CHILD))
 				break;
 		}
 	}
@@ -114,6 +129,17 @@ COleControlContainer::~COleControlContainer()
 	while (pos != NULL)
 	{
 		m_siteMap.GetNextAssoc(pos, (void*&)hWnd, (void*&)pSite);
+		if (!(pSite->m_pDataSourceControl))
+		{
+			m_siteMap.RemoveKey((void*&)hWnd);
+			delete pSite;
+		}
+	}
+
+	pos = m_siteMap.GetStartPosition();
+	while (pos != NULL)
+	{
+		m_siteMap.GetNextAssoc(pos, (void*&)hWnd, (void*&)pSite);
 		delete pSite;
 	}
 	m_siteMap.RemoveAll();
@@ -121,24 +147,41 @@ COleControlContainer::~COleControlContainer()
 	RELEASE(m_pOleFont);
 }
 
-BOOL COleControlContainer::CreateControl(CWnd* pWndCtrl, REFCLSID clsid,
+BOOL COleControlContainer::CreateControl( CWnd* pWndCtrl, REFCLSID clsid,
 	LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, UINT nID,
 	CFile* pPersist, BOOL bStorage, BSTR bstrLicKey,
-	COleControlSite** ppNewSite)
+	COleControlSite** ppNewSite )
+{
+   CRect rect2( rect );
+   CPoint pt;
+   CSize size;
+
+   pt = rect2.TopLeft();
+   size = rect2.Size();
+
+   return( CreateControl( pWndCtrl, clsid, lpszWindowName, dwStyle, &pt, &size,
+	  nID, pPersist, bStorage, bstrLicKey, ppNewSite ) );
+}
+
+BOOL COleControlContainer::CreateControl(CWnd* pWndCtrl, REFCLSID clsid,
+	LPCTSTR lpszWindowName, DWORD dwStyle, const POINT* ppt, const SIZE* psize,
+   UINT nID, CFile* pPersist, BOOL bStorage, BSTR bstrLicKey,
+   COleControlSite** ppNewSite)
 {
 	COleControlSite* pSite = NULL;
 
 	TRY
 	{
-		pSite = new COleControlSite(this);
+		pSite = afxOccManager->CreateSite(this);
 	}
 	END_TRY
 
 	if (pSite == NULL)
 		return FALSE;
 
-	BOOL bCreated = SUCCEEDED(pSite->CreateControl(pWndCtrl, clsid,
-		lpszWindowName, dwStyle, rect, nID, pPersist, bStorage, bstrLicKey));
+	BOOL bCreated = SUCCEEDED( pSite->CreateControl(pWndCtrl, clsid,
+		lpszWindowName, dwStyle, ppt, psize, nID, pPersist, bStorage,
+	  bstrLicKey ) );
 
 	if (bCreated)
 	{
@@ -191,7 +234,11 @@ BOOL COleControlContainer::GetAmbientProp(COleControlSite* pSite, DISPID dispid,
 
 	case DISPID_AMBIENT_APPEARANCE:     // ambient appearance is 3D
 		V_VT(pvarResult) = VT_I2;
+#ifndef _AFX_NO_CTL3D_SUPPORT
 		if (afxData.bWin4 || AfxGetCtl3dState()->m_pfnSubclassDlgEx != NULL)
+#else
+		if (afxData.bWin4)
+#endif
 			V_I2(pvarResult) = 1;
 		else
 			V_I2(pvarResult) = 0;
@@ -234,6 +281,14 @@ BOOL COleControlContainer::GetAmbientProp(COleControlSite* pSite, DISPID dispid,
 	case DISPID_AMBIENT_LOCALEID:
 		V_VT(pvarResult) = VT_I4;
 		V_I4(pvarResult) = GetThreadLocale();
+		return TRUE;
+
+	case DISPID_AMBIENT_DISPLAYNAME:
+		{
+			CString str;                // return blank string
+			V_VT(pvarResult) = VT_BSTR;
+			V_BSTR(pvarResult) = str.AllocSysString();
+		}
 		return TRUE;
 
 	case DISPID_AMBIENT_SCALEUNITS:
@@ -291,8 +346,20 @@ void COleControlContainer::CreateOleFont(CFont* pFont)
 	fd.cySize.Hi = 0;
 
 	RELEASE(m_pOleFont);
-	if (FAILED(OleCreateFontIndirect(&fd, IID_IFontDisp, (void**)&m_pOleFont)))
+	if (FAILED(::OleCreateFontIndirect(&fd, IID_IFontDisp, (void**)&m_pOleFont)))
 		m_pOleFont = NULL;
+}
+
+void COleControlContainer::FreezeAllEvents(BOOL bFreeze)
+{
+	HWND hWnd;
+	COleControlSite* pSite;
+	POSITION pos = m_siteMap.GetStartPosition();
+	while (pos != NULL)
+	{
+		m_siteMap.GetNextAssoc(pos, (void*&)hWnd, (void*&)pSite);
+		pSite->FreezeEvents(bFreeze);
+	}
 }
 
 void COleControlContainer::ScrollChildren(int dx, int dy)
@@ -323,8 +390,8 @@ void COleControlContainer::OnUIDeactivate(COleControlSite* pSite)
 {
 	UNUSED(pSite);
 
-	ASSERT(m_pSiteUIActive == pSite);
-	m_pSiteUIActive = NULL;
+	if (m_pSiteUIActive == pSite)
+		m_pSiteUIActive = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -391,13 +458,13 @@ UINT COleControlContainer::GetDlgItemInt(int nID, BOOL* lpTrans, BOOL bSigned) c
 	// Quick check for valid number
 	LPTSTR pch = szText;
 
-	while (isspace((int)(unsigned char)*pch))
+	while (_istspace(*pch))
 		pch = CharNext(pch);    // skip whitespace
 
 	if ((*pch) == '+' || (*pch) == '-')
 		pch = CharNext(pch);    // skip sign
 
-	BOOL bTrans = isdigit((int)(unsigned char)*pch);    // did we find a digit?
+	BOOL bTrans = _istdigit(*pch);    // did we find a digit?
 
 	if (lpTrans != NULL)
 		*lpTrans = bTrans;
@@ -485,19 +552,19 @@ STDMETHODIMP COleControlContainer::XOleIPFrame::QueryInterface(
 	REFIID iid, LPVOID* ppvObj)
 {
 	METHOD_PROLOGUE_EX_(COleControlContainer, OleIPFrame)
-	return (HRESULT)pThis->ExternalQueryInterface(&iid, ppvObj);
+	return (HRESULT)pThis->InternalQueryInterface(&iid, ppvObj);
 }
 
 STDMETHODIMP_(ULONG) COleControlContainer::XOleIPFrame::AddRef()
 {
 	METHOD_PROLOGUE_EX_(COleControlContainer, OleIPFrame)
-	return (ULONG)pThis->ExternalAddRef();
+	return (ULONG)pThis->InternalAddRef();
 }
 
 STDMETHODIMP_(ULONG) COleControlContainer::XOleIPFrame::Release()
 {
 	METHOD_PROLOGUE_EX_(COleControlContainer, OleIPFrame)
-	return (ULONG)pThis->ExternalRelease();
+	return (ULONG)pThis->InternalRelease();
 }
 
 STDMETHODIMP COleControlContainer::XOleIPFrame::GetWindow(HWND* phWnd)
@@ -535,21 +602,15 @@ STDMETHODIMP COleControlContainer::XOleIPFrame::SetActiveObject(
 {
 	METHOD_PROLOGUE_EX_(COleControlContainer, OleIPFrame)
 
-	ASSERT(pThis->m_pSiteUIActive != NULL);
-
-	if (pActiveObject != NULL)
+	if (pThis->m_pSiteUIActive != NULL)
 	{
-		ASSERT(pThis->m_pSiteUIActive->m_pActiveObject == NULL);
-		pActiveObject->AddRef();
+		LPOLEINPLACEACTIVEOBJECT pOldActiveObject = pThis->m_pSiteUIActive->m_pActiveObject;
+		if (pActiveObject != NULL)
+			pActiveObject->AddRef();
 		pThis->m_pSiteUIActive->m_pActiveObject = pActiveObject;
+		if (pOldActiveObject != NULL)
+			pOldActiveObject->Release();
 	}
-	else
-	{
-		ASSERT(pThis->m_pSiteUIActive->m_pActiveObject != NULL);
-		pThis->m_pSiteUIActive->m_pActiveObject->Release();
-		pThis->m_pSiteUIActive->m_pActiveObject = NULL;
-	}
-
 	return S_OK;
 }
 
@@ -576,7 +637,8 @@ STDMETHODIMP COleControlContainer::XOleIPFrame::SetStatusText(LPCOLESTR)
 
 STDMETHODIMP COleControlContainer::XOleIPFrame::EnableModeless(BOOL)
 {
-	return E_NOTIMPL;
+   // As long as we don't create any modeless dialogs, we can just return S_OK.
+	return S_OK;
 }
 
 STDMETHODIMP COleControlContainer::XOleIPFrame::TranslateAccelerator(LPMSG,
@@ -638,19 +700,19 @@ STDMETHODIMP COleControlContainer::XOleContainer::QueryInterface(
 	REFIID iid, LPVOID* ppvObj)
 {
 	METHOD_PROLOGUE_EX_(COleControlContainer, OleContainer)
-	return (HRESULT)pThis->ExternalQueryInterface(&iid, ppvObj);
+	return (HRESULT)pThis->InternalQueryInterface(&iid, ppvObj);
 }
 
 STDMETHODIMP_(ULONG) COleControlContainer::XOleContainer::Release()
 {
 	METHOD_PROLOGUE_EX_(COleControlContainer, OleContainer)
-	return (ULONG)pThis->ExternalRelease();
+	return (ULONG)pThis->InternalRelease();
 }
 
 STDMETHODIMP_(ULONG) COleControlContainer::XOleContainer::AddRef()
 {
 	METHOD_PROLOGUE_EX_(COleControlContainer, OleContainer)
-	return (ULONG)pThis->ExternalAddRef();
+	return (ULONG)pThis->InternalAddRef();
 }
 
 STDMETHODIMP COleControlContainer::XOleContainer::ParseDisplayName(LPBINDCTX,
@@ -707,7 +769,7 @@ STDMETHODIMP COleControlContainer::XOleContainer::EnumObjects(DWORD dwFlags,
 	}
 	else
 	{
-		ASSERT(pEnum = NULL);
+		ASSERT(pEnum == NULL);
 		ASSERT(*ppEnumUnknown == NULL);
 
 		if (ppUnk != NULL)

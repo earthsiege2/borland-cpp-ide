@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -48,6 +48,7 @@ COleObjectFactory::COleObjectFactory(REFCLSID clsid,
 	m_pRuntimeClass = pRuntimeClass;
 	m_bMultiInstance = bMultiInstance;
 	m_lpszProgID = lpszProgID;
+	m_bOAT = (BYTE) OAT_UNKNOWN;
 
 	// licensing information
 	m_bLicenseChecked = FALSE;
@@ -55,9 +56,9 @@ COleObjectFactory::COleObjectFactory(REFCLSID clsid,
 
 	// add this factory to the list of factories
 	m_pNextFactory = NULL;
-	AFX_MODULE_STATE* pState = AfxGetModuleState();
+	AFX_MODULE_STATE* pModuleState = _AFX_CMDTARGET_GETSTATE();
 	AfxLockGlobals(CRIT_OBJECTFACTORYLIST);
-	pState->m_factoryList.AddHead(this);
+	pModuleState->m_factoryList.AddHead(this);
 	AfxUnlockGlobals(CRIT_OBJECTFACTORYLIST);
 
 	ASSERT_VALID(this);
@@ -83,7 +84,7 @@ COleObjectFactory::~COleObjectFactory()
 #ifdef _AFXDLL
 	AFX_MODULE_STATE* pModuleState = m_pModuleState;
 #else
-	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	AFX_MODULE_STATE* pModuleState = _AFX_CMDTARGET_GETSTATE();
 #endif
 	AfxLockGlobals(CRIT_OBJECTFACTORYLIST);
 	BOOL bResult = pModuleState->m_factoryList.Remove(this);
@@ -93,12 +94,8 @@ COleObjectFactory::~COleObjectFactory()
 
 	// check CDynLinkLibrary objects in case it was transfered during init
 #ifdef _AFXDLL
-	AFX_MODULE_PROCESS_STATE* pState = pModuleState->m_process.GetDataNA();
-	if (pState == NULL)
-		return;
-
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		if (pDLL->m_factoryList.Remove(this))
@@ -114,6 +111,11 @@ COleObjectFactory::~COleObjectFactory()
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
+
+BOOL COleObjectFactory::Unregister()
+{
+	return TRUE;
+}
 
 BOOL COleObjectFactory::Register()
 {
@@ -146,6 +148,25 @@ BOOL COleObjectFactory::Register()
 	return TRUE;
 }
 
+BOOL PASCAL COleObjectFactory::UnregisterAll()
+{
+	BOOL bResult = TRUE;
+	// register application factories
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	AfxLockGlobals(CRIT_OBJECTFACTORYLIST);
+	for (COleObjectFactory* pFactory = pModuleState->m_factoryList;
+		pFactory != NULL; pFactory = pFactory->m_pNextFactory)
+	{
+		// unregister any registered, non-doctemplate factories
+		if (pFactory->IsRegistered() && !pFactory->Unregister())
+		{
+			bResult = FALSE;
+		}
+	}
+	AfxUnlockGlobals(CRIT_OBJECTFACTORYLIST);
+	return bResult;
+}
+
 BOOL PASCAL COleObjectFactory::RegisterAll()
 {
 	BOOL bResult = TRUE;
@@ -166,8 +187,7 @@ BOOL PASCAL COleObjectFactory::RegisterAll()
 #ifdef _AFXDLL
 	// register extension DLL factories
 	AfxLockGlobals(CRIT_DYNLINKLIST);
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		for (pFactory = pDLL->m_factoryList;
@@ -219,8 +239,7 @@ void PASCAL COleObjectFactory::RevokeAll()
 #ifdef _AFXDLL
 	AfxLockGlobals(CRIT_DYNLINKLIST);
 	// register extension DLL factories
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		for (pFactory = pDLL->m_factoryList;
@@ -273,8 +292,7 @@ BOOL PASCAL COleObjectFactory::UpdateRegistryAll(BOOL bRegister)
 #ifdef _AFXDLL
 	AfxLockGlobals(CRIT_DYNLINKLIST);
 	// register extension DLL factories
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
-	for (CDynLinkLibrary* pDLL = pState->m_libraryList; pDLL != NULL;
+	for (CDynLinkLibrary* pDLL = pModuleState->m_libraryList; pDLL != NULL;
 		pDLL = pDLL->m_pNextDLL)
 	{
 		for (pFactory = pDLL->m_factoryList;
@@ -296,7 +314,7 @@ BOOL PASCAL COleObjectFactory::UpdateRegistryAll(BOOL bRegister)
 CCmdTarget* COleObjectFactory::OnCreateObject()
 {
 	ASSERT_VALID(this);
-	ASSERT(AfxIsValidAddress(m_pRuntimeClass, sizeof(CRuntimeClass)));
+	ASSERT(AfxIsValidAddress(m_pRuntimeClass, sizeof(CRuntimeClass), FALSE));
 		// this implementation needs a runtime class
 
 	// allocate object, throw exception on failure
@@ -353,8 +371,10 @@ BOOL COleObjectFactory::VerifyLicenseKey(BSTR bstrKey)
 	{
 		ASSERT(bstr != NULL);
 
-		UINT cch = SysStringLen(bstr);
-		if ((cch == SysStringLen(bstrKey)) &&
+		// if length and content match, it's good!
+
+		UINT cch = SysStringByteLen(bstr);
+		if ((cch == SysStringByteLen(bstrKey)) &&
 			(memcmp(bstr, bstrKey, cch) == 0))
 		{
 			bLicensed = TRUE;
@@ -372,20 +392,20 @@ BOOL COleObjectFactory::VerifyLicenseKey(BSTR bstrKey)
 STDMETHODIMP_(ULONG) COleObjectFactory::XClassFactory::AddRef()
 {
 	METHOD_PROLOGUE_EX_(COleObjectFactory, ClassFactory)
-	return pThis->ExternalAddRef();
+	return pThis->InternalAddRef();
 }
 
 STDMETHODIMP_(ULONG) COleObjectFactory::XClassFactory::Release()
 {
 	METHOD_PROLOGUE_EX_(COleObjectFactory, ClassFactory)
-	return pThis->ExternalRelease();
+	return pThis->InternalRelease();
 }
 
 STDMETHODIMP COleObjectFactory::XClassFactory::QueryInterface(
 	REFIID iid, LPVOID* ppvObj)
 {
 	METHOD_PROLOGUE_EX_(COleObjectFactory, ClassFactory)
-	return pThis->ExternalQueryInterface(&iid, ppvObj);
+	return pThis->InternalQueryInterface(&iid, ppvObj);
 }
 
 STDMETHODIMP COleObjectFactory::XClassFactory::CreateInstance(
@@ -456,6 +476,8 @@ STDMETHODIMP COleObjectFactory::XClassFactory::CreateInstanceLic(
 	METHOD_PROLOGUE_EX(COleObjectFactory, ClassFactory)
 	ASSERT_VALID(pThis);
 
+	if (ppvObject == NULL)
+		return E_POINTER;
 	*ppvObject = NULL;
 
 	if (((bstrKey != NULL) && !pThis->VerifyLicenseKey(bstrKey)) ||
@@ -508,7 +530,7 @@ STDMETHODIMP COleObjectFactory::XClassFactory::CreateInstanceLic(
 			}
 		}
 		if (dwRef != 1)
-			TRACE1("Warning: object created with reference of %ld", dwRef);
+			TRACE1("Warning: object created with reference of %ld\n", dwRef);
 	}
 
 	// cleanup in case of errors
@@ -544,12 +566,7 @@ void COleObjectFactory::Dump(CDumpContext& dc) const
 	LPOLESTR lpszClassID = NULL;
 	if (StringFromCLSID(m_clsid, &lpszClassID) == S_OK)
 	{
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      OLE2CT(lpszClassID);
-		dc << "\nm_clsid = " << (LPCSTR)pBAfxConv;
-#else    // __BORLANDC__
 		dc << "\nm_clsid = " << OLE2CT(lpszClassID);
-#endif   // __BORLANDC__
 		CoTaskMemFree(lpszClassID);
 	}
 	dc << "\nm_pRuntimeClass = " << m_pRuntimeClass;

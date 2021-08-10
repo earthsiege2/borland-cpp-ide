@@ -1,0 +1,137 @@
+TDSTRP32 Help
+
+1. TDSTRP32: The symbol table stripping utility
+==============================================
+TDSTRP32.EXE lets you remove the symbol table from an executable program.
+This is a faster way of removing the symbol table than recompiling and
+relinking your program without symbolic debug information. TDSTRP32 can
+also remove debugging information from an .OBJ file:
+
+   TDSTRP32 PROGRAM.OBJ
+
+You can also use TDSTRP32 to remove the symbol table and put it in
+a separate file. This is useful when you want to convert the .EXE
+format program to a .COM file and still retain the debugging symbol
+table. TDSTRP32 puts the symbol table in a file with the extension
+.TDS. Turbo Debugger looks for this file when it loads a program to
+debug that doesn't have a symbol table.
+
+
+TDSTRP32 command-line options
+----------------------------
+The general form of the DOS command line used to start TDSTRP32 is:
+
+   TDSTRP32 [-s] [-c] <exename> [<outputname>]
+
+If you don't specify the -s option, the symbol table is removed from
+the .EXE file <exename>. If you specify an <outputname>, the original
+.EXE file is left unchanged and a version with no symbol table is created
+as <outputname>.
+
+If you do specify the -s option, the symbol table will be put in a
+file with the same name as <exename> but with the extension .TDS. If you
+specify an output file, the symbol table will be put in <outputname>.
+
+If you specify the -c option, the input .EXE file is converted into a
+.COM file. If you use -c in conjunction with -s, you can convert an
+.EXE file with symbols into a .COM file with a separate .TDS symbol
+file. This lets you debug .COM files with Turbo Debugger while
+retaining full debugging information.
+
+You can only convert certain .EXE files into .COM files. The same
+restrictions apply to the -c option of TDSTRP32 as to the /t option of
+TLINK: Your program must start at location 100 hex, and it can't
+contain any segment fixups.
+
+The default extension for <exename> is .EXE. If you add an extension,
+it overrides the default.
+
+There are two default extensions for <outputname>,
+
+o .TDS when you use the -s command-line switch
+o .EXE when you don't use the -s command-line switch
+
+If you add an extension, it overrides the defaults.
+
+Here are some sample TDSTRP32 command lines. The following command
+removes the symbol table from MYPROG.EXE:
+
+   TDSTRP32 MYPROG
+
+The following command removes the symbol table from MYPROG.OLD
+and places it in MYPROG.TDS:
+
+   TDSTRP32 -s MYPROG.OLD
+
+The following command leaves MYPROG.EXE unchanged but creates another
+copy of it named MYPROG.NEW without a symbol table:
+
+   TDSTRP32 MYPROG MYPROG.NEW
+
+The following command removes the symbol table from MYPROG.EXE and
+places it in MYSYMS.TDS:
+
+   TDSTRP32 -s MYPROG MYSYMS
+
+
+TDSTRP32 error messages
+----------------------
+Following is a list of TDSTRP32 error messages:
+
+Can't create file: ___
+  TDSTRP32 couldn't create the output symbol or .EXE file. Either there
+  is no more room on your disk, or you specified an invalid output file
+  name.
+
+Can't open file: ___
+  TDSTRP32 could not locate the .EXE file from which you want to remove the
+  symbol table.
+
+Error reading from input exe file
+  An error occurred during reading from the input executable program
+  file. Your disk may be unreadable. Try the operation again.
+
+Error writing to output file: ___; disk may be full
+  TDSTRP32 couldn't write to the output symbol or executable file. This
+  usually happens when there is no more room on your disk. You will have
+  to delete some files to make room for the file created by TDSTRP32.
+
+Input file is not an .exe file
+  You've specified an input file name that isn't a valid executable
+  program. You can strip symbols only from .EXE programs because these
+  are the only ones that TLINK can put a symbol table in. Programs in
+  .COM file format don't have symbol tables and can't be processed by
+  TDSTRP32.
+
+Invalid command-line option: ___
+  You've given an invalid command-line option when starting TDSTRP32
+  from the DOS command line.
+
+Invalid exe file format
+  The input file appears to be an .EXE format program file, but
+  something is wrong with it. You should relink the program with TLINK.
+
+Not enough memory
+  Your system doesn't have enough free memory for TDSTRP32 to load and
+  process the .EXE file. This only happens in extreme circumstances
+  (TDSTRP32 has very modest memory requirements). Try rebooting your 
+  system and running TDSTRP32 again. You might have previously run a
+  program that allocated some memory that won't be freed until you reboot.
+
+Program does not have a symbol table
+  You've specified an input file that's a valid .EXE file, but it
+  doesn't have a symbol table.
+
+Program does not have a valid symbol table
+  The symbol table at the end of the .EXE file isn't a valid TLINK
+  symbol table. This can happen if you try to use TDSTRP32 on a program
+  created by a linker other than TLINK. Relink the program with TLINK.
+
+Too many arguments
+  You can supply a maximum of two arguments to TDSTRP32, the first being
+  the name of the executable program, and the second being the name of
+  the output file for symbols or the executable program.
+
+You must supply an exe file name
+  You've started TDSTRP32 without giving it the name of an .EXE program
+  file whose symbol table you want to strip.

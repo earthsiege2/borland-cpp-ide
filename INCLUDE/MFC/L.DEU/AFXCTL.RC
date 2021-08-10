@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,6 +28,7 @@ END
 /////////////////////////////////////////////////////////////////////////////
 // OLE Control Resources
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
@@ -154,9 +155,11 @@ BEGIN
 	AFX_IDS_COLOR_ACTIVEBORDER "Aktiver Rahmen"
 	AFX_IDS_COLOR_INACTIVEBORDER "Inaktiver Rahmen"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
 STRINGTABLE DISCARDABLE
 BEGIN
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_WNDFRAME  "Fensterrahmen"
 	AFX_IDS_COLOR_SCROLLBARS "Bildlaufleisten"
 	AFX_IDS_COLOR_BTNFACE   "Schaltfläche"
@@ -171,6 +174,7 @@ BEGIN
 	AFX_IDS_ITALIC          "Kursiv"
 	AFX_IDS_BOLDITALIC      "Fett-kursiv"
 	AFX_IDS_SAMPLETEXT      "AaBbYyZz"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_DISPLAYSTRING_FONT "(Schriftart)"
 	AFX_IDS_DISPLAYSTRING_COLOR "(Farbe)"
 END
@@ -178,18 +182,22 @@ END
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_DISPLAYSTRING_PICTURE "(Bild - %s)"
-	AFX_IDS_PICTUREFILTER   "Alle Bildtypen|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|Bitmaps (*.bmp;*.dib)|*.bmp;*.dib|Symbole/Zeiger (*.ico;*.cur)|*.ico;*.cur|Metadateien (*.wmf;*.emf)|*.emf;*.wmf|Alle Dateien (*.*)|*.*||"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
+	AFX_IDS_PICTUREFILTER   "Alle Bildtypen|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|Bitmaps (*.bmp;*.dib)|*.bmp;*.dib|Symbole/Zeiger (*.ico;*.cur)|*.ico;*.cur|Metadateien (*.wmf;*.emf)|*.wmf;*.emf|Alle Dateien (*.*)|*.*||"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_PICTYPE_UNKNOWN "Unbekannt"
 	AFX_IDS_PICTYPE_NONE    "Kein"
 	AFX_IDS_PICTYPE_BITMAP  "Bitmap"
 	AFX_IDS_PICTYPE_METAFILE "Metadatei"
 	AFX_IDS_PICTYPE_ICON    "Symbol"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_PPG       "Farbeigenschaften"
 	AFX_IDS_COLOR_PPG_CAPTION "Farben"
 	AFX_IDS_FONT_PPG        "Schrifteigenschaften"
 	AFX_IDS_FONT_PPG_CAPTION "Schriftarten"
 	AFX_IDS_PICTURE_PPG     "Bildeigenschaften"
 	AFX_IDS_PICTURE_PPG_CAPTION "Bilder"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_BORDERSTYLE_0   "0 - Keiner"
 	AFX_IDS_BORDERSTYLE_1   "1 - Fester einzelner"
 END
@@ -200,6 +208,7 @@ BEGIN
 	AFX_IDS_VERB_PROPERTIES "&Eigenschaften..."
 END
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_PICTURECANTOPEN "Bilddatei %1 konnte nicht geöffnet werden. Die Datei existiert möglicherweise nicht oder ist nicht lesbar."
@@ -213,7 +222,9 @@ STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_PICTUREBROWSETITLE "Bilder durchsuchen"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
+#ifndef _AFX_NO_CTLERROR_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_E_ILLEGALFUNCTIONCALL "Ungültiger Funktionsaufruf"
@@ -267,6 +278,7 @@ BEGIN
 	AFX_IDP_E_SEARCHTEXTNOTFOUND "Suchtext nicht gefunden"
 	AFX_IDP_E_REPLACEMENTSTOOLONG "Ersetzungstext zu lang"
 END
+#endif //!_AFX_NO_CTLERROR_RESOURCES
 
 #endif //!_AFXDLL
 #endif //__AFXOLECL_RC__

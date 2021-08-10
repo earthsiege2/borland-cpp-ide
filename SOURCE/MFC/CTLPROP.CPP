@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,39 +37,77 @@ static char THIS_FILE[] = __FILE__;
 #define STOCKPROP_ENABLED       0x00000040
 #define STOCKPROP_APPEARANCE    0x00000080
 
-static const DISPID _rgdispidStockProps[] =
+AFX_STATIC_DATA const DWORD _afxStockProps[] =
 {
-	DISPID_BACKCOLOR,
-	DISPID_CAPTION,
-	DISPID_FONT,
-	DISPID_FORECOLOR,
-	DISPID_TEXT,
-	DISPID_BORDERSTYLE,
-	DISPID_ENABLED,
-	DISPID_APPEARANCE,
-	DISPID_UNKNOWN,
+	STOCKPROP_BACKCOLOR,    // -501
+	0,                      // -502
+	0,                      // -503
+	STOCKPROP_BORDERSTYLE,  // -504
+	0,                      // -505
+	0,                      // -506
+	0,                      // -507
+	0,                      // -508
+	0,                      // -509
+	0,                      // -510
+	0,                      // -511
+	STOCKPROP_FONT,         // -512
+	STOCKPROP_FORECOLOR,    // -513
+	STOCKPROP_ENABLED,      // -514
+	0,                      // -515
+	0,                      // -516
+	STOCKPROP_TEXT,         // -517
+	STOCKPROP_CAPTION,      // -518
+	0,                      // -519
+	STOCKPROP_APPEARANCE,   // -520
 };
 
 void COleControl::InitStockPropMask()
 {
-	const DISPID* pDispID = _rgdispidStockProps;
+	const AFX_DISPMAP* pDispMap = GetDispatchMap();
 	const AFX_DISPMAP_ENTRY* pEntry;
-	DWORD dwMaskBit = 1;
+	ASSERT(pDispMap != NULL);
 
-	while (*pDispID != DISPID_UNKNOWN)
+	// If stock property mask is already initialized, we're outta here.
+	if (*pDispMap->lpStockPropMask != (DWORD)-1)
+		return;
+
+	AfxLockGlobals(CRIT_STOCKMASK);
+
+	if (*pDispMap->lpStockPropMask == (DWORD)-1)
 	{
-		if (((pEntry = GetDispEntry(*pDispID)) != NULL) &&
-			(pEntry->flags & afxDispStock))
+		const AFX_DISPMAP* pDispMapTop = pDispMap;
+		DWORD dwStockPropMask = 0;
+
+		while (pDispMap != NULL)
 		{
-			m_dwStockPropMask |= dwMaskBit;
+			pEntry = pDispMap->lpEntries;
+			while (pEntry->nPropOffset != -1)
+			{
+				int nIndex = DISPID_BACKCOLOR - pEntry->lDispID;
+				DWORD dwFlag;
+				if (nIndex >= 0 && nIndex < _countof(_afxStockProps) &&
+					(dwFlag = _afxStockProps[nIndex]) != 0)
+				{
+					dwStockPropMask |= dwFlag;
+				}
+
+				++pEntry;
+			}
+			// check base class
+#ifdef _AFXDLL
+			pDispMap = (*pDispMap->pfnGetBaseMap)();
+#else
+			pDispMap = pDispMap->pBaseMap;
+#endif
 		}
 
-		dwMaskBit <<= 1;
-		++pDispID;
+		*pDispMapTop->lpStockPropMask = dwStockPropMask;
 	}
+
+	AfxUnlockGlobals(CRIT_STOCKMASK);
 }
 
-static void ToggleBorderStyle(CWnd* pWnd)
+AFX_STATIC void AFXAPI _AfxToggleBorderStyle(CWnd* pWnd)
 {
 	if (pWnd->m_hWnd != NULL)
 	{
@@ -80,7 +118,7 @@ static void ToggleBorderStyle(CWnd* pWnd)
 	}
 }
 
-static void ToggleAppearance(CWnd* pWnd)
+AFX_STATIC void AFXAPI _AfxToggleAppearance(CWnd* pWnd)
 {
 	if (pWnd->m_hWnd != NULL)
 	{
@@ -98,11 +136,12 @@ static void ToggleAppearance(CWnd* pWnd)
 void COleControl::ExchangeStockProps(CPropExchange* pPX)
 {
 	BOOL bLoading = pPX->IsLoading();
-	DWORD dwPersistMask = m_dwStockPropMask;
+	DWORD dwStockPropMask = GetStockPropMask();
+	DWORD dwPersistMask = dwStockPropMask;
 
 	PX_ULong(pPX, _T("_StockProps"), dwPersistMask);
 
-	if (m_dwStockPropMask & (STOCKPROP_CAPTION | STOCKPROP_TEXT))
+	if (dwStockPropMask & (STOCKPROP_CAPTION | STOCKPROP_TEXT))
 	{
 		CString strText;
 
@@ -110,9 +149,9 @@ void COleControl::ExchangeStockProps(CPropExchange* pPX)
 		{
 			if (!bLoading)
 				strText = InternalGetText();
-			if (m_dwStockPropMask & STOCKPROP_CAPTION)
+			if (dwStockPropMask & STOCKPROP_CAPTION)
 				PX_String(pPX, _T("Caption"), strText, _T(""));
-			if (m_dwStockPropMask & STOCKPROP_TEXT)
+			if (dwStockPropMask & STOCKPROP_TEXT)
 				PX_String(pPX, _T("Text"), strText, _T(""));
 		}
 		if (bLoading)
@@ -123,7 +162,7 @@ void COleControl::ExchangeStockProps(CPropExchange* pPX)
 		}
 	}
 
-	if (m_dwStockPropMask & STOCKPROP_FORECOLOR)
+	if (dwStockPropMask & STOCKPROP_FORECOLOR)
 	{
 		if (dwPersistMask & STOCKPROP_FORECOLOR)
 			PX_Color(pPX, _T("ForeColor"), m_clrForeColor, AmbientForeColor());
@@ -131,7 +170,7 @@ void COleControl::ExchangeStockProps(CPropExchange* pPX)
 			m_clrForeColor = AmbientForeColor();
 	}
 
-	if (m_dwStockPropMask & STOCKPROP_BACKCOLOR)
+	if (dwStockPropMask & STOCKPROP_BACKCOLOR)
 	{
 		if (dwPersistMask & STOCKPROP_BACKCOLOR)
 			PX_Color(pPX, _T("BackColor"), m_clrBackColor, AmbientBackColor());
@@ -139,7 +178,7 @@ void COleControl::ExchangeStockProps(CPropExchange* pPX)
 			m_clrBackColor = AmbientBackColor();
 	}
 
-	if (m_dwStockPropMask & STOCKPROP_FONT)
+	if (dwStockPropMask & STOCKPROP_FONT)
 	{
 		LPFONTDISP pFontDispAmbient = AmbientFont();
 		BOOL bChanged = TRUE;
@@ -155,7 +194,7 @@ void COleControl::ExchangeStockProps(CPropExchange* pPX)
 		RELEASE(pFontDispAmbient);
 	}
 
-	if (m_dwStockPropMask & STOCKPROP_BORDERSTYLE)
+	if (dwStockPropMask & STOCKPROP_BORDERSTYLE)
 	{
 		short sBorderStyle = m_sBorderStyle;
 
@@ -165,13 +204,10 @@ void COleControl::ExchangeStockProps(CPropExchange* pPX)
 			m_sBorderStyle = 0;
 
 		if (sBorderStyle != m_sBorderStyle)
-		{
-			ToggleBorderStyle(this);
-			InvalidateControl();
-		}
+			_AfxToggleBorderStyle(this);
 	}
 
-	if (m_dwStockPropMask & STOCKPROP_ENABLED)
+	if (dwStockPropMask & STOCKPROP_ENABLED)
 	{
 		BOOL bEnabled = m_bEnabled;
 
@@ -184,7 +220,7 @@ void COleControl::ExchangeStockProps(CPropExchange* pPX)
 			::EnableWindow(m_hWnd, m_bEnabled);
 	}
 
-	if (m_dwStockPropMask & STOCKPROP_APPEARANCE)
+	if (dwStockPropMask & STOCKPROP_APPEARANCE)
 	{
 		short sAppearance = m_sAppearance;
 
@@ -194,11 +230,226 @@ void COleControl::ExchangeStockProps(CPropExchange* pPX)
 			m_sAppearance = AmbientAppearance();
 
 		if (sAppearance != m_sAppearance)
+			_AfxToggleAppearance(this);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Serialization for stock properties
+
+void COleControl::SerializeStockProps(CArchive& ar)
+{
+	BOOL bLoading = ar.IsLoading();
+	DWORD dwStockPropMask = GetStockPropMask();
+	DWORD dwPersistMask = dwStockPropMask;
+
+	if (bLoading)
+	{
+		ar >> dwPersistMask;
+
+		if (dwStockPropMask & (STOCKPROP_CAPTION | STOCKPROP_TEXT))
 		{
-			ToggleAppearance(this);
-			InvalidateControl();
+			if (dwPersistMask & (STOCKPROP_CAPTION | STOCKPROP_TEXT))
+			{
+				CString strText;
+				ar >> strText;
+				TRY
+					SetText(strText);
+				END_TRY
+			}
+			else
+			{
+				TRY
+					SetText(_T(""));
+				END_TRY
+			}
+		}
+
+		if (dwStockPropMask & STOCKPROP_FORECOLOR)
+		{
+			if (dwPersistMask & STOCKPROP_FORECOLOR)
+				ar >> m_clrForeColor;
+			else
+				m_clrForeColor = AmbientForeColor();
+		}
+
+		if (dwStockPropMask & STOCKPROP_BACKCOLOR)
+		{
+			if (dwPersistMask & STOCKPROP_BACKCOLOR)
+				ar >> m_clrBackColor;
+			else
+				m_clrBackColor = AmbientBackColor();
+		}
+
+		if (dwStockPropMask & STOCKPROP_FONT)
+		{
+			BOOL bRead = FALSE;
+
+			if (dwPersistMask & STOCKPROP_FONT)
+			{
+				BYTE bFlag;
+				ar >> bFlag;
+				if (bFlag != 0xFF)
+				{
+					CArchiveStream stm(&ar);
+					LPSTREAM pstm = _AfxGetArchiveStream(ar, stm);
+					LPFONT pFont = _AfxCreateFontFromStream(pstm);
+					if (pFont != NULL)
+					{
+						m_font.SetFont(pFont);
+						bRead = TRUE;
+					}
+				}
+			}
+
+			if (! bRead)
+			{
+				LPFONTDISP pFontDispAmbient = AmbientFont();
+				m_font.InitializeFont(NULL, pFontDispAmbient);
+				RELEASE(pFontDispAmbient);
+			}
+
+			OnFontChanged();
+		}
+
+		if (dwStockPropMask & STOCKPROP_BORDERSTYLE)
+		{
+			if (dwPersistMask & STOCKPROP_BORDERSTYLE)
+			{
+				short sBorderStyle = m_sBorderStyle;
+				ar >> m_sBorderStyle;
+				if (sBorderStyle != m_sBorderStyle)
+					_AfxToggleBorderStyle(this);
+			}
+			else
+			{
+				m_sBorderStyle = 0;
+			}
+		}
+
+		if (dwStockPropMask & STOCKPROP_ENABLED)
+		{
+			if (dwPersistMask & STOCKPROP_ENABLED)
+			{
+				BOOL bEnabled = m_bEnabled;
+				ar >> m_bEnabled;
+				if ((bEnabled != m_bEnabled) && (m_hWnd != NULL))
+					::EnableWindow(m_hWnd, m_bEnabled);
+			}
+			else
+			{
+				m_bEnabled = TRUE;
+			}
+		}
+
+		if (dwStockPropMask & STOCKPROP_APPEARANCE)
+		{
+			if (dwPersistMask & STOCKPROP_APPEARANCE)
+			{
+				short sAppearance = m_sAppearance;
+				ar >> m_sAppearance;
+
+				if (sAppearance != m_sAppearance)
+					_AfxToggleAppearance(this);
+			}
+			else
+			{
+				m_sAppearance = AmbientAppearance();
+			}
 		}
 	}
+	else
+	{
+		ar << dwPersistMask;
+
+		if (dwStockPropMask & (STOCKPROP_CAPTION | STOCKPROP_TEXT))
+			ar << m_strText;
+
+		if (dwStockPropMask & STOCKPROP_FORECOLOR)
+			ar << m_clrForeColor;
+
+		if (dwStockPropMask & STOCKPROP_BACKCOLOR)
+			ar << m_clrBackColor;
+
+		if (dwStockPropMask & STOCKPROP_FONT)
+		{
+			BOOL bWrite = FALSE;
+			LPFONT pFont = m_font.m_pFont;
+			if (pFont != NULL)
+			{
+				// If same as ambient font (or error), write 0xFF for the flag
+				LPFONTDISP pFontDispAmbient = AmbientFont();
+				if (!_AfxIsSameFont(m_font, NULL, pFontDispAmbient))
+				{
+					LPPERSISTSTREAM pps = NULL;
+					if (SUCCEEDED(pFont->QueryInterface(IID_IPersistStream,
+						(LPVOID*)&pps)))
+					{
+						ASSERT_POINTER(pps, IPersistStream);
+						ar << (BYTE)0x00;
+						CArchiveStream stm(&ar);
+						LPSTREAM pstm = _AfxGetArchiveStream(ar, stm);
+						bWrite = SUCCEEDED(::OleSaveToStream(pps, pstm));
+						pps->Release();
+						if (!bWrite)
+							AfxThrowArchiveException(CArchiveException::generic);
+					}
+				}
+				RELEASE(pFontDispAmbient);
+			}
+			if (! bWrite)
+			{
+				ar << (BYTE)0xFF;
+			}
+		}
+
+		if (dwStockPropMask & STOCKPROP_BORDERSTYLE)
+			ar << m_sBorderStyle;
+
+		if (dwStockPropMask & STOCKPROP_ENABLED)
+			ar << m_bEnabled;
+
+		if (dwStockPropMask & STOCKPROP_APPEARANCE)
+			ar << m_sAppearance;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Initialization for stock properties
+
+void COleControl::ResetStockProps()
+{
+	DWORD dwStockPropMask = GetStockPropMask();
+
+	if (dwStockPropMask & (STOCKPROP_CAPTION | STOCKPROP_TEXT))
+	{
+		TRY
+			SetText(_T(""));
+		END_TRY
+	}
+
+	if (dwStockPropMask & STOCKPROP_FORECOLOR)
+		m_clrForeColor = AmbientForeColor();
+
+	if (dwStockPropMask & STOCKPROP_BACKCOLOR)
+		m_clrBackColor = AmbientBackColor();
+
+	if (dwStockPropMask & STOCKPROP_FONT)
+	{
+		LPFONTDISP pFontDispAmbient = AmbientFont();
+		m_font.InitializeFont(NULL, pFontDispAmbient);
+		RELEASE(pFontDispAmbient);
+		OnFontChanged();
+	}
+
+	if (dwStockPropMask & STOCKPROP_BORDERSTYLE)
+		m_sBorderStyle = 0;
+
+	if (dwStockPropMask & STOCKPROP_ENABLED)
+		m_bEnabled = TRUE;
+
+	if (dwStockPropMask & STOCKPROP_APPEARANCE)
+		m_sAppearance = AmbientAppearance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -228,7 +479,7 @@ void COleControl::SetAppearance(short sAppearance)
 	m_sAppearance = sAppearance;
 	m_bModified = TRUE;
 
-	ToggleAppearance(this);
+	_AfxToggleAppearance(this);
 	OnAppearanceChanged();
 
 	BoundPropertyChanged(DISPID_APPEARANCE);
@@ -300,7 +551,7 @@ void COleControl::SetBorderStyle(short sBorderStyle)
 	m_sBorderStyle = sBorderStyle;
 	m_bModified = TRUE;
 
-	ToggleBorderStyle(this);
+	_AfxToggleBorderStyle(this);
 	OnBorderStyleChanged();
 
 	BoundPropertyChanged(DISPID_BORDERSTYLE);
@@ -318,10 +569,25 @@ void COleControl::OnBorderStyleChanged()
 
 const CString& COleControl::InternalGetText()
 {
-	if (m_hWnd != NULL)
+	// Some subclassed controls (such as edit controls and comboboxes) change
+	// the window text without sending WM_SETTEXT. Therefore, we need to
+	// ensure that m_strText is up-to-date.
+
+	if (m_hWnd != NULL && IsSubclassedControl())
 	{
-		int nLen = ::GetWindowTextLength(m_hWnd);
-		::GetWindowText(m_hWnd, m_strText.GetBufferSetLength(nLen), nLen+1);
+		// Usually, the window text will be shorter than 32 characters.
+		// When it is, we can be more efficient.
+		const int _cchUsual = 32;
+
+		if (DefWindowProc(WM_GETTEXT, (WPARAM)_cchUsual,
+			(LPARAM)m_strText.GetBufferSetLength(_cchUsual)) >= _cchUsual - 1)
+		{
+			// Text was too long: allocate a bigger buffer.
+
+			int nLen = DefWindowProc(WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0) + 1;
+			DefWindowProc(WM_GETTEXT, (WPARAM)nLen,
+				(LPARAM)m_strText.GetBufferSetLength(nLen));
+		}
 		m_strText.ReleaseBuffer();
 	}
 
@@ -349,16 +615,20 @@ LRESULT COleControl::OnSetText(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam == 0 || AfxIsValidString((LPCTSTR)lParam));
 
+	CString str = InternalGetText();
+
 	// Is the property changing?
-	if ((lParam == 0 && m_strText.IsEmpty()) ||
-		(lParam != 0 && m_strText == (LPCTSTR)lParam))
+	if ((lParam == 0 && str.IsEmpty()) ||
+		(lParam != 0 && str == (LPCTSTR)lParam))
 		return 0;
 
-	if (m_dwStockPropMask & STOCKPROP_CAPTION)
+	DWORD dwStockPropMask = GetStockPropMask();
+
+	if (dwStockPropMask & STOCKPROP_CAPTION)
 		if (!BoundPropertyRequestEdit(DISPID_CAPTION))
 			return -1;
 
-	if (m_dwStockPropMask & STOCKPROP_TEXT)
+	if (dwStockPropMask & STOCKPROP_TEXT)
 		if (!BoundPropertyRequestEdit(DISPID_TEXT))
 			return -1;
 
@@ -367,14 +637,14 @@ LRESULT COleControl::OnSetText(WPARAM wParam, LPARAM lParam)
 	m_bModified = TRUE;
 
 	if (m_hWnd != NULL)
-		lResult = CWnd::DefWindowProc(WM_SETTEXT, wParam, lParam);
+		lResult = DefWindowProc(WM_SETTEXT, wParam, lParam);
 
 	OnTextChanged();
 
-	if (m_dwStockPropMask & STOCKPROP_CAPTION)
+	if (dwStockPropMask & STOCKPROP_CAPTION)
 		BoundPropertyChanged(DISPID_CAPTION);
 
-	if (m_dwStockPropMask & STOCKPROP_TEXT)
+	if (dwStockPropMask & STOCKPROP_TEXT)
 		BoundPropertyChanged(DISPID_TEXT);
 
 	return lResult;
@@ -456,7 +726,7 @@ void COleControl::OnFontChanged()
 
 	// Send WM_SETFONT to control's window
 	if ((m_hWnd != NULL) &&
-		(m_dwStockPropMask & STOCKPROP_FONT) &&
+		(GetStockPropMask() & STOCKPROP_FONT) &&
 		IsSubclassedControl())
 	{
 		HFONT hFontPrev = (HFONT)SendMessage(WM_GETFONT, 0, 0);
@@ -525,7 +795,19 @@ void COleControl::OnForeColorChanged()
 
 OLE_HANDLE COleControl::GetHwnd()
 {
+#ifdef _AFXDLL
 	return (OLE_HANDLE)((m_bInPlaceActive || m_bOpen) ? m_hWnd : NULL);
+#else
+	return (OLE_HANDLE)(m_bInPlaceActive ? m_hWnd : NULL);
+#endif
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// ReadyState property
+
+long COleControl::GetReadyState()
+{
+	return m_lReadyState;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -593,23 +875,6 @@ void COleControl::GetFontTextMetrics(LPTEXTMETRIC lptm, CFontHolder& fontHolder)
 /////////////////////////////////////////////////////////////////////////////
 // Ambient property access
 
-BOOL COleControl::GetAmbientProperty(DISPID dwDispID, VARTYPE vtProp, void* pvProp)
-{
-	BOOL bSuccess = FALSE;
-
-	if (m_ambientDispDriver.m_lpDispatch != NULL)
-	{
-		TRY
-		{
-			m_ambientDispDriver.GetProperty(dwDispID, vtProp, pvProp);
-			bSuccess = TRUE;
-		}
-		END_TRY
-	}
-
-	return bSuccess;
-}
-
 BOOL AFXAPI _GetI4Property(LPDISPATCH pDispatch, DISPID dwDispID, DWORD* pdwResult)
 {
 	if (pDispatch == NULL)
@@ -651,11 +916,130 @@ BOOL AFXAPI _GetI4Property(LPDISPATCH pDispatch, DISPID dwDispID, DWORD* pdwResu
 	return FALSE;
 }
 
+COleDispatchDriver* COleControl::GetAmbientDispatchDriver()
+{
+	if (m_ambientDispDriver.m_lpDispatch == NULL)
+	{
+		// Initialize pointer to ambient property dispinterface.
+		IDispatch* pDispatch = NULL;
+
+		if (m_pClientSite != NULL &&
+			SUCCEEDED(m_pClientSite->QueryInterface(IID_IDispatch,
+				reinterpret_cast<void**>(&pDispatch))))
+		{
+			ASSERT(pDispatch != NULL);
+			m_ambientDispDriver.AttachDispatch(pDispatch);
+		}
+	}
+
+	return &m_ambientDispDriver;
+}
+
+AFX_STATIC_DATA const DWORD _afxAmbientFlags[] =
+{
+	QACONTAINER_MESSAGEREFLECT,     // -706
+	0,                              // -707
+	0,                              // -708
+	QACONTAINER_USERMODE,           // -709
+	QACONTAINER_UIDEAD,             // -710
+	QACONTAINER_SHOWGRABHANDLES,    // -711
+	QACONTAINER_SHOWHATCHING,       // -712
+	QACONTAINER_DISPLAYASDEFAULT,   // -713
+	QACONTAINER_SUPPORTSMNEMONICS,  // -714
+	QACONTAINER_AUTOCLIP,           // -715
+};
+
+BOOL COleControl::GetAmbientProperty(DISPID dwDispID, VARTYPE vtProp, void* pvProp)
+{
+	// First, check whether ambient property can be obtained from cache.
+
+	_AFXCTL_AMBIENT_CACHE* pAmbientCache = _afxAmbientCache;
+	if (pAmbientCache->m_bValid)
+	{
+		switch (vtProp)
+		{
+		// Fetch boolean by selecting appropriate flag in cache.
+		case VT_BOOL:
+			{
+				int nIndex = DISPID_AMBIENT_MESSAGEREFLECT - dwDispID;
+				DWORD dwFlag;
+				if (nIndex >= 0 && nIndex < _countof(_afxAmbientFlags) &&
+					(dwFlag = _afxAmbientFlags[nIndex]) != 0)
+				{
+					*(BOOL*)pvProp =
+						((pAmbientCache->m_dwAmbientFlags & dwFlag) != 0);
+					return TRUE;
+				}
+			}
+			break;
+
+		// Fetch color, appearance, or font from corresponding cache entry.
+		case VT_I4:
+			switch (dwDispID)
+			{
+			case DISPID_AMBIENT_FORECOLOR:
+				*(DWORD*)pvProp = pAmbientCache->m_colorFore;
+				return TRUE;
+
+			case DISPID_AMBIENT_BACKCOLOR:
+				*(DWORD*)pvProp = pAmbientCache->m_colorBack;
+				return TRUE;
+
+			case DISPID_AMBIENT_APPEARANCE:
+				*(DWORD*)pvProp = pAmbientCache->m_dwAppearance;
+				return TRUE;
+			}
+			break;
+
+		case VT_I2:
+			if (dwDispID == DISPID_AMBIENT_APPEARANCE)
+			{
+				*(short*)pvProp = (short)pAmbientCache->m_dwAppearance;
+				return TRUE;
+			}
+			break;
+
+		case VT_DISPATCH:
+			if ((dwDispID == DISPID_AMBIENT_FONT) &&
+				(pAmbientCache->m_pFont != NULL) &&
+				SUCCEEDED(pAmbientCache->m_pFont->QueryInterface(IID_IFontDisp,
+					reinterpret_cast<void**>(pvProp))))
+			{
+				return TRUE;
+			}
+			break;
+		}
+	}
+
+	// If there's no ambient dispatch interface available, then fail.
+
+	COleDispatchDriver* pDispDriver = GetAmbientDispatchDriver();
+	if (pDispDriver->m_lpDispatch == NULL)
+		return FALSE;
+
+	// If requested property is of type VT_I4, use optimized function.
+
+	if (vtProp == VT_I4)
+		return _GetI4Property(pDispDriver->m_lpDispatch, dwDispID,
+			(DWORD*)pvProp);
+
+	// If none of the above apply, just use the dispatch driver.
+
+	BOOL bSuccess = FALSE;
+	TRY
+	{
+		pDispDriver->GetProperty(dwDispID, vtProp, pvProp);
+		bSuccess = TRUE;
+	}
+	END_TRY
+
+	return bSuccess;
+}
+
 short COleControl::AmbientAppearance()
 {
 	DWORD dwAppearance;
-	if (!_GetI4Property(m_ambientDispDriver.m_lpDispatch,
-		DISPID_AMBIENT_APPEARANCE, &dwAppearance))
+	if (!GetAmbientProperty(DISPID_AMBIENT_APPEARANCE, VT_I4, &dwAppearance))
 		dwAppearance = 0;
 	return (short)dwAppearance;
 }
@@ -663,8 +1047,7 @@ short COleControl::AmbientAppearance()
 OLE_COLOR COleControl::AmbientBackColor()
 {
 	OLE_COLOR clrBackColor;
-	if (!_GetI4Property(m_ambientDispDriver.m_lpDispatch,
-		DISPID_AMBIENT_BACKCOLOR, &clrBackColor))
+	if (!GetAmbientProperty(DISPID_AMBIENT_BACKCOLOR, VT_I4, &clrBackColor))
 		clrBackColor = GetSysColor(COLOR_WINDOW);
 	return clrBackColor;
 }
@@ -678,10 +1061,7 @@ CString COleControl::AmbientDisplayName()
 
 LPFONTDISP COleControl::AmbientFont()
 {
-	//
-	//  Note: Caller MUST Release the font!
-	//
-
+	// Note: Caller MUST Release the font!
 	LPFONTDISP pDisp;
 	if (!GetAmbientProperty(DISPID_AMBIENT_FONT, VT_DISPATCH, &pDisp))
 		pDisp = NULL;
@@ -691,8 +1071,7 @@ LPFONTDISP COleControl::AmbientFont()
 OLE_COLOR COleControl::AmbientForeColor()
 {
 	OLE_COLOR clrForeColor;
-	if (!_GetI4Property(m_ambientDispDriver.m_lpDispatch,
-		DISPID_AMBIENT_FORECOLOR, &clrForeColor))
+	if (!GetAmbientProperty(DISPID_AMBIENT_FORECOLOR, VT_I4, &clrForeColor))
 		clrForeColor = GetSysColor(COLOR_WINDOWTEXT);
 	return clrForeColor;
 }
@@ -700,8 +1079,7 @@ OLE_COLOR COleControl::AmbientForeColor()
 LCID COleControl::AmbientLocaleID()
 {
 	LCID lcid;
-	if (!_GetI4Property(m_ambientDispDriver.m_lpDispatch,
-		DISPID_AMBIENT_LOCALEID, &lcid))
+	if (!GetAmbientProperty(DISPID_AMBIENT_LOCALEID, VT_I4, &lcid))
 		lcid = 0;
 	return lcid;
 }
@@ -758,16 +1136,13 @@ BOOL COleControl::AmbientShowHatching()
 
 void COleControl::BoundPropertyChanged(DISPID dispid)
 {
-	const CPtrArray* pConnections = m_xPropConnPt.GetConnections();
-	ASSERT(pConnections != NULL);
-
-	int i;
-	int cConnections = pConnections->GetSize();
+	POSITION pos = m_xPropConnPt.GetStartPosition();
 	LPPROPERTYNOTIFYSINK pPropNotifySink;
 
-	for (i = 0; i < cConnections; i++)
+	while (pos != NULL)
 	{
-		pPropNotifySink = (LPPROPERTYNOTIFYSINK)(pConnections->GetAt(i));
+		pPropNotifySink =
+			(LPPROPERTYNOTIFYSINK)m_xPropConnPt.GetNextConnection(pos);
 		ASSERT(pPropNotifySink != NULL);
 		pPropNotifySink->OnChanged(dispid);
 	}
@@ -775,16 +1150,13 @@ void COleControl::BoundPropertyChanged(DISPID dispid)
 
 BOOL COleControl::BoundPropertyRequestEdit(DISPID dispid)
 {
-	const CPtrArray* pConnections = m_xPropConnPt.GetConnections();
-	ASSERT(pConnections != NULL);
-
-	int i;
-	int cConnections = pConnections->GetSize();
+	POSITION pos = m_xPropConnPt.GetStartPosition();
 	LPPROPERTYNOTIFYSINK pPropNotifySink;
 
-	for (i = 0; i < cConnections; i++)
+	while (pos != NULL)
 	{
-		pPropNotifySink = (LPPROPERTYNOTIFYSINK)(pConnections->GetAt(i));
+		pPropNotifySink =
+			(LPPROPERTYNOTIFYSINK)m_xPropConnPt.GetNextConnection(pos);
 		ASSERT(pPropNotifySink != NULL);
 		if (pPropNotifySink->OnRequestEdit(dispid) != S_OK)
 			return FALSE;
@@ -922,8 +1294,10 @@ inline LPOLESTR AFXAPI _AfxCopyString(LPCTSTR psz)
 	{
 #ifdef _UNICODE
 		wcscpy(pszCopy, psz);
-#else
+#elif !defined(OLE2ANSI)
 		MultiByteToWideChar(CP_ACP, 0, psz, -1, pszCopy, cch);
+#else
+		lstrcpy(pszCopy, psz);
 #endif
 	}
 
@@ -1061,9 +1435,129 @@ BOOL COleControl::OnGetPredefinedValue(DISPID dispid, DWORD dwCookie,
 	return FALSE;
 }
 
+void COleControl::Load(LPCTSTR strNewPath, CDataPathProperty& prop)
+{
+	prop.SetControl(this);
+	prop.Open(strNewPath);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CDataPathProperty implementation
+
+BOOL CDataPathProperty::Open(CFileException* pError)
+{
+	return CAsyncMonikerFile::Open(m_strPath, m_pControl ? m_pControl->GetClientSite() : NULL, pError);
+}
+
+BOOL CDataPathProperty::Open(LPCTSTR lpszPath, CFileException* pError)
+{
+	SetPath(lpszPath);
+	return Open(pError);
+}
+
+BOOL CDataPathProperty::Open(COleControl* pControl, CFileException* pError)
+{
+	SetControl(pControl);
+	return Open(pError);
+}
+
+BOOL CDataPathProperty::Open(LPCTSTR lpszPath, COleControl* pControl, CFileException* pError)
+{
+	SetControl(pControl);
+	SetPath(lpszPath);
+	return Open(pError);
+}
+
+void CDataPathProperty::ResetData()
+{
+}
+
+#ifdef _DEBUG
+void CDataPathProperty::AssertValid() const
+{
+	CAsyncMonikerFile::AssertValid();
+}
+
+void CDataPathProperty::Dump(CDumpContext& dc) const
+{
+	CAsyncMonikerFile::Dump(dc);
+
+	dc << "\nm_pControl = " << m_pControl;
+	dc << "\nm_strPath = \"" << m_strPath;
+	dc << "\"\n";
+}
+#endif //_DEBUG
+
+/////////////////////////////////////////////////////////////////////////////
+// CCachedDataPathProperty implementation
+
+AFX_STATIC inline DWORD _AfxTransferFileContent(CFile* pFrom, CFile* pTo)
+{
+	BYTE buff[1024];
+	DWORD dwRead = 0;
+	DWORD dwActual;
+	do
+	{
+		dwActual = pFrom->Read(buff, 1024);
+		pTo->Write(buff, dwActual);
+
+		dwRead += dwActual;
+	}
+	while (dwActual > 0);
+	return dwRead;
+}
+
+void CCachedDataPathProperty::OnDataAvailable(DWORD dwSize, DWORD bscfFlag)
+{
+	UNUSED_ALWAYS(bscfFlag);
+	UNUSED_ALWAYS(dwSize);
+	DWORD dwPos = m_Cache.GetPosition();
+	TRY
+	{
+		// Cache the data in our mem file.
+		m_Cache.SeekToEnd();
+		_AfxTransferFileContent(this, &m_Cache);
+	}
+	CATCH_ALL(e)
+	{
+		m_Cache.Seek(dwPos, CFile::begin);
+		THROW_LAST();
+	}
+	END_CATCH_ALL
+	m_Cache.Seek(dwPos, CFile::begin);
+}
+
+void CCachedDataPathProperty::Close()
+{
+	m_Cache.SetLength(0);
+	CDataPathProperty::Close();
+}
+
+void CCachedDataPathProperty::ResetData()
+{
+	m_Cache.SetLength(0);
+}
+#ifdef _DEBUG
+void CCachedDataPathProperty::AssertValid() const
+{
+	CDataPathProperty::AssertValid();
+	m_Cache.AssertValid();
+}
+
+void CCachedDataPathProperty::Dump(CDumpContext& dc) const
+{
+	CDataPathProperty::Dump(dc);
+
+	m_Cache.Dump(dc);
+}
+#endif //_DEBUG
+
 /////////////////////////////////////////////////////////////////////////////
 // Force any extra compiler-generated code into AFX_INIT_SEG
 
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
+
+IMPLEMENT_DYNAMIC(CDataPathProperty, CAsyncMonikerFile)
+IMPLEMENT_DYNAMIC(CCachedDataPathProperty, CDataPathProperty)

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -52,7 +52,7 @@ BOOL CDialogBar::Create(CWnd* pParentWnd, LPCTSTR lpszTemplateName,
 #endif //_DEBUG
 
 	// allow chance to modify styles
-	m_dwStyle = nStyle;
+	m_dwStyle = (nStyle & CBRS_ALL);
 	CREATESTRUCT cs;
 	memset(&cs, 0, sizeof(cs));
 	cs.lpszClass = _afxWndControlBar;
@@ -71,6 +71,7 @@ BOOL CDialogBar::Create(CWnd* pParentWnd, LPCTSTR lpszTemplateName,
 
 	// initialize common controls
 	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	AfxDeferRegisterClass(AFX_WNDCOMMCTLSNEW_REG);
 
 	BOOL bSuccess = CreateDlg(lpszTemplateName, pParentWnd);
 
@@ -116,9 +117,11 @@ void CDialogBar::OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler)
 
 #ifndef _AFX_NO_OCC_SUPPORT
 
+//{{AFX_MSG_MAP(CDialogBar)
 BEGIN_MESSAGE_MAP(CDialogBar, CControlBar)
 	ON_MESSAGE(WM_INITDIALOG, HandleInitDialog)
 END_MESSAGE_MAP()
+//}}AFX_MSG_MAP
 
 LRESULT CDialogBar::HandleInitDialog(WPARAM, LPARAM)
 {

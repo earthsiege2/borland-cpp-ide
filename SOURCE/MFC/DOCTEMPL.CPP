@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -183,13 +183,8 @@ void CDocTemplate::RemoveDocument(CDocument* pDoc)
 	pDoc->m_pDocTemplate = NULL;
 }
 
-#ifndef _MAC
 CDocTemplate::Confidence CDocTemplate::MatchDocType(LPCTSTR lpszPathName,
 	CDocument*& rpDocMatch)
-#else
-CDocTemplate::Confidence CDocTemplate::MatchDocType(LPCTSTR lpszPathName,
-	DWORD dwFileType, CDocument*& rpDocMatch)
-#endif
 {
 	ASSERT(lpszPathName != NULL);
 	rpDocMatch = NULL;
@@ -212,18 +207,11 @@ CDocTemplate::Confidence CDocTemplate::MatchDocType(LPCTSTR lpszPathName,
 	if (GetDocString(strFilterExt, CDocTemplate::filterExt) &&
 	  !strFilterExt.IsEmpty())
 	{
-#ifndef _MAC
 		// see if extension matches
 		ASSERT(strFilterExt[0] == '.');
 		LPCTSTR lpszDot = _tcsrchr(lpszPathName, '.');
 		if (lpszDot != NULL && lstrcmpi(lpszDot, strFilterExt) == 0)
 			return yesAttemptNative; // extension matches, looks like ours
-#else
-		// see if file type matches
-		ASSERT(strFilterExt.GetLength() == 4);
-		if (dwFileType == *(DWORD*)(const char*)strFilterExt)
-			return yesAttemptNative; // file type matches, looks like ours
-#endif
 	}
 
 	// otherwise we will guess it may work
@@ -359,14 +347,12 @@ BOOL CDocTemplate::SaveAllModified()
 }
 
 
-void CDocTemplate::CloseAllDocuments(BOOL bEndSession)
+void CDocTemplate::CloseAllDocuments(BOOL)
 {
 	POSITION pos = GetFirstDocPosition();
 	while (pos != NULL)
 	{
 		CDocument* pDoc = GetNextDoc(pos);
-		if (bEndSession)
-			pDoc->DisconnectViews();
 		pDoc->OnCloseDocument();
 	}
 }
@@ -381,6 +367,20 @@ void CDocTemplate::OnIdle()
 		ASSERT_KINDOF(CDocument, pDoc);
 		pDoc->OnIdle();
 	}
+}
+
+BOOL CDocTemplate::OnCmdMsg(UINT nID, int nCode, void* pExtra,
+	AFX_CMDHANDLERINFO* pHandlerInfo)
+{
+	BOOL bReturn;
+	CCmdTarget* pFactory = DYNAMIC_DOWNCAST(CCmdTarget, m_pAttachedFactory);
+
+	if (nCode == CN_OLE_UNREGISTER && pFactory != NULL)
+		bReturn = pFactory->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+	else
+		bReturn = CCmdTarget::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+
+	return bReturn;
 }
 
 /////////////////////////////////////////////////////////////////////////////

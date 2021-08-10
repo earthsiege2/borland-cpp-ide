@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1995, Microsoft Corporation
+Copyright (c) 1995-1999, Microsoft Corporation
 
 Module Name:
 
@@ -14,12 +14,14 @@ Abstract:
 --*/
 
 #ifndef _WOWNT32_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WOWNT32_
-#pragma option -b
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#if defined(_MSC_VER)
+#if _MSC_VER > 1000
+#pragma once
+#endif
+#endif
 
 //
 // 16:16 -> 0:32 Pointer translation.
@@ -256,9 +258,5 @@ BOOL WINAPI WOWCallback16Ex(
                 PDWORD pdwRetCode
                 );
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* !_WOWNT32_ */

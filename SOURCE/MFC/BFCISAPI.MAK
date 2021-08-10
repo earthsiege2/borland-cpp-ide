@@ -97,7 +97,9 @@ DEBOPTS=-O1
 #
 CPP=bcc32
 LIB32=tlib
+!ifndef LINK32
 LINK32=tlink32
+!endif
 
 CL_MODEL=/D_X86_
 MODEL=IS
@@ -145,10 +147,10 @@ CPPFLAGS=$(CPPFLAGS) $(CL_MODEL) $(CL_OPT) $(DEFS) $(OPT)
 PCH_FILE=
 
 .SUFFIXES: .cpp
-.path.obj = $D
+.path.obj = $(D)
 
 .cpp.obj:
-        $(CPP) @&&~
+        $(CC) @&&~
 $(CPPFLAGS) -c  $<
 ~
 
@@ -161,16 +163,16 @@ GOALS=$(GOALS) $(LIBDIR)\$(GOAL).lib
 goal: $(GOALS)
 
 create.dir:
-	@-if not exist $D\*.* mkdir $D
+	@-if not exist $(D)\*.* mkdir $(D)
 	@-if not exist $(LIBDIR) mkdir $(LIBDIR)
 
 clean:
-	-if exist $D\*.obj erase $D\*.obj
-	-if exist $D\*.pch erase $D\*.pch
-	-if exist $D\*.res erase $D\*.res
-	-if exist $D\*.rsc erase $D\*.rsc
-	-if exist $D\*.map erase $D\*.map
-	-if exist $D\*.* rmdir $D
+	-if exist $(D)\*.obj erase $(D)\*.obj
+	-if exist $(D)\*.pch erase $(D)\*.pch
+	-if exist $(D)\*.res erase $(D)\*.res
+	-if exist $(D)\*.rsc erase $(D)\*.rsc
+	-if exist $(D)\*.map erase $(D)\*.map
+	-if exist $(D)\*.* rmdir $(D)
 	-if exist ..\lib\$(GOAL).pdb del ..\lib\$(GOAL).pdb
 
 #############################################################################

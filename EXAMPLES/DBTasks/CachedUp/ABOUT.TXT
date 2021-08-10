@@ -1,0 +1,101 @@
+This example demonstrates how cached updates
+can be used with live data and in conjunction
+with the UpdateSQL component for non-live data.
+
+When working with live data, updates are
+performed by the BDE, otherwise the updates
+are performed by the UpdateSQL component.
+
+The following is a description of what each
+of the controls in the main form do:
+
+ o Cached Updates Checkbox
+
+   This checkbox determines whether cached
+   updates are enabled or not.  When unchecked,
+   the other controls which are only relevant
+   while cached updates mode are disabled.
+   In this mode, all edits are immediately
+   applied to the underlying dataset.
+
+ o UpdateSQL Checkbox
+
+   This checkbox determines whether the
+   UpdateSQL component is used to perform
+   the cached updates.  When the user clicks
+   on this control to check or uncheck it,
+   the dataset is closed and the UpdateObject
+   property is set or cleared and then the
+   dataset is reopened.  This is required
+   because the UpdateObject property of
+   TDataSet can only be set while the dataset
+   is closed.  You can examine the SQL
+   statements used by the UpdateSQL component
+   by double clicking on it in the data module.
+
+ o Apply Updates Button
+
+   Clicking this button causes all pending
+   updates to be applied.
+
+ o Cancel Updates Button
+
+   Clicking this button causes all pending
+   updates to be discarded.
+
+ o Revert Record Button
+
+   Clicking this button causes any updates
+   to the current record in the grid to
+   be discarded.
+
+ o Show Records Group
+
+   Each of the check boxes in the ShowRecords
+   groupbox determine what types of records
+   are displayed in the grid.  If you change
+   several records, and then want to only
+   see those record, uncheck all the boxes
+   except for the one marked "modified".
+   If you delete a record and then later
+   decide you want to undelete it, check
+   the deleted box, and then position to
+   the deleted record in the grid and click
+   the revert record button.
+
+ o ReExecute Query Button
+
+   Clicking this button forces the dataset
+   to be closed and then reopened.
+
+This example also uses a calculated field
+which shows the current update status of each
+record (only when cached updates are enabled).
+
+Errors which occur during the update process
+are displayed in a simple form which shows
+the new and old values together.  There are
+buttons which allow the user to determine
+what type of action take.  To see the
+update error dialog in action, try changing
+the ProjID field of one record to be the
+same as the ProjID of another record.
+This will cause a key violation when the
+apply updates button is clicked.
+When the error dialog comes up, if
+you click the abort button, no updates will
+be performed and the dataset will be restored
+to the state it was in before the updates
+were applied.  If you click the skip button,
+any other changes you made will be applied,
+but not the one with the invalid ProjID.
+The last option would be to change the ProjID
+to something valid (such as the old value)
+and then click the retry button.
+
+Cached updates provide a powerful way of
+working with data in Borland C++Builder.
+See the Database Application Developers Guide
+for a complete discussion of this feature.
+
+

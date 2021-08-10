@@ -1,0 +1,14 @@
+LIBRARY MGMTAPI
+EXPORTS
+
+    SnmpMgrClose                             = 'MGMTAPI.DLL'.*
+    SnmpMgrCtl                               = 'MGMTAPI.DLL'.*
+    SnmpMgrGetTrap                           = 'MGMTAPI.DLL'.*
+    SnmpMgrGetTrapEx                         = 'MGMTAPI.DLL'.*
+    SnmpMgrMIB2Disk                          = 'MGMTAPI.DLL'.*
+    SnmpMgrOidToStr                          = 'MGMTAPI.DLL'.*
+    SnmpMgrOpen                              = 'MGMTAPI.DLL'.*
+    SnmpMgrRequest                           = 'MGMTAPI.DLL'.*
+    SnmpMgrStrToOid                          = 'MGMTAPI.DLL'.*
+    SnmpMgrTrapListen                        = 'MGMTAPI.DLL'.*
+    serverTrapThread                         = 'MGMTAPI.DLL'.*

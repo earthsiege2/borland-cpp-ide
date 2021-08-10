@@ -14,27 +14,18 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
-#  $Revision:   8.2  $                                                               #
+#  $Revision:   9.1  $                                                               #
 #                                                                           #
 #############################################################################
-
-#############################################################################
-# In order to build the OBJ list for 16 bit platforms, a definition of      #
-# MODEL is required.                                                        #
-#############################################################################
-!if ($(OS) == DOS || $(OS) == WIN16) && !$d(MODEL)
-!    error MODEL is required
-!endif
 
 #############################################################################
 # Build the object module lists.                                            #
 #############################################################################
 OBJS =               \
-	bitset.obj
+        bitset.obj
 
 #############################################################################
 # Configure the environment apprpriately.                                   #
 #############################################################################
-
 !include rules.mak
-
+!include ..\stlopts.inc

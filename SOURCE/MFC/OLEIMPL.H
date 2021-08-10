@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -19,198 +19,289 @@
 struct AFX_OLE_CALL
 {
 	// main OLE32.DLL entry points
-	HRESULT (STDAPICALLTYPE* pfnReadFmtUserTypeStg[2])(LPSTORAGE pstg,
+	HRESULT (STDAPICALLTYPE* pfnReadFmtUserTypeStg)(LPSTORAGE pstg,
 		CLIPFORMAT FAR* pcf, LPOLESTR FAR* lplpszUserType);
-	HRESULT (STDAPICALLTYPE* pfnReadClassStg[2])(LPSTORAGE pStg, CLSID FAR* pclsid);
-	HRESULT (STDAPICALLTYPE* pfnCreateFileMoniker[2])(LPCOLESTR lpszPathName,
+	HRESULT (STDAPICALLTYPE* pfnReadClassStg)(LPSTORAGE pStg, CLSID FAR* pclsid);
+	HRESULT (STDAPICALLTYPE* pfnCreateFileMoniker)(LPCOLESTR lpszPathName,
 		LPMONIKER FAR* ppmk);
-	HRESULT (STDAPICALLTYPE* pfnStgIsStorageFile[2])(const OLECHAR * pwcsName);
-	HRESULT (STDAPICALLTYPE* pfnStgOpenStorage[2])(const OLECHAR * pwcsName,
+	HRESULT (STDAPICALLTYPE* pfnStgIsStorageFile)(const OLECHAR * pwcsName);
+	HRESULT (STDAPICALLTYPE* pfnStgOpenStorage)(const OLECHAR * pwcsName,
 		IStorage *pstgPriority, DWORD grfMode, SNB snbExclude, DWORD reserved,
 		IStorage ** ppstgOpen);
-	HRESULT (STDAPICALLTYPE* pfnDoDragDrop[2])(LPDATAOBJECT pDataObj, LPDROPSOURCE pDropSource,
+	HRESULT (STDAPICALLTYPE* pfnDoDragDrop)(LPDATAOBJECT pDataObj, LPDROPSOURCE pDropSource,
 		DWORD dwOKEffects, LPDWORD pdwEffect);
-	HRESULT (STDAPICALLTYPE* pfnCoLockObjectExternal[2])(LPUNKNOWN pUnk, BOOL fLock, BOOL fLastUnlockReleases);
-	HRESULT (STDAPICALLTYPE* pfnRegisterDragDrop[2])(HWND hwnd, LPDROPTARGET pDropTarget);
-	HRESULT (STDAPICALLTYPE* pfnOleRegGetUserType [2])(REFCLSID clsid, DWORD dwFormOfType,
+	HRESULT (STDAPICALLTYPE* pfnCoLockObjectExternal)(LPUNKNOWN pUnk, BOOL fLock, BOOL fLastUnlockReleases);
+	HRESULT (STDAPICALLTYPE* pfnRegisterDragDrop)(HWND hwnd, LPDROPTARGET pDropTarget);
+	HRESULT (STDAPICALLTYPE* pfnOleRegGetUserType )(REFCLSID clsid, DWORD dwFormOfType,
 		LPOLESTR * pszUserType);
-	HRESULT (STDAPICALLTYPE* pfnStgCreateDocfile[2])(const OLECHAR * pwcsName, DWORD grfMode,
+	HRESULT (STDAPICALLTYPE* pfnStgCreateDocfile)(const OLECHAR * pwcsName, DWORD grfMode,
 		DWORD reserved, IStorage** ppstgOpen);
-	HRESULT (STDAPICALLTYPE* pfnRevokeDragDrop[2])(HWND hwnd);;
-	HRESULT (STDAPICALLTYPE* pfnCoRegisterClassObject[2])(REFCLSID rclsid, LPUNKNOWN pUnk,
+	HRESULT (STDAPICALLTYPE* pfnRevokeDragDrop)(HWND hwnd);
+	HRESULT (STDAPICALLTYPE* pfnCoRegisterClassObject)(REFCLSID rclsid, LPUNKNOWN pUnk,
 		DWORD dwClsContext, DWORD flags, LPDWORD lpdwRegister);
-	HRESULT (STDAPICALLTYPE* pfnCoRevokeClassObject[2])(DWORD dwRegister);
-	HRESULT (STDAPICALLTYPE* pfnOleTranslateAccelerator[2])(LPOLEINPLACEFRAME lpFrame,
+	HRESULT (STDAPICALLTYPE* pfnCoRevokeClassObject)(DWORD dwRegister);
+	HRESULT (STDAPICALLTYPE* pfnOleTranslateAccelerator)(LPOLEINPLACEFRAME lpFrame,
 		LPOLEINPLACEFRAMEINFO lpFrameInfo, LPMSG lpmsg);
-	BOOL (STDAPICALLTYPE* pfnIsAccelerator[2])(HACCEL hAccel, INT cAccelEntries,
+	BOOL (STDAPICALLTYPE* pfnIsAccelerator)(HACCEL hAccel, INT cAccelEntries,
 		LPMSG lpMsg, WORD* lpwCmd);
-	HOLEMENU (STDAPICALLTYPE* pfnOleCreateMenuDescriptor[2])(HMENU hmenuCombined,
+	HOLEMENU (STDAPICALLTYPE* pfnOleCreateMenuDescriptor)(HMENU hmenuCombined,
 		LPOLEMENUGROUPWIDTHS lpMenuWidths);
-	HRESULT (STDAPICALLTYPE* pfnOleDestroyMenuDescriptor [2])(HOLEMENU holemenu);
-	HRESULT (STDAPICALLTYPE* pfnGetRunningObjectTable[2])(DWORD reserved, LPRUNNINGOBJECTTABLE FAR* pprot);
-	HRESULT (STDAPICALLTYPE* pfnWriteClassStg[2])(LPSTORAGE pStg, REFCLSID rclsid);
-	HRESULT (STDAPICALLTYPE* pfnOleQueryLinkFromData[2])(LPDATAOBJECT pSrcDataObject);
-	HRESULT (STDAPICALLTYPE* pfnCoRegisterMessageFilter[2])(LPMESSAGEFILTER lpMessageFilter,
+	HRESULT (STDAPICALLTYPE* pfnOleDestroyMenuDescriptor )(HOLEMENU holemenu);
+	HRESULT (STDAPICALLTYPE* pfnGetRunningObjectTable)(DWORD reserved, LPRUNNINGOBJECTTABLE FAR* pprot);
+	HRESULT (STDAPICALLTYPE* pfnWriteClassStg)(LPSTORAGE pStg, REFCLSID rclsid);
+	HRESULT (STDAPICALLTYPE* pfnOleQueryLinkFromData)(LPDATAOBJECT pSrcDataObject);
+	HRESULT (STDAPICALLTYPE* pfnCoRegisterMessageFilter)(LPMESSAGEFILTER lpMessageFilter,
 		LPMESSAGEFILTER * lplpMessageFilter);
-	HRESULT (STDAPICALLTYPE* pfnCoCreateInstance[2])(REFCLSID rclsid, LPUNKNOWN * pUnkOuter,
+	HRESULT (STDAPICALLTYPE* pfnCoCreateInstance)(REFCLSID rclsid, LPUNKNOWN * pUnkOuter,
 		DWORD dwClsContext, REFIID riid, LPVOID* ppv);
-	HRESULT (STDAPICALLTYPE* pfnCreateBindCtx[2])(DWORD reserved, LPBC FAR* ppbc);
-	HRESULT (STDAPICALLTYPE* pfnStringFromCLSID[2])(REFCLSID rclsid, LPOLESTR FAR* lplpsz);
-	HRESULT (STDAPICALLTYPE* pfnCoDisconnectObject[2])(LPUNKNOWN pUnk, DWORD dwReserved);
-	HRESULT (STDAPICALLTYPE* pfnOleRegEnumVerbs [2])(REFCLSID clsid, LPENUMOLEVERB FAR* ppenum);
-	void (STDAPICALLTYPE* pfnOleUninitialize[2])(void);
-	HRESULT (STDAPICALLTYPE* pfnCreateOleAdviseHolder[2])(LPOLEADVISEHOLDER FAR* ppOAHolder);
-	HRESULT (STDAPICALLTYPE* pfnCreateDataAdviseHolder[2])(LPDATAADVISEHOLDER FAR* ppDAHolder);
-	HRESULT (STDAPICALLTYPE* pfnOleGetAutoConvert[2])(REFCLSID clsidOld, LPCLSID pClsidNew);
-	HRESULT (STDAPICALLTYPE* pfnCoGetClassObject[2])(REFCLSID rclsid, DWORD dwClsContext,
+	HRESULT (STDAPICALLTYPE* pfnCreateBindCtx)(DWORD reserved, LPBC FAR* ppbc);
+	HRESULT (STDAPICALLTYPE* pfnStringFromCLSID)(REFCLSID rclsid, LPOLESTR FAR* lplpsz);
+	HRESULT (STDAPICALLTYPE* pfnCoDisconnectObject)(LPUNKNOWN pUnk, DWORD dwReserved);
+	HRESULT (STDAPICALLTYPE* pfnOleRegEnumVerbs )(REFCLSID clsid, LPENUMOLEVERB FAR* ppenum);
+	void (STDAPICALLTYPE* pfnOleUninitialize)(void);
+	HRESULT (STDAPICALLTYPE* pfnCreateOleAdviseHolder)(LPOLEADVISEHOLDER FAR* ppOAHolder);
+	HRESULT (STDAPICALLTYPE* pfnCreateDataAdviseHolder)(LPDATAADVISEHOLDER FAR* ppDAHolder);
+	HRESULT (STDAPICALLTYPE* pfnOleGetAutoConvert)(REFCLSID clsidOld, LPCLSID pClsidNew);
+	HRESULT (STDAPICALLTYPE* pfnCoGetClassObject)(REFCLSID rclsid, DWORD dwClsContext,
 		LPVOID pvReserved, REFIID riid, LPVOID* ppv);
-	HRESULT (STDAPICALLTYPE* pfnOleCreateDefaultHandler[2])(REFCLSID clsid,
+	HRESULT (STDAPICALLTYPE* pfnOleCreateDefaultHandler)(REFCLSID clsid,
 		LPUNKNOWN pUnkOuter, REFIID riid, LPVOID* lplpvObj);
-	HRESULT (STDAPICALLTYPE* pfnCreateDataCache[2])(
+	HRESULT (STDAPICALLTYPE* pfnCreateDataCache)(
 		LPUNKNOWN pUnkOuter, REFCLSID clsid, REFIID riid, LPVOID* lplpvObj);
-	HRESULT (STDAPICALLTYPE* pfnReadClassStm[2])(LPSTREAM pStm, CLSID FAR* pclsid);
-	HRESULT (STDAPICALLTYPE* pfnOleLoadFromStream[2])(LPSTREAM pStm, REFIID iidInterface, LPVOID FAR* ppvObj);
-	int (STDAPICALLTYPE* pfnStringFromGUID2[2])(REFGUID rguid, LPOLESTR lpsz, int cbMax);
-	void (STDAPICALLTYPE* pfnCoUninitialize[2])(void);
-	HRESULT (STDAPICALLTYPE* pfnCoInitialize[2])(LPVOID pvReserved);
-	HRESULT (STDAPICALLTYPE* pfnOleInitialize[2])(LPVOID pvReserved);
-	void (STDAPICALLTYPE* pfnCoFreeUnusedLibraries[2])(void);
-	HRESULT (STDAPICALLTYPE* pfnOleCreateFromData[2])(LPDATAOBJECT pSrcDataObj,
+	HRESULT (STDAPICALLTYPE* pfnReadClassStm)(LPSTREAM pStm, CLSID FAR* pclsid);
+	HRESULT (STDAPICALLTYPE* pfnOleLoadFromStream)(LPSTREAM pStm, REFIID iidInterface, LPVOID FAR* ppvObj);
+	int (STDAPICALLTYPE* pfnStringFromGUID2)(REFGUID rguid, LPOLESTR lpsz, int cbMax);
+	void (STDAPICALLTYPE* pfnCoUninitialize)(void);
+	HRESULT (STDAPICALLTYPE* pfnCoInitialize)(LPVOID pvReserved);
+	HRESULT (STDAPICALLTYPE* pfnOleInitialize)(LPVOID pvReserved);
+	void (STDAPICALLTYPE* pfnCoFreeUnusedLibraries)(void);
+	HRESULT (STDAPICALLTYPE* pfnOleCreateFromData)(LPDATAOBJECT pSrcDataObj,
 		REFIID riid, DWORD renderopt, LPFORMATETC pFormatEtc,
 		LPOLECLIENTSITE pClientSite, LPSTORAGE pStg, LPVOID* ppvObj);
-	HRESULT (STDAPICALLTYPE* pfnOleSetContainedObject[2])(LPUNKNOWN pUnknown, BOOL fContained);
-	HRESULT (STDAPICALLTYPE* pfnOleLockRunning[2])(LPUNKNOWN pUnknown, BOOL fLock, BOOL fLastUnlockCloses);
-	LPVOID (STDAPICALLTYPE* pfnCoTaskMemAlloc[2])(ULONG cb);
-	HRESULT (STDAPICALLTYPE* pfnCLSIDFromString[2])(LPOLESTR lpsz, LPCLSID pclsid);
-	HRESULT (STDAPICALLTYPE* pfnCLSIDFromProgID [2])(LPCOLESTR lpszProgID, LPCLSID lpclsid);
-	HRESULT (STDAPICALLTYPE* pfnOleIsCurrentClipboard[2])(LPDATAOBJECT pDataObj);
-	HRESULT (STDAPICALLTYPE* pfnOleFlushClipboard[2])(void);
-	HRESULT (STDAPICALLTYPE* pfnOleSetClipboard[2])(LPDATAOBJECT pDataObj);
-	BOOL (STDAPICALLTYPE* pfnOleIsRunning[2])(LPOLEOBJECT pObject);;
-	HRESULT (STDAPICALLTYPE* pfnOleRun[2])(LPUNKNOWN pUnknown);
-	HRESULT (STDAPICALLTYPE* pfnOleGetClipboard[2])(LPDATAOBJECT FAR* ppDataObj);
-	HRESULT (STDAPICALLTYPE* pfnCoTreatAsClass[2])(REFCLSID clsidOld, REFCLSID clsidNew);
-	HRESULT (STDAPICALLTYPE* pfnOleQueryCreateFromData[2])(LPDATAOBJECT pSrcDataObject);
-	HRESULT (STDAPICALLTYPE* pfnOleSetMenuDescriptor [2])(HOLEMENU holemenu,
+	HRESULT (STDAPICALLTYPE* pfnOleSetContainedObject)(LPUNKNOWN pUnknown, BOOL fContained);
+	HRESULT (STDAPICALLTYPE* pfnOleLockRunning)(LPUNKNOWN pUnknown, BOOL fLock, BOOL fLastUnlockCloses);
+	LPVOID (STDAPICALLTYPE* pfnCoTaskMemAlloc)(ULONG cb);
+	HRESULT (STDAPICALLTYPE* pfnCLSIDFromString)(LPOLESTR lpsz, LPCLSID pclsid);
+	HRESULT (STDAPICALLTYPE* pfnCLSIDFromProgID )(LPCOLESTR lpszProgID, LPCLSID lpclsid);
+	HRESULT (STDAPICALLTYPE* pfnOleIsCurrentClipboard)(LPDATAOBJECT pDataObj);
+	HRESULT (STDAPICALLTYPE* pfnOleFlushClipboard)(void);
+	HRESULT (STDAPICALLTYPE* pfnOleSetClipboard)(LPDATAOBJECT pDataObj);
+	BOOL (STDAPICALLTYPE* pfnOleIsRunning)(LPOLEOBJECT pObject);
+	HRESULT (STDAPICALLTYPE* pfnOleRun)(LPUNKNOWN pUnknown);
+	HRESULT (STDAPICALLTYPE* pfnOleGetClipboard)(LPDATAOBJECT FAR* ppDataObj);
+	HRESULT (STDAPICALLTYPE* pfnCoTreatAsClass)(REFCLSID clsidOld, REFCLSID clsidNew);
+	HRESULT (STDAPICALLTYPE* pfnOleQueryCreateFromData)(LPDATAOBJECT pSrcDataObject);
+	HRESULT (STDAPICALLTYPE* pfnOleSetMenuDescriptor )(HOLEMENU holemenu,
 		HWND hwndFrame, HWND hwndActiveObject, LPOLEINPLACEFRAME lpFrame,
 		LPOLEINPLACEACTIVEOBJECT lpActiveObj);
-	HRESULT (STDAPICALLTYPE* pfnCreateItemMoniker[2])(LPCOLESTR lpszDelim,
+	HRESULT (STDAPICALLTYPE* pfnCreateItemMoniker)(LPCOLESTR lpszDelim,
 		LPCOLESTR lpszItem, LPMONIKER* ppmk);
-	HRESULT (STDAPICALLTYPE* pfnCreateGenericComposite[2])(LPMONIKER pmkFirst,
+	HRESULT (STDAPICALLTYPE* pfnCreateGenericComposite)(LPMONIKER pmkFirst,
 		LPMONIKER pmkRest, LPMONIKER* ppmkComposite);
-	HRESULT (STDAPICALLTYPE* pfnCreateStreamOnHGlobal[2])(HGLOBAL hGlobal,
+	HRESULT (STDAPICALLTYPE* pfnCreateStreamOnHGlobal)(HGLOBAL hGlobal,
 		BOOL fDeleteOnRelease, LPSTREAM* ppstm);
-	HRESULT (STDAPICALLTYPE* pfnOleSaveToStream[2])(LPPERSISTSTREAM pPStm, LPSTREAM pStm);
-	HRESULT (STDAPICALLTYPE* pfnWriteClassStm[2])(LPSTREAM pStm, REFCLSID rclsid);
-	void (STDAPICALLTYPE* pfnCoTaskMemFree[2])(LPVOID pv);
-	HGLOBAL (STDAPICALLTYPE* pfnOleGetIconOfClass[2])(REFCLSID rclsid, LPOLESTR lpszLabel,
+	HRESULT (STDAPICALLTYPE* pfnOleSaveToStream)(LPPERSISTSTREAM pPStm, LPSTREAM pStm);
+	HRESULT (STDAPICALLTYPE* pfnWriteClassStm)(LPSTREAM pStm, REFCLSID rclsid);
+	void (STDAPICALLTYPE* pfnCoTaskMemFree)(LPVOID pv);
+	HGLOBAL (STDAPICALLTYPE* pfnOleGetIconOfClass)(REFCLSID rclsid, LPOLESTR lpszLabel,
 		BOOL fUseTypeAsLabel);
-	void (STDAPICALLTYPE* pfnReleaseStgMedium[2])(LPSTGMEDIUM);
-	HRESULT (STDAPICALLTYPE* pfnGetHGlobalFromILockBytes [2])(LPLOCKBYTES plkbyt, HGLOBAL FAR* phglobal);
-	HRESULT (STDAPICALLTYPE* pfnStgOpenStorageOnILockBytes[2])(LPLOCKBYTES plkbyt,
+	void (STDAPICALLTYPE* pfnReleaseStgMedium)(LPSTGMEDIUM);
+	HRESULT (STDAPICALLTYPE* pfnGetHGlobalFromILockBytes )(LPLOCKBYTES plkbyt, HGLOBAL FAR* phglobal);
+	HRESULT (STDAPICALLTYPE* pfnStgOpenStorageOnILockBytes)(LPLOCKBYTES plkbyt,
 		LPSTORAGE pstgPriority, DWORD grfMode, SNB snbExclude, DWORD reserved,
 		LPSTORAGE* ppstgOpen);
-	HRESULT (STDAPICALLTYPE* pfnCreateILockBytesOnHGlobal[2])(HGLOBAL hGlobal,
+	HRESULT (STDAPICALLTYPE* pfnCreateILockBytesOnHGlobal)(HGLOBAL hGlobal,
 		BOOL fDeleteOnRelease, LPLOCKBYTES* pplkbyt);
-	HRESULT (STDAPICALLTYPE* pfnStgCreateDocfileOnILockBytes[2])(LPLOCKBYTES plkbyt,
+	HRESULT (STDAPICALLTYPE* pfnStgCreateDocfileOnILockBytes)(LPLOCKBYTES plkbyt,
 		DWORD grfMode, DWORD reserved, LPSTORAGE* ppstgOpen);
-	HRESULT (STDAPICALLTYPE* pfnOleSave[2])(LPPERSISTSTORAGE pPS, LPSTORAGE pStg, BOOL fSameAsLoad);
-	HRESULT (STDAPICALLTYPE* pfnOleLoad[2])(LPSTORAGE pStg, REFIID riid,
+	HRESULT (STDAPICALLTYPE* pfnOleSave)(LPPERSISTSTORAGE pPS, LPSTORAGE pStg, BOOL fSameAsLoad);
+	HRESULT (STDAPICALLTYPE* pfnOleLoad)(LPSTORAGE pStg, REFIID riid,
 		LPOLECLIENTSITE pClientSite, LPVOID* ppvObj);
-	HRESULT (STDAPICALLTYPE* pfnOleCreate[2])(REFCLSID rclsid, REFIID riid,
+	HRESULT (STDAPICALLTYPE* pfnOleCreate)(REFCLSID rclsid, REFIID riid,
 		DWORD renderopt, LPFORMATETC pFormatEtc, LPOLECLIENTSITE pClientSite,
 		LPSTORAGE pStg, LPVOID* ppvObj);
-	HRESULT (STDAPICALLTYPE* pfnOleCreateLinkToFile[2])(LPCOLESTR lpszFileName,
+	HRESULT (STDAPICALLTYPE* pfnOleCreateLinkToFile)(LPCOLESTR lpszFileName,
 		REFIID riid, DWORD renderopt, LPFORMATETC lpFormatEtc,
 		LPOLECLIENTSITE pClientSite, LPSTORAGE pStg, LPVOID* ppvObj);
-	HRESULT (STDAPICALLTYPE* pfnOleCreateFromFile[2])(REFCLSID rclsid,
+	HRESULT (STDAPICALLTYPE* pfnOleCreateFromFile)(REFCLSID rclsid,
 		LPCOLESTR lpszFileName, REFIID riid, DWORD renderopt,
 		LPFORMATETC pFormatEtc, LPOLECLIENTSITE pClientSite, LPSTORAGE pStg,
 		LPVOID* ppvObj);
-	HRESULT (STDAPICALLTYPE* pfnOleCreateStaticFromData[2])(LPDATAOBJECT pSrcDataObj,
+	HRESULT (STDAPICALLTYPE* pfnOleCreateStaticFromData)(LPDATAOBJECT pSrcDataObj,
 		REFIID riid, DWORD renderopt, LPFORMATETC pFormatEtc,
 		LPOLECLIENTSITE pClientSite, LPSTORAGE pStg, LPVOID* ppvObj);
-	HRESULT (STDAPICALLTYPE* pfnOleCreateLinkFromData[2])(LPDATAOBJECT pSrcDataObj,
+	HRESULT (STDAPICALLTYPE* pfnOleCreateLinkFromData)(LPDATAOBJECT pSrcDataObj,
 		REFIID riid, DWORD renderopt, LPFORMATETC pFormatEtc,
 		LPOLECLIENTSITE pClientSite, LPSTORAGE pStg, LPVOID* ppvObj);
-	HRESULT (STDAPICALLTYPE* pfnSetConvertStg[2])(LPSTORAGE pStg, BOOL fConvert);
-	HANDLE (STDAPICALLTYPE* pfnOleDuplicateData[2])(HANDLE hSrc, CLIPFORMAT cfFormat,
+	HRESULT (STDAPICALLTYPE* pfnSetConvertStg)(LPSTORAGE pStg, BOOL fConvert);
+	HANDLE (STDAPICALLTYPE* pfnOleDuplicateData)(HANDLE hSrc, CLIPFORMAT cfFormat,
 		UINT uiFlags);
-	HRESULT (STDAPICALLTYPE* pfnWriteFmtUserTypeStg [2])(LPSTORAGE pstg, CLIPFORMAT cf, LPOLESTR lpszUserType);
-	HRESULT (STDAPICALLTYPE* pfnOleRegGetMiscStatus[2])(REFCLSID clsid, DWORD dwAspect,
+	HRESULT (STDAPICALLTYPE* pfnWriteFmtUserTypeStg )(LPSTORAGE pstg, CLIPFORMAT cf, LPOLESTR lpszUserType);
+	HRESULT (STDAPICALLTYPE* pfnOleRegGetMiscStatus)(REFCLSID clsid, DWORD dwAspect,
 		DWORD* pdwStatus);
-	HRESULT (STDAPICALLTYPE* pfnCoGetMalloc[2])(DWORD dwMemContext, LPMALLOC * ppMalloc);
-	HRESULT (STDAPICALLTYPE* pfnStgIsStorageILockBytes[2])(LPLOCKBYTES plkbyt);
+	HRESULT (STDAPICALLTYPE* pfnCoGetMalloc)(DWORD dwMemContext, LPMALLOC * ppMalloc);
+	HRESULT (STDAPICALLTYPE* pfnStgIsStorageILockBytes)(LPLOCKBYTES plkbyt);
 
 	// OLEAUT32.DLL entry points
-	void (STDAPICALLTYPE* pfnSysFreeString[2])(BSTR);
-	BSTR (STDAPICALLTYPE* pfnSysAllocStringByteLen[2])(const char FAR* psz,
+	void (STDAPICALLTYPE* pfnSysFreeString)(BSTR);
+#if !defined(_MAC)
+	BSTR (STDAPICALLTYPE* pfnSysAllocStringByteLen)(const char FAR* psz,
 		unsigned int len);
-	HRESULT (STDAPICALLTYPE* pfnVariantCopy[2])(VARIANTARG FAR* pvargDest,
+#endif
+	HRESULT (STDAPICALLTYPE* pfnVariantCopy)(VARIANTARG FAR* pvargDest,
 		VARIANTARG FAR* pvargSrc);
-	HRESULT (STDAPICALLTYPE* pfnVariantClear[2])(VARIANTARG FAR* pvarg);
-	HRESULT (STDAPICALLTYPE* pfnVariantChangeType[2])(VARIANTARG FAR* pvargDest,
+	HRESULT (STDAPICALLTYPE* pfnVariantClear)(VARIANTARG FAR* pvarg);
+	HRESULT (STDAPICALLTYPE* pfnVariantChangeType)(VARIANTARG FAR* pvargDest,
 		VARIANTARG FAR* pvarSrc, unsigned short wFlags, VARTYPE vt);
-	BSTR (STDAPICALLTYPE* pfnSysAllocStringLen[2])(const OLECHAR FAR*,
+	BSTR (STDAPICALLTYPE* pfnSysAllocStringLen)(const OLECHAR FAR*,
 		unsigned int);
-	unsigned int (STDAPICALLTYPE* pfnSysStringLen[2])(BSTR);
-	int (STDAPICALLTYPE* pfnSysReAllocStringLen[2])(BSTR FAR*, const OLECHAR FAR*,
+	unsigned int (STDAPICALLTYPE* pfnSysStringLen)(BSTR);
+	int (STDAPICALLTYPE* pfnSysReAllocStringLen)(BSTR FAR*, const OLECHAR FAR*,
 		unsigned int);
-	BSTR (STDAPICALLTYPE* pfnSysAllocString[2])(const OLECHAR FAR*);
-	unsigned int (STDAPICALLTYPE* pfnSysStringByteLen[2])(BSTR bstr);
-	HRESULT (STDAPICALLTYPE* pfnVarCyFromStr[2])(OLECHAR FAR* strIn, LCID lcid,
+	BSTR (STDAPICALLTYPE* pfnSysAllocString)(const OLECHAR FAR*);
+#if !defined(_MAC)
+	unsigned int (STDAPICALLTYPE* pfnSysStringByteLen)(BSTR bstr);
+#endif
+	HRESULT (STDAPICALLTYPE* pfnVarCyFromStr)(OLECHAR FAR* strIn, LCID lcid,
 		unsigned long dwFlags, CY FAR* pcyOut);
-	HRESULT (STDAPICALLTYPE* pfnVarBstrFromCy[2])(CY cyIn, LCID lcid,
+	HRESULT (STDAPICALLTYPE* pfnVarBstrFromCy)(CY cyIn, LCID lcid,
 		unsigned long dwFlags, BSTR FAR* pbstrOut);
-	HRESULT (STDAPICALLTYPE* pfnVarDateFromStr[2])(OLECHAR FAR* strIn, LCID lcid,
+	HRESULT (STDAPICALLTYPE* pfnVarDateFromStr)(OLECHAR FAR* strIn, LCID lcid,
 		unsigned long dwFlags, DATE FAR* pdateOut);
-	HRESULT (STDAPICALLTYPE* pfnVarBstrFromDate[2])(DATE dateIn, LCID lcid,
+	HRESULT (STDAPICALLTYPE* pfnVarBstrFromDate)(DATE dateIn, LCID lcid,
 		unsigned long dwFlags, BSTR FAR* pbstrOut);
-	HRESULT (STDAPICALLTYPE* pfnLoadTypeLib[2])(const OLECHAR FAR *szFile,
+	HRESULT (STDAPICALLTYPE* pfnLoadTypeLib)(const OLECHAR FAR *szFile,
 		ITypeLib FAR* FAR* pptlib);
-	HRESULT (STDAPICALLTYPE* pfnRegisterTypeLib[2])(ITypeLib FAR* ptlib,
+	HRESULT (STDAPICALLTYPE* pfnLoadRegTypeLib)(REFGUID guid,
+		WORD wVerMajor, WORD wVerMinor, LCID lcid, ITypeLib FAR* FAR* pptlib);
+	HRESULT (STDAPICALLTYPE* pfnRegisterTypeLib)(ITypeLib FAR* ptlib,
 		OLECHAR FAR *szFullPath, OLECHAR FAR *szHelpDir);
-	int (STDAPICALLTYPE* pfnDosDateTimeToVariantTime[2])(unsigned short wDosDate,
+	int (STDAPICALLTYPE* pfnDosDateTimeToVariantTime)(unsigned short wDosDate,
 		unsigned short wDosTime, double FAR* pvtime);
-	SAFEARRAY FAR* (STDAPICALLTYPE* pfnSafeArrayCreate[2])(VARTYPE vt,
+	SAFEARRAY FAR* (STDAPICALLTYPE* pfnSafeArrayCreate)(VARTYPE vt,
 		unsigned int cDims, SAFEARRAYBOUND FAR* rgsabound);
-	HRESULT (STDAPICALLTYPE* pfnSafeArrayRedim[2])(SAFEARRAY FAR* psa,
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayRedim)(SAFEARRAY FAR* psa,
 		SAFEARRAYBOUND FAR* psaboundNew);
-	HRESULT (STDAPICALLTYPE* pfnSafeArrayAccessData[2])(SAFEARRAY FAR* psa,
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayAccessData)(SAFEARRAY FAR* psa,
 		void HUGEP* FAR* ppvData);
-	HRESULT (STDAPICALLTYPE* pfnSafeArrayUnaccessData[2])(SAFEARRAY FAR* psa);
-	HRESULT (STDAPICALLTYPE* pfnSafeArrayGetUBound[2])(SAFEARRAY FAR* psa,
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayUnaccessData)(SAFEARRAY FAR* psa);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayGetUBound)(SAFEARRAY FAR* psa,
 		unsigned int nDim, long FAR* plUbound);
-	HRESULT (STDAPICALLTYPE* pfnSafeArrayGetLBound[2])(SAFEARRAY FAR* psa,
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayGetLBound)(SAFEARRAY FAR* psa,
 		unsigned int nDim, long FAR* plLbound);
-	unsigned int (STDAPICALLTYPE* pfnSafeArrayGetElemsize[2])(SAFEARRAY FAR* psa);
-	unsigned int (STDAPICALLTYPE* pfnSafeArrayGetDim[2])(SAFEARRAY FAR* psa);
+	unsigned int (STDAPICALLTYPE* pfnSafeArrayGetElemsize)(SAFEARRAY FAR* psa);
+	unsigned int (STDAPICALLTYPE* pfnSafeArrayGetDim)(SAFEARRAY FAR* psa);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayCopy)(SAFEARRAY FAR* psa,
+		SAFEARRAY FAR* FAR* ppsaOut);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayAllocData)(SAFEARRAY FAR* psa);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayAllocDescriptor)(unsigned int cDims,
+		SAFEARRAY FAR* FAR* ppsaOut);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayGetElement)(SAFEARRAY FAR* psa,
+		long FAR* rgIndices, void FAR* pvData);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayPutElement)(SAFEARRAY FAR* psa,
+		long FAR* rgIndices, void FAR* pvData);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayLock)(SAFEARRAY FAR* psa);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayUnlock)(SAFEARRAY FAR* psa);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayDestroy)(SAFEARRAY FAR* psa);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayDestroyData)(SAFEARRAY FAR* psa);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayDestroyDescriptor)(SAFEARRAY FAR* psa);
+	HRESULT (STDAPICALLTYPE* pfnSafeArrayPtrOfIndex)(SAFEARRAY FAR* psa,
+		long FAR* rgIndices, void HUGEP* FAR* ppvData);
+#if defined(_MAC) && defined(MACOCX)
+	HRESULT (STDAPICALLTYPE* pfnLoadTypeLibFSp)(const void *pfsspec, ITypeLib FAR* FAR* pptlib);
+	HRESULT (STDAPICALLTYPE* pfnRegisterTypeLibFolder)(OLECHAR FAR* szFullPath);
+	HRESULT (STDAPICALLTYPE* pfnQueryTypeLibFolder)(LPBSTR pbstr);
+	LCID (WINAPI* pfnGetUserDefaultLCID)(void);
+#endif
 
 	// OLEDLG.DLL entry points
-	BOOL (STDAPICALLTYPE* pfnOleUIAddVerbMenu[2])(LPOLEOBJECT lpOleObj, LPCTSTR lpszShortType,
+	BOOL (STDAPICALLTYPE* pfnOleUIAddVerbMenu)(LPOLEOBJECT lpOleObj, LPCTSTR lpszShortType,
 		HMENU hMenu, UINT uPos, UINT uIDVerbMin, UINT uIDVerbMax,
 		BOOL bAddConvert, UINT idConvert, HMENU FAR *lphMenu);
-	UINT (STDAPICALLTYPE* pfnOleUIBusy[2])(LPOLEUIBUSY);
-	UINT (STDAPICALLTYPE* pfnOleUIChangeIcon[2])(LPOLEUICHANGEICON);
-	UINT (STDAPICALLTYPE* pfnOleUIChangeSource[2])(LPOLEUICHANGESOURCE);
-	UINT (STDAPICALLTYPE* pfnOleUIConvert[2])(LPOLEUICONVERT);
-	UINT (STDAPICALLTYPE* pfnOleUIEditLinks[2])(LPOLEUIEDITLINKS);
-	UINT (STDAPICALLTYPE* pfnOleUIInsertObject[2])(LPOLEUIINSERTOBJECT);
-	UINT (STDAPICALLTYPE* pfnOleUIObjectProperties[2])(LPOLEUIOBJECTPROPS);
-	UINT (STDAPICALLTYPE* pfnOleUIPasteSpecial[2])(LPOLEUIPASTESPECIAL);
-	BOOL (STDAPICALLTYPE* pfnOleUIUpdateLinks[2])(LPOLEUILINKCONTAINER lpOleUILinkCntr,
+	UINT (STDAPICALLTYPE* pfnOleUIBusy)(LPOLEUIBUSY);
+	UINT (STDAPICALLTYPE* pfnOleUIChangeIcon)(LPOLEUICHANGEICON);
+	UINT (STDAPICALLTYPE* pfnOleUIChangeSource)(LPOLEUICHANGESOURCE);
+	UINT (STDAPICALLTYPE* pfnOleUIConvert)(LPOLEUICONVERT);
+	UINT (STDAPICALLTYPE* pfnOleUIEditLinks)(LPOLEUIEDITLINKS);
+	UINT (STDAPICALLTYPE* pfnOleUIInsertObject)(LPOLEUIINSERTOBJECT);
+	UINT (STDAPICALLTYPE* pfnOleUIObjectProperties)(LPOLEUIOBJECTPROPS);
+	UINT (STDAPICALLTYPE* pfnOleUIPasteSpecial)(LPOLEUIPASTESPECIAL);
+	BOOL (STDAPICALLTYPE* pfnOleUIUpdateLinks)(LPOLEUILINKCONTAINER lpOleUILinkCntr,
 		HWND hwndParent, LPTSTR lpszTitle, int cLinks);
 
 	// Special Mac registry entry points
 #ifdef _MAC
-	LONG (APIENTRY* pfnAfxRegCloseKey[2])(HKEY hKey);
-	LONG (APIENTRY* pfnRegOpenKey[2])(HKEY hKey, LPCSTR lpSubKey, PHKEY phkResult);
-	LONG (APIENTRY* pfnRegSetValue[2])(HKEY hKey, LPCSTR lpSubKey, DWORD dwType,
+	LONG (APIENTRY* pfnRegCloseKey)(HKEY hKey);
+	LONG (APIENTRY* pfnRegOpenKey)(HKEY hKey, LPCSTR lpSubKey, PHKEY phkResult);
+	LONG (APIENTRY* pfnRegSetValue)(HKEY hKey, LPCSTR lpSubKey, DWORD dwType,
 		LPCSTR lpData, DWORD cbData);
-	LONG (APIENTRY* pfnRegQueryValue[2])(HKEY hKey, LPCSTR lpSubKey, LPSTR lpValue,
+	LONG (APIENTRY* pfnRegSetValueEx)(HKEY hKey, LPCTSTR lpValueName,
+		DWORD Reserved, DWORD dwType, CONST BYTE* lpData, DWORD cbData);
+	LONG (APIENTRY* pfnRegQueryValue)(HKEY hKey, LPCSTR lpSubKey, LPSTR lpValue,
 		PLONG lpcbValue);
+	LONG (APIENTRY* pfnRegQueryValueEx)(HKEY hKey, LPCTSTR lpValueName,
+		LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData, LPDWORD lpcbData);
+	LONG (APIENTRY* pfnRegEnumKey)(HKEY hKey, DWORD dwIndex, LPTSTR lpName,
+		DWORD cbName);
+	LONG (APIENTRY* pfnRegDeleteKey)(HKEY hKey, LPCTSTR lpSubKey);
+	LONG (APIENTRY* pfnRegDeleteValue)(HKEY hKey, LPCTSTR lpValueName);
+	LONG (APIENTRY* pfnRegCreateKey)(HKEY hKey, LPCTSTR lpSubKey,
+		PHKEY phkResult);
 #endif
 };
+
+#ifndef _MAC
+
+/////////////////////////////////////////////////////////////////////////////
+// AFX_URLMON_CALL - used to dynamically load URLMON.DLL
+
+#ifndef __urlmon_h__
+#include <urlmon.h>
+#endif
+
+struct AFX_URLMON_CALL
+{
+	HRESULT (STDAPICALLTYPE* pfnRegisterBindStatusCallback)(LPBC pBC,
+		IBindStatusCallback *pBSCb, IBindStatusCallback **pBSCbPrev, DWORD dwReserved);
+	HRESULT (STDAPICALLTYPE* pfnRevokeBindStatusCallback)(LPBC pBC,
+		IBindStatusCallback *pBSCb);
+	HRESULT (STDAPICALLTYPE* pfnIsAsyncMoniker)(IMoniker* pmk);
+	HRESULT (STDAPICALLTYPE* pfnCreateURLMoniker)(LPMONIKER pMkCtx, LPCWSTR szURL, LPMONIKER FAR * ppmk);
+	HRESULT (STDAPICALLTYPE* pfnCreateAsyncBindCtx)(DWORD dwReserved, IBindStatusCallback *pBSCb,
+		IEnumFORMATETC *pEFetc, IBindCtx **ppBC);
+};
+
+extern AFX_DATA AFX_URLMON_CALL _afxUrlMon;
+
+/////////////////////////////////////////////////////////////////////////////
+// macros for AFX_URLMON_CALL access
+
+#ifdef RegisterBindStatusCallback
+#undef RegisterBindStatusCallback
+#endif
+#define RegisterBindStatusCallback _afxUrlMon.pfnRegisterBindStatusCallback
+
+#ifdef RevokeBindStatusCallback
+#undef RevokeBindStatusCallback
+#endif
+#define RevokeBindStatusCallback _afxUrlMon.pfnRevokeBindStatusCallback
+
+#ifdef IsAsyncMoniker
+#undef IsAsyncMoniker
+#endif
+#define IsAsyncMoniker _afxUrlMon.pfnIsAsyncMoniker
+
+#ifdef CreateURLMoniker
+#undef CreateURLMoniker
+#endif
+#define CreateURLMoniker _afxUrlMon.pfnCreateURLMoniker
+
+#ifdef CreateAsyncBindCtx
+#undef CreateAsyncBindCtx
+#endif
+#define CreateAsyncBindCtx _afxUrlMon.pfnCreateAsyncBindCtx
+
+#endif //!_MAC
 
 extern AFX_DATA AFX_OLE_CALL _afxOLE;
 
@@ -218,30 +309,30 @@ extern AFX_DATA AFX_OLE_CALL _afxOLE;
 #ifdef ReadFmtUserTypeStg
 #undef ReadFmtUserTypeStg
 #endif
-#define ReadFmtUserTypeStg  _afxOLE.pfnReadFmtUserTypeStg[0]
+#define ReadFmtUserTypeStg  _afxOLE.pfnReadFmtUserTypeStg
 #ifdef ReadClassStg
 #undef ReadClassStg
 #endif
-#define ReadClassStg    _afxOLE.pfnReadClassStg[0]
+#define ReadClassStg    _afxOLE.pfnReadClassStg
 #ifdef CreateFileMoniker
 #undef CreateFileMoniker
 #endif
-#define CreateFileMoniker   _afxOLE.pfnCreateFileMoniker[0]
+#define CreateFileMoniker   _afxOLE.pfnCreateFileMoniker
 #ifdef StgIsStorageFile
 #undef StgIsStorageFile
 #endif
-#define StgIsStorageFile    _afxOLE.pfnStgIsStorageFile[0]
+#define StgIsStorageFile    _afxOLE.pfnStgIsStorageFile
 #ifdef StgOpenStorage
 #undef StgOpenStorage
 #endif
-#define StgOpenStorage  _afxOLE.pfnStgOpenStorage[0]
+#define StgOpenStorage  _afxOLE.pfnStgOpenStorage
 
 #if defined(_AFX_OLE_IMPL)
 //DoDragDrop
 inline HRESULT STDAPICALLTYPE DoDragDrop(LPDATAOBJECT pDataObj,
 	LPDROPSOURCE pDropSource, DWORD dwOKEffects, LPDWORD pdwEffect)
 {
-	return _afxOLE.pfnDoDragDrop[0](pDataObj, pDropSource, dwOKEffects,
+	return _afxOLE.pfnDoDragDrop(pDataObj, pDropSource, dwOKEffects,
 		pdwEffect);
 }
 #endif
@@ -249,443 +340,574 @@ inline HRESULT STDAPICALLTYPE DoDragDrop(LPDATAOBJECT pDataObj,
 #ifdef CoLockObjectExternal
 #undef CoLockObjectExternal
 #endif
-#define CoLockObjectExternal    _afxOLE.pfnCoLockObjectExternal[0]
+#define CoLockObjectExternal    _afxOLE.pfnCoLockObjectExternal
 #ifdef RegisterDragDrop
 #undef RegisterDragDrop
 #endif
-#define RegisterDragDrop    _afxOLE.pfnRegisterDragDrop[0]
+#define RegisterDragDrop    _afxOLE.pfnRegisterDragDrop
 #ifdef OleRegGetUserType
 #undef OleRegGetUserType
 #endif
-#define OleRegGetUserType   _afxOLE.pfnOleRegGetUserType[0]
+#define OleRegGetUserType   _afxOLE.pfnOleRegGetUserType
 #ifdef StgCreateDocfile
 #undef StgCreateDocfile
 #endif
-#define StgCreateDocfile    _afxOLE.pfnStgCreateDocfile[0]
+#define StgCreateDocfile    _afxOLE.pfnStgCreateDocfile
 #ifdef RevokeDragDrop
 #undef RevokeDragDrop
 #endif
-#define RevokeDragDrop  _afxOLE.pfnRevokeDragDrop[0]
+#define RevokeDragDrop  _afxOLE.pfnRevokeDragDrop
 #ifdef CoRegisterClassObject
 #undef CoRegisterClassObject
 #endif
-#define CoRegisterClassObject   _afxOLE.pfnCoRegisterClassObject[0]
+#define CoRegisterClassObject   _afxOLE.pfnCoRegisterClassObject
 #ifdef CoRevokeClassObject
 #undef CoRevokeClassObject
 #endif
-#define CoRevokeClassObject _afxOLE.pfnCoRevokeClassObject[0]
+#define CoRevokeClassObject _afxOLE.pfnCoRevokeClassObject
 #ifdef OleTranslateAccelerator
 #undef OleTranslateAccelerator
 #endif
-#define OleTranslateAccelerator _afxOLE.pfnOleTranslateAccelerator[0]
+#define OleTranslateAccelerator _afxOLE.pfnOleTranslateAccelerator
 #ifdef IsAccelerator
 #undef IsAccelerator
 #endif
-#define IsAccelerator   _afxOLE.pfnIsAccelerator[0]
+#define IsAccelerator   _afxOLE.pfnIsAccelerator
 #ifdef OleCreateMenuDescriptor
 #undef OleCreateMenuDescriptor
 #endif
-#define OleCreateMenuDescriptor _afxOLE.pfnOleCreateMenuDescriptor[0]
+#define OleCreateMenuDescriptor _afxOLE.pfnOleCreateMenuDescriptor
 #ifdef OleDestroyMenuDescriptor
 #undef OleDestroyMenuDescriptor
 #endif
-#define OleDestroyMenuDescriptor    _afxOLE.pfnOleDestroyMenuDescriptor[0]
+#define OleDestroyMenuDescriptor    _afxOLE.pfnOleDestroyMenuDescriptor
 #ifdef GetRunningObjectTable
 #undef GetRunningObjectTable
 #endif
-#define GetRunningObjectTable   _afxOLE.pfnGetRunningObjectTable[0]
+#define GetRunningObjectTable   _afxOLE.pfnGetRunningObjectTable
 #ifdef WriteClassStg
 #undef WriteClassStg
 #endif
-#define WriteClassStg   _afxOLE.pfnWriteClassStg[0]
+#define WriteClassStg   _afxOLE.pfnWriteClassStg
 #ifdef OleQueryLinkFromData
 #undef OleQueryLinkFromData
 #endif
-#define OleQueryLinkFromData    _afxOLE.pfnOleQueryLinkFromData[0]
+#define OleQueryLinkFromData    _afxOLE.pfnOleQueryLinkFromData
 #ifdef CoRegisterMessageFilter
 #undef CoRegisterMessageFilter
 #endif
-#define CoRegisterMessageFilter _afxOLE.pfnCoRegisterMessageFilter[0]
+#define CoRegisterMessageFilter _afxOLE.pfnCoRegisterMessageFilter
 #ifdef CoCreateInstance
 #undef CoCreateInstance
 #endif
-#define CoCreateInstance    _afxOLE.pfnCoCreateInstance[0]
+#define CoCreateInstance    _afxOLE.pfnCoCreateInstance
 #ifdef CreateBindCtx
 #undef CreateBindCtx
 #endif
-#define CreateBindCtx   _afxOLE.pfnCreateBindCtx[0]
+#define CreateBindCtx   _afxOLE.pfnCreateBindCtx
 #ifdef StringFromCLSID
 #undef StringFromCLSID
 #endif
-#define StringFromCLSID _afxOLE.pfnStringFromCLSID[0]
+#define StringFromCLSID _afxOLE.pfnStringFromCLSID
 #ifdef CoDisconnectObject
 #undef CoDisconnectObject
 #endif
-#define CoDisconnectObject  _afxOLE.pfnCoDisconnectObject[0]
+#define CoDisconnectObject  _afxOLE.pfnCoDisconnectObject
 #ifdef OleRegEnumVerbs
 #undef OleRegEnumVerbs
 #endif
-#define OleRegEnumVerbs _afxOLE.pfnOleRegEnumVerbs[0]
+#define OleRegEnumVerbs _afxOLE.pfnOleRegEnumVerbs
 #ifdef OleUninitialize
 #undef OleUninitialize
 #endif
-#define OleUninitialize _afxOLE.pfnOleUninitialize[0]
+#define OleUninitialize _afxOLE.pfnOleUninitialize
 #ifdef CreateOleAdviseHolder
 #undef CreateOleAdviseHolder
 #endif
-#define CreateOleAdviseHolder   _afxOLE.pfnCreateOleAdviseHolder[0]
+#define CreateOleAdviseHolder   _afxOLE.pfnCreateOleAdviseHolder
 #ifdef CreateDataAdviseHolder
 #undef CreateDataAdviseHolder
 #endif
-#define CreateDataAdviseHolder  _afxOLE.pfnCreateDataAdviseHolder[0]
+#define CreateDataAdviseHolder  _afxOLE.pfnCreateDataAdviseHolder
 #ifdef OleGetAutoConvert
 #undef OleGetAutoConvert
 #endif
-#define OleGetAutoConvert   _afxOLE.pfnOleGetAutoConvert[0]
+#define OleGetAutoConvert   _afxOLE.pfnOleGetAutoConvert
 #ifdef CoGetClassObject
 #undef CoGetClassObject
 #endif
-#define CoGetClassObject    _afxOLE.pfnCoGetClassObject[0]
+#define CoGetClassObject    _afxOLE.pfnCoGetClassObject
 #ifdef OleCreateDefaultHandler
 #undef OleCreateDefaultHandler
 #endif
-#define OleCreateDefaultHandler _afxOLE.pfnOleCreateDefaultHandler[0]
+#define OleCreateDefaultHandler _afxOLE.pfnOleCreateDefaultHandler
 #ifdef CreateDataCache
 #undef CreateDataCache
 #endif
-#define CreateDataCache _afxOLE.pfnCreateDataCache[0]
+#define CreateDataCache _afxOLE.pfnCreateDataCache
 #ifdef ReadClassStm
 #undef ReadClassStm
 #endif
-#define ReadClassStm    _afxOLE.pfnReadClassStm[0]
+#define ReadClassStm    _afxOLE.pfnReadClassStm
 #ifdef OleLoadFromStream
 #undef OleLoadFromStream
 #endif
-#define OleLoadFromStream   _afxOLE.pfnOleLoadFromStream[0]
+#define OleLoadFromStream   _afxOLE.pfnOleLoadFromStream
 #ifdef StringFromGUID2
 #undef StringFromGUID2
 #endif
-#define StringFromGUID2 _afxOLE.pfnStringFromGUID2[0]
+#define StringFromGUID2 _afxOLE.pfnStringFromGUID2
 #ifdef CoUninitialize
 #undef CoUninitialize
 #endif
-#define CoUninitialize  _afxOLE.pfnCoUninitialize[0]
+#define CoUninitialize  _afxOLE.pfnCoUninitialize
 #ifdef CoInitialize
 #undef CoInitialize
 #endif
-#define CoInitialize    _afxOLE.pfnCoInitialize[0]
+#define CoInitialize    _afxOLE.pfnCoInitialize
 #ifdef OleInitialize
 #undef OleInitialize
 #endif
-#define OleInitialize   _afxOLE.pfnOleInitialize[0]
+#define OleInitialize   _afxOLE.pfnOleInitialize
 #ifdef CoFreeUnusedLibraries
 #undef CoFreeUnusedLibraries
 #endif
-#define CoFreeUnusedLibraries   _afxOLE.pfnCoFreeUnusedLibraries[0]
+#define CoFreeUnusedLibraries   _afxOLE.pfnCoFreeUnusedLibraries
 #ifdef OleCreateFromData
 #undef OleCreateFromData
 #endif
-#define OleCreateFromData   _afxOLE.pfnOleCreateFromData[0]
+#define OleCreateFromData   _afxOLE.pfnOleCreateFromData
 #ifdef OleSetContainedObject
 #undef OleSetContainedObject
 #endif
-#define OleSetContainedObject   _afxOLE.pfnOleSetContainedObject[0]
+#define OleSetContainedObject   _afxOLE.pfnOleSetContainedObject
 #ifdef OleLockRunning
 #undef OleLockRunning
 #endif
-#define OleLockRunning  _afxOLE.pfnOleLockRunning[0]
+#define OleLockRunning  _afxOLE.pfnOleLockRunning
 #ifdef CoTaskMemAlloc
 #undef CoTaskMemAlloc
 #endif
-#define CoTaskMemAlloc  _afxOLE.pfnCoTaskMemAlloc[0]
+#define CoTaskMemAlloc  _afxOLE.pfnCoTaskMemAlloc
 #ifdef CLSIDFromString
 #undef CLSIDFromString
 #endif
-#define CLSIDFromString _afxOLE.pfnCLSIDFromString[0]
+#define CLSIDFromString _afxOLE.pfnCLSIDFromString
 #ifdef CLSIDFromProgID
 #undef CLSIDFromProgID
 #endif
-#define CLSIDFromProgID _afxOLE.pfnCLSIDFromProgID[0]
+#define CLSIDFromProgID _afxOLE.pfnCLSIDFromProgID
 #ifdef OleIsCurrentClipboard
 #undef OleIsCurrentClipboard
 #endif
-#define OleIsCurrentClipboard   _afxOLE.pfnOleIsCurrentClipboard[0]
+#define OleIsCurrentClipboard   _afxOLE.pfnOleIsCurrentClipboard
 #ifdef OleFlushClipboard
 #undef OleFlushClipboard
 #endif
-#define OleFlushClipboard   _afxOLE.pfnOleFlushClipboard[0]
+#define OleFlushClipboard   _afxOLE.pfnOleFlushClipboard
 #ifdef OleSetClipboard
 #undef OleSetClipboard
 #endif
-#define OleSetClipboard _afxOLE.pfnOleSetClipboard[0]
+#define OleSetClipboard _afxOLE.pfnOleSetClipboard
 #ifdef OleIsRunning
 #undef OleIsRunning
 #endif
-#define OleIsRunning    _afxOLE.pfnOleIsRunning[0]
+#define OleIsRunning    _afxOLE.pfnOleIsRunning
 #ifdef OleRun
 #undef OleRun
 #endif
-#define OleRun  _afxOLE.pfnOleRun[0]
+#define OleRun  _afxOLE.pfnOleRun
 #ifdef OleGetClipboard
 #undef OleGetClipboard
 #endif
-#define OleGetClipboard _afxOLE.pfnOleGetClipboard[0]
+#define OleGetClipboard _afxOLE.pfnOleGetClipboard
 #ifdef CoTreatAsClass
 #undef CoTreatAsClass
 #endif
-#define CoTreatAsClass  _afxOLE.pfnCoTreatAsClass[0]
+#define CoTreatAsClass  _afxOLE.pfnCoTreatAsClass
 #ifdef OleQueryCreateFromData
 #undef OleQueryCreateFromData
 #endif
-#define OleQueryCreateFromData  _afxOLE.pfnOleQueryCreateFromData[0]
+#define OleQueryCreateFromData  _afxOLE.pfnOleQueryCreateFromData
 #ifdef OleSetMenuDescriptor
 #undef OleSetMenuDescriptor
 #endif
-#define OleSetMenuDescriptor    _afxOLE.pfnOleSetMenuDescriptor[0]
+#define OleSetMenuDescriptor    _afxOLE.pfnOleSetMenuDescriptor
 #ifdef CreateItemMoniker
 #undef CreateItemMoniker
 #endif
-#define CreateItemMoniker   _afxOLE.pfnCreateItemMoniker[0]
+#define CreateItemMoniker   _afxOLE.pfnCreateItemMoniker
 #ifdef CreateGenericComposite
 #undef CreateGenericComposite
 #endif
-#define CreateGenericComposite  _afxOLE.pfnCreateGenericComposite[0]
+#define CreateGenericComposite  _afxOLE.pfnCreateGenericComposite
 #ifdef CreateStreamOnHGlobal
 #undef CreateStreamOnHGlobal
 #endif
-#define CreateStreamOnHGlobal   _afxOLE.pfnCreateStreamOnHGlobal[0]
+#define CreateStreamOnHGlobal   _afxOLE.pfnCreateStreamOnHGlobal
 #ifdef OleSaveToStream
 #undef OleSaveToStream
 #endif
-#define OleSaveToStream _afxOLE.pfnOleSaveToStream[0]
+#define OleSaveToStream _afxOLE.pfnOleSaveToStream
 #ifdef WriteClassStm
 #undef WriteClassStm
 #endif
-#define WriteClassStm   _afxOLE.pfnWriteClassStm[0]
+#define WriteClassStm   _afxOLE.pfnWriteClassStm
 #ifdef CoTaskMemFree
 #undef CoTaskMemFree
 #endif
-#define CoTaskMemFree   _afxOLE.pfnCoTaskMemFree[0]
+#define CoTaskMemFree   _afxOLE.pfnCoTaskMemFree
 #ifdef OleGetIconOfClass
 #undef OleGetIconOfClass
 #endif
-#define OleGetIconOfClass   _afxOLE.pfnOleGetIconOfClass[0]
+#define OleGetIconOfClass   _afxOLE.pfnOleGetIconOfClass
 #ifdef ReleaseStgMedium
 #undef ReleaseStgMedium
 #endif
-#define ReleaseStgMedium    _afxOLE.pfnReleaseStgMedium[0]
+#define ReleaseStgMedium    _afxOLE.pfnReleaseStgMedium
 #ifdef GetHGlobalFromILockBytes
 #undef GetHGlobalFromILockBytes
 #endif
-#define GetHGlobalFromILockBytes    _afxOLE.pfnGetHGlobalFromILockBytes[0]
+#define GetHGlobalFromILockBytes    _afxOLE.pfnGetHGlobalFromILockBytes
 #ifdef StgOpenStorageOnILockBytes
 #undef StgOpenStorageOnILockBytes
 #endif
-#define StgOpenStorageOnILockBytes  _afxOLE.pfnStgOpenStorageOnILockBytes[0]
+#define StgOpenStorageOnILockBytes  _afxOLE.pfnStgOpenStorageOnILockBytes
 #ifdef CreateILockBytesOnHGlobal
 #undef CreateILockBytesOnHGlobal
 #endif
-#define CreateILockBytesOnHGlobal   _afxOLE.pfnCreateILockBytesOnHGlobal[0]
+#define CreateILockBytesOnHGlobal   _afxOLE.pfnCreateILockBytesOnHGlobal
 #ifdef StgCreateDocfileOnILockBytes
 #undef StgCreateDocfileOnILockBytes
 #endif
-#define StgCreateDocfileOnILockBytes    _afxOLE.pfnStgCreateDocfileOnILockBytes[0]
+#define StgCreateDocfileOnILockBytes    _afxOLE.pfnStgCreateDocfileOnILockBytes
 #ifdef OleSave
 #undef OleSave
 #endif
-#define OleSave _afxOLE.pfnOleSave[0]
+#define OleSave _afxOLE.pfnOleSave
 #ifdef OleLoad
 #undef OleLoad
 #endif
-#define OleLoad _afxOLE.pfnOleLoad[0]
+#define OleLoad _afxOLE.pfnOleLoad
 #ifdef OleCreate
 #undef OleCreate
 #endif
-#define OleCreate   _afxOLE.pfnOleCreate[0]
+#define OleCreate   _afxOLE.pfnOleCreate
 #ifdef OleCreateLinkToFile
 #undef OleCreateLinkToFile
 #endif
-#define OleCreateLinkToFile _afxOLE.pfnOleCreateLinkToFile[0]
+#define OleCreateLinkToFile _afxOLE.pfnOleCreateLinkToFile
 #ifdef OleCreateFromFile
 #undef OleCreateFromFile
 #endif
-#define OleCreateFromFile   _afxOLE.pfnOleCreateFromFile[0]
+#define OleCreateFromFile   _afxOLE.pfnOleCreateFromFile
 #ifdef OleCreateStaticFromData
 #undef OleCreateStaticFromData
 #endif
-#define OleCreateStaticFromData _afxOLE.pfnOleCreateStaticFromData[0]
+#define OleCreateStaticFromData _afxOLE.pfnOleCreateStaticFromData
 #ifdef OleCreateLinkFromData
 #undef OleCreateLinkFromData
 #endif
-#define OleCreateLinkFromData   _afxOLE.pfnOleCreateLinkFromData[0]
+#define OleCreateLinkFromData   _afxOLE.pfnOleCreateLinkFromData
 #ifdef SetConvertStg
 #undef SetConvertStg
 #endif
-#define SetConvertStg   _afxOLE.pfnSetConvertStg[0]
+#define SetConvertStg   _afxOLE.pfnSetConvertStg
 #ifdef OleDuplicateData
 #undef OleDuplicateData
 #endif
-#define OleDuplicateData    _afxOLE.pfnOleDuplicateData[0]
+#define OleDuplicateData    _afxOLE.pfnOleDuplicateData
 #ifdef WriteFmtUserTypeStg
 #undef WriteFmtUserTypeStg
 #endif
-#define WriteFmtUserTypeStg _afxOLE.pfnWriteFmtUserTypeStg[0]
+#define WriteFmtUserTypeStg _afxOLE.pfnWriteFmtUserTypeStg
 #ifdef OleRegGetMiscStatus
 #undef OleRegGetMiscStatus
 #endif
-#define OleRegGetMiscStatus _afxOLE.pfnOleRegGetMiscStatus[0]
+#define OleRegGetMiscStatus _afxOLE.pfnOleRegGetMiscStatus
 #ifdef CoGetMalloc
 #undef CoGetMalloc
 #endif
-#define CoGetMalloc _afxOLE.pfnCoGetMalloc[0]
+#define CoGetMalloc _afxOLE.pfnCoGetMalloc
 #ifdef StgIsStorageILockBytes
 #undef StgIsStorageILockBytes
 #endif
-#define StgIsStorageILockBytes  _afxOLE.pfnStgIsStorageILockBytes[0]
+#define StgIsStorageILockBytes  _afxOLE.pfnStgIsStorageILockBytes
+
+#ifdef _MAC
+
+#ifdef RegEnumKey
+#undef RegEnumKey
+#endif
+#define RegEnumKey _afxOLE.pfnRegEnumKey
+
+#ifdef RegDeleteKey
+#undef RegDeleteKey
+#endif
+#define RegDeleteKey _afxOLE.pfnRegDeleteKey
+
+#ifdef RegDeleteValue
+#undef RegDeleteValue
+#endif
+#define RegDeleteValue _afxOLE.pfnRegDeleteValue
+
+#ifdef RegCloseKey
+#undef RegCloseKey
+#endif
+#define RegCloseKey _afxOLE.pfnRegCloseKey
+
+#ifdef RegSetValue
+#undef RegSetValue
+#endif
+#define RegSetValue _afxOLE.pfnRegSetValue
+
+#ifdef RegCreateKey
+#undef RegCreateKey
+#endif
+#define RegCreateKey _afxOLE.pfnRegCreateKey
+
+#ifdef RegSetValueEx
+#undef RegSetValueEx
+#endif
+#define RegSetValueEx _afxOLE.pfnRegSetValueEx
+
+#ifdef RegQueryValue
+#undef RegQueryValue
+#endif
+#define RegQueryValue _afxOLE.pfnRegQueryValue
+
+#ifdef RegOpenKey
+#undef RegOpenKey
+#endif
+#define RegOpenKey _afxOLE.pfnRegOpenKey
+
+#ifdef RegQueryValueEx
+#undef RegQueryValueEx
+#endif
+#define RegQueryValueEx _afxOLE.pfnRegQueryValueEx
+
+#endif //_MAC
 
 // OLEAUT32.DLL mappings
 #ifdef SysFreeString
 #undef SysFreeString
 #endif
-#define SysFreeString               _afxOLE.pfnSysFreeString[0]
+#define SysFreeString               _afxOLE.pfnSysFreeString
+
+#if !defined(_MAC)
 #ifdef SysAllocStringByteLen
 #undef SysAllocStringByteLen
 #endif
-#define SysAllocStringByteLen       _afxOLE.pfnSysAllocStringByteLen[0]
+#define SysAllocStringByteLen       _afxOLE.pfnSysAllocStringByteLen
+#endif
+
 #ifdef VariantCopy
 #undef VariantCopy
 #endif
-#define VariantCopy                 _afxOLE.pfnVariantCopy[0]
+#define VariantCopy                 _afxOLE.pfnVariantCopy
 #ifdef VariantClear
 #undef VariantClear
 #endif
-#define VariantClear                _afxOLE.pfnVariantClear[0]
+#define VariantClear                _afxOLE.pfnVariantClear
 #ifdef VariantChangeType
 #undef VariantChangeType
 #endif
-#define VariantChangeType           _afxOLE.pfnVariantChangeType[0]
+#define VariantChangeType           _afxOLE.pfnVariantChangeType
 #ifdef SysAllocStringLen
 #undef SysAllocStringLen
 #endif
-#define SysAllocStringLen           _afxOLE.pfnSysAllocStringLen[0]
+#define SysAllocStringLen           _afxOLE.pfnSysAllocStringLen
 #ifdef SysStringLen
 #undef SysStringLen
 #endif
-#define SysStringLen                _afxOLE.pfnSysStringLen[0]
+#define SysStringLen                _afxOLE.pfnSysStringLen
 #ifdef SysReAllocStringLen
 #undef SysReAllocStringLen
 #endif
-#define SysReAllocStringLen         _afxOLE.pfnSysReAllocStringLen[0]
+#define SysReAllocStringLen         _afxOLE.pfnSysReAllocStringLen
 #ifdef SysAllocString
 #undef SysAllocString
 #endif
-#define SysAllocString              _afxOLE.pfnSysAllocString[0]
+#define SysAllocString              _afxOLE.pfnSysAllocString
+
+#if !defined(_MAC)
 #ifdef SysStringByteLen
 #undef SysStringByteLen
 #endif
-#define SysStringByteLen            _afxOLE.pfnSysStringByteLen[0]
+#define SysStringByteLen            _afxOLE.pfnSysStringByteLen
+#endif
+
 #ifdef VarCyFromStr
 #undef VarCyFromStr
 #endif
-#define VarCyFromStr                _afxOLE.pfnVarCyFromStr[0]
+#define VarCyFromStr                _afxOLE.pfnVarCyFromStr
 #ifdef VarBstrFromCy
 #undef VarBstrFromCy
 #endif
-#define VarBstrFromCy               _afxOLE.pfnVarBstrFromCy[0]
+#define VarBstrFromCy               _afxOLE.pfnVarBstrFromCy
 #ifdef VarDateFromStr
 #undef VarDateFromStr
 #endif
-#define VarDateFromStr              _afxOLE.pfnVarDateFromStr[0]
+#define VarDateFromStr              _afxOLE.pfnVarDateFromStr
 #ifdef VarBstrFromDate
 #undef VarBstrFromDate
 #endif
-#define VarBstrFromDate             _afxOLE.pfnVarBstrFromDate[0]
+#define VarBstrFromDate             _afxOLE.pfnVarBstrFromDate
 #ifdef LoadTypeLib
 #undef LoadTypeLib
 #endif
-#define LoadTypeLib                 _afxOLE.pfnLoadTypeLib[0]
+#define LoadTypeLib                 _afxOLE.pfnLoadTypeLib
+
+#if defined(_MAC) && defined(MACOCX)
+#ifdef LoadTypeLibFSp
+#undef LoadTypeLibFSp
+#endif
+#define LoadTypeLibFSp              _afxOLE.pfnLoadTypeLibFSp
+#ifdef RegisterTypeLibFolder
+#undef RegisterTypeLibFolder
+#endif
+#define RegisterTypeLibFolder       _afxOLE.pfnRegisterTypeLibFolder
+#ifdef QueryTypeLibFolder
+#undef QueryTypeLibFolder
+#endif
+#define QueryTypeLibFolder          _afxOLE.pfnQueryTypeLibFolder
+#ifdef GetUserDefaultLCID
+#undef GetUserDefaultLCID
+#endif
+#define GetUserDefaultLCID          _afxOLE.pfnGetUserDefaultLCID
+#endif //_MAC && MACOCX
+
+#ifdef LoadRegTypeLib
+#undef LoadRegTypeLib
+#endif
+#define LoadRegTypeLib              _afxOLE.pfnLoadRegTypeLib
 #ifdef RegisterTypeLib
 #undef RegisterTypeLib
 #endif
-#define RegisterTypeLib             _afxOLE.pfnRegisterTypeLib[0]
+#define RegisterTypeLib             _afxOLE.pfnRegisterTypeLib
 #ifdef DosDateTimeToVariantTime
 #undef DosDateTimeToVariantTime
 #endif
-#define DosDateTimeToVariantTime    _afxOLE.pfnDosDateTimeToVariantTime[0]
+#define DosDateTimeToVariantTime    _afxOLE.pfnDosDateTimeToVariantTime
 #ifdef SafeArrayCreate
 #undef SafeArrayCreate
 #endif
-#define SafeArrayCreate         _afxOLE.pfnSafeArrayCreate[0]
+#define SafeArrayCreate             _afxOLE.pfnSafeArrayCreate
 #ifdef SafeArrayRedim
 #undef SafeArrayRedim
 #endif
-#define SafeArrayRedim      _afxOLE.pfnSafeArrayRedim[0]
+#define SafeArrayRedim              _afxOLE.pfnSafeArrayRedim
 #ifdef SafeArrayAccessData
 #undef SafeArrayAccessData
 #endif
-#define SafeArrayAccessData         _afxOLE.pfnSafeArrayAccessData[0]
+#define SafeArrayAccessData         _afxOLE.pfnSafeArrayAccessData
 #ifdef SafeArrayUnaccessData
 #undef SafeArrayUnaccessData
 #endif
-#define SafeArrayUnaccessData       _afxOLE.pfnSafeArrayUnaccessData[0]
+#define SafeArrayUnaccessData       _afxOLE.pfnSafeArrayUnaccessData
 #ifdef SafeArrayGetUBound
 #undef SafeArrayGetUBound
 #endif
-#define SafeArrayGetUBound          _afxOLE.pfnSafeArrayGetUBound[0]
+#define SafeArrayGetUBound          _afxOLE.pfnSafeArrayGetUBound
 #ifdef SafeArrayGetLBound
 #undef SafeArrayGetLBound
 #endif
-#define SafeArrayGetLBound          _afxOLE.pfnSafeArrayGetLBound[0]
+#define SafeArrayGetLBound          _afxOLE.pfnSafeArrayGetLBound
 #ifdef SafeArrayGetElemsize
 #undef SafeArrayGetElemsize
 #endif
-#define SafeArrayGetElemsize        _afxOLE.pfnSafeArrayGetElemsize[0]
+#define SafeArrayGetElemsize        _afxOLE.pfnSafeArrayGetElemsize
 #ifdef SafeArrayGetDim
 #undef SafeArrayGetDim
 #endif
-#define SafeArrayGetDim             _afxOLE.pfnSafeArrayGetDim[0]
+#define SafeArrayGetDim             _afxOLE.pfnSafeArrayGetDim
+#ifdef SafeArrayCopy
+#undef SafeArrayCopy
+#endif
+#define SafeArrayCopy               _afxOLE.pfnSafeArrayCopy
+#ifdef SafeArrayAllocData
+#undef SafeArrayAllocData
+#endif
+#define SafeArrayAllocData          _afxOLE.pfnSafeArrayAllocData
+#ifdef SafeArrayAllocDescriptor
+#undef SafeArrayAllocDescriptor
+#endif
+#define SafeArrayAllocDescriptor    _afxOLE.pfnSafeArrayAllocDescriptor
+#ifdef SafeArrayGetElement
+#undef SafeArrayGetElement
+#endif
+#define SafeArrayGetElement         _afxOLE.pfnSafeArrayGetElement
+#ifdef SafeArrayPutElement
+#undef SafeArrayPutElement
+#endif
+#define SafeArrayPutElement         _afxOLE.pfnSafeArrayPutElement
+#ifdef SafeArrayLock
+#undef SafeArrayLock
+#endif
+#define SafeArrayLock               _afxOLE.pfnSafeArrayLock
+#ifdef SafeArrayUnlock
+#undef SafeArrayUnlock
+#endif
+#define SafeArrayUnlock             _afxOLE.pfnSafeArrayUnlock
+#ifdef SafeArrayDestroy
+#undef SafeArrayDestroy
+#endif
+#define SafeArrayDestroy            _afxOLE.pfnSafeArrayDestroy
+#ifdef SafeArrayDestroyData
+#undef SafeArrayDestroyData
+#endif
+#define SafeArrayDestroyData        _afxOLE.pfnSafeArrayDestroyData
+#ifdef SafeArrayDestroyDescriptor
+#undef SafeArrayDestroyDescriptor
+#endif
+#define SafeArrayDestroyDescriptor  _afxOLE.pfnSafeArrayDestroyDescriptor
+#ifdef SafeArrayPtrOfIndex
+#undef SafeArrayPtrOfIndex
+#endif
+#define SafeArrayPtrOfIndex         _afxOLE.pfnSafeArrayPtrOfIndex
+
 
 // OLEDLG.DLL mappings
 #ifdef OleUIAddVerbMenu
 #undef OleUIAddVerbMenu
 #endif
-#define OleUIAddVerbMenu        _afxOLE.pfnOleUIAddVerbMenu[0]
+#define OleUIAddVerbMenu        _afxOLE.pfnOleUIAddVerbMenu
 #ifdef OleUIBusy
 #undef OleUIBusy
 #endif
-#define OleUIBusy               _afxOLE.pfnOleUIBusy[0]
+#define OleUIBusy               _afxOLE.pfnOleUIBusy
 #ifdef OleUIChangeIcon
 #undef OleUIChangeIcon
 #endif
-#define OleUIChangeIcon         _afxOLE.pfnOleUIChangeIcon[0]
+#define OleUIChangeIcon         _afxOLE.pfnOleUIChangeIcon
 #ifdef OleUIChangeSource
 #undef OleUIChangeSource
 #endif
-#define OleUIChangeSource       _afxOLE.pfnOleUIChangeSource[0]
+#define OleUIChangeSource       _afxOLE.pfnOleUIChangeSource
 #ifdef OleUIConvert
 #undef OleUIConvert
 #endif
-#define OleUIConvert            _afxOLE.pfnOleUIConvert[0]
+#define OleUIConvert            _afxOLE.pfnOleUIConvert
 #ifdef OleUIEditLinks
 #undef OleUIEditLinks
 #endif
-#define OleUIEditLinks          _afxOLE.pfnOleUIEditLinks[0]
+#define OleUIEditLinks          _afxOLE.pfnOleUIEditLinks
 #ifdef OleUIInsertObject
 #undef OleUIInsertObject
 #endif
-#define OleUIInsertObject       _afxOLE.pfnOleUIInsertObject[0]
+#define OleUIInsertObject       _afxOLE.pfnOleUIInsertObject
 #ifdef OleUIObjectProperties
 #undef OleUIObjectProperties
 #endif
-#define OleUIObjectProperties   _afxOLE.pfnOleUIObjectProperties[0]
+#define OleUIObjectProperties   _afxOLE.pfnOleUIObjectProperties
 #ifdef OleUIPasteSpecial
 #undef OleUIPasteSpecial
 #endif
-#define OleUIPasteSpecial       _afxOLE.pfnOleUIPasteSpecial[0]
+#define OleUIPasteSpecial       _afxOLE.pfnOleUIPasteSpecial
 #ifdef OleUIUpdateLinks
 #undef OleUIUpdateLinks
 #endif
-#define OleUIUpdateLinks        _afxOLE.pfnOleUIUpdateLinks[0]
+#define OleUIUpdateLinks        _afxOLE.pfnOleUIUpdateLinks
 
 #endif //_AFXDLL
 

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -24,8 +24,89 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // Helper functions
 
-static long AFXAPI MultMultDivDiv(int factor, int num1, int num2,
-	int den1, int den2);
+AFX_STATIC long AFXAPI _AfxMultMultDivDiv(
+	int factor, int num1, int num2,
+	int den1, int den2)
+{
+#ifdef _AFX_PORTABLE
+	// make sure that (num1 * num2) does not overflow 31-bits.
+	long temp = num1 < 0 ? -num1 : num1;
+	for (int nBitsResult = 0; temp != 0; nBitsResult++)
+		temp >>= 1;
+	temp = num2 < 0 ? -num2 : num2;
+	for (; temp != 0; nBitsResult++)
+		temp >>= 1;
+	if (nBitsResult > 31)
+	{
+		num1 >>= nBitsResult - 31;
+		num2 >>= nBitsResult - 31;
+	}
+
+	// make sure that (den1 * den2) does not overflow 31-bits
+	temp = den1 < 0 ? -den1 : den1;
+	for (nBitsResult = 0; temp != 0; nBitsResult++)
+		temp >>= 1;
+	temp = den2 < 0 ? -den2 : den2;
+	for (; temp != 0; nBitsResult++)
+		temp >>= 1;
+	if (nBitsResult > 31)
+	{
+		den1 >>= nBitsResult - 31;
+		den2 >>= nBitsResult - 31;
+	}
+
+	long numerator = (long)num1 * (long)num2;   // no overflow
+	long denominator = (long)den1 * (long)den2; // no overflow
+#else
+	__int64 numerator = (__int64)num1 * (__int64)num2;   // no overflow
+	__int64 denominator = (__int64)den1 * (__int64)den2; // no overflow
+	__int64 temp;
+#endif
+
+	temp = numerator < 0 ? -numerator : numerator;
+	for (int nBitsInNum = 0; temp != 0; nBitsInNum++)
+		temp >>= 1;
+
+	temp = factor < 0 ? -factor : factor;
+	for (int nBitsInFactor = 0; temp != 0; nBitsInFactor++)
+		temp >>= 1;
+
+	nBitsInNum += nBitsInFactor;
+
+	//
+	// normalizing the denominator to positive results in an easier
+	// determination of whether there is overflow
+	//
+	if (denominator < 0)
+	{
+		denominator = -denominator;
+		numerator = -numerator;
+	}
+
+	// Get the product of factor * numerator representable in a long/__int64
+	// while distributing loss of presision across all three numerator terms
+	// Adjust denominator as well
+	//
+	while (nBitsInNum-- > 31)
+	{
+		numerator >>= 1;
+		denominator >>= 1;
+		if (nBitsInNum-- <= 31)
+			break;
+		numerator >>= 1;
+		denominator >>= 1;
+		if (nBitsInNum-- <= 31)
+			break;
+		factor >>= 1;
+		denominator >>= 1;
+	}
+	numerator *= factor;
+
+	if (denominator == 0)
+		return numerator < 0 ? LONG_MIN : LONG_MAX;
+
+	return (long) ((numerator + denominator/2) / denominator);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // Print Preview DC (CPreviewDC)
@@ -242,7 +323,7 @@ void CPreviewDC::MirrorFont()
 	else
 		logFont.lfHeight = -(tm.tmHeight - tm.tmInternalLeading);
 
-	logFont.lfWidth = 0;
+	logFont.lfWidth = tm.tmAveCharWidth;
 	logFont.lfWeight = tm.tmWeight;
 	logFont.lfItalic = tm.tmItalic;
 	logFont.lfUnderline = tm.tmUnderlined;
@@ -300,11 +381,6 @@ void CPreviewDC::MirrorFont()
 
 	AfxDeleteObject((HGDIOBJ*)&m_hFont);  // delete the old logical font
 	m_hFont = hNewFont;         // save the new one
-
-#ifdef _MAC
-	VERIFY(::GetCharWidth(m_hDC, 0, 255, m_aCharWidthsDraw));
-	VERIFY(::GetCharWidth(m_hAttribDC, 0, 255, m_aCharWidthsAttrib));
-#endif
 }
 
 CFont* CPreviewDC::SelectObject(CFont* pFont)
@@ -416,7 +492,7 @@ CSize CPreviewDC::ScaleWindowExt(int xNum, int xDenom, int yNum, int yDenom)
 
 // private helpers for TextOut functions
 
-static int ComputeNextTab(int x, UINT nTabStops, LPINT lpnTabStops,
+AFX_STATIC int AFXAPI _AfxComputeNextTab(int x, UINT nTabStops, LPINT lpnTabStops,
 										int nTabOrigin, int nTabWidth)
 {
 	x -= nTabOrigin;        // normalize position to tab origin
@@ -442,7 +518,7 @@ CSize CPreviewDC::ComputeDeltas(int& x, LPCTSTR lpszString, UINT &nCount,
 	::GetTextMetrics(m_hDC, &tmScreen);
 
 	CSize sizeExtent;
-	::GetTextExtentPointA(m_hAttribDC, "A", 1, &sizeExtent);
+	::GetTextExtentPoint32A(m_hAttribDC, "A", 1, &sizeExtent);
 
 	CPoint ptCurrent;
 	UINT nAlignment = ::GetTextAlign(m_hAttribDC);
@@ -486,7 +562,7 @@ CSize CPreviewDC::ComputeDeltas(int& x, LPCTSTR lpszString, UINT &nCount,
 			int nRunLength = (int)(lpszCurChar - lpszStartRun) + bSpace;
 
 			CSize sizeExtent;
-			::GetTextExtentPoint(m_hAttribDC, lpszStartRun, nRunLength,
+			::GetTextExtentPoint32(m_hAttribDC, lpszStartRun, nRunLength,
 				&sizeExtent);
 			int nNewPos = nStartRunPos + sizeExtent.cx
 				- tmAttrib.tmOverhang;
@@ -494,7 +570,7 @@ CSize CPreviewDC::ComputeDeltas(int& x, LPCTSTR lpszString, UINT &nCount,
 			// now, if this is a Tab (!bSpace), compute the next tab stop
 			if (!bSpace)
 			{
-				nNewPos = ComputeNextTab(nNewPos, nTabStops, lpnTabStops,
+				nNewPos = _AfxComputeNextTab(nNewPos, nTabStops, lpnTabStops,
 								nTabOrigin, nTabWidth);
 			}
 
@@ -521,7 +597,6 @@ CSize CPreviewDC::ComputeDeltas(int& x, LPCTSTR lpszString, UINT &nCount,
 			}
 			else
 			{
-#ifndef _MAC
 				::GetCharWidth(m_hDC, (_TUCHAR)*lpszCurChar,
 					(_TUCHAR)*lpszCurChar, &cxScreen);
 				if (!::GetCharWidth(m_hAttribDC, (_TUCHAR)*lpszCurChar,
@@ -530,10 +605,6 @@ CSize CPreviewDC::ComputeDeltas(int& x, LPCTSTR lpszString, UINT &nCount,
 					// If printer driver fails the above call, use the average width
 					*pnCurDelta = tmAttrib.tmAveCharWidth;
 				}
-#else
-				cxScreen = m_aCharWidthsDraw[(_TUCHAR)*lpszCurChar];
-				*pnCurDelta = m_aCharWidthsAttrib[(_TUCHAR)*lpszCurChar];
-#endif
 			}
 			*pnCurDelta -= tmAttrib.tmOverhang;
 			cxScreen -= tmScreen.tmOverhang;
@@ -642,7 +713,7 @@ CSize CPreviewDC::TabbedTextOut(int x, int y, LPCTSTR lpszString, int nCount,
 	ASSERT(m_hAttribDC != NULL);
 	ASSERT(m_hDC != NULL);
 	ASSERT(lpszString != NULL);
-	ASSERT(AfxIsValidAddress(lpszString, nCount));
+	ASSERT(AfxIsValidAddress(lpszString, nCount, FALSE));
 	ASSERT(lpnTabStopPositions == NULL ||
 			AfxIsValidAddress(lpnTabStopPositions, sizeof(int) * nTabPositions,
 				FALSE));
@@ -810,14 +881,14 @@ void CPreviewDC::MirrorMappingMode(BOOL bCompute)
 			m_sizeVpExt.cy  <<= 1;
 		}
 
-		long lTempExt = MultMultDivDiv(m_sizeVpExt.cx,
+		long lTempExt = _AfxMultMultDivDiv(m_sizeVpExt.cx,
 			m_nScaleNum, afxData.cxPixelsPerInch,
 			m_nScaleDen, ::GetDeviceCaps(m_hAttribDC, LOGPIXELSX));
 
 		ASSERT(m_sizeWinExt.cx != 0);
 		m_sizeVpExt.cx = (int)lTempExt;
 
-		lTempExt = MultMultDivDiv(m_sizeVpExt.cy,
+		lTempExt = _AfxMultMultDivDiv(m_sizeVpExt.cy,
 			m_nScaleNum, afxData.cyPixelsPerInch,
 			m_nScaleDen, ::GetDeviceCaps(m_hAttribDC, LOGPIXELSY));
 
@@ -894,101 +965,19 @@ void CPreviewDC::PrinterDPtoScreenDP(LPPOINT lpPoint) const
 	CSize sizePrinterWinExt;
 	VERIFY(::GetWindowExtEx(m_hAttribDC, &sizePrinterWinExt));
 
-	long xScreen = MultMultDivDiv(lpPoint->x,
+	long xScreen = _AfxMultMultDivDiv(lpPoint->x,
 		sizePrinterWinExt.cx, m_sizeVpExt.cx,
 		sizePrinterVpExt.cx, m_sizeWinExt.cx);
 
 	lpPoint->x = (int)xScreen;
 
-	long yScreen = MultMultDivDiv(lpPoint->y,
+	long yScreen = _AfxMultMultDivDiv(lpPoint->y,
 		sizePrinterWinExt.cy, m_sizeVpExt.cy,
 		sizePrinterVpExt.cy, m_sizeWinExt.cy);
 
 	lpPoint->y = (int)yScreen;
 }
 
-static long AFXAPI MultMultDivDiv(int factor, int num1, int num2,
-	int den1, int den2)
-{
-#if defined(_AFX_PORTABLE) || defined(_MAC)
-	// make sure that (num1 * num2) does not overflow 31-bits.
-	long temp = num1 < 0 ? -num1 : num1;
-	for (int nBitsResult = 0; temp != 0; nBitsResult++)
-		temp >>= 1;
-	temp = num2 < 0 ? -num2 : num2;
-	for (; temp != 0; nBitsResult++)
-		temp >>= 1;
-	if (nBitsResult > 31)
-	{
-		num1 >>= nBitsResult - 31;
-		num2 >>= nBitsResult - 31;
-	}
-
-	// make sure that (den1 * den2) does not overflow 31-bits
-	temp = den1 < 0 ? -den1 : den1;
-	for (nBitsResult = 0; temp != 0; nBitsResult++)
-		temp >>= 1;
-	temp = den2 < 0 ? -den2 : den2;
-	for (; temp != 0; nBitsResult++)
-		temp >>= 1;
-	if (nBitsResult > 31)
-	{
-		den1 >>= nBitsResult - 31;
-		den2 >>= nBitsResult - 31;
-	}
-
-	long numerator = (long)num1 * (long)num2;   // no overflow
-	long denominator = (long)den1 * (long)den2; // no overflow
-#else
-	__int64 numerator = (__int64)num1 * (__int64)num2;   // no overflow
-	__int64 denominator = (__int64)den1 * (__int64)den2; // no overflow
-	__int64 temp;
-#endif
-
-	temp = numerator < 0 ? -numerator : numerator;
-	for (int nBitsInNum = 0; temp != 0; nBitsInNum++)
-		temp >>= 1;
-
-	temp = factor < 0 ? -factor : factor;
-	for (int nBitsInFactor = 0; temp != 0; nBitsInFactor++)
-		temp >>= 1;
-
-	nBitsInNum += nBitsInFactor;
-
-	//
-	// normalizing the denominator to positive results in an easier
-	// determination of whether there is overflow
-	//
-	if (denominator < 0)
-	{
-		denominator = -denominator;
-		numerator = -numerator;
-	}
-
-	// Get the product of factor * numerator representable in a long/__int64
-	// while distributing loss of presision across all three numerator terms
-	// Adjust denominator as well
-	//
-	while (nBitsInNum-- > 31)
-	{
-		numerator >>= 1;
-		denominator >>= 1;
-		if (nBitsInNum-- <= 31)
-			break;
-		numerator >>= 1;
-		denominator >>= 1;
-		if (nBitsInNum-- <= 31)
-			break;
-		factor >>= 1;
-		denominator >>= 1;
-	}
-	numerator *= factor;
-
-	if (denominator == 0)
-		return numerator < 0 ? LONG_MIN : LONG_MAX;
-
-	return (long) ((numerator + denominator/2) / denominator);
-}
 
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)

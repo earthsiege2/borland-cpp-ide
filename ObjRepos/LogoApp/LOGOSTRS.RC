@@ -1,0 +1,10 @@
+STRINGTABLE DISCARDABLE
+{
+
+    1  "Untitled"
+    2  "OK to overwrite %s"
+    3  "Error sending mail"
+    
+}
+
+

@@ -7,8 +7,8 @@
  */
 
 #ifndef _MAPINLS_H_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MAPINLS_H_
-#pragma option -b
 
 #if defined (WIN32) && !defined (_WIN32)
 #define _WIN32
@@ -32,9 +32,7 @@ extern "C" {
 #endif
 
 #if defined(DOS) || defined(_MAC)
-#pragma option -b.
 #include <string.h>
-#pragma option -b
 #endif
 
 #ifndef FAR
@@ -208,6 +206,6 @@ BOOL    WINAPI  MNLS_IsBadStringPtrW(LPCWSTR lpsz, UINT ucchMax);
 }
 #endif
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* _MAPINLS_H_ */
 

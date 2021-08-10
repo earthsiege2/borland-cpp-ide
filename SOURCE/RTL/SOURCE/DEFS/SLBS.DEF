@@ -1,0 +1,29 @@
+LIBRARY SLBS
+EXPORTS
+
+    ColumnLBClass_ListBoxWndProc             = 'SLBS.DLL'.*
+    _ColumnLBClass_Register                  = 'SLBS.DLL'.ColumnLBClass_Register
+    ColumnLBClass_TitleListBoxWndProc        = 'SLBS.DLL'.*
+    _ColumnLBClass_Unregister                = 'SLBS.DLL'.ColumnLBClass_Unregister
+    ColumnLBClass_WndProc                    = 'SLBS.DLL'.*
+    _ColumnLB_DrawColumnBorder               = 'SLBS.DLL'.ColumnLB_DrawColumnBorder
+    _ColumnVLBClass_Register                 = 'SLBS.DLL'.ColumnVLBClass_Register
+    _ColumnVLBClass_Unregister               = 'SLBS.DLL'.ColumnVLBClass_Unregister
+    DLLEntry                                 = 'SLBS.DLL'.*
+    _HierDraw_CloseItem                      = 'SLBS.DLL'.HierDraw_CloseItem
+    _HierDraw_Copy                           = 'SLBS.DLL'.HierDraw_Copy
+    _HierDraw_DrawCloseAll                   = 'SLBS.DLL'.HierDraw_DrawCloseAll
+    _HierDraw_DrawInit                       = 'SLBS.DLL'.HierDraw_DrawInit
+    _HierDraw_DrawSetTextHeight              = 'SLBS.DLL'.HierDraw_DrawSetTextHeight
+    _HierDraw_DrawTerm                       = 'SLBS.DLL'.HierDraw_DrawTerm
+    _HierDraw_IsOpened                       = 'SLBS.DLL'.HierDraw_IsOpened
+    _HierDraw_IsPointOnIcon                  = 'SLBS.DLL'.HierDraw_IsPointOnIcon
+    _HierDraw_OnDrawItem                     = 'SLBS.DLL'.HierDraw_OnDrawItem
+    _HierDraw_OnDrawItem2                    = 'SLBS.DLL'.HierDraw_OnDrawItem2
+    _HierDraw_OnMeasureItem                  = 'SLBS.DLL'.HierDraw_OnMeasureItem
+    _HierDraw_OpenItem                       = 'SLBS.DLL'.HierDraw_OpenItem
+    _HierDraw_ShowKids                       = 'SLBS.DLL'.HierDraw_ShowKids
+    LBSubclassProc                           = 'SLBS.DLL'.*
+    RegisterVListBox                         = 'SLBS.DLL'.*
+    _SetSortToggle                           = 'SLBS.DLL'.SetSortToggle
+    VListBoxWndProc                          = 'SLBS.DLL'.*

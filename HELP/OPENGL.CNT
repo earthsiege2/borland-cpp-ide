@@ -1,4 +1,0 @@
-:TITLE OpenGL Programmer's Reference
-:INDEX OpenGL Programmer's Reference = opengl.hlp
-:INCLUDE WIN32SDK.CFG
-:INCLUDE OPENGL.TOC

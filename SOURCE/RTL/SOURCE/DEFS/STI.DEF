@@ -1,0 +1,7 @@
+LIBRARY STI
+EXPORTS
+
+    StiCreateInstance                        = 'STI.DLL'.*
+    StiCreateInstanceA                       = 'STI.DLL'.*
+    StiCreateInstanceW                       = 'STI.DLL'.*
+    StiPrivateGetDeviceInfoW                 = 'STI.DLL'.*

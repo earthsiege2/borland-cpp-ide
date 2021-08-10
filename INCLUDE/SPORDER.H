@@ -1,5 +1,67 @@
-#ifdef __FLAT__
-  #include <win32\sporder.h>
-#else
-  #error sporder.h can only be used in a Win32 Application
+/*++
+
+Copyright (c) 1996-1999  Microsoft Corporation
+
+Module Name:
+
+    sporder.h
+
+Abstract:
+
+    This header prototypes the 32-Bit Windows functions that are used
+    to change the order or WinSock2 transport service providers and
+    name space providers.
+
+Revision History:
+
+--*/
+
+#ifndef __SPORDER_H__
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
+#define __SPORDER_H__
+
+#if _MSC_VER > 1000
+#pragma once
 #endif
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int
+WSPAPI
+WSCWriteProviderOrder (
+    IN LPDWORD lpwdCatalogEntryId,
+    IN DWORD dwNumberOfEntries
+    );
+
+typedef
+int
+(WSPAPI * LPWSCWRITEPROVIDERORDER)(
+    IN LPDWORD lpwdCatalogEntryId,
+    IN DWORD dwNumberOfEntries
+    );
+
+
+int
+WSPAPI
+WSCWriteNameSpaceOrder (
+    IN LPGUID lpProviderId,
+    IN DWORD dwNumberOfEntries
+    );
+
+typedef 
+int
+(WSPAPI * LPWSCWRITENAMESPACEORDER)(
+    IN LPGUID lpProviderId,
+    IN DWORD dwNumberOfEntries
+    );
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#pragma option pop /*P_O_Pop*/
+#endif      // __SPORDER_H__

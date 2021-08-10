@@ -7,8 +7,8 @@
  */
 
 #ifndef MAPICODE_H
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define MAPICODE_H
-#pragma option -b
 
 #if defined (WIN32) && !defined (_WIN32)
 #define _WIN32
@@ -17,9 +17,7 @@
 /* Define S_OK and ITF_* */
 
 #ifdef _WIN32
-#pragma option -b.
 #include <winerror.h>
-#pragma option -b
 #endif
 
 /*
@@ -243,5 +241,5 @@
 #define HR_FAILED(_hr) FAILED((SCODE)(_hr))
 #endif
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif  /* MAPICODE_H */

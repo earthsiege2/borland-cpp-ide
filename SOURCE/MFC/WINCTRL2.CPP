@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,13 +22,11 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 
 #ifndef _AFX_NO_OLE_SUPPORT
-#ifndef _AFXDLL
 extern "C"
 {
 HIMAGELIST WINAPI ImageList_Read(LPSTREAM pstm);
 BOOL       WINAPI ImageList_Write(HIMAGELIST himl, LPSTREAM pstm);
 }
-#endif
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -166,7 +164,7 @@ BOOL CToolBarCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_BAR_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(TOOLBARCLASSNAME, NULL, dwStyle, rect, pParentWnd, nID);
@@ -193,8 +191,6 @@ int CToolBarCtrl::AddBitmap(int nNumButtons, UINT nBitmapID)
 	TBADDBITMAP tbab;
 	tbab.hInst = AfxFindResourceHandle((LPCTSTR)nBitmapID, RT_BITMAP);
 	ASSERT(tbab.hInst != NULL);
-	if (tbab.hInst == NULL)
-		return FALSE;
 	tbab.nID = nBitmapID;
 	return (int) ::SendMessage(m_hWnd, TB_ADDBITMAP, (WPARAM)nNumButtons,
 		(LPARAM)&tbab);
@@ -228,10 +224,7 @@ int CToolBarCtrl::AddString(UINT nStringID)
 	HINSTANCE hInst = AfxFindResourceHandle(MAKEINTRESOURCE((nStringID>>4)+1),
 		RT_STRING);
 	ASSERT(hInst != NULL);
-	if (hInst == NULL)
-		return FALSE;
-	return (int) ::SendMessage(m_hWnd, TB_ADDSTRING, (WPARAM)hInst,
-		(LPARAM)nStringID);
+	return (int)::SendMessage(m_hWnd, TB_ADDSTRING, (WPARAM)hInst, nStringID);
 }
 
 int CToolBarCtrl::OnCreate(LPCREATESTRUCT lpcs)
@@ -242,6 +235,13 @@ int CToolBarCtrl::OnCreate(LPCREATESTRUCT lpcs)
 	return 0;
 }
 
+HRESULT CToolBarCtrl::GetDropTarget(IDropTarget** ppDropTarget) const
+{
+	ASSERT(::IsWindow(m_hWnd));
+	ASSERT(ppDropTarget);
+	return (HRESULT) ::SendMessage(m_hWnd, TB_GETOBJECT, (WPARAM)&IID_IDropTarget, (LPARAM)ppDropTarget);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CStatusBarCtrl
 
@@ -249,7 +249,7 @@ BOOL CStatusBarCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_BAR_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(STATUSCLASSNAME, NULL, dwStyle, rect, pParentWnd, nID);
@@ -294,6 +294,15 @@ int CStatusBarCtrl::GetTextLength(int nPane, int* pType) const
 	if (pType != NULL)
 		*pType = HIWORD(dw);
 	return LOWORD(dw);
+}
+
+CString CStatusBarCtrl::GetTipText(int nPane) const
+{
+	ASSERT(::IsWindow(m_hWnd));
+	ASSERT(nPane < 256);
+	TCHAR buf[256];
+	::SendMessage(m_hWnd, SB_GETTIPTEXT, MAKEWPARAM(nPane, 256), (LPARAM)buf);
+	return CString(buf);
 }
 
 BOOL CStatusBarCtrl::GetBorders(int& nHorz, int& nVert, int& nSpacing) const
@@ -342,7 +351,7 @@ BOOL CListCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_LISTVIEW_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(WC_LISTVIEW, NULL, dwStyle, rect, pParentWnd, nID);
@@ -361,10 +370,55 @@ BOOL CListCtrl::GetItemRect(int nItem, LPRECT lpRect, UINT nCode) const
 		(LPARAM)lpRect);
 }
 
+BOOL CListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = LVSICF_NOINVALIDATEALL */)
+{
+	ASSERT(::IsWindow(m_hWnd));
+
+	// can't have dwFlags on a control that isn't virutal
+	ASSERT(dwFlags == 0 || (GetStyle() & LVS_OWNERDATA));
+
+	return (BOOL) ::SendMessage(m_hWnd, LVM_SETITEMCOUNT, (WPARAM) iCount,
+		(LPARAM) dwFlags);
+}
+
+CSize CListCtrl::SetIconSpacing(int cx, int cy)
+{
+	ASSERT(::IsWindow(m_hWnd));
+	DWORD dwRet = (DWORD) ::SendMessage(m_hWnd, LVM_SETICONSPACING,
+		0, (LPARAM) MAKELONG(cx, cy));
+
+	return CSize(dwRet);
+}
+
+CSize CListCtrl::SetIconSpacing(CSize size)
+{
+	ASSERT(::IsWindow(m_hWnd));
+	DWORD dwRet = (DWORD) ::SendMessage(m_hWnd, LVM_SETICONSPACING,
+		0, (LPARAM) MAKELONG(size.cx, size.cy));
+
+	return CSize(dwRet);
+}
+
+BOOL CListCtrl::GetSubItemRect(int iItem, int iSubItem, int nArea, CRect& ref)
+{
+	ASSERT(::IsWindow(m_hWnd));
+	ASSERT(nArea == LVIR_BOUNDS || nArea == LVIR_ICON || nArea == LVIR_LABEL);
+
+	RECT rect;
+	rect.top = iSubItem;
+	rect.left = nArea;
+	BOOL bRet = (BOOL) ::SendMessage(m_hWnd, LVM_GETSUBITEMRECT,
+		iItem, (LPARAM) &rect);
+
+	if (bRet)
+		ref = rect;
+	return bRet;
+}
+
 int CListCtrl::InsertColumn(int nCol, LPCTSTR lpszColumnHeading, int nFormat,
 	int nWidth, int nSubItem)
 {
-	LV_COLUMN column;
+	LVCOLUMN column;
 	column.mask = LVCF_TEXT|LVCF_FMT;
 	column.pszText = (LPTSTR)lpszColumnHeading;
 	column.fmt = nFormat;
@@ -385,7 +439,7 @@ int CListCtrl::InsertItem(UINT nMask, int nItem, LPCTSTR lpszItem, UINT nState, 
 	int nImage, LPARAM lParam)
 {
 	ASSERT(::IsWindow(m_hWnd));
-	LV_ITEM item;
+	LVITEM item;
 	item.mask = nMask;
 	item.iItem = nItem;
 	item.iSubItem = 0;
@@ -400,7 +454,7 @@ int CListCtrl::InsertItem(UINT nMask, int nItem, LPCTSTR lpszItem, UINT nState, 
 int CListCtrl::HitTest(CPoint pt, UINT* pFlags) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	LV_HITTESTINFO hti;
+	LVHITTESTINFO hti;
 	hti.pt = pt;
 	int nRes = (int) ::SendMessage(m_hWnd, LVM_HITTEST, 0, (LPARAM)&hti);
 	if (pFlags != NULL)
@@ -412,7 +466,8 @@ BOOL CListCtrl::SetItem(int nItem, int nSubItem, UINT nMask, LPCTSTR lpszItem,
 	int nImage, UINT nState, UINT nStateMask, LPARAM lParam)
 {
 	ASSERT(::IsWindow(m_hWnd));
-	LV_ITEM lvi;
+	ASSERT((GetStyle() & LVS_OWNERDATA)==0);
+	LVITEM lvi;
 	lvi.mask = nMask;
 	lvi.iItem = nItem;
 	lvi.iSubItem = nSubItem;
@@ -424,11 +479,30 @@ BOOL CListCtrl::SetItem(int nItem, int nSubItem, UINT nMask, LPCTSTR lpszItem,
 	return (BOOL) ::SendMessage(m_hWnd, LVM_SETITEM, 0, (LPARAM)&lvi);
 }
 
+BOOL CListCtrl::SetItemState(int nItem, UINT nState, UINT nStateMask)
+{
+	ASSERT(::IsWindow(m_hWnd));
+	LVITEM lvi;
+	lvi.stateMask = nStateMask;
+	lvi.state = nState;
+	return (BOOL) ::SendMessage(m_hWnd, LVM_SETITEMSTATE, nItem, (LPARAM)&lvi);
+}
+
+BOOL CListCtrl::SetItemText(int nItem, int nSubItem, LPCTSTR lpszText)
+{
+	ASSERT(::IsWindow(m_hWnd));
+	ASSERT((GetStyle() & LVS_OWNERDATA)==0);
+	LVITEM lvi;
+	lvi.iSubItem = nSubItem;
+	lvi.pszText = (LPTSTR) lpszText;
+	return (BOOL) ::SendMessage(m_hWnd, LVM_SETITEMTEXT, nItem, (LPARAM)&lvi);
+}
+
 CString CListCtrl::GetItemText(int nItem, int nSubItem) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	LV_ITEM lvi;
-	memset(&lvi, 0, sizeof(LV_ITEM));
+	LVITEM lvi;
+	memset(&lvi, 0, sizeof(LVITEM));
 	lvi.iSubItem = nSubItem;
 	CString str;
 	int nLen = 128;
@@ -448,8 +522,8 @@ CString CListCtrl::GetItemText(int nItem, int nSubItem) const
 int CListCtrl::GetItemText(int nItem, int nSubItem, LPTSTR lpszText, int nLen) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	LV_ITEM lvi;
-	memset(&lvi, 0, sizeof(LV_ITEM));
+	LVITEM lvi;
+	memset(&lvi, 0, sizeof(LVITEM));
 	lvi.iSubItem = nSubItem;
 	lvi.cchTextMax = nLen;
 	lvi.pszText = lpszText;
@@ -460,8 +534,8 @@ int CListCtrl::GetItemText(int nItem, int nSubItem, LPTSTR lpszText, int nLen) c
 DWORD CListCtrl::GetItemData(int nItem) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	LV_ITEM lvi;
-	memset(&lvi, 0, sizeof(LV_ITEM));
+	LVITEM lvi;
+	memset(&lvi, 0, sizeof(LVITEM));
 	lvi.iItem = nItem;
 	lvi.mask = LVIF_PARAM;
 	VERIFY(::SendMessage(m_hWnd, LVM_GETITEM, 0, (LPARAM)&lvi));
@@ -503,6 +577,20 @@ void CListCtrl::OnNcDestroy()
 	CWnd::OnNcDestroy();
 }
 
+CImageList* CListCtrl::CreateDragImage(int nItem, LPPOINT lpPoint)
+{
+	ASSERT(::IsWindow(m_hWnd));
+
+	HIMAGELIST hImageList = (HIMAGELIST)::SendMessage(m_hWnd,
+		LVM_CREATEDRAGIMAGE, nItem, (LPARAM)lpPoint);
+	if (hImageList == NULL)
+		return NULL;
+
+	CImageList* pImageList = new CImageList;
+	VERIFY(pImageList->Attach(hImageList));
+	return pImageList;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CTreeCtrl
 
@@ -516,7 +604,7 @@ BOOL CTreeCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_TREEVIEW_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(WC_TREEVIEW, NULL, dwStyle, rect, pParentWnd, nID);
@@ -538,7 +626,7 @@ BOOL CTreeCtrl::GetItemRect(HTREEITEM hItem, LPRECT lpRect, BOOL bTextOnly) cons
 CString CTreeCtrl::GetItemText(HTREEITEM hItem) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	TV_ITEM item;
+	TVITEM item;
 	item.hItem = hItem;
 	item.mask = TVIF_TEXT;
 	CString str;
@@ -559,7 +647,7 @@ CString CTreeCtrl::GetItemText(HTREEITEM hItem) const
 BOOL CTreeCtrl::GetItemImage(HTREEITEM hItem, int& nImage, int& nSelectedImage) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	TV_ITEM item;
+	TVITEM item;
 	item.hItem = hItem;
 	item.mask = TVIF_IMAGE|TVIF_SELECTEDIMAGE;
 	BOOL bRes = (BOOL)::SendMessage(m_hWnd, TVM_GETITEM, 0, (LPARAM)&item);
@@ -574,7 +662,7 @@ BOOL CTreeCtrl::GetItemImage(HTREEITEM hItem, int& nImage, int& nSelectedImage) 
 UINT CTreeCtrl::GetItemState(HTREEITEM hItem, UINT nStateMask) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	TV_ITEM item;
+	TVITEM item;
 	item.hItem = hItem;
 	item.mask = TVIF_STATE;
 	item.stateMask = nStateMask;
@@ -586,7 +674,7 @@ UINT CTreeCtrl::GetItemState(HTREEITEM hItem, UINT nStateMask) const
 DWORD CTreeCtrl::GetItemData(HTREEITEM hItem) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	TV_ITEM item;
+	TVITEM item;
 	item.hItem = hItem;
 	item.mask = TVIF_PARAM;
 	VERIFY(::SendMessage(m_hWnd, TVM_GETITEM, 0, (LPARAM)&item));
@@ -596,7 +684,7 @@ DWORD CTreeCtrl::GetItemData(HTREEITEM hItem) const
 BOOL CTreeCtrl::ItemHasChildren(HTREEITEM hItem) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	TV_ITEM item;
+	TVITEM item;
 	item.hItem = hItem;
 	item.mask = TVIF_CHILDREN;
 	::SendMessage(m_hWnd, TVM_GETITEM, 0, (LPARAM)&item);
@@ -607,7 +695,7 @@ BOOL CTreeCtrl::SetItem(HTREEITEM hItem, UINT nMask, LPCTSTR lpszItem, int nImag
 	int nSelectedImage, UINT nState, UINT nStateMask, LPARAM lParam)
 {
 	ASSERT(::IsWindow(m_hWnd));
-	TV_ITEM item;
+	TVITEM item;
 	item.hItem = hItem;
 	item.mask = nMask;
 	item.pszText = (LPTSTR) lpszItem;
@@ -624,7 +712,7 @@ HTREEITEM CTreeCtrl::InsertItem(UINT nMask, LPCTSTR lpszItem, int nImage,
 	HTREEITEM hParent, HTREEITEM hInsertAfter)
 {
 	ASSERT(::IsWindow(m_hWnd));
-	TV_INSERTSTRUCT tvis;
+	TVINSERTSTRUCT tvis;
 	tvis.hParent = hParent;
 	tvis.hInsertAfter = hInsertAfter;
 	tvis.item.mask = nMask;
@@ -640,7 +728,7 @@ HTREEITEM CTreeCtrl::InsertItem(UINT nMask, LPCTSTR lpszItem, int nImage,
 HTREEITEM CTreeCtrl::HitTest(CPoint pt, UINT* pFlags) const
 {
 	ASSERT(::IsWindow(m_hWnd));
-	TV_HITTESTINFO hti;
+	TVHITTESTINFO hti;
 	hti.pt = pt;
 	HTREEITEM h = (HTREEITEM)::SendMessage(m_hWnd, TVM_HITTEST, 0,
 		(LPARAM)&hti);
@@ -665,6 +753,49 @@ void CTreeCtrl::OnDestroy()
 	CWnd::OnDestroy();
 }
 
+CImageList* CTreeCtrl::CreateDragImage(HTREEITEM hItem)
+{
+	ASSERT(::IsWindow(m_hWnd));
+
+	HIMAGELIST hImageList = (HIMAGELIST)::SendMessage(m_hWnd,
+		TVM_CREATEDRAGIMAGE, 0, (LPARAM)hItem);
+	if (hImageList == NULL)
+		return NULL;
+
+	CImageList* pImageList = new CImageList;
+	VERIFY(pImageList->Attach(hImageList));
+	return pImageList;
+}
+
+BOOL CTreeCtrl::GetCheck(HTREEITEM hItem) const
+{
+	ASSERT(::IsWindow(m_hWnd));
+	TVITEM item;
+	item.mask = TVIF_HANDLE | TVIF_STATE;
+	item.hItem = hItem;
+	item.stateMask = TVIS_STATEIMAGEMASK;
+	VERIFY(::SendMessage(m_hWnd, TVM_GETITEM, 0, (LPARAM)&item));
+	// Return zero if it's not checked, or nonzero otherwise.
+	return ((BOOL)(item.state >> 12) -1);
+}
+
+BOOL CTreeCtrl::SetCheck(HTREEITEM hItem, BOOL fCheck)
+{
+	ASSERT(::IsWindow(m_hWnd));
+	TVITEM item;
+	item.mask = TVIF_HANDLE | TVIF_STATE;
+	item.hItem = hItem;
+	item.stateMask = TVIS_STATEIMAGEMASK;
+
+	/*
+	Since state images are one-based, 1 in this macro turns the check off, and
+	2 turns it on.
+	*/
+	item.state = INDEXTOSTATEIMAGEMASK((fCheck ? 2 : 1));
+
+	return (BOOL)::SendMessage(m_hWnd, TVM_SETITEM, 0, (LPARAM)&item);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CSpinButtonCtrl
 
@@ -672,7 +803,7 @@ BOOL CSpinButtonCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_UPDOWN_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(UPDOWN_CLASS, NULL, dwStyle, rect, pParentWnd, nID);
@@ -698,7 +829,7 @@ BOOL CSliderCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_BAR_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(TRACKBAR_CLASS, NULL, dwStyle, rect, pParentWnd, nID);
@@ -743,7 +874,7 @@ BOOL CProgressCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_PROGRESS_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(PROGRESS_CLASS, NULL, dwStyle, rect, pParentWnd, nID);
@@ -761,7 +892,7 @@ BOOL CHeaderCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_LISTVIEW_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(WC_HEADER, NULL, dwStyle, rect, pParentWnd, nID);
@@ -797,7 +928,7 @@ BOOL CHotKeyCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_HOTKEY_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(HOTKEY_CLASS, NULL, dwStyle, rect, pParentWnd, nID);
@@ -829,7 +960,7 @@ BOOL CTabCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd,
 	UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_TAB_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(WC_TABCONTROL, NULL, dwStyle, rect, pParentWnd, nID);
@@ -867,6 +998,62 @@ void CTabCtrl::OnDestroy()
 	CWnd::OnDestroy();
 }
 
+DWORD CTabCtrl::GetItemState(int nItem, DWORD dwMask) const
+{
+	ASSERT(::IsWindow(m_hWnd));
+
+	TCITEM item;
+	item.mask = TCIF_STATE;
+	item.dwStateMask = dwMask;
+	VERIFY(::SendMessage(m_hWnd, TCM_GETITEM, (WPARAM)nItem, (LPARAM)&item));
+
+	return item.dwState;
+}
+
+BOOL CTabCtrl::SetItemState(int nItem, DWORD dwMask, DWORD dwState)
+{
+	ASSERT(::IsWindow(m_hWnd));
+
+	TCITEM item;
+	item.mask = TCIF_STATE;
+	item.dwState = dwState;
+	item.dwStateMask = dwMask;
+
+	return (BOOL) ::SendMessage(m_hWnd, TCM_SETITEM,
+		(WPARAM) nItem, (LPARAM) &item);
+}
+
+BOOL CTabCtrl::InsertItem(UINT nMask, int nItem, LPCTSTR lpszItem,
+	int nImage, LPARAM lParam)
+{
+	ASSERT(::IsWindow(m_hWnd));
+
+	TCITEM item;
+	item.mask = nMask;
+	item.iImage = nImage;
+	item.lParam = lParam;
+	item.pszText = (LPTSTR) lpszItem;
+
+	return (BOOL) ::SendMessage(m_hWnd, TCM_INSERTITEM, nItem, (LPARAM) &item);
+}
+
+BOOL CTabCtrl::InsertItem(UINT nMask, int nItem, LPCTSTR lpszItem,
+	int nImage, LPARAM lParam, DWORD dwState, DWORD dwStateMask)
+{
+	ASSERT(::IsWindow(m_hWnd));
+
+	TCITEM item;
+	item.mask = nMask;
+	item.iImage = nImage;
+	item.lParam = lParam;
+	item.pszText = (LPTSTR) lpszItem;
+	item.dwState = dwState;
+	item.dwStateMask = dwStateMask;
+
+	return (BOOL) ::SendMessage(m_hWnd, TCM_INSERTITEM, nItem, (LPARAM) &item);
+}
+
+
 /////////////////////////////////////////////////////////////////////////////
 // CAnimateCtrl
 
@@ -874,7 +1061,7 @@ BOOL CAnimateCtrl::Create(DWORD dwStyle, const RECT& rect,
 	CWnd* pParentWnd, UINT nID)
 {
 	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_ANIMATE_REG));
 
 	CWnd* pWnd = this;
 	return pWnd->Create(ANIMATE_CLASS, NULL, dwStyle, rect, pParentWnd, nID);
@@ -898,170 +1085,17 @@ CRichEditCtrl::~CRichEditCtrl()
 #endif //!_AFX_NO_RICHEDIT_SUPPORT
 
 /////////////////////////////////////////////////////////////////////////////
-// CArchiveStream
-
-#ifndef _AFX_NO_OLE_SUPPORT
-
-// static definitions of IIDs to avoid linking with uuid.lib
-static IID _IID_IUnknown =
-	{ 0x00000000, 0x0000, 0x0000, { 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 } };
-static IID _IID_IStream =
-	{ 0x0000000C, 0x0000, 0x0000, { 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 } };
-
-CArchiveStream::CArchiveStream(CArchive* pArchive)
-{
-	m_pArchive = pArchive;
-}
-
-STDMETHODIMP_(ULONG)CArchiveStream::AddRef()
-{
-	return 1;
-}
-
-STDMETHODIMP_(ULONG)CArchiveStream::Release()
-{
-	return 0;
-}
-
-STDMETHODIMP CArchiveStream::QueryInterface(REFIID iid, LPVOID* ppvObj)
-{
-	if (iid == _IID_IUnknown || iid == _IID_IStream)
-	{
-		*ppvObj = this;
-		return NOERROR;
-	}
-	return E_NOINTERFACE;
-}
-
-STDMETHODIMP CArchiveStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
-{
-	ASSERT(m_pArchive != NULL);
-	ASSERT(m_pArchive->IsLoading());
-
-	int nRead = 0;
-	TRY
-	{
-		nRead = m_pArchive->Read(pv, cb);
-	}
-	CATCH_ALL(e)
-	{
-		DELETE_EXCEPTION(e);
-		return E_UNEXPECTED;
-	}
-	END_CATCH_ALL
-
-	if (pcbRead != NULL)
-		*pcbRead = nRead;
-	return NOERROR;
-}
-
-STDMETHODIMP CArchiveStream::Write(const void *pv, ULONG cb, ULONG *pcbWritten)
-{
-	ASSERT(m_pArchive != NULL);
-	ASSERT(m_pArchive->IsStoring());
-
-	int nWrite = 0;
-	TRY
-	{
-		m_pArchive->Write(pv, cb);
-		nWrite = cb;
-	}
-	CATCH_ALL(e)
-	{
-		DELETE_EXCEPTION(e);
-		return E_UNEXPECTED;
-	}
-	END_CATCH_ALL
-
-	if (pcbWritten != NULL)
-		*pcbWritten = nWrite;
-	return NOERROR;
-}
-
-STDMETHODIMP CArchiveStream::Seek(LARGE_INTEGER uliOffset, DWORD dwOrigin,
-	ULARGE_INTEGER* puliNew)
-{
-	// can't handle offsets with really large magnitude
-	if ((uliOffset.HighPart != 0) &&
-		((uliOffset.HighPart != -1) || ((long)uliOffset.LowPart >= 0)))
-		return E_NOTIMPL;
-
-	CFile* pFile = m_pArchive->GetFile();
-	if (pFile == NULL)
-		return E_NOTIMPL;
-	m_pArchive->Flush();
-
-	ASSERT(STREAM_SEEK_SET == CFile::begin);
-	ASSERT(STREAM_SEEK_CUR == CFile::current);
-	ASSERT(STREAM_SEEK_END == CFile::end);
-	LONG lNew;
-	TRY
-	{
-		lNew = pFile->Seek((LONG)uliOffset.LowPart, (UINT)dwOrigin);
-	}
-	CATCH_ALL(e)
-	{
-		DELETE_EXCEPTION(e);
-		return E_UNEXPECTED;
-	}
-	END_CATCH_ALL
-
-	if (puliNew != NULL)
-		ULISet32(*puliNew, lNew);
-
-	return NOERROR;
-}
-
-STDMETHODIMP CArchiveStream::SetSize(ULARGE_INTEGER)
-{
-	return E_NOTIMPL;
-}
-
-STDMETHODIMP CArchiveStream::CopyTo(LPSTREAM, ULARGE_INTEGER, ULARGE_INTEGER*,
-	ULARGE_INTEGER*)
-{
-	return E_NOTIMPL;
-}
-
-STDMETHODIMP CArchiveStream::Commit(DWORD)
-{
-	return E_NOTIMPL;
-}
-
-STDMETHODIMP CArchiveStream::Revert()
-{
-	return E_NOTIMPL;
-}
-
-STDMETHODIMP CArchiveStream::LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
-{
-	return E_NOTIMPL;
-}
-
-STDMETHODIMP CArchiveStream::UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER,
-	DWORD)
-{
-	return E_NOTIMPL;
-}
-
-STDMETHODIMP CArchiveStream::Stat(STATSTG*, DWORD)
-{
-	return E_NOTIMPL;
-}
-
-STDMETHODIMP CArchiveStream::Clone(LPSTREAM*)
-{
-	return E_NOTIMPL;
-}
-
-#endif // _AFX_NO_OLE_SUPPORT
-
-/////////////////////////////////////////////////////////////////////////////
 // CImageList
 
-static CHandleMap* afxMapHIMAGELIST(BOOL bCreate = FALSE);
+#include "fixalloc.h"
 
-static CHandleMap* afxMapHIMAGELIST(BOOL bCreate)
+class CTempImageList : public CImageList
+{
+	DECLARE_DYNCREATE(CTempImageList)
+	DECLARE_FIXED_ALLOC(CTempImageList);
+};
+
+CHandleMap* PASCAL afxMapHIMAGELIST(BOOL bCreate)
 {
 	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
 	if (pState->m_pmapHIMAGELIST == NULL && bCreate)
@@ -1070,7 +1104,7 @@ static CHandleMap* afxMapHIMAGELIST(BOOL bCreate)
 #ifndef _AFX_PORTABLE
 		_PNH pnhOldHandler = AfxSetNewHandler(&AfxCriticalNewHandler);
 #endif
-		pState->m_pmapHIMAGELIST = new CHandleMap(RUNTIME_CLASS(CImageList),
+		pState->m_pmapHIMAGELIST = new CHandleMap(RUNTIME_CLASS(CTempImageList),
 			offsetof(CImageList, m_hImageList));
 
 #ifndef _AFX_PORTABLE
@@ -1080,7 +1114,6 @@ static CHandleMap* afxMapHIMAGELIST(BOOL bCreate)
 	}
 	return pState->m_pmapHIMAGELIST;
 }
-
 
 CImageList::CImageList()
 {
@@ -1113,13 +1146,6 @@ BOOL CImageList::DeleteImageList()
 	return ImageList_Destroy(Detach());
 }
 
-void PASCAL CImageList::DeleteTempMap()
-{
-	CHandleMap* pMap = afxMapHIMAGELIST();
-	if (pMap != NULL)
-		pMap->DeleteTemp();
-}
-
 CImageList* PASCAL CImageList::FromHandle(HIMAGELIST h)
 {
 	CHandleMap* pMap = afxMapHIMAGELIST(TRUE);
@@ -1136,31 +1162,32 @@ CImageList* PASCAL CImageList::FromHandlePermanent(HIMAGELIST h)
 	if (pMap != NULL)
 	{
 		// only look in the permanent map - does no allocations
-		pMap->LookupPermanent(h, (CObject*&)pImageList);
+		pImageList = (CImageList*)pMap->LookupPermanent(h);
 		ASSERT(pImageList == NULL || pImageList->m_hImageList == h);
 	}
 	return pImageList;
 }
 
-BOOL CImageList::Create(int cx, int cy, BOOL bMask, int nInitial, int nGrow)
+BOOL CImageList::Create(int cx, int cy, UINT nFlags, int nInitial, int nGrow)
 {
-	return Attach(ImageList_Create(cx, cy, bMask, nInitial, nGrow));
+	return Attach(ImageList_Create(cx, cy, nFlags, nInitial, nGrow));
 }
 
 BOOL CImageList::Create(UINT nBitmapID, int cx, int nGrow, COLORREF crMask)
 {
 	ASSERT(HIWORD(nBitmapID) == 0);
-	return Attach(ImageList_LoadBitmap(
-		AfxFindResourceHandle((LPCTSTR)nBitmapID, RT_BITMAP),
+	HINSTANCE hInst = AfxFindResourceHandle((LPCTSTR)nBitmapID, RT_BITMAP);
+	ASSERT(hInst != NULL);
+	return Attach(ImageList_LoadBitmap(hInst,
 		(LPCTSTR)nBitmapID, cx, nGrow, crMask));
 }
 
 BOOL CImageList::Create(LPCTSTR lpszBitmapID, int cx, int nGrow,
 	COLORREF crMask)
 {
-	return Attach(ImageList_LoadBitmap(
-		AfxFindResourceHandle(lpszBitmapID, RT_BITMAP),
-		lpszBitmapID, cx, nGrow, crMask));
+	HINSTANCE hInst = AfxFindResourceHandle(lpszBitmapID, RT_BITMAP);
+	ASSERT(hInst != NULL);
+	return Attach(ImageList_LoadBitmap(hInst, lpszBitmapID, cx, nGrow, crMask));
 }
 
 BOOL CImageList::Create(CImageList& imagelist1, int nImage1,
@@ -1227,13 +1254,18 @@ void CImageList::AssertValid() const
 	CHandleMap* pMap = afxMapHIMAGELIST();
 	ASSERT(pMap != NULL);
 
-	ASSERT(pMap->LookupPermanent(m_hImageList, p) ||
-		pMap->LookupTemporary(m_hImageList, p));
+	ASSERT((p = pMap->LookupPermanent(m_hImageList)) != NULL ||
+		(p = pMap->LookupTemporary(m_hImageList)) != NULL);
 	ASSERT((CImageList*)p == this);   // must be us
 }
 #endif
 
+
 /////////////////////////////////////////////////////////////////////////////
+
+#ifdef AFX_CMNCTL_SEG
+#pragma code_seg(AFX_CMNCTL_SEG)
+#endif
 
 #ifndef _AFX_ENABLE_INLINES
 
@@ -1255,6 +1287,7 @@ IMPLEMENT_DYNAMIC(CDragListBox, CListBox)
 IMPLEMENT_DYNAMIC(CSpinButtonCtrl, CWnd)
 IMPLEMENT_DYNAMIC(CSliderCtrl, CWnd)
 IMPLEMENT_DYNAMIC(CProgressCtrl, CWnd)
+IMPLEMENT_DYNAMIC(CComboBoxEx, CComboBox)
 IMPLEMENT_DYNAMIC(CHeaderCtrl, CWnd)
 IMPLEMENT_DYNAMIC(CHotKeyCtrl, CWnd)
 IMPLEMENT_DYNAMIC(CAnimateCtrl, CWnd)
@@ -1265,8 +1298,14 @@ IMPLEMENT_DYNAMIC(CToolBarCtrl, CWnd)
 IMPLEMENT_DYNAMIC(CStatusBarCtrl, CWnd)
 IMPLEMENT_DYNCREATE(CImageList, CObject)
 
+IMPLEMENT_DYNCREATE(CTempImageList, CImageList);
+
 #ifndef _AFX_NO_RICHEDIT_SUPPORT
 IMPLEMENT_DYNAMIC(CRichEditCtrl, CWnd)
 #endif
+
+#pragma warning(disable: 4074)
+#pragma init_seg(compiler)
+IMPLEMENT_FIXED_ALLOC(CTempImageList, 64);
 
 /////////////////////////////////////////////////////////////////////////////

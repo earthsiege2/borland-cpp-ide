@@ -1,0 +1,14 @@
+LIBRARY SFC
+EXPORTS
+
+    SfcClose                                 = 'SFC.DLL'.* @4 @3
+    SfcConnectToServer                       = 'SFC.DLL'.* @3 @2
+    SfcFileException                         = 'SFC.DLL'.* @5 @4
+    SfcGetNextProtectedFile                  = 'SFC.DLL'.*
+    SfcInitProt                              = 'SFC.DLL'.* @1 @0
+    SfcInitiateScan                          = 'SFC.DLL'.* @6 @5
+    SfcInstallProtectedFiles                 = 'SFC.DLL'.* @7 @6
+    SfcIsFileProtected                       = 'SFC.DLL'.*
+    SfcTerminateWatcherThread                = 'SFC.DLL'.* @2 @1
+    SfcWLEventLogoff                         = 'SFC.DLL'.*
+    SfcWLEventLogon                          = 'SFC.DLL'.*

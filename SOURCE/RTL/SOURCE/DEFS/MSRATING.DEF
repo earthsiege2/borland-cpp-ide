@@ -1,0 +1,17 @@
+LIBRARY MSRATING
+EXPORTS
+
+    ChangeSupervisorPassword                 = 'MSRATING.DLL'.*
+    IntroDialogProc                          = 'MSRATING.DLL'.* @1 @0
+    RatingAccessDeniedDialog2                = 'MSRATING.DLL'.*
+    RatingAccessDeniedDialog                 = 'MSRATING.DLL'.*
+    RatingAddPropertyPages                   = 'MSRATING.DLL'.*
+    RatingCheckUserAccess                    = 'MSRATING.DLL'.*
+    RatingEnable                             = 'MSRATING.DLL'.*
+    RatingEnabledQuery                       = 'MSRATING.DLL'.*
+    RatingFreeDetails                        = 'MSRATING.DLL'.*
+    RatingInit                               = 'MSRATING.DLL'.*
+    RatingObtainCancel                       = 'MSRATING.DLL'.*
+    RatingObtainQuery                        = 'MSRATING.DLL'.*
+    RatingSetupUI                            = 'MSRATING.DLL'.*
+    VerifySupervisorPassword                 = 'MSRATING.DLL'.*

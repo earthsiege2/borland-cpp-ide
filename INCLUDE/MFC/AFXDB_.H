@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -26,6 +26,7 @@
 #define AFX_RFX_DATE_PSEUDO_NULL CTime(0)
 #define AFX_RFX_TIMESTAMP_PSEUDO_NULL 99
 
+#define AFX_RFX_NO_TYPE     0
 #define AFX_RFX_BOOL        1
 #define AFX_RFX_BYTE        2
 #define AFX_RFX_INT         3
@@ -38,6 +39,10 @@
 #define AFX_RFX_LONGBINARY  11
 #define AFX_RFX_SHORT       12
 #define AFX_RFX_CURRENCY    13
+#define AFX_RFX_OLEDATETIME 14
+#define AFX_RFX_TIMESTAMP   15
+#define AFX_RFX_OLEDATE     16
+#define AFX_RFX_LPTSTR      17
 
 //////////////////////////////////////////////////////////////////////////////
 // CLongBinary - a Long (generally > 32k in length) Binary object

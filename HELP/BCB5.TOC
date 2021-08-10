@@ -1,0 +1,38 @@
+:Base bcb5.hlp>main
+:Title Borland C++Builder Help
+
+1 QuickStart: Tutorials
+2 Text Editor Tutorial
+3 Creating a text editor--a tutorial=CreatingATextEditorATutorial
+3 Starting a new application=StartingANewApplication2
+3 Setting property values=SettingPropertyValues2
+3 Adding objects to the form=AddingObjectsToTheForm2
+3 Adding support for a menu and a toolbar=AddingSupportForAMenuAndAToolbar2
+3 Adding actions to the action list=AddingActionsToTheActionList
+3 Adding standard actions to the action list=AddingStandardActionsToTheActionList
+3 Adding images to the image list=AddingImagesToTheImageList
+3 Adding a menu=AddingAMenu2
+3 Adding a toolbar=AddingAToolbar2
+3 Writing event handlers=WritingAnEventHandler2
+3 Creating an event handler for the New command=CreatingAnEventHandlerForTheNewCommand
+3 Creating an event handler for the Open command=CreatingAnEventHandlerForTheOpenCommand
+3 Creating an event handler for the Save command=CreatingAnEventHandlerForTheSaveCommand
+3 Creating an event handler for the Save As command=CreatingAnEventHandlerForTheSaveAsCommand
+3 Creating an event handler for the Exit command=CreatingAnEventHandlerForTheExitCommand
+3 Creating a Help file=CreatingAHelpFile
+3 Creating an event handler for the Help Contents command=CreatingAnEventHandlerForTheHelpContentsCommand
+3 Creating an event handler for the Help Index command=CreatingAnEventHandlerForTheHelpIndexCommand
+3 Creating an About box=CreatingAnAboutBox
+3 Completing your application=CompletingYourApplication
+2 Database Tutorial
+3 Creating a database application--a tutorial=FHXR20421
+3 Starting a new application=StartingANewApplication
+3 Adding objects to the form=AddingObjectsToTheForm
+3 Connecting to a database=ConnectingToADatabase
+3 Adding support for a menu and a toolbar=AddingSupportForAMenuAndAToolbar
+3 Adding a menu=AddingAMenu
+3 Adding a toolbar=AddingAToolbar
+3 Displaying images=DisplayingImages
+3 Adding text and memo objects=AddingTextAndMemoObjects
+3 Writing an event handler=WritingAnEventHandler
+

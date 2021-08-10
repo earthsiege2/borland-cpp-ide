@@ -1,0 +1,6 @@
+LIBRARY MSIMG32
+EXPORTS
+
+    AlphaBlend                               = 'MSIMG32.DLL'.*
+    GradientFill                             = 'MSIMG32.DLL'.*
+    TransparentBlt                           = 'MSIMG32.DLL'.*

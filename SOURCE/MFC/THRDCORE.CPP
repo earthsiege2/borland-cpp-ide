@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -59,17 +59,20 @@ UINT APIENTRY _AfxThreadEntry(void* pParam)
 		pThreadState->m_pModuleState = pStartup->pThreadState->m_pModuleState;
 
 		// set current thread pointer for AfxGetThread
-		AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
+		AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+#ifdef _AFXDLL
+		pThread->m_pModuleState = pModuleState;
+#endif
+		AFX_MODULE_THREAD_STATE* pState = pModuleState->m_thread;
 		pState->m_pCurrentWinThread = pThread;
-		pState->m_pfnNewHandler = pStartup->pfnNewHandler;
 
 		// forced initialization of the thread
 		AfxInitThread();
 
 		// thread inherits app's main window if not already set
 		CWinApp* pApp = AfxGetApp();
-		ASSERT(pApp != NULL);
-		if (pThread->m_pMainWnd == NULL && pApp->m_pMainWnd->GetSafeHwnd() != NULL)
+		if (pApp != NULL &&
+			pThread->m_pMainWnd == NULL && pApp->m_pMainWnd->GetSafeHwnd() != NULL)
 		{
 			// just attach the HWND
 			threadWnd.Attach(pApp->m_pMainWnd->m_hWnd);
@@ -133,8 +136,15 @@ UINT APIENTRY _AfxThreadEntry(void* pParam)
 
 CWinThread* AFXAPI AfxGetThread()
 {
+	// check for current thread in module thread state
 	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
-	return pState->m_pCurrentWinThread;
+	CWinThread* pThread = pState->m_pCurrentWinThread;
+
+	// if no CWinThread for the module, then use the global app
+	if (pThread == NULL)
+		pThread = AfxGetApp();
+
+	return pThread;
 }
 
 CWinThread* AFXAPI AfxBeginThread(AFX_THREADPROC pfnThreadProc, LPVOID pParam,
@@ -219,6 +229,11 @@ void AFXAPI AfxEndThread(UINT nExitCode, BOOL bDelete)
 	{
 		ASSERT_VALID(pThread);
 		ASSERT(pThread != AfxGetApp());
+
+		// cleanup OLE if required
+		if (pThread->m_lpfnOleTermOrFreeLib != NULL)
+			(*pThread->m_lpfnOleTermOrFreeLib)(TRUE, FALSE);
+
 		if (bDelete)
 			pThread->Delete();
 		pState->m_pCurrentWinThread = NULL;
@@ -241,17 +256,13 @@ void AFXAPI AfxInitThread()
 {
 	if (!afxContextIsDLL)
 	{
-		// attempt to make the message queue bigger
-		for (int cMsg = 96; !SetMessageQueue(cMsg) && (cMsg -= 8); )
-			;
-
 		// set message filter proc
 		_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
 		ASSERT(pThreadState->m_hHookOldMsgFilter == NULL);
 		pThreadState->m_hHookOldMsgFilter = ::SetWindowsHookEx(WH_MSGFILTER,
 			_AfxMsgFilterHook, NULL, ::GetCurrentThreadId());
 
-#ifndef _MAC
+#ifndef _AFX_NO_CTL3D_SUPPORT
 		// intialize CTL3D for this thread
 		_AFX_CTL3D_STATE* pCtl3dState = _afxCtl3dState;
 		if (pCtl3dState->m_pfnAutoSubclass != NULL)
@@ -259,26 +270,41 @@ void AFXAPI AfxInitThread()
 
 		// allocate thread local _AFX_CTL3D_THREAD just for automatic termination
 		_AFX_CTL3D_THREAD* pTemp = _afxCtl3dThread;
+		pTemp;  // avoid unused warning
 #endif
 	}
 }
 
 extern CThreadSlotData* _afxThreadData;
-void AFXAPI AfxTermThread()
+void AFXAPI AfxTermThread(HINSTANCE hInstTerm)
 {
-	// cleanup thread local tooltip window
-	_AFX_THREAD_STATE* pThreadState = _afxThreadState.GetDataNA();
-	if ((pThreadState != NULL) &&
-		(pThreadState->m_pToolTip != NULL))
+#ifdef _DEBUG
+	// check for missing AfxLockTempMap calls
+	if (AfxGetModuleThreadState()->m_nTempMapLock != 0)
 	{
-		pThreadState->m_pToolTip->DestroyWindow();
-		delete pThreadState->m_pToolTip;
-		pThreadState->m_pToolTip=NULL;
+		TRACE1("Warning: Temp map lock count non-zero (%ld).\n",
+			AfxGetModuleThreadState()->m_nTempMapLock);
+	}
+#endif
+	AfxLockTempMaps();
+	AfxUnlockTempMaps(-1);
+
+	// cleanup thread local tooltip window
+	if (hInstTerm == NULL)
+	{
+		_AFX_THREAD_STATE* pThreadState = _afxThreadState.GetDataNA();
+		if ((pThreadState != NULL) &&
+			(pThreadState->m_pToolTip != NULL))
+		{
+			pThreadState->m_pToolTip->DestroyWindow();
+			delete pThreadState->m_pToolTip;
+			pThreadState->m_pToolTip=NULL;
+		}
 	}
 
 	// cleanup the rest of the thread local data
 	if (_afxThreadData != NULL)
-		_afxThreadData->DeleteValues(NULL);
+		_afxThreadData->DeleteValues(hInstTerm, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -323,6 +349,10 @@ void CWinThread::CommonConstruct()
 
 	// most threads are deleted when not needed
 	m_bAutoDelete = TRUE;
+
+	// initialize OLE state
+	m_pMessageFilter = NULL;
+	m_lpfnOleTermOrFreeLib = NULL;
 }
 
 #ifdef AFX_TERM_SEG
@@ -334,6 +364,11 @@ CWinThread::~CWinThread()
 	// free thread object
 	if (m_hThread != NULL)
 		CloseHandle(m_hThread);
+
+	// cleanup module state
+	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
+	if (pState->m_pCurrentWinThread == this)
+		pState->m_pCurrentWinThread = NULL;
 }
 
 #ifdef AFX_CORE1_SEG
@@ -513,7 +548,7 @@ BOOL CWinThread::OnIdle(LONG lCount)
 				(WPARAM)TRUE, 0, TRUE, TRUE);
 		}
 		// send WM_IDLEUPDATECMDUI to all frame windows
-		AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
+		AFX_MODULE_THREAD_STATE* pState = _AFX_CMDTARGET_GETSTATE()->m_thread;
 		CFrameWnd* pFrameWnd = pState->m_frameList;
 		while (pFrameWnd != NULL)
 		{
@@ -538,7 +573,7 @@ BOOL CWinThread::OnIdle(LONG lCount)
 	}
 	else if (lCount >= 0)
 	{
-		AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
+		AFX_MODULE_THREAD_STATE* pState = _AFX_CMDTARGET_GETSTATE()->m_thread;
 		if (pState->m_nTempMapLock == 0)
 		{
 			// free temp maps, OLE DLLs, etc.
@@ -556,23 +591,74 @@ BOOL CWinThread::OnIdle(LONG lCount)
 	return lCount < 0;  // nothing more to do if lCount >= 0
 }
 
+void CWinThread::DispatchThreadMessage(MSG* pMsg)
+{
+	DispatchThreadMessageEx(pMsg);
+}
+
+BOOL CWinThread::DispatchThreadMessageEx(MSG* pMsg)
+{
+	const AFX_MSGMAP* pMessageMap; pMessageMap = GetMessageMap();
+	const AFX_MSGMAP_ENTRY* lpEntry;
+
+#ifdef _AFXDLL
+	for (/* pMessageMap already init'ed */; pMessageMap != NULL;
+		pMessageMap = (*pMessageMap->pfnGetBaseMap)())
+#else
+	for (/* pMessageMap already init'ed */; pMessageMap != NULL;
+		pMessageMap = pMessageMap->pBaseMap)
+#endif
+
+	{
+		// Note: catch not so common but fatal mistake!!
+		//      BEGIN_MESSAGE_MAP(CMyThread, CMyThread)
+#ifdef _AFXDLL
+		ASSERT(pMessageMap != (*pMessageMap->pfnGetBaseMap)());
+#else
+		ASSERT(pMessageMap != pMessageMap->pBaseMap);
+#endif
+
+		if (pMsg->message < 0xC000)
+		{
+			// constant window message
+			if ((lpEntry = AfxFindMessageEntry(pMessageMap->lpEntries,
+				pMsg->message, 0, 0)) != NULL)
+				goto LDispatch;
+		}
+		else
+		{
+			// registered windows message
+			lpEntry = pMessageMap->lpEntries;
+			while ((lpEntry = AfxFindMessageEntry(lpEntry, 0xC000, 0, 0)) != NULL)
+			{
+				UINT* pnID = (UINT*)(lpEntry->nSig);
+				ASSERT(*pnID >= 0xC000);
+					// must be successfully registered
+				if (*pnID == pMsg->message)
+					goto LDispatch;
+				lpEntry++;      // keep looking past this one
+			}
+		}
+	}
+	return FALSE;
+
+LDispatch:
+	union MessageMapFunctions mmf;
+	mmf.pfn = lpEntry->pfn;
+
+	// always posted, so return value is meaningless
+
+	(this->*mmf.pfn_THREAD)(pMsg->wParam, pMsg->lParam);
+	return TRUE;
+}
+
 BOOL CWinThread::PreTranslateMessage(MSG* pMsg)
 {
 	ASSERT_VALID(this);
 
-	UINT message = pMsg->message;
-	BOOL bKeys = (message >= WM_KEYFIRST && message <= WM_KEYLAST) ||
-		(message >= WM_SYSKEYFIRST && message <= WM_SYSKEYLAST);
-	if (bKeys ||
-		(message == WM_LBUTTONDOWN || message == WM_LBUTTONDBLCLK) ||
-		(message == WM_RBUTTONDOWN || message == WM_RBUTTONDBLCLK) ||
-		(message == WM_MBUTTONDOWN || message == WM_MBUTTONDBLCLK) ||
-		(message == WM_NCLBUTTONDOWN || message == WM_NCLBUTTONDBLCLK) ||
-		(message == WM_NCRBUTTONDOWN || message == WM_NCRBUTTONDBLCLK) ||
-		(message == WM_NCMBUTTONDOWN || message == WM_NCMBUTTONDBLCLK))
-	{
-		CWnd::CancelToolTips(bKeys);
-	}
+	// if this is a thread-message, short-circuit this function
+	if (pMsg->hwnd == NULL && DispatchThreadMessageEx(pMsg))
+		return TRUE;
 
 	// walk from target to main window
 	CWnd* pMainWnd = AfxGetMainWnd();
@@ -611,34 +697,32 @@ LRESULT CWinThread::ProcessWndProcException(CException*, const MSG* pMsg)
 
 LRESULT CALLBACK _AfxMsgFilterHook(int code, WPARAM wParam, LPARAM lParam)
 {
-	if (afxContextIsDLL || (code < 0 && code != MSGF_DDEMGR))
+	CWinThread* pThread;
+	if (afxContextIsDLL || (code < 0 && code != MSGF_DDEMGR) ||
+		(pThread = AfxGetThread()) == NULL)
 	{
-		return ::CallNextHookEx(AfxGetThreadState()->m_hHookOldMsgFilter,
+		return ::CallNextHookEx(_afxThreadState->m_hHookOldMsgFilter,
 			code, wParam, lParam);
 	}
-	ASSERT(wParam == 0);
-	return (LRESULT)AfxGetThread()->ProcessMessageFilter(code, (LPMSG)lParam);
+	ASSERT(pThread != NULL);
+	return (LRESULT)pThread->ProcessMessageFilter(code, (LPMSG)lParam);
 }
 
-static BOOL AFXAPI IsHelpKey(LPMSG lpMsg)
+AFX_STATIC BOOL AFXAPI IsHelpKey(LPMSG lpMsg)
 	// return TRUE only for non-repeat F1 keydowns.
 {
 	return lpMsg->message == WM_KEYDOWN &&
-#ifndef _MAC
 		   lpMsg->wParam == VK_F1 &&
-#else
-		   lpMsg->wParam == VK_HELP &&
-#endif
 		   !(HIWORD(lpMsg->lParam) & KF_REPEAT) &&
 		   GetKeyState(VK_SHIFT) >= 0 &&
 		   GetKeyState(VK_CONTROL) >= 0 &&
 		   GetKeyState(VK_MENU) >= 0;
 }
 
-static inline BOOL IsEnterKey(LPMSG lpMsg)
+AFX_STATIC inline BOOL IsEnterKey(LPMSG lpMsg)
 	{ return lpMsg->message == WM_KEYDOWN && lpMsg->wParam == VK_RETURN; }
 
-static inline BOOL IsButtonUp(LPMSG lpMsg)
+AFX_STATIC inline BOOL IsButtonUp(LPMSG lpMsg)
 	{ return lpMsg->message == WM_LBUTTONUP; }
 
 BOOL CWinThread::ProcessMessageFilter(int code, LPMSG lpMsg)
@@ -687,7 +771,7 @@ BOOL CWinThread::ProcessMessageFilter(int code, LPMSG lpMsg)
 			lpMsg->message >= WM_KEYFIRST && lpMsg->message <= WM_KEYLAST)
 		{
 			// need to translate messages for the in-place container
-			_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
+			_AFX_THREAD_STATE* pThreadState = _afxThreadState.GetData();
 			if (pThreadState->m_bInMsgFilter)
 				return FALSE;
 			pThreadState->m_bInMsgFilter = TRUE;    // avoid reentering this code
@@ -753,6 +837,7 @@ BOOL CWinThread::PumpMessage()
 #endif
 
 	// process this message
+
 	if (m_msgCur.message != WM_KICKIDLE && !PreTranslateMessage(&m_msgCur))
 	{
 		::TranslateMessage(&m_msgCur);

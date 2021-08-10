@@ -1,0 +1,74 @@
+/*------------------------------------------------------------------------*/
+/*                                                                        */
+/*  VERSION.RC                                                            */
+/*                                                                        */
+/*------------------------------------------------------------------------*/
+
+/*
+ *      C/C++ Run Time Library - Version 10.0
+ *
+ *      Copyright (c) 1993, 2000 by Inprise Corporation
+ *      All Rights Reserved.
+ *
+ */
+
+/* $Revision:   9.11  $        */
+
+#include "version.h"
+
+/* ----- RC defines ----- */
+#ifdef RC_INVOKED
+#define ID(id)                  id
+#else
+#define ID(id)                  MAKEINTRESOURCE(id)
+#endif
+
+/* ----- Symbols ----- */
+#define VS_FILE_INFO            ID(16)          /* Version stamp res type */
+#define VS_VERSION_INFO         ID(1)           /* Version stamp res ID */
+#define VS_USER_DEFINED         ID(100)         /* User-defined res IDs */
+
+/* ----- VS_VERSION.dwFileFlags ----- */
+#define VS_FFI_SIGNATURE        0xFEEF04BDL
+#define VS_FFI_STRUCVERSION     0x00010000L
+#define VS_FFI_FILEFLAGSMASK    0x0000003FL
+
+/* ----- VS_VERSION.dwFileFlags ----- */
+#define VS_FF_DEBUG             0x00000001L
+#define VS_FF_PRERELEASE        0x00000002L
+#define VS_FF_PATCHED           0x00000004L
+#define VS_FF_PRIVATEBUILD      0x00000008L
+#define VS_FF_INFOINFERRED      0x00000010L
+#define VS_FF_SPECIALBUILD      0x00000020L
+
+
+VS_VERSION_INFO VERSIONINFO
+FILEOS          VOS__WINDOWS32
+FILETYPE        VFT_DLL
+FILESUBTYPE     VS_USER_DEFINED
+
+
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "Inprise Corporation\0"
+      VALUE "FileDescription", __RTLDLLDESCSTR
+      VALUE "FileVersion", VERSION_STRING
+      VALUE "InternalName", "Run Time Library\0"
+      VALUE "LegalCopyright", __RTLDLLCOPYRIGHTSTR
+      VALUE "ProductName", __RTLDLLPRODNAMESTR
+      VALUE "ProductVersion", __RTLDLLVERSTR
+#ifdef __RTLDLLBETASTR
+      VALUE "SpecialBuild", __RTLDLLBETASTR
+#endif
+    END
+
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN                               /*  Language   |    Translation       */
+    VALUE "Translation", 0x409, 1252  /* U.S. English, Windows Multilingual */
+  END
+END

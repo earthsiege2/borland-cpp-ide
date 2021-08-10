@@ -1,6 +1,0 @@
-LIBRARY     BCBMM.DLL
-
-EXPORTS
-    @System@FreeMemory$qpv	   = FreeMemory
-    @System@GetMemory$qi	   = GetMemory
-    @System@ReallocMemory$qpvi	   = ReallocMemory

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -166,13 +166,7 @@ CDocument* CMultiDocTemplate::OpenDocumentFile(LPCTSTR lpszPathName,
 			pFrame->DestroyWindow();
 			return NULL;
 		}
-#ifdef _MAC
-		// if the document is dirty, we must have opened a stationery pad
-		//  - don't change the pathname because we want to treat the document
-		//  as untitled
-		if (!pDocument->IsModified())
-#endif
-			pDocument->SetPathName(lpszPathName);
+		pDocument->SetPathName(lpszPathName);
 	}
 
 	InitialUpdateFrame(pFrame, pDocument, bMakeVisible);
@@ -186,11 +180,7 @@ void CMultiDocTemplate::SetDefaultTitle(CDocument* pDocument)
 		!strDocName.IsEmpty())
 	{
 		TCHAR szNum[8];
-#ifndef _MAC
 		wsprintf(szNum, _T("%d"), m_nUntitledCount+1);
-#else
-		wsprintf(szNum, _T(" %d"), m_nUntitledCount+1);
-#endif
 		strDocName += szNum;
 	}
 	else

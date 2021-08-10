@@ -1,0 +1,9 @@
+LIBRARY KSPROXY
+EXPORTS
+
+    KsGetMediaType                           = 'KSPROXY.AX'.*
+    KsGetMediaTypeCount                      = 'KSPROXY.AX'.*
+    KsGetMultiplePinFactoryItems             = 'KSPROXY.AX'.*
+    KsOpenDefaultDevice                      = 'KSPROXY.AX'.*
+    KsResolveRequiredAttributes              = 'KSPROXY.AX'.*
+    KsSynchronousDeviceControl               = 'KSPROXY.AX'.*

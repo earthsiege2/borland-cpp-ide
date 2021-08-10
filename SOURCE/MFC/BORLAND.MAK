@@ -64,7 +64,7 @@
 
 # Default to DEBUG mode
 !ifndef DEBUG
-DEBUG=1
+DEBUG=0
 !endif
 
 # Default to No Debug Info mode
@@ -92,12 +92,17 @@ BROWSE=0
 #NO_PCH=1
 #!endif
 
-# Default to no _MBCS build
-MBCS=0
+# Default to _MBCS build
+MBCS=1
 
 # Default to multithreading support
 !ifndef MT
 MT=1
+!endif
+
+# Default to not enable Borland CodeGuard
+!ifndef CG
+CG=0
 !endif
 
 # Lib directory
@@ -107,7 +112,7 @@ LIBDIR=..\..\LIB
 
 # Lib Path
 !ifndef LPATH
-LIBDIR=..\..\LIB
+LPATH=..\..\LIB;..\..\LIB\PSDK
 !endif
 
 # MFC Include directory base
@@ -117,8 +122,14 @@ MFCINCL=..\..\include\mfc
 
 # BC Include directory
 !ifndef BCINCL
-BCINCL=..\..\include
+BCINCL=..\..\include;..\..\include\atl
 !endif
+
+# Disable Warnings
+!ifndef NO_WARNINGS
+NO_WARNINGS=0
+!endif
+
 
 # Clean up PCH file
 !ifndef NO_CLEAN_PCH
@@ -127,9 +138,15 @@ NO_CLEAN_PCH=0
 
 BASE=W
 MODEL=N
+!if "$(MBCS)" != "0"
+TARGDEFS=$(TARGDEFS) /D_MBCS
+!endif
 PLATFORM=INTEL
 
 LFLAGS=$(LFLAGS) /j$(LPATH) /L$(LPATH)
+!if "$(NO_WARNINGS)" == "1"
+LFLAGS=$(LFLAGS) /w-
+!endif
 
 #
 # DEBUG OPTIONS
@@ -157,21 +174,29 @@ DEBOPTS=/O1
 DEBOPTS=/Od /v /vi
 !endif
 
+!if "$(CG)" == "1"
+DEBOPTS=$(DEBOPTS) -vG
+!endif
+
 #
 # PLATFORM options
 #
-CPP=bcc32
+CC=bcc32
 LIB32=tlib
-LINK32=tlink32
-
+!ifndef LINK32
+LINK32=ilink32 /Gn
+!endif
 CL_MODEL=/D_X86_
-
+GENDEFS=perl -w $(MAKEDIR)\gendefs.pl
 
 # TYPE = Library Type Designator
 #       c = normal C library
 #       d = DLL library
 TYPE=c
+
+!if "$(DEXT)" == ""
 DEXT=
+!endif
 
 #
 # Object File Directory
@@ -185,56 +210,68 @@ D=$(OBJ)                                 # User specified directory
 #
 # _AFXDLL DLL Variant
 #
-
-!if "$(DLL)" == "2"
-# _AFXDLL library
-TYPE=e
-!if "$(OBJ)" == ""
-D=DLL$(DEBUGSUF).$(BASE)
-!if "$(UNICODE)" == "1"
-D=$(MODEL)$D
-!endif
-D=$$$D
-!endif
-TARGOPTS=$(TARGOPTS)
-TARGDEFS=$(TARGDEFS)
-!if "$(MT)" != "0"
-TARGOPTS=$(TARGOPTS) /WM /D_MT=1
-!endif
-TARGDEFS=$(TARGDEFS) /D_WINDLL /D_AFXDLL
-!else
-# not _AFXDLL library
-!if "$(MT)" != "0"
-TARGOPTS=$(TARGOPTS) /WM /D_MT=1
-!endif
-!endif
-
-MODEL=N
-
 !if "$(DLL)" == "2"
 !if "$(TARG)" == ""
 !error DLL=2 is used only from BFCDLL.MAK, BFCOLE.MAK, or BFCDB.MAK
 !endif
 GOAL=$(TARG)
+TYPE=e
+!if "$(OBJ)" == ""
+D=DLL$(DEBUGSUF).$(BASE)
+!if "$(UNICODE)" == "1"
+D=$(MODEL)$(D)
+!endif
+D=$$$(D)
+!endif
+TARGDEFS=$(TARGDEFS) /D_WINDLL /D_AFXDLL
 !else
 GOAL=$(MODEL)afx$(TYPE)$(BASE)$(DEBUGSUF)
 !endif
 
+#
+# Threaded-ness
+#
+!if "$(MT)" != "0"
+TARGOPTS=$(TARGOPTS) /WM /D_MT=1
+!else
+!error This makefile only builds multi-threaded libraries, not single threaded.
+!endif
+
+#
+# Import libraries for the DLL builds
+#
+IMPORT_LIBS=import32.lib inet.lib odbc32.lib
 
 #
 # COMPILER OPTIONS
 #
-DEFS=$(DEFS) /D_WCHAR_T_DEFINED /D__MSC /D_ANONYMOUS_STRUCT
+
+DEFS=$(DEFS)  -D_declspec=__declspec /D_WCHAR_T_DEFINED /D__MSC /D_ANONYMOUS_STRUCT -D_MSC_VER=1200 -D_WINDOWS
 !if "$(DLL)" == "2"
 DEFS=$(DEFS) /D_RTLDLL /D_DLL
 !endif
-CL_OPT= -g0 -j1 -VF4 $(INCROPTS) $(DEBOPTS) $(CVOPTS) $(TARGOPTS)
+CL_OPT= -a8 -g0 -j2 -jb -VF4 $(INCROPTS) $(DEBOPTS) $(CVOPTS) $(TARGOPTS)
+
+#
+# Internal debugging switch for the compiler (-=xx)
+#
+!ifdef COMPILER_DIAG
+CL_OPT= $(CL_OPT) -=o
+!endif
 
 !if "$(BROWSE)" != "0"
 CL_OPT=-R $(CL_OPT)
 !endif
 
-CL_OPT=-n$D $(CL_OPT)
+CL_OPT=-n$(D) $(CL_OPT)
+
+!if "$(NO_WARNINGS)" == "1"
+CL_OPT=$(CL_OPT) -w-
+!endif
+
+!if "$(DEVBUILD)" != "0"
+CL_OPT=$(CL_OPT) /D_AFX_DEVBUILD
+!endif
 
 DEFS=$(DEFS) $(DEBDEFS) $(TARGDEFS)
 
@@ -243,7 +280,7 @@ DEFS=$(DEFS) $(DEBDEFS) $(TARGDEFS)
 
 OBJECT=objcore.obj except.obj \
 	validadd.obj dumpcont.obj dumpflt.obj \
-	arccore.obj arcobj.obj arcex.obj
+	arccore.obj arcobj.obj arcex.obj arcstrm.obj
 
 # non-shared diagnostics
 OBJDIAG=dumpinit.obj dumpout.obj \
@@ -261,76 +298,81 @@ COLL2=map_pp.obj map_pw.obj map_so.obj \
 
 MISC=\
 	strcore.obj strex.obj timecore.obj \
-	afxdbcs.obj afxstate.obj afxtls.obj bormem.obj
-
-MISC=$(MISC) mtcore.obj mtex.obj
+	afxdbcs.obj afxstate.obj afxtls.obj fixalloc.obj \
+        mtcore.obj mtex.obj
 
 WINDOWS=\
 	wincore.obj winfrm.obj winfrm2.obj winfrmx.obj \
 	winmdi.obj tooltip.obj winmini.obj winhand.obj \
 	winmain.obj barcore.obj bartool.obj bardlg.obj \
 	barstat.obj bardock.obj dockcont.obj dockstat.obj \
-	dcprev.obj dcmeta.obj trckrect.obj
+	dcprev.obj dcmeta.obj trckrect.obj barcool.obj
 
 DIALOG=\
 	winctrl1.obj winctrl2.obj winctrl3.obj winctrl4.obj \
 	winbtn.obj dlgcore.obj dlgdata.obj dlgfloat.obj \
 	dlgprop.obj dlgcomm.obj dlgfile.obj dlgprnt.obj \
-	dlgclr.obj dlgfnt.obj dlgfr.obj ccdata.obj dlgtempl.obj
+	dlgclr.obj dlgfnt.obj dlgfr.obj ccdata.obj dlgtempl.obj \
+        winctrl6.obj winctrl7.obj
 
 WINMISC=\
 	wingdi.obj wingdix.obj winstr.obj winmenu.obj \
-	auxdata.obj afxcrit.obj afxtrace.obj winutil.obj
-
-WINMISC=$(WINMISC) winocc.obj
+	auxdata.obj afxcrit.obj afxtrace.obj winutil.obj winocc.obj
 
 DOCVIEW=\
 	cmdtarg.obj doccore.obj doctempl.obj \
 	docsingl.obj docmulti.obj docmgr.obj \
 	viewcore.obj viewprnt.obj winsplit.obj viewscrl.obj \
-	viewform.obj viewedit.obj viewprev.obj viewcmn.obj
+	viewform.obj viewedit.obj viewprev.obj viewcmn.obj \
+	docmapi.obj
 
-DOCVIEW=$(DOCVIEW) docmapi.obj
+INTERNET=inet.obj filefind.obj
+!if "$(UNICODE)" == "1"
+INTERNET=$(INTERNET) isapimix.obj
+!endif
 
 APPLICATION=\
 	thrdcore.obj appcore.obj appinit.obj appterm.obj \
-	appui.obj appui2.obj appui3.obj appgray.obj appdlg.obj \
-	app3d.obj appprnt.obj apphelp.obj apphelpx.obj \
+	appui.obj appui1.obj appui2.obj appui3.obj appgray.obj \
+	appdlg.obj app3d.obj appprnt.obj apphelp.obj apphelpx.obj \
 	filelist.obj
 
 !if "$(DLL)" != "2"
 APPLICATION=$(APPLICATION) app3ds.obj \
-	nolib.obj appmodul.obj dllmodul.obj oleexp.obj
+	nolib.obj appmodul.obj dllmodul.obj oleexp.obj dumpstak.obj
 !endif
 
 # ODBC components:
 DB=\
 	dbcore.obj dbrfx.obj dbview.obj dbflt.obj \
-	dblong.obj
+	dblong.obj dbvar.obj
 
+#
 # DAO is not supported under Borland C++
-#DB=\
-#	$(DB) daocore.obj daodfx.obj daoview.obj
+#
+#DB= $(DB) daocore.obj daodfx.obj daoview.obj viewoled.obj
+#
 
 SOCKETS=sockcore.obj
 
 OLEREQ=olelock.obj
 
 OLE=\
-	oleinit.obj olebar.obj olecli1.obj olecli2.obj \
-	olecli3.obj oledobj1.obj oledobj2.obj \
+	oleinit.obj olecli1.obj olecli2.obj \
+	olecli3.obj olecnvrt.obj oledobj1.obj oledobj2.obj \
 	oledisp1.obj oledisp2.obj oledlgs1.obj oledlgs2.obj \
-	oledlgs3.obj oledata.obj \
+	oledlgs3.obj oledata.obj olevar.obj olevar1.obj \
 	oledoc1.obj oledoc2.obj oledrop1.obj oledrop2.obj \
 	olemsgf.obj oleenum.obj olefact.obj oleipfrm.obj \
 	olelink.obj olemisc.obj olestrm.obj olesvr1.obj \
 	olesvr2.obj olereg.obj oletsvr.obj oleui1.obj \
 	oleui2.obj oleunk.obj oleverb.obj olecall.obj \
-	olevar.obj viewrich.obj oledll.obj oletyplb.obj
-
-OLE=$(OLE)\
-	 occmgr.obj occevent.obj occcont.obj occsite.obj \
-	 occlock.obj occddx.obj occddxf.obj occdlg.obj
+	viewrich.obj oledll.obj oletyplb.obj \
+	olemon.obj winctrl5.obj viewhtml.obj \
+	occmgr.obj occevent.obj occcont.obj occsite.obj \
+	occlock.obj occddx.obj occddxf.obj occdlg.obj \
+	oledocvw.obj oledocob.obj oledoctg.obj oledocip.obj \
+	oledoccl.obj oleasmon.obj olebar.obj
 
 OLECTL=\
 	ctlcache.obj ctlcore.obj ctlconn.obj \
@@ -341,12 +383,16 @@ OLECTL=\
 	ctlpset.obj ctlpstg.obj ctlpstm.obj \
 	ctlrefl.obj ctlreg.obj ctltrack.obj \
 	ctlview.obj olepset.obj ctlpbag.obj \
-	olepro32.obj \
-	ppgcolor.obj ppgfont.obj ppgpict.obj \
-	ppgstock.obj
+	ctlquick.obj ctlnownd.obj \
+	ppgcolor.obj ppgfont.obj ppgpict.obj ppgstock.obj
 
 !if "$(DEBUG)" == "1"
-OLECTL=$(OLECTL) ctlinl.obj bormem.obj
+OLECTL=$(OLECTL) ctlinl.obj
+!endif
+
+# Borland enhancement:
+!if "$(DEBUG)" == "1" && "$(MONOLITHIC)" == "1"
+OLE=$(OLE) dllole.obj
 !endif
 
 OLEDLL=$(OLE) $(OLECTL) $(OLEASM)
@@ -359,7 +405,7 @@ INLINES =
 
 CPP_OBJS=$(OBJECT) $(OBJDIAG) $(INLINES) $(FILES) $(COLL1) $(COLL2) $(MISC) \
 	$(WINDOWS) $(DIALOG) $(WINMISC) $(DOCVIEW) $(APPLICATION) \
-	$(SOCKETS) $(OLEREQ) $(OLE) $(DAO) $(DB)
+	$(SOCKETS) $(OLEREQ) $(OLE) $(DAO) $(DB) $(INTERNET) $(OLECTL)
 
 
 OBJS=$(CPP_OBJS) $(OLEASM)
@@ -395,21 +441,35 @@ PCH_FILE=
 !endif
 CPPFLAGS=$(CPPFLAGS) $(PCH_CMD)
 
+!ifdef JOHNS_CPP32
+PREPROCFLAGS=-Sd -Sk -Sr -P-
+!else
+PREPROCFLAGS=-Sd -Sk -Ss -P
+!endif
+
 .SUFFIXES: .cpp
 
-.path.obj = $D
+.path.obj = $(D)
+
+
+.cpp.i:
+	cpp32 @$(BORRSP) $(PREPROCFLAGS) $<
 
 .cpp.obj:
-	bcc32 @$(BORRSP) /c { $< }
+!if $d(FORCE_CPP32)
+	cpp32 @$(BORRSP) $(PREPROCFLAGS) $<
+!else
+	$(CC) @$(BORRSP) /c { $< }
+!endif
 
 !ifndef NO_PCH
-PCH_TARGETS=$(PCH_FILE) $D\$(PCH_CPP).obj
+PCH_TARGETS=$(PCH_FILE) $(D)\$(PCH_CPP).obj
 !endif
 
 #############################################################################
 # Goals to build
 
-GOALS=create.dir create.rsp
+GOALS=log.mode create.dir create.rsp
 !ifndef NO_PCH
 GOALS=$(GOALS) $(PCH_TARGETS)
 !endif
@@ -417,11 +477,20 @@ GOALS=$(GOALS) $(LIBDIR)\$(GOAL).lib
 
 goal: $(GOALS)
 
+log.mode:
+  @-echo BORLAND.MAK: 
+  @-echo              GOAL=$(GOAL), DLL=$(DLL),  DEBUG=$(DEBUG), 
+  @-echo              DBGINFO=$(DBGINFO), RCDEFINES=$(RCDEFINES), 
+  @-echo              CL_OPT=$(CL_OPT), DEFS=$(DEFS),
+  @-echo              CPPFLAGS=$(CPPFLAGS)	 
+  @-echo              D=$(D)
+  @-echo              STATICLINK_OBJS=$(STATICLINK_OBJS)
+
 create.rsp:
 !ifndef NO_PCH
 !if "$(NO_CLEAN_PCH)" == "0"
     @-if exist $(PCH_FILE) echo Erasing PCH file: $(PCH_FILE) for a fresh build
-    @-if exist $(PCH_FILE) erase $(PCH_FILE) > nul
+    @-if exist $(PCH_FILE) erase $(PCH_FILE) > nul 
 !endif
 !endif
     @-if exist $(BORRSP) erase $(BORRSP) > nul
@@ -430,16 +499,23 @@ $(CPPFLAGS) -I$(BCINCL);$(MFCINCL)
 | $(BORRSP)
 
 create.dir:
-	@-if not exist $D\*.* mkdir $D
+	@-if not exist $(D) mkdir $(D)
 	@-if not exist $(LIBDIR) mkdir $(LIBDIR)
 
 clean:
-	-if exist $D\*.obj erase $D\*.obj
-	-if exist $D\*.csm erase $D\*.csm
-	-if exist $D\*.res erase $D\*.res
-	-if exist $D\*.rsc erase $D\*.rsc
-	-if exist $D\*.map erase $D\*.map
-	-if exist $D\*.* rmdir $D
+	@-if exist *.map erase *.map
+	@-if exist *.dll erase *.dll
+	@-if exist *.cfg erase *.cfg
+	@-if exist *.rsp erase *.rsp
+	@-if exist *.tds erase *.tds
+!if $d(INTEGRATION_BUILD)
+	@-if exist $(PLATFORM)\*.def erase $(PLATFORM)\*.def
+!endif
+	@-if exist $$DLLD.W  rmdir $$DLLD.W /s
+	@-if exist $$DLL.W rmdir $$DLL.W /s
+	@-if exist $$NW rmdir $$NW /s
+	@-if exist $$NWD rmdir $$NWD /s
+
 
 #############################################################################
 # Precompiled header file
@@ -453,9 +529,9 @@ HDRS =$(MFCINCL)\*.h $(MFCINCL)\*.inl
 !endif
 
 !if "$(DLL)" != "2"
-$(PCH_TARGETS): $(PCH_CPP).cpp $(HDRS)
-	bcc32 @&&!
--H -H=$(PCH_FILE) $(CL_MODEL) $(CL_OPT) $(PDBOPTS) $(DEFS) $(OPT) /c $(PCH_CPP).cpp
+$(PCH_TARGETS): $(PCH_CPP).cpp
+	$(CC) @&&!
+$(CPPFLAGS) -I$(BCINCL);$(MFCINCL) /c $(PCH_CPP).cpp
 !
 
 !endif # DLL != 2
@@ -469,7 +545,7 @@ $(PCH_TARGETS): $(PCH_CPP).cpp $(HDRS)
 # Build final library
 $(LIBDIR)\$(GOAL).lib: $(OBJS)
 	@-if exist $@ erase $@
-	@tlib $@ /P2048 @&&!
+	@$(LIB32) $@ /P2048 @&&!
 +-$(**: = &^
 +-)
 !

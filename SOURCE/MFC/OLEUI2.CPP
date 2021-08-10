@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -84,7 +84,7 @@ void COleDocument::OnEditLinks()
 {
 	ASSERT_VALID(this);
 
-	COleLinksDialog dlg(this, GetRoutingView());
+	COleLinksDialog dlg(this, GetRoutingView_());
 	dlg.DoModal();
 }
 
@@ -93,7 +93,7 @@ void COleDocument::OnEditConvert()
 	ASSERT_VALID(this);
 
 	// get selected item
-	COleClientItem* pItem = GetPrimarySelectedItem(GetRoutingView());
+	COleClientItem* pItem = GetPrimarySelectedItem(GetRoutingView_());
 	if (pItem == NULL)
 		return;
 
@@ -107,7 +107,7 @@ void COleDocument::OnUpdateEditChangeIcon(CCmdUI* pCmdUI)
 {
 	ASSERT_VALID(this);
 
-	pCmdUI->Enable(GetPrimarySelectedItem(GetRoutingView()) != NULL);
+	pCmdUI->Enable(GetPrimarySelectedItem(GetRoutingView_()) != NULL);
 }
 
 void COleDocument::OnEditChangeIcon()
@@ -115,7 +115,7 @@ void COleDocument::OnEditChangeIcon()
 	ASSERT_VALID(this);
 
 	// get selected item
-	COleClientItem* pItem = GetPrimarySelectedItem(GetRoutingView());
+	COleClientItem* pItem = GetPrimarySelectedItem(GetRoutingView_());
 	if (pItem == NULL)
 		return;
 
@@ -135,7 +135,7 @@ void COleDocument::OnUpdateObjectVerbMenu(CCmdUI* pCmdUI)
 	}
 
 	// check for single selection
-	COleClientItem* pItem = GetPrimarySelectedItem(GetRoutingView());
+	COleClientItem* pItem = GetPrimarySelectedItem(GetRoutingView_());
 	if (pItem == NULL || pItem->GetType() == OT_STATIC)
 	{
 		// no selection, or is 'static' item
@@ -149,7 +149,7 @@ void COleDocument::OnUpdateObjectVerbMenu(CCmdUI* pCmdUI)
 		nConvertID = 0;
 
 	// update the menu
-	AfxOleSetEditMenu(GetPrimarySelectedItem(GetRoutingView()),
+	AfxOleSetEditMenu(GetPrimarySelectedItem(GetRoutingView_()),
 		pCmdUI->m_pMenu, pCmdUI->m_nIndex,
 		ID_OLE_VERB_FIRST, ID_OLE_VERB_LAST, nConvertID);
 }

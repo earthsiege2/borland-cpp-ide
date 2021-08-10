@@ -1,0 +1,150 @@
+BRCC32 Help
+
+There are several Borland command-line resource tools:
+
+Resource compiler
+
+BRCC32.EXE is the Borland resource compiler. It compiles resource script files (.RC files) and produces the binary .RES file.
+
+Resource linkers
+
+RLINK32.DLL is the Borland resource linker that binds resources, in .RES file form, to an .EXE file, and marks the resulting .EXE file as a Windows executable. RLINK32.DLL is accessed through TLINK32.EXE.
+
+Resource shells
+
+BRC32.EXE is a shell through which BRCC32 and RLINK32 (through TLINK32) can be started in a single step.
+
+BRCC32 is the command-line version of the resource compiler. It accepts a resource script file (.RC) as input and produces a resource object file (.RES) as output.
+
+Syntax
+
+BRCC32 [options] <filename>.RC
+
+Command-line options
+
+BRCC32 accepts these options:
+
+Option	Description
+
+@responsefile	Takes instructions from the specified command file.
+-c <code page>	Uses the specified code page for resource translation. If -c is not used, the default ANSI code page is used.
+-d<name>[=<string>]	Defines a preprocessor symbol.
+-fo<filename>	Renames the output .RES file. (By default, BRCC32 creates the output .RES file with the same name as the input .RC file.)
+-i<path>	Adds one or more directories (separated by semicolons) to the include search path.
+
+-m	Indicates that the code page specified with the -c switch contains double-byte character set (DBCS) characters.
+-r	This switch is ignored. It is included for compatibility with other resource compilers.
+-v	Prints progress messages (verbose).
+-x	Deletes the current include path.
+-? or -h	Displays help.
+-16	Builds a 16-bit resource.
+-32	Builds a 32-bit resource.
+
+BRCC32 predefines common resource-related Windows constants such as WS_VISIBLE and BS_PUSHBUTTON. Also, two special compiler-related symbols are defined: RC_INVOKED and WORKSHOP_INVOKED. These symbols can be used in the source text in conjunction with conditional preprocessor statements to control compilation. For example, the following construct can greatly speed up compilation:
+
+#ifndef WORKSHOP_INVOKED
+
+#include "windows.h"
+
+#endif
+
+Downward compatability
+
+The following syntax and options are supported for downward compatability:
+
+Syntax
+
+BRCC [options] <filename>.RC
+
+Command-line options
+
+BRCC accept these options: 
+
+Option	Description
+
+-31	Builds Windows 3.1-compatible .RES files.
+-w32	Builds Win32-compatible .RES files.
+
+The following example adds two directories to the include path and produces a .RES file with the same name as the input .RC file. 
+
+brcc32 -i<dir1>;<dir2> <filename>.RC
+
+This example produces an output .RES file with a name different from the input .RC file name:
+
+brcc32 -fo<filename>.RES <filename>.RC
+
+This example builds a 16-bit .RES file:
+
+brcc32 -16 -fo<filename>.RES <filename>.RC
+
+The Borland resource compiler (BRC32) is a resource compiler shell. It invokes BRCC32 and RLINK32, depending on the command-line syntax.
+
+Syntax
+
+brc32 [options] <filename>.RC [<filename>.EXE]
+
+Command-line options
+
+BRC32 accepts these options:
+
+Switch	Description
+
+-d<name>=string	Defines a symbol you can test with the #IFDEF preprocessor directive.
+-fo<filename>	Renames the .RES file.
+-fe<filename>	Renames the .EXE file.
+-i<path>	Adds one or more directories (separated by semicolons) to the include search path.
+-r	Creates a .RES file only. The compiled .RES file is not added to the .EXE.
+-v	Prints progress messages (verbose listing).
+-x	Directs the compiler to ignore the INCLUDE environment variable when it searches for include or resource files.
+
+-16	Builds 16-bit .RES files.
+-32	Builds 32-bit .RES files.
+-Vd.d	Makes the .EXE file with Windows version provided (v3.1 is the default for 16-bit resources; -v4.0 is the default for 32-bit resources). Version options are listed in the following table.
+
+Option	Bit	Resulting look
+
+3.1	16	Gives white background with a non 3-D look for Windows 3.1x, Windows 32s, or WinNT 3.1
+4.0	16	Gives gray 3-D look for Windows 95 and WinNT 3.51
+3.1	32	Gives white background with a non 3-D look for Windows 32s or WinNT 3.1
+4.0	32	Gives gray 3-D look for Windows 95 and WinNT 3.51
+
+The following switches are invalid when the -r switch is specified:
+
+-k	Disables the contiguous preload of segments and resources in the .EXE file. Segments are kept in the order in which they appear in the .DEF file. (This option only applies to 16-bit resources.) 
+-t	Creates an application that runs only in protected mode (Windows Standard or 386 Enhanced mode). 
+
+Downward compatability
+
+The following sytax and options are supported for downward compatabliity
+
+Syntax
+
+brc [switches] <filename>.RC [<filename>.EXE] 
+
+Command-line options
+
+BRC accept these options: 
+
+Option	Description
+
+-31	Builds Windows 3.1-compatible .RES files.
+-w32	Builds Win32-compatible .RES files.
+
+The following statement compiles the .RC file, creates a .RES file, and adds the .RES file to the executable file: 
+
+brc32 <filename>.RC [<filename>.EXE]
+
+BRC32 automatically seeks an .EXE file with the same name as the .RC file. You need to specify the .EXE file only if its name is different from that of the .RC file. 
+The following statement creates a .RES file, but not an .EXE file. If you name an .EXE file in the command line, BRC ignores it:
+
+brc32 -r <filename>.RC
+
+The following statement adds an existing .RES file to an executable file. The .EXE file name is required only if it differs from the .RES file name: 
+
+brc32 <filename>.RES [<filename>.EXE] 
+
+This example uses BRC32 to build a 16-bit Windows 3.1 compatible .RES file: 
+
+brc32 -16 -v3.1 -fo<filename>.RES <filename>.RC
+
+Copyright © 1998 Borland International.

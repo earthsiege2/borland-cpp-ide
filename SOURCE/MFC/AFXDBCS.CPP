@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -21,14 +21,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-static BOOL PASCAL AfxInitDBCS()
+AFX_STATIC BOOL PASCAL _AfxInitDBCS()
 {
 	CPINFO info;
 	GetCPInfo(GetOEMCP(), &info);
 	return info.MaxCharSize > 1;
 }
 
-const AFX_DATADEF BOOL _afxDBCS = AfxInitDBCS();
+const AFX_DATADEF BOOL _afxDBCS = _AfxInitDBCS();
 
 #endif //_MBCS
 

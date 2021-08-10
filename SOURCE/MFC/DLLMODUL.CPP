@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -21,14 +21,48 @@ static char THIS_FILE[] = __FILE__;
 // global data
 
 // The following symbol used to force inclusion of this module for _USRDLL
-#if defined(_X86_) || defined(_MAC)
+#ifdef _X86_
 extern "C" { int _afxForceUSRDLL; }
 #else
 extern "C" { int __afxForceUSRDLL; }
 #endif
 
 #ifdef _AFXDLL
+
 static AFX_EXTENSION_MODULE controlDLL;
+
+// force initialization early
+#pragma warning(disable: 4074)
+#pragma init_seg(lib)
+
+/////////////////////////////////////////////////////////////////////////////
+// static-linked version of AfxWndProc for use by this module
+
+LRESULT CALLBACK AfxWndProcDllStatic(HWND, UINT, WPARAM, LPARAM);
+
+class _AFX_DLL_MODULE_STATE : public AFX_MODULE_STATE
+{
+public:
+	_AFX_DLL_MODULE_STATE() : AFX_MODULE_STATE(TRUE, AfxWndProcDllStatic, _MFC_VER)
+		{ }
+};
+
+static _AFX_DLL_MODULE_STATE afxModuleState;
+
+#undef AfxWndProc
+LRESULT CALLBACK
+AfxWndProcDllStatic(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
+{
+	AFX_MANAGE_STATE(&afxModuleState);
+	return AfxWndProc(hWnd, nMsg, wParam, lParam);
+}
+
+AFX_MODULE_STATE* AFXAPI AfxGetStaticModuleState()
+{
+	AFX_MODULE_STATE* pModuleState = &afxModuleState;
+	return pModuleState;
+}
+
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -46,8 +80,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		AfxCoreInitModule();
 #endif
 
+		_AFX_THREAD_STATE* pState = AfxGetThreadState();
+		AFX_MODULE_STATE* pPrevModState = pState->m_pPrevModuleState;
+
 		// Initialize DLL's instance(/module) not the app's
-		if (!AfxWinInit(hInstance, NULL, &afxChNil, 0))
+		if (!AfxWinInit(hInstance, NULL, _T(""), 0))
 		{
 			AfxWinTerm();
 			goto Cleanup;       // Init Failed
@@ -62,6 +99,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 			goto Cleanup;       // Init Failed
 		}
 
+		pState->m_pPrevModuleState = pPrevModState;
 #ifdef _AFXDLL
 		// wire up this DLL into the resource chain
 		VERIFY(AfxInitExtensionModule(controlDLL, hInstance));
@@ -74,10 +112,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		bResult = TRUE;
 
 Cleanup:
+		pState->m_pPrevModuleState = pPrevModState;
 #ifdef _AFXDLL
 		// restore previously-saved module state
 		VERIFY(AfxSetModuleState(AfxGetThreadState()->m_pPrevModuleState) ==
-			AfxGetStaticModuleState());
+			&afxModuleState);
 		DEBUG_ONLY(AfxGetThreadState()->m_pPrevModuleState = NULL);
 #endif
 		return bResult;
@@ -88,7 +127,7 @@ Cleanup:
 		// set module state for cleanup
 		ASSERT(AfxGetThreadState()->m_pPrevModuleState == NULL);
 		AfxGetThreadState()->m_pPrevModuleState =
-			AfxSetModuleState(AfxGetStaticModuleState());
+			AfxSetModuleState(&afxModuleState);
 #endif
 
 		CWinApp* pApp = AfxGetApp();
@@ -102,9 +141,9 @@ Cleanup:
 			TRACE1("Warning: Temp map lock count non-zero (%ld).\n",
 				AfxGetModuleThreadState()->m_nTempMapLock);
 		}
-		AfxLockTempMaps();
-		AfxUnlockTempMaps();
 #endif
+		AfxLockTempMaps();
+		AfxUnlockTempMaps(-1);
 
 		// terminate the library before destructors are called
 		AfxWinTerm();
@@ -112,25 +151,31 @@ Cleanup:
 #ifdef _AFXDLL
 		AfxTermExtensionModule(controlDLL, TRUE);
 #else
-		AfxTermLocalData(hInstance);
+		AfxTermLocalData(hInstance, TRUE);
 #endif
+	}
+	else if (dwReason == DLL_THREAD_DETACH)
+	{
+		AFX_MANAGE_STATE(&afxModuleState);
+
+#ifdef _DEBUG
+		// check for missing AfxLockTempMap calls
+		if (AfxGetModuleThreadState()->m_nTempMapLock != 0)
+		{
+			TRACE1("Warning: Temp map lock count non-zero (%ld).\n",
+				AfxGetModuleThreadState()->m_nTempMapLock);
+		}
+#endif
+		AfxLockTempMaps();
+		AfxUnlockTempMaps(-1);
+
+		AfxTermThread(hInstance);
 	}
 
 	return TRUE;
 }
 
 #ifdef _AFXDLL
-
-/////////////////////////////////////////////////////////////////////////////
-// static-linked version of AfxWndProc for use by this module
-
-#undef AfxWndProc
-LRESULT CALLBACK
-AfxWndProcDllStatic(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
-{
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	return AfxWndProc(hWnd, nMsg, wParam, lParam);
-}
 
 /////////////////////////////////////////////////////////////////////////////
 // initialize app state such that it points to this module's core state
@@ -155,17 +200,16 @@ BOOL WINAPI RawDllMain(HINSTANCE, DWORD dwReason, LPVOID)
 #endif
 
 		// set module state before initialization
-		AFX_MODULE_STATE* pModuleState = AfxGetStaticModuleState();
 		_AFX_THREAD_STATE* pState = AfxGetThreadState();
-		pState->m_pPrevModuleState = AfxSetModuleState(pModuleState);
+		pState->m_pPrevModuleState = AfxSetModuleState(&afxModuleState);
 
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
 		// restore module state after cleanup
-		AFX_MODULE_STATE* pModuleState = AfxGetStaticModuleState();
 		_AFX_THREAD_STATE* pState = AfxGetThreadState();
-		VERIFY(AfxSetModuleState(pState->m_pPrevModuleState) == pModuleState);
+		VERIFY(AfxSetModuleState(pState->m_pPrevModuleState) ==
+			&afxModuleState);
 		DEBUG_ONLY(pState->m_pPrevModuleState = NULL);
 
 #ifndef _AFXDLL
@@ -175,25 +219,6 @@ BOOL WINAPI RawDllMain(HINSTANCE, DWORD dwReason, LPVOID)
 	return TRUE;
 }
 
-// force initialization early
-#pragma warning(disable: 4074)
-#pragma init_seg(lib)
-
-class _AFX_DLL_MODULE_STATE : public AFX_MODULE_STATE
-{
-public:
-	_AFX_DLL_MODULE_STATE() : AFX_MODULE_STATE(TRUE, AfxWndProcDllStatic, _MFC_VER)
-		{ }
-};
-
-static _AFX_DLL_MODULE_STATE afxModuleState;
-
-AFX_MODULE_STATE* AFXAPI AfxGetStaticModuleState()
-{
-	AFX_MODULE_STATE* pModuleState = &afxModuleState;
-	return pModuleState;
-}
-
 #endif //_AFXDLL
 
 /////////////////////////////////////////////////////////////////////////////
@@ -201,34 +226,21 @@ AFX_MODULE_STATE* AFXAPI AfxGetStaticModuleState()
 
 #ifndef _AFXDLL
 
-class _AFX_TERM_DLL_STATE
-{
-public:
-	_AFX_TERM_DLL_STATE();
-	~_AFX_TERM_DLL_STATE();
-};
+// force initialization early
+#pragma warning(disable: 4074)
+#pragma init_seg(lib)
 
-_AFX_TERM_DLL_STATE::_AFX_TERM_DLL_STATE()
-{
-	// add a reference to thread local storage data
-	AfxTlsAddRef();
-}
-
-_AFX_TERM_DLL_STATE::~_AFX_TERM_DLL_STATE()
+void AFX_CDECL AfxTermDllState()
 {
 	// terminate local data and critical sections
-	AfxTermLocalData(NULL);
+	AfxTermLocalData(NULL, TRUE);
 	AfxCriticalTerm();
 
 	// release the reference to thread local storage data
 	AfxTlsRelease();
 }
 
-// force initialization early
-#pragma warning(disable: 4074)
-#pragma init_seg(lib)
-
-_AFX_TERM_DLL_STATE _afxTermDllState;
+char _afxTermDllState = (char)(AfxTlsAddRef(), atexit(&AfxTermDllState));
 
 #endif // !_AFXDLL
 

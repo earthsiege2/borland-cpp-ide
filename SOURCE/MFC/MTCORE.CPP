@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 
 CSyncObject::CSyncObject(LPCTSTR pstrName)
 {
-	UNUSED(pstrName);   // unused in retail builds
+	UNUSED(pstrName);   // unused in release builds
 
 	m_hObject = NULL;
 

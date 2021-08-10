@@ -7,12 +7,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -31,7 +32,7 @@ Prototype in    mbstring.h
 
 Description     _mbbtombc converts 1-byte character c to 2-byte character.
                 The conversion occurs in the range of ASCII subset from
-                0x20 to 0x7E, and JIS Kana subset from 0xA1 to 0xDF.  
+                0x20 to 0x7E, and JIS Kana subset from 0xA1 to 0xDF.
                 _mbctombb converts 2-bytes character c to 1-byte character.
                 The convertible characters are alphabetical, numeric,
                 Katakana, Hiragana and a part of simbols.
@@ -96,8 +97,8 @@ static unsigned char mbc_to_mbb_symbol_table_2[ZTOH_SYMBOLS] = {
 
 unsigned int _RTLENTRY _EXPFUNC _mbbtombc(unsigned int c)
 {
-	if ( _mbcsCodePage  != _KANJI_CP )
-    	return (c);
+    if ( _mbcsCodePage  != _KANJI_CP )
+        return (c);
     if (c >= 0x0020 && c <= 0x007E)
         return ascii_to_mbc_table[c - 0x0020];
     else if (c >= 0x00A1 && c <= 0x00DF)
@@ -111,7 +112,7 @@ unsigned int _RTLENTRY _EXPFUNC _mbctombb(unsigned int c)
     int i;
 
     if ( _mbcsCodePage  != _KANJI_CP )
-    return (c);
+        return (c);
 
     if (c >= 0x8340 && c <= 0x8396)
     {

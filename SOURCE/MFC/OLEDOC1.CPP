@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -184,14 +184,8 @@ void COleDocument::SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU)
 	while ((pItem = GetNextClientItem(pos)) != NULL)
 	{
 		// update that item's host names
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      LPCWSTR pBAfxTemp = T2COLE(AfxGetAppName());
-		T2COLE(m_strTitle);
-		pItem->m_lpObject->SetHostNames(pBAfxTemp, (LPCWSTR)pBAfxConv);
-#else    // __BORLANDC__
 		pItem->m_lpObject->SetHostNames(T2COLE(AfxGetAppName()),
 			T2COLE(m_strTitle));
-#endif   // __BORLANDC__
 	}
 }
 
@@ -422,12 +416,7 @@ LPMONIKER COleDocument::GetMoniker(OLEGETMONIKER /*nAssign*/)
 
 	// return file moniker based on current path name
 	LPMONIKER lpMoniker;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(m_strPathName);
-	CreateFileMoniker((LPCWSTR)pBAfxConv, &lpMoniker);
-#else    // __BORLANDC__
 	CreateFileMoniker(T2COLE(m_strPathName), &lpMoniker);
-#endif   // __BORLANDC__
 	return lpMoniker;
 }
 
@@ -506,23 +495,21 @@ BOOL COleDocument::OnOpenDocument(LPCTSTR lpszPathName)
 			{
 				// convert existing storage file
 				sc = StgCreateDocfile(lpsz, STGM_READWRITE|
-					STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE|STGM_CONVERT,
+					STGM_TRANSACTED|STGM_SHARE_DENY_WRITE|STGM_CONVERT,
 					0, &lpStorage);
 				if (FAILED(sc) || lpStorage == NULL)
 					sc = StgCreateDocfile(lpsz, STGM_READ|
-							STGM_TRANSACTED|STGM_SHARE_DENY_WRITE|STGM_CONVERT,
-							0, &lpStorage);
+						STGM_TRANSACTED|STGM_CONVERT, 0, &lpStorage);
 			}
 			else
 			{
 				// open new storage file
 				sc = StgOpenStorage(lpsz, NULL,
-					STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE,
+					STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_DENY_WRITE,
 					0, 0, &lpStorage);
 				if (FAILED(sc) || lpStorage == NULL)
 					sc = StgOpenStorage(lpsz, NULL,
-						STGM_READ|STGM_TRANSACTED|STGM_SHARE_DENY_WRITE,
-						0, 0, &lpStorage);
+						STGM_READ|STGM_TRANSACTED, 0, 0, &lpStorage);
 			}
 			if (FAILED(sc))
 				AfxThrowOleException(sc);
@@ -591,16 +578,9 @@ BOOL COleDocument::OnSaveDocument(LPCTSTR lpszPathName)
 			m_lpRootStg = NULL;
 
 			LPSTORAGE lpStorage;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-         T2COLE(lpszPathName);
-			SCODE sc = ::StgCreateDocfile((LPCWSTR)pBAfxConv,
-				STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE|STGM_CREATE,
-				0, &lpStorage);
-#else    // __BORLANDC__
 			SCODE sc = ::StgCreateDocfile(T2COLE(lpszPathName),
-				STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_EXCLUSIVE|STGM_CREATE,
+				STGM_READWRITE|STGM_TRANSACTED|STGM_SHARE_DENY_WRITE|STGM_CREATE,
 				0, &lpStorage);
-#endif   // __BORLANDC__
 			if (sc != S_OK)
 				AfxThrowOleException(sc);
 
@@ -691,8 +671,6 @@ void COleDocument::OnCloseDocument()
 // Helpers for saving to IStorage based files
 //  (these are used in the 'docfile' implementation as well as for servers)
 
-static const TCHAR szContents[] = _T("Contents");
-
 void COleDocument::SaveToStorage(CObject* pObject)
 {
 	ASSERT(m_lpRootStg != NULL);
@@ -700,7 +678,7 @@ void COleDocument::SaveToStorage(CObject* pObject)
 	// create Contents stream
 	COleStreamFile file;
 	CFileException fe;
-	if (!file.CreateStream(m_lpRootStg, szContents,
+	if (!file.CreateStream(m_lpRootStg, _T("Contents"),
 			CFile::modeReadWrite|CFile::shareExclusive|CFile::modeCreate, &fe))
 	{
 		if (fe.m_cause == CFileException::fileNotFound)
@@ -746,9 +724,9 @@ void COleDocument::LoadFromStorage()
 	// open Contents stream
 	COleStreamFile file;
 	CFileException fe;
-	if (!file.OpenStream(m_lpRootStg, szContents,
+	if (!file.OpenStream(m_lpRootStg, _T("Contents"),
 			CFile::modeRead|CFile::shareExclusive, &fe) &&
-		!file.CreateStream(m_lpRootStg, szContents,
+		!file.CreateStream(m_lpRootStg, _T("Contents"),
 			CFile::modeRead|CFile::shareExclusive|CFile::modeCreate, &fe))
 	{
 		if (fe.m_cause == CFileException::fileNotFound)

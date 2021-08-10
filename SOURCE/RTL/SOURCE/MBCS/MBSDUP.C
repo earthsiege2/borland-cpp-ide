@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <string.h>
 #include <mbstring.h>
@@ -28,7 +29,7 @@ Description     _mdsdup makes a duplicate of strings str with null-
                 terminating character, obtaining space with a call to
                 malloc.The allocated space is (strlen(str + 1)) byte long.
 
-Return value	Return null pointer if space could not be allocated
+Return value    Return null pointer if space could not be allocated
                 with a call to malloc.
 
                 The user is responcible for freeing the space allocated

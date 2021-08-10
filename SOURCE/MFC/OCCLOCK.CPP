@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -32,8 +32,8 @@ COleControlLock::COleControlLock(REFCLSID clsid)
 	m_pClassFactory = NULL;
 
 	// initialize OLE, if necessary
-	_AFX_OLE_STATE* pOleState = _afxOleState;
-	if (!pOleState->m_bNeedTerm && !AfxOleInit())
+	_AFX_THREAD_STATE* pState = AfxGetThreadState();
+	if (!pState->m_bNeedTerm && !AfxOleInit())
 		return;
 
 	// attempt to lock the class factory of the control
@@ -74,9 +74,9 @@ BOOL AFXAPI AfxOleLockControl(REFCLSID clsid)
 		}
 		else
 		{
-			AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
+			AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
 			AfxLockGlobals(CRIT_CTLLOCKLIST);
-			pState->m_lockList.AddHead(pLock);
+			pModuleState->m_lockList.AddHead(pLock);
 			AfxUnlockGlobals(CRIT_CTLLOCKLIST);
 		}
 	}
@@ -114,9 +114,9 @@ BOOL AFXAPI AfxOleUnlockControl(LPCTSTR lpszProgID)
 
 BOOL AFXAPI AfxOleUnlockControl(REFCLSID clsid)
 {
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
 	AfxLockGlobals(CRIT_CTLLOCKLIST);
-	COleControlLock* pLock = pState->m_lockList;
+	COleControlLock* pLock = pModuleState->m_lockList;
 	BOOL bResult = FALSE;
 	while (pLock != NULL)
 	{
@@ -124,7 +124,7 @@ BOOL AFXAPI AfxOleUnlockControl(REFCLSID clsid)
 		if (clsid == pLock->m_clsid)
 		{
 			// remove lock from list and delete it
-			pState->m_lockList.Remove(pLock);
+			pModuleState->m_lockList.Remove(pLock);
 			delete pLock;
 			bResult = TRUE;
 		}
@@ -136,14 +136,14 @@ BOOL AFXAPI AfxOleUnlockControl(REFCLSID clsid)
 
 void AFXAPI AfxOleUnlockAllControls()
 {
-	AFX_MODULE_PROCESS_STATE* pState = AfxGetModuleProcessState();
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
 	COleControlLock* pLock;
 	AfxLockGlobals(CRIT_CTLLOCKLIST);
-	while ((pLock = pState->m_lockList) != NULL)
+	while ((pLock = pModuleState->m_lockList) != NULL)
 	{
-		pState->m_lockList.Remove(pLock);
+		pModuleState->m_lockList.Remove(pLock);
 		delete pLock;
 	}
-	ASSERT(pState->m_lockList.IsEmpty());
+	ASSERT(pModuleState->m_lockList.IsEmpty());
 	AfxUnlockGlobals(CRIT_CTLLOCKLIST);
 }

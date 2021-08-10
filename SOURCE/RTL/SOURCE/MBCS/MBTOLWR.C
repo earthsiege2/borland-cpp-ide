@@ -7,19 +7,15 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
 
 #include <ctype.h>
 #include <mbctype.h>
-
-#if 0
-extern int _mbascii;
-#endif
 
 /*---------------------------------------------------------------------*
 
@@ -42,16 +38,6 @@ Return value    Returns a converted value. If the code is not convertible,
 unsigned int _RTLENTRY _EXPFUNC _mbctolower(unsigned int c)
 {
     if (c <= 0x00FF)
-    {
-        if (isupper(c))
-            c += 0x20;
-    }
-#if 0
-    else
-    {
-        if (_mbascii && c >= 0x8260 && c <= 0x8279)
-            c += 0x0021;
-    }
-#endif
+        c = _ltolower(c);
     return c;
 }

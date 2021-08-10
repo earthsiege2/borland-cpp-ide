@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -69,6 +69,14 @@ void* PASCAL CNoTrackObject::operator new(size_t nSize, LPCSTR, int)
 {
 	return CNoTrackObject::operator new(nSize);
 }
+
+#if 0 //_MSC_VER >= 1200
+void PASCAL CNoTrackObject::operator delete(void* pObject, LPCSTR, int)
+{
+	if (pObject != NULL)
+		::LocalFree(pObject);
+}
+#endif
 #endif
 
 void* PASCAL CNoTrackObject::operator new(size_t nSize)
@@ -92,10 +100,6 @@ void PASCAL CNoTrackObject::operator delete(void* p)
 BYTE __afxThreadData[sizeof(CThreadSlotData)];
 CThreadSlotData* _afxThreadData;
 
-// global _afxProcessData used to allocate process local indexes
-BYTE __afxProcessData[sizeof(CThreadSlotData)];
-CThreadSlotData* _afxProcessData;
-
 struct CThreadData : public CNoTrackObject
 {
 	CThreadData* pNext; // required to be member of CSimpleList
@@ -112,7 +116,7 @@ struct CSlotData
 // flags used for CSlotData::dwFlags above
 #define SLOT_USED   0x01    // slot is allocated
 
-CThreadSlotData::CThreadSlotData(BOOL bThreadLocal)
+__declspec(nothrow) CThreadSlotData::CThreadSlotData()
 {
 	m_list.Construct(offsetof(CThreadData, pNext));
 
@@ -121,17 +125,11 @@ CThreadSlotData::CThreadSlotData(BOOL bThreadLocal)
 	m_nRover = 1;   // first slot (0) is always reserved
 	m_nMax = 0;
 	m_pSlotData = NULL;
-	m_pData = NULL;
 
 	// init m_tlsIndex to -1 if !bThreadLocal, otherwise TlsAlloc
-	if (bThreadLocal)
-	{
-		m_tlsIndex = TlsAlloc();
-		if (m_tlsIndex == (DWORD)-1)
-			AfxThrowMemoryException();
-	}
-	else
-		m_tlsIndex = (DWORD)-1;
+	m_tlsIndex = TlsAlloc();
+	if (m_tlsIndex == (DWORD)-1)
+		AfxThrowMemoryException();
 
 	InitializeCriticalSection(&m_sect);
 }
@@ -142,6 +140,14 @@ CThreadSlotData::~CThreadSlotData()
 	{
 		TlsFree(m_tlsIndex);
 		DEBUG_ONLY(m_tlsIndex = (DWORD)-1);
+	}
+
+	CThreadData* pData = m_list;
+	while (pData != NULL)
+	{
+		CThreadData* pDataNext = pData->pNext;
+		DeleteValues(pData, NULL);
+		pData = pDataNext;
 	}
 
 	if (m_pSlotData != NULL)
@@ -251,39 +257,9 @@ inline void* CThreadSlotData::GetThreadValue(int nSlot)
 	ASSERT(m_tlsIndex != (DWORD)-1);
 
 	CThreadData* pData = (CThreadData*)TlsGetValue(m_tlsIndex);
-	void* pResult;
 	if (pData == NULL || nSlot >= pData->nCount)
-		pResult = NULL;
-	else
-		pResult = pData->pData[nSlot];
-	return pResult;
-}
-
-void* CThreadSlotData::GetValue(int nSlot)
-{
-	ASSERT(nSlot != 0 && nSlot < m_nMax);
-	ASSERT(m_pSlotData != NULL);
-	ASSERT(m_pSlotData[nSlot].dwFlags & SLOT_USED);
-
-	CThreadData* pData;
-	if (m_tlsIndex == (DWORD)-1)
-	{
-		EnterCriticalSection(&m_sect);
-		pData = m_pData;
-	}
-	else
-		pData = (CThreadData*)TlsGetValue(m_tlsIndex);
-
-	void* pResult;
-	if (pData == NULL || nSlot >= pData->nCount)
-		pResult = NULL;
-	else
-		pResult = pData->pData[nSlot];
-
-	if (m_tlsIndex == (DWORD)-1)
-		LeaveCriticalSection(&m_sect);
-
-	return pResult;
+		return NULL;
+	return pData->pData[nSlot];
 }
 
 void CThreadSlotData::SetValue(int nSlot, void* pValue)
@@ -292,21 +268,9 @@ void CThreadSlotData::SetValue(int nSlot, void* pValue)
 	ASSERT(m_pSlotData != NULL);
 	ASSERT(m_pSlotData[nSlot].dwFlags & SLOT_USED);
 
-	CThreadData* pData;
-	if (m_tlsIndex == (DWORD)-1)
+	CThreadData* pData = (CThreadData*)TlsGetValue(m_tlsIndex);
+	if (pData == NULL || nSlot >= pData->nCount && pValue != NULL)
 	{
-		EnterCriticalSection(&m_sect);
-		pData = m_pData;
-	}
-	else
-		pData = (CThreadData*)TlsGetValue(m_tlsIndex);
-
-	if (pData == NULL || nSlot >= pData->nCount)
-	{
-		// no need to grow if not large enough and pValue == NULL
-		if (pValue == NULL)
-			goto LReturn;
-
 		// if pData is NULL then this thread has not been visited yet
 		if (pData == NULL)
 		{
@@ -316,11 +280,9 @@ void CThreadSlotData::SetValue(int nSlot, void* pValue)
 			DEBUG_ONLY(pData->pNext = NULL);
 
 			// protect while adding to global list
-			if (m_tlsIndex == (DWORD)-1)
-				EnterCriticalSection(&m_sect);
+			EnterCriticalSection(&m_sect);
 			m_list.AddHead(pData);
-			if (m_tlsIndex == (DWORD)-1)
-				LeaveCriticalSection(&m_sect);
+			LeaveCriticalSection(&m_sect);
 		}
 
 		// grow to now current size
@@ -330,27 +292,16 @@ void CThreadSlotData::SetValue(int nSlot, void* pValue)
 			pData->pData = (void**)LocalReAlloc(pData->pData, m_nMax*sizeof(LPVOID),
 				LMEM_MOVEABLE);
 		if (pData->pData == NULL)
-		{
-			if (m_tlsIndex == (DWORD)-1)
-				LeaveCriticalSection(&m_sect);
 			AfxThrowMemoryException();
-		}
 
 		// initialize the newly allocated part
 		memset(pData->pData + pData->nCount, 0,
 			(m_nMax - pData->nCount) * sizeof(LPVOID));
 		pData->nCount = m_nMax;
-		if (m_tlsIndex != (DWORD)-1)
-			TlsSetValue(m_tlsIndex, pData);
-		else
-			m_pData = pData;
+		TlsSetValue(m_tlsIndex, pData);
 	}
 	ASSERT(pData->pData != NULL && nSlot < pData->nCount);
 	pData->pData[nSlot] = pValue;
-
-LReturn:
-	if (m_tlsIndex == (DWORD)-1)
-		LeaveCriticalSection(&m_sect);
 }
 
 void CThreadSlotData::AssignInstance(HINSTANCE hInst)
@@ -367,43 +318,63 @@ void CThreadSlotData::AssignInstance(HINSTANCE hInst)
 	LeaveCriticalSection(&m_sect);
 }
 
-void CThreadSlotData::DeleteValues(HINSTANCE hInst)
+void CThreadSlotData::DeleteValues(CThreadData* pData, HINSTANCE hInst)
+{
+	// Note: does not lock critical section because only meant to be called
+	// from DeleteValues(HINSTANCE, BOOL).
+
+	ASSERT(pData != NULL);
+
+	// free each element in the table
+	BOOL bDelete = TRUE;
+	for (int i = 1; i < pData->nCount; i++)
+	{
+		if (hInst == NULL || m_pSlotData[i].hInst == hInst)
+		{
+			// delete the data since hInst matches (or is NULL)
+			delete (CNoTrackObject*)pData->pData[i];
+			pData->pData[i] = NULL;
+		}
+		else if (pData->pData[i] != NULL)
+		{
+			// don't delete thread data if other modules still alive
+			bDelete = FALSE;
+		}
+	}
+
+	if (bDelete)
+	{
+		// remove from master list and free it
+		EnterCriticalSection(&m_sect);
+		m_list.Remove(pData);
+		LeaveCriticalSection(&m_sect);
+		LocalFree(pData->pData);
+		delete pData;
+
+		// clear TLS index to prevent from re-use
+		TlsSetValue(m_tlsIndex, NULL);
+	}
+}
+
+void CThreadSlotData::DeleteValues(HINSTANCE hInst, BOOL bAll)
 {
 	EnterCriticalSection(&m_sect);
-	CThreadData* pData = m_tlsIndex != (DWORD)-1 ?
-		(CThreadData*)TlsGetValue(m_tlsIndex) : m_pData;
-	if (pData != NULL)
+	if (!bAll)
 	{
-		BOOL bDelete = TRUE;
-
-		// free each element in the table
-		for (int i = 1; i < pData->nCount; i++)
+		// delete the values only for the current thread
+		CThreadData* pData = (CThreadData*)TlsGetValue(m_tlsIndex);
+		if (pData != NULL)
+			DeleteValues(pData, hInst);
+	}
+	else
+	{
+		// delete the values for all threads
+		CThreadData* pData = m_list;
+		while (pData != NULL)
 		{
-			if (hInst == NULL || m_pSlotData[i].hInst == hInst)
-			{
-				// delete the data since hInst matches (or is NULL)
-				delete (CNoTrackObject*)pData->pData[i];
-				pData->pData[i] = NULL;
-			}
-			else if (pData->pData[i] != NULL)
-			{
-				// don't delete thread data if other modules still alive
-				bDelete = FALSE;
-			}
-		}
-
-		if (bDelete)
-		{
-			// remove from master list and free it
-			m_list.Remove(pData);
-			LocalFree(pData->pData);
-			delete pData;
-
-			// clear TLS index to prevent from re-use
-			if (m_tlsIndex != (DWORD)-1)
-				TlsSetValue(m_tlsIndex, NULL);
-			else
-				m_pData = NULL;
+			CThreadData* pDataNext = pData->pNext;
+			DeleteValues(pData, hInst);
+			pData = pDataNext;
 		}
 	}
 	LeaveCriticalSection(&m_sect);
@@ -419,13 +390,13 @@ CNoTrackObject* CThreadLocalObject::GetData(
 	{
 		if (_afxThreadData == NULL)
 		{
-			_afxThreadData = new(__afxThreadData) CThreadSlotData(TRUE);
+			_afxThreadData = new(__afxThreadData) CThreadSlotData;
 			ASSERT(_afxThreadData != NULL);
 		}
 		m_nSlot = _afxThreadData->AllocSlot();
 		ASSERT(m_nSlot != 0);
 	}
-	CNoTrackObject* pValue = 
+	CNoTrackObject* pValue =
 		(CNoTrackObject*)_afxThreadData->GetThreadValue(m_nSlot);
 	if (pValue == NULL)
 	{
@@ -444,7 +415,7 @@ CNoTrackObject* CThreadLocalObject::GetDataNA()
 	if (m_nSlot == 0 || _afxThreadData == NULL)
 		return NULL;
 
-	CNoTrackObject* pValue = 
+	CNoTrackObject* pValue =
 		(CNoTrackObject*)_afxThreadData->GetThreadValue(m_nSlot);
 	return pValue;
 }
@@ -462,64 +433,29 @@ CThreadLocalObject::~CThreadLocalObject()
 CNoTrackObject* CProcessLocalObject::GetData(
 	CNoTrackObject* (AFXAPI* pfnCreateObject)())
 {
-	if (_afxProcessData == NULL)
+	if (m_pObject == NULL)
 	{
-#ifdef _MAC
-		// PowerMac does DLLs more like Win32, less like Win32s
-		BOOL bWin31 = FALSE;
-#else
-		// need to use thread local storage on Win32s
-		DWORD dwVersion = GetVersion();
-		BOOL bWin31 = (dwVersion & 0x80000000) && (BYTE)dwVersion < 4;
-#endif
-		_afxProcessData = new(__afxProcessData) CThreadSlotData(bWin31);
-		ASSERT(_afxProcessData != NULL);
-	}
-
-	CNoTrackObject* pValue;
-	TRY
-	{
-		EnterCriticalSection(&_afxProcessData->m_sect);
-		if (m_nSlot == 0)
+		AfxLockGlobals(CRIT_PROCESSLOCAL);
+		TRY
 		{
-			m_nSlot = _afxProcessData->AllocSlot();
-			ASSERT(m_nSlot != 0);
+			if (m_pObject == NULL)
+				m_pObject = (*pfnCreateObject)();
 		}
-		pValue = (CNoTrackObject*)_afxProcessData->GetValue(m_nSlot);
-		if (pValue == NULL)
+		CATCH_ALL(e)
 		{
-			// allocate zero-init object
-			pValue = (*pfnCreateObject)();
-
-			// set tls data to newly created object
-			_afxProcessData->SetValue(m_nSlot, pValue);
-			ASSERT(_afxProcessData->GetValue(m_nSlot) == pValue);
+			AfxUnlockGlobals(CRIT_PROCESSLOCAL);
+			THROW_LAST();
 		}
-		LeaveCriticalSection(&_afxProcessData->m_sect);
+		END_CATCH_ALL
+		AfxUnlockGlobals(CRIT_PROCESSLOCAL);
 	}
-	CATCH_ALL(e)
-	{
-		LeaveCriticalSection(&_afxProcessData->m_sect);
-		THROW_LAST();
-	}
-	END_CATCH_ALL
-	return pValue;
-}
-
-CNoTrackObject* CProcessLocalObject::GetDataNA()
-{
-	if (m_nSlot == 0 || _afxProcessData == NULL)
-		return NULL;
-
-	CNoTrackObject* pValue = (CNoTrackObject*)_afxProcessData->GetValue(m_nSlot);
-	return pValue;
+	return m_pObject;
 }
 
 CProcessLocalObject::~CProcessLocalObject()
 {
-	if (m_nSlot != 0 && _afxProcessData != NULL)
-		_afxProcessData->FreeSlot(m_nSlot);
-	m_nSlot = 0;
+	if (m_pObject != NULL)
+		delete m_pObject;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -529,18 +465,12 @@ void AFXAPI AfxInitLocalData(HINSTANCE hInst)
 {
 	if (_afxThreadData != NULL)
 		_afxThreadData->AssignInstance(hInst);
-
-	if (_afxProcessData != NULL)
-		_afxProcessData->AssignInstance(hInst);
 }
 
-void AFXAPI AfxTermLocalData(HINSTANCE hInst)
+void AFXAPI AfxTermLocalData(HINSTANCE hInst, BOOL bAll)
 {
 	if (_afxThreadData != NULL)
-		_afxThreadData->DeleteValues(hInst);
-
-	if (_afxProcessData != NULL)
-		_afxProcessData->DeleteValues(hInst);
+		_afxThreadData->DeleteValues(hInst, bAll);
 }
 
 // This reference count is needed to support Win32s, such that the
@@ -548,7 +478,7 @@ void AFXAPI AfxTermLocalData(HINSTANCE hInst)
 // It is basically a reference count of the number of processes that
 // have attached to the MFC DLL.
 
-static long _afxTlsRef;
+AFX_STATIC_DATA long _afxTlsRef = 0;
 
 void AFXAPI AfxTlsAddRef()
 {
@@ -563,11 +493,6 @@ void AFXAPI AfxTlsRelease()
 		{
 			_afxThreadData->~CThreadSlotData();
 			_afxThreadData = NULL;
-		}
-		if (_afxProcessData != NULL)
-		{
-			_afxProcessData->~CThreadSlotData();
-			_afxProcessData = NULL;
 		}
 	}
 }

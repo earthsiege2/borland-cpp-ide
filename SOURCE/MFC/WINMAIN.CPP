@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -18,12 +18,13 @@
 // Standard WinMain implementation
 //  Can be replaced as long as 'AfxWinInit' is called first
 
-int AFXAPI AfxWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
+int AFXAPI AfxWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPTSTR lpCmdLine, int nCmdShow)
 {
 	ASSERT(hPrevInstance == NULL);
 
 	int nReturnCode = -1;
+	CWinThread* pThread = AfxGetThread();
 	CWinApp* pApp = AfxGetApp();
 
 	// AFX internal initialization
@@ -31,37 +32,32 @@ int AFXAPI AfxWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		goto InitFailure;
 
 	// App global initializations (rare)
-	ASSERT_VALID(pApp);
-	if (!pApp->InitApplication())
+	if (pApp != NULL && !pApp->InitApplication())
 		goto InitFailure;
-	ASSERT_VALID(pApp);
 
 	// Perform specific initializations
-	if (!pApp->InitInstance())
+	if (!pThread->InitInstance())
 	{
-		if (pApp->m_pMainWnd != NULL)
+		if (pThread->m_pMainWnd != NULL)
 		{
 			TRACE0("Warning: Destroying non-NULL m_pMainWnd\n");
-			pApp->m_pMainWnd->DestroyWindow();
+			pThread->m_pMainWnd->DestroyWindow();
 		}
-		nReturnCode = pApp->ExitInstance();
+		nReturnCode = pThread->ExitInstance();
 		goto InitFailure;
 	}
-	ASSERT_VALID(pApp);
-
-	nReturnCode = pApp->Run();
-	ASSERT_VALID(pApp);
+	nReturnCode = pThread->Run();
 
 InitFailure:
 #ifdef _DEBUG
-		// Check for missing AfxLockTempMap calls
-		if (AfxGetModuleThreadState()->m_nTempMapLock != 0)
-		{
-			TRACE1("Warning: Temp map lock count non-zero (%ld).\n",
-				AfxGetModuleThreadState()->m_nTempMapLock);
-		}
-		AfxLockTempMaps();
-		AfxUnlockTempMaps();
+	// Check for missing AfxLockTempMap calls
+	if (AfxGetModuleThreadState()->m_nTempMapLock != 0)
+	{
+		TRACE1("Warning: Temp map lock count non-zero (%ld).\n",
+			AfxGetModuleThreadState()->m_nTempMapLock);
+	}
+	AfxLockTempMaps();
+	AfxUnlockTempMaps(-1);
 #endif
 
 	AfxWinTerm();

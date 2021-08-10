@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -29,7 +29,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 // Old class ID for picture type
-static const CLSID CLSID_StdPicture_V1 =
+AFX_STATIC_DATA const CLSID _afx_CLSID_StdPicture2_V1 =
 	{ 0xfb8f0824,0x0164,0x101b, { 0x84,0xed,0x08,0x00,0x2b,0x2e,0xc7,0x13 } };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -107,6 +107,9 @@ BOOL AFXAPI _AfxCopyPropValue(VARTYPE vtProp, void* pvDest, const void * pvSrc)
 
 		switch (vtProp)
 		{
+		case VT_UI1:
+			*(BYTE*)pvDest = *(BYTE*)pvSrc;
+			break;
 		case VT_I2:
 			*(short*)pvDest = *(short*)pvSrc;
 			break;
@@ -118,6 +121,9 @@ BOOL AFXAPI _AfxCopyPropValue(VARTYPE vtProp, void* pvDest, const void * pvSrc)
 			break;
 		case VT_BSTR:
 			*(CString*)pvDest = *(CString*)pvSrc;
+			break;
+		case VT_LPSTR:
+			*(CString*)pvDest = (LPCTSTR)pvSrc;
 			break;
 		case VT_CY:
 			*(CY*)pvDest = *(CY*)pvSrc;
@@ -159,6 +165,56 @@ BOOL COleControl::ExchangeExtent(CPropExchange* pPX)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// Serialization for version number
+
+DWORD COleControl::SerializeVersion(CArchive& ar, DWORD dwVersionDefault,
+	BOOL bConvert)
+{
+	DWORD dwVersion;
+
+	if (ar.IsLoading())
+	{
+		ar >> m_dwVersionLoaded;
+		dwVersion = m_dwVersionLoaded;
+	}
+	else
+	{
+		dwVersion = bConvert ? dwVersionDefault : m_dwVersionLoaded;
+		ar << dwVersion;
+	}
+
+	return dwVersion;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Initialization for version number
+
+void COleControl::ResetVersion(DWORD dwVersionDefault)
+{
+	m_dwVersionLoaded = dwVersionDefault;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Serialization for extent
+
+void COleControl::SerializeExtent(CArchive& ar)
+{
+	if (ar.IsLoading())
+	{
+		SIZEL szl;
+		ar >> szl.cx;
+		ar >> szl.cy;
+		if ((m_cxExtent != szl.cx) || (m_cyExtent != szl.cy))
+			m_xOleObject.SetExtent(DVASPECT_CONTENT, &szl);
+	}
+	else
+	{
+		ar << m_cxExtent;
+		ar << m_cyExtent;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // CPropExchange member functions
 
 BOOL CPropExchange::ExchangeVersion(DWORD& dwVersionLoaded,
@@ -192,8 +248,8 @@ CArchivePropExchange::CArchivePropExchange(CArchive& ar) :
 BOOL CArchivePropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 		void* pvProp, const void* pvDefault)
 {
-	UNUSED(pszPropName);     // unused in retail builds
-	UNUSED(pvDefault);       // unused in retail builds
+	UNUSED(pszPropName);     // unused in release builds
+	UNUSED(pvDefault);       // unused in release builds
 
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT(AfxIsValidAddress(pvProp, 1, FALSE));
@@ -203,6 +259,9 @@ BOOL CArchivePropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 	{
 		switch (vtProp)
 		{
+		case VT_UI1:
+			m_ar >> *(BYTE*)pvProp;
+			break;
 		case VT_I2:
 			m_ar >> *(WORD*)pvProp;
 			break;
@@ -213,6 +272,7 @@ BOOL CArchivePropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 			*(BOOL*)pvProp = 0;
 			m_ar >> *(BYTE*)pvProp;
 			break;
+		case VT_LPSTR:
 		case VT_BSTR:
 			m_ar >> *(CString*)pvProp;
 			break;
@@ -232,6 +292,9 @@ BOOL CArchivePropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 	{
 		switch (vtProp)
 		{
+		case VT_UI1:
+			m_ar << *(BYTE*)pvProp;
+			break;
 		case VT_I2:
 			m_ar << *(WORD*)pvProp;
 			break;
@@ -241,6 +304,7 @@ BOOL CArchivePropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 		case VT_BOOL:
 			m_ar << *(BYTE*)pvProp;
 			break;
+		case VT_LPSTR:
 		case VT_BSTR:
 			m_ar << *(CString*)pvProp;
 			break;
@@ -263,7 +327,7 @@ BOOL CArchivePropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 BOOL CArchivePropExchange::ExchangeBlobProp(LPCTSTR pszPropName,
 	HGLOBAL* phBlob, HGLOBAL /*hBlobDefault*/)
 {
-	UNUSED(pszPropName);     // unused in retail builds
+	UNUSED(pszPropName);     // unused in release builds
 
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(phBlob, HGLOBAL);
@@ -350,7 +414,7 @@ BOOL AFXAPI _AfxIsSameUnknownObject(REFIID iid, LPUNKNOWN pUnk1, LPUNKNOWN pUnk2
 BOOL CArchivePropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
 		LPUNKNOWN* ppUnk, REFIID iid, LPUNKNOWN pUnkDefault)
 {
-	UNUSED(pszPropName);     // unused in retail builds
+	UNUSED(pszPropName);     // unused in release builds
 
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(ppUnk, LPUNKNOWN);
@@ -383,7 +447,7 @@ BOOL CArchivePropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
 				// otherwise will need a stream
 				LPSTREAM pstm = _AfxGetArchiveStream(m_ar, stm);
 				if (IsEqualCLSID(clsid, CLSID_StdPicture) ||
-					IsEqualCLSID(clsid, CLSID_StdPicture_V1))
+					IsEqualCLSID(clsid, _afx_CLSID_StdPicture2_V1))
 				{
 					// special case for pictures
 					bResult = SUCCEEDED(::OleLoadPicture(pstm, 0, FALSE, iid,
@@ -398,8 +462,33 @@ BOOL CArchivePropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
 					VERIFY(SUCCEEDED(pstm->Seek(li, STREAM_SEEK_CUR, NULL)));
 
 					// and load the object normally
-					bResult = SUCCEEDED(::OleLoadFromStream(pstm, iid,
-						(void**)ppUnk));
+
+					CLSID clsid;
+					if (SUCCEEDED(::ReadClassStm(pstm, &clsid)) &&
+							(SUCCEEDED(::CoCreateInstance(clsid, NULL,
+								CLSCTX_SERVER | CLSCTX_REMOTE_SERVER,
+								iid, (void**)ppUnk)) ||
+							SUCCEEDED(::CoCreateInstance(clsid, NULL,
+								CLSCTX_SERVER & ~CLSCTX_REMOTE_SERVER,
+								iid, (void**)ppUnk))))
+					{
+						LPPERSISTSTREAM pps = NULL;
+						if (SUCCEEDED((*ppUnk)->QueryInterface(
+								IID_IPersistStream, (void**)&pps)) ||
+							SUCCEEDED((*ppUnk)->QueryInterface(
+								IID_IPersistStreamInit, (void**)&pps)))
+						{
+							ASSERT_POINTER(pps, IPersistStream);
+							bResult = SUCCEEDED(pps->Load(pstm));
+							pps->Release();
+						}
+
+						if (!bResult)
+						{
+							(*ppUnk)->Release();
+							*ppUnk = NULL;
+						}
+					}
 				}
 			}
 		}
@@ -428,8 +517,10 @@ BOOL CArchivePropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
 			if (*ppUnk != NULL)
 			{
 				LPPERSISTSTREAM pps = NULL;
-				if (SUCCEEDED((*ppUnk)->QueryInterface(IID_IPersistStream,
-					(LPVOID*)&pps)))
+				if (SUCCEEDED((*ppUnk)->QueryInterface(
+						IID_IPersistStream, (void**)&pps)) ||
+					SUCCEEDED((*ppUnk)->QueryInterface(
+						IID_IPersistStreamInit, (void**)&pps)))
 				{
 					ASSERT_POINTER(pps, IPersistStream);
 					LPSTREAM pstm = _AfxGetArchiveStream(m_ar, stm);
@@ -455,7 +546,7 @@ BOOL CArchivePropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
 BOOL CArchivePropExchange::ExchangeFontProp(LPCTSTR pszPropName,
 	CFontHolder& font, const FONTDESC* pFontDesc, LPFONTDISP pFontDispAmbient)
 {
-	UNUSED(pszPropName);     // unused in retail builds
+	UNUSED(pszPropName);     // unused in release builds
 
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&font, CFontHolder);
@@ -528,7 +619,7 @@ CResetPropExchange::CResetPropExchange()
 BOOL CResetPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 		void* pvProp, const void* pvDefault)
 {
-	UNUSED(pszPropName);     // unused in retail builds
+	UNUSED(pszPropName);     // unused in release builds
 
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT(AfxIsValidAddress(pvProp, 1, FALSE));
@@ -540,7 +631,7 @@ BOOL CResetPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
 BOOL CResetPropExchange::ExchangeBlobProp(LPCTSTR pszPropName,
 	HGLOBAL* phBlob, HGLOBAL hBlobDefault)
 {
-	UNUSED(pszPropName);     // unused in retail builds
+	UNUSED(pszPropName);     // unused in release builds
 
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(phBlob, HGLOBAL);
@@ -562,7 +653,7 @@ BOOL CResetPropExchange::ExchangeBlobProp(LPCTSTR pszPropName,
 BOOL CResetPropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
 		LPUNKNOWN* ppUnk, REFIID iid, LPUNKNOWN pUnkDefault)
 {
-	UNUSED(pszPropName);     // unused in retail builds
+	UNUSED(pszPropName);     // unused in release builds
 
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(ppUnk, LPUNKNOWN);
@@ -583,7 +674,7 @@ BOOL CResetPropExchange::ExchangeFontProp(
 	LPCTSTR pszPropName, CFontHolder& font, const FONTDESC* pFontDesc,
 	LPFONTDISP pFontDispAmbient)
 {
-	UNUSED(pszPropName);     // unused in retail builds
+	UNUSED(pszPropName);     // unused in release builds
 
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&font, CFontHolder);
@@ -595,6 +686,77 @@ BOOL CResetPropExchange::ExchangeFontProp(
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// CAsyncPropExchange member functions
+
+CAsyncPropExchange::CAsyncPropExchange(DWORD dwVersion)
+{
+	m_bAsync = TRUE;
+	m_bLoading = TRUE;
+	m_dwVersion = dwVersion;
+}
+
+BOOL CAsyncPropExchange::ExchangeVersion(DWORD& dwVersionLoaded,
+	DWORD dwVersionDefault, BOOL bConvert)
+{
+	if (m_bLoading)
+	{
+		dwVersionLoaded = m_dwVersion;
+		return TRUE;
+	}
+	else
+	{
+		return m_dwVersion == (bConvert ? dwVersionDefault : dwVersionLoaded);
+	}
+}
+
+BOOL CAsyncPropExchange::ExchangeProp(LPCTSTR pszPropName, VARTYPE vtProp,
+	void* pvProp, const void* pvDefault)
+{
+	// Should never be called
+	UNUSED_ALWAYS(pszPropName);
+	UNUSED_ALWAYS(vtProp);
+	UNUSED_ALWAYS(pvProp);
+	UNUSED_ALWAYS(pvDefault);
+	ASSERT(FALSE);
+	return FALSE;
+}
+
+BOOL CAsyncPropExchange::ExchangeBlobProp(LPCTSTR pszPropName, HGLOBAL* phBlob,
+	HGLOBAL hBlobDefault)
+{
+	// Should never be called
+	UNUSED_ALWAYS(pszPropName);
+	UNUSED_ALWAYS(phBlob);
+	UNUSED_ALWAYS(hBlobDefault);
+	ASSERT(FALSE);
+	return FALSE;
+}
+
+BOOL CAsyncPropExchange::ExchangeFontProp(LPCTSTR pszPropName,
+	CFontHolder& font, const FONTDESC* pFontDesc, LPFONTDISP pFontDispAmbient)
+{
+	// Should never be called
+	UNUSED_ALWAYS(pszPropName);
+	UNUSED_ALWAYS(font);
+	UNUSED_ALWAYS(pFontDesc);
+	UNUSED_ALWAYS(pFontDispAmbient);
+	ASSERT(FALSE);
+	return FALSE;
+}
+
+BOOL CAsyncPropExchange::ExchangePersistentProp(LPCTSTR pszPropName,
+	LPUNKNOWN* ppUnk, REFIID iid, LPUNKNOWN pUnkDefault)
+{
+	// Should never be called
+	UNUSED_ALWAYS(pszPropName);
+	UNUSED_ALWAYS(ppUnk);
+	UNUSED_ALWAYS(iid);
+	UNUSED_ALWAYS(pUnkDefault);
+	ASSERT(FALSE);
+	return FALSE;
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // PX_ functions
 
 BOOL AFX_CDECL PX_Short(CPropExchange* pPX, LPCTSTR pszPropName, short& sValue)
@@ -603,7 +765,9 @@ BOOL AFX_CDECL PX_Short(CPropExchange* pPX, LPCTSTR pszPropName, short& sValue)
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&sValue, short);
 
-	return pPX->ExchangeProp(pszPropName, VT_I2, &sValue);
+	if (pPX->IsAsynchronous())
+		return TRUE;
+	return  pPX->ExchangeProp(pszPropName, VT_I2, &sValue);
 }
 
 BOOL AFX_CDECL PX_Short(CPropExchange* pPX, LPCTSTR pszPropName, short& sValue,
@@ -613,6 +777,8 @@ BOOL AFX_CDECL PX_Short(CPropExchange* pPX, LPCTSTR pszPropName, short& sValue,
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&sValue, short);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_I2, &sValue, &sDefault);
 }
 
@@ -622,6 +788,8 @@ BOOL AFX_CDECL PX_UShort(CPropExchange* pPX, LPCTSTR pszPropName, USHORT& usValu
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&usValue, USHORT);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_I2, &usValue);
 }
 
@@ -632,6 +800,8 @@ BOOL AFX_CDECL PX_UShort(CPropExchange* pPX, LPCTSTR pszPropName, USHORT& usValu
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&usValue, USHORT);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_I2, &usValue, &usDefault);
 }
 
@@ -641,6 +811,8 @@ BOOL AFX_CDECL PX_Long(CPropExchange* pPX, LPCTSTR pszPropName, long& lValue)
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&lValue, long);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_I4, &lValue);
 }
 
@@ -651,6 +823,8 @@ BOOL AFX_CDECL PX_Long(CPropExchange* pPX, LPCTSTR pszPropName, long& lValue,
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&lValue, long);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_I4, &lValue, &lDefault);
 }
 
@@ -660,6 +834,8 @@ BOOL AFX_CDECL PX_ULong(CPropExchange* pPX, LPCTSTR pszPropName, ULONG& ulValue)
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&ulValue, ULONG);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_I4, &ulValue);
 }
 
@@ -670,6 +846,8 @@ BOOL AFX_CDECL PX_ULong(CPropExchange* pPX, LPCTSTR pszPropName, ULONG& ulValue,
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&ulValue, ULONG);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_I4, &ulValue, &ulDefault);
 }
 
@@ -679,6 +857,8 @@ BOOL AFX_CDECL PX_Color(CPropExchange* pPX, LPCTSTR pszPropName, OLE_COLOR& clrV
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&clrValue, OLE_COLOR);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_I4, &clrValue);
 }
 
@@ -689,6 +869,8 @@ BOOL AFX_CDECL PX_Color(CPropExchange* pPX, LPCTSTR pszPropName, OLE_COLOR& clrV
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&clrValue, OLE_COLOR);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_I4, &clrValue, &clrDefault);
 }
 
@@ -698,6 +880,8 @@ BOOL AFX_CDECL PX_Bool(CPropExchange* pPX, LPCTSTR pszPropName, BOOL& bValue)
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&bValue, BOOL);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_BOOL, &bValue);
 }
 
@@ -708,6 +892,8 @@ BOOL AFX_CDECL PX_Bool(CPropExchange* pPX, LPCTSTR pszPropName, BOOL& bValue,
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&bValue, BOOL);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_BOOL, &bValue, &bDefault);
 }
 
@@ -717,6 +903,8 @@ BOOL AFX_CDECL PX_String(CPropExchange* pPX, LPCTSTR pszPropName, CString& strVa
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&strValue, CString);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_BSTR, &strValue);
 }
 
@@ -727,7 +915,21 @@ BOOL AFX_CDECL PX_String(CPropExchange* pPX, LPCTSTR pszPropName, CString& strVa
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&strValue, CString);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_BSTR, &strValue, &strDefault);
+}
+
+BOOL AFX_CDECL PX_String(CPropExchange* pPX, LPCTSTR pszPropName, CString& strValue,
+	LPCTSTR lpszDefault)
+{
+	ASSERT_POINTER(pPX, CPropExchange);
+	ASSERT(AfxIsValidString(pszPropName));
+	ASSERT_POINTER(&strValue, CString);
+
+	if (pPX->IsAsynchronous())
+		return TRUE;
+	return pPX->ExchangeProp(pszPropName, VT_LPSTR, &strValue, lpszDefault);
 }
 
 BOOL AFX_CDECL PX_Currency(CPropExchange* pPX, LPCTSTR pszPropName, CY& cyValue)
@@ -736,6 +938,8 @@ BOOL AFX_CDECL PX_Currency(CPropExchange* pPX, LPCTSTR pszPropName, CY& cyValue)
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&cyValue, CY);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_CY, &cyValue);
 }
 
@@ -746,6 +950,8 @@ BOOL AFX_CDECL PX_Currency(CPropExchange* pPX, LPCTSTR pszPropName, CY& cyValue,
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&cyValue, CY);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_CY, &cyValue, &cyDefault);
 }
 
@@ -755,6 +961,8 @@ BOOL AFX_CDECL PX_Float(CPropExchange* pPX, LPCTSTR pszPropName, float& floatVal
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&floatValue, float);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_R4, &floatValue);
 }
 
@@ -765,6 +973,8 @@ BOOL AFX_CDECL PX_Float(CPropExchange* pPX, LPCTSTR pszPropName, float& floatVal
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&floatValue, float);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_R4, &floatValue, &floatDefault);
 }
 
@@ -774,6 +984,8 @@ BOOL AFX_CDECL PX_Double(CPropExchange* pPX, LPCTSTR pszPropName, double& double
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&doubleValue, double);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_R8, &doubleValue);
 }
 
@@ -784,6 +996,8 @@ BOOL AFX_CDECL PX_Double(CPropExchange* pPX, LPCTSTR pszPropName, double& double
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&doubleValue, double);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeProp(pszPropName, VT_R8, &doubleValue, &doubleDefault);
 }
 
@@ -794,6 +1008,8 @@ BOOL AFX_CDECL PX_Blob(CPropExchange* pPX, LPCTSTR pszPropName, HGLOBAL& hBlob,
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&hBlob, HGLOBAL);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeBlobProp(pszPropName, &hBlob, hBlobDefault);
 }
 
@@ -806,6 +1022,8 @@ BOOL AFX_CDECL PX_Font(CPropExchange* pPX, LPCTSTR pszPropName, CFontHolder& fon
 	ASSERT_NULL_OR_POINTER(pFontDesc, FONTDESC);
 	ASSERT_NULL_OR_POINTER(pFontDispAmbient, IFontDisp);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangeFontProp(pszPropName, font, pFontDesc,
 		pFontDispAmbient);
 }
@@ -819,6 +1037,8 @@ BOOL AFX_CDECL PX_IUnknown(CPropExchange* pPX, LPCTSTR pszPropName, LPUNKNOWN& p
 	ASSERT_NULL_OR_POINTER(pUnk, IUnknown);
 	ASSERT_NULL_OR_POINTER(pUnkDefault, IUnknown);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	return pPX->ExchangePersistentProp(pszPropName, &pUnk, iid, pUnkDefault);
 }
 
@@ -828,6 +1048,8 @@ BOOL AFX_CDECL PX_Picture(CPropExchange* pPX, LPCTSTR pszPropName, CPictureHolde
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&pict, CPictureHolder);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	LPUNKNOWN& pUnk = (LPUNKNOWN&)pict.m_pPict;
 	return PX_IUnknown(pPX, pszPropName, pUnk, IID_IPicture);
 }
@@ -839,6 +1061,8 @@ BOOL AFX_CDECL PX_Picture(CPropExchange* pPX, LPCTSTR pszPropName, CPictureHolde
 	ASSERT(AfxIsValidString(pszPropName));
 	ASSERT_POINTER(&pict, CPictureHolder);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	LPUNKNOWN& pUnk = (LPUNKNOWN&)pict.m_pPict;
 	return PX_IUnknown(pPX, pszPropName, pUnk, IID_IPicture,
 		pictDefault.m_pPict);
@@ -851,6 +1075,8 @@ BOOL AFX_CDECL PX_VBXFontConvert(CPropExchange* pPX, CFontHolder& font)
 	ASSERT_POINTER(pPX, CPropExchange);
 	ASSERT_POINTER(&font, CFontHolder);
 
+	if (pPX->IsAsynchronous())
+		return TRUE;
 	if (font.m_pFont != NULL)
 	{
 		CString strName;
@@ -877,6 +1103,62 @@ BOOL AFX_CDECL PX_VBXFontConvert(CPropExchange* pPX, CFontHolder& font)
 			font.m_pFont->put_Strikethrough(bFlag);
 	}
 	return TRUE;
+}
+
+AFX_STATIC BOOL AFXAPI _Afx_PX_DataPath(CPropExchange* pPX, LPCTSTR pszPropName,
+	CDataPathProperty& dataPathProp, VARTYPE vtDefault, const void* pvDefault)
+{
+	ASSERT_POINTER(pPX, CPropExchange);
+	ASSERT(AfxIsValidString(pszPropName));
+
+	const BOOL bIsLoading = pPX->IsLoading();
+
+	COleControl* pControl = dataPathProp.GetControl();
+	if (!pControl)
+		TRACE0("No control in PX_DataPath!");
+
+	BOOL bHasClientSite = pControl ? NULL != pControl->GetClientSite() : FALSE;
+
+	if (!pPX->IsAsynchronous())
+	{
+		CString strPath;
+		if (!bIsLoading)
+			strPath = dataPathProp.GetPath();
+		if (((pvDefault != NULL) && !pPX->ExchangeProp(pszPropName, vtDefault, &strPath, pvDefault)) ||
+			((pvDefault == NULL) && !pPX->ExchangeProp(pszPropName, VT_BSTR, &strPath)))
+			return FALSE;
+		if (bIsLoading)
+			dataPathProp.SetPath(strPath);
+		if (pControl && !bHasClientSite)
+			pControl->RequestAsynchronousExchange(pPX->GetVersion());
+	}
+
+	if (pPX->IsAsynchronous() || bHasClientSite)
+	{
+#ifdef _DEBUG
+		{
+			if (!bHasClientSite)
+				TRACE0("No client site in PX_DataPath!");
+		}
+#endif // _DEBUG
+
+		if (bIsLoading)
+			return dataPathProp.Open();
+	}
+
+	return TRUE;
+}
+
+BOOL AFX_CDECL PX_DataPath(CPropExchange* pPX, LPCTSTR pszPropName,
+	CDataPathProperty& dataPathProp, LPCTSTR pszDefault)
+{
+	return _Afx_PX_DataPath(pPX, pszPropName, dataPathProp, VT_LPSTR, pszDefault);
+}
+
+BOOL AFX_CDECL PX_DataPath(CPropExchange* pPX, LPCTSTR pszPropName,
+	CDataPathProperty& dataPathProp, const CString& strDefault)
+{
+	return _Afx_PX_DataPath(pPX, pszPropName, dataPathProp, VT_BSTR, &strDefault);
 }
 
 /////////////////////////////////////////////////////////////////////////////

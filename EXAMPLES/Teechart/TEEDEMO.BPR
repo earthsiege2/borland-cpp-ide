@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project --><PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="teedemo.exe"/>
+    <OBJFILES value="TeeDemo.obj TeeMain.obj TeeBasic.obj Basic.obj specs.obj Features.obj 
+      UColor.obj UAniZoom.obj UBitmap.obj UDraw.obj UClick.obj UMain.obj 
+      UOverbar.obj ULegend.obj UAxisLab.obj UScroll.obj UShapes.obj UScrollB.obj 
+      LastValu.obj UCrossH.obj UKBoar.obj UPrint.obj LogLab.obj UPages.obj 
+      UMetafil.obj"/>
+    <RESFILES value="TeeDemo.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) TeeMain.dfm TeeBasic.dfm Basic.dfm specs.dfm Features.dfm 
+      UColor.dfm UAniZoom.dfm UBitmap.dfm UDraw.dfm UClick.dfm UMain.dfm 
+      UOverbar.dfm ULegend.dfm UAxisLab.dfm UScroll.dfm UShapes.dfm UScrollB.dfm 
+      LastValu.dfm UCrossH.dfm UKBoar.dfm UPrint.dfm LogLab.dfm UPages.dfm 
+      UMetafil.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="bcbsmp50.lib"/>
+    <SPARELIBS value="tee50.lib bcbsmp50.lib vclx50.lib teeui50.lib teedb50.lib vcl50.lib"/>
+    <PACKAGES value="vclx50.bpi vcl50.bpi tee50.bpi teedb50.bpi teeui50.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT;USEPACKAGES"/>
+    <MAINSOURCE value="TeeDemo.cpp"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffixcpp"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -xp -Tkh30000 -r- -a8 -k -y -v 
+      -vi- -c -b- -tW -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -H -W -v -JPHN -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zi"/>
+    <LFLAGS value="-aa -Tpe -x -Gn -w -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=1
+Item0=$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=1
+Item0=$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=USEPACKAGES
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+InMemoryExe=0
+ShowInfoMsgs=0
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

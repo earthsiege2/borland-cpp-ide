@@ -1,0 +1,18 @@
+LIBRARY OLEACC
+EXPORTS
+
+    AccessibleChildren                       = 'OLEACC.DLL'.*
+    AccessibleObjectFromEvent                = 'OLEACC.DLL'.*
+    AccessibleObjectFromPoint                = 'OLEACC.DLL'.*
+    AccessibleObjectFromWindow               = 'OLEACC.DLL'.*
+    CreateStdAccessibleObject                = 'OLEACC.DLL'.*
+    CreateStdAccessibleProxyA                = 'OLEACC.DLL'.*
+    CreateStdAccessibleProxyW                = 'OLEACC.DLL'.*
+    GetOleaccVersionInfo                     = 'OLEACC.DLL'.*
+    GetRoleTextA                             = 'OLEACC.DLL'.*
+    GetRoleTextW                             = 'OLEACC.DLL'.*
+    GetStateTextA                            = 'OLEACC.DLL'.*
+    GetStateTextW                            = 'OLEACC.DLL'.*
+    LresultFromObject                        = 'OLEACC.DLL'.*
+    ObjectFromLresult                        = 'OLEACC.DLL'.*
+    WindowFromAccessibleObject               = 'OLEACC.DLL'.*

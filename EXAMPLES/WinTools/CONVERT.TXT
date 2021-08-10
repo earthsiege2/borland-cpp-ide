@@ -1,0 +1,14 @@
+Convert.exe is a utility that converts .dfm files to .txt 
+files and vice versa. Usage is simple:
+
+	to convert from dfm to txt: convert unit.dfm
+	to convert from txt to dfm: convert unit.txt
+
+you can also specify multiple files:
+
+	convert unit.txt unit2.txt unit3.txt
+
+	convert unit.txt unit2.dfm unit3.dfm unit4.txt
+
+and it will do the conversions automatically to the opposite
+format.

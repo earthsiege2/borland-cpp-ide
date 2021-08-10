@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -10,10 +10,6 @@
 
 #ifndef __AFXMT_H__
 #define __AFXMT_H__
-
-#ifdef _MAC
-	#error Multithreaded classes not supported in this library variant.
-#endif
 
 #ifndef __AFX_H__
 	#include <afx.h>
@@ -235,7 +231,7 @@ protected:
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXMT_INLINE inline
+#define _AFXMT_INLINE AFX_INLINE
 #include <afxmt.inl>
 #undef _AFXMT_INLINE
 #endif

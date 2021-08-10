@@ -1,14 +1,19 @@
 :Base OPENHELP.HLP
-1 Using OpenHelp
-2 About OpenHelp = AboutOpenHelp@openhelp.hlp>main
-2 Starting OpenHelp = StartingOpenHelp@openhelp.hlp>TaskWin
-2 Changing the active search range = ChangingTheActiveSearchRange@openhelp.hlp>TaskWin
-2 Creating a new search range = CreatingANewSearchRange@openhelp.hlp>TaskWin
-2 Modifying search ranges = ModifyingSearchRanges@openhelp.hlp>TaskWin
-2 Adding Help files to OpenHelp = AddingHelpFilesToOpenHelp@openhelp.hlp>TaskWin
-2 Removing Help files from OpenHelp = RemovingHelpFilesFromAOpenHelp@openhelp.hlp>TaskWin
-
-
-
+:Title Borland OpenHelp Help
+:Index OpenHelp=OPENHELP.HLP
+;
+1 Borland OpenHelp
+2 OpenHelp overview
+3 OpenHelp overview = ohOpenHelpOverview
+3 Adding and removing files from the master table of contents=ohAddingFilesToTheMasterTableOfContents
+3 Adding and removing files from the master index=ohAddingFilesToTheMasterIndex
+3 Adding and removing files from the context-sensitive Help search range= ohAddingFilesToTheLinkRange 
+3 Cleaning up the system registry=ohCleaningUpTheSystemRegistry
+2 Working with projects
+3 Working with projects = ohWorkingWithOpenHelpProjects
+3 Creating a project=ohCreatingAProject
+3 Opening a project=ohOpeningAProject
+3 Editing a project=ohEditingAProject
+3 Saving a project=ohSavingAProject
 
 

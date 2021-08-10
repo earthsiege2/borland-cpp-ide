@@ -1,4 +1,0 @@
-#define IDD_TEST1       500
-#define IDM_MAINMENU    100
-#define CM_TEST1DIALOG	101
-

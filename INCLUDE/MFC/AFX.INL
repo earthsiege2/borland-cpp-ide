@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,22 +22,33 @@ _AFX_INLINE void CObject::Serialize(CArchive&)
 _AFX_INLINE void* PASCAL CObject::operator new(size_t, void* p)
 	{ return p; }
 #ifndef _DEBUG
-// _DEBUG versions in memory.cpp
+// _DEBUG versions in afxmem.cpp
 _AFX_INLINE void PASCAL CObject::operator delete(void* p)
 	{ ::operator delete(p); }
+
+// __BORLANDC__
+// was: #if _MSC_VER >= 1200
+#if 0
+_AFX_INLINE void PASCAL CObject::operator delete(void* p, void*)
+	{ ::operator delete(p); }
+#endif
+
+
 _AFX_INLINE void* PASCAL CObject::operator new(size_t nSize)
 	{ return ::operator new(nSize); }
 // _DEBUG versions in objcore.cpp
+#ifdef _AFXDLL
 _AFX_INLINE void CObject::AssertValid() const
 	{ /* no asserts in release builds */ }
 _AFX_INLINE void CObject::Dump(CDumpContext&) const
 	{ /* no dumping in release builds */ }
-#endif
+#endif //_AFXDLL
+#endif //!_DEBUG
 _AFX_INLINE const CObject* AFX_CDECL AfxDynamicDownCast(CRuntimeClass* pClass, const CObject* pObject)
-	{ return (CObject*)AfxDynamicDownCast(pClass, (const CObject*)pObject); }
+	{ return (const CObject*)AfxDynamicDownCast(pClass, (CObject*)pObject); }
 #ifdef _DEBUG
 _AFX_INLINE const CObject* AFX_CDECL AfxStaticDownCast(CRuntimeClass* pClass, const CObject* pObject)
-	{ return (CObject*)AfxStaticDownCast(pClass, (const CObject*)pObject); }
+	{ return (const CObject*)AfxStaticDownCast(pClass, (CObject*)pObject); }
 #endif
 
 // exceptions
@@ -47,8 +58,10 @@ _AFX_INLINE CSimpleException::CSimpleException()
 	{ m_bInitialized = FALSE; m_bLoaded = FALSE; }
 _AFX_INLINE CSimpleException::CSimpleException(BOOL bAutoDelete)
 	: CException(bAutoDelete) { m_bInitialized = FALSE; m_bLoaded = FALSE; }
+#if !defined(_AFX_CORE_IMPL) || !defined(_AFXDLL) || defined(_DEBUG)
 _AFX_INLINE CSimpleException::~CSimpleException()
 	{ }
+#endif
 
 _AFX_INLINE CMemoryException::CMemoryException()
 	: CSimpleException() { }
@@ -87,15 +100,37 @@ _AFX_INLINE void CFile::SeekToBegin()
 _AFX_INLINE void CFile::SetFilePath(LPCTSTR lpszNewName)
 {
 	ASSERT_VALID(this);
-	ASSERT(AfxIsValidString(lpszNewName, FALSE));
+	ASSERT(AfxIsValidString(lpszNewName));
 	m_strFileName = lpszNewName;
 }
+
+// CFileFind
+_AFX_INLINE BOOL CFileFind::IsReadOnly() const
+	{ return MatchesMask(FILE_ATTRIBUTE_READONLY); }
+_AFX_INLINE BOOL CFileFind::IsDirectory() const
+	{ return MatchesMask(FILE_ATTRIBUTE_DIRECTORY); }
+_AFX_INLINE BOOL CFileFind::IsCompressed() const
+	{ return MatchesMask(FILE_ATTRIBUTE_COMPRESSED); }
+_AFX_INLINE BOOL CFileFind::IsSystem() const
+	{ return MatchesMask(FILE_ATTRIBUTE_SYSTEM); }
+_AFX_INLINE BOOL CFileFind::IsHidden() const
+	{ return MatchesMask(FILE_ATTRIBUTE_HIDDEN); }
+_AFX_INLINE BOOL CFileFind::IsTemporary() const
+	{ return MatchesMask(FILE_ATTRIBUTE_TEMPORARY); }
+_AFX_INLINE BOOL CFileFind::IsNormal() const
+	{ return MatchesMask(FILE_ATTRIBUTE_NORMAL); }
+_AFX_INLINE BOOL CFileFind::IsArchived() const
+	{ return MatchesMask(FILE_ATTRIBUTE_ARCHIVE); }
 
 // CString
 _AFX_INLINE CStringData* CString::GetData() const
 	{ ASSERT(m_pchData != NULL); return ((CStringData*)m_pchData)-1; }
 _AFX_INLINE void CString::Init()
 	{ m_pchData = afxEmptyString.m_pchData; }
+#ifndef _AFXDLL
+_AFX_INLINE CString::CString()
+	{ m_pchData = afxEmptyString.m_pchData; }
+#endif
 _AFX_INLINE CString::CString(const unsigned char* lpsz)
 	{ Init(); *this = (LPCSTR)lpsz; }
 _AFX_INLINE const CString& CString::operator=(const unsigned char* lpsz)
@@ -124,13 +159,15 @@ _AFX_INLINE int PASCAL CString::SafeStrlen(LPCTSTR lpsz)
 
 // CString support (windows specific)
 _AFX_INLINE int CString::Compare(LPCTSTR lpsz) const
-	{ return _tcscmp(m_pchData, lpsz); }    // MBCS/Unicode aware
+	{ ASSERT(AfxIsValidString(lpsz)); return _tcscmp(m_pchData, lpsz); }    // MBCS/Unicode aware
 _AFX_INLINE int CString::CompareNoCase(LPCTSTR lpsz) const
-	{ return _tcsicmp(m_pchData, lpsz); }   // MBCS/Unicode aware
+	{ ASSERT(AfxIsValidString(lpsz)); return _tcsicmp(m_pchData, lpsz); }   // MBCS/Unicode aware
 // CString::Collate is often slower than Compare but is MBSC/Unicode
 //  aware as well as locale-sensitive with respect to sort order.
 _AFX_INLINE int CString::Collate(LPCTSTR lpsz) const
-	{ return _tcscoll(m_pchData, lpsz); }   // locale sensitive
+	{ ASSERT(AfxIsValidString(lpsz)); return _tcscoll(m_pchData, lpsz); }   // locale sensitive
+_AFX_INLINE int CString::CollateNoCase(LPCTSTR lpsz) const
+	{ ASSERT(AfxIsValidString(lpsz)); return _tcsicoll(m_pchData, lpsz); }   // locale sensitive
 
 _AFX_INLINE TCHAR CString::GetAt(int nIndex) const
 {
@@ -145,46 +182,48 @@ _AFX_INLINE TCHAR CString::operator[](int nIndex) const
 	ASSERT(nIndex < GetData()->nDataLength);
 	return m_pchData[nIndex];
 }
-_AFX_INLINE BOOL AFXAPI operator==(const CString& s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator==(const CString& s1, const CString& s2)
 	{ return s1.Compare(s2) == 0; }
-_AFX_INLINE BOOL AFXAPI operator==(const CString& s1, LPCTSTR s2)
+_AFX_INLINE bool AFXAPI operator==(const CString& s1, LPCTSTR s2)
 	{ return s1.Compare(s2) == 0; }
-_AFX_INLINE BOOL AFXAPI operator==(LPCTSTR s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator==(LPCTSTR s1, const CString& s2)
 	{ return s2.Compare(s1) == 0; }
-_AFX_INLINE BOOL AFXAPI operator!=(const CString& s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator!=(const CString& s1, const CString& s2)
 	{ return s1.Compare(s2) != 0; }
-_AFX_INLINE BOOL AFXAPI operator!=(const CString& s1, LPCTSTR s2)
+_AFX_INLINE bool AFXAPI operator!=(const CString& s1, LPCTSTR s2)
 	{ return s1.Compare(s2) != 0; }
-_AFX_INLINE BOOL AFXAPI operator!=(LPCTSTR s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator!=(LPCTSTR s1, const CString& s2)
 	{ return s2.Compare(s1) != 0; }
-_AFX_INLINE BOOL AFXAPI operator<(const CString& s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator<(const CString& s1, const CString& s2)
 	{ return s1.Compare(s2) < 0; }
-_AFX_INLINE BOOL AFXAPI operator<(const CString& s1, LPCTSTR s2)
+_AFX_INLINE bool AFXAPI operator<(const CString& s1, LPCTSTR s2)
 	{ return s1.Compare(s2) < 0; }
-_AFX_INLINE BOOL AFXAPI operator<(LPCTSTR s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator<(LPCTSTR s1, const CString& s2)
 	{ return s2.Compare(s1) > 0; }
-_AFX_INLINE BOOL AFXAPI operator>(const CString& s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator>(const CString& s1, const CString& s2)
 	{ return s1.Compare(s2) > 0; }
-_AFX_INLINE BOOL AFXAPI operator>(const CString& s1, LPCTSTR s2)
+_AFX_INLINE bool AFXAPI operator>(const CString& s1, LPCTSTR s2)
 	{ return s1.Compare(s2) > 0; }
-_AFX_INLINE BOOL AFXAPI operator>(LPCTSTR s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator>(LPCTSTR s1, const CString& s2)
 	{ return s2.Compare(s1) < 0; }
-_AFX_INLINE BOOL AFXAPI operator<=(const CString& s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator<=(const CString& s1, const CString& s2)
 	{ return s1.Compare(s2) <= 0; }
-_AFX_INLINE BOOL AFXAPI operator<=(const CString& s1, LPCTSTR s2)
+_AFX_INLINE bool AFXAPI operator<=(const CString& s1, LPCTSTR s2)
 	{ return s1.Compare(s2) <= 0; }
-_AFX_INLINE BOOL AFXAPI operator<=(LPCTSTR s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator<=(LPCTSTR s1, const CString& s2)
 	{ return s2.Compare(s1) >= 0; }
-_AFX_INLINE BOOL AFXAPI operator>=(const CString& s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator>=(const CString& s1, const CString& s2)
 	{ return s1.Compare(s2) >= 0; }
-_AFX_INLINE BOOL AFXAPI operator>=(const CString& s1, LPCTSTR s2)
+_AFX_INLINE bool AFXAPI operator>=(const CString& s1, LPCTSTR s2)
 	{ return s1.Compare(s2) >= 0; }
-_AFX_INLINE BOOL AFXAPI operator>=(LPCTSTR s1, const CString& s2)
+_AFX_INLINE bool AFXAPI operator>=(LPCTSTR s1, const CString& s2)
 	{ return s2.Compare(s1) <= 0; }
 
 // CTime and CTimeSpan
+#if !defined(_AFX_CORE_IMPL) || !defined(_AFXDLL) || defined(_DEBUG)
 _AFX_INLINE CTimeSpan::CTimeSpan()
 	{ }
+#endif
 _AFX_INLINE CTimeSpan::CTimeSpan(time_t time)
 	{ m_timeSpan = time; }
 _AFX_INLINE CTimeSpan::CTimeSpan(LONG lDays, int nHours, int nMins, int nSecs)
@@ -229,12 +268,16 @@ _AFX_INLINE BOOL CTimeSpan::operator>=(CTimeSpan timeSpan) const
 	{ return m_timeSpan >= timeSpan.m_timeSpan; }
 
 
+#if !defined(_AFX_CORE_IMPL) || !defined(_AFXDLL) || defined(_DEBUG)
 _AFX_INLINE CTime::CTime()
 	{ }
+#endif
 _AFX_INLINE CTime::CTime(time_t time)
 	{ m_time = time; }
+#if !defined(_AFX_CORE_IMPL) || !defined(_AFXDLL) || defined(_DEBUG)
 _AFX_INLINE CTime::CTime(const CTime& timeSrc)
 	{ m_time = timeSrc.m_time; }
+#endif
 _AFX_INLINE const CTime& CTime::operator=(const CTime& timeSrc)
 	{ m_time = timeSrc.m_time; return *this; }
 _AFX_INLINE const CTime& CTime::operator=(time_t t)
@@ -316,7 +359,7 @@ _AFX_INLINE CArchive& CArchive::operator<<(char ch)
 _AFX_INLINE CArchive& CArchive::operator<<(BYTE by)
 	{ if (m_lpBufCur + sizeof(BYTE) > m_lpBufMax) Flush();
 		*(UNALIGNED BYTE*)m_lpBufCur = by; m_lpBufCur += sizeof(BYTE); return *this; }
-#ifndef _MAC
+#ifndef _AFX_BYTESWAP
 _AFX_INLINE CArchive& CArchive::operator<<(WORD w)
 	{ if (m_lpBufCur + sizeof(WORD) > m_lpBufMax) Flush();
 		*(UNALIGNED WORD*)m_lpBufCur = w; m_lpBufCur += sizeof(WORD); return *this; }
@@ -346,7 +389,7 @@ _AFX_INLINE CArchive& CArchive::operator>>(BYTE& by)
 	{ if (m_lpBufCur + sizeof(BYTE) > m_lpBufMax)
 			FillBuffer(sizeof(BYTE) - (UINT)(m_lpBufMax - m_lpBufCur));
 		by = *(UNALIGNED BYTE*)m_lpBufCur; m_lpBufCur += sizeof(BYTE); return *this; }
-#ifndef _MAC
+#ifndef _AFX_BYTESWAP
 _AFX_INLINE CArchive& CArchive::operator>>(WORD& w)
 	{ if (m_lpBufCur + sizeof(WORD) > m_lpBufMax)
 			FillBuffer(sizeof(WORD) - (UINT)(m_lpBufMax - m_lpBufCur));

@@ -1,0 +1,35 @@
+LIBRARY WTSAPI32
+EXPORTS
+
+    WTSCloseServer                           = 'WTSAPI32.DLL'.*
+    WTSDisconnectSession                     = 'WTSAPI32.DLL'.*
+    WTSEnumerateProcessesA                   = 'WTSAPI32.DLL'.*
+    WTSEnumerateProcessesW                   = 'WTSAPI32.DLL'.*
+    WTSEnumerateServersA                     = 'WTSAPI32.DLL'.*
+    WTSEnumerateServersW                     = 'WTSAPI32.DLL'.*
+    WTSEnumerateSessionsA                    = 'WTSAPI32.DLL'.*
+    WTSEnumerateSessionsW                    = 'WTSAPI32.DLL'.*
+    WTSFreeMemory                            = 'WTSAPI32.DLL'.*
+    WTSLogoffSession                         = 'WTSAPI32.DLL'.*
+    WTSOpenServerA                           = 'WTSAPI32.DLL'.*
+    WTSOpenServerW                           = 'WTSAPI32.DLL'.*
+    WTSQuerySessionInformationA              = 'WTSAPI32.DLL'.*
+    WTSQuerySessionInformationW              = 'WTSAPI32.DLL'.*
+    WTSQueryUserConfigA                      = 'WTSAPI32.DLL'.*
+    WTSQueryUserConfigW                      = 'WTSAPI32.DLL'.*
+    WTSSendMessageA                          = 'WTSAPI32.DLL'.*
+    WTSSendMessageW                          = 'WTSAPI32.DLL'.*
+    WTSSetSessionInformationA                = 'WTSAPI32.DLL'.*
+    WTSSetSessionInformationW                = 'WTSAPI32.DLL'.*
+    WTSSetUserConfigA                        = 'WTSAPI32.DLL'.*
+    WTSSetUserConfigW                        = 'WTSAPI32.DLL'.*
+    WTSShutdownSystem                        = 'WTSAPI32.DLL'.*
+    WTSTerminateProcess                      = 'WTSAPI32.DLL'.*
+    WTSVirtualChannelClose                   = 'WTSAPI32.DLL'.*
+    WTSVirtualChannelOpen                    = 'WTSAPI32.DLL'.*
+    WTSVirtualChannelPurgeInput              = 'WTSAPI32.DLL'.*
+    WTSVirtualChannelPurgeOutput             = 'WTSAPI32.DLL'.*
+    WTSVirtualChannelQuery                   = 'WTSAPI32.DLL'.*
+    WTSVirtualChannelRead                    = 'WTSAPI32.DLL'.*
+    WTSVirtualChannelWrite                   = 'WTSAPI32.DLL'.*
+    WTSWaitSystemEvent                       = 'WTSAPI32.DLL'.*

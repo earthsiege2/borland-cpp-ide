@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,6 +9,10 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
+
+#ifdef _AFXDLL
+#pragma comment(lib, "olepro32.lib")
+#endif
 
 #ifndef _AFX_ENABLE_INLINES
 

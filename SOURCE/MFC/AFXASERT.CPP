@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -75,8 +75,6 @@ BOOL AFXAPI AfxAssertFailedLine(LPCSTR lpszFileName, int nLine)
 	if (afxTraceEnabled)
 	{
 		// assume the debugger or auxiliary port
-		// output into MacsBug looks better if it's done in one string,
-		// since MacsBug always breaks the line after each output
 		TCHAR szT[_MAX_PATH*2 + 20];
 		wsprintf(szT, _T("Assertion Failed: %s\n"), szMessage);
 		OutputDebugString(szT);

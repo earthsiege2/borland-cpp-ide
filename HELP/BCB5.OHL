@@ -1,0 +1,96 @@
+;WHAT'S NEW, IDE HELP
+:Link bcb5new.hlp
+:Link bcb5.hlp
+
+;DEVELOPER'S GUIDE
+:Link bcb5prog.hlp
+:Link bcb5dbd.hlp
+:Link bcb5dap.hlp
+:Link bcb5cw.hlp
+:Link bcb5com.hlp
+
+;OTHER BORLAND IDE HELP
+:Link ite.hlp
+:Link pce.hlp
+:Link cg.hlp
+
+;VCL/BORLAND COMPONENT REFERENCE
+:Link bcb5vcl.hlp
+
+:Link bcb5tool.hlp
+:Link bcb5errs.hlp
+:Link bcb5lang.hlp
+:Link bcb5rtl.hlp
+:Link bcb5scl.hlp
+
+;INTERBASE EXPRESS COMPONENTS
+:Link ibx.hlp
+
+;OBJECT PASCAL REFERENCE
+:Link del5op.hlp
+
+;BORLAND TOOLS (bcb5XTRA)
+:Link bcb5xtra.hlp
+:Link sqlmon.hlp
+:Link sqlbuild.hlp
+:Link dbexplr3.hlp
+:Link winsight.hlp
+:Link imagedit.hlp
+:Link openhelp.hlp
+
+;TEAMSOURCE
+:Link TeamSrc.hlp
+
+;BDE/COMMON BORLAND FILES
+:Link bde32.hlp
+:Link bdeadmin.hlp
+:Link datapump.hlp
+:Link localsql.hlp
+:Link sqllnk32.hlp
+:Link ibctrls.hlp
+:Link dbddesk.hlp
+
+;THIRD-PARTY HELP
+;Fastnet components
+:Link nmmsg.hlp
+:Link nmhttp.hlp
+:Link nmftp.hlp
+:Link nmfngr.hlp
+:Link nmdaytim.hlp
+:Link nmecho.hlp
+:Link nmnntp.hlp
+:Link nmsmtp.hlp
+:Link nmpop3.hlp
+:Link nmstrm.hlp
+:Link nmtime.hlp
+:Link nmudp.hlp
+:Link nmurl.hlp
+:Link nmuue.hlp
+:Link psock.hlp
+;
+;QuickReports
+:Link quickrpt.hlp
+;
+;Teechart
+:Link teechart.hlp
+;
+
+;MSSDK HELP
+:Link 95guide.hlp
+:Link kbase.hlp
+:Link mapi.hlp
+:Link midl.hlp
+:Link misapi.hlp
+:Link mmedia.hlp
+:Link ole.hlp
+:Link opengl.hlp
+:Link pdh.hlp
+:Link penapi.hlp
+:Link progtech.hlp
+:Link rpc.hlp
+:Link setupapi.hlp
+:Link sock2.hlp
+:Link tapi.hlp
+:Link win32.hlp
+
+

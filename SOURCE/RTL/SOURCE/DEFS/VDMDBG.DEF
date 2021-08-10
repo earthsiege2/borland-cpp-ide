@@ -1,0 +1,31 @@
+LIBRARY VDMDBG
+EXPORTS
+
+    VDMBreakThread                           = 'VDMDBG.DLL'.*
+    VDMDetectWOW                             = 'VDMDBG.DLL'.*
+    VDMEnumProcessWOW                        = 'VDMDBG.DLL'.*
+    VDMEnumTaskWOW                           = 'VDMDBG.DLL'.*
+    VDMEnumTaskWOWEx                         = 'VDMDBG.DLL'.*
+    VDMGetAddrExpression                     = 'VDMDBG.DLL'.*
+    VDMGetContext                            = 'VDMDBG.DLL'.*
+    VDMGetDbgFlags                           = 'VDMDBG.DLL'.*
+    VDMGetModuleSelector                     = 'VDMDBG.DLL'.*
+    VDMGetPointer                            = 'VDMDBG.DLL'.*
+    VDMGetSegmentInfo                        = 'VDMDBG.DLL'.*
+    VDMGetSegtablePointer                    = 'VDMDBG.DLL'.*
+    VDMGetSelectorModule                     = 'VDMDBG.DLL'.*
+    VDMGetSymbol                             = 'VDMDBG.DLL'.*
+    VDMGetThreadContext                      = 'VDMDBG.DLL'.*
+    VDMGetThreadSelectorEntry                = 'VDMDBG.DLL'.*
+    VDMGlobalFirst                           = 'VDMDBG.DLL'.*
+    VDMGlobalNext                            = 'VDMDBG.DLL'.*
+    VDMIsModuleLoaded                        = 'VDMDBG.DLL'.*
+    VDMKillWOW                               = 'VDMDBG.DLL'.*
+    VDMModuleFirst                           = 'VDMDBG.DLL'.*
+    VDMModuleNext                            = 'VDMDBG.DLL'.*
+    VDMProcessException                      = 'VDMDBG.DLL'.*
+    VDMSetContext                            = 'VDMDBG.DLL'.*
+    VDMSetDbgFlags                           = 'VDMDBG.DLL'.*
+    VDMSetThreadContext                      = 'VDMDBG.DLL'.*
+    VDMStartTaskInWOW                        = 'VDMDBG.DLL'.*
+    VDMTerminateTaskWOW                      = 'VDMDBG.DLL'.*

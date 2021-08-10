@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,6 +22,8 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // Support for gray background in dialogs (and message boxes)
 
+#ifndef _AFX_NO_GRAYDLG_SUPPORT
+
 LRESULT CALLBACK
 _AfxCbtFilterHook(int code, WPARAM wParam, LPARAM lParam);
 
@@ -39,30 +41,16 @@ void CWinApp::SetDialogBkColor(COLORREF clrCtlBk, COLORREF clrCtlText)
 		}
 	}
 
-	// set up for grey backgrounds for dialogs
+	// set up for gray backgrounds for dialogs
 	_AFX_WIN_STATE* pWinState = _afxWinState;
 	AfxDeleteObject((HGDIOBJ*)&pWinState->m_hDlgBkBrush);
-
-#ifdef _MAC
-	// MFC's default gray color is available in the VGA palette but not in
-	// the standard Mac 4- or 8-bit color tables, so we will remap it to
-	// the closest available solid color. We also want to use 3DLIGHT as
-	// the background color rather than the darker gray that Win32 MFC uses.
-	if (clrCtlBk == RGB(192, 192, 192))
-	{
-		HDC hdc = ::GetDC(NULL);
-		clrCtlBk = GetNearestColor(hdc, GetSysColor(COLOR_3DLIGHT));
-		::ReleaseDC(NULL, hdc);
-	}
-
-	// save the requested background color
-	pWinState->m_crDlgBkClr = clrCtlBk;
-#endif
 
 	pWinState->m_hDlgBkBrush = ::CreateSolidBrush(clrCtlBk);
 	pWinState->m_crDlgTextClr = clrCtlText;
 	if (pWinState->m_hDlgBkBrush == NULL)
 		AfxThrowResourceException();
 }
+
+#endif //!_AFX_NO_GRAYDLG_SUPPORT
 
 /////////////////////////////////////////////////////////////////////////////

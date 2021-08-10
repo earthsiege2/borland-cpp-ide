@@ -1,0 +1,13 @@
+LIBRARY MFCUIA32
+EXPORTS
+
+    OleUIAddVerbMenu                         = 'MFCUIA32.DLL'.*
+    OleUIBusy                                = 'MFCUIA32.DLL'.*
+    OleUICanConvertOrActivateAs              = 'MFCUIA32.DLL'.*
+    OleUIChangeIcon                          = 'MFCUIA32.DLL'.*
+    OleUIConvert                             = 'MFCUIA32.DLL'.*
+    OleUIEditLinks                           = 'MFCUIA32.DLL'.*
+    OleUIInsertObject                        = 'MFCUIA32.DLL'.*
+    OleUIPasteSpecial                        = 'MFCUIA32.DLL'.*
+    _OleUIPromptUser                         = 'MFCUIA32.DLL'.OleUIPromptUser
+    OleUIUpdateLinks                         = 'MFCUIA32.DLL'.*

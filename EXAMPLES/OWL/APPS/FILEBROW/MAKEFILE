@@ -1,8 +1,0 @@
-#----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1991, 1996 by Borland International
-#----------------------------------------------------------------------------
-
-EXERES=filebrow
-MODELS=ldf
-!include $(BCEXAMPLEDIR)\owlmake.gen
-

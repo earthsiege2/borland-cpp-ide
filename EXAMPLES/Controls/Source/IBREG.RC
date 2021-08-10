@@ -1,0 +1,60 @@
+/****************************************************************************
+
+
+ibreg.rc
+
+produced by Borland Resource Workshop
+
+
+*****************************************************************************/
+
+
+TIBEVENTALERTER BITMAP
+{
+ '42 4D 96 01 00 00 00 00 00 00 76 00 00 00 28 00'
+ '00 00 18 00 00 00 18 00 00 00 01 00 04 00 00 00'
+ '00 00 20 01 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 10 00 00 00 00 00 00 00 00 00 80 00 00 80'
+ '00 00 00 80 80 00 80 00 00 00 80 00 80 00 80 80'
+ '00 00 C0 C0 C0 01 80 80 80 01 00 00 FF 00 00 FF'
+ '00 01 00 FF FF 01 FF 00 00 00 FF 00 FF 00 FF FF'
+ '00 01 FF FF FF 01 77 77 77 77 77 77 77 77 77 77'
+ '77 77 77 77 77 77 77 77 77 77 77 77 07 77 77 77'
+ '77 77 77 77 77 77 77 70 77 77 77 77 77 77 77 77'
+ '77 77 77 07 77 77 77 77 77 77 77 77 77 80 07 77'
+ '77 77 77 77 77 77 77 77 77 00 F0 77 70 07 77 77'
+ '77 77 77 77 70 0F BF 07 08 77 77 77 77 77 77 77'
+ '08 0B FB 07 77 77 77 77 77 77 77 70 8B 00 FF 07'
+ '77 77 77 77 77 77 77 00 BB 00 FB 07 00 07 77 77'
+ '77 77 77 70 BB 00 BF 07 77 77 00 00 00 00 00 00'
+ '0B 07 8B 07 77 77 F7 70 F7 77 77 80 70 08 78 07'
+ '08 77 F7 70 F7 77 77 70 77 00 80 77 70 07 F7 70'
+ 'F7 70 F7 70 77 80 07 77 77 77 F7 70 F7 70 07 70'
+ '77 77 77 07 77 77 F7 70 F7 77 77 70 77 77 77 70'
+ '77 77 F7 70 F7 77 76 07 77 77 77 77 07 77 F7 70'
+ 'F7 77 77 70 77 77 77 77 77 77 F7 70 F7 70 F7 70'
+ '77 77 77 77 77 77 F7 70 F7 70 07 70 77 77 77 77'
+ '77 77 F7 70 F7 77 77 70 77 77 77 77 77 77 F7 70'
+ 'F7 77 77 07 77 77 77 77 77 77 FF F0 FF FF FF 77'
+ '77 77 77 77 77 77'
+}
+
+
+STRINGTABLE 
+{
+ 57810, "Requested Events"
+ 57811, "&OK"
+ 57812, "Cancel"
+}
+
+STRINGTABLE 
+{
+ 57800, "You must register events before queueing them"
+ 57801, "Component is not connected to an open Database"
+ 57802, "''%s'' is not connected to an InterBase database"
+ 57803, "You cannot call CancelEvents from within an OnEventAlert handler"
+ 57804, "Invalid blank event added to EventAlerter events list"
+ 57805, "You cannot call QueueEvents from within an OnEventAlert handler"
+ 57806, "You cannot Register or Unregister events from within an OnEventAlert handler"
+ 57807, "You can only register 15 events per EventAlerter"
+}

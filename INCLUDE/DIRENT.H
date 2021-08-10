@@ -5,29 +5,25 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1991, 1997 by Borland International
+ *      Copyright (c) 1991, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.2  $ */
+
+/* $Revision:   9.2  $ */
 
 #ifndef __DIRENT_H
 #define __DIRENT_H
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
 
-#ifndef NULL
-#include <_null.h>
-#endif
-
-#if defined(__WIN32__)
+#ifndef _WINDOWS_
 #include <windows.h>  /* For WIN32_FIND_DATA */
 #endif
-
 
 #if !defined(RC_INVOKED)
 
@@ -49,33 +45,8 @@ extern "C" {
  */
 struct dirent
 {
-#if defined(__OS2__)
-    char        d_name[256];
-#elif defined(__WIN32__) || defined(__DPMI32__)
     char        d_name[260];
-#else
-    char        d_name[13];
-#endif
 };
-
-
-#if !defined(__FLAT__)
-
-/* _DIR type returned by _opendir().  The first two members cannot
- * be separated, because they make up the DOS DTA structure used
- * by _findfirst() and _findnext().
- */
-typedef struct
-{
-    char           _d_reserved[30];      /* reserved part of DTA */
-    struct dirent  _d_dirent;            /* filename part of DTA */
-    char    _FAR  *_d_dirname;           /* directory name */
-    char           _d_first;             /* first file flag */
-    unsigned char  _d_magic;             /* magic cookie for verifying handle */
-} DIR;
-
-#else    /* defined __FLAT__ */
-
 
 /* wdirent structure returned by wreaddir().
  */
@@ -93,13 +64,7 @@ typedef struct
     char         *_d_dirname;           /* directory name */
     unsigned      _d_magic;             /* magic cookie for verifying handle */
     unsigned      _d_nfiles;            /* no. of files remaining in buf */
-#if defined(__OS2__)
-    char         *_d_bufp;              /* next entry in buffer */
-    char          _d_buf[512];          /* buffer for found filenames */
-#endif
-#if defined(__WIN32__)
     char          _d_buf[sizeof(WIN32_FIND_DATA)];  /* buffer for a single file */
-#endif
 } DIR;
 
 typedef struct
@@ -108,21 +73,13 @@ typedef struct
     wchar_t      *_d_dirname;           /* directory name */
     unsigned      _d_magic;             /* magic cookie for verifying handle */
     unsigned      _d_nfiles;            /* no. of files remaining in buf */
-#if defined(__OS2__)
-    char         *_d_bufp;              /* next entry in buffer */
-    char          _d_buf[512];          /* buffer for found filenames */
-#endif
-#if defined(__WIN32__)
     char          _d_buf[sizeof(WIN32_FIND_DATA)];  /* buffer for a single file */
-#endif
 } wDIR;
 
 wDIR           * _RTLENTRY _EXPFUNC wopendir  (const wchar_t *__dirname);
 struct wdirent * _RTLENTRY _EXPFUNC wreaddir  (wDIR *__dir);
 int              _RTLENTRY _EXPFUNC wclosedir (wDIR *__dir);
 void             _RTLENTRY _EXPFUNC wrewinddir(wDIR *__dir);
-
-#endif  /* __FLAT__ */
 
 /* Prototypes.
  */

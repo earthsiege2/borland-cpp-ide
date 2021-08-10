@@ -1,4 +1,0 @@
-LIBRARY WST
-EXPORTS
-
-    __penter                                 = _penter

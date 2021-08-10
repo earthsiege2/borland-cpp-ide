@@ -1,7 +1,7 @@
 // convert.cpp : implementation file
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -147,7 +147,7 @@ CConverter::CConverter(LPCSTR pszLibName, CFrameWnd* pWnd) : CTrackFile(pWnd)
 		{
 			CString str = AfxGetAppName();
 			str.MakeUpper();
-			VERIFY(m_pInitConverter(AfxGetMainWnd()->GetSafeHwnd(), T2A(str)));
+			VERIFY(m_pInitConverter(AfxGetMainWnd()->GetSafeHwnd(), T2CA(str)));
 		}
 	}
 }
@@ -227,7 +227,7 @@ BOOL CConverter::IsFormatCorrect(LPCTSTR pszFileName)
 		return FALSE;
 
 	char buf[_MAX_PATH];
-	strcpy(buf, T2A(pszFileName));
+	strcpy(buf, T2CA(pszFileName));
 
 	CharToOemA(buf, buf);
 
@@ -351,7 +351,7 @@ BOOL CConverter::Open(LPCTSTR pszFileName, UINT nOpenFlags,
 	// we convert to oem and back because of the following case
 	// test(c).txt becomes testc.txt in OEM and stays testc.txt to Ansi
 	char buf[_MAX_PATH];
-	strcpy(buf, T2A(pszFileName));
+	strcpy(buf, T2CA(pszFileName));
 	CharToOemA(buf, buf);
 	OemToCharA(buf, buf);
 

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -77,6 +77,12 @@ BEGIN
 		"Fehler bei der Aktualisierungs- oder Löschoperation."
 	AFX_IDP_SQL_DYNAMIC_CURSOR_NOT_SUPPORTED
 		"Dynamische Cursor werden vom ODBC-Treiber nicht unterstützt."
+	AFX_IDP_SQL_FIELD_NOT_FOUND
+		"Ungültiger Feldname oder Feldindex."
+	AFX_IDP_SQL_BOOKMARKS_NOT_SUPPORTED
+		"Lesezeichen werden für ODBC-Treiber nicht unterstützt."
+	AFX_IDP_SQL_BOOKMARKS_NOT_ENABLED
+		"Lesezeichen bei Satzgruppe nicht aktiviert."
 	AFX_IDP_DAO_ENGINE_INITIALIZATION
 		"Initialisierung des DAO/Jet-Datenbankmoduls nicht möglich."
 	AFX_IDP_DAO_DFX_BIND

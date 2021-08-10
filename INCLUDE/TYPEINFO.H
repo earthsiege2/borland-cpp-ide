@@ -4,29 +4,25 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1993, 1997 by Borland International
+ *      Copyright (c) 1993, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.14  $ */
 
 #if !defined(__cplusplus)
 #error Must use C++ for typeinfo.h
 #endif
 
-#if defined(__TINY__)
-#error Cannot use Runtime Type Information in tiny model
-#endif
-
 #ifndef __TYPEINFO_H
 #define __TYPEINFO_H
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
-
 
 #if !defined(RC_INVOKED)
 
@@ -39,58 +35,98 @@
 
 #endif  /* !RC_INVOKED */
 
+typedef struct
+{
+    unsigned long  Data1;
+    unsigned short Data2;
+    unsigned short Data3;
+    unsigned char  Data4[ 8 ];
+} _BORGUID;
 
 #if defined(_BUILDRTLDLL) || defined(_RTLDLL)
 #   define _TIDIST   _EXPCLASS
 #else
-#   if defined(__FLAT__)
 #     define _TIDIST
-#   else
-#      if     defined(__LARGE__) || defined(__COMPACT__) || defined(__HUGE__) || defined(__DLL__)
-#         define _TIDIST  __huge
-#      else
-#         define _TIDIST  __huge __near
-#      endif
-#   endif
 #endif
 
 class                   tpid;
 
-class   _TIDIST  __rtti typeinfo
+namespace std {
+
+class   _TIDIST  __rtti type_info
 {
 
 public:
 
-#if defined(__FLAT__)
         tpid          * tpp;
-#else
-        tpid    __far * tpp;
-#endif
 
 private:
-                __cdecl typeinfo(const typeinfo _FAR &);
-    typeinfo &  __cdecl operator=(const typeinfo _FAR &);
+                __cdecl type_info(const type_info &);
+    type_info & __cdecl operator=(const type_info &);
 
 public:
+    virtual     __cdecl ~type_info();
 
-    virtual     __cdecl ~typeinfo();
+    bool        __cdecl operator==(const type_info  &) const;
+    bool        __cdecl operator!=(const type_info  &) const;
 
-    bool        __cdecl operator==(const typeinfo _FAR &) const;
-    bool        __cdecl operator!=(const typeinfo _FAR &) const;
+    bool        __cdecl before(const type_info  &) const;
 
-    bool        __cdecl before(const typeinfo _FAR &) const;
+    const char *__cdecl name() const;
 
-    const char _FAR *__cdecl name() const;
+/*  Extra Borland specific member functions and types.  This is for
+    dynamic GUID translation and casting.
+*/
+    void *      __cdecl _internal_rtti_cast(void *srcObj, const type_info *srcType) const;
+
+    template    <class  _SrcType>
+    void *      __cdecl _rtti_cast(_SrcType *_src) const
+    {
+        // do the typeid() inline so the compiler will flag an error
+        // if the _SrcType doesn't support rtti.
+        return _internal_rtti_cast(_src, (const type_info*)& typeid(_SrcType));
+    }
+    const _BORGUID *__cdecl _guid() const;
+
+    struct _base_info
+    {
+            type_info *_type;
+            void *_cookie;
+    };
+
+    struct _vbase_info : public _base_info
+    {
+            bool _indirect();
+    };
+
+    type_info const *_first_base(_base_info &) const;
+    type_info const *_next_base(_base_info &) const;
+    type_info const *_first_vbase(_vbase_info &) const;
+    type_info const *_next_vbase(_vbase_info &_vb) const
+    {
+            return _next_base(_vb);
+    }
+
+protected:
+                __cdecl type_info(tpid *_tpp) { tpp = _tpp; }
 };
 
+class   bad_cast{};
+class   bad_typeid{};
+} // std
 
 #if !defined(__STDC__)
-typedef typeinfo Type_info;  // For backwards compatibility.
+// The following are for backwards compatibility.
+typedef std::type_info   typeinfo;
+typedef std::type_info   Type_info;
+typedef std::bad_cast    Bad_cast;
+typedef std::bad_typeid  Bad_typeid;
+
+#pragma obsolete typeinfo
+#pragma obsolete Type_info
+#pragma obsolete Bad_cast
+#pragma obsolete Bad_typeid
 #endif
-
-class   Bad_cast{};
-class   Bad_typeid{};
-
 
 #if !defined(RC_INVOKED)
 
@@ -102,5 +138,9 @@ class   Bad_typeid{};
 #endif
 
 #endif  /* !RC_INVOKED */
+
+#ifndef __USING_STD_NAMES__
+  using namespace std;
+#endif
 
 #endif

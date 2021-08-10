@@ -1,6 +1,6 @@
 #ifndef EXCHFORM_H
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define EXCHFORM_H
-#pragma option -b
 
 
 /*
@@ -72,5 +72,5 @@ DEFINE_EXCHFORMGUID(PS_EXCHFORM, 0x0C);
 #define chOpMapDisable              '2'
 
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif // EXCHFORM_H

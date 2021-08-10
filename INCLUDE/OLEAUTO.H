@@ -1,7 +1,7 @@
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
+//  Copyright (C) Microsoft Corporation, 1992-1999.
 //
 //  File:       oleauto.h
 //
@@ -10,14 +10,16 @@
 //----------------------------------------------------------------------------
 
 #if !defined( _OLEAUTO_H_ )
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _OLEAUTO_H_
-#pragma option -b
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 // Set packing to 8 for ISV, and Win95 support
 #ifndef RC_INVOKED
-#pragma option -b.
 #include <pshpack8.h>
-#pragma option -b
 #endif // RC_INVOKED
 
 //  Definition of the OLE Automation APIs, and macros.
@@ -53,9 +55,7 @@ typedef DWORD LCID;
 #endif
 
 /* pull in the MIDL generated header */
-#pragma option -b.
 #include <oaidl.h>
-#pragma option -b
 
 
 /*---------------------------------------------------------------------*/
@@ -93,9 +93,10 @@ WINOLEAUTAPI_(INT) VariantTimeToSystemTime(DOUBLE vtime, LPSYSTEMTIME lpSystemTi
 /*---------------------------------------------------------------------*/
 
 WINOLEAUTAPI SafeArrayAllocDescriptor(UINT cDims, SAFEARRAY ** ppsaOut);
+WINOLEAUTAPI SafeArrayAllocDescriptorEx(VARTYPE vt, UINT cDims, SAFEARRAY ** ppsaOut);
 WINOLEAUTAPI SafeArrayAllocData(SAFEARRAY * psa);
 WINOLEAUTAPI_(SAFEARRAY *) SafeArrayCreate(VARTYPE vt, UINT cDims, SAFEARRAYBOUND * rgsabound);
-WINOLEAUTAPI_(SAFEARRAY *) SafeArrayCreateVector(VARTYPE vt, LONG lLbound, ULONG cElements);
+WINOLEAUTAPI_(SAFEARRAY *) SafeArrayCreateEx(VARTYPE vt, UINT cDims, SAFEARRAYBOUND * rgsabound, PVOID pvExtra);
 WINOLEAUTAPI SafeArrayCopyData(SAFEARRAY *psaSource, SAFEARRAY *psaTarget);
 WINOLEAUTAPI SafeArrayDestroyDescriptor(SAFEARRAY * psa);
 WINOLEAUTAPI SafeArrayDestroyData(SAFEARRAY * psa);
@@ -113,7 +114,13 @@ WINOLEAUTAPI SafeArrayGetElement(SAFEARRAY * psa, LONG * rgIndices, void * pv);
 WINOLEAUTAPI SafeArrayPutElement(SAFEARRAY * psa, LONG * rgIndices, void * pv);
 WINOLEAUTAPI SafeArrayCopy(SAFEARRAY * psa, SAFEARRAY ** ppsaOut);
 WINOLEAUTAPI SafeArrayPtrOfIndex(SAFEARRAY * psa, LONG * rgIndices, void ** ppvData);
-
+WINOLEAUTAPI SafeArraySetRecordInfo(SAFEARRAY * psa, IRecordInfo * prinfo);
+WINOLEAUTAPI SafeArrayGetRecordInfo(SAFEARRAY * psa, IRecordInfo ** prinfo);
+WINOLEAUTAPI SafeArraySetIID(SAFEARRAY * psa, REFGUID guid);
+WINOLEAUTAPI SafeArrayGetIID(SAFEARRAY * psa, GUID * pguid);
+WINOLEAUTAPI SafeArrayGetVartype(SAFEARRAY * psa, VARTYPE * pvt);
+WINOLEAUTAPI_(SAFEARRAY *) SafeArrayCreateVector(VARTYPE vt, LONG lLbound, ULONG cElements);
+WINOLEAUTAPI_(SAFEARRAY *) SafeArrayCreateVectorEx(VARTYPE vt, LONG lLbound, ULONG cElements, PVOID pvExtra);
 
 /*---------------------------------------------------------------------*/
 /*                           VARIANT API                               */
@@ -129,14 +136,17 @@ WINOLEAUTAPI VariantChangeTypeEx(VARIANTARG * pvargDest,
                 VARIANTARG * pvarSrc, LCID lcid, USHORT wFlags, VARTYPE vt);
 
 // Flags for VariantChangeType/VariantChangeTypeEx
-#define VARIANT_NOVALUEPROP 0x1
-#define VARIANT_ALPHABOOL   0x2 // For VT_BOOL to VT_BSTR conversions,
-                                // convert to "True"/"False" instead of
-                                // "-1"/"0"
-#define VARIANT_NOUSEROVERRIDE   0x4	// For conversions to/from VT_BSTR,
-					// passes LOCALE_NOUSEROVERRIDE
-					// to core coercion routines
-
+#define VARIANT_NOVALUEPROP      0x01
+#define VARIANT_ALPHABOOL        0x02 // For VT_BOOL to VT_BSTR conversions,
+                                      // convert to "True"/"False" instead of
+                                      // "-1"/"0"
+#define VARIANT_NOUSEROVERRIDE   0x04 // For conversions to/from VT_BSTR,
+				      // passes LOCALE_NOUSEROVERRIDE
+				      // to core coercion routines
+#define VARIANT_CALENDAR_HIJRI   0x08
+#define VARIANT_LOCALBOOL        0x10 // For VT_BOOL to VT_BSTR and back,
+                                      // convert to local language rather than
+                                      // English
 
 /*---------------------------------------------------------------------*/
 /*                Vector <-> Bstr conversion APIs                      */
@@ -145,6 +155,39 @@ WINOLEAUTAPI VariantChangeTypeEx(VARIANTARG * pvargDest,
 WINOLEAUTAPI VectorFromBstr (BSTR bstr, SAFEARRAY ** ppsa);
 WINOLEAUTAPI BstrFromVector (SAFEARRAY *psa, BSTR *pbstr);
 
+/*---------------------------------------------------------------------*/
+/*                     Variant API Flags                               */
+/*---------------------------------------------------------------------*/
+
+/* Any of the coersion functions that converts either from or to a string
+ * takes an additional lcid and dwFlags arguments. The lcid argument allows
+ * locale specific parsing to occur.  The dwFlags allow additional function
+ * specific condition to occur.  All function that accept the dwFlags argument
+ * can include either 0 or LOCALE_NOUSEROVERRIDE flag.
+ */
+
+/* The VarDateFromStr and VarBstrFromDate functions also accept the
+ * VAR_TIMEVALUEONLY and VAR_DATEVALUEONLY flags
+ */
+#define VAR_TIMEVALUEONLY       ((DWORD)0x00000001)    /* return time value */
+#define VAR_DATEVALUEONLY       ((DWORD)0x00000002)    /* return date value */
+
+/* VarDateFromUdate() only */
+#define VAR_VALIDDATE           ((DWORD)0x00000004)
+
+/* Accepted by all date & format APIs */
+#define VAR_CALENDAR_HIJRI      ((DWORD)0x00000008)    /* use Hijri calender */
+
+/* Booleans can optionally be accepted in localized form. Pass VAR_LOCALBOOL
+ * into VarBoolFromStr and VarBstrFromBool to use localized boolean names
+ */
+#define VAR_LOCALBOOL           ((DWORD)0x00000010)
+
+/* When passed into VarFormat and VarFormatFromTokens, prevents substitution
+ * of formats in the case where a string is passed in that can not be
+ * coverted into the desired type. (for ex, 'Format("Hello", "General Number")')
+ */
+#define VAR_FORMAT_NOSUBSTITUTE ((DWORD)0x00000020)
 
 /*---------------------------------------------------------------------*/
 /*                     VARTYPE Coercion API                            */
@@ -155,18 +198,6 @@ WINOLEAUTAPI BstrFromVector (SAFEARRAY *psa, BSTR *pbstr);
  * required, and this makes the routines a bit more generic.
  * They may of course still be passed a BSTR as the strIn param.
  */
-
-/* Any of the coersion functions that converts either from or to a string
- * takes an additional lcid and dwFlags arguments. The lcid argument allows
- * locale specific parsing to occur.  The dwFlags allow additional function
- * specific condition to occur.  All function that accept the dwFlags argument
- * can include either 0 or LOCALE_NOUSEROVERRIDE flag. In addition, the
- * VarDateFromStr functions also accepts the VAR_TIMEVALUEONLY and
- * VAR_DATEVALUEONLY flags
- */
-
-#define VAR_TIMEVALUEONLY   ((DWORD)0x00000001)    /* return time value */
-#define VAR_DATEVALUEONLY   ((DWORD)0x00000002)    /* return date value */
 
 WINOLEAUTAPI VarUI1FromI2(SHORT sIn, BYTE * pbOut);
 WINOLEAUTAPI VarUI1FromI4(LONG lIn, BYTE * pbOut);
@@ -473,14 +504,112 @@ WINOLEAUTAPI VarParseNumFromStr(OLECHAR * strIn, LCID lcid, ULONG dwFlags,
 WINOLEAUTAPI VarNumFromParseNum(NUMPARSE * pnumprs, BYTE * rgbDig,
             ULONG dwVtBits, VARIANT * pvar);
 
+/*---------------------------------------------------------------------*/
+/*                     VARTYPE Math API                                */
+/*---------------------------------------------------------------------*/
+
+STDAPI VarAdd(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarAnd(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarCat(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarDiv(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarEqv(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarIdiv(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarImp(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarMod(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarMul(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarOr(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarPow(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarSub(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+STDAPI VarXor(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
+
+STDAPI VarAbs(LPVARIANT pvarIn, LPVARIANT pvarResult);
+STDAPI VarFix(LPVARIANT pvarIn, LPVARIANT pvarResult);
+STDAPI VarInt(LPVARIANT pvarIn, LPVARIANT pvarResult);
+STDAPI VarNeg(LPVARIANT pvarIn, LPVARIANT pvarResult);
+STDAPI VarNot(LPVARIANT pvarIn, LPVARIANT pvarResult);
+
+STDAPI VarRound(LPVARIANT pvarIn, int cDecimals, LPVARIANT pvarResult);
+// dwFlags passed to CompareString if a string compare
+STDAPI VarCmp(LPVARIANT pvarLeft, LPVARIANT pvarRight, LCID lcid, ULONG dwFlags);
+
+#ifdef __cplusplus
+extern "C++" {
+// Add wrapper for old ATL headers to call
+__inline
+HRESULT
+STDAPICALLTYPE
+VarCmp(LPVARIANT pvarLeft, LPVARIANT pvarRight, LCID lcid) {
+    return VarCmp(pvarLeft, pvarRight, lcid, 0);
+}
+} // extern "C++"
+#endif
+
+
+// Decimal math
+//
+STDAPI VarDecAdd(LPDECIMAL pdecLeft, LPDECIMAL pdecRight, LPDECIMAL pdecResult);
+STDAPI VarDecDiv(LPDECIMAL pdecLeft, LPDECIMAL pdecRight, LPDECIMAL pdecResult);
+STDAPI VarDecMul(LPDECIMAL pdecLeft, LPDECIMAL pdecRight, LPDECIMAL pdecResult);
+STDAPI VarDecSub(LPDECIMAL pdecLeft, LPDECIMAL pdecRight, LPDECIMAL pdecResult);
+
+STDAPI VarDecAbs(LPDECIMAL pdecIn, LPDECIMAL pdecResult);
+STDAPI VarDecFix(LPDECIMAL pdecIn, LPDECIMAL pdecResult);
+STDAPI VarDecInt(LPDECIMAL pdecIn, LPDECIMAL pdecResult);
+STDAPI VarDecNeg(LPDECIMAL pdecIn, LPDECIMAL pdecResult);
+
+STDAPI VarDecRound(LPDECIMAL pdecIn, int cDecimals, LPDECIMAL pdecResult);
+
+STDAPI VarDecCmp(LPDECIMAL pdecLeft, LPDECIMAL pdecRight);
+STDAPI VarDecCmpR8(LPDECIMAL pdecLeft, double dblRight);
+
+
+// Currency math
+//
+STDAPI VarCyAdd(CY cyLeft, CY cyRight, LPCY pcyResult);
+STDAPI VarCyMul(CY cyLeft, CY cyRight, LPCY pcyResult);
+STDAPI VarCyMulI4(CY cyLeft, long lRight, LPCY pcyResult);
+STDAPI VarCySub(CY cyLeft, CY cyRight, LPCY pcyResult);
+
+STDAPI VarCyAbs(CY cyIn, LPCY pcyResult);
+STDAPI VarCyFix(CY cyIn, LPCY pcyResult);
+STDAPI VarCyInt(CY cyIn, LPCY pcyResult);
+STDAPI VarCyNeg(CY cyIn, LPCY pcyResult);
+
+STDAPI VarCyRound(CY cyIn, int cDecimals, LPCY pcyResult);
+
+STDAPI VarCyCmp(CY cyLeft, CY cyRight);
+STDAPI VarCyCmpR8(CY cyLeft, double dblRight);
+
+
+// Misc support functions
+//
+STDAPI VarBstrCat(BSTR bstrLeft, BSTR bstrRight, LPBSTR pbstrResult);
+STDAPI VarBstrCmp(BSTR bstrLeft, BSTR bstrRight, LCID lcid, ULONG dwFlags); // dwFlags passed to CompareString
+STDAPI VarR8Pow(double dblLeft, double dblRight, double *pdblResult);
+STDAPI VarR4CmpR8(float fltLeft, double dblRight);
+STDAPI VarR8Round(double dblIn, int cDecimals, double *pdblResult);
+
+
+// Compare results.  These are returned as a SUCCESS HResult.  Subtracting
+// one gives the usual values of -1 for Less Than, 0 for Equal To, +1 for
+// Greater Than.
+//
+#define VARCMP_LT   0
+#define VARCMP_EQ   1
+#define VARCMP_GT   2
+#define VARCMP_NULL 3
+
+// VT_HARDTYPE tells the compare routine that the argument is a literal or
+// otherwise declared of that specific type.  It causes comparison rules to
+// change. For example, if a hard-type string is compared to a variant (not hard
+// -type) number, the number is converted to string.  If a hard-type number is
+// compared to a variant string, the string is converted to number.  If they're
+// both variant, then number < string.
+#define VT_HARDTYPE VT_RESERVED
 
 /*---------------------------------------------------------------------*/
 /*                   New date functions                                */
 /*---------------------------------------------------------------------*/
-
-#define VAR_VALIDDATE       0x0004    /* VarDateFromUdate() only */
-#define VAR_CALENDAR_HIJRI  0x0008    /* use Hijri calender */
-#define VARIANT_CALENDAR_HIJRI VAR_CALENDAR_HIJRI
 
 /* The UDATE structure is used with VarDateFromUdate() and VarUdateFromDate().
  * It represents an "unpacked date".
@@ -491,17 +620,33 @@ typedef struct {
 } UDATE;
 
 /* APIs to "pack" and "unpack" dates.
+ * NOTE: Ex version of VarDateFromUdate obeys 2 digit year setting in
+ * control panel.
  */
 WINOLEAUTAPI VarDateFromUdate(UDATE *pudateIn, ULONG dwFlags, DATE *pdateOut);
-
+WINOLEAUTAPI VarDateFromUdateEx(UDATE *pudateIn, LCID lcid, ULONG dwFlags, DATE *pdateOut);
 WINOLEAUTAPI VarUdateFromDate(DATE dateIn, ULONG dwFlags, UDATE *pudateOut);
 
 /* API to retrieve the secondary(altername) month names
    Useful for Hijri, Polish and Russian alternate month names
-*/   
+*/
 WINOLEAUTAPI GetAltMonthNames(LCID lcid, LPOLESTR * * prgp);
 
+/*---------------------------------------------------------------------*/
+/*                 Format                                              */
+/*---------------------------------------------------------------------*/
 
+WINOLEAUTAPI VarFormat(LPVARIANT pvarIn, LPOLESTR pstrFormat, int iFirstDay, int iFirstWeek, ULONG dwFlags, BSTR *pbstrOut);
+WINOLEAUTAPI VarFormatDateTime(LPVARIANT pvarIn, int iNamedFormat, ULONG dwFlags, BSTR *pbstrOut);
+WINOLEAUTAPI VarFormatNumber(LPVARIANT pvarIn, int iNumDig, int iIncLead, int iUseParens, int iGroup, ULONG dwFlags, BSTR *pbstrOut);
+WINOLEAUTAPI VarFormatPercent(LPVARIANT pvarIn, int iNumDig, int iIncLead, int iUseParens, int iGroup, ULONG dwFlags, BSTR *pbstrOut);
+WINOLEAUTAPI VarFormatCurrency(LPVARIANT pvarIn, int iNumDig, int iIncLead, int iUseParens, int iGroup, ULONG dwFlags, BSTR *pbstrOut);
+
+WINOLEAUTAPI VarWeekdayName(int iWeekday, int fAbbrev, int iFirstDay, ULONG dwFlags, BSTR *pbstrOut);
+WINOLEAUTAPI VarMonthName(int iMonth, int fAbbrev, ULONG dwFlags, BSTR *pbstrOut);
+
+WINOLEAUTAPI VarFormatFromTokens(LPVARIANT pvarIn, LPOLESTR pstrFormat, LPBYTE pbTokCur, ULONG dwFlags, BSTR *pbstrOut, LCID lcid);
+WINOLEAUTAPI VarTokenizeFormatString(LPOLESTR pstrFormat, LPBYTE rgbTok, int cbTok, int iFirstDay, int iFirstWeek, LCID lcid, int *pcbActual);
 
 /*---------------------------------------------------------------------*/
 /*                 ITypeLib                                            */
@@ -703,6 +848,17 @@ WINOLEAUTAPI GetErrorInfo(ULONG dwReserved, IErrorInfo ** pperrinfo);
 WINOLEAUTAPI CreateErrorInfo(ICreateErrorInfo ** pperrinfo);
 
 /*---------------------------------------------------------------------*/
+/*           User Defined Data types support                           */
+/*---------------------------------------------------------------------*/
+
+WINOLEAUTAPI GetRecordInfoFromTypeInfo(ITypeInfo * pTypeInfo,
+            IRecordInfo ** ppRecInfo);
+
+WINOLEAUTAPI GetRecordInfoFromGuids(REFGUID rGuidTypeLib,
+            ULONG uVerMajor, ULONG uVerMinor, LCID lcid,
+            REFGUID rGuidTypeInfo, IRecordInfo ** ppRecInfo);
+
+/*---------------------------------------------------------------------*/
 /*                           MISC API                                  */
 /*---------------------------------------------------------------------*/
 
@@ -715,9 +871,13 @@ WINOLEAUTAPI_(void) ClearCustData(LPCUSTDATA pCustData);
 #if __STDC__ || defined(NONAMELESSUNION)
 #define V_UNION(X, Y)   ((X)->n1.n2.n3.Y)
 #define V_VT(X)         ((X)->n1.n2.vt)
+#define V_RECORDINFO(X) ((X)->n1.n2.n3.brecVal.pRecInfo)
+#define V_RECORD(X)     ((X)->n1.n2.n3.brecVal.pvRecord)
 #else
 #define V_UNION(X, Y)   ((X)->Y)
 #define V_VT(X)         ((X)->vt)
+#define V_RECORDINFO(X) ((X)->pRecInfo)
+#define V_RECORD(X)     ((X)->pvRecord)
 #endif
 
 /* Variant access macros
@@ -733,6 +893,8 @@ WINOLEAUTAPI_(void) ClearCustData(LPCUSTDATA pCustData);
 #define V_I2REF(X)       V_UNION(X, piVal)
 #define V_I4(X)          V_UNION(X, lVal)
 #define V_I4REF(X)       V_UNION(X, plVal)
+#define V_I8(X)          V_UNION(X, llVal)
+#define V_I8REF(X)       V_UNION(X, pllVal)
 #define V_R4(X)          V_UNION(X, fltVal)
 #define V_R4REF(X)       V_UNION(X, pfltVal)
 #define V_R8(X)          V_UNION(X, dblVal)
@@ -743,6 +905,8 @@ WINOLEAUTAPI_(void) ClearCustData(LPCUSTDATA pCustData);
 #define V_UI2REF(X)      V_UNION(X, puiVal)
 #define V_UI4(X)         V_UNION(X, ulVal)
 #define V_UI4REF(X)      V_UNION(X, pulVal)
+#define V_UI8(X)         V_UNION(X, ullVal)
+#define V_UI8REF(X)      V_UNION(X, pullVal)
 #define V_INT(X)         V_UNION(X, intVal)
 #define V_INTREF(X)      V_UNION(X, pintVal)
 #define V_UINT(X)        V_UNION(X, uintVal)
@@ -770,10 +934,8 @@ WINOLEAUTAPI_(void) ClearCustData(LPCUSTDATA pCustData);
 #define V_DECIMALREF(X)  V_UNION(X, pdecVal)
 
 #ifndef RC_INVOKED
-#pragma option -b.
 #include <poppack.h>
-#pragma option -b
 #endif // RC_INVOKED
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif     // __OLEAUTO_H__

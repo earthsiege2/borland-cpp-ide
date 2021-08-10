@@ -1,7 +1,7 @@
 // aboutbox.cpp : implementation file
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -11,12 +11,12 @@
 // Microsoft Foundation Classes product.
 
 
-
 #include "stdafx.h"
 #include "resource.h"
 #include "aboutbox.h"
 #include <dos.h>
 #include <direct.h>
+
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -71,17 +71,8 @@ BOOL CAboutBox::OnInitDialog()
 		SetDlgItemText(IDC_PHYSICAL_MEM, str);
 
 		// fill disk free information
-
-#ifdef __BORLANDC__
-		struct diskfree_t diskfree;
-      unsigned drive;
-      _dos_getdrive(&drive);
-		if (_dos_getdiskfree(drive, &diskfree) == 0)
-#else
 		struct _diskfree_t diskfree;
 		if (_getdiskfree(_getdrive(), &diskfree) == 0)
-#endif
-
 		{
 			strFmt.LoadString(IDS_DISK_SPACE);
 			wsprintf(str.GetBuffer(80), strFmt,

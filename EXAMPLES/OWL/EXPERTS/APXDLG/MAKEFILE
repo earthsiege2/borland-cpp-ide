@@ -1,9 +1,0 @@
-#----------------------------------------------------------------------------
-# ObjectWindows
-# Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
-#----------------------------------------------------------------------------
-EXERES = apxdlg
-RESEXE = apxdlgap.res
-OBJEXE = apxdlgap.obj apxdlgdc.obj
-
-!include $(BCEXAMPLEDIR)\owlmake.gen

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -10,12 +10,131 @@
 
 #ifndef _AFX_NO_OCC_SUPPORT
 
+#include <oledb.h>
+#include "olebind.h"
+#include "ocdbid.h"
+#include "ocdb.h"
+
+// MFC doesn't use the OLEDB 1.5 features of ATL and it causes
+// compile problems, so just make ATL think it's not version 1.5
+#if (OLEDBVER >= 0x0150)
+#undef OLEDBVER
+#define OLEDBVER 0x0100
+#endif
+
+#define AtlTrace AfxTrace
+#include "atldbcli.h"
+
+class CDataSourceControl;
+class CDataBoundProperty;
+
 // CCmdTarget
 	class COleControlContainer;
 	class COleControlSite;
 
 class COccManager;
 struct _AFX_OCC_DIALOG_INFO;
+
+#define DISPID_DATASOURCE   0x80010001
+#define DISPID_DATAFIELD    0x80010002
+
+interface AFX_NOVTABLE IDataSourceListener : public IUnknown
+{
+public:
+	virtual HRESULT STDMETHODCALLTYPE OnDataMemberChanged(BSTR bstrDM) = 0;
+	virtual HRESULT STDMETHODCALLTYPE OnDataMemberAdded(BSTR bstrDM) = 0;
+	virtual HRESULT STDMETHODCALLTYPE OnDataMemberRemoved(BSTR bstrDM) = 0;
+};
+
+interface AFX_NOVTABLE IDataSource : public IUnknown
+{
+public:
+	virtual HRESULT STDMETHODCALLTYPE GetDataMember(BSTR bstrDM, const GUID __RPC_FAR* riid, IUnknown __RPC_FAR* __RPC_FAR* ppunk) = 0;
+	virtual HRESULT STDMETHODCALLTYPE GetDataMemberName(long lIndex, BSTR __RPC_FAR *pbstrDM) = 0;
+	virtual HRESULT STDMETHODCALLTYPE GetDataMemberCount(long __RPC_FAR *plCount) = 0;
+	virtual HRESULT STDMETHODCALLTYPE AddDataSourceListener(IDataSourceListener __RPC_FAR *pDSL) = 0;
+	virtual HRESULT STDMETHODCALLTYPE RemoveDataSourceListener(IDataSourceListener __RPC_FAR *pDSL) = 0;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// OLE Databinding support class for data sources
+
+interface IRowPosition;
+
+class CDataSourceControl
+{
+private:
+	CDataSourceControl() {};
+public:
+	struct METAROWTYPE
+	{
+		DBCOLUMNID idColumnID;
+		DWORD dwColumnID;
+		LPSTR lpstrName;
+		DWORD dwName;
+		CPtrList* m_pClientList;
+	};
+
+	CDataSourceControl(COleControlSite *pClientSite);
+	~CDataSourceControl();
+	HRESULT Initialize();
+	virtual IUnknown* GetCursor();
+	HRESULT GetMetaData();
+	virtual void BindProp(COleControlSite* pClientSite, BOOL bBind = TRUE);
+	virtual void BindProp(CDataBoundProperty* pProperty, BOOL bBind = TRUE);
+	virtual void BindColumns();
+	BOOL CopyColumnID(DBCOLUMNID* pcidDst, DBCOLUMNID const *pcidSrc);
+	HRESULT GetBoundClientRow();
+	virtual HRESULT UpdateControls();
+	virtual HRESULT UpdateCursor();
+	COleVariant ToVariant(int nCol);
+
+	COleControlSite *m_pClientSite;  // Back ptr to containing site
+	ICursorMove* m_pCursorMove;
+	ICursorUpdateARow* m_pCursorUpdateARow;
+	int m_nColumns;
+	METAROWTYPE* m_pMetaRowData;
+	CPtrList m_CursorBoundProps;
+	void* m_pVarData;
+	int m_nBindings;
+	DBCOLUMNBINDING *m_pColumnBindings;
+	VARIANT* m_pValues;
+	BOOL m_bUpdateInProgress;
+
+// OLE/DB stuff
+	IDataSource*            m_pDataSource;
+	IRowPosition*           m_pRowPosition;
+	ATL::CRowset*           m_pRowset;
+	ATL::CDynamicAccessor*  m_pDynamicAccessor;
+
+	DWORD m_dwRowsetNotify; // IRowsetNotify cookie
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// OLE Databinding support class for bound controls
+
+class CDataBoundProperty
+{
+protected:
+	CDataBoundProperty() {};
+public:
+	CDataBoundProperty(CDataBoundProperty* pLast, DISPID dispid, WORD ctlid);
+	~CDataBoundProperty() {};
+	void SetClientSite(COleControlSite *pClientSite);
+	void SetDSCSite(COleControlSite *pDSCSite);
+	void RemoveSource();
+	void Notify();
+	IUnknown* GetCursor();
+	CDataBoundProperty* GetNext();
+
+	COleControlSite *m_pClientSite;  // Back ptr to containing site
+	WORD m_ctlid;
+	DISPID m_dispid;
+	COleControlSite *m_pDSCSite;
+	BOOL m_bOwnXferOut;
+	BOOL m_bIsDirty;
+	CDataBoundProperty* m_pNext;
+};
 
 /////////////////////////////////////////////////////////////////////////////
 // Control containment helper functions
@@ -40,10 +159,16 @@ public:
 		LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, UINT nID,
 		CFile* pPersist=NULL, BOOL bStorage=FALSE, BSTR bstrLicKey=NULL,
 		COleControlSite** ppNewSite=NULL);
+   // Overload to allow creation of default-sized controls
+	BOOL CreateControl(CWnd* pWndCtrl, REFCLSID clsid,
+		LPCTSTR lpszWindowName, DWORD dwStyle, const POINT* ppt,
+	  const SIZE* psize, UINT nID, CFile* pPersist=NULL, BOOL bStorage=FALSE,
+	  BSTR bstrLicKey=NULL, COleControlSite** ppNewSite=NULL);
 	virtual COleControlSite* FindItem(UINT nID) const;
 	virtual BOOL GetAmbientProp(COleControlSite* pSite, DISPID dispid,
 		VARIANT* pvarResult);
 	void CreateOleFont(CFont* pFont);
+	void FreezeAllEvents(BOOL bFreeze);
 	virtual void ScrollChildren(int dx, int dy);
 	virtual void OnUIActivate(COleControlSite* pSite);
 	virtual void OnUIDeactivate(COleControlSite* pSite);
@@ -60,6 +185,11 @@ public:
 	virtual void SetDlgItemInt(int nID, UINT nValue, BOOL bSigned);
 	virtual void SetDlgItemText(int nID, LPCTSTR lpszString);
 	virtual UINT IsDlgButtonChecked(int nIDButton) const;
+#ifndef _AFXDLL
+	virtual void AttachControlSite(CWnd* pWnd);
+#else
+	void AttachControlSite(CWnd* pWnd);
+#endif
 
 // Attributes
 	CWnd* m_pWnd;
@@ -102,6 +232,8 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 // COleControlSite - implementation class
 
+#define VT_MFCFORCEPUTREF   0x8000  // force DISPATCH_PROPERTYPUTREF
+
 class COleControlSite : public CCmdTarget
 {
 public:
@@ -113,6 +245,11 @@ public:
 	HRESULT CreateControl(CWnd* pWndCtrl, REFCLSID clsid,
 		LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, UINT nID,
 		CFile* pPersist=NULL, BOOL bStorage=FALSE, BSTR bstrLicKey=NULL);
+   // Overload to allow creation of default-sized controls
+	HRESULT CreateControl(CWnd* pWndCtrl, REFCLSID clsid,
+		LPCTSTR lpszWindowName, DWORD dwStyle, const POINT* ppt,
+	  const SIZE* psize, UINT nID, CFile* pPersist=NULL, BOOL bStorage=FALSE,
+	  BSTR bstrLicKey=NULL);
 	virtual BOOL DestroyControl();
 	UINT GetID();
 	BOOL GetEventIID(IID* piid);
@@ -123,11 +260,11 @@ public:
 	void GetControlInfo();
 	BOOL IsMatchingMnemonic(LPMSG lpMsg);
 	void SendMnemonic(LPMSG lpMsg);
+	void FreezeEvents(BOOL bFreeze);
 
 	virtual void InvokeHelperV(DISPID dwDispID, WORD wFlags, VARTYPE vtRet,
 		void* pvRet, const BYTE* pbParamInfo, va_list argList);
-	virtual void SetPropertyV(DISPID dwDispID, VARTYPE vtProp,
-		va_list argList);
+	virtual void SetPropertyV(DISPID dwDispID, VARTYPE vtProp, va_list argList);
 	virtual void AFX_CDECL InvokeHelper(DISPID dwDispID, WORD wFlags, VARTYPE vtRet,
 		void* pvRet, const BYTE* pbParamInfo, ...);
 	virtual void GetProperty(DISPID dwDispID, VARTYPE vtProp, void* pvProp) const;
@@ -152,6 +289,12 @@ public:
 	virtual BOOL IsWindowEnabled() const;
 	virtual BOOL EnableWindow(BOOL bEnable);
 	virtual CWnd* SetFocus();
+	virtual void EnableDSC();
+	virtual void BindDefaultProperty(DISPID dwDispID, VARTYPE vtProp, LPCTSTR szFieldName, CWnd* pDSCWnd);
+	virtual void BindProperty(DISPID dwDispId, CWnd* pWndDSC);
+
+// Overridables
+	virtual BOOL QuickActivate();
 
 // Attributes
 	COleControlContainer* m_pCtrlCont;
@@ -171,6 +314,21 @@ public:
 	DWORD m_dwMiscStatus;
 	CONTROLINFO m_ctlInfo;
 
+	// Databound control stuff
+	DWORD m_dwNotifyDBEvents; // INotifyDBEvents sink cookie
+	CDataSourceControl* m_pDataSourceControl;
+	CDataBoundProperty* m_pBindings;
+	union {
+		COleControlSite *m_pDSCSite;
+		WORD m_ctlidRowSource;
+	};
+	DISPID m_defdispid;
+	UINT m_dwType;
+	CString m_strDataField;
+	BOOL m_bIgnoreNotify;
+	BOOL m_bIsDirty;
+	VARIANT m_varResult;
+
 protected:
 // Implementation
 	BOOL SetExtent();
@@ -181,6 +339,7 @@ protected:
 	void AttachWindow();
 	void DetachWindow();
 	BOOL OnEvent(AFX_EVENT* pEvent);
+	HRESULT GetCursor(DISPID dispid, LPUNKNOWN* ppcursorOut, LPVOID *ppcidOut);
 
 public:
 // Interface maps
@@ -247,6 +406,30 @@ public:
 						  VARIANT*, EXCEPINFO*, unsigned int*);
 	END_INTERFACE_PART(EventSink)
 
+	BEGIN_INTERFACE_PART(BoundObjectSite, IBoundObjectSite)
+		STDMETHOD(GetCursor)(DISPID dispid, LPLPCURSOR ppcursorOut, LPVOID *ppcidOut);
+	END_INTERFACE_PART(BoundObjectSite)
+
+	BEGIN_INTERFACE_PART(NotifyDBEvents, INotifyDBEvents)
+		STDMETHOD(OKToDo)(DWORD dwEventWhat, ULONG cReasons, DBNOTIFYREASON rgReasons[]);
+		STDMETHOD(Cancelled)(DWORD dwEventWhat, ULONG cReasons, DBNOTIFYREASON rgReasons[]);
+		STDMETHOD(SyncBefore)(DWORD dwEventWhat, ULONG cReasons, DBNOTIFYREASON rgReasons[]);
+		STDMETHOD(AboutToDo)(DWORD dwEventWhat, ULONG cReasons, DBNOTIFYREASON rgReasons[]);
+		STDMETHOD(FailedToDo)(DWORD dwEventWhat, ULONG cReasons, DBNOTIFYREASON rgReasons[]);
+		STDMETHOD(SyncAfter)(DWORD dwEventWhat, ULONG cReasons, DBNOTIFYREASON rgReasons[]);
+		STDMETHOD(DidEvent)(DWORD dwEventWhat, ULONG cReasons, DBNOTIFYREASON rgReasons[]);
+
+		// Not part of i/f - just a helper
+		HRESULT FireEvent(DWORD dwEventWhat, ULONG cReasons,
+			DBNOTIFYREASON rgReasons[], DSCSTATE nState);
+	END_INTERFACE_PART(NotifyDBEvents)
+
+	BEGIN_INTERFACE_PART(RowsetNotify, IRowsetNotify)
+		STDMETHOD(OnFieldChange)(IRowset* pRowset, HROW hRow, ULONG cColumns, ULONG rgColumns[], DBREASON eReason, DBEVENTPHASE ePhase, BOOL fCantDeny);
+		STDMETHOD(OnRowChange)(IRowset* pRowset, ULONG cRows, const HROW rghRows[], DBREASON eReason, DBEVENTPHASE ePhase, BOOL fCantDeny);
+		STDMETHOD(OnRowsetChange)(IRowset* pRowset, DBREASON eReason, DBEVENTPHASE ePhase, BOOL fCantDeny);
+	END_INTERFACE_PART(RowsetNotify)
+
 	DECLARE_INTERFACE_MAP()
 };
 
@@ -260,6 +443,10 @@ public:
 	// Event handling
 	virtual BOOL OnEvent(CCmdTarget* pCmdTarget, UINT idCtrl, AFX_EVENT* pEvent,
 		AFX_CMDHANDLERINFO* pHandlerInfo);
+
+	// Internal object creation
+	virtual COleControlContainer* CreateContainer(CWnd* pWnd);
+	virtual COleControlSite* CreateSite(COleControlContainer* pCtrlCont);
 
 	// Dialog creation
 	virtual const DLGTEMPLATE* PreCreateDialog(_AFX_OCC_DIALOG_INFO* pOccDialogInfo,
@@ -282,9 +469,11 @@ public:
 // Implementation
 protected:
 	// Dialog creation
-	CWnd* CreateDlgControl(CWnd* pWndParent, const CWnd* pWndAfter,
-		BOOL bDialogEx, LPDLGITEMTEMPLATE pDlgItem, WORD nMsg, BYTE* lpData,
-		DWORD cb);
+	HWND CreateDlgControl(CWnd* pWndParent, HWND hwAfter, BOOL bDialogEx,
+		LPDLGITEMTEMPLATE pDlgItem, WORD nMsg, BYTE* lpData, DWORD cb);
+
+	// Databinding
+	void BindControls(CWnd* pWndParent);
 
 	// Dialog manager
 	static void AFX_CDECL UIActivateControl(CWnd* pWndNewFocus);

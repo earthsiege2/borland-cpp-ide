@@ -1,0 +1,15 @@
+USEUNIT("padview.cpp");
+USEUNIT("paditem.cpp");
+USEUNIT("superpad.cpp");
+USEUNIT("tabstop.cpp");
+USEUNIT("pageset.cpp");
+USEUNIT("stdafx.cpp");
+USEUNIT("mainfrm.cpp");
+USEUNIT("paddoc.cpp");
+USEUNIT("padframe.cpp");
+USEUNIT("ipframe.cpp");
+USEUNIT("linkitem.cpp");
+USEUNIT("aboutbox.cpp");
+USERC("superpad.rc");
+
+#define WinMain

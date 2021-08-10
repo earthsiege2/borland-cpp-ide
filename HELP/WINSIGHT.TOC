@@ -1,43 +1,25 @@
-:BASE winsight.hlp
-0 WinSight User's Guide
-
-1 WinSight overview
-2 Getting started = GettingStarted
-2 Using WinSight = UseWinSight
-2 WinSight basics = Essentials
-2 WinSight tasks = Tasks
-2 Using the mouse with WinSight = UseMouse
-2 Using the keyboard with WinSight = UseKeyboard
-2 Find Window mode = FindWindows
-2 Tracing messages = MTOMessagesToTraceCBoxes
-1WinSight views
-2 WinSight views = WinSightViews
-3 Window Tree view = WindowTreeView
-3 Message Trace view = MessageTraceView
-3 Class List view = ClassListView
-3 Detail window = DetailWindow
-1 WinSight menus
-2 WinSight menu commands = Commands
-2 Spy menu
-3 Spy menu = MSpy
-2 View menu
-3 View Menu = MView
-4 View | Class List = VClassList
-4 View | Window Tree = VWindowTree
-4 View | Message Trace = VMessageTrace
-4 View | Split Horizontal = VSplitHorizontal
-4 View | Split Vertical = VSplitVertical
-2 Tree menu
-3 Tree menu = MTree
-4 Tree | Expand One Level (+) = TExpandOneLevel
-4 Tree | Expand Branch (*) = TExpandBranch
-4 Tree | Expand All (Ctrl+*) = TExpandAll
-4 Tree | Collapse Branch (-) = TCollapseBranch
-2 Messages menu
-3 Messages menu = MMessages
-3 Tracking messages = MessageGroups
-2 Start!/Stop! menu
-3 Start!/Stop! menu = MStopStart
-2 Help menu
-3 Help menu = Mhelp
-
+:Base WINSIGHT.HLP>main
+:Title WinSight Help
+:Index WinSight=winsight.hlp
+;
+1 WinSight Help
+2 Basics
+3 Overview=essentials
+3 Window Tree view=WindowTreeview
+3 Class List view=ClassListview
+3 Message Trace view=MessageTraceview
+3 Find=FindWindows
+3 Trace=TraceMessages
+3 Getting Started=GettingStarted
+3 Messages WinSight Tracks=MessageGroups 
+3 WinSight Views=WinSightViews
+2 Tasks
+3 Tracing Messages=TraceMessages
+3 Using the Find Window Mode=FindWindows
+3 Using the Keyboard with WinSight=UseKeyboard
+3 Using the Messages Menu to Trace Messages=MMessages
+3 Using the Mouse with WinSight=UseMouse
+3 Using the Spy Menu to Display Window Details=MSpy
+3 Using the Start! and Stop! Menu=MStopStart
+3 Using the Tree Menu to Display the Window Tree View=MTree
+3 Using the View Menu to Display WinSight Views=MView

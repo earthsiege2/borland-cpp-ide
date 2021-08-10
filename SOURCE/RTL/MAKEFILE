@@ -1,8 +1,9 @@
 #############################################################################
-# This makefile is used as the driver to build the chosen RTL.  For         #
+# This makefile is used as the driver to build the chosen RTL flavor.  For  #
 # appropriate command line switches and environment variables, see          #
 # rules.mak                                                                 #
 #############################################################################
+RTLSOURCE = 1
 !include rules.mak
 
 #############################################################################
@@ -10,12 +11,7 @@
 # rules.mak is enhanced or modified, make the results must be reflected     #
 # here as well!!!                                                           #
 #############################################################################
-#
-# The -l in the following line is an undocumented switch for MAKE.EXE
-# which allows the commandline of a command to exceed 128 chars.  The
-# default behavior is to report an error for any line exceeding 128.
-#
-CMDLINE = -l OS=$(OS) -DMBCS
+CMDLINE = -l TARGET_OS=$(TARGET_OS) -DMBCS
 
 !if $d(DEBUG)
     CMDLINE = $(CMDLINE) -DDEBUG
@@ -23,10 +19,6 @@ CMDLINE = -l OS=$(OS) -DMBCS
 
 !if $d(DLL)
     CMDLINE = $(CMDLINE) -DDLL
-!endif
-
-!if $d(MODEL)
-    CMDLINE = $(CMDLINE) MODEL=$(MODEL)
 !endif
 
 !if $d(MT)
@@ -45,10 +37,29 @@ CMDLINE = -l OS=$(OS) -DMBCS
     CMDLINE = $(CMDLINE) -$(MAKEFLAGS)
 !endif
 
+!if $d(RTLSOURCE)
+    CMDLINE = $(CMDLINE) -DRTLSOURCE=1
+!endif
+
+!if $d(RTL_FORCE_FULL_REBUILD)
+    CMDLINE = -B $(CMDLINE)
+!endif
+
 #############################################################################
 # What needs to be built.                                                   #
 #############################################################################
-all : start srcdirs builddir end
+all : createdir start srcdirs builddir end
+
+createdir:
+  @if not exist $(PSDKDIR) mkdir $(PSDKDIR)
+  @if not exist $(RTLROOT)\obj mkdir $(RTLROOT)\obj
+  @if not exist $(RTLROOT)\obj\win32 mkdir $(RTLROOT)\obj\win32
+  @if not exist $(RTLROOT)\obj\win32\obj mkdir $(RTLROOT)\obj\win32\obj
+  @if not exist $(RTLROOT)\obj\win32\objx mkdir $(RTLROOT)\obj\win32\objx
+  @if not exist $(RTLROOT)\obj\win32\objmt mkdir $(RTLROOT)\obj\win32\objmt
+  @if not exist $(RTLROOT)\obj\win32\objmtx mkdir $(RTLROOT)\obj\win32\objmtx
+  @if not exist $(RTLROOT)\obj\win32\objmgmt mkdir $(RTLROOT)\obj\win32\objmgmt
+  @if not exist $(RTLROOT)\obj\win32\objmgmtx mkdir $(RTLROOT)\obj\win32\objmgmtx
 
 srcdirs : $(SRCDIRS)
 
@@ -72,13 +83,8 @@ $(BUILDDIR) :
     @echo.
     cd $*
 !if $d(DLL)
-!    if $(OS) == WIN16
-         $(MAKE) -I$(RTLROOT) $(CMDLINE) win16dll
-!    else
-         $(MAKE) -I$(RTLROOT) $(CMDLINE) dll
-!    endif
+     $(MAKE) -I$(RTLROOT) $(CMDLINE) dll
 !else
-     $(MAKE) -I$(RTLROOT) $(CMDLINE) objs
      $(MAKE) -I$(RTLROOT) $(CMDLINE) lib
 !endif
 
@@ -87,11 +93,11 @@ $(BUILDDIR) :
 #############################################################################
 start :
     @echo.
-    @echo [***************** Borland C++ Run Time Libary *****************]
+    @echo [***************** Borland C++Builder Run Time Libary *****************]
     @echo.
 !if $d(DLL)
     if exist $(LIBDIR)\dll.rsp del $(LIBDIR)\dll.rsp
-    echo $(LIBDIR)\\$(DLLC0)+ > $(LIBDIR)\dll.rsp
+    echo $(LIBDIR)\\\\$(DLLC0)+ > $(LIBDIR)\dll.rsp
     if exist $(LIBDIR)\import.rsp del $(LIBDIR)\import.rsp
 !else
     if exist $(LIBDIR)\tlib.rsp del $(LIBDIR)\tlib.rsp
@@ -105,4 +111,5 @@ end :
 !else
     if exist $(LIBDIR)\tlib.rsp del $(LIBDIR)\tlib.rsp
 !endif
+
 

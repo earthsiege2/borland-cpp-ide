@@ -1,0 +1,14 @@
+//----------------------------------------------------------------------------
+// Borland C++ Builder
+// Copyright (c) 1997 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#ifndef WORKSHOP_INVOKED
+  #include <windows.h>
+#endif
+
+Live		BITMAP	live.bmp
+Dead		BITMAP	dead.bmp
+
+Malet		CURSOR	malet.cur
+MaletDown	CURSOR	maletdow.cur
+

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -34,6 +34,7 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
+#ifndef _AFX_NO_APPMENU_RESOURCES
 	AFX_IDS_OPENFILE,               "Abrir"
 #ifndef _MAC
 	AFX_IDS_SAVEFILE,               "Guardar como"
@@ -43,10 +44,10 @@ BEGIN
 	AFX_IDS_SAVEFILE,               "Guardar documento como:"
 	AFX_IDS_ALLFILTER,              "Todos los archivos"
 	AFX_IDS_UNTITLED,               "sin título"
-	AFX_IDS_UNNAMED_FILE,           "un archivo sin nombre"
 	AFX_IDS_ABOUT,                  "Acerca de %1\205"
 #endif
 	AFX_IDS_HIDE,                   "&Ocultar"
+#endif // !_AFX_NO_APPMENUSTRING_RESOURCES
 
 	AFX_IDS_MEMORY_EXCEPTION,       "No hay suficiente memoria."
 	AFX_IDS_NOT_SUPPORTED_EXCEPTION,"Se intentó una operación no permitida."
@@ -54,6 +55,7 @@ BEGIN
 	AFX_IDS_USER_EXCEPTION,         "Se encontr¢ un error desconocido."
 
 	// General error prompts
+#ifndef _AFX_NO_FILECMD_RESOURCES
 	AFX_IDP_INVALID_FILENAME,       "Nombre de archivo no válido."
 	AFX_IDP_FAILED_TO_OPEN_DOC,     "Imposible abrir documento."
 	AFX_IDP_FAILED_TO_SAVE_DOC,     "Imposible guardar documento."
@@ -65,14 +67,20 @@ BEGIN
 	AFX_IDP_FAILED_TO_CREATE_DOC,   "Imposible crear el documento vacío."
 	AFX_IDP_FILE_TOO_LARGE,         "Archivo demasiado grande."
 	AFX_IDP_FAILED_TO_START_PRINT,  "Imposible iniciar impresión."
+#endif // !_AFX_NO_FILECMD_RESOURCES
 	AFX_IDP_FAILED_TO_LAUNCH_HELP,  "Imposible ejecutar la ayuda."
 	AFX_IDP_INTERNAL_FAILURE,       "Error interno de la aplicación."
 	AFX_IDP_COMMAND_FAILURE,        "Falló el comando."
 	AFX_IDP_FAILED_MEMORY_ALLOC     "No hay suficiente memoria para efectuar la operación."
 	AFX_IDP_GET_NOT_SUPPORTED,      "Imposible leer una propiedad de sólo escritura."
 	AFX_IDP_SET_NOT_SUPPORTED,      "Imposible escribir en una propiedad de sólo lectura."
+	AFX_IDP_UNREG_DONE,               "Se quitaron las entradas del Registro del sistema y eliminaron los archivos INI (si existían)."
+	AFX_IDP_UNREG_FAILURE,            "No se quitaron todas las entradas del Registro (o archivo INI)."
+	AFX_IDP_DLL_LOAD_FAILED,        "Este programa requiere el archivo %s, pero no está en este sistema."
+	AFX_IDP_DLL_BAD_VERSION,        "This program is linked to the missing export %s in the file %s. This machine may have an incompatible version of %s."
 
 	// CFile/CArchive error strings for user failure
+#ifndef _AFX_NO_CFILE_RESOURCES
 	AFX_IDP_FAILED_INVALID_FORMAT   "Formato de archivo no esperado."
 #ifndef _MAC
 	AFX_IDP_FAILED_INVALID_PATH     "%1\nImposible encontrar este archivo.\nCompruebe que la ruta y el nombre de archivo son correctos"
@@ -85,6 +93,7 @@ BEGIN
 	AFX_IDP_FAILED_ACCESS_WRITE     "Imposible escribir en %1, es de sólo lectura o alguien más lo ha abierto."
 	AFX_IDP_FAILED_IO_ERROR_READ    "Error inesperado al leer %1."
 	AFX_IDP_FAILED_IO_ERROR_WRITE   "Error inesperado al escribir en %1."
+#endif // !_AFX_NO_CFILE_RESOURCES
 
 	// Parsing error prompts
 	AFX_IDP_PARSE_INT,              "Introduzca un número entero."
@@ -111,6 +120,7 @@ BEGIN
 
 	AFX_IDP_NO_ERROR_AVAILABLE      "No hay ningún mensaje de error disponible."
 
+#ifndef _AFX_NO_CFILE_RESOURCES
 	AFX_IDP_FILE_NONE                "No ha ocurrido ningún error."
 	AFX_IDP_FILE_GENERIC             "Error desconocido al acceder a %1."
 	AFX_IDP_FILE_NOT_FOUND           "No se encontró %1."
@@ -126,6 +136,8 @@ BEGIN
 	AFX_IDP_FILE_LOCKING             "Violación de bloqueo al acceder %1. "
 	AFX_IDP_FILE_DISKFULL            "Disco lleno al acceder a %1."
 	AFX_IDP_FILE_EOF                 "Se intentó acceder a %1 más allá del final."
+	AFX_IDS_UNNAMED_FILE             "un archivo sin nombre"
+#endif // !_AFX_NO_CFILE_RESOURCES
 
 	AFX_IDP_ARCH_NONE               "No ha ocurrido ningún error."
 	AFX_IDP_ARCH_GENERIC                "Error desconocido al acceder a %1."
@@ -176,6 +188,7 @@ AFX_IDC_MOVE4WAY        CURSOR  DISCARDABLE     "res\\move4way.cur"
 /////////////////////////////////////////////////////////////////////////////
 // Standard Dialogs
 
+#ifndef _AFX_NO_NEWTYPEDLG_RESOURCES
 AFX_IDD_NEWTYPEDLG DIALOG DISCARDABLE  9, 26, 183, 70
 #ifndef _MAC
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | 0x04
@@ -191,6 +204,7 @@ BEGIN
 	PUSHBUTTON      "Cancelar",IDCANCEL,137,23,40,14
 	PUSHBUTTON      "&Ayuda",ID_HELP,137,43,40,14
 END
+#endif // !_AFX_NO_NEWTYPEDLG_RESOURCES
 
 /////////////////////////////////////////////////////////////////////////////
 // CMiniFrameWnd Bitmap

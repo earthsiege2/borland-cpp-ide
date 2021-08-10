@@ -1,0 +1,64 @@
+:Base ibx.hlp>main
+:Title InterBase Express Reference
+
+1 InterBase Express Reference
+
+2 Getting Started with InterBase Express=1OGJ__D
+
+2 VCL Object and Component Listing by Unit
+
+3 IB
+4 EIBError=EIBError
+4 EIBClientError=EIBClientError
+4 EIBInterBaseError=EIBInterBaseError
+
+3 IBBlob
+4 TIBBlobStream=TIBBlobStream
+4 TIBDSBlobStream=TIBDSBlobStream
+
+3 IBCustomDataSet
+4 TIBBCDField=TIBBCDField
+4 TIBCustomDataSet=TIBCustomDataSet
+4 TIBDataLink=TIBDataLink
+4 TIBDataSet=TIBDataSet
+4 TIBDataSetUpdateObject=TIBDataSetUpdateObject
+4 TIBStringField=TIBStringField
+
+3 IBDatabase
+4 TIBBase=TIBBase
+4 TIBDatabase=TIBDatabase
+4 TIBTransaction=TIBTransaction
+
+3 IBDatabaseInfo
+4 TIBDatabaseInfo=TIBDatabaseInfo
+
+3 IBEvents
+4 TIBEvents=TIBEvents
+
+3 IBQuery
+4 TIBQuery=TIBQuery
+
+3 IBSQL
+4 TIBCustomSQLMonitor=TIBCustomSQLMonitor
+4 TIBSQL=TIBSQL
+4 TIBBatch=TIBBatch
+4 TIBBatchInput=TIBBatchInput
+4 TIBBatchOutput=TIBBatchOutput
+4 TIBInputDelimitedFile=TIBInputDelimitedFile
+4 TIBInputRawFile=TIBInputRawFile
+4 TIBOutputDelimitedFile=TIBOutputDelimitedFile
+4 TIBOutputRawFile=TIBOutputRawFile
+4 TIBSQLMonitor=TIBSQLMonitor
+4 TIBSQLMonitorHook=TIBSQLMonitorHook
+4 TIBXSQLDA=TIBXSQLDA
+4 TIBXSQLVAR=TIBXSQLVAR
+
+3 IBStoredProc
+4 TIBStoredProc=TIBStoredProc
+
+3 IBTable
+4 TIBTable=TIBTable
+
+3 IBUpdateSQL
+4 TIBUpdateSQL=TIBUpdateSQL
+

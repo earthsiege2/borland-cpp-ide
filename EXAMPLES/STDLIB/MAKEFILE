@@ -49,32 +49,178 @@
 
 ########################   Targets    #################################
 
-all : accum.exe adj_diff.exe advance.exe auto_ptr.exe b_search.exe \
-	binders.exe bitset.exe complex.exe copyex.exe count.exe \
-	deque.exe distance.exe eqlrange.exe equal.exe exceptio.exe \
-	exceptn.exe fill.exe find.exe find_f_o.exe for_each.exe \
-	funct_ob.exe generate.exe heap_ops.exe includes.exe \
-	inr_prod.exe ins_itr.exe lex_comp.exe limits.exe list.exe \
-        map.exe max.exe max_elem.exe merge.exe mismatch.exe \
-	multimap.exe multiset.exe negator.exe nthelem.exe p_queue.exe \
-	partsort.exe partsum.exe permute.exe pnt2fnct.exe prtition.exe \
-	queue.exe remove.exe replace.exe rev_itr.exe reverse.exe \
-	rndshufl.exe rotate.exe search.exe setex.exe set_diff.exe \
-	set_intr.exe set_unin.exe set_s_di.exe set_intr.cpp sort.exe \
-	stack.exe string.exe swap.exe trnsform.exe ul_bound.exe \
-	unique.exe vector.exe alg1.exe alg2.exe alg3.exe alg4.exe \
-	alg5.exe alg6.exe alg7.exe calc.exe complx.exe concord.exe \
-	graph.exe icecream.exe radix.exe sieve.exe spell.exe tele.exe \
-	widwork.exe
+ALLEXES =                                                                     \
+        accum.exe     \
+        adj_diff.exe  \
+        advance.exe   \
+        alg1.exe      \
+        alg2.exe      \
+        alg3.exe      \
+        alg4.exe      \
+        alg5.exe      \
+        alg6.exe      \
+        alg7.exe      \
+        auto_ptr.exe  \
+        b_search.exe  \
+        binders.exe   \
+        bitset.exe    \
+        calc.exe      \
+        codecvt.exe   \
+        collate.exe   \
+        complex.exe   \
+        complx.exe    \
+        concord.exe   \
+        copyex.exe    \
+        count.exe     \
+        ctype.exe     \
+        deque.exe     \
+        distance.exe  \
+        eqlrange.exe  \
+        equal.exe     \
+        except.exe    \
+        exceptn.exe   \
+        filebuf.exe   \
+        fill.exe      \
+        find.exe      \
+        find_end.exe  \
+        find_f_o.exe  \
+        for_each.exe  \
+        fstream.exe   \
+        funct_ob.exe  \
+        generate.exe  \
+        graph.exe     \
+        gslc_ary.exe  \
+        gslice.exe    \
+        hasfacet.exe  \
+        heap_ops.exe  \
+        icecream.exe  \
+        ifstream.exe  \
+        includes.exe  \
+        indr_ary.exe  \
+        inr_prod.exe  \
+        ins_itr.exe   \
+        io_iter.exe   \
+        isalnum.exe   \
+        istbufit.exe  \
+        istngstr.exe  \
+        istream1.exe  \
+        istrstre.exe  \
+        lex_comp.exe  \
+        limits.exe    \
+        list.exe      \
+        locale.exe    \
+        map.exe       \
+        mask_ary.exe  \
+        max.exe       \
+        max_elem.exe  \
+        memfunc.exe   \
+        memfunrf.exe  \
+        merge.exe     \
+        mismatch.exe  \
+        moneyget.exe  \
+        moneyput.exe  \
+        monpunct.exe  \
+        multimap.exe  \
+        multiset.exe  \
+        mutex.exe     \
+        negator.exe   \
+        nthelem.exe   \
+        numget.exe    \
+        numpunct.exe  \
+        numput.exe    \
+        ostbufit.exe  \
+        ostream1.exe  \
+        ostream2.exe  \
+        p_queue.exe   \
+        partsort.exe  \
+        partsum.exe   \
+        permute.exe   \
+        pnt2fnct.exe  \
+        prtition.exe  \
+        queue.exe     \
+        radix.exe     \
+        remove.exe    \
+        replace.exe   \
+        rev_itr.exe   \
+        reverse.exe   \
+        rndshufl.exe  \
+        rotate.exe    \
+        search.exe    \
+        set_diff.exe  \
+        set_intr.exe  \
+        set_s_di.exe  \
+        set_unin.exe  \
+        setex.exe     \
+        sieve.exe     \
+        slc_ary.exe   \
+        slice.exe     \
+        sort.exe      \
+        spell.exe     \
+        stack.exe     \
+        stngstre.exe  \
+        stocks.exe    \
+        string.exe    \
+        strngbuf.exe  \
+        strstrbf.exe  \
+        strstrea.exe  \
+        swap.exe      \
+        tele.exe      \
+        timeget.exe   \
+        timeput.exe   \
+        toupper.exe   \
+        trnsform.exe  \
+        ul_bound.exe  \
+        unique.exe    \
+        usefacet.exe  \
+        valarray.exe  \
+        vector.exe    \
+        widwork.exe   \
 
+
+
+
+all : rwstdmsg.dll messages.exe allobjs $(ALLEXES)
+all : allobjs $(ALLEXES)
+
+allobjs: $(ALLEXES:.exe=.obj)
 
 clean:
-   if exist *.obj del *.obj
-   if exist *.exe del *.exe
+   -@if exist *.obj del *.obj                 >nul
+   -@if exist *.lib del *.lib                 >nul
+   -@if exist rwstdmsg.res del rwstdmsg.res   >nul
+   -@if exist *.exe del *.exe                 >nul
+   -@if exist *.dll del *.dll                 >nul
+   -@if exist *.tds del *.tds                 >nul
+   -@if exist $(PCHROOT).* del $(PCHROOT).*   >nul
+
+runall: all $(ALLEXES)
+#
+# Warning: there are quite a few exe's here that will run.  Also, several
+#          of the examples require input from stdin.
+#
+    & $?
+
+###########################  Explicit Rules #######################
+rwstdmsg.obj: rwstdmsg.cpp
+    $(CPP) $(CPPFLAGS) -tWD$(TARGSUF) -c {$? }
+
+rwstdmsg.res: rwstdmsg.rc
+    $(RC) $(RCFLAGS) $?
+
+rwstdmsg.dll: rwstdmsg.obj rwstdmsg.res
+    start $(LINKER) $(LINKFLAGS) $(LINKSTARTUP) rwstdmsg.obj ,$*,,$(LINKLIBS),,rwstdmsg.res
+
+messages.exe: messages.obj rwstdmsg.dll
+    $(CPP) $(CPPFLAGS) messages.obj rwstdmsg.lib
+
 
 ###########################  Implicit Rules #######################
 .cpp.obj:
-    $(CPP) $(CPPFLAGS) -c {$< }
+    $(CPP) $(CPPFLAGS) -c {$? }
+
+.cpp.i:
+    $(CPP32) $(CPPFLAGS) -c -Sr -Sd {$? }
 
 .obj.exe:
     $(CPP) $(CPPFLAGS) $<
+

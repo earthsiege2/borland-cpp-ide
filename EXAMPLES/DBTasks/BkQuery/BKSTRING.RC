@@ -1,0 +1,30 @@
+//---------------------------------------------------------------------------
+// Borland C++Builder
+// Copyright (c) 1987, 1997 Borland International Inc.  All Rights Reserved.
+//---------------------------------------------------------------------------
+// bkstring.rc
+// This resource file contains a user defined resource type SQLQUERY.
+// This type is stored in an ascii file with extention .sql.  The name SQLQUERY
+// and the file type are completely arbitrary.
+// Please see the invaluable reference "Programming Window 95" by
+// Charles Petzold, MS Press, Chapter 9, "User-Defined Resources"
+//---------------------------------------------------------------------------
+
+#define IDS_VeryInefficientName           800
+#define IDS_AmountDueName                 801
+#define IDSQLQUERY_VeryInefficientQuery   809
+#define IDSQLQUERY_AmountDueByCustomer    810
+
+#ifdef RC_INVOKED
+
+IDSQLQUERY_VeryInefficientQuery SQLQUERY1 ineffcnt.sql
+IDSQLQUERY_AmountDueByCustomer  SQLQUERY2 amountdu.sql
+
+STRINGTABLE
+{
+  IDS_VeryInefficientName,       "IB: Very Inefficient Query"
+  IDS_AmountDueName,             "DB: Amount Due By Customer"
+}
+
+#endif
+

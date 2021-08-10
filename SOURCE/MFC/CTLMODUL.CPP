@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -30,8 +30,10 @@ IMPLEMENT_DYNAMIC(COleControlModule, CWinApp)
 
 BOOL COleControlModule::InitInstance()
 {
+#ifdef _AFXDLL
 	// wire up resources from OLE DLL
 	AfxOleInitModule();
+#endif
 
 	COleObjectFactory::RegisterAll();
 	return TRUE;

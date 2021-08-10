@@ -1,7 +1,0 @@
-#----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1995, 1996 by Borland International
-#----------------------------------------------------------------------------
-EXERES=nb
-OBJEXE=nb.obj notebook.obj hscroll.obj vscroll.obj utils.obj
-
-!include $(BCEXAMPLEDIR)\owlmake.gen

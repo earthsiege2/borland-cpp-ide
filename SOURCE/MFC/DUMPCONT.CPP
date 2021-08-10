@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -81,10 +81,8 @@ CDumpContext& CDumpContext::operator<<(LPCTSTR lpsz)
 				OutputString(szBuffer);
 				lpBuf = szBuffer;
 			}
-#ifndef _MAC
 			if (*lpsz == '\n')
 				*lpBuf++ = '\r';
-#endif
 			*lpBuf++ = *lpsz++;
 		}
 		*lpBuf = '\0';
@@ -166,7 +164,11 @@ CDumpContext& CDumpContext::operator<<(const CObject* pOb)
 	if (pOb == NULL)
 		*this << _T("NULL");
 	else
+#ifdef _AFXDLL
 		pOb->Dump(*this);
+#else
+		*this << _T("Unable to dump object in static release builds");
+#endif
 
 	return *this;
 }

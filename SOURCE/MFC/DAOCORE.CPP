@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -19,6 +19,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#pragma comment(lib, "ole32.lib")
+
 #define new DEBUG_NEW
 
 /////////////////////////////////////////////////////////////////////////////
@@ -32,8 +34,14 @@ _AFX_DAO_STATE::_AFX_DAO_STATE()
 
 _AFX_DAO_STATE::~_AFX_DAO_STATE()
 {
+	// these ASSERTs can trip when:
+	// ... there any outstanding workspsace objects
 	ASSERT(m_mapWorkspaces.IsEmpty());
+
+	// ... you've not shut down with a call AfxDaoTerm()
 	ASSERT(m_pDAODBEngine == NULL);
+
+	// ... OLE wasn't correctly shut down
 	ASSERT(!m_bOleInitialized);
 }
 
@@ -61,6 +69,8 @@ void AFX_CDECL AfxGetIndexFields(DAOIndex* pDAOIndex,
 	DAOIndexFields** ppDAOIndexFields);
 void AFX_CDECL AfxGetIndexFieldInfo(DAOIndex* pDAOIndex, CDaoIndexInfo& indexinfo);
 void AFX_CDECL AfxSetIndexFieldInfo(DAOIndex* pDAOIndex, CDaoIndexInfo& indexinfo);
+void AFX_CDECL AfxGetDefaultValue(DAOField* pDAOField, CString& strDefaultValue);
+void AFX_CDECL AfxSetDefaultValue(DAOField* pDAOField, CString& strDefaultValue);
 
 // GetRows helper
 void AFX_CDECL ThrowGetRowsDaoException(SCODE scode);
@@ -71,40 +81,19 @@ _AFX_DAO_STATE* AFX_CDECL AfxGetDaoState();
 //////////////////////////////////////////////////////////////////////////
 // Global data
 
-static const TCHAR szParameters[] = _T("PARAMETERS ");
-static const TCHAR szSelect[] = _T("SELECT ");
-static const TCHAR szFrom[] = _T(" FROM ");
-static const TCHAR szWhere[] = _T(" WHERE ");
-static const TCHAR szOrderBy[] = _T(" ORDER BY ");
-static const TCHAR szTransform[] = _T("TRANSFORM ");
-static const TCHAR szTable[] = _T("TABLE ");
+AFX_STATIC_DATA const TCHAR _afxParameters2[] = _T("PARAMETERS ");
+AFX_STATIC_DATA const TCHAR _afxSelect2[] = _T("SELECT ");
+AFX_STATIC_DATA const TCHAR _afxFrom2[] = _T(" FROM ");
+AFX_STATIC_DATA const TCHAR _afxWhere2[] = _T(" WHERE ");
+AFX_STATIC_DATA const TCHAR _afxOrderBy2[] = _T(" ORDER BY ");
+AFX_STATIC_DATA const TCHAR _afxTransform2[] = _T("TRANSFORM ");
+AFX_STATIC_DATA const TCHAR _afxTable2[] = _T("TABLE ");
 
 // Need a static VARIANT for optional DAO parameters
-static VARIANT _afxOptionalVariant;
-
-struct AFX_INITOPTIONALVARIANT
-{
-	AFX_INITOPTIONALVARIANT()
-	{
-		_afxOptionalVariant.vt = VT_ERROR;
-		_afxOptionalVariant.scode = DISP_E_PARAMNOTFOUND;
-	};
-};
-
-static const AFX_INITOPTIONALVARIANT _afxInitOptionalVariant;
+AFX_STATIC_DATA VARIANT _afxOptionalVariant = { VT_ERROR, 0, 0, 0, DISP_E_PARAMNOTFOUND };
 
 // Need a static VARIANT for NULL DAO parameters
-static VARIANT _afxNullVariant;
-
-struct AFX_INITNULLVARIANT
-{
-	AFX_INITNULLVARIANT()
-	{
-		_afxNullVariant.vt = VT_NULL;
-	};
-};
-
-static const AFX_INITNULLVARIANT _afxInitNullVariant;
+AFX_STATIC_DATA VARIANT _afxNullVariant = { VT_NULL, 0, 0, 0, 0 };
 
 //////////////////////////////////////////////////////////////////////////
 // Logging helpers
@@ -569,11 +558,6 @@ CDaoWorkspace::CDaoWorkspace()
 
 CDaoWorkspace::~CDaoWorkspace()
 {
-#ifdef _DEBUG
-	if ((afxTraceFlags & traceDatabase) && IsOpen())
-		TRACE0("Warning: call Close before destructing Workspace.\n");
-#endif
-
 	if (IsOpen())
 	{
 		m_nStatus |= AFX_DAO_IMPLICIT_CLOSE;
@@ -583,9 +567,8 @@ CDaoWorkspace::~CDaoWorkspace()
 	{
 		// Remove the workspace from the AFX_DAO_STATE's map
 		_AFX_DAO_STATE* pDaoState = AfxGetDaoState();
-		VERIFY(pDaoState->m_mapWorkspaces.RemoveKey(this));
+		pDaoState->m_mapWorkspaces.RemoveKey(this);
 	}
-
 }
 
 void CDaoWorkspace::Create(LPCTSTR lpszName, LPCTSTR lpszUserName,
@@ -605,7 +588,7 @@ void CDaoWorkspace::Create(LPCTSTR lpszName, LPCTSTR lpszUserName,
 	COleVariant varUserName(lpszUserName, VT_BSTRT);
 	COleVariant varPassword(lpszPassword, VT_BSTRT);
 
-	DAO_CHECK(pDaoState->m_pDAODBEngine->CreateWorkspace(
+	DAO_CHECK(pDaoState->m_pDAODBEngine->_30_CreateWorkspace(
 		V_BSTR(&varName), V_BSTR(&varUserName),
 		V_BSTR(&varPassword), &m_pDAOWorkspace));
 
@@ -652,7 +635,13 @@ void CDaoWorkspace::Open(LPCTSTR lpszWorkspaceName)
 	ASSERT_VALID(this);
 	ASSERT(m_pDAOWorkspaces == NULL);
 	ASSERT(m_pDAOWorkspace == NULL);
-	ASSERT(!IsOpen());
+
+	// Re-Opening is invalid.
+	if (IsOpen())
+	{
+		ASSERT(FALSE);
+		return;
+	}
 
 	// Set the workspace name (or use 0 if opening default)
 	COleVariant var(lpszWorkspaceName, VT_BSTRT);
@@ -729,7 +718,7 @@ void CDaoWorkspace::Close()
 
 	// Remove the workspace from the AFX_DAO_STATE's map
 	_AFX_DAO_STATE* pDaoState = AfxGetDaoState();
-	VERIFY(pDaoState->m_mapWorkspaces.RemoveKey(this));
+	pDaoState->m_mapWorkspaces.RemoveKey(this);
 }
 
 CString PASCAL CDaoWorkspace::GetVersion()
@@ -865,24 +854,11 @@ void PASCAL CDaoWorkspace::CompactDatabase(LPCTSTR lpszSrcName,
 	if (pDaoState->m_pDAODBEngine == NULL)
 		InitializeEngine();
 
-#ifdef __BORLANDC__
-	if (lpszPassword != NULL)
-		DAO_CHECK(pDaoState->m_pDAODBEngine->CompactDatabase(
-			V_BSTR(&varSrcName), V_BSTR(&varDestName),
-			COleVariant(lpszLocale, VT_BSTRT), COleVariant((long)nOptions),
-			(VARIANT)COleVariant(lpszPassword, VT_BSTRT)));
-	else
-		DAO_CHECK(pDaoState->m_pDAODBEngine->CompactDatabase(
-			V_BSTR(&varSrcName), V_BSTR(&varDestName),
-			COleVariant(lpszLocale, VT_BSTRT), COleVariant((long)nOptions),
-			_afxOptionalVariant));
-#else
 	DAO_CHECK(pDaoState->m_pDAODBEngine->CompactDatabase(
 		V_BSTR(&varSrcName), V_BSTR(&varDestName),
 		COleVariant(lpszLocale, VT_BSTRT), COleVariant((long)nOptions),
 		lpszPassword != NULL ? (VARIANT)COleVariant(lpszPassword, VT_BSTRT) :
 		_afxOptionalVariant));
-#endif
 }
 
 void PASCAL CDaoWorkspace::CompactDatabase(LPCTSTR lpszSrcName,
@@ -1020,13 +996,56 @@ void CDaoWorkspace::BeginTrans()
 	DAO_CHECK(m_pDAOWorkspace->BeginTrans());
 }
 
+// Determine whether to use DAO 3.6, 3.5, or 3.0
+// Use DAO 3.0 if DLL build and not built with MFC 4.21 or later
+// Use DAO 3.6 if MFC 6.01 or later
+// otherwise, DAO 3.5
+
+#ifndef _AFXDLL
+#if _MFC_VER >= 0x0601
+#define _AfxDetermineDaoVersion()   (36)
+#else
+#define _AfxDetermineDaoVersion()   (35)
+#endif
+#else // dynamically because of DLL
+static inline BYTE _AfxDetermineDaoVersion()
+{
+	BYTE bReturn = 35;
+
+#ifdef _AFXDLL
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	if (pModuleState->m_dwVersion < 0x421)
+		bReturn = 30;
+	else if (pModuleState->m_dwVersion >= 0x0601)
+		bReturn = 36;
+#endif // _AFXDLL
+
+	return bReturn;
+}
+#endif
+
 void CDaoWorkspace::CommitTrans()
 {
 	ASSERT_VALID(this);
 	ASSERT(IsOpen());
 	ASSERT(m_pDAOWorkspace != NULL);
 
-	DAO_CHECK(m_pDAOWorkspace->CommitTrans());
+   BYTE bUseDao = _AfxDetermineDaoVersion();
+
+	if (bUseDao == 35 || bUseDao == 36)
+	{
+		// Call DAO 3.5 or 3.6 method with no option set.
+		// CommitTrans option parameter not yet supported.
+		DAO_CHECK(m_pDAOWorkspace->CommitTrans(0));
+	}
+	else
+	{
+		// Call DAO 3.0 method
+		// The DAO 3.0 version of CommitTrans takes no params
+		// so cast CommitTrans to method that takes no params.
+		HRESULT (STDMETHODCALLTYPE DAOWorkspace::*pMethod)() = (HRESULT (STDMETHODCALLTYPE DAOWorkspace::*)())m_pDAOWorkspace->CommitTrans;
+		DAO_CHECK((m_pDAOWorkspace->*pMethod)());
+	}
 }
 
 void CDaoWorkspace::Rollback()
@@ -1193,11 +1212,6 @@ CDaoDatabase::CDaoDatabase(CDaoWorkspace* pWorkspace)
 
 CDaoDatabase::~CDaoDatabase()
 {
-#ifdef _DEBUG
-	if ((afxTraceFlags & traceDatabase) && IsOpen())
-		TRACE0("Warning: call Close before destructing Database.\n");
-#endif
-
 	if (IsOpen())
 		Close();
 
@@ -1236,6 +1250,13 @@ void CDaoDatabase::Open(LPCTSTR lpszName, BOOL bExclusive,
 	BOOL bReadOnly, LPCTSTR lpszConnect)
 {
 	ASSERT_VALID(this);
+
+	// Re-Opening is invalid.
+	if (IsOpen())
+	{
+		ASSERT(FALSE);
+		return;
+	}
 
 	// Allocate, maintain and/or open workspace if necessary
 	InitWorkspace();
@@ -1327,7 +1348,7 @@ void CDaoDatabase::Close()
 	m_bOpen = FALSE;
 
 	// Remove the CDaoDatabase from the CDaoWorkspace's map
-	VERIFY(m_pWorkspace->m_mapDatabases.RemoveKey(this));
+	m_pWorkspace->m_mapDatabases.RemoveKey(this);
 }
 
 BOOL CDaoDatabase::CanUpdate()
@@ -1498,8 +1519,7 @@ void CDaoDatabase::CreateRelation(CDaoRelationInfo& relinfo)
 				COleVariant(relinfo.m_pFieldInfos[nIndex].m_strName, VT_BSTRT),
 				_afxOptionalVariant, _afxOptionalVariant, &pDAOField));
 
-			COleVariant var(
-				relinfo.m_pFieldInfos[nIndex].m_strForeignName, VT_BSTRT);
+			COleVariant var(relinfo.m_pFieldInfos[nIndex].m_strForeignName, VT_BSTRT);
 			DAO_CHECK(pDAOField->put_ForeignName(V_BSTR(&var)));
 
 			// Append the field to relation fields collection and release
@@ -1713,7 +1733,8 @@ void CDaoDatabase::InitWorkspace()
 		m_nStatus |= AFX_DAO_IMPLICIT_WS;
 	}
 
-	if (!m_pWorkspace->IsOpen())
+	// Open workspace if not open and not new (unappended)
+	if (!m_pWorkspace->IsOpen() && !m_pWorkspace->IsNew())
 	{
 		// Open the default workspace
 		m_pWorkspace->Open();
@@ -2015,17 +2036,12 @@ CDaoTableDef::CDaoTableDef(CDaoDatabase* pDatabase)
 
 CDaoTableDef::~CDaoTableDef()
 {
-#ifdef _DEBUG
-	if ((afxTraceFlags & traceDatabase) && IsOpen())
-		TRACE0("Warning: call Close before destructing TableDef.\n");
-#endif
-
 	if (IsOpen())
 		Close();
 	else if (m_bNew)
 	{
 		// Remove the tabledef from the CDaoDatabase's map
-		VERIFY(m_pDatabase->m_mapTableDefs.RemoveKey(this));
+		m_pDatabase->m_mapTableDefs.RemoveKey(this);
 	}
 }
 
@@ -2136,7 +2152,7 @@ void CDaoTableDef::Close()
 	m_bNew = FALSE;
 
 	// Remove the tabledef from the CDaoDatabase's map
-	VERIFY(m_pDatabase->m_mapTableDefs.RemoveKey(this));
+	m_pDatabase->m_mapTableDefs.RemoveKey(this);
 }
 
 BOOL CDaoTableDef::CanUpdate()
@@ -2610,17 +2626,12 @@ CDaoQueryDef::CDaoQueryDef(CDaoDatabase* pDatabase)
 
 CDaoQueryDef::~CDaoQueryDef()
 {
-#ifdef _DEBUG
-	if ((afxTraceFlags & traceDatabase) && IsOpen())
-		TRACE0("Warning: call Close before destructing QueryDef.\n");
-#endif
-
 	if (IsOpen())
 		Close();
 	else if (m_bNew)
 	{
 		// Remove the querydef from the CDaoDatabase's map
-		VERIFY(m_pDatabase->m_mapQueryDefs.RemoveKey(this));
+		m_pDatabase->m_mapQueryDefs.RemoveKey(this);
 	}
 }
 
@@ -2743,7 +2754,7 @@ void CDaoQueryDef::Close()
 	m_bNew = FALSE;
 
 	// Remove the querydef from the CDaoDatabase's map
-	VERIFY(m_pDatabase->m_mapQueryDefs.RemoveKey(this));
+	m_pDatabase->m_mapQueryDefs.RemoveKey(this);
 }
 
 BOOL CDaoQueryDef::CanUpdate()
@@ -3163,6 +3174,16 @@ void CDaoQueryDef::FillParameterInfo(DAOParameter* pDAOParameter,
 		paraminfo.m_strName = V_BSTRT(&var);
 		var.Clear();
 
+		TCHAR* pch = paraminfo.m_strName.GetBuffer(0);
+		int nLength = lstrlen(pch);
+		if (nLength > 0 && *pch == '[' && *(pch + nLength -1) == ']')
+		{
+			*(pch + nLength - 1) = 0;  // remove last bracket.
+			lstrcpy(pch, pch + 1);
+		}
+
+		paraminfo.m_strName.ReleaseBuffer(-1);
+
 		DAO_CHECK(pDAOParameter->get_Type(
 			&paraminfo.m_nType));
 
@@ -3231,11 +3252,6 @@ CDaoRecordset::CDaoRecordset(CDaoDatabase* pDatabase)
 
 CDaoRecordset::~CDaoRecordset()
 {
-#ifdef _DEBUG
-	if ((afxTraceFlags & traceDatabase) && IsOpen())
-		TRACE0("Warning: call Close before destructing Recordset.\n");
-#endif
-
 	if (IsOpen())
 		Close();
 
@@ -3253,7 +3269,14 @@ void CDaoRecordset::Open(int nOpenType, LPCTSTR lpszSQL, int nOptions)
 	ASSERT_VALID(this);
 	ASSERT(nOpenType == AFX_DAO_USE_DEFAULT_TYPE ||
 		nOpenType == dbOpenDynaset || nOpenType == dbOpenSnapshot ||
-		dbOpenTable);
+		nOpenType == dbOpenTable);
+
+	// Re-Opening is invalid.
+	if (IsOpen())
+	{
+		ASSERT(FALSE);
+		return;
+	}
 
 	if (nOpenType == AFX_DAO_USE_DEFAULT_TYPE)
 		m_nOpenType = m_nDefaultType;
@@ -3263,13 +3286,6 @@ void CDaoRecordset::Open(int nOpenType, LPCTSTR lpszSQL, int nOptions)
 	// Snapshots readOnly in DAO model.
 	if (m_nOpenType == dbOpenSnapshot)
 		nOptions |= dbReadOnly;
-
-	// Re-Opening is invalid.
-	if (IsOpen())
-	{
-		ASSERT(FALSE);
-		return;
-	}
 
 	// Cache parameters and initialize
 	m_nOptions = nOptions;
@@ -3292,51 +3308,75 @@ void CDaoRecordset::Open(int nOpenType, LPCTSTR lpszSQL, int nOptions)
 		m_pTableDef = new CDaoTableDef(m_pDatabase);
 		m_nStatus |= AFX_DAO_IMPLICIT_TD;
 
-		// Must remove the bracket from the name
-		StripBrackets(m_strSQL, m_strSQL.GetBuffer(0));
-		m_strSQL.ReleaseBuffer();
+		TRY
+		{
+			// Must remove the bracket from the name
+			StripBrackets(m_strSQL, m_strSQL.GetBuffer(0));
+			m_strSQL.ReleaseBuffer();
 
-		m_pTableDef->Open(m_strSQL);
+			m_pTableDef->Open(m_strSQL);
 
-		// Open the DAO recordset (implicit MoveFirst)
-		DAO_CHECK(m_pTableDef->m_pDAOTableDef->OpenRecordset(
-			COleVariant((long)m_nOpenType), COleVariant((long)m_nOptions),
-			&m_pDAORecordset));
+			// Open the DAO recordset (implicit MoveFirst)
+			DAO_CHECK(m_pTableDef->m_pDAOTableDef->OpenRecordset(
+				COleVariant((long)m_nOpenType), COleVariant((long)m_nOptions),
+				&m_pDAORecordset));
+		}
+		CATCH_ALL(e)
+		{
+			// Once recordset marked as open, Close handles this
+			if (m_pTableDef->IsOpen())
+				m_pTableDef->Close();
+			delete m_pTableDef;
+			THROW_LAST();
+		}
+		END_CATCH_ALL
 	}
 	else
 	{
 		m_pQueryDef = new CDaoQueryDef(m_pDatabase);
 		m_nStatus |= AFX_DAO_IMPLICIT_QD;
 
-		// If initial clause includes potential start of row returning
-		// query, then SQL passed to Open must be valid
-		// (Note: TABLE is valid for UNION-type queries)
-		if ((_tcsnicmp(m_strSQL, szSelect, _countof(szSelect)-1) != 0) &&
-			(_tcsnicmp(m_strSQL, szParameters, _countof(szParameters)-1) != 0) &&
-			(_tcsnicmp(m_strSQL, szTransform, _countof(szTransform)-1) != 0) &&
-			(_tcsnicmp(m_strSQL, szTable, _countof(szTable)-1) != 0))
+		TRY
 		{
-			BuildSQL();
+			// If initial clause includes potential start of row returning
+			// query, then SQL passed to Open must be valid
+			// (Note: TABLE is valid for UNION-type queries)
+			if ((_tcsnicmp(m_strSQL, _afxSelect2, _countof(_afxSelect2)-1) != 0) &&
+				(_tcsnicmp(m_strSQL, _afxParameters2, _countof(_afxParameters2)-1) != 0) &&
+				(_tcsnicmp(m_strSQL, _afxTransform2, _countof(_afxTransform2)-1) != 0) &&
+				(_tcsnicmp(m_strSQL, _afxTable2, _countof(_afxTable2)-1) != 0))
+			{
+				BuildSQL();
+			}
+			else
+			{
+				// Add the filter and sort
+				if (!m_strFilter.IsEmpty())
+					m_strSQL += _afxWhere2 + m_strFilter;
+
+				if (!m_strSort.IsEmpty())
+					m_strSQL += _afxOrderBy2 + m_strSort;
+			}
+
+			// Create and define temp query
+			m_pQueryDef->Open();
+			m_pQueryDef->SetSQL(m_strSQL);
+
+			BindParameters();
+			// Open the DAO recordset (implicit MoveFirst)
+			DAO_CHECK(m_pQueryDef->m_pDAOQueryDef->_30_OpenRecordset(
+				COleVariant((long)m_nOpenType), COleVariant((long)m_nOptions),
+				&m_pDAORecordset));
 		}
-		else
+		CATCH_ALL(e)
 		{
-			// Add the filter and sort
-			if (!m_strFilter.IsEmpty())
-				m_strSQL += szWhere + m_strFilter;
-
-			if (!m_strSort.IsEmpty())
-				m_strSQL += szOrderBy + m_strSort;
+			// Once recordset marked as open, Close handles this
+			if (m_pQueryDef->IsOpen())
+				m_pQueryDef->Close();
+			delete m_pQueryDef;
+			THROW_LAST();
 		}
-
-		// Create and define temp query
-		m_pQueryDef->Open();
-		m_pQueryDef->SetSQL(m_strSQL);
-
-		BindParameters();
-		// Open the DAO recordset (implicit MoveFirst)
-		DAO_CHECK(m_pQueryDef->m_pDAOQueryDef->OpenRecordset(
-			COleVariant((long)m_nOpenType), COleVariant((long)m_nOptions),
-			&m_pDAORecordset));
+		END_CATCH_ALL
 	}
 
 	m_bOpen = TRUE;
@@ -3367,6 +3407,13 @@ void CDaoRecordset::Open(CDaoQueryDef* pQueryDef, int nOpenType,
 	if (!pQueryDef->IsOpen())
 		ThrowDaoException(AFX_DAO_ERROR_OBJECT_NOT_OPEN);
 
+	// Re-Opening is invalid.
+	if (IsOpen())
+	{
+		ASSERT(FALSE);
+		return;
+	}
+
 	if (nOpenType == AFX_DAO_USE_DEFAULT_TYPE)
 		m_nOpenType = m_nDefaultType;
 	else
@@ -3378,13 +3425,6 @@ void CDaoRecordset::Open(CDaoQueryDef* pQueryDef, int nOpenType,
 	// Snapshots readOnly in DAO model.
 	if (m_nOpenType == dbOpenSnapshot)
 		nOptions |= dbReadOnly;
-
-	// Re-Opening is invalid.
-	if (IsOpen())
-	{
-		ASSERT(FALSE);
-		return;
-	}
 
 	// Cache parameters and initialize
 	m_nOptions = nOptions;
@@ -3399,7 +3439,7 @@ void CDaoRecordset::Open(CDaoQueryDef* pQueryDef, int nOpenType,
 	BindParameters();
 
 	// Open the DAO recordset (implicit MoveFirst)
-	DAO_CHECK(m_pQueryDef->m_pDAOQueryDef->OpenRecordset(
+	DAO_CHECK(m_pQueryDef->m_pDAOQueryDef->_30_OpenRecordset(
 		COleVariant((long)m_nOpenType), COleVariant((long)m_nOptions),
 		&m_pDAORecordset));
 
@@ -3432,20 +3472,17 @@ void CDaoRecordset::Open(CDaoTableDef* pTableDef, int nOpenType,
 		ThrowDaoException(AFX_DAO_ERROR_OBJECT_NOT_OPEN);
 	m_pTableDef = pTableDef;
 
-	if (nOpenType == AFX_DAO_USE_DEFAULT_TYPE)
-		m_nOpenType = m_nDefaultType;
-	else
-		m_nOpenType = nOpenType;
-
-	// Can't open dynaset or snapshots type recordsets with TableDef
-	ASSERT(m_nOpenType == dbOpenTable);
-
 	// Re-Opening is invalid.
 	if (IsOpen())
 	{
 		ASSERT(FALSE);
 		return;
 	}
+
+	if (nOpenType == AFX_DAO_USE_DEFAULT_TYPE)
+		m_nOpenType = m_nDefaultType;
+	else
+		m_nOpenType = nOpenType;
 
 	// Cache parameters and initialize
 	m_nOptions = nOptions;
@@ -3564,7 +3601,7 @@ void CDaoRecordset::Close()
 	m_bOpen = FALSE;
 
 	// Remove the recordset from the CDaoDatabase's map
-	VERIFY(m_pDatabase->m_mapRecordsets.RemoveKey(this));
+	m_pDatabase->m_mapRecordsets.RemoveKey(this);
 }
 
 void CDaoRecordset::Requery()
@@ -3573,47 +3610,48 @@ void CDaoRecordset::Requery()
 	ASSERT(IsOpen());
 	ASSERT(CanRestart());
 
-	TRY
-	{
-		// If filter or sort strings changed, must Close and Open
-		// This is only effective if m_strFilter/m_strSort used
-		if ((m_pQueryDef != NULL &&
-			(m_nStatus & AFX_DAO_IMPLICIT_QD)) &&
-			((m_strRequeryFilter != m_strFilter) ||
-			(m_strRequerySort != m_strSort)))
-		{
-			Close();
-			Open(m_nOpenType, m_strRequerySQL, m_nOptions);
-		}
-		else
-		{
-			// Rebind parameters in case values have changed
-			BindParameters();
-
-			if (m_pQueryDef != NULL)
-			{
-				COleVariant varDisp;
-				varDisp.pdispVal = m_pQueryDef->m_pDAOQueryDef;
-				varDisp.vt = VT_DISPATCH;
-				DAO_CHECK(m_pDAORecordset->Requery(varDisp));
-
-				// Reset vt to prevent release of DAOQueryDef
-				varDisp.vt = VT_EMPTY;
-			}
-			else
-				// Must be a table type recordset (this will fail!)
-				DAO_CHECK(m_pDAORecordset->Requery(_afxOptionalVariant));
-
-			GetDataAndFixupNulls();
-			ResetCursorAttributes();
-		}
-	}
-	CATCH_ALL(e)
+	// If filter or sort strings changed, must Close and Open
+	// This is only effective if m_strFilter/m_strSort used
+	if ((m_pQueryDef != NULL &&
+		(m_nStatus & AFX_DAO_IMPLICIT_QD)) &&
+		((m_strRequeryFilter != m_strFilter) ||
+		(m_strRequerySort != m_strSort)))
 	{
 		Close();
-		THROW_LAST();
+		Open(m_nOpenType, m_strRequerySQL, m_nOptions);
 	}
-	END_CATCH_ALL
+	else
+	{
+		// Rebind parameters in case values have changed
+		BindParameters();
+
+		if (m_pQueryDef != NULL)
+		{
+			COleVariant varDisp;
+			varDisp.pdispVal = m_pQueryDef->m_pDAOQueryDef;
+			varDisp.vt = VT_DISPATCH;
+
+			TRY
+			{
+				DAO_CHECK(m_pDAORecordset->Requery(varDisp));
+			}
+			CATCH_ALL(e)
+			{
+				// Reset vt to prevent release of DAOQueryDef
+				varDisp.vt = VT_EMPTY;
+				THROW_LAST();
+			}
+			END_CATCH_ALL
+
+			// Reset vt to prevent release of DAOQueryDef
+			varDisp.vt = VT_EMPTY;
+		}
+		else
+			// Must be a table type recordset (this will fail!)
+			DAO_CHECK(m_pDAORecordset->Requery(_afxOptionalVariant));
+
+		GetDataAndFixupNulls();
+	}
 }
 
 CString CDaoRecordset::GetDefaultDBName()
@@ -3639,7 +3677,7 @@ void CDaoRecordset::DoFieldExchange(CDaoFieldExchange* /* pFX */)
 	// Do nothing if dynamic binding, otherwise override and add DFX calls
 }
 
-BOOL CDaoRecordset::IsBOF()
+BOOL CDaoRecordset::IsBOF() const
 {
 	ASSERT_VALID(this);
 	ASSERT(IsOpen());
@@ -3649,7 +3687,7 @@ BOOL CDaoRecordset::IsBOF()
 	return nBOF == AFX_DAO_TRUE;
 }
 
-BOOL CDaoRecordset::IsEOF()
+BOOL CDaoRecordset::IsEOF() const
 {
 	ASSERT_VALID(this);
 	ASSERT(IsOpen());
@@ -3845,7 +3883,7 @@ void CDaoRecordset::SetCurrentIndex(LPCTSTR lpszName)
 	DAO_CHECK(m_pDAORecordset->put_Index(V_BSTR(&var)));
 
 	// Refetch the data
-	ResetCursor();
+	GetDataAndFixupNulls();
 }
 
 long CDaoRecordset::GetRecordCount()
@@ -4160,7 +4198,7 @@ void CDaoRecordset::SetBookmark(COleVariant varBookmark)
 
 	DAO_CHECK(m_pDAORecordset->put_Bookmark(&varBookmark.parray));
 
-	ResetCursor();
+	GetDataAndFixupNulls();
 }
 
 long CDaoRecordset::GetAbsolutePosition()
@@ -4182,7 +4220,7 @@ void CDaoRecordset::SetAbsolutePosition(long lPosition)
 
 	DAO_CHECK(m_pDAORecordset->put_AbsolutePosition(lPosition));
 
-	ResetCursor();
+	GetDataAndFixupNulls();
 }
 
 float CDaoRecordset::GetPercentPosition()
@@ -4204,7 +4242,7 @@ void CDaoRecordset::SetPercentPosition(float fPosition)
 
 	DAO_CHECK(m_pDAORecordset->put_PercentPosition(fPosition));
 
-	ResetCursor();
+	GetDataAndFixupNulls();
 }
 
 void CDaoRecordset::MoveNext()
@@ -4256,7 +4294,7 @@ void CDaoRecordset::Move(long lRows)
 		break;
 
 	case AFX_DAO_LAST:
-		DAO_CHECK(m_pDAORecordset->MoveLast());
+		DAO_CHECK(m_pDAORecordset->_30_MoveLast());
 		break;
 
 	// General case
@@ -4266,7 +4304,7 @@ void CDaoRecordset::Move(long lRows)
 
 	}
 
-	ResetCursor();
+	GetDataAndFixupNulls();
 }
 
 BOOL CDaoRecordset::FindNext(LPCTSTR lpszFilter)
@@ -4332,7 +4370,7 @@ BOOL CDaoRecordset::Find(long lType, LPCTSTR lpszFilter)
 
 	BOOL bMatch = IsMatch();
 	if (bMatch)
-		ResetCursor();
+		GetDataAndFixupNulls();
 
 	return bMatch;
 }
@@ -4361,7 +4399,7 @@ BOOL CDaoRecordset::Seek(LPCTSTR lpszComparison, COleVariant* pKey1,
 
 	BOOL bMatch = IsMatch();
 	if (bMatch)
-		ResetCursor();
+		GetDataAndFixupNulls();
 
 	return bMatch;
 }
@@ -4395,7 +4433,7 @@ BOOL CDaoRecordset::Seek(LPCTSTR lpszComparison, COleVariant* pKeyArray,
 
 	BOOL bMatch = IsMatch();
 	if (bMatch)
-		ResetCursor();
+		GetDataAndFixupNulls();
 
 	return bMatch;
 }
@@ -4406,7 +4444,7 @@ void CDaoRecordset::CancelUpdate()
 	ASSERT(IsOpen());
 	ASSERT(m_pDAORecordset != NULL);
 
-	DAO_CHECK(m_pDAORecordset->CancelUpdate());
+	DAO_CHECK(m_pDAORecordset->_30_CancelUpdate());
 
 	// Restore cache if necessary
 	if (m_bCheckCacheForDirtyFields && m_nFields > 0)
@@ -4482,20 +4520,9 @@ void CDaoRecordset::FillCache(long* pSize, COleVariant* pBookmark)
 	ASSERT(IsOpen());
 	ASSERT(m_pDAORecordset != NULL);
 
-#ifdef __BORLANDC__
-	if (pSize)
-		DAO_CHECK(m_pDAORecordset->FillCache(
-			(VARIANT)COleVariant(*pSize),
-			pBookmark != NULL ? (VARIANT)*pBookmark : _afxOptionalVariant));
-	else
-		DAO_CHECK(m_pDAORecordset->FillCache(
-			_afxOptionalVariant,
-			pBookmark != NULL ? (VARIANT)*pBookmark : _afxOptionalVariant));
-#else
 	DAO_CHECK(m_pDAORecordset->FillCache(
 		pSize != NULL ? (VARIANT)COleVariant(*pSize) : _afxOptionalVariant,
 		pBookmark != NULL ? (VARIANT)*pBookmark : _afxOptionalVariant));
-#endif
 }
 
 void CDaoRecordset::AddNew()
@@ -4558,7 +4585,7 @@ void CDaoRecordset::Update()
 	ASSERT(IsOpen());
 	ASSERT(m_pDAORecordset != NULL);
 
-	int nMode;
+	int nMode = 0;
 
 	// If caching, compare cache to current values and save state
 	if (m_nFields > 0)
@@ -4573,7 +4600,7 @@ void CDaoRecordset::Update()
 		SetDirtyFields();
 	}
 
-	DAO_CHECK(m_pDAORecordset->Update());
+	DAO_CHECK(m_pDAORecordset->_30_Update());
 
 	// Restore data if data cached and were in add mode
 	if (m_bCheckCacheForDirtyFields && m_nFields > 0 &&
@@ -4602,34 +4629,46 @@ void CDaoRecordset::Delete()
 
 COleVariant CDaoRecordset::GetFieldValue(LPCTSTR lpszName)
 {
-	ASSERT_VALID(this);
-	ASSERT(IsOpen());
-	ASSERT(m_pDAORecordset != NULL);
-
 	COleVariant var;
-
-	// Use DAO optimization. get_Collect will get the field object from
-	// the fields collection and fetch the value
-	DAO_CHECK(m_pDAORecordset->get_Collect(
-		COleVariant(lpszName, VT_BSTRT), &var));
-
+	GetFieldValue(lpszName, var);
 	return var;
 }
 
 COleVariant CDaoRecordset::GetFieldValue(int nIndex)
 {
+	COleVariant var;
+	GetFieldValue(nIndex, var);
+	return var;
+}
+
+void CDaoRecordset::GetFieldValue(LPCTSTR lpszName, COleVariant& varValue)
+{
 	ASSERT_VALID(this);
 	ASSERT(IsOpen());
 	ASSERT(m_pDAORecordset != NULL);
 
-	COleVariant var;
+	// Clear out variant
+	varValue.Clear();
 
 	// Use DAO optimization. get_Collect will get the field object from
 	// the fields collection and fetch the value
 	DAO_CHECK(m_pDAORecordset->get_Collect(
-		COleVariant((long)nIndex), &var));
+		COleVariant(lpszName, VT_BSTRT), &varValue));
+}
 
-	return var;
+void CDaoRecordset::GetFieldValue(int nIndex, COleVariant& varValue)
+{
+	ASSERT_VALID(this);
+	ASSERT(IsOpen());
+	ASSERT(m_pDAORecordset != NULL);
+
+	// Clear out variant
+	varValue.Clear();
+
+	// Use DAO optimization. get_Collect will get the field object from
+	// the fields collection and fetch the value
+	DAO_CHECK(m_pDAORecordset->get_Collect(
+		COleVariant((long)nIndex), &varValue));
 }
 
 void CDaoRecordset::SetFieldValue(LPCTSTR lpszName,
@@ -4777,17 +4816,17 @@ void CDaoRecordset::BuildSQL()
 	if (m_nParams > 0)
 		BuildParameterList();
 	BuildSelectList();
-	m_strSQL += szFrom + strTableName;
+	m_strSQL += _afxFrom2 + strTableName;
 
 	if (!m_strFilter.IsEmpty())
 	{
-		m_strSQL += szWhere;
+		m_strSQL += _afxWhere2;
 		m_strSQL += m_strFilter;
 	}
 
 	if (!m_strSort.IsEmpty())
 	{
-		m_strSQL += szOrderBy;
+		m_strSQL += _afxOrderBy2;
 		m_strSQL += m_strSort;
 	}
 }
@@ -4814,7 +4853,7 @@ void CDaoRecordset::BuildSelectList()
 	ASSERT_VALID(this);
 	ASSERT(m_nFields > 0);
 
-	m_strSQL += szSelect;
+	m_strSQL += _afxSelect2;
 
 	CDaoFieldExchange fx(CDaoFieldExchange::AddToSelectList, this);
 	DoFieldExchange(&fx);
@@ -4825,7 +4864,7 @@ void CDaoRecordset::BuildParameterList()
 	ASSERT_VALID(this);
 	ASSERT(m_nParams > 0);
 
-	m_strSQL += szParameters;
+	m_strSQL += _afxParameters2;
 
 	CDaoFieldExchange fx(CDaoFieldExchange::AddToParameterList, this);
 	DoFieldExchange(&fx);
@@ -4845,7 +4884,10 @@ void CDaoRecordset::BindFields()
 		// Setup the DAO binding struct
 		ASSERT(m_prgDaoColBindInfo == NULL);
 		m_prgDaoColBindInfo = new DAOCOLUMNBINDING[m_nFields];
+		memset(m_prgDaoColBindInfo, 0, sizeof(DAOCOLUMNBINDING) * m_nFields);
 		m_pulColumnLengths = new DWORD[m_nFields];
+		memset(m_pulColumnLengths, 0, sizeof(DWORD) * m_nFields);
+
 		m_pbFieldFlags = new BYTE[m_nFields];
 		memset(m_pbFieldFlags, 0, m_nFields);
 
@@ -4998,14 +5040,6 @@ void CDaoRecordset::SetDirtyFields()
 	DoFieldExchange(&fx);
 }
 
-void CDaoRecordset::ResetCursor()
-{
-	ASSERT_VALID(this);
-
-	GetDataAndFixupNulls();
-	ResetCursorAttributes();
-}
-
 void CDaoRecordset::SetCursorAttributes()
 {
 	ASSERT_VALID(this);
@@ -5013,17 +5047,6 @@ void CDaoRecordset::SetCursorAttributes()
 	m_bScrollable = !(m_nOptions & dbForwardOnly);
 	m_bAppendable = CanUpdate() ||
 		(!(m_nOptions & dbReadOnly) && (m_nOptions & dbAppendOnly));
-
-	// Set the deleted record flag;
-	m_bDeleted = FALSE;
-}
-
-void CDaoRecordset::ResetCursorAttributes()
-{
-	ASSERT_VALID(this);
-
-	// Reset all cursor dependent states
-	m_bDeleted = FALSE;
 }
 
 void CDaoRecordset::GetDataAndFixupNulls()
@@ -5057,6 +5080,9 @@ void CDaoRecordset::GetDataAndFixupNulls()
 			//  errors are not appended to DAO errors collection
 			if (FAILED(scode))
 				ThrowGetRowsDaoException(scode);
+
+			// Check to see if row deleted as it is just warning
+			m_bDeleted = scode == S_RECORDDELETED;
 
 			// Reset the status array
 			ClearFieldStatusFlags();
@@ -5202,27 +5228,27 @@ void CDaoRecordset::Dump(CDumpContext& dc) const
 
 	CObject::Dump(dc);
 
-	dc << "m_bOpen = " << m_bOpen;
-	dc << "m_bAppendable = " << m_bAppendable;
-	dc << "m_bScrollable = " << m_bScrollable;
-	dc << "m_bDeleted = " << m_bDeleted;
+	dc << "\nm_bOpen = " << m_bOpen;
+	dc << "\nm_bAppendable = " << m_bAppendable;
+	dc << "\nm_bScrollable = " << m_bScrollable;
+	dc << "\nm_bDeleted = " << m_bDeleted;
 
-	dc << "m_nOpenType = " << m_nOpenType;
-	dc << "m_nDefaultType = " << m_nDefaultType;
-	dc << "m_nOptions = " << m_nOptions;
+	dc << "\nm_nOpenType = " << m_nOpenType;
+	dc << "\nm_nDefaultType = " << m_nDefaultType;
+	dc << "\nm_nOptions = " << m_nOptions;
 
-	dc << "m_strSQL = " << m_strSQL;
-	dc << "m_strFilter = " << m_strFilter;
-	dc << "m_strSort = " << m_strSort;
-	dc << "m_strRequerySQL = " << m_strRequerySQL;
-	dc << "m_strRequeryFilter = " << m_strRequeryFilter;
-	dc << "m_strRequerySort = " << m_strRequerySort;
+	dc << "\nm_strSQL = " << m_strSQL;
+	dc << "\nm_strFilter = " << m_strFilter;
+	dc << "\nm_strSort = " << m_strSort;
+	dc << "\nm_strRequerySQL = " << m_strRequerySQL;
+	dc << "\nm_strRequeryFilter = " << m_strRequeryFilter;
+	dc << "\nm_strRequerySort = " << m_strRequerySort;
 
-	dc << "m_nFields = " << m_nFields;
-	dc << "m_nParams = " << m_nParams;
+	dc << "\nm_nFields = " << m_nFields;
+	dc << "\nm_nParams = " << m_nParams;
 
-	dc << "m_bCheckCacheForDirtyFields = " << m_bCheckCacheForDirtyFields;
-	dc << "m_nStatus = " << m_nStatus;
+	dc << "\nm_bCheckCacheForDirtyFields = " << m_bCheckCacheForDirtyFields;
+	dc << "\nm_nStatus = " << m_nStatus;
 
 	dc << "\n";
 }
@@ -5285,7 +5311,7 @@ void AFX_CDECL AfxGetFieldInfo(DAOField* pDAOField, CDaoFieldInfo& fieldinfo,
 			fieldinfo.m_strForeignName = V_BSTRT(&var);
 			var.Clear();
 		}
-		AND_CATCH(CDaoException, e)
+		CATCH(CDaoException, e)
 		{
 			// If this property not appropriate, set foreign name empty
 			if (e->m_scode != E_DAO_IllegalOperation)
@@ -5301,10 +5327,7 @@ void AFX_CDECL AfxGetFieldInfo(DAOField* pDAOField, CDaoFieldInfo& fieldinfo,
 
 	if (dwInfoOptions & AFX_DAO_FETCH_ALL_PROPERTIES)
 	{
-		DAO_CHECK(pDAOField->get_DefaultValue(&V_BSTR(&var)));
-		var.vt = VT_BSTR;
-		fieldinfo.m_strDefaultValue = V_BSTRT(&var);
-		var.Clear();
+		AfxGetDefaultValue(pDAOField, fieldinfo.m_strDefaultValue);
 
 		DAO_CHECK(pDAOField->get_ValidationRule(&V_BSTR(&var)));
 		var.vt = VT_BSTR;
@@ -5358,8 +5381,49 @@ void AFX_CDECL AfxSetFieldInfo(DAOField* pDAOField, CDaoFieldInfo& fieldinfo)
 
 	if (!fieldinfo.m_strDefaultValue.IsEmpty())
 	{
-		COleVariant var(fieldinfo.m_strDefaultValue, VT_BSTRT);
-		DAO_CHECK(pDAOField->put_DefaultValue(V_BSTR(&var)));
+		AfxSetDefaultValue(pDAOField, fieldinfo.m_strDefaultValue);
+	}
+}
+
+void AFX_CDECL AfxGetDefaultValue(DAOField* pDAOField, CString& strDefaultValue)
+{
+	COleVariant var;
+	BYTE bUseDao = _AfxDetermineDaoVersion();
+
+	if (bUseDao == 35 || bUseDao == 36)
+	{
+		// Call the DAO 3.5/3.6 method
+		DAO_CHECK(pDAOField->get_DefaultValue(&var));
+	}
+	else
+	{
+		// Call DAO 3.0 method
+		// get_DefaultValue takes BSTR* param not VARIANT*
+		HRESULT (STDMETHODCALLTYPE DAOField::*pMethod)(BSTR*) = (HRESULT (STDMETHODCALLTYPE DAOField::*)(BSTR*))pDAOField->get_DefaultValue;
+		DAO_CHECK((pDAOField->*pMethod)(&V_BSTR(&var)));
+		var.vt = VT_BSTR;
+	}
+
+	strDefaultValue = V_BSTRT(&var);
+	var.Clear();
+}
+
+void AFX_CDECL AfxSetDefaultValue(DAOField* pDAOField, CString& strDefaultValue)
+{
+	COleVariant var(strDefaultValue, VT_BSTRT);
+	BYTE bUseDao = _AfxDetermineDaoVersion();
+
+	if (bUseDao == 35 || bUseDao == 36)
+	{
+		// Call DAO 3.5/3.6 version
+		DAO_CHECK(pDAOField->put_DefaultValue(var));
+	}
+	else
+	{
+		// Call DAO 3.0 method
+		// put_DefaultValue takes BSTR param not VARIANT
+		HRESULT (STDMETHODCALLTYPE DAOField::*pMethod)(BSTR) = (HRESULT (STDMETHODCALLTYPE DAOField::*)(BSTR))pDAOField->put_DefaultValue;
+		DAO_CHECK((pDAOField->*pMethod)(V_BSTR(&var)));
 	}
 }
 
@@ -5437,14 +5501,28 @@ void AFX_CDECL AfxGetIndexFields(DAOIndex* pDAOIndex,
 	DAOIndexFields** ppDAOIndexFields)
 {
 	COleVariant var;
+	BYTE bUseDao = _AfxDetermineDaoVersion();
 
 	// Set the desired interface
 	GUID guidIndexFields;
+   if (bUseDao == 35 || bUseDao == 36)
+   {
+	  // Use DAO 3.5/3.6
 #ifdef _UNICODE
-	guidIndexFields = IID_IDAOIndexFieldsW;
+	   guidIndexFields = IID_IDAOIndexFieldsW;
 #else
-	guidIndexFields = IID_IDAOIndexFields;
+	   guidIndexFields = IID_IDAOIndexFields;
 #endif
+   }
+   else
+   {
+	  // Use DAO 3.0
+#ifdef _UNICODE
+	  guidIndexFields = IID30_IDAOIndexFieldsW;
+#else
+	  guidIndexFields = IID30_IDAOIndexFields;
+#endif
+   }
 
 	// Get dispatch pointer to fields collection
 	DAO_CHECK(pDAOIndex->get_Fields(&var));
@@ -5487,17 +5565,31 @@ void AFX_CDECL AfxGetIndexFieldInfo(DAOIndex* pDAOIndex, CDaoIndexInfo& indexinf
 			indexinfo.m_nFields = nCount;
 		}
 
+	   BYTE bUseDao = _AfxDetermineDaoVersion();
+
 		// Now get field info for each field
 		long lAttributes;
 		for (short nIndex = 0; nIndex < indexinfo.m_nFields; nIndex++)
 		{
 			// Set the desired interface
 			GUID guidField;
+
+		 if (bUseDao == 35 || bUseDao == 36)
+		 {
 #ifdef _UNICODE
-			guidField = IID_IDAOFieldW;
+			   guidField = IID_IDAOFieldW;
 #else
-			guidField = IID_IDAOField;
+			   guidField = IID_IDAOField;
 #endif
+		 }
+		 else
+		 {
+#ifdef _UNICODE
+			guidField = IID30_IDAOFieldW;
+#else
+			guidField = IID30_IDAOField;
+#endif
+		 }
 
 			// Get the field item
 			DAO_CHECK(pDAOIndexFields->get_Item(COleVariant(nIndex), &var));
@@ -5645,18 +5737,19 @@ void AFX_CDECL ThrowGetRowsDaoException(SCODE scode)
 // _AFX_DAO_STATE helper
 _AFX_DAO_STATE* AFX_CDECL AfxGetDaoState()
 {
-	// The DAO state is store in the module process
-	_AFX_DAO_STATE* pDaoState = AfxGetModuleProcessState()->m_pDaoState;
+	// The DAO state is store in the module state
+	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+	_AFX_DAO_STATE* pDaoState = pModuleState->m_pDaoState;
 
 	// Allocate a new DAO state if necessary
 	if (pDaoState == NULL)
 	{
 		pDaoState = new _AFX_DAO_STATE;
-		AfxGetModuleProcessState()->m_pDaoState = pDaoState;
+		pModuleState->m_pDaoState = pDaoState;
 	}
-
 	return pDaoState;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////
 // DAODBEngine helpers
@@ -5670,29 +5763,65 @@ void AFXAPI AfxDaoInit()
 		AFX_DAO_ERROR_ENGINE_INITIALIZATION);
 	pDaoState->m_bOleInitialized = TRUE;
 
-	// Hook up term to CWinApp, otherwise explicit AfxDaoTerm call req'd
+	// Hook AfxDaoTerm to CWinApp, otherwise explicit AfxDaoTerm call req'd
 	CWinApp* pApp = AfxGetApp();
 	if (pApp != NULL)
 		pApp->m_lpfnDaoTerm = AfxDaoTerm;
 
-	// Set the interface type
+	BYTE bUseDao = _AfxDetermineDaoVersion();
+
+	CLSID clsidEngine;
+	COleVariant varKey;
 	GUID guidEngine;
+
+	// Set the interface type
 #ifdef _UNICODE
-	guidEngine = IID_IDAODBEngineW;
+			guidEngine = IID_IDAODBEngineW;
 #else
-	guidEngine = IID_IDAODBEngine;
+			guidEngine = IID_IDAODBEngine;
 #endif
 
+	// DAO 3.5 and 3.6 runtime key
+	varKey = _T("mbmabptebkjcdlgtjmskjwtsdhjbmkmwtrak");
+
+	switch (bUseDao)
+	{
+		case 35:
+			// Use DAO 3.5
+			clsidEngine = CLSID35_CDAODBEngine;
+			break;
+
+		case 30:
+			// Use DAO 3.0
+			clsidEngine = CLSID30_CDAODBEngine;
+
+			// DAO 3.0 runtime key
+			varKey = _T("mjgcqcejfchcijecpdhckcdjqigdejfccjri");
+
+			// Set the interface type
+#ifdef _UNICODE
+			guidEngine = IID30_IDAODBEngineW;
+#else
+			guidEngine = IID30_IDAODBEngine;
+#endif
+			break;
+
+		case 36:
+			// Use DAO 3.6
+			clsidEngine = CLSID_CDAODBEngine;
+			break;
+
+		default:
+			ASSERT(FALSE);
+	}
+
 	LPCLASSFACTORY2 pCF2;
-	DAO_CHECK_ERROR(::CoGetClassObject(CLSID_CDAODBEngine,
+	DAO_CHECK_ERROR(::CoGetClassObject(clsidEngine,
 		CLSCTX_INPROC_SERVER, NULL, IID_IClassFactory2, (LPVOID*)&pCF2),
 		AFX_DAO_ERROR_ENGINE_INITIALIZATION);
 
 	TRY
 	{
-		// DAO runtime key
-		COleVariant varKey(_T("mjgcqcejfchcijecpdhckcdjqigdejfccjri"));
-
 		DAO_CHECK_ERROR(pCF2->CreateInstanceLic( NULL, NULL, guidEngine,
 			V_BSTR(&varKey), (LPVOID*)&pDaoState->m_pDAODBEngine),
 			AFX_DAO_ERROR_ENGINE_INITIALIZATION);
@@ -5747,6 +5876,7 @@ void AFXAPI AfxDaoTerm()
 	if (pApp != NULL)
 		pApp->m_lpfnDaoTerm = NULL;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Inline function declarations expanded out-of-line

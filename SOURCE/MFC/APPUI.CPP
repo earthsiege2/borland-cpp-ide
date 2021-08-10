@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -68,127 +68,6 @@ void CWinApp::DoWaitCursor(int nCode)
 	AfxUnlockGlobals(CRIT_WAITCURSOR);
 }
 
-void CWinApp::EnableModeless(BOOL bEnable)
-{
-#ifdef _AFX_NO_OLE_SUPPORT
-	UNUSED(bEnable);
-#endif
-
-	// no-op if main window is NULL or not a CFrameWnd
-	CWnd* pMainWnd = AfxGetMainWnd();
-	if (pMainWnd == NULL || !pMainWnd->IsFrameWnd())
-		return;
-
-#ifndef _AFX_NO_OLE_SUPPORT
-	// check if notify hook installed
-	ASSERT_KINDOF(CFrameWnd, pMainWnd);
-	CFrameWnd* pFrameWnd = (CFrameWnd*)pMainWnd;
-	if (pFrameWnd->m_pNotifyHook != NULL)
-		pFrameWnd->m_pNotifyHook->OnEnableModeless(bEnable);
-#endif
-}
-
-int CWinApp::DoMessageBox(LPCTSTR lpszPrompt, UINT nType, UINT nIDPrompt)
-{
-	ASSERT_VALID(this);
-
-	// disable windows for modal dialog
-	EnableModeless(FALSE);
-	HWND hWndTop;
-	CWnd* pWnd = CWnd::GetSafeOwner(NULL, &hWndTop);
-
-	// set help context if possible
-	DWORD* pdwContext = &m_dwPromptContext;
-	if (pWnd != NULL)
-	{
-		// use app-level context or frame level context
-		ASSERT_VALID(pWnd);
-		CWnd* pMainWnd = pWnd->GetTopLevelParent();
-		ASSERT_VALID(pMainWnd);
-		if (pMainWnd->IsFrameWnd())
-			pdwContext = &((CFrameWnd*)pMainWnd)->m_dwPromptContext;
-	}
-
-	ASSERT(pdwContext != NULL);
-	DWORD dwOldPromptContext = *pdwContext;
-	if (nIDPrompt != 0)
-		*pdwContext = HID_BASE_PROMPT+nIDPrompt;
-
-	// determine icon based on type specified
-	if ((nType & MB_ICONMASK) == 0)
-	{
-		switch (nType & MB_TYPEMASK)
-		{
-		case MB_OK:
-		case MB_OKCANCEL:
-			nType |= MB_ICONEXCLAMATION;
-			break;
-
-		case MB_YESNO:
-		case MB_YESNOCANCEL:
-			nType |= MB_ICONEXCLAMATION;
-			break;
-
-		case MB_ABORTRETRYIGNORE:
-		case MB_RETRYCANCEL:
-			// No default icon for these types, since they are rarely used.
-			// The caller should specify the icon.
-			break;
-
-#ifdef _MAC
-		case MB_SAVEDONTSAVECANCEL:
-			nType |= MB_ICONEXCLAMATION;
-			break;
-#endif
-		}
-	}
-
-#ifdef _DEBUG
-	if ((nType & MB_ICONMASK) == 0)
-		TRACE0("Warning: no icon specified for message box.\n");
-#endif
-
-	_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
-	int nResult =
-		::MessageBox(pWnd->GetSafeHwnd(), lpszPrompt, m_pszAppName, nType);
-	*pdwContext = dwOldPromptContext;
-
-	// re-enable windows
-	if (hWndTop != NULL)
-		::EnableWindow(hWndTop, TRUE);
-	EnableModeless(TRUE);
-
-	return nResult;
-}
-
-int AFXAPI AfxMessageBox(LPCTSTR lpszText, UINT nType, UINT nIDHelp)
-{
-	CWinApp* pApp = AfxGetApp();
-	return pApp->DoMessageBox(lpszText, nType, nIDHelp);
-}
-
-int AFXAPI AfxMessageBox(UINT nIDPrompt, UINT nType, UINT nIDHelp)
-{
-	CString string;
-	if (!string.LoadString(nIDPrompt))
-	{
-		TRACE1("Error: failed to load message box prompt string 0x%04x.\n",
-			nIDPrompt);
-		ASSERT(FALSE);
-	}
-	if (nIDHelp == (UINT)-1)
-		nIDHelp = nIDPrompt;
-	return AfxGetApp()->DoMessageBox(string, nType, nIDHelp);
-}
-
-int CWnd::MessageBox(LPCTSTR lpszText, LPCTSTR lpszCaption, UINT nType)
-{
-	if (lpszCaption == NULL)
-		lpszCaption = AfxGetAppName();
-	_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
-	int nResult = ::MessageBox(GetSafeHwnd(), lpszText, lpszCaption, nType);
-	return nResult;
-}
 
 BOOL CWinApp::SaveAllModified()
 {
@@ -204,14 +83,7 @@ void CWinApp::AddToRecentFileList(LPCTSTR lpszPathName)
 	ASSERT(AfxIsValidString(lpszPathName));
 
 	if (m_pRecentFileList != NULL)
-	{
-		// fully qualify the path name
-		TCHAR szTemp[_MAX_PATH];
-		AfxFullPath(szTemp, lpszPathName);
-
-		// then add to recent file list
 		m_pRecentFileList->Add(lpszPathName);
-	}
 }
 
 CDocument* CWinApp::OpenDocumentFile(LPCTSTR lpszFileName)
@@ -241,7 +113,6 @@ void CWinApp::OnUpdateRecentFileMenu(CCmdUI* pCmdUI)
 /////////////////////////////////////////////////////////////////////////////
 // DDE and ShellExecute support
 
-#ifndef _MAC
 BOOL CWinApp::OnDDECommand(LPTSTR lpszCommand)
 {
 	if (m_pDocManager != NULL)
@@ -249,7 +120,6 @@ BOOL CWinApp::OnDDECommand(LPTSTR lpszCommand)
 	else
 		return FALSE;
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // MRU file list default implementation

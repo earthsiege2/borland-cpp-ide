@@ -1,6 +1,0 @@
-LIBRARY CAP
-EXPORTS
-
-    DumpCAP
-    StartCAP
-    StopCAP

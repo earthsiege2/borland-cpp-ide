@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -35,6 +35,7 @@ COleServerDoc::COleServerDoc()
 	m_dwOrigStyleEx = 0;
 	m_bClosing = FALSE;
 	m_pEmbeddedItem = NULL; // will be non-NULL if embedded item needed
+	m_pDocObjectServer = NULL;      // becomes non-NULL if DocObject support enabled
 }
 
 COleServerDoc::~COleServerDoc()
@@ -52,6 +53,13 @@ COleServerDoc::~COleServerDoc()
 	COleServerItem* pItem;
 	while ((pItem = GetNextServerItem(pos)) != NULL)
 		RemoveItem(pItem);
+
+	// release doc object manager, if any
+	if (m_pDocObjectServer != NULL)
+	{
+		delete m_pDocObjectServer;
+		m_pDocObjectServer = NULL;
+	}
 
 	// should not be in-place active when doc is destroyed!
 	ASSERT(m_pInPlaceFrame == NULL);
@@ -98,6 +106,58 @@ COleServerItem* COleServerDoc::GetEmbeddedItem()
 
 	ASSERT_VALID(m_pEmbeddedItem);
 	return m_pEmbeddedItem;
+}
+
+CDocObjectServer* COleServerDoc::GetDocObjectServer(LPOLEDOCUMENTSITE pDocSite)
+{
+	// by default, we're not DocObject enabled
+	UNUSED_ALWAYS(pDocSite);
+	return NULL;
+}
+
+HRESULT COleServerDoc::OnExecOleCmd(const GUID* pguidCmdGroup, DWORD nCmdID,
+		DWORD nCmdExecOpt, VARIANTARG* pvarargIn, VARIANTARG* pvarargOut)
+{
+	UNUSED_ALWAYS(pguidCmdGroup);
+	UNUSED_ALWAYS(nCmdID);
+	UNUSED_ALWAYS(nCmdExecOpt);
+	UNUSED_ALWAYS(pvarargIn);
+	UNUSED_ALWAYS(pvarargOut);
+
+	return E_NOTIMPL;
+}
+
+LPUNKNOWN COleServerDoc::GetInterfaceHook(const void* piid)
+{
+	LPUNKNOWN lpUnk = NULL;
+
+	// are we Doc Object supporters?
+	if (m_pDocObjectServer != NULL)
+	{
+		// don't be tricked into handing out a different IUnknown
+		DWORD lData1 = ((IID*)piid)->Data1;
+		BOOL bUnknown = ((DWORD*)&IID_IUnknown)[0] == lData1 &&
+			((DWORD*)piid)[1] == ((DWORD*)&IID_IUnknown)[1] &&
+			((DWORD*)piid)[2] == ((DWORD*)&IID_IUnknown)[2] &&
+			((DWORD*)piid)[3] == ((DWORD*)&IID_IUnknown)[3];
+
+		if (bUnknown)
+			return NULL;
+
+		lpUnk = m_pDocObjectServer->GetInterface(piid);
+	}
+
+	// failing that, try the base class
+	if (lpUnk == NULL)
+		lpUnk = COleLinkingDoc::GetInterfaceHook(piid);
+
+	return lpUnk;
+}
+
+void COleServerDoc::ActivateDocObject()
+{
+	if (m_pDocObjectServer != NULL)
+		m_pDocObjectServer->ActivateDocObject();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -607,9 +667,13 @@ BOOL COleServerDoc::OnSaveDocument(LPCTSTR lpszPathName)
 	ASSERT_VALID(this);
 	ASSERT(lpszPathName == NULL || AfxIsValidString(lpszPathName));
 
+	BOOL bModified = IsModified();
 	BOOL bRemember = m_bRemember;
 	if (!COleLinkingDoc::OnSaveDocument(lpszPathName))
 		return FALSE;
+
+	if (!bRemember)
+		SetModifiedFlag(bModified);
 
 	if (lpszPathName != NULL && bRemember)
 	{
@@ -951,11 +1015,32 @@ void COleServerDoc::OnSaveEmbedding(LPSTORAGE lpStorage)
 /////////////////////////////////////////////////////////////////////////////
 // COleServerDoc in-place activation implementation
 
+AFX_STATIC HWND AFXAPI _AfxGetWindow32(HWND hWnd)
+{
+	// don't bother if hWnd is already a 32-bit HWND
+	if (HIWORD(hWnd) != 0)
+		return hWnd;
+
+	// otherwise convert by getting a DC...
+	HDC hDC = ::GetDC(hWnd);
+	if (hDC == NULL)
+		return hWnd;
+
+	// then, getting the HWND from the DC...
+	HWND hWnd32 = ::WindowFromDC(hDC);
+	if (hWnd32 == NULL)
+		hWnd32 = hWnd;
+
+	// then releasing the DC itself
+	::ReleaseDC(hWnd, hDC);
+
+	return hWnd32;  // return full 32-bit HWND
+}
+
 BOOL COleServerDoc::ActivateInPlace()
 {
-	USES_CONVERSION;
-
 	ASSERT_VALID(this);
+	USES_CONVERSION;
 	LPCOLESTR lpszTitle = NULL;
 
 	if (m_lpClientSite == NULL)
@@ -1020,7 +1105,7 @@ BOOL COleServerDoc::ActivateInPlace()
 	ASSERT(pFrameWnd->GetParent() == pParentWnd);
 	m_pInPlaceFrame = pFrameWnd;
 
-	// send activate notification
+	// send activate notification.
 	if (lpInPlaceSite->OnUIActivate() != S_OK)
 		goto DestroyFrameAndFail;
 
@@ -1040,17 +1125,40 @@ BOOL COleServerDoc::ActivateInPlace()
 
 	// allow server to install frame controls in container
 	VERIFY(pFrameWnd->m_lpFrame->GetWindow(&hWnd) == S_OK);
+
+	// some containers (Works 4.0, for example) return only the lower
+	// 16-bits of the HWND and that confuses us; to work around this
+	// we convert the 16-bit HWND into the full 32-bit HWND.
+	hWnd = _AfxGetWindow32(hWnd);
+
 	pFrameWnd->m_pMainFrame = new COleCntrFrameWnd(pFrameWnd);
 	pFrameWnd->m_pMainFrame->Attach(hWnd);
 	if (pFrameWnd->m_lpDocFrame != NULL)
 	{
-		VERIFY(pFrameWnd->m_lpDocFrame->GetWindow(&hWnd) == S_OK);
-		pFrameWnd->m_pDocFrame = new COleCntrFrameWnd(pFrameWnd);
-		pFrameWnd->m_pDocFrame->Attach(hWnd);
+		HWND hWndDocument;
+		VERIFY(pFrameWnd->m_lpDocFrame->GetWindow(&hWndDocument) == S_OK);
+		if (hWndDocument != hWnd)
+		{
+			pFrameWnd->m_pDocFrame = new COleCntrFrameWnd(pFrameWnd);
+			pFrameWnd->m_pDocFrame->Attach(hWndDocument);
+		}
+		else
+		{
+			RELEASE(pFrameWnd->m_lpDocFrame);
+			pFrameWnd->m_lpDocFrame = NULL;
+		}
 	}
+
 	// update zoom factor information before creating control bars
-	pFrameWnd->m_rectPos.CopyRect(&rcPosRect);
+
+	//WINBUG: some clients send an empty rectangle and expect the
+	// server to use the ClipRect for the PosRect
+	if (IsRectEmpty(&rcPosRect))
+		pFrameWnd->m_rectPos.CopyRect(&rcClipRect);
+	else
+		pFrameWnd->m_rectPos.CopyRect(&rcPosRect);
 	pFrameWnd->m_rectClip.CopyRect(&rcClipRect);
+
 	if (!pFrameWnd->OnCreateControlBars(pFrameWnd->m_pMainFrame,
 		pFrameWnd->m_pDocFrame))
 	{
@@ -1058,7 +1166,13 @@ BOOL COleServerDoc::ActivateInPlace()
 	}
 
 	// resize the window to match the object
-	OnSetItemRects(&rcPosRect, &rcClipRect);
+
+	//WINBUG: some clients send an empty rectangle and expect the
+	// server to use the ClipRect for the PosRect
+	if (IsRectEmpty(&rcPosRect))
+		OnSetItemRects(&rcClipRect, &rcClipRect);
+	else
+		OnSetItemRects(&rcPosRect, &rcClipRect);
 
 	// set the active object
 	ASSERT(pFrameWnd->m_lpFrame != NULL);
@@ -1528,11 +1642,14 @@ void COleServerDoc::OnDeactivateUI(BOOL bUndoable)
 	if (pFrameWnd->m_lpDocFrame != NULL)
 		OnShowControlBars(pFrameWnd->m_pDocFrame, FALSE);
 
-	// hide the frame and any popups owned by the frame
-	pFrameWnd->ShowOwnedWindows(FALSE);
-	pFrameWnd->ShowWindow(SW_HIDE);
-	pFrameWnd->m_nShowDelay = SW_HIDE;
-	pFrameWnd->m_pMainFrame->m_nShowDelay = SW_HIDE;
+	if (m_pDocObjectServer == NULL)
+	{
+		// hide the frame and any popups owned by the frame
+		pFrameWnd->ShowOwnedWindows(FALSE);
+		pFrameWnd->ShowWindow(SW_HIDE);
+		pFrameWnd->m_nShowDelay = SW_HIDE;
+		pFrameWnd->m_pMainFrame->m_nShowDelay = SW_HIDE;
+	}
 
 	// set the m_hWnd members, but remove them from the maps
 	pFrameWnd->m_pMainFrame->m_hWnd = pFrameWnd->m_pMainFrame->Detach();
@@ -1881,6 +1998,31 @@ STDMETHODIMP COleServerDoc::XOleObject::SetClientSite(
 	RELEASE(pThis->m_lpClientSite);
 	pThis->m_lpClientSite = pClientSite;
 
+	// do we already have doc object support enabled?
+	if (pThis->m_pDocObjectServer != NULL)
+	{
+		// If we currently have a document site pointer,
+		// release it.
+		pThis->m_pDocObjectServer->ReleaseDocSite();
+	}
+
+	if (pClientSite != NULL)
+	{
+		LPOLEDOCUMENTSITE pDocSite;
+
+		if (SUCCEEDED(pClientSite->QueryInterface(IID_IOleDocumentSite,
+			(LPVOID*) &pDocSite)))
+		{
+			if (pThis->m_pDocObjectServer != NULL)
+				pThis->m_pDocObjectServer->SetDocSite(pDocSite);
+			else
+			{
+				pThis->m_pDocObjectServer =
+					pThis->GetDocObjectServer(pDocSite);
+			}
+		}
+	}
+
 	return S_OK;
 }
 
@@ -1910,14 +2052,8 @@ STDMETHODIMP COleServerDoc::XOleObject::SetHostNames(
 
 	TRY
 	{
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      LPCSTR pBAfxTemp = OLE2CT(lpszContainerObj);
-      OLE2CT(lpszContainerApp);
-		pThis->OnSetHostNames((LPCSTR)pBAfxConv, pBAfxTemp);
-#else    // __BORLANDC__
 		pThis->OnSetHostNames(OLE2CT(lpszContainerApp),
 			OLE2CT(lpszContainerObj));
-#endif   // __BORLANDC__
 	}
 	END_TRY
 
@@ -2243,9 +2379,9 @@ STDMETHODIMP COleServerDoc::XOleObject::GetExtent(
 STDMETHODIMP COleServerDoc::XOleObject::Advise(
 	IAdviseSink* pAdvSink, DWORD* pdwConnection)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, OleObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, OleObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2264,9 +2400,9 @@ STDMETHODIMP COleServerDoc::XOleObject::Advise(
 
 STDMETHODIMP COleServerDoc::XOleObject::Unadvise(DWORD dwConnection)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, OleObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, OleObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2286,9 +2422,9 @@ STDMETHODIMP COleServerDoc::XOleObject::Unadvise(DWORD dwConnection)
 STDMETHODIMP COleServerDoc::XOleObject::EnumAdvise(
 	LPENUMSTATDATA* ppenumAdvise)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, OleObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, OleObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2367,9 +2503,9 @@ STDMETHODIMP COleServerDoc::XDataObject::QueryInterface(
 STDMETHODIMP COleServerDoc::XDataObject::GetData(
 	LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, DataObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, DataObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2389,9 +2525,9 @@ STDMETHODIMP COleServerDoc::XDataObject::GetData(
 STDMETHODIMP COleServerDoc::XDataObject::GetDataHere(
 	LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, DataObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, DataObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2411,9 +2547,9 @@ STDMETHODIMP COleServerDoc::XDataObject::GetDataHere(
 STDMETHODIMP COleServerDoc::XDataObject::QueryGetData(
 	LPFORMATETC lpFormatEtc)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, DataObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, DataObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2442,9 +2578,9 @@ STDMETHODIMP COleServerDoc::XDataObject::GetCanonicalFormatEtc(
 STDMETHODIMP COleServerDoc::XDataObject::SetData(
 	LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium, BOOL bRelease)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, DataObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, DataObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2464,9 +2600,9 @@ STDMETHODIMP COleServerDoc::XDataObject::SetData(
 STDMETHODIMP COleServerDoc::XDataObject::EnumFormatEtc(
 	DWORD dwDirection, LPENUMFORMATETC* ppenumFormatEtc)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, DataObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, DataObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2487,9 +2623,9 @@ STDMETHODIMP COleServerDoc::XDataObject::DAdvise(
 	FORMATETC* pFormatetc, DWORD advf,
 	LPADVISESINK pAdvSink, DWORD* pdwConnection)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, DataObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, DataObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2509,9 +2645,9 @@ STDMETHODIMP COleServerDoc::XDataObject::DAdvise(
 
 STDMETHODIMP COleServerDoc::XDataObject::DUnadvise(DWORD dwConnection)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, DataObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, DataObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{
@@ -2531,9 +2667,9 @@ STDMETHODIMP COleServerDoc::XDataObject::DUnadvise(DWORD dwConnection)
 STDMETHODIMP COleServerDoc::XDataObject::EnumDAdvise(
 	LPENUMSTATDATA* ppenumAdvise)
 {
-	METHOD_PROLOGUE_EX_(COleServerDoc, DataObject)
+	METHOD_PROLOGUE_EX(COleServerDoc, DataObject)
 
-	COleServerItem* pItem;
+	COleServerItem* pItem = NULL;
 	SCODE sc = E_OUTOFMEMORY;
 	TRY
 	{

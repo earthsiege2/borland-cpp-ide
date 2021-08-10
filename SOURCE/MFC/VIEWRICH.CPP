@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -35,9 +35,7 @@ public:
 CReObject::CReObject()
 {
 	cbStruct = sizeof(REOBJECT);
-	poleobj = NULL;
-	pstg = NULL;
-	polesite = NULL;
+	memset(&cbStruct+1, 0, sizeof(*this)-sizeof(cbStruct));
 }
 
 CReObject::CReObject(CRichEditCntrItem* pItem)
@@ -75,7 +73,7 @@ CReObject::~CReObject()
 /////////////////////////////////////////////////////////////////////////////
 // CRichEditView
 
-static const UINT nMsgFindReplace = ::RegisterWindowMessage(FINDMSGSTRING);
+AFX_STATIC const UINT _afxMsgFindReplace2 = ::RegisterWindowMessage(FINDMSGSTRING);
 
 BEGIN_MESSAGE_MAP(CRichEditView, CCtrlView)
 	//{{AFX_MSG_MAP(CRichEditView)
@@ -108,7 +106,7 @@ BEGIN_MESSAGE_MAP(CRichEditView, CCtrlView)
 	ON_WM_DESTROY()
 	//}}AFX_MSG_MAP
 	ON_NOTIFY_REFLECT(EN_SELCHANGE, OnSelChange)
-	ON_REGISTERED_MESSAGE(nMsgFindReplace, OnFindReplaceCmd)
+	ON_REGISTERED_MESSAGE(_afxMsgFindReplace2, OnFindReplaceCmd)
 END_MESSAGE_MAP()
 
 // richedit buffer limit -- let's set it at 16M
@@ -134,16 +132,10 @@ CRichEditView::CRichEditView() : CCtrlView(_T("RICHEDIT"), AFX_WS_DEFAULT_VIEW |
 
 BOOL CRichEditView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	_AFX_RICHEDIT_STATE* pState = AfxGetRichEditState();
-	if (pState->m_hInstRichEdit == NULL)
-#ifndef _MAC
-		pState->m_hInstRichEdit = LoadLibraryA("RICHED32.DLL");
-#else
-		pState->m_hInstRichEdit = RELoadLibrary();
-#endif
-	ASSERT(pState->m_hInstRichEdit != NULL);
+	if (!AfxInitRichEdit())
+		return FALSE;
 	CCtrlView::PreCreateWindow(cs);
-	cs.lpszName = &afxChNil;
+	cs.lpszName = _T("");
 
 	cs.cx = cs.cy = 100; // necessary to avoid bug with ES_SELECTIONBAR and zero for cx and cy
 	cs.style |= WS_CLIPSIBLINGS;
@@ -300,6 +292,7 @@ BOOL CRichEditView::PaginateTo(CDC* pDC, CPrintInfo* pInfo)
 	UINT nPageSave = pInfo->m_nCurPage;
 	ASSERT(nPageSave > 1);
 	ASSERT(nPageSave >= (UINT)m_aPageStart.GetSize());
+	VERIFY(pDC->SaveDC() != 0);
 	pDC->IntersectClipRect(0, 0, 0, 0);
 	pInfo->m_nCurPage = m_aPageStart.GetSize();
 	while (pInfo->m_nCurPage < nPageSave)
@@ -316,6 +309,7 @@ BOOL CRichEditView::PaginateTo(CDC* pDC, CPrintInfo* pInfo)
 		++pInfo->m_nCurPage;
 	}
 	BOOL bResult = pInfo->m_nCurPage == nPageSave;
+	pDC->RestoreDC(-1);
 	pInfo->m_nCurPage = nPageSave;
 	pInfo->m_rectDraw = rectSave;
 	ASSERT_VALID(this);
@@ -456,20 +450,20 @@ END_INTERFACE_MAP()
 STDMETHODIMP_(ULONG) CRichEditView::XRichEditOleCallback::AddRef()
 {
 	METHOD_PROLOGUE_EX_(CRichEditView, RichEditOleCallback)
-	return (ULONG)pThis->ExternalAddRef();
+	return (ULONG)pThis->InternalAddRef();
 }
 
 STDMETHODIMP_(ULONG) CRichEditView::XRichEditOleCallback::Release()
 {
 	METHOD_PROLOGUE_EX_(CRichEditView, RichEditOleCallback)
-	return (ULONG)pThis->ExternalRelease();
+	return (ULONG)pThis->InternalRelease();
 }
 
 STDMETHODIMP CRichEditView::XRichEditOleCallback::QueryInterface(
 	REFIID iid, LPVOID* ppvObj)
 {
 	METHOD_PROLOGUE_EX_(CRichEditView, RichEditOleCallback)
-	return (HRESULT)pThis->ExternalQueryInterface(&iid, ppvObj);
+	return (HRESULT)pThis->InternalQueryInterface(&iid, ppvObj);
 }
 
 STDMETHODIMP CRichEditView::XRichEditOleCallback::GetNewStorage(LPSTORAGE* ppstg)
@@ -573,18 +567,10 @@ STDMETHODIMP CRichEditView::XRichEditOleCallback::GetDragDropEffect(
 	{
 		DWORD dwEffect;
 		// check for force link
-#ifndef _MAC
 		if ((grfKeyState & (MK_CONTROL|MK_SHIFT)) == (MK_CONTROL|MK_SHIFT))
-#else
-		if ((grfKeyState & (MK_OPTION|MK_SHIFT)) == (MK_OPTION|MK_SHIFT))
-#endif
 			dwEffect = DROPEFFECT_LINK;
 		// check for force copy
-#ifndef _MAC
 		else if ((grfKeyState & MK_CONTROL) == MK_CONTROL)
-#else
-		else if ((grfKeyState & MK_OPTION) == MK_OPTION)
-#endif
 			dwEffect = DROPEFFECT_COPY;
 		// check for force move
 		else if ((grfKeyState & MK_ALT) == MK_ALT)
@@ -815,10 +801,12 @@ void CRichEditView::OnEditProperties()
 {
 	ASSERT(m_lpRichEditOle != NULL);
 	CRichEditCntrItem* pSelection = GetSelectedItem();
+
 	// make sure item is in sync with richedit's item
 	CReObject reo;
-	HRESULT hr = m_lpRichEditOle->GetObject(REO_IOB_SELECTION, &reo,
+	m_lpRichEditOle->GetObject(REO_IOB_SELECTION, &reo,
 		REO_GETOBJ_NO_INTERFACES);
+
 	pSelection->SyncToRichEditObject(reo);
 	COlePropertiesDialog dlg(pSelection);
 	dlg.DoModal();
@@ -1071,11 +1059,13 @@ void CRichEditView::SetCharFormat(CHARFORMAT cf)
 	m_bSyncCharFormat = TRUE;
 }
 
-void CRichEditView::SetParaFormat(PARAFORMAT& pf)
+BOOL CRichEditView::SetParaFormat(PARAFORMAT& pf)
 {
+	BOOL bRetVal;
 	CWaitCursor wait;
-	GetRichEditCtrl().SetParaFormat(pf);
+	bRetVal = GetRichEditCtrl().SetParaFormat(pf);
 	m_bSyncParaFormat = TRUE;
+	return bRetVal;
 }
 
 CRichEditCntrItem* CRichEditView::GetSelectedItem() const
@@ -1244,7 +1234,7 @@ void CRichEditView::DoPaste(COleDataObject& dataobj, CLIPFORMAT cf, HMETAFILEPIC
 				((COleClientItem*)pItem)->SetDrawAspect(DVASPECT_CONTENT);
 		}
 
-/////////
+
 		HRESULT hr = InsertItem(pItem);
 		pItem->UpdateItemType();
 
@@ -1365,7 +1355,7 @@ HRESULT CRichEditView::ShowContainerUI(BOOL b)
 	if (b)
 		pItem->m_pView = this;
 	HRESULT hr = pItem->ShowContainerUI(b);
-	if (!b)
+	if (FAILED(hr) || !b)
 		pItem->m_pView = NULL;
 	return hr;
 }
@@ -1602,9 +1592,30 @@ BOOL CRichEditView::FindTextSimple(LPCTSTR lpszFind, BOOL bCase, BOOL bWord)
 		m_lInitialSearchPos = ft.chrg.cpMin;
 		m_bFirstSearch = FALSE;
 	}
+
 	ft.lpstrText = T2A((LPTSTR)lpszFind);
 	if (ft.chrg.cpMin != ft.chrg.cpMax) // i.e. there is a selection
+	{
+
+#ifndef _UNICODE
+		// If byte at beginning of selection is a DBCS lead byte,
+		// increment by one extra byte.
+		TEXTRANGE textRange;
+		TCHAR ch[2];
+		textRange.chrg.cpMin = ft.chrg.cpMin;
+		textRange.chrg.cpMax = ft.chrg.cpMin + 1;
+		textRange.lpstrText = ch;
+		GetRichEditCtrl().SendMessage(EM_GETTEXTRANGE, 0, (LPARAM)&textRange);
+		if (_istlead(ch[0]))
+		{
+			ASSERT(ft.chrg.cpMax - ft.chrg.cpMin >= 2);
+			ft.chrg.cpMin++;
+		}
+#endif
+
 		ft.chrg.cpMin++;
+	}
+
 	if (m_lInitialSearchPos >= 0)
 		ft.chrg.cpMax = GetTextLength();
 	else
@@ -1623,7 +1634,7 @@ BOOL CRichEditView::FindTextSimple(LPCTSTR lpszFind, BOOL bCase, BOOL bWord)
 		ft.chrg.cpMin = 0;
 		ft.chrg.cpMax = m_lInitialSearchPos;
 		m_lInitialSearchPos = m_lInitialSearchPos - GetTextLength();
-		return (FindAndSelect(dwFlags, ft) == -1) ? FALSE : TRUE;
+		return FindAndSelect(dwFlags, ft) != -1;
 	}
 	// not found
 	else
@@ -1703,8 +1714,26 @@ CRichEditDoc::CRichEditDoc()
 
 CRichEditView* CRichEditDoc::GetView() const
 {
+	// find the first view - if there are no views
+	// we must return NULL
+
 	POSITION pos = GetFirstViewPosition();
-	return (CRichEditView*)GetNextView(pos);
+	if (pos == NULL)
+		return NULL;
+
+	// find the first view that is a CRichEditView
+
+	CView* pView;
+	while (pos != NULL)
+	{
+		pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CRichEditView)))
+			return (CRichEditView*) pView;
+	}
+
+	// can't find one--return NULL
+
+	return NULL;
 }
 
 BOOL CRichEditDoc::IsModified()
@@ -1740,14 +1769,8 @@ void CRichEditDoc::SetTitle(LPCTSTR lpszTitle)
 	CRichEditView *pView = GetView();
 	ASSERT(pView != NULL);
 	ASSERT(pView->m_lpRichEditOle != NULL);
-#if defined(__BORLANDC__)  && defined(_UNICODE)
-   LPSTR pBAfxTemp = T2A(lpszTitle));
-   T2A(AfxGetAppName());
-	pView->m_lpRichEditOle->SetHostNames((LPSTR)pBAfxConv, pBAfxTemp);
-#else    // __BORLANDC__
-	pView->m_lpRichEditOle->SetHostNames(T2A(AfxGetAppName()),
-		T2A(lpszTitle));
-#endif   // __BORLANDC__
+	pView->m_lpRichEditOle->SetHostNames(T2CA(AfxGetAppName()),
+		T2CA(lpszTitle));
 }
 
 CRichEditCntrItem* CRichEditDoc::LookupItem(LPOLEOBJECT lpobj) const
@@ -1784,7 +1807,7 @@ void CRichEditDoc::MarkItemsClear() const
 		pItem = (CRichEditCntrItem*) COleServerDoc::GetNextItem(pos);
 		// Mark item as not in use unless under construction (i.e. m_lpObject == NULL)
 		if (pItem->IsKindOf(RUNTIME_CLASS(CRichEditCntrItem)))
-			pItem->Mark( (pItem->m_lpObject == NULL) ? TRUE : FALSE);
+			pItem->Mark(pItem->m_lpObject == NULL);
 	}
 }
 
@@ -1860,7 +1883,7 @@ void CRichEditDoc::DeleteContents()
 	{
 		pView->DeleteContents();
 		pView->GetRichEditCtrl().SetModify(FALSE);
-		ASSERT(pView->GetRichEditCtrl().GetModify() == FALSE);
+		ASSERT(!pView->GetRichEditCtrl().GetModify());
 	}
 }
 
@@ -2039,12 +2062,7 @@ BOOL CRichEditCntrItem::ConvertTo(REFCLSID clsidNew)
 	LPOLESTR lpOleStr;
 	OleRegGetUserType(clsidNew, USERCLASSTYPE_FULL, &lpOleStr);
 	LPCTSTR lpsz = OLE2CT(lpOleStr);
-#if defined(__BORLANDC__)  && defined(_UNICODE)
-   T2A(lpsz);
-	HRESULT hRes = preole->ConvertObject(REO_IOB_SELECTION, clsidNew, (LPSTR)pBAfxConv);
-#else    // __BORLANDC__
-	HRESULT hRes = preole->ConvertObject(REO_IOB_SELECTION, clsidNew, T2A(lpsz));
-#endif   // __BORLANDC__
+	HRESULT hRes = preole->ConvertObject(REO_IOB_SELECTION, clsidNew, T2CA(lpsz));
 	CoTaskMemFree(lpOleStr);
 	return (SUCCEEDED(hRes));
 }

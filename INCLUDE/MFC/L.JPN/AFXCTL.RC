@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,6 +28,7 @@ END
 /////////////////////////////////////////////////////////////////////////////
 // OLE Control Resources
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
@@ -140,7 +141,7 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
-	AFX_IDS_PROPPAGE_UNKNOWN "(Unknown)"
+	AFX_IDS_PROPPAGE_UNKNOWN "(不明)"
 	AFX_IDS_COLOR_DESKTOP   "ﾃﾞｽｸﾄｯﾌﾟ"
 	AFX_IDS_COLOR_APPWORKSPACE "作業する領域"
 	AFX_IDS_COLOR_WNDBACKGND "ｳｨﾝﾄﾞｳの背景"
@@ -154,9 +155,11 @@ BEGIN
 	AFX_IDS_COLOR_ACTIVEBORDER "ｱｸﾃｨﾌﾞ ｳｨﾝﾄﾞｳの境界"
 	AFX_IDS_COLOR_INACTIVEBORDER "非ｱｸﾃｨﾌﾞ ｳｨﾝﾄﾞｳの境界"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
 STRINGTABLE DISCARDABLE
 BEGIN
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_WNDFRAME  "ｳｨﾝﾄﾞｳの枠"
 	AFX_IDS_COLOR_SCROLLBARS "ｽｸﾛｰﾙ ﾊﾞｰ"
 	AFX_IDS_COLOR_BTNFACE   "ﾎﾞﾀﾝの表面"
@@ -171,6 +174,7 @@ BEGIN
 	AFX_IDS_ITALIC          "斜体"
 	AFX_IDS_BOLDITALIC      "太字斜体"
 	AFX_IDS_SAMPLETEXT      "AaBbYyZz"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_DISPLAYSTRING_FONT "(ﾌｫﾝﾄ)"
 	AFX_IDS_DISPLAYSTRING_COLOR "(色)"
 END
@@ -178,18 +182,22 @@ END
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_DISPLAYSTRING_PICTURE "(ﾋﾟｸﾁｬ - %s)"
-	AFX_IDS_PICTUREFILTER   "すべてのﾋﾟｸﾁｬ形式|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|ﾋﾞｯﾄﾏｯﾌﾟ (*.bmp;*.dib)|*.bmp;*.dib|ｱｲｺﾝ/ｶｰｿﾙ (*.ico;*.cur)|*.ico|ﾒﾀﾌｧｲﾙ (*.wmf;*.emf)|*.emf;*.wmf|すべてのﾌｧｲﾙ (*.*)|*.*||"
-	AFX_IDS_PICTYPE_UNKNOWN "Unknown"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
+	AFX_IDS_PICTUREFILTER   "すべてのﾋﾟｸﾁｬ形式|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|ﾋﾞｯﾄﾏｯﾌﾟ (*.bmp;*.dib)|*.bmp;*.dib|ｱｲｺﾝ/ｶｰｿﾙ (*.ico;*.cur)|*.ico;*.cur|ﾒﾀﾌｧｲﾙ (*.wmf;*.emf)|*.wmf;*.emf|すべてのﾌｧｲﾙ (*.*)|*.*||"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
+	AFX_IDS_PICTYPE_UNKNOWN "不明"
 	AFX_IDS_PICTYPE_NONE    "なし"
 	AFX_IDS_PICTYPE_BITMAP  "ﾋﾞｯﾄﾏｯﾌﾟ"
 	AFX_IDS_PICTYPE_METAFILE "ﾒﾀﾌｧｲﾙ"
 	AFX_IDS_PICTYPE_ICON    "ｱｲｺﾝ"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_PPG       "ｶﾗｰ ﾌﾟﾛﾊﾟﾃｨ ﾍﾟｰｼﾞ"
 	AFX_IDS_COLOR_PPG_CAPTION "ｶﾗｰ"
 	AFX_IDS_FONT_PPG        "ﾌｫﾝﾄ ﾌﾟﾛﾊﾟﾃｨ ﾍﾟｰｼﾞ"
 	AFX_IDS_FONT_PPG_CAPTION "ﾌｫﾝﾄ"
 	AFX_IDS_PICTURE_PPG     "ﾋﾟｸﾁｬ ﾌﾟﾛﾊﾟﾃｨ ﾍﾟｰｼﾞ"
 	AFX_IDS_PICTURE_PPG_CAPTION "ﾋﾟｸﾁｬ"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_BORDERSTYLE_0   "0 - なし"
 	AFX_IDS_BORDERSTYLE_1   "1 - 固定(実線)"
 END
@@ -200,6 +208,7 @@ BEGIN
 	AFX_IDS_VERB_PROPERTIES "ﾌﾟﾛﾊﾟﾃｨ(&P)..."
 END
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_PICTURECANTOPEN "ﾋﾟｸﾁｬ ﾌｧｲﾙ %1 をﾛｰﾄﾞできません。ﾌｧｲﾙが存在しないか、読み込めない可能性があります。"
@@ -213,7 +222,9 @@ STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_PICTUREBROWSETITLE "ﾋﾟｸﾁｬ の参照"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
+#ifndef _AFX_NO_CTLERROR_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_E_ILLEGALFUNCTIONCALL "関数呼び出しが正しくありません。"
@@ -267,6 +278,7 @@ BEGIN
 	AFX_IDP_E_SEARCHTEXTNOTFOUND "検索文字列が見つかりません。"
 	AFX_IDP_E_REPLACEMENTSTOOLONG "置換文字列が長すぎます。"
 END
+#endif //!_AFX_NO_CTLERROR_RESOURCES
 
 #endif //!_AFXDLL
 #endif //__AFXOLECL_RC__

@@ -1,0 +1,42 @@
+/*
+  File : \working\atm\XACTION.IDL
+  Date : Thu Aug 20 15:21:12 PDT 1998
+  User : mcuff
+  Dir  : D:\visi\vbroker
+*/
+enum EnumAction {
+  balance,
+  withdraw,
+  deposit
+};
+enum EnumStatus {
+  OK,
+  invalid,
+  complete,
+  incomplete
+};
+struct xaction {
+  long UserID;
+  long PIN;
+  long account;
+  double amount;
+  ::EnumAction action;
+  double balance;
+  ::EnumStatus status;
+};
+interface Server {
+  exception NoServer {
+    string message;
+  };
+  ::xaction HandleTransaction(
+    inout ::xaction Transaction
+  );
+/*  raises(
+    ::Server::NoServer
+  );
+*/  
+  long Balance();
+};
+
+
+

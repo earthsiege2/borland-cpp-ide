@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
@@ -17,13 +17,9 @@
 #include <mbctype.h>
 #include <mbstring.h>
 
-#if 0
-extern int _mbascii;
-#endif
-
 /*---------------------------------------------------------------------*
 
-Name            _mbslwr - Converts uppercase letters in a string to 
+Name            _mbslwr - Converts uppercase letters in a string to
                           lowercase.
 
 Usage           unsigned char *_mbslwr(unsigned char *s);
@@ -51,18 +47,9 @@ unsigned char * _RTLENTRY _EXPFUNC _mbslwr(unsigned char *s)
     for (p = s; *p; p++)
     {
         if (_ismbblead(*p) && p[1])
-        {
             p++;
-#if 0
-            if (_mbascii && p[-1] == 0x82 && *p >= 0x60 && *p <= 0x79)
-                *p += 0x21;
-#endif
-        }
         else
-        {
-            if (isupper(*p))
-                *p += 0x20;
-        }
+            *p = _ltolower(*p);
     }
     return s;
 }

@@ -1,0 +1,13 @@
+USEUNIT("chkbook.cpp");
+USEUNIT("mainfrm.cpp");
+USEUNIT("chkbkfrm.cpp");
+USEUNIT("checkdoc.cpp");
+USEUNIT("fxrecdoc.cpp");
+USEUNIT("rowview.cpp");
+USEUNIT("bookvw.cpp");
+USEUNIT("checkvw.cpp");
+USEUNIT("dollcent.cpp");
+USEUNIT("stdafx.cpp");
+USERC("chkbook.rc");
+
+#define WinMain

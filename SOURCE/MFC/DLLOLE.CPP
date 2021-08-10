@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -34,22 +34,22 @@ extern "C" BOOL (WINAPI* _pRawDllMain)(HINSTANCE, DWORD, LPVOID) = &RawDllMain;
 #ifdef _DEBUG
 #ifndef _UNICODE
 #ifdef __BORLANDC__
-  #define MFC40_DLL "BFC40D.DLL"
+  #define MFC42_DLL "BFC42D.DLL"
 #else
-  #define MFC40_DLL "MFC40D.DLL"
+  #define MFC42_DLL "MFC42D.DLL"
 #endif // __BORLANDC__
 #else
-#define MFC40_DLL "MFC40UD.DLL"
+#define MFC42_DLL "MFC42UD.DLL"
 #endif
 #else
 #ifndef _UNICODE
 #ifdef __BORLANDC__
-  #define MFC40_DLL "BFC40.DLL"
+  #define MFC42_DLL "BFC42.DLL"
 #else
-  #define MFC40_DLL "MFC40.DLL"
+  #define MFC42_DLL "MFC42.DLL"
 #endif // __BORLANDC__
 #else
-#define MFC40_DLL "MFC40U.DLL"
+#define MFC42_DLL "MFC42U.DLL"
 #endif
 #endif
 
@@ -58,10 +58,8 @@ BOOL WINAPI RawDllMain(HINSTANCE, DWORD dwReason, LPVOID)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-#ifndef _MAC
 		// Prevent the MFC DLL from being unloaded prematurely
-		LoadLibraryA(MFC40_DLL);
-#endif
+		LoadLibraryA(MFC42_DLL);
 
 		// make sure we have enough memory to attempt to start (8kb)
 		void* pMinHeap = LocalAlloc(NONZEROLPTR, 0x2000);
@@ -88,10 +86,8 @@ BOOL WINAPI RawDllMain(HINSTANCE, DWORD dwReason, LPVOID)
 			_AfxGetOleModuleState());
 		DEBUG_ONLY(AfxGetThreadState()->m_pPrevModuleState = NULL);
 
-#ifndef _MAC
 		// Now it's OK for the MFC  DLL to be unloaded (see LoadLibrary above)
-		FreeLibrary(GetModuleHandleA(MFC40_DLL));
-#endif
+		FreeLibrary(GetModuleHandleA(MFC42_DLL));
 	}
 	return TRUE;    // ok
 }
@@ -101,8 +97,6 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-		DisableThreadLibraryCalls(hInstance);
-
 		// shared initialization
 		BOOL bRegister = !extensionDLL.bInitialized;
 		AFX_MODULE_STATE* pModuleState = _AfxGetOleModuleState();
@@ -115,7 +109,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		// wire up base DLL class list into private module state
 		AfxCoreInitModule();
 
-		AfxWinInit(hInstance, NULL, &afxChNil, 0);
+		AfxWinInit(hInstance, NULL, _T(""), 0);
 
 		// Register class factories in context of private module state
 		if (bRegister)
@@ -144,6 +138,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		// cleanup module state in OLE private module state
 		AfxTermExtensionModule(extensionDLL, TRUE);
 	}
+	else if (dwReason == DLL_THREAD_DETACH)
+	{
+		AfxTermThread(hInstance);
+	}
+
 	return TRUE;    // ok
 }
 
@@ -260,10 +259,16 @@ static void _AfxForceVectorDelete()
 	new COleDropSource[2];
 	new COleResizeBar[2];
 	new COleStreamFile[2];
+	new CMonikerFile[2];
 	new COleTemplateServer[2];
 	new COleDataObject[2];
 	new COleDropTarget[2];
 	new COleIPFrameWnd[2];
+
+	new COleDocIPFrameWnd[2];
+	new CAsyncMonikerFile[2];
+	new CCachedDataPathProperty[2];
+	new CDataPathProperty[2];
 
 	new COleVariant[2];
 

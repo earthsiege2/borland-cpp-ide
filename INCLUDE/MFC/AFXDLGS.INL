@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -12,15 +12,19 @@
 
 #ifdef _AFXDLGS_INLINE
 
+// CCommonDialog
 _AFXDLGS_INLINE CCommonDialog::CCommonDialog(CWnd* pParentWnd)
 	: CDialog((UINT)0, pParentWnd) { }
 
+// CFileDialog
 _AFXDLGS_INLINE BOOL CFileDialog::GetReadOnlyPref() const
 	{ return m_ofn.Flags & OFN_READONLY ? TRUE : FALSE; }
 _AFXDLGS_INLINE void CFileDialog::SetTemplate(UINT nWin3ID, UINT nWin4ID)
 	{ SetTemplate(MAKEINTRESOURCE(nWin3ID), MAKEINTRESOURCE(nWin4ID)); }
 _AFXDLGS_INLINE POSITION CFileDialog::GetStartPosition() const
 	{ return (POSITION)m_ofn.lpstrFile; }
+
+// CFontDialog
 _AFXDLGS_INLINE CString CFontDialog::GetFaceName() const
 	{ return (LPCTSTR)m_cf.lpLogFont->lfFaceName; }
 _AFXDLGS_INLINE CString CFontDialog::GetStyleName() const
@@ -39,8 +43,12 @@ _AFXDLGS_INLINE BOOL CFontDialog::IsUnderline() const
 	{ return m_cf.lpLogFont->lfUnderline ? TRUE : FALSE; }
 _AFXDLGS_INLINE COLORREF CFontDialog::GetColor() const
 	{ return m_cf.rgbColors; }
+
+// CColorDialog
 _AFXDLGS_INLINE COLORREF CColorDialog::GetColor() const
 	{ return m_cc.rgbResult; }
+
+// CPrintDialog
 _AFXDLGS_INLINE BOOL CPrintDialog::PrintSelection() const
 	{ return m_pd.Flags & PD_SELECTION ? TRUE : FALSE; }
 _AFXDLGS_INLINE BOOL CPrintDialog::PrintRange() const
@@ -57,6 +65,8 @@ _AFXDLGS_INLINE HDC CPrintDialog::GetPrinterDC() const
 	{ ASSERT_VALID(this);
 		ASSERT(m_pd.Flags & PD_RETURNDC);
 		return m_pd.hDC; }
+
+// CFindReplaceDialog
 _AFXDLGS_INLINE BOOL CFindReplaceDialog::IsTerminating() const
 	{ return m_fr.Flags & FR_DIALOGTERM ? TRUE : FALSE ; }
 _AFXDLGS_INLINE CString CFindReplaceDialog::GetReplaceString() const
@@ -76,6 +86,7 @@ _AFXDLGS_INLINE BOOL CFindReplaceDialog::ReplaceCurrent() const
 _AFXDLGS_INLINE BOOL CFindReplaceDialog::ReplaceAll() const
 	{ return m_fr.Flags & FR_REPLACEALL ? TRUE : FALSE; }
 
+// CPropertySheet
 _AFXDLGS_INLINE CPropertyPage* CPropertySheet::GetPage(int nPage) const
 	{ return STATIC_DOWNCAST(CPropertyPage, (CObject*)m_pages[nPage]); }
 _AFXDLGS_INLINE void CPropertySheet::SetWizardMode()
@@ -83,17 +94,22 @@ _AFXDLGS_INLINE void CPropertySheet::SetWizardMode()
 _AFXDLGS_INLINE void CPropertySheet::SetFinishText(LPCTSTR lpszText)
 	{ ASSERT(::IsWindow(m_hWnd)); ::SendMessage(m_hWnd, PSM_SETFINISHTEXT, 0, (LPARAM)lpszText); }
 _AFXDLGS_INLINE void CPropertySheet::SetWizardButtons(DWORD dwFlags)
-	{ ASSERT(::IsWindow(m_hWnd)); ::SendMessage(m_hWnd, PSM_SETWIZBUTTONS, 0, dwFlags); }
+	{ ASSERT(::IsWindow(m_hWnd)); ::PostMessage(m_hWnd, PSM_SETWIZBUTTONS, 0, dwFlags); }
 _AFXDLGS_INLINE CTabCtrl* CPropertySheet::GetTabControl() const
 	{ ASSERT(::IsWindow(m_hWnd)); return (CTabCtrl*)CWnd::FromHandle(
 		(HWND)::SendMessage(m_hWnd, PSM_GETTABCONTROL, 0, 0)); }
 _AFXDLGS_INLINE BOOL CPropertySheet::PressButton(int nButton)
 	{ ASSERT(::IsWindow(m_hWnd)); return (BOOL)::SendMessage(m_hWnd, PSM_PRESSBUTTON, nButton, 0); }
+_AFXDLGS_INLINE BOOL CPropertySheet::IsWizard() const
+		{ return ((((CPropertySheet*)this)->GetPropSheetHeader()->dwFlags & (PSH_WIZARD | PSH_WIZARD97)) != 0); }
 
-#ifndef _MAC
+// CPropertySheetEx
+_AFXDLGS_INLINE void CPropertySheetEx::SetWizardMode()
+	{ m_psh.dwFlags |= PSH_WIZARD; }
+
+// CPageSetupDialog
 _AFXDLGS_INLINE CSize CPageSetupDialog::GetPaperSize() const
 	{ return CSize(m_psd.ptPaperSize.x, m_psd.ptPaperSize.y); }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 

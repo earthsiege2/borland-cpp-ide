@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -477,7 +477,7 @@ DROPEFFECT COleServerItem::DoDragDrop(LPCRECT lpItemRect, CPoint ptOffset,
 		formatEtc.ptd = NULL;
 		formatEtc.dwAspect = DVASPECT_CONTENT;
 		formatEtc.lindex = -1;
-		formatEtc.tymed = (TYMED)-1;
+		formatEtc.tymed = (DWORD) -1;
 		if (lpDataObject->QueryGetData(&formatEtc) == S_OK)
 			dwEffects |= DROPEFFECT_LINK;
 
@@ -713,9 +713,7 @@ void COleServerItem::GetObjectDescriptorData(
 	if (lpOffset != NULL)
 	{
 		CSize ptOffset(lpOffset->x, lpOffset->y);
-#ifndef _MAC
 		((CDC*)NULL)->DPtoHIMETRIC(&ptOffset);
-#endif
 		pointl.x = ptOffset.cx;
 		pointl.y = ptOffset.cy;
 	}
@@ -724,9 +722,7 @@ void COleServerItem::GetObjectDescriptorData(
 	{
 		sizel.cx = lpSize->cx;
 		sizel.cy = lpSize->cy;
-#ifndef _MAC
 		((CDC*)NULL)->DPtoHIMETRIC(&sizel);
-#endif
 	}
 	else
 	{
@@ -956,14 +952,8 @@ STDMETHODIMP COleServerItem::XOleObject::GetMoniker(
 			case OLEGETMONIKER_ONLYIFTHERE:
 			case OLEGETMONIKER_FORCEASSIGN:
 				// create item moniker from name
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-            T2COLE(pThis->m_strItemName);
-				CreateItemMoniker(OLESTDDELIMOLE, (LPCWSTR)pBAfxConv,
-					ppMoniker);
-#else    // __BORLANDC__
 				CreateItemMoniker(OLESTDDELIMOLE, T2COLE(pThis->m_strItemName),
 					ppMoniker);
-#endif   // __BORLANDC__
 				break;
 
 			case OLEGETMONIKER_UNASSIGN:

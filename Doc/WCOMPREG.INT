@@ -1,0 +1,93 @@
+
+{*******************************************************}
+{                                                       }
+{       Borland Delphi Visual Component Library         }
+{       Registration of MIDAS Web components            }
+{                                                       }
+{       Copyright (c) 1999 Inprise Corporation          }
+{                                                       }
+{*******************************************************}
+
+unit WCompReg;
+
+interface
+
+uses DsgnIntf, Classes, MidProd;
+
+type
+  TProviderNameProperty = class(TStringProperty)
+    function GetAttributes: TPropertyAttributes; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+  TXMLDisplayComponentProperty = class(TComponentProperty)
+    function GetAttributes: TPropertyAttributes; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+  TQueryFormComponentProperty = class(TComponentProperty)
+    function GetAttributes: TPropertyAttributes; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+  TItemsFieldProperty = class(TStringProperty)
+    function GetAttributes: TPropertyAttributes; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+  TDataSetViewFieldProperty = class(TStringProperty)
+    function GetAttributes: TPropertyAttributes; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+  TDataSetViewParamProperty = class(TStringProperty)
+    function GetAttributes: TPropertyAttributes; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+  TXMLDataSetFieldProperty = class(TStringProperty)
+    function GetAttributes: TPropertyAttributes; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+  TServerNameProperty = class(TStringProperty)
+    function GetAttributes: TPropertyAttributes; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+  TCssClassProperty = class(TStringProperty)
+  protected
+    function FindProducer: TCustomMidasPageProducer; virtual;
+  public
+    function GetAttributes: TPropertyAttributes; override;
+    procedure GetValues(Proc: TGetStrProc); override;
+  end;
+
+  TWebPageItemsPropertyEditor = class(TClassProperty)
+    procedure Edit; override;
+    function GetAttributes: TPropertyAttributes; override;
+  end;
+
+  TStylesFilePropertyEditor = class(TStringProperty)
+  public
+    procedure Edit; override;
+    function GetAttributes: TPropertyAttributes; override;
+  end;
+
+  TWebPageEditor = class(TComponentEditor)
+  public
+    procedure ExecuteVerb(Index: Integer); override;
+    function GetVerb(Index: Integer): string; override;
+    function GetVerbCount: Integer; override;
+  end;
+
+  TXMLBrokerEditor = class(TComponentEditor)
+  public
+    procedure ExecuteVerb(Index: Integer); override;
+    function GetVerb(Index: Integer): string; override;
+    function GetVerbCount: Integer; override;
+  end;
+
+procedure Register;
+
+implementation

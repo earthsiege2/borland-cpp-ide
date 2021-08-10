@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -65,6 +65,7 @@ static const AFX_MAP_MESSAGE allMessages[] =
 	DEFINE_MESSAGE(WM_CTLCOLORSCROLLBAR),
 	DEFINE_MESSAGE(WM_CTLCOLORSTATIC),
 	DEFINE_MESSAGE(WM_WININICHANGE),
+	DEFINE_MESSAGE(WM_SETTINGCHANGE),
 	DEFINE_MESSAGE(WM_DEVMODECHANGE),
 	DEFINE_MESSAGE(WM_ACTIVATEAPP),
 	DEFINE_MESSAGE(WM_FONTCHANGE),
@@ -125,6 +126,7 @@ static const AFX_MAP_MESSAGE allMessages[] =
 	DEFINE_MESSAGE(WM_MENUSELECT),
 	DEFINE_MESSAGE(WM_MENUCHAR),
 	DEFINE_MESSAGE(WM_ENTERIDLE),
+	DEFINE_MESSAGE(WM_MOUSEWHEEL),
 	DEFINE_MESSAGE(WM_MOUSEMOVE),
 	DEFINE_MESSAGE(WM_LBUTTONDOWN),
 	DEFINE_MESSAGE(WM_LBUTTONUP),
@@ -148,6 +150,7 @@ static const AFX_MAP_MESSAGE allMessages[] =
 	DEFINE_MESSAGE(WM_MDIGETACTIVE),
 	DEFINE_MESSAGE(WM_MDISETMENU),
 	DEFINE_MESSAGE(WM_CUT),
+	DEFINE_MESSAGE(WM_COPYDATA),
 	DEFINE_MESSAGE(WM_COPY),
 	DEFINE_MESSAGE(WM_PASTE),
 	DEFINE_MESSAGE(WM_CLEAR),
@@ -222,7 +225,6 @@ static const AFX_MAP_MESSAGE allMessages[] =
 /////////////////////////////////////////////////////////////////////////////
 // DDE special case
 
-#ifndef _MAC
 static void AFXAPI TraceDDE(LPCTSTR lpszPrefix, const MSG* pMsg)
 {
 	if (pMsg->message == WM_DDE_EXECUTE)
@@ -285,7 +287,6 @@ static void AFXAPI TraceDDE(LPCTSTR lpszPrefix, const MSG* pMsg)
 		::GlobalUnlock(hAdvise);
 	}
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -354,10 +355,8 @@ void AFXAPI _AfxTraceMsg(LPCTSTR lpszPrefix, const MSG* pMsg)
 			pMsg->wParam, pMsg->lParam);
 	}
 
-#ifndef _MAC
 	if (pMsg->message >= WM_DDE_FIRST && pMsg->message <= WM_DDE_LAST)
 		TraceDDE(lpszPrefix, pMsg);
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -25,22 +25,17 @@ static char THIS_FILE[] = __FILE__;
 // CRectTracker global state
 
 // various GDI objects we need to draw
-static HCURSOR rghCursors[10];
-static HBRUSH hatchBrush;
-static HPEN blackDottedPen;
-static int nHandleSize;
+AFX_STATIC_DATA HCURSOR _afxCursors[10] = { 0, };
+AFX_STATIC_DATA HBRUSH _afxHatchBrush = 0;
+AFX_STATIC_DATA HPEN _afxBlackDottedPen = 0;
+AFX_STATIC_DATA int _afxHandleSize = 0;
 
-// a special struct that will cleanup automatically
-struct _AFX_TRACKER_TERM
+void AFX_CDECL AfxTrackerTerm()
 {
-	~_AFX_TRACKER_TERM()
-	{
-		AfxDeleteObject((HGDIOBJ*)&hatchBrush);
-		AfxDeleteObject((HGDIOBJ*)&blackDottedPen);
-	}
-};
-
-static const _AFX_TRACKER_TERM trackerTerm;
+	AfxDeleteObject((HGDIOBJ*)&_afxHatchBrush);
+	AfxDeleteObject((HGDIOBJ*)&_afxBlackDottedPen);
+}
+char _afxTrackerTerm = (char)atexit(&AfxTrackerTerm);
 
 // the struct below is used to determine the qualities of a particular handle
 struct AFX_HANDLEINFO
@@ -56,7 +51,7 @@ struct AFX_HANDLEINFO
 };
 
 // this array describes all 8 handles (clock-wise)
-static const AFX_HANDLEINFO rgHandleInfo[] =
+AFX_STATIC_DATA const AFX_HANDLEINFO _afxHandleInfo[] =
 {
 	// corner handles (top-left, top-right, bottom-right, bottom-left
 	{ offsetof(RECT, left), offsetof(RECT, top),        0, 0,  0,  0, 1, 3 },
@@ -80,7 +75,7 @@ struct AFX_RECTINFO
 };
 
 // this array is indexed by the offset of the RECT member / sizeof(int)
-static const AFX_RECTINFO rgRectInfo[] =
+AFX_STATIC_DATA const AFX_RECTINFO _afxRectInfo[] =
 {
 	{ offsetof(RECT, right), +1 },
 	{ offsetof(RECT, bottom), +1 },
@@ -113,7 +108,7 @@ void CRectTracker::Construct()
 		ASSERT(offsetof(RECT, right) > offsetof(RECT, top));
 		ASSERT(offsetof(RECT, bottom) > offsetof(RECT, right));
 
-		if (hatchBrush == NULL)
+		if (_afxHatchBrush == NULL)
 		{
 			// create the hatch pattern + bitmap
 			WORD hatchPattern[8];
@@ -132,20 +127,20 @@ void CRectTracker::Construct()
 			}
 
 			// create black hatched brush
-			hatchBrush = CreatePatternBrush(hatchBitmap);
+			_afxHatchBrush = CreatePatternBrush(hatchBitmap);
 			DeleteObject(hatchBitmap);
-			if (hatchBrush == NULL)
+			if (_afxHatchBrush == NULL)
 			{
 				AfxUnlockGlobals(CRIT_RECTTRACKER);
 				AfxThrowResourceException();
 			}
 		}
 
-		if (blackDottedPen == NULL)
+		if (_afxBlackDottedPen == NULL)
 		{
 			// create black dotted pen
-			blackDottedPen = CreatePen(PS_DOT, 0, RGB(0, 0, 0));
-			if (blackDottedPen == NULL)
+			_afxBlackDottedPen = CreatePen(PS_DOT, 0, RGB(0, 0, 0));
+			if (_afxBlackDottedPen == NULL)
 			{
 				AfxUnlockGlobals(CRIT_RECTTRACKER);
 				AfxThrowResourceException();
@@ -157,34 +152,29 @@ void CRectTracker::Construct()
 			MAKEINTRESOURCE(AFX_IDC_TRACK4WAY), RT_GROUP_CURSOR);
 
 		// initialize the cursor array
-		rghCursors[0] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACKNWSE));
-		rghCursors[1] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACKNESW));
-		rghCursors[2] = rghCursors[0];
-		rghCursors[3] = rghCursors[1];
-		rghCursors[4] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACKNS));
-		rghCursors[5] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACKWE));
-		rghCursors[6] = rghCursors[4];
-		rghCursors[7] = rghCursors[5];
-		rghCursors[8] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACK4WAY));
-		rghCursors[9] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_MOVE4WAY));
+		_afxCursors[0] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACKNWSE));
+		_afxCursors[1] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACKNESW));
+		_afxCursors[2] = _afxCursors[0];
+		_afxCursors[3] = _afxCursors[1];
+		_afxCursors[4] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACKNS));
+		_afxCursors[5] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACKWE));
+		_afxCursors[6] = _afxCursors[4];
+		_afxCursors[7] = _afxCursors[5];
+		_afxCursors[8] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_TRACK4WAY));
+		_afxCursors[9] = ::LoadCursor(hInst, MAKEINTRESOURCE(AFX_IDC_MOVE4WAY));
 
 		// get default handle size from Windows profile setting
-#ifndef _MAC
 		static const TCHAR szWindows[] = _T("windows");
 		static const TCHAR szInplaceBorderWidth[] =
 			_T("oleinplaceborderwidth");
-		nHandleSize = GetProfileInt(szWindows, szInplaceBorderWidth, 4);
-#else
-		nHandleSize = 4;
-#endif
-
+		_afxHandleSize = GetProfileInt(szWindows, szInplaceBorderWidth, 4);
 		bInitialized = TRUE;
 	}
 	AfxUnlockGlobals(CRIT_RECTTRACKER);
 
 	m_nStyle = 0;
-	m_nHandleSize = nHandleSize;
-	m_sizeMin.cy = m_sizeMin.cx = nHandleSize*2;
+	m_nHandleSize = _afxHandleSize;
+	m_sizeMin.cy = m_sizeMin.cx = m_nHandleSize*2;
 
 	m_rectLast.SetRectEmpty();
 	m_sizeLast.cx = m_sizeLast.cy = 0;
@@ -220,7 +210,7 @@ void CRectTracker::Draw(CDC* pDC) const
 	if ((m_nStyle & (dottedLine|solidLine)) != 0)
 	{
 		if (m_nStyle & dottedLine)
-			pOldPen = pDC->SelectObject(CPen::FromHandle(blackDottedPen));
+			pOldPen = pDC->SelectObject(CPen::FromHandle(_afxBlackDottedPen));
 		else
 			pOldPen = (CPen*)pDC->SelectStockObject(BLACK_PEN);
 		pOldBrush = (CBrush*)pDC->SelectStockObject(NULL_BRUSH);
@@ -232,7 +222,7 @@ void CRectTracker::Draw(CDC* pDC) const
 
 	// if hatchBrush is going to be used, need to unrealize it
 	if ((m_nStyle & (hatchInside|hatchedBorder)) != 0)
-		UnrealizeObject(hatchBrush);
+		UnrealizeObject(_afxHatchBrush);
 
 	// hatch inside
 	if ((m_nStyle & hatchInside) != 0)
@@ -240,15 +230,11 @@ void CRectTracker::Draw(CDC* pDC) const
 		pTemp = pDC->SelectStockObject(NULL_PEN);
 		if (pOldPen == NULL)
 			pOldPen = (CPen*)pTemp;
-		pTemp = pDC->SelectObject(CBrush::FromHandle(hatchBrush));
+		pTemp = pDC->SelectObject(CBrush::FromHandle(_afxHatchBrush));
 		if (pOldBrush == NULL)
 			pOldBrush = (CBrush*)pTemp;
 		pDC->SetBkMode(TRANSPARENT);
-#ifndef _MAC
 		nOldROP = pDC->SetROP2(R2_MASKNOTPEN);
-#else _MAC
-		nOldROP = pDC->SetROP2(R2_MERGENOTPEN);
-#endif // _MAC
 		pDC->Rectangle(rect.left+1, rect.top+1, rect.right, rect.bottom);
 		pDC->SetROP2(nOldROP);
 	}
@@ -256,7 +242,7 @@ void CRectTracker::Draw(CDC* pDC) const
 	// draw hatched border
 	if ((m_nStyle & hatchedBorder) != 0)
 	{
-		pTemp = pDC->SelectObject(CBrush::FromHandle(hatchBrush));
+		pTemp = pDC->SelectObject(CBrush::FromHandle(_afxHatchBrush));
 		if (pOldBrush == NULL)
 			pOldBrush = (CBrush*)pTemp;
 		pDC->SetBkMode(OPAQUE);
@@ -322,8 +308,8 @@ BOOL CRectTracker::SetCursor(CWnd* pWnd, UINT nHitTest) const
 			nHandle = (TrackerHit)9;
 	}
 
-	ASSERT(nHandle < _countof(rghCursors));
-	::SetCursor(rghCursors[nHandle]);
+	ASSERT(nHandle < _countof(_afxCursors));
+	::SetCursor(_afxCursors[nHandle]);
 	return TRUE;
 }
 
@@ -350,11 +336,11 @@ int CRectTracker::NormalizeHit(int nHandle) const
 	ASSERT(nHandle <= 8 && nHandle >= -1);
 	if (nHandle == hitMiddle || nHandle == hitNothing)
 		return nHandle;
-	const AFX_HANDLEINFO* pHandleInfo = &rgHandleInfo[nHandle];
+	const AFX_HANDLEINFO* pHandleInfo = &_afxHandleInfo[nHandle];
 	if (m_rect.Width() < 0)
 	{
 		nHandle = (TrackerHit)pHandleInfo->nInvertX;
-		pHandleInfo = &rgHandleInfo[nHandle];
+		pHandleInfo = &_afxHandleInfo[nHandle];
 	}
 	if (m_rect.Height() < 0)
 		nHandle = (TrackerHit)pHandleInfo->nInvertY;
@@ -439,8 +425,8 @@ void CRectTracker::AdjustRect(int nHandle, LPRECT)
 	if (px != NULL && nAbsWidth < m_sizeMin.cx)
 	{
 		nNewWidth = nAbsWidth != 0 ? nNewWidth / nAbsWidth : 1;
-		ASSERT((int*)px - (int*)&m_rect < _countof(rgRectInfo));
-		const AFX_RECTINFO* pRectInfo = &rgRectInfo[(int*)px - (int*)&m_rect];
+		ASSERT((int*)px - (int*)&m_rect < _countof(_afxRectInfo));
+		const AFX_RECTINFO* pRectInfo = &_afxRectInfo[(int*)px - (int*)&m_rect];
 		*px = *(int*)((BYTE*)&m_rect + pRectInfo->nOffsetAcross) +
 			nNewWidth * m_sizeMin.cx * -pRectInfo->nSignAcross;
 	}
@@ -451,8 +437,8 @@ void CRectTracker::AdjustRect(int nHandle, LPRECT)
 	if (py != NULL && nAbsHeight < m_sizeMin.cy)
 	{
 		nNewHeight = nAbsHeight != 0 ? nNewHeight / nAbsHeight : 1;
-		ASSERT((int*)py - (int*)&m_rect < _countof(rgRectInfo));
-		const AFX_RECTINFO* pRectInfo = &rgRectInfo[(int*)py - (int*)&m_rect];
+		ASSERT((int*)py - (int*)&m_rect < _countof(_afxRectInfo));
+		const AFX_RECTINFO* pRectInfo = &_afxRectInfo[(int*)py - (int*)&m_rect];
 		*py = *(int*)((BYTE*)&m_rect + pRectInfo->nOffsetAcross) +
 			nNewHeight * m_sizeMin.cy * -pRectInfo->nSignAcross;
 	}
@@ -504,7 +490,7 @@ void CRectTracker::GetHandleRect(int nHandle, CRect* pHandleRect) const
 	int nWidth = rectT.Width();
 	int nHeight = rectT.Height();
 	CRect rect;
-	const AFX_HANDLEINFO* pHandleInfo = &rgHandleInfo[nHandle];
+	const AFX_HANDLEINFO* pHandleInfo = &_afxHandleInfo[nHandle];
 	rect.left = *(int*)((BYTE*)&rectT + pHandleInfo->nOffsetX);
 	rect.top = *(int*)((BYTE*)&rectT + pHandleInfo->nOffsetY);
 	rect.left += size * pHandleInfo->nHandleX;
@@ -578,6 +564,8 @@ BOOL CRectTracker::TrackHandle(int nHandle, CWnd* pWnd, CPoint point,
 	if (::GetCapture() != NULL)
 		return FALSE;
 
+	AfxLockTempMaps();  // protect maps while looping
+
 	ASSERT(!m_bFinalErase);
 
 	// save original width & height in pixels
@@ -615,8 +603,6 @@ BOOL CRectTracker::TrackHandle(int nHandle, CWnd* pWnd, CPoint point,
 
 	CRect rectOld;
 	BOOL bMoved = FALSE;
-
-	AfxLockTempMaps();  // protect maps while looping
 
 	// get messages until capture lost or cancelled/accepted
 	for (;;)
@@ -698,7 +684,7 @@ ExitLoop:
 		pWnd->ReleaseDC(pDrawDC);
 	ReleaseCapture();
 
-	AfxUnlockTempMaps();
+	AfxUnlockTempMaps(FALSE);
 
 	// restore rect in case bMoved is still FALSE
 	if (!bMoved)
@@ -726,7 +712,7 @@ void CRectTracker::GetModifyPointers(
 	//  (Note: handles that map to themselves along a given axis when that
 	//   axis is inverted don't modify the value on that axis)
 
-	const AFX_HANDLEINFO* pHandleInfo = &rgHandleInfo[nHandle];
+	const AFX_HANDLEINFO* pHandleInfo = &_afxHandleInfo[nHandle];
 	if (pHandleInfo->nInvertX != nHandle)
 	{
 		*ppx = (int*)((BYTE*)&m_rect + pHandleInfo->nOffsetX);

@@ -5,13 +5,14 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1998, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.3  $        */
 
 #ifndef __cplusplus
 #error Must use C++ for REGEXP.H
@@ -28,7 +29,6 @@
 #include <except.h>
 #endif
 
-
 #if !defined(RC_INVOKED)
 
 #if defined(__STDC__)
@@ -37,8 +37,6 @@
 
 #endif  /* !RC_INVOKED */
 
-
-class _EXPCLASS string;
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
@@ -61,30 +59,26 @@ public:
         TOOLONG
     };
 
-    _RTLENTRY TRegexp( const char _FAR *cp );
-    _RTLENTRY TRegexp( const TRegexp _FAR &r );
+    _RTLENTRY TRegexp( const char *cp );
+    _RTLENTRY TRegexp( const TRegexp &r );
     _RTLENTRY ~TRegexp();
 
-    TRegexp _FAR & _RTLENTRY operator = ( const TRegexp _FAR &r ) throw( xalloc );
-    TRegexp _FAR & _RTLENTRY operator = ( const char _FAR *cp ) throw( xalloc );
-    size_t _RTLENTRY find( const string _FAR &s,
-                           size_t _FAR *len,
+    TRegexp & _RTLENTRY operator = ( const TRegexp &r ) throw();
+    TRegexp & _RTLENTRY operator = ( const char *cp )   throw();
+    size_t _RTLENTRY find( const char *cp,
+                           size_t *len,
                            size_t start = 0 ) const;
-    StatVal _RTLENTRY status() throw();
+    StatVal _RTLENTRY status() throw() { return stat; }
 
 private:
 
-    void _RTLENTRY copy_pattern( const TRegexp _FAR &r ) throw( xalloc );
-    void _RTLENTRY gen_pattern( const char _FAR *cp ) throw( xalloc );
+    void _RTLENTRY copy_pattern( const TRegexp &r ) throw();
+    void _RTLENTRY gen_pattern( const char *cp )    throw();
 
-    unsigned char _FAR *the_pattern;
+    unsigned char *the_pattern;
     StatVal stat;
     static const unsigned maxpat;
 };
-
-#if defined( BI_OLDNAMES )
-#define BI_Regexp TRegexp
-#endif
 
 
 #if !defined(RC_INVOKED)

@@ -46,18 +46,10 @@
 \****************************************************************************/
 
 #ifndef _INC_PENWIN
+#pragma option push -b -a8 -pc -A- /*P_O_Push __BORLANDC__: This file was forgotten in the PSDK so it was taken from the VC++ 6.0 */
 #define _INC_PENWIN
-#pragma option -b
 
-#pragma option -b.
 #include <windows.h>
-#pragma option -b
-
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <pshpack8.h>
-#pragma option -b
-#endif
 
 #ifndef _WIN32
 #ifndef RC_INVOKED
@@ -83,9 +75,7 @@ extern "C" {
 
 #ifndef NOPENAPPS   // not available in WIN32
 #ifndef RC_INVOKED
-#pragma option -b.
     #include <skbapi.h>
-#pragma option -b
 #endif /* !RC_INVOKED */
 #endif /*!NOPENAPPS */
 
@@ -2367,12 +2357,5 @@ BOOL      WINAPI KKConvert(HWND hwndConvert, HWND hwndCaller,
 #endif /* RC_INVOKED */
 #endif //!_WIN32
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <poppack.h>
-#pragma option -b
-#endif
-
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* #define _INC_PENWIN */
-

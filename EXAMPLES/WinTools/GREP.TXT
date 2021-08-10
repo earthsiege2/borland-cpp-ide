@@ -1,0 +1,118 @@
+Grep Help
+
+GREP: A Text-Search Utility
+
+GREP (Global Regular Expression Print) is a powerful text-search program derived from the UNIX utility of the same name. GREP searches for a text pattern in one or more files or in its standard input stream.
+
+Here is a quick example of a situation where you might want to use GREP. Suppose you wanted to find out which text files in your current directory contained the string "Bob". You would type:
+
+	grep Bob *.txt
+
+GREP responds with a list of the lines in each file (if any) that contained the string "Bob". Because GREP does not ignore case by default, the strings "bob" and "boB" do not match.
+
+GREP can do a lot more than match a single, fixed string. You can make GREP search for any string that matches a particular pattern. (See GREP: The search string.)
+
+
+GREP: Command-Line Syntax
+
+The general command-line syntax for GREP is
+
+grep [-options] searchstring [file(s) ... ]
+
+Option	Description
+
+
+
+options	consist of one or more letters, preceded by a hyphen (-), that changes the behavior of GREP.
+searchstring	gives the pattern to search for.
+file(s)	tells GREP which files to search. (If you do not specify a file, GREP searches standard input; this lets you use pipes and redirection.)
+
+
+
+The command GREP ? prints a help screen showing the options, special characters, and defaults for GREP.
+
+Redirecting Output from GREP
+
+If you find that the results of your GREP are longer than one screen, you can redirect the output to a file. For example, you could use this command:
+
+GREP "Bob" *.txt > temp.txt
+
+which searches all files with the TXT extension in the current directory, then puts the results in a file called TEMP.TXT. (You can name this file anything you like.) Use any word processor to read TEMP.TXT (the results of the search).
+
+
+GREP: Command-Line Options
+
+You can pass options to the GREP utility on the command line by specifying one or more single characters preceded by a hyphen (-). Each individual character is a switch that you can turn on or off: A plus symbol (+) after a character turns the option on; a hyphen (-) after the character turns the option off. The + sign is optional; for example, -r means the same thing as -r+. You can list multiple options individually (like this: -i -d -l), or you can combine them (like this: -ild or -il, -d, and so on).
+
+Here are the GREP option characters and their meanings:
+
+Option	Description
+
+
+
+-c	Count only: Prints only a count of matching lines. For each file that contains at least one matching line, GREP prints the file name and a count of the number of matching lines. Matching lines are not printed. This option is off by default.
+-d	Search subdirectories: For each file specified on the command line, GREP searches for all files that match the file specification, both in the directory specified and in all subdirectories below the specified directory. If you give a file without a path, GREP assumes the files are in the current directory. This option is off by default.
+
+-e	Search expression follows: Indicates that the next argument is the search expression. This option is useful when you want to search for an expression that begins with “-“.
+-i	Ignore case: GREP ignores upper/lowercase differences. When this option is on, GREP treats all letters a to z as identical to the corresponding letters A to Z in all situations. This option is off by default.
+-l	List file names only: Prints only the name of each file containing a match. After GREP finds a match, it prints the file name and processing immediately moves on to the next file. This option is off by default.
+
+-n	Line numbers: Each matching line that GREP prints is preceded by its line number. This option is off by default.
+-o	UNIX output format: Changes the output format of matching lines to support more easily the UNIX style of command-line piping. All lines of output are preceded by the name of the file that contained the  matching line. This option is off by default.
+-r	Regular expression search: The text defined by searchstring is treated as a regular expression instead of as a literal string. This option is on by default. A regular expression is one or more occurrences of one or more characters optionally enclosed in quotes. The following symbols are treated specially:
+
+	^  start of line	$  end of line
+	.  any character	\  quote next character
+	*  match zero or more	+  match one or more
+
+	[aeiou0-9]	match a, e, i, o, u, and 0-9
+	[^aeiou0-9]	match all but a, e, i, o, u, and 0-9
+
+-u filename		Update options: Creates a copy of GREP.EXE called filename.EXE.  Any options included on the command line are saved as defaults in the new copy of GREP. Use the -u option to customize the default option settings. To verify that the defaults have been set correctly, type filename ?; each option on the help screen is followed by a + or – to indicate its default setting.
+-v	Nonmatch: Prints only nonmatching lines. Only lines that do not contain the search string are considered nonmatching lines. This option is off by default.
+
+-w	Word search: Text found that matches the regular expression is considered a match only if the character immediately preceding and following cannot be part of a word. The default word character set includes A to Z, 0 to 9, and the underscore ( _ ). This option is off by default. An alternate form of this option lets you specify the set of legal word characters. Its form is -w[set], where set is any valid regular expression.
+	If you define the set with alphabetic characters, it is automatically defined to contain both the uppercase and lowercase values for each letter in the set (regardless of how it is typed), even if the search is case-sensitive. If you use the -w option in combination with the -u option, the new set of legal characters is saved as the default set.
+
+-z	Verbose: GREP prints the file name of every file searched. Each matching line is preceded by its line number. A count of matching lines in each file is given, even if the count is zero. This option is off by default.
+?	Displays a help screen showing the options, special characters, and defaults for GREP.
+
+
+GREP: The Search String
+
+The value of searchstring defines the pattern GREP searches for. A search string can be either a regular expression or a literal string.
+
+	In a regular expression, certain characters have special meanings: They are operators that govern the search.
+	In a literal string, there are no operators: Each character is treated literally.
+
+You can enclose the search string in quotation marks to prevent spaces and tabs from being treated as delimiters. To search for an expression that begins with “-“, use the -e option. The text matched by the search string cannot cross line boundaries; that is, all the text necessary to match the pattern must be on a single line.
+
+A regular expression is either a single character or a set of characters enclosed in brackets. A concatenation of regular expressions is a regular expression.
+
+When you use the -r option (on by default), the search string is treated as a regular expression (not a literal expression). The following characters have special meanings:
+
+Symbol	Description
+
+
+
+ ^	A circumflex at the start of the expression matches the start of a line.
+ $	A dollar sign at the end of the expression matches the end of a line.
+ .	A period matches any character.
+ *	An asterisk after a string matches any number of occurrences of that string followed by any characters, including zero characters. For example, bo* matches bot, boo, and as well as bo.
+
+ +	A plus sign after a string matches any number of occurrences of that string followed by any characters, except zero characters. For example, bo+ matches bot and boo, but not b or bo.
+{ }	Characters or expressions in braces are grouped so that the evaluation of a search pattern can be controlled and so grouped text can be referred to by number.
+[ ]	Characters in brackets match any one character that appears in the brackets, but no others. For example [bot] matches b, o, or t.
+
+[^]	A circumflex at the start of the string in brackets means NOT. Hence, [^bot] matches any characters except b, o, or t.
+[-]	A hyphen within the brackets signifies a range of characters. For example, [b-o] matches any character from b through o. 
+  \  	A backslash before a wildcard character tells GREP to treat that character literally, not as a wildcard. For example, \^ matches ^ and does not look for the start of a line.
+
+
+
+Four of the "special" characters ($, ., *, and +) do not have any special meaning when used within a bracketed set. In addition, the character ^ is only treated specially if it immediately follows the beginning of the set definition (immediately after the [ delimiter).
+
+GREP: File Specifications
+
+The files option tells GREP which files to search. Files can be an explicit file name or a generic file name  incorporating the DOS ? and * wildcards. In addition, you can type a path (drive and directory information). If you list files without a path, GREP searches the current directory. If you do not specify any files, input to GREP must come from redirection (<) or a vertical bar (|).
+

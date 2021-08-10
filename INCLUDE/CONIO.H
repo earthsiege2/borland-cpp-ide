@@ -4,21 +4,21 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.4  $ */
 
 #if !defined(__CONIO_H)
 #define __CONIO_H
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
-
 
 #if !defined(RC_INVOKED)
 
@@ -73,116 +73,6 @@ enum COLORS {
 #endif
 
 #define BLINK       128 /* blink bit */
-
-#if !defined(__FLAT__)
-
-enum text_modes {  LASTMODE=-1,
-                   BW40=0,
-                   C40,
-                   BW80,
-                   C80,
-                   MONO=7,
-                   C4350=64 };
-
-#if defined(__DPMI16__) || !defined(_Windows)
-
-#if !defined(__STDC__)  /*  NON-ANSI  */
-#define directvideo  _directvideo
-#endif
-
-extern   int _RTLENTRY _directvideo;
-
-#endif  /* __DPMI16__ || !_Windows */
-
-extern   int _RTLENTRY _wscroll;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void        _RTLENTRY clreol( void );
-void        _RTLENTRY clrscr( void );
-void        _RTLENTRY gotoxy( int __x, int __y );
-int         _RTLENTRY getch( void );
-int         _RTLENTRY getche( void );
-int         _RTLENTRY kbhit( void );
-int         _RTLENTRY putch( int __c );
-int         _RTLENTRY wherex( void );
-int         _RTLENTRY wherey( void );
-
-#ifndef _PORT_DEFS
-unsigned char   _RTLENTRY inportb( unsigned __portid );
-unsigned        _RTLENTRY inport ( unsigned __portid );
-int             _RTLENTRY inp( unsigned __portid );
-unsigned        _RTLENTRY inpw( unsigned __portid );
-void            _RTLENTRY outportb( unsigned __portid, unsigned char __value );
-void            _RTLENTRY outport ( unsigned __portid, unsigned __value );
-int             _RTLENTRY outp( unsigned __portid, int __value );
-unsigned        _RTLENTRY outpw( unsigned __portid, unsigned __value );
-#endif  /* !_PORT_DEFS */
-
-#if defined(__DPMI16__) || !defined(_Windows)
-
-void        _RTLENTRY delline( void );
-int         _RTLENTRY gettext( int __left, int __top,
-                           int __right, int __bottom,
-                           void *__destin);
-void        _RTLENTRY gettextinfo (struct text_info *__r );
-void        _RTLENTRY highvideo( void );
-void        _RTLENTRY insline( void );
-void        _RTLENTRY lowvideo( void );
-int         _RTLENTRY movetext( int __left, int __top,
-                            int __right, int __bottom,
-                            int __destleft, int __desttop );
-void        _RTLENTRY normvideo( void );
-int         _RTLENTRY puttext( int __left, int __top,
-                           int __right, int __bottom,
-                           void *__source );
-void        _RTLENTRY textattr( int __newattr );
-void        _RTLENTRY textbackground( int __newcolor );
-void        _RTLENTRY textcolor( int __newcolor );
-void        _RTLENTRY textmode( int __newmode );
-void        _RTLENTRY window( int __left, int __top, int __right, int __bottom);
-
-void        _RTLENTRY _setcursortype( int __cur_t );
-char *      _RTLENTRY cgets( char *__str );
-int         _RTLENTRY cprintf( const char *__format, ... );
-int         _RTLENTRY cputs( const char *__str );
-int         _RTLENTRY cscanf( const char *__format, ... );
-char *      _RTLENTRY getpass( const char *__prompt );
-int         _RTLENTRY ungetch( int __ch );
-
-#endif /* __DPMI16__ || !_Windows */
-
-#ifndef _PORT_DEFS
-#define _PORT_DEFS
-
-    /* These are in-line functions.  These prototypes just clean up
-       some syntax checks and code generation.
-     */
-unsigned char   _RTLENTRY  __inportb__ (unsigned __portid);
-unsigned        _RTLENTRY  __inportw__ (unsigned __portid);
-unsigned char   _RTLENTRY  __outportb__(unsigned __portid, unsigned char __value);
-unsigned        _RTLENTRY  __outportw__(unsigned __portid, unsigned __value);
-
-#define inportb(__portid)           __inportb__(__portid)
-#define outportb(__portid, __value) ((void) __outportb__(__portid, __value))
-#define inport(__portid)            __inportw__(__portid)
-#define outport(__portid, __value)  ((void) __outportw__(__portid, __value))
-
-/* MSC-compatible macros for port I/O */
-#define inp(__portid)               __inportb__ (__portid)
-#define outp(__portid, __value)     __outportb__(__portid, (unsigned char)(__value))
-#define inpw(__portid)              __inportw__ (__portid)
-#define outpw(__portid, __value)    __outportw__(__portid, __value)
-
-#endif  /* _PORT_DEFS */
-
-#ifdef __cplusplus
-}
-#endif
-
-#else  /* __FLAT__ */
 
 enum text_modes
 {
@@ -243,10 +133,6 @@ enum text_modes
 
 #define PASS_MAX    8   /* max. no. of chars returned by getpass */
 
-#if !defined(__STDC__)  /*  NON-ANSI  */
-#define directvideo  _directvideo
-#define _getch       getch             /* for MSC compatibility */
-#endif
 
 extern   int _RTLENTRY _EXPDATA _directvideo;
 
@@ -294,12 +180,36 @@ int         _RTLENTRY _EXPFUNC ungetch( int __ch );
 int         _RTLENTRY _EXPFUNC wherex( void );
 int         _RTLENTRY _EXPFUNC wherey( void );
 
+__inline int _getch( void ) { return getch(); } /* for MSC compatibility */
+
+/*
+  This function will remove from the console event queue, any key-up events
+  that are pending. under Win95 key-up events will incorrectly be translated
+  into real key presses by the OS ReadFile() API call, which scanf() uses.
+  The WinNT version of ReadFile() correctly ignores them, of course. The
+  problem can occur when getch() is called to get a key, then scanf() is
+  called to obtain more input from stdin.  On Win95 the key-up event that is
+  still left in the event queue will cause ReadFile() to think that the same
+  key was pressed again.  Although, good programming practice dictates that
+  one shouldn't use both getch() and scanf() near each other in the same
+  program, the following function could help alleviate this key-up problem.
+  cscanf() does NOT suffer from this problem since it gets its input via
+  getch() and not ReadFile().  __flush_win95_keyup_events() should be called
+  before scanf() is called. Keep in mind that you must allow sufficient time
+  for the user to release the key so that the key-up event is inserted
+  before flushing the key-up events.  Otherwise, the key-up event will occur
+  after scanf() is blocked and waiting inside ReadFile().
+
+  __flush_win95_keyup_events() returns the number of key-up events that it
+  removed from the queue.
+
+*/
+int         _RTLENTRY _EXPFUNC __flush_win95_keyup_events (void);
+
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif  /* __FLAT__  */
-
 
 #if !defined(RC_INVOKED)
 

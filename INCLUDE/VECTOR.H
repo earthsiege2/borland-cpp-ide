@@ -1,12 +1,10 @@
-#ifndef __STD_VECTOR__
-#define __STD_VECTOR__
-/* $Revision:   8.1  $ */
-
+#ifndef __VECTOR_H
+#define __VECTOR_H
+#pragma option push -b -a8 -pc -Vx- -Ve- -A- -w-inl -w-aus -w-sig
+// -*- C++ -*-
 /***************************************************************************
  *
  * vector - declarations for the Standard Library vector class
- *
- * $Id: vector,v 1.41 1995/09/14 23:53:38 lijewski Exp $
  *
  ***************************************************************************
  *
@@ -24,234 +22,433 @@
  *
  ***************************************************************************
  *
- * (c) Copyright 1994, 1995 Rogue Wave Software, Inc.
- * ALL RIGHTS RESERVED
+ * Copyright (c) 1994-1999 Rogue Wave Software, Inc.  All Rights Reserved.
  *
- * The software and information contained herein are proprietary to, and
- * comprise valuable trade secrets of, Rogue Wave Software, Inc., which
- * intends to preserve as trade secrets such software and information.
- * This software is furnished pursuant to a written license agreement and
- * may be used, copied, transmitted, and stored only in accordance with
- * the terms of such license and with the inclusion of the above copyright
- * notice.  This software and information or any other copies thereof may
- * not be provided or otherwise made available to any other person.
+ * This computer software is owned by Rogue Wave Software, Inc. and is
+ * protected by U.S. copyright laws and other laws and by international
+ * treaties.  This computer software is furnished by Rogue Wave Software,
+ * Inc. pursuant to a written license agreement and may be used, copied,
+ * transmitted, and stored only in accordance with the terms of such
+ * license and with the inclusion of the above copyright notice.  This
+ * computer software or any other copies thereof may not be provided or
+ * otherwise made available to any other person.
  *
- * Notwithstanding any other lease or license that may pertain to, or
- * accompany the delivery of, this computer software and information, the
- * rights of the Government regarding its use, reproduction and disclosure
- * are as set forth in Section 52.227-19 of the FARS Computer
- * Software-Restricted Rights clause.
- *
- * Use, duplication, or disclosure by the Government is subject to
- * restrictions as set forth in subparagraph (c)(1)(ii) of the Rights in
- * Technical Data and Computer Software clause at DFARS 252.227-7013.
- * Contractor/Manufacturer is Rogue Wave Software, Inc.,
- * P.O. Box 2328, Corvallis, Oregon 97339.
- *
- * This computer software and information is distributed with "restricted
- * rights."  Use, duplication or disclosure is subject to restrictions as
- * set forth in NASA FAR SUP 18-52.227-79 (April 1985) "Commercial
- * Computer Software-Restricted Rights (April 1985)."  If the Clause at
- * 18-52.227-74 "Rights in Data General" is specified in the contract,
- * then the "Alternate III" clause applies.
+ * U.S. Government Restricted Rights.  This computer software is provided
+ * with Restricted Rights.  Use, duplication, or disclosure by the
+ * Government is subject to restrictions as set forth in subparagraph (c)
+ * (1) (ii) of The Rights in Technical Data and Computer Software clause
+ * at DFARS 252.227-7013 or subparagraphs (c) (1) and (2) of the
+ * Commercial Computer Software – Restricted Rights at 48 CFR 52.227-19,
+ * as applicable.  Manufacturer is Rogue Wave Software, Inc., 5500
+ * Flatiron Parkway, Boulder, Colorado 80301 USA.
  *
  **************************************************************************/
 
+#ifndef __STD_VECTOR__
+#define __STD_VECTOR__
+
 #include <stdcomp.h>
+#include <rw/stddefs.h> 
+#include <rw/rwdispatch.h> 
 
-#include <function>
+#include <algorithm>
 #include <iterator>
-#include <algorith>
-
-#ifndef Allocator
-#define Allocator allocator
 #include <memory>
-#endif
+#include <stdexcept>
 
 #ifndef vector
 #define vector vector
 #endif
 
-#ifndef RWSTD_NO_NAMESPACE
+#ifndef _RWSTD_NO_NAMESPACE
 namespace std {
 #endif
 
-template <class T>
-class vector
-{
+//
+// Note that _RWSTD_COMPLEX_DEFAULT(x)
+// will expand to: ' = x', or nothing,
+// depending on your compiler's capabilities and/or
+// flag settings (see stdcomp.h).
+//
+  template <class T, class Allocator _RWSTD_COMPLEX_DEFAULT(allocator<T>) >
+  class vector
+  {
+
+  private:
+#if defined( _RWSTD_ALLOCATOR) && !defined(_HPACC_)
+    typedef _TYPENAME Allocator::template rebind<T>::other __value_alloc_type;
+#else
+    typedef allocator_interface<Allocator,T> __value_alloc_type;
+#endif
+
   public:
     //
     // Types.
     //
-    typedef Allocator<T>                               vector_allocator;
-    typedef typename vector_allocator::reference       reference;
-    typedef typename vector_allocator::const_reference const_reference;
-    typedef typename vector_allocator::pointer         iterator;
-    typedef typename vector_allocator::const_pointer   const_iterator;
-    typedef typename vector_allocator::size_type       size_type;
-    typedef typename vector_allocator::difference_type difference_type;
-    typedef          T                                 value_type;
-    typedef reverse_iterator<const_iterator, value_type,
-                             const_reference, difference_type>
-                                                       const_reverse_iterator;
-    typedef reverse_iterator<iterator, value_type,
-                             reference, difference_type>
-                                                       reverse_iterator;
-  protected:
+    typedef T                                          value_type;
+    typedef Allocator                                  allocator_type;
 
-    Allocator<T> the_allocator;
+#ifndef _RWSTD_NO_COMPLICATED_TYPEDEF
+    typedef _TYPENAME _RWSTD_ALLOC_SIZE_TYPE               size_type;
+    typedef _TYPENAME _RWSTD_ALLOC_DIFF_TYPE               difference_type;
+    typedef _TYPENAME __value_alloc_type::pointer          iterator;
+    typedef _TYPENAME __value_alloc_type::const_pointer    const_iterator;
+    typedef _TYPENAME __value_alloc_type::reference        reference;
+    typedef _TYPENAME __value_alloc_type::const_reference  const_reference;
+    typedef _TYPENAME __value_alloc_type::pointer          pointer;
+    typedef _TYPENAME __value_alloc_type::const_pointer    const_pointer;
+#else
+    typedef size_t          size_type;
+    typedef ptrdiff_t       difference_type;
+    typedef T*              iterator;
+    typedef const T*        const_iterator;
+    typedef T&              reference;
+    typedef const T&        const_reference;
+    typedef T*              pointer;
+    typedef const T*        const_pointer;
+#endif  //_RWSTD_NO_COMPLICATED_TYPEDEF
 
-    iterator start;
-    iterator finish;
-    iterator end_of_storage;
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC 
+    typedef _RW_STD::reverse_iterator<const_iterator> const_reverse_iterator;
+    typedef _RW_STD::reverse_iterator<iterator>  reverse_iterator;
+#else
+    typedef _RW_STD::reverse_iterator<const_iterator, 
+      random_access_iterator_tag, value_type, 
+      const_reference, const_pointer, difference_type>
+      const_reverse_iterator;
+    typedef _RW_STD::reverse_iterator<iterator, 
+      random_access_iterator_tag, value_type,
+      reference, pointer, difference_type>
+      reverse_iterator;
+#endif
 
-    void insert_aux (iterator position, const T& x);
+protected:
 
+    size_type          __buffer_size;
+    iterator           __start;
+    iterator           __finish;
+    __RWSTD::__rw_basis<iterator,allocator_type>  __end_of_storage;
+
+    void __insert_aux (iterator position, const T& x);
+    void __insert_aux (iterator position, size_type n, const T& x);
+#ifndef _RWSTD_NO_MEMBER_TEMPLATES
+    template<class InputIterator>
+    void __insert_aux (iterator position, InputIterator first, InputIterator last, _RW_is_not_integer)
+    { __insert_aux2 (position, first, last); }
+    template<class InputIterator>
+    void __insert_aux (iterator position, InputIterator first, InputIterator last, _RW_is_integer)
+    { __insert_aux (position, (size_type)first, last); }
+    template<class InputIterator>
+    void __insert_aux2 (iterator position, InputIterator first, InputIterator last);
+#else
+    void __insert_aux2 (iterator position, const_iterator first, const_iterator last);
+#endif
+
+    void __destroy(iterator start, iterator finish)
+    {
+      while ( start != finish)
+        __value_alloc_type(__end_of_storage).destroy(start++);
+    }
+
+    // 
+    //  Allocate buffers and fill with n values
+    //
+    void __initn(size_type n, const T& value)
+    {
+      __init();
+      __start = __value_alloc_type(__end_of_storage).allocate(n,0);
+#ifndef _RWSTD_NO_EXCEPTIONS
+      try {
+        uninitialized_fill_n(__start, n, value);
+      } catch(...) {
+        __value_alloc_type(__end_of_storage).deallocate(__start,n);
+        throw;
+      }      
+#else
+      uninitialized_fill_n(__start, n, value);
+#endif // _RWSTD_NO_EXCEPTIONS
+      __finish = __start + n;
+      __end_of_storage = __finish;
+    } 
+
+    void __init() 
+    {
+      __buffer_size = 
+      max((size_type)1,__RWSTD::__rw_allocation_size((value_type*)0,(size_type)0,(size_type)0));
+    }
   public:
     //
     // construct/copy/destroy
     //
-    vector () : start(0), finish(0), end_of_storage(0) {}
-    //
-    // Build a vector of size n with each element set to default for type T.
-    // This requires that T have a default constructor.
-    //
-    explicit vector (size_type n)
-    {
-        start = the_allocator.allocate(n);
-        T value;
-        uninitialized_fill_n(start, n, value);
-        finish = start + n;
-        end_of_storage = finish;
+    _EXPLICIT vector (const Allocator& alloc _RWSTD_DEFAULT_ARG(Allocator())) 
+      : __start(0), __finish(0), __end_of_storage(0,alloc)
+    { 
+      __init(); 
     }
+
+#ifdef _RWSTD_NO_DEFAULT_TEMPLATE_ARGS
+    vector (void) 
+      : __start(0), __finish(0), __end_of_storage(0,Allocator())
+    { ; }
+
+    vector (size_type n, const T& value) 
+      : __start(0), __finish(0), __end_of_storage(0,Allocator())
+    {
+      __initn(n,value);
+    }
+#endif
+
+    _EXPLICIT vector (size_type n)
+      : __start(0), __finish(0), __end_of_storage(0,Allocator())
+    {
+      T value = T();
+      __initn(n,value);
+    }
+
+#ifndef _RWSTD_NO_MEMBER_TEMPLATES
+
+    template<class InputIterator>
+    void __init_aux (InputIterator first, InputIterator last, _RW_is_not_integer)
+    {
+      if (__is_input_iterator(__iterator_category(first))) {
+	copy(first, last, back_inserter(*this));
+      } else {
+	size_type n;
+	__init(); 
+	__initialize(n, size_type(0));
+	distance(first, last, n);
+	__start = __value_alloc_type(__end_of_storage).allocate(n,0);
+#ifndef _RWSTD_NO_EXCEPTIONS
+	try {
+	  __finish = uninitialized_copy(first, last, __start);
+	} catch(...) {
+	  __value_alloc_type(__end_of_storage).deallocate(__start,n);
+	  throw;
+	}      
+#else
+	__finish = uninitialized_copy(first, last, __start);
+#endif // _RWSTD_NO_EXCEPTIONS
+	__end_of_storage = __finish;
+      }
+    }
+    template<class InputIterator>
+    void __init_aux (InputIterator first, InputIterator last, _RW_is_integer)
+    { __initn((size_type)first,last); }
+
+    template<class InputIterator>
+    vector (InputIterator first, InputIterator last,
+            const Allocator& alloc _RWSTD_DEFAULT_ARG(Allocator()))
+      : __start(0), __finish(0), __end_of_storage(0,alloc)
+    {
+        typedef _TYPENAME _RWdispatch<InputIterator>::_RWtype _RWtype;
+        __init_aux(first, last, _RWtype());
+    }
+    vector (size_type n, const T& value,
+            const Allocator& alloc _RWSTD_DEFAULT_ARG(Allocator()))
+      : __start(0), __finish(0), __end_of_storage(0,alloc)
+    { __initn((size_type)n,value); }
+#else
     //
     // Build a vector of size n with each element set to copy of value.
     //
-    explicit vector (size_type n, const T& value)
+    vector (size_type n, const T& value,
+            const Allocator& alloc _RWSTD_DEFAULT_ARG(Allocator()))
+      : __start(0), __finish(0), __end_of_storage(0,alloc)
     {
-        start = the_allocator.allocate(n);
-        uninitialized_fill_n(start, n, value);
-        finish = start + n;
-        end_of_storage = finish;
-    }
-    vector (const vector<T>& x)
-    {
-        start = the_allocator.allocate(x.end() - x.begin());
-        finish = uninitialized_copy(x.begin(), x.end(), start);
-        end_of_storage = finish;
+      __initn(n,value);
     }
 
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
-template<class InputIterator>
-    vector (InputIterator first, InputIterator last)
+    vector (const_iterator first, const_iterator last,
+            const Allocator& alloc _RWSTD_DEFAULT_ARG(Allocator()))
+      : __start(0), __finish(0), __end_of_storage(0,alloc)
+    {
+      size_type n;
+      __init(); 
+      __initialize(n, size_type(0));
+      distance(first, last, n);
+      __start = __value_alloc_type(__end_of_storage).allocate(n,0);
+#ifndef _RWSTD_NO_EXCEPTIONS
+      try {
+        __finish = uninitialized_copy(first, last, __start);
+      } catch(...) {
+        __value_alloc_type(__end_of_storage).deallocate(__start,n);
+        throw;
+      }      
 #else
+      __finish = uninitialized_copy(first, last, __start);
+#endif // _RWSTD_NO_EXCEPTIONS
+      __end_of_storage = __finish;
+    }
+
+#ifdef _RWSTD_NO_DEFAULT_TEMPLATE_ARGS
     vector (const_iterator first, const_iterator last)
-#endif
-     {
-        size_type n;
-        __initialize(n, size_type(0));
-        distance(first, last, n);
-        start = the_allocator.allocate(n);
-        finish = uninitialized_copy(first, last, start);
-        end_of_storage = finish;
+      : __start(0), __finish(0), __end_of_storage(0,Allocator())
+    {
+      size_type n;
+      __init(); 
+      __initialize(n, size_type(0));
+      distance(first, last, n);
+      __start = __value_alloc_type(__end_of_storage).allocate(n,0);
+#ifndef _RWSTD_NO_EXCEPTIONS
+      try {
+        __finish = uninitialized_copy(first, last, __start);
+      } catch(...) {
+        __value_alloc_type(__end_of_storage).deallocate(__start,n);
+        throw;
+      }      
+#else
+      __finish = uninitialized_copy(first, last, __start);
+#endif //  _RWSTD_NO_EXCEPTIONS
+      __end_of_storage = __finish;
+    }
+#endif // _RWSTD_NO_DEFAULT_TEMPLATE_ARGS
+#endif // _RWSTD_NO_MEMBER_TEMPLATES
+
+    vector (const vector<T,Allocator>& x)
+      : __start(0), __finish(0), __end_of_storage(0,x.get_allocator())
+    {
+      __init(); 
+      __start = __value_alloc_type(__end_of_storage).allocate(x.end() - x.begin(),0);
+      __finish = uninitialized_copy(x.begin(), x.end(), __start);
+      __end_of_storage = __finish;
     }
 
     ~vector ()
-    {
-        destroy(start, finish); the_allocator.deallocate(start);
+    { 
+      __destroy(__start, __finish); 
+      __value_alloc_type(__end_of_storage).deallocate(__start,__end_of_storage.data()-__start);
     }
-    vector<T>& operator= (const vector<T>& x);
 
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
-    template<class InputIterator>
-    void assign (InputIterator first, InputIterator last)
+    vector<T,Allocator>& operator= (const vector<T,Allocator>& x);
+
+#ifndef _RWSTD_NO_MEMBER_TEMPLATES
+	template<class InputIterator>
+	void assign (InputIterator first, InputIterator last)
+	{
+		erase(begin(), end());
+    	typedef _TYPENAME _RWdispatch<InputIterator>::_RWtype _RWtype;
+	    __insert_aux(begin(), first, last, _RWtype());
+	}
+	void assign (size_type n, const T& t)
+	{
+		erase(begin(), end()); insert(begin(), n, t);
+	}
 #else
     void assign (const_iterator first, const_iterator last)
-#endif
-    {
-        erase(begin(), end()); insert(begin(), first, last);
-    }
-    //
-    // Assign n copies of default value of type T to vector.
-    // This requires that T have a default constructor.
-    //
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
-    template<class Size, class T>
-    void assign (Size n)
-#else
-    void assign (size_type n)
-#endif
-    {
-        erase(begin(), end()); insert(begin(), n, T());
-    }
+    { erase(begin(), end()); insert(begin(), first, last); }
     //
     // Assign n copies of t to this vector.
     //
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
-    template<class Size, class T>
-    void assign (Size n, const T& t)
-#else
     void assign (size_type n, const T& t)
-#endif
+    { erase(begin(), end()); insert(begin(), n, t); }
+#endif // _RWSTD_NO_MEMBER_TEMPLATES
+
+    allocator_type get_allocator() const
     {
-        erase(begin(), end()); insert(begin(), n, t);
+      return (allocator_type)__end_of_storage;
     }
+
     //
     // Iterators.
     //
-    iterator       begin ()       { return start;  }
-    const_iterator begin () const { return start;  }
-    iterator       end ()         { return finish; }
-    const_iterator end ()   const { return finish; }
+    iterator       begin ()       { return __start;  }
+    const_iterator begin () const { return __start;  }
+    iterator       end ()         { return __finish; }
+    const_iterator end ()   const { return __finish; }
 
     reverse_iterator rbegin ()
-    {
-        reverse_iterator tmp(end()); return tmp;
+    { 
+      reverse_iterator tmp(end()); return tmp;
     }
     const_reverse_iterator rbegin () const
-    {
-        const_reverse_iterator tmp(end()); return tmp;
+    { 
+      const_reverse_iterator tmp(end()); return tmp;
     }
     reverse_iterator rend ()
-    {
-        reverse_iterator tmp(begin()); return tmp;
+    { 
+      reverse_iterator tmp(begin()); return tmp;
     }
     const_reverse_iterator rend () const
-    {
-        const_reverse_iterator tmp(begin()); return tmp;
+    { 
+      const_reverse_iterator tmp(begin()); return tmp;
     }
 
     //
     // Capacity.
     //
     size_type size ()     const { return size_type(end() - begin()); }
-    size_type max_size () const { return the_allocator.max_size();   }
+    size_type max_size () const { return __value_alloc_type(__end_of_storage).max_size();   }
     void resize (size_type new_size);
     void resize (size_type new_size, T value);
 
-    size_type capacity () const { return size_type(end_of_storage - begin()); }
+    size_type capacity () const { return size_type(__end_of_storage.data() - begin()); }
     bool      empty ()    const { return begin() == end();                    }
     void reserve (size_type n)
     {
-        if (capacity() < n)
-        {
-            iterator tmp = the_allocator.allocate(n);
-            uninitialized_copy(begin(), end(), tmp);
-            destroy(start, finish);
-            the_allocator.deallocate(start);
-            finish = tmp + size();
-            start = tmp;
-            end_of_storage = begin() + n;
+      _RWSTD_THROW(n > max_size(), length_error,
+        __RWSTD::except_msg_string(__RWSTD::__rwse_InvalidSizeParam,
+          "vector::reserve(size_t)",n,max_size()).msgstr());
+
+      if (capacity() < n)
+      {
+        __value_alloc_type va(__end_of_storage);
+        iterator tmp = va.allocate(n,__start);
+#ifndef _RWSTD_NO_EXCEPTIONS
+        try {
+          uninitialized_copy(begin(), end(), tmp);
+        } catch(...) {
+          __value_alloc_type(__end_of_storage).deallocate(tmp,n);
+          throw;
         }
+#else
+        uninitialized_copy(begin(), end(), tmp);
+#endif // _RWSTD_NO_EXCEPTIONS
+        __destroy(__start, __finish);
+        va.deallocate(__start,__end_of_storage.data()-__start);
+        __finish = tmp + size();
+        __start = tmp;
+        __end_of_storage = begin() + n;
+      }
     }
 
     //
     // Element access.
     //
-    reference       operator[] (size_type n)       { return *(begin() + n); }
-    const_reference operator[] (size_type n) const { return *(begin() + n); }
-    reference       at (size_type n)               { return *(begin() + n); }
-    const_reference at (size_type n)         const { return *(begin() + n); }
+    reference       operator[] (size_type n)       
+    {
+#ifdef _RWSTD_BOUNDS_CHECKING
+      _RWSTD_THROW(n >= size(), out_of_range,
+        __RWSTD::except_msg_string(__RWSTD::rwse_OutOfRange,
+          "vector::operator[](size_t)",n,size()).msgstr());
+#endif
+      return *(begin() + n);
+
+    }
+  
+    const_reference operator[] (size_type n) const 
+    {
+#ifdef _RWSTD_BOUNDS_CHECKING
+      _RWSTD_THROW(n >= size(), out_of_range,
+        __RWSTD::except_msg_string(__RWSTD::rwse_OutOfRange,
+          "vector::operator[](size_t) const",n,size()).msgstr());
+#endif
+      return *(begin() + n);
+    }
+  
+    reference       at (size_type n)               
+    { 
+      _RWSTD_THROW(n >= size(), out_of_range,
+        __RWSTD::except_msg_string(__RWSTD::rwse_OutOfRange,
+          "vector:: at(size_t)",n,size()).msgstr());
+      return *(begin() + n); 
+    }
+    const_reference at (size_type n)  const 
+    { 
+      _RWSTD_THROW(n >= size(), out_of_range,
+        __RWSTD::except_msg_string(__RWSTD::rwse_OutOfRange,
+          "vector:: at(size_t) const",n,size()).msgstr());
+      return *(begin() + n); 
+    }
     reference       front ()                       { return *begin();       }
     const_reference front ()                 const { return *begin();       }
     reference       back ()                        { return *(end() - 1);   }
@@ -262,829 +459,998 @@ template<class InputIterator>
     //
     void push_back (const T& x)
     {
-        if (finish != end_of_storage)
-        {
-            construct(finish, x); finish++;
-        }
-        else
-            insert_aux(end(), x);
+      if (__finish != __end_of_storage.data())
+      {
+        __value_alloc_type(__end_of_storage).construct(__finish, x); 
+        __finish++;
+      }
+      else
+        __insert_aux(end(), x);
     }
     void pop_back()
     {
-        --finish; destroy(finish);
+      --__finish; 
+      __value_alloc_type(__end_of_storage).destroy(__finish);
     }
-    //
-    // Insert default value of type T at position.
-    // Requires that T have a default constructor.
-    //
-    iterator insert (iterator position)
-    {
-        size_type n = position - begin();
-        T x;
-        if (finish != end_of_storage && position == end())
-        {
-            construct(finish, x); finish++;
-        }
-        else
-            insert_aux(position, x);
-        return begin() + n;
-    }
+
     //
     // Insert x at position.
     //
     iterator insert (iterator position, const T& x)
     {
-        size_type n = position - begin();
-        if (finish != end_of_storage && position == end())
-        {
-            construct(finish, x); finish++;
-        }
-        else
-            insert_aux(position, x);
-        return begin() + n;
+      size_type n = position - begin();
+      if (__finish != __end_of_storage.data() && position == end())
+      {
+        __value_alloc_type(__end_of_storage).construct(__finish, x); __finish++;
+      }
+      else
+        __insert_aux(position, x);
+      return begin() + n;
     }
-    void insert (iterator position, size_type n, const T& x);
 
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
+#ifndef _RWSTD_NO_MEMBER_TEMPLATES
     template<class InputIterator>
-    void insert (iterator position, InputIterator first, InputIterator last);
+    void insert (iterator position, InputIterator first, 
+                 InputIterator last)
+    {
+        typedef _TYPENAME _RWdispatch<InputIterator>::_RWtype _RWtype;
+        __insert_aux(position, first, last, _RWtype());
+    }
+    void insert (iterator position, size_type n, const T& value)
+    { __insert_aux(position,n,value); }
 #else
-    void insert (iterator position, const_iterator first, const_iterator last);
-#endif
+    void insert (iterator position, size_type n, const T& x)
+    { __insert_aux(position,n,x); }
+    void insert (iterator position, const_iterator first, const_iterator last)
+    { __insert_aux2(position, first, last); }
+#endif // _RWSTD_NO_MEMBER_TEMPLATES
 
-    void swap (vector<T>& x)
+    iterator erase (iterator position)
     {
-#ifndef RWSTD_NO_NAMESPACE
-        std::swap(start, x.start);
-        std::swap(finish, x.finish);
-        std::swap(end_of_storage, x.end_of_storage);
-        std::swap(the_allocator,x.the_allocator);
+      if (position + 1 != end()) 
+        copy(position + 1, end(), position);
+      --__finish;
+      __value_alloc_type(__end_of_storage).destroy(__finish);
+      return position;
+    }
+    iterator erase (iterator first, iterator last)
+    {
+      iterator i = copy(last, end(), first);
+      iterator tmp = __finish;
+      __finish = __finish - (last - first); 
+      __destroy(i, tmp);
+      return first;
+    }
+
+    void swap (vector<T,Allocator>& x)
+    {
+      if((allocator_type)__end_of_storage==(allocator_type)x.__end_of_storage)
+      {
+#ifndef _RWSTD_NO_NAMESPACE
+        std::swap(__start, x.__start);
+        std::swap(__finish, x.__finish);
+        std::swap(__end_of_storage, x.__end_of_storage);
 #else
-        ::swap(start, x.start);
-        ::swap(finish, x.finish);
-        ::swap(end_of_storage, x.end_of_storage);
-        ::swap(the_allocator,x.the_allocator);
-#endif
+        ::swap(__start, x.__start);
+        ::swap(__finish, x.__finish);
+        ::swap(__end_of_storage, x.__end_of_storage);
+#endif // _RWSTD_NO_NAMESPACE
+      }
+      else
+      {
+        vector<T,Allocator> _x = *this;
+        *this = x;
+        x=_x;
+      } 
     }
-    void erase (iterator position)
-    {
-        if (position + 1 != end()) copy(position + 1, end(), position);
-        --finish;
-        destroy(finish);
-    }
-    void erase (iterator first, iterator last)
-    {
-        iterator i = copy(last, end(), first);
-        destroy(i, finish);
-        finish = finish - (last - first);
-    }
-};
 
-template <class T>
-inline bool operator== (const vector<T>& x, const vector<T>& y)
-{
+    void clear()
+    {
+      erase(begin(),end());
+    }
+
+#ifndef _RWSTD_STRICT_ANSI
+    // Non-standard function for setting buffer allocation size
+    size_type allocation_size() { return __buffer_size; }
+    size_type allocation_size(size_type new_size) 
+    { 
+      size_type tmp = __buffer_size; 
+      __buffer_size = max((size_type)1,new_size);
+      return tmp;
+    }
+#endif  // _RWSTD_STRICT_ANSI
+  };
+
+  template <class T, class Allocator>
+  inline bool operator== (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+  {
     return x.size() == y.size() && equal(x.begin(), x.end(), y.begin());
-}
+  }
 
-template <class T>
-inline bool operator< (const vector<T>& x, const vector<T>& y)
-{
+  template <class T, class Allocator>
+  inline bool operator< (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+  {
     return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+  }
+
+#if !defined(_RWSTD_NO_NAMESPACE) || !defined(_RWSTD_NO_PART_SPEC_OVERLOAD)
+  template <class T, class Allocator>
+  inline bool operator!= (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+  {
+    return !(x == y);
+  }
+
+  template <class T, class Allocator>
+  inline bool operator> (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+  {
+    return y < x;
+  }
+
+  template <class T, class Allocator>
+  inline bool operator>= (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+  {
+    return !(x < y);
+  }
+
+  template <class T, class Allocator>
+  inline bool operator<= (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+  {
+    return !(y <  x);
+  }
+
+  template <class T, class Allocator>
+  inline void swap(vector<T,Allocator>& a, vector<T,Allocator>& b)
+  {
+    a.swap(b);
+  }
+#endif // !defined(_RWSTD_NO_NAMESPACE) || !defined(_RWSTD_NO_PART_SPEC_OVERLOAD)
+#if defined (_RWSTD_NO_TEMPLATE_REPOSITORY) && defined (__BORLANDC__) && (__TURBOC__ < 0x540)
+#ifndef _RWSTD_NO_NAMESPACE
 }
-
-//
-// This requires that T have a default constructor.
-//
-
-template <class T>
-void vector<T>::resize (size_type new_size)
-{
-    T value;
-    if (new_size > size())
-        insert(end(), new_size - size(), value);
-    else if (new_size < size())
-        erase(begin() + new_size, end());
-}
-
-template <class T>
-void vector<T>::resize (size_type new_size, T value)
-{
-    if (new_size > size())
-        insert(end(), new_size - size(), value);
-    else if (new_size < size())
-        erase(begin() + new_size, end());
-}
-
-template <class T>
-vector<T>& vector<T>::operator= (const vector<T>& x)
-{
-    if (&x == this) return *this;
-    if (x.size() > capacity())
-    {
-        destroy(start, finish);
-        the_allocator.deallocate(start);
-        start = the_allocator.allocate(x.end() - x.begin());
-        end_of_storage = uninitialized_copy(x.begin(), x.end(), start);
-    }
-    else if (size() >= x.size())
-    {
-        iterator i = copy(x.begin(), x.end(), begin());
-        destroy(i, finish);
-    }
-    else
-    {
-        copy(x.begin(), x.begin() + size(), begin());
-        uninitialized_copy(x.begin() + size(), x.end(), begin() + size());
-    }
-    finish = begin() + x.size();
-    return *this;
-}
-
-template <class T>
-void vector<T>::insert_aux (iterator position, const T& x)
-{
-    if (finish != end_of_storage)
-    {
-        construct(finish, *(finish - 1));
-        copy_backward(position, finish - 1, finish);
-        *position = x;
-        ++finish;
-    }
-    else
-    {
-        //
-        // We always allocate enough space for a number of additional
-        // elements in the vector, unless the size of each element is
-        // very large.
-        //
-        const size_type CHUNKSIZE = sizeof(T) >= 1024 ? 1 : 1024 / sizeof(T);
-        size_type len = size() ? 2 * size() : CHUNKSIZE;
-        iterator tmp = the_allocator.allocate(len);
-        uninitialized_copy(begin(), position, tmp);
-        construct((tmp + (position - begin())), x);
-        uninitialized_copy(position, end(), tmp + (position - begin()) + 1);
-        destroy(begin(), end());
-        the_allocator.deallocate(begin());
-        end_of_storage = tmp + len;
-        finish = tmp + size() + 1;
-        start = tmp;
-    }
-}
-
-template <class T>
-void vector<T>::insert (iterator position, size_type n, const T& x)
-{
-    if (n == 0) return;
-    if (end_of_storage - finish >= n)
-    {
-        if (end() - position > n)
-        {
-            uninitialized_copy(end() - n, end(), end());
-            copy_backward(position, end() - n, end());
-            fill(position, position + n, x);
-        }
-        else
-        {
-            uninitialized_copy(position, end(), position + n);
-            fill(position, end(), x);
-            uninitialized_fill_n(end(), n - (end() - position), x);
-        }
-        finish += n;
-    }
-    else
-    {
-        size_type len = size() + max(size(), n);
-        iterator tmp = the_allocator.allocate(len);
-        uninitialized_copy(begin(), position, tmp);
-        uninitialized_fill_n(tmp + (position - begin()), n, x);
-        uninitialized_copy(position, end(), tmp + (position - begin() + n));
-        destroy(begin(), end());
-        the_allocator.deallocate(begin());
-        end_of_storage = tmp + len;
-        finish = tmp + size() + n;
-        start = tmp;
-    }
-}
-
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
-template<class T>
-template<class InputIterator>
-void vector<T>::insert (iterator position, InputIterator first,
-                        InputIterator last)
-#else
-template<class T>
-void vector<T>::insert (iterator position, const_iterator first,
-                        const_iterator last)
 #endif
-{
-    if (first == last) return;
-    size_type n;
-    __initialize(n, size_type(0));
-    distance(first, last, n);
-    if (end_of_storage - finish >= n)
-    {
-        if (end() - position > n)
-        {
-            uninitialized_copy(end() - n, end(), end());
-            copy_backward(position, end() - n, end());
-            copy(first, last, position);
-        }
-        else
-        {
-            uninitialized_copy(position, end(), position + n);
-            copy(first, first + (end() - position), position);
-            uninitialized_copy(first + (end() - position), last, end());
-        }
-        finish += n;
-    }
-    else
-    {
-        size_type len = size() + max(size(), n);
-        iterator tmp = the_allocator.allocate(len);
-        uninitialized_copy(begin(), position, tmp);
-        uninitialized_copy(first, last, tmp + (position - begin()));
-        uninitialized_copy(position, end(), tmp + (position - begin() + n));
-        destroy(begin(), end());
-        the_allocator.deallocate(begin());
-        end_of_storage = tmp + len;
-        finish = tmp + size() + n;
-        start = tmp;
-    }
-}
+
+#include <vector.cc>
+
+#ifndef _RWSTD_NO_NAMESPACE
+namespace std {
+#endif
+
+#endif // (_RWSTD_NO_TEMPLATE_REPOSITORY) && defined (__BORLANDC__)
 
 //
-// If bool is a builtin type, we provide a vector<bool> specialization.
+// If bool is a builtin type, we provide a vector<bool,allocator> specialization.
+// We do not provide the allocator interface for this specialization.
 //
-#ifndef RWSTD_NO_BOOL
+#ifndef _RWSTD_NO_BOOL
 
-#define __WORD_BIT (int(CHAR_BIT*sizeof(unsigned int)))
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC
 
-class vector<bool>
-{
-  public:
+  template <class Allocator>
+  class _RWSTDExport vector<bool, Allocator >
+  {
+
+#else
+
+// Use a macro to mutate Allocator into allocator<bool>
+#define Allocator allocator<bool>
+
+  _RWSTD_TEMPLATE
+  class _RWSTDExport vector<bool, allocator<bool> >
+  {
+
+#endif // _RWSTD_NO_CLASS_PARTIAL_SPEC
+
+  public:  
     //
     // types
     //
-    typedef Allocator<unsigned int>                     vector_allocator;
-    typedef bool                                        value_type;
-    typedef typename vector_allocator::size_type        size_type;
-    typedef typename vector_allocator::difference_type  difference_type;
+    typedef Allocator                                 allocator_type;
+    typedef bool                                      value_type;
+
+  private:
+#if defined ( _RWSTD_ALLOCATOR) && !defined(_HPACC_)
+#ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
+    typedef _TYPENAME allocator_type::template rebind<unsigned int>::other __value_alloc_type;
+#else
+    typedef allocator_type::template rebind<unsigned int>::other __value_alloc_type;
+#endif
+#else
+    typedef allocator_interface<allocator_type,unsigned int> __value_alloc_type;
+#endif
+
+  public:
+#ifdef _RWSTD_NO_EMBEDDED_TYPEDEF
+    typedef allocator<bool>::size_type               size_type;
+    typedef allocator<bool>::difference_type         difference_type;
+#else
+#ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
+    typedef allocator_type::size_type          size_type;
+    typedef allocator_type::difference_type    difference_type;
+#else
+    typedef _TYPENAME allocator_type::size_type          size_type;
+    typedef _TYPENAME allocator_type::difference_type    difference_type;
+#endif
+#endif
+
+  protected:
+#ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
+    typedef __value_alloc_type::pointer       pointer;
+    typedef __value_alloc_type::const_pointer const_pointer;
+#else
+    typedef _TYPENAME __value_alloc_type::pointer       pointer;
+    typedef _TYPENAME __value_alloc_type::const_pointer const_pointer;
+#endif
+
+  public:
+
     //
     // forward declarations
     //
     class iterator;
     class const_iterator;
+
     //
     // bit reference
     //
     class reference
     {
-        friend class iterator;
-        friend class const_iterator;
-      protected:
-        unsigned int* p;
-        unsigned int mask;
-        reference (unsigned int* x, unsigned int y) : p(x), mask(y) {}
-      public:
-        reference () : p(0), mask(0) {}
-        operator bool () const { return !(!(*p & mask)); }
-        reference& operator= (bool x)
-        {
-            if (x)
-                *p |= mask;
-            else
-                *p &= ~mask;
-            return *this;
-        }
-        reference& operator= (const reference& x) { return *this = bool(x); }
-        bool operator== (const reference& x) const
-        {
-            return bool(*this) == bool(x);
-        }
-        bool operator< (const reference& x) const
-        {
-            return bool(*this) < bool(x);
-        }
-        void flip () { *p ^= mask; }
-    };
+      friend class iterator;
+      friend class const_iterator;
+    protected:
+      unsigned int* p;
+      unsigned int mask;
+      reference (unsigned int* x, unsigned int y) : p(x), mask(y) {}
+    public:
+      reference () : p(0), mask(0) {}
+      operator bool () const { return !(!(*p & mask)); }
+      reference& operator= (bool x)
+      {
+        if (x)      
+          *p |= mask;
+        else
+          *p &= ~mask;
+        return *this;
+      }
+      reference& operator= (const reference& x) { return *this = bool(x); }
 
+#ifndef _RWSTD_STRICT_ANSI
+      bool operator== (const reference& x) const
+      {
+        return bool(*this) == bool(x);
+      }
+      bool operator< (const reference& x) const
+      {
+#if !defined(_MSC_VER) || defined(__BORLANDC__)
+        return bool(*this) < bool(x);
+#else
+        return int(*this) < int(x);
+#endif
+      }
+      bool operator!= (const reference& x) const
+      {
+        return !(*this == x);
+      }
+      bool operator> (const reference& x) const
+      {
+        return  x < *this;
+      }
+      bool operator>= (const reference& x) const
+      {
+        return !(*this < x);
+      }
+      bool operator<= (const reference& x) const
+      {
+        return !(*this > x);
+      }
+#endif // _RWSTD_STRICT_ANSI
+
+      void flip () { *p ^= mask; }
+    };
+    
     typedef bool const_reference;
     //
     // Definition of our iterator.
     //
-    class iterator : public random_access_iterator<bool, difference_type>
+    class iterator : public _RW_STD::iterator<random_access_iterator_tag,
+                                     value_type, difference_type,
+                                     pointer,reference>
     {
-        friend class vector<bool>;
-        friend class const_iterator;
+#if !defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
+      friend class vector<bool,Allocator>;
+#else
+      friend class vector<bool,allocator<bool> >;
+#endif
+      friend class const_iterator;
 
-      protected:
+    protected:
 
-        unsigned int* p;
-        unsigned int  offset;
+      unsigned int* p;
+      unsigned int  offset;
 
-        void bump_up ()
+      void __bump_up ()
+      {
+        if (offset++ == _RWSTD_WORD_BIT - 1)
         {
-            if (offset++ == __WORD_BIT - 1)
-            {
-                offset = 0; ++p;
-            }
+          offset = 0; ++p;
         }
-        void bump_down ()
+      }
+      void __bump_down ()
+      {
+        if (offset-- == 0)
         {
-            if (offset-- == 0)
-            {
-                offset = __WORD_BIT - 1; --p;
-            }
+          offset = _RWSTD_WORD_BIT - 1; --p;
         }
+      }
 
-      public:
+    public:
+      iterator () : p(0), offset(0) {}
+      iterator (unsigned int* x, unsigned int y) : p(x), offset(y) {}
 
-        iterator () : p(0), offset(0) {}
-        iterator (unsigned int* x, unsigned int y) : p(x), offset(y) {}
-
-        reference operator* () const { return reference(p, 1U << offset); }
-        iterator& operator++ ()
+      reference operator* () const { return reference(p, 1U << offset); }
+      iterator& operator++ ()
+      {
+        __bump_up(); return *this;
+      }
+      iterator operator++ (int)
+      {
+        iterator tmp = *this; __bump_up(); return tmp;
+      }
+      iterator& operator-- ()
+      {
+        __bump_down(); return *this;
+      }
+      iterator operator-- (int)
+      {
+        iterator tmp = *this; __bump_down(); return tmp;
+      }
+      iterator& operator+= (difference_type i)
+      {
+        difference_type n = i + offset;
+        p += n / _RWSTD_WORD_BIT;
+        n = n % _RWSTD_WORD_BIT;
+        if (n < 0)
         {
-            bump_up(); return *this;
+          offset = n + _RWSTD_WORD_BIT; --p;
         }
-        iterator operator++ (int)
-        {
-            iterator tmp = *this; bump_up(); return tmp;
-        }
-        iterator& operator-- ()
-        {
-            bump_down(); return *this;
-        }
-        iterator operator-- (int)
-        {
-            iterator tmp = *this; bump_down(); return tmp;
-        }
-        iterator& operator+= (difference_type i)
-        {
-            difference_type n = i + offset;
-            p += n / __WORD_BIT;
-            n = n % __WORD_BIT;
-            if (n < 0)
-            {
-                offset = n + __WORD_BIT; --p;
-            }
-            else
-                offset = n;
-            return *this;
-        }
-        iterator& operator-= (difference_type i)
-        {
-            *this += -i; return *this;
-        }
-        iterator operator+ (difference_type i) const
-        {
-            iterator tmp = *this; return tmp += i;
-        }
-        iterator operator- (difference_type i) const
-        {
-            iterator tmp = *this; return tmp -= i;
-        }
-        difference_type operator- (iterator x) const
-        {
-            return __WORD_BIT * (p - x.p) + offset - x.offset;
-        }
-        reference operator[] (difference_type i)
-        {
-            return *(*this + i);
-        }
-        bool operator== (const iterator& x) const
-        {
-            return p == x.p && offset == x.offset;
-        }
-        bool operator< (iterator x) const
-        {
-            return p < x.p || (p == x.p && offset < x.offset);
-        }
+        else
+          offset = n;
+        return *this;
+      }
+      iterator& operator-= (difference_type i)
+      {
+        *this += -i; return *this;
+      }
+      iterator operator+ (difference_type i) const
+      {
+        iterator tmp = *this; return tmp += i;
+      }
+      iterator operator- (difference_type i) const
+      {
+        iterator tmp = *this; return tmp -= i;
+      }
+      difference_type operator- (iterator x) const
+      {
+        return _RWSTD_WORD_BIT * (p - x.p) + offset - x.offset;
+      }
+      reference operator[] (difference_type i)
+      {
+        return *(*this + i);
+      }
+      bool operator== (const iterator& x) const
+      {
+        return p == x.p && offset == x.offset;
+      }
+      bool operator< (const iterator& x) const
+      {
+        return p < x.p || (p == x.p && offset < x.offset);
+      }
+      bool operator!= (const iterator& x) const
+      {
+        return !(*this == x);
+      }
+      bool operator> (const iterator& x) const
+      {
+        return x < *this;
+      }
+      bool operator>= (const iterator& x) const
+      {
+        return !(*this < x);
+      }
+      bool operator<= (const iterator& x) const
+      {
+        return !(*this > x);
+      }
     };
     //
     // Definition of our const_iterator.
     //
     class const_iterator
-        : public random_access_iterator<bool, difference_type>
+      : public _RW_STD::iterator<random_access_iterator_tag,
+                        value_type, difference_type, 
+                        const_pointer, const_reference>
     {
-        friend class vector<bool>;
+#if !defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
+      friend class vector<bool,Allocator>;
+#else
+      friend class vector<bool,allocator<bool> >;
+#endif
 
-      protected:
+    protected:
 
-        unsigned int* p;
-        unsigned int offset;
-        void bump_up ()
+      unsigned int* p;
+      unsigned int offset;
+      void  __bump_up ()
+      {
+        if (offset++ == _RWSTD_WORD_BIT - 1)
         {
-            if (offset++ == __WORD_BIT - 1)
-            {
-                offset = 0; ++p;
-            }
+          offset = 0; ++p;
         }
-        void bump_down()
+      }
+      void __bump_down()
+      {
+        if (offset-- == 0)
         {
-            if (offset-- == 0)
-            {
-                offset = __WORD_BIT - 1; --p;
-            }
+          offset = _RWSTD_WORD_BIT - 1; --p;
         }
+      }
 
-      public:
-
-        const_iterator () : p(0), offset(0) {}
-        const_iterator (unsigned int* x, unsigned int y) : p(x), offset(y) {}
-        const_iterator (const iterator& x) : p(x.p), offset(x.offset) {}
-
-        const_reference operator* () const
+    public:
+      const_iterator () : p(0), offset(0) {}
+      const_iterator (unsigned int* x, unsigned int y) : p(x), offset(y) {}
+#if !defined(_MSC_VER) || defined(__BORLANDC__)
+#ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
+      const_iterator (const vector<bool,Allocator>::iterator& x) : p(x.p), offset(x.offset) {}
+#else
+      const_iterator (const _TYPENAME vector<bool,Allocator>::iterator& x) : p(x.p), offset(x.offset) {}
+#endif
+#else
+      const_iterator (const iterator& x) : p(x.p), offset(x.offset) {}
+#endif
+      const_reference operator* () const
+      {
+        return vector<bool,Allocator>::reference(p, 1U << offset);
+      }
+      const_iterator& operator++ ()
+      {
+        __bump_up(); return *this;
+      }
+      const_iterator operator++ (int)
+      {
+        const_iterator tmp = *this; __bump_up(); return tmp;
+      }
+      const_iterator& operator-- ()
+      {
+        __bump_down(); return *this;
+      }
+      const_iterator operator-- (int)
+      {
+        const_iterator tmp = *this; __bump_down(); return tmp;
+      }
+      const_iterator& operator+= (difference_type i)
+      {
+        difference_type n = i + offset;
+        p += n / _RWSTD_WORD_BIT;
+        n = n % _RWSTD_WORD_BIT;
+        if (n < 0)
         {
-            return reference(p, 1U << offset);
+          offset = n + _RWSTD_WORD_BIT; --p;
         }
-        const_iterator& operator++ ()
-        {
-            bump_up(); return *this;
-        }
-        const_iterator operator++ (int)
-        {
-            const_iterator tmp = *this; bump_up(); return tmp;
-        }
-        const_iterator& operator-- ()
-        {
-            bump_down(); return *this;
-        }
-        const_iterator operator-- (int)
-        {
-            const_iterator tmp = *this; bump_down(); return tmp;
-        }
-        const_iterator& operator+= (difference_type i)
-        {
-            difference_type n = i + offset;
-            p += n / __WORD_BIT;
-            n = n % __WORD_BIT;
-            if (n < 0)
-            {
-                offset = n + __WORD_BIT; --p;
-            }
-            else
-                offset = n;
-            return *this;
-        }
-        const_iterator& operator-= (difference_type i)
-        {
-            *this += -i; return *this;
-        }
-        const_iterator operator+ (difference_type i) const
-        {
-            const_iterator tmp = *this; return tmp += i;
-        }
-        const_iterator operator- (difference_type i) const
-        {
-            const_iterator tmp = *this; return tmp -= i;
-        }
-        difference_type operator- (const_iterator x) const
-        {
-            return __WORD_BIT * (p - x.p) + offset - x.offset;
-        }
-        const_reference operator[] (difference_type i)
-        {
-            return *(*this + i);
-        }
-        bool operator== (const const_iterator& x) const
-        {
-            return p == x.p && offset == x.offset;
-        }
-        bool operator< (const_iterator x) const
-        {
-            return p < x.p || (p == x.p && offset < x.offset);
-        }
+        else
+          offset = n;
+        return *this;
+      }
+      const_iterator& operator-= (difference_type i)
+      {
+        *this += -i; return *this;
+      }
+      const_iterator operator+ (difference_type i) const
+      {
+        const_iterator tmp = *this; return tmp += i;
+      }
+      const_iterator operator- (difference_type i) const
+      {
+        const_iterator tmp = *this; return tmp -= i;
+      }
+      difference_type operator- (const_iterator x) const
+      {
+        return _RWSTD_WORD_BIT * (p - x.p) + offset - x.offset;
+      }
+      const_reference operator[] (difference_type i)
+      { 
+        return *(*this + i); 
+      }
+      bool operator== (const const_iterator& x) const
+      {
+        return p == x.p && offset == x.offset;
+      }
+      bool operator< (const const_iterator& x) const
+      {
+        return p < x.p || (p == x.p && offset < x.offset);
+      }
+      bool operator!= (const const_iterator& x) const
+      {
+        return !(*this == x);
+      }
+      bool operator> (const const_iterator& x) const
+      {
+        return x < *this;
+      }
+      bool operator>= (const const_iterator& x) const
+      {
+        return !(*this < x);
+      }
+      bool operator<= (const const_iterator& x) const
+      {
+        return !(*this > x);
+      }
     };
     //
     // types
     //
-    typedef reverse_iterator<const_iterator,
-                             value_type,
-                             const_reference,
-                             difference_type> const_reverse_iterator;
-    typedef reverse_iterator<iterator,
-                             value_type,
-                             reference,
-                             difference_type> reverse_iterator;
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC 
+    typedef _RW_STD::reverse_iterator<const_iterator> const_reverse_iterator;
+    typedef _RW_STD::reverse_iterator<iterator>  reverse_iterator;
+#else
+    typedef _RW_STD::reverse_iterator<const_iterator, 
+      random_access_iterator_tag, value_type, 
+      const_reference, const_pointer, difference_type>
+      const_reverse_iterator;
+    typedef _RW_STD::reverse_iterator<iterator, 
+      random_access_iterator_tag, value_type,
+      reference, pointer, difference_type>
+      reverse_iterator;
+#endif
+
+  private:
+    //
+    // These private functions are replicas of generic algorithms.
+    //  We provide them here to avoid putting instantiations of 
+    //  the generic algorithms into an archive or shared library.
+    //  This gives you full flexibilty in deciding where you want
+    //  to put particular instantiations of the generic 
+    //  algorithms.
+    //
+  
+    void __fill (iterator first, iterator last, 
+               const bool& value)
+    {
+      while (first != last) *first++ = value;
+    }
+    void __fill_n (iterator first, size_type n,
+                 const bool& value)
+    {
+      while (n-- > 0) *first++ = value;
+    }
+#ifndef _RWSTD_NO_MEMBER_TEMPLATES
+    template <class Iterator>
+    iterator __copy (Iterator first, Iterator last,
+                   iterator result)
+    {
+      while (first != last) *result++ = *first++;
+      return result;
+    }
+    template <class Iterator>
+    iterator __copy_backward (Iterator first, Iterator last,
+                            iterator result)
+    {
+      while (first != last) *--result = *--last;
+      return result;
+    }
+#else
+    iterator __copy (const_iterator first, const_iterator last,
+                   iterator result)
+    {
+      while (first != last) *result++ = *first++;
+      return result;
+    }
+    iterator __copy (const bool* first, const bool* last,
+                   iterator result)
+    {
+      while (first != last) *result++ = *first++;
+      return result;
+    }
+    iterator __copy_backward (const_iterator first, const_iterator last,
+                            iterator result)
+    {
+      while (first != last) *--result = *--last;
+      return result;
+    }
+    iterator __copy_backward (const bool* first, const bool* last,
+                            iterator result)
+    {
+      while (first != last) *--result = *--last;
+      return result;
+    }
+#endif
+
   protected:
 
-    Allocator<unsigned int> the_allocator;
-    iterator                start;
-    iterator                finish;
-    unsigned int*           end_of_storage;
+    iterator                __start;
+    iterator                __finish;
+    __RWSTD::__rw_basis<unsigned int*,allocator_type>   __end_of_storage;
 
-    unsigned int* bit_alloc (size_type n)
+    unsigned int* __bit_alloc (size_type n)
     {
-        return the_allocator.allocate((n + __WORD_BIT - 1)/__WORD_BIT);
+      return __value_alloc_type(__end_of_storage).allocate((n + _RWSTD_WORD_BIT - 1)/_RWSTD_WORD_BIT,__start.p);
     }
-    void initialize (size_type n)
+    void __init (size_type n)
     {
-        unsigned int* q = bit_alloc(n);
-        end_of_storage = q + (n + __WORD_BIT - 1)/__WORD_BIT;
-        start = iterator(q, 0);
-        finish = start + n;
+      unsigned int* q = __bit_alloc(n);
+      __end_of_storage = q + (n + _RWSTD_WORD_BIT - 1)/_RWSTD_WORD_BIT;
+      __start = iterator(q, 0);
+      __finish = __start + n;
     }
-    void insert_aux (iterator position, bool x);
+    void __insert_aux (iterator position, bool x);
 
   public:
 
     //
     // construct/copy/destroy
     //
-    explicit vector ()
-        : start(iterator()), finish(iterator()), end_of_storage(0) {}
-    explicit vector (size_type n, bool value = bool())
+    vector<bool,Allocator> (const Allocator&  alloc _RWSTD_DEFAULT_ARG(Allocator()))
+      : __start(iterator()), __finish(iterator()), 
+        __end_of_storage(0,alloc)
+    { ; }
+    _EXPLICIT vector<bool,Allocator> (size_type n, bool value = bool(), 
+       const Allocator&  alloc _RWSTD_DEFAULT_ARG(Allocator()))
+      : __end_of_storage(0,alloc)
     {
-        initialize(n); fill(start.p, end_of_storage, value ? ~0 : 0);
-    }
-    vector (const vector<bool>& x)
-    {
-        initialize(x.size()); copy(x.begin(), x.end(), start);
+      __init(n); 
+      unsigned int * first = __start.p;
+      size_type m = (n + _RWSTD_WORD_BIT - 1)/_RWSTD_WORD_BIT;
+      while (m-- > 0) *first++ = value ? ~0 : 0;
     }
 
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
-template<class InputIterator>
-    vector (InputIterator first, InputIterator last)
+    vector<bool,Allocator> (const vector<bool,Allocator >& x)
+      : __end_of_storage(0,x.get_allocator())
     {
-        size_type n;
-        __initialize(n, size_type(0));
-        distance(first, last, n);
-        initialize(n);
-        copy(first, last, start);
+      __init(x.size()); 
+      __copy(x.begin(), x.end(), __start);
+    }
+
+#ifndef _RWSTD_NO_MEMBER_TEMPLATES
+    template<class InputIterator>
+    vector<bool,Allocator>  (InputIterator first, InputIterator last)
+      : __end_of_storage(0,Allocator())
+    {
+      size_type n;
+      __initialize(n, size_type(0));
+      distance(first, last, n);
+      __init(n);
+      __copy(first, last, __start);
     }
 #else
-    vector (const_iterator first, const_iterator last)
+    vector<bool,Allocator> (const_iterator first, const_iterator last)
+      : __end_of_storage(0,Allocator())
     {
-        size_type n;
-        __initialize(n, size_type(0));
-        distance(first, last, n);
-        initialize(n);
-        copy(first, last, start);
+      size_type n;
+      __initialize(n, size_type(0));
+      distance(first, last, n);
+      __init(n);
+      __copy(first, last, __start);
     }
-    vector (const bool* first, const bool* last)
+    vector<bool,Allocator> (const bool* first, const bool* last)
+      : __end_of_storage(0,Allocator())
     {
-        size_type n;
-        __initialize(n, size_type(0));
-        distance(first, last, n);
-        initialize(n);
-        copy(first, last, start);
+      size_type n;
+      __initialize(n, size_type(0));
+      distance(first, last, n);
+      __init(n);
+      __copy(first, last, __start);
     }
 #endif
-    ~vector () { the_allocator.deallocate(start.p); }
-    vector& operator= (const vector<bool>& x)
-    {
-        if (&x == this) return *this;
-        if (x.size() > capacity())
-        {
-            the_allocator.deallocate(start.p);
-            initialize(x.size());
-        }
-        copy(x.begin(), x.end(), begin());
-        finish = begin() + x.size();
-        return *this;
+    ~vector<bool,Allocator> () {
+      __value_alloc_type(__end_of_storage).deallocate(__start.p,  
+        __end_of_storage.data()-__start.p); 
     }
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
+    vector<bool,Allocator>& operator= (const vector<bool, Allocator>& x)
+    {
+      if (&x == this) return *this;
+      if (x.size() > capacity())
+      {
+        __value_alloc_type(__end_of_storage).deallocate(__start.p,
+          __end_of_storage.data()-__start.p); 
+        __init(x.size());
+      }
+      __copy(x.begin(), x.end(), begin());
+      __finish = begin() + x.size();
+      return *this;
+    }
+#ifndef _RWSTD_NO_MEMBER_TEMPLATES
     template<class InputIterator>
     void assign (InputIterator first, InputIterator last)
+    { erase(begin(), end()); insert(begin(), first, last); }
 #else
     void assign (const_iterator first, const_iterator last)
+    { erase(begin(), end()); insert(begin(), first, last); }
 #endif
+
+    void assign (size_type n, const bool& t = bool())
+    { erase(begin(), end()); insert(begin(), n, t);  }
+
+    allocator_type get_allocator() const
     {
-        erase(begin(), end()); insert(begin(), first, last);
+      return (allocator_type)__end_of_storage;
     }
 
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
-    template<class Size, class T>
-    void assign (Size n, const bool& t = bool())
-#else
-    void assign (size_type n, const bool& t = bool())
-#endif
-    {
-        erase(begin(), end()); insert(begin(), n, t);
-    }
     //
     // iterators
     //
-    iterator       begin ()       { return start; }
-    const_iterator begin () const { return start; }
-    iterator       end   ()       { return finish; }
-    const_iterator end   () const { return finish; }
+    iterator       begin ()       { return __start; }
+    const_iterator begin () const 
+    { return const_iterator(__start.p,__start.offset); }
+    iterator       end   ()       { return __finish; }
+    const_iterator end   () const 
+    { return const_iterator(__finish.p,__finish.offset); }
 
     reverse_iterator       rbegin () { return reverse_iterator(end()); }
     const_reverse_iterator rbegin () const
-    {
-        return const_reverse_iterator(end());
+    { 
+      return const_reverse_iterator(end()); 
     }
     reverse_iterator       rend () { return reverse_iterator(begin()); }
     const_reverse_iterator rend () const
-    {
-        return const_reverse_iterator(begin());
+    { 
+      return const_reverse_iterator(begin()); 
     }
+
     //
     // capacity
     //
     size_type size     () const { return size_type(end() - begin());  }
-    size_type max_size () const { return the_allocator.max_size(); }
+    size_type max_size () const { return __value_alloc_type(__end_of_storage).max_size(); }
     void resize (size_type new_size, bool c = false);
     size_type capacity () const
     {
-        return size_type(const_iterator(end_of_storage, 0) - begin());
+      return size_type(const_iterator(__end_of_storage.data(), 0) - begin());
     }
     bool empty () const { return begin() == end(); }
     void reserve (size_type n)
     {
-        if (capacity() < n)
-        {
-            unsigned int* q = bit_alloc(n);
-            finish = copy(begin(), end(), iterator(q, 0));
-            the_allocator.deallocate(start.p);
-            start = iterator(q, 0);
-            end_of_storage = q + (n + __WORD_BIT - 1)/__WORD_BIT;
-        }
+      _RWSTD_THROW(n > max_size(), length_error,
+        __RWSTD::except_msg_string(__RWSTD::__rwse_InvalidSizeParam,
+          "vector<bool>::reserve(size_t)",n,max_size()).msgstr());
+      if (capacity() < n)
+      {
+        unsigned int* q = __bit_alloc(n);
+        __finish = __copy(begin(), end(), iterator(q, 0));
+        __value_alloc_type(__end_of_storage).deallocate(__start.p,
+                                                   __end_of_storage.data()-__start.p);
+        __start = iterator(q, 0);
+        __end_of_storage = q + (n + _RWSTD_WORD_BIT - 1)/_RWSTD_WORD_BIT;
+      }
     }
+
     //
     // element access
     //
-    reference       operator[] (size_type n)       { return *(begin() + n); }
-    const_reference operator[] (size_type n) const { return *(begin() + n); }
-    reference       at (size_type n)               { return *(begin() + n); }
-    const_reference at (size_type n)         const { return *(begin() + n); }
+    reference       operator[] (size_type n)       
+    { 
+#ifdef _RWSTD_BOUNDS_CHECKING
+      _RWSTD_THROW(n >= size(), out_of_range,
+        __RWSTD::except_msg_string(__RWSTD::rwse_OutOfRange,
+          "vector<bool>::[](size_t)",n,size()).msgstr());
+#endif
+      return *(begin() + n); 
+    }
+    const_reference operator[] (size_type n) const 
+    { 
+#ifdef _RWSTD_BOUNDS_CHECKING
+      _RWSTD_THROW(n >= size(), out_of_range,
+        __RWSTD::except_msg_string(__RWSTD::rwse_OutOfRange,
+          "vector<bool>::[](size_t)",n,size()).msgstr());
+#endif
+      return *(begin() + n); 
+    }
+    reference       at (size_type n)               
+    { 
+      _RWSTD_THROW(n >= size(), out_of_range,
+        __RWSTD::except_msg_string(__RWSTD::rwse_OutOfRange,
+          "vector<bool>:: at(size_t)",n,size()).msgstr());
+      return *(begin() + n); 
+    }
+    const_reference at (size_type n)   const 
+    {
+      _RWSTD_THROW(n >= size(), out_of_range,
+        __RWSTD::except_msg_string( __RWSTD::rwse_OutOfRange,
+          "vector<bool>:: at(size_t) const",n,size()).msgstr());
+
+      return *(begin() + n); 
+    }
     reference       front ()       { return *begin();     }
     const_reference front () const { return *begin();     }
     reference       back  ()       { return *(end() - 1); }
     const_reference back  () const { return *(end() - 1); }
+    
     //
     // modifiers
     //
-    void push_back (bool x)
+    void push_back (const bool& x)
     {
-        if (finish.p != end_of_storage)
-            *finish++ = x;
-        else
-            insert_aux(end(), x);
+      if (__finish.p != __end_of_storage.data())
+        *__finish++ = x;
+      else
+        __insert_aux(end(), x);
     }
-    void pop_back () { --finish; }
+    void pop_back () { --__finish; }
+
     iterator insert (iterator position, const bool& x = bool())
     {
-        size_type n = position - begin();
-        if (finish.p != end_of_storage && position == end())
-            *finish++ = x;
-        else
-            insert_aux(position, x);
-        return begin() + n;
+      size_type n = position - begin();
+      if (__finish.p != __end_of_storage.data() && position == end())
+        *__finish++ = x;
+      else
+        __insert_aux(position, x);
+      return begin() + n;
     }
-    void insert (iterator position, size_type n, const bool& x = bool());
+    void insert (iterator position, size_type n, const bool& x);
 
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
+#ifndef _RWSTD_NO_MEMBER_TEMPLATES
     template<class InputIterator>
     void insert (iterator position, InputIterator first, InputIterator last);
 #else
-    void insert (iterator position, const_iterator first,
+    void insert (iterator position, const_iterator first, 
                  const_iterator last);
 #endif
 
-    void erase (iterator position)
+    iterator erase (iterator position)
     {
-        if (position + 1 != end())
-            copy(position + 1, end(), position);
-        --finish;
+      if (!(position + 1 == end()))
+        __copy(position + 1, end(), position);
+      --__finish;
+      return position;
     }
-    void erase(iterator first, iterator last)
+    iterator erase(iterator first, iterator last)
     {
-        finish = copy(last, end(), first);
+      __finish = __copy(last, end(), first);
+      return first;
     }
-    void swap (vector<bool>& x)
+    void swap (vector<bool,Allocator >& x)
     {
-#ifndef RWSTD_NO_NAMESPACE
-        std::swap(start,          x.start);
-        std::swap(finish,         x.finish);
-        std::swap(the_allocator,  x.the_allocator);
-        std::swap(end_of_storage, x.end_of_storage);
+      if((allocator_type)__end_of_storage==(allocator_type)x.__end_of_storage)
+      {
+#ifndef _RWSTD_NO_NAMESPACE
+        std::swap(__start,          x.__start);
+        std::swap(__finish,         x.__finish);
+        std::swap(__end_of_storage, x.__end_of_storage);
 #else
-        ::swap(start,          x.start);
-        ::swap(finish,         x.finish);
-        ::swap(the_allocator,  x.the_allocator);
-        ::swap(end_of_storage, x.end_of_storage);
-#endif
+        ::swap(__start,          x.__start); 
+        ::swap(__finish,         x.__finish);
+        ::swap(__end_of_storage, x.__end_of_storage);
+#endif // _RWSTD_NO_NAMESPACE
+      }
+      else
+      {
+        vector<bool,Allocator> _x = *this;
+        *this = x;
+        x=_x;
+      } 
     }
+    static void swap(reference x, reference y);
     void flip ();
-};
-
-inline bool operator== (const vector<bool>& x, const vector<bool>& y)
-{
-    return x.size() == y.size() && equal(x.begin(), x.end(), y.begin());
-}
-
-inline bool operator< (const vector<bool>& x, const vector<bool>& y)
-{
-    return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
-}
-
-void vector<bool>::flip ()
-{
-    for (iterator i = begin(); i != end(); i++)
-        *i = !(*i);
-}
-
-void swap (typename vector<bool>::reference x,
-           typename vector<bool>::reference y)
-{
-    bool tmp = x; x = y; y = tmp;
-}
-
-void vector<bool>::insert_aux (iterator position, bool x)
-{
-    if (finish.p != end_of_storage)
+    void clear()
     {
-        copy_backward(position, finish - 1, finish);
-        *position = x;
-        ++finish;
+      erase(begin(),end());
     }
-    else
-    {
-        size_type len = size() ? 2 * size() : __WORD_BIT;
-        unsigned int* q = bit_alloc(len);
-        iterator i = copy(begin(), position, iterator(q, 0));
-        *i++ = x;
-        finish = copy(position, end(), i);
-        the_allocator.deallocate(start.p);
-        end_of_storage = q + (len + __WORD_BIT - 1)/__WORD_BIT;
-        start = iterator(q, 0);
-    }
-}
+  };
 
-void vector<bool>::insert (iterator position, size_type n, const bool& x)
-{
-    if (n == 0) return;
-    if (capacity() - size() >= n)
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC
+  template <class Allocator>
+#endif
+  inline bool operator== (const vector<bool,Allocator >& x, 
+                          const vector<bool,Allocator >& y)
+  {
+    if (x.size() == y.size())
     {
-        copy_backward(position, end(), finish + n);
-        fill(position, position + n, x);
-        finish += n;
-    }
-    else
-    {
-        size_type len = size() + max(size(), n);
-        unsigned int* q = bit_alloc(len);
-        iterator i = copy(begin(), position, iterator(q, 0));
-        fill_n(i, n, x);
-        finish = copy(position, end(), i + n);
-        the_allocator.deallocate(start.p);
-        end_of_storage = q + (n + __WORD_BIT - 1)/__WORD_BIT;
-        start = iterator(q, 0);
-    }
-}
-
-#ifndef RWSTD_NO_MEMBER_TEMPLATES
-template<class InputIterator>
-void vector<bool>::insert (iterator position, InputIterator first,
-                           InputIterator last)
+#ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
+      vector<bool,Allocator >::const_iterator first1 = x.begin(), 
 #else
-void vector<bool>::insert (iterator position, const_iterator first,
-                           const_iterator last)
+      _TYPENAME vector<bool,Allocator >::const_iterator first1 = x.begin(), 
 #endif
-{
-    if (first == last) return;
-    size_type n;
-    __initialize(n, size_type(0));
-    distance(first, last, n);
-    if (capacity() - size() >= n)
-    {
-        copy_backward(position, end(), finish + n);
-        copy(first, last, position);
-        finish += n;
+      last1 =x.end(),
+      first2 = y.begin();
+            
+      while (first1 != last1 && *first1 == *first2)
+      {
+        ++first1;
+        ++first2;
+      }
+      return first1 == last1;
     }
-    else
+    return false;
+  }
+
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC
+  template <class Allocator>
+#endif
+  inline bool operator< (const vector<bool,Allocator >& x, 
+                         const vector<bool,Allocator >& y)
+  {
+#ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
+    vector<bool,Allocator >::const_iterator first1 = x.begin(), 
+#else
+    _TYPENAME vector<bool,Allocator >::const_iterator first1 = x.begin(), 
+#endif
+    last1 =x.end(),
+    first2 = y.begin(),
+    last2 = y.end();
+
+    while (first1 != last1 && first2 != last2)
     {
-        size_type len = size() + max(size(), n);
-        unsigned int* q = bit_alloc(len);
-        iterator i = copy(begin(), position, iterator(q, 0));
-        i = copy(first, last, i);
-        finish = copy(position, end(), i);
-        the_allocator.deallocate(start.p);
-        end_of_storage = q + (len + __WORD_BIT - 1)/__WORD_BIT;
-        start = iterator(q, 0);
+      if ((int)*first1 < (int)*first2)     return true;
+      if ((int)*first2++ < (int)*first1++) return false;
     }
-}
+    return first1 == last1 && first2 != last2;
+  }
 
-void vector<bool>::resize (size_type new_size, bool c)
-{
-  if (new_size > size())
-      insert(end(), new_size - size(), c);
-  else if (new_size < size())
-      erase(begin() + new_size, end());
-}
+#if !defined(_RWSTD_NO_NAMESPACE) || !defined(_RWSTD_NO_PART_SPEC_OVERLOAD)
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC
+  template <class Allocator>
+#endif
+  inline bool operator!= (const vector<bool,Allocator >& x, 
+                          const vector<bool,Allocator >& y)
+  {
+    return !(x == y);
+  }
 
-#undef __WORD_BIT
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC
+  template <class Allocator>
+#endif
+  inline bool operator> (const vector<bool,Allocator >& x, 
+                         const vector<bool,Allocator >& y)
+  {
+    return y < x;
+  }
 
-#endif /*RWSTD_NO_BOOL*/
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC
+  template <class Allocator>
+#endif
+  inline bool operator>= (const vector<bool,Allocator >& x, 
+                          const vector<bool,Allocator >& y)
+  {
+    return !(x < y);
+  }
 
-#ifndef RWSTD_NO_NAMESPACE
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC
+  template <class Allocator>
+#endif
+  inline bool operator<= (const vector<bool,Allocator >& x, 
+                          const vector<bool,Allocator >& y)
+  {
+    return !(y <  x);
+  }
+
+#ifndef _RWSTD_NO_CLASS_PARTIAL_SPEC
+  template <class Allocator>
+#endif
+  inline void swap(vector<bool,Allocator >& a, vector<bool,Allocator >& b)
+  {
+    a.swap(b);
+  }
+
+#endif
+
+#ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
+#undef Allocator 
+#endif
+
+#endif /*_RWSTD_NO_BOOL*/
+
+#ifndef _RWSTD_NO_NAMESPACE
 }
 #endif
 
-#undef Allocator
+#if defined (_RWSTD_NO_TEMPLATE_REPOSITORY) && (!defined (__TURBOC__) || (__TURBOC__ > 0x530))
+#include <vector.cc>
+#endif
+
 #undef vector
 
 #endif /*__STD_VECTOR__*/
+
+#ifndef __USING_STD_NAMES__
+  using namespace std;
+#endif
+
+#pragma option pop
+#endif /* __VECTOR_H */

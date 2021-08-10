@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -10,12 +10,6 @@
 
 #include "stdafx.h"
 #include <malloc.h>
-#ifdef _MAC
-#include <macname1.h>
-#include <Types.h>
-#include <macos\Windows.h>
-#include <macname2.h>
-#endif
 
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
@@ -66,44 +60,21 @@ AUX_DATA::AUX_DATA()
 	// Cache various target platform version information
 	DWORD dwVersion = ::GetVersion();
 	nWinVer = (LOBYTE(dwVersion) << 8) + HIBYTE(dwVersion);
-	bWin32s = (dwVersion & 0x80000000) != 0;
+	bWin95 = (dwVersion & 0x80000000) != 0;
 	bWin4 = (BYTE)dwVersion >= 4;
 	bNotWin4 = 1 - bWin4;   // for convenience
-#ifndef _MAC
 	bSmCaption = bWin4;
-#else
-	bSmCaption = TRUE;
-	bOleIgnoreSuspend = FALSE;
-#endif
-	bWin31 = bWin32s && !bWin4; // Windows 95 reports Win32s
 	bMarked4 = FALSE;
 
-#ifndef _MAC
 	// determine various metrics based on EXE subsystem version mark
 	if (bWin4)
 		bMarked4 = (GetProcessVersion(0) >= 0x00040000);
-#endif
 
 	// Cached system metrics (updated in CWnd::OnWinIniChange)
 	UpdateSysMetrics();
 
-	// Border attributes
-	hbrLtGray = ::CreateSolidBrush(RGB(192, 192, 192));
-	hbrDkGray = ::CreateSolidBrush(RGB(128, 128, 128));
-	ASSERT(hbrLtGray != NULL);
-	ASSERT(hbrDkGray != NULL);
-
 	// Cached system values (updated in CWnd::OnSysColorChange)
 	hbrBtnFace = NULL;
-	hbrBtnShadow = NULL;
-	hbrBtnHilite = NULL;
-	hbrWindowFrame = NULL;
-#ifdef _MAC
-	hbr3DLight = NULL;
-#endif
-	hpenBtnShadow = NULL;
-	hpenBtnHilite = NULL;
-	hpenBtnText = NULL;
 	UpdateSysColors();
 
 	// Standard cursors
@@ -129,22 +100,6 @@ AUX_DATA::AUX_DATA()
 // Termination code
 AUX_DATA::~AUX_DATA()
 {
-	// cleanup standard brushes
-	AfxDeleteObject((HGDIOBJ*)&hbrLtGray);
-	AfxDeleteObject((HGDIOBJ*)&hbrDkGray);
-	AfxDeleteObject((HGDIOBJ*)&hbrBtnFace);
-	AfxDeleteObject((HGDIOBJ*)&hbrBtnShadow);
-	AfxDeleteObject((HGDIOBJ*)&hbrBtnHilite);
-	AfxDeleteObject((HGDIOBJ*)&hbrWindowFrame);
-#ifdef _MAC
-	AfxDeleteObject((HGDIOBJ*)&hbr3DLight);
-#endif
-
-	// cleanup standard pens
-	AfxDeleteObject((HGDIOBJ*)&hpenBtnShadow);
-	AfxDeleteObject((HGDIOBJ*)&hpenBtnHilite);
-	AfxDeleteObject((HGDIOBJ*)&hpenBtnText);
-
 	// clean up objects we don't actually create
 	AfxDeleteObject((HGDIOBJ*)&hbmMenuDot);
 }
@@ -160,41 +115,11 @@ void AUX_DATA::UpdateSysColors()
 	clrBtnHilite = ::GetSysColor(COLOR_BTNHIGHLIGHT);
 	clrBtnText = ::GetSysColor(COLOR_BTNTEXT);
 	clrWindowFrame = ::GetSysColor(COLOR_WINDOWFRAME);
-#ifdef _MAC
-	clr3DLight = ::GetSysColor(COLOR_3DLIGHT);
-#endif
 
-	AfxDeleteObject((HGDIOBJ*)&hbrBtnFace);
-	AfxDeleteObject((HGDIOBJ*)&hbrBtnShadow);
-	AfxDeleteObject((HGDIOBJ*)&hbrBtnHilite);
-	AfxDeleteObject((HGDIOBJ*)&hbrWindowFrame);
-#ifdef _MAC
-	AfxDeleteObject((HGDIOBJ*)&hbr3DLight);
-#endif
-
-	hbrBtnFace = ::CreateSolidBrush(clrBtnFace);
+	hbrBtnFace = ::GetSysColorBrush(COLOR_BTNFACE);
 	ASSERT(hbrBtnFace != NULL);
-	hbrBtnShadow = ::CreateSolidBrush(clrBtnShadow);
-	ASSERT(hbrBtnShadow != NULL);
-	hbrBtnHilite = ::CreateSolidBrush(clrBtnHilite);
-	ASSERT(hbrBtnHilite != NULL);
-	hbrWindowFrame = ::CreateSolidBrush(clrWindowFrame);
+	hbrWindowFrame = ::GetSysColorBrush(COLOR_WINDOWFRAME);
 	ASSERT(hbrWindowFrame != NULL);
-#ifdef _MAC
-	hbr3DLight = ::CreateSolidBrush(clr3DLight);
-	ASSERT(hbr3DLight != NULL);
-#endif
-
-	AfxDeleteObject((HGDIOBJ*)&hpenBtnShadow);
-	AfxDeleteObject((HGDIOBJ*)&hpenBtnHilite);
-	AfxDeleteObject((HGDIOBJ*)&hpenBtnText);
-
-	hpenBtnShadow = ::CreatePen(PS_SOLID, 0, clrBtnShadow);
-	ASSERT(hpenBtnShadow != NULL);
-	hpenBtnHilite = ::CreatePen(PS_SOLID, 0, clrBtnHilite);
-	ASSERT(hpenBtnHilite != NULL);
-	hpenBtnText = ::CreatePen(PS_SOLID, 0, clrBtnText);
-	ASSERT(hpenBtnText != NULL);
 }
 
 void AUX_DATA::UpdateSysMetrics()
@@ -216,70 +141,5 @@ void AUX_DATA::UpdateSysMetrics()
 	cyPixelsPerInch = GetDeviceCaps(hDCScreen, LOGPIXELSY);
 	ReleaseDC(NULL, hDCScreen);
 }
-
-/////////////////////////////////////////////////////////////////////////////
-// DLL loading helpers
-
-#ifdef _AFXDLL
-
-#ifndef _MAC
-static BOOL bWin31 = -1; // unknown right now
-#endif
-
-HINSTANCE AFXAPI AfxLoadDll(HINSTANCE& hInst, LPCSTR lpszDLL,
-	FARPROC* pProcPtrs, LPCSTR lpszProcName)
-{
-	// we test hInst for NULL twice
-	// if hInst == NULL we need to enter a critical section to set it
-	// however, after entering the critical section, we should test it again
-	// because it could change from NULL to non-NULL in that time.
-	// if hInst != NULL initially (usually true), we save several function
-	// calls as well as entering/leaving a critical section.
-	if (hInst == NULL)
-	{
-		AfxLockGlobals(CRIT_DYNDLLLOAD);
-		if (hInst == NULL)
-		{
-#ifndef _MAC
-			hInst = LoadLibraryA(lpszDLL);
-#else
-			hInst = LoadLibraryEx(lpszDLL, NULL, LOAD_BY_FRAGMENT_NAME);
-#endif
-			ASSERT(hInst != NULL);
-		}
-		AfxUnlockGlobals(CRIT_DYNDLLLOAD);
-		if (hInst == NULL)
-		{
-			TRACE1("Error: Unable to load DLL '%hs'!\n", lpszDLL);
-			AfxThrowMemoryException();
-		}
-	}
-
-	// cache the procedure pointer if cache memory is provided
-	if (pProcPtrs != NULL && pProcPtrs[1] == NULL)
-	{
-		pProcPtrs[1] = GetProcAddress(hInst, lpszProcName);
-		ASSERT(pProcPtrs[1] != NULL);
-
-#ifndef _MAC
-		if (bWin31 == -1)
-		{
-			DWORD dwVersion = GetVersion();
-			bWin31 = (dwVersion & 0x80000000) && (BYTE)dwVersion < 4;
-		}
-		// only substitute the thunk on real Win32 -- not Win32s
-		if (!bWin31)
-#endif
-			pProcPtrs[0] = pProcPtrs[1];
-	}
-	return hInst;
-}
-
-HINSTANCE AFXAPI AfxLoadDll(HINSTANCE& hInst, LPCSTR lpszDLL)
-{
-	return AfxLoadDll(hInst, lpszDLL, NULL, NULL);
-}
-
-#endif
 
 /////////////////////////////////////////////////////////////////////////////

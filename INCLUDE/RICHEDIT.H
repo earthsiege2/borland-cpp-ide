@@ -2,21 +2,19 @@
  *	RICHEDIT.H
  *	
  *	Purpose:
- *		RICHEDIT v2.0 public definitions.  Note that there is additional
- *		functionality available for v2.0 that is not in the original
+ *		RICHEDIT v2.0/3.0 public definitions.  Note that there is additional
+ *		functionality available for v2.0 and 3.0 that is not in the original
  *		Windows 95 release.
  *	
- *	Copyright (c) 1985-1996, Microsoft Corporation
+ *	Copyright (c) 1993-1998, Microsoft Corporation
  */
 
 #ifndef _RICHEDIT_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define	_RICHEDIT_
-#pragma option -b
 
 #ifdef _WIN32
-#pragma option -b.
 #include <pshpack4.h>
-#pragma option -b
 #elif !defined(RC_INVOKED)
 #pragma pack(4)
 #endif
@@ -25,25 +23,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* To mimic RichEdit 1.0 behavior for Unicode apps, simply set _RICHEDIT_VER to 0x0100 */
+/* To mimic older RichEdit behavior, set _RICHEDIT_VER to appropriate value */
+/*		Version 1.0		0x0100	*/
+/*		Version 2.0		0x0200	*/
+/*		Version 2.1		0x0210	*/
 #ifndef _RICHEDIT_VER
-#define _RICHEDIT_VER	0x0200
-#endif
-
-/*
- *	To make some structures which can be passed between 16 and 32 bit windows
- *	almost compatible, padding is introduced to the 16 bit versions of the
- *	structure.
- */
-#ifdef _WIN32
-#	define	_WPAD	/##/
-#else
-#	define	_WPAD	WORD
+#define _RICHEDIT_VER	0x0300
 #endif
 
 #define cchTextLimitDefault 32767
 
-/* Richedit2.0 Window Class. */
+/* RichEdit 2.0 Window Class. */
+// For Windows CE to avoid possible conflicts on Win95.
+#define CERICHEDIT_CLASSA	"RichEditCEA"
+#define CERICHEDIT_CLASSW	L"RichEditCEW"
 
 #define RICHEDIT_CLASSA		"RichEdit20A"
 #define RICHEDIT_CLASS10A	"RICHEDIT"			// Richedit 1.0
@@ -121,7 +114,7 @@ extern "C" {
 #define EM_SETWORDBREAKPROCEX	(WM_USER + 81)
 #endif
 
-/* Richedit v2.0 messages */
+/* RichEdit 2.0 messages */
 #define	EM_SETUNDOLIMIT			(WM_USER + 82)
 #define EM_REDO					(WM_USER + 84)
 #define EM_CANREDO				(WM_USER + 85)
@@ -148,6 +141,8 @@ typedef enum tagTextMode
 #define EM_SETPALETTE			(WM_USER + 93)
 #define EM_GETTEXTEX			(WM_USER + 94)
 #define EM_GETTEXTLENGTHEX		(WM_USER + 95)
+#define EM_SHOWSCROLLBAR		(WM_USER + 96)
+#define EM_SETTEXTEX			(WM_USER + 97)
 
 /* Far East specific messages */
 #define EM_SETPUNCTUATION		(WM_USER + 100)
@@ -164,11 +159,52 @@ typedef enum tagTextMode
 #define EM_GETLANGOPTIONS		(WM_USER + 121)
 #define EM_GETIMECOMPMODE		(WM_USER + 122)
 
+#define EM_FINDTEXTW			(WM_USER + 123)
+#define EM_FINDTEXTEXW			(WM_USER + 124)
+
+/* RE3.0 FE messages */
+#define EM_RECONVERSION			(WM_USER + 125)
+#define EM_SETIMEMODEBIAS		(WM_USER + 126)	
+#define EM_GETIMEMODEBIAS		(WM_USER + 127)
+
+/* BiDi specific messages */
+#define EM_SETBIDIOPTIONS		(WM_USER + 200)
+#define EM_GETBIDIOPTIONS		(WM_USER + 201)
+
+#define EM_SETTYPOGRAPHYOPTIONS	(WM_USER + 202)
+#define EM_GETTYPOGRAPHYOPTIONS	(WM_USER + 203)
+
+/* Extended edit style specific messages */
+#define EM_SETEDITSTYLE			(WM_USER + 204)
+#define EM_GETEDITSTYLE			(WM_USER + 205)
+
+/* Extended edit style masks */
+#define	SES_EMULATESYSEDIT		1
+#define SES_BEEPONMAXTEXT		2
+#define	SES_EXTENDBACKCOLOR		4
+#define SES_MAPCPS				8
+#define SES_EMULATE10			16
+#define	SES_USECRLF				32
+#define SES_USEAIMM				64
+#define SES_NOIME				128
+
+#define SES_ALLOWBEEPS			256
+#define SES_UPPERCASE			512
+#define	SES_LOWERCASE			1024
+#define SES_NOINPUTSEQUENCECHK	2048
+#define SES_BIDI				4096
+#define SES_SCROLLONKILLFOCUS	8192
+#define	SES_XLTCRCRLFTOCR		16384
+
+
 /* Options for EM_SETLANGOPTIONS and EM_GETLANGOPTIONS */
 #define IMF_AUTOKEYBOARD		0x0001
 #define IMF_AUTOFONT			0x0002
-#define IMF_IMECANCELCOMPLETE	0x0004	// high completes the comp string when aborting, low cancels.
+#define IMF_IMECANCELCOMPLETE	0x0004	// high completes comp string when aborting, low cancels.
 #define IMF_IMEALWAYSSENDNOTIFY 0x0008
+#define IMF_AUTOFONTSIZEADJUST	0x0010
+#define IMF_UIFONTS				0x0020
+#define IMF_DUALFONT			0x0080
 
 /* Values for EM_GETIMECOMPMODE */
 #define ICM_NOTOPEN				0x0000
@@ -177,8 +213,53 @@ typedef enum tagTextMode
 #define ICM_LEVEL2_5			0x0003
 #define ICM_LEVEL2_SUI			0x0004
 
-/* New notifications */
+/* Options for EM_SETTYPOGRAPHYOPTIONS */
+#define	TO_ADVANCEDTYPOGRAPHY	1
+#define	TO_SIMPLELINEBREAK		2
 
+/* Pegasus outline mode messages (RE 3.0) */
+
+// Outline mode message
+#define EM_OUTLINE              (WM_USER + 220)
+// Message for getting and restoring scroll pos
+#define EM_GETSCROLLPOS         (WM_USER + 221)
+#define EM_SETSCROLLPOS         (WM_USER + 222)
+// Change fontsize in current selection by wParam
+#define EM_SETFONTSIZE          (WM_USER + 223)
+#define EM_GETZOOM				(WM_USER + 224)
+#define EM_SETZOOM				(WM_USER + 225)
+
+// Outline mode wparam values
+#define EMO_EXIT                0       // enter normal mode,  lparam ignored
+#define EMO_ENTER               1       // enter outline mode, lparam ignored
+#define EMO_PROMOTE             2       // LOWORD(lparam) == 0 ==>
+                                        // promote  to body-text
+                                        // LOWORD(lparam) != 0 ==>
+                                        // promote/demote current selection
+                                        // by indicated number of levels
+#define EMO_EXPAND              3       // HIWORD(lparam) = EMO_EXPANDSELECTION
+                                        // -> expands selection to level
+                                        // indicated in LOWORD(lparam)
+                                        // LOWORD(lparam) = -1/+1 corresponds
+                                        // to collapse/expand button presses
+                                        // in winword (other values are
+                                        // equivalent to having pressed these
+                                        // buttons more than once)
+                                        // HIWORD(lparam) = EMO_EXPANDDOCUMENT
+                                        // -> expands whole document to
+                                        // indicated level
+#define EMO_MOVESELECTION       4       // LOWORD(lparam) != 0 -> move current
+                                        // selection up/down by indicated
+                                        // amount
+#define EMO_GETVIEWMODE			5		// Returns VM_NORMAL or VM_OUTLINE
+
+// EMO_EXPAND options
+#define EMO_EXPANDSELECTION     0
+#define EMO_EXPANDDOCUMENT      1
+#define VM_NORMAL				4		// Agrees with RTF \viewkindN
+#define VM_OUTLINE				2
+
+/* New notifications */
 #define EN_MSGFILTER			0x0700
 #define EN_REQUESTRESIZE		0x0701
 #define EN_SELCHANGE			0x0702
@@ -192,9 +273,13 @@ typedef enum tagTextMode
 #define EN_OBJECTPOSITIONS		0x070a
 #define EN_LINK					0x070b
 #define EN_DRAGDROPDONE			0x070c
+#define EN_PARAGRAPHEXPANDED	0x070d
+
+/* BiDi specific notifications */
+#define EN_ALIGNLTR				0x0710
+#define EN_ALIGNRTL				0x0711
 
 /* Event notification masks */
-
 #define ENM_NONE				0x00000000
 #define ENM_CHANGE				0x00000001
 #define ENM_UPDATE				0x00000002
@@ -208,6 +293,7 @@ typedef enum tagTextMode
 #define ENM_CORRECTTEXT			0x00400000		/* PenWin specific */
 #define ENM_SCROLLEVENTS		0x00000008
 #define ENM_DRAGDROPDONE		0x00000010
+#define ENM_PARAGRAPHEXPANDED	0x00000020
 
 /* Far East specific notification mask */
 #define ENM_IMECHANGE			0x00800000		/* unused by RE2.0 */
@@ -216,7 +302,6 @@ typedef enum tagTextMode
 #define ENM_LINK				0x04000000
 
 /* New edit control styles */
-
 #define ES_SAVESEL				0x00008000
 #define ES_SUNKEN				0x00004000
 #define ES_DISABLENOSCROLL		0x00002000
@@ -225,13 +310,17 @@ typedef enum tagTextMode
 /* same as ES_UPPERCASE, but re-used to completely disable OLE drag'n'drop */
 #define ES_NOOLEDRAGDROP		0x00000008
 
-/* New edit control extended style */
+/* Edit control extended style */
+#if (_WIN32_WINNT > 0x0400) || (WINVER > 0x0400)
+#define ES_EX_NOCALLOLEINIT		0x00000000		/* Not supported in RE 2.0/3.0 */
+#else
 #ifdef	_WIN32
 #define ES_EX_NOCALLOLEINIT		0x01000000
 #endif	
+#endif
 
 /* These flags are used in FE Windows */
-#define ES_VERTICAL				0x00400000
+#define ES_VERTICAL				0x00400000		/* Not supported in RE 2.0/3.0 */
 #define	ES_NOIME				0x00080000
 #define ES_SELFIME				0x00040000
 
@@ -253,7 +342,7 @@ typedef enum tagTextMode
 #define ECOOP_AND				0x0003
 #define ECOOP_XOR				0x0004
 
-/* new word break function actions */
+/* New word break function actions */
 #define WB_CLASSIFY			3
 #define WB_MOVEWORDLEFT		4
 #define WB_MOVEWORDRIGHT	5
@@ -302,11 +391,10 @@ typedef enum tagTextMode
 typedef LONG (*EDITWORDBREAKPROCEX)(char *pchText, LONG cchText, BYTE bCharSet, INT action);
 #endif
 
-/* all character format measurements are in twips */
+/* All character format measurements are in twips */
 typedef struct _charformat
 {
 	UINT		cbSize;
-	_WPAD		_wPad1;
 	DWORD		dwMask;
 	DWORD		dwEffects;
 	LONG		yHeight;
@@ -315,13 +403,11 @@ typedef struct _charformat
 	BYTE		bCharSet;
 	BYTE		bPitchAndFamily;
 	char		szFaceName[LF_FACESIZE];
-	_WPAD		_wPad2;
 } CHARFORMATA;
 
 typedef struct _charformatw
 {
 	UINT		cbSize;
-	_WPAD		_wPad1;
 	DWORD		dwMask;
 	DWORD		dwEffects;
 	LONG		yHeight;
@@ -330,7 +416,6 @@ typedef struct _charformatw
 	BYTE		bCharSet;
 	BYTE		bPitchAndFamily;
 	WCHAR		szFaceName[LF_FACESIZE];
-	_WPAD		_wPad2;
 } CHARFORMATW;
 
 #if (_RICHEDIT_VER >= 0x0200)
@@ -368,17 +453,19 @@ typedef struct _charformatw
 #define yHeightCharPtsMost 1638
 
 /* EM_SETCHARFORMAT wParam masks */
-#define SCF_SELECTION	0x0001
-#define SCF_WORD		0x0002
-#define SCF_DEFAULT		0x0000		// set the default charformat or paraformat
-#define SCF_ALL			0x0004		// not valid with SCF_SELECTION or SCF_WORD
-#define SCF_USEUIRULES	0x0008		// modifier for SCF_SELECTION; says that
-									// the format came from a toolbar, etc. and
-									// therefore UI formatting rules should be
-									// used instead of strictly formatting the
-									// selection.
-
-
+#define SCF_SELECTION		0x0001
+#define SCF_WORD			0x0002
+#define SCF_DEFAULT			0x0000		// Set default charformat or paraformat
+#define SCF_ALL				0x0004		// Not valid with SCF_SELECTION or SCF_WORD
+#define SCF_USEUIRULES		0x0008		// Modifier for SCF_SELECTION; says that
+										//  format came from a toolbar, etc., and
+										//  hence UI formatting rules should be
+										//  used instead of literal formatting
+#define SCF_ASSOCIATEFONT	0x0010		// Associate fontname with bCharSet (one
+										//  possible for each of Western, ME, FE,
+										//  Thai)
+#define SCF_NOKBUPDATE		0x0020		// Do not update the KB layput for this change
+										// even if autokeyboard is on.
 typedef struct _charrange
 {
 	LONG	cpMin;
@@ -408,43 +495,61 @@ typedef struct _textrangew
 #endif /* _RICHEDIT_VER >= 0x0200 */
 
 
-typedef DWORD (CALLBACK *EDITSTREAMCALLBACK)(DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb);
+typedef DWORD (CALLBACK *EDITSTREAMCALLBACK)(DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb);
 
 typedef struct _editstream
 {
-	DWORD dwCookie;		/* user value passed to callback as first parameter */
-	DWORD dwError;		/* last error */
+	DWORD_PTR dwCookie;		/* user value passed to callback as first parameter */
+	DWORD	  dwError;		/* last error */
 	EDITSTREAMCALLBACK pfnCallback;
 } EDITSTREAM;
 
-/* stream formats */
+/* Stream formats. Flags are all in low word, since high word gives
+   possible codepage choice. */
 
 #define SF_TEXT			0x0001
 #define SF_RTF			0x0002
-#define SF_RTFNOOBJS	0x0003		/* outbound only */
-#define SF_TEXTIZED		0x0004		/* outbound only */
-#define SF_UNICODE		0x0010		/* Unicode file of some kind */
+#define SF_RTFNOOBJS	0x0003		/* Write only */
+#define SF_TEXTIZED		0x0004		/* Write only */
 
-/* Flag telling stream operations to operate on the selection only */
-/* EM_STREAMIN will replace the current selection */
-/* EM_STREAMOUT will stream out the current selection */
+#define SF_UNICODE		0x0010		/* Unicode file (UCS2 little endian) */
+#define SF_USECODEPAGE	0x0020		/* CodePage given by high word */
+#define SF_NCRFORNONASCII 0x40		/* Output /uN for nonASCII */
+
+/* Flag telling stream operations to operate on selection only */
+/* EM_STREAMIN  will replace current selection */
+/* EM_STREAMOUT will stream out current selection */
 #define SFF_SELECTION	0x8000
 
-/* Flag telling stream operations to operate on the common RTF keyword only */
-/* EM_STREAMIN will accept the only common RTF keyword */
-/* EM_STREAMOUT will stream out the only common RTF keyword */
+/* Flag telling stream operations to ignore some FE control words */
+/* having to do with FE word breaking and horiz vs vertical text. */
+/* Not used in RichEdit 2.0 and later	*/
 #define SFF_PLAINRTF	0x4000
+
+/* Flag telling file stream output (SFF_SELECTION flag not set) to persist */
+/* \viewscaleN control word. */
+#define SFF_PERSISTVIEWSCALE 0x2000
+
+/* Flag telling file stream input with SFF_SELECTION flag not set not to */
+/* close the document */
+#define SFF_KEEPDOCINFO	0x1000
+
+/* Flag telling stream operations to output in Pocket Word format */
+#define SFF_PWD			0x0800
+
+/* 3-bit field specifying the value of N - 1 to use for \rtfN or \pwdN */
+#define SF_RTFVAL		0x0700
 
 typedef struct _findtext
 {
 	CHARRANGE chrg;
-	LPSTR lpstrText;
+	LPCSTR lpstrText;
 } FINDTEXTA;
 
 typedef struct _findtextw
 {
 	CHARRANGE chrg;
-	LPWSTR lpstrText;
+	LPCWSTR lpstrText;
 } FINDTEXTW;
 
 #if (_RICHEDIT_VER >= 0x0200)
@@ -460,14 +565,14 @@ typedef struct _findtextw
 typedef struct _findtextexa
 {
 	CHARRANGE chrg;
-	LPSTR lpstrText;
+	LPCSTR	  lpstrText;
 	CHARRANGE chrgText;
 } FINDTEXTEXA;
 
 typedef struct _findtextexw
 {
 	CHARRANGE chrg;
-	LPWSTR lpstrText;
+	LPCWSTR	  lpstrText;
 	CHARRANGE chrgText;
 } FINDTEXTEXW;
 
@@ -491,18 +596,20 @@ typedef struct _formatrange
 	CHARRANGE chrg;
 } FORMATRANGE;
 
-/* all paragraph measurements are in twips */
+/* All paragraph measurements are in twips */
 
 #define MAX_TAB_STOPS 32
 #define lDefaultTab 720
 
+/* This is a hack to make PARAFORMAT compatible with RE 1.0 */
+#define	wReserved	wEffects
+
 typedef struct _paraformat
 {
 	UINT	cbSize;
-	_WPAD	_wPad1;
 	DWORD	dwMask;
 	WORD	wNumbering;
-	WORD	wReserved;
+	WORD	wEffects;
 	LONG	dxStartIndent;
 	LONG	dxRightIndent;
 	LONG	dxOffset;
@@ -565,7 +672,6 @@ struct CHARFORMAT2A : _charformat
 typedef struct _charformat2w
 {
 	UINT		cbSize;
-	_WPAD		_wPad1;
 	DWORD		dwMask;
 	DWORD		dwEffects;
 	LONG		yHeight;
@@ -574,7 +680,6 @@ typedef struct _charformat2w
 	BYTE		bCharSet;
 	BYTE		bPitchAndFamily;
 	WCHAR		szFaceName[LF_FACESIZE];
-	_WPAD		_wPad2;
 	WORD		wWeight;			/* Font weight (LOGFONT value)		*/
 	SHORT		sSpacing;			/* Amount to space between letters	*/
 	COLORREF	crBackColor;		/* Background color					*/
@@ -591,7 +696,6 @@ typedef struct _charformat2w
 typedef struct _charformat2a
 {
 	UINT		cbSize;
-	_WPAD		_wPad1;
 	DWORD		dwMask;
 	DWORD		dwEffects;
 	LONG		yHeight;
@@ -600,7 +704,6 @@ typedef struct _charformat2a
 	BYTE		bCharSet;
 	BYTE		bPitchAndFamily;
 	char		szFaceName[LF_FACESIZE];
-	_WPAD		_wPad2;
 	WORD		wWeight;			/* Font weight (LOGFONT value)		*/
 	SHORT		sSpacing;			/* Amount to space between letters	*/
 	COLORREF	crBackColor;		/* Background color					*/
@@ -633,14 +736,14 @@ typedef struct _charformat2a
 
 #define	PFM_ALL (PFM_STARTINDENT | PFM_RIGHTINDENT | PFM_OFFSET	| \
 				 PFM_ALIGNMENT   | PFM_TABSTOPS    | PFM_NUMBERING | \
-				 PFM_OFFSETINDENT)
+				 PFM_OFFSETINDENT| PFM_RTLPARA)
 
 /* New masks and effects -- a parenthesized asterisk indicates that
-   the data is stored by RichEdit2.0, but not displayed */
+   the data is stored by RichEdit 2.0/3.0, but not displayed */
 
 #define CFM_SMALLCAPS		0x0040			/* (*)	*/
-#define	CFM_ALLCAPS			0x0080			/* (*)	*/
-#define	CFM_HIDDEN			0x0100			/* (*)	*/
+#define	CFM_ALLCAPS			0x0080			/* Displayed by 3.0	*/
+#define	CFM_HIDDEN			0x0100			/* Hidden by 3.0 */
 #define	CFM_OUTLINE			0x0200			/* (*)	*/
 #define	CFM_SHADOW			0x0400			/* (*)	*/
 #define	CFM_EMBOSS			0x0800			/* (*)	*/
@@ -650,9 +753,9 @@ typedef struct _charformat2a
 
 #define CFM_BACKCOLOR		0x04000000
 #define CFM_LCID			0x02000000
-#define	CFM_UNDERLINETYPE	0x00800000		/* (*)	*/
+#define	CFM_UNDERLINETYPE	0x00800000		/* Many displayed by 3.0 */
 #define	CFM_WEIGHT			0x00400000
-#define CFM_SPACING			0x00200000		/* (*)	*/
+#define CFM_SPACING			0x00200000		/* Displayed by 3.0	*/
 #define CFM_KERNING			0x00100000		/* (*)	*/
 #define CFM_STYLE			0x00080000		/* (*)	*/
 #define CFM_ANIMATION		0x00040000		/* (*)	*/
@@ -687,14 +790,20 @@ typedef struct _charformat2a
    CFM_BACKCOLOR, respectively, which control them */
 #define CFE_AUTOBACKCOLOR	CFM_BACKCOLOR
 
-/* Underline types */
+/* Underline types. RE 1.0 displays only CFU_UNDERLINE */
 #define CFU_CF1UNDERLINE	0xFF	/* map charformat's bit underline to CF2.*/
-#define CFU_INVERT			0xFE	/* For IME composition fake a selection.*/	
-#define	CFU_UNDERLINEDOTTED	0x4		/* (*) displayed as ordinary underline	*/
-#define	CFU_UNDERLINEDOUBLE	0x3		/* (*) displayed as ordinary underline	*/
-#define CFU_UNDERLINEWORD	0x2		/* (*) displayed as ordinary underline	*/
-#define CFU_UNDERLINE		0x1
-#define CFU_UNDERLINENONE	0
+#define CFU_INVERT			0xFE	/* For IME composition fake a selection.*/
+#define CFU_UNDERLINEHAIRLINE	10	/* (*) displayed as ordinary underline	*/
+#define CFU_UNDERLINETHICK		9
+#define CFU_UNDERLINEWAVE		8
+#define	CFU_UNDERLINEDASHDOTDOT	7
+#define	CFU_UNDERLINEDASHDOT	6
+#define	CFU_UNDERLINEDASH		5
+#define	CFU_UNDERLINEDOTTED		4
+#define	CFU_UNDERLINEDOUBLE		3	/* (*) displayed as ordinary underline	*/
+#define CFU_UNDERLINEWORD		2	/* (*) displayed as ordinary underline	*/
+#define CFU_UNDERLINE			1
+#define CFU_UNDERLINENONE		0
 
 #ifdef __cplusplus
 struct PARAFORMAT2 : _paraformat
@@ -704,16 +813,15 @@ struct PARAFORMAT2 : _paraformat
 	LONG	dyLineSpacing;			/* Line spacing depending on Rule		*/
 	SHORT	sStyle;					/* Style handle							*/
 	BYTE	bLineSpacingRule;		/* Rule for line spacing (see tom.doc)	*/
-	BYTE	bCRC;					/* Reserved for CRC for rapid searching	*/
+	BYTE	bOutlineLevel;			/* Outline level						*/
 	WORD	wShadingWeight;			/* Shading in hundredths of a per cent	*/
 	WORD	wShadingStyle;			/* Nibble 0: style, 1: cfpat, 2: cbpat	*/
 	WORD	wNumberingStart;		/* Starting value for numbering			*/
 	WORD	wNumberingStyle;		/* Alignment, roman/arabic, (), ), ., etc.*/
-	WORD	wNumberingTab;			/* Space bet FirstIndent and 1st-line text*/
-	WORD	wBorderSpace;			/* Space between border and text (twips)*/
-	WORD	wBorderWidth;			/* Border pen width (twips)				*/
-	WORD	wBorders;				/* Byte 0: bits specify which borders	*/
-									/* Nibble 2: border style, 3: color index*/
+	WORD	wNumberingTab;			/* Space bet FirstIndent & 1st-line text*/
+	WORD	wBorderSpace;			/* Border-text spaces (nbl/bdr in pts)	*/
+	WORD	wBorderWidth;			/* Pen widths (nbl/bdr in half pts)		*/
+	WORD	wBorders;				/* Border styles (nibble/border)		*/
 };
 
 #else	/* regular C-style	*/
@@ -721,7 +829,6 @@ struct PARAFORMAT2 : _paraformat
 typedef struct _paraformat2
 {
 	UINT	cbSize;
-	_WPAD	_wPad1;
 	DWORD	dwMask;
 	WORD	wNumbering;
 	WORD	wReserved;
@@ -736,25 +843,19 @@ typedef struct _paraformat2
 	LONG	dyLineSpacing;			/* Line spacing depending on Rule		*/
 	SHORT	sStyle;					/* Style handle							*/
 	BYTE	bLineSpacingRule;		/* Rule for line spacing (see tom.doc)	*/
-	BYTE	bCRC;					/* Reserved for CRC for rapid searching	*/
+	BYTE	bOutlineLevel;			/* Outline Level						*/
 	WORD	wShadingWeight;			/* Shading in hundredths of a per cent	*/
-	WORD	wShadingStyle;			/* Nibble 0: style, 1: cfpat, 2: cbpat	*/
+	WORD	wShadingStyle;			/* Byte 0: style, nib 2: cfpat, 3: cbpat*/
 	WORD	wNumberingStart;		/* Starting value for numbering			*/	
-	WORD	wNumberingStyle;		/* Alignment, roman/arabic, (), ), ., etc.*/
+	WORD	wNumberingStyle;		/* Alignment, Roman/Arabic, (), ), ., etc.*/
 	WORD	wNumberingTab;			/* Space bet 1st indent and 1st-line text*/
-	WORD	wBorderSpace;			/* Space between border and text (twips)*/
-	WORD	wBorderWidth;			/* Border pen width (twips)				*/
-	WORD	wBorders;				/* Byte 0: bits specify which borders	*/
-									/* Nibble 2: border style, 3: color index*/
+	WORD	wBorderSpace;			/* Border-text spaces (nbl/bdr in pts)	*/
+	WORD	wBorderWidth;			/* Pen widths (nbl/bdr in half twips)	*/
+	WORD	wBorders;				/* Border styles (nibble/border)		*/
 } PARAFORMAT2;
 
 #endif /* C++	*/
 
-/* this is a hack to make PARAFORMAT code more readable.
-   it applies to the wReserved field in PARAFORMAT, which
-   in PARAFORMAT2 is now used. */
-
-#define	wEffects			wReserved
 
 /* PARAFORMAT 2.0 masks and effects */
 
@@ -764,9 +865,9 @@ typedef struct _paraformat2
 #define	PFM_STYLE				0x00000400
 #define PFM_BORDER				0x00000800	/* (*)	*/
 #define PFM_SHADING				0x00001000	/* (*)	*/
-#define PFM_NUMBERINGSTYLE		0x00002000	/* (*)	*/
-#define PFM_NUMBERINGTAB		0x00004000	/* (*)	*/
-#define PFM_NUMBERINGSTART		0x00008000	/* (*)	*/
+#define PFM_NUMBERINGSTYLE		0x00002000	/* RE 3.0	*/
+#define PFM_NUMBERINGTAB		0x00004000	/* RE 3.0	*/
+#define PFM_NUMBERINGSTART		0x00008000	/* RE 3.0	*/
 
 #define PFM_RTLPARA				0x00010000
 #define PFM_KEEP				0x00020000	/* (*)	*/
@@ -776,11 +877,16 @@ typedef struct _paraformat2
 #define PFM_NOWIDOWCONTROL		0x00200000	/* (*)	*/
 #define PFM_DONOTHYPHEN			0x00400000	/* (*)	*/
 #define PFM_SIDEBYSIDE			0x00800000	/* (*)	*/
+#define PFM_TABLE				0x40000000	/* RE 3.0 */
 
-#define PFM_TABLE				0xc0000000	/* (*)	*/
+// The following three properties are read only
+#define PFM_COLLAPSED			0x01000000	/* RE 3.0 */
+#define PFM_OUTLINELEVEL		0x02000000	/* RE 3.0 */
+#define PFM_BOX					0x04000000	/* RE 3.0 */
+
 
 /* Note: PARAFORMAT has no effects */
-#define PFM_EFFECTS  (PFM_RTLPARA | PFM_KEEP | PFM_KEEPNEXT | PFM_TABLE \
+#define PFM_EFFECTS (PFM_RTLPARA | PFM_KEEP | PFM_KEEPNEXT | PFM_TABLE \
 					| PFM_PAGEBREAKBEFORE | PFM_NOLINENUMBER  \
 					| PFM_NOWIDOWCONTROL | PFM_DONOTHYPHEN | PFM_SIDEBYSIDE \
 					| PFM_TABLE)
@@ -798,43 +904,43 @@ typedef struct _paraformat2
 #define PFE_DONOTHYPHEN			(PFM_DONOTHYPHEN 	 >> 16)	/* (*)	*/
 #define PFE_SIDEBYSIDE			(PFM_SIDEBYSIDE		 >> 16)	/* (*)	*/
 
-#define PFE_TABLEROW			0xc000		/* These 3 options are mutually	*/
-#define PFE_TABLECELLEND		0x8000		/*  exclusive and each imply	*/
-#define PFE_TABLECELL			0x4000		/*  that para is part of a table*/
+// The following four effects are read only
+#define PFE_OUTLINELEVEL		(PFM_OUTLINELEVEL	 >> 16)	/* (+)	*/
+#define PFE_COLLAPSED			(PFM_COLLAPSED		 >> 16)	/* (+)	*/
+#define PFE_BOX					(PFM_BOX			 >> 16)	/* (+)	*/
+#define PFE_TABLE				0x4000		/* Para is a table row. RE 3.0 */
 
-/*
- *	PARAFORMAT numbering options (values for wNumbering):
- *
- *		Numbering Type		Value	Meaning
- *		tomNoNumbering		  0		Turn off paragraph numbering
- *		tomNumberAsLCLetter	  1		a, b, c, ...
- *		tomNumberAsUCLetter	  2		A, B, C, ...
- *		tomNumberAsLCRoman	  3		i, ii, iii, ...
- *		tomNumberAsUCRoman	  4		I, II, III, ...
- *		tomNumberAsSymbols	  5		default is bullet
- *		tomNumberAsNumber	  6		0, 1, 2, ...
- *		tomNumberAsSequence	  7		tomNumberingStart is first Unicode to use
- *
- *	Other valid Unicode chars are Unicodes for bullets.
- */
+/* PARAFORMAT2 wNumbering options (see also PFN_BULLET) */
+#define PFN_ARABIC		2		/* tomListNumberAsArabic:   0, 1, 2,	...*/
+#define PFN_LCLETTER	3		/* tomListNumberAsLCLetter: a, b, c,	...*/
+#define	PFN_UCLETTER	4		/* tomListNumberAsUCLetter: A, B, C,	...*/
+#define	PFN_LCROMAN		5		/* tomListNumberAsLCRoman:  i, ii, iii,	...*/
+#define	PFN_UCROMAN		6		/* tomListNumberAsUCRoman:  I, II, III,	...*/
 
+/* PARAFORMAT2 wNumberingStyle options */
+#define PFNS_PAREN		0x000	/* default, e.g.,				  1)	*/
+#define	PFNS_PARENS		0x100	/* tomListParentheses/256, e.g., (1)	*/
+#define PFNS_PERIOD		0x200	/* tomListPeriod/256, e.g.,		  1.	*/
+#define PFNS_PLAIN		0x300	/* tomListPlain/256, e.g.,		  1		*/
+#define PFNS_NONUMBER	0x400	/* Used for continuation w/o number		*/
 
-#define	PFA_JUSTIFY			4	/* New paragraph-alignment option 2.0 (*)
+#define	PFA_JUSTIFY			 4	/* New paragraph-alignment option 2.0 (*) */
+#define PFA_FULL_INTERWORD	 4
+#define PFA_FULL_INTERLETTER 5
+#define PFA_FULL_SCALED		 6
+#define	PFA_FULL_GLYPHS		 7
+#define	PFA_SNAP_GRID		 8
 
-
-/* notification structures */
+/* Notification structures */
 
 #ifndef WM_NOTIFY
-#define WM_NOTIFY				0x004E
+#define WM_NOTIFY		0x004E
 
 typedef struct _nmhdr
 {
 	HWND	hwndFrom;
-	_WPAD	_wPad1;
 	UINT	idFrom;
-	_WPAD	_wPad2;
 	UINT	code;
-	_WPAD	_wPad3;
 } NMHDR;
 #endif  /* !WM_NOTIFY */
 
@@ -842,9 +948,7 @@ typedef struct _msgfilter
 {
 	NMHDR	nmhdr;
 	UINT	msg;
-	_WPAD	_wPad1;
 	WPARAM	wParam;
-	_WPAD	_wPad2;
 	LPARAM	lParam;
 } MSGFILTER;
 
@@ -867,7 +971,7 @@ typedef struct _selchange
 #define SEL_MULTICHAR	0x0004
 #define SEL_MULTIOBJECT	0x0008
 
-/* used with IRichEditOleCallback::GetContextMenu, this flag will be
+/* Used with IRichEditOleCallback::GetContextMenu, this flag will be
    passed as a "selection type".  It indicates that a context menu for
    a right-mouse drag drop should be generated.  The IOleObject parameter
    will really be the IDataObject for the drop
@@ -886,9 +990,7 @@ typedef struct _enprotected
 {
 	NMHDR nmhdr;
 	UINT msg;
-	_WPAD	_wPad1;
 	WPARAM wParam;
-	_WPAD	_wPad2;
 	LPARAM lParam;
 	CHARRANGE chrg;
 } ENPROTECTED;
@@ -923,9 +1025,7 @@ typedef struct _enlink
 {
     NMHDR nmhdr;
     UINT msg;
-    _WPAD   _wPad1;
     WPARAM wParam;
-    _WPAD   _wPad2;
     LPARAM lParam;
     CHARRANGE chrg;
 } ENLINK;
@@ -954,7 +1054,7 @@ typedef struct _compcolor
 }COMPCOLOR;
 
 
-/* clipboard formats - use as parameter to RegisterClipboardFormat() */
+/* Clipboard formats - use as parameter to RegisterClipboardFormat() */
 #define CF_RTF 			TEXT("Rich Text Format")
 #define CF_RTFNOOBJS 	TEXT("Rich Text Format Without Objects")
 #define CF_RETEXTOBJ 	TEXT("RichEdit Text and Objects")
@@ -962,8 +1062,8 @@ typedef struct _compcolor
 /* Paste Special */
 typedef struct _repastespecial
 {
-	DWORD	dwAspect;
-	DWORD	dwParam;
+	DWORD		dwAspect;
+	DWORD_PTR	dwParam;
 } REPASTESPECIAL;
 
 /*	UndoName info */
@@ -977,22 +1077,36 @@ typedef enum _undonameid
 	UID_PASTE		= 5
 } UNDONAMEID;
 
-/* flags for the GETEXTEX data structure */
+/* Flags for the SETEXTEX data structure */
+#define ST_DEFAULT		0
+#define ST_KEEPUNDO		1
+#define ST_SELECTION	2
+
+/* EM_SETTEXTEX info; this struct is passed in the wparam of the message */
+typedef struct _settextex
+{
+	DWORD	flags;			/* flags (see the ST_XXX defines			*/
+	UINT	codepage;		/* code page for translation (CP_ACP for sys default;
+						       1200 for Unicode, -1 for control default	*/
+} SETTEXTEX;
+
+/* Flags for the GETEXTEX data structure */
 #define GT_DEFAULT		0
 #define GT_USECRLF		1
+#define GT_SELECTION	2
 
 /* EM_GETTEXTEX info; this struct is passed in the wparam of the message */
 typedef struct _gettextex
 {
 	DWORD	cb;				/* count of bytes in the string				*/
 	DWORD	flags;			/* flags (see the GT_XXX defines			*/
-	UINT	codepage;		/* code page for translation (CP_ACP for default,
-						       1200 for Unicode							*/
+	UINT	codepage;		/* code page for translation (CP_ACP for sys default,
+						       1200 for Unicode, -1 for control default	*/
 	LPCSTR	lpDefaultChar;	/* replacement for unmappable chars			*/
 	LPBOOL	lpUsedDefChar;	/* pointer to flag set when def char used	*/
 } GETTEXTEX;
 
-/* flags for the GETTEXTLENGTHEX data structure							*/
+/* Flags for the GETTEXTLENGTHEX data structure							*/
 #define GTL_DEFAULT		0	/* do the default (return # of chars)		*/
 #define GTL_USECRLF		1	/* compute answer using CRLFs for paragraphs*/
 #define GTL_PRECISE		2	/* compute a precise answer					*/
@@ -1008,6 +1122,36 @@ typedef struct _gettextlengthex
 							   1200 for Unicode							*/
 } GETTEXTLENGTHEX;
 	
+/* BiDi specific features */
+typedef struct _bidioptions
+{
+	UINT	cbSize;
+	WORD	wMask;
+	WORD	wEffects; 
+} BIDIOPTIONS;
+
+/* BIDIOPTIONS masks */
+#if (_RICHEDIT_VER == 0x0100)
+#define BOM_DEFPARADIR			0x0001	/* Default paragraph direction (implies alignment) (obsolete) */
+#define BOM_PLAINTEXT			0x0002	/* Use plain text layout (obsolete) */
+#endif /* _RICHEDIT_VER == 0x0100 */
+#define BOM_NEUTRALOVERRIDE		0x0004	/* Override neutral layout (obsolete) */
+#define BOM_CONTEXTREADING		0x0008	/* Context reading order */
+#define BOM_CONTEXTALIGNMENT	0x0010	/* Context alignment */
+
+/* BIDIOPTIONS effects */
+#if (_RICHEDIT_VER == 0x0100)
+#define BOE_RTLDIR				0x0001	/* Default paragraph direction (implies alignment) (obsolete) */
+#define BOE_PLAINTEXT			0x0002	/* Use plain text layout (obsolete) */
+#endif /* _RICHEDIT_VER == 0x0100 */
+#define BOE_NEUTRALOVERRIDE		0x0004	/* Override neutral layout (obsolete) */
+#define BOE_CONTEXTREADING		0x0008	/* Context reading order */
+#define BOE_CONTEXTALIGNMENT	0x0010	/* Context alignment */
+
+/* Additional EM_FINDTEXT[EX] flags */
+#define FR_MATCHDIAC                    0x20000000
+#define FR_MATCHKASHIDA                 0x40000000
+#define FR_MATCHALEFHAMZA               0x80000000
 	
 /* UNICODE embedding character */
 #ifndef WCH_EMBEDDING
@@ -1015,12 +1159,8 @@ typedef struct _gettextlengthex
 #endif /* WCH_EMBEDDING */
 		
 
-#undef _WPAD
-
 #ifdef _WIN32
-#pragma option -b.
 #include <poppack.h>
-#pragma option -b
 #elif !defined(RC_INVOKED)
 #pragma pack()
 #endif
@@ -1029,6 +1169,6 @@ typedef struct _gettextlengthex
 }
 #endif  /* __cplusplus */
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif /* !_RICHEDIT_ */
 

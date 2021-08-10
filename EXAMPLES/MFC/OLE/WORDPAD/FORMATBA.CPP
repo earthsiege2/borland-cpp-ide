@@ -1,7 +1,7 @@
 // formatba.cpp : implementation file
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -196,14 +196,16 @@ void CFormatBar::OnFontNameKillFocus()
 			CFontDesc* pDesc = (CFontDesc*)m_comboFontName.GetItemData(nIndex);
 			ASSERT(pDesc != NULL);
 			ASSERT(pDesc->m_strName.GetLength() < LF_FACESIZE);
-			lstrcpynA(cf.szFaceName, T2A(pDesc->m_strName), LF_FACESIZE);
+			lstrcpynA(cf.szFaceName,
+				T2A((LPTSTR) (LPCTSTR) pDesc->m_strName), LF_FACESIZE);
 			cf.bCharSet = pDesc->m_nCharSet;
 			cf.bPitchAndFamily = pDesc->m_nPitchAndFamily;
 		}
 		else // unknown font
 		{
 			ASSERT(str.GetLength() < LF_FACESIZE);
-			lstrcpynA(cf.szFaceName, T2A(str), LF_FACESIZE);
+			lstrcpynA(cf.szFaceName,
+				T2A((LPTSTR) (LPCTSTR) str), LF_FACESIZE);
 			cf.bCharSet = DEFAULT_CHARSET;
 			cf.bPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
 		}

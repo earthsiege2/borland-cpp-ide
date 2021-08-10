@@ -6,20 +6,25 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.3  $ */
+
+/* $Revision:   9.11  $ */
 
 #ifndef __FLOAT_H
 #define __FLOAT_H
 
-#if !defined( ___DEFS_H )
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
+
+#ifdef __cplusplus
+namespace std {
+#endif /* __cplusplus */
 
 
 #if !defined(RC_INVOKED)
@@ -73,24 +78,61 @@
 #define FLT_MIN_EXP         -125
 #define LDBL_MIN_EXP        -16381
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern float        _RTLENTRY _EXPDATA _max_flt;
 extern double       _RTLENTRY _EXPDATA _max_dble;
 extern long double  _RTLENTRY _EXPDATA _max_ldble;
 extern long double  _RTLENTRY _EXPDATA _tiny_ldble;
 
+unsigned int _RTLENTRY            _clear87(void);
+unsigned int _RTLENTRY            _control87(unsigned int __newcw, unsigned int __mask);
+void         _RTLENTRY            _fpreset(void);
+unsigned int _RTLENTRY            _status87(void);
+
+/* Microsoft C compatible IEEE functions */
+
+double       _RTLENTRY _EXPFUNC  _chgsign(double __d);
+double       _RTLENTRY _EXPFUNC  _copysign(double __da, double __db);
+int          _RTLENTRY _EXPFUNC  _finite(double __d);
+int          _RTLENTRY _EXPFUNC  _fpclass(double __d);
+int          _RTLENTRY _EXPFUNC  _isnan(double __d);
+double       _RTLENTRY _EXPFUNC  _logb(double __d);
+double       _RTLENTRY _EXPFUNC  _scalb(double __d, long __exp);
+double       _RTLENTRY _EXPFUNC  _nextafter(double __da, double __db);
+
+long double  _RTLENTRY _EXPFUNC  _chgsignl(long double __ld);
+long double  _RTLENTRY _EXPFUNC  _copysignl(long double __lda, long double __ldb);
+int          _RTLENTRY _EXPFUNC  _finitel(long double __ld);
+int          _RTLENTRY _EXPFUNC  _fpclassl(long double __ld);
+int          _RTLENTRY _EXPFUNC  _isnanl(long double __ld);
+long double  _RTLENTRY _EXPFUNC  _logbl(long double __ld);
+long double  _RTLENTRY _EXPFUNC  _scalbl(long double __ld, long __exp);
+long double  _RTLENTRY _EXPFUNC  _nextafterl(long double __lda, long double __ldb);
+
+#define      _controlfp(__a, __b) _control87((__a), ((__b)& (~EM_DENORMAL)))
+#define      _statusfp            _status87
+#define      _clearfp             _clear87
+
+/* Return values for _fpclass() and _fpclassl() */
+
+#define _FPCLASS_UNSUP  0x0000  /* Unsupported IEEE format      */
+#define _FPCLASS_SNAN   0x0001  /* Signaling NaN                */
+#define _FPCLASS_QNAN   0x0002  /* Quiet NaN                    */
+#define _FPCLASS_NINF   0x0004  /* Negative Infinity            */
+#define _FPCLASS_NN     0x0008  /* Negative Normal              */
+#define _FPCLASS_ND     0x0010  /* Negative Denormal            */
+#define _FPCLASS_NZ     0x0020  /* Negative Zero (-0.0)         */
+#define _FPCLASS_PZ     0x0040  /* Positive Zero (+0.0)         */
+#define _FPCLASS_PD     0x0080  /* Positive Denormal            */
+#define _FPCLASS_PN     0x0100  /* Positive Normal              */
+#define _FPCLASS_PINF   0x0200  /* Positive Infinity            */
+
+
 #ifdef __cplusplus
-extern "C" {
-#endif
-unsigned int _RTLENTRY          _clear87(void);
-unsigned int _RTLENTRY          _control87(unsigned int __newcw, unsigned int __mask);
-void         _RTLENTRY          _fpreset(void);
-unsigned int _RTLENTRY          _status87(void);
-int          _RTLENTRY          _isnan (double d);
-int          _RTLENTRY          _isnanl (long double ld);
-int          _RTLENTRY          _finite (double d);
-int          _RTLENTRY          _finitel (long double ld);
-#ifdef __cplusplus
-}
+} // "C"
 #endif
 
 #if !defined(__STDC__)
@@ -130,11 +172,19 @@ int          _RTLENTRY          _finitel (long double ld);
 #define     PC_53       0x0200  /*    53 bits           */
 #define     PC_64       0x0300  /*    64 bits           */
 
+#ifdef __cplusplus
+} // std
+#endif /* __cplusplus */
+
 /* 387 Initial Control Word */
 /* use affine infinity, mask underflow and precision exceptions */
 
 #define CW_DEFAULT  _default87
 extern unsigned int _RTLENTRY _default87;
+
+#ifdef __cplusplus
+namespace std {
+#endif /* __cplusplus */
 
 /*
     SIGFPE signal error types (for integer & float exceptions).
@@ -155,19 +205,17 @@ extern unsigned int _RTLENTRY _default87;
 */
 #define SEGV_BOUND          10  /* A BOUND violation (SIGSEGV)  */
 #define SEGV_EXPLICITGEN    11  /* When SIGSEGV is raise()'d    */
-#if defined(__OS2__) || defined(__WIN32__)
 #define SEGV_ACCESS         12  /* Access violation */
 #define SEGV_STACK          13  /* Unable to grow stack */
-#endif
 
 /*
             SIGILL signal error types.
 */
 #define ILL_EXECUTION       20  /* Illegal operation exception  */
 #define ILL_EXPLICITGEN     21  /* When SIGILL is raise()'d     */
-#if defined(__OS2__) || defined(__WIN32__)
 #define ILL_PRIVILEGED      22  /* Privileged instruction */
-#endif
+#define ILL_BREAKPOINT      23  /* Breakpoint exception */
+#define ILL_SINGLE_STEP     24  /* Singlestep exception */
 
 #endif  /* !__STDC__ */
 
@@ -180,6 +228,36 @@ extern unsigned int _RTLENTRY _default87;
 
 #endif  /* !RC_INVOKED */
 
+#ifdef __cplusplus
+} // std
+#endif /* __cplusplus */
 
 #endif  /* __FLOAT_H */
 
+#if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__FLOAT_H_USING_LIST)
+#define __FLOAT_H_USING_LIST
+     using std::_chgsign;
+     using std::_chgsignl;
+     using std::_clear87;
+     using std::_control87;
+     using std::_copysign;
+     using std::_copysignl;
+     using std::_finite;
+     using std::_finitel;
+     using std::_fpclass;
+     using std::_fpclassl;
+     using std::_fpreset;
+     using std::_isnan;
+     using std::_isnanl;
+     using std::_logb;
+     using std::_logbl;
+     using std::_max_dble;
+     using std::_max_flt;
+     using std::_max_ldble;
+     using std::_nextafter;
+     using std::_nextafterl;
+     using std::_scalb;
+     using std::_scalbl;
+     using std::_status87;
+     using std::_tiny_ldble;
+#endif /* __USING_CNAME__ */

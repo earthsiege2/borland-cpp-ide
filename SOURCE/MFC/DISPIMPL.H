@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -60,27 +60,4 @@
 #define _RETVAL_FIRST
 #endif
 
-#ifdef _68K_
-#define _STACK_INT      int
-#define _STACK_LONG     long
-#define _STACK_FLOAT    float
-#define _STACK_DOUBLE   double
-#define _STACK_PTR      void*
-#define _SCRATCH_SIZE   0
-#define _STACK_OFFSET   0
-#define _STACK_MIN      0
-#endif
-
-#ifdef _MPPC_
-#define _STACK_INT      int
-#define _STACK_LONG     long
-#define _STACK_FLOAT    float
-#define _STACK_DOUBLE   double
-#define _STACK_PTR      void*
-#define _SHADOW_DOUBLES 13
-#define _SCRATCH_SIZE   (_SHADOW_DOUBLES*sizeof(double))
-#define _STACK_OFFSET   0
-#define _STACK_MIN      (64+32) // 8 32-bit registers, 32 bytes param space
-#define _RETVAL_FIRST
-#endif
-
+/////////////////////////////////////////////////////////////////////////////

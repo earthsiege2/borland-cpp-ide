@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -23,8 +23,6 @@ static char THIS_FILE[] = __FILE__;
 
 #define GUID_CCH    39  // Characters in string form of guid, including '\0'
 
-#define ERROR_BADKEY_WIN16  2   // needed when running on Win32s
-
 inline BOOL _AfxRegDeleteKeySucceeded(LONG error)
 {
 	return (error == ERROR_SUCCESS) || (error == ERROR_BADKEY) ||
@@ -37,33 +35,45 @@ inline BOOL _AfxRegDeleteKeySucceeded(LONG error)
 
 LONG AFXAPI _AfxRecursiveRegDeleteKey(HKEY hParentKey, LPTSTR szKeyName)
 {
-	DWORD   dwIndex = 0L;
-	TCHAR   szSubKeyName[256];
-	HKEY    hCurrentKey;
-	DWORD   dwResult;
+	// one implementation for everybody
+	return AfxDelRegTreeHelper(hParentKey, szKeyName);
+}
 
-	if ((dwResult = RegOpenKey(hParentKey, szKeyName, &hCurrentKey)) ==
-		ERROR_SUCCESS)
+void _AfxUnregisterInterfaces(ITypeLib* pTypeLib)
+{
+	TCHAR szKey[128];
+	lstrcpy(szKey, _T("Interface\\"));
+	LPTSTR pszGuid = szKey + lstrlen(szKey);
+
+	int cTypeInfo = pTypeLib->GetTypeInfoCount();
+
+	for (int i = 0; i < cTypeInfo; i++)
 	{
-		// Remove all subkeys of the key to delete
-		while ((dwResult = RegEnumKey(hCurrentKey, 0, szSubKeyName, 255)) ==
-			ERROR_SUCCESS)
+		TYPEKIND tk;
+		if (SUCCEEDED(pTypeLib->GetTypeInfoType(i, &tk)) &&
+			(tk == TKIND_DISPATCH || tk == TKIND_INTERFACE))
 		{
-			if ((dwResult = _AfxRecursiveRegDeleteKey(hCurrentKey,
-				szSubKeyName)) != ERROR_SUCCESS)
-				break;
-		}
+			ITypeInfo* pTypeInfo = NULL;
+			if (SUCCEEDED(pTypeLib->GetTypeInfo(i, &pTypeInfo)))
+			{
+				TYPEATTR* pTypeAttr;
+				if (SUCCEEDED(pTypeInfo->GetTypeAttr(&pTypeAttr)))
+				{
+#if defined(_UNICODE) || defined(OLE2ANSI)
+					StringFromGUID2(pTypeAttr->guid, pszGuid, GUID_CCH);
+#else
+					WCHAR wszGuid[39];
+					StringFromGUID2(pTypeAttr->guid, wszGuid, GUID_CCH);
+					_wcstombsz(pszGuid, wszGuid, GUID_CCH);
+#endif
+					_AfxRecursiveRegDeleteKey(HKEY_CLASSES_ROOT, szKey);
+					pTypeInfo->ReleaseTypeAttr(pTypeAttr);
+				}
 
-		// If all went well, we should now be able to delete the requested key
-		if ((dwResult == ERROR_NO_MORE_ITEMS) || (dwResult == ERROR_BADKEY) ||
-			(dwResult == ERROR_BADKEY_WIN16))
-		{
-			dwResult = RegDeleteKey(hParentKey, szKeyName);
+				pTypeInfo->Release();
+			}
 		}
 	}
-
-	RegCloseKey(hCurrentKey);
-	return dwResult;
 }
 
 BOOL AFXAPI AfxOleRegisterTypeLib(HINSTANCE hInstance, REFGUID tlid,
@@ -73,9 +83,10 @@ BOOL AFXAPI AfxOleRegisterTypeLib(HINSTANCE hInstance, REFGUID tlid,
 
 	BOOL bSuccess = FALSE;
 	CString strPathName;
-	::GetModuleFileName(hInstance, strPathName.GetBuffer(_MAX_PATH),
-		_MAX_PATH);
+	TCHAR *szPathName = strPathName.GetBuffer(_MAX_PATH);
+	::GetModuleFileName(hInstance, szPathName, _MAX_PATH);
 	strPathName.ReleaseBuffer();
+	LPTYPELIB ptlib = NULL;
 
 	// If a filename was specified, replace final component of path with it.
 	if (pszFileName != NULL)
@@ -86,13 +97,7 @@ BOOL AFXAPI AfxOleRegisterTypeLib(HINSTANCE hInstance, REFGUID tlid,
 		strPathName += pszFileName;
 	}
 
-	LPTYPELIB ptlib = NULL;
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(strPathName);
-	if (SUCCEEDED(LoadTypeLib((LPCWSTR)pBAfxConv, &ptlib)))
-#else    // __BORLANDC__
 	if (SUCCEEDED(LoadTypeLib(T2COLE(strPathName), &ptlib)))
-#endif   // __BORLANDC__
 	{
 		ASSERT_POINTER(ptlib, ITypeLib);
 
@@ -113,14 +118,8 @@ BOOL AFXAPI AfxOleRegisterTypeLib(HINSTANCE hInstance, REFGUID tlid,
 		if (IsEqualGUID(tlid, tlidActual))
 		{
 			// Register the type library.
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-         LPWSTR pBAfxTemp = T2OLE((LPTSTR)pszHelpDir);
-         T2OLE((LPTSTR)(LPCTSTR)strPathName);
-			if (SUCCEEDED(RegisterTypeLib(ptlib, (LPWSTR)pBAfxConv, pBAfxTemp)))
-#else    // __BORLANDC__
 			if (SUCCEEDED(RegisterTypeLib(ptlib,
 					T2OLE((LPTSTR)(LPCTSTR)strPathName), T2OLE((LPTSTR)pszHelpDir))))
-#endif   // __BORLANDC__
 				bSuccess = TRUE;
 		}
 
@@ -131,16 +130,24 @@ BOOL AFXAPI AfxOleRegisterTypeLib(HINSTANCE hInstance, REFGUID tlid,
 		TRACE1("Warning: Could not load type library from %s\n", (LPCTSTR)strPathName);
 	}
 
-
 	return bSuccess;
 }
 
 #define TYPELIBWIN   _T("win32")
 #define TYPELIBWIN_2 _T("win16")
 
-BOOL AFXAPI AfxOleUnregisterTypeLib(REFGUID tlid)
+BOOL AFXAPI AfxOleUnregisterTypeLib(REFGUID tlid, WORD wVerMajor,
+	WORD wVerMinor, LCID lcid)
 {
 	USES_CONVERSION;
+
+	// Load type library before unregistering it.
+	ITypeLib* pTypeLib = NULL;
+	if (wVerMajor != 0)
+	{
+		if (FAILED(LoadRegTypeLib(tlid, wVerMajor, wVerMinor, lcid, &pTypeLib)))
+			pTypeLib = NULL;
+	}
 
 	// Format typelib guid as a string
 	OLECHAR szTypeLibID[GUID_CCH];
@@ -154,12 +161,7 @@ BOOL AFXAPI AfxOleUnregisterTypeLib(REFGUID tlid)
 	BOOL bSurgical = FALSE;
 	LONG error = ERROR_SUCCESS;
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   OLE2CT(szTypeLibID);
-	wsprintf(szKeyTypeLib, _T("TYPELIB\\%s"), (LPCSTR)pBAfxConv);
-#else    // __BORLANDC__
 	wsprintf(szKeyTypeLib, _T("TYPELIB\\%s"), OLE2CT(szTypeLibID));
-#endif   // __BORLANDC__
 
 	HKEY hKeyTypeLib;
 	if (RegOpenKey(HKEY_CLASSES_ROOT, szKeyTypeLib, &hKeyTypeLib) ==
@@ -194,8 +196,8 @@ BOOL AFXAPI AfxOleUnregisterTypeLib(REFGUID tlid)
 				ERROR_SUCCESS)
 			{
 				// Don't remove HELPDIR or FLAGS keys.
-				if ((_tcsicmp(szLocale, _T("HELPDIR")) == 0) ||
-					(_tcsicmp(szLocale, _T("FLAGS")) == 0))
+				if ((lstrcmpi(szLocale, _T("HELPDIR")) == 0) ||
+					(lstrcmpi(szLocale, _T("FLAGS")) == 0))
 				{
 					++iKeyLocale;
 					continue;
@@ -262,22 +264,42 @@ BOOL AFXAPI AfxOleUnregisterTypeLib(REFGUID tlid)
 	if (!bSurgical)
 		error = _AfxRecursiveRegDeleteKey(HKEY_CLASSES_ROOT, szKeyTypeLib);
 
+	if (_AfxRegDeleteKeySucceeded(error))
+	{
+		// If type library was unregistered successfully, then also unregister
+		// interfaces.
+		if (pTypeLib != NULL)
+		{
+			ITypeLib* pDummy = NULL;
+			if (FAILED(LoadRegTypeLib(tlid, wVerMajor, wVerMinor, lcid, &pDummy)))
+				_AfxUnregisterInterfaces(pTypeLib);
+			else
+				pDummy->Release();
+
+			pTypeLib->Release();
+		}
+	}
+
 	return _AfxRegDeleteKeySucceeded(error);
 }
 
-static const LPCTSTR rglpszCtrlProgID[] =
+AFX_STATIC_DATA const LPCTSTR _afxCtrlProgID[] =
 {
 	_T("\0") _T("%1"),
 	_T("CLSID\0") _T("%2"),
 	NULL
 };
 
-static const LPCTSTR rglpszCtrlClassID[] =
+#define INPROCSERVER   _T("InprocServer32")
+#define INPROCSERVER_2 _T("InprocServer")
+#define TOOLBOXBITMAP  _T("ToolboxBitmap32")
+
+AFX_STATIC_DATA const LPCTSTR _afxCtrlClassID[] =
 {
 	_T("\0") _T("%1"),
 	_T("ProgID\0") _T("%2"),
-	_T("InprocServer32\0") _T("%3"),
-	_T("ToolboxBitmap32\0") _T("%3, %4"),
+	INPROCSERVER _T("\0%3"),
+	TOOLBOXBITMAP _T("\0%3, %4"),
 	_T("MiscStatus\0") _T("0"),
 	_T("MiscStatus\\1\0") _T("%5"),
 	_T("Control\0") _T(""),
@@ -336,9 +358,9 @@ BOOL AFXAPI AfxOleRegisterControlClass(HINSTANCE hInstance,
 	HKEY hkeyClassID = NULL;
 	HKEY hkeyProgID = NULL;
 
-	TCHAR szKey[_MAX_PATH];
-	wsprintf(szKey, _T("CLSID\\%s"), lpszClassID);
-	if (::RegCreateKey(HKEY_CLASSES_ROOT, szKey, &hkeyClassID) !=
+	TCHAR szScratch[_MAX_PATH];
+	wsprintf(szScratch, _T("CLSID\\%s"), lpszClassID);
+	if (::RegCreateKey(HKEY_CLASSES_ROOT, szScratch, &hkeyClassID) !=
 		ERROR_SUCCESS)
 		goto Error;
 	if (::RegCreateKey(HKEY_CLASSES_ROOT, pszProgID, &hkeyProgID) !=
@@ -351,7 +373,7 @@ BOOL AFXAPI AfxOleRegisterControlClass(HINSTANCE hInstance,
 	LPCTSTR rglpszSymbols[7];
 	rglpszSymbols[0] = strTypeName;
 	rglpszSymbols[1] = lpszClassID;
-	bSuccess = AfxOleRegisterHelper(rglpszCtrlProgID, rglpszSymbols, 2,
+	bSuccess = AfxOleRegisterHelper(_afxCtrlProgID, rglpszSymbols, 2,
 		TRUE, hkeyProgID);
 
 	if (!bSuccess)
@@ -363,7 +385,7 @@ BOOL AFXAPI AfxOleRegisterControlClass(HINSTANCE hInstance,
 	rglpszSymbols[4] = szMiscStatus;
 	rglpszSymbols[5] = OLE2CT(szTypeLibID);
 	rglpszSymbols[6] = szVersion;
-	bSuccess = AfxOleRegisterHelper(rglpszCtrlClassID, rglpszSymbols, 7,
+	bSuccess = AfxOleRegisterHelper(_afxCtrlClassID, rglpszSymbols, 7,
 		TRUE, hkeyClassID);
 
 	if (!bSuccess)
@@ -378,6 +400,21 @@ BOOL AFXAPI AfxOleRegisterControlClass(HINSTANCE hInstance,
 				ERROR_SUCCESS);
 	}
 
+	if (nRegFlags & afxRegApartmentThreading)
+	{
+		HKEY hkeyInprocServer32;
+		bSuccess = (::RegOpenKey(hkeyClassID, INPROCSERVER,
+			&hkeyInprocServer32) == ERROR_SUCCESS);
+		if (!bSuccess)
+			goto Error;
+		ASSERT(hkeyInprocServer32 != NULL);
+		static TCHAR szApartment[] = _T("Apartment");
+		bSuccess = (::RegSetValueEx(hkeyInprocServer32, _T("ThreadingModel"), 0,
+			REG_SZ, (const BYTE*)szApartment, (lstrlen(szApartment)+1) * sizeof(TCHAR)) ==
+			ERROR_SUCCESS);
+		::RegCloseKey(hkeyInprocServer32);
+	}
+
 Error:
 	if (hkeyProgID != NULL)
 		::RegCloseKey(hkeyProgID);
@@ -387,10 +424,6 @@ Error:
 
 	return bSuccess;
 }
-
-#define INPROCSERVER   _T("InprocServer32")
-#define INPROCSERVER_2 _T("InprocServer")
-#define TOOLBOXBITMAP  _T("ToolboxBitmap32")
 
 BOOL AFXAPI AfxOleUnregisterClass(REFCLSID clsid, LPCTSTR pszProgID)
 {
@@ -406,6 +439,8 @@ BOOL AFXAPI AfxOleUnregisterClass(REFCLSID clsid, LPCTSTR pszProgID)
 		return FALSE;
 
 	TCHAR szKey[_MAX_PATH];
+	long error;
+	BOOL bRetCode = TRUE;
 
 	// check to see if a 16-bit InprocServer key is found when unregistering
 	// 32-bit (or vice versa).
@@ -414,8 +449,6 @@ BOOL AFXAPI AfxOleUnregisterClass(REFCLSID clsid, LPCTSTR pszProgID)
 	BOOL bSurgical = RegOpenKey(HKEY_CLASSES_ROOT, szKey, &hkey) ==
 		ERROR_SUCCESS;
 
-	long error;
-	BOOL bRetCode = TRUE;
 	if (bSurgical)
 	{
 		// Only remove the keys specific to this version of the control,
@@ -447,10 +480,10 @@ BOOL AFXAPI AfxOleUnregisterClass(REFCLSID clsid, LPCTSTR pszProgID)
 	return bRetCode;
 }
 
-static const LPCTSTR rglpszPropPageClass[] =
+AFX_STATIC_DATA const LPCTSTR _afxPropPageClass[] =
 {
 	_T("\0") _T("%1"),
-	_T("InprocServer32\0") _T("%2"),
+	INPROCSERVER _T("\0%2"),
 	NULL
 };
 
@@ -463,8 +496,7 @@ BOOL AFXAPI AfxOleRegisterPropertyPageClass(HINSTANCE hInstance,
 BOOL AFXAPI AfxOleRegisterPropertyPageClass(HINSTANCE hInstance,
 	REFCLSID clsid, UINT idTypeName, int nRegFlags)
 {
-	ASSERT(!(nRegFlags & afxRegInsertable));	// can't be insertable
-	UNUSED(nRegFlags);
+	ASSERT(!(nRegFlags & afxRegInsertable));    // can't be insertable
 
 	USES_CONVERSION;
 
@@ -500,11 +532,26 @@ BOOL AFXAPI AfxOleRegisterPropertyPageClass(HINSTANCE hInstance,
 	LPCTSTR rglpszSymbols[2];
 	rglpszSymbols[0] = strTypeName;
 	rglpszSymbols[1] = strPathName;
-	bSuccess = AfxOleRegisterHelper(rglpszPropPageClass, rglpszSymbols,
+	bSuccess = AfxOleRegisterHelper(_afxPropPageClass, rglpszSymbols,
 		2, TRUE, hkeyClassID);
 
 	if (!bSuccess)
 		goto Error;
+
+	if (nRegFlags & afxRegApartmentThreading)
+	{
+		HKEY hkeyInprocServer32;
+		bSuccess = (::RegOpenKey(hkeyClassID, INPROCSERVER,
+			&hkeyInprocServer32) == ERROR_SUCCESS);
+		if (!bSuccess)
+			goto Error;
+		ASSERT(hkeyInprocServer32 != NULL);
+		static TCHAR szApartment[] = _T("Apartment");
+		bSuccess = (::RegSetValueEx(hkeyInprocServer32, _T("ThreadingModel"), 0,
+			REG_SZ, (const BYTE*)szApartment, (lstrlen(szApartment)+1) * sizeof(TCHAR)) ==
+			ERROR_SUCCESS);
+		::RegCloseKey(hkeyInprocServer32);
+	}
 
 Error:
 	if (hkeyClassID != NULL)

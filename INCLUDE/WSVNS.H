@@ -2,19 +2,25 @@
  *
  *   wsvns.h
  *
+ *  Copyright (C) Microsoft Corporation, 1992-1999.
+ *
  *   Windows Sockets include file for VINES IP.  This file contains all
  *   standardized VINES IP information.  Include this header file after
  *   winsock.h.
  *
  *   To open an VINES IP socket, call socket() with an address family of
- *   AF_BAN, a socket type of SOCK_DGRAM, SOCK_STREAM, or SOCK_SEQPACKET, 
+ *   AF_BAN, a socket type of SOCK_DGRAM, SOCK_STREAM, or SOCK_SEQPACKET,
  *   and protocol of 0.
  *
  ******************************************************************************/
 
 #ifndef _WSVNS_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSVNS_
-#pragma option -b
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 /*
  * Socket address, VINES IP style.  Address fields and port field are defined
@@ -35,7 +41,7 @@ typedef struct sockaddr_vns {
 #define VNSPROTO_SPP		3
 
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif _WSVNS_
 
 

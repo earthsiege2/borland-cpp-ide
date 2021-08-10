@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -39,12 +39,7 @@ COleStreamFile::COleStreamFile(LPSTREAM lpStream)
 			{
 				TCHAR szTemp[_MAX_PATH];
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-            OLE2CT(statstg.pwcsName);
-				AfxFullPath(szTemp, (LPCSTR)pBAfxConv);
-#else    // __BORLANDC__
 				AfxFullPath(szTemp, OLE2CT(statstg.pwcsName));
-#endif   // __BORLANDC__
 				CoTaskMemFree(statstg.pwcsName);
 
 				m_strStorageName = szTemp;
@@ -76,6 +71,25 @@ void COleStreamFile::Attach(LPSTREAM lpStream)
 
 	m_lpStream = lpStream;
 	m_bCloseOnDelete = FALSE;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// OLE streams helper
+
+HRESULT AFXAPI _AfxReadFromStream(LPSTREAM pStream, void* lpBuf, UINT nCount, DWORD& nRead)
+{
+	if (nCount == 0)
+	{
+		nRead = 0;
+		return S_OK;
+	}
+
+	ASSERT(AfxIsValidAddress(lpBuf, nCount));
+	ASSERT(pStream != NULL);
+
+	// read from the stream
+	SCODE sc = pStream->Read(lpBuf, nCount, &nRead);
+	return ResultFromScode(sc);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -168,14 +182,8 @@ BOOL COleStreamFile::GetStatus(CFileStatus& rStatus) const
 	if (statstg.pwcsName != NULL)
 	{
 		// name was returned -- copy and free it
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      OLE2CT(statstg.pwcsName);
-		lstrcpyn(rStatus.m_szFullName, (LPCSTR)pBAfxConv,
-			_countof(rStatus.m_szFullName));
-#else    // __BORLANDC__
 		lstrcpyn(rStatus.m_szFullName, OLE2CT(statstg.pwcsName),
 			_countof(rStatus.m_szFullName));
-#endif   // __BORLANDC__
 		CoTaskMemFree(statstg.pwcsName);
 	}
 	return TRUE;
@@ -219,14 +227,8 @@ BOOL COleStreamFile::OpenStream(LPSTORAGE lpStorage, LPCTSTR lpszStreamName,
 	ASSERT(pError == NULL ||
 		AfxIsValidAddress(pError, sizeof(CFileException)));
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(lpszStreamName);
-	SCODE sc = lpStorage->OpenStream((LPCWSTR)pBAfxConv, NULL, nOpenFlags, 0,
-		&m_lpStream);
-#else    // __BORLANDC__
 	SCODE sc = lpStorage->OpenStream(T2COLE(lpszStreamName), NULL, nOpenFlags, 0,
 		&m_lpStream);
-#endif   // __BORLANDC__
 	if (FAILED(sc) && pError != NULL)
 		_AfxFillOleFileException(pError, sc);
 
@@ -253,26 +255,15 @@ BOOL COleStreamFile::CreateStream(LPSTORAGE lpStorage, LPCTSTR lpszStreamName,
 		{
 			TCHAR szTemp[_MAX_PATH];
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-         OLE2CT(statstg.pwcsName);
-			AfxFullPath(szTemp, (LPCSTR)pBAfxConv);
-#else    // __BORLANDC__
 			AfxFullPath(szTemp, OLE2CT(statstg.pwcsName));
-#endif   // __BORLANDC__
 			CoTaskMemFree(statstg.pwcsName);
 
 			m_strStorageName = szTemp;
 		}
 	}
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   T2COLE(lpszStreamName);
-	SCODE sc = lpStorage->CreateStream((LPCWSTR)pBAfxConv, nOpenFlags,
-		0, 0, &m_lpStream);
-#else    // __BORLANDC__
 	SCODE sc = lpStorage->CreateStream(T2COLE(lpszStreamName), nOpenFlags,
 		0, 0, &m_lpStream);
-#endif   // __BORLANDC__
 
 	if (FAILED(sc) && pError != NULL)
 		_AfxFillOleFileException(pError, sc);
@@ -309,7 +300,7 @@ CFile* COleStreamFile::Duplicate() const
 		_AfxThrowOleFileException(sc);
 
 	ASSERT(lpStream != NULL);
-	COleStreamFile* pFile;
+	COleStreamFile* pFile = NULL;
 
 	TRY
 	{
@@ -382,18 +373,13 @@ UINT COleStreamFile::Read(void* lpBuf, UINT nCount)
 	ASSERT_VALID(this);
 	ASSERT(m_lpStream != NULL);
 
-	if (nCount == 0)
-		return 0;
-
-	ASSERT(AfxIsValidAddress(lpBuf, nCount));
-
-	// read from the stream
 	DWORD dwBytesRead;
-	SCODE sc = m_lpStream->Read(lpBuf, nCount, &dwBytesRead);
-	if (sc != S_OK)
-		_AfxThrowOleFileException(sc);
+	HRESULT hr = _AfxReadFromStream(m_lpStream, lpBuf, nCount, dwBytesRead);
 
-	// always return number of bytes read (will always fit in UINT)
+	if (hr != S_OK)
+		_AfxThrowOleFileException(hr);
+
+	// always return number of bytes read
 	return (UINT)dwBytesRead;
 }
 
@@ -473,13 +459,11 @@ void COleStreamFile::Flush()
 	SCODE sc = m_lpStream->Commit(0);
 	if (sc != S_OK)
 		_AfxThrowOleFileException(sc);
-
 }
 
 void COleStreamFile::Close()
 {
 	ASSERT_VALID(this);
-	ASSERT(m_lpStream != NULL);
 
 	if (m_lpStream != NULL)
 	{
@@ -489,6 +473,11 @@ void COleStreamFile::Close()
 	}
 
 	m_strStorageName.Empty();
+}
+
+IStream* COleStreamFile::GetStream() const
+{
+	return m_lpStream;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -509,6 +498,8 @@ void COleStreamFile::Dump(CDumpContext& dc) const
 	dc << "\"\n";
 }
 #endif
+
+////////////////////////////////////////////////////////////////////////////
 
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,12 +9,6 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
-
-#ifdef _MAC
-#include <macname1.h>
-#include <Processes.h>
-#include <macname2.h>
-#endif
 
 #ifdef AFX_OLE2_SEG
 #pragma code_seg(AFX_OLE2_SEG)
@@ -83,8 +77,6 @@ BOOL COleFrameHook::OnDocActivate(BOOL bActive)
 {
 	ASSERT_VALID(this);
 
-#ifndef _MAC
-
 	if (m_lpActiveObject == NULL)
 		return TRUE;
 
@@ -121,23 +113,6 @@ BOOL COleFrameHook::OnDocActivate(BOOL bActive)
 
 	// don't do default if activating
 	return bActive;
-
-#else // _MAC
-
-	if ((!bActive) && (m_pActiveItem != NULL))
-	{
-		ProcessSerialNumber psn;
-
-		m_pActiveItem->Deactivate();
-
-		psn.highLongOfPSN = 0;
-		psn.lowLongOfPSN = kCurrentProcess;
-		SetFrontProcess(&psn);
-	}
-
-	return TRUE;
-
-#endif // _MAC
 }
 
 BOOL COleFrameHook::OnContextHelp(BOOL bEnter)
@@ -153,6 +128,93 @@ BOOL COleFrameHook::OnContextHelp(BOOL bEnter)
 /////////////////////////////////////////////////////////////////////////////
 // COleFrameHook callbacks for the top-level frame
 
+BOOL COleFrameHook::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
+{
+	UNUSED_ALWAYS(nFlags);
+	UNUSED_ALWAYS(nItemID);
+
+	// if we're over a docobject item, we need to reflect messages
+
+	COleDocObjectItem* pActiveDocObjectItem = DYNAMIC_DOWNCAST(COleDocObjectItem, m_pActiveItem);
+	if (pActiveDocObjectItem != NULL)
+	{
+		CWnd* pWnd = pActiveDocObjectItem->GetInPlaceWindow();
+
+		// if we're popping up a menu, figure out what menu is
+		// apparing; if it's in the help menu and it's not the
+		// first element, it's the object's menu.
+
+		if (nFlags & MF_POPUP)
+		{
+			if (pActiveDocObjectItem->m_pHelpPopupMenu->GetSafeHmenu() ==
+					hSysMenu)
+			{
+				pActiveDocObjectItem->m_bInHelpMenu = (nItemID != 0);
+
+				if (pActiveDocObjectItem->m_bInHelpMenu && pWnd != NULL)
+				{
+					pWnd->SendMessage(WM_MENUSELECT,
+						MAKEWPARAM(nItemID, nFlags), (LPARAM) hSysMenu);
+					return TRUE;
+				}
+			}
+		}
+		else
+		{
+			if (pActiveDocObjectItem->m_bInHelpMenu && pWnd != NULL)
+			{
+				pWnd->SendMessage(WM_MENUSELECT,
+					MAKEWPARAM(nItemID, nFlags), (LPARAM) hSysMenu);
+				return TRUE;
+			}
+		}
+	}
+
+	return FALSE;
+}
+
+void COleFrameHook::OnInitMenu(CMenu* pMenu)
+{
+	UNUSED_ALWAYS(pMenu);
+
+	// reset the help menu flag when a new menu is opening
+
+	COleDocObjectItem* pActiveDocObjectItem = DYNAMIC_DOWNCAST(COleDocObjectItem, m_pActiveItem);
+	if (pActiveDocObjectItem != NULL)
+		pActiveDocObjectItem->m_bInHelpMenu = FALSE;
+
+	return;
+}
+
+BOOL COleFrameHook::OnInitMenuPopup(CMenu* pMenu, int nIndex, BOOL bSysMenu)
+{
+	UNUSED_ALWAYS(nIndex);
+
+	if (bSysMenu)
+		return FALSE;
+
+	COleDocObjectItem* pActiveDocObjectItem = DYNAMIC_DOWNCAST(COleDocObjectItem, m_pActiveItem);
+	if (pActiveDocObjectItem == NULL)
+		return FALSE;
+
+	// if we're popping up a new menu, for the object,
+	// reflect the message and don't let MFC handle it
+	// with ON_COMMAND_UI stuff
+
+	if (pActiveDocObjectItem->m_bInHelpMenu)
+	{
+		CWnd* pWnd = pActiveDocObjectItem->GetInPlaceWindow();
+		if (pWnd != NULL)
+		{
+			pWnd->SendMessage(WM_INITMENUPOPUP, (WPARAM) pMenu->m_hMenu,
+				MAKELPARAM(nIndex, bSysMenu));
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 BOOL COleFrameHook::OnPreTranslateMessage(MSG* pMsg)
 {
 	ASSERT_VALID(this);
@@ -164,6 +226,25 @@ BOOL COleFrameHook::OnPreTranslateMessage(MSG* pMsg)
 	if (pMsg->message >= WM_KEYFIRST && pMsg->message <= WM_KEYLAST)
 		return m_lpActiveObject->TranslateAccelerator(pMsg) == S_OK;
 
+	// if we've finally gotten a WM_COMMAND message, make sure
+	// that it is appropriately reflected to the docobject
+
+	if (pMsg->message == WM_COMMAND)
+	{
+		COleDocObjectItem* pActiveDocObjectItem = DYNAMIC_DOWNCAST(COleDocObjectItem, m_pActiveItem);
+		if (pActiveDocObjectItem != NULL)
+		{
+			LRESULT lResult = 0;
+			if (pActiveDocObjectItem->m_bInHelpMenu)
+			{
+				CWnd* pWnd = pActiveDocObjectItem->GetInPlaceWindow();
+				if (pWnd != NULL)
+					lResult = pWnd->SendMessage(WM_COMMAND, pMsg->wParam, pMsg->lParam);
+			}
+			return lResult;
+		}
+	}
+
 	return FALSE;
 }
 
@@ -173,13 +254,6 @@ void COleFrameHook::OnActivate(BOOL bActive)
 
 	if (m_lpActiveObject == NULL || m_pActiveItem->m_pInPlaceFrame != this)
 		return;
-
-#ifdef _MAC
-	if(bActive)
-	{
-		afxData.bOleIgnoreSuspend = TRUE;
-	}
-#endif
 
 	if (m_pFrameWnd->IsWindowEnabled())
 	{
@@ -330,10 +404,19 @@ BOOL COleClientItem::CanActivate()
 		CView* pView = pOleState->m_pActivateView;
 		if (pView == NULL)
 		{
-			// no routing view available - just use first one
-			COleDocument* pDoc = GetDocument();
-			POSITION pos = pDoc->GetFirstViewPosition();
-			pView = pDoc->GetNextView(pos);
+			// no routing view available - try to use the one with focus
+			CWnd* pWnd = CWnd::GetFocus();
+			while (pWnd != NULL && !pWnd->IsKindOf(RUNTIME_CLASS(CView)))
+				pWnd = pWnd->GetParent();
+			pView = STATIC_DOWNCAST(CView, pWnd);
+
+			if (pView == NULL)
+			{
+				// still no routing view available - just use first one
+				COleDocument* pDoc = GetDocument();
+				POSITION pos = pDoc->GetFirstViewPosition();
+				pView = pDoc->GetNextView(pos);
+			}
 		}
 		m_pView = pView;
 	}
@@ -543,7 +626,6 @@ void COleClientItem::OnDeactivateUI(BOOL /*bUndoable*/)
 	{
 		OnShowControlBars(m_pInPlaceFrame->m_pFrameWnd, TRUE);
 
-#ifndef _MAC
 		// release OLE frame window hooks and allow menu update
 		::OleSetMenuDescriptor(NULL, m_pInPlaceFrame->m_pFrameWnd->m_hWnd,
 			NULL, NULL, NULL);
@@ -552,7 +634,6 @@ void COleClientItem::OnDeactivateUI(BOOL /*bUndoable*/)
 			::OleSetMenuDescriptor(NULL, m_pInPlaceDoc->m_pFrameWnd->m_hWnd,
 				NULL, NULL, NULL);
 		}
-#endif
 		m_pInPlaceFrame->m_pFrameWnd->DelayUpdateFrameMenu(NULL);
 
 		// unhook from frame window
@@ -683,8 +764,7 @@ void COleClientItem::OnInsertMenus(CMenu* pMenuShared,
 		return;
 
 	// insert our menu items and adjust group widths array
-	AfxMergeMenus(pMenuShared, CMenu::FromHandle(hMenuOLE),
-		&lpMenuWidths->width[0], 0);
+	AfxMergeMenus(pMenuShared->GetSafeHmenu(), hMenuOLE, &lpMenuWidths->width[0], 0);
 }
 
 void COleClientItem::OnSetMenu(CMenu* pMenuShared, HOLEMENU holemenu,
@@ -706,7 +786,6 @@ void COleClientItem::OnSetMenu(CMenu* pMenuShared, HOLEMENU holemenu,
 	// update the menu
 	pFrameWnd->DelayUpdateFrameMenu(pMenuShared->GetSafeHmenu());
 
-#ifndef _MAC
 	// enable/disable the OLE command routing hook
 	::OleSetMenuDescriptor(holemenu, pFrameWnd->m_hWnd,
 		hwndActiveObject, NULL, NULL);
@@ -717,10 +796,6 @@ void COleClientItem::OnSetMenu(CMenu* pMenuShared, HOLEMENU holemenu,
 		::OleSetMenuDescriptor(holemenu, pFrameWnd->m_hWnd,
 			hwndActiveObject, NULL, NULL);
 	}
-#else
-	holemenu;
-	hwndActiveObject;
-#endif
 }
 
 void COleClientItem::OnRemoveMenus(CMenu* pMenuShared)
@@ -735,7 +810,7 @@ void COleClientItem::OnRemoveMenus(CMenu* pMenuShared)
 		return;
 
 	// remove any menu popups originally added in OnInsertMenus
-	AfxUnmergeMenus(pMenuShared, CMenu::FromHandle(hMenuOLE));
+	AfxUnmergeMenus(pMenuShared->GetSafeHmenu(), hMenuOLE);
 }
 
 BOOL COleClientItem::OnUpdateFrameTitle()
@@ -796,7 +871,8 @@ void COleClientItem::DeactivateUI()
 		Close();    // handle rare failure cases by calling Close
 		return;
 	}
-	m_nItemState = activeState; // just in case server has crashed
+	if (m_nItemState == activeUIState)
+		m_nItemState = activeState; // just in case server has crashed
 }
 
 BOOL COleClientItem::SetItemRects(LPCRECT lpPosRect, LPCRECT lpClipRect)
@@ -895,7 +971,81 @@ BEGIN_INTERFACE_MAP(COleFrameHook, CCmdTarget)
 	INTERFACE_PART(COleFrameHook, IID_IOleWindow, OleInPlaceFrame)
 	INTERFACE_PART(COleFrameHook, IID_IOleInPlaceUIWindow, OleInPlaceFrame)
 	INTERFACE_PART(COleFrameHook, IID_IOleInPlaceFrame, OleInPlaceFrame)
+#ifndef _AFXDLL
+	INTERFACE_PART(COleFrameHook, IID_IOleCommandTarget, OleCommandTarget)
+#endif
 END_INTERFACE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// COleFrameHook::XOleCommandTarget implementation
+
+#ifdef _AFXDLL
+LPUNKNOWN COleFrameHook::GetInterfaceHook(const void* pIID)
+{
+	ASSERT(m_pModuleState != NULL);
+	if (m_pModuleState->m_dwVersion >= 0x423 &&
+		*(IID*)pIID == IID_IOleCommandTarget)
+	{
+		return &m_xOleCommandTarget;
+	}
+	return NULL;
+}
+#endif
+
+STDMETHODIMP_(ULONG) COleFrameHook::XOleCommandTarget::AddRef()
+{
+	METHOD_PROLOGUE_EX_(COleFrameHook, OleCommandTarget)
+	return pThis->ExternalAddRef();
+}
+
+STDMETHODIMP_(ULONG) COleFrameHook::XOleCommandTarget::Release()
+{
+	METHOD_PROLOGUE_EX_(COleFrameHook, OleCommandTarget)
+	return pThis->ExternalRelease();
+}
+
+STDMETHODIMP COleFrameHook::XOleCommandTarget::QueryInterface(
+	REFIID iid, LPVOID* ppvObj)
+{
+	METHOD_PROLOGUE_EX_(COleFrameHook, OleCommandTarget)
+	return pThis->ExternalQueryInterface(&iid, ppvObj);
+}
+
+STDMETHODIMP COleFrameHook::XOleCommandTarget::Exec(
+   const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt,
+   VARIANTARG* pvarargIn, VARIANTARG* pvarargOut)
+{
+	HRESULT hResult = OLECMDERR_E_UNKNOWNGROUP;
+	METHOD_PROLOGUE_EX_(COleFrameHook, OleCommandTarget)
+
+	COleDocObjectItem* pActiveDocObjectItem =
+		DYNAMIC_DOWNCAST(COleDocObjectItem, pThis->m_pActiveItem);
+	if (pActiveDocObjectItem != NULL)
+	{
+		hResult = _AfxExecOleCommandHelper(pActiveDocObjectItem,
+			pguidCmdGroup, nCmdID, nCmdExecOpt, pvarargIn, pvarargOut);
+	}
+
+	return hResult;
+}
+
+STDMETHODIMP COleFrameHook::XOleCommandTarget::QueryStatus(
+   const GUID* pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[],
+   OLECMDTEXT* pcmdtext)
+{
+	HRESULT hResult = OLECMDERR_E_UNKNOWNGROUP;
+	METHOD_PROLOGUE_EX_(COleFrameHook, OleCommandTarget)
+
+	COleDocObjectItem* pActiveDocObjectItem =
+		DYNAMIC_DOWNCAST(COleDocObjectItem, pThis->m_pActiveItem);
+	if (pActiveDocObjectItem != NULL)
+	{
+		hResult = _AfxQueryStatusOleCommandHelper(pActiveDocObjectItem,
+		   pguidCmdGroup, cCmds, rgCmds, pcmdtext);
+	}
+
+	return hResult;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // COleFrameHook::XOleInPlaceFrame implementation
@@ -979,15 +1129,7 @@ STDMETHODIMP COleFrameHook::XOleInPlaceFrame::GetBorder(LPRECT lpRectBorder)
 
 	// determine border space assuming that we'll remove our control bars
 	CRect rectSave = pFrameWnd->m_rectBorder;
-#ifndef _MAC
 	pFrameWnd->NegotiateBorderSpace(CFrameWnd::borderSet, NULL);
-#else
-	if (pFrameWnd->GetActiveView()->GetParentFrame() != pFrameWnd)
-	{
-		// MDI only
-		pFrameWnd->NegotiateBorderSpace(CFrameWnd::borderSet, NULL);
-	}
-#endif
 	pFrameWnd->NegotiateBorderSpace(CFrameWnd::borderGet, lpRectBorder);
 	pFrameWnd->NegotiateBorderSpace(CFrameWnd::borderSet, &rectSave);
 
@@ -1028,6 +1170,7 @@ STDMETHODIMP COleFrameHook::XOleInPlaceFrame::SetBorderSpace(
 		CFrameWnd::borderSet, (LPRECT)lpRectWidths))
 	{
 		pFrameWnd->DelayRecalcLayout(FALSE);
+		pFrameWnd->PostMessage(WM_KICKIDLE);
 	}
 	pThis->m_pActiveItem->OnShowControlBars(pFrameWnd, lpRectWidths == NULL);
 
@@ -1135,14 +1278,8 @@ STDMETHODIMP COleFrameHook::XOleInPlaceFrame::SetStatusText(
 	METHOD_PROLOGUE_EX_(COleFrameHook, OleInPlaceFrame)
 	USES_CONVERSION;
 
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-   OLE2CT(lpszStatusText);
-	pThis->m_pFrameWnd->SendMessage(WM_SETMESSAGESTRING, 0,
-		(LPARAM)pBAfxConv);
-#else    // __BORLANDC__
 	pThis->m_pFrameWnd->SendMessage(WM_SETMESSAGESTRING, 0,
 		(LPARAM)OLE2CT(lpszStatusText));
-#endif   // __BORLANDC__
 
 	return S_OK;
 }

@@ -1,0 +1,24 @@
+LIBRARY ICM32
+EXPORTS
+
+    CMCheckColors                            = 'ICM32.DLL'.* @1 @0
+    CMCheckColorsInGamut                     = 'ICM32.DLL'.* @2 @1
+    CMCheckRGBs                              = 'ICM32.DLL'.* @3 @2
+    CMConvertColorNameToIndex                = 'ICM32.DLL'.* @19 @18
+    CMConvertIndexToColorName                = 'ICM32.DLL'.* @20 @19
+    CMCreateDeviceLinkProfile                = 'ICM32.DLL'.* @4 @3
+    CMCreateMultiProfileTransform            = 'ICM32.DLL'.* @5 @4
+    CMCreateProfile                          = 'ICM32.DLL'.* @6 @5
+    CMCreateProfileW                         = 'ICM32.DLL'.* @7 @6
+    CMCreateTransform                        = 'ICM32.DLL'.* @8 @7
+    CMCreateTransformExt                     = 'ICM32.DLL'.* @9 @8
+    CMCreateTransformExtW                    = 'ICM32.DLL'.* @10 @9
+    CMCreateTransformW                       = 'ICM32.DLL'.* @11 @10
+    CMDeleteTransform                        = 'ICM32.DLL'.* @12 @11
+    CMGetInfo                                = 'ICM32.DLL'.* @13 @12
+    CMGetNamedProfileInfo                    = 'ICM32.DLL'.* @21 @20
+    CMIsProfileValid                         = 'ICM32.DLL'.* @14 @13
+    CMTranslateColors                        = 'ICM32.DLL'.* @15 @14
+    CMTranslateRGB                           = 'ICM32.DLL'.* @16 @15
+    CMTranslateRGBs                          = 'ICM32.DLL'.* @17 @16
+    CMTranslateRGBsExt                       = 'ICM32.DLL'.* @18 @17

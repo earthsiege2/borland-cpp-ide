@@ -1,0 +1,17 @@
+USEUNIT("collect.cpp");
+USEUNIT("colledoc.cpp");
+USEUNIT("collevw.cpp");
+USEUNIT("dwarryvw.cpp");
+USEUNIT("intlstvw.cpp");
+USEUNIT("mainfrm.cpp");
+USEUNIT("mapdwvw.cpp");
+USEUNIT("mapssvw.cpp");
+USEUNIT("ptarryvw.cpp");
+USEUNIT("strlstvw.cpp");
+USEUNIT("typaryvw.cpp");
+USEUNIT("typlstvw.cpp");
+USEUNIT("typtrmap.cpp");
+USEUNIT("stdafx.cpp");
+USERC("collect.rc");
+
+#define WinMain

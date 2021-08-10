@@ -1,0 +1,7 @@
+LIBRARY HEXEDIT
+EXPORTS
+
+;    DLLEntry                                 = 'HEXEDIT.DLL'.*
+    HexEditClass_Register                    = 'HEXEDIT.DLL'.*
+    HexEditClass_UnRegister                  = 'HEXEDIT.DLL'.*
+    HexEditClass_WndProc                     = 'HEXEDIT.DLL'.*

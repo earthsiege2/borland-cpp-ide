@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -99,7 +99,7 @@ BOOL COleDataObject::GetNextFormat(LPFORMATETC lpFormatEtc)
 	ASSERT(m_bClipboard || m_lpDataObject != NULL);
 	ASSERT(AfxIsValidAddress(lpFormatEtc, sizeof(FORMATETC), FALSE));
 
-	// return false if enumerator is already NULL
+	// return FALSE if enumerator is already NULL
 	if (m_lpEnumerator == NULL)
 		return FALSE;
 

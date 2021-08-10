@@ -7,13 +7,14 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.2  $ */
+
+/* $Revision:   9.3  $ */
 
 #ifndef __DIRECT_H
 #define __DIRECT_H
@@ -39,20 +40,14 @@ extern "C" {
 
 /* Prototypes for MSC functions */
 
-#if !defined(__FLAT__)
-
-int    _Cdecl _chdrive(int __drive);
-char _FAR * _Cdecl _FARFUNC _getdcwd(int __drive, char _FAR *__buf, int __len);
-int    _Cdecl _getdrive(void);
-
-#else   /* defined __FLAT__ */
-
 int    _RTLENTRY _EXPFUNC _chdrive(int __drive);
 char * _RTLENTRY _EXPFUNC _getdcwd(int __drive, char * __buf, int __len);
-int    _RTLENTRY _EXPFUNC _getdrive(void);
 
 wchar_t * _RTLENTRY _EXPFUNC _wgetdcwd(int __drive, wchar_t * __buf, int __len);
-#endif /* __FLAT__ */
+
+unsigned long _RTLENTRY _EXPFUNC _getdrives(void);
+
+
 
 #ifdef __cplusplus
 }

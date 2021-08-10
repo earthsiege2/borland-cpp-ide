@@ -1,6 +1,0 @@
-library WIN87EM
-exports
-  __FPMATH @1
-  __WIN87EMINFO @3
-  __WIN87EMRESTORE @4
-  __WIN87EMSAVE @5

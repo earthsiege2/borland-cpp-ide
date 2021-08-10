@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -111,7 +111,6 @@ int CFontDialog::DoModal()
 
 void CFontDialog::GetCurrentFont(LPLOGFONT lplf)
 {
-	ASSERT(m_hWnd != NULL);
 	ASSERT(lplf != NULL);
 
 	if (m_hWnd != NULL)
@@ -177,12 +176,7 @@ DWORD CFontDialog::FillInLogFont(const CHARFORMAT& cf)
 	if (cf.dwMask & CFM_FACE)
 	{
 		m_lf.lfPitchAndFamily = cf.bPitchAndFamily;
-#if defined(__BORLANDC__) && defined(_UNICODE)
-      A2T(cf.szFaceName);
-		_tcscpy(m_lf.lfFaceName, (LPCSTR)pBAfxConv);
-#else
-		_tcscpy(m_lf.lfFaceName, A2T(cf.szFaceName));
-#endif
+		lstrcpy(m_lf.lfFaceName, A2T((LPSTR)cf.szFaceName));
 	}
 	else
 	{
@@ -214,12 +208,7 @@ void CFontDialog::GetCharFormat(CHARFORMAT& cf) const
 	{
 		cf.dwMask |= CFM_FACE;
 		cf.bPitchAndFamily = m_cf.lpLogFont->lfPitchAndFamily;
-#if defined(__BORLANDC__) && defined(_UNICODE)
-      T2A(GetFaceName());
-		strcpy(cf.szFaceName, (LPCSTR)pBAfxConv);
-#else    // __BORLANDC__
-		strcpy(cf.szFaceName, T2A(GetFaceName()));
-#endif   // __BORLANDC__
+		lstrcpyA(cf.szFaceName, T2A((LPTSTR)(LPCTSTR)GetFaceName()));
 	}
 
 	if (m_cf.Flags & CF_EFFECTS)

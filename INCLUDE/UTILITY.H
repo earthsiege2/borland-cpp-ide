@@ -1,12 +1,13 @@
+#ifndef __UTILITY_H
+#define __UTILITY_H
+#pragma option push -b -a8 -pc -Vx- -Ve- -w-inl -w-aus -w-sig
+// -*- C++ -*-
 #ifndef __STD_UTILITY__
 #define __STD_UTILITY__
-/* $Revision:   8.1  $ */
 
 /***************************************************************************
  *
  * utility - Declarations for the Standard Library utility classes
- *
- * $Id: utility,v 1.15 1995/08/15 00:07:49 smithey Exp $
  *
  ***************************************************************************
  *
@@ -24,113 +25,153 @@
  *
  ***************************************************************************
  *
- * (c) Copyright 1994, 1995 Rogue Wave Software, Inc.
- * ALL RIGHTS RESERVED
+ * Copyright (c) 1994-1999 Rogue Wave Software, Inc.  All Rights Reserved.
  *
- * The software and information contained herein are proprietary to, and
- * comprise valuable trade secrets of, Rogue Wave Software, Inc., which
- * intends to preserve as trade secrets such software and information.
- * This software is furnished pursuant to a written license agreement and
- * may be used, copied, transmitted, and stored only in accordance with
- * the terms of such license and with the inclusion of the above copyright
- * notice.  This software and information or any other copies thereof may
- * not be provided or otherwise made available to any other person.
+ * This computer software is owned by Rogue Wave Software, Inc. and is
+ * protected by U.S. copyright laws and other laws and by international
+ * treaties.  This computer software is furnished by Rogue Wave Software,
+ * Inc. pursuant to a written license agreement and may be used, copied,
+ * transmitted, and stored only in accordance with the terms of such
+ * license and with the inclusion of the above copyright notice.  This
+ * computer software or any other copies thereof may not be provided or
+ * otherwise made available to any other person.
  *
- * Notwithstanding any other lease or license that may pertain to, or
- * accompany the delivery of, this computer software and information, the
- * rights of the Government regarding its use, reproduction and disclosure
- * are as set forth in Section 52.227-19 of the FARS Computer
- * Software-Restricted Rights clause.
- *
- * Use, duplication, or disclosure by the Government is subject to
- * restrictions as set forth in subparagraph (c)(1)(ii) of the Rights in
- * Technical Data and Computer Software clause at DFARS 252.227-7013.
- * Contractor/Manufacturer is Rogue Wave Software, Inc.,
- * P.O. Box 2328, Corvallis, Oregon 97339.
- *
- * This computer software and information is distributed with "restricted
- * rights."  Use, duplication or disclosure is subject to restrictions as
- * set forth in NASA FAR SUP 18-52.227-79 (April 1985) "Commercial
- * Computer Software-Restricted Rights (April 1985)."  If the Clause at
- * 18-52.227-74 "Rights in Data General" is specified in the contract,
- * then the "Alternate III" clause applies.
+ * U.S. Government Restricted Rights.  This computer software is provided
+ * with Restricted Rights.  Use, duplication, or disclosure by the
+ * Government is subject to restrictions as set forth in subparagraph (c)
+ * (1) (ii) of The Rights in Technical Data and Computer Software clause
+ * at DFARS 252.227-7013 or subparagraphs (c) (1) and (2) of the
+ * Commercial Computer Software – Restricted Rights at 48 CFR 52.227-19,
+ * as applicable.  Manufacturer is Rogue Wave Software, Inc., 5500
+ * Flatiron Parkway, Boulder, Colorado 80301 USA.
  *
  **************************************************************************/
 
 #include <stdcomp.h>
 
-#ifndef RWSTD_NO_NAMESPACE
+#ifndef _RWSTD_NO_NAMESPACE
 namespace std {
+#endif
+
+#ifndef _RWSTD_NO_NAMESPACE
+  namespace rel_ops {
 #endif
 
 //
 // Operators
 //
 
-template <class T>
-inline bool operator!=(const T& x, const T& y)
-{
-    return !(x == y);
-}
+    template <class T>
+    inline bool operator!=(const T& x, const T& y)
+    {
+      return !(x == y);
+    }
 
-template <class T>
-inline bool operator>(const T& x, const T& y)
-{
-    return y < x;
-}
+    template <class T>
+    inline bool operator>(const T& x, const T& y)
+    {
+      return y < x;
+    }
 
-template <class T>
-inline bool operator<=(const T& x, const T& y)
-{
-    return !(y < x);
-}
+    template <class T>
+    inline bool operator<=(const T& x, const T& y)
+    {
+      return !(y < x);
+    }
 
-template <class T>
-inline bool operator>=(const T& x, const T& y)
-{
-    return !(x < y);
-}
+    template <class T>
+    inline bool operator>=(const T& x, const T& y)
+    {
+      return !(x < y);
+    }
+
+#ifndef _RWSTD_NO_NAMESPACE
+  } /* End of namespace rel_ops */
+#endif
 
 //
 // Pairs.
 //
 
-template <class T1, class T2>
-struct pair
-{
+  template <class T1, class T2>
+  struct pair
+  {
+    typedef T1 first_type;
+    typedef T2 second_type;
+
     T1 first;
     T2 second;
     pair (const T1& a, const T2& b) : first(a), second(b) {}
-#ifdef RWSTD_NO_MEMBER_WO_DEF_CTOR
-    pair ()
-#ifndef RWSTD_NO_BUILT_IN_CTOR
-: first(T1()), second(T2())
+    pair () 
+#ifndef _RWSTD_NO_BUILT_IN_CTOR
+      : first(T1()), second(T2()) 
 #endif
     { ; }
+
+    pair(const pair& p) 
+      : first(p.first), second(p.second)
+    { ; }
+#ifndef _RWSTD_NO_MEMBER_TEMPLATES
+    template <class U, class V> pair(const pair<U,V>& p) 
+      : first(p.first), second(p.second)
+    { ; }
 #endif
-    ~pair () {;} // To avoid xlC warnings when destroy is called.
-};
 
-template <class T1, class T2>
-inline bool operator==(const pair<T1, T2>& x, const pair<T1, T2>& y)
-{
-    return x.first == y.first && x.second == y.second;
-}
+  };
 
-template <class T1, class T2>
-inline bool operator<(const pair<T1, T2>& x, const pair<T1, T2>& y)
-{
-    return x.first < y.first || (!(y.first < x.first) && x.second < y.second);
-}
+  template <class T1, class T2>
+  inline bool operator==(const pair<T1, T2>& x, const pair<T1, T2>& y)
+  { 
+    return x.first == y.first && x.second == y.second; 
+  }
 
-template <class T1, class T2>
-inline pair<T1, T2> make_pair(const T1& x, const T2& y)
-{
+  template <class T1, class T2>
+  inline bool operator<(const pair<T1, T2>& x, const pair<T1, T2>& y)
+  { 
+    return x.first < y.first || (!(y.first < x.first) && x.second < y.second); 
+  }
+
+#ifndef _RWSTD_NO_NAMESPACE
+  template <class T1, class T2>
+  inline bool operator!=(const pair<T1, T2>& x, const pair<T1, T2>& y)
+  { 
+    return !(x == y);
+  }
+
+  template <class T1, class T2>
+  inline bool operator>(const pair<T1, T2>& x, const pair<T1, T2>& y)
+  { 
+    return y < x;
+  }
+
+  template <class T1, class T2>
+  inline bool operator>=(const pair<T1, T2>& x, const pair<T1, T2>& y)
+  { 
+    return !(x < y);
+  }
+
+  template <class T1, class T2>
+  inline bool operator<=(const pair<T1, T2>& x, const pair<T1, T2>& y)
+  { 
+    return !(y < x);
+  }
+#endif
+
+  template <class T1, class T2>
+  inline pair<T1, T2> make_pair(const T1& x, const T2& y)
+  {
     return pair<T1, T2>(x, y);
-}
+  }
 
-#ifndef RWSTD_NO_NAMESPACE
+#ifndef _RWSTD_NO_NAMESPACE
 }
 #endif
 
 #endif /*__STD_UTILITY__*/
+
+#ifndef __USING_STD_NAMES__
+  using namespace std;
+#endif
+
+#pragma option pop
+#endif /* __UTILITY_H */

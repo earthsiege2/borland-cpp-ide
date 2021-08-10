@@ -1,0 +1,4 @@
+LIBRARY ACLCLS
+EXPORTS
+
+    HrFolderACLsOpen                         = 'ACLCLS.DLL'.*

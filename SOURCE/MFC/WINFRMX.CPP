@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -263,7 +263,7 @@ HWND CFrameWnd::SetHelpCapture(POINT point, BOOL* pbDescendant)
 	return hWndHit;
 }
 
-static DWORD AFXAPI MapClientArea(HWND hWnd, POINT point)
+AFX_STATIC DWORD AFXAPI _AfxMapClientArea(HWND hWnd, POINT point)
 {
 	DWORD dwContext;
 
@@ -288,11 +288,11 @@ static DWORD AFXAPI MapClientArea(HWND hWnd, POINT point)
 	return dwContext == 0 ? -1 : dwContext;
 }
 
-static DWORD AFXAPI MapNonClientArea(int iHit)
+AFX_STATIC DWORD AFXAPI _AfxMapNonClientArea(int iHit)
 {
 	ASSERT(iHit != HTCLIENT);
 
-	if (iHit < 0 || iHit > HTBORDER)
+	if (iHit < 0 || iHit > HTHELP)
 		return (DWORD)-1;
 
 	return HID_BASE_NCAREAS+iHit;
@@ -341,13 +341,13 @@ BOOL CFrameWnd::ProcessHelpMsg(MSG& msg, DWORD* pContext)
 			}
 			else if (iHit == HTCLIENT)
 			{
-				*pContext = MapClientArea(hWndHit, msg.pt);
+				*pContext = _AfxMapClientArea(hWndHit, msg.pt);
 				PeekMessage(&msg, NULL, msg.message, msg.message, PM_REMOVE);
 				return FALSE;
 			}
 			else
 			{
-				*pContext = MapNonClientArea(iHit);
+				*pContext = _AfxMapNonClientArea(iHit);
 				PeekMessage(&msg, NULL, msg.message, msg.message, PM_REMOVE);
 				return FALSE;
 			}

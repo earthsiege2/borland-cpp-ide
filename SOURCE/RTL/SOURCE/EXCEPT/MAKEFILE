@@ -1,5 +1,5 @@
 #############################################################################
-#
+#                                                                           #
 # The make process relies on the creation of DLL and library response file  #
 # creation.  To control the location of object modules the following should #
 # be defined:                                                               #
@@ -14,61 +14,47 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
+# $Revision:   9.7  $                                                                #
+#                                                                           #
 #############################################################################
-
-#############################################################################
-# In order to build the object module lists for 16 bit platforms, a         #
-# definition of MODEL is required.                                          #
-#############################################################################
-!if ($(OS) == DOS || $(OS) == WIN16) && !$d(MODEL)
-!    error MODEL is required
-!endif
 
 #############################################################################
 # Build the object module lists.                                            #
 #############################################################################
-!if $(MODEL) != t || !$d(MODEL)
-    OBJS =               \
-            xalloc.obj   \
-            xmsg.obj     \
-            xx.obj
+OBJS =               \
+        xx.obj       \
+        xxa.obj      \
+        xx_xpf.obj   \
+        xxtype.obj   \
+        xxut.obj     \
+        xxv.obj      \
+        defhandl.obj \
+        dtrcount.obj \
+        except.obj   \
+        lockdbg.obj  \
+        setexc.obj   \
+        ta.obj       \
+        xmsg.obj
 
-!   if $(OS) != DOS && $(OS) != WIN16
-        OBJS =  $(OBJS) \
-                xxa.obj \
-                xxv.obj
+IMPOBJS =            \
+        xxv.obj      \
+	xxa.obj
 
-        IMPOBJS =       \
-                xxa.obj \
-                xxv.obj
+!if $d(MAGIC)
+IMPOBJS_P_ONLY =     \
+        xx_xpf.obj
 
-        MISC = noxx.obj
-!   else
-!       if !$d(DLL) && $(MODEL) != t
-            MISC = noxx.obj
-!       endif
+IMPOBJS_W_ONLY =     \
+        xx_w.obj
 
-        AUXOBJS =       \
-                xxa.obj \
-                xxv.obj
+!else
+IMPOBJS = $(IMPOBJS) \
+        xx_w.obj
 
-!       if $d(DLL)
-            IMPOBJS = $(AUXOBJS)
-!       else
-            OBJS    = $(AUXOBJS) $(OBJS)
-!       endif
-!   endif
-
-!   if $(OS) != WIN16
-        OBJS =  $(OBJS)      \
-                dtrcount.obj
-!   endif
 !endif
 
-!   if $(OS) == WIN32
-        OBJS =  $(OBJS)      \
-                lockdbg.obj
-!   endif
+MISC =  noxx.obj
+
 
 #############################################################################
 # Configure the environment appropriately.                                  #
@@ -79,23 +65,4 @@ TASMCFG = 1        # Force tasm.cfg creation
 #############################################################################
 # Miscellaneous explicit rules.                                             #
 #############################################################################
-!if $(OS) == WIN16
-
-!if $(MODEL) == c
-xalloc.obj: xalloc.cpp
-        $(CC) -m$(MODEL) -WDE -n$(OBJDIR) $?
-
-xmsg.obj: xmsg.cpp
-        $(CC) -m$(MODEL) -WDE -n$(OBJDIR) $?
-!elif $(MODEL) == l
-xalloc.obj: xalloc.cpp
-        $(CC) -m$(MODEL) -WDE -n$(OBJDIR) -zC_TEXTB $?
-
-xmsg.obj: xmsg.cpp
-        $(CC) -m$(MODEL) -WDE -n$(OBJDIR) -zC_TEXTB $?
-
-!endif
-!endif
-
-
 

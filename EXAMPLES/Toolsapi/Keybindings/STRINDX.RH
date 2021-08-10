@@ -1,0 +1,10 @@
+//------------------------------------------------------------------------------
+  #define sBufferList 0
+  #define sNewIDEClassic 5
+  #define sBlockCopied 10
+  #define sBlockMoved 15
+  #define sBlockDeleted 20
+  #define sLiteralKeyInserted 25
+  #define sInsertLiteralChar 30
+  #define sNoBlockMarked 35
+//------------------------------------------------------------------------------

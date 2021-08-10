@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="empx.ocx"/>
+    <OBJFILES value="empx.obj EmpEdImp.obj EmpX_ATL.obj EmpX_TLB.obj RECERROR.obj"/>
+    <RESFILES value="EmpX.res EmpX.tlb"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) EmpEdImp.dfm RECERROR.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="vclnp50.lib inet50.lib vclmid50.lib vcldb50.lib vcl50.lib"/>
+    <SPARELIBS value="vcl50.lib vcldb50.lib vclmid50.lib inet50.lib"/>
+    <PACKAGES value=""/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT;USING_ATLVCL;_ATL_NO_SECURITY;_ATL_BOTH_THREADED"/>
+    <MAINSOURCE value="empx.cpp"/>
+    <INCLUDEPATH value="..\..\..\OBJREPOS;$(BCB)\objrepos;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\include\atl"/>
+    <LIBPATH value="..\..\..\OBJREPOS;$(BCB)\objrepos;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-8026 -w-8027 -w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I..\..\..\OBJREPOS -I$(BCB)\objrepos -I$(BCB)\include 
+      -I$(BCB)\include\vcl -I$(BCB)\include\atl -src_suffixcpp"/>
+    <CFLAG1 value="-WD -Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a1 -k -y -v -vi- -c -b- -tW"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHN -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-aa -Tpd -x -Gn -Gi -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0d32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[Deployment]
+DeployDir=
+DeployURL=
+HTMLDir=
+CABCompress=0
+CodeSign=0
+IncludeVerInfo=0
+AutoIncRelease=0
+DeployPackages=0
+DeployFiles=0
+CompanyURL=
+Description=
+CredFile=
+PrivKey=
+CryptoType=0
+Timestamping=0
+TimestampServer=
+
+[HistoryLists\hlIncludePath]
+Count=0
+
+[HistoryLists\hlLibraryPath]
+Count=0
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=2
+Item0=_ATL_APARTMENT_THREADED;USING_ATLVCL;_ATL_NO_SECURITY;USEPACKAGES
+Item1=_RTLDLL;USEPACKAGES;_ATL_APARTMENT_THREADED;USING_ATLVCL;_ATL_NO_SECURITY
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+InMemoryExe=0
+ShowInfoMsgs=0
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

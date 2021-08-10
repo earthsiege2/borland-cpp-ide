@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -21,7 +21,6 @@ _AFXEXT_INLINE BOOL CMetaFileDC::Create(LPCTSTR lpszFilename)
 	{ return Attach(::CreateMetaFile(lpszFilename)); }
 _AFXEXT_INLINE HMETAFILE CMetaFileDC::Close()
 	{ return ::CloseMetaFile(Detach()); }
-#ifndef _MAC
 _AFXEXT_INLINE BOOL CMetaFileDC::CreateEnhanced(CDC* pDCRef,
 		LPCTSTR lpszFileName, LPCRECT lpBounds, LPCTSTR lpszDescription)
 	{ return Attach(::CreateEnhMetaFile(pDCRef->GetSafeHdc(),
@@ -47,7 +46,6 @@ _AFXEXT_INLINE int CMetaFileDC::DrawText(const CString& str, LPRECT lpRect, UINT
 		return DrawText((LPCTSTR)str, str.GetLength(), lpRect, nFormat); }
 _AFXEXT_INLINE BOOL CMetaFileDC::PtVisible(POINT point) const
 	{ ASSERT(m_hDC != NULL); return PtVisible(point.x, point.y); }
-#endif
 
 // CSplitterWnd
 _AFXEXT_INLINE int CSplitterWnd::GetRowCount() const
@@ -62,25 +60,48 @@ _AFXEXT_INLINE CWnd* CSplitterWnd::GetActivePane(int& row, int& col)
 _AFXEXT_INLINE BOOL CSplitterWnd::IsTracking()
 	{ return m_bTracking; }
 
-// control bars
+// CControlBar
 _AFXEXT_INLINE int CControlBar::GetCount() const
 	{ return m_nCount; }
 _AFXEXT_INLINE DWORD CControlBar::GetBarStyle()
 	{ return m_dwStyle; }
+_AFXEXT_INLINE void CControlBar::SetBorders(LPCRECT lpRect)
+	{ SetBorders(lpRect->left, lpRect->top, lpRect->right, lpRect->bottom); }
+_AFXEXT_INLINE CRect CControlBar::GetBorders() const
+	{ return CRect(m_cxLeftBorder, m_cyTopBorder, m_cxRightBorder, m_cyBottomBorder); }
+
+// CToolBar
 _AFXEXT_INLINE BOOL CToolBar::LoadToolBar(UINT nIDResource)
 	{ return LoadToolBar(MAKEINTRESOURCE(nIDResource)); }
 _AFXEXT_INLINE BOOL CToolBar::LoadBitmap(UINT nIDResource)
 	{ return LoadBitmap(MAKEINTRESOURCE(nIDResource)); }
 _AFXEXT_INLINE CToolBarCtrl& CToolBar::GetToolBarCtrl() const
 	{ return *(CToolBarCtrl*)this; }
+
+// CDialogBar
 _AFXEXT_INLINE BOOL CDialogBar::Create(CWnd* pParentWnd, UINT nIDTemplate,
 		UINT nStyle, UINT nID)
 	{ return Create(pParentWnd, MAKEINTRESOURCE(nIDTemplate), nStyle, nID); }
+
+// CStatusBar
 _AFXEXT_INLINE CStatusBarCtrl& CStatusBar::GetStatusBarCtrl() const
 	{ return *(CStatusBarCtrl*)this; }
+_AFXEXT_INLINE void CStatusBar::SetBorders(LPCRECT lpRect)
+	{ SetBorders(lpRect->left, lpRect->top, lpRect->right, lpRect->bottom); }
+_AFXEXT_INLINE void CStatusBar::SetBorders(int cxLeft, int cyTop, int cxRight, int cyBottom)
+	{ ASSERT(cyTop >= 2); CControlBar::SetBorders(cxLeft, cyTop, cxRight, cyBottom); }
 #ifdef _DEBUG
 // status bars do not support docking
 _AFXEXT_INLINE void CStatusBar::EnableDocking(DWORD)
+	{ ASSERT(FALSE); }
+#endif
+
+// CReBar
+_AFXEXT_INLINE CReBarCtrl& CReBar::GetReBarCtrl() const
+	{ return *(CReBarCtrl*)this; }
+#ifdef _DEBUG
+// rebars do not support docking
+_AFXEXT_INLINE void CReBar::EnableDocking(DWORD)
 	{ ASSERT(FALSE); }
 #endif
 

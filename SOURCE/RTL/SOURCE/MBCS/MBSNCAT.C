@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -32,7 +33,7 @@ Description     _mbsncat appends at most maxlen characters of src to
                 (_mbslen(dest) + maxlen).
 
                 If the second byte of 2-bytes character is null,the first
-		byte character is regarded as null.
+                byte character is regarded as null.
 
 Return value    Returns a pointer to dest.
 

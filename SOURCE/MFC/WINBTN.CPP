@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -60,16 +60,6 @@ BOOL CBitmapButton::LoadBitmaps(LPCTSTR lpszBitmapResource,
 		if (!m_bitmapDisabled.LoadBitmap(lpszBitmapResourceDisabled))
 			bAllLoaded = FALSE;
 	}
-#ifdef _MAC
-	ASSERT(m_bitmap.m_hObject != NULL);
-	::SetBitmapReadOnly((HBITMAP)m_bitmap.m_hObject, BRO_READONLY);
-	if (m_bitmapSel.m_hObject != NULL)
-		::SetBitmapReadOnly((HBITMAP)m_bitmapSel.m_hObject, BRO_READONLY);
-	if (m_bitmapFocus.m_hObject != NULL)
-		::SetBitmapReadOnly((HBITMAP)m_bitmapFocus.m_hObject, BRO_READONLY);
-	if (m_bitmapDisabled.m_hObject != NULL)
-		::SetBitmapReadOnly((HBITMAP)m_bitmapDisabled.m_hObject, BRO_READONLY);
-#endif
 	return bAllLoaded;
 }
 
@@ -121,12 +111,7 @@ void CBitmapButton::DrawItem(LPDRAWITEMSTRUCT lpDIS)
 	UINT state = lpDIS->itemState;
 	if ((state & ODS_SELECTED) && m_bitmapSel.m_hObject != NULL)
 		pBitmap = &m_bitmapSel;
-#ifndef _MAC
 	else if ((state & ODS_FOCUS) && m_bitmapFocus.m_hObject != NULL)
-#else
-	else if ((state & ODS_FOCUS) && m_bitmapFocus.m_hObject != NULL &&
-			(GetParent()->GetStyle() & DS_WINDOWSUI))
-#endif
 		pBitmap = &m_bitmapFocus;   // third image for focused
 	else if ((state & ODS_DISABLED) && m_bitmapDisabled.m_hObject != NULL)
 		pBitmap = &m_bitmapDisabled;   // last image for disabled

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,14 +37,14 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
-	AFX_IDP_STATIC_OBJECT           "정적 OLE 개체를 활성화할 수 없음."
+	AFX_IDP_STATIC_OBJECT           "고정 ActiveX 개체를 활성화할 수 없습니다."
 	AFX_IDP_FAILED_TO_CONNECT       "접속 실패.\n 연결이 끊어졌을 수 있음."
 	AFX_IDP_SERVER_BUSY             "명령을 처리할 수 없음, 서버 사용 중."
 	AFX_IDP_BAD_VERB                "서버 작동 실행 실패."
 	AFX_IDP_FAILED_TO_LAUNCH        "서버 응용프로그램 실패."
-	AFX_IDS_UPDATING_ITEMS          "OLE 개체 새로 고침"
-	AFX_IDP_FAILED_TO_CONVERT       "OLE 개체 변환 실패."
-	AFX_IDP_ASK_TO_DISCARD          "윈도우 종료 시에는 OLE 개체가 저장되지 않음!\n %1에 대한 모든 변경 사항을 버릴까요?"
+	AFX_IDS_UPDATING_ITEMS          "ActiveX 개체 새로 고침"
+	AFX_IDP_FAILED_TO_CONVERT       "ActiveX 개체를 변환하는 데 실패하였습니다."
+	AFX_IDP_ASK_TO_DISCARD          "현재의 Windows에서는 ActiveX 개체를 저장할 수 없습니다!\n%1에 대한 변경 사항을 무시할까요?"
 	AFX_IDP_FAILED_TO_CREATE        "개체 만들기 실패. 응용 프로그램이 시스템 등록부에 입력되었는지 확인하십시오."
 
 	AFX_IDS_METAFILE_FORMAT         "그림 (메타파일)\n 그림"

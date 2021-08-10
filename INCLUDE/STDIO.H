@@ -5,28 +5,30 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.21  $ */
+
+/* $Revision:   9.10  $ */
 
 #ifndef __STDIO_H
 #define __STDIO_H
+#define _INC_STDIO  /* MSC Guard name */
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
 
 #if !defined(___NFILE_H)
 #include <_nfile.h>
 #endif
 
-#ifndef NULL
-#include <_null.h>
-#endif
+#ifdef __cplusplus
+namespace std {
+#endif /* __cplusplus */
 
 
 #if !defined(RC_INVOKED)
@@ -38,25 +40,6 @@
 #pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
-
-
-#ifndef _SIZE_T
-#define _SIZE_T
-typedef unsigned size_t;
-#endif
-
-#ifndef __cplusplus
-#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
-#define _WCHAR_T
-#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
-typedef unsigned short wchar_t;
-#endif
-#endif
-
-#if !defined(_WINT_T)
-typedef wchar_t wint_t;
-#define _WINT_T
-#endif
 
 /* Definition of the file position type
 */
@@ -90,7 +73,7 @@ extern int _floatconvert;
 /* End-of-file constant definition
 */
 #define EOF (-1)                /* End of file indicator */
-#define WEOF (wint_t)(0xFFFF)   /* wide-character end of file indicator */
+#define WEOF (_WINT_T)(0xFFFF)   /* wide-character end of file indicator */
 
 /* Default buffer size use by "setbuf" function
 */
@@ -112,151 +95,10 @@ extern int _floatconvert;
 */
 #define TMP_MAX     0xFFFF
 
-
-#if !defined(__FLAT__)
-
 /* Definition of the control structure for streams
 */
-typedef struct  {
-        int             level;          /* fill/empty level of buffer */
-        unsigned        flags;          /* File status flags          */
-        char            fd;             /* File descriptor            */
-        unsigned char   hold;           /* Ungetc char if no buffer   */
-        int             bsize;          /* Buffer size                */
-        unsigned char   _FAR *buffer;   /* Data transfer buffer       */
-        unsigned char   _FAR *curp;     /* Current active pointer     */
-        unsigned        istemp;         /* Temporary file indicator   */
-        short           token;          /* Used for validity checking */
-}       FILE;                           /* This is the FILE object    */
-
-/* Number of files that can be open simultaneously
-*/
-#if defined(__STDC__)
-#define FOPEN_MAX (_NFILE_ - 2) /* (_NFILE_ - stdaux & stdprn) */
-#else
-#define FOPEN_MAX (_NFILE_)     /* Able to have 20 files */
-#define SYS_OPEN  (_NFILE_)
-#endif
-
-#define FILENAME_MAX 80
-
-/* Standard I/O predefined streams
-*/
-
-#if !defined( _RTLDLL )
-extern  FILE    _RTLENTRY _streams[];
-extern  unsigned    _RTLENTRY _nfile;
-
-#define stdin   (&_streams[0])
-#define stdout  (&_streams[1])
-#define stderr  (&_streams[2])
-#define stdaux  (&_streams[3])
-#define stdprn  (&_streams[4])
-
-#else
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-FILE far * far _RTLENTRY __getStream(int);
-#ifdef __cplusplus
-}
-#endif
-
-#define stdin   __getStream(0)
-#define stdout  __getStream(1)
-#define stderr  __getStream(2)
-
-#endif  /* _RTLDLL  */
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-void    _RTLENTRY          clearerr(FILE _FAR *__stream);
-int     _RTLENTRY _EXPFUNC fclose(FILE _FAR *__stream);
-int     _RTLENTRY _EXPFUNC fflush(FILE _FAR *__stream);
-int     _RTLENTRY _EXPFUNC fgetc(FILE _FAR *__stream);
-int     _RTLENTRY          fgetpos(FILE _FAR *__stream, fpos_t _FAR *__pos);
-char   _FAR *_RTLENTRY _EXPFUNC fgets(char _FAR *__s, int __n, FILE _FAR *__stream);
-FILE   _FAR *_RTLENTRY _EXPFUNC fopen(const char _FAR *__path, const char _FAR *__mode);
-int     _RTLENTRY _EXPFUNC fprintf(FILE _FAR *__stream, const char _FAR *__format, ...);
-int     _RTLENTRY _EXPFUNC fputc(int __c, FILE _FAR *__stream);
-int     _RTLENTRY _EXPFUNC fputs(const char _FAR *__s, FILE _FAR *__stream);
-size_t  _RTLENTRY _EXPFUNC fread(void _FAR *__ptr, size_t __size, size_t __n,
-                     FILE _FAR *__stream);
-FILE   _FAR *_RTLENTRY _EXPFUNC freopen(const char _FAR *__path, const char _FAR *__mode,
-                            FILE _FAR *__stream);
-int     _RTLENTRY _EXPFUNC fscanf(FILE _FAR *__stream, const char _FAR *__format, ...);
-int     _RTLENTRY _EXPFUNC fseek(FILE _FAR *__stream, long __offset, int __whence);
-int     _RTLENTRY          fsetpos(FILE _FAR *__stream, const fpos_t _FAR *__pos);
-long    _RTLENTRY _EXPFUNC ftell(FILE _FAR *__stream);
-size_t  _RTLENTRY _EXPFUNC fwrite(const void _FAR *__ptr, size_t __size, size_t __n,
-                      FILE _FAR *__stream);
-char   _FAR *_RTLENTRY     gets(char _FAR *__s);
-void    _RTLENTRY          perror(const char _FAR *__s);
-int     _RTLENTRY          printf(const char _FAR *__format, ...);
-int     _RTLENTRY          puts(const char _FAR *__s);
-int     _RTLENTRYF         remove(const char _FAR *__path);
-int     _RTLENTRYF _EXPFUNC rename(const char _FAR *__oldname,const char _FAR *__newname);
-void    _RTLENTRY _EXPFUNC rewind(FILE _FAR *__stream);
-int     _RTLENTRY          scanf(const char _FAR *__format, ...);
-void    _RTLENTRY          setbuf(FILE _FAR *__stream, char _FAR *__buf);
-int     _RTLENTRY _EXPFUNC setvbuf(FILE _FAR *__stream, char _FAR *__buf,
-                                   int __type, size_t __size);
-int     _RTLENTRY _EXPFUNC sprintf(char _FAR *__buffer, const char _FAR *__format, ...);
-int     _RTLENTRY _EXPFUNC sscanf(const char _FAR *__buffer,
-                                  const char _FAR *__format, ...);
-char   _FAR *_RTLENTRY _EXPFUNC strerror(int __errnum);
-FILE   _FAR *_RTLENTRY _EXPFUNC tmpfile(void);
-char   _FAR *_RTLENTRY _EXPFUNC tmpnam(char _FAR *__s);
-int     _RTLENTRY _EXPFUNC ungetc(int __c, FILE _FAR *__stream);
-int     _RTLENTRY _EXPFUNC vfprintf(FILE _FAR *__stream, const char _FAR *__format,
-                                    void _FAR *__arglist);
-int     _RTLENTRY _EXPFUNC vfscanf(FILE _FAR *__stream, const char _FAR *__format,
-                                   void _FAR *__arglist);
-int     _RTLENTRYF         vprintf(const char _FAR *__format, void _FAR *__arglist);
-int     _RTLENTRY          vscanf(const char _FAR *__format, void _FAR *__arglist);
-int     _RTLENTRY _EXPFUNC vsprintf(char _FAR *__buffer, const char _FAR *__format,
-                                    void _FAR *__arglist);
-int     _RTLENTRY _EXPFUNC vsscanf(const char _FAR *__buffer, const char _FAR *__format,
-                                   void _FAR *__arglist);
-int     _RTLENTRYF         unlink(const char _FAR *__path);
-int     _RTLENTRY          getc(FILE _FAR *__fp);
-
-int     _RTLENTRY          getchar(void);
-int     _RTLENTRY          putchar(const int __c);
-
-int     _RTLENTRY          putc(const int __c, FILE _FAR *__fp);
-int     _RTLENTRY          feof(FILE _FAR *__fp);
-int     _RTLENTRY          ferror(FILE _FAR *__fp);
-int     _RTLENTRY          fileno(FILE _FAR *__fp);
-
-FILE    _FAR *_RTLENTRY _EXPFUNC fdopen(int __handle, char _FAR *__type);
-int     _RTLENTRY _EXPFUNC fgetchar(void);
-int     _RTLENTRY _EXPFUNC flushall(void);
-int     _RTLENTRY _EXPFUNC fcloseall(void);
-int     _RTLENTRY _EXPFUNC fputchar(int __c);
-FILE    _FAR * _RTLENTRY   _fsopen (const char _FAR *__path, const char _FAR *__mode,
-                  int __shflag);
-int     _RTLENTRY          getw(FILE _FAR *__stream);
-int     _RTLENTRY          putw(int __w, FILE _FAR *__stream);
-int     _RTLENTRY          rmtmp(void);
-char    _FAR * _RTLENTRY _EXPFUNC _strerror(const char _FAR *__s);
-char    _FAR * _RTLENTRY _EXPFUNC tempnam(char _FAR *__dir, char _FAR *__pfx);
-
-int      _RTLENTRY _EXPFUNC _fgetc(FILE _FAR *__stream);           /* used by getc() macro */
-int      _RTLENTRY _EXPFUNC _fputc(char __c, FILE _FAR *__stream); /* used by putc() macro */
-void     _RTLENTRY _InitEasyWin(void);  /* Initialization call for Easy Windows */
-
-#ifdef  __cplusplus
-}
-#endif   /* __cplusplus */
-
-#else    /* defined __FLAT__ */
-
-/* Definition of the control structure for streams
-*/
-typedef struct  {
+typedef struct
+{
         unsigned char  *curp;       /* Current active pointer     */
         unsigned char  *buffer;     /* Data transfer buffer       */
         int             level;      /* fill/empty level of buffer */
@@ -279,6 +121,10 @@ typedef struct  {
 
 #define FILENAME_MAX 260
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Standard I/O predefined streams
 */
 extern  FILE        _RTLENTRY _EXPDATA _streams[];
@@ -288,9 +134,6 @@ extern  unsigned    _RTLENTRY _EXPDATA _nfile;
 #define stdout  (&_streams[1])
 #define stderr  (&_streams[2])
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /* __getStream() is used internally with CG only, but prototyped here for
   consistancy with the 16-bit version.
 */
@@ -303,192 +146,199 @@ FILE * _RTLENTRY _EXPFUNC __getStream( int );
 #ifdef __cplusplus
 extern "C" {
 #endif
-void    _RTLENTRY _EXPFUNC clearerr(FILE * __stream);
-int     _RTLENTRY _EXPFUNC fclose(FILE * __stream);
-int     _RTLENTRY _EXPFUNC fflush(FILE * __stream);
-int     _RTLENTRY _EXPFUNC fgetc(FILE * __stream);
-wint_t  _RTLENTRY _EXPFUNC fgetwc(FILE * __stream);
-int     _RTLENTRY _EXPFUNC fgetpos(FILE * __stream, fpos_t*__pos);
-char  * _RTLENTRY _EXPFUNC fgets(char * __s, int __n, FILE * __stream);
-wchar_t* _RTLENTRY _EXPFUNC fgetws(wchar_t * __s, int __n, FILE * __stream);
-FILE  * _RTLENTRY _EXPFUNC fopen(const char * __path, const char * __mode);
-FILE  * _RTLENTRY _EXPFUNC _wfopen(const wchar_t * __path, const wchar_t * __mode);
-int     _RTLENTRY _EXPFUNC fprintf(FILE * __stream, const char * __format, ...);
-int     _RTLENTRY _EXPFUNC fwprintf(FILE * __stream, const wchar_t *__format, ...);
-int     _RTLENTRY _EXPFUNC fputc(int __c, FILE * __stream);
-wint_t  _RTLENTRY _EXPFUNC fputwc(wint_t __c, FILE * __stream);
-int     _RTLENTRY _EXPFUNC fputs(const char * __s, FILE * __stream);
-int     _RTLENTRY _EXPFUNC fputws(const wchar_t * __s, FILE * __stream);
-size_t  _RTLENTRY _EXPFUNC fread(void * __ptr, size_t __size, size_t __n,
+void      _RTLENTRY _EXPFUNC clearerr(FILE * __stream);
+int       _RTLENTRY _EXPFUNC fclose(FILE * __stream);
+int       _RTLENTRY _EXPFUNC fflush(FILE * __stream);
+int       _RTLENTRY _EXPFUNC fgetc(FILE * __stream);
+_WINT_T   _RTLENTRY _EXPFUNC fgetwc(FILE * __stream);
+int       _RTLENTRY _EXPFUNC fgetpos(FILE * __stream, fpos_t*__pos);
+char  *   _RTLENTRY _EXPFUNC fgets(char * __s, int __n, FILE * __stream);
+wchar_t*  _RTLENTRY _EXPFUNC fgetws(wchar_t * __s, int __n, FILE * __stream);
+FILE  *   _RTLENTRY _EXPFUNC fopen(const char * __path, const char * __mode);
+FILE  *   _RTLENTRY _EXPFUNC _wfopen(const wchar_t * __path,
+                                 const wchar_t * __mode);
+int       _RTLENTRY _EXPFUNC fprintf(FILE * __stream, const char * __format, ...);
+int       _RTLENTRY _EXPFUNC fwprintf(FILE * __stream, const wchar_t *__format, ...);
+int       _RTLENTRY _EXPFUNC fputc(int __c, FILE * __stream);
+_WINT_T   _RTLENTRY _EXPFUNC fputwc(_WINT_T __c, FILE * __stream);
+int       _RTLENTRY _EXPFUNC fputs(const char * __s, FILE * __stream);
+int       _RTLENTRY _EXPFUNC fputws(const wchar_t * __s, FILE * __stream);
+_SIZE_T   _RTLENTRY _EXPFUNC fread(void * __ptr, _SIZE_T __size, _SIZE_T __n,
                                  FILE * __stream);
-FILE  * _RTLENTRY _EXPFUNC freopen(const char * __path, const char * __mode,
-                                   FILE * __stream);
-FILE  * _RTLENTRY _EXPFUNC _wfreopen(const wchar_t * __path, const wchar_t * __mode,
-                                   FILE * __stream);
-int     _RTLENTRY _EXPFUNC fscanf(FILE * __stream, const char * __format, ...);
-int     _RTLENTRY _EXPFUNC fwscanf(FILE *__stream, const wchar_t *__format, ...);
-int     _RTLENTRY _EXPFUNC fseek(FILE * __stream, long __offset, int __whence);
-int     _RTLENTRY _EXPFUNC fsetpos(FILE * __stream, const fpos_t*__pos);
-long    _RTLENTRY _EXPFUNC ftell(FILE * __stream);
-size_t  _RTLENTRY _EXPFUNC fwrite(const void * __ptr, size_t __size, size_t __n,
-                            FILE * __stream);
-char  * _RTLENTRY _EXPFUNC gets(char * __s);
-wchar_t* _RTLENTRY _EXPFUNC _getws(wchar_t * __s);
+FILE  *   _RTLENTRY _EXPFUNC freopen(const char * __path, const char * __mode,
+                                 FILE * __stream);
+FILE  *   _RTLENTRY _EXPFUNC _wfreopen(const wchar_t * __path, const wchar_t * __mode,
+                                 FILE * __stream);
+int       _RTLENTRY _EXPFUNC fscanf(FILE * __stream, const char * __format, ...);
+int       _RTLENTRY _EXPFUNC fwscanf(FILE *__stream, const wchar_t *__format, ...);
+int       _RTLENTRY _EXPFUNC fseek(FILE * __stream, long __offset, int __whence);
+int       _RTLENTRY _EXPFUNC fsetpos(FILE * __stream, const fpos_t*__pos);
+long      _RTLENTRY _EXPFUNC ftell(FILE * __stream);
+_SIZE_T   _RTLENTRY _EXPFUNC fwrite(const void * __ptr, _SIZE_T __size, _SIZE_T __n,
+                                 FILE * __stream);
+char  *   _RTLENTRY _EXPFUNC gets(char * __s);
+wchar_t*  _RTLENTRY _EXPFUNC _getws(wchar_t * __s);
+int       _RTLENTRY _EXPFUNC _pclose(FILE *__stream);
+void      _RTLENTRY _EXPFUNC perror(const char * __s);
+void      _RTLENTRY _EXPFUNC _wperror(const wchar_t * __s);
+FILE *    _RTLENTRY _EXPFUNC _popen(const char * __command, const char * __mode);
+FILE *    _RTLENTRY _EXPFUNC _wpopen(const wchar_t * __command,
+                                 const wchar_t * __mode);
 
-#if defined(__OS2__) || defined(__WIN32__)
-int     _RTLENTRY _EXPFUNC _pclose(FILE *__stream);
+int       _RTLENTRY _EXPFUNC printf(const char * __format, ...);
+int       _RTLENTRY _EXPFUNC wprintf(const wchar_t * __format, ...);
+int       _RTLENTRY _EXPFUNC puts(const char * __s);
+int       _RTLENTRY _EXPFUNC _putws(const wchar_t * __s);
+
+int       _RTLENTRY _EXPFUNC remove(const char * __path);
+int       _RTLENTRY _EXPFUNC _wremove(const wchar_t * __path);
+int       _RTLENTRY _EXPFUNC rename(const char * __oldname,const char * __newname);
+int       _RTLENTRY _EXPFUNC _wrename(const wchar_t * __oldname,const wchar_t * __newname);
+void      _RTLENTRY _EXPFUNC rewind(FILE * __stream);
+int       _RTLENTRY _EXPFUNC scanf(const char * __format, ...);
+int       _RTLENTRY _EXPFUNC wscanf(const wchar_t * __format, ...);
+void      _RTLENTRY _EXPFUNC setbuf(FILE * __stream, char * __buf);
+int       _RTLENTRY _EXPFUNC setvbuf(FILE * __stream, char * __buf,
+                                 int __type, _SIZE_T __size);
+int       _RTLENTRY _EXPFUNC sprintf(char * __buffer, const char * __format, ...);
+int       _RTLENTRY _EXPFUNC swprintf(wchar_t * __buffer, const wchar_t * __format, ...);
+int       _RTLENTRY _EXPFUNC snprintf(char * __buffer, _SIZE_T __nsize,
+                                 const char * __format, ...);
+int       _RTLENTRY _EXPFUNC snwprintf(wchar_t * __buffer, _SIZE_T __nsize,
+                                 const wchar_t * __format, ...);
+#ifndef __STDC__
+int       _RTLENTRY _EXPFUNC _snprintf(char * __buffer, _SIZE_T __nsize,
+                                 const char * __format, ...);
+int       _RTLENTRY _EXPFUNC _snwprintf(wchar_t * __buffer, _SIZE_T __nsize,
+                                 const wchar_t * __format, ...);
 #endif
-
-void    _RTLENTRY _EXPFUNC perror(const char * __s);
-void    _RTLENTRY _EXPFUNC _wperror(const wchar_t * __s);
-
-#if defined(__OS2__) || defined(__WIN32__)
-FILE *  _RTLENTRY _EXPFUNC _popen(const char * __command, const char * __mode);
-#endif
-#if defined(__WIN32__)
-FILE *  _RTLENTRY _EXPFUNC _wpopen(const wchar_t * __command,
-                                   const wchar_t * __mode);
-#endif
-
-int     _RTLENTRY _EXPFUNC printf(const char * __format, ...);
-int     _RTLENTRY _EXPFUNC wprintf(const wchar_t * __format, ...);
-int     _RTLENTRY _EXPFUNC puts(const char * __s);
-int     _RTLENTRY _EXPFUNC _putws(const wchar_t * __s);
-
-int     _RTLENTRYF _EXPFUNC remove(const char * __path);
-int     _RTLENTRYF _EXPFUNC _wremove(const wchar_t * __path);
-int     _RTLENTRYF _EXPFUNC rename(const char * __oldname,const char * __newname);
-int     _RTLENTRYF _EXPFUNC _wrename(const wchar_t * __oldname,const wchar_t * __newname);
-void    _RTLENTRY  _EXPFUNC rewind(FILE * __stream);
-int     _RTLENTRY  _EXPFUNC scanf(const char * __format, ...);
-int     _RTLENTRY  _EXPFUNC wscanf(const wchar_t * __format, ...);
-void    _RTLENTRY  _EXPFUNC setbuf(FILE * __stream, char * __buf);
-int     _RTLENTRY  _EXPFUNC setvbuf(FILE * __stream, char * __buf,
-                                    int __type, size_t __size);
-int     _RTLENTRY  _EXPFUNC sprintf(char * __buffer, const char * __format, ...);
-int     _RTLENTRY  _EXPFUNC swprintf(wchar_t * __buffer, const wchar_t * __format, ...);
-
-int     _RTLENTRY  _EXPFUNC sscanf(const char * __buffer,
-                                   const char * __format, ...);
-int     _RTLENTRY  _EXPFUNC swscanf(const wchar_t * __buffer,
-                                   const wchar_t * __format, ...);
-char  * _RTLENTRY _EXPFUNC strerror(int __errnum);
-FILE  * _RTLENTRY _EXPFUNC tmpfile(void);
-char  * _RTLENTRY _EXPFUNC tmpnam(char * __s);
+int       _RTLENTRY _EXPFUNC sscanf(const char * __buffer,
+                                 const char * __format, ...);
+int       _RTLENTRY _EXPFUNC swscanf(const wchar_t * __buffer,
+                                 const wchar_t * __format, ...);
+char  *   _RTLENTRY _EXPFUNC strerror(int __errnum);
+FILE  *   _RTLENTRY _EXPFUNC tmpfile(void);
+char  *   _RTLENTRY _EXPFUNC tmpnam(char * __s);
 wchar_t * _RTLENTRY _EXPFUNC _wtmpnam(wchar_t * __s);
-int     _RTLENTRY _EXPFUNC ungetc(int __c, FILE * __stream);
-wint_t  _RTLENTRY _EXPFUNC ungetwc(wint_t __c, FILE * __stream);
-int     _RTLENTRY _EXPFUNC vfprintf(FILE * __stream, const char * __format,
-                            void * __arglist);
-int     _RTLENTRY _EXPFUNC vfscanf(FILE * __stream, const char * __format,
-                            void * __arglist);
-int     _RTLENTRYF _EXPFUNC vprintf(const char * __format, void * __arglist);
-int     _RTLENTRY _EXPFUNC vscanf(const char * __format, void * __arglist);
-int     _RTLENTRY _EXPFUNC vsprintf(char * __buffer, const char * __format,
-                        void * __arglist);
-int     _RTLENTRY _EXPFUNC vsscanf(const char * __buffer, const char * __format,
-                        void * __arglist);
-int     _RTLENTRY _EXPFUNC vfwprintf(FILE * __stream, const wchar_t * __format,
-                            void * __arglist);
-int     _RTLENTRY _EXPFUNC vfwscanf(FILE * __stream, const wchar_t * __format,
-                            void * __arglist);
-int     _RTLENTRY _EXPFUNC vwprintf(const wchar_t * __format, void * __arglist);
-int     _RTLENTRY _EXPFUNC vwscanf(const wchar_t * __format, void * __arglist);
-int     _RTLENTRY _EXPFUNC vswprintf(wchar_t * __buffer, const wchar_t * __format,
-                        void * __arglist);
-int     _RTLENTRY _EXPFUNC vswscanf(const wchar_t * __buffer, const wchar_t * __format,
-                        void * __arglist);
-int     _RTLENTRY _EXPFUNC _unlink(const char * __path);
-int     _RTLENTRY _EXPFUNC _wunlink(const wchar_t * __path);
+int       _RTLENTRY _EXPFUNC ungetc(int __c, FILE * __stream);
+_WINT_T   _RTLENTRY _EXPFUNC ungetwc(_WINT_T __c, FILE * __stream);
+int       _RTLENTRY _EXPFUNC vfprintf(FILE * __stream, const char * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC vfscanf(FILE * __stream, const char * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC vprintf(const char * __format, void * __arglist);
+int       _RTLENTRY _EXPFUNC vscanf(const char * __format, void * __arglist);
+int       _RTLENTRY _EXPFUNC vsprintf(char * __buffer, const char * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC vsnprintf(char * __buffer, _SIZE_T __nsize, const char * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC vsscanf(const char * __buffer, const char * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC vfwprintf(FILE * __stream, const wchar_t * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC vfwscanf(FILE * __stream, const wchar_t * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC vwprintf(const wchar_t * __format, void * __arglist);
+int       _RTLENTRY _EXPFUNC vwscanf(const wchar_t * __format, void * __arglist);
+int       _RTLENTRY _EXPFUNC vswprintf(wchar_t * __buffer, const wchar_t * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC vsnwprintf(wchar_t * __buffer, _SIZE_T __nsize, const wchar_t * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC vswscanf(const wchar_t * __buffer, const wchar_t * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC _unlink(const char * __path);
+int       _RTLENTRY _EXPFUNC _wunlink(const wchar_t * __path);
+#ifndef   __STDC__
+int       _RTLENTRY _EXPFUNC _vsnprintf(char * __buffer, _SIZE_T __nsize, const char * __format,
+                                 void * __arglist);
+int       _RTLENTRY _EXPFUNC _vsnwprintf(wchar_t * __buffer, _SIZE_T __nsize, const wchar_t * __format,
+                                 void * __arglist);
+#endif
 
-int     _RTLENTRY _EXPFUNC getc(FILE * __fp);
-wint_t  _RTLENTRY _EXPFUNC getwc(FILE * __fp);
-int     _RTLENTRY _EXPFUNC getchar(void);
-wint_t  _RTLENTRY _EXPFUNC getwchar(void);
-int     _RTLENTRY _EXPFUNC putchar(const int __c);
-wint_t  _RTLENTRY _EXPFUNC putwchar(const wint_t __c);
-int     _RTLENTRY _EXPFUNC putc(const int __c, FILE * __fp);
-wint_t  _RTLENTRY _EXPFUNC putwc(const wint_t __c, FILE * __fp);
-int     _RTLENTRY _EXPFUNC feof(FILE * __fp);
-int     _RTLENTRY _EXPFUNC ferror(FILE * __fp);
-int     _RTLENTRY _EXPFUNC _fileno(FILE _FAR *__fp);
-int     _RTLENTRY _EXPFUNC _flushall(void);
-int     _RTLENTRY _EXPFUNC _fcloseall(void);
-FILE  * _RTLENTRY _EXPFUNC _fdopen(int __handle, char * __type);
-FILE  * _RTLENTRY _EXPFUNC _wfdopen(int __handle, wchar_t * __type);
-int     _RTLENTRY _EXPFUNC _fgetchar(void);
-wint_t  _RTLENTRY _EXPFUNC _fgetwchar(void);
-int     _RTLENTRY _EXPFUNC _fputchar(int __c);
-wint_t  _RTLENTRY _EXPFUNC _fputwchar(wint_t __c);
-FILE  * _RTLENTRY _EXPFUNC _fsopen (const char * __path, const char * __mode, int __shflag);
-FILE  * _RTLENTRY _EXPFUNC _wfsopen (const wchar_t * __path,
-                              const wchar_t * __mode, int __shflag);
+int       _RTLENTRY _EXPFUNC getc(FILE * __fp);
+_WINT_T   _RTLENTRY _EXPFUNC getwc(FILE * __fp);
+int       _RTLENTRY _EXPFUNC getchar(void);
+_WINT_T   _RTLENTRY _EXPFUNC getwchar(void);
+int       _RTLENTRY _EXPFUNC putchar(const int __c);
+_WINT_T   _RTLENTRY _EXPFUNC putwchar(const _WINT_T __c);
+int       _RTLENTRY _EXPFUNC putc(const int __c, FILE * __fp);
+_WINT_T   _RTLENTRY _EXPFUNC putwc(const _WINT_T __c, FILE * __fp);
+int       _RTLENTRY _EXPFUNC feof(FILE * __fp);
+int       _RTLENTRY _EXPFUNC ferror(FILE * __fp);
+int       _RTLENTRY _EXPFUNC _fileno(FILE _FAR *__fp);
+int       _RTLENTRY _EXPFUNC _flushall(void);
+int       _RTLENTRY _EXPFUNC _fcloseall(void);
+FILE  *   _RTLENTRY _EXPFUNC _fdopen(int __handle, char * __type);
+FILE  *   _RTLENTRY _EXPFUNC _wfdopen(int __handle, wchar_t * __type);
+int       _RTLENTRY _EXPFUNC _fgetchar(void);
+_WINT_T   _RTLENTRY _EXPFUNC _fgetwchar(void);
+int       _RTLENTRY _EXPFUNC _fputchar(int __c);
+_WINT_T   _RTLENTRY _EXPFUNC _fputwchar(_WINT_T __c);
+FILE  *   _RTLENTRY _EXPFUNC _fsopen (const char * __path, const char * __mode, int __shflag);
+FILE  *   _RTLENTRY _EXPFUNC _wfsopen (const wchar_t * __path,
+                                 const wchar_t * __mode, int __shflag);
 #ifdef __IN_SOPEN
-int  _RTLENTRY  _EXPFUNC _sopen ();
+int       _RTLENTRY _EXPFUNC _sopen ();
 #else
-int  _RTLENTRY  _EXPFUNC _sopen (const char *__path, int __access, int __shflag,
-                      ... /* unsigned mode */);
+int       _RTLENTRY _EXPFUNC _sopen (const char *__path, int __access, int __shflag,
+                                 ... /* unsigned mode */);
 #endif
-int  _RTLENTRY  _EXPFUNC32 _wsopen (const wchar_t *__path, int __access, int __shflag,
-                      ... /* unsigned mode */);
-int     _RTLENTRY _EXPFUNC _getw(FILE * __stream);
-int     _RTLENTRY _EXPFUNC _putw(int __w, FILE * __stream);
-int     _RTLENTRY _EXPFUNC _rmtmp(void);
-char  * _RTLENTRY _EXPFUNC _strerror(const char * __s);
-char  * _RTLENTRY _EXPFUNC _tempnam(char * __dir, char * __pfx);
+int       _RTLENTRY _EXPFUNC _wsopen (const wchar_t *__path, int __access, int __shflag,
+                                 ... /* unsigned mode */);
+int       _RTLENTRY _EXPFUNC _getw(FILE * __stream);
+int       _RTLENTRY _EXPFUNC _putw(int __w, FILE * __stream);
+int       _RTLENTRY _EXPFUNC _rmtmp(void);
+char  *   _RTLENTRY _EXPFUNC _strerror(const char * __s);
+char  *   _RTLENTRY _EXPFUNC _tempnam(char * __dir, char * __pfx);
 wchar_t * _RTLENTRY _EXPFUNC _wtempnam(wchar_t * __dir, wchar_t * __pfx);
-
-int      _RTLENTRY _EXPFUNC _fgetc(FILE * __stream);           /* used by getc() macro */
-wint_t   _RTLENTRY _EXPFUNC _fgetwc(FILE * __stream);
-int      _RTLENTRY _EXPFUNC _fputc(char __c, FILE * __stream); /* used by putc() macro */
-wint_t   _RTLENTRY _EXPFUNC _fputwc(wchar_t __c, FILE * __stream);
-
+int       _RTLENTRY _EXPFUNC _fgetc(FILE * __stream);           /* used by getc() macro */
+_WINT_T   _RTLENTRY _EXPFUNC _fgetwc(FILE * __stream);
+int       _RTLENTRY _EXPFUNC _fputc(char __c, FILE * __stream); /* used by putc() macro */
+_WINT_T   _RTLENTRY _EXPFUNC _fputwc(wchar_t __c, FILE * __stream);
 #if !defined(__STDC__)
-int     _RTLENTRY _EXPFUNC flushall(void);
-FILE  * _RTLENTRY _EXPFUNC fdopen(int __handle, char * __type);
-int     _RTLENTRY _EXPFUNC fputchar(int __c);
-int     _RTLENTRY _EXPFUNC fgetchar(void);
-int     _RTLENTRY _EXPFUNC fileno(FILE * __fp);
-int     _RTLENTRY _EXPFUNC fcloseall(void);
-char  * _RTLENTRY _EXPFUNC tempnam(char * __dir, char * __pfx);
-int     _RTLENTRY _EXPFUNC rmtmp(void);
-int     _RTLENTRY _EXPFUNC unlink(const char * __path);
-int     _RTLENTRY _EXPFUNC getw(FILE * __stream);
-int     _RTLENTRY _EXPFUNC putw(int __w, FILE * __stream);
-int     _RTLENTRY _EXPFUNC sopen (const char *__path, int __access, int __shflag,
-                      ... /* unsigned mode */);
+int       _RTLENTRY _EXPFUNC flushall(void);
+FILE  *   _RTLENTRY _EXPFUNC fdopen(int __handle, char * __type);
+int       _RTLENTRY _EXPFUNC fputchar(int __c);
+int       _RTLENTRY _EXPFUNC fgetchar(void);
+int       _RTLENTRY _EXPFUNC fileno(FILE * __fp);
+int       _RTLENTRY _EXPFUNC fcloseall(void);
+char  *   _RTLENTRY _EXPFUNC tempnam(char * __dir, char * __pfx);
+int       _RTLENTRY _EXPFUNC rmtmp(void);
+int       _RTLENTRY _EXPFUNC unlink(const char * __path);
+int       _RTLENTRY _EXPFUNC getw(FILE * __stream);
+int       _RTLENTRY _EXPFUNC putw(int __w, FILE * __stream);
+int       _RTLENTRY _EXPFUNC sopen (const char *__path, int __access, int __shflag,
+                                 ... /* unsigned mode */);
 #endif
-
 #ifdef  __cplusplus
 }
 #endif
-#endif  /* __FLAT__ */
 
 /*  The following macros provide for common functions */
 
 #if !defined(__CODEGUARD__)
 
-#define ferror(f)   ((f)->flags & _F_ERR)
-#define feof(f)     ((f)->flags & _F_EOF)
-#define fileno(f)   ((f)->fd)
-#define _fileno(f)   ((f)->fd)
+#define ferror(__f)   ((__f)->flags & _F_ERR)
+#define feof(__f)     ((__f)->flags & _F_EOF)
+#define fileno(__f)   ((__f)->fd)
+#define _fileno(__f)   ((__f)->fd)
 
-#define getc(f) \
-  ((--((f)->level) >= 0) ? (unsigned char)(*(f)->curp++) : \
-    _fgetc (f))
+#define getc(__f) \
+  ((--((__f)->level) >= 0) ? (unsigned char)(*(__f)->curp++) : \
+    _fgetc (__f))
 
-#define putc(c,f) \
-  ((++((f)->level) < 0) ? (unsigned char)(*(f)->curp++=(c)) : \
-    _fputc ((c),f))
+#define putc(__c,__f) \
+  ((++((__f)->level) < 0) ? (unsigned char)(*(__f)->curp++=(__c)) : \
+    _fputc (((char)(__c)),__f))
 
 #define getchar()   getc(stdin)
 #define getwchar()  getwc(stdin)
-#define putchar(c)  putc((c), stdout)
-#define putwchar(c) putwc((c), stdout)
+#define putchar(__c)  putc((__c), stdout)
+#define putwchar(__c) putwc((__c), stdout)
 
 #endif
 
-#define ungetc(c,f) ungetc((c),f)   /* traditionally a macro */
+#define ungetc(__c,__f) ungetc((__c),__f)   /* traditionally a macro */
 
 #if !defined(RC_INVOKED)
 
@@ -501,5 +351,143 @@ int     _RTLENTRY _EXPFUNC sopen (const char *__path, int __access, int __shflag
 
 #endif  /* !RC_INVOKED */
 
+#ifdef __cplusplus
+} // std
+#endif /* __cplusplus */
 
 #endif  /* __STDIO_H */
+
+#if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__STDIO_H_USING_LIST)
+#define __STDIO_H_USING_LIST
+     using std::FILE;
+     using std::__getStream;
+     using std::_fcloseall;
+     using std::_fdopen;
+     using std::_fgetc;
+     using std::_fgetchar;
+     using std::_fgetwc;
+     using std::_fgetwchar;
+     using std::_fileno;
+     using std::_floatconvert;
+     using std::_flushall;
+     using std::_fputc;
+     using std::_fputchar;
+     using std::_fputwc;
+     using std::_fputwchar;
+     using std::_fsopen;
+     using std::_getw;
+     using std::_getws;
+     using std::_pclose;
+     using std::_popen;
+     using std::_putw;
+     using std::_putws;
+     using std::_rmtmp;
+     using std::_sopen;
+     using std::_streams;
+     using std::_strerror;
+     using std::_tempnam;
+     using std::_unlink;
+     using std::_wfdopen;
+     using std::_wfopen;
+     using std::_wfreopen;
+     using std::_wfsopen;
+     using std::_wperror;
+     using std::_wpopen;
+     using std::_wremove;
+     using std::_wrename;
+     using std::_wsopen;
+     using std::_wtempnam;
+     using std::_wtmpnam;
+     using std::_wunlink;
+     using std::clearerr;
+     using std::fclose;
+     using std::feof;
+     using std::ferror;
+     using std::fflush;
+     using std::fgetc;
+     using std::fgetpos;
+     using std::fgets;
+     using std::fgetwc;
+     using std::fgetws;
+     using std::fopen;
+     using std::fpos_t;
+     using std::fprintf;
+     using std::fputc;
+     using std::fputs;
+     using std::fputwc;
+     using std::fputws;
+     using std::fread;
+     using std::freopen;
+     using std::fscanf;
+     using std::fseek;
+     using std::fsetpos;
+     using std::ftell;
+     using std::fwprintf;
+     using std::fwrite;
+     using std::fwscanf;
+     using std::getc;
+     using std::getchar;
+     using std::gets;
+     using std::getwc;
+     using std::getwchar;
+     using std::perror;
+     using std::printf;
+     using std::putc;
+     using std::putchar;
+     using std::puts;
+     using std::putwc;
+     using std::putwchar;
+     using std::remove;
+     using std::rename;
+     using std::rewind;
+     using std::scanf;
+     using std::setbuf;
+     using std::setvbuf;
+     using std::snprintf;
+     using std::snwprintf;
+     using std::sprintf;
+     using std::sscanf;
+     using std::strerror;
+     using std::swprintf;
+     using std::swscanf;
+     using std::tmpfile;
+     using std::tmpnam;
+     using std::ungetc;
+     using std::ungetwc;
+     using std::vfprintf;
+     using std::vfscanf;
+     using std::vfwprintf;
+     using std::vfwscanf;
+     using std::vprintf;
+     using std::vscanf;
+     using std::vsnprintf;
+     using std::vsnwprintf;
+     using std::vsprintf;
+     using std::vsscanf;
+     using std::vswprintf;
+     using std::vswscanf;
+     using std::vwprintf;
+     using std::vwscanf;
+     using std::wprintf;
+     using std::wscanf;
+
+#if !defined(__STDC__)
+     using std::_snprintf;
+     using std::_snwprintf;
+     using std::_vsnprintf;
+     using std::_vsnwprintf;
+     using std::fcloseall;
+     using std::fdopen;
+     using std::fgetchar;
+     using std::fileno;
+     using std::flushall;
+     using std::fputchar;
+     using std::getw;
+     using std::putw;
+     using std::rmtmp;
+     using std::sopen;
+     using std::tempnam;
+     using std::unlink;
+#endif // !__STDC__
+
+#endif /* __USING_CNAME__ */

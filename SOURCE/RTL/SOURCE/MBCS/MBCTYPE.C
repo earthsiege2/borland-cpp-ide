@@ -1,21 +1,28 @@
 /*-----------------------------------------------------------------------*
  * filename - mbctype.c
  *
- * variables(s)
- *        _mbctype -  //todo
+ * function(s)
+ *        _setmbcp -
+ *
+ * variable(s)
+ *        _mbctype -
+ *        _mbcsCodePage -
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1997, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
 
+/* $Revision:   9.4  $ */
+
 #include <mbctype.h>
 #include <windows.h>
 #include <_io.h>
+#include <_locale.h>
 /*---------------------------------------------------------------------*
 
 Name            _mbctype
@@ -27,14 +34,14 @@ Prototype in    mbctype.h
 Description     _mbctype  stores the character type information
 *---------------------------------------------------------------------*/
 
-#define NUM_OF_CHARS	257    /* -1 to 255  */
+#define NUM_OF_CHARS    257    /* -1 to 255  */
 unsigned char _mbctype[NUM_OF_CHARS];
 
-int _mbcsCodePage; // to store the current code page
+int _mbcsCodePage; /* to store the current code page */
 
 /* Hard coded Japanese specific ranges  */
 unsigned char _kalpha[] = { 0xA6, 0xDF };   /* single byte ranges */
-unsigned char _kpunct[] = { 0xA1, 0xA5 };	/* punctuation ranges */
+unsigned char _kpunct[] = { 0xA1, 0xA5 };   /* punctuation ranges */
 
 /*---------------------------------------------------------------------*
 
@@ -47,6 +54,7 @@ Prototype in    mbctype.h
 Description     _setmbcp() initializes the MBCS table with values for
                 the new code page. It prints an error message if it cannot
                 retrive the code page information from the operating system
+
 *---------------------------------------------------------------------*/
 int _RTLENTRY _EXPFUNC _setmbcp ( int newCodePage )
 {
@@ -54,52 +62,64 @@ int _RTLENTRY _EXPFUNC _setmbcp ( int newCodePage )
     BYTE *leadBytes;
     CPINFO cpinfo;
 
-    if ( !GetCPInfo (newCodePage, &cpinfo ) )
+    if ( newCodePage == _MB_CP_OEM )
+        newCodePage = GetOEMCP();
+    else if ( newCodePage == _MB_CP_ANSI )
+        newCodePage = GetACP();
+    else if ( newCodePage == _MB_CP_LOCALE )
+        newCodePage = __locale->codepage;
+
+    if ( newCodePage && !GetCPInfo (newCodePage, &cpinfo ) )
     {
-	_ErrorMessage ("Error: system code page access failure; MBCS table not initialized");
-	return -1;
+        _ErrorMessage ("Error: system code page access failure; MBCS table not initialized");
+        return -1;
     }
 
     for ( i = 0; i < NUM_OF_CHARS; i++ )
-    	_mbctype[i] = 0;
+        _mbctype[i] = 0;
 
-	if ( cpinfo.MaxCharSize > 1 )
+    if ( newCodePage && cpinfo.MaxCharSize > 1 )
     {
         /* set leadbytes */
-    	for ( leadBytes = cpinfo.LeadByte; (*leadBytes && *(leadBytes+1 )); leadBytes += 2)
+        for ( leadBytes = cpinfo.LeadByte; (*leadBytes && *(leadBytes+1 )); leadBytes += 2)
         {
-        	for ( i = *leadBytes; i <= *(leadBytes+1); i++ )
-            	_mbctype[i+1] = __MBB1;
-		}
+            for ( i = *leadBytes; i <= *(leadBytes+1); i++ )
+                _mbctype[i+1] = __MBB1;
+        }
 
-		/* set trail bytes */
+        /* set trail bytes */
         for ( i = 1; i < 255; i++ )
-        	_mbctype[i+1] |= __MBB2;
+            _mbctype[i+1] |= __MBB2;
 
-		/* Japanese specific ranges  */
+        /* Japanese specific ranges  */
 
-		if ( newCodePage == _KANJI_CP )
-		{
-			for ( i = _kalpha[0]; i <= _kalpha[1]; i++ )
-        		_mbctype[i+1] |= __MBBS;
+        if ( newCodePage == _KANJI_CP )
+        {
+            for ( i = _kalpha[0]; i <= _kalpha[1]; i++ )
+                _mbctype[i+1] |= __MBBS;
 
-			for ( i = _kpunct[0]; i <= _kpunct[1]; i++ )
-        		_mbctype[i+1] |= __MBBP;
+            for ( i = _kpunct[0]; i <= _kpunct[1]; i++ )
+                _mbctype[i+1] |= __MBBP;
 
-		}
+        }
 
-		_mbcsCodePage = newCodePage;
+        _mbcsCodePage = newCodePage;
     }
     else
-	_mbcsCodePage = 0;
+        _mbcsCodePage = 0;
 
     return 0;
 }
 
+int _RTLENTRY _EXPFUNC _getmbcp (void)
+{
+    return _mbcsCodePage;
+}
+
 void _initMBCSTable(void)
 {
-	#pragma startup _initMBCSTable 1
+#pragma startup _initMBCSTable 1 /* Initializes the MBCS tables */
 
-	_setmbcp( GetACP() );
+    _setmbcp( GetACP() );
 }
 

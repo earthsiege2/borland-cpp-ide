@@ -26,13 +26,11 @@
  */
 
 #ifndef _INC_MMSYSTEM
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_MMSYSTEM   /* #defined if mmsystem.h has been included */
-#pragma option -b
 
 #ifdef _WIN32
-#pragma option -b.
 #include <pshpack1.h>
-#pragma option -b
 #else
 #ifndef RC_INVOKED
 #pragma pack(1)
@@ -1623,19 +1621,11 @@ typedef struct tagMIXERCONTROLA {
 	struct {
 	    LONG    lMinimum;           /* signed minimum for this control */
 	    LONG    lMaximum;           /* signed maximum for this control */
-#if defined(_ANONYMOUS_STRUCT)
 	};
-#else
-	}s;
-#endif
 	struct {
 	    DWORD   dwMinimum;          /* unsigned minimum for this control */
 	    DWORD   dwMaximum;          /* unsigned maximum for this control */
-#if defined(_ANONYMOUS_STRUCT)
 	};
-#else
-	}s1;
-#endif
 	DWORD       dwReserved[6];
     } Bounds;
     union {
@@ -1656,19 +1646,11 @@ typedef struct tagMIXERCONTROLW {
 	struct {
 	    LONG    lMinimum;           /* signed minimum for this control */
 	    LONG    lMaximum;           /* signed maximum for this control */
-#if defined(_ANONYMOUS_STRUCT)
 	};
-#else
-	}s;
-#endif
 	struct {
 	    DWORD   dwMinimum;          /* unsigned minimum for this control */
 	    DWORD   dwMaximum;          /* unsigned maximum for this control */
-#if defined(_ANONYMOUS_STRUCT)
 	};
-#else
-	}s1;
-#endif
 	DWORD       dwReserved[6];
     } Bounds;
     union {
@@ -1700,11 +1682,11 @@ typedef struct tMIXERCONTROL {
 	struct {
 	    LONG    lMinimum;           /* signed minimum for this control */
 	    LONG    lMaximum;           /* signed maximum for this control */
-	}s1;
+	};
 	struct {
 	    DWORD   dwMinimum;          /* unsigned minimum for this control */
 	    DWORD   dwMaximum;          /* unsigned maximum for this control */
-	}s2;
+	};
 	DWORD       dwReserved[6];
     } Bounds;
     union {
@@ -1804,11 +1786,7 @@ typedef struct tagMIXERLINECONTROLSA {
     union {
 	DWORD       dwControlID;    /* MIXER_GETLINECONTROLSF_ONEBYID */
 	DWORD       dwControlType;  /* MIXER_GETLINECONTROLSF_ONEBYTYPE */
-#if defined(__cplusplus) || defined(_ANONYMOUS_UNION)
     };
-#else
-    }u;
-#endif
     DWORD           cControls;      /* count of controls pmxctrl points to */
     DWORD           cbmxctrl;       /* size in bytes of _one_ MIXERCONTROL */
     LPMIXERCONTROLA pamxctrl;       /* pointer to first MIXERCONTROL array */
@@ -1819,11 +1797,7 @@ typedef struct tagMIXERLINECONTROLSW {
     union {
 	DWORD       dwControlID;    /* MIXER_GETLINECONTROLSF_ONEBYID */
 	DWORD       dwControlType;  /* MIXER_GETLINECONTROLSF_ONEBYTYPE */
-#if defined(__cplusplus) || defined(_ANONYMOUS_UNION)
     };
-#else
-    }u;
-#endif
     DWORD           cControls;      /* count of controls pmxctrl points to */
     DWORD           cbmxctrl;       /* size in bytes of _one_ MIXERCONTROL */
     LPMIXERCONTROLW pamxctrl;       /* pointer to first MIXERCONTROL array */
@@ -1882,11 +1856,7 @@ typedef struct tMIXERCONTROLDETAILS {
     union {
 	HWND        hwndOwner;      /* for MIXER_SETCONTROLDETAILSF_CUSTOM */
 	DWORD       cMultipleItems; /* if _MULTIPLE, the number of items per channel */
-#if defined(__cplusplus) || defined(_ANONYMOUS_UNION)
     };
-#else
-    }u;
-#endif
     DWORD           cbDetails;      /* size of _one_ details_XX struct */
     LPVOID          paDetails;      /* pointer to array of details_XX structs */
 } MIXERCONTROLDETAILS, *PMIXERCONTROLDETAILS, FAR *LPMIXERCONTROLDETAILS;
@@ -3763,14 +3733,12 @@ typedef struct tagMCI_OVLY_LOAD_PARMS {
 #endif  /* __cplusplus */
 
 #ifdef _WIN32
-#pragma option -b.
 #include <poppack.h>
-#pragma option -b
 #else
 #ifndef RC_INVOKED
 #pragma pack()
 #endif
 #endif
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif  /* _INC_MMSYSTEM */

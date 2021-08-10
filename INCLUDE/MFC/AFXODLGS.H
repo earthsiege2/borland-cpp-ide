@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -23,14 +23,9 @@
 	#include <afxdlgs.h>
 #endif
 
-#ifdef _MAC
-	// include OLE dialog/helper APIs
-	#include <ole2ui.h>
-#else
-	// include OLE dialog/helper APIs
-	#ifndef _OLEDLG_H_
-		#include <oledlg.h>
-	#endif
+// include OLE dialog/helper APIs
+#ifndef _OLEDLG_H_
+	#include <oledlg.h>
 #endif
 
 #ifdef _AFX_MINREBUILD
@@ -105,7 +100,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 // Wrappers for OLE UI dialogs
 
+#ifdef _AFXDLL
 class COleDialog : public CCommonDialog
+#else
+class AFX_NOVTABLE COleDialog : public CCommonDialog
+#endif
 {
 	DECLARE_DYNAMIC(COleDialog)
 
@@ -145,6 +144,7 @@ public:
 
 // Operations
 	virtual int DoModal();
+	int DoModal(DWORD dwFlags);
 	BOOL CreateItem(COleClientItem* pItem);
 		// call after DoModal to create item based on dialog data
 
@@ -168,9 +168,17 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
+	enum FilterFlags {
+		DocObjectsOnly = 1,
+		ControlsOnly = 2,
+	};
+
 protected:
 	TCHAR m_szFileName[_MAX_PATH];
 		// contains full path name after return
+
+	void AddClassIDToList(LPCLSID& lpList, int& nListCount,
+		int& nBufferLen, LPCLSID pNewID);
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -482,7 +490,7 @@ public:
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXODLGS_INLINE inline
+#define _AFXODLGS_INLINE AFX_INLINE
 #include <afxole.inl>
 #undef _AFXODLGS_INLINE
 #endif

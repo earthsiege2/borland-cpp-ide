@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -32,9 +32,6 @@ END_MESSAGE_MAP()
 
 BOOL CListView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
-
 	return CCtrlView::PreCreateWindow(cs);
 }
 
@@ -84,9 +81,6 @@ END_MESSAGE_MAP()
 
 BOOL CTreeView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// initialize common controls
-	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
-
 	return CCtrlView::PreCreateWindow(cs);
 }
 

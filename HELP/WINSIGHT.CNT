@@ -1,6 +1,5 @@
-:BASE WINSIGHT.HLP
-:TITLE WinSight User's Guide
-:INDEX WinSight User's Guide = WINSIGHT.HLP
-
-:INCLUDE OPENHELP.CFG
+:Base WINSIGHT.HLP>main
+:Title Winsight Help
+:Index Winsight Help=WINSIGHT.HLP
+:INCLUDE BCB5XTRA.OHL
 :INCLUDE WINSIGHT.TOC

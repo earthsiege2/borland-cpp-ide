@@ -1,0 +1,33 @@
+Touch Help
+
+Using TOUCH
+
+TOUCH.EXE updates a file's date stamp so that it reflects your system’s current time and date.
+Sometimes you may need to force a target to be recompiled or rebuilt even though you haven't changed its source files. One way to do this is to use the TOUCH utility to update the time stamp of one or more of the target’s dependency files. To touch a file (or files), type the following at the command prompt:
+
+	touch [options] filename [filename...]
+
+If TOUCH cannot find a file that matches the name you specify, it creates a zero-length file with the correct date stamp. To suppress automatic file creation, use the -c option.
+
+Because TOUCH is a 32-bit executable, it accepts long file names. In addition, you can use file names that contain the wildcard characters * and ? to “touch” more than a single file at a time. Use the -s option to update matching files in all subdirectories.
+
+Note:	Before you use TOUCH, make sure your system's internal clock is set correctly.
+
+TOUCH options
+
+TOUCH.EXE supports several command-line options:
+
+Option	Description
+
+
+
+-c	Don’t generate file if it doesn’t already exist.
+-dmm-dd-yy	Sets the date of the file to the specified date.
+-rfilename	Sets the time and date of files to match those of filename.
+-h	Displays help information (same as typing TOUCH without options or file names).
+-s	Recurses through subdirectories
+-thh:mm:ss	Sets the time of the file to the specified time.
+-v	Verbose mode. Shows each file TOUCHed.
+
+
+

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -21,10 +21,10 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-static const int _nResizeStyle =
+AFX_STATIC_DATA const int _afxResizeStyle =
 	CRectTracker::resizeInside | CRectTracker::resizeOutside;
 
-static void PASCAL _OffsetTrackerRect(CRect& rect, CWnd* pWnd)
+AFX_STATIC void AFXAPI _AfxOffsetTrackerRect(CRect& rect, CWnd* pWnd)
 {
 	DWORD dwStyle = pWnd->GetStyle();
 	DWORD dwExStyle = pWnd->GetExStyle();
@@ -46,8 +46,15 @@ static void PASCAL _OffsetTrackerRect(CRect& rect, CWnd* pWnd)
 
 void COleControl::CreateTracker(BOOL bHandles, BOOL bHatching)
 {
+	CreateTracker(bHandles, bHatching, NULL);
+}
+
+void COleControl::CreateTracker(BOOL bHandles, BOOL bHatching, LPCRECT prcClip)
+{
 	ASSERT(bHandles || bHatching);
+#ifdef _AFXDLL
 	ASSERT(!m_bOpen);
+#endif
 	ASSERT(m_bUIActive);
 	ASSERT(m_pRectTracker == NULL);
 
@@ -63,22 +70,15 @@ void COleControl::CreateTracker(BOOL bHandles, BOOL bHatching)
 	{
 		// Create the tracker.
 		CRect rectTmp = m_rcPos;
-		_OffsetTrackerRect(rectTmp, this);
-		m_pRectTracker = new CRectTracker(rectTmp, nStyle);
-		UINT nHandleSize = m_pRectTracker->m_nHandleSize++;
+		_AfxOffsetTrackerRect(rectTmp, this);
+		m_pRectTracker = new CControlRectTracker(rectTmp, nStyle);
 
-		// Enlarge window to expose non-client area.
-		CWnd* pWndOuter = GetOuterWindow();
-		CWnd* pWndParent = pWndOuter->GetParent();
-		CRect rectWindow;
-		CRect rectParent;
-		pWndOuter->GetWindowRect(rectWindow);
-		pWndParent->GetClientRect(rectParent);
-		pWndParent->ClientToScreen(rectParent);
-		rectWindow.OffsetRect(-rectParent.left, -rectParent.top);
-		rectWindow.InflateRect(nHandleSize, nHandleSize);
-		::MoveWindow(pWndOuter->m_hWnd, rectWindow.left, rectWindow.top,
-			rectWindow.Width(), rectWindow.Height(), TRUE);
+		// Reset the window sizes, reflecting the tracker
+		if (prcClip != NULL)
+			m_pRectTracker->m_rectClip = *prcClip;
+		else
+			prcClip = m_rcPos;
+		OnSetObjectRects(m_rcPos, prcClip);
 	}
 	CATCH (CException, e)
 	{
@@ -97,30 +97,21 @@ void COleControl::CreateTracker(BOOL bHandles, BOOL bHatching)
 
 void COleControl::DestroyTracker()
 {
+#ifdef _AFXDLL
 	ASSERT(!m_bOpen);
+#endif
 	ASSERT(m_bUIActive);
 
 	if (m_pRectTracker == NULL)
 		return;
 
-	UINT nHandleSize = m_pRectTracker->m_nHandleSize - 1;
-
 	// Destroy the tracker.
+	CRect rectClip = m_pRectTracker->m_rectClip;
 	delete m_pRectTracker;
 	m_pRectTracker = NULL;
 
-	// Restore window to its original (pre-UIActive) size.
-	CWnd* pWndOuter = GetOuterWindow();
-	CWnd* pWndParent = pWndOuter->GetParent();
-	CRect rectWindow;
-	CRect rectParent;
-	pWndOuter->GetWindowRect(rectWindow);
-	pWndParent->GetClientRect(rectParent);
-	pWndParent->ClientToScreen(rectParent);
-	rectWindow.OffsetRect(-rectParent.left, -rectParent.top);
-	rectWindow.InflateRect(-(int)nHandleSize, -(int)nHandleSize);
-	::MoveWindow(pWndOuter->m_hWnd, rectWindow.left, rectWindow.top,
-		rectWindow.Width(), rectWindow.Height(), TRUE);
+	// Reset the position based on no tracker present
+	OnSetObjectRects(m_rcPos, rectClip);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -128,7 +119,11 @@ void COleControl::DestroyTracker()
 
 void COleControl::OnNcPaint()
 {
+#ifdef _AFXDLL
 	if (m_bOpen || m_pRectTracker == NULL)
+#else
+	if (m_pRectTracker == NULL)
+#endif
 	{
 		Default();
 		return;
@@ -184,7 +179,11 @@ void COleControl::OnNcCalcSize(BOOL, NCCALCSIZE_PARAMS* lpParams)
 {
 	Default();
 
+#ifdef _AFXDLL
 	if (m_bOpen || m_pRectTracker == NULL)
+#else
+	if (m_pRectTracker == NULL)
+#endif
 		return;
 
 	// Adjust client rect to make room for tracker.
@@ -192,7 +191,7 @@ void COleControl::OnNcCalcSize(BOOL, NCCALCSIZE_PARAMS* lpParams)
 	::InflateRect(lpParams->rgrc, -(int)nHandleSize, -(int)nHandleSize);
 
 	m_pRectTracker->m_rect = m_rcPos;
-	_OffsetTrackerRect(m_pRectTracker->m_rect, this);
+	_AfxOffsetTrackerRect(m_pRectTracker->m_rect, this);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -200,8 +199,12 @@ void COleControl::OnNcCalcSize(BOOL, NCCALCSIZE_PARAMS* lpParams)
 
 UINT COleControl::OnNcHitTest(CPoint point)
 {
+#ifdef _AFXDLL
 	if (m_bOpen || m_pRectTracker == NULL ||
-		!(m_pRectTracker->m_nStyle & _nResizeStyle))
+#else
+	if (m_pRectTracker == NULL ||
+#endif
+		!(m_pRectTracker->m_nStyle & _afxResizeStyle))
 	{
 		return (UINT)Default();
 	}
@@ -240,8 +243,12 @@ UINT COleControl::OnNcHitTest(CPoint point)
 
 void COleControl::OnNcLButtonDown(UINT nHitTest, CPoint point)
 {
+#ifdef _AFXDLL
 	if (m_bOpen || m_pRectTracker == NULL ||
-		!(m_pRectTracker->m_nStyle & _nResizeStyle) ||
+#else
+	if (m_pRectTracker == NULL ||
+#endif
+		!(m_pRectTracker->m_nStyle & _afxResizeStyle) ||
 		(nHitTest == HTHSCROLL) || (nHitTest == HTVSCROLL))
 	{
 		Default();
@@ -250,16 +257,12 @@ void COleControl::OnNcLButtonDown(UINT nHitTest, CPoint point)
 
 	ScreenToClient(&point);
 
-	AfxLockTempMaps();
-
 	// Setup a (semi-)permanent CWnd for the control's parent window
 	CRect rectBefore = m_pRectTracker->m_rect;
 	CWnd* pWndClip = CWnd::FromHandle(::GetParent(GetOuterWindow()->m_hWnd));
 
 	// Move or resize the tracker.
 	BOOL bTrack = m_pRectTracker->Track(this, point, FALSE, pWndClip);
-
-	AfxUnlockTempMaps();
 
 	if (bTrack)
 	{
@@ -279,9 +282,12 @@ void COleControl::OnNcLButtonDown(UINT nHitTest, CPoint point)
 			pWndOuter->GetWindowRect(rectWindow);
 			pWndParent->GetClientRect(rectParent);
 			pWndParent->ClientToScreen(rectParent);
+		 int nBorderWidth = GetBorderStyle()*GetSystemMetrics( SM_CXBORDER );
+		 int nBorderHeight = GetBorderStyle()*GetSystemMetrics( SM_CYBORDER );
 			UINT nHandleSize = m_pRectTracker->m_nHandleSize - 1;
 			rectAfter.OffsetRect(rectWindow.left - rectParent.left +
-				nHandleSize, rectWindow.top - rectParent.top + nHandleSize);
+				nHandleSize + nBorderWidth, rectWindow.top - rectParent.top +
+			nHandleSize + nBorderHeight);
 
 			// Update the control's extents.
 			SIZEL szlPixels;
@@ -308,8 +314,12 @@ void COleControl::OnNcLButtonDown(UINT nHitTest, CPoint point)
 
 BOOL COleControl::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT)
 {
+#ifdef _AFXDLL
 	if (m_bOpen || m_pRectTracker == NULL ||
-		!(m_pRectTracker->m_nStyle & _nResizeStyle))
+#else
+	if (m_pRectTracker == NULL ||
+#endif
+		!(m_pRectTracker->m_nStyle & _afxResizeStyle))
 	{
 		return (BOOL)Default();
 	}

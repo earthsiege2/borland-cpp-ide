@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,6 +9,7 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
+#include "fixalloc.h"
 
 #ifdef AFX_CORE1_SEG
 #pragma code_seg(AFX_CORE1_SEG)
@@ -30,27 +31,29 @@ AFX_DATADEF TCHAR afxChNil = '\0';
 // For an empty string, m_pchData will point here
 // (note: avoids special case of checking for NULL m_pchData)
 // empty string data (and locked)
-static int rgInitData[] = { -1, 0, 0, 0 };
-static AFX_DATADEF CStringData* afxDataNil = (CStringData*)&rgInitData;
-static LPCTSTR afxPchNil = (LPCTSTR)(((BYTE*)&rgInitData)+sizeof(CStringData));
+AFX_STATIC_DATA int _afxInitData[] = { -1, 0, 0, 0 };
+AFX_STATIC_DATA CStringData* _afxDataNil = (CStringData*)&_afxInitData;
+AFX_COMDAT LPCTSTR _afxPchNil = (LPCTSTR)(((BYTE*)&_afxInitData)+sizeof(CStringData));
 // special function to make afxEmptyString work even during initialization
 const CString& AFXAPI AfxGetEmptyString()
-	{ return *(CString*)&afxPchNil; }
+	{ return *(CString*)&_afxPchNil; }
 
 //////////////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 
+#ifdef _AFXDLL
 CString::CString()
 {
 	Init();
 }
+#endif
 
 CString::CString(const CString& stringSrc)
 {
 	ASSERT(stringSrc.GetData()->nRefs != 0);
 	if (stringSrc.GetData()->nRefs >= 0)
 	{
-		ASSERT(stringSrc.GetData() != afxDataNil);
+		ASSERT(stringSrc.GetData() != _afxDataNil);
 		m_pchData = stringSrc.m_pchData;
 		InterlockedIncrement(&GetData()->nRefs);
 	}
@@ -60,6 +63,20 @@ CString::CString(const CString& stringSrc)
 		*this = stringSrc.m_pchData;
 	}
 }
+
+#ifndef _DEBUG
+
+#pragma warning(disable: 4074)
+#pragma init_seg(compiler)
+
+#define ROUND(x,y) (((x)+(y-1))&~(y-1))
+#define ROUND4(x) ROUND(x, 4)
+AFX_STATIC CFixedAlloc _afxAlloc64(ROUND4(65*sizeof(TCHAR)+sizeof(CStringData)));
+AFX_STATIC CFixedAlloc _afxAlloc128(ROUND4(129*sizeof(TCHAR)+sizeof(CStringData)));
+AFX_STATIC CFixedAlloc _afxAlloc256(ROUND4(257*sizeof(TCHAR)+sizeof(CStringData)));
+AFX_STATIC CFixedAlloc _afxAlloc512(ROUND4(513*sizeof(TCHAR)+sizeof(CStringData)));
+
+#endif //!_DEBUG
 
 void CString::AllocBuffer(int nLen)
 // always allocate one extra character for '\0' termination
@@ -72,39 +89,89 @@ void CString::AllocBuffer(int nLen)
 		Init();
 	else
 	{
-		CStringData* pData =
-			(CStringData*)new BYTE[sizeof(CStringData) + (nLen+1)*sizeof(TCHAR)];
+		CStringData* pData;
+#ifndef _DEBUG
+		if (nLen <= 64)
+		{
+			pData = (CStringData*)_afxAlloc64.Alloc();
+			pData->nAllocLength = 64;
+		}
+		else if (nLen <= 128)
+		{
+			pData = (CStringData*)_afxAlloc128.Alloc();
+			pData->nAllocLength = 128;
+		}
+		else if (nLen <= 256)
+		{
+			pData = (CStringData*)_afxAlloc256.Alloc();
+			pData->nAllocLength = 256;
+		}
+		else if (nLen <= 512)
+		{
+			pData = (CStringData*)_afxAlloc512.Alloc();
+			pData->nAllocLength = 512;
+		}
+		else
+#endif
+		{
+			pData = (CStringData*)
+				new BYTE[sizeof(CStringData) + (nLen+1)*sizeof(TCHAR)];
+			pData->nAllocLength = nLen;
+		}
 		pData->nRefs = 1;
 		pData->data()[nLen] = '\0';
 		pData->nDataLength = nLen;
-		pData->nAllocLength = nLen;
 		m_pchData = pData->data();
 	}
 }
 
+void FASTCALL CString::FreeData(CStringData* pData)
+{
+#ifndef _DEBUG
+	int nLen = pData->nAllocLength;
+	if (nLen == 64)
+		_afxAlloc64.Free(pData);
+	else if (nLen == 128)
+		_afxAlloc128.Free(pData);
+	else if (nLen == 256)
+		_afxAlloc256.Free(pData);
+	else  if (nLen == 512)
+		_afxAlloc512.Free(pData);
+	else
+	{
+		ASSERT(nLen > 512);
+		delete[] (BYTE*)pData;
+	}
+#else
+	delete[] (BYTE*)pData;
+#endif
+}
+
 void CString::Release()
 {
-	if (GetData() != afxDataNil)
+	if (GetData() != _afxDataNil)
 	{
 		ASSERT(GetData()->nRefs != 0);
 		if (InterlockedDecrement(&GetData()->nRefs) <= 0)
-			delete[] (BYTE*)GetData();
+			FreeData(GetData());
 		Init();
 	}
 }
 
 void PASCAL CString::Release(CStringData* pData)
 {
-	if (pData != afxDataNil)
+	if (pData != _afxDataNil)
 	{
 		ASSERT(pData->nRefs != 0);
 		if (InterlockedDecrement(&pData->nRefs) <= 0)
-			delete[] (BYTE*)pData;
+			FreeData(pData);
 	}
 }
 
 void CString::Empty()
 {
+	if (GetData()->nDataLength == 0)
+		return;
 	if (GetData()->nRefs >= 0)
 		Release();
 	else
@@ -138,10 +205,10 @@ void CString::AllocBeforeWrite(int nLen)
 CString::~CString()
 //  free any attached data
 {
-	if (GetData() != afxDataNil)
+	if (GetData() != _afxDataNil)
 	{
 		if (InterlockedDecrement(&GetData()->nRefs) <= 0)
-			delete[] (BYTE*)GetData();
+			FreeData(GetData());
 	}
 }
 
@@ -254,7 +321,7 @@ const CString& CString::operator=(const CString& stringSrc)
 {
 	if (m_pchData != stringSrc.m_pchData)
 	{
-		if ((GetData()->nRefs < 0 && GetData() != afxDataNil) ||
+		if ((GetData()->nRefs < 0 && GetData() != _afxDataNil) ||
 			stringSrc.GetData()->nRefs < 0)
 		{
 			// actual copy necessary since one of the strings is locked
@@ -264,7 +331,7 @@ const CString& CString::operator=(const CString& stringSrc)
 		{
 			// can just copy references around
 			Release();
-			ASSERT(stringSrc.GetData() != afxDataNil);
+			ASSERT(stringSrc.GetData() != _afxDataNil);
 			m_pchData = stringSrc.m_pchData;
 			InterlockedIncrement(&GetData()->nRefs);
 		}
@@ -274,7 +341,7 @@ const CString& CString::operator=(const CString& stringSrc)
 
 const CString& CString::operator=(LPCTSTR lpsz)
 {
-	ASSERT(lpsz == NULL || AfxIsValidString(lpsz, FALSE));
+	ASSERT(lpsz == NULL || AfxIsValidString(lpsz));
 	AssignCopy(SafeStrlen(lpsz), lpsz);
 	return *this;
 }
@@ -338,7 +405,7 @@ CString AFXAPI operator+(const CString& string1, const CString& string2)
 
 CString AFXAPI operator+(const CString& string, LPCTSTR lpsz)
 {
-	ASSERT(lpsz == NULL || AfxIsValidString(lpsz, FALSE));
+	ASSERT(lpsz == NULL || AfxIsValidString(lpsz));
 	CString s;
 	s.ConcatCopy(string.GetData()->nDataLength, string.m_pchData,
 		CString::SafeStrlen(lpsz), lpsz);
@@ -347,7 +414,7 @@ CString AFXAPI operator+(const CString& string, LPCTSTR lpsz)
 
 CString AFXAPI operator+(LPCTSTR lpsz, const CString& string)
 {
-	ASSERT(lpsz == NULL || AfxIsValidString(lpsz, FALSE));
+	ASSERT(lpsz == NULL || AfxIsValidString(lpsz));
 	CString s;
 	s.ConcatCopy(CString::SafeStrlen(lpsz), lpsz, string.GetData()->nDataLength,
 		string.m_pchData);
@@ -387,7 +454,7 @@ void CString::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 
 const CString& CString::operator+=(LPCTSTR lpsz)
 {
-	ASSERT(lpsz == NULL || AfxIsValidString(lpsz, FALSE));
+	ASSERT(lpsz == NULL || AfxIsValidString(lpsz));
 	ConcatInPlace(SafeStrlen(lpsz), lpsz);
 	return *this;
 }
@@ -413,6 +480,11 @@ LPTSTR CString::GetBuffer(int nMinBufLength)
 
 	if (GetData()->nRefs > 1 || nMinBufLength > GetData()->nAllocLength)
 	{
+#ifdef _DEBUG
+		// give a warning in case locked string becomes unlocked
+		if (GetData() != _afxDataNil && GetData()->nRefs < 0)
+			TRACE0("Warning: GetBuffer on locked CString creates unlocked CString!\n");
+#endif
 		// we have to grow the buffer
 		CStringData* pOldData = GetData();
 		int nOldLen = GetData()->nDataLength;   // AllocBuffer will tromp it
@@ -476,7 +548,7 @@ LPTSTR CString::LockBuffer()
 void CString::UnlockBuffer()
 {
 	ASSERT(GetData()->nRefs == -1);
-	if (GetData() != afxDataNil)
+	if (GetData() != _afxDataNil)
 		GetData()->nRefs = 1;
 }
 
@@ -485,8 +557,17 @@ void CString::UnlockBuffer()
 
 int CString::Find(TCHAR ch) const
 {
+	return Find(ch, 0);
+}
+
+int CString::Find(TCHAR ch, int nStart) const
+{
+	int nLength = GetData()->nDataLength;
+	if (nStart >= nLength)
+		return -1;
+
 	// find first single character
-	LPTSTR lpsz = _tcschr(m_pchData, (_TUCHAR)ch);
+	LPTSTR lpsz = _tcschr(m_pchData + nStart, (_TUCHAR)ch);
 
 	// return -1 if not found and index otherwise
 	return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
@@ -494,7 +575,7 @@ int CString::Find(TCHAR ch) const
 
 int CString::FindOneOf(LPCTSTR lpszCharSet) const
 {
-	ASSERT(AfxIsValidString(lpszCharSet, FALSE));
+	ASSERT(AfxIsValidString(lpszCharSet));
 	LPTSTR lpsz = _tcspbrk(m_pchData, lpszCharSet);
 	return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
@@ -502,13 +583,13 @@ int CString::FindOneOf(LPCTSTR lpszCharSet) const
 void CString::MakeUpper()
 {
 	CopyBeforeWrite();
-	::CharUpper(m_pchData);
+	_tcsupr(m_pchData);
 }
 
 void CString::MakeLower()
 {
 	CopyBeforeWrite();
-	::CharLower(m_pchData);
+	_tcslwr(m_pchData);
 }
 
 void CString::MakeReverse()

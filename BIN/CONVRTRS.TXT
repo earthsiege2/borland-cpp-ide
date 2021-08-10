@@ -1,0 +1,3 @@
+# Interchange codepages
+ibm-1252        cp1252        # Windows Latin 1
+

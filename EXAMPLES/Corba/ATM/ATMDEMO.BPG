@@ -1,0 +1,29 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = atmclient atmserver BankServer BankServer2
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+atmclient: atmclient.bpr
+  $(MAKE)
+
+atmserver: atmserver.bpr
+  $(MAKE)
+
+BankServer: BankServer.bpr
+  $(MAKE)
+
+BankServer2: BankServer2.bpr
+  $(MAKE)
+
+

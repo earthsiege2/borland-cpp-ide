@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -34,6 +34,7 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
+#ifndef _AFX_NO_APPMENU_RESOURCES
 	AFX_IDS_OPENFILE,               "打开"
 #ifndef _MAC
 	AFX_IDS_SAVEFILE,               "保存为"
@@ -43,10 +44,10 @@ BEGIN
 	AFX_IDS_SAVEFILE,               "保存文档为:"
 	AFX_IDS_ALLFILTER,              "所有文件"
 	AFX_IDS_UNTITLED,               "无标题"
-	AFX_IDS_UNNAMED_FILE,           "一未命名文件"
 	AFX_IDS_ABOUT,                  "“关于%1\205”"
 #endif
 	AFX_IDS_HIDE,                   "隐藏(&H)"
+#endif // !_AFX_NO_APPMENUSTRING_RESOURCES
 
 	AFX_IDS_MEMORY_EXCEPTION,       "内存不足。"
 	AFX_IDS_NOT_SUPPORTED_EXCEPTION,"试图执行系统不支持的操作。"
@@ -54,6 +55,7 @@ BEGIN
 	AFX_IDS_USER_EXCEPTION,         "出现了未知的错误"
 
 	// General error prompts
+#ifndef _AFX_NO_FILECMD_RESOURCES
 	AFX_IDP_INVALID_FILENAME,       "无效的文件名。"
 	AFX_IDP_FAILED_TO_OPEN_DOC,     "打开文档失败。"
 	AFX_IDP_FAILED_TO_SAVE_DOC,     "保存文档失败。"
@@ -65,14 +67,20 @@ BEGIN
 	AFX_IDP_FAILED_TO_CREATE_DOC,   "建立空文档失败。"
 	AFX_IDP_FILE_TOO_LARGE,         "该文件太大，无法打开。"
 	AFX_IDP_FAILED_TO_START_PRINT,  "无法启动打印作业。"
+#endif // !_AFX_NO_FILECMD_RESOURCES
 	AFX_IDP_FAILED_TO_LAUNCH_HELP,  "启动帮助失败。"
 	AFX_IDP_INTERNAL_FAILURE,       "内部应用程序出错。"
 	AFX_IDP_COMMAND_FAILURE,        "命令失败。"
 	AFX_IDP_FAILED_MEMORY_ALLOC     "没有足够的内存执行操作。"
 	AFX_IDP_GET_NOT_SUPPORTED,      "无法读只写特性。"
 	AFX_IDP_SET_NOT_SUPPORTED,      "无法写只读特性。"
+	AFX_IDP_UNREG_DONE,               "系统注册项已被移除并且相应的 INI 文件（假如存在）也被删除。"
+	AFX_IDP_UNREG_FAILURE,            "不是所有的系统注册项（或 INI 文件）都被移除。"
+	AFX_IDP_DLL_LOAD_FAILED,        "在系统中没有找到此程序需要的文件%s。"
+	AFX_IDP_DLL_BAD_VERSION,        "此程序连接到文件 %s 中丢失的输出 %s 。此机器可能有一个 %s 不兼容的版本。"
 
 	// CFile/CArchive error strings for user failure
+#ifndef _AFX_NO_CFILE_RESOURCES
 	AFX_IDP_FAILED_INVALID_FORMAT   "非预期的文件格式。"
 #ifndef _MAC
 	AFX_IDP_FAILED_INVALID_PATH     "无法找到该文件。\n请验证给出的路径和文件名是否正确。"
@@ -85,6 +93,7 @@ BEGIN
 	AFX_IDP_FAILED_ACCESS_WRITE     "无法对 %1 进行写操作，因为它是只读文件或已经被其他人打开。"
 	AFX_IDP_FAILED_IO_ERROR_READ    "在对 %1 进行读操作时发生了一个非预期的错误。"
 	AFX_IDP_FAILED_IO_ERROR_WRITE   "在对 %1 进行写操作时发生了一个非预期的错误。"
+#endif // !_AFX_NO_CFILE_RESOURCES
 
 	// Parsing error prompts
 	AFX_IDP_PARSE_INT,              "请键入一个整数。"
@@ -111,6 +120,7 @@ BEGIN
 
 	AFX_IDP_NO_ERROR_AVAILABLE      "得不到出错信息。"
 
+#ifndef _AFX_NO_CFILE_RESOURCES
 	AFX_IDP_FILE_NONE                "无错误发生。"
 	AFX_IDP_FILE_GENERIC             "在对 %1 进行访问时发生了一个不明错误。"
 	AFX_IDP_FILE_NOT_FOUND           "没有找到 %1。"
@@ -126,6 +136,8 @@ BEGIN
 	AFX_IDP_FILE_LOCKING             "在存取 %1 时发生锁违例。"
 	AFX_IDP_FILE_DISKFULL            "在存取 %1 时磁盘已满。"
 	AFX_IDP_FILE_EOF                 "试图越过其尾端对 %1 进行读写。"
+	AFX_IDS_UNNAMED_FILE             "一未命名文件"
+#endif // !_AFX_NO_CFILE_RESOURCES
 
 	AFX_IDP_ARCH_NONE               "无错误发生。"
 	AFX_IDP_ARCH_GENERIC                "在对 %1 进行访问时发生了一个不明错误。"
@@ -176,6 +188,7 @@ AFX_IDC_MOVE4WAY        CURSOR  DISCARDABLE     "res\\move4way.cur"
 /////////////////////////////////////////////////////////////////////////////
 // Standard Dialogs
 
+#ifndef _AFX_NO_NEWTYPEDLG_RESOURCES
 AFX_IDD_NEWTYPEDLG DIALOG DISCARDABLE  9, 26, 183, 70
 #ifndef _MAC
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | 0x04
@@ -191,6 +204,7 @@ BEGIN
 	PUSHBUTTON      "取消",IDCANCEL,137,23,40,14
 	PUSHBUTTON      "帮助(&H)",ID_HELP,137,43,40,14
 END
+#endif // !_AFX_NO_NEWTYPEDLG_RESOURCES
 
 /////////////////////////////////////////////////////////////////////////////
 // CMiniFrameWnd Bitmap

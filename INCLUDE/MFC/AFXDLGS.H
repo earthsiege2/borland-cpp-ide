@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,7 +22,7 @@
 // Avoid mapping GetFileTitle to GetFileTitle[A/W]
 #ifdef GetFileTitle
 #undef GetFileTitle
-inline short APIENTRY GetFileTitle(LPCTSTR lpszFile, LPTSTR lpszTitle, WORD cbBuf)
+AFX_INLINE short APIENTRY GetFileTitle(LPCTSTR lpszFile, LPTSTR lpszTitle, WORD cbBuf)
 #ifdef UNICODE
 	{ return ::GetFileTitleW(lpszFile, lpszTitle, cbBuf); }
 #else
@@ -44,17 +44,10 @@ inline short APIENTRY GetFileTitle(LPCTSTR lpszFile, LPTSTR lpszTitle, WORD cbBu
 #endif
 
 #ifndef _AFX_NOFORCE_LIBS
-#ifndef _MAC
 
 /////////////////////////////////////////////////////////////////////////////
 // Win32 libraries
 
-#else //!_MAC
-
-/////////////////////////////////////////////////////////////////////////////
-// Mac libraries
-
-#endif //_MAC
 #endif //!_AFX_NOFORCE_LIBS
 
 /////////////////////////////////////////////////////////////////////////////
@@ -83,9 +76,11 @@ inline short APIENTRY GetFileTitle(LPCTSTR lpszFile, LPTSTR lpszTitle, WORD cbBu
 
 	// CWnd
 	class CPropertySheet;     // implements tabbed dialogs
+		class CPropertySheetEx;
 
 	// CDialog
 		class CPropertyPage;  // Used with CPropertySheet for tabbed dialogs
+			class CPropertyPageEx;
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -95,7 +90,11 @@ inline short APIENTRY GetFileTitle(LPCTSTR lpszFile, LPTSTR lpszTitle, WORD cbBu
 /////////////////////////////////////////////////////////////////////////////
 // CCommonDialog - base class for all common dialogs
 
+#ifdef _AFXDLL
 class CCommonDialog : public CDialog
+#else
+class AFX_NOVTABLE CCommonDialog : public CDialog
+#endif
 {
 public:
 	CCommonDialog(CWnd* pParentWnd);
@@ -104,6 +103,11 @@ public:
 protected:
 	virtual void OnOK();
 	virtual void OnCancel();
+
+	//{{AFX_MSG(CCommonDialog)
+	afx_msg BOOL OnHelpInfo(HELPINFO*);
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -144,13 +148,11 @@ public:
 	void SetTemplate(UINT nWin3ID, UINT nWin4ID);
 	void SetTemplate(LPCTSTR lpWin3ID, LPCTSTR lpWin4ID);
 
-#ifndef _MAC
 	// Other operations available while the dialog is visible
 	CString GetFolderPath() const; // return full path
 	void SetControlText(int nID, LPCSTR lpsz);
 	void HideControl(int nID);
 	void SetDefExt(LPCSTR lpsz);
-#endif
 
 // Overridable callbacks
 protected:
@@ -279,17 +281,18 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
+#ifndef _AFX_NO_GRAYDLG_SUPPORT
 protected:
 	//{{AFX_MSG(CColorDialog)
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+#endif //!_AFX_NO_GRAYDLG_SUPPORT
 };
 
 // for backward compatibility clrSavedCustom is defined as GetSavedCustomColors
 #define clrSavedCustom GetSavedCustomColors()
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 // Page Setup dialog
 
@@ -331,7 +334,6 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 };
-#endif //!_MAC
 
 /////////////////////////////////////////////////////////////////////////////
 // CPrintDialog - used for Print... and PrintSetup...
@@ -455,20 +457,70 @@ protected:
 ////////////////////////////////////////////////////////////////////////////
 // CPropertyPage -- one page of a tabbed dialog
 
+// MFC needs to use the original Win95 version of the PROPSHEETPAGE structure.
+
+typedef struct _AFX_OLDPROPSHEETPAGE {
+		DWORD           dwSize;
+		DWORD           dwFlags;
+		HINSTANCE       hInstance;
+		union {
+			LPCTSTR          pszTemplate;
+#ifdef _WIN32
+			LPCDLGTEMPLATE  pResource;
+#else
+			const VOID FAR *pResource;
+#endif
+		} DUMMYUNIONNAME;
+		union {
+			HICON       hIcon;
+			LPCSTR      pszIcon;
+		} DUMMYUNIONNAME2;
+		LPCTSTR          pszTitle;
+		DLGPROC         pfnDlgProc;
+		LPARAM          lParam;
+		LPFNPSPCALLBACK pfnCallback;
+		UINT FAR * pcRefParent;
+} AFX_OLDPROPSHEETPAGE;
+
+// same goes for PROPSHEETHEADER
+
+typedef struct _AFX_OLDPROPSHEETHEADER {
+		DWORD           dwSize;
+		DWORD           dwFlags;
+		HWND            hwndParent;
+		HINSTANCE       hInstance;
+		union {
+			HICON       hIcon;
+			LPCTSTR     pszIcon;
+		}DUMMYUNIONNAME;
+		LPCTSTR         pszCaption;
+
+		UINT            nPages;
+		union {
+			UINT        nStartPage;
+			LPCTSTR     pStartPage;
+		}DUMMYUNIONNAME2;
+		union {
+			LPCPROPSHEETPAGE ppsp;
+			HPROPSHEETPAGE FAR *phpage;
+		}DUMMYUNIONNAME3;
+		PFNPROPSHEETCALLBACK pfnCallback;
+} AFX_OLDPROPSHEETHEADER;
+
 class CPropertyPage : public CDialog
 {
 	DECLARE_DYNAMIC(CPropertyPage)
 
 // Construction
 public:
+	CPropertyPage();
 	CPropertyPage(UINT nIDTemplate, UINT nIDCaption = 0);
 	CPropertyPage(LPCTSTR lpszTemplateName, UINT nIDCaption = 0);
-	CPropertyPage();
 	void Construct(UINT nIDTemplate, UINT nIDCaption = 0);
 	void Construct(LPCTSTR lpszTemplateName, UINT nIDCaption = 0);
 
 // Attributes
-	PROPSHEETPAGE   m_psp;
+	AFX_OLDPROPSHEETPAGE   m_psp;
 
 // Operations
 	void CancelToClose();
@@ -495,18 +547,20 @@ public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
-	void EndDialog(int nEndID); // incorrect to call and will assert
 #endif
+	void EndDialog(int nEndID); // called for error scenarios
 
 protected:
 	// private implementation data
 	CString m_strCaption;
+	BOOL m_bFirstSetActive;
 
 	// implementation helpers
 	void CommonConstruct(LPCTSTR lpszTemplateName, UINT nIDCaption);
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 	virtual BOOL PreTranslateMessage(MSG*);
 	LRESULT MapWizardResult(LRESULT lToMap);
+	BOOL IsButtonEnabled(int iButton);
 
 	void PreProcessPageTemplate(PROPSHEETPAGE& psp, BOOL bWizard);
 #ifndef _AFX_NO_OCC_SUPPORT
@@ -521,6 +575,43 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 	friend class CPropertySheet;
+	friend class CPropertySheetEx;
+};
+
+class CPropertyPageEx : public CPropertyPage
+{
+	DECLARE_DYNAMIC(CPropertyPageEx)
+
+// Construction
+public:
+	CPropertyPageEx();
+	CPropertyPageEx(UINT nIDTemplate, UINT nIDCaption = 0,
+		UINT nIDHeaderTitle = 0, UINT nIDHeaderSubTitle = 0);
+	CPropertyPageEx(LPCTSTR lpszTemplateName, UINT nIDCaption = 0,
+		UINT nIDHeaderTitle = 0, UINT nIDHeaderSubTitle = 0);
+	void Construct(UINT nIDTemplate, UINT nIDCaption = 0,
+		UINT nIDHeaderTitle = 0, UINT nIDHeaderSubTitle = 0);
+	void Construct(LPCTSTR lpszTemplateName, UINT nIDCaption = 0,
+		UINT nIDHeaderTitle = 0, UINT nIDHeaderSubTitle = 0);
+
+// Implementation
+public:
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+
+protected:
+	// private implementation data
+	CString m_strHeaderTitle;    // this is displayed in the header
+	CString m_strHeaderSubTitle; //
+
+	// implementation helpers
+	void CommonConstruct(LPCTSTR lpszTemplateName, UINT nIDCaption,
+		UINT nIDHeaderTitle, UINT nIDHeaderSubTitle);
+
+	friend class CPropertySheet;
+	friend class CPropertySheetEx;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -552,7 +643,7 @@ public:
 
 // Attributes
 public:
-	PROPSHEETHEADER m_psh;
+	AFX_OLDPROPSHEETHEADER m_psh;
 
 	int GetPageCount() const;
 	CPropertyPage* GetActivePage() const;
@@ -567,6 +658,8 @@ public:
 	void SetWizardMode();
 	void SetFinishText(LPCTSTR lpszText);
 	void SetWizardButtons(DWORD dwFlags);
+
+	void EnableStackedTabs(BOOL bStacked);
 
 // Operations
 public:
@@ -585,14 +678,15 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 	void CommonConstruct(CWnd* pParentWnd, UINT iSelectPage);
-	void EnableStackedTabs(BOOL bStacked);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	virtual void BuildPropPageArray();
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra,
-		AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual BOOL OnInitDialog();
 	virtual BOOL ContinueModal();
+	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra,
+		AFX_CMDHANDLERINFO* pHandlerInfo);
+	AFX_OLDPROPSHEETHEADER* GetPropSheetHeader();   // should be virtual, but can't break binary compat yet
+	BOOL IsWizard() const;
 
 protected:
 	CPtrArray m_pages;      // array of CPropertyPage pointers
@@ -616,6 +710,54 @@ protected:
 	friend class CPropertyPage;
 };
 
+////////////////////////////////////////////////////////////////////////////
+// CPropertySheetEx -- a tabbed "dialog" (really a popup-window), extended
+//                     for IE4
+
+class CPropertySheetEx : public CPropertySheet
+{
+	DECLARE_DYNAMIC(CPropertySheetEx)
+
+// Construction
+public:
+	CPropertySheetEx();
+	CPropertySheetEx(UINT nIDCaption, CWnd* pParentWnd = NULL,
+		UINT iSelectPage = 0, HBITMAP hbmWatermark = NULL,
+		HPALETTE hpalWatermark = NULL, HBITMAP hbmHeader = NULL);
+	CPropertySheetEx(LPCTSTR pszCaption, CWnd* pParentWnd = NULL,
+		UINT iSelectPage = 0, HBITMAP hbmWatermark = NULL,
+		HPALETTE hpalWatermark = NULL, HBITMAP hbmHeader = NULL);
+	void Construct(UINT nIDCaption, CWnd* pParentWnd = NULL,
+		UINT iSelectPage = 0, HBITMAP hbmWatermark = NULL,
+		HPALETTE hpalWatermark = NULL, HBITMAP hbmHeader = NULL);
+	void Construct(LPCTSTR pszCaption, CWnd* pParentWnd = NULL,
+		UINT iSelectPage = 0, HBITMAP hbmWatermark = NULL,
+		HPALETTE hpalWatermark = NULL, HBITMAP hbmHeader = NULL);
+
+// Attributes
+public:
+	PROPSHEETHEADER m_psh;
+
+// Operations
+public:
+	void AddPage(CPropertyPageEx* pPage);
+
+// Implementation
+public:
+	virtual ~CPropertySheetEx();
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+	void CommonConstruct(CWnd* pParentWnd, UINT iSelectPage,
+		HBITMAP hbmWatermark, HPALETTE hpalWatermark, HBITMAP hbmHeader);
+	virtual void BuildPropPageArray();
+	void SetWizardMode();
+
+	friend class CPropertyPage;
+	friend class CPropertyPageEx;
+};
+
 /////////////////////////////////////////////////////////////////////////////
 // Inline function declarations
 
@@ -624,7 +766,7 @@ protected:
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXDLGS_INLINE inline
+#define _AFXDLGS_INLINE AFX_INLINE
 #include <afxdlgs.inl>
 #endif
 

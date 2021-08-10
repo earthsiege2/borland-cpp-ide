@@ -1,7 +1,7 @@
 // colledoc.cpp : implementation of the CCollectDoc class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -29,7 +29,11 @@ void CMyStruct::FormatMyStruct(CString& str)
 	str.Format(_T("{%i, %.4f, %s}"), m_int, m_float, (LPCTSTR)m_str);
 }
 
+#if _MSC_VER > 1020
+template <> void AFXAPI SerializeElements<CMyStruct*>(CArchive& ar, CMyStruct** ppElements, int nCount)
+#else
 void SerializeElements(CArchive& ar, CMyStruct** ppElements, int nCount)
+#endif
 {
 	// Since SerializeElements is always called by the framework with nCount=1
 	// for a CMap<>, it is a good idea to implement SerializeElement to handle

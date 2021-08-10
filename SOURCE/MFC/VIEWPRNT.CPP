@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,11 +9,6 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
-#ifdef _MAC
-#include <macname1.h>
-#include <Events.h>
-#include <macname2.h>
-#endif
 
 #ifdef AFX_PRINT_SEG
 #pragma code_seg(AFX_PRINT_SEG)
@@ -35,11 +30,6 @@ public:
 	//}}AFX_DATA
 	CPrintingDialog::CPrintingDialog(CWnd* pParent)
 		{
-#ifdef _MAC
-			// Note! set m_pView *before* CDialog::Create so that
-			// CPrintingDialog::OnInitDialog can use it.
-			m_pView = pParent;
-#endif
 			Create(CPrintingDialog::IDD, pParent);      // modeless !
 			_afxWinState->m_bUserAbort = FALSE;
 		}
@@ -47,71 +37,14 @@ public:
 
 	virtual BOOL OnInitDialog();
 	virtual void OnCancel();
-
-protected:
-#ifdef _MAC
-	CWnd*   m_pView;        // the view being printed
-
-	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
-#endif
-
-#ifdef _MAC
-	//{{AFX_MSG(CPrintingDialog)
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-#endif
 };
-
-#ifdef _MAC
-BEGIN_MESSAGE_MAP(CPrintingDialog, CDialog)
-	//{{AFX_MSG_MAP(CPrintingDialog)
-	ON_WM_MOUSEACTIVATE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-#endif
 
 BOOL CALLBACK _AfxAbortProc(HDC, int)
 {
 	_AFX_WIN_STATE* pWinState = _afxWinState;
-
-#ifdef _MAC
-	EventRecord er;
-	BOOL fNewMessages;
-
-	// Look for an event, and if we find one, see if WLM cares about it.
-	// If so, remove it from the queue (and then ignore it, since we've
-	// already told WLM about it by calling QueueEvent). We also remove
-	// the event from the queue if it's an activateEvt for a non-WLM
-	// window, since this will probably be an activate for the printer
-	// driver's status window, which we want to flush from the queue so
-	// that it doesn't block events for WLM windows.
-
-	while (EventAvail(everyEvent, &er) &&
-		(QueueEvent(&er, &fNewMessages) || er.what == activateEvt))
-	{
-		GetNextEvent(everyEvent, &er);
-	}
-
-	// It's harder for us to depend on a cmd-. or escape keypress getting
-	// picked up by the EventAvail, since the user could easily click in
-	// the printer status window, producing a non-WLM event that would hide
-	// the keypress. Therefore we also explicitly check for the keypress.
-
-	if (GetAsyncKeyState(VK_CANCEL))
-	{
-		TRACE0("saw an async VK_CANCEL\n");
-		pWinState->m_bUserAbort = TRUE;
-	}
-#endif
-
 	MSG msg;
 	while (!pWinState->m_bUserAbort &&
-#ifndef _MAC
 		::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE))
-#else
-		// don't grab any new messages from the Mac event queue
-		::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE | PM_NOEVENTS))
-#endif
 	{
 		if (!AfxGetThread()->PumpMessage())
 			return FALSE;   // terminate if WM_QUIT received
@@ -121,16 +54,8 @@ BOOL CALLBACK _AfxAbortProc(HDC, int)
 
 BOOL CPrintingDialog::OnInitDialog()
 {
-#ifdef _MAC
-	// prime the state of the VK_CANCEL key
-	GetAsyncKeyState(VK_CANCEL);
-#endif
 	SetWindowText(AfxGetAppName());
-#ifndef _MAC
 	CenterWindow();
-#else
-	CenterWindow(m_pView->GetParentFrame());
-#endif
 	return CDialog::OnInitDialog();
 }
 
@@ -140,19 +65,6 @@ void CPrintingDialog::OnCancel()
 	CDialog::OnCancel();
 }
 
-#ifdef _MAC
-int CPrintingDialog::OnMouseActivate(CWnd* pDesktopWnd, UINT, UINT)
-{
-	UNUSED(pDesktopWnd); // not used in release build
-	ASSERT(pDesktopWnd == this);
-
-	// if the printer driver has opened its own status window, we don't
-	// want to activate our printing status window when it's clicked
-
-	return MA_NOACTIVATE;
-}
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CView printing commands
 
@@ -161,8 +73,15 @@ BOOL CView::DoPreparePrinting(CPrintInfo* pInfo)
 	ASSERT(pInfo != NULL);
 	ASSERT(pInfo->m_pPD != NULL);
 
+	if (pInfo->m_pPD->m_pd.nMinPage > pInfo->m_pPD->m_pd.nMaxPage)
+		pInfo->m_pPD->m_pd.nMaxPage = pInfo->m_pPD->m_pd.nMinPage;
+
+	// don't prompt the user if we're doing print preview, printing directly,
+	// or printing via IPrint and have been instructed not to ask
+
 	CWinApp* pApp = AfxGetApp();
-	if (pInfo->m_bPreview || pInfo->m_bDirect)
+	if (pInfo->m_bPreview || pInfo->m_bDirect ||
+		(pInfo->m_bDocObject && !(pInfo->m_dwFlags & PRINTFLAG_PROMPTUSER)))
 	{
 		if (pInfo->m_pPD->m_pd.hDC == NULL)
 		{
@@ -170,9 +89,10 @@ BOOL CView::DoPreparePrinting(CPrintInfo* pInfo)
 			//   print dialog.
 			if (!pApp->GetPrinterDeviceDefaults(&pInfo->m_pPD->m_pd))
 			{
-					// bring up dialog to alert the user they need to install a printer.
-				if (pApp->DoPrintDialog(pInfo->m_pPD) != IDOK)
-					return FALSE;
+				// bring up dialog to alert the user they need to install a printer.
+				if (!pInfo->m_bDocObject || (pInfo->m_dwFlags & PRINTFLAG_MAYBOTHERUSER))
+					if (pApp->DoPrintDialog(pInfo->m_pPD) != IDOK)
+						return FALSE;
 			}
 
 			if (pInfo->m_pPD->m_pd.hDC == NULL)
@@ -190,7 +110,6 @@ BOOL CView::DoPreparePrinting(CPrintInfo* pInfo)
 	else
 	{
 		// otherwise, bring up the print dialog and allow user to change things
-
 		// preset From-To range same as Min-Max range
 		pInfo->m_pPD->m_pd.nFromPage = (WORD)pInfo->GetMinPage();
 		pInfo->m_pPD->m_pd.nToPage = (WORD)pInfo->GetMaxPage();
@@ -201,6 +120,8 @@ BOOL CView::DoPreparePrinting(CPrintInfo* pInfo)
 
 	ASSERT(pInfo->m_pPD != NULL);
 	ASSERT(pInfo->m_pPD->m_pd.hDC != NULL);
+	if (pInfo->m_pPD->m_pd.hDC == NULL)
+		return FALSE;
 
 	pInfo->m_nNumPreviewPages = pApp->m_nNumPreviewPages;
 	VERIFY(pInfo->m_strPageDesc.LoadString(AFX_IDS_PREVIEWPAGEDESC));
@@ -213,7 +134,7 @@ void CView::OnFilePrint()
 	CPrintInfo printInfo;
 	ASSERT(printInfo.m_pPD != NULL);    // must be set
 
-	if (GetCurrentMessage()->wParam == ID_FILE_PRINT_DIRECT)
+	if (LOWORD(GetCurrentMessage()->wParam) == ID_FILE_PRINT_DIRECT)
 	{
 		CCommandLineInfo* pCmdInfo = AfxGetApp()->m_pCmdInfo;
 
@@ -241,7 +162,7 @@ void CView::OnFilePrint()
 
 		// gather file to print to if print-to-file selected
 		CString strOutput;
-		if (printInfo.m_pPD->m_pd.Flags & PD_PRINTTOFILE)
+		if (printInfo.m_pPD->m_pd.Flags & PD_PRINTTOFILE && !printInfo.m_bDocObject)
 		{
 			// construct CFileDialog for browsing
 			CString strDef(MAKEINTRESOURCE(AFX_IDS_PRINTDEFAULTEXT));
@@ -290,10 +211,15 @@ void CView::OnFilePrint()
 
 		// setup the printing DC
 		CDC dcPrint;
-		dcPrint.Attach(printInfo.m_pPD->m_pd.hDC);  // attach printer dc
-		dcPrint.m_bPrinting = TRUE;
+		if (!printInfo.m_bDocObject)
+		{
+			dcPrint.Attach(printInfo.m_pPD->m_pd.hDC);  // attach printer dc
+			dcPrint.m_bPrinting = TRUE;
+		}
 		OnBeginPrinting(&dcPrint, &printInfo);
-		dcPrint.SetAbortProc(_AfxAbortProc);
+
+		if (!printInfo.m_bDocObject)
+			dcPrint.SetAbortProc(_AfxAbortProc);
 
 		// disable main window while printing & init printing status dialog
 		AfxGetMainWnd()->EnableWindow(FALSE);
@@ -301,17 +227,15 @@ void CView::OnFilePrint()
 
 		CString strTemp;
 		dlgPrintStatus.SetDlgItemText(AFX_IDC_PRINT_DOCNAME, strTitle);
-#ifndef _MAC
 		dlgPrintStatus.SetDlgItemText(AFX_IDC_PRINT_PRINTERNAME,
 			printInfo.m_pPD->GetDeviceName());
 		AfxFormatString1(strTemp, nFormatID, strPortName);
 		dlgPrintStatus.SetDlgItemText(AFX_IDC_PRINT_PORTNAME, strTemp);
-#endif
 		dlgPrintStatus.ShowWindow(SW_SHOW);
 		dlgPrintStatus.UpdateWindow();
 
 		// start document printing process
-		if (dcPrint.StartDoc(&docInfo) == SP_ERROR)
+		if (!printInfo.m_bDocObject && dcPrint.StartDoc(&docInfo) == SP_ERROR)
 		{
 			// enable main window before proceeding
 			AfxGetMainWnd()->EnableWindow(TRUE);
@@ -343,56 +267,70 @@ void CView::OnFilePrint()
 
 		VERIFY(strTemp.LoadString(AFX_IDS_PRINTPAGENUM));
 
-		// begin page printing loop
+		// If it's a doc object, we don't loop page-by-page
+		// because doc objects don't support that kind of levity.
+
 		BOOL bError = FALSE;
-		for (printInfo.m_nCurPage = nStartPage;
-			printInfo.m_nCurPage != nEndPage; printInfo.m_nCurPage += nStep)
+		if (printInfo.m_bDocObject)
 		{
 			OnPrepareDC(&dcPrint, &printInfo);
-
-			// check for end of print
-			if (!printInfo.m_bContinuePrinting)
-				break;
-
-			// write current page
-			TCHAR szBuf[80];
-			wsprintf(szBuf, strTemp, printInfo.m_nCurPage);
-			dlgPrintStatus.SetDlgItemText(AFX_IDC_PRINT_PAGENUM, szBuf);
-
-			// set up drawing rect to entire page (in logical coordinates)
-			printInfo.m_rectDraw.SetRect(0, 0,
-				dcPrint.GetDeviceCaps(HORZRES),
-				dcPrint.GetDeviceCaps(VERTRES));
-			dcPrint.DPtoLP(&printInfo.m_rectDraw);
-
-			// attempt to start the current page
-			if (dcPrint.StartPage() < 0)
+			OnPrint(&dcPrint, &printInfo);
+		}
+		else
+		{
+			// begin page printing loop
+			for (printInfo.m_nCurPage = nStartPage;
+				printInfo.m_nCurPage != nEndPage; printInfo.m_nCurPage += nStep)
 			{
-				bError = TRUE;
-				break;
-			}
-
-			// must call OnPrepareDC on newer versions of Windows because
-			// StartPage now resets the device attributes.
-			if (afxData.bMarked4)
 				OnPrepareDC(&dcPrint, &printInfo);
 
-			ASSERT(printInfo.m_bContinuePrinting);
+				// check for end of print
+				if (!printInfo.m_bContinuePrinting)
+					break;
 
-			// page successfully started, so now render the page
-			OnPrint(&dcPrint, &printInfo);
-			if (dcPrint.EndPage() < 0 || !_AfxAbortProc(dcPrint.m_hDC, 0))
-			{
-				bError = TRUE;
-				break;
+				// write current page
+				TCHAR szBuf[80];
+				wsprintf(szBuf, strTemp, printInfo.m_nCurPage);
+				dlgPrintStatus.SetDlgItemText(AFX_IDC_PRINT_PAGENUM, szBuf);
+
+				// set up drawing rect to entire page (in logical coordinates)
+				printInfo.m_rectDraw.SetRect(0, 0,
+					dcPrint.GetDeviceCaps(HORZRES),
+					dcPrint.GetDeviceCaps(VERTRES));
+				dcPrint.DPtoLP(&printInfo.m_rectDraw);
+
+				// attempt to start the current page
+				if (dcPrint.StartPage() < 0)
+				{
+					bError = TRUE;
+					break;
+				}
+
+				// must call OnPrepareDC on newer versions of Windows because
+				// StartPage now resets the device attributes.
+				if (afxData.bMarked4)
+					OnPrepareDC(&dcPrint, &printInfo);
+
+				ASSERT(printInfo.m_bContinuePrinting);
+
+				// page successfully started, so now render the page
+				OnPrint(&dcPrint, &printInfo);
+				if (dcPrint.EndPage() < 0 || !_AfxAbortProc(dcPrint.m_hDC, 0))
+				{
+					bError = TRUE;
+					break;
+				}
 			}
 		}
 
 		// cleanup document printing process
-		if (!bError)
-			dcPrint.EndDoc();
-		else
-			dcPrint.AbortDoc();
+		if (!printInfo.m_bDocObject)
+		{
+			if (!bError)
+				dcPrint.EndDoc();
+			else
+				dcPrint.AbortDoc();
+		}
 
 		AfxGetMainWnd()->EnableWindow();    // enable main window
 
@@ -400,17 +338,6 @@ void CView::OnFilePrint()
 		dlgPrintStatus.DestroyWindow();
 
 		dcPrint.Detach();   // will be cleaned up by CPrintInfo destructor
-
-#ifdef _MAC
-		// It's common for the user to click on the printing status dialog
-		// and not have the click be registered because the abort proc
-		// wasn't called often enough. For this reason we call _FlushEvents
-		// after printing is done so that those events don't get sent
-		// through to the document window and cause unintended changes to
-		// the document.
-
-		FlushEvents(everyEvent, 0);
-#endif
 	}
 }
 
@@ -431,8 +358,12 @@ CPrintInfo::CPrintInfo()
 
 	m_lpUserData = NULL;        // Initialize to no user data
 	m_bPreview = FALSE;         // initialize to not preview
-	m_bDirect =  FALSE;         // initialize to not direct
+	m_bDirect = FALSE;          // initialize to not direct
+	m_bDocObject = FALSE;       // initialize to not IPrint
 	m_bContinuePrinting = TRUE; // Assume it is OK to print
+
+	m_dwFlags = 0;
+	m_nOffsetPage = 0;
 }
 
 CPrintInfo::~CPrintInfo()

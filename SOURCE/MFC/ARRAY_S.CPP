@@ -1,6 +1,6 @@
 
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -232,7 +232,20 @@ void CStringArray::SetAtGrow(int nIndex, LPCTSTR newElement)
 	m_pData[nIndex] = newElement;
 }
 
-void CStringArray::InsertAt(int nIndex, LPCTSTR newElement, int nCount)
+
+void CStringArray::SetAtGrow(int nIndex, const CString& newElement)
+{
+	ASSERT_VALID(this);
+	ASSERT(nIndex >= 0);
+
+	if (nIndex >= m_nSize)
+		SetSize(nIndex+1);
+	m_pData[nIndex] = newElement;
+}
+
+
+
+void CStringArray::InsertEmpty(int nIndex, int nCount)
 {
 	ASSERT_VALID(this);
 	ASSERT(nIndex >= 0);    // will expand to meet need
@@ -260,9 +273,35 @@ void CStringArray::InsertAt(int nIndex, LPCTSTR newElement, int nCount)
 
 	// insert new value in the gap
 	ASSERT(nIndex + nCount <= m_nSize);
+}
+
+
+void CStringArray::InsertAt(int nIndex, LPCTSTR newElement, int nCount)
+{
+
+	// make room for new elements
+	InsertEmpty(nIndex, nCount);
+
+
+
+	// copy elements into the empty space
+	CString temp = newElement;
+	while (nCount--)
+		m_pData[nIndex++] = temp;
+
+}
+
+
+void CStringArray::InsertAt(int nIndex, const CString& newElement, int nCount)
+{
+	// make room for new elements
+	InsertEmpty(nIndex, nCount);
+
+	// copy elements into the empty space
 	while (nCount--)
 		m_pData[nIndex++] = newElement;
 }
+
 
 void CStringArray::RemoveAt(int nIndex, int nCount)
 {
@@ -277,7 +316,7 @@ void CStringArray::RemoveAt(int nIndex, int nCount)
 	DestructElements(&m_pData[nIndex], nCount);
 
 	if (nMoveCount)
-		memcpy(&m_pData[nIndex], &m_pData[nIndex + nCount],
+		memmove(&m_pData[nIndex], &m_pData[nIndex + nCount],
 			nMoveCount * sizeof(CString));
 	m_nSize -= nCount;
 }

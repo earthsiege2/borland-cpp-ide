@@ -1,0 +1,5 @@
+:Base pce.hlp>main
+:Title Package Collection Editor Help
+:Index Package Collection Editor Help=PCE.HLP
+:INCLUDE BCB5.OHL
+:INCLUDE PCE.TOC

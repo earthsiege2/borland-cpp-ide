@@ -1,0 +1,9 @@
+USEUNIT("circ1.cpp");
+USEUNIT("circ1ctl.cpp");
+USEUNIT("circ1ppg.cpp");
+USEUNIT("stdafx.cpp");
+USELIB("odbc32.lib");
+USERC("circ1.rc");
+USEDEF("circ1.def");
+
+#define DllEntryPoint

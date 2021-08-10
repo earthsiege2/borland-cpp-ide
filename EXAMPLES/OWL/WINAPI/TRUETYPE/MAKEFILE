@@ -1,7 +1,0 @@
-#----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-#----------------------------------------------------------------------------
-
-MODELS = ldf
-EXERES = truetype
-!include $(BCEXAMPLEDIR)\owlmake.gen

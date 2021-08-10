@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(CScrollView, CView)
 	ON_WM_SIZE()
 	ON_WM_HSCROLL()
 	ON_WM_VSCROLL()
+	ON_WM_MOUSEWHEEL()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -34,6 +35,74 @@ END_MESSAGE_MAP()
 #define MM_NONE             0
 #define MM_SCALETOFIT       (-1)
 	// standard GDI mapping modes are > 0
+
+extern BOOL _afxGotScrollLines; // defined in wincore.cpp
+
+UINT PASCAL _AfxGetMouseScrollLines()
+{
+	static UINT uCachedScrollLines;
+
+	// if we've already got it and we're not refreshing,
+	// return what we've already got
+
+	if (_afxGotScrollLines)
+		return uCachedScrollLines;
+
+	// see if we can find the mouse window
+
+	_afxGotScrollLines = TRUE;
+
+	static UINT msgGetScrollLines;
+	static WORD nRegisteredMessage;
+
+	if (nRegisteredMessage == 0)
+	{
+		msgGetScrollLines = ::RegisterWindowMessage(MSH_SCROLL_LINES);
+		if (msgGetScrollLines == 0)
+			nRegisteredMessage = 1;     // couldn't register!  never try again
+		else
+			nRegisteredMessage = 2;     // it worked: use it
+	}
+
+	if (nRegisteredMessage == 2)
+	{
+		HWND hwMouseWheel = NULL;
+		hwMouseWheel = FindWindow(MSH_WHEELMODULE_CLASS, MSH_WHEELMODULE_TITLE);
+		if (hwMouseWheel && msgGetScrollLines)
+		{
+			uCachedScrollLines = (UINT)
+				::SendMessage(hwMouseWheel, msgGetScrollLines, 0, 0);
+			return uCachedScrollLines;
+		}
+	}
+
+	// couldn't use the window -- try system settings
+	uCachedScrollLines = 3; // reasonable default
+	if (!afxData.bWin4)
+	{
+		HKEY hKey;
+		if (RegOpenKeyEx(HKEY_CURRENT_USER,  _T("Control Panel\\Desktop"),
+				0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
+		{
+			TCHAR szData[128];
+			DWORD dwKeyDataType;
+			DWORD dwDataBufSize = _countof(szData);
+
+			if (RegQueryValueEx(hKey, _T("WheelScrollLines"), NULL, &dwKeyDataType,
+					(LPBYTE) &szData, &dwDataBufSize) == ERROR_SUCCESS)
+			{
+				uCachedScrollLines = _tcstoul(szData, NULL, 10);
+			}
+			RegCloseKey(hKey);
+		}
+	}
+	else if (!afxData.bWin95)
+	{
+		::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &uCachedScrollLines, 0);
+	}
+
+	return uCachedScrollLines;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CScrollView construction/destruction
@@ -423,9 +492,7 @@ void CScrollView::CenterOnPoint(CPoint ptCenter) // center in device coords
 	ASSERT(xDesired >= 0);
 	ASSERT(yDesired >= 0);
 
-	int xOrig = GetScrollPos(SB_HORZ);
 	SetScrollPos(SB_HORZ, xDesired);
-	int yOrig = GetScrollPos(SB_VERT);
 	SetScrollPos(SB_VERT, yDesired);
 }
 
@@ -700,6 +767,90 @@ void CScrollView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	OnScroll(MAKEWORD(-1, nSBCode), nPos);
 }
+
+BOOL CScrollView::OnMouseWheel(UINT fFlags, short zDelta, CPoint point)
+{
+	// we don't handle anything but scrolling just now
+	if (fFlags & (MK_SHIFT | MK_CONTROL))
+		return FALSE;
+
+	// if the parent is a splitter, it will handle the message
+	if (GetParentSplitter(this, TRUE))
+		return FALSE;
+
+	// we can't get out of it--perform the scroll ourselves
+	return DoMouseWheel(fFlags, zDelta, point);
+}
+
+// This function isn't virtual. If you need to override it,
+// you really need to override OnMouseWheel() here or in
+// CSplitterWnd.
+
+BOOL CScrollView::DoMouseWheel(UINT fFlags, short zDelta, CPoint point)
+{
+	UNUSED_ALWAYS(point);
+	UNUSED_ALWAYS(fFlags);
+
+	// if we have a vertical scroll bar, the wheel scrolls that
+	// if we have _only_ a horizontal scroll bar, the wheel scrolls that
+	// otherwise, don't do any work at all
+
+	DWORD dwStyle = GetStyle();
+	CScrollBar* pBar = GetScrollBarCtrl(SB_VERT);
+	BOOL bHasVertBar = ((pBar != NULL) && pBar->IsWindowEnabled()) ||
+					(dwStyle & WS_VSCROLL);
+
+	pBar = GetScrollBarCtrl(SB_HORZ);
+	BOOL bHasHorzBar = ((pBar != NULL) && pBar->IsWindowEnabled()) ||
+					(dwStyle & WS_HSCROLL);
+
+	if (!bHasVertBar && !bHasHorzBar)
+		return FALSE;
+
+	BOOL bResult = FALSE;
+	UINT uWheelScrollLines = _AfxGetMouseScrollLines();
+	int nToScroll;
+	int nDisplacement;
+
+	if (bHasVertBar)
+	{
+		nToScroll = ::MulDiv(-zDelta, uWheelScrollLines, WHEEL_DELTA);
+		if (nToScroll == -1 || uWheelScrollLines == WHEEL_PAGESCROLL)
+		{
+			nDisplacement = m_pageDev.cy;
+			if (zDelta > 0)
+				nDisplacement = -nDisplacement;
+		}
+		else
+		{
+			nDisplacement = nToScroll * m_lineDev.cy;
+			nDisplacement = min(nDisplacement, m_pageDev.cy);
+		}
+		bResult = OnScrollBy(CSize(0, nDisplacement), TRUE);
+	}
+	else if (bHasHorzBar)
+	{
+		nToScroll = ::MulDiv(-zDelta, uWheelScrollLines, WHEEL_DELTA);
+		if (nToScroll == -1 || uWheelScrollLines == WHEEL_PAGESCROLL)
+		{
+			nDisplacement = m_pageDev.cx;
+			if (zDelta > 0)
+				nDisplacement = -nDisplacement;
+		}
+		else
+		{
+			nDisplacement = nToScroll * m_lineDev.cx;
+			nDisplacement = min(nDisplacement, m_pageDev.cx);
+		}
+		bResult = OnScrollBy(CSize(nDisplacement, 0), TRUE);
+	}
+
+	if (bResult)
+		UpdateWindow();
+
+	return bResult;
+}
+
 
 BOOL CScrollView::OnScroll(UINT nScrollCode, UINT nPos, BOOL bDoScroll)
 {

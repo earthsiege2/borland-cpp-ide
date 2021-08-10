@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,14 +37,14 @@ END
 
 STRINGTABLE DISCARDABLE
 BEGIN
-	AFX_IDP_STATIC_OBJECT           "Ein statisches OLE-Objekt kann nicht aktiviert werden."
+	AFX_IDP_STATIC_OBJECT           "Ein statisches ActiveX-Objekt kann nicht aktiviert werden."
 	AFX_IDP_FAILED_TO_CONNECT       "Fehler beim Verbindungsversuch.\nDie Verbindung ist vielleicht unterbrochen."
 	AFX_IDP_SERVER_BUSY             "Der Befehl kann nicht verarbeitet werden, weil der Server beschäftigt ist."
 	AFX_IDP_BAD_VERB                "Fehler beim Ausführen der Server-Operation."
 	AFX_IDP_FAILED_TO_LAUNCH        "Die Server-Anwendung konnte nicht gestartet werden."
-	AFX_IDS_UPDATING_ITEMS          "Aktualisiere OLE-Objekte."
-	AFX_IDP_FAILED_TO_CONVERT       "Das OLE-Objekt konnte nicht umgewandelt werden."
-	AFX_IDP_ASK_TO_DISCARD          "OLE-Objekte können nicht beim Beenden von Windows gespeichert werden!\nSollen alle Änderungen an %1 verworfen werden?"
+	AFX_IDS_UPDATING_ITEMS          "ActiveX-Objekte werden aktualisiert"
+	AFX_IDP_FAILED_TO_CONVERT       "ActiveX-Objekt konnte nicht konvertiert werden."
+	AFX_IDP_ASK_TO_DISCARD          "ActiveX-Objekte können beim Beenden von Windows nicht gespeichert werden!\nAlle bei %1 vorgenommenen Änderungen ignorieren?"
 	AFX_IDP_FAILED_TO_CREATE        "Fehler beim Erzeugen des Objekts. Stellen Sie sicher, daß das Objekt in der Systemregistrierung eingetragen ist."
 
 	AFX_IDS_METAFILE_FORMAT         "Bild (Metadatei)\nein Bild"

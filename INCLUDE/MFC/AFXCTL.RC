@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -28,6 +28,7 @@ END
 /////////////////////////////////////////////////////////////////////////////
 // OLE Control Resources
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
@@ -42,7 +43,7 @@ AFX_IDB_TRUETYPE        BITMAP  DISCARDABLE     "RES\\TRUETYPE.BMP"
 
 AFX_IDD_PROPPAGE_FONT DIALOG DISCARDABLE  13, 54, 250, 110
 STYLE WS_CHILD | 0x4
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Shell Dlg"
 BEGIN
 	LTEXT           "Property &Name:",IDC_STATIC,3,5,61,8
 	COMBOBOX        AFX_IDC_FONTPROP,65,3,100,71,CBS_DROPDOWNLIST | CBS_SORT |
@@ -70,7 +71,7 @@ END
 
 AFX_IDD_PROPPAGE_COLOR DIALOG DISCARDABLE  0, 0, 250, 62
 STYLE WS_CHILD | 0x4
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Shell Dlg"
 BEGIN
 	LTEXT           "Property &Name:",IDC_STATIC,3,3,100,8
 	COMBOBOX        AFX_IDC_COLORPROP,3,13,100,54,CBS_DROPDOWNLIST |
@@ -110,7 +111,7 @@ END
 
 AFX_IDD_PROPPAGE_PICTURE DIALOG DISCARDABLE  0, 0, 250, 62
 STYLE WS_CHILD | 0x4
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Shell Dlg"
 BEGIN
 	LTEXT           "Property &Name:",IDC_STATIC,3,3,100,8
 	COMBOBOX        AFX_IDC_PROPNAME,3,13,100,30,CBS_DROPDOWNLIST | CBS_SORT |
@@ -154,9 +155,11 @@ BEGIN
 	AFX_IDS_COLOR_ACTIVEBORDER "Active Border"
 	AFX_IDS_COLOR_INACTIVEBORDER "Inactive Border"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
 STRINGTABLE DISCARDABLE
 BEGIN
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_WNDFRAME  "Window Frame"
 	AFX_IDS_COLOR_SCROLLBARS "Scroll Bars"
 	AFX_IDS_COLOR_BTNFACE   "Button Face"
@@ -171,6 +174,7 @@ BEGIN
 	AFX_IDS_ITALIC          "Italic"
 	AFX_IDS_BOLDITALIC      "Bold Italic"
 	AFX_IDS_SAMPLETEXT      "AaBbYyZz"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_DISPLAYSTRING_FONT "(Font)"
 	AFX_IDS_DISPLAYSTRING_COLOR "(Color)"
 END
@@ -178,18 +182,22 @@ END
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_DISPLAYSTRING_PICTURE "(Picture - %s)"
-	AFX_IDS_PICTUREFILTER   "All Picture Types|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|Bitmaps (*.bmp;*.dib)|*.bmp;*.dib|Icons/Cursors (*.ico;*.cur)|*.ico|Metafiles (*.wmf;*.emf)|*.emf;*.wmf|All files (*.*)|*.*||"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
+	AFX_IDS_PICTUREFILTER   "All Picture Types|*.bmp;*.cur;*.dib;*.emf;*.ico;*.wmf|Bitmaps (*.bmp;*.dib)|*.bmp;*.dib|Icons/Cursors (*.ico;*.cur)|*.ico;*.cur|Metafiles (*.wmf;*.emf)|*.wmf;*.emf|All files (*.*)|*.*||"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_PICTYPE_UNKNOWN "Unknown"
 	AFX_IDS_PICTYPE_NONE    "None"
 	AFX_IDS_PICTYPE_BITMAP  "Bitmap"
 	AFX_IDS_PICTYPE_METAFILE "Metafile"
 	AFX_IDS_PICTYPE_ICON    "Icon"
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_COLOR_PPG       "Color Property Page"
 	AFX_IDS_COLOR_PPG_CAPTION "Colors"
 	AFX_IDS_FONT_PPG        "Font Property Page"
 	AFX_IDS_FONT_PPG_CAPTION "Fonts"
 	AFX_IDS_PICTURE_PPG     "Picture Property Page"
 	AFX_IDS_PICTURE_PPG_CAPTION "Pictures"
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 	AFX_IDS_BORDERSTYLE_0   "0 - None"
 	AFX_IDS_BORDERSTYLE_1   "1 - Fixed Single"
 END
@@ -200,6 +208,7 @@ BEGIN
 	AFX_IDS_VERB_PROPERTIES "&Properties..."
 END
 
+#ifndef _AFX_NO_STOCKPPG_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_PICTURECANTOPEN "Unable to open the picture file %1. The file may not exist, or may not be readable."
@@ -213,7 +222,9 @@ STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDS_PICTUREBROWSETITLE "Browse Pictures"
 END
+#endif // !_AFX_NO_STOCKPPG_RESOURCES
 
+#ifndef _AFX_NO_CTLERROR_RESOURCES
 STRINGTABLE DISCARDABLE
 BEGIN
 	AFX_IDP_E_ILLEGALFUNCTIONCALL "Illegal function call"
@@ -267,6 +278,7 @@ BEGIN
 	AFX_IDP_E_SEARCHTEXTNOTFOUND "Search text not found"
 	AFX_IDP_E_REPLACEMENTSTOOLONG "Replacement text too long"
 END
+#endif //!_AFX_NO_CTLERROR_RESOURCES
 
 #endif //!_AFXDLL
 #endif //__AFXOLECL_RC__

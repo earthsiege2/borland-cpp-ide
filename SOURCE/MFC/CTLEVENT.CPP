@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,80 +22,79 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
+#pragma warning(disable: 4706) // assignment within conditional
+
 /////////////////////////////////////////////////////////////////////////////
 // Stock event mask
 
-#define STOCKEVENT_CLICK        0x00000001
-#define STOCKEVENT_DBLCLICK     0x00000002
-#define STOCKEVENT_KEYDOWN      0x00000004
-#define STOCKEVENT_KEYPRESS     0x00000008
-#define STOCKEVENT_KEYUP        0x00000010
-#define STOCKEVENT_MOUSEDOWN    0x00000020
-#define STOCKEVENT_MOUSEMOVE    0x00000040
-#define STOCKEVENT_MOUSEUP      0x00000080
-#define STOCKEVENT_ERROR        0x00000100
+#define STOCKEVENT_CLICK            0x00000001
+#define STOCKEVENT_DBLCLICK         0x00000002
+#define STOCKEVENT_KEYDOWN          0x00000004
+#define STOCKEVENT_KEYPRESS         0x00000008
+#define STOCKEVENT_KEYUP            0x00000010
+#define STOCKEVENT_MOUSEDOWN        0x00000020
+#define STOCKEVENT_MOUSEMOVE        0x00000040
+#define STOCKEVENT_MOUSEUP          0x00000080
+#define STOCKEVENT_ERROR            0x00000100
+#define STOCKEVENT_READYSTATECHANGE 0x00000200
 
 #define STOCKEVENTS_MOUSE       0x000000A3  // Click, DblClick, MouseDown, MouseUp
 
-static const DISPID _rgdispidStockEvents[] =
+AFX_STATIC_DATA const DWORD _afxStockEvents[] =
 {
-	DISPID_CLICK,
-	DISPID_DBLCLICK,
-	DISPID_KEYDOWN,
-	DISPID_KEYPRESS,
-	DISPID_KEYUP,
-	DISPID_MOUSEDOWN,
-	DISPID_MOUSEMOVE,
-	DISPID_MOUSEUP,
-	DISPID_ERROREVENT,
-	DISPID_UNKNOWN
+	STOCKEVENT_CLICK,               // -600
+	STOCKEVENT_DBLCLICK,            // -601
+	STOCKEVENT_KEYDOWN,             // -602
+	STOCKEVENT_KEYPRESS,            // -603
+	STOCKEVENT_KEYUP,               // -604
+	STOCKEVENT_MOUSEDOWN,           // -605
+	STOCKEVENT_MOUSEMOVE,           // -606
+	STOCKEVENT_MOUSEUP,             // -607
+	STOCKEVENT_ERROR,               // -608
+	STOCKEVENT_READYSTATECHANGE,    // -609
 };
-
-static const AFX_EVENTMAP_ENTRY* AFXAPI _AfxGetStdEventMapEntry(
-	const AFX_EVENTMAP* pEventMap, DISPID dispid)
-{
-	const AFX_EVENTMAP_ENTRY* pEntry;
-
-	while (pEventMap != NULL)
-	{
-		pEntry = pEventMap->lpEntries;
-
-		// Scan entries in this event map
-		if (pEntry != NULL)
-		{
-			while (pEntry->pszName != NULL)
-			{
-				if (pEntry->dispid == dispid)
-					return pEntry;
-				++pEntry;
-			}
-		}
-
-		// If we didn't find it, go to the base class's event map
-		pEventMap = pEventMap->lpBaseEventMap;
-	}
-
-	// If we reach here, the event isn't supported
-	return NULL;
-}
 
 void COleControl::InitStockEventMask()
 {
-	const DISPID* pdispidStockEvent = _rgdispidStockEvents;
 	const AFX_EVENTMAP* pEventMap = GetEventMap();
 	const AFX_EVENTMAP_ENTRY* pEntry;
-	DWORD dwMaskBit = 1;
+	ASSERT(pEventMap != NULL);
 
-	while (*pdispidStockEvent != DISPID_UNKNOWN)
+	// If stock event mask is already initialized, we're outta here.
+	if (*pEventMap->lpStockEventMask != (DWORD)-1)
+		return;
+
+	AfxLockGlobals(CRIT_STOCKMASK);
+
+	if (*pEventMap->lpStockEventMask == (DWORD)-1)
 	{
-		pEntry = _AfxGetStdEventMapEntry(pEventMap, *pdispidStockEvent);
+		const AFX_EVENTMAP* pEventMapTop = pEventMap;
+		DWORD dwStockEventMask = 0;
 
-		if ((pEntry != NULL) && (pEntry->flags & afxEventStock))
-			m_dwStockEventMask |= dwMaskBit;
+		while (pEventMap != NULL)
+		{
+			pEntry = pEventMap->lpEntries;
+			while (pEntry != NULL && pEntry->pszName != NULL)
+			{
+				int nIndex = DISPID_CLICK - pEntry->dispid;
+				DWORD dwFlag;
+				if ((pEntry->flags & afxEventStock) && (nIndex >= 0) &&
+					(nIndex < _countof(_afxStockEvents)) &&
+					(dwFlag = _afxStockEvents[nIndex]) != 0)
+				{
+					dwStockEventMask |= dwFlag;
+				}
 
-		dwMaskBit <<= 1;
-		++pdispidStockEvent;
-	};
+				++pEntry;
+			}
+			// check base class
+			pEventMap = pEventMap->lpBaseEventMap;
+		}
+
+		*pEventMapTop->lpStockEventMask = dwStockEventMask;
+	}
+
+	AfxUnlockGlobals(CRIT_STOCKMASK);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -127,7 +126,7 @@ const AFX_EVENTMAP_ENTRY* COleControl::GetEventMapEntry(
 		{
 			while (pEntry->pszName != NULL)
 			{
-				if (_tcscmp(pEntry->pszName, pszName) == 0)
+				if (lstrcmp(pEntry->pszName, pszName) == 0)
 				{
 					if (pEntry->dispid != DISPID_UNKNOWN)
 						dispid = pEntry->dispid;
@@ -157,16 +156,11 @@ void COleControl::FireEventV(DISPID dispid, BYTE* pbParams,
 {
 	COleDispatchDriver driver;
 
-	const CPtrArray* pConnections = m_xEventConnPt.GetConnections();
-	ASSERT(pConnections != NULL);
-
-	int i;
-	int cConnections = pConnections->GetSize();
+	POSITION pos = m_xEventConnPt.GetStartPosition();
 	LPDISPATCH pDispatch;
-
-	for (i = 0; i < cConnections; i++)
+	while (pos != NULL)
 	{
-		pDispatch = (LPDISPATCH)(pConnections->GetAt(i));
+		pDispatch = (LPDISPATCH)m_xEventConnPt.GetNextConnection(pos);
 		ASSERT(pDispatch != NULL);
 		driver.AttachDispatch(pDispatch, FALSE);
 		TRY
@@ -238,7 +232,7 @@ void COleControl::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void COleControl::KeyUp(USHORT* pnChar)
 {
-	if (m_dwStockEventMask & STOCKEVENT_KEYUP)
+	if (GetStockEventMask() & STOCKEVENT_KEYUP)
 	{
 		USHORT nShiftState = _AfxShiftState();
 		FireKeyUp(pnChar, nShiftState);
@@ -251,7 +245,7 @@ void COleControl::KeyUp(USHORT* pnChar)
 
 void COleControl::KeyDown(USHORT* pnChar)
 {
-	if (m_dwStockEventMask & STOCKEVENT_KEYDOWN)
+	if (GetStockEventMask() & STOCKEVENT_KEYDOWN)
 	{
 		USHORT nShiftState = _AfxShiftState();
 		FireKeyDown(pnChar, nShiftState);
@@ -262,7 +256,7 @@ void COleControl::KeyDown(USHORT* pnChar)
 	}
 }
 
-static void PostTrailByte(CWnd* pWnd, BYTE bTrailByte)
+AFX_STATIC void AFXAPI _AfxPostTrailByte(CWnd* pWnd, BYTE bTrailByte)
 {
 	// Force new trail byte to the front of the queue.
 	pWnd->PostMessage(WM_QUEUE_SENTINEL);
@@ -281,8 +275,8 @@ static void PostTrailByte(CWnd* pWnd, BYTE bTrailByte)
 UINT COleControl::OnGetDlgCode()
 {
 	// If we're firing KeyPress, prevent the container from stealing WM_CHAR.
-    return (IsSubclassedControl() ? CWnd::OnGetDlgCode() : 0) |
-		(m_dwStockEventMask & STOCKEVENT_KEYPRESS) ? DLGC_WANTCHARS : 0;
+	return (IsSubclassedControl() ? CWnd::OnGetDlgCode() : 0) |
+		((GetStockEventMask() & STOCKEVENT_KEYPRESS) ? DLGC_WANTCHARS : 0);
 }
 
 void COleControl::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -292,7 +286,7 @@ void COleControl::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 	BOOL bLeadByte = IsDBCSLeadByte((BYTE)nCharShort);
 	MSG msg;
 
-	if (m_dwStockEventMask & STOCKEVENT_KEYPRESS)
+	if (GetStockEventMask() & STOCKEVENT_KEYPRESS)
 	{
 		if (bLeadByte)
 		{
@@ -340,7 +334,7 @@ void COleControl::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 					VERIFY(::PeekMessage(&msg, m_hWnd, WM_CHAR, WM_CHAR,
 						PM_NOYIELD | PM_REMOVE));
-					PostTrailByte(this, LOBYTE(nCharShort));
+					_AfxPostTrailByte(this, LOBYTE(nCharShort));
 					nChar = HIBYTE(nCharShort);
 				}
 				else
@@ -360,7 +354,7 @@ void COleControl::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 					// Event handler changed character from SBCS to DBCS:
 					// Post the new trail byte.
 
-					PostTrailByte(this, LOBYTE(nCharShort));
+					_AfxPostTrailByte(this, LOBYTE(nCharShort));
 					nChar = HIBYTE(nCharShort);
 				}
 			}
@@ -378,9 +372,9 @@ void COleControl::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 		TCHAR szClassName[10];
 		if ((!::GetClassName(m_hWnd, szClassName, 10)) ||  // didn't get class
-			(_tcsicmp(szClassName, _T("Edit")) &&           // not Edit
-			 _tcsicmp(szClassName, _T("ListBox")) &&        // not ListBox
-			 _tcsicmp(szClassName, _T("ComboBox"))))        // not ComboBox
+			(lstrcmpi(szClassName, _T("Edit")) &&           // not Edit
+			 lstrcmpi(szClassName, _T("ListBox")) &&        // not ListBox
+			 lstrcmpi(szClassName, _T("ComboBox"))))        // not ComboBox
 		{
 			VERIFY(::PeekMessage(&msg, m_hWnd, WM_CHAR, WM_CHAR,
 				PM_NOYIELD | PM_REMOVE));
@@ -405,14 +399,15 @@ void COleControl::OnKeyUpEvent(USHORT, USHORT)
 
 void COleControl::ButtonDown(USHORT iButton, UINT, CPoint point)
 {
-	if ((m_dwStockEventMask & STOCKEVENTS_MOUSE) || m_bPendingUIActivation)
+	DWORD dwStockEventMask = GetStockEventMask();
+	if ((dwStockEventMask & STOCKEVENTS_MOUSE) || m_bPendingUIActivation)
 	{
 		if (m_iButtonState == 0)
 			SetCapture();
 
 		m_iButtonState |= iButton;
 
-		if (m_dwStockEventMask & STOCKEVENT_MOUSEDOWN)
+		if (dwStockEventMask & STOCKEVENT_MOUSEDOWN)
 			FireMouseDown(iButton, _AfxShiftState(), point.x, point.y);
 
 		m_iDblClkState &= ~iButton;
@@ -425,10 +420,15 @@ void COleControl::ButtonUp(USHORT iButton, UINT, CPoint point)
 	{
 		m_iButtonState &= ~iButton;
 
-		if (m_dwStockEventMask & STOCKEVENT_MOUSEUP)
+		if (m_iButtonState == 0)
+			ReleaseCapture();
+
+		DWORD dwStockEventMask = GetStockEventMask();
+
+		if (dwStockEventMask & STOCKEVENT_MOUSEUP)
 			FireMouseUp(iButton, _AfxShiftState(), point.x, point.y);
 
-		if ((m_dwStockEventMask & STOCKEVENT_CLICK) &&
+		if ((dwStockEventMask & STOCKEVENT_CLICK) &&
 			!(m_iDblClkState & iButton))
 		{
 			CRect rect;
@@ -443,12 +443,13 @@ void COleControl::ButtonUp(USHORT iButton, UINT, CPoint point)
 
 void COleControl::ButtonDblClk(USHORT iButton, UINT, CPoint)
 {
-	if (m_dwStockEventMask & STOCKEVENTS_MOUSE)
+	DWORD dwStockEventMask = GetStockEventMask();
+	if (dwStockEventMask & STOCKEVENTS_MOUSE)
 	{
 		SetCapture();
 		m_iButtonState |= iButton;
 
-		if (m_dwStockEventMask & STOCKEVENT_DBLCLICK)
+		if (dwStockEventMask & STOCKEVENT_DBLCLICK)
 		{
 			FireDblClick();
 			m_iDblClkState |= iButton;
@@ -456,134 +457,100 @@ void COleControl::ButtonDblClk(USHORT iButton, UINT, CPoint)
 	}
 }
 
-void COleControl::OnMouseMove(UINT nFlags, CPoint point)
+void COleControl::OnMouseMove(UINT /*nFlags*/, CPoint point)
 {
-	if (m_dwStockEventMask & STOCKEVENT_MOUSEMOVE)
+	if (GetStockEventMask() & STOCKEVENT_MOUSEMOVE)
 	{
 		HWND hWndSave = m_hWnd;
-		FireMouseMove(m_iButtonState, _AfxShiftState(), point.x, point.y);
+		FireMouseMove((short)m_iButtonState, _AfxShiftState(), point.x, point.y);
 		if (m_hWnd != hWndSave)
 			return;
 	}
-	CWnd::OnMouseMove(nFlags, point);
+	Default();
 }
 
 void COleControl::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	HWND hWndSave = m_hWnd;
-	SetFocus();
-	ButtonDown(LEFT_BUTTON, nFlags, point);
-	if (m_hWnd != hWndSave)
-		return;
-
-	CWnd::OnLButtonDown(nFlags, point);
+	OnButtonDown(LEFT_BUTTON, nFlags, point);
 }
 
 void COleControl::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	HWND hWndSave = m_hWnd;
-	ButtonUp(LEFT_BUTTON, nFlags, point);
-	if (m_hWnd != hWndSave)
-		return;
-
-	CWnd::OnLButtonUp(nFlags, point);
-	if (m_bInPlaceActive && !m_bUIActive && m_bPendingUIActivation &&
-		(GetFocus() == this || IsChild(GetFocus())))
-	{
-		m_bPendingUIActivation = FALSE;
-		OnActivateInPlace(TRUE, NULL);
-	}
-
-	if (m_iButtonState == 0)
-		ReleaseCapture();
+	OnButtonUp(LEFT_BUTTON, nFlags, point);
 }
 
 void COleControl::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	HWND hWndSave = m_hWnd;
-	ButtonDblClk(LEFT_BUTTON, nFlags, point);
-	if (m_hWnd != hWndSave)
-		return;
-
-	CWnd::OnLButtonDblClk(nFlags, point);
+	OnButtonDblClk(LEFT_BUTTON, nFlags, point);
 }
 
 void COleControl::OnMButtonDown(UINT nFlags, CPoint point)
 {
-	HWND hWndSave = m_hWnd;
-	ButtonDown(MIDDLE_BUTTON, nFlags, point);
-	if (m_hWnd != hWndSave)
-		return;
-
-	CWnd::OnMButtonDown(nFlags, point);
+	OnButtonDown(MIDDLE_BUTTON, nFlags, point);
 }
 
 void COleControl::OnMButtonUp(UINT nFlags, CPoint point)
 {
-	HWND hWndSave = m_hWnd;
-	ButtonUp(MIDDLE_BUTTON, nFlags, point);
-	if (m_hWnd != hWndSave)
-		return;
-
-	CWnd::OnMButtonUp(nFlags, point);
-	if (m_bInPlaceActive && !m_bUIActive && m_bPendingUIActivation &&
-		(GetFocus() == this || IsChild(GetFocus())))
-	{
-		m_bPendingUIActivation = FALSE;
-		OnActivateInPlace(TRUE, NULL);
-	}
-
-	if (m_iButtonState == 0)
-		ReleaseCapture();
+	OnButtonUp(MIDDLE_BUTTON, nFlags, point);
 }
 
 void COleControl::OnMButtonDblClk(UINT nFlags, CPoint point)
 {
-	HWND hWndSave = m_hWnd;
-	ButtonDblClk(MIDDLE_BUTTON, nFlags, point);
-	if (m_hWnd != hWndSave)
-		return;
-
-	CWnd::OnMButtonDblClk(nFlags, point);
+	OnButtonDblClk(MIDDLE_BUTTON, nFlags, point);
 }
 
 void COleControl::OnRButtonDown(UINT nFlags, CPoint point)
 {
-	HWND hWndSave = m_hWnd;
-	ButtonDown(RIGHT_BUTTON, nFlags, point);
-	if (m_hWnd != hWndSave)
-		return;
-
-	CWnd::OnRButtonDown(nFlags, point);
+	OnButtonDown(RIGHT_BUTTON, nFlags, point);
 }
 
 void COleControl::OnRButtonUp(UINT nFlags, CPoint point)
 {
-	HWND hWndSave = m_hWnd;
-	ButtonUp(RIGHT_BUTTON, nFlags, point);
-	if (m_hWnd != hWndSave)
-		return;
-
-	CWnd::OnRButtonUp(nFlags, point);
-	if (m_bInPlaceActive && !m_bUIActive && m_bPendingUIActivation &&
-		(GetFocus() == this || IsChild(GetFocus())))
-	{
-		m_bPendingUIActivation = FALSE;
-		OnActivateInPlace(TRUE, NULL);
-	}
-
-	if (m_iButtonState == 0)
-		ReleaseCapture();
+	OnButtonUp(RIGHT_BUTTON, nFlags, point);
 }
 
 void COleControl::OnRButtonDblClk(UINT nFlags, CPoint point)
 {
+	OnButtonDblClk(RIGHT_BUTTON, nFlags, point);
+}
+
+void COleControl::OnButtonDown(USHORT nButton, UINT nFlags, CPoint point)
+{
 	HWND hWndSave = m_hWnd;
-	ButtonDblClk(RIGHT_BUTTON, nFlags, point);
+	if (nButton == LEFT_BUTTON)
+		SetFocus();
+	ButtonDown(nButton, nFlags, point);
 	if (m_hWnd != hWndSave)
 		return;
 
-	CWnd::OnRButtonDblClk(nFlags, point);
+	Default();
+}
+
+void COleControl::OnButtonUp(USHORT nButton, UINT nFlags, CPoint point)
+{
+	HWND hWndSave = m_hWnd;
+	Default();
+	ButtonUp(nButton, nFlags, point);
+	if (m_hWnd != hWndSave)
+		return;
+
+	if (m_bInPlaceActive && !m_bUIActive && m_bPendingUIActivation)
+	{
+		m_bPendingUIActivation = FALSE;
+		HWND hWndFocus = ::GetFocus();
+		if (hWndFocus == m_hWnd || ::IsChild(m_hWnd, hWndFocus))
+			OnActivateInPlace(TRUE, NULL);
+	}
+}
+
+void COleControl::OnButtonDblClk(USHORT nButton, UINT nFlags, CPoint point)
+{
+	HWND hWndSave = m_hWnd;
+	ButtonDblClk(nButton, nFlags, point);
+	if (m_hWnd != hWndSave)
+		return;
+
+	Default();
 }
 
 void COleControl::OnCancelMode()
@@ -602,7 +569,7 @@ void COleControl::OnClick(USHORT /*iButton*/)
 {
 	// May be overridden by subclass
 
-	if (m_dwStockEventMask & STOCKEVENT_CLICK)
+	if (GetStockEventMask() & STOCKEVENT_CLICK)
 		FireClick();
 }
 
@@ -635,12 +602,7 @@ void COleControl::FireError(SCODE scode, LPCTSTR lpszDescription, UINT nHelpID)
 		&bCancelDisplay);
 
 	if (!bCancelDisplay)
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      OLE2CT(bstrDescription);
-		DisplayError(scode, (LPCSTR)pBAfxConv, lpszSource, lpszHelpFile, nHelpID);
-#else    // __BORLANDC__
 		DisplayError(scode, OLE2CT(bstrDescription), lpszSource, lpszHelpFile, nHelpID);
-#endif   // __BORLANDC__
 
 	::SysFreeString(bstrDescription);
 

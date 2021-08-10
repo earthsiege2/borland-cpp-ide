@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -28,7 +29,7 @@ Description     Returns the byte size of the first character of str
 
                 The character of the first byte is not regarded as null
                 character even if the second byte of 2-bytes character is
-		null character. 
+                null character.
 
 Return value    Returns the byte size of a character.
 

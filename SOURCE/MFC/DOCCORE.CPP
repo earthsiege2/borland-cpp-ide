@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -9,23 +9,7 @@
 // Microsoft Foundation Classes product.
 
 #include "stdafx.h"
-#ifndef _MAC
 #include "io.h" // for _access
-#else
-#include <macname1.h>
-#include <Types.h>
-#include <Finder.h>
-#include <Files.h>
-#include <Resources.h>
-#include <Memory.h>
-#include <Script.h>
-#include <macname2.h>
-
-// misspelled in Finder.h
-#ifndef kIsStationery
-#define kIsStationery kIsStationary
-#endif
-#endif //_MAC
 
 #ifdef AFX_CORE2_SEG
 #pragma code_seg(AFX_CORE2_SEG)
@@ -309,16 +293,11 @@ BOOL CDocument::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 		if (bReplace && newName.IsEmpty())
 		{
 			newName = m_strTitle;
-#ifndef _MAC
 			// check for dubious filename
 			int iBad = newName.FindOneOf(_T(" #%;/\\"));
-#else
-			int iBad = newName.FindOneOf(_T(":"));
-#endif
 			if (iBad != -1)
 				newName.ReleaseBuffer(iBad);
 
-#ifndef _MAC
 			// append the default suffix if there is one
 			CString strExt;
 			if (pTemplate->GetDocString(strExt, CDocTemplate::filterExt) &&
@@ -327,7 +306,6 @@ BOOL CDocument::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 				ASSERT(strExt[0] == '.');
 				newName += strExt;
 			}
-#endif
 		}
 
 		if (!AfxGetApp()->DoPromptFileName(newName,
@@ -369,17 +347,6 @@ BOOL CDocument::SaveModified()
 	if (!IsModified())
 		return TRUE;        // ok to continue
 
-#ifdef _MAC
-	CWinApp* pApp = AfxGetApp();
-	if (pApp->m_nSaveOption == CWinApp::saveNo)
-		return TRUE;
-	else if (pApp->m_nSaveOption == CWinApp::saveYes)
-	{
-		DoFileSave();
-		return TRUE;
-	}
-#endif
-
 	// get name/title of document
 	CString name;
 	if (m_strPathName.IsEmpty())
@@ -400,19 +367,9 @@ BOOL CDocument::SaveModified()
 		}
 	}
 
-#ifdef _MAC
-	AfxGetFileTitle(m_strPathName, name.GetBuffer(_MAX_FNAME), _MAX_FNAME);
-	name.ReleaseBuffer();
-#endif
-
 	CString prompt;
-#ifndef _MAC
 	AfxFormatString1(prompt, AFX_IDP_ASK_TO_SAVE, name);
 	switch (AfxMessageBox(prompt, MB_YESNOCANCEL, AFX_IDP_ASK_TO_SAVE))
-#else
-	AfxFormatString2(prompt, AFX_IDP_ASK_TO_SAVE, AfxGetAppName(), name);
-	switch (AfxMessageBox(prompt, MB_SAVEDONTSAVECANCEL, AFX_IDP_ASK_TO_SAVE))
-#endif
 	{
 	case IDCANCEL:
 		return FALSE;       // don't continue
@@ -516,18 +473,12 @@ void CDocument::ReportSaveLoadException(LPCTSTR lpszPathName,
 
 	if (prompt.IsEmpty())
 	{
-#ifndef _MAC
 		TCHAR szTitle[_MAX_PATH];
 		if (afxData.bMarked4)
 			AfxGetFileTitle(lpszPathName, szTitle, _countof(szTitle));
 		else
 			lstrcpyn(szTitle, lpszPathName, _countof(szTitle));
 		AfxFormatString1(prompt, nIDP, szTitle);
-#else
-		TCHAR szTitle[_MAX_FNAME];
-		AfxGetFileTitle(lpszPathName, szTitle, _MAX_FNAME);
-		AfxFormatString1(prompt, nIDP, szTitle);
-#endif
 	}
 
 	AfxMessageBox(prompt, MB_ICONEXCLAMATION, nHelpContext);
@@ -536,13 +487,38 @@ void CDocument::ReportSaveLoadException(LPCTSTR lpszPathName,
 /////////////////////////////////////////////////////////////////////////////
 // File operations (default uses CDocument::Serialize)
 
+CString CMirrorFile::GetTempName(LPCTSTR lpszOriginalFile, BOOL bCreate)
+{
+	CString str;
+
+	// get the directory for the file
+
+	TCHAR szPath[_MAX_PATH];
+	LPTSTR lpszName;
+	GetFullPathName(lpszOriginalFile, _MAX_PATH, szPath, &lpszName);
+	*lpszName = NULL;
+
+	// let's create a temporary file name, and create
+	// a file too!
+
+	GetTempFileName(szPath, _T("MFC"), 0,
+		str.GetBuffer(_MAX_PATH+1));
+	str.ReleaseBuffer();
+
+	// delete the file if the user just wants a name
+
+	if (!bCreate)
+		CFile::Remove(str);
+
+	return str;
+}
+
 BOOL CMirrorFile::Open(LPCTSTR lpszFileName, UINT nOpenFlags,
 	CFileException* pError)
 {
 	ASSERT(lpszFileName != NULL);
 	m_strMirrorName.Empty();
 
-#ifndef _MAC
 	CFileStatus status;
 	if (nOpenFlags & CFile::modeCreate) //opened for writing
 	{
@@ -552,34 +528,23 @@ BOOL CMirrorFile::Open(LPCTSTR lpszFileName, UINT nOpenFlags,
 			AfxGetRoot(lpszFileName, strRoot);
 
 			DWORD dwSecPerClus, dwBytesPerSec, dwFreeClus, dwTotalClus;
-			int nBytes = 0;
+			DWORD nBytes = 0;
 			if (GetDiskFreeSpace(strRoot, &dwSecPerClus, &dwBytesPerSec, &dwFreeClus,
 				&dwTotalClus))
 			{
-				nBytes = dwFreeClus*dwSecPerClus*dwBytesPerSec;
+				nBytes = dwFreeClus * dwSecPerClus * dwBytesPerSec;
 			}
-			if (nBytes > 2*status.m_size) // at least 2x free space avail
+			if (nBytes > 2 * DWORD(status.m_size)) // at least 2x free space avail
 			{
-				// get the directory for the file
-				TCHAR szPath[_MAX_PATH];
-				LPTSTR lpszName;
-				GetFullPathName(lpszFileName, _MAX_PATH, szPath, &lpszName);
-				*lpszName = NULL;
-
-				//let's create a temporary file name
-				GetTempFileName(szPath, _T("MFC"), 0,
-					m_strMirrorName.GetBuffer(_MAX_PATH+1));
-				m_strMirrorName.ReleaseBuffer();
+				m_strMirrorName = GetTempName(lpszFileName, TRUE);
 			}
 		}
 	}
-#endif
 
 	if (!m_strMirrorName.IsEmpty() &&
 		CFile::Open(m_strMirrorName, nOpenFlags, pError))
 	{
 		m_strFileName = lpszFileName;
-#ifndef _MAC
 		FILETIME ftCreate, ftAccess, ftModify;
 		if (::GetFileTime((HANDLE)m_hFile, &ftCreate, &ftAccess, &ftModify))
 		{
@@ -589,16 +554,17 @@ BOOL CMirrorFile::Open(LPCTSTR lpszFileName, UINT nOpenFlags,
 
 		DWORD dwLength = 0;
 		PSECURITY_DESCRIPTOR pSecurityDescriptor = NULL;
-		GetFileSecurity(lpszFileName, DACL_SECURITY_INFORMATION,
-			NULL, dwLength, &dwLength);
-		pSecurityDescriptor = (PSECURITY_DESCRIPTOR) new BYTE[dwLength];
-		if (::GetFileSecurity(lpszFileName, DACL_SECURITY_INFORMATION,
-			pSecurityDescriptor, dwLength, &dwLength))
+		if (GetFileSecurity(lpszFileName, DACL_SECURITY_INFORMATION,
+			NULL, dwLength, &dwLength))
 		{
-			SetFileSecurity(m_strMirrorName, DACL_SECURITY_INFORMATION, pSecurityDescriptor);
+			pSecurityDescriptor = (PSECURITY_DESCRIPTOR) new BYTE[dwLength];
+			if (::GetFileSecurity(lpszFileName, DACL_SECURITY_INFORMATION,
+				pSecurityDescriptor, dwLength, &dwLength))
+			{
+				SetFileSecurity(m_strMirrorName, DACL_SECURITY_INFORMATION, pSecurityDescriptor);
+			}
+			delete[] (BYTE*)pSecurityDescriptor;
 		}
-		delete[] (BYTE*)pSecurityDescriptor;
-#endif
 		return TRUE;
 	}
 	m_strMirrorName.Empty();
@@ -612,14 +578,75 @@ void CMirrorFile::Abort()
 		CFile::Remove(m_strMirrorName);
 }
 
+//WINBUG: these will be in a public header, some day.
+
+typedef BOOL (WINAPI* ReplaceAPIPtr)(LPCWSTR, LPCWSTR, LPCWSTR,
+						DWORD, LPVOID, LPVOID);
+#ifndef REPLACEFILE_WRITE_THROUGH
+#define REPLACEFILE_WRITE_THROUGH 0x00000001
+#endif
+#ifndef REPLACEFILE_IGNORE_MERGE_ERRORS
+#define REPLACEFILE_IGNORE_MERGE_ERRORS 0x00000002
+#endif
+
+#ifndef ERROR_UNABLE_TO_MOVE_REPLACEMENT
+#define ERROR_UNABLE_TO_MOVE_REPLACEMENT 1176L
+#endif
+#ifndef ERROR_UNABLE_TO_MOVE_REPLACEMENT_2
+#define ERROR_UNABLE_TO_MOVE_REPLACEMENT_2 1177L
+#endif
+
 void CMirrorFile::Close()
 {
 	CString m_strName = m_strFileName; //file close empties string
 	CFile::Close();
 	if (!m_strMirrorName.IsEmpty())
 	{
-		CFile::Remove(m_strName);
-		CFile::Rename(m_strMirrorName, m_strName);
+		BOOL bWorked = FALSE;
+		DWORD dwResult = 0;
+      ReplaceAPIPtr pfn = NULL;
+		CString strBackupName;
+
+		if (!afxData.bWin95)
+		{
+			HMODULE hModule = GetModuleHandleA("KERNEL32");
+			ASSERT(hModule != NULL);
+
+	      pfn = (ReplaceAPIPtr) GetProcAddress(hModule, "ReplaceFile");
+
+			if (pfn != NULL)
+			{
+				USES_CONVERSION;
+
+				strBackupName = GetTempName(m_strMirrorName, FALSE);
+
+				// this NT API handles copying all attributes for us
+
+				bWorked = (pfn)(T2W((LPTSTR)(LPCTSTR)m_strName),
+                            T2W((LPTSTR)(LPCTSTR)m_strMirrorName),
+                            T2W((LPTSTR)(LPCTSTR)strBackupName),
+					REPLACEFILE_WRITE_THROUGH | REPLACEFILE_IGNORE_MERGE_ERRORS,
+					NULL, NULL);
+
+				if (!bWorked)
+				   dwResult = GetLastError();
+			}
+		}
+
+		if (!bWorked)
+		{
+			if (dwResult == ERROR_UNABLE_TO_MOVE_REPLACEMENT || dwResult == 0)
+				CFile::Remove(m_strName);
+
+			if (dwResult == ERROR_UNABLE_TO_MOVE_REPLACEMENT_2)
+			   CFile::Remove(strBackupName);
+
+			CFile::Rename(m_strMirrorName, m_strName);
+		}
+      else if (pfn != NULL)
+      {
+         CFile::Remove(strBackupName);
+      }
 	}
 }
 
@@ -705,23 +732,6 @@ BOOL CDocument::OnOpenDocument(LPCTSTR lpszPathName)
 
 	SetModifiedFlag(FALSE);     // start off with unmodified
 
-#ifdef _MAC
-	WIN32_FIND_DATA fileData;
-	HANDLE hFind = FindFirstFile(lpszPathName, &fileData);
-	ASSERT(hFind != (HANDLE)-1);
-	VERIFY(FindClose(hFind));
-
-	if ((fileData.wFinderFlags & kIsStationery) != 0)
-	{
-		SetModifiedFlag();
-		if (m_pDocTemplate != NULL)
-			m_pDocTemplate->SetDefaultTitle(this);
-
-		// normally SetPathName would do this, but we aren't calling it
-		AfxGetApp()->AddToRecentFileList(lpszPathName);
-	}
-#endif
-
 	return TRUE;
 }
 
@@ -764,59 +774,10 @@ BOOL CDocument::OnSaveDocument(LPCTSTR lpszPathName)
 	}
 	END_CATCH_ALL
 
-#ifdef _MAC
-	RecordDataFileOwner(lpszPathName, AfxGetAppName());
-#endif
-
 	SetModifiedFlag(FALSE);     // back to unmodified
 
 	return TRUE;        // success
 }
-
-#ifdef _MAC
-void CDocument::RecordDataFileOwner(LPCTSTR lpszPathName, LPCTSTR lpszAppName)
-{
-	FSSpec fss;
-
-	if (UnwrapFile(lpszPathName, &fss))
-	{
-		FInfo finfo;
-		short refNum;
-
-		if (FSpGetFInfo(&fss, &finfo) == noErr)
-			FSpCreateResFile(&fss, finfo.fdCreator, finfo.fdType, smSystemScript);
-		refNum = FSpOpenResFile(&fss, fsRdWrPerm);
-
-		if (ResError() == noErr)
-		{
-			Handle hv = Get1Resource('STR ', -16396);
-			if (hv == NULL)
-			{
-				hv = NewHandle(0);
-				if (hv != NULL)
-					AddResource(hv, 'STR ', -16396, "\p");
-			}
-
-			if (hv != NULL)
-			{
-				int cbAppName = lstrlen(lpszAppName);
-
-				SetHandleSize(hv, cbAppName + 1);
-				if (MemError() == noErr)
-				{
-					BlockMove(lpszAppName, *hv + 1, cbAppName);
-					**hv = (char) cbAppName;
-				}
-
-				ChangedResource(hv);
-				WriteResource(hv);
-			}
-
-			CloseResFile(refNum);
-		}
-	}
-}
-#endif
 
 void CDocument::OnCloseDocument()
 	// must close all views now (no prompting) - usually destroys this

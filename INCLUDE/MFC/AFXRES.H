@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -10,10 +10,6 @@
 
 #ifndef __AFXRES_H__
 #define __AFXRES_H__
-
-#ifdef REZ  // Mac resource compiler (mrc) defines REZ
-#define RC_INVOKED
-#endif
 
 #ifdef RC_INVOKED
 #ifndef _INC_WINDOWS
@@ -47,11 +43,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // General style bits etc
 
-// Tab Control styles
-#ifndef TCS_MULTILINE // new in later versions of Win32
-#define TCS_MULTILINE       0x0200
-#endif
-
 // ControlBar styles
 #define CBRS_ALIGN_LEFT     0x1000L
 #define CBRS_ALIGN_TOP      0x2000L
@@ -74,12 +65,13 @@
 #define CBRS_SIZE_FIXED     0x0002L
 #define CBRS_FLOATING       0x0001L
 
+#define CBRS_GRIPPER        0x00400000L
+
 #define CBRS_ORIENT_HORZ    (CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM)
 #define CBRS_ORIENT_VERT    (CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT)
 #define CBRS_ORIENT_ANY     (CBRS_ORIENT_HORZ|CBRS_ORIENT_VERT)
 
-#define CBRS_ALL            0xFFFFL
-
+#define CBRS_ALL            0x0040FFFFL
 
 // the CBRS_ style is made up of an alignment style and a draw border style
 //  the alignment styles are mutually exclusive
@@ -113,6 +105,8 @@
 #define AFX_IDW_STATUS_BAR              0xE801  // Status bar window
 #define AFX_IDW_PREVIEW_BAR             0xE802  // PrintPreview Dialog Bar
 #define AFX_IDW_RESIZE_BAR              0xE803  // OLE in-place resize bar
+#define AFX_IDW_REBAR                   0xE804  // COMCTL32 "rebar" Bar
+#define AFX_IDW_DIALOGBAR               0xE805  // CDialogBar
 
 // Note: If your application supports docking toolbars, you should
 //  not use the following IDs for your own toolbars.  The IDs chosen
@@ -268,7 +262,18 @@
 // View commands (same number used as IDW used for control bar)
 #define ID_VIEW_TOOLBAR                 0xE800
 #define ID_VIEW_STATUS_BAR              0xE801
-	// -> E8FF reserved for other control bar commands
+#define ID_VIEW_REBAR                   0xE804
+#define ID_VIEW_AUTOARRANGE         0xE805
+	// E810 -> E81F must be kept in order for RANGE macros
+#define ID_VIEW_SMALLICON               0xE810
+#define ID_VIEW_LARGEICON               0xE811
+#define ID_VIEW_LIST                   0xE812
+#define ID_VIEW_DETAILS                 0xE813
+#define ID_VIEW_LINEUP                  0xE814
+#define ID_VIEW_BYNAME                  0xE815
+#define AFX_ID_VIEW_MINIMUM              ID_VIEW_SMALLICON
+#define AFX_ID_VIEW_MAXIMUM              ID_VIEW_BYNAME
+	// E800 -> E8FF reserved for other control bar commands
 
 // RecordForm commands
 #define ID_RECORD_FIRST                 0xE900
@@ -313,9 +318,6 @@
 #define AFX_IDS_SAVEFILECOPY            0xF004
 #define AFX_IDS_PREVIEW_CLOSE           0xF005
 #define AFX_IDS_UNNAMED_FILE            0xF006
-#ifdef _MAC
-#define AFX_IDS_ABOUT                   0xF010
-#endif
 #define AFX_IDS_HIDE                    0xF011
 
 // MFC Standard Exception Error messages
@@ -382,6 +384,10 @@
 #define AFX_IDP_INTERNAL_FAILURE        0xF108      // general failure
 #define AFX_IDP_COMMAND_FAILURE         0xF109      // command failure
 #define AFX_IDP_FAILED_MEMORY_ALLOC     0xF10A
+#define AFX_IDP_UNREG_DONE              0xF10B
+#define AFX_IDP_UNREG_FAILURE           0xF10C
+#define AFX_IDP_DLL_LOAD_FAILED         0xF10D
+#define AFX_IDP_DLL_BAD_VERSION         0xF10E
 
 // DDV parse errors
 #define AFX_IDP_PARSE_INT               0xF110
@@ -409,6 +415,7 @@
 #define AFX_IDP_FAILED_TO_CONNECT       0xF181
 #define AFX_IDP_SERVER_BUSY             0xF182
 #define AFX_IDP_BAD_VERB                0xF183
+#define AFX_IDS_NOT_DOCOBJECT                0xF184
 #define AFX_IDP_FAILED_TO_NOTIFY        0xF185
 #define AFX_IDP_FAILED_TO_LAUNCH        0xF186
 #define AFX_IDP_ASK_TO_UPDATE           0xF187
@@ -490,34 +497,39 @@
 #define AFX_IDP_SQL_INCORRECT_ODBC              0xF297
 #define AFX_IDP_SQL_UPDATE_DELETE_FAILED        0xF298
 #define AFX_IDP_SQL_DYNAMIC_CURSOR_NOT_SUPPORTED    0xF299
+#define AFX_IDP_SQL_FIELD_NOT_FOUND             0xF29A
+#define AFX_IDP_SQL_BOOKMARKS_NOT_SUPPORTED     0xF29B
+#define AFX_IDP_SQL_BOOKMARKS_NOT_ENABLED       0xF29C
+
+// ODBC Database strings
+#define AFX_IDS_DELETED                         0xF29D
 
 // DAO Database errors / prompt strings
 #ifndef RC_INVOKED      // code only
-#define AFX_IDP_DAO_FIRST                       0xF2A0
+#define AFX_IDP_DAO_FIRST                       0xF2B0
 #endif //!RC_INVOKED
-#define AFX_IDP_DAO_ENGINE_INITIALIZATION       0xF2A0
-#define AFX_IDP_DAO_DFX_BIND                    0xF2A1
-#define AFX_IDP_DAO_OBJECT_NOT_OPEN             0xF2A2
+#define AFX_IDP_DAO_ENGINE_INITIALIZATION       0xF2B0
+#define AFX_IDP_DAO_DFX_BIND                    0xF2B1
+#define AFX_IDP_DAO_OBJECT_NOT_OPEN             0xF2B2
 
 // ICDAORecordset::GetRows Errors
 //  These are not placed in DAO Errors collection
 //  and must be handled directly by MFC.
-#define AFX_IDP_DAO_ROWTOOSHORT                 0xF2A3
-#define AFX_IDP_DAO_BADBINDINFO                 0xF2A4
-#define AFX_IDP_DAO_COLUMNUNAVAILABLE           0xF2A5
+#define AFX_IDP_DAO_ROWTOOSHORT                 0xF2B3
+#define AFX_IDP_DAO_BADBINDINFO                 0xF2B4
+#define AFX_IDP_DAO_COLUMNUNAVAILABLE           0xF2B5
 
 /////////////////////////////////////////////////////////////////////////////
 // Strings for ISAPI support
 
-#define AFX_IDS_HTTP_TITLE				0xF2D1
-#define AFX_IDS_HTTP_NO_TEXT			0xF2D2
-#define AFX_IDS_HTTP_BAD_REQUEST		0xF2D3
-#define AFX_IDS_HTTP_AUTH_REQUIRED		0xF2D4
-#define AFX_IDS_HTTP_FORBIDDEN			0xF2D5
-#define AFX_IDS_HTTP_NOT_FOUND			0xF2D6
-#define AFX_IDS_HTTP_SERVER_ERROR		0xF2D7
-#define AFX_IDS_HTTP_NOT_IMPLEMENTED	0xF2D8
-
+#define AFX_IDS_HTTP_TITLE              0xF2D1
+#define AFX_IDS_HTTP_NO_TEXT            0xF2D2
+#define AFX_IDS_HTTP_BAD_REQUEST        0xF2D3
+#define AFX_IDS_HTTP_AUTH_REQUIRED      0xF2D4
+#define AFX_IDS_HTTP_FORBIDDEN          0xF2D5
+#define AFX_IDS_HTTP_NOT_FOUND          0xF2D6
+#define AFX_IDS_HTTP_SERVER_ERROR       0xF2D7
+#define AFX_IDS_HTTP_NOT_IMPLEMENTED    0xF2D8
 
 /////////////////////////////////////////////////////////////////////////////
 // AFX implementation - control IDs (AFX_IDC)
@@ -559,9 +571,6 @@
 #define AFX_IDD_NEWTYPEDLG              30721
 #define AFX_IDD_PRINTDLG                30722
 #define AFX_IDD_PREVIEW_TOOLBAR         30723
-#ifdef _MAC
-#define AFX_IDD_PREVIEW_SHORTTOOLBAR    30731
-#endif
 
 // Dialogs defined for OLE2UI library
 #define AFX_IDD_INSERTOBJECT            30724
@@ -754,9 +763,7 @@
 #define AFX_IDP_E_SEARCHTEXTNOTFOUND        0xFEC6
 #define AFX_IDP_E_REPLACEMENTSTOOLONG       0xFEC7
 
-
-
-
+/////////////////////////////////////////////////////////////////////////////
 
 #ifdef _AFX_MINREBUILD
 #pragma component(minrebuild, on)

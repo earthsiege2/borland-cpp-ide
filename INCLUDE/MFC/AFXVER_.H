@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -14,16 +14,14 @@
 // Master version numbers
 
 #define _AFX     1      // Microsoft Application Framework Classes
-#define _MFC_VER 0x0410 // Microsoft Foundation Classes version 4.10
+#ifndef _MFC_VER
+#define _MFC_VER 0x0600 // Microsoft Foundation Classes version 6.00, VC++ 6.0
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // Default swap tuning for AFX library
 
-#ifndef _68K_
-	#define _TEXTSEG(name)  ".text$" #name
-#else
-	#define _TEXTSEG(name)  #name, "swappable"
-#endif
+#define _TEXTSEG(name)  ".text$" #name
 
 // Most segments are tuned via function order list (DLL version)
 #ifndef _AFX_FUNCTION_ORDER
@@ -32,14 +30,16 @@
 #define AFX_CORE3_SEG   _TEXTSEG(AFX_CORE3) // more core functionality
 #define AFX_CORE4_SEG   _TEXTSEG(AFX_CORE4) // more core functionality
 #define AFX_AUX_SEG     _TEXTSEG(AFX_AUX)   // auxilliary functionality
+#define AFX_CMNCTL_SEG  _TEXTSEG(AFX_CMNCTL)// most common controls
 #define AFX_COLL_SEG    _TEXTSEG(AFX_COL1)  // collections
 #define AFX_COLL2_SEG   _TEXTSEG(AFX_COL2)  // more collections
+#define AFX_INET_SEG    _TEXTSEG(AFX_INET)  // Internet client-side stuff
 #define AFX_OLE_SEG     _TEXTSEG(AFX_OLE1)  // OLE support
 #define AFX_OLE2_SEG    _TEXTSEG(AFX_OLE2)  // more OLE support
 #define AFX_OLE3_SEG    _TEXTSEG(AFX_OLE3)  // and more OLE support
 #define AFX_OLE4_SEG    _TEXTSEG(AFX_OLE4)  // and more OLE support
 #define AFX_OLE5_SEG    _TEXTSEG(AFX_OLE5)  // and even more OLE support
-#define AFX_OLERA_SEG	_TEXTSEG(AFX_OLERA) // (reserved for future use)
+#define AFX_OLERA_SEG   _TEXTSEG(AFX_OLERA) // (reserved for future use)
 #define AFX_PRINT_SEG   _TEXTSEG(AFX_PRNT)  // Printing functionality
 #define AFX_DBG1_SEG    _TEXTSEG(AFX_DBG1)  // inlines go here in _DEBUG
 #define AFX_DBG2_SEG    _TEXTSEG(AFX_DBG2)  // inlines go here in _DEBUG
@@ -53,14 +53,16 @@
 #define AFX_CORE3_SEG                       // more core functionality
 #define AFX_CORE4_SEG                       // more core functionality
 #define AFX_AUX_SEG                         // auxilliary functionality
+#define AFX_CMNCTL_SEG                      // most common controls
 #define AFX_COLL_SEG                        // collections
 #define AFX_COLL2_SEG                       // more collections
+#define AFX_INET_SEG                        // Internet client-side stuff
 #define AFX_OLE_SEG                         // OLE support
 #define AFX_OLE2_SEG                        // more OLE support
 #define AFX_OLE3_SEG                        // and more OLE support
 #define AFX_OLE4_SEG                        // and more OLE support
 #define AFX_OLE5_SEG                        // and even more OLE support
-#define AFX_OLERA_SEG						// (reserved for future use)
+#define AFX_OLERA_SEG                       // (reserved for future use)
 #define AFX_PRINT_SEG                       // Printing functionality
 #define AFX_DBG1_SEG                        // inlines go here in _DEBUG
 #define AFX_DBG2_SEG                        // inlines go here in _DEBUG
@@ -87,6 +89,9 @@
 #pragma component(browser, off, references, "FALSE")
 #pragma component(browser, off, references, "FAR")
 #pragma component(browser, off, references, "LPSTR")
+#pragma component(browser, off, references, "LPTSTR")
+#pragma component(browser, off, references, "LPCSTR")
+#pragma component(browser, off, references, "LPCTSTR")
 #pragma component(browser, off, references, "NULL")
 #pragma component(browser, off, references, "PASCAL")
 #pragma component(browser, off, references, "THIS_FILE")
@@ -121,6 +126,7 @@
 	#define _AFXDLL
 #endif
 
+
 #ifdef __BORLANDC__
 #  if defined(_AFXDLL) && !defined(_RTLDLL)
 #    error The dynamic MFC library requires the dynamic RTL.
@@ -131,14 +137,16 @@
 #  endif
 #endif
 
-#ifndef _MAC
 #if defined(_AFXDLL) && !defined(_MT)
 	#error Please use the /MD switch (multithreaded DLL C-runtime)
-#endif
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
 // special include files
+
+#ifndef AFX_INLINE
+	#define AFX_INLINE inline /*__forceinline*/
+#endif
 
 #include <afxv_w32.h>
 
@@ -147,16 +155,11 @@
 	#include <afxv_cpu.h>
 #endif
 
-// Include any non-Windows OS-specific items
-#ifdef _MAC
-	#include <afxv_mac.h>
-#endif
-
-#if defined(_X86_) || defined(_MAC)
+#ifdef _X86_
 	#define _AFX_MINREBUILD
 #endif
 
-#if defined(_CUSTOM) || defined (__BORLANDC__)
+#if defined (_CUSTOM) || defined (__BORLANDC__)
 // Put any custom configuration items in afxv_cfg.h
 	#include <afxv_cfg.h>
 #endif
@@ -168,8 +171,6 @@
 
 #ifdef _AFXDLL
 	#include <afxv_dll.h>
-#else
-	#define _AFX_NO_OCX_SUPPORT
 #endif
 
 // Define this virtual key for use by status bar
@@ -211,7 +212,12 @@
 
 // PASCAL is used for static member functions
 #ifndef PASCAL
-	#define PASCAL
+	#define PASCAL  __stdcall
+#endif
+
+// FASTCALL is used for static member functions with little or no params
+#ifndef FASTCALL
+	#define FASTCALL __fastcall
 #endif
 
 // CDECL and EXPORT are defined in case WINDOWS.H doesn't
@@ -248,6 +254,11 @@
 	#define AFX_EXPORT EXPORT
 #endif
 
+#ifndef AFX_STATIC
+	#define AFX_STATIC extern
+	#define AFX_STATIC_DATA extern __declspec(selectany)
+#endif
+
 // The following macros are used to enable export/import
 
 // for data
@@ -274,30 +285,47 @@
 	#define AFX_API_IMPORT __declspec(dllimport)
 #endif
 
+// This macro is used to reduce size requirements of some classes
+#ifndef AFX_ALWAYS_VTABLE
+#ifndef AFX_NOVTABLE
+#if _MSC_VER >= 1100 && !defined(_DEBUG)
+#define AFX_NOVTABLE __declspec(novtable)
+#else
+#define AFX_NOVTABLE
+#endif
+#endif
+#endif
+
+// for global data that should be in COMDATs (packaged data)
+#ifndef AFX_COMDAT
+	#define AFX_COMDAT
+#endif
+
 // The following macros are used on data declarations/definitions
 //  (they are redefined for extension DLLs and the shared MFC DLL)
 #define AFX_DATA
 #define AFX_DATADEF
+#define AFX_API
 
-// used when building the "core" MFC40.DLL
+// used when building the "core" MFC42.DLL
 #ifndef AFX_CORE_DATA
 	#define AFX_CORE_DATA
 	#define AFX_CORE_DATADEF
 #endif
 
-// used when building the MFC/OLE support MFCO40.DLL
+// used when building the MFC/OLE support MFCO42.DLL
 #ifndef AFX_OLE_DATA
 	#define AFX_OLE_DATA
 	#define AFX_OLE_DATADEF
 #endif
 
-// used when building the MFC/DB support MFCD40.DLL
+// used when building the MFC/DB support MFCD42.DLL
 #ifndef AFX_DB_DATA
 	#define AFX_DB_DATA
 	#define AFX_DB_DATADEF
 #endif
 
-// used when building the MFC/NET support MFCN40.DLL
+// used when building the MFC/NET support MFCN42.DLL
 #ifndef AFX_NET_DATA
 	#define AFX_NET_DATA
 	#define AFX_NET_DATADEF

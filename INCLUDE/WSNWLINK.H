@@ -3,7 +3,7 @@
  *
  *
  *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1995.
+ *  Copyright (C) Microsoft Corporation, 1992-1999.
  *   Microsoft-specific extensions to the Windows NT IPX/SPX Windows
  *   Sockets interface.  These extensions are provided for use as
  *   necessary for compatibility with existing applications.  They are
@@ -28,14 +28,13 @@
  */
 
 #ifndef _WSNWLINK_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSNWLINK_
-#pragma option -b
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <pshpack8.h>
-#pragma option -b
+#if _MSC_VER > 1000
+#pragma once
 #endif
+
 
 /*
  *   Set/get the IPX packet type.  The value specified in the
@@ -281,12 +280,6 @@ typedef struct _IPX_SPXCONNSTATUS_DATA {
 
 #define IPX_IMMEDIATESPXACK     0x4010
 
-#ifdef __BORLANDC__
-#pragma option -b.
-  #include <poppack.h>
-#pragma option -b
-#endif
-
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif
 

@@ -1,0 +1,29 @@
+LIBRARY MSWSOCK
+EXPORTS
+
+    AcceptEx                                 = 'MSWSOCK.DLL'.*
+    EnumProtocolsA                           = 'MSWSOCK.DLL'.*
+    EnumProtocolsW                           = 'MSWSOCK.DLL'.*
+    GetAcceptExSockaddrs                     = 'MSWSOCK.DLL'.*
+    GetAddressByNameA                        = 'MSWSOCK.DLL'.*
+    GetAddressByNameW                        = 'MSWSOCK.DLL'.*
+    GetNameByTypeA                           = 'MSWSOCK.DLL'.*
+    GetNameByTypeW                           = 'MSWSOCK.DLL'.*
+    GetServiceA                              = 'MSWSOCK.DLL'.*
+    GetServiceW                              = 'MSWSOCK.DLL'.*
+    GetTypeByNameA                           = 'MSWSOCK.DLL'.*
+    GetTypeByNameW                           = 'MSWSOCK.DLL'.*
+    MigrateWinsockConfiguration              = 'MSWSOCK.DLL'.*
+    NPLoadNameSpaces                         = 'MSWSOCK.DLL'.*
+    SetServiceA                              = 'MSWSOCK.DLL'.*
+    SetServiceW                              = 'MSWSOCK.DLL'.*
+    TransmitFile                             = 'MSWSOCK.DLL'.*
+    WSARecvEx                                = 'MSWSOCK.DLL'.*
+    dn_expand                                = 'MSWSOCK.DLL'.*
+    getnetbyname                             = 'MSWSOCK.DLL'.*
+    inet_network                             = 'MSWSOCK.DLL'.*
+    rcmd                                     = 'MSWSOCK.DLL'.*
+    rexec                                    = 'MSWSOCK.DLL'.*
+    rresvport                                = 'MSWSOCK.DLL'.*
+    s_perror                                 = 'MSWSOCK.DLL'.*
+    sethostname                              = 'MSWSOCK.DLL'.*

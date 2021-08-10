@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -10,15 +10,6 @@
 
 #include "stdafx.h"
 #include <malloc.h>
-#include <dos.h>
-#ifdef _MAC
-#include <macname1.h>
-#include <Types.h>
-#include <GestaltEqu.h>
-#include <AERegistry.h>
-#include <Errors.h>
-#include <macname2.h>
-#endif
 
 #ifdef AFX_CORE1_SEG
 #pragma code_seg(AFX_CORE1_SEG)
@@ -29,10 +20,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-static const TCHAR szFileSection[] = _T("Recent File List");
-static const TCHAR szFileEntry[] = _T("File%d");
-static const TCHAR szPreviewSection[] = _T("Settings");
-static const TCHAR szPreviewEntry[] = _T("PreviewPages");
+AFX_STATIC_DATA const TCHAR _afxFileSection[] = _T("Recent File List");
+AFX_STATIC_DATA const TCHAR _afxFileEntry[] = _T("File%d");
+AFX_STATIC_DATA const TCHAR _afxPreviewSection[] = _T("Settings");
+AFX_STATIC_DATA const TCHAR _afxPreviewEntry[] = _T("PreviewPages");
 
 /////////////////////////////////////////////////////////////////////////////
 // globals (internal library use)
@@ -55,6 +46,8 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // _AFX_WIN_STATE implementation
 
+#ifndef _AFX_NO_GRAYDLG_SUPPORT
+
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
@@ -62,11 +55,6 @@ END_MESSAGE_MAP()
 _AFX_WIN_STATE::_AFX_WIN_STATE()
 {
 	// Note: it is only necessary to intialize non-zero data.
-
-#ifdef _MAC
-	// by default, don't override DefWindowProc's coloring
-	m_crDlgTextClr = (COLORREF)-1;
-#endif
 }
 
 #ifdef AFX_TERM_SEG
@@ -78,16 +66,22 @@ _AFX_WIN_STATE::~_AFX_WIN_STATE()
 	AfxDeleteObject((HGDIOBJ*)&m_hDlgBkBrush);
 }
 
+#endif //!_AFX_NO_GRAYDLG_SUPPORT
+
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
 
 CWinApp::CWinApp(LPCTSTR lpszAppName)
 {
-	m_pszAppName = lpszAppName;
+	if (lpszAppName != NULL)
+		m_pszAppName = _tcsdup(lpszAppName);
+	else
+		m_pszAppName = NULL;
 
 	// initialize CWinThread state
-	AFX_MODULE_THREAD_STATE* pThreadState = AfxGetModuleThreadState();
+	AFX_MODULE_STATE* pModuleState = _AFX_CMDTARGET_GETSTATE();
+	AFX_MODULE_THREAD_STATE* pThreadState = pModuleState->m_thread;
 	ASSERT(AfxGetThread() == NULL);
 	pThreadState->m_pCurrentWinThread = this;
 	ASSERT(AfxGetThread() == this);
@@ -96,7 +90,6 @@ CWinApp::CWinApp(LPCTSTR lpszAppName)
 
 	// initialize CWinApp state
 	ASSERT(afxCurrentWinApp == NULL); // only one CWinApp object please
-	AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
 	pModuleState->m_pCurrentWinApp = this;
 	ASSERT(AfxGetApp() == this);
 
@@ -121,20 +114,12 @@ CWinApp::CWinApp(LPCTSTR lpszAppName)
 	m_hDevNames = NULL;
 	m_nNumPreviewPages = 0;     // not specified (defaults to 1)
 
-	// initialize OLE state
-	m_lpfnOleTermOrFreeLib = NULL;   // will be set if AfxOleInit called
-	m_pMessageFilter = NULL;
-
 	// initialize DAO state
 	m_lpfnDaoTerm = NULL;   // will be set if AfxDaoInit called
 
 	// other initialization
 	m_bHelpMode = FALSE;
 	m_nSafetyPoolSize = 512;        // default size
-
-#ifdef _MAC
-	m_nSaveOption = saveAsk;
-#endif
 }
 
 BOOL CWinApp::InitApplication()
@@ -167,30 +152,19 @@ void CWinApp::LoadStdProfileSettings(UINT nMaxMRU)
 	if (nMaxMRU != 0)
 	{
 		// create file MRU since nMaxMRU not zero
-		m_pRecentFileList = new CRecentFileList(0, szFileSection, szFileEntry,
+		m_pRecentFileList = new CRecentFileList(0, _afxFileSection, _afxFileEntry,
 			nMaxMRU);
 		m_pRecentFileList->ReadList();
 	}
 	// 0 by default means not set
-	m_nNumPreviewPages = GetProfileInt(szPreviewSection, szPreviewEntry, 0);
+	m_nNumPreviewPages = GetProfileInt(_afxPreviewSection, _afxPreviewEntry, 0);
 }
 
 void CWinApp::ParseCommandLine(CCommandLineInfo& rCmdInfo)
 {
-#ifdef __BORLANDC__
-#define __argc _argc
-#define __argv _argv
-#endif
-#ifndef _MAC
-	USES_CONVERSION;
-
 	for (int i = 1; i < __argc; i++)
 	{
-#ifdef _UNICODE
-		LPCTSTR pszParam = __wargv[i];
-#else
-		LPCTSTR pszParam = __argv[i];
-#endif
+		LPCTSTR pszParam = __targv[i];
 		BOOL bFlag = FALSE;
 		BOOL bLast = ((i + 1) == __argc);
 		if (pszParam[0] == '-' || pszParam[0] == '/')
@@ -199,23 +173,8 @@ void CWinApp::ParseCommandLine(CCommandLineInfo& rCmdInfo)
 			bFlag = TRUE;
 			++pszParam;
 		}
-#if defined(__BORLANDC__) && defined(_UNICODE)
-      T2A(pszParam);
-		rCmdInfo.ParseParam((LPCSTR)pBAfxConv, bFlag, bLast);
-#else    // __BORLANDC__
-		rCmdInfo.ParseParam(T2A(pszParam), bFlag, bLast);
-#endif   // __BORLANDC__
+		rCmdInfo.ParseParam(pszParam, bFlag, bLast);
 	}
-#else
-	// WLM command line can contain only one parameter,
-	// /Embedding
-
-	if (m_lpCmdLine[0] == '-' || m_lpCmdLine[0] == '/')
-	{
-		rCmdInfo.ParseParam(m_lpCmdLine+1, TRUE, TRUE);
-	}
-
-#endif // _MAC
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -233,44 +192,90 @@ CCommandLineInfo::~CCommandLineInfo()
 {
 }
 
-void CCommandLineInfo::ParseParam(const char* pszParam,BOOL bFlag,BOOL bLast)
+void CCommandLineInfo::ParseParam(const TCHAR* pszParam,BOOL bFlag,BOOL bLast)
 {
 	if (bFlag)
 	{
-		if (lstrcmpA(pszParam, "pt") == 0)
-			m_nShellCommand = FilePrintTo;
-		else if (lstrcmpA(pszParam, "p") == 0)
-			m_nShellCommand = FilePrint;
-		else if (lstrcmpA(pszParam, "dde") == 0)
-		{
-			AfxOleSetUserCtrl(FALSE);
-			m_nShellCommand = FileDDE;
-		}
-		else if (lstrcmpA(pszParam, "Embedding") == 0)
-		{
-			AfxOleSetUserCtrl(FALSE);
-			m_bRunEmbedded = TRUE;
-			m_bShowSplash = FALSE;
-		}
-		else if (lstrcmpA(pszParam, "Automation") == 0)
-		{
-			AfxOleSetUserCtrl(FALSE);
-			m_bRunAutomated = TRUE;
-			m_bShowSplash = FALSE;
-		}
+		USES_CONVERSION;
+		ParseParamFlag(T2CA(pszParam));
 	}
 	else
-	{
-		if (m_strFileName.IsEmpty())
-			m_strFileName = pszParam;
-		else if (m_nShellCommand == FilePrintTo && m_strPrinterName.IsEmpty())
-			m_strPrinterName = pszParam;
-		else if (m_nShellCommand == FilePrintTo && m_strDriverName.IsEmpty())
-			m_strDriverName = pszParam;
-		else if (m_nShellCommand == FilePrintTo && m_strPortName.IsEmpty())
-			m_strPortName = pszParam;
-	}
+		ParseParamNotFlag(pszParam);
 
+	ParseLast(bLast);
+}
+
+#ifdef UNICODE
+void CCommandLineInfo::ParseParam(const char* pszParam, BOOL bFlag, BOOL bLast)
+{
+	if (bFlag)
+		ParseParamFlag(pszParam);
+	else
+		ParseParamNotFlag(pszParam);
+
+	ParseLast(bLast);
+}
+#endif // UNICODE
+
+void CCommandLineInfo::ParseParamFlag(const char* pszParam)
+{
+	// OLE command switches are case insensitive, while
+	// shell command switches are case sensitive
+
+	if (lstrcmpA(pszParam, "pt") == 0)
+		m_nShellCommand = FilePrintTo;
+	else if (lstrcmpA(pszParam, "p") == 0)
+		m_nShellCommand = FilePrint;
+	else if (lstrcmpiA(pszParam, "Unregister") == 0 ||
+			 lstrcmpiA(pszParam, "Unregserver") == 0)
+		m_nShellCommand = AppUnregister;
+	else if (lstrcmpA(pszParam, "dde") == 0)
+	{
+		AfxOleSetUserCtrl(FALSE);
+		m_nShellCommand = FileDDE;
+	}
+	else if (lstrcmpiA(pszParam, "Embedding") == 0)
+	{
+		AfxOleSetUserCtrl(FALSE);
+		m_bRunEmbedded = TRUE;
+		m_bShowSplash = FALSE;
+	}
+	else if (lstrcmpiA(pszParam, "Automation") == 0)
+	{
+		AfxOleSetUserCtrl(FALSE);
+		m_bRunAutomated = TRUE;
+		m_bShowSplash = FALSE;
+	}
+}
+
+void CCommandLineInfo::ParseParamNotFlag(const TCHAR* pszParam)
+{
+	if (m_strFileName.IsEmpty())
+		m_strFileName = pszParam;
+	else if (m_nShellCommand == FilePrintTo && m_strPrinterName.IsEmpty())
+		m_strPrinterName = pszParam;
+	else if (m_nShellCommand == FilePrintTo && m_strDriverName.IsEmpty())
+		m_strDriverName = pszParam;
+	else if (m_nShellCommand == FilePrintTo && m_strPortName.IsEmpty())
+		m_strPortName = pszParam;
+}
+
+#ifdef UNICODE
+void CCommandLineInfo::ParseParamNotFlag(const char* pszParam)
+{
+	if (m_strFileName.IsEmpty())
+		m_strFileName = pszParam;
+	else if (m_nShellCommand == FilePrintTo && m_strPrinterName.IsEmpty())
+		m_strPrinterName = pszParam;
+	else if (m_nShellCommand == FilePrintTo && m_strDriverName.IsEmpty())
+		m_strDriverName = pszParam;
+	else if (m_nShellCommand == FilePrintTo && m_strPortName.IsEmpty())
+		m_strPortName = pszParam;
+}
+#endif
+
+void CCommandLineInfo::ParseLast(BOOL bLast)
+{
 	if (bLast)
 	{
 		if (m_nShellCommand == FileNew && !m_strFileName.IsEmpty())
@@ -278,254 +283,6 @@ void CCommandLineInfo::ParseParam(const char* pszParam,BOOL bFlag,BOOL bLast)
 		m_bShowSplash = !m_bRunEmbedded && !m_bRunAutomated;
 	}
 }
-
-#ifdef _MAC
-BOOL CWinApp::CreateInitialDocument()
-{
-	if (m_pMainWnd != NULL)
-		m_pMainWnd->SendMessage(WM_COMMAND, ID_FILE_NEW);
-	else if (m_pDocManager != NULL)
-	{
-		POSITION pos = m_pDocManager->GetFirstDocTemplatePosition();
-		if (pos != NULL)
-		{
-			CDocTemplate* pTemplate = m_pDocManager->GetNextDocTemplate(pos);
-
-			// if MDI, or SDI but we haven't opened any documents yet, open a new one
-			if (pTemplate != NULL &&
-				(pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)) ||
-				m_pDocManager->GetOpenDocumentCount() == 0))
-			{
-				OnFileNew();
-			}
-		}
-	}
-
-	return TRUE;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// required AppleEvent handlers
-
-static OSErr MissingParams(AppleEvent* pae)
-{
-	OSErr       err;
-	DescType    dtT;
-	Size        lT;
-
-	err = AEGetAttributePtr(pae, keyMissedKeywordAttr, typeWildCard,
-			&dtT, NULL, 0, &lT);
-
-	if (err == errAEDescNotFound)
-		return noErr;
-	else if (err == noErr)
-		return errAEEventNotHandled;
-	else
-		return err;
-}
-
-static OSErr HandlerCommon(AppleEvent* pae, long lRefcon, CWinApp*& rpApp)
-{
-	OSErr err = MissingParams(pae);
-	if (err != noErr)
-		return err;
-
-	rpApp = (CWinApp*) lRefcon;
-	ASSERT_VALID(rpApp);
-	ASSERT_KINDOF(CWinApp, rpApp);
-
-	return noErr;
-}
-
-OSErr PASCAL _AfxOpenAppHandler(AppleEvent* pae, AppleEvent*, long lRefcon)
-{
-	CWinApp* pApp;
-	OSErr err = HandlerCommon(pae, lRefcon, pApp);
-	if (err == noErr)
-	{
-		if (pApp->CreateInitialDocument())
-			err = noErr;
-		else
-			err = errAEEventNotHandled;
-	}
-	AfxOleSetUserCtrl(TRUE);
-	return err;
-}
-
-OSErr PASCAL _AfxOpenDocHandler(AppleEvent* pae, AppleEvent*, long lRefcon)
-{
-	AEDescList docList;
-	OSErr err = AEGetParamDesc(pae, keyDirectObject, typeAEList, &docList);
-	if (err == noErr)
-	{
-		CWinApp* pApp;
-		err = HandlerCommon(pae, lRefcon, pApp);
-		if (err == noErr)
-		{
-			long cDoc;
-			VERIFY(AECountItems(&docList, &cDoc) == noErr);
-
-			for (int iDoc = 1; iDoc <= cDoc; iDoc++)
-			{
-				AEKeyword key;
-				DescType dt;
-				long lcb;
-				FSSpec fss;
-
-				if (AEGetNthPtr(&docList, iDoc, typeFSS, &key, &dt, (Ptr) &fss,
-						sizeof(FSSpec), &lcb) == noErr)
-				{
-					ASSERT(dt == typeFSS);
-					ASSERT(lcb == sizeof(FSSpec));
-
-					char sz[256];
-					if (WrapFile(&fss, sz, sizeof(sz)))
-						pApp->OpenDocumentFile(sz);
-				}
-			}
-		}
-		VERIFY(AEDisposeDesc(&docList) == noErr);
-	}
-
-	AfxOleSetUserCtrl(TRUE);
-	return err;
-}
-
-OSErr PASCAL _AfxPrintDocHandler(AppleEvent* pae, AppleEvent*, long lRefcon)
-{
-	AEDescList docList;
-
-	SetCursor(afxData.hcurArrow);
-	OSErr err = AEGetParamDesc(pae, keyDirectObject, typeAEList, &docList);
-	if (err == noErr)
-	{
-		CWinApp* pApp;
-		err = HandlerCommon(pae, lRefcon, pApp);
-		if (err == noErr)
-		{
-			long cDoc;
-			AEInteractAllowed level;
-			BOOL bLevelChanged = TRUE;
-
-			VERIFY(AECountItems(&docList, &cDoc) == noErr);
-			if (AEGetInteractionAllowed(&level) != noErr)
-			{
-				bLevelChanged = FALSE;
-			}
-
-			for (int iDoc = 1; iDoc <= cDoc; iDoc++)
-			{
-				AEKeyword key;
-				DescType dt;
-				long lcb;
-				FSSpec fss;
-
-				if ((iDoc == 2) && (bLevelChanged) &&
-					(AESetInteractionAllowed(kAEInteractWithSelf) != noErr))
-				{
-					bLevelChanged = FALSE;
-				}
-
-				if (AEGetNthPtr(&docList, iDoc, typeFSS, &key, &dt, (Ptr) &fss,
-						sizeof(FSSpec), &lcb) == noErr)
-				{
-					CDocument* pDoc = NULL;
-
-					ASSERT(dt == typeFSS);
-					ASSERT(lcb == sizeof(FSSpec));
-
-					char sz[256];
-					if (WrapFile(&fss, sz, sizeof(sz)))
-						pDoc = pApp->OpenDocumentFile(sz);
-
-					if(pDoc != NULL)
-					{
-						POSITION pos = pDoc->GetFirstViewPosition();
-						CView* pView = pDoc->GetNextView(pos);
-
-						if(pView != NULL)
-						{
-							pView->SendMessage(WM_COMMAND, ID_FILE_PRINT);
-						}
-						pDoc->OnCloseDocument();
-					}
-				}
-			}
-			if (bLevelChanged)
-			{
-				AESetInteractionAllowed(level);
-			}
-		}
-		VERIFY(AEDisposeDesc(&docList) == noErr);
-	}
-
-	AfxOleSetUserCtrl(TRUE);
-	return err;
-}
-
-OSErr PASCAL _AfxQuitHandler(AppleEvent* pae, AppleEvent*, long lRefcon)
-{
-	long newSave;
-	DescType dt;
-	long lcb;
-
-	if (AEGetParamPtr(pae, keyAESaveOptions, typeEnumeration, &dt,
-			(Ptr) &newSave, sizeof(newSave), &lcb) != noErr)
-		newSave = kAEAsk;
-#ifdef _DEBUG
-	else
-	{
-		ASSERT(dt == typeEnumeration);
-		ASSERT(lcb == sizeof(newSave));
-	}
-#endif
-
-	CWinApp* pApp;
-	OSErr err = HandlerCommon(pae, lRefcon, pApp);
-	if (err != noErr)
-		return err;
-
-	CWinApp::SaveOption oldSave = pApp->m_nSaveOption;
-
-	switch (newSave)
-	{
-		case kAEYes:
-			pApp->m_nSaveOption = CWinApp::saveYes;
-			break;
-
-		case kAENo:
-			pApp->m_nSaveOption = CWinApp::saveNo;
-			break;
-
-		case kAEAsk:
-			pApp->m_nSaveOption = CWinApp::saveAsk;
-			break;
-
-		default:
-			break;
-	}
-
-	ASSERT(err == noErr);   // initial state assumed by the following code
-
-	if (pApp->m_pMainWnd != NULL)
-	{
-		pApp->m_pMainWnd->SendMessage(WM_COMMAND, ID_APP_EXIT);
-		if (pApp->m_pMainWnd != NULL)
-			err = userCanceledErr;
-	}
-	else
-	{
-		// Perhaps the app is using a dialog as its UI. Just tell it
-		// to quit directly.
-
-		AfxPostQuitMessage(0);
-	}
-	pApp->m_nSaveOption = oldSave;
-
-	return err;
-}
-
-#endif //_MAC
 
 /////////////////////////////////////////////////////////////////////////////
 // App termination
@@ -570,6 +327,24 @@ CWinApp::~CWinApp()
 	// free cached commandline
 	if (m_pCmdInfo != NULL)
 		delete m_pCmdInfo;
+
+	// cleanup module state
+	AFX_MODULE_STATE* pModuleState = _AFX_CMDTARGET_GETSTATE();
+	if (pModuleState->m_lpszCurrentAppName == m_pszAppName)
+		pModuleState->m_lpszCurrentAppName = NULL;
+	if (pModuleState->m_pCurrentWinApp == this)
+		pModuleState->m_pCurrentWinApp = NULL;
+
+	// free various strings allocated with _tcsdup
+	free((void*)m_pszAppName);
+	free((void*)m_pszRegistryKey);
+	free((void*)m_pszExeName);
+	free((void*)m_pszHelpFilePath);
+	free((void*)m_pszProfileName);
+
+	// avoid calling CloseHandle() on our own thread handle
+	// during the CWinThread destructor
+	m_hThread = NULL;
 }
 
 void CWinApp::SaveStdProfileSettings()
@@ -580,20 +355,26 @@ void CWinApp::SaveStdProfileSettings()
 		m_pRecentFileList->WriteList();
 
 	if (m_nNumPreviewPages != 0)
-		WriteProfileInt(szPreviewSection, szPreviewEntry, AfxGetApp()->m_nNumPreviewPages);
+		WriteProfileInt(_afxPreviewSection, _afxPreviewEntry, m_nNumPreviewPages);
 }
 
 int CWinApp::ExitInstance()
 {
-	if (!afxContextIsDLL)
-		SaveStdProfileSettings();
+	// if we remember that we're unregistering,
+	// don't save our profile settings
+
+	if (m_pCmdInfo == NULL ||
+		m_pCmdInfo->m_nShellCommand != CCommandLineInfo::AppUnregister)
+	{
+		if (!afxContextIsDLL)
+			SaveStdProfileSettings();
+	}
 
 	// Cleanup DAO if necessary
 	if (m_lpfnDaoTerm != NULL)
 	{
 		// If a DLL, YOU must call AfxDaoTerm prior to ExitInstance
 		ASSERT(!afxContextIsDLL);
-
 		(*m_lpfnDaoTerm)();
 	}
 
@@ -625,12 +406,9 @@ int CWinApp::Run()
 void AFXAPI AfxPostQuitMessage(int nExitCode)
 {
 	// cleanup OLE libraries
-	CWinApp* pApp = AfxGetApp();
-	ASSERT(pApp != NULL);
 	CWinThread* pThread = AfxGetThread();
-	ASSERT(pThread != NULL);
-	if (pThread == pApp && pApp->m_lpfnOleTermOrFreeLib != NULL)
-		(*pApp->m_lpfnOleTermOrFreeLib)(TRUE, TRUE);
+	if (pThread != NULL && pThread->m_lpfnOleTermOrFreeLib != NULL)
+		(*pThread->m_lpfnOleTermOrFreeLib)(TRUE, TRUE);
 
 	::PostQuitMessage(nExitCode);
 }
@@ -693,17 +471,6 @@ LRESULT CWinApp::ProcessWndProcException(CException* e, const MSG* pMsg)
 
 BOOL CWinApp::OnIdle(LONG lCount)
 {
-#ifndef _AFX_NO_OLE_SUPPORT
-	COleMessageFilter* pFilter = NULL;
-	if (afxData.bWin31)
-	{
-		// OLE LRPC calls are bad during idle
-		pFilter = AfxOleGetMessageFilter();
-		if (pFilter != NULL)
-			pFilter->BeginBusyState();
-	}
-#endif
-
 	if (lCount <= 0)
 	{
 		CWinThread::OnIdle(lCount);
@@ -724,13 +491,6 @@ BOOL CWinApp::OnIdle(LONG lCount)
 	{
 		VERIFY(!CWinThread::OnIdle(lCount));
 	}
-
-#ifndef _AFX_NO_OLE_SUPPORT
-	// ok for LRPC calls again
-	if (pFilter != NULL)
-		pFilter->EndBusyState();
-#endif
-
 	return lCount < 1;  // more to do if lCount < 1
 }
 
@@ -742,7 +502,6 @@ void CWinApp::DevModeChange(LPTSTR lpDeviceName)
 	if (m_hDevNames == NULL)
 		return;
 
-#ifndef _MAC
 	LPDEVNAMES lpDevNames = (LPDEVNAMES)::GlobalLock(m_hDevNames);
 	ASSERT(lpDevNames != NULL);
 	if (lstrcmp((LPCTSTR)lpDevNames + lpDevNames->wDeviceOffset,
@@ -772,9 +531,6 @@ void CWinApp::DevModeChange(LPTSTR lpDeviceName)
 		}
 		ClosePrinter(hPrinter);
 	}
-#else
-	UNUSED_ALWAYS(lpDeviceName);
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -811,9 +567,6 @@ void CWinApp::Dump(CDumpContext& dc) const
 	dc << "\nm_hDevMode = " << (UINT)m_hDevMode;
 	dc << "\nm_hDevNames = " << (UINT)m_hDevNames;
 	dc << "\nm_dwPromptContext = " << m_dwPromptContext;
-#ifdef _MAC
-	dc << "\nm_nSaveOption = " << (UINT)m_nSaveOption;
-#endif
 
 	if (m_pRecentFileList != NULL)
 	{

@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -54,10 +54,9 @@ BOOL AFXAPI _AfxIsComboBoxControl(HWND hWnd, UINT nStyle)
 		return FALSE;
 
 	// do expensive classname compare next
-	static const TCHAR szComboBox[] = _T("combobox");
-	TCHAR szCompare[_countof(szComboBox)+1];
+	TCHAR szCompare[_countof("combobox")+1];
 	::GetClassName(hWnd, szCompare, _countof(szCompare));
-	return lstrcmpi(szCompare, szComboBox) == 0;
+	return lstrcmpi(szCompare, _T("combobox")) == 0;
 }
 
 BOOL AFXAPI _AfxCompareClassName(HWND hWnd, LPCTSTR lpszClassName)
@@ -148,18 +147,6 @@ void AFXAPI AfxCancelModes(HWND hWndRcvr)
 	::SendMessage(hWndCancel, CB_SHOWDROPDOWN, FALSE, 0L);
 }
 
-#ifdef _MAC
-// The EqualRect API provided by the Windows Portability Libraries for Macintosh
-// returns true if the input rectangles are both empty, even if they do not have
-// identical coordinates. _AfxIdenticalRect only returns true if the rectangles
-// have exactly identical coordinates.
-BOOL AFXAPI _AfxIdenticalRect(LPCRECT lpRectOne, LPCRECT lpRectTwo)
-{
-	ASSERT(sizeof(RECT) == 4 * sizeof(LONG));   // require no gaps between fields
-	return memcmp(lpRectOne, lpRectTwo, sizeof(RECT)) == 0;
-}
-#endif //_MAC
-
 void AFXAPI AfxGlobalFree(HGLOBAL hGlobal)
 {
 	if (hGlobal == NULL)
@@ -201,8 +188,10 @@ int AFX_CDECL AfxCriticalNewHandler(size_t nSize)
 		}
 		else
 		{
+			BOOL bEnable = AfxEnableMemoryTracking(FALSE);
 			_expand(pThreadState->m_pSafetyPoolBuffer,
 				nOldBufferSize - (nSize + MIN_MALLOC_OVERHEAD));
+			AfxEnableMemoryTracking(bEnable);
 			TRACE3("Warning: Shrinking safety pool from %d to %d to satisfy request of %d bytes.\n",
 				 nOldBufferSize, _msize(pThreadState->m_pSafetyPoolBuffer), nSize);
 		}

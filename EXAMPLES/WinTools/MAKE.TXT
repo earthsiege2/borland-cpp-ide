@@ -1,0 +1,402 @@
+MAKE Help
+
+Using MAKE
+
+MAKE.EXE is a command-line utility that helps you manage project compilation and link cycles. MAKE is not inherently tied to compiling and linking, but is a more generic tool for executing commands based on file dependencies. MAKE helps you quickly build projects by compiling only the files you have modified since the last compilation. In addition, you can set up rules that specify how MAKE should deal with the special circumstances in your builds.
+
+MAKE Basics
+
+MAKE uses rules you write along with its default settings to determine how it should compile the files in your project. For example, you can specify when to build your projects with debug information and to compile your .OBJ files only if the date/time stamps of a source file is more recent than the .OBJ itself. If you need to force the compilation of a module, use TOUCH.EXE to modify the time stamp of one of the module’s dependents.
+
+In an ASCII makefile, you write explicit and implicit rules to tell MAKE how to treat the files in your project; MAKE determines if it should execute a command on a file or set of files using the rules you set up. Although your commands usually tell MAKE to compile or link a set of files, you can specify nearly any operating system command with MAKE.
+
+The general syntax for MAKE is
+
+MAKE [options...] [target[target]]
+
+options
+
+are MAKE options that control how MAKE works
+
+target
+
+is the name of the target listed in the makefile that you want to build
+
+You must separate the MAKE command and the options and target arguments with spaces. When specifying targets, you can use wildcard characters (such as * and ?) to indicate multiple files. To get command-line help for MAKE, type MAKE -?.
+Default MAKE actions
+
+When you issue a MAKE command, MAKE looks for the file BUILTINS.MAK, which contains the default rules for MAKE (use the -r option to ignore the default rules). MAKE looks for this file first in the current directory, then in the directory where MAKE.EXE is stored. After loading BUILTINS.MAK, MAKE looks in the current directory for a file called MAKEFILE or MAKEFILE.MAK (use the -f option to specify a file other than MAKEFILE). If MAKE can’t find either of these files, it generates an error message.
+
+After loading the makefile, MAKE tries to build only the first explicit target listed in the makefile by checking the time and date of the dependent files of the first target. If the dependent files are more recent than the target file, MAKE executes the commands to update the target.
+If one of the first target’s dependent files is used as a target elsewhere in the makefile, MAKE checks that target’s dependencies and builds it before building the first target. This chain reaction is called a linked dependency.
+
+If something during the build process fails, MAKE deletes the target file it was building. Use the .precious directive if you want MAKE to keep the target when a build fails.
+You can stop MAKE after issuing the MAKE command by pressing Ctrl+Break or Ctrl+C.
+
+
+BUILTINS.MAK
+
+The file BUILTINS.MAK contains standard rules and macros that MAKE uses when it builds the targets in a makefile. To ignore this file, use the -r MAKE option.
+Here is the default text of BUILTINS.MAK:
+
+#
+# Borland C++ - (C) Copyright 1997 by Borland International
+#
+
+CC       = bcc32
+RC       = brcc32
+AS       = tasm32
+
+.asm.obj:
+      $(AS) $(AFLAGS) $&.asm
+
+.c.exe:
+      $(CC) $(CFLAGS) $&.c
+
+.c.obj:
+      $(CC) $(CFLAGS) /c $&.c
+
+.cpp.exe:
+      $(CC) $(CFLAGS) $&.cpp
+
+.cpp.obj:
+      $(CC) $(CPPFLAGS) /c $&.cpp
+
+.rc.res:
+      $(RC) $(RFLAGS) /r $&
+
+.SUFFIXES: .exe .obj .asm .c .res .rc
+
+!if !$d(BCEXAMPLEDIR)
+BCEXAMPLEDIR = $(MAKEDIR)\..\EXAMPLES
+
+!endif
+
+
+About makefiles
+
+A makefile is an ASCII file that contains the set of instructions that MAKE uses to build a certain project. Although MAKE assumes your makefile is called MAKEFILE or MAKEFILE.MAK, you can specify a different makefile name with the -f option.
+MAKE either builds the target(s) you specify with the make command or it builds the first target it finds in the makefile To build more than a single target, use a symbolic target in your makefile.
+Makefiles can contain
+
+	Comments (precede with a number sign [#])
+	Explicit and implicit rules
+	Macros
+	Directives
+
+Symbolic targets
+
+A symbolic target forces MAKE to build multiple targets in a makefile. When you specify a symbolic target, the dependency line lists all the targets you want to build (a symbolic target basically uses linked dependencies to build more than one target).
+For example, the following makefile uses the symbolic target AllFiles to build both FILE1.EXE and FILE2.EXE:
+
+AllFiles: file1.exe file2.exe  #Note that AllFiles has no commands
+file1.exe: file1.obj
+    bcc32 file1.obj
+file2.exe: file2.obj
+    bcc32 file2.obj
+
+Rules for symbolic targets
+
+Observe the following rules when you use symbolic targets:
+
+	Do not type a line of commands after the symbolic target line.
+	A symbolic target must have a unique name; it cannot be the name of a file in your current directory.
+	Symbolic target names must follow the operating system rules for naming files.
+
+MAKE options
+
+You can use command-line options to control the behavior of MAKE. MAKE options are case-sensitive and must be preceded with either a hyphen (-) or slash (/).
+The general syntax for MAKE is
+
+MAKE [options...] [target[target]]
+
+options
+
+are MAKE options that control how MAKE works
+
+target
+
+is the name of the target listed in the makefile that you want to build
+
+You must separate the MAKE command and the options and target arguments with spaces. When specifying targets, you can use wildcard characters (such as * and ?) to indicate multiple files. To get command-line help for MAKE, type MAKE -?.
+
+For example, to use a file called PROJECTA.MAK as the makefile, type MAKE -fPROJECTA.MAK. Many of the command-line options have equivalent directives that you can use within the makefile.
+
+Option	Description
+
+
+
+-a	Checks dependencies of include files and nested include files associated with .OBJ files and updates the .OBJ if the .h file changed. See also -c.
+-B	Builds all targets regardless of file dates.
+-c	Caches autodependency information, which can improve MAKE speed. Use with -a. Do not use this option if MAKE modifies include files (which can happen if you use TOUCH in the makefile or if you create header or include files during the MAKE process).
+
+-Dmacro	Defines macro as a single character, causing an expression !ifdef macro written in the makefile to return true.
+[-D]macro=[string]	Defines macro as string. If string contains any spaces or tabs, enclose string in quotation marks. The -D is optional.
+-ddirectory	Specifies the drive and directory that MAKER (the real mode version of MAKE) uses when it swaps out of memory. This option must be used with -S. MAKE ignores this option.
+
+-e	Ignores a macro if its name is the same as an environment variable (MAKE uses the environment variable instead of the macro).
+-ffilename	Uses filename or filename.MAK instead of MAKEFILE (a space after -f is optional).
+-h or -?	Displays MAKE options. Default settings are shown with a trailing plus sign.
+-Idirectory	Searches for include files in the current directory first, then in directory you specify with this option.
+
+-i	Ignores the exit status of all programs run from the makefile and continues the build process.
+-l	Enables the use of long comment lines (on by default).
+-K	Keeps temporary files that MAKE creates (MAKE usually deletes them).
+-m	Displays the date and time stamp of each file as MAKE processes it.
+-N	Causes MAKE to mimic Microsoft's NMAKE.
+-n	Prints the MAKE commands but does not perform them, this is helpful for debugging makefiles.
+
+-p	Displays all macro definitions and implicit rules before executing the makefile.
+-q	Returns 0 if the target is up-to-date and nonzero if it is not (for use with batch files).
+-r	Ignores any rules defined in BUILTINS.MAK.
+-S	Swaps MAKER out of memory while commands are executed, reducing memory overhead and allowing compilation of large modules. MAKE ignores this option.
+-s	Suppresses onscreen command display (silent).
+
+-Umacro	Undefines the previous macro definition of macro.
+-Wfilename	Writes MAKE to filename, updating all non-string options.
+
+Using TOUCH
+
+TOUCH.EXE updates a file's date stamp so that it reflects your system’s current time and date.
+Sometimes you may need to force a target to be recompiled or rebuilt even though you haven't changed its source files. One way to do this is to use the TOUCH utility to update the time stamp of one or more of the target’s dependency files. To touch a file (or files), type the following at the command prompt:
+
+	touch [options] filename [filename...]
+
+If TOUCH cannot find a file that matches the name you specify, it creates a zero-length file with the correct date stamp. To suppress automatic file creation, use the -c option.
+
+Because TOUCH is a 32-bit executable, it accepts long file names. In addition, you can use file names that contain the wildcard characters * and ? to “touch” more than a single file at a time. Use the -s option to update matching files in all subdirectories.
+
+Note:	Before you use TOUCH, make sure your system's internal clock is set correctly.
+
+TOUCH options
+
+TOUCH.EXE supports several command-line options:
+
+Option	Description
+
+
+
+-c	Don’t generate file if it doesn’t already exist.
+-dmm-dd-yy	Sets the date of the file to the specified date.
+-rfilename	Sets the time and date of files to match those of filename.
+-h	Displays help information (same as typing TOUCH without options or file names).
+-s	Recurses through subdirectories
+-thh:mm:ss	Sets the time of the file to the specified time.
+-v	Verbose mode. Shows each file TOUCHed.
+
+Explicit and implicit rules
+
+You write explicit and implicit rules to instruct MAKE how to build the targets in your makefile. In general, these rules are defined as follows:
+
+Explicit rules are instructions for specific files.
+Implicit rules are general instructions for files without explicit rules.
+
+All the rules you write follow this general format:
+
+Dependency line
+    Command line
+
+While the dependency line has a different syntax for explicit and implicit rules, the command line syntax stays the same for both rule types.
+
+MAKE supports multiple dependency lines for a single target, and a single target can have multiple command lines. However, only one dependency line should contain a related command line. For example:
+
+Target1: dependent1 dep2 dep3 dep4 dep5
+Target1: dep6 dep7 dep8
+    bcc32 -c $**
+
+Explicit rule syntax
+
+Explicit rules specify the instructions that MAKE must follow when it builds specific targets. Explicit rules name one or more targets followed by one or two colons. One colon means one rule is written for the target(s); two colons mean that two or more rules are written for the target(s).
+Explicit rules follow this syntax:
+
+target [target...]:[:][{path}] [dependent[s]...]
+    [commands]
+
+
+target
+
+specifies the name and extension of the file to be built (a target must begin a line in the makefile-you cannot precede the target name with spaces or tabs). To specify more than one target, separate the target names with spaces or tabs. Also, you cannot use a target name more than once in the target position of an explicit rule.
+
+path
+
+is a list of directories that tells MAKE where to find the dependent files. Separate multiple directories with semicolons and enclosed the entire path specification in braces.
+
+dependent
+
+is the file (or files) whose date and time MAKE checks to see if it is newer than target. Each dependent file must be preceded by a space. If a dependent appears elsewhere in the makefile as a target, MAKE updates or creates that target before using the dependent in the original target (this in known as a linked dependency).
+
+commands
+
+are any operating system command or commands. You must indent the command line by at least one space or tab, otherwise they are interpreted as a target. Separate multiple commands with spaces.
+
+If a dependency or command line continues on the following line, use a backslash (\) at the end of the first line to indicate that the line continues. For example,
+
+MYSOURCE.EXE: FILE1.OBJ\          #Dependency line
+    FILE3.OBJ                     #Dependency line continued
+    bcc32 file1.obj file3.obj     #Command line
+
+Single targets with multiple rules
+
+A single target can have more than one explicit rule. To specify more than a single explicit rule, use a double colon (::) after the target name. The following example shows targets with multiple rules and commands.
+
+.cpp.obj:
+    bcc32 -c -ncobj $<
+
+.asm.obj:
+    tasm  /mx $<, asmobj\
+
+mylib.lib :: f1.obj f2.obj      #double colon specifies multipe rules
+    echo Adding C files
+    tlib mylib -+cobjf1 -+cobjf2
+
+mylib.lib :: f3.obj f4.obj
+    echo Adding ASM files
+    tlib mylib -+asmobjf3 -+asmobjf4
+
+Implicit rule syntax
+
+An implicit rule specifies a general rule for how MAKE should build files that end with specific file extensions. Implicit rules start with either a path or a period. Their main components are file extensions separated by periods. The first extension belongs to the dependent, the second to the target.
+If implicit dependents are out-of-date with respect to the target, or if the dependents don't exist, MAKE executes the commands associated with the rule. MAKE updates explicit dependents before it updates implicit dependents.
+
+Implicit rules follow this basic syntax:
+
+[{source_dir}].source_ext[{target_dir}].target_ext:
+    [commands]
+
+
+source_dir
+
+specifies the directory (or directories) containing the dependent files. Separate multiple directories with a semicolon.
+
+.source_ext
+
+specifies the dependent filename extension.
+
+target_dir
+
+specifies the directory where MAKE places the target files. The implicit rule will only be used for targets in this directory. Without specifying a target directory, targets from any directory will match the implicit rule.
+
+.target_ext
+
+specifies the target filename extension. Macros are allowed here.
+
+: (colon)
+
+marks the end of the dependency line.
+
+commands
+
+are any operating system command or commands. You must indent the command line by at least one space or tab, otherwise they are interpreted as a target.
+
+If two implicit rules match a target extension but no dependent exists, MAKE uses the implicit rule whose dependent's extension appears first in the .SUFFIXES list.
+
+Explicit rules with implicit commands
+
+A target in an explicit rule can get its command line from an implicit rule. The following example shows an implicit rule followed by an explicit rule without a command line.
+
+.c.obj:
+
+    bcc32 -c $<   #This command uses a macro $< described later
+
+
+
+myprog.obj:       #This explicit rule uses the command: bcc32 -c myprog.c
+
+The implicit rule command tells MAKE to compile MYPROG.C (the macro $< replaces the name myprog.obj with myprog.c).
+Command syntax
+
+Commands immediately follow an explicit or implicit rule and must begin on a new line with a space or tab.
+Commands can be any operating system command, but they can also include MAKE macros, directives, and special operators that your operating system won’t recognize (however, note that | can't be used in commands). Here are some sample commands:
+
+cd..
+
+bcc32 -c mysource.c
+
+COPY *.OBJ C:\PROJECTA
+
+bcc32 -c $(SOURCE)     #Macros are explained later in the chapter.
+
+Commands follow this general syntax:
+
+[prefix...] commands
+
+Command prefixes
+
+Commands in both implicit and explicit rules can have prefixes that modify how MAKE treats the commands. The following table lists the prefixes you can use in makefiles:
+
+Prefix	Description
+
+
+
+@	Don't display the command while it's being executed.
+-num	Stop processing commands in the makefile when the exit code returned from command exceeds the integer num. Normally, MAKE aborts if the exit code is nonzero. No space is allowed between - and num.
+-	Continue processing commands in the makefile, regardless of the exit codes they return.
+&	Expand either the macro $**, which represents all dependent files, or the macro $?, which represents all dependent files stamped later than the target. Execute the command once for each dependent file in the expanded macro.
+
+!	Will behave like the & prefix.
+
+Using @
+
+The following command uses the @ prefix, which prevents MAKE from displaying the command onscreen.
+
+diff.exe : diff.obj
+    @bcc32 diff.obj
+
+Using -num and -
+
+The -num and - prefixes control the makefile processing when errors occur. You can choose to continue with the MAKE process if an error occurs or you can specify a number of errors to tolerate.
+
+In the following example, MAKE continues processing if BCC32 returns errors:
+
+target.exe : target.obj
+target.obj : target.cpp
+    -bcc32 -c target.cpp
+
+Using &
+
+The & prefix issues a command once for each dependent file. It is especially useful for commands that don't take a list of files as parameters. For example,
+
+copyall : file1.cpp file2.cpp
+    &copy $** c:\temp
+
+invokes COPY twice as follows:
+
+copy file1.cpp c:\temp
+copy file2.cpp c:\temp
+
+Without the & modifier, MAKE would call COPY only once. Note: the & prefix only works with $** and $! macros.
+MAKE command operators
+
+While you can use any operating system command in a MAKE command section, you can also use the following special operators:
+
+Operator	Description
+
+
+
+<	Use input from a specified file rather than from standard input
+>	Send the output from command to file
+>>	Append the output from command to file
+<<	Create a temporary inline file and use its contents as standard input to command. Also, create temporary response file when -N is used. Note: this is only for use with NMAKE.
+&&	Create a temporary response file and insert its name in the makefile
+delimiter	Use delimiters with temporary response files. You can use any character other than # as a delimiter. Use << and && as a starting and ending delimiter for a temporary file. Any characters on the same line and immediately following the starting delimiter are ignored. The closing delimiter must be written on a line by itself.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

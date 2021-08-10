@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1989-1996  Microsoft Corporation
+Copyright (c) 1989-1999  Microsoft Corporation
 
 Module Name:
 
@@ -20,8 +20,12 @@ Revision History:
 --*/
 
 #ifndef _MSWSOCK_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MSWSOCK_
-#pragma option -b
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -83,6 +87,9 @@ typedef struct _TRANSMIT_FILE_BUFFERS {
 #define TF_DISCONNECT       0x01
 #define TF_REUSE_SOCKET     0x02
 #define TF_WRITE_BEHIND     0x04
+#define TF_USE_DEFAULT_WORKER 0x00
+#define TF_USE_SYSTEM_THREAD  0x10
+#define TF_USE_KERNEL_APC     0x20
 
 BOOL
 PASCAL FAR
@@ -178,6 +185,6 @@ VOID
 }
 #endif
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif  /* _MSWSOCK_ */
 

@@ -1,0 +1,5 @@
+LIBRARY DINPUT
+EXPORTS
+
+    DirectInputCreateW                       = 'DINPUT.DLL'.*
+    DirectInputCreateA                       = 'DINPUT.DLL'.*

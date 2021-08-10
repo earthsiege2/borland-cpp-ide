@@ -6,12 +6,13 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -27,14 +28,14 @@ Prototype in    mbstring.h
 
 Description     _mbccpy copies the first character of src to dest.
                 dest should be the same size with the first character
-                of scr. 
+                of scr.
 
                 It doesn't check whether null pointer or not,so don't
                 pass it.
 
-		It doesn't regard the character of the first byte as NULL
-		character even if the second byte of 2 byte character is
-		NULL character. 
+                It doesn't regard the character of the first byte as NULL
+                character even if the second byte of 2 byte character is
+                NULL character.
 
 Return value    None.
 

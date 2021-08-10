@@ -1,0 +1,16 @@
+LIBRARY MSUILSTF
+EXPORTS
+
+    FCloseHelp                               = 'MSUILSTF.DLL'.*
+    FDoDialog2                               = 'MSUILSTF.DLL'.*
+    FDoDialog                                = 'MSUILSTF.DLL'.*
+    FDoDialogExt                             = 'MSUILSTF.DLL'.*
+    FGstGenericDlgProc                       = 'MSUILSTF.DLL'.*
+    FGstGenericHelpDlgProc                   = 'MSUILSTF.DLL'.*
+    FKillNDialogs2                           = 'MSUILSTF.DLL'.*
+    FKillNDialogs                            = 'MSUILSTF.DLL'.*
+    HdlgHelpTop                              = 'MSUILSTF.DLL'.*
+    HdlgShowHelp                             = 'MSUILSTF.DLL'.*
+    HdlgStackTop                             = 'MSUILSTF.DLL'.*
+    ReactivateSetupScript                    = 'MSUILSTF.DLL'.*
+    SetScriptFile                            = 'MSUILSTF.DLL'.*

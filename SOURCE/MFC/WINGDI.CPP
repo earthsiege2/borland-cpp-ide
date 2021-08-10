@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -67,9 +67,15 @@ void CDC::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
-static CHandleMap* afxMapHDC(BOOL bCreate = FALSE);
+#include "fixalloc.h"
 
-static CHandleMap* afxMapHDC(BOOL bCreate)
+class CTempDC : public CDC
+{
+	DECLARE_DYNCREATE(CTempDC)
+	DECLARE_FIXED_ALLOC(CTempDC);
+};
+
+CHandleMap* PASCAL afxMapHDC(BOOL bCreate)
 {
 	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
 	if (pState->m_pmapHDC == NULL && bCreate)
@@ -78,7 +84,7 @@ static CHandleMap* afxMapHDC(BOOL bCreate)
 #ifndef _AFX_PORTABLE
 		_PNH pnhOldHandler = AfxSetNewHandler(&AfxCriticalNewHandler);
 #endif
-		pState->m_pmapHDC = new CHandleMap(RUNTIME_CLASS(CDC),
+		pState->m_pmapHDC = new CHandleMap(RUNTIME_CLASS(CTempDC),
 			offsetof(CDC, m_hDC), 2);
 
 #ifndef _AFX_PORTABLE
@@ -87,13 +93,6 @@ static CHandleMap* afxMapHDC(BOOL bCreate)
 		AfxEnableMemoryTracking(bEnable);
 	}
 	return pState->m_pmapHDC;
-}
-
-void PASCAL CDC::DeleteTempMap()
-{
-	CHandleMap* pMap = afxMapHDC();
-	if (pMap != NULL)
-		pMap->DeleteTemp();
 }
 
 CDC* PASCAL CDC::FromHandle(HDC hDC)
@@ -158,11 +157,8 @@ void CDC::SetAttribDC(HDC hDC)  // Set the Attribute DC
 void CDC::SetOutputDC(HDC hDC)  // Set the Output DC
 {
 #ifdef _DEBUG
-	CObject* pObject;
-
 	CHandleMap* pMap = afxMapHDC();
-	if (pMap != NULL && pMap->LookupPermanent(m_hDC, pObject) &&
-		pObject == this)
+	if (pMap != NULL && pMap->LookupPermanent(m_hDC) == this)
 	{
 		TRACE0("Cannot Set Output hDC on Attached CDC.\n");
 		ASSERT(FALSE);
@@ -179,10 +175,8 @@ void CDC::ReleaseAttribDC()     // Release the Attribute DC
 void CDC::ReleaseOutputDC()     // Release the Output DC
 {
 #ifdef _DEBUG
-	CObject* pObject;
 	CHandleMap* pMap = afxMapHDC();
-	if (pMap != NULL && pMap->LookupPermanent(m_hDC, pObject) &&
-		pObject == this)
+	if (pMap != NULL && pMap->LookupPermanent(m_hDC) == this)
 	{
 		TRACE0("Cannot Release Output hDC on Attached CDC.\n");
 		ASSERT(FALSE);
@@ -206,7 +200,7 @@ int CDC::StartDoc(LPCTSTR lpszDocName)
 int CDC::SaveDC()
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = 0;
 	if (m_hAttribDC != NULL)
 		nRetVal = ::SaveDC(m_hAttribDC);
 	if (m_hDC != m_hAttribDC && ::SaveDC(m_hDC) != 0)
@@ -238,7 +232,7 @@ CGdiObject* CDC::SelectStockObject(int nIndex)
 	ASSERT(m_hDC != NULL);
 
 	HGDIOBJ hObject = ::GetStockObject(nIndex);
-	HGDIOBJ hOldObj;
+	HGDIOBJ hOldObj = NULL;
 
 	ASSERT(hObject != NULL);
 	if (m_hDC != m_hAttribDC)
@@ -251,7 +245,8 @@ CGdiObject* CDC::SelectStockObject(int nIndex)
 CPen* CDC::SelectObject(CPen* pPen)
 {
 	ASSERT(m_hDC != NULL);
-	HGDIOBJ hOldObj;
+	HGDIOBJ hOldObj = NULL;
+
 	if (m_hDC != m_hAttribDC)
 		hOldObj = ::SelectObject(m_hDC, pPen->GetSafeHandle());
 	if (m_hAttribDC != NULL)
@@ -262,7 +257,8 @@ CPen* CDC::SelectObject(CPen* pPen)
 CBrush* CDC::SelectObject(CBrush* pBrush)
 {
 	ASSERT(m_hDC != NULL);
-	HGDIOBJ hOldObj;
+	HGDIOBJ hOldObj = NULL;
+
 	if (m_hDC != m_hAttribDC)
 		hOldObj = ::SelectObject(m_hDC, pBrush->GetSafeHandle());
 	if (m_hAttribDC != NULL)
@@ -273,7 +269,8 @@ CBrush* CDC::SelectObject(CBrush* pBrush)
 CFont* CDC::SelectObject(CFont* pFont)
 {
 	ASSERT(m_hDC != NULL);
-	HGDIOBJ hOldObj;
+	HGDIOBJ hOldObj = NULL;
+
 	if (m_hDC != m_hAttribDC)
 		hOldObj = ::SelectObject(m_hDC, pFont->GetSafeHandle());
 	if (m_hAttribDC != NULL)
@@ -284,7 +281,8 @@ CFont* CDC::SelectObject(CFont* pFont)
 int CDC::SelectObject(CRgn* pRgn)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = GDI_ERROR;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = (int)::SelectObject(m_hDC, pRgn->GetSafeHandle());
 	if (m_hAttribDC != NULL)
@@ -303,7 +301,8 @@ CPalette* CDC::SelectPalette(CPalette* pPalette, BOOL bForceBackground)
 COLORREF CDC::SetBkColor(COLORREF crColor)
 {
 	ASSERT(m_hDC != NULL);
-	COLORREF crRetVal;
+	COLORREF crRetVal = CLR_INVALID;
+
 	if (m_hDC != m_hAttribDC)
 		crRetVal = ::SetBkColor(m_hDC, crColor);
 	if (m_hAttribDC != NULL)
@@ -314,7 +313,8 @@ COLORREF CDC::SetBkColor(COLORREF crColor)
 int CDC::SetBkMode(int nBkMode)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = 0;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::SetBkMode(m_hDC, nBkMode);
 	if (m_hAttribDC != NULL)
@@ -325,7 +325,8 @@ int CDC::SetBkMode(int nBkMode)
 int CDC::SetPolyFillMode(int nPolyFillMode)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = 0;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::SetPolyFillMode(m_hDC, nPolyFillMode);
 	if (m_hAttribDC != NULL)
@@ -336,7 +337,8 @@ int CDC::SetPolyFillMode(int nPolyFillMode)
 int CDC::SetROP2(int nDrawMode)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = 0;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::SetROP2(m_hDC, nDrawMode);
 	if (m_hAttribDC != NULL)
@@ -347,7 +349,8 @@ int CDC::SetROP2(int nDrawMode)
 int CDC::SetStretchBltMode(int nStretchMode)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = 0;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::SetStretchBltMode(m_hDC, nStretchMode);
 	if (m_hAttribDC != NULL)
@@ -358,7 +361,8 @@ int CDC::SetStretchBltMode(int nStretchMode)
 COLORREF CDC::SetTextColor(COLORREF crColor)
 {
 	ASSERT(m_hDC != NULL);
-	COLORREF crRetVal;
+	COLORREF crRetVal = CLR_INVALID;
+
 	if (m_hDC != m_hAttribDC)
 		crRetVal = ::SetTextColor(m_hDC, crColor);
 	if (m_hAttribDC != NULL)
@@ -369,7 +373,8 @@ COLORREF CDC::SetTextColor(COLORREF crColor)
 int CDC::SetMapMode(int nMapMode)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = 0;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::SetMapMode(m_hDC, nMapMode);
 	if (m_hAttribDC != NULL)
@@ -380,7 +385,8 @@ int CDC::SetMapMode(int nMapMode)
 CPoint CDC::SetViewportOrg(int x, int y)
 {
 	ASSERT(m_hDC != NULL);
-	POINT point;
+	CPoint point;
+
 	if (m_hDC != m_hAttribDC)
 		VERIFY(::SetViewportOrgEx(m_hDC, x, y, &point));
 	if (m_hAttribDC != NULL)
@@ -391,7 +397,8 @@ CPoint CDC::SetViewportOrg(int x, int y)
 CPoint CDC::OffsetViewportOrg(int nWidth, int nHeight)
 {
 	ASSERT(m_hDC != NULL);
-	POINT point;
+	CPoint point;
+
 	if (m_hDC != m_hAttribDC)
 		VERIFY(::OffsetViewportOrgEx(m_hDC, nWidth, nHeight, &point));
 	if (m_hAttribDC != NULL)
@@ -402,7 +409,8 @@ CPoint CDC::OffsetViewportOrg(int nWidth, int nHeight)
 CSize CDC::SetViewportExt(int x, int y)
 {
 	ASSERT(m_hDC != NULL);
-	SIZE size;
+	CSize size;
+
 	if (m_hDC != m_hAttribDC)
 		VERIFY(::SetViewportExtEx(m_hDC, x, y, &size));
 	if (m_hAttribDC != NULL)
@@ -413,7 +421,8 @@ CSize CDC::SetViewportExt(int x, int y)
 CSize CDC::ScaleViewportExt(int xNum, int xDenom, int yNum, int yDenom)
 {
 	ASSERT(m_hDC != NULL);
-	SIZE size;
+	CSize size;
+
 	if (m_hDC != m_hAttribDC)
 		VERIFY(::ScaleViewportExtEx(m_hDC, xNum, xDenom, yNum, yDenom, &size));
 	if (m_hAttribDC != NULL)
@@ -424,7 +433,8 @@ CSize CDC::ScaleViewportExt(int xNum, int xDenom, int yNum, int yDenom)
 CPoint CDC::SetWindowOrg(int x, int y)
 {
 	ASSERT(m_hDC != NULL);
-	POINT point;
+	CPoint point;
+
 	if (m_hDC != m_hAttribDC)
 		VERIFY(::SetWindowOrgEx(m_hDC, x, y, &point));
 	if (m_hAttribDC != NULL)
@@ -435,7 +445,8 @@ CPoint CDC::SetWindowOrg(int x, int y)
 CPoint CDC::OffsetWindowOrg(int nWidth, int nHeight)
 {
 	ASSERT(m_hDC != NULL);
-	POINT point;
+	CPoint point;
+
 	if (m_hDC != m_hAttribDC)
 		VERIFY(::OffsetWindowOrgEx(m_hDC, nWidth, nHeight, &point));
 	if (m_hAttribDC != NULL)
@@ -446,7 +457,8 @@ CPoint CDC::OffsetWindowOrg(int nWidth, int nHeight)
 CSize CDC::SetWindowExt(int x, int y)
 {
 	ASSERT(m_hDC != NULL);
-	SIZE size;
+	CSize size;
+
 	if (m_hDC != m_hAttribDC)
 		VERIFY(::SetWindowExtEx(m_hDC, x, y, &size));
 	if (m_hAttribDC != NULL)
@@ -457,7 +469,8 @@ CSize CDC::SetWindowExt(int x, int y)
 CSize CDC::ScaleWindowExt(int xNum, int xDenom, int yNum, int yDenom)
 {
 	ASSERT(m_hDC != NULL);
-	SIZE size;
+	CSize size;
+
 	if (m_hDC != m_hAttribDC)
 		VERIFY(::ScaleWindowExtEx(m_hDC, xNum, xDenom, yNum, yDenom, &size));
 	if (m_hAttribDC != NULL)
@@ -474,7 +487,8 @@ int CDC::GetClipBox(LPRECT lpRect) const
 int CDC::SelectClipRgn(CRgn* pRgn)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = ERROR;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::SelectClipRgn(m_hDC, (HRGN)pRgn->GetSafeHandle());
 	if (m_hAttribDC != NULL)
@@ -485,7 +499,8 @@ int CDC::SelectClipRgn(CRgn* pRgn)
 int CDC::ExcludeClipRect(int x1, int y1, int x2, int y2)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = ERROR;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::ExcludeClipRect(m_hDC, x1, y1, x2, y2);
 	if (m_hAttribDC != NULL)
@@ -496,7 +511,8 @@ int CDC::ExcludeClipRect(int x1, int y1, int x2, int y2)
 int CDC::ExcludeClipRect(LPCRECT lpRect)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = ERROR;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::ExcludeClipRect(m_hDC, lpRect->left, lpRect->top,
 			lpRect->right, lpRect->bottom);
@@ -509,7 +525,8 @@ int CDC::ExcludeClipRect(LPCRECT lpRect)
 int CDC::IntersectClipRect(int x1, int y1, int x2, int y2)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = ERROR;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::IntersectClipRect(m_hDC, x1, y1, x2, y2);
 	if (m_hAttribDC != NULL)
@@ -520,7 +537,8 @@ int CDC::IntersectClipRect(int x1, int y1, int x2, int y2)
 int CDC::IntersectClipRect(LPCRECT lpRect)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = ERROR;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::IntersectClipRect(m_hDC, lpRect->left, lpRect->top,
 			lpRect->right, lpRect->bottom);
@@ -533,7 +551,8 @@ int CDC::IntersectClipRect(LPCRECT lpRect)
 int CDC::OffsetClipRgn(int x, int y)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = ERROR;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::OffsetClipRgn(m_hDC, x, y);
 	if (m_hAttribDC != NULL)
@@ -544,7 +563,8 @@ int CDC::OffsetClipRgn(int x, int y)
 int CDC::OffsetClipRgn(SIZE size)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = ERROR;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::OffsetClipRgn(m_hDC, size.cx, size.cy);
 	if (m_hAttribDC != NULL)
@@ -555,7 +575,8 @@ int CDC::OffsetClipRgn(SIZE size)
 CPoint CDC::MoveTo(int x, int y)
 {
 	ASSERT(m_hDC != NULL);
-	POINT point;
+	CPoint point;
+
 	if (m_hDC != m_hAttribDC)
 		VERIFY(::MoveToEx(m_hDC, x, y, &point));
 	if (m_hAttribDC != NULL)
@@ -574,7 +595,8 @@ BOOL CDC::LineTo(int x, int y)
 UINT CDC::SetTextAlign(UINT nFlags)
 {
 	ASSERT(m_hDC != NULL);
-	UINT nRetVal;
+	UINT nRetVal = GDI_ERROR;
+
 	if (m_hDC != m_hAttribDC)
 		::SetTextAlign(m_hDC, nFlags);
 	if (m_hAttribDC != NULL)
@@ -582,23 +604,22 @@ UINT CDC::SetTextAlign(UINT nFlags)
 	return nRetVal;
 }
 
-#ifndef _MAC
 int CDC::SetTextJustification(int nBreakExtra, int nBreakCount)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = 0;
+
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::SetTextJustification(m_hDC, nBreakExtra, nBreakCount);
 	if (m_hAttribDC != NULL)
 		nRetVal = ::SetTextJustification(m_hAttribDC, nBreakExtra, nBreakCount);
 	return nRetVal;
 }
-#endif
 
 int CDC::SetTextCharacterExtra(int nCharExtra)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = 0x8000000;
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::SetTextCharacterExtra(m_hDC, nCharExtra);
 	if (m_hAttribDC != NULL)
@@ -609,7 +630,7 @@ int CDC::SetTextCharacterExtra(int nCharExtra)
 DWORD CDC::SetMapperFlags(DWORD dwFlag)
 {
 	ASSERT(m_hDC != NULL);
-	DWORD dwRetVal;
+	DWORD dwRetVal = GDI_ERROR;
 	if (m_hDC != m_hAttribDC)
 		dwRetVal = ::SetMapperFlags(m_hDC, dwFlag);
 	if (m_hAttribDC != NULL)
@@ -617,10 +638,82 @@ DWORD CDC::SetMapperFlags(DWORD dwFlag)
 	return dwRetVal;
 }
 
+typedef DWORD (CALLBACK* AFX_GDIGETLAYOUTPROC)(HDC);
+typedef DWORD (CALLBACK* AFX_GDISETLAYOUTPROC)(HDC, DWORD);
+
+DWORD CDC::GetLayout() const
+{
+	ASSERT(m_hDC != NULL);
+
+	HINSTANCE hInst = ::GetModuleHandleA("GDI32.DLL");
+	ASSERT(hInst != NULL);
+
+	DWORD dwGetLayout = LAYOUT_LTR;
+
+	AFX_GDIGETLAYOUTPROC pfn;
+	pfn = (AFX_GDIGETLAYOUTPROC) GetProcAddress(hInst, "GetLayout");
+
+	// if they API is available, just call it. If it is not
+	// available, indicate an error.
+
+	if (pfn != NULL)
+		dwGetLayout = (*pfn)(m_hDC);
+	else
+	{
+		dwGetLayout = GDI_ERROR;
+		SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
+	}
+
+	return dwGetLayout;
+}
+
+DWORD CDC::SetLayout(DWORD dwSetLayout)
+{
+	ASSERT(m_hDC != NULL);
+
+	HINSTANCE hInst = ::GetModuleHandleA("GDI32.DLL");
+	ASSERT(hInst != NULL);
+
+	DWORD dwGetLayout = LAYOUT_LTR;
+
+	AFX_GDISETLAYOUTPROC pfn;
+	pfn = (AFX_GDISETLAYOUTPROC) GetProcAddress(hInst, "SetLayout");
+
+	// If the API is availalbe, just call it. If it's not available,
+	// setting anything other than LAYOUT_LTR is an error.
+
+	if (pfn != NULL)
+		dwGetLayout = (*pfn)(m_hDC, dwSetLayout);
+	else if (dwSetLayout != LAYOUT_LTR)
+	{
+		dwGetLayout = GDI_ERROR;
+		SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
+	}
+
+	return dwGetLayout;
+}
+
+void CWnd::ScreenToClient(LPRECT lpRect) const
+{
+	ASSERT(::IsWindow(m_hWnd));
+	::ScreenToClient(m_hWnd, (LPPOINT)lpRect);
+	::ScreenToClient(m_hWnd, ((LPPOINT)lpRect)+1);
+	if (GetExStyle() & WS_EX_LAYOUTRTL)
+		CRect::SwapLeftRight(lpRect);
+}
+
+void CWnd::ClientToScreen(LPRECT lpRect) const
+{
+	ASSERT(::IsWindow(m_hWnd));
+	::ClientToScreen(m_hWnd, (LPPOINT)lpRect);
+	::ClientToScreen(m_hWnd, ((LPPOINT)lpRect)+1);
+	if (GetExStyle() & WS_EX_LAYOUTRTL)
+		CRect::SwapLeftRight(lpRect);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // Advanced Win32 GDI functions
 
-#ifndef _MAC
 BOOL CDC::ArcTo(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
 {
 	ASSERT(m_hDC != NULL);
@@ -637,7 +730,7 @@ BOOL CDC::ArcTo(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
 int CDC::SetArcDirection(int nArcDirection)
 {
 	ASSERT(m_hDC != NULL);
-	int nResult;
+	int nResult = 0;
 	if (m_hDC != m_hAttribDC)
 		nResult = ::SetArcDirection(m_hDC, nArcDirection);
 	if (m_hAttribDC != NULL)
@@ -674,7 +767,7 @@ BOOL CDC::PolylineTo(const POINT* lpPoints, int nCount)
 BOOL CDC::SetColorAdjustment(const COLORADJUSTMENT* lpColorAdjust)
 {
 	ASSERT(m_hDC != NULL);
-	BOOL bResult;
+	BOOL bResult = FALSE;
 	if (m_hDC != m_hAttribDC)
 		bResult = ::SetColorAdjustment(m_hDC, lpColorAdjust);
 	if (m_hAttribDC != NULL)
@@ -721,14 +814,13 @@ BOOL CDC::SelectClipPath(int nMode)
 int CDC::SelectClipRgn(CRgn* pRgn, int nMode)
 {
 	ASSERT(m_hDC != NULL);
-	int nRetVal;
+	int nRetVal = ERROR;
 	if (m_hDC != m_hAttribDC)
 		nRetVal = ::ExtSelectClipRgn(m_hDC, (HRGN)pRgn->GetSafeHandle(), nMode);
 	if (m_hAttribDC != NULL)
 		nRetVal = ::ExtSelectClipRgn(m_hAttribDC, (HRGN)pRgn->GetSafeHandle(), nMode);
 	return nRetVal;
 }
-#endif //!_MAC
 
 /////////////////////////////////////////////////////////////////////////////
 // Special handling for metafile playback
@@ -982,13 +1074,19 @@ void CGdiObject::AssertValid() const
 {
 	CObject::AssertValid();
 	ASSERT(m_hObject == NULL ||
-		(afxData.bWin32s || ::GetObjectType(m_hObject) != 0));
+		(afxData.bWin95 || ::GetObjectType(m_hObject) != 0));
 }
 #endif
 
-static CHandleMap* afxMapHGDIOBJ(BOOL bCreate = FALSE);
+#include "fixalloc.h"
 
-static CHandleMap* afxMapHGDIOBJ(BOOL bCreate)
+class CTempGdiObject : public CGdiObject
+{
+	DECLARE_DYNCREATE(CTempGdiObject)
+	DECLARE_FIXED_ALLOC(CTempGdiObject);
+};
+
+CHandleMap* PASCAL afxMapHGDIOBJ(BOOL bCreate)
 {
 	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
 	if (pState->m_pmapHGDIOBJ == NULL && bCreate)
@@ -997,7 +1095,7 @@ static CHandleMap* afxMapHGDIOBJ(BOOL bCreate)
 #ifndef _AFX_PORTABLE
 		_PNH pnhOldHandler = AfxSetNewHandler(&AfxCriticalNewHandler);
 #endif
-		pState->m_pmapHGDIOBJ = new CHandleMap(RUNTIME_CLASS(CGdiObject),
+		pState->m_pmapHGDIOBJ = new CHandleMap(RUNTIME_CLASS(CTempGdiObject),
 			offsetof(CGdiObject, m_hObject));
 
 #ifndef _AFX_PORTABLE
@@ -1006,13 +1104,6 @@ static CHandleMap* afxMapHGDIOBJ(BOOL bCreate)
 		AfxEnableMemoryTracking(bEnable);
 	}
 	return pState->m_pmapHGDIOBJ;
-}
-
-void PASCAL CGdiObject::DeleteTempMap()
-{
-	CHandleMap* pMap = afxMapHGDIOBJ();
-	if (pMap != NULL)
-		pMap->DeleteTemp();
 }
 
 CGdiObject* PASCAL CGdiObject::FromHandle(HGDIOBJ h)
@@ -1068,7 +1159,6 @@ CPen::CPen(int nPenStyle, int nWidth, COLORREF crColor)
 		AfxThrowResourceException();
 }
 
-#ifndef _MAC
 CPen::CPen(int nPenStyle, int nWidth, const LOGBRUSH* pLogBrush,
 	int nStyleCount, const DWORD* lpStyle)
 {
@@ -1076,7 +1166,6 @@ CPen::CPen(int nPenStyle, int nWidth, const LOGBRUSH* pLogBrush,
 			lpStyle)))
 		AfxThrowResourceException();
 }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1088,7 +1177,7 @@ void CPen::Dump(CDumpContext& dc) const
 	if (m_hObject == NULL)
 		return;
 
-	if (!afxData.bWin32s && ::GetObjectType(m_hObject) != OBJ_PEN)
+	if (!afxData.bWin95 && ::GetObjectType(m_hObject) != OBJ_PEN)
 	{
 		// not a valid object
 		dc << "has ILLEGAL HPEN!";
@@ -1146,7 +1235,7 @@ void CBrush::Dump(CDumpContext& dc) const
 	if (m_hObject == NULL)
 		return;
 
-	if (!afxData.bWin32s && ::GetObjectType(m_hObject) != OBJ_BRUSH)
+	if (!afxData.bWin95 && ::GetObjectType(m_hObject) != OBJ_BRUSH)
 	{
 		// not a valid window
 		dc << "has ILLEGAL HBRUSH!";
@@ -1173,7 +1262,7 @@ void CFont::Dump(CDumpContext& dc) const
 	if (m_hObject == NULL)
 		return;
 
-	if (!afxData.bWin32s && ::GetObjectType(m_hObject) != OBJ_FONT)
+	if (!afxData.bWin95 && ::GetObjectType(m_hObject) != OBJ_FONT)
 	{
 		// not a valid GDI object
 		dc << "has ILLEGAL HFONT!";
@@ -1211,7 +1300,7 @@ void CBitmap::Dump(CDumpContext& dc) const
 	if (m_hObject == NULL)
 		return;
 
-	if (!afxData.bWin32s && ::GetObjectType(m_hObject) != OBJ_BITMAP)
+	if (!afxData.bWin95 && ::GetObjectType(m_hObject) != OBJ_BITMAP)
 	{
 		// not a valid object
 		dc << "has ILLEGAL HBITMAP!";
@@ -1254,6 +1343,10 @@ IMPLEMENT_DYNAMIC(CBitmap, CGdiObject)
 IMPLEMENT_DYNAMIC(CPalette, CGdiObject)
 IMPLEMENT_DYNAMIC(CRgn, CGdiObject)
 
+IMPLEMENT_DYNCREATE(CTempDC, CDC);
+
+IMPLEMENT_DYNCREATE(CTempGdiObject, CGdiObject);
+
 /////////////////////////////////////////////////////////////////////////////
 // Standard exception processing
 
@@ -1276,5 +1369,10 @@ void AFXAPI AfxThrowUserException()
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
 #endif
+
+#pragma warning(disable: 4074)
+#pragma init_seg(compiler)
+IMPLEMENT_FIXED_ALLOC(CTempDC, 64);
+IMPLEMENT_FIXED_ALLOC(CTempGdiObject, 64);
 
 /////////////////////////////////////////////////////////////////////////////

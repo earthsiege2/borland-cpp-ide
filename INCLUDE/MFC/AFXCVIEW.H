@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -116,7 +116,7 @@ public:
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXCVIEW_INLINE inline
+#define _AFXCVIEW_INLINE AFX_INLINE
 #include <afxcview.inl>
 #endif
 

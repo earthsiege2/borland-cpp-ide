@@ -1,0 +1,6 @@
+:Base ibctrls.hlp>main
+:Title InterBase Controls Help
+:Index InterBase Controls Help=IBCTRLS.HLP
+:INCLUDE DELPHI5.OHL
+:INCLUDE BCB5.OHL
+:INCLUDE IBCTRLS.TOC

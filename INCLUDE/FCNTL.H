@@ -5,19 +5,20 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1987, 1997 by Borland International
+ *      Copyright (c) 1987, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.5  $ */
 
 #if !defined(__FCNTL_H)
 #define __FCNTL_H
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
 
 #if !defined(RC_INVOKED)
@@ -28,31 +29,26 @@
 
 #endif  /* !RC_INVOKED */
 
-#if defined(__FLAT__)
+#ifdef __cplusplus
+namespace std {
+#endif /* __cplusplus */
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
-int _RTLENTRY _EXPFUNC _pipe(int *phandles, unsigned int psize, int textmode);
+int _RTLENTRY _EXPFUNC _pipe(int *__phandles, unsigned int __psize, int __textmode);
 #if defined(__cplusplus)
 }
 #endif
-#endif  /* __FLAT__ */
 
 extern int _RTLENTRY _fmode;
 
 /* The first three can only be set by open */
 
-#if !defined(__FLAT__)
-#define O_RDONLY    1
-#define O_WRONLY    2
-#define O_RDWR      4
-#else
 #define O_RDONLY    0
 #define O_WRONLY    1
 #define O_RDWR      2
 #define O_ACCMODE   3       /* mask for file access modes */
-#endif  /* __FLAT__ */
 
 /* Flag values for open only */
 
@@ -87,7 +83,7 @@ extern int _RTLENTRY _fmode;
 #define O_DENYREAD  0x30
 #define O_DENYNONE  0x40
 
-#if defined(__MFC_COMPAT__)
+/* MSC compatible versions */
 #define _O_APPEND      O_APPEND
 #define _O_BINARY      O_BINARY
 #define _O_CREAT       O_CREAT
@@ -100,7 +96,6 @@ extern int _RTLENTRY _fmode;
 #define _O_TEXT        O_TEXT
 #define _O_TRUNC       O_TRUNC
 #define _O_WRONLY      O_WRONLY
-#endif
 
 #if !defined(RC_INVOKED)
 
@@ -110,4 +105,14 @@ extern int _RTLENTRY _fmode;
 
 #endif  /* !RC_INVOKED */
 
+#ifdef __cplusplus
+} // std
+#endif /* __cplusplus */
+
 #endif  /* __FCNTL_H */
+
+#if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__FCNTL_H_USING_LIST)
+#define __FCNTL_H_USING_LIST
+    using std::_pipe;
+    using std::_fmode;
+#endif /* __USING_CNAME__ */

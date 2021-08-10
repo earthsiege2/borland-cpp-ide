@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -63,7 +63,7 @@ HPALETTE _AfxInitPalette(VOID);
 HPALETTE hPal;
 
 // The system colors information
-static const SysColorsInfo SysColorsList[] =
+AFX_STATIC_DATA const SysColorsInfo _afxSysColorsList[] =
 {
 	AFX_IDS_COLOR_DESKTOP, COLOR_BACKGROUND,
 	AFX_IDS_COLOR_APPWORKSPACE, COLOR_APPWORKSPACE,
@@ -211,7 +211,7 @@ CColorPropPage::CColorPropPage() :
 BOOL CColorPropPage::OnInitDialog()
 {
 	UINT iButton;
-	for (iButton = 0; iButton < NB_COLORS; iButton++)
+	for (iButton = 0; iButton < NBUTTONS; iButton++)
 	{
 		VERIFY(m_Buttons[iButton].SubclassDlgItem(AFX_IDC_COLOR_BLACK + iButton, this));
 		m_Buttons[iButton].SetFaceColor(PALETTEINDEX(iButton));
@@ -228,7 +228,7 @@ BOOL CColorPropPage::OnInitDialog()
 
 void CColorPropPage::FillSysColors()
 {
-	const SysColorsInfo* pInfo = &SysColorsList[0];
+	const SysColorsInfo* pInfo = &_afxSysColorsList[0];
 	while (pInfo->nStrID != NULL)
 	{
 		CString strColor;
@@ -254,12 +254,16 @@ void CColorPropPage::DoDataExchange(CDataExchange* pDX)
 
 	if (pDX->m_bSaveAndValidate)
 	{
-		PALETTEENTRY pe;
 		unsigned long color = 0;
+		BOOL bChanged = TRUE;
 
 		int nIndex = m_SysColors.GetCurSel();
+
+		// did the user pick a particular button?
+		// or did they select a system colour from the dropdown?
 		if (m_pSelectedButton != NULL)
 		{
+			PALETTEENTRY pe;
 			GetPaletteEntries(hPal, m_pSelectedButton->GetDlgCtrlID() - AFX_IDC_COLOR_BLACK, 1, &pe);
 			color = RGB(pe.peRed, pe.peGreen, pe.peBlue);
 		}
@@ -267,8 +271,11 @@ void CColorPropPage::DoDataExchange(CDataExchange* pDX)
 		{
 			color = 0x80000000 | m_SysColors.GetItemData(nIndex);
 		}
+		else
+			bChanged = FALSE;
 
-		SetColorProp(pDX, color, m_strPropName);
+		if (bChanged)
+			SetColorProp(pDX, color, m_strPropName);
 	}
 	else
 	{
@@ -298,7 +305,7 @@ void CColorPropPage::DoDataExchange(CDataExchange* pDX)
 		else
 		{
 			// Normal color
-			for (int index = 0; index < NB_COLORS; index++)
+			for (int index = 0; index < NBUTTONS; index++)
 			{
 				PALETTEENTRY pe;
 
@@ -311,14 +318,11 @@ void CColorPropPage::DoDataExchange(CDataExchange* pDX)
 
 }
 
-BOOL CColorPropPage::SetColorProp(CDataExchange* pDX, unsigned long color, LPCTSTR pszPropName)
+BOOL CColorPropPage::SetColorProp(CDataExchange* /* pDX */,
+	unsigned long color, LPCTSTR pszPropName)
 {
 	USES_CONVERSION;
 	COleDispatchDriver PropDispDriver;
-
-	// Set the properties for all the objects
-	ASSERT_KINDOF(COlePropertyPage, pDX->m_pDlgWnd);
-	COlePropertyPage* propDialog = (COlePropertyPage*)(pDX->m_pDlgWnd);
 
 	ULONG nObjects;
 	LPDISPATCH* ppDisp = GetObjectArray(&nObjects);
@@ -327,9 +331,10 @@ BOOL CColorPropPage::SetColorProp(CDataExchange* pDX, unsigned long color, LPCTS
 	{
 		DISPID dwDispID;
 
-		// Get the Dispatch ID for the property and if successful set the value of the property
+		// Get the Dispatch ID for the property and if successful set the value
 		LPCOLESTR lpOleStr = T2COLE(pszPropName);
-		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr, 1, 0, &dwDispID)))
+		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr,
+			1, m_lcid, &dwDispID)))
 		{
 			// Set property
 			PropDispDriver.AttachDispatch(ppDisp[i], FALSE);
@@ -355,14 +360,11 @@ BOOL CColorPropPage::SetColorProp(CDataExchange* pDX, unsigned long color, LPCTS
 	return TRUE;
 }
 
-BOOL CColorPropPage::GetColorProp(CDataExchange* pDX, unsigned long* pcolor, LPCTSTR pszPropName)
+BOOL CColorPropPage::GetColorProp(CDataExchange* /* pDX */,
+	unsigned long* pcolor, LPCTSTR pszPropName)
 {
 	USES_CONVERSION;
 	COleDispatchDriver PropDispDriver;
-
-	// Set the properties for all the objects
-	ASSERT_KINDOF(COlePropertyPage, pDX->m_pDlgWnd);
-	COlePropertyPage* propDialog = (COlePropertyPage*)(pDX->m_pDlgWnd);
 
 	ULONG nObjects;
 	LPDISPATCH* ppDisp = GetObjectArray(&nObjects);
@@ -371,9 +373,10 @@ BOOL CColorPropPage::GetColorProp(CDataExchange* pDX, unsigned long* pcolor, LPC
 	{
 		DISPID dwDispID;
 
-		// Get the Dispatch ID for the property and if successful set the value of the property
+		// Get the Dispatch ID for the property and if successful get the value
 		LPCOLESTR lpOleStr = T2COLE(pszPropName);
-		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr, 1, 0, &dwDispID)))
+		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr,
+			1, m_lcid, &dwDispID)))
 		{
 			// Get property
 			unsigned long color = 0;
@@ -492,18 +495,18 @@ void _AfxDraw3DButtonFrame(CDC *pDC, CRect rcButton, BOOL fFocus)
 
 HPALETTE _AfxInitPalette(VOID)
 {
-
-	NPLOGPALETTE pPal; //Local Palette
+	NPLOGPALETTE pPal; // Local palette
 	HPALETTE pal;
 
-
 	//Allocates space for QcQp Palette 'pPal'
-	VERIFY( (UINT) (pPal = (NPLOGPALETTE)LocalAlloc (LPTR,
-				(sizeof (LOGPALETTE) +
-				(sizeof (PALETTEENTRY) * (NB_COLORS))))));
+	pPal = (NPLOGPALETTE) LocalAlloc(LPTR,
+			(sizeof (LOGPALETTE) +
+			(sizeof (PALETTEENTRY) * CColorPropPage::NBUTTONS)));
+	if (pPal == NULL)
+		return NULL;
 
 	//Initialize 'pPal' fields
-	pPal->palNumEntries = NB_COLORS;
+	pPal->palNumEntries = CColorPropPage::NBUTTONS;
 	pPal->palVersion = 0x300;
 
 	//Inits Every color of our palette
@@ -589,7 +592,6 @@ HPALETTE _AfxInitPalette(VOID)
 
 	//Creates the logical palette
 	pal = ::CreatePalette((LPLOGPALETTE)pPal);
-	VERIFY(pal);
 
 	//Free allocated memory
 	VERIFY(LocalFree((HLOCAL)pPal) == NULL);
@@ -623,7 +625,7 @@ void CColorPropPage::OnObjectsChanged()
 		{
 			// No color properties: disable everything.
 			UINT iButton;
-			for (iButton = 0; iButton < NB_COLORS; iButton++)
+			for (iButton = 0; iButton < NBUTTONS; iButton++)
 				m_Buttons[iButton].EnableWindow(FALSE);
 			m_SysColors.EnableWindow(FALSE);
 		}
@@ -635,6 +637,8 @@ void CColorPropPage::OnObjectsChanged()
 
 /////////////////////////////////////////////////////////////////////////////
 // Class factory for Color property page
+
+#ifdef _AFXDLL
 
 #ifdef AFXCTL_FACT_SEG
 #pragma code_seg(AFXCTL_FACT_SEG)
@@ -651,6 +655,8 @@ BOOL CColorPropPage::CColorPropPageFactory::UpdateRegistry(BOOL bRegister)
 	else
 		return AfxOleUnregisterClass(m_clsid, NULL);
 }
+
+#endif //_AFXDLL
 
 /////////////////////////////////////////////////////////////////////////////
 // Force any extra compiler-generated code into AFX_INIT_SEG

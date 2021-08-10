@@ -1,0 +1,17 @@
+#include "xaction.idl"
+interface BankServer {
+  ::xaction HandleTransaction(
+    inout ::xaction Transaction
+  );
+  long BankID();
+};
+module Bank {
+  interface Account {
+    float balance();
+  };
+  interface AccountManager {
+    ::Bank::Account open(
+      in string name
+    );
+  };
+};

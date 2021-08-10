@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -25,6 +25,9 @@ HID_HT_SIZE                             0x4000F // alias: ID_HT_BOTTOM
 HID_HT_SIZE                             0x40010 // alias: ID_HT_BOTTOMLEFT
 HID_HT_SIZE                             0x40011 // alias: ID_HT_BOTTOMRIGHT
 HID_HT_SIZE                             0x40012 // alias: ID_HT_BORDER
+HID_HT_OBJECT							0x40013
+HID_HT_CLOSE							0x40014
+HID_HT_HELP								0x40015
 
 // WM_SYSCOMMAND help IDs
 HID_SC_SIZE                             0x1EF00
@@ -169,6 +172,10 @@ AFX_HIDP_FAILED_TO_LAUNCH_HELP          0x3F107
 AFX_HIDP_INTERNAL_FAILURE               0x3F108
 AFX_HIDP_COMMAND_FAILURE                0x3F109
 AFX_HIDP_FAILED_MEMORY_ALLOC            0x3F10A
+AFX_HIDP_UNREG_DONE                     0x3F10B
+AFX_HIDP_UNREG_FAILURE                  0x3F10C
+AFX_HIDP_DLL_LOAD_FAILED                0x3F10D
+AFX_HIDP_DLL_BAD_VERSION                0x3F10E
 AFX_HIDP_PARSE_INT                      0x3F110
 AFX_HIDP_PARSE_REAL                     0x3F111
 AFX_HIDP_PARSE_INT_RANGE                0x3F112
@@ -252,12 +259,15 @@ AFX_HIDP_SQL_ROW_FETCH                  0x3F296
 AFX_HIDP_SQL_INCORRECT_ODBC             0x3F297
 AFX_HIDP_SQL_UPDATE_DELETE_FAILED       0x3F298
 AFX_HIDP_SQL_DYNAMIC_CURSOR_NOT_SUPPORTED	0x3F299
-AFX_HIDP_DAO_ENGINE_INITIALIZATION      0x3F2A0
-AFX_HIDP_DAO_DFX_BIND                   0x3F2A1
-AFX_HIDP_DAO_OBJECT_NOT_OPEN            0x3F2A2
-AFX_HIDP_DAO_ROWTOOSHORT                0x3F2A3
-AFX_HIDP_DAO_BADBINDINFO                0x3F2A4
-AFX_HIDP_DAO_COLUMNUNAVAILABLE          0x3F2A5
+AFX_HIDP_SQL_FIELD_NOT_FOUND            0x3F29A
+AFX_HIDP_SQL_BOOKMARKS_NOT_SUPPORTED    0x3F29B
+AFX_HIDP_SQL_BOOKMARKS_NOT_ENABLED      0x3F29C
+AFX_HIDP_DAO_ENGINE_INITIALIZATION      0x3F2B0
+AFX_HIDP_DAO_DFX_BIND                   0x3F2B1
+AFX_HIDP_DAO_OBJECT_NOT_OPEN            0x3F2B2
+AFX_HIDP_DAO_ROWTOOSHORT                0x3F2B3
+AFX_HIDP_DAO_BADBINDINFO                0x3F2B4
+AFX_HIDP_DAO_COLUMNUNAVAILABLE          0x3F2B5
  
 // Frame Controls (AFX_HIDW_*)
 AFX_HIDW_TOOLBAR                        0x5E800
@@ -270,3 +280,4 @@ AFX_HIDW_DOCKBAR_RIGHT                  0x5E81D
 AFX_HIDW_DOCKBAR_BOTTOM                 0x5E81E
 AFX_HIDW_DOCKBAR_FLOAT                  0x5E81F
  
+/////////////////////////////////////////////////////////////////////////////

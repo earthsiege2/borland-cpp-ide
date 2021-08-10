@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -29,6 +29,14 @@
 #ifndef _OLECTL_H_
 	#include <olectl.h>
 #endif
+#ifndef __ocidl_h__
+	#include <ocidl.h>
+#endif
+
+// Shell interface support
+#ifndef _SHLOBJ_H_
+	#include <shlobj.h>
+#endif
 
 #ifdef _AFX_MINREBUILD
 #pragma component(minrebuild, off)
@@ -38,7 +46,6 @@
 #endif
 
 #ifndef _AFX_NOFORCE_LIBS
-#ifndef _MAC
 
 /////////////////////////////////////////////////////////////////////////////
 // Win32 libraries
@@ -46,63 +53,20 @@
 #ifdef _AFXDLL
 	#if defined(_DEBUG) && !defined(_AFX_MONOLITHIC)
 		#ifndef _UNICODE
-			#pragma comment(lib, "mfco40d.lib")
+			#pragma comment(lib, "mfco42d.lib")
 		#else
-			#pragma comment(lib, "mfco40ud.lib")
+			#pragma comment(lib, "mfco42ud.lib")
 		#endif
 	#endif
 #endif
 
 #pragma comment(lib, "oledlg.lib")
 #pragma comment(lib, "ole32.lib")
+#pragma comment(lib, "olepro32.lib")
 #pragma comment(lib, "oleaut32.lib")
 #pragma comment(lib, "uuid.lib")
-#pragma comment(lib, "uuid2.lib")
-#pragma comment(lib, "olepro32.lib")
+#pragma comment(lib, "urlmon.lib")
 
-#else //!_MAC
-
-/////////////////////////////////////////////////////////////////////////////
-// Mac libraries
-
-#ifdef _AFXDLL
-	#ifdef _DEBUG
-		#pragma comment(lib, "mfco40pd.lib")
-	#else
-		#pragma comment(lib, "mfco40p.lib")
-	#endif
-#endif
-
-#if !defined(_AFXDLL) && !defined(_USRDLL)
-	#ifdef _DEBUG
-		#pragma comment(lib, "wlmoled.lib")
-		#pragma comment(lib, "ole2uid.lib")
-	#else
-		#pragma comment(lib, "wlmole.lib")
-		#pragma comment(lib, "ole2ui.lib")
-	#endif
-	#pragma comment(linker, "/macres:ole2ui.rsc")
-#else
-	#ifdef _DEBUG
-		#pragma comment(lib, "oledlgd.lib")
-		#pragma comment(lib, "msvcoled.lib")
-	#else
-		#pragma comment(lib, "oledlg.lib")
-		#pragma comment(lib, "msvcole.lib")
-	#endif
-#endif
-
-#pragma comment(lib, "uuid.lib")
-
-#ifdef _DEBUG
-	#pragma comment(lib, "ole2d.lib")
-	#pragma comment(lib, "ole2autd.lib")
-#else
-	#pragma comment(lib, "ole2.lib")
-	#pragma comment(lib, "ole2auto.lib")
-#endif
-
-#endif //_MAC
 #endif //!_AFX_NOFORCE_LIBS
 
 /////////////////////////////////////////////////////////////////////////////
@@ -130,6 +94,7 @@ class COleVariant;          // OLE VARIANT wrapper
 class COleCurrency;         // Based on OLE CY
 class COleDateTime;         // Based on OLE DATE
 class COleDateTimeSpan;     // Based on a double
+class COleSafeArray;        // Based on OLE VARIANT
 /////////////////////////////////////////////////////////////////////////////
 
 // AFXDLL support
@@ -146,18 +111,22 @@ class COleDateTimeSpan;     // Based on a double
 	theClass* pThis = \
 		((theClass*)((BYTE*)this - offsetof(theClass, m_x##localClass))); \
 	AFX_MANAGE_STATE(pThis->m_pModuleState) \
+	pThis; /* avoid warning from compiler */ \
 
 #define METHOD_PROLOGUE_(theClass, localClass) \
 	theClass* pThis = \
 		((theClass*)((BYTE*)this - offsetof(theClass, m_x##localClass))); \
+	pThis; /* avoid warning from compiler */ \
 
 #ifndef _AFX_NO_NESTED_DERIVATION
 #define METHOD_PROLOGUE_EX(theClass, localClass) \
 	theClass* pThis = ((theClass*)((BYTE*)this - m_nOffset)); \
 	AFX_MANAGE_STATE(pThis->m_pModuleState) \
+	pThis; /* avoid warning from compiler */ \
 
 #define METHOD_PROLOGUE_EX_(theClass, localClass) \
 	theClass* pThis = ((theClass*)((BYTE*)this - m_nOffset)); \
+	pThis; /* avoid warning from compiler */ \
 
 #else
 #define METHOD_PROLOGUE_EX(theClass, localClass) \
@@ -216,24 +185,44 @@ class COleDateTimeSpan;     // Based on a double
 	} m_x##localClass; \
 	friend class X##localClass; \
 
+struct CInterfacePlaceHolder
+{
+	DWORD m_vtbl;   // filled in with USE_INTERFACE_PART
+	CInterfacePlaceHolder() { m_vtbl = 0; }
+};
+
+#define END_INTERFACE_PART_OPTIONAL(localClass) \
+	}; \
+	CInterfacePlaceHolder m_x##localClass; \
+	friend class X##localClass; \
+
+#ifdef _AFXDLL
+#define END_INTERFACE_PART_STATIC END_INTERFACE_PART
+#else
+#define END_INTERFACE_PART_STATIC END_INTERFACE_PART
+#endif
+
+#define USE_INTERFACE_PART(localClass) \
+	m_x##localClass.m_vtbl = *(DWORD*)&X##localClass(); \
+
 #ifdef _AFXDLL
 #define BEGIN_INTERFACE_MAP(theClass, theBase) \
 	const AFX_INTERFACEMAP* PASCAL theClass::_GetBaseInterfaceMap() \
 		{ return &theBase::interfaceMap; } \
 	const AFX_INTERFACEMAP* theClass::GetInterfaceMap() const \
 		{ return &theClass::interfaceMap; } \
-	const AFX_DATADEF AFX_INTERFACEMAP theClass::interfaceMap = \
+	AFX_COMDAT const AFX_DATADEF AFX_INTERFACEMAP theClass::interfaceMap = \
 		{ &theClass::_GetBaseInterfaceMap, &theClass::_interfaceEntries[0], }; \
-	const AFX_DATADEF AFX_INTERFACEMAP_ENTRY theClass::_interfaceEntries[] = \
+	AFX_COMDAT const AFX_DATADEF AFX_INTERFACEMAP_ENTRY theClass::_interfaceEntries[] = \
 	{ \
 
 #else
 #define BEGIN_INTERFACE_MAP(theClass, theBase) \
 	const AFX_INTERFACEMAP* theClass::GetInterfaceMap() const \
 		{ return &theClass::interfaceMap; } \
-	const AFX_DATADEF AFX_INTERFACEMAP theClass::interfaceMap = \
+	AFX_COMDAT const AFX_DATADEF AFX_INTERFACEMAP theClass::interfaceMap = \
 		{ &theBase::interfaceMap, &theClass::_interfaceEntries[0], }; \
-	const AFX_DATADEF AFX_INTERFACEMAP_ENTRY theClass::_interfaceEntries[] = \
+	AFX_COMDAT const AFX_DATADEF AFX_INTERFACEMAP_ENTRY theClass::_interfaceEntries[] = \
 	{ \
 
 #endif
@@ -269,6 +258,7 @@ public:
 };
 
 void AFXAPI AfxThrowOleException(SCODE sc);
+void AFXAPI AfxCheckError(SCODE sc);
 
 /////////////////////////////////////////////////////////////////////////////
 // IDispatch specific exception
@@ -314,22 +304,24 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 		{ return &baseClass::dispatchMap; } \
 	const AFX_DISPMAP* theClass::GetDispatchMap() const \
 		{ return &theClass::dispatchMap; } \
-	const AFX_DISPMAP theClass::dispatchMap = \
+	AFX_COMDAT const AFX_DISPMAP theClass::dispatchMap = \
 		{ &theClass::_GetBaseDispatchMap, &theClass::_dispatchEntries[0], \
-			&theClass::_dispatchEntryCount }; \
-	UINT theClass::_dispatchEntryCount = (UINT)-1; \
-	const AFX_DISPMAP_ENTRY theClass::_dispatchEntries[] = \
+			&theClass::_dispatchEntryCount, &theClass::_dwStockPropMask }; \
+	AFX_COMDAT UINT theClass::_dispatchEntryCount = (UINT)-1; \
+	AFX_COMDAT DWORD theClass::_dwStockPropMask = (DWORD)-1; \
+	AFX_COMDAT const AFX_DISPMAP_ENTRY theClass::_dispatchEntries[] = \
 	{ \
 
 #else
 #define BEGIN_DISPATCH_MAP(theClass, baseClass) \
 	const AFX_DISPMAP* theClass::GetDispatchMap() const \
 		{ return &theClass::dispatchMap; } \
-	const AFX_DISPMAP theClass::dispatchMap = \
+	AFX_COMDAT const AFX_DISPMAP theClass::dispatchMap = \
 		{ &baseClass::dispatchMap, &theClass::_dispatchEntries[0], \
-			&theClass::_dispatchEntryCount }; \
-	UINT theClass::_dispatchEntryCount = (UINT)-1; \
-	const AFX_DISPMAP_ENTRY theClass::_dispatchEntries[] = \
+			&theClass::_dispatchEntryCount, &theClass::_dwStockPropMask }; \
+	AFX_COMDAT UINT theClass::_dispatchEntryCount = (UINT)-1; \
+	AFX_COMDAT DWORD theClass::_dwStockPropMask = (DWORD)-1; \
+	AFX_COMDAT const AFX_DISPMAP_ENTRY theClass::_dispatchEntries[] = \
 	{ \
 
 #endif
@@ -359,6 +351,7 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 	#define VT_BSTRA            14
 	#define VT_BSTRT            VT_BSTRA
 #endif
+#define VTS_UI1             "\x0F"      // a 'BYTE'
 
 // parameter types: by reference VTs
 #define VTS_PI2             "\x42"      // a 'short*'
@@ -373,6 +366,7 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 #define VTS_PBOOL           "\x4B"      // a 'VARIANT_BOOL*'
 #define VTS_PVARIANT        "\x4C"      // a 'VARIANT*'
 #define VTS_PUNKNOWN        "\x4D"      // an 'IUnknown**'
+#define VTS_PUI1            "\x4F"      // a 'BYTE*'
 
 // special VT_ and VTS_ values
 #define VTS_NONE            NULL        // used for members with 0 params
@@ -423,7 +417,7 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 // these DISP_ macros cause the framework to generate the DISPID
 #define DISP_FUNCTION(theClass, szExternalName, pfnMember, vtRetVal, vtsParams) \
 	{ _T(szExternalName), DISPID_UNKNOWN, vtsParams, vtRetVal, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnMember, (AFX_PMSG)0, 0, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnMember, (AFX_PMSG)0, 0, \
 		afxDispCustom }, \
 
 #define DISP_PROPERTY(theClass, szExternalName, memberName, vtPropType) \
@@ -432,23 +426,23 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 
 #define DISP_PROPERTY_NOTIFY(theClass, szExternalName, memberName, pfnAfterSet, vtPropType) \
 	{ _T(szExternalName), DISPID_UNKNOWN, NULL, vtPropType, (AFX_PMSG)0, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnAfterSet, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnAfterSet, \
 		offsetof(theClass, memberName), afxDispCustom }, \
 
 #define DISP_PROPERTY_EX(theClass, szExternalName, pfnGet, pfnSet, vtPropType) \
 	{ _T(szExternalName), DISPID_UNKNOWN, NULL, vtPropType, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnGet, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnSet, 0, afxDispCustom }, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnGet, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnSet, 0, afxDispCustom }, \
 
 #define DISP_PROPERTY_PARAM(theClass, szExternalName, pfnGet, pfnSet, vtPropType, vtsParams) \
 	{ _T(szExternalName), DISPID_UNKNOWN, vtsParams, vtPropType, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnGet, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnSet, 0, afxDispCustom }, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnGet, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnSet, 0, afxDispCustom }, \
 
 // these DISP_ macros allow the app to determine the DISPID
 #define DISP_FUNCTION_ID(theClass, szExternalName, dispid, pfnMember, vtRetVal, vtsParams) \
 	{ _T(szExternalName), dispid, vtsParams, vtRetVal, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnMember, (AFX_PMSG)0, 0, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnMember, (AFX_PMSG)0, 0, \
 		afxDispCustom }, \
 
 #define DISP_PROPERTY_ID(theClass, szExternalName, dispid, memberName, vtPropType) \
@@ -457,18 +451,18 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 
 #define DISP_PROPERTY_NOTIFY_ID(theClass, szExternalName, dispid, memberName, pfnAfterSet, vtPropType) \
 	{ _T(szExternalName), dispid, NULL, vtPropType, (AFX_PMSG)0, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnAfterSet, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnAfterSet, \
 		offsetof(theClass, memberName), afxDispCustom }, \
 
 #define DISP_PROPERTY_EX_ID(theClass, szExternalName, dispid, pfnGet, pfnSet, vtPropType) \
 	{ _T(szExternalName), dispid, NULL, vtPropType, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnGet, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnSet, 0, afxDispCustom }, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnGet, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnSet, 0, afxDispCustom }, \
 
 #define DISP_PROPERTY_PARAM_ID(theClass, szExternalName, dispid, pfnGet, pfnSet, vtPropType, vtsParams) \
 	{ _T(szExternalName), dispid, vtsParams, vtPropType, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnGet, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnSet, 0, afxDispCustom }, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnGet, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnSet, 0, afxDispCustom }, \
 
 // the DISP_DEFVALUE is a special case macro that creates an alias for DISPID_VALUE
 #define DISP_DEFVALUE(theClass, szExternalName) \
@@ -490,7 +484,7 @@ public: \
 #define IMPLEMENT_OLECREATE(class_name, external_name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
 	AFX_DATADEF COleObjectFactory class_name::factory(class_name::guid, \
 		RUNTIME_CLASS(class_name), FALSE, _T(external_name)); \
-	const AFX_DATADEF GUID class_name::guid = \
+	AFX_COMDAT const AFX_DATADEF GUID class_name::guid = \
 		{ l, w1, w2, { b1, b2, b3, b4, b5, b6, b7, b8 } }; \
 
 /////////////////////////////////////////////////////////////////////////////
@@ -548,16 +542,18 @@ public:
 		BOOL bMultiInstance, LPCTSTR lpszProgID);
 
 // Attributes
-	BOOL IsRegistered() const;
+	virtual BOOL IsRegistered() const;
 	REFCLSID GetClassID() const;
 
 // Operations
-	BOOL Register();
+	virtual BOOL Register();
+	BOOL Unregister();
 	void Revoke();
 	void UpdateRegistry(LPCTSTR lpszProgID = NULL);
 		// default uses m_lpszProgID if not NULL
 	BOOL IsLicenseValid();
 
+	static BOOL PASCAL UnregisterAll();
 	static BOOL PASCAL RegisterAll();
 	static void PASCAL RevokeAll();
 	static BOOL PASCAL UpdateRegistryAll(BOOL bRegister = TRUE);
@@ -590,7 +586,8 @@ protected:
 	BYTE m_bLicenseChecked;
 	BYTE m_bLicenseValid;
 	BYTE m_bRegistered;             // is currently registered w/ system
-	BYTE m_bReserved;               // reserved for future use
+	BYTE m_bOAT;                          // used by COleTemplateServer to
+											  // remember application type for unregistry
 
 // Interface Maps
 public:
@@ -620,10 +617,13 @@ public:
 //  correct registration entries given the application type.
 enum OLE_APPTYPE
 {
+	OAT_UNKNOWN = -1,                // no type decided yet
 	OAT_INPLACE_SERVER = 0,     // server has full server user-interface
 	OAT_SERVER = 1,             // server supports only embedding
 	OAT_CONTAINER = 2,          // container supports links to embeddings
 	OAT_DISPATCH_OBJECT = 3,    // IDispatch capable object
+	OAT_DOC_OBJECT_SERVER = 4,  // sever supports DocObject embedding
+	OAT_DOC_OBJECT_CONTAINER =5,// container supports DocObject clients
 };
 
 class COleTemplateServer : public COleObjectFactory
@@ -639,9 +639,13 @@ public:
 	void UpdateRegistry(OLE_APPTYPE nAppType = OAT_INPLACE_SERVER,
 		LPCTSTR* rglpszRegister = NULL, LPCTSTR* rglpszOverwrite = NULL);
 		// may want to UpdateRegistry if not run with /Embedded
+	BOOL Register();
+	BOOL Unregister();
 
 // Implementation
 protected:
+	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra,
+			AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual CCmdTarget* OnCreateObject();
 	CDocTemplate* m_pDocTemplate;
 
@@ -659,12 +663,27 @@ BOOL AFXAPI AfxOleRegisterServerClass(
 	LPCTSTR lpszShortTypeName, LPCTSTR lpszLongTypeName,
 	OLE_APPTYPE nAppType = OAT_SERVER,
 	LPCTSTR* rglpszRegister = NULL, LPCTSTR* rglpszOverwrite = NULL,
-	int nIconIndex = 0);
+	int nIconIndex = 0, LPCTSTR lpszLocalFilterName = NULL);
+BOOL AFXAPI AfxOleRegisterServerClass(
+	REFCLSID clsid, LPCTSTR lpszClassName,
+	LPCTSTR lpszShortTypeName, LPCTSTR lpszLongTypeName,
+	OLE_APPTYPE nAppType,
+	LPCTSTR* rglpszRegister, LPCTSTR* rglpszOverwrite,
+	int nIconIndex, LPCTSTR lpszLocalFilterName, LPCTSTR lpszLocalFilterExt);
 
-// AfxOleRegisterHelper is a worker function used by AfxOleRegisterServerClass
-//  (available for advanced registry work)
+BOOL AFXAPI AfxOleUnregisterServerClass(
+	REFCLSID clsid, LPCTSTR lpszClassName, LPCTSTR lpszShortTypeName,
+	LPCTSTR lpszLongTypeName, OLE_APPTYPE nAppType = OAT_SERVER,
+	LPCTSTR* rglpszRegister = NULL, LPCTSTR* rglpszOverwrite = NULL);
+
+// AfxOleRegisterHelper is a worker function used by
+//  AfxOleRegisterServerClass (available for advanced registry work)
 BOOL AFXAPI AfxOleRegisterHelper(LPCTSTR const* rglpszRegister,
 	LPCTSTR const* rglpszSymbols, int nSymbols, BOOL bReplace,
+	HKEY hKeyRoot = ((HKEY)0x80000000)); // HKEY_CLASSES_ROOT
+
+BOOL AFXAPI AfxOleUnregisterHelper(LPCTSTR const* rglpszRegister,
+	LPCTSTR const* rglpszSymbols, int nSymbols,
 	HKEY hKeyRoot = ((HKEY)0x80000000)); // HKEY_CLASSES_ROOT
 
 /////////////////////////////////////////////////////////////////////////////
@@ -690,18 +709,18 @@ BOOL AFXAPI AfxOleRegisterHelper(LPCTSTR const* rglpszRegister,
 		{ return &theBase::connectionMap; } \
 	const AFX_CONNECTIONMAP* theClass::GetConnectionMap() const \
 		{ return &theClass::connectionMap; } \
-	const AFX_DATADEF AFX_CONNECTIONMAP theClass::connectionMap = \
+	AFX_COMDAT const AFX_DATADEF AFX_CONNECTIONMAP theClass::connectionMap = \
 		{ &theClass::_GetBaseConnectionMap, &theClass::_connectionEntries[0], }; \
-	const AFX_DATADEF AFX_CONNECTIONMAP_ENTRY theClass::_connectionEntries[] = \
+	AFX_COMDAT const AFX_DATADEF AFX_CONNECTIONMAP_ENTRY theClass::_connectionEntries[] = \
 	{ \
 
 #else
 #define BEGIN_CONNECTION_MAP(theClass, theBase) \
 	const AFX_CONNECTIONMAP* theClass::GetConnectionMap() const \
 		{ return &theClass::connectionMap; } \
-	const AFX_DATADEF AFX_CONNECTIONMAP theClass::connectionMap = \
+	AFX_COMDAT const AFX_DATADEF AFX_CONNECTIONMAP theClass::connectionMap = \
 		{ &(theBase::connectionMap), &theClass::_connectionEntries[0], }; \
-	const AFX_DATADEF AFX_CONNECTIONMAP_ENTRY theClass::_connectionEntries[] = \
+	AFX_COMDAT const AFX_DATADEF AFX_CONNECTIONMAP_ENTRY theClass::_connectionEntries[] = \
 	{ \
 
 #endif
@@ -716,27 +735,37 @@ BOOL AFXAPI AfxOleRegisterHelper(LPCTSTR const* rglpszRegister,
 /////////////////////////////////////////////////////////////////////////////
 // CConnectionPoint
 
+#ifdef _AFXDLL
 class CConnectionPoint : public CCmdTarget
+#else
+class AFX_NOVTABLE CConnectionPoint : public CCmdTarget
+#endif
 {
 // Constructors
 public:
 	CConnectionPoint();
 
 // Operations
-	const CPtrArray* GetConnections();
+	POSITION GetStartPosition() const;
+	LPUNKNOWN GetNextConnection(POSITION& pos) const;
+	const CPtrArray* GetConnections();  // obsolete
 
 // Overridables
 	virtual LPCONNECTIONPOINTCONTAINER GetContainer();
 	virtual REFIID GetIID() = 0;
 	virtual void OnAdvise(BOOL bAdvise);
 	virtual int GetMaxConnections();
+	virtual LPUNKNOWN QuerySinkInterface(LPUNKNOWN pUnkSink);
 
 // Implementation
 	~CConnectionPoint();
+	void CreateConnectionArray();
+	int GetConnectionCount();
 
 protected:
 	size_t m_nOffset;
-	CPtrArray m_Connections;
+	LPUNKNOWN m_pUnkFirstConnection;
+	CPtrArray* m_pConnections;
 
 // Interface Maps
 public:
@@ -789,35 +818,45 @@ public:
 
 #define ON_EVENT(theClass, id, dispid, pfnHandler, vtsParams) \
 	{ _T(""), dispid, vtsParams, VT_BOOL, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnHandler, (AFX_PMSG)0, 0, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnHandler, (AFX_PMSG)0, 0, \
 		afxDispCustom, id, (UINT)-1 }, \
 
 #define ON_EVENT_RANGE(theClass, idFirst, idLast, dispid, pfnHandler, vtsParams) \
 	{ _T(""), dispid, vtsParams, VT_BOOL, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnHandler, (AFX_PMSG)0, 0, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnHandler, (AFX_PMSG)0, 0, \
 		afxDispCustom, idFirst, idLast }, \
 
 #define ON_PROPNOTIFY(theClass, id, dispid, pfnRequest, pfnChanged) \
 	{ _T(""), dispid, VTS_NONE, VT_VOID, \
-		(AFX_PMSG)(BOOL (CCmdTarget::*)(BOOL*))pfnRequest, \
-		(AFX_PMSG)(BOOL (CCmdTarget::*)(void))pfnChanged, \
+		(AFX_PMSG)(BOOL (CCmdTarget::*)(BOOL*))&pfnRequest, \
+		(AFX_PMSG)(BOOL (CCmdTarget::*)(void))&pfnChanged, \
 		1, afxDispCustom, id, (UINT)-1 }, \
 
 #define ON_PROPNOTIFY_RANGE(theClass, idFirst, idLast, dispid, pfnRequest, pfnChanged) \
 	{ _T(""), dispid, VTS_NONE, VT_VOID, \
-		(AFX_PMSG)(BOOL (CCmdTarget::*)(UINT, BOOL*))pfnRequest, \
-		(AFX_PMSG)(BOOL (CCmdTarget::*)(UINT))pfnChanged, \
+		(AFX_PMSG)(BOOL (CCmdTarget::*)(UINT, BOOL*))&pfnRequest, \
+		(AFX_PMSG)(BOOL (CCmdTarget::*)(UINT))&pfnChanged, \
+		1, afxDispCustom, idFirst, idLast }, \
+
+#define ON_DSCNOTIFY(theClass, id, pfnNotify) \
+	{ _T(""), DISPID_UNKNOWN, VTS_NONE, VT_VOID, \
+		(AFX_PMSG)(BOOL (CCmdTarget::*)(DSCSTATE, DSCREASON, BOOL*))&pfnNotify, (AFX_PMSG)0, \
+		1, afxDispCustom, id, (UINT)-1 }, \
+
+#define ON_DSCNOTIFY_RANGE(theClass, idFirst, idLast, pfnNotify) \
+	{ _T(""), DISPID_UNKNOWN, VTS_NONE, VT_VOID, \
+		(AFX_PMSG)(BOOL (CCmdTarget::*)(UINT, DSCSTATE, DSCREASON, BOOL*))&pfnNotify, (AFX_PMSG)0, \
 		1, afxDispCustom, idFirst, idLast }, \
 
 #define ON_EVENT_REFLECT(theClass, dispid, pfnHandler, vtsParams) \
 	{ _T(""), dispid, vtsParams, VT_BOOL, \
-		(AFX_PMSG)(void (theClass::*)(void))pfnHandler, (AFX_PMSG)0, 0, \
+		(AFX_PMSG)(void (theClass::*)(void))&pfnHandler, (AFX_PMSG)0, 0, \
 		afxDispCustom, (UINT)-1, (UINT)-1 }, \
 
 #define ON_PROPNOTIFY_REFLECT(theClass, dispid, pfnRequest, pfnChanged) \
 	{ _T(""), dispid, VTS_NONE, VT_VOID, \
-		(AFX_PMSG)(BOOL (CCmdTarget::*)(BOOL*))pfnRequest, \
-		(AFX_PMSG)(BOOL (CCmdTarget::*)(void))pfnChanged, \
+		(AFX_PMSG)(BOOL (CCmdTarget::*)(BOOL*))&pfnRequest, \
+		(AFX_PMSG)(BOOL (CCmdTarget::*)(void))&pfnChanged, \
 		1, afxDispCustom, (UINT)-1, (UINT)-1 }, \
 
 #endif // !_AFX_NO_OCC_SUPPORT
@@ -839,7 +878,7 @@ CTypeLibCache* AFXAPI AfxGetTypeLibCache(const GUID* pTypeLibID);
 	HRESULT class_name::GetTypeLib(LCID lcid, LPTYPELIB* ppTypeLib) \
 		{ return ::LoadRegTypeLib(tlid, wVerMajor, wVerMinor, lcid, ppTypeLib); } \
 	CTypeLibCache* class_name::GetTypeLibCache() \
-		{ return AfxGetTypeLibCache(&tlid); } \
+		{ AFX_MANAGE_STATE(m_pModuleState); return AfxGetTypeLibCache(&tlid); } \
 
 /////////////////////////////////////////////////////////////////////////////
 // Init & Term helpers
@@ -885,9 +924,7 @@ SCODE AFXAPI AfxDllCanUnloadNow(void);
 #define AFX_OLE_TRUE (-1)
 #define AFX_OLE_FALSE 0
 
-#ifndef __BORLANDC__
 class CLongBinary;  // forward reference (see afxdb_.h)
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // COleVariant class - wraps VARIANT types
@@ -918,14 +955,15 @@ public:
 	COleVariant(const COleDateTime& timeSrc);
 
 	COleVariant(const CByteArray& arrSrc);
-#ifndef __BORLANDC__
 	COleVariant(const CLongBinary& lbSrc);
-#endif
+
+	COleVariant(LPCITEMIDLIST pidl);
 
 // Operations
 public:
 	void Clear();
 	void ChangeType(VARTYPE vartype, LPVARIANT pSrc = NULL);
+	void Attach(VARIANT& varSrc);
 	VARIANT Detach();
 
 	BOOL operator==(const VARIANT& varSrc) const;
@@ -948,9 +986,7 @@ public:
 	const COleVariant& operator=(const COleDateTime& dateSrc);
 
 	const COleVariant& operator=(const CByteArray& arrSrc);
-#ifndef __BORLANDC__
 	const COleVariant& operator=(const CLongBinary& lbSrc);
-#endif
 
 	void SetString(LPCTSTR lpszSrc, VARTYPE vtSrc); // used to set ANSI string
 
@@ -960,6 +996,7 @@ public:
 // Implementation
 public:
 	~COleVariant();
+	void _ClearCompat();
 };
 
 // COleVariant diagnostics and serialization
@@ -1048,6 +1085,7 @@ CArchive& AFXAPI operator>>(CArchive& ar, COleCurrency& curSrc);
 // COleDateTime class helpers
 
 #define AFX_OLE_DATETIME_ERROR (-1)
+#define AFX_OLE_DATETIME_HALFSECOND (1.0 / (2.0 * (60.0 * 60.0 * 24.0)))
 
 /////////////////////////////////////////////////////////////////////////////
 // COleDateTime class
@@ -1087,6 +1125,8 @@ public:
 	void SetStatus(DateTimeStatus status);
 	DateTimeStatus GetStatus() const;
 
+	BOOL GetAsSystemTime(SYSTEMTIME& sysTime) const;
+
 	int GetYear() const;
 	int GetMonth() const;       // month of year (1 = Jan)
 	int GetDay() const;         // day of month (0-31)
@@ -1124,10 +1164,10 @@ public:
 
 	operator DATE() const;
 
-	BOOL SetDateTime(int nYear, int nMonth, int nDay,
+	int SetDateTime(int nYear, int nMonth, int nDay,
 		int nHour, int nMin, int nSec);
-	BOOL SetDate(int nYear, int nMonth, int nDay);
-	BOOL SetTime(int nHour, int nMin, int nSec);
+	int SetDate(int nYear, int nMonth, int nDay);
+	int SetTime(int nHour, int nMin, int nSec);
 	BOOL ParseDateTime(LPCTSTR lpszDate, DWORD dwFlags = 0,
 		LCID lcid = LANG_USER_DEFAULT);
 
@@ -1227,6 +1267,92 @@ CArchive& AFXAPI operator<<(CArchive& ar, COleDateTimeSpan dateSpanSrc);
 CArchive& AFXAPI operator>>(CArchive& ar, COleDateTimeSpan& dateSpanSrc);
 
 /////////////////////////////////////////////////////////////////////////////
+// Helper for initializing COleSafeArray
+void AFXAPI AfxSafeArrayInit(COleSafeArray* psa);
+
+/////////////////////////////////////////////////////////////////////////////
+// CSafeArray class
+
+typedef const SAFEARRAY* LPCSAFEARRAY;
+
+class COleSafeArray : public tagVARIANT
+{
+//Constructors
+public:
+	COleSafeArray();
+	COleSafeArray(const SAFEARRAY& saSrc, VARTYPE vtSrc);
+	COleSafeArray(LPCSAFEARRAY pSrc, VARTYPE vtSrc);
+	COleSafeArray(const COleSafeArray& saSrc);
+	COleSafeArray(const VARIANT& varSrc);
+	COleSafeArray(LPCVARIANT pSrc);
+	COleSafeArray(const COleVariant& varSrc);
+
+// Operations
+public:
+	void Clear();
+	void Attach(VARIANT& varSrc);
+	VARIANT Detach();
+
+	COleSafeArray& operator=(const COleSafeArray& saSrc);
+	COleSafeArray& operator=(const VARIANT& varSrc);
+	COleSafeArray& operator=(LPCVARIANT pSrc);
+	COleSafeArray& operator=(const COleVariant& varSrc);
+
+	BOOL operator==(const SAFEARRAY& saSrc) const;
+	BOOL operator==(LPCSAFEARRAY pSrc) const;
+	BOOL operator==(const COleSafeArray& saSrc) const;
+	BOOL operator==(const VARIANT& varSrc) const;
+	BOOL operator==(LPCVARIANT pSrc) const;
+	BOOL operator==(const COleVariant& varSrc) const;
+
+	operator LPVARIANT();
+	operator LPCVARIANT() const;
+
+	// One dim array helpers
+	void CreateOneDim(VARTYPE vtSrc, DWORD dwElements,
+		const void* pvSrcData = NULL, long nLBound = 0);
+	DWORD GetOneDimSize();
+	void ResizeOneDim(DWORD dwElements);
+
+	// Multi dim array helpers
+	void Create(VARTYPE vtSrc, DWORD dwDims, DWORD* rgElements);
+
+	// SafeArray wrapper classes
+	void Create(VARTYPE vtSrc, DWORD dwDims, SAFEARRAYBOUND* rgsabounds);
+	void AccessData(void** ppvData);
+	void UnaccessData();
+	void AllocData();
+	void AllocDescriptor(DWORD dwDims);
+	void Copy(LPSAFEARRAY* ppsa);
+	void GetLBound(DWORD dwDim, long* pLBound);
+	void GetUBound(DWORD dwDim, long* pUBound);
+	void GetElement(long* rgIndices, void* pvData);
+	void PtrOfIndex(long* rgIndices, void** ppvData);
+	void PutElement(long* rgIndices, void* pvData);
+	void Redim(SAFEARRAYBOUND* psaboundNew);
+	void Lock();
+	void Unlock();
+	DWORD GetDim();
+	DWORD GetElemSize();
+	void Destroy();
+	void DestroyData();
+	void DestroyDescriptor();
+
+//Implementation
+public:
+	~COleSafeArray();
+
+	// Cache info to make element access (operator []) faster
+	DWORD m_dwElementSize;
+	DWORD m_dwDims;
+};
+
+// COleSafeArray diagnostics and serialization
+#ifdef _DEBUG
+CDumpContext& AFXAPI operator<<(CDumpContext& dc, COleSafeArray& saSrc);
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
 // DDX_ functions for OLE controls on dialogs
 
 #ifndef _AFX_NO_OCC_SUPPORT
@@ -1270,7 +1396,7 @@ void AFXAPI DDX_OCFloatRO(CDataExchange* pDX, int nIDC, DISPID dispid,
 // Function to enable containment of OLE controls
 
 #ifndef _AFX_NO_OCC_SUPPORT
-void AFX_CDECL AfxEnableControlContainer();
+void AFX_CDECL AfxEnableControlContainer(COccManager* pOccManager=NULL);
 #else
 #define AfxEnableControlContainer()
 #endif
@@ -1283,7 +1409,7 @@ void AFX_CDECL AfxEnableControlContainer();
 #endif
 
 #ifdef _AFX_ENABLE_INLINES
-#define _AFXDISP_INLINE inline
+#define _AFXDISP_INLINE AFX_INLINE
 #include <afxole.inl>
 #undef _AFXDISP_INLINE
 #endif

@@ -1,0 +1,123 @@
+ILink32 Help
+
+Using ILINK32
+The ILINK32 linker is a command-line tool that combines object modules (.OBJ files), library modules (.LIB files), and resources to produce executables (.EXE, .DLL, and .BPL files). Because the compiler automatically calls the linker, you don't need to call the linker explicitly unless you suppress the linking stage of compilation (see the -c compiler option).
+
+ILINK32 is invoked from the command line and uses a configuration file called ILINK32.CFG, an optional response file, and command-line options.
+
+ILINK32 links 32-bit Windows code and uses the 32-bit resource linker, RLINK32.DLL. To build VCL applications, you must use ILINK32.
+
+
+ILINK32, the incremental linker
+ILINK32 links object modules (.OBJ files), library modules (.LIB files), and resources to produce executable files (.EXE, .DLL, and .BPL files). ILINK32 uses linker-state files to link previously linked images, resulting in much faster link cycles.
+
+Linker-state files
+
+When you first build a project, ILINK32 creates and stores project .OBJ and .LIB information in four read-only linker-state files. The next time you build or make your project, ILINK32 reads these files to reduce the time it takes to link your project.
+
+The four linker-state files have file names of <Project>.IL?, where <Project> is taken from the name of the project .MAK file, and the character in place of the question mark (?) identifies each of the four individual linker-state files.
+
+By default, C++Builder automatically creates an initial set of linker-state files the first time you load it, and stores the files in your C++Builder Bin directory. If you need to regenerate the default linker-state files, pass the command-line option -deflink to C++Builder; C++Builder will then create the files when you load it.
+
+Debug-information file
+
+If you include debug information in your final linked executable, ILINK32 will always store the debug information in a separate .TDS file, named <Project>.TDS by default. Both the C++Builder integrated debugger and Turbo Debugger read these debugger-information files.
+
+ ILINK32 command-line syntax
+
+The linker syntax controls how the linkers work. Linker command-line options are case-sensitive.
+The linkers can also use a configuration file called ILINK32.CFG for options that you'd normally type at the command-line.
+
+Syntax
+
+ILINK32 [@respfile][options] startup myobjs, [exe], [mapfile], [libraries], [deffile], [resfile]
+
+[@respfile]	A response file is an ASCII file that lists linker options and file names that you would normally type at the command line. By placing options and files names in a response file, you can save the amount of keystrokes you need to type to link your application.
+
+[options]	Linker options that control how the linker works. For example, options specify whether to produce an .EXE or a DLL file. Linker options must be preceded by either a slash (/) or a hyphen (-).
+startup	A Borland initialization module for executables or DLLs that arranges the order of the various segments of the program. Failure to link in the correct initialization module usually results in a long list of error messages telling you that certain identifiers are unresolved, or that no stack has been created.
+
+myobjs	The .OBJ files you want linked. Specify the path if the files aren't in the current directory. (The linker appends an .OBJ extensions if no extension is present.)
+[exe]	The name you want given to the executable file (.COM, .EXE, or .DLL). If you don't specify an executable file name, ILINK32 derives the name of the executable by appending .EXE or .DLL to the first object file name listed. (The linker assumes or appends an .EXE extensions for executable files if no extension is present. It also assumes or appends a .DLL extension for dynamic link libraries if no extension is present.)
+
+[mapfile]	Is the name you want given to the map file. If you don't specify a name, the map file name is given the same as exefile (but with the .MAP extension). (The linker appends a .MAP extensions if no extension is present.)
+[libraries]	The library files you want included at link time. Do not use commas to separate the libraries listed. If a file is not in the current directory or the search path (see the /L option) then you must include the path in the link statement. (The linker appends a .LIB extension if no extension is present.)
+
+	The order in which you list the libraries is very important; be sure to use the order defined in this list:
+	 Code Guard libraries (if needed)
+	 List any of your own user libraries, noting that if a function is defined more than once, the linker uses the first definition encountered
+	 If you’re creating a DOS overlay, link the DOS overlay module OVERLAY.LIB
+	 DPMI libraries (DOS DPMI applications only)
+	 IMPORT.LIB (if you’re creating an executable that uses the Windows API)
+
+	 Math libraries (if needed)
+	 Runtime libraries associated with your memory model and platform
+[deffile]	The module definition file for a Windows executable. If you don't specify a module definition (.DEF) file and you have used the /Twe or /Twd option, the linker creates an application based on default settings. (The linker appends a .DEF extension if no extension is present.)
+[resfile]	A list of .RES files (compiled resource files) to bind to the executable. (The linker appends an .RES extension if no extension is present.)
+
+
+ILINK32.CFG File
+ILINK32 uses a configuration file called ILINK32.CFG for options that you would normally type at the command line (note that configuration files can contain only options, not file names). Configuration files let you save options you use frequently, so you do not have to continually retype them.
+ILINK32 looks for ILINK32.CFG in the current directory, then in the directory from which it was loaded.
+The following ILINK32.CFG file tells ILINK32 to look for libraries first in the ..\LIB directory of your Borland compiler, then in C:\WINAPPS\LIB, to include debug information in the executables it creates, to create a detailed segment map, and to produce a Windows executable (.EXE not .DLL).
+
+;Sample ILINK32.CFG file
+
+/Lc:\BORLANDC\LIB;c:\WINAPPS\LIB
+/v /s
+
+/Tpe
+
+Note: If you specify command-line options in addition to those recorded in a configuration file, the command-line options override any conflicting configuration options.
+
+
+Linker response files
+You can use response files with the command-line linkers to specify linker options.
+Response files are ASCII files that list linker options and file names that you would normally type at the command line. Response files allow you longer command lines than most operating systems support, plus you don't have to continually type the same information. Response files can include the same information as configuration files, but they also support the inclusion of file names.
+Unlike the command line, a response file can be several lines long. To specify an added line, end a line with a plus character (+) and continue the command on the next line. Note that if a line ends with an option that uses the plus to turn it on (such as /v+), the + is not treated as a line continuation character (to continue the line, use /v+ +).
+
+If you separate command-line components (such as .OBJ files from .LIB files) by lines in a response file, you must leave out the comma used to separate them on the command line. For example,
+
+/c c0ws+
+
+myprog,myexe +
+mymap +
+
+mylib cws
+
+leaves out the commas you'd have to type if you put the information on the command line:
+
+	ILINK32 /c c0ws myprog,myexe,mymap,mylib cws
+
+To use response files,
+
+1.	Type the command-line options and file names into an ASCII text file and save the file. Response files shipped with Ebony have an .RSP extension.
+2.	Type ILINK32 @[path]RESFILE.RSP where RESFILE.RSP is the name of your response file.
+
+You can specify more than one response file as follows:
+
+	ilink32 /c @listobjs.rsp,myexe,mymap,@listlibs.rsp
+
+Note: You can add comments to response files using semicolons; the linker ignores any text on a line that follows a semicolon.
+Using ILINK32 with BCC32.EXE
+
+You can pass options and files to ILINK32 through the command-line compiler (BCC32.EXE) by typing file names on the command line with explicit .OBJ and .LIB extensions. For example,
+
+	BCC32 mainfile.obj sub1.obj mylib.lib
+
+links MAINFILE.OBJ, SUB1.OBJ, and MYLIB.LIB to produce the executable MAINFILE.EXE.
+
+Note: By default, BCC32 starts ILINK32 with the files C0W32.OBJ, CW32.LIB, and IMPORT32.LIB (initialization module, run-time library, and Windows import library). In addition, both compilers always pass the linkers the /c (case-sensitive link) option.
+
+
+
+
+
+
+
+
+
+
+
+
+

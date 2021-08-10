@@ -3,13 +3,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1991, 1997 by Borland International
+ *      Copyright (c) 1998, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.2  $        */
+
+/* $Revision:   9.2  $        */
 
 
 #if !defined( __CONSTREA_H )
@@ -21,7 +22,6 @@
 #endif  // __IOSTREAM_H
 
 conbuf *conbuf::current = 0;
-long constream::isCon_ = 0L;
 
 _RTLENTRY conbuf::conbuf()
 {
@@ -58,13 +58,11 @@ void _RTLENTRY conbuf::swap()
     current = this;
 }
 
-_RTLENTRY constream::constream() : ostream( &buf )
+_RTLENTRY constream::constream()
 {
+    init (&buf);
     oldtie = cin.tie( this );
     setf( ios::unitbuf );
-    if( !isCon_ )
-        isCon_ = bitalloc();
-    setf( isCon_ );
 }
 
 ostream& _RTLENTRY clreol( ostream& o )
@@ -116,9 +114,9 @@ static ostream& _RTLENTRY scrsr( ostream& o, int c )
     return o;
 }
 
-omanip<int> _RTLENTRY setcrsrtype( int c )
+omanip1<int> _RTLENTRY setcrsrtype( int c )
 {
-    return omanip<int>( scrsr, c );
+    return omanip1<int>( scrsr, c );
 }
 
 
@@ -129,9 +127,9 @@ static ostream& _RTLENTRY sattr( ostream& o, int a )
     return o;
 }
 
-omanip<int> _RTLENTRY setattr( int a )
+omanip1<int> _RTLENTRY setattr( int a )
 {
-    return omanip<int>( sattr, a );
+    return omanip1<int>( sattr, a );
 }
 
 static ostream& _RTLENTRY sxy( ostream& o, int x, int y )
@@ -153,9 +151,9 @@ static ostream& _RTLENTRY sbk( ostream& o, int a )
     return o;
 }
 
-omanip<int> _RTLENTRY setbk( int a )
+omanip1<int> _RTLENTRY setbk( int a )
 {
-    return omanip<int>( sbk, a );
+    return omanip1<int>( sbk, a );
 }
 
 static ostream& _RTLENTRY sclr( ostream& o, int a )
@@ -165,7 +163,7 @@ static ostream& _RTLENTRY sclr( ostream& o, int a )
     return o;
 }
 
-omanip<int> _RTLENTRY setclr( int a )
+omanip1<int> _RTLENTRY setclr( int a )
 {
-    return omanip<int>( sclr, a );
+    return omanip1<int>( sclr, a );
 }

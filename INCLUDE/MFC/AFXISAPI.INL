@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1995 Microsoft Corporation
+// Copyright (C) 1995-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -14,9 +14,12 @@
 
 _AFXISAPI_INLINE CHttpServerContext::CHttpServerContext(EXTENSION_CONTROL_BLOCK* pECB)
 #ifdef _DEBUG
-	: m_pECB(pECB), m_pStream(NULL), m_dwEndOfHeaders(0), m_dwOldEndOfHeaders(0)
+	: m_dwStatusCode(DWORD(-1)), m_bSendHeaders(TRUE), m_pECB(pECB),
+	  m_pStream(NULL), m_dwEndOfHeaders(0), m_dwOldEndOfHeaders(0),
+	  m_dwChunkSize(0)
 #else
-	: m_pECB(pECB), m_pStream(NULL), m_dwEndOfHeaders(0)
+	: m_dwStatusCode(DWORD(-1)), m_bSendHeaders(TRUE), m_pECB(pECB),
+	  m_pStream(NULL), m_dwEndOfHeaders(0), m_dwChunkSize(0)
 #endif
 	{ }
 
@@ -35,7 +38,7 @@ _AFXISAPI_INLINE CHttpServerContext& CHttpServerContext::operator<<(float f)
 
 _AFXISAPI_INLINE CHttpServerContext& CHttpServerContext::operator<<(long int dw)
 	{ ISAPIASSERT(m_pStream != NULL);
-		if (m_pStream != NULL) *m_pStream << dw; 
+		if (m_pStream != NULL) *m_pStream << dw;
 		return *this; }
 
 _AFXISAPI_INLINE CHttpServerContext& CHttpServerContext::operator<<(short int w)
@@ -43,16 +46,15 @@ _AFXISAPI_INLINE CHttpServerContext& CHttpServerContext::operator<<(short int w)
 		if (m_pStream != NULL) *m_pStream << w;
 		return *this; }
 
-_AFXISAPI_INLINE CHttpServerContext& CHttpServerContext::operator<<(CHtmlStream& stream)
+_AFXISAPI_INLINE CHttpServerContext& CHttpServerContext::operator<<(const CHtmlStream& stream)
 	{ ISAPIASSERT(m_pStream != NULL);
-		if (m_pStream != NULL) *m_pStream << stream; 
+		if (m_pStream != NULL) *m_pStream << stream;
 		return *this; }
 
 _AFXISAPI_INLINE CHttpServerContext& CHttpServerContext::operator<<(LPCTSTR psz)
 	{ ISAPIASSERT(m_pStream != NULL && psz != NULL);
 		if (m_pStream != NULL && psz != NULL) *m_pStream << psz;
 		return *this; }
-
 
 _AFXISAPI_INLINE BOOL CHttpServerContext::GetServerVariable(LPTSTR lpszVariableName,
 		LPVOID lpvBuffer, LPDWORD lpdwSize)
@@ -119,4 +121,3 @@ _AFXISAPI_INLINE BOOL CHttpFilterContext::ServerSupportFunction(enum SF_REQ_TYPE
 
 
 #endif // _AFXISAPI_INLINE
-

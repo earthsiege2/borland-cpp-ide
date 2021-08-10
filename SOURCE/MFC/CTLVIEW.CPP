@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -27,6 +27,71 @@ static char THIS_FILE[] = __FILE__;
 BOOL COleControl::OnGetColorSet(DVTARGETDEVICE*, HDC, LPLOGPALETTE*)
 {
 	// Can be overridden by subclass
+	return FALSE;
+}
+
+BOOL COleControl::OnGetViewExtent(DWORD dwDrawAspect, LONG /* lindex */,
+	DVTARGETDEVICE* /* ptd */, LPSIZEL lpsizel)
+{
+	// Can be overridden by subclass for two-pass drawing
+	if (dwDrawAspect == DVASPECT_OPAQUE || dwDrawAspect == DVASPECT_TRANSPARENT)
+		dwDrawAspect = DVASPECT_CONTENT;
+	return SUCCEEDED(m_xOleObject.GetExtent(dwDrawAspect, lpsizel));
+}
+
+BOOL COleControl::OnGetViewRect(DWORD dwAspect, LPRECTL pRect)
+{
+	// Can be overridden by subclass for two-pass drawing
+	SIZEL size;
+	OnGetViewExtent(dwAspect, -1, NULL, &size);
+	pRect->left = 0;
+	pRect->top = 0;
+	pRect->right = size.cx;
+	pRect->bottom = -size.cy;
+	return TRUE;
+}
+
+DWORD COleControl::OnGetViewStatus()
+{
+	// Can be overridden by subclass for two-pass drawing
+	return VIEWSTATUS_OPAQUE;
+}
+
+BOOL COleControl::OnQueryHitPoint(DWORD dwAspect, LPCRECT /* pRectBounds */,
+	POINT /* ptlLoc */, LONG /* lCloseHint */, DWORD* pHitResult)
+{
+	// Can be overridden by subclass for non-rectangular hit-testing
+	if (dwAspect == DVASPECT_CONTENT)
+	{
+		*pHitResult = HITRESULT_HIT;
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
+BOOL COleControl::OnQueryHitRect(DWORD dwAspect, LPCRECT /* pRectBounds */,
+	LPCRECT /* prcLoc */, LONG /* lCloseHint */, DWORD* pHitResult)
+{
+	// Can be overridden by subclass for non-rectangular hit-testing
+	if (dwAspect == DVASPECT_CONTENT)
+	{
+		*pHitResult = HITRESULT_HIT;
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
+BOOL COleControl::OnGetNaturalExtent(DWORD /* dwAspect */, LONG /* lindex */,
+	DVTARGETDEVICE* /* ptd */, HDC /* hicTargetDev */,
+	DVEXTENTINFO* /* pExtentInfo */, LPSIZEL /* psizel */)
+{
+	// Can be overridden by subclass to provide sizing hints
 	return FALSE;
 }
 
@@ -62,10 +127,29 @@ STDMETHODIMP COleControl::XViewObject::Draw(DWORD dwDrawAspect, LONG lindex,
 
 	HRESULT hResult = S_OK;
 
-	AfxLockTempMaps();
+	CRect rc;
 
-	CRect rc((int)lprcBounds->left, (int)lprcBounds->top,
-			 (int)lprcBounds->right, (int)lprcBounds->bottom);
+	if (lprcBounds == NULL)
+	{
+		if (pThis->m_bInPlaceSiteWndless)
+			rc.CopyRect(pThis->m_rcPos);
+		else
+			return E_INVALIDARG;
+	}
+	else
+	{
+		rc.SetRect((int)lprcBounds->left, (int)lprcBounds->top,
+			(int)lprcBounds->right, (int)lprcBounds->bottom);
+	}
+
+	// Check if optimized drawing is permitted
+	if (pvAspect != NULL && (pThis->GetControlFlags() & canOptimizeDraw))
+	{
+		pThis->m_bOptimizedDraw = (((DVASPECTINFO*)pvAspect)->dwFlags &
+			DVASPECTINFOFLAG_CANOPTIMIZE);
+	}
+
+	AfxLockTempMaps();
 
 	// Convert from rectangle from logical to device coordinates,
 	// save DC state, and switch to MM_TEXT mode.  After drawing,
@@ -116,6 +200,7 @@ STDMETHODIMP COleControl::XViewObject::Draw(DWORD dwDrawAspect, LONG lindex,
 	}
 
 	AfxUnlockTempMaps();
+	pThis->m_bOptimizedDraw = FALSE;
 	return hResult;
 }
 
@@ -217,11 +302,50 @@ STDMETHODIMP COleControl::XViewObject::GetAdvise(DWORD* pAspects, DWORD* pAdvf,
 	return S_OK;
 }
 
-STDMETHODIMP COleControl::XViewObject::GetExtent(DWORD dwDrawAspect, LONG,
-	DVTARGETDEVICE*, LPSIZEL lpsizel)
+STDMETHODIMP COleControl::XViewObject::GetExtent(DWORD dwDrawAspect,
+	LONG lindex, DVTARGETDEVICE* ptd, LPSIZEL lpsizel)
 {
 	METHOD_PROLOGUE_EX_(COleControl, ViewObject)
-	return pThis->m_xOleObject.GetExtent(dwDrawAspect, lpsizel);
+	return pThis->OnGetViewExtent(dwDrawAspect, lindex, ptd, lpsizel) ? S_OK :
+		E_FAIL;
+}
+
+STDMETHODIMP COleControl::XViewObject::GetRect(DWORD dwAspect, LPRECTL pRect)
+{
+	METHOD_PROLOGUE_EX_(COleControl, ViewObject)
+	return pThis->OnGetViewRect(dwAspect, pRect) ? S_OK : DV_E_DVASPECT;
+}
+
+STDMETHODIMP COleControl::XViewObject::GetViewStatus(DWORD* pdwStatus)
+{
+	METHOD_PROLOGUE_EX_(COleControl, ViewObject)
+	*pdwStatus = pThis->OnGetViewStatus();
+	return S_OK;
+}
+
+STDMETHODIMP COleControl::XViewObject::QueryHitPoint(DWORD dwAspect,
+	LPCRECT pRectBounds, POINT ptlLoc, LONG lCloseHint, DWORD* pHitResult)
+{
+	METHOD_PROLOGUE_EX_(COleControl, ViewObject)
+	return pThis->OnQueryHitPoint(dwAspect, pRectBounds, ptlLoc, lCloseHint,
+		pHitResult) ? S_OK : E_FAIL;
+}
+
+STDMETHODIMP COleControl::XViewObject::QueryHitRect(DWORD dwAspect,
+	LPCRECT pRectBounds, LPCRECT prcLoc, LONG lCloseHint, DWORD* pHitResult)
+{
+	METHOD_PROLOGUE_EX_(COleControl, ViewObject)
+	return pThis->OnQueryHitRect(dwAspect, pRectBounds, prcLoc, lCloseHint,
+		pHitResult) ? S_OK : E_FAIL;
+}
+
+STDMETHODIMP COleControl::XViewObject::GetNaturalExtent(DWORD dwAspect,
+	LONG lindex, DVTARGETDEVICE* ptd, HDC hicTargetDev,
+	DVEXTENTINFO* pExtentInfo, LPSIZEL psizel)
+{
+	METHOD_PROLOGUE_EX_(COleControl, ViewObject)
+	return pThis->OnGetNaturalExtent(dwAspect, lindex, ptd, hicTargetDev,
+		pExtentInfo, psizel) ? S_OK : E_NOTIMPL;
 }
 
 /////////////////////////////////////////////////////////////////////////////

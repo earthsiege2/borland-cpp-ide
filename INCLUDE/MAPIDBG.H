@@ -8,8 +8,8 @@
  */
 
 #ifndef __MAPIDBG_H_
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __MAPIDBG_H_
-#pragma option -b
 
 #if defined (WIN32) && !defined (_WIN32)
 #define _WIN32
@@ -477,5 +477,5 @@ extern SCODE IMSLogon_Logoff_Scodes[];
 
 /* ------------------------------------------------------------------------ */
 
-#pragma option -b.
+#pragma option pop /*P_O_Pop*/
 #endif

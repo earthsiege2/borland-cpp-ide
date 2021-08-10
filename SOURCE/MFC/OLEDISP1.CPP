@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -37,6 +37,9 @@ void CCmdTarget::GetStandardProp(const AFX_DISPMAP_ENTRY* pEntry,
 		pvarResult->vt = pEntry->vt;
 	switch (pEntry->vt)
 	{
+	case VT_I1:
+		pvarResult->bVal = *(BYTE*)pProp;
+		break;
 	case VT_I2:
 		pvarResult->iVal = *(short*)pProp;
 		break;
@@ -111,6 +114,9 @@ SCODE CCmdTarget::SetStandardProp(const AFX_DISPMAP_ENTRY* pEntry,
 	void* pProp = (BYTE*)this + pEntry->nPropOffset;
 	switch (pEntry->vt)
 	{
+	case VT_I1:
+		*(BYTE*)pProp = pArg->bVal;
+		break;
 	case VT_I2:
 		*(short*)pProp = pArg->iVal;
 		break;
@@ -284,10 +290,12 @@ LookupDispID:
 				pEntry = pDispMap->lpEntries + LOWORD(memid)-1;
 
 				// must have automatic DISPID or same ID
-				ASSERT(pEntry->lDispID == DISPID_UNKNOWN ||
-					pEntry->lDispID == memid);
-
-				return pEntry;
+				// if not then look manually
+				if (pEntry->lDispID == DISPID_UNKNOWN ||
+					pEntry->lDispID == memid)
+				{
+					return pEntry;
+				}
 			}
 		}
 	}
@@ -454,65 +462,70 @@ BSTR CString::SetSysString(BSTR* pbstr) const
 //  that the stack grows down, and that arguments are pushed last to first.
 
 // calculate size of pushed arguments + retval reference
+
+// size of arguments on stack when pushed by value
+AFX_STATIC_DATA const UINT _afxByValue[] =
+{
+	0,                          // VTS_EMPTY
+	0,                          // VTS_NULL
+	sizeof(_STACK_INT),         // VTS_I2
+	sizeof(_STACK_LONG),        // VTS_I4
+	sizeof(_STACK_FLOAT),       // VTS_R4
+	sizeof(_STACK_DOUBLE),      // VTS_R8
+	sizeof(CY),                 // VTS_CY
+	sizeof(DATE),               // VTS_DATE
+	sizeof(LPCOLESTR),          // VTS_WBSTR (VT_BSTR)
+	sizeof(LPDISPATCH),         // VTS_DISPATCH
+	sizeof(SCODE),              // VTS_SCODE
+	sizeof(BOOL),               // VTS_BOOL
+	sizeof(const VARIANT*),     // VTS_VARIANT
+	sizeof(LPUNKNOWN),           // VTS_UNKNOWN
+#if !defined(_UNICODE) && !defined(OLE2ANSI)
+	sizeof(LPCSTR),             // VTS_BSTR (VT_BSTRA -- MFC defined)
+#endif
+};
+
+// size of arguments on stack when pushed by reference
+AFX_STATIC_DATA const UINT _afxByRef[] =
+{
+	0,                          // VTS_PEMPTY
+	0,                          // VTS_PNULL
+	sizeof(short*),             // VTS_PI2
+	sizeof(long*),              // VTS_PI4
+	sizeof(float*),             // VTS_PR4
+	sizeof(double*),            // VTS_PR8
+	sizeof(CY*),                // VTS_PCY
+	sizeof(DATE*),              // VTS_PDATE
+	sizeof(BSTR*),              // VTS_PBSTR
+	sizeof(LPDISPATCH*),        // VTS_PDISPATCH
+	sizeof(SCODE*),             // VTS_PSCODE
+	sizeof(VARIANT_BOOL*),      // VTS_PBOOL
+	sizeof(VARIANT*),           // VTS_PVARIANT
+	sizeof(LPUNKNOWN*),         // VTS_PUNKNOWN
+	sizeof(BYTE*),              // VTS_PUI1
+};
+
+AFX_STATIC_DATA const UINT _afxRetVal[] =
+{
+	0,                          // VT_EMPTY
+	0,                          // VT_NULL
+	0,                          // VT_I2
+	0,                          // VT_I4
+	0,                          // VT_R4
+	0,                          // VT_R8
+	sizeof(CY*),                // VT_CY
+	0,                          // VT_DATE (same as VT_R8)
+	0,                          // VT_BSTR
+	0,                          // VT_DISPATCH
+	0,                          // VT_ERROR
+	0,                          // VT_BOOL
+	sizeof(VARIANT*),           // VT_VARIANT
+	0,                          // VT_UNKNOWN
+	0,                          // VT_UI1
+};
+
 UINT PASCAL CCmdTarget::GetStackSize(const BYTE* pbParams, VARTYPE vtResult)
 {
-	// size of arguments on stack when pushed by value
-	static const UINT rgnByValue[] =
-	{
-		0,                          // VTS_EMPTY
-		0,                          // VTS_NULL
-		sizeof(_STACK_INT),         // VTS_I2
-		sizeof(_STACK_LONG),        // VTS_I4
-		sizeof(_STACK_FLOAT),       // VTS_R4
-		sizeof(_STACK_DOUBLE),      // VTS_R8
-		sizeof(CY),                 // VTS_CY
-		sizeof(DATE),               // VTS_DATE
-		sizeof(LPCOLESTR),          // VTS_WBSTR (VT_BSTR)
-		sizeof(LPDISPATCH),         // VTS_DISPATCH
-		sizeof(SCODE),              // VTS_SCODE
-		sizeof(BOOL),               // VTS_BOOL
-		sizeof(const VARIANT*),     // VTS_VARIANT
-		sizeof(LPUNKNOWN),           // VTS_UNKNOWN
-#if !defined(_UNICODE) && !defined(OLE2ANSI)
-		sizeof(LPCSTR),             // VTS_BSTR (VT_BSTRA -- MFC defined)
-#endif
-	};
-	// size of arguments on stack when pushed by reference
-	static const UINT rgnByRef[] =
-	{
-		0,                          // VTS_PEMPTY
-		0,                          // VTS_PNULL
-		sizeof(short*),             // VTS_PI2
-		sizeof(long*),              // VTS_PI4
-		sizeof(float*),             // VTS_PR4
-		sizeof(double*),            // VTS_PR8
-		sizeof(CY*),                // VTS_PCY
-		sizeof(DATE*),              // VTS_PDATE
-		sizeof(BSTR*),              // VTS_PBSTR
-		sizeof(LPDISPATCH*),        // VTS_PDISPATCH
-		sizeof(SCODE*),             // VTS_PSCODE
-		sizeof(VARIANT_BOOL*),      // VTS_PBOOL
-		sizeof(VARIANT*),           // VTS_PVARIANT
-		sizeof(LPUNKNOWN*)          // VTS_PUNKNOWN
-	};
-	static const UINT rgnRetVal[] =
-	{
-		0,                          // VT_EMPTY
-		0,                          // VT_NULL
-		0,                          // VT_I2
-		0,                          // VT_I4
-		0,                          // VT_R4
-		0,                          // VT_R8
-		sizeof(CY*),                // VT_CY
-		0,                          // VT_DATE (same as VT_R8)
-		0,                          // VT_BSTR
-		0,                          // VT_DISPATCH
-		0,                          // VT_ERROR
-		0,                          // VT_BOOL
-		sizeof(VARIANT*),           // VT_VARIANT
-		0                           // VT_UNKNOWN
-	};
-
 	// sizeof 'this' pointer
 	UINT nCount = sizeof(CCmdTarget*);
 #ifdef _ALIGN_STACK
@@ -520,8 +533,8 @@ UINT PASCAL CCmdTarget::GetStackSize(const BYTE* pbParams, VARTYPE vtResult)
 #endif
 
 	// count bytes in return value
-	ASSERT((UINT)vtResult < _countof(rgnRetVal));
-	nCount += rgnRetVal[vtResult];
+	ASSERT((UINT)vtResult < _countof(_afxRetVal));
+	nCount += _afxRetVal[vtResult];
 #ifdef _ALIGN_STACK
 	nCount = (nCount + (_ALIGN_STACK-1)) & ~(_ALIGN_STACK-1);
 #endif
@@ -536,10 +549,10 @@ UINT PASCAL CCmdTarget::GetStackSize(const BYTE* pbParams, VARTYPE vtResult)
 			// get and add appropriate byte count
 			const UINT* rgnBytes;
 			if (*pbParams & VT_MFCBYREF)
-				rgnBytes = rgnByRef;
+				rgnBytes = _afxByRef;
 			else
-				rgnBytes = rgnByValue;
-			ASSERT((*pbParams & ~VT_MFCBYREF) < _countof(rgnByValue));
+				rgnBytes = _afxByValue;
+			ASSERT((*pbParams & ~VT_MFCBYREF) < _countof(_afxByValue));
 #ifdef _ALIGN_DOUBLES
 			// align doubles on 8 byte for some platforms
 			if (*pbParams == VT_R8)
@@ -661,7 +674,7 @@ SCODE CCmdTarget::PushStackArgs(BYTE* pStack, const BYTE* pbParams,
 #if defined(_UNICODE) || defined(OLE2ANSI)
 				VARTYPE vtTarget = vt;
 #else
-				VARTYPE vtTarget = (vt == VT_BSTRA) ? VT_BSTR : vt;
+				VARTYPE vtTarget = (VARTYPE) ((vt == VT_BSTRA) ? VT_BSTR : vt);
 #endif
 				if (pArg->vt != vtTarget)
 				{
@@ -724,6 +737,10 @@ SCODE CCmdTarget::PushStackArgs(BYTE* pStack, const BYTE* pbParams,
 		switch (vt)
 		{
 		// by value parameters
+		case VT_UI1:
+			*(_STACK_INT*)pStack = pArg->bVal; // 'BYTE' is passed as 'int'
+			pStack += sizeof(_STACK_INT);
+			break;
 		case VT_I2:
 			*(_STACK_INT*)pStack = pArg->iVal;
 			pStack += sizeof(_STACK_INT);   // 'short' is passed as 'int'
@@ -793,6 +810,10 @@ SCODE CCmdTarget::PushStackArgs(BYTE* pStack, const BYTE* pbParams,
 			break;
 
 		// by reference parameters
+		case VT_UI2|VT_BYREF:
+			*(_STACK_PTR*)pStack = (_STACK_PTR)pArg->pbVal;
+			pStack += sizeof(_STACK_PTR);
+			break;
 		case VT_I2|VT_BYREF:
 			*(_STACK_PTR*)pStack = (_STACK_PTR)pArg->piVal;
 			pStack += sizeof(_STACK_PTR);
@@ -826,7 +847,7 @@ SCODE CCmdTarget::PushStackArgs(BYTE* pStack, const BYTE* pbParams,
 			pStack += sizeof(_STACK_PTR);
 			break;
 		case VT_BOOL|VT_BYREF:
-			*(_STACK_PTR*)pStack = (_STACK_PTR)pArg->pbool;
+			*(_STACK_PTR*)pStack = (_STACK_PTR)pArg->pboolVal;
 			pStack += sizeof(_STACK_PTR);
 			break;
 		case VT_VARIANT|VT_BYREF:
@@ -960,7 +981,7 @@ SCODE CCmdTarget::CallMemberFunc(const AFX_DISPMAP_ENTRY* pEntry, WORD wFlags,
 #endif
 	pStack += _STACK_OFFSET;
 
-	DWORD dwResult;
+	DWORD dwResult = 0;
 	if (sc == S_OK)
 	{
 		TRY
@@ -1018,6 +1039,9 @@ SCODE CCmdTarget::CallMemberFunc(const AFX_DISPMAP_ENTRY* pEntry, WORD wFlags,
 		// build return value VARIANT from result union
 		switch (vtResult)
 		{
+		case VT_UI2:
+			pvarResult->bVal = (BYTE)dwResult;
+			break;
 		case VT_I2:
 			pvarResult->iVal = (short)dwResult;
 			break;
@@ -1149,12 +1173,7 @@ STDMETHODIMP COleDispatchImpl::GetIDsOfNames(
 	{
 		// fill in the member name
 		const AFX_DISPMAP* pDerivMap = pThis->GetDispatchMap();
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-      OLE2CT(rgszNames[0]);
-		rgdispid[0] = pThis->MemberIDFromName(pDerivMap, (LPCSTR)pBAfxConv);
-#else    // __BORLANDC__
 		rgdispid[0] = pThis->MemberIDFromName(pDerivMap, OLE2CT(rgszNames[0]));
-#endif   // __BORLANDC__
 		if (rgdispid[0] == DISPID_UNKNOWN)
 			sc = DISP_E_UNKNOWNNAME;
 		else
@@ -1250,6 +1269,8 @@ STDMETHODIMP COleDispatchImpl::Invoke(
 	// handle special cases of DISPATCH_PROPERTYPUT
 	VARIANT* pvarParamSave = NULL;
 	VARIANT vaParamSave;
+	vaParamSave.vt = VT_ERROR;
+
 	DISPPARAMS paramsTemp;
 	VARIANT vaTemp;
 	AfxVariantInit(&vaTemp);

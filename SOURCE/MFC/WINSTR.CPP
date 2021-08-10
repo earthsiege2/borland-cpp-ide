@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -23,9 +23,9 @@ static char THIS_FILE[] = __FILE__;
 // Windows extensions to strings
 
 #ifdef _UNICODE
-#define CHAR_FUDGE 1	// one TCHAR unused is good enough
+#define CHAR_FUDGE 1    // one TCHAR unused is good enough
 #else
-#define CHAR_FUDGE 2	// two BYTES unused for case of DBC last char
+#define CHAR_FUDGE 2    // two BYTES unused for case of DBC last char
 #endif
 
 BOOL CString::LoadString(UINT nID)

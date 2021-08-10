@@ -1,174 +1,230 @@
-/*  strstream.h -- class strstream declarations
+#ifndef __STRSTREA_H
+#define __STRSTREA_H
+#pragma option push -b -a8 -pc -Vx- -Ve- -w-inl -w-aus -w-sig
+// -*- C++ -*-
+/***************************************************************************
+ *
+ * strstream - Declarations for the Standard Library string stream classes
+ *
+ ***************************************************************************
+ *
+ * Copyright (c) 1994-1999 Rogue Wave Software, Inc.  All Rights Reserved.
+ *
+ * This computer software is owned by Rogue Wave Software, Inc. and is
+ * protected by U.S. copyright laws and other laws and by international
+ * treaties.  This computer software is furnished by Rogue Wave Software,
+ * Inc. pursuant to a written license agreement and may be used, copied,
+ * transmitted, and stored only in accordance with the terms of such
+ * license and with the inclusion of the above copyright notice.  This
+ * computer software or any other copies thereof may not be provided or
+ * otherwise made available to any other person.
+ *
+ * U.S. Government Restricted Rights.  This computer software is provided
+ * with Restricted Rights.  Use, duplication, or disclosure by the
+ * Government is subject to restrictions as set forth in subparagraph (c)
+ * (1) (ii) of The Rights in Technical Data and Computer Software clause
+ * at DFARS 252.227-7013 or subparagraphs (c) (1) and (2) of the
+ * Commercial Computer Software – Restricted Rights at 48 CFR 52.227-19,
+ * as applicable.  Manufacturer is Rogue Wave Software, Inc., 5500
+ * Flatiron Parkway, Boulder, Colorado 80301 USA.
+ *
+ **************************************************************************/
 
-*/
+#ifndef __STD_STRSTREAM__
+#define __STD_STRSTREAM__
 
+#include <streambuf>
+#include <istream>
+#include <ostream>
+
+#ifndef _RWSTD_NO_NAMESPACE 
+namespace std {
+#endif
+  
+
+  class _RWSTDExport strstreambuf
+#ifndef _RWSTD_NO_COMPLEX_DEFAULT_TEMPLATES
+    : public basic_streambuf<char>
+#else
+    : public basic_streambuf<char, char_traits<char> >
+#endif // _RWSTD_NO_COMPLEX_DEFAULT_TEMPLATES 
+  {
+
+  public:
+    //
+    // Types:
+    //
+    typedef char                         char_type;
+    typedef char_traits<char>            traits;
+    typedef traits::int_type             int_type;
+    typedef traits::pos_type             pos_type;
+    typedef traits::off_type             off_type;
+  
+    _EXPLICIT strstreambuf(streamsize alsize = 0);
+    strstreambuf(void *(*palloc)(size_t), void (*pfree)(void *));
+    strstreambuf(char *gnext, streamsize n, char *pbeg = 0);
+
+    strstreambuf(unsigned char *gnext, streamsize n,
+                 unsigned char *pbeg = 0);
+    strstreambuf(signed char *gnext, streamsize n,
+                 signed char *pbeg = 0);
+
+    strstreambuf(const char *gnext, streamsize n);
+    strstreambuf(const unsigned char *gnext, streamsize n);
+    strstreambuf(const signed char *gnext, streamsize n);
+    virtual ~strstreambuf();
+
+    void freeze(bool f = true);
+    char *str();
+    int pcount() const;
+
+  protected:
+    virtual int_type overflow(int_type c = traits::eof());
+    virtual int_type pbackfail(int_type c = traits::eof());
+    virtual int_type underflow();
+
+    virtual pos_type seekoff(off_type, ios_base::seekdir way,
+                             ios_base::openmode which =
+                             ios_base::in | ios_base::out);
+
+    virtual pos_type seekpos(pos_type sp, ios_base::openmode which =
+                             ios_base::in | ios_base::out);
+
+    virtual streambuf* setbuf(char *s, streamsize n);
+    virtual streamsize xsputn(const char_type *s, streamsize n);
+
+  private:
+    typedef long strstate;
+
+    enum str_state {
+      allocated      = 0x01,
+      constant       = 0x02,
+      dynamic        = 0x04,
+      frozen         = 0x08
+    };
+
+    int doallocate();
+  
+    strstate       __strmode;
+    streamsize     __alsize;
+    char          *__data;
+    streamsize     __end_pos;
+
+    void           *(*__palloc)(size_t);
+    void           (*__pfree)(void *);
+  };
+
+  class _RWSTDExport istrstream
+#ifndef _RWSTD_NO_COMPLEX_DEFAULT_TEMPLATES
+    : public basic_istream<char>
+#else
+    : public basic_istream<char, char_traits<char> >
+#endif
+  {
+
+  public:
+    //
+    // Types:
+    //
+    typedef char                         char_type;
+    typedef char_traits<char>            traits;
+    typedef traits::int_type             int_type;
+    typedef traits::pos_type             pos_type;
+    typedef traits::off_type             off_type;
+  
+    _EXPLICIT istrstream(const char *s);
+    istrstream(const char *s, streamsize n);
+    _EXPLICIT istrstream(char *s);
+    istrstream(char *s, streamsize n);
+
+    virtual ~istrstream();
+
+    strstreambuf *rdbuf() const;
+    char *str();
+  protected:
+
+  private:
+    strstreambuf              __sb;
+  };
+  class _RWSTDExport ostrstream
+#ifndef _RWSTD_NO_COMPLEX_DEFAULT_TEMPLATES
+    : public basic_ostream<char>
+#else
+    : public basic_ostream<char, char_traits<char> >
+#endif
+  {
+
+  public:
+    //
+    // Types:
+    //
+    typedef char                               char_type;
+    typedef char_traits<char>                  traits;
+    typedef traits::int_type                   int_type;
+    typedef traits::pos_type                   pos_type;
+    typedef traits::off_type                   off_type;
+  
+    ostrstream();
+    ostrstream(char *s, int n,
+               ios_base::openmode = ios_base::out);
+    
+    virtual ~ostrstream();
+    strstreambuf *rdbuf() const;
+    void freeze(bool freezefl = true);
+    char *str();
+    int pcount() const;
+
+  protected:
+
+  private:
+    strstreambuf        __sb;
+  };
 /*
- *      C/C++ Run Time Library - Version 8.0
- *
- *      Copyright (c) 1990, 1997 by Borland International
- *      All Rights Reserved.
- *
+ *  Class strstream
  */
-/* $Revision:   8.1  $ */
 
-#ifndef __cplusplus
-#error Must use C++ for the type strstream.
+  class _RWSTDExport strstream
+#ifndef _RWSTD_NO_DEFAULT_TEMPLATES
+    : public basic_iostream<char>
+#else
+    : public basic_iostream<char, char_traits<char> >
+#endif
+  {
+
+  public:
+    //
+    // Types:
+    //
+    typedef char                         char_type;
+    typedef char_traits<char>            traits;
+    typedef traits::int_type             int_type;
+    typedef traits::pos_type             pos_type;
+    typedef traits::off_type             off_type;
+  
+    strstream();
+    strstream(char *s, int n,
+              ios_base::openmode = ios_base::out | ios_base::in);
+
+    void freeze(bool freezefl = true);
+    int pcount() const;
+
+    virtual ~strstream();
+    strstreambuf *rdbuf() const;
+
+    char *str();
+  protected:
+
+  private:
+    strstreambuf          __sb;
+  };
+#ifndef _RWSTD_NO_NAMESPACE
+}
 #endif
 
-#ifndef __STRSTREAM_H
-#define __STRSTREAM_H
-
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#endif //__STD_STRSTREAM__ 
+#ifndef __USING_STD_NAMES__
+  using namespace std;
 #endif
 
-#if !defined(__IOSTREAM_H)
-#include <iostream.h>
-#endif
-
-
-#if !defined(RC_INVOKED)
-
-#pragma pack(push, 1)
-
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-     // disable Object data calling convention
-#endif
-#endif
-
-#if !defined(__TINY__)
-#pragma option -RT
-#endif
-
-#pragma option -Vo-
-
-#if defined(__STDC__)
-#pragma warn -nak
-#endif
-
-#endif  /* !RC_INVOKED */
-
-
-_CLASSDEF(strstreambuf)
-_CLASSDEF(strstreambase)
-_CLASSDEF(istrstream)
-_CLASSDEF(ostrstream)
-_CLASSDEF(strstream)
-
-class _EXPCLASS strstreambuf : public streambuf {
-public:
-    _RTLENTRY strstreambuf();
-    _RTLENTRY strstreambuf(int n);
-    _RTLENTRY strstreambuf(void _FAR * (*a)(long), void (*f)(void _FAR *));
-    _RTLENTRY strstreambuf(         char _FAR * _s, int,
-                                    char _FAR * _strt=0);
-    _RTLENTRY strstreambuf(signed   char _FAR * _s, int,
-                           signed   char _FAR * _strt=0);
-    _RTLENTRY strstreambuf(unsigned char _FAR * _s, int,
-                           unsigned char _FAR * _strt=0);
-    _RTLENTRY ~strstreambuf();
-
-    void    _RTLENTRY freeze(int = 1);
-    char _FAR *  _RTLENTRY str();
-virtual int _RTLENTRY doallocate();
-virtual int _RTLENTRY overflow(int);
-virtual int _RTLENTRY underflow();
-virtual int _RTLENTRY sync();
-virtual streambuf _FAR * _RTLENTRY setbuf(char _FAR *, int);
-virtual streampos   _RTLENTRY seekoff(streamoff, ios::seek_dir, int);
-
-private:
-    void _FAR *  _RTLENTRY (*allocf)(long);
-    void    _RTLENTRY (*freef)(void _FAR *);
-    short   ssbflags;
-    enum    { dynamic = 1, frozen = 2, unlimited = 4 };
-    int next_alloc;
-
-    void    _RTLENTRY init(char _FAR *, int, char _FAR *);
-};
-
-
-class _EXPCLASS strstreambase : public virtual ios {
-public:
-    strstreambuf _FAR * _RTLENTRY rdbuf();
-
-protected:
-        _RTLENTRY strstreambase(char _FAR *, int, char _FAR *);
-        _RTLENTRY strstreambase();
-        _RTLENTRY ~strstreambase();
-private:
-        strstreambuf buf;
-};
-inline strstreambuf _FAR * _RTLENTRY strstreambase::rdbuf()
-                                    { return &this->buf; }
-
-
-class _EXPCLASS istrstream : public strstreambase, public istream {
-public:
-        _RTLENTRY istrstream(         char _FAR *);
-        _RTLENTRY istrstream(signed   char _FAR *);
-        _RTLENTRY istrstream(unsigned char _FAR *);
-        _RTLENTRY istrstream(         char _FAR *, int);
-        _RTLENTRY istrstream(signed   char _FAR *, int);
-        _RTLENTRY istrstream(unsigned char _FAR *, int);
-        _RTLENTRY ~istrstream();
-};
-
-
-class _EXPCLASS ostrstream : public strstreambase, public ostream {
-public:
-        _RTLENTRY ostrstream(         char _FAR *, int, int = ios::out);
-        _RTLENTRY ostrstream(signed   char _FAR *, int, int = ios::out);
-        _RTLENTRY ostrstream(unsigned char _FAR *, int, int = ios::out);
-        _RTLENTRY ostrstream();
-        _RTLENTRY ~ostrstream();
-
-    char _FAR * _RTLENTRY str();
-    int     _RTLENTRY pcount();
-};
-inline char _FAR * _RTLENTRY ostrstream::str()
-                { return strstreambase::rdbuf()->str(); }
-inline int  _RTLENTRY ostrstream::pcount()
-                { return strstreambase::rdbuf()->out_waiting(); }
-
-
-class _EXPCLASS strstream : public strstreambase, public iostream {
-public:
-        _RTLENTRY strstream();
-        _RTLENTRY strstream(         char _FAR *, int _sz, int _m);
-        _RTLENTRY strstream(signed   char _FAR *, int _sz, int _m);
-        _RTLENTRY strstream(unsigned char _FAR *, int _sz, int _m);
-        _RTLENTRY ~strstream();
-
-    char _FAR * _RTLENTRY str();
-};
-inline char _FAR * _RTLENTRY strstream::str()
-                { return strstreambase::rdbuf()->str(); }
-
-
-#if !defined(RC_INVOKED)
-
-#if defined(__STDC__)
-#pragma warn .nak
-#endif
-
-#pragma option -Vo.
-
-#if !defined(__TINY__)
-#pragma option -RT.
-#endif
-
-#if defined(__BCOPT__)
-#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po.     // restore Object data calling convention
-#endif
-#endif
-
-/* restore default packing */
-#pragma pack(pop)
-
-#endif  /* !RC_INVOKED */
-
-
-#endif  /* __STRSTREAM_H */
+#pragma option pop
+#endif /* __STRSTREA_H */

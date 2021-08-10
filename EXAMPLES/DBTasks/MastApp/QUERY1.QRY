@@ -1,0 +1,22 @@
+Ver 2.0,QBE - Integra Visual Database Builder,0, 0, 2048, 1498,,,,,
+ , , - Distinct & Quote,,,,,
+    4, - Number of Tables,-1, -1, 707, 489, 699, 201,,,,
+ORDERS.DB,ORDERS,335, 1, 447, 325,,,,,
+CUSTOMER.DB,CUSTOMER,63, 8, 175, 229,,,,,
+EMPLOYEE.DB,EMPLOYEE,470, 9, 582, 137,,,,,
+ITEMS.DB,ITEMS,188, 111, 300, 239,,,,,
+    1, - Number of Columns,,,,,,
+OrderNo,ORDERS,                   1,     , ,,,
+     , - Number of Criteria,,,,,,
+    2, - Number of Joins,,,,,,
+CustNo,ORDERS,CustNo,CUSTOMER,          ,          ,,
+OrderNo,ORDERS,OrderNo,ITEMS,          ,          ,,
+
+"SELECT Statement"
+,,,,,,,
+SELECT	ORDERS."OrderNo"
+FROM	"ORDERS.DB" ORDERS , "CUSTOMER.DB" CUSTOMER , 
+	"EMPLOYEE.DB" EMPLOYEE , "ITEMS.DB" ITEMS
+WHERE	( ORDERS.CustNo = CUSTOMER.CustNo )
+		AND
+	( ORDERS.OrderNo = ITEMS.OrderNo ),,,,,,,

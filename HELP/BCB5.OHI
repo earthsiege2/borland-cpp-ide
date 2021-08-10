@@ -1,0 +1,55 @@
+;WHAT'S NEW, IDE HELP
+:Index What's New in Borland C++Builder =bcb5new.hlp
+:Index Borland C++Builder Help =bcb5.hlp
+
+;DEVELOPER'S GUIDE
+:Index Programming with Borland C++Builder =bcb5prog.hlp
+:Index Developing Database Applications =bcb5dbd.hlp
+:Index Developing Distributed Applications =bcb5dap.hlp
+:Index Creating Custom Components =bcb5cw.hlp
+:Index Developing COM-based Applications  =bcb5com.hlp
+
+:Index C++Builder Language Guide =bcb5lang.hlp
+:Index C Runtime Library Reference =bcb5rtl.hlp
+:Index C++Builder Tools =bcb5tool.hlp
+:Index C++Builder Error Messages and Warnings =bcb5errs.hlp
+:Index Standard C++ Library =bcb5scl.hlp
+
+;OTHER BORLAND IDE HELP
+:Index CodeGuard Help =cg.hlp
+:Index Integrated Translation Environment Help =ite.hlp
+:Index Package Collection Editor Help =pce.hlp
+
+;VCL/BORLAND COMPONENT REFERENCE
+:Index Visual Component Library Reference=bcb5vcl.hlp
+
+;INTERBASE EXPRESS COMPONENTS
+:Index InterBase Express Help =ibx.hlp
+
+;THIRD-PARTY HELP
+;
+;Fastnet components
+:Index FastNet SMTP Help=nmsmtp.hlp
+:Index FastNet URL Encode/Decode Help=nmurl.hlp
+:Index FastNet UUProcessor Help=nmuue.hlp
+:Index NMMSG unit=nmmsg.hlp
+:Index NMpop3 unit=nmpop3.hlp
+:Index PSock=psock.hlp
+:Index TNMDayTime component=nmdaytim.hlp
+:Index TNMEcho component=nmecho.hlp
+:Index TNMFinger component=nmfngr.hlp
+:Index TNMFTP component=nmftp.hlp
+:Index TNMHTTP component=nmhttp.hlp
+:Index TNMNNTP component=nmnntp.hlp
+:Index TNMStrm component=nmstrm.hlp
+:Index TNMTime component=nmtime.hlp
+:Index TNMUDP component=nmudp.hlp
+;
+;QuickReports
+;:Index QuickReports=quickrpt.hlp
+;
+;Teechart
+;:Index TeeChart=teechart.hlp
+;
+;;;;
+

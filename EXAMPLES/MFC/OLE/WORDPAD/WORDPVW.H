@@ -2,7 +2,7 @@
 //
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -94,7 +94,7 @@ protected:
 	afx_msg void OnPenTab();
 	afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
 	afx_msg BOOL OnQueryNewPalette();
-	afx_msg void OnWinIniChange(LPCTSTR lpszSection);
+	afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	//}}AFX_MSG
 	afx_msg void OnEditChange();

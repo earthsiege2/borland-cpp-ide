@@ -1,4 +1,0 @@
-:TITLE Win32 Programmer's Reference
-:INDEX Win32 Programmer's Reference = win32.hlp
-:INCLUDE WIN32SDK.CFG
-:INCLUDE WIN32.TOC

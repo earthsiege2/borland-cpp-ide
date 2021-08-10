@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -121,12 +121,15 @@ void _AfxInitMaskFromBitmap(CBitmap* pbmp, CBitmap* pbmpMask)
 	dcDst.CreateCompatibleDC(NULL);
 	CDC dcSrc;
 	dcSrc.CreateCompatibleDC(NULL);
-	CBitmap* pbmpSaveDst = dcDst.SelectObject(pbmpMask);
-	CBitmap* pbmpSaveSrc = dcSrc.SelectObject(pbmp);
+	CBitmap* pOldDst = dcDst.SelectObject(pbmpMask);
+	CBitmap* pOldSrc = dcSrc.SelectObject(pbmp);
 
 	COLORREF oldBkColor = dcSrc.SetBkColor(dcSrc.GetPixel(0, 0));
 	dcDst.BitBlt(0, 0, bmp.bmWidth, bmp.bmHeight, &dcSrc, 0, 0, NOTSRCCOPY);
 	dcSrc.SetBkColor(oldBkColor);
+
+	dcDst.SelectObject(pOldDst);
+	dcSrc.SelectObject(pOldSrc);
 }
 
 void CFontPropPage::DoDataExchange(CDataExchange* pDX)
@@ -167,31 +170,33 @@ void CFontPropPage::DoDataExchange(CDataExchange* pDX)
 
 		SetFontProps(pDX, fobj, m_strPropName);
 	}
-
-	FONTOBJECT fobj;
-	MERGEOBJECT mobj;
-	if (!m_strPropName.IsEmpty() && GetFontProps(pDX, &fobj, m_strPropName, &mobj))
+	else
 	{
-		if (fobj.bBold && fobj.bItalic)
-			m_nCurrentStyle = NTM_BOLD | NTM_ITALIC;
-		else if (fobj.bBold)
-			m_nCurrentStyle = NTM_BOLD;
-		else if (fobj.bItalic)
-			m_nCurrentStyle = NTM_ITALIC;
-		else
-			m_nCurrentStyle = NTM_REGULAR;
-		m_nActualStyle = m_nCurrentStyle;
-		m_bUnderline = fobj.bUnderline;
-		m_bStrikeOut = fobj.bStrikethrough;
+		FONTOBJECT fobj;
+		MERGEOBJECT mobj;
+		if (!m_strPropName.IsEmpty() && GetFontProps(pDX, &fobj, m_strPropName, &mobj))
+		{
+			if (fobj.bBold && fobj.bItalic)
+				m_nCurrentStyle = NTM_BOLD | NTM_ITALIC;
+			else if (fobj.bBold)
+				m_nCurrentStyle = NTM_BOLD;
+			else if (fobj.bItalic)
+				m_nCurrentStyle = NTM_ITALIC;
+			else
+				m_nCurrentStyle = NTM_REGULAR;
+			m_nActualStyle = m_nCurrentStyle;
+			m_bUnderline = fobj.bUnderline;
+			m_bStrikeOut = fobj.bStrikethrough;
 
-		mobj.bNameOK = TRUE;
-		mobj.bSizeOK = TRUE;
-		mobj.bStyleOK = TRUE;
-		mobj.bUnderlineOK = TRUE;
-		mobj.bStrikethroughOK = TRUE;
+			mobj.bNameOK = TRUE;
+			mobj.bSizeOK = TRUE;
+			mobj.bStyleOK = TRUE;
+			mobj.bUnderlineOK = TRUE;
+			mobj.bStrikethroughOK = TRUE;
 
-		_AfxStringFromCy(m_strFontSize, fobj.cySize);
-		SelectFontFromList(fobj.strName, &mobj);
+			_AfxStringFromCy(m_strFontSize, fobj.cySize);
+			SelectFontFromList(fobj.strName, &mobj);
+		}
 	}
 }
 
@@ -213,9 +218,10 @@ BOOL CFontPropPage::SetFontProps(CDataExchange* pDX, FONTOBJECT fobj, LPCTSTR ps
 	{
 		DISPID dwDispID;
 
-		// Get the Dispatch ID for the property and if successful set the value of the property
+		// Get the Dispatch ID for the property and if successful set the value
 		LPCOLESTR lpOleStr = T2COLE(pszPropName);
-		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr, 1, 0, &dwDispID)))
+		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr,
+			1, m_lcid, &dwDispID)))
 		{
 			LPDISPATCH pFontDisp = NULL;
 
@@ -266,16 +272,13 @@ BOOL CFontPropPage::SetFontProps(CDataExchange* pDX, FONTOBJECT fobj, LPCTSTR ps
 	return bStatus;
 }
 
-BOOL CFontPropPage::GetFontProps(CDataExchange* pDX, FONTOBJECT* pfobj, LPCTSTR pszPropName, MERGEOBJECT* pmobj)
+BOOL CFontPropPage::GetFontProps(CDataExchange* /* pDX */,
+	FONTOBJECT* pfobj, LPCTSTR pszPropName, MERGEOBJECT* pmobj)
 {
 	USES_CONVERSION;
 	BOOL bStatus = FALSE;
 
 	COleDispatchDriver PropDispDriver;
-
-	// Set the properties for all the objects
-	ASSERT_KINDOF(COlePropertyPage, pDX->m_pDlgWnd);
-	COlePropertyPage* propDialog = (COlePropertyPage*)(pDX->m_pDlgWnd);
 
 	ULONG nObjects;
 	LPDISPATCH* ppDisp = GetObjectArray(&nObjects);
@@ -284,9 +287,10 @@ BOOL CFontPropPage::GetFontProps(CDataExchange* pDX, FONTOBJECT* pfobj, LPCTSTR 
 	{
 		DISPID dwDispID;
 
-		// Get the Dispatch ID for the property and if successful set the value of the property
+		// Get the Dispatch ID for the property and if successful get the value
 		LPCOLESTR lpOleStr = T2COLE(pszPropName);
-		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr, 1, 0, &dwDispID)))
+		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr,
+			1, m_lcid, &dwDispID)))
 		{
 			LPDISPATCH pFontDisp;
 
@@ -308,12 +312,7 @@ BOOL CFontPropPage::GetFontProps(CDataExchange* pDX, FONTOBJECT* pfobj, LPCTSTR 
 				// Set font characteristics
 				OLECHAR *pszName;
 				pFont->get_Name(&pszName);
-#if defined(__BORLANDC__) && !defined(_UNICODE) && !defined(OLE2ANSI)
-            OLE2CT(pszName);
-				if (_tcscmp((LPCSTR)pBAfxConv, pfobj->strName) != 0 && i != 0)
-#else    // __BORLANDC__
-				if (_tcscmp(OLE2CT(pszName), pfobj->strName) != 0 && i != 0)
-#endif   // __BORLANDC__
+				if (lstrcmp(OLE2CT(pszName), pfobj->strName) != 0 && i != 0)
 					pmobj->bNameOK = FALSE;
 				pfobj->strName = pszName;
 				SysFreeString(pszName);
@@ -379,7 +378,8 @@ void CFontPropPage::FillFacenameList()
 
 	// Create a DC to enumerate
 	CClientDC dc(NULL);
-	int rc = EnumFontFamilies(dc.GetSafeHdc(), (LPCTSTR) NULL, (FONTENUMPROC) CFontPropPage::EnumFontFamiliesCallBack, (LPARAM) this);
+	EnumFontFamilies(dc.GetSafeHdc(), (LPCTSTR) NULL,
+		(FONTENUMPROC)CFontPropPage::EnumFontFamiliesCallBack, (LPARAM) this);
 
 	// Select the first one
 	if (m_FontNames.SetCurSel(0) != CB_ERR)
@@ -405,6 +405,8 @@ int CALLBACK CFontPropPage::EnumFontFamiliesCallBack(ENUMLOGFONT *lpelf, NEWTEXT
 	return 1;
 }
 
+AFX_STATIC_DATA int _afxTTDefaults[] = { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48 };
+
 void CFontPropPage::FillSizeList()
 {
 	// Clear the size list
@@ -416,15 +418,14 @@ void CFontPropPage::FillSizeList()
 	CString strFaceName;
 	m_FontNames.GetLBText(m_FontNames.GetCurSel(), strFaceName);
 	CClientDC dc(NULL);
-	int rc = EnumFontFamilies(dc.GetSafeHdc(), (LPCTSTR) strFaceName, (FONTENUMPROC) CFontPropPage::EnumFontFamiliesCallBack2, (LPARAM) this);
+	EnumFontFamilies(dc.GetSafeHdc(), (LPCTSTR) strFaceName, (FONTENUMPROC) CFontPropPage::EnumFontFamiliesCallBack2, (LPARAM) this);
 
 	// Check if we have a font that is either a vector or Truettype font
 	if (m_FontNames.GetFontType() != RASTER_FONTTYPE)
 	{
 		// Fill with "common" sizes
-		static int TTDefaults[] = { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48 };
-		for (int i = 0; i < _countof(TTDefaults); i++)
-			m_FontSizes.AddSize(TTDefaults[i], 0);
+		for (int i = 0; i < _countof(_afxTTDefaults); i++)
+			m_FontSizes.AddSize(_afxTTDefaults[i], 0);
 	}
 
 	// See what fonts are native
@@ -1064,6 +1065,8 @@ void CFontPropPage::OnObjectsChanged()
 /////////////////////////////////////////////////////////////////////////////
 // Class factory for Font property page
 
+#ifdef _AFXDLL
+
 #ifdef AFXCTL_FACT_SEG
 #pragma code_seg(AFXCTL_FACT_SEG)
 #endif
@@ -1079,6 +1082,8 @@ BOOL CFontPropPage::CFontPropPageFactory::UpdateRegistry(BOOL bRegister)
 	else
 		return AfxOleUnregisterClass(m_clsid, NULL);
 }
+
+#endif //_AFXDLL
 
 /////////////////////////////////////////////////////////////////////////////
 // Force any extra compiler-generated code into AFX_INIT_SEG

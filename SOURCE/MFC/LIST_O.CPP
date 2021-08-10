@@ -1,6 +1,6 @@
 
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -129,6 +129,7 @@ void CObList::FreeNode(CObList::CNode* pNode)
 
 POSITION CObList::AddHead(CObject* newElement)
 {
+
 	ASSERT_VALID(this);
 
 	CNode* pNewNode = NewNode(NULL, m_pNodeHead);
@@ -139,10 +140,14 @@ POSITION CObList::AddHead(CObject* newElement)
 		m_pNodeTail = pNewNode;
 	m_pNodeHead = pNewNode;
 	return (POSITION) pNewNode;
+
 }
+
+
 
 POSITION CObList::AddTail(CObject* newElement)
 {
+
 	ASSERT_VALID(this);
 
 	CNode* pNewNode = NewNode(m_pNodeTail, NULL);
@@ -153,7 +158,10 @@ POSITION CObList::AddTail(CObject* newElement)
 		m_pNodeHead = pNewNode;
 	m_pNodeTail = pNewNode;
 	return (POSITION) pNewNode;
+
 }
+
+
 
 void CObList::AddHead(CObList* pNewList)
 {
@@ -220,6 +228,7 @@ CObject* CObList::RemoveTail()
 
 POSITION CObList::InsertBefore(POSITION position, CObject* newElement)
 {
+
 	ASSERT_VALID(this);
 
 	if (position == NULL)
@@ -242,10 +251,14 @@ POSITION CObList::InsertBefore(POSITION position, CObject* newElement)
 	}
 	pOldNode->pPrev = pNewNode;
 	return (POSITION) pNewNode;
+
 }
+
+
 
 POSITION CObList::InsertAfter(POSITION position, CObject* newElement)
 {
+
 	ASSERT_VALID(this);
 
 	if (position == NULL)
@@ -269,7 +282,10 @@ POSITION CObList::InsertAfter(POSITION position, CObject* newElement)
 	}
 	pOldNode->pNext = pNewNode;
 	return (POSITION) pNewNode;
+
 }
+
+
 
 void CObList::RemoveAt(POSITION position)
 {
@@ -307,9 +323,8 @@ void CObList::RemoveAt(POSITION position)
 POSITION CObList::FindIndex(int nIndex) const
 {
 	ASSERT_VALID(this);
-	ASSERT(nIndex >= 0);
 
-	if (nIndex >= m_nCount)
+	if (nIndex >= m_nCount || nIndex < 0)
 		return NULL;  // went too far
 
 	CNode* pNode = m_pNodeHead;

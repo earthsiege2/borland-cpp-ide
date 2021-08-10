@@ -5,21 +5,21 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1988, 1997 by Borland International
+ *      Copyright (c) 1988, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   8.1  $ */
+
+/* $Revision:   9.5  $ */
 
 #ifndef __SIGNAL_H
 #define __SIGNAL_H
 
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#ifndef ___STDDEF_H
+#include <_stddef.h>
 #endif
-
 
 #if !defined(RC_INVOKED)
 
@@ -29,6 +29,22 @@
 
 #endif  /* !RC_INVOKED */
 
+/* _SIGCONTEXT contains exception info for WIN32 exceptions that were caught
+   and turned into signals.  There will always be three 32-bit parameters
+   passed to the user's signal handler.  Unused parameters will be 0.  The
+   _PSIGCONTEXT parameter will always be the last (third) parameter.
+ */
+
+typedef struct
+{
+  struct _EXCEPTION_RECORD * _pexecptionrecord; /* defined in WINNT.H */
+  struct _CONTEXT *          _pcontext;         /* defined in WINNT.H */
+  unsigned long              _result;           /* return value for the SEH */
+} _SIGCONTEXT, *_PSIGCONTEXT;
+
+#ifdef __cplusplus
+  namespace std {
+#endif /* __cplusplus */
 
 typedef int sig_atomic_t;   /* Atomic entity type (ANSI) */
 
@@ -48,13 +64,10 @@ typedef void _USERENTRY (_EXPFUNC * _CatcherPTR)();
 #define SIGINT           2
 #define SIGSEGV         11              /* Memory access violation */
 #define SIGTERM         15
-#ifdef __FLAT__
 #define SIGUSR1         16              /* User-defined signal 1 */
 #define SIGUSR2         17              /* User-defined signal 2 */
 #define SIGUSR3         20              /* User-defined signal 3 */
 #define SIGBREAK        21              /* Control-Break interrupt */
-#endif  /* __FLAT__ */
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,5 +93,17 @@ void (_USERENTRY * _RTLENTRY _EXPFUNC32 signal(int __sig, void (_USERENTRY * __f
 
 #endif  /* !RC_INVOKED */
 
+#ifdef __cplusplus
+} // std
+#endif /* __cplusplus */
+
 
 #endif  /* __SIGNAL_H */
+
+#if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__SIGNAL_H_USING_LIST)
+#define __SIGNAL_H_USING_LIST
+     using std::_CatcherPTR;
+     using std::sig_atomic_t;
+     using std::raise;
+     using std::signal;
+#endif /* __USING_CNAME__ */

@@ -1,66 +1,78 @@
-          WELCOME TO BORLAND C++ RUNTIME LIBRARY SOURCE 8.02
-          --------------------------------------------------
+          WELCOME TO BORLAND C++BUILDER RUNTIME LIBRARY SOURCE 10.0
+          ---------------------------------------------------------
 
-  This README contains information on support for the Borland C++
+  This README contains information on support for the Borland C++Builder 5.0
   Runtime Library source code.
 
   BUILDING THE RTL
   ----------------
 
-  IMPORTANT:  In order to build the libraries, the RTL tools directory must
-  be present on your path.  These tools are located in the tools
-  subdirectory of the directory where the source was installed.
+  IMPORTANT:  In order to build the libraries, the RTL tools directory
+  must be present on your path.  These tools are located in the tools
+  subdirectory of the directory where the source was copied.  For
+  example, if you have copied the RTL source tree into
 
-  For example, if your Borland C++ root installation directory is C:\BC5,
-  and the RTL source was copied into C:\BC5\SOURCE\RTL then
-  C:\BC5\SOURCE\RTL\TOOLS must be added to your path.
+       C:\Program Files\Borland\CBuilder\SOURCE\RTL
+  then
+       C:\PROGRA~1\Borland\CBuilder\SOURCE\RTL\TOOLS
 
-  You must have TASM.EXE and TASM32.EXE installed from Borland Turbo
-  Assembler before you can build the Run Time Library.
+  must be added to your path.
 
-  To build the rtl, change to the directory into which the source was copied
-  and run the BUILD.BAT file. If no parameters are passed to BUILD.BAT, a
-  help screen is displayed listing the possible sections of the RTL that can
-  be built.  To build that section, run BUILD.BAT with that parameter. For
-  example :
+  If the RTL was not copied into the C++Builder installation area in the
+  SOURCE subdirectory, you will need to set the RTLROOT environment variable
+  to point to the location of the RTL source files. For example, if the
+  compiler was installed in
 
-    c:\> cd C:\BC5\SOURCE\RTL
+     C:\Program Files\Borland\CBuilder
 
-    c:\bc5\source\rtl\> BUILD ALL
+  and the RTL tree was copied to
 
-  will build everything.
+     D:\RTLSOURCE
 
-  Note: if the RTL was not copied into the \SOURCE\RTL directory of the
-  compiler installation (ie: C:\BC5\SOURCE\RTL), you will need to set the
-  environment variable: RTLROOT= to point to the location accordingly. For
-  example, if the compiler is in C:\BC5\, and the RTL SOURCE is in
-  D:\MYSTUFF\Borland\SOURCE\RTL, then make sure to:
+  then you must set the RTLROOT environment variable as follows:
 
-    SET RTLROOT=D:\MYSTUFF\Borland\SOURCE\RTL
+     SET RTLROOT=D:\RTLSOURCE
 
-  before you run BUILD.BAT.
+  To build the RTL, change to the directory into which the source was copied
+  and run the BUILD.BAT file.  For example:
+
+    c:\> cd C:\Program Files\Borland\CBuilder\SOURCE\RTL
+
+    c:\Program Files\Borland\CBuilder\source\rtl\> BUILD
+
+  Once the RTL has been built, the new .OBJ, .LIB, .DLL, & .TDS files will
+  be located in the SOURCE\RTL\LIB directory.  You should copy all the *.OBJ
+  & *.LIB files to your main CBuilder\Lib directory and copy the *.DLL &
+  *.TDS files to your main CBuilder\Bin directory.
 
 
   DEBUGGING INFORMATION
   ---------------------
 
-  To build any sections of the RTL with debug info enabled, set the
-  environment variable: DEBUG=1.  Then proceed with the build as normal.
+  To build the RTL with debug info enabled, set the environment variable
+  DEBUG=1, then proceed with the build as normal.
 
   Keep in mind that the build process really preforms a "make" re-compiling
   only the OBJs that are out of date.  If you've built copies of the RTL
   previously, then in order to get a complete re-build of the RTL you should
-  delete all files and subdirs in RTL\OBJ\ and RTL\LIB and then re-copy
+  delete all files and subdirs in RTL\OBJ\WIN32 and RTL\LIB and then re-copy
   those dirs and subdirs from the CD-ROM.
+
+  Alternatively, you can set the environment variable
+  RTL_FORCE_FULL_REBUILD=1 then proceed with the build as normal.
 
 
   RUNTIME LIBRARY SUPPORT
   -----------------------
 
-  The Borland C++Builder Runtime Library Source Code is provided for your use
-  and modification.  IMPORTANT: Borland Technical Support will not answer
-  questions or provide any assistance relating to this product. Essentially,
-  the Sources are provided "as is" and you are on your own.
+  The Borland C++Builder Runtime Library source code is provided for your
+  use and modification.
+
+  IMPORTANT: Borland will only provide technical support for the RTL as it
+  was shipped.  This means that if you use the source code to re-build the
+  RTL, even if you have not modified the source, then no technical support
+  is availible from Borland.  Essentially, the RTL sources are provided "as
+  is" and you are on your own.
 
   If you find what you think is a genuine problem in the source code,
   we want to hear about it. Technical Support is available from the
@@ -68,24 +80,11 @@
 
   1. Internet: http://www.borland.com
 
-  2. CompuServe: For instant on-line access to the Borland forums with
-     their libraries of technical information and answers
-     to common questions, type
+  2. Borland's TECHFAX service. Call (800) 822-4269 for a FAX
+     catalog of technical document entries.
 
-       GO BCPPWIN
-
-     If you are not a member of CompuServe, see the enclosed
-     special offer, and write for full details on how to receive
-     a free IntroPak containing a $15 credit toward your first
-     month's on-line charges.
-
-  3. Borland's TECHFAX service. Call (800) 822-4269 for a FAX
-      catalog of technical document entries.
-
-  4. Borland DLBBS. Dial (408) 431-5096 (8-N-1)
-      for a host of free technical documents and example programs.
-
-  5. For immediate assistance with everything from configuring Borland
+  3. For immediate assistance with everything from configuring Borland
      C++Builder to programming or debugging, call our C++Builder
-     Programmer's Advisor Lines ($2/minute, first minute free):
-     1-800-782-5558 (MC/Visa)
+     Programmer's Advisor Lines at: 1-888-683-2378 (MC/Visa)
+
+

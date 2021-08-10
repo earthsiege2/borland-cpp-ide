@@ -3,17 +3,18 @@
  *
  * function(s)
  *        _mbsnbcnt - Counts the byte size of the portion of a string,
- *                    starting the first to Nth charachter in a 
+ *                    starting the first to Nth charachter in a
  *                    string.
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 10.0
  *
- *      Copyright (c) 1992, 1997 by Borland International
+ *      Copyright (c) 1992, 2000 by Inprise Corporation
  *      All Rights Reserved.
  *
  */
+
 
 #include <mbctype.h>
 #include <mbstring.h>
@@ -38,7 +39,7 @@ Description     _mbsnbcnt counts the number of characters from a heading
 
                 _mbsnbcnt ignores the second byte of 2-bytes code even if
                 it is a illegal value.(that character is counted as same
-                as legal characters.) 
+                as legal characters.)
 
 Return value    Returns the number of characters in specified potion.
 

@@ -1,7 +1,7 @@
 // colledoc.h : interface of the CCollectDoc class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1997 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -29,7 +29,11 @@ public:
 //	these declarations in the header file to avoid any unexpected
 //	results.
 
+#if _MSC_VER > 1020
+template <> void AFXAPI SerializeElements<CMyStruct*>(CArchive& ar, CMyStruct** ppElements, int nCount);
+#else
 void SerializeElements(CArchive& ar, CMyStruct** ppElements, int nCount);
+#endif
 
 class CMyObject : public CObject
 {

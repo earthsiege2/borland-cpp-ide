@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -101,9 +101,10 @@ BOOL CPicturePropPage::SetPictureProp(CDataExchange*, LPPICTUREDISP pPictDisp, L
 	{
 		DISPID dwDispID;
 
-		// Get the Dispatch ID for the property and if successful set the value of the property
+		// Get the Dispatch ID for the property and if successful set the value
 		LPCOLESTR lpOleStr = T2COLE(pszPropName);
-		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr, 1, 0, &dwDispID)))
+		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr,
+			1, m_lcid, &dwDispID)))
 		{
 			// Set property
 			PropDispDriver.AttachDispatch(ppDisp[i], FALSE);
@@ -151,9 +152,10 @@ BOOL CPicturePropPage::GetPictureProp(CDataExchange*, LPPICTUREDISP* ppPictDisp,
 	{
 		DISPID dwDispID;
 
-		// Get the Dispatch ID for the property and if successful set the value of the property
+		// Get the Dispatch ID for the property and if successful get the value
 		LPCOLESTR lpOleStr = T2COLE(pszPropName);
-		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr, 1, 0, &dwDispID)))
+		if (SUCCEEDED(ppDisp[i]->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpOleStr,
+			1, m_lcid, &dwDispID)))
 		{
 			// Get property
 			LPPICTUREDISP pPictDisp = NULL;
@@ -362,7 +364,7 @@ void CPicturePropPage::OnBrowse()
 	ASSERT(pstm != NULL);
 
 	LPPICTURE pPict;
-	if (SUCCEEDED(OleLoadPicture(pstm, lSize, FALSE, IID_IPicture, (LPVOID *)&pPict)))
+	if (SUCCEEDED(::OleLoadPicture(pstm, lSize, FALSE, IID_IPicture, (LPVOID *)&pPict)))
 	{
 		ChangePicture(pPict);
 	}
@@ -379,16 +381,12 @@ void CPicturePropPage::OnBrowse()
 	pstm->Release();
 }
 
-static PICTDESC _pictDescEmpty =
-{
-	sizeof(PICTDESC),
-	PICTYPE_NONE,
-};
+AFX_STATIC_DATA PICTDESC _afxPictDescEmpty = { sizeof(PICTDESC), PICTYPE_NONE, };
 
 void CPicturePropPage::OnClear()
 {
 	LPPICTURE pPict;
-	if (SUCCEEDED(OleCreatePictureIndirect(&_pictDescEmpty, IID_IPicture, TRUE,
+	if (SUCCEEDED(::OleCreatePictureIndirect(&_afxPictDescEmpty, IID_IPicture, TRUE,
 		(LPVOID *)&pPict)))
 	{
 		ChangePicture(pPict);
@@ -464,6 +462,8 @@ void CPicturePropPage::OnObjectsChanged()
 /////////////////////////////////////////////////////////////////////////////
 // Class factory for Picture property page
 
+#ifdef _AFXDLL
+
 #ifdef AFXCTL_FACT_SEG
 #pragma code_seg(AFXCTL_FACT_SEG)
 #endif
@@ -479,6 +479,8 @@ BOOL CPicturePropPage::CPicturePropPageFactory::UpdateRegistry(BOOL bRegister)
 	else
 		return AfxOleUnregisterClass(m_clsid, NULL);
 }
+
+#endif //_AFXDLL
 
 /////////////////////////////////////////////////////////////////////////////
 // Force any extra compiler-generated code into AFX_INIT_SEG
