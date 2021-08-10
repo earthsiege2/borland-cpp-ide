@@ -1,32 +1,21 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   Tutorial application -- step12dv.rc
+// ObjectWindows - (C) Copyright 1991, 1994 by Borland International
+//   Tutorial application -- step11dv.rc
 //----------------------------------------------------------------------------
-#ifndef WORKSHOP_INVOKED
-  #include <windows.h>
-#endif
-
 #define CM_PENSIZE    306
 #define CM_PENCOLOR   307
-#define CM_UNDO       208
-#define CM_CLEAR      209
-#define CM_DELETE     210
 #define IDM_DRAWVIEW  212
-#define IDM_DRAWLISTVIEW 213
-#define IDA_DRAWLISTVIEW 213
 #define IDS_FILEINFO  215
 
-#ifdef RC_INVOKED 
+#ifdef RC_INVOKED
+#ifndef WORKSHOP_INVOKED
+# include <windows.h>
+#endif
 
-#include <owl\inputdia.rc>
+#include <owl/inputdia.rc>
 
 IDM_DRAWVIEW MENU 
 {
- POPUP "&Edit"
- {
-  MENUITEM "&Undo",      CM_UNDO
-  MENUITEM "&Clear",     CM_CLEAR
- }
  POPUP "&Tools"
  {
   MENUITEM "Pen &Size",  CM_PENSIZE
@@ -34,32 +23,11 @@ IDM_DRAWVIEW MENU
  }
 }
 
-IDM_DRAWLISTVIEW MENU 
-{
- POPUP "&Edit"
- {
-  MENUITEM "Pen &Size",   CM_PENSIZE
-  MENUITEM "Pen &Color",  CM_PENCOLOR
-  MENUITEM "&Delete Line",CM_DELETE  
-  MENUITEM "&Undo",       CM_UNDO
-  MENUITEM "Clear All",   CM_CLEAR
- }
-}
-
-IDA_DRAWLISTVIEW ACCELERATORS
-BEGIN
-  VK_DELETE, CM_DELETE,   VIRTKEY, SHIFT
-  VK_BACK,   CM_UNDO,     VIRTKEY, ALT
-END
-
 STRINGTABLE 
 {
  CM_PENSIZE, "Changes the pen width"
  CM_PENCOLOR, "Changes the pen color"
- CM_DELETE, "Erase selected line"
- CM_CLEAR, "Erase all lines"
- CM_UNDO, "Undo last action"
- IDS_FILEINFO, "Lines from Step 12"
+ IDS_FILEINFO, "Lines from Step 11"
 }
 
 #endif  // RC_INVOKED

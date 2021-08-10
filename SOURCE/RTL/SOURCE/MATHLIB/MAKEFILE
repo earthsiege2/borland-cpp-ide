@@ -1,0 +1,211 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+!if $(OS) != DPMI16
+    MATHOBJS =           \
+	    matherrl.obj \
+	    matherr.obj  \
+	    pow10d.obj   \
+	    pow10l.obj   \
+	    _matherl.obj \
+	    _matherr.obj \
+	    acosasin.obj \
+	    acossinl.obj \
+	    atan2.obj    \
+	    atan2l.obj   \
+	    ceil.obj     \
+	    ceill.obj    \
+	    cos.obj      \
+	    cosh.obj     \
+	    coshl.obj    \
+	    cosl.obj     \
+	    exp.obj      \
+	    expl.obj     \
+	    floor.obj    \
+	    floorl.obj   \
+	    fmod.obj     \
+	    fmodl.obj    \
+	    frexp.obj    \
+	    frexpl.obj   \
+	    hypot.obj    \
+	    ldexp.obj    \
+	    ldexpl.obj   \
+	    log.obj      \
+	    log10.obj    \
+	    log10l.obj   \
+	    logl.obj     \
+	    modf.obj     \
+	    modfl.obj    \
+	    poly.obj     \
+	    pow.obj      \
+	    powl.obj     \
+	    sin.obj      \
+	    sinh.obj     \
+	    sinhl.obj    \
+	    sinl.obj     \
+	    sqrt.obj     \
+	    sqrtl.obj    \
+	    tan.obj      \
+	    tanh.obj     \
+	    tanhl.obj    \
+	    tanl.obj     \
+	    _pow10.obj
+
+    MATHAUXOBJS=         \
+	    atof.obj     \
+	    atold.obj    \
+	    difftime.obj \
+	    efcvt.obj    \
+	    gcvt.obj     \
+	    hugeval.obj  \
+	    mathwhy.obj  \
+	    strtod.obj   \
+	    atan.obj     \
+	    atanl.obj    \
+	    clear87.obj  \
+	    ctrl87.obj   \
+	    expld.obj    \
+	    fabs.obj     \
+	    fabsl.obj    \
+	    hypotl.obj   \
+	    ldtrunc.obj  \
+	    polyl.obj    \
+	    realcvt2.obj \
+	    round.obj    \
+	    scantod2.obj \
+	    stat87.obj   \
+	    xcvt.obj
+
+!   if $(OS) == WIN16
+	MATHAUXOBJS =                \
+		      $(MATHAUXOBJS) \
+		      fbstp.obj      \
+		      wintrans.obj
+
+!   else
+	MATHOBJS =               \
+		     $(MATHOBJS) \
+		     fperr.obj   \
+		     fpreset.obj
+!   endif
+
+!   if !$d(DLL)
+	MATHMISC =               \
+		     emuvars.obj \
+		     flags87.obj
+!   endif
+
+    MATHMISC =          \
+	    $(MATHMISC) \
+	    fftol.obj   \
+	    nftol.obj
+
+!   if $d(DLL)
+	IMPOBJS  = $(MATHAUXOBJS) $(MATHMISC)
+	OBJS     = $(MATHOBJS)
+!   else
+	MATHOBJS = $(MATHAUXOBJS) $(MATHOBJS) $(MATHMISC)
+!   endif
+
+!   if !$d(DLL)
+!       if $(OS) == DOS
+	    MISC =                   \
+		   math$(MODEL).lib
+!       else
+	    MISC =                   \
+		   mathw$(MODEL).lib
+!       endif
+!   endif
+!else
+    OBJS =            \
+	    $(OBJS)   \
+	    fperr.obj
+!endif
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+CCSFX = -D__NO_INTRINSICS__ -Z
+
+!if $(OS) == DOS
+    CCPFX = -k
+!endif
+
+TASMCFG = 1        # Force tasm.cfg creation
+NOOPT   = 1        # Suppress optimizations
+
+!include rules.mak
+
+ASM = $(ASM) -I$(SRCBASE)\emu
+
+#############################################################################
+# MISC explicit rules.                                                      #
+#############################################################################
+math$(MODEL).lib : $(MATHOBJS)
+    makersp "-+%s &\n" &&|
+	    $?
+|   >> $(LIBDIR)\math.rsp
+    $(TLIB) $(LIBDIR)\$& @$(LIBDIR)\math.rsp, $(LIBDIR)\temp.lst
+    if exist $(LIBDIR)\$&.bak del $(LIBDIR)\$&.bak
+    del $(LIBDIR)\temp.lst
+    del $(LIBDIR)\math.rsp
+
+mathw$(MODEL).lib : $(MATHOBJS)
+    makersp "-+%s &\n" &&|
+	    $?
+|   >> $(LIBDIR)\math.rsp
+    $(TLIB) $(LIBDIR)\$& @$(LIBDIR)\math.rsp, $(LIBDIR)\temp.lst
+    if exist $(LIBDIR)\$&.bak del $(LIBDIR)\$&.bak
+    del $(LIBDIR)\temp.lst
+    del $(LIBDIR)\math.rsp
+
+ASMOPTS = -m -mx -q -t -I$(INCLBASE)\rtlinc\common16 -D__COMPACT__ -D__BSS__
+
+!if $(OS) == WIN16
+    ASMOPTS = $(ASMOPTS) -D_WINDOWS -D_Windows -o
+!endif
+
+!if $(MODEL) == s || $(MODEL) == m
+    LDATA = 0
+!else
+    LDATA = 1
+!endif
+
+emuvars.obj : emuvars.asm
+	echo $(ASMOPTS) > tasm.cfg
+	$(ASM) -DLDATA=$(LDATA) $&,$(OBJDIR)\$.
+	del tasm.cfg
+
+fftol.obj : ftol.asm
+	echo $(ASMOPTS) > tasm.cfg
+	$(ASM) -DFCall ftol, $(OBJDIR)\$.
+	del tasm.cfg
+
+flags87.obj : flags87.asm
+	echo $(ASMOPTS) > tasm.cfg
+	$(ASM) $&, $(OBJDIR)\$.
+	del tasm.cfg
+
+nftol.obj : ftol.asm
+	echo $(ASMOPTS) > tasm.cfg
+	$(ASM) -DNCall ftol, $(OBJDIR)\$.
+	del tasm.cfg
+

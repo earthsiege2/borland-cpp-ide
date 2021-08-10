@@ -1,0 +1,59 @@
+##0 [[StartLine]]
+##0 [[EndLine]]
+##0 [[GetProp]]
+##0 [[SetProp]]
+##--BEGIN-- TRUE
+##      :^1
+##      :YPos() StartLine
+##      --BEGIN-- ? \\"//{{[[ClassName]]AUTO_TBL_END}}"
+##          :^-1
+##          :YPos() EndLine
+##          :^@StartLine
+##          :^BOL
+##          :0 [[CurrAutoLine]]
+##          --FOR-- AutoEntry = 1 TO ((EndLine - StartLine) + 1)
+##              :ScanAutoEntry([[InternalName]], [[Kind]], [[GetExtName]], [[SetExtName]], [[GetProp]], [[SetProp]])
+##              --BEGIN-- TRUE
+##                  :YPos() CurrAutoLine
+##                  :^BOF
+##                  :Kind == 1
+##                      :? \\"//{{[[ClassName]]AUTO_DATA_BEGIN}}"
+##                          :? \\" [[GetExtName]]"
+##                              :^BOL
+##                              :ScanDataEntry([[CPPType]])
+##                                  :"" [[CPPArgs]]
+##                                  :AddAutomation(ClassName, Kind, InternalName, GetExtName, SetExtName, CPPType, GetProp, SetProp, CPPArgs)
+##*
+##                  :Kind == 2
+##                      :? \\"//{{[[ClassName]]AUTO_PROP_BEGIN}}"
+##                          --BEGIN-- GetProp == TRUE
+##                              :? \\" [[GetExtName]] "
+##                                  :^BOL
+##                                  :ScanGetProp(GetExtName, [[CPPType]])
+##                                      :"" [[CPPArgs]]
+##                                      :AddAutomation(ClassName, Kind, InternalName, GetExtName, SetExtName, CPPType, GetProp, SetProp, CPPArgs)
+##*
+##                          --END-- GetProp == TRUE
+##                          --BEGIN-- ((SetProp == TRUE) && (GetProp == FALSE))
+##                              :? \\" [[SetExtName]] "
+##                                  :^BOL
+##                                  :ScanSetProp([[CPPType]])
+##                                      :"" [[CPPArgs]]
+##                                      :AddAutomation(ClassName, Kind, InternalName, GetExtName, SetExtName, CPPType, GetProp, SetProp, CPPArgs)
+##*
+##                          --END-- ((SetProp == TRUE) && (GetProp == FALSE))
+##*
+##                  :Kind == 3
+##                      :? \\"//{{[[ClassName]]AUTO_METH_BEGIN}}"
+##                          :? \\" [[GetExtName]] "
+##                              :^BOL
+##                              :ScanMethEntry(GetExtName, [[CPPType]], [[CPPArgs]])
+##                                  :AddAutomation(ClassName, Kind, InternalName, GetExtName, SetExtName, CPPType, GetProp, SetProp, CPPArgs)
+##*
+##              --END-- TRUE
+##              :^@CurrAutoLine
+##*
+##              :^1
+##          --NEXT-- AutoEntry
+##      --END-- ? \\"//{{[[ClassName]]AUTO_TBL_END}}"
+##--END-- TRUE

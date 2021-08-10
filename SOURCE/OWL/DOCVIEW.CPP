@@ -1,24 +1,26 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\docview.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Implements classes TDocument, TView, TWindowView
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\docmanag.h>
-#include <owl\docview.rc>
+#include <owl/owlpch.h>
+#include <owl/docmanag.h>
+#include <owl/appdict.h>
+#include <owl/docview.rh>
 #include <string.h>
 
 DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
 
 #if !defined(SECTION) || SECTION == 1
 
-const UINT MinUniqueViewId = 0x8000;
-UINT TView::NextViewId = MinUniqueViewId;
+const uint MinUniqueViewId = 0x8000;
+uint TView::NextViewId = MinUniqueViewId;
+int TDocument::UntitledIndex = 0;
 
-//
+//----------------------------------------------------------------------------
 //  class TDocument
-//  ----- ---------
 //
 
 TDocument*
@@ -27,47 +29,54 @@ TDocument::List::Next(const TDocument* doc)
   return doc ? doc->NextDoc : DocList;
 }
 
-BOOL
+bool
 TDocument::List::Insert(TDocument* doc)
 {
   TDocument* pdoc;
   for (pdoc = DocList; pdoc; pdoc = pdoc->NextDoc)
     if (pdoc == doc)
-      return FALSE;
+      return false;
   doc->NextDoc = DocList;
   DocList = doc;
-  return TRUE;
+  return true;
 }
 
-BOOL
+bool
 TDocument::List::Remove(TDocument* doc)
 {
   TDocument** ppdoc;
-  for (ppdoc = &DocList; *ppdoc; ppdoc = &(*ppdoc)->NextDoc){
+  for (ppdoc = &DocList; *ppdoc; ppdoc = &(*ppdoc)->NextDoc) {
     if (*ppdoc == doc) {
       *ppdoc = doc->NextDoc;
-      return TRUE;
+      return true;
     }
   }
-  return FALSE;
+  return false;
 }
 
 void
 TDocument::List::Destroy()
 {
-  while(DocList)
+  while (DocList)
     delete DocList;   // removes it entry from destructor
 }
 
 TDocument::TDocument(TDocument* parent)
-                  : ParentDoc(parent), NextDoc(0), OpenMode(0),
-                    Title(0), Template(0), ViewList(0), Tag(0), StreamList(0),
-                    DocPath(0), DirtyFlag(FALSE)
+:
+  ParentDoc(parent), NextDoc(0), OpenMode(0),
+  Title(0), Template(0), ViewList(0), Tag(0), StreamList(0),
+  DocPath(0), DirtyFlag(false), Embedded(false)
 {
   if (parent) {
     DocManager = parent->DocManager;
-    parent->ChildDoc.Insert(this);
-  } else {
+    if (parent->ParentDoc == parent) {// a dummy parent
+      ParentDoc = 0;
+      DocManager->DocList.Insert(this);
+    }
+    else
+      parent->ChildDoc.Insert(this);
+  }
+  else {
     TApplication* app = GetApplicationObject();
     if ((DocManager = app->DocManager) == 0)
       THROW( TXOwl(IDS_NODOCMANAGER) );  // no doc manager to catch this one
@@ -77,34 +86,35 @@ TDocument::TDocument(TDocument* parent)
 
 TDocument::~TDocument()
 {
+  if (ParentDoc == this) // a dummy doc
+    return;
+
   ChildDoc.Destroy();    // destroy children first, otherwise unnecessary
   Close();               // force close (not virtual at this point!)
 
   //  delete all attached views, data has already been flushed
   //
   SetTemplate(0);   // unref tpl, prevent self autodelete when deleting views
-  TView* pview;
-  for (pview = ViewList; pview != 0; pview = pview->NextView) {
-    DocManager->PostEvent(dnClose, *pview);
-    delete pview;
-  }
+  while (ViewList)
+    delete ViewList;  // ~View() calls DetachView, which removes it from list
 
   //  delete all streams, should only be present if abort or coding error
   //
-  while(StreamList)
+  while (StreamList)
     delete StreamList;
 
   // detach from parent and doc manager
   //
   if (ParentDoc) {
     ParentDoc->ChildDoc.Remove(this);
-  } else {
+  }
+  else {
     DocManager->PostEvent(dnClose, *this);
     DocManager->DocList.Remove(this);
   }
 
-  delete Title;
-  delete DocPath;
+  delete [] Title;
+  delete [] DocPath;
 }
 
 static char* PropNames[] = {
@@ -159,26 +169,24 @@ int
 TDocument::GetProperty(int prop, void far* dest, int textlen)
 {
   const char far* src;
-  switch(prop)
-  {
+  char numBuf[6];
+  switch (prop) {
     case DocumentClass:
       src = _TYPENAME(this);
       break;
     case TemplateName:
-      src = Template ? Template->Description : 0;
+      src = Template ? Template->GetDescription() : 0;
       break;
-    case ViewCount:
-    {
-      char buf[4];
+    case ViewCount: {
       int cnt;
-      TView* pview;
-      for (pview=ViewList, cnt=0; pview != 0; pview=pview->NextView, cnt++) ;
+      TView* view;
+      for (view=ViewList, cnt=0; view != 0; view=view->NextView, cnt++) ;
       if (!textlen) {
         *(int far*)dest = cnt;
         return sizeof(int);
       }
-      wsprintf(buf, "%d", cnt);
-      src = buf;
+      wsprintf(numBuf, "%d", cnt);
+      src = numBuf;
       break;
     }
     case StoragePath:
@@ -201,29 +209,28 @@ TDocument::GetProperty(int prop, void far* dest, int textlen)
   return srclen;
 }
 
-BOOL
+bool
 TDocument::SetProperty(int prop, const void far* src)
 {
-  switch(prop)
-  {
+  switch (prop) {
     case DocTitle:
       SetTitle((const char far*)src);
       break;
     case StoragePath:
       return SetDocPath((const char far*)src);
     default:
-      return FALSE;
+      return false;
   }
-  return TRUE;
+  return true;
 }
 
 TDocument&
 TDocument::RootDocument()
 {
   TDocument* pdoc = this;
-  while(pdoc->ParentDoc)
+  while (pdoc->ParentDoc)
     pdoc = pdoc->ParentDoc;
-  return *pdoc; 
+  return *pdoc;
 }
 
 void
@@ -237,29 +244,31 @@ TDocument::SetDocManager(TDocManager& dm)
   DocManager = &dm;
 }
 
-BOOL
-TDocument::SetDocPath(LPCSTR path)
+bool
+TDocument::SetDocPath(const char far* path)
 {
-  char title[256];
   delete DocPath;
-  DocPath = path ? strnewdup(path) : 0;
-  if (path == 0 || ::GetFileTitle(path, title, sizeof(title)) != 0) {
-    if (DocManager->Application->LoadString(IDS_UNTITLED, title, sizeof(title)) == 0)
-      title[0] = 0;
+  DocPath = (path && *path) ? strnewdup(path) : 0;
+
+  char title[256];
+  if (!DocPath || ::GetFileTitle(DocPath, title, sizeof title) != 0) {
+    int len = DocManager->Application->LoadString(IDS_UNTITLED, title, sizeof title);
+    if (DocManager->IsFlagSet(dmMDI))
+      wsprintf(title+len, "%d", ++UntitledIndex);
   }
   SetTitle(title);
-  return TRUE;  // derived classes may validate path
+  return true;  // derived classes may validate path
 }
 
 void
-TDocument::SetTitle(LPCSTR title)
+TDocument::SetTitle(const char far* title)
 {
   delete Title;
   Title = title ? strnewdup(title) : 0;
   ReindexFrames();
 }
 
-BOOL
+bool
 TDocument::SetTemplate(TDocTemplate* tpl)
 {
   if (Template)
@@ -267,25 +276,25 @@ TDocument::SetTemplate(TDocTemplate* tpl)
   if (tpl)
     DocManager->RefTemplate(*tpl);
   Template = tpl;
-  return TRUE;
+  return true;
 }
 
 void
 TDocument::ReindexFrames()
 {
-  TView* pview;
+  TView* view;
   int seq;
 
-  for (seq = -1, pview = ViewList; pview != 0; pview = pview->NextView) {
-         seq -= pview->SetDocTitle(Title, seq);  // decrement if title displayed
-         if (seq == -3)   // need only check if more than one title displayed
+  for (seq = -1, view = ViewList; view != 0; view = view->NextView) {
+    seq -= view->SetDocTitle(Title, seq);  // decrement if title displayed
+    if (seq == -3)   // need only check if more than one title displayed
       break;
   }
   if (seq == -1)
     return;
   seq = (seq == -2 ? 0 : 1);
-  for (pview = ViewList; pview != 0; pview = pview->NextView) {
-    seq += pview->SetDocTitle(Title, seq);  // increment if title displayed
+  for (view = ViewList; view != 0; view = view->NextView) {
+    seq += view->SetDocTitle(Title, seq);  // increment if title displayed
   }
 }
 
@@ -301,7 +310,7 @@ TDocument::DetachStream(TStream& strm)
 {
   TStream** plist = &StreamList;
   for ( ; *plist; plist = &(*plist)->NextStream) {
-    if (*plist == &strm){
+    if (*plist == &strm) {
       *plist = strm.NextStream;
       return;
     }
@@ -326,7 +335,7 @@ TDocument::AttachView(TView& view)
   TView** ppview;
 
   for (ppview = &ViewList; *ppview; ppview = &(*ppview)->NextView)
-  ;
+    ;
   *ppview = &view;    // insert at end of list
   view.NextView = 0;
   view.Doc = this;
@@ -337,15 +346,15 @@ TView*
 TDocument::InitView(TView* view)
 {
   if (!view)           // test if new TView failed
-      return 0;
-  if (!view->IsOK()){  // test if constructor failed
-      delete view;
-      return 0;
+    return 0;
+  if (!view->IsOK()) { // test if constructor failed
+    delete view;
+    return 0;
   }
   DocManager->PostEvent(dnCreate, *view);
-  if (!view->IsOK()){      // if failed in creation
-      delete view;
-      return 0;
+  if (!view->IsOK()) {     // if failed in creation
+    delete view;
+    return 0;
   }
   ReindexFrames();
   if (++TView::NextViewId < MinUniqueViewId)
@@ -353,147 +362,155 @@ TDocument::InitView(TView* view)
   return view;
 }
 
-BOOL
+bool
 TDocument::DetachView(TView& view)
 {
   TView** plist = &ViewList;
-  for ( ; *plist; plist = &(*plist)->NextView) {
-    if (*plist == &view){
+  for (; *plist; plist = &(*plist)->NextView) {
+    if (*plist == &view) {
+      DocManager->PostEvent(dnClose, view);
       *plist = view.NextView;
       NotifyViews(vnViewClosed, (long)&view, &view);
-      if (!ViewList){     // all views for this doc are now gone
-         if (Template && (Template->Flags & dtAutoDelete)) {
-           if (IsOpen())
-             Close();	  // close the document streams
-           return view.IsOK();   // delete doc UNLESS failure in creation
-         }
-      } else {
+      if (!ViewList) {    // all views for this doc are now gone
+        if (Template && (Template->Flags & dtAutoDelete)) {
+          if (IsOpen())
+            Close();     // close the document streams
+          return view.IsOK();   // delete doc UNLESS failure in creation
+        }
+      }
+      else {
         ReindexFrames();
       }
       break;
     }
   }
-  return FALSE;
+  return false;
 }
 
-BOOL
-TDocument::Commit(BOOL force)
+bool
+TDocument::Commit(bool force)
 {
   TDocument* pdoc = 0;
   while ((pdoc = ChildDoc.Next(pdoc)) != 0) {
     if (!pdoc->Commit(force))
-      return FALSE;
+      return false;
   }
+
   // should we test here for DocPath==0 , or should caller have checked?
+  //
   return NotifyViews(vnCommit, force);
 }
 
-BOOL
-TDocument::Revert(BOOL clear)
+bool
+TDocument::Revert(bool clear)
 {
   TDocument* pdoc = 0;
   while ((pdoc = ChildDoc.Next(pdoc)) != 0) {
     if (!pdoc->Revert(clear))
-      return FALSE;
+      return false;
   }
   return NotifyViews(vnRevert, clear);
 }
 
-BOOL
+bool
 TDocument::NotifyViews(int event, long item, TView* exclude)
 {
-  BOOL answer = TRUE;
+  bool answer = true;
   TEventHandler::TEventInfo eventInfo(WM_OWLNOTIFY, event);
 
   TDocument* pdoc = 0;
-  while ((pdoc = ChildDoc.Next(pdoc)) != 0)  
-    answer &= pdoc->NotifyViews(event, item, exclude);
+  while ((pdoc = ChildDoc.Next(pdoc)) != 0)
+    answer = ToBool(answer && pdoc->NotifyViews(event, item, exclude));
 
-  TView* pview;
-  for (pview = ViewList; pview != 0; pview = pview->NextView)
-    if (pview != exclude && pview->Find(eventInfo))
-      answer &= (int)pview->Dispatch(eventInfo, 0, item);
+  for (TView* view = ViewList; view != 0; view = view->NextView)
+    if (view != exclude && view->Find(eventInfo))
+      answer = ToBool(answer && view->Dispatch(eventInfo, 0, item));
   return answer;
 }
 
 TView*
 TDocument::QueryViews(int event, long item, TView* exclude)
 {
-  TView* pview;
+  TView* view;
   TDocument* pdoc = 0;
   while ((pdoc = ChildDoc.Next(pdoc)) != 0)
-    if ((pview = pdoc->QueryViews(event, item, exclude)) != 0)
-      return pview;
+    if ((view = pdoc->QueryViews(event, item, exclude)) != 0)
+      return view;
 
   TEventHandler::TEventInfo eventInfo(WM_OWLNOTIFY, event);
-  for (pview = ViewList; pview != 0; pview = pview->NextView)
-    if (pview != exclude && pview->Find(eventInfo)
-                         && pview->Dispatch(eventInfo, 0, item))
-      return pview;    // return first acknowledger
+  for (view = ViewList; view != 0; view = view->NextView)
+    if (view != exclude && view->Find(eventInfo)
+                        && view->Dispatch(eventInfo, 0, item))
+      return view;    // return first acknowledger
 
-  return 0;            // if no takers
+  return 0;           // if no takers
 }
 
-BOOL
+bool
 TDocument::IsDirty()
 {
   if (DirtyFlag)
-    return TRUE;
+    return true;
 
   TDocument* pdoc = 0;
   while ((pdoc = ChildDoc.Next(pdoc)) != 0)
     if (pdoc->IsDirty())
-      return TRUE;
+      return true;
 
-  return (QueryViews(vnIsDirty) != 0);
+  return QueryViews(vnIsDirty) != 0;
 }
 
-BOOL
+bool
 TDocument::HasFocus(HWND hwnd)
 {
   TDocument* pdoc = 0;
   while ((pdoc = ChildDoc.Next(pdoc)) != 0)
     if (pdoc->HasFocus(hwnd))
-      return TRUE;
+      return true;
 
-  return (QueryViews(vnIsWindow, (long)hwnd) != 0);
+  return QueryViews(vnIsWindow, (long)hwnd) != 0;
 }
 
-BOOL
+bool
 TDocument::CanClose()
 {
+  // Just say yes if we have multiple views open
+  //
+  if (NextView(NextView(0)))
+    return true;
+
   TDocument* pdoc = 0;
   while ((pdoc = ChildDoc.Next(pdoc)) != 0)
     if (!pdoc->CanClose())
-      return FALSE;
+      return false;
 
   return DocManager->FlushDoc(*this);  // do the UI in the doc manager
 }
 
-BOOL
+bool
 TDocument::Close()
 {
   TDocument* pdoc = 0;
   while ((pdoc = ChildDoc.Next(pdoc)) != 0)
     if (!pdoc->Close())
-      return FALSE;
+      return false;
 
-  return TRUE;
+  return true;
 }
 
-UINT
-TDocument::PostError(UINT sid, UINT choice)
+uint
+TDocument::PostError(uint sid, uint choice)
 {
   return DocManager->PostDocError(*this, sid, choice);
 }
 
-
-//
+//----------------------------------------------------------------------------
 //  class TView
-//  ----- -----
 //
 
-TView::TView(TDocument& doc) : Tag(0), ViewMenu(0)
+TView::TView(TDocument& doc)
+:
+  Tag(0), ViewMenu(0)
 {
   ViewId = NextViewId;
   doc.AttachView(*this);
@@ -510,10 +527,11 @@ TView::~TView()
 void
 TView::SetViewMenu(TMenuDescr* menu)
 {
+  delete ViewMenu;
   ViewMenu = menu;
   TDocTemplate* tpl = Doc->GetTemplate();
-  if (tpl && *ViewMenu->Module == *tpl->GetModule())
-    ViewMenu->Module = tpl->GetModule();// force same module alias as template
+  if (tpl && ViewMenu && *ViewMenu->GetModule() == *tpl->GetModule())
+    ViewMenu->SetModule(tpl->GetModule());// force same module alias as template
 }
 
 static char* TView_PropertyNames[] = {
@@ -562,8 +580,7 @@ int
 TView::GetProperty(int prop, void far* dest, int textlen)
 {
   const char far* src;
-  switch(prop)
-  {
+  switch (prop) {
     case ViewClass:
       src = _TYPENAME(this);
       break;
@@ -584,22 +601,33 @@ TView::GetProperty(int prop, void far* dest, int textlen)
   return srclen;
 }
 
-
-//
+//----------------------------------------------------------------------------
 //  class TWindowView
-//  ----- -----------
 //
 
 DEFINE_RESPONSE_TABLE1(TWindowView, TWindow)
   EV_VN_ISWINDOW,
 END_RESPONSE_TABLE;
 
+TWindowView::TWindowView(TDocument& doc, TWindow* parent)
+      : TView(doc), TWindow(parent, 0, doc.GetDocManager().GetApplication())
+{
+}
 
 //
-//  class TDateTime (eventually)
-//  ----- ---------
+// Does a given HWND belong to this view? Yes if it is us, or a child of us
 //
-int FormatFileTime(FILETIME* pft, void far* dest, int textlen)
+bool
+TWindowView::VnIsWindow(HWND hWnd)
+{
+  return hWnd == HWindow || IsChild(hWnd);
+}
+
+//----------------------------------------------------------------------------
+//  class TDateTime (eventually)
+//
+
+int _OWLFUNC FormatFileTime(FILETIME* pft, void far* dest, int textlen)
 {
   char buf[40];
   int len;
@@ -608,7 +636,7 @@ int FormatFileTime(FILETIME* pft, void far* dest, int textlen)
     *(FILETIME FAR*)dest = *pft;
     return sizeof(FILETIME);
   }
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
   SYSTEMTIME dt;
   FileTimeToSystemTime(pft, &dt);
   len = wsprintf(buf,"%d/%d/%d %02d:%02d:%02d.%02d",
@@ -618,7 +646,7 @@ int FormatFileTime(FILETIME* pft, void far* dest, int textlen)
   struct time filet;
   struct date filed;
   if (!(FileTimeToDateTime(pft, &filed, &filet)))
-    return FALSE;
+    return false;
   len = wsprintf(buf,"%d/%d/%d %02d:%02d:%02d.%02d",
                  filed.da_mon,filed.da_day,filed.da_year,
                  filet.ti_hour,filet.ti_min,filet.ti_sec,filet.ti_hund);
@@ -630,7 +658,7 @@ int FormatFileTime(FILETIME* pft, void far* dest, int textlen)
   return len;
 }
 
-#if !defined(__WIN32__)
+#if !defined(BI_PLAT_WIN32)
 //
 // Win32/OLE2 compatible FILETIME support for 16-bit applications
 //    these functions to be incorporated into TDateTime class
@@ -709,9 +737,11 @@ void DateTimeToFileTime(struct date* dosd, struct time* dost, FILETIME FAR* pft)
 }
 
 
+//
 // Convert FILETIME structure to date and time structures
+//
 
-BOOL FileTimeToDateTime(FILETIME FAR* pft, struct date* dosd, struct time* dost)
+bool FileTimeToDateTime(FILETIME FAR* pft, struct date* dosd, struct time* dost)
 {
   union {
     long udt;
@@ -723,7 +753,7 @@ BOOL FileTimeToDateTime(FILETIME FAR* pft, struct date* dosd, struct time* dost)
   asm sub  ax,0xB1DE
   asm sbb  dx,0x019D
   asm jnc OK
-  return FALSE;
+  return false;
 OK:
   asm mov  cx,50000
   asm div  cx
@@ -750,41 +780,13 @@ OK:
   unixtodos(u.udt, dosd, dost);
   asm pop  ax
   dost->ti_hund = _AL;
-  return TRUE;
+  return true;
 }
-#endif //!defined(__WIN32__)
-
-//
-// dispatchers for view notifications
-//
-
-LRESULT _OWLFUNC
-B_long_Dispatch(GENERIC& generic, int (GENERIC::*pmf)(long), WPARAM, LPARAM a)
-{
-  return (generic.*pmf)(a);
-}
-
-LRESULT _OWLFUNC
-B_int_Dispatch(GENERIC& generic, int (GENERIC::*pmf)(int), WPARAM, LPARAM a)
-{
-  return (generic.*pmf)((int)a);
-}
-
-LRESULT _OWLFUNC
-B_void_Dispatch(GENERIC& generic, int (GENERIC::*pmf)(), WPARAM, LPARAM)
-{
-  return (generic.*pmf)();
-}
-
-LRESULT _OWLFUNC
-B_pointer_Dispatch(GENERIC& generic, int(GENERIC::*pmf)(void*),WPARAM,LPARAM a)
-{
-  return (generic.*pmf)((void*)a);
-}
+#endif  // !defined(BI_PLAT_WIN32)
 
 #endif
+//----------------------------------------------------------------------------
 #if !defined(SECTION) || SECTION == 2
-
 
 IMPLEMENT_ABSTRACT_STREAMABLE(TView);
 
@@ -792,11 +794,12 @@ void*
 TView::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
   TView* o = GetObject();
-  BOOL hasViewMenu = is.readByte();
+  bool hasViewMenu = is.readByte();
   if (hasViewMenu) {
     o->ViewMenu = new TMenuDescr;
     is >> *o->ViewMenu;
-  } else
+  }
+  else
     o->ViewMenu = 0;
   is >> o->ViewId;
   is >> o->Doc;
@@ -808,7 +811,7 @@ void
 TView::Streamer::Write(opstream& os) const
 {
   TView* o = GetObject();
-  os.writeByte(o->ViewMenu ? (char)1 : (char)0);
+  os.writeByte(int16(o->ViewMenu ? 1 : 0));
   if (o->ViewMenu)
     os << *o->ViewMenu;
   os << o->ViewId;
@@ -827,7 +830,7 @@ TDocument::Streamer::Read(ipstream& is, uint32 /*version*/) const
   o->NextDoc = 0;
   o->StreamList = 0;
   o->DocManager = 0;
-  o->DirtyFlag = FALSE;
+  o->DirtyFlag = false;
 
   is >> o->OpenMode;
   o->DocPath = is.freadString();

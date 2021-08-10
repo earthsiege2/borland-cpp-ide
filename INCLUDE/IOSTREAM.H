@@ -13,9 +13,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1990, 1993 by Borland International
+ *      Copyright (c) 1990, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -35,13 +35,29 @@
 #include <mem.h>    // to get memcpy and NULL
 #endif
 
-#pragma option -a-      // byte packing
-#pragma option -Vo-     // set standard C++ options
-#pragma option -RT
 
-#if defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#if !defined(RC_INVOKED)
+
+#pragma option -a-      // byte packing
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
 #pragma option -po-     // disable Object data calling convention
 #endif
+#endif
+
+#if !defined(__TINY__)
+#pragma option -RT
+#endif
+
+#pragma option -Vo-     // set standard C++ options
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 // Definition of EOF must match the one in <stdio.h>
 #define EOF (-1)
@@ -230,7 +246,7 @@ inline          _RTLENTRY ios::operator void _FAR *()
 inline int      _RTLENTRY ios::operator! () { return fail(); }
 
 
-class _CLASSTYPE streambuf {
+class _EXPCLASS streambuf {
 public:
     // constructors and destructors
         _RTLENTRY streambuf();                 // make empty streambuf
@@ -813,12 +829,28 @@ ios&            _RTLENTRY  unlock(ios&);   // unlock file handle
 extern "C" void  _RTLENTRY _InitEasyWin(void);
 #endif
 
-#if defined(__BCOPT__) && !defined(__FLAT__)
-#pragma option -po.     // restore Object Data calling convention
+
+#if !defined(RC_INVOKED)
+
+#pragma option -Vo.     // restore user C++ options
+
+#if !defined(__TINY__)
+#pragma option -RT.
 #endif
 
-#pragma option -RT.
-#pragma option -Vo.     // restore user C++ options
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po.     // restore Object data calling convention
+#endif
+#endif
+
 #pragma option -a.      // restore default packing
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __IOSTREAM_H */

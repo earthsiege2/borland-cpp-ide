@@ -20,8 +20,6 @@
 #include <owl\owlpch.h>
 #pragma hdrstop
 
-#include <owl\opensave.h>
-
 ##<<TApplication QUERY_FILENAME_CPP [[FileName]]
 #include "[[FileName]].rh"            // Definition of all resources.
 
@@ -30,10 +28,8 @@
 class [[TMDIClient]] : public TMDIClient {
 public:
     int                     ChildCount;                 // Number of child window created. 
-##!@OPT_APPL_DOCVIEW
-    TOpenSaveDialog::TData  FileData;                   // Data to control open/saveas standard dialog.
 
-    [[TMDIClient]] ();
+    [[TMDIClient]](TModule* module = 0);
     virtual ~[[TMDIClient]] ();
 
     void OpenFile (const char *fileName = 0);
@@ -83,9 +79,19 @@ DECLARE_RESPONSE_TABLE([[TMDIClient]]);
 
 ##<<TApplication QUERY_FILE_H [[FileName]]
 #include "[[FileName]]"
-##QUERY_FILE_H [[FileName]]
+##--BEGIN-- !@OPT_APPL_DOCVIEW
+##  --BEGIN-- @QUERY_APPL_MODEL == VALUE_MDI
+##:     <<TMDIChild QUERY_WIND_CLIENT [[Client]]
+##:     <<*Client QUERY_FILE_H [[FileName]]
 #include "[[FileName]]"
+##  --END-- @QUERY_APPL_MODEL == VALUE_MDI
+##  --BEGIN-- @QUERY_APPL_MODEL == VALUE_SDI
+
+##  --END-- @QUERY_APPL_MODEL == VALUE_SDI
+##--END-- !@OPT_APPL_DOCVIEW
 ##<<TMDIChild QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+##QUERY_FILE_H [[FileName]]
 #include "[[FileName]]"
 ##@OPT_APPL_PRINTING 2
 #include "apxprint.h"
@@ -134,8 +140,8 @@ END_RESPONSE_TABLE;
 // ===========
 // Construction/Destruction handling.
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
- [[TMDIClient]]::[[TMDIClient]] ()
- : TMDIClient ()
+[[TMDIClient]]::[[TMDIClient]] (TModule* module)
+ : TMDIClient (module)
 {
 ##QUERY_WIND_STYLE [[StyleAttributes]]
 ##StyleAttributes != "" 3
@@ -154,7 +160,7 @@ END_RESPONSE_TABLE;
 }
 
 
- [[TMDIClient]]::~[[TMDIClient]] ()
+[[TMDIClient]]::~[[TMDIClient]] ()
 {
     Destroy();
 
@@ -175,24 +181,27 @@ void [[TMDIClient]]::SetupWindow ()
     TMDIClient::SetupWindow ();
 
 ##--BEGIN-- !@OPT_APPL_DOCVIEW
+##<<TApplication QUERY_CLASS_NAME [[TApplication]]
+    [[TApplication]] *theApp = TYPESAFE_DOWNCAST(GetApplication(), [[TApplication]]);
+
 ##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
     // Common file file flags and filters for Open/Save As dialogs.  Filename and directory are
     // computed in the member functions CmFileOpen, and CmFileSaveAs.
-    FileData.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+    theApp->FileData.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 ##OPT_DV_RESET
 ##OPT_DV_NEXT
 ##QUERY_DV_DESCR [[Descr]]
 ##--BEGIN-- QUERY_DV_FILTER [[Filter]]
 ##(Filter != "*.*") && (Descr != "All Files (*.*)"
-    FileData.SetFilter("[[Descr]]|[[Filter]]|All Files (*.*)|*.*|");
+    theApp->FileData.SetFilter("[[Descr]]|[[Filter]]|All Files (*.*)|*.*|");
 ##(Filter == "*.*") && (Descr == "All Files (*.*)"
-    FileData.SetFilter("All Files (*.*)|*.*|");
+    theApp->FileData.SetFilter("All Files (*.*)|*.*|");
 
 ##--END-- QUERY_DV_FILTER [[Filter]]
 ##--END-- !@OPT_APPL_DOCVIEW
 ##@OPT_APPL_DRAGDROP 2
     // Accept files via drag/drop in the client window.
-    DragAcceptFiles(TRUE);
+    DragAcceptFiles(true);
 }
 
 
@@ -205,7 +214,9 @@ void [[TMDIClient]]::SetupWindow ()
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
 void [[TMDIClient]]::CmFileNew ()
 {
-##--BEGIN-- <<TMDIChild QUERY_WIND_CLIENT != "TEditFile"
+##<<TMDIChild QUERY_WIND_CLIENT [[ClientClass]]
+##--BEGIN-- <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
+##--BEGIN-- BaseClient != "TEditFile"
     char    title[255];
     char    numberStr[16];
 
@@ -213,28 +224,28 @@ void [[TMDIClient]]::CmFileNew ()
     // Generate a title for the MDI child window.
     if (GetModule()->LoadString(IDS_UNTITLED, title, sizeof(title))) {
         wsprintf(numberStr, " - %d", ChildCount++);
-        lstrcat(title, numberStr);
+        strcat(title, numberStr);
     } else
         title[0] = '\0';
 
-##--END-- <<TMDIChild QUERY_WIND_CLIENT != "TEditFile"
-##--BEGIN-- <<TMDIChild QUERY_WIND_CLIENT == "TEditFile"
+##--END-- BaseClient != "TEditFile"
+##--BEGIN-- BaseClient == "TEditFile"
     char    title[255];
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
     // Generate a title for the MDI child window.
     wsprintf(title, "%d", ChildCount++);
 
-##--END-- <<TMDIChild QUERY_WIND_CLIENT == "TEditFile"
-##<<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
-##<<TMDIChild QUERY_WIND_CLIENT == "TEditFile"
+##--END-- BaseClient "TEditFile"
+##--BEGIN-- <<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
+##BaseClient == "TEditFile"
     [[TMDIChild]]* child = new [[TMDIChild]](*this, title, 0);
-##<<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
-##<<TMDIChild QUERY_WIND_CLIENT == "TListBox"
+##BaseClient == "TListBox"
     [[TMDIChild]]* child = new [[TMDIChild]](*this, title, 0);
-##<<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
-##<<TMDIChild QUERY_WIND_CLIENT == "TWindow"
+##BaseClient == "TWindow"
     [[TMDIChild]]* child = new [[TMDIChild]](*this, title, 0);
+##--END-- <<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
+##--END-- <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
     // Associate ICON w/ this child window.
@@ -253,24 +264,28 @@ void [[TMDIClient]]::CmFileNew ()
 
 void [[TMDIClient]]::OpenFile (const char *fileName)
 {
+##<<TApplication QUERY_CLASS_NAME [[TApplication]]
+    [[TApplication]] *theApp = TYPESAFE_DOWNCAST(GetApplication(), [[TApplication]]);
+
     if (fileName)
-        lstrcpy(FileData.FileName, fileName);
+        strcpy(theApp->FileData.FileName, fileName);
 
     //
 ##<<TMDIChild QUERY_WIND_CLIENT [[TMDIChildClient]]
     // Create a MDIChild window whose client is [[TMDIChildClient]].
     //
 ##<<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
-##<<TMDIChild QUERY_WIND_CLIENT == "TEditFile"
-    [[TMDIChild]]* child = new [[TMDIChild]](*this, "", new TEditFile(0, 0, 0, 0, 0, 0, 0, FileData.FileName));
-##<<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
-##<<TMDIChild QUERY_WIND_CLIENT == "TListBox" 3
-    TListBox far *client = new TListBox(0, 0, 0, 0, 100, 100);
-    client->Attr.Style &= ~LBS_SORT;                    // Don't sort the list its a file.
-    [[TMDIChild]]* child = new [[TMDIChild]](*this, FileData.FileName, client);
-##<<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
-##<<TMDIChild QUERY_WIND_CLIENT == "TWindow"
-    [[TMDIChild]]* child = new [[TMDIChild]](*this, FileData.FileName, 0);
+##<<TMDIChild QUERY_WIND_CLIENT [[ClientClass]]
+##<<*ClientClass QUERY_BASE_NAME [[BaseClient]]
+##--BEGIN-- TRUE
+##BaseClient == "TEditFile"
+    [[TMDIChild]]* child = new [[TMDIChild]](*this, "", new [[ClientClass]](0, 0, 0, 0, 0, 0, 0, theApp->FileData.FileName));
+##BaseClient == "TListBox" 2
+    [[ClientClass]] far *client = new [[ClientClass]](0, 0, 0, 0, 100, 100);
+    [[TMDIChild]]* child = new [[TMDIChild]](*this, theApp->FileData.FileName, client);
+##BaseClient == "TWindow"
+    [[TMDIChild]]* child = new [[TMDIChild]](*this, theApp->FileData.FileName, new [[ClientClass]](0));
+##--END-- TRUE
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
     // Associate ICON w/ this child window.
@@ -297,13 +312,16 @@ void [[TMDIClient]]::OpenFile (const char *fileName)
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
 void [[TMDIClient]]::CmFileOpen ()
 {
+##<<TApplication QUERY_CLASS_NAME [[TApplication]]
+    [[TApplication]] *theApp = TYPESAFE_DOWNCAST(GetApplication(), [[TApplication]]);
+
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
     //
     // Display standard Open dialog box to select a file name.
     //
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    *FileData.FileName = 0;
-    if (TFileOpenDialog(this, FileData).Execute() == IDOK)
+    *(theApp->FileData.FileName) = 0;
+    if (TFileOpenDialog(this, theApp->FileData).Execute() == IDOK)
         OpenFile();
 }
 
@@ -315,6 +333,9 @@ void [[TMDIClient]]::LoadTextFile ()
     char            buf[255+1];
     ifstream        *inStream;
 
+##<<TApplication QUERY_CLASS_NAME [[TApplication]]
+    [[TApplication]] *theApp = TYPESAFE_DOWNCAST(GetApplication(), [[TApplication]]);
+
 ##<<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
     [[TMDIChild]]  *curChild = ([[TMDIChild]] *)GetActiveMDIChild();
     TListBox        *client = TYPESAFE_DOWNCAST(curChild->GetClientWindow(), TListBox);
@@ -323,7 +344,7 @@ void [[TMDIClient]]::LoadTextFile ()
     // Only work if the client class is a TListBox.
     if (client) {
         client->ClearList();
-        inStream = new ifstream(FileData.FileName);
+        inStream = new ifstream(theApp->FileData.FileName);
         while (inStream->good()) {
             inStream->getline(buf, sizeof(buf) - 1);
             if (inStream->good())
@@ -335,7 +356,7 @@ void [[TMDIClient]]::LoadTextFile ()
         if (inStream->bad() && !inStream->eof()) {
             string msgTemplate(*GetModule(), IDS_UNABLEREAD);
             char*  msg = new char[MAXPATH + msgTemplate.length()];
-            wsprintf(msg, msgTemplate.c_str(), *FileData.FileName);
+            wsprintf(msg, msgTemplate.c_str(), *(theApp->FileData.FileName));
             MessageBox(msg, GetApplication()->GetName(), MB_ICONEXCLAMATION | MB_OK);
             delete msg;
         }
@@ -364,25 +385,25 @@ void [[TMDIClient]]::CmFilePrint ()
     [[TApplication]] *theApp = TYPESAFE_DOWNCAST(GetApplication(), [[TApplication]]);
     if (theApp) {
         if (!theApp->Printer)
-            theApp->Printer = new TPrinter;
+            theApp->Printer = new TPrinter(GetApplication());
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
         //
         // Create Printout window and set characteristics.
         //
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-        APXPrintOut printout(theApp->Printer, Title, GetActiveMDIChild(), TRUE);
+        APXPrintOut printout(theApp->Printer, Title, GetActiveMDIChild()->GetClientWindow(), true);
 
-        theApp->Printing = TRUE;
+        theApp->Printing++;
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
         //
         // Bring up the Print dialog and print the document.
         //
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-        theApp->Printer->Print(GetActiveMDIChild()->GetClientWindow(), printout, TRUE);
+        theApp->Printer->Print(GetWindowPtr(GetActiveWindow()), printout, true);
 
-        theApp->Printing = FALSE;
+        theApp->Printing--;
     }
 }
 
@@ -399,7 +420,7 @@ void [[TMDIClient]]::CmFilePrintSetup ()
     [[TApplication]] *theApp = TYPESAFE_DOWNCAST(GetApplication(), [[TApplication]]);
     if (theApp) {
         if (!theApp->Printer)
-            theApp->Printer = new TPrinter;
+            theApp->Printer = new TPrinter(GetApplication());
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
         //
@@ -423,14 +444,14 @@ void [[TMDIClient]]::CmFilePrintPreview ()
     [[TApplication]] *theApp = TYPESAFE_DOWNCAST(GetApplication(), [[TApplication]]);
     if (theApp) {
         if (!theApp->Printer)
-            theApp->Printer = new TPrinter;
+            theApp->Printer = new TPrinter(GetApplication());
 
-        theApp->Printing = TRUE;
+        theApp->Printing++;
 
-        PreviewWindow *prevW = new PreviewWindow(Parent, theApp->Printer, GetActiveMDIChild(), "Print Preview", new TLayoutWindow(0));
+        PreviewWindow *prevW = new PreviewWindow(Parent, theApp->Printer, GetActiveMDIChild()->GetClientWindow(), "Print Preview", new TLayoutWindow(0));
         prevW->Create();
 
-        GetApplication()->BeginModal(GetApplication()->MainWindow);
+        GetApplication()->BeginModal(GetApplication()->GetMainWindow());
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
         // We must destroy the preview window explicitly.  Otherwise, the window will not be destroyed until
@@ -438,7 +459,7 @@ void [[TMDIClient]]::CmFilePrintPreview ()
         prevW->Destroy();
         delete prevW;
 
-        theApp->Printing = FALSE;
+        theApp->Printing--;
     }
 }
 
@@ -461,14 +482,14 @@ void [[TMDIClient]]::CmPrintEnable (TCommandEnabler &tce)
             // really exists and then delete the Printer object.
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
             if (!theApp->Printer) {
-                theApp->Printer = new TPrinter;
+                theApp->Printer = new TPrinter(GetApplication());
                 
                 tce.Enable(theApp->Printer->GetSetup().Error == 0);
             } else
                 tce.Enable(theApp->Printer->GetSetup().Error == 0);
         }
     } else
-        tce.Enable(FALSE);
+        tce.Enable(false);
 }
 
 

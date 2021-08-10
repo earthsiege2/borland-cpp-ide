@@ -31,7 +31,7 @@ class TMyMDIClient : public TMDIClient {
   private:
     WORD        ChildNum;
     
-  DECLARE_STREAMABLE(_OWLCLASS, TMyMDIClient, 1);
+  DECLARE_STREAMABLE(, TMyMDIClient, 1);
 };
 
 IMPLEMENT_CASTABLE1(TMyMDIClient, TMDIClient);
@@ -54,7 +54,7 @@ class TMDIApp : public TApplication {
     TMyMDIClient* Client;
 
   DECLARE_RESPONSE_TABLE(TMDIApp);
-  DECLARE_STREAMABLE(_OWLCLASS, TMDIApp, 1);
+  DECLARE_STREAMABLE(, TMDIApp, 1);
 };
 
 DEFINE_RESPONSE_TABLE1(TMDIApp, TApplication)

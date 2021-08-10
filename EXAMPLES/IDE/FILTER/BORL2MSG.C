@@ -3,6 +3,7 @@
 */
 
 #include "ToolApi.H"
+#include "filtrc.h"
 
 #include <stdlib.h>
 #include <mem.h>
@@ -21,6 +22,8 @@ int posted = 0;
 IDE_ToolAPIFunc IDE_ToolAPI[IDE_NumFunctions];
 
 /* Global variables use to parse program output */
+HINSTANCE  globInst;
+
 FileHandle Pipefh;
 
 HMEM       hBuffer;
@@ -137,7 +140,24 @@ void ProcessLine( LPSTR Line )
     return;
   }
   
-
+  if (strncmp( Line, "   WINDPMI.386", 14 ) == 0)
+  {
+    M.message = Line;
+    M.filename = NULL;
+    M.column = 1;
+    M.line = 1;
+    IDE_PostMessage( CUR_MSG_GROUP, &M );
+    s = GetLine();
+    s = GetLine();
+    if (s != NULL)
+    {
+      M.message = s;
+      IDE_PostMessage( CUR_MSG_GROUP, &M );
+    }
+    fatalCount++;
+    return;    
+  }
+  
   // If line begins with Error or Warning or Fatal we want it
   if (!strncmp( Line, "Error", 5 ))
   {
@@ -216,6 +236,8 @@ void ProcessLine( LPSTR Line )
       {
         // didn't find a number, send 0
         i=0;
+        // and reset message to lineno
+        s = lineno;
       }
     }
   
@@ -225,7 +247,7 @@ void ProcessLine( LPSTR Line )
     M.filename = file;
     M.column = 1;
     M.line = i;
-
+    
     IDE_PostMessage( CUR_MSG_GROUP, &M );
     posted++;
   }
@@ -239,10 +261,13 @@ void FilterToIDE( void )
 {
   LPSTR line;
 
-  Pipefh = IDE_Open( PIPEID, READ_WRITE );
+  Pipefh = IDE_Open( PIPEID, 0 );
   if (Pipefh < 0)
   {
-    IDE_ErrorBox( "BORL2MSG.DLL: Cannot filter output pipe." );
+    char error[100];
+    LoadString( globInst, IDS_CANNOTFILTER, error, sizeof(error));
+    IDE_ErrorBox( error );
+    fatalCount++;
     return;
   }
 
@@ -295,6 +320,7 @@ int far pascal _export Run( pTransferBlock TransBlock )
 int far pascal LibMain( HINSTANCE hInstance, WORD wDataSegment,
 			WORD wHeapSize, LPSTR lpszCmdLine )
 {
+  globInst = hInstance;
   return 1;
 }
 

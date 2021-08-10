@@ -1,0 +1,86 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+!if $d(DLL)
+    AUXOBJS =          \
+            alloca.obj
+!else
+    OBJS =             \
+            alloca.obj
+
+!   if $(MODEL) != t
+        MISC =             \
+                newnx.obj
+!   endif
+!endif
+
+AUXOBJS =            \
+        $(AUXOBJS)   \
+        stkavail.obj \
+        ffmalloc.obj \
+        heaplen.obj  \
+        peek.obj     \
+        poke.obj     \
+        stklen.obj   \
+        del.obj      \
+        delarray.obj \
+        delf.obj     \
+        delfarry.obj \
+        new.obj      \
+        newarray.obj \
+        newf.obj     \
+        newfarry.obj \
+        newfpl.obj   \
+        newfplar.obj \
+        newpl.obj    \
+        newplarr.obj \
+        vapp.obj     \
+        vappv.obj    \
+        vdel.obj     \
+        vdelf.obj    \
+        vdeln.obj    \
+        vdelxf.obj   \
+        vdelxn.obj   \
+        vnew.obj     \
+        vnewf.obj    \
+        vnewn.obj    \
+        vnewv.obj    \
+        vnewvf.obj   \
+        vnewvn.obj
+
+!if $d(DLL)
+    IMPOBJS = $(AUXOBJS)
+!else
+    OBJS    = $(AUXOBJS) $(OBJS)
+!endif
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+TASMCFG = 1        # Force tasm.cfg creation
+
+!include rules.mak
+
+#############################################################################
+# MISC explicit rules.                                                      #
+#############################################################################
+newnx.obj : new.cpp
+    $(CC) -o$(OBJDIR)\$& -DNOXX $?

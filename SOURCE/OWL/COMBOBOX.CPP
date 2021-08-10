@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\combobox.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of TComboBox & TComboBoxData.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\combobox.h>
+#include <owl/owlpch.h>
+#include <owl/combobox.h>
 #include <cstring.h>
 
 #if !defined(SECTION) || SECTION == 1
@@ -14,8 +15,9 @@
 // constructor for a TComboBoxData object
 //
 TComboBoxData::TComboBoxData()
- : Strings(10, 0, 10),
-   ItemDatas(10, 0, 10)
+:
+  Strings(10, 0, 10),
+  ItemDatas(10, 0, 10)
 {
   SelIndex = 0;
 }
@@ -29,10 +31,10 @@ TComboBoxData::~TComboBoxData()
 
 //
 // adds the supplied string to the "Strings" array and copies it into
-// "Selection" if "isSelected" is TRUE
+// "Selection" if "isSelected" is true
 //
 void
-TComboBoxData::AddString(const char* str, BOOL isSelected)
+TComboBoxData::AddString(const char* str, bool isSelected)
 {
   Strings.Add(str);
   if (isSelected)
@@ -40,7 +42,7 @@ TComboBoxData::AddString(const char* str, BOOL isSelected)
 }
 
 void
-TComboBoxData::AddStringItem(const char* str, DWORD itemData, BOOL isSelected)
+TComboBoxData::AddStringItem(const char* str, uint32 itemData, bool isSelected)
 {
   ItemDatas.Add(itemData);
   AddString(str, isSelected);
@@ -108,10 +110,11 @@ TComboBoxData::GetSelString(char far* buffer, int bufferSize) const
 TComboBox::TComboBox(TWindow*        parent,
                      int             id,
                      int x, int y, int w, int h,
-                     DWORD           style,
-                     UINT            textLen,
+                     uint32           style,
+                     uint            textLen,
                      TModule*        module)
-  : TListBox(parent, id, x, y, w, h, module)
+:
+  TListBox(parent, id, x, y, w, h, module)
 {
   TextLen = textLen;
   Attr.Style = WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP |
@@ -120,9 +123,10 @@ TComboBox::TComboBox(TWindow*        parent,
 
 TComboBox::TComboBox(TWindow*   parent,
                      int        resourceId,
-                     UINT       textLen,
+                     uint       textLen,
                      TModule*   module)
-  : TListBox(parent, resourceId, module)
+:
+  TListBox(parent, resourceId, module)
 {
   TextLen = textLen;
 }
@@ -170,7 +174,7 @@ TComboBox::GetEditSel(int& startPos, int& endPos)
 // shows or hides the drop-down list
 //
 void
-TComboBox::ShowList(BOOL show)
+TComboBox::ShowList(bool show)
 {
   if ((GetWindowLong(GWL_STYLE) & CBS_DROPDOWN) == CBS_DROPDOWN)
     HandleMessage(CB_SHOWDROPDOWN, show);
@@ -195,7 +199,7 @@ DoAddStringToCB(string& str, void* comboBox)
 // to retrieve the size without transferring data, pass tdSizeData as the
 // direction
 //
-UINT
+uint
 TComboBox::Transfer(void* buffer, TTransferDirection direction)
 {
   TComboBoxData* comboBoxData = (TComboBoxData*)buffer;
@@ -217,7 +221,7 @@ TComboBox::Transfer(void* buffer, TTransferDirection direction)
     char*  tmpString = new char[maxStringLen+1];
     for (i = 0; i < count; i++) {
       GetString(tmpString, i);
-      comboBoxData->AddString(tmpString, FALSE);
+      comboBoxData->AddString(tmpString, false);
       comboBoxData->GetItemDatas()[i] = GetItemData(i);
     }
     delete tmpString;
@@ -234,23 +238,23 @@ TComboBox::Transfer(void* buffer, TTransferDirection direction)
         GetString(str, selIndex);
         comboBoxData->SelectString(str);
         delete str;
-      
-      } else
+      }
+      else
         comboBoxData->SelectString("");
-
-    } else {
+    }
+    else {
       int  stringLen = GetWindowTextLength();
       if (stringLen > 0) {
         char* str = new char[stringLen+1];
         GetWindowText(str, stringLen+1);
         comboBoxData->SelectString(str);
         delete str;
-
-      } else
+      }
+      else
         comboBoxData->SelectString("");
     }
-
-  } else if (direction == tdSetData) {
+  }
+  else if (direction == tdSetData) {
     ClearList();
     comboBoxData->GetStrings().ForEach(DoAddStringToCB, this);
     for (int i = 0; i < comboBoxData->GetItemDatas().GetItemsInContainer(); i++)
@@ -258,7 +262,7 @@ TComboBox::Transfer(void* buffer, TTransferDirection direction)
 
     SetWindowText(comboBoxData->GetSelection().c_str());
     if (comboBoxData->GetSelIndex() >= 0)
-      SetSelIndex(comboBoxData->GetSelIndex());
+      SetSelString(comboBoxData->GetSelection().c_str(), 0);
   }
 
   return sizeof(TComboBoxData);

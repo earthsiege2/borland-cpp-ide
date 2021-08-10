@@ -2,13 +2,13 @@
 /*                                                                        */
 /*  FILE.H                                                                */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_FILE_H )
-#define __CLASSLIB_FILE_H
+#if !defined( CLASSLIB_FILE_H )
+#define CLASSLIB_FILE_H
 
 #ifndef __STDLIB_H
 #include <stdlib.h>
@@ -19,7 +19,7 @@
 #endif
 
 #ifndef __FCNTL_H
-#include <Fcntl.h>
+#include <fcntl.h>
 #endif
 
 #ifndef __STAT_H
@@ -34,20 +34,28 @@
 #include <io.h>
 #endif
 
+#ifndef __DOS_H
+#include <dos.h>
+#endif
+
 #if !defined( __SYSTYPES_H )
 #include <systypes.h>
 #endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
-
-#if !defined( __CLASSLIB__TIME_H )
-#include "classlib\time.h"
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
 #endif
 
-#if !defined( __CLASSLIB__DATE_H )
-#include "classlib\date.h"
+#if !defined( CLASSLIB__TIME_H )
+#include <classlib/time.h>
+#endif
+
+#if !defined( CLASSLIB__DATE_H )
+#include <classlib/date.h>
+#endif
+
+#if defined( BI_HAS_HREADWRITE ) && !defined( __WINDOWS_H )
+#include <windows.h>
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )
@@ -107,13 +115,13 @@ public:
 
     enum{
     //  DOS file type flags
-        Normal      = 0x00,
-        RdOnly      = 0x01,
-        Hidden      = 0x02,
-        System      = 0x04,
-        Volume      = 0x08,
-        Directory   = 0x10,
-        Archive     = 0x20
+        Normal      = FA_NORMAL,
+        RdOnly      = FA_RDONLY,
+        Hidden      = FA_HIDDEN,
+        System      = FA_SYSTEM,
+        Volume      = FA_LABEL,
+        Directory   = FA_DIREC,
+        Archive     = FA_ARCH
         };
 
     enum seek_dir
@@ -237,12 +245,12 @@ inline long TFile::SeekToEnd()
 
 inline int TFile::Read( void *buffer, int numBytes )
 {
-    return ::_read( Handle, buffer, numBytes );
+    return ::_rtl_read( Handle, buffer, numBytes );
 }
 
 inline int TFile::Write( const void *buffer, int numBytes)
 {
-    return ::_write( Handle, buffer, numBytes );
+    return ::_rtl_write( Handle, buffer, numBytes );
 }
 
 inline void TFile::Flush()
@@ -286,5 +294,4 @@ inline long TFile::Write(const void __huge* Buffer, long NumBytes)
 #pragma option -po.
 #endif
 
-#endif  // __CLASSLIB_FILE_H
-
+#endif  // CLASSLIB_FILE_H

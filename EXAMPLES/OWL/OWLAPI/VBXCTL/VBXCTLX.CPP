@@ -8,9 +8,11 @@
 #include <owl\vbxctl.h>
 #include "vbxctlx.h"
 
+//#define USE_RESOURCE_DLL
+
 class TTestDialog : public TDialog, public TVbxEventHandler {
   public:
-    TTestDialog(TWindow* parent, const char* name);
+    TTestDialog(TWindow* parent, const char* name, TModule* module=0);
 
   protected:
     void SetupWindow();
@@ -41,8 +43,8 @@ DEFINE_RESPONSE_TABLE2(TTestDialog, TDialog, TVbxEventHandler)
   EV_VBXEVENTNAME(IDC_BIPICT3,"DragDrop",EvDropDest),
 END_RESPONSE_TABLE;
 
-TTestDialog::TTestDialog(TWindow* parent, const char* name)
-  : TDialog(parent, name), TWindow(parent)
+TTestDialog::TTestDialog(TWindow* parent, const char* name, TModule* module)
+  : TDialog(parent, name, module)
 {
   Switch1 = new TVbxControl(this, IDC_BISWITCH1);
   Switch2 = new TVbxControl(this, IDC_BISWITCH2);
@@ -99,13 +101,30 @@ TTestDialog::EvDropDest(VBXEVENT far * event)
 class TTestApp : public TApplication {
   public:
     TTestApp() : TApplication() {}
+   ~TTestApp() {delete ResModule;}
 
   protected:
     void InitMainWindow() {
       MainWindow = new TFrameWindow(0, "Dialog Tester", 0);
       MainWindow->AssignMenu("COMMANDS");
+#if defined(USE_RESOURCE_DLL)
+      ResModule = new TModule("resource.dll");
+# if 1
+      VBXEnableDLL(*this, *ResModule);
+# else
+      WNDCLASS wc;
+      GetClassInfo("VBCONTROL", &wc);
+      wc.hInstance = *ResModule;
+      RegisterClass(&wc);
+# endif
+#else
+      ResModule = 0;
+#endif
     }
-    void CmTest() {TTestDialog(MainWindow, "SAMPLES").Execute();}
+    void CmTest() {TTestDialog(MainWindow, "SAMPLES", ResModule).Execute();}
+
+  private:
+    TModule* ResModule;
 
   DECLARE_RESPONSE_TABLE(TTestApp);
 };
@@ -117,14 +136,12 @@ END_RESPONSE_TABLE;
 int
 OwlMain(int, char**)
 {
-#if defined(__WIN32__)
-  ::MessageBox(0, "This is not a 32 bit example", "OWL Examples", MB_OK);
-  return 0;
-
-#else
-  TBIVbxLibrary vbxLib;     // constructing this loads & inits the library
-  return TTestApp().Run();
-
-#endif
+  try {
+    TBIVbxLibrary vbxLib;     // constructing this loads & inits the library
+    return TTestApp().Run();
+  }
+  catch (xmsg& x) {
+    ::MessageBox(0, x.why().c_str(), "OWL Examples", MB_OK);
+    return -1;
+  }
 }
-

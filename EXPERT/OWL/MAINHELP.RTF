@@ -30,17 +30,22 @@
 \par }\sectd \linex576\endnhere \pard\plain \sl240 \f5\fs20\lang1033 {\fs16\up6 #{\footnote \pard\plain \s245 \f5\fs20\lang1033 {\fs16\up6 #} main_index}}{\fs16\up6 ${\footnote \pard\plain \s245 \f5\fs20\lang1033 {\fs16\up6 $} Help Index}}{\fs16\up6 +
 {\footnote \pard\plain \s245 \f5\fs20\lang1033 {\fs16\up6 +} index:0005}}{\fs16\up6  }{\b\f4\fs28 Contents}{\v\f4 index_info}{\b\f4\fs28\ul 
 \par }{\b\f6 
+##--BEGIN-- (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
 \par }{\b\f6 Commands}{\f6 
 \par }{\f6\uldb File Menu}{\v\f6 menu_file}{\f6 
 \par }{\f6\uldb Edit Menu}{\v\f6 menu_edit}{\f6 
 \par }{\f6\uldb Search Menu}{\v\f6 menu_search}{\f6 
 ##@QUERY_APPL_MODEL == VALUE_MDI
 \par }{\f6\uldb Windows Menu}{\v\f6 menu_windows}{\f6 
+\par }{\f6\uldb Help Menu}{\v\f6 menu_help}{\f6 
 \par }{\b\f6 
+##--END-- (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
 ##@OPT_APPL_TOOLBAR 3
 \par }{\b\f6 Toolbar}{\f6 
 \par }{\f6\uldb Toolbar Commands}{\v\f6 toolbar}{\f6 
 \par }{\b\f6 
+##--BEGIN-- (@QUERY_APPL_MODEL != VALUE_DIALOG)
 \par }{\b\f6 Procedures}{\b\f6 
 \par }{\f6\uldb Copying Text}{\v\f6 proc_copying_text}{\f6 
 \par }{\f6\uldb Deleting Text}{\v\f6 proc_deleting_text}{\f6 
@@ -51,6 +56,7 @@
 ##@OPT_APPL_PRINTING
 \par }{\f6\uldb Printing}{\v\f6 print}{\f6 
 \par }{\b\f6 
+##--END-- (@QUERY_APPL_MODEL != VALUE_DIALOG)
 \par }{\b\f6 Keyboard Topics}{\f6 
 \par }{\f6\uldb Windows Key Strokes}{\v\f6 keyboard_topic}{\f6 
 \par }{\fs16\up6 \page }{\fs16\up6 #{\footnote \pard\plain \s245 \f5\fs20\lang1033 {\fs16\up6 #} index_info}}{\b\f6  }{\f6 For information on how to use Help, press F1 or select Using Help from the Help menu.}{\f6 
@@ -106,6 +112,13 @@
 \par }{\strike\f6 Close All}{\v\f6 CM_CLOSECHILDREN}{\f6 \tab }{\f6 Close all windows.}{\f6 
 \par }{\f6 \page }
 ##--END-- @QUERY_APPL_MODEL == VALUE_MDI
+{\f6 #{\footnote \pard\plain \sl240 \f5\fs20\lang1033 # menu_help}}{\f6 ${\footnote \pard\plain \sl240 \f5\fs20\lang1033 $ Help Menu}}{\f6 +{\footnote \pard\plain \sl240 \f5\fs20\lang1033 + commands:040}}{\b\f6 Help}{\b\f6  Menu}{\f6 
+
+\par }{\f6 
+\par }{\f6 The Help menu provides access to the help system and the about dialog.}{\f6 
+\par }{\f6 
+\par }{\strike\f6 Contents}{\v\f6 CM_HELPCONTENTS}{\f6 \tab }{\f6 Help topic contents.}{\f6 
+\par }{\f6 \page }
 {\f6 #{\footnote \pard\plain \sl240 \f5\fs20\lang1033 # proc_copying_text}}{\f6 ${\footnote \pard\plain \sl240 \f5\fs20\lang1033 $ Copying Text}}{\f6 +{\footnote \pard\plain \sl240 \f5\fs20\lang1033 + procedures:010}}{\f6 K{\footnote 
 \pard\plain \sl240 \f5\fs20\lang1033 K copy;clipboard}}{\b\f6 Copying Text}{\f6 
 \par }{\f6 
@@ -277,5 +290,11 @@ The Search|Replace command searches the current document for a text pattern, and
 \par }{\f6 
 \par }{\f6 \page }
 ##--END-- @QUERY_APPL_MODEL == VALUE_MDI
+{\fs16\up6 #{\footnote \pard\plain \s245 \f5\fs20\lang1033 {\fs16\up6 #} CM_HELPCONTENTS}}{\fs16\up6 ${\footnote \pard\plain \s245 \f5\fs20\lang1033 {\fs16\up6 $} Help table of contents}}{\fs16\up6 +{\footnote \pard\plain \s245 
+\f5\fs20\lang1033 {\fs16\up6 +} menu_help:010}}{\b\f6 Window}{\b\f6  Help table of contents}{\f6 
+\par }{\f6 
+\par }{\f6 The Help|Contents displays the help contents page.}{\f6 
+\par }{\f6 
+\par }{\f6 \page }
 {\f6 
 \par }}

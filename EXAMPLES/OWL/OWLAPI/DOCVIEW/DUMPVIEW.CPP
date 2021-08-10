@@ -22,9 +22,11 @@ class _DOCVIEWCLASS TDumpView : public TListBox, public TView {
     // overridden virtuals from TView
     //
     LPCSTR   GetViewName(){return StaticName();}
+//    const char far*   GetViewName(){return StaticName();}
     TWindow* GetWindow()  {return (TWindow*)this;}
     BOOL     SetDocTitle(LPCSTR docname, int index)
-                          {return TListBox::SetDocTitle(docname, index); }
+//    BOOL     SetDocTitle(const char far* docname, int index)
+                          {return TListBox::SetDocTitle(docname, index);}
     //
     // overridden virtuals from TWindow
     //
@@ -104,8 +106,9 @@ TDumpView::TDumpView(TDocument& doc, TWindow* parent)
          : TView(doc), TListBox(parent, GetNextViewId(), 0,0,0,0)
 {
   Init();
-  Attr.Style &= ~(WS_BORDER | LBS_SORT);
-  Attr.Style |= (LBS_DISABLENOSCROLL);
+//  Attr.Style &= ~(WS_BORDER | LBS_SORT);
+  Attr.Style &= ~(LBS_SORT);
+  Attr.Style |= LBS_DISABLENOSCROLL | LBS_NOINTEGRALHEIGHT;
   Attr.AccelTable = IDA_DUMPVIEW;
   SetViewMenu(new TMenuDescr(IDM_DUMPVIEW,0,1,0,0,0,1));
 }
@@ -121,12 +124,11 @@ TDumpView::Init()
 BOOL
 TDumpView::VnDocClosed(int omode)
 {
-  int top;
-  int sel;
   if (UpdateMode == -1 || !(omode & ofWrite))  // make sure someone else's write
     return FALSE;
-  top = GetTopIndex();
-  sel = GetSelIndex();
+
+  int top = GetTopIndex();
+  int sel = GetSelIndex();
   ClearList();
   LoadData(top, sel);
   return TRUE;
@@ -227,9 +229,9 @@ TDumpView::Create()
   //if (!Parent->IsFlagSet(wfMainWindow))// prevent parent shrink if main window
       Parent->SetFlag(wfShrinkToClient);
   }
-  if (Doc->GetDocPath() == 0) {  
+  if (!Doc->GetDocPath())  
     return TRUE;           // new file, no data to display
-  }
+
   if (!LoadData(0, 0))
     NotOK();
   return TRUE;
@@ -351,6 +353,13 @@ void
 TDumpView::EvLButtonDown(UINT modKeys, TPoint& point)
 {
   if (UpdateMode > 0) {
+    int line = point.y/CharHeight + GetTopIndex();
+    if (line != EditLine) {
+      EndEditLine();
+      TListBox::EvLButtonDown(modKeys, point);
+      return;
+    }
+
     int index = ((point.x*2 - CharWidth)/(CharWidth*2) - AddrWidth*2)/3;
     if (index >= 0 && index < Changes->Count) {
       EditByte = index;
@@ -359,9 +368,9 @@ TDumpView::EvLButtonDown(UINT modKeys, TPoint& point)
       GetItemRect(EditLine, rect);
       InvalidateRect(rect);
     }
-  } else {
+
+  } else
     TListBox::EvLButtonDown(modKeys, point);
-  }
 }
 
 void
@@ -372,7 +381,7 @@ TDumpView::EvLButtonDblClk(UINT /*modKeys*/, TPoint& point)
     index = 0;
   int line = point.y/CharHeight + GetTopIndex();
   if (UpdateMode <= 0 || line != EditLine) {
-    EndEditLine();
+//    EndEditLine();
     NewEditLine(line, index);
   }
 }
@@ -457,23 +466,29 @@ TDumpView::EvPaint()
 {
   TRegion updateRgn;
   GetUpdateRgn(updateRgn);
-  DefaultProcessing();  // predefined class, don't call TWindow
-//TWindow::EvPaint();
+  
+  DefaultProcessing();  // predefined listbox class will paint, don't call TWindow
+
   if (UpdateMode <= 0)
     return;
-  if (GetSelIndex() != EditLine) { /*::MessageBeep(MB_ICONEXCLAMATION);*/ return;}
+  if (GetSelIndex() != EditLine) {
+    //::MessageBeep(MB_ICONEXCLAMATION);
+    return;
+  }
   if (GetTopIndex() > EditLine || (GetTopIndex()+DisplayLines) <= EditLine)
     return;
+
   TRect rect;
   GetItemRect(EditLine, rect);
   rect.left += CharWidth * (AddrWidth*2+1+EditByte*3) + 1;
   rect.right = rect.left + CharWidth * 2;
+
   // should check if in update region!
   TClientDC dc(HWindow);
-  dc.SelectClipRgn(updateRgn);
-  dc.IntersectClipRect(rect);
-//GetUpdateRgn(updateRgn);
-  dc.InvertRgn(updateRgn);
+//  dc.SelectClipRgn(updateRgn);
+//  dc.IntersectClipRect(rect);
+//  dc.InvertRgn(updateRgn);
+  dc.InvertRgn(updateRgn &= rect);
 }
 
 void

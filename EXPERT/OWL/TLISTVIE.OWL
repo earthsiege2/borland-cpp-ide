@@ -1,0 +1,179 @@
+<<[H]TListView [[TListView]]
+##{hheader.snp}
+#include <owl\owlpch.h>
+#pragma hdrstop
+
+
+##<<TApplication QUERY_FILENAME_CPP [[Filename]]
+#include "[[Filename]].rh"            // Definition of all resources.
+
+
+//{{TListView = [[TListView]]}}
+class [[TListView]] : public TListView {
+public:
+    [[TListView]] (TDocument& doc, TWindow* parent = 0);
+    virtual ~[[TListView]] ();
+##--BEGIN-- @OPT_APPL_PRINTING
+
+//{{[[TListView]]VIRTUAL_BEGIN}}
+public:
+    virtual void Paint (TDC& dc, bool erase, TRect& rect);
+##:DBVirtual(\\"[[TListView]]", "Paint")
+//{{[[TListView]]VIRTUAL_END}}
+//{{[[TListView]]RSP_TBL_BEGIN}}
+protected:
+    void EvGetMinMaxInfo (MINMAXINFO far& minmaxinfo);
+//{{[[TListView]]RSP_TBL_END}}
+DECLARE_RESPONSE_TABLE([[TListView]]);
+##--END-- @OPT_APPL_PRINTING
+};    //{{[[TListView]]}}
+##{hfooter.snp}
+>>[H]TListView [[TListView]]
+
+
+<<[CPP]TListView [[TListView]]
+##{cheader.snp}
+#include <owl\owlpch.h>
+#pragma hdrstop
+
+##<<TApplication QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+##QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+
+#include <stdio.h>
+
+
+//{{[[TListView]] Implementation}}
+
+
+##--BEGIN-- @OPT_APPL_PRINTING
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//
+// Build a response table for all messages/commands handled
+// by [[TListView]] derived from TListView.
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+DEFINE_RESPONSE_TABLE1([[TListView]], TListView)
+//{{[[TListView]]RSP_TBL_BEGIN}}
+##:DBResponse(\\"[[TListView]]", "", "", "WM_GETMINMAXINFO", "")
+    EV_WM_GETMINMAXINFO,
+//{{[[TListView]]RSP_TBL_END}}
+END_RESPONSE_TABLE;
+
+
+##--END-- @OPT_APPL_PRINTING
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//////////////////////////////////////////////////////////
+// [[TListView]]
+// ==========
+// Construction/Destruction handling.
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+[[TListView]]::[[TListView]] (TDocument& doc, TWindow* parent)
+    : TListView(doc, parent)
+{
+##QUERY_WIND_STYLE [[StyleAttributes]]
+##StyleAttributes != "" 3
+    // Override the default window style for TListView.
+[[StyleAttributes]]
+
+##QUERY_WIND_BACKGRND [[BackgroundColor]]
+##BackgroundColor != "" 3
+    // Change the window's background color
+    SetBkgndColor([[BackgroundColor]]);
+
+    // INSERT>> Your constructor code here.
+
+}
+
+
+[[TListView]]::~[[TListView]] ()
+{
+    // INSERT>> Your destructor code here.
+
+}
+##--BEGIN-- @OPT_APPL_PRINTING == TRUE
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//
+// Paint routine for Window, Printer, and PrintPreview for a TListView client.
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TListView]]::Paint (TDC& dc, bool, TRect& rect)
+{
+##<<TApplication QUERY_CLASS_NAME [[TApplication]]
+    [[TApplication]] *theApp = TYPESAFE_DOWNCAST(GetApplication(), [[TApplication]]);
+    if (theApp) {
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+        // Only paint if we're printing and we have something to paint, otherwise do nothing.
+        if (theApp->Printing && theApp->Printer && !rect.IsEmpty()) {
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+            // Use pageSize to get the size of the window to render into.  For a Window it's the client area,
+            // for a printer it's the printer DC dimensions and for print preview it's the layout window.
+            TSize   pageSize(rect.right - rect.left, rect.bottom - rect.top);
+
+            HFONT   hFont = (HFONT)GetWindowFont();
+            TFont   font("Arial", -12);
+            if (hFont == 0)
+              dc.SelectObject(font);
+            else
+              dc.SelectObject(TFont(hFont));
+    
+            TEXTMETRIC  tm;
+            int fHeight = (dc.GetTextMetrics(tm) == true) ? tm.tmHeight + tm.tmExternalLeading : 10;
+    
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+            // How many lines of this font can we fit on a page.
+            int linesPerPage = MulDiv(pageSize.cy, 1, fHeight);
+            if (linesPerPage) {    
+                TPrintDialog::TData &printerData = theApp->Printer->GetSetup();
+
+                int maxPg = ((GetCount() / linesPerPage) + 1.0);
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+                // Compute the number of pages to print.
+                printerData.MinPage = 1;
+                printerData.MaxPage = maxPg;
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+                // Do the text stuff:
+                int     fromPage = printerData.FromPage == -1 ? 1 : printerData.FromPage;
+                int     toPage = printerData.ToPage == -1 ? 1 : printerData.ToPage;
+                char    buffer[255];
+                int     currentPage = fromPage;
+
+                while (currentPage <= toPage) {
+                    int startLine = (currentPage - 1) * linesPerPage;
+                    int lineIdx = 0;
+                    while (lineIdx < linesPerPage) {
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+                        // If the string is no longer valid then there's nothing more to display.
+                        if (GetString(buffer, startLine + lineIdx) < 0)
+                            break;
+                        dc.TabbedTextOut(TPoint(0, lineIdx * fHeight), buffer, strlen(buffer), 0, NULL, 0);
+                        lineIdx++;
+                    }
+                    currentPage++;
+                }
+            }
+        }
+    }
+}
+
+
+void [[TListView]]::EvGetMinMaxInfo (MINMAXINFO far& minmaxinfo)
+{
+##<<TApplication QUERY_CLASS_NAME [[TApplication]]
+    [[TApplication]] *theApp = TYPESAFE_DOWNCAST(GetApplication(), [[TApplication]]);
+    if (theApp) {
+        if (theApp->Printing) {
+            minmaxinfo.ptMaxSize = TPoint(32000, 32000);
+            minmaxinfo.ptMaxTrackSize = TPoint(32000, 32000);
+            return;
+        }
+    }
+    TListView::EvGetMinMaxInfo(minmaxinfo);
+}
+##--END-- @OPT_APPL_PRINTING == TRUE
+>>[CPP]TListView [[TListView]]

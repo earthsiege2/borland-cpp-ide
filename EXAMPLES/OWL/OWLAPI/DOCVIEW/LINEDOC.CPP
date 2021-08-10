@@ -3,13 +3,14 @@
 //   Implements classes TDrawDocument, TDrawView, TDrawListView
 //----------------------------------------------------------------------------
 #include <owl\owlpch.h>
+#include <owl\docmanag.h>
+#include <owl\filedoc.h>
 #include <owl\dc.h>
 #include <owl\inputdia.h>
 #include <owl\chooseco.h>
 #include <owl\gdiobjec.h>
-#include <owl\docmanag.h>
-#include <owl\filedoc.h>
 #include <owl\listbox.h>
+#include <owl\docview.h>
 #include <classlib\arrays.h>
 #include "linedoc.rc"
 
@@ -832,3 +833,4 @@ TDrawListView::Streamer::Write(opstream &os) const
   os << o->DrawDoc;
 }
 
+

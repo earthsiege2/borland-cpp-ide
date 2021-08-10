@@ -2,16 +2,17 @@
 *                                                                             *
 *  ddeml.h -    DDEML API header file                                         *
 *                                                                             *
-*                                                                             *
 \*****************************************************************************/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1992, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
+
+#if !defined(__FLAT__)
 
 #ifndef __DDEML_H       /* prevent multiple includes */
 #define __DDEML_H
@@ -23,8 +24,6 @@
 #ifndef RC_INVOKED
 #pragma option -a-      /* Assume byte packing throughout */
 #endif  /* RC_INVOKED */
-
-#if !defined(__FLAT__)
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -60,8 +59,11 @@ extern "C" {            /* Assume C declarations for C++ */
 
 DECLARE_HANDLE32(HCONVLIST);
 DECLARE_HANDLE32(HCONV);
-DECLARE_HANDLE32(HSZ);
 DECLARE_HANDLE32(HDDEDATA);
+#if !defined(_HSZ_DEFINED)
+#define _HSZ_DEFINED
+DECLARE_HANDLE32(HSZ);
+#endif
 
 /* the following structure is for use with XTYP_WILDCONNECT processing. */
 
@@ -463,7 +465,22 @@ typedef struct tagMONCONVSTRUCT
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
-#else     /* defined __FLAT__ */
+#ifndef RC_INVOKED
+#pragma option -a.      /* Revert to default packing */
+#endif  /* RC_INVOKED */
+
+#endif  /* __DDEML_H */
+
+
+#else  /* !__FLAT__ */
+
+#ifndef _INC_DDEMLH
+#define _INC_DDEMLH
+#define __DDEML_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /******** public types ********/
 
@@ -612,11 +629,11 @@ typedef CONVINFO FAR *PCONVINFO;
 
 /***** Timeout constants *****/
 
-#define     TIMEOUT_ASYNC           0xFFFFFFFFL
+#define     TIMEOUT_ASYNC           0xFFFFFFFF
 
 /***** Transaction ID constants *****/
 
-#define     QID_SYNC                0xFFFFFFFFL
+#define     QID_SYNC                0xFFFFFFFF
 
 /****** public strings used in DDE ******/
 
@@ -666,19 +683,19 @@ UINT WINAPI DdeInitializeW(LPDWORD pidInst, PFNCALLBACK pfnCallback,
  * Callback filter flags for use with standard apps.
  */
 
-#define     CBF_FAIL_SELFCONNECTIONS     0x00001000L
-#define     CBF_FAIL_CONNECTIONS         0x00002000L
-#define     CBF_FAIL_ADVISES             0x00004000L
-#define     CBF_FAIL_EXECUTES            0x00008000L
-#define     CBF_FAIL_POKES               0x00010000L
-#define     CBF_FAIL_REQUESTS            0x00020000L
-#define     CBF_FAIL_ALLSVRXACTIONS      0x0003f000L
+#define     CBF_FAIL_SELFCONNECTIONS     0x00001000
+#define     CBF_FAIL_CONNECTIONS         0x00002000
+#define     CBF_FAIL_ADVISES             0x00004000
+#define     CBF_FAIL_EXECUTES            0x00008000
+#define     CBF_FAIL_POKES               0x00010000
+#define     CBF_FAIL_REQUESTS            0x00020000
+#define     CBF_FAIL_ALLSVRXACTIONS      0x0003f000
 
-#define     CBF_SKIP_CONNECT_CONFIRMS    0x00040000L
-#define     CBF_SKIP_REGISTRATIONS       0x00080000L
-#define     CBF_SKIP_UNREGISTRATIONS     0x00100000L
-#define     CBF_SKIP_DISCONNECTS         0x00200000L
-#define     CBF_SKIP_ALLNOTIFICATIONS    0x003c0000L
+#define     CBF_SKIP_CONNECT_CONFIRMS    0x00040000
+#define     CBF_SKIP_REGISTRATIONS       0x00080000
+#define     CBF_SKIP_UNREGISTRATIONS     0x00100000
+#define     CBF_SKIP_DISCONNECTS         0x00200000
+#define     CBF_SKIP_ALLNOTIFICATIONS    0x003c0000
 
 /*
  * Application command flags
@@ -921,25 +938,22 @@ typedef struct tagMONCONVSTRUCT {
  * Callback filter flags for use with MONITOR apps - 0 implies no monitor
  * callbacks.
  */
-#define     MF_HSZ_INFO                  0x01000000L
-#define     MF_SENDMSGS                  0x02000000L
-#define     MF_POSTMSGS                  0x04000000L
-#define     MF_CALLBACKS                 0x08000000L
-#define     MF_ERRORS                    0x10000000L
-#define     MF_LINKS                     0x20000000L
-#define     MF_CONV                      0x40000000L
+#define     MF_HSZ_INFO                  0x01000000
+#define     MF_SENDMSGS                  0x02000000
+#define     MF_POSTMSGS                  0x04000000
+#define     MF_CALLBACKS                 0x08000000
+#define     MF_ERRORS                    0x10000000
+#define     MF_LINKS                     0x20000000
+#define     MF_CONV                      0x40000000
 
-#define     MF_MASK                      0xFF000000L
+#define     MF_MASK                      0xFF000000
 #endif /* NODDEMLSPY */
 
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
 
-#endif /* __FLAT__ */
-
-#ifndef RC_INVOKED
-#pragma option -a.      /* Revert to default packing */
-#endif  /* RC_INVOKED */
-
-#endif  /* __DDEML_H */
+#endif /* _INC_DDEMLH */
 
 
-
+#endif  /* __FLAT__ */

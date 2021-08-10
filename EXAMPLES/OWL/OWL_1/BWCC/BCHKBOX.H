@@ -9,13 +9,13 @@
   #include <owl\checkbox.h>
 #endif
 
-class _EXPCLASS TGroupBox;
+class  TGroupBox;
 
 //
 //  class TBCheckBox
 //  ----- ----------
 //
-class _EXPCLASS TBCheckBox : public TCheckBox {
+class  TBCheckBox : public TCheckBox {
   public:
     TBCheckBox(TWindow*        parent,
                int             id,
@@ -32,7 +32,7 @@ class _EXPCLASS TBCheckBox : public TCheckBox {
   protected:
     char far* GetClassName();
 
-  DECLARE_STREAMABLE_FROM_BASE(_EXPCLASS, TBCheckBox, TCheckBox);
+  DECLARE_STREAMABLE_FROM_BASE(, TBCheckBox, TCheckBox);
 };
 
 #endif //__BCHKBOX_H

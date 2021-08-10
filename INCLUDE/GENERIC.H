@@ -4,9 +4,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1990, 1993 by Borland International
+ *      Copyright (c) 1990, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -20,6 +20,14 @@
 
 #if !defined(___DEFS_H)
 #include <_defs.h>
+#endif
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
 #endif
 
 // token-pasting macros; ANSI requires an extra level of indirection
@@ -38,8 +46,8 @@
 #define implement2(z, y, x) _Paste2(z, implement2)(y, x)
 
 // macros for declaring error-handling functions
-extern _Cdecl genericerror(int, char _FAR *);    // not implemented ***
-typedef int _Cdecl (_FAR *GPT)(int, char _FAR *);
+extern _RTLENTRY genericerror(int, char _FAR *);    // not implemented ***
+typedef int _RTLENTRY (_FAR *GPT)(int, char _FAR *);
 #define set_handler(gen, tp, z) _Paste4(set_, tp, gen, _handler)(z)
 #define errorhandler(gen, tp) _Paste3(tp, gen, handler)
 #define callerror(gen, tp, z, y) (*errorhandler(gen, tp))(z, y)
@@ -49,6 +57,14 @@ typedef int _Cdecl (_FAR *GPT)(int, char _FAR *);
  * is not supplied.  If you can document any expected behavior, we
  * will try to adjust our implementation accordingly.
  */
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif
 
 #endif  /* __GENERIC_H */
 

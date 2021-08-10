@@ -48,7 +48,7 @@ F1 : Help; : Help
 F2 : ToggleBreakpoint; : ToggleBreakpoint
 F4 : RunToHere;        : RunToHere
 F5 : ZoomWindow;
-/* F6 : NextWindow; next time */
+F6 : NextWindow;
 F7 : Trace;        : Trace
 F8 : Step;         : Step
 F9 : RunProgram;   : RunProgram

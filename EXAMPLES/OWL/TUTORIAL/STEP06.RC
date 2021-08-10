@@ -1,13 +1,9 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Tutorial application -- step06.rc
 //----------------------------------------------------------------------------
-#ifndef WORKSHOP_INVOKED
-  #include <windows.h>
-#endif
-
-#include <owl\inputdia.rc>
-#include <owl\except.rc>
+#include <owl/inputdia.rc>
+#include <owl/except.rc>
 
 #define CM_FILENEW    201
 #define CM_FILEOPEN   202
@@ -16,6 +12,10 @@
 #define CM_ABOUT      205
 
 #ifdef RC_INVOKED 
+#ifndef WORKSHOP_INVOKED
+# include <windows.h>
+#endif
+
 
 COMMANDS MENU 
 {

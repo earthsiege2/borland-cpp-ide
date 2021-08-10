@@ -2,14 +2,14 @@
 /*                                                                        */
 /*  VERSION.CPP                                                           */
 /*                                                                        */
-/*  Copyright Borland International 1993                                  */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_VERSION_H )
-#include "classlib\version.h"
-#endif	// __CLASSLIB_VERSION_H
+#if !defined( CLASSLIB_VERSION_H )
+#include <classlib/version.h>
+#endif
 
 #define ID "CLASSLIB"
 

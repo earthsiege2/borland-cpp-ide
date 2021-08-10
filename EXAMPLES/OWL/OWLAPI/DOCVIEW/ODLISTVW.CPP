@@ -16,15 +16,15 @@ class _DOCVIEWCLASS TODListView : public TODListBox, public TView {
   public:
     TODListView(TDocument& doc, TWindow* parent = 0);
    ~TODListView();
-    static LPCSTR StaticName() {return "OD List View";}  // put in resource
+    static const char far* StaticName() {return "OD List View";}  // put in resource
     BOOL DirtyFlag;
 
     //
     // overridden virtuals from TView
     //
-    LPCSTR   GetViewName(){return StaticName();}
+    const char far*  GetViewName() {return StaticName();}
     TWindow* GetWindow()  {return (TWindow*)this;}
-    BOOL     SetDocTitle(LPCSTR docname, int index)
+    BOOL     SetDocTitle(const char far* docname, int index)
                           {return TODListBox::SetDocTitle(docname, index); }
     //
     // overridden virtuals from TWindow
@@ -55,11 +55,14 @@ class _DOCVIEWCLASS TODListView : public TODListBox, public TView {
     BOOL VnIsDirty()  {return DirtyFlag;}
     BOOL VnDocClosed(int omode);
     void EvDestroy();
-    void CmSelChange(){} // to prevent interpreting as unprocessed accelerator
+    void CmSelChange() {} // to prevent interpreting as unprocessed accelerator
 
   DECLARE_RESPONSE_TABLE(TODListView);
   DECLARE_STREAMABLE(,TODListView,1);
 };
+
+
+const char VirtualLastLineStr[] = "---";  // Last virtual line appended to list
 
 DEFINE_RESPONSE_TABLE1(TODListView, TODListBox)
   EV_COMMAND(CM_ODLISTUNDO,    CmEditUndo),
@@ -100,19 +103,20 @@ TODListView::TODListView(TDocument& doc, TWindow* /*parent*/)
 BOOL
 TODListView::LoadData(int top, int sel)
 {
-  char buf[100+1];
-  istream* inStream;
-  char* str;
-
   CmEditClear();
+  DeleteString(0);
   DirtyFlag = FALSE;
+
+  istream* inStream;
   if ((inStream = Doc->InStream(ios::in)) == 0)
     return FALSE;
 
   for (;;) {
+    char buf[100+1];
     inStream->getline(buf, sizeof(buf)-1);
     if (!inStream->gcount() && !inStream->good())
       break;  // if EOF or error
+    char* str;
     if (Attr.Style & LBS_HASSTRINGS) {   // strings stored in list box
       str = buf;
     } else {
@@ -121,6 +125,7 @@ TODListView::LoadData(int top, int sel)
     }
     AddString(str);
   }
+  AddString(VirtualLastLineStr);
   SetSelIndex(top);
   SetSelIndex(sel);
   delete inStream;   // close file in case process switch
@@ -133,6 +138,7 @@ TODListView::Create()
   DirtyFlag = FALSE;
   TODListBox::Create();   // throws exception TXInvalidWindow
   if (Doc->GetDocPath() == 0) {  
+    CmEditClear();         // perform any clearing initialization
     return TRUE;           // new file, no data to display
   }
   if (!LoadData(0, 0))
@@ -156,37 +162,36 @@ TODListView::VnDocClosed(int omode)
 BOOL
 TODListView::VnCommit(BOOL force)
 {
-  int count;
-  int index;
-  int len;
-  char* buf = 0;  // initialized only to prevent warning about use before def
-  LPSTR str;
-  int buflen = 0;
-  ostream* outStream;
-
   if (!force && !DirtyFlag)
     return TRUE;
+
+  ostream* outStream;
   if ((outStream = Doc->OutStream(ios::out)) == 0)
     return FALSE;
   outStream->seekp(Origin);
 
-  count = GetCount();
-  for (index = 0; index < count; index++) {
+  char* buf = 0;  // initialized only to prevent warning about use before def
+  int buflen = 0;
+  int count = GetCount();
+  for (int index = 0; index < count-1; index++) {  // don't write last virtual line
+    int len;
+    char far* str;
     if (Attr.Style & LBS_HASSTRINGS) {
       len = GetStringLen(index);
     } else {
-      str = (LPSTR)GetItemData(index);
-      len = str ? lstrlen(str) : 0;
+      str = (char far*)GetItemData(index);
+      len = str ? strlen(str) : 0;
     }
-    if (len != 0){
-      if (len >= buflen){
-         if (buflen != 0) delete buf;
-         buf = new char[buflen = len+1];
+    if (len != 0) {
+      if (len >= buflen) {
+        if (buflen != 0)
+          delete buf;
+        buf = new char[buflen = len+1];
       }
       if (Attr.Style & LBS_HASSTRINGS)
         GetString(buf, index);
       else
-        lstrcpy(buf, str);
+        strcpy(buf, str);
       *outStream << buf;
     }
     *outStream << '\n';
@@ -205,6 +210,7 @@ TODListView::VnRevert(BOOL clear)
   if (!clear && Doc->GetDocPath() != 0)
     return LoadData(0,0);
   CmEditClear();
+  DirtyFlag = FALSE;
   return TRUE;
 }
 
@@ -232,72 +238,74 @@ TODListView::CmEditCut()
 void
 TODListView::CmEditCopy()
 {
-  HANDLE cbhdl;
-  LPSTR gbuf;
-  LPSTR str;
-  int len;
   int index = GetSelIndex();
-  if (!GetCount()) return;
+  int count = GetCount();
+  if (count <= 1 || index >= count-1)
+    return;
+
+  char far* str;
+  int len;
   if (Attr.Style & LBS_HASSTRINGS) {  // strings stored in list box
     len = GetStringLen(index);
-  }else{
-    str = (LPSTR)GetItemData(index);
-    len = lstrlen(str);
+  } else {
+    str = (char far*)GetItemData(index);
+    len = strlen(str);
   }
-  TClipboard& cb = OpenClipboard();
+
+  TClipboard cb(*this);
   if (cb.EmptyClipboard()) {
-    cbhdl = GlobalAlloc(GHND,len+0+1);
-    gbuf = (char far*)GlobalLock(cbhdl);
-    if (Attr.Style & LBS_HASSTRINGS){  // strings stored in list box
+    HANDLE cbhdl = ::GlobalAlloc(GHND, len+0+1);
+    char far* gbuf = (char far*)::GlobalLock(cbhdl);
+    if (Attr.Style & LBS_HASSTRINGS) {  // strings stored in list box
       GetString(gbuf, index);
-    }else{
-      lstrcpy(gbuf, str);
+    } else {
+      strcpy(gbuf, str);
     }
-    GlobalUnlock(cbhdl);
+    ::GlobalUnlock(cbhdl);
     cb.SetClipboardData(CF_TEXT, cbhdl);
   }
-  cb.CloseClipboard();
 }
 
 void
 TODListView::CmEditPaste()
 {
-  HANDLE cbhdl;
-  LPSTR text;
-  LPSTR str;
   int index = GetSelIndex();
   if (index < 0)
     index = 0;
-//UINT format = 0;
-  TClipboard& cb = OpenClipboard();
-  if (!cb) return;  // clipboard open by another program
-//if (!cb.IsClipboardFormatAvailable(CF_TEXT)) return;
-  if ((cbhdl = cb.GetClipboardData(CF_TEXT)) != 0){
-    text = (LPSTR)GlobalLock(cbhdl);
+
+  TClipboard cb(*this);
+  if (!cb)
+    return;  // clipboard open by another window
+
+  HANDLE cbhdl = cb.GetClipboardData(CF_TEXT);
+  if (cbhdl) {
+    char far* text = (char far*)::GlobalLock(cbhdl);
+    char far* str;
     if (Attr.Style & LBS_HASSTRINGS) {   // strings stored in list box
       str = text;
-    }else{
-      str = new char[lstrlen(text)+1];
-      lstrcpy(str, text);
+    } else {
+      str = new char[strlen(text)+1];
+      strcpy(str, text);
     }
     InsertString(str, index);
-    SetSelIndex(index);
+    SetSelIndex(index+1);
     DirtyFlag = TRUE;
-    GlobalUnlock(cbhdl);
+    ::GlobalUnlock(cbhdl);
   }
-  cb.CloseClipboard();
 }
 
 void
 TODListView::CmEditDelete()
 {
-  ODItemInfo item;
   int count = GetCount();
-  if (!count)
+  int index = GetSelIndex();
+  if (count <= 1 || index >= count-1)
     return;
+
+  ODItemInfo item;
   item.Hdc = ::GetDC(*this);
-  item.Index = GetSelIndex();
-  item.Data  = (void far*) GetItemData(item.Index);
+  item.Index = index;
+  item.Data  = (void far*)GetItemData(index);
   item.State = 0;
   GetItemInfo(item);
   ::ReleaseDC(*this, item.Hdc);
@@ -305,9 +313,9 @@ TODListView::CmEditDelete()
     SetHorizontalExtent(MaxWidth = 0); // force recalculate max width
   if (!(Attr.Style & LBS_HASSTRINGS))  // strings not stored in list box
     delete item.Data;
-  DeleteString(item.Index);
-  if (item.Index == count-1) item.Index--;
-  SetSelIndex(item.Index);
+
+  DeleteString(index);
+  SetSelIndex(index);
   DirtyFlag = TRUE;
 }
 
@@ -315,17 +323,17 @@ void
 TODListView::CmEditClear()
 {
   int count = GetCount();
-  if (!count)
+  if (count == 1)
     return;
-  if (!(Attr.Style & LBS_HASSTRINGS)) {  // strings not stored in list box
-    int index;
-    for (index = 0; index < count; index++) {
-      delete (LPSTR)GetItemData(index);
-    }
+  if (count) {
+    if (!(Attr.Style & LBS_HASSTRINGS))  // strings not stored in list box
+      for (int index = 0; index < count-1; index++)
+        delete (char far*)GetItemData(index);
+    ClearList();
+    DirtyFlag = TRUE;
+    SetHorizontalExtent(MaxWidth = 0);
   }
-  ClearList();
-  DirtyFlag = TRUE;
-  SetHorizontalExtent(MaxWidth = 0);
+  AddString(VirtualLastLineStr);
 }
 
 TODListView::~TODListView()
@@ -341,30 +349,34 @@ TODListView::EvDestroy()
   TWindow::EvDestroy();
 }
 
-static int linePrompt(TWindow* parent,int index,UINT id,LPSTR buf,int buflen)
+static int linePrompt(TWindow* parent, int index, UINT id, char far* buf,int buflen)
 {
   char msg[41];
   wsprintf(msg, string(*parent->GetModule(), IDS_ODLISTNUM).c_str(), index);
-  LPCSTR prompt = string(*parent->GetModule(), id).c_str();
+  const char far* prompt = string(*parent->GetModule(), id).c_str();
   return TInputDialog(parent, msg, prompt, buf, buflen).Execute();
 }
 
 void
 TODListView::CmEditAdd()
 {
-  LPSTR str;
   char inputText[80];
-  int index = GetSelIndex() + 1;
-  inputText[0] = 0;
+  *inputText = 0;
+
+  int index = GetSelIndex();
+  if (index < 0)
+    index = 0;
+
   if (linePrompt(this,index+1,CM_ODLISTADD,inputText,sizeof(inputText))==IDOK) {
+    char far* str;
     if (Attr.Style & LBS_HASSTRINGS) {   // strings stored in list box
       str = inputText;
     } else {
-      str = new char[lstrlen(inputText)+1];
-      lstrcpy(str, inputText);
+      str = new char[strlen(inputText)+1];
+      strcpy(str, inputText);
     }
     InsertString(str, index);
-    SetSelIndex(index);
+    SetSelIndex(index+1);
     DirtyFlag = TRUE;
   }
 }
@@ -372,29 +384,29 @@ TODListView::CmEditAdd()
 void
 TODListView::CmEditItem()
 {
-  LPSTR str;
+  int index = GetSelIndex();
+  if (index < 0 || index >= GetCount()-1)
+    return;
+
   int len;
   char* inputText;
-  int index = GetSelIndex();
-  if (index < 0)
-    return;
   if (Attr.Style & LBS_HASSTRINGS) { // strings stored in list box
     len = GetStringLen(index);
     inputText = new char[len + 81];
     GetString(inputText, index);
-  }else{
-    str = (LPSTR)GetItemData(index);
-    len = lstrlen(str);
+  } else {
+    char far* str = (char far*)GetItemData(index);
+    len = strlen(str);
     inputText = new char[len + 81];
-    lstrcpy(inputText, str);
+    strcpy(inputText, str);
   }
-  if (linePrompt(this,index+1,CM_ODLISTEDIT,inputText, len + 81)==IDOK){
-    if (Attr.Style & LBS_HASSTRINGS){  // strings stored in list box
+  if (linePrompt(this,index+1,CM_ODLISTEDIT,inputText, len + 81)==IDOK) {
+    char far* str;
+    if (Attr.Style & LBS_HASSTRINGS) {  // strings stored in list box
       str = inputText;
-    }else{
-      delete (LPSTR)GetItemData(index);
-      str = new char[lstrlen(inputText)+1];
-      lstrcpy(str, inputText);
+    } else {
+      delete (char far*)GetItemData(index);
+      str = strnewdup(inputText);
     }
     DeleteString(index);
     InsertString(str, index);

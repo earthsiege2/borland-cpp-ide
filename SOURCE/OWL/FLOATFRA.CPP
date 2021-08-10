@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\floatfra.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TFloatingFrame.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\floatfra.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/floatfra.h>
+#include <owl/dc.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -18,24 +19,25 @@ DEFINE_RESPONSE_TABLE2(TFloatingFrame, TTinyCaption, TFrameWindow)
   EV_WM_SYSCOMMAND,
   EV_WM_NCCALCSIZE,
   EV_WM_NCPAINT,
+  EV_WM_NCHITTEST,
 END_RESPONSE_TABLE;
 
 TFloatingFrame::TFloatingFrame(TWindow* owner, char* title, TWindow* client, 
-                               BOOL shrinkToClient, int captionHeight,
-                               BOOL popupPalette, TModule* module)
-  : TFrameWindow(owner, title, client, shrinkToClient, module),
-    TTinyCaption(),
-    Margin(2, 2)
+                               bool shrinkToClient, int captionHeight,
+                               bool popupPalette, TModule* module)
+:
+  TFrameWindow(owner, title, client, shrinkToClient, module),
+  TTinyCaption(),
+  Margin(2, 2)
 {
   FloatingPaletteEnabled = popupPalette;
-  EnableTinyCaption(captionHeight, FloatingPaletteEnabled);
   if (FloatingPaletteEnabled) {
     Attr.Style = WS_POPUP | WS_BORDER | WS_VISIBLE;
 
     //
-    // Use close box (TRUE) for palettes
+    // Use close box (true) for palettes, & calc dimensions w/ new styles
     //
-    EnableTinyCaption(TFloatingFrame::DefaultCaptionHeight, TRUE);
+    EnableTinyCaption(captionHeight, true);
 
     //
     // Windows with a popup style ignore CW_USEDEFAULT style
@@ -47,13 +49,15 @@ TFloatingFrame::TFloatingFrame(TWindow* owner, char* title, TWindow* client,
     Attr.W = 100;
     Attr.H = 50;
   }
+  else
+    EnableTinyCaption(captionHeight, false);
 }
 
 //
 // Resolving ambiguous mixin reference
 //
 LRESULT
-TFloatingFrame::EvCommand(UINT id, HWND hWndCtl, UINT notifyCode)
+TFloatingFrame::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
 {
   LRESULT er;
   if (TTinyCaption::DoCommand(id, hWndCtl, notifyCode, er) == esComplete)
@@ -69,15 +73,15 @@ TFloatingFrame::EvCommand(UINT id, HWND hWndCtl, UINT notifyCode)
 // function to avoid duplicate default processing
 //
 void
-TFloatingFrame::EvSysCommand(UINT cmdType, TPoint& p)
+TFloatingFrame::EvSysCommand(uint cmdType, TPoint& p)
 {
   if (TTinyCaption::DoSysCommand(cmdType, p) == esComplete)
     return;
   TFrameWindow::EvSysCommand(cmdType,p);
 }
 
-UINT
-TFloatingFrame::EvNCCalcSize(BOOL calcValidRects, NCCALCSIZE_PARAMS far& calcSize)
+uint
+TFloatingFrame::EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize)
 {
   // Adjust margins for extra edge around palette
   //
@@ -88,7 +92,7 @@ TFloatingFrame::EvNCCalcSize(BOOL calcValidRects, NCCALCSIZE_PARAMS far& calcSiz
     calcSize.rgrc[0].bottom -= Margin.cy * GetSystemMetrics(SM_CYBORDER);
   }
 
-  UINT er;
+  uint er;
   if (DoNCCalcSize(calcValidRects, calcSize, er) == esComplete)
     return er;
   return TFrameWindow::EvNCCalcSize(calcValidRects, calcSize);
@@ -121,6 +125,34 @@ TFloatingFrame::EvNCPaint()
     dc.TextRect(wr.right-mx, wr.top, wr.right, wr.bottom);         // right
     dc.TextRect(wr.left+mx, wr.bottom-my, wr.right-mx, wr.bottom); // bottom
   }
+}
+
+//
+// Return where in the non client area we are.  We only handle caption
+// bar area
+//
+uint
+TFloatingFrame::EvNCHitTest(TPoint& screenPt)
+{
+  uint er;
+  if (TTinyCaption::DoNCHitTest(screenPt, er) == esComplete ||
+      DoNCHitTest(screenPt, er) == esComplete)
+    return er;
+  return TWindow::EvNCHitTest(screenPt);
+}
+
+TEventStatus
+TFloatingFrame::DoNCHitTest(TPoint& screenPt, uint& evRes)
+{
+  if (FloatingPaletteEnabled) {
+    TPoint clientOffs(0,0);
+    ClientToScreen(clientOffs);
+    if (!GetClientRect().Contains(screenPt-clientOffs)) {
+      evRes = HTCAPTION;
+      return esComplete;
+    }
+  }
+  return esPartial;
 }
 
 #endif

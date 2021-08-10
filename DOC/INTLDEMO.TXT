@@ -11,7 +11,7 @@ International API
 
     The LOCALE.BLL  Support for these locales is contained in the
  file is installed  LOCALE.BLL library. By default, the "C" locale is in
-        in BC4\BIN  effect. However, a call to setlocale dynamically links
+       in BC45\BIN  effect. However, a call to setlocale dynamically links
         directory.  the LOCALE.BLL library to your program. A locale-
                     specific module is enabled by a call to setlocale. The
                     call will also specify which character set to use with
@@ -23,7 +23,7 @@ International API
 
                     If the call to setlocale can be resolved, several
                     character-handling functions change their behavior.
-                    Because Borland C++ 4.0 international API currently
+                    Because Borland C++ 4.5 international API currently
                     supports only 8-bit characters (thereby enabling
                     recognition of as many as 256 characters), only
                     single-byte character-handling functions are affected.
@@ -42,7 +42,7 @@ API sample program
                     sample program (named INTLDEMO.EXE) is an ObjectWindows
                     application. All source code and a project file for the
                     sample are provided. The sample program INTLDEMO (in
-                    BC4\EXAMPLES\WINDOWS\INTLDEMO) demonstrates how the
+                    BC45\EXAMPLES\WINDOWS\INTLDEMO) demonstrates how the
                     setlocale function can produce an "internationally
                     aware" Windows application. You can switch the inter-
                     face language at run time between English, French, and

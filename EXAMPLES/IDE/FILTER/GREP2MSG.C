@@ -3,6 +3,7 @@
 */
 
 #include "ToolApi.H"
+#include "filtrc.h"
 
 #include <stdlib.h>
 #include <mem.h>
@@ -23,6 +24,8 @@ int posted = 0;
 IDE_ToolAPIFunc IDE_ToolAPI[IDE_NumFunctions];
 
 /* Global variables use to parse program output */
+HINSTANCE  globInst;
+
 FileHandle Pipefh;
 
 HMEM       hBuffer;
@@ -190,7 +193,9 @@ void FilterToIDE( void )
   Pipefh = IDE_Open( PIPEID, READ_WRITE );
   if (Pipefh < 0)
   {
-    IDE_ErrorBox( "Grep2Msg.DLL: Cannot filter output." );
+    char error[100];
+    LoadString( globInst, IDS_CANNOTFILTER, error, sizeof(error));
+    IDE_ErrorBox( error );
     return;
   }
 
@@ -247,6 +252,7 @@ int far pascal _export Run( pTransferBlock TransBlock )
 int far pascal LibMain( HINSTANCE hInstance, WORD wDataSegment,
 			WORD wHeapSize, LPSTR lpszCmdLine )
 {
+  globInst = hInstance;
   return 1;
 }
 

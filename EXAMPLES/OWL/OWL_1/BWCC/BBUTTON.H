@@ -13,7 +13,7 @@
 //  class TBButton
 //  ----- --------
 //
-class _EXPCLASS TBButton : public TButton {
+class  TBButton : public TButton {
   public:
     TBButton(TWindow*        parent,
              int             id,
@@ -27,7 +27,7 @@ class _EXPCLASS TBButton : public TButton {
   protected:
     char far* GetClassName();
 
-  DECLARE_STREAMABLE_FROM_BASE(_EXPCLASS, TBButton, TButton);
+  DECLARE_STREAMABLE_FROM_BASE(, TBButton, TButton);
 };
 
 #endif //__BBUTTON_H

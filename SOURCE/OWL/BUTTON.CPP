@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\button.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TButton.  This defines the basic behavior
 //   of all buttons.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\button.h>
-#include <owl\applicat.h>
+#include <owl/owlpch.h>
+#include <owl/button.h>
+#include <owl/applicat.h>
 #include <bwcc.h>
 
 #if !defined(SECTION) || SECTION == 1
@@ -24,12 +25,13 @@ TButton::TButton(TWindow*        parent,
                  int             id,
                  const char far* text,
                  int x, int y, int w, int h,
-                 BOOL            isDefault,
+                 bool            isDefault,
                  TModule*        module)
-  : TControl(parent, id, text, x, y, w, h, module)
+:
+  TControl(parent, id, text, x, y, w, h, module)
 {
-  IsCurrentDefPB = FALSE;    // not used for buttons in windows
-  IsDefPB = FALSE;           // not used for buttons in windows
+  IsCurrentDefPB = false;    // not used for buttons in windows
+  IsDefPB = false;           // not used for buttons in windows
 
   if (isDefault)
     Attr.Style |= BS_DEFPUSHBUTTON;
@@ -46,11 +48,13 @@ TButton::TButton(TWindow*        parent,
 //
 TButton::TButton(TWindow*   parent,
                  int        resourceId,
-                 TModule*   module) : TControl(parent, resourceId, module)
+                 TModule*   module)
+:
+  TControl(parent, resourceId, module)
 {
   DisableTransfer();
-  IsDefPB = FALSE;         // needed for drawable buttons
-  IsCurrentDefPB = FALSE;  // needed for drawable buttons
+  IsDefPB = false;         // needed for drawable buttons
+  IsCurrentDefPB = false;  // needed for drawable buttons
 }
 
 //
@@ -69,7 +73,7 @@ TButton::GetClassName()
 // if this is a drawable button which is supposed to act like a DefPushButton,
 // send DM_SETDEFID to Parent to make this into Parent's default pushbutton
 //
-// this only works (and IsDefPB should only be TRUE) if Parent is a dialog
+// this only works (and IsDefPB should only be true) if Parent is a dialog
 //
 void
 TButton::SetupWindow()
@@ -82,7 +86,7 @@ TButton::SetupWindow()
 // if this is a drawable button we tell Windows whether we want to
 // be treated as the current default push button or not
 //
-UINT
+uint
 TButton::EvGetDlgCode(MSG far* msg)
 {
   if ((Attr.Style & BS_OWNERDRAW) != BS_OWNERDRAW)
@@ -107,14 +111,14 @@ TButton::BMSetStyle(WPARAM wParam, LPARAM)
     DefaultProcessing();
 
   else if (wParam == BS_DEFPUSHBUTTON) {
-    IsCurrentDefPB = TRUE;
+    IsCurrentDefPB = true;
     Invalidate();
-
-  } else if (wParam == BS_PUSHBUTTON) {
-    IsCurrentDefPB = FALSE;
+  }
+  else if (wParam == BS_PUSHBUTTON) {
+    IsCurrentDefPB = false;
     Invalidate();
-
-  } else {
+  }
+  else {
     DefaultProcessing();
   }
 

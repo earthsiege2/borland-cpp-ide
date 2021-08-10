@@ -1,18 +1,19 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   include\owl\listview.h
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TListView
 //----------------------------------------------------------------------------
-#if !defined(__OWL_LISTVIEW_H)
-#define __OWL_LISTVIEW_H
+#if !defined(OWL_LISTVIEW_H)
+#define OWL_LISTVIEW_H
 
-#if !defined(__OWL_DOCMANAG_H)
-  #include <owl\docmanag.h>
+#if !defined(OWL_DOCMANAG_H)
+# include <owl/docmanag.h>
 #endif
-#if !defined(__OWL_LISTBOX_H)
-  #include <owl\listbox.h>
+#if !defined(OWL_LISTBOX_H)
+# include <owl/listbox.h>
 #endif
-#include <owl\listview.rc>
+#include <owl/listview.rh>
 
 //
 //  class TListView
@@ -21,26 +22,33 @@
 class _OWLCLASS TListView : public TListBox, public TView {
   public:
     TListView(TDocument& doc, TWindow* parent = 0);
-    static LPCSTR StaticName() {return "List View";}  // put in resource
-    BOOL DirtyFlag;
+    static const char far* StaticName() {return "List View";}  // put in resource
+    int  DirtyFlag;
+
     //
     // overridden virtuals from TView
     //
-    LPCSTR   GetViewName(){return StaticName();}
+    const char far* GetViewName() {return StaticName();}
     TWindow* GetWindow()  {return (TWindow*)this;}
-    BOOL     SetDocTitle(LPCSTR docname, int index)
+    bool     SetDocTitle(const char far* docname, int index)
                           {return TListBox::SetDocTitle(docname, index); }
+
+    //
+    // overridden virtuals from TListBox
+    //
+    int  AddString(const char far* str);
+
     //
     // overridden virtuals from TWindow
     //
-    BOOL CanClose()   {return TListBox::CanClose() && Doc->CanClose();}
-    BOOL Create();
+    bool CanClose()   {return TListBox::CanClose() && Doc->CanClose();}
+    bool Create();
 
   protected:
     long Origin;
     int  MaxWidth;    // maximum horizontal extent
-    void SetExtent(LPSTR str);
-    BOOL LoadData(int top, int sel);
+    void SetExtent(const char far* str);
+    bool LoadData(int top, int sel);
     //
     // message response functions
     //
@@ -52,17 +60,17 @@ class _OWLCLASS TListView : public TListBox, public TView {
     void CmEditClear();
     void CmEditAdd();
     void CmEditItem();
-    UINT EvGetDlgCode(MSG far*);
-    BOOL VnDocClosed(int omode);
-    BOOL VnCommit(BOOL force);
-    BOOL VnRevert(BOOL clear);
-    BOOL VnIsWindow(HWND hWnd) {return HWindow == hWnd;}
-    BOOL VnIsDirty()       {return DirtyFlag;}
-    void CmSelChange(){} // to prevent interpreting as unprocessed accelerator
+    uint EvGetDlgCode(MSG far*);
+    bool VnDocClosed(int omode);
+    bool VnCommit(bool force);
+    bool VnRevert(bool clear);
+    bool VnIsWindow(HWND hWnd) {return HWindow == hWnd;}
+    bool VnIsDirty() {return DirtyFlag != 0;}
+    void CmSelChange() {} // to prevent interpreting as unprocessed accelerator
 
   DECLARE_RESPONSE_TABLE(TListView);
   DECLARE_STREAMABLE(_OWLCLASS, TListView,1);
 };
 
-#endif  // __OWL_LISTVIEW_H
+#endif  // OWL_LISTVIEW_H
 

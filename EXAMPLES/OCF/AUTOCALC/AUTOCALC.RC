@@ -1,0 +1,164 @@
+//----------------------------------------------------------------------------
+// ObjectComponents - (C) Copyright 1994 by Borland International
+//----------------------------------------------------------------------------
+#include <windows.h>
+#include "autocalc.rh"
+#include <osl\locale.rh>
+
+IDD_CALC DIALOG DISCARDABLE  0, 0, 92, 114
+STYLE    WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX
+CLASS    APP_NAME
+CAPTION  APP_NAME
+{
+  PUSHBUTTON "0", IDC_ZERO,          9, 90, 14, 15
+  PUSHBUTTON "1", IDC_ONE,           9, 70, 15, 16
+  PUSHBUTTON "2", IDC_TWO,          29, 70, 16, 15
+  PUSHBUTTON "3", IDC_THREE,        49, 70, 15, 15
+  PUSHBUTTON "4", IDC_FOUR,          9, 50, 15, 14
+  PUSHBUTTON "5", IDC_FIVE,         29, 50, 15, 15
+  PUSHBUTTON "6", IDC_SIX,          49, 50, 15, 15
+  PUSHBUTTON "7", IDC_SEVEN,         9, 30, 15, 15
+  PUSHBUTTON "8", IDC_EIGHT,        29, 30, 15, 15
+  PUSHBUTTON "9", IDC_NINE,         49, 30, 15, 15
+  PUSHBUTTON "=", IDC_EQUALS,       49, 90, 14, 15
+  PUSHBUTTON "+", IDC_PLUS,         69, 30, 15, 15
+  PUSHBUTTON "-", IDC_MINUS,        69, 50, 14, 15
+  PUSHBUTTON "*", IDC_MULT,         69, 70, 15, 15
+  PUSHBUTTON "/", IDC_DIV,          69, 90, 15, 15
+  PUSHBUTTON "C", IDC_CLEAR,        29, 90, 16, 15
+  EDITTEXT        IDC_DISPLAY,       9,  6, 76, 15, ES_MULTILINE | ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY
+}
+
+IDI_ICON ICON
+{
+ '00 00 01 00 01 00 20 20 10 00 00 00 00 00 E8 02'
+ '00 00 16 00 00 00 28 00 00 00 20 00 00 00 40 00'
+ '00 00 01 00 04 00 00 00 00 00 80 02 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 80 00 00 80 00 00 00 80 80 00 80 00'
+ '00 00 80 00 80 00 80 80 00 00 80 80 80 00 C0 C0'
+ 'C0 00 00 00 FF 00 00 FF 00 00 00 FF FF 00 FF 00'
+ '00 00 FF 00 FF 00 FF FF 00 00 FF FF FF 00 00 00'
+ '07 77 77 77 77 77 77 77 77 77 77 77 77 00 00 00'
+ '07 77 77 77 77 77 77 77 77 77 77 77 77 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 77 00 00 00'
+ 'CC CC CC CC CC CC CC CC CC CC CC C0 77 00 00 00'
+ 'CC 00 00 C0 00 0C 00 00 C0 00 0C C0 77 00 00 00'
+ 'CC 08 70 C0 87 0C 08 70 C0 87 0C C0 77 00 00 00'
+ 'CC 0F 80 C0 F8 0C 0F 80 C0 F8 0C C0 77 00 00 00'
+ 'CC 00 00 C0 00 0C 00 00 C0 00 0C C0 77 00 00 00'
+ 'CC CC CC CC CC CC CC CC CC CC CC C0 77 00 00 00'
+ 'CC 00 00 C0 00 0C 00 00 C0 00 0C C0 77 00 00 00'
+ 'CC 08 70 C0 87 0C 08 70 C0 87 0C C0 77 00 00 00'
+ 'CC 0F 80 C0 F8 0C 0F 80 C0 F8 0C C0 77 00 00 00'
+ 'CC 00 00 C0 00 0C 00 00 C0 00 0C C0 77 00 00 00'
+ 'CC CC CC CC CC CC CC CC CC CC CC C0 77 00 00 00'
+ 'CC 00 00 C0 00 0C 00 00 C0 00 0C C0 77 00 00 00'
+ 'CC 08 70 C0 87 0C 08 70 C0 87 0C C0 77 00 00 00'
+ 'CC 0F 80 C0 F8 0C 0F 80 C0 F8 0C C0 77 00 00 00'
+ 'CC 00 00 C0 00 0C 00 00 C0 00 0C C0 77 00 00 00'
+ 'CC CC CC CC CC CC CC CC CC CC CC C0 77 00 00 00'
+ '99 00 00 C0 00 0C 00 00 C0 00 0C C0 77 00 00 00'
+ '99 08 70 90 87 0C 08 70 C0 87 0C C0 77 00 00 00'
+ '99 0F 80 90 F8 0C 0F 80 C0 F8 0C C0 77 00 00 00'
+ '99 00 00 90 00 0C 00 00 C0 00 0C C0 77 00 00 00'
+ '99 99 99 99 99 CC CC CC CC CC CC C0 77 00 00 00'
+ '99 99 99 99 99 CC CC CC CC CC CC C0 77 00 00 00'
+ '99 99 99 99 99 9C CC CC CC CC CC C0 77 00 00 00'
+ '99 00 00 00 00 00 00 00 00 00 0C C0 77 00 00 00'
+ '99 00 00 00 00 0B 0B 0B 0B 0B 0C C0 77 00 00 00'
+ '99 00 00 00 00 0B 0B 0B 0B 0B 0C C0 77 00 00 00'
+ '99 00 00 00 00 00 00 00 00 00 0C C0 77 00 00 00'
+ '99 99 99 99 99 9C CC CC CC CC CC C0 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 F8 00'
+ '00 03 F8 00 00 03 E0 00 00 03 E0 00 00 03 E0 00'
+ '00 03 E0 00 00 03 E0 00 00 03 E0 00 00 03 E0 00'
+ '00 03 E0 00 00 03 E0 00 00 03 E0 00 00 03 E0 00'
+ '00 03 E0 00 00 03 E0 00 00 03 E0 00 00 03 E0 00'
+ '00 03 E0 00 00 03 E0 00 00 03 E0 00 00 03 E0 00'
+ '00 03 E0 00 00 03 E0 00 00 03 E0 00 00 03 E0 00'
+ '00 03 E0 00 00 03 E0 00 00 03 E0 00 00 03 E0 00'
+ '00 03 E0 00 00 03 E0 00 00 0F E0 00 00 0F'
+}
+
+typehelp     XLAT "autocalc.hlp"
+           GERMAN "acalcger.hlp"
+             XEND
+
+AppName      XLAT "Automated Calculator 1.0 Application"
+           GERMAN "Automatisierte Taschenrechner-Anwendung 1.0"
+             XEND
+AppDebug     XLAT "Automated Calculator 1.0 Debug App"
+           GERMAN "Automatisierte Taschenrechner-Anwendung 1.0, Debug"
+             XEND
+AppDLLServer XLAT "Automated Calculator 1.0 DLL Server"
+           GERMAN "Automatisierte Taschenrechner 1.0, DLL-Server"
+             XEND
+
+TCalc        XLAT "Automated Calculator Class"
+           GERMAN "Automatisierte Taschenrechner-Klasse" XEND
+TCalcWindow  XLAT "Calculator Window Properties"
+           GERMAN "Fenstereigenschaften des Taschenrechners" XEND
+TMyArray     XLAT "Array Collection"
+           GERMAN "Integer-Liste" XEND
+TCalcButtons XLAT "Button Collection"
+           GERMAN "Schalterliste" XEND
+TCalcButton  XLAT "Calculator Button"
+           GERMAN "Taschenrechner-Schalter" XEND
+
+Add          XLAT GERMAN "Addieren" XEND
+Subtract     XLAT GERMAN "Subtrahieren" XEND
+Multiply     XLAT GERMAN "Multiplizieren" XEND
+Divide       XLAT GERMAN "Dividieren" XEND
+Equals       XLAT GERMAN "Ergeben" XEND
+
+Accumulator  XLAT GERMAN "Akkumulator" XEND
+Accumulator_ XLAT "Calculator accumulator" GERMAN "Taschenrechner-Akkumulator" XEND
+Activate     XLAT GERMAN "Aktivieren" XEND
+Activate_    XLAT "Button State" GERMAN "Schalterstatus" XEND
+Application  XLAT GERMAN "Anwendung" XEND
+Application_ XLAT "Application object" GERMAN "Anwendungsobjekt" XEND
+Array        XLAT GERMAN "Matrix" XEND
+Array_       XLAT "Array as collection" GERMAN "Matrix als Liste" XEND
+Button       XLAT GERMAN "Schalter" XEND
+Button_      XLAT "Button push sequence" GERMAN "Schaltreihenfolge" XEND
+Buttons      XLAT GERMAN "Schalter" XEND
+Buttons_     XLAT "Button Collection" GERMAN "Schalter-Liste" XEND
+Calculator   XLAT GERMAN "Taschenrechner" XEND
+Caption      XLAT GERMAN "Titel" XEND
+Caption_     XLAT "Window Title" GERMAN "Fenstertitel" XEND
+Clear        XLAT GERMAN "Löschen" XEND
+Clear_       XLAT "Clear accumulator" GERMAN "Akkumulator löschen" XEND
+Collection   XLAT GERMAN "Liste"XEND
+Color        XLAT GERMAN "Farbe" XEND
+Color_       XLAT "Background Color" GERMAN "Hintergrundfarbe" XEND
+Count        XLAT GERMAN "Anzahl" XEND
+CountAr_     XLAT "Array Count" GERMAN "Matrixanzahl" XEND
+CountBu_     XLAT "Button Count" GERMAN "Button-Anzahl" XEND
+Display      XLAT GERMAN "Anzeigen" XEND
+Display_     XLAT "Update display" GERMAN "Anzeige aktualisieren" XEND
+Evaluate     XLAT GERMAN "Auswerten" XEND
+Evaluate_    XLAT "Evaluate operand, op" GERMAN "Operand, Op auswerten" XEND
+Height       XLAT GERMAN "Höhe" XEND
+Height_      XLAT "Window Height" GERMAN "Fensterhöhe" XEND
+Index        XLAT XEND
+Item         XLAT GERMAN "Element" XEND
+ItemAr_      XLAT "Access Array Element" GERMAN "Auf Matrixelement zugreifen" XEND
+ItemBu_      XLAT "Button Collection Item" GERMAN "Schalter-Element" XEND
+LookAtWindow XLAT GERMAN "UntersucheFenster" XEND
+LookAtWindow_ XLAT "Test of object as arg" GERMAN "Objekt als Argument testen" XEND
+Key          XLAT GERMAN "Taste" XEND
+Op_          XLAT "Pending operation" GERMAN "Nächste Operation" XEND
+Operand_     XLAT "Pending operand" GERMAN "Nächster Operand" XEND
+Quit         XLAT GERMAN "Beenden" XEND
+Quit_        XLAT "Terminate calculator" GERMAN "Programm beenden" XEND
+Update       XLAT GERMAN "Aktualisierung" XEND
+Update_      XLAT "Callback Notification Object" GERMAN "Benachrichtegungobjekt" XEND
+Text         XLAT XEND
+Text_        XLAT "Button Text" GERMAN "Schaltertext" XEND
+Visible      XLAT GERMAN "Sichtbar" XEND
+Visible_     XLAT "Visible to user" GERMAN "Sichtbar für Benutzer" XEND
+Width        XLAT GERMAN "Breite" XEND
+Width_       XLAT "Window Width" GERMAN "Fensterbreite" XEND
+Window       XLAT GERMAN "Fenster" XEND
+Window_      XLAT "Calculator window" GERMAN "Taschenrechner-Fenster" XEND

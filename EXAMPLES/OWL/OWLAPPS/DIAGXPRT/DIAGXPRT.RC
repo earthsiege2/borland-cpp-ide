@@ -5,53 +5,53 @@
 
 #include  "diagxprt.rh"
 
-#ifdef    RC_INVOKED
+#if defined(RC_INVOKED)
 
 #include  <owl\editfile.rc>
+#define NO_IDS_EDITSEARCH
 #include  <owl\editsear.rc>
-
 
 // Toolbar hints
 //
 STRINGTABLE
 {
-  CM_FILENEW, "Clear current log"
-  CM_FILEOPEN, "Open an existing log file"
-  CM_FILESAVE, "Save current log file"
-  CM_FILESAVEAS, "Save current log file with new name"
+  CM_FILENEW,      "Clear current log"
+  CM_FILEOPEN,     "Open an existing log file"
+  CM_FILESAVE,     "Save current log file"
+  CM_FILESAVEAS,   "Save current log file with new name"
 
-  CM_EDITCOPY, "Copy selected text to clipboard"
-  CM_EDITCUT,  "Cut selected text to clipboard"
-  CM_EDITPASTE, "Paste text from clipboard"
+  CM_EDITCOPY,     "Copy selected text to clipboard"
+  CM_EDITCUT,      "Cut selected text to clipboard"
+  CM_EDITPASTE,    "Paste text from clipboard"
   
-  CM_EDITFIND, "Find"
-  CM_EDITREPLACE, "Replace"
+  CM_EDITFIND,     "Find"
+  CM_EDITREPLACE,  "Replace"
   CM_EDITFINDNEXT, "Find/Replace next"
   
-  CM_SETUP,  "Configure diagnostic groups"
-  CM_START,  "Start OWL diagnostic message logging"
-  CM_STOP,   "Stop OWL diagnostic message logging"
+  CM_SETUP,        "Configure diagnostic groups"
+  CM_START,        "Start OWL diagnostic message logging"
+  CM_STOP,         "Stop OWL diagnostic message logging"
 
-  CM_MEM,    "Display GlobalCompact(), MemManInfo() and SystemHeapInfo()"
-  CM_HELP,   "Display help text"
+  CM_MEM,          "Display GlobalCompact(), MemManInfo() and SystemHeapInfo()"
+  CM_HELP,         "Display help text"
 }
 
 STRINGTABLE
 {
-  IDS_TITLE,    "Owl Diag Expert"
-  IDS_FONT0_NAME,   "Helvetica"
-  IDS_FONT0_SIZE,   "16"
-  IDS_FONT1_NAME,   "Helvetica"
-  IDS_FONT1_SIZE,   "11"
+  IDS_TITLE,      "Owl Diag Expert"
+  IDS_FONT0_NAME, "Helvetica"
+  IDS_FONT0_SIZE, "16"
+  IDS_FONT1_NAME, "Helvetica"
+  IDS_FONT1_SIZE, "11"
 }
 
 STRINGTABLE
 {
-  IDS_DECORATED,    "&Decorated"
+  IDS_DECORATED,  "&Decorated"
   IDS_START,      "S&tart"
-  IDS_STOP,     "S&top"
-  IDS_MORE,     "&More>>>"
-  IDS_LESS,     "<<<&Less"
+  IDS_STOP,       "S&top"
+  IDS_MORE,       "&More>>>"
+  IDS_LESS,       "<<<&Less"
 }
 
 STRINGTABLE
@@ -118,7 +118,6 @@ CM_FILEOPEN BITMAP LOADONCALL MOVEABLE
   '88 88 88 88 01 12'
 }
 
-
 CM_FILESAVE BITMAP LOADONCALL MOVEABLE 
 {
   '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
@@ -146,7 +145,6 @@ CM_FILESAVE BITMAP LOADONCALL MOVEABLE
   '88 88 88 88 46 64'
 }
 
-
 CM_FILESAVEAS BITMAP LOADONCALL MOVEABLE 
 {
   '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
@@ -173,7 +171,6 @@ CM_FILESAVEAS BITMAP LOADONCALL MOVEABLE
   '00 08 88 88 88 88 88 88 00 00 88 88 88 88 88 88'
   '88 88 88 88 00 00'
 }
-
 
 CM_FILEPRINT BITMAP LOADONCALL MOVEABLE 
 {

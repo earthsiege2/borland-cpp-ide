@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  HEAPSEL.CPP                                                           */
 /*                                                                        */
-/*  Copyright Borland International 1993                                  */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
@@ -18,15 +18,15 @@
 
 #if !defined( __WINDOWS_H )
 #include <windows.h>
-#endif	// __WINDOWS_H
+#endif
 
 #if !defined( __DOS_H )
 #include <dos.h>
-#endif	// __DOS_H
+#endif
 
-#if !defined( __CLASSLIB_HEAPSEL_H )
-#include "classlib\heapsel.h"
-#endif	// __CLASSLIB_HEAPSEL_H
+#if !defined( CLASSLIB_HEAPSEL_H )
+#include <classlib/heapsel.h>
+#endif
 
 void _BIDSFARDATA *THeapSelector::Allocate( size_t sz ) const
 {
@@ -42,4 +42,4 @@ void THeapSelector::Free( void _BIDSFARDATA *block )
         LocalFree( hMem );
 }
 
-#endif  // __FLAT__
+#endif

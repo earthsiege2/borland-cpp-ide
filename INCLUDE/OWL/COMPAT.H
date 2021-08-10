@@ -1,44 +1,54 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\compat.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
-#if !defined(__OWL_COMPAT_H)
-#define __OWL_COMPAT_H
+#if !defined(OWL_COMPAT_H)
+#define OWL_COMPAT_H
 
-#if !defined(BI_OLDNAMES)
-#define BI_OLDNAMES
+#if defined(__WIN32__)
+#pragma message Check maximum identifier length setting.  Must equal 55 or greater.
 #endif
 
-#if !defined(__OWL_OWLDEFS_H)
-  #include <owl\owldefs.h>
+
+#if !defined(BI_OLDNAMES)
+# define BI_OLDNAMES
+#endif
+
+#include <owl/owlpch.h>
+
+#if !defined(OWL_OWLDEFS_H)
+# include <owl/owldefs.h>
 #endif
 
 struct TMessage {
   HWND  Receiver;
-  WORD  Message;
+  uint16  Message;
 
   union {
-    WORD  WParam;
+    uint16  WParam;
 
     struct tagWP {
-      BYTE Lo;
-      BYTE Hi;
+      uint8 Lo;
+      uint8 Hi;
     } WP;
   };
 
   union {
-    DWORD  LParam;
+    uint32  LParam;
 
     struct tagLP {
-      WORD Lo;
-      WORD Hi;
+      uint16 Lo;
+      uint16 Hi;
     } LP;
   };
 
   long  Result;
 };
 
-TMessage _OWLFUNC __GetTMessage();
+class _OWLCLASS TWindow;
+TMessage _OWLFUNC __GetTMessageWin(TWindow* win);
+#define __GetTMessage() __GetTMessageWin(this)
 
 //
 // Constants for application messages
@@ -58,7 +68,7 @@ TMessage _OWLFUNC __GetTMessage();
 
 #define WM_RESERVED             WM_INTERNAL - WM_FIRST
 
-#define ID_RESERVED             ID_INTERNAL - Id_FIRST
+#define ID_RESERVED             ID_INTERNAL - ID_FIRST
 #define ID_FIRSTMDICHILD        ID_RESERVED + 1
 #define ID_MDICLIENT            ID_RESERVED + 2
 
@@ -84,4 +94,4 @@ typedef char _FAR * Pchar;
 typedef const char _FAR * PCchar;
 typedef const void _FAR * PCvoid;
 
-#endif  // __OWL_COMPAT_H
+#endif  // OWL_COMPAT_H

@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  VERSION.H                                                             */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/

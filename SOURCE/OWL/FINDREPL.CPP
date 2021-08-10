@@ -1,30 +1,59 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\findrepl.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of FindReplace- abstract, Find-, Replace- common Dialog
 //   classes
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\findrepl.h>
+#include <owl/owlpch.h>
+#include <owl/findrepl.h>
 #if !defined(ctlFirst)
-  #include <dlgs.h>
+# include <dlgs.h>
 #endif
 
 #if !defined(SECTION) || SECTION == 1
 
-TFindReplaceDialog::TData::TData(DWORD flags, int buffSize)
-  : Flags(flags), BuffSize(buffSize), Error(0)
+TFindReplaceDialog::TData::TData(uint32 flags, int buffSize)
+:
+  Flags(flags), BuffSize(buffSize), Error(0)
 {
   FindWhat = new char[BuffSize];
   ReplaceWith = new char[BuffSize];
   *FindWhat = *ReplaceWith = 0;
 }
 
+TFindReplaceDialog::TData::TData(const TData& src)
+:
+  Flags(src.Flags),
+  BuffSize(src.BuffSize),
+  Error(0)
+{
+  FindWhat = strnewdup(src.FindWhat, BuffSize);
+  ReplaceWith = strnewdup(src.ReplaceWith, BuffSize);
+}
+
+
 TFindReplaceDialog::TData::~TData()
 {
-  delete FindWhat;
-  delete ReplaceWith;
+  delete [] FindWhat;
+  delete [] ReplaceWith;
+}
+
+TFindReplaceDialog::TData&
+TFindReplaceDialog::TData::operator =(const TData& src)
+{
+  Flags = src.Flags;
+  BuffSize = src.BuffSize;
+  Error = 0;
+
+  delete [] FindWhat;
+  FindWhat = strnewdup(src.FindWhat, BuffSize);
+
+  delete [] ReplaceWith;
+  ReplaceWith = strnewdup(src.ReplaceWith, BuffSize);
+
+  return *this;
 }
 
 
@@ -48,13 +77,14 @@ TFindReplaceDialog::Init(TResId templateId)
   if (templateId) {
     fr.lpTemplateName = templateId;
     fr.Flags |= FR_ENABLETEMPLATE;
-  } else
+  }
+  else
     fr.Flags &= ~FR_ENABLETEMPLATE;
 
   fr.lpstrFindWhat = Data.FindWhat;
-  fr.wFindWhatLen = (WORD)Data.BuffSize;
+  fr.wFindWhatLen = (uint16)Data.BuffSize;
   fr.lpstrReplaceWith = Data.ReplaceWith;
-  fr.wReplaceWithLen = (WORD)Data.BuffSize;
+  fr.wReplaceWithLen = (uint16)Data.BuffSize;
 }
 
 TFindReplaceDialog::TFindReplaceDialog(TWindow*        parent,
@@ -62,8 +92,9 @@ TFindReplaceDialog::TFindReplaceDialog(TWindow*        parent,
                                        TResId          templateId,
                                        const char far* title,
                                        TModule*        module)
-  : TCommonDialog(parent, title, module),
-    Data(data)
+:
+  TCommonDialog(parent, title, module),
+  Data(data)
 {
   Init(templateId);
 }
@@ -74,8 +105,8 @@ TFindReplaceDialog::DoCreate()
   return 0;
 }
 
-BOOL
-TFindReplaceDialog::DialogFunction(UINT msg, WPARAM wParam, LPARAM lParam)
+bool
+TFindReplaceDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
 {
   return TCommonDialog::DialogFunction(msg, wParam, lParam);
 }

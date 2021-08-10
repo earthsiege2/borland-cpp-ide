@@ -1,0 +1,28 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for Hash Table examples                                       #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = hash
+EXEALL = hash.exe ihash.exe
+
+EXEMAKE= $(HASH) $(IHASH)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+HASH=$(EXERULE:hash.obj=hash.obj myclass.obj)
+IHASH=$(HASH:hash=ihash)
+
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

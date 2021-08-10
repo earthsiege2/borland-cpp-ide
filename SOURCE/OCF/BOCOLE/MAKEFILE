@@ -1,0 +1,102 @@
+#-----------------------------------------------------------------------------
+# ObjectComponents - (C) Copyright 1991, 1993 by Borland International
+#
+# MAKEFILE for ObjectComponents BOcOle Dlls
+#
+#------------------------------------------------------------------------
+!ifdef WIN32
+MODEL = 32
+APP   = BOCOLEF
+UNICODE = UNICODE
+!else
+MODEL = l
+APP   = BOCOLE
+!endif
+DLL = 1
+VERSION = 1
+
+OBJS = \
+   bolecomp.obj \
+   bolesvc.obj  \
+   bolecman.obj \
+   bolecont.obj \
+   bolesite.obj \
+   oledll.obj   \
+   boleips.obj  \
+   bolefact.obj \
+   boledoc.obj  \
+   bolepart.obj \
+   boleclip.obj \
+   bhatch.obj \
+   olenew.obj \
+   boledata.obj\
+   bolehelp.obj \
+   boleguid.obj
+!if $d(DIAGS)
+OBJS = $(OBJS) \
+  hashtbl.obj  \
+  oledebug.obj
+!endif
+
+!ifndef WIN32
+DEBUG_TARGETS =   \
+   $(RELDIR)\$(APP).map
+#  $(RELDIR)\$(APP).sym   
+!endif
+
+OTHER_TARGETS = \
+   $(RELDIR)\$(APP).res   \
+   $(RELDIR)\$(APP).dll   \
+#  $(RELDIR)\$(APP).lib   \
+#  $(RELDIR)\bolever.h   \
+   $(DEBUG_TARGETS)
+
+OBJDIR = $(MODEL)BIN
+
+!ifdef WIN32
+   RESOURCES = $(SRCDIR)\boleui32\boleui32.res
+   LIBS = boleui32 ole2w32 # ctl3d32
+!else
+   RESOURCES = $(SRCDIR)\boleui\boleui.res
+   LIBS = boleui ole2w16 # ctl3dv2
+!endif
+
+!include make.inc
+
+$(RELDIR)\$(APP).dll :  $(APP).dll
+   copy $(APP).dll $(RELDIR)\$(APP).dll
+!ifndef WIN32
+   tdstrip -s $(RELDIR)\$(APP).dll
+!else
+   tdstrp32 -s $(RELDIR)\$(APP).dll
+!endif
+
+$(RELDIR)\$(APP).map :  $(APP).map
+   copy $(APP).map $(RELDIR)\$(APP).map
+
+$(RELDIR)\$(APP).sym :  $(APP).map
+   $(MAPSYM) $(APP).map
+   copy $(APP).sym $(RELDIR)\$(APP).sym
+   del $(APP).sym
+
+$(RELDIR)\bolever.h : $(SRCDIR)\bolever.h
+   copy $(SRCDIR)\bolever.h $(RELDIR)\bolever.h
+
+!ifndef  WIN32
+boleguid.obj: $(SRCDIR)\boleguid.cpp
+  $(CPP) -zE_TEXT -zFCODE $(SRCDIR)\boleguid.cpp      
+# put data into code segment in this module
+!endif
+
+!ifdef WIN32
+# $(APP).res: $(SRCDIR)\bole16.rc $(SRCDIR)\bole32.rc
+#         $(BCROOT)\bin\brc32 -r @&&|
+#         -I$(BCROOT)\include;$(OLEROOT)\h;$(SRCDIR) \
+#         $(SRCDIR)\bole32.rc -fo $(APP).res
+# |
+!else
+$(APP).res: $(SRCDIR)\bole16.rc
+        $(BCROOT)\bin\brc -r @&&|
+        -I.;$(BCROOT)\include $(SRCDIR)\bole16.rc -fo $(APP).res
+|
+!endif

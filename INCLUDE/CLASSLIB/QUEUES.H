@@ -2,21 +2,21 @@
 /*                                                                        */
 /*  QUEUES.H                                                              */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_QUEUES_H )
-#define __CLASSLIB_QUEUES_H
+#if !defined( CLASSLIB_QUEUES_H )
+#define CLASSLIB_QUEUES_H
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_DEQUES_H )
-#include "classlib\deques.h"
-#endif  // __CLASSLIB_DEQUES_H
+#if !defined( CLASSLIB_DEQUES_H )
+#include <classlib/deques.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -200,6 +200,7 @@ public:
     Parent::ForEach;
     Parent::FirstThat;
     Parent::LastThat;
+    Parent::OwnsElements;
 
 #if defined( BI_OLDNAMES )
     T *peek() const { return Peek(); }
@@ -212,6 +213,7 @@ public:
     Parent::forEach;
     Parent::firstThat;
     Parent::lastThat;
+    Parent::ownsElements;
 #endif  // BI_OLDNAMES
 
 };
@@ -434,6 +436,7 @@ public:
     Parent::ForEach;
     Parent::FirstThat;
     Parent::LastThat;
+    Parent::OwnsElements;
 
 #if defined( BI_OLDNAMES )
     T *peek() const { return Peek(); }
@@ -446,6 +449,7 @@ public:
     Parent::forEach;
     Parent::firstThat;
     Parent::lastThat;
+    Parent::ownsElements;
 #endif  // BI_OLDNAMES
 
 };
@@ -540,5 +544,5 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_QUEUES_H
+#endif  // CLASSLIB_QUEUES_H
 

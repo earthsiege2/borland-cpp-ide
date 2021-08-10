@@ -3,9 +3,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1990, 1993 by Borland International
+ *      Copyright (c) 1990, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -25,10 +25,23 @@
 #include <iostream.h>
 #endif
 
-#pragma option -Vo-
-#if defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-
+
+#if !defined(RC_INVOKED)
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po-     // disable Object data calling convention
 #endif
+#endif
+
+#pragma option -Vo-
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 template<class typ> class _EXPCLASS smanip {
         ios _FAR & (_RTLENTRY *_fn)(ios _FAR &, typ);
@@ -126,9 +139,22 @@ smanip<int>     _RTLENTRY _EXPFUNC setprecision(int _n);
 // set the field width to n
 smanip<int>     _RTLENTRY _EXPFUNC setw(int _n);
 
-#pragma option -Vo.
-#if defined(__BCOPT__) && !defined(__FLAT__)
-#pragma option -po.
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
 
+#pragma option -Vo.
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po.     // restore Object data calling convention
 #endif
+#endif
+
+#endif  /* !RC_INVOKED */
+
+
+#endif  /* __IOMANIP_H */

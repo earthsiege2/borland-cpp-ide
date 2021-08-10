@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\choosefo.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of Choose Font Common Dialog class
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\choosefo.h>
+#include <owl/owlpch.h>
+#include <owl/choosefo.h>
 #if !defined(ctlFirst)
-  #include <dlgs.h>
+# include <dlgs.h>
 #endif
 
 DEFINE_RESPONSE_TABLE1(TChooseFontDialog, TCommonDialog)
@@ -19,8 +20,9 @@ TChooseFontDialog::TChooseFontDialog(TWindow*        parent,
                                      TResId          templateId,
                                      const char far* title,
                                      TModule*        module)
-  : TCommonDialog(parent, title, module),
-    Data(data)
+:
+  TCommonDialog(parent, title, module),
+  Data(data)
 {
   memset(&cf, 0, sizeof(CHOOSEFONT));
   cf.lStructSize = sizeof(CHOOSEFONT);
@@ -30,7 +32,8 @@ TChooseFontDialog::TChooseFontDialog(TWindow*        parent,
   if (templateId) {
     cf.lpTemplateName = templateId;
     cf.Flags |= CF_ENABLETEMPLATE;
-  } else
+  }
+  else
     cf.Flags &= ~CF_ENABLETEMPLATE;
   cf.lpfnHook = 0;
 
@@ -44,8 +47,8 @@ TChooseFontDialog::TChooseFontDialog(TWindow*        parent,
   cf.nSizeMax = Data.SizeMax;
 }
 
-BOOL
-TChooseFontDialog::DialogFunction(UINT msg, WPARAM wParam, LPARAM lParam)
+bool
+TChooseFontDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
 {
   return TCommonDialog::DialogFunction(msg, wParam, lParam);
 }
@@ -62,7 +65,8 @@ TChooseFontDialog::DoExecute()
     Data.Color = cf.rgbColors;
     Data.Style = cf.lpszStyle;
     Data.FontType = cf.nFontType;
-  } else {
+  }
+  else {
     Data.Error = ::CommDlgExtendedError();
   }
   return ret ? IDOK : IDCANCEL;

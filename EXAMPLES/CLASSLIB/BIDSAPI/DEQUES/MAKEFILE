@@ -1,0 +1,30 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for Deque examples                                            #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = deque
+EXEALL = deque.exe ideque.exe deqlist.exe ideqlist.exe
+
+EXEMAKE= $(DEQUE) $(IDEQUE) $(DEQLIST) $(IDEQLIST)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+DEQUE=$(EXERULE:deque.obj=deque.obj myclass.obj)
+IDEQUE=$(DEQUE:deque=ideque)
+DEQLIST=$(DEQUE:deque=deqlist)
+IDEQLIST=$(DEQUE:deque=ideqlist)
+
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

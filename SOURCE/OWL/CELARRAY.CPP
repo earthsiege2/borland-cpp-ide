@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\celarray.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of a bitmap Cel array class.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\celarray.h>
+#include <owl/owlpch.h>
+#include <owl/celarray.h>
 
 //
 // Construct a TCelArray from a bitmap, slicing a portion of the bitmap up
@@ -16,10 +17,12 @@ TCelArray::TCelArray(TBitmap* bmp, int numCels, TSize celSize,
 {
   PRECONDITION(bmp);
   Bitmap = bmp;
-  ShouldDelete = autoDelete == AutoDelete;
+  ShouldDelete = ToBool(autoDelete == AutoDelete);
   
   NCels = numCels < 1 ? 1 : numCels;
-  CSize = celSize ? celSize : TSize(bmp->Width() / NCels, bmp->Height());
+  CSize = celSize.cx && celSize.cy ?
+            celSize :
+            TSize(bmp->Width() / NCels, bmp->Height());
   Offs = offset;
 }
 
@@ -30,7 +33,7 @@ TCelArray::TCelArray(TBitmap* bmp, int numCels, TSize celSize,
 TCelArray::TCelArray(TDib& dib, int numCels)
 {
   Bitmap = new TBitmap(dib, &TPalette((HPALETTE)::GetStockObject(DEFAULT_PALETTE)));
-  ShouldDelete = TRUE;
+  ShouldDelete = true;
 
   NCels = numCels < 1 ? 1 : numCels;
   CSize = TSize(dib.Width() / NCels, dib.Height());

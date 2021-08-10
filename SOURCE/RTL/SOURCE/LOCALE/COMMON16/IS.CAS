@@ -1,0 +1,103 @@
+/*---------------------------------------------------------------------------
+ * filename - is.cas
+ *
+ * function(s)     - replacements for macros in ctype.h
+ *    isalnum
+ *    isascii
+ *    isalpha
+ *    iscntrl
+ *    isdigit
+ *    isgraph
+ *    islower
+ *    isprint
+ *    ispunct
+ *    isspace
+ *    isupper
+ *    isxdigit
+ *--------------------------------------------------------------------------*/
+
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1987, 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+
+#pragma inline
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <rtldata.h>
+
+int _CType __isctype( int c, int type )
+{
+    _QRTLDataBlock;
+
+    if ( c == EOF )
+        return( 0 );
+
+    return( ( _QRTLInstanceData(_pLocale)->pCtype[ (((c) & 0x00ff) +1) ] & ( type ) ) );
+}
+
+int _CType (isalnum)( int c )
+{
+    return( __isctype( c, _IS_ALNUM ) );
+}
+
+int _CType (isascii)( int c )
+  {
+  return( isascii( c ) );
+  }
+
+int _CType (isalpha)( int c )
+{
+    return( __isctype( c, _IS_ALPHA ) );
+}
+
+int _CType (iscntrl)( int c )
+{
+    return( __isctype( c, _IS_CTL ) );
+}
+
+int _CType (isdigit)( int c )
+{
+    return( __isctype( c, _IS_DIG ) );
+}
+
+int _CType (isgraph)( int c )
+{
+    return( __isctype( c, _IS_GRAPH ) );
+}
+
+int _CType (islower)( int c )
+{
+    return( __isctype( c, _IS_LOW ) );
+}
+
+int _CType (isprint)( int c )
+{
+    return( __isctype( c, (_IS_GRAPH) ) || (c & 0x00ff) == ' ' );
+}
+
+int _CType (ispunct)( int c )
+{
+    return( __isctype( c, _IS_PUN ) );
+}
+
+int _CType (isspace)( int c )
+{
+    return( __isctype( c, _IS_SP ) );
+}
+
+int _CType (isupper)( int c )
+{
+    return( __isctype( c, _IS_UPP ) );
+}
+
+int _CType (isxdigit)( int c )
+{
+    return( __isctype( c, _IS_HEX ) );
+}
+

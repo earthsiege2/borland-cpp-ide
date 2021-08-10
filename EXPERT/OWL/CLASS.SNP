@@ -1,6 +1,25 @@
 <<[H]
-##QUERY_DLOG [[Constant]]
-##\\QUERY_CONSTR_DEF [[ConstructorParam]]
+##QUERY_BASE_NAME [[BaseName]]
+##QUERY_WIND_CLIENT [[Client]]
+##"" [[ClientBase]]
+##--BEGIN-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
+##:  <<*Client QUERY_BASE_NAME ClientBase
+##(Client != "TMDIClient") && (ClientBase != "TMDIClient")
+##:     QUERY_CLASS_NAME [[ClassName]]
+##:     %\\"The class [[ClassName]]'s client can only be a TMDIClient type class.  "
+##*
+##--END-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
+##--BEGIN-- "" [[ConstructorParam]]
+##"" [[ClientClass]]
+##"" [[ClientParam]]
+##--BEGIN-- QUERY_DLOG [[Constant]]
+##QUERY_WIND_CLIENT ClientClass
+##ClientClass != ""
+##:     \\QUERY_WIND_CLIENT_PARAM ClientParam
+##*
+##\\QUERY_CONSTR_DEF ConstructorParam
+##*
+##--END-- QUERY_DLOG [[Constant]]
 ##"#if !defined(__" [[AnyClass]]
 ##^BOF
 ##--BEGIN-- ? AnyClass [[AnotherClass]]
@@ -23,8 +42,6 @@
 #include <owl\owlpch.h>
 #pragma hdrstop
 
-##QUERY_INCLUDE [[IncludeFile]]
-#include <owl\[[IncludeFile]]>
 ##QUERY_WIND_CLIENT [[Client]]
 ##Client != ""
 ##:     GetIncludeFile(\\"[[Client]]") [[ClientIncludeFile]]
@@ -40,12 +57,23 @@ class [[ClassName]] : public [[BaseName]] {
 public:
     [[ClassName]] [[ConstructorParam]];
     virtual ~[[ClassName]] ();
+##--BEGIN-- QUERY_BASE_NAME == "TView"
+
+    static const char far* StaticName() { return "[[ClassName]] View"; }
+
+//{{[[ClassName]]VIRTUAL_BEGIN}}
+protected:
+##:DBVirtual(\\"[[ClassName]]", "GetViewName")
+    virtual const char far* GetViewName ();
+//{{[[ClassName]]VIRTUAL_END}}
+##--END-- QUERY_BASE_NAME == "TView"
 };    //{{[[ClassName]]}}
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
 ##AnotherClass == FALSE
 ##:     {hfooter.snp}
 ##*
 ##--END-- ? AnyClass [[AnotherClass]]
+##--END-- "" [[ConstructorParam]]
 >>[H]
 
 
@@ -90,6 +118,7 @@ public:
 ##:     ConstructorList != ""
 [[ConstructorList]]
 {
+##--BEGIN-- QUERY_WINDOW_BASE
 ##QUERY_WIND_STYLE [[StyleAttributes]]
 ##StyleAttributes != "" 3
     // Override the default window style for [[BaseName]].
@@ -100,6 +129,7 @@ public:
     // Change the window's background color
     SetBkgndColor([[BackgroundColor]]);
 
+##--END-- QUERY_WINDOW_BASE
     // INSERT>> Your constructor code here.
 
 }
@@ -107,12 +137,19 @@ public:
 
 [[ClassName]]::~[[ClassName]] ()
 {
-##QUERY_BASE_NAME [[BaseName]]
-##((BaseName != "TModule") && (BaseName != "TEventHandler")) 2
+##QUERY_WINDOW_BASE 2
     Destroy();
 
     // INSERT>> Your destructor code here.
 
 }
+##--BEGIN-- BaseName == "TView"
+
+
+const char far* [[ClassName]]::GetViewName ()
+{
+    return StaticName();
+}
+##--END-- BaseName == "TView"
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
 >>[CPP]

@@ -195,7 +195,7 @@ int
 OwlMain(int /*argc*/, char* /*argv*/ [])
 {
 #if defined(__WIN32__)
-  if (!(HIWORD(GetVersion())&0x8000)) {
+  if (!(::GetVersion()&0x80000000)) {
     ::MessageBox(0, "This is not a Win NT Example", "OWL Examples", MB_OK);
     return 0;
   }

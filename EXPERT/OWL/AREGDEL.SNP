@@ -1,0 +1,29 @@
+<<[CPP]
+##^BOF
+##? "REGDATA(cmdline, \"/Automation\")"
+##      :^DOS
+##      :InsertText("REGDATA(cmdline, \"\")")
+##*
+##--BEGIN-- ? "new TOcApp"
+##      :^EOS
+##      :QUERY_CLASS_NAME [[ClassName]]
+##      :\\", TAutoObject<[[ClassName]]>(this)" [[Object]]
+##      :? Object
+##          :^DOS
+##*
+##--END-- ? "new TOcApp"
+##--BEGIN-- QUERY_BASE_NAME == "TApplication"
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##^BOF
+##? \\"//{{[[ClassName]]FACTORY_TBL_BEGIN}}", \\"//{{[[ClassName]]FACTORY_TBL_END}}"
+##:     InsertText("")
+##*
+##--BEGIN-- @QUERY_APPL_OLE == VALUE_NOOLE
+##^BOF
+##? \\"//{{[[ClassName]]_REGFACT_BEGIN}}", \\"//{{[[ClassName]]_REGFACT_END}}"
+##:     InsertText("")
+##*
+##--END-- @QUERY_APPL_OLE == VALUE_NOOLE
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+##--END-- QUERY_BASE_NAME == "TApplication"
+>>[CPP]

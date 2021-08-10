@@ -1,16 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\gadget.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Base class TGadget and helper class TSeparatorGadget.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_GADGET_H)
-#define __OWL_GADGET_H
+#if !defined(OWL_GADGET_H)
+#define OWL_GADGET_H
 
-#if !defined(__OWL_WINDOW_H)
-  #include "owl\window.h"
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
 #endif
-#if !defined(__OWL_DC_H)
-  #include "owl\dc.h"
+#if !defined(OWL_DC_H)
+# include <owl/dc.h>
 #endif
 
 class _OWLCLASS TGadgetWindow;
@@ -55,10 +56,10 @@ class _OWLCLASS TGadget {
     virtual ~TGadget();
 
     struct TBorders {
-      unsigned  Left   : 4;
-      unsigned  Right  : 4;
-      unsigned  Top    : 4;
-      unsigned  Bottom : 4;
+      unsigned  Left   : 8;
+      unsigned  Right  : 8;
+      unsigned  Top    : 8;
+      unsigned  Bottom : 8;
 
       TBorders() {Left = Right = Top = Bottom = 0;}
     };
@@ -74,24 +75,24 @@ class _OWLCLASS TGadget {
     //       the gadget window's GadgetChangedSize() member function
     //
     void           SetBorders(TBorders& borders);
-    TBorders      &GetBorders() {return Borders;}
+    TBorders&      GetBorders() {return Borders;}
 
     void           SetMargins(TMargins& margins);
-    TMargins      &GetMargins() {return Margins;}
+    TMargins&      GetMargins() {return Margins;}
 
     void           SetBorderStyle(TBorderStyle);
     TBorderStyle   GetBorderStyle() {return BorderStyle;}
 
-    TRect         &GetBounds() {return Bounds;}
+    TRect&         GetBounds() {return Bounds;}
 
-    virtual void   SetEnabled(BOOL);
-    BOOL           GetEnabled() {return Enabled;}
+    virtual void   SetEnabled(bool);
+    bool           GetEnabled() {return Enabled;}
 
     //
     // simply sets the corresponding member data. call the gadget window's
     // GadgetChangedSize() member function if you want to affect a change in size
     //
-    void           SetShrinkWrap(BOOL shrinkWrapWidth, BOOL shrinkWrapHeight);
+    void           SetShrinkWrap(bool shrinkWrapWidth, bool shrinkWrapHeight);
 
     //
     // directly alters the size of the gadget. calls the gadget window's
@@ -129,7 +130,7 @@ class _OWLCLASS TGadget {
     virtual void   CommandEnable();
     virtual void   SysColorChange();
 
-    TGadget       *NextGadget() {return Next;}
+    TGadget*       NextGadget() {return Next;}
 
   protected:
     //
@@ -139,16 +140,16 @@ class _OWLCLASS TGadget {
     virtual void   Inserted();
     virtual void   Removed();
     
-    void           Invalidate(BOOL erase = TRUE);
+    void           Invalidate(bool erase = true);
     void           InvalidateRect(const TRect& rect,  // receiver's coord system
-                                  BOOL  erase = TRUE);
+                                  bool  erase = true);
     void           Update();  // Paint now if possible
 
     //
-    // default behavior returns TRUE if the point is within the receiver's
+    // default behavior returns true if the point is within the receiver's
     // bounding rect. "point" is in the receiver's coordinate system
     //
-    virtual BOOL   PtIn(TPoint& point);
+    virtual bool   PtIn(TPoint& point);
 
     virtual void   Paint(TDC& dc);
 
@@ -167,25 +168,25 @@ class _OWLCLASS TGadget {
     // "point" is in the receiver's coordinate system. MouseMove is only 
     // called if the mouse is captured.
     //
-    virtual void   MouseMove(UINT modKeys, TPoint& point);
-    virtual void   MouseEnter(UINT modKeys, TPoint& point);
-    virtual void   MouseLeave(UINT modKeys, TPoint& point);
+    virtual void   MouseMove(uint modKeys, TPoint& point);
+    virtual void   MouseEnter(uint modKeys, TPoint& point);
+    virtual void   MouseLeave(uint modKeys, TPoint& point);
 
     //
     // captures the mouse if "TrackMouse" is set. "point" is in the receiver's
     // coordinate system
     //
-    virtual void   LButtonDown(UINT modKeys, TPoint& point);
+    virtual void   LButtonDown(uint modKeys, TPoint& point);
 
     //
     // releases the mouse capture if "TrackMouse" is set. "point" is in the
     // receiver's coordinate system
     //
-    virtual void   LButtonUp(UINT modKeys, TPoint& point);
+    virtual void   LButtonUp(uint modKeys, TPoint& point);
 
   public:
-    BOOL             Clip;            // FALSE
-    BOOL             WideAsPossible;  // FALSE
+    bool             Clip;            // false
+    bool             WideAsPossible;  // false
 
   protected:
     TGadgetWindow*   Window;
@@ -193,14 +194,14 @@ class _OWLCLASS TGadget {
     TBorderStyle     BorderStyle;
     TBorders         Borders;
     TMargins         Margins;
-    BOOL             ShrinkWrapWidth;
-    BOOL             ShrinkWrapHeight;
-    BOOL             TrackMouse;      // FALSE
+    bool             ShrinkWrapWidth;
+    bool             ShrinkWrapHeight;
+    bool             TrackMouse;      // false
     int              Id;
 
   private:
     TGadget*         Next;
-    BOOL             Enabled;
+    bool             Enabled;
 
     friend class _OWLCLASS TGadgetWindow;
 
@@ -225,6 +226,7 @@ class _OWLCLASS TGadget {
 class _OWLCLASS TSeparatorGadget : public TGadget {
   public:
     TSeparatorGadget(int size = 6);
+    void   Inserted();
 };
 
-#endif  // __OWL_GADGET_H
+#endif  // OWL_GADGET_H

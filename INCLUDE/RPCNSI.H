@@ -1,6 +1,8 @@
 /*++
 
-Module Name: rpcnsi.h
+Module Name:
+
+    rpcnsi.h
 
 Abstract:
 
@@ -10,36 +12,21 @@ Abstract:
 --*/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1991, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
 #ifndef __RPCNSI_H__
 #define __RPCNSI_H__
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define __RPCNSI_H
 
 typedef void __RPC_FAR * RPC_NS_HANDLE;
 
-typedef struct
-{
-  unsigned long Count;
-  RPC_IF_ID __RPC_FAR * IfId[1];
-} RPC_IF_ID_VECTOR;
-
 #define RPC_C_NS_SYNTAX_DEFAULT 0
 #define RPC_C_NS_SYNTAX_DCE 3
-
-#define RPC_C_VERS_ALL 0
-#define RPC_C_VERS_COMPATIBLE 1
-#define RPC_C_VERS_EXACT 2
-#define RPC_C_VERS_MAJOR_ONLY 3
-#define RPC_C_VERS_UPTO 4
 
 #define RPC_C_PROFILE_DEFAULT_ELT 0
 #define RPC_C_PROFILE_ALL_ELT 1
@@ -383,11 +370,6 @@ RpcNsMgmtEntryInqIfIdsA(
     );
 
 RPC_STATUS RPC_ENTRY
-RpcIfIdVectorFree (
-    IN OUT RPC_IF_ID_VECTOR __RPC_FAR * __RPC_FAR * IfIdVec
-    );
-
-RPC_STATUS RPC_ENTRY
 RpcNsMgmtHandleSetExpAge(
     IN RPC_NS_HANDLE NsHandle,
     IN unsigned long ExpirationAge
@@ -530,9 +512,5 @@ RpcNsBindingSelect(
 #define RpcNsProfileEltInqNext RpcNsProfileEltInqNextA
 
 #endif /* UNICODE */
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __RPCNSI_H__ */

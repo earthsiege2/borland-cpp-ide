@@ -1,9 +1,10 @@
 #----------------------------------------------------------------------------
 # ObjectWindows - (C) Copyright 1991, 1993 by Borland International
 #----------------------------------------------------------------------------
-
+EXE = gauge
 MODELS=mlfd
-EXERES=gaugex
+OBJEXE = gaugex.obj
+RESEXE = gaugex.res
 !include $(BCEXAMPLEDIR)\owlmake.gen
 
 

@@ -1,19 +1,24 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\edit.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TEdit.  This defines the basic behavior
 //   of all edit controls.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\edit.h>
-#include <owl\validate.h>
+#include <owl/owlpch.h>
+#include <owl/edit.h>
+#include <owl/validate.h>
 #include <dos.h>
 #include <string.h>
 #include <ctype.h>
 
 #if !defined(SECTION) || SECTION == 1
 
+//
+// Class pointer to an edit control that is trying to regain focus after losing
+// it with invalid contents. Is 0 in all other conditions.
+//
 TEdit* TEdit::ValidatorReFocus = 0;
 
 DEFINE_RESPONSE_TABLE1(TEdit, TStatic)
@@ -49,8 +54,8 @@ TEdit::TEdit(TWindow*        parent,
              int             id,
              const char far* text,
              int x, int y, int w, int h,
-             UINT            textLen,
-             BOOL            multiline,
+             uint            textLen,
+             bool            multiline,
              TModule*        module)
   : TStatic(parent, id, text, x, y, w, h, textLen, module)
 {
@@ -73,7 +78,7 @@ TEdit::TEdit(TWindow*        parent,
 //
 TEdit::TEdit(TWindow*   parent,
              int        resourceId,
-             UINT       textLen,
+             uint       textLen,
              TModule*   module)
   : TStatic(parent, resourceId, textLen, module)
 {
@@ -105,11 +110,11 @@ TEdit::ENErrSpace()
 // sent to Self, where we will generate the Invalid
 // message (See WMKeyDown below).
 //
-UINT
+uint
 TEdit::EvGetDlgCode(MSG far* msg)
 {
-  UINT retVal = (UINT)TStatic::EvGetDlgCode(msg);
-  if (!IsValid(FALSE))
+  uint retVal = (uint)TStatic::EvGetDlgCode(msg);
+  if (!IsValid(false))
     retVal |= DLGC_WANTTAB;
   return retVal;
 }
@@ -125,91 +130,93 @@ TEdit::EvGetDlgCode(MSG far* msg)
 // is free to modify the string, if it is so configured.
 //
 void
-TEdit::EvChar(UINT key, UINT repeatCount, UINT flags)
+TEdit::EvChar(uint key, uint repeatCount, uint flags)
 {
   if (Validator && key != VK_BACK) {
     int oldBuffLen = GetTextLen();
     char far* oldBuff = new char[oldBuffLen+1];
     GetText(oldBuff, oldBuffLen+1);
-    
-    UINT   startSel, endSel;
-    GetSelection(startSel, endSel);
-    BOOL wasAppending = endSel == oldBuffLen;
 
-    TStatic::EvChar(key, repeatCount, flags);      // Process the new char...
+    uint   startSel, endSel;
+    GetSelection(startSel, endSel);
+    bool wasAppending = endSel == oldBuffLen;
+
+    bool preMsgModify = IsModified();             // Save (pre)  MODIFY flag
+
+    TStatic::EvChar(key, repeatCount, flags);     // Process the new char...
+
+    bool postMsgModify= IsModified();             // Save (post) MODIFY flag
 
     GetSelection(startSel, endSel);
     int buffLen = GetTextLen();
-    char far* buff = (oldBuffLen > buffLen) ? LockBuffer(oldBuffLen+1) :
-                                              LockBuffer();
+    char far* buff = LockBuffer(max((int)TextLen,max(oldBuffLen,buffLen))+1);
 
-    //
     // Run the result of the edit through the validator.  If incorrect,
-    // then restore the original text.  Otherwise, set the (possibly)
-    // modified result of the validation back into the edit control,
-    // so the results of the auto-fill (if any) can be viewed.
+    // then restore the original text.  Otherwise, range check & position
+    // the selection as needed.
     //
     if (!Validator->HasOption(voOnAppend) || wasAppending && endSel == buffLen) {
-      if (!Validator->IsValidInput(buff, FALSE)) {
-        strcpy(buff, oldBuff);
-      } else {
-        if (startSel >= oldBuffLen && buffLen > oldBuffLen)
-          startSel = buffLen;
-        if (endSel >= oldBuffLen && buffLen > oldBuffLen)
-          endSel = buffLen;
+      if (!Validator->IsValidInput(buff, false)) {
+        strcpy(buff, oldBuff);          // Restore old buffer
+        postMsgModify = preMsgModify;   // Restore old modify state too!
       }
-      UnlockBuffer(buff, TRUE);
+      else {
+        if (wasAppending)
+          startSel = endSel = strlen(buff); // may have autoFilled--move to end
+      }
+      UnlockBuffer(buff, true);
       SetSelection(startSel, endSel);
-
-    } else {
-      if (endSel == buffLen && !Validator->IsValidInput(buff, FALSE))
+    }
+    else {
+      if (endSel == buffLen && !Validator->IsValidInput(buff, false))
         Validator->Error();
       UnlockBuffer(buff);
     }
-    delete oldBuff;
-
-  } else
+    HandleMessage(EM_SETMODIFY, (WPARAM)postMsgModify);
+    delete [] oldBuff;
+  }
+  else
     TStatic::EvChar(key, repeatCount, flags);
 }
 
 //
-// If the TAB key is sent to the Edit Control, check
-// the validity before allowing the focus to change.
-// The control will only get a TAB if WMGetDlgCode(above)
-// allows it, which is done when the control contains
-// invalid input (we re-validate here just for completeness,
-// in case descendants redefine any of this behavior).
+// If the TAB key is sent to the Edit Control, check the validity before
+// allowing the focus to change. The control will only get a TAB if
+// EvGetDlgCode(above) allows it, which is done when the control contains
+// invalid input (we re-validate here just for completeness, in case descendants
+// redefine any of this behavior).
 //
-// We need to validate on TAB focus-changes because there
-// is a case not handled by WMKillFocus: when focus is
-// lost to an OK or CANCEL button by tabbing.
+// We need to validate on TAB focus-changes because there is a case not handled
+// by EvKillFocus: when focus is lost to an OK or CANCEL button by tabbing.
+//
+// Otherwise, for validators with the OnAppend option, perform an input
+// validation if the selection moves to the end. i.e. it becomes appending.
 //
 void
-TEdit::EvKeyDown(UINT key, UINT /*repeatCount*/, UINT /*flags*/)
+TEdit::EvKeyDown(uint key, uint /*repeatCount*/, uint /*flags*/)
 {
-  if (key == VK_TAB && !IsValid(TRUE))
+  if (key == VK_TAB && !IsValid(true))
     return;
   if (Validator && Validator->HasOption(voOnAppend)) {
-    UINT  startSel, endSel;
+    uint  startSel, endSel;
     GetSelection(startSel, endSel);
-    
-    int buffLen = GetTextLen(); // get new length of buffer
-    BOOL  wasAppending = endSel == buffLen;
+    int buffLen = GetTextLen();   // length of buffer
+    bool  wasAppending = endSel == buffLen;
 
     DefaultProcessing();
 
     if (!wasAppending) {
       GetSelection(startSel, endSel);
       char far* buff = LockBuffer();
-      if (endSel == strlen(buff) && !Validator->IsValidInput(buff, FALSE))
+      if (endSel == strlen(buff) && !Validator->IsValidInput(buff, false))
         Validator->Error();
       UnlockBuffer(buff);
     }
-
-  } else
+  }
+  else
     DefaultProcessing();
 }
- 
+
 //
 // Validates this whenever the focus is about to be lost.
 // Holds onto the focus if this is not valid.  Checks first
@@ -221,7 +228,6 @@ TEdit::EvKeyDown(UINT key, UINT /*repeatCount*/, UINT /*flags*/)
 void
 TEdit::EvKillFocus(HWND hWndGetFocus)
 {
-  //
   // If another validator is attempting to regain focus, then let it
   //
   if (Validator && !ValidatorReFocus) {
@@ -242,7 +248,7 @@ TEdit::EvKillFocus(HWND hWndGetFocus)
       // it of the validation failure, and providing it with a handle
       // to us.
       //
-      if (btnId != IDCANCEL && btnId != IDOK && !IsValid(FALSE)) {
+      if (btnId != IDCANCEL && btnId != IDOK && !IsValid(false)) {
         ValidatorReFocus = this;
         Parent->PostMessage(WM_CHILDINVALID, WPARAM(HWindow));
       }
@@ -289,18 +295,18 @@ TEdit::ValidatorError()
 void
 TEdit::Clear()
 {
-  DeleteSubText(0, UINT(-1));
+  DeleteSubText(0, uint(-1));
 }
 
-BOOL
+bool
 TEdit::CanClose()
 {
-  BOOL okToClose = TStatic::CanClose();
+  bool okToClose = TStatic::CanClose();
   if (okToClose)
-    if (IsWindowEnabled() && !IsValid(TRUE)) {
+    if (IsWindowEnabled() && !IsValid(true)) {
       ValidatorReFocus = this;
       SetFocus();
-      return FALSE;
+      return false;
     }
   return okToClose;
 }
@@ -312,7 +318,7 @@ TEdit::CanClose()
 void
 TEdit::CmSelectEnable(TCommandEnabler& commandHandler)
 {
-  UINT sPos, ePos;
+  uint sPos, ePos;
 
   GetSelection(sPos, ePos);
   commandHandler.Enable(sPos != ePos);
@@ -325,9 +331,8 @@ TEdit::CmSelectEnable(TCommandEnabler& commandHandler)
 void
 TEdit::CmPasteEnable(TCommandEnabler& commandHandler)
 {
-  TClipboard& clipboard = OpenClipboard();
+  TClipboard clipboard(*this);
   commandHandler.Enable(clipboard.IsClipboardFormatAvailable(CF_TEXT));
-    clipboard.CloseClipboard();
 }
 
 //
@@ -370,15 +375,15 @@ TEdit::GetLineLength(int lineNumber) const
 
 //
 // returns the text of line number "lineNumber" (0-terminated)
-// returns FALSE if an error occurs or if the text doesn't fit in "TextString"
+// returns false if an error occurs or if the text doesn't fit in "TextString"
 //
-BOOL
+bool
 TEdit::GetLine(char far* textString, int strSize, int lineNumber) const
 {
   if (strSize <= 0)
-    return FALSE;
+    return false;
 
-  BOOL success = strSize >= GetLineLength(lineNumber) + 1;
+  bool success = strSize >= GetLineLength(lineNumber) + 1;
 
   if (strSize < sizeof(int)) {
     textString[0] = 0;
@@ -392,7 +397,7 @@ TEdit::GetLine(char far* textString, int strSize, int lineNumber) const
   textString[bytesCopied] = '\0'; // Windows returns non-0 terminated string
 
   if (bytesCopied != (int)CONST_CAST(TEdit*,this)->HandleMessage(EM_LINELENGTH,GetLineIndex(lineNumber)))
-    return FALSE;
+    return false;
   return success;
 }
 
@@ -402,14 +407,14 @@ TEdit::GetLine(char far* textString, int strSize, int lineNumber) const
 // Must call UnlockBuffer when finished with buffer.
 //
 char far*
-TEdit::LockBuffer(UINT newSize)
+TEdit::LockBuffer(uint newSize)
 {
   // make a copy if can't get handle. Single line edit controls or Win32s will
   // fail the GetHandle(), so do it the hard way.
   //
   if (!(GetWindowLong(GWL_STYLE)&ES_MULTILINE)
-#if defined(__WIN32__)
-       || (HIWORD(::GetVersion())&0x8000)
+#if defined(BI_PLAT_WIN32)
+       || (::GetVersion()&0x80000000)  // Win32s & Chicago
 #endif
   ) {
     if (!newSize)
@@ -421,15 +426,15 @@ TEdit::LockBuffer(UINT newSize)
 
   HLOCAL  hBuffer = GetHandle();
 
-  #if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
     if (newSize) {
       hBuffer = LocalReAlloc(hBuffer, newSize, LHND);
       if (!hBuffer)
         return 0;
     }
-    return (char*)LocalLock(hBuffer);
-  #else
-    WORD editDS = FP_SEG(GlobalLock((HINSTANCE)GetWindowWord(GWW_HINSTANCE)));
+    return STATIC_CAST(char*,LocalLock(hBuffer));
+#else
+    uint16 editDS = FP_SEG(GlobalLock((HINSTANCE)GetWindowWord(GWW_HINSTANCE)));
     asm push DS;
     _DS = editDS;
 
@@ -437,13 +442,14 @@ TEdit::LockBuffer(UINT newSize)
       hBuffer = LocalReAlloc(hBuffer, newSize, LHND);
       if (!hBuffer) {
         asm pop DS;
+        GlobalUnlock((HGLOBAL)GlobalHandle(editDS));
         return 0;
       }
     }
     char far* returnValue = (char far*)MK_FP(_DS,LocalLock(hBuffer));
     asm pop DS;
     return returnValue;
-  #endif
+#endif
 }
 
 //
@@ -453,7 +459,7 @@ TEdit::LockBuffer(UINT newSize)
 // Ignores call if buffer is 0
 //
 void
-TEdit::UnlockBuffer(const char far* buffer, BOOL updateHandle)
+TEdit::UnlockBuffer(const char far* buffer, bool updateHandle)
 {
   if (!buffer)
     return;
@@ -461,21 +467,21 @@ TEdit::UnlockBuffer(const char far* buffer, BOOL updateHandle)
   // if a copy was made on lock, copy it back if requested & free buffer
   //
   if (!(GetWindowLong(GWL_STYLE)&ES_MULTILINE)
-#if defined(__WIN32__)
-       || (HIWORD(::GetVersion())&0x8000)
+#if defined(BI_PLAT_WIN32)
+       || (::GetVersion()&0x80000000)  // Win32s & Chicago
 #endif
    ) {
     if (updateHandle)
       SetText(buffer);
-    delete(char*)buffer;
+    delete [] CONST_CAST(char far*,buffer);
     return;
   }
 
-  #if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
     HLOCAL  hBuffer = LocalHandle((LPVOID)buffer);
     LocalUnlock(hBuffer);
-  #else
-    WORD editDS = FP_SEG(buffer);
+#else
+    uint16 editDS = FP_SEG(buffer);
     asm push DS;
     _DS = editDS;
 
@@ -484,7 +490,7 @@ TEdit::UnlockBuffer(const char far* buffer, BOOL updateHandle)
 
     asm pop DS;
     GlobalUnlock((HGLOBAL)GlobalHandle(editDS));   // unlock LockBuffer's lock
-  #endif
+#endif
 
   //
   // handle may have moved or buffer contents written on
@@ -498,7 +504,7 @@ TEdit::UnlockBuffer(const char far* buffer, BOOL updateHandle)
 // string functions to work with different language drivers
 //
 static const char far*
-strstrcd(const char far* str1, const char far* str2, BOOL caseSens)
+strstrcd(const char far* str1, const char far* str2, bool caseSens)
 {
   PRECONDITION(str1 && str2);
   int len2 = strlen(str2);
@@ -535,8 +541,8 @@ strstrcd(const char far* str1, const char far* str2, BOOL caseSens)
 // to know where to start.
 //
 static const char far*
-strrstrcd(const char far* str1, UINT len1, const char far* str2,
-           BOOL caseSens)
+strrstrcd(const char far* str1, uint len1, const char far* str2,
+           bool caseSens)
 {
   PRECONDITION(str1 && str2);
   int len2 = strlen(str2);
@@ -575,14 +581,14 @@ strrstrcd(const char far* str1, UINT len1, const char far* str2,
 // end/beginning (depending on direction) of the current selection
 //
 int
-TEdit::Search(UINT startPos, const char far* text, BOOL caseSensitive,
-              BOOL wholeWord, BOOL up)
+TEdit::Search(uint startPos, const char far* text, bool caseSensitive,
+              bool wholeWord, bool up)
 {
   if (!text || !text[0])
     return -1;
 
-  if (startPos == (UINT)-1) {
-    UINT sBeg, sEnd;
+  if (startPos == (uint)-1) {
+    uint sBeg, sEnd;
     GetSelection(sBeg, sEnd);
     startPos = up ? sBeg : sEnd;
   }
@@ -606,7 +612,7 @@ TEdit::Search(UINT startPos, const char far* text, BOOL caseSensitive,
     if (wholeWord && pos) {
       if (pos > buffer && isalnum(pos[-1]) || // Match is in preceding word
           textLen < strlen(pos) && isalnum(pos[textLen])) {
-        startPos = (UINT)(pos-buffer) + !up;
+        startPos = (uint)(pos-buffer) + !up;
         continue;  // Skip this match and keep searching
       }
     }
@@ -616,10 +622,10 @@ TEdit::Search(UINT startPos, const char far* text, BOOL caseSensitive,
   // If we've got a match, select that text, cleanup & return.
   //
   if (pos) {
-    UINT sBeg = (UINT)(pos - buffer);
+    uint sBeg = (uint)(pos - buffer);
     UnlockBuffer(buffer);
     SetSelection(sBeg, sBeg + textLen);
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
     HandleMessage(WM_KEYDOWN, VK_RIGHT);
     SetSelection(sBeg, sBeg + textLen);
 #endif
@@ -632,44 +638,44 @@ TEdit::Search(UINT startPos, const char far* text, BOOL caseSensitive,
 
 
 //
-// deletes the selected text; returns FALSE if no text is selected
+// deletes the selected text; returns false if no text is selected
 //
-BOOL
+bool
 TEdit::DeleteSelection()
 {
-  UINT  startPos, endPos;
+  uint  startPos, endPos;
 
   GetSelection(startPos, endPos);
 
   if (startPos != endPos) {
     HandleMessage(WM_CLEAR);
-    return TRUE;
+    return true;
   }
-  return FALSE;
+  return false;
 }
 
 //
 // deletes text in the range "startPos .. endPos"
 //
-// returns FALSE if an error occurs
+// returns false if an error occurs
 //
-BOOL
-TEdit::DeleteSubText(UINT startPos, UINT endPos)
+bool
+TEdit::DeleteSubText(uint startPos, uint endPos)
 {
   if (SetSelection(startPos, endPos))
     return DeleteSelection();
 
   else
-    return FALSE;
+    return false;
 }
 
 //
 // deletes the text at line number "lineNumber" (deletes the line containing
 // the caret if "lineNumber" is -1
 //
-// returns FALSE if "lineNumber" is greater than the number of lines
+// returns false if "lineNumber" is greater than the number of lines
 //
-BOOL
+bool
 TEdit::DeleteLine(int lineNumber)
 {
   if (lineNumber == -1)
@@ -685,14 +691,14 @@ TEdit::DeleteLine(int lineNumber)
 
     if (firstPos == 0  && firstPos == lastPos) {
       SetText("");
-      return TRUE;
-
-    } else {
+      return true;
+    }
+    else {
       return DeleteSubText(firstPos, lastPos);
     }
   }
 
-  return FALSE;
+  return false;
 }
 
 //
@@ -700,12 +706,12 @@ TEdit::DeleteLine(int lineNumber)
 // positions
 //
 void
-TEdit::GetSubText(char far* textString, UINT startPos, UINT endPos) const
+TEdit::GetSubText(char far* textString, uint startPos, uint endPos) const
 {
   int  tempIndex = 0;
 
   if (endPos >= startPos) {
-    BOOL  okToContinue = TRUE;
+    bool  okToContinue = true;
     int   startLine = GetLineFromPos(startPos);
     int   endLine = GetLineFromPos(endPos);
     int   startChar = startPos - GetLineIndex(startLine);
@@ -733,16 +739,15 @@ TEdit::GetSubText(char far* textString, UINT startPos, UINT endPos) const
           memcpy(&textString[tempIndex], &line[tempStart], tempSize);
           tempIndex += tempSize;
         }
-
         if (tempLine != endLine) {
           textString[tempIndex++] = 0x0d;  // CR
           textString[tempIndex++] = 0x0a;  // LF
         }
+      }
+      else
+        okToContinue = false;
 
-      } else
-        okToContinue = FALSE;
-
-      delete line;
+      delete [] line;
     }
   }
   textString[tempIndex] = '\0';
@@ -770,17 +775,17 @@ TEdit::SetupWindow()
     HandleMessage(EM_LIMITTEXT, TextLen - 1);
 }
 
-BOOL
-TEdit::IsValid(BOOL reportError)
+bool
+TEdit::IsValid(bool reportError)
 {
   if (Validator) {
     char far* buffer = LockBuffer();
-    BOOL valid = reportError ? Validator->Valid(buffer) : 
+    bool valid = reportError ? Validator->Valid(buffer) : 
                                Validator->IsValid(buffer);
     UnlockBuffer(buffer);
     return valid;
   }
-  return TRUE;
+  return true;
 }
 
 void
@@ -799,19 +804,19 @@ TEdit::SetValidator(TValidator* validator)
 //
 // the return value is the size (in bytes) of the transfer data
 //
-UINT
+uint
 TEdit::Transfer(void* buffer, TTransferDirection direction)
 {
   if (Validator && Validator->HasOption(voTransfer) && GetNumLines() <= 1) {
     CHECK(GetWindowTextLength() < TextLen);
     char* text = new char[TextLen];
     GetText(text, TextLen);
-    UINT result = Validator->Transfer(text, buffer, direction);
+    uint result = Validator->Transfer(text, buffer, direction);
     if (result == 0)
       result = TStatic::Transfer(buffer, direction);
     else if (direction == tdSetData)
       SetText(text);
-    delete text;
+    delete [] text;
     return result;
   }
   return TStatic::Transfer(buffer, direction);

@@ -1,16 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\edit.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of class TEdit.  This defines the basic behavior
 //   of all edit controls.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_EDIT_H)
-#define __OWL_EDIT_H
+#if !defined(OWL_EDIT_H)
+#define OWL_EDIT_H
 
-#if !defined(__OWL_STATIC_H)
-  #include <owl\static.h>
+#if !defined(OWL_STATIC_H)
+# include <owl/static.h>
 #endif
-#include <owl\edit.rh>
+#include <owl/edit.rh>
 
 class _OWLCLASS TValidator;
 
@@ -24,13 +25,13 @@ class _OWLCLASS TEdit : public TStatic {
           int             id,
           const char far* text,
           int x, int y, int w, int h,
-          UINT            textLen = 0,
-          BOOL            multiline = FALSE,
+          uint            textLen = 0,
+          bool            multiline = false,
           TModule*        module = 0);
 
     TEdit(TWindow*   parent,
           int        resourceId,
-          UINT       textLen = 0,
+          uint       textLen = 0,
           TModule*   module = 0);
 
    ~TEdit();
@@ -40,53 +41,53 @@ class _OWLCLASS TEdit : public TStatic {
     //
     int     GetNumLines() const;
     int     GetLineLength(int lineNumber) const;
-    BOOL    GetLine(char far* str, int strSize, int lineNumber) const;
-    void    GetSubText(char far* str, UINT startPos, UINT endPos) const;
-    void    GetSelection(UINT& startPos, UINT& endPos) const;
+    bool    GetLine(char far* str, int strSize, int lineNumber) const;
+    void    GetSubText(char far* str, uint startPos, uint endPos) const;
+    void    GetSelection(uint& startPos, uint& endPos) const;
 
-    BOOL    IsModified() const;
+    bool    IsModified() const;
     void    ClearModify() {HandleMessage(EM_SETMODIFY);}
 
-    int     GetLineFromPos(UINT charPos) const;
-    UINT    GetLineIndex(int lineNumber) const;
+    int     GetLineFromPos(uint charPos) const;
+    uint    GetLineIndex(int lineNumber) const;
 
-    UINT    Transfer(void* buffer, TTransferDirection direction);
+    uint    Transfer(void* buffer, TTransferDirection direction);
 
     //
     // Lock and unlock this edit control's buffer. Allows direct access to the
     // text in the edit control.
     //
-    char far* LockBuffer(UINT newSize = 0);
-    void    UnlockBuffer(const char far* buffer, BOOL updateHandle = FALSE);
+    char far* LockBuffer(uint newSize = 0);
+    void    UnlockBuffer(const char far* buffer, bool updateHandle = false);
 
     //
     // operations
     //
-    BOOL    DeleteSubText(UINT startPos, UINT endPos);
-    BOOL    DeleteLine(int lineNumber);
-    BOOL    DeleteSelection();
-    BOOL    SetSelection(UINT startPos, UINT endPos);
+    bool    DeleteSubText(uint startPos, uint endPos);
+    bool    DeleteLine(int lineNumber);
+    bool    DeleteSelection();
+    bool    SetSelection(uint startPos, uint endPos);
 
     void    Scroll(int horizontalUnit, int verticalUnit);
     void    Insert(const char far* str);
-    int     Search(UINT startPos, const char far* text,
-                   BOOL caseSensitive=FALSE, BOOL wholeWord=FALSE,
-                   BOOL up=FALSE);
+    int     Search(uint startPos, const char far* text,
+                   bool caseSensitive=false, bool wholeWord=false,
+                   bool up=false);
 
     void    GetRect(TRect& frmtRect) const;
     void    SetRect(const TRect& frmtRect);
     void    SetRectNP(const TRect& frmtRect);
-    void    FormatLines(BOOL addEOL);
+    void    FormatLines(bool addEOL);
     void    SetTabStops(int numTabs, const int far* tabs);
 
     HLOCAL  GetHandle() const;
     void    SetHandle(HLOCAL localMem);
 
-    void    SetPasswordChar(UINT ch) {HandleMessage(EM_SETPASSWORDCHAR, ch);}
+    void    SetPasswordChar(uint ch) {HandleMessage(EM_SETPASSWORDCHAR, ch);}
 
     int     GetFirstVisibleLine() const;
-    void    SetReadOnly(BOOL readOnly);
-    UINT    GetPasswordChar() const;
+    void    SetReadOnly(bool readOnly);
+    uint    GetPasswordChar() const;
 
     EDITWORDBREAKPROC GetWordBreakProc() const;
     void    SetWordBreakProc(EDITWORDBREAKPROC proc);
@@ -94,14 +95,14 @@ class _OWLCLASS TEdit : public TStatic {
     //
     // clipboard operations
     //
-    BOOL    CanUndo() const;
+    bool    CanUndo() const;
     void    EmptyUndoBuffer() {HandleMessage(EM_EMPTYUNDOBUFFER);}
     void    Undo() {HandleMessage(WM_UNDO);}
     void    Paste() {HandleMessage(WM_PASTE);}
     void    Copy() {HandleMessage(WM_COPY);}
     void    Cut() {HandleMessage(WM_CUT);}
     
-    BOOL    IsValid(BOOL reportErr = FALSE);
+    bool    IsValid(bool reportErr = false);
     void    SetValidator(TValidator* validator);
     void    ValidatorError();
 
@@ -145,12 +146,12 @@ class _OWLCLASS TEdit : public TStatic {
     //
     TValidator*  Validator;
 
-    void         EvChar(UINT key, UINT repeatCount, UINT flags);
-    void         EvKeyDown(UINT key, UINT repeatCount, UINT flags);
-    UINT         EvGetDlgCode(MSG far*);
+    void         EvChar(uint key, uint repeatCount, uint flags);
+    void         EvKeyDown(uint key, uint repeatCount, uint flags);
+    uint         EvGetDlgCode(MSG far*);
     void         EvSetFocus(HWND hWndLostFocus);
     void         EvKillFocus(HWND hWndGetFocus);
-    BOOL         CanClose();
+    bool         CanClose();
 
     //
     // handler for input validation message sent by parent
@@ -200,31 +201,31 @@ inline int TEdit::GetNumLines() const {
   return (int)CONST_CAST(TEdit*,this)->HandleMessage(EM_GETLINECOUNT);
 }
 
-inline BOOL TEdit::IsModified() const {
-  return (BOOL)CONST_CAST(TEdit*,this)->HandleMessage(EM_GETMODIFY);
+inline bool TEdit::IsModified() const {
+  return (bool)CONST_CAST(TEdit*,this)->HandleMessage(EM_GETMODIFY);
 }
 
 //
 // selects the characters in the range "startPos .. endPos"
 //
-inline BOOL TEdit::SetSelection(UINT startPos, UINT endPos) {
-  #if defined(__WIN32__)
-    return HandleMessage(EM_SETSEL, startPos, endPos) != 0;
-  #else
-    return HandleMessage(EM_SETSEL, 0, MAKELPARAM(startPos, endPos)) != 0;
-  #endif
+inline bool TEdit::SetSelection(uint startPos, uint endPos) {
+#if defined(BI_PLAT_WIN32)
+  return HandleMessage(EM_SETSEL, startPos, endPos) != 0;
+#else
+  return HandleMessage(EM_SETSEL, 0, MAKELPARAM(startPos, endPos)) != 0;
+#endif
 }
 
 // returns the starting and ending positions of the selected text
 //
-inline void TEdit::GetSelection(UINT& startPos, UINT& endPos) const {
-  #if defined(__WIN32__)
-    CONST_CAST(TEdit*,this)->HandleMessage(EM_GETSEL, (WPARAM)&startPos, (LPARAM)&endPos);
-  #else
-    LRESULT  retValue = CONST_CAST(TEdit*,this)->HandleMessage(EM_GETSEL);
-    startPos = LOWORD(retValue);
-    endPos   = HIWORD(retValue);
-  #endif
+inline void TEdit::GetSelection(uint& startPos, uint& endPos) const {
+#if defined(BI_PLAT_WIN32)
+  CONST_CAST(TEdit*,this)->HandleMessage(EM_GETSEL, (WPARAM)&startPos, (LPARAM)&endPos);
+#else
+  LRESULT  retValue = CONST_CAST(TEdit*,this)->HandleMessage(EM_GETSEL);
+  startPos = LOWORD(retValue);
+  endPos   = HIWORD(retValue);
+#endif
 }
 
 //
@@ -235,7 +236,7 @@ inline void TEdit::GetSelection(UINT& startPos, UINT& endPos) const {
 // if "CharPos" is -1, the line containing the beginning of the selection (or
 // the line containing the caret if no selection) is returned
 //
-inline int TEdit::GetLineFromPos(UINT charPos) const {
+inline int TEdit::GetLineFromPos(uint charPos) const {
   return (int)CONST_CAST(TEdit*,this)->HandleMessage(EM_LINEFROMCHAR, charPos);
 }
 
@@ -245,7 +246,7 @@ inline int TEdit::GetLineFromPos(UINT charPos) const {
 //
 // if "LineNumber" is -1, the line containing the caret is used
 //
-inline UINT TEdit::GetLineIndex(int lineNumber) const {
+inline uint TEdit::GetLineIndex(int lineNumber) const {
   return (int)CONST_CAST(TEdit*,this)->HandleMessage(EM_LINEINDEX, lineNumber);
 }
 
@@ -253,11 +254,11 @@ inline UINT TEdit::GetLineIndex(int lineNumber) const {
 // scrolls the text by the specified horizontal and vertical amounts
 //
 inline void TEdit::Scroll(int horizUnit, int vertUnit) {
-  #if defined(__WIN32__)
-    HandleMessage(EM_LINESCROLL, horizUnit, vertUnit);
-  #else
-    HandleMessage(EM_LINESCROLL, 0, MAKELONG(vertUnit, horizUnit));
-  #endif
+#if defined(BI_PLAT_WIN32)
+  HandleMessage(EM_LINESCROLL, horizUnit, vertUnit);
+#else
+  HandleMessage(EM_LINESCROLL, 0, MAKELONG(vertUnit, horizUnit));
+#endif
 }
 
 //
@@ -280,7 +281,7 @@ inline void TEdit::SetRectNP(const TRect& frmtRect) {
   HandleMessage(EM_SETRECTNP, 0, (LPARAM)(const TRect FAR*)&frmtRect);
 }
 
-inline void TEdit::FormatLines(BOOL addEOL) {
+inline void TEdit::FormatLines(bool addEOL) {
   HandleMessage(EM_FMTLINES, addEOL);
 }
 
@@ -300,12 +301,12 @@ inline int TEdit::GetFirstVisibleLine() const {
   return (int)CONST_CAST(TEdit*,this)->HandleMessage(EM_GETFIRSTVISIBLELINE);
 }
 
-inline void TEdit::SetReadOnly(BOOL readOnly) {
+inline void TEdit::SetReadOnly(bool readOnly) {
   HandleMessage(EM_SETREADONLY, readOnly);
 }
 
-inline UINT TEdit::GetPasswordChar() const {
-  return (UINT)CONST_CAST(TEdit*,this)->HandleMessage(EM_GETPASSWORDCHAR);
+inline uint TEdit::GetPasswordChar() const {
+  return (uint)CONST_CAST(TEdit*,this)->HandleMessage(EM_GETPASSWORDCHAR);
 }
 
 inline EDITWORDBREAKPROC TEdit::GetWordBreakProc() const {
@@ -316,8 +317,8 @@ inline void TEdit::SetWordBreakProc(EDITWORDBREAKPROC proc) {
   HandleMessage(EM_SETWORDBREAKPROC, 0, (LPARAM)proc);
 }
 
-inline BOOL TEdit::CanUndo() const {
-  return (BOOL)CONST_CAST(TEdit*,this)->HandleMessage(EM_CANUNDO);
+inline bool TEdit::CanUndo() const {
+  return (bool)CONST_CAST(TEdit*,this)->HandleMessage(EM_CANUNDO);
 }
 
-#endif  // __OWL_EDIT_H
+#endif  // OWL_EDIT_H

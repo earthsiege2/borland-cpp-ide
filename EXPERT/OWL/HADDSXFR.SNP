@@ -4,7 +4,7 @@
 ##^BOF
 ##? ClassMarker [[Search]]
 ##Search == FALSE
-##:     %\\"Unable to add instant data struct for class [[ClassName]] to [[FileName]].  "
+##:     %\\"Unable to add instance data structure for class [[ClassName]] to [[FileName]].  "
 ##*
 ##^BOL
 struct [[ClassName]]Xfer {

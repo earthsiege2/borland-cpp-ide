@@ -1,0 +1,104 @@
+#############################################################################
+# This makefile is used as the driver to build the chosen RTL.  For         #
+# appropriate command line switches and environment variables, see          #
+# rules.mak                                                                 #       
+#############################################################################
+!include rules.mak
+
+#############################################################################
+# Build the command line.  NOTE: The code here is based on rules.mak.  If   #
+# rules.mak is enhanced or modified, make the results must be reflected     #
+# here as well!!!                                                           #
+#############################################################################
+CMDLINE = OS=$(OS)
+
+!if $d(DEBUG)
+    CMDLINE = $(CMDLINE) -DDEBUG
+!endif
+
+!if $d(DLL)
+    CMDLINE = $(CMDLINE) -DDLL
+!endif
+
+!if $d(MODEL)
+    CMDLINE = $(CMDLINE) MODEL=$(MODEL)
+!endif
+
+!if $d(MT)
+    CMDLINE = $(CMDLINE) -DMT
+!endif
+
+!if $d(PCH)
+    CMDLINE = $(CMDLINE) -DPCH
+!endif
+
+!if $d(MAKEFLAGS)
+    CMDLINE = $(CMDLINE) -$(MAKEFLAGS)
+!endif
+
+#############################################################################
+# What needs to be built.                                                   #
+#############################################################################
+all : start srcdirs builddir end
+
+srcdirs : $(SRCDIRS)
+
+BUILDDIR = $(LIBDIR)
+
+builddir : $(BUILDDIR)
+
+#############################################################################
+# For each source directory build whatever is necessary.                    #
+#############################################################################
+$(SRCDIRS) :
+    @echo.
+    @echo [*************** $* ***************]
+    @echo.
+    &cd $*
+    $(MAKE) -I$(RTLROOT) $(CMDLINE) objs
+
+$(BUILDDIR) :
+    @echo.
+    @echo [*************** $* ***************]
+    @echo.
+    cd $*
+!if $d(DLL)
+!    if $(OS) == WIN16
+         $(MAKE) -I$(RTLROOT) $(CMDLINE) win16dll
+!    else    
+         $(MAKE) -I$(RTLROOT) $(CMDLINE) dll
+!    endif
+!else
+!    if $(OS) == DOS || $(OS) == WIN16
+         $(MAKE) -I$(RTLROOT) $(CMDLINE) objs
+!    endif
+     $(MAKE) -I$(RTLROOT) $(CMDLINE) lib
+!endif
+
+#############################################################################
+# Do whatever is necessary at the start and end of the build.               #
+#############################################################################
+start :
+    time < $(RTLROOT)\tools\return.txt
+    @echo.
+    @echo [***************** Borland C++ Run Time Libary *****************]
+    @echo.
+!if $d(DLL)
+    if exist $(LIBDIR)\dll.rsp del $(LIBDIR)\dll.rsp
+    echo $(LIBDIR)\\\\$(DLLC0)+ > $(LIBDIR)\dll.rsp
+    if exist $(LIBDIR)\import.rsp del $(LIBDIR)\import.rsp
+!else
+    if exist $(LIBDIR)\tlib.rsp del $(LIBDIR)\tlib.rsp
+!endif
+
+end :
+    cd $(RTLROOT)
+!if $d(DLL)
+    if exist $(LIBDIR)\dll.rsp del $(LIBDIR)\dll.rsp
+    if exist $(LIBDIR)\import.rsp del $(LIBDIR)\import.rsp
+!else
+    if exist $(LIBDIR)\tlib.rsp del $(LIBDIR)\tlib.rsp
+!endif
+    time < $(RTLROOT)\tools\return.txt
+
+

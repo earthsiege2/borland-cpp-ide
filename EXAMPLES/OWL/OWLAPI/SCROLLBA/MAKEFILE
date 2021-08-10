@@ -2,7 +2,8 @@
 # ObjectWindows - (C) Copyright 1991, 1993 by Borland International
 #----------------------------------------------------------------------------
 
-EXE   =scrollbx
+EXE =scrollba
+OBJEXE = scrollbx.obj
 MODELS=mldf
 !include $(BCEXAMPLEDIR)\owlmake.gen
 

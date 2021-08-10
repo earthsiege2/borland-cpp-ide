@@ -2,29 +2,29 @@
 /*                                                                        */
 /*  BAGS.H                                                                */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_BAGS_H )
-#define __CLASSLIB_BAGS_H
+#if !defined( CLASSLIB_BAGS_H )
+#define CLASSLIB_BAGS_H
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_SHDDEL_H )
-#include "classlib\shddel.h"
-#endif  // __CLASSLIB_SHDDEL_H
+#if !defined( CLASSLIB_SHDDEL_H )
+#include <classlib/shddel.h>
+#endif
 
-#if !defined( __CLASSLIB_VECTIMP_H )
-#include "classlib\vectimp.h"
-#endif  // __CLASSLIB_VECTIMP_H
+#if !defined( CLASSLIB_VECTIMP_H )
+#include <classlib/vectimp.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -473,5 +473,5 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_BAGS_H
+#endif  // CLASSLIB_BAGS_H
 

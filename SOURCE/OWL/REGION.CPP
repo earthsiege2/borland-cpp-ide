@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\region.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of GDI Region object class
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\gdiobjec.h>
+#include <owl/owlpch.h>
+#include <owl/gdiobjec.h>
 
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 
@@ -16,7 +17,8 @@ TRegion::TRegion()
 }
 
 TRegion::TRegion(HRGN handle, TAutoDelete autoDelete)
-  : TGdiBase(handle, autoDelete)
+:
+  TGdiBase(handle, autoDelete)
 {
 }
 
@@ -24,7 +26,7 @@ TRegion::TRegion(const TRegion& source)
 {
   Handle = ::CreateRectRgn(0, 0, 0, 0);
   WARNX(OwlGDI, !Handle, 0, "Cannot create copy of region " << 
-        UINT(HRGN(source)));
+        uint(HRGN(source)));
   CheckValid();
   ::CombineRgn((HRGN)Handle, source, 0, RGN_COPY);
 }
@@ -55,7 +57,7 @@ TRegion::TRegion(const TPoint* points, int count, int fillMode)
 {
   Handle = ::CreatePolygonRgn(points, count, fillMode);
   WARNX(OwlGDI, !Handle, 0, "Cannot create poly region " << count << 
-        "pts @" << hex << DWORD(LPVOID(points)));
+        "pts @" << hex << uint32(LPVOID(points)));
   CheckValid();
 }
 
@@ -64,7 +66,7 @@ TRegion::TRegion(const TPoint* points, const int* polyCounts, int count,
 {
   Handle = ::CreatePolyPolygonRgn(points, polyCounts, count, fillMode);
   WARNX(OwlGDI, !Handle, 0, "Cannot create polypoly region " << count << 
-        "polies @" << hex << DWORD(LPVOID(points)));
+        "polies @" << hex << uint32(LPVOID(points)));
   CheckValid();
 }
 

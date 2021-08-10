@@ -1,4 +1,5 @@
 <<[H]
+##QUERY_PASSED_PARAM [[OldClient]]
 ##QUERY_WIND_CLIENT [[Client]]
 ##--BEGIN-- Client != ""
 ##:     GetIncludeFile(\\"[[Client]]") [[ClientIncludeFile]]
@@ -19,11 +20,47 @@
 #include [[ClientIncludeFile]]
 ##--END-- PragmaFound == FALSE
 ##--END-- FoundInclude == FALSE
+##QUERY_BASE_NAME [[BaseName]]
+##QUERY_WIND_CLIENT [[Client]]
+##"" [[ClientBase]]
+##--BEGIN-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
+##:  <<*Client QUERY_BASE_NAME ClientBase
+##(Client != "TMDIClient") && (ClientBase != "TMDIClient")
+##:     QUERY_CLASS_NAME [[ClassName]]
+##:     %\\"The class [[ClassName]]'s client can only be a TMDIClient type class.  "
+##*
+##QUERY_CLASS_NAME [[ClassName]]
+##FALSE [[ClientReplace]]
+##--BEGIN-- ? \\"[[ClassName]] ("
+##:     YPos() [[ConstructorLine]]
+##:     \\"*new [[OldClient]]" [[MDIFrameClient]]
+##:     ? MDIFrameClient [[FoundIt]]
+##:     --BEGIN-- FoundIt
+##:         (YPos() == ConstructorLine) ClientReplace
+##ClientReplace == FALSE
+##:         %\\"Unable to find client instantiation in constructor.  " 
+##*
+##:         ^BOL
+##:         ? MDIFrameClient,"),",0 ClientReplace
+##ClientReplace == FALSE
+##:         %\\"Unable to find client instantiation in constructor.  " 
+##*
+##:         QUERY_WIND_CLIENT [[Client]]
+##:         \\QUERY_WIND_CLIENT_PARAM [[ClientParam]]
+##:         InsertText(\\"*new [[Client]][[ClientParam]]")
+##*
+##:     --END-- FoundIt
+##--END-- ? \\"[[ClassName]] ("
+##--END-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
 ##--END-- Client != ""
 >>[H]
 
 
 <<[CPP]
+##QUERY_BASE_NAME [[BaseName]]
+##(BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
+##:     Exit()
+##*
 ##QUERY_PASSED_PARAM [[OldClient]]
 ##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
 ##\\"[[ClassName]]::[[ClassName]] (" [[FindClass]]

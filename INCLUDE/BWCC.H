@@ -39,7 +39,11 @@
                               // users should not use a property
                               // with this name!
 
+#if  !defined( IDHELP)
+
 #define IDHELP    998         // Id of help button
+
+#endif
 
 #define BORDLGCLASS   "BorDlg"      // Our Custom Dialog class
 #define BORGRAYCLASS  "BorDlg_Gray" // Our Custom Dialog class - gray background

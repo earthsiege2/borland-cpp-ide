@@ -1,4 +1,4 @@
-/* Borland C++ - (C) Copyright 1992 by Borland International               */
+/* Borland C++ - (C) Copyright 1994 by Borland International               */
 
 /***************************************************************************
 
@@ -54,7 +54,7 @@ FARPROC        lpDdeProc;              /*  DDE callback function           */
 HSZ            hszService;
 HSZ            hszTopic;
 HSZ            hszItem;
-HCONV          hConv = NULL;           /*Handle of established conversation*/
+HCONV          hConv = (HCONV)NULL;    /*Handle of established conversation*/
 HDDEDATA       hData;
 DWORD          dwResult;
 WORD           wFmt = CF_TEXT;         /*  Clipboard format                */
@@ -67,7 +67,6 @@ char szAppName[] = "DDEClientApplication";
 
 
 /***************************************************************************/
-
 #pragma argsused
 int PASCAL WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpszCmdLine, int nCmdShow )
@@ -82,7 +81,7 @@ int PASCAL WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
    if ( !InitInstance ( hInstance, nCmdShow ) )
       return ( FALSE );
 
-  while ( GetMessage ( &msg, NULL, NULL, NULL ) )
+  while ( GetMessage ( &msg, NULL, 0, 0 ) )
   {
     TranslateMessage ( &msg );
     DispatchMessage ( &msg );
@@ -156,6 +155,7 @@ BOOL InitInstance ( HANDLE hInstance, int nCmdShow )
 
 /***************************************************************************/
 
+#pragma warn -eff
 LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
                                WPARAM wParam, LPARAM lParam )
 {
@@ -204,11 +204,11 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
          break;
 
       case IDM_CONNECT_SERVER:
-         if ( hConv == NULL )
+         if ( hConv == (HCONV)NULL )
          {
       hConv = DdeConnect ( idInst, hszService, hszTopic,
                (PCONVCONTEXT) NULL );
-      if ( hConv == NULL )
+      if ( hConv == (HCONV)NULL )
       {
          HandleError ( DdeGetLastError ( idInst ) );
          HandleOutput ( "Unsuccessful connection." );
@@ -222,10 +222,10 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
          break;
 
       case IDM_DISCONNECT_SERVER:
-         if ( hConv != NULL )
+         if ( hConv != (HCONV)NULL )
          {
       DdeDisconnect ( hConv );
-      hConv = NULL;
+      hConv = (HCONV)NULL;
       HandleOutput ( "Disconnected from server." );
          }
          else
@@ -234,7 +234,7 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
          break;
 
       case IDM_MSG_TO_SERVER:
-         if ( hConv != NULL )
+         if ( hConv != (HCONV)NULL )
          {
       iClientCount ++;
       sprintf ( tbuf, "%3d.", iClientCount );
@@ -247,7 +247,7 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
     #endif
          sizeof ( szDDEString ), 0L, hszItem, wFmt, 0 );
 
-      if ( hData != NULL )
+      if ( hData != (HDDEDATA)NULL )
         hData = DdeClientTransaction ( (LPBYTE)hData, -1, hConv,
              hszItem, wFmt, XTYP_POKE, 1000, &dwResult );
       else
@@ -259,7 +259,7 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
          break;
 
       case IDM_MSG_FROM_SERVER:
-         if ( hConv != NULL )
+         if ( hConv != (HCONV)NULL )
          {
       hData = DdeClientTransaction ( NULL, 0, hConv,
              hszItem, wFmt, XTYP_REQUEST, 1000, &dwResult );
@@ -313,10 +313,10 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
    break;
 
       case WM_DESTROY:
-         if ( hConv != NULL )
+         if ( hConv != (HCONV)NULL )
          {
             DdeDisconnect ( hConv );
-            hConv = NULL;
+            hConv = (HCONV)NULL;
          }
 
          DdeFreeStringHandle ( idInst, hszService );
@@ -334,6 +334,7 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
 
    return ( FALSE );
 }
+#pragma warn .eff
 
 /***************************************************************************/
 
@@ -368,7 +369,7 @@ HDDEDATA EXPENTRY _export DDECallback ( WORD wType, WORD wFmt, HCONV hConvX, HSZ
    switch ( wType )
    {
       case XTYP_DISCONNECT:
-         hConv = NULL;
+         hConv = (HCONV)NULL;
          HandleOutput ( "The server forced a disconnect." );
          return ( (HDDEDATA) NULL );
 

@@ -2,25 +2,25 @@
 /*                                                                        */
 /*  BINIMP.H                                                              */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_BINIMP_H )
-#define __CLASSLIB_BINIMP_H
+#if !defined( CLASSLIB_BINIMP_H )
+#define CLASSLIB_BINIMP_H
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_VOIDP_H )
-#include "classlib\voidp.h"
-#endif  // __CLASSLIB_VOIDP_H
+#if !defined( CLASSLIB_VOIDP_H )
+#include <classlib/voidp.h>
+#endif
 
-#if !defined( __CLASSLIB_STACKS_H )
-#include "classlib\stacks.h"
-#endif  // __CLASSLIB_STACKS_H
+#if !defined( CLASSLIB_STACKS_H )
+#include <classlib/stacks.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -155,6 +155,7 @@ protected:
 
     TBinaryTreeExternalIteratorBase( TBinarySearchTreeBase _BIDSFAR & tree,
         TBinarySearchTreeBase::IteratorOrder order = TBinarySearchTreeBase::InOrder );
+    ~TBinaryTreeExternalIteratorBase();
 
     TBinarySearchTreeBase::BinNode _BIDSFAR *GetCurrent() const
         {
@@ -165,7 +166,7 @@ protected:
 
 private:
 
-    TStackAsList<TBinarySearchTreeBase::BinNode _BIDSFAR *> Stack;
+    TStackAsList<TBinarySearchTreeBase::BinNode _BIDSFAR *> *Stack;
     TBinarySearchTreeBase _BIDSFAR *Tree;
     TBinarySearchTreeBase::BinNode _BIDSFAR *Current;
     TBinarySearchTreeBase::IteratorOrder Order;
@@ -562,6 +563,6 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_BINIMP_H
+#endif  // CLASSLIB_BINIMP_H
 
 

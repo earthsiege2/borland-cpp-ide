@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\owldiag.cpp
-//   Implementation of OWL diagnostics
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of Owl diagnostics
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\point.h>
+#include <owl/owlpch.h>
+#include <owl/point.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -35,8 +36,8 @@ GetDiagEnabled(char* file, char* name, uint8 e)
     return 0;
   
   GetPrivateProfileString(Section, name, "", buf, sizeof(buf), ofs.szPathName);
-  char *pe = strtok(buf, " ");
-  return pe ? uint8(atoi(pe)) : e;
+  char* pe = strtok(buf, " ");
+  return pe ? uint16(atoi(pe)) : e;
 }
 
 //
@@ -53,6 +54,6 @@ GetDiagLevel(char* file, char* name, uint8 l)
 
   GetPrivateProfileString(Section, name, "", buf, sizeof(buf), ofs.szPathName);
   strtok(buf, " ");
-  char *pl = strtok(0, " ");
-  return pl ? uint8(atoi(pl)) : l;
+  char* pl = strtok(0, " ");
+  return pl ? uint16(atoi(pl)) : l;
 }

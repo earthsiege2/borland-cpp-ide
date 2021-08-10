@@ -1,6 +1,7 @@
 ##--BEGIN-- TRUE
 
 
-##QUERY_FILENAME_H [[Filename]]
+##QUERY_FILENAME_H [[HFileName]]
+##StripDiacritic(HFileName) [[Filename]]
 #endif                                      // __[[Filename]]_h sentry.
 ##--END-- TRUE

@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\tinycapt.cpp
-//   Defines type TTinyCaption
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TTinyCaption
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\tinycapt.h>
-#include <owl\gdiobjec.h>
+#include <owl/owlpch.h>
+#include <owl/tinycapt.h>
+#include <owl/gdiobjec.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -31,7 +32,7 @@ END_RESPONSE_TABLE;
 //
 TTinyCaption::TTinyCaption()
 {
-  TCEnabled = FALSE;
+  TCEnabled = false;
   CaptionFont = 0;
 }
 
@@ -41,7 +42,7 @@ TTinyCaption::~TTinyCaption()
 }
 
 void
-TTinyCaption::EnableTinyCaption(int captionHeight, BOOL closeBox)
+TTinyCaption::EnableTinyCaption(int captionHeight, bool closeBox)
 {
   Border.cx = GetSystemMetrics(SM_CXBORDER);
   Border.cy = GetSystemMetrics(SM_CYBORDER);
@@ -49,58 +50,58 @@ TTinyCaption::EnableTinyCaption(int captionHeight, BOOL closeBox)
   //
   // Get width of window borders, these will vary with type of window
   //
-  long style = Attr.Style;
-  if (style & WS_THICKFRAME) {
+  if (Attr.Style & WS_THICKFRAME) {
     Frame.cx = GetSystemMetrics(SM_CXFRAME);
     Frame.cy = GetSystemMetrics(SM_CYFRAME);
-
-  } else if (style & WS_DLGFRAME) {
+  }
+  else if (Attr.Style & WS_DLGFRAME) {
     Frame.cx = GetSystemMetrics(SM_CXDLGFRAME);
     Frame.cy = GetSystemMetrics(SM_CYDLGFRAME);
-
-  } else if (style & WS_BORDER) {
+  }
+  else {
+    Attr.Style |= WS_BORDER;  // must have at least a border
     Frame = Border;
-
-  } else {
-    Frame.cx = 0;
-    Frame.cy = 0;
   }
 
-  CaptionHeight = ((Border.cy+GetSystemMetrics(SM_CYCAPTION)) * captionHeight)
-                    / 100;
+  //
+  // Calculate the actual caption height including lower divider, but not top
+  // border
+  //
+  CaptionHeight = (GetSystemMetrics(SM_CYCAPTION) * captionHeight) / 100
+                  - Border.cy;
   CloseBox = closeBox;
 
   delete CaptionFont;
   CaptionFont = new TFont(
-    "Small Fonts",              // facename
-    -(CaptionHeight-Border.cy), // pixel height,
+    "Arial",                    // facename. "Small Fonts" is another option
+    -(CaptionHeight-2*Border.cy), // height in pixels,
     0, 0, 0, FW_NORMAL,         // width,esc,orientation,weight
     VARIABLE_PITCH | FF_SWISS,  // Pitch and Family
-    FALSE, FALSE, FALSE,        // Italic, Underline, Strikeout
+    false, false, false,        // Italic, Underline, Strikeout
     ANSI_CHARSET,               // Charset
     OUT_CHARACTER_PRECIS,       // Output precision
     CLIP_DEFAULT_PRECIS,        // Clip precision
     PROOF_QUALITY               // Quality
   );
 
-  TCEnabled = TRUE;
+  TCEnabled = true;
 }
 
 //
 // Return where in the non client area we are.  We only handle caption
 // bar area
 //
-UINT
+uint
 TTinyCaption::EvNCHitTest(TPoint& screenPt)
 {
-  UINT er;
+  uint er;
   if (DoNCHitTest(screenPt, er) == esComplete)
     return er;
   return TWindow::EvNCHitTest(screenPt);
 }
 
 TEventStatus
-TTinyCaption::DoNCHitTest(TPoint& screenPt, UINT& evRes)
+TTinyCaption::DoNCHitTest(TPoint& screenPt, uint& evRes)
 {
   if (!TCEnabled)
     return esPartial;
@@ -109,16 +110,16 @@ TTinyCaption::DoNCHitTest(TPoint& screenPt, UINT& evRes)
   // Check style bits to see what to paint
   //
   long style = GetWindowLong(GWL_STYLE);
-  BOOL hasCaption, hasSysMenu, hasMaximize, hasMinimize;
-  hasCaption = hasSysMenu = hasMaximize = hasMinimize = FALSE;
+  bool hasCaption, hasSysMenu, hasMaximize, hasMinimize;
+  hasCaption = hasSysMenu = hasMaximize = hasMinimize = false;
   if (style & WS_CAPTION) {
-    hasCaption = TRUE;
+    hasCaption = true;
     if (style & WS_SYSMENU)
-      hasSysMenu = TRUE;
+      hasSysMenu = true;
     if (style & WS_MAXIMIZEBOX)
-      hasMaximize = TRUE;
+      hasMaximize = true;
     if (style & WS_MINIMIZEBOX)
-      hasMinimize = TRUE;
+      hasMinimize = true;
   }
 
   //
@@ -129,25 +130,25 @@ TTinyCaption::DoNCHitTest(TPoint& screenPt, UINT& evRes)
   if ((hasSysMenu || CloseBox) && GetSysBoxRect().Contains(winPt)) {
     evRes = HTSYSMENU;
     return esComplete;
-
-  } else if (hasMinimize && GetMinBoxRect().Contains(winPt)) {
+  }
+  else if (hasMinimize && GetMinBoxRect().Contains(winPt)) {
     evRes = HTMINBUTTON;
     return esComplete;
-
-  } else if (hasMaximize && GetMaxBoxRect().Contains(winPt)) {
+  }
+  else if (hasMaximize && GetMaxBoxRect().Contains(winPt)) {
     evRes = HTMAXBUTTON;
     return esComplete;
-
+  }
   //
   // CaptionRect includes buttons so make sure it's last checked
   // Should modify this one to allow clicking in left, top, right thin 
   // borders of caption
   //
-  } else if (hasCaption && GetCaptionRect().Contains(winPt)) {
+  else if (hasCaption && GetCaptionRect().Contains(winPt)) {
     evRes = HTCAPTION;
     return esComplete;
-
-  } else {
+  }
+  else {
     evRes = 0;
     return esPartial;
   }
@@ -182,10 +183,10 @@ TTinyCaption::DoNCPaint()
 //
 // Returns the size of our client area
 //
-UINT
-TTinyCaption::EvNCCalcSize(BOOL calcValidRects, NCCALCSIZE_PARAMS far& calcSize)
+uint
+TTinyCaption::EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize)
 {
-  UINT er;
+  uint er;
   if (DoNCCalcSize(calcValidRects, calcSize, er) == esComplete)
     return er;
   return TWindow::EvNCCalcSize(calcValidRects, calcSize);
@@ -195,8 +196,8 @@ TTinyCaption::EvNCCalcSize(BOOL calcValidRects, NCCALCSIZE_PARAMS far& calcSize)
 // Return the size of our client area, leaving room for caption bar
 //
 TEventStatus
-TTinyCaption::DoNCCalcSize(BOOL /*calcValidRects*/,
-                           NCCALCSIZE_PARAMS far& calcSize, UINT& evRes)
+TTinyCaption::DoNCCalcSize(bool /*calcValidRects*/,
+                           NCCALCSIZE_PARAMS far& calcSize, uint& evRes)
 {
   if (!TCEnabled || IsIconic())
     return esPartial;
@@ -213,7 +214,7 @@ TTinyCaption::DoNCCalcSize(BOOL /*calcValidRects*/,
 }
 
 void
-TTinyCaption::EvNCLButtonDown(UINT hitTest, TPoint& screenPt)
+TTinyCaption::EvNCLButtonDown(uint hitTest, TPoint& screenPt)
 {
   //
   // Display system menu, invert min/max icons (not), etc
@@ -223,7 +224,7 @@ TTinyCaption::EvNCLButtonDown(UINT hitTest, TPoint& screenPt)
 }
 
 TEventStatus
-TTinyCaption::DoNCLButtonDown(UINT hitTest, TPoint& /*screenPt*/)
+TTinyCaption::DoNCLButtonDown(uint hitTest, TPoint& screenPt)
 {
   if (!TCEnabled)
     return esPartial;
@@ -232,22 +233,27 @@ TTinyCaption::DoNCLButtonDown(UINT hitTest, TPoint& /*screenPt*/)
     case HTSYSMENU:
       DownHit = HTSYSMENU;
       if (CloseBox) {
-        IsPressed = TRUE;
+        IsPressed = true;
         SetCapture();
         PaintCloseBox(TWindowDC(*this), GetSysBoxRect(), IsPressed);
+      }
+      else {
+        TRect sysBoxRect = GetSysBoxRect().InflatedBy(-1,-1);
+        sysBoxRect.right += 1;
 
-      } else {
-        TWindowDC(*this).PatBlt(GetSysBoxRect(), PATINVERT);
+        TWindowDC(*this).PatBlt(sysBoxRect, PATINVERT);
         //
         // Display sys menu on button down
         // Need to lock sys menu until user clicks outside
         //
 
         //
-        // Set flag to indicate we're expecting a sys command
+        // Set flag to indicate we're expecting a sys command, & then send
+        // message to popup sys menu
         //
-        WaitingForSysCmd = TRUE;
-        DoSysMenu();
+        WaitingForSysCmd = true;
+        SendMessage(WM_SYSCOMMAND, SC_MOUSEMENU|HTSYSMENU,
+                    MAKELPARAM(screenPt.x,screenPt.y));
 
         //
         // If we didn't execute a command, user released btn outside of menu
@@ -255,37 +261,29 @@ TTinyCaption::DoNCLButtonDown(UINT hitTest, TPoint& /*screenPt*/)
         // were brought up with a keystroke
         //
         if (WaitingForSysCmd) {
-          UINT hitTest;
+          uint hitTest;
           TPoint pt;
           GetCursorPos(pt);
           DoNCHitTest(pt, hitTest);
           if (hitTest == HTSYSMENU) {
-            //
-            // Make this look like menu was brought up with LButton UP or
-            // Alt-Space so that it stays on screen after mouse is released
-            //
-            BYTE rgbKeyState[256];
-            GetKeyboardState(rgbKeyState);
-            rgbKeyState[VK_LBUTTON] = 0;      // 0==UP, 1==DOWN
-            SetKeyboardState(rgbKeyState);
-            DoSysMenu();  // TrackPopupMenu will now have alt-space behavior
+            SendMessage(WM_SYSCOMMAND, SC_KEYMENU|HTSYSMENU);
           }
         }
         if (HWindow)
-          TWindowDC(*this).PatBlt(GetSysBoxRect(), PATINVERT);
+          TWindowDC(*this).PatBlt(sysBoxRect, PATINVERT);
       }
       return esComplete;
 
     case HTMINBUTTON:
       DownHit = HTMINBUTTON;
-      IsPressed = TRUE;
+      IsPressed = true;
       SetCapture();
       PaintMinBox(TWindowDC(*this), GetMinBoxRect(), IsPressed);
       return esComplete;
 
     case HTMAXBUTTON:
       DownHit = HTMAXBUTTON;
-      IsPressed = TRUE;
+      IsPressed = true;
       SetCapture();
       PaintMaxBox(TWindowDC(*this), GetMaxBoxRect(), IsPressed);
       return esComplete;
@@ -295,21 +293,21 @@ TTinyCaption::DoNCLButtonDown(UINT hitTest, TPoint& /*screenPt*/)
 }
 
 void
-TTinyCaption::EvMouseMove(UINT modKeys, TPoint& pt)
+TTinyCaption::EvMouseMove(uint modKeys, TPoint& pt)
 {
   if (DoMouseMove(modKeys, pt) == esPartial)
     TWindow::EvMouseMove(modKeys, pt);
 }
 
 TEventStatus
-TTinyCaption::DoMouseMove(UINT /*modKeys*/, TPoint& pt)
+TTinyCaption::DoMouseMove(uint /*modKeys*/, TPoint& pt)
 {
   if (TCEnabled && DownHit != HTNOWHERE) {
-    UINT   hitTest;
+    uint   hitTest;
     TPoint screenPt = pt;
     ClientToScreen(screenPt);    // Cvt to screen coord
     DoNCHitTest(screenPt, hitTest);
-    BOOL isNowPressed = hitTest == DownHit;
+    bool isNowPressed = hitTest == DownHit;
 
     if (isNowPressed != IsPressed) {
       IsPressed = isNowPressed;
@@ -331,7 +329,7 @@ TTinyCaption::DoMouseMove(UINT /*modKeys*/, TPoint& pt)
 }
 
 void
-TTinyCaption::EvLButtonUp(UINT modKeys, TPoint& pt)
+TTinyCaption::EvLButtonUp(uint modKeys, TPoint& pt)
 {
   //
   // If we're still in area where buton went down, then do it
@@ -341,13 +339,13 @@ TTinyCaption::EvLButtonUp(UINT modKeys, TPoint& pt)
 }
 
 TEventStatus
-TTinyCaption::DoLButtonUp(UINT modKeys, TPoint& pt)
+TTinyCaption::DoLButtonUp(uint modKeys, TPoint& pt)
 {
   if (TCEnabled && DownHit != HTNOWHERE) {
     ReleaseCapture();
     DoMouseMove(modKeys, pt);
 
-    UINT   hitTest;
+    uint   hitTest;
     TPoint screenPt = pt;
     ClientToScreen(screenPt);    // Cvt to screen coord
     DoNCHitTest(screenPt, hitTest);
@@ -378,29 +376,29 @@ TTinyCaption::DoLButtonUp(UINT modKeys, TPoint& pt)
   return esPartial;
 }
 
-BOOL
-TTinyCaption::EvNCActivate(BOOL active)
+bool
+TTinyCaption::EvNCActivate(bool active)
 {
-  BOOL er;
+  bool er;
   if (DoNCActivate(active, er) == esComplete)
     return er;
   return TWindow::EvNCActivate(active);
 }
 
 TEventStatus
-TTinyCaption::DoNCActivate(BOOL active, BOOL& evRes)
+TTinyCaption::DoNCActivate(bool active, bool& evRes)
 {
   if (!TCEnabled || IsIconic())
     return esPartial;  // Let default do it's thing
 
   PaintCaption(active);
-  evRes = !active;
+  evRes = ToBool(!active);
   return esComplete;
 }
 
 
 LRESULT
-TTinyCaption::EvCommand(UINT id, HWND hWndCtl, UINT notifyCode)
+TTinyCaption::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
 {
   LRESULT er;
   if (DoCommand(id, hWndCtl, notifyCode, er) == esComplete)
@@ -409,7 +407,7 @@ TTinyCaption::EvCommand(UINT id, HWND hWndCtl, UINT notifyCode)
 }
 
 TEventStatus
-TTinyCaption::DoCommand(UINT id, HWND /*hWndCtl*/, UINT notifyCode, LRESULT& evRes)
+TTinyCaption::DoCommand(uint id, HWND /*hWndCtl*/, uint notifyCode, LRESULT& evRes)
 {
   //
   // We're displaying system menu using TrackPopup...
@@ -420,51 +418,49 @@ TTinyCaption::DoCommand(UINT id, HWND /*hWndCtl*/, UINT notifyCode, LRESULT& evR
     return esPartial;
 
   if (id >= 0xF000) {
-    WaitingForSysCmd = FALSE;  // For LButtonDown use
+    WaitingForSysCmd = false;  // Let LButtonDown handler know that a command was sent
     evRes = HandleMessage(WM_SYSCOMMAND, id, notifyCode);
     return esComplete;
-
-  } else {
+  }
+  else {
     evRes = 0;
     return esPartial;
   }
 }
 
 void
-TTinyCaption::EvSysCommand(UINT cmdType, TPoint& p)
+TTinyCaption::EvSysCommand(uint cmdType, TPoint& p)
 {
   if (DoSysCommand(cmdType,p) == esPartial)
-    TWindow::EvSysCommand(cmdType,p);
+    TWindow::EvSysCommand(cmdType, p);
 }
 
+//
+//
+// Handle WM_SYSCOMMAND to make sure that SC_KEYMENU and SC_MOUSEMENU bring up
+// our sys menu at the right coord w/ respect to the tiny sys box.
+//
+// If iconic, then let default windows processing deal with the menu
+//
 TEventStatus
-TTinyCaption::DoSysCommand(UINT cmdType, TPoint&)
+TTinyCaption::DoSysCommand(uint cmdType, TPoint&)
 {
   if (!TCEnabled)
     return esPartial;
 
-  //
-  // Make sure that ALT-SPACE brings up our sys menu at the right coord
-  //
-  if (cmdType == SC_KEYMENU) {
-    //
-    // If we're iconized, windows sends us the SC_KEYMENU message when the
-    // user clicks on the icon.  We want the menu to be displayed in the
-    // default position
-    //
-    if (!IsIconic()) {
-      DoSysMenu();
-      return esComplete;
-    }
+  cmdType &= 0xFFF0;
+  if ((cmdType == SC_KEYMENU || cmdType == SC_MOUSEMENU) && !IsIconic()) {
+    DoSysMenu();
+    return esComplete;
   }
   return esPartial;
 }
 
 void
-TTinyCaption::PaintButton(TDC& dc, TRect& r, BOOL pressed)
+TTinyCaption::PaintButton(TDC& dc, TRect& r, bool pressed)
 {
 //  dc.OWLFastWindowFrame(TBrush(GetSysColor(COLOR_WINDOWFRAME)), r, 1, 1);
-  dc.FrameRect(r, TBrush(TColor::Black));
+  dc.FrameRect(r, TBrush(GetSysColor(COLOR_WINDOWFRAME)));
 
   r.Inflate(-1,-1);
   dc.TextRect(r, TColor::LtGray);
@@ -472,7 +468,8 @@ TTinyCaption::PaintButton(TDC& dc, TRect& r, BOOL pressed)
     if (pressed) {
       dc.TextRect(r.left, r.top, r.right, r.top+1, TColor::Gray);
       dc.TextRect(r.left, r.top+1, r.left+1, r.bottom, TColor::Gray);
-    } else {
+    }
+    else {
       dc.TextRect(r.left, r.top, r.right-1, r.top+1, TColor::White);
       dc.TextRect(r.left, r.top+1, r.left+1, r.bottom-1, TColor::White);
       dc.TextRect(r.right-1, r.top+1, r.right, r.bottom, TColor::Gray);
@@ -482,7 +479,7 @@ TTinyCaption::PaintButton(TDC& dc, TRect& r, BOOL pressed)
 }
 
 void
-TTinyCaption::PaintCloseBox(TDC& dc, TRect& boxRect, BOOL pressed)
+TTinyCaption::PaintCloseBox(TDC& dc, TRect& boxRect, bool pressed)
 {
   //
   // Fill the box with light gray & draw bevel if possible
@@ -494,21 +491,27 @@ TTinyCaption::PaintCloseBox(TDC& dc, TRect& boxRect, BOOL pressed)
 
   //
   // Do something different to differentiate from standard system menu--
-  // draw a recessed black box
+  // draw a recessed black box glyph about half the button size, centered
   //
-  TRect glyphRect(0, 0, boxRect.Width()/2+1, boxRect.Height()/2+1);
-  glyphRect += TPoint(boxRect.left + glyphRect.right/2,
-                      boxRect.top + glyphRect.bottom/2);
+  int glyphWidth  = boxRect.Width() > 7 ?
+                      boxRect.Width()-boxRect.Width()/2-1 : boxRect.Width()-3;
+  int glyphHeight = boxRect.Height() > 7 ?
+                      boxRect.Height()-boxRect.Height()/2-1 : boxRect.Height()-3;
+  if (glyphWidth > 1 && glyphHeight > 1) {
+    TRect glyphRect(0, 0, glyphWidth, glyphHeight);
+    glyphRect.Offset(boxRect.left + (boxRect.Width()-glyphWidth-1)/2,
+                     boxRect.top + (boxRect.Height()-glyphHeight-1)/2);
 
-  dc.TextRect(glyphRect, TColor::Gray);
-  glyphRect.Offset(1,1);
-  dc.TextRect(glyphRect, TColor::White);
-  glyphRect.BottomRight().Offset(-1,-1);
-  dc.TextRect(glyphRect, TColor::Black);
+    dc.TextRect(glyphRect, TColor::Gray);
+    glyphRect.Offset(1,1);
+    dc.TextRect(glyphRect, TColor::White);
+    glyphRect.BottomRight().Offset(-1,-1);
+    dc.TextRect(glyphRect, TColor::Black);
+  }
 }
 
 void
-TTinyCaption::PaintSysBox(TDC& dc, TRect& boxRect, BOOL /*pressed*/)
+TTinyCaption::PaintSysBox(TDC& dc, TRect& boxRect, bool /*pressed*/)
 {
   //
   // Dont paint over the left & top borders
@@ -543,7 +546,7 @@ TTinyCaption::PaintSysBox(TDC& dc, TRect& boxRect, BOOL /*pressed*/)
 }
 
 void
-TTinyCaption::PaintMinBox(TDC& dc, TRect& boxRect, BOOL pressed)
+TTinyCaption::PaintMinBox(TDC& dc, TRect& boxRect, bool pressed)
 {
   //
   // Fill the box with light gray & draw bevel if possible
@@ -558,7 +561,7 @@ TTinyCaption::PaintMinBox(TDC& dc, TRect& boxRect, BOOL pressed)
 
   TPoint begPt = boxRect.TopLeft().OffsetBy((bw+1)/4, (bh+2)/3);
   TPoint endPt = begPt.OffsetBy((bw+1)/2,0);
-  for (int i = 0; begPt.x < endPt.x; i++) {
+  while (begPt.x < endPt.x) {
     dc.MoveTo(begPt);
     dc.LineTo(endPt);
     begPt.Offset(1,1);
@@ -567,7 +570,7 @@ TTinyCaption::PaintMinBox(TDC& dc, TRect& boxRect, BOOL pressed)
 }
 
 void
-TTinyCaption::PaintMaxBox(TDC& dc, TRect& boxRect, BOOL pressed)
+TTinyCaption::PaintMaxBox(TDC& dc, TRect& boxRect, bool pressed)
 {
   //
   // Fill the box with light gray & draw bevel if possible
@@ -586,7 +589,7 @@ TTinyCaption::PaintMaxBox(TDC& dc, TRect& boxRect, BOOL pressed)
   if (IsZoomed()) {
     TPoint begPt = boxRect.BottomLeft().OffsetBy((bw+1)/4, -bh*3/8);
     TPoint endPt = begPt.OffsetBy((bw+1)/2, 0);
-    for (int i = 0; begPt.x < endPt.x; i++) {
+    while (begPt.x < endPt.x) {
       dc.MoveTo(begPt);
       dc.LineTo(endPt);
       begPt.Offset(1,1);
@@ -600,7 +603,7 @@ TTinyCaption::PaintMaxBox(TDC& dc, TRect& boxRect, BOOL pressed)
   {
     TPoint begPt = boxRect.TopLeft().OffsetBy((bw+1)/4, IsZoomed() ? bh*3/8 : bh*2/3);
     TPoint endPt = begPt.OffsetBy((bw+1)/2, 0);
-    for (int i = 0; begPt.x < endPt.x; i++) {
+    while (begPt.x < endPt.x) {
       dc.MoveTo(begPt);
       dc.LineTo(endPt);
       begPt.Offset(1, -1);
@@ -610,7 +613,7 @@ TTinyCaption::PaintMaxBox(TDC& dc, TRect& boxRect, BOOL pressed)
 }
 
 void
-TTinyCaption::PaintCaption(BOOL active)
+TTinyCaption::PaintCaption(bool active)
 {
   int xOrg;
 
@@ -634,7 +637,7 @@ TTinyCaption::PaintCaption(BOOL active)
 
   dc.SelectObject(*CaptionFont);
   dc.SetBkMode(TRANSPARENT);
-  TSize textSize = dc.GetTextExtent(Title, lstrlen(Title));
+  TSize textSize = dc.GetTextExtent(Title, strlen(Title));
 
   //
   // Calc x coord for text, so that text is centered between caption buttons
@@ -660,16 +663,17 @@ TTinyCaption::PaintCaption(BOOL active)
   if ((style & WS_SYSMENU) || CloseBox)
     xOrg += GetSysBoxRect().Width();
 
-  dc.ExtTextOut(xOrg, captRect.top,
+  dc.ExtTextOut(xOrg, captRect.top-Border.cy,
     ETO_CLIPPED,
     &captRect,
     Title,
-    lstrlen(Title)
+    strlen(Title)
   );
   dc.RestoreFont();
 
   //
   // Paint widgets: sysmenu or close button, minimize button, maximize button
+  // They currently all use a black pen
   //
   dc.SelectStockObject(BLACK_PEN);
 
@@ -678,27 +682,28 @@ TTinyCaption::PaintCaption(BOOL active)
   //
 
   if (CloseBox)
-    PaintCloseBox(dc, GetSysBoxRect(), FALSE);
+    PaintCloseBox(dc, GetSysBoxRect(), false);
   else if (style & WS_SYSMENU)
-    PaintSysBox(dc, GetSysBoxRect(), FALSE);
+    PaintSysBox(dc, GetSysBoxRect(), false);
 
   //
   // Paint minimize button
   //
   if (style & WS_MINIMIZEBOX)
-    PaintMinBox(dc, GetMinBoxRect(), FALSE);
+    PaintMinBox(dc, GetMinBoxRect(), false);
 
   //
   // Paint maximize button
   //
   if (style & WS_MAXIMIZEBOX)
-    PaintMaxBox(dc, GetMaxBoxRect(), FALSE);
+    PaintMaxBox(dc, GetMaxBoxRect(), false);
 
   //
-  // Draw black line under caption
+  // Draw window-frame color line under caption
   //
-  dc.MoveTo(captRect.left, captRect.bottom-1);
-  dc.LineTo(captRect.right, captRect.bottom-1);
+  dc.FrameRect(captRect.left, captRect.bottom-1, captRect.right, captRect.bottom,
+               TBrush(GetSysColor(COLOR_WINDOWFRAME)));
+
 }
 
 //
@@ -722,7 +727,7 @@ TTinyCaption::GetCaptionRect()
 }
 
 //
-// Returns a rectangle for sysmenu, minimize, or maximize rectangle
+// Return a rectangle for sysmenu, minimize, or maximize rectangle
 //
 TRect
 TTinyCaption::GetSysBoxRect()
@@ -756,15 +761,25 @@ TTinyCaption::GetMaxBoxRect()
   return boxRect;
 }
 
+//
+// Get system menu, setup menu items, popup & track it
+//
 void
 TTinyCaption::DoSysMenu()
 {
-  HMENU h = GetSystemMenu();
-  if (h) {
+  HMENU hSysMenu = GetSystemMenu();
+  if (hSysMenu) {
+    uint32 style = GetWindowLong(GWL_STYLE);
+    EnableMenuItem(hSysMenu, SC_RESTORE, (IsIconic() || IsZoomed()) ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(hSysMenu, SC_MOVE, (style & WS_CAPTION) ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(hSysMenu, SC_SIZE, (style & WS_THICKFRAME) ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(hSysMenu, SC_MINIMIZE, ((style&WS_MINIMIZEBOX) && !IsIconic()) ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(hSysMenu, SC_MAXIMIZE, ((style&WS_MAXIMIZEBOX) && !IsZoomed()) ? MF_ENABLED : MF_GRAYED);
     TRect r = GetSysBoxRect();
-    ClientToScreen(r.TopLeft());  // Cvt pt to screen coord
-    TrackPopupMenu(h, TPM_LEFTALIGN | TPM_LEFTBUTTON,
-                   r.left-Frame.cx, r.top-Frame.cy-1, 0, HWindow,0);
+    ClientToScreen(r.TopLeft());     // Cvt pt to screen coord
+    ClientToScreen(r.BottomRight()); 
+    TrackPopupMenu(hSysMenu, TPM_LEFTALIGN | TPM_LEFTBUTTON,
+                   r.left-Frame.cx, r.top-Frame.cy, 0, HWindow, &r);
   }
 }
 

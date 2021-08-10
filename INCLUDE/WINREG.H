@@ -1,7 +1,5 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1991 Microsoft Corporation
-
 Module Name:
 
     Winreg.h
@@ -17,12 +15,17 @@ Author:
 
 --*/
 
-#ifndef __WINREG_H
-#define __WINREG_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
-#ifndef __WINBASE_H
-#include <winbase.h>
-#endif
+#ifndef _WINREG_
+#define _WINREG_
+#define __WINREG_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,6 +53,8 @@ typedef HKEY *PHKEY;
 #define HKEY_LOCAL_MACHINE          (( HKEY ) 0x80000002 )
 #define HKEY_USERS                  (( HKEY ) 0x80000003 )
 #define HKEY_PERFORMANCE_DATA       (( HKEY ) 0x80000004 )
+#define HKEY_PERFORMANCE_TEXT       (( HKEY ) 0x80000050 )
+#define HKEY_PERFORMANCE_NLSTEXT    (( HKEY ) 0x80000060 )
 
 //
 // Default values for parameters that do not exist in the Win 3.1
@@ -63,12 +68,14 @@ typedef HKEY *PHKEY;
 //
 
 
+WINADVAPI
 LONG
 APIENTRY
 RegCloseKey (
     HKEY hKey
     );
 
+WINADVAPI
 LONG
 APIENTRY
 RegConnectRegistryA (
@@ -76,6 +83,7 @@ RegConnectRegistryA (
     HKEY hKey,
     PHKEY phkResult
     );
+WINADVAPI
 LONG
 APIENTRY
 RegConnectRegistryW (
@@ -89,6 +97,7 @@ RegConnectRegistryW (
 #define RegConnectRegistry  RegConnectRegistryA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegCreateKeyA (
@@ -96,6 +105,7 @@ RegCreateKeyA (
     LPCSTR lpSubKey,
     PHKEY phkResult
     );
+WINADVAPI
 LONG
 APIENTRY
 RegCreateKeyW (
@@ -109,6 +119,7 @@ RegCreateKeyW (
 #define RegCreateKey  RegCreateKeyA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegCreateKeyExA (
@@ -122,6 +133,7 @@ RegCreateKeyExA (
     PHKEY phkResult,
     LPDWORD lpdwDisposition
     );
+WINADVAPI
 LONG
 APIENTRY
 RegCreateKeyExW (
@@ -141,12 +153,14 @@ RegCreateKeyExW (
 #define RegCreateKeyEx  RegCreateKeyExA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegDeleteKeyA (
     HKEY hKey,
     LPCSTR lpSubKey
     );
+WINADVAPI
 LONG
 APIENTRY
 RegDeleteKeyW (
@@ -159,12 +173,14 @@ RegDeleteKeyW (
 #define RegDeleteKey  RegDeleteKeyA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegDeleteValueA (
     HKEY hKey,
     LPSTR lpValueName
     );
+WINADVAPI
 LONG
 APIENTRY
 RegDeleteValueW (
@@ -177,6 +193,7 @@ RegDeleteValueW (
 #define RegDeleteValue  RegDeleteValueA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegEnumKeyA (
@@ -185,6 +202,7 @@ RegEnumKeyA (
     LPSTR lpName,
     DWORD cbName
     );
+WINADVAPI
 LONG
 APIENTRY
 RegEnumKeyW (
@@ -199,6 +217,7 @@ RegEnumKeyW (
 #define RegEnumKey  RegEnumKeyA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegEnumKeyExA (
@@ -211,6 +230,7 @@ RegEnumKeyExA (
     LPDWORD lpcbClass,
     PFILETIME lpftLastWriteTime
     );
+WINADVAPI
 LONG
 APIENTRY
 RegEnumKeyExW (
@@ -229,6 +249,7 @@ RegEnumKeyExW (
 #define RegEnumKeyEx  RegEnumKeyExA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegEnumValueA (
@@ -241,6 +262,7 @@ RegEnumValueA (
     LPBYTE lpData,
     LPDWORD lpcbData
     );
+WINADVAPI
 LONG
 APIENTRY
 RegEnumValueW (
@@ -259,12 +281,14 @@ RegEnumValueW (
 #define RegEnumValue  RegEnumValueA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegFlushKey (
     HKEY hKey
     );
 
+WINADVAPI
 LONG
 APIENTRY
 RegGetKeySecurity (
@@ -274,6 +298,7 @@ RegGetKeySecurity (
     LPDWORD lpcbSecurityDescriptor
     );
 
+WINADVAPI
 LONG
 APIENTRY
 RegLoadKeyA (
@@ -281,6 +306,7 @@ RegLoadKeyA (
     LPCSTR  lpSubKey,
     LPCSTR  lpFile
     );
+WINADVAPI
 LONG
 APIENTRY
 RegLoadKeyW (
@@ -294,6 +320,7 @@ RegLoadKeyW (
 #define RegLoadKey  RegLoadKeyA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegNotifyChangeKeyValue (
@@ -304,6 +331,7 @@ RegNotifyChangeKeyValue (
     BOOL fAsynchronus
     );
 
+WINADVAPI
 LONG
 APIENTRY
 RegOpenKeyA (
@@ -311,6 +339,7 @@ RegOpenKeyA (
     LPCSTR lpSubKey,
     PHKEY phkResult
     );
+WINADVAPI
 LONG
 APIENTRY
 RegOpenKeyW (
@@ -324,6 +353,7 @@ RegOpenKeyW (
 #define RegOpenKey  RegOpenKeyA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegOpenKeyExA (
@@ -333,6 +363,7 @@ RegOpenKeyExA (
     REGSAM samDesired,
     PHKEY phkResult
     );
+WINADVAPI
 LONG
 APIENTRY
 RegOpenKeyExW (
@@ -348,6 +379,7 @@ RegOpenKeyExW (
 #define RegOpenKeyEx  RegOpenKeyExA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegQueryInfoKeyA (
@@ -364,6 +396,7 @@ RegQueryInfoKeyA (
     LPDWORD lpcbSecurityDescriptor,
     PFILETIME lpftLastWriteTime
     );
+WINADVAPI
 LONG
 APIENTRY
 RegQueryInfoKeyW (
@@ -386,6 +419,7 @@ RegQueryInfoKeyW (
 #define RegQueryInfoKey  RegQueryInfoKeyA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegQueryValueA (
@@ -394,6 +428,7 @@ RegQueryValueA (
     LPSTR lpValue,
     PLONG   lpcbValue
     );
+WINADVAPI
 LONG
 APIENTRY
 RegQueryValueW (
@@ -408,6 +443,7 @@ RegQueryValueW (
 #define RegQueryValue  RegQueryValueA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegQueryValueExA (
@@ -418,6 +454,7 @@ RegQueryValueExA (
     LPBYTE lpData,
     LPDWORD lpcbData
     );
+WINADVAPI
 LONG
 APIENTRY
 RegQueryValueExW (
@@ -434,6 +471,7 @@ RegQueryValueExW (
 #define RegQueryValueEx  RegQueryValueExA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegReplaceKeyA (
@@ -442,6 +480,7 @@ RegReplaceKeyA (
     LPCSTR  lpNewFile,
     LPCSTR  lpOldFile
     );
+WINADVAPI
 LONG
 APIENTRY
 RegReplaceKeyW (
@@ -456,6 +495,7 @@ RegReplaceKeyW (
 #define RegReplaceKey  RegReplaceKeyA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegRestoreKeyA (
@@ -463,6 +503,7 @@ RegRestoreKeyA (
     LPCSTR lpFile,
     DWORD   dwFlags
     );
+WINADVAPI
 LONG
 APIENTRY
 RegRestoreKeyW (
@@ -476,6 +517,7 @@ RegRestoreKeyW (
 #define RegRestoreKey  RegRestoreKeyA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegSaveKeyA (
@@ -483,6 +525,7 @@ RegSaveKeyA (
     LPCSTR lpFile,
     LPSECURITY_ATTRIBUTES lpSecurityAttributes
     );
+WINADVAPI
 LONG
 APIENTRY
 RegSaveKeyW (
@@ -496,6 +539,7 @@ RegSaveKeyW (
 #define RegSaveKey  RegSaveKeyA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegSetKeySecurity (
@@ -504,6 +548,7 @@ RegSetKeySecurity (
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     );
 
+WINADVAPI
 LONG
 APIENTRY
 RegSetValueA (
@@ -513,6 +558,7 @@ RegSetValueA (
     LPCSTR lpData,
     DWORD cbData
     );
+WINADVAPI
 LONG
 APIENTRY
 RegSetValueW (
@@ -529,6 +575,7 @@ RegSetValueW (
 #endif // !UNICODE
 
 
+WINADVAPI
 LONG
 APIENTRY
 RegSetValueExA (
@@ -539,6 +586,7 @@ RegSetValueExA (
     CONST BYTE* lpData,
     DWORD cbData
     );
+WINADVAPI
 LONG
 APIENTRY
 RegSetValueExW (
@@ -555,12 +603,14 @@ RegSetValueExW (
 #define RegSetValueEx  RegSetValueExA
 #endif // !UNICODE
 
+WINADVAPI
 LONG
 APIENTRY
 RegUnLoadKeyA (
     HKEY    hKey,
     LPCSTR lpSubKey
     );
+WINADVAPI
 LONG
 APIENTRY
 RegUnLoadKeyW (
@@ -577,6 +627,7 @@ RegUnLoadKeyW (
 // Remoteable System Shutdown APIs
 //
 
+WINADVAPI
 BOOL
 APIENTRY
 InitiateSystemShutdownA(
@@ -586,6 +637,7 @@ InitiateSystemShutdownA(
     BOOL bForceAppsClosed,
     BOOL bRebootAfterShutdown
     );
+WINADVAPI
 BOOL
 APIENTRY
 InitiateSystemShutdownW(
@@ -602,11 +654,13 @@ InitiateSystemShutdownW(
 #endif // !UNICODE
 
 
+WINADVAPI
 BOOL
 APIENTRY
 AbortSystemShutdownA(
     LPSTR lpMachineName
     );
+WINADVAPI
 BOOL
 APIENTRY
 AbortSystemShutdownW(

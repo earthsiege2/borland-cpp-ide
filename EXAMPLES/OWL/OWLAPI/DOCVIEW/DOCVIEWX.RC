@@ -28,6 +28,8 @@
 IDM_DVSDI MENU LOADONCALL MOVEABLE PURE DISCARDABLE
 {
   MenuItem "File",   0,GRAYED  ;placeholder for File menu from DocManager
+  MenuItem Separator
+  MenuItem Separator
   POPUP "&Desktop"
   {
     MenuItem "&Clear Desktop",  CM_DESKCLEAR
@@ -39,6 +41,8 @@ IDM_DVSDI MENU LOADONCALL MOVEABLE PURE DISCARDABLE
 IDM_DVMDI MENU LOADONCALL MOVEABLE PURE DISCARDABLE
 {
   MenuItem "File",   0,GRAYED  ;placeholder for File menu from DocManager
+  MenuItem Separator
+  MenuItem Separator
   POPUP "&Desktop"
   {
     MenuItem "&Clear Desktop",  CM_DESKCLEAR
@@ -49,6 +53,8 @@ IDM_DVMDI MENU LOADONCALL MOVEABLE PURE DISCARDABLE
     MenuItem "&Disable View",   CM_DISABLEVIEW
     MenuItem "&Enable Views",   CM_ENABLEVIEWS
   }
+  MenuItem Separator
+  MenuItem Separator
   POPUP "&Window"
   {
     MenuItem  "&Cascade",       CM_CASCADECHILDREN

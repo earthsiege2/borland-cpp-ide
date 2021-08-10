@@ -101,7 +101,7 @@ DEFINE_RESPONSE_TABLE1(TListBoxWindow, TFrameWindow)
   EV_COMMAND_ENABLE(CM_DIR_LIST,         CmEnableOther),
 END_RESPONSE_TABLE;
 
-const int TListBoxWindow::TextLen = 31;
+const int TListBoxWindow::TextLen = 21;
 
 //
 // Constructor.  Setup menu and text areas.
@@ -219,7 +219,7 @@ TListBoxWindow::CmMultiColumn()
   ListBox->Attr.Style &= ~LBS_SORT;
   ListBox->Create();
   ListBox->SetFocus();
-  ListBox->SetColumnWidth(85);   // about half of the list box window.
+  ListBox->SetColumnWidth(100);   // about half of the list box window.
   ListBox->AddString("Have");
   ListBox->AddString("a");
   ListBox->AddString("nice");
@@ -416,8 +416,8 @@ TListBoxWindow::CmEnableOther(TCommandEnabler& commandHandler)
 void
 TListBoxWindow::UpdateTextFields()
 {
-  char  buf[TextLen] = "";                    // temporary buffers.
-  char  buf2[TextLen] = "";
+  char  buf[3*(TextLen+1)] = "";                  // temporary buffers.
+  char  buf2[3*(TextLen+1)] = "";
   int   index = ListBox->GetSelIndex();       // Current selection.
   int   strLen;                               // length of string in list box.
   int   multiSelCnt = ListBox->GetSelCount(); // # of selections.

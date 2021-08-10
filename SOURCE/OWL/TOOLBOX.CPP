@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\toolbox.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TToolBox, a 2-d arrangement of TButtonGadgets.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\toolbox.h>
-#include <owl\buttonga.h>
+#include <owl/owlpch.h>
+#include <owl/toolbox.h>
+#include <owl/buttonga.h>
 
 IMPLEMENT_CASTABLE(TToolBox);
 
@@ -14,7 +15,8 @@ TToolBox::TToolBox(TWindow*        parent,
                    int             numRows,
                    TTileDirection  direction,
                    TModule*        module)
-  : TGadgetWindow(parent, direction, new TGadgetWindowFont, module)
+:
+  TGadgetWindow(parent, direction, new TGadgetWindowFont, module)
 {
   NumRows = numRows;
   NumColumns = numColumns;
@@ -25,14 +27,14 @@ TToolBox::TToolBox(TWindow*        parent,
   Margins.Units = TMargins::BorderUnits;
   Margins.Left = Margins.Right = Margins.Top = Margins.Bottom = -1;
   
-  ShrinkWrapWidth = TRUE;
+  ShrinkWrapWidth = true;
 }
 
 void
 TToolBox::Insert(TGadget& g, TPlacement placement, TGadget* sibling)
 {
   TGadgetWindow::Insert(g, placement, sibling);
-  ((TButtonGadget&)g).SetNotchCorners(FALSE);
+  ((TButtonGadget&)g).SetNotchCorners(false);
 }
 
 //
@@ -164,8 +166,8 @@ TToolBox::TileGadgets()
 
       y += cellSize.cy - cyBorder;
     }
-
-  } else {
+  }
+  else {
     x = innerRect.left;
 
     for (int c = 0; c < numColumns; c++) {
@@ -203,6 +205,6 @@ TToolBox::LayoutSession()
   TGadgetWindow::LayoutSession();
   TSize sz;
   GetDesiredSize(sz);
-  MoveWindow(0, 0, sz.cx, sz.cy, TRUE);
+  MoveWindow(0, 0, sz.cx, sz.cy, true);
 }
 

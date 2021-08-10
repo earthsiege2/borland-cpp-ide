@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  HEAPSEL.H                                                             */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
@@ -12,15 +12,15 @@
 
 #if !defined( __DOS_H )
 #include <dos.h>
-#endif	// __DOS_H
+#endif
 
 #if !defined( __STDLIB_H )
 #include <stdlib.h>
-#endif	// __STDLIB_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif	// __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
@@ -57,7 +57,7 @@
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-class _BIDSFARCLASS __rtti THeapSelector
+class _BIDSFARCLASS _RTTI THeapSelector
 {
 
 public:

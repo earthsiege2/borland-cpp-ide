@@ -2,25 +2,25 @@
 /*                                                                        */
 /*  DICT.H                                                                */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_DICT_H )
-#define __CLASSLIB_DICT_H
+#if !defined( CLASSLIB_DICT_H )
+#define CLASSLIB_DICT_H
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_SHDDEL_H )
-#include "classlib\shddel.h"
-#endif  // __CLASSLIB_SHDDEL_H
+#if !defined( CLASSLIB_SHDDEL_H )
+#include <classlib/shddel.h>
+#endif
 
-#if !defined( __CLASSLIB_HASHIMP_H )
-#include "classlib\hashimp.h"
-#endif  // __CLASSLIB_HASHIMP_H
+#if !defined( CLASSLIB_HASHIMP_H )
+#include <classlib/hashimp.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -128,7 +128,7 @@ class TMDictionaryAsHashTableIterator :
 {
 public:
 
-    TMDictionaryAsHashTableIterator( TMDictionaryAsHashTable<T,A>& t ) :
+    TMDictionaryAsHashTableIterator( const TMDictionaryAsHashTable<T,A>& t ) :
         TMHashTableIteratorImp<T,A>( t.HashTable )
         {
         }
@@ -163,7 +163,7 @@ class TDictionaryAsHashTableIterator :
 {
 public:
 
-    TDictionaryAsHashTableIterator( TDictionaryAsHashTable<T>& t ) :
+    TDictionaryAsHashTableIterator( const TDictionaryAsHashTable<T>& t ) :
         TMDictionaryAsHashTableIterator<T,TStandardAllocator>( t )
         {
         }
@@ -268,7 +268,7 @@ class TMIDictionaryAsHashTableIterator :
 {
 public:
 
-    TMIDictionaryAsHashTableIterator( TMIDictionaryAsHashTable<T,A>& t ) :
+    TMIDictionaryAsHashTableIterator( const TMIDictionaryAsHashTable<T,A>& t ) :
         TMIHashTableIteratorImp<T,A>( t.HashTable )
         {
         }
@@ -306,7 +306,7 @@ template <class T> class TIDictionaryAsHashTableIterator :
 {
 public:
 
-    TIDictionaryAsHashTableIterator( TIDictionaryAsHashTable<T>& t ) :
+    TIDictionaryAsHashTableIterator( const TIDictionaryAsHashTable<T>& t ) :
         TMIDictionaryAsHashTableIterator<T,TStandardAllocator>( t )
         {
         }
@@ -329,12 +329,12 @@ template <class T> class TDictionary :
 
 public:
 
-    TDictionary( int upper, int lower = 0, int delta = 0 ) :
-        TDictionaryAsHashTable<T>( upper, lower, delta )
+    TDictionary( unsigned size = DEFAULT_HASH_TABLE_SIZE ) :
+        TDictionaryAsHashTable<T>( size )
         {
         }
 
-}
+};
 
 template <class T> class TDictionaryIterator :
     public TDictionaryAsHashTableIterator<T>
@@ -356,5 +356,6 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_DICT_H
+#endif  // CLASSLIB_DICT_H
 
+

@@ -25,7 +25,7 @@
 #endif  // __COLLECT_H
 
 #pragma option -Vo-
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po-
 #endif
 
@@ -475,7 +475,7 @@ inline Object _FAR & Btree::operator[]( long i ) const
         return NOOBJECT;
     }
 
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po.
 #endif
 #pragma option -Vo.

@@ -1,0 +1,27 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for Vector examples                                           #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = vector
+EXEALL = vector.exe ivector.exe
+
+EXEMAKE= $(VECTOR) $(IVECTOR)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+VECTOR=$(EXERULE:vector.obj=vector.obj myclass.obj)
+IVECTOR=$(VECTOR:vector=ivector)
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

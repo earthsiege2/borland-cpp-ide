@@ -21,7 +21,7 @@
 #endif  // __COLLECT_H
 
 #pragma option -Vo-
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po-
 #endif
 
@@ -183,7 +183,7 @@ inline ListIterator::ListIterator( const List _FAR & toIterate )
     startingElement = currentElement = toIterate.head->next;
 }
 
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po.
 #endif
 #pragma option -Vo.

@@ -109,7 +109,6 @@ void cmShadows(void);
 void DoPaint(void);
 void cm(void);
 
-
 //*******************************************************************
 // WinMain - TrueType main
 //
@@ -416,7 +415,7 @@ void DoPaint()
     HDC               hDC;
     LOGFONT           FontRec;
     UINT              FmSize;
-    OUTLINETEXTMETRIC *FontMetric = 0;
+    OUTLINETEXTMETRIC *FontMetric;
     int               FontHeight, x, y, j, k;
     UINT              BaseWidth, DesiredExtent;
     float             Theta;
@@ -557,7 +556,6 @@ void DoPaint()
     } // for d
 
     free(FontMetric);
-    FontMetric = 0;
 
     // lose the fan font, selecting in the Borland text font
     DeleteObject(SelectObject(hDC, CreateFontIndirect(&BorlandFontRec)));
@@ -681,12 +679,14 @@ void cmAlignmentMarks(void)
 // cmAbout -- invoke the "About" dialog.  Its return code is ignored, since
 // the About dialog doesn't return anything to the program.
 //*************************************************************************
+#pragma warn -eff
 void cmAbout(void)
 {
     lpDlgProc = (DLGPROC) MakeProcInstance( (FARPROC) DlgBoxProc, hInst);
     DialogBox(hInst, "About", hwnd, lpDlgProc);
     FreeProcInstance ( (FARPROC) lpDlgProc );
 }  // end of cmAbout()
+#pragma warn .eff
 
 
 //*************************************************************************

@@ -6,12 +6,19 @@
 *               designed to allow version stamping of Windows executable files*
 *               and of special .VER files for DOS executable files.           *
 *                                                                             *
-*               Copyright (c) 1993, Microsoft Corp.  All rights reserved      *
-*                                                                             *
 \*****************************************************************************/
 
-#ifndef __VER_H
-#define __VER_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef VER_H
+#define VER_H
+#define __WINVER_H
 
 #ifdef __cplusplus
 extern "C" {

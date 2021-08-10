@@ -3,15 +3,19 @@
 ##QUERY_SNP_FUNC_RESULT [[FunctionResult]]
 ##QUERY_SNP_FUNC_DEFPARAM [[FunctionDefParam]]
 ##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
-##"[[FunctionResult]] [[ClassName]]::[[FunctionName]] [[FunctionDefParam]]" [[FindFTemplate]]
-##\\FindFTemplate [[FindFunction]]
+##\\"[[ClassName]]::[[FunctionName]]" [[FindFunction]]
 ##^BOF
-##? FindFunction
-##:^BOL
-##:^SCROLL
-##:^^
-##:     QUERY_FILE_CPP [[FileName]]
-##:     %\\"Function already exists in [[FileName]]" -2
-##*
+##FALSE [[Search]]
+##0 [[YPosition]]
+##  --BEGIN-- TRUE
+##      {FindFunc.SNP}
+##      --BEGIN-- Search == 1
+##          :^BOL
+##          :^SCROLL
+##          :^^
+##          :QUERY_FILE_CPP [[FileName]]
+##          :%\\"Function already exists in [[FileName]]" -2
+##      --END-- Search == 1
+##  --END-- TRUE
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
 >>[CPP]

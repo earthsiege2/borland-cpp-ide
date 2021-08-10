@@ -1,0 +1,139 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+!if $(OS) != DPMI16
+    AUXOBJS =            \
+            libmain.obj  \
+            wep.obj      \
+            winmain.obj
+
+!   if $(MODEL) == l
+        OBJS = lockdll.obj
+!   endif
+!   if $d(DLL)
+        IMPOBJS = $(AUXOBJS)
+
+        OBJS = $(OBJS)     \
+               rtlmain.obj
+        MISC = $(LIBDIR)\c0rtldll.obj
+!   else
+        OBJS = $(AUXOBJS) $(OBJS)
+
+        MISC =                           \
+               $(LIBDIR)\c0d$(MODEL).obj \
+               $(LIBDIR)\c0w$(MODEL).obj
+!   endif
+!else
+    MISC =                    \
+            $(LIBDIR)\c0x.obj
+!endif
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+TASMCFG = 1        # Force tasm.cfg creation
+
+!include rules.mak
+
+ASM = $(ASM) -m -mx -q -t -I$(INCLBASE)\rtlinc\common16
+
+#############################################################################
+# MISC explicit rules.                                                      #
+#############################################################################
+$(LIBDIR)\c0ws.obj : c0w.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+        -d__SMALL__   -d__WINDOWS__ 
+|       tasm.cfg
+        $(ASM) $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)
+
+$(LIBDIR)\c0wc.obj : c0w.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+         -d__COMPACT__ -d__WINDOWS__
+|       tasm.cfg
+        $(ASM) $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)
+
+$(LIBDIR)\c0wm.obj : c0w.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+        -d__MEDIUM__  -d__WINDOWS__
+|       tasm.cfg
+        $(ASM) $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)
+
+$(LIBDIR)\c0wl.obj : c0w.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+         -d__LARGE__   -d__WINDOWS__
+|       tasm.cfg
+        $(ASM) $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)
+
+$(LIBDIR)\c0ds.obj : c0d.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+        -d__SMALL__   -d__WINDOWS__ 
+|       tasm.cfg
+        $(ASM) $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)
+
+$(LIBDIR)\c0dc.obj : c0d.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+         -d__COMPACT__ -d__WINDOWS__ 
+|       tasm.cfg
+        $(ASM) $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)
+
+$(LIBDIR)\c0dm.obj : c0d.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+         -d__MEDIUM__  -d__WINDOWS__ 
+|       tasm.cfg
+        $(ASM) $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)
+
+$(LIBDIR)\c0dl.obj : c0d.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+        -d__LARGE__   -d__WINDOWS__
+|       tasm.cfg
+        $(ASM)  $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)
+
+$(LIBDIR)\c0x.obj : c0w.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+        -d__LARGE__ -d__WINDOWS__ -d__DPMI16__
+|       tasm.cfg
+        $(ASM) $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)
+
+$(LIBDIR)\c0rtldll.obj : c0d.asm
+        if exist tasm.cfg del tasm.cfg
+        copy &&|
+        -d__LARGE__ -d__WINDOWS__ -d_BUILDRTLDLL
+|       tasm.cfg
+        $(ASM) $**, $(OBJDIR)\$.
+        copy $(OBJDIR)\$. $(LIBDIR)

@@ -1,452 +1,331 @@
-                         INSTALL.TXT
-                         ===========
-SEARCH INSTRUCTIONS:  To go directly to a specific
-section, search for "SECTION -#-" replacing the # with
-the appropriate section number.
 
-                       TABLE OF CONTENTS
-SECTION 1     System Requirements
-              A)   Minimum Installation
-              B)   Full Installation
-
-SECTION 2     Installing BC++ 4.0
-              A)   Pre-Installation Notes
-                   1)   Bad Disc?
-                   2)   Disk Compression
-                   3)   Upgrading
-                   4)   Network Installation
-                   5)   Compatibility Issues
-                        -Adobe Type Manager
-                        -Norton Desktop for Windows
-                        -Windows NT
-              B)   Installation Instructions
-
-SECTION 3     CD-ROM Information
-              A)   Specialized CD-ROM installations
-              B)   Compiler Issues
+                           INSTALL.TXT
+                           ===========
 
 
-SECTION 4     Win32 Install Issues
-              A)   Explanation of Win32s
-              B)   Adding Win32s To Your System
-              C)   Removing Win32s From Your System
-
-SECTION 5     Troubleshooting - Install Issues
-              A)   Disk Space Requirements Do Not Change
-              B)   Data Integrity or Bad Sector Errors
-              C)   Invalid Directory Name or Format
-                   Errors
-              D)   Install Program Terminates Prematurely
-                   For No Reason
-              E)   Disk Full or Insufficient Disk Space 
-                   Errors
-              F)   GP Fault or Unhandled Exception Errors
-             
-SECTION 6     Troubleshooting - Run Time Problems
-              A)   Out of Memory Errors
-              B)   GP Fault or Unhandled Exception Errors
-              C)   Program Group Does Not Appear
-              D)   File Not Found Errors
-              E)   Turbo Debugger for Windows
-         
-SECTION 7     Modifications the Install Program Makes to 
-              Your System
-              A)   Standard Installation
-              B)   Win 32s Setup Program
-
-SECTION 8     Icons in the BC++ Group Window
-              A)   Creating a Program Group Window for BC++
-              B)   List of Executable Files for each Icon 
-                   and a description of it does
-
-SECTION 9     LAN Windows Configuration
-
-SECTION 10    CD-ROM Issues
-
-SECTION 11    How to Get A Technical Information Document
-              A)   From DLBBS
-              B)   From TechFax
-
-SECTION 12    Boot Clean
+SEARCH INSTRUCTIONS:  To go directly to a specific section,
+search for "SECTION -#-" replacing the # with the appropriate
+section number.
 
 
-SECTION -1-  SYSTEM REQUIREMENTS
-Before installing BC++ 4.0 please review the minimum 
-system requirements listed below:
+                        TABLE OF CONTENTS
 
-A) Minimum Installation
-   4 MB Extended Memory
-   Intel 386 or higher
-   DOS 4.01 or later
-   Windows 3.1 or later
-   Approximately 9 MB hard disk space
-   CD-ROM Drive
+SECTION 0       System Requirements
+                A)  Minimum Installation
+                B)  Full Installation
 
-Note: If your system does not meet these minimum requirements,
-      you will not be able to install and run BC++ 4.0.
+SECTION 1       Booting Clean
+                A)  Making a Boot Disk
+                B)  Contents of CONFIG.SYS
+                C)  Contents of AUTOEXEC.BAT
+                D)  Changes to WIN.INI and SYSTEM.INI
+
+SECTION 2       Installation Notes
+                A)  Boot Clean
+                B)  Upgrading Issues
+                C)  Network Installation
+                D)  Hard Drive Installation
+                E)  Installing Under Windows NT, OS/2, or Windows 95
+
+SECTION 3       Trouble Shooting Installation Problems
+                A)  Internal Error, Unable to Start Install
+                B)  Data Integrity or Bad Sector on Disk Errors
+                C)  Install Program Terminates Prematurely
+                D)  General Protection Fault/Unhandled Exception
+                E)  Problems With Installing Win32s
+
+SECTION 4       CD-ROM Information
+                A) "Drive not ready" When Starting Windows
+                B)  Command-line Compiler Issues
+                C)  Difficult Finding Files
+                D)  Compiling and Running the Examples
+
+SECTION 5       How to Get A technical Information Document
+                A)  From TechFax
+                B)  From an On-Line Service
+
+
+SECTION -0- SYSTEM REQUIREMENTS
+===============================
+
+Before installing BC++ 4.5 please review the minimum system
+requirements listed below:
+
+A) Minimum Installation (no IDE)
+
+        4 MB Extended Memory
+        Intel 386 or higher
+        PC-DOS (MS-DOS) 4.01 or later
+        Microsoft Windows 3.1 or later
+        3.5" High Density Disk Drive or CD ROM Drive
 
 B) Full Installation (16-bit/32-bit capability):
-   8 MB system memory
-   Intel 386 or higher
-   DOS 4.01 or later
-   Windows 3.1 or later
-   Win32s (included in BC++ 4.0)
-   Approximately 84 MB hard disk space
-   CD-ROM Drive
+
+        8 MB Total Memory
+        Intel 386 or higher
+        DOS 4.01 or later
+        Windows 3.1 or later
+        VGA
+        Win32s (included with BC++ 4.5)
+        3.5" High Density Disk Drive or CD ROM Drive
+
+C) Hard disk requirements (may vary due to cluster size)
+
+        CD-ROM configuration (tools run from CD):  25 mb
+        DOS command line configuration:            25 mb
+        16-bit Windows configuration (incl. IDE):  75 mb
+        32-bit Windows configuration (incl. IDE):  75 mb
+        Full installation:                        100 mb
+        
 
 NOTE: On a compressed hard disk the installation process
-might need additional hard disk space. If you are using
-a disk compression utility, refer to Section 2, part A.
+might need additional hard disk space, depending on how the
+installation affects the overall compression ratio.
 
 
-SECTION -2-  INSTALLING BC++ 4.0
-A) Pre-Installation Notes
-
-1) Bad Disc?:
-   If you have a bad CD, contact Borland's Disk
-   Replacement line at (800) 621-3132. 
-
-   *** If you are having trouble reading the CD and you are
-   using the Corel CD Extensions, you may need updated drivers,
-   available from Corel.  Alternatively, you can switch back
-   to using the MSCDEX driver that comes with Windows.
-
-2) Disk Compression:
-   If you are using a disk compression utility (such as
-   Stacker[tm], DoubleSpace[tm], XtraDrive[tm],
-   SuperStor[tm], etc.) the estimated available hard disk
-   space reported might not be sufficient to install the
-   product. During installation, BC++ 4.0 copies compressed
-   files onto your hard disk. Disk compression utilities
-   report available hard disk space assuming that the files
-   copied onto the disk can be compressed. Since the files
-   that are copied by the installation program are already
-   compressed, the disk compression utility cannot compress
-   them any further. To solve this, you might need to free
-   additional hard disk space for the installation.
-
-3) Upgrading:  In most cases, you should remove all
-   previous versions of Borland C++, including files and
-   directories, from your hard drive before installing BC++
-   4.0. However, if you are using Object Windows Library (OWL)
-   v1.0 or Turbo Vision (TV) v1.0, you must retain the source
-   code for Classlib, TV and OWL in order to recompile them under
-   BC++ v4.0.
-
-   If you decide to keep a previous version of Borland C++ on
-   your system, you may wish to consult Technical Information
-   Document number 1736. For information on how to receive
-   this document, refer to Section 10.  
-
-4) Network Installation:
-   If you are installing BC++ 4.0 on a network, you may wish
-   to consult Technical Information Document number 1738.  For
-   information on how to receive this document, refer to 
-   Section 11.
-
-5) Compatibility Issues:
-
-   -Adobe Type Manager (ATM)
-     If you have ATM running on your system, you will want to
-     disable it before running the install program for the
-     online book services.
-
-   -Norton Desktop For Windows (NDW)
-     If you have Norton Desktop running on your system and
-     have the Auto Arrange Icons option turned off,
-     the BC++ 4.0 program icons may appear to be on top
-     of each other once the installation process is
-     complete.  Either turn on Auto Arrange (Configure |
-     Quick Access | Auto Arrange) before installing or simply
-     click Window | Arrange Group Icons to arrange the new
-     icons within the Borland C++ 4.0 window. (Make sure the 
-     Borland C++ 4.0 window is highlighted when you choose 
-     Arrange Group Icons.)
-   
-     When installing the online book system, the Adobe program
-     group that is created during the installation process 
-     may be empty when running NDW. Because the book icons
-     contained in the Borland C++ 4.0 Online Books group
-     automatically start the Acrobat reader, the program group
-     is not needed. You may delete the empty program group, or,
-     if you want to add the program group, follow the instructions
-     below:
-        1) Choose File | New from the Program Manager menu
-        2) Choose Program Group
-        3) For a description, type  Adobe 
-        4) Click OK
-        5) Choose File | New from the Program Manager menu
-        6) Choose Program Item
-        7) For Command Line, type C:\ACROREAD\ACROREAD.EXE
-           (Change drive/directory if defaults were modified)
-        8) Click OK
-        9) Repeat steps 5 and 6
-       10) For Command Line, type C:\ACROREAD\README.WRI
-           (Change drive/directory if defaults were modified)
-       11) Click OK
-
-   -Windows NT
-     The online book services are not available when running
-     BC++ 4.0 under Windows NT. This is because the online book
-     reader, Adobe Acrobat, requires the use of Adobe Type
-     Manager(ATM) to display the manual text. Windows NT does
-     not currently support ATM.
- 
-
-B) Installation Instructions:
-
-1. Boot Clean
-   It is highly recommended that do not run other applications
-   when installing BC++ 4.0. Other programs (and drivers)
-   running on your computer could interfere with the
-   installation process. Booting your system with a clean 
-   configuration will eliminate any potential software 
-   conflicts that might arise during installation. Refer to
-   Section 12 for instructions on how to boot clean.
-
-2. Installation instructions are provided in the
-   installation booklet that is included with the CD. Refer to
-   those directions for general installation information and
-   continue referring to this document for specific
-   installation information.
-
-3. Select installation options from the install menu for
-   Destination and Configuration File directories.
-   "Borland C++ Destination Directory" is the directory
-   where BC++ 4.0 will be installed.
-
-   "Borland C++ Configuration File Directory" is the drive
-   and directory where the BC++ 4.0 configuration files
-   are stored and referenced. 
-
-   "CD-ROM Drive:" is the drive letter used to access your
-   CD-ROM drive. This letter is used when creating
-   configuration files for Borland C++ 4.0. The install
-   program will still install the package if this letter is
-   set incorrectly, but all configuration files used by
-   BC++ 4.0 will be wrong, causing file access errors.
-
-   "Windows Directory" is the directory where Windows is 
-   located. This path cannot be edited.
-
-   The "Install ONLY configuration files to your hard disk"
-   option is used to install the minimum system configuration
-   to your hard disk. Most of the package will accessed from
-   the CD-ROM drive. Note that selecting and deselecting this
-   option will undo any changes made when customizing the
-   installation using the "Customize Hard Disk Installation"
-   button.
-
-   The "Install Win32s" option will install Win32s. Refer to
-   Section 3 for more information.
-
-   The "Create Borland C++ Group" option will create a
-   program group in Windows with the BC++ 4.0 icons. Refer
-   to Section 8 for more information.
-
-   The "LAN Windows Configuration" option is needed when you
-   are installing BC++ 4.0 onto a network or run Windows
-   from a network.  Refer to Section 9 for more information.
-
-   The "Customize Hard Disk Installation" button lets you 
-   customize the installation of BC++ 4.0.
-
-SECTION -3-  CD-ROM INFORMATION
-
-A) Specialized CD-ROM Installations
-   In addition to the information provided on the CD-ROM
-   version of BC++ 4.0, the CD provides you with many install
-   options. Among these, three configurations are most 
-   prominent. Each is a tradeoff in speed versus disk space.
-   Because CD-ROMs by their design are fairly slow, you can
-   choose to place certain files on your hard disk in
-   an effort to speed response time.
-
-   The three sample configurations are listed below.
-   The list below is by no means exhaustive; rather
-   it provides a framework from which you can customize
-   your own installation. Keep in mind that the more you
-   place on your hard disk, the faster the product runs.
-
-   1) SLOWEST, LEAST HD SPACE USED (1.1M):
-      This installation option uses the least hard disk
-      space but provides the slowest performance. In
-      addition, it requires the CD to be in the drive
-      every time you start Windows. (See note at the
-      end of Section 3, part A)
-        Install Options:
-          Check the following items:
-           [Borland C++ CD-ROM Installation]
-	    - Install ONLY configuration files to HD
-	    - Install Win32s
-	    - Create Borland C++ Group
-	   (Click install)
 
 
-   2) MEDIUM SPEED, MEDIUM SPACE USED (10.2M):
-      This installation option uses about 10MB of hard disk
-      space and provides good performance. The BC4 CD
-      MUST be in the drive every time you run windows.
-      (See note at the end Section 3, part A)
+SECTION -1- BOOTING CLEAN
+=========================
 
-        Install Options:
+It is highly recommended that you boot clean before installing
+BC++ 4.5.  Booting your system with a clean configuration will
+eliminate many potential software conflicts that might cause the
+installation to fail.  You will need one blank floppy diskette.
+After making the disk bootable, use a text editor (EDIT, for
+example) to create and/or modify the files mentioned below.  
 
-          Check the following items:
-      	[Borland C++ CD-ROM Installation]
-	    - Install ONLY configuration files to HD
-	    - Install Win32s
-	    - Create Borland C++ Group
+Note that the instructions below assume that DOS is installed
+into the directory C:\DOS, and that Windows in installed into the
+directory C:\WINDOWS.
 
-          (Click CUSTOMIZE HARD DISK INSTALLATION)
-          (Click on BORLAND C++ TOOLS)
+Twice below there is a statement "<insert required drivers here>".  
+For the purposes of the clean boot, a "required driver" is one
+that must be loaded so that you can access the devices necessary
+to complete the installation.  For example, for a CD-ROM
+installation, MSCDEX (or equivalent) would be a required driver;
+if you are installing onto a network drive, your network drivers
+are required.  Examples of things that are not "required drivers"
+include EMM386.EXE, QDPMI.SYS, and SMARTDRV.EXE.  If you are
+unsure whether a driver is required, assume it is not.
 
-           [Borland C++ Tools Options]
-	    - IDE
-           (Click OK)
-           (Click OK again)
-           (Click Install)
+A) Making a Boot Disk
 
-   3) FASTEST, MOST HD SPACE USED (72.7M):
-      This installation option provides the fastest
-      performance and uses the most hard disk space.
+It is suggested that you create the clean boot configuration on a
+floppy disk, in order to minimize the number of changes made to
+your normal system configuration.
 
-        Install Options:
-         (Click RESET DEFAULTS BUTTON)
+In most cases, inserting a blank diskette in drive A: and typing
+the command
 
-         Verify the following items are checked:
-          [Borland C++ CD-ROM Installation]
-	    - Install Win32s
-	    - Create Borland C++ Group
+    format a: /s
 
-         Verify the following item are UNCHECKED:
-          [Borland C++ CD-ROM Installation]
-	    - Install Only Configuration Files
-	    - Create Borland C++ Group
-
-          (Click install)
-
-Every user has different requirements for a compiler. You
-need to identify what files you use often and place those
-on the hard disk for rapid access. Doing this provides an
-optimal environment for compiling code while retaining
-accessibility to not-so-often used data on the CD-ROM.
-
-Remember, in addition to the installation file set, the CD-ROM
-version of BC++ 4.0 contains a full installation target set
-under the \BC4 directory. This is useful when you need to access
-distribution files without running the install program.
-
-If you performed either a minimum or medium install and do
-not want the BC++ 4.0 CD in the drive every time
-you start Windows, copy the files WINDPMI.386 and
-TDDEBUG.386 from the \BC4\BIN directory on the CD to your
-configuration file directory and modify your SYSTEM.INI
-file. For example, if you specified C:\BC4\BIN as your
-configuration file directory and your CD-ROM drive is D:,
-then the following commands would move the appropriate
-files to your hard disk:
-           COPY D:\BC4\BIN\WINDPMI.386 C:\BC4\BIN
-           COPY D:\BC4\BIN\TDDEBUG.386 C:\BC4\BIN
-
-Be sure to modify your Windows SYSTEM.INI file to reflect
-these changes. For example:
-
-change:
-           [386Enh]
-           device=D:\BC4\BIN\WINDPMI.386
-           device=D:\BC4\BIN\TDDEBUG.386
-to:
-           [386Enh]
-           device=C:\BC4\BIN\WINDPMI.386
-           device=C:\BC4\BIN\TDDEBUG.386
+will work.  See your DOS documentation for more details
+on creating a bootable floppy.
 
 
-B) Compiler Issues
+B) Contents of CONFIG.SYS (on boot floppy)
 
-   Because the CD-ROM drive is a read-only device, special
-   issues are raised when using the command-line compiler
-   included with BC++ 4.  While the Windows-hosted tools can
-   find BCW.INI in the Windows directory, the command-line
-   tools rely on finding configuration files in either your
-   current working directory or in their home directory. (E.g.-
-   C:\BC4\BIN)
+    DEVICE=C:\DOS\HIMEM.SYS
+    FILES=40
+    <insert REQUIRED drivers here>
 
-   The CD contains default configuration files that set
-   these paths to D:\BC4\INCLUDE and D:\BC4\LIB. If you
-   need to change these entries, or want to add options
-   to the configuration files, you'll need to copy the
-   configuration files into the directory where you run
-   the tools and then edit the directory options.
-   Configuration files are simple ASCII files and can be
-   edited in most text editors. These files include
-   TURBOC.CFG, TLINK.CFG, BCC32.CFG, TLINK32.CFG. Also,
-   BCROOT.INC defines a macro that is commonly used in
-   make files. You can override this value by setting an
-   environment variable for BCROOT.
+C) Contents of AUTOEXEC.BAT (on boot floppy)
 
+    REM the path statement should be copied verbatim
+    REM from your current AUTOEXEC.BAT.  The line included
+    REM below is an example only.
 
-SECTION -4-  Win32s INSTALL ISSUES
-A) An Explanation of Win32s
-   Win32s is a subset of Windows NT. It lets 32-bit
-   programs run under Windows 3.1 (16-bit) by simulating a
-   32-bit operating system. If you are using Windows 3.1,
-   these extensions (provided by Microsoft) are required to
-   run 32-bit applications created with BCW. Note that
-   you need a minimum of 8 MB of memory to run Win32s. If
-   you plan to create 32-bit applications, you must install
-   these extensions. If you are unsure, and you have 8 MB of
-   memory, install Win32s. The Win32s extensions don't
-   affect the normal operation of Windows 3.1.
+    PATH=C:\WINDOWS;C:\DOS;C:\BC45\BIN
 
-B) Adding Win32s to your system
-   If you haven't installed BC++ 4.0 yet, make sure you
-   check the "Install WIN32s" install option.
+D) Changes to C:\WINDOWS\WIN.INI and C:\WINDOWS\SYSTEM.INI
 
-   If you already installed BC++ 4.0 without Win32s on
-   your system, insert the CD in your drive. Run Windows
-   and then choose File|Run and type d:setup <enter>.
+Before modifying these files, be sure to back them up: Windows
+will not properly start if they are corrupted (i.e., copy WIN.INI
+WIN.BAK).
 
-C) Removing Win32s from your system
-   To remove Win32s from your system refer to Section 2
-   "Outdated versions of Win32s" in the README.TXT file.
+    1)  Edit WIN.INI
 
-   Remember that installation of Win32s is required if you
-   plan to run 32 Bit applications under Windows 3.1.
+    2)  Find all lines that begin with either "load=" or "run="
+    and place a single ";" at the start of each line.
+
+    3)  Edit SYSTEM.INI
+
+    4)  If the line that starts with "shell=" is set to
+    something besides "progman.exe", place a ";" at the start of
+    the line, and replace it with "shell=program.exe" (no
+    quotes).  
 
 
-SECTION -5-  TROUBLESHOOTING - INSTALL PROBLEMS
- 
+
+SECTION -2- BEFORE YOU BEGIN
+============================
+
+A)  Boot Clean
+
+    It is highly recommended that you boot clean before
+    installing BC++ 4.5. Booting your system with a clean 
+    configuration will eliminate any potential software 
+    conflicts that might arise during installation. Refer to
+    Section 1 for instructions on how to boot clean.
+
+B)  Upgrading Issues
+
+    If you are upgrading from BC4 or BC4.02, before removing the
+    old version of the compiler, be sure to save the RTL, BIDS,
+    and OWL .DLLs if you have any executables that depend upon
+    them.  Otherwise, you will need to rebuild those application
+    with the new libraries.
+
+    If you will be using OWL 1 or Turbo Vision 1, you must keep
+    the source code for ClassLib, TV, and OWL 1 on your computer
+    so that you can rebuild them with BC++ 4.5.  Remove the
+    previous version of BC++ from your PATH statement in your
+    AUTOEXEC.BAT.
+
+    For other upgrading issues (especially with regard to the
+    Paradox Engine), please see the file BC45\DOC\COMPAT.TXT.
+
+C)  Network Installation
+
+    If you are installing BC++ 4.5 on a network, you may wish to
+    consult Technical Information Document number 1738.  For
+    information on how to receive this document, refer to
+    Section 5.
+
+D)  Hard Drive Installation
+
+    If you have about 40 megabytes of hard drive space in
+    addition to what is required for the installation of BC++
+    4.5, you may want to install the product from your hard
+    drive.  The primary advantage of a hard drive installation is
+    speed:  expect to halve the time it takes to install as
+    compared to an installation from floppy disks.  To install
+    from hard drive, make a temporary directory and then XCOPY
+    each disk into that directory; if you have the CD, XCOPY the
+    INSTALL directory.  Then, run the INSTALL.EXE from the
+    temporary directory rather than from the installation disk.
+
+
+
+E) Installing Under Windows NT, OS/2, or Windows 95
+
+    1)  The install will fail if you enter any paths that use long
+        file names (more than 8 letters in the name, more than 3
+        letters in the extension, or exceeding a total path length
+        of 128 characters).
+
+    2)  When installing under OS/2, WinOS/2 should be run in either
+        a full screen WinOS/2 session, or from Program Manager.
+        Also, the session must be in Enhanced Mode rather than 
+        Standard.  To check this, see the WinOS/2 settings for
+        the appropriate icon.  Note that if run from a full screen
+        session (preferred), near the end of the installation,
+        focus will switch to the OS/2 desktop as a DOS program is
+        run; when this program exits, OS/2 will not return the
+        focus back to the WinOS/2 session, you will need to do
+        this manually.
+    
+    3)  Under Windows NT, To allow for the proper execution of OLE
+        applications that use .DLLs in the Borland C++ "bin"
+        directory, you must update the system path.  To modify the
+        system path, you must have Administrator privileges or login
+        as the Administrator.
+
+        To update the system path,
+        1)  In Program Manager, double-click the Control Panel
+            icon.
+        2)  In the Control Panel group, double-click the System
+            icon.
+        3)  In the System Environment Variable box, select the
+            "Path=" statement.
+        4)  In the Value box, add the path to the Borland C++
+            "bin" directory.  For example, if you installed 
+            Borland C++ in the C:\BC45 directory, type
+            C:\BC45\BIN at the end of the path statement.
+        5)  Choose Set.
+        6)  Choose OK.
+
+    4)  WINRUN.EXE will be installed in your StartUp Program
+        Manager group.  Because OS/2 (as of version 3.0) does
+        not provide support for Windows VxDs, WINRUN.EXE will
+        issue an error message and fail to load.  Simply remove
+        it from the StartUp group to prevent future error messages.
+
+    5)  To run 16-bit protected-mode programs (bcc, tlink) under
+        an NT command prompt, you need to add the following line 
+        to CONFIG.NT:
+
+        ntcmdprompt
+
+        Under the default NT command-line prompt, DOS COMMAND.COM
+        is run after returning from a TSR (such as RTM.EXE, which
+        bcc and tlink load). Adding the above line will cause the
+        original NT CMD.EXE to be run.
+
+    6)  Under Windows 95, add the following line to your
+        AUTOEXEC.BAT file:
+
+        SET RTM=EXTMAX 12288
+
+
+SECTION -3- TROUBLESHOOTING INSTALLATION PROBLEMS
+=================================================
+
 This section explains common errors encountered during
 installation. System configuration and software conflicts
-might cause the installation process to fail. 
+might cause the installation process to fail. If the
+installation fails, follow the instructions in Section 1
+on how to boot clean.  This will eliminate many possible
+software conflicts.  Also, check the integrity of the file
+systems on your hard drive using a utility like CHKDSK or
+SCANDISK; proceeding with an installation while file system
+errors are present increases the risk of a failure resulting in
+data loss.  If these two steps do not solve the
+problem, or you encounter a problem not mentioned here, 
+contact Borland Technical Support.
 
-To eliminate any possible software conflicts, refer to
-Section 12 for instructions on how to boot clean. If
-booting clean doesn't solve the problem, or you encounter a
-problem not mentioned here, contact Borland Technical
-Support.
+A)  Internal Error, Unable to Start Install
 
-A) Disk Space Requirements Do Not Change
-   The CD-ROM installation requirements text at the bottom of
-   the main install dialog does not change regardless of 
-   options selected.  This information is presented to you
-   as a reference point only.
+    1) Error -2:  The install program was unable to create a
+    temporary directory needed for the installation.  Check that
+    if you have either TMP or TEMP set as environment variables
+    that they point to a valid directory on a drive with at least
+    two megabytes of free space (four megabytes if you are using
+    disk compression).  If you do not have a TMP or a TEMP
+    environment variable set, the install will place it's
+    temporary files in the directory WINDOWS\BORLAND.TMP.
 
-B) Data Integrity or Bad Sector on Disk Errors
-   If you receive either one of these error messages, you
-   need to get a replacement disc. Contact Borland's
-   Disk Replacement Line at (800-621-3132). 
+    2) Error -3:  There was an error while copying and decompressing
+    the file INSTRUN.EXE, which is used to launch phase two of
+    the installation.  Check that there is sufficient free space
+    in your temporary directory (see above) and boot the machine
+    clean.  Also, a hard drive installation is often helpful.
 
-C) Invalid Directory Name or Format Errors
-   If you receive this error message, then it's possible
-   you don't have write access to the directory you are
-   installing to. Verify your access rights and try
-   installing again. 
+    3) Error -69:  The execution of INSTRUN.EXE (phase two of
+    the installation process) failed.  Probable causes:  file
+    corruption (see above), memory corruption (see the section on
+    booting clean).
 
-D) Install Program Terminates Prematurely 
+B)  Data Integrity or Bad Sector on Disk Errors
+
+    If you receive either one of these error messages, you
+    may need to get a replacement disk set. If running a
+    disk checking utility (such as "chkdsk" or "scandisk") 
+    reports a bad sector or data integrity problem contact
+    Borland's Disk Replacement Line at (800-621-3132). 
+    Otherwise, see the Section 1 on booting clean, and if 
+    the problem persists, contact Borland Technical Support
+    (408-461-9133) for further assistance.
+
+    Outside the US, contact your local Borland representative.
+
+C) Install Program Terminates Prematurely 
+
    If the install program stops for no apparent reason without 
    error messages, it is possible that certain support files
    are write protected. To check this, do the following:
+
           1) Go to your WINDOWS directory
           2) Type  attrib *.*
           3) Check for the "r" attribute. If any file has this
@@ -454,630 +333,203 @@ D) Install Program Terminates Prematurely
                      attrib -r <filename>
           4) Repeat steps 2-3 for the WINDOWS\SYSTEM directory.
 
-E) Disk Full or Insufficient Disk Space Errors
-   You could get either one of these errors if there is 
-   insufficient hard disk space available to install
-   BC++ 4.0. (See Section 2, Part 2 for information about
-   disk compression) Here are additional suggestions:
-
-   - Boot your system with a clean configuration. Refer to
-     Section 12 for instructions on how to boot clean.
-
-   - Make sure your system meets the minimum installation
-     requirements. Refer to Section 1 for a list of the
-     minimum installation requirements.
-
-   - Make sure that at least 3Mb of disk space is available
-     on the drive where you have Windows installed, regardless
-     of which drive you are installing Borland C++ to.
-
-   - Run Windows in standard mode (win /s). During a
-     Windows-hosted installation process, a swap file is
-     used to simulate extra memory while running Windows.
-     This only happens if you are running Windows in 386
-     Enhanced Mode and have virtual memory (under control
-     panel) turned on. While Windows is running, the
-     temporary swap file can grow dynamically thereby
-     using up hard disk space. Starting Windows in standard
-     mode (win /s) before installing prevents this problem.
-
-F) GP Fault/Unhandled Exception 
-   GP Fault or Unhandled Exception errors can occur for a
-   variety of reasons. Possible reasons for these errors are
-   explained in Technical Information Document number 649.
-   Refer to Section 10 for instructions on how to obtain
-   this document. Here are a few suggestions for solving
-   these errors:
-
-   - Make sure your system meets the minimum requirements.
-     Refer to Section 1 for a list of the minimum
-     installation requirements.
-
-   - Boot your system with a clean configuration. Refer to
-     Section 12 for instructions on how to boot clean.
-
-   - Run Windows in standard mode (win /s) to eliminate swap
-     file usage.
-
-   - Turn off Disk Caching and Video/Shadow RAM in CMOS.
-     Refer to the documentation for your computer.
-
-
-SECTION -6-  TROUBLESHOOTING - RUN TIME PROBLEMS
-This section describes common errors encountered when
-trying to use BC++ 4.0. System configuration and software
-conflicts might cause BC++ 4.0 to fail. If BC++ 4.0 fails,
-you should boot your system clean to eliminate any possible
-software conflicts. Refer to Section 12 for instructions
-on how to boot clean. If booting clean does not solve the
-problem or you encounter a problem not mentioned here,
-contact Borland Technical Support.
-
-A) Out of Memory
-   If you are getting "Out of Memory" errors when running the
-   command line tools, you might have exhausted your extended
-   (or XMS) memory pool. This is especially true if you only
-   have 2MB available extended RAM and do not have a memory
-   manager that provides virtual memory. If you are
-   experiencing this, please consult Technical Information
-   Document number 1737. For information on how to receive
-   this document, refer to Section 10.
-
-B) GP Fault/Unhandled Exception/System Hang 
-   GP Fault or Unhandled Exception errors can occur for a
-   variety of reasons including: not enough memory
-   available, not enough hard disk space available,
-   conflicts with optimizations set in the CMOS, and
-   software conflicts. Technical Information Document
-   numbers 649 and 1328 address these issues. Refer to
-   Section 10 for information on how to obtain these files.
-
-C) A BC++ 4.0 Program Group Does Not Appear
-   Refer to Section 8 for information about this issue.
-
-D) File Not Found Errors
-   If you are trying to compile an example program and the
-   compiler cannot find certain support files (like the Object
-   Windows Library DLL), make sure you rebooted your computer
-   after completing the installation procedure. Rebooting will
-   ensure that your DOS PATH environment variable is correctly
-   set, allowing the compiler to find the support files it
-   needs.
-
-
-E) Turbo Debugger for Windows 
-   If you experience any strange behavior from the Turbo
-   Debugger, such as a garbled screen or a system hang upon
-   execution or exit:
-   1)  Make sure that you have the latest Windows drivers 
-       for your video card.
-   2)  Run TDWINI and test a different DLL to resolve a 
-       possible compatibility problem with your specific 
-       card.
-   3)  Check TD-HELP!.TXT, TD_RDME.TXT, and README.TXT for
-       additional information. 
-   4)  If you are still experiencing difficulties your
-       problem might not be related to the video mode. At 
-       this point contact Borland Technical Support via 
-       phone or online help.  Refer to Section 11 for more 
-       information about online options and procedures. 
-
-
-SECTION -7-  MODIFICATIONS INSTALL MAKES TO YOUR SYSTEM
-This section describes the files that are added by the
-install program to your Windows directory and modifications
-that are made to the Windows configuration files. The
-install program does not make backup copies of your WIN.INI
-and SYSTEM.INI files. You may want to back these files up
-before installing.
-
-A) Standard Installation
-   Files changed in the Windows directory:
-   (Note, X is a system dependent value)
-     WIN.INI modifications:
-             [Extensions]
-     added:  IDE=BCW.EXE^.IDE
-             [BCW4.0 INSTALL]
-             Reserved1=X:\BC4
-   PROGMAN.INI modifications:
-
-             [Groups]
-   added:    GroupX=X:\WINDOWS\BCW40.GRP
-             
-   SYSTEM.INI modifications:
-              [386Enh]
-    added:    device=X:\BC4\BIN\WINDPMI.386
-              device=X:\BC4\BIN\TDDEBUG.386
-
-   Files added to WINDOWS directory:
-     BCW.INI            BCW40.GRP 
-     BORHELP.INI        HELP.ICO 
-     SYSTEM.OLD         TDW.INI 
-     WINHELP.INI 
-
-   Files added to the WINDOWS\SYSTEM directory:
-     BW32000C.DLL       BW320007.DLL
-     BW320009.DLL       BWCC.DLL
-     BWCC000C.DLL       BWCC0007.DLL 
-     BWCC0009.DLL       BWCC32.DLL 
-     CTL3DV2.DLL        CTL3D32.DLL
-     OWL.INI
-
-Note: Additional configuration files will be added to your
-      WINDOWS directory when you run certain tools. (Eg,
-      WORKSHOP.INI for the Resource Workshop)
-
-SECTION -8-  ICONS IN THE BC++ GROUP WINDOW
-
-A) Creating a Program Group Window for BC++ 4.0:
-   
-   If the Borland C++ Program Group Window didn't appear
-   after installation, refer to section 10, part 5 for 
-   suggestions. You can also create a new Program Group by
-   choosing one of the following options:
-
-   - Generate icons by downloading the BC4GRPS.ZIP file.
-     (If you need help on downloading refer to Section 11 of
-     this document.) At the DOS prompt type: PKUNZIP
-     BC4GRPS.ZIP. This uncompresses the files, including a
-     README.TXT file containing instructions on using the
-     BC4GRPS.EXE program. PKUNZIP is a compression utility
-     found on many BBS's. Refer to Section 11 of this
-     document for information on obtaining this utility.
-
-
-   - Manually creating the icons. Load Windows, choose
-     File|New|Program Group, and click on OK. Type the
-     name you want for the program group window in the
-     "Description:" text box, such as Borland C++. Leave
-     "Group File" line blank. Click OK. A new Window appears.
-     Choose File|New|Program Item to create icons for the
-     Windows programs and click OK. Select one of the
-     Windows executable programs to create an icon for, such
-     as BCW.EXE (you can also use the Browse button). Type
-     the name of that executable program in the Description
-     text box. Type the full pathname to the executable in
-     the Command Line text box. Typing a pathname for the
-     working directory is optional. The default is the
-     WINDOWS directory. Click OK. The icon appears in 
-     the active program group window. Repeat these steps
-     for executable program you want to use.
-
-B) List of executable files that each icon calls:
-   Borland C++:                 \BC4\BIN\BCW.EXE
-   Borland C++ launches Borland's Integrated Development
-   Environment (IDE). From within the IDE, you can edit,
-   compile, and run C or C++ programs.
-
-   Turbo Debugger for Win32:    \BC4\BIN\TD32.EXE
-   This icon launches the 32-bit debugger.
-
-   TD32 Configuration:          \BC4\BIN\TD32INST.EXE
-   This icon launches the configuration utility for Turbo
-   Debugger for Win32.
-
-   TD Video Configuration:      \BC4\BIN\TDWINI.EXE
-   This icon launches the configuration utility that lets
-   you configure the Debugger to run with your video card.
-
-   Turbo Debugger for Windows:  \BC4\BIN\TDW.EXE
-   This icon launches the 16-bit Turbo Debugger for Windows.
-
-   TDW Configuration:           \BC4\BIN\TDWINST.EXE
-   This icon launches the configuration utility for Turbo
-   Debugger for Windows.
-
-   Remote Debugging:            \BC4\BIN\WREMOTE.EXE
-   This icon launches the Remote Debugger.
-
-   Remote Setup:                \BC4\BIN\WRSETUP.EXE
-   This icon launches the configuration utility that lets
-   you configure your system to do remote debugging.
-
-   Turbo Debugger for DOS:      \BC4\BIN\TD.EXE
-   This icon launches the DOS Turbo Debugger.
-
-   TD Configuration:            \BC4\BIN\TDINST.EXE
-   This icon launches the configuration utility for Turbo
-   Debugger for DOS.
-
-   WinSpector:                  \BC4\BIN\WINSPCTR.EXE
-   This icon launches WinSpector. WinSpector helps you
-   performing a post-mortem examination of Unrecoverable
-   Application Errors (UAE) or General Protection Errors.
-
-   WinSight:                    \BC4\BIN\WINSIGHT.EXE
-   This icon launches WinSight--a program that lists
-   debugging information about Windows classes, windows,
-   and messages. Using WinSight, you can study how any
-   application creates classes and windows, and you can
-   monitor how Windows sends and receives messages.
-   WinSight is a passive observer: it intercepts and
-   displays info about messages, but does not
-   prevent messages from getting to applications.
-
-   FConvert:                    \BC4\BIN\FCONVERT.EXE
-   This icon launches the utility to convert text files from
-   OEM to ANSI format or vice versa.
-
-   Workshop:                    \BC4\BIN\WORKSHOP.EXE
-   This icon launches Resource Workshop, a tool that
-   integrates the entire process of designing, editing,
-   and compiling resources for applications.
-
-   Hot-Spot Editor:             \BC4\BIN\SHED.EXE
-   This icon launches the Hot-Spot Editor, which creates
-   and edits a bitmap that includes one or more hotspots.
-   A hotspot can link to Help topics or run Help macros when
-   clicked. Using Hot-Spot Editor, you can assign hotspots
-   to a bitmap and assign attributes to each hotspot. These
-   bitmap files generally have a .SHG filename extension.
-
-   Win32s Reference:            \BC4\BIN\WIN32S.HLP
-   This icon launches the on-line reference for Microsoft's
-   Win32 Application Programming Interface (API).   
-
-   Multimedia Reference:        \BC4\BIN\WIN31MWH.HLP
-   This icon launches the on-line reference for the
-   Multimedia Application Programming Interface (API) of
-   Windows 3.1. The Multimedia API includes the functions,
-   messages, and data structures you can use to create
-   multimedia applications for Windows.
-
-   MCI Reference:               \BC4\BIN\MCISTRWH.HLP
-   This icon launches the on-line reference for the Media
-   Control Interface (MCI). MCI is a high-level command
-   interface to multimedia devices and resource files.
-
-   Hot-Spot Reference:          \BC4\BIN\SHED.HLP
-   This icon launches the on-line reference for the Hot-Spot
-   Editor.
-
-   Windows Socket Reference:    \BC4\BIN\WINSOCK.HLP
-   This icon launches the on-line reference for Open
-   Interface for Network Programming under Microsoft
-   Windows. Windows Sockets is an independent
-   specification which defines a network programming
-   interface for MS Windows. 
-
-   BCW and Library Reference:   \BC4\BIN\BCW.HLP
-   This icon launches the on-line reference for Borland C++
-   for Windows.
-
-   ObjectWindows Reference:     \BC4\BIN\OWL.HLP
-   This icon launches the on-line reference for
-   ObjectWindows.
-
-   Windows API Reference:       \BC4\BIN\BWINAPI.HLP
-   This icon launches the on-line reference for Windows API.
-
-   Resource Workshop Reference: \BC4\BIN\WORKHELP.HLP
-   This icon launches the on-line reference for Resource
-   Workshop.
-
-   Winsight Reference:          \BC4\BIN\WINSIGHT.HLP
-   This icon launches the on-line reference for WinSight.
-
-   Winspector Reference:        \BC4\BIN\WINSPCTR.HLP
-   This icon launches the on-line reference for WinSpector.
-
-   Creating Help:               \BC4\BIN\CWH.HLP
-   This icon launches the on-line reference documents that
-   tell you how to create an on-line Help system using the
-   Microsoft Windows 3.1 Help compiler and application
-   called "WinHelp".
-
-   Master Index:                \BC4\BIN\MINDEX.HLP
-   This icon launches the master index to all of the printed
-   manuals that come with BC++ 4.0.
-
-
-SECTION -9-  LAN WINDOWS CONFIGURATION
-
-BC++ 4.0 provides a LAN Windows Configuration option during
-installation. This option must be used when you run Windows
-from a network or plan to install BC++ 4.0 to a network.
-
-If you run Windows from a network, this option is required
-because access to the WINDOWS\SYSTEM directory is usually
-read-only. If you plan to install BC++ 4.0 to a network,
-the LAN Windows Configuration option centralizes the
-location of these files to a location on your hard disk that
-can be read from and written to.
-
-The LAN Windows Configuration option places the following files
-normally installed to the WINDOWS\SYSTEM directory
-in the BC4\BIN subdirectory.   
-
-BW32000C.DLL       BW320007.DLL  
-BW320009.DLL       BWCC.DLL      
-BWCC000C.DLL       BWCC0007.DLL  
-BWCC0009.DLL       BWCC32.DLL     
-CTL3DV2.DLL        CTL3D32.DLL   
-
-You will want to ask your Network Administrator to move the
-files above to the WINDOWS\SYSTEM directory to maintain standard
-file locations.
-
-If you are installing BC++ 4.0 to a network, you will also want
-to use this option.  If users who will be running BC++ 4.0 from
-the network copy the files listed above into their own 
-WINDOWS\SYSTEM directory on their local machine, they can be
-removed from the BIN directory on the network.  Otherwise, you 
-must make sure that the BC4\BIN subdirectory appears in each 
-path on each machine that will run BC++ 4.0 and those DLLs 
-should remain in the BIN directory. For example, if you 
-installed BC++ 4.0 to the network drive W:, then each machine 
-that runs BC++ 4.0 should have W:\BC4\BIN in its path.
-
-Note that selecting the LAN Windows Configuration option
-will not automatically setup BC++ 4.0 to work on a network.
-Additional configuration adjustments also have to be made
-to your system. To find out more about network installations,
-obtain Technical Information Document number 1738. Refer to
-Section 10 on how to obtain this document.
-
-
-SECTION -10-  CD-ROM ISSUES
-1) Speeding Up Your CD-ROM Drive
-   There are a couple of things you can do to help speed up
-   your CD-ROM drive. The first is increasing the number of
-   buffers used for your CD-ROM driver. This is set by
-   using /M: option on the Microsoft CD extension driver
-   (MSCDEX). Eight buffers usually provides a good
-   compromise between memory usage and performance.
-     See the example MSCDEX driver line below:
-        C:\DOS\MSCDEX /D:MSCD000 /L:D /M:8
-   This line assumes you installed your CD-ROM driver with
-   an MSCD000 label, want the CD-ROM drive to be D: and want
-   to use 8 buffers.
-
-   Another option you can choose is using a CD-ROM caching
-   utility such as CD Speedway[tm] or SmartDrive[tm].
-   Starting with MSDOS version 6.2, SmartDrive provides
-   CD-ROM caching ability ONLY when the MSCDEX driver is
-   loaded BEFORE SmartDrive. CD Speedway is an add-in
-   program available from a third party and provides
-   similar disk caching ability. Note that Borland doesn't
-   recommend either of these utilities, they are mentioned
-   here only for your reference.
-
-2) Check your PATH statement
-   Ensure your DOS PATH statement has both the hard disk
-   directory where you installed BC4 and the path to the
-   CD-ROM files you want. For example,
-      PATH= C:\BC4\BIN;D:\BC4\BIN;C:\DOS;C:\WINDOWS
-   This assumes you installed the product to the BC4
-   directory on your C: drive and your CD-ROM drive is D:
-
-3) Difficulty Finding Files?
-   If you're experiencing difficulty finding files when
-   running BC4, check your PATH statement (see above).
-   If the path is correct, make sure your project
-   directories are valid. If you're relying on the CD-ROM
-   drive to provide certain library files, make sure the
-   appropriate drive/path combination is present
-   in the directories section of your project.
-
-4) Getting CD-ROM NOT READY (or similar) error Message?
-   This error message can occur when you chose a partial
-   install during the installation of BC4 and the BC4 CD
-   is NOT in the drive. 
-
-   Certain support files need to be read when Windows is
-   started and because a partial install was implemented,
-   those files appear on the CD-ROM drive. Make sure the
-   CD is in the CD-ROM drive when you start Windows. If
-   this is not convenient, then you might want to place
-   the required support files on your hard disk. 
-
-   When Windows starts, it may look for two support files: 
-   WINDPMI.386 and TDDEBUG.386. If you place these on your
-   hard disk and edit your Windows SYSTEM.INI file to reflect
-   those changes, the CD-ROM would not have be in the drive
-   when you start Windows.
-
-   The CD-ROM NOT READY error message can also occur if
-   you have a CD-ROM drive in your DOS path and no CD is
-   in the drive. Another possibility is an outdated MSCDEX
-   driver. An outdated driver can cause access errors and
-   should be replaced with the newest version. As of the
-   date of this file, the latest version of MSCDEX is 2.23.
-
-5) No Icons Appear, File/Path Settings Incorrect
-   If you get blank icons (MS default icons) in the BC4
-   program group, then it is possible the path for the
-   program is incorrect. This could happen if an incorrect
-   CD-ROM drive was specified during the install process
-   or if the disk isn't accessible when trying to run the
-   program. Note that the installation program installs
-   BC++ even if you specified an incorrect drive letter
-   for your CD-ROM drive. 
-
-   The installation program uses the entry for your CD-ROM
-   drive to create default configuration files used by the
-   compiler. If you specified an incorrect CD-ROM drive,
-   all of the configuration files used by the compiler
-   will be wrong. If the wrong CD-ROM drive letter was
-   specified, simply remove all traces of a previous
-   install from your hard disk and reinstall the product
-   ensuring the correct CD-ROM drive letter is used during
-   the install process.
-
-
-SECTION -11-  HOW TO GET A TECHNICAL INFORMATION DOCUMENT
+D)  General Protection Fault/Unhandled Exception 
+
+    If you encounter a General Protection Fault or Unhandled
+    Exception during installation, try the following steps:
+
+    - Make sure your system meets the minimum requirements.
+      Refer to Section 0 for a list of the minimum
+      installation requirements.
+
+    - Boot your system with a clean configuration. Refer to
+      Section 1 for instructions on how to boot clean.
+
+    - Perform an integrity check on your hard drive, using
+      a utility such as "SCANDISK" or "CHKDSK".
+
+    - Turn off Disk Caching and Video/Shadow RAM in CMOS.
+      Refer to the documentation for your computer.
+
+E)  Win32s Issues
+
+    Win32s is for use with Windows 3.1 or 3.11 only.
+    Specifically, it is not required for a Win32
+    operating system, and will not work with OS/2.
+
+    Most of the time, if the Win32s setup utility fails, it is
+    because the setup program had difficulty detecting a
+    sufficient amount of virtual memory.  Ensure that you have
+    virtual memory enabled in Windows, and that you are running
+    in "Enhanced Mode."  To reinstall Win32s, either:
+
+        - Insert the 27th disk in your floppy drive and
+        execute SETUP.EXE
+
+        or
+
+        - Run SETUP.EXE from the INSTALL directory on your
+        CD-ROM.
+
+
+
+SECTION -4- CD-ROM INFORMATION
+==============================
+
+This section discusses a few issues that pertain specifically to
+using BC45 from a CD-ROM.  If you did a "full installation", this
+section is not relevant.
+
+A)  "Drive not ready" When Starting Windows
+
+At startup, Windows will check the status of all of the drives
+listed in your PATH.  If a CD is not loaded in your CD-ROM drive
+at this time, Windows will complain that the drive is not ready.
+The following steps will minimize the number of "Drive not ready"
+errors related to using BC45 from your CD, and will also ensure
+that when starting Windows the contents of the CD loaded in your
+drive will not be important.
+
+    1)  Edit your AUTOEXEC.BAT file, and ensure that the
+    \BC45\BIN directory on the CD is the last element of your
+    path.  You will likely find a line that reads:
+
+            PATH D:\BC45\BIN;%PATH%
+
+    Change it to:
+
+            PATH %PATH%;D:\BC45\BIN
+
+    and be sure that it is the last line in the file that sets
+    any component of your path.
+        
+    2)  Copy the files WINDPMI.386 and TDDEBUG.386 from the
+    \BC45\BIN directory on the CD to your configuration file
+    directory and modify your WINDOWS\SYSTEM.INI file. For
+    example,
+
+           COPY D:\BC45\BIN\WINDPMI.386 C:\BC45\BIN
+           COPY D:\BC45\BIN\TDDEBUG.386 C:\BC45\BIN
+
+    Be sure to modify your Windows SYSTEM.INI file to reflect
+    these changes. For example, change:
+
+           [386Enh]
+           device=D:\BC45\BIN\WINDPMI.386
+           device=D:\BC45\BIN\TDDEBUG.386
+    to:
+           [386Enh]
+           device=C:\BC45\BIN\WINDPMI.386
+           device=C:\BC45\BIN\TDDEBUG.386
+
+B) Command-Line Compiler Issues
+
+Because the CD-ROM drive is a read-only device, special issues
+are raised when using the command-line compiler included with
+BC++ 4.  While the Windows-hosted tools can find BCW.INI in the
+Windows directory, the command-line tools rely on finding
+configuration files in either your current working directory or
+in their home directory.  (E.g., C:\BC45\BIN)
+
+The CD contains default configuration files that set these paths
+to D:\BC45\INCLUDE and D:\BC45\LIB. If you need to change these
+entries, or want to add options to the configuration files,
+you'll need to copy the configuration files into the directory
+where you run the tools and then edit the directory options.
+Configuration files are simple ASCII files and can be edited in
+most text editors. These files include TURBOC.CFG, TLINK.CFG,
+BCC32.CFG, TLINK32.CFG. Also, BCROOT.INC defines a macro that is
+commonly used in make files. You can override this value by
+setting an environment variable for BCROOT.
+
+
+C) Difficulty Finding Files
+
+If you're experiencing difficulty finding files when running
+BC45, check your PATH statement.  Although having the PATH
+statement point to the CD-ROM drive all the time will cause
+Windows to complain "Drive not ready" if a CD is not in the
+CD-ROM drive, sometimes when compiling if the CD-ROM drive is not
+on the PATH and the files that are needed are on the BC45 CD, the
+compiler will not be able to find those files. Thus you might
+need to add the CD Drive to your PATH; to minimize complaints
+with "Drive not ready" errors, be sure that it is at the end.  If
+the path is correct, make sure your project directories are
+valid. If you are relying on the CD-ROM drive to provide certain
+library files, make sure the appropriate drive/path combination
+is present in the directories section of your project.  
+
+D)  Compiling and Running the Examples
+
+All of the example projects will write their output by default to
+the current directory.  While this is ideal when the examples are
+installed to the hard drive, the read-only nature of a CD-ROM
+will cause the compilation to fail.  To use any of the examples,
+follow these steps:
+
+    1) Open the project file for the example you wish to run.
+    2) Select Options|Project
+    3) Set the temporary and final output directories to a
+       writeable location.
+
+
+
+SECTION -5- HOW TO GET A TECHNICAL INFORMATION DOCUMENT
+=======================================================
+
 Technical Information Documents contain tips, techniques, 
 and enhanced information on using Borland development tools,
 and information on commonly asked programming questions.  
-Such documents often include programming examples.  These
-documents can be accessed via modem or fax.	 Technical
-files which contain binary modules, such as patches for 
-released Borland products, are normally available only from 
-those services that can be accessed by modem.  Documents can 
-be accessed from the following sources:
+Such documents often include programming examples.  
  
-A) Fax the document from Borland's TechFax Service.
-   Call (800) 822-4269 from a touch-tone phone. When
-   prompted, enter your FAX number, then enter the document
-   number you want to receive. The document will be faxed to
-   you shortly.
+Here is a list of commonly requested Technical Information Documents:
 
-   Here is a list of common Technical Information Documents:
-      * 3       General Catalog of All Documents Available
+      * 3       General Catalog of All C/C++ Documents Available
       * 649     General Protection Faults
-      * 1171    Problem Report Form
-      * 1010    Installing and Configuring BC++
-      * 806     Network Installations
       * 738     Memory Corruption
+      * 1171    Problem Report Form
       * 1561    Clean Boot
+      * 1738    Network Installations
+      * 1773    How to Build DOS Applications in Borland C++ 4.0
 
-B) Download the document from:
+
+A)  From within the US, fax the document from Borland's TechFax 
+Service.
+
+Call (800) 822-4269 from a touch-tone phone. When prompted, enter
+your FAX number, then enter the document number you want to
+receive. The document will be faxed to you shortly.
+
+
+B)  Download the document.  The file name for document number NNN
+would be tiNNN.zip.
+
    -The Borland Download Bulletin Board Service (DLBBS)
-    (408) 431-5096, protocol 8N1
+        (408) 431-5096, protocol 8N1
+
+    [When downloading files from the DLBBS, you will
+    need to select the appropriate "conference" from
+    the main menu.]
+
    -The Borland Automated Online Service (OAS)
-    (408) 431-5250, protocol 8N1
-   -The Borland-supported FTP site on Internet
-    ftp.cica.indiana.edu, IP address [129.79.20.27]
-   -Borland-supported forums on CompuServe, Genie, BIX.
-     for CIS type: go BCPPWIN 
-                     or
-                   go BCPPDOS 
-                   and choose library 2
-     for BIX type: join Borland 
-     for GENIE type: Borland
- 
-   Below are steps to download a Technical Information
-   Document from the Borland DLBBS.
+        (408) 431-5250, protocol 8N1
 
-   For proper display, your communication software should
-   provide ANSI terminal support. Most packages provide
-   VT-100 terminal emulation, which is fine for the DLBBS.
-   If you're using a Windows based package, select a screen
-   font (such as: Terminal) that includes extended ASCII
-   characters.
+   -The Borland FTP site on the Internet
+        ftp.borland.com (IP address: 143.186.15.10)
 
-   Once connected, you'll be prompted to enter your first
-   and last name and a password. If you haven't used the
-   service before, you'll be asked to verify your name and
-   then answer a few questions. The menu-driven system
-   guides you through the various product and file
-   areas. You'll always receive a list of options when you
-   are prompted to make any choice.
+    [all file names are case-sensitive on the FTP
+    site, and almost always lower-case.]
 
-   MANEUVERING THE MAIN MENU
-   First join the C++ Conference.  The Main Menu shows the
-   product whose files you can access. At the Main menu, 
-   type "F" to select the Files	menu.
+   -Borland-supported forums on CompuServe and Genie.
+        for CIS type: go BCPPWIN or go BCPPDOS 
+                    and choose library 2
+        for GENIE type: Borland
 
-   DOWNLOADING FILES
-   Once you know the name of the file you want to download,
-   type "D" for download at the File menu. When prompted,
-   type the full name of the file or files. All Technical
-   Information Documents have the form "TI#.ZIP". Replace
-   the # with the appropriate document number. For example,
-   to download Technical Information Document number 649,
-   the full name of the file is TI649.ZIP.  If you do not
-   know the protocol or download keys to press, refer to 
-   your telecommunications manual.
+With rare exception, all files on the DLBBS and FTP site will be
+compressed with a PKZIP 2.04 (or later) compatible archiver.  If
+you do not have a version of PKZIP, you can download the file
+pkz204g.exe; execute this file in an empty directory to extract
+pkunzip.exe.
 
-   WORKING WITH DOWNLOADED FILES
-   Most of the files on the Download BBS are stored and
-   transferred in an archived (compressed) format and need
-   to be unarchived before they can be used. If you don't
-   have the unarchiving utility PKUNZIP v.204G or newer,
-   download PKZ204G.EXE from the DLBBS and execute it.
-   You'll receive PKUNZIP and PKZIP utilities. To unarchive
-   the file, type the name of an unarchive utility
-   (UNPACK, UNZIP or PKUNZIP) and then the name of the
-   archived file. For example:
-        PKUNZIP TI649.ZIP
 
-SECTION -12-  BOOT CLEAN
-This section describes the process of "booting clean" on
-IBM PC's and compatible computers with DOS and/or windows.
-This document assumes you have MS-DOS version 5.00 or higher.
-"Booting Clean" is the process of booting without loading
-device drivers and TSRs that can cause memory conflicts.
-
-These device drivers and TSRs are usually loaded in two
-files (AUTOEXEC.BAT and CONFIG.SYS typically located on
-the root directory of your hard disk). The safest
-method of booting clean is to create a "bootable" floppy
-disk in drive A:. See the "Making a Boot Disk" section
-below.
-
-If you are using a program that runs under Microsoft
-Windows, then you might need to make changes to some Windows
-configuration files in order to ensure a "clean system
-configuration" under Windows. The two files you will need
-to examine are WIN.INI and SYSTEM.INI. These files are
-located in the WINDOWS subdirectory on your hard disk. The
-changes that you will need to make to these files (if any)
-are outlined below. 
-
-Making a Boot Disk In order to make a bootable floppy disk,
-follow the instructions below. NOTE: These instructions
-assume that your hard disk is C: and your DOS and WINDOWS
-subdirectories appear on this disk. (Most cases)
-
-     1) Place a blank disk in drive A:
-     2) type  format a: /s (format the disk)
-
-At this point you now have a bootable floppy disk
-containing an ASCII editor (EDIT.COM) and a high memory
-driver (HIMEM.SYS). Using EDIT, ensure your AUTOEXEC.BAT
-and CONFIG.SYS look like one of the configuration choices
-below. 
-
-Your "clean" system configuration should be exactly like
-one of the choices below except replace "<Insert Required
-drivers here>" with any required drivers. The ONLY
-required drivers are, for example, disk compression and/or
-hard disk access drivers. This does not include mouse
-drivers and disk caching utilities such as SmartDrive.
-
-Clean Configuration: DOS 5.0 and DOS 6.x running Windows
------------------------------------------------------------
-   1)  Insert your "bootable floppy" in drive A:
-   2)  type  A:
-   3)  At the A> prompt type  edit CONFIG.SYS
-   4)  Type in the following:
-          <Insert Required drivers here>
-          DEVICE=HIMEM.SYS
-          FILES=40
-          BUFFERS=40
-   5)  Exit the editor (Alt-F, then X, then Y)
-   6)  Type  edit AUTOEXEC.BAT
-   7)  Type in the following:
-          <Insert Required drivers here>
-          PATH=C:\WINDOWS;C:\DOS;C:\BC4\BIN
-          PROMPT $P$G
-   8)  Exit the editor (Alt-F, then X, then Y)
-   9)  type  C: 
-  10)  type  CD \WINDOWS
-  11)  type  copy WIN.INI WIN.BAK
-  12)  type  copy SYSTEM.INI SYSTEM.BAK
-  13)  type  edit WIN.INI
-  14)  Make sure that the "load=" and "run=" lines in your
-       WIN.INI file look like the following:
-          ------------
-          [windows]
-          spooler=yes
-          load=
-          run=
-          Beep=yes
-          ------------
-  15)  Exit the editor (Alt-F, then X, then Y)
-  16)  type  edit system.ini
-  17)  Ensure that your "shell=" line in your SYSTEM.INI file
-        looks like the following:
-          ------------
-          [boot]
-          shell=progman.exe
-          ------------
-  18)  Exit the editor (Alt-F, then X, then Y)
-  19)  Make sure your "Bootable floppy" is in drive A: and
-        reboot your computer.
-
--------------------END OF FILE INSTALL.TXT------------------
-
+                   *** END OF FILE INSTALL.TXT ***

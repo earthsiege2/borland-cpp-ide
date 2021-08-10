@@ -3,5 +3,7 @@
 
 EXERES  = vbdialog
 LIBEXE  = $(BCLIBDIR)\bivbx.lib
-SYSTEMS = WIN16
 !include $(BCEXAMPLEDIR)\makefile.gen
+!if $(_32BIT_)
+  LIBEXE=$(BCLIBDIR)\bivbx32.lib
+!endif

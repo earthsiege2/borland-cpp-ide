@@ -1,23 +1,27 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\editsear.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TEditWindow, an edit control that responds to
 //   Find, Replace and FindNext commands.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\editsear.h>
-#include <owl\applicat.h>
-#include <owl\edit.h>
-#include <owl\findrepl.h>
+#include <owl/owlpch.h>
+#include <owl/editsear.h>
+#include <owl/applicat.h>
+#include <owl/edit.h>
+#include <owl/findrepl.h>
 #include <cstring.h>
 
 #if !defined(SECTION) || SECTION == 1
 
 DEFINE_RESPONSE_TABLE1(TEditSearch, TEdit)
   EV_COMMAND(CM_EDITFIND, CmEditFind),
+  EV_COMMAND_ENABLE(CM_EDITFIND, CeEditFindReplace),
   EV_COMMAND(CM_EDITREPLACE, CmEditReplace),
+  EV_COMMAND_ENABLE(CM_EDITREPLACE, CeEditFindReplace),
   EV_COMMAND(CM_EDITFINDNEXT, CmEditFindNext),
+  EV_COMMAND_ENABLE(CM_EDITFINDNEXT, CeEditFindNext),
   EV_REGISTERED(FINDMSGSTRING, EvFindMsg),
 END_RESPONSE_TABLE;
 
@@ -29,8 +33,9 @@ TEditSearch::TEditSearch(TWindow*        parent,
                          const char far* text,
                          int x, int y, int w, int h,
                          TModule*        module)
-  : TEdit(parent, id, text, x, y, w, h, 0, TRUE, module),
-    SearchData(FR_DOWN)
+:
+  TEdit(parent, id, text, x, y, w, h, 0, true, module),
+  SearchData(FR_DOWN)
 {
   Attr.Style |= ES_NOHIDESEL;
   SearchDialog = 0;
@@ -43,7 +48,7 @@ TEditSearch::~TEditSearch()
 }
 
 //
-// Post a CM_EDITFIND or a CM_EDITREPLACE to re-open a previously open 
+// Post a CM_EDITFIND or a CM_EDITREPLACE to re-open a previously open
 // find or replace modeless dialog
 //
 void
@@ -61,22 +66,29 @@ void
 TEditSearch::DoSearch()
 {
   do {
-    if (Search(-1, SearchData.FindWhat, BOOL(SearchData.Flags&FR_MATCHCASE),
-               BOOL(SearchData.Flags&FR_WHOLEWORD),
+#if defined(BI_PLAT_WIN32)
+    unsigned long version = ::GetVersion();
+    if (version & 0x80000000L) {
+      if (GetApplication())
+        GetApplication()->PumpWaitingMessages();
+    }
+#endif
+    if (Search(-1, SearchData.FindWhat, bool(SearchData.Flags&FR_MATCHCASE),
+               bool(SearchData.Flags&FR_WHOLEWORD),
                !(SearchData.Flags&FR_DOWN)) >= 0) {
       if (SearchData.Flags & (FR_REPLACE|FR_REPLACEALL))
         Insert(SearchData.ReplaceWith);
-
-    } else {
+    }
+    else {
       if (SearchData.Flags & (FR_FINDNEXT|FR_REPLACE)) {
-        string errTemplate(*GetModule(), IDS_CANNOTFIND);
+        string errTemplate(GetModule()->LoadString(IDS_CANNOTFIND));
         char  errMsg[81];
-        wsprintf(errMsg, errTemplate.c_str(), (LPCSTR)SearchData.FindWhat);
+        wsprintf(errMsg, errTemplate.c_str(), (const char far*)SearchData.FindWhat);
         TWindow* w = SearchDialog ? (TWindow*)SearchDialog : (TWindow*)this;
         w->MessageBox(errMsg, GetApplication()->GetName(),
-                      MB_OK | MB_ICONEXCLAMATION);
-
-      } else if (SearchData.Flags & FR_REPLACEALL)
+                      MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
+      }
+      else if (SearchData.Flags & FR_REPLACEALL)
         break;
     }
   } while (SearchData.Flags & FR_REPLACEALL);
@@ -111,6 +123,15 @@ TEditSearch::CmEditReplace()
 }
 
 //
+// Enable the find or replace option only if no dialog is up
+//
+void
+TEditSearch::CeEditFindReplace(TCommandEnabler& ce)
+{
+  ce.Enable(!SearchCmd);
+}
+
+//
 // Respond to the possible separate menu command to repeat the search
 //
 void
@@ -120,6 +141,15 @@ TEditSearch::CmEditFindNext()
     SearchDialog->UpdateData();
   SearchData.Flags |= FR_FINDNEXT;
   DoSearch();
+}
+
+//
+// Only enable FindNext if we've got data to search for
+//
+void
+TEditSearch::CeEditFindNext(TCommandEnabler& ce)
+{
+  ce.Enable((SearchData.FindWhat && *(SearchData.FindWhat)) ? true : false);
 }
 
 //
@@ -142,6 +172,7 @@ TEditSearch::EvFindMsg(WPARAM, LPARAM lParam)
 
 
 #endif
+//----------------------------------------------------------------------------
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_STREAMABLE1(TEditSearch, TEdit);

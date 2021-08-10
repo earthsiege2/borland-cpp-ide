@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\gdiobjec.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of TGdiObject, abstract GDI object base class
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\gdiobjec.h>
+#include <owl/owlpch.h>
+#include <owl/gdiobjec.h>
 
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlGDI, 1, 0);
                                    // General GDI diagnostic group
@@ -16,7 +17,7 @@ DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlGDIOrphan, 1, 0);
 //
 #if !defined(NO_GDI_ORPHAN_CONTROL)
 
-#include <classlib\bags.h>
+#include <classlib/bags.h>
 
 struct TObjInfo {
   HANDLE            Handle;
@@ -27,14 +28,12 @@ struct TObjInfo {
   TObjInfo(HANDLE handle) : Handle(handle) {}
   TObjInfo(HANDLE handle, TGdiObject::TType type, int ref)
     : Handle(handle), Type(type), RefCount(ref) {}
-  BOOL operator ==(const TObjInfo& other) const {
+  bool operator ==(const TObjInfo& other) const {
     return other.Handle == Handle;
   }
 };
 
 typedef TBagAsVector<TObjInfo> TObjInfoBag;
-typedef TBagAsVectorIterator<TObjInfo> TObjInfoBagIter;
-
 static TObjInfoBag* ObjInfoBag;
 
 #if defined(__TRACE)
@@ -73,6 +72,10 @@ void
 TGdiObject::RefRemove(HANDLE handle)
 {
   ObjInfoBag->Detach(TObjInfo(handle));
+  if (ObjInfoBag->GetItemsInContainer() == 0) {
+    delete ObjInfoBag;
+    ObjInfoBag = 0;
+  }
 }
 
 //
@@ -93,28 +96,32 @@ TGdiObject::RefInc(HANDLE handle)
 //
 void
 #if defined(__TRACE)
-  TGdiObject::RefDec(HANDLE handle, BOOL wantDelete)
+  TGdiObject::RefDec(HANDLE handle, bool wantDelete)
 #else
   TGdiObject::RefDec(HANDLE handle)
 #endif
 {
   TObjInfo* member = RefFind(handle);
   if (member) {
-    BOOL needDelete = --(member->RefCount) == 0;
+    bool needDelete = --(member->RefCount) == 0;
     #if defined(__TRACE)
       if (needDelete != wantDelete) {
         if (needDelete)
           TRACEX(OwlGDIOrphan, 1, "Orphan" << ObjTypeStr[member->Type] <<
-                 (UINT)member->Handle << "Deleted")
+                 (uint)member->Handle << "Deleted")
         else
           TRACEX(OwlGDIOrphan, 1, ObjTypeStr[member->Type] <<
-                 (UINT)member->Handle << "Orphan")
+                 (uint)member->Handle << "Orphan")
       }
     #endif
     if (needDelete) {
       if (!::DeleteObject(member->Handle))
         THROW( TXGdi(IDS_GDIDELETEFAIL, member->Handle) );
       ObjInfoBag->Detach(*member);
+      if (ObjInfoBag->GetItemsInContainer() == 0) {
+        delete ObjInfoBag;
+        ObjInfoBag = 0;
+      }
     }
   }
 }
@@ -145,9 +152,10 @@ TGdiObject::TGdiObject()
 }
 
 TGdiObject::TGdiObject(HANDLE handle, TAutoDelete autoDelete)
-  : TGdiBase(handle, autoDelete)
+:
+  TGdiBase(handle, autoDelete)
 {
-//  CheckValid();
+  // CheckValid();  // cant do this here, as derived class may set handle later
   // Derived class must call OBJ_REF_ADD(Handle, type) if ShouldDelete
 }
 
@@ -155,7 +163,7 @@ TGdiObject::~TGdiObject()
 {
   if (ShouldDelete) {
     #if !defined(NO_GDI_ORPHAN_CONTROL)
-      OBJ_REF_DEC(Handle, TRUE);
+      OBJ_REF_DEC(Handle, true);
     #else
       if (!::DeleteObject(Handle))
         THROW( TXGdi(IDS_GDIDELETEFAIL, Handle) );

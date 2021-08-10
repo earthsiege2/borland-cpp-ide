@@ -1,4 +1,4 @@
-// (C) Copyright 1992 by Borland International
+// (C) Copyright 1994 by Borland International
 //
 // Cmdlg.c - Common Dialogs example in C
 
@@ -89,7 +89,7 @@ lStructSize member is not set the call to GetOpenFileName() will fail.
   ofnTemp.nFileOffset = 0;
   ofnTemp.nFileExtension = 0;
   ofnTemp.lpstrDefExt = "*";
-  ofnTemp.lCustData = NULL;
+  ofnTemp.lCustData = 0L;
   ofnTemp.lpfnHook = NULL;
   ofnTemp.lpTemplateName = NULL;
 /*
@@ -260,10 +260,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 LRESULT FAR PASCAL _export MainWndProc(HWND hWnd, UINT message,
                   WPARAM wParam, LPARAM lParam)
 {
-  HFONT fTemp;  // Placeholder for the original font
-  RECT rTemp;     // Client are needed by DrawText()
-  HDC hdc;        // HDC for Window
-  PAINTSTRUCT ps; // Paint Struct for BeginPaint call
+  HFONT fTemp = (HFONT)NULL;  // Placeholder for the original font
+  RECT rTemp;                 // Client are needed by DrawText()
+  HDC hdc;                    // HDC for Window
+  PAINTSTRUCT ps;             // Paint Struct for BeginPaint call
 
   switch (message) {
   case WM_CREATE: // Initialize Global vars
@@ -271,7 +271,7 @@ LRESULT FAR PASCAL _export MainWndProc(HWND hWnd, UINT message,
       crColor = RGB( 0, 0, 0 );       // Use black as the default color
       hfFont = 0;                     // Empty the handle to the font
       tfFontLoaded = FALSE;           // Set the font selected flag to false
-    return NULL;
+    return 0L;
 
   case WM_PAINT:
   // Display the file name using the selected font in the selected color.
@@ -325,7 +325,7 @@ LRESULT FAR PASCAL _export MainWndProc(HWND hWnd, UINT message,
   default:      // Passes it on if unproccessed
     return (DefWindowProc(hWnd, message, wParam, lParam));
   }
-  return (NULL);
+  return 0L;
 }
 
 #pragma argsused
@@ -347,8 +347,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   while (GetMessage(&msg, // message structure
     NULL, // handle of window receiving the message
-    NULL, // lowest message to examine
-    NULL))  // highest message to examine
+    0,    // lowest message to examine
+    0))   // highest message to examine
   {
   TranslateMessage(&msg); // Translates virtual key codes
   DispatchMessage(&msg);  // Dispatches message to window

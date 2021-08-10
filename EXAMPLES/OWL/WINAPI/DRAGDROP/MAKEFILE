@@ -2,5 +2,6 @@
 # ObjectWindows - (C) Copyright 1991, 1993 by Borland International
 #----------------------------------------------------------------------------
 
+MODELS = mldf
 EXERES=dragdrop
 !include $(BCEXAMPLEDIR)\owlmake.gen

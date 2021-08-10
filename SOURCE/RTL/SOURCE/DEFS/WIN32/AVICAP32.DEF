@@ -1,0 +1,8 @@
+LIBRARY     AVICAP32.DLL
+
+EXPORTS
+    capCreateCaptureWindowA        @1   
+    capCreateCaptureWindowW        @2   
+    capGetDriverDescriptionA       @3   
+    capGetDriverDescriptionW       @4   
+    videoThunk32                   @5   

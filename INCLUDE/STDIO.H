@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -27,9 +27,17 @@
 #include <_null.h>
 #endif
 
-#if !defined(_RC_INVOKED)
-#pragma option -a-
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
 #endif
+
+#pragma option -a-
+
+#endif  /* !RC_INVOKED */
+
 
 #ifndef _SIZE_T
 #define _SIZE_T
@@ -135,7 +143,7 @@ extern  unsigned    _RTLENTRY _nfile;
 #ifdef __cplusplus
 extern "C" {
 #endif
-FILE far * far __getStream(int);
+FILE far * far _RTLENTRY __getStream(int);
 #ifdef __cplusplus
 }
 #endif
@@ -179,30 +187,30 @@ void    _RTLENTRY _EXPFUNC rewind(FILE _FAR *__stream);
 int     _RTLENTRY          scanf(const char _FAR *__format, ...);
 void    _RTLENTRY          setbuf(FILE _FAR *__stream, char _FAR *__buf);
 int     _RTLENTRY _EXPFUNC setvbuf(FILE _FAR *__stream, char _FAR *__buf,
-                       int __type, size_t __size);
+                                   int __type, size_t __size);
 int     _RTLENTRY _EXPFUNC sprintf(char _FAR *__buffer, const char _FAR *__format, ...);
 int     _RTLENTRY _EXPFUNC sscanf(const char _FAR *__buffer,
-                      const char _FAR *__format, ...);
+                                  const char _FAR *__format, ...);
 char   _FAR *_RTLENTRY _EXPFUNC strerror(int __errnum);
 FILE   _FAR *_RTLENTRY _EXPFUNC tmpfile(void);
 char   _FAR *_RTLENTRY _EXPFUNC tmpnam(char _FAR *__s);
 int     _RTLENTRY _EXPFUNC ungetc(int __c, FILE _FAR *__stream);
 int     _RTLENTRY _EXPFUNC vfprintf(FILE _FAR *__stream, const char _FAR *__format,
-                        void _FAR *__arglist);
+                                    void _FAR *__arglist);
 int     _RTLENTRY _EXPFUNC vfscanf(FILE _FAR *__stream, const char _FAR *__format,
-                        void _FAR *__arglist);
+                                   void _FAR *__arglist);
 int     _RTLENTRYF         vprintf(const char _FAR *__format, void _FAR *__arglist);
 int     _RTLENTRY          vscanf(const char _FAR *__format, void _FAR *__arglist);
 int     _RTLENTRY _EXPFUNC vsprintf(char _FAR *__buffer, const char _FAR *__format,
-                        void _FAR *__arglist);
+                                    void _FAR *__arglist);
 int     _RTLENTRY _EXPFUNC vsscanf(const char _FAR *__buffer, const char _FAR *__format,
-                        void _FAR *__arglist);
+                                   void _FAR *__arglist);
 int     _RTLENTRYF         unlink(const char _FAR *__path);
 int     _RTLENTRY          getc(FILE _FAR *__fp);
-                        
+
 int     _RTLENTRY          getchar(void);
 int     _RTLENTRY          putchar(const int __c);
-                        
+
 int     _RTLENTRY          putc(const int __c, FILE _FAR *__fp);
 int     _RTLENTRY          feof(FILE _FAR *__fp);
 int     _RTLENTRY          ferror(FILE _FAR *__fp);
@@ -280,9 +288,9 @@ int     _RTLENTRY _EXPFUNC fprintf(FILE * __stream, const char * __format, ...);
 int     _RTLENTRY _EXPFUNC fputc(int __c, FILE * __stream);
 int     _RTLENTRY _EXPFUNC fputs(const char * __s, FILE * __stream);
 size_t  _RTLENTRY _EXPFUNC fread(void * __ptr, size_t __size, size_t __n,
-                            FILE * __stream);
+                                 FILE * __stream);
 FILE  * _RTLENTRY _EXPFUNC freopen(const char * __path, const char * __mode,
-                            FILE * __stream);
+                                   FILE * __stream);
 int     _RTLENTRY _EXPFUNC fscanf(FILE * __stream, const char * __format, ...);
 int     _RTLENTRY _EXPFUNC fseek(FILE * __stream, long __offset, int __whence);
 int     _RTLENTRY _EXPFUNC fsetpos(FILE * __stream, const fpos_t*__pos);
@@ -306,14 +314,14 @@ int     _RTLENTRY _EXPFUNC puts(const char * __s);
 
 int     _RTLENTRYF _EXPFUNC remove(const char * __path);
 int     _RTLENTRYF _EXPFUNC rename(const char * __oldname,const char * __newname);
-void    _RTLENTRY _EXPFUNC rewind(FILE * __stream);
-int     _RTLENTRY _EXPFUNC scanf(const char * __format, ...);
-void    _RTLENTRY _EXPFUNC setbuf(FILE * __stream, char * __buf);
-int     _RTLENTRY _EXPFUNC setvbuf(FILE * __stream, char * __buf,
-                            int __type, size_t __size);
-int     _RTLENTRY _EXPFUNC sprintf(char * __buffer, const char * __format, ...);
-int     _RTLENTRY _EXPFUNC sscanf(const char * __buffer,
-                            const char * __format, ...);
+void    _RTLENTRY  _EXPFUNC rewind(FILE * __stream);
+int     _RTLENTRY  _EXPFUNC scanf(const char * __format, ...);
+void    _RTLENTRY  _EXPFUNC setbuf(FILE * __stream, char * __buf);
+int     _RTLENTRY  _EXPFUNC setvbuf(FILE * __stream, char * __buf,
+                                    int __type, size_t __size);
+int     _RTLENTRY  _EXPFUNC sprintf(char * __buffer, const char * __format, ...);
+int     _RTLENTRY  _EXPFUNC sscanf(const char * __buffer,
+                                   const char * __format, ...);
 char  * _RTLENTRY _EXPFUNC strerror(int __errnum);
 FILE  * _RTLENTRY _EXPFUNC tmpfile(void);
 char  * _RTLENTRY _EXPFUNC tmpnam(char * __s);
@@ -377,8 +385,16 @@ int      _RTLENTRY _EXPFUNC _fputc(char __c, FILE * __stream); /* used by putc()
 
 #define ungetc(c,f) ungetc((c),f)   /* traditionally a macro */
 
-#if !defined(_RC_INVOKED)
+
+#if !defined(RC_INVOKED)
+
 #pragma option -a. /* restore default packing */
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __STDIO_H */

@@ -1,0 +1,4 @@
+LIBRARY 32rtm.exe INITINSTANCE
+
+EXPORTS
+        GetLoaderVersion

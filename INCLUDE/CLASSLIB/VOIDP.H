@@ -1,18 +1,18 @@
-/*--------------------------------------------------------------------*/
-/*                                                                    */
-/*  VOIDP.H                                                           */
-/*                                                                    */
-/*  Copyright (c) Borland International 1993                          */
-/*  All Rights Reserved                                               */
-/*                                                                    */
-/*--------------------------------------------------------------------*/
+/*------------------------------------------------------------------------*/
+/*                                                                        */
+/*  VOIDP.H                                                               */
+/*                                                                        */
+/*  Copyright (c) 1993, 1994 Borland International                        */
+/*  All Rights Reserved                                                   */
+/*                                                                        */
+/*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_VOIDP_H )
-#define __CLASSLIB_VOIDP_H
+#if !defined( CLASSLIB_VOIDP_H )
+#define CLASSLIB_VOIDP_H
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
@@ -42,5 +42,5 @@ private:
 #pragma option -po.
 #endif
 
-#endif  // __CLASSLIB_VOIDP_H
+#endif  // CLASSLIB_VOIDP_H
 

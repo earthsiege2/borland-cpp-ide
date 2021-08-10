@@ -3,8 +3,10 @@
 #   examples\owl\owlapi\vbxctl\makefile
 #----------------------------------------------------------------------------
 
-EXERES=vbxctlx
 LIBEXE=$(BCLIBDIR)\bivbx.lib
+EXERES=vbxctlx
 MODELS=mldf
 !include $(BCEXAMPLEDIR)\owlmake.gen
-
+!if $(_32BIT_)
+  LIBEXE=$(BCLIBDIR)\bivbx32.lib
+!endif

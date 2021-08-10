@@ -1,0 +1,362 @@
+#-----------------------------------------------------------------------------
+# ObjectComponents - (C) Copyright 1991, 1993 by Borland International
+#
+# MAKEFILE for ObjectComponents Framework
+#
+# Defines:
+#   MODEL=<d|s|m|l|f>   one of: dll(default), small, medium, large or flat
+#   WIN32        enables win32 static (flat) or DLL
+#   DIAGS        enables runtime diagnostic lib (adds 'd' to lib name before 'w')
+#   DEBUG        enables debug info for TDW & TD32
+#   NOPCH        disables precompiled headers for OCF
+#   NAME=Xxx     lib & DLL name base, Defaults to 'OCF'. Req. for non-diag DLLs
+#   VERSION=nnn  version for OCF DLL. Defaults to 250. Req. for non-diag DLLs
+#   USERDLL      builds OCF for use in a user DLL (adds 'u' to lib name after model)
+#
+# Define these for alternate OCF build directories:
+#   OCFSRCDIR    defaults to: $(BCROOT)\source\OCF
+#   OCFINCDIR    defaults to: $(BCROOT)\include
+#   OCFLIBDIR    defaults to: $(BCROOT)\lib
+#   OCFBINDIR    defaults to: $(BCROOT)\bin
+#
+#-----------------------------------------------------------------------------
+
+.autodepend
+.cacheautodepend
+.swap
+
+#--------------------------------------------------------------------
+# fill in defaults
+#--------------------------------------------------------------------
+!if $(MODEL) == d
+  DLL = 1
+!endif
+!if $(MODEL) == f
+  WIN32 = 1
+!endif
+!if $d(WIN32)
+  MODEL = f
+!elif $d(DLL) || !$d(MODEL)
+  MODEL = l
+!endif
+
+#--------------------------------------------------------------------
+# dir & name components
+#--------------------------------------------------------------------
+!if $d(DLL)
+
+! if $d(WIN32)
+    KEY = fi                  # 32bit DLL import library
+! else
+    KEY = i                   # 16bit DLL import library
+! endif
+  KEY = w$(KEY)
+
+!else
+
+KEY = w$(MODEL)                 # Static library
+
+!endif  # if/else $d(DLL)
+
+! if $d(USERDLL)
+  KEY = $(KEY)u                 # Static or import library for use by dlls
+! endif
+
+!if !$d(NAME)
+  NAME=ocf
+! if !$d(VERSION)
+    VERSION=250  #//CQ is this right?  or 1.00?
+! endif
+!endif
+
+#--------------------------------------------------------------------
+# debug & diagnostic flags
+#--------------------------------------------------------------------
+!if $d(DEBUG)
+  CDBG = -v -k -Od    # debug-info on, normal stack, no optimizations
+!endif
+!if 1 || $d(DEBUG)    # Leave public debug info in dll & strip to a .tds after
+! if $d(WIN32)
+    LDBG = -v
+! else
+    LDBG = -v -Vt
+! endif
+!endif
+
+!if $d(DIAGS)         # default diags use precondition, check, trace & warn
+  __DEBUG=2
+  __TRACE=1
+  __WARN=1
+  BD=d                # Use Bids Diag version when OCF lib is diag
+  OD=d                # OCF libs & dll get a 'd' for Diag versions
+!endif
+
+#
+# Build up compiler diag switches based on settings
+#
+!if $d(__DEBUG)
+  CDIAG = -D__DEBUG=$(__DEBUG)
+!endif
+!if $d(__TRACE)
+  CDIAG = $(CDIAG) -D__TRACE
+!endif
+!if $d(__WARN)
+  CDIAG = $(CDIAG) -D__WARN
+!endif
+
+#--------------------------------------------------------------------
+# dir & search paths, & precompiled headers
+#--------------------------------------------------------------------
+
+#
+# BC tools BCBINDIR can be based on MAKEDIR if no BCROOT is defined
+#
+!if $d(BCROOT)
+  BCBINDIR = $(BCROOT)\bin
+!else
+  BCBINDIR = $(MAKEDIR)
+!endif
+
+#
+# default bcroot to whatever is in bcroot.inc
+#
+!if !$d(BCROOT)
+  #BCROOT = $(MAKEDIR)\..
+  !include $(MAKEDIR)\bcroot.inc
+!endif
+
+#
+# Where to find OCF dirs-- can set these for special layouts
+#
+!if !$d(OCFSRCDIR)
+  OCFSRCDIR = $(BCROOT)\source\ocf
+!endif
+
+!if !$d(OCFINCDIR)
+  OCFINCDIR = $(BCROOT)\include
+!endif
+
+!if !$d(OCFLIBDIR)
+  OCFLIBDIR = $(BCROOT)\lib
+!endif
+
+!if !$d(OCFBINDIR)
+  OCFBINDIR = $(BCROOT)\bin
+!endif
+
+#
+# Where to find BC tools, libraries and include files
+#
+BCINCDIR = $(BCROOT)\include
+BCLIBDIR = $(BCROOT)\lib
+
+#
+# Build search paths differently if OCF include dir is not below BC's
+#
+!if "$(OCFINCDIR)" == "$(BCINCDIR)"
+  INCLUDE       = .;$(BCINCDIR);$(BCINCDIR)\ocf
+  RCINCLUDEPATH = -i$(BCINCDIR)
+!else
+  INCLUDE       = .;$(OCFINCDIR);$(OCFINCDIR)\ocf;$(BCINCDIR)
+  RCINCLUDEPATH = -i$(OCFINCDIR) -i$(BCINCDIR)
+!endif
+
+OCFOBJDIR = $(OCFSRCDIR)\object\$(OD)$(KEY)    # Keep seperate diag/nondiag dirs
+
+.PATH.obj = $(OCFOBJDIR)
+.PATH.res = $(OCFOBJDIR)
+.PATH.def = $(OCFOBJDIR)
+.PATH.lib = $(OCFLIBDIR)
+.PATH.cpp = $(OCFSRCDIR)
+
+#
+# Define this to enable the use of Precompiled headers when building OCF
+#
+!if !$d(NOPCH)
+  CPCH= -H=$(OCFLIBDIR)\$(NAME)$(OD)$(KEY).csm -H"ocf/ocfpch.h" -D_OCFPCH
+! if $d(WIN32)
+  CPCH= $(CPCH) -Hc
+! endif
+!endif
+
+#--------------------------------------------------------------------
+# library names
+#--------------------------------------------------------------------
+OCFLIB = $(OCFLIBDIR)\$(NAME)$(OD)$(KEY).lib
+
+#--------------------------------------------------------------------
+# tools and options for 32bit
+#--------------------------------------------------------------------
+!if $d(WIN32)
+  BCC      = $(BCBINDIR)\bcc32       # Compiler
+  BRCC     = brcc32                  # Resource compiler
+  BCCASM   = $(BCBINDIR)\tasm32      # Assembler
+  TLINK    = $(BCBINDIR)\tlink32     # Linker
+  TLIB     = $(BCBINDIR)\tlib        # Librarian
+  IMPLIB   = $(BCBINDIR)\implib      # Import library generator
+  TDSTRIP  = $(BCBINDIR)\tdstrp32    # Debug info extractor
+
+  COPTS    = -d -k- -O1gmpv        # Optimizations
+  CFGFILE  = bcc32.cfg               # Name of compiler's config file
+! if $d(DEBUG)
+    TLIBOPTS = /P512
+! else
+    TLIBOPTS = /P32 /0
+! endif
+
+! if $d(DLL)
+    CWIN = -WDE -D_BUILDOCFDLL
+    LFLAGS   = $(LDBG) -Tpd -aa -s -c
+!   if !$d(BIDSILIB)
+      BIDSILIB = bids$(BD)fi
+!   endif
+    STDLIBS  = import32 cw32i    # Libs for linking the OCF DLL
+
+! else
+    CWIN = -W
+! endif
+
+#--------------------------------------------------------------------
+# tools and options for 16bit
+#--------------------------------------------------------------------
+!else
+  BCC      = $(BCBINDIR)\bcc         # Compiler
+  BRCC     = brcc                    # Resource compiler
+  BCCASM   = $(BCBINDIR)\tasm        # Assembler
+  TLINK    = $(BCBINDIR)\tlink       # Linker
+  TLIB     = $(BCBINDIR)\tlib        # Librarian
+
+  # implib needs -o switch in 16 bit for compatibility
+  IMPLIB   = $(BCBINDIR)\implib -o   # Import library generator
+  TDSTRIP  = $(BCBINDIR)\tdstrip     # Debug info extractor
+
+  CMDL     = -m$(MODEL)
+  COPTS    = -3 -d -k- -O1gmpv     # Optimizations
+
+! if $(MODEL) != s && $(MODEL) != m  # Large models can put strs in code seg
+    COPTS = $(COPTS) -dc
+! endif
+! if $(MODEL) == s                   # Small model turns off some options
+    NO_CPP_EXCEPTIONS = 1
+! endif
+! if $d(NO_CPP_EXCEPTIONS)
+    COPTS = $(COPTS) -DNO_CPP_EXCEPTIONS -x-
+! endif
+  CFGFILE = turboc.cfg
+
+! if $d(DEBUG)
+    TLIBOPTS = /P512
+! else
+    TLIBOPTS = /P32 /0
+! endif
+
+! if $d(DLL)                       # Build the 16bit OCF for use with RTL/BIDS DLL
+!   if $d(USERDLL)
+      CWIN = -WDE -D_OCFDLL -xc      # _BUILDOCFDLL in EXE (not actually a dll)
+!   else
+      CWIN = -WSE -D_OCFDLL          # _BUILDOCFDLL in DLL (not actually a dll)
+!   endif
+    LFLAGS = $(LDBG) -Twd -n -s -c -C
+!   if !$d(BIDSILIB)
+      BIDSILIB = bids$(BD)i
+!   endif
+    STDLIBS  = import crtldll        # Libs for linking the OC DLL
+
+! else
+!   if $d(USERDLL)
+      CWIN = -WDE -xc                # Build static OCF lib for use in DLLs
+!   else
+      CWIN = -WSE                    # Build regular static OCF lib
+!   endif
+! endif
+
+!endif
+
+#--------------------------------------------------------------------
+# rules
+#--------------------------------------------------------------------
+.rc.res:
+  $(BRCC) $(RCINCLUDEPATH) -fo$@ $.
+
+.cpp.obj:
+  $(BCC) {$. }
+
+#--------------------------------------------------------------------
+# Various file lists needed for dependency checking and LIBing.
+#
+#   OBJS_CMN are the objs common to static libs and the dll
+#   OBJS_LIB are the objs that go into libs and implibs only, not the dlls
+#   OBJS_DLL are the objs that go into the dll only
+#   LIBDEPOBJS is the list of object files for lib/implib dependency checking
+#   LIBOBJS is the list of object files for building/addingto the libraries
+#   LINKOBJS is the list of object files for building the DLL
+#--------------------------------------------------------------------
+
+# General Objs
+#
+OBJS_CMN = \
+ PFXautocli.obj\
+ PFXappdesc.obj\
+ PFXautosrv.obj\
+ PFXautoval.obj\
+ PFXocreg.obj\
+ PFXocguid.obj\
+ PFXocstorag.obj\
+ PFXoleutil.obj\
+ PFXtypelib.obj
+
+OBJS_CMN = $(OBJS_CMN)\
+ PFXocapp.obj\
+ PFXocdoc.obj\
+ PFXocpart.obj\
+ PFXocremvie.obj\
+ PFXocdata.obj\
+ PFXoclink.obj\
+ PFXocview.obj
+
+# Put together obj groups into lists for different targets
+#
+!if $d(DLL)
+ LIBDEPOBJS= $(OBJS_CMN:PFX=) $(OBJS_LIB:PFX=) $(OBJS_DLL:PFX=)
+ LIBOBJS   = $(OBJS_LIB:PFX=+) $(OBJS_CMN:PFX=+) $(OBJS_DLL:PFX=+)
+ LINKOBJS  = $(OBJS_CMN:PFX=) $(OBJS_DLL:PFX=)
+!else
+ LIBDEPOBJS= $(OBJS_CMN:PFX=) $(OBJS_LIB:PFX=)
+ LIBOBJS   = $(OBJS_CMN:PFX=+) $(OBJS_LIB:PFX=+)
+!endif
+
+#--------------------------------------------------------------------
+# targets
+#--------------------------------------------------------------------
+all: cfgfile $(OCFLIB)
+
+cfgfile:
+  @-if not exist $(.PATH.obj)\..\NUL md $(.PATH.obj)\..
+  @-if not exist $(.PATH.obj)\NUL md $(.PATH.obj)
+  @copy &&|
+-I$(INCLUDE)
+-c -w $(CMDL) $(CWIN) $(COPTS)
+$(CDBG) $(CDIAG)
+$(CPCH) -n$(.PATH.obj) $(CCFOCF)
+| $(CFGFILE) > NUL
+
+$(OCFLIB): $(LIBDEPOBJS)
+  @del $(OCFLIB)
+  @cd $(.PATH.obj)
+  $(TLIB) $(TLIBOPTS) $(OCFLIB) @&&|
+$(LIBOBJS)
+|
+  @cd $(.PATH.cpp)
+
+clean:
+  @echo Removing .OBJs from $(.PATH.obj)
+  @if exist $(.PATH.obj)\*.obj del $(.PATH.obj)\*.obj
+  @if exist $(.PATH.obj)\*.csm del $(.PATH.obj)\*.csm
+
+!if $d(WIN32)
+ocguid.obj: ocguid.cpp
+  $(BCC) -H- ocguid.cpp
+!else
+ocguid.obj: ocguid.cpp
+  $(BCC) -H- -zE_TEXT -zFCODE ocguid.cpp
+!endif

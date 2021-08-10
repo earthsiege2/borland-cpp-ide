@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\color.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of color classes
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\color.h>
+#include <owl/owlpch.h>
+#include <owl/color.h>
 
 const TColor TColor::Black(0, 0, 0);         // 0
 const TColor TColor::LtGray(192, 192, 192);  // 7
@@ -23,7 +24,7 @@ const TColor TColor::White(255, 255, 255);   // 15
 // ie 1, 4, 8, and 24.  If the bit count is not supported, it returns -1
 //
 long _OWLFUNC
-NColors(WORD bitCount)
+NColors(uint16 bitCount)
 {
   if (bitCount == 1 || bitCount == 4 || bitCount == 8)
     return 1 << bitCount;
@@ -32,7 +33,7 @@ NColors(WORD bitCount)
   return -1;
 }
 
-WORD _OWLFUNC
+uint16 _OWLFUNC
 NBits(long colors)
 {
   if (colors <= 2)

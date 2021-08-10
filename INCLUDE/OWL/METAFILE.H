@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\metafile.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of a MetaFile wrapper class
 //----------------------------------------------------------------------------
-#if !defined(__OWL_METAFILE_H)
-#define __OWL_METAFILE_H
+#if !defined(OWL_METAFILE_H)
+#define OWL_METAFILE_H
 
-#if !defined(__OWL_GDIBASE_H)
-  #include <owl\gdibase.h>
+#if !defined(OWL_GDIBASE_H)
+# include <owl/gdibase.h>
 #endif
 class _OWLCLASS TClipboard;
 class _OWLCLASS TDC;
@@ -24,25 +25,25 @@ class _OWLCLASS TMetaFilePict : private TGdiBase {
     TMetaFilePict(HMETAFILE handle, TAutoDelete autoDelete);
     TMetaFilePict(const TClipboard& clipboard);
     TMetaFilePict(const char* filename);
-  #if defined(__WIN32__)
-    TMetaFilePict(UINT size, void far* data);
-  #else
+#if defined(BI_PLAT_WIN32)
+    TMetaFilePict(uint size, void far* data);
+#else
     TMetaFilePict(HGLOBAL data);
-  #endif
+#endif
     TMetaFilePict(const TMetaFilePict&, const char far* fileName = 0);
    ~TMetaFilePict();
 
     operator    HMETAFILE() const {return HMETAFILE(Handle);}
 
-  #if defined(__WIN32__)
-    DWORD       GetMetaFileBitsEx(UINT size, void* data);
-  #else
+#if defined(BI_PLAT_WIN32)
+    uint32      GetMetaFileBitsEx(uint size, void* data);
+#else
     HANDLE      GetMetaFileBits() {return ::GetMetaFileBits(HMETAFILE(Handle));}
-  #endif
+#endif
 
     // Play this metafile onto a dc
     TSize     CalcPlaySize(TDC& dc, const TSize& defSize) const;
-    BOOL      PlayOnto(TDC& dc, const TSize& defSize) const;
+    bool      PlayOnto(TDC& dc, const TSize& defSize) const;
 
     // Put this MetaFilePict onto the clipboard
     void      ToClipboard(TClipboard& clipboard, 
@@ -77,4 +78,4 @@ class _OWLCLASS TMetaFilePict : private TGdiBase {
 inline TClipboard& operator <<(TClipboard& clipboard, TMetaFilePict& mfp)
       {mfp.ToClipboard(clipboard); return clipboard;}
 
-#endif  // __OWL_METAFILE_H
+#endif  // OWL_METAFILE_H

@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\textwidg.h
-//   Base class TGadget.
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Definition of text gadget class TGadget.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_TEXTGADG_H)
-#define __OWL_TEXTGADG_H
+#if !defined(OWL_TEXTGADG_H)
+#define OWL_TEXTGADG_H
 
-#if !defined(__OWL_GADGET_H)
-  #include "owl\gadget.h"
+#if !defined(OWL_GADGET_H)
+# include <owl/gadget.h>
 #endif
 
 //
@@ -24,7 +25,7 @@ class _OWLCLASS TTextGadget : public TGadget {
   public:
     enum TAlign {Left, Center, Right};
 
-    TTextGadget(int id = 0, TBorderStyle = Recessed, TAlign = Left, UINT numChars = 10, const char* text = 0);
+    TTextGadget(int id = 0, TBorderStyle = Recessed, TAlign = Left, uint numChars = 10, const char* text = 0);
    ~TTextGadget();
 
     const char*   GetText() const {return Text;}
@@ -43,13 +44,13 @@ class _OWLCLASS TTextGadget : public TGadget {
     void    Invalidate();
 
   private:
-    UINT    GetMaxCharWidth();
+    uint    GetMaxCharWidth();
 
   protected:
     char*    Text;
-    UINT     TextLen;
+    uint     TextLen;
     TAlign   Align;
-    UINT     NumChars;
+    uint     NumChars;
 
   private:
     //
@@ -59,4 +60,4 @@ class _OWLCLASS TTextGadget : public TGadget {
     TTextGadget& operator =(const TTextGadget&);
 };
 
-#endif  // __OWL_TEXTGADG_H
+#endif  // OWL_TEXTGADG_H

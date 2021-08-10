@@ -31,11 +31,13 @@ cdecl
 char
 class
 const
+const_cast
 continue
 default
 delete
 do
 double
+dynamic_cast
 else
 enum
 extern
@@ -54,11 +56,13 @@ private
 protected
 public
 register
+reinterpret_cast
 return
 short
 signed
 sizeof
 static
+static_cast
 struct
 switch
 template
@@ -66,6 +70,7 @@ this
 throw
 try
 typedef
+typeid
 union
 unsigned
 virtual

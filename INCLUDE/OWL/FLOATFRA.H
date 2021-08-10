@@ -1,16 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\floatfra.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Class TFloatingFrame.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_FLOATFRA_H)
-#define __OWL_FLOATFRA_H
+#if !defined(OWL_FLOATFRA_H)
+#define OWL_FLOATFRA_H
 
-#if !defined(__OWL_FRAMEWIN_H)
-  #include <owl\framewin.h>
+#if !defined(OWL_FRAMEWIN_H)
+# include <owl/framewin.h>
 #endif
-#if !defined(__OWL_TINYCAPT_H)
-  #include <owl\tinycapt.h>
+#if !defined(OWL_TINYCAPT_H)
+# include <owl/tinycapt.h>
 #endif
 
 //
@@ -33,26 +34,30 @@ class _OWLCLASS TFloatingFrame : public TFrameWindow, public TTinyCaption {
     TFloatingFrame(TWindow*        parent,
                    char*           title = 0,
                    TWindow*        clientWnd = 0,
-                   BOOL            shrinkToClient = FALSE,
+                   bool            shrinkToClient = false,
                    int             captionHeight = DefaultCaptionHeight,
-                   BOOL            popupPalette = FALSE,
+                   bool            popupPalette = false,
                    TModule*        module = 0);
     
     void    SetMargins(const TSize& margin) {Margin = margin;}
 
-    enum {DefaultCaptionHeight = 48};
+    enum {DefaultCaptionHeight = 58};
+
+  protected:
+    TEventStatus  DoNCHitTest(TPoint& screenPt, uint& evRes);
+
+    LRESULT EvCommand(uint id, HWND hWndCtl, uint notifyCode);
+    void    EvSysCommand(uint cmdType, TPoint& p);
+    uint    EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize);
+    void    EvNCPaint();
+    uint    EvNCHitTest(TPoint& screenPt);
 
   private:
-    LRESULT EvCommand(UINT id, HWND hWndCtl, UINT notifyCode);
-    void    EvSysCommand(UINT cmdType, TPoint& p);
-    UINT    EvNCCalcSize(BOOL calcValidRects, NCCALCSIZE_PARAMS far& calcSize);
-    void    EvNCPaint();
-
     TSize   Margin;  // left and right, top and bottom
-    BOOL    FloatingPaletteEnabled;
+    bool    FloatingPaletteEnabled;
 
   DECLARE_RESPONSE_TABLE(TFloatingFrame);
   DECLARE_STREAMABLE(_OWLCLASS, TFloatingFrame, 1);
 };
 
-#endif  // __OWL_FLOATFRA_H
+#endif  // OWL_FLOATFRA_H

@@ -365,11 +365,12 @@ Caption::Caption( const string& text, TextLoc where ) :
 {
 }
 
+#pragma warn -def
 void Caption::ImplementDraw( TDC& dc )
 {
     TEXTMETRIC tm;
     dc.GetTextMetrics(tm);
-    WORD textHeight = tm.tmHeight+tm.tmExternalLeading;
+    int textHeight = tm.tmHeight+tm.tmExternalLeading;
 
     int yDelta;
     switch( Where )
@@ -388,6 +389,7 @@ void Caption::ImplementDraw( TDC& dc )
                 bbox.top+yDelta,
                 Text.c_str(), Text.length() );
 }
+#pragma warn .def
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
@@ -1243,7 +1245,7 @@ private:
         operator TDC&() const;
     private:
         TDC& DC;
-        WORD OldFlags;
+        uint OldFlags;
         TPen Pen;
     };
 

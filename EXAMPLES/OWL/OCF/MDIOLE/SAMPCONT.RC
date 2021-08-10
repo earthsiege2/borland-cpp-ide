@@ -1,0 +1,10 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+
+#include "sampcont.h"
+
+STRINGTABLE
+{
+ IDS_DOCFILEFILTER, "Container Files (*.DFL)|*.DFL|AllFiles (*.*)|*.*|"
+}

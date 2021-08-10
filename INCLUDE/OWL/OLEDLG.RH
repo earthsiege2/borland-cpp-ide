@@ -1,0 +1,172 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Command IDs to use with oledlg.h
+//----------------------------------------------------------------------------
+
+//
+// Insert Object
+//
+#define IDC_CREATENEW       100
+#define IDC_CREATEFROMFILE  101
+#define IDC_OBJECTTYPE      102
+#define IDC_OBJECTLIST      103
+#define IDC_FILE            104
+#define IDC_FILETYPE        105
+#define IDC_FILENAME        106
+#define IDC_BROWSE          107
+#define IDC_LINK            108
+#define IDC_DISPLAYASICON   109
+#define IDC_ICONIMAGE       110
+#define IDC_CHANGEICON      111
+#define IDC_DOCUMENTTYPE    112
+#define IDC_RESULTIMAGE     113
+#define IDC_RESULTTEXT      114
+
+//
+// Change Icon
+//
+#define IDC_CURRENT         115
+#define IDC_DEFAULT         116
+#define IDC_FROMFILE        117
+#define IDC_CURRENTICON     118
+#define IDC_DEFAULTICON     119
+#define IDC_ICONLIST        120
+#define IDC_RESULTICON      121
+#define IDC_DOCUMENTNAME    122
+#define IDC_LABEL           123
+
+//
+// Convert
+//
+#define IDC_CONVERTTO       124
+#define IDC_ACTIVATEAS      125
+#define IDC_CURRENTOBJECTTYPE 126
+#define IDC_ACTIVATELIST    127
+#define IDC_SOURCE          128
+#define IDC_TYPE            129
+#define IDC_ICONLABEL1      130
+#define IDC_ICONLABEL2      131
+
+
+//
+// Paste Special
+//
+#define IDC_PASTELIST       132
+#define IDC_PASTELINKLIST   133
+#define IDC_DISPLAYLIST     134
+
+//
+// Link
+//
+#define IDC_PASTE           135
+#define IDC_PASTELINK       136
+#define IDC_BREAKLINK       137
+#define IDC_CHANGESOURCE    138
+#define IDC_OPENSOURCE      139
+#define IDC_UPDATENOW       140
+#define IDC_MANUAL          141
+#define IDC_AUTOMATIC       142
+#define IDC_LINKLIST        143
+#define IDC_COL1            144
+#define IDC_COL2            145
+#define IDC_COL3            146
+
+//
+// Customized FileOpen
+//
+#define IDC_DIRECTORY       147
+
+//
+// Custom Control Class Names
+//
+#define RESULTIMAGE_CLSNAME "ResImage"
+#define ICONIMAGE_CLSNAME   "IconImage"
+
+//
+// OLE Dialog Resource Identifiers
+//
+#define DLG_INSERTOBJECT    32248
+#define DLG_CHANGEICON      32249
+#define DLG_CONVERT         32250 
+#define DLG_PASTESPECIAL    32251 
+#define DLG_EDITLINKS       32252 
+#define DLG_FILEOPEN        32253
+
+//
+// Generic OLE Dialog String IDs
+//
+#define IDS_FILTERS             32320
+#define IDS_ICONFILTERS         32321
+#define IDS_BROWSE              32322
+
+//
+// Insert Object Dialog String IDs
+//
+#define IDS_IORESULTNEW             32400
+#define IDS_IORESULTNEWICON         32401
+#define IDS_IORESULTFROMFILE1       32402
+#define IDS_IORESULTFROMFILE2       32403
+#define IDS_IORESULTFROMFILEICON2   32404
+#define IDS_IORESULTLINKFILE1       32405
+#define IDS_IORESULTLINKFILE2       32406
+#define IDS_IORESULTLINKFILEICON1   32407
+#define IDS_IORESULTLINKFILEICON2   32408
+
+//
+// Change Icon Dialog String IDs
+//
+#define IDS_CINOICONSINFILE         32430
+#define IDS_CIINVALIDFILE           32431
+#define IDS_CIFILEACCESS            32432
+#define IDS_CIFILESHARE             32433
+#define IDS_CIFILEOPENFAIL          32434
+
+//
+// Convert dialog String IDs
+//
+#define IDS_CVRESULTCONVERTLINK     32440
+#define IDS_CVRESULTCONVERTTO       32441
+#define IDS_CVRESULTNOCHANGE        32442
+#define IDS_CVRESULTDISPLAYASICON   32443
+#define IDS_CVRESULTACTIVATEAS      32444
+#define IDS_CVRESULTACTIVATEDIFF    32445
+
+//
+// Paste Special Dialog String IDs
+//
+#define IDS_PSPASTEDATA             32410
+#define IDS_PSPASTEOBJECT           32411
+#define IDS_PSPASTEOBJECTASICON     32412
+#define IDS_PSPASTELINKDATA         32413
+#define IDS_PSPASTELINKOBJECT       32414
+#define IDS_PSPASTELINKOBJECTASICON 32415
+#define IDS_PSNONOLE                32416
+#define IDS_PSUNKNOWNTYPE           32417
+#define IDS_PSUNKNOWNSRC            32418
+#define IDS_PSUNKNOWNAPP            32419
+
+
+//
+// Links dialog String IDs
+//
+#define IDS_LINK_AUTO               32450
+#define IDS_LINK_MANUAL             32451
+#define IDS_LINK_UNKNOWN            32452
+#define IDS_LINKS                   32453
+#define IDS_FAILED                  32454
+#define IDS_CHANGESOURCE            32455
+#define IDS_INVALIDSOURCE           32456
+#define IDS_ERR_GETLINKSOURCE       32457
+#define IDS_ERR_GETLINKUPDATEOPTIONS 32458
+#define IDS_ERR_ADDSTRING           32459
+#define IDS_CHANGEADDITIONALLINKS   32460
+#define IDS_CLOSE                   32461
+
+//
+// Resource identifiers for bitmaps
+//
+#define IDB_RESULTSEGA          32325
+#define IDB_RESULTSVGA          32326
+#define IDB_RESULTSHIRESVGA     32327

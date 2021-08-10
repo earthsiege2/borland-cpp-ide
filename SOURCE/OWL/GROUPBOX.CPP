@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\groupbox.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TGroupBox.  This defines the basic behavior
 //   for all group boxes.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\groupbox.h>
-#include <owl\applicat.h>
+#include <owl/owlpch.h>
+#include <owl/groupbox.h>
+#include <owl/applicat.h>
 #include <bwcc.h>
 
 #if !defined(SECTION) || SECTION == 1
@@ -23,9 +24,10 @@ TGroupBox::TGroupBox(TWindow*        parent,
                      const char far* text,
                      int x, int y, int w, int h,
                      TModule*        module)
-  : TControl(parent, id, text, x, y, w, h, module)
+:
+  TControl(parent, id, text, x, y, w, h, module)
 {
-  NotifyParent = TRUE;
+  NotifyParent = true;
   Attr.Style = (Attr.Style | BS_GROUPBOX) & ~WS_TABSTOP;
 }
 
@@ -55,7 +57,7 @@ TGroupBox::TGroupBox(TWindow*   parent,
                      TModule*   module)
   : TControl(parent, resourceId, module)
 {
-  NotifyParent = TRUE;
+  NotifyParent = true;
   DisableTransfer();
 }
 
@@ -70,7 +72,7 @@ void
 TGroupBox::SelectionChanged(int controlId)
 {
   if (NotifyParent)
-    #if defined(__WIN32__)
+    #if defined(BI_PLAT_WIN32)
       Parent->PostMessage(WM_COMMAND, MAKEWPARAM(Attr.Id, controlId),
                           (LPARAM) HWindow);
     #else

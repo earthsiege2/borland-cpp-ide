@@ -1,0 +1,538 @@
+##{cheader.snp}
+#include <owl\owlpch.h>
+#pragma hdrstop
+
+##@OPT_APPL_DRAGDROP 2
+#include <dir.h>
+
+##QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+##<<TMDIClient QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+##<<TMDIChild QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+##OPT_DV_RESET
+##OPT_DV_NEXT
+##QUERY_DV_TVIEW [[WindowClient]]
+##<<*WindowClient QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+##<<TDialog QUERY_FILE_H [[Filename]]
+#include "[[Filename]]"                        // Definition of about dialog.       
+
+
+##--BEGIN-- @OPT_APPL_HELP
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//
+// Generated help file.
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##@QUERY_APPL_HELP [[HelpFile]]
+const char HelpFileName[] = "[[HelpFile]].hlp";
+
+
+##--END-- @OPT_APPL_HELP
+##{cdragdrp.owl}
+//{{[[TApplication]] Implementation}}
+
+
+##--BEGIN-- @QUERY_APPL_OLE_AUTO 
+//
+// OLE's ITypeInfo browses this symbol table for a list of all data,
+// properties, and methods exposed by this automated class.
+//
+##@QUERY_APPL_OLE != VALUE_NOOLE
+DEFINE_AUTOAGGREGATE([[TApplication]], OcApp->Aggregate)
+##@QUERY_APPL_OLE == VALUE_NOOLE
+DEFINE_AUTOCLASS([[TApplication]])
+    EXPOSE_APPLICATION([[TApplication]], "Application", "Application object", 0)
+    EXPOSE_QUIT("Quit", "Quit application", 0)
+//{{[[TApplication]]SYM_TBL_BEGIN}}
+//{{[[TApplication]]SYM_TBL_END}}
+##@QUERY_APPL_OLE != VALUE_NOOLE
+END_AUTOAGGREGATE([[TApplication]], tfAppObject | tfCanCreate, "[[TApplication]]", 0, 0);
+##@QUERY_APPL_OLE == VALUE_NOOLE
+END_AUTOCLASS([[TApplication]], tfAppObject | tfCanCreate, "[[TApplication]]", 0, 0);
+
+
+##--END-- @QUERY_APPL_OLE_AUTO 
+##((@QUERY_APPL_OLE != VALUE_NOOLE) || @QUERY_APPL_OLE_AUTO) 2
+DEFINE_APP_DICTIONARY(AppDictionary);
+
+##((@QUERY_APPL_OLE == VALUE_NOOLE) && @QUERY_APPL_OLE_AUTO)
+static TPointer<TRegistrar> Registrar;
+##((@QUERY_APPL_OLE != VALUE_NOOLE)
+static TPointer<TOcRegistrar> Registrar;
+
+##--BEGIN-- ((@QUERY_APPL_OLE != VALUE_NOOLE) || @QUERY_APPL_OLE_AUTO)
+REGISTRATION_FORMAT_BUFFER(100)
+
+BEGIN_REGISTRATION(ApplicationReg)
+##@QUERY_OLE_GUID [[GUID]]
+    REGDATA(clsid, "{[[GUID]]}")
+##--BEGIN-- @QUERY_PRJ_NAME [[AppTitle]]
+##((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH) || @QUERY_APPL_OLE_AUTO) 2
+    REGDATA(appname, "[[AppTitle]] Server")
+    REGDATA(description, "[[AppTitle]] Server Application")
+##((@QUERY_APPL_OLE == VALUE_CONTAINER) && !@QUERY_APPL_OLE_AUTO) 2
+    REGDATA(appname, "[[AppTitle]] Container")
+    REGDATA(description, "[[AppTitle]] Container Application")
+##@QUERY_APPL_OLE_AUTO
+    REGDATA(progid, "[[AppTitle]].Application.1")
+##--END-- @QUERY_PRJ_NAME [[AppTitle]]
+##@QUERY_APPL_OLE_AUTO
+    REGDATA(cmdline, "/Automation")
+##!@QUERY_APPL_OLE_AUTO
+    REGDATA(cmdline, "")
+##((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
+    REGDATA(usage, ocrMultipleUse)
+##--BEGIN-- @QUERY_APPL_OLE_AUTO
+//    REGDATA(debugger, "TDW")
+##--END-- @QUERY_APPL_OLE_AUTO
+END_REGISTRATION
+
+##--END-- @QUERY_APPL_OLE != VALUE_NOOLE
+##@QUERY_APPL_OLE != VALUE_NOOLE
+##: {AddOleDV.SNP}
+##*
+##@QUERY_APPL_OLE == VALUE_NOOLE
+##: {AddDocV.SNP}
+##*
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//
+// Build a response table for all messages/commands handled
+// by the application.
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+DEFINE_RESPONSE_TABLE1([[TApplication]], TApplication)
+//{{[[TApplication]]RSP_TBL_BEGIN}}
+    EV_OWLVIEW(dnCreate, EvNewView),
+    EV_OWLVIEW(dnClose,  EvCloseView),
+##:DBResponse(\\"[[TApplication]]", "CM_HELPABOUT", "CmHelpAbout", "", "COMMAND")
+    EV_COMMAND(CM_HELPABOUT, CmHelpAbout),
+##@OPT_APPL_HELP 2
+##:DBResponse(\\"[[TApplication]]", "CM_HELPCONTENTS", "CmHelpContents", "", "COMMAND")
+##:DBResponse(\\"[[TApplication]]", "CM_HELPUSING", "CmHelpUsing", "", "COMMAND")
+    EV_COMMAND(CM_HELPCONTENTS, CmHelpContents),
+    EV_COMMAND(CM_HELPUSING, CmHelpUsing),
+##@OPT_APPL_DRAGDROP
+##:DBResponse(\\"[[TApplication]]", "", "", "WM_DROPFILES", "")
+    EV_WM_DROPFILES,
+##@OPT_APPL_PRINTING
+##:DBResponse(\\"[[TApplication]]", "", "", "WM_WININICHANGE", "")
+    EV_WM_WININICHANGE,
+//{{[[TApplication]]RSP_TBL_END}}
+END_RESPONSE_TABLE;
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//////////////////////////////////////////////////////////
+// [[TApplication]]
+// =====
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##((@QUERY_APPL_OLE == VALUE_NOOLE) && (@QUERY_APPL_OLE_AUTO))
+[[TApplication]]::[[TApplication]] () : TApplication(::ApplicationReg["appname"], ::Module, &::AppDictionary)
+##@QUERY_APPL_OLE != VALUE_NOOLE
+[[TApplication]]::[[TApplication]] () : TApplication(::ApplicationReg["appname"], ::Module, &::AppDictionary)
+##((@QUERY_APPL_OLE == VALUE_NOOLE) && (!@QUERY_APPL_OLE_AUTO))
+##QUERY_WIND_TITLE [[Title]]
+[[TApplication]]::[[TApplication]] () : TApplication("[[Title]]")
+{
+##@OPT_APPL_HELP 4
+    HelpState = false;
+    ContextHelp = false;
+    HelpCursor = 0;
+
+##@OPT_APPL_PRINTING 3
+    Printer = 0;
+    Printing = 0;
+
+    SetDocManager(new TDocManager(dmMDI, this));
+
+    // INSERT>> Your constructor code here.
+}
+
+
+[[TApplication]]::~[[TApplication]] ()
+{
+##@OPT_APPL_PRINTING 3
+    if (Printer)
+        delete Printer;
+
+    // INSERT>> Your destructor code here.
+}
+
+
+##--BEGIN-- @OPT_APPL_HELP
+bool [[TApplication]]::CanClose ()
+{
+    bool result = TApplication::CanClose();
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Close the help engine if we used it.
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    if (result && HelpState)
+        GetMainWindow()->WinHelp(HelpFileName, HELP_QUIT, 0L);
+ 
+    return result;
+}
+
+
+##--END-- @OPT_APPL_HELP
+##--BEGIN-- @OPT_APPL_TOOLBAR
+void [[TApplication]]::CreateGadgets (TControlBar *cb, bool server)
+{
+    if (!server) {
+        cb->Insert(*new TButtonGadget(CM_MDIFILENEW, CM_MDIFILENEW));
+        cb->Insert(*new TButtonGadget(CM_MDIFILEOPEN, CM_MDIFILEOPEN));
+        cb->Insert(*new TButtonGadget(CM_FILESAVE, CM_FILESAVE));
+        cb->Insert(*new TSeparatorGadget(6));
+    }
+
+    cb->Insert(*new TButtonGadget(CM_EDITCUT, CM_EDITCUT));
+    cb->Insert(*new TButtonGadget(CM_EDITCOPY, CM_EDITCOPY));
+    cb->Insert(*new TButtonGadget(CM_EDITPASTE, CM_EDITPASTE));
+    cb->Insert(*new TSeparatorGadget(6));
+    cb->Insert(*new TButtonGadget(CM_EDITUNDO, CM_EDITUNDO));
+    cb->Insert(*new TSeparatorGadget(6));
+    cb->Insert(*new TButtonGadget(CM_EDITFIND, CM_EDITFIND));
+    cb->Insert(*new TButtonGadget(CM_EDITFINDNEXT, CM_EDITFINDNEXT));
+##--BEGIN-- @OPT_APPL_PRINTING
+
+    if (!server) {
+        cb->Insert(*new TSeparatorGadget(6));
+        cb->Insert(*new TButtonGadget(CM_FILEPRINT, CM_FILEPRINT));
+        cb->Insert(*new TButtonGadget(CM_FILEPRINTPREVIEW, CM_FILEPRINTPREVIEW));
+    }
+##--END-- @OPT_APPL_PRINTING
+##@OPT_APPL_HELP 3
+
+    cb->Insert(*new TSeparatorGadget(6));
+    cb->Insert(*new TButtonGadget(CM_HELPCONTENTS, CM_HELPCONTENTS));
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Add fly-over help hints.
+    cb->SetHintMode(TGadgetWindow::EnterHints);
+}
+
+
+##@QUERY_APPL_OLE == VALUE_NOOLE
+void [[TApplication]]::SetupSpeedBar (TDecoratedMDIFrame *frame)
+##@QUERY_APPL_OLE != VALUE_NOOLE
+void [[TApplication]]::SetupSpeedBar (TOleMDIFrame *frame)
+{ 
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Create default toolbar New and associate toolbar buttons with commands.
+    //   
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    TControlBar* cb = new TControlBar(frame);
+    CreateGadgets(cb);
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Setup the toolbar ID used by OLE 2 for toolbar negotiation.
+    cb->Attr.Id = IDW_TOOLBAR;
+
+    frame->Insert(*cb, TDecoratedFrame::Top);
+}
+
+
+##--END-- @OPT_APPL_TOOLBAR
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//////////////////////////////////////////////////////////
+// [[TApplication]]
+// =====
+// Application intialization.
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TApplication]]::InitMainWindow ()
+{
+    if (nCmdShow != SW_HIDE)
+##@QUERY_APPL_STARTUP == VALUE_NORMAL
+        nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWNORMAL : nCmdShow;
+##@QUERY_APPL_STARTUP == VALUE_MIN
+        nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWMINIMIZED : nCmdShow;
+##@QUERY_APPL_STARTUP == VALUE_MAX
+        nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWMAXIMIZED : nCmdShow;
+
+##<<TMDIClient QUERY_CLASS_NAME [[TMDIClient]]
+    mdiClient = new [[TMDIClient]](this);
+##@OPT_APPL_STATUSBAR 2
+##@QUERY_APPL_OLE != VALUE_NOOLE
+    TOleMDIFrame* frame = new TOleMDIFrame(Name, MDI_MENU, *mdiClient, true, this);
+##@QUERY_APPL_OLE == VALUE_NOOLE
+    TDecoratedMDIFrame* frame = new TDecoratedMDIFrame(Name, MDI_MENU, *mdiClient, true, this);
+##!@OPT_APPL_STATUSBAR 2
+##@QUERY_APPL_OLE != VALUE_NOOLE
+    TOleMDIFrame* frame = new TOleMDIFrame(Name, MDI_MENU, *mdiClient, false, this);
+##@QUERY_APPL_OLE == VALUE_NOOLE
+    TDecoratedMDIFrame* frame = new TDecoratedMDIFrame(Name, MDI_MENU, *mdiClient, false, this);
+
+##QUERY_WIND_STYLE [[StyleAttributes]]
+##StyleAttributes != "" 3
+    // Override the default window style for the main window.
+[[StyleAttributes]]
+
+##QUERY_WIND_BACKGRND [[BackgroundColor]]
+##BackgroundColor != "" 3
+    // Change the window's background color
+    frame->SetBkgndColor([[BackgroundColor]]);
+
+##--BEGIN-- ((@QUERY_APPL_OLE != VALUE_SERVER) && (@QUERY_APPL_OLE != VALUE_OLEBOTH))
+##@QUERY_APPL_STARTUP == VALUE_NORMAL
+    nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWNORMAL : nCmdShow;
+##@QUERY_APPL_STARTUP == VALUE_MIN
+    nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWMINIMIZED : nCmdShow;
+##@QUERY_APPL_STARTUP == VALUE_MAX
+    nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWMAXIMIZED : nCmdShow;
+
+##--END-- ((@QUERY_APPL_OLE != VALUE_SERVER) && (@QUERY_APPL_OLE != VALUE_OLEBOTH))
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Assign ICON w/ this application.
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    frame->SetIcon(this, IDI_MDIAPPLICATION);
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Menu associated with window and accelerator table associated with table.
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    frame->AssignMenu(MDI_MENU);
+    
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Associate with the accelerator table.
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    frame->Attr.AccelTable = MDI_MENU;
+
+##@OPT_APPL_TOOLBAR
+    SetupSpeedBar(frame);
+##@OPT_APPL_STATUSBAR 7
+
+    TStatusBar *sb = new TStatusBar(frame, TGadget::Recessed,
+                                    TStatusBar::CapsLock        |
+                                    TStatusBar::NumLock         |
+                                    TStatusBar::ScrollLock      |
+                                    TStatusBar::Overtype);
+    frame->Insert(*sb, TDecoratedFrame::Bottom);
+  
+    SetMainWindow(frame);
+
+    frame->SetMenuDescr(TMenuDescr(MDI_MENU));
+
+##--BEGIN-- @QUERY_APPL_CONTROL==VALUE_3D
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Windows 3-D controls.
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    EnableCtl3d(true);
+##--END-- @QUERY_APPL_CONTROL==VALUE_3D
+##--BEGIN-- @QUERY_APPL_CONTROL==VALUE_BWCC
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Borland Windows custom controls.
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    EnableBWCC();
+##--END-- @QUERY_APPL_CONTROL==VALUE_BWCC
+}
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//////////////////////////////////////////////////////////
+// [[TApplication]]
+// =====
+// Response Table handlers:
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TApplication]]::EvNewView (TView& view)
+{
+##--BEGIN-- ((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
+    TOleView* ov = TYPESAFE_DOWNCAST(&view, TOleView);
+    // If  we're embedded and we're opening out of place then don't create the child window.
+    if (view.GetDocument().IsEmbedded() && ov && !ov->IsOpenEditing()) {
+        TWindow* vw = view.GetWindow();
+        vw->SetParent(TYPESAFE_DOWNCAST(GetMainWindow(), TOleFrame)->GetRemViewBucket());
+        vw->Create();
+    } else {
+        TMDIClient *mdiClient = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), TMDIClient);
+        if (mdiClient) {
+##<<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
+            [[TMDIChild]]* child = new [[TMDIChild]](*mdiClient, 0, 0);
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE
+            // Associate ICON w/ this child window.
+            child->SetIcon(this, IDI_DOC);
+
+##@QUERY_APPL_OLE != VALUE_NOOLE 3
+            if (view.GetViewMenu())
+	            child->SetMenuDescr(*view.GetViewMenu());
+
+            child->Create();
+            child->SetClientWindow(view.GetWindow());
+        }
+    }
+
+    if (!ov || !ov->GetOcRemView())
+        OcApp->SetOption(amEmbedding, false);
+##--END-- ((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
+##--BEGIN-- ((@QUERY_APPL_OLE != VALUE_SERVER) && (@QUERY_APPL_OLE != VALUE_OLEBOTH))
+    TMDIClient *mdiClient = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), TMDIClient);
+    if (mdiClient) {
+##<<TMDIChild QUERY_CLASS_NAME [[TMDIChild]]
+        [[TMDIChild]]* child = new [[TMDIChild]](*mdiClient, 0, view.GetWindow());
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE
+        // Associate ICON w/ this child window.
+        child->SetIcon(this, IDI_DOC);
+
+##@QUERY_APPL_OLE != VALUE_NOOLE 3
+        if (view.GetViewMenu())
+	        child->SetMenuDescr(*view.GetViewMenu());
+
+        child->Create();
+    }
+##--END-- ((@QUERY_APPL_OLE != VALUE_SERVER) && (@QUERY_APPL_OLE != VALUE_OLEBOTH))
+}
+
+
+void [[TApplication]]::EvCloseView (TView&)
+{
+}
+##--BEGIN-- @OPT_APPL_HELP
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//////////////////////////////////////////////////////////
+// [[TApplication]]
+// =====
+// Menu Help Contents command
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TApplication]]::CmHelpContents ()
+{
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Show the help table of contents.
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    HelpState = GetMainWindow()->WinHelp(HelpFileName, HELP_CONTENTS, 0L);
+}
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//////////////////////////////////////////////////////////
+// [[TApplication]]
+// =====
+// Menu Help Using Help command
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TApplication]]::CmHelpUsing ()
+{
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Display the contents of the Windows help file.
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    HelpState = GetMainWindow()->WinHelp(HelpFileName, HELP_HELPONHELP, 0L);
+}
+##--END-- @OPT_APPL_HELP
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//////////////////////////////////////////////////////////
+// [[TApplication]]
+// ===========
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##@QUERY_TARGET_NAME [[Target]]
+// Menu Help About [[Target]] command
+void [[TApplication]]::CmHelpAbout ()
+{
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // Show the modal dialog.
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##--BEGIN-- <<TDialog QUERY_CLASS_NAME [[TDialog]]
+##((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
+    [[TDialog]](&TWindow(::GetFocus(), this)).Execute();
+##((@QUERY_APPL_OLE != VALUE_SERVER) && (@QUERY_APPL_OLE != VALUE_OLEBOTH))
+    [[TDialog]](GetMainWindow()).Execute();
+##--END-- <<TDialog QUERY_CLASS_NAME [[TDialog]]
+}
+##--BEGIN-- @OPT_APPL_DRAGDROP
+
+
+void [[TApplication]]::InitInstance ()
+{
+    TApplication::InitInstance();
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Accept files via drag/drop in the frame window.
+    GetMainWindow()->DragAcceptFiles(true);
+}
+
+
+void [[TApplication]]::EvDropFiles (TDropInfo drop)
+{
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Number of files dropped.
+    int totalNumberOfFiles = drop.DragQueryFileCount();
+
+    TFileList* files = new TFileList;
+
+    for (int i = 0; i < totalNumberOfFiles; i++) {
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE
+        // Tell DragQueryFile the file interested in (i) and the length of your buffer.
+        int     fileLength = drop.DragQueryFileNameLen(i) + 1;
+        char    *fileName = new char[fileLength];
+
+        drop.DragQueryFile(i, fileName, fileLength);
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+        // Getting the file dropped. The location is relative to your client coordinates,
+        // and will have negative values if dropped in the non client parts of the window.
+        //
+        // DragQueryPoint copies that point where the file was dropped and returns whether
+        // or not the point is in the client area.  Regardless of whether or not the file
+        // is dropped in the client or non-client area of the window, you will still receive
+        // the file name.
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+        TPoint  point;
+        bool    inClientArea = drop.DragQueryPoint(point);
+        files->Add(new TFileDrop(fileName, point, inClientArea, this));
+    }
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Open the files that were dropped.
+    AddFiles(files);
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Release the memory allocated for this handle with DragFinish.
+    drop.DragFinish();
+}
+
+
+void [[TApplication]]::AddFiles (TFileList* files)
+{
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Open all files dragged in.
+    TFileListIter fileIter(*files);
+
+    while (fileIter) {
+        TDocTemplate* tpl = GetDocManager()->MatchTemplate(fileIter.Current()->WhoAmI());
+        if (tpl)
+            tpl->CreateDoc(fileIter.Current()->WhoAmI());
+        fileIter++;
+    }
+}
+##--END-- @OPT_APPL_DRAGDROP
+
+
+##{main.owl}

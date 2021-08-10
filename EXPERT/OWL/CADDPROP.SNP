@@ -1,0 +1,71 @@
+##"//{{[[ClassName]]SYM_TBL_END}}" [[ClassTMarker]]
+##\\ClassTMarker [[ClassMarker]]
+##^BOF
+##--BEGIN-- ? ClassMarker [[Search]]
+##      Search == FALSE
+##      :{CAddSym.SNP}
+##      :^BOF
+##      :? ClassMarker [[Search]]
+##*
+##--END-- ? ClassMarker [[Search]]
+##^BOL
+##(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
+##      :StripPtrRef(OLEType, [[StripType]]) [[AnyStripping]]
+##      :StripType OLEType
+##*
+##(GetProperty == TRUE) && (SetProperty == TRUE)
+    EXPOSE_PROPRW([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
+##(GetProperty == TRUE) && (SetProperty == FALSE)
+    EXPOSE_PROPRO([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
+##(GetProperty == FALSE) && (SetProperty == TRUE)
+    EXPOSE_PROPWO([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
+##^EOF
+##0 [[ScrollPosition]]
+##FALSE [[DuplicateFunction]]
+##FALSE [[SetFoundIt]]
+##--BEGIN-- FALSE [[GetFoundIt]]
+##      --BEGIN-- GetProperty == TRUE
+##          :{FindAuto.SNP}
+##          :DuplicateFunction GetFoundIt
+##          :DuplicateFunction GetDuplicateFunc
+##          :GetFoundIt == FALSE
+##          :^EOF
+##*
+##      --END-- GetProperty == TRUE
+##      --BEGIN-- SetProperty == TRUE
+##          :FALSE DuplicateFunction
+##          :{FindAuto.SNP}
+##          :DuplicateFunction SetFoundIt
+##          :DuplicateFunction SetDuplicateFunc
+##          :SetFoundIt == FALSE
+##          :^EOF
+##*
+##      --END-- SetProperty == TRUE
+##      --BEGIN-- TRUE
+##          --BEGIN-- ((GetProperty == TRUE) && (GetFoundIt == FALSE))
+##              :(YPos() + 2) ScrollPosition
+
+[[CPPType]] [[ClassName]]::[[GetName]] ()
+{
+    // INSERT>> Your get property code here.
+}
+##          --END-- ((GetProperty == TRUE) && (GetFoundIt == FALSE))
+##          --BEGIN-- ((SetProperty == TRUE) && (SetFoundIt == FALSE))
+##              :ScrollPosition  == 0
+##              :(YPos() + 2) ScrollPosition
+##*
+
+void [[ClassName]]::[[SetName]] ([[CPPType]] property)
+{
+    // INSERT>> Your set property code here.
+
+}
+##          --END-- ((SetProperty == TRUE) && (SetFoundIt == FALSE))
+##((GetFoundIt == FALSE) && (SetFoundIt == FALSE))
+##      :^@ScrollPosition
+##      :^BOL
+##      :^SCROLL
+##      :^^
+##*
+##      --END-- TRUE
+##--END-- FALSE [[GetFoundIt]]

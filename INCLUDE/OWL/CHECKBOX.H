@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\checkbox.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TCheckBox.  This defines the basic behavior
 //   for all check boxes.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_CHECKBOX_H)
-#define __OWL_CHECKBOX_H
+#if !defined(OWL_CHECKBOX_H)
+#define OWL_CHECKBOX_H
 
-#if !defined(__OWL_BUTTON_H)
-  #include <owl\button.h>
+#if !defined(OWL_BUTTON_H)
+# include <owl/button.h>
 #endif
 
 class _OWLCLASS TGroupBox;
@@ -16,9 +17,11 @@ class _OWLCLASS TGroupBox;
 //
 // Checkbox flags indicating check state
 //
-enum {BF_CHECKED   = 0x01,
-      BF_GRAYED    = 0x02,
-      BF_UNCHECKED = 0x0};
+enum {
+  BF_CHECKED   = 0x01,
+  BF_GRAYED    = 0x02,
+  BF_UNCHECKED = 0x0
+};
 
 //
 //  class TCheckBox
@@ -44,25 +47,25 @@ class _OWLCLASS TCheckBox : public TButton {
     void       Uncheck() {SetCheck(BF_UNCHECKED);}
     void       Toggle();
 
-    UINT       GetCheck() const;
-    void       SetCheck(UINT check);
+    uint       GetCheck() const;
+    void       SetCheck(uint check);
 
-    UINT       GetState() const;
-    void       SetState(UINT state) {HandleMessage(BM_SETSTATE, state);}
+    uint       GetState() const;
+    void       SetState(uint state) {SendMessage(BM_SETSTATE, state);}
 
-    void       SetStyle(UINT style, BOOL redraw);
+    void       SetStyle(uint style, bool redraw);
 
     //
     // Override TWindow virtual member functions
     //
-    UINT       Transfer(void* buffer, TTransferDirection direction);
+    uint       Transfer(void* buffer, TTransferDirection direction);
 
   protected:
     //
     //  override TButton's processing so drawable check boxes and radio
     //  buttons work properly
     //
-    UINT       EvGetDlgCode(MSG far*) {return (UINT)DefaultProcessing();}
+    uint       EvGetDlgCode(MSG far*) {return (uint)DefaultProcessing();}
 
     //
     // child id notification
@@ -82,16 +85,16 @@ class _OWLCLASS TCheckBox : public TButton {
   DECLARE_STREAMABLE(_OWLCLASS, TCheckBox, 1);
 };
 
-inline UINT TCheckBox::GetCheck() const {
-  return (UINT)CONST_CAST(TCheckBox*, this)->HandleMessage(BM_GETCHECK);
+inline uint TCheckBox::GetCheck() const {
+  return (uint)CONST_CAST(TCheckBox*, this)->SendMessage(BM_GETCHECK);
 }
 
-inline UINT TCheckBox::GetState() const {
-  return (UINT)CONST_CAST(TCheckBox*, this)->HandleMessage(BM_GETSTATE);
+inline uint TCheckBox::GetState() const {
+  return (uint)CONST_CAST(TCheckBox*, this)->SendMessage(BM_GETSTATE);
 }
 
-inline void TCheckBox::SetStyle(UINT style, BOOL redraw) {
-  HandleMessage(BM_SETSTYLE, style, MAKELPARAM(redraw,0));
+inline void TCheckBox::SetStyle(uint style, bool redraw) {
+  SendMessage(BM_SETSTYLE, style, MAKELPARAM(redraw,0));
 }
 
-#endif  // __OWL_CHECKBOX_H
+#endif  // OWL_CHECKBOX_H

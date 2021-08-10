@@ -1,8 +1,6 @@
 /***
 *w32sut.h -
 *
-*       Copyright (c) 1987-1992, Microsoft Corporation.  All rights reserved.
-*
 *Purpose:
 *       This file declares the constants, structures, and functions
 *       used for accessing and using the Universal Thunk mechanism.
@@ -11,6 +9,14 @@
 *       W32SUT_32 defined.
 *
 ****/
+
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
 /* Check that one of the 2 constants is defined  */
 #ifdef W32SUT_16
@@ -23,6 +29,11 @@
 #ifndef W32SUT_32
 #error  Either W32SUT_16 or W32SUT_32 should be defined
 #endif
+#endif
+
+
+#if defined(__cplusplus)
+extern "C" {
 #endif
 
 
@@ -65,4 +76,9 @@ typedef DWORD (FAR PASCAL  * UT16CBPROC)( LPVOID lpBuff,
 LPVOID  WINAPI  UTLinearToSelectorOffset(LPBYTE lpByte);
 LPVOID  WINAPI  UTSelectorOffsetToLinear(LPBYTE lpByte);
 
+#endif
+
+
+#if defined(__cplusplus)
+}
 #endif

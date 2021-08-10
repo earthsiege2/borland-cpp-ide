@@ -1,0 +1,71 @@
+#----------------------------------------------------------------------------
+# ObjectComponents
+# (C) Copyright 1994 by Borland International, All Rights Reserved
+#
+# MAKEFILE to build AUTOCALC.EXE and CALLCALC.EXE, sample automation server 
+# and automation controller respectively.
+#
+# When running Win3.x this MAKEFILE uses the WINRUN.EXE utility and WINRUN.386
+# to execute WINDOWS applications from a DOS window. Make sure that WINRUN
+# is properly installed and that WINRUN.EXE is running before running MAKE
+# under Win3.x
+#
+# callcalc 1 //EXE Server: IID_CalcApplication
+# callcalc 2 //EXE Server: ExeProgId
+# callcalc 3 //DLL Server: IID_CalcDllServer
+# callcalc 4 //DLL Server: DllProgId
+# callcalc 5 //IID_CalcDebug
+# callcalc 6 //DebugProgId
+#----------------------------------------------------------------------------
+
+!if !$d(MODEL)
+MODEL     = l                         #default model
+!endif
+MODELS    = mlf                       #allowable models
+EXERES    = callcalc                  #target base name (.EXE & .RES)
+RESEXE_   = callcalc.rh               #.RES dependency
+
+EXEALL    = autocalc.exe callcalc.exe
+EXEMAKE   = $(AUTOCALC)  $(CALLCALC)
+
+CALLCALC  = $(EXERULE)
+AUTOCAL_  = $(CALLCALC:callcalc=autocalc)
+AUTOCALC  = $(AUTOCAL_:autocalc.obj=winmain.obj autocalc.obj)
+
+
+TARGETS = autocalc.cxx
+RULES   = ^
+libmain.cpp : winmain.cpp ^
+  @copy winmain.cpp libmain.cpp ^
+acalcips.cpp : autocalc.cpp ^
+  @copy autocalc.cpp acalcips.cpp ^
+.exe.olb: ^
+  @echo Generating type library of $$< ^
+  wr /w $$< /RegServer /Typelib ^
+.olb.cxx: ^
+  @echo Generating C++ file from type library of $$< ^
+  autogen $$< ^
+callcalc.obj : autocalc.cxx   
+
+HLP    = autocalc acalcger
+HLP_   = autocalc.hh autocalc.rtf acalcger.rtf
+
+
+!if "$(MODEL)" != "m"
+
+DLL    = acalcips
+RESDLL = autocalc.res
+RESDLL_= autocalc.rh
+OBJDLL = libmain.obj acalcips.obj
+
+TARGETS= $(TARGETS) regsrvr.fil
+RULES  = $(RULES) ^
+regsrvr.fil: $(DLL).DLL ^
+  @echo Registering $(DLL).dll ^
+  register $(DLL).DLL -RegServer ^
+  -@type NUL > $$<
+
+!endif
+
+
+!include $(BCEXAMPLEDIR)\ocfmake.gen

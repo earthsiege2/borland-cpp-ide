@@ -20,6 +20,7 @@
 #define MAXIDLEN    4
 #define MAXDEPTLEN  7
 #define MAXSECLEN   3
+#define MAXCUSTOMLEN   20
 
 struct TEmployeeStruct {
   char NameEdit[MAXNAMELEN];
@@ -30,6 +31,7 @@ struct TEmployeeStruct {
   BOOL FullTime;
   BOOL Perm;
   BOOL Exempt;
+  char CustomEdit[MAXCUSTOMLEN];
 };
 
 //----------------------------------------------------------------------------
@@ -37,7 +39,15 @@ struct TEmployeeStruct {
 class TEmployeeDlg : public TDialog {
   public:
     TEmployeeDlg(TWindow* parent, const char* name, TEmployeeStruct& transfer);
+  private:
+    TEdit* CustomEdit;
+    void CmSetCustom();
+
+  DECLARE_RESPONSE_TABLE(TEmployeeDlg);
 };
+DEFINE_RESPONSE_TABLE1(TEmployeeDlg, TDialog)
+  EV_COMMAND(110, CmSetCustom),
+END_RESPONSE_TABLE;
 
 TEmployeeDlg::TEmployeeDlg(TWindow* parent, const char* name, TEmployeeStruct& transfer)
   : TDialog(parent, name),
@@ -57,8 +67,22 @@ TEmployeeDlg::TEmployeeDlg(TWindow* parent, const char* name, TEmployeeStruct& t
   new TCheckBox(this, 106, 0);
   new TCheckBox(this, 107, 0);
   new TCheckBox(this, 108, 0);
+  CustomEdit = new TEdit(this, 111, sizeof(transfer.CustomEdit));
+  TValidator* v = new TPXPictureValidator("------", TRUE);
+  v->UnsetOption(voOnAppend);
+  CustomEdit->SetValidator(v);
 
   TransferBuffer = (void far*)&transfer;
+}
+
+void TEmployeeDlg::CmSetCustom()
+{
+  char buff[40];
+  GetDlgItemText(109, buff, sizeof buff);
+  TValidator* v = new TPXPictureValidator(buff, TRUE);
+  v->UnsetOption(voOnAppend);
+  CustomEdit->SetValidator(v);
+  CustomEdit->SetFocus();
 }
 
 //----------------------------------------------------------------------------

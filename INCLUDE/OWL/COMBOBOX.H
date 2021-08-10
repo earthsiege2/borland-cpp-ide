@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\combobox.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TComboBox and TComboBoxData.  This defines the basic
 //   behavior of all combo box controls.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_COMBOBOX_H)
-#define __OWL_COMBOBOX_H
+#if !defined(OWL_COMBOBOX_H)
+#define OWL_COMBOBOX_H
 
-#if !defined(__OWL_LISTBOX_H)
-  #include <owl\listbox.h>
+#if !defined(OWL_LISTBOX_H)
+# include <owl/listbox.h>
 #endif
 
 //
@@ -17,18 +18,18 @@
 //
 class _OWLCLASS TComboBox : public TListBox {
   public:
-    UINT  TextLen;
+    uint  TextLen;
 
     TComboBox(TWindow*        parent,
               int             id,
               int x, int y, int w, int h,
-              DWORD           style,
-              UINT            textLen,
+              uint32          style,
+              uint            textLen,
               TModule*        module = 0);
 
     TComboBox(TWindow*   parent,
               int        resourceId,
-              UINT       textLen = 0,
+              uint       textLen = 0,
               TModule*   module = 0);
 
     //
@@ -46,14 +47,14 @@ class _OWLCLASS TComboBox : public TListBox {
     //
     // for drop down combo boxes
     //
-    void          ShowList(BOOL show);
-    void          ShowList() {ShowList(TRUE);}
-    void          HideList() {ShowList(FALSE);}
+    void          ShowList(bool show);
+    void          ShowList() {ShowList(true);}
+    void          HideList() {ShowList(false);}
 
     void          GetDroppedControlRect(TRect& Rect) const;
-    BOOL          GetDroppedState() const;
-    BOOL          GetExtendedUI() const;
-    int           SetExtendedUI(BOOL Extended);
+    bool          GetDroppedState() const;
+    bool          GetExtendedUI() const;
+    int           SetExtendedUI(bool Extended);
 
     //
     // Combo's List box virtual functions
@@ -63,7 +64,7 @@ class _OWLCLASS TComboBox : public TListBox {
     virtual int   DeleteString(int index);
 
     virtual void  ClearList();
-    virtual int   DirectoryList(UINT attrs, const char far* fileSpec);
+    virtual int   DirectoryList(uint attrs, const char far* fileSpec);
 
     virtual int   GetCount() const;
     virtual int   FindString(const char far* find, int indexStart) const;
@@ -74,8 +75,8 @@ class _OWLCLASS TComboBox : public TListBox {
     virtual int   GetSelIndex() const;
     virtual int   SetSelIndex(int index);
     virtual int   SetSelString(const char far* findStr, int indexStart);
-    virtual DWORD GetItemData(int index) const;
-    virtual int   SetItemData(int index, DWORD itemData);
+    virtual uint32 GetItemData(int index) const;
+    virtual int   SetItemData(int index, uint32 itemData);
 
     int           GetItemHeight(int index) const;
     int           SetItemHeight(int index, int height);
@@ -83,7 +84,7 @@ class _OWLCLASS TComboBox : public TListBox {
     //
     // Override TWindow virtual member functions
     //
-    UINT          Transfer(void* buffer, TTransferDirection direction);
+    uint          Transfer(void* buffer, TTransferDirection direction);
 
   protected:
     //
@@ -135,8 +136,8 @@ class _OWLCLASS TComboBoxData {
     int             GetSelIndex() {return SelIndex;}
     string&         GetSelection() {return Selection;}
 
-    void    AddString(const char* str, BOOL isSelected = FALSE);
-    void    AddStringItem(const char* str, DWORD itemData, BOOL isSelected = FALSE);
+    void    AddString(const char* str, bool isSelected = false);
+    void    AddStringItem(const char* str, uint32 itemData, bool isSelected = false);
     void    Clear() {Strings.Flush(); ItemDatas.Flush(); ResetSelections();}
 
     void    Select(int index);
@@ -172,16 +173,16 @@ inline void TComboBox::GetDroppedControlRect(TRect& rect) const {
     HandleMessage(CB_GETDROPPEDCONTROLRECT, 0, (LPARAM)(TRect FAR*)&rect);
 }
 
-inline BOOL TComboBox::GetDroppedState() const {
-  return (BOOL)CONST_CAST(TComboBox*,this)->HandleMessage(CB_GETDROPPEDSTATE);
+inline bool TComboBox::GetDroppedState() const {
+  return (bool)CONST_CAST(TComboBox*,this)->HandleMessage(CB_GETDROPPEDSTATE);
 }
 
-inline BOOL TComboBox::GetExtendedUI() const {
-  return (BOOL)CONST_CAST(TComboBox*,this)->HandleMessage(CB_GETEXTENDEDUI);
+inline bool TComboBox::GetExtendedUI() const {
+  return (bool)CONST_CAST(TComboBox*,this)->HandleMessage(CB_GETEXTENDEDUI);
 }
 
-inline int TComboBox::SetExtendedUI(BOOL extended) {
-  return (BOOL)HandleMessage(CB_SETEXTENDEDUI, extended);
+inline int TComboBox::SetExtendedUI(bool extended) {
+  return (bool)HandleMessage(CB_SETEXTENDEDUI, extended);
 }
 
 //
@@ -211,7 +212,7 @@ inline int TComboBox::DeleteString(int index) {
   return (int)HandleMessage(CB_DELETESTRING, index);
 }
 
-inline int TComboBox::DirectoryList(UINT attrs, const char far* fileSpec) {
+inline int TComboBox::DirectoryList(uint attrs, const char far* fileSpec) {
   return (int)HandleMessage(CB_DIR, attrs,(LPARAM)fileSpec);
 }
 
@@ -287,11 +288,11 @@ inline int TComboBox::SetSelString(const char far* findStr, int indexStart) {
   return (int)HandleMessage(CB_SELECTSTRING, indexStart, (LPARAM)findStr);
 }
 
-inline DWORD TComboBox::GetItemData(int index) const {
+inline uint32 TComboBox::GetItemData(int index) const {
   return CONST_CAST(TComboBox*,this)->HandleMessage(CB_GETITEMDATA, index);
 }
 
-inline int TComboBox::SetItemData(int index, DWORD itemData) {
+inline int TComboBox::SetItemData(int index, uint32 itemData) {
   return (int)HandleMessage(CB_SETITEMDATA, index, itemData);
 }
 
@@ -304,4 +305,4 @@ inline int TComboBox::SetItemHeight(int index, int height) {
   return (int)HandleMessage(CB_GETITEMHEIGHT, index, MAKELPARAM(height,0));
 }
 
-#endif  // __OWL_COMBOBOX_H
+#endif  // OWL_COMBOBOX_H

@@ -3,7 +3,13 @@
     Definitions used for file status functions
 */
 
-/* $Copyright: 1987$ */
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1987, 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
 #if !defined(__STAT_H)
 #define __STAT_H

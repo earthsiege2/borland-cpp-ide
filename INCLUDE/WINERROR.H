@@ -1,7 +1,5 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1991-1992  Microsoft Corporation
-
 Module Name:
 
     winerror.h
@@ -23,7 +21,16 @@ Notes:
 
 --*/
 
-#ifndef __WINERROR_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _WINERROR_
+#define _WINERROR_
 #define __WINERROR_H
 
 
@@ -56,6 +63,14 @@ Notes:
 //
 // Define the facility codes
 //
+#define FACILITY_WINDOWS                 8
+#define FACILITY_STORAGE                 3
+#define FACILITY_RPC                     1
+#define FACILITY_WIN32                   7
+#define FACILITY_CONTROL                 10
+#define FACILITY_NULL                    0
+#define FACILITY_ITF                     4
+#define FACILITY_DISPATCH                2
 
 
 //
@@ -64,22 +79,15 @@ Notes:
 
 
 //
-// MessageId: NO_ERROR
-//
-// MessageText:
-//
-//  NO_ERROR
-//
-#define NO_ERROR                         0L    // dderror
-
-//
 // MessageId: ERROR_SUCCESS
 //
 // MessageText:
 //
-//  The configuration registry database operation completed successfully.
+//  The operation completed successfully.
 //
 #define ERROR_SUCCESS                    0L
+
+#define NO_ERROR 0L                                                 // dderror
 
 //
 // MessageId: ERROR_INVALID_FUNCTION
@@ -621,7 +629,8 @@ Notes:
 //
 // MessageText:
 //
-//  The network request was not accepted.
+//  No more connections can be made to this remote computer at this time
+//  because there are already as many connections as the computer can accept.
 //
 #define ERROR_REQ_NOT_ACCEP              71L
 
@@ -1780,6 +1789,15 @@ Notes:
 #define ERROR_TOO_MANY_POSTS             298L
 
 //
+// MessageId: ERROR_PARTIAL_COPY
+//
+// MessageText:
+//
+//  Only part of a Read/WriteProcessMemory request was completed.
+//
+#define ERROR_PARTIAL_COPY               299L
+
+//
 // MessageId: ERROR_MR_MID_NOT_FOUND
 //
 // MessageText:
@@ -2692,6 +2710,15 @@ Notes:
 #define ERROR_OPEN_FILES                 2401L
 
 //
+// MessageId: ERROR_ACTIVE_CONNECTIONS
+//
+// MessageText:
+//
+//  Active connections still exist.
+//
+#define ERROR_ACTIVE_CONNECTIONS         2402L
+
+//
 // MessageId: ERROR_DEVICE_IN_USE
 //
 // MessageText:
@@ -2885,7 +2912,7 @@ Notes:
 //
 // MessageText:
 //
-//  An attempt was made to establish a session to a Lan Manager server, but there
+//  An attempt was made to establish a session to a network server, but there
 //  are already too many sessions established to that server.
 //
 #define ERROR_REMOTE_SESSION_LIMIT_EXCEEDED 1220L
@@ -2908,6 +2935,197 @@ Notes:
 //  The network is not present or not started.
 //
 #define ERROR_NO_NETWORK                 1222L
+
+//
+// MessageId: ERROR_CANCELLED
+//
+// MessageText:
+//
+//  The operation was cancelled by the user.
+//
+#define ERROR_CANCELLED                  1223L
+
+//
+// MessageId: ERROR_USER_MAPPED_FILE
+//
+// MessageText:
+//
+//  The requested operation cannot be performed on a file with a user mapped section open.
+//
+#define ERROR_USER_MAPPED_FILE           1224L
+
+//
+// MessageId: ERROR_CONNECTION_REFUSED
+//
+// MessageText:
+//
+//  The remote system refused the network connection.
+//
+#define ERROR_CONNECTION_REFUSED         1225L
+
+//
+// MessageId: ERROR_GRACEFUL_DISCONNECT
+//
+// MessageText:
+//
+//  The network connection was gracefully closed.
+//
+#define ERROR_GRACEFUL_DISCONNECT        1226L
+
+//
+// MessageId: ERROR_ADDRESS_ALREADY_ASSOCIATED
+//
+// MessageText:
+//
+//  The network transport endpoint already has an address associated with it.
+//
+#define ERROR_ADDRESS_ALREADY_ASSOCIATED 1227L
+
+//
+// MessageId: ERROR_ADDRESS_NOT_ASSOCIATED
+//
+// MessageText:
+//
+//  An address has not yet been associated with the network endpoint.
+//
+#define ERROR_ADDRESS_NOT_ASSOCIATED     1228L
+
+//
+// MessageId: ERROR_CONNECTION_INVALID
+//
+// MessageText:
+//
+//  An operation was attempted on a non-existent network connection.
+//
+#define ERROR_CONNECTION_INVALID         1229L
+
+//
+// MessageId: ERROR_CONNECTION_ACTIVE
+//
+// MessageText:
+//
+//  An invalid operation was attempted on an active network connection.
+//
+#define ERROR_CONNECTION_ACTIVE          1230L
+
+//
+// MessageId: ERROR_NETWORK_UNREACHABLE
+//
+// MessageText:
+//
+//  The remote network is not reachable by the transport.
+//
+#define ERROR_NETWORK_UNREACHABLE        1231L
+
+//
+// MessageId: ERROR_HOST_UNREACHABLE
+//
+// MessageText:
+//
+//  The remote system is not reachable by the transport.
+//
+#define ERROR_HOST_UNREACHABLE           1232L
+
+//
+// MessageId: ERROR_PROTOCOL_UNREACHABLE
+//
+// MessageText:
+//
+//  The remote system does not support the transport protocol.
+//
+#define ERROR_PROTOCOL_UNREACHABLE       1233L
+
+//
+// MessageId: ERROR_PORT_UNREACHABLE
+//
+// MessageText:
+//
+//  No service is operating at the destination network endpoint
+//  on the remote system.
+//
+#define ERROR_PORT_UNREACHABLE           1234L
+
+//
+// MessageId: ERROR_REQUEST_ABORTED
+//
+// MessageText:
+//
+//  The request was aborted.
+//
+#define ERROR_REQUEST_ABORTED            1235L
+
+//
+// MessageId: ERROR_CONNECTION_ABORTED
+//
+// MessageText:
+//
+//  The network connection was aborted by the local system.
+//
+#define ERROR_CONNECTION_ABORTED         1236L
+
+//
+// MessageId: ERROR_RETRY
+//
+// MessageText:
+//
+//  The operation could not be completed.  A retry should be performed.
+//
+#define ERROR_RETRY                      1237L
+
+//
+// MessageId: ERROR_CONNECTION_COUNT_LIMIT
+//
+// MessageText:
+//
+//  A connection to the server could not be made because the limit on the number of
+//  concurrent connections for this account has been reached.
+//
+#define ERROR_CONNECTION_COUNT_LIMIT     1238L
+
+//
+// MessageId: ERROR_LOGIN_TIME_RESTRICTION
+//
+// MessageText:
+//
+//  Attempting to login during an unauthorized time of day for this account.
+//
+#define ERROR_LOGIN_TIME_RESTRICTION     1239L
+
+//
+// MessageId: ERROR_LOGIN_WKSTA_RESTRICTION
+//
+// MessageText:
+//
+//  The account is not authorized to login from this station.
+//
+#define ERROR_LOGIN_WKSTA_RESTRICTION    1240L
+
+//
+// MessageId: ERROR_INCORRECT_ADDRESS
+//
+// MessageText:
+//
+//  The network address could not be used for the operation requested.
+//
+#define ERROR_INCORRECT_ADDRESS          1241L
+
+//
+// MessageId: ERROR_ALREADY_REGISTERED
+//
+// MessageText:
+//
+//  The service is already registered.
+//
+#define ERROR_ALREADY_REGISTERED         1242L
+
+//
+// MessageId: ERROR_SERVICE_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified service does not exist.
+//
+#define ERROR_SERVICE_NOT_FOUND          1243L
 
 
 
@@ -3388,9 +3606,9 @@ Notes:
 //
 // MessageText:
 //
-//  Indicates a Windows NT Advanced Server could not be contacted or that
-//  objects within the domain are protected such that necessary          
-//  information could not be retrieved.                                  
+//  Indicates a Windows NT Server could not be contacted or that
+//  objects within the domain are protected such that necessary
+//  information could not be retrieved.
 //
 #define ERROR_CANT_ACCESS_DOMAIN_INFO    1351L
 
@@ -5073,7 +5291,7 @@ Notes:
 //
 // MessageText:
 //
-//  The SAM database on the Windows NT Advanced Server does not have a computer
+//  The SAM database on the Windows NT Server does not have a computer
 //  account for this workstation trust relationship.
 //
 #define ERROR_NO_TRUST_SAM_ACCOUNT       1787L
@@ -5343,6 +5561,123 @@ Notes:
 #define ERROR_NOT_ENOUGH_QUOTA           1816L
 
 //
+// MessageId: RPC_S_NO_INTERFACES
+//
+// MessageText:
+//
+//  No interfaces have been registered.
+//
+#define RPC_S_NO_INTERFACES              1817L
+
+//
+// MessageId: RPC_S_CALL_CANCELLED
+//
+// MessageText:
+//
+//  The server was altered while processing this call.
+//
+#define RPC_S_CALL_CANCELLED             1818L
+
+//
+// MessageId: RPC_S_BINDING_INCOMPLETE
+//
+// MessageText:
+//
+//  The binding handle does not contain all required information.
+//
+#define RPC_S_BINDING_INCOMPLETE         1819L
+
+//
+// MessageId: RPC_S_COMM_FAILURE
+//
+// MessageText:
+//
+//  Communications failure.
+//
+#define RPC_S_COMM_FAILURE               1820L
+
+//
+// MessageId: RPC_S_UNSUPPORTED_AUTHN_LEVEL
+//
+// MessageText:
+//
+//  The requested authentication level is not supported.
+//
+#define RPC_S_UNSUPPORTED_AUTHN_LEVEL    1821L
+
+//
+// MessageId: RPC_S_NO_PRINC_NAME
+//
+// MessageText:
+//
+//  No principal name registered.
+//
+#define RPC_S_NO_PRINC_NAME              1822L
+
+//
+// MessageId: RPC_S_NOT_RPC_ERROR
+//
+// MessageText:
+//
+//  The error specified is not a valid Windows NT RPC error code.
+//
+#define RPC_S_NOT_RPC_ERROR              1823L
+
+//
+// MessageId: RPC_S_UUID_LOCAL_ONLY
+//
+// MessageText:
+//
+//  A UUID that is valid only on this computer has been allocated.
+//
+#define RPC_S_UUID_LOCAL_ONLY            1824L
+
+//
+// MessageId: RPC_S_SEC_PKG_ERROR
+//
+// MessageText:
+//
+//  A security package specific error occurred.
+//
+#define RPC_S_SEC_PKG_ERROR              1825L
+
+//
+// MessageId: RPC_S_NOT_CANCELLED
+//
+// MessageText:
+//
+//  Thread is not cancelled.
+//
+#define RPC_S_NOT_CANCELLED              1826L
+
+//
+// MessageId: RPC_X_INVALID_ES_ACTION
+//
+// MessageText:
+//
+//  Invalid operation on the encoding/decoding handle.
+//
+#define RPC_X_INVALID_ES_ACTION          1827L
+
+//
+// MessageId: RPC_X_WRONG_ES_VERSION
+//
+// MessageText:
+//
+//  Incompatible version of the serializing package.
+//
+#define RPC_X_WRONG_ES_VERSION           1828L
+
+//
+// MessageId: RPC_X_WRONG_STUB_VERSION
+//
+// MessageText:
+//
+//  Incompatible version of the RPC stub.
+//
+#define RPC_X_WRONG_STUB_VERSION         1829L
+
+//
 // MessageId: RPC_S_GROUP_MEMBER_NOT_FOUND
 //
 // MessageText:
@@ -5424,6 +5759,33 @@ Notes:
 #define ERROR_INVALID_PRINTER_STATE      1906L
 
 //
+// MessageId: ERROR_PASSWORD_MUST_CHANGE
+//
+// MessageText:
+//
+//  The user must change his password before he logs on the first time.
+//
+#define ERROR_PASSWORD_MUST_CHANGE       1907L
+
+//
+// MessageId: ERROR_DOMAIN_CONTROLLER_NOT_FOUND
+//
+// MessageText:
+//
+//  Could not find the domain controller for this domain.
+//
+#define ERROR_DOMAIN_CONTROLLER_NOT_FOUND 1908L
+
+//
+// MessageId: ERROR_ACCOUNT_LOCKED_OUT
+//
+// MessageText:
+//
+//  The referenced account is currently locked out and may not be logged on to.
+//
+#define ERROR_ACCOUNT_LOCKED_OUT         1909L
+
+//
 // MessageId: ERROR_NO_BROWSER_SERVERS_FOUND
 //
 // MessageText:
@@ -5432,4 +5794,2877 @@ Notes:
 //
 #define ERROR_NO_BROWSER_SERVERS_FOUND   6118L
 
-#endif // __WINERROR_H
+
+
+
+///////////////////////////
+//                       //
+//   OpenGL Error Code   //
+//                       //
+///////////////////////////
+
+
+//
+// MessageId: ERROR_INVALID_PIXEL_FORMAT
+//
+// MessageText:
+//
+//  The pixel format is invalid.
+//
+#define ERROR_INVALID_PIXEL_FORMAT       2000L
+
+//
+// MessageId: ERROR_BAD_DRIVER
+//
+// MessageText:
+//
+//  The specified driver is invalid.
+//
+#define ERROR_BAD_DRIVER                 2001L
+
+//
+// MessageId: ERROR_INVALID_WINDOW_STYLE
+//
+// MessageText:
+//
+//  The window style or class attribute is invalid for this operation.
+//
+#define ERROR_INVALID_WINDOW_STYLE       2002L
+
+//
+// MessageId: ERROR_METAFILE_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The requested metafile operation is not supported.
+//
+#define ERROR_METAFILE_NOT_SUPPORTED     2003L
+
+//
+// MessageId: ERROR_TRANSFORM_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The requested transformation operation is not supported.
+//
+#define ERROR_TRANSFORM_NOT_SUPPORTED    2004L
+
+//
+// MessageId: ERROR_CLIPPING_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The requested clipping operation is not supported.
+//
+#define ERROR_CLIPPING_NOT_SUPPORTED     2005L
+
+// End of OpenGL error codes
+
+
+
+////////////////////////////////////
+//                                //
+//     Win32 Spooler Error Codes  //
+//                                //
+////////////////////////////////////
+//
+// MessageId: ERROR_UNKNOWN_PRINT_MONITOR
+//
+// MessageText:
+//
+//  The specified print monitor is unknown.
+//
+#define ERROR_UNKNOWN_PRINT_MONITOR      3000L
+
+//
+// MessageId: ERROR_PRINTER_DRIVER_IN_USE
+//
+// MessageText:
+//
+//  The specified printer driver is currently in use.
+//
+#define ERROR_PRINTER_DRIVER_IN_USE      3001L
+
+//
+// MessageId: ERROR_SPOOL_FILE_NOT_FOUND
+//
+// MessageText:
+//
+//  The spool file was not found.
+//
+#define ERROR_SPOOL_FILE_NOT_FOUND       3002L
+
+//
+// MessageId: ERROR_SPL_NO_STARTDOC
+//
+// MessageText:
+//
+//  A StartDocPrinter call was not issued.
+//
+#define ERROR_SPL_NO_STARTDOC            3003L
+
+//
+// MessageId: ERROR_SPL_NO_ADDJOB
+//
+// MessageText:
+//
+//  An AddJob call was not issued.
+//
+#define ERROR_SPL_NO_ADDJOB              3004L
+
+//
+// MessageId: ERROR_PRINT_PROCESSOR_ALREADY_INSTALLED
+//
+// MessageText:
+//
+//  The specified print processor has already been installed.
+//
+#define ERROR_PRINT_PROCESSOR_ALREADY_INSTALLED 3005L
+
+//
+// MessageId: ERROR_PRINT_MONITOR_ALREADY_INSTALLED
+//
+// MessageText:
+//
+//  The specified print monitor has already been installed.
+//
+#define ERROR_PRINT_MONITOR_ALREADY_INSTALLED 3006L
+
+////////////////////////////////////
+//                                //
+//     Wins Error Codes           //
+//                                //
+////////////////////////////////////
+//
+// MessageId: ERROR_WINS_INTERNAL
+//
+// MessageText:
+//
+//  WINS encountered an error while processing the command.
+//
+#define ERROR_WINS_INTERNAL              4000L
+
+//
+// MessageId: ERROR_CAN_NOT_DEL_LOCAL_WINS
+//
+// MessageText:
+//
+//  The local WINS can not be deleted.
+//
+#define ERROR_CAN_NOT_DEL_LOCAL_WINS     4001L
+
+//
+// MessageId: ERROR_STATIC_INIT
+//
+// MessageText:
+//
+//  The importation from the file failed.
+//
+#define ERROR_STATIC_INIT                4002L
+
+//
+// MessageId: ERROR_INC_BACKUP
+//
+// MessageText:
+//
+//  The backup Failed.  Was a full backup done before ?
+//
+#define ERROR_INC_BACKUP                 4003L
+
+//
+// MessageId: ERROR_FULL_BACKUP
+//
+// MessageText:
+//
+//  The backup Failed.  Check the directory that you are backing the database to.
+//
+#define ERROR_FULL_BACKUP                4004L
+
+//
+// MessageId: ERROR_REC_NON_EXISTENT
+//
+// MessageText:
+//
+//  The name does not exist in the WINS database.
+//
+#define ERROR_REC_NON_EXISTENT           4005L
+
+//
+// MessageId: ERROR_RPL_NOT_ALLOWED
+//
+// MessageText:
+//
+//  Replication with a non-configured partner is not allowed.
+//
+#define ERROR_RPL_NOT_ALLOWED            4006L
+
+////////////////////////////////////
+//                                //
+//     OLE Error Codes            //
+//                                //
+////////////////////////////////////
+
+//
+// OLE error definitions and values
+//
+// The return value of OLE APIs and methods is an HRESULT.
+// This is not a handle to anything, but is merely a 32-bit value
+// with several fields encoded in the value.  The parts of an 
+// HRESULT are shown below.  
+//
+// Many of the macros and functions below were orginally defined to 
+// operate on SCODEs.  SCODEs are no longer used.  The macros are 
+// still present for compatibility and easy porting of Win16 code.
+// Newly written code should use the HRESULT macros and functions.
+//
+
+//
+//  HRESULTs are 32 bit values layed out as follows:
+//
+//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
+//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
+//  +-+-+-+-+-+---------------------+-------------------------------+
+//  |S|R|C|N|r|    Facility         |               Code            |
+//  +-+-+-+-+-+---------------------+-------------------------------+
+//
+//  where
+//
+//      S - Severity - indicates success/fail
+//
+//          0 - Success
+//          1 - Fail (COERROR)
+//
+//      R - reserved portion of the facility code, corresponds to NT's
+//              second severity bit.
+//
+//      C - reserved portion of the facility code, corresponds to NT's
+//              C field.
+//
+//      N - reserved portion of the facility code. Used to indicate a
+//              mapped NT status value.
+//
+//      r - reserved portion of the facility code. Reserved for internal
+//              use. Used to indicate HRESULT values that are not status
+//              values, but are instead message ids for display strings.
+//
+//      Facility - is the facility code
+//
+//      Code - is the facility's status code
+//
+
+//
+// Severity values
+//
+
+#define SEVERITY_SUCCESS    0
+#define SEVERITY_ERROR      1
+
+
+//
+// Generic test for success on any status value (non-negative numbers
+// indicate success).
+//
+
+#define SUCCEEDED(Status) ((HRESULT)(Status) >= 0)
+
+//
+// and the inverse
+//
+
+#define FAILED(Status) ((HRESULT)(Status)<0)
+
+
+//
+// Generic test for error on any status value.
+//
+
+#define IS_ERROR(Status) ((unsigned long)(Status) >> 31 == SEVERITY_ERROR)
+
+//
+// Return the code
+//
+
+#define HRESULT_CODE(hr)    ((hr) & 0xFFFF)
+#define SCODE_CODE(sc)      ((sc) & 0xFFFF)
+
+//
+//  Return the facility
+//
+
+#define HRESULT_FACILITY(hr)  (((hr) >> 16) & 0x1fff)
+#define SCODE_FACILITY(sc)    (((sc) >> 16) & 0x1fff)
+
+//
+//  Return the severity
+//
+
+#define HRESULT_SEVERITY(hr)  (((hr) >> 31) & 0x1)
+#define SCODE_SEVERITY(sc)    (((sc) >> 31) & 0x1)
+
+//
+// Create an HRESULT value from component pieces
+//
+
+#define MAKE_HRESULT(sev,fac,code) \
+    ((HRESULT) (((unsigned long)(sev)<<31) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))) )
+#define MAKE_SCODE(sev,fac,code) \
+    ((SCODE) (((unsigned long)(sev)<<31) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))) )
+
+
+//
+// Map a WIN32 error value into a HRESULT
+// Note: This assumes that WIN32 errors fall in the range -32k to 32k.
+//
+// Define bits here so macros are guaranteed to work
+
+#define FACILITY_NT_BIT                 0x10000000
+#define HRESULT_FROM_WIN32(x)   (x ? ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000)) : 0 )
+
+//
+// Map an NT status value into a HRESULT
+//
+
+#define HRESULT_FROM_NT(x)      ((HRESULT) ((x) | FACILITY_NT_BIT))
+
+
+// ****** OBSOLETE functions
+
+// HRESULT functions
+// As noted above, these functions are obsolete and should not be used.
+
+
+// Extract the SCODE from a HRESULT
+
+#define GetScode(hr) ((SCODE) (hr))
+
+// Convert an SCODE into an HRESULT.
+
+#define ResultFromScode(sc) ((HRESULT) (sc))
+
+
+// PropagateResult is a noop
+#define PropagateResult(hrPrevious, scBase) ((HRESULT) scBase)
+
+
+// ****** End of OBSOLETE functions.
+
+
+// ---------------------- HRESULT value definitions -----------------
+//
+// HRESULT definitions
+//
+
+#define NOERROR             S_OK
+
+//
+// Error definitions follow
+//
+
+//
+// Codes 0x4000-0x40ff are reserved for OLE
+//
+//
+// Error codes
+//
+//
+// MessageId: E_UNEXPECTED
+//
+// MessageText:
+//
+//  Catastrophic failure
+//
+#define E_UNEXPECTED                     0x8000FFFFL
+
+#ifdef WIN32
+//
+// MessageId: E_NOTIMPL
+//
+// MessageText:
+//
+//  Not implemented
+//
+#define E_NOTIMPL                        0x80004001L
+
+//
+// MessageId: E_OUTOFMEMORY
+//
+// MessageText:
+//
+//  Ran out of memory
+//
+#define E_OUTOFMEMORY                    0x8007000EL
+
+//
+// MessageId: E_INVALIDARG
+//
+// MessageText:
+//
+//  One or more arguments are invalid
+//
+#define E_INVALIDARG                     0x80070057L
+
+//
+// MessageId: E_NOINTERFACE
+//
+// MessageText:
+//
+//  No such interface supported
+//
+#define E_NOINTERFACE                    0x80004002L
+
+//
+// MessageId: E_POINTER
+//
+// MessageText:
+//
+//  Invalid pointer
+//
+#define E_POINTER                        0x80004003L
+
+//
+// MessageId: E_HANDLE
+//
+// MessageText:
+//
+//  Invalid handle
+//
+#define E_HANDLE                         0x80070006L
+
+//
+// MessageId: E_ABORT
+//
+// MessageText:
+//
+//  Operation aborted
+//
+#define E_ABORT                          0x80004004L
+
+//
+// MessageId: E_FAIL
+//
+// MessageText:
+//
+//  Unspecified error
+//
+#define E_FAIL                           0x80004005L
+
+//
+// MessageId: E_ACCESSDENIED
+//
+// MessageText:
+//
+//  General access denied error
+//
+#define E_ACCESSDENIED                   0x80070005L
+
+#else
+//
+// MessageId: E_NOTIMPL
+//
+// MessageText:
+//
+//  Not implemented
+//
+#define E_NOTIMPL                        0x80000001L
+
+//
+// MessageId: E_OUTOFMEMORY
+//
+// MessageText:
+//
+//  Ran out of memory
+//
+#define E_OUTOFMEMORY                    0x80000002L
+
+//
+// MessageId: E_INVALIDARG
+//
+// MessageText:
+//
+//  One or more arguments are invalid
+//
+#define E_INVALIDARG                     0x80000003L
+
+//
+// MessageId: E_NOINTERFACE
+//
+// MessageText:
+//
+//  No such interface supported
+//
+#define E_NOINTERFACE                    0x80000004L
+
+//
+// MessageId: E_POINTER
+//
+// MessageText:
+//
+//  Invalid pointer
+//
+#define E_POINTER                        0x80000005L
+
+//
+// MessageId: E_HANDLE
+//
+// MessageText:
+//
+//  Invalid handle
+//
+#define E_HANDLE                         0x80000006L
+
+//
+// MessageId: E_ABORT
+//
+// MessageText:
+//
+//  Operation aborted
+//
+#define E_ABORT                          0x80000007L
+
+//
+// MessageId: E_FAIL
+//
+// MessageText:
+//
+//  Unspecified error
+//
+#define E_FAIL                           0x80000008L
+
+//
+// MessageId: E_ACCESSDENIED
+//
+// MessageText:
+//
+//  General access denied error
+//
+#define E_ACCESSDENIED                   0x80000009L
+
+#endif //WIN32
+//
+// MessageId: CO_E_INIT_TLS
+//
+// MessageText:
+//
+//  Thread local storage failure
+//
+#define CO_E_INIT_TLS                    0x80004006L
+
+//
+// MessageId: CO_E_INIT_SHARED_ALLOCATOR
+//
+// MessageText:
+//
+//  Get shared memory allocator failure
+//
+#define CO_E_INIT_SHARED_ALLOCATOR       0x80004007L
+
+//
+// MessageId: CO_E_INIT_MEMORY_ALLOCATOR
+//
+// MessageText:
+//
+//  Get memory allocator failure
+//
+#define CO_E_INIT_MEMORY_ALLOCATOR       0x80004008L
+
+//
+// MessageId: CO_E_INIT_CLASS_CACHE
+//
+// MessageText:
+//
+//  Unable to initialize class cache
+//
+#define CO_E_INIT_CLASS_CACHE            0x80004009L
+
+//
+// MessageId: CO_E_INIT_RPC_CHANNEL
+//
+// MessageText:
+//
+//  Unable to initialize RPC services
+//
+#define CO_E_INIT_RPC_CHANNEL            0x8000400AL
+
+//
+// MessageId: CO_E_INIT_TLS_SET_CHANNEL_CONTROL
+//
+// MessageText:
+//
+//  Cannot set thread local storage channel control
+//
+#define CO_E_INIT_TLS_SET_CHANNEL_CONTROL 0x8000400BL
+
+//
+// MessageId: CO_E_INIT_TLS_CHANNEL_CONTROL
+//
+// MessageText:
+//
+//  Could not allocate thread local storage channel control
+//
+#define CO_E_INIT_TLS_CHANNEL_CONTROL    0x8000400CL
+
+//
+// MessageId: CO_E_INIT_UNACCEPTED_USER_ALLOCATOR
+//
+// MessageText:
+//
+//  The user supplied memory allocator is unacceptable
+//
+#define CO_E_INIT_UNACCEPTED_USER_ALLOCATOR 0x8000400DL
+
+//
+// MessageId: CO_E_INIT_SCM_MUTEX_EXISTS
+//
+// MessageText:
+//
+//  The OLE service mutex already exists
+//
+#define CO_E_INIT_SCM_MUTEX_EXISTS       0x8000400EL
+
+//
+// MessageId: CO_E_INIT_SCM_FILE_MAPPING_EXISTS
+//
+// MessageText:
+//
+//  The OLE service file mapping already exists
+//
+#define CO_E_INIT_SCM_FILE_MAPPING_EXISTS 0x8000400FL
+
+//
+// MessageId: CO_E_INIT_SCM_MAP_VIEW_OF_FILE
+//
+// MessageText:
+//
+//  Unable to map view of file for OLE service
+//
+#define CO_E_INIT_SCM_MAP_VIEW_OF_FILE   0x80004010L
+
+//
+// MessageId: CO_E_INIT_SCM_EXEC_FAILURE
+//
+// MessageText:
+//
+//  Failure attempting to launch OLE service
+//
+#define CO_E_INIT_SCM_EXEC_FAILURE       0x80004011L
+
+//
+// MessageId: CO_E_INIT_ONLY_SINGLE_THREADED
+//
+// MessageText:
+//
+//  There was an attempt to call CoInitialize a second time while single threaded
+//
+#define CO_E_INIT_ONLY_SINGLE_THREADED   0x80004012L
+
+
+//
+// Success codes
+//
+#define S_OK                                   (0x00000000L)
+#define S_FALSE                                (0x00000001L)
+
+// ******************
+// FACILITY_ITF
+// ******************
+
+//
+// Codes 0x0-0x01ff are reserved for the OLE group of
+// interfaces.
+//
+
+
+//
+// Generic OLE errors that may be returned by many inerfaces
+//
+
+#define OLE_E_FIRST 0x80040000L
+#define OLE_E_LAST  0x800400FFL
+#define OLE_S_FIRST 0x00040000L
+#define OLE_S_LAST  0x000400FFL
+
+//
+// Old OLE errors
+//
+//
+// MessageId: OLE_E_OLEVERB
+//
+// MessageText:
+//
+//  Invalid OLEVERB structure
+//
+#define OLE_E_OLEVERB                    0x80040000L
+
+//
+// MessageId: OLE_E_ADVF
+//
+// MessageText:
+//
+//  Invalid advise flags
+//
+#define OLE_E_ADVF                       0x80040001L
+
+//
+// MessageId: OLE_E_ENUM_NOMORE
+//
+// MessageText:
+//
+//  Can't enumerate any more, because the associated data is missing
+//
+#define OLE_E_ENUM_NOMORE                0x80040002L
+
+//
+// MessageId: OLE_E_ADVISENOTSUPPORTED
+//
+// MessageText:
+//
+//  This implementation doesn't take advises
+//
+#define OLE_E_ADVISENOTSUPPORTED         0x80040003L
+
+//
+// MessageId: OLE_E_NOCONNECTION
+//
+// MessageText:
+//
+//  There is no connection for this connection ID
+//
+#define OLE_E_NOCONNECTION               0x80040004L
+
+//
+// MessageId: OLE_E_NOTRUNNING
+//
+// MessageText:
+//
+//  Need to run the object to perform this operation
+//
+#define OLE_E_NOTRUNNING                 0x80040005L
+
+//
+// MessageId: OLE_E_NOCACHE
+//
+// MessageText:
+//
+//  There is no cache to operate on
+//
+#define OLE_E_NOCACHE                    0x80040006L
+
+//
+// MessageId: OLE_E_BLANK
+//
+// MessageText:
+//
+//  Uninitialized object
+//
+#define OLE_E_BLANK                      0x80040007L
+
+//
+// MessageId: OLE_E_CLASSDIFF
+//
+// MessageText:
+//
+//  Linked object's source class has changed
+//
+#define OLE_E_CLASSDIFF                  0x80040008L
+
+//
+// MessageId: OLE_E_CANT_GETMONIKER
+//
+// MessageText:
+//
+//  Not able to get the moniker of the object
+//
+#define OLE_E_CANT_GETMONIKER            0x80040009L
+
+//
+// MessageId: OLE_E_CANT_BINDTOSOURCE
+//
+// MessageText:
+//
+//  Not able to bind to the source
+//
+#define OLE_E_CANT_BINDTOSOURCE          0x8004000AL
+
+//
+// MessageId: OLE_E_STATIC
+//
+// MessageText:
+//
+//  Object is static; operation not allowed
+//
+#define OLE_E_STATIC                     0x8004000BL
+
+//
+// MessageId: OLE_E_PROMPTSAVECANCELLED
+//
+// MessageText:
+//
+//  User cancelled out of save dialog
+//
+#define OLE_E_PROMPTSAVECANCELLED        0x8004000CL
+
+//
+// MessageId: OLE_E_INVALIDRECT
+//
+// MessageText:
+//
+//  Invalid rectangle
+//
+#define OLE_E_INVALIDRECT                0x8004000DL
+
+//
+// MessageId: OLE_E_WRONGCOMPOBJ
+//
+// MessageText:
+//
+//  compobj.dll is too old for the ole2.dll initialized
+//
+#define OLE_E_WRONGCOMPOBJ               0x8004000EL
+
+//
+// MessageId: OLE_E_INVALIDHWND
+//
+// MessageText:
+//
+//  Invalid window handle
+//
+#define OLE_E_INVALIDHWND                0x8004000FL
+
+//
+// MessageId: OLE_E_NOT_INPLACEACTIVE
+//
+// MessageText:
+//
+//  Object is not in any of the inplace active states
+//
+#define OLE_E_NOT_INPLACEACTIVE          0x80040010L
+
+//
+// MessageId: OLE_E_CANTCONVERT
+//
+// MessageText:
+//
+//  Not able to convert object
+//
+#define OLE_E_CANTCONVERT                0x80040011L
+
+//
+// MessageId: OLE_E_NOSTORAGE
+//
+// MessageText:
+//
+//  Not able to perform the operation because object is not given storage yet
+//  
+//
+#define OLE_E_NOSTORAGE                  0x80040012L
+
+//
+// MessageId: DV_E_FORMATETC
+//
+// MessageText:
+//
+//  Invalid FORMATETC structure
+//
+#define DV_E_FORMATETC                   0x80040064L
+
+//
+// MessageId: DV_E_DVTARGETDEVICE
+//
+// MessageText:
+//
+//  Invalid DVTARGETDEVICE structure
+//
+#define DV_E_DVTARGETDEVICE              0x80040065L
+
+//
+// MessageId: DV_E_STGMEDIUM
+//
+// MessageText:
+//
+//  Invalid STDGMEDIUM structure
+//
+#define DV_E_STGMEDIUM                   0x80040066L
+
+//
+// MessageId: DV_E_STATDATA
+//
+// MessageText:
+//
+//  Invalid STATDATA structure
+//
+#define DV_E_STATDATA                    0x80040067L
+
+//
+// MessageId: DV_E_LINDEX
+//
+// MessageText:
+//
+//  Invalid lindex
+//
+#define DV_E_LINDEX                      0x80040068L
+
+//
+// MessageId: DV_E_TYMED
+//
+// MessageText:
+//
+//  Invalid tymed
+//
+#define DV_E_TYMED                       0x80040069L
+
+//
+// MessageId: DV_E_CLIPFORMAT
+//
+// MessageText:
+//
+//  Invalid clipboard format
+//
+#define DV_E_CLIPFORMAT                  0x8004006AL
+
+//
+// MessageId: DV_E_DVASPECT
+//
+// MessageText:
+//
+//  Invalid aspect(s)
+//
+#define DV_E_DVASPECT                    0x8004006BL
+
+//
+// MessageId: DV_E_DVTARGETDEVICE_SIZE
+//
+// MessageText:
+//
+//  tdSize parameter of the DVTARGETDEVICE structure is invalid
+//
+#define DV_E_DVTARGETDEVICE_SIZE         0x8004006CL
+
+//
+// MessageId: DV_E_NOIVIEWOBJECT
+//
+// MessageText:
+//
+//  Object doesn't support IViewObject interface
+//
+#define DV_E_NOIVIEWOBJECT               0x8004006DL
+
+#define DRAGDROP_E_FIRST 0x80040100L
+#define DRAGDROP_E_LAST  0x8004010FL
+#define DRAGDROP_S_FIRST 0x00040100L
+#define DRAGDROP_S_LAST  0x0004010FL
+//
+// MessageId: DRAGDROP_E_NOTREGISTERED
+//
+// MessageText:
+//
+//  Trying to revoke a drop target that has not been registered
+//
+#define DRAGDROP_E_NOTREGISTERED         0x80040100L
+
+//
+// MessageId: DRAGDROP_E_ALREADYREGISTERED
+//
+// MessageText:
+//
+//  This window has already been registered as a drop target
+//
+#define DRAGDROP_E_ALREADYREGISTERED     0x80040101L
+
+//
+// MessageId: DRAGDROP_E_INVALIDHWND
+//
+// MessageText:
+//
+//  Invalid window handle
+//
+#define DRAGDROP_E_INVALIDHWND           0x80040102L
+
+#define CLASSFACTORY_E_FIRST  0x80040110L
+#define CLASSFACTORY_E_LAST   0x8004011FL
+#define CLASSFACTORY_S_FIRST  0x00040110L
+#define CLASSFACTORY_S_LAST   0x0004011FL
+//
+// MessageId: CLASS_E_NOAGGREGATION
+//
+// MessageText:
+//
+//  Class does not support aggregation (or class object is remote)
+//
+#define CLASS_E_NOAGGREGATION            0x80040110L
+
+//
+// MessageId: CLASS_E_CLASSNOTAVAILABLE
+//
+// MessageText:
+//
+//  ClassFactory cannot supply requested class
+//
+#define CLASS_E_CLASSNOTAVAILABLE        0x80040111L
+
+#define MARSHAL_E_FIRST  0x80040120L
+#define MARSHAL_E_LAST   0x8004012FL
+#define MARSHAL_S_FIRST  0x00040120L
+#define MARSHAL_S_LAST   0x0004012FL
+#define DATA_E_FIRST     0x80040130L
+#define DATA_E_LAST      0x8004013FL
+#define DATA_S_FIRST     0x00040130L
+#define DATA_S_LAST      0x0004013FL
+#define VIEW_E_FIRST     0x80040140L
+#define VIEW_E_LAST      0x8004014FL
+#define VIEW_S_FIRST     0x00040140L
+#define VIEW_S_LAST      0x0004014FL
+//
+// MessageId: VIEW_E_DRAW
+//
+// MessageText:
+//
+//  Error drawing view
+//
+#define VIEW_E_DRAW                      0x80040140L
+
+#define REGDB_E_FIRST     0x80040150L
+#define REGDB_E_LAST      0x8004015FL
+#define REGDB_S_FIRST     0x00040150L
+#define REGDB_S_LAST      0x0004015FL
+//
+// MessageId: REGDB_E_READREGDB
+//
+// MessageText:
+//
+//  Could not read key from registry
+//
+#define REGDB_E_READREGDB                0x80040150L
+
+//
+// MessageId: REGDB_E_WRITEREGDB
+//
+// MessageText:
+//
+//  Could not write key to registry
+//
+#define REGDB_E_WRITEREGDB               0x80040151L
+
+//
+// MessageId: REGDB_E_KEYMISSING
+//
+// MessageText:
+//
+//  Could not find the key in the registry
+//
+#define REGDB_E_KEYMISSING               0x80040152L
+
+//
+// MessageId: REGDB_E_INVALIDVALUE
+//
+// MessageText:
+//
+//  Invalid value for registry
+//
+#define REGDB_E_INVALIDVALUE             0x80040153L
+
+//
+// MessageId: REGDB_E_CLASSNOTREG
+//
+// MessageText:
+//
+//  Class not registered
+//
+#define REGDB_E_CLASSNOTREG              0x80040154L
+
+//
+// MessageId: REGDB_E_IIDNOTREG
+//
+// MessageText:
+//
+//  Interface not registered
+//
+#define REGDB_E_IIDNOTREG                0x80040155L
+
+#define CACHE_E_FIRST     0x80040170L
+#define CACHE_E_LAST      0x8004017FL
+#define CACHE_S_FIRST     0x00040170L
+#define CACHE_S_LAST      0x0004017FL
+//
+// MessageId: CACHE_E_NOCACHE_UPDATED
+//
+// MessageText:
+//
+//  Cache not updated
+//
+#define CACHE_E_NOCACHE_UPDATED          0x80040170L
+
+#define OLEOBJ_E_FIRST     0x80040180L
+#define OLEOBJ_E_LAST      0x8004018FL
+#define OLEOBJ_S_FIRST     0x00040180L
+#define OLEOBJ_S_LAST      0x0004018FL
+//
+// MessageId: OLEOBJ_E_NOVERBS
+//
+// MessageText:
+//
+//  No verbs for OLE object
+//
+#define OLEOBJ_E_NOVERBS                 0x80040180L
+
+//
+// MessageId: OLEOBJ_E_INVALIDVERB
+//
+// MessageText:
+//
+//  Invalid verb for OLE object
+//
+#define OLEOBJ_E_INVALIDVERB             0x80040181L
+
+#define CLIENTSITE_E_FIRST     0x80040190L
+#define CLIENTSITE_E_LAST      0x8004019FL
+#define CLIENTSITE_S_FIRST     0x00040190L
+#define CLIENTSITE_S_LAST      0x0004019FL
+//
+// MessageId: INPLACE_E_NOTUNDOABLE
+//
+// MessageText:
+//
+//  Undo is not available
+//
+#define INPLACE_E_NOTUNDOABLE            0x800401A0L
+
+//
+// MessageId: INPLACE_E_NOTOOLSPACE
+//
+// MessageText:
+//
+//  Space for tools is not available
+//
+#define INPLACE_E_NOTOOLSPACE            0x800401A1L
+
+#define INPLACE_E_FIRST     0x800401A0L
+#define INPLACE_E_LAST      0x800401AFL
+#define INPLACE_S_FIRST     0x000401A0L
+#define INPLACE_S_LAST      0x000401AFL
+#define ENUM_E_FIRST        0x800401B0L
+#define ENUM_E_LAST         0x800401BFL
+#define ENUM_S_FIRST        0x000401B0L
+#define ENUM_S_LAST         0x000401BFL
+#define CONVERT10_E_FIRST        0x800401C0L
+#define CONVERT10_E_LAST         0x800401CFL
+#define CONVERT10_S_FIRST        0x000401C0L
+#define CONVERT10_S_LAST         0x000401CFL
+//
+// MessageId: CONVERT10_E_OLESTREAM_GET
+//
+// MessageText:
+//
+//  OLESTREAM Get method failed
+//
+#define CONVERT10_E_OLESTREAM_GET        0x800401C0L
+
+//
+// MessageId: CONVERT10_E_OLESTREAM_PUT
+//
+// MessageText:
+//
+//  OLESTREAM Put method failed
+//
+#define CONVERT10_E_OLESTREAM_PUT        0x800401C1L
+
+//
+// MessageId: CONVERT10_E_OLESTREAM_FMT
+//
+// MessageText:
+//
+//  Contents of the OLESTREAM not in correct format
+//
+#define CONVERT10_E_OLESTREAM_FMT        0x800401C2L
+
+//
+// MessageId: CONVERT10_E_OLESTREAM_BITMAP_TO_DIB
+//
+// MessageText:
+//
+//  There was an error in a Windows GDI call while converting the bitmap to a DIB
+//
+#define CONVERT10_E_OLESTREAM_BITMAP_TO_DIB 0x800401C3L
+
+//
+// MessageId: CONVERT10_E_STG_FMT
+//
+// MessageText:
+//
+//  Contents of the IStorage not in correct format
+//
+#define CONVERT10_E_STG_FMT              0x800401C4L
+
+//
+// MessageId: CONVERT10_E_STG_NO_STD_STREAM
+//
+// MessageText:
+//
+//  Contents of IStorage is missing one of the standard streams
+//
+#define CONVERT10_E_STG_NO_STD_STREAM    0x800401C5L
+
+//
+// MessageId: CONVERT10_E_STG_DIB_TO_BITMAP
+//
+// MessageText:
+//
+//  There was an error in a Windows GDI call while converting the DIB to a bitmap.
+//  
+//
+#define CONVERT10_E_STG_DIB_TO_BITMAP    0x800401C6L
+
+#define CLIPBRD_E_FIRST        0x800401D0L
+#define CLIPBRD_E_LAST         0x800401DFL
+#define CLIPBRD_S_FIRST        0x000401D0L
+#define CLIPBRD_S_LAST         0x000401DFL
+//
+// MessageId: CLIPBRD_E_CANT_OPEN
+//
+// MessageText:
+//
+//  OpenClipboard Failed
+//
+#define CLIPBRD_E_CANT_OPEN              0x800401D0L
+
+//
+// MessageId: CLIPBRD_E_CANT_EMPTY
+//
+// MessageText:
+//
+//  EmptyClipboard Failed
+//
+#define CLIPBRD_E_CANT_EMPTY             0x800401D1L
+
+//
+// MessageId: CLIPBRD_E_CANT_SET
+//
+// MessageText:
+//
+//  SetClipboard Failed
+//
+#define CLIPBRD_E_CANT_SET               0x800401D2L
+
+//
+// MessageId: CLIPBRD_E_BAD_DATA
+//
+// MessageText:
+//
+//  Data on clipboard is invalid
+//
+#define CLIPBRD_E_BAD_DATA               0x800401D3L
+
+//
+// MessageId: CLIPBRD_E_CANT_CLOSE
+//
+// MessageText:
+//
+//  CloseClipboard Failed
+//
+#define CLIPBRD_E_CANT_CLOSE             0x800401D4L
+
+#define MK_E_FIRST        0x800401E0L
+#define MK_E_LAST         0x800401EFL
+#define MK_S_FIRST        0x000401E0L
+#define MK_S_LAST         0x000401EFL
+//
+// MessageId: MK_E_CONNECTMANUALLY
+//
+// MessageText:
+//
+//  Moniker needs to be connected manually
+//
+#define MK_E_CONNECTMANUALLY             0x800401E0L
+
+//
+// MessageId: MK_E_EXCEEDEDDEADLINE
+//
+// MessageText:
+//
+//  Operation exceeded deadline
+//
+#define MK_E_EXCEEDEDDEADLINE            0x800401E1L
+
+//
+// MessageId: MK_E_NEEDGENERIC
+//
+// MessageText:
+//
+//  Moniker needs to be generic
+//
+#define MK_E_NEEDGENERIC                 0x800401E2L
+
+//
+// MessageId: MK_E_UNAVAILABLE
+//
+// MessageText:
+//
+//  Operation unavailable
+//
+#define MK_E_UNAVAILABLE                 0x800401E3L
+
+//
+// MessageId: MK_E_SYNTAX
+//
+// MessageText:
+//
+//  Invalid syntax
+//
+#define MK_E_SYNTAX                      0x800401E4L
+
+//
+// MessageId: MK_E_NOOBJECT
+//
+// MessageText:
+//
+//  No object for moniker
+//
+#define MK_E_NOOBJECT                    0x800401E5L
+
+//
+// MessageId: MK_E_INVALIDEXTENSION
+//
+// MessageText:
+//
+//  Bad extension for file
+//
+#define MK_E_INVALIDEXTENSION            0x800401E6L
+
+//
+// MessageId: MK_E_INTERMEDIATEINTERFACENOTSUPPORTED
+//
+// MessageText:
+//
+//  Intermediate operation failed
+//
+#define MK_E_INTERMEDIATEINTERFACENOTSUPPORTED 0x800401E7L
+
+//
+// MessageId: MK_E_NOTBINDABLE
+//
+// MessageText:
+//
+//  Moniker is not bindable
+//
+#define MK_E_NOTBINDABLE                 0x800401E8L
+
+//
+// MessageId: MK_E_NOTBOUND
+//
+// MessageText:
+//
+//  Moniker is not bound
+//
+#define MK_E_NOTBOUND                    0x800401E9L
+
+//
+// MessageId: MK_E_CANTOPENFILE
+//
+// MessageText:
+//
+//  Moniker cannot open file
+//
+#define MK_E_CANTOPENFILE                0x800401EAL
+
+//
+// MessageId: MK_E_MUSTBOTHERUSER
+//
+// MessageText:
+//
+//  User input required for operation to succeed
+//
+#define MK_E_MUSTBOTHERUSER              0x800401EBL
+
+//
+// MessageId: MK_E_NOINVERSE
+//
+// MessageText:
+//
+//  Moniker class has no inverse
+//
+#define MK_E_NOINVERSE                   0x800401ECL
+
+//
+// MessageId: MK_E_NOSTORAGE
+//
+// MessageText:
+//
+//  Moniker does not refer to storage
+//
+#define MK_E_NOSTORAGE                   0x800401EDL
+
+//
+// MessageId: MK_E_NOPREFIX
+//
+// MessageText:
+//
+//  No common prefix
+//
+#define MK_E_NOPREFIX                    0x800401EEL
+
+//
+// MessageId: MK_E_ENUMERATION_FAILED
+//
+// MessageText:
+//
+//  Moniker could not be enumerated
+//
+#define MK_E_ENUMERATION_FAILED          0x800401EFL
+
+#define CO_E_FIRST        0x800401F0L
+#define CO_E_LAST         0x800401FFL
+#define CO_S_FIRST        0x000401F0L
+#define CO_S_LAST         0x000401FFL
+//
+// MessageId: CO_E_NOTINITIALIZED
+//
+// MessageText:
+//
+//  CoInitialize has not been called.
+//
+#define CO_E_NOTINITIALIZED              0x800401F0L
+
+//
+// MessageId: CO_E_ALREADYINITIALIZED
+//
+// MessageText:
+//
+//  CoInitialize has already been called.
+//
+#define CO_E_ALREADYINITIALIZED          0x800401F1L
+
+//
+// MessageId: CO_E_CANTDETERMINECLASS
+//
+// MessageText:
+//
+//  Class of object cannot be determined
+//
+#define CO_E_CANTDETERMINECLASS          0x800401F2L
+
+//
+// MessageId: CO_E_CLASSSTRING
+//
+// MessageText:
+//
+//  Invalid class string
+//
+#define CO_E_CLASSSTRING                 0x800401F3L
+
+//
+// MessageId: CO_E_IIDSTRING
+//
+// MessageText:
+//
+//  Invalid interface string
+//
+#define CO_E_IIDSTRING                   0x800401F4L
+
+//
+// MessageId: CO_E_APPNOTFOUND
+//
+// MessageText:
+//
+//  Application not found
+//
+#define CO_E_APPNOTFOUND                 0x800401F5L
+
+//
+// MessageId: CO_E_APPSINGLEUSE
+//
+// MessageText:
+//
+//  Application cannot be run more than once
+//
+#define CO_E_APPSINGLEUSE                0x800401F6L
+
+//
+// MessageId: CO_E_ERRORINAPP
+//
+// MessageText:
+//
+//  Some error in application program
+//
+#define CO_E_ERRORINAPP                  0x800401F7L
+
+//
+// MessageId: CO_E_DLLNOTFOUND
+//
+// MessageText:
+//
+//  DLL for class not found
+//
+#define CO_E_DLLNOTFOUND                 0x800401F8L
+
+//
+// MessageId: CO_E_ERRORINDLL
+//
+// MessageText:
+//
+//  Error in the DLL
+//
+#define CO_E_ERRORINDLL                  0x800401F9L
+
+//
+// MessageId: CO_E_WRONGOSFORAPP
+//
+// MessageText:
+//
+//  Wrong OS or OS version for application
+//
+#define CO_E_WRONGOSFORAPP               0x800401FAL
+
+//
+// MessageId: CO_E_OBJNOTREG
+//
+// MessageText:
+//
+//  Object is not registered
+//
+#define CO_E_OBJNOTREG                   0x800401FBL
+
+//
+// MessageId: CO_E_OBJISREG
+//
+// MessageText:
+//
+//  Object is already registered
+//
+#define CO_E_OBJISREG                    0x800401FCL
+
+//
+// MessageId: CO_E_OBJNOTCONNECTED
+//
+// MessageText:
+//
+//  Object is not connected to server
+//
+#define CO_E_OBJNOTCONNECTED             0x800401FDL
+
+//
+// MessageId: CO_E_APPDIDNTREG
+//
+// MessageText:
+//
+//  Application was launched but it didn't register a class factory
+//
+#define CO_E_APPDIDNTREG                 0x800401FEL
+
+//
+// MessageId: CO_E_RELEASED
+//
+// MessageText:
+//
+//  Object has been released
+//
+#define CO_E_RELEASED                    0x800401FFL
+
+//
+// Old OLE Success Codes
+//
+//
+// MessageId: OLE_S_USEREG
+//
+// MessageText:
+//
+//  Use the registry database to provide the requested information
+//
+#define OLE_S_USEREG                     0x00040000L
+
+//
+// MessageId: OLE_S_STATIC
+//
+// MessageText:
+//
+//  Success, but static
+//
+#define OLE_S_STATIC                     0x00040001L
+
+//
+// MessageId: OLE_S_MAC_CLIPFORMAT
+//
+// MessageText:
+//
+//  Macintosh clipboard format
+//
+#define OLE_S_MAC_CLIPFORMAT             0x00040002L
+
+//
+// MessageId: DRAGDROP_S_DROP
+//
+// MessageText:
+//
+//  Successful drop took place
+//
+#define DRAGDROP_S_DROP                  0x00040100L
+
+//
+// MessageId: DRAGDROP_S_CANCEL
+//
+// MessageText:
+//
+//  Drag-drop operation canceled
+//
+#define DRAGDROP_S_CANCEL                0x00040101L
+
+//
+// MessageId: DRAGDROP_S_USEDEFAULTCURSORS
+//
+// MessageText:
+//
+//  Use the default cursor
+//
+#define DRAGDROP_S_USEDEFAULTCURSORS     0x00040102L
+
+//
+// MessageId: DATA_S_SAMEFORMATETC
+//
+// MessageText:
+//
+//  Data has same FORMATETC
+//
+#define DATA_S_SAMEFORMATETC             0x00040130L
+
+//
+// MessageId: VIEW_S_ALREADY_FROZEN
+//
+// MessageText:
+//
+//  View is already frozen
+//
+#define VIEW_S_ALREADY_FROZEN            0x00040140L
+
+//
+// MessageId: CACHE_S_FORMATETC_NOTSUPPORTED
+//
+// MessageText:
+//
+//  FORMATETC not supported
+//
+#define CACHE_S_FORMATETC_NOTSUPPORTED   0x00040170L
+
+//
+// MessageId: CACHE_S_SAMECACHE
+//
+// MessageText:
+//
+//  Same cache
+//
+#define CACHE_S_SAMECACHE                0x00040171L
+
+//
+// MessageId: CACHE_S_SOMECACHES_NOTUPDATED
+//
+// MessageText:
+//
+//  Some cache(s) not updated
+//
+#define CACHE_S_SOMECACHES_NOTUPDATED    0x00040172L
+
+//
+// MessageId: OLEOBJ_S_INVALIDVERB
+//
+// MessageText:
+//
+//  Invalid verb for OLE object
+//
+#define OLEOBJ_S_INVALIDVERB             0x00040180L
+
+//
+// MessageId: OLEOBJ_S_CANNOT_DOVERB_NOW
+//
+// MessageText:
+//
+//  Verb number is valid but verb cannot be done now
+//
+#define OLEOBJ_S_CANNOT_DOVERB_NOW       0x00040181L
+
+//
+// MessageId: OLEOBJ_S_INVALIDHWND
+//
+// MessageText:
+//
+//  Invalid window handle passed
+//
+#define OLEOBJ_S_INVALIDHWND             0x00040182L
+
+//
+// MessageId: INPLACE_S_TRUNCATED
+//
+// MessageText:
+//
+//  Message is too long; some of it had to be truncated before displaying
+//
+#define INPLACE_S_TRUNCATED              0x000401A0L
+
+//
+// MessageId: CONVERT10_S_NO_PRESENTATION
+//
+// MessageText:
+//
+//  Unable to convert OLESTREAM to IStorage
+//
+#define CONVERT10_S_NO_PRESENTATION      0x000401C0L
+
+//
+// MessageId: MK_S_REDUCED_TO_SELF
+//
+// MessageText:
+//
+//  Moniker reduced to itself
+//
+#define MK_S_REDUCED_TO_SELF             0x000401E2L
+
+//
+// MessageId: MK_S_ME
+//
+// MessageText:
+//
+//  Common prefix is this moniker
+//
+#define MK_S_ME                          0x000401E4L
+
+//
+// MessageId: MK_S_HIM
+//
+// MessageText:
+//
+//  Common prefix is input moniker
+//
+#define MK_S_HIM                         0x000401E5L
+
+//
+// MessageId: MK_S_US
+//
+// MessageText:
+//
+//  Common prefix is both monikers
+//
+#define MK_S_US                          0x000401E6L
+
+//
+// MessageId: MK_S_MONIKERALREADYREGISTERED
+//
+// MessageText:
+//
+//  Moniker is already registered in running object table
+//
+#define MK_S_MONIKERALREADYREGISTERED    0x000401E7L
+
+// ******************
+// FACILITY_WINDOWS
+// ******************
+//
+// Codes 0x0-0x01ff are reserved for the OLE group of
+// interfaces.
+//
+//
+// MessageId: CO_E_CLASS_CREATE_FAILED
+//
+// MessageText:
+//
+//  Attempt to create a class object failed
+//
+#define CO_E_CLASS_CREATE_FAILED         0x80080001L
+
+//
+// MessageId: CO_E_SCM_ERROR
+//
+// MessageText:
+//
+//  OLE service could not bind object
+//
+#define CO_E_SCM_ERROR                   0x80080002L
+
+//
+// MessageId: CO_E_SCM_RPC_FAILURE
+//
+// MessageText:
+//
+//  RPC communication failed with OLE service
+//
+#define CO_E_SCM_RPC_FAILURE             0x80080003L
+
+//
+// MessageId: CO_E_BAD_PATH
+//
+// MessageText:
+//
+//  Bad path to object
+//
+#define CO_E_BAD_PATH                    0x80080004L
+
+//
+// MessageId: CO_E_SERVER_EXEC_FAILURE
+//
+// MessageText:
+//
+//  Server execution failed
+//
+#define CO_E_SERVER_EXEC_FAILURE         0x80080005L
+
+//
+// MessageId: CO_E_OBJSRV_RPC_FAILURE
+//
+// MessageText:
+//
+//  OLE service could not communicate with the object server
+//
+#define CO_E_OBJSRV_RPC_FAILURE          0x80080006L
+
+//
+// MessageId: MK_E_NO_NORMALIZED
+//
+// MessageText:
+//
+//  Moniker path could not be normalized
+//
+#define MK_E_NO_NORMALIZED               0x80080007L
+
+//
+// MessageId: CO_E_SERVER_STOPPING
+//
+// MessageText:
+//
+//  Object server is stopping when OLE service contacts it
+//
+#define CO_E_SERVER_STOPPING             0x80080008L
+
+//
+// MessageId: MEM_E_INVALID_ROOT
+//
+// MessageText:
+//
+//  An invalid root block pointer was specified
+//
+#define MEM_E_INVALID_ROOT               0x80080009L
+
+//
+// MessageId: MEM_E_INVALID_LINK
+//
+// MessageText:
+//
+//  An allocation chain contained an invalid link pointer
+//
+#define MEM_E_INVALID_LINK               0x80080010L
+
+//
+// MessageId: MEM_E_INVALID_SIZE
+//
+// MessageText:
+//
+//  The requested allocation size was too large
+//
+#define MEM_E_INVALID_SIZE               0x80080011L
+
+// ******************
+// FACILITY_DISPATCH
+// ******************
+//
+// MessageId: DISP_E_UNKNOWNINTERFACE
+//
+// MessageText:
+//
+//  Unknown interface.
+//
+#define DISP_E_UNKNOWNINTERFACE          0x80020001L
+
+//
+// MessageId: DISP_E_MEMBERNOTFOUND
+//
+// MessageText:
+//
+//  Member not found.
+//
+#define DISP_E_MEMBERNOTFOUND            0x80020003L
+
+//
+// MessageId: DISP_E_PARAMNOTFOUND
+//
+// MessageText:
+//
+//  Parameter not found.
+//
+#define DISP_E_PARAMNOTFOUND             0x80020004L
+
+//
+// MessageId: DISP_E_TYPEMISMATCH
+//
+// MessageText:
+//
+//  Type mismatch.
+//
+#define DISP_E_TYPEMISMATCH              0x80020005L
+
+//
+// MessageId: DISP_E_UNKNOWNNAME
+//
+// MessageText:
+//
+//  Unknown name.
+//
+#define DISP_E_UNKNOWNNAME               0x80020006L
+
+//
+// MessageId: DISP_E_NONAMEDARGS
+//
+// MessageText:
+//
+//  No named arguments.
+//
+#define DISP_E_NONAMEDARGS               0x80020007L
+
+//
+// MessageId: DISP_E_BADVARTYPE
+//
+// MessageText:
+//
+//  Bad variable type.
+//
+#define DISP_E_BADVARTYPE                0x80020008L
+
+//
+// MessageId: DISP_E_EXCEPTION
+//
+// MessageText:
+//
+//  Exception occurred.
+//
+#define DISP_E_EXCEPTION                 0x80020009L
+
+//
+// MessageId: DISP_E_OVERFLOW
+//
+// MessageText:
+//
+//  Out of present range.
+//
+#define DISP_E_OVERFLOW                  0x8002000AL
+
+//
+// MessageId: DISP_E_BADINDEX
+//
+// MessageText:
+//
+//  Invalid index.
+//
+#define DISP_E_BADINDEX                  0x8002000BL
+
+//
+// MessageId: DISP_E_UNKNOWNLCID
+//
+// MessageText:
+//
+//  Unknown language.
+//
+#define DISP_E_UNKNOWNLCID               0x8002000CL
+
+//
+// MessageId: DISP_E_ARRAYISLOCKED
+//
+// MessageText:
+//
+//  Memory is locked.
+//
+#define DISP_E_ARRAYISLOCKED             0x8002000DL
+
+//
+// MessageId: DISP_E_BADPARAMCOUNT
+//
+// MessageText:
+//
+//  Invalid number of parameters.
+//
+#define DISP_E_BADPARAMCOUNT             0x8002000EL
+
+//
+// MessageId: DISP_E_PARAMNOTOPTIONAL
+//
+// MessageText:
+//
+//  Parameter not optional.
+//
+#define DISP_E_PARAMNOTOPTIONAL          0x8002000FL
+
+//
+// MessageId: DISP_E_BADCALLEE
+//
+// MessageText:
+//
+//  Invalid callee.
+//
+#define DISP_E_BADCALLEE                 0x80020010L
+
+//
+// MessageId: DISP_E_NOTACOLLECTION
+//
+// MessageText:
+//
+//  Does not support a collection.
+//
+#define DISP_E_NOTACOLLECTION            0x80020011L
+
+//
+// MessageId: TYPE_E_BUFFERTOOSMALL
+//
+// MessageText:
+//
+//  Buffer too small.
+//
+#define TYPE_E_BUFFERTOOSMALL            0x80028016L
+
+//
+// MessageId: TYPE_E_INVDATAREAD
+//
+// MessageText:
+//
+//  Old format or invalid type library.
+//
+#define TYPE_E_INVDATAREAD               0x80028018L
+
+//
+// MessageId: TYPE_E_UNSUPFORMAT
+//
+// MessageText:
+//
+//  Old format or invalid type library.
+//
+#define TYPE_E_UNSUPFORMAT               0x80028019L
+
+//
+// MessageId: TYPE_E_REGISTRYACCESS
+//
+// MessageText:
+//
+//  Error accessing the OLE registry.
+//
+#define TYPE_E_REGISTRYACCESS            0x8002801CL
+
+//
+// MessageId: TYPE_E_LIBNOTREGISTERED
+//
+// MessageText:
+//
+//  Library not registered.
+//
+#define TYPE_E_LIBNOTREGISTERED          0x8002801DL
+
+//
+// MessageId: TYPE_E_UNDEFINEDTYPE
+//
+// MessageText:
+//
+//  Bound to unknown type.
+//
+#define TYPE_E_UNDEFINEDTYPE             0x80028027L
+
+//
+// MessageId: TYPE_E_QUALIFIEDNAMEDISALLOWED
+//
+// MessageText:
+//
+//  Qualified name disallowed.
+//
+#define TYPE_E_QUALIFIEDNAMEDISALLOWED   0x80028028L
+
+//
+// MessageId: TYPE_E_INVALIDSTATE
+//
+// MessageText:
+//
+//  Invalid forward reference, or reference to uncompiled type.
+//
+#define TYPE_E_INVALIDSTATE              0x80028029L
+
+//
+// MessageId: TYPE_E_WRONGTYPEKIND
+//
+// MessageText:
+//
+//  Type mismatch.
+//
+#define TYPE_E_WRONGTYPEKIND             0x8002802AL
+
+//
+// MessageId: TYPE_E_ELEMENTNOTFOUND
+//
+// MessageText:
+//
+//  Element not found.
+//
+#define TYPE_E_ELEMENTNOTFOUND           0x8002802BL
+
+//
+// MessageId: TYPE_E_AMBIGUOUSNAME
+//
+// MessageText:
+//
+//  Ambiguous name.
+//
+#define TYPE_E_AMBIGUOUSNAME             0x8002802CL
+
+//
+// MessageId: TYPE_E_NAMECONFLICT
+//
+// MessageText:
+//
+//  Name already exists in the library.
+//
+#define TYPE_E_NAMECONFLICT              0x8002802DL
+
+//
+// MessageId: TYPE_E_UNKNOWNLCID
+//
+// MessageText:
+//
+//  Unknown LCID.
+//
+#define TYPE_E_UNKNOWNLCID               0x8002802EL
+
+//
+// MessageId: TYPE_E_DLLFUNCTIONNOTFOUND
+//
+// MessageText:
+//
+//  Function not defined in specified DLL.
+//
+#define TYPE_E_DLLFUNCTIONNOTFOUND       0x8002802FL
+
+//
+// MessageId: TYPE_E_BADMODULEKIND
+//
+// MessageText:
+//
+//  Wrong module kind for the operation.
+//
+#define TYPE_E_BADMODULEKIND             0x800288BDL
+
+//
+// MessageId: TYPE_E_SIZETOOBIG
+//
+// MessageText:
+//
+//  Size may not exceed 64K.
+//
+#define TYPE_E_SIZETOOBIG                0x800288C5L
+
+//
+// MessageId: TYPE_E_DUPLICATEID
+//
+// MessageText:
+//
+//  Duplicate ID in inheritance hierarchy.
+//
+#define TYPE_E_DUPLICATEID               0x800288C6L
+
+//
+// MessageId: TYPE_E_INVALIDID
+//
+// MessageText:
+//
+//  Incorrect inheritance depth in standard OLE hmember.
+//
+#define TYPE_E_INVALIDID                 0x800288CFL
+
+//
+// MessageId: TYPE_E_TYPEMISMATCH
+//
+// MessageText:
+//
+//  Type mismatch.
+//
+#define TYPE_E_TYPEMISMATCH              0x80028CA0L
+
+//
+// MessageId: TYPE_E_OUTOFBOUNDS
+//
+// MessageText:
+//
+//  Invalid number of arguments.
+//
+#define TYPE_E_OUTOFBOUNDS               0x80028CA1L
+
+//
+// MessageId: TYPE_E_IOERROR
+//
+// MessageText:
+//
+//  I/O Error.
+//
+#define TYPE_E_IOERROR                   0x80028CA2L
+
+//
+// MessageId: TYPE_E_CANTCREATETMPFILE
+//
+// MessageText:
+//
+//  Error creating unique tmp file.
+//
+#define TYPE_E_CANTCREATETMPFILE         0x80028CA3L
+
+//
+// MessageId: TYPE_E_CANTLOADLIBRARY
+//
+// MessageText:
+//
+//  Error loading type library/DLL.
+//
+#define TYPE_E_CANTLOADLIBRARY           0x80029C4AL
+
+//
+// MessageId: TYPE_E_INCONSISTENTPROPFUNCS
+//
+// MessageText:
+//
+//  Inconsistent property functions.
+//
+#define TYPE_E_INCONSISTENTPROPFUNCS     0x80029C83L
+
+//
+// MessageId: TYPE_E_CIRCULARTYPE
+//
+// MessageText:
+//
+//  Circular dependency between types/modules.
+//
+#define TYPE_E_CIRCULARTYPE              0x80029C84L
+
+// ******************
+// FACILITY_STORAGE
+// ******************
+//
+// MessageId: STG_E_INVALIDFUNCTION
+//
+// MessageText:
+//
+//  Unable to perform requested operation.
+//
+#define STG_E_INVALIDFUNCTION            0x80030001L
+
+//
+// MessageId: STG_E_FILENOTFOUND
+//
+// MessageText:
+//
+//  %s could not be found.
+//
+#define STG_E_FILENOTFOUND               0x80030002L
+
+//
+// MessageId: STG_E_PATHNOTFOUND
+//
+// MessageText:
+//
+//  The path %s could not be found.
+//
+#define STG_E_PATHNOTFOUND               0x80030003L
+
+//
+// MessageId: STG_E_TOOMANYOPENFILES
+//
+// MessageText:
+//
+//  There are insufficient resources to open another file.
+//
+#define STG_E_TOOMANYOPENFILES           0x80030004L
+
+//
+// MessageId: STG_E_ACCESSDENIED
+//
+// MessageText:
+//
+//  Access Denied.
+//
+#define STG_E_ACCESSDENIED               0x80030005L
+
+//
+// MessageId: STG_E_INVALIDHANDLE
+//
+// MessageText:
+//
+//  Attempted an operation on an invalid object.
+//
+#define STG_E_INVALIDHANDLE              0x80030006L
+
+//
+// MessageId: STG_E_INSUFFICIENTMEMORY
+//
+// MessageText:
+//
+//  There is insufficient memory available to complete operation.
+//
+#define STG_E_INSUFFICIENTMEMORY         0x80030008L
+
+//
+// MessageId: STG_E_INVALIDPOINTER
+//
+// MessageText:
+//
+//  Invalid pointer error.
+//
+#define STG_E_INVALIDPOINTER             0x80030009L
+
+//
+// MessageId: STG_E_NOMOREFILES
+//
+// MessageText:
+//
+//  There are no more entries to return.
+//
+#define STG_E_NOMOREFILES                0x80030012L
+
+//
+// MessageId: STG_E_DISKISWRITEPROTECTED
+//
+// MessageText:
+//
+//  Disk is write-protected.
+//
+#define STG_E_DISKISWRITEPROTECTED       0x80030013L
+
+//
+// MessageId: STG_E_SEEKERROR
+//
+// MessageText:
+//
+//  An error occurred during a seek operation.
+//
+#define STG_E_SEEKERROR                  0x80030019L
+
+//
+// MessageId: STG_E_WRITEFAULT
+//
+// MessageText:
+//
+//  A disk error occurred during a write operation.
+//
+#define STG_E_WRITEFAULT                 0x8003001DL
+
+//
+// MessageId: STG_E_READFAULT
+//
+// MessageText:
+//
+//  A disk error occurred during a read operation.
+//
+#define STG_E_READFAULT                  0x8003001EL
+
+//
+// MessageId: STG_E_SHAREVIOLATION
+//
+// MessageText:
+//
+//  A share violation has occurred.
+//
+#define STG_E_SHAREVIOLATION             0x80030020L
+
+//
+// MessageId: STG_E_LOCKVIOLATION
+//
+// MessageText:
+//
+//  A lock violation has occurred.
+//
+#define STG_E_LOCKVIOLATION              0x80030021L
+
+//
+// MessageId: STG_E_FILEALREADYEXISTS
+//
+// MessageText:
+//
+//  %s already exists.
+//
+#define STG_E_FILEALREADYEXISTS          0x80030050L
+
+//
+// MessageId: STG_E_INVALIDPARAMETER
+//
+// MessageText:
+//
+//  Invalid parameter error.
+//
+#define STG_E_INVALIDPARAMETER           0x80030057L
+
+//
+// MessageId: STG_E_MEDIUMFULL
+//
+// MessageText:
+//
+//  There is insufficient disk space to complete operation.
+//
+#define STG_E_MEDIUMFULL                 0x80030070L
+
+//
+// MessageId: STG_E_ABNORMALAPIEXIT
+//
+// MessageText:
+//
+//  An API call exited abnormally.
+//
+#define STG_E_ABNORMALAPIEXIT            0x800300FAL
+
+//
+// MessageId: STG_E_INVALIDHEADER
+//
+// MessageText:
+//
+//  The file %s is not a valid compound file.
+//
+#define STG_E_INVALIDHEADER              0x800300FBL
+
+//
+// MessageId: STG_E_INVALIDNAME
+//
+// MessageText:
+//
+//  The name %s is not valid.
+//
+#define STG_E_INVALIDNAME                0x800300FCL
+
+//
+// MessageId: STG_E_UNKNOWN
+//
+// MessageText:
+//
+//  An unexpected error occurred.
+//
+#define STG_E_UNKNOWN                    0x800300FDL
+
+//
+// MessageId: STG_E_UNIMPLEMENTEDFUNCTION
+//
+// MessageText:
+//
+//  That function is not implemented.
+//
+#define STG_E_UNIMPLEMENTEDFUNCTION      0x800300FEL
+
+//
+// MessageId: STG_E_INVALIDFLAG
+//
+// MessageText:
+//
+//  Invalid flag error.
+//
+#define STG_E_INVALIDFLAG                0x800300FFL
+
+//
+// MessageId: STG_E_INUSE
+//
+// MessageText:
+//
+//  Attempted to use an object that is busy.
+//
+#define STG_E_INUSE                      0x80030100L
+
+//
+// MessageId: STG_E_NOTCURRENT
+//
+// MessageText:
+//
+//  The storage has been changed since the last commit.
+//
+#define STG_E_NOTCURRENT                 0x80030101L
+
+//
+// MessageId: STG_E_REVERTED
+//
+// MessageText:
+//
+//  Attempted to use an object that has ceased to exist.
+//
+#define STG_E_REVERTED                   0x80030102L
+
+//
+// MessageId: STG_E_CANTSAVE
+//
+// MessageText:
+//
+//  Can't save.
+//
+#define STG_E_CANTSAVE                   0x80030103L
+
+//
+// MessageId: STG_E_OLDFORMAT
+//
+// MessageText:
+//
+//  The compound file %s was produced with an incompatible version of storage.
+//
+#define STG_E_OLDFORMAT                  0x80030104L
+
+//
+// MessageId: STG_E_OLDDLL
+//
+// MessageText:
+//
+//  The compound file %s was produced with a newer version of storage.
+//
+#define STG_E_OLDDLL                     0x80030105L
+
+//
+// MessageId: STG_E_SHAREREQUIRED
+//
+// MessageText:
+//
+//  Share.exe or equivalent is required for operation.
+//
+#define STG_E_SHAREREQUIRED              0x80030106L
+
+//
+// MessageId: STG_E_NOTFILEBASEDSTORAGE
+//
+// MessageText:
+//
+//  Illegal operation called on non-file based storage.
+//
+#define STG_E_NOTFILEBASEDSTORAGE        0x80030107L
+
+//
+// MessageId: STG_E_EXTANTMARSHALLINGS
+//
+// MessageText:
+//
+//  Illegal operation called on object with extant marshallings.
+//
+#define STG_E_EXTANTMARSHALLINGS         0x80030108L
+
+//
+// MessageId: STG_S_CONVERTED
+//
+// MessageText:
+//
+//  The underlying file was converted to compound file format.
+//
+#define STG_S_CONVERTED                  0x00030200L
+
+// ******************
+// FACILITY_RPC
+// ******************
+//
+// Codes 0x0-0x11 are propogated from 16 bit OLE.
+//
+//
+// MessageId: RPC_E_CALL_REJECTED
+//
+// MessageText:
+//
+//  Call was rejected by callee.
+//
+#define RPC_E_CALL_REJECTED              0x80010001L
+
+//
+// MessageId: RPC_E_CALL_CANCELED
+//
+// MessageText:
+//
+//  Call was canceled by the message filter.
+//
+#define RPC_E_CALL_CANCELED              0x80010002L
+
+//
+// MessageId: RPC_E_CANTPOST_INSENDCALL
+//
+// MessageText:
+//
+//  The caller is dispatching an intertask SendMessage call and
+//  cannot call out via PostMessage.
+//
+#define RPC_E_CANTPOST_INSENDCALL        0x80010003L
+
+//
+// MessageId: RPC_E_CANTCALLOUT_INASYNCCALL
+//
+// MessageText:
+//
+//  The caller is dispatching an asynchronous call and cannot
+//  make an outgoing call on behalf of this call.
+//
+#define RPC_E_CANTCALLOUT_INASYNCCALL    0x80010004L
+
+//
+// MessageId: RPC_E_CANTCALLOUT_INEXTERNALCALL
+//
+// MessageText:
+//
+//  It is illegal to call out while inside message filter.
+//
+#define RPC_E_CANTCALLOUT_INEXTERNALCALL 0x80010005L
+
+//
+// MessageId: RPC_E_CONNECTION_TERMINATED
+//
+// MessageText:
+//
+//  The connection terminated or is in a bogus state
+//  and cannot be used any more. Other connections
+//  are still valid.
+//
+#define RPC_E_CONNECTION_TERMINATED      0x80010006L
+
+//
+// MessageId: RPC_E_SERVER_DIED
+//
+// MessageText:
+//
+//  The callee (server [not server application]) is not available
+//  and disappeared; all connections are invalid.  The call may
+//  have executed.
+//
+#define RPC_E_SERVER_DIED                0x80010007L
+
+//
+// MessageId: RPC_E_CLIENT_DIED
+//
+// MessageText:
+//
+//  The caller (client) disappeared while the callee (server) was
+//  processing a call.
+//
+#define RPC_E_CLIENT_DIED                0x80010008L
+
+//
+// MessageId: RPC_E_INVALID_DATAPACKET
+//
+// MessageText:
+//
+//  The data packet with the marshalled parameter data is incorrect.
+//
+#define RPC_E_INVALID_DATAPACKET         0x80010009L
+
+//
+// MessageId: RPC_E_CANTTRANSMIT_CALL
+//
+// MessageText:
+//
+//  The call was not transmitted properly; the message queue
+//  was full and was not emptied after yielding.
+//
+#define RPC_E_CANTTRANSMIT_CALL          0x8001000AL
+
+//
+// MessageId: RPC_E_CLIENT_CANTMARSHAL_DATA
+//
+// MessageText:
+//
+//  The client (caller) cannot marshall the parameter data - low memory, etc.
+//
+#define RPC_E_CLIENT_CANTMARSHAL_DATA    0x8001000BL
+
+//
+// MessageId: RPC_E_CLIENT_CANTUNMARSHAL_DATA
+//
+// MessageText:
+//
+//  The client (caller) cannot unmarshall the return data - low memory, etc.
+//
+#define RPC_E_CLIENT_CANTUNMARSHAL_DATA  0x8001000CL
+
+//
+// MessageId: RPC_E_SERVER_CANTMARSHAL_DATA
+//
+// MessageText:
+//
+//  The server (callee) cannot marshall the return data - low memory, etc.
+//
+#define RPC_E_SERVER_CANTMARSHAL_DATA    0x8001000DL
+
+//
+// MessageId: RPC_E_SERVER_CANTUNMARSHAL_DATA
+//
+// MessageText:
+//
+//  The server (callee) cannot unmarshall the parameter data - low memory, etc.
+//
+#define RPC_E_SERVER_CANTUNMARSHAL_DATA  0x8001000EL
+
+//
+// MessageId: RPC_E_INVALID_DATA
+//
+// MessageText:
+//
+//  Received data is invalid; could be server or client data.
+//
+#define RPC_E_INVALID_DATA               0x8001000FL
+
+//
+// MessageId: RPC_E_INVALID_PARAMETER
+//
+// MessageText:
+//
+//  A particular parameter is invalid and cannot be (un)marshalled.
+//
+#define RPC_E_INVALID_PARAMETER          0x80010010L
+
+//
+// MessageId: RPC_E_CANTCALLOUT_AGAIN
+//
+// MessageText:
+//
+//  There is no second outgoing call on same channel in DDE conversation.
+//
+#define RPC_E_CANTCALLOUT_AGAIN          0x80010011L
+
+//
+// MessageId: RPC_E_SERVER_DIED_DNE
+//
+// MessageText:
+//
+//  The callee (server [not server application]) is not available
+//  and disappeared; all connections are invalid.  The call did not execute.
+//
+#define RPC_E_SERVER_DIED_DNE            0x80010012L
+
+//
+// MessageId: RPC_E_SYS_CALL_FAILED
+//
+// MessageText:
+//
+//  System call failed.
+//
+#define RPC_E_SYS_CALL_FAILED            0x80010100L
+
+//
+// MessageId: RPC_E_OUT_OF_RESOURCES
+//
+// MessageText:
+//
+//  Could not allocate some required resource (memory, events, ...)
+//
+#define RPC_E_OUT_OF_RESOURCES           0x80010101L
+
+//
+// MessageId: RPC_E_ATTEMPTED_MULTITHREAD
+//
+// MessageText:
+//
+//  Attempted to make calls on more than one thread in single threaded mode.
+//
+#define RPC_E_ATTEMPTED_MULTITHREAD      0x80010102L
+
+//
+// MessageId: RPC_E_NOT_REGISTERED
+//
+// MessageText:
+//
+//  The requested interface is not registered on the server object.
+//
+#define RPC_E_NOT_REGISTERED             0x80010103L
+
+//
+// MessageId: RPC_E_FAULT
+//
+// MessageText:
+//
+//  RPC could not call the server or could not return the results of calling the server.
+//
+#define RPC_E_FAULT                      0x80010104L
+
+//
+// MessageId: RPC_E_SERVERFAULT
+//
+// MessageText:
+//
+//  The server threw an exception.
+//
+#define RPC_E_SERVERFAULT                0x80010105L
+
+//
+// MessageId: RPC_E_CHANGED_MODE
+//
+// MessageText:
+//
+//  Cannot change thread mode after it is set.
+//
+#define RPC_E_CHANGED_MODE               0x80010106L
+
+//
+// MessageId: RPC_E_INVALIDMETHOD
+//
+// MessageText:
+//
+//  The method called does not exist on the server.
+//
+#define RPC_E_INVALIDMETHOD              0x80010107L
+
+//
+// MessageId: RPC_E_DISCONNECTED
+//
+// MessageText:
+//
+//  The object invoked has disconnected from its clients.
+//
+#define RPC_E_DISCONNECTED               0x80010108L
+
+//
+// MessageId: RPC_E_RETRY
+//
+// MessageText:
+//
+//  The object invoked chose not to process the call now.  Try again later.
+//
+#define RPC_E_RETRY                      0x80010109L
+
+//
+// MessageId: RPC_E_SERVERCALL_RETRYLATER
+//
+// MessageText:
+//
+//  The message filter indicated that the application is busy.
+//
+#define RPC_E_SERVERCALL_RETRYLATER      0x8001010AL
+
+//
+// MessageId: RPC_E_SERVERCALL_REJECTED
+//
+// MessageText:
+//
+//  The message filter rejected the call.
+//
+#define RPC_E_SERVERCALL_REJECTED        0x8001010BL
+
+//
+// MessageId: RPC_E_INVALID_CALLDATA
+//
+// MessageText:
+//
+//  A call control interfaces was called with invalid data.
+//
+#define RPC_E_INVALID_CALLDATA           0x8001010CL
+
+//
+// MessageId: RPC_E_CANTCALLOUT_ININPUTSYNCCALL
+//
+// MessageText:
+//
+//  An outgoing call cannot be made since the application is dispatching an input-synchronous call.
+//
+#define RPC_E_CANTCALLOUT_ININPUTSYNCCALL 0x8001010DL
+
+//
+// MessageId: RPC_E_WRONG_THREAD
+//
+// MessageText:
+//
+//  The application called an interface that was marshalled for a different thread.
+//
+#define RPC_E_WRONG_THREAD               0x8001010EL
+
+//
+// MessageId: RPC_E_THREAD_NOT_INIT
+//
+// MessageText:
+//
+//  CoInitialize has not been called on the current thread.
+//
+#define RPC_E_THREAD_NOT_INIT            0x8001010FL
+
+//
+// MessageId: RPC_E_UNEXPECTED
+//
+// MessageText:
+//
+//  An internal error occurred.
+//
+#define RPC_E_UNEXPECTED                 0x8001FFFFL
+
+#endif // _WINERROR_

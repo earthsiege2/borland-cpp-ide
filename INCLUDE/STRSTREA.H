@@ -3,9 +3,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1990, 1993 by Borland International
+ *      Copyright (c) 1990, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -25,13 +25,29 @@
 #include <iostream.h>
 #endif
 
-#pragma option -Vo-
-#if defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-
-#endif
+
+#if !defined(RC_INVOKED)
 
 #pragma option -a-
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po-     // disable Object data calling convention
+#endif
+#endif
+
+#if !defined(__TINY__)
 #pragma option -RT
+#endif
+
+#pragma option -Vo-
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 _CLASSDEF(strstreambuf)
 _CLASSDEF(strstreambase)
@@ -129,12 +145,28 @@ public:
 inline char _FAR * _RTLENTRY strstream::str()
                 { return strstreambase::rdbuf()->str(); }
 
-#pragma option -Vo.
-#if defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__) 
-#pragma option -po.
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
 
+#pragma option -Vo.
+
+#if !defined(__TINY__)
 #pragma option -RT.
+#endif
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po.     // restore Object data calling convention
+#endif
+#endif
+
 #pragma option -a.  /* restore default packing */
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __STRSTREAM_H */

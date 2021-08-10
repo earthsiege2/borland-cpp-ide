@@ -1,19 +1,20 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\gadgetwi.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Basic behavior for a class owning tiled gadgets.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_GADGETWI_H)
-#define __OWL_GADGETWI_H
+#if !defined(OWL_GADGETWI_H)
+#define OWL_GADGETWI_H
 
-#if !defined(__OWL_WINDOW_H)
-  #include "owl\window.h"
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
 #endif
-#if !defined(__OWL_GADGET_H)
-  #include "owl\gadget.h"
+#if !defined(OWL_GADGET_H)
+# include <owl/gadget.h>
 #endif
-#if !defined(__OWL_GDIOBJEC_H)
-  #include "owl\gdiobjec.h"
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
 #endif
 
 //
@@ -27,8 +28,8 @@
 class _OWLCLASS TGadgetWindowFont : public TFont {
   public:
     TGadgetWindowFont(int  pointSize = 10,
-                      BOOL bold = FALSE,
-                      BOOL italic = FALSE);
+                      bool bold = false,
+                      bool italic = false);
 };
 
 //
@@ -63,7 +64,7 @@ class _OWLCLASS TGadgetWindow : public TWindow {
     // override TWindow member function and choose initial size if shrink
     // wrapping was requested
     //
-    BOOL          Create();
+    bool          Create();
 
     //
     // changes the margins and initiates a layout session
@@ -74,14 +75,14 @@ class _OWLCLASS TGadgetWindow : public TWindow {
     virtual void  SetDirection(TTileDirection direction);
   
     TFont&        GetFont() {return *Font;}
-    UINT          GetFontHeight() const {return FontHeight;}
+    uint          GetFontHeight() const {return FontHeight;}
 
     //
     // Gadgets always get notified when a left button down occurs within their
     // bounding rectangle. if you want mouse drags and a mouse up then you
     // need to capture the mouse
     //
-    BOOL          GadgetSetCapture(TGadget& gadget);     // fails if already captured
+    bool          GadgetSetCapture(TGadget& gadget);     // fails if already captured
     void          GadgetReleaseCapture(TGadget& gadget); // ignores other gadgets
 
     //
@@ -92,7 +93,7 @@ class _OWLCLASS TGadgetWindow : public TWindow {
                     {HintMode = hintMode;}
     THintMode     GetHintMode() {return HintMode;}
 
-    void          SetHintCommand(int id);  // -1 to clear
+    void          SetHintCommand(int id);  // (id <= 0) to clear
 
     enum TPlacement {Before, After};
 
@@ -120,7 +121,7 @@ class _OWLCLASS TGadgetWindow : public TWindow {
     //
     // iterates over the Gadgets invoking their CommandEnable() member function
     //
-    BOOL          IdleAction(long idleCount);
+    bool          IdleAction(long idleCount);
 
     //
     // sent by a Gadget when its size has changed. initiates a layout session
@@ -140,7 +141,7 @@ class _OWLCLASS TGadgetWindow : public TWindow {
     //
     // simply sets the corresponding member data
     //
-    void          SetShrinkWrap(BOOL shrinkWrapWidth, BOOL shrinkWrapHeight);
+    void          SetShrinkWrap(bool shrinkWrapWidth, bool shrinkWrapHeight);
 
     TGadget*      FirstGadget() const {return Gadgets;}
     TGadget*      NextGadget(TGadget& gadget) const {return gadget.Next;}
@@ -154,12 +155,12 @@ class _OWLCLASS TGadgetWindow : public TWindow {
     TGadget*        Capture;        // Gadget that has captured the mouse
     TGadget*        AtMouse;        // Last Gadget at mouse position
     TMargins        Margins;
-    UINT            NumGadgets       : 8;
-    UINT            FontHeight       : 8;
-    BOOL            ShrinkWrapWidth  : 8;
-    BOOL            ShrinkWrapHeight : 8;
-    BOOL            WideAsPossible   : 8;
-    BOOL            DirtyLayout      : 8;
+    uint            NumGadgets       : 8;
+    uint            FontHeight       : 8;
+    bool            ShrinkWrapWidth  : 8;
+    bool            ShrinkWrapHeight : 8;
+    uint            WideAsPossible   : 8;  // # of "WideAsPossible" gadgets
+    bool            DirtyLayout      : 8;
     TTileDirection  Direction        : 8;
     THintMode       HintMode         : 8;
 
@@ -169,7 +170,7 @@ class _OWLCLASS TGadgetWindow : public TWindow {
     // override this to implement a specific look (e.g. separator line,
     // raised, ...)
     //
-    virtual void  PaintGadgets(TDC& dc, BOOL erase, TRect& rect);
+    virtual void  PaintGadgets(TDC& dc, bool erase, TRect& rect);
 
     //
     // if shrink wrapping was requested returns the size needed to accomodate
@@ -218,18 +219,19 @@ class _OWLCLASS TGadgetWindow : public TWindow {
     //
     // selects the font into the DC and calls PaintGadgets()
     //
-    void          Paint(TDC& dc, BOOL erase, TRect& rect);
+    void          Paint(TDC& dc, bool erase, TRect& rect);
 
     virtual void  PositionGadget(TGadget* previous, TGadget* next, TPoint& point);
 
     //
     // message response functions
     //
-    void          EvLButtonDown(UINT modKeys, TPoint& point);
-    void          EvLButtonUp(UINT modKeys, TPoint& point);
-    void          EvMouseMove(UINT modKeys, TPoint& point);
-    HBRUSH        EvCtlColor(HDC hDC, HWND /*hWndChild*/, UINT /*ctlType*/);
-    void          EvSize(UINT sizeType, TSize& size);
+    void          EvLButtonDown(uint modKeys, TPoint& point);
+    void          EvLButtonUp(uint modKeys, TPoint& point);
+    void          EvLButtonDblClk(uint modKeys, TPoint& point);
+    void          EvMouseMove(uint modKeys, TPoint& point);
+    HBRUSH        EvCtlColor(HDC hDC, HWND /*hWndChild*/, uint /*ctlType*/);
+    void          EvSize(uint sizeType, TSize& size);
     void          EvSysColorChange();
 
   private:
@@ -248,4 +250,4 @@ class _OWLCLASS TGadgetWindow : public TWindow {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_GADGETWI_H
+#endif  // OWL_GADGETWI_H

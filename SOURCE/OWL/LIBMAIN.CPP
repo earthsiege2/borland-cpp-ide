@@ -1,42 +1,93 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\libmain.cpp
-//   Implementation of LibMain()
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
+//   Default implementation of LibMain() for user DLLs
 //----------------------------------------------------------------------------
-#undef _BUILDOWLDLL
-#include <owl\owlpch.h>
-#include <owl\module.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
 
-DIAG_DECLARE_GROUP(OwlApp);        // General Application diagnostic group
+DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMain, true, 0);
 
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
 
-BOOL WINAPI
-DllEntryPoint(HINSTANCE hInstance, DWORD reason, LPVOID)
+int WINAPI
+DllEntryPoint(HINSTANCE hInstance, uint32 reason, LPVOID)
 {
-  TRACEX(OwlApp, 0, "DllEntryPoint(" << hInstance << ", " << reason << ", " <<
+  TRACEX(OwlMain, 0, "DllEntryPoint(" << hInstance << ", " << reason << ", " <<
          ") called");
   
   switch (reason) {
     case DLL_PROCESS_ATTACH:
-      if (!::Module)
-        ::Module = new TModule(0, hInstance);
+      // If no global ::Module ptr exists yet, provide a default now
+      //
+      if (!::Module) {
+        static TModule module(0, hInstance);
+        ::Module = &module;
+      }
+      TApplication::SetWinMainParams(hInstance, 0, 0, SW_SHOWNORMAL);
+ 
+      TRY {
+        int retVal = OwlMain(0, 0);
+        TRACEX(OwlMain, 0, "DllEntryPoint() returns " << retVal);
+        return retVal == 0;
+      }
+      CATCH( (xmsg& x) {return ::HandleGlobalException(x, 0) == 0;} )
   }
-  return TRUE;
+  return true;
 }
 
-#else   // !defined(__WIN32__)
+#else   // !defined(BI_PLAT_WIN32)
+
+//
+// Make sure that the DLLs we use stay in memory while we perform static
+// destructor cleanup
+//
+#if defined(_OWLDLL)
+
+static HINSTANCE BidsInst;
+static HINSTANCE OwlInst;
+void lockDlls()
+{
+  BidsInst = ::LoadLibrary("BIDS45.DLL");  // load lowlevel to hilevel order
+  OwlInst = ::LoadLibrary("OWL250.DLL");
+}
+#pragma startup lockDlls 0
+
+void unlockDlls()
+{
+  ::FreeLibrary(OwlInst);  // unload hilevel to lowlevel order (reversed)
+  ::FreeLibrary(BidsInst);
+}
+#pragma exit unlockDlls 0
+
+#endif
 
 int
 FAR PASCAL
 LibMain(HINSTANCE   hInstance,
-        WORD      /*wDataSeg*/,
-        WORD      /*cbHeapSize*/,
-        char far* /*cmdLine*/)
+        uint16    /*wDataSeg*/,
+        uint16    /*cbHeapSize*/,
+        char far*   cmdLine)
 {
-  TRACEX(OwlApp, 0, "LibMain(" << (unsigned)hInstance << ",,,) called");
-  ::Module = new TModule(0, hInstance);
-  return TRUE;
+  TRACEX(OwlMain, 0, "LibMain(" << hex << uint(hInstance) << ", " << 
+                                  TResId(cmdLine)  << ") called");
+
+  // If no global ::Module ptr exists yet, provide a default now
+  //
+  if (!::Module) {
+    static TModule module(0, hInstance);
+    ::Module = &module;
+  }
+
+  TApplication::SetWinMainParams(hInstance, 0, cmdLine, SW_SHOWNORMAL);
+
+  TRY {
+    int retVal = OwlMain(0, 0);
+    TRACEX(OwlMain, 0, "LibMain() returns " << retVal);
+    return retVal == 0;
+  }
+  CATCH( (xmsg& x) {return ::HandleGlobalException(x, 0) == 0;} )
 }
 
-#endif  // defined(__WIN32__)
+#endif  // defined(BI_PLAT_WIN32)

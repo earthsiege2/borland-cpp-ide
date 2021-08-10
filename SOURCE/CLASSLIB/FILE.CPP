@@ -1,30 +1,43 @@
-/*--------------------------------------------------------------------*/
-/*                                                                    */
-/*  FILE.CPP                                                          */
-/*                                                                    */
-/*  Copyright (c) Borland International 1993                          */
-/*  All Rights Reserved                                               */
-/*                                                                    */
-/*--------------------------------------------------------------------*/
+/*------------------------------------------------------------------------*/
+/*                                                                        */
+/*  FILE.CPP                                                              */
+/*                                                                        */
+/*  Copyright (c) 1993, 1994 Borland International                        */
+/*  All Rights Reserved                                                   */
+/*                                                                        */
+/*------------------------------------------------------------------------*/
 
 #if !defined( __LIMITS_H )
 #include <limits.h>
-#endif	// __LIMITS_H
+#endif
 
 #if !defined( __DIR_H )
 #include <dir.h>
-#endif  // __DIR_H
+#endif
 
 #if !defined( __DOS_H )
 #include <dos.h>
-#endif  // __DOS_H
+#endif
 
 #if !defined( __IOSTREAM_H )
 #include <iostream.h>
-#endif  // __IOSTREAM_H
+#endif
 
-#if !defined( __CLASSLIB_FILE_H )
-#include "classlib\file.h"
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
+
+#if defined( BI_PLAT_OS2 ) && !defined( __OS2_H )
+#define INCL_BASE
+#include <os2.h>
+#endif
+
+#if defined( BI_PLAT_WIN32 ) && !defined( __WINDOWS_H )
+#include <windows.h>
+#endif
+
+#if !defined( CLASSLIB_FILE_H )
+#include <classlib/file.h>
 #endif
 
 int TFile::Open( const char _BIDSFAR *name, uint16 access, uint16 permission )
@@ -56,6 +69,7 @@ long TFile::Length() const
     return ::filelength( Handle );
 }
 
+#if !defined( __OS2__ )
 int TFile::GetStatus( TFileStatus _BIDSFAR & status ) const
 {
     struct ftime ftime;
@@ -63,9 +77,9 @@ int TFile::GetStatus( TFileStatus _BIDSFAR & status ) const
         return 0;
     TDate fileDate( ftime.ft_day, ftime.ft_month, ftime.ft_year+80 );
     status.createTime = TTime( fileDate,
-                                 ftime.ft_hour,
-                                 ftime.ft_min,
-                                 ftime.ft_tsec*2 );
+                               ftime.ft_hour,
+                               ftime.ft_min,
+                               ftime.ft_tsec*2 );
     status.modifyTime = status.createTime;
     status.accessTime = status.createTime;
     status.size = Length();
@@ -73,6 +87,28 @@ int TFile::GetStatus( TFileStatus _BIDSFAR & status ) const
     status.fullName[0] = '\0';
     return 1;
 }
+#else
+
+TTime MakeTTime( FDATE fdate, FTIME ftime )
+{
+    TDate fileDate( fdate.day, fdate.month, fdate.year );
+    return TTime( fileDate, ftime.hours, ftime.minutes, ftime.twosecs*2 );
+}
+
+int TFile::GetStatus( TFileStatus _BIDSFAR& status ) const
+{
+    FILESTATUS stat;
+    if( ::DosQueryFileInfo( Handle, FIL_STANDARD, &stat, sizeof(stat) ) != 0 )
+        return 0;
+    status.createTime = MakeTTime( stat.fdateCreation, stat.ftimeCreation );
+    status.modifyTime = MakeTTime( stat.fdateLastWrite, stat.ftimeLastWrite );
+    status.accessTime = MakeTTime( stat.fdateLastAccess, stat.ftimeLastAccess );
+    status.size = stat.cbFile;
+    status.attribute = stat.attrFile;
+    status.fullName[0] = '\0';
+    return 1;
+}
+#endif
 
 struct dos_ftime
 {
@@ -88,7 +124,9 @@ struct dos_fdate
     unsigned year : 7;
 };
 
-int TFile::GetStatus( const char _BIDSFAR *name, TFileStatus _BIDSFAR & status )
+#if !defined( __OS2__ )
+int TFile::GetStatus( const char _BIDSFAR *name,
+                      TFileStatus _BIDSFAR & status )
 {
     if( ::_fullpath( status.fullName, name, sizeof(status.fullName) ) == 0 )
         {
@@ -122,11 +160,47 @@ int TFile::GetStatus( const char _BIDSFAR *name, TFileStatus _BIDSFAR & status )
     status.attribute = blk.ff_attrib;
     return 1;
 }
+#else
+int TFile::GetStatus( const char _BIDSFAR *name,
+                      TFileStatus _BIDSFAR & status )
+{
+    if( ::_fullpath( status.fullName, name, sizeof(status.fullName) ) == 0 )
+        {
+        status.fullName[0] = '\0';
+        return 0;
+        }
+    const uint16 FA_ALL = FA_RDONLY | FA_HIDDEN | FA_SYSTEM |
+                          FA_LABEL | FA_DIREC | FA_ARCH;
+    HDIR Handle;
+    FILEFINDBUF stat;
+    ULONG count;
+    if( ::DosFindFirst( status.fullName,
+                        &Handle,
+                        FA_ALL,
+                        &stat,
+                        sizeof(stat),
+                        &count,
+                        0 ) != 0 )
+        {
+        status.fullName[0] = '\0';
+        return 0;
+        }
+        
+    status.createTime = MakeTTime( stat.fdateCreation, stat.ftimeCreation );
+    status.modifyTime = MakeTTime( stat.fdateLastWrite, stat.ftimeLastWrite );
+    status.accessTime = MakeTTime( stat.fdateLastAccess, stat.ftimeLastAccess );
+    status.size = stat.cbFile;
+    status.attribute = stat.attrFile;
+    return 1;
+}
+#endif
 
-int TFile::SetStatus( const char _BIDSFAR *name, const TFileStatus _BIDSFAR & status )
+#if !defined( __OS2__ )
+int TFile::SetStatus( const char _BIDSFAR *name,
+                      const TFileStatus _BIDSFAR & status )
 {
     int attr = ::_rtl_chmod( name, 0 );
-    if( attr & FA_RDONLY )
+    if( attr & TFile::RdOnly )
         return 0;
 
     ftime fileTime;
@@ -147,4 +221,45 @@ int TFile::SetStatus( const char _BIDSFAR *name, const TFileStatus _BIDSFAR & st
         return 0;
     return 1;
 }
+#else
 
+FDATE MakeFDATE( TTime time )
+{
+    FDATE fdate;
+    fdate.day = TDate(time).Day();
+    fdate.month = TDate(time).Month();
+    fdate.year = TDate(time).Year();
+    return fdate;
+}
+
+FTIME MakeFTIME( TTime time )
+{
+    FTIME ftime;
+    ftime.hours = time.Hour();
+    ftime.minutes = time.Minute();
+    ftime.twosecs = time.Second()/2;
+    return ftime;
+}
+
+int TFile::SetStatus( const char _BIDSFAR *name,
+                      const TFileStatus _BIDSFAR & status )
+{
+    FILESTATUS stat;
+    stat.fdateCreation = MakeFDATE( status.createTime );
+    stat.ftimeCreation = MakeFTIME( status.createTime );
+    stat.fdateLastAccess = MakeFDATE( status.accessTime );
+    stat.ftimeLastAccess = MakeFTIME( status.accessTime );
+    stat.fdateLastWrite = MakeFDATE( status.modifyTime );
+    stat.ftimeLastWrite = MakeFTIME( status.modifyTime );
+    stat.cbFile = status.size;
+    stat.cbFileAlloc = status.size;
+    stat.attrFile = status.attribute;
+    TFile file( name, ReadWrite | DenyWrite );
+    return ::DosSetFileInfo( file.GetHandle(),
+                             FIL_STANDARD,
+                             &stat,
+                             sizeof(stat) );
+}
+#endif
+
+

@@ -1,0 +1,20 @@
+//----------------------------------------------------------------------------
+// ObjectConnections - (C) Copyright 1994 by Borland International
+//----------------------------------------------------------------------------
+
+#define IDI_1	 1
+#define IDD_HELP 1
+
+#define IDS_NOOPTIONS  10
+#define IDS_TOOMANYOPT 11
+#define IDS_UNKNOWNOPT 12
+#define IDS_MISSINGOPT 13
+#define IDS_NOFINDMOD  14
+#define IDS_NOLOADMOD  15
+#define IDS_NOENTRYPNT 16
+#define IDS_REGFAILURE 17
+#define IDS_TYPELIBERR 18
+#define IDS_INVALIDMOD 19
+#define IDS_CANTLOAD16 20
+#define IDS_CANTLOAD32 21
+#define IDS_MAX        50

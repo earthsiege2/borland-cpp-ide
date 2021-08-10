@@ -1,0 +1,12 @@
+##\\"class [[ClassName]] : " [[ClassDef]]
+##^BOF
+##? ClassDef [[Search1]]
+##Search1 == FALSE
+##:         %\\"[[ClassName]] class definition missing.  "
+##*
+##Search1 == TRUE
+##YPos() [[ClassDefLine]]
+##? " {" [[Search2]]
+##((Search2 == TRUE) && (ClassDefLine == YPos()))
+##:     InsertText(", TAutoBase")
+##*

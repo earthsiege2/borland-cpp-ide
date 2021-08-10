@@ -1,0 +1,13 @@
+[Config]
+BrowseButtons()
+
+[Options]
+Title=AutoCalc Help File
+
+[Map]
+#include <autocalc.hh>
+
+[Files]
+AutoCalc.rtf
+
+

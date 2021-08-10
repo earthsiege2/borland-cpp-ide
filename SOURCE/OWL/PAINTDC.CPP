@@ -1,12 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\dc.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of TPaintDC
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/dc.h>
 
-TPaintDC::TPaintDC(HWND wnd) : TDC()
+TPaintDC::TPaintDC(HWND wnd)
+:
+  TDC()
 {
   Wnd = wnd;
   Handle = ::BeginPaint(Wnd, &Ps);

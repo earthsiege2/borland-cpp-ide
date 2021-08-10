@@ -1,7 +1,5 @@
 /*++ BUILD Version: 0012    // Increment this if a change has global effects
 
-Copyright (c) 1990-1992  Microsoft Corporation
-
 Module Name:
 
     winioctl.h
@@ -14,18 +12,22 @@ Revision History:
 
 --*/
 
-#ifndef __WINIOCTL_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _WINIOCTL_
+#define _WINIOCTL_
 #define __WINIOCTL_H
-
-
-#ifndef __WINBASE_H
-#include <winbase.h>
-#endif
 
 #ifndef _DEVIOCTL_
 #define _DEVIOCTL_
 
-// begin_ntddk begin_nthal
+// begin_ntddk begin_nthal begin_ntifs
 //
 // Define the various device type values.  Note that values used by Microsoft
 // Corporation are in the range 0-32767, and 32768-65535 are reserved for use
@@ -108,7 +110,7 @@ Revision History:
 #define FILE_READ_ACCESS          ( 0x0001 )    // file & pipe
 #define FILE_WRITE_ACCESS         ( 0x0002 )    // file & pipe
 
-// end_ntddk end_nthal
+// end_ntddk end_nthal end_ntifs
 
 #endif // _DEVIOCTL_
 
@@ -128,17 +130,22 @@ Revision History:
 #define IOCTL_DISK_REASSIGN_BLOCKS      CTL_CODE(IOCTL_DISK_BASE, 0x0007, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_DISK_PERFORMANCE          CTL_CODE(IOCTL_DISK_BASE, 0x0008, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DISK_IS_WRITABLE          CTL_CODE(IOCTL_DISK_BASE, 0x0009, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_LOGGING              CTL_CODE(IOCTL_DISK_BASE, 0x000a, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_FORMAT_TRACKS_EX     CTL_CODE(IOCTL_DISK_BASE, 0x000b, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
 //
 // The following device control codes are common for all class drivers.  The
 // functions codes defined here must match all of the other class drivers.
 //
 
-#define IOCTL_DISK_CHECK_VERIFY CTL_CODE(IOCTL_DISK_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_DISK_MEDIA_REMOVAL CTL_CODE(IOCTL_DISK_BASE, 0x0201, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_DISK_EJECT_MEDIA  CTL_CODE(IOCTL_DISK_BASE, 0x0202, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_DISK_LOAD_MEDIA   CTL_CODE(IOCTL_DISK_BASE, 0x0203, METHOD_BUFFERED, FILE_READ_ACCESS)
-
+#define IOCTL_DISK_CHECK_VERIFY     CTL_CODE(IOCTL_DISK_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_DISK_MEDIA_REMOVAL    CTL_CODE(IOCTL_DISK_BASE, 0x0201, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_DISK_EJECT_MEDIA      CTL_CODE(IOCTL_DISK_BASE, 0x0202, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_DISK_LOAD_MEDIA       CTL_CODE(IOCTL_DISK_BASE, 0x0203, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_DISK_RESERVE          CTL_CODE(IOCTL_DISK_BASE, 0x0204, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_DISK_RELEASE          CTL_CODE(IOCTL_DISK_BASE, 0x0205, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_DISK_FIND_NEW_DEVICES CTL_CODE(IOCTL_DISK_BASE, 0x0206, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_DISK_REMOVE_DEVICE    CTL_CODE(IOCTL_DISK_BASE, 0x0207, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 #define IOCTL_DISK_GET_MEDIA_TYPES CTL_CODE(IOCTL_DISK_BASE, 0x0300, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
@@ -243,6 +250,22 @@ typedef WORD   BAD_TRACK_NUMBER;
 typedef WORD   *PBAD_TRACK_NUMBER;
 
 //
+// Define the input buffer structure for the driver, when
+// it is called with IOCTL_DISK_FORMAT_TRACKS_EX.
+//
+
+typedef struct _FORMAT_EX_PARAMETERS {
+   MEDIA_TYPE MediaType;
+   DWORD StartCylinderNumber;
+   DWORD EndCylinderNumber;
+   DWORD StartHeadNumber;
+   DWORD EndHeadNumber;
+   WORD   FormatGapLength;
+   WORD   SectorsPerTrack;
+   WORD   SectorNumber[1];
+} FORMAT_EX_PARAMETERS, *PFORMAT_EX_PARAMETERS;
+
+//
 // The following structure is returned on an IOCTL_DISK_GET_DRIVE_GEOMETRY
 // request and an array of them is returned on an IOCTL_DISK_GET_MEDIA_TYPES
 // request.
@@ -265,7 +288,8 @@ typedef struct _DISK_GEOMETRY {
 typedef struct _PARTITION_INFORMATION {
     LARGE_INTEGER StartingOffset;
     LARGE_INTEGER PartitionLength;
-    LARGE_INTEGER HiddenSectors;
+    DWORD HiddenSectors;
+    DWORD PartitionNumber;
     BYTE  PartitionType;
     BOOLEAN BootIndicator;
     BOOLEAN RecognizedPartition;
@@ -315,8 +339,37 @@ typedef struct _REASSIGN_BLOCKS {
 } REASSIGN_BLOCKS, *PREASSIGN_BLOCKS;
 
 //
+// IOCTL_DISK_MEDIA_REMOVAL disables the mechanism
+// on a SCSI device that ejects media. This function
+// may or may not be supported on SCSI devices that
+// support removable media.
+//
+// TRUE means prevent media from being removed.
+// FALSE means allow media removal.
+//
+
+typedef struct _PREVENT_MEDIA_REMOVAL {
+    BOOLEAN PreventMediaRemoval;
+} PREVENT_MEDIA_REMOVAL, *PPREVENT_MEDIA_REMOVAL;
+
+///////////////////////////////////////////////////////
+//                                                   //
+// The following structures define disk debugging    //
+// capabilities. The IOCTLs are directed to one of   //
+// the two disk filter drivers.                      //
+//                                                   //
+// DISKPERF is a utilty for collecting disk request  //
+// statistics.                                       //
+//                                                   //
+// SIMBAD is a utility for injecting faults in       //
+// IO requests to disks.                             //
+//                                                   //
+///////////////////////////////////////////////////////
+
+//
 // The following structure is exchanged on an IOCTL_DISK_GET_PERFORMANCE
-// request.
+// request. This ioctl collects summary disk request statistics used
+// in measuring performance.
 //
 
 typedef struct _DISK_PERFORMANCE {
@@ -330,18 +383,109 @@ typedef struct _DISK_PERFORMANCE {
 } DISK_PERFORMANCE, *PDISK_PERFORMANCE;
 
 //
-// IOCTL_DISK_MEDIA_REMOVAL disables the mechanism
-// on a SCSI device that ejects media. This function
-// may or may not be supported on SCSI devices that
-// support removable media.
-//
-// TRUE means prevent media from being removed.
-// FALSE means allow media removal.
+// This structure defines the disk logging record. When disk logging
+// is enabled, one of these is written to an internal buffer for each
+// disk request.
 //
 
-typedef struct _PREVENT_MEDIA_REMOVAL {
-    BOOLEAN PreventMediaRemoval;
-} PREVENT_MEDIA_REMOVAL, *PPREVENT_MEDIA_REMOVAL;
+typedef struct _DISK_RECORD {
+   LARGE_INTEGER ByteOffset;
+   LARGE_INTEGER StartTime;
+   LARGE_INTEGER EndTime;
+   PVOID VirtualAddress;
+   DWORD NumberOfBytes;
+   BYTE  DeviceNumber;
+   BOOLEAN ReadRequest;
+} DISK_RECORD, *PDISK_RECORD;
+
+//
+// The following structure is exchanged on an IOCTL_DISK_LOG request.
+// Not all fields are valid with each function type.
+//
+
+typedef struct _DISK_LOGGING {
+    BYTE  Function;
+    PVOID BufferAddress;
+    DWORD BufferSize;
+} DISK_LOGGING, *PDISK_LOGGING;
+
+//
+// Disk logging functions
+//
+// Start disk logging. Only the Function and BufferSize fields are valid.
+//
+
+#define DISK_LOGGING_START    0
+
+//
+// Stop disk logging. Only the Function field is valid.
+//
+
+#define DISK_LOGGING_STOP     1
+
+//
+// Return disk log. All fields are valid. Data will be copied from internal
+// buffer to buffer specified for the number of bytes requested.
+//
+
+#define DISK_LOGGING_DUMP     2
+
+//
+// DISK BINNING
+//
+// DISKPERF will keep counters for IO that falls in each of these ranges.
+// The application determines the number and size of the ranges.
+// Joe Lin wanted me to keep it flexible as possible, for instance, IO
+// sizes are interesting in ranges like 0-4096, 4097-16384, 16385-65536, 65537+.
+//
+
+#define DISK_BINNING          3
+
+//
+// Bin types
+//
+
+typedef enum _BIN_TYPES {
+    RequestSize,
+    RequestLocation
+} BIN_TYPES;
+
+//
+// Bin ranges
+//
+
+typedef struct _BIN_RANGE {
+    LARGE_INTEGER StartValue;
+    LARGE_INTEGER Length;
+} BIN_RANGE, *PBIN_RANGE;
+
+//
+// Bin definition
+//
+
+typedef struct _PERF_BIN {
+    DWORD NumberOfBins;
+    DWORD TypeOfBin;
+    BIN_RANGE BinsRanges[1];
+} PERF_BIN, *PPERF_BIN ;
+
+//
+// Bin count
+//
+
+typedef struct _BIN_COUNT {
+    BIN_RANGE BinRange;
+    DWORD BinCount;
+} BIN_COUNT, *PBIN_COUNT;
+
+//
+// Bin results
+//
+
+typedef struct _BIN_RESULTS {
+    DWORD NumberOfBins;
+    BIN_COUNT BinCounts[1];
+} BIN_RESULTS, *PBIN_RESULTS;
 
 
 #define IOCTL_SERIAL_LSRMST_INSERT      CTL_CODE(FILE_DEVICE_SERIAL_PORT,31,METHOD_BUFFERED,FILE_ANY_ACCESS)
@@ -376,6 +520,11 @@ typedef struct _PREVENT_MEDIA_REMOVAL {
 #define FSCTL_LOCK_VOLUME               CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 6, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_UNLOCK_VOLUME             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 7, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DISMOUNT_VOLUME           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 8, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define FSCTL_MOUNT_DBLS_VOLUME         CTL_CODE(FILE_DEVICE_FILE_SYSTEM,13, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define FSCTL_GET_COMPRESSION           CTL_CODE(FILE_DEVICE_FILE_SYSTEM,15, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define FSCTL_SET_COMPRESSION           CTL_CODE(FILE_DEVICE_FILE_SYSTEM,16, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define FSCTL_READ_COMPRESSION          CTL_CODE(FILE_DEVICE_FILE_SYSTEM,17, METHOD_NEITHER,  FILE_ANY_ACCESS)
+#define FSCTL_WRITE_COMPRESSION         CTL_CODE(FILE_DEVICE_FILE_SYSTEM,18, METHOD_NEITHER,  FILE_ANY_ACCESS)
 
 
 #endif // _WINIOCTL_

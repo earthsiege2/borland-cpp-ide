@@ -1,17 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   include\owl\docview.cpp
-//   Implements classes TDocManager, TDocTemplate
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
+//   Implements class TDocManager
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\docmanag.h>
-#include <owl\docview.rc>
+#include <owl/owlpch.h>
+#include <owl/docmanag.h>
+#include <owl/appdict.h>
+#include <owl/docview.rh>
 #include <string.h>
-#include <dlgs.h>  /* cmb1 for file open dialog box */
-#include <dir.h>   /* MAXEXT for file open dialog default extension */
-
-#define TemplatesSeized ((TDocTemplate*)1)  // template list taken by doc mgr
+#include <dlgs.h>  // cmb1 for file open dialog box
+#include <dir.h>   // MAXEXT for file open dialog default extension
 
 #if defined(SECTION) && SECTION != 1
 DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
@@ -27,40 +27,36 @@ DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlDocView, 1, 0);
 //
 class TPickList : public TWindow {
   public:
-    TPickList(LPCSTR title, TWindow* parent = 0);
-    TPickList(UINT sid, TWindow* parent = 0);
+    TPickList(const char far* title, TWindow* parent);
+    TPickList(uint sid, TWindow* parent);
    ~TPickList();
-    int AddString(LPCSTR str);
-    int Execute();   // returns pick index (1-based), 0 if cancelled
+    int AddString(const char far* str);
+    int Execute();   // returns pick index (1 based), 0 if cancelled
 
   private:
-    LRESULT EvCommand (UINT id, HWND hWndCtl, UINT notifyCode);
+    LRESULT EvCommand(uint id, HWND hWndCtl, uint notifyCode);
+
     HMENU Popup;
-    int Count;
-    int Index;
+    int   Count;
+    int   Index;
 };
 
-LRESULT
-TPickList::EvCommand (UINT id, HWND /* hWndCtl */, UINT /* notifyCode */)
-{
-  WARNX(OwlDocView, id > Count, 0, "TPickList index invalid");
-  Index = id;
-  return 0;
-}
-
-TPickList::TPickList(LPCSTR title, TWindow* parent)
-  : TWindow(parent ? parent : GetApplicationObject()->MainWindow,0,0)
+TPickList::TPickList(const char far* title, TWindow* parent)
+:
+  TWindow(parent, 0, 0),
+  Count(0)
 {
   Popup = ::CreatePopupMenu();
   if (title) {
     ::AppendMenu(Popup, MF_GRAYED, 0, title);
     ::AppendMenu(Popup, MF_SEPARATOR, 0, 0);
   }
-  Count = 0;
 }
 
-TPickList::TPickList(UINT sid, TWindow* parent)
- : TWindow(parent ? parent : GetApplicationObject()->MainWindow,0,0), Count(0)
+TPickList::TPickList(uint sid, TWindow* parent)
+:
+  TWindow(parent, 0, 0),
+  Count(0)
 {
   char buf[256];
 
@@ -78,7 +74,7 @@ TPickList::~TPickList()
 }
 
 int
-TPickList::AddString(LPCSTR str)
+TPickList::AddString(const char far* str)
 {
   ::AppendMenu(Popup, MF_ENABLED, ++Count, str);
   return Count;
@@ -97,90 +93,105 @@ TPickList::Execute()
   Popup = 0;
   return Index;
 }
+
+LRESULT
+TPickList::EvCommand(uint id, HWND /*hWndCtl*/, uint /*notifyCode*/)
+{
+  WARNX(OwlDocView, id > Count, 0, "TPickList index invalid");
+  Index = id;
+  return 0;
+}
+
 //----------------------------------------------------------------------------
-//
-//  class TDocTemplate
-//  ----- ------------
+//  class TDocManager
 //
 
-TDocTemplate::TDocTemplate(LPCSTR desc, LPCSTR filt, LPCSTR dir, LPCSTR ext,
-                           long flags, TModule*& module, TDocTemplate*& rptpl)
-  : Flags(flags),
-    Description(desc ? strnewdup(desc) : 0),
-    FileFilter (filt ? strnewdup(filt) : 0),
-    Directory  (dir  ? strnewdup(dir)  : 0),
-    DefaultExt (ext  ? strnewdup(ext)  : 0),
-    ModulePtr(&module)
+DEFINE_RESPONSE_TABLE (TDocManager)
+  EV_WM_CANCLOSE,
+  EV_WM_PREPROCMENU,
+  EV_WM_WAKEUP,
+  EV_COMMAND(CM_FILENEW,           CmFileNew),
+  EV_COMMAND(CM_FILEOPEN,          CmFileOpen),
+  EV_COMMAND(CM_FILESAVE,          CmFileSave),
+  EV_COMMAND(CM_FILESAVEAS,        CmFileSaveAs),
+  EV_COMMAND(CM_FILEREVERT,        CmFileRevert),
+  EV_COMMAND(CM_FILECLOSE,         CmFileClose),
+  EV_COMMAND(CM_VIEWCREATE,        CmViewCreate),
+  EV_COMMAND_ENABLE(CM_FILENEW,    CeFileNew),
+  EV_COMMAND_ENABLE(CM_FILEOPEN,   CeFileOpen),
+  EV_COMMAND_ENABLE(CM_FILESAVE,   CeFileSave),
+  EV_COMMAND_ENABLE(CM_FILESAVEAS, CeFileSaveAs),
+  EV_COMMAND_ENABLE(CM_FILEREVERT, CeFileRevert),
+  EV_COMMAND_ENABLE(CM_FILECLOSE,  CeFileClose),
+  EV_COMMAND_ENABLE(CM_VIEWCREATE, CeViewCreate),
+END_RESPONSE_TABLE;
+
+TDocManager::TDocManager(int mode, TDocTemplate*& templateHead)
+:
+  Mode(mode),
+  TemplateHead(&templateHead)
 {
-  // link this template into doc manager's template list
-  // if the doc manager is not constructed yet, link into static list
-  // the doc manager will then hook this list into its own chain
-  TDocTemplate** pptpl;
-  if (rptpl == TemplatesSeized) {
-    DocManager = GetApplicationObject()->DocManager;
-    RefCnt = 1;
-    pptpl = &DocManager->TemplateList;
-  } else {
-    pptpl = &rptpl;
-    RefCnt = 0x8001;  // flag as static
+  TDocTemplate* ptpl;
+
+  TemplateList = templateHead;  // catch up with any statics
+  for (ptpl = TemplateList; ptpl; ptpl = ptpl->GetNextTemplate())
+    ptpl->DocManager = this;
+
+  Application = GetApplicationObject();
+
+  // setup backward compatibility entry points
+  //
+  TDocTemplate::SelectSave_ = SelectSave;
+  TDocTemplate::InitDoc_    = InitDoc;
+  TDocTemplate::InitView_   = InitView;
+}
+
+TDocManager::TDocManager(int mode, TApplication* app, TDocTemplate*& templateHead)
+:
+  Mode(mode),
+  Application(app),
+  TemplateHead(&templateHead)
+{
+  TDocTemplate* ptpl;
+
+  TemplateList = templateHead;  // catch up with any statics
+  for (ptpl = TemplateList; ptpl; ptpl = ptpl->GetNextTemplate())
+    ptpl->DocManager = this;
+
+  // setup backward compatibility entry points
+  //
+  TDocTemplate::SelectSave_ = SelectSave;
+  TDocTemplate::InitDoc_    = InitDoc;
+  TDocTemplate::InitView_   = InitView;
+}
+
+TDocManager::~TDocManager()
+{
+  TDocument* doc;
+  while ((doc = DocList.Next(0)) != 0) {
+    if (doc->IsOpen())
+      doc->Close();
+    delete doc;            // removes view, unlinks template and doc manager
+    Application->PumpWaitingMessages();  // force out posted MDI child destroy
   }
-  while (*pptpl)     // put new templates at end of chain
-    pptpl = &(*pptpl)->NextTemplate;
-  NextTemplate = 0;
-  *pptpl = this;
-}
-
-void TDocTemplate::SetFileFilter(const char far* txt)
-{
-  delete FileFilter;
-  FileFilter = txt ? strnewdup(txt) : 0;
-}
-
-void TDocTemplate::SetDescription(const char far* txt)
-{
-  delete Description;
-  Description = txt ? strnewdup(txt) : 0;
-}
-
-void TDocTemplate::SetDirectory(const char far* txt)
-{
-  delete Directory;
-  Directory = txt ? strnewdup(txt) : 0;
-}
-
-void TDocTemplate::SetDirectory(const char far* txt, int len)
-{
-  delete Directory;
-  if (txt && len > 0) {
-    Directory = strncpy(new far char[len+1], txt, len);
-    Directory[len] = 0;
-  } else {
-    Directory = 0;
+  while (TemplateList) {
+    TDocTemplate* ptpl = TemplateList;
+    TemplateList = ptpl->GetNextTemplate();
+    if (ptpl->RefCnt & 0x8000)  // skip over statics
+      ptpl->DocManager = 0;
+    else
+      delete ptpl;
   }
 }
 
-void TDocTemplate::SetDefaultExt(const char far* txt)
-{
-  delete DefaultExt;
-  DefaultExt = txt ? strnewdup(txt) : 0;
-}
-
-TDocTemplate::~TDocTemplate()   // called only when RefCnt goes to 0
-{
-  delete FileFilter;
-  delete Description;
-  delete Directory;
-  delete DefaultExt;
-}
-
-
+//
 //  prompts user to select a document class for a new document
 //  returns the template index used for the selection (1-based), 0 if failure
-
+//
 int
 TDocManager::SelectDocType(TDocTemplate** tpllist, int tplcount)
 {
-  TPickList* pickl = new TPickList(IDS_DOCLIST);
+  TPickList* pickl = new TPickList(IDS_DOCLIST, Application->GetMainWindow());
   while (tplcount--)
     pickl->AddString((*tpllist++)->GetDescription());
   int index = pickl->Execute();
@@ -188,13 +199,14 @@ TDocManager::SelectDocType(TDocTemplate** tpllist, int tplcount)
   return index;
 }
 
+//
 //  prompts user to select a view class for a new view on existing document
 //  returns the template index used for the selection (1-based), 0 if failure
-
+//
 int
 TDocManager::SelectViewType(TDocTemplate** tpllist, int tplcount)
 {
-  TPickList* pickl = new TPickList(IDS_VIEWLIST);
+  TPickList* pickl = new TPickList(IDS_VIEWLIST, Application->GetMainWindow());
   while (tplcount--)
     pickl->AddString((*tpllist++)->GetViewName());
   int index = pickl->Execute();
@@ -207,16 +219,19 @@ TDocManager::SelectViewType(TDocTemplate** tpllist, int tplcount)
 //  under Win32s the OPENFILENAME passed to WM_INITDIALOG is a temporary copy
 //
 struct TplHookData {      // pointer to this struct passed as lCustData
-  TDocTemplate** TplList; // template pointer array
+  long Flags;             // original flags passed to SelectDocPath
+  unsigned long far* DlgFlags;     // pointer to dialog flags in OPENFILENAME
   char far* ExtBuf;       // pointer to buffer holding the default extension
+  TDocTemplate** TplList; // template pointer array
   int InitIndex;          // starting index, ofn.nFilterIndex is inconsistent
+  bool Save;              // true if saving
 };
 
 //
 //  dialog hook function to catch template selection changes
 //
-UINT FAR PASCAL _export
-TplHook(HWND hDlg, UINT msg, UINT wParam, LONG lParam)
+uint CALLBACK __export
+TplHook(HWND hDlg, uint msg, uint wParam, int32 lParam)
 {
   static TplHookData* hookData;  // !!update to store in dialog property
   TDocTemplate** tpllist;
@@ -224,13 +239,13 @@ TplHook(HWND hDlg, UINT msg, UINT wParam, LONG lParam)
   int idx;
   switch(msg) {
     case WM_COMMAND:
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
       if (LOWORD(wParam) != cmb1 || HIWORD(wParam) != CBN_SELCHANGE)
 #else
       if (wParam != cmb1 || HIWORD(lParam) != CBN_SELCHANGE)
 #endif
         return 0;
-      idx = (int)::SendMessage((HWND)(UINT)lParam, CB_GETCURSEL, 0, 0L);
+      idx = (int)::SendMessage((HWND)(uint)lParam, CB_GETCURSEL, 0, 0L);
       break;
 
     case WM_INITDIALOG:
@@ -243,25 +258,26 @@ TplHook(HWND hDlg, UINT msg, UINT wParam, LONG lParam)
       return 0;
   }
   tpllist = hookData->TplList;
+  long flags = tpllist[idx]->GetFlags() | hookData->Flags;
+  if (hookData->Save)
+    flags = (flags | dtNoReadOnly) & ~dtFileMustExist;
+  *hookData->DlgFlags = flags & ~dtProhibited;
   if (tpllist[idx]->GetDefaultExt())
     strcpy(hookData->ExtBuf, tpllist[idx]->GetDefaultExt());
   else
     hookData->ExtBuf[0] = 0;
-  ::SendDlgItemMessage(hDlg, chx1, BM_SETCHECK, 
-                       tpllist[idx]->IsFlagSet(dtReadOnly), 0);
-  ::ShowWindow(GetDlgItem(hDlg, chx1),
-               tpllist[idx]->IsFlagSet(dtHideReadOnly) ? SW_HIDE : SW_SHOW);
+  ::SendDlgItemMessage(hDlg, chx1, BM_SETCHECK, ((flags&dtReadOnly) != 0), 0);
+  ::ShowWindow(GetDlgItem(hDlg, chx1), (flags&dtHideReadOnly)?SW_HIDE:SW_SHOW);
   return 0;  // flag as unprocessed
 }
 
-//
 //  prompts user with one or all templates to select file to open
 //  returns the template index used for the selection (1-based), 0 if failure
 //  this is Windows-specific, using the system-defined file open dialog box
 //
 int
 TDocManager::SelectDocPath(TDocTemplate** tpllist, int tplcount,
-              LPSTR path, int buflen, long flags, BOOL save)
+              char far* path, int buflen, long flags, bool save)
 {
   char extbuf[MAXEXT-1];       // writable buffer for default file extension
   OPENFILENAME ofn;            // local openfilename structure
@@ -271,7 +287,9 @@ TDocManager::SelectDocPath(TDocTemplate** tpllist, int tplcount,
   memset(&ofn, 0, sizeof(ofn));
   TDocTemplate* ptpl;
   TProcInstance TplHookProcInstance((FARPROC)TplHook);
-  // concatenate description and filters into a single string
+
+  // Concatenate description and filters into a single string
+  //
   for (len=2, count=0; count < tplcount; count++) {
     ptpl = tpllist[count];
     len += (strlen(ptpl->GetFileFilter())+2); // space for two null separators
@@ -284,67 +302,77 @@ TDocManager::SelectDocPath(TDocTemplate** tpllist, int tplcount,
     if ((len = strlen(ptpl->GetDescription())) != 0) {
       strcpy(pbuf, ptpl->GetDescription());
       pbuf += len + 1;
-    } else {
+    }
+    else {
       *pbuf++ = 0;
     }
-    len = strlen(ptpl->GetFileFilter());
     strcpy(pbuf, ptpl->GetFileFilter());
-    pbuf += len + 1;
+    pbuf += strlen(pbuf) + 1;
   }
   *pbuf = 0;              // double null to signify end
+
   // set selection to previously selected template if present
+  //
   for (index = count = 0; count < tplcount; count++)
     if (tpllist[count]->IsFlagSet(dtSelected)) {
       index = count;
       break;
     }
-  struct TplHookData hookData = {tpllist, extbuf, index};
+
+  struct TplHookData hookData = {flags,&ofn.Flags,extbuf,tpllist,index,save};
   ofn.nFilterIndex = index + 1; // Note: Windows *might* decrement this by one
   ofn.lpstrInitialDir = tpllist[index]->GetDirectory();
   ofn.lpstrDefExt = (LPCSTR)&extbuf;  // receives string from hook function
   ofn.lStructSize = sizeof(OPENFILENAME);
-  ofn.hwndOwner = GetApplicationObject()->MainWindow->HWindow;
+  ofn.hwndOwner = Application->GetMainWindow()->HWindow;
   ofn.lpstrFilter = filtbuf;
   ofn.lpstrFile = path;
   ofn.nMaxFile = buflen;
-  ofn.Flags = (flags & ~dtProhibited) | OFN_ENABLEHOOK/* | OFN_NOCHANGEDIR */;
-  ofn.lCustData = (LPARAM)&hookData;   
+  ofn.Flags = OFN_ENABLEHOOK /* | OFN_NOCHANGEDIR */;
+  ofn.lCustData = (LPARAM)&hookData;
   (DLGPROC)ofn.lpfnHook = (DLGPROC)(FARPROC)TplHookProcInstance;
-  GetApplicationObject()->EnableCtl3dAutosubclass(TRUE);
-  if ((save ? ::GetSaveFileName(&ofn) : ::GetOpenFileName(&ofn)) == 0){
-    DWORD err = ::CommDlgExtendedError();  // temp for debugging use
+
+  Application->EnableCtl3dAutosubclass(true);
+
+  if ((save ? ::GetSaveFileName(&ofn) : ::GetOpenFileName(&ofn)) == 0) {
+    uint32 err = ::CommDlgExtendedError();  // temp for debugging use
     if (err != 0)
       TRACEX(OwlDocView, 0, "OpenFileName error:" << err);
     ofn.nFilterIndex = 0;
-  } else {
-    // set flag to remember template which was selected
+  }
+  else {
+    TDocument* doc;
+    if (ofn.lpstrFile && (doc = FindDocument(ofn.lpstrFile)) != 0) {
+      PostDocError(*doc, IDS_DUPLICATEDOC);
+      return 0;
+    }
+
+    // Set flag to remember template which was selected
+    //
     for (index=(int)ofn.nFilterIndex-1, count=0; count < tplcount; count++) {
       if (count == index)
         tpllist[count]->SetFlag(dtSelected);
       else
         tpllist[count]->ClearFlag(dtSelected);
     }
-    // update template with directory from dialog if flag set
+    // Update template with directory from dialog if flag set
+    //
     ptpl = tpllist[(int)ofn.nFilterIndex - 1];
     if (ofn.nFileOffset && (ptpl->IsFlagSet(dtUpdateDir))
                         && (ptpl->GetDirectory()==0
          || memcmp(ptpl->GetDirectory(), ofn.lpstrFile,ofn.nFileOffset) != 0))
       ptpl->SetDirectory(ofn.lpstrFile, ofn.nFileOffset);
   }
-  delete filtbuf;
-  GetApplicationObject()->EnableCtl3dAutosubclass(FALSE);
+  delete [] filtbuf;
+  Application->EnableCtl3dAutosubclass(false);
   return (int)ofn.nFilterIndex;
 }
 
 void
 TDocManager::AttachTemplate(TDocTemplate& tpl)
 {
-  TDocTemplate** pptpl = &TemplateList;
-  while (*pptpl)     // put new templates at end of chain
-    pptpl = &(*pptpl)->NextTemplate;
-  tpl.NextTemplate = 0;
   tpl.DocManager = this;
-  *pptpl = &tpl;
+  TDocTemplate::AddLink((TRegLink*&)TemplateList, tpl);
 }
 
 void
@@ -352,40 +380,41 @@ TDocManager::DeleteTemplate(TDocTemplate& tpl)
 {
   if (tpl.RefCnt & 0x8000) // check for static templates
     return;
-  if (!tpl.DocManager)    // check if has owner           
+  if (!tpl.DocManager)    // check if has owner
     return;
-  TDocTemplate** tpllist = &tpl.DocManager->TemplateList;
-  for ( ; *tpllist; tpllist = &(*tpllist)->NextTemplate) {
-    if (*tpllist == &tpl) {
-      *tpllist = tpl.NextTemplate; // remove from application list
-      UnRefTemplate(tpl);  // will delete unless documents still reference it
-      return;
-    }
+
+  if (TDocTemplate::RemoveLink((TRegLink*&)TemplateList, tpl)) {
+    UnRefTemplate(tpl);  // will delete unless documents still reference it
+    return;
   }
   TRACEX(OwlDocView, 0, "TDocManager::DeleteTemplate(), not in app list");
 }
 
-//
-//  initialize document using a specific doc template
+//  initialize document using its specific doc template
 //  prompts for pathname if none supplied and not creating a new document
 //
 TDocument*
-TDocTemplate::InitDoc(TDocument* doc, LPCSTR path, long flags)
+TDocManager::InitDoc(TDocument* doc, const char far* path, long flags)
 {
-  char filepath[256];
-  if (!doc)
-    return doc;       // in case new TDocument failed
-  flags ^= Flags;     // alter template's flags using caller's mask       
+  TDocTemplate* tpl = doc->GetTemplate();
+  if (!tpl)
+    return 0;
+  flags ^= tpl->GetFlags();     // alter template's flags using caller's mask
   if (flags & dtNewDoc) {
     doc->SetDocPath(0);
-  } else {
+    if (!doc->InitDoc()) { // Give doc a chance to do its own initialization
+      PostDocError(*doc, IDS_UNABLEOPEN);
+      delete doc;
+      return 0;
+    }
+  }
+  else {
     if (!path) {
-      if (!FileFilter)
+      char filepath[256];
+      if (!tpl->GetFileFilter())
         return 0;
       filepath[0] = 0;    // no initial file path
-      TDocTemplate* ptpl = this;
-      int index = doc->DocManager->SelectDocPath(&ptpl, 1,
-                                filepath, sizeof(filepath), flags|Flags);
+      int index = SelectDocPath(&tpl, 1, filepath, sizeof(filepath), flags);
       if (!index) {
         delete doc;
         return 0;
@@ -393,18 +422,22 @@ TDocTemplate::InitDoc(TDocument* doc, LPCSTR path, long flags)
       path = filepath;
     }
     doc->SetDocPath(path);
+    if (!doc->InitDoc()) { // Give doc a chance to do its own initialization
+      PostDocError(*doc, IDS_UNABLEOPEN);
+      delete doc;
+      return 0;
+    }
 
     if ((flags & dtAutoOpen)
-    && !doc->Open((flags & dtNoReadOnly) ? ofReadWrite : ofRead)) {
-      doc->DocManager->PostDocError(*doc, IDS_UNABLEOPEN);
+        && !doc->Open((flags & dtNoReadOnly) ? ofReadWrite : ofRead)) {
+      PostDocError(*doc, IDS_UNABLEOPEN);
       delete doc;
       return 0;
     }
   }
-  doc->SetTemplate(this);
-  doc->DocManager->PostEvent(dnCreate, *doc);
+  PostEvent(dnCreate, *doc);
   if (!(flags & dtNoAutoView)) {
-    if (!(CreateView(*doc, flags))) {
+    if (!doc->InitView(tpl->ConstructView(*doc))) {
       if (flags & dtAutoDelete) {
         if (doc->IsOpen())
           doc->Close();
@@ -416,108 +449,67 @@ TDocTemplate::InitDoc(TDocument* doc, LPCSTR path, long flags)
   return doc;
 }
 
-BOOL
-TDocTemplate::SelectSave(TDocument& doc)
+//  create and initialize document using a specific doc template
+//
+TDocument*
+TDocManager::CreateDoc(TDocTemplate* tpl, const char far* path,
+                       TDocument* parent, long flags)
 {
+  if (!tpl)
+    return 0;
+
+  TDocument dummyDoc(this);
+  if (parent == 0)
+    parent = &dummyDoc;
+
+  TDocument* doc = tpl->ConstructDoc(parent);
+  if (!doc)
+    return 0;
+  doc->SetTemplate(tpl);
+  return InitDoc(doc, path, flags);
+}
+
+TView*
+TDocManager::CreateView(TDocument& doc)
+{
+  return doc.InitView(doc.GetTemplate()->ConstructView(doc)); // tests view==0
+}
+
+bool
+TDocManager::SelectSave(TDocument& doc)
+{
+  TDocTemplate* ptpl = doc.GetTemplate();
+  if (!ptpl || !ptpl->GetFileFilter())
+    return false;
   char filepath[256];
-  if (!FileFilter)
-    return FALSE;
   if (doc.GetDocPath())
     strcpy(filepath, doc.GetDocPath());
   else
     filepath[0] = 0;    // no initial file path
-  TDocTemplate* ptpl = this;
-  int index = doc.DocManager->SelectDocPath(&ptpl,1, filepath,sizeof(filepath),
-                            (Flags|dtNoReadOnly)&~dtFileMustExist, TRUE);
-  return index ? doc.SetDocPath(filepath) : FALSE;
-}
-
-TView*
-TDocTemplate::InitView(TView* view)
-{
-  if (!view)   // test in case new TView failed
-    return 0;
-  return view->GetDocument().InitView(view);
-}
-
-//
-//  class TDocManager
-//  ----- -----------
-//
-
-DEFINE_RESPONSE_TABLE (TDocManager)
-  EV_WM_CANCLOSE,
-  EV_WM_PREPROCMENU,
-  EV_COMMAND(CM_FILENEW,           CmFileNew),
-  EV_COMMAND(CM_FILEOPEN,          CmFileOpen),
-  EV_COMMAND(CM_FILESAVE,          CmFileSave),
-  EV_COMMAND(CM_FILESAVEAS,        CmFileSaveAs),
-  EV_COMMAND(CM_FILEREVERT,        CmFileRevert),
-  EV_COMMAND(CM_FILECLOSE,         CmFileClose),
-  EV_COMMAND(CM_VIEWCREATE,        CmViewCreate),
-  EV_COMMAND_ENABLE(CM_FILENEW,    CmEnableNew),
-  EV_COMMAND_ENABLE(CM_FILEOPEN,   CmEnableOpen),
-  EV_COMMAND_ENABLE(CM_FILESAVE,   CmEnableSave),
-  EV_COMMAND_ENABLE(CM_FILESAVEAS, CmEnableSaveAs),
-  EV_COMMAND_ENABLE(CM_FILEREVERT, CmEnableRevert),
-  EV_COMMAND_ENABLE(CM_FILECLOSE,  CmEnableClose),
-  EV_COMMAND_ENABLE(CM_VIEWCREATE, CmEnableCreate),
-END_RESPONSE_TABLE;
-
-TDocManager::TDocManager(int mode, TDocTemplate*& templateHead)
-            : Mode(mode), TemplateHead(&templateHead)
-{
-  TDocTemplate* ptpl;
-
-  if (templateHead != TemplatesSeized) {
-    TemplateList = templateHead;  // catch up with any statics
-    templateHead = TemplatesSeized;
-  }
-  for (ptpl = TemplateList; ptpl; ptpl = ptpl->NextTemplate) {
-    ptpl->DocManager = this;
-    ptpl->RefCnt |= 0x8000;       // flag as static
-  }
-  Application = GetApplicationObject();
-}
-
-TDocManager::~TDocManager()
-{
-  TDocument* pdoc = 0;
-  TDocTemplate* ptpl;
-  while ((pdoc = DocList.Next(pdoc)) != 0) {
-    if (pdoc->IsOpen())
-      pdoc->Close();
-    delete pdoc;            // removes view, unlinks template and doc manager
-    Application->PumpWaitingMessages();  // force out posted MDI child destroy
-  }
-  for (ptpl=TemplateList; ptpl != 0 ; ptpl = ptpl->NextTemplate) {
-    if (ptpl->RefCnt & 0x8000)  // skip over statics
-      ptpl->DocManager = 0;
-    else
-      delete ptpl;
-  }
-  *TemplateHead = TemplateList;  // restore for next DocManager
+  int index = SelectDocPath(&ptpl,1, filepath,sizeof(filepath), 0, true);
+  return index ? doc.SetDocPath(filepath) : false;
 }
 
 TDocument*
 TDocManager::FindDocument(const char far* path)
 {
-  TDocument* pdoc = 0;
-  while ((pdoc = DocList.Next(pdoc)) != 0)
+  TDocument* doc = 0;
+  while ((doc = DocList.Next(doc)) != 0)
     if (path) {
-      if (pdoc->GetDocPath() && strcmp(pdoc->GetDocPath(), path) == 0)
-        break;
-    } else {
-      if (pdoc->GetDocPath() == 0)
+      if (doc->GetDocPath() && strcmp(doc->GetDocPath(), path) == 0)
         break;
     }
-  return pdoc;
+    else {
+      if (doc->GetDocPath() == 0)
+        break;
+    }
+  return doc;
 }
 
 void
 TDocManager::PostEvent(int id, TDocument& doc)
 {
-  TWindow* win = Application->MainWindow;
+  TWindow* win = Application->GetMainWindow();
   if (win && win->HWindow)
     win->SendMessage(WM_OWLDOCUMENT, id, (LPARAM)&doc);
 }
@@ -525,73 +517,92 @@ TDocManager::PostEvent(int id, TDocument& doc)
 void
 TDocManager::PostEvent(int id, TView& view)
 {
-  TWindow* win = Application->MainWindow;
+  TWindow* win = Application->GetMainWindow();
   if (win && win->HWindow)
     win->SendMessage(WM_OWLVIEW, id, (LPARAM)&view);
 }
 
-BOOL
+bool
 TDocManager::EvCanClose()
 {
-  TDocument* pdoc = 0;
-  while ((pdoc = DocList.Next(pdoc)) != 0) {
-    if (pdoc->CanClose() == FALSE)  // normally calls back to FlushDoc()
-      return FALSE;
+  TDocument* doc = 0;
+  while ((doc = DocList.Next(doc)) != 0) {
+    if (!doc->CanClose())  // normally calls back to FlushDoc()
+      return false;
   }
-  return TRUE;
+  return true;
 }
 
+//
+// Preprocess the app frame's menu to replace the file menu with one managed
+// by this docmanager
+//
 void
-TDocManager::EvPreProcessMenu(HMENU fmenu)
+TDocManager::EvPreProcessMenu(HMENU hMenuBar)
 {
   if (Mode & dmMenu) {
-    HMENU menu = ::Module->LoadMenu(IDM_DOCMANAGERFILE);
-    char buf[40];
-    Application->LoadString(IDS_DOCMANAGERFILE, buf, sizeof(buf));
-    if (menu) {
+    HMENU hMenu = Application->LoadMenu(IDM_DOCMANAGERFILE);
+    if (!hMenu)
+      hMenu = ::Module->LoadMenu(IDM_DOCMANAGERFILE);
+    if (hMenu) {
+      char buf[40];
+      Application->LoadString(IDS_DOCMANAGERFILE, buf, sizeof buf);
       if (Mode & dmNoRevert)
-        ::DeleteMenu(menu, CM_FILEREVERT, MF_BYCOMMAND);
-      ::DeleteMenu(fmenu, 0, MF_BYPOSITION);
-      ::InsertMenu(fmenu, 0, MF_BYPOSITION|MF_POPUP, (UINT)menu, buf);
+        ::DeleteMenu(hMenu, CM_FILEREVERT, MF_BYCOMMAND);
+      ::DeleteMenu(hMenuBar, 0, MF_BYPOSITION);
+      ::InsertMenu(hMenuBar, 0, MF_BYPOSITION|MF_POPUP, (uint)hMenu, buf);
     }
   }
 }
 
-BOOL
+void
+TDocManager::EvWakeUp()
+{
+  TDocument* doc = 0;
+  while ((doc = DocList.Next(doc)) != 0)
+    doc->ReindexFrames();
+}
+
+bool
 TDocManager::FlushDoc(TDocument& doc)
 {
   while (doc.IsDirty()) {
-    switch(PostDocError(doc, IDS_DOCCHANGED, MB_YESNOCANCEL))
-    {
+    int saveOrNot = doc.IsEmbedded() ?
+                      IDYES :
+                      PostDocError(doc, IDS_DOCCHANGED, MB_YESNOCANCEL);
+
+    switch (saveOrNot) {
       case IDYES:
-        if (doc.GetDocPath() == 0) {
-          TDocTemplate* tpl;
-          if ((tpl = SelectAnySave(doc, FALSE))==0)
+        // Prompt the user for filename in save-as situation
+        //
+        if (!doc.IsEmbedded() && doc.GetDocPath() == 0) {
+          TDocTemplate* tpl = SelectAnySave(doc, false);
+          if (!tpl)
             continue;
           if (tpl != doc.Template)
             doc.SetTemplate(tpl);
         }
         if (doc.Commit())
-          return TRUE;
+          return true;
         continue;
 
       case IDNO:
-        if (doc.Revert(TRUE))
-          return TRUE;
-        return FALSE;
+        if (doc.Revert(true))
+          return true;
+        return false;
 
       case IDCANCEL:
-        return FALSE;
+        return false;
     }
   }
-  return TRUE;
+  return true;
 }
 
 TDocument*
 TDocManager::GetCurrentDoc()
 {
   TDocument* doc = 0;
-  HWND hwnd = TWindow::GetFocus();
+  HWND hwnd = GetApplication()->GetMainWindow()->GetCommandTarget();
 
   while ((doc = DocList.Next(doc)) != 0 && !doc->HasFocus(hwnd))
     ;
@@ -602,9 +613,9 @@ TDocManager::GetCurrentDoc()
 // event handlers
 //
 void
-TDocManager::CmEnableNew(TCommandEnabler& hndlr)
+TDocManager::CeFileNew(TCommandEnabler& ce)
 {
-  hndlr.Enable(TemplateList != 0);
+  ce.Enable(TemplateList != 0);
 }
 
 void
@@ -614,9 +625,9 @@ TDocManager::CmFileNew()
 }
 
 void
-TDocManager::CmEnableOpen(TCommandEnabler& hndlr)
+TDocManager::CeFileOpen(TCommandEnabler& ce)
 {
-  hndlr.Enable(TemplateList != 0);
+  ce.Enable(TemplateList != 0);
 }
 
 void
@@ -626,96 +637,90 @@ TDocManager::CmFileOpen()
 }
 
 void
-TDocManager::CmEnableClose(TCommandEnabler& hndlr)
+TDocManager::CeFileClose(TCommandEnabler& ce)
 {
-  hndlr.Enable(GetCurrentDoc() != 0);
+  ce.Enable(GetCurrentDoc() != 0);
 }
 
 void
 TDocManager::CmFileClose()
 {
-  TDocument* doc;
-
-  if ((doc = GetCurrentDoc()) == 0)
-    return;
-  if (doc->CanClose() == FALSE)  // normally calls back to FlushDoc()
-    return;
-  if (!doc->Close())
-    PostDocError(*doc, IDS_UNABLECLOSE);
-  else
-    delete doc;
+  TDocument* doc = GetCurrentDoc();
+  if (doc && doc->CanClose()) {  // normally calls back to FlushDoc()
+    if (!doc->Close())
+      PostDocError(*doc, IDS_UNABLECLOSE);
+    else
+      delete doc;
+  }
 }
 
 void
-TDocManager::CmEnableSaveAs(TCommandEnabler& hndlr)
+TDocManager::CeFileSaveAs(TCommandEnabler& ce)
 {
   TDocument* doc = GetCurrentDoc();
-  hndlr.Enable(doc != 0);
+  ce.Enable(doc != 0);
 }
 
 void
 TDocManager::CmFileSaveAs()
 {
-  TDocument* doc;
-  TDocTemplate* tpl;
-
-  if ((doc = GetCurrentDoc()) == 0)
-    return;
-  if ((tpl = SelectAnySave(*doc, FALSE)) == 0)
-    return;
-  if (tpl != doc->Template)
-    doc->SetTemplate(tpl);       // replace existing template
-  doc->Commit(TRUE);             // force rewrite to new path
+  TDocument* doc = GetCurrentDoc();
+  if (doc) {
+    TDocTemplate* tpl = SelectAnySave(*doc, false);
+    if (tpl) {
+      if (tpl != doc->Template)
+        doc->SetTemplate(tpl);       // replace existing template
+      doc->Commit(true);             // force rewrite to new path
+    }
+  }
 }
 
 void
-TDocManager::CmEnableSave(TCommandEnabler& hndlr)
+TDocManager::CeFileSave(TCommandEnabler& ce)
 {
   TDocument* doc = GetCurrentDoc();
-  hndlr.Enable(doc && (doc->IsDirty() || (Mode & dmSaveEnable)));
+  ce.Enable(doc && (doc->IsDirty() || (Mode & dmSaveEnable)));
 }
 
 void
 TDocManager::CmFileSave()
 {
-  TDocument* doc;
-
-  if ((doc = GetCurrentDoc()) == 0)
-    return;
-  if (doc->GetDocPath() == 0) {
-    CmFileSaveAs();
-    return;
+  TDocument* doc = GetCurrentDoc();
+  if (doc) {
+    if (doc->GetDocPath() == 0) {
+      CmFileSaveAs();
+      return;
+    }
+    if (!(Mode & dmSaveEnable) && !doc->IsDirty()) {
+      PostDocError(*doc, IDS_NOTCHANGED);
+      return;
+    }
+    doc->Commit();  // should force write here?
   }
-  if (!(Mode & dmSaveEnable) && !doc->IsDirty()){
-    PostDocError(*doc, IDS_NOTCHANGED);
-    return;
-  }
-  doc->Commit();  // should force write here?
 }
 
 void
-TDocManager::CmEnableRevert(TCommandEnabler& hndlr)
+TDocManager::CeFileRevert(TCommandEnabler& ce)
 {
   TDocument* doc = GetCurrentDoc();
-  hndlr.Enable(doc && doc->IsDirty() && doc->GetDocPath());
+  ce.Enable(doc && doc->IsDirty() && doc->GetDocPath());
 }
 
 void
 TDocManager::CmFileRevert()
 {
-  TDocument* doc;
-
-  if ((doc = GetCurrentDoc()) == 0 || !doc->GetDocPath())
-    return;
-  if (!doc->IsDirty()){
-    PostDocError(*doc, IDS_NOTCHANGED);
-    return;
+  TDocument* doc = GetCurrentDoc();
+  if (doc && doc->GetDocPath()) {
+    if (!doc->IsDirty()) {
+      PostDocError(*doc, IDS_NOTCHANGED);
+      return;
+    }
+    doc->Revert();
   }
-  doc->Revert();
 }
 
 void
-TDocManager::CmEnableCreate(TCommandEnabler& hndlr)
+TDocManager::CeViewCreate(TCommandEnabler& hndlr)
 {
   TDocument* doc = GetCurrentDoc();
   hndlr.Enable(doc != 0);
@@ -725,48 +730,53 @@ void
 TDocManager::CmViewCreate()
 {
   TDocument* doc = GetCurrentDoc();
-
   if (doc)
     CreateAnyView(*doc);
 }
 
-UINT
-TDocManager::PostDocError(TDocument& doc, UINT sid, UINT choice)
+uint
+TDocManager::PostDocError(TDocument& doc, uint sid, uint choice)
 {
   char buf[256];
 
-  if (Application->LoadString(sid, buf, sizeof(buf)) == 0)
+  if (Application->LoadString(sid, buf, sizeof buf) == 0)
     strcpy(buf, "Error: Message not found");  // should throw exception?
   if (choice != MB_OK)
     choice |= MB_ICONQUESTION;
-  return Application->MainWindow->MessageBox(buf, doc.GetTitle(), choice);
+  return Application->GetMainWindow()->MessageBox(buf, doc.GetTitle(), choice);
 }
 
 //
 //  CreateAnyDoc - selects from list of attached non-hidden doc templates
 //
 TDocument*
-TDocManager::CreateAnyDoc(LPCSTR path, long flags)
+TDocManager::CreateAnyDoc(const char far* path, long flags)
 {
   TDocTemplate* ptpl;
   TDocument* doc;
   char filepath[256];
   int index;
-  TDocTemplate* tpllist[40];
+  TDocTemplate* tpllist[40];  // increase number to display more templates
   int tplcount = 0;
 
   // compose list of visible templates
-  for (ptpl=TemplateList; ptpl; ptpl=ptpl->NextTemplate) {
+  //
+  for (ptpl = TemplateList; ptpl; ptpl = ptpl->GetNextTemplate()) {
     if (ptpl->IsVisible() &&
         !(ptpl->IsFlagSet(dtReadOnly) && (flags & dtNewDoc)))
       tpllist[tplcount++] = ptpl;
+
+    // prevent overflowing array
+    if (tplcount >= sizeof(tpllist)/sizeof(tpllist[0]))
+      break;
   }
   if (!tplcount)
     return 0;         // no usable templates
 
   if (flags & dtNewDoc) {  // creat empty doc from any registered template
     index = tplcount==1 ? 1 : SelectDocType(tpllist, tplcount);
-  } else {           // select doc using filters from all registered templates
+  }
+  else {           // select doc using filters from all registered templates
     if (path)
       strcpy(filepath, path);
     else
@@ -785,8 +795,8 @@ TDocManager::CreateAnyDoc(LPCSTR path, long flags)
 
   ptpl = tpllist[index-1];
 
-  if ((Mode & dmSDI) && (doc=DocList.Next(0)) != 0) {  // one at a time if SDI
-    if (doc->CanClose() == FALSE)        // normally calls back to FlushDoc()
+  if ((Mode & dmSDI) && (doc = DocList.Next(0)) != 0) { // one at a time if SDI
+    if (!doc->CanClose())        // normally calls back to FlushDoc()
       return 0;
     if (!doc->Close()) {
       PostDocError(*doc, IDS_UNABLECLOSE);
@@ -794,14 +804,17 @@ TDocManager::CreateAnyDoc(LPCSTR path, long flags)
     }
     delete doc;
   }
-  return ptpl->CreateDoc(filepath, flags);
+
+  doc = ptpl->ConstructDoc(&TDocument(this));  // pass a dummy doc
+  doc->SetTemplate(ptpl);
+  return InitDoc(doc, filepath, flags);
 }
 
 //
 //  SelectAnySave - selects from registered templates supporting this doc
 //
 TDocTemplate*
-TDocManager::SelectAnySave(TDocument& doc, BOOL samedoc)
+TDocManager::SelectAnySave(TDocument& doc, bool samedoc)
 {
   TDocTemplate* ptpl;
   char filepath[256];
@@ -811,7 +824,7 @@ TDocManager::SelectAnySave(TDocument& doc, BOOL samedoc)
 
   if (!TemplateList)
     return 0;   // if no templates are registered
-  for (tplcount=0, ptpl=TemplateList; ptpl; ptpl=ptpl->NextTemplate) {
+  for (tplcount = 0, ptpl = TemplateList; ptpl; ptpl = ptpl->GetNextTemplate()) {
     if (ptpl->IsVisible() && (!samedoc || ptpl->IsMyKindOfDoc(doc))
         && !ptpl->IsFlagSet(dtReadOnly) )
       tpllist[tplcount++] = ptpl;
@@ -822,8 +835,7 @@ TDocManager::SelectAnySave(TDocument& doc, BOOL samedoc)
     strcpy(filepath, doc.GetDocPath());
   else
     filepath[0] = 0;    // no initial file path
-  index = SelectDocPath(tpllist, tplcount, filepath, sizeof(filepath),
-                        dtNoReadOnly, TRUE);
+  index = SelectDocPath(tpllist, tplcount, filepath, sizeof(filepath),0,true);
   if (!index)
     return 0;   // user cancel or dialog error
   ptpl = tpllist[index-1];
@@ -836,16 +848,16 @@ TDocManager::SelectAnySave(TDocument& doc, BOOL samedoc)
 //  CreateAnyView - selects from registered templates supporting this doc
 //
 TView*
-TDocManager::CreateAnyView(TDocument& doc, long flags)
+TDocManager::CreateAnyView(TDocument& doc, long /*flags*/)
 {
   const int MaxViewCount = 25;
   TDocTemplate* tplList[MaxViewCount];
   int tplCount;
   TDocTemplate* ptpl;
   int index;
-  LPCSTR viewName;
+  const char far* viewName;
 
-  for (ptpl=TemplateList, tplCount=0; ptpl != 0; ptpl = ptpl->NextTemplate) {
+  for (ptpl=TemplateList, tplCount=0; ptpl != 0; ptpl = ptpl->GetNextTemplate()) {
     if (ptpl->IsMyKindOfDoc(doc)) {
       viewName = ptpl->GetViewName();
       for (index = 0; index < tplCount; index++)
@@ -867,7 +879,7 @@ TDocManager::CreateAnyView(TDocument& doc, long flags)
     return 0;
 
   ptpl = tplList[index - 1];
-  return ptpl->CreateView(doc, flags); // call virtual create function
+  return doc.InitView(ptpl->ConstructView(doc)); // call virtual create
 }
 
 #define ANSITOUPPER(c) ( (char)(unsigned)(unsigned long)\
@@ -882,9 +894,9 @@ TDocManager::MatchTemplate(const char far* path)
   if (FindDocument(path))
     return 0;   // prevent reload of same document
   if (::GetFileTitle(path, name, sizeof(name)) != 0)
-    return 0;   // invalid name or buffer too small  
+    return 0;   // invalid name or buffer too small
   ::AnsiUpper(name);
-  for (ptpl=TemplateList; ptpl != 0; ptpl = ptpl->NextTemplate) {
+  for (ptpl = TemplateList; ptpl != 0; ptpl = ptpl->GetNextTemplate()) {
     const char far* pp = ptpl->GetFileFilter();
     if (!pp || ptpl->IsFlagSet(dtHidden))
       continue;
@@ -924,7 +936,6 @@ IMPLEMENT_STREAMABLE(TDocManager);
 void*
 TDocManager::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
-
   TDocManager* o = GetObject();
 
   TDocTemplate* ptpl = o->TemplateList;
@@ -936,15 +947,17 @@ TDocManager::Streamer::Read(ipstream& is, uint32 /*version*/) const
       break;
 
     if (isStatic) {
-      if (ptpl) {  // if static templates available
-        is >> *ptpl;       // update static template data
+      if (ptpl) {                         // if static templates available
+        is >> *ptpl;                      // update static template data
         ptpl = o->GetNextTemplate(ptpl);
-      } else {    // have run out of static templates
+      }
+      else {                            // have run out of static templates
         char tbuf[sizeof(TDocTemplate)];  // sink for unused template data
         memset(tbuf,0,sizeof(tbuf));      // force static flag off
         is >> *(TDocTemplate*)tbuf;
       }
-    } else {     // if dynamic template, object will be constructed
+    }
+    else {                // if dynamic template, object will be constructed
       TModule* module;
       is >> module;
       is >> ptpl;
@@ -952,16 +965,23 @@ TDocManager::Streamer::Read(ipstream& is, uint32 /*version*/) const
       o->AttachTemplate(*ptpl);
     }
   }
-    
+
   int count;
-  is >> count;     // document count
+  is >> count;               // document count
   while (count--) {
-    TDocument*  pdoc;
-    is >> pdoc;
-    pdoc->SetDocManager(*o);  // inserts into properly into list
+    TDocument*  doc;
+    is >> doc;
+    doc->SetDocManager(*o);  // inserts properly into list
   }
 
+  // Get application, & post ourselves a wakeup message to finish things up
+  // once all windows have been created, etc.
+  //
   o->Application = GetApplicationObject();
+  TWindow* win = o->Application->GetMainWindow();
+  if (win && win->HWindow)
+    win->PostMessage(WM_OWLWAKEUP);
+
   return o;
 }
 
@@ -976,65 +996,67 @@ TDocManager::Streamer::Write(opstream& os) const
     os << flag;
     if (flag) {
       os << *ptpl;              // write reference to static template
-    } else {
+    }
+    else {
       os << ptpl->GetModule();  // write template's module pointer first
       os << ptpl;               // write pointer to static template
     }
   }
-  os << -1;   // template list terminator  
+  os << -1;   // template list terminator
 
-  TDocument* pdoc = 0;
+  TDocument* doc = 0;
   int count;
-  for (count = 0; (pdoc = o->DocList.Next(pdoc))!=0; count++) ;
+  for (count = 0; (doc = o->DocList.Next(doc))!=0; count++) ;
   os << count;
 
-  // must write documents out in order created, i.e. from end of list forward
+  // Must write documents out in order created, i.e. from end of list forward
+  //
   while (count) {
     int i = count--;
-    for (pdoc = 0; i--; pdoc = o->DocList.Next(pdoc)) ;
-    os << pdoc;
+    for (doc = 0; i--; doc = o->DocList.Next(doc)) ;
+    os << doc;
   }
 }
 
-IMPLEMENT_ABSTRACT_STREAMABLE(TDocTemplate);
+//
+// TDocTemplate backward compatibility code
+//
 
-void*
-TDocTemplate::Streamer::Read(ipstream& is, uint32 /* version */) const
+bool TDocManager::SelectSave(TDocTemplate* ptpl, TDocument& doc)
 {
-  TDocTemplate* o = GetObject();
-  BOOL wasStatic = o->IsStatic();  // test in case dummy template passed
-  is >> o->RefCnt;  // need to set back to 1 if doc attach increments!!?
-  is >> o->Flags;
-  if (o->IsStatic()) {
-    delete o->Description;
-    delete o->FileFilter;
-    delete o->Directory;
-    delete o->DefaultExt;
-  }
-  o->Description = is.freadString();
-  o->FileFilter  = is.freadString();
-  o->Directory   = is.freadString();
-  o->DefaultExt  = is.freadString();
-  if (o->IsStatic() && !wasStatic) {  // dummy template passed as sink
-    delete o->Description;
-    delete o->FileFilter;
-    delete o->Directory;
-    delete o->DefaultExt;
-  }
-  return o;
+  TDocManager* mgr = ptpl->GetDocManager();
+  if (!mgr || !ptpl || !ptpl->GetFileFilter())
+    return false;
+  char filepath[256];
+  if (doc.GetDocPath())
+    strcpy(filepath, doc.GetDocPath());
+  else
+    filepath[0] = 0;    // no initial file path
+  int index = mgr->SelectDocPath(&ptpl,1, filepath,sizeof(filepath), 0, true);
+  return index ? doc.SetDocPath(filepath) : false;
 }
 
-void
-TDocTemplate::Streamer::Write(opstream& os) const
+TView* TDocManager::InitView(TView* view)
 {
-  TDocTemplate* o = GetObject();
-  os << o->RefCnt;
-  os << o->Flags;
-  os.fwriteString(o->Description);
-  os.fwriteString(o->FileFilter);
-  os.fwriteString(o->Directory);
-  os.fwriteString(o->DefaultExt);
+  if (!view)   // test in case new TView failed
+    return 0;
+  return view->GetDocument().InitView(view);
 }
+
+TDocument* TDocManager::InitDoc(TDocTemplate& tpl, TDocument* doc,
+                                const char far* path, long flags)
+{
+  TDocManager* mgr = tpl.GetDocManager();
+  if (!mgr || !doc)
+    return 0;
+  doc->SetTemplate(&tpl);
+  return mgr->InitDoc(doc, path, flags);
+}
+
+static void Obsolete() {TRACEX(OwlDocView, 0, "Obsolete function called");}
+void TDocTemplate::SetFileFilter(const char far*) {Obsolete();}
+void TDocTemplate::SetDescription(const char far*){Obsolete();}
+void TDocTemplate::SetDefaultExt(const char far*) {Obsolete();}
 
 #endif
 

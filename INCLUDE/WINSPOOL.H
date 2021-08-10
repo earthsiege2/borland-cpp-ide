@@ -1,7 +1,5 @@
 /*++
 
-Copyright (c) 1990-1993  Microsoft Corporation
-
 Module Name:
 
     WinSpool.h
@@ -10,28 +8,26 @@ Abstract:
 
     Header file for Print APIs
 
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
 Revision History:
 
 --*/
 
-#ifndef __WINSPOOL_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _WINSPOOL_
+#define _WINSPOOL_
 #define __WINSPOOL_H
-
-#ifndef __WINBASE_H
-#include <winbase.h>
-#endif
-
-#ifndef __WINGDI_H
-#include <wingdi.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 typedef struct _PRINTER_INFO_1A {
     DWORD   Flags;
@@ -39,37 +35,35 @@ typedef struct _PRINTER_INFO_1A {
     LPSTR   pName;
     LPSTR   pComment;
 } PRINTER_INFO_1A, *PPRINTER_INFO_1A, *LPPRINTER_INFO_1A;
-
 typedef struct _PRINTER_INFO_1W {
     DWORD   Flags;
     LPWSTR  pDescription;
     LPWSTR  pName;
     LPWSTR  pComment;
 } PRINTER_INFO_1W, *PPRINTER_INFO_1W, *LPPRINTER_INFO_1W;
-
 #ifdef UNICODE
-#define PRINTER_INFO_1 PRINTER_INFO_1W
-#define PPRINTER_INFO_1 PPRINTER_INFO_1W
-#define LPPRINTER_INFO_1 LPPRINTER_INFO_1W
+typedef PRINTER_INFO_1W PRINTER_INFO_1;
+typedef PPRINTER_INFO_1W PPRINTER_INFO_1;
+typedef LPPRINTER_INFO_1W LPPRINTER_INFO_1;
 #else
-#define PRINTER_INFO_1 PRINTER_INFO_1A
-#define PPRINTER_INFO_1 PPRINTER_INFO_1A
-#define LPPRINTER_INFO_1 LPPRINTER_INFO_1A
+typedef PRINTER_INFO_1A PRINTER_INFO_1;
+typedef PPRINTER_INFO_1A PPRINTER_INFO_1;
+typedef LPPRINTER_INFO_1A LPPRINTER_INFO_1;
 #endif // UNICODE
 
 typedef struct _PRINTER_INFO_2A {
-    LPSTR   pServerName;
-    LPSTR   pPrinterName;
-    LPSTR   pShareName;
-    LPSTR   pPortName;
-    LPSTR   pDriverName;
-    LPSTR   pComment;
-    LPSTR   pLocation;
+    LPSTR     pServerName;
+    LPSTR     pPrinterName;
+    LPSTR     pShareName;
+    LPSTR     pPortName;
+    LPSTR     pDriverName;
+    LPSTR     pComment;
+    LPSTR     pLocation;
     LPDEVMODEA pDevMode;
-    LPSTR   pSepFile;
-    LPSTR   pPrintProcessor;
-    LPSTR   pDatatype;
-    LPSTR   pParameters;
+    LPSTR     pSepFile;
+    LPSTR     pPrintProcessor;
+    LPSTR     pDatatype;
+    LPSTR     pParameters;
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
     DWORD   Attributes;
     DWORD   Priority;
@@ -80,20 +74,19 @@ typedef struct _PRINTER_INFO_2A {
     DWORD   cJobs;
     DWORD   AveragePPM;
 } PRINTER_INFO_2A, *PPRINTER_INFO_2A, *LPPRINTER_INFO_2A;
-
 typedef struct _PRINTER_INFO_2W {
-    LPWSTR  pServerName;
-    LPWSTR  pPrinterName;
-    LPWSTR  pShareName;
-    LPWSTR  pPortName;
-    LPWSTR  pDriverName;
-    LPWSTR  pComment;
-    LPWSTR  pLocation;
+    LPWSTR    pServerName;
+    LPWSTR    pPrinterName;
+    LPWSTR    pShareName;
+    LPWSTR    pPortName;
+    LPWSTR    pDriverName;
+    LPWSTR    pComment;
+    LPWSTR    pLocation;
     LPDEVMODEW pDevMode;
-    LPWSTR  pSepFile;
-    LPWSTR  pPrintProcessor;
-    LPWSTR  pDatatype;
-    LPWSTR  pParameters;
+    LPWSTR    pSepFile;
+    LPWSTR    pPrintProcessor;
+    LPWSTR    pDatatype;
+    LPWSTR    pParameters;
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
     DWORD   Attributes;
     DWORD   Priority;
@@ -104,20 +97,39 @@ typedef struct _PRINTER_INFO_2W {
     DWORD   cJobs;
     DWORD   AveragePPM;
 } PRINTER_INFO_2W, *PPRINTER_INFO_2W, *LPPRINTER_INFO_2W;
-
 #ifdef UNICODE
-#define PRINTER_INFO_2 PRINTER_INFO_2W
-#define PPRINTER_INFO_2 PPRINTER_INFO_2W
-#define LPPRINTER_INFO_2 LPPRINTER_INFO_2W
+typedef PRINTER_INFO_2W PRINTER_INFO_2;
+typedef PPRINTER_INFO_2W PPRINTER_INFO_2;
+typedef LPPRINTER_INFO_2W LPPRINTER_INFO_2;
 #else
-#define PRINTER_INFO_2 PRINTER_INFO_2A
-#define PPRINTER_INFO_2 PPRINTER_INFO_2A
-#define LPPRINTER_INFO_2 LPPRINTER_INFO_2A
+typedef PRINTER_INFO_2A PRINTER_INFO_2;
+typedef PPRINTER_INFO_2A PPRINTER_INFO_2;
+typedef LPPRINTER_INFO_2A LPPRINTER_INFO_2;
 #endif // UNICODE
 
 typedef struct _PRINTER_INFO_3 {
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
 } PRINTER_INFO_3, *PPRINTER_INFO_3, *LPPRINTER_INFO_3;
+
+typedef struct _PRINTER_INFO_4A {
+    LPSTR   pPrinterName;
+    LPSTR   pServerName;
+    DWORD   Attributes;
+} PRINTER_INFO_4A, *PPRINTER_INFO_4A, *LPPRINTER_INFO_4A;
+typedef struct _PRINTER_INFO_4W {
+    LPWSTR  pPrinterName;
+    LPWSTR  pServerName;
+    DWORD   Attributes;
+} PRINTER_INFO_4W, *PPRINTER_INFO_4W, *LPPRINTER_INFO_4W;
+#ifdef UNICODE
+typedef PRINTER_INFO_4W PRINTER_INFO_4;
+typedef PPRINTER_INFO_4W PPRINTER_INFO_4;
+typedef LPPRINTER_INFO_4W LPPRINTER_INFO_4;
+#else
+typedef PRINTER_INFO_4A PRINTER_INFO_4;
+typedef PPRINTER_INFO_4A PPRINTER_INFO_4;
+typedef LPPRINTER_INFO_4A LPPRINTER_INFO_4;
+#endif // UNICODE
 
 #define PRINTER_CONTROL_PAUSE            1
 #define PRINTER_CONTROL_RESUME           2
@@ -156,6 +168,13 @@ typedef struct _PRINTER_INFO_3 {
 #define PRINTER_ATTRIBUTE_HIDDEN         0x00000020
 #define PRINTER_ATTRIBUTE_LOCAL          0x00000040
 
+#define PRINTER_ATTRIBUTE_ENABLE_DEVQ       0x00000080
+#define PRINTER_ATTRIBUTE_KEEPPRINTEDJOBS   0x00000100
+#define PRINTER_ATTRIBUTE_DO_COMPLETE_FIRST 0x00000200
+
+
+
+
 #define NO_PRIORITY   0
 #define MAX_PRIORITY 99
 #define MIN_PRIORITY  1
@@ -163,12 +182,12 @@ typedef struct _PRINTER_INFO_3 {
 
 typedef struct _JOB_INFO_1A {
    DWORD    JobId;
-   LPSTR    pPrinterName;
-   LPSTR    pMachineName;
-   LPSTR    pUserName;
-   LPSTR    pDocument;
-   LPSTR    pDatatype;
-   LPSTR    pStatus;
+   LPSTR      pPrinterName;
+   LPSTR      pMachineName;
+   LPSTR      pUserName;
+   LPSTR      pDocument;
+   LPSTR      pDatatype;
+   LPSTR      pStatus;
    DWORD    Status;
    DWORD    Priority;
    DWORD    Position;
@@ -176,15 +195,14 @@ typedef struct _JOB_INFO_1A {
    DWORD    PagesPrinted;
    SYSTEMTIME Submitted;
 } JOB_INFO_1A, *PJOB_INFO_1A, *LPJOB_INFO_1A;
-
 typedef struct _JOB_INFO_1W {
    DWORD    JobId;
-   LPWSTR   pPrinterName;
-   LPWSTR   pMachineName;
-   LPWSTR   pUserName;
-   LPWSTR   pDocument;
-   LPWSTR   pDatatype;
-   LPWSTR   pStatus;
+   LPWSTR     pPrinterName;
+   LPWSTR     pMachineName;
+   LPWSTR     pUserName;
+   LPWSTR     pDocument;
+   LPWSTR     pDatatype;
+   LPWSTR     pStatus;
    DWORD    Status;
    DWORD    Priority;
    DWORD    Position;
@@ -192,30 +210,29 @@ typedef struct _JOB_INFO_1W {
    DWORD    PagesPrinted;
    SYSTEMTIME Submitted;
 } JOB_INFO_1W, *PJOB_INFO_1W, *LPJOB_INFO_1W;
-
 #ifdef UNICODE
-#define JOB_INFO_1 JOB_INFO_1W
-#define PJOB_INFO_1 PJOB_INFO_1W
-#define LPJOB_INFO_1 LPJOB_INFO_1W
+typedef JOB_INFO_1W JOB_INFO_1;
+typedef PJOB_INFO_1W PJOB_INFO_1;
+typedef LPJOB_INFO_1W LPJOB_INFO_1;
 #else
-#define JOB_INFO_1 JOB_INFO_1A
-#define PJOB_INFO_1 PJOB_INFO_1A
-#define LPJOB_INFO_1 LPJOB_INFO_1A
+typedef JOB_INFO_1A JOB_INFO_1;
+typedef PJOB_INFO_1A PJOB_INFO_1;
+typedef LPJOB_INFO_1A LPJOB_INFO_1;
 #endif // UNICODE
 
 typedef struct _JOB_INFO_2A {
    DWORD    JobId;
-   LPSTR    pPrinterName;
-   LPSTR    pMachineName;
-   LPSTR    pUserName;
-   LPSTR    pDocument;
-   LPSTR    pNotifyName;
-   LPSTR    pDatatype;
-   LPSTR    pPrintProcessor;
-   LPSTR    pParameters;
-   LPSTR    pDriverName;
-   LPDEVMODE pDevMode;
-   LPSTR    pStatus;
+   LPSTR      pPrinterName;
+   LPSTR      pMachineName;
+   LPSTR      pUserName;
+   LPSTR      pDocument;
+   LPSTR      pNotifyName;
+   LPSTR      pDatatype;
+   LPSTR      pPrintProcessor;
+   LPSTR      pParameters;
+   LPSTR      pDriverName;
+   LPDEVMODEA pDevMode;
+   LPSTR      pStatus;
    PSECURITY_DESCRIPTOR pSecurityDescriptor;
    DWORD    Status;
    DWORD    Priority;
@@ -228,20 +245,19 @@ typedef struct _JOB_INFO_2A {
    DWORD    Time;           // How many seconds the job has been printing
    DWORD    PagesPrinted;
 } JOB_INFO_2A, *PJOB_INFO_2A, *LPJOB_INFO_2A;
-
 typedef struct _JOB_INFO_2W {
    DWORD    JobId;
-   LPWSTR   pPrinterName;
-   LPWSTR   pMachineName;
-   LPWSTR   pUserName;
-   LPWSTR   pDocument;
-   LPWSTR   pNotifyName;
-   LPWSTR   pDatatype;
-   LPWSTR   pPrintProcessor;
-   LPWSTR   pParameters;
-   LPWSTR   pDriverName;
-   LPDEVMODE pDevMode;
-   LPWSTR   pStatus;
+   LPWSTR     pPrinterName;
+   LPWSTR     pMachineName;
+   LPWSTR     pUserName;
+   LPWSTR     pDocument;
+   LPWSTR     pNotifyName;
+   LPWSTR     pDatatype;
+   LPWSTR     pPrintProcessor;
+   LPWSTR     pParameters;
+   LPWSTR     pDriverName;
+   LPDEVMODEW pDevMode;
+   LPWSTR     pStatus;
    PSECURITY_DESCRIPTOR pSecurityDescriptor;
    DWORD    Status;
    DWORD    Priority;
@@ -254,15 +270,14 @@ typedef struct _JOB_INFO_2W {
    DWORD    Time;           // How many seconds the job has been printing
    DWORD    PagesPrinted;
 } JOB_INFO_2W, *PJOB_INFO_2W, *LPJOB_INFO_2W;
-
 #ifdef UNICODE
-#define JOB_INFO_2 JOB_INFO_2W
-#define PJOB_INFO_2 PJOB_INFO_2W
-#define LPJOB_INFO_2 LPJOB_INFO_2W
+typedef JOB_INFO_2W JOB_INFO_2;
+typedef PJOB_INFO_2W PJOB_INFO_2;
+typedef LPJOB_INFO_2W LPJOB_INFO_2;
 #else
-#define JOB_INFO_2 JOB_INFO_2A
-#define PJOB_INFO_2 PJOB_INFO_2A
-#define LPJOB_INFO_2 LPJOB_INFO_2A
+typedef JOB_INFO_2A JOB_INFO_2;
+typedef PJOB_INFO_2A PJOB_INFO_2;
+typedef LPJOB_INFO_2A LPJOB_INFO_2;
 #endif // UNICODE
 
 #define JOB_CONTROL_PAUSE              1
@@ -282,234 +297,215 @@ typedef struct _JOB_INFO_2W {
 #define JOB_POSITION_UNSPECIFIED       0
 
 typedef struct _ADDJOB_INFO_1A {
-    LPSTR   Path;
+    LPSTR     Path;
     DWORD   JobId;
 } ADDJOB_INFO_1A, *PADDJOB_INFO_1A, *LPADDJOB_INFO_1A;
-
 typedef struct _ADDJOB_INFO_1W {
-    LPWSTR  Path;
+    LPWSTR    Path;
     DWORD   JobId;
 } ADDJOB_INFO_1W, *PADDJOB_INFO_1W, *LPADDJOB_INFO_1W;
-
 #ifdef UNICODE
-#define ADDJOB_INFO_1 ADDJOB_INFO_1W
-#define PADDJOB_INFO_1 PADDJOB_INFO_1W
-#define LPADDJOB_INFO_1 LPADDJOB_INFO_1W
+typedef ADDJOB_INFO_1W ADDJOB_INFO_1;
+typedef PADDJOB_INFO_1W PADDJOB_INFO_1;
+typedef LPADDJOB_INFO_1W LPADDJOB_INFO_1;
 #else
-#define ADDJOB_INFO_1 ADDJOB_INFO_1A
-#define PADDJOB_INFO_1 PADDJOB_INFO_1A
-#define LPADDJOB_INFO_1 LPADDJOB_INFO_1A
+typedef ADDJOB_INFO_1A ADDJOB_INFO_1;
+typedef PADDJOB_INFO_1A PADDJOB_INFO_1;
+typedef LPADDJOB_INFO_1A LPADDJOB_INFO_1;
 #endif // UNICODE
 
 typedef struct _DRIVER_INFO_1A {
-    LPSTR   pName;              // QMS 810
+    LPSTR     pName;              // QMS 810
 } DRIVER_INFO_1A, *PDRIVER_INFO_1A, *LPDRIVER_INFO_1A;
-
 typedef struct _DRIVER_INFO_1W {
-    LPWSTR  pName;              // QMS 810
+    LPWSTR    pName;              // QMS 810
 } DRIVER_INFO_1W, *PDRIVER_INFO_1W, *LPDRIVER_INFO_1W;
-
 #ifdef UNICODE
-#define DRIVER_INFO_1 DRIVER_INFO_1W
-#define PDRIVER_INFO_1 PDRIVER_INFO_1W
-#define LPDRIVER_INFO_1 LPDRIVER_INFO_1W
+typedef DRIVER_INFO_1W DRIVER_INFO_1;
+typedef PDRIVER_INFO_1W PDRIVER_INFO_1;
+typedef LPDRIVER_INFO_1W LPDRIVER_INFO_1;
 #else
-#define DRIVER_INFO_1 DRIVER_INFO_1A
-#define PDRIVER_INFO_1 PDRIVER_INFO_1A
-#define LPDRIVER_INFO_1 LPDRIVER_INFO_1A
+typedef DRIVER_INFO_1A DRIVER_INFO_1;
+typedef PDRIVER_INFO_1A PDRIVER_INFO_1;
+typedef LPDRIVER_INFO_1A LPDRIVER_INFO_1;
 #endif // UNICODE
 
 typedef struct _DRIVER_INFO_2A {
     DWORD   cVersion;
-    LPSTR   pName;              // QMS 810
-    LPSTR   pEnvironment;       // Win32 x86
-    LPSTR   pDriverPath;        // c:\drivers\pscript.dll
-    LPSTR   pDataFile;          // c:\drivers\QMS810.PPD
-    LPSTR   pConfigFile;        // c:\drivers\PSCRPTUI.DLL
+    LPSTR     pName;              // QMS 810
+    LPSTR     pEnvironment;       // Win32 x86
+    LPSTR     pDriverPath;        // c:\drivers\pscript.dll
+    LPSTR     pDataFile;          // c:\drivers\QMS810.PPD
+    LPSTR     pConfigFile;        // c:\drivers\PSCRPTUI.DLL
 } DRIVER_INFO_2A, *PDRIVER_INFO_2A, *LPDRIVER_INFO_2A;
-
 typedef struct _DRIVER_INFO_2W {
     DWORD   cVersion;
-    LPWSTR  pName;              // QMS 810
-    LPWSTR  pEnvironment;       // Win32 x86
-    LPWSTR  pDriverPath;        // c:\drivers\pscript.dll
-    LPWSTR  pDataFile;          // c:\drivers\QMS810.PPD
-    LPWSTR  pConfigFile;        // c:\drivers\PSCRPTUI.DLL
+    LPWSTR    pName;              // QMS 810
+    LPWSTR    pEnvironment;       // Win32 x86
+    LPWSTR    pDriverPath;        // c:\drivers\pscript.dll
+    LPWSTR    pDataFile;          // c:\drivers\QMS810.PPD
+    LPWSTR    pConfigFile;        // c:\drivers\PSCRPTUI.DLL
 } DRIVER_INFO_2W, *PDRIVER_INFO_2W, *LPDRIVER_INFO_2W;
-
 #ifdef UNICODE
-#define DRIVER_INFO_2 DRIVER_INFO_2W
-#define PDRIVER_INFO_2 PDRIVER_INFO_2W
-#define LPDRIVER_INFO_2 LPDRIVER_INFO_2W
+typedef DRIVER_INFO_2W DRIVER_INFO_2;
+typedef PDRIVER_INFO_2W PDRIVER_INFO_2;
+typedef LPDRIVER_INFO_2W LPDRIVER_INFO_2;
 #else
-#define DRIVER_INFO_2 DRIVER_INFO_2A
-#define PDRIVER_INFO_2 PDRIVER_INFO_2A
-#define LPDRIVER_INFO_2 LPDRIVER_INFO_2A
+typedef DRIVER_INFO_2A DRIVER_INFO_2;
+typedef PDRIVER_INFO_2A PDRIVER_INFO_2;
+typedef LPDRIVER_INFO_2A LPDRIVER_INFO_2;
 #endif // UNICODE
 
+
 typedef struct _DOC_INFO_1A {
-    LPSTR   pDocName;
-    LPSTR   pOutputFile;
-    LPSTR   pDatatype;
+    LPSTR     pDocName;
+    LPSTR     pOutputFile;
+    LPSTR     pDatatype;
 } DOC_INFO_1A, *PDOC_INFO_1A, *LPDOC_INFO_1A;
-
 typedef struct _DOC_INFO_1W {
-    LPWSTR  pDocName;
-    LPWSTR  pOutputFile;
-    LPWSTR  pDatatype;
+    LPWSTR    pDocName;
+    LPWSTR    pOutputFile;
+    LPWSTR    pDatatype;
 } DOC_INFO_1W, *PDOC_INFO_1W, *LPDOC_INFO_1W;
-
 #ifdef UNICODE
-#define DOC_INFO_1 DOC_INFO_1W
-#define PDOC_INFO_1 PDOC_INFO_1W
-#define LPDOC_INFO_1 LPDOC_INFO_1W
+typedef DOC_INFO_1W DOC_INFO_1;
+typedef PDOC_INFO_1W PDOC_INFO_1;
+typedef LPDOC_INFO_1W LPDOC_INFO_1;
 #else
-#define DOC_INFO_1 DOC_INFO_1A
-#define PDOC_INFO_1 PDOC_INFO_1A
-#define LPDOC_INFO_1 LPDOC_INFO_1A
+typedef DOC_INFO_1A DOC_INFO_1;
+typedef PDOC_INFO_1A PDOC_INFO_1;
+typedef LPDOC_INFO_1A LPDOC_INFO_1;
 #endif // UNICODE
 
 typedef struct _FORM_INFO_1A {
     DWORD   Flags;
-    LPSTR   pName;
+    LPSTR     pName;
     SIZEL   Size;
     RECTL   ImageableArea;
 } FORM_INFO_1A, *PFORM_INFO_1A, *LPFORM_INFO_1A;
-
 typedef struct _FORM_INFO_1W {
     DWORD   Flags;
-    LPWSTR  pName;
+    LPWSTR    pName;
     SIZEL   Size;
     RECTL   ImageableArea;
 } FORM_INFO_1W, *PFORM_INFO_1W, *LPFORM_INFO_1W;
-
 #ifdef UNICODE
-#define FORM_INFO_1 FORM_INFO_1W
-#define PFORM_INFO_1 PFORM_INFO_1W
-#define LPFORM_INFO_1 LPFORM_INFO_1W
+typedef FORM_INFO_1W FORM_INFO_1;
+typedef PFORM_INFO_1W PFORM_INFO_1;
+typedef LPFORM_INFO_1W LPFORM_INFO_1;
 #else
-#define FORM_INFO_1 FORM_INFO_1A
-#define PFORM_INFO_1 PFORM_INFO_1A
-#define LPFORM_INFO_1 LPFORM_INFO_1A
+typedef FORM_INFO_1A FORM_INFO_1;
+typedef PFORM_INFO_1A PFORM_INFO_1;
+typedef LPFORM_INFO_1A LPFORM_INFO_1;
 #endif // UNICODE
+
 
 #define FORM_BUILTIN    0x00000001
 
 
 typedef struct _PRINTPROCESSOR_INFO_1A {
-    LPSTR   pName;
+    LPSTR     pName;
 } PRINTPROCESSOR_INFO_1A, *PPRINTPROCESSOR_INFO_1A, *LPPRINTPROCESSOR_INFO_1A;
-
 typedef struct _PRINTPROCESSOR_INFO_1W {
-    LPWSTR  pName;
+    LPWSTR    pName;
 } PRINTPROCESSOR_INFO_1W, *PPRINTPROCESSOR_INFO_1W, *LPPRINTPROCESSOR_INFO_1W;
-
 #ifdef UNICODE
-#define PRINTPROCESSOR_INFO_1 PRINTPROCESSOR_INFO_1W
-#define PPRINTPROCESSOR_INFO_1 PPRINTPROCESSOR_INFO_1W
-#define LPPRINTPROCESSOR_INFO_1 LPPRINTPROCESSOR_INFO_1W
+typedef PRINTPROCESSOR_INFO_1W PRINTPROCESSOR_INFO_1;
+typedef PPRINTPROCESSOR_INFO_1W PPRINTPROCESSOR_INFO_1;
+typedef LPPRINTPROCESSOR_INFO_1W LPPRINTPROCESSOR_INFO_1;
 #else
-#define PRINTPROCESSOR_INFO_1 PRINTPROCESSOR_INFO_1A
-#define PPRINTPROCESSOR_INFO_1 PPRINTPROCESSOR_INFO_1A
-#define LPPRINTPROCESSOR_INFO_1 LPPRINTPROCESSOR_INFO_1A
+typedef PRINTPROCESSOR_INFO_1A PRINTPROCESSOR_INFO_1;
+typedef PPRINTPROCESSOR_INFO_1A PPRINTPROCESSOR_INFO_1;
+typedef LPPRINTPROCESSOR_INFO_1A LPPRINTPROCESSOR_INFO_1;
 #endif // UNICODE
 
 typedef struct _PORT_INFO_1A {
-    LPSTR   pName;
+    LPSTR     pName;
 } PORT_INFO_1A, *PPORT_INFO_1A, *LPPORT_INFO_1A;
-
 typedef struct _PORT_INFO_1W {
-    LPWSTR  pName;
+    LPWSTR    pName;
 } PORT_INFO_1W, *PPORT_INFO_1W, *LPPORT_INFO_1W;
-
 #ifdef UNICODE
-#define PORT_INFO_1 PORT_INFO_1W
-#define PPORT_INFO_1 PPORT_INFO_1W
-#define LPPORT_INFO_1 LPPORT_INFO_1W
+typedef PORT_INFO_1W PORT_INFO_1;
+typedef PPORT_INFO_1W PPORT_INFO_1;
+typedef LPPORT_INFO_1W LPPORT_INFO_1;
 #else
-#define PORT_INFO_1 PORT_INFO_1A
-#define PPORT_INFO_1 PPORT_INFO_1A
-#define LPPORT_INFO_1 LPPORT_INFO_1A
+typedef PORT_INFO_1A PORT_INFO_1;
+typedef PPORT_INFO_1A PPORT_INFO_1;
+typedef LPPORT_INFO_1A LPPORT_INFO_1;
 #endif // UNICODE
 
-typedef struct _MONITOR_INFO_1A {
-    LPSTR   pName;
+
+typedef struct _MONITOR_INFO_1A{
+    LPSTR     pName;
 } MONITOR_INFO_1A, *PMONITOR_INFO_1A, *LPMONITOR_INFO_1A;
-
-typedef struct _MONITOR_INFO_1W {
-    LPWSTR  pName;
+typedef struct _MONITOR_INFO_1W{
+    LPWSTR    pName;
 } MONITOR_INFO_1W, *PMONITOR_INFO_1W, *LPMONITOR_INFO_1W;
-
 #ifdef UNICODE
-#define MONITOR_INFO_1 MONITOR_INFO_1W
-#define PMONITOR_INFO_1 PMONITOR_INFO_1W
-#define LPMONITOR_INFO_1 LPMONITOR_INFO_1W
+typedef MONITOR_INFO_1W MONITOR_INFO_1;
+typedef PMONITOR_INFO_1W PMONITOR_INFO_1;
+typedef LPMONITOR_INFO_1W LPMONITOR_INFO_1;
 #else
-#define MONITOR_INFO_1 MONITOR_INFO_1A
-#define PMONITOR_INFO_1 PMONITOR_INFO_1A
-#define LPMONITOR_INFO_1 LPMONITOR_INFO_1A
+typedef MONITOR_INFO_1A MONITOR_INFO_1;
+typedef PMONITOR_INFO_1A PMONITOR_INFO_1;
+typedef LPMONITOR_INFO_1A LPMONITOR_INFO_1;
 #endif // UNICODE
 
-typedef struct _MONITOR_INFO_2A {
-    LPSTR   pName;
-    LPSTR   pEnvironment;
-    LPSTR   pDLLName;
+typedef struct _MONITOR_INFO_2A{
+    LPSTR     pName;
+    LPSTR     pEnvironment;
+    LPSTR     pDLLName;
 } MONITOR_INFO_2A, *PMONITOR_INFO_2A, *LPMONITOR_INFO_2A;
-
-typedef struct _MONITOR_INFO_2W {
-    LPWSTR  pName;
-    LPWSTR  pEnvironment;
-    LPWSTR  pDLLName;
+typedef struct _MONITOR_INFO_2W{
+    LPWSTR    pName;
+    LPWSTR    pEnvironment;
+    LPWSTR    pDLLName;
 } MONITOR_INFO_2W, *PMONITOR_INFO_2W, *LPMONITOR_INFO_2W;
-
 #ifdef UNICODE
-#define MONITOR_INFO_2 MONITOR_INFO_2W
-#define PMONITOR_INFO_2 PMONITOR_INFO_2W
-#define LPMONITOR_INFO_2 LPMONITOR_INFO_2W
+typedef MONITOR_INFO_2W MONITOR_INFO_2;
+typedef PMONITOR_INFO_2W PMONITOR_INFO_2;
+typedef LPMONITOR_INFO_2W LPMONITOR_INFO_2;
 #else
-#define MONITOR_INFO_2 MONITOR_INFO_2A
-#define PMONITOR_INFO_2 PMONITOR_INFO_2A
-#define LPMONITOR_INFO_2 LPMONITOR_INFO_2A
+typedef MONITOR_INFO_2A MONITOR_INFO_2;
+typedef PMONITOR_INFO_2A PMONITOR_INFO_2;
+typedef LPMONITOR_INFO_2A LPMONITOR_INFO_2;
 #endif // UNICODE
 
-typedef struct _DATATYPES_INFO_1A {
-    LPSTR   pName;
+typedef struct _DATATYPES_INFO_1A{
+    LPSTR     pName;
 } DATATYPES_INFO_1A, *PDATATYPES_INFO_1A, *LPDATATYPES_INFO_1A;
-
-typedef struct _DATATYPES_INFO_1W {
-    LPWSTR  pName;
+typedef struct _DATATYPES_INFO_1W{
+    LPWSTR    pName;
 } DATATYPES_INFO_1W, *PDATATYPES_INFO_1W, *LPDATATYPES_INFO_1W;
-
 #ifdef UNICODE
-#define DATATYPES_INFO_1 DATATYPES_INFO_1W
-#define PDATATYPES_INFO_1 PDATATYPES_INFO_1W
-#define LPDATATYPES_INFO_1 LPDATATYPES_INFO_1W
+typedef DATATYPES_INFO_1W DATATYPES_INFO_1;
+typedef PDATATYPES_INFO_1W PDATATYPES_INFO_1;
+typedef LPDATATYPES_INFO_1W LPDATATYPES_INFO_1;
 #else
-#define DATATYPES_INFO_1 DATATYPES_INFO_1A
-#define PDATATYPES_INFO_1 PDATATYPES_INFO_1A
-#define LPDATATYPES_INFO_1 LPDATATYPES_INFO_1A
+typedef DATATYPES_INFO_1A DATATYPES_INFO_1;
+typedef PDATATYPES_INFO_1A PDATATYPES_INFO_1;
+typedef LPDATATYPES_INFO_1A LPDATATYPES_INFO_1;
 #endif // UNICODE
 
-typedef struct _PRINTER_DEFAULTSA {
-    LPSTR       pDatatype;
-    LPDEVMODEA  pDevMode;
+typedef struct _PRINTER_DEFAULTSA{
+    LPSTR         pDatatype;
+    LPDEVMODEA pDevMode;
     ACCESS_MASK DesiredAccess;
 } PRINTER_DEFAULTSA, *PPRINTER_DEFAULTSA, *LPPRINTER_DEFAULTSA;
-
-typedef struct _PRINTER_DEFAULTSW {
-    LPWSTR      pDatatype;
-    LPDEVMODEW  pDevMode;
+typedef struct _PRINTER_DEFAULTSW{
+    LPWSTR        pDatatype;
+    LPDEVMODEW pDevMode;
     ACCESS_MASK DesiredAccess;
 } PRINTER_DEFAULTSW, *PPRINTER_DEFAULTSW, *LPPRINTER_DEFAULTSW;
-
 #ifdef UNICODE
-#define PRINTER_DEFAULTS PRINTER_DEFAULTSW
-#define PPRINTER_DEFAULTS PPRINTER_DEFAULTSW
-#define LPPRINTER_DEFAULTS LPPRINTER_DEFAULTSW
+typedef PRINTER_DEFAULTSW PRINTER_DEFAULTS;
+typedef PPRINTER_DEFAULTSW PPRINTER_DEFAULTS;
+typedef LPPRINTER_DEFAULTSW LPPRINTER_DEFAULTS;
 #else
-#define PRINTER_DEFAULTS PRINTER_DEFAULTSA
-#define PPRINTER_DEFAULTS PPRINTER_DEFAULTSA
-#define LPPRINTER_DEFAULTS LPPRINTER_DEFAULTSA
+typedef PRINTER_DEFAULTSA PRINTER_DEFAULTS;
+typedef PPRINTER_DEFAULTSA PPRINTER_DEFAULTS;
+typedef LPPRINTER_DEFAULTSA LPPRINTER_DEFAULTS;
 #endif // UNICODE
 
 BOOL
@@ -523,23 +519,21 @@ EnumPrintersA(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 BOOL
 WINAPI
 EnumPrintersW(
     DWORD   Flags,
-    LPWSTR  Name,
+    LPWSTR   Name,
     DWORD   Level,
     LPBYTE  pPrinterEnum,
     DWORD   cbBuf,
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 #ifdef UNICODE
-#define EnumPrinters EnumPrintersW
+#define EnumPrinters  EnumPrintersW
 #else
-#define EnumPrinters EnumPrintersA
+#define EnumPrinters  EnumPrintersA
 #endif // !UNICODE
 
 #define PRINTER_ENUM_DEFAULT     0x00000001
@@ -571,19 +565,17 @@ OpenPrinterA(
    LPHANDLE phPrinter,
    LPPRINTER_DEFAULTSA pDefault
 );
-
 BOOL
 WINAPI
 OpenPrinterW(
-   LPWSTR   pPrinterName,
+   LPWSTR    pPrinterName,
    LPHANDLE phPrinter,
    LPPRINTER_DEFAULTSW pDefault
 );
-
 #ifdef UNICODE
-#define OpenPrinter OpenPrinterW
+#define OpenPrinter  OpenPrinterW
 #else
-#define OpenPrinter OpenPrinterA
+#define OpenPrinter  OpenPrinterA
 #endif // !UNICODE
 
 BOOL
@@ -592,18 +584,16 @@ ResetPrinterA(
    HANDLE   hPrinter,
    LPPRINTER_DEFAULTSA pDefault
 );
-
 BOOL
 WINAPI
 ResetPrinterW(
    HANDLE   hPrinter,
    LPPRINTER_DEFAULTSW pDefault
 );
-
 #ifdef UNICODE
-#define ResetPrinter ResetPrinterW
+#define ResetPrinter  ResetPrinterW
 #else
-#define ResetPrinter ResetPrinterA
+#define ResetPrinter  ResetPrinterA
 #endif // !UNICODE
 
 BOOL
@@ -615,7 +605,6 @@ SetJobA(
     LPBYTE  pJob,
     DWORD   Command
 );
-
 BOOL
 WINAPI
 SetJobW(
@@ -625,11 +614,10 @@ SetJobW(
     LPBYTE  pJob,
     DWORD   Command
 );
-
 #ifdef UNICODE
-#define SetJob SetJobW
+#define SetJob  SetJobW
 #else
-#define SetJob SetJobA
+#define SetJob  SetJobA
 #endif // !UNICODE
 
 BOOL
@@ -642,7 +630,6 @@ GetJobA(
    DWORD    cbBuf,
    LPDWORD  pcbNeeded
 );
-
 BOOL
 WINAPI
 GetJobW(
@@ -653,11 +640,10 @@ GetJobW(
    DWORD    cbBuf,
    LPDWORD  pcbNeeded
 );
-
 #ifdef UNICODE
-#define GetJob GetJobW
+#define GetJob  GetJobW
 #else
-#define GetJob GetJobA
+#define GetJob  GetJobA
 #endif // !UNICODE
 
 BOOL
@@ -672,7 +658,6 @@ EnumJobsA(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 BOOL
 WINAPI
 EnumJobsW(
@@ -685,11 +670,10 @@ EnumJobsW(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 #ifdef UNICODE
-#define EnumJobs EnumJobsW
+#define EnumJobs  EnumJobsW
 #else
-#define EnumJobs EnumJobsA
+#define EnumJobs  EnumJobsA
 #endif // !UNICODE
 
 HANDLE
@@ -699,19 +683,17 @@ AddPrinterA(
     DWORD   Level,
     LPBYTE  pPrinter
 );
-
 HANDLE
 WINAPI
 AddPrinterW(
-    LPWSTR  pName,
+    LPWSTR   pName,
     DWORD   Level,
     LPBYTE  pPrinter
 );
-
 #ifdef UNICODE
-#define AddPrinter AddPrinterW
+#define AddPrinter  AddPrinterW
 #else
-#define AddPrinter AddPrinterA
+#define AddPrinter  AddPrinterA
 #endif // !UNICODE
 
 BOOL
@@ -728,7 +710,6 @@ SetPrinterA(
     LPBYTE  pPrinter,
     DWORD   Command
 );
-
 BOOL
 WINAPI
 SetPrinterW(
@@ -737,11 +718,10 @@ SetPrinterW(
     LPBYTE  pPrinter,
     DWORD   Command
 );
-
 #ifdef UNICODE
-#define SetPrinter SetPrinterW
+#define SetPrinter  SetPrinterW
 #else
-#define SetPrinter SetPrinterA
+#define SetPrinter  SetPrinterA
 #endif // !UNICODE
 
 BOOL
@@ -753,7 +733,6 @@ GetPrinterA(
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 BOOL
 WINAPI
 GetPrinterW(
@@ -763,11 +742,10 @@ GetPrinterW(
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 #ifdef UNICODE
-#define GetPrinter GetPrinterW
+#define GetPrinter  GetPrinterW
 #else
-#define GetPrinter GetPrinterA
+#define GetPrinter  GetPrinterA
 #endif // !UNICODE
 
 BOOL
@@ -777,19 +755,17 @@ AddPrinterDriverA(
     DWORD   Level,
     LPBYTE  pDriverInfo
 );
-
 BOOL
 WINAPI
 AddPrinterDriverW(
-    LPWSTR  pName,
+    LPWSTR   pName,
     DWORD   Level,
     LPBYTE  pDriverInfo
 );
-
 #ifdef UNICODE
-#define AddPrinterDriver AddPrinterDriverW
+#define AddPrinterDriver  AddPrinterDriverW
 #else
-#define AddPrinterDriver AddPrinterDriverA
+#define AddPrinterDriver  AddPrinterDriverA
 #endif // !UNICODE
 
 BOOL
@@ -803,23 +779,21 @@ EnumPrinterDriversA(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 BOOL
 WINAPI
 EnumPrinterDriversW(
-    LPWSTR  pName,
-    LPWSTR  pEnvironment,
+    LPWSTR   pName,
+    LPWSTR   pEnvironment,
     DWORD   Level,
     LPBYTE  pDriverInfo,
     DWORD   cbBuf,
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 #ifdef UNICODE
-#define EnumPrinterDrivers EnumPrinterDriversW
+#define EnumPrinterDrivers  EnumPrinterDriversW
 #else
-#define EnumPrinterDrivers EnumPrinterDriversA
+#define EnumPrinterDrivers  EnumPrinterDriversA
 #endif // !UNICODE
 
 BOOL
@@ -832,22 +806,20 @@ GetPrinterDriverA(
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 BOOL
 WINAPI
 GetPrinterDriverW(
     HANDLE  hPrinter,
-    LPWSTR  pEnvironment,
+    LPWSTR   pEnvironment,
     DWORD   Level,
     LPBYTE  pDriverInfo,
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 #ifdef UNICODE
-#define GetPrinterDriver GetPrinterDriverW
+#define GetPrinterDriver  GetPrinterDriverW
 #else
-#define GetPrinterDriver GetPrinterDriverA
+#define GetPrinterDriver  GetPrinterDriverA
 #endif // !UNICODE
 
 BOOL
@@ -860,22 +832,20 @@ GetPrinterDriverDirectoryA(
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 BOOL
 WINAPI
 GetPrinterDriverDirectoryW(
-    LPWSTR  pName,
-    LPWSTR  pEnvironment,
+    LPWSTR   pName,
+    LPWSTR   pEnvironment,
     DWORD   Level,
     LPBYTE  pDriverDirectory,
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 #ifdef UNICODE
-#define GetPrinterDriverDirectory GetPrinterDriverDirectoryW
+#define GetPrinterDriverDirectory  GetPrinterDriverDirectoryW
 #else
-#define GetPrinterDriverDirectory GetPrinterDriverDirectoryA
+#define GetPrinterDriverDirectory  GetPrinterDriverDirectoryA
 #endif // !UNICODE
 
 BOOL
@@ -885,19 +855,17 @@ DeletePrinterDriverA(
    LPSTR    pEnvironment,
    LPSTR    pDriverName
 );
-
 BOOL
 WINAPI
 DeletePrinterDriverW(
-   LPWSTR   pName,
-   LPWSTR   pEnvironment,
-   LPWSTR   pDriverName
+   LPWSTR    pName,
+   LPWSTR    pEnvironment,
+   LPWSTR    pDriverName
 );
-
 #ifdef UNICODE
-#define DeletePrinterDriver DeletePrinterDriverW
+#define DeletePrinterDriver  DeletePrinterDriverW
 #else
-#define DeletePrinterDriver DeletePrinterDriverA
+#define DeletePrinterDriver  DeletePrinterDriverA
 #endif // !UNICODE
 
 BOOL
@@ -908,20 +876,18 @@ AddPrintProcessorA(
     LPSTR   pPathName,
     LPSTR   pPrintProcessorName
 );
-
 BOOL
 WINAPI
 AddPrintProcessorW(
-    LPWSTR  pName,
-    LPWSTR  pEnvironment,
-    LPWSTR  pPathName,
-    LPWSTR  pPrintProcessorName
+    LPWSTR   pName,
+    LPWSTR   pEnvironment,
+    LPWSTR   pPathName,
+    LPWSTR   pPrintProcessorName
 );
-
 #ifdef UNICODE
-#define AddPrintProcessor AddPrintProcessorW
+#define AddPrintProcessor  AddPrintProcessorW
 #else
-#define AddPrintProcessor AddPrintProcessorA
+#define AddPrintProcessor  AddPrintProcessorA
 #endif // !UNICODE
 
 BOOL
@@ -935,24 +901,24 @@ EnumPrintProcessorsA(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 BOOL
 WINAPI
 EnumPrintProcessorsW(
-    LPWSTR  pName,
-    LPWSTR  pEnvironment,
+    LPWSTR   pName,
+    LPWSTR   pEnvironment,
     DWORD   Level,
     LPBYTE  pPrintProcessorInfo,
     DWORD   cbBuf,
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 #ifdef UNICODE
-#define EnumPrintProcessors EnumPrintProcessorsW
+#define EnumPrintProcessors  EnumPrintProcessorsW
 #else
-#define EnumPrintProcessors EnumPrintProcessorsA
+#define EnumPrintProcessors  EnumPrintProcessorsA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -964,36 +930,24 @@ GetPrintProcessorDirectoryA(
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 BOOL
 WINAPI
 GetPrintProcessorDirectoryW(
-    LPWSTR  pName,
-    LPWSTR  pEnvironment,
+    LPWSTR   pName,
+    LPWSTR   pEnvironment,
     DWORD   Level,
     LPBYTE  pPrintProcessorInfo,
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 #ifdef UNICODE
-#define GetPrintProcessorDirectory GetPrintProcessorDirectoryW
+#define GetPrintProcessorDirectory  GetPrintProcessorDirectoryW
 #else
-#define GetPrintProcessorDirectory GetPrintProcessorDirectoryA
+#define GetPrintProcessorDirectory  GetPrintProcessorDirectoryA
 #endif // !UNICODE
 
 BOOL
-EnumPrintProcessorDatatypesW(
-    LPWSTR  pName,
-    LPWSTR  pPrintProcessorName,
-    DWORD   Level,
-    LPBYTE  pDatatypes,
-    DWORD   cbBuf,
-    LPDWORD pcbNeeded,
-    LPDWORD pcReturned
-);
-
-BOOL
+WINAPI
 EnumPrintProcessorDatatypesA(
     LPSTR   pName,
     LPSTR   pPrintProcessorName,
@@ -1003,11 +957,21 @@ EnumPrintProcessorDatatypesA(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
+BOOL
+WINAPI
+EnumPrintProcessorDatatypesW(
+    LPWSTR   pName,
+    LPWSTR   pPrintProcessorName,
+    DWORD   Level,
+    LPBYTE  pDatatypes,
+    DWORD   cbBuf,
+    LPDWORD pcbNeeded,
+    LPDWORD pcReturned
+);
 #ifdef UNICODE
-#define EnumPrintProcessorDatatypes EnumPrintProcessorDatatypesW
+#define EnumPrintProcessorDatatypes  EnumPrintProcessorDatatypesW
 #else
-#define EnumPrintProcessorDatatypes EnumPrintProcessorDatatypesA
+#define EnumPrintProcessorDatatypes  EnumPrintProcessorDatatypesA
 #endif // !UNICODE
 
 BOOL
@@ -1017,19 +981,17 @@ DeletePrintProcessorA(
     LPSTR   pEnvironment,
     LPSTR   pPrintProcessorName
 );
-
 BOOL
 WINAPI
 DeletePrintProcessorW(
-    LPWSTR  pName,
-    LPWSTR  pEnvironment,
-    LPWSTR  pPrintProcessorName
+    LPWSTR   pName,
+    LPWSTR   pEnvironment,
+    LPWSTR   pPrintProcessorName
 );
-
 #ifdef UNICODE
-#define DeletePrintProcessor DeletePrintProcessorW
+#define DeletePrintProcessor  DeletePrintProcessorW
 #else
-#define DeletePrintProcessor DeletePrintProcessorA
+#define DeletePrintProcessor  DeletePrintProcessorA
 #endif // !UNICODE
 
 DWORD
@@ -1039,7 +1001,6 @@ StartDocPrinterA(
     DWORD   Level,
     LPBYTE  pDocInfo
 );
-
 DWORD
 WINAPI
 StartDocPrinterW(
@@ -1047,11 +1008,10 @@ StartDocPrinterW(
     DWORD   Level,
     LPBYTE  pDocInfo
 );
-
 #ifdef UNICODE
-#define StartDocPrinter StartDocPrinterW
+#define StartDocPrinter  StartDocPrinterW
 #else
-#define StartDocPrinter StartDocPrinterA
+#define StartDocPrinter  StartDocPrinterA
 #endif // !UNICODE
 
 BOOL
@@ -1105,7 +1065,6 @@ AddJobA(
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 BOOL
 WINAPI
 AddJobW(
@@ -1115,11 +1074,10 @@ AddJobW(
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 #ifdef UNICODE
-#define AddJob AddJobW
+#define AddJob  AddJobW
 #else
-#define AddJob AddJobA
+#define AddJob  AddJobA
 #endif // !UNICODE
 
 BOOL
@@ -1139,29 +1097,27 @@ PrinterProperties(
 LONG
 WINAPI
 DocumentPropertiesA(
-    HWND    hWnd,
-    HANDLE  hPrinter,
+    HWND      hWnd,
+    HANDLE    hPrinter,
     LPSTR   pDeviceName,
     PDEVMODEA pDevModeOutput,
     PDEVMODEA pDevModeInput,
-    DWORD   fMode
+    DWORD     fMode
 );
-
 LONG
 WINAPI
 DocumentPropertiesW(
-    HWND    hWnd,
-    HANDLE  hPrinter,
-    LPWSTR  pDeviceName,
+    HWND      hWnd,
+    HANDLE    hPrinter,
+    LPWSTR   pDeviceName,
     PDEVMODEW pDevModeOutput,
     PDEVMODEW pDevModeInput,
-    DWORD   fMode
+    DWORD     fMode
 );
-
 #ifdef UNICODE
-#define DocumentProperties DocumentPropertiesW
+#define DocumentProperties  DocumentPropertiesW
 #else
-#define DocumentProperties DocumentPropertiesA
+#define DocumentProperties  DocumentPropertiesA
 #endif // !UNICODE
 
 LONG
@@ -1173,22 +1129,21 @@ AdvancedDocumentPropertiesA(
     PDEVMODEA pDevModeOutput,
     PDEVMODEA pDevModeInput
 );
-
 LONG
 WINAPI
 AdvancedDocumentPropertiesW(
     HWND    hWnd,
     HANDLE  hPrinter,
-    LPWSTR  pDeviceName,
+    LPWSTR   pDeviceName,
     PDEVMODEW pDevModeOutput,
     PDEVMODEW pDevModeInput
 );
-
 #ifdef UNICODE
-#define AdvancedDocumentProperties AdvancedDocumentPropertiesW
+#define AdvancedDocumentProperties  AdvancedDocumentPropertiesW
 #else
-#define AdvancedDocumentProperties AdvancedDocumentPropertiesA
+#define AdvancedDocumentProperties  AdvancedDocumentPropertiesA
 #endif // !UNICODE
+
 
 DWORD
 WINAPI
@@ -1200,23 +1155,23 @@ GetPrinterDataA(
     DWORD    nSize,
     LPDWORD  pcbNeeded
 );
-
 DWORD
 WINAPI
 GetPrinterDataW(
     HANDLE   hPrinter,
-    LPWSTR   pValueName,
+    LPWSTR    pValueName,
     LPDWORD  pType,
     LPBYTE   pData,
     DWORD    nSize,
     LPDWORD  pcbNeeded
 );
-
 #ifdef UNICODE
-#define GetPrinterData GetPrinterDataW
+#define GetPrinterData  GetPrinterDataW
 #else
-#define GetPrinterData GetPrinterDataA
+#define GetPrinterData  GetPrinterDataA
 #endif // !UNICODE
+
+
 
 DWORD
 WINAPI
@@ -1227,22 +1182,22 @@ SetPrinterDataA(
     LPBYTE  pData,
     DWORD   cbData
 );
-
 DWORD
 WINAPI
 SetPrinterDataW(
     HANDLE  hPrinter,
-    LPWSTR  pValueName,
+    LPWSTR   pValueName,
     DWORD   Type,
     LPBYTE  pData,
     DWORD   cbData
 );
-
 #ifdef UNICODE
-#define SetPrinterData SetPrinterDataW
+#define SetPrinterData  SetPrinterDataW
 #else
-#define SetPrinterData SetPrinterDataA
+#define SetPrinterData  SetPrinterDataA
 #endif // !UNICODE
+
+
 
 DWORD
 WINAPI
@@ -1251,9 +1206,35 @@ WaitForPrinterChange(
     DWORD   Flags
 );
 
+HANDLE
+WINAPI
+FindFirstPrinterChangeNotification(
+    HANDLE  hPrinter,
+    DWORD   fdwFlags,
+    DWORD   fdwOptions,
+    LPVOID  pvReserved
+);
+
+BOOL
+WINAPI
+FindNextPrinterChangeNotification(
+    HANDLE hChange,
+    PDWORD pdwChange,
+    DWORD  dwReserved,
+    LPVOID pvReserved
+);
+
+
+BOOL
+WINAPI
+FindClosePrinterChangeNotification(
+    HANDLE hChange
+);
+
 #define PRINTER_CHANGE_ADD_PRINTER              0x00000001
 #define PRINTER_CHANGE_SET_PRINTER              0x00000002
 #define PRINTER_CHANGE_DELETE_PRINTER           0x00000004
+#define PRINTER_CHANGE_FAILED_CONNECTION_PRINTER    0x00000008
 #define PRINTER_CHANGE_PRINTER                  0x000000FF
 #define PRINTER_CHANGE_ADD_JOB                  0x00000100
 #define PRINTER_CHANGE_SET_JOB                  0x00000200
@@ -1272,6 +1253,7 @@ WaitForPrinterChange(
 #define PRINTER_CHANGE_DELETE_PRINT_PROCESSOR   0x04000000
 #define PRINTER_CHANGE_PRINT_PROCESSOR          0x07000000
 #define PRINTER_CHANGE_ADD_PRINTER_DRIVER       0x10000000
+#define PRINTER_CHANGE_SET_PRINTER_DRIVER       0x20000000
 #define PRINTER_CHANGE_DELETE_PRINTER_DRIVER    0x40000000
 #define PRINTER_CHANGE_PRINTER_DRIVER           0x70000000
 #define PRINTER_CHANGE_TIMEOUT                  0x80000000
@@ -1287,23 +1269,23 @@ PrinterMessageBoxA(
     LPSTR   pCaption,
     DWORD   dwType
 );
-
 DWORD
 WINAPI
 PrinterMessageBoxW(
     HANDLE  hPrinter,
     DWORD   Error,
     HWND    hWnd,
-    LPWSTR  pText,
-    LPWSTR  pCaption,
+    LPWSTR   pText,
+    LPWSTR   pCaption,
     DWORD   dwType
 );
-
 #ifdef UNICODE
-#define PrinterMessageBox PrinterMessageBoxW
+#define PrinterMessageBox  PrinterMessageBoxW
 #else
-#define PrinterMessageBox PrinterMessageBoxA
+#define PrinterMessageBox  PrinterMessageBoxA
 #endif // !UNICODE
+
+
 
 #define PRINTER_ERROR_INFORMATION   0x80000000
 #define PRINTER_ERROR_WARNING       0x40000000
@@ -1326,7 +1308,6 @@ AddFormA(
     DWORD   Level,
     LPBYTE  pForm
 );
-
 BOOL
 WINAPI
 AddFormW(
@@ -1334,12 +1315,13 @@ AddFormW(
     DWORD   Level,
     LPBYTE  pForm
 );
-
 #ifdef UNICODE
-#define AddForm AddFormW
+#define AddForm  AddFormW
 #else
-#define AddForm AddFormA
+#define AddForm  AddFormA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1347,19 +1329,19 @@ DeleteFormA(
     HANDLE  hPrinter,
     LPSTR   pFormName
 );
-
 BOOL
 WINAPI
 DeleteFormW(
     HANDLE  hPrinter,
-    LPWSTR  pFormName
+    LPWSTR   pFormName
 );
-
 #ifdef UNICODE
-#define DeleteForm DeleteFormW
+#define DeleteForm  DeleteFormW
 #else
-#define DeleteForm DeleteFormA
+#define DeleteForm  DeleteFormA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1371,23 +1353,23 @@ GetFormA(
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 BOOL
 WINAPI
 GetFormW(
     HANDLE  hPrinter,
-    LPWSTR  pFormName,
+    LPWSTR   pFormName,
     DWORD   Level,
     LPBYTE  pForm,
     DWORD   cbBuf,
     LPDWORD pcbNeeded
 );
-
 #ifdef UNICODE
-#define GetForm GetFormW
+#define GetForm  GetFormW
 #else
-#define GetForm GetFormA
+#define GetForm  GetFormA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1397,21 +1379,21 @@ SetFormA(
     DWORD   Level,
     LPBYTE  pForm
 );
-
 BOOL
 WINAPI
 SetFormW(
     HANDLE  hPrinter,
-    LPWSTR  pFormName,
+    LPWSTR   pFormName,
     DWORD   Level,
     LPBYTE  pForm
 );
-
 #ifdef UNICODE
-#define SetForm SetFormW
+#define SetForm  SetFormW
 #else
-#define SetForm SetFormA
+#define SetForm  SetFormA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1423,7 +1405,6 @@ EnumFormsA(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 BOOL
 WINAPI
 EnumFormsW(
@@ -1434,12 +1415,13 @@ EnumFormsW(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 #ifdef UNICODE
-#define EnumForms EnumFormsW
+#define EnumForms  EnumFormsW
 #else
-#define EnumForms EnumFormsA
+#define EnumForms  EnumFormsA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1451,23 +1433,23 @@ EnumMonitorsA(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 BOOL
 WINAPI
 EnumMonitorsW(
-    LPWSTR  pName,
+    LPWSTR   pName,
     DWORD   Level,
     LPBYTE  pMonitors,
     DWORD   cbBuf,
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 #ifdef UNICODE
-#define EnumMonitors EnumMonitorsW
+#define EnumMonitors  EnumMonitorsW
 #else
-#define EnumMonitors EnumMonitorsA
+#define EnumMonitors  EnumMonitorsA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1476,20 +1458,20 @@ AddMonitorA(
     DWORD   Level,
     LPBYTE  pMonitors
 );
-
 BOOL
 WINAPI
 AddMonitorW(
-    LPWSTR  pName,
+    LPWSTR   pName,
     DWORD   Level,
     LPBYTE  pMonitors
 );
-
 #ifdef UNICODE
-#define AddMonitor AddMonitorW
+#define AddMonitor  AddMonitorW
 #else
-#define AddMonitor AddMonitorA
+#define AddMonitor  AddMonitorA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1498,20 +1480,20 @@ DeleteMonitorA(
     LPSTR   pEnvironment,
     LPSTR   pMonitorName
 );
-
 BOOL
 WINAPI
 DeleteMonitorW(
-    LPWSTR  pName,
-    LPWSTR  pEnvironment,
-    LPWSTR  pMonitorName
+    LPWSTR   pName,
+    LPWSTR   pEnvironment,
+    LPWSTR   pMonitorName
 );
-
 #ifdef UNICODE
-#define DeleteMonitor DeleteMonitorW
+#define DeleteMonitor  DeleteMonitorW
 #else
-#define DeleteMonitor DeleteMonitorA
+#define DeleteMonitor  DeleteMonitorA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1523,23 +1505,23 @@ EnumPortsA(
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 BOOL
 WINAPI
 EnumPortsW(
-    LPWSTR  pName,
+    LPWSTR   pName,
     DWORD   Level,
     LPBYTE  pPorts,
     DWORD   cbBuf,
     LPDWORD pcbNeeded,
     LPDWORD pcReturned
 );
-
 #ifdef UNICODE
-#define EnumPorts EnumPortsW
+#define EnumPorts  EnumPortsW
 #else
-#define EnumPorts EnumPortsA
+#define EnumPorts  EnumPortsA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1548,20 +1530,20 @@ AddPortA(
     HWND    hWnd,
     LPSTR   pMonitorName
 );
-
 BOOL
 WINAPI
 AddPortW(
-    LPWSTR  pName,
+    LPWSTR   pName,
     HWND    hWnd,
-    LPWSTR  pMonitorName
+    LPWSTR   pMonitorName
 );
-
 #ifdef UNICODE
-#define AddPort AddPortW
+#define AddPort  AddPortW
 #else
-#define AddPort AddPortA
+#define AddPort  AddPortA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1570,20 +1552,20 @@ ConfigurePortA(
     HWND    hWnd,
     LPSTR   pPortName
 );
-
 BOOL
 WINAPI
 ConfigurePortW(
-    LPWSTR  pName,
+    LPWSTR   pName,
     HWND    hWnd,
-    LPWSTR  pPortName
+    LPWSTR   pPortName
 );
-
 #ifdef UNICODE
-#define ConfigurePort ConfigurePortW
+#define ConfigurePort  ConfigurePortW
 #else
-#define ConfigurePort ConfigurePortA
+#define ConfigurePort  ConfigurePortA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
@@ -1592,56 +1574,56 @@ DeletePortA(
     HWND    hWnd,
     LPSTR   pPortName
 );
-
 BOOL
 WINAPI
 DeletePortW(
-    LPWSTR  pName,
+    LPWSTR   pName,
     HWND    hWnd,
-    LPWSTR  pPortName
+    LPWSTR   pPortName
 );
-
 #ifdef UNICODE
-#define DeletePort DeletePortW
+#define DeletePort  DeletePortW
 #else
-#define DeletePort DeletePortA
+#define DeletePort  DeletePortA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
 AddPrinterConnectionA(
     LPSTR   pName
 );
-
 BOOL
 WINAPI
 AddPrinterConnectionW(
-    LPWSTR  pName
+    LPWSTR   pName
 );
-
 #ifdef UNICODE
-#define AddPrinterConnection AddPrinterConnectionW
+#define AddPrinterConnection  AddPrinterConnectionW
 #else
-#define AddPrinterConnection AddPrinterConnectionA
+#define AddPrinterConnection  AddPrinterConnectionA
 #endif // !UNICODE
+
+
 
 BOOL
 WINAPI
 DeletePrinterConnectionA(
     LPSTR   pName
 );
-
 BOOL
 WINAPI
 DeletePrinterConnectionW(
-    LPWSTR  pName
+    LPWSTR   pName
 );
-
 #ifdef UNICODE
-#define DeletePrinterConnection DeletePrinterConnectionW
+#define DeletePrinterConnection  DeletePrinterConnectionW
 #else
-#define DeletePrinterConnection DeletePrinterConnectionA
+#define DeletePrinterConnection  DeletePrinterConnectionA
 #endif // !UNICODE
+
+
 
 HANDLE
 WINAPI
@@ -1650,48 +1632,46 @@ ConnectToPrinterDlg(
     DWORD   Flags
 );
 
-typedef struct _PROVIDOR_INFO_1A {
-    LPSTR   pName;
-    LPSTR   pEnvironment;
-    LPSTR   pDLLName;
+typedef struct _PROVIDOR_INFO_1A{
+    LPSTR     pName;
+    LPSTR     pEnvironment;
+    LPSTR     pDLLName;
 } PROVIDOR_INFO_1A, *PPROVIDOR_INFO_1A, *LPPROVIDOR_INFO_1A;
-
-typedef struct _PROVIDOR_INFO_1W {
-    LPWSTR  pName;
-    LPWSTR  pEnvironment;
-    LPWSTR  pDLLName;
+typedef struct _PROVIDOR_INFO_1W{
+    LPWSTR    pName;
+    LPWSTR    pEnvironment;
+    LPWSTR    pDLLName;
 } PROVIDOR_INFO_1W, *PPROVIDOR_INFO_1W, *LPPROVIDOR_INFO_1W;
-
 #ifdef UNICODE
-#define PROVIDOR_INFO_1 PROVIDOR_INFO_1W
-#define PPROVIDOR_INFO_1 PPROVIDOR_INFO_1W
-#define LPPROVIDOR_INFO_1 LPPROVIDOR_INFO_1W
+typedef PROVIDOR_INFO_1W PROVIDOR_INFO_1;
+typedef PPROVIDOR_INFO_1W PPROVIDOR_INFO_1;
+typedef LPPROVIDOR_INFO_1W LPPROVIDOR_INFO_1;
 #else
-#define PROVIDOR_INFO_1 PROVIDOR_INFO_1A
-#define PPROVIDOR_INFO_1 PPROVIDOR_INFO_1A
-#define LPPROVIDOR_INFO_1 LPPROVIDOR_INFO_1A
+typedef PROVIDOR_INFO_1A PROVIDOR_INFO_1;
+typedef PPROVIDOR_INFO_1A PPROVIDOR_INFO_1;
+typedef LPPROVIDOR_INFO_1A LPPROVIDOR_INFO_1;
 #endif // UNICODE
+
+
 
 BOOL
 WINAPI
 AddPrintProvidorA(
-    LPSTR   pName,
-    DWORD   Level,
-    LPBYTE  pProvidorInfo
+    LPSTR  pName,
+    DWORD    level,
+    LPBYTE   pProvidorInfo
 );
-
 BOOL
 WINAPI
 AddPrintProvidorW(
     LPWSTR  pName,
-    DWORD   Level,
-    LPBYTE  pProvidorInfo
+    DWORD    level,
+    LPBYTE   pProvidorInfo
 );
-
 #ifdef UNICODE
-#define AddPrintProvidor AddPrintProvidorW
+#define AddPrintProvidor  AddPrintProvidorW
 #else
-#define AddPrintProvidor AddPrintProvidorA
+#define AddPrintProvidor  AddPrintProvidorA
 #endif // !UNICODE
 
 BOOL
@@ -1701,20 +1681,20 @@ DeletePrintProvidorA(
     LPSTR   pEnvironment,
     LPSTR   pPrintProvidorName
 );
-
 BOOL
 WINAPI
 DeletePrintProvidorW(
-    LPWSTR  pName,
-    LPWSTR  pEnvironment,
-    LPWSTR  pPrintProvidorName
+    LPWSTR   pName,
+    LPWSTR   pEnvironment,
+    LPWSTR   pPrintProvidorName
 );
-
 #ifdef UNICODE
-#define DeletePrintProvidor DeletePrintProvidorW
+#define DeletePrintProvidor  DeletePrintProvidorW
 #else
-#define DeletePrintProvidor DeletePrintProvidorA
+#define DeletePrintProvidor  DeletePrintProvidorA
 #endif // !UNICODE
+
+
 
 #define SERVER_ACCESS_ADMINISTER    0x00000001
 #define SERVER_ACCESS_ENUMERATE     0x00000002
@@ -1782,3 +1762,4 @@ DeletePrintProvidorW(
 #endif
 
 #endif // _WINSPOOL_
+

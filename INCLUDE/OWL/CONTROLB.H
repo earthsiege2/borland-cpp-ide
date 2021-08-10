@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\controlb.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Class TControlBar.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_CONTROLB_H)
-#define __OWL_CONTROLB_H
+#if !defined(OWL_CONTROLB_H)
+#define OWL_CONTROLB_H
 
-#if !defined(__OWL_GADGETWI_H)
-  #include "owl\gadgetwi.h"
+#if !defined(OWL_GADGETWI_H)
+# include <owl/gadgetwi.h>
 #endif
 
 //
@@ -24,7 +25,7 @@ class _OWLCLASS TControlBar : public TGadgetWindow {
                 TFont*          font = new TGadgetWindowFont,
                 TModule*        module = 0);
 
-    BOOL    PreProcessMsg(MSG& msg);
+    bool    PreProcessMsg(MSG& msg);
 
   protected:
     void    PositionGadget(TGadget* previous, TGadget* next, TPoint& p);
@@ -32,4 +33,4 @@ class _OWLCLASS TControlBar : public TGadgetWindow {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_CONTROLB_H
+#endif  // OWL_CONTROLB_H

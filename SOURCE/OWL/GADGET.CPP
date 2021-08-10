@@ -1,29 +1,36 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\gadget.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TGadget and class TSeperatorGadget.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\gadget.h>
-#include <owl\gadgetwi.h>
+#include <owl/owlpch.h>
+#include <owl/gadget.h>
+#include <owl/gadgetwi.h>
 
 TSeparatorGadget::TSeparatorGadget(int size)
 {
-  ShrinkWrapWidth = ShrinkWrapHeight = FALSE;
-  SetEnabled(FALSE);
+  ShrinkWrapWidth = ShrinkWrapHeight = false;
+  SetEnabled(false);
   Bounds.right = size * GetSystemMetrics(SM_CXBORDER);
   Bounds.bottom = size * GetSystemMetrics(SM_CYBORDER);
+}
+
+void
+TSeparatorGadget::Inserted()
+{
+  BorderStyle = None;  // prohibit our style from being changed
 }
 
 TGadget::TGadget(int id, TBorderStyle borderStyle)
 {
   Window = 0;
   Bounds = TRect(0, 0, 0, 0);
-  Enabled = TRUE;
-  TrackMouse = FALSE;
-  Clip = FALSE;
-  WideAsPossible = FALSE;
-  ShrinkWrapWidth = ShrinkWrapHeight = TRUE;
+  Enabled = true;
+  TrackMouse = false;
+  Clip = false;
+  WideAsPossible = false;
+  ShrinkWrapWidth = ShrinkWrapHeight = true;
   Next = 0;
   Id = id;
 
@@ -32,7 +39,6 @@ TGadget::TGadget(int id, TBorderStyle borderStyle)
 
 TGadget::~TGadget()
 {
-  //
   //    If we're in a window, remove ourselves.
   //
   if (Window)
@@ -50,7 +56,7 @@ TGadget::SysColorChange()
 }
 
 void
-TGadget::SetShrinkWrap(BOOL shrinkWrapWidth, BOOL shrinkWrapHeight)
+TGadget::SetShrinkWrap(bool shrinkWrapWidth, bool shrinkWrapHeight)
 {
   ShrinkWrapWidth = shrinkWrapWidth;
   ShrinkWrapHeight = shrinkWrapHeight;
@@ -67,11 +73,11 @@ TGadget::SetSize(TSize& size)
 }
 
 void
-TGadget::SetEnabled(BOOL enabled)
+TGadget::SetEnabled(bool enabled)
 {
   if (Enabled != enabled) {
     Enabled = enabled;
-    Invalidate(FALSE);
+    Invalidate(false);
   }
 }
 
@@ -107,6 +113,7 @@ TGadget::SetBorderStyle(TBorderStyle borderStyle)
   BorderStyle = borderStyle;
 
   switch (BorderStyle) {
+    default:
     case None:
       edgeThickness = 0;
       break;
@@ -128,7 +135,7 @@ TGadget::SetBorderStyle(TBorderStyle borderStyle)
     Window->GadgetChangedSize(*this);
 }
 
-BOOL
+bool
 TGadget::PtIn(TPoint& point)
 {
   return point.x >= 0 && point.y >= 0 &&
@@ -146,7 +153,7 @@ TGadget::Removed()
 }
 
 void
-TGadget::InvalidateRect(const TRect& rect, BOOL erase)
+TGadget::InvalidateRect(const TRect& rect, bool erase)
 {
   if (Window && Window->HWindow) {
     TRect  updateRect(rect.left + Bounds.left, rect.top + Bounds.top,
@@ -157,7 +164,7 @@ TGadget::InvalidateRect(const TRect& rect, BOOL erase)
 }
 
 void
-TGadget::Invalidate(BOOL erase)
+TGadget::Invalidate(bool erase)
 {
   InvalidateRect(TRect(0, 0, Bounds.Width(), Bounds.Height()), erase);
 }
@@ -176,13 +183,13 @@ void
 TGadget::PaintBorder(TDC& dc)
 {
   if (BorderStyle != None) {
-    int  xBorder = GetSystemMetrics(SM_CXBORDER);
-    int  yBorder = GetSystemMetrics(SM_CYBORDER);
+    int  xB = GetSystemMetrics(SM_CXBORDER);
+    int  yB = GetSystemMetrics(SM_CYBORDER);
 
     if (BorderStyle == Plain)
       dc.OWLFastWindowFrame(TBrush(GetSysColor(COLOR_WINDOWFRAME)),
                             TRect(0, 0, Bounds.Width(), Bounds.Height()),
-                            xBorder, yBorder);
+                            xB, yB);
 
     else {
       TBrush  highlight(GetSysColor(COLOR_BTNHIGHLIGHT));
@@ -191,33 +198,33 @@ TGadget::PaintBorder(TDC& dc)
       switch (BorderStyle) {
         case Raised:
           dc.SelectObject(highlight);
-          dc.PatBlt(0, 0, Bounds.Width(), yBorder, PATCOPY);
-          dc.PatBlt(0, 0, xBorder, Bounds.Height(), PATCOPY);
+          dc.PatBlt(0, 0, Bounds.Width()-xB, yB, PATCOPY);
+          dc.PatBlt(0, 0, xB, Bounds.Height()-yB, PATCOPY);
           dc.SelectObject(shadow);
-          dc.PatBlt(0, Bounds.Height() - 1, Bounds.Width(), yBorder, PATCOPY);
-          dc.PatBlt(Bounds.Width() - 1, 0, xBorder, Bounds.Height(), PATCOPY);
+          dc.PatBlt(1, Bounds.Height()-yB, Bounds.Width()-xB, yB, PATCOPY);
+          dc.PatBlt(Bounds.Width()-xB, yB, xB, Bounds.Height()-yB, PATCOPY);
           break;
 
         case Recessed:
           dc.SelectObject(shadow);
-          dc.PatBlt(0, 0, Bounds.Width(), yBorder, PATCOPY);
-          dc.PatBlt(0, 0, xBorder, Bounds.Height(), PATCOPY);
+          dc.PatBlt(0, 0, Bounds.Width()-xB, yB, PATCOPY);
+          dc.PatBlt(0, 0, xB, Bounds.Height()-yB, PATCOPY);
           dc.SelectObject(highlight);
-          dc.PatBlt(0, Bounds.Height() - 1, Bounds.Width(), yBorder, PATCOPY);
-          dc.PatBlt(Bounds.Width() - 1, 0, xBorder, Bounds.Height(), PATCOPY);
+          dc.PatBlt(xB, Bounds.Height()-yB, Bounds.Width()-xB, yB, PATCOPY);
+          dc.PatBlt(Bounds.Width()-xB, yB, xB, Bounds.Height()-yB, PATCOPY);
           break;
 
         case Embossed:
           dc.SelectObject(highlight);
-          dc.PatBlt(0, 0, Bounds.Width() - 1, 1, PATCOPY);
-          dc.PatBlt(0, 0, 1, Bounds.Height() - 2, PATCOPY);
-          dc.PatBlt(2, Bounds.Height() - 3, Bounds.Width() - 4, 1, PATCOPY);
-          dc.PatBlt(Bounds.Width() - 3, 3, 1, Bounds.Height() - 5, PATCOPY);
+          dc.PatBlt(0, 0, Bounds.Width()-xB, yB, PATCOPY);
+          dc.PatBlt(0, 0, xB, Bounds.Height()-yB, PATCOPY);
+          dc.PatBlt(3*xB, Bounds.Height()-3*yB, Bounds.Width()-5*xB, yB, PATCOPY);
+          dc.PatBlt(Bounds.Width()-3*xB, 3*yB, xB, Bounds.Height()-5*xB, PATCOPY);
           dc.SelectObject(shadow);
-          dc.PatBlt(2, 2, Bounds.Width() - 5, 1, PATCOPY);
-          dc.PatBlt(2, 2, 1, Bounds.Height() - 5, PATCOPY);
-          dc.PatBlt(1, Bounds.Height() - 1, Bounds.Width() - 2, 1, PATCOPY);
-          dc.PatBlt(Bounds.Width() - 1, 1, 1, Bounds.Height() - 1, PATCOPY);
+          dc.PatBlt(2*xB, 2*yB, Bounds.Width()-5*xB, yB, PATCOPY);
+          dc.PatBlt(2*xB, 2*yB, xB, Bounds.Height()-5*yB, PATCOPY);
+          dc.PatBlt(xB, Bounds.Height()-yB, Bounds.Width()-2*xB, yB, PATCOPY);
+          dc.PatBlt(Bounds.Width()-xB, yB, xB, Bounds.Height()-yB, PATCOPY);
           break;
       }
     }
@@ -253,14 +260,14 @@ void
 TGadget::GetOuterSizes(int& left, int& right, int& top, int& bottom)
 {
   if (Window) {
-    int  cxBorder = GetSystemMetrics(SM_CXBORDER);
-    int  cyBorder = GetSystemMetrics(SM_CYBORDER);
+    int  xBorder = GetSystemMetrics(SM_CXBORDER);
+    int  yBorder = GetSystemMetrics(SM_CYBORDER);
 
     Window->GetMargins(Margins, left, right, top, bottom);
-    left += Borders.Left * cxBorder;
-    right += Borders.Right * cxBorder;
-    top += Borders.Top * cyBorder;
-    bottom += Borders.Bottom * cyBorder;
+    left += Borders.Left * xBorder;
+    right += Borders.Right * xBorder;
+    top += Borders.Top * yBorder;
+    bottom += Borders.Bottom * yBorder;
   }
 }
 
@@ -289,7 +296,7 @@ TGadget::GetInnerRect(TRect& innerRect)
 // gadget has captured the mouse
 //
 void
-TGadget::MouseMove(UINT /*modKeys*/, TPoint&)
+TGadget::MouseMove(uint /*modKeys*/, TPoint&)
 {
 }
 
@@ -298,7 +305,7 @@ TGadget::MouseMove(UINT /*modKeys*/, TPoint&)
 // has capture
 //
 void
-TGadget::MouseEnter(UINT /*modKeys*/, TPoint&)
+TGadget::MouseEnter(uint /*modKeys*/, TPoint&)
 {
 }
 
@@ -307,19 +314,19 @@ TGadget::MouseEnter(UINT /*modKeys*/, TPoint&)
 // has capture
 //
 void
-TGadget::MouseLeave(UINT /*modKeys*/, TPoint&)
+TGadget::MouseLeave(uint /*modKeys*/, TPoint&)
 {
 }
 
 void
-TGadget::LButtonDown(UINT /*modKeys*/, TPoint&)
+TGadget::LButtonDown(uint /*modKeys*/, TPoint&)
 {
   if (TrackMouse)
     Window->GadgetSetCapture(*this);
 }
 
 void
-TGadget::LButtonUp(UINT /*modKeys*/, TPoint&)
+TGadget::LButtonUp(uint /*modKeys*/, TPoint&)
 {
   if (TrackMouse)
     Window->GadgetReleaseCapture(*this);

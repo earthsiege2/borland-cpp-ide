@@ -4,13 +4,12 @@
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-/*
- *      C/C++ Run Time Library - Version 6.0
- *
- *      Copyright (c) 1991, 1993 by Borland International
- *      All Rights Reserved.
- *
- */
+;
+;       C/C++ Run Time Library - Version 6.5
+; 
+;       Copyright (c) 1991, 1994 by Borland International
+;       All Rights Reserved.
+; 
 
 ;     If defined, the following flags inhibit inclusion
 ;     of the indicated items:

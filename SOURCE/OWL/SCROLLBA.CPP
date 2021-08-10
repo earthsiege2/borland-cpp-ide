@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\scrollba.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TScrollBar.  This defines the basic
 //   behavior of all scrollbar controls.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\scrollba.h>
+#include <owl/owlpch.h>
+#include <owl/scrollba.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -24,9 +25,10 @@ END_RESPONSE_TABLE;
 TScrollBar::TScrollBar(TWindow*        parent,
                        int             id,
                        int x, int y, int w, int h,
-                       BOOL            isHScrollBar,
+                       bool            isHScrollBar,
                        TModule*        module)
-  : TControl(parent, id, 0, x, y, w, h, module)
+:
+  TControl(parent, id, 0, x, y, w, h, module)
 {
   LineMagnitude = 1;
   PageMagnitude = 10;
@@ -36,8 +38,8 @@ TScrollBar::TScrollBar(TWindow*        parent,
 
     if (Attr.H == 0)
       Attr.H = GetSystemMetrics(SM_CYHSCROLL);
-
-  } else {
+  }
+  else {
     Attr.Style |= SBS_VERT;
 
     if (Attr.W == 0)
@@ -48,7 +50,8 @@ TScrollBar::TScrollBar(TWindow*        parent,
 TScrollBar::TScrollBar(TWindow*   parent,
                        int        resourceId,
                        TModule*   module)
-  : TControl(parent, resourceId, module)
+:
+  TControl(parent, resourceId, module)
 {
   LineMagnitude = 1;
   PageMagnitude = 10;
@@ -62,7 +65,7 @@ TScrollBar::TScrollBar(TWindow*   parent,
 //
 // the return value is the size (in bytes) of the transfer data
 //
-UINT
+uint
 TScrollBar::Transfer(void* buffer, TTransferDirection direction)
 {
   TScrollBarData* scrollBuff = (TScrollBarData*)buffer;
@@ -70,8 +73,8 @@ TScrollBar::Transfer(void* buffer, TTransferDirection direction)
   if (direction == tdGetData) {
     GetRange(scrollBuff->LowValue, scrollBuff->HighValue);
     scrollBuff->Position = GetPosition();
-
-  } else if (direction == tdSetData) {
+  }
+  else if (direction == tdSetData) {
     SetRange(scrollBuff->LowValue, scrollBuff->HighValue);
     SetPosition(scrollBuff->Position);
   }
@@ -117,7 +120,7 @@ TScrollBar::SetPosition(int thumbPos)
     thumbPos = min;
 
   if (thumbPos != GetPosition())
-    ::SetScrollPos(HWindow, SB_CTL, thumbPos, TRUE);
+    ::SetScrollPos(HWindow, SB_CTL, thumbPos, true);
 }
 
 //
@@ -214,7 +217,7 @@ TScrollBar::SBEndScroll()
 }
 
 void
-TScrollBar::EvHScroll(UINT scrollCode, UINT thumbPos, HWND /*hWndCtl*/)
+TScrollBar::EvHScroll(uint scrollCode, uint thumbPos, HWND /*hWndCtl*/)
 {
   switch (scrollCode) {
     case SB_LINEDOWN:      SBLineDown(); break;
@@ -230,7 +233,7 @@ TScrollBar::EvHScroll(UINT scrollCode, UINT thumbPos, HWND /*hWndCtl*/)
 }
 
 void
-TScrollBar::EvVScroll(UINT scrollCode, UINT thumbPos, HWND hWndCtl)
+TScrollBar::EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl)
 {
   EvHScroll(scrollCode, thumbPos, hWndCtl);
 }

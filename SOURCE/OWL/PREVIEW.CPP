@@ -1,34 +1,37 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\preview.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of print preview classes
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\preview.h>
-#include <owl\printer.h>
-#include <owl\gdiobjec.h>
-#include <owl\dc.h>
-#include <owl\printdia.h>
+#include <owl/owlpch.h>
+#include <owl/preview.h>
+#include <owl/printer.h>
+#include <owl/gdiobjec.h>
+#include <owl/dc.h>
+#include <owl/printdia.h>
 #include <math.h>
 
 //
 // Some inlines to provide platform independence since we drop directly to API
 // calls to implement some of TPrintPreviewDC.
 //
-#if defined(__WIN32__)
-  inline BOOL SetWindowExt(HDC hdc, int w, int h) {return ::SetWindowExtEx(hdc, w, h, 0);}
-  inline BOOL SetViewportExt(HDC hdc, int w, int h) {return ::SetViewportExtEx(hdc, w, h, 0);}
-  inline BOOL SetViewportOrg(HDC hdc, int x, int y) {return ::SetViewportOrgEx(hdc, x, y, 0);}
+#if defined(BI_PLAT_WIN32)
+  inline bool SetWindowExt(HDC hdc, int w, int h) {return ::SetWindowExtEx(hdc, w, h, 0);}
+  inline bool SetWindowOrg(HDC hdc, int w, int h) {return ::SetWindowOrgEx(hdc, w, h, 0);}
+  inline bool SetViewportExt(HDC hdc, int w, int h) {return ::SetViewportExtEx(hdc, w, h, 0);}
+  inline bool SetViewportOrg(HDC hdc, int x, int y) {return ::SetViewportOrgEx(hdc, x, y, 0);}
 #endif
 
 TPrintPreviewDC::TPrintPreviewDC(TDC&         screen,
                                  TPrintDC&    printdc,
                                  const TRect& client,
                                  const TRect& clip)
-  : TPrintDC(screen),
-    PrnDC(printdc),
-    PrnFont(0),
-    CurrentPreviewFont(0)
+:
+  TPrintDC(screen),
+  PrnDC(printdc),
+  PrnFont(0),
+  CurrentPreviewFont(0)
 {
   //
   // Set the initial mode & extents for the screen dc
@@ -195,7 +198,7 @@ TPrintPreviewDC::SyncFont()
   
   // Keep just the pitch (low 2 bits). Ignore the family
   //
-  lf.lfPitchAndFamily = BYTE((tm.tmPitchAndFamily & 0x0003) | FF_DONTCARE);
+  lf.lfPitchAndFamily = uint8((tm.tmPitchAndFamily & 0x0003) | FF_DONTCARE);
   PrnDC.GetTextFace(sizeof(lf.lfFaceName), lf.lfFaceName);
 
   ::DeleteObject(::SelectObject(GetHDC(), ::CreateFontIndirect(&lf)));
@@ -252,7 +255,7 @@ TPrintPreviewDC::ReOrg()
   ::SetViewportOrg(GetHDC(), origin.x, origin.y);
 
   PrnDC.GetWindowOrg(origin);
-  ::SetViewportOrg(GetHDC(), origin.x, origin.y);
+  ::SetWindowOrg(GetHDC(), origin.x, origin.y);
 }
 
 TColor
@@ -279,52 +282,52 @@ TPrintPreviewDC::SetMapMode(int mode)
   return result;
 }
 
-BOOL
+bool
 TPrintPreviewDC::SetViewportOrg(const TPoint& origin, TPoint far* oldOrg)
 {
-  BOOL result = PrnDC.SetViewportOrg(origin, oldOrg);
+  bool result = PrnDC.SetViewportOrg(origin, oldOrg);
   ReOrg();
   return result;
 }
 
-BOOL
+bool
 TPrintPreviewDC::OffsetViewportOrg(const TPoint& delta, TPoint far* oldOrg)
 {
-  BOOL result = PrnDC.OffsetViewportOrg(delta, oldOrg);
+  bool result = PrnDC.OffsetViewportOrg(delta, oldOrg);
   ReOrg();
   return result;
 }
 
-BOOL
+bool
 TPrintPreviewDC::SetViewportExt(const TSize& extent, TSize far* oldExtent)
 {
-  BOOL result = PrnDC.SetViewportExt(extent, oldExtent);
+  bool result = PrnDC.SetViewportExt(extent, oldExtent);
   ReScale();
   return result;
 }
 
-BOOL
+bool
 TPrintPreviewDC::ScaleViewportExt(int xNum, int xDenom, int yNum, int yDenom,
                                   TSize far* oldExtent)
 {
-  BOOL result = PrnDC.ScaleViewportExt( xNum, xDenom, yNum, yDenom, oldExtent);
+  bool result = PrnDC.ScaleViewportExt( xNum, xDenom, yNum, yDenom, oldExtent);
   ReScale();
   return result;
 }
 
-BOOL
+bool
 TPrintPreviewDC::SetWindowExt(const TSize& extent, TSize far* oldExtent)
 {
-  BOOL result = PrnDC.SetWindowExt(extent, oldExtent);
+  bool result = PrnDC.SetWindowExt(extent, oldExtent);
   ReScale();
   return result;
 }
 
-BOOL
+bool
 TPrintPreviewDC::ScaleWindowExt(int xNum, int xDenom, int yNum, int yDenom,
                                 TSize far* oldExtent)
 {
-  BOOL result = PrnDC.ScaleWindowExt(xNum, xDenom, yNum, yDenom, oldExtent);
+  bool result = PrnDC.ScaleWindowExt(xNum, xDenom, yNum, yDenom, oldExtent);
   ReScale();
   return result;
 }
@@ -353,7 +356,7 @@ TPreviewPage::TPreviewPage(TWindow* parent, TPrintout& printout,
 // onto the window DC provided, 
 //
 void
-TPreviewPage::Paint(TDC& dc, BOOL, TRect& clip)
+TPreviewPage::Paint(TDC& dc, bool, TRect& clip)
 {
   TPrintPreviewDC pdc(dc, PrintDC, GetClientRect(), clip);
   Printout.SetPrintParams(&pdc, PrintExtent);
@@ -369,7 +372,8 @@ TPreviewPage::Paint(TDC& dc, BOOL, TRect& clip)
 
     Printout.EndDocument();
     Printout.EndPrinting();
-  } else 
+  }
+  else 
     dc.PatBlt(0, 0, Attr.W, Attr.H, WHITENESS);
 }
 
@@ -377,7 +381,7 @@ TPreviewPage::Paint(TDC& dc, BOOL, TRect& clip)
 // Always repaint whole window if size is changed
 //
 void
-TPreviewPage::EvSize(UINT sizeType, TSize& size)
+TPreviewPage::EvSize(uint sizeType, TSize& size)
 {
   Invalidate();
   TWindow::EvSize(sizeType, size);

@@ -1,8 +1,8 @@
-// Borland C++ Windows - (C) Copyright 1992 by Borland International
+// Borland C++ Windows - (C) Copyright 1994 by Borland International
 
 // FILE : cmdlgr.h
 
-#define szCMDLGAPAbout "Common Dialog Example\nCopyright (c) 1992 Borland International, Inc."
+#define szCMDLGAPAbout "Common Dialog Example\nCopyright (c) 1994 Borland International, Inc."
 
 #define CM_U_FILEOPEN               0x100
 #define CM_U_COLOR                  0x101

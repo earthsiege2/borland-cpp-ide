@@ -1,19 +1,23 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\gdibase.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of base most abstract GDI object class
 //----------------------------------------------------------------------------
-#if !defined(__OWL_GDIBASE_H)
-#define __OWL_GDIBASE_H
+#if !defined(OWL_GDIBASE_H)
+#define OWL_GDIBASE_H
 
-#if !defined(__OWL_COLOR_H)
-  #include <owl\color.h>
+#if !defined(OWL_OWLDEFS_H)
+# include <owl/owldefs.h>
 #endif
-#if !defined(__OWL_POINT_H)
-  #include <owl\point.h>
+#if !defined(OSL_GEOMETRY_H)
+# include <osl/geometry.h>
 #endif
-#if !defined(__OWL_EXCEPT_H)
-  #include <owl\except.h>
+#if !defined(OWL_COLOR_H)
+# include <owl/color.h>
+#endif
+#if !defined(OWL_EXCEPT_H)
+# include <owl/except.h>
 #endif
 
 //
@@ -41,11 +45,11 @@ class _OWLCLASS TGdiBase {
 
   protected:
     HANDLE      Handle;       // GDI handle of this object
-    BOOL        ShouldDelete; // Should object delete GDI handle in dtor?
+    bool        ShouldDelete; // Should object delete GDI handle in dtor?
 
     // throws exception if object is bad
-    void        CheckValid(UINT resId = IDS_GDIFAILURE);
-    static void CheckValid(HANDLE handle, UINT resId = IDS_GDIFAILURE);
+    void        CheckValid(uint resId = IDS_GDIFAILURE);
+    static void CheckValid(HANDLE handle, uint resId = IDS_GDIFAILURE);
 
     // constructors for use by derived classes only
     TGdiBase();
@@ -58,4 +62,4 @@ class _OWLCLASS TGdiBase {
     TGdiBase& operator=(const TGdiBase&);
 };
 
-#endif  // __OWL_GDIBASE_H
+#endif  // OWL_GDIBASE_H

@@ -1,6 +1,6 @@
 <<[CPP]
 ##@OPT_APPL_DOCVIEW != TRUE
-##:     %"Unable to do any document/view manipulations; document/view must be selected during AppExpert.  "
+##:     %"Unable to do any document/view manipulations. Doc/view must be selected when specifying application generation options.  "
 ##*
 ##"//{{DOC_VIEW}}" [[DocVMarker]]
 ##"//{{DOC_MANAGER_END}}" [[DocMMarker]]
@@ -9,24 +9,42 @@
 ##Search == FALSE
 ##:     %"Missing document/view markers for templates.  "
 ##*
+##@QUERY_APPL_OLE != VALUE_NOOLE
+##{AddOleDV.SNP}
+##*
+##@QUERY_APPL_OLE == VALUE_NOOLE
 ##{AddDocV.SNP}
+##*
 ##FALSE [[IncludeSearch]]
 ##OPT_DV_RESET
 ##--FOR-- IncrV = 1 TO @QUERY_DV_COUNT
 ##OPT_DV_NEXT
-##QUERY_DV_TVIEW [[TView]]
-##\\"[[TView]]" [[ViewType]]
-##(ViewType != "TEditView") && (ViewType != "TListView") && (ViewType != "TWindowView")
-##:     GetIncludeFile(ViewType) [[ViewIncludeFile]]
-##:     \\"#include [[ViewIncludeFile]]" [[Include]]
+##QUERY_DV_TDOCUMENT [[TDocument]]
+##\\"[[TDocument]]" [[DocumentType]]
+##((DocumentType != "TFileDocument") && (DocumentType != "TOleDocument")
+##:     GetIncludeFile(DocumentType) [[DocumentIncludeFile]]
+##:     \\"#include [[DocumentIncludeFile]]" [[IncludeDocument]]
 ##:     ^BOF
-##:     ? Include IncludeSearch
+##:     ? IncludeDocument IncludeSearch
 ##:     IncludeSearch == FALSE
 ##:         ^BOF
 ##:         ?\\"#include "
 ##:         ^BOL
-##:         ^1
-[[Include]]
+##:         ^2
+[[IncludeDocument]]
+##QUERY_DV_TVIEW [[TView]]
+##\\"[[TView]]" [[ViewType]]
+##((ViewType != "TEditView") && (ViewType != "TListView") && (ViewType != "TWindowView") && (ViewType != "TOleView"))
+##:     <<*ViewType QUERY_FILE_H [[ViewIncludeFile]]
+##:     \\"#include \"[[ViewIncludeFile]]\"" [[IncludeView]]
+##:     ^BOF
+##:     ? IncludeView IncludeSearch
+##:     IncludeSearch == FALSE
+##:         ^BOF
+##:         ?\\"#include "
+##:         ^BOL
+##:         ^2
+[[IncludeView]]
 ##--NEXT-- IncrV
 ##^^
 >>[CPP]

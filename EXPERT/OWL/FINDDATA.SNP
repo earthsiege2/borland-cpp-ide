@@ -1,7 +1,7 @@
-<<[CPP]
+<<[H]
 ##QUERY_BASE_NAME != "TDialog"
 ##:     QUERY_CLASS_NAME [[ClassName]]
-##:     %\\"[[ClassName]] is not a TDialog derived class, instance data not found.  "
+##:     %\\"[[ClassName]] is not derived from TDialog. Instance data not found.  "
 ##*
 ##"" [[ClassDefLine]]
 ##"" [[ConstructorLine]]
@@ -10,17 +10,14 @@
 ##--BEGIN-- QUERY_BASE_NAME == "TDialog"
 ##{XfrState.SNP}
 ##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
-##\\"//{{[[ClassName]]XFER_USE}}" [[XFerMarker]]
 ##^BOF
-##--BEGIN-- ? XFerMarker [[Search]]
-##Search == FALSE
-##:     QUERY_FILE_CPP [[FileName]]
-##:     %\\"Unable to locate instance data implementation in [[FileName]].  "
-##*
-##^BOL
-##^SCROLL
-##^^
-##--END-- ? XFerMarker [[Search]]
+##--BEGIN-- ? \\"//{{[[ClassName]]XFER_DATA}}"
+## --BEGIN-- ? ClassDefLine
+##:     QUERY_FILE_H [[FileName]]
+##:     %\\"Instance data variable already exists in [[FileName]]" -2
+## --END-- ? ClassDefLine
+##--END-- ? \\"//{{[[ClassName]]XFER_DATA}}"
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
 ##--END-- QUERY_BASE_NAME == "TDialog"
->>[CPP]
+>>[H]
+

@@ -1,0 +1,4 @@
+LIBRARY WIN87EM 
+ 
+EXPORTS
+	    __FPMATH    @1

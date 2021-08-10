@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\mdiclien.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TMDIClient.  This defines the basic behavior
 //   of all MDI client windows.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\mdi.h>
+#include <owl/owlpch.h>
+#include <owl/mdi.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -18,6 +19,7 @@ DEFINE_RESPONSE_TABLE1(TMDIClient, TWindow)
   EV_COMMAND(CM_ARRANGEICONS, CmArrangeIcons),
   EV_COMMAND(CM_CLOSECHILDREN, CmCloseChildren),
   EV_COMMAND_ENABLE(CM_TILECHILDREN, CmChildActionEnable),
+  EV_COMMAND_ENABLE(CM_TILECHILDRENHORIZ, CmChildActionEnable),
   EV_COMMAND_ENABLE(CM_CASCADECHILDREN, CmChildActionEnable),
   EV_COMMAND_ENABLE(CM_ARRANGEICONS, CmChildActionEnable),
   EV_COMMAND_ENABLE(CM_CLOSECHILDREN, CmChildActionEnable),
@@ -33,17 +35,16 @@ END_RESPONSE_TABLE;
 //
 TMDIClient::TMDIClient(TModule* module)
 {
-  //
   // Initialize virtual base, in case the derived-most used default ctor
   //
   TWindow::Init(0, 0, module);
 
   Attr.Id = IDW_MDICLIENT;
-  //
+
   // allow client area to grow scroll bars if necessary
   //
   Attr.Style |= MDIS_ALLCHILDSTYLES | WS_GROUP | WS_TABSTOP | WS_CLIPCHILDREN|
-                WS_VSCROLL | WS_HSCROLL;
+                WS_CLIPSIBLINGS | WS_VSCROLL | WS_HSCROLL | WS_BORDER;
   ClientAttr = new CLIENTCREATESTRUCT; // far
   ClientAttr->hWindowMenu = 0;
   ClientAttr->idFirstChild = IDW_FIRSTMDICHILD;
@@ -57,7 +58,8 @@ TMDIClient::TMDIClient(TModule* module)
 // classes
 //
 TMDIClient::TMDIClient(HWND hWnd, TModule* module)
-  : TWindow(hWnd, module)
+:
+  TWindow(hWnd, module)
 {
   ClientAttr = 0;
   SetFlag(wfStreamTop);
@@ -103,17 +105,17 @@ TMDIClient::TileChildren(int tile)
   HandleMessage(WM_MDITILE, tile);
 }
 
-BOOL
+bool
 TMDIClient::PreProcessMsg(MSG& msg)
 {
   if (msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN)
     return TranslateMDISysAccel(HWindow, &msg);
 
   else
-    return FALSE;
+    return false;
 }
 
-BOOL
+bool
 TMDIClient::Create()
 {
   TMDIFrame*  frame = TYPESAFE_DOWNCAST(Parent,TMDIFrame);
@@ -144,7 +146,7 @@ TMDIClient::InitChild()
   return new TMDIChild(*this);
 }
 
-static BOOL
+static bool
 CannotClose(TWindow* win, void*)
 {
   return !win->CanClose();
@@ -161,17 +163,17 @@ CloseChild(TWindow* win, void*)
 // closes each MDI child, after calling the child's CanClose() method to
 // ensure that it is Ok to do so
 //
-// returns TRUE if all children are closed(or there were no children),
-// FALSE if any child can't be closed
+// returns true if all children are closed(or there were no children),
+// false if any child can't be closed
 //
-BOOL
+bool
 TMDIClient::CloseChildren()
 {
   if (!FirstThat(CannotClose)) {
     ForEach(CloseChild);
-    return TRUE;
+    return true;
   }
-  return FALSE;
+  return false;
 }
 
 //
@@ -186,31 +188,7 @@ TMDIClient::EvMDICreate(MDICREATESTRUCT far& createStruct)
                WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
                WS_SYSMENU | WS_CAPTION | WS_THICKFRAME |
                WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
-
-  //
-  // deal with create maximized child problems
-  //
-  DWORD origStyle = createStruct.style;
-  if (createStruct.style & WS_MAXIMIZE) {
-    SetRedraw(FALSE);
-    createStruct.style &= ~(WS_MAXIMIZE | WS_VISIBLE | WS_VSCROLL | WS_HSCROLL);
-    createStruct.style |= WS_DISABLED;
-  }
-
-  LRESULT result = DefaultProcessing();
-
-  if (HWND(result) && (origStyle & WS_MAXIMIZE)) {
-    SetRedraw(TRUE);
-
-    if (!(origStyle & WS_DISABLED))
-      ::EnableWindow(HWND(result), TRUE);
-
-    HandleMessage(WM_MDIMAXIMIZE, WPARAM(result));
-
-    ::SetWindowLong(HWND(result), GWL_STYLE, origStyle);
-  }
-
-  return result;
+  return DefaultProcessing();
 }
 
 //
@@ -223,11 +201,13 @@ static void sUnHide(TWindow* win, void* hWnd)
   if (*win == (HWND)hWnd)
     return;
   if (!win->IsWindowVisible()) {
-    win->SetWindowPos(0,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOZORDER|SWP_NOACTIVATE|SWP_NOREDRAW);
+    win->SetWindowPos(0, 0, 0, 0, 0,
+                      SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOZORDER|
+                      SWP_NOACTIVATE|SWP_NOREDRAW);
     win->SetFlag(wfUnHidden);
   }
   if (!win->IsWindowEnabled()) {
-    win->EnableWindow(TRUE);
+    win->EnableWindow(true);
     win->SetFlag(wfUnDisabled);
   }
 }
@@ -242,20 +222,20 @@ static void sReHide(TWindow* win, void*)
   }
   if (win->IsFlagSet(wfUnDisabled)) {
     win->ClearFlag(wfUnDisabled);
-    win->EnableWindow(FALSE);
+    win->EnableWindow(false);
   }
 }
 
 void
 TMDIClient::EvMDIDestroy(HWND hWnd)
 {
-  ForEach(sUnHide,(void*)hWnd);
+  ForEach(sUnHide, (void*)hWnd);
   DefaultProcessing();
-  ForEach(sReHide, 0);
-#if defined(__WIN32__)
+  ForEach(sReHide);
+#if defined(BI_PLAT_WIN32)
   HandleMessage(WM_MDIREFRESHMENU);
 #else
-  HandleMessage(WM_MDISETMENU, TRUE);
+  HandleMessage(WM_MDISETMENU, true);
 #endif
 }
 
@@ -284,7 +264,7 @@ TMDIClient::Streamer::Read(ipstream& is, uint32 /*version*/) const
 
   GetObject()->ClientAttr = new CLIENTCREATESTRUCT;  //far
 
-  UINT idFirstChild;  // Need temp for near data model since ClientAttr is far
+  uint idFirstChild;  // Need temp for near data model since ClientAttr is far
   is >> idFirstChild;
   GetObject()->ClientAttr->idFirstChild = idFirstChild;
   GetObject()->ClientAttr->hWindowMenu = (HMENU) 0;

@@ -1,0 +1,14 @@
+LIBRARY     OLE2NLS
+
+DESCRIPTION 'National Language Support Library'
+
+EXPORTS
+    NOTIFYWINDOWPROC               @11  
+    COMPARESTRINGA                 @8   
+    GETSYSTEMDEFAULTLANGID         @4   
+    GETUSERDEFAULTLCID             @1   
+    GETUSERDEFAULTLANGID           @3   
+    GETSYSTEMDEFAULTLCID           @2   
+    LCMAPSTRINGA                   @6   
+    GETSTRINGTYPEA                 @7   
+    GETLOCALEINFOA                 @5   

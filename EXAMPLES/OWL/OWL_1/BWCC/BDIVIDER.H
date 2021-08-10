@@ -14,7 +14,7 @@
 //  class TBDivider
 //  ----- ---------
 //
-class _EXPCLASS TBDivider : public TControl {
+class  TBDivider : public TControl {
   public:
     TBDivider(TWindow*        parent,
               int             id,
@@ -29,7 +29,7 @@ class _EXPCLASS TBDivider : public TControl {
   protected:
     char far* GetClassName();
 
-  DECLARE_STREAMABLE_FROM_BASE(_EXPCLASS, TBDivider, TControl);
+  DECLARE_STREAMABLE_FROM_BASE(, TBDivider, TControl);
 };
 
 #endif //__BDIVIDER_H

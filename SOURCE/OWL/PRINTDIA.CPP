@@ -1,13 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\printdia.cpp
-//   Implementation of Print and PrintDetup common Dialogs
-//   classes
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of Print and PrintDetup common Dialogs classes
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\printdia.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/printdia.h>
+#include <owl/dc.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -20,8 +20,9 @@ TPrintDialog::TPrintDialog(TWindow*        parent,
                            const char far* setupTemplateName,
                            const char far* title,
                            TModule*        module)
-  : TCommonDialog(parent, title, module),
-    Data(data)
+:
+  TCommonDialog(parent, title, module),
+  Data(data)
 {
   memset(&pd, 0, sizeof(PRINTDLG));
   pd.lStructSize = sizeof(PRINTDLG);
@@ -29,28 +30,33 @@ TPrintDialog::TPrintDialog(TWindow*        parent,
   pd.hInstance = *GetModule();
   pd.Flags = PD_ENABLEPRINTHOOK | PD_ENABLESETUPHOOK | Data.Flags;
   pd.Flags &= ~PD_RETURNDEFAULT;
+
   if (printTemplateName) {
     (LPCSTR)pd.lpPrintTemplateName = printTemplateName;
     pd.Flags |= PD_ENABLEPRINTTEMPLATE;
-  } else
+  }
+  else
     pd.Flags &= ~PD_ENABLEPRINTTEMPLATE;
+
   if (setupTemplateName) {
     (LPCSTR)pd.lpSetupTemplateName = setupTemplateName;
     pd.Flags |= PD_ENABLESETUPTEMPLATE;
-  } else
+  }
+  else
     pd.Flags &= ~PD_ENABLESETUPTEMPLATE;
+
   pd.lpfnPrintHook = 0;
   pd.lpfnSetupHook = 0;
 
-  pd.nFromPage = (WORD)Data.FromPage;
-  pd.nToPage = (WORD)Data.ToPage;
-  pd.nMinPage = (WORD)Data.MinPage;
-  pd.nMaxPage = (WORD)Data.MaxPage;
-  pd.nCopies = (WORD)Data.Copies;
+  pd.nFromPage = (uint16)Data.FromPage;
+  pd.nToPage = (uint16)Data.ToPage;
+  pd.nMinPage = (uint16)Data.MinPage;
+  pd.nMaxPage = (uint16)Data.MaxPage;
+  pd.nCopies = (uint16)Data.Copies;
 }
 
-BOOL
-TPrintDialog::DialogFunction(UINT msg, WPARAM wParam, LPARAM lParam)
+bool
+TPrintDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
 {
   return TCommonDialog::DialogFunction(msg, wParam, lParam);
 }
@@ -72,7 +78,8 @@ TPrintDialog::DoExecute()
     Data.FromPage = pd.nFromPage;
     Data.ToPage = pd.nToPage;
     Data.Copies = pd.nCopies;
-  } else {
+  }
+  else {
     Data.Error = ::CommDlgExtendedError();
   }
   Data.hDevMode = pd.hDevMode;
@@ -81,7 +88,7 @@ TPrintDialog::DoExecute()
   return ret ? IDOK : IDCANCEL;
 }
 
-BOOL
+bool
 TPrintDialog::GetDefaultPrinter()
 {
   pd.Flags |= PD_RETURNDEFAULT;
@@ -93,9 +100,13 @@ TPrintDialog::GetDefaultPrinter()
 //----------------------------------------------------------------------------
 
 TPrintDialog::TData::TData()
-  : Flags(PD_ALLPAGES|PD_COLLATE), Error(0),
-    FromPage(-1), ToPage(-1), MinPage(-1), MaxPage(-1), Copies(1),
-    hDevMode(0), DevMode(0), hDevNames(0), DevNames(0), hDC(0)
+:
+  Flags(PD_ALLPAGES|PD_COLLATE),
+  Error(0),
+  FromPage(-1), ToPage(-1),
+  MinPage(-1), MaxPage(-1),
+  Copies(1),
+  hDevMode(0), DevMode(0), hDevNames(0), DevNames(0), hDC(0)
 {
 }
 
@@ -210,29 +221,33 @@ TPrintDialog::TData::SetDevNames(const char far* driver,
   DevNames = (DEVNAMES far*)::GlobalLock(hDevNames);
   char far* p = (char far*)(DevNames + 1);
 
-  DevNames->wDriverOffset = WORD((char near*)p - (char near*)DevNames);
+  DevNames->wDriverOffset = uint16((char near*)p - (char near*)DevNames);
   if (driver)
     while (*driver)
       *p++ = *driver++;
   *p++ = 0;
 
-  DevNames->wDeviceOffset = WORD((char near*)p - (char near*)DevNames);
+  DevNames->wDeviceOffset = uint16((char near*)p - (char near*)DevNames);
   if (device)
     while (*device)
       *p++ = *device++;
   *p++ = 0;
 
-  DevNames->wOutputOffset = WORD((char near*)p - (char near*)DevNames);
+  DevNames->wOutputOffset = uint16((char near*)p - (char near*)DevNames);
   if (output)
     while (*output)
       *p++ = *output++;
   *p++ = 0;
 
-  DevNames->wDefault = FALSE;
+  DevNames->wDefault = false;
 }
 
+//
+// Pass ownership of our hDC to the caller thru a new's TPrintDC object
+//
 TPrintDC*
-TPrintDialog::TData::TransferDC() {
+TPrintDialog::TData::TransferDC()
+{
   if (!hDC)
     return 0;
   HDC dc = hDC;
@@ -244,7 +259,7 @@ TPrintDialog::TData::TransferDC() {
 #if !defined(SECTION) || SECTION == 2
 
 void*
-TPrintDialog::TData::Read(ipstream& is, uint32)
+TPrintDialog::TData::Read(ipstream& is, uint32 /*version*/)
 {
   is >> Flags;
   is >> FromPage;
@@ -255,7 +270,7 @@ TPrintDialog::TData::Read(ipstream& is, uint32)
   char far* driver = is.freadString();
   char far* device = is.freadString();
   char far* output = is.freadString();
-  WORD deflt;
+  uint16 deflt;
   is >> deflt;
   SetDevNames(driver, device, output);
   if (DevNames)
@@ -271,7 +286,8 @@ TPrintDialog::TData::Read(ipstream& is, uint32)
     is.freadBytes(devMode, size);
     SetDevMode(devMode);
     delete devMode;
-  } else
+  }
+  else
     ClearDevMode();
 
   return this;
@@ -289,13 +305,14 @@ TPrintDialog::TData::Write(opstream& os)
   os.fwriteString(GetDriverName());
   os.fwriteString(GetDeviceName());
   os.fwriteString(GetOutputName());
-  os << (DevNames ? DevNames->wDefault : WORD(0));
+  os << (DevNames ? DevNames->wDefault : uint16(0));
 
   if (DevMode) {
     int16 size = int16(sizeof(DEVMODE) + DevMode->dmDriverExtra);
     os << size;
     os.fwriteBytes(DevMode, size);
-  } else
+  }
+  else
     os << int16(0);
 }
 

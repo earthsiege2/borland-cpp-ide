@@ -1,18 +1,19 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\mdi.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of TMDIClient and TMDIFrame classes
 //----------------------------------------------------------------------------
-#if !defined(__OWL_MDI_H)
-#define __OWL_MDI_H
+#if !defined(OWL_MDI_H)
+#define OWL_MDI_H
 
-#if !defined(__OWL_FRAMEWIN_H)
-  #include <owl\framewin.h>
+#if !defined(OWL_FRAMEWIN_H)
+# include <owl/framewin.h>
 #endif
-#if !defined(__OWL_MDICHILD_H)
-  #include <owl\mdichild.h>
+#if !defined(OWL_MDICHILD_H)
+# include <owl/mdichild.h>
 #endif
-#include <owl\mdi.rh>
+#include <owl/mdi.rh>
 
 class _OWLCLASS TMDIFrame;
 
@@ -24,10 +25,10 @@ class _OWLCLASS TMDIClient : public virtual TWindow {
   public:
     LPCLIENTCREATESTRUCT  ClientAttr;
 
-    TMDIClient(TModule*   module = 0);
+    TMDIClient(TModule* module = 0);
    ~TMDIClient();
 
-    virtual BOOL        CloseChildren();
+    virtual bool        CloseChildren();
 
     TMDIChild*          GetActiveMDIChild();
 
@@ -41,8 +42,8 @@ class _OWLCLASS TMDIClient : public virtual TWindow {
     //
     // override member functions defined by TWindow
     //
-    BOOL                PreProcessMsg(MSG& msg);
-    BOOL                Create();
+    bool                PreProcessMsg(MSG& msg);
+    bool                Create();
 
     virtual TWindow*    CreateChild();
 
@@ -104,8 +105,9 @@ class _OWLCLASS TMDIFrame : virtual public TFrameWindow {
     //
     // override virtual functions defined by TFrameWindow or TWindow
     //
-    BOOL         SetMenu(HMENU);
+    bool         SetMenu(HMENU);
     TMDIClient*  GetClientWindow();
+    virtual HWND GetCommandTarget();
     void         PerformCreate(int menuOrId);
 
     //
@@ -117,7 +119,7 @@ class _OWLCLASS TMDIFrame : virtual public TFrameWindow {
     //
     // call ::DefFrameProc() instead of ::DefWindowProc()
     //
-    LRESULT      DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+    LRESULT      DefWindowProc(uint message, WPARAM wParam, LPARAM lParam);
 
   private:
     //
@@ -130,4 +132,4 @@ class _OWLCLASS TMDIFrame : virtual public TFrameWindow {
   DECLARE_STREAMABLE(_OWLCLASS, TMDIFrame, 1);
 };
 
-#endif  // __OWL_MDI_H
+#endif  // OWL_MDI_H

@@ -1,0 +1,28 @@
+LIBRARY     COMCTL32.DLL
+
+EXPORTS
+    CreateHeaderWindow             @12
+    CreateHeaderWindowA            @9
+    CreateHeaderWindowW            @18
+    CreateMappedBitmap             @8
+    CreateStatusWindow             @19
+    CreateStatusWindowA            @6
+    CreateStatusWindowW            @20
+    CreateToolbar                  @7
+    CreateUpDownControl            @16
+    DrawInsert                     @15
+    DrawStatusText                 @21
+    DrawStatusTextA                @5
+    DrawStatusTextW                @22
+    GetEffectiveClientRect         @4
+    GetPrivateProfileStruct        @23
+    GetPrivateProfileStructA       @11
+    GetPrivateProfileStructW       @24
+    InitCommonControls             @17
+    LBItemFromPt                   @14
+    MakeDragList                   @13
+    MenuHelp                       @2
+    ShowHideMenuCtl                @3
+    WritePrivateProfileStruct      @30
+    WritePrivateProfileStructA     @10
+    WritePrivateProfileStructW     @31

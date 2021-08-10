@@ -1,20 +1,22 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\bitmapga.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TBitmapGadget
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\bitmapga.h>
-#include <owl\gadgetwi.h>
-#include <owl\celarray.h>
+#include <owl/owlpch.h>
+#include <owl/bitmapga.h>
+#include <owl/gadgetwi.h>
+#include <owl/celarray.h>
 
 TBitmapGadget::TBitmapGadget(TResId bmpResId,
                              int id,
                              TBorderStyle borderStyle,
                              int numImages, int startImage)
-  : TGadget(id,borderStyle),
-    ResId(bmpResId),
-    NumImages(numImages)
+:
+  TGadget(id,borderStyle),
+  ResId(bmpResId),
+  NumImages(numImages)
 {
   ImageArray = 0;
   CurrentImage = startImage;
@@ -67,12 +69,12 @@ TBitmapGadget::GetDesiredSize(TSize& size)
 }
 
 int
-TBitmapGadget::SelectImage(int imageNum, BOOL immediate)
+TBitmapGadget::SelectImage(int imageNum, bool immediate)
 {
-  UINT oldImageNum = CurrentImage;
+  uint oldImageNum = CurrentImage;
   if (imageNum != CurrentImage) {
     CurrentImage = imageNum;
-    Invalidate(FALSE);
+    Invalidate(false);
   }
   if (immediate)
     Update();

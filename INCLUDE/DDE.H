@@ -5,12 +5,15 @@
 \*****************************************************************************/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
+
+#if !defined(__FLAT__)
+
 
 #ifndef __DDE_H         /* prevent multiple includes */
 #define __DDE_H
@@ -19,8 +22,6 @@
 #pragma option -a-      /* Assume byte packing throughout */
 #pragma warn -bbf       /* Turn off warning about bitfields */
 #endif  /* RC_INVOKED */
-
-#if !defined(__FLAT__)
 
 #ifndef __WINDOWS_H
 #include <windows.h>    /* <windows.h> must be included */
@@ -157,35 +158,51 @@ typedef struct tagDDEUP
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
+#ifndef RC_INVOKED
+#pragma option -a.      /* Revert to default packing */
+#pragma warn .bbf       /* Revert to default warning about bitfields */
+#endif  /* RC_INVOKED */
+
+#endif  /* __DDE_H */
+
+
 #else     /* defined __FLAT__ */
+
+
+#ifndef _DDEHEADER_INCLUDED_
+#define _DDEHEADER_INCLUDED_
+#define __DDE_H
 
 #ifndef _WINDEF_
 #include <windef.h>
 #endif
 
 #ifndef RC_INVOKED
-#pragma option -a-      /* Assume byte packing throughout */
 #pragma warn -bbf       /* Turn off warning about bitfields */
 #endif  /* RC_INVOKED */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* DDE window messages */
 
-#define WM_DDE_FIRST        0x03E0
+#define WM_DDE_FIRST	    0x03E0
 #define WM_DDE_INITIATE     (WM_DDE_FIRST)
 #define WM_DDE_TERMINATE    (WM_DDE_FIRST+1)
-#define WM_DDE_ADVISE       (WM_DDE_FIRST+2)
+#define WM_DDE_ADVISE	    (WM_DDE_FIRST+2)
 #define WM_DDE_UNADVISE     (WM_DDE_FIRST+3)
-#define WM_DDE_ACK              (WM_DDE_FIRST+4)
-#define WM_DDE_DATA             (WM_DDE_FIRST+5)
-#define WM_DDE_REQUEST      (WM_DDE_FIRST+6)
-#define WM_DDE_POKE             (WM_DDE_FIRST+7)
-#define WM_DDE_EXECUTE      (WM_DDE_FIRST+8)
-#define WM_DDE_LAST             (WM_DDE_FIRST+8)
+#define WM_DDE_ACK	        (WM_DDE_FIRST+4)
+#define WM_DDE_DATA	        (WM_DDE_FIRST+5)
+#define WM_DDE_REQUEST	    (WM_DDE_FIRST+6)
+#define WM_DDE_POKE	        (WM_DDE_FIRST+7)
+#define WM_DDE_EXECUTE	    (WM_DDE_FIRST+8)
+#define WM_DDE_LAST	        (WM_DDE_FIRST+8)
 
 /*----------------------------------------------------------------------------
 |       DDEACK structure
 |
-|       Structure of wStatus (LOWORD(lParam)) in WM_DDE_ACK message
+|	Structure of wStatus (LOWORD(lParam)) in WM_DDE_ACK message
 |       sent in response to a WM_DDE_DATA, WM_DDE_REQUEST, WM_DDE_POKE,
 |       WM_DDE_ADVISE, or WM_DDE_UNADVISE message.
 |
@@ -195,22 +212,22 @@ typedef struct {
         unsigned short bAppReturnCode:8,
                  reserved:6,
                  fBusy:1,
-                 fAck:1;
+		 fAck:1;
 } DDEACK;
 
 
 /*----------------------------------------------------------------------------
 |       DDEADVISE structure
 |
-|       WM_DDE_ADVISE parameter structure for hOptions (LOWORD(lParam))
+|	WM_DDE_ADVISE parameter structure for hOptions (LOWORD(lParam))
 |
 ----------------------------------------------------------------------------*/
 
 typedef struct {
         unsigned short reserved:14,
                  fDeferUpd:1,
-                 fAckReq:1;
-        short     cfFormat;
+		 fAckReq:1;
+	short     cfFormat;
 } DDEADVISE;
 
 
@@ -224,32 +241,32 @@ typedef struct {
 ----------------------------------------------------------------------------*/
 
 typedef struct {
-        unsigned short unused:12,
+	unsigned short unused:12,
                  fResponse:1,
                  fRelease:1,
                  reserved:1,
                  fAckReq:1;
-        short    cfFormat;
-        BYTE     Value[1];
+	short	 cfFormat;
+	BYTE	 Value[1];
 } DDEDATA;
 
 
 /*----------------------------------------------------------------------------
-|       DDEPOKE structure
+|	DDEPOKE structure
 |
-|       WM_DDE_POKE parameter structure for hData (LOWORD(lParam)).
+|	WM_DDE_POKE parameter structure for hData (LOWORD(lParam)).
 |       The actual size of this structure depends on the size of
 |       the Value array.
 |
 ----------------------------------------------------------------------------*/
 
 typedef struct {
-        unsigned short unused:13,  /* Earlier versions of DDE.H incorrectly */
+	unsigned short unused:13,  /* Earlier versions of DDE.H incorrectly */
                              /* 12 unused bits.                       */
-                 fRelease:1,
-                 fReserved:2;
-        short    cfFormat;
-        BYTE     Value[1];  /* This member was named rgb[1] in previous */
+		 fRelease:1,
+		 fReserved:2;
+	short    cfFormat;
+	BYTE	 Value[1];  /* This member was named rgb[1] in previous */
                             /* versions of DDE.H                        */
 
 } DDEPOKE;
@@ -268,18 +285,18 @@ typedef struct {
         unsigned short unused:13,
                  fRelease:1,
                  fDeferUpd:1,
-                 fAckReq:1;
-        short    cfFormat;
+		 fAckReq:1;
+	short	 cfFormat;
 } DDELN;
 
 typedef struct {
-        unsigned short unused:12,
+	unsigned short unused:12,
                  fAck:1,
                  fRelease:1,
                  fReserved:1,
                  fAckReq:1;
-        short    cfFormat;
-        BYTE     rgb[1];
+	short	 cfFormat;
+	BYTE	 rgb[1];
 } DDEUP;
 
 
@@ -308,13 +325,14 @@ BOOL APIENTRY UnpackDDElParam(UINT msg, LONG lParam, PUINT puiLo, PUINT puiHi);
 BOOL APIENTRY FreeDDElParam(UINT msg, LONG lParam);
 LONG APIENTRY ReuseDDElParam(LONG lParam, UINT msgIn, UINT msgOut, UINT uiLo, UINT uiHi);
 
-#endif  /* __FLAT__ */
+#ifdef __cplusplus
+}
+#endif
 
 #ifndef RC_INVOKED
-#pragma option -a.      /* Revert to default packing */
-#pragma warn .bbf       /* Revert to default warning about bitfields */
+#pragma warn .bbf       /* Turn off warning about bitfields */
 #endif  /* RC_INVOKED */
 
-#endif  /* __DDE_H */
+#endif // _DDEHEADER_INCLUDED_
 
-
+#endif  /* __FLAT__ */

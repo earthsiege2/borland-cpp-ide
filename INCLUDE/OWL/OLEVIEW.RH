@@ -1,0 +1,40 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// (C) Copyright 1994 by Borland International, All Rights Reserved
+//
+//   Menu and accelerator IDs for use with TOleView
+//----------------------------------------------------------------------------
+
+#include <ocf/ocapp.rh>
+
+#define CM_EDITPASTESPECIAL       24311
+#define CM_EDITPASTELINK          24312
+#define CM_EDITINSERTOBJECT       24313
+#define CM_EDITLINKS              24314
+
+#define CM_EDITOBJECT             24370
+#define CM_EDITFIRSTVERB          24371 // 20 verbs at most
+#define CM_EDITLASTVERB           24390
+
+#define CM_EDITCONVERT            24391
+#define CM_EDITSHOWOBJECTS        24392
+
+//
+// Menu ID
+//
+#define IDM_OLEPOPUP              32405
+#define IDM_OLEVIEW               32406
+#define IDM_OLEVIEWEMBED          32407
+
+//
+// String ID
+//
+#define IDS_EDITOBJECT      32600
+#define IDS_EDITCONVERT     32601
+#define IDS_CLOSESERVER     32602
+#define IDS_EXITSERVER      32603
+
+//
+// Accelerator IDs
+//
+#define IDA_OLEVIEW       32551

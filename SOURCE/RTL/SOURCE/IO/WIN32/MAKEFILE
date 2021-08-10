@@ -1,0 +1,74 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+OBJS =               \
+        chdir.obj    \
+        chdrive.obj  \
+        chmod.obj    \
+        dosclose.obj \
+        doscreat.obj \
+        dosdfree.obj \
+        dosfattr.obj \
+        dosfind.obj  \
+        dosgdriv.obj \
+        dosgftim.obj \
+        dosopen.obj  \
+        dosread.obj  \
+        dossftim.obj \
+        doswrite.obj \
+        flength.obj  \
+        fstat.obj    \
+        fullpath.obj \
+        getcurdi.obj \
+        getdcwd.obj  \
+        getdfree.obj \
+        getdisk.obj  \
+        handles.obj  \
+        ioerror.obj  \
+        lock.obj     \
+        locking.obj  \
+        mkdir.obj    \
+        oshandle.obj \
+        rename.obj   \
+        rmdir.obj    \
+        stat.obj     \
+        utime.obj    \
+        _chmod.obj   \
+        _close.obj   \
+        _open.obj    \
+        _pipe.obj    \
+        _read.obj    \
+        _write.obj   \
+        __access.obj \
+        __close.obj  \
+        __dup.obj    \
+        __dup2.obj   \
+        __ftrunc.obj \
+        __isatty.obj \
+        __lseek.obj  \
+        __open.obj   \
+        __unlink.obj
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+!include rules.mak
+

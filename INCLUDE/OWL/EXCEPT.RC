@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\except.rc
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Resources to use with owl
 //----------------------------------------------------------------------------
 
-#include <owl\except.rh>
+#include <owl/except.rh>
 
 #if defined(RC_INVOKED)
 
@@ -14,7 +15,7 @@
 #if !defined(NO_IDS_EXCEPT) && !defined(__IDS_EXCEPT)
 #define __IDS_EXCEPT
 STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
-BEGIN
+{
   IDS_OWLEXCEPTION        "ObjectWindows Exception"
   IDS_UNHANDLEDXMSG       "Unhandled Exception"
   IDS_OKTORESUME          "OK to resume?"
@@ -25,6 +26,7 @@ BEGIN
   IDS_OUTOFMEMORY         "Out of memory"
   IDS_INVALIDMODULE       "Invalid module specified for window"
   IDS_INVALIDMAINWINDOW   "Invalid MainWindow"
+  IDS_VBXLIBRARYFAIL      "VBX Library init failure"
 
   IDS_INVALIDWINDOW       "Invalid window %s"
   IDS_INVALIDCHILDWINDOW  "Invalid child window %s"
@@ -51,7 +53,7 @@ BEGIN
   IDS_GDIDELETEFAIL       "GDI object %X delete failure"
   IDS_GDIDESTROYFAIL      "GDI object %X destroy failure"
   IDS_INVALIDDIBHANDLE    "Invalid DIB handle %X"
-END
+}
 #endif
 #undef NO_IDS_EXCEPT
 

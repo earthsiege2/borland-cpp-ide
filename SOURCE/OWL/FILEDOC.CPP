@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\filedoc.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Implements classes TFileDocument, TFileInStream, TFileOutStream, TFileBuf
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\filedoc.h>
+#include <owl/owlpch.h>
+#include <owl/filedoc.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -70,10 +71,10 @@ class _OWLCLASS_RTL TFileOutStream : public TFileStreamBase, public TOutStream {
 //
 
 HFILE
-TFileDocument::OpenThisFile(int omode, LPCSTR name, streampos* pseekpos){
+TFileDocument::OpenThisFile(int omode, const char far* name, streampos* pseekpos){
   int how;
   HFILE fhdl;
-  BOOL exists = FALSE;
+  bool exists = false;
   int share = omode & shMask;
 
   if (share < shCompat)
@@ -94,7 +95,7 @@ TFileDocument::OpenThisFile(int omode, LPCSTR name, streampos* pseekpos){
         if ((fhdl=::_lopen(name,OF_READ|OF_SHARE_COMPAT))   !=HFILE_ERROR
         ||  (fhdl=::_lopen(name,OF_READ|OF_SHARE_DENY_NONE))!=HFILE_ERROR) {
           ::_lclose(fhdl);
-          exists = TRUE;
+          exists = true;
           }
         }
       if (!(exists && !(omode & (ofNoCreate | ofNoReplace)))) {
@@ -119,14 +120,14 @@ TFileDocument::OpenThisFile(int omode, LPCSTR name, streampos* pseekpos){
       return HFILE_ERROR;
     }
   }
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
   FileLength = GetFileSize((HANDLE)fhdl, 0);
   InfoPresent = GetFileTime((HANDLE)fhdl, &FileCreateTime, &FileAccessTime,
                             &FileUpdateTime);
 #else
   FileLength = filelength(fhdl);
   getftime(fhdl, (struct ftime*)&FileTime);
-  InfoPresent = TRUE;
+  InfoPresent = true;
 #endif
   NotifyViews(vnDocOpened,omode);
   return fhdl;
@@ -141,60 +142,60 @@ TFileDocument::CloseThisFile(HFILE fhdl, int omode)
   }
 }
 
-BOOL
-TFileDocument::Open(int omode, LPCSTR path)
+bool
+TFileDocument::Open(int omode, const char far* path)
 {
   long seekpos;
   if (FHdl != HFILE_ERROR)
-    return FALSE;    // if already open at document level
+    return false;    // if already open at document level
   if (path)
     SetDocPath(path);
   if (omode != 0)
     SetOpenMode(omode);
   if ((FHdl = OpenThisFile(GetOpenMode(),GetDocPath(),&seekpos)) == HFILE_ERROR)
-    return FALSE;
-  return TRUE;
+    return false;
+  return true;
 }
 
-BOOL
+bool
 TFileDocument::Open(HFILE fhdl)
 {
   SetOpenMode(PREV_OPEN | ofReadWrite);  // can we determine open mode?
   SetDocPath(0); // can we get path name?
   FHdl = fhdl;
-  return TRUE;
+  return true;
 }
 
-BOOL
+bool
 TFileDocument::Close()
 {
   if (!TDocument::Close())     // close all children first
-    return FALSE;
+    return false;
   if (FHdl != HFILE_ERROR) {   // if open at document level
     if (TDocument::IsOpen())   // cannot close document if streams open
-      return FALSE;       // ?should we close streams here?
+      return false;       // ?should we close streams here?
     CloseThisFile(FHdl, GetOpenMode());
     FHdl = HFILE_ERROR;
   }
-  return TRUE;
+  return true;
 }
 
-BOOL
-TFileDocument::Commit(BOOL force)
+bool
+TFileDocument::Commit(bool force)
 {
   if (!TDocument::Commit(force))      // flush views and child docs
-    return FALSE;
-  SetDirty(FALSE);
-  return TRUE;
+    return false;
+  SetDirty(false);
+  return true;
 }
 
-BOOL
-TFileDocument::Revert(BOOL clear)
+bool
+TFileDocument::Revert(bool clear)
 {
   if (!TDocument::Revert(clear))
-    return FALSE;
-  SetDirty(FALSE);
-  return TRUE;
+    return false;
+  SetDirty(false);
+  return true;
 }
 
 static char* PropNames[] = {
@@ -248,8 +249,7 @@ TFileDocument::FindProperty(const char far* name)
 int
 TFileDocument::GetProperty(int prop, void far* dest, int textlen)
 {
-  switch(prop)
-  {
+  switch(prop) {
     case FileHandle:
       if (textlen)
         return 0;
@@ -257,13 +257,13 @@ TFileDocument::GetProperty(int prop, void far* dest, int textlen)
       return sizeof(FHdl);
     default:
       if (InfoPresent) {
-        switch(prop)
-        {
+        switch(prop) {
           case StorageSize:
             if (!textlen) {
               *(unsigned long FAR*)dest = FileLength;
               return sizeof(FileLength);
-            } else {
+            }
+            else {
               char buf[10];
               int len = wsprintf(buf, "%ld", FileLength);
               if (textlen > len)
@@ -272,18 +272,18 @@ TFileDocument::GetProperty(int prop, void far* dest, int textlen)
               *((char far*)dest + textlen) = 0;
               return len;
             }
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
           case CreateTime:
             return FormatFileTime(&FileCreateTime, dest, textlen);
           case ModifyTime:
             return FormatFileTime(&FileUpdateTime, dest, textlen);
           case AccessTime:
             return FormatFileTime(&FileAccessTime, dest, textlen);
+
 #else  // DOS file system
           case CreateTime:
           case ModifyTime:
-          case AccessTime:
-          {
+          case AccessTime: {
             struct date  propdate;
             struct time  proptime;
             propdate.da_year = ((struct ftime*)&FileTime)->ft_year+1980;
@@ -302,15 +302,16 @@ TFileDocument::GetProperty(int prop, void far* dest, int textlen)
   }
 }
 
-BOOL
+bool
 TFileDocument::SetProperty(int prop, const void far* src)
 {
-  // file properties currently not settable
+  // File properties currently not settable
+  //
   return TDocument::SetProperty(prop, src);
 }
 
 TInStream*
-TFileDocument::InStream(int omode, LPCSTR /* strmId */) 
+TFileDocument::InStream(int omode, const char far* /*strmId*/) 
 {
   HFILE fhdl;
   streampos seekpos;
@@ -321,7 +322,8 @@ TFileDocument::InStream(int omode, LPCSTR /* strmId */)
   if ((fhdl = FHdl) == HFILE_ERROR) {   // if file not open at document level
     if ((fhdl=OpenThisFile (omode, GetDocPath(), &seekpos)) == HFILE_ERROR)
       return 0;
-  } else {
+  }
+  else {
     omode = GetOpenMode() ? (GetOpenMode() & ~ofBinary) | (omode & ofBinary)
                           : omode;
     omode |= PREV_OPEN;
@@ -330,7 +332,7 @@ TFileDocument::InStream(int omode, LPCSTR /* strmId */)
 }
 
 TOutStream*
-TFileDocument::OutStream(int omode, LPCSTR /* strmId */)
+TFileDocument::OutStream(int omode, const char far* /*strmId*/)
 {
   HFILE fhdl;
   streampos seekpos;
@@ -341,7 +343,8 @@ TFileDocument::OutStream(int omode, LPCSTR /* strmId */)
   if ((fhdl = FHdl) == HFILE_ERROR) {   // if file not open at document level
     if ((fhdl=OpenThisFile (omode, GetDocPath(), &seekpos)) == HFILE_ERROR)
       return 0;
-  } else {
+  }
+  else {
     omode = GetOpenMode() ? (GetOpenMode() & ~ofBinary) | (omode & ofBinary)
                           : omode;
     omode |= PREV_OPEN;
@@ -386,15 +389,16 @@ TFileBuf::TFileBuf(int fhdl, int omode, long seekpos)
 // We take a simple approach, and don't check for small position changes
 // within the current buffer.
 
-streampos TFileBuf::seekoff(streamoff off, ios::seek_dir dir, int /* mode ignored */)
+streampos TFileBuf::seekoff(streamoff off, ios::seek_dir dir, int /*mode*/)
 {
   long loff = off;
-  int count = out_waiting();
   if (out_waiting()) {       // flush the output
     if (sync() == EOF)
         return EOF;
-  } else if (dir == ios::cur)
-    if ((count = in_avail()) != 0) {
+  }
+  else if (dir == ios::cur) {
+    int count = in_avail();
+    if (count != 0) {
       loff -= count;
 
       //  if we're in text mode, need to allow for newlines
@@ -406,6 +410,7 @@ streampos TFileBuf::seekoff(streamoff off, ios::seek_dir dir, int /* mode ignore
             loff--;
       }
     }
+  }
   int w = (dir==ios::beg) ? SEEK_SET : ((dir==ios::cur) ? SEEK_CUR:SEEK_END);
   last_seek = ::_llseek(xfd, loff, w);
   if (!unbuffered() && base()) {      // set up get and put areas
@@ -425,7 +430,8 @@ int TFileBuf::sync()
     char* srcp = pbase();
     char* endp = srcp + count;
 
-    // convert LF's to CR/LF if text mode
+    // Convert LF's to CR/LF if text mode
+    //
     if ((mode & ofBinary) == 0) {
       for (curp = srcp; curp < endp; curp++) {
         if (*curp == '\n') {
@@ -446,7 +452,8 @@ int TFileBuf::sync()
     char *b = base();
     setp(b+pb, b+blen());
     setg(b, b+pb, b+pb);
-  } else if (in_avail()) {
+  }
+  else if (in_avail()) {
     last_seek = ::_llseek(xfd, long(-in_avail()), SEEK_CUR);
     setg(eback(), gptr(), gptr());
     setp(gptr(), gptr());
@@ -464,7 +471,7 @@ int TFileBuf::underflow()
   if (in_avail())    // no action needed
     return (unsigned char) *gptr();
 
-  int c;  // the return value
+  int c = 0;  // the return value
   int count;  // input character count
 
   if (!unbuffered() && base()) {     // this is buffered
@@ -511,13 +518,15 @@ int TFileBuf::underflow()
 
     if (count)
       c = (unsigned char) *gptr();
-  } else {     // this is not buffered
+  }
+  else {     // this is not buffered
     for (;;) {
       count = ::_lread(xfd, lahead, 1);
       if (count == HFILE_ERROR) {
         c = EOF;
         setg(0, 0, 0);
-      } else {
+      }
+      else {
         c = (unsigned char)lahead[0];
         if ((mode & ofBinary) == 0  && c == '\r')
           continue;
@@ -546,14 +555,16 @@ int TFileBuf::overflow(int c)
         b[0] = '\r';
         b[1] = (char)c;
         count = 2;
-      } else {
+      }
+      else {
         b[0] = (char)c;
         count = 1;
       }
       if (::_lwrite(xfd, b, count) != count)
         return EOF;
     }
-  } else {   // now we know this is buffered and state is not bad
+  }
+  else {   // now we know this is buffered and state is not bad
 
     // resets get and put areas
     if (sync() != 0)
@@ -595,7 +606,7 @@ TFileDocument::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
   TFileDocument* o = GetObject();
   o->FHdl = HFILE_ERROR;    // initialize to closed file
-  o->InfoPresent = FALSE;
+  o->InfoPresent = false;
   ReadBaseObject((TDocument*)o, is);
   return o;
 }

@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\layoutwi.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TLayoutWindow.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\layoutwi.h>
+#include <owl/owlpch.h>
+#include <owl/layoutwi.h>
 
 DEFINE_RESPONSE_TABLE1(TLayoutWindow, TWindow)
   EV_WM_SIZE,
@@ -94,9 +95,9 @@ class TFixed {
     //
     //  equality operators
     //
-    friend BOOL   operator ==(const TFixed& l,
+    friend bool   operator ==(const TFixed& l,
                               const TFixed& r) {return l.Value == r.Value;}
-    friend BOOL   operator !=(const TFixed& l,
+    friend bool   operator !=(const TFixed& l,
                               const TFixed& r) {return l.Value != r.Value;}
 
     //
@@ -126,7 +127,7 @@ struct TConstraint {
 
   TConstraint();
 
-  BOOL  IsResolved();  // iff its inputs have been resolved
+  bool  IsResolved();  // iff its inputs have been resolved
   int   Evaluate();
   int   NumActualInputs();
 };
@@ -134,7 +135,7 @@ struct TConstraint {
 struct TVariable {
   int           Value;
   TConstraint*  DeterminedBy;  // 0 if variable is constant
-  BOOL          Resolved;
+  bool          Resolved;
 
   TVariable() {Value = 0; DeterminedBy = 0;}
 };
@@ -147,7 +148,7 @@ struct TVariable {
 //
 struct TChildMetrics {
   public:
-    BOOL            GeneratedConstraints;
+    bool            GeneratedConstraints;
     TWindow*        Child;
     TLayoutMetrics  Metrics;
     TVariable       Variables[4];  // x => 0, y => 1, right => 2, bottom => 3
@@ -160,7 +161,7 @@ TChildMetrics::TChildMetrics(TWindow&        child,
                              TLayoutMetrics& metrics)
   : Child(&child), Metrics(metrics)
 {
-  GeneratedConstraints = FALSE;
+  GeneratedConstraints = false;
   Next = 0;
 }
 
@@ -174,7 +175,7 @@ TConstraint::TConstraint()
   Output = 0;
 }
 
-BOOL
+bool
 TConstraint::IsResolved()
 {
   return (!Inputs[0] || Inputs[0]->Resolved) &&
@@ -249,7 +250,8 @@ TLayoutMetrics::SetMeasurementUnits(TMeasurementUnits units)
 TLayoutWindow::TLayoutWindow(TWindow*        parent,
                              const char far* title,
                              TModule*        module)
-  : TWindow(parent, title, module)
+:
+  TWindow(parent, title, module)
 {
   //
   // Initialize virtual bases, in case the derived-most used default ctor
@@ -260,7 +262,7 @@ TLayoutWindow::TLayoutWindow(TWindow*        parent,
   ChildMetrics = 0;
   Constraints = 0;
   Plan = 0;
-  PlanIsDirty = FALSE;
+  PlanIsDirty = false;
   ClientSize.cx = ClientSize.cy = 0;
 
   //
@@ -268,15 +270,15 @@ TLayoutWindow::TLayoutWindow(TWindow*        parent,
   // mark them as resolved
   //
   Variables = new TVariable[4];
-  Variables[0].Resolved = TRUE;
-  Variables[1].Resolved = TRUE;
-  Variables[2].Resolved = TRUE;
-  Variables[3].Resolved = TRUE;
+  Variables[0].Resolved = true;
+  Variables[1].Resolved = true;
+  Variables[2].Resolved = true;
+  Variables[3].Resolved = true;
 }
 
 TLayoutWindow::~TLayoutWindow()
 {
-  delete Variables;
+  delete [] Variables;
 
   //
   // free the child metrics
@@ -301,7 +303,7 @@ TLayoutWindow::~TLayoutWindow()
 }
 
 void
-TLayoutWindow::EvSize(UINT sizeType, TSize& size)
+TLayoutWindow::EvSize(uint sizeType, TSize& size)
 {
   TWindow::EvSize(sizeType, size);
 
@@ -316,7 +318,7 @@ TLayoutWindow::SetChildLayoutMetrics(TWindow& child, TLayoutMetrics& metrics)
 {
   TChildMetrics*  childMetrics;
 
-  PlanIsDirty = TRUE;
+  PlanIsDirty = true;
 
   if (ChildMetrics) {
     //
@@ -344,7 +346,7 @@ TLayoutWindow::SetChildLayoutMetrics(TWindow& child, TLayoutMetrics& metrics)
 // Remove child (layout) metrics for a given child (if found) and update
 // other children as necessary
 //
-BOOL
+bool
 TLayoutWindow::RemoveChildLayoutMetrics(TWindow& child)
 {
   TChildMetrics**  childMetrics;
@@ -389,7 +391,8 @@ TLayoutWindow::RemoveChildLayoutMetrics(TWindow& child)
               cm->Metrics.Width.RelWin = tmp->Metrics.X.RelWin;
               if (cm->Metrics.Width.RelWin == lmParent)
                 cm->Metrics.Width.OtherEdge = tmp->Metrics.X.OtherEdge;
-            } else {
+            }
+            else {
               cm->Metrics.Width.RelWin = tmp->Metrics.Width.RelWin;
               if (cm->Metrics.Width.RelWin == lmParent)
                 cm->Metrics.Width.OtherEdge = tmp->Metrics.Width.OtherEdge;
@@ -405,7 +408,8 @@ TLayoutWindow::RemoveChildLayoutMetrics(TWindow& child)
               cm->Metrics.Height.RelWin = tmp->Metrics.Y.RelWin;
               if (cm->Metrics.Height.RelWin == lmParent)
                 cm->Metrics.Height.OtherEdge = tmp->Metrics.Y.OtherEdge;
-            } else {
+            }
+            else {
               cm->Metrics.Height.RelWin = tmp->Metrics.Height.RelWin;
               if (cm->Metrics.Height.RelWin == lmParent)
                 cm->Metrics.Height.OtherEdge = tmp->Metrics.Height.OtherEdge;
@@ -418,10 +422,10 @@ TLayoutWindow::RemoveChildLayoutMetrics(TWindow& child)
       // finaly, delete target metrics
       //
       delete tmp;
-      return TRUE;
+      return true;
     }
 
-  return FALSE;
+  return false;
 }
 
 TChildMetrics*
@@ -433,10 +437,10 @@ TLayoutWindow::GetChildMetrics(TWindow& child)
     if (childMetrics->Child == &child)
       return childMetrics;
 
-  return FALSE;
+  return false;
 }
 
-BOOL
+bool
 TLayoutWindow::GetChildLayoutMetrics(TWindow& child, TLayoutMetrics& metrics)
 {
   TChildMetrics*  childMetrics;
@@ -444,10 +448,10 @@ TLayoutWindow::GetChildLayoutMetrics(TWindow& child, TLayoutMetrics& metrics)
   for (childMetrics = ChildMetrics; childMetrics; childMetrics = childMetrics->Next)
     if (childMetrics->Child == &child) {
       metrics = childMetrics->Metrics;
-      return TRUE;
+      return true;
     }
 
-  return FALSE;
+  return false;
 }
 
 void
@@ -466,7 +470,7 @@ TLayoutWindow::LayoutUnitsToPixels(int value)
 }
 
 static
-BOOL
+bool
 HasBorder(TWindow* win)
 {
   //
@@ -474,10 +478,10 @@ HasBorder(TWindow* win)
   // without WS_BORDER set
   //
   if ((win->Attr.Style & (WS_CHILD|WS_POPUP)) && !(win->Attr.Style & WS_BORDER))
-    return FALSE;
+    return false;
 
   else
-    return TRUE;
+    return true;
 }
 
 void
@@ -523,13 +527,13 @@ TLayoutWindow::BuildPlan()
   for (childMetrics = ChildMetrics; childMetrics; childMetrics = childMetrics->Next) {
     TVariable*  variable = childMetrics->Variables;
 
-    variable->Resolved = variable->DeterminedBy ? FALSE : TRUE;
+    variable->Resolved = variable->DeterminedBy ? false : true;
     variable++;
-    variable->Resolved = variable->DeterminedBy ? FALSE : TRUE;
+    variable->Resolved = variable->DeterminedBy ? false : true;
     variable++;
-    variable->Resolved = variable->DeterminedBy ? FALSE : TRUE;
+    variable->Resolved = variable->DeterminedBy ? false : true;
     variable++;
-    variable->Resolved = variable->DeterminedBy ? FALSE : TRUE;
+    variable->Resolved = variable->DeterminedBy ? false : true;
   }
 
   //
@@ -542,18 +546,18 @@ TLayoutWindow::BuildPlan()
   // look for constraints that have all their input variables resolved and
   // append them to the plan
   //
-  for (BOOL foundOne = TRUE; foundOne;) {
+  for (bool foundOne = true; foundOne;) {
     TConstraint*  c = Constraints;
     TConstraint*  previous = 0;
 
-    foundOne = FALSE;
+    foundOne = false;
 
     while (c) {
       if (c->IsResolved()) {
         TConstraint*  resolved = c;
 
-        c->Output->Resolved = TRUE;
-        foundOne = TRUE;
+        c->Output->Resolved = true;
+        foundOne = true;
         //
         // extract the constraint from the list of constraints
         //
@@ -575,8 +579,8 @@ TLayoutWindow::BuildPlan()
           Plan = resolved;
 
         lastInPlan = resolved;
-
-      } else {
+      }
+      else {
         previous = c;
         c = c->Next;
       }
@@ -858,8 +862,8 @@ TLayoutWindow::AddConstraint(TChildMetrics&     metrics,
 
         if (whichConstraint == WidthConstraint)
           output = &metrics.Variables[XConstraint];
-
-      } else {
+      }
+      else {
         //
         // rewrite "right - left + 1 = " as "right = left + ... - 1"
         //
@@ -884,8 +888,8 @@ TLayoutWindow::AddConstraint(TChildMetrics&     metrics,
 
         if (whichConstraint == HeightConstraint)
           output = &metrics.Variables[YConstraint];
-
-      } else {
+      }
+      else {
         //
         // rewrite "bottom - top + 1 = " as "bottom = top + ... - 1"
         //
@@ -968,9 +972,9 @@ TLayoutWindow::RemoveConstraints(TChildMetrics& childMetrics)
 {
   TVariable*  variable = childMetrics.Variables;
 
-  PlanIsDirty = TRUE;
+  PlanIsDirty = true;
   ClearPlan();
-  childMetrics.GeneratedConstraints = FALSE;
+  childMetrics.GeneratedConstraints = false;
 
   for (int i = 0; i < 4; i++) {
     TConstraint*  constraint = variable->DeterminedBy;
@@ -1010,7 +1014,7 @@ TLayoutWindow::BuildConstraints(TChildMetrics& childMetrics)
   if (!childMetrics.GeneratedConstraints) {
     TLayoutConstraint*  c = &childMetrics.Metrics.X;
 
-    childMetrics.GeneratedConstraints = TRUE;
+    childMetrics.GeneratedConstraints = true;
 
     //
     // "x" can be one of: left, right, center
@@ -1027,8 +1031,8 @@ TLayoutWindow::BuildConstraints(TChildMetrics& childMetrics)
       int  value = c->Units == lmPixels ? c->Value : LayoutUnitsToPixels(c->Value);
 
       childMetrics.Variables[c->MyEdge == lmLeft ? 0 : 2].Value = value;
-
-    } else {
+    }
+    else {
       AddConstraint(childMetrics, c, XConstraint);
     }
 
@@ -1049,8 +1053,8 @@ TLayoutWindow::BuildConstraints(TChildMetrics& childMetrics)
       int  value = c->Units == lmPixels ? c->Value : LayoutUnitsToPixels(c->Value);
 
       childMetrics.Variables[c->MyEdge == lmTop ? 1 : 3].Value = value;
-
-    } else {
+    }
+    else {
       AddConstraint(childMetrics, c, YConstraint);
     }
 
@@ -1126,8 +1130,8 @@ TLayoutWindow::Layout()
       Variables[1].Value = -cyBorder;
       Variables[2].Value += cxBorder;
       Variables[3].Value += cyBorder;
-
-    } else {
+    }
+    else {
       Variables[0].Value = 0;
       Variables[1].Value = 0;
     }
@@ -1136,7 +1140,7 @@ TLayoutWindow::Layout()
     // Rebuild layout plan if necessary
     //
     if (PlanIsDirty) {
-      PlanIsDirty = FALSE;
+      PlanIsDirty = false;
 
       for (childMetrics = ChildMetrics; childMetrics;
            childMetrics = childMetrics->Next)
@@ -1166,8 +1170,8 @@ TLayoutWindow::Layout()
           variables[3].Value - variables[1].Value + 1,
           SWP_NOZORDER | SWP_NOACTIVATE
         );
-
-      } else {
+      }
+      else {
         win->Attr.X = variables[0].Value;
         win->Attr.Y = variables[1].Value;
         win->Attr.W = variables[2].Value - variables[0].Value + 1;

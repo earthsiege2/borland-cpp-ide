@@ -1,28 +1,32 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\findrepl.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of FindReplace- abstract, Find-, Replace- common Dialog 
 //   classes
 //----------------------------------------------------------------------------
-#if !defined(__OWL_FINDREPL_H)
-#define __OWL_FINDREPL_H
+#if !defined(OWL_FINDREPL_H)
+#define OWL_FINDREPL_H
 
-#if !defined(__OWL_COMMDIAL_H)
-  #include <owl\commdial.h>
+#if !defined(OWL_COMMDIAL_H)
+# include <owl/commdial.h>
 #endif
 
 class _OWLCLASS TFindReplaceDialog : public TCommonDialog {
   public:
     class _OWLCLASS TData {
       public:
-        DWORD    Flags;
-        DWORD    Error;
+        uint32   Flags;
+        uint32   Error;
         char*    FindWhat;
         char*    ReplaceWith;
         int      BuffSize;
       
-        TData(DWORD flags = 0, int buffSize = 81);
-        ~TData();
+        TData(uint32 flags = 0, int buffSize = 81);
+        TData(const TData& src);
+       ~TData();
+
+        TData& operator =(const TData& src);
 
         void     Write(opstream& os);
         void     Read(ipstream& is);
@@ -48,7 +52,7 @@ class _OWLCLASS TFindReplaceDialog : public TCommonDialog {
                        TModule*        module = 0);
 
     void     Init(TResId templateId);
-    BOOL     DialogFunction(UINT message, WPARAM, LPARAM);
+    bool     DialogFunction(uint message, WPARAM, LPARAM);
 
     //
     // Default behavior inline for message response functions
@@ -100,4 +104,4 @@ class _OWLCLASS TReplaceDialog : public TFindReplaceDialog {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_FINDREPL_H
+#endif  // OWL_FINDREPL_H

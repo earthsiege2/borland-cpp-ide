@@ -1,0 +1,146 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+OBJS =               \
+        access.obj   \
+        chsize.obj   \
+        close.obj    \
+        dup.obj      \
+        dup2.obj     \
+        eof.obj      \
+        fdopen.obj   \
+        flushall.obj \
+        fnsplit.obj  \
+        ftruncat.obj \
+        isatty.obj   \
+        lseek.obj    \
+        open.obj     \
+        read.obj     \
+        remove.obj   \
+        umask.obj    \
+        unlink.obj   \
+        write.obj    \
+        allocbuf.obj \
+        cfinfo.obj   \
+        clearerr.obj \
+        closeall.obj \
+        creat.obj    \
+        createmp.obj \
+        creatnew.obj \
+        fclose.obj   \
+        fflush.obj   \
+        fgetchar.obj \
+        fgetpos.obj  \
+        fgets.obj    \
+        files.obj    \
+        files2.obj   \
+        findfrst.obj \
+        flushout.obj \
+        fmode.obj    \
+        fmodeptr.obj \
+        fnmerge.obj  \
+        fopen.obj    \
+        fprintf.obj  \
+        fputchar.obj \
+        fputn.obj    \
+        fputs.obj    \
+        fread.obj    \
+        freopen.obj  \
+        fscanf.obj   \
+        fseek.obj    \
+        fsetpos.obj  \
+        fwrite.obj   \
+        getcwd.obj   \
+        getftime.obj \
+        gets.obj     \
+        getw.obj     \
+        lgetc.obj    \
+        lputc.obj    \
+        makepath.obj \
+        mkname.obj   \
+        mktemp.obj   \
+        perror.obj   \
+        printf.obj   \
+        puts.obj     \
+        putw.obj     \
+        rewind.obj   \
+        rmtmp.obj    \
+        scanf.obj    \
+        scanner.obj  \
+        scantol.obj  \
+        setbuf.obj   \
+        setftime.obj \
+        setmode.obj  \
+        setvbuf.obj  \
+        sopen.obj    \
+        splitpth.obj \
+        sprintf.obj  \
+        sscanf.obj   \
+        streams.obj  \
+        tell.obj     \
+        tempnam.obj  \
+        tmpfile.obj  \
+        tmpnam.obj   \
+        ungetc.obj   \
+        vfprintf.obj \
+        vfscanf.obj  \
+        vprinter.obj \
+        vprintf.obj  \
+        vscanf.obj   \
+        xfclose.obj  \
+        xfflush.obj  \
+        _cfinfo.obj  \
+        _creat.obj   \
+        _fdopen.obj  \
+        _flshall.obj \
+        _fputc.obj   \
+        _fsopen.obj  \
+        _popen.obj   \
+        _umask.obj   \
+        __eof.obj    \
+        __read.obj   \
+        __write.obj
+
+!if $d(MT)
+    OBJS = $(OBJS)       \
+           fgetc.obj    \
+           fputc.obj
+!endif
+
+!if $d(DLL)
+    IMPOBJS = fmode.obj
+!else
+    MISC    = $(LIBDIR)\fileinfo.obj
+!endif
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+TASMCFG = 1        # Force tasm.cfg creation
+
+!include rules.mak
+
+#############################################################################
+# MISC explicit rules.                                                      #
+#############################################################################
+$(LIBDIR)\fileinfo.obj : fileinfo.obj
+    copy $** $(LIBDIR)\$.
+

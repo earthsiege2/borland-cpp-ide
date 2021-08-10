@@ -1,0 +1,49 @@
+/*-----------------------------------------------------------------------*
+ * filename - segread.c
+ *
+ * function(s)
+ *        segread - reads segment registers
+ *-----------------------------------------------------------------------*/
+
+/*
+ *      C/C++ Run Time Library - Version 1.5
+ *
+ *      Copyright (c) 1987, 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#pragma inline
+#include <dos.h>
+
+/*-----------------------------------------------------------------------*
+
+Name            segread - reads segment registers
+
+Usage           #include <dos.h>
+		void segread(struct SREGS *segp);
+
+Prototype in    dos.h
+
+Description     segread places the current values of the segment
+		registers (stored in SEGREGS) into the structure pointed to by
+		segp.
+
+		This call is intended for use with int386x.
+
+Return value    None
+
+*------------------------------------------------------------------------*/
+void _RTLENTRY segread(struct SREGS *segp)
+{
+    asm
+    {
+	mov     eax, segp    
+	mov     word ptr [eax].es, es
+	mov     word ptr [eax].cs, cs
+	mov     word ptr [eax].ss, ss
+	mov     word ptr [eax].ds, ds
+	mov     word ptr [eax].fs, fs
+	mov     word ptr [eax].gs, gs
+    }
+}

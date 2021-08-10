@@ -1,60 +1,66 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Tutorial application -- step05.cpp
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\framewin.h>
-#include <owl\dc.h>
-#include <owl\inputdia.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
+#include <owl/framewin.h>
+#include <owl/dc.h>
+#include <owl/inputdia.h>
 #include <stdlib.h>
 
-class TMyWindow : public TWindow {
+class TDrawWindow : public TWindow {
   public:
-    TMyWindow(TWindow *parent = 0);
-   ~TMyWindow() {delete DragDC; delete Pen;}
+    TDrawWindow(TWindow* parent = 0);
+   ~TDrawWindow()
+    {
+      delete DragDC;
+      delete Pen;
+    }
 
     void SetPenSize(int newSize);
 
   protected:
-    TDC *DragDC;
+    TDC* DragDC;
     int PenSize;
-    TPen *Pen;
+    TPen* Pen;
 
     // Override member function of TWindow
-    BOOL CanClose();
+    bool CanClose();
 
     // Message response functions
-    void EvLButtonDown(UINT, TPoint&);
-    void EvRButtonDown(UINT, TPoint&);
-    void EvMouseMove(UINT, TPoint&);
-    void EvLButtonUp(UINT, TPoint&);
+    void EvLButtonDown(uint, TPoint&);
+    void EvRButtonDown(uint, TPoint&);
+    void EvMouseMove(uint, TPoint&);
+    void EvLButtonUp(uint, TPoint&);
 
-    DECLARE_RESPONSE_TABLE(TMyWindow);
+  DECLARE_RESPONSE_TABLE(TDrawWindow);
 };
 
-DEFINE_RESPONSE_TABLE1(TMyWindow, TWindow)
+DEFINE_RESPONSE_TABLE1(TDrawWindow, TWindow)
   EV_WM_LBUTTONDOWN,
   EV_WM_RBUTTONDOWN,
   EV_WM_MOUSEMOVE,
   EV_WM_LBUTTONUP,
 END_RESPONSE_TABLE;
 
-TMyWindow::TMyWindow(TWindow *parent)
+TDrawWindow::TDrawWindow(TWindow* parent)
 {
   Init(parent, 0, 0);
-  DragDC = 0;
+  DragDC  = 0;
   PenSize = 1;
-  Pen = new TPen(TColor::Black, PenSize);
+  Pen     = new TPen(TColor::Black, PenSize);
 }
 
-BOOL TMyWindow::CanClose()
+bool
+TDrawWindow::CanClose()
 {
   return MessageBox("Do you want to save?", "Drawing has changed",
                     MB_YESNO | MB_ICONQUESTION) == IDNO;
 }
 
-void TMyWindow::EvLButtonDown(UINT, TPoint& point)
+void
+TDrawWindow::EvLButtonDown(uint, TPoint& point)
 {
   Invalidate();
 
@@ -66,16 +72,17 @@ void TMyWindow::EvLButtonDown(UINT, TPoint& point)
   }
 }
 
-void TMyWindow::EvRButtonDown(UINT, TPoint&)
+void
+TDrawWindow::EvRButtonDown(uint, TPoint&)
 {
-  char           inputText[6];
+  char inputText[6];
 
   wsprintf(inputText, "%d", PenSize);
   if ((TInputDialog(this, "Line Thickness",
                         "Input a new thickness:",
-                        inputText, 
+                        inputText,
                         sizeof(inputText))).Execute() == IDOK) {
-    int  newPenSize = atoi(inputText);
+    int newPenSize = atoi(inputText);
 
     if (newPenSize < 0)
       newPenSize = 1;
@@ -84,13 +91,15 @@ void TMyWindow::EvRButtonDown(UINT, TPoint&)
   }
 }
 
-void TMyWindow::EvMouseMove(UINT, TPoint& point)
+void
+TDrawWindow::EvMouseMove(uint, TPoint& point)
 {
   if (DragDC)
     DragDC->LineTo(point);
 }
 
-void TMyWindow::EvLButtonUp(UINT, TPoint&)
+void
+TDrawWindow::EvLButtonUp(uint, TPoint&)
 {
   if (DragDC) {
     ReleaseCapture();
@@ -99,24 +108,26 @@ void TMyWindow::EvLButtonUp(UINT, TPoint&)
   }
 }
 
-void TMyWindow::SetPenSize(int newSize)
+void
+TDrawWindow::SetPenSize(int newSize)
 {
   delete Pen;
   PenSize = newSize;
-  Pen = new TPen(TColor::Black, PenSize);
+  Pen     = new TPen(TColor::Black, PenSize);
 }
 
-class TMyApp : public TApplication {
+class TDrawApp : public TApplication {
   public:
-    TMyApp() : TApplication() {}
+    TDrawApp() : TApplication() {}
 
     void InitMainWindow()
     {
-      SetMainWindow(new TFrameWindow(0, "Drawing Pad", new TMyWindow));
+      SetMainWindow(new TFrameWindow(0, "Drawing Pad", new TDrawWindow));
     }
 };
 
-int OwlMain(int /*argc*/, char* /*argv*/ [])
+int
+OwlMain(int /*argc*/, char* /*argv*/ [])
 {
-  return TMyApp().Run();
+  return TDrawApp().Run();
 }

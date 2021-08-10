@@ -25,7 +25,7 @@
 #endif  // __CHECKS_H
 
 #pragma option -Vo-
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po-
 #endif
 
@@ -103,7 +103,7 @@ int operator <=( const Sortable _FAR & test1, const Sortable _FAR & test2 )
     return ( test1 < test2 || test1 == test2 );
 }
 
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po.
 #endif
 #pragma option -Vo.

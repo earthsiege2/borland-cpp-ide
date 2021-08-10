@@ -1,0 +1,77 @@
+##--BEGIN-- @OPT_APPL_DOCVIEW
+//{{DOC_VIEW}}
+##OPT_DV_RESET
+##--FOR-- IncrV = 1 TO @QUERY_DV_COUNT
+##      OPT_DV_NEXT
+##      QUERY_DV_TDOCUMENT [[TDocument]]
+##      QUERY_DV_TVIEW [[TView]]
+DEFINE_DOC_TEMPLATE_CLASS([[TDocument]], [[TView]], DocType[[IncrV]]);
+##--NEXT-- IncrV
+//{{DOC_VIEW_END}}
+
+//{{DOC_MANAGER}}
+##OPT_DV_RESET
+##"" [[Descr]]
+##"" [[Filter]]
+##"" [[Ext]]
+##"" [[Style]]
+##"" [[View]]
+##"" [[ViewBase]]
+##--FOR-- IncrV = 1 TO @QUERY_DV_COUNT
+##      OPT_DV_NEXT
+##      QUERY_DV_DESCR Descr
+##      QUERY_DV_FILTER Filter
+##      QUERY_DV_EXT Ext
+##      QUERY_DV_STYLE Style
+##      QUERY_DV_TVIEW View
+BEGIN_REGISTRATION(__dvReg[[IncrV]])
+##      --BEGIN-- @QUERY_PRJ_NAME [[Title]]
+##          --BEGIN-- @QUERY_APPL_OLE != VALUE_NOOLE
+##              :"" ViewBase
+##              :<<*View QUERY_BASE_NAME ViewBase
+##              --BEGIN-- ViewBase == "TOleView"
+    REGDATA(progid, "[[Title]].Document.[[IncrV]]")
+##                  :((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
+    REGDATA(description, "[[Title]] Document Version [[IncrV]]")
+##                  :((@QUERY_APPL_OLE != VALUE_SERVER) && (@QUERY_APPL_OLE != VALUE_OLEBOTH))
+    REGDATA(description, "[[Descr]]")
+##              --END-- ViewBase == "TOleView"
+##              :ViewBase != "TOleView"
+    REGDATA(description, "[[Descr]]")
+##          --END-- @QUERY_APPL_OLE != VALUE_NOOLE
+##      --END-- @QUERY_PRJ_NAME [[Title]]
+##@QUERY_APPL_OLE == VALUE_NOOLE
+    REGDATA(description, "[[Descr]]")
+    REGDATA(extension, "[[Ext]]")
+    REGDATA(docfilter, "[[Filter]]")
+##--BEGIN-- @QUERY_APPL_OLE != VALUE_NOOLE
+##<<*View QUERY_BASE_NAME ViewBase
+##ViewBase == "TOleView"
+    REGDOCFLAGS([[Style]] | dtAutoOpen | dtRegisterExt)
+##ViewBase != "TOleView"
+    REGDOCFLAGS([[Style]])
+##--END-- @QUERY_APPL_OLE != VALUE_NOOLE
+##@QUERY_APPL_OLE == VALUE_NOOLE
+    REGDOCFLAGS([[Style]])
+//    REGDATA(debugger, "TDW")
+##<<*View QUERY_BASE_NAME ViewBase
+##--BEGIN-- ViewBase == "TOleView"
+##--BEGIN-- ((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
+    REGDATA(menuname, "[[View]]")
+    REGDATA(insertable, "")
+    REGDATA(verb0, "&Edit")
+    REGDATA(verb1, "&Open")
+##--END-- ((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
+##--BEGIN-- ((@QUERY_APPL_OLE == VALUE_CONTAINER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH) || (@QUERY_APPL_OLE == VALUE_SERVER))
+    REGFORMAT(0, ocrEmbedSource,  ocrContent,  ocrIStorage, ocrGet)
+    REGFORMAT(1, ocrMetafilePict, ocrContent,  ocrMfPict | ocrStaticMed, ocrGet)
+    REGFORMAT(2, ocrBitmap, ocrContent,  ocrGDI | ocrStaticMed, ocrGet)
+    REGFORMAT(3, ocrDib, ocrContent,  ocrHGlobal | ocrStaticMed, ocrGet)
+    REGFORMAT(4, ocrLinkSource, ocrContent,  ocrIStream, ocrGet)
+##--END-- ((@QUERY_APPL_OLE == VALUE_CONTAINER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH) || (@QUERY_APPL_OLE == VALUE_SERVER))
+##--END-- ViewBase == "TOleView"
+END_REGISTRATION
+DocType[[IncrV]] __dvt[[IncrV]](__dvReg[[IncrV]]);
+##--NEXT-- IncrV
+//{{DOC_MANAGER_END}}
+##--END-- @OPT_APPL_DOCVIEW

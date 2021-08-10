@@ -1,16 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993, 1993 by Borland International
-//   source\owl\bitset.h
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
+//   Definition of a bit mask set
 //----------------------------------------------------------------------------
-#if !defined(__OWL_BITSET_H)
-#define __OWL_BITSET_H
+#if !defined(OWL_BITSET_H)
+#define OWL_BITSET_H
 
-#if !defined(__OWL_OWLDEFS_H)
-  #include <owl\owldefs.h>
-#endif
-
-#if !defined(__CLASSLIB_DEFS_H)
-  #include <classlib\defs.h>
+#if !defined(OWL_OWLDEFS_H)
+# include <owl/owldefs.h>
 #endif
 
 class _BIDSCLASS opstream;
@@ -21,14 +19,14 @@ class _OWLCLASS TBitSet {
     TBitSet();
     TBitSet(const TBitSet&);
 
-    int Has(int item);
+    int Has(uint8 item);
 
     TBitSet operator ~() const;
 
-    void DisableItem(int item);
-    void EnableItem(int item);
-    TBitSet& operator +=(int item) {EnableItem(item); return *this;}
-    TBitSet& operator -=(int item) {DisableItem(item); return *this;}
+    void DisableItem(uint8 item);
+    void EnableItem(uint8 item);
+    TBitSet& operator +=(uint8 item) {EnableItem(item); return *this;}
+    TBitSet& operator -=(uint8 item) {DisableItem(item); return *this;}
 
     void DisableItem(const TBitSet& bs);
     void EnableItem(const TBitSet& bs);
@@ -49,8 +47,8 @@ class _OWLCLASS TBitSet {
     friend ipstream& operator >>(ipstream& in, TBitSet& bs);
 
   private:
-    int    Loc(int item) {return item / 8;}
-    uint8  Mask(int item) {return Masks[item & 0x07];}
+    int    Loc(uint8 item) {return item / 8;}
+    uint8  Mask(uint8 item) {return Masks[item & 0x07];}
 
     static uint8 near Masks[8];
 
@@ -69,4 +67,4 @@ inline int operator !=(const TBitSet& bs1, const TBitSet& bs2) {
   return !operator ==(bs1, bs2);
 }
 
-#endif  // __OWL_BITSET_H
+#endif  // OWL_BITSET_H

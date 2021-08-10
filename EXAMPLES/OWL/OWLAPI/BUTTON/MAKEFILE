@@ -3,6 +3,7 @@
 #   examples\owl\owlapi\button\makefile
 #----------------------------------------------------------------------------
 
+MODELS=mldf
 EXE    = buttonx
 !include $(BCEXAMPLEDIR)\owlmake.gen
 

@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\controlb.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TControlBar.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\controlb.h>
+#include <owl/owlpch.h>
+#include <owl/controlb.h>
 
 IMPLEMENT_CASTABLE(TControlBar);
 
@@ -12,24 +13,25 @@ TControlBar::TControlBar(TWindow*        parent,
                          TTileDirection  direction,
                          TFont*          font,
                          TModule*        module)
-  : TGadgetWindow(parent, direction, font, module)
+:
+  TGadgetWindow(parent, direction, font, module)
 {
   Margins.Units = TMargins::BorderUnits;
 
   if (Direction == Horizontal) {
     Margins.Left = Margins.Right = 6;
     Margins.Top = Margins.Bottom = 2;
-
-  } else {
+  }
+  else {
     Margins.Left = Margins.Right = 2;
     Margins.Top = Margins.Bottom = 6;
   }
 }
 
-BOOL
+bool
 TControlBar::PreProcessMsg(MSG&)
 {
-  return FALSE;
+  return false;
 }
 
 void

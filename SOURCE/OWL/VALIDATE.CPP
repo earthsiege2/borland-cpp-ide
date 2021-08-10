@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\validate.cpp
+// ObjectWindows
+// (C) Copyright 1994, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TValidator, user input validator abstract base class
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\validate.h>
-#include <owl\module.h>
-#include <classlib\objstrm.h>
+#include <owl/owlpch.h>
+#include <owl/validate.h>
+#include <owl/module.h>
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -36,28 +37,28 @@ TValidator::Error()
 // Checks current input against validator. May adjust input if suppressFill
 // isn't set & validator has the voFill option set.
 //
-BOOL
-TValidator::IsValidInput(char far*, BOOL /*suppressFill*/)
+bool
+TValidator::IsValidInput(char far*, bool /*suppressFill*/)
 {
-  return TRUE;
+  return true;
 }
 
 //
 // Checks input against validator for completeness. Never modifies input.
 //
-BOOL
+bool
 TValidator::IsValid(const char far*)
 {
-  return TRUE;
+  return true;
 }
 
-UINT
+uint
 TValidator::Transfer(char far*, void*, TTransferDirection)
 {
   return 0;
 }
 
-TValidator::TXValidator::TXValidator(UINT resId) : TXOwl(resId)
+TValidator::TXValidator::TXValidator(uint resId) : TXOwl(resId)
 {
 }
 

@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  STDTEMPL.H                                                            */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*                                                                        */
@@ -22,12 +22,12 @@
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_STDTEMPL_H )
-#define __CLASSLIB_STDTEMPL_H
+#if !defined( CLASSLIB_STDTEMPL_H )
+#define CLASSLIB_STDTEMPL_H
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -69,5 +69,5 @@ template <class T> inline const T& range( const T& minVal, const T& maxVal,
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_STDTEMPL_H
+#endif  // CLASSLIB_STDTEMPL_H
 

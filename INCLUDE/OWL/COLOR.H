@@ -1,20 +1,21 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\color.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of color classes
 //----------------------------------------------------------------------------
-#if !defined(__OWL_COLOR_H)
-#define __OWL_COLOR_H
+#if !defined(OWL_COLOR_H)
+#define OWL_COLOR_H
 
-#if !defined(__OWL_OWLDEFS_H)
-  #include <owl\owldefs.h>
+#if !defined(OWL_OWLDEFS_H)
+# include <owl/owldefs.h>
 #endif
 
-long _OWLFUNC NColors(WORD bitCount);
-WORD _OWLFUNC NBits(long colors);
+long _OWLFUNC NColors(uint16 bitCount);
+uint16 _OWLFUNC NBits(long colors);
 
-#define OWLRGB(r,g,b)\
- ((COLORREF)(((BYTE)(WORD)(r)|((WORD)(g)<<8))|(((DWORD)(BYTE)(WORD)(b))<<16)))
+#define OWLRGB(r,g,b) \
+ ((COLORREF)(((uint8)(uint16)(r)|((uint16)(g)<<8))|(((uint32)(uint8)(uint16)(b))<<16)))
 
 class _OWLCLASS TColor {
   public:
@@ -22,7 +23,7 @@ class _OWLCLASS TColor {
     TColor(COLORREF value) : Value(value) {}
     TColor(long value) : Value((COLORREF)value) {}
     TColor(int r, int g, int b) : Value(OWLRGB(r,g,b)) {}
-    TColor(int r, int g, int b, int f) : Value(((DWORD)f<<24) | OWLRGB(r,g,b)) {}
+    TColor(int r, int g, int b, int f) : Value(((uint32)f<<24) | OWLRGB(r,g,b)) {}
     TColor(int index) : Value(PALETTEINDEX(index)) {}
     TColor(const PALETTEENTRY far& pe) : Value(OWLRGB(pe.peRed,pe.peGreen,pe.peBlue)) {}
     TColor(const RGBQUAD far& q) : Value(OWLRGB(q.rgbRed,q.rgbGreen,q.rgbBlue)) {}
@@ -31,17 +32,17 @@ class _OWLCLASS TColor {
     // Type Conversion Operators
     operator      COLORREF() const {return Value;}
 
-    BOOL operator ==(const TColor& clrVal) const {return Value==clrVal;}
+    bool operator ==(const TColor& clrVal) const {return Value==clrVal;}
 
     int           Index() const {return (int)Value & 0xFFFF;}
     TColor        Rgb() const {return Value & 0x00FFFFFFUL;}
     TColor        PalIndex() const {return (COLORREF)Index() | 0x01000000UL;}
     TColor        PalRelative() const {return Rgb() | 0x02000000UL;}
 
-    BYTE          Red() const {return (BYTE)(WORD)Value;}
-    BYTE          Green() const {return ((BYTE)(WORD)(((WORD)Value) >> 8));}
-    BYTE          Blue() const {return ((BYTE)(WORD)(Value>>16));}
-    BYTE          Flags() const {return (BYTE)(WORD)(Value>>24);}
+    uint8         Red() const {return (uint8)(uint16)Value;}
+    uint8         Green() const {return ((uint8)(uint16)(((uint16)Value) >> 8));}
+    uint8         Blue() const {return ((uint8)(uint16)(Value>>16));}
+    uint8         Flags() const {return (uint8)(uint16)(Value>>24);}
 
     static const TColor  Black;
     static const TColor  LtGray;
@@ -78,16 +79,15 @@ class TRgbTriple : public tagRGBTRIPLE {
     TRgbTriple(const RGBTRIPLE far& t) {*(RGBTRIPLE*)this = t;}
 };
 
-
 //----------------------------------------------------------------------------
 // Inlines
 //----------------------------------------------------------------------------
 
 inline TPaletteEntry::TPaletteEntry(int r, int g, int b, int f) {
-  peRed = (BYTE)(WORD)r;
-  peGreen = (BYTE)(WORD)g;
-  peBlue = (BYTE)(WORD)b;
-  peFlags = (BYTE)(WORD)f;
+  peRed = (uint8)(uint16)r;
+  peGreen = (uint8)(uint16)g;
+  peBlue = (uint8)(uint16)b;
+  peFlags = (uint8)(uint16)f;
 }
 
 inline TPaletteEntry::TPaletteEntry(TColor c) {
@@ -98,9 +98,9 @@ inline TPaletteEntry::TPaletteEntry(TColor c) {
 }
 
 inline TRgbQuad::TRgbQuad(int r, int g, int b) {
-  rgbRed = (BYTE)(WORD)r;
-  rgbGreen = (BYTE)(WORD)g;
-  rgbBlue = (BYTE)(WORD)b;
+  rgbRed = (uint8)(uint16)r;
+  rgbGreen = (uint8)(uint16)g;
+  rgbBlue = (uint8)(uint16)b;
   rgbReserved = 0;
 }
 
@@ -112,9 +112,9 @@ inline TRgbQuad::TRgbQuad(TColor c) {
 }
 
 inline TRgbTriple::TRgbTriple(int r, int g, int b) {
-  rgbtRed = (BYTE)(WORD)r;
-  rgbtGreen = (BYTE)(WORD)g;
-  rgbtBlue = (BYTE)(WORD)b;
+  rgbtRed = (uint8)(uint16)r;
+  rgbtGreen = (uint8)(uint16)g;
+  rgbtBlue = (uint8)(uint16)b;
 }
 
 inline TRgbTriple::TRgbTriple(TColor c) {
@@ -123,4 +123,4 @@ inline TRgbTriple::TRgbTriple(TColor c) {
   rgbtBlue = c.Blue();
 }
 
-#endif  // __OWL_COLOR_H
+#endif  // OWL_COLOR_H

@@ -1,27 +1,31 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\window.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Base window class definition, including HWND encapsulation.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_WINDOW_H)
-#define __OWL_WINDOW_H
+#if !defined(OWL_WINDOW_H)
+#define OWL_WINDOW_H
 
-#if !defined(__OWL_POINT_H)
-  #include <owl\point.h>
+#if !defined(OWL_OWLDEFS_H)
+# include <owl/owldefs.h>
 #endif
-#if !defined(__OWL_CLIPBOAR_H)
-  #include <owl\clipboar.h>
+#if !defined(OSL_GEOMETRY_H)
+# include <osl/geometry.h>
 #endif
-#if !defined(__OWL_WINDOWEV_H)
-  #include <owl\windowev.h>
+#if !defined(OWL_CLIPBOAR_H)
+# include <owl/clipboar.h>
 #endif
-#if !defined(__OWL_MODULE_H)
-  #include <owl\module.h>
+#if !defined(OWL_WINDOWEV_H)
+# include <owl/windowev.h>
 #endif
-#if defined(__WIN32__) && !defined(__CLASSLIB_THREAD_H)
-  #include <classlib\thread.h>
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
 #endif
-#include <owl\window.rh>
+#if defined(BI_MULTI_THREAD) && !defined(CLASSLIB_THREAD_H)
+# include <classlib/thread.h>
+#endif
+#include <owl/window.rh>
 
 class _OWLCLASS TApplication;
 class _OWLCLASS TModule;
@@ -35,22 +39,28 @@ class _OWLCLASS TDC;
 //  ---- -----------
 //
 enum TWindowFlag {
-  wfAlias           = 0x0001,
-  wfAutoCreate      = 0x0002,
-  wfFromResource    = 0x0004,
-  wfShrinkToClient  = 0x0008,
-  wfMainWindow      = 0x0010,
-  wfStreamTop       = 0x0020,
-  wfPredefinedClass = 0x0040,
-  wfTransfer        = 0x0080,
-  wfUnHidden        = 0x0100,  // used temporarily when destroying MDI child
-  wfUnDisabled      = 0x0200,  // used temporarily when destroying MDI child
+  wfAlias           = 0x0001,  // TWindow is an alias to a preexisting HWND
+  wfAutoCreate      = 0x0002,  // Create the HWindow when our parent is created
+  wfFromResource    = 0x0004,  // HWindow comes from HWND created from resource
+  wfShrinkToClient  = 0x0008,  // Shrink a frame window to its client's size
+  wfMainWindow      = 0x0010,  // This frame window is the main window
+  wfFullyCreated    = 0x0020,  // Window is fully created & not being destroyed
+  wfStreamTop       = 0x0040,  // This window is the topmost one to stream
+  wfPredefinedClass = 0x0080,  // Window class used was not defined by Owl
+  wfTransfer        = 0x0100,  // Transfer enabled
+  wfUnHidden        = 0x0200,  // Used temporarily when destroying MDI child
+  wfUnDisabled      = 0x0400,  // Used temporarily when destroying MDI child
+  wfDeleteOnClose   = 0x0800   // Window is condemned on EvClose
 };
 
 //
 // Transfer function flags
 //
-enum TTransferDirection {tdGetData, tdSetData, tdSizeData};
+enum TTransferDirection {
+  tdGetData,    // Get data from the window into the buffer
+  tdSetData,    // Set data from the buffer into the window
+  tdSizeData    // Just query the window data size in bytes
+};
 
 //
 // Mixin window event implementation return status
@@ -63,57 +73,62 @@ enum TEventStatus {
 //
 // special background color flags for EvEraseBkgnd processing
 //
-const DWORD NoColor = 0xFF000000l;  // let DefWindowProc erase
-const DWORD NoErase = 0xFE000000l;  // don't erase, wait for Paint
+const uint32 NoColor = 0xFF000000l;  // let DefWindowProc erase
+const uint32 NoErase = 0xFE000000l;  // don't erase, wait for Paint
 
 //
 //  windows 3.1 windowsx.h name confict with TWindows::GetFirstChild()
 //
 #if defined(GetFirstChild)
-  #undef GetFirstChild(hwnd)
+# undef GetFirstChild(hwnd)
 #endif
 
+//
+// Member and non-member action and conditional function types used with
+// ForEach and FirstThat.
+//
 typedef void (*TActionFunc)(TWindow* win, void* param);
-typedef BOOL (*TCondFunc)(TWindow* win, void* param);
+typedef bool (*TCondFunc)(TWindow* win, void* param);
 
 typedef void (TWindow::*TActionMemFunc)(TWindow* win, void* param);
-typedef BOOL (TWindow::*TCondMemFunc)(TWindow* win, void* param);
+typedef bool (TWindow::*TCondMemFunc)(TWindow* win, void* param);
 
 //
 //  class TCommandEnabler
 //  ----- ---------------
 //
-//  provides an extensible interface for auto enabling/disabling of commands
-//  (menu items, tool bar buttons, ...)
+//  base class for an extensible interface for auto enabling/disabling of
+//  commands (menu items, tool bar buttons, ...)
 //
 class _OWLCLASS TCommandEnabler {
   public:
-    const UINT  Id;
+    const uint  Id;
 
-    TCommandEnabler(UINT id, HWND hWndReceiver = 0);
+    TCommandEnabler(uint id, HWND hWndReceiver = 0);
 
-    virtual void  Enable(BOOL enable = TRUE);  // sets "Handled" to TRUE
-    virtual void  SetText(LPCSTR text) = 0;
+    virtual void  Enable(bool enable = true);  // sets "Handled" to true
+    virtual void  SetText(const char far* text) = 0;
     enum {Unchecked, Checked, Indeterminate};
     virtual void  SetCheck(int check) = 0;  // Unchecked, Checked, or Indeterminate
 
-    BOOL        GetHandled() {return Handled;}
-    BOOL        IsReceiver(HWND hReceiver) {return hReceiver==HWndReceiver;}
+    bool        GetHandled() {return Handled;}
+    bool        IsReceiver(HWND hReceiver) {return hReceiver==HWndReceiver;}
 
   protected:
     const HWND  HWndReceiver;
-    BOOL        Handled;
+    bool        Handled;
 };
 
 //
 //  struct TWindowsAttr
 //  ------ ------------
 //
-//  Window creation attributes
+//  Window *Creation* attributes. Don't rely on these to track once HWindow
+//  has been created, use member functions to access information.
 //
 struct TWindowAttr {
-    DWORD      Style;
-    DWORD      ExStyle;
+    uint32     Style;
+    uint32     ExStyle;
     int        X, Y, W, H;
     TResId     Menu;        // Menu resource id
     int        Id;          // Child identifier
@@ -130,13 +145,13 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
   public:
     class _OWLCLASS_RTL TXWindow : public TXOwl {
       public:
-        TXWindow(TWindow* win = 0, UINT resourceId = IDS_INVALIDWINDOW);
+        TXWindow(TWindow* win = 0, uint resourceId = IDS_INVALIDWINDOW);
         TXWindow(const TXWindow& src);
         int Unhandled(TModule* app, unsigned promptResId);
         TXOwl* Clone();
         void Throw() {throw *this;}
         TWindow*      Window;
-        static string Msg(TWindow* wnd, UINT resourceid);
+        static string Msg(TWindow* wnd, uint resourceid);
     };
 
     TStatus        Status;
@@ -181,9 +196,9 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     //
     // query and set the flags
     //
-    void              SetFlag(TWindowFlag mask) {Flags |= DWORD(mask);}
-    void              ClearFlag(TWindowFlag mask) {Flags &= DWORD(~mask);}
-    BOOL              IsFlagSet(TWindowFlag mask) {return (Flags & mask) ? 1 : 0;}
+    void              SetFlag(TWindowFlag mask) {Flags |= uint32(mask);}
+    void              ClearFlag(TWindowFlag mask) {Flags &= uint32(~mask);}
+    bool              IsFlagSet(TWindowFlag mask) {return (Flags & mask) ? 1 : 0;}
 
     //
     // sets/clears flag which indicates that the TWindow should be
@@ -207,14 +222,14 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
 
     TApplication*     GetApplication() const {return Application;}
     WNDPROC           GetThunk() const {return Thunk;}
-    virtual BOOL      Register();
+    virtual bool      Register();
 
     //
     // create/destroy an MS_Windows element to be associated with an OWL window
     //
-    virtual BOOL      Create();
+    virtual bool      Create();
     virtual void      PerformCreate(int menuOrId);
-    BOOL              CreateChildren();
+    bool              CreateChildren();
     virtual void      Destroy(int retVal = 0);
 
     //
@@ -223,71 +238,74 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     virtual void      CloseWindow(int retVal = 0);
 
     //
-    // This function is obsolete. Destroy() should be called directly, & then
-    // the window destructed (using delete, etc).
+    // Unconditionally shut down a given window. Destroy() is called to
+    // destroy the HWindow, & then the window is deleted. Non-static version
+    // is safe as long as it is inline and not called on itself
     //
-    void              ShutDownWindow(int retVal = 0);
+    static void       ShutDownWindow(TWindow* win, int retVal = 0);
+    void              ShutDownWindow(int retVal = 0)
+                          {ShutDownWindow(this, retVal);}
 
-  #if defined(__WIN32__)
+#if defined(BI_MULTI_THREAD)
     //
     // override TEventHandler::Dispatch() to handle multi-thread
     // synchronization
     //
     virtual LRESULT  Dispatch(TEventInfo& info, WPARAM wp, LPARAM lp = 0);
-  #endif
+#endif
 
     //
     // called from TApplication::ProcessAppMsg() to give the window an
     // opportunity to perform preprocessing of the Windows message
     //
-    // if you return TRUE, further processing of the message is halted
+    // if you return true, further processing of the message is halted
     //
     // if you override this method in a derived class, make sure to call this
     // routine because it handles translation of accelerators...
     //
-    virtual BOOL      PreProcessMsg(MSG& msg);
-    virtual BOOL      IdleAction(long idleCount);
-    virtual BOOL      HoldFocusHWnd(HWND hWndLose, HWND hWndGain);
+    virtual bool      PreProcessMsg(MSG& msg);
+    virtual bool      IdleAction(long idleCount);
+    virtual bool      HoldFocusHWnd(HWND hWndLose, HWND hWndGain);
 
     int               GetId() const {return Attr.Id;}
     TWindow*          ChildWithId(int id) const;
 
     virtual void      SetParent(TWindow* newParent);
-    virtual BOOL      SetDocTitle(LPCSTR docname, int index);
+    virtual bool      SetDocTitle(const char far* docname, int index);
 
     void              Show(int cmdShow);
     void              SetCaption(const char far* title);
     void              GetWindowTextTitle();
     void              GetHWndState();
-    BOOL              SetCursor(TModule* module, TResId resId);
-    void              SetBkgndColor(DWORD color) {BkgndColor = color;}
+    bool              SetCursor(TModule* module, TResId resId);
+    void              SetBkgndColor(uint32 color) {BkgndColor = color;}
 
-    virtual BOOL      CanClose();
+    virtual bool      CanClose();
 
     //
     // forwards the current event to "hWnd" using either PostMessage() or
     // SendMessage(). Owl window version calls directly to window proc on send.
     //
-    LRESULT           ForwardMessage(HWND hWnd, BOOL send = TRUE);
-    LRESULT           ForwardMessage(BOOL send = TRUE);
+    LRESULT           ForwardMessage(HWND hWnd, bool send = true);
+    LRESULT           ForwardMessage(bool send = true);
 
     //
     // send message to all children
     //
-    void              ChildBroadcastMessage(UINT msg, WPARAM wParam=0, LPARAM lParam=0);
+    void              ChildBroadcastMessage(uint msg, WPARAM wParam=0, LPARAM lParam=0);
 
     //
     // Notify a window (parent usually) of a child action.
     //
     void              SendNotification(int id, int notifyCode, HWND hCtl,
-                                       UINT msg = WM_COMMAND);
+                                       uint msg = WM_COMMAND);
 
     //
     // Called from StdWndProc to allow exceptions to be caught and suspended.
     // Calls HandleMessage from within try block. Catches and suspends all
     // exceptions before returning to Windows (Windows is not exception safe).
     //
-    LRESULT           ReceiveMessage(UINT   msg,
+    LRESULT           ReceiveMessage(uint   msg,
                                      WPARAM wParam = 0,
                                      LPARAM lParam = 0);
 
@@ -295,7 +313,7 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // Call a Window's window proc to handle a message. Similar to SendMessage
     // but more direct.
     //
-    LRESULT           HandleMessage(UINT   msg,
+    LRESULT           HandleMessage(uint   msg,
                                     WPARAM wParam = 0,
                                     LPARAM lParam = 0);
 
@@ -303,8 +321,8 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // virtual functions called to handle a message, and to deal with an
     // unhandled message in a default way.
     //
-    virtual LRESULT   WindowProc(UINT msg, WPARAM wParam, LPARAM lParam);
-    virtual LRESULT   DefWindowProc(UINT msg, WPARAM wParam, LPARAM lParam);
+    virtual LRESULT   WindowProc(uint msg, WPARAM wParam, LPARAM lParam);
+    virtual LRESULT   DefWindowProc(uint msg, WPARAM wParam, LPARAM lParam);
 
     //
     // called by WindowProc() to handle WM_COMMANDs
@@ -318,12 +336,14 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     //                a control. if the message is from an accelerator, it is 1.
     //                if the message is from a menu, it is 0
     //
-    virtual LRESULT   EvCommand(UINT id, HWND hWndCtl, UINT notifyCode);
+    virtual LRESULT   EvCommand(uint id, HWND hWndCtl, uint notifyCode);
 
     //
-    // called by WindowProc() to handle WM_COMMAND_ENABLE
+    // called by WindowProc() to handle WM_COMMAND_ENABLE, & helper function
     //
     virtual void      EvCommandEnable(TCommandEnabler& ce);
+    void              RouteCommandEnable(HWND hInitCmdTarget, TCommandEnabler& ce);
+    
 
     //
     // default processing, deals with special cases or calling DefWindowProc
@@ -333,14 +353,14 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     //
     // Paint function called by base classes when responding to WM_PAINT
     //
-    virtual void      Paint(TDC& dc, BOOL erase, TRect& rect);
+    virtual void      Paint(TDC& dc, bool erase, TRect& rect);
 
     //
     // transfer buffer
     //
     void              SetTransferBuffer(void* transferBuffer)
                           {TransferBuffer = transferBuffer;}
-    virtual UINT      Transfer(void* buffer, TTransferDirection direction);
+    virtual uint      Transfer(void* buffer, TTransferDirection direction);
     virtual void      TransferData(TTransferDirection direction);
 
     //
@@ -357,19 +377,19 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // allow a TWindow& to be used as an HWND in Windows API calls
     //
     operator          HWND() const {return HWindow;}
-    BOOL              IsWindow() const {return ::IsWindow(HWindow);}
+    bool              IsWindow() const {return ::IsWindow(HWindow);}
 
     //
     // messages
     //
-    LRESULT           SendMessage(UINT   msg,
+    LRESULT           SendMessage(uint   msg,
                                   WPARAM wParam = 0,
                                   LPARAM lParam = 0);
     LRESULT           SendDlgItemMessage(int    childId,
-                                         UINT   msg,
+                                         uint   msg,
                                          WPARAM wParam = 0,
                                          LPARAM lParam = 0);
-    BOOL              PostMessage(UINT   msg,
+    bool              PostMessage(uint   msg,
                                   WPARAM wParam = 0,
                                   LPARAM lParam = 0);
     static HWND       GetCapture();
@@ -377,9 +397,9 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     static void       ReleaseCapture();
     static HWND       GetFocus();
     HWND              SetFocus();
-    BOOL              IsWindowEnabled() const;
-    virtual BOOL      EnableWindow(BOOL enable);
-    void              SetRedraw(BOOL redraw);
+    bool              IsWindowEnabled() const;
+    virtual bool      EnableWindow(bool enable);
+    void              SetRedraw(bool redraw);
 
     //
     // window coordinates, dimensions...
@@ -395,9 +415,9 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     void              ClientToScreen(TPoint& point) const;
     void              GetWindowRect(TRect& rect) const;
     TRect             GetWindowRect() const;
-    static void       AdjustWindowRect(TRect& rect, DWORD style, BOOL menu);
-    static void       AdjustWindowRectEx(TRect& rect, DWORD style,
-                                         BOOL  menu,  DWORD exStyle);
+    static void       AdjustWindowRect(TRect& rect, uint32 style, bool menu);
+    static void       AdjustWindowRectEx(TRect& rect, uint32 style,
+                                         bool  menu,  uint32 exStyle);
 
     //
     // window and class Words and Longs, window properties
@@ -405,35 +425,35 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     long              GetClassName(char far* className, int maxCount) const;
     long              GetClassLong(int index) const;
     long              SetClassLong(int index, long newLong);
-    WORD              GetClassWord(int index) const;
-    WORD              SetClassWord(int index, WORD newWord);
+    uint16            GetClassWord(int index) const;
+    uint16            SetClassWord(int index, uint16 newWord);
     long              GetWindowLong(int index) const;
     long              SetWindowLong(int index, long newLong);
-    WORD              GetWindowWord(int index) const;
-    WORD              SetWindowWord(int index, WORD newWord);
+    uint16            GetWindowWord(int index) const;
+    uint16            SetWindowWord(int index, uint16 newWord);
     int               EnumProps(PROPENUMPROC proc);
-    HANDLE            GetProp(WORD atom) const;
-    HANDLE            RemoveProp(WORD atom) const;
-    BOOL              SetProp(WORD atom, HANDLE data) const;
+    HANDLE            GetProp(uint16 atom) const;
+    HANDLE            RemoveProp(uint16 atom) const;
+    bool              SetProp(uint16 atom, HANDLE data) const;
     HANDLE            GetProp(const char far* str) const;
     HANDLE            RemoveProp(const char far* str) const;
-    BOOL              SetProp(const char far* str, HANDLE data) const;
+    bool              SetProp(const char far* str, HANDLE data) const;
 
     //
     // window placement(X,Y) and display
     //
-    BOOL              MoveWindow(int x, int y, int w, int h, BOOL repaint = FALSE);
-    BOOL              MoveWindow(const TRect& rect, BOOL repaint = FALSE);
-    virtual BOOL      ShowWindow(int cmdShow);
-    void              ShowOwnedPopups(BOOL show);
-    BOOL              IsWindowVisible() const;
-    BOOL              IsZoomed() const;
-    BOOL              IsIconic() const;
+    bool              MoveWindow(int x, int y, int w, int h, bool repaint = false);
+    bool              MoveWindow(const TRect& rect, bool repaint = false);
+    virtual bool      ShowWindow(int cmdShow);
+    void              ShowOwnedPopups(bool show);
+    bool              IsWindowVisible() const;
+    bool              IsZoomed() const;
+    bool              IsIconic() const;
     int               GetWindowTextLength() const;
     int               GetWindowText(char far* str, int maxCount) const;
     void              SetWindowText(const char far* str);
-    BOOL              GetWindowPlacement(WINDOWPLACEMENT* place) const;
-    BOOL              SetWindowPlacement(const WINDOWPLACEMENT* place);
+    bool              GetWindowPlacement(WINDOWPLACEMENT* place) const;
+    bool              SetWindowPlacement(const WINDOWPLACEMENT* place);
 
     //
     // window positioning(Z), sibling relationships
@@ -442,52 +462,52 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     static HWND       GetActiveWindow();
     HWND              SetActiveWindow();
     static HWND       GetDesktopWindow();
-  #if !defined(__WIN32__)
+#if defined(BI_PLAT_WIN16)
     static HWND       GetSysModalWindow();
     HWND              SetSysModalWindow();
-  #endif
+#endif
     HWND              GetLastActivePopup() const;
-    HWND              GetNextWindow(UINT dirFlag) const;
+    HWND              GetNextWindow(uint dirFlag) const;
     HWND              GetTopWindow() const;
-    HWND              GetWindow(UINT cmd) const;
-    BOOL              SetWindowPos(HWND         hWndInsertAfter,
+    HWND              GetWindow(uint cmd) const;
+    bool              SetWindowPos(HWND         hWndInsertAfter,
                                    const TRect& rect,
-                                   UINT         flags);
-    BOOL              SetWindowPos(HWND hWndInsertAfter,
+                                   uint         flags);
+    bool              SetWindowPos(HWND hWndInsertAfter,
                                    int x, int y, int w, int h,
-                                   UINT flags);
+                                   uint flags);
 
     //
     // window painting: invalidating, validating & updating
     //
-    void              Invalidate(BOOL erase = TRUE);
-    void              InvalidateRect(const TRect& rect, BOOL erase = TRUE);
-    void              InvalidateRgn(HRGN hRgn, BOOL erase = TRUE);
+    void              Invalidate(bool erase = true);
+    void              InvalidateRect(const TRect& rect, bool erase = true);
+    void              InvalidateRgn(HRGN hRgn, bool erase = true);
     void              Validate();
     void              ValidateRect(const TRect& rect);
     void              ValidateRgn(HRGN hRgn);
     void              UpdateWindow();
-    BOOL              FlashWindow(BOOL invert);
-    BOOL              GetUpdateRect(TRect& rect, BOOL erase = TRUE) const;
-    BOOL              GetUpdateRgn(TRegion& rgn, BOOL erase = TRUE) const;
-    BOOL              LockWindowUpdate();
-    BOOL              RedrawWindow(TRect* update,
+    bool              FlashWindow(bool invert);
+    bool              GetUpdateRect(TRect& rect, bool erase = true) const;
+    bool              GetUpdateRgn(TRegion& rgn, bool erase = true) const;
+    bool              LockWindowUpdate();
+    bool              RedrawWindow(TRect* update,
                                    HRGN   hUpdateRgn,
-                                   UINT   redrawFlags = RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE);
+                                   uint   redrawFlags = RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE);
 
     //
     // scrolling and scrollbars
     //
     int               GetScrollPos(int bar) const;
-    int               SetScrollPos(int bar, int pos, BOOL redraw = TRUE);
+    int               SetScrollPos(int bar, int pos, bool redraw = true);
     void              GetScrollRange(int bar, int& minPos, int& maxPos) const;
     void              SetScrollRange(int  bar,
                                      int  minPos,
                                      int  maxPos,
-                                     BOOL redraw = TRUE);
-    BOOL              EnableScrollBar(UINT sbFlags=SB_BOTH,
-                                      UINT arrowFlags=ESB_ENABLE_BOTH);
-    void              ShowScrollBar(int bar, BOOL show = TRUE);
+                                     bool redraw = true);
+    bool              EnableScrollBar(uint sbFlags=SB_BOTH,
+                                      uint arrowFlags=ESB_ENABLE_BOTH);
+    void              ShowScrollBar(int bar, bool show = true);
     void              ScrollWindow(int              dx,
                                    int              dy,
                                    const TRect far* scroll = 0,
@@ -498,31 +518,31 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
                                      const TRect far* clip = 0,
                                      HRGN             hUpdateRgn = 0,
                                      TRect far*       update = 0,
-                                     UINT             flags = 0);
+                                     uint             flags = 0);
 
     //
     // parent/child with Ids
     //
     int               GetDlgCtrlID() const;
     HWND              GetDlgItem(int childId) const;
-    UINT              GetDlgItemInt(int   childId,
-                                    BOOL* translated = 0,
-                                    BOOL  isSigned = TRUE) const;
+    uint              GetDlgItemInt(int   childId,
+                                    bool* translated = 0,
+                                    bool  isSigned = true) const;
     void              SetDlgItemInt(int  childId,
-                                    UINT value,
-                                    BOOL isSigned = TRUE) const;
+                                    uint value,
+                                    bool isSigned = true) const;
     int               GetDlgItemText(int       childId,
                                      char far* text,
                                      int       max) const;
     void              SetDlgItemText(int childId, const char far* text) const;
-    UINT              IsDlgButtonChecked(int buttonId) const;
+    uint              IsDlgButtonChecked(int buttonId) const;
     HWND              GetParent() const;
-    BOOL              IsChild(HWND) const;
+    bool              IsChild(HWND) const;
     HWND              GetNextDlgGroupItem(HWND hWndCtrl,
-                                          BOOL previous = FALSE) const;
+                                          bool previous = false) const;
     HWND              GetNextDlgTabItem(HWND HWndCtrl,
-                                        BOOL previous = FALSE) const;
-    void              CheckDlgButton(int buttonId, UINT check);
+                                        bool previous = false) const;
+    void              CheckDlgButton(int buttonId, uint check);
     void              CheckRadioButton(int firstButtonId,
                                        int lastButtonId,
                                        int checkButtonId);
@@ -531,60 +551,63 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     // menus and menubar
     //
     HMENU             GetMenu() const;
-    HMENU             GetSystemMenu(BOOL revert = FALSE) const;
-    BOOL              SetMenu(HMENU hMenu);
-    BOOL              HiliteMenuItem(HMENU hMenu, UINT idItem, UINT hilite);
+    HMENU             GetSystemMenu(bool revert = false) const;
+    bool              SetMenu(HMENU hMenu);
+    bool              HiliteMenuItem(HMENU hMenu, uint idItem, uint hilite);
     void              DrawMenuBar();
 
     //
-    // clipboard
+    // obsolete way to open the global clipboard object. The recomended
+    // way is to construct a TClipboard object using the TClipboard(HWND) ctor
     //
     TClipboard&       OpenClipboard();
 
     //
     // timer
     //
-    BOOL              KillTimer(UINT timerId);
-    UINT              SetTimer(UINT timerId, UINT timeout, TIMERPROC proc = 0);
+    bool              KillTimer(uint timerId);
+    uint              SetTimer(uint timerId, uint timeout, TIMERPROC proc = 0);
 
     //
     // caret, cursor, font
     //
     void              CreateCaret(HBITMAP hBitmap);
-    void              CreateCaret(BOOL isGray, int width, int height);
-    static UINT       GetCaretBlinkTime();
+    void              CreateCaret(bool isGray, int width, int height);
+    static uint       GetCaretBlinkTime();
     static void       GetCaretPos(TPoint& point);
     void              HideCaret();
-    static void       SetCaretBlinkTime(WORD milliSecs);
+    static void       SetCaretBlinkTime(uint16 milliSecs);
     static void       SetCaretPos(int x, int y);
     static void       SetCaretPos(const TPoint& pos);
     void              ShowCaret();
     static void       DestroyCaret();
     static void       GetCursorPos(TPoint& pos);
-    void              SetWindowFont(HFONT font, BOOL redraw);
+    void              SetWindowFont(HFONT font, bool redraw);
     HFONT             GetWindowFont();
 
     //
     // hot keys
     //
-  #if defined(__WIN32__)
-    BOOL              RegisterHotKey(int  idHotKey,
-                                     UINT modifiers,
-                                     UINT virtKey);
-    BOOL              UnregisterHotKey(int idHotKey);
-  #endif
+#if defined(BI_PLAT_WIN32)
+    bool              RegisterHotKey(int  idHotKey,
+                                     uint modifiers,
+                                     uint virtKey);
+    bool              UnregisterHotKey(int idHotKey);
+#endif
 
     //
     // Misc
     //
-    BOOL              WinHelp(const char far* helpFile,
-                              UINT            command,
-                              DWORD           data);
+    bool              WinHelp(const char far* helpFile,
+                              uint            command,
+                              uint32           data);
     int               MessageBox(const char far* text,
                                  const char far* caption = 0,
-                                 UINT            type = MB_OK);
+                                 uint            type = MB_OK);
     HTASK             GetWindowTask() const;
-    void              DragAcceptFiles(BOOL accept);
+    void              DragAcceptFiles(bool accept);
+
+    TCurrentEvent&   GetCurrentEvent() {return GetApplication()->GetCurrentEvent();}
 
   protected:
     //
@@ -593,18 +616,18 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     void              EvClose();
     int               EvCreate(CREATESTRUCT far& createStruct);
     void              EvDestroy();
-    LRESULT           EvCompareItem(UINT ctrlId, COMPAREITEMSTRUCT far& compareInfo);
-    void              EvDeleteItem(UINT ctrlId, DELETEITEMSTRUCT far& deleteInfo);
-    void              EvDrawItem(UINT ctrlId, DRAWITEMSTRUCT far& drawInfo);
-    void              EvMeasureItem(UINT ctrlId, MEASUREITEMSTRUCT far& measureInfo);
-    void              EvHScroll(UINT scrollCode, UINT thumbPos, HWND hWndCtl);
-    void              EvVScroll(UINT scrollCode, UINT thumbPos, HWND hWndCtl);
+    LRESULT           EvCompareItem(uint ctrlId, COMPAREITEMSTRUCT far& compareInfo);
+    void              EvDeleteItem(uint ctrlId, DELETEITEMSTRUCT far& deleteInfo);
+    void              EvDrawItem(uint ctrlId, DRAWITEMSTRUCT far& drawInfo);
+    void              EvMeasureItem(uint ctrlId, MEASUREITEMSTRUCT far& measureInfo);
+    void              EvHScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
+    void              EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
     void              EvMove(TPoint& clientOrigin);
     void              EvNCDestroy();
-    BOOL              EvQueryEndSession();
-    void              EvSize(UINT sizeType, TSize& size);
-    void              EvLButtonDown(UINT modKeys, TPoint& point);
-    BOOL              EvEraseBkgnd(HDC);
+    bool              EvQueryEndSession();
+    void              EvSize(uint sizeType, TSize& size);
+    void              EvLButtonDown(uint modKeys, TPoint& point);
+    bool              EvEraseBkgnd(HDC);
     void              EvPaint();
     void              EvSysColorChange();
     LRESULT           EvWin32CtlColor(WPARAM, LPARAM);
@@ -619,131 +642,138 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     //
     // system messages
     //
-    void              EvCompacting(UINT compactRatio);
+    void              EvCommNotify(uint commId, uint status);
+    void              EvCompacting(uint compactRatio);
     void              EvDevModeChange(char far* devName);
-    void              EvEnable(BOOL enabled);
-    void              EvEndSession(BOOL endSession);
+    void              EvEnable(bool enabled);
+    void              EvEndSession(bool endSession);
     void              EvFontChange();
-    int               EvPower(UINT powerEvent);
-    void              EvSysCommand(UINT cmdType, TPoint& point);
-    void              EvSystemError(UINT error);
+    int               EvPower(uint powerEvent);
+    void              EvSysCommand(uint cmdType, TPoint& point);
+    void              EvSystemError(uint error);
     void              EvTimeChange();
-    void              EvTimer(UINT timerId);
+    void              EvTimer(uint timerId);
     void              EvWinIniChange(char far* section);
 
     //
     // window manager messages
     //
-    void              EvActivate(UINT active,
-                                 BOOL minimized,
+    void              EvActivate(uint active,
+                                 bool minimized,
                                  HWND hWndOther /* may be 0 */);
-    void              EvActivateApp(BOOL active, HTASK hTask);
+    void              EvActivateApp(bool active, HTASK hTask);
     void              EvCancelMode();
     void              EvGetMinMaxInfo(MINMAXINFO far& minmaxinfo);
+    void              EvGetText(uint buffSize, char far* buff);
+    uint              EvGetTextLength();
     void              EvIconEraseBkgnd(HDC hDC);
     void              EvKillFocus(HWND hWndGetFocus /* may be 0 */);
-    UINT              EvMouseActivate(HWND hWndTopLevel,
-                                      UINT hitTestCode,
-                                      UINT msg);
+    uint              EvMouseActivate(HWND hWndTopLevel,
+                                      uint hitTestCode,
+                                      uint msg);
 
     // The following five are called under Win32 only
     //
-    void              EvInputFocus(BOOL gainingFocus);
+    void              EvInputFocus(bool gainingFocus);
     void              EvOtherWindowCreated(HWND hWndOther);
     void              EvOtherWindowDestroyed(HWND hWndOther);
     void              EvPaintIcon();
     void              EvHotKey(int idHotKey);
 
-    void              EvParentNotify(UINT event,
-                                     UINT childHandleOrX,
-                                     UINT childIDOrY);
+    void              EvNextDlgCtl(uint hctlOrDir, uint isHCtl);
+    void              EvParentNotify(uint event,
+                                     uint childHandleOrX,
+                                     uint childIDOrY);
     HANDLE            EvQueryDragIcon();
-    BOOL              EvQueryOpen();
-    BOOL              EvSetCursor(HWND hWndCursor,
-                                  UINT hitTest,
-                                  UINT mouseMsg);
+    bool              EvQueryOpen();
+    void              EvQueueSync();
+    bool              EvSetCursor(HWND hWndCursor,
+                                  uint hitTest,
+                                  uint mouseMsg);
     void              EvSetFocus(HWND hWndLostFocus /* may be 0 */);
-    void              EvSetFont(HFONT, BOOL);
-    void              EvSetText(const char far*);
-    void              EvShowWindow(BOOL show, UINT status);
+    HFONT             EvGetFont();
+    void              EvSetFont(HFONT hFont, bool redraw);
+    void              EvSetRedraw(bool redraw);
+    void              EvSetText(const char far* text);
+    void              EvShowWindow(bool show, uint status);
     void              EvWindowPosChanged(WINDOWPOS far& windowPos);
     void              EvWindowPosChanging(WINDOWPOS far& windowPos);
 
     //
     // keyboard input
     //
-    void              EvChar(UINT key, UINT repeatCount, UINT flags);
-    void              EvDeadChar(UINT deadKey, UINT repeatCount, UINT flags);
-    void              EvKeyDown(UINT key, UINT repeatCount, UINT flags);
-    void              EvKeyUp(UINT key, UINT repeatCount, UINT flags);
-    void              EvSysChar(UINT key, UINT repeatCount, UINT flags);
-    void              EvSysDeadChar(UINT key, UINT repeatCount, UINT flags);
-    void              EvSysKeyDown(UINT key, UINT repeatCount, UINT flags);
-    void              EvSysKeyUp(UINT key, UINT repeatCount, UINT flags);
+    void              EvChar(uint key, uint repeatCount, uint flags);
+    void              EvDeadChar(uint deadKey, uint repeatCount, uint flags);
+    void              EvKeyDown(uint key, uint repeatCount, uint flags);
+    void              EvKeyUp(uint key, uint repeatCount, uint flags);
+    void              EvSysChar(uint key, uint repeatCount, uint flags);
+    void              EvSysDeadChar(uint key, uint repeatCount, uint flags);
+    void              EvSysKeyDown(uint key, uint repeatCount, uint flags);
+    void              EvSysKeyUp(uint key, uint repeatCount, uint flags);
 
     //
     // controls
     //
-    HBRUSH            EvCtlColor(HDC hDC, HWND hWndChild, UINT ctlType);
+    HBRUSH            EvCtlColor(HDC hDC, HWND hWndChild, uint ctlType);
 
     //
     // mouse input
     //
-    void              EvLButtonDblClk(UINT modKeys, TPoint& point);
-    void              EvLButtonUp(UINT modKeys, TPoint& point);
-    void              EvMButtonDblClk(UINT modKeys, TPoint& point);
-    void              EvMButtonDown(UINT modKeys, TPoint& point);
-    void              EvMButtonUp(UINT modKeys, TPoint& point);
-    void              EvMouseMove(UINT modKeys, TPoint& point);
-    void              EvRButtonDblClk(UINT modKeys, TPoint& point);
-    void              EvRButtonDown(UINT modKeys, TPoint& point);
-    void              EvRButtonUp(UINT modKeys, TPoint& point);
+    void              EvLButtonDblClk(uint modKeys, TPoint& point);
+    void              EvLButtonUp(uint modKeys, TPoint& point);
+    void              EvMButtonDblClk(uint modKeys, TPoint& point);
+    void              EvMButtonDown(uint modKeys, TPoint& point);
+    void              EvMButtonUp(uint modKeys, TPoint& point);
+    void              EvMouseMove(uint modKeys, TPoint& point);
+    void              EvRButtonDblClk(uint modKeys, TPoint& point);
+    void              EvRButtonDown(uint modKeys, TPoint& point);
+    void              EvRButtonUp(uint modKeys, TPoint& point);
 
     //
     // menu related messages
     //
     void              EvInitMenu(HMENU hMenu);
     void              EvInitMenuPopup(HMENU hPopupMenu,
-                                      UINT  index,
-                                      BOOL  sysMenu);
-    UINT              EvMenuChar(UINT nChar, UINT menuType, HMENU hMenu);
-    void              EvMenuSelect(UINT menuItemId, UINT flags, HMENU hMenu);
+                                      uint  index,
+                                      bool  sysMenu);
+    uint              EvMenuChar(uint nChar, uint menuType, HMENU hMenu);
+    void              EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu);
 
     //
     // dialog messages
     //
-    void              EvEnterIdle(UINT source, HWND hWndDlg);
-    UINT              EvGetDlgCode(MSG far*);
+    void              EvEnterIdle(uint source, HWND hWndDlg);
+    uint              EvGetDlgCode(MSG far* msg);
 
     //
     // print manager messages
     //
-    void              EvSpoolerStatus(UINT jobStatus, UINT jobsLeft);
+    void              EvSpoolerStatus(uint jobStatus, uint jobsLeft);
 
     //
     // clipboard messages
     //
-    void              EvAskCBFormatName(UINT bufLen, char far* buffer);
+    void              EvAskCBFormatName(uint bufLen, char far* buffer);
     void              EvChangeCBChain(HWND hWndRemoved, HWND hWndNext);
     void              EvDrawClipboard();
     void              EvDestroyClipboard();
     void              EvHScrollClipboard(HWND hWndCBViewer,
-                                         UINT scrollCode,
-                                         UINT pos);
+                                         uint scrollCode,
+                                         uint pos);
     void              EvPaintClipboard(HWND hWnd, HANDLE hPaintStruct);
     void              EvRenderAllFormats();
-    void              EvRenderFormat(UINT dataFormat);
+    void              EvRenderFormat(uint dataFormat);
     void              EvSizeClipboard(HWND hWndViewer, HANDLE hRect);
     void              EvVScrollClipboard(HWND hWndCBViewer,
-                                         UINT scrollCode,
-                                         UINT pos);
+                                         uint scrollCode,
+                                         uint pos);
 
     //
     // palette manager messages
     //
     void              EvPaletteChanged(HWND hWndPalChg);
     void              EvPaletteIsChanging(HWND hWndPalChg);
-    BOOL              EvQueryNewPalette();
+    bool              EvQueryNewPalette();
 
     //
     // drag-n-drop messages
@@ -753,37 +783,29 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     //
     // list box messages
     //
-    int               EvCharToItem(UINT key, HWND hWndListBox, UINT caretPos);
-    int               EvVKeyToItem(UINT key, HWND hWndListBox, UINT caretPos);
+    int               EvCharToItem(uint key, HWND hWndListBox, uint caretPos);
+    int               EvVKeyToItem(uint key, HWND hWndListBox, uint caretPos);
 
     //
     // non-client messages
     //
-    BOOL              EvNCActivate(BOOL active);
-    UINT              EvNCCalcSize(BOOL calcValidRects, NCCALCSIZE_PARAMS far& params);
-    BOOL              EvNCCreate(CREATESTRUCT far& createStruct);
-    UINT              EvNCHitTest(TPoint& point);
-    void              EvNCLButtonDblClk(UINT hitTest, TPoint& point);
-    void              EvNCLButtonDown(UINT hitTest, TPoint& point);
-    void              EvNCLButtonUp(UINT hitTest, TPoint& point);
-    void              EvNCMButtonDblClk(UINT hitTest, TPoint& point);
-    void              EvNCMButtonDown(UINT hitTest, TPoint& point);
-    void              EvNCMButtonUp(UINT hitTest, TPoint& point);
-    void              EvNCMouseMove(UINT hitTest, TPoint& point);
+    bool              EvNCActivate(bool active);
+    uint              EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& params);
+    bool              EvNCCreate(CREATESTRUCT far& createStruct);
+    uint              EvNCHitTest(TPoint& point);
+    void              EvNCLButtonDblClk(uint hitTest, TPoint& point);
+    void              EvNCLButtonDown(uint hitTest, TPoint& point);
+    void              EvNCLButtonUp(uint hitTest, TPoint& point);
+    void              EvNCMButtonDblClk(uint hitTest, TPoint& point);
+    void              EvNCMButtonDown(uint hitTest, TPoint& point);
+    void              EvNCMButtonUp(uint hitTest, TPoint& point);
+    void              EvNCMouseMove(uint hitTest, TPoint& point);
     void              EvNCPaint();
-    void              EvNCRButtonDblClk(UINT hitTest, TPoint& point);
-    void              EvNCRButtonDown(UINT hitTest, TPoint& point);
-    void              EvNCRButtonUp(UINT hitTest, TPoint& point);
+    void              EvNCRButtonDblClk(uint hitTest, TPoint& point);
+    void              EvNCRButtonDown(uint hitTest, TPoint& point);
+    void              EvNCRButtonUp(uint hitTest, TPoint& point);
 
   protected:
-    void*        TransferBuffer;
-    HACCEL       hAccel;
-    TModule*     CursorModule;
-    TResId       CursorResId;
-    HCURSOR      HCursor;
-    DWORD        BkgndColor;
-
-    //
     // Constructor & subsequent initializer for use with virtual derivations
     // Immediate derivitives must call Init() before constructions are done.
     //
@@ -796,25 +818,35 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     virtual void      SetupWindow();
     virtual void      CleanupWindow();
 
-    void              DispatchScroll(UINT scrollCode, UINT thumbPos, HWND hWndCtrl);
+    void              DispatchScroll(uint scrollCode, uint thumbPos, HWND hWndCtrl);
 
     void              LoadAcceleratorTable();
     virtual void      RemoveChild(TWindow* child);
+
+    TWindow*          GetWindowPtr(HWND hWnd) const;
+
+  protected:
+    void*        TransferBuffer;
+    HACCEL       hAccel;
+    TModule*     CursorModule;
+    TResId       CursorResId;
+    HCURSOR      HCursor;
+    uint32       BkgndColor;
 
   private:
     WNDPROC         Thunk;        // Thunk that load 'this' into registers
     TApplication*   Application;  // Application that this window belongs to
     TModule*        Module;       // default module used for getting resources
-    DWORD           Flags;
-    WORD            ZOrder;
+    uint32          Flags;
+    uint16          ZOrder;
     TWindow*        ChildList;
     TWindow*        SiblingList;
-    DWORD           UniqueId;
+    uint32          UniqueId;
 
-    static DWORD    LastUniqueId;
+    static uint32   LastUniqueId;
 
     void              Init(TWindow* parent, TModule* module);
-    BOOL              OrderIsI(TWindow* win, void* position);
+    bool              OrderIsI(TWindow* win, void* position);
     void              AssignZOrder();
     void              AddChild(TWindow* child);
     int               IndexOf(TWindow* child);
@@ -829,8 +861,10 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
     TWindow& operator =(const TWindow&);
 
   DECLARE_RESPONSE_TABLE(TWindow);
-  DECLARE_STREAMABLE(_OWLCLASS, TWindow, 1);
+  DECLARE_STREAMABLE(_OWLCLASS, TWindow, 3);
 };  // end of class TWindow
+
+//----------------------------------------------------------------------------
 
 //
 // A TActionFunc defined in window.cpp
@@ -838,10 +872,12 @@ class _OWLCLASS TWindow : virtual public TEventHandler,
 void DoEnableAutoCreate(TWindow* win, void*);
 
 //
-// Global funciton to retrieve a TWindow pointer given an HWND
+// Raw function to retrieve a TWindow pointer given an HWND from the a given
+// app, or any app (app==0). Use the TWindow or TApplication member versions
+// in new code for more protection.
 //
-TWindow* _OWLFUNC GetWindowPtr(HWND hWnd);
-inline TWindow*   GetObjectPtr(HWND hWnd) {return GetWindowPtr(hWnd);}
+TWindow* _OWLFUNC GetWindowPtr(HWND hWnd, const TApplication* app = 0);
+inline TWindow* GetObjectPtr(HWND hWnd) {return ::GetWindowPtr(hWnd);}
 
 #if defined(__TRACE) || defined(__WARN)
   ostream& operator <<(ostream& os, const TWindow& w);
@@ -850,25 +886,25 @@ inline TWindow*   GetObjectPtr(HWND hWnd) {return GetWindowPtr(hWnd);}
 //----------------------------------------------------------------------------
 
 inline void
-TWindow::SendNotification(int id, int notifyCode, HWND hCtl, UINT msg) {
-  #if defined(__WIN32__)
-    HandleMessage(msg, MAKEWPARAM(id, notifyCode), LPARAM(hCtl));
-  #else
-    HandleMessage(msg, id, MAKELPARAM(hCtl, notifyCode));
-  #endif
+TWindow::SendNotification(int id, int notifyCode, HWND hCtl, uint msg) {
+#if defined(BI_PLAT_WIN32)
+  HandleMessage(msg, MAKEWPARAM(id, notifyCode), LPARAM(hCtl));
+#else
+  HandleMessage(msg, id, MAKELPARAM(hCtl, notifyCode));
+#endif
 }
 
 //
 // HWND wrappers
 //
 inline LRESULT
-TWindow::SendDlgItemMessage(int     childId, UINT   msg,
-                             WPARAM wParam,  LPARAM lParam) {
+TWindow::SendDlgItemMessage(int     childId, uint   msg,
+                            WPARAM wParam,  LPARAM lParam) {
   return ::SendDlgItemMessage(HWindow, childId, msg, wParam, lParam);
 }
 
-inline BOOL
-TWindow::PostMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
+inline bool
+TWindow::PostMessage(uint msg, WPARAM wParam, LPARAM lParam) {
   return ::PostMessage(HWindow, msg, wParam, lParam);
 }
 
@@ -897,18 +933,18 @@ TWindow::SetFocus() {
   return ::SetFocus(HWindow);
 }
 
-inline BOOL
+inline bool
 TWindow::IsWindowEnabled() const {
   return ::IsWindowEnabled(HWindow);
 }
 
-inline BOOL
-TWindow::EnableWindow(BOOL enable) {
+inline bool
+TWindow::EnableWindow(bool enable) {
   return ::EnableWindow(HWindow, enable);
 }
 
 inline void
-TWindow::SetRedraw(BOOL redraw) {
+TWindow::SetRedraw(bool redraw) {
   SendMessage(WM_SETREDRAW, redraw);
 }
 
@@ -961,12 +997,12 @@ TWindow::GetWindowRect() const {
 }
 
 inline void
-TWindow::AdjustWindowRect(TRect& rect, DWORD style, BOOL menu) {
+TWindow::AdjustWindowRect(TRect& rect, uint32 style, bool menu) {
   ::AdjustWindowRect(&rect, style, menu);
 }
 
 inline void
-TWindow::AdjustWindowRectEx(TRect& rect, DWORD style, BOOL menu, DWORD exStyle) {
+TWindow::AdjustWindowRectEx(TRect& rect, uint32 style, bool menu, uint32 exStyle) {
   ::AdjustWindowRectEx(&rect, style, menu, exStyle);
 }
 
@@ -989,13 +1025,13 @@ TWindow::SetClassLong(int index, long newLong) {
   return ::SetClassLong(HWindow, index, newLong);
 }
 
-inline WORD
+inline uint16
 TWindow::GetClassWord(int index) const {
   return ::GetClassWord(HWindow, index);
 }
 
-inline WORD
-TWindow::SetClassWord(int index, WORD newWord) {
+inline uint16
+TWindow::SetClassWord(int index, uint16 newWord) {
   return ::SetClassWord(HWindow, index, newWord);
 }
 
@@ -1009,13 +1045,13 @@ TWindow::SetWindowLong(int index, long newLong) {
   return ::SetWindowLong(HWindow, index, newLong);
 }
 
-inline WORD
+inline uint16
 TWindow::GetWindowWord(int index) const {
   return ::GetWindowWord(HWindow, index);
 }
 
-inline WORD
-TWindow::SetWindowWord(int index, WORD newWord) {
+inline uint16
+TWindow::SetWindowWord(int index, uint16 newWord) {
   return ::SetWindowWord(HWindow, index, newWord);
 }
 
@@ -1025,18 +1061,18 @@ TWindow::EnumProps(PROPENUMPROC proc) {
 }
 
 inline HANDLE
-TWindow::GetProp(WORD atom) const {
-  return :: GetProp(HWindow, (LPCSTR)(DWORD)atom);
+TWindow::GetProp(uint16 atom) const {
+  return :: GetProp(HWindow, (LPCSTR)(uint32)atom);
 }
 
 inline HANDLE
-TWindow::RemoveProp(WORD atom) const {
-  return :: RemoveProp(HWindow, (LPCSTR)(DWORD)atom);
+TWindow::RemoveProp(uint16 atom) const {
+  return :: RemoveProp(HWindow, (LPCSTR)(uint32)atom);
 }
 
-inline BOOL
-TWindow::SetProp(WORD atom, HANDLE data) const {
-  return :: SetProp(HWindow, (LPCSTR)(DWORD)atom, data);
+inline bool
+TWindow::SetProp(uint16 atom, HANDLE data) const {
+  return :: SetProp(HWindow, (LPCSTR)(uint32)atom, data);
 }
 
 inline HANDLE
@@ -1049,43 +1085,43 @@ TWindow::RemoveProp(const char far* str) const {
   return ::RemoveProp(HWindow, str);
 }
 
-inline BOOL
+inline bool
 TWindow::SetProp(const char far* str, HANDLE data) const {
   return ::SetProp(HWindow, str, data);
 }
 
-inline BOOL
-TWindow::MoveWindow(int x, int y, int w, int h, BOOL repaint) {
+inline bool
+TWindow::MoveWindow(int x, int y, int w, int h, bool repaint) {
   return ::MoveWindow(HWindow, x, y, w, h, repaint);
 }
 
-inline BOOL
-TWindow::MoveWindow(const TRect& rect, BOOL repaint) {
+inline bool
+TWindow::MoveWindow(const TRect& rect, bool repaint) {
   return ::MoveWindow(HWindow, rect.left, rect.top,
                       rect.Width(), rect.Height(), repaint);
 }
 
-inline BOOL
+inline bool
 TWindow::ShowWindow(int cmdShow) {
   return ::ShowWindow(HWindow, cmdShow);
 }
 
 inline void
-TWindow::ShowOwnedPopups(BOOL show) {
+TWindow::ShowOwnedPopups(bool show) {
   ::ShowOwnedPopups(HWindow, show);
 }
 
-inline BOOL
+inline bool
 TWindow::IsWindowVisible() const {
   return ::IsWindowVisible(HWindow);
 }
 
-inline BOOL
+inline bool
 TWindow::IsZoomed() const {
   return ::IsZoomed(HWindow);
 }
 
-inline BOOL
+inline bool
 TWindow::IsIconic() const {
   return ::IsIconic(HWindow);
 }
@@ -1105,12 +1141,12 @@ TWindow::SetWindowText(const char far* str) {
   ::SetWindowText(HWindow, str);
 }
 
-inline BOOL
+inline bool
 TWindow::GetWindowPlacement(WINDOWPLACEMENT* place) const {
   return ::GetWindowPlacement(HWindow, place);
 }
 
-inline BOOL
+inline bool
 TWindow::SetWindowPlacement(const WINDOWPLACEMENT* place) {
   return ::SetWindowPlacement(HWindow, place);
 }
@@ -1135,7 +1171,7 @@ TWindow::GetDesktopWindow() {
   return ::GetDesktopWindow();
 }
 
-#if !defined(__WIN32__)
+#if defined(BI_PLAT_WIN16)
 inline HWND
 TWindow::GetSysModalWindow() {
   return ::GetSysModalWindow();
@@ -1147,7 +1183,7 @@ TWindow::SetSysModalWindow() {
 }
 
 inline HWND
-TWindow::GetNextWindow(UINT flag) const {
+TWindow::GetNextWindow(uint flag) const {
   return ::GetNextWindow(HWindow, flag);
 }
 #endif
@@ -1158,7 +1194,7 @@ TWindow::GetLastActivePopup() const {
 }
 
 inline HWND
-TWindow::GetWindow(UINT flag) const {
+TWindow::GetWindow(uint flag) const {
   return ::GetWindow(HWindow, flag);
 }
 
@@ -1167,31 +1203,31 @@ TWindow::GetTopWindow() const {
   return ::GetTopWindow(HWindow);
 }
 
-inline BOOL
-TWindow::SetWindowPos(HWND hWndInsertAfter, const TRect& rect, UINT flags) {
+inline bool
+TWindow::SetWindowPos(HWND hWndInsertAfter, const TRect& rect, uint flags) {
   return ::SetWindowPos(HWindow, hWndInsertAfter, rect.left, rect.top,
                         rect.Width(), rect.Height(), flags);
 }
 
-inline BOOL
+inline bool
 TWindow::SetWindowPos(HWND hWndInsertAfter,
                       int x, int y, int w, int h,
-                      UINT flags) {
+                      uint flags) {
   return ::SetWindowPos(HWindow, hWndInsertAfter, x, y, w, h, flags);
 }
 
 inline void
-TWindow::Invalidate(BOOL erase) {
+TWindow::Invalidate(bool erase) {
   ::InvalidateRect(HWindow, 0, erase);
 }
 
 inline void
-TWindow::InvalidateRect(const TRect& rect, BOOL erase) {
+TWindow::InvalidateRect(const TRect& rect, bool erase) {
   ::InvalidateRect(HWindow, &rect, erase);
 }
 
 inline void
-TWindow::InvalidateRgn(HRGN hRgn, BOOL erase) {
+TWindow::InvalidateRgn(HRGN hRgn, bool erase) {
   ::InvalidateRgn(HWindow, hRgn, erase);
 }
 
@@ -1215,23 +1251,23 @@ TWindow::UpdateWindow() {
   ::UpdateWindow(HWindow);
 }
 
-inline BOOL
-TWindow::FlashWindow(BOOL invert) {
+inline bool
+TWindow::FlashWindow(bool invert) {
   return ::FlashWindow(HWindow, invert);
 }
 
-inline BOOL
-TWindow::GetUpdateRect(TRect& rect, BOOL erase) const {
+inline bool
+TWindow::GetUpdateRect(TRect& rect, bool erase) const {
   return ::GetUpdateRect(HWindow, &rect, erase);
 }
 
-inline BOOL
+inline bool
 TWindow::LockWindowUpdate() {
   return ::LockWindowUpdate(HWindow);
 }
 
-inline BOOL
-TWindow::RedrawWindow(TRect* update, HRGN hUpdateRgn, UINT redraw) {
+inline bool
+TWindow::RedrawWindow(TRect* update, HRGN hUpdateRgn, uint redraw) {
   return ::RedrawWindow(HWindow, update, hUpdateRgn, redraw);
 }
 
@@ -1241,7 +1277,7 @@ TWindow::GetScrollPos(int bar) const {
 }
 
 inline int
-TWindow::SetScrollPos(int bar, int pos, BOOL redraw) {
+TWindow::SetScrollPos(int bar, int pos, bool redraw) {
   return ::SetScrollPos(HWindow, bar, pos, redraw);
 }
 
@@ -1251,16 +1287,16 @@ TWindow::GetScrollRange(int bar, int& minPos, int& maxPos) const {
 }
 
 inline void
-TWindow::SetScrollRange(int bar, int minPos, int maxPos, BOOL redraw) {
+TWindow::SetScrollRange(int bar, int minPos, int maxPos, bool redraw) {
   ::SetScrollRange(HWindow, bar, minPos, maxPos, redraw);
 }
 
-inline BOOL
-TWindow::EnableScrollBar(UINT sbFlags, UINT arrowFlags) {
+inline bool
+TWindow::EnableScrollBar(uint sbFlags, uint arrowFlags) {
   return ::EnableScrollBar(HWindow, sbFlags, arrowFlags);
 }
 
-inline void TWindow::ShowScrollBar(int bar, BOOL show) {
+inline void TWindow::ShowScrollBar(int bar, bool show) {
   ::ShowScrollBar(HWindow, bar, show);
 }
 
@@ -1279,7 +1315,7 @@ TWindow::ScrollWindowEx(int              dx,
                         const TRect far* clip,
                         HRGN             hUpdateRgn,
                         TRect far*       update,
-                        UINT             flags) {
+                        uint             flags) {
   ::ScrollWindowEx(HWindow, dx, dy, scroll, clip, hUpdateRgn, update, flags);
 }
 
@@ -1293,13 +1329,13 @@ TWindow::GetDlgItem(int childId) const {
   return ::GetDlgItem(HWindow, childId);
 }
 
-inline UINT
-TWindow::GetDlgItemInt(int childId, BOOL* translated, BOOL isSigned) const {
-  return ::GetDlgItemInt(HWindow, childId, translated, isSigned);
+inline uint
+TWindow::GetDlgItemInt(int childId, bool* translated, bool isSigned) const {
+  return ::GetDlgItemInt(HWindow, childId, (int*)translated, isSigned);
 }
 
 inline void
-TWindow::SetDlgItemInt(int childId, UINT value, BOOL isSigned) const {
+TWindow::SetDlgItemInt(int childId, uint value, bool isSigned) const {
   ::SetDlgItemInt(HWindow, childId, value, isSigned);
 }
 
@@ -1313,7 +1349,7 @@ TWindow::SetDlgItemText(int childId, const char far* text) const {
   ::SetDlgItemText(HWindow, childId, text);
 }
 
-inline UINT
+inline uint
 TWindow::IsDlgButtonChecked(int buttonId) const {
   return ::IsDlgButtonChecked(HWindow, buttonId);
 }
@@ -1323,23 +1359,23 @@ TWindow::GetParent() const {
   return ::GetParent(HWindow);
 }
 
-inline BOOL
+inline bool
 TWindow::IsChild(HWND hWnd) const {
   return ::IsChild(HWindow, hWnd);
 }
 
 inline HWND
-TWindow::GetNextDlgGroupItem(HWND hWndCtrl, BOOL previous) const {
+TWindow::GetNextDlgGroupItem(HWND hWndCtrl, bool previous) const {
   return ::GetNextDlgGroupItem(HWindow, hWndCtrl, previous);
 }
 
 inline HWND
-TWindow::GetNextDlgTabItem(HWND hWndCtrl, BOOL previous) const {
+TWindow::GetNextDlgTabItem(HWND hWndCtrl, bool previous) const {
   return ::GetNextDlgTabItem(HWindow, hWndCtrl, previous);
 }
 
 inline void
-TWindow::CheckDlgButton(int buttonId, UINT check) {
+TWindow::CheckDlgButton(int buttonId, uint check) {
   ::CheckDlgButton(HWindow, buttonId, check);
 }
 
@@ -1354,17 +1390,17 @@ TWindow::GetMenu() const {
 }
 
 inline HMENU
-TWindow::GetSystemMenu(BOOL revert) const {
+TWindow::GetSystemMenu(bool revert) const {
   return ::GetSystemMenu(HWindow, revert);
 }
 
-inline BOOL
+inline bool
 TWindow::SetMenu(HMENU hMenu) {
   return ::SetMenu(HWindow, hMenu);
 }
 
-inline BOOL
-TWindow::HiliteMenuItem(HMENU hMenu, UINT idItem, UINT hilite) {
+inline bool
+TWindow::HiliteMenuItem(HMENU hMenu, uint idItem, uint hilite) {
   return ::HiliteMenuItem(HWindow, hMenu, idItem, hilite);
 }
 
@@ -1381,13 +1417,13 @@ TWindow::OpenClipboard() {
   return clip;
 }
 
-inline BOOL
-TWindow::KillTimer(UINT timerId) {
+inline bool
+TWindow::KillTimer(uint timerId) {
   return ::KillTimer(HWindow, timerId);
 }
 
-inline UINT
-TWindow::SetTimer(UINT timerId, UINT timeout, TIMERPROC proc) {
+inline uint
+TWindow::SetTimer(uint timerId, uint timeout, TIMERPROC proc) {
   return ::SetTimer(HWindow, timerId, timeout, proc);
 }
 
@@ -1397,8 +1433,8 @@ TWindow::CreateCaret(HBITMAP hBitmap) {
 }
 
 inline void
-TWindow::CreateCaret(int shade, int width, int height) {
-  ::CreateCaret(HWindow,(HBITMAP) shade, width, height);
+TWindow::CreateCaret(bool isGray, int width, int height) {
+  ::CreateCaret(HWindow, (HBITMAP)(isGray ? 1 : 0), width, height);
 }
 
 inline void
@@ -1406,7 +1442,7 @@ TWindow::DestroyCaret() {
   ::DestroyCaret();
 }
 
-inline UINT
+inline uint
 TWindow::GetCaretBlinkTime() {
   return ::GetCaretBlinkTime();
 }
@@ -1422,7 +1458,7 @@ TWindow::HideCaret() {
 }
 
 inline void
-TWindow::SetCaretBlinkTime(WORD milliSecs) {
+TWindow::SetCaretBlinkTime(uint16 milliSecs) {
   ::SetCaretBlinkTime(milliSecs);
 }
 
@@ -1447,7 +1483,7 @@ TWindow::GetCursorPos(TPoint& pos) {
 }
 
 inline void
-TWindow::SetWindowFont(HFONT font, BOOL redraw) {
+TWindow::SetWindowFont(HFONT font, bool redraw) {
   HandleMessage(WM_SETFONT, WPARAM(font), redraw);
 }
 
@@ -1456,26 +1492,26 @@ TWindow::GetWindowFont() {
   return (HFONT)HandleMessage(WM_GETFONT);
 }
 
-#if defined(__WIN32__)
-inline BOOL
-TWindow::RegisterHotKey(int idHotKey, UINT modifiers, UINT virtKey) {
+#if defined(BI_PLAT_WIN32)
+inline bool
+TWindow::RegisterHotKey(int idHotKey, uint modifiers, uint virtKey) {
   return ::RegisterHotKey(HWindow, idHotKey, modifiers, virtKey);
 }
 
-inline BOOL
+inline bool
 TWindow::UnregisterHotKey(int idHotKey) {
   return ::UnregisterHotKey(HWindow, idHotKey);
 }
 #endif
 
-inline BOOL
-TWindow::WinHelp(const char far* helpFile, UINT command, DWORD data) {
+inline bool
+TWindow::WinHelp(const char far* helpFile, uint command, uint32 data) {
   return ::WinHelp(HWindow, helpFile, command, data);
 }
 
 inline HTASK
 TWindow::GetWindowTask() const {
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
   return (HANDLE)::GetWindowThreadProcessId(HWindow, 0);
 #else
   return ::GetWindowTask(HWindow);
@@ -1483,36 +1519,42 @@ TWindow::GetWindowTask() const {
 }
 
 inline void
-TWindow::DragAcceptFiles(BOOL accept) {
+TWindow::DragAcceptFiles(bool accept) {
   ::DragAcceptFiles(HWindow, accept);
+}
+
+inline TWindow* TWindow::GetWindowPtr(HWND hWnd) const {
+  return ::GetWindowPtr(hWnd, GetApplication());
 }
 
 //
 // inline member functions that call DefWindowProc()
 //
-inline void    TWindow::EvActivate(UINT active,
-                                   BOOL minimized,
+inline void    TWindow::EvActivate(uint active,
+                                   bool minimized,
                                    HWND hWndOther /*may be 0*/)
                    {DefaultProcessing();}
-inline void    TWindow::EvActivateApp(BOOL active, HTASK hTask /* threadId*/)
+inline void    TWindow::EvActivateApp(bool active, HTASK hTask /* threadId*/)
                    {DefaultProcessing();}
-inline void    TWindow::EvAskCBFormatName(UINT bufLen, char far* buffer)
+inline void    TWindow::EvAskCBFormatName(uint bufLen, char far* buffer)
                    {DefaultProcessing();}
 inline void    TWindow::EvCancelMode()
                    {DefaultProcessing();}
 inline void    TWindow::EvChangeCBChain(HWND hWndRemoved, HWND hWndNext)
                    {DefaultProcessing();}
-inline void    TWindow::EvChar(UINT key, UINT repeatCount, UINT flags)
+inline void    TWindow::EvChar(uint key, uint repeatCount, uint flags)
                    {DefaultProcessing();}
-inline int     TWindow::EvCharToItem(UINT key, HWND hWndListBox, UINT caretPos)
+inline int     TWindow::EvCharToItem(uint key, HWND hWndListBox, uint caretPos)
                    {return (int)DefaultProcessing();}
-inline int     TWindow::EvVKeyToItem(UINT key, HWND hWndListBox, UINT caretPos)
+inline int     TWindow::EvVKeyToItem(uint key, HWND hWndListBox, uint caretPos)
                    {return (int)DefaultProcessing();}
-inline void    TWindow::EvCompacting(UINT compactRatio)
+inline void    TWindow::EvCommNotify(uint commId, uint status)
                    {DefaultProcessing();}
-inline HBRUSH  TWindow::EvCtlColor(HDC hDC, HWND hWndChild, UINT ctlType)
+inline void    TWindow::EvCompacting(uint compactRatio)
+                   {DefaultProcessing();}
+inline HBRUSH  TWindow::EvCtlColor(HDC hDC, HWND hWndChild, uint ctlType)
                    {return (HBRUSH)DefaultProcessing();}
-inline void    TWindow::EvDeadChar(UINT deadKey, UINT repeatCount, UINT flags)
+inline void    TWindow::EvDeadChar(uint deadKey, uint repeatCount, uint flags)
                    {DefaultProcessing();}
 inline void    TWindow::EvDestroyClipboard()
                    {DefaultProcessing();}
@@ -1522,83 +1564,89 @@ inline void    TWindow::EvDropFiles(TDropInfo)
                    {DefaultProcessing();}
 inline void    TWindow::EvDrawClipboard()
                    {DefaultProcessing();}
-inline void    TWindow::EvEnable(BOOL enabled)
+inline void    TWindow::EvEnable(bool enabled)
                    {DefaultProcessing();}
-inline void    TWindow::EvEndSession(BOOL endSession)
+inline void    TWindow::EvEndSession(bool endSession)
                    {DefaultProcessing();}
-inline void    TWindow::EvEnterIdle(UINT source, HWND hWndDlg)
+inline void    TWindow::EvEnterIdle(uint source, HWND hWndDlg)
                    {DefaultProcessing();}
 inline void    TWindow::EvFontChange()
                    {DefaultProcessing();}
-inline UINT    TWindow::EvGetDlgCode(MSG far*)
-                   {return (UINT)DefaultProcessing();}
+inline uint    TWindow::EvGetDlgCode(MSG far*)
+                   {return (uint)DefaultProcessing();}
+inline HFONT   TWindow::EvGetFont()
+                   {return (HFONT)DefaultProcessing();}
 inline void    TWindow::EvGetMinMaxInfo(MINMAXINFO far&)
                    {DefaultProcessing();}
-inline void  TWindow::EvHotKey(int idHotKey)
+inline void    TWindow::EvGetText(uint buffSize, char far* buff)
                    {DefaultProcessing();}
-inline void  TWindow::EvInputFocus(BOOL gainingFocus)
+inline uint    TWindow::EvGetTextLength()
+                   {return (uint)DefaultProcessing();}
+inline void    TWindow::EvHotKey(int idHotKey)
+                   {DefaultProcessing();}
+inline void    TWindow::EvInputFocus(bool gainingFocus)
                    {DefaultProcessing();}
 inline void    TWindow::EvHScrollClipboard(HWND hWndCBViewer,
-                                           UINT scrollCode,
-                                           UINT pos)
+                                           uint scrollCode,
+                                           uint pos)
                    {DefaultProcessing();}
 inline void    TWindow::EvIconEraseBkgnd(HDC)
                    {DefaultProcessing();}
 inline void    TWindow::EvInitMenu(HMENU)
                    {DefaultProcessing();}
-inline void    TWindow::EvInitMenuPopup(HMENU hPopupMenu, UINT index, BOOL sysMenu)
+inline void    TWindow::EvKeyDown(uint key, uint repeatCount, uint flags)
                    {DefaultProcessing();}
-inline void    TWindow::EvKeyDown(UINT key, UINT repeatCount, UINT flags)
+inline void    TWindow::EvKeyUp(uint key, uint repeatCount, uint flags)
                    {DefaultProcessing();}
-inline void    TWindow::EvKeyUp(UINT key, UINT repeatCount, UINT flags)
+inline void    TWindow::EvLButtonDblClk(uint modKeys, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvLButtonDblClk(UINT modKeys, TPoint&)
+inline void    TWindow::EvLButtonUp(uint modKeys, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvLButtonUp(UINT modKeys, TPoint&)
+inline void    TWindow::EvMButtonDblClk(uint modKeys, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvMButtonDblClk(UINT modKeys, TPoint&)
+inline void    TWindow::EvMButtonDown(uint modKeys, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvMButtonDown(UINT modKeys, TPoint&)
+inline void    TWindow::EvMButtonUp(uint modKeys, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvMButtonUp(UINT modKeys, TPoint&)
+inline uint    TWindow::EvMenuChar(uint nChar, uint menuType, HMENU hMenu)
+                   {return (uint)DefaultProcessing();}
+inline void    TWindow::EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu)
                    {DefaultProcessing();}
-inline UINT    TWindow::EvMenuChar(UINT nChar, UINT menuType, HMENU hMenu)
-                   {return (UINT)DefaultProcessing();}
-inline void    TWindow::EvMenuSelect(UINT menuItemId, UINT flags, HMENU hMenu)
+inline uint    TWindow::EvMouseActivate(HWND hWndTopLevel, uint hitTestCode, uint msg)
+                   {return (uint)DefaultProcessing();}
+inline void    TWindow::EvMouseMove(uint modKeys, TPoint&)
                    {DefaultProcessing();}
-inline UINT    TWindow::EvMouseActivate(HWND hWndTopLevel, UINT hitTestCode, UINT msg)
-                   {return (UINT)DefaultProcessing();}
-inline void    TWindow::EvMouseMove(UINT modKeys, TPoint&)
+inline bool    TWindow::EvNCActivate(bool active)
+                   {return (bool)DefaultProcessing();}
+inline uint    TWindow::EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far&)
+                   {return (uint)DefaultProcessing();}
+inline bool    TWindow::EvNCCreate(CREATESTRUCT far&)
+                   {return (bool)DefaultProcessing();}
+inline uint    TWindow::EvNCHitTest(TPoint&)
+                   {return (uint)DefaultProcessing();}
+inline void    TWindow::EvNCLButtonDblClk(uint hitTest, TPoint&)
                    {DefaultProcessing();}
-inline BOOL    TWindow::EvNCActivate(BOOL active)
-                   {return (BOOL)DefaultProcessing();}
-inline UINT    TWindow::EvNCCalcSize(BOOL calcValidRects, NCCALCSIZE_PARAMS far&)
-                   {return (UINT)DefaultProcessing();}
-inline BOOL    TWindow::EvNCCreate(CREATESTRUCT far&)
-                   {return (BOOL)DefaultProcessing();}
-inline UINT    TWindow::EvNCHitTest(TPoint&)
-                   {return (UINT)DefaultProcessing();}
-inline void    TWindow::EvNCLButtonDblClk(UINT hitTest, TPoint&)
+inline void    TWindow::EvNCLButtonDown(uint hitTest, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvNCLButtonDown(UINT hitTest, TPoint&)
+inline void    TWindow::EvNCLButtonUp(uint hitTest, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvNCLButtonUp(UINT hitTest, TPoint&)
+inline void    TWindow::EvNCMButtonDblClk(uint hitTest, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvNCMButtonDblClk(UINT hitTest, TPoint&)
+inline void    TWindow::EvNCMButtonDown(uint hitTest, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvNCMButtonDown(UINT hitTest, TPoint&)
+inline void    TWindow::EvNCMButtonUp(uint hitTest, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvNCMButtonUp(UINT hitTest, TPoint&)
-                   {DefaultProcessing();}
-inline void    TWindow::EvNCMouseMove(UINT hitTest, TPoint&)
+inline void    TWindow::EvNCMouseMove(uint hitTest, TPoint&)
                    {DefaultProcessing();}
 inline void    TWindow::EvNCPaint()
                    {DefaultProcessing();}
-inline void    TWindow::EvNCRButtonDblClk(UINT hitTest, TPoint&)
+inline void    TWindow::EvNCRButtonDblClk(uint hitTest, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvNCRButtonDown(UINT hitTest, TPoint&)
+inline void    TWindow::EvNCRButtonDown(uint hitTest, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvNCRButtonUp(UINT hitTest, TPoint&)
+inline void    TWindow::EvNCRButtonUp(uint hitTest, TPoint&)
+                   {DefaultProcessing();}
+inline void    TWindow::EvNextDlgCtl(uint hctlOrDir, uint isHCtl)
                    {DefaultProcessing();}
 inline void    TWindow::EvOtherWindowCreated(HWND hWndOther)
                    {DefaultProcessing();}
@@ -1612,65 +1660,69 @@ inline void    TWindow::EvPaletteChanged(HWND hWndPalChg)
                    {DefaultProcessing();}
 inline void    TWindow::EvPaletteIsChanging(HWND hWndPalChg)
                    {DefaultProcessing();}
-inline void    TWindow::EvParentNotify(UINT event,
-                                       UINT childHandleOrX,
-                                       UINT childIDOrY)
+inline void    TWindow::EvParentNotify(uint event,
+                                       uint childHandleOrX,
+                                       uint childIDOrY)
                    {DefaultProcessing();}
-inline int     TWindow::EvPower(UINT)
+inline int     TWindow::EvPower(uint)
                    {return (int)DefaultProcessing();}
-inline void    TWindow::EvSysCommand(UINT cmdType, TPoint&)
+inline void    TWindow::EvSysCommand(uint cmdType, TPoint&)
                    {DefaultProcessing();}
 inline HANDLE  TWindow::EvQueryDragIcon()
                    {return (HANDLE)DefaultProcessing();}
-inline BOOL    TWindow::EvQueryNewPalette()
-                   {return (BOOL)DefaultProcessing();}
-inline BOOL    TWindow::EvQueryOpen()
-                   {return (BOOL)DefaultProcessing();}
+inline bool    TWindow::EvQueryNewPalette()
+                   {return (bool)DefaultProcessing();}
+inline bool    TWindow::EvQueryOpen()
+                   {return (bool)DefaultProcessing();}
+inline void    TWindow::EvQueueSync()
+                   {DefaultProcessing();}
 inline void    TWindow::EvRenderAllFormats()
                    {DefaultProcessing();}
-inline void    TWindow::EvRenderFormat(UINT dataFormat)
+inline void    TWindow::EvRenderFormat(uint dataFormat)
                    {DefaultProcessing();}
-inline void    TWindow::EvRButtonDblClk(UINT modKeys, TPoint&)
+inline void    TWindow::EvRButtonDblClk(uint modKeys, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvRButtonDown(UINT modKeys, TPoint&)
+inline void    TWindow::EvRButtonDown(uint modKeys, TPoint&)
                    {DefaultProcessing();}
-inline void    TWindow::EvRButtonUp(UINT modKeys, TPoint&)
+inline void    TWindow::EvRButtonUp(uint modKeys, TPoint&)
                    {DefaultProcessing();}
 inline void    TWindow::EvSetFocus(HWND hWndLostFocus)
                    {DefaultProcessing();}
-inline void    TWindow::EvSetFont(HFONT, BOOL)
+inline void    TWindow::EvSetFont(HFONT, bool)
+                   {DefaultProcessing();}
+inline void    TWindow::EvSetRedraw(bool)
                    {DefaultProcessing();}
 inline void    TWindow::EvSetText(const char far*)
                    {DefaultProcessing();}
-inline void    TWindow::EvShowWindow(BOOL show, UINT status)
+inline void    TWindow::EvShowWindow(bool show, uint status)
                    {DefaultProcessing();}
 inline void    TWindow::EvSizeClipboard(HWND hWndViewer, HANDLE hRect)
                    {DefaultProcessing();}
-inline void    TWindow::EvSpoolerStatus(UINT jobStatus, UINT jobsLeft)
+inline void    TWindow::EvSpoolerStatus(uint jobStatus, uint jobsLeft)
                    {DefaultProcessing();}
-inline void    TWindow::EvSysChar(UINT key, UINT repeatCount, UINT flags)
+inline void    TWindow::EvSysChar(uint key, uint repeatCount, uint flags)
                    {DefaultProcessing();}
-inline void    TWindow::EvSysDeadChar(UINT key, UINT repeatCount, UINT flags)
+inline void    TWindow::EvSysDeadChar(uint key, uint repeatCount, uint flags)
                    {DefaultProcessing();}
-inline void    TWindow::EvSysKeyDown(UINT key, UINT repeatCount, UINT flags)
+inline void    TWindow::EvSysKeyDown(uint key, uint repeatCount, uint flags)
                    {DefaultProcessing();}
-inline void    TWindow::EvSysKeyUp(UINT key, UINT repeatCount, UINT flags)
+inline void    TWindow::EvSysKeyUp(uint key, uint repeatCount, uint flags)
                    {DefaultProcessing();}
-inline void    TWindow::EvSystemError(UINT error)
+inline void    TWindow::EvSystemError(uint error)
                    {DefaultProcessing();}
 inline void    TWindow::EvTimeChange()
                    {DefaultProcessing();}
-inline void    TWindow::EvTimer(UINT timerId)
+inline void    TWindow::EvTimer(uint timerId)
                    {DefaultProcessing();}
 inline void    TWindow::EvWinIniChange(char far* section)
                    {DefaultProcessing();}
 inline void    TWindow::EvVScrollClipboard(HWND hWndCBViewer,
-                                           UINT scrollCode,
-                                           UINT pos)
+                                           uint scrollCode,
+                                           uint pos)
                    {DefaultProcessing();}
 inline void    TWindow::EvWindowPosChanged(WINDOWPOS far& windowPos)
                    {DefaultProcessing();}
 inline void    TWindow::EvWindowPosChanging(WINDOWPOS far& windowPos)
                    {DefaultProcessing();}
 
-#endif  // __OWL_WINDOW_H
+#endif  // OWL_WINDOW_H

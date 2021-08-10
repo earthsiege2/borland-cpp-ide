@@ -1,18 +1,20 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\textwidg.cpp
-//   Defines class TTextGadget.
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TTextGadget.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\textgadg.h>
-#include <owl\gadgetwi.h>
+#include <owl/owlpch.h>
+#include <owl/textgadg.h>
+#include <owl/gadgetwi.h>
 
 TTextGadget::TTextGadget(int          id,
                          TBorderStyle borderStyle,
                          TAlign       align,
-                         UINT         numChars,
+                         uint         numChars,
                          const char*  text)
-  : TGadget(id, borderStyle)
+:
+  TGadget(id, borderStyle)
 {
   Margins.Left = Margins.Right = 2;
   Align = align;
@@ -25,7 +27,7 @@ TTextGadget::TTextGadget(int          id,
 
 TTextGadget::~TTextGadget()
 {
-  delete Text;
+  delete [] Text;
 }
 
 //
@@ -37,7 +39,7 @@ TTextGadget::Invalidate()
   TRect  innerRect;
 
   GetInnerRect(innerRect);
-  InvalidateRect(innerRect, FALSE);
+  InvalidateRect(innerRect, false);
 }
 
 //
@@ -46,23 +48,36 @@ TTextGadget::Invalidate()
 void
 TTextGadget::SetText(const char* text)
 {
-  if (text != Text) {
-    delete Text;
+  //
+  // Skip processing if new text is similar to current
+  //
+  if (text && Text && !strcmp(text, Text))
+    return;
 
-    if (text) {
-      Text = strnewdup(text);
-      TextLen = strlen(Text);
+  //
+  // Skip processing if matching pointers [eg. g->SetText(g->GetText()),
+  // or g->SetText(0) when current text is already null].
+  // NOTE: This is safe as long as 'Text' is always a strnewduped string
+  //       and not simply a pointer to a user supplied buffer. Derived 
+  //       classes must follow the convention of always setting
+  //       'Text' via SetText.
+  //
+  if (text == Text) 
+    return;
 
-    } else {
-      Text = 0;
-      TextLen = 0;
-    }
+  delete [] Text;
+  Text = 0;
+  TextLen = 0;
 
-    Invalidate();
+  if (text) {
+    Text = strnewdup(text);
+    TextLen = strlen(Text);
   }
+
+  Invalidate();
 }
 
-UINT
+uint
 TTextGadget::GetMaxCharWidth()
 {
   TScreenDC   dc;

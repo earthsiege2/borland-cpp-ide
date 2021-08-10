@@ -1,14 +1,16 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\module.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TModule.  TModule defines the
 //   basic behavior for OWL libraries and applications.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\module.h>
+#include <owl/owlpch.h>
+#include <owl/module.h>
+#include <owl/appdict.h>
 
-extern UINT _OWLDATA GetWindowPtrMsgId;  // in owl.cpp
+extern uint _OWLDATA GetWindowPtrMsgId;  // in applicat.cpp
 
 
 #if !defined(SECTION) || SECTION == 1
@@ -21,17 +23,17 @@ extern UINT _OWLDATA GetWindowPtrMsgId;  // in owl.cpp
 
 //
 // Construct a TModule that is an alias for a DLL. TModule will load & free
-// the DLL if shouldLoad is TRUE. If shouldLoad is FALSE, then the HInstance
+// the DLL if shouldLoad is true. If shouldLoad is false, then the HInstance
 // must be set some time later using InitModule()
 //
-TModule::TModule(const char far* name, BOOL shouldLoad)
+TModule::TModule(const char far* name, bool shouldLoad)
 {
   if (shouldLoad) {
     HInstance = ::LoadLibrary(name);
     if (HInstance <= HINSTANCE(32))
       THROW( TXInvalidModule() );
-
-  } else {
+  }
+  else {
     HInstance = 0;
   }
 
@@ -49,7 +51,7 @@ TModule::TModule(const char far* name, HINSTANCE hInstance)
 {
   PRECONDITION(hInstance > HINSTANCE(32));
   HInstance = hInstance;
-  ShouldFree = FALSE;
+  ShouldFree = false;
   Name = strnewdup(name);
   lpCmdLine = 0;
 }
@@ -62,7 +64,7 @@ TModule::TModule(const char far* name, HINSTANCE hInstance,
                  const char far* cmdLine)
 {
   HInstance = 0;
-  ShouldFree = FALSE;
+  ShouldFree = false;
   Name = strnewdup(name);
   lpCmdLine = 0;
   if (hInstance)
@@ -77,14 +79,14 @@ TModule::~TModule()
 {
   if (ShouldFree)
     ::FreeLibrary(HInstance);
-  delete Name;
-  delete lpCmdLine;
+  delete [] Name;
+  delete [] lpCmdLine;
 }
 
 void
 TModule::SetName(const char far* name)
 {
-  delete Name;
+  delete [] Name;
   Name = strnewdup(name);
 }
 
@@ -97,34 +99,35 @@ TModule::InitModule(HINSTANCE hInstance, const char far* cmdLine)
 {
   SetInstance(hInstance);
 
-  #if defined(__WIN32__)
-    //
-    // Win32 prepends the full application path to the command line arguments
-    // skip over this "extra" argument for 16-bit compatibility
-    // _argc and _argv do the correct processing, _argv[0] being the pathname
-    //
-    if (cmdLine)
-      while (*cmdLine && *cmdLine++ != ' ')
-        ;
-  #endif
+#if defined(BI_PLAT_WIN32)
+  //
+  // Win32 prepends the full application path to the command line arguments
+  // skip over this "extra" argument for 16-bit compatibility
+  // _argc and _argv do the correct processing, _argv[0] being the pathname
+  //
+  if (cmdLine)
+    while (*cmdLine && *cmdLine++ != ' ')
+      ;
+#endif
 
   if (cmdLine)
     lpCmdLine = strnewdup(cmdLine);
 
-  //
-  // register a system-wide "GetWindowPtr" message as "OWLxxxx:GetWindowPtr"
+  // Register a system-wide "GetWindowPtr" message as "GetWindowPtr(_hInstance)"
+  // Each running copy of ObjectWindows will get a unique message Id
   //
   if (!GetWindowPtrMsgId) {
-    const char msgName[] = "OWL%X:GetWindowPtr";
-    char buff[sizeof(msgName) + 6];
-    wsprintf(buff, msgName, OWLVersion);
-    GetWindowPtrMsgId = ::RegisterWindowMessage(buff);
+    const char msgTemplate[] = "GetWindowPtr(%X)";
+    char msgName[sizeof(msgTemplate) + 8];
+    wsprintf(msgName, msgTemplate, unsigned(_hInstance));
+    GetWindowPtrMsgId = ::RegisterWindowMessage(msgName);
+    CHECK(GetWindowPtrMsgId);
   }
 }
 
 //
 // Replaceable exception handler; may be redefined to process OWL exceptions
-// if canResume is FALSE, then the user doesn't have the option of ignoring
+// if canResume is false, then the user doesn't have the option of ignoring
 //
 int
 TModule::Error(xmsg& x, unsigned captionResId, unsigned promptResId)
@@ -153,31 +156,35 @@ TModule::SetInstance(HINSTANCE hInstance)
 }
 
 //
-// LoadString replacement which does not generated debug warning output
+// LoadString replacements which do not generated debug warning output
 //
-#if defined(__WIN32__)
-typedef WCHAR* resText;
+#if defined(BI_PLAT_WIN32)
+ typedef WCHAR* TResText;
+ typedef WCHAR* TResCount;
 #else
-typedef char far* resText;
+ typedef char far* TResText;
+ typedef uint8 far* TResCount;
 #endif
 
 int
-TModule::LoadString(UINT id, char far* buf, int bufSize) const
+TModule::LoadString(uint id, char far* buf, int bufSize) const
 {
-  int len = 0;
+  uint len = 0;
   HRSRC     resHdl;
   HGLOBAL   glbHdl;
-  resText   resData;
-  
+  TResText  resData;
+
   if ((resHdl = FindResource(id/16+1, RT_STRING)) != 0
    && (glbHdl = LoadResource(resHdl)) != 0) {
-    if ((resData = (resText)LockResource(glbHdl)) != 0) {
-      for (int cnt = id % 16; len = *resData++, cnt--; resData += len) ;
+    if ((resData = (TResText)LockResource(glbHdl)) != 0) {
+      for (int cnt = id % 16; len = *(TResCount)resData++, cnt--; resData += len)
+        ;
       if (len != 0) {
         if (len >= bufSize)
           len = bufSize-1;
-        for (cnt = len; len--; *buf++ = (char)*resData++) ;
-        *(buf) = 0;
+        for (cnt = len; cnt--; *buf++ = (char)*resData++)
+          ;
+        *buf = 0;
       }
       UnlockResource(glbHdl);
     }
@@ -194,10 +201,48 @@ TModule::LoadString(UINT id, char far* buf, int bufSize) const
   return 0;    // indicate string not found
 }
 
+string
+TModule::LoadString(uint id) const
+{
+  uint len = 0;
+  HRSRC     resHdl;
+  HGLOBAL   glbHdl;
+  TResText  resData;
+  string    retString;
+
+  if ((resHdl = FindResource(id/16+1, RT_STRING)) != 0
+   && (glbHdl = LoadResource(resHdl)) != 0) {
+    if ((resData = (TResText)LockResource(glbHdl)) != 0) {
+      for (int cnt = id % 16; len = *(TResCount)resData++, cnt--; resData += len)
+        ;
+      if (len != 0) {
+#if (0) // This is dangerous unless string is changed to handle non-terminated
+        // char arrays
+        //
+        retString.append(resData, 0, len);
+#else
+        retString.resize(len);
+        int i = 0;
+        for (cnt = len; cnt--; retString[i++] = (char)*resData++)
+          ;
+#endif
+      }
+      UnlockResource(glbHdl);
+    }
+    FreeResource(glbHdl);
+    if (len)
+      return retString;
+  }
+
+  if (::Module != this)                   // look in OWL module if different
+    return ::Module->LoadString(id);
+
+  return retString;    // empty if string not found
+}
 
 //----------------------------------------------------------------------------
 
-#include <owl\applicat.h>
+#include <owl/applicat.h>
 
 //
 // obsolete error handler--use Error(xmsg&,...) instead
@@ -214,7 +259,7 @@ TModule::Error(int errorCode)
 
   if (::MessageBox(0, errorStr, module ? module->GetName() : Name,
                    MB_ICONSTOP | MB_YESNO | MB_TASKMODAL) == IDNO)
-  #if defined(__WIN32__)
+  #if defined(BI_PLAT_WIN32)
     ::PostThreadMessage(GetCurrentThreadId(), WM_QUIT, 0, 0);
   #else
     ::PostAppMessage(GetCurrentTask(), WM_QUIT, 0, 0);
@@ -281,11 +326,11 @@ TModule::Streamer::Write(opstream& os) const
 // Entry (& exit) functions for Owl in a DLL
 //
 
-#if defined(__DLL__)
+#if defined(_BUILDOWLDLL)
 
 //
 // TModule derived class to facilitate streaming pointer to the OWL Library
-//	the OWL module must be streamed by reference before any pointers to it
+// the OWL module must be streamed by reference before any pointers to it
 // the following code simply prevents writing data back over the OWL module 
 //
 
@@ -313,18 +358,19 @@ TObjectWindowsLibrary::Streamer::Write(opstream&) const
 //
 TModule* Module = 0;
 
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
 
 static int  Attaches = 0;  // Win32s doesn't have per-instance data-- keep
                            // track of number of attached processes
 
-BOOL WINAPI
-DllEntryPoint(HINSTANCE hInstance, DWORD reason, LPVOID)
+int WINAPI
+DllEntryPoint(HINSTANCE hInstance, uint32 reason, void*)
 {
   switch (reason) {
     case DLL_PROCESS_ATTACH: {
-      if (!Attaches)
+      if (!Attaches) {
         ::Module = new TObjectWindowsLibrary(hInstance);
+      }
       Attaches++;
       break;
     }
@@ -335,23 +381,22 @@ DllEntryPoint(HINSTANCE hInstance, DWORD reason, LPVOID)
       break;
     }
   }
-  return TRUE;
+  return true;
 }
 
-#else  // !defined(__WIN32__)
+#else  // !defined(BI_PLAT_WIN32)
 
 //
-// Construct a TModule on the local heap to represent this Owl DLL
-// Leave the heap locked so that we can have far pointers to it.
+// Entry point for the Owl DLL itself
 //
 int FAR PASCAL
 LibMain(HINSTANCE   hInstance,
-        WORD      /*wDataSeg*/,
-        WORD      /*cbHeapSize*/,
+        uint16    /*wDataSeg*/,
+        uint16    /*cbHeapSize*/,
         char far* /*lpCmdLine*/)
 {
   //
-  // Allocate the module object for the Owl DLL. The RTL makes sure that
+  // Allocate the TModule object for the Owl DLL. The RTL makes sure that
   // the memory allocated is GMEM_SHARE.
   //
   ::Module = new TObjectWindowsLibrary(hInstance);
@@ -367,8 +412,8 @@ WEP(int /*bSystemExit*/)
   return 1;
 }
 
-#endif  // defined(__WIN32__)
-#endif  // defined(__DLL__)
+#endif  // defined(BI_PLAT_WIN32)
+#endif  // defined(_BUILDOWLDLL)
 #endif  // SECTION == 3
 
 #if !defined(SECTION) || SECTION == 4
@@ -378,6 +423,6 @@ WEP(int /*bSystemExit*/)
 ostream& _OWLFUNC
 operator <<(ostream& os, const TModule& m)
 {
-  return os << hex << UINT(m.HInstance);
+  return os << hex << uint(m.HInstance);
 }
 #endif //section 4

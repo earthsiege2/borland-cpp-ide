@@ -1,26 +1,29 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\metafile.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of TMetaFilePict class
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\metafile.h>
-#include <owl\gdiobjec.h>
-#include <owl\clipboar.h>
-#include <owl\except.h>
+#include <owl/owlpch.h>
+#include <owl/metafile.h>
+#include <owl/gdiobjec.h>
+#include <owl/clipboar.h>
+#include <owl/except.h>
 
 
 TMetaFilePict::TMetaFilePict(HMETAFILE handle, TAutoDelete autoDelete)
-  : TGdiBase(handle, autoDelete),
-    Extent(0,0)
+:
+  TGdiBase(handle, autoDelete),
+  Extent(0,0)
 {
   Mm = MM_ANISOTROPIC;
 }
 
 TMetaFilePict::TMetaFilePict(const char* filename)
-  : TGdiBase(::GetMetaFile(filename), AutoDelete),
-    Extent(0,0)
+:
+  TGdiBase(::GetMetaFile(filename), AutoDelete),
+  Extent(0,0)
 {
   Mm = MM_ANISOTROPIC;
 }
@@ -30,7 +33,8 @@ TMetaFilePict::TMetaFilePict(const char* filename)
 // Should be copied if metafile needs to be kept.
 //
 TMetaFilePict::TMetaFilePict(const TClipboard&)
-  : Extent(0,0)
+:
+  Extent(0,0)
 {
   HGLOBAL hmfp = ::GetClipboardData(CF_METAFILEPICT);
   METAFILEPICT far* mfp = (METAFILEPICT far*)::GlobalLock(hmfp);
@@ -40,18 +44,20 @@ TMetaFilePict::TMetaFilePict(const TClipboard&)
     Extent = TSize(mfp->xExt, mfp->yExt);
     Handle = mfp->hMF;
     ::GlobalUnlock(hmfp);
-  } else
+  }
+  else
     Handle = 0;
 
-  ShouldDelete = FALSE;
+  ShouldDelete = false;
   CheckValid();
 }
 
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
 
-TMetaFilePict::TMetaFilePict(UINT size, void* data)
-  : TGdiBase(::SetMetaFileBitsEx(size, (LPBYTE)data), NoAutoDelete),
-    Extent(0,0)
+TMetaFilePict::TMetaFilePict(uint size, void* data)
+:
+  TGdiBase(::SetMetaFileBitsEx(size, (LPBYTE)data), NoAutoDelete),
+  Extent(0,0)
 {
   CheckValid();
   Mm = MM_ANISOTROPIC;
@@ -60,8 +66,9 @@ TMetaFilePict::TMetaFilePict(UINT size, void* data)
 #else
 
 TMetaFilePict::TMetaFilePict(HGLOBAL data)
-  : TGdiBase(::SetMetaFileBitsBetter(data), NoAutoDelete),
-    Extent(0,0)
+:
+  TGdiBase(::SetMetaFileBitsBetter(data), NoAutoDelete),
+  Extent(0,0)
 {
   CheckValid();
   Mm = MM_ANISOTROPIC;
@@ -70,8 +77,9 @@ TMetaFilePict::TMetaFilePict(HGLOBAL data)
 #endif
 
 TMetaFilePict::TMetaFilePict(const TMetaFilePict& src, const char far* fileName)
-  : TGdiBase(::CopyMetaFile(src, fileName), AutoDelete),
-    Extent(src.Extent)
+:
+  TGdiBase(::CopyMetaFile(src, fileName), AutoDelete),
+  Extent(src.Extent)
 {
   CheckValid();
   Mm = src.Mm;
@@ -83,10 +91,10 @@ TMetaFilePict::~TMetaFilePict()
     ::DeleteMetaFile(HMETAFILE(Handle));
 }
 
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
 
-DWORD
-TMetaFilePict::GetMetaFileBitsEx(UINT size, void* data)
+uint32
+TMetaFilePict::GetMetaFileBitsEx(uint size, void* data)
 {
   return ::GetMetaFileBitsEx(HMETAFILE(Handle), size, (LPBYTE)data);
 }
@@ -109,18 +117,18 @@ TMetaFilePict::CalcPlaySize(TDC& dc, const TSize& defSize) const
   //
   if (!Extent.cx) {
     return defSize;
-
+  }
   // Use positive extents scaled to 0.01mm units
   //
-  } else if (Extent.cx > 0) {
+  else if (Extent.cx > 0) {
     return TSize(
         int(long(Extent.cx)*dc.GetDeviceCaps(HORZRES)/dc.GetDeviceCaps(HORZSIZE)/100),
         int(long(Extent.cy)*dc.GetDeviceCaps(VERTRES)/dc.GetDeviceCaps(VERTSIZE)/100)
       );
-
+  }
   // Use negative extents scaled to 0.01mm units w/ aspect ratio scaling
   //
-  } else {
+  else {
     long xscale = 100L * defSize.cx *
       dc.GetDeviceCaps(HORZSIZE)/dc.GetDeviceCaps(HORZRES) / -Extent.cx;
     long yscale = 100L * defSize.cy *
@@ -137,7 +145,7 @@ TMetaFilePict::CalcPlaySize(TDC& dc, const TSize& defSize) const
 // Play this metafile onto a dc, possibly using a default size if this 
 // metafile doesn't have one. Does not save dc state.
 //
-BOOL
+bool
 TMetaFilePict::PlayOnto(TDC& dc, const TSize& defSize) const
 {
   // Set target dc's mapping mode to this metafile's if there is one
@@ -174,5 +182,5 @@ TMetaFilePict::ToClipboard(TClipboard& clipboard, unsigned mapMode,
   ::GlobalUnlock(hmfp);
   
   clipboard.SetClipboardData(CF_METAFILEPICT, hmfp);
-  ShouldDelete = FALSE;
+  ShouldDelete = false;
 }

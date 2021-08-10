@@ -27,7 +27,7 @@
 #endif  // __DBLLIST_H
 
 #pragma option -Vo-
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po-
 #endif
 
@@ -177,7 +177,7 @@ private:
 #endif  // __DEQUES_H
 
 #pragma option -Vo-
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po-
 #endif
 
@@ -684,7 +684,7 @@ inline ContainerIterator _FAR & BI_TCDequeAsDoubleList::initIterator() const
 
 #endif  // TEMPLATES
 
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po.
 #endif
 #pragma option -Vo.

@@ -1,12 +1,12 @@
 <<[CPP]TApplication
-##"#include <owl\vbxctl.h>" [[BIVBXInclude]]
+##"#include <owl\\vbxctl.h>" [[BIVBXInclude]]
 ##^BOF
 ##? BIVBXInclude [[SearchIncl]]
 ##--BEGIN-- SearchIncl == FALSE
 ##^BOF
 ##? "#include" SearchIncl
 ##SearchIncl == TRUE 2
-##:     AddToProject("BIVBX.LIB") [[result]]
+##:     AddVBXLibrary() [[result]]
 ##:     ^BOL
 ##:     ^2
 

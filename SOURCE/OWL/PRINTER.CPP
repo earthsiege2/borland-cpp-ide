@@ -1,14 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\printer.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\window.h>
-#include <owl\dc.h>
-#include <owl\static.h>
-#include <owl\printer.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
+#include <owl/appdict.h>
+#include <owl/window.h>
+#include <owl/framewin.h>
+#include <owl/dc.h>
+#include <owl/static.h>
+#include <owl/printer.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -23,11 +26,12 @@
 //----------------------------------------------------------------------------
 
 // TFormattedStatic - Static control that uses its resource title as a printf
-// format string to format text provided in the constructor
+// format string to format one or two text strings provided in the constructor
 //
 class TFormattedStatic: public TStatic {
   public:
-    TFormattedStatic(TWindow* parent, int resId, const char far* text);
+    TFormattedStatic(TWindow* parent, int resId, const char far* text,
+                     const char far* text2=0);
    ~TFormattedStatic();
   
   protected:
@@ -35,17 +39,22 @@ class TFormattedStatic: public TStatic {
 
   private:
     char far*  Text;
+    char far*  Text2;
 };
 
-TFormattedStatic::TFormattedStatic(TWindow* parent, int resId, const char far* text)
-  : TStatic(parent, resId, 0)
+TFormattedStatic::TFormattedStatic(TWindow* parent, int resId,
+                                   const char far* text, const char far* text2)
+:
+  TStatic(parent, resId, 0)
 {
   Text = strnewdup(text);
+  Text2 = text2 ? strnewdup(text2) : 0;
 }
 
 TFormattedStatic::~TFormattedStatic()
 {
   delete Text;
+  delete Text2;
 }
 
 void
@@ -53,38 +62,115 @@ TFormattedStatic::SetupWindow()
 {
   TStatic::SetupWindow();
 
-  char format[80];
-  GetText(format, sizeof(format) - 1);
-
+  // Use the Title retrieved from the resource as a printf template for
+  // the one or two text strings, then set the text directly to the control to
+  // preserve the Title
+  //
   char buff[80];
-  wsprintf(buff, format, Text);
+  wsprintf(buff, Title, Text, Text2);  // second text string is optional
   SetText(buff);
 }
 
+// TNumericStatic - Static control that uses its resource title as a printf
+// format string to format one or two text strings provided in the constructor
+//
+class TNumericStatic: public TStatic {
+  public:
+    TNumericStatic(TWindow* parent, int resId, int number);
+
+  protected:
+    LRESULT EvSetNumber(WPARAM wParam, LPARAM lParam);
+
+  private:
+    int Number;
+
+  DECLARE_RESPONSE_TABLE(TNumericStatic);
+};
+#define WM_SETNUMBER    WM_USER+100
+
+DEFINE_RESPONSE_TABLE1(TNumericStatic, TStatic)
+  EV_MESSAGE(WM_SETNUMBER, EvSetNumber),
+END_RESPONSE_TABLE;
+
+TNumericStatic::TNumericStatic(TWindow* parent, int resId, int number)
+:
+  TStatic(parent, resId, 0),
+  Number(number)
+{
+}
+
+//
+// Handle our user defined message to set the number displayed in the %d part
+// of the Title format string. If the number is <= 0, then hide this window
+//
+LRESULT
+TNumericStatic::EvSetNumber(WPARAM wParam, LPARAM)
+{
+  Number = wParam;
+  if (Number > 0) {
+    char buff[80];
+    wsprintf(buff, Title, Number);
+    SetText(buff);
+  }
+  HWND hWndDefault = Parent->GetDlgItem(-1);
+  if (Number > 0) {
+    SetWindowPos(HWND_TOP, 0, 0, 0, 0,
+                 SWP_NOSIZE|SWP_NOMOVE|SWP_SHOWWINDOW);
+    if (hWndDefault)
+      ::ShowWindow(hWndDefault, SW_HIDE);
+    UpdateWindow();
+  }
+  return 0;
+}
+
+
 //----------------------------------------------------------------------------
 
-TPrinterAbortDlg::TPrinterAbortDlg(TWindow* parent, TResId resId,
-  const char far* title, const char far* device, const char far* port)
-  : TDialog(parent, resId),
-    TWindow(parent, 0)
+DEFINE_RESPONSE_TABLE1(TPrinterAbortDlg, TDialog)
+  EV_COMMAND(IDCANCEL, CmCancel),
+END_RESPONSE_TABLE;
+
+
+TPrinterAbortDlg::TPrinterAbortDlg(TWindow*        parent,
+                                   TResId          resId,
+                                   const char far* title,
+                                   const char far* device,
+                                   const char far* port,
+                                   HDC             prnDC)
+:
+  TDialog(parent, resId),
+  TWindow(parent, 0),
+  PrnDC(prnDC)
 {
+  new TNumericStatic(this, ID_PAGE, 0);
   new TFormattedStatic(this, ID_TITLE, title);
-  new TFormattedStatic(this, ID_DEVICE, device);
-  new TFormattedStatic(this, ID_PORT, port);
+  new TFormattedStatic(this, ID_DEVICE, device, port);
 }
 
 void
 TPrinterAbortDlg::SetupWindow()
 {
-  TDialog::SetupWindow();
-  EnableMenuItem(GetSystemMenu(FALSE), SC_CLOSE, MF_GRAYED);
+  // ignore missing controls, resource may be different
+  //
+  TRY {
+    TDialog::SetupWindow();
+  }
+  CATCH( (...) {
+  } )
+  EnableMenuItem(GetSystemMenu(false), SC_CLOSE, MF_GRAYED);
 }
 
-LRESULT
-TPrinterAbortDlg::EvCommand(UINT id, HWND hWndCtl, UINT notifyCode)
+//
+// Handle the print-cancel button by setting the user print abort flag in the
+// application.
+//
+void
+TPrinterAbortDlg::CmCancel()
 {
-  TPrinter::SetUserAbort();
-  return TDialog::EvCommand(id, hWndCtl, notifyCode);
+  TPrinter::SetUserAbort(PrnDC);
+  HWND hBtn = GetDlgItem(IDCANCEL);
+  if (hBtn)
+    ::EnableWindow(hBtn, false);
 }
 
 
@@ -107,19 +193,17 @@ TPrinterAbortDlg::EvCommand(UINT id, HWND hWndCtl, UINT notifyCode)
 //     DefaultPrinter->Setup(MyWindow);
 //
 
-BOOL TPrinter::UserAbort;    // Set by printing dialog if user cancels
+HDC TPrinter::UserAbortDC = 0;    // Set by printing dialog if user cancels
 
 //
 // Initialize the TPrinter object assigned to the default printer
 //
-TPrinter::TPrinter()
+TPrinter::TPrinter(TApplication* app)
 {
   Data = new TPrintDialog::TData;
-  memset(Data, 0, sizeof(TPrintDialog::TData));
-  Data->Flags = PD_ALLPAGES | PD_COLLATE;
-  Data->FromPage = Data->ToPage = -1;
-
   Error = 0;
+  Application = app ? app : ::GetApplicationObject();
+  CHECK(Application);
   GetDefaultPrinter();
 }
 
@@ -151,10 +235,14 @@ TPrinter::GetDefaultPrinter()
   // into DevMode and DevNames. We never actually Execute() the dialog.
   //
   SETCLEAR(Data->Flags, 0, PD_RETURNDC);
-  TPrintDialog printDialog(0, *Data);
+  TPrintDialog printDialog(Application->GetMainWindow(), *Data);
   printDialog.GetDefaultPrinter();
 }
 
+//
+// Associate this printer object with actual printer info: driver name, device
+// name and output port name.
+//
 void
 TPrinter::SetPrinter(const char* driver, const char* device, const char* output)
 {
@@ -162,35 +250,54 @@ TPrinter::SetPrinter(const char* driver, const char* device, const char* output)
 }
 
 //
-// Abort procedure used during printing
+// Abort procedure used during printing, called by windows. Returns true to
+// continue the print job, false to cancel.
 //
-BOOL FAR PASCAL _export
-TPrinterAbortProc(HDC, short)
+int CALLBACK __export
+TPrinterAbortProc(HDC hDC, int code)
 {
-  TApplication* app = GetApplicationObject();
-  app->PumpWaitingMessages();
-  return !TPrinter::GetUserAbort(); // UserAbort will have been set in the AbortDialog
+  GetApplicationObject()->PumpWaitingMessages();
+
+  // UserAbortDC will have been set by the AbortDialog
+  //
+  if (TPrinter::GetUserAbort() == hDC || TPrinter::GetUserAbort() == HDC(-1)) {
+    TPrinter::SetUserAbort(0);
+    return false;
+  }
+  return code == 0 || code == SP_OUTOFDISK;
 }
 
-BOOL
+//
+// Virtual called from within Print() to construct and execute a print dialog
+// before actual printing occurs. Return true to continue printing, false to
+// cancel
+//
+bool
 TPrinter::ExecPrintDialog(TWindow* parent)
 {
   return TPrintDialog(parent, *Data).Execute() == IDOK;
 }
 
+//
+// Virtual called from withing Print() just before the main printing loop to
+// construct and create the printing status, or abort window. This window
+// should use the control IDs specified in printer.rh
+//
 TWindow*
 TPrinter::CreateAbortWindow(TWindow* parent, TPrintout& printout)
 {
+  TDC* dc = printout.GetPrintDC();
   TWindow* win = new TPrinterAbortDlg(parent, IDD_ABORTDIALOG,
                                       printout.GetTitle(),
                                       Data->GetDeviceName(),
-                                      Data->GetOutputName());
+                                      Data->GetOutputName(),
+                                      dc ? HDC(*dc) : HDC(-1));
   win->Create();
   return win;
 }
 
 //
-// Helper function for Print when it is banding to calculate banding flags
+// Helper function for Print when it is banding used to calculate banding flags
 // and rectangle.
 //
 void
@@ -209,8 +316,8 @@ TPrinter::CalcBandingFlags(TPrintDC& prnDC)
     if (bandInfo.HasText)
       flags |= pfGraphics;
     Flags = (Flags & ~pfBoth) | flags;
-
-  } else {
+  }
+  else {
     //
     // If a driver does not support BANDINFO the Microsoft recommended way
     // of determining text only bands is if the first band is the full page,
@@ -226,22 +333,21 @@ TPrinter::CalcBandingFlags(TPrintDC& prnDC)
       else
         Flags = Flags | pfBoth;
   }
-  FirstBand = FALSE;
+  FirstBand = false;
 }
 
 //
 // Print the given printout to the printer, prompting the user with a
 // commdlg print dialog if indicated.
 //
-BOOL
-TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
+bool
+TPrinter::Print(TWindow* parent, TPrintout& printout, bool prompt)
 {
   PRECONDITION(parent);
 
   // Start from scratch
   //
-  Error = 0;
-  UserAbort = FALSE;
+  Error = 1;           // Positive 'Error' means print job is OK
   TPrintDC*   prnDC;
   HCURSOR hOrigCursor = ::SetCursor(::LoadCursor(0, IDC_WAIT));
 
@@ -265,7 +371,8 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
       Data->ToPage = Data->MinPage;
     else if (Data->ToPage > Data->MaxPage)
       Data->ToPage = Data->MaxPage;
-  } else
+  }
+  else
     Data->Flags |= PD_NOPAGENUMS;
 
   //
@@ -275,19 +382,19 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
   //
   if (prompt) {
     SETCLEAR(Data->Flags, PD_RETURNDC, PD_RETURNDEFAULT|PD_PRINTSETUP);
-    BOOL ok = ExecPrintDialog(parent);
+    bool ok = ExecPrintDialog(parent);
     if (!ok && Data->Error == PDERR_DEFAULTDIFFERENT) {
       ClearDevice();
       ok = ExecPrintDialog(parent);
     }
     if (!ok)
-      return FALSE;
+      return false;
 
     prnDC = Data->TransferDC();   // We now own the DC, let prnDC manage it
-
+  }
   // Construct the DC directly if prompting was not enabled.
   //
-  } else {
+  else {
     prnDC = new TPrintDC(Data->GetDriverName(), Data->GetDeviceName(),
                          Data->GetOutputName(), Data->GetDevMode());
   }
@@ -302,7 +409,7 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
   printout.SetPrintParams(prnDC, PageSize);
 
   //
-  // Create modeless abort dialog using strings & unlock the devname struct
+  // Create modeless abort dialog using strings
   //
   TWindow* abortWin;
   TRY {
@@ -314,27 +421,21 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
   })
 
   ::SetCursor(hOrigCursor);
-  parent->EnableWindow(FALSE);
+  parent->EnableWindow(false);
 
-  #if defined (__DLL__)
-    // We don't need to make a proc instance for DLLs
-    ABORTPROC abortProcInst = (ABORTPROC)TPrinterAbortProc;
-  #else
-    ABORTPROC abortProcInst = (ABORTPROC)MakeProcInstance((FARPROC)TPrinterAbortProc, *parent->GetModule());
-  #endif
-  prnDC->SetAbortProc(abortProcInst);
+  prnDC->SetAbortProc(TPrinterAbortProc);
 
   //
   // Only band if the user requests banding and the printer
   // supports banding
   //
-  BOOL banding = printout.WantBanding() &&
+  bool banding = printout.WantBanding() &&
                 (prnDC->GetDeviceCaps(RASTERCAPS) & RC_BANDING);
   if (banding)
     //
     // Only use BANDINFO if supported.
     //
-    UseBandInfo = prnDC->QueryEscSupport(BANDINFO);
+    UseBandInfo = ToBool(prnDC->QueryEscSupport(BANDINFO));
 
   else
     //
@@ -343,7 +444,7 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
     BandRect.Set(0, 0, PageSize.cx, PageSize.cy);
 
   //
-  // If more than one(uncollated) copy was requested, see if printer can
+  // If more than one (uncollated) copy was requested, see if printer can
   // handle it for performance and user convenience.
   //
   int copiesPerPass = 1;
@@ -359,13 +460,16 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
   if (prompt && (Data->Flags & PD_SELECTION) || selFromPage) {
     fromPage = selFromPage;
     toPage = selToPage;
-  } else if (prompt && (Data->Flags & PD_PAGENUMS)) {
+  }
+  else if (prompt && (Data->Flags & PD_PAGENUMS)) {
     fromPage = Data->FromPage;
     toPage = Data->ToPage;
-  } else if (Data->MinPage) {
+  }
+  else if (Data->MinPage) {
     fromPage = Data->MinPage;
     toPage = Data->MaxPage;
-  } else {
+  }
+  else {
     fromPage = 1;
     toPage = INT_MAX;
   }
@@ -374,7 +478,9 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
   // Copies loop, one pass per block of document copies.
   //
   printout.BeginPrinting();
-  for (int copies = Data->Copies; copies > 0; copies -= copiesPerPass) {
+  for (int copies = Data->Copies;
+       copies > 0 && Error > 0;
+       copies -= copiesPerPass) {
 
     //
     // On last multi-copy pass, may need to adjust copy count
@@ -393,13 +499,16 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
          Error > 0 && pageNum <= toPage && printout.HasPage(pageNum);
          pageNum++) {
 
+      abortWin->SendDlgItemMessage(ID_PAGE, WM_SETNUMBER, pageNum);
+
       //
       // Begin the page by getting the first band or calling StartPage()
       //
       if (banding) {
-        FirstBand = TRUE;
+        FirstBand = true;
         Error = prnDC->NextBand(BandRect);
-      } else
+      }
+      else
         Error = prnDC->StartPage();
 
       //
@@ -409,9 +518,9 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
         //
         // [Manually call the abort proc between bands or pages]
         //
-        #if defined(MANUAL_ABORT_CALL)
-          prnDC->QueryAbort();
-        #endif
+#if defined(MANUAL_ABORT_CALL)
+        prnDC->QueryAbort();
+#endif
 
         if (banding) {
           CalcBandingFlags(*prnDC);
@@ -430,38 +539,44 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
       //
       // EndPage (NEWFRAME) need only called if not banding
       //
-      if (Error > 0 && !banding)
+      if (Error > 0 && !banding) {
         Error = prnDC->EndPage();
+        if (Error == 0)    // a zero return here is OK for this call
+          Error = 1;
+      }
 
-    }  // Whole Document-loop
+    }  // End of Whole Document-loop
 
     // Tell GDI the document is finished
+    //
     if (Error > 0)
-      #if defined(MANUAL_ABORT_CALL)
-        if (banding && UserAbort)
-          prnDC->AbortDoc();
-        else
-      #endif
+#if defined(MANUAL_ABORT_CALL)
+      if (banding && (UserAbortDC == *prnDC || UserAbortDC == HDC(-1))
+        prnDC->AbortDoc();
+      else
         prnDC->EndDoc();
+#else
+      prnDC->EndDoc();
+#endif
 
     printout.EndDocument();
 
-  } // Copy-loop
+  } // End of Copy-loop
   printout.EndPrinting();
 
+  // Set the printer back to 1 copy
+  //
   if (copiesPerPass > 1)
     prnDC->SetCopyCount(1, copiesPerPass);
 
   //
   // Re-enable parent and free allocated resources
   //
-  # if !defined (__DLL__)
-    FreeProcInstance((FARPROC)abortProcInst);
-  #endif
-
-  parent->EnableWindow(TRUE);
+  parent->EnableWindow(true);
   abortWin->Destroy();
   delete abortWin;
+  if (UserAbortDC == *prnDC)  // User tried to abort, but it was too late
+    UserAbortDC = 0;
   delete prnDC;
 
   //
@@ -470,7 +585,7 @@ TPrinter::Print(TWindow* parent, TPrintout& printout, BOOL prompt)
   if (Error & SP_NOTREPORTED)
     ReportError(parent, printout);
 
-  return Error > 0 && !UserAbort;
+  return Error > 0;
 }
 
 //
@@ -484,10 +599,15 @@ void TPrinter::Setup(TWindow* parent)
   ExecPrintDialog(parent);
 }
 
+//
+// Report the printer error in a message box. First translate the SP_ codes
+// into ObjectWindows string resource IDs, and then load the strings. Don't
+// display anything if the string is not found, or the code is unknown.
+//
 void
 TPrinter::ReportError(TWindow* parent, TPrintout& printout)
 {
-  WORD  errorId;
+  uint16  errorId;
 
   switch (Error) {
     case SP_ERROR:
@@ -510,20 +630,25 @@ TPrinter::ReportError(TWindow* parent, TPrintout& printout)
   }
 
   TModule& module = *parent->GetModule();
+
+  char  errorCaption[80];
+  if (!module.LoadString(IDS_PRNERRORCAPTION, errorCaption, sizeof(errorCaption)))
+    return;
+
   char  errorTemplate[40];
   char  errorStr[40];
-  module.LoadString(IDS_PRNERRORTEMPLATE, errorTemplate, sizeof(errorTemplate));
-  module.LoadString(errorId, errorStr, sizeof(errorStr));
+  if (!module.LoadString(IDS_PRNERRORTEMPLATE, errorTemplate, sizeof(errorTemplate)))
+    return;
+  if (!module.LoadString(errorId, errorStr, sizeof(errorStr)))
+    return;
 
   char  errorMsg[80];
   wsprintf(errorMsg, errorTemplate, printout.GetTitle(), (char far*)errorStr);
 
-  char  errorCaption[80];
-  module.LoadString(IDS_PRNERRORCAPTION, errorCaption, sizeof(errorCaption));
   parent->MessageBox(errorMsg, errorCaption, MB_OK | MB_ICONSTOP);
 }
 
-TPrinter::TXPrinter::TXPrinter(UINT resId) : TXOwl(resId)
+TPrinter::TXPrinter::TXPrinter(uint resId) : TXOwl(resId)
 {
 }
 

@@ -34,7 +34,7 @@
 #define ID_LOCALEWINDOW 101
 // language identifiers as defined in winnt.h
 #define LANG_ENGLISH 0x09
-#define LANG_FRENCH  0x0C
+#define LANG_FRENCH  0x0c
 #define LANG_GERMAN  0x07
 
 #pragma warn -inl // functions containing ... are not expanded inline
@@ -324,38 +324,6 @@ void TFileListBox::GetDirList()
 
 void TFileListBox::ChangeDir()
 {
-#if 0
-  char buf[MAXFILE + MAXEXT + 1], fullPath[MAXPATH];
-  if (GetSelString(buf, sizeof buf))
-    getcwd(fullPath, sizeof fullPath);
-  if (strstr(buf, ".."))
-  {
-    char *ptr = fullPath;
-    while(strchr(ptr, '\\')) ptr ++;
-    *(--ptr) = 0;
-    if (strlen(fullPath) == 2)
-    {
-      strcat(fullPath, "\\"); // \ is needed on the root, otherwise not.
-    }
-  }
-  else
-  {
-    if (fullPath[strlen(fullPath) - 1] != '\\')
-      strcat(fullPath, "\\");
-    strcat(fullPath, buf);
-    for (int i = 0; i < MAXPATH; i++)
-      if (fullPath[i] == ' ')
-      {
-        fullPath[i] = 0;
-        i = MAXPATH;
-      }
-  }
-  if (!chdir(fullPath))
-  {
-    GetDirList();
-    FillListBox();
-  }
-#endif
   char buf[MAXFILE + MAXEXT + 1];
   if (GetSelString(buf, sizeof buf))
   {
@@ -1000,7 +968,7 @@ class TLocaleFrame : public TDecoratedFrame
    void CMUKLocale()
    {
     if (locale != locUK)
-      ChangeLocale(LC_ALL, "en_UK.WIN1252", locUK);
+      ChangeLocale(LC_ALL, "en_GB.WIN1252", locUK);
    }
 
    void CMFrenchLocale()

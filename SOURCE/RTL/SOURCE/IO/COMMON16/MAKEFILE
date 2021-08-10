@@ -1,0 +1,173 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+!if $(OS) != DPMI16
+    OBJS =               \
+            readu.obj    \
+            writeu.obj   \
+            access.obj   \
+            chmod.obj    \
+            close.obj    \
+            closeall.obj \
+            fclose.obj   \
+            fdopen.obj   \
+            fflush.obj   \
+            fgets.obj    \
+            flushall.obj \
+            flushout.obj \
+            fnmerge.obj  \
+            fnsplit.obj  \
+            fopen.obj    \
+            fprintf.obj  \
+            fputs.obj    \
+            fread.obj    \
+            freopen.obj  \
+            fscanf.obj   \
+            fseek.obj    \
+            fsetpos.obj  \
+            fullpath.obj \
+            fwrite.obj   \
+            getcwd.obj   \
+            gets.obj     \
+            locking.obj  \
+            makepath.obj \
+            mktemp.obj   \
+            perror.obj   \
+            printf.obj   \
+            putc.obj     \
+            puts.obj     \
+            putw.obj     \
+            rewind.obj   \
+            scanf.obj    \
+            setmode.obj  \
+            setvbuf.obj  \
+            splitpth.obj \
+            sprintf.obj  \
+            sscanf.obj   \
+            tempnam.obj  \
+            tmpfile.obj  \
+            tmpnam.obj   \
+            utime.obj    \
+            vfprintf.obj \
+            vfscanf.obj  \
+            vprintf.obj  \
+            vscanf.obj   \
+            write.obj    \
+            xfclose.obj  \
+            xfflush.obj  \
+            _access.obj  \
+            _fsopen.obj  \
+            chmoda.obj   \
+            chsize.obj   \
+            closea.obj   \
+            creat.obj    \
+            creata.obj   \
+            eof.obj      \
+            findfirs.obj \
+            flength.obj  \
+            fstat.obj    \
+            getc.obj     \
+            getdcwd.obj  \
+            lock.obj     \
+            open.obj     \
+            opena.obj    \
+            read.obj     \
+            rename.obj   \
+            stat.obj     \
+            ungetc.obj   \
+            writea.obj   \
+            _chmoda.obj
+
+    AUXOBJS =            \
+            chdrive.obj  \
+            clearerr.obj \
+            dosclose.obj \
+            doscmmit.obj \
+            dosdfree.obj \
+            dosgdriv.obj \
+            dosgftim.obj \
+            doslock.obj  \
+            dosseek.obj  \
+            dossftim.obj \
+            fgetpos.obj  \
+            files.obj    \
+            files2.obj   \
+            fmode.obj    \
+            getdisk.obj  \
+            getw.obj     \
+            iomacro.obj  \
+            mkname.obj   \
+            rmtmp.obj    \
+            setbuf.obj   \
+            setupio.obj  \
+            sopen.obj    \
+            tell.obj     \
+            umask.obj    \
+            xclose.obj   \
+            chdir.obj    \
+            doscreat.obj \
+            dosfattr.obj \
+            dosfind.obj  \
+            dosopen.obj  \
+            dosread.obj  \
+            doswrite.obj \
+            dup2.obj     \
+            getcurdi.obj \
+            getdta.obj   \
+            getfat.obj   \
+            getftime.obj \
+            getverf.obj  \
+            ioerror.obj  \
+            isatty.obj   \
+            lseek.obj    \
+            mkdir.obj    \
+            parsfnm.obj  \
+            reada.obj    \
+            remove.obj   \
+            rmdir.obj    \
+            scanner.obj  \
+            setdta.obj   \
+            setftime.obj \
+            unlink.obj   \
+            vprinter.obj \
+            zapctlz.obj
+
+!   if $d(DLL)
+        IMPOBJS = $(AUXOBJS)  \
+                  fsetpos.obj
+
+!   else
+        OBJS    = $(AUXOBJS) $(OBJS)
+!   endif
+
+!else
+    OBJS =               \
+            reada.obj    \
+            writea.obj
+!endif
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+TASMCFG = 1        # Force tasm.cfg creation
+
+!include rules.mak
+

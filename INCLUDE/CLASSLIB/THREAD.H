@@ -2,46 +2,330 @@
 /*                                                                        */
 /*  THREAD.H                                                              */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
-/*  Defines the class TCriticalSection and its nested class Lock.         */
 /*  Defines the class TMutex and its nested class Lock.                   */
+/*  Defines the class TCriticalSection and its nested class Lock.         */
 /*  Defines the class TSync and its nested class Lock.                    */
 /*  Defines the template TStaticSync and its nested class Lock.           */
 /*  Defines the class TThread.                                            */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __THREAD_H )
-#define __THREAD_H
+#if !defined( CLASSLIB_THREAD_H )
+#define CLASSLIB_THREAD_H
 
 #if !defined( __CSTRING_H )
 #include <cstring.h>
-#endif  // __CSTRING_H
+#endif
 
-#if !defined( __WINDOWS_H )
-#include <windows.h>
-#endif  // __WINDOWS_H
+#if defined( _Windows )
+# if defined( __WINDOWS_H )
+#   if !defined( STRICT )
+#     error #define <windows.h> must be preceded by #define STRICT
+#   endif
+# else
+#   define STRICT   
+#   include <windows.h>
+# endif
+#elif defined( __OS2__ )
+# if defined( __OS2_H )
+#   if !defined( INCL_BASE )
+#     error #include <os2.h> must be preceded by #define INCL_PM
+#   endif
+# else
+#   define INCL_BASE
+#   include <os2.h>
+# endif
+#endif
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
 #endif  // __CHECKS_H
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
 #if !defined(BI_MULTI_THREAD)
 #error Thread classes require multi-threaded operating system.
 #endif
 
-#if defined( __OS2__ )
-#error Thread classes not implemented for OS/2.
-#endif
-
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
+#endif
+
+/*------------------------------------------------------------------------*/
+/*                                                                        */
+/*  class TMutex;                                                         */
+/*  class TMutex::Lock;                                                   */
+/*                                                                        */
+/*  TMutex provides a system-independent interface to critical            */
+/*  sections in threads. With suitable underlying implementations the     */
+/*  same code can be used under OS/2 and Windows NT.                      */
+/*                                                                        */
+/*  An object of type TMutex can be used in conjunction with              */
+/*  objects of type TMutex::Lock to guarantee that only one               */
+/*  thread can be executing any of the code sections protected by the     */
+/*  lock at any given time.                                               */
+/*                                                                        */
+/*  The differences between the classes TCriticalSection and TMutex are   */
+/*  that a timeout can be specified when creating a Lock on a TMutex      */
+/*  object, and that a TMutex object has a HANDLE which can be used       */
+/*  outside the class. This mirrors the distinction made in Windows NT    */
+/*  between a CRITICALSECTION and a Mutex. Under NT a TCriticalSection    */
+/*  object is much faster than a TMutex object. Under operating systems   */
+/*  that don't make this distinction a TCriticalSection object can use    */
+/*  the same underlying implementation as a TMutex, losing the speed      */
+/*  advantage that it has under NT.                                       */
+/*                                                                        */
+/*  TMutex Public Interface                                               */
+/*  ---------------------------------                                     */
+/*                                                                        */
+/*      TMutex();               Constructor. Takes no parameters.         */
+/*                                                                        */
+/*      ~TMutex();              Destructor.                               */
+/*                                                                        */
+/*      operator HANDLE() const; (NT)                                     */
+/*      operator HMTX() const;   (OS/2)                                   */
+/*                              Returns a handle to the TMutex object,    */
+/*                              for use in OS calls that require it.      */
+/*                                                                        */
+/*      class Lock;             Handles locking and unlocking of          */
+/*                              critical sections.                        */
+/*                                                                        */
+/*                                                                        */
+/*  TMutex::Lock Public Interface                                         */
+/*  ---------------------------------------                               */
+/*                                                                        */
+/*      Lock( const TMutex&,                                              */
+/*            unsigned long timeOut = NoLimit );                          */
+/*                                                                        */
+/*                              Request a lock on the TCriticalSection    */
+/*                              object. If no Lock object in a different  */
+/*                              thread from the calling thread holds      */
+/*                              a lock on that object the lock is         */
+/*                              allowed and execution continues. If       */
+/*                              another thread holds a lock on that       */
+/*                              object the requesting thread is blocked   */
+/*                              until the owning thread has released all  */
+/*                              of its locks.                             */
+/*                                                                        */
+/*      ~Lock();                Releases the lock.                        */
+/*                                                                        */
+/*  Example                                                               */
+/*  -------                                                               */
+/*                                                                        */
+/*      TMutex LockF;                                                     */
+/*                                                                        */
+/*      void f()                                                          */
+/*      {                                                                 */
+/*      TMutex::Lock lock(LockF);                                         */
+/*      // critical processing goes here                                  */
+/*      }                                                                 */
+/*                                                                        */
+/*  Only one thread of execution will be allowed to execute the critical  */
+/*  code inside f() at any one time.                                      */
+/*                                                                        */
+/*------------------------------------------------------------------------*/
+
+class TMutex
+{
+
+public:
+
+#if defined( __WIN32__ )
+    // Windows NT
+    enum { NoLimit = -1 };
+    typedef HANDLE THandle;
+#elif defined( __OS2__ )
+    // OS/2
+    enum { NoLimit = SEM_INDEFINITE_WAIT };
+    typedef HMTX THandle;
+#endif
+
+    TMutex();
+    ~TMutex();
+
+    operator THandle() const;   // HANDLE() under NT
+                                // HMTX() under OS/2
+
+    class Lock
+    {
+    public:
+        Lock( const TMutex&, unsigned long timeOut = NoLimit );
+        ~Lock();
+
+        void Release();
+
+    private:
+        const TMutex& MutexObj;
+
+    };
+
+    friend Lock;
+
+private:
+
+    THandle Handle;
+
+    TMutex( const TMutex& );
+    const TMutex& operator = ( const TMutex& );
+
+};
+
+
+#if defined( __WIN32__ )
+
+//------------------------------------------------
+//
+//  TMutex constructor
+//
+//  WIN32
+//
+
+inline TMutex::TMutex()
+{
+    Handle = ::CreateMutex( 0, FALSE, 0 );
+}
+
+//------------------------------------------------
+//
+//  TMutex destructor
+//
+//  WIN32
+//
+
+inline TMutex::~TMutex()
+{
+    ::CloseHandle(Handle);
+}
+
+//------------------------------------------------
+//
+//  TMutex::operator THandle()
+//
+//  WIN32
+//
+
+inline TMutex::operator TMutex::THandle() const
+{
+    return Handle;
+}
+
+//------------------------------------------------
+//
+//  TMutex::Lock constructor
+//
+//  WIN32
+//
+
+inline TMutex::Lock::Lock( const TMutex& mutex, unsigned long timeOut ) :
+    MutexObj(mutex)
+{
+    ::WaitForSingleObject( MutexObj, timeOut );
+}
+
+//------------------------------------------------
+//
+//  TMutex::Lock destructor
+//
+//  WIN32
+//
+
+inline TMutex::Lock::~Lock()
+{
+    Release();
+}
+
+//------------------------------------------------
+//
+//  TMutex::Lock::Release()
+//
+//  WIN32
+//
+
+inline void TMutex::Lock::Release()
+{
+    ::ReleaseMutex(MutexObj);
+}
+
+#elif defined( __OS2__ )
+
+//------------------------------------------------
+//
+//  TMutex constructor
+//
+//  OS/2
+//
+
+inline TMutex::TMutex()
+{
+    ::DosCreateMutexSem( 0, &Handle, 0, FALSE );
+}
+
+//------------------------------------------------
+//
+//  TMutex destructor
+//
+//  OS/2
+//
+
+inline TMutex::~TMutex()
+{
+    ::DosCloseMutexSem(Handle);
+}
+
+//------------------------------------------------
+//
+//  TMutex::operator THandle()
+//
+//  OS/2
+//
+
+inline TMutex::operator TMutex::THandle() const
+{
+    return Handle;
+}
+
+//------------------------------------------------
+//
+//  TMutex::Lock constructor
+//
+//  OS/2
+//
+
+inline TMutex::Lock::Lock( const TMutex& mutex, unsigned long timeOut ) :
+    MutexObj(mutex)
+{
+    ::DosRequestMutexSem( MutexObj, timeOut );
+}
+
+//------------------------------------------------
+//
+//  TMutex::Lock destructor
+//
+//  OS/2
+//
+
+inline TMutex::Lock::~Lock()
+{
+    Release();
+}
+
+//------------------------------------------------
+//
+//  TMutex::Lock::Release()
+//
+//  OS/2
+//
+
+inline void TMutex::Lock::Release()
+{
+    ::DosReleaseMutexSem(MutexObj);
+}
+
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -125,14 +409,22 @@ public:
         Lock( const TCriticalSection& );
         ~Lock();
     private:
+#if defined( __WIN32__ )
         const TCriticalSection& CritSecObj;
+#elif defined( __OS2__ )
+        TMutex::Lock Lck;
+#endif
     };
 
     friend Lock;
 
 private:
 
+#if defined( __WIN32__ )
     CRITICAL_SECTION CritSec;
+#elif defined( __OS2__ )
+    TMutex CritSec;
+#endif
 
     TCriticalSection( const TCriticalSection& );
     const TCriticalSection& operator = ( const TCriticalSection& );
@@ -140,167 +432,123 @@ private:
 };
 
 
+#if defined( __WIN32__ )
+
+//------------------------------------------------
+//
+//  TCriticalSection constructor
+//
+//  WIN32
+//
+//  Use system call to initialize the CRITICAL_SECTION object.
+//
+
 inline TCriticalSection::TCriticalSection()
 {
-    InitializeCriticalSection(CONST_CAST(CRITICAL_SECTION *,&CritSec));
+    ::InitializeCriticalSection(CONST_CAST(CRITICAL_SECTION *,&CritSec));
 }
+
+//------------------------------------------------
+//
+//  TCriticalSection destructor
+//
+//  WIN32
+//
+//  Use system call to destroy the CRITICAL_SECTION object.
+//
 
 inline TCriticalSection::~TCriticalSection()
 {
-    DeleteCriticalSection(CONST_CAST(CRITICAL_SECTION *,&CritSec));
+    ::DeleteCriticalSection(CONST_CAST(CRITICAL_SECTION *,&CritSec));
 }
+
+//------------------------------------------------
+//
+//  TCriticalSection::Lock constructor
+//
+//  WIN32
+//
+//  Use system call to lock the CRITICAL_SECTION object.
+//
 
 inline TCriticalSection::Lock::Lock( const TCriticalSection& sec ) :
     CritSecObj(sec)
 {
-    EnterCriticalSection(CONST_CAST(CRITICAL_SECTION *,&CritSecObj.CritSec));
+    ::EnterCriticalSection(CONST_CAST(CRITICAL_SECTION *,&CritSecObj.CritSec));
 }
+
+//------------------------------------------------
+//
+//  TCriticalSection::Lock destructor
+//
+//  WIN32
+//
+//  Use system call to unlock the CRITICAL_SECTION object.
+//
 
 inline TCriticalSection::Lock::~Lock()
 {
-    LeaveCriticalSection(CONST_CAST(CRITICAL_SECTION *,&CritSecObj.CritSec));
+    ::LeaveCriticalSection(CONST_CAST(CRITICAL_SECTION *,&CritSecObj.CritSec));
 }
 
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  class TMutex;                                                         */
-/*  class TMutex::Lock;                                                   */
-/*                                                                        */
-/*  TMutex provides a system-independent interface to critical            */
-/*  sections in threads. With suitable underlying implementations the     */
-/*  same code can be used under OS/2 and Windows NT.                      */
-/*                                                                        */
-/*  An object of type TMutex can be used in conjunction with              */
-/*  objects of type TMutex::Lock to guarantee that only one               */
-/*  thread can be executing any of the code sections protected by the     */
-/*  lock at any given time.                                               */
-/*                                                                        */
-/*  The differences between the classes TCriticalSection and TMutex are   */
-/*  that a timeout can be specified when creating a Lock on a TMutex      */
-/*  object, and that a TMutex object has a HANDLE which can be used       */
-/*  outside the class. This mirrors the distinction made in Windows NT    */
-/*  between a CRITICALSECTION and a Mutex. Under NT a TCriticalSection    */
-/*  object is much faster than a TMutex object. Under operating systems   */
-/*  that don't make this distinction a TCriticalSection object can use    */
-/*  the same underlying implementation as a TMutex, losing the speed      */
-/*  advantage that it has under NT.                                       */
-/*                                                                        */
-/*  TMutex Public Interface                                               */
-/*  ---------------------------------                                     */
-/*                                                                        */
-/*      TMutex();               Constructor. Takes no parameters.         */
-/*                                                                        */
-/*      ~TMutex();              Destructor.                               */
-/*                                                                        */
-/*      operator HANDLE() const;                                          */
-/*                              Returns a HANDLE to the TMutex object,    */
-/*                              for use in OS calls that require it.      */
-/*                                                                        */
-/*      class Lock;             Handles locking and unlocking of          */
-/*                              critical sections.                        */
-/*                                                                        */
-/*                                                                        */
-/*  TMutex::Lock Public Interface                                         */
-/*  ---------------------------------------                               */
-/*                                                                        */
-/*      Lock( const TMutex&,                                              */
-/*            unsigned long timeOut = NoLimit );                          */
-/*                                                                        */
-/*                              Request a lock on the TCriticalSection    */
-/*                              object. If no Lock object in a different  */
-/*                              thread from the calling thread holds      */
-/*                              a lock on that object the lock is         */
-/*                              allowed and execution continues. If       */
-/*                              another thread holds a lock on that       */
-/*                              object the requesting thread is blocked   */
-/*                              until the owning thread has released all  */
-/*                              of its locks.                             */
-/*                                                                        */
-/*      ~Lock();                Releases the lock.                        */
-/*                                                                        */
-/*  Example                                                               */
-/*  -------                                                               */
-/*                                                                        */
-/*      TMutex LockF;                                                     */
-/*                                                                        */
-/*      void f()                                                          */
-/*      {                                                                 */
-/*      TMutex::Lock lock(LockF);                                         */
-/*      // critical processing goes here                                  */
-/*      }                                                                 */
-/*                                                                        */
-/*  Only one thread of execution will be allowed to execute the critical  */
-/*  code inside f() at any one time.                                      */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+#elif defined( __OS2__ )
 
-class TMutex
+//------------------------------------------------
+//
+//  TCriticalSection constructor
+//
+//  OS2
+//
+//  Compiler takes care of constructing the TMutex data object.
+//
+
+inline TCriticalSection::TCriticalSection()
 {
-
-public:
-
-    enum { NoLimit = -1 };  // Windows NT
-
-    TMutex();
-    ~TMutex();
-
-    operator HANDLE() const;
-
-    class Lock
-    {
-    public:
-        Lock( const TMutex&, unsigned long timeOut = NoLimit );
-        ~Lock();
-
-        void Release();
-
-    private:
-        const TMutex& MutexObj;
-
-    };
-
-    friend Lock;
-
-private:
-
-    HANDLE Handle;
-
-    TMutex( const TMutex& );
-    const TMutex& operator = ( const TMutex& );
-
-};
-
-
-inline TMutex::TMutex()
-{
-    Handle = ::CreateMutex( 0, FALSE, 0 );
 }
 
-inline TMutex::~TMutex()
+//------------------------------------------------
+//
+//  TCriticalSection destructor
+//
+//  OS2
+//
+//  Compiler takes care of destroying the TMutex data object.
+//
+
+inline TCriticalSection::~TCriticalSection()
 {
-    ::CloseHandle(Handle);
 }
 
-inline TMutex::operator HANDLE() const
+//------------------------------------------------
+//
+//  TCriticalSection::Lock constructor
+//
+//  OS2
+//
+//  Construct the TMutex::Lock object to lock the
+//  specified TCriticalSection object.
+//
+
+inline TCriticalSection::Lock::Lock( const TCriticalSection& sec ) :
+    Lck(sec.CritSec)
 {
-    return Handle;
 }
 
-inline TMutex::Lock::Lock( const TMutex& mutex, unsigned long timeOut ) :
-    MutexObj(mutex)
+//------------------------------------------------
+//
+//  TCriticalSection::Lock destructor
+//
+//  OS2
+//
+//  Compiler takes care of destroying the TMutex::Lock data
+//  object, which releases the lock.
+//
+
+inline TCriticalSection::Lock::~Lock()
 {
-    ::WaitForSingleObject( MutexObj, timeOut );
 }
 
-inline TMutex::Lock::~Lock()
-{
-    Release();
-}
-
-inline void TMutex::Lock::Release()
-{
-    ::ReleaseMutex(MutexObj);
-}
+#endif
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
@@ -347,14 +595,14 @@ inline void TMutex::Lock::Release()
 /*                                                                        */
 /*      void ThreadSafe::f()                                              */
 /*      {                                                                 */
-/*      Lock(this);                                                       */
+/*      Lock lock(this);                                                       */
 /*      if( i == 2 )                                                      */
 /*          i = 3;                                                        */
 /*      }                                                                 */
 /*                                                                        */
 /*      void ThreadSafe::g()                                              */
 /*      {                                                                 */
-/*      Lock(this);                                                       */
+/*      Lock lock(this);                                                       */
 /*      if( i == 3 )                                                      */
 /*          i = 2;                                                        */
 /*      }                                                                 */
@@ -386,6 +634,16 @@ private:
 
 };
 
+//------------------------------------------------
+//
+//  TSync constructors
+//
+//  Copy constructor does not copy the TCriticalSection object,
+//  since the new object is not being used in any of its own
+//  member functions. This means that the new object must start
+//  in an unlocked state.
+//
+
 inline TSync::TSync()
 {
 }
@@ -394,15 +652,41 @@ inline TSync::TSync( const TSync& )
 {
 }
 
+//------------------------------------------------
+//
+//  TSync assignment operator
+//
+//  Does not copy the TCriticalSection object, since the new
+//  object is not being used in any of its own member functions.
+//  This means that the new object must start in an unlocked state.
+//
+
 inline const TSync& TSync::operator = ( const TSync& )
 {
     return *this;
 }
 
+//------------------------------------------------
+//
+//  TSync::Lock constructor
+//
+//  Locks the TCriticalSection object in the TSync object.
+//
+
 inline TSync::Lock::Lock( const TSync *sync ) :
     TCriticalSection::Lock(GetRef(sync))
 {
 }
+
+//------------------------------------------------
+//
+//  TSync::Lock::GetRef()
+//
+//  Returns a reference to the TCriticalSection object contained
+//  in the TSync object.
+//
+//  In the diagnostic version, checks for a null pointer.
+//
 
 inline const TCriticalSection& TSync::Lock::GetRef( const TSync *sync )
 {
@@ -456,14 +740,14 @@ inline const TCriticalSection& TSync::Lock::GetRef( const TSync *sync )
 /*                                                                        */
 /*      void ThreadSafe::f()                                              */
 /*      {                                                                 */
-/*      Lock(this);                                                       */
+/*      Lock lock;                                                        */
 /*      if( i == 2 )                                                      */
 /*          i = 3;                                                        */
 /*      }                                                                 */
 /*                                                                        */
 /*      void ThreadSafe::g()                                              */
 /*      {                                                                 */
-/*      Lock(this);                                                       */
+/*      Lock lock;                                                        */
 /*      if( i == 3 )                                                      */
 /*          i = 2;                                                        */
 /*      }                                                                 */
@@ -476,9 +760,9 @@ template <class T> class TStaticSync
 protected:
 
     TStaticSync();
-    ~TStaticSync();
     TStaticSync( const TStaticSync<T>& );
     const TStaticSync<T>& operator = ( const TStaticSync<T>& );
+    ~TStaticSync();
 
     class Lock : private TCriticalSection::Lock
     {
@@ -495,8 +779,28 @@ private:
 
 };
 
+//------------------------------------------------
+//
+//  TStaticSync<T>::CritSec
+//  TStaticSync<T>::Count
+//
+//  Instantiate the data members.
+//
+
 template <class T> TCriticalSection *TStaticSync<T>::CritSec;
 template <class T> unsigned long TStaticSync<T>::Count;
+
+//------------------------------------------------
+//
+//  TStaticSync<T> constructor
+//
+//  If this is the first TStaticSync<T> object to be constructed,
+//  create the semaphore.
+//
+//  The copy constructor only has to increment the count, since
+//  there will already be at least one TStaticSync<T> object,
+//  namely, the one being copied.
+//
 
 template <class T> inline TStaticSync<T>::TStaticSync()
 {
@@ -504,16 +808,16 @@ template <class T> inline TStaticSync<T>::TStaticSync()
         CritSec = new TCriticalSection;
 }
 
-template <class T> inline TStaticSync<T>::~TStaticSync()
-{
-    if( --Count == 0 )
-        delete CritSec;
-}
-
 template <class T>
 inline TStaticSync<T>::TStaticSync( const TStaticSync<T>& )
 {
+    Count++;
 }
+
+//------------------------------------------------
+//
+//  TStaticSync<T> assignment operator
+//
 
 template <class T>
 inline const TStaticSync<T>& TStaticSync<T>::operator = ( const TStaticSync<T>& )
@@ -521,13 +825,19 @@ inline const TStaticSync<T>& TStaticSync<T>::operator = ( const TStaticSync<T>& 
     return *this;
 }
 
-#if 0
-template <class T>
-inline TStaticSync::Lock::Lock() :
-    TCriticalSection::Lock(TStaticSync<T>::CritSec)
+//------------------------------------------------
+//
+//  TStaticSync<T> destructor
+//
+//  If this is the only remaining TStaticSync<T> object,
+//  destroy the semaphore.
+//
+
+template <class T> inline TStaticSync<T>::~TStaticSync()
 {
+    if( --Count == 0 )
+        delete CritSec;
 }
-#endif
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
@@ -551,22 +861,22 @@ inline TStaticSync::Lock::Lock() :
 /*                              derived class can check the state of      */
 /*                              this flag by calling ShouldTerminate().   */
 /*                                                                        */
-/*      WaitForExit( unsigned long timeout = (unsigned long)(-1) );       */
+/*      WaitForExit( unsigned long timeout = NoLimit );                   */
 /*                              Blocks the calling thread until the       */
 /*                              internal thread exits or until the time   */
 /*                              specified by timeout, in milliseconds,    */
-/*                              expires. A timeout of -1 says to wait     */
-/*                              indefinitely.                             */
+/*                              expires. A timeout of NoLimit says to     */
+/*                              wait indefinitely.                        */
 /*                                                                        */
-/*      TerminateAndWait( unsigned long timeout = (unsigned long)(-1) );  */
+/*      TerminateAndWait( unsigned long timeout = NoLimit );              */
 /*                              Combines the behavior of Terminate() and  */
 /*                              WaitForExit(). Sets an internal flag that */
 /*                              indicates that the thread should exit     */
 /*                              and blocks the calling thread until the   */
 /*                              internal thread exits or until the time   */
 /*                              specified by timeout, in milliseconds,    */
-/*                              expires. A timeout of -1 says to wait     */
-/*                              indefinitely.                             */
+/*                              expires. A timeout of NoLimit says to     */
+/*                              wait indefinitely.                        */
 /*                                                                        */
 /*      GetStatus();            Gets the current status of the thread.    */
 /*                              See TThread::Status for possible values.  */
@@ -737,10 +1047,19 @@ class _BIDSCLASS TThread
 
 public:
 
-    enum Status { Created, Running, Suspended, Finished, Invalid };
-    enum { NoLimit = -1 };      // Windows NT
+#if defined( __WIN32__ )
+    // Windows NT
+    enum { NoLimit = -1 };
+    typedef HANDLE THandle;
+#elif defined( __OS2__ )
+    // OS/2
+    enum { NoLimit = DCWW_WAIT };
+    typedef TID THandle;
+#endif
 
-    HANDLE Start();
+    enum Status { Created, Running, Suspended, Finished, Invalid };
+
+    THandle Start();
     unsigned long Suspend();
     unsigned long Resume();
     void Terminate();
@@ -777,45 +1096,93 @@ public:
 protected:
 
     TThread();
-    virtual ~TThread();
 
     // Copying a thread puts the target into the Created state
-    const TThread& operator = ( const TThread& );
     TThread( const TThread& );
+    const TThread& operator = ( const TThread& );
+
+    virtual ~TThread();
 
     int ShouldTerminate() const;
 
 private:
 
     virtual unsigned long Run() = 0;
-    static unsigned long _stdcall Execute( void *thread );
 
     Status CheckStatus() const;
 
-    HANDLE Handle;
+    THandle Handle;
+#if defined( __MT__ )
+    static void _USERENTRY Execute( void *thread );
+#elif defined( __WIN32__ )
+    static unsigned long _stdcall Execute( void *thread );
+#else
+    static void __stdcall Execute( unsigned long );
+#endif
+#if defined( __WIN32__ )
     DWORD ThreadId;
-    Status Stat;
+#else
+    ULONG Priority;
+#endif
+    mutable Status Stat;
 
     int TerminationRequested;
 
 };
 
+//------------------------------------------------
+//
+//  TThread::GetStatus()
+//
+//  If the thread is marked as Running it may have terminated
+//  without our knowing it, so we have to check.
+//
+
+#if defined( BI_NO_MUTABLE )
 inline TThread::Status TThread::GetStatus() const
 {
     if( Stat == Running )
         CONST_CAST(TThread *,this)->Stat = CheckStatus();
     return Stat;
 }
+#else
+inline TThread::Status TThread::GetStatus() const
+{
+    if( Stat == Running )
+        Stat = CheckStatus();
+    return Stat;
+}
+#endif
+
+//------------------------------------------------
+//
+//  TThread::GetPriority()
+//
+//  Direct OS call under WIN32. Return stored value under OS/2.
+//
 
 inline int TThread::GetPriority() const
 {
+#if defined( __WIN32__ )
     return ::GetThreadPriority(Handle);
+#else
+    return Priority;
+#endif
 }
 
+//------------------------------------------------
+//
+//  TThread::ShouldTerminate()
+//
 inline int TThread::ShouldTerminate() const
 {
     return TerminationRequested;
 }
+
+//------------------------------------------------
+//
+//  TThread::ThreadError::GetErrorType()
+//
 
 inline TThread::ThreadError::ErrorType TThread::ThreadError::GetErrorType() const
 {
@@ -827,4 +1194,5 @@ inline TThread::ThreadError::ErrorType TThread::ThreadError::GetErrorType() cons
 #endif
 
 #endif  // __THREAD_H
+
 

@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -19,9 +19,17 @@
 #include <_defs.h>
 #endif
 
-#if !defined(_RC_INVOKED)
-#pragma option -a-
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
 #endif
+
+#pragma option -a-
+
+#endif  /* !RC_INVOKED */
+
 
 #ifndef _SIZE_T
 #define _SIZE_T
@@ -114,8 +122,16 @@ char _FAR * _RTLENTRY  _EXPFUNC _strtime(char _FAR *timestr);
 
 #endif  /* __STDC__  */
 
-#if !defined(_RC_INVOKED)
+
+#if !defined(RC_INVOKED)
+
 #pragma option -a. /* restore default packing */
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __TIME_H */

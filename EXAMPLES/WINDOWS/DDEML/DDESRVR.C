@@ -1,4 +1,4 @@
-/* Borland C++ - (C) Copyright 1992 by Borland International               */
+/* Borland C++ - (C) Copyright 1994 by Borland International               */
 
 /***************************************************************************
 
@@ -51,7 +51,7 @@ FARPROC        lpDdeProc;              /*  DDE callback function           */
 HSZ            hszService;
 HSZ            hszTopic;
 HSZ            hszItem;
-HCONV          hConvApp = NULL;        /*Handle of established conversation*/
+HCONV          hConvApp = (HCONV)NULL; /*Handle of established conversation*/
 char           szDDEData[80];          /*  Local receive buffer            */
 char           szDDEString[80];        /*  Local send buffer               */
 int            iServerCount = 0;       /*  Send message counter            */
@@ -76,7 +76,7 @@ int PASCAL WinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
    if ( !InitInstance ( hInstance, nCmdShow ) )
       return ( FALSE );
 
-  while ( GetMessage ( &msg, NULL, NULL, NULL ) )
+  while ( GetMessage ( &msg, NULL, 0, 0 ) )
   {
     TranslateMessage ( &msg );
     DispatchMessage ( &msg );
@@ -150,6 +150,7 @@ BOOL InitInstance ( HANDLE hInstance, int nCmdShow )
 
 /***************************************************************************/
 
+#pragma warn -eff
 LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
                                WPARAM wParam, LPARAM lParam )
 {
@@ -202,7 +203,7 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
          break;
 
       case IDM_SHOW_CONNECTIONS:
-         if ( hConvApp != NULL )
+         if ( hConvApp != (HCONV)NULL )
          {
       HandleOutput ( "Connection established." );
          }
@@ -245,10 +246,10 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
          break;
 
       case WM_DESTROY:
-         if ( hConvApp != NULL )
+         if ( hConvApp != (HCONV)NULL )
    {
             DdeDisconnect ( hConvApp );
-            hConvApp = NULL;
+            hConvApp = (HCONV)NULL;
          }
 
          DdeFreeStringHandle ( idInst, hszService );
@@ -266,6 +267,7 @@ LRESULT CALLBACK _export MainWndProc ( HWND hWnd, UINT message,
 
    return ( FALSE );
 }
+#pragma warn .eff
 
 /***************************************************************************/
 
@@ -322,7 +324,7 @@ HDDEDATA EXPENTRY _export DDECallback ( WORD wType, WORD wFmt, HCONV hConv, HSZ 
        #endif
                   sizeof ( szDDEString ), 0L, hszItem, wFmt, 0 );
 
-         if ( hData != NULL )
+         if ( hData != (HDDEDATA)NULL )
    {
             HandleOutput ( szDDEString );
             return ( hData );
@@ -330,7 +332,7 @@ HDDEDATA EXPENTRY _export DDECallback ( WORD wType, WORD wFmt, HCONV hConv, HSZ 
          else
          {
             HandleOutput ( "Could not create data handle." );
-            return ( NULL );
+            return ( (HDDEDATA)NULL );
          }
 
       case XTYP_EXECUTE:
@@ -357,7 +359,7 @@ HDDEDATA EXPENTRY _export DDECallback ( WORD wType, WORD wFmt, HCONV hConv, HSZ 
          break;
 
       case XTYP_DISCONNECT:
-         hConvApp = NULL;
+         hConvApp = (HCONV)NULL;
          HandleOutput ( "The client has disconnected." );
          break;
 

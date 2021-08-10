@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  CASTABLE.CPP                                                          */
 /*                                                                        */
-/*  Copyright Borland International 1992, 1993                            */
+/*  Copyright (c) 1992, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
@@ -11,9 +11,9 @@
 #define BI_NO_RTTI
 #endif
 
-#if !defined( __CLASSLIB_OBJSTRM_H )
-#include "classlib\objstrm.h"
-#endif	// __CLASSLIB_OBJSTRM_H
+#if !defined( CLASSLIB_OBJSTRM_H )
+#include <classlib/objstrm.h>
+#endif
 
 TStreamableBase::~TStreamableBase()
 {

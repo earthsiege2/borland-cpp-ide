@@ -1,12 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\swindobj.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Streamable object implementation for TWindow.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\window.h>
-#include <owl\scroller.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
+#include <owl/appdict.h>
+#include <owl/window.h>
+#include <owl/scroller.h>
 
 extern WNDPROC CreateInstanceThunk(TWindow*);
 
@@ -16,7 +18,7 @@ const int StreamIsTop      = 1;
 const int StreamIsTopChild = 2;
 
 void *
-TWindow::Streamer::Read(ipstream& is, uint32 /*version*/) const
+TWindow::Streamer::Read(ipstream& is, uint32 version) const
 {
   TWindow* o = GetObject();
   int flags;
@@ -35,9 +37,6 @@ TWindow::Streamer::Read(ipstream& is, uint32 /*version*/) const
   o->hAccel = 0;
   o->SetUniqueId();
 
-  o->Application = GetApplicationObject();
-  o->Thunk = CreateInstanceThunk(o);
-
   is >> o->Module;
   TResId TempId;
   is >> TempId;
@@ -47,8 +46,8 @@ TWindow::Streamer::Read(ipstream& is, uint32 /*version*/) const
   if (o->IsFlagSet(wfFromResource)) {
     o->DefaultProc = (WNDPROC)::DefWindowProc;
     memset(&o->Attr, 0, sizeof(o->Attr));
-
-  } else {
+  }
+  else {
     long  temp;
     is >> o->Attr.Style >> o->Attr.ExStyle >>
           o->Attr.X >> o->Attr.Y >> o->Attr.W >> o->Attr.H >> temp;
@@ -64,10 +63,46 @@ TWindow::Streamer::Read(ipstream& is, uint32 /*version*/) const
   is >> o->ZOrder;
 
   is >> o->Parent;
-  if (flags & StreamIsTopChild)
-    o->Parent->ChildList = o;  // set parent's child pointer to this
-  is >> o->ChildList;
-  is >> o->SiblingList;
+
+  if (o->Parent) {
+    o->Application = o->Parent->GetApplication();
+
+    // Version 1 and version 3 sibling streaming techniques
+    //
+    if (version == 1) {
+      if (flags & StreamIsTopChild)
+        o->Parent->ChildList = o;  // set parent's child pointer to this
+
+      is >> o->ChildList;
+      is >> o->SiblingList;
+    }
+    else {
+      o->Parent->AddChild(o);
+
+      static bool readSiblings = true;
+      bool saveReadSiblings = readSiblings;
+      readSiblings = true;
+      is >> o->ChildList;
+      readSiblings = saveReadSiblings;
+
+      if (readSiblings) {
+        readSiblings = false;
+
+        unsigned numSiblings;
+        is >> numSiblings;
+        for (unsigned i = 0; i < numSiblings; i++) {
+          TWindow* sibling;
+          is >> sibling;
+        }
+        readSiblings = true;
+      }
+    }
+  }
+  else {
+    o->Application = TYPESAFE_DOWNCAST(o->Module,TApplication);
+    if (!o->Application)
+      o->Application = ::GetApplicationObject();
+  }
 
   is >> o->Scroller;
   if (o->Scroller)
@@ -77,6 +112,8 @@ TWindow::Streamer::Read(ipstream& is, uint32 /*version*/) const
   is >> o->CursorModule >> o->CursorResId;
   o->SetCursor(o->CursorModule, o->CursorResId);
   is >> o->BkgndColor;
+
+  o->Thunk = CreateInstanceThunk(o);
 
   return o;
 }
@@ -90,25 +127,26 @@ TWindow::Streamer::Write(opstream& os) const
   int flags = 0;
   if (o->IsFlagSet(wfStreamTop) || o->IsFlagSet(wfMainWindow))
     flags |= StreamIsTop;
-  else if ((o->Parent->IsFlagSet(wfStreamTop) || o->Parent->IsFlagSet(wfMainWindow))
-		 && o->Parent->ChildList == o)
+  else if (o->Parent) {
+    if ((o->Parent->IsFlagSet(wfStreamTop) || o->Parent->IsFlagSet(wfMainWindow))
+      && o->Parent->ChildList == o)
     flags |= StreamIsTopChild;
+  }
   os << flags;
 
-  if (flags & StreamIsTop) {
+  if (flags & StreamIsTop)
     return;
-  }
 
   os << o->Module;
   os << TResId(o->Title);
 
-  DWORD saveFlags = o->Flags;
+  uint32 saveFlags = o->Flags;
   if (o->HWindow)
     saveFlags |= wfAutoCreate;
   os << saveFlags;
 
   if (!o->IsFlagSet(wfFromResource)) {
-    DWORD saveStyle = o->Attr.Style &
+    uint32 saveStyle = o->Attr.Style &
                       ~(WS_MINIMIZE | WS_MAXIMIZE | WS_DISABLED | WS_VISIBLE);
 
     if (o->HWindow)
@@ -127,8 +165,29 @@ TWindow::Streamer::Write(opstream& os) const
   os << o->ZOrder;
 
   os << o->Parent;
+
+#if 0  // (TWindow::Streamer::ClassVersion() == 1)
   os << o->ChildList;
   os << o->SiblingList;
+
+#else  // version >= 3
+  if (o->Parent) {
+    static bool writeSiblings = true;
+    bool saveWriteSiblings = writeSiblings;
+    writeSiblings = true;
+    os << o->ChildList;
+    writeSiblings = saveWriteSiblings;
+
+    if (writeSiblings) {
+      writeSiblings = false;
+
+      os << (o->Parent->NumChildren()-1);
+      for (TWindow* sibling = o->SiblingList; sibling != o; sibling = sibling->Next())
+        os << sibling;
+      writeSiblings = true;
+    }
+  }
+#endif
 
   os << o->Scroller;
 

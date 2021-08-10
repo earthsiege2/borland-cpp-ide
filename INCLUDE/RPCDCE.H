@@ -1,23 +1,32 @@
 /*++
 
-Module Name: rpcdce.h
+Module Name:
+
+    rpcdce.h
 
 Abstract:
 
     This module contains the DCE RPC runtime APIs.
 
+Author:
+
+    Michael Montague (mikemon) 25-Sep-1991
+
+Revision History:
+
 --*/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1991, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
 #ifndef __RPCDCE_H__
 #define __RPCDCE_H__
+#define __RPCDCE_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,7 +58,9 @@ typedef struct _GUID
 #ifndef UUID_DEFINED
 #define UUID_DEFINED
 typedef GUID UUID;
+#ifndef uuid_t
 #define uuid_t UUID
+#endif
 #endif
 
 typedef struct _RPC_BINDING_VECTOR
@@ -57,14 +68,18 @@ typedef struct _RPC_BINDING_VECTOR
     unsigned long Count;
     RPC_BINDING_HANDLE BindingH[1];
 } RPC_BINDING_VECTOR;
+#ifndef rpc_binding_vector_t
 #define rpc_binding_vector_t RPC_BINDING_VECTOR
+#endif
 
 typedef struct _UUID_VECTOR
 {
   unsigned long Count;
   UUID *Uuid[1];
 } UUID_VECTOR;
+#ifndef uuid_vector_t
 #define uuid_vector_t UUID_VECTOR
+#endif
 
 typedef void __RPC_FAR * RPC_IF_HANDLE;
 
@@ -82,6 +97,8 @@ typedef struct _RPC_IF_ID
 #define RPC_C_BINDING_MIN_TIMEOUT 0
 #define RPC_C_BINDING_DEFAULT_TIMEOUT 5
 #define RPC_C_BINDING_MAX_TIMEOUT 9
+
+#define RPC_C_CANCEL_INFINITE_TIMEOUT -1
 
 #define RPC_C_LISTEN_MAX_CALLS_DEFAULT 1234
 #define RPC_C_PROTSEQ_MAX_REQS_DEFAULT 10
@@ -116,7 +133,7 @@ typedef struct _RPC_PROTSEQ_VECTOR
 
 #endif /* RPC_UNICODE_SUPPORTED */
 
-typedef void
+typedef void __RPC_USER
 RPC_OBJECT_INQ_FN (
     IN UUID __RPC_FAR * ObjectUuid,
     OUT UUID __RPC_FAR * TypeUuid,
@@ -135,6 +152,12 @@ typedef struct
 #define RPC_C_STATS_CALLS_OUT 1
 #define RPC_C_STATS_PKTS_IN 2
 #define RPC_C_STATS_PKTS_OUT 3
+
+typedef struct
+{
+  unsigned long Count;
+  RPC_IF_ID __RPC_FAR * IfId[1];
+} RPC_IF_ID_VECTOR;
 
 /* client */
 RPC_STATUS RPC_ENTRY
@@ -205,6 +228,13 @@ RPC_STATUS RPC_ENTRY
 RpcBindingSetObject (
     IN RPC_BINDING_HANDLE Binding,
     IN UUID __RPC_FAR * ObjectUuid
+    );
+
+/* client/server */
+RPC_STATUS RPC_ENTRY
+RpcMgmtInqDefaultProtectLevel(
+    IN  unsigned long AuthnSvc,
+    OUT unsigned long __RPC_FAR *AuthnLevel
     );
 
 /* client/server */
@@ -411,6 +441,13 @@ RpcMgmtSetComTimeout (
     IN RPC_BINDING_HANDLE Binding,
     IN unsigned int Timeout
     );
+
+/* client */
+RPC_STATUS RPC_ENTRY
+RpcMgmtSetCancelTimeout(
+    long Timeout
+    );
+
 
 /* server */
 
@@ -697,6 +734,50 @@ RpcMgmtEnableIdleCleanup (
     void
     );
 
+RPC_STATUS RPC_ENTRY
+RpcMgmtInqIfIds (
+    IN RPC_BINDING_HANDLE Binding,
+    OUT RPC_IF_ID_VECTOR __RPC_FAR * __RPC_FAR * IfIdVector
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcIfIdVectorFree (
+    IN OUT RPC_IF_ID_VECTOR __RPC_FAR * __RPC_FAR * IfIdVector
+    );
+
+#ifdef RPC_UNICODE_SUPPORTED
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtInqServerPrincNameA (
+    IN RPC_BINDING_HANDLE Binding,
+    IN unsigned long AuthnSvc,
+    OUT unsigned char __RPC_FAR * __RPC_FAR * ServerPrincName
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtInqServerPrincNameW (
+    IN RPC_BINDING_HANDLE Binding,
+    IN unsigned long AuthnSvc,
+    OUT unsigned short __RPC_FAR * __RPC_FAR * ServerPrincName
+    );
+
+#ifdef UNICODE
+#define RpcMgmtInqServerPrincName RpcMgmtInqServerPrincNameW
+#else /* UNICODE */
+#define RpcMgmtInqServerPrincName RpcMgmtInqServerPrincNameA
+#endif /* UNICODE */
+
+#else /* RPC_UNICODE_SUPPORTED */
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtInqServerPrincName (
+    IN RPC_BINDING_HANDLE Binding,
+    IN unsigned long AuthnSvc,
+    OUT unsigned char __RPC_FAR * __RPC_FAR * ServerPrincName
+    );
+
+#endif /* RPC_UNICODE_SUPPORTED */
+
 /* client */
 RPC_STATUS RPC_ENTRY
 RpcEpResolveBinding (
@@ -750,11 +831,65 @@ typedef void __RPC_FAR * RPC_AUTHZ_HANDLE;
 #define RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5
 #define RPC_C_AUTHN_LEVEL_PKT_PRIVACY 6
 
+
+#define RPC_C_PROTECT_LEVEL_DEFAULT       (RPC_C_AUTHN_LEVEL_DEFAULT)
+#define RPC_C_PROTECT_LEVEL_NONE          (RPC_C_AUTHN_LEVEL_NONE)
+#define RPC_C_PROTECT_LEVEL_CONNECT       (RPC_C_AUTHN_LEVEL_CONNECT)
+#define RPC_C_PROTECT_LEVEL_CALL          (RPC_C_AUTHN_LEVEL_CALL)
+#define RPC_C_PROTECT_LEVEL_PKT           (RPC_C_AUTHN_LEVEL_PKT)
+#define RPC_C_PROTECT_LEVEL_PKT_INTEGRITY (RPC_C_AUTHN_LEVEL_PKT_INTEGRITY)
+#define RPC_C_PROTECT_LEVEL_PKT_PRIVACY   (RPC_C_AUTHN_LEVEL_PKT_PRIVACY)
+
 #define RPC_C_AUTHN_NONE 0
 #define RPC_C_AUTHN_DCE_PRIVATE 1
 #define RPC_C_AUTHN_DCE_PUBLIC 2
 #define RPC_C_AUTHN_DEC_PUBLIC 4
+#define RPC_C_AUTHN_WINNT       10
 #define RPC_C_AUTHN_DEFAULT 0xFFFFFFFFL
+
+#if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
+typedef struct _SEC_WINNT_AUTH_IDENTITY
+{
+  char __RPC_FAR *User;
+  char __RPC_FAR *Domain;
+  char __RPC_FAR *Password;
+} SEC_WINNT_AUTH_IDENTITY;
+#else
+
+
+#define SEC_WINNT_AUTH_IDENTITY_ANSI 0x1
+#define SEC_WINNT_AUTH_IDENTITY_UNICODE 0x2
+
+typedef struct _SEC_WINNT_AUTH_IDENTITY_W {
+  unsigned short __RPC_FAR *User;
+  unsigned long UserLength;
+  unsigned short __RPC_FAR *Domain;
+  unsigned long DomainLength;
+  unsigned short __RPC_FAR *Password;
+  unsigned long PasswordLength;
+  unsigned long Flags;
+} SEC_WINNT_AUTH_IDENTITY_W, *PSEC_WINNT_AUTH_IDENTITY_W;
+
+typedef struct _SEC_WINNT_AUTH_IDENTITY_A {
+  unsigned char __RPC_FAR *User;
+  unsigned long UserLength;
+  unsigned char __RPC_FAR *Domain;
+  unsigned long DomainLength;
+  unsigned char __RPC_FAR *Password;
+  unsigned long PasswordLength;
+  unsigned long Flags;
+} SEC_WINNT_AUTH_IDENTITY_A, *PSEC_WINNT_AUTH_IDENTITY_A;
+
+#ifdef UNICODE
+#define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_W
+#define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_W
+#define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_W
+#else // UNICODE
+#define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_A
+#define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_A
+#define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_A
+#endif // UNICODE
+#endif // defined(__RPC_DOS__) || defined(__RPC_WIN16__)
 
 #define RPC_C_AUTHZ_NONE 0
 #define RPC_C_AUTHZ_NAME 1
@@ -823,7 +958,7 @@ RpcBindingSetAuthInfoW (
     );
 
 typedef void
-(__RPC_FAR * RPC_AUTH_KEY_RETRIEVAL_FN) (
+(__RPC_USER * RPC_AUTH_KEY_RETRIEVAL_FN) (
     IN void __RPC_FAR * Arg,
     IN unsigned short __RPC_FAR * ServerPrincName,
     IN unsigned long KeyVer,
@@ -892,7 +1027,7 @@ RpcBindingSetAuthInfo (
     );
 
 typedef void
-(__RPC_FAR * RPC_AUTH_KEY_RETRIEVAL_FN) (
+(__RPC_USER * RPC_AUTH_KEY_RETRIEVAL_FN) (
     IN void __RPC_FAR * Arg,
     IN unsigned char __RPC_FAR * ServerPrincName,
     IN unsigned long KeyVer,
@@ -917,9 +1052,24 @@ typedef struct {
     unsigned long AuthFlags;
 } RPC_CLIENT_INFORMATION1, __RPC_FAR * PRPC_CLIENT_INFORMATION1;
 
+RPC_STATUS RPC_ENTRY
+RpcBindingServerFromClient (
+    IN RPC_BINDING_HANDLE ClientBinding,
+    OUT RPC_BINDING_HANDLE __RPC_FAR * ServerBinding
+    );
+
 void RPC_ENTRY
 RpcRaiseException (
     IN RPC_STATUS exception
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcTestCancel(
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcCancelThread(
+    IN void * Thread
     );
 
 /* client/server */
@@ -983,6 +1133,37 @@ UuidFromString (
     );
 
 #endif /* RPC_UNICODE_SUPPORTED */
+
+signed int RPC_ENTRY
+UuidCompare (
+    IN UUID __RPC_FAR * Uuid1,
+    IN UUID __RPC_FAR * Uuid2,
+    OUT RPC_STATUS __RPC_FAR * Status
+    );
+
+RPC_STATUS RPC_ENTRY
+UuidCreateNil (
+    OUT UUID __RPC_FAR * NilUuid
+    );
+
+int RPC_ENTRY
+UuidEqual (
+    IN UUID __RPC_FAR * Uuid1,
+    IN UUID __RPC_FAR * Uuid2,
+    OUT RPC_STATUS __RPC_FAR * Status
+    );
+
+unsigned short RPC_ENTRY
+UuidHash (
+    IN UUID __RPC_FAR * Uuid,
+    OUT RPC_STATUS __RPC_FAR * Status
+    );
+
+int RPC_ENTRY
+UuidIsNil (
+    IN UUID __RPC_FAR * Uuid,
+    OUT RPC_STATUS __RPC_FAR * Status
+    );
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -1054,10 +1235,134 @@ RpcEpUnregister(
     IN UUID_VECTOR * UuidVector
     );
 
+#ifdef RPC_UNICODE_SUPPORTED
+
+RPC_STATUS RPC_ENTRY
+DceErrorInqTextA (
+    IN RPC_STATUS RpcStatus,
+    OUT unsigned char __RPC_FAR * ErrorText
+    );
+
+RPC_STATUS RPC_ENTRY
+DceErrorInqTextW (
+    IN RPC_STATUS RpcStatus,
+    OUT unsigned short __RPC_FAR * ErrorText
+    );
+
+#ifdef UNICODE
+#define DceErrorInqText DceErrorInqTextW
+#else /* UNICODE */
+#define DceErrorInqText DceErrorInqTextA
+#endif /* UNICODE */
+
+#else /* RPC_UNICODE_SUPPORTED */
+
+RPC_STATUS RPC_ENTRY
+DceErrorInqText (
+    IN RPC_STATUS RpcStatus,
+    OUT unsigned char __RPC_FAR * ErrorText
+    );
+
+#endif /* RPC_UNICODE_SUPPORTED */
+
+#define DCE_C_ERROR_STRING_LEN 256
+
+typedef I_RPC_HANDLE * RPC_EP_INQ_HANDLE;
+
+#define  RPC_C_EP_ALL_ELTS        0
+#define  RPC_C_EP_MATCH_BY_IF     1
+#define  RPC_C_EP_MATCH_BY_OBJ    2
+#define  RPC_C_EP_MATCH_BY_BOTH   3
+
+#define  RPC_C_VERS_ALL           1
+#define  RPC_C_VERS_COMPATIBLE    2
+#define  RPC_C_VERS_EXACT         3
+#define  RPC_C_VERS_MAJOR_ONLY    4
+#define  RPC_C_VERS_UPTO          5
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtEpEltInqBegin (
+    IN RPC_BINDING_HANDLE EpBinding OPTIONAL,
+    IN unsigned long InquiryType,
+    IN RPC_IF_ID __RPC_FAR * IfId OPTIONAL,
+    IN unsigned long VersOption OPTIONAL,
+    IN UUID __RPC_FAR * ObjectUuid OPTIONAL,
+    OUT RPC_EP_INQ_HANDLE __RPC_FAR * InquiryContext
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtEpEltInqDone (
+    IN OUT RPC_EP_INQ_HANDLE __RPC_FAR * InquiryContext
+    );
+
+#ifdef RPC_UNICODE_SUPPORTED
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtEpEltInqNextA (
+    IN RPC_EP_INQ_HANDLE InquiryContext,
+    OUT RPC_IF_ID __RPC_FAR * IfId,
+    OUT RPC_BINDING_HANDLE __RPC_FAR * Binding OPTIONAL,
+    OUT UUID __RPC_FAR * ObjectUuid OPTIONAL,
+    OUT unsigned char __RPC_FAR * __RPC_FAR * Annotation OPTIONAL
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtEpEltInqNextW (
+    IN RPC_EP_INQ_HANDLE InquiryContext,
+    OUT RPC_IF_ID __RPC_FAR * IfId,
+    OUT RPC_BINDING_HANDLE __RPC_FAR * Binding OPTIONAL,
+    OUT UUID __RPC_FAR * ObjectUuid OPTIONAL,
+    OUT unsigned short __RPC_FAR * __RPC_FAR * Annotation OPTIONAL
+    );
+
+#ifdef UNICODE
+#define RpcMgmtEpEltInqNext RpcMgmtEpEltInqNextW
+#else /* UNICODE */
+#define RpcMgmtEpEltInqNext RpcMgmtEpEltInqNextA
+#endif /* UNICODE */
+
+#else /* RPC_UNICODE_SUPPORTED */
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtEpEltInqNext (
+    IN RPC_EP_INQ_HANDLE InquiryContext,
+    OUT RPC_IF_ID __RPC_FAR * IfId,
+    OUT RPC_BINDING_HANDLE __RPC_FAR * Binding OPTIONAL,
+    OUT unsigned char __RPC_FAR * __RPC_FAR * Annotation OPTIONAL
+    );
+
+#endif /* RPC_UNICODE_SUPPORTED */
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtEpUnregister (
+    IN RPC_BINDING_HANDLE EpBinding OPTIONAL,
+    IN RPC_IF_ID __RPC_FAR * IfId,
+    IN RPC_BINDING_HANDLE Binding,
+    IN UUID __RPC_FAR * ObjectUuid OPTIONAL
+    );
+
+typedef int
+(__RPC_API * RPC_MGMT_AUTHORIZATION_FN) (
+    IN RPC_BINDING_HANDLE ClientBinding,
+    IN unsigned long RequestedMgmtOperation,
+    OUT RPC_STATUS __RPC_FAR * Status
+    );
+
+#define RPC_C_MGMT_INQ_IF_IDS         0
+#define RPC_C_MGMT_INQ_PRINC_NAME     1
+#define RPC_C_MGMT_INQ_STATS          2
+#define RPC_C_MGMT_IS_SERVER_LISTEN   3
+#define RPC_C_MGMT_STOP_SERVER_LISTEN 4
+
+RPC_STATUS RPC_ENTRY
+RpcMgmtSetAuthorizationFn (
+    IN RPC_MGMT_AUTHORIZATION_FN AuthorizationFn
+    );
+
+#include "rpcdcep.h"
+
 #ifdef __cplusplus
 }
 #endif
-
-#include "rpcdcep.h"
 
 #endif /* __RPCDCE_H__ */

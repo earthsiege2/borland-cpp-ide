@@ -2,34 +2,34 @@
 /*                                                                        */
 /*  TIMEIO.CPP                                                            */
 /*                                                                        */
-/*  Copyright Borland International 1993                                  */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
 #if !defined( __STDIO_H )
 #include <stdio.h>
-#endif  // __STDIO_H
+#endif
 
 #if !defined( __STRSTREA_H )
 #include <strstrea.h>
-#endif  // __STRSTREA_H
+#endif
 
 #if !defined( __IOMANIP_H )
 #include <iomanip.h>
-#endif  // __IOMANIP_H
+#endif
 
 #if !defined( __CSTRING_H )
 #include <cstring.h>
-#endif  // __CSTRING_H
+#endif
 
-#if !defined( __CLASSLIB_TIME_H )
-#include "classlib\time.h"
-#endif  // __CLASSLIB_TIME_H
+#if !defined( CLASSLIB_TIME_H )
+#include <classlib/time.h>
+#endif
 
-#if !defined( __CLASSLIB_FILE_H )
-#include "classlib\file.h"
-#endif  // __CLASSLIB_FILE_H
+#if !defined( CLASSLIB_FILE_H )
+#include <classlib/file.h>
+#endif
 
 // Static variable intialization:
 int TTime::PrintDateFlag = 1;

@@ -1,4 +1,4 @@
-// (C) Copyright 1993 by Borland International
+// (C) Copyright 1994 by Borland International
 //
 // DragDrop.c - Drag and Drop example in C
 
@@ -17,9 +17,9 @@
  --------------------------------------------------------------- */
 
 char HelpText[]=
-"\n\rThis application must be run under Windows 3.1.\n\r \
-Bring up the Windows 3.1 File Manager.  Select a file\n\r \
-with the left mouse button and keep the button down.\n\r \
+"\n\rThis application must be run under Windows 3.1 or greater.\n\r \
+Bring up the File Manager or an equivalent file viewer.\n\r \
+Select a file with the left mouse button and keep the button down.\n\r \
 Now drag the mouse over until it is on top of the drag\n\r \
 n' drop window client area.  Now release the left mouse\n\r \
 button.  You have just dragged and dropped a file.  To\n\r \
@@ -97,7 +97,7 @@ void WMDropFiles( WPARAM WParam, HWND hWnd)
    SHELL.DLL.  Get the info of the files out of it.
 **********************************************************/
 {
-   struct FileList *FLptr=NULL, *FLCurrent=NULL, *FLHead=NULL;
+   struct FileList *FLptr, *FLCurrent=NULL, *FLHead=NULL;
    struct List *liFiles;
    int TotalNumberOfFiles;
    int nFileLength;
@@ -116,10 +116,10 @@ void WMDropFiles( WPARAM WParam, HWND hWnd)
 
 /****************************************************************
    Step 5:
-   Find out total number of files dropped, by passing 0xFFFF for
-   index parameter to DragQueryFile
+   Find out total number of files dropped, by passing -1 for
+   the index parameter to DragQueryFile
 *****************************************************************/
-   TotalNumberOfFiles = DragQueryFile( Handle , 0xFFFF, NULL, 0 );
+   TotalNumberOfFiles = DragQueryFile( Handle , -1, NULL, 0 );
    GetHelp=FALSE;
 
    liFiles =(struct List*)malloc(sizeof(struct List));
@@ -334,7 +334,7 @@ LRESULT FAR PASCAL _export MainWndProc(HWND   hWnd,   UINT   message,
 *****************************************************************/
          DragAcceptFiles( hWnd , TRUE );
 
-      return NULL;
+      return 0L;
    case WM_DROPFILES:
 /************************************************************
    Step 2:
@@ -392,7 +392,7 @@ LRESULT FAR PASCAL _export MainWndProc(HWND   hWnd,   UINT   message,
             UpdateWindow(hWnd);
          break;
          case 104:
-      MessageBox(hWnd,"DRAG n' DROP Example\nCopyright (c) 1993 Borland International, Inc.","ABOUT BOX",MB_OK);
+      MessageBox(hWnd,"DRAG n' DROP Example\nCopyright (c) 1994 Borland International, Inc.","ABOUT BOX",MB_OK);
          break;
 
          default:
@@ -416,7 +416,7 @@ LRESULT FAR PASCAL _export MainWndProc(HWND   hWnd,   UINT   message,
    default:       // Passes it on if unproccessed
       return (DefWindowProc(hWnd, message, wParam, lParam));
    }
-   return (NULL);
+   return 0L;
 }
 
 #pragma argsused
@@ -438,8 +438,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    while (GetMessage(&msg, // message structure
       NULL, // handle of window receiving the message
-      NULL, // lowest message to examine
-      NULL))   // highest message to examine
+      0,    // lowest message to examine
+      0))   // highest message to examine
    {
       TranslateMessage(&msg); // Translates virtual key codes
       DispatchMessage(&msg);  // Dispatches message to window

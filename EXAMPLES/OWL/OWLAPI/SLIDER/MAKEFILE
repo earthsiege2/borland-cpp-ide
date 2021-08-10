@@ -2,7 +2,9 @@
 # ObjectWindows - (C) Copyright 1991, 1993 by Borland International
 #----------------------------------------------------------------------------
 
-EXERES=sliderx
+EXE = slider
+OBJEXE = sliderx.obj
+RESEXE = sliderx.res
 MODELS=mldf
 !include $(BCEXAMPLEDIR)\owlmake.gen
 

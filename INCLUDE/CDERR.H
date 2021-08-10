@@ -1,21 +1,13 @@
-/*****************************************************************************\
-*                                                                             *
-* cderr.h -     Common dialog error return codes                              *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-\*****************************************************************************/
-
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
-
-#ifndef __CDERR_H       /* prevent multiple includes */
+#ifndef _CDERR_INCLUDED_
+#define _CDERR_INCLUDED_
 #define __CDERR_H
 
 #define CDERR_DIALOGFAILURE   0xFFFF
@@ -62,6 +54,4 @@
 
 #define CCERR_CHOOSECOLORCODES 0x5000
 
-#endif  /* __CDERR_H */
-
-
+#endif // _CDERR_INCLUDED_

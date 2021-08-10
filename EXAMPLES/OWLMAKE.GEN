@@ -10,13 +10,6 @@ MODELS = smldf
 SYSTEMS = WIN16 WIN32
 !endif
 
-SYSLIBS = 1   # force defined, actually set after include of makefile.gen
-!include $(BCEXAMPLEDIR)\makefile.gen
-
-!ifdef USEDLL
-CFLAGS = $(CFLAGS) -D_OWLDLL -D_BIDSDLL
-!endif
-
 #----------------------------------------------------------------------------
 # dir & search paths
 #----------------------------------------------------------------------------
@@ -24,11 +17,34 @@ CFLAGS = $(CFLAGS) -D_OWLDLL -D_BIDSDLL
 !ifndef OWLLIBDIR
 OWLLIBDIR = $(BCLIBDIR)
 !endif
+!ifndef BIDSLIBDIR
+BIDSLIBDIR = $(BCLIBDIR)
+!endif
 
-!if !$d(OWLINCDIR)
+!ifndef OWLINCDIR
 OWLINCDIR = $(BCINCDIR)
-!elif "$(OWLINCDIR)" != "$(BCINCDIR)"
-INCLUDEPATH = $(OWLINCDIR);$(BCINCDIR)
+!endif
+!ifndef BIDSINCDIR
+BIDSINCDIR = $(BCINCDIR)
+!endif
+
+!if "$(OWLINCDIR)" != "$(BCINCDIR)"
+! if "$(BIDSINCDIR)" != "$(OWLINCDIR)" && "$(BIDSINCDIR)" != "$(BCINCDIR)"
+SYSINCPATH = $(OWLINCDIR);$(BIDSINCDIR)
+! else 
+SYSINCPATH = $(OWLINCDIR)
+! endif
+!elif "$(BIDSINCDIR)" != "$(BCINCDIR)"
+SYSINCPATH = $(BIDSINCDIR)
+!endif
+
+SYSLIBS = 1   # force defined, actually set after include of makefile.gen
+SYSLIBSD = 1  # force defined, actually set after include of makefile.gen
+!include $(BCEXAMPLEDIR)\makefile.gen
+
+!ifdef USEDLL
+CFLAGS = $(CFLAGS) -D_OWLDLL -D_BIDSDLL
+CFLAGSD = $(CFLAGSD) -D_OWLDLL -D_BIDSDLL
 !endif
 
 #----------------------------------------------------------------------------
@@ -75,14 +91,23 @@ BIDSSFX = $(_SFX_)
 #
 # add OWL and BIDS libraries before user and runtime libraries
 #
-SYSLIBS = $(OWLLIBDIR)\owl$(OWLSFX) $(BCLIBDIR)\bids$(BIDSSFX)
-
+SYSLIBS = $(OWLLIBDIR)\owl$(OWLSFX) $(BIDSLIBDIR)\bids$(BIDSSFX)
+!if $(_32BIT_)
+SYSLIBSD = $(OWLLIBDIR)\owl$(OWLSFX) $(BIDSLIBDIR)\bids$(BIDSSFX)
+!else
+SYSLIBSD = $(OWLLIBDIR)\owl$(OWLSFX)u $(BIDSLIBDIR)\bids$(BIDSSFX)
+!endif
 
 #
 # build the cpp command line option for precompiled headers if requested
 #
 !if !$d(NOOWLPCH)
 CPCH = -H=$(OWLLIBDIR)\owl$(OWLSFX).csm -H"owl\owlpch.h" -D_OWLPCH
+!if $(_32BIT_)
+CPCHD = -H=$(OWLLIBDIR)\owl$(OWLSFX).csm -H"owl\owlpch.h" -D_OWLPCH
+!else
+CPCHD = -H=$(OWLLIBDIR)\owl$(OWLSFX)u.csm -H"owl\owlpch.h" -D_OWLPCH
+!endif
 !endif
 
-$(MAKEFILE) :: $(OWLLIBDIR)\owl$(OWLSFX).lib $(BCLIBDIR)\bids$(BIDSSFX).lib
+$(MAKEFILE) :: $(OWLLIBDIR)\owl$(OWLSFX).lib $(BIDSLIBDIR)\bids$(BIDSSFX).lib

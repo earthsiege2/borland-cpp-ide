@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -18,6 +18,16 @@
 #if !defined(___DEFS_H)
 #include <_defs.h>
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 /*  Modes available as first argument to the spawnxx functions. */
 
@@ -45,7 +55,7 @@ void _Cdecl _c_exit(void);
 void _Cdecl exit(int __status);
 void _Cdecl _exit(int __status);
 
-#if !defined(_Windows)
+#if defined(__DPMI16__) || !defined(_Windows)
 
 int  _Cdecl execl(char _FAR *__path, char _FAR *__arg0, ...);
 int  _Cdecl execle(char _FAR *__path, char _FAR *__arg0, ...);
@@ -65,7 +75,7 @@ int  _Cdecl spawnvp(int __mode, char _FAR *__path, char _FAR *__argv[]);
 int  _Cdecl spawnvpe(int __mode, char _FAR *__path, char _FAR *__argv[], char _FAR *_FAR *__env);
 int  _Cdecl _FARFUNC system(const char _FAR *__command);
 
-#endif /* _Windows */
+#endif /* __DPMI16__ || !_Windows */
 
 #else  /* defined __FLAT__ */
 
@@ -73,10 +83,10 @@ int  _RTLENTRY _EXPFUNC getpid(void);
 void _RTLENTRY _EXPFUNC abort(void);
 void _RTLENTRY _EXPFUNC _cexit(void);
 void _RTLENTRY _EXPFUNC _c_exit(void);
-int  __cdecl   _EXPFUNC execl(const char * __path, const char * __arg0, ...);
-int  __cdecl   _EXPFUNC execle(const char * __path, const char * __arg0, ...);
-int  __cdecl   _EXPFUNC execlp(const char * __path, const char * __arg0, ...);
-int  __cdecl   _EXPFUNC execlpe(const char * __path, const char * __arg0, ...);
+int  _RTLENTRY _EXPFUNC execl(const char * __path, const char * __arg0, ...);
+int  _RTLENTRY _EXPFUNC execle(const char * __path, const char * __arg0, ...);
+int  _RTLENTRY _EXPFUNC execlp(const char * __path, const char * __arg0, ...);
+int  _RTLENTRY _EXPFUNC execlpe(const char * __path, const char * __arg0, ...);
 int  _RTLENTRY _EXPFUNC execv(const char * __path, char * const * __argv);
 int  _RTLENTRY _EXPFUNC execve(const char * __path, char * const * __argv,
                               char * const * __env);
@@ -85,10 +95,10 @@ int  _RTLENTRY _EXPFUNC execvpe(const char * __path, char * const * __argv,
                                 char * const * __env);
 void _RTLENTRY _EXPFUNC exit(int __status);
 void _RTLENTRY _EXPFUNC _exit(int __status);
-int  __cdecl   _EXPFUNC spawnl(int __mode, const char * __path, const char * __arg0, ...);
-int  __cdecl   _EXPFUNC spawnle(int __mode, const char * __path, const char * __arg0, ...);
-int  __cdecl   _EXPFUNC spawnlp(int __mode, const char * __path, const char * __arg0, ...);
-int  __cdecl   _EXPFUNC spawnlpe(int __mode, const char * __path, const char * __arg0, ...);
+int  _RTLENTRY _EXPFUNC spawnl(int __mode, const char * __path, const char * __arg0, ...);
+int  _RTLENTRY _EXPFUNC spawnle(int __mode, const char * __path, const char * __arg0, ...);
+int  _RTLENTRY _EXPFUNC spawnlp(int __mode, const char * __path, const char * __arg0, ...);
+int  _RTLENTRY _EXPFUNC spawnlpe(int __mode, const char * __path, const char * __arg0, ...);
 int  _RTLENTRY _EXPFUNC spawnv(int __mode, const char * __path, char * const * __argv);
 int  _RTLENTRY _EXPFUNC spawnve(int __mode, const char * __path, char * const * __argv,
                                char * const * __env);
@@ -128,6 +138,16 @@ int  _RTLENTRY _EXPFUNC wait           (int *__term_stat);
 #ifdef __cplusplus
 }
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __PROCESS_H */
 

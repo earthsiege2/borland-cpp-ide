@@ -1,0 +1,64 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+!if $(OS) != DPMI16
+    OBJS =               \
+            signal.obj
+
+    AUXOBJS =            \
+            setjmp.obj   \
+            errexit.obj  \
+            setargv.obj  \
+            setargv0.obj \
+            setenv.obj   \
+            setenvrn.obj \
+            sigshell.obj \
+            int86.obj    \
+            intdos.obj   \
+            intr.obj
+
+!   if $d(DLL)
+        IMPOBJS = $(AUXOBJS)
+!   else
+        OBJS    = $(AUXOBJS) $(OBJS)
+
+        MISC    = setjmpnx.obj
+!   endif
+!else
+    OBJS =               \
+            errexit.obj  \
+            setargv.obj  \
+            setargv0.obj \
+            setenvrn.obj
+!endif
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+TASMCFG = 1        # Force tasm.cfg creation
+
+!include rules.mak
+
+#############################################################################
+# MISC explicit rules.                                                      #
+#############################################################################
+setjmpnx.obj : setjmp.asm
+    $(ASM) -DNOXX $?, $(OBJDIR)\$&

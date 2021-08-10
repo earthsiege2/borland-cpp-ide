@@ -1,0 +1,54 @@
+<<[H]
+##"" [[AutoSMarker]]
+##"" [[AutoEMarker]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##\\"//{{[[ClassName]]AUTO_TBL_BEGIN}}" AutoSMarker
+##\\"//{{[[ClassName]]AUTO_TBL_END}}" AutoEMarker
+##^BOF
+##? AutoSMarker,AutoEMarker [[Search]]
+##Search == FALSE
+##:     %"Missing class automation markers.  "
+##*
+##  --BEGIN-- QUERY_BASE_NAME [[BaseName]]
+##      --BEGIN-- BaseName == "TApplication"
+##          :InsertText("")
+[[AutoSMarker]]
+[[AutoEMarker]]
+##      --END-- BaseName == "TApplication"
+##      --BEGIN-- BaseName != "TApplication"
+##          :InsertText("")
+##          :^DELL
+##          :^-1
+##          :^DELL
+##      --END-- BaseName != "TApplication"
+##  --END-- QUERY_BASE_NAME [[BaseName]]
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[H]
+
+
+<<[CPP]
+##"" [[AutoSMarker]]
+##"" [[AutoEMarker]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##\\"//{{[[ClassName]]SYM_TBL_BEGIN}}" AutoSMarker
+##\\"//{{[[ClassName]]SYM_TBL_END}}" AutoEMarker
+##^BOF
+##? AutoSMarker,AutoEMarker [[Search]]
+##Search == FALSE
+##:     %"Missing automation symbol table markers.  "
+##*
+##InsertText("")
+##  --BEGIN-- QUERY_BASE_NAME [[BaseName]]
+##      --BEGIN-- BaseName == "TApplication"
+[[AutoSMarker]]
+[[AutoEMarker]]
+##      --END-- BaseName == "TApplication"
+##      --BEGIN-- BaseName != "TApplication"
+##          :^DELL
+##          :^-2
+##          :^DELL
+##          :^DELL
+##      --END-- BaseName != "TApplication"
+##  --END-- QUERY_BASE_NAME [[BaseName]]
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[CPP]

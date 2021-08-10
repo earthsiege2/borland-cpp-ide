@@ -1,0 +1,9 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
+//   Menu and accelerator IDs for use with TEditView
+//----------------------------------------------------------------------------
+
+#define IDM_EDITVIEW   32581
+#define IDA_EDITVIEW   32582

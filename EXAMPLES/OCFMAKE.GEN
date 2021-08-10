@@ -1,0 +1,111 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1993 by Borland International
+#     Extension to makefile.gen, adding OCF definitions and libraries
+#----------------------------------------------------------------------------
+
+!ifndef MODELS
+MODELS = smldf
+!endif
+!ifndef SYSTEMS
+SYSTEMS = WIN16 WIN32
+!endif
+
+
+#
+# if no MODEL is specified & we're in 16-bit,  default to LARGE
+#
+!if !$d(MODEL) && !$d(WIN32) && "$(SYSTEM)" != "WIN32"
+MODEL=l
+!endif
+
+
+SYSLIBS  = 1   # force defined, actually set after include of makefile.gen
+SYSLIBSD = 1   # force defined, actually set after include of makefile.gen
+!include $(BCEXAMPLEDIR)\makefile.gen
+
+!ifdef USEDLL
+CFLAGS = $(CFLAGS) -D_OCFDLL -D_BIDSDLL
+CFLAGSD = $(CFLAGSD) -D_OCFDLL -D_BIDSDLL
+!endif
+
+#----------------------------------------------------------------------------
+# dir & search paths
+#----------------------------------------------------------------------------
+
+!ifndef OCFLIBDIR
+OCFLIBDIR = $(BCLIBDIR)
+!endif
+
+!if !$d(OCFINCDIR)
+OCFINCDIR = $(BCINCDIR)
+!elif "$(OCFINCDIR)" != "$(BCINCDIR)"
+INCLUDEPATH = $(OCFINCDIR);$(BCINCDIR)
+!endif
+
+#----------------------------------------------------------------------------
+# additional libraries for OCF and BIDS
+#----------------------------------------------------------------------------
+
+# determine library name suffix based upon model
+#
+!if $(_32BIT_)
+! if $d(USEDLL)
+_SFX_ = fi
+! else
+_SFX_ = f
+! endif
+!else #WIN16
+! if $d(USEDLL)
+_SFX_ = i
+! else
+_SFX_ = $(MODEL)
+! endif
+!endif
+
+!if $(_32BIT_)
+_OCFCODE_ = w
+!else
+_OCFCODE_ = $(_SYSCODE_)
+!endif
+
+#
+# select suffix for alternate library if diagnostics enabled
+#
+!if $(DIAGS)
+OCFSFX = d$(_OCFCODE_)$(_SFX_)
+! if $d(USEDLL) || $(_32BIT_)
+BIDSSFX = d$(_SFX_)
+! else # 16-bit static
+BIDSSFX = db$(_SFX_)  #use 'db' for 16 bit static for compatibility
+! endif
+!else # no diags
+OCFSFX = $(_OCFCODE_)$(_SFX_)
+BIDSSFX = $(_SFX_)
+!endif
+
+#
+# add OCF to system libraries
+#
+!if $(_32BIT_)
+OLELIB =   $(BCLIBDIR)\ole2w32
+SYSLIBS =  $(OCFLIBDIR)\ocf$(OCFSFX) $(BCLIBDIR)\bids$(BIDSSFX) $(OLELIB)
+SYSLIBSD = $(SYSLIBS)
+!else
+OLELIB =   $(BCLIBDIR)\ole2w16
+SYSLIBS =  $(OCFLIBDIR)\ocf$(OCFSFX) $(BCLIBDIR)\bids$(BIDSSFX) $(OLELIB)
+SYSLIBSD = $(OCFLIBDIR)\ocf$(OCFSFX)u $(BCLIBDIR)\bids$(BIDSSFX) $(OLELIB)
+!endif
+
+#
+# build the cpp command line option for precompiled headers if requested
+#
+!if !$d(NOOCFPCH)
+CPCH = -H=$(OCFLIBDIR)\ocf$(OCFSFX).csm -H"ocf\ocfpch.h" -D_OCFPCH
+!if $(_32BIT_)
+CPCHD = -H=$(OCFLIBDIR)\ocf$(OCFSFX).csm -H"ocf\ocfpch.h" -D_OCFPCH
+!else
+CPCHD = -H=$(OCFLIBDIR)\ocf$(OCFSFX)u.csm -H"ocf\ocfpch.h" -D_OCFPCH
+!endif
+!endif
+
+$(MAKEFILE) :: $(OCFLIBDIR)\ocf$(OCFSFX).lib $(BCLIBDIR)\bids$(BIDSSFX).lib

@@ -2,37 +2,37 @@
 /*                                                                        */
 /*  MEMMGR.H                                                              */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_MEMMGR_H )
-#define __CLASSLIB_MEMMGR_H
+#if !defined( CLASSLIB_MEMMGR_H )
+#define CLASSLIB_MEMMGR_H
 
 #if !defined( __STDLIB_H )
 #include <stdlib.h>
-#endif  // __STDLIB_H
+#endif
 
 #if !defined( __DOS_H )
 #include <dos.h>
-#endif  // __DOS_H
+#endif
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_STDTEMPL_H )
-#include "classlib\stdtempl.h"
-#endif  // __CLASSLIB_STDTEMPL_H
+#if !defined( CLASSLIB_STDTEMPL_H )
+#include <classlib/stdtempl.h>
+#endif
 
-#if !defined( __CLASSLIB_ALLOCTR_H )
-#include "classlib\alloctr.h"
-#endif  // __CLASSLIB_ALLOCTR_H
+#if !defined( CLASSLIB_ALLOCTR_H )
+#include <classlib/alloctr.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -461,7 +461,10 @@ public:
 #endif
 
 typedef TMMemBlocks<TStandardAllocator> TStandardBlocks;
+
+#if defined( BI_PLAT_WIN16 ) && defined( BI_DATA_FAR )
 typedef TMMemBlocks<TSharedAllocator> TSharedBlocks;
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po.
@@ -469,5 +472,5 @@ typedef TMMemBlocks<TSharedAllocator> TSharedBlocks;
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_MEMMGR_H
+#endif  // CLASSLIB_MEMMGR_H
 

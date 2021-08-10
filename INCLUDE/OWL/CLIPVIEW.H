@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\clipview.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
-#if !defined(__OWL_CLIPVIEW_H)
-#define __OWL_CLIPVIEW_H
+#if !defined(OWL_CLIPVIEW_H)
+#define OWL_CLIPVIEW_H
 
-#if !defined(__OWL_WINDOW_H)
-  #include <owl\window.h>
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
 #endif
 
 //
@@ -52,4 +53,4 @@ class _OWLCLASS TClipboardViewer : virtual public TWindow {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_CLIPVIEW_H
+#endif  // OWL_CLIPVIEW_H

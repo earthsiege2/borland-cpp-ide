@@ -122,7 +122,7 @@ TBeepDialog::TBeepDialog(TWindow* parent, TResId resId)
 void
 TBeepDialog::HandleButtonMsg()
 {
-  char  text[4];
+  char  text[6];
   sprintf(text, "%d", ++NumClicks);
   ::SetWindowText(GetDlgItem(ID_STATIC), text);
 }

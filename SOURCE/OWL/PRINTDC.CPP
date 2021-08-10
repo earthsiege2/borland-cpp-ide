@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\dc.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of TPrintDC
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/dc.h>
 
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
   extern "C" {
     int  WINAPI DeviceCapabilitiesExA(LPCSTR, LPCSTR, LPCSTR, WORD,
                                       LPSTR, CONST DEVMODEA*);
@@ -21,23 +22,25 @@
   typedef int (WINAPI* DeviceCapabilitiesFcn)(LPCSTR, LPCSTR, WORD, LPSTR, CONST DEVMODEA*);
   #define PROC_DEVICECAPABILITIES MAKEINTRESOURCE(91)
 #else
-  typedef DWORD (CALLBACK* DeviceCapabilitiesFcn)(LPCSTR, LPCSTR, WORD, LPSTR, const DEVMODE far*);
+  typedef uint32 (CALLBACK* DeviceCapabilitiesFcn)(LPCSTR, LPCSTR, WORD, LPSTR, const DEVMODE far*);
 #endif
 
 TPrintDC::TPrintDC(HDC handle, TAutoDelete autoDelete) 
-  : TCreatedDC(handle, autoDelete)
+:
+  TCreatedDC(handle, autoDelete)
 {
   DocInfo.cbSize = sizeof(DocInfo);
 }
 
 TPrintDC::TPrintDC(const char far* driver, const char far* device,
                    const char far* output, const DEVMODE far* initData)
-  : TCreatedDC(driver, device, output, initData)
+:
+  TCreatedDC(driver, device, output, initData)
 {
   DocInfo.cbSize = sizeof(DocInfo);
 }
 
-DWORD
+uint32
 TPrintDC::DeviceCapabilities(const char far* driver, 
                              const char far* device, 
                              const char far* port,
@@ -48,26 +51,25 @@ TPrintDC::DeviceCapabilities(const char far* driver,
   //
   // DeviceCapabilitiesEx not functional in this Win32 (NT) release
   //
-  #if 0 && defined(__WIN32__)
+  #if 0 && defined(BI_PLAT_WIN32)
     return ::DeviceCapabilitiesEx(driver, device, port, capability, output, devmode);
 
   //
   // DeviceCapabilities missing in Win32s
   //
-  #elif 0 && defined(__WIN32__)
+  #elif 0 && defined(BI_PLAT_WIN32)
     return ::DeviceCapabilities(device, port, (uint16)capability, output, devmode);
-
 
   //
   // Hand call DeviceCapabilities due to Win32s missing function!
   //
   #else
-    DWORD caps = 0;
-    #if defined(__WIN32__)
+    uint32 caps = 0;
+    #if defined(BI_PLAT_WIN32)
       //
       // Try the Win32 DeviceCapabilitiesEx function
       //
-      caps = ::DeviceCapabilitiesEx(driver, device, port, (WORD)capability, output, devmode);
+      caps = ::DeviceCapabilitiesEx(driver, device, port, (uint16)capability, output, devmode);
       if (GetLastError() != ERROR_CALL_NOT_IMPLEMENTED)
         return caps;
     #endif
@@ -82,7 +84,7 @@ TPrintDC::DeviceCapabilities(const char far* driver,
       DeviceCapabilitiesFcn deviceCapabilities = 
          (DeviceCapabilitiesFcn)::GetProcAddress(driverInst, PROC_DEVICECAPABILITIES);
       if (deviceCapabilities)
-        caps = deviceCapabilities(device, port, (WORD)capability, output, devmode);
+        caps = deviceCapabilities(device, port, (uint16)capability, output, devmode);
       ::FreeLibrary(driverInst);
     }
     return caps;

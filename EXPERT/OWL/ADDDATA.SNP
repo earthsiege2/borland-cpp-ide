@@ -1,7 +1,7 @@
 <<[H]
 ##QUERY_BASE_NAME != "TDialog"
 ##:     QUERY_CLASS_NAME [[ClassName]]
-##:     %\\"[[ClassName]] is not a TDialog derived class, instance data not added.  "
+##:     %\\"[[ClassName]] is not derived from TDialog. Instance data not added.  "
 ##*
 ##"" [[ClassDefLine]]
 ##"" [[ConstructorLine]]
@@ -20,6 +20,7 @@
 ##:         %\\"[[ClassName]] missing #include for instance data.  "
 ##*
 ##(Search1 == FALSE) && (Search2 == TRUE) 
+##:     ^3
 ##:     ^BOL
 [[IncludeFile]]
 ##--END-- ? IncludeFile [[Search1]]

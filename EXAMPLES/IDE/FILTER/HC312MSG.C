@@ -3,6 +3,7 @@
 */
 
 #include "ToolApi.H"  // Borland IDE tool dll interface
+#include "filtrc.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -20,6 +21,7 @@
 IDE_ToolAPIFunc IDE_ToolAPI[IDE_NumFunctions];
 
 /* Global variables use to parse program output */
+HINSTANCE globInst;
 
 char WarningText[] = "Warning";
 char ErrorText[]   = "Error";
@@ -203,7 +205,9 @@ void FilterToIDE( void )
   Pipefh = IDE_Open( PIPEID, READ_WRITE );
   if (Pipefh < 0)
   {
-    IDE_ErrorBox( "HC312Msg.DLL: Cannot filter output." );
+    char error[100];
+    LoadString( globInst, IDS_CANNOTFILTER, error, sizeof(error));
+    IDE_ErrorBox( error );
     return;
   }
 
@@ -255,6 +259,7 @@ int far pascal _export Run( pTransferBlock TransBlock )
 int far pascal LibMain( HINSTANCE hInstance, WORD wDataSegment,
 			WORD wHeapSize, LPSTR lpszCmdLine )
 {
+  globInst = hInstance;
   return 1;
 }
 

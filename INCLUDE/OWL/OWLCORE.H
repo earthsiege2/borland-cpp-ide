@@ -1,27 +1,52 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\owlcore.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Include for the core classes in Owl.  Works well with precompiled hdrs
 //----------------------------------------------------------------------------
-#if !defined(__OWL_OWLCORE_H)
-#define __OWL_OWLCORE_H
+#if !defined(OWL_OWLCORE_H)
+#define OWL_OWLCORE_H
 
-#include <owl\owldefs.h>
-#include <owl\version.h>
+#if !defined(OWL_OWLDEFS_H)
+#  include <owl/owldefs.h>
+#endif
+#if !defined(OWL_VERSION_H)
+#  include <owl/version.h>
+#endif
 
-#include <owl\module.h>
-#include <owl\applicat.h>
+#if !defined(OWL_MODULE_H)
+#  include <owl/module.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+#  include <owl/applicat.h>
+#endif
 
-#include <owl\dc.h>
-#include <owl\menu.h>
+#if !defined(OWL_DC_H)
+#  include <owl/dc.h>
+#endif
+#if !defined(OWL_MENU_H)
+#  include <owl/menu.h>
+#endif
 
-#include <owl\window.h>
+#if !defined(OWL_WINDOW_H)
+#  include <owl/window.h>
+#endif
 
-#include <owl\mdi.h>
-#include <owl\mdichild.h>
-#include <owl\decmdifr.h>
+#if !defined(OWL_MDI_H)
+#  include <owl/mdi.h>
+#endif
+#if !defined(OWL_MDICHILD_H)
+#  include <owl/mdichild.h>
+#endif
+#if !defined(OWL_DECMDIFR_H)
+#  include <owl/decmdifr.h>
+#endif
 
-#include <owl\dialog.h>
-#include <owl\control.h>
+#if !defined(OWL_DIALOG_H)
+#  include <owl/dialog.h>
+#endif
+#if !defined(OWL_CONTROL_H)
+#  include <owl/control.h>
+#endif
 
-#endif  // __OWL_OWLCORE_H
+#endif  // OWL_OWLCORE_H

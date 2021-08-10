@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  VERSION.RC                                                            */
 /*                                                                        */
-/*  Copyright Borland International 1993                                  */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
@@ -33,8 +33,8 @@ BEGIN
       VALUE "InternalName", "BIDS Class Library\0"
       VALUE "LegalCopyright", "Copyright Borland International 1993\0"
       VALUE "ProductName", "Borland C++ 4.0\0"
-      VALUE "ProductVersion", "4.1"
-      VALUE "SpecialBuild", "07 Jul 1993 18:18:16  "
+      VALUE "ProductVersion", "4.2"
+      VALUE "SpecialBuild", "05 Nov 1994 09:43:34  "
     END
 
   END

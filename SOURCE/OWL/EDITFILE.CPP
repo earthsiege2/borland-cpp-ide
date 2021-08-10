@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\editfile.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TEditFile, a text edit which can find/replace
 //   and read/write from/to a file.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\editfile.h>
-#include <owl\applicat.h>
+#include <owl/owlpch.h>
+#include <owl/editfile.h>
+#include <owl/applicat.h>
 #include <string.h>
 #include <dir.h>
 #include <limits.h>
@@ -31,7 +32,8 @@ TEditFile::TEditFile(TWindow*        parent,
                      int x, int y, int w, int h,
                      const char far* fileName,
                      TModule*        module)
-  : TEditSearch(parent, id, text, x, y, w, h, module)
+:
+  TEditSearch(parent, id, text, x, y, w, h, module)
 {
   FileName = fileName ? strnewdup(fileName) : 0;
 }
@@ -52,11 +54,11 @@ TEditFile::SetupWindow()
 {
   TEditSearch::SetupWindow();
   FileData.Flags = OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT;
-  FileData.SetFilter(string(*GetModule(), IDS_FILEFILTER).c_str());
+  FileData.SetFilter(GetModule()->LoadString(IDS_FILEFILTER).c_str());
 
   SetFileName(FileName);
   if (FileName && !Read()) {
-    string msgTemplate(*GetModule(), IDS_UNABLEREAD);
+    string msgTemplate(GetModule()->LoadString(IDS_UNABLEREAD));
     char*  msg = new char[MAXPATH + msgTemplate.length()];
     wsprintf(msg, msgTemplate.c_str(), FileName);
     MessageBox(msg, GetApplication()->GetName(), MB_ICONEXCLAMATION | MB_OK);
@@ -76,20 +78,8 @@ TEditFile::SetFileName(const char far* fileName)
     delete FileName;
     FileName = fileName ? strnewdup(fileName) : 0;
   }
-
-  string untitled(*GetModule(), IDS_UNTITLEDFILE);
-  const char far* p = FileName ? (const char far*)FileName : untitled.c_str();
-
-  if (!Parent->Title || !*Parent->Title)
-    Parent->SetWindowText(p);
-
-  else {
-    const char frmt[] = "%s - %s";
-    char* newCaption = new char[strlen(Parent->Title)+3+strlen(p)+1];
-    wsprintf(newCaption, frmt, p, Parent->Title);
-    Parent->SetWindowText(newCaption);
-    delete newCaption;
-  }
+  string untitled(GetModule()->LoadString(IDS_UNTITLEDFILE));
+  SetDocTitle(FileName ? (const char far*)FileName : untitled.c_str(), 0);
 }
 
 //
@@ -116,9 +106,9 @@ TEditFile::ReplaceWith(const char far* fileName)
   if (Read(fileName)) {
     Invalidate();
     SetFileName(fileName);
-
-  } else {
-    string msgTemplate(*GetModule(), IDS_UNABLEREAD);
+  }
+  else {
+    string msgTemplate(GetModule()->LoadString(IDS_UNABLEREAD));
     char*  msg = new char[MAXPATH + msgTemplate.length()];
     wsprintf(msg, msgTemplate.c_str(), fileName);
     MessageBox(msg, GetApplication()->GetName(), MB_ICONEXCLAMATION | MB_OK);
@@ -137,7 +127,7 @@ TEditFile::Open()
 {
   if (CanClear()) {
     *FileData.FileName = 0;
-    if ((new TFileOpenDialog(this, FileData))->Execute() == IDOK)
+    if (TFileOpenDialog(this, FileData).Execute() == IDOK)
       ReplaceWith(FileData.FileName);
   }
 }
@@ -147,16 +137,16 @@ TEditFile::Open()
 // if no name passed, into the TEdit control
 // The caller is responsible for any error UI
 //
-BOOL
+bool
 TEditFile::Read(const char far* fileName)
 {
   if (!fileName)
     if (FileName)
       fileName = FileName;
     else
-      return FALSE;
+      return false;
 
-  BOOL   success = FALSE;
+  bool   success = false;
   HFILE  file = _lopen(fileName, OF_READ);
 
   if (file != HFILE_ERROR) {
@@ -164,7 +154,7 @@ TEditFile::Read(const char far* fileName)
     _llseek(file, 0, SEEK_SET);
 
     if (charsToRead >= 0
-      #if !defined(__WIN32__)
+      #if !defined(BI_PLAT_WIN32)
         && charsToRead < UINT_MAX     // limit 16bit edit ctrls to 1 segment
       #endif
       ) {
@@ -173,17 +163,17 @@ TEditFile::Read(const char far* fileName)
       // Lock and resize Editor's buffer to the size of the file
       // Then if OK, read the file into editBuffer
       //
-      char far* editBuffer = LockBuffer(UINT(charsToRead+1));
+      char far* editBuffer = LockBuffer(uint(charsToRead+1));
       if (editBuffer) {
-        if (_lread(file, editBuffer, UINT(charsToRead)) == charsToRead) {
+        if (_lread(file, editBuffer, uint(charsToRead)) == charsToRead) {
 
           // 0 terminate Editor's buffer
           //
           editBuffer[int(charsToRead)] = 0;
-          success = TRUE;
+          success = true;
           ClearModify();
         }
-        UnlockBuffer(editBuffer, TRUE);
+        UnlockBuffer(editBuffer, true);
       }
     }
     _lclose(file);
@@ -196,10 +186,10 @@ TEditFile::Read(const char far* fileName)
 // saves the contents of the TEdit child control into the file currently
 // being editted
 //
-// returns true if the file was saved or IsModified returns FALSE
+// returns true if the file was saved or IsModified returns false
 //(contents already saved)
 //
-BOOL
+bool
 TEditFile::Save()
 {
   if (IsModified()) {
@@ -207,15 +197,15 @@ TEditFile::Save()
       return SaveAs();
 
     if (!Write()) {
-      string msgTemplate(*GetModule(), IDS_UNABLEWRITE);
+      string msgTemplate(GetModule()->LoadString(IDS_UNABLEWRITE));
       char*  msg = new char[MAXPATH + msgTemplate.length()];
       wsprintf(msg, msgTemplate.c_str(), FileName);
       MessageBox(msg, GetApplication()->GetName(), MB_ICONEXCLAMATION | MB_OK);
       delete msg;
-      return FALSE;
+      return false;
     }
   }
-  return TRUE;  // editor's contents haven't been changed
+  return true;  // editor's contents haven't been changed
 }
 
 //
@@ -224,7 +214,7 @@ TEditFile::Save()
 //
 // returns true if the file was saved
 //
-BOOL
+bool
 TEditFile::SaveAs()
 {
   if (FileName)
@@ -233,18 +223,18 @@ TEditFile::SaveAs()
   else
     *FileData.FileName = 0;
 
-  if ((new TFileSaveDialog(this, FileData))->Execute() == IDOK) {
+  if (TFileSaveDialog(this, FileData).Execute() == IDOK) {
     if (Write(FileData.FileName)) {
       SetFileName(FileData.FileName);
-      return TRUE;
+      return true;
     }
-    string msgTemplate(*GetModule(), IDS_UNABLEWRITE);
+    string msgTemplate(GetModule()->LoadString(IDS_UNABLEWRITE));
     char*  msg = new char[MAXPATH + msgTemplate.length()];
     wsprintf(msg, msgTemplate.c_str(), FileName);
     MessageBox(msg, GetApplication()->GetName(), MB_ICONEXCLAMATION | MB_OK);
     delete msg;
   }
-  return FALSE;
+  return false;
 }
 
 //
@@ -261,24 +251,24 @@ TEditFile::CmSaveEnable(TCommandEnabler& commandHandler)
 // the previously-specified file if none passed.
 // The caller is responsible for any error UI
 //
-BOOL
+bool
 TEditFile::Write(const char far* fileName)
 {
   if (!fileName)
     if (FileName)
       fileName = FileName;
     else
-      return FALSE;
+      return false;
 
   int file = _lcreat(fileName, 0);
   if (file == -1) {
-    return FALSE;
+    return false;
   }
 
-  BOOL success = FALSE;
+  bool success = false;
   char far* editBuffer = LockBuffer();
   if (editBuffer) {
-    success = _lwrite(file, editBuffer, strlen(editBuffer)) != (WORD)-1;
+    success = ToBool(_lwrite(file, editBuffer, strlen(editBuffer)) != (uint16)-1);
     UnlockBuffer(editBuffer);
     if (success)
       ClearModify();
@@ -289,18 +279,18 @@ TEditFile::Write(const char far* fileName)
 }
 
 //
-// returns a BOOL value indicating whether or not it is Ok to clear
+// returns a bool value indicating whether or not it is Ok to clear
 // the TEdit's text
 //
-// returns TRUE if the text has not been changed, or if the user Oks the
+// returns true if the text has not been changed, or if the user Oks the
 // clearing of the text
 //
-BOOL
+bool
 TEditFile::CanClear()
 {
   if (IsModified()) {
-    string msgTemplate(*GetModule(), IDS_FILECHANGED);
-    string untitled(*GetModule(), IDS_UNTITLEDFILE);
+    string msgTemplate(GetModule()->LoadString(IDS_FILECHANGED));
+    string untitled(GetModule()->LoadString(IDS_UNTITLEDFILE));
     char*  msg = new char[MAXPATH+msgTemplate.length()];
 
     wsprintf(msg, msgTemplate.c_str(),
@@ -310,10 +300,10 @@ TEditFile::CanClear()
     delete msg;
     return result==IDYES ? Save() : result != IDCANCEL;
   }
-  return TRUE;
+  return true;
 }
 
-BOOL
+bool
 TEditFile::CanClose()
 {
   return CanClear();

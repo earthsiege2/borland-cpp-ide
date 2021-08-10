@@ -1,57 +1,71 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\editsear.rc
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Resources to use with TEditSearch.
 //----------------------------------------------------------------------------
 
-#include <owl\editsear.rh>
+#include <owl/editsear.rh>
 
 #if defined(RC_INVOKED)
 
 #if !defined(NO_IDM_EDITSEARCH) && !defined(__IDM_EDITSEARCH)
 #define __IDM_EDITSEARCH
 IDM_EDITSEARCH MENU LOADONCALL MOVEABLE PURE DISCARDABLE
-BEGIN
-  POPUP "&Edit"
-  BEGIN
-    MenuItem  "&Undo\aAlt+BkSp", CM_EDITUNDO
+{
+  Popup "&Edit"
+  {
+    MenuItem  "&Undo\aCtrl+Z",        CM_EDITUNDO
     MenuItem  SEPARATOR
-    MenuItem  "&Cut\aShift+Del", CM_EDITCUT
-    MenuItem  "C&opy\aCtrl+Ins", CM_EDITCOPY
-    MenuItem  "&Paste\aShift+Ins", CM_EDITPASTE
-    MenuItem  "&Delete\aDel", CM_EDITDELETE
+    MenuItem  "&Cut\aCtrl+X",         CM_EDITCUT
+    MenuItem  "C&opy\aCtrl+C",        CM_EDITCOPY
+    MenuItem  "&Paste\aCtrl+V",       CM_EDITPASTE
+    MenuItem  "&Delete\aDel",         CM_EDITDELETE
     MenuItem  "C&lear All\aCtrl+Del", CM_EDITCLEAR
-  END
+  }
   POPUP "&Search"
-  BEGIN
-    MenuItem  "&Find...", CM_EDITFIND
+  {
+    MenuItem  "&Find...",    CM_EDITFIND
     MenuItem  "&Replace...", CM_EDITREPLACE
-    MenuItem  "&Next\aF3", CM_EDITFINDNEXT
-  END
-END
+    MenuItem  "&Next\aF3",   CM_EDITFINDNEXT
+  }
+}
 #endif
 #undef NO_IDM_EDITSEARCH
 
 #if !defined(NO_IDA_EDITSEARCH) && !defined(__IDA_EDITSEARCH)
 #define __IDA_EDITSEARCH
 IDA_EDITSEARCH ACCELERATORS
-BEGIN
-  VK_DELETE, CM_EDITCUT, VIRTKEY, SHIFT
-  VK_INSERT, CM_EDITCOPY, VIRTKEY, CONTROL
-  VK_INSERT, CM_EDITPASTE, VIRTKEY, SHIFT
-  VK_DELETE, CM_EDITCLEAR, VIRTKEY, CONTROL
-  VK_BACK, CM_EDITUNDO, VIRTKEY, ALT
-  VK_F3, CM_EDITFINDNEXT, VIRTKEY
-END
+{
+  VK_DELETE, CM_EDITCUT,      VIRTKEY, SHIFT
+  VK_INSERT, CM_EDITCOPY,     VIRTKEY, CONTROL
+  VK_INSERT, CM_EDITPASTE,    VIRTKEY, SHIFT
+  VK_DELETE, CM_EDITCLEAR,    VIRTKEY, CONTROL
+  VK_BACK,   CM_EDITUNDO,     VIRTKEY, ALT
+  VK_F3,     CM_EDITFINDNEXT, VIRTKEY
+}
 #endif
 #undef NO_IDA_EDITSEARCH
 
 #if !defined(NO_IDS_EDITSEARCH) && !defined(__IDS_EDITSEARCH)
 #define __IDS_EDITSEARCH
 STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
-BEGIN
+{
+  CM_EDITUNDO-1,  "Editing commands, undo and Clipboard access"
+  CM_EDITUNDO,    "Undo the last action"
+  CM_EDITCUT,     "Cut the selection and put it on the Clipboard"
+  CM_EDITCOPY,    "Copy the selection to the Clipboard"
+  CM_EDITPASTE,   "Insert the Clipboard contents at the caret"
+  CM_EDITDELETE,  "Delete the selection"
+  CM_EDITCLEAR,   "Clear the document"
+  CM_EDITADD,     "Insert a new line"
+  CM_EDITEDIT,    "Edit the current line"
+  CM_EDITFIND,    "Find the specified text"
+  CM_EDITREPLACE, "Find the specified text and change it"
+  CM_EDITFINDNEXT,"Find the next match"
+
   IDS_CANNOTFIND, "Cannot find ""%s""."
-END
+}
 #endif
 #undef NO_IDS_EDITSEARCH
 

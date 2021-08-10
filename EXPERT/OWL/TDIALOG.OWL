@@ -37,6 +37,30 @@ public:
 ##:DBVirtual(\\"[[TDialog]]", "SetupWindow")
 //{{[[TDialog]]VIRTUAL_END}}
 };    //{{[[TDialog]]}}
+
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+// Reading the VERSIONINFO resource.
+class ProjectRCVersion {
+public:
+    ProjectRCVersion (TModule *module);
+    virtual ~ProjectRCVersion ();
+
+    bool GetProductName (LPSTR &prodName);
+    bool GetProductVersion (LPSTR &prodVersion);
+    bool GetCopyright (LPSTR &copyright);
+    bool GetDebug (LPSTR &debug);
+
+protected:
+    LPBYTE      TransBlock;
+    void FAR    *FVData;
+
+private:
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Don't allow this object to be copied.
+    ProjectRCVersion (const ProjectRCVersion &);
+    ProjectRCVersion & operator =(const ProjectRCVersion &);
+};
 ##{hfooter.snp}
 >>[H]TDialog [[TDialog]]
 
@@ -49,9 +73,9 @@ public:
 #include <owl\owlpch.h>
 #pragma hdrstop
 
-#include <owl\static.h>
-
+#if !defined(__FLAT__)
 #include <ver.h>
+#endif
 
 ##<<TApplication QUERY_FILE_H [[FileName]]
 #include "[[FileName]]"
@@ -59,47 +83,32 @@ public:
 #include "[[FileName]]"
 
 
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-// Reading the VERSIONINFO resource.
-class ProjectRCVersion {
-public:
-    ProjectRCVersion (TModule *module);
-    virtual ~ProjectRCVersion ();
-
-    BOOL GetProductName (LPSTR &prodName);
-    BOOL GetProductVersion (LPSTR &prodVersion);
-    BOOL GetCopyright (LPSTR &copyright);
-    BOOL GetDebug (LPSTR &debug);
-
-protected:
-    LPBYTE      TransBlock;
-    void FAR    *FVData;
-
-private:
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Don't allow this object to be copied.
-    ProjectRCVersion (const ProjectRCVersion &);
-    ProjectRCVersion & operator =(const ProjectRCVersion &);
-};
-
-
 ProjectRCVersion::ProjectRCVersion (TModule *module)
 {
     char    appFName[255];
+    char    subBlockName[255];
     DWORD   fvHandle;
     UINT    vSize;
 
     FVData = 0;
 
     module->GetModuleFileName(appFName, sizeof(appFName));
-    DWORD dwSize = GetFileVersionInfoSize(appFName, &fvHandle);
+    OemToAnsi(appFName, appFName);
+    DWORD dwSize = ::GetFileVersionInfoSize(appFName, &fvHandle);
     if (dwSize) {
         FVData  = (void FAR *)new char[(UINT)dwSize];
-        if (GetFileVersionInfo(appFName, fvHandle, dwSize, FVData))
-            if (!VerQueryValue(FVData, "\\VarFileInfo\\Translation", (void FAR* FAR*)&TransBlock, &vSize)) {
+        if (::GetFileVersionInfo(appFName, fvHandle, dwSize, FVData)) {
+            // Copy string to buffer so if the -dc compiler switch (Put constant strings in code segments)
+            // is on VerQueryValue will work under Win16.  This works around a problem in Microsoft's ver.dll
+            // which writes to the string pointed to by subBlockName.
+            strcpy(subBlockName, "\\VarFileInfo\\Translation"); 
+            if (!::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&TransBlock, &vSize)) {
                 delete FVData;
                 FVData = 0;
-            }
+            } else
+                // Swap the words so wsprintf will print the lang-charset in the correct format.
+                *(DWORD *)TransBlock = MAKELONG(HIWORD(*(DWORD *)TransBlock), LOWORD(*(DWORD *)TransBlock));
+        }
     }
 }
 
@@ -111,43 +120,43 @@ ProjectRCVersion::~ProjectRCVersion ()
 }
 
 
-BOOL ProjectRCVersion::GetProductName (LPSTR &prodName)
+bool ProjectRCVersion::GetProductName (LPSTR &prodName)
 {
     UINT    vSize;
     char    subBlockName[255];
 
     wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"ProductName");
-    return FVData ? VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&prodName, &vSize) : FALSE;
+    return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&prodName, &vSize) : false;
 }
 
 
-BOOL ProjectRCVersion::GetProductVersion (LPSTR &prodVersion)
+bool ProjectRCVersion::GetProductVersion (LPSTR &prodVersion)
 {
     UINT    vSize;
     char    subBlockName[255];
 
     wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"ProductVersion");
-    return FVData ? VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&prodVersion, &vSize) : FALSE;
+    return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&prodVersion, &vSize) : false;
 }
 
 
-BOOL ProjectRCVersion::GetCopyright (LPSTR &copyright)
+bool ProjectRCVersion::GetCopyright (LPSTR &copyright)
 {
     UINT    vSize;
     char    subBlockName[255];
 
     wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"LegalCopyright");
-    return FVData ? VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&copyright, &vSize) : FALSE;
+    return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&copyright, &vSize) : false;
 }
 
 
-BOOL ProjectRCVersion::GetDebug (LPSTR &debug)
+bool ProjectRCVersion::GetDebug (LPSTR &debug)
 {
     UINT    vSize;
     char    subBlockName[255];
 
     wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"SpecialBuild");
-    return FVData ? VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&debug, &vSize) : FALSE;
+    return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&debug, &vSize) : false;
 }
 
 
@@ -177,10 +186,10 @@ BOOL ProjectRCVersion::GetDebug (LPSTR &debug)
 
 void [[TDialog]]::SetupWindow ()
 {
-    LPSTR prodName, prodVersion, copyright, debug;
+    LPSTR prodName = 0, prodVersion = 0, copyright = 0, debug = 0;
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Get the static text who's value is based on VERSIONINFO.
+    // Get the static text for the value based on VERSIONINFO.
     TStatic *versionCtrl = new TStatic(this, IDC_VERSION, 255);
     TStatic *copyrightCtrl = new TStatic(this, IDC_COPYRIGHT, 255);
     TStatic *debugCtrl = new TStatic(this, IDC_DEBUG, 255);
@@ -192,21 +201,27 @@ void [[TDialog]]::SetupWindow ()
     ProjectRCVersion applVersion(GetModule());
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Get the product name, product version and legal copyright strings.
-    applVersion.GetProductName(prodName);
-    applVersion.GetProductVersion(prodVersion);
-    applVersion.GetCopyright(copyright);
-
+    // Get the product name and product version strings.
+    if (applVersion.GetProductName(prodName) && applVersion.GetProductVersion(prodVersion)) {
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-    // IDC_VERSION is the product name and version number, the initial value of IDC_VERSION is
-    // the word Version (in whatever language) product name VERSION product version.
-    char    buffer[255];
-    char    versionName[128];
-    versionCtrl->GetText(versionName, sizeof(versionName));
-    wsprintf(buffer, "%s %s %s", prodName, versionName, prodVersion);
-    versionCtrl->SetText(buffer);
+        // IDC_VERSION is the product name and version number, the initial value of IDC_VERSION is
+        // the word Version (in whatever language) product name VERSION product version.
+        char    buffer[255];
+        char    versionName[128];
 
-    copyrightCtrl->SetText(copyright);
+        buffer[0] = '\0';
+        versionName[0] = '\0';
+
+        versionCtrl->GetText(versionName, sizeof(versionName));
+        wsprintf(buffer, "%s %s %s", prodName, versionName, prodVersion);
+
+        versionCtrl->SetText(buffer);
+    }
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //Get the legal copyright string.
+    if (applVersion.GetCopyright(copyright))
+        copyrightCtrl->SetText(copyright);
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
     // Only get the SpecialBuild text if the VERSIONINFO resource is there.

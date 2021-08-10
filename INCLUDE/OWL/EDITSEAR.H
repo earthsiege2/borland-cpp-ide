@@ -1,19 +1,20 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\editsear.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of class TEditSearch, an edit control that responds to
 //   Find, Replace and FindNext menu commands.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_EDITSEAR_H)
-#define __OWL_EDITSEAR_H
+#if !defined(OWL_EDITSEAR_H)
+#define OWL_EDITSEAR_H
 
-#if !defined(__OWL_EDIT_H)
-  #include <owl\edit.h>
+#if !defined(OWL_EDIT_H)
+# include <owl/edit.h>
 #endif
-#if !defined(__OWL_FINDREPL_H)
-  #include <owl\findrepl.h>
+#if !defined(OWL_FINDREPL_H)
+# include <owl/findrepl.h>
 #endif
-#include <owl\editsear.rh>
+#include <owl/editsear.rh>
 
 
 //
@@ -24,7 +25,7 @@ class _OWLCLASS TEditSearch : public TEdit {
   public:
     TFindReplaceDialog::TData SearchData;
     TFindReplaceDialog*       SearchDialog;  // Find or replace dialog
-    UINT                      SearchCmd;     // command set that opened dialog
+    uint                      SearchCmd;     // command set that opened dialog
 
     TEditSearch(TWindow*        parent = 0,
                 int             id = 0,
@@ -42,7 +43,9 @@ class _OWLCLASS TEditSearch : public TEdit {
     //
     void          CmEditFind();               // CM_EDITFIND
     void          CmEditReplace();            // CM_EDITREPLACE
+    void          CeEditFindReplace(TCommandEnabler& ce);
     void          CmEditFindNext();           // CM_EDITFINDNEXT
+    void          CeEditFindNext(TCommandEnabler& ce);
 
     LRESULT       EvFindMsg(WPARAM, LPARAM);  // Registered commdlg message
 
@@ -57,4 +60,4 @@ class _OWLCLASS TEditSearch : public TEdit {
   DECLARE_STREAMABLE(_OWLCLASS, TEditSearch, 1);
 };
 
-#endif  // __OWL_EDITSEAR_H
+#endif  // OWL_EDITSEAR_H

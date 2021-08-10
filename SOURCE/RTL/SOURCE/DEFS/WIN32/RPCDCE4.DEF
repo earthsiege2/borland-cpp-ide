@@ -1,0 +1,18 @@
+LIBRARY     RPCDCE4.DLL
+
+EXPORTS
+    DceErrorInqTextA               @1
+    DceErrorInqTextW               @2
+    MIDL_user_allocate             @3
+    MIDL_user_free                 @4
+    RpcMgmtEpEltInqBegin           @7
+    RpcMgmtEpEltInqDone            @8
+    RpcMgmtEpEltInqNextA           @9
+    RpcMgmtEpEltInqNextW           @10
+    RpcMgmtEpUnregister            @11
+    RpcMgmtSetAuthorizationFn      @17
+    UuidCompare                    @20
+    UuidCreateNil                  @21
+    UuidEqual                      @22
+    UuidHash                       @23
+    UuidIsNil                      @24

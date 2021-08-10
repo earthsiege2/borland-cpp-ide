@@ -1,0 +1,70 @@
+<<[CPP]
+##QUERY_SNP_AUTO_KIND [[Kind]]
+##QUERY_SNP_AUTO_NAME [[InternalName]]
+##QUERY_SNP_AUTO_GETNAME [[GetName]]
+##QUERY_SNP_AUTO_SETNAME [[SetName]]
+##QUERY_SNP_AUTO_CPPTYPE [[CPPType]]
+##QUERY_SNP_AUTO_OLETYPE [[OLEType]]
+##QUERY_SNP_AUTO_DESCR [[Description]]
+##QUERY_SNP_AUTO_GETPROPERTY [[GetProperty]]
+##QUERY_SNP_AUTO_SETPROPERTY [[SetProperty]]
+##QUERY_SNP_AUTO_CPPARGS [[CPPArguments]]
+##QUERY_SNP_AUTO_OLEARGS [[OLEArguments]]
+##QUERY_SNP_AUTO_VALIDATOR [[Validator]]
+##"" [[FunctionName]]
+##"" [[FunctionResult]]
+##"" [[FunctionDefParam]]
+##"" [[FindFunction]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##--BEGIN--Kind == VALUE_DATA
+##    :\\"EXPOSE_PROPRW([[InternalName]], [[OLEType]], \"[[InternalName]]\"," FindFunction
+##    :^BOF
+##    :? FindFunction
+##*
+##    :^BOL
+##    :^SCROLL
+##    :^^
+##--END--Kind == VALUE_DATA
+##--BEGIN-- ((Kind == VALUE_PROPERTY) || (Kind == VALUE_METHOD))
+##      --BEGIN-- Kind == VALUE_PROPERTY
+##          :GetProperty == TRUE
+##              :CPPType FunctionResult
+##              :GetName FunctionName
+##              :\\"[[ClassName]]::[[GetName]]" FindFunction
+##*
+##          :((GetProperty == FALSE) && (SetProperty == TRUE))
+##              :"void" FunctionResult
+##              :SetName FunctionName
+##              :\\"[[ClassName]]::[[SetName]]" FindFunction
+##*
+##      --END-- Kind == VALUE_PROPERTY
+##      --BEGIN-- Kind == VALUE_METHOD
+##          :CPPType FunctionResult
+##          :InternalName FunctionName
+##          :CPPArguments FunctionDefParam
+##          :\\"[[ClassName]]::[[InternalName]]" FindFunction
+##*
+##      --END-- Kind == VALUE_METHOD
+##      :^BOF
+##      :FALSE [[Search]]
+##      :0 [[YPosition]]
+##      --BEGIN-- TRUE
+##          :{FindFunc.SNP}
+##          --BEGIN-- Search == -1
+##              :^BOF
+##              :? FindFunction Search
+##              :YPos() YPosition
+##          --END-- Search == -1
+##          --BEGIN-- Search == 0
+##              :QUERY_FILE_CPP [[FileName]]
+##              :%\\"Unable to locate function [[FunctionName]] implementation in [[FileName]].  "
+##          --END-- Search == 0
+##      --END-- TRUE
+##^@YPosition
+##^BOL
+##^SCROLL
+##^^
+##--END-- ((Kind == VALUE_PROPERTY) || (Kind == VALUE_METHOD))
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+##*
+>>[CPP]

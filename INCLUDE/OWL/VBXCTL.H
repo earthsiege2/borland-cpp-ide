@@ -1,35 +1,52 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   include\owl\vbxctl.h
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Defines TVbxControl and associated classes
 //----------------------------------------------------------------------------
-#if !defined(__OWL_VBXCTL_H)
-#define __OWL_VBXCTL_H
+#if !defined(OWL_VBXCTL_H)
+#define OWL_VBXCTL_H
 
-#if !defined(__OWL_CONTROL_H)
-  #include <owl\control.h>
+#if !defined(OWL_CONTROL_H)
+# include <owl/control.h>
 #endif
 #if !defined(__BIVBX_H)
-  #include <bivbx.h>
+# include <bivbx.h>
 #endif
+#if !defined(BI_PLAT_MSW)
+# error VBX supported only under MS Windows
+#endif
+
+// Old-style defines for VbxGen compatibility
+//
+#define __OWL_VBXCTL_H
+#define __OWL_OWLDEFS_H
 
 //
 //  class TBIVbxLibrary
 //  ----- -------------
 //
-class _OWLCLASS TBIVbxLibrary : virtual public TModule {
+class TBIVbxLibrary : public TModule {
   public:
-    TBIVbxLibrary();
-   ~TBIVbxLibrary();
+   class _OWLCLASS_RTL TXVbxLibrary : public TXOwl {
+    public:
+      TXVbxLibrary();
+      TXOwl* Clone();
+      void Throw();
+   };
+
+   TBIVbxLibrary();
+  ~TBIVbxLibrary();
 };
-  
+
 //
 //  class TVbxEventHandler
 //  ----- ----------------
 //
-class _OWLCLASS TVbxEventHandler : virtual public TEventHandler {
+class TVbxEventHandler : virtual public TEventHandler {
   protected:
     LRESULT  EvVbxDispatch(WPARAM wp, LPARAM lp);
+    LRESULT  EvVbxInitForm(WPARAM wp, LPARAM lp);
 
   DECLARE_RESPONSE_TABLE(TVbxEventHandler);
 };
@@ -38,7 +55,7 @@ class _OWLCLASS TVbxEventHandler : virtual public TEventHandler {
 //  class TVbxControl
 //  ----- -----------
 //
-class _OWLCLASS TVbxControl : public TControl, public TVbxEventHandler {
+class TVbxControl : public TControl, public TVbxEventHandler {
   public:
     TVbxControl(TWindow*        parent,
                 int             id,
@@ -58,83 +75,94 @@ class _OWLCLASS TVbxControl : public TControl, public TVbxEventHandler {
 
     void SetupWindow();
 
-    LRESULT EvDefaultProcessing(WPARAM, LPARAM) { return DefaultProcessing(); }
-
     // properties
     int GetNumProps();
     int GetPropIndex(const char far* name);
+#if defined(BI_PLAT_WIN16)
     const char far* GetPropName(int propIndex);
+#endif
+    void GetPropName(int propIndex, string& str);
     int GetPropType(int propIndex);
     int GetPropType(char far* name);
-    BOOL IsArrayProp(int propIndex);
-    BOOL IsArrayProp(char far* name);
+    bool IsArrayProp(int propIndex);
+    bool IsArrayProp(char far* name);
 
     // get properties by index
-    BOOL GetProp(int propIndex, int& value, int arrayIndex=-1);
-    BOOL GetProp(int propIndex, long& value, int arrayIndex=-1);
-    BOOL GetProp(int propIndex, ENUM& value, int arrayIndex=-1);
-    BOOL GetProp(int propIndex, HPIC& value, int arrayIndex=-1);
-    BOOL GetProp(int propIndex, float& value, int arrayIndex=-1);
-    BOOL GetProp(int propIndex, string& value, int arrayIndex=-1);
-    BOOL GetProp(int propIndex, COLORREF& value, int arrayIndex=-1);
+    bool GetProp(int propIndex, int& value, int arrayIndex=-1);
+    bool GetProp(int propIndex, long& value, int arrayIndex=-1);
+#if defined(BI_UNIQUE_BOOL)
+    bool GetProp(int propIndex, bool& value, int arrayIndex=-1);
+#endif
+    bool GetProp(int propIndex, ENUM& value, int arrayIndex=-1);
+    bool GetProp(int propIndex, HPIC& value, int arrayIndex=-1);
+    bool GetProp(int propIndex, float& value, int arrayIndex=-1);
+    bool GetProp(int propIndex, string& value, int arrayIndex=-1);
+    bool GetProp(int propIndex, COLORREF& value, int arrayIndex=-1);
 
     // get properties by name
-    BOOL GetProp(const char far* name, int& value, int arrayIndex=-1);
-    BOOL GetProp(const char far* name, long& value, int arrayIndex=-1);
-    BOOL GetProp(const char far* name, ENUM& value, int arrayIndex=-1);
-    BOOL GetProp(const char far* name, HPIC& value, int arrayIndex=-1);
-    BOOL GetProp(const char far* name, float& value, int arrayIndex=-1);
-    BOOL GetProp(const char far* name, string& value, int arrayIndex=-1);
-    BOOL GetProp(const char far* name, COLORREF& value, int arrayIndex=-1);
+    bool GetProp(const char far* name, int& value, int arrayIndex=-1);
+    bool GetProp(const char far* name, long& value, int arrayIndex=-1);
+#if defined(BI_UNIQUE_BOOL)
+    bool GetProp(const char far* name, bool& value, int arrayIndex=-1);
+#endif
+    bool GetProp(const char far* name, ENUM& value, int arrayIndex=-1);
+    bool GetProp(const char far* name, HPIC& value, int arrayIndex=-1);
+    bool GetProp(const char far* name, float& value, int arrayIndex=-1);
+    bool GetProp(const char far* name, string& value, int arrayIndex=-1);
+    bool GetProp(const char far* name, COLORREF& value, int arrayIndex=-1);
 
     // set properties by index
-    BOOL SetProp(int propIndex, int value, int arrayIndex=-1);
-    BOOL SetProp(int propIndex, long value, int arrayIndex=-1);
-    BOOL SetProp(int propIndex, ENUM value, int arrayIndex=-1);
-    BOOL SetProp(int propIndex, HPIC value, int arrayIndex=-1);
-    BOOL SetProp(int propIndex, float value, int arrayIndex=-1);
-    BOOL SetProp(int propIndex, const string& value, int arrayIndex=-1);
-    BOOL SetProp(int propIndex, const char far* value, int arrayIndex=-1);
-    BOOL SetProp(int propIndex, COLORREF value, int arrayIndex=-1);
+    bool SetProp(int propIndex, int value, int arrayIndex=-1);
+    bool SetProp(int propIndex, long value, int arrayIndex=-1);
+    bool SetProp(int propIndex, ENUM value, int arrayIndex=-1);
+    bool SetProp(int propIndex, HPIC value, int arrayIndex=-1);
+    bool SetProp(int propIndex, float value, int arrayIndex=-1);
+    bool SetProp(int propIndex, const string& value, int arrayIndex=-1);
+    bool SetProp(int propIndex, const char far* value, int arrayIndex=-1);
+    bool SetProp(int propIndex, COLORREF value, int arrayIndex=-1);
 
     // set properties by name
-    BOOL SetProp(const char far* name, int value, int arrayIndex=-1);
-    BOOL SetProp(const char far* name, long value, int arrayIndex=-1);
-    BOOL SetProp(const char far* name, ENUM value, int arrayIndex=-1);
-    BOOL SetProp(const char far* name, HPIC value, int arrayIndex=-1);
-    BOOL SetProp(const char far* name, float value, int arrayIndex=-1);
-    BOOL SetProp(const char far* name, const string& value, int arrayIndex=-1);
-    BOOL SetProp(const char far* name, const char far* value, int arrayIndex=-1);
-    BOOL SetProp(const char far*, COLORREF value, int arrayIndex=-1);
+    bool SetProp(const char far* name, int value, int arrayIndex=-1);
+    bool SetProp(const char far* name, long value, int arrayIndex=-1);
+    bool SetProp(const char far* name, ENUM value, int arrayIndex=-1);
+    bool SetProp(const char far* name, HPIC value, int arrayIndex=-1);
+    bool SetProp(const char far* name, float value, int arrayIndex=-1);
+    bool SetProp(const char far* name, const string& value, int arrayIndex=-1);
+    bool SetProp(const char far* name, const char far* value, int arrayIndex=-1);
+    bool SetProp(const char far*, COLORREF value, int arrayIndex=-1);
 
     // events
     int GetNumEvents();
     int GetEventIndex(const char far* name);
+#if defined(BI_PLAT_WIN16)
     const char far* GetEventName(int eventIndex);
-    
+#endif
+    void GetEventName(int eventIndex, string& str);
+
     // methods
-    BOOL Method(int method, long far* args);
-    BOOL AddItem(int index, const char far* item);
-    BOOL Drag(int action);
-    BOOL Move(long x, long y, long w, long h);
-    BOOL Refresh();
-    BOOL RemoveItem(int index);
-    
+    bool AddItem(int index, const char far* item);
+    bool Drag(int action);
+    bool Move(long x, long y, long w, long h);
+    bool Refresh();
+    bool RemoveItem(int index);
+
     // control
     HCTL GetHCTL() {return HCtl;}
 
   protected:
     char far* GetClassName();
     void PerformCreate(int menuOrId);
-    BOOL GetVBXProperty(int propIndex, void far *value, int arrayIndex=-1);
-    BOOL SetVBXProperty(int propIndex, LONG value, int arrayIndex=-1);
-    
+    bool GetVBXProperty(int propIndex, void far *value, int arrayIndex=-1);
+    bool SetVBXProperty(int propIndex, int32 value, int arrayIndex=-1);
+
   private:
-    HCTL HCtl;
+    HCTL      HCtl;
     char far* VbxName;
     char far* VbxClass;
-    long InitLen;
+    long      InitLen;
     void far* InitData;
+
+    LRESULT EvDefaultProcessing(WPARAM, LPARAM);
 
   DECLARE_RESPONSE_TABLE(TVbxControl);
   DECLARE_CASTABLE;
@@ -170,7 +198,6 @@ VBXDispatch(GENERIC& generic,
             WPARAM   wParam,
             LPARAM   lParam);
 
-          
 //
 // TVbxControl Inlines
 //
@@ -185,9 +212,18 @@ inline int TVbxControl::GetPropIndex(const char far* name)
   return ::VBXGetPropIndex(HCtl, name);
 }
 
+#if defined(BI_PLAT_WIN16)
 inline const char far* TVbxControl::GetPropName(int propIndex)
 {
   return ::VBXGetPropName(HCtl, propIndex);
+}
+#endif
+
+inline void TVbxControl::GetPropName(int propIndex, string& str)
+{
+  char buff[64];
+  ::VBXGetPropNameBuf(HCtl, propIndex, buff, sizeof buff);
+  str = buff;
 }
 
 inline int TVbxControl::GetPropType(int propIndex)
@@ -200,12 +236,12 @@ inline int TVbxControl::GetPropType(char far* name)
   return GetPropType(GetPropIndex(name));
 }
 
-inline BOOL TVbxControl::IsArrayProp(int propIndex)
+inline bool TVbxControl::IsArrayProp(int propIndex)
 {
   return ::VBXIsArrayProp(HCtl, propIndex);
 }
 
-inline BOOL TVbxControl::IsArrayProp(char far* name)
+inline bool TVbxControl::IsArrayProp(char far* name)
 {
   return IsArrayProp(GetPropIndex(name));
 }
@@ -213,41 +249,62 @@ inline BOOL TVbxControl::IsArrayProp(char far* name)
 
 // get properties by id
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(int propIndex, int& value, int arrayIndex)
 {
+#if defined(BI_PLAT_WIN32)
+  int16 temp;
+  bool rv = GetVBXProperty(propIndex, &temp, arrayIndex);
+  value = temp;
+  return rv;
+#else
   return GetVBXProperty(propIndex, &value, arrayIndex);
+#endif
 }
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(int propIndex, long& value, int arrayIndex)
 {
   return GetVBXProperty(propIndex, &value, arrayIndex);
 }
 
-inline BOOL 
+#if defined(BI_UNIQUE_BOOL)
+inline bool
+TVbxControl::GetProp(int propIndex, bool& value, int arrayIndex)
+{
+#if defined(BI_PLAT_WIN32)
+  int16 temp;
+  bool rv = GetVBXProperty(propIndex, &temp, arrayIndex);
+  value = temp;
+  return rv;
+#else
+  return GetVBXProperty(propIndex, &value, arrayIndex);
+#endif
+}
+#endif
+
+inline bool
 TVbxControl::GetProp(int propIndex, ENUM& value, int arrayIndex)
 {
-  BOOL rv;
-  short temp;
-  rv = GetVBXProperty(propIndex, &temp, arrayIndex);
-  value = (ENUM) temp;
+  int16 temp;
+  bool rv = GetVBXProperty(propIndex, &temp, arrayIndex);
+  value = (ENUM)temp;
   return rv;
 }
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(int propIndex, HPIC& value, int arrayIndex)
 {
   return GetVBXProperty(propIndex, &value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(int propIndex, float& value, int arrayIndex)
 {
   return GetVBXProperty(propIndex, &value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(int propIndex, COLORREF& value, int arrayIndex)
 {
   return GetVBXProperty(propIndex, &value, arrayIndex);
@@ -255,43 +312,51 @@ TVbxControl::GetProp(int propIndex, COLORREF& value, int arrayIndex)
 
 // get properties by name
 
-inline BOOL 
+#if defined(BI_UNIQUE_BOOL)
+inline bool
 TVbxControl::GetProp(const char far* name, int& value, int arrayIndex)
 {
   return GetProp(GetPropIndex(name), value, arrayIndex);
 }
+#endif
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(const char far* name, long& value, int arrayIndex)
 {
   return GetProp(GetPropIndex(name), value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
+TVbxControl::GetProp(const char far* name, bool& value, int arrayIndex)
+{
+  return GetProp(GetPropIndex(name), value, arrayIndex);
+}
+
+inline bool
 TVbxControl::GetProp(const char far* name, ENUM& value, int arrayIndex)
 {
   return GetProp(GetPropIndex(name), value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(const char far* name, HPIC& value, int arrayIndex)
 {
   return GetProp(GetPropIndex(name), value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(const char far* name, float& value, int arrayIndex)
 {
   return GetProp(GetPropIndex(name), value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(const char far* name, string& value, int arrayIndex)
 {
   return GetProp(GetPropIndex(name), value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::GetProp(const char far* name, COLORREF& value, int arrayIndex)
 {
   return GetProp(GetPropIndex(name), value, arrayIndex);
@@ -299,49 +364,49 @@ TVbxControl::GetProp(const char far* name, COLORREF& value, int arrayIndex)
 
 // set properties by id
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(int propIndex, int value, int arrayIndex)
 {
   return SetVBXProperty(propIndex, value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(int propIndex, long value, int arrayIndex)
 {
   return SetVBXProperty(propIndex, value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(int propIndex, HPIC value, int arrayIndex)
 {
   return SetVBXProperty(propIndex, value, arrayIndex);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(int propIndex, ENUM value, int arrayIndex)
 {
   return SetVBXProperty(propIndex, (long)value, arrayIndex);
 }
 
-inline BOOL
+inline bool
 TVbxControl::SetProp(int propIndex, float value, int arrayIndex)
 {
   return SetVBXProperty(propIndex, *((long*)&value), arrayIndex);
 }
 
-inline BOOL
+inline bool
 TVbxControl::SetProp(int propIndex, const string& value, int arrayIndex)
 {
   return SetVBXProperty(propIndex, long(value.c_str()), arrayIndex);
 }
 
-inline BOOL
+inline bool
 TVbxControl::SetProp(int propIndex, const char far* value, int arrayIndex)
 {
   return SetVBXProperty(propIndex, (long)value, arrayIndex);
 }
 
-inline BOOL
+inline bool
 TVbxControl::SetProp(int propIndex, COLORREF value, int arrayIndex)
 {
   return SetVBXProperty(propIndex, (long)value, arrayIndex);
@@ -349,108 +414,111 @@ TVbxControl::SetProp(int propIndex, COLORREF value, int arrayIndex)
 
 // set properties by name
 
-inline BOOL
+inline bool
 TVbxControl::SetProp(const char far* name, int value, int arrayIndex)
 {
   return SetProp(GetPropIndex(name), value);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(const char far* name, long value, int arrayIndex)
 {
   return SetProp(GetPropIndex(name), value);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(const char far* name, ENUM value, int arrayIndex)
 {
   return SetProp(GetPropIndex(name), value);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(const char far* name, HPIC value, int arrayIndex)
 {
   return SetProp(GetPropIndex(name), value);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(const char far* name, float value, int arrayIndex)
 {
   return SetProp(GetPropIndex(name), value);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(const char far* name, const string& value, int arrayIndex)
 {
   return SetProp(GetPropIndex(name), value.c_str());
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(const char far* name, const char far* value, int arrayIndex)
 {
   return SetProp(GetPropIndex(name), value);
 }
 
-inline BOOL 
+inline bool
 TVbxControl::SetProp(const char far* name, COLORREF value, int arrayIndex)
 {
   return SetProp(GetPropIndex(name), value);
 }
 
 
-inline int 
+inline int
 TVbxControl::GetNumEvents()
 {
   return ::VBXGetNumEvents(HCtl);
 }
 
-inline int 
+inline int
 TVbxControl::GetEventIndex(const char far* name)
 {
   return ::VBXGetEventIndex(HCtl, name);
 }
 
+#if defined(BI_PLAT_WIN16)
 inline const char far*
 TVbxControl::GetEventName(int eventIndex)
 {
   return ::VBXGetEventName(HCtl, eventIndex);
 }
+#endif
 
-inline BOOL 
-TVbxControl::Method(int method, long far* args)
+inline void
+TVbxControl::GetEventName(int eventIndex, string& str)
 {
-  return ::VBXMethod(HCtl, method, args);
+  char buff[64];
+  ::VBXGetEventNameBuf(HCtl, eventIndex, buff, sizeof buff);
+  str = buff;
 }
 
-inline BOOL 
+inline bool
 TVbxControl::AddItem(int index, const char far* item)
 {
   return ::VBXMethodAddItem(HCtl, index, item);
 }
 
-inline BOOL
+inline bool
 TVbxControl::Drag(int action)
 {
   return ::VBXMethodDrag(HCtl, action);
 }
 
-inline BOOL
+inline bool
 TVbxControl::Move(long x, long y, long w, long h)
 {
   return ::VBXMethodMove(HCtl, x, y, w, h);
 }
 
-inline BOOL
+inline bool
 TVbxControl::Refresh()
 {
   return ::VBXMethodRefresh(HCtl);
 }
 
-inline BOOL
+inline bool
 TVbxControl::RemoveItem(int index)
 {
   return ::VBXMethodRemoveItem(HCtl, index);
 }
 
-#endif  // __OWL_VBXCTL_H
-
+#endif  // OWL_VBXCTL_H

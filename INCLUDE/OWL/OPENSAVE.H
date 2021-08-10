@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\opensave.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of TOpenSave- abstract, TFileOpen-, TFileSave- common Dialog 
 //   classes
 //----------------------------------------------------------------------------
-#if !defined(__OWL_OPENSAVE_H)
-#define __OWL_OPENSAVE_H
+#if !defined(OWL_OPENSAVE_H)
+#define OWL_OPENSAVE_H
 
-#if !defined(__COMMDIAL_H)
-  #include <owl\commdial.h>
+#if !defined(OWL_COMMDIAL_H)
+# include <owl/commdial.h>
 #endif
 
 //
@@ -19,18 +20,22 @@ class _OWLCLASS TOpenSaveDialog : public TCommonDialog {
   public:
     class _OWLCLASS TData {
       public:
-        DWORD      Flags;
-        DWORD      Error;
+        uint32     Flags;
+        uint32     Error;
         char*      FileName;
         char*      Filter;
         char*      CustomFilter;
         int        FilterIndex;
         char*      InitialDir;
         char*      DefExt;
+        int        MaxPath;
       
-        TData(DWORD flags=0, char* filter=0, char* customFilter=0, 
-              char* initialDir=0, char* defExt=0);
+        TData(uint32 flags=0, const char* filter=0, char* customFilter=0, 
+              char* initialDir=0, char* defExt=0, int maxPath=0);
+        TData(const TData& src);
         ~TData();
+
+        TData& operator =(const TData& src);
 
         void     SetFilter(const char* filter = 0);
 
@@ -49,7 +54,7 @@ class _OWLCLASS TOpenSaveDialog : public TCommonDialog {
 
     static int GetFileTitle(const char far* fileName, char far* fileTitle, 
                             int fileTitleLen) //Win32 casts
-           {return ::GetFileTitle((LPSTR)fileName, fileTitle,(WORD)fileTitleLen);}
+           {return ::GetFileTitle((LPSTR)fileName, fileTitle,(uint16)fileTitleLen);}
 
   protected:
     OPENFILENAME ofn;
@@ -57,7 +62,7 @@ class _OWLCLASS TOpenSaveDialog : public TCommonDialog {
 
     TOpenSaveDialog(TWindow* parent, TData& data, TModule*   module = 0);
     void    Init(TResId templateId);
-    BOOL    DialogFunction(UINT message, WPARAM, LPARAM);
+    bool    DialogFunction(uint message, WPARAM, LPARAM);
 
     //
     // override TWindow & TDialog virtuals
@@ -72,7 +77,7 @@ class _OWLCLASS TOpenSaveDialog : public TCommonDialog {
     //
     // Messages registered by the common dialog DLL
     //
-    static UINT ShareViMsgId;
+    static uint ShareViMsgId;
 
     //
     // Default behavior inline for message response functions
@@ -133,4 +138,4 @@ class _OWLCLASS TFileSaveDialog : public TOpenSaveDialog {
     TFileSaveDialog& operator=(const TFileSaveDialog&);
 };
 
-#endif  // __OWL_OPENSAVE_H
+#endif  // OWL_OPENSAVE_H

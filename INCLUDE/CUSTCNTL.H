@@ -5,12 +5,14 @@
 \*****************************************************************************/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
+
+#if !defined(__FLAT__)
 
 #ifndef __CUSTCNTL_H    /* prevent multiple includes */
 #define __CUSTCNTL_H
@@ -26,8 +28,6 @@
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
-
-#if !defined(__FLAT__)
 
 /* If included with the 3.0 windows.h, define compatible aliases */
 #if !defined(WINVER) || (WINVER < 0x030a)
@@ -307,7 +307,28 @@ typedef HGLOBAL (CALLBACK *LPFNLIST)
 
 #define RWDELETEMSGNAME "Rws_deletecontrol"
 
-#else     /* defined __FLAT__  */
+
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
+
+#ifndef RC_INVOKED
+#pragma option -a.      /* Revert to default packing */
+#endif  /* RC_INVOKED */
+
+#endif  /* __CUSTCNTL_H */
+
+
+#else  /* !__FLAT__ */
+
+#ifndef _INC_CUSTCNTL
+#define _INC_CUSTCNTL
+#define __CUSTCNTL_H
+
+#ifdef __cplusplus
+extern "C" {            /* Assume C declarations for C++ */
+#endif  /* __cplusplus */
+
 
 /*
  * General size defines.
@@ -495,17 +516,12 @@ typedef UINT (CALLBACK* LPFNCCINFOW)(LPCCINFOW acci);
 #define LPFNCCINFO  LPFNCCINFOA
 #endif  // UNICODE
 
-#endif  /* __FLAT__ */
 
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
-#ifndef RC_INVOKED
-#pragma option -a.      /* Revert to default packing */
-#endif  /* RC_INVOKED */
-
-#endif  /* __CUSTCNTL_H */
+#endif  /* _INC_CUSTCNTL */
 
 
-
+#endif  /* __FLAT__ */

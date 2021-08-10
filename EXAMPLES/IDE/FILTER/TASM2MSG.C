@@ -3,6 +3,7 @@
 */
 
 #include "ToolApi.H"  // Borland IDE tool dll interface
+#include "filtrc.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -20,6 +21,7 @@
 IDE_ToolAPIFunc IDE_ToolAPI[IDE_NumFunctions];
 
 /* Global variables use to parse program output */
+HINSTANCE  globInst;
 
 /* Turbo Assembler text for conversion */
 char TasmWarningTxt[] = "*Warning* ";
@@ -363,11 +365,15 @@ void ProcessLine( LPSTR Line )
 void FilterToIDE( void )
 {
   LPSTR line;
+  
+  Pipefh = IDE_Open( PIPEID, 0 );
 
-  Pipefh = IDE_Open( PIPEID, READ_WRITE );
   if (Pipefh < 0)
   {
-    IDE_ErrorBox( "Tasm2Msg.DLL: Cannot filter output pipe." );
+    char error[100];
+    LoadString( globInst, IDS_CANNOTFILTER, error, sizeof(error));
+    IDE_ErrorBox( error );
+    numFatals++;
     return;
   }
 
@@ -413,6 +419,7 @@ int far pascal _export Run( pTransferBlock TransBlock )
   {
     return toolWarnings;
   }
+  
   return toolSuccess;
 }
 
@@ -420,6 +427,7 @@ int far pascal _export Run( pTransferBlock TransBlock )
 int far pascal LibMain( HINSTANCE hInstance, WORD wDataSegment,
 			WORD wHeapSize, LPSTR lpszCmdLine )
 {
+  globInst = hInstance;
   return 1;
 }
 

@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1990, 1993 by Borland International
+ *      Copyright (c) 1990, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -22,6 +22,16 @@
 #if !defined(___DEFS_H)
 #include <_defs.h>
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #ifndef _SIZE_T
 #define _SIZE_T
@@ -38,6 +48,34 @@ new_handler _RTLENTRY set_new_handler(new_handler);
 #define _set_new_handler(f) set_new_handler(f)
 #endif
 
+void * _RTLENTRY _EXPFUNC32 operator new(size_t size);
+void * _RTLENTRY _EXPFUNC32 operator new(size_t size, void *ptr);
+
+void * _RTLENTRY _EXPFUNC32 operator new[](size_t size);
+void * _RTLENTRY _EXPFUNC32 operator new[](size_t size, void *ptr);
+
+void   _RTLENTRY _EXPFUNC32 operator delete  (void *);
+void   _RTLENTRY _EXPFUNC32 operator delete[](void *);
+
+#if !defined(__FLAT__) && (defined(__COMPACT__) || defined(__LARGE__) || defined(__HUGE__))
+    void __far * _RTLENTRY operator new(unsigned long size);
+    void __far * _RTLENTRY operator new(unsigned long size, void __far *ptr);
+    
+    void __far * _RTLENTRY operator new[](unsigned long size);
+    void __far * _RTLENTRY operator new[](unsigned long size, void __far *ptr);
+
+    void         _RTLENTRY operator delete  (void __far *ptr);
+    void         _RTLENTRY operator delete[](void __far *ptr);
+#endif
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
+
 #endif  /* __NEW_H */
 
-

@@ -1,0 +1,1 @@
+#define IDS_CANNOTFILTER 100

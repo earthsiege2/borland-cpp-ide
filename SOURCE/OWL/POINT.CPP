@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\point.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of mathematical TPoint, TSize, TRect classes.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\point.h>
+#include <owl/owlpch.h>
+#include <owl/point.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -42,7 +43,7 @@ strnewdup(const char* s)
 //
 // make a far duplicate of a C string using new far
 //
-#if defined(__SMALL__) || defined(__MEDIUM__)
+#if defined(BI_DATA_NEAR)
 char far*  _OWLFUNC
 strnewdup(const char far* s)
 {
@@ -140,7 +141,7 @@ operator <<(ostream& os, const TRect& r)
 ostream& _OWLFUNC
 operator <<(ostream& os, const TResId& id)
 {
-  BOOL  isNumeric = !id.IsString();
+  bool  isNumeric = !id.IsString();
 
   if (isNumeric)
     os << (long)id.Id;
@@ -175,15 +176,15 @@ operator <<(opstream& os, const TRect& r)
 ipstream& _OWLFUNC
 operator >>(ipstream& is, TResId& id)
 {
-  BOOL  isNumeric;
+  bool  isNumeric;
   is >> isNumeric;
 
   if (isNumeric) {
     long  nid;
     is >> nid;
     id = int(nid);
-
-  } else
+  }
+  else
     id = is.freadString();
   return is;
 }
@@ -191,7 +192,7 @@ operator >>(ipstream& is, TResId& id)
 opstream& _OWLFUNC
 operator <<(opstream& os, const TResId& id)
 {
-  BOOL  isNumeric = !id.IsString();
+  bool  isNumeric = !id.IsString();
   os << isNumeric;
 
   if (isNumeric)
@@ -202,4 +203,3 @@ operator <<(opstream& os, const TResId& id)
   return os;
 }
 #endif
-

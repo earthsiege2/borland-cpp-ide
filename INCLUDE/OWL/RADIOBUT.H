@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\radiobut.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TRadioButton.  This defines the basic behavior
 //   for all radio buttons.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_RADIOBUT_H)
-#define __OWL_RADIOBUT_H
+#if !defined(OWL_RADIOBUT_H)
+#define OWL_RADIOBUT_H
 
-#if !defined(__OWL_CHECKBOX_H)
-  #include <owl\checkbox.h>
+#if !defined(OWL_CHECKBOX_H)
+# include <owl/checkbox.h>
 #endif
 
 //
@@ -48,4 +49,4 @@ class _OWLCLASS TRadioButton : public TCheckBox {
   DECLARE_STREAMABLE(_OWLCLASS, TRadioButton, 1);
 };
 
-#endif  // __OWL_RADIOBUT_H
+#endif  // OWL_RADIOBUT_H

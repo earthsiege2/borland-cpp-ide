@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\control.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TControl.  This defines the basic behavior
 //   of all controls.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\control.h>
+#include <owl/owlpch.h>
+#include <owl/control.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -26,7 +27,8 @@ TControl::TControl(TWindow*        parent,
                    const char far* title,
                    int x, int y, int w, int h,
                    TModule*        module)
-  : TWindow(parent, title, module)
+:
+  TWindow(parent, title, module)
 {
   Attr.Id = id;
   Attr.X = x;
@@ -45,7 +47,8 @@ TControl::TControl(TWindow*        parent,
 TControl::TControl(TWindow*   parent,
                    int        resourceId,
                    TModule*   module)
-  : TWindow(parent, 0, module)
+:
+  TWindow(parent, 0, module)
 {
   if (HIWORD(Title))
     delete Title;     // Free memory allocated by TWindow's constructor
@@ -71,7 +74,7 @@ TControl::EvPaint()
 // handles WM_COMPAREITEM message (for owner draw controls)
 //
 LRESULT
-TControl::EvCompareItem(UINT /*ctrlId*/, COMPAREITEMSTRUCT far& compareInfo)
+TControl::EvCompareItem(uint /*ctrlId*/, COMPAREITEMSTRUCT far& compareInfo)
 {
   return CompareItem(compareInfo);
 }
@@ -89,7 +92,7 @@ TControl::CompareItem(COMPAREITEMSTRUCT far&)
 // handles WM_DELETEITEM message(for owner draw controls)
 //
 void
-TControl::EvDeleteItem(UINT /*ctrlId*/, DELETEITEMSTRUCT far& deleteInfo)
+TControl::EvDeleteItem(uint /*ctrlId*/, DELETEITEMSTRUCT far& deleteInfo)
 {
   DeleteItem(deleteInfo);
 }
@@ -103,7 +106,7 @@ TControl::DeleteItem(DELETEITEMSTRUCT far&)
 }
 
 void
-TControl::EvDrawItem(UINT /*ctrlId*/, DRAWITEMSTRUCT far& drawInfo)
+TControl::EvDrawItem(uint /*ctrlId*/, DRAWITEMSTRUCT far& drawInfo)
 {
   DrawItem(drawInfo);
 }
@@ -130,7 +133,7 @@ TControl::DrawItem(DRAWITEMSTRUCT far& drawInfo)
 }
 
 void
-TControl::EvMeasureItem(UINT /*ctrlId*/, MEASUREITEMSTRUCT far& measureInfo)
+TControl::EvMeasureItem(uint /*ctrlId*/, MEASUREITEMSTRUCT far& measureInfo)
 {
   MeasureItem(measureInfo);
 }

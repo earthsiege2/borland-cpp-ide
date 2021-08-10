@@ -6,20 +6,20 @@
 All function names, member names, and operators have been borrowed
 from AT&T C++, except for the addition of:
 
-    friend complex _Cdecl acos(complex _FAR &);
-    friend complex _Cdecl asin(complex _FAR &);
-    friend complex _Cdecl atan(complex _FAR &);
-    friend complex _Cdecl log10(complex _FAR &);
-    friend complex _Cdecl tan(complex _FAR &);
-    friend complex _Cdecl tanh(complex _FAR &);
-    complex _Cdecl operator+();
-    complex _Cdecl operator-();
+    friend complex _RTLENTRY acos(complex _FAR &);
+    friend complex _RTLENTRY asin(complex _FAR &);
+    friend complex _RTLENTRY atan(complex _FAR &);
+    friend complex _RTLENTRY log10(complex _FAR &);
+    friend complex _RTLENTRY tan(complex _FAR &);
+    friend complex _RTLENTRY tanh(complex _FAR &);
+    complex _RTLENTRY operator+();
+    complex _RTLENTRY operator-();
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1990, 1993 by Borland International
+ *      Copyright (c) 1990, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -31,7 +31,6 @@ from AT&T C++, except for the addition of:
 #if !defined(__COMPLEX_H)
 #define __COMPLEX_H
 
-#pragma warn -nak   /* Ignore non-ansi keywords */
 
 #if !defined(___DEFS_H)
 #include <_defs.h>
@@ -46,10 +45,22 @@ from AT&T C++, except for the addition of:
 #endif
 
 
-#pragma option -Vo-
-#if defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-
+#if !defined(RC_INVOKED)
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po-     // disable Object data calling convention
 #endif
+#endif
+
+#pragma option -Vo-
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 class _EXPCLASS complex {
 
@@ -275,12 +286,22 @@ ostream _FAR & _RTLENTRY _EXPFUNC operator<<(ostream _FAR &, complex _FAR &);
 istream _FAR & _RTLENTRY _EXPFUNC operator>>(istream _FAR &, complex _FAR &);
 
 
-#pragma option -Vo.
-#if defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__) 
-#pragma option -po.   
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
 
-#pragma warn .nak   /* Ignore non-ansi keywords */
+#pragma option -Vo.
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po.     // restore Object data calling convention
+#endif
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  // __COMPLEX_H
 

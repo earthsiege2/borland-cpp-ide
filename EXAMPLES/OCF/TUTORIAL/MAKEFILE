@@ -1,0 +1,19 @@
+#-----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1994 by Borland International
+#   Tutorial application -- makefile.
+#
+#-----------------------------------------------------------------------------
+MODELS = ldf
+
+EXERES = sample
+EXEALL = cppocf0.exe cppocf1.exe cppocf2.exe cppocf3.exe
+EXEMAKE= $(CPPOCF0) $(CPPOCF1) $(CPPOCF2) $(CPPOCF3)
+
+CPPOCF0=$(EXERULE:sample=cppocf0)
+CPPOCF1=$(EXERULE:sample=cppocf1)
+CPPOCF2=$(EXERULE:sample=cppocf2)
+OCFHLPR=$(EXERULE:sample=cppocf3)
+CPPOCF3=$(OCFHLPR:cppocf3.obj=cppocf3.obj ocfhlpr.obj)
+
+!include $(BCEXAMPLEDIR)\ocfmake.gen
+

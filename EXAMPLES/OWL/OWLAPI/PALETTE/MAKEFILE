@@ -2,7 +2,9 @@
 # ObjectWindows - (C) Copyright 1991, 1993 by Borland International
 #----------------------------------------------------------------------------
 
-EXERES=palettex
+EXE = palette
+OBJEXE = palettex.obj
+RESEXE = palettex.res
 MODELS=mldf
 !include $(BCEXAMPLEDIR)\owlmake.gen
 

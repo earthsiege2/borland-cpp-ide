@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1991, 1993 by Borland International
+ *      Copyright (c) 1991, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -18,6 +18,16 @@
 #if !defined(___DEFS_H)
 #include <_defs.h>
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #ifndef _SIZE_T
 #define _SIZE_T
@@ -44,6 +54,16 @@ void        _RTLENTRYF _EXPFUNC qsort(void * __base, size_t __nelem, size_t __wi
 #ifdef __cplusplus
 }
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __SEARCH_H */
 

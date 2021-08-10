@@ -1,17 +1,18 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\printer.rc
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Resources to use with THSlider & TVSlider
 //----------------------------------------------------------------------------
 
-#include <owl\slider.rh>
+#include <owl/slider.rh>
 
 #if defined(RC_INVOKED)
 
 #if !defined(NO_IDB_HSLIDERTHUMB) && !defined(__IDB_HSLIDERTHUMB)
 #define __IDB_HSLIDERTHUMB
 IDB_HSLIDERTHUMB BITMAP PRELOAD MOVEABLE DISCARDABLE 
-BEGIN
+{
   '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
   '00 00 12 00 00 00 14 00 00 00 01 00 04 00 00 00'
   '00 00 F0 00 00 00 00 00 00 00 00 00 00 00 00 00'
@@ -35,14 +36,14 @@ BEGIN
   '00 00 0F F7 77 78 00 88 77 77 70 00 00 00 0F FF'
   'FF FF 00 88 88 88 80 00 00 00 B0 00 00 00 BB 00'
   '00 00 0B 00 00 00'
-END
+}
 #endif
 #undef NO_IDB_HSLIDERTHUMB
 
 #if !defined(NO_IDB_VSLIDERTHUMB) && !defined(__IDB_VSLIDERTHUMB)
 #define __IDB_VSLIDERTHUMB
 IDB_VSLIDERTHUMB BITMAP PRELOAD MOVEABLE DISCARDABLE 
-BEGIN
+{
   '42 4D 2A 01 00 00 00 00 00 00 76 00 00 00 28 00'
   '00 00 28 00 00 00 09 00 00 00 01 00 04 00 00 00'
   '00 00 B4 00 00 00 00 00 00 00 00 00 00 00 00 00'
@@ -62,7 +63,7 @@ BEGIN
   '77 80 0F FF FF FF FF FF FF FF FF F0 08 88 88 88'
   '88 88 88 88 88 80 B0 00 00 00 00 00 00 00 00 0B'
   'B0 00 00 00 00 00 00 00 00 0B'
-END
+}
 #endif
 #undef NO_IDB_VSLIDERTHUMB
 

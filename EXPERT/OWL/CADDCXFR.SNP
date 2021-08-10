@@ -4,14 +4,14 @@
 ##^BOF
 ##? ClassMarker [[Search]]
 ##Search == FALSE
-##:     %\\"Unable to add instant data; marker for [[ClassName]] constructor to [[FileName]].  "
+##:     %\\"Unable to add instance data, marker for [[ClassName]] constructor to [[FileName]].  "
 ##*
 ##^BOL
 static [[ClassName]]Xfer [[ClassName]]Data;
 
 ##? "{" [[Search]]
 ##Search == FALSE
-##:     %\\"Unable to add instant data; marker for [[ClassName]] constructor body to [[FileName]].  "
+##:     %\\"Unable to add instance data, marker for [[ClassName]] constructor body to [[FileName]].  "
 ##*
 ##--END-- QUERY_FILE_H [[FileName]]
 ##^BOL

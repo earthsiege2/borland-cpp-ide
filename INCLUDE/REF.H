@@ -5,9 +5,9 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -29,10 +29,23 @@
 #include <_defs.h>
 #endif
 
-#pragma option -Vo-
-#if     defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-
+
+#if !defined(RC_INVOKED)
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po-     // disable Object data calling convention
 #endif
+#endif
+
+#pragma option -Vo-
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
@@ -62,10 +75,22 @@ private:
 #define BI_Reference TReference
 #endif
 
-#pragma option -Vo.
-#if     defined(__BCOPT__) && !defined(_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po.
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
 
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po.     // restore Object data calling convention
+#endif
+#endif
+
+#pragma option -Vo.
+
+#endif  /* !RC_INVOKED */
+
+
 #endif  // __REF_H
-

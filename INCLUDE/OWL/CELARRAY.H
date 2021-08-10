@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\celarray.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of a bitmap Cel array class.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_CELARRAY_H)
-#define __OWL_CELARRAY_H
+#if !defined(OWL_CELARRAY_H)
+#define OWL_CELARRAY_H
 
-#if !defined(__OWL_GDIOBJCT_H)
-  #include <owl\gdiobjec.h>
+#if !defined(OWL_GDIOBJCT_H)
+# include <owl/gdiobjec.h>
 #endif
 
 
@@ -38,7 +39,7 @@ class _OWLCLASS TCelArray {
 
   protected:
     TBitmap*  Bitmap;
-    BOOL      ShouldDelete;
+    bool      ShouldDelete;
 
     TPoint    Offs;
     int       NCels;
@@ -47,4 +48,4 @@ class _OWLCLASS TCelArray {
   private:
 };
 
-#endif  // __OWL_CELARRAY_H
+#endif  // OWL_CELARRAY_H

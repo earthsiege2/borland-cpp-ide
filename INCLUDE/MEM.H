@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -21,6 +21,20 @@
 
 #ifndef NULL
 #include <_null.h>
+#endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 
@@ -41,86 +55,35 @@ typedef unsigned size_t;
 #endif
 
 
-#ifdef __cplusplus
-extern "C" {
+#if !defined(__FLAT__) || defined(__DPMI32__)
+void        _RTLENTRY  _EXPFUNC movedata(unsigned __srcseg, unsigned __srcoff,
+                                         unsigned __dstseg, unsigned __dstoff, size_t __n);
 #endif
 
-#if !defined(__FLAT__)
 
 void _FAR * _RTLENTRY  _EXPFUNC memccpy(void _FAR *__dest, const void _FAR *__src,
-                           int __c, size_t __n);
+                                        int __c, size_t __n);
 int         _RTLENTRY  _EXPFUNC memcmp(const void _FAR *__s1, const void _FAR *__s2,
-                          size_t __n);
+                                       size_t __n);
 void _FAR * _RTLENTRY  _EXPFUNC memcpy(void _FAR *__dest, const void _FAR *__src,
-                          size_t __n);
+                                       size_t __n);
 int         _RTLENTRY  _EXPFUNC memicmp(const void _FAR *__s1, const void _FAR *__s2,
-                          size_t __n);
+                                        size_t __n);
 void _FAR * _RTLENTRYF _EXPFUNC memmove(void _FAR *__dest, const void _FAR *__src,
-                          size_t __n);
+                                        size_t __n);
 void _FAR * _RTLENTRYF _EXPFUNC memset(void _FAR *__s, int __c, size_t __n);
-void        _RTLENTRY  _EXPFUNC movedata(unsigned __srcseg, unsigned __srcoff,
-                            unsigned __dstseg,unsigned __dstoff, size_t __n);
-void        _RTLENTRY  _EXPFUNC movmem(const void _FAR *__src, void _FAR *__dest,
-                          unsigned __length);
-void        _RTLENTRY  _EXPFUNC setmem(void _FAR *__dest,unsigned __length, char __value);
 
-
-#if !defined(__STDC__) /* NON_ANSI  */
-void  far * _RTLENTRY _FARCALL _fmemccpy(void far *__dest, const void far *__src,
-                       int __c, size_t __n);
-void  far * _RTLENTRY _FARCALL _fmemchr(const void far *__s, int __c, size_t __n);
-int         _RTLENTRY _FARCALL _fmemcmp(const void far *__s1, const void far *__s2,
-                       size_t __n);
-void  far * _RTLENTRY _FARCALL _fmemcpy(void far *__dest, const void far *__src,
-                       size_t __n);
-int         _RTLENTRY _FARCALL _fmemicmp(const void far *__s1, const void far *__s2,
-                       size_t __n);
-void  far * _RTLENTRY _FARCALL _fmemmove(void far *__dest, const void far *__src,
-                       size_t __n);
-void  far * _RTLENTRY _FARCALL _fmemset(void far *__s, int __c, size_t __n);
-void        _RTLENTRY _FARCALL _fmovmem(const void far *__src, void far *__dest,
-                       unsigned __length);
-void        _RTLENTRY _FARCALL _fsetmem(void far *__dest, unsigned __length,
-                       char __value);
-#endif /* __STDC__  */
-
-
-#else  /* defined __FLAT__ */
-
-
-void * _RTLENTRY  _EXPFUNC memccpy(void * __dest, const void * __src,
-                                  int __c, size_t __n);
-int    _RTLENTRY  _EXPFUNC memcmp(const void * __s1, const void * __s2,
-                                  size_t __n);
-void * _RTLENTRY  _EXPFUNC memcpy(void * __dest, const void * __src,
-                                  size_t __n);
-int    _RTLENTRY  _EXPFUNC memicmp(const void * __s1, const void * __s2,
-                                   size_t __n);
-void * _RTLENTRYF _EXPFUNC memmove(void * __dest, const void * __src,
-                                   size_t __n);
-void * _RTLENTRYF _EXPFUNC memset(void * __s, int __c, size_t __n);
-
-#define movmem(src,dest,length) (void)memmove(dest,src,length)
-#define setmem(dest,length,value) (void)memset(dest,value,length)
-
-#endif  /* __FLAT__ */
-
-#ifdef __cplusplus
-}
-#endif
 
 #if defined(__cplusplus)
-extern "C++" {
-      void _FAR * _RTLENTRY _EXPFUNC32 memchr(void _FAR *__s, int __c, size_t __n);
-const void _FAR * _RTLENTRY _EXPFUNC32 memchr(const void _FAR *__s, int __c, size_t __n);
+extern "C++"
+{
+          void _FAR * _RTLENTRY _EXPFUNC32 memchr(void _FAR *__s, int __c, size_t __n);
+    const void _FAR * _RTLENTRY _EXPFUNC32 memchr(const void _FAR *__s, int __c, size_t __n);
 }
 #else
-      void _FAR * _RTLENTRY _EXPFUNC32 memchr(const void _FAR *__s, int __c, size_t __n);
+          void _FAR * _RTLENTRY _EXPFUNC32 memchr(const void _FAR *__s, int __c, size_t __n);
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #if !defined(__STRING_H)
 /* Intrinsic functions */
@@ -131,8 +94,69 @@ void _FAR * _RTLENTRY  _EXPFUNC16 __memcpy__(void _FAR * __dest, const void _FAR
 void _FAR * _RTLENTRYF _EXPFUNC16 __memset__(void _FAR * __s, int __c, size_t __n);
 #endif
 
+
+#if !defined(__FLAT__)
+
+void        _RTLENTRY  _EXPFUNC movmem(const void _FAR *__src, void _FAR *__dest,
+                                       unsigned __length);
+void        _RTLENTRY  _EXPFUNC setmem(void _FAR *__dest,unsigned __length, char __value);
+
+
+#if !defined(__STDC__) /* NON_ANSI  */
+void  __far * _RTLENTRY _FARCALL _fmemccpy(void __far *__dest, const void __far *__src,
+                                           int __c, size_t __n);
+void  __far * _RTLENTRY _FARCALL _fmemchr(const void __far *__s, int __c, size_t __n);
+int           _RTLENTRY _FARCALL _fmemcmp(const void __far *__s1, const void __far *__s2,
+                                          size_t __n);
+void  __far * _RTLENTRY _FARCALL _fmemcpy(void __far *__dest, const void __far *__src,
+                                          size_t __n);
+int           _RTLENTRY _FARCALL _fmemicmp(const void __far *__s1, const void __far *__s2,
+                                           size_t __n);
+void  __far * _RTLENTRY _FARCALL _fmemmove(void __far *__dest, const void __far *__src,
+                                           size_t __n);
+void  __far * _RTLENTRY _FARCALL _fmemset(void __far *__s, int __c, size_t __n);
+void          _RTLENTRY _FARCALL _fmovmem(const void __far *__src, void __far *__dest,
+                                          unsigned __length);
+void          _RTLENTRY _FARCALL _fsetmem(void __far *__dest, unsigned __length,
+                                          char __value);
+#endif /* __STDC__  */
+
+
+#else  /* defined __FLAT__ */
+
+
+#define movmem(src,dest,length) (void)memmove(dest,src,length)
+#define setmem(dest,length,value) (void)memset(dest,value,length)
+
+
+#if !defined(__STDC__) /* NON_ANSI  */
+#define _fmemccpy memccpy
+#define _fmemchr  memchr
+#define _fmemcmp  memcmp
+#define _fmemcpy  memcpy
+#define _fmemicmp memicmp
+#define _fmemmove memmove
+#define _fmemset  memset
+#define _fmovmem  movmem
+#define _fsetmem  setmem
+#endif /* __STDC__  */
+
+
+#endif  /* __FLAT__ */
+
+
 #ifdef __cplusplus
 }
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __MEM_H */

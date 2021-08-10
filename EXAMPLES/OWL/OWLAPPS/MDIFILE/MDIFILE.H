@@ -13,5 +13,3 @@
 #define IDM_EDITFILE_DOC    100
 #define IDM_EDITFILE_CHILD  101
 
-#define IDW_STATUSBAR       32000   // Copied from include\owl\messageb.h
-#define IDW_TOOLBAR         1000    // Assigned to toolbar in BuildControlBar()

@@ -1,29 +1,30 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\toolbox.h
-//   Class TToolBox.
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Definition of class TToolBox.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_TOOLBOX_H)
-#define __OWL_TOOLBOX_H
+#if !defined(OWL_TOOLBOX_H)
+#define OWL_TOOLBOX_H
 
-#if !defined(__OWL_GADGETWI_H)
-  #include "owl\gadgetwi.h"
+#if !defined(OWL_GADGETWI_H)
+# include <owl/gadgetwi.h>
 #endif
 
 //
 //  class TToolBox
 //  ----- --------
 //
-//  arranges its gadgets in a matrix. all columns are the same width(as wide
-//  as the widest gadget) and all rows are the same height(as high as the
+//  arranges its gadgets in a matrix. all columns are the same width (as wide
+//  as the widest gadget) and all rows are the same height (as high as the
 //  heighest gadget)
 //
 //  you specify the number of rows and columns you want. you can specify
 //  AS_MANY_AS_NEEDED in which case the toolbox figures out how many rows or
-//  columns are needed based on the opposite dimension(e.g. if there are
+//  columns are needed based on the opposite dimension (e.g. if there are
 //  20 gadgets and you requested 4 columns then you would get 5 rows)
 //
-#define AS_MANY_AS_NEEDED  -1
+const int AS_MANY_AS_NEEDED = -1;
 
 class _OWLCLASS TToolBox : public TGadgetWindow {
   public:
@@ -57,4 +58,4 @@ class _OWLCLASS TToolBox : public TGadgetWindow {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_TOOLBOX_H
+#endif  // OWL_TOOLBOX_H

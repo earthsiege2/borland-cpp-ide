@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\groupbox.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TGroupBox.  This defines the basic behavior
 //   for all group boxes.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_GROUPBOX_H)
-#define __OWL_GROUPBOX_H
+#if !defined(OWL_GROUPBOX_H)
+#define OWL_GROUPBOX_H
 
-#if !defined(__OWL_CONTROL_H)
-  #include <owl\control.h>
+#if !defined(OWL_CONTROL_H)
+# include <owl/control.h>
 #endif
 
 //
@@ -17,7 +18,7 @@
 //
 class _OWLCLASS TGroupBox : public TControl {
   public:
-    BOOL  NotifyParent;
+    bool  NotifyParent;
 
     TGroupBox(TWindow*        parent,
               int             id,
@@ -42,4 +43,4 @@ class _OWLCLASS TGroupBox : public TControl {
   DECLARE_STREAMABLE(_OWLCLASS, TGroupBox, 1);
 };
 
-#endif  // __OWL_GROUPBOX_H
+#endif  // OWL_GROUPBOX_H

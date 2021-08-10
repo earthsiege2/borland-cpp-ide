@@ -15,7 +15,7 @@
 #define CM_ODLISTEDIT       27388
 #define IDS_ODLISTNUM       32583
 #define IDM_ODLISTVIEW      32583
-#define IDA_ODLISTVIEW      32583
+#define IDA_ODLISTVIEW      32584
 
 #if defined(RC_INVOKED)
 
@@ -23,14 +23,14 @@ IDM_ODLISTVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
 BEGIN
   POPUP "&Edit"
   BEGIN
-    MenuItem  "&Undo\aAlt+BkSp",      CM_ODLISTUNDO
+    MenuItem  "&Undo\aCtrl+Z",        CM_ODLISTUNDO
     MenuItem  SEPARATOR
-    MenuItem  "&Cut\aShift+Del",      CM_ODLISTCUT
-    MenuItem  "C&opy\aCtrl+Ins",      CM_ODLISTCOPY
-    MenuItem  "&Paste\aShift+Ins",    CM_ODLISTPASTE
+    MenuItem  "&Cut\aCtrl+X",         CM_ODLISTCUT
+    MenuItem  "C&opy\aCtrl+C",        CM_ODLISTCOPY
+    MenuItem  "&Paste\aCtrl+V",       CM_ODLISTPASTE
     MenuItem  "&Delete\aDel",         CM_ODLISTDELETE
-    MenuItem  "&Add Item\aEnter",     CM_ODLISTADD
-    MenuItem  "&Edit Item\aAlt+Enter",CM_ODLISTEDIT
+    MenuItem  "&Add Item\aIns",       CM_ODLISTADD
+    MenuItem  "&Edit Item\aEnter",    CM_ODLISTEDIT
     MenuItem  "C&lear All\aCtrl+Del", CM_ODLISTCLEAR
   END
   POPUP "&Help"
@@ -41,6 +41,7 @@ END
 
 IDA_ODLISTVIEW ACCELERATORS
 BEGIN
+  "^z",      CM_ODLISTUNDO,
   "^x",      CM_ODLISTCUT,
   "^c",      CM_ODLISTCOPY,
   "^v",      CM_ODLISTPASTE,
@@ -50,8 +51,8 @@ BEGIN
   VK_INSERT, CM_ODLISTCOPY,  VIRTKEY, CONTROL
   VK_INSERT, CM_ODLISTPASTE, VIRTKEY, SHIFT
   VK_BACK,   CM_ODLISTUNDO,  VIRTKEY, ALT
-  VK_RETURN, CM_ODLISTADD,   VIRTKEY
-  VK_RETURN, CM_ODLISTEDIT,  VIRTKEY, ALT
+  VK_INSERT, CM_ODLISTADD,   VIRTKEY
+  VK_RETURN, CM_ODLISTEDIT,  VIRTKEY
 END
 
 STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE

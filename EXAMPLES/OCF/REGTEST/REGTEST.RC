@@ -1,0 +1,26 @@
+//----------------------------------------------------------------------------
+// ObjectComponents - (C) Copyright 1994 by Borland International
+// OLE registration test resources
+//----------------------------------------------------------------------------
+
+#include "regtest.rh"
+
+IDD_MAIN DIALOG 26, 69, 276, 160
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "OLE 2 Registration Test"
+FONT 8, "MS Sans Serif"
+{
+ PUSHBUTTON "Display",    IDC_DISPLAY,     8,  8, 40, 14
+ PUSHBUTTON "Register",   IDC_REGISTER,   52,  8, 40, 14
+ PUSHBUTTON "Unregister", IDC_UNREGISTER, 96,  8, 40, 14
+ PUSHBUTTON "Verify",     IDC_VERIFY,    140,  8, 40, 14
+ PUSHBUTTON "Compare",    IDC_COMPARE,   184,  8, 40, 14
+ PUSHBUTTON "Write File", IDC_WRITEFILE, 228,  8, 40, 14
+ LTEXT         "Op:",     -1,             10, 31, 13, 10
+ LTEXT         "",        IDC_OP,         23, 31, 42, 10, NOT WS_GROUP|WS_BORDER
+ LTEXT         "Errors:", -1,             75, 31, 27, 10
+ RTEXT         "",        IDC_ERRORS,    100, 31, 70, 10, NOT WS_GROUP|WS_BORDER
+ DEFPUSHBUTTON "Exit",    IDC_EXIT,      228, 29, 40, 14
+ LISTBOX                  IDC_REGLIST,     8, 52,260,100,
+                                WS_VSCROLL | WS_HSCROLL | LBS_NOINTEGRALHEIGHT
+}

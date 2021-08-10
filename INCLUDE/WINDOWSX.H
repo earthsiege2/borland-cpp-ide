@@ -1,3 +1,13 @@
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#if !defined(__FLAT__)
+
 /*****************************************************************************\
 *                                                                             *
 * windowsx.h -  Macro APIs, window message crackers, and control APIs         *
@@ -6,30 +16,15 @@
 *                                                                             *
 \*****************************************************************************/
 
-/*
- *      C/C++ Run Time Library - Version 6.0
- *
- *      Copyright (c) 1991, 1993 by Borland International
- *      All Rights Reserved.
- *
- */
-
-#ifndef __WINDOWSX_H    /* prevent multiple includes */
+#ifndef _INC_WINDOWSX
+#define _INC_WINDOWSX
 #define __WINDOWSX_H
 
-#ifndef __WINDOWS_H
-#include <windows.h>    /* <windows.h> must be included */
-#endif  /* __WINDOWS_H */
-
-#ifndef RC_INVOKED
-#pragma option -a-      /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#include "pshpack1.h"
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
-
-#if !defined(__FLAT__)
 
 /****** KERNEL Macro APIs ****************************************************/
 
@@ -373,13 +368,13 @@ extern "C" {            /* Assume C declarations for C++ */
 #define FORWARD_WM_QUERYDRAGICON(hwnd, fn) \
     (HICON)(UINT)(DWORD)(fn)((hwnd), WM_QUERYDRAGICON, 0, 0L)
 
-#ifdef __SHELLAPI_H
+#ifdef _INC_SHELLAPI
 /* void Cls_OnDropFiles(HWND hwnd, HDROP hdrop) */
 #define HANDLE_WM_DROPFILES(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HDROP)(wParam)), 0L)
 #define FORWARD_WM_DROPFILES(hwnd, hdrop, fn) \
     (void)(fn)((hwnd), WM_DROPFILES, (WPARAM)(hdrop), 0L)
-#endif  /* __SHELLAPI_H */
+#endif  /* _INC_SHELLAPI */
 
 /* void Cls_OnActivate(HWND hwnd, UINT state, HWND hwndActDeact, BOOL fMinimized) */
 #define HANDLE_WM_ACTIVATE(hwnd, wParam, lParam, fn) \
@@ -1213,7 +1208,33 @@ extern "C" {            /* Assume C declarations for C++ */
 #define GET_WM_VSCROLL_MPS(code, pos, hwnd)    \
         (WPARAM)(code), MAKELONG(pos, hwnd)
 
-#else    /* defined __FLAT__ */
+#include "poppack.h"
+
+#ifdef __cplusplus
+}                       /* End of extern "C" { */
+#endif  /* __cplusplus */
+
+#endif  /* !_INC_WINDOWSX */
+
+
+#else  /* !__FLAT__ */
+
+
+/*****************************************************************************\
+*                                                                             *
+* windowsx.h -  Macro APIs, window message crackers, and control APIs         *
+*                                                                             *
+*               Version Win32 / Windows NT                                    *
+*                                                                             *
+\*****************************************************************************/
+
+#ifndef _INC_WINDOWSX
+#define _INC_WINDOWSX
+#define __WINDOWSX_H
+
+#ifdef __cplusplus
+extern "C" {            /* Assume C declarations for C++ */
+#endif /* __cplusplus */
 
 /****** KERNEL Macro APIs ****************************************************/
 
@@ -1416,8 +1437,8 @@ extern "C" {            /* Assume C declarations for C++ */
 
 /* This message is in Windows 3.1 only */
 /* void Cls_OnSystemError(HWND hwnd, int errCode) */
-#define HANDLE_WM_SYSTEMERROR(hwnd, wParam, lParam, fn)
-#define FORWARD_WM_SYSTEMERROR(hwnd, errCode, fn)
+#define HANDLE_WM_SYSTEMERROR(hwnd, wParam, lParam, fn) 0L
+#define FORWARD_WM_SYSTEMERROR(hwnd, errCode, fn) 0L
 
 /* BOOL Cls_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct) */
 #define HANDLE_WM_CREATE(hwnd, wParam, lParam, fn) \
@@ -1563,13 +1584,13 @@ extern "C" {            /* Assume C declarations for C++ */
 #define FORWARD_WM_QUERYDRAGICON(hwnd, fn) \
     (HICON)(UINT)(DWORD)(fn)((hwnd), WM_QUERYDRAGICON, 0L, 0L)
 
-#ifdef __SHELLAPI_H
+#ifdef _INC_SHELLAPI
 /* void Cls_OnDropFiles(HWND hwnd, HDROP hdrop) */
 #define HANDLE_WM_DROPFILES(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HDROP)(wParam)), 0L)
 #define FORWARD_WM_DROPFILES(hwnd, hdrop, fn) \
     (void)(fn)((hwnd), WM_DROPFILES, (WPARAM)(HDROP)(hdrop), 0L)
-#endif  /* __SHELLAPI_H */
+#endif  /* _INC_SHELLAPI */
 
 /* void Cls_OnActivate(HWND hwnd, UINT state, HWND hwndActDeact, BOOL fMinimized) */
 #define HANDLE_WM_ACTIVATE(hwnd, wParam, lParam, fn) \
@@ -1812,13 +1833,13 @@ extern "C" {            /* Assume C declarations for C++ */
 #define HANDLE_WM_HSCROLL(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(lParam), (UINT)(LOWORD(wParam)), (int)(short)HIWORD(wParam)), 0L)
 #define FORWARD_WM_HSCROLL(hwnd, hwndCtl, code, pos, fn) \
-    (void)(fn)((hwnd), WM_HSCROLL, MAKEWPARAM((UINT)(pos),(UINT)(code)), (LPARAM)(UINT)(hwndCtl))
+    (void)(fn)((hwnd), WM_HSCROLL, MAKEWPARAM((UINT)(int)(code),(UINT)(int)(pos)), (LPARAM)(UINT)(hwndCtl))
 
 /* void Cls_OnVScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos) */
 #define HANDLE_WM_VSCROLL(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(lParam), (UINT)(LOWORD(wParam)),  (int)(short)HIWORD(wParam)), 0L)
 #define FORWARD_WM_VSCROLL(hwnd, hwndCtl, code, pos, fn) \
-    (void)(fn)((hwnd), WM_VSCROLL, MAKEWPARAM((UINT)(int)(pos),(UINT)(int)(code)), (LPARAM)(HWND)(hwndCtl))
+    (void)(fn)((hwnd), WM_VSCROLL, MAKEWPARAM((UINT)(int)(code), (UINT)(int)(pos)), (LPARAM)(HWND)(hwndCtl))
 
 /* void Cls_OnCut(HWND hwnd) */
 #define HANDLE_WM_CUT(hwnd, wParam, lParam, fn) \
@@ -1949,7 +1970,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 /* HWND Cls_MDINext(HWND hwnd, HWND hwndCur, BOOL fPrev) */
 #define HANDLE_WM_MDINEXT(hwnd, wParam, lParam, fn) \
-    (fn)((hwnd), (HWND)(wParam), (BOOL)lParam)
+    (LRESULT)(HWND)(fn)((hwnd), (HWND)(wParam), (BOOL)lParam)
 #define FORWARD_WM_MDINEXT(hwnd, hwndCur, fPrev, fn) \
     (HWND)(UINT)(DWORD)(fn)((hwnd), WM_MDINEXT, (WPARAM)(hwndCur), (LPARAM)(fPrev))
 
@@ -2198,7 +2219,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define Edit_SetReadOnly(hwndCtl, fReadOnly)    ((BOOL)(DWORD)SendMessage((hwndCtl), EM_SETREADONLY, (WPARAM)(BOOL)(fReadOnly), 0L))
 
-#define Edit_GetPasswordChar(hwndCtl)           ((char)(DWORD)SendMessage((hwndCtl), EM_GETPASSWORDCHAR, 0L, 0L))
+#define Edit_GetPasswordChar(hwndCtl)           ((TCHAR)(DWORD)SendMessage((hwndCtl), EM_GETPASSWORDCHAR, 0L, 0L))
 
 #define Edit_SetWordBreakProc(hwndCtl, lpfnWordBreak) ((void)SendMessage((hwndCtl), EM_SETWORDBREAKPROC, 0L, (LPARAM)(EDITWORDBREAKPROC)(lpfnWordBreak)))
 #define Edit_GetWordBreakProc(hwndCtl)          ((EDITWORDBREAKPROC)SendMessage((hwndCtl), EM_GETWORDBREAKPROC, 0L, 0L))
@@ -2346,7 +2367,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define GET_WM_ACTIVATE_MPS(s, fmin, hwnd)   \
         (WPARAM)MAKELONG((s), (fmin)), (LONG)(hwnd)
 
-#define GET_WM_CHARTOITEM_CHAR(wp, lp)          (CHAR)LOWORD(wp)
+#define GET_WM_CHARTOITEM_CHAR(wp, lp)          (TCHAR)LOWORD(wp)
 #define GET_WM_CHARTOITEM_POS(wp, lp)           HIWORD(wp)
 #define GET_WM_CHARTOITEM_HWND(wp, lp)          (HWND)(lp)
 #define GET_WM_CHARTOITEM_MPS(ch, pos, hwnd) \
@@ -2384,7 +2405,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define GET_WM_MDISETMENU_MPS(hmenuF, hmenuW) (WPARAM)hmenuF, (LONG)hmenuW
 
-#define GET_WM_MENUCHAR_CHAR(wp, lp)                (CHAR)LOWORD(wp)
+#define GET_WM_MENUCHAR_CHAR(wp, lp)                (TCHAR)LOWORD(wp)
 #define GET_WM_MENUCHAR_HMENU(wp, lp)               (HMENU)(lp)
 #define GET_WM_MENUCHAR_FMENU(wp, lp)               (BOOL)HIWORD(wp)
 #define GET_WM_MENUCHAR_MPS(ch, hmenu, f)    \
@@ -2430,60 +2451,73 @@ extern "C" {            /* Assume C declarations for C++ */
 
 /****** C runtime porting macros ****************************************/
 
-#define _ncalloc calloc
-#define _nexpand expand
-#define _ffree free
-#define _fmalloc malloc
-#define _fmemccpy memccpy
-#define _fmemchr memchr
-#define _fmemcmp memcmp
-#define _fmemcpy memcpy
-#define _fmemicmp memicmp
-#define _fmemmove memmove
-#define _fmemset memset
-#define _fmsize _msize
-#define _frealloc realloc
-#define _fstrcat strcat
-#define _fstrchr strchr
-#define _fstrcmp strcmp
-#define _fstrcpy strcpy
-#define _fstrcspn strcspn
-#define _fstrdup strdup
-#define _fstricmp stricmp
-#define _fstrlen strlen
-#define _fstrlwr strlwr
-#define _fstrncat strncat
-#define _fstrncmp strncmp
-#define _fstrncpy strncpy
-#define _fstrnicmp strnicmp
-#define _fstrnset strnset
-#define _fstrpbrk strpbrk
-#define _fstrrchr strrchr
-#define _fstrrev strrev
-#define _fstrset strset
-#define _fstrspn strspn
-#define _fstrstr strstr
-#define _fstrtok strtok
-#define _fstrupr strupr
-#define _nfree free
-#define _nmalloc malloc
-#define _nmsize msize
-#define _nrealloc realloc
-#define _nstrdup strdup
+#if defined(__BORLANDC__)
+#define _nexpand    expand
+#define _fmemccpy   memccpy
+#define _fmemicmp   memicmp
+#define _fmsize     msize
+#define _fstrdup    strdup
+#define _fstricmp   stricmp
+#define _fstrlwr    strlwr
+#define _fstrnicmp  strnicmp
+#define _fstrnset   strnset
+#define _fstrrev    strrev
+#define _fstrset    strset
+#define _fstrupr    strupr
+#define _nmsize     msize
+#define _nstrdup    strdup
+#else
+#define _nexpand    _expand
+#define _fmemccpy   _memccpy
+#define _fmemicmp   _memicmp
+#define _fmsize     _msize
+#define _fstrdup    _strdup
+#define _fstricmp   _stricmp
+#define _fstrlwr    _strlwr
+#define _fstrnicmp  _strnicmp
+#define _fstrnset   _strnset
+#define _fstrrev    _strrev
+#define _fstrset    _strset
+#define _fstrupr    _strupr
+#define _nmsize     _msize
+#define _nstrdup    _strdup
+#endif
+
+#define _ncalloc    calloc
+#define _ffree      free
+#define _fmalloc    malloc
+#define _fmemchr    memchr
+#define _fmemcmp    memcmp
+#define _fmemcpy    memcpy
+#define _fmemmove   memmove
+#define _fmemset    memset
+#define _frealloc   realloc
+#define _fstrcat    strcat
+#define _fstrchr    strchr
+#define _fstrcmp    strcmp
+#define _fstrcpy    strcpy
+#define _fstrcspn   strcspn
+#define _fstrlen    strlen
+#define _fstrncat   strncat
+#define _fstrncmp   strncmp
+#define _fstrncpy   strncpy
+#define _fstrpbrk   strpbrk
+#define _fstrrchr   strrchr
+#define _fstrspn    strspn
+#define _fstrstr    strstr
+#define _fstrtok    strtok
+#define _nfree      free
+#define _nmalloc    malloc
+#define _nrealloc   realloc
 #define hmemcpy     memcpy
 
 #define DECLARE_HANDLE32    DECLARE_HANDLE
 
-#endif  /* __FLAT__ */
-
 #ifdef __cplusplus
 }                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+#endif       /* __cplusplus */
 
-#ifndef RC_INVOKED
-#pragma option -a.      /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#endif  /* !_INC_WINDOWSX */
 
-#endif  /* !__WINDOWSX_H */
 
-
+#endif  /* __FLAT__ */

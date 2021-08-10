@@ -14,7 +14,7 @@
 //  class TBGroupBox
 //  ----- ----------
 //
-class _EXPCLASS TBGroupBox : public TGroupBox {
+class  TBGroupBox : public TGroupBox {
   public:
     TBGroupBox(TWindow*        parent,
                int             id,
@@ -27,7 +27,7 @@ class _EXPCLASS TBGroupBox : public TGroupBox {
   protected:
     char far* GetClassName();
 
-  DECLARE_STREAMABLE_FROM_BASE(_EXPCLASS, TBGroupBox, TGroupBox);
+  DECLARE_STREAMABLE_FROM_BASE(, TBGroupBox, TGroupBox);
 };
 
 #endif //__BGRPBOX_H

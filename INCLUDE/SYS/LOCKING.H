@@ -4,7 +4,13 @@
 
 */
 
-/* $Copyright: 1990$ */
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1990, 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
 #if !defined(__LOCKING_H)
 #define __LOCKING_H

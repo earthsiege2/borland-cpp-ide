@@ -1,14 +1,18 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\eventhan.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   TEventHandler and related classes & macros
 //----------------------------------------------------------------------------
-#if !defined(__OWL_EVENTHAN_H)
-#define __OWL_EVENTHAN_H
+#if !defined(OWL_EVENTHAN_H)
+#define OWL_EVENTHAN_H
 
-#include <limits.h>
-#include <owl\signatur.h>
-#include <owl\dispatch.h>
+#if !defined(OWL_SIGNATUR_H)
+# include <owl/signatur.h>
+#endif
+#if !defined(OWL_DISPATCH_H)
+# include <owl/dispatch.h>
+#endif
 
 #if defined(__TRACE) || defined(__WARN)
   //
@@ -18,16 +22,16 @@
   class _OWLCLASS MsgName {
     public:
       friend ostream& operator <<(ostream& os, const MsgName& msg);
-      MsgName(UINT msg) : Message(msg) {}
+      MsgName(uint msg) : Message(msg) {}
     private:
-      UINT Message;
+      uint Message;
   };
 #endif
 
 #if defined(OWLRTFAR)
-  #define __RTFAR  far
+# define __RTFAR  far
 #else
-  #define __RTFAR
+# define __RTFAR
 #endif
 
 //
@@ -43,8 +47,10 @@
 #define WM_OWLNOTIFY      (WM_OWLLAST - 4)
 #define WM_OWLPREPROCMENU (WM_OWLLAST - 5)
 #define WM_OWLCANCLOSE    (WM_OWLLAST - 6)
-#define WM_VBXNAME        (WM_OWLLAST - 7)
-#define WM_VBXBASE        (WM_OWLLAST - 7 - 256)
+#define WM_VBXINITFORM    (WM_OWLLAST - 7)
+#define WM_VBXNAME        (WM_OWLLAST - 8)
+#define WM_VBXBASE        (WM_OWLLAST - 8 - 256)
+#define WM_OWLWAKEUP      (WM_VBXBASE - 1)
 
 template <class T> class TResponseTableEntry;  // forward declaration
 typedef TResponseTableEntry<GENERIC>  TGenericTableEntry;
@@ -54,31 +60,31 @@ typedef TResponseTableEntry<GENERIC>  TGenericTableEntry;
 //  ----- -------------
 //  base class from which to derive classes that can handle events
 //
-class _OWLCLASS __rtti TEventHandler {
+class _OWLCLASS _RTTI TEventHandler {
   public:
     class TEventInfo {
       public:
-        const UINT                  Msg;
-        const UINT                  Id;
+        const uint                  Msg;
+        const uint                  Id;
         GENERIC*                    Object;
         TGenericTableEntry __RTFAR* Entry;
 
-        TEventInfo(UINT msg, UINT id = 0) : Msg(msg), Id(id) {Entry = 0;}
+        TEventInfo(uint msg, uint id = 0) : Msg(msg), Id(id) {Entry = 0;}
     };
-    typedef BOOL(*TEqualOperator)(TGenericTableEntry __RTFAR&, TEventInfo&);
+    typedef bool(*TEqualOperator)(TGenericTableEntry __RTFAR&, TEventInfo&);
 
     //
     // searches the list of response table entries looking for a match
     //
     // since class TEventHandler doesn't have any entries, this routine just
-    // returns FALSE
+    // returns false
     //
-    virtual BOOL     Find(TEventInfo& info, TEqualOperator op = 0);
+    virtual bool     Find(TEventInfo& info, TEqualOperator op = 0);
 
     virtual LRESULT  Dispatch(TEventInfo& info, WPARAM wp, LPARAM lp = 0);
 
   protected:
-    BOOL             SearchEntries(TGenericTableEntry __RTFAR* entries,
+    bool             SearchEntries(TGenericTableEntry __RTFAR* entries,
                                    TEventInfo& info,
                                    TEqualOperator op);
 };
@@ -93,10 +99,10 @@ template <class T> class TResponseTableEntry {
     typedef void (T::*PMF)();
 
     union {
-      UINT          Msg;
-      UINT          NotifyCode;
+      uint          Msg;
+      uint          NotifyCode;
     };
-    UINT            Id;
+    uint            Id;
     TAnyDispatcher  Dispatcher;
     PMF             Pmf;
 };
@@ -110,7 +116,7 @@ template <class T> class TResponseTableEntry {
     typedef TResponseTableEntry< cls >::PMF   TMyPMF;\
     typedef cls                               TMyClass;\
   public:\
-    BOOL  Find(TEventInfo&, TEqualOperator = 0)
+    bool  Find(TEventInfo&, TEqualOperator = 0)
 
 #define END_RESPONSE_TABLE\
   {0, 0, 0, 0}}
@@ -128,7 +134,7 @@ template <class T> class TResponseTableEntry {
 //    END_RESPONSE_TABLE;
 //
 #define DEFINE_RESPONSE_TABLE(cls)\
-  BOOL  cls::Find(TEventInfo& eventInfo, TEqualOperator equal)\
+  bool  cls::Find(TEventInfo& eventInfo, TEqualOperator equal)\
       {eventInfo.Object = (GENERIC*)this;\
        return SearchEntries((TGenericTableEntry __RTFAR*)__entries, eventInfo, equal);}\
   DEFINE_RESPONSE_TABLE_ENTRIES(cls)
@@ -138,7 +144,7 @@ template <class T> class TResponseTableEntry {
 // exactly like macro DEFINE_RESPONSE_TABLE
 //
 #define DEFINE_RESPONSE_TABLE1(cls, base)\
-  BOOL  cls::Find(TEventInfo& eventInfo, TEqualOperator equal)\
+  bool  cls::Find(TEventInfo& eventInfo, TEqualOperator equal)\
       {eventInfo.Object = (GENERIC*)this;\
        return SearchEntries((TGenericTableEntry __RTFAR*)__entries, eventInfo, equal) ||\
               base::Find(eventInfo, equal);}\
@@ -149,7 +155,7 @@ template <class T> class TResponseTableEntry {
 // exactly like macro DEFINE_RESPONSE_TABLE
 //
 #define DEFINE_RESPONSE_TABLE2(cls, base1, base2)\
-  BOOL  cls::Find(TEventInfo& eventInfo, TEqualOperator equal)\
+  bool  cls::Find(TEventInfo& eventInfo, TEqualOperator equal)\
       {eventInfo.Object = (GENERIC*)this;\
        return SearchEntries((TGenericTableEntry __RTFAR*)__entries, eventInfo, equal) ||\
               base1::Find(eventInfo, equal) ||\
@@ -161,7 +167,7 @@ template <class T> class TResponseTableEntry {
 // exactly like macro DEFINE_RESPONSE_TABLE
 //
 #define DEFINE_RESPONSE_TABLE3(cls, base1, base2, base3)\
-  BOOL  cls::Find(TEventInfo& eventInfo, TEqualOperator equal)\
+  bool  cls::Find(TEventInfo& eventInfo, TEqualOperator equal)\
       {eventInfo.Object = (GENERIC*)this;\
        return SearchEntries((TGenericTableEntry __RTFAR*)__entries, eventInfo, equal) ||\
               base1::Find(eventInfo, equal) ||\
@@ -169,4 +175,4 @@ template <class T> class TResponseTableEntry {
               base3::Find(eventInfo, equal);}\
   DEFINE_RESPONSE_TABLE_ENTRIES(cls)
 
-#endif  // __OWL_EVENTHAN_H
+#endif  // OWL_EVENTHAN_H

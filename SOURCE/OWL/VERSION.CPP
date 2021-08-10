@@ -1,9 +1,10 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\version.cpp
-//   OWL global version structure
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
+//   OWL global version structure for vprint
 //----------------------------------------------------------------------------
-#include <owl\version.h>
+#include <owl/version.h>
 
 #define WhoIsUs "OWL"
 
@@ -15,6 +16,6 @@ struct TVersionHeader {
 
 TVersionHeader VersionHeader = {
   {'$', '*', '$', '*', '$', '*'},
-  {InternalVersion},
+  {ObjectWindowsInternalVersion},
   WhoIsUs,
 };

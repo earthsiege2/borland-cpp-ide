@@ -1,25 +1,26 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\printdia.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of Print and PrintSetup common Dialogs
 //   classes
 //----------------------------------------------------------------------------
-#if !defined(__OWL_PRINTDIA_H)
-#define __OWL_PRINTDIA_H
+#if !defined(OWL_PRINTDIA_H)
+#define OWL_PRINTDIA_H
 
-#if !defined(__COMMDIAL_H)
-  #include <owl\commdial.h>
+#if !defined(OWL_COMMDIAL_H)
+# include <owl/commdial.h>
 #endif
-#if !defined(__DC_H)
-  #include <owl\dc.h>
+#if !defined(OWL_DC_H)
+# include <owl/dc.h>
 #endif
 
 class _OWLCLASS TPrintDialog : public TCommonDialog {
   public:
     class _OWLCLASS TData {
       public:
-        DWORD           Flags;
-        DWORD           Error;
+        uint32          Flags;
+        uint32          Error;
         int             FromPage;
         int             ToPage;
         int             MinPage;
@@ -54,6 +55,9 @@ class _OWLCLASS TPrintDialog : public TCommonDialog {
         DEVMODE far*  DevMode;
         DEVNAMES far* DevNames;
 
+        TData(const TData&);         // hidden to prevent copying & assignment
+        TData& operator =(const TData&);
+
       friend class TPrintDialog;
     };
 
@@ -64,7 +68,7 @@ class _OWLCLASS TPrintDialog : public TCommonDialog {
                  const char far* title = 0,
                  TModule*        module = 0);
                
-    BOOL       GetDefaultPrinter();
+    bool       GetDefaultPrinter();
 
     int        DoExecute();
 
@@ -72,7 +76,7 @@ class _OWLCLASS TPrintDialog : public TCommonDialog {
     PRINTDLG   pd;
     TData&     Data;
 
-    BOOL    DialogFunction(UINT message, WPARAM, LPARAM);
+    bool    DialogFunction(uint message, WPARAM, LPARAM);
 
     // Default behavior inline for message response functions
     //
@@ -86,4 +90,4 @@ class _OWLCLASS TPrintDialog : public TCommonDialog {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_PRINTDIA_H
+#endif  // OWL_PRINTDIA_H

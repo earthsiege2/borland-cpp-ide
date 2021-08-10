@@ -1,7 +1,5 @@
 /*++ BUILD Version: 0001    Increment this if a change has global effects
 
-Copyright (c) 1985-1993, Microsoft Corporation
-
 Module Name:
 
     windef.h
@@ -12,13 +10,17 @@ Abstract:
 
 --*/
 
-#ifndef __WINDEF_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _WINDEF_
+#define _WINDEF_
 #define __WINDEF_H
-
-
-#ifndef _X86_
-   #define _X86_
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,11 +44,11 @@ typedef char *PSZ;
 #define MAX_PATH          260
 
 #ifndef NULL
-#  if defined(__cplusplus) || defined(_Windows)
-#    define NULL 0
-#  else
-#    define NULL ((void *)0)
-#  endif
+#    if defined(__cplusplus) || defined(_Windows)
+#      define NULL 0
+#    else
+#      define NULL ((void *)0)
+#    endif
 #endif
 
 #ifndef FALSE
@@ -69,28 +71,22 @@ typedef char *PSZ;
 #define OPTIONAL
 #endif
 
-#ifdef far
 #undef far
-#endif
-#ifdef near
 #undef near
-#endif
-#ifdef pascal
 #undef pascal
-#endif
 
 #define far
 #define near
-#if (_MSC_VER >= 800)
+#if (_MSC_VER >= 800) || defined(__BORLANDC__)
 #define pascal __stdcall
 #else
-/* #define pascal */
+#define pascal
 #endif
 
-#if defined(DOSWIN32) || defined(__BORLANDC__)
-#define cdecl __cdecl
+#ifdef DOSWIN32 || defined(__BORLANDC__)
+#define cdecl _cdecl
 #ifndef CDECL
-#define CDECL __cdecl
+#define CDECL _cdecl
 #endif
 #else
 #define cdecl
@@ -102,7 +98,7 @@ typedef char *PSZ;
 #if (_MSC_VER >= 800) || defined(__BORLANDC__)
 #define CALLBACK    __stdcall
 #define WINAPI      __stdcall __import
-#define WINAPIV     __cdecl
+#define WINAPIV     __cdecl __import
 #define APIENTRY    WINAPI
 #define APIPRIVATE  __stdcall
 #define PASCAL      __stdcall
@@ -115,7 +111,9 @@ typedef char *PSZ;
 #define PASCAL      pascal
 #endif
 
+#undef  FAR
 #define FAR                 far
+#undef  NEAR
 #define NEAR                near
 #ifndef CONST
 #define CONST               const
@@ -140,21 +138,14 @@ typedef DWORD near          *PDWORD;
 typedef DWORD far           *LPDWORD;
 typedef void far            *LPVOID;
 typedef CONST void far      *LPCVOID;
+
 typedef int                 INT;
 typedef unsigned int        UINT;
 typedef unsigned int        *PUINT;
 
-#ifdef __cplusplus
-}
-#endif
-
-#ifndef __WINNT_H
+#ifndef NT_INCLUDED
 #include <winnt.h>
-#endif /* __WINNT_H */
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#endif /* NT_INCLUDED */
 
 /* Types use for passing & returning polymorphic values */
 typedef UINT WPARAM;
@@ -171,7 +162,7 @@ typedef LONG LRESULT;
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-#endif  /* NOMINMAX && __cplusplus */
+#endif  /* !NOMINMAX && !__cplusplus */
 
 #define MAKEWORD(a, b)      ((WORD)(((BYTE)(a)) | (((WORD)((BYTE)(b))) << 8)))
 #define MAKELONG(a, b)      ((LONG)(((WORD)(a)) | (((DWORD)((WORD)(b))) << 16)))
@@ -208,6 +199,7 @@ DECLARE_HANDLE(HACCEL);
 DECLARE_HANDLE(HBITMAP);
 DECLARE_HANDLE(HBRUSH);
 DECLARE_HANDLE(HDC);
+DECLARE_HANDLE(HGLRC);            // OpenGL
 DECLARE_HANDLE(HDESK);
 DECLARE_HANDLE(HENHMETAFILE);
 DECLARE_HANDLE(HFONT);
@@ -221,10 +213,11 @@ DECLARE_HANDLE(HPEN);
 DECLARE_HANDLE(HRGN);
 DECLARE_HANDLE(HRSRC);
 DECLARE_HANDLE(HSTR);
+DECLARE_HANDLE(HTASK);
 DECLARE_HANDLE(HWINSTA);
 DECLARE_HANDLE(HKL);
 
-typedef int HFILE;      /* Polymorphic with C runtime file handle type */
+typedef int HFILE;
 typedef HICON HCURSOR;      /* HICONs & HCURSORs are polymorphic */
 
 typedef DWORD   COLORREF;
@@ -246,7 +239,7 @@ typedef struct _RECTL       /* rcl */
     LONG    top;
     LONG    right;
     LONG    bottom;
-} RECTL, *PRECTL;
+} RECTL, *PRECTL, *LPRECTL;
 
 typedef struct tagPOINT
 {
@@ -267,7 +260,7 @@ typedef struct tagSIZE
 } SIZE, *PSIZE, *LPSIZE;
 
 typedef SIZE               SIZEL;
-typedef SIZE               *PSIZEL;
+typedef SIZE               *PSIZEL, *LPSIZEL;
 
 typedef struct tagPOINTS
 {
@@ -311,4 +304,3 @@ typedef struct tagPOINTS
 #endif
 
 #endif /* _WINDEF_ */
-

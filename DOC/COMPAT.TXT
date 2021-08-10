@@ -1,16 +1,18 @@
-Using the Paradox Engine And Database Frameworks with BC 4.0
+COMPAT.TXT - Compatibility Information
+
+Using the Paradox Engine And Database Frameworks with BC 4.5
 ============================================================
 
 THE PARADOX ENGINE
 
 There is only one significant detail regarding the use of the Paradox
-Engine 3.0x with Borland C++ 4.0.  The BC 3.1 versions of setjump and
+Engine 3.0x with Borland C++ 4.5.  The BC 3.1 versions of setjump and
 longjump will have to be linked into your application in order to create
 DOS Paradox Engine and Database Framework applications.  The object
-module, setjmp.obj, is provided in the BC4\LIB\COMPAT directory. Linking
-this module into your application will replace the BC 4.0 version of
+module, setjmp.obj, is provided in the BC45\LIB\COMPAT directory. Linking
+this module into your application will replace the BC 4.5 version of
 these functions.  To do this, simply add the file
-\BC4\LIB\COMPAT\SETJMP.OBJ to your project file or to the link command
+\BC45\LIB\COMPAT\SETJMP.OBJ to your project file or to the link command
 in your makefile.
 
 
@@ -18,32 +20,32 @@ REBUILDING THE DATABASE FRAMEWORKS
 
 Due to changes in the debug information format, symbol length, and
 runtime library, the Database Framework library must be recompiled with
-Borland C++ 4.0.
+Borland C++ 4.5.
 
 A number of changes will have to be made to the Paradox Engine DBF v3.01
-makefile in order for it to work with BC 4.0 (this makefile is available
+makefile in order for it to work with BC 4.5 (this makefile is available
 from our local BBS at (408) 431-5096 as the file TI1169.ZIP and from
 TechFax at (800) 822-4269, document number 1169):
 
 1. Copy makefile.bc to make40.mak
 
-2. Make certain that a turboc.cfg file exists in the BC4\BIN directory
+2. Make certain that a turboc.cfg file exists in the BC45\BIN directory
    containing:
 
-      -Ic:\bc4\include
-      -Lc:\bc4\lib
+      -Ic:\bc45\include
+      -Lc:\bc45\lib
 
-   Make certain that a tlink.cfg file exist in the BC4\BIN directory
+   Make certain that a tlink.cfg file exist in the BC45\BIN directory
    containing:
 
-      -Lc:\bc4\lib
+      -Lc:\bc45\lib
 
    Adjust the above paths to reflect your systems' configuration.
 
 3. Make the following changes:
 
    Line 83: Change the 'CCINCLUDE=' line to contain the path to the BC
-            4.0 include directory.
+            4.5 include directory.
    Line 168: Delete the blank space at the end of the 'DEBUGFLAG=v ' line
    Line 172: Delete the blank space at the end of the 'DYNAMICFLAG=d ' line
    Line 202: Add '-DWindows' after '-DWINDOWS'
@@ -72,7 +74,7 @@ libraries are now ready for use in your Database Frameworks Program.
 CHANGES TO USER CODE WITH RESPECT TO DBF
 
 The only change to your source code involves the use of the 'new'
-operator. In BC++ 4.0, the new operator no longer returns NULL in case
+operator. In BC++ 4.5, the new operator no longer returns NULL in case
 of failure, rather the xalloc exception is thrown.  To change this back
 so operator new returns NULL, call set_new_handler(0).
 
@@ -109,16 +111,45 @@ recommended because it can make error checking difficult.
 The other option is to change the source of the Database Frameworks: Add
 the try {} catch(xalloc) clause everywhere that new is called.
 
+Using Turbo Assembler 4.0 with Borland C++ 4.5
+==============================================
+Turbo Assembler 4.0 is fully compatible with Borland C++ 4.5.  There is
+an error in the WHEREIS example program which will cause two undefined
+symbol errors when built.  The following corrections will resolve the
+problem:
+
+In file \examples\tasm\whereis\iexedos.asm
+line 118, change:
+mov es,[es:psp.EnvironmentBlock]
+to:
+mov es,[es:Psp.EnvironmentBlock]
+
+line 196, change:
+mov ax, [ComSpecSeg]
+to:
+mov ax, [ComspecSeg]
+
+In file \examples\tasm\whereis\whereis.asm
+line 448, change:
+endp main
+to:
+endp Main
+
+line 565, change:
+call WriteAsciizString,ds,offset Syntax
+to:
+call WriteASCIIZString,ds,offset Syntax
 
 
-Using Turbo Vision 1.0x with Borland C++ 4.0
+Using Turbo Vision 1.0x with Borland C++ 4.5
 ============================================
 
 REBUILDING THE TURBO VISION LIBRARY:
 
 Due to changes in the debug information format, symbol length, and
-runtime library, the Turbo Vision library must be recompiled with
-Borland C++ 4.0.
+runtime library, the Turbo Vision 1.0 library must be recompiled with
+Borland C++ 4.5.  Note that Turbo Vision 2.0 is fully compatible with
+Borland C++ 4.5 and does not require the modifications in this section.
 
 There are a few minor changes that need to be made to the source code
 before recompiling it with the new compiler.  These are due to slightly
@@ -127,7 +158,7 @@ modification as well, which are shown below.
 
 There are 3 steps to this process:
 
-   1. Copy the old 3.1 Turbo Vision source into the new BC4 directory
+   1. Copy the old 3.1 Turbo Vision source into the new BC45 directory
       structure.
    2. Make the appropriate changes according to the instructions below.
    3. Run MAKE to build the new Turbo Vision library you need to
@@ -136,16 +167,16 @@ There are 3 steps to this process:
       overlays.
 
 These steps are now presented in more detail:  Note that the Borland C++
-root directory is assumed to be \BC4.  Change this as necessary for your
+root directory is assumed to be \BC45.  Change this as necessary for your
 particular installation.  Also, if you are upgrading from Borland C++
 2.0 and have the original version of Turbo Vision, some of the line
 numbers mentioned may not accurately reflect your version.
 
 You need to copy your old Turbo Vision source and include files from
-Borland C++ 3.1 into your Borland C++ 4.0 directory hierarchy.  To do
+Borland C++ 3.1 into your Borland C++ 4.5 directory hierarchy.  To do
 this, just run the following command:
 
-   XCOPY \BC31\TVISION \BC4\TVISION /S
+   XCOPY \BC31\TVISION \BC45\TVISION /S
 
 and when it asks you about creating a directory called TVISION, say yes.
 Modify the above paths according to your system configuration if
@@ -182,7 +213,24 @@ The changes are as follows:
    Replace line 348:  char *loc = strchr( p->name, '~' );
    With               char *loc = (char*)strchr( p->name, '~' );
 
-4. MAKEFILE
+4. TVWRITE.ASM
+   Replace line 25:  PUBLIC  @TView@writeChar$qsszcucs
+   With              PUBLIC  @TView@writeChar$qsscucs
+
+   Replace line 27:  PUBLIC  @TView@writeStr$qssnxzcuc
+   With              PUBLIC  @TView@writeStr$qssnxcuc
+
+   Replace line 366:  PROC    @TView@writeChar$qsszcucs
+   With               PROC    @TView@writeChar$qsscucs
+
+   Replace line 436:  PROC    @TView@writeStr$qssnxzcuc
+   With               PROC    @TView@writeStr$qssnxcuc
+
+   Note that all of the above changes simply entail removing
+   the letter 'z' from the last part of the mangled symbol
+   name.
+
+5. MAKEFILE
    Replace line 100:
       CFLAGS = -c $(CCOVYFLAGS) -P -O1 -m$(MODEL) -I$(INCLUDE) -n$(OBJDIR)
    With
@@ -198,7 +246,7 @@ The changes are as follows:
       !endif
 
    *** If you did NOT purchase the Turbo Assembler add-on package for
-   Borland C++ 4.0, you must make some additional changes.
+   Borland C++ 4.5, you must make some additional changes.
 
    Replace the group at lines 259-263:
       !if $d(BC)
@@ -247,16 +295,16 @@ Here are the steps required to build an overlayable version of TV.LIB:
    Change line 96 from : CCOVYFLAGS = -Y -Vs -B
                     to : CCOVYFLAGS = -Y -Vs
 
-2. Change to the \BC4\TVISION\LIB directory and make a backup copy of
+2. Change to the \BC45\TVISION\LIB directory and make a backup copy of
    TV.LIB by typing:
 
    COPY TV.LIB OLDTV.LIB
 
-3. Switch to the \BC4\TVISION\SOURCE directory and type:
+3. Switch to the \BC45\TVISION\SOURCE directory and type:
 
    MAKE -B -DOVERLAY
 
-4. This will create a new TV.LIB in the \BC4\TVISION\LIB directory.
+4. This will create a new TV.LIB in the \BC45\TVISION\LIB directory.
    There are seven modules in TV.LIB which cannot be overlayed.  The
    easiest solution to this problem is to create three seperate
    libraries.  Two libraries will be used when creating overlayed TV
@@ -285,14 +333,14 @@ Here are the steps required to build an overlayable version of TV.LIB:
 
 
 
-Using the Object Based Class Library with Borland C++ 4.0
+Using the Object Based Class Library with Borland C++ 4.5
 =========================================================
 
 The object based class library, while still included with Borland C++
-4.0, must be compiled before it can be used.  Here are instructions for
+4.5, must be compiled before it can be used.  Here are instructions for
 doing so:
 
-There is a makefile in the source directory, \BC4\SOURCE\CLASSLIB which
+There is a makefile in the source directory, \BC45\SOURCE\CLASSLIB which
 can be used to build all versions of the class library.  For example, to
 build a large model static version for use with Object Windows, run the
 following command:
@@ -305,46 +353,46 @@ following command:
    MAKE -DDOS -DDBG -DOBJECTS "-DBCC=bcc -x-" -DDLL -DNAME=tclass
 
 Note that to successfully use the DLL version of the class library you will
-have to copy TCLASS40.DLL from the \BC4\LIB directory into the \BC4\BIN
+have to copy TCLASS40.DLL from the \BC45\LIB directory into the \BC45\BIN
 directory.
 
 
 
-Using OWL 1.0 with Borland C++ 4.0
+Using OWL 1.0 with Borland C++ 4.5
 ==================================
 
 REBUILDING THE OWL LIBRARY:
 
 Due to changes in the debug information format, symbol length, and
 runtime library, the Object Windows library must be recompiled with
-Borland C++ 4.0.
+Borland C++ 4.5.
 
 Rebuilding Object Windows requires that you first rebuild the Object
 Based Class Library.  If you have not already done so, go to the section
-above marked "Using the Object Based Class Library with Borland C++ 4.0"
+above marked "Using the Object Based Class Library with Borland C++ 4.5"
 and follow those directions before continuing here.
 
 There are 4 steps to this process:
 
-   1. Copy the old 3.1 OWL source into the new BC4 directory structure.
+   1. Copy the old 3.1 OWL source into the new BC45 directory structure.
    2. Extract the new makefile from the end of this file and save it.
    3. Make a slight modification to OWLDLL.DEF.
    4. Run MAKE to build the various OWL libraries you need to continue
       your work.
 
 These steps are now presented in more detail:  Note that the Borland C++
-root directory is assumed to be \BC4.  Change this as necessary for your
+root directory is assumed to be \BC45.  Change this as necessary for your
 particular installation.
 
-First, go to the \BC4\SOURCE directory and create a new subdirectory
+First, go to the \BC45\SOURCE directory and create a new subdirectory
 called OWL1.  In OWL1, make three more subdirectories called SOURCE,
 LIB, and OBJECT.  In OBJECT, make directories called WS, WM, WL, and WD.
 Copy the entire contents of the \BC31\OWL\SOURCE directory from Borland
-C++ 3.1 into \BC4\SOURCE\OWL1\SOURCE.  The following batch text
+C++ 3.1 into \BC45\SOURCE\OWL1\SOURCE.  The following batch text
 (modified to reflect your systems directory structure) will automate
 these tasks for you:
 
-   CD \BC4\SOURCE
+   CD \BC45\SOURCE
    MKDIR OWL1
    CD OWL1
    MKDIR OBJECT
@@ -361,13 +409,13 @@ You are now ready to make the necessary modifications before rebuilding
 the library.
 
 The makefile for OWL 1.0 needed some changes to be suitable for use with
-Borland C++ 4.0.  Due to the number of changes, we have enclosed a new
+Borland C++ 4.5.  Due to the number of changes, we have enclosed a new
 makefile and the end of this document.  Extract it using your favorite
 editor (e.g. the IDE) and save it in the OWL1\SOURCE directory as
 MAKEFILE.
 
 There are now new names for the OWL 1.0 libraries to avoid conflicts
-with the OWL 2.0 libraries.  The new names are:
+with the OWL 2.5 libraries.  The new names are:
 
    OWL100WS.LIB   Small model
    OWL100WM.LIB   Medium model
@@ -389,7 +437,7 @@ To build the dynamic library with full debug info, run MAKE as follows:
 
    MAKE -DDLL -DDEBUG
 
-*** If you did not purchase the Turbo Assembler 4.0, you can only
+*** If you did not purchase the Turbo Assembler 4.5, you can only
 rebuild the large model static library or the dynamic library.  You must
 also define NOTASM when running MAKE.  The following command will build
 the large model static library.
@@ -400,7 +448,7 @@ the large model static library.
 
 USING THE NEW OWL 1.0 LIBRARIES
 
-To import your old OWL 1.0 projects into BC++ 4.0, only a few changes
+To import your old OWL 1.0 projects into BC++ 4.5, only a few changes
 are needed.  First load the .PRJ file into the IDE via Project | Open
 Project. After the project file is loaded, perform the following
 changes:
@@ -419,9 +467,9 @@ changes:
 
    3. Select the Project Notebook (via Options | Project).
       Under Directories.  Set the Include path to:
-         \BC4\INCLUDE;\BC4\INCLUDE\CLASSLIB\OBSOLETE;\BC4\INCLUDE\OWLCVT
+         \BC45\INCLUDE;\BC45\INCLUDE\CLASSLIB\OBSOLETE;\BC45\INCLUDE\OWLCVT
       Set the Library path to:
-         \BC4\LIB
+         \BC45\LIB
       Under C++ Options | Exception Handling/RTTI turn off all checkboxes.
 
       If using the dynamic versions of these libraries, go to Options |

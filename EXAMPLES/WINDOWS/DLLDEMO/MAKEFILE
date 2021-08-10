@@ -1,5 +1,5 @@
 # Borland C++ - (C) Copyright 1993 by Borland International
-# Makefile for DRAGDROP program
+# Makefile for DLLDEMO program
 
 MODEL  = d  #force use of DLLs
 EXERES = dlldemo

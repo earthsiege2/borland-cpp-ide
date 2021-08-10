@@ -1,16 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\decmdifr.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of TDecoratedMDIFrame class
 //----------------------------------------------------------------------------
-#if !defined(__OWL_DECMDIFR_H)
-#define __OWL_DECMDIFR_H
+#if !defined(OWL_DECMDIFR_H)
+#define OWL_DECMDIFR_H
 
-#if !defined(__OWL_MDI_H)
-  #include <owl\mdi.h>
+#if !defined(OWL_MDI_H)
+# include <owl/mdi.h>
 #endif
-#if !defined(__OWL_DECFRAME_H)
-  #include <owl\decframe.h>
+#if !defined(OWL_DECFRAME_H)
+# include <owl/decframe.h>
 #endif
 
 //
@@ -24,10 +25,10 @@ class _OWLCLASS TDecoratedMDIFrame : public TMDIFrame, public TDecoratedFrame {
     TDecoratedMDIFrame(const char far* title,
                        TResId          menuResId,
                        TMDIClient&     clientWnd = *new TMDIClient,
-                       BOOL            trackMenuSelection = FALSE,
+                       bool            trackMenuSelection = false,
                        TModule*        module = 0);
 
-    LRESULT  DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+    LRESULT  DefWindowProc(uint message, WPARAM wParam, LPARAM lParam);
 
   private:
     //
@@ -40,4 +41,4 @@ class _OWLCLASS TDecoratedMDIFrame : public TMDIFrame, public TDecoratedFrame {
   DECLARE_STREAMABLE(_OWLCLASS, TDecoratedMDIFrame, 1);
 };
 
-#endif  // __OWL_DECMDIFR_H
+#endif  // OWL_DECMDIFR_H

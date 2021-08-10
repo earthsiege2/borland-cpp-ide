@@ -1,0 +1,12 @@
+LIBRARY     STORAGE
+
+DESCRIPTION 'Storage DLL'
+
+EXPORTS
+    STGOPENSTORAGEONILOCKBYTES     @4   
+    STGISSTORAGEILOCKBYTES         @6   
+    STGISSTORAGEFILE               @5   
+    STGCREATEDOCFILE               @1   
+    STGCREATEDOCFILEONILOCKBYTES   @2   
+    STGOPENSTORAGE                 @3   
+    STGSETTIMES                    @7   

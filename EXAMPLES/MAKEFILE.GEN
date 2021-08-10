@@ -5,6 +5,7 @@
 #
 #  Usage for each makefile using this include, specify system and model:
 #    SYSTEM=WIN16 is implied unless MODEL=f, in which case WIN32 is implied
+#    MODEL=d (DLL) is implied unless SYSTEM=WIN32, in which case MODEL=f
 #
 #    make SYSTEM=WIN16 MODEL=s  builds 16bit Windows small model static
 #    make SYSTEM=WIN16 MODEL=m  builds 16bit Windows medium model static
@@ -21,18 +22,28 @@
 #    make SYSTEM=CON32 MODEL=d  builds 32bit DLL console app     
 #         -DDEBUG <or> DEBUG=1    add to enable debug info for TDW & TD32
 #         -DDIAGS <or> DIAGS=1    add to enable runtime diagnostics
-#         MAKEARGS=           make command args for running generated makefile
+#         MAKEARGS=           make command args used to run generated makefile
+#         TARGET=  name.extension of a single target to make (rather than all)
 #
 #   For backward compatibility, SYSTEM may also be specied by -D, e.g. -DWIN32
 #
 # A specific makefile for the requested model will be generated as required.
-# Then the generated makefile will be run to produce the target executables.
+# The generated makefile will then be run to produce the target executables.
+# This generated makefile will be named {model}.MAK, where {model} is the
+# concatenation of the SYSTEM, MODEL, DIAGS, and DEBUG values. A zero-length
+# sentry file named {model}.MOD is produced to identify the built components.
+# Changing the model, system, diag, or debug values forces a complete rebuild.
 #
 # BCEXAMPLEDIR must be defined as the directory of this file and other *.gen
 # BCEXAMPLEDIR is defined by default to $(MAKEDIR)\..\EXAMPLES in BUILTINS.MAK
 # This may be redefined as an environment variable or on the MAKE command line
 #
-#  Define one or more of the following macros for automatic targeting:
+# The specification makefile in the project directory consists of a series of
+# definitions described below, followed by an include of this file or another
+# gen file which wrappers this file, i.e. !include $(BCEXAMPLEDIR)\owlmake.gen
+# Editing the specification makefile forces regeneration of target makefiles.
+#
+# Defines to specify *.EXE targets, generation of $(EXERULE):
 #    EXE=     Base name of .exe for app with no .rc file
 #    EXERES=  Base name of .exe for app with .rc -> .res file of same name
 #    RESEXE=  .res file(s) for EXE (define RESEXE_ also if more dependencies)
@@ -42,9 +53,11 @@
 #    LIBEXE=  Library file names for extra libs if needed
 #    MAPEXE(=)Name for map file, else none will be generated
 #    CCFEXE=  Additional compiler flags for EXE, added after standard options
-#    EXEBIN=  Name with extension of executable if not $(EXE).exe
+#    EXEBIN=  Name with extension of executable if different from $(EXE).exe
 #    EXE_=    Additional dependencies for EXE, other than RESEXE and OBJEXE
+#    DOSSTUB= Specific stub to bind when running a Windows app under DOS
 #
+# Defines to specify *.DLL targets, generation of $(DLLRULE):
 #    DLL=     Base name of .dll for dynamic library with no .rc file
 #    DLLRES=  Base name of .dll for with .rc file with same base name
 #    OBJDLL=  Explicit list of .obj files for DLL, if other than $(DLL).obj
@@ -56,19 +69,29 @@
 #    CCFDLL=  Additional compiler flags for EXE, added after standard options
 #    DLLBIN=  Name with extension of dynamic library if not $(DLL).dll
 #
+# Defines to specify *.HLP targets:
 #    HLP=     Helpfile base name, assumes .hlp made from .hpj
 #    HLP_=    Optional dependency files for helpfile, if more than $(HLP).hpj
 #
+# Defines to specify *.LIB targets:
 #    LIBBIN=  Static library to build (with extension), requires OBJLIB=
 #    OBJLIB=  Required list of object files for building static library LIBBIN
 #
+# Defines to specify additional targets to be included in generated makefile:
 #    TARGETS= Additional targets to build, rules must be defined in RULES
-#
-#    RULES=   Additional rules and dependencies to be included in the makefile
+#    RULES=   Additional rules and dependencies to be appended to the makefile
 #             Lines before the final line must be terminated with a caret (^)
 #
+# Defines to restrict the models or operating environments for the makefile:
 #    MODELS=  Optional list of supported models, else all valid models allowed
 #    SYSTEMS= Optional list of supported systems, else all platforms supported
+#    MODEL=   Forces a particular model, regardless of command line argument
+#    SYSTEM=  Forces a particular system, regardless of command line argument
+#
+# Defines to specify additional user include paths and libraries:
+#    USERINCPATH= Search path for include files, put before other include paths
+#    USERLIBPATH= Search path for user libraries specified without directories
+#    USERLIBS  = User libraries for EXEs and DLLs, won't be put as dependents
 #
 # For generating makefiles with multiple similar .exe targets:
 #  Generate a template EXE target rule using the EXE options for a sample EXE
@@ -81,8 +104,8 @@
 #  Substitute text in $(DLLRULE), $(DLLRULE:old=new), and define the following
 #     DLLALL=  The list of all .exe targets, including extensions
 #     DLLMAKE= The list of all rules for the targets in DLLALL (may be macros)
-# To build a single target when multiple EXE or DLL targets are generated:
-#     TARGET=  The single target to make, with extension, e.g. step10.exe
+#
+# Define RTLFIRST to force the RTL library before all other libraries
 #
 #-----------------------------------------------------------------------------
 
@@ -107,6 +130,17 @@ MATHOPT = 1  # =0 for no math libs, =1 for emulation, =2 for math coprocessor
 # other macros defined outside this file will not be altered unless incorrect
 
 #-----------------------------------------------------------------------------
+# define macros for inserting spaces $(sp) and newlines $(nl)
+#-----------------------------------------------------------------------------
+
+_sp_ = | |
+sp = $(_sp_:|=)
+
+_nl_ = |^
+|
+nl = $(_nl_:|=)
+
+#-----------------------------------------------------------------------------
 # directory & search paths
 #-----------------------------------------------------------------------------
 
@@ -128,8 +162,19 @@ BCINCDIR      = $(BCROOT)\include
 !ifndef BCLIBDIR
 BCLIBDIR      = $(BCROOT)\lib
 !endif
-LIBPATH       = $(BCLIBDIR)
-INCLUDEPATH   = $(BCINCDIR)
+
+!ifdef USERLIBPATH
+LIBRARYPATH = -L$(USERLIBPATH)$(sp)
+!endif
+
+!ifdef SYSINCPATH
+_SYSINCPATH_ = $(SYSINCPATH);
+!endif
+!ifdef USERINCPATH
+INCLUDEPATH   = $(USERINCPATH);$(_SYSINCPATH_)$(BCINCDIR)
+!else
+INCLUDEPATH   = $(_SYSINCPATH_)$(BCINCDIR)
+!endif
 
 #----------------------------------------------------------------------------
 # validate or select target operating system
@@ -273,7 +318,9 @@ HEAPSIZE = 4096
 #
 !ifdef EXERES
 EXE = $(EXERES)
+! ifndef RESEXE
 RESEXE = $(EXE).res
+! endif
 !endif
 !ifdef EXE
 ! ifndef EXEBIN
@@ -293,7 +340,9 @@ CFGEXE = cfgexe
 
 !ifdef DLLRES
 DLL = $(DLLRES)
+! ifndef RESDLL
 RESDLL = $(DLL).res
+! endif
 !endif
 !ifdef DLL
 ! ifndef CFGDLL
@@ -305,7 +354,7 @@ DLLBIN = $(DLL).dll
 !endif
 
 !ifdef HLP
-HLPBIN = $(HLP).hlp
+HLPBIN = $(HLP: =.hlp ).hlp
 !endif
 
 #----------------------------------------------------------------------------
@@ -313,7 +362,6 @@ HLPBIN = $(HLP).hlp
 #----------------------------------------------------------------------------
 !if $(DEBUG) != 0
 DEBUG = 1
-CDBG = -v -k -Od
 ! if $(_32BIT_)
 LDBG = -v
 ! else
@@ -373,7 +421,12 @@ STDDLIBS=$(BCLIBDIR)\import $(BCLIBDIR)\crtldll
 ! ifdef USEDLL
 STDLIBS  = $(STDDLIBS)
 ! else
+! ifdef RTLFIRST
+_RTLFIRST_ = $(BCLIBDIR)\cw$(_MODEL_)$(sp)
+STDLIBS =$(BCLIBDIR)\import $(BCLIBDIR)\mathw$(_MODEL_)
+! else
 STDLIBS =$(BCLIBDIR)\import $(BCLIBDIR)\mathw$(_MODEL_) $(BCLIBDIR)\cw$(_MODEL_)
+! endif #RTLFIRST
 ! endif
 ! if $d(FASTTHIS)
 SYSTEM = WIN16F
@@ -399,9 +452,26 @@ _SYSCODE_ = d
 
 !endif
 
-!ifdef SYSLIBS
-_SYSLIBS_ = $(SYSLIBS)+^
+!ifdef USERLIBS
+_USERLIBS_ = $(USERLIBS)+$(nl)
+!endif
 
+!ifdef SYSLIBS
+_SYSLIBS_ = $(SYSLIBS)+$(nl)
+!endif
+
+!ifdef SYSLIBSD
+_SYSLIBSD_ = $(SYSLIBSD)+$(nl)
+!else
+_SYSLIBSD_ = $(_SYSLIBS_)
+!endif
+
+!ifdef LIBDLL
+_LIBDLL_ = $(LIBDLL)$(sp)
+!endif
+
+!ifdef LIBEXE
+_LIBEXE_ = $(LIBEXE)$(sp)
 !endif
 
 # set makefile name based on platform, model, debug/diagnostic mode
@@ -415,23 +485,27 @@ _MODELNAME_ = $(SYSTEM)$(MODEL)$(DIAGS)$(DEBUG)
 BCC      = $(BCBINDIR)\bcc32.exe
 BRCC     = $(BCBINDIR)\brcc32.exe
 TLINK    = $(BCBINDIR)\tlink32.exe
-#COPTS   = -$(CPUOPT) -d -k- -O1gmpv -vi
-COPTS    = -$(CPUOPT) -d -k- -vi
+!if $(DEBUG)
+COPTS    = -$(CPUOPT) -d -k -Od -v
+!else
+COPTS    = -$(CPUOPT) -d -k-
+!endif
 CFGFILE  = bcc32.cfg
 
 !ifdef USEDLL
 CFLAGS   = -W -D_RTLDLL $(COPTS)
+CFLAGSD  = -WDE -D_RTLDLL $(COPTS) # building DLL's
 !else                          # using DLL libraries
 CFLAGS   = -W $(COPTS)
+CFLAGSD  = -WDE $(COPTS)       # building DLL's
 !endif                         # using static libraries
-CFLAGSD  = -WDE $(COPTS)    # building DLL's
 
-!if $(_GUI_) #WIN32)
-LFLAGS   = $(LDBG) -Tpe -aa -c
-LFLAGSD  = $(LDBG) -Tpd -aa -c
+!if $(_GUI_) #WIN32
+LFLAGS   = -Tpe -aa -c $(LDBG)
+LFLAGSD  = -Tpd -aa -c $(LDBG)
 !else #CON32
-LFLAGS   = $(LDBG) -Tpe -ap -c
-LFLAGSD  = $(LDBG) -Tpd -ap -c
+LFLAGS   = -Tpe -ap -c $(LDBG)
+LFLAGSD  = -Tpd -ap -c $(LDBG)
 !endif
 
 #----------------------------------------------------------------------------
@@ -442,32 +516,37 @@ BCC      = $(BCBINDIR)\bcc.exe
 BRCC     = $(BCBINDIR)\brcc.exe
 TLINK    = $(BCBINDIR)\tlink.exe
 RLINK    = $(BCBINDIR)\rlink.exe -K
-COPTS    = -$(CPUOPT) -d -k- -O1gmpv $(COPTS)
+!if $(DEBUG)
+COPTS    = -$(CPUOPT) -d -k -Od -v
+!else
+COPTS    = -$(CPUOPT) -d -k- -O1gmpv
+!endif
 !if $(_MODEL_) != s && $(_MODEL_) != m
 COPTS    = $(COPTS) -dc      # -dc shouldn't be used in small & medium models
 !endif
 CFGFILE  = turboc.cfg
 
-!if   $d(FASTTHIS)
-  CENTRY = -D_FASTTHIS -p
+!if   $d(FASTTHIS) && $d(PASCAL)
+  _CENTRY_ = -D_FASTTHIS -p
+!elif $d(FASTTHIS)
+  _CENTRY_ = -D_FASTTHIS
 !elif $d(PASCAL)
-  CENTRY = -p
-!else
-  CENTRY = -p-
+  _CENTRY_ = -p
 !endif
 
 !if   $d(USEDLL)                        # using DLL libraries
-CFLAGS   = -WS -D_RTLDLL $(COPTS) -m$(_MODEL_) $(CENTRY)
-LFLAGS   = $(LDBG) -Tw -c -C -A=16
+CFLAGS   = -WS -D_RTLDLL $(COPTS) -m$(_MODEL_) $(_CENTRY_)
+CFLAGSD  = -WD -xc -D_RTLDLL $(COPTS) -m$(DMODEL) $(_CENTRY_) # building DLLs
+LFLAGS   = -Tw -c -C -A=16 -Oc -Oi -Oa -Or $(LDBG)
 !elif $(_GUI_)                          # using static libraries
-CFLAGS   = -WSE $(COPTS) -m$(_MODEL_) $(CENTRY)
-LFLAGS   = $(LDBG) -Tw -c -C -A=16
+CFLAGS   = -WSE $(COPTS) -m$(_MODEL_) $(_CENTRY_)
+CFLAGSD  = -WDE -xc $(COPTS) -m$(DMODEL) $(_CENTRY_) # building DLLs
+LFLAGS   = -Tw -c -C -A=16  -Oc -Oi -Oa -Or $(LDBG)
 !else                                   # using 16-bit DOS
-CFLAGS   = $(COPTS) -m$(_MODEL_) $(CENTRY)
-LFLAGS   = $(LDBG) -c -C -A=16 -E
+CFLAGS   = $(COPTS) -m$(_MODEL_) $(_CENTRY_)
+LFLAGS   = -c -C -A=16 $(LDBG)
 !endif
-CFLAGSD  = -WDE $(COPTS) -m$(DMODEL) $(CENTRY) # building DLLs
-LFLAGSD  = $(LDBG) -Twd -c -C -A=16
+LFLAGSD  = -Twd -c -C -A=16 -Oc -Oi -Oa -Or $(LDBG)
 
 !endif #if/else $(_32BIT_)
 
@@ -505,6 +584,18 @@ HEAPSIZE $(HEAPSIZE)^
 |
 ! endif
 
+! ifdef RESDLL   # explicit .res file or space-separated list of .res files
+!  if !$(_32BIT_) && "$(RESDLL)" != "$(RESDLL: =)" # >1 16-bit .res file
+_RESDLL_ = ^
+ $(RLINK) @&&|^
+-fi$(RESDLL: = -fi)^
+$(DLLBIN)^
+|
+! else
+_RESDLL_ = ,$(RESDLL)
+!  endif
+! endif
+
 ! ifdef MAPDLL
 !  if "$(MAPDLL)"=="1"
 MAPDLL=
@@ -514,16 +605,17 @@ _MAPDLL_ = -m -s $(MAPDLL)
 _MAPDLL_ = -x
 ! endif
 #
-# construct rule for DLL target
+# construct rule for DLL target - possibility that OBJDLL is blank
 #
 DLLRULE =^
 $(DLLBIN): $(OBJDLL) $(RESDLL) $(DEFDLL) $(LIBDLL)^
-  $(TLINK) $(LFLAGSD) @&&|^
+  $(TLINK) @&&|^
+$(LFLAGSD) $(LIBRARYPATH)+^
 $(C0D) $(OBJDLL)^
 $(DLLBIN)^
 $(_MAPDLL_)^
-$(_SYSLIBS_)$(LIBDLL) $(STDLIBS)^
-|,$(_DEFDLL_),$(RESDLL)^
+$(_RTLFIRST_)$(_LIBDLL_)$(_USERLIBS_)$(_SYSLIBSD_)$(STDLIBS)^
+|,$(_DEFDLL_)$(_RESDLL_)^
   $(IMPLIB) $(DLL) $(DLLBIN)^
 
 ! ifndef DLLALL
@@ -562,6 +654,16 @@ _LIBOBJ_  = $(_LIBOBJ2_:.obj=)
 ! elif $d(DEFEXE)
 _DEFEXE_ = ,$(DEFEXE)
 ! elif !$(_32BIT_) #WIN16
+!  ifdef DOSSTUB
+_DEFEXE_ = ,&&|^
+EXETYPE WINDOWS^
+STUB '$(DOSSTUB)'^
+CODE PRELOAD MOVEABLE DISCARDABLE^
+DATA PRELOAD MOVEABLE MULTIPLE^
+HEAPSIZE $(HEAPSIZE)^
+STACKSIZE $(STACKSIZE)^
+|
+!  else
 _DEFEXE_ = ,&&|^
 EXETYPE WINDOWS^
 CODE PRELOAD MOVEABLE DISCARDABLE^
@@ -569,6 +671,7 @@ DATA PRELOAD MOVEABLE MULTIPLE^
 HEAPSIZE $(HEAPSIZE)^
 STACKSIZE $(STACKSIZE)^
 |
+!  endif
 ! elif $(_GUI_)    #WIN32
 _DEFEXE_ = ,&&|^
 EXETYPE WINDOWS^
@@ -582,14 +685,11 @@ DATA PRELOAD MOVEABLE MULTIPLE^
 |
 ! endif
 
-! ifdef RESEXE     # must remove possible trailing space from macro definition
-_RESEXE1_=$(RESEXE)*
-_RESEXE2_=$(_RESEXE1_: *=)
-_RESEXE3_=$(_RESEXE2_:*=)
-!  if !$(_32BIT_) && "$(_RESEXE3_)" != "$(_RESEXE3_: =)" # >1 16-bit .res file
+! ifdef RESEXE   # explicit .res file or space-separated list of .res files
+!  if !$(_32BIT_) && "$(RESEXE)" != "$(RESEXE: =)" # >1 16-bit .res file
 _RESEXE_ = ^
  $(RLINK) @&&|^
--fi$(_RESEXE3_: = -fi)^
+-fi$(RESEXE: = -fi)^
 $(EXEBIN)^
 |
 ! else
@@ -600,7 +700,7 @@ _RESEXE_ = ,$(RESEXE)
 ! ifndef OBJEXE   # if no explicit objs, assume one with same base name as EXE
 OBJEXE = $(EXE).obj
 ! endif
-! ifdef MAPEXE 
+! ifdef MAPEXE
 !  if "$(MAPEXE)"=="1"
 MAPEXE=
 !  endif
@@ -612,13 +712,13 @@ _MAPEXE_ = -x
 # construct rule for EXE target
 #
 EXERULE =^
-$(EXEBIN): $(OBJEXE) $(RESEXE) $(DEFEXE) $(LIBEXE)^
+$(EXEBIN): $(OBJEXE) $(RESEXE) $(DEFEXE) $(LIBEXE) $(EXE_)^
   $(TLINK) @&&|^
-$(LFLAGS) $(C0)+^
+$(LFLAGS) $(LIBRARYPATH)$(C0)+^
 $(OBJEXE)^
 $(EXEBIN)^
 $(_MAPEXE_)^
-$(_SYSLIBS_)$(LIBEXE) $(STDLIBS)^
+$(_RTLFIRST_)$(_USERLIBS_)$(_SYSLIBS_)$(_LIBEXE_)$(STDLIBS)^
 |$(_DEFEXE_)$(_RESEXE_)^
 
 ! ifndef EXEALL
@@ -667,7 +767,7 @@ _TARGET_ = $(CFGDLL) $(TARGET) $(CFGCLN)
 !endif
 
 all: $(MAKEFILE) $(_SENTRY_)
-  @$(MAKEDIR)\$(MAKE) -f$(MAKEFILE) $(_TARGET_) $(MAKEARGS)
+  @$(MAKEDIR)\$(MAKE) -f$(MAKEFILE) $(MAKEARGS) $(_TARGET_) 
 
 #----------------------------------------------------------------------------
 # generate makefile
@@ -690,18 +790,24 @@ all: $(CFGDLL) $(DLLALL) $(CFGEXE) $(LIBBIN) $(EXEALL) $(HLPBIN) $(TARGETS) $(CF
   $(BCC) {$$< }
 .c.obj:
   $(BCC) {$$< }
+!ifdef HLP
+.hpj.hlp:
+  $(HC) $$<
+!endif
 #
 # dependencies
 #
 !ifdef HLP_
-.hpj.hlp:
-  $(HC) $$<
 
 $(HLPBIN) : $(HLP_)
 !endif
 !ifdef RESEXE_
 
 $(RESEXE) : $(RESEXE_)
+!endif
+!ifdef RESDLL_
+
+$(RESDLL) : $(RESDLL_)
 !endif
 #
 # DLL target - also makes import library
@@ -715,7 +821,7 @@ cfgdll:
   @copy &&|
 -I$(INCLUDEPATH)
 -c $(CFLAGSD)
--w $(CDBG) $(CDIAG) $(CPCH) $(CCFDLL)
+-w $(CDIAG) $(CPCHD) $(CCFDLL)
 | $(CFGFILE) >NUL
 !endif
 #
@@ -732,7 +838,7 @@ cfgexe:
   @copy &&|
 -I$(INCLUDEPATH)
 -c $(CFLAGS)
--w $(CDBG) $(CDIAG) $(CPCH) $(CCFEXE)
+-w $(CDIAG) $(CPCH) $(CCFEXE)
 | $(CFGFILE) >NUL
 !endif
 # LIBBIN target
@@ -750,7 +856,6 @@ $(LIBBIN) : $(OBJLIB)
 $(EXEMAKE)
 !endif
 !if "$(CFGCLN)" == "cfgcln"
-
 cfgcln:
   @del $(CFGFILE)
 !endif

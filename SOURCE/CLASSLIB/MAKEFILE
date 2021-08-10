@@ -2,7 +2,7 @@
 #                                                                          #
 #   MAKEFILE for Class Libraries                                           #
 #                                                                          #
-#   Copyright (c) Borland International 1991, 1993                         #
+#   Copyright (c) Borland International 1991, 1994                         #
 #   All Rights Reserved                                                    #
 #                                                                          #
 #   Usage:                                                                 #
@@ -13,6 +13,8 @@
 #                                                                          #
 #       -DDOS, -DWIN32, -DOS2   Specifies target system                    #
 #                                                                          #
+#       -DMT                    Build multi-thread version                 #
+#                                                                          #
 #       -DMODEL=x               Specifies memory model for DOS library.    #
 #                               Required when building DOS library.        #
 #                               Must be s, c, m, l, or h.                  #
@@ -20,11 +22,53 @@
 #       -DNAME=xxx              Base name of the target library or DLL     #
 #                               Always required.                           #
 #                                                                          #
+#       -DSUFFIX=xxx            Suffix to add to the base name when        #
+#                               building a DLL. For example, -DSUFFIX=d is #
+#                               used when building the DBG DLLs. This puts #
+#                               'd' into the name of the dll and the name  #
+#                               of the import library.                     #
+#                                                                          #
 #       -DDLL                   Build a DLL.                               #
 #                                                                          #
 #       -DDBG                   Build the debugging version of the target. #
 #                                                                          #
 #       -DOBJECTS               Also build the object-based containers     #
+#                                                                          #
+#       -DBIDSFARVTABLE         moves class vtables out of dgroup          #
+#                                                                          #
+#   16-bit non-diagnostic static libraries:                                #
+#   make -r -DDOS -DMODEL=s -DNAME=bidss                                   #
+#   make -r -DDOS -DMODEL=c -DNAME=bidsc                                   #
+#   make -r -DDOS -DMODEL=m -DNAME=bidsm                                   #
+#   make -r -DDOS -DMODEL=l -DNAME=bidsl                                   #
+#   make -r -DDOS -DMODEL=h -DNAME=bidsh                                   #
+#                                                                          #
+#   16-bit diagnostic static libraries:                                    #
+#   make -r -DDOS -DMODEL=s -DDBG -DNAME=bidsdbs                           #
+#   make -r -DDOS -DMODEL=c -DDBG -DNAME=bidsdbc                           #
+#   make -r -DDOS -DMODEL=m -DDBG -DNAME=bidsdbm                           #
+#   make -r -DDOS -DMODEL=l -DDBG -DNAME=bidsdbl                           #
+#   make -r -DDOS -DMODEL=h -DDBG -DNAME=bidsdbh                           #
+#                                                                          #
+#   16-bit DLLs:                                                           #
+#   make -r -DDOS -DDLL -DNAME=bids                                        #
+#   make -r -DDOS -DDLL -DDBG -DNAME=bids -DSUFFIX=d                       #
+#                                                                          #
+#   WIN32 libraries:                                                       #
+#   make -r -DWIN32 -DNAME=bidsf                                           #
+#   make -r -DWIN32 -DDBG -DNAME=bidsdf                                    #
+#                                                                          #
+#   WIN32 DLLs:                                                            #
+#   make -r -DWIN32 -DDLL -DNAME=bids -DSUFFIX=f                           #
+#   make -r -DWIN32 -DDLL -DDBG -DNAME=bids -DSUFFIX=df                    #
+#                                                                          #
+#   OS/2 libraries:                                                        #
+#   make -r -DOS2 -DNAME=bids2                                             #
+#   make -r -DOS2 -DDBG -DNAME=bidsdb2                                     #
+#                                                                          #
+#   OS/2 DLLs:                                                             #
+#   make -r -DOS2 -DDLL -DNAME=bids -DSUFFIX=2                             #
+#   make -r -DOS2 -DDLL -DDBG -DNAME=bids -DSUFFIX=d2                      #
 #                                                                          #
 #--------------------------------------------------------------------------#
 
@@ -45,6 +89,10 @@
 
 !if $d(DLL) && !$d(NAME)
 !error Must specify a NAME for a DLL.
+!endif
+
+!if $d(DOS) && $d(MT)
+!error Cannot build multi-thread library for DOS.
 !endif
 
 !if $d(MODEL)
@@ -86,9 +134,9 @@ MAKE = make
 
 !if !$d(TLIB)
 !if $d(WIN32)
-TLIB = tlib /C/E
+TLIB = tlib /C
 !else
-TLIB = tlib /C/E
+TLIB = tlib /C
 !endif
 !endif
 
@@ -115,6 +163,8 @@ BRCC = brcc
 #   WFLAG does some magic to produce a library that works for both   #
 #   DOS and Windows.                                                 #
 #                                                                    #
+#   WLFLAG is a variation of WFLAG for the implib objs               #
+#                                                                    #
 #   DFLAG contains the debugging switches that will be passed to the #
 #   compiler through the .CFG file.                                  #
 #                                                                    #
@@ -123,17 +173,27 @@ BRCC = brcc
 #                                                                    #
 #   XFLAG handles _RTLDLL, which is passed to the compiler in the    #
 #   .CFG file and determines whether classes are to be exported.     #
+#   It also handle far vtable options when they are enabled.         #
 #                                                                    #
 #   LINKOPTS is the list of options for the linker.                  #
 #                                                                    #
 #--------------------------------------------------------------------#
 
 !if $d(DOS) && $d(DLL)
-WFLAG = -WDE
+WFLAG = -WDE -xc
+WLFLAG = -Y
 !elif $d(DOS) && ($(MODEL) == s || $(MODEL) == c )
 WFLAG = -WE
 !elif $d(DOS) && ($(MODEL) == m || $(MODEL) == l)
 WFLAG = -Y
+!endif
+
+!if $d(MT)
+!if $d(OS2)
+MTFLAG = -sm
+!else
+MTFLAG = -WM
+!endif
 !endif
 
 !if $d(DBG)
@@ -148,6 +208,10 @@ LFLAG = /0
 XFLAG = -D_RTLDLL -D_BUILDBIDSDLL
 !endif
 
+!if $d(BIDSFARVTABLE)
+XFLAG = $(XFLAG) -D_BIDSFARVTABLE  #;_RTLFARVTABLE if RTL is rebuilt too
+!endif
+
 !if $d(DOS)
 !if $d(DLL)
 MFLAG = -ml
@@ -157,7 +221,7 @@ MFLAG = -m$(MODEL)
 !endif
 
 !if $d(DOS)
-LINKOPTS = /C/c/s/Twd
+LINKOPTS = /C/c/s/Twd/Oc/Oi/Oa/Or
 !elif $d(OS2)
 LINKOPTS = /c/s/Tod
 !elif $d(WIN32)
@@ -185,9 +249,13 @@ TARGETLIB = $(NAME)
 
 !else
 
-VER = 40
+VER = 45
 
+!if $d(DLL) && $d(WIN32) && $d(DBG)
+TARGETFILE = bds$(VER)$(SUFFIX)     # name is too long if we use 'bids'
+!else
 TARGETFILE = $(NAME)$(VER)$(SUFFIX)
+!endif
 TARGETLIB  = $(NAME)$(SUFFIX)i.lib
 
 !if $d(DOS)
@@ -198,12 +266,22 @@ LINKLIBS = $(LIB)\import.lib $(LIB)\crtldll.lib
 !elif $d(OS2)
 
 STARTUP = $(LIB)\c02d.obj
-LINKLIBS = $(LIB)\c2.lib $(LIB)\os2.lib
+
+!if $d(MT)
+LINKLIBS = $(LIB)\c2mti.lib $(LIB)\os2.lib
+!else
+LINKLIBS = $(LIB)\c2i.lib $(LIB)\os2.lib
+!endif
 
 !else
 
 STARTUP = $(LIB)\c0d32.obj
+
+!if $d(MT)
+LINKLIBS = $(LIB)\cw32mti.lib $(LIB)\import32.lib
+!else
 LINKLIBS = $(LIB)\cw32i.lib $(LIB)\import32.lib
+!endif
 
 !endif
 
@@ -261,7 +339,11 @@ OBJDIRLIST = 2 d2 i2 di2
 #--------------------------------------------------------------------#
 
 !if !$d(BCROOT)
+!if $d(OS2)
+BCROOT=$(MAKEDIR)\..
+!else
 !include $(MAKEDIR)\bcroot.inc
+!endif
 !endif
 
 !if !$d(INCLUDE)
@@ -332,6 +414,10 @@ OBJDIR=i$(OBJDIR)
 #   OBJS is the main list, conditionalized for the various targets   #
 #       and options.                                                 #
 #                                                                    #
+#   OBJS_LIB are the objs that only go in libs & implib, not the dll #
+#                                                                    #
+#   OBJS_DLL are the objs that only go in the dll, not the libs      #
+#                                                                    #
 #   DEPOBJS is the list of object files for dependency checking      #
 #                                                                    #
 #   LIBOBJS is the list of object files for building the library     #
@@ -368,11 +454,28 @@ OBJS = $(OBJS)      \
     PFXtimeio.obj   \
     PFXversion.obj
 
+!if !$d(OS2)
+OBJS = $(OBJS)      \
+    PFXexbase.obj   \
+    PFXgeometry.obj \
+    PFXgeomstrm.obj \
+    PFXreglink.obj
+!endif
+
+OBJS_LIB =          \
+    PFXlocale.obj   \
+    PFXlocaleco.obj \
+    PFXlocaleid.obj \
+    PFXregheap.obj  \
+    PFXustring.obj
+
+OBJS_DLL =
+
 !if $d(DOS) && !$d(DLL)
 OBJS = $(OBJS) PFXtimer.obj
 !endif
 
-!if $d(WIN32)
+!if $d(WIN32) || $d(OS2)
 OBJS = $(OBJS) PFXthread.obj
 !endif
 
@@ -407,16 +510,20 @@ OBJS = $(OBJS) PFXtmpl1.obj
 
 !endif
 
-!if $d(DLL) && !$d(OBJECTS)
+!if $d(DLL) && !$d(OBJECTS) && !$d(OS2)
 RESFILE = version.res
 !endif
 
-PFXOBJS = $(OBJS:SFX=)
-SFXOBJS = $(OBJS:PFX=)
+#PFXOBJS = $(OBJS:SFX=)
+#SFXOBJS = $(OBJS:PFX=)
 
-DEPOBJS = $(PFXOBJS:PFX=)
-LIBOBJS = $(PFXOBJS:PFX= -+)
-LINKOBJS = $(PFXOBJS:PFX=)
+DEPOBJS = $(OBJS:PFX=) $(OBJS_LIB:PFX=) $(OBJS_DLL:PFX=)
+!if $d(DLL)
+LIBOBJS = $(OBJS_LIB:PFX=+)
+LINKOBJS = $(OBJS:PFX=) $(OBJS_DLL:PFX=)
+!else
+LIBOBJS = $(OBJS:PFX=-+) $(OBJS_LIB:PFX=-+)
+!endif
 
 #--------------------------------------------------------------------#
 #                                                                    #
@@ -454,13 +561,14 @@ $(RESFILE)
     rc -30 $(TARGETFILE)
 !endif
     implib $(TARGETLIB) $(TARGETFILE).dll
-    tlib /E $(TARGETLIB)
+    tlib $(LFLAG) $(TARGETLIB) @&&|
+$(LIBOBJS)
+|
     cd $(ROOTDIR)
     copy $(.PATH.obj)\$(TARGETFILE).dll $(.PATH.lib)
     del $(.PATH.obj)\$(TARGETFILE).dll
     copy $(.PATH.obj)\$(TARGETLIB) $(.PATH.lib)
     del $(.PATH.obj)\$(TARGETLIB)
-
 !endif
 
 
@@ -478,7 +586,11 @@ config:
 ! >turboc.cfg
 
 deffile:
+!if $d(DOS)
     @echo >$(.PATH.obj)\temp.def LIBRARY     $(TARGETFILE)
+!else
+    @echo >$(.PATH.obj)\temp.def LIBRARY     $(TARGETFILE) INITINSTANCE
+!endif
     @echo >>$(.PATH.obj)\temp.def DESCRIPTION 'Parametrized Class Library for BC++'
 !if $d(DOS)
     @echo >>$(.PATH.obj)\temp.def EXETYPE     WINDOWS
@@ -513,10 +625,14 @@ tmpl2.obj: tmplinst.cpp
     $(BCC) $(WFLAG) -P {$< }
 
 .cpp.obj:
-    $(BCC) $(WFLAG) {$* }
+    $(BCC) $(WFLAG) $(MTFLAG) {$* }
 
 .rc.res:
     $(BRCC) -i$(RCINCLUDE) $*.rc
     copy $*.res $(.PATH.obj)
     del $*.res
 
+!if $d(DOS) && $d(DLL)
+$(OBJS_LIB:PFX=):
+    $(BCC) $(WLFLAG) $(MTFLAG) -D_BIDSDLL -U_BUILDBIDSDLL $(.PATH.cpp)\$&.cpp
+!endif

@@ -1,0 +1,12 @@
+LIBRARY     OLE2CONV
+
+DESCRIPTION 'QuickDraw to GDI Conversion DLL for OLE2'
+
+EXPORTS
+    GETFILTERINFO                  @1   
+    STATUSPROC                     @6   
+    GETFILTERPREF                  @3   
+    ENUMFONTFUNC                   @7   
+    IMPORTEMBEDDEDGR               @4   
+    QD2GDI                         @5   
+    IMPORTGR                       @2   

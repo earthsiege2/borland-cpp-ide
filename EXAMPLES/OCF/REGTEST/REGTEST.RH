@@ -1,0 +1,19 @@
+//----------------------------------------------------------------------------
+// ObjectComponents - (C) Copyright 1994 by Borland International
+// OLE registration test resource definitions
+//----------------------------------------------------------------------------
+
+#define IDC_DISPLAY      65
+#define IDC_REGISTER     66
+#define IDC_UNREGISTER   67
+#define IDC_VERIFY       68
+#define IDC_COMPARE      69
+#define IDC_WRITEFILE    70
+#define IDC_FIRSTOP  IDC_DISPLAY
+#define IDC_LASTOP   IDC_WRITEFILE
+
+#define IDC_EXIT       IDOK
+#define IDC_OP           80
+#define IDC_ERRORS       81
+#define IDC_REGLIST      90
+#define IDD_MAIN	  1

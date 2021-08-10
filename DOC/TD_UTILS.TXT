@@ -9,6 +9,7 @@ This file contains information about the following Turbo Debugger utilities:
 3. TDMEM
 4. TDWINI
 5. TDRF
+6. TDINST, TDWINST, and TD32INST
 
 For convenience, when searching for information about a particular utility,
 you can search for the name of the utility followed by a colon (i.e. TDUMP:).
@@ -359,7 +360,7 @@ provided with the utility.
 
 
 5. TDRF: Utility for remote file commands and file transfer
-===========================================================================
+===========================================================
 The remote file transfer utility (TDRF) works in conjunction with TDREMOTE
 or WREMOTE running on another system.  (For more information on TDREMOTE and
 WREMOTE, see the "Remote Debugging" appendix in the "Turbo Debugger User's 
@@ -699,6 +700,12 @@ TDRF:
 "Wrong version of remote driver"
   You're using incompatible versions of TDRF and TDREMOTE. Make sure
   you're using the latest version of each utility.
+
+
+6. TDINST, TDWINST, and TD32INST
+================================
+Press <F1> while running TDINST, TDWINST, or TD32INST to obtain online help
+regarding the Turbo Debugger installation programs.
 
 
 \**************************** END OF FILE ********************************\

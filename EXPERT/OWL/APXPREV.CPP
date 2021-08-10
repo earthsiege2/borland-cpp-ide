@@ -1,5 +1,5 @@
 ##@QUERY_PRJ_NAME [[Project]]
-/*  Main [[Project]]
+/*  Project [[Project]]
 ##@QUERY_PRJ_COMPANY [[CompanyName]] 2
 ##@QUERY_PRJ_COPYRIGHT [[Copyright]] 2
 ##\\Copyright Copyright 2
@@ -22,10 +22,6 @@
 #include <owl\owlpch.h>
 #pragma hdrstop
 
-#include <owl\controlb.h>
-#include <owl\buttonga.h>
-#include <owl\textgadg.h>
-
 #include "apxprev.h"
 
 ##<<TApplication QUERY_FILENAME_CPP [[FileName]]
@@ -35,15 +31,18 @@
 //{{PreviewWindow Implementation}}
 
 DEFINE_RESPONSE_TABLE1(PreviewWindow, TDecoratedFrame)
+    EV_COMMAND_ENABLE(APX_PPR_PREVIOUS, PPR_PreviousEnable),
+    EV_COMMAND_ENABLE(APX_PPR_NEXT, PPR_NextEnable),
     EV_COMMAND(APX_PPR_PREVIOUS, PPR_Previous),
     EV_COMMAND(APX_PPR_NEXT, PPR_Next),
     EV_COMMAND(APX_PPR_ONEUP, PPR_OneUp),
+    EV_COMMAND_ENABLE(APX_PPR_TWOUP, PPR_TwoUpEnable),
     EV_COMMAND(APX_PPR_TWOUP, PPR_TwoUp),
+    EV_COMMAND(APX_PPR_DONE, PPR_Done),
+##@QUERY_APPL_MODEL == VALUE_MDI 2
+    EV_COMMAND(CM_FILEPRINT, CmPrint),
+    EV_COMMAND_ENABLE(CM_FILEPRINT, CmPrintEnable),
 //{{PreviewWindowRSP_TBL_BEGIN}}
-##:DBResponse("PreviewWindow", "", "", "WM_NCLBUTTONDOWN", "")
-    EV_WM_NCLBUTTONDOWN,
-##:DBResponse("PreviewWindow", "", "", "WM_CLOSE", "")
-    EV_WM_CLOSE,
 //{{PreviewWindowRSP_TBL_END}}
 END_RESPONSE_TABLE;
 
@@ -64,9 +63,9 @@ PreviewWindow::PreviewWindow (TWindow *parentWindow, TPrinter *printer, TWindow*
                          data.GetDevMode());
 
     PrintExtent = new TSize(PrnDC->GetDeviceCaps(HORZRES), PrnDC->GetDeviceCaps(VERTRES));
-    Printout = new APXPrintOut(Printer, "Print Preview", currWindow, TRUE);
+    Printout = new APXPrintOut(Printer, "Print Preview", currWindow, true);
 
-    SetBkgndColor(GetSysColor(COLOR_APPWORKSPACE));
+    SetBkgndColor(::GetSysColor(COLOR_APPWORKSPACE));
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
     //
@@ -74,26 +73,29 @@ PreviewWindow::PreviewWindow (TWindow *parentWindow, TPrinter *printer, TWindow*
     //
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
     PreviewSpeedBar = new TControlBar(this);
-    PreviewSpeedBar->Insert(*new TButtonGadget(APX_PPR_PREVIOUS, APX_PPR_PREVIOUS, TButtonGadget::Command, TRUE));
-    PreviewSpeedBar->Insert(*new TButtonGadget(APX_PPR_NEXT, APX_PPR_NEXT, TButtonGadget::Command, TRUE));
+    PreviewSpeedBar->Insert(*new TButtonGadget(APX_PPR_PREVIOUS, APX_PPR_PREVIOUS, TButtonGadget::Command, true));
+    PreviewSpeedBar->Insert(*new TButtonGadget(APX_PPR_NEXT, APX_PPR_NEXT, TButtonGadget::Command, true));
     PreviewSpeedBar->Insert(*new TSeparatorGadget(6));
-    PreviewSpeedBar->Insert(*new TButtonGadget(APX_PPR_ONEUP, APX_PPR_ONEUP, TButtonGadget::Exclusive, TRUE, TButtonGadget::Down));
-    PreviewSpeedBar->Insert(*new TButtonGadget(APX_PPR_TWOUP, APX_PPR_TWOUP, TButtonGadget::Exclusive, TRUE));
+    PreviewSpeedBar->Insert(*new TButtonGadget(APX_PPR_ONEUP, APX_PPR_ONEUP, TButtonGadget::Exclusive, true, TButtonGadget::Down));
+    PreviewSpeedBar->Insert(*new TButtonGadget(APX_PPR_TWOUP, APX_PPR_TWOUP, TButtonGadget::Exclusive, true));
     PreviewSpeedBar->Insert(*new TSeparatorGadget(12));
     PreviewSpeedBar->Insert(*new TTextGadget(APX_PPR_CURRPAGE, TGadget::Recessed, TTextGadget::Left, 10, "Page 1"));
+    PreviewSpeedBar->Insert(*new TSeparatorGadget(20));
+    PreviewSpeedBar->Insert(*new TButtonGadget(CM_FILEPRINT, CM_FILEPRINT, TButtonGadget::Command, true));
+    PreviewSpeedBar->Insert(*new TSeparatorGadget(20));
+    PreviewSpeedBar->Insert(*new TButtonGadget(APX_PPR_DONE, APX_PPR_DONE, TButtonGadget::Command, true));
     Insert(*PreviewSpeedBar, TDecoratedFrame::Top);
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // We want a window that can be sized, maximized, or minimized.
-    Attr.Style &= ~(WS_THICKFRAME | WS_BORDER | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
-    Attr.Style |= (WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU);
+    // We want a window that cannot be sized, maximized, or minimized.
+    Attr.Style = (WS_VISIBLE | WS_POPUP);
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
     // Don't show the border of the preview window.
-    Attr.X = -1;
+    Attr.X = 0;
     Attr.Y = -1;
-    Attr.W = Parent->GetClientRect().Width() + 2;
-    Attr.H = Parent->GetClientRect().Height() + 2;
+    Attr.W = Parent->GetClientRect().Width();
+    Attr.H = Parent->GetClientRect().Height() + 1;
     parentWindow->MapWindowPoints(HWindow, (TPoint *)&(Attr.X), 1);
 }
 
@@ -139,21 +141,22 @@ void PreviewWindow::SetupWindow ()
     // Make minor axis a percentage (aspect ratio) of the page's major axis
     //
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    if (PrintExtent->cx > PrintExtent->cy)  {
-        metrics1.Width.Set(lmRight, lmLeftOf, lmParent, lmRight, 15);
-        metrics1.Height.PercentOf(Page1, int((long(PrintExtent->cy) * 100) / PrintExtent->cx), lmWidth);
+    TRect r = Client->GetClientRect();
+    long ratio;
 
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-        // Two up is only available for portrait mode.
-        TGadget *theGadget = PreviewSpeedBar->GadgetWithId(APX_PPR_TWOUP);
-        theGadget->SetEnabled(FALSE);
-   } else {
+    if (PrintExtent->cx > PrintExtent->cy)
+        ratio = ((long)PrintExtent->cy * 100) / PrintExtent->cx;
+    else
+        ratio = ((long)PrintExtent->cx * 100) / PrintExtent->cy;
+
+    bool xMajor = (((r.Width() * ratio) / 100) > r.Height());
+    if (xMajor){
         metrics1.Height.Set(lmBottom, lmAbove, lmParent, lmBottom, 15);
-        metrics1.Width.PercentOf(Page1, int((long(PrintExtent->cx) * 95) / PrintExtent->cy), lmHeight);
+        metrics1.Width.PercentOf(Page1, (int)((long)PrintExtent->cx * 95 / PrintExtent->cy), lmHeight);
+    } else {
+        metrics1.Height.PercentOf(Page1, (int)((long)PrintExtent->cy * 95 / PrintExtent->cx), lmWidth);
+        metrics1.Width.Set(lmRight, lmLeftOf, lmParent, lmRight, 15);
     }
-
-    TGadget *theGadget = PreviewSpeedBar->GadgetWithId(APX_PPR_PREVIOUS);
-    theGadget->SetEnabled(FALSE);
 
     Page1->Create();
 
@@ -165,16 +168,6 @@ void PreviewWindow::SetupWindow ()
 void PreviewWindow::SpeedBarState ()
 {
     TPrintDialog::TData &printerData = Printer->GetSetup();
-
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Only have previous on if we're not at the first page.
-    TGadget *theGadget = PreviewSpeedBar->GadgetWithId(APX_PPR_PREVIOUS);
-    theGadget->SetEnabled(printerData.FromPage != 1);
-
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Only have next on if we're not at the last page.
-    theGadget = PreviewSpeedBar->GadgetWithId(APX_PPR_NEXT);
-    theGadget->SetEnabled(printerData.ToPage != printerData.MaxPage);
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
     // Update the page count.
@@ -190,13 +183,21 @@ void PreviewWindow::SpeedBarState ()
 }
 
 
-void PreviewWindow::EvClose ()
+void PreviewWindow::PPR_PreviousEnable (TCommandEnabler &tce)
 {
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Don't call the base class EvClose we do not want PreviewWindow to be destructed.
-##@QUERY_APPL_MODEL == VALUE_SDI
-    GetApplication()->MainWindow->SetRedraw(FALSE);
-    GetApplication()->EndModal(IDCANCEL);
+    // Only have previous on if we're not at the first page.
+    TPrintDialog::TData &printerData = Printer->GetSetup();
+    tce.Enable(printerData.FromPage != 1);
+}
+
+
+void PreviewWindow::PPR_NextEnable (TCommandEnabler &tce)
+{
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Only have next on if we're not at the last page.
+    TPrintDialog::TData &printerData = Printer->GetSetup();
+    tce.Enable(printerData.ToPage != printerData.MaxPage);
 }
 
 
@@ -252,6 +253,14 @@ void PreviewWindow::PPR_OneUp ()
 }
 
 
+void PreviewWindow::PPR_TwoUpEnable (TCommandEnabler &tce)
+{
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
+    // Two up is only available for portrait mode.
+    tce.Enable(PrintExtent->cx <= PrintExtent->cy);
+}
+
+
 void PreviewWindow::PPR_TwoUp ()
 {
     if (Page2 == 0) {
@@ -298,12 +307,28 @@ void PreviewWindow::PPR_TwoUp ()
 }
 
 
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-// Don't allow the print preview window to be dragged around.
-void PreviewWindow::EvNCLButtonDown(UINT wHitTestCode, TPoint & point)
+void PreviewWindow::PPR_Done ()
 {
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // If the LButtonDown isn't in the caption then process it normally.
-    if (wHitTestCode != HTCAPTION)
-        TDecoratedFrame::EvNCLButtonDown(wHitTestCode, point);
+    // Don't call the base class EvClose we do not want PreviewWindow to be destructed.
+##@QUERY_APPL_MODEL == VALUE_SDI
+    GetApplication()->GetMainWindow()->SetRedraw(false);
+    GetApplication()->EndModal(IDCANCEL);
 }
+##--BEGIN-- @QUERY_APPL_MODEL == VALUE_MDI
+
+
+void PreviewWindow::CmPrint ()
+{
+    TWindow *client = GetApplication()->GetMainWindow()->GetClientWindow();
+
+    if (client)
+        client->SendMessage(WM_COMMAND, CM_FILEPRINT, 0);
+}
+
+
+void PreviewWindow::CmPrintEnable (TCommandEnabler &tce)
+{
+	tce.Enable(true);
+}
+##--END-- @QUERY_APPL_MODEL == VALUE_MDI

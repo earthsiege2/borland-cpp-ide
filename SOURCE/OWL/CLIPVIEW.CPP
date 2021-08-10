@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\clipview.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   implementation of class TClipboardViewer
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\clipview.h>
+#include <owl/owlpch.h>
+#include <owl/clipview.h>
 
 //
 // We only want to search this mixin for events, so don't include any base
@@ -28,7 +29,8 @@ TClipboardViewer::TClipboardViewer()
 }
 
 TClipboardViewer::TClipboardViewer(HWND hWnd, TModule*   module)
-  : TWindow(hWnd, module)
+:
+  TWindow(hWnd, module)
 {
 }
 

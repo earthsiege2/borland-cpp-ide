@@ -2,21 +2,21 @@
 /*                                                                        */
 /*  TIMER.H                                                               */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_TIMER_H )
-#define __CLASSLIB_TIMER_H
+#if !defined( CLASSLIB_TIMER_H )
+#define CLASSLIB_TIMER_H
 
-#if defined( _Windows ) && !defined( _BUILDRTLDLL )
-#error TTimer not available for Windows
+#if !defined( __DOS__ ) && !defined( BUILDBIDSTIMER )
+#error class TTimer only available under DOS
 #endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif	// __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -82,5 +82,5 @@ inline double TTimer::Resolution()
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_TIMER_H
+#endif  // CLASSLIB_TIMER_H
 

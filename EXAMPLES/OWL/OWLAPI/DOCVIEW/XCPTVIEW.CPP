@@ -27,9 +27,11 @@ class _DOCVIEWCLASS TExceptionView : public TListBox, public TView {
     //
     // overridden virtuals from TView
     //
-    LPCSTR   GetViewName(){return StaticName();}
+    const char far*   GetViewName(){return StaticName();}
+//    LPCSTR   GetViewName(){return StaticName();}
     TWindow* GetWindow()  {return (TWindow*)this;}
-    BOOL     SetDocTitle(LPCSTR docname, int index)
+    BOOL     SetDocTitle(const char far* docname, int index)
+//    BOOL     SetDocTitle(LPCSTR docname, int index)
                           {return TListBox::SetDocTitle(docname, index); }
     //
     // overridden virtuals from TWindow
@@ -178,7 +180,6 @@ void TExceptionView::CmTXOwl()
   XTest* xt = new XTestD();
   delete xt;
   ThrowTXOwl();
-  delete &x;
 }
 
 void TExceptionView::CmTXTest()
@@ -355,7 +356,7 @@ BOOL TExceptionView::Create()
     Doc->PostError(IDS_NOMEMORYFORVIEW, MB_OK);
     return TRUE;   // cannot return FALSE - throws another exception
   }
-  if (Doc->GetDocPath() == 0) {  
+  if (Doc->GetDocPath() == 0) {
     return TRUE;           // new file, no data to display
   }
   if (!LoadData(0, 0))
@@ -431,7 +432,7 @@ TXTest::~TXTest()
 const TXTest& TXTest::operator = (const TXTest& src)
 {
   *(TXOwl*)this = src;
-  View = src.View;   
+  View = src.View;
   Index = src.Index;
   View->AddRef();
   View->Annotate(Index, '=');

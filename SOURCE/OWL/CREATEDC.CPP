@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\dc.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of TCreatedDC, TIC & TDibDC
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/dc.h>
 
 TCreatedDC::TCreatedDC() : TDC()
 {
@@ -12,7 +13,8 @@ TCreatedDC::TCreatedDC() : TDC()
 
 TCreatedDC::TCreatedDC(const char far* driver, const char far* device, 
                        const char far* output, const DEVMODE far* initData)
-  : TDC()
+:
+  TDC()
 {
   Handle = ::CreateDC(driver, device, output, initData);
   CheckValid();
@@ -22,7 +24,8 @@ TCreatedDC::TCreatedDC(const char far* driver, const char far* device,
 // Use an existing HDC. Delete it on destruction as requested
 //
 TCreatedDC::TCreatedDC(HDC handle, TAutoDelete autoDelete)
-  : TDC(handle, autoDelete)
+:
+  TDC(handle, autoDelete)
 {
 }
 
@@ -41,7 +44,8 @@ TCreatedDC::~TCreatedDC()
 //
 TIC::TIC(const char far* driver, const char far* device, 
          const char far* output, const DEVMODE far* initData)
-  : TCreatedDC()
+:
+  TCreatedDC()
 {
   Handle = ::CreateIC(driver, device, output, initData);
   CheckValid();
@@ -51,6 +55,7 @@ TIC::TIC(const char far* driver, const char far* device,
 //
 //
 TDibDC::TDibDC(const TDib& dib)
-  : TCreatedDC("DIB", 0, 0, (const DEVMODE far*)dib.GetInfoHeader())
+:
+  TCreatedDC("DIB", 0, 0, (const DEVMODE far*)dib.GetInfoHeader())
 {
 }

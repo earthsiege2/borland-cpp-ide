@@ -13,7 +13,7 @@
 //  class TBWindow
 //  ----- --------
 //
-class _EXPCLASS TBWindow : public TWindow {
+class  TBWindow : public TWindow {
   public:
     TBWindow(TWindow*        parent,
              const char far* name,
@@ -23,7 +23,7 @@ class _EXPCLASS TBWindow : public TWindow {
     char far* GetClassName();
     void      GetWindowClass(WNDCLASS& wndClass);
 
-  DECLARE_STREAMABLE_FROM_BASE(_EXPCLASS, TBWindow, TWindow);
+  DECLARE_STREAMABLE_FROM_BASE(, TBWindow, TWindow);
 };
 
 #endif //__BWINDOW_H

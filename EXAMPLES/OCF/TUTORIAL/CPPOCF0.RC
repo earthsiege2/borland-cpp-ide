@@ -1,0 +1,14 @@
+#include "CppOcf0.rh"
+
+CppOcf0Menu MENU
+{
+ POPUP "&File"
+ {
+  MENUITEM "E&xit", CM_EXIT
+ }
+
+ POPUP "&Edit"
+ {
+  MENUITEM "&Insert Object", CM_INSERTOBJECT
+ }
+}

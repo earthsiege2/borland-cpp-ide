@@ -47,6 +47,12 @@ MACRO DeleteWord
     END
   ELSE
     BEGIN
+      IF InqCursorInTabSpace THEN
+	BEGIN
+          LiteralChar('x');
+          CursorCharLeft;
+	END
+      ENDIF;
       SetTempPos;
       CursorRightSkipWord;
       CursorRightSkipWhite;
@@ -270,8 +276,12 @@ MACRO MacMarkWord
   IF NOT InqCursorPastEOF THEN
     BEGIN
       SetNonInclusiveBlock;SetTempPos;HideBlock;CursorRight;
-      WordLeft;RightOfWord;SetBlockEnd;WordLeft;
+      CursorLeftSkipNonWord;CursorLeftSkipWordStream;
+      CursorRightSkipWord;
+      SetBlockEnd;
+      CursorLeftSkipNonWord;CursorLeftSkipWordStream;
       SetBlockBeg;MoveToBlockEnd;HighlightBlock;
+      FixScreenPos;
     END
   ENDIF
 END;
@@ -569,8 +579,8 @@ ctrl-T : DeleteWord;
 ctrl-Y : MacDeleteLine;
 ctrl-Z : MacUndo; : Undo
 
-ctrl-shift-I : IndentBlock(2);
-ctrl-shift-U : OutdentBlock(2);
+ctrl-shift-I : IndentBlock;
+ctrl-shift-U : OutdentBlock;
 ctrl-shift-Y : DeleteToEol;
 ctrl-shift-Z : MacRedo; : Redo
 
@@ -663,7 +673,7 @@ ctrl-K+^D : Menu;    /* N.B. must duplicate this due to quirk in keymap processo
 ctrl-K+^E : MacLowerCaseWord;
 ctrl-K+^F : MacUpperCaseWord;
 ctrl-K+^H : ToggleHideBlock;
-ctrl-K+^I : IndentBlock(2);
+ctrl-K+^I : IndentBlock;
 ctrl-K+^K : MacSetBlockEnd;
 ctrl-K+^L : MacMarkLine;
 ctrl-K+^N : UpperCaseBlock;
@@ -672,7 +682,7 @@ ctrl-K+^O : LowerCaseBlock;
 ctrl-K+^R : ReadBlock;
 ctrl-K+^S : SaveFile; /* N.B. must duplicate this due to quirk in keymap processor */
 ctrl-K+^T : MacMarkWord;
-ctrl-K+^U : OutdentBlock(2);
+ctrl-K+^U : OutdentBlock;
 ctrl-K+^V : MacMoveBlock;
 ctrl-K+^W : WriteBlock;
 ctrl-K+^Y : MacDeleteBlock;

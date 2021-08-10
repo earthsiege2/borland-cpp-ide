@@ -5,19 +5,27 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
 
-#pragma warn -nak   /* Ignore non-ansi keywords */
-
 #if !defined(___DEFS_H)
 #include <_defs.h>
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #if !defined(__FLAT__)
 
@@ -39,7 +47,7 @@ void _Cdecl _FARFUNC __assertfail( char _FAR *__msg,
 #ifdef NDEBUG
 #  define assert(p)   ((void)0)
 #else
-#  ifdef _Windows
+#  if defined(_Windows) && !defined(__DPMI16__)
 #    define _ENDL
 #  else
 #    define _ENDL "\n"
@@ -77,5 +85,12 @@ void _RTLENTRY _EXPFUNC __assertfail(char * __msg, char * __cond,
 
 #endif  /* __FLAT__  */
 
-#pragma warn .nak   /* Ignore non-ansi keywords */
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
 

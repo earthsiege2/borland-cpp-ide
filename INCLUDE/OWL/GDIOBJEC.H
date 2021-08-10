@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\gdiobjct.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of abstract GDI object class and derived classes
 //----------------------------------------------------------------------------
-#if !defined(__OWL_GDIOBJEC_H)
-#define __OWL_GDIOBJEC_H
+#if !defined(OWL_GDIOBJEC_H)
+#define OWL_GDIOBJEC_H
 
-#if !defined(__OWL_GDIBASE_H)
-  #include <owl\gdibase.h>
+#if !defined(OWL_GDIBASE_H)
+# include <owl/gdibase.h>
 #endif
 
 class _OWLCLASS TDC;
@@ -24,23 +25,23 @@ class _OWLCLASS TMetaFilePict;
 // enabled by default unless NO_GDI_ORPHAN_CONTROL is defined.
 //
 #if !defined(NO_GDI_ORPHAN_CONTROL)
-  #define OBJ_REF_ADD(handle,type) TGdiObject::RefAdd((handle), (type))
-  #define OBJ_REF_REMOVE(handle) TGdiObject::RefRemove(handle)
-  #define OBJ_REF_INC(handle) TGdiObject::RefInc(handle)
-  #if defined(__TRACE)
-    #define OBJ_REF_DEC(handle, wantDelete) TGdiObject::RefDec((handle),\
+# define OBJ_REF_ADD(handle,type) TGdiObject::RefAdd((handle), (type))
+# define OBJ_REF_REMOVE(handle) TGdiObject::RefRemove(handle)
+# define OBJ_REF_INC(handle) TGdiObject::RefInc(handle)
+# if defined(__TRACE)
+#   define OBJ_REF_DEC(handle, wantDelete) TGdiObject::RefDec((handle),\
                                                                (wantDelete))
-  #else
-    #define OBJ_REF_DEC(handle, wantDelete) TGdiObject::RefDec((handle))
-  #endif
-  #define OBJ_REF_COUNT(handle) TGdiObject::RefCount(handle)
+# else
+#   define OBJ_REF_DEC(handle, wantDelete) TGdiObject::RefDec((handle))
+# endif
+# define OBJ_REF_COUNT(handle) TGdiObject::RefCount(handle)
   struct TObjInfo;
 #else
-  #define OBJ_REF_ADD(handle,type) handle
-  #define OBJ_REF_REMOVE(handle) handle
-  #define OBJ_REF_INC(handle) handle
-  #define OBJ_REF_DEC(handle,wantDelete) handle
-  #define OBJ_REF_COUNT(handle) -1
+# define OBJ_REF_ADD(handle,type) handle
+# define OBJ_REF_REMOVE(handle) handle
+# define OBJ_REF_INC(handle) handle
+# define OBJ_REF_DEC(handle,wantDelete) handle
+# define OBJ_REF_COUNT(handle) -1
 #endif
 
 //
@@ -57,6 +58,7 @@ class _OWLCLASS TGdiObject : private TGdiBase {
 
     operator    HGDIOBJ() const {return HGDIOBJ(Handle);}
     int         GetObject(int count, void far* object) const;
+    bool        operator ==(const TGdiObject& other) const {return Handle == other.Handle;}
 
     #if !defined(NO_GDI_ORPHAN_CONTROL)
       enum TType {
@@ -67,7 +69,7 @@ class _OWLCLASS TGdiObject : private TGdiBase {
       static void      RefRemove(HANDLE handle);
       static void      RefInc(HANDLE handle);
       #if defined(__TRACE)
-        static void    RefDec(HANDLE handle, BOOL wantDelete);
+        static void    RefDec(HANDLE handle, bool wantDelete);
       #else
         static void    RefDec(HANDLE handle);
       #endif
@@ -102,17 +104,17 @@ class _OWLCLASS TPen : public TGdiObject {
     TPen(TColor color, int width=1, int style=PS_SOLID);
     TPen(const LOGPEN far* logPen);
     TPen(const TPen&);
-  #if defined(__WIN32__)
-    TPen(DWORD penStyle, DWORD width, const TBrush& brush, DWORD styleCount,
-         LPDWORD style);
-    TPen(DWORD penStyle, DWORD width, const LOGBRUSH& logBrush,
-         DWORD styleCount, LPDWORD style);
-  #endif
+#if defined(BI_PLAT_WIN32)
+    TPen(uint32 penStyle, uint32 width, const TBrush& brush, uint32 styleCount,
+         uint32* style);
+    TPen(uint32 penStyle, uint32 width, const LOGBRUSH& logBrush,
+         uint32 styleCount, uint32* style);
+#endif
 
     operator HPEN() const {return HPEN(HGDIOBJ(*this));}
 
     // Get GDI Pen Object information
-    BOOL        GetObject(LOGPEN far& logPen) const;
+    bool        GetObject(LOGPEN far& logPen) const;
 
   private:
     TPen& operator =(const TPen&);
@@ -140,11 +142,35 @@ class _OWLCLASS TBrush : public TGdiObject {
     operator HBRUSH() const {return HBRUSH(HGDIOBJ(*this));}
 
     // Get GDI Brush Object information
-    BOOL        GetObject(LOGBRUSH far& logBrush) const;
-    BOOL        UnrealizeObject();
+    bool        GetObject(LOGBRUSH far& logBrush) const;
+#if defined(BI_PLAT_WIN16)
+    bool        UnrealizeObject();  // Use TDC::SetBrushOrg() for Win32
+#endif
 
   private:
     TBrush& operator =(const TBrush&);
+};
+
+//
+// class THatch8x8Brush
+// ----- --------------
+//
+// Mini 8x8 monochrome configurable hatch brush class, with predefined patterns
+//
+class _OWLCLASS THatch8x8Brush : public TBrush {
+  public:
+    THatch8x8Brush(const uint8 hatch[], TColor fgColor=TColor::White,
+                   TColor bgColor=TColor::Black);
+    void     Reconstruct(const uint8 hatch[], TColor fgColor, TColor bgColor);
+
+    const static uint8 Hatch22F1[8];  // 2-on, 2-off, offset 1 per row forward
+    const static uint8 Hatch13F1[8];  // 1-on, 3-off, offset 1 per row forward
+    const static uint8 Hatch11F1[8];  // 1-on, 1-off, offset 1 per row
+    const static uint8 Hatch22B1[8];  // 2-on, 2-off, offset 1 per row backward
+    const static uint8 Hatch13B1[8];  // 1-on, 3-off, offset 1 per row backward
+
+  private:
+    static HBRUSH Create(const uint8 hatch[], TColor fgColor, TColor bgColor);
 };
 
 //
@@ -162,22 +188,22 @@ class _OWLCLASS TFont : public TGdiObject {
     TFont(const char far* facename=0,
           int height=0, int width=0, int escapement=0, int orientation=0,
           int weight=FW_NORMAL,
-          BYTE pitchAndFamily=DEFAULT_PITCH|FF_DONTCARE,
-          BYTE italic=FALSE, BYTE underline=FALSE, BYTE strikeout=FALSE,
-          BYTE charSet=1,  // DEFAULT_CHARSET or UNICODE_CHARSET
-          BYTE outputPrecision=OUT_DEFAULT_PRECIS,
-          BYTE clipPrecision=CLIP_DEFAULT_PRECIS,
-          BYTE quality=DEFAULT_QUALITY);
+          uint8 pitchAndFamily=DEFAULT_PITCH|FF_DONTCARE,
+          uint8 italic=false, uint8 underline=false, uint8 strikeout=false,
+          uint8 charSet=1,  // DEFAULT_CHARSET or UNICODE_CHARSET
+          uint8 outputPrecision=OUT_DEFAULT_PRECIS,
+          uint8 clipPrecision=CLIP_DEFAULT_PRECIS,
+          uint8 quality=DEFAULT_QUALITY);
 
     // CreateFont() matching font ctor
     TFont(int height, int width, int escapement=0, int orientation=0,
           int weight=FW_NORMAL,
-          BYTE italic=FALSE, BYTE underline=FALSE, BYTE strikeout=FALSE,
-          BYTE charSet=1,  // DEFAULT_CHARSET or UNICODE_CHARSET
-          BYTE outputPrecision=OUT_DEFAULT_PRECIS,
-          BYTE clipPrecision=CLIP_DEFAULT_PRECIS,
-          BYTE quality=DEFAULT_QUALITY,
-          BYTE pitchAndFamily=DEFAULT_PITCH|FF_DONTCARE,
+          uint8 italic=false, uint8 underline=false, uint8 strikeout=false,
+          uint8 charSet=1,  // DEFAULT_CHARSET or UNICODE_CHARSET
+          uint8 outputPrecision=OUT_DEFAULT_PRECIS,
+          uint8 clipPrecision=CLIP_DEFAULT_PRECIS,
+          uint8 quality=DEFAULT_QUALITY,
+          uint8 pitchAndFamily=DEFAULT_PITCH|FF_DONTCARE,
           const char far* facename=0);
     TFont(const LOGFONT far* logFont);
     TFont(const TFont&);
@@ -185,7 +211,7 @@ class _OWLCLASS TFont : public TGdiObject {
     operator HFONT() const {return HFONT(HGDIOBJ(*this));}
 
     // Get GDI Font Object information
-    BOOL        GetObject(LOGFONT far& logFont) const;
+    bool        GetObject(LOGFONT far& logFont) const;
 
   private:
     TFont& operator =(const TFont&);
@@ -208,30 +234,30 @@ class _OWLCLASS TPalette : public TGdiObject {
 
     TPalette(const LOGPALETTE far* logPalette);
     TPalette(const PALETTEENTRY far* entries, int count);
-    TPalette(const BITMAPINFO far* info, UINT flags=0);    //Win 3.0 DIB hdr
-    TPalette(const BITMAPCOREINFO far* core, UINT flags=0);//PM 1.0 DIB header
-    TPalette(const TDib& dib, UINT flags=0);               // DIB object
+    TPalette(const BITMAPINFO far* info, uint flags=0);    //Win 3.0 DIB hdr
+    TPalette(const BITMAPCOREINFO far* core, uint flags=0);//PM 1.0 DIB header
+    TPalette(const TDib& dib, uint flags=0);               // DIB object
 
     operator HPALETTE() const {return HPALETTE(HGDIOBJ(*this));}
 
     // Palette functions
-    BOOL        ResizePalette(UINT numEntries);
-    void        AnimatePalette(UINT start, UINT count, const PALETTEENTRY far* entries);
-    UINT        SetPaletteEntries(WORD start, WORD count, const PALETTEENTRY far* entries);
-    UINT        SetPaletteEntry(WORD index, const PALETTEENTRY far& entry);
-    UINT        GetPaletteEntries(WORD start, WORD count, PALETTEENTRY far* entries) const;
-    UINT        GetPaletteEntry(WORD index, PALETTEENTRY far& entry) const;
-    UINT        GetNearestPaletteIndex(TColor color) const;
-    BOOL        GetObject(WORD far& numEntries) const;
-    WORD        GetNumEntries() const;
+    bool        ResizePalette(uint numEntries);
+    void        AnimatePalette(uint start, uint count, const PALETTEENTRY far* entries);
+    uint        SetPaletteEntries(uint16 start, uint16 count, const PALETTEENTRY far* entries);
+    uint        SetPaletteEntry(uint16 index, const PALETTEENTRY far& entry);
+    uint        GetPaletteEntries(uint16 start, uint16 count, PALETTEENTRY far* entries) const;
+    uint        GetPaletteEntry(uint16 index, PALETTEENTRY far& entry) const;
+    uint        GetNearestPaletteIndex(TColor color) const;
+    bool        GetObject(uint16 far& numEntries) const;
+    uint16      GetNumEntries() const;
 
     // Put this palette onto the clipboard
     void        ToClipboard(TClipboard& Clipboard);
-    BOOL        UnrealizeObject() {return ::UnrealizeObject(Handle);}
+    bool        UnrealizeObject() {return ::UnrealizeObject(Handle);}
 
   protected:
-    void        Create(const BITMAPINFO far* info, UINT flags);
-    void        Create(const BITMAPCOREINFO far* core, UINT flags);
+    void        Create(const BITMAPINFO far* info, uint flags);
+    void        Create(const BITMAPCOREINFO far* core, uint flags);
 
   private:
     TPalette& operator =(const TPalette&);
@@ -254,10 +280,10 @@ class _OWLCLASS TBitmap : public TGdiObject {
     TBitmap(const TClipboard& clipboard);
     TBitmap(const TBitmap& bitmap);
 
-    TBitmap(int width, int height, BYTE planes=1, BYTE bitCount=1, void far* bits=0);
+    TBitmap(int width, int height, uint8 planes=1, uint8 bitCount=1, const void far* bits=0);
     TBitmap(const BITMAP far* bitmap);
-    TBitmap(const TDC& Dc, int width, int height, BOOL discardable = FALSE);
-    TBitmap(const TDC& Dc, const TDib& dib, DWORD usage=CBM_INIT);
+    TBitmap(const TDC& Dc, int width, int height, bool discardable = false);
+    TBitmap(const TDC& Dc, const TDib& dib, uint32 usage=CBM_INIT);
 
     TBitmap(const TMetaFilePict& metaFile, TPalette& palette, const TSize& size);
     TBitmap(const TDib& dib, const TPalette* palette = 0);
@@ -267,15 +293,15 @@ class _OWLCLASS TBitmap : public TGdiObject {
     operator HBITMAP() const {return HBITMAP(HGDIOBJ(*this));}
 
     // Get/set GDI Object information
-    BOOL        GetObject(BITMAP far& bitmap) const;
+    bool        GetObject(BITMAP far& bitmap) const;
     int         Width() const;
     int         Height() const;
-    BYTE        Planes() const;
-    BYTE        BitsPixel() const;
-    DWORD       GetBitmapBits(DWORD count, void far* bits) const;
-    DWORD       SetBitmapBits(DWORD count, const void far* bits);
-    BOOL        GetBitmapDimension(TSize& size) const;
-    BOOL        SetBitmapDimension(const TSize& size, TSize far* oldSize=0);
+    uint8       Planes() const;
+    uint8       BitsPixel() const;
+    uint32      GetBitmapBits(uint32 count, void far* bits) const;
+    uint32      SetBitmapBits(uint32 count, const void far* bits);
+    bool        GetBitmapDimension(TSize& size) const;
+    bool        SetBitmapDimension(const TSize& size, TSize far* oldSize=0);
 
     // Put this bitmap onto the clipboard
     void  ToClipboard(TClipboard& clipboard);
@@ -322,10 +348,10 @@ class _OWLCLASS TRegion : private TGdiBase {
     operator HRGN() const {return HRGN(Handle);}
 
     // Test and information functions/operators
-    BOOL        operator ==(const TRegion& other) const;
-    BOOL        operator !=(const TRegion& other) const;
-    BOOL        Contains(const TPoint& point) const;
-    BOOL        Touches(const TRect& rect) const;
+    bool        operator ==(const TRegion& other) const;
+    bool        operator !=(const TRegion& other) const;
+    bool        Contains(const TPoint& point) const;
+    bool        Touches(const TRect& rect) const;
     int         GetRgnBox(TRect& box) const;
     TRect       GetRgnBox() const;
 
@@ -358,17 +384,18 @@ class _OWLCLASS TIcon : private TGdiBase {
     TIcon(HINSTANCE, const char far* filename, int index);
     TIcon(HINSTANCE, const TSize& size, int planes, int bitsPixel, 
           const void far* andBits, const void far* xorBits);
-  #if defined(__WIN32__)
-    TIcon(const void* resBits, DWORD resSize);
+#if defined(BI_PLAT_WIN32)
+    TIcon(const void* resBits, uint32 resSize);
     TIcon(const ICONINFO* iconInfo);
-  #endif
-    ~TIcon();
+#endif
+   ~TIcon();
 
     operator HICON() const {return HICON(Handle);}
-
-  #if defined(__WIN32__)
-    BOOL      GetIconInfo(ICONINFO* iconInfo) const;
-  #endif
+    bool     operator ==(const TIcon& other) const {return Handle == other.Handle;}
+    
+#if defined(BI_PLAT_WIN32)
+    bool     GetIconInfo(ICONINFO* iconInfo) const;
+#endif
 
   private:
     TIcon(const TIcon&); // Protect against copying of icons
@@ -379,10 +406,10 @@ class _OWLCLASS TIcon : private TGdiBase {
 // class TCursor
 // ----- -------
 //
-// Pseudo-GDI object Icon class.  Can construct an icon from a resource or
+// Pseudo-GDI object Cursor class.  Can construct an cursor from a resource or
 // explicit info.  Overloads the destructor since it is not a real GDI object.
 //
-class _OWLCLASS TCursor : public TGdiObject {
+class _OWLCLASS TCursor : public TGdiBase {
   public:
     // Constructors
     TCursor(HCURSOR handle, TAutoDelete autoDelete = NoAutoDelete);
@@ -390,17 +417,18 @@ class _OWLCLASS TCursor : public TGdiObject {
     TCursor(HINSTANCE, TResId);
     TCursor(HINSTANCE, const TPoint& hotSpot,
             const TSize& size, void far* andBits, void far* xorBits);
-  #if defined(__WIN32__)
-    TCursor(const void* resBits, DWORD resSize);
+#if defined(BI_PLAT_WIN32)
+    TCursor(const void* resBits, uint32 resSize);
     TCursor(const ICONINFO* iconInfo);
-  #endif
-    ~TCursor();
+#endif
+   ~TCursor();
 
     operator HCURSOR() const {return HCURSOR(Handle);}
+    bool     operator ==(const TCursor& other) const {return Handle == other.Handle;}
 
-  #if defined(__WIN32__)
-    BOOL      GetIconInfo(ICONINFO* iconInfo) const;
-  #endif
+#if defined(BI_PLAT_WIN32)
+    bool     GetIconInfo(ICONINFO* iconInfo) const;
+#endif
     
   private:
     TCursor(const TCursor&); // Protect against copying of cursors
@@ -429,11 +457,17 @@ class _OWLCLASS TDib : private TGdiBase {
     TDib(const TClipboard& clipboard);
     TDib(const TDib& dib);
 
-    TDib(int width, int height, int nColors, WORD mode=DIB_RGB_COLORS);
+    TDib(int width, int height, int nColors, uint16 mode=DIB_RGB_COLORS);
     TDib(HINSTANCE, TResId);
     TDib(const char* name);
+#if !defined(BI_DATA_NEAR)
+    TDib(istream& is, bool readFileHeader = false);
+#endif
     TDib(const TBitmap& bitmap, const TPalette* pal = 0);
-    ~TDib();
+   ~TDib();
+
+    // Comparison operator
+    bool     operator ==(const TDib& other) const {return Handle == other.Handle;}
 
     // Access to the internal structures of the dib
     const BITMAPINFO far*      GetInfo() const {return Info;}
@@ -442,8 +476,8 @@ class _OWLCLASS TDib : private TGdiBase {
     BITMAPINFOHEADER far*      GetInfoHeader() {return &Info->bmiHeader;}
     const TRgbQuad far*        GetColors() const {return (const TRgbQuad far*)Info->bmiColors;}
     TRgbQuad far*              GetColors() {return (TRgbQuad far*)Info->bmiColors;}
-    const WORD far*            GetIndices() const {return (WORD*)Info->bmiColors;}
-    WORD far*                  GetIndices() {return (WORD*)Info->bmiColors;}
+    const uint16 far*          GetIndices() const {return (uint16*)Info->bmiColors;}
+    uint16 far*                GetIndices() {return (uint16*)Info->bmiColors;}
     const void HUGE*           GetBits() const {return Bits;}
     void HUGE*                 GetBits() {return Bits;}
 
@@ -460,29 +494,34 @@ class _OWLCLASS TDib : private TGdiBase {
     void      ToClipboard(TClipboard& clipboard);
 
     // Get info about this Dib
-    BOOL      IsOK() const {return Info != 0;}
-    BOOL      IsPM() const {return IsCore;}
+    bool      IsOK() const {return Info != 0;}
+    bool      IsPM() const {return IsCore;}
     int       Width() const {return W;}
     int       Height() const {return H;}
     TSize     Size() const {return TSize(W,H);}
     long      NumColors() const {return NumClrs;}
-    WORD      StartScan() const {return 0;}
-    WORD      NumScans() const {return WORD(H);}
-    WORD      Usage() const {return Mode;}
+    uint16    StartScan() const {return 0;}
+    uint16    NumScans() const {return uint16(H);}
+    uint16    Usage() const {return Mode;}
 
-    BOOL      WriteFile(const char* filename);
+    // Write this dib to a file by name, to file object or to an ostream
+    bool      WriteFile(const char* filename);
+    bool      Write(TFile& file, bool writeFileHeader = false);
+#if !defined(BI_DATA_NEAR)
+    bool      Write(ostream& os, bool writeFileHeader = false);
+#endif
 
     // Work with the dib in PAL or RGB mode
-    BOOL      ChangeModeToPal(const TPalette& pal);
-    BOOL      ChangeModeToRGB(const TPalette& pal);
+    bool      ChangeModeToPal(const TPalette& pal);
+    bool      ChangeModeToRGB(const TPalette& pal);
     TColor    GetColor(int entry) const;
     void      SetColor(int entry, TColor color);
     int       FindColor(TColor color);
-    int       MapColor(TColor fromColor, TColor toColor, BOOL doAll = FALSE);
-    WORD      GetIndex(int entry) const;
-    void      SetIndex(int entry, WORD index);
-    int       FindIndex(WORD index);
-    int       MapIndex(WORD fromIndex, WORD toIndex, BOOL doAll = FALSE);
+    int       MapColor(TColor fromColor, TColor toColor, bool doAll = false);
+    uint16    GetIndex(int entry) const;
+    void      SetIndex(int entry, uint16 index);
+    int       FindIndex(uint16 index);
+    int       MapIndex(uint16 fromIndex, uint16 toIndex, bool doAll = false);
 
     enum {
       MapFace      = 0x01,  // Or these together to control colors to map
@@ -491,22 +530,35 @@ class _OWLCLASS TDib : private TGdiBase {
       MapHighlight = 0x08,
       MapFrame     = 0x10
     };
-    void      MapUIColors(UINT mapColors, TColor* bkColor = 0);
+    void      MapUIColors(uint mapColors, TColor* bkColor = 0);
     
   protected:
+    TGdiBase::CheckValid;  // make this function available to derivatives
+    TGdiBase::Handle;      // and these members too
+    TGdiBase::ShouldDelete;
+
     BITMAPINFO far* Info;       // Locked global alloc'd block
     void HUGE*      Bits;       // Pointer into above block at bits
     long            NumClrs;
     int             W;
     int             H;
-    WORD            Mode;
-    BOOL            IsCore : 4;       //Q 1;
-    BOOL            IsResHandle : 4;  //Q 1;
+    uint16          Mode;
+    bool            IsCore : 1;
+    bool            IsResHandle : 1;
+
+    // Protected ctor- derived classes need to fillin handle & get info
+    TDib();
 
     void      InfoFromHandle();
-    BOOL      Read(TFile& file, long offBits = 0);
-    BOOL      LoadResource(HINSTANCE, TResId);
-    BOOL      LoadFile(const char* name);
+    bool      ReadFile(const char* name);
+    bool      Read(TFile& file, bool readFileHeader = false);
+#if !defined(BI_DATA_NEAR)
+    bool      Read(istream& is, bool readFileHeader = false);
+#endif
+
+    bool      LoadResource(HINSTANCE, TResId);
+
+    bool      LoadFile(const char* name) {return ReadFile(name);} // old name
 
   private:
     TDib& operator =(const TDib&);
@@ -516,104 +568,103 @@ inline TClipboard& operator <<(TClipboard& clipboard, TDib& dib)
       {dib.ToClipboard(clipboard); return clipboard;}
 
 
-
 //----------------------------------------------------------------------------
 //   Inlines for abstract GDI object class and derived classes.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_DC_H)
-  #include <owl\dc.h>
+#if !defined(OWL_DC_H)
+# include <owl/dc.h>
 #endif
-#if !defined(__OWL_CLIPBOAR_H)
-  #include <owl\clipboar.h>
+#if !defined(OWL_CLIPBOAR_H)
+# include <owl/clipboar.h>
 #endif
 
 inline int TGdiObject::GetObject(int count, void far* object) const {
-  #if defined(__WIN32__)
-    #if defined(UNICODE)
-      return ::GetObjectW(Handle, count, object);
-    #else
-      return ::GetObjectA(Handle, count, object);
-    #endif
-  #else
-    return ::GetObject(Handle, count, object);
-  #endif
+#if defined(BI_PLAT_WIN32)
+# if defined(UNICODE)
+    return ::GetObjectW(Handle, count, object);
+#  else
+    return ::GetObjectA(Handle, count, object);
+#  endif
+#else
+  return ::GetObject(Handle, count, object);
+#endif
 }
 
-inline BOOL TPen::GetObject(LOGPEN far& logPen) const {
+inline bool TPen::GetObject(LOGPEN far& logPen) const {
   return TGdiObject::GetObject(sizeof(logPen), &logPen) != 0;
 }
 
-inline BOOL TBrush::GetObject(LOGBRUSH far& logBrush) const {
+inline bool TBrush::GetObject(LOGBRUSH far& logBrush) const {
   return TGdiObject::GetObject(sizeof(logBrush), &logBrush) != 0;
 }
 
-#if !defined(__WIN32__)
-  inline BOOL TBrush:: UnrealizeObject() {
-    return ::UnrealizeObject(Handle);
- }
+#if defined(BI_PLAT_WIN16)
+inline bool TBrush:: UnrealizeObject() {
+  return ::UnrealizeObject(Handle);
+}
 #endif
 
-inline BOOL TFont::GetObject(LOGFONT far& logFont) const {
+inline bool TFont::GetObject(LOGFONT far& logFont) const {
   return TGdiObject::GetObject(sizeof(logFont), &logFont) != 0;
 }
 
 
-inline BOOL TPalette::ResizePalette(UINT numEntries) {
+inline bool TPalette::ResizePalette(uint numEntries) {
   return ::ResizePalette((HPALETTE)Handle, numEntries);
 }
 
-inline void TPalette::AnimatePalette(UINT start, UINT count, const PALETTEENTRY far* entries) {
+inline void TPalette::AnimatePalette(uint start, uint count, const PALETTEENTRY far* entries) {
   ::AnimatePalette((HPALETTE)Handle, start, count, entries);
 }
 
-inline UINT TPalette::SetPaletteEntries(WORD start, WORD count, const PALETTEENTRY far* entries) {
+inline uint TPalette::SetPaletteEntries(uint16 start, uint16 count, const PALETTEENTRY far* entries) {
   return ::SetPaletteEntries((HPALETTE)Handle, start, count, entries);
 }
 
-inline UINT TPalette::SetPaletteEntry(WORD index, const PALETTEENTRY far& entry) {
+inline uint TPalette::SetPaletteEntry(uint16 index, const PALETTEENTRY far& entry) {
   return ::SetPaletteEntries((HPALETTE)Handle, index, 1, &entry);
 }
 
-inline UINT TPalette::GetPaletteEntries(WORD start, WORD count, PALETTEENTRY far* entries) const {
+inline uint TPalette::GetPaletteEntries(uint16 start, uint16 count, PALETTEENTRY far* entries) const {
   return ::GetPaletteEntries((HPALETTE)Handle, start, count, entries);
 }
 
-inline UINT TPalette::GetPaletteEntry(WORD index, PALETTEENTRY far& entry) const {
+inline uint TPalette::GetPaletteEntry(uint16 index, PALETTEENTRY far& entry) const {
   return ::GetPaletteEntries((HPALETTE)Handle, index, 1, &entry);
 }
 
-inline UINT TPalette::GetNearestPaletteIndex(TColor Color) const {
+inline uint TPalette::GetNearestPaletteIndex(TColor Color) const {
   return ::GetNearestPaletteIndex((HPALETTE)Handle, Color);
 }
 
-inline BOOL TPalette::GetObject(WORD far& numEntries) const {
+inline bool TPalette::GetObject(uint16 far& numEntries) const {
   return TGdiObject::GetObject(sizeof(numEntries), &numEntries);
 }
 
-inline WORD TPalette::GetNumEntries() const {
-  WORD numEntries;
+inline uint16 TPalette::GetNumEntries() const {
+  uint16 numEntries;
   if (TGdiObject::GetObject(sizeof(numEntries), &numEntries))
     return numEntries;
   return 0;
 }
 
-inline DWORD TBitmap::GetBitmapBits(DWORD count, void far* bits) const {
+inline uint32 TBitmap::GetBitmapBits(uint32 count, void far* bits) const {
   return ::GetBitmapBits((HBITMAP)Handle, count, bits);
 }
 
-inline DWORD TBitmap::SetBitmapBits(DWORD count, const void far* bits) {
+inline uint32 TBitmap::SetBitmapBits(uint32 count, const void far* bits) {
   return ::SetBitmapBits((HBITMAP)Handle, count, bits);
 }
 
-inline BOOL TBitmap::GetBitmapDimension(TSize& size) const {
+inline bool TBitmap::GetBitmapDimension(TSize& size) const {
   return ::GetBitmapDimensionEx((HBITMAP)Handle, &size);
 }
 
-inline BOOL TBitmap::SetBitmapDimension(const TSize& size, TSize far* oldSize) {
+inline bool TBitmap::SetBitmapDimension(const TSize& size, TSize far* oldSize) {
   return ::SetBitmapDimensionEx((HBITMAP)Handle, size.cx, size.cy, oldSize);
 }
 
-inline BOOL TBitmap::GetObject(BITMAP far& Bitmap) const {
+inline bool TBitmap::GetObject(BITMAP far& Bitmap) const {
   return TGdiObject::GetObject(sizeof(Bitmap), &Bitmap) != 0;
 }
 
@@ -622,19 +673,19 @@ inline void TRegion::SetRectRgn(const TRect& rect) {
   ::SetRectRgn((HRGN)Handle, rect.left, rect.top, rect.right, rect.bottom);
 }
 
-inline BOOL TRegion::operator ==(const TRegion& other) const {
+inline bool TRegion::operator ==(const TRegion& other) const {
   return ::EqualRgn((HRGN)Handle, other);
 }
 
-inline BOOL TRegion::operator !=(const TRegion& other) const {
+inline bool TRegion::operator !=(const TRegion& other) const {
   return !::EqualRgn((HRGN)Handle, other);
 }
 
-inline BOOL TRegion::Contains(const TPoint& point) const {
+inline bool TRegion::Contains(const TPoint& point) const {
   return ::PtInRegion((HRGN)Handle, point.x, point.y);
 }
 
-inline BOOL TRegion::Touches(const TRect& rect) const {
+inline bool TRegion::Touches(const TRect& rect) const {
   return ::RectInRegion((HRGN)Handle, (TRect*)&rect); // API <const> typecast 
 }
 
@@ -682,15 +733,16 @@ inline TRegion& TRegion::operator ^=(const TRegion& source) {
   ::CombineRgn((HRGN)Handle, (HRGN)Handle, source, RGN_XOR);
   return *this;
 }
-#if defined(__WIN32__)
-inline BOOL TIcon::GetIconInfo(ICONINFO far* IconInfo) const {
+
+#if defined(BI_PLAT_WIN32)
+inline bool TIcon::GetIconInfo(ICONINFO far* IconInfo) const {
   return ::GetIconInfo((HICON)Handle, IconInfo);
 }
 
-inline BOOL TCursor::GetIconInfo(ICONINFO far* IconInfo) const {
+inline bool TCursor::GetIconInfo(ICONINFO far* IconInfo) const {
   return ::GetIconInfo((HICON)(HCURSOR)Handle, IconInfo);
 }
 #endif
 
 
-#endif  // __OWL_GDIOBJEC_H
+#endif  // OWL_GDIOBJEC_H

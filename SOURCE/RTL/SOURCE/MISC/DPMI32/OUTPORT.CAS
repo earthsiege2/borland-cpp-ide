@@ -1,0 +1,110 @@
+/*-----------------------------------------------------------------------*
+ * filename - outport.cas
+ *
+ * function(s)
+ *        outport  - output word to a hardware port
+ *        outportb - output byte to a hardware port
+ *        outp     - output byte to a hardware port, return value output
+ *        outpw    - output word to a hardware port, return value output
+ *-----------------------------------------------------------------------*/
+
+/*
+ *      C/C++ Run Time Library - Version 1.5
+ *
+ *      Copyright (c) 1987, 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+
+#pragma inline
+#include <asmrules.h>
+#include <dos.h>
+
+#undef outportb
+#undef outport
+#undef outp
+#undef outpw
+
+/* Don't allow DPMI32 modules on Win32 */
+void _RTLENTRY __disallowDPMI32onWin32(void);
+#pragma extref __disallowDPMI32onWin32
+
+/*-----------------------------------------------------------------------*
+
+Name            outport - output to a hardware port
+
+Usage           void outport(unsigned port, unsigned val);
+
+Prototype in    dos.h
+
+Description     see inport
+
+*------------------------------------------------------------------------*/
+void _RTLENTRY outport(unsigned port, unsigned val)
+{
+    asm     mov     dx, W0(port)
+    asm     mov     ax, W0(val)
+    asm     out     dx, ax
+}
+
+/*-----------------------------------------------------------------------*
+
+Name            outportb - output to a hardware port
+
+Usage           #include <dos.h>
+                void outportb(unsigned port, unsigned char val);
+
+Prototype in    dos.h
+
+Description     see inport
+
+*------------------------------------------------------------------------*/
+void _RTLENTRY outportb(unsigned port, unsigned char val)
+{
+    asm     mov     dx, W0(port)
+    asm     mov     al, BY0(val)
+    asm     out     dx, al
+}
+
+/*-----------------------------------------------------------------------*
+
+Name            outpw   - output word to a hardware port
+
+Usage           unsigned outpw(unsigned port, unsigned val);
+
+Prototype in    dos.h
+
+Description     Similar to outport, except that it returns
+                the value output.  MSC compatible.
+
+*------------------------------------------------------------------------*/
+unsigned _RTLENTRY outpw(unsigned port, unsigned val)
+{
+    asm     mov     dx, W0(port)
+    asm     xor     eax, eax
+    asm     mov     ax, W0(val)
+    asm     out     dx, ax
+    return (_EAX);
+}
+
+/*-----------------------------------------------------------------------*
+
+Name            outp    - output byte to a hardware port
+
+Usage           int outp(unsigned port, int val);
+
+Prototype in    dos.h
+
+Description     Similar to outportb, except that it returns
+                the value output.  MSC compatible.
+
+*------------------------------------------------------------------------*/
+int _RTLENTRY outp(unsigned port, int val)
+{
+    asm     mov     dx, W0(port)
+    asm     xor     eax, eax
+    asm     mov     al, BY0(val)
+    asm     out     dx, al
+    return (_EAX);
+}

@@ -1,26 +1,38 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\winmain.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of WinMain for user exes
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
+#include <osl/locale.h>
 
-DIAG_DECLARE_GROUP(OwlApp);        // General Application diagnostic group
+DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMain, true, 0);
 
 //
 // Default WinMain calls OwlMain, after setting params into TApplication
 //
 int PASCAL
-WinMain(HINSTANCE instance, HINSTANCE prevInstance, char far* cmdLine, int cmdShow)
+WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char far* cmdLine, int cmdShow)
 {
-  TRACEX(OwlApp, 0, "WinMain(" << hex << UINT(instance) << ", " << 
-                                  hex << UINT(prevInstance) << ", \"" << 
+  TRACEX(OwlMain, 0, "WinMain(" << hex << uint(hInstance) << ", " << 
+                                  hex << uint(hPrevInstance) << ", \"" << 
                                   TResId(cmdLine) << "\", " << 
                                   cmdShow << ") called");
-  TApplication::SetWinMainParams(instance, prevInstance, cmdLine, cmdShow);
-  int retVal = OwlMain(_argc, _argv);
-  TRACEX(OwlApp, 0, "WinMain() returns " << retVal);
 
-  return retVal;
+  // If no global ::Module ptr exists yet, provide a default now
+  //
+  if (!::Module) {
+    static TModule module(0, hInstance);
+    ::Module = &module;
+  }
+  
+  TApplication::SetWinMainParams(hInstance, hPrevInstance, cmdLine, cmdShow);
+  TRY {
+    int retVal = OwlMain(_argc, _argv);
+    TRACEX(OwlMain, 0, "WinMain() returns " << retVal);
+    return retVal;
+  }
+  CATCH( (xmsg& x) {return ::HandleGlobalException(x, 0);} )
 }

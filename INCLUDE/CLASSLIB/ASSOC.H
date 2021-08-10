@@ -2,29 +2,29 @@
 /*                                                                        */
 /*  ASSOC.H                                                               */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_ASSOC_H )
-#define __CLASSLIB_ASSOC_H
+#if !defined( CLASSLIB_ASSOC_H )
+#define CLASSLIB_ASSOC_H
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_ALLOCTR_H )
-#include "classlib\alloctr.h"
-#endif  // __CLASSLIB_ALLOCTR_H
+#if !defined( CLASSLIB_ALLOCTR_H )
+#include <classlib/alloctr.h>
+#endif
 
-#if !defined( __CLASSLIB_VOIDP_H )
-#include "classlib\voidp.h"
-#endif  // __CLASSLIB_VOIDP_H
+#if !defined( CLASSLIB_VOIDP_H )
+#include <classlib/voidp.h>
+#endif
 
-#if !defined( __CLASSLIB_HASHIMP_H )
-#include "classlib\hashimp.h"
-#endif  // __CLASSLIB_HASHIMP_H
+#if !defined( CLASSLIB_HASHIMP_H )
+#include <classlib/hashimp.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -220,7 +220,11 @@ public:
         return *Key() == *a.Key();
         }
 
-    Parent::HashValue;
+    unsigned HashValue() const
+        {
+        return ::HashValue( *Key() );
+        }
+        
     Parent::Value;
 
     void DeleteElements()
@@ -297,8 +301,11 @@ public:
         return *Key() == *a.Key();
         }
 
-    Parent::HashValue;
-
+    unsigned HashValue() const
+        {
+        return ::HashValue( *Key() );
+        }
+        
     void DeleteElements()
         {
         delete CONST_CAST(K *,Key());
@@ -338,4 +345,4 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_ASSOC_H
+#endif  // CLASSLIB_ASSOC_H

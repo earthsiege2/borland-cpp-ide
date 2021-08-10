@@ -2,14 +2,14 @@
 /*                                                                        */
 /*  BINIMP.CPP                                                            */
 /*                                                                        */
-/*  Copyright Borland International 1993                                  */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_BINIMP_H )
-#include "classlib\binimp.h"
-#endif  // __CLASSLIB_BINIMP_H
+#if !defined( CLASSLIB_BINIMP_H )
+#include <classlib/binimp.h>
+#endif
 
 TBinarySearchTreeBase::TBinarySearchTreeBase() :
     Root(0),
@@ -197,6 +197,7 @@ step6:
 }
 
 TBinaryTreeExternalIteratorBase::TBinaryTreeExternalIteratorBase( TBinarySearchTreeBase& tree, TBinarySearchTreeBase::IteratorOrder order ) :
+    Stack( new TStackAsList<TBinarySearchTreeBase::BinNode _BIDSFAR *> ),
     Tree(&tree),
     Current( tree.Root ),
     Order( order )
@@ -204,9 +205,14 @@ TBinaryTreeExternalIteratorBase::TBinaryTreeExternalIteratorBase( TBinarySearchT
     Restart();
 }
 
+TBinaryTreeExternalIteratorBase::~TBinaryTreeExternalIteratorBase()
+{
+    delete Stack;
+}
+
 void TBinaryTreeExternalIteratorBase::Restart()
 {
-    Stack.Flush();
+    Stack->Flush();
     Current = Tree->Root;
     LeftVisited = RightVisited = 0;
     Processed = 0;
@@ -226,7 +232,7 @@ TBinarySearchTreeBase::BinNode *TBinaryTreeExternalIteratorBase::Next()
 
         if( Current->Left != 0 && !LeftVisited )
             {
-            Stack.Push( Current );
+            Stack->Push( Current );
             Current = Current->Left;
             LeftVisited = RightVisited = 0;
             Processed = 0;
@@ -236,7 +242,7 @@ TBinarySearchTreeBase::BinNode *TBinaryTreeExternalIteratorBase::Next()
             TBinarySearchTreeBase::BinNode *Res = 0;
             if( Order == TBinarySearchTreeBase::InOrder )
                 Res = Current;
-            Stack.Push( Current );
+            Stack->Push( Current );
             Current = Current->Right;
             LeftVisited = RightVisited = 0;
             Processed = 0;
@@ -245,7 +251,7 @@ TBinarySearchTreeBase::BinNode *TBinaryTreeExternalIteratorBase::Next()
             }
         else
             {
-            if( Stack.IsEmpty() )
+            if( Stack->IsEmpty() )
                 {
                 if( Processed == 0 )
                     {
@@ -260,20 +266,49 @@ TBinarySearchTreeBase::BinNode *TBinaryTreeExternalIteratorBase::Next()
             else
                 {
                 TBinarySearchTreeBase::BinNode *Res;
-                if( Order == TBinarySearchTreeBase::PostOrder ||
-                   (Order == TBinarySearchTreeBase::InOrder && IsInOrder()) )
+                switch( Order )
                     {
-                    Res = Current;
-                    Processed = 0;
+                    case TBinarySearchTreeBase::PreOrder:
+                        // This node has already been
+                        // processed, so we have further to go.
+                        Res = 0;
+
+                        // This node's parent has
+                        // already been processed
+                        Processed = 1;
+
+                        break;
+
+                    case TBinarySearchTreeBase::InOrder:
+                        if( IsInOrder() )
+                            {
+                            // This node needs to be processed.
+                            Res = Current;
+                            }
+                        else
+                            {
+                            // Node has already been processed.
+                            Res = 0;
+                            }
+                        // If we're the right-hand child, our parent
+                        // has already been processed.
+                        Processed = Stack->Top()->Right == Current;
+
+                        break;
+
+                    case TBinarySearchTreeBase::PostOrder:
+                        // This node needs to be processed.
+                        Res = Current;
+
+                        // This node's parent has not been processed.
+                        Processed = 0;
+
+                        break;
                     }
-                else
-                    {
-                    Res = 0;
-                    Processed = 1;
-                    }
+
                 LeftVisited = 1;
-                RightVisited = !Tree->LessThan( Current, Stack.Top() );
-                Current = Stack.Pop();
+                RightVisited = Stack->Top()->Right == Current;
+                Current = Stack->Pop();
                 if( Res != 0 )
                     return Res;
                 }

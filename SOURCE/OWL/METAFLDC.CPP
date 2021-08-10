@@ -1,12 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\dc.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of DC encapsulation classes
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/dc.h>
 
-TMetaFileDC::TMetaFileDC(const char far* filename) : TDC()
+TMetaFileDC::TMetaFileDC(const char far* filename)
+:
+  TDC()
 {
   Handle = ::CreateMetaFile(filename);
   CheckValid();

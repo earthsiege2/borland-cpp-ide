@@ -1,29 +1,23 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\compat.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Owl 1.0 compatibility structures & functions
 //----------------------------------------------------------------------------
-#include <owl\owldefs.h>
-#include <owl\compat.h>
-#include <owl\window.h>
-
-struct TCurrentEvent {
-  TWindow*  Win;
-  UINT      Msg;
-  WPARAM    WParam;
-  LPARAM    LParam;
-};
-
-extern TCurrentEvent  CurrentEvent;
+#include <owl/owlpch.h>
+#include <owl/compat.h>
+#include <owl/window.h>
 
 TMessage _OWLFUNC
-__GetTMessage()
+__GetTMessageWin(TWindow* win)
 {
   TMessage  msg;
+  TCurrentEvent& currentEvent = win->GetCurrentEvent();
 
-  msg.Receiver = CurrentEvent.Win->HWindow;
-  msg.Message = (WORD)CurrentEvent.Msg;
-  msg.WParam = (WORD)CurrentEvent.WParam;
-  msg.LParam = CurrentEvent.LParam;
+  msg.Receiver = currentEvent.Win->HWindow;
+  msg.Message = (uint16)currentEvent.Message;
+  msg.WParam = (uint16)currentEvent.WParam;
+  msg.LParam = currentEvent.LParam;
 
   return msg;
 }
@@ -31,7 +25,7 @@ __GetTMessage()
 string
 TXCompatibility::MapStatusCodeToString(int statusCode)
 {
-  UINT resId;
+  uint resId;
 
   switch (statusCode) {
     case EM_INVALIDCHILD:
@@ -65,16 +59,24 @@ TXCompatibility::MapStatusCodeToString(int statusCode)
 //   TWindow.Status to one of the EM_XXX values.
 //
 TXCompatibility::TXCompatibility(int statusCode)
-  : TXOwl(MapStatusCodeToString(statusCode)), Status(statusCode)
+:
+  TXOwl(MapStatusCodeToString(statusCode)),
+  Status(statusCode)
 {
 }
 
 TXCompatibility::TXCompatibility(const TXCompatibility& src)
-  : TXOwl(src), Status(src.Status)
+:
+  TXOwl(src),
+  Status(src.Status)
 {
 }
 
-TXOwl*
+TXCompatibility::~TXCompatibility()
+{
+}
+
+TXCompatibility*
 TXCompatibility::Clone()
 {
   return new TXCompatibility(*this);

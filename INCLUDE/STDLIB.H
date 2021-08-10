@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -23,9 +23,17 @@
 #include <_null.h>
 #endif
 
-#if !defined(_RC_INVOKED)
-#pragma option -a-
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
 #endif
+
+#pragma option -a-
+
+#endif  /* !RC_INVOKED */
+
 
 #ifndef _SIZE_T
 #define _SIZE_T
@@ -522,16 +530,22 @@ extern "C" long _RTLENTRY _EXPFUNC time(long _FAR *);
 /* Need prototype of time() for C++ randomize() */
 inline void _RTLENTRY randomize(void) { srand((unsigned) time(NULL)); }
 
-#ifndef __MINMAX_DEFINED
+#if !defined( __MINMAX_DEFINED) && defined(__cplusplus)
 #define __MINMAX_DEFINED
-template <class T> inline const T& min( const T& t1, const T& t2 )
+template <class T> inline const T _FAR &min( const T _FAR &t1, const T _FAR &t2 )
 {
-    return t1>t2 ? t2 : t1;
+    if  (t1 < t2)
+        return t1;
+    else
+        return t2;
 }
 
-template <class T> inline const T& max( const T& t1, const T& t2 )
+template <class T> inline const T _FAR &max( const T _FAR &t1, const T _FAR &t2 )
 {
-    return t1>t2 ? t1 : t2;
+    if  (t1 > t2)
+        return t1;
+    else
+        return t2;
 }
 #endif
 
@@ -547,15 +561,20 @@ template <class T> inline const T& max( const T& t1, const T& t2 )
 #endif /* __STDC__ */
 
 #if defined(__MSC)
-
 #define _itoa(__value, __string, __radix) itoa(__value, __string, __radix)
-
 #endif
 
-#if !defined(_RC_INVOKED)
+
+#if !defined(RC_INVOKED)
+
 #pragma option -a.  /* restore default packing */
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __STDLIB_H */
 
-

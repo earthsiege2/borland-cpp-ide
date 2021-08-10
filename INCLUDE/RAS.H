@@ -1,11 +1,19 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
+/*
 ** ras.h
 ** Remote Access external API
 ** Public header for external API clients
 */
 
-#ifndef __RAS_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _RAS_H_
+#define _RAS_H_
 #define __RAS_H
 
 #ifdef __cplusplus
@@ -16,6 +24,7 @@ extern "C" {
 #include <lmcons.h>
 #endif
 
+#include "pshpack4.h"
 
 #define RAS_MaxEntryName      20
 #define RAS_MaxDeviceName     32
@@ -24,6 +33,8 @@ extern "C" {
 #define RAS_MaxParamValue     128
 #define RAS_MaxPhoneNumber    128
 #define RAS_MaxCallbackNumber 48
+#define RAS_MaxIpAddress      15
+#define RAS_MaxIpxAddress     21
 
 
 DECLARE_HANDLE( HRASCONN );
@@ -42,7 +53,6 @@ RASCONNW
 };
 
 #define RASCONNA struct tagRASCONNA
-
 RASCONNA
 {
     DWORD    dwSize;
@@ -67,7 +77,6 @@ RASCONNA
 #define RASCS_DONE   0x2000
 
 #define RASCONNSTATE enum tagRASCONNSTATE
-
 RASCONNSTATE
 {
     RASCS_OpenPort = 0,
@@ -88,6 +97,7 @@ RASCONNSTATE
     RASCS_PrepareForCallback,
     RASCS_WaitForModemReset,
     RASCS_WaitForCallback,
+    RASCS_Projected,
 
     RASCS_Interactive = RASCS_PAUSED,
     RASCS_RetryAuthentication,
@@ -104,7 +114,6 @@ RASCONNSTATE
 /* Describes the status of a RAS connection.  (See RasConnectionStatus)
 */
 #define RASCONNSTATUSW struct tagRASCONNSTATUSW
-
 RASCONNSTATUSW
 {
     DWORD        dwSize;
@@ -115,7 +124,6 @@ RASCONNSTATUSW
 };
 
 #define RASCONNSTATUSA struct tagRASCONNSTATUSA
-
 RASCONNSTATUSA
 {
     DWORD        dwSize;
@@ -139,7 +147,6 @@ RASCONNSTATUSA
 /* Describes connection establishment parameters.  (See RasDial)
 */
 #define RASDIALPARAMSW struct tagRASDIALPARAMSW
-
 RASDIALPARAMSW
 {
     DWORD dwSize;
@@ -152,7 +159,6 @@ RASDIALPARAMSW
 };
 
 #define RASDIALPARAMSA struct tagRASDIALPARAMSA
-
 RASDIALPARAMSA
 {
     DWORD dwSize;
@@ -175,10 +181,32 @@ RASDIALPARAMSA
 #define LPRASDIALPARAMS  RASDIALPARAMS*
 
 
+/* Describes extended connection establishment options.  (See RasDial)
+*/
+#define RASDIALEXTENSIONS struct tagRASDIALEXTENSIONS
+RASDIALEXTENSIONS
+{
+    DWORD dwSize;
+    DWORD dwfOptions;
+    HWND  hwndParent;
+    DWORD reserved;
+};
+
+#define LPRASDIALEXTENSIONS RASDIALEXTENSIONS*
+
+/* 'dwfOptions' bit flags.
+*/
+#define RDEOPT_UsePrefixSuffix           0x00000001
+#define RDEOPT_PausedStates              0x00000002
+#define RDEOPT_IgnoreModemSpeaker        0x00000004
+#define RDEOPT_SetModemSpeaker           0x00000008
+#define RDEOPT_IgnoreSoftwareCompression 0x00000010
+#define RDEOPT_SetSoftwareCompression    0x00000020
+
+
 /* Describes an enumerated RAS phone book entry name.  (See RasEntryEnum)
 */
 #define RASENTRYNAMEW struct tagRASENTRYNAMEW
-
 RASENTRYNAMEW
 {
     DWORD dwSize;
@@ -186,7 +214,6 @@ RASENTRYNAMEW
 };
 
 #define RASENTRYNAMEA struct tagRASENTRYNAMEA
-
 RASENTRYNAMEA
 {
     DWORD dwSize;
@@ -204,21 +231,171 @@ RASENTRYNAMEA
 #define LPRASENTRYNAME  RASENTRYNAME*
 
 
-/* Prototype for caller's RasDial callback handler.  Arguments are the message
-** ID (currently always WM_RASDIALEVENT), the current RASCONNSTATE and the
-** error that has occurred (or 0 if none).
+/* Protocol code to projection data structure mapping.
 */
+#define RASPROJECTION enum tagRASPROJECTION
+RASPROJECTION
+{
+    RASP_Amb = 0x10000,
+    RASP_PppNbf = 0x803F,
+    RASP_PppIpx = 0x802B,
+    RASP_PppIp = 0x8021
+};
+
+#define LPRASPROJECTION RASPROJECTION*
+
+
+/* Describes the result of a RAS AMB (Authentication Message Block)
+** projection.  This protocol is used with NT 3.1 and OS/2 1.3 downlevel
+** RAS servers.
+*/
+#define RASAMBW struct tagRASAMBW
+RASAMBW
+{
+    DWORD dwSize;
+    DWORD dwError;
+    WCHAR szNetBiosError[ NETBIOS_NAME_LEN + 1 ];
+    BYTE  bLana;
+};
+
+#define RASAMBA struct tagRASAMBA
+RASAMBA
+{
+    DWORD dwSize;
+    DWORD dwError;
+    CHAR  szNetBiosError[ NETBIOS_NAME_LEN + 1 ];
+    BYTE  bLana;
+};
+
+#ifdef UNICODE
+#define RASAMB RASAMBW
+#else
+#define RASAMB RASAMBA
+#endif
+
+#define LPRASAMBW RASAMBW*
+#define LPRASAMBA RASAMBA*
+#define LPRASAMB  RASAMB*
+
+
+/* Describes the result of a PPP NBF (NetBEUI) projection.
+*/
+#define RASPPPNBFW struct tagRASPPPNBFW
+RASPPPNBFW
+{
+    DWORD dwSize;
+    DWORD dwError;
+    DWORD dwNetBiosError;
+    WCHAR szNetBiosError[ NETBIOS_NAME_LEN + 1 ];
+    WCHAR szWorkstationName[ NETBIOS_NAME_LEN + 1 ];
+    BYTE  bLana;
+};
+
+#define RASPPPNBFA struct tagRASPPPNBFA
+RASPPPNBFA
+{
+    DWORD dwSize;
+    DWORD dwError;
+    DWORD dwNetBiosError;
+    CHAR  szNetBiosError[ NETBIOS_NAME_LEN + 1 ];
+    CHAR  szWorkstationName[ NETBIOS_NAME_LEN + 1 ];
+    BYTE  bLana;
+};
+
+#ifdef UNICODE
+#define RASPPPNBF RASPPPNBFW
+#else
+#define RASPPPNBF RASPPPNBFA
+#endif
+
+#define LPRASPPPNBFW RASPPPNBFW*
+#define LPRASPPPNBFA RASPPPNBFA*
+#define LPRASPPPNBF  RASPPPNBF*
+
+
+/* Describes the results of a PPP IPX (Internetwork Packet Exchange)
+** projection.
+*/
+#define RASPPPIPXW struct tagRASIPXW
+RASPPPIPXW
+{
+    DWORD dwSize;
+    DWORD dwError;
+    WCHAR szIpxAddress[ RAS_MaxIpxAddress + 1 ];
+};
+
+
+#define RASPPPIPXA struct tagRASPPPIPXA
+RASPPPIPXA
+{
+    DWORD dwSize;
+    DWORD dwError;
+    CHAR  szIpxAddress[ RAS_MaxIpxAddress + 1 ];
+};
+
+#ifdef UNICODE
+#define RASPPPIPX RASPPPIPXW
+#else
+#define RASPPPIPX RASPPPIPXA
+#endif
+
+#define LPRASPPPIPXW RASPPPIPXW*
+#define LPRASPPPIPXA RASPPPIPXA*
+#define LPRASPPPIPX  RASPPPIPX*
+
+
+/* Describes the results of an PPP IP (Internet) projection.
+*/
+#define RASPPPIPW struct tagRASPPPIPW
+RASPPPIPW
+{
+    DWORD dwSize;
+    DWORD dwError;
+    WCHAR szIpAddress[ RAS_MaxIpAddress + 1 ];
+};
+
+#define RASPPPIPA struct tagRASPPPIPA
+RASPPPIPA
+{
+    DWORD dwSize;
+    DWORD dwError;
+    CHAR  szIpAddress[ RAS_MaxIpAddress + 1 ];
+};
+
+#ifdef UNICODE
+#define RASPPPIP RASPPPIPW
+#else
+#define RASPPPIP RASPPPIPA
+#endif
+
+#define LPRASPPPIPW RASPPPIPW*
+#define LPRASPPPIPA RASPPPIPA*
+#define LPRASPPPIP  RASPPPIP*
+
+
+/* If using RasDial message notifications, get the notification message code
+** by passing this string to the RegisterWindowMessageA() API.
+** WM_RASDIALEVENT is used only if a unique message cannot be registered.
+*/
+#define RASDIALEVENT    "RasDialEvent"
 #define WM_RASDIALEVENT 0xCCCD
+
+/* Prototypes for caller's RasDial callback handler.  Arguments are the
+** message ID (currently always WM_RASDIALEVENT), the current RASCONNSTATE and
+** the error that has occurred (or 0 if none).  Extended arguments are the
+** handle of the RAS connection and an extended error code.
+*/
 typedef VOID (WINAPI *RASDIALFUNC)( UINT, RASCONNSTATE, DWORD );
+typedef VOID (WINAPI *RASDIALFUNC1)( HRASCONN, UINT, RASCONNSTATE, DWORD, DWORD );
 
 
 /* External RAS API function prototypes.
 */
-DWORD APIENTRY RasDialA( LPSTR, LPSTR, LPRASDIALPARAMSA, LPVOID, RASDIALFUNC,
-                   LPHRASCONN );
+DWORD APIENTRY RasDialA( LPRASDIALEXTENSIONS, LPSTR, LPRASDIALPARAMSA, DWORD,
+                   LPVOID, LPHRASCONN );
 
-DWORD APIENTRY RasDialW( LPWSTR, LPWSTR, LPRASDIALPARAMSW, LPVOID, RASDIALFUNC,
-                   LPHRASCONN );
+DWORD APIENTRY RasDialW( LPRASDIALEXTENSIONS, LPWSTR, LPRASDIALPARAMSW, DWORD,
+                   LPVOID, LPHRASCONN );
 
 DWORD APIENTRY RasEnumConnectionsA( LPRASCONNA, LPDWORD, LPDWORD );
 
@@ -242,25 +419,34 @@ DWORD APIENTRY RasHangUpA( HRASCONN );
 
 DWORD APIENTRY RasHangUpW( HRASCONN );
 
+DWORD APIENTRY RasGetProjectionInfoA( HRASCONN, RASPROJECTION, LPVOID,
+                   LPDWORD );
+
+DWORD APIENTRY RasGetProjectionInfoW( HRASCONN, RASPROJECTION, LPVOID,
+                   LPDWORD );
 
 #ifdef UNICODE
-#define RasDial             RasDialW
-#define RasEnumConnections  RasEnumConnectionsW
-#define RasEnumEntries      RasEnumEntriesW
-#define RasGetConnectStatus RasGetConnectStatusW
-#define RasGetErrorString   RasGetErrorStringW
-#define RasHangUp           RasHangUpW
+#define RasDial              RasDialW
+#define RasEnumConnections   RasEnumConnectionsW
+#define RasEnumEntries       RasEnumEntriesW
+#define RasGetConnectStatus  RasGetConnectStatusW
+#define RasGetErrorString    RasGetErrorStringW
+#define RasHangUp            RasHangUpW
+#define RasGetProjectionInfo RasGetProjectionInfoW
 #else
-#define RasDial             RasDialA
-#define RasEnumConnections  RasEnumConnectionsA
-#define RasEnumEntries      RasEnumEntriesA
-#define RasGetConnectStatus RasGetConnectStatusA
-#define RasGetErrorString   RasGetErrorStringA
-#define RasHangUp           RasHangUpA
+#define RasDial              RasDialA
+#define RasEnumConnections   RasEnumConnectionsA
+#define RasEnumEntries       RasEnumEntriesA
+#define RasGetConnectStatus  RasGetConnectStatusA
+#define RasGetErrorString    RasGetErrorStringA
+#define RasHangUp            RasHangUpA
+#define RasGetProjectionInfo RasGetProjectionInfoA
 #endif
 
 #ifdef __cplusplus
 }
 #endif
+
+#include "poppack.h"
 
 #endif // _RAS_H_

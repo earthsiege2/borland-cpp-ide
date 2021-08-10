@@ -46,11 +46,14 @@ class TGameWindow : public TWindow {
 
     // message response functions
     //
-    void CmAbout();      // IDM_ABOUT
-    void CmOptions();    // IDM_OPTION
-    void CmPause();      // IDM_PAUSE
-    void CmResetGame();  // IDM_RESET
-    void CmStopGame();   // IDM_STOP
+    void CmAbout();        // IDM_ABOUT
+    void CmOptions();      // IDM_OPTION
+    void CmPause();        // IDM_PAUSE
+    void CmResetGame();    // IDM_RESET
+    void CmStopGame();     // IDM_STOP
+    void CeResetGame(TCommandEnabler&);
+    void CeOptions(TCommandEnabler&); 
+    void CeStopGame(TCommandEnabler&);
     BOOL EvEraseBkgnd(HDC hDC);
     void EvDestroy();
     void EvLButtonDown(UINT, TPoint&);
@@ -76,10 +79,13 @@ class TGameWindow : public TWindow {
 
 DEFINE_RESPONSE_TABLE1(TGameWindow, TWindow)
   EV_COMMAND(IDM_ABOUT, CmAbout),
-  EV_COMMAND(IDM_OPTION, CmOptions),
   EV_COMMAND(IDM_PAUSE, CmPause),
+  EV_COMMAND(IDM_OPTION, CmOptions),
+  EV_COMMAND_ENABLE(IDM_OPTION, CeOptions),
   EV_COMMAND(IDM_RESET, CmResetGame),
+  EV_COMMAND_ENABLE(IDM_RESET, CeResetGame),
   EV_COMMAND(IDM_STOP, CmStopGame),
+  EV_COMMAND_ENABLE(IDM_STOP, CeStopGame),
   EV_WM_ERASEBKGND,
   EV_WM_DESTROY,
   EV_WM_LBUTTONDOWN,
@@ -163,7 +169,7 @@ TOptionDialog::CanClose()
     gameParent->GameTime = time;
     return TRUE;
   } else {
-    MessageBox("Game Time must be a number greater than 0!", "Error", MB_OK);
+    MessageBox("Game time must be between 0 and 9830!", "Error", MB_OK);
     return FALSE;
   }
 }
@@ -326,13 +332,29 @@ TGameWindow::CmPause()
   }
 }
 
+void 
+TGameWindow::CeResetGame(TCommandEnabler& cmdEnabler)
+{
+  cmdEnabler.Enable(IsGameOver ? true : false);
+}
+
+void 
+TGameWindow::CeOptions(TCommandEnabler& cmdEnabler) 
+{
+  cmdEnabler.Enable(IsGameOver ? true : false);    
+}
+
+void 
+TGameWindow::CeStopGame(TCommandEnabler& cmdEnabler)
+{
+  cmdEnabler.Enable((IsGameOver || IsPause) ? false : true);   
+}
+
 void
 TGameWindow::CmResetGame()
 {
   TMenu menu(*Parent);
-  menu.ModifyMenu(IDM_OPTION, MF_BYCOMMAND | MF_GRAYED, IDM_OPTION, "&Options");
   menu.ModifyMenu(IDM_PAUSE, MF_BYCOMMAND, IDM_PAUSE, "&Pause");
-  menu.ModifyMenu(IDM_STOP, MF_BYCOMMAND, IDM_STOP, "&Stop");
   Parent->DrawMenuBar();
   Invalidate(TRUE);
   CreateTimer();
@@ -355,9 +377,7 @@ TGameWindow::CmStopGame()
 {
   KillTimer(TimerId);
   TMenu menu(*Parent);
-  menu.ModifyMenu(IDM_OPTION, MF_BYCOMMAND, IDM_OPTION, "&Options");
   menu.ModifyMenu(IDM_PAUSE, MF_BYCOMMAND|MF_GRAYED, IDM_PAUSE, "&Pause");
-  menu.ModifyMenu(IDM_STOP, MF_BYCOMMAND|MF_GRAYED, IDM_STOP, "&Stop");
   IsPause = FALSE;
   Parent->DrawMenuBar();
   IsGameOver = TRUE;

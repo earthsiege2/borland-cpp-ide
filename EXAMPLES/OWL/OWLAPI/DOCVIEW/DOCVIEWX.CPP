@@ -62,9 +62,13 @@ void MyDVApp::EvDropFiles(TDropInfo dropInfo)
     char* filePath = new char [fileLength];
     dropInfo.DragQueryFile(index++, filePath, fileLength);
     TDocTemplate* tpl = GetDocManager()->MatchTemplate(filePath);
+#if 0  // obsolete code
     if (tpl) {
       tpl->CreateDoc(filePath);
     }
+#else // new code
+    GetDocManager()->CreateDoc(tpl, filePath);
+#endif
     delete filePath;
   }
   dropInfo.DragFinish();
@@ -99,9 +103,8 @@ void MyDVApp::InitMainWindow()
     MainWindow = (DocMode == dmSDI
           ? new TFrameWindow(0, "SDI DocView Example")
           : new TMDIFrame("MDI DocView Example", 0, *(Client=new TMDIClient)));
-  }  
-  MainWindow->SetMenuDescr(DocMode==dmSDI ? TMenuDescr(IDM_DVSDI,1,0,1,0,0,0)
-                                          : TMenuDescr(IDM_DVMDI,1,0,1,0,1,0));
+  }
+  MainWindow->SetMenuDescr(TMenuDescr(DocMode==dmSDI ? IDM_DVSDI : IDM_DVMDI));
   MainWindow->SetIcon(this, IDI_DOCVIEW);
 }
 
@@ -179,13 +182,16 @@ void MyDVApp::Streamer::Write(opstream& os) const
   if (o->DocMode == dmMDI) {
     os << *o->Client;// stream out object reference only, no children streamed
     os << *o->DocManager;
+    os << o->Client->GetActiveMDIChild();
   } else {
     TWindow* client = mainWnd->SetClientWindow(0);  // unhook view
-    client->ShowWindow(SW_HIDE);
-    client->SetParent(0);
-    os << *o->DocManager;
-    os << client;    // save pointer to client window
-	 mainWnd->SetClientWindow(client);
+    if (client) {
+      client->ShowWindow(SW_HIDE);
+      client->SetParent(0);
+      os << *o->DocManager;
+      os << client;    // save pointer to client window
+      mainWnd->SetClientWindow(client);
+    }
   }
 }
 
@@ -202,16 +208,24 @@ void* MyDVApp::Streamer::Read(ipstream& is, uint32 /*version*/ ) const
     is >> *o->Client;      // skip stream top ref, no data or children read in
     is >> *o->DocManager;  // streams in all templates, docs, views, windows
     o->Client->CreateChildren(); // create MDI children and descendents
+
+    TMDIChild* active;
+    is >> active;
+    if (active)
+      GetObject()->Client->HandleMessage(WM_MDIACTIVATE,(UINT)active->HWindow);
+
   } else {
     TWindow* client;
     is >> *o->DocManager; // streams in all templates, docs, views, windows
     is >> client;         // streams in pointer to constructed client window
-    mainWnd->SetClientWindow(client);
-    TDocument* doc;
-    TView* view;
-    if ((doc = o->DocManager->DocList.Next(0)) != 0 &&
-        (view = doc->NextView(0)) != 0)
-      mainWnd->MergeMenu(*view->GetViewMenu());
+    if (client) {
+      mainWnd->SetClientWindow(client);
+      TDocument* doc;
+      TView* view;
+      if ((doc = o->DocManager->DocList.Next(0)) != 0 &&
+          (view = doc->NextView(0)) != 0)
+        mainWnd->MergeMenu(*view->GetViewMenu());
+    }
   }
   return GetObject();
 }

@@ -2,7 +2,7 @@
 #define __apxprev_h
 
 ##@QUERY_PRJ_NAME [[Project]]
-/*  Main [[Project]]
+/*  Project [[Project]]
 ##@QUERY_PRJ_COMPANY [[CompanyName]] 2
 ##@QUERY_PRJ_COPYRIGHT [[Copyright]] 2
 ##\\Copyright Copyright 2
@@ -24,10 +24,6 @@
 
 #include <owl\owlpch.h>
 #pragma hdrstop
-
-#include <owl\controlb.h>
-#include <owl\printdia.h>
-#include <owl\preview.h>
 
 #include "apxprint.h"
 ##<<TApplication QUERY_FILENAME_CPP [[FileName]]
@@ -56,6 +52,17 @@ private:
     TLayoutWindow   *Client;
 
     void SpeedBarState ();
+    void PPR_PreviousEnable (TCommandEnabler &tce);
+    void PPR_NextEnable (TCommandEnabler &tce);
+    void PPR_Previous ();
+    void PPR_Next ();
+    void PPR_OneUp ();
+    void PPR_TwoUpEnable (TCommandEnabler &tce);
+    void PPR_TwoUp ();
+    void PPR_Done ();
+##@QUERY_APPL_MODEL == VALUE_MDI 2
+    void CmPrintEnable (TCommandEnabler &tce);
+    void CmPrint ();
 
 //{{PreviewWindowVIRTUAL_BEGIN}}
 protected:
@@ -65,12 +72,6 @@ protected:
 
 //{{PreviewWindowRSP_TBL_BEGIN}}
 protected:
-    void PPR_Previous ();
-    void PPR_Next ();
-    void PPR_OneUp ();
-    void PPR_TwoUp ();
-    void EvNCLButtonDown (UINT wHitTestCode, TPoint & point);
-    void EvClose ();
 //{{PreviewWindowRSP_TBL_END}}
 DECLARE_RESPONSE_TABLE(PreviewWindow);
 };    //{{PreviewWindow}}

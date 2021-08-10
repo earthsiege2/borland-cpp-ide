@@ -1,16 +1,19 @@
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#if !defined(__FLAT__)
+
+
 /*****************************************************************************\
 *                                                                             *
 * shellapi.h -  SHELL.DLL functions, types, and definitions                   *
 *                                                                             *
 \*****************************************************************************/
-
-/*
- *      C/C++ Run Time Library - Version 6.0
- *
- *      Copyright (c) 1987, 1993 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef __SHELLAPI_H    /* prevent multiple includes */
 #define __SHELLAPI_H
@@ -26,8 +29,6 @@
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
-
-#if !defined(__FLAT__)
 
 /* If included with the 3.0 windows.h, define compatible aliases */
 #if !defined(WINVER) || (WINVER < 0x030a)
@@ -84,8 +85,37 @@ HICON WINAPI ExtractIcon(HINSTANCE hInst, LPCSTR lpszExeFileName, UINT nIconInde
 HINSTANCE WINAPI ShellExecute(HWND hwnd, LPCSTR lpOperation, LPCSTR lpFile, LPCSTR lpParameters, LPCSTR lpDirectory, int iShowCmd);
 HINSTANCE WINAPI FindExecutable(LPCSTR lpFile, LPCSTR lpDirectory, LPSTR lpResult);
 
+#ifdef __cplusplus
+}
+#endif
+
+#ifndef RC_INVOKED
+#pragma option -a.      /* Revert to default packing */
+#endif  /* RC_INVOKED */
+
+#endif  /* __SHELLAPI_H */
+
+
 #else    /* defined __FLAT__ */
 
+
+#ifndef _INC_SHELLAPI
+#define _INC_SHELLAPI
+#define __SHELLAPI_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*
+ *  shell.h
+ *
+ *  Header file for shell association database management functions
+ */
+
+
+//****************************************************************************
+// THIS INFORMATION IS PUBLIC
 
 /* API exports from the library
  */
@@ -128,6 +158,7 @@ HINSTANCE APIENTRY ShellExecuteW(HWND hwnd, LPCWSTR lpOperation, LPCWSTR lpFile,
 
 HINSTANCE APIENTRY FindExecutableA(LPCSTR lpFile, LPCSTR lpDirectory, LPSTR lpResult);
 HINSTANCE APIENTRY FindExecutableW(LPCWSTR lpFile, LPCWSTR lpDirectory, LPWSTR lpResult);
+TCHAR ** APIENTRY CommandLineToArgvW(TCHAR* lpCmdLine, int*pNumArgs);
 
 INT   APIENTRY ShellAboutA(HWND hWnd, LPCSTR szApp, LPCSTR szOtherStuff, HICON hIcon);
 INT   APIENTRY ShellAboutW(HWND hWnd, LPCWSTR szApp, LPCWSTR szOtherStuff, HICON hIcon);
@@ -152,17 +183,11 @@ HICON APIENTRY ExtractAssociatedIconW(HINSTANCE hInst, LPWSTR lpIconPath, LPWORD
 #define ExtractAssociatedIcon ExtractAssociatedIconW
 #endif
 
-
-#endif  /* __FLAT__ */
-
 #ifdef __cplusplus
 }
 #endif
 
-#ifndef RC_INVOKED
-#pragma option -a.      /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#endif // _INC_SHELLAPI
+
 
 #endif  /* __SHELLAPI_H */
-
-

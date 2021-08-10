@@ -3,6 +3,8 @@
 #   examples\owl\owlapi\groupbox\makefile
 #----------------------------------------------------------------------------
 
-EXE = groupbxx
+MODELS = mldf
+EXE = groupbox
+OBJEXE = groupbxx.obj
 !include $(BCEXAMPLEDIR)\owlmake.gen
 

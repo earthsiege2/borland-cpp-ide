@@ -1,24 +1,17 @@
-/*****************************************************************************\
-*                                                                             *
-* colordlg.h -  Common dialog color dialog's control id numbers               *
-*                                                                             *
-*                                                                             *
-\*****************************************************************************/
-
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1992, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
-#ifndef __COLORDLG_H    /* prevent multiple includes */
+#if !defined(__COLORDLG_H)
 #define __COLORDLG_H
 
 #define DLG_COLOR          10
 
-#define COLOR_HUESCROLL   700          /* color dialog */
+#define COLOR_HUESCROLL   700	       /* color dialog */
 #define COLOR_SATSCROLL   701
 #define COLOR_LUMSCROLL   702
 #define COLOR_HUE         703
@@ -51,4 +44,4 @@
 #define NUM_BASIC_COLORS   48
 #define NUM_CUSTOM_COLORS  16
 
-#endif  /* __COLORDLG_H */
+#endif  /* !__COLORDLG_H */

@@ -1,0 +1,30 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for Stack examples                                            #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = stack
+EXEALL = stack.exe istack.exe stklist.exe istklist.exe
+
+EXEMAKE= $(STACK) $(ISTACK) $(STKLIST) $(ISTKLIST)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+STACK=$(EXERULE:stack.obj=stack.obj myclass.obj)
+ISTACK=$(STACK:stack=istack)
+STKLIST=$(STACK:stack=stklist)
+ISTKLIST=$(STACK:stack=istklist)
+
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

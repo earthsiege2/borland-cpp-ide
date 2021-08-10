@@ -1,19 +1,20 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\commdial.h
-//   Definition of Common Dialog abstract class
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Definition of Common Dialog abstract base class
 //----------------------------------------------------------------------------
-#if !defined(__OWL_COMMDIAL_H)
-#define __OWL_COMMDIAL_H
+#if !defined(OWL_COMMDIAL_H)
+#define OWL_COMMDIAL_H
 
-#if !defined(__OWL_DIALOG_H)
-  #include <owl\dialog.h>
+#if !defined(OWL_DIALOG_H)
+# include <owl/dialog.h>
 #endif
 #if !defined(__COMMDLG_H)
-  #include <commdlg.h>
+# include <commdlg.h>
 #endif
 #if !defined(__CDERR_H)
-  #include <cderr.h>
+# include <cderr.h>
 #endif
 
 class _OWLCLASS TCommonDialog : public TDialog {
@@ -43,8 +44,8 @@ class _OWLCLASS TCommonDialog : public TDialog {
 };
 
 //
-// Used internally by comm dialogs
+// Used internally by common dialogs
 //
 extern TProcInstance StdDlgProcInstance;
 
-#endif  // __OWL_COMMDIAL_H
+#endif  // OWL_COMMDIAL_H

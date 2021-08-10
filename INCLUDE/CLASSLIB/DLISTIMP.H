@@ -2,37 +2,37 @@
 /*                                                                        */
 /*  DLISTIMP.H                                                            */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_DLISTIMP_H )
-#define __CLASSLIB_DLISTIMP_H
+#if !defined( CLASSLIB_DLISTIMP_H )
+#define CLASSLIB_DLISTIMP_H
 
 #if !defined( __LIMITS_H )
 #include <limits.h>
-#endif  // __LIMITS_H
+#endif
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_MEMMGR_H )
-#include "classlib\memmgr.h"
-#endif  // __CLASSLIB_MEMMGR_H
+#if !defined( CLASSLIB_MEMMGR_H )
+#include <classlib/memmgr.h>
+#endif
 
-#if !defined( __CLASSLIB_ALLOCTR_H )
-#include "classlib\alloctr.h"
-#endif  // __CLASSLIB_ALLOCTR_H
+#if !defined( CLASSLIB_ALLOCTR_H )
+#include <classlib/alloctr.h>
+#endif
 
-#if !defined( __CLASSLIB_VOIDP_H )
-#include "classlib\voidp.h"
-#endif  // __CLASSLIB_VOIDP_H
+#if !defined( CLASSLIB_VOIDP_H )
+#include <classlib/voidp.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -82,7 +82,7 @@ TMDoubleListBlockInitializer<T,Alloc>::~TMDoubleListBlockInitializer()
     PRECONDITION( Count != 0 );
     if( --Count == 0 )
         {
-        Alloc::operator delete(TMDoubleListElement<T,Alloc>::Mgr);
+        delete TMDoubleListElement<T,Alloc>::Mgr;
         TMDoubleListElement<T,Alloc>::Mgr = 0;
         }
 }
@@ -754,6 +754,8 @@ public:
         return Parent::DoDetachAtTail( del ); 
         }
 
+    T *Find( const T *t );
+
     void Flush( int del = 0 )
         {
         DoFlush( del );
@@ -789,6 +791,16 @@ private:
         }
 
 };
+
+template <class T, class List, class Alloc>
+T *TMInternalIDoubleListImp<T,List,Alloc>::Find( const T *t )
+{
+    TMDoubleListElement<TVoidPointer,Alloc> *pred = FindPred(t);
+    if( pred->Next == &Tail )
+        return 0;
+    else
+        return STATIC_CAST(T *,STATIC_CAST(void *,pred->Next->Data));
+}
 
 template <class T, class List, class Alloc>
 void TMInternalIDoubleListImp<T,List,Alloc>::ForEach( IterFunc iter,
@@ -855,6 +867,16 @@ public:
     T *operator ++ ()
         {
         return STATIC_CAST(T *,STATIC_CAST(void *,Parent::operator++()));
+        }
+
+    T *operator -- (int)
+        {
+        return STATIC_CAST(T *,STATIC_CAST(void *,Parent::operator--(1)));
+        }
+
+    T *operator -- ()
+        {
+        return STATIC_CAST(T *,STATIC_CAST(void *,Parent::operator--()));
         }
 
 #if defined( BI_OLDNAMES )
@@ -1134,5 +1156,5 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_DLISTIMP_H
+#endif  // CLASSLIB_DLISTIMP_H
 

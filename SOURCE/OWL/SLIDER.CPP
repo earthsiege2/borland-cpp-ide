@@ -1,11 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\slider.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TSlider, slider UI widget abstract base class.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\slider.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/slider.h>
+#include <owl/dc.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -34,19 +36,20 @@ TSlider::TSlider(TWindow*        parent,
                  int x, int y, int w, int h,
                  TResId          thumbResId,
                  TModule*        module)
-  : TScrollBar(parent, id, x, y, w, h, TRUE, module),
-    ThumbResId(thumbResId),
-    ThumbRect(0, 0, 9, 20),
-    CaretRect(3, 3, 3+3, 3+13)
+:
+  TScrollBar(parent, id, x, y, w, h, true, module),
+  ThumbResId(thumbResId),
+  ThumbRect(0, 0, 9, 20),
+  CaretRect(3, 3, 3+3, 3+13)
 {
   SetRange(0, 100);
   Pos = 0;
   ThumbRgn = 0;
   TicGap = Range/10;
   SlotThick = 17;
-  Snap = TRUE;
+  Snap = true;
 
-  Sliding = FALSE;
+  Sliding = false;
   
   // get slot size from Attr.H set by TScrollBar ?
 
@@ -149,8 +152,8 @@ TSlider::SlideThumb(TDC& dc, int pos)
     oldRgn -= *ThumbRgn;
     dc.SelectClipRgn(oldRgn);
     PaintSlot(dc);
-
-  } else {
+  }
+  else {
     ThumbRect = TRect(point, ThumbRect.Size());
     PaintSlot(dc);
     PaintThumb(dc);
@@ -198,9 +201,15 @@ TSlider::SnapPos(int pos)
 void
 TSlider::GetBkColor(TDC& dc)
 {
+#if defined(BI_PLAT_WIN32)
+  Parent->HandleMessage(WM_CTLCOLORSTATIC,
+                        (WPARAM)(HDC)dc,
+                        LPARAM(HWindow));
+#else
   Parent->HandleMessage(WM_CTLCOLOR, 
                         (WPARAM)(HDC)dc,
                         MAKELPARAM(HWindow, CTLCOLOR_STATIC));
+#endif  
   BkColor = dc.GetBkColor();
 }
 
@@ -208,7 +217,7 @@ TSlider::GetBkColor(TDC& dc)
 // 
 //
 void
-TSlider::EvSize(UINT sizeType, TSize& size)
+TSlider::EvSize(uint sizeType, TSize& size)
 {
   TScrollBar::EvSize(sizeType, size);
 }
@@ -216,7 +225,7 @@ TSlider::EvSize(UINT sizeType, TSize& size)
 //
 // Make sure we get cursor movement keys to move the thumb
 //
-UINT
+uint
 TSlider::EvGetDlgCode(MSG far*)
 {
   return DLGC_WANTARROWS;
@@ -247,8 +256,8 @@ TSlider::EvPaint()
     ValidateRgn(*ThumbRgn);
     PaintSlot(dc);
     PaintRuler(dc);
-
-  } else {                          // no region, thumb will flicker a little
+  }
+  else {                          // no region, thumb will flicker a little
     TPaintDC  dc(*this);
 
     GetBkColor(dc);
@@ -262,10 +271,10 @@ TSlider::EvPaint()
 //
 // We'll always erase as we paint to avoid flicker
 //
-BOOL
+bool
 TSlider::EvEraseBkgnd(HDC)
 {
-  return TRUE;
+  return true;
 }
 
 //
@@ -273,7 +282,7 @@ TSlider::EvEraseBkgnd(HDC)
 // If in the slot, pg up or down. If on the ruler, jump there.
 //
 void
-TSlider::EvLButtonDown(UINT /*modKeys*/, TPoint& point)
+TSlider::EvLButtonDown(uint /*modKeys*/, TPoint& point)
 {
   if (GetFocus() != HWindow)
     SetFocus();
@@ -292,7 +301,7 @@ TSlider::EvLButtonDown(UINT /*modKeys*/, TPoint& point)
       break;
 
     case SB_THUMBTRACK: {
-      Sliding = TRUE;
+      Sliding = true;
       SetCapture();
       HideCaret();
       SlideDC = new TClientDC(HWindow);  // keep this dc around while sliding
@@ -314,7 +323,7 @@ TSlider::EvLButtonDown(UINT /*modKeys*/, TPoint& point)
 // it.
 //
 void
-TSlider::EvMouseMove(UINT modKeys, TPoint& point)
+TSlider::EvMouseMove(uint modKeys, TPoint& point)
 {
   if (Sliding && SlideDC) {
     if (!(modKeys&MK_LBUTTON)) {
@@ -331,11 +340,11 @@ TSlider::EvMouseMove(UINT modKeys, TPoint& point)
 // sliding state
 //
 void
-TSlider::EvLButtonUp(UINT /*modKeys*/, TPoint& point)
+TSlider::EvLButtonUp(uint /*modKeys*/, TPoint& point)
 {
   int pos = SnapPos(PointToPos(point - MouseOffset));
   if (Sliding) {
-    Sliding = FALSE;
+    Sliding = false;
     NotifyParent(SB_THUMBPOSITION, pos);
 
     GetBkColor(*SlideDC);   // repaint thumb in released state
@@ -356,7 +365,7 @@ TSlider::EvLButtonUp(UINT /*modKeys*/, TPoint& point)
 // Catch double clicks and eat them
 //
 void
-TSlider::EvLButtonDblClk(UINT /*modKeys*/, TPoint&)
+TSlider::EvLButtonDblClk(uint /*modKeys*/, TPoint&)
 {
 }
 
@@ -364,7 +373,7 @@ TSlider::EvLButtonDblClk(UINT /*modKeys*/, TPoint&)
 // Translate key messages to scroll events w/ repeat.
 //
 void
-TSlider::EvKeyDown(UINT key, UINT repeatCount, UINT /*flags*/)
+TSlider::EvKeyDown(uint key, uint repeatCount, uint /*flags*/)
 {
   static int KeyToCode[] = {
     SB_PAGEUP,    // VK_PRIOR
@@ -391,16 +400,20 @@ TSlider::EvKeyDown(UINT key, UINT repeatCount, UINT /*flags*/)
 void
 TSlider::EvSetFocus(HWND /*hWndLostFocus*/)
 {
-  CreateCaret(TRUE, CaretRect.Width(), CaretRect.Height());
+  CreateCaret(true, CaretRect.Width(), CaretRect.Height());
   SetCaretPos(ThumbRect.left+CaretRect.left, ThumbRect.top+CaretRect.top);
   ShowCaret();
+
+//  TScrollBar::EvSetFocus(hWndLostFocus);  // Can't let SCROLLBAR see this
 }
 
 void
-TSlider::EvKillFocus(HWND /*hWndGetFocus*/)
+TSlider::EvKillFocus(HWND hWndGetFocus)
 {
   HideCaret();
   DestroyCaret();
+
+  TScrollBar::EvKillFocus(hWndGetFocus); // need to let TWindow do focus save
 }
 
 #endif
@@ -409,7 +422,7 @@ TSlider::EvKillFocus(HWND /*hWndGetFocus*/)
 IMPLEMENT_ABSTRACT_STREAMABLE1(TSlider, TScrollBar);
 
 void*
-TSlider::Streamer::Read(ipstream& is, uint32 /* version */) const
+TSlider::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
   TSlider* o = GetObject();
   ReadBaseObject((TScrollBar*)o, is);

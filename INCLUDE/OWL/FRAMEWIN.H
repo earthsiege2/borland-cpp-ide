@@ -1,45 +1,46 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\framewin.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Declaration of class TFrameWindow.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_FRAMEWIN_H)
-#define __OWL_FRAMEWIN_H
+#if !defined(OWL_FRAMEWIN_H)
+#define OWL_FRAMEWIN_H
 
-#if !defined(__OWL_WINDOW_H)
-  #include <owl\window.h>
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
+#endif
+#if !defined(OWL_MENU_H)
+# include <owl/menu.h>
 #endif
 
-const int IDW_MDICLIENT     = 32001;
-const int IDW_FIRSTMDICHILD = 32002;
+// MDI window IDs
+//
+const int IDW_MDICLIENT     = 32000;  // ID of MDI client window 
+const int IDW_FIRSTMDICHILD = 32001;  // child window IDs, 32 max to 32032
 
 //
-//  class TMenuDescr
-//  ----- ----------
+// command enabler for menu items
 //
-//  Menu information used to allow merging of two menus
-//
-struct _OWLCLASS TMenuDescr {
-    enum TGroup {
-      FileGroup,
-      EditGroup,
-      ContainerGroup,
-      ObjectGroup,
-      WindowGroup,
-      HelpGroup,
-      NumGroups
-    };
-    TMenuDescr();
-    TMenuDescr(TResId id, int fg, int eg, int cg, int og, int wg, int hg,
-               TModule* module = ::Module);
+class _OWLCLASS TMenuItemEnabler : public TCommandEnabler {
+  public:
+    TMenuItemEnabler(HMENU hMenu, uint id, HWND hWndReceiver, int position)
+      : TCommandEnabler(id, hWndReceiver) {HMenu = hMenu; Position = position;}
 
-    TResId   Id;
-    TModule* Module;       // pointer to constructor caller's module
-    int      GroupCount[NumGroups];
-    
-    friend ipstream& operator >>(ipstream& is, TMenuDescr& m);
-    friend opstream& operator <<(opstream& os, const TMenuDescr& m);
+    //
+    // override member functions of TCommandEnabler
+    //
+    void  Enable(bool);
+    void  SetText(const char far*);
+    void  SetCheck(int);
+    HMENU GetMenu() {return HMenu;}
+    int   GetPosition() {return Position;}
+
+  protected:
+    HMENU  HMenu;
+    int    Position;
 };
+
 
 //
 //  class TFrameWindow
@@ -50,12 +51,12 @@ struct _OWLCLASS TMenuDescr {
 //
 class _OWLCLASS TFrameWindow : virtual public TWindow {
   public:
-    BOOL         KeyboardHandling;
+    bool         KeyboardHandling;
 
     TFrameWindow(TWindow*        parent,
                  const char far* title = 0,
                  TWindow*        clientWnd = 0,
-                 BOOL            shrinkToClient = FALSE,
+                 bool            shrinkToClient = false,
                  TModule*        module = 0);
 
     TFrameWindow(HWND hWnd, TModule* module = 0);
@@ -64,31 +65,33 @@ class _OWLCLASS TFrameWindow : virtual public TWindow {
     //
     // Menubar manipulating functions
     //
-    virtual BOOL      AssignMenu(TResId menuResId);
-    virtual BOOL      SetMenu(HMENU newMenu);
+    virtual bool      AssignMenu(TResId menuResId);
+    virtual bool      SetMenu(HMENU newMenu);
     void              SetMenuDescr(const TMenuDescr& menuDescr);
     const TMenuDescr* GetMenuDescr() const {return MenuDescr;}
-    BOOL              MergeMenu(const TMenuDescr& childMenuDescr);
-    BOOL              RestoreMenu();
+    bool              MergeMenu(const TMenuDescr& childMenuDescr);
+    bool              RestoreMenu();
 
-    BOOL              SetIcon(TModule* iconModule, TResId iconResId);
+    bool              SetIcon(TModule* iconModule, TResId iconResId);
 
     virtual TWindow*  GetClientWindow();
     virtual TWindow*  SetClientWindow(TWindow* clientWnd);
+    void              RemoveChild(TWindow* child);
+    virtual HWND      GetCommandTarget();
 
     //
     // sets flag indicating that the receiver has requested "keyboard
     // handling" (translation of keyboard input into control selections)
     //
-    void              EnableKBHandler() {KeyboardHandling = TRUE;}
+    void              EnableKBHandler() {KeyboardHandling = true;}
 
     //
     // override virtual functions defined by TWindow
     //
-    BOOL              PreProcessMsg(MSG& msg);
-    BOOL              IdleAction(long idleCount);
-    BOOL              HoldFocusHWnd(HWND hWndLose, HWND hWndGain);
-    BOOL              SetDocTitle(LPCSTR docname, int index);
+    bool              PreProcessMsg(MSG& msg);
+    bool              IdleAction(long idleCount);
+    bool              HoldFocusHWnd(HWND hWndLose, HWND hWndGain);
+    bool              SetDocTitle(const char far* docname, int index);
 
   protected:
     HWND         HWndRestoreFocus;
@@ -101,29 +104,30 @@ class _OWLCLASS TFrameWindow : virtual public TWindow {
     // Immediate derivitives must call Init() before constructions are done.
     //
     TFrameWindow();
-    void              Init(TWindow* clientWnd, BOOL shrinkToClient);
+    void              Init(TWindow* clientWnd, bool shrinkToClient);
     
     //
     // extra processing for commands: starts with the focus window and gives
     // it and its parent windows an opportunity to handle the command
     //
-    LRESULT           EvCommand(UINT id, HWND hWndCtl, UINT notifyCode);
+    LRESULT           EvCommand(uint id, HWND hWndCtl, uint notifyCode);
     void              EvCommandEnable(TCommandEnabler& ce);
 
     //
     // message response functions
     //
     void              EvInitMenuPopup(HMENU hPopupMenu,
-                                      UINT  index,
-                                      BOOL  sysMenu);
+                                      uint  index,
+                                      bool  sysMenu);
     void              EvPaint();
-    BOOL              EvEraseBkgnd(HDC);
+    bool              EvEraseBkgnd(HDC);
     HANDLE            EvQueryDragIcon();
     void              EvSetFocus(HWND hWndLostFocus);
-    void              EvSize(UINT sizeType, TSize& size);
-    void              EvParentNotify(UINT event,
-                                     UINT childHandleOrX,
-                                     UINT childIDOrY);
+    void              EvSize(uint sizeType, TSize& size);
+    void              EvParentNotify(uint event,
+                                     uint childHandleOrX,
+                                     uint childIDOrY);
+    void              EvEnterIdle(uint source, HWND hWndDlg);
 
     //
     // override virtual function defined by TWindow
@@ -137,7 +141,7 @@ class _OWLCLASS TFrameWindow : virtual public TWindow {
     TPoint       MinimizedPos;
 
     void              Init(TWindow* clientWnd);
-    BOOL              ResizeClientWindow(BOOL redraw = TRUE);
+    bool              ResizeClientWindow(bool redraw = true);
     TWindow*          FirstChildWithTab();
 
     //
@@ -150,4 +154,4 @@ class _OWLCLASS TFrameWindow : virtual public TWindow {
   DECLARE_STREAMABLE(_OWLCLASS, TFrameWindow, 1);
 };
 
-#endif  // __OWL_FRAMEWIN_H
+#endif  // OWL_FRAMEWIN_H

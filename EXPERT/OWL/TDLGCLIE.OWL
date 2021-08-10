@@ -1,0 +1,132 @@
+<<[H]TDLGClient [[TDialog]]
+##{hheader.snp}
+#include <owl\owlpch.h>
+#pragma hdrstop
+
+##<<TApplication QUERY_FILENAME_CPP [[Filename]]
+#include "[[Filename]].rh"                  // Definition of all resources.
+
+
+##--BEGIN-- !@OPT_APPL_DOCVIEW
+//{{TDialog = [[TDialog]]}}
+class [[TDialog]] : public TDialog {
+public:
+##QUERY_DLOG [[DLogRsrc]]
+    [[TDialog]] (TWindow *parent, TResId resId = [[DLogRsrc]], TModule *module = 0);
+    virtual ~[[TDialog]] ();
+
+};    //{{[[TDialog]]}}
+##--END-- !@OPT_APPL_DOCVIEW
+##--BEGIN-- @OPT_APPL_DOCVIEW
+//{{TDialog = [[TDialog]]}}
+class [[TDialog]] : public TDialog, public TView {
+public:
+    [[TDialog]] (TDocument& doc, TWindow* parent = 0);
+    virtual ~[[TDialog]] ();
+
+    static const char far* StaticName() {return "Dialog View";}  // put in resource
+
+    //
+    // inherited virtuals from TView
+    //
+    const char far* GetViewName() {return StaticName();}
+    TWindow* GetWindow() {return (TWindow*)this;}
+    bool     SetDocTitle(const char far* docname, int index)
+             { return TWindow::SetDocTitle(docname, index); }
+  private:
+    //
+    // event handlers
+    //
+    bool     VnIsWindow(HWND hWnd) {return HWindow == hWnd;}
+
+//{{[[TDialog]]VIRTUAL_BEGIN}}
+public:
+    virtual bool CanClose ();
+##:DBVirtual(\\"[[TDialog]]", "CanClose")
+//{{[[TDialog]]VIRTUAL_END}}
+
+//{{[[TDialog]]RSP_TBL_BEGIN}}
+protected:
+//{{[[TDialog]]RSP_TBL_END}}
+DECLARE_RESPONSE_TABLE([[TDialog]]);
+};    //{{[[TDialog]]}}
+##--END-- @OPT_APPL_DOCVIEW
+##{hfooter.snp}
+>>[H]TDLGClient [[TDialog]]
+
+
+<<[CPP]TDLGClient [[TDialog]]
+##{cheader.snp}
+#include <owl\owlpch.h>
+#pragma hdrstop
+
+##<<TApplication QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+##QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+
+
+//{{[[TDialog]] Implementation}}
+
+
+##--BEGIN-- !@OPT_APPL_DOCVIEW
+##      --BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//////////////////////////////////////////////////////////
+// [[TDialog]]
+// ==========
+// Construction/Destruction handling.
+##      --END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+[[TDialog]]::[[TDialog]] (TWindow *parent, TResId resId, TModule *module)
+    : TDialog(parent, resId, module)
+{
+    // INSERT>> Your constructor code here.
+}
+
+
+[[TDialog]]::~[[TDialog]] ()
+{
+    Destroy();
+
+    // INSERT>> Your destructor code here.
+}
+##--END-- !@OPT_APPL_DOCVIEW
+##--BEGIN-- @OPT_APPL_DOCVIEW
+//
+// Build a response table for all messages/commands handled
+// by the application.
+//
+DEFINE_RESPONSE_TABLE1([[TDialog]], TDialog)
+//{{[[TDialog]]RSP_TBL_BEGIN}}
+//{{[[TDialog]]RSP_TBL_END}}
+END_RESPONSE_TABLE;
+
+
+##      --BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//////////////////////////////////////////////////////////
+// [[TDialog]]
+// ==========
+// Construction/Destruction handling.
+##      --END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+[[TDialog]]::[[TDialog]] (TDocument& doc, TWindow* parent)
+##:     @QUERY_APPL_DLGCLIENT [[ClientClass]]
+##:     <<*ClientClass QUERY_DLOG [[DLogRsrc]]
+		: TView(doc), TDialog(parent, [[DLogRsrc]])
+{
+    // INSERT>> Your constructor code here.
+
+}
+
+
+[[TDialog]]::~[[TDialog]] ()
+{
+    // INSERT>> Your destructor code here.
+
+}
+
+
+bool [[TDialog]]::CanClose ()
+{
+    return TWindow::CanClose() && Doc->CanClose();
+}
+##--END-- @OPT_APPL_DOCVIEW
+>>[CPP]TDLGClient [[TDialog]]

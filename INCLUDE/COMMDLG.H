@@ -1,22 +1,22 @@
-/*****************************************************************************\
-*                                                                             *
-* commdlg.h -   Common dialog functions, types, and definitions               *
-*                                                                             *
-*                                                                             *
-\*****************************************************************************/
-
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
+#if !defined(__FLAT__)
+
+
+/*****************************************************************************\
+*                                                                             *
+* commdlg.h -   Common dialog functions, types, and definitions               *
+*                                                                             *
+\*****************************************************************************/
+
 #ifndef __COMMDLG_H     /* prevent multiple includes */
 #define __COMMDLG_H
-
-#pragma warn -nak   /* Ignore non-ansi keywords */
 
 #ifndef __WINDOWS_H
 #include <windows.h>    /* <windows.h> must be included */
@@ -29,8 +29,6 @@
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
-
-#if !defined(__FLAT__)
 
 /* If included with the 3.0 windows.h, define compatible aliases */
 #if !defined(WINVER) || (WINVER < 0x030a)
@@ -319,7 +317,43 @@ typedef DEVNAMES FAR* LPDEVNAMES;
 
 DWORD   WINAPI CommDlgExtendedError(void);
 
-#else    /* defined __FLAT__  */
+#ifdef __cplusplus
+}                                                                /* end extern "C"  */
+#endif  /* __cplusplus */
+
+#ifndef RC_INVOKED
+#pragma option -a.      /* Revert to default packing */
+#endif  /* RC_INVOKED */
+
+#endif  /* __COMMDLG_H */
+
+
+#else  /* __FLAT__ */
+
+
+/*++
+
+Module Name:
+
+    commdlg.h
+
+Abstract:
+
+    common dialog definitions; #include <windows.h> must be precluded
+
+Revision History:
+
+--*/
+
+#ifndef _INC_COMMDLG
+#define _INC_COMMDLG
+#define __COMMDLG_H
+
+#include "pshpack1.h"   /* Assume byte packing throughout */
+
+#ifdef __cplusplus
+extern "C" {            /* Assume C declarations for C++ */
+#endif  /* __cplusplus */
 
 typedef UINT (APIENTRY *LPOFNHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 
@@ -822,19 +856,13 @@ typedef DEVNAMES * LPDEVNAMES;
 
 DWORD APIENTRY     CommDlgExtendedError(VOID);
 
-
-#endif  /* __FLAT__  */
-
 #ifdef __cplusplus
-}                                                                /* end extern "C"  */
+}
 #endif  /* __cplusplus */
 
-#ifndef RC_INVOKED
-#pragma option -a.      /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#include "poppack.h"
 
-#pragma warn .nak   /* Ignore non-ansi keywords */
+#endif  /* !_INC_COMMDLG */
 
-#endif  /* __COMMDLG_H */
 
-
+#endif  /* __FLAT__ */

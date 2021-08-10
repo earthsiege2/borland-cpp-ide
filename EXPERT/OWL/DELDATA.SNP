@@ -1,7 +1,7 @@
 <<[H]
 ##QUERY_BASE_NAME != "TDialog"
 ##:     QUERY_CLASS_NAME [[ClassName]]
-##:     %\\"[[ClassName]] is not a TDialog derived class, instance data not deleted.  "
+##:     %\\"[[ClassName]] is not derived from TDialog. Instance data not deleted.  "
 ##*
 ##"" [[ClassDefLine]]
 ##"" [[ConstructorLine]]

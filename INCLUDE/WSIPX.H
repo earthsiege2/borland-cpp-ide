@@ -27,7 +27,16 @@
  *
  */
 
-#ifndef __WSIPX_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _WSIPX_
+#define _WSIPX_
 #define __WSIPX_H
 
 /*

@@ -1,7 +1,5 @@
 /*++
 
-Copyright (c) 1991-1993  Microsoft Corporation
-
 Module Name:
 
     dlcapi.h
@@ -14,7 +12,16 @@ Revision History:
 
 --*/
 
-#ifndef __DLCAPI_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _DLCAPI_
+#define _DLCAPI_
 #define __DLCAPI_H
 
 #ifdef __cplusplus

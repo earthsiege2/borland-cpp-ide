@@ -1,5 +1,5 @@
 ##@QUERY_PRJ_NAME [[Project]]
-/*  Main [[Project]]
+/*  Project [[Project]]
 ##@QUERY_PRJ_COMPANY [[CompanyName]] 2
 ##@QUERY_PRJ_COPYRIGHT [[Copyright]] 2
 ##\\Copyright Copyright 2
@@ -22,10 +22,6 @@
 #include <owl\owlpch.h>
 #pragma hdrstop
 
-#include <owl\listbox.h>
-#include <owl\edit.h>
-#include <owl\preview.h>
-
 #include "apxprint.h"
 
 
@@ -47,9 +43,7 @@ void APXPrintOut::BeginPrinting ()
 
     BeginPage(clientR);
 
-    TFrameWindow *fWindow = TYPESAFE_DOWNCAST(Window, TFrameWindow);
-
-    HFONT   hFont = (HFONT)fWindow->GetClientWindow()->GetWindowFont();
+    HFONT   hFont = (HFONT)Window->GetWindowFont();
     TFont   font("Arial", -12);
     if (hFont == 0)
       DC->SelectObject(font);
@@ -57,7 +51,7 @@ void APXPrintOut::BeginPrinting ()
       DC->SelectObject(TFont(hFont));
     
     TEXTMETRIC  tm;
-    int fHeight = (DC->GetTextMetrics(tm) == TRUE) ? tm.tmHeight + tm.tmExternalLeading : 10;
+    int fHeight = (DC->GetTextMetrics(tm) == true) ? tm.tmHeight + tm.tmExternalLeading : 10;
 
     DC->RestoreFont();
     
@@ -67,21 +61,12 @@ void APXPrintOut::BeginPrinting ()
     
     TPrintDialog::TData &printerData = Printer->GetSetup();
 
-    int maxPg = 1;
-
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Get the client class window (this is the contents we're going to print).
-    TEdit *clientEditWindow = 0;
-    TListBox *clientListWindow = 0;
+    // GetMinMaxInfo event is overrided to return the number of lines when printing.
+    MINMAXINFO minmaxinfo;
+    Window->SendMessage(WM_GETMINMAXINFO, 0, (long)&minmaxinfo);
+    int maxPg = ((minmaxinfo.ptMaxSize.y / linesPerPage) + 1.0);
 
-    clientEditWindow = TYPESAFE_DOWNCAST(fWindow->GetClientWindow(), TEdit);
-    if (clientEditWindow)
-        maxPg = ((clientEditWindow->GetNumLines() / linesPerPage) + 1.0);
-    else {
-        clientListWindow = TYPESAFE_DOWNCAST(fWindow->GetClientWindow(), TListBox);
-        if (clientListWindow)
-            maxPg = ((clientListWindow->GetCount() / linesPerPage) + 1.0);
-    }
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
     // Compute the number of pages to print.
@@ -138,7 +123,7 @@ void APXPrintOut::BeginPage (TRect &clientR)
     // Resize the window, notice position, order, and redraw are not done the window size changes but the user
     // doesn't see any visible change to the window.
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    Window->SetRedraw(FALSE);
+    Window->SetRedraw(false);
     Window->SetWindowPos(0, 0, 0, clientR.Width() + adjX, clientR.Height() + adjY,
                          SWP_NOMOVE | SWP_NOREDRAW | SWP_NOZORDER| SWP_NOACTIVATE);
 }
@@ -164,7 +149,7 @@ void APXPrintOut::PrintPage (int page, TRect& bandRect, unsigned)
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
     // Call the window to paint itself to the printer DC.
-    Window->Paint(*DC, FALSE, bandRect);
+    Window->Paint(*DC, false, bandRect);
 
     printerData.FromPage = fromPg;
     printerData.ToPage = toPg;
@@ -182,7 +167,7 @@ void APXPrintOut::EndPage ()
     // Resize to original window size, no one's the wiser.
     Window->SetWindowPos(0, 0, 0, OrgR.Width(), OrgR.Height(),
                          SWP_NOMOVE | SWP_NOREDRAW | SWP_NOZORDER| SWP_NOACTIVATE);
-    Window->SetRedraw(TRUE);
+    Window->SetRedraw(true);
 
 ##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
     // Restore changes made to the DC
@@ -194,7 +179,7 @@ void APXPrintOut::EndPage ()
 }
 
 
-BOOL APXPrintOut::HasPage (int pageNumber)
+bool APXPrintOut::HasPage (int pageNumber)
 {
     TPrintDialog::TData &printerData = Printer->GetSetup();
 

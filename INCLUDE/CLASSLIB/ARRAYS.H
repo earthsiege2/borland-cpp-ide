@@ -2,35 +2,35 @@
 /*                                                                        */
 /*  ARRAYS.H                                                              */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_ARRAYS_H )
-#define __CLASSLIB_ARRAYS_H
+#if !defined( CLASSLIB_ARRAYS_H )
+#define CLASSLIB_ARRAYS_H
 
 //#define TEMPLATES
 
 #if !defined( __MEM_H )
 #include <mem.h>
-#endif  // __MEM_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_SHDDEL_H )
-#include "classlib\shddel.h"
-#endif  // __CLASSLIB_SHDDEL_H
+#if !defined( CLASSLIB_SHDDEL_H )
+#include <classlib/shddel.h>
+#endif
 
-#if !defined( __CLASSLIB_ALLOCTR_H )
-#include "classlib\alloctr.h"
-#endif  // __CLASSLIB_ALLOCTR_H
+#if !defined( CLASSLIB_ALLOCTR_H )
+#include <classlib/alloctr.h>
+#endif
 
-#if !defined( __CLASSLIB_VECTIMP_H )
-#include "classlib\vectimp.h"
-#endif  // __CLASSLIB_VECTIMP_H
+#if !defined( CLASSLIB_VECTIMP_H )
+#include <classlib/vectimp.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -103,7 +103,7 @@ public:
     int isFull() const { return IsFull(); }
     int isEmpty() const { return IsEmpty(); }
     unsigned getItemsInContainer() const { return GetItemsInContainer(); }
-#endif  // BI_OLDNAMES
+#endif
 
     void Reallocate( unsigned sz, unsigned offset = 0 )
         {
@@ -220,7 +220,7 @@ public:
 
     T& operator []( int loc ) const
         {
-        PRECONDITION( loc >= Lowerbound && ZeroBase(loc) < Data.Count() );
+        PRECONDITION( loc >= Lowerbound && ZeroBase(loc) < Data.Limit() );
         return Data[ZeroBase(loc)];
         }
 
@@ -266,7 +266,7 @@ public:
         { return lastThat( cond, args ); }
     void flush( TShouldDelete::DeleteType = TShouldDelete::DefDelete )
         { Flush(); }
-#endif  // BI_OLDNAMES
+#endif
 
 protected:
 
@@ -300,6 +300,11 @@ public:
     TIArrayAsVectorImp( int upper, int lower, int delta ) :
         TArrayAsVectorImp<Vect,T *>( upper, lower, delta )
         {
+        }
+
+    ~TIArrayAsVectorImp()
+        {
+        Flush();
         }
 
     int Add( T *t )
@@ -347,7 +352,7 @@ public:
 
     T *& operator []( int loc ) const
         {
-        PRECONDITION( loc >= Lowerbound && ZeroBase(loc) < Data.Count() );
+        PRECONDITION( loc >= Lowerbound && ZeroBase(loc) < Data.Limit() );
         return Data[ZeroBase(loc)];
         }
 
@@ -384,6 +389,7 @@ public:
         { return Detach(loc,dt); }
     int destroy( T *t ) { return Destroy(t); }
     int destroy( int loc,TShouldDelete::DeleteType ) { return Destroy(loc); }
+    int find( const T *t ) const { return Find(t); }
     int hasMember( T *t ) const { return HasMember(t); }
     void forEach( IterFunc iter, void *args )
         { ForEach( iter, args ); }
@@ -393,7 +399,7 @@ public:
         { return lastThat( cond, args ); }
     void flush( TShouldDelete::DeleteType = TShouldDelete::DefDelete )
         { Flush(); }
-#endif  // BI_OLDNAMES
+#endif
 
 protected:
 
@@ -578,7 +584,7 @@ public:
 
 #if defined( BI_OLDNAMES )
 #define BI_SArrayAsVector TSArrayAsVector
-#define BI_SArrayAsVectorIterator TArrayAsVectorIterator
+#define BI_SArrayAsVectorIterator TSArrayAsVectorIterator
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -838,5 +844,5 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_ARRAYS_H
+#endif  // CLASSLIB_ARRAYS_H
 

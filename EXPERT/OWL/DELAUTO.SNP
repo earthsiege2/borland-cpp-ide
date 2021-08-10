@@ -1,0 +1,177 @@
+<<[H]
+##QUERY_SNP_AUTO_KIND [[Kind]]
+##QUERY_SNP_AUTO_NAME [[InternalName]]
+##QUERY_SNP_AUTO_GETNAME [[GetName]]
+##QUERY_SNP_AUTO_SETNAME [[SetName]]
+##QUERY_SNP_AUTO_CPPTYPE [[CPPType]]
+##QUERY_SNP_AUTO_OLETYPE [[OLEType]]
+##QUERY_SNP_AUTO_DESCR [[Description]]
+##QUERY_SNP_AUTO_GETPROPERTY [[GetProperty]]
+##QUERY_SNP_AUTO_SETPROPERTY [[SetProperty]]
+##QUERY_SNP_AUTO_CPPARGS [[CPPArguments]]
+##QUERY_SNP_AUTO_OLEARGS [[OLEArguments]]
+##QUERY_SNP_AUTO_VALIDATOR [[Validator]]
+##"" [[SearchStr]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##--BEGIN--Kind == VALUE_DATA
+##      :OLEType == "TAutoBool"
+##          :"TAutoBool" CPPType
+##*
+##(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate") && (OLEType != "TAutoBool")
+##      --BEGIN-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
+##          !AnyStripping
+##              :\\"AUTODATA([[InternalName]], [[InternalName]], TAutoObject<[[StripCPPType]]>, )" SearchStr
+##*
+##          AnyStripping
+##              :\\"AUTODATA([[InternalName]], [[InternalName]], TAutoObject<[[StripCPPType]]>, )" SearchStr
+##*
+##      --END-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
+##*
+##(OLEType != CPPType) && (OLEType != "TAutoString")
+##      :\\"AUTODATA([[InternalName]], [[InternalName]], [[CPPType]], )" SearchStr
+##*
+##(OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate") || (OLEType == "TAutoBool"))
+##      :\\"AUTODATA([[InternalName]], [[InternalName]], [[CPPType]], )" SearchStr
+##*
+##(OLEType == "TAutoString") && (CPPType != "string")
+##      :\\"AUTODATA([[InternalName]], [[InternalName]], TAutoString, )" SearchStr
+##*
+##(OLEType == "TAutoString") && (CPPType == "string")
+##      :\\"AUTODATA([[InternalName]], [[InternalName]], string, )" SearchStr
+##*
+##      :^BOF
+##      :? SearchStr [[Search]]
+##      :Search == TRUE
+##      :^BOL
+##      :^DELL
+##*
+##--END--Kind == VALUE_DATA
+##--BEGIN-- Kind == VALUE_PROPERTY
+##      :OLEType == "TAutoBool"
+##          :"TAutoBool" CPPType
+##*
+##      :"" [[XlateOLEProp]]
+##      --BEGIN-- "" [[OLEAutoProp]]
+##          :^BOL
+##          :(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate") && (OLEType != "TAutoBool")
+##              --BEGIN-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
+##                  !AnyStripping
+##                      :\\"TAutoObject<[[StripCPPType]]>" OLEAutoProp
+##*
+##                  AnyStripping
+##                      :\\"TAutoObject<[[StripCPPType]]>" OLEAutoProp
+##*
+##              --END-- StripPtrRef(CPPType) [[StripCPPType]]
+##*
+##          :(OLEType != CPPType) && (OLEType != "TAutoString")
+##              :"[[CPPType]]" OLEAutoProp
+##*
+##          :(OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate") || (OLEType == "TAutoBool"))
+##              :"[[CPPType]]" OLEAutoProp
+##*
+##          :(OLEType == "TAutoString") && (CPPType != "string")
+##              :"TAutoString" OLEAutoProp
+##*
+##          :(OLEType == "TAutoString") && (CPPType == "string")
+##              :"string" OLEAutoProp
+##*
+##          :\\OLEAutoProp XlateOLEProp
+##          :(GetProperty == TRUE) && (SetProperty == TRUE)
+##              :\\"AUTOPROP([[InternalName]], [[GetName]], [[SetName]], [[XlateOLEProp]],)" SearchStr
+##*
+##          :(GetProperty == TRUE) && (SetProperty == FALSE)
+##              :\\"AUTOPROPRO([[InternalName]], [[GetName]], [[XlateOLEProp]], )" SearchStr
+##*
+##          :(GetProperty == FALSE) && (SetProperty == TRUE)
+##              :\\"AUTOPROPWO([[InternalName]], [[SetName]], [[XlateOLEProp]], )" SearchStr
+##*
+##      --END-- "" [[OLEAutoProp]]
+##      :^BOF
+##      :? SearchStr [[Search]]
+##      :Search == TRUE
+##      :^BOL
+##      :^DELL
+##*
+##--END-- Kind == VALUE_PROPERTY
+##"" [[AutoFuncLine]]
+##--BEGIN-- Kind == VALUE_METHOD
+##      :{MethRip.SNP}
+##      :? AutoFuncLine [[Search]]
+##      :Search == TRUE
+##          :^BOL
+##          :^DELL
+##*
+##--END-- Kind == VALUE_METHOD
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+##*
+>>[H]
+
+
+<<[CPP]
+##QUERY_SNP_AUTO_KIND [[Kind]]
+##QUERY_SNP_AUTO_NAME [[InternalName]]
+##QUERY_SNP_AUTO_GETNAME [[GetName]]
+##QUERY_SNP_AUTO_SETNAME [[SetName]]
+##QUERY_SNP_AUTO_CPPTYPE [[CPPType]]
+##QUERY_SNP_AUTO_OLETYPE [[OLEType]]
+##QUERY_SNP_AUTO_DESCR [[Description]]
+##QUERY_SNP_AUTO_GETPROPERTY [[GetProperty]]
+##QUERY_SNP_AUTO_SETPROPERTY [[SetProperty]]
+##QUERY_SNP_AUTO_CPPARGS [[CPPArguments]]
+##QUERY_SNP_AUTO_OLEARGS [[OLEArguments]]
+##QUERY_SNP_AUTO_VALIDATOR [[Validator]]
+##"" [[SearchStr]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##--BEGIN--Kind == VALUE_DATA
+##      :(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
+##          :StripPtrRef(OLEType, [[StripCPPType]]) [[AnyStripping]]
+##          :StripCPPPType OLEType
+##*
+##      :\\"EXPOSE_PROPRW([[InternalName]], [[OLEType]], \"[[InternalName]]\"" SearchStr
+##      :? SearchStr [[Search]]
+##      :Search == TRUE
+##      :^BOL
+##      :^DELL
+##*
+##--END--Kind == VALUE_DATA
+##--BEGIN-- Kind == VALUE_PROPERTY
+##      :(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
+##          :StripPtrRef(OLEType, [[StripCPPType]]) [[AnyStripping]]
+##          :StripCPPType OLEType
+##*
+##(GetProperty == TRUE) && (SetProperty == TRUE)
+##      :\\"EXPOSE_PROPRW([[InternalName]], [[OLEType]], \"[[InternalName]]\"" SearchStr
+##*
+##(GetProperty == TRUE) && (SetProperty == FALSE)
+##      :\\"EXPOSE_PROPRO([[InternalName]], [[OLEType]], \"[[InternalName]]\"" SearchStr
+##*
+##(GetProperty == FALSE) && (SetProperty == TRUE)
+##      :\\"EXPOSE_PROPWO([[InternalName]], [[OLEType]], \"[[InternalName]]\"" SearchStr
+##*
+##      :? SearchStr [[Search]]
+##      :Search == TRUE
+##          :^BOL
+##          :^DELL
+##*
+##--END-- Kind == VALUE_PROPERTY
+##--BEGIN-- Kind == VALUE_METHOD
+##      :(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
+##          :StripPtrRef(OLEType, [[StripCPPType]]) [[AnyStripping]]
+##          :StripCPPType OLEType
+##*
+##      :\\"EXPOSE_METHOD([[InternalName]], [[OLEType]], \"[[InternalName]]\"" SearchStr
+##      :? SearchStr [[Search]]
+##      :Search == TRUE
+##          :^BOL
+##          :^DELL
+##*
+##      :AutoParse(CPPArguments, OLEArguments)
+##AutoCount() [[Count]]
+##          --FOR-- Index = 1 TO Count
+##              :^DELL
+##          --Next-- Index
+##      :AutoReset()
+##*
+##--END-- Kind == VALUE_METHOD
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[CPP]

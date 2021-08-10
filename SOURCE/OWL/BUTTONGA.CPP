@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\buttonga.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TButtonGadget.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\buttonga.h>
-#include <owl\gadgetwi.h>
-#include <owl\celarray.h>
+#include <owl/owlpch.h>
+#include <owl/buttonga.h>
+#include <owl/gadgetwi.h>
+#include <owl/celarray.h>
 
 //
 // make the monochrome bitmap large enough to hold any possible bitmap
@@ -16,72 +17,13 @@
 const long RopPSDPxax = 0x00B8074AL;  //
 const long RopDSPDxax = 0x00E20746L;  // 
 
-//----------------------------------------------------------------------------
-
-//
-// Mini 8x8 monochrome checkerboard dither brush class
-//
-class TDitherBrush : public TBrush {
-  public:
-    TDitherBrush();
-    void     Reconstruct();
-  private:
-    static HBRUSH CreateBrush();
-};
-
-TDitherBrush::TDitherBrush()
-  : TBrush(CreateBrush(), AutoDelete)
-{
-  OBJ_REF_ADD(Handle, Brush);
-}
-
-//
-// (re) constructs the dither brush with current system button colors
-//
-void
-TDitherBrush::Reconstruct()
-{
-  if (Handle)
-    ::DeleteObject(Handle);
-  Handle = CreateBrush();
-}
-
-HBRUSH
-TDitherBrush::CreateBrush()
-{
-  TDib dib(8, 8, 2, DIB_RGB_COLORS);
-  unsigned char HUGE* bits = (unsigned char HUGE*)dib.GetBits();
-  memset(bits, 0, 8*sizeof(DWORD));
-  bits[0 * sizeof(DWORD)] = 0xAA;
-  bits[2 * sizeof(DWORD)] = 0xAA;
-  bits[4 * sizeof(DWORD)] = 0xAA;
-  bits[6 * sizeof(DWORD)] = 0xAA;
-  bits[1 * sizeof(DWORD)] = 0x55;
-  bits[3 * sizeof(DWORD)] = 0x55;
-  bits[5 * sizeof(DWORD)] = 0x55;
-  bits[7 * sizeof(DWORD)] = 0x55;
-  dib.SetColor(0, GetSysColor(COLOR_BTNFACE));
-  dib.SetColor(1, GetSysColor(COLOR_BTNHIGHLIGHT));
-
-  HBRUSH Handle;
-  #if defined(__WIN32__)
-    Handle = ::CreateDIBPatternBrushPt((LPVOID)dib.GetInfo(), dib.Usage());
-    if (!Handle && ::GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
-      Handle = ::CreateDIBPatternBrush(dib, dib.Usage());
-  #else
-    Handle = ::CreateDIBPatternBrush(dib, dib.Usage());
-  #endif
-
-  CheckValid(Handle);
-  return Handle;
-}
-
-//----------------------------------------------------------------------------
-
 //
 // local 'class' vars
 //
-static TDitherBrush ditherBrush;
+static THatch8x8Brush ditherBrush(THatch8x8Brush::Hatch11F1,
+                                  ::GetSysColor(COLOR_BTNHIGHLIGHT),
+                                  ::GetSysColor(COLOR_BTNHIGHLIGHT));
+
 static TBitmap      glyphMask(GLYPH_MASK_WIDTH, GLYPH_MASK_HEIGHT, 1, 1, 0);
 
 //
@@ -91,61 +33,62 @@ class _OWLCLASS TButtonGadgetEnabler : public TCommandEnabler {
   public:
     TButtonGadgetEnabler(HWND hWndReceiver, TButtonGadget* g)
       : TCommandEnabler(g->GetId(), hWndReceiver) {
-      gadget = g;
+      Gadget = g;
     }
 
     //
     // override member functions of TCommandEnabler
     //
-    void  Enable(BOOL);
-    void  SetText(LPCSTR);
+    void  Enable(bool);
+    void  SetText(const char far*);
     void  SetCheck(int);
 
   protected:
-    TButtonGadget*  gadget;
+    TButtonGadget*  Gadget;
 };
 
 void
-TButtonGadgetEnabler::Enable(BOOL enable)
+TButtonGadgetEnabler::Enable(bool enable)
 {
   TCommandEnabler::Enable(enable);
-  gadget->SetEnabled(enable);
+  Gadget->SetEnabled(enable);
 }
 
 void
-TButtonGadgetEnabler::SetText(LPCSTR)
+TButtonGadgetEnabler::SetText(const char far*)
 {
-  #pragma warn -ccc
-  CHECK(FALSE);
-  #pragma warn .ccc
+# pragma warn -ccc
+  CHECK(false);
+# pragma warn .ccc
 }
 
 void
 TButtonGadgetEnabler::SetCheck(int state)
 {
-  gadget->SetButtonState(TButtonGadget::TState(state));
+  Gadget->SetButtonState(TButtonGadget::TState(state));
 }
 
 TButtonGadget::TButtonGadget(TResId bmpResId,
                              int    id,
                              TType  type,
-                             BOOL   enabled,
+                             bool   enabled,
                              TState state,
-                             BOOL   repeat)
-  : TGadget(id, Plain)
+                             bool   repeat)
+:
+  TGadget(id, Plain)
 {
   ResId = bmpResId.IsString() ? strnewdup(bmpResId) : (char far*)bmpResId;
   CelArray = 0;
   BitmapOrigin.x = BitmapOrigin.y = 0;
   Type = type;
   Repeat = repeat;
-  TrackMouse = TRUE;
+  TrackMouse = true;
   State = state;
-  NotchCorners = TRUE;
-  Pressed = FALSE;
+  NotchCorners = true;
+  Pressed = false;
   SetEnabled(enabled);
   SetShadowStyle(DoubleShadow);
-  SetAntialiasEdges(TRUE);
+  SetAntialiasEdges(true);
 }
 
 TButtonGadget::~TButtonGadget()
@@ -169,8 +112,7 @@ TButtonGadget::SetShadowStyle(TShadowStyle shadowStyle)
 void
 TButtonGadget::CommandEnable()
 {
-  //
-  // Can't post here since a ptr to a temp is passed
+  // Must send, not post here, since a ptr to a temp is passed
   //
   Window->Parent->HandleMessage(
     WM_COMMAND_ENABLE,
@@ -182,7 +124,9 @@ TButtonGadget::CommandEnable()
 void
 TButtonGadget::SysColorChange()
 {
-  ditherBrush.Reconstruct();
+  ditherBrush.Reconstruct(THatch8x8Brush::Hatch11F1,
+                          ::GetSysColor(COLOR_BTNHIGHLIGHT),
+                          ::GetSysColor(COLOR_BTNHIGHLIGHT));
   BuildCelArray();
 }
 
@@ -199,30 +143,31 @@ TButtonGadget::CheckExclusively()
       // look for the start of the group in which the receiver is located
       //
       while (g != this) {
-        if (((TButtonGadget*)g)->Type != Exclusive)
+        TButtonGadget* bg = TYPESAFE_DOWNCAST(g, TButtonGadget);
+        if (!bg || bg->Type != Exclusive)
           first = 0;
 
         else if (!first)
-          first = (TButtonGadget*)g;
+          first = bg;
 
         g = g->NextGadget();
       }
-
-      //
-      // look for the end of the group in which the receiver is located
-      //
-      while (last->NextGadget()) {
-        if (((TButtonGadget*)last->NextGadget())->Type != Exclusive)
-          break;
-
-        else
-          last = (TButtonGadget*)last->NextGadget();
-      }
-
       if (!first)
         first = this;
 
-      while (TRUE) {
+      // Look for the end of the group in which the receiver is located
+      //
+      while (last->NextGadget()) {
+        TButtonGadget* bg = TYPESAFE_DOWNCAST(last->NextGadget(), TButtonGadget);
+        if (!bg || bg->Type != Exclusive)
+          break;
+
+        else
+          last = bg;
+      }
+
+      while (true) {
+        CHECK(first);     // Already know they are buttons, but just in case...
         if (first->State == Down) {
           first->State = Up;
           first->Invalidate();
@@ -232,7 +177,7 @@ TButtonGadget::CheckExclusively()
         if (first == last)
           break;
 
-        first = (TButtonGadget*)first->NextGadget();
+        first = TYPESAFE_DOWNCAST(first->NextGadget(), TButtonGadget);
       }
     }
 
@@ -261,8 +206,7 @@ TButtonGadget::SetBounds(TRect& bounds)
 
   TGadget::SetBounds(bounds);
 
-  //
-  // center the glyph within the inner bounds
+  // Center the glyph within the inner bounds
   //
   GetInnerRect(innerRect);
 
@@ -287,15 +231,15 @@ TButtonGadget::GetDesiredSize(TSize& size)
 // returns the resulting number of rectangles which will be in the
 // range "0 .. 4" inclusive
 //
-UINT
+uint
 Subtract(TRect& r1, TRect& r2, TRect result[4])
 {
   if (!r1.Touches(r2)) {
     result[0] = r1;
     return 1;
-
-  } else {
-    UINT  i = 0;
+  }
+  else {
+    uint  i = 0;
 
     if (r2.top > r1.top) {
       result[i].left = r1.left;
@@ -526,8 +470,8 @@ TButtonGadget::Paint(TDC& dc)
   if (Pressed || State == Down) {
     innerRect.left += shadow * cxBorder;
     innerRect.top += shadow * cyBorder;
-
-  } else {
+  }
+  else {
     int  i = 0;
 
     //
@@ -537,7 +481,7 @@ TButtonGadget::Paint(TDC& dc)
     innerRect.bottom -= cyBorder;
     innerRect.right -= cxBorder;
 
-    while (TRUE) {
+    while (true) {
       dc.PatBlt(innerRect.left, innerRect.bottom,
                 innerRect.Width() + cxBorder, cyBorder, PATCOPY);
       dc.PatBlt(innerRect.right, innerRect.top,
@@ -590,8 +534,8 @@ TButtonGadget::Paint(TDC& dc)
 
     else //(State == Indeterminate)
       dc.BitBlt(bitmapRect, celDC, CelArray->CelRect(CelIndeterm).TopLeft());
-
-  } else {
+  }
+  else {
     TRect dirtyRects[4];
     int   numRects = Subtract(innerRect, bitmapRect, dirtyRects);
     if (numRects) {
@@ -615,7 +559,7 @@ TButtonGadget::Invalidate()
   TRect  r(0, 0, Bounds.Width(), Bounds.Height());
 
   r.Inflate(-GetSystemMetrics(SM_CXBORDER), -GetSystemMetrics(SM_CYBORDER));
-  InvalidateRect(r, FALSE);
+  InvalidateRect(r, false);
 }
 
 //
@@ -624,7 +568,7 @@ TButtonGadget::Invalidate()
 void
 TButtonGadget::BeginPressed(TPoint&)
 {
-  Pressed = TRUE;
+  Pressed = true;
   Invalidate();
   Update();
   if (Window->GetHintMode() == TGadgetWindow::PressHints)
@@ -637,7 +581,7 @@ TButtonGadget::BeginPressed(TPoint&)
 void
 TButtonGadget::CancelPressed(TPoint&)
 {
-  Pressed = FALSE;
+  Pressed = false;
   Invalidate();
   Update();
   if (Window->GetHintMode() == TGadgetWindow::PressHints)
@@ -660,34 +604,34 @@ TButtonGadget::Activate(TPoint& pt)
 
   CancelPressed(pt);
 
-  if (!(Type == Exclusive && State != Down))
+  if (!(Type == Exclusive && State != Down) && GetEnabled())
     Window->Parent->PostMessage(WM_COMMAND, GetId());
 }
 
 void
-TButtonGadget::LButtonDown(UINT modKeys, TPoint& pt)
+TButtonGadget::LButtonDown(uint modKeys, TPoint& pt)
 {
   TGadget::LButtonDown(modKeys, pt);
   BeginPressed(pt);
 }
 
 void
-TButtonGadget::MouseMove(UINT modKeys, TPoint& pt)
+TButtonGadget::MouseMove(uint modKeys, TPoint& pt)
 {
   TGadget::MouseMove(modKeys, pt);
 
-  BOOL  hit = PtIn(pt);
+  bool  hit = PtIn(pt);
   if (Pressed) {
     if (!hit)
       CancelPressed(pt);
-
-  } else if (hit) {
+  }
+  else if (hit) {
     BeginPressed(pt);
   }
 }
 
 void
-TButtonGadget::MouseEnter(UINT modKeys, TPoint& pt)
+TButtonGadget::MouseEnter(uint modKeys, TPoint& pt)
 {
   TGadget::MouseEnter(modKeys, pt);
   if (Window->GetHintMode() == TGadgetWindow::EnterHints)
@@ -695,7 +639,7 @@ TButtonGadget::MouseEnter(UINT modKeys, TPoint& pt)
 }
 
 void
-TButtonGadget::MouseLeave(UINT modKeys, TPoint& pt)
+TButtonGadget::MouseLeave(uint modKeys, TPoint& pt)
 {
   TGadget::MouseLeave(modKeys, pt);
   if (Window->GetHintMode() == TGadgetWindow::EnterHints)
@@ -703,7 +647,7 @@ TButtonGadget::MouseLeave(UINT modKeys, TPoint& pt)
 }
 
 void
-TButtonGadget::LButtonUp(UINT modKeys, TPoint& pt)
+TButtonGadget::LButtonUp(uint modKeys, TPoint& pt)
 {
   TGadget::LButtonUp(modKeys, pt);
   if (Pressed)

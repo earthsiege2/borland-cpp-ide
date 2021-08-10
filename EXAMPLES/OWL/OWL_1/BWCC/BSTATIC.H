@@ -14,7 +14,7 @@
 //  class TBStatic
 //  ----- --------
 //
-class _EXPCLASS TBStatic : public TStatic {
+class  TBStatic : public TStatic {
   public:
     TBStatic(TWindow*        parent,
              int             id,
@@ -31,7 +31,7 @@ class _EXPCLASS TBStatic : public TStatic {
   protected:
     char far* GetClassName();
 
-  DECLARE_STREAMABLE_FROM_BASE(_EXPCLASS, TBStatic, TStatic);
+  DECLARE_STREAMABLE_FROM_BASE(, TBStatic, TStatic);
 };
 
 #endif //__BSTATIC_H

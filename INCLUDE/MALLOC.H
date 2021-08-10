@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1991, 1993 by Borland International
+ *      Copyright (c) 1991, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -22,10 +22,33 @@ extern "C" {
 #endif
 
 
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
+
+#if !defined(__FLAT__) && !defined(__ALLOC_H)
+#include <alloc.h>
+#endif
+
+
+#ifndef _SIZE_T
+  #define _SIZE_T
+  typedef unsigned size_t;
+#endif
+
 #if !defined(_Windows) || defined(__FLAT__)
 /* _HEAPINFO structure returned by heapwalk */
 
+
+#if !defined(RC_INVOKED)
 #pragma option -a-
+#endif
+
 
 typedef struct _heapinfo
 {
@@ -34,7 +57,11 @@ typedef struct _heapinfo
     int     _useflag;
 } _HEAPINFO;
 
+
+#if !defined(RC_INVOKED)
 #pragma option -a.
+#endif
+
 
 #endif  /* _Windows */
 
@@ -62,7 +89,7 @@ typedef struct _heapinfo
 #define _ffree(block)           farfree(block)
 #define _frealloc(block,size)   farrealloc(block,(unsigned long)(size))
 #define _fcalloc(num,size)      farcalloc((unsigned long)(num),(unsigned long)(size))
-#define halloc(num,size)        (void huge *)_farmalloc((unsigned long)(num)*(size))
+#define halloc(num,size)        (void huge *)farmalloc((unsigned long)(num)*(size))
 #define hfree(block)            farfree((void far *)(block))
 #define _heapmin()              0
 #define _fheapmin()             0
@@ -75,9 +102,11 @@ int         _RTLENTRY _EXPFUNC _heapwalk   (_HEAPINFO *__entry);
 
 void *      _Cdecl alloca     (size_t __size);
 void *      _Cdecl __alloca__ (size_t __size);
+
 #if defined(__BCOPT__ ) && !defined(_Windows)
-#define     alloca  __alloca__
+#define     alloca(__size)  __alloca__(__size)
 #endif
+
 size_t      _Cdecl stackavail (void);
 
 #else  /* __FLAT__ */
@@ -86,6 +115,10 @@ size_t      _Cdecl stackavail (void);
 
 void *      __cdecl   _EXPFUNC alloca( size_t __size );
 void *      __cdecl            __alloca__ (size_t __size);
+
+#if (__CGVER__ >= 0x200)
+#define		alloca(__size) __alloca__(__size)
+#endif
 
 size_t      _RTLENTRY _EXPFUNC stackavail  (void);
 int         _RTLENTRY _EXPFUNC _heapadd    (void * __block, size_t __size);
@@ -105,9 +138,18 @@ size_t      _RTLENTRY _EXPFUNC _msize      (void * __block );
 #endif
 
 /* Obsolete functions */
-#if !defined(RC_INVOKED) && !defined(_Windows) && !defined(__FLAT__)
+#if !defined(RC_INVOKED) && (!defined(_Windows) || defined(__FLAT__))
 #pragma obsolete _heapwalk
 #endif
 
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
+
 #endif  /* __MALLOC_H */
-

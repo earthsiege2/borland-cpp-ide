@@ -1,31 +1,34 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   include\owl\listview.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Implements class TListView
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\listview.h>
-#include <owl\listview.rc>
-#include <owl\docview.rc>
-#include <owl\inputdia.h>
+#include <owl/owlpch.h>
+#include <owl/listview.h>
+#include <owl/listview.rh>
+#include <owl/docview.rh>
+#include <owl/inputdia.h>
 
 DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
 
 #if !defined(SECTION) || SECTION == 1
 
+const char VirtualLastLineStr[] = "---";  // Last virtual line appended to list
+
 //  class TListView
 //  ----- ---------
 //
 DEFINE_RESPONSE_TABLE1(TListView, TListBox)
-  EV_COMMAND(CM_LISTUNDO,    CmEditUndo),
-  EV_COMMAND(CM_LISTCUT,     CmEditCut),
-  EV_COMMAND(CM_LISTCOPY,    CmEditCopy),
-  EV_COMMAND(CM_LISTPASTE,   CmEditPaste),
-  EV_COMMAND(CM_LISTCLEAR,   CmEditClear),
-  EV_COMMAND(CM_LISTDELETE,  CmEditDelete),
-  EV_COMMAND(CM_LISTADD,     CmEditAdd),
-  EV_COMMAND(CM_LISTEDIT,    CmEditItem),
+  EV_COMMAND(CM_EDITUNDO,   CmEditUndo),
+  EV_COMMAND(CM_EDITCUT,    CmEditCut),
+  EV_COMMAND(CM_EDITCOPY,   CmEditCopy),
+  EV_COMMAND(CM_EDITPASTE,  CmEditPaste),
+  EV_COMMAND(CM_EDITCLEAR,  CmEditClear),
+  EV_COMMAND(CM_EDITDELETE, CmEditDelete),
+  EV_COMMAND(CM_EDITADD,    CmEditAdd),
+  EV_COMMAND(CM_EDITEDIT,   CmEditItem),
   EV_WM_GETDLGCODE,
   EV_NOTIFY_AT_CHILD(LBN_DBLCLK, CmEditItem),
   EV_NOTIFY_AT_CHILD(LBN_SELCHANGE, CmSelChange),
@@ -37,63 +40,86 @@ DEFINE_RESPONSE_TABLE1(TListView, TListBox)
 END_RESPONSE_TABLE;
 
 TListView::TListView(TDocument& doc, TWindow* parent)
-   : TView(doc),TListBox(parent, GetNextViewId(), 0,0,0,0),
-     Origin(0), MaxWidth(0), DirtyFlag(FALSE)
+:
+  TView(doc),
+  TListBox(parent, GetNextViewId(), 0,0,0,0),
+  Origin(0),
+  MaxWidth(0),
+  DirtyFlag(false)
 {
-  Attr.Style &= ~(WS_BORDER | LBS_SORT);
+  Attr.Style &= ~(LBS_SORT);
   Attr.Style |= (WS_HSCROLL | LBS_NOINTEGRALHEIGHT);
   Attr.AccelTable = IDA_LISTVIEW;
-  SetViewMenu(new TMenuDescr(IDM_LISTVIEW,0,1,0,0,0,1));
+  if (::FindResource(*GetModule(), TResId(IDM_LISTVIEW), RT_MENU))
+    SetViewMenu(new TMenuDescr(IDM_LISTVIEW, 0,1,0,0,0,1, GetModule()));
+}
+
+int
+TListView::AddString(const char far* str)
+{
+  long style = GetWindowLong(GWL_STYLE);
+  if (!(style & LBS_SORT)) {
+    int itemsInListBox = GetCount();
+    if (itemsInListBox > 0) {
+      // before the end of list marker
+      return InsertString(str, itemsInListBox-1);
+    }
+  }
+  return TListBox::AddString(str);
 }
 
 void
-TListView::SetExtent(LPSTR str)
+TListView::SetExtent(const char far* str)
 {
-  HDC hdc;
   int len;
-  TSize extent;
   if ((len = strlen(str)) == 0)
     return;
-  hdc = ::GetDC(HWindow);
+
+  HDC hdc = ::GetDC(HWindow);
+  TSize extent;
   ::GetTextExtentPoint(hdc, str, len, &extent);
   extent.cx += 2; // room for focus rectangle
 
-  if (extent.cx > MaxWidth){
+  if (extent.cx > MaxWidth)
     SetHorizontalExtent(MaxWidth = extent.cx);
-  }
+
   ::ReleaseDC(HWindow, hdc);
 }
 
-BOOL
+bool
 TListView::VnDocClosed(int omode)
 {
-  int top;
-  int sel;
   if (DirtyFlag == 2 || !(omode & ofWrite))  // make sure someone else's write
-    return FALSE;
-  top = GetTopIndex();
-  sel = GetSelIndex();
+    return false;
+  int top = GetTopIndex();
+  int sel = GetSelIndex();
   LoadData(top, sel);
-  return TRUE;
+  return true;
 }
 
-BOOL
+bool
 TListView::LoadData(int top, int sel)
 {
-  char buf[100+1];
-  istream* inStream;
-  BOOL status = TRUE;
+  CmEditClear();    // Clear list & remove virtual last line temporarily
+  DeleteString(0);
 
-  CmEditClear();
-  DirtyFlag = FALSE;
+  long style = GetWindowLong(GWL_STYLE);
+  if (!(style & LBS_SORT))
+    TListBox::AddString(VirtualLastLineStr);     // Append virtual last line
+
+  DirtyFlag = false;
+
+  bool status = true;
+  istream* inStream;
   if ((inStream = Doc->InStream(ios::in)) == 0) {
     Doc->PostError(IDS_UNABLEOPEN, MB_OK);
-    return FALSE;
+    return false;
   }
   for (;;) {
+    char buf[100+1];
     inStream->getline(buf, sizeof(buf)-1);
     if (!inStream->gcount() && !inStream->good()) {
-      status = inStream->eof();
+      status = ToBool(inStream->eof());
       break;
     }
     AddString(buf);
@@ -107,7 +133,7 @@ TListView::LoadData(int top, int sel)
   return status;
 }
 
-BOOL
+bool
 TListView::Create()
 {
   TRY {
@@ -115,64 +141,62 @@ TListView::Create()
   }
   CATCH( (TXOwl& x) {
     Doc->PostError(IDS_NOMEMORYFORVIEW, MB_OK);
-    return TRUE;   // cannot return FALSE - throws another exception
+    return true;   // cannot return false - throws another exception
   })
-  if (Doc->GetDocPath() == 0) {  
-    return TRUE;           // new file, no data to display
+  if (Doc->GetDocPath() == 0) {
+    CmEditClear();         // perform any clearing initialization
+    return true;           // new file, no data to display
   }
   if (!LoadData(0, 0))
     NotOK();
-  return TRUE;
+  return true;
 }
 
-BOOL
-TListView::VnCommit(BOOL force)
+bool
+TListView::VnCommit(bool force)
 {
-  int count;
-  int index;
-  int len;
-  char* buf;
-  ostream* outStream;
-  BOOL status;
-
   if (!force && !DirtyFlag)
-    return TRUE;
-  if ((outStream = Doc->OutStream(ios::out)) == 0) {
+    return true;
+
+  ostream* outStream = Doc->OutStream(ios::out);
+  if (outStream == 0) {
     Doc->PostError(IDS_UNABLEOPEN, MB_OK);
-    return FALSE;
+    return false;
   }
   outStream->seekp(Origin);
-  count = GetCount();
-  for (index = 0; index < count; index++) {
-    len = GetStringLen(index);
-    buf = new char[len+1];
+  int count = GetCount();
+  for (int index = 0; index < count-1; index++) {  // don't write last virtual line
+    int len = GetStringLen(index);
+    char* buf = new char[len+1];
     GetString(buf, index);
     *outStream << buf << '\n';
     delete buf;
   }
   DirtyFlag = 2;           // to detect our own close notification
-  status = outStream->good();
+
+  bool status = ToBool(outStream->good());
   delete outStream;
-  DirtyFlag = FALSE;
+  DirtyFlag = false;
   if (!status)
     Doc->PostError(IDS_WRITEERROR, MB_OK);
+
   return status;
 }
 
-BOOL
-TListView::VnRevert(BOOL clear)
+bool
+TListView::VnRevert(bool clear)
 {
   if (!clear && Doc->GetDocPath() != 0)
     return LoadData(0,0);
   CmEditClear();
-  DirtyFlag = FALSE;
-  return TRUE;
+  DirtyFlag = false;
+  return true;
 }
 
-UINT
+uint
 TListView::EvGetDlgCode(MSG far*)
 {
-  UINT retVal = (UINT)DefaultProcessing();
+  uint retVal = (uint)DefaultProcessing();
   retVal |= DLGC_WANTCHARS;
   return retVal;
 }
@@ -193,40 +217,41 @@ TListView::CmEditCut()
 void
 TListView::CmEditCopy()
 {
-  HANDLE cbhdl;
-  char far* buf;
   int index = GetSelIndex();
-  if (!GetCount()) return;
-  int len = GetStringLen(index);
-  TClipboard& cb = OpenClipboard();
+  int count = GetCount();
+  if (count <= 1 || index >= count-1)
+    return;
+
+  TClipboard cb(*this);
   if (cb.EmptyClipboard()) {
-    cbhdl = GlobalAlloc(GHND,len+0+1);
-    buf = (char far*)GlobalLock(cbhdl);
+    int len = GetStringLen(index);
+    HANDLE cbhdl = ::GlobalAlloc(GHND,len+0+1);
+    char far* buf = (char far*)::GlobalLock(cbhdl);
     GetString(buf, index);
-    GlobalUnlock(cbhdl);
+    ::GlobalUnlock(cbhdl);
     cb.SetClipboardData(CF_TEXT, cbhdl);
   }
-  cb.CloseClipboard();
 }
 
 void
 TListView::CmEditPaste()
 {
-  HANDLE cbhdl;
-  char far* text;
   int index = GetSelIndex();
   if (index < 0)
     index = 0;
-  TClipboard& cb = OpenClipboard();
-  if (!cb) return;   // clipboard open by another program
-  if ((cbhdl = cb.GetClipboardData(CF_TEXT)) != 0) {
-    text = (char far*)GlobalLock(cbhdl);
+
+  TClipboard cb(*this);
+  if (!cb)
+    return;   // clipboard open by another program
+
+  HANDLE cbhdl = cb.GetClipboardData(CF_TEXT);
+  if (cbhdl) {
+    char far* text = (char far*)::GlobalLock(cbhdl);
     InsertString(text, index);
-    SetSelIndex(index);
-    DirtyFlag = TRUE;
-    GlobalUnlock(cbhdl);
+    SetSelIndex(index+1);
+    DirtyFlag = true;
+    ::GlobalUnlock(cbhdl);
   }
-  cb.CloseClipboard();
 }
 
 void
@@ -234,59 +259,74 @@ TListView::CmEditDelete()
 {
   int count = GetCount();
   int index = GetSelIndex();
-  if (!count) return;
+  if (count <= 1 || index >= count-1)
+    return;
+
   DeleteString(index);
-  if (index == count-1) index--;
   SetSelIndex(index);
-  DirtyFlag = TRUE;
+  DirtyFlag = true;
 }
 
 void
 TListView::CmEditClear()
 {
-  if (GetCount()) {
+  int count = GetCount();
+  if (count == 1)
+    return;
+  if (count) {
     ClearList();
-    DirtyFlag = TRUE;
+    DirtyFlag = true;
     SetHorizontalExtent(MaxWidth = 0);
   }
+  long style = GetWindowLong(GWL_STYLE);
+  if (!(style & LBS_SORT))
+    TListBox::AddString(VirtualLastLineStr);
 }
 
-static int linePrompt(TWindow* parent,int index,UINT id,LPSTR buf,int buflen)
+static int linePrompt(TWindow* parent, int index, UINT id,
+                      char far* buf, int buflen)
 {
   char msg[41];
-  wsprintf(msg, string(*parent->GetModule(), IDS_LISTNUM).c_str(), index);
-  LPCSTR prompt = string(*parent->GetModule(), id).c_str();
-  return TInputDialog(parent, msg, prompt, buf, buflen).Execute();
+  wsprintf(msg, parent->GetModule()->LoadString(IDS_LISTNUM).c_str(), index);
+  return TInputDialog(parent, msg,
+                      parent->GetModule()->LoadString(id).c_str(),
+                      buf, buflen).Execute();
 }
 
 void
 TListView::CmEditAdd()
 {
   char inputText[101];
-  int index = GetSelIndex() + 1;   // becomes 0 if list box is empty
-  inputText[0] = 0;
-  if (linePrompt(this,index+1,CM_LISTADD,inputText,sizeof(inputText))==IDOK) {
+  *inputText = 0;
+
+  int index = GetSelIndex();
+  if (index < 0)
+    index = 0;
+
+  if (linePrompt(this,index+1,CM_EDITADD,inputText,sizeof(inputText)) == IDOK) {
     InsertString(inputText, index);
-    SetSelIndex(index);
+    SetSelIndex(index+1);
     SetExtent(inputText);
-    DirtyFlag = TRUE;
+    DirtyFlag = true;
   }
 }
 
 void
 TListView::CmEditItem()
 {
-  char inputText[101];
   int index = GetSelIndex();
-  if (index < 0)
+  if (index < 0 || index >= GetCount()-1)
     return;
+
+  char inputText[101];
   GetSelString(inputText, sizeof(inputText)-1);
-  if (linePrompt(this,index+1,CM_LISTEDIT,inputText,sizeof(inputText))==IDOK){
+
+  if (linePrompt(this,index+1,CM_EDITEDIT,inputText,sizeof(inputText))==IDOK) {
     DeleteString(index);
     InsertString(inputText, index);
     SetExtent(inputText);
     SetSelIndex(index);
-    DirtyFlag = TRUE;
+    DirtyFlag = true;
   }
 }
 
@@ -313,4 +353,3 @@ TListView::Streamer::Write(opstream &os) const
 }
 
 #endif
-

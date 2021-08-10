@@ -8,8 +8,8 @@
 TODListBox::TODListBox(int id)
           : TControl(0, id, 0, 0,0, 100,100), BufTemp(0), BufLen(0), MaxWidth(0)
 {
-  Attr.Style = (Attr.Style & ~(LBS_SORT | LBS_HASSTRINGS | LBS_MULTIPLESEL))
-  | (LBS_NOTIFY | WS_VSCROLL | WS_HSCROLL | WS_BORDER | LBS_OWNERDRAWVARIABLE);
+  Attr.Style &= ~(LBS_SORT | LBS_HASSTRINGS | LBS_MULTIPLESEL);
+  Attr.Style |= (LBS_NOTIFY | WS_VSCROLL | WS_HSCROLL | WS_BORDER | LBS_OWNERDRAWVARIABLE);
 }
 
 char far *
@@ -21,8 +21,9 @@ TODListBox::GetClassName()
 void TODListBox::ItemRedraw(int index)   // force item to be redrawn
 {
   TRect rect;
-  if (GetItemRect(index, rect) <= 0) return;   // return 1 if OK, -1 if error
-  InvalidateRect (rect);
+  if (GetItemRect(index, rect) <= 0)
+    return;   // return 1 if OK, -1 if error
+  InvalidateRect(rect);
 }
 
 void TODListBox::DrawItem(DRAWITEMSTRUCT far & dis)
@@ -95,7 +96,7 @@ BOOL TODListBox::GetItemInfo(ODItemInfo& item) {
       }
       GetString(str = BufTemp, item.Index);
     }
-  }else{ // assume text pointer is allocated data stored in item data     
+  } else { // assume text pointer is allocated data stored in item data     
     str = (char far*)item.Data;
     len = str ? lstrlen(str) : 0;
   }
@@ -156,5 +157,3 @@ TODListBox::Streamer::Write(opstream& os) const
   WriteBaseObject((TControl*)GetObject(), os);
   os << GetObject()->MaxWidth;
 }
-
-

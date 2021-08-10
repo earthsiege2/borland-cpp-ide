@@ -1,14 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\mdichild.cpp
-//   Defines class TMDIChild. This defines the basic behavior of all MDI
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TMDIChild. This defines the basic behavior of all MDI
 //   child windows
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\mdichild.h>
-#include <owl\mdi.h>
+#include <owl/owlpch.h>
+#include <owl/mdichild.h>
+#include <owl/mdi.h>
+#include <owl/applicat.h>
 
+DIAG_DECLARE_GROUP(OwlWin);  // diagnostic group for windows
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -23,7 +26,7 @@ END_RESPONSE_TABLE;
 TMDIChild::TMDIChild(TMDIClient&     parent,
                      const char far* title,
                      TWindow*        clientWnd,
-                     BOOL            shrinkToClient,
+                     bool            shrinkToClient,
                      TModule*        module)
 {
   //
@@ -39,59 +42,78 @@ TMDIChild::TMDIChild(TMDIClient&     parent,
 }
 
 //
-// constructor for a TMDIChild which is being used in a DLL as an alias
+// Constructor for a TMDIChild which is being used in a DLL as an alias
 // for a non-OWL window
 //
 TMDIChild::TMDIChild(HWND hWnd, TModule*   module)
-  : TFrameWindow(hWnd, module),
-    TWindow(hWnd, module)
+:
+  TFrameWindow(hWnd, module),
+  TWindow(hWnd, module)
 {
   Attr.Style = WS_CLIPSIBLINGS;
 }
 
-BOOL
-TMDIChild::EvNCActivate(BOOL active)
+//
+// Don't allow NC Activation if we are only temporarily unhidden for window
+// menu maintainance
+//
+bool
+TMDIChild::EvNCActivate(bool active)
 {
-  return IsFlagSet(wfUnHidden) ? FALSE : TFrameWindow::EvNCActivate(active);
+  return IsFlagSet(wfUnHidden) ? false : TFrameWindow::EvNCActivate(active);
 }
 
-BOOL
+//
+// Perform special processing for showing MDI children to make sure that
+// the MDI client maintains the window list correctly
+//
+bool
 TMDIChild::ShowWindow(int cmdShow)
 {
   int  retVal = TFrameWindow::ShowWindow(cmdShow);     // 0 if had been hidden
-  if ((retVal != 0) != (cmdShow != SW_HIDE)) { // if visible state has changed
+
+  // Process only if visible state has changed
+  //
+  if ((retVal != 0) != (cmdShow != SW_HIDE)) {
     if ((HWND)Parent->HandleMessage(WM_MDIGETACTIVE) == *this) {
       if (cmdShow == SW_HIDE)
-        Parent->HandleMessage(WM_MDINEXT, (UINT)(HWND)*this);
+        Parent->HandleMessage(WM_MDINEXT, (uint)(HWND)*this);
       else
-        HandleMessage(WM_NCACTIVATE, TRUE); // resend suppressed message
+        HandleMessage(WM_NCACTIVATE, true); // resend suppressed message
     }
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
     Parent->HandleMessage(WM_MDIREFRESHMENU);
 #else
-    Parent->HandleMessage(WM_MDISETMENU, TRUE);
+    Parent->HandleMessage(WM_MDISETMENU, true);
 #endif
   }
   return retVal;
 }
 
-BOOL
-TMDIChild::EnableWindow(BOOL enable)
+//
+// Perform special processing for enabling MDI children to make sure that
+// the MDI client maintains the window list correctly
+//
+bool
+TMDIChild::EnableWindow(bool enable)
 {
   int retVal = TFrameWindow::EnableWindow(enable);  // 0 if previously enabled
-  if ((retVal!=0) != (enable==0)) {  // if disabled state has actually changed
+
+  // Process only if disabled state has actually changed
+  //
+  if ((retVal!=0) != (enable==0)) {
     if (!enable && (HWND)Parent->HandleMessage(WM_MDIGETACTIVE) == *this)
-      Parent->HandleMessage(WM_MDINEXT, (UINT)(HWND)*this);
-#if defined(__WIN32__)
+      Parent->HandleMessage(WM_MDINEXT, (uint)(HWND)*this);
+#if defined(BI_PLAT_WIN32)
     Parent->HandleMessage(WM_MDIREFRESHMENU);
 #else
-    Parent->HandleMessage(WM_MDISETMENU, TRUE);
+    Parent->HandleMessage(WM_MDISETMENU, true);
 #endif
   }
   return retVal;
 }
 
-BOOL
+bool
 TMDIChild::PreProcessMsg(MSG& msg)
 {
   //
@@ -103,38 +125,46 @@ TMDIChild::PreProcessMsg(MSG& msg)
   // so, we will do it here to make sure it gets done
   //
   if (KeyboardHandling && Parent->PreProcessMsg(msg))
-    return TRUE;
+    return true;
 
   if (hAccel && ::TranslateAccelerator(Parent->Parent->HWindow, hAccel, &msg))
-    return TRUE;
+    return true;
 
   return TFrameWindow::PreProcessMsg(msg);
 }
 
 //
-// destroys the MS-Windows element associated with the TMDIChild
+// Destroys the MS-Windows element associated with the TMDIChild
 //
 void
 TMDIChild::Destroy(int)
 {
   if (HWindow) {
-    ForEach(DoEnableAutoCreate);
+    ForEach(DoEnableAutoCreate);  // use iterator function in window.cpp
 
-    if (Parent) // send destroy message to MDI client window
-      Parent->HandleMessage(WM_MDIDESTROY, (WPARAM) HWindow);
-
-    else
-      ::DestroyWindow(HWindow);
+    if (Parent) { // send destroy message to MDI client window
+      Parent->HandleMessage(WM_MDIDESTROY, (WPARAM)HWindow);
+      HWindow = 0;  // Assume success
+    }
+    else {
+      if (::DestroyWindow(HWindow))
+        HWindow = 0;
+      GetApplication()->ResumeThrow();
+      WARNX(OwlWin, HWindow, 0, "::DestroyWindow(" << (uint)HWindow << ") failed");
+    }
   }
 }
 
+//
+// An MDI Child creates its HWindow by sending an MDI Create packet to the MDI
+// client.
+//
 void
 TMDIChild::PerformCreate(int)
 {
   PRECONDITION(Parent);
 
   MDICREATESTRUCT  createStruct;
-
   createStruct.szClass = GetClassName();
   createStruct.szTitle = Title;
   createStruct.hOwner = *GetModule();
@@ -142,37 +172,22 @@ TMDIChild::PerformCreate(int)
   createStruct.y = Attr.Y;
   createStruct.cx = Attr.W;
   createStruct.cy = Attr.H;
-
-  DWORD style = Attr.Style;
-  if (style & WS_MAXIMIZE) {  // Work around a Windows MDI bug
-    Attr.Style &= ~(WS_MAXIMIZE | WS_VISIBLE);
-    Attr.Style |= WS_DISABLED;
-  }
   createStruct.style = Attr.Style;
   createStruct.lParam = (LPARAM)Attr.Param;
 
   HWindow = (HWND)Parent->HandleMessage(WM_MDICREATE, 0, (LPARAM)&createStruct);
-
-  if (style & WS_MAXIMIZE) {  // finish up maximized mdi workaround
-    EnableWindow(TRUE);
-                Attr.Style = style;
-    Parent->HandleMessage(WM_MDIMAXIMIZE, WPARAM(HWindow));
-  }
 }
 
 void
-TMDIChild::EvMDIActivate(HWND hWndActivated,
-                         HWND /*hWndDeactivated*/)
+TMDIChild::EvMDIActivate(HWND hWndActivated, HWND hWndDeactivated)
 {
   if (HWindow == hWndActivated) {
-    //
     // A bug in Windows MDI causes the first MDI child to not get a
     // WM_SETFOCUS. Simulate it now
     //
     if (!GetWindow(GW_HWNDNEXT) && GetFocus() != HWindow)
       HandleMessage(WM_SETFOCUS, WPARAM(HWindow));
 
-    //
     // Merge this windows menubar with the MDI frame's if there is a
     // MenuDescr assigned
     //
@@ -181,9 +196,8 @@ TMDIChild::EvMDIActivate(HWND hWndActivated,
       if (frame)
         frame->MergeMenu(*GetMenuDescr());
     }
-
-  } else {
-    //
+  }
+  else {
     // Restore the MDI frame's menubar if there is no other MDI child being
     // activated
     //
@@ -193,14 +207,28 @@ TMDIChild::EvMDIActivate(HWND hWndActivated,
         frame->RestoreMenu();
     }
   }
+
+  // Forward MDI child activation to our client (if we have one) so that it can
+  // perform any type of activate/deactivate processing that it needs
+  //
+  TWindow* w = GetClientWindow();
+  if (w && w->IsWindow())
+#if defined(BI_PLAT_WIN32)
+    w->HandleMessage(WM_MDIACTIVATE, WPARAM(hWndActivated), LPARAM(hWndDeactivated));
+#else
+    w->HandleMessage(WM_MDIACTIVATE, 0, MAKELPARAM(hWndActivated,hWndDeactivated));
+#endif
 }
 
 //
 // override DefWindowProc to use DefMDIChildProc
 //
 LRESULT
-TMDIChild::DefWindowProc(UINT msg, WPARAM wParam, LPARAM lParam)
+TMDIChild::DefWindowProc(uint msg, WPARAM wParam, LPARAM lParam)
 {
+  if (IsFlagSet(wfAlias))
+    return TWindow::DefWindowProc(msg, wParam, lParam);
+
   return ::DefMDIChildProc(HWindow, msg, wParam, lParam);
 }
 
@@ -225,6 +253,5 @@ TMDIChild::Streamer::Write(opstream& os) const
 {
   WriteVirtualBase((TFrameWindow*)GetObject(), os);
 }
-
 
 #endif

@@ -2,17 +2,21 @@
 /*                                                                        */
 /*  DATE.H                                                                */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB__DATE_H )
-#define __CLASSLIB__DATE_H
+#if !defined( CLASSLIB__DATE_H )
+#define CLASSLIB__DATE_H
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined(___DEFS_H)
+#include <_defs.h>
+#endif
+
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
@@ -287,4 +291,4 @@ inline HashValue( TDate _BIDSFAR & d )
 #pragma option -po.
 #endif
 
-#endif  // __CLASSLIB_DATE_H
+#endif  // CLASSLIB_DATE_H

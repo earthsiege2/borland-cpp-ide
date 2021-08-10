@@ -12,7 +12,7 @@ CreateDLLWindow(HWND parentHWnd)
 {
   TWindow* parentAlias = GetWindowPtr(parentHWnd);  // check if an OWL window
   if (!parentAlias)
-    parentAlias = new TWindow(parentHWnd);
+    parentAlias = new TWindow(parentHWnd, ::Module);
   TWindow* window = new TWindow(parentAlias, "Hello from a DLL!");
   window->Attr.Style |= WS_POPUPWINDOW | WS_CAPTION | WS_THICKFRAME
                       | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;

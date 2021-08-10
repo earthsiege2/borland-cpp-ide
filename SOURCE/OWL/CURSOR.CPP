@@ -1,19 +1,21 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\cursor.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of GDI Cursor object class
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\gdiobjec.h>
+#include <owl/owlpch.h>
+#include <owl/gdiobjec.h>
 
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 
 TCursor::TCursor(HCURSOR handle, TAutoDelete autoDelete)
-  : TGdiObject(handle, autoDelete)
+:
+  TGdiBase(handle, autoDelete)
 {
 }
 
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
 TCursor::TCursor(HINSTANCE, const TCursor& cursor)
 {
   Handle = (HCURSOR)::CopyIcon((HICON)(HCURSOR)cursor);
@@ -31,7 +33,7 @@ TCursor::TCursor(HINSTANCE instance, TResId resId)
 {
   PRECONDITION(resId);
   Handle = ::LoadCursor(instance, resId);
-  ShouldDelete = FALSE;
+  ShouldDelete = (instance != 0);
   CheckValid();
 }
 
@@ -44,18 +46,18 @@ TCursor::TCursor(HINSTANCE instance, const TPoint& hotSpot, const TSize& size,
   CheckValid();
 }
 
-#if defined(__WIN32__)
-TCursor::TCursor(const void* resBits, DWORD resSize)
+#if defined(BI_PLAT_WIN32)
+TCursor::TCursor(const void* resBits, uint32 resSize)
 {
   PRECONDITION(resBits && resSize);
-  Handle = ::CreateIconFromResource((PBYTE)resBits, resSize, FALSE, 0x00030000);
+  Handle = ::CreateIconFromResource((PBYTE)resBits, resSize, false, 0x00030000);
   CheckValid();
 }
 
 TCursor::TCursor(const ICONINFO* iconInfo)
 {
   PRECONDITION(iconInfo);
-  //iconInfo->fIcon = FALSE;
+  //iconInfo->fIcon = false;
   Handle = ::CreateIconIndirect((PICONINFO)iconInfo);
   CheckValid();
 }
@@ -64,6 +66,5 @@ TCursor::TCursor(const ICONINFO* iconInfo)
 TCursor::~TCursor()
 {
   if (ShouldDelete)
-    if (!::DestroyCursor((HCURSOR)Handle))
-      THROW( TXGdi(IDS_GDIDESTROYFAIL, Handle) );
+    ::DestroyCursor((HCURSOR)Handle);
 }

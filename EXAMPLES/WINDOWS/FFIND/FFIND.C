@@ -697,7 +697,6 @@ long FindFile(char *drives, char *pattern)
     long      rc;
 
     rc = 0;
-    nfiles = 0;
     file_count = 0;
     tree[1] = ':';
     tree[2] = 0;
@@ -738,7 +737,6 @@ int DoADir(char *patternp, char *patternn, char *include)
     char          patternw[80];
     char          npatternp[64];
     char          buf[128];
-    int           files;
     int           mfiles;
     int           have_subs;
     int           nfiles;
@@ -750,7 +748,6 @@ int DoADir(char *patternp, char *patternn, char *include)
 
     strcat(patternw, patternn);
 
-    files = 0;
     mfiles = 0;
     have_subs = 0;
 
@@ -765,8 +762,6 @@ int DoADir(char *patternp, char *patternn, char *include)
             }
             else                              // file
             {
-                files++;
-
                 if (FnMatch(include, fileinfo.ff_name))
                 {
                     mfiles++;

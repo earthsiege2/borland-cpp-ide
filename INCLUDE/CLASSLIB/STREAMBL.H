@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  STREAMBL.H                                                            */
 /*                                                                        */
-/*  Copyright (c) 1992, 1993 Borland International                        */
+/*  Copyright (c) 1992, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*  Class definitions for object streaming                                */
@@ -27,16 +27,16 @@
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_STREAMBL_H )
-#define __CLASSLIB_STREAMBL_H
+#if !defined( CLASSLIB_STREAMBL_H )
+#define CLASSLIB_STREAMBL_H
 
 #if !defined( __STRING_H )
 #include <string.h>
-#endif  // __STRING_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
 #if defined(_FASTTHIS)
 #  define _BIDSFASTTHIS __fastthis
@@ -44,17 +44,17 @@
 #  define _BIDSFASTTHIS
 #endif
 
-#if !defined( __CLASSLIB_VECTIMP_H )
+#if !defined( CLASSLIB_VECTIMP_H )
 #include "classlib\vectimp.h"
-#endif  // __CLASSLIB_VECTIMP_H
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
 #endif
 
-#if defined( __WINDOWS__ ) && !defined( __WINDOWS_H )
+#if defined( BI_PLAT_MSW ) && !defined( __WINDOWS_H )
 #include <windows.h>
-#endif  // __WINDOWS__ && __WINDOWS_H
+#endif
 
 #if defined( BI_NO_PER_INSTANCE_DATA ) && defined(_BIDSDLL)
 
@@ -79,7 +79,7 @@ struct _BIDSCLASS ObjectBuilder
 
     enum { NoDelta = -1 };
 
-    ObjectBuilder( BUILDER b, int d ) : Builder( b ), Delta( d )
+    _BIDSENTRY ObjectBuilder( BUILDER b, int d ) : Builder( b ), Delta( d )
     {
     }
 
@@ -95,15 +95,14 @@ class _BIDSCLASS TStreamableClass : public ObjectBuilder
 
 public:
 
-    TStreamableClass( const char *n, 
-                      BUILDER b, 
-                      int d = NoDelta,
-                      ModuleId mid = GetModuleId()
-                    );
+    _BIDSENTRY TStreamableClass( const char *n, 
+                             BUILDER b, 
+                             int d = NoDelta,
+                             ModuleId mid = GetModuleId() );
 
-    ~TStreamableClass();
+    _BIDSENTRY ~TStreamableClass();
 
-    int operator == ( const TStreamableClass& n ) const
+    int _BIDSENTRY operator == ( const TStreamableClass& n ) const
         {
         if( strcmp( ObjectId, n.ObjectId ) != 0 )
             return 0;
@@ -111,7 +110,7 @@ public:
             return (ModId == 0 || n.ModId == 0 || ModId == n.ModId);
         }
 
-    int operator < ( const TStreamableClass& n ) const
+    int _BIDSENTRY operator < ( const TStreamableClass& n ) const
         {
         int res = strcmp( ObjectId, n.ObjectId );
         if( res < 0 )
@@ -136,11 +135,12 @@ class _BIDSCLASS TStreamableTypes
 
 public:
 
-    TStreamableTypes() : Types( 5, 5 ) {}
+    _BIDSENTRY TStreamableTypes() : Types( 5, 5 ) {}
 
-    void RegisterType( ModuleId id, TStreamableClass& );
-    void UnRegisterType( ModuleId id, TStreamableClass& );
-    const ObjectBuilder *Lookup( ModuleId id, const char *name ) const;
+    void _BIDSENTRY RegisterType( ModuleId id, TStreamableClass& );
+    void _BIDSENTRY UnRegisterType( ModuleId id, TStreamableClass& );
+    const ObjectBuilder * _BIDSENTRY Lookup( ModuleId id,
+                                         const char *name ) const;
 
 private:
 
@@ -152,5 +152,5 @@ private:
 #pragma option -po.
 #endif
 
-#endif  // __CLASSLIB_STREAMBLE_H
+#endif  // CLASSLIB_STREAMBLE_H
 

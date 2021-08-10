@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\buttonga.h
-//   Base class TButtonGadget.
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Definition of class TButtonGadget.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_BUTTONGA_H)
-#define __OWL_BUTTONGA_H
+#if !defined(OWL_BUTTONGA_H)
+#define OWL_BUTTONGA_H
 
-#if !defined(__OWL_GADGET_H)
-  #include "owl\gadget.h"
+#if !defined(OWL_GADGET_H)
+# include <owl/gadget.h>
 #endif
 class _OWLCLASS TCelArray;
 
@@ -38,26 +39,26 @@ class _OWLCLASS TButtonGadget : public TGadget {
     TButtonGadget(TResId bmpResId,
                   int    id,
                   TType  type = Command,
-                  BOOL   enabled = FALSE, // initial state before cmd enabling
+                  bool   enabled = false, // initial state before cmd enabling
                   TState state = Up,
-                  BOOL   repeat = FALSE);
+                  bool   repeat = false);
    ~TButtonGadget();
 
     void          SetButtonState(TState);
     TState        GetButtonState() {return State;}
 
     TType         GetButtonType() {return Type;}
+    void          GetDesiredSize(TSize& size);
+    void          SetBounds(TRect& r);
 
+    // A couple of button style options
     //
-    // a couple of button style options
-    //
-    void          SetNotchCorners(BOOL notchCorners=TRUE)
+    void          SetNotchCorners(bool notchCorners=true)
                     {NotchCorners = notchCorners;}
     void          SetShadowStyle(TShadowStyle style=DoubleShadow);
-    void          SetAntialiasEdges(BOOL anti=TRUE) {AntialiasEdges=anti;}
+    void          SetAntialiasEdges(bool anti=true) {AntialiasEdges=anti;}
 
-    //
-    // override and initiate a WM_COMMAND_ENABLE message
+    // Override and initiate a WM_COMMAND_ENABLE message
     //
     void          CommandEnable();
 
@@ -70,35 +71,31 @@ class _OWLCLASS TButtonGadget : public TGadget {
     TState        State          : 4;
     TType         Type           : 4;
     TShadowStyle  ShadowStyle    : 4;
-    BOOL          Repeat         : 1;
-    BOOL          NotchCorners   : 1;
-    BOOL          Pressed        : 1;
-    BOOL          AntialiasEdges : 1;
+    bool          Repeat         : 1;
+    bool          NotchCorners   : 1;
+    bool          Pressed        : 1;
+    bool          AntialiasEdges : 1;
 
+    // Override basic TGadget member functions
     //
-    // overrive basic TGadget member functions
-    //
-    void          GetDesiredSize(TSize& size);
     void          Paint(TDC& dc);
     void          Invalidate();
-    void          SetBounds(TRect& r);
 
-    //
-    // override TGadget member functions and respond to user fiddling with the
+    // Override TGadget member functions and respond to user fiddling with the
     // button by self-sending button protocol messages
     //
-    void          LButtonDown(UINT modKeys, TPoint& p);
-    void          MouseMove(UINT modKeys, TPoint& p);
-    void          MouseEnter(UINT modKeys, TPoint& p);
-    void          MouseLeave(UINT modKeys, TPoint& p);
-    void          LButtonUp(UINT modKeys, TPoint& p);
+    void          LButtonDown(uint modKeys, TPoint& p);
+    void          MouseMove(uint modKeys, TPoint& p);
+    void          MouseEnter(uint modKeys, TPoint& p);
+    void          MouseLeave(uint modKeys, TPoint& p);
+    void          LButtonUp(uint modKeys, TPoint& p);
 
     enum {
       //CelMask,
-      CelNormal,
-      CelDisabled,
-      CelIndeterm,
-      CelDown,
+      CelNormal,    // Normal state
+      CelDisabled,  // Disabled (grayed)
+      CelIndeterm,  // Indeterminate-neither normal nor down
+      CelDown,      // Down or checked
       CelsTotal
     };
     virtual TDib* GetGlyphDib();
@@ -112,19 +109,19 @@ class _OWLCLASS TButtonGadget : public TGadget {
 
     //
     // invoked by mouse-down & mouse enter events. sets member data "Pressed"
-    // to TRUE and highlights the button
+    // to true and highlights the button
     //
     virtual void  BeginPressed(TPoint& p);
 
     //
-    // invoked by mouse exit events. sets member data "Pressed" to FALSE and
+    // invoked by mouse exit events. sets member data "Pressed" to false and
     // paints the button in its current state
     //
     virtual void  CancelPressed(TPoint& p);
 
     //
     // invoked by mouse-up event inside the Gadget. sets member data "Pressed"
-    // to FALSE, changes state for attribute buttons, and paints the button
+    // to false, changes state for attribute buttons, and paints the button
     // in its current state
     //
     // generates WM_COMMAND
@@ -135,4 +132,4 @@ class _OWLCLASS TButtonGadget : public TGadget {
     void          CheckExclusively();
 };
 
-#endif  // __OWL_BUTTONGA_H
+#endif  // OWL_BUTTONGA_H

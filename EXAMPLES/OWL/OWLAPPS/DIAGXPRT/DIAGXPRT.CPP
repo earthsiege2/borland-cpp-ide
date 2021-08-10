@@ -155,7 +155,7 @@ TDiagClient::CmHelp()
 void 
 TDiagClient::CmMem()
 {
-  char buf[80];
+  static char buf[80];
 
   MEMMANINFO info;
   info.dwSize=sizeof(info);

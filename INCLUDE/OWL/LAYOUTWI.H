@@ -1,16 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\layoutwi.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Declarations of classes TLayoutMetrics & TLayoutWindow
 //----------------------------------------------------------------------------
-#if !defined(__OWL_LAYOUTWI_H)
-#define __OWL_LAYOUTWI_H
+#if !defined(OWL_LAYOUTWI_H)
+#define OWL_LAYOUTWI_H
 
-#if !defined(__OWL_WINDOW_H)
-  #include <owl\window.h>
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
 #endif
-#if !defined(__OWL_LAYOUTCO_H)
-  #include <owl\layoutco.h>
+#if !defined(OWL_LAYOUTCO_H)
+# include <owl/layoutco.h>
 #endif
 
 //
@@ -93,8 +94,8 @@ class _OWLCLASS TLayoutWindow : virtual public TWindow {
     void            Layout();
 
     void            SetChildLayoutMetrics(TWindow& child, TLayoutMetrics& metrics);
-    BOOL            GetChildLayoutMetrics(TWindow& child, TLayoutMetrics& metrics);
-    BOOL            RemoveChildLayoutMetrics(TWindow& child);
+    bool            GetChildLayoutMetrics(TWindow& child, TLayoutMetrics& metrics);
+    bool            RemoveChildLayoutMetrics(TWindow& child);
 
   protected:
     TSize           ClientSize;
@@ -102,7 +103,7 @@ class _OWLCLASS TLayoutWindow : virtual public TWindow {
     //
     // responds to a change in size by calling Layout()
     //
-    void            EvSize(UINT sizeType, TSize& size);
+    void            EvSize(uint sizeType, TSize& size);
 
     //
     // Override TWindow virtuals
@@ -117,7 +118,7 @@ class _OWLCLASS TLayoutWindow : virtual public TWindow {
     TConstraint*    Constraints;
     TConstraint*    Plan;
     TVariable*      Variables;
-    BOOL            PlanIsDirty;
+    bool            PlanIsDirty;
     int             NumChildMetrics;
     int             FontHeight;
 
@@ -146,4 +147,4 @@ class _OWLCLASS TLayoutWindow : virtual public TWindow {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_LAYOUTWIN_H
+#endif  // OWL_LAYOUTWIN_H

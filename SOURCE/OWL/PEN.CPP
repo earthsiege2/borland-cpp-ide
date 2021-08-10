@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\pen.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation for GDI Pen object
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\gdiobjec.h>
+#include <owl/owlpch.h>
+#include <owl/gdiobjec.h>
 
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 DIAG_DECLARE_GROUP(OwlGDIOrphan);  // Orphan control tracing group
@@ -13,7 +14,8 @@ DIAG_DECLARE_GROUP(OwlGDIOrphan);  // Orphan control tracing group
 // Constructors
 //
 TPen::TPen(HPEN handle, TAutoDelete autoDelete)
-  : TGdiObject(handle, autoDelete)
+:
+  TGdiObject(handle, autoDelete)
 {
   #if !defined(NO_GDI_ORPHAN_CONTROL)
     if (ShouldDelete)
@@ -32,7 +34,7 @@ TPen::TPen(TColor color, int width, int style)
       Handle = ::GetStockObject(BLACK_PEN);
     else
       Handle = ::GetStockObject(WHITE_PEN);
-    ShouldDelete = FALSE;
+    ShouldDelete = false;
     return;
   }
   Handle = ::CreatePen(style, width, color);
@@ -47,7 +49,7 @@ TPen::TPen(const LOGPEN far* logPen)
   PRECONDITION(logPen);
   Handle = ::CreatePenIndirect((LPLOGPEN)logPen);
   WARNX(OwlGDI, !Handle, 0, "Cannot create TPen from logPen @" <<
-        hex << DWORD(LPVOID(logPen)));
+        hex << uint32(LPVOID(logPen)));
   CheckValid();
   OBJ_REF_ADD(Handle, Pen);
 }
@@ -59,31 +61,31 @@ TPen::TPen(const TPen& src)
   src.GetObject(logPen);
   Handle = ::CreatePenIndirect(&logPen);
   WARNX(OwlGDI, !Handle, 0, "Cannot create TPen from TPen @" <<
-        hex << DWORD(LPVOID(&src)));
+        hex << uint32(LPVOID(&src)));
   CheckValid();
   OBJ_REF_ADD(Handle, Pen);
 }
 
-#if defined(__WIN32__)
-TPen::TPen(DWORD penStyle, DWORD width, const TBrush& brush,
-           DWORD styleCount, LPDWORD style)
+#if defined(BI_PLAT_WIN32)
+TPen::TPen(uint32 penStyle, uint32 width, const TBrush& brush,
+           uint32 styleCount, uint32* style)
 {
   LOGBRUSH logBrush;
   brush.GetObject(logBrush);
   Handle = ::ExtCreatePen(penStyle, width, &logBrush, styleCount, style);
   WARNX(OwlGDI, !Handle, 0, "Cannot create TPen from brush " << hex << 
-        UINT(HBRUSH(brush)));
+        uint(HBRUSH(brush)));
   CheckValid();
   OBJ_REF_ADD(Handle, Pen);
 }
 
-TPen::TPen(DWORD penStyle, DWORD width, const LOGBRUSH& logBrush,
-           DWORD styleCount, LPDWORD style)
+TPen::TPen(uint32 penStyle, uint32 width, const LOGBRUSH& logBrush,
+           uint32 styleCount, uint32* style)
 {
   Handle = ::ExtCreatePen(penStyle, width, (LPLOGBRUSH)&logBrush, styleCount,
                           style);
   WARNX(OwlGDI, !Handle, 0, "Cannot create TPen from logBrush @" <<
-        hex << DWORD(LPVOID(&logBrush)));
+        hex << uint32(LPVOID(&logBrush)));
   CheckValid();
   OBJ_REF_ADD(Handle, Pen);
 }

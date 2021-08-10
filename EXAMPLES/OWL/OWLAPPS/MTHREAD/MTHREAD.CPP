@@ -145,9 +145,10 @@ int
 OwlMain(int /*argc*/, char* /*argv*/ [])
 {
 #if defined(__WIN32__)
-  if ((HIWORD(GetVersion())&0x8000)) {
-		::MessageBox(0, "This is a Win NT Example", "OWL Examples", MB_OK);
- 		return 0;
+  if ((::GetVersion()&0x80000000) && (::GetVersion()&0xFF) < 4) {
+    ::MessageBox(0, "This Example requires a multithreaded version of Windows",
+                 "OWL Examples", MB_OK);
+    return 0;
   }
 #endif
   return TGdiDemoApp().Run();

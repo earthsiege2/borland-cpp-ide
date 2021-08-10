@@ -1,0 +1,32 @@
+##--BEGIN-- @OPT_APPL_DRAGDROP
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+// TFileDrop class Maintains information about a dropped file, its name, where it was dropped,
+// and whether or not it was in the client area
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+class TFileDrop {
+public:
+    operator == (const TFileDrop& other) const {return this == &other;}
+
+    char*   FileName;
+    TPoint  Point;
+    bool    InClientArea;
+
+    TFileDrop (char*, TPoint&, bool, TModule*);
+    ~TFileDrop ();
+
+    const char* WhoAmI ();
+private:
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    //
+    // hidden to prevent accidental copying or assignment
+    //
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    TFileDrop (const TFileDrop&);
+    TFileDrop & operator = (const TFileDrop&);
+};
+
+typedef TIBagAsVector<TFileDrop> TFileList;
+typedef TIBagAsVectorIterator<TFileDrop> TFileListIter;
+
+
+##--END-- @OPT_APPL_DRAGDROP

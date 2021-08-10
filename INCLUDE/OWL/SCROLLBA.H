@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\scrollba.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TScrollBar.  This defines the basic
 //   behavior of all scrollbar controls.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_SCROLLBAR_H)
-#define __OWL_SCROLLBAR_H
+#if !defined(OWL_SCROLLBAR_H)
+#define OWL_SCROLLBAR_H
 
-#if !defined(__OWL_CONTROL_H)
-  #include <owl\control.h>
+#if !defined(OWL_CONTROL_H)
+# include <owl/control.h>
 #endif
 
 //
@@ -20,7 +21,7 @@ class _OWLCLASS TScrollBar : public TControl {
     TScrollBar(TWindow*        parent,
                int             id,
                int x, int y, int w, int h,
-               BOOL            isHScrollBar,
+               bool            isHScrollBar,
                TModule*        module = 0);
 
     TScrollBar(TWindow* parent, int resourceId, TModule*   module = 0);
@@ -32,14 +33,14 @@ class _OWLCLASS TScrollBar : public TControl {
                     {::GetScrollRange(HWindow, SB_CTL, &min, &max);}
     virtual int   GetPosition() const {return ::GetScrollPos(HWindow, SB_CTL);}
     virtual void  SetRange(int min, int max)
-                    {::SetScrollRange(HWindow, SB_CTL, min, max, FALSE);}
+                    {::SetScrollRange(HWindow, SB_CTL, min, max, false);}
     virtual void  SetPosition(int thumbPos);
     virtual int   DeltaPos(int delta);
 
     //
     // Override TWindow virtual member functions
     //
-    UINT          Transfer(void* buffer, TTransferDirection direction);
+    uint          Transfer(void* buffer, TTransferDirection direction);
 
     //
     // called by EvHScroll and EvVScroll response table handlers
@@ -60,8 +61,8 @@ class _OWLCLASS TScrollBar : public TControl {
     // response table handlers that call above virtual functions in 
     // response to messages sent by to us by TWindow::DispatchScroll()
     //
-    void          EvHScroll(UINT scrollCode, UINT thumbPos, HWND hWndCtl);
-    void          EvVScroll(UINT scrollCode, UINT thumbPos, HWND hWndCtl);
+    void          EvHScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
+    void          EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
     
   public:
     int  LineMagnitude;
@@ -110,4 +111,4 @@ struct TScrollBarData {
   int  Position;
 };
 
-#endif  // __OWL_SCROLLBAR_H
+#endif  // OWL_SCROLLBAR_H

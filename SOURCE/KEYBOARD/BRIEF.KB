@@ -536,6 +536,27 @@ MACRO MacToggleCase
   ENDIF;
 END;
 
+MACRO MacSaveFile
+  IF InqValidBlock THEN
+    WriteBlock
+  ELSE
+    SaveFile
+  ENDIF;
+END;
+
+MACRO MacReplaceFwd
+  SetTempPos;
+  SetSearchDirection(1);
+  Replace;
+  MoveToTempPos;
+  FixScreenPos;
+END;
+
+MACRO MacSearchFwd
+  SetSearchDirection(1);
+  GetFindString;
+END;
+
 /******* Brief Key Bindings  ******/
 
 KEYBOARD System
@@ -561,14 +582,14 @@ ctrl-F9   : RunProgram;       : RunProgram
 Ctrl-N    : NextError;    : PrevError
 Ctrl-P    : PrevError;    : NextError
 
-Alt-E       : OpenFile;     : OpenFile
+Alt-E       : OpenFileInPane;   
 Alt-Shift-E : OpenFile;
 Alt-H       : Help;         : Help
 Alt-Shift-H : Help;
 Alt-O       : SaveFileAs;   : SaveFileAs
 Alt-Shift-O : SaveFileAs;
-Alt-W       : SaveFile;     : SaveFile
-Alt-Shift-W : SaveFile;
+Alt-W       : MacSaveFile;     : SaveFile
+Alt-Shift-W : MacSaveFile;
 Alt-X       : Quit;         : Quit
 Alt-Shift-X : Quit;
 Alt-Z       : FileMenu;
@@ -603,14 +624,14 @@ F4+RgAr   : DeletePane(3);
 END;
 
 KEYBOARD Editor
-F5        : GetFindString; : GetFindString
-F6        : Replace;       : Replace
+F5        : MacSearchFwd;  : GetFindString
+F6        : MacReplaceFwd; : Replace
 
-Alt-F5    : ReverseSearch;
-/* Alt-F6    : ReverseReplace; next time */
+Alt-F5    : BEGIN SetSearchDirection(0); GetFindString; END;
+Alt-F6    : BEGIN SetTempPos; SetSearchDirection(0); Replace; MoveToTempPos; FixScreenPos; END;
 
-Shift-F5  : RepeatSearch;  : RepeatSearch
-/* Shift-F6  : RepeatReplace; next time */
+Shift-F5  : RepeatSearch(1);  : RepeatSearch
+Shift-F6  : BEGIN SetTempPos; RepeatReplace; MoveToTempPos; FixScreenPos; END;
 
 /* Ctrl-F1 is mapped to HelpKeywordSearch for backward compatibility with */
 /* the previous IDEs. It should be considered reserved by Borland and     */
@@ -620,6 +641,8 @@ Ctrl-F1   : HelpKeywordSearch;  : HelpKeywordSearch
 
 Ctrl-F5   : ToggleCaseSensitive;
 Ctrl-F6   : ToggleRegExp;
+
+Ctrl-dash : DeleteBuffer;
 
 Esc       : MacEscape;
 Del       : MacDeleteKey;
@@ -722,10 +745,10 @@ Alt-Q       : LiteralChar;
 Alt-Shift-Q : LiteralChar;
 Alt-R       : ReadBlock;
 Alt-Shift-R : ReadBlock;
-Alt-S       : GetFindString;
-Alt-Shift-S : GetFindString;
-Alt-T       : Replace;
-Alt-Shift-T : Replace;
+Alt-S       : MacSearchFwd;
+Alt-Shift-S : MacSearchFwd;
+Alt-T       : MacReplaceFwd;
+Alt-Shift-T : MacReplaceFwd;
 Alt-U       : Undo;
 Alt-Shift-U : Undo;
 /*Alt-V     : ShowVersion;   not implemented */

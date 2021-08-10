@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\controlg.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Class TControlGadget definition
 //----------------------------------------------------------------------------
-#if !defined(__OWL_CONTROLG_H)
-#define __OWL_CONTROLG_H
+#if !defined(OWL_CONTROLG_H)
+#define OWL_CONTROLG_H
 
-#if !defined(__OWL_GADGET_H)
-  #include "owl\gadget.h"
+#if !defined(OWL_GADGET_H)
+# include <owl/gadget.h>
 #endif
 
 //
@@ -23,9 +24,9 @@ class _OWLCLASS TControlGadget : public TGadget {
     void           Inserted();
     void           Removed();
 
-    void           Invalidate(BOOL erase = TRUE);
+    void           Invalidate(bool erase = true);
     void           InvalidateRect(const TRect& rect, // receiver's coord system
-                                  BOOL  erase = TRUE);
+                                  bool  erase = true);
     void           Update();  // Paint now if possible
 
     void           SetBounds(TRect& rect);
@@ -38,7 +39,7 @@ class _OWLCLASS TControlGadget : public TGadget {
     void           GetDesiredSize(TSize& size);
 
   protected:
-    TWindow*         Control;
+    TWindow*       Control;
 
   private:
     //
@@ -48,4 +49,4 @@ class _OWLCLASS TControlGadget : public TGadget {
     TControlGadget& operator =(const TControlGadget&);
 };
 
-#endif  // __OWL_CONTROLG_H
+#endif  // OWL_CONTROLG_H

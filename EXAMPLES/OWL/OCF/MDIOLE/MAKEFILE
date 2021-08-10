@@ -1,0 +1,10 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1994 by Borland International
+#----------------------------------------------------------------------------
+MODELS = ldf
+
+EXE    = mdiole
+OBJEXE = mdiole.obj sampcont.obj
+RESEXE = mdiole.res sampcont.res
+
+!include $(BCEXAMPLEDIR)\owlocfmk.gen

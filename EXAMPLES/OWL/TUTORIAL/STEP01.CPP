@@ -1,14 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Tutorial application -- step01.cpp
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\framewin.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
+#include <owl/framewin.h>
 
-class TMyApp : public TApplication {
+class TDrawApp : public TApplication {
   public:
-    TMyApp() : TApplication() {}
+    TDrawApp() : TApplication() {}
 
     void InitMainWindow()
     {
@@ -16,7 +16,8 @@ class TMyApp : public TApplication {
     }
 };
 
-int OwlMain(int /*argc*/, char* /*argv*/ [])
+int
+OwlMain(int /*argc*/, char* /*argv*/ [])
 {
-  return TMyApp().Run();
+  return TDrawApp().Run();
 }

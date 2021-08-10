@@ -10,9 +10,9 @@
  * Change log:
  *
  * Fri Apr 23 16:31:01 1993  Mark Towfiq  (towfiq@Microdyne.COM)
- * New version from David Treadwell which adds extern "C" around
- * __WSAFDIsSet() and removes "const" from buf param of
- * WSAAsyncGetHostByAddr().  Added change log.
+ *      New version from David Treadwell which adds extern "C" around
+ *      __WSAFDIsSet() and removes "const" from buf param of
+ *      WSAAsyncGetHostByAddr().  Added change log.
  *
  * Sat May 15 10:55:00 1993 David Treadwell (davidtr@microsoft.com)
  *  Fix the IN_CLASSC macro to account for class-D multicasts.
@@ -20,15 +20,24 @@
  *
  */
 
-#ifndef __WINSOCKAPI_H
-#define __WINSOCKAPI_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#define __WINSOCK_H
 
 /*
  * Pull in WINDOWS.H if necessary
  */
-#ifndef __WINDOWS_H
+#ifndef _INC_WINDOWS
 #include <windows.h>
-#endif /* __WINDOWS_H */
+#endif /* _INC_WINDOWS */
 
 /*
  * Basic system type definitions, taken from the BSD file sys/types.h.
@@ -57,8 +66,8 @@ typedef u_int           SOCKET;
 #endif /* FD_SETSIZE */
 
 typedef struct fd_set {
-        u_int   fd_count;               /* how many are SET? */
-        SOCKET  fd_array[FD_SETSIZE];   /* an array of SOCKETs */
+	u_int   fd_count;               /* how many are SET? */
+	SOCKET  fd_array[FD_SETSIZE];   /* an array of SOCKETs */
 } fd_set;
 
 #ifdef __cplusplus
@@ -75,33 +84,33 @@ extern int PASCAL FAR __WSAFDIsSet(SOCKET, fd_set FAR *);
 #define FD_CLR(fd, set) do { \
     u_int __i; \
     for (__i = 0; __i < ((fd_set FAR *)(set))->fd_count ; __i++) { \
-        if (((fd_set FAR *)(set))->fd_array[__i] == fd) { \
-            while (__i < ((fd_set FAR *)(set))->fd_count-1) { \
-                ((fd_set FAR *)(set))->fd_array[__i] = \
-                    ((fd_set FAR *)(set))->fd_array[__i+1]; \
-                __i++; \
-            } \
-            ((fd_set FAR *)(set))->fd_count--; \
-            break; \
-        } \
+	if (((fd_set FAR *)(set))->fd_array[__i] == fd) { \
+	    while (__i < ((fd_set FAR *)(set))->fd_count-1) { \
+		((fd_set FAR *)(set))->fd_array[__i] = \
+		    ((fd_set FAR *)(set))->fd_array[__i+1]; \
+		__i++; \
+	    } \
+	    ((fd_set FAR *)(set))->fd_count--; \
+	    break; \
+	} \
     } \
 } while(0)
 
 #define FD_SET(fd, set) do { \
     if (((fd_set FAR *)(set))->fd_count < FD_SETSIZE) \
-        ((fd_set FAR *)(set))->fd_array[((fd_set FAR *)(set))->fd_count++]=fd;\
+	((fd_set FAR *)(set))->fd_array[((fd_set FAR *)(set))->fd_count++]=(fd);\
 } while(0)
 
 #define FD_ZERO(set) (((fd_set FAR *)(set))->fd_count=0)
 
-#define FD_ISSET(fd, set) __WSAFDIsSet((SOCKET)fd, (fd_set FAR *)set)
+#define FD_ISSET(fd, set) __WSAFDIsSet((SOCKET)(fd), (fd_set FAR *)(set))
 
 /*
  * Structure used in select() call, taken from the BSD file sys/time.h.
  */
 struct timeval {
-        long    tv_sec;         /* seconds */
-        long    tv_usec;        /* and microseconds */
+	long    tv_sec;         /* seconds */
+	long    tv_usec;        /* and microseconds */
 };
 
 /*
@@ -111,8 +120,8 @@ struct timeval {
  */
 #define timerisset(tvp)         ((tvp)->tv_sec || (tvp)->tv_usec)
 #define timercmp(tvp, uvp, cmp) \
-        ((tvp)->tv_sec cmp (uvp)->tv_sec || \
-         (tvp)->tv_sec == (uvp)->tv_sec && (tvp)->tv_usec cmp (uvp)->tv_usec)
+	((tvp)->tv_sec cmp (uvp)->tv_sec || \
+	 (tvp)->tv_sec == (uvp)->tv_sec && (tvp)->tv_usec cmp (uvp)->tv_usec)
 #define timerclear(tvp)         (tvp)->tv_sec = (tvp)->tv_usec = 0
 
 /*
@@ -130,13 +139,13 @@ struct timeval {
 #define IOC_OUT         0x40000000      /* copy out parameters */
 #define IOC_IN          0x80000000      /* copy in parameters */
 #define IOC_INOUT       (IOC_IN|IOC_OUT)
-                                        /* 0x20000000 distinguishes new &
-                                           old ioctl's */
-#define _IO(x,y)        (IOC_VOID|(x<<8)|y)
+					/* 0x20000000 distinguishes new &
+					   old ioctl's */
+#define _IO(x,y)        (IOC_VOID|((x)<<8)|(y))
 
-#define _IOR(x,y,t)     (IOC_OUT|(((long)sizeof(t)&IOCPARM_MASK)<<16)|(x<<8)|y)
+#define _IOR(x,y,t)     (IOC_OUT|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 
-#define _IOW(x,y,t)     (IOC_IN|(((long)sizeof(t)&IOCPARM_MASK)<<16)|(x<<8)|y)
+#define _IOW(x,y,t)     (IOC_IN|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 
 #define FIONREAD    _IOR('f', 127, u_long) /* get # bytes to read */
 #define FIONBIO     _IOW('f', 126, u_long) /* set/clear non-blocking i/o */
@@ -156,11 +165,11 @@ struct timeval {
  */
 
 struct  hostent {
-        char    FAR * h_name;           /* official name of host */
-        char    FAR * FAR * h_aliases;  /* alias list */
-        short   h_addrtype;             /* host address type */
-        short   h_length;               /* length of address */
-        char    FAR * FAR * h_addr_list; /* list of addresses */
+	char    FAR * h_name;           /* official name of host */
+	char    FAR * FAR * h_aliases;  /* alias list */
+	short   h_addrtype;             /* host address type */
+	short   h_length;               /* length of address */
+	char    FAR * FAR * h_addr_list; /* list of addresses */
 #define h_addr  h_addr_list[0]          /* address, for backward compat */
 };
 
@@ -169,23 +178,23 @@ struct  hostent {
  * fits in 32 bits.
  */
 struct  netent {
-        char    FAR * n_name;           /* official name of net */
-        char    FAR * FAR * n_aliases;  /* alias list */
-        short   n_addrtype;             /* net address type */
-        u_long  n_net;                  /* network # */
+	char    FAR * n_name;           /* official name of net */
+	char    FAR * FAR * n_aliases;  /* alias list */
+	short   n_addrtype;             /* net address type */
+	u_long  n_net;                  /* network # */
 };
 
 struct  servent {
-        char    FAR * s_name;           /* official service name */
-        char    FAR * FAR * s_aliases;  /* alias list */
-        short   s_port;                 /* port # */
-        char    FAR * s_proto;          /* protocol to use */
+	char    FAR * s_name;           /* official service name */
+	char    FAR * FAR * s_aliases;  /* alias list */
+	short   s_port;                 /* port # */
+	char    FAR * s_proto;          /* protocol to use */
 };
 
 struct  protoent {
-        char    FAR * p_name;           /* official protocol name */
-        char    FAR * FAR * p_aliases;  /* alias list */
-        short   p_proto;                /* protocol # */
+	char    FAR * p_name;           /* official protocol name */
+	char    FAR * FAR * p_aliases;  /* alias list */
+	short   p_proto;                /* protocol # */
 };
 
 /*
@@ -247,7 +256,7 @@ struct  protoent {
 #define IPPORT_BIFFUDP          512
 #define IPPORT_WHOSERVER        513
 #define IPPORT_ROUTESERVER      520
-                                        /* 520+1 also used */
+					/* 520+1 also used */
 
 /*
  * Ports < IPPORT_RESERVED are reserved for
@@ -266,23 +275,23 @@ struct  protoent {
  * Internet address (old style... should be updated)
  */
 struct in_addr {
-        union {
-                struct { u_char s_b1,s_b2,s_b3,s_b4; } S_un_b;
-                struct { u_short s_w1,s_w2; } S_un_w;
-                u_long S_addr;
-        } S_un;
+	union {
+		struct { u_char s_b1,s_b2,s_b3,s_b4; } S_un_b;
+		struct { u_short s_w1,s_w2; } S_un_w;
+		u_long S_addr;
+	} S_un;
 #define s_addr  S_un.S_addr
-                                /* can be used for most tcp & ip code */
+				/* can be used for most tcp & ip code */
 #define s_host  S_un.S_un_b.s_b2
-                                /* host on imp */
+				/* host on imp */
 #define s_net   S_un.S_un_b.s_b1
-                                /* network */
+				/* network */
 #define s_imp   S_un.S_un_w.s_w2
-                                /* imp */
+				/* imp */
 #define s_impno S_un.S_un_b.s_b4
-                                /* imp # */
+				/* imp # */
 #define s_lh    S_un.S_un_b.s_b3
-                                /* logical host */
+				/* logical host */
 };
 
 /*
@@ -316,23 +325,23 @@ struct in_addr {
  * Socket address, internet style.
  */
 struct sockaddr_in {
-        short   sin_family;
-        u_short sin_port;
-        struct  in_addr sin_addr;
-        char    sin_zero[8];
+	short   sin_family;
+	u_short sin_port;
+	struct  in_addr sin_addr;
+	char    sin_zero[8];
 };
 
 #define WSADESCRIPTION_LEN      256
 #define WSASYS_STATUS_LEN       128
 
 typedef struct WSAData {
-        WORD                    wVersion;
-        WORD                    wHighVersion;
-        char                    szDescription[WSADESCRIPTION_LEN+1];
-        char                    szSystemStatus[WSASYS_STATUS_LEN+1];
-        unsigned short          iMaxSockets;
-        unsigned short          iMaxUdpDg;
-        char FAR *              lpVendorInfo;
+	WORD                    wVersion;
+	WORD                    wHighVersion;
+	char                    szDescription[WSADESCRIPTION_LEN+1];
+	char                    szSystemStatus[WSASYS_STATUS_LEN+1];
+	unsigned short          iMaxSockets;
+	unsigned short          iMaxUdpDg;
+	char FAR *              lpVendorInfo;
 } WSADATA;
 
 typedef WSADATA FAR *LPWSADATA;
@@ -340,7 +349,24 @@ typedef WSADATA FAR *LPWSADATA;
 /*
  * Options for use with [gs]etsockopt at the IP level.
  */
-#define IP_OPTIONS      1               /* set/get IP per-packet options */
+#define IP_OPTIONS          1           /* set/get IP per-packet options    */
+#define IP_MULTICAST_IF     2           /* set/get IP multicast interface   */
+#define IP_MULTICAST_TTL    3           /* set/get IP multicast timetolive  */
+#define IP_MULTICAST_LOOP   4           /* set/get IP multicast loopback    */
+#define IP_ADD_MEMBERSHIP   5           /* add  an IP group membership      */
+#define IP_DROP_MEMBERSHIP  6           /* drop an IP group membership      */
+
+#define IP_DEFAULT_MULTICAST_TTL   1    /* normally limit m'casts to 1 hop  */
+#define IP_DEFAULT_MULTICAST_LOOP  1    /* normally hear sends if a member  */
+#define IP_MAX_MEMBERSHIPS         20   /* per socket; must fit in one mbuf */
+
+/*
+ * Argument structure for IP_ADD_MEMBERSHIP and IP_DROP_MEMBERSHIP.
+ */
+struct ip_mreq {
+	struct in_addr  imr_multiaddr;  /* IP multicast address of group */
+	struct in_addr  imr_interface;  /* local IP address of interface */
+};
 
 /*
  * Definitions related to sockets: types, address families, options,
@@ -404,9 +430,24 @@ typedef WSADATA FAR *LPWSADATA;
 #define SO_DISCOPTLEN   0x7007
 
 /*
+ * Option for opening sockets for synchronous access.
+ */
+#define SO_OPENTYPE     0x7008
+
+#define SO_SYNCHRONOUS_ALERT    0x10
+#define SO_SYNCHRONOUS_NONALERT 0x20
+
+/*
+ * Other NT-specific options.
+ */
+#define SO_MAXDG        0x7009
+#define SO_MAXPATHDG    0x700A
+
+/*
  * TCP options.
  */
 #define TCP_NODELAY     0x0001
+#define TCP_BSDURGENT   0x7000
 
 /*
  * Address families.
@@ -439,8 +480,8 @@ typedef WSADATA FAR *LPWSADATA;
  * addresses.
  */
 struct sockaddr {
-        u_short sa_family;              /* address family */
-        char    sa_data[14];            /* up to 14 bytes of direct address */
+	u_short sa_family;              /* address family */
+	char    sa_data[14];            /* up to 14 bytes of direct address */
 };
 
 /*
@@ -448,8 +489,8 @@ struct sockaddr {
  * information in raw sockets.
  */
 struct sockproto {
-        u_short sp_family;              /* address family */
-        u_short sp_protocol;            /* protocol */
+	u_short sp_family;              /* address family */
+	u_short sp_protocol;            /* protocol */
 };
 
 /*
@@ -481,8 +522,8 @@ struct sockproto {
  * Structure used for manipulating linger option.
  */
 struct  linger {
-        u_short l_onoff;                /* option on/off */
-        u_short l_linger;               /* linger time */
+	u_short l_onoff;                /* option on/off */
+	u_short l_linger;               /* linger time */
 };
 
 /*
@@ -501,7 +542,7 @@ struct  linger {
 
 #define MSG_MAXIOVLEN   16
 
-#define  MSG_PARTIAL     0x8000          /* partial send or recv for message xport */
+#define MSG_PARTIAL     0x8000          /* partial send or recv for message xport */
 
 /*
  * Define constant based on rfc883, used by gethostbyxxxx() calls.
@@ -668,7 +709,7 @@ extern "C" {
 #endif
 
 SOCKET PASCAL FAR accept (SOCKET s, struct sockaddr FAR *addr,
-                          int FAR *addrlen);
+			  int FAR *addrlen);
 
 int PASCAL FAR bind (SOCKET s, const struct sockaddr FAR *addr, int namelen);
 
@@ -679,13 +720,13 @@ int PASCAL FAR connect (SOCKET s, const struct sockaddr FAR *name, int namelen);
 int PASCAL FAR ioctlsocket (SOCKET s, long cmd, u_long FAR *argp);
 
 int PASCAL FAR getpeername (SOCKET s, struct sockaddr FAR *name,
-                            int FAR * namelen);
+			    int FAR * namelen);
 
 int PASCAL FAR getsockname (SOCKET s, struct sockaddr FAR *name,
-                            int FAR * namelen);
+			    int FAR * namelen);
 
 int PASCAL FAR getsockopt (SOCKET s, int level, int optname,
-                           char FAR * optval, int FAR *optlen);
+			   char FAR * optval, int FAR *optlen);
 
 u_long PASCAL FAR htonl (u_long hostlong);
 
@@ -704,18 +745,18 @@ u_short PASCAL FAR ntohs (u_short netshort);
 int PASCAL FAR recv (SOCKET s, char FAR * buf, int len, int flags);
 
 int PASCAL FAR recvfrom (SOCKET s, char FAR * buf, int len, int flags,
-                         struct sockaddr FAR *from, int FAR * fromlen);
+			 struct sockaddr FAR *from, int FAR * fromlen);
 
 int PASCAL FAR select (int nfds, fd_set FAR *readfds, fd_set FAR *writefds,
-                       fd_set FAR *exceptfds, const struct timeval FAR *timeout);
+		       fd_set FAR *exceptfds, const struct timeval FAR *timeout);
 
 int PASCAL FAR send (SOCKET s, const char FAR * buf, int len, int flags);
 
 int PASCAL FAR sendto (SOCKET s, const char FAR * buf, int len, int flags,
-                       const struct sockaddr FAR *to, int tolen);
+		       const struct sockaddr FAR *to, int tolen);
 
 int PASCAL FAR setsockopt (SOCKET s, int level, int optname,
-                           const char FAR * optval, int optlen);
+			   const char FAR * optval, int optlen);
 
 int PASCAL FAR shutdown (SOCKET s, int how);
 
@@ -724,7 +765,7 @@ SOCKET PASCAL FAR socket (int af, int type, int protocol);
 /* Database function prototypes */
 
 struct hostent FAR * PASCAL FAR gethostbyaddr(const char FAR * addr,
-                                              int len, int type);
+					      int len, int type);
 
 struct hostent FAR * PASCAL FAR gethostbyname(const char FAR * name);
 
@@ -733,7 +774,7 @@ int PASCAL FAR gethostname (char FAR * name, int namelen);
 struct servent FAR * PASCAL FAR getservbyport(int port, const char FAR * proto);
 
 struct servent FAR * PASCAL FAR getservbyname(const char FAR * name,
-                                              const char FAR * proto);
+					      const char FAR * proto);
 
 struct protoent FAR * PASCAL FAR getprotobynumber(int proto);
 
@@ -758,36 +799,36 @@ FARPROC PASCAL FAR WSASetBlockingHook(FARPROC lpBlockFunc);
 int PASCAL FAR WSACancelBlockingCall(void);
 
 HANDLE PASCAL FAR WSAAsyncGetServByName(HWND hWnd, u_int wMsg,
-                                        const char FAR * name, 
-                                        const char FAR * proto,
-                                        char FAR * buf, int buflen);
+					const char FAR * name, 
+					const char FAR * proto,
+					char FAR * buf, int buflen);
 
 HANDLE PASCAL FAR WSAAsyncGetServByPort(HWND hWnd, u_int wMsg, int port,
-                                        const char FAR * proto, char FAR * buf,
-                                        int buflen);
+					const char FAR * proto, char FAR * buf,
+					int buflen);
 
 HANDLE PASCAL FAR WSAAsyncGetProtoByName(HWND hWnd, u_int wMsg,
-                                         const char FAR * name, char FAR * buf,
-                                         int buflen);
+					 const char FAR * name, char FAR * buf,
+					 int buflen);
 
 HANDLE PASCAL FAR WSAAsyncGetProtoByNumber(HWND hWnd, u_int wMsg,
-                                           int number, char FAR * buf,
-                                           int buflen);
+					   int number, char FAR * buf,
+					   int buflen);
 
 HANDLE PASCAL FAR WSAAsyncGetHostByName(HWND hWnd, u_int wMsg,
-                                        const char FAR * name, char FAR * buf,
-                                        int buflen);
+					const char FAR * name, char FAR * buf,
+					int buflen);
 
 HANDLE PASCAL FAR WSAAsyncGetHostByAddr(HWND hWnd, u_int wMsg,
-                                        const char FAR * addr, int len, int type,
-                                        char FAR * buf, int buflen);
+					const char FAR * addr, int len, int type,
+					char FAR * buf, int buflen);
 
 int PASCAL FAR WSACancelAsyncRequest(HANDLE hAsyncTaskHandle);
 
 int PASCAL FAR WSAAsyncSelect(SOCKET s, HWND hWnd, u_int wMsg,
-                               long lEvent);
+			       long lEvent);
 
-int PASCAL FAR WSARecvEx (SOCKET s, char FAR * buf, int len, int *flags);
+int PASCAL FAR WSARecvEx (SOCKET s, char FAR * buf, int len, int FAR *flags);
 
 #ifdef __cplusplus
 }

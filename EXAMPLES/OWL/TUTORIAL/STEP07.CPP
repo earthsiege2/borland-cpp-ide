@@ -1,46 +1,51 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Tutorial application -- step07.cpp
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\framewin.h>
-#include <owl\dc.h>
-#include <owl\inputdia.h>
-#include <owl\opensave.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
+#include <owl/framewin.h>
+#include <owl/dc.h>
+#include <owl/inputdia.h>
+#include <owl/opensave.h>
+#include <classlib/arrays.h>
 #include <stdlib.h>
 #include <string.h>
-#include <classlib\arrays.h>
 #include "step07.rc"
 
 typedef TArray<TPoint> TPoints;
 typedef TArrayIterator<TPoint> TPointsIterator;
 
-class TMyWindow : public TWindow {
+class TDrawWindow : public TWindow {
   public:
-    TMyWindow(TWindow *parent = 0);
-   ~TMyWindow() {delete DragDC; delete Pen; delete Line; delete FileData;}
+    TDrawWindow(TWindow* parent = 0);
+   ~TDrawWindow()
+    {
+      delete DragDC;
+      delete Pen;
+      delete Line;
+      delete FileData;
+    }
 
     void SetPenSize(int newSize);
 
   protected:
-    TDC *DragDC;
+    TDC* DragDC;
     int PenSize;
-    TPen *Pen;
-    TPoints *Line; // To store points in line.
-    TOpenSaveDialog::TData
-              *FileData;
-    BOOL IsDirty, IsNewFile;
+    TPen* Pen;
+    TPoints* Line; // To store points in line.
+    TOpenSaveDialog::TData* FileData;
+    bool IsDirty, IsNewFile;
 
     // Override member function of TWindow
-    BOOL CanClose();
+    bool CanClose();
 
     // Message response functions
-    void EvLButtonDown(UINT, TPoint&);
-    void EvRButtonDown(UINT, TPoint&);
-    void EvMouseMove(UINT, TPoint&);
-    void EvLButtonUp(UINT, TPoint&);
-    void Paint(TDC&, BOOL, TRect&);
+    void EvLButtonDown(uint, TPoint&);
+    void EvRButtonDown(uint, TPoint&);
+    void EvMouseMove(uint, TPoint&);
+    void EvLButtonUp(uint, TPoint&);
+    void Paint(TDC&, bool, TRect&);
     void CmFileNew();
     void CmFileOpen();
     void CmFileSave();
@@ -49,10 +54,10 @@ class TMyWindow : public TWindow {
     void SaveFile();
     void OpenFile();
 
-    DECLARE_RESPONSE_TABLE(TMyWindow);
+  DECLARE_RESPONSE_TABLE(TDrawWindow);
 };
 
-DEFINE_RESPONSE_TABLE1(TMyWindow, TWindow)
+DEFINE_RESPONSE_TABLE1(TDrawWindow, TWindow)
   EV_WM_LBUTTONDOWN,
   EV_WM_RBUTTONDOWN,
   EV_WM_MOUSEMOVE,
@@ -64,37 +69,39 @@ DEFINE_RESPONSE_TABLE1(TMyWindow, TWindow)
   EV_COMMAND(CM_ABOUT, CmAbout),
 END_RESPONSE_TABLE;
 
-TMyWindow::TMyWindow(TWindow *parent)
+TDrawWindow::TDrawWindow(TWindow* parent)
 {
   Init(parent, 0, 0);
-  DragDC = 0;
-  PenSize = 1;
-  Pen = new TPen(TColor::Black, PenSize);
-  Line = new TPoints(10, 0, 10);
-  IsNewFile = TRUE;
-  IsDirty = FALSE;
-  FileData = new TOpenSaveDialog::TData(OFN_HIDEREADONLY|OFN_FILEMUSTEXIST,
+  DragDC    = 0;
+  PenSize   = 1;
+  Pen       = new TPen(TColor::Black, PenSize);
+  Line      = new TPoints(10, 0, 10);
+  IsNewFile = true;
+  IsDirty   = false;
+  FileData  = new TOpenSaveDialog::TData(OFN_HIDEREADONLY|OFN_FILEMUSTEXIST,
                                         "Point Files (*.PT7)|*.pt7|", 0, "",
                                         "PT7");
 }
 
-BOOL TMyWindow::CanClose()
+bool
+TDrawWindow::CanClose()
 {
   if (IsDirty)
     switch(MessageBox("Do you want to save?", "Drawing has changed",
                       MB_YESNOCANCEL | MB_ICONQUESTION)) {
       case IDCANCEL:
-        // Choosing Cancel means to abort the close -- return FALSE.
-        return FALSE;
+        // Choosing Cancel means to abort the close -- return false.
+        return false;
 
       case IDYES:
         // Choosing Yes means to save the drawing.
         CmFileSave();
     }
-  return TRUE;
+  return true;
 }
 
-void TMyWindow::EvLButtonDown(UINT, TPoint& point)
+void
+TDrawWindow::EvLButtonDown(uint, TPoint& point)
 {
   Line->Flush();
   Invalidate();
@@ -105,18 +112,19 @@ void TMyWindow::EvLButtonDown(UINT, TPoint& point)
     DragDC->SelectObject(*Pen);
     DragDC->MoveTo(point);
     Line->Add(point);
-    IsDirty = TRUE;
+    IsDirty = true;
   }
 }
 
-void TMyWindow::EvRButtonDown(UINT, TPoint&)
+void
+TDrawWindow::EvRButtonDown(uint, TPoint&)
 {
   char inputText[6];
 
   wsprintf(inputText, "%d", PenSize);
   if ((TInputDialog(this, "Line Thickness",
                         "Input a new thickness:",
-                        inputText, 
+                        inputText,
                         sizeof(inputText))).Execute() == IDOK) {
     int newPenSize = atoi(inputText);
 
@@ -127,7 +135,8 @@ void TMyWindow::EvRButtonDown(UINT, TPoint&)
   }
 }
 
-void TMyWindow::EvMouseMove(UINT, TPoint& point)
+void
+TDrawWindow::EvMouseMove(uint, TPoint& point)
 {
   if (DragDC) {
     DragDC->LineTo(point);
@@ -135,7 +144,8 @@ void TMyWindow::EvMouseMove(UINT, TPoint& point)
   }
 }
 
-void TMyWindow::EvLButtonUp(UINT, TPoint&)
+void
+TDrawWindow::EvLButtonUp(uint, TPoint&)
 {
   if (DragDC) {
     ReleaseCapture();
@@ -144,16 +154,18 @@ void TMyWindow::EvLButtonUp(UINT, TPoint&)
   }
 }
 
-void TMyWindow::SetPenSize(int newSize)
+void
+TDrawWindow::SetPenSize(int newSize)
 {
   delete Pen;
   PenSize = newSize;
-  Pen = new TPen(TColor::Black, PenSize);
+  Pen     = new TPen(TColor::Black, PenSize);
 }
 
-void TMyWindow::Paint(TDC& dc, BOOL, TRect&)
+void
+TDrawWindow::Paint(TDC& dc, bool, TRect&)
 {
-  BOOL first = TRUE;
+  bool first = true;
   TPointsIterator i(*Line);
 
   dc.SelectObject(*Pen);
@@ -165,30 +177,33 @@ void TMyWindow::Paint(TDC& dc, BOOL, TRect&)
       dc.LineTo(p);
     else {
       dc.MoveTo(p);
-      first = FALSE;
+      first = false;
     }
   }
   dc.RestorePen();
 }
 
-void TMyWindow::CmFileNew()
+void
+TDrawWindow::CmFileNew()
 {
   if (CanClose()) {
     Line->Flush();
     Invalidate();
-    IsDirty = FALSE;
-    IsNewFile = TRUE;
+    IsDirty = false;
+    IsNewFile = true;
   }
 }
 
-void TMyWindow::CmFileOpen()
+void
+TDrawWindow::CmFileOpen()
 {
   if (CanClose())
     if ((TFileOpenDialog(this, *FileData)).Execute() == IDOK)
       OpenFile();
 }
 
-void TMyWindow::CmFileSave()
+void
+TDrawWindow::CmFileSave()
 {
   if (IsNewFile)
     CmFileSaveAs();
@@ -196,7 +211,8 @@ void TMyWindow::CmFileSave()
     SaveFile();
 }
 
-void TMyWindow::CmFileSaveAs()
+void
+TDrawWindow::CmFileSaveAs()
 {
   if (IsNewFile)
     strcpy(FileData->FileName, "");
@@ -205,28 +221,30 @@ void TMyWindow::CmFileSaveAs()
     SaveFile();
 }
 
-void TMyWindow::CmAbout()
+void
+TDrawWindow::CmAbout()
 {
   TDialog(this, IDD_ABOUT).Execute();
 }
 
-void TMyWindow::SaveFile()
+void
+TDrawWindow::SaveFile()
 {
   ofstream os(FileData->FileName);
 
   if (!os)
     MessageBox("Unable to open file", "File Error", MB_OK | MB_ICONEXCLAMATION);
-  else
-  {
+  else {
     os << Line->GetItemsInContainer();
     TPointsIterator  i(*Line);
     while (i)
       os << i++;
-    IsNewFile = IsDirty = FALSE;
+    IsNewFile = IsDirty = false;
   }
 }
 
-void TMyWindow::OpenFile()
+void
+TDrawWindow::OpenFile()
 {
   ifstream is(FileData->FileName);
 
@@ -243,22 +261,23 @@ void TMyWindow::OpenFile()
     }
   }
 
-  IsNewFile = IsDirty = FALSE;
+  IsNewFile = IsDirty = false;
   Invalidate();
 }
 
-class TMyApp : public TApplication {
+class TDrawApp : public TApplication {
   public:
-    TMyApp() : TApplication() {}
+    TDrawApp() : TApplication() {}
 
     void InitMainWindow()
     {
-      SetMainWindow(new TFrameWindow(0, "Drawing Pad", new TMyWindow));
+      SetMainWindow(new TFrameWindow(0, "Drawing Pad", new TDrawWindow));
       GetMainWindow()->AssignMenu("COMMANDS");
     }
 };
 
-int OwlMain(int /*argc*/, char* /*argv*/ [])
+int
+OwlMain(int /*argc*/, char* /*argv*/ [])
 {
-  return TMyApp().Run();
+  return TDrawApp().Run();
 }

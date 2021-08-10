@@ -1,0 +1,93 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+MISC =                         \
+        $(LIBDIR)\import32.lib \
+        $(LIBDIR)\ole2w32.lib
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+!include rules.mak
+
+#############################################################################
+# MISC explicit rules.                                                      #
+#############################################################################
+CONLIBS =            \
+        advapi32.def \
+        dlcapi.def   \
+        kernel32.def \
+        inetmib1.def \
+        lz32.def     \
+        mgmtapi.def  \
+        mpr.def      \
+        netapi32.def \
+        nddeapi.def  \
+        rasapi32.def \
+        rpcdce4.def  \
+        rpcns4.def   \
+        rpcrt4.def   \
+        vdmdbg.def   \
+        version.def  \
+        win32spl.def \
+        winstrm.def  \
+        wsock32.def  \
+        winspool.def
+
+GUILIBS =            \
+        avicap32.def \
+        avifil32.def \
+        comctl32.def \
+        comdlg32.def \
+        gdi32.def    \
+        glu32.def    \
+        msacm32.def  \
+        msvfw32.def  \
+        olecli32.def \
+        olesvr32.def \
+        opengl32.def \
+        shell32.def  \
+        user32.def   \
+        winmm.def    \
+        wow32.def
+
+OLE2LIBS =           \
+        ole32.def    \
+        oleaut32.def
+
+$(LIBDIR)\import32.lib : $(CONLIBS:.def=.fst) $(GUILIBS:.def=.fst)
+    makersp "-+!s &\n" &&|
+        $?
+|   > $&.rsp
+    $(TLIB) $< @$&.rsp, temp.lst
+    del *.rsp
+    del temp.lst
+    if exist $*.bak del $*.bak
+
+$(LIBDIR)\ole2w32.lib : $(OLE2LIBS:.def=.fst) uuid.obj
+    makersp "-+!s &\n" &&|
+        $?
+|   > $&.rsp
+    $(TLIB) $< @$&.rsp, temp.lst
+    del *.rsp
+    del temp.lst
+    if exist $*.bak del $*.bak
+

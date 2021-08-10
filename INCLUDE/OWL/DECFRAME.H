@@ -1,16 +1,19 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\decframe.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
-#if !defined(__OWL_DECFRAME_H)
-#define __OWL_DECFRAME_H
+#if !defined(OWL_DECFRAME_H)
+#define OWL_DECFRAME_H
 
-#if !defined(__OWL_FRAMEWIN_H)
-  #include <owl\framewin.h>
+#if !defined(OWL_FRAMEWIN_H)
+# include <owl/framewin.h>
 #endif
-#if !defined(__OWL_LAYOUTWI_H)
-  #include <owl\layoutwi.h>
+#if !defined(OWL_LAYOUTWI_H)
+# include <owl/layoutwi.h>
 #endif
+
+const int IDW_TOOLBAR       = 32041;  // Standard toolbar child window ID
 
 //
 //  class TDecoratedFrame
@@ -26,7 +29,7 @@ class _OWLCLASS TDecoratedFrame : virtual public TFrameWindow, public TLayoutWin
     TDecoratedFrame(TWindow*        parent,
                     const char far* title,
                     TWindow*        clientWnd,
-                    BOOL            trackMenuSelection = FALSE,
+                    bool            trackMenuSelection = false,
                     TModule*        module = 0);
 
     enum TLocation {Top = 0x0100,  Bottom = 0x0200,
@@ -38,33 +41,37 @@ class _OWLCLASS TDecoratedFrame : virtual public TFrameWindow, public TLayoutWin
     // override TFrameWindow member function to give decorations an opportunity
     // to do pre-processing (e.g. mnemonic access)
     //
-    BOOL      PreProcessMsg(MSG& msg);
+    bool      PreProcessMsg(MSG& msg);
     TWindow*  SetClientWindow(TWindow* clientWnd);
 
   protected:
-    BOOL   TrackMenuSelection;
-    UINT   MenuItemId;
+    bool   TrackMenuSelection;
+    uint   MenuItemId;
 
     void      SetupWindow();
 
+    void      RemoveChild(TWindow* child);
+    
     //
     // automatic showing/hiding of tool bars and status bars
     //
-    LRESULT   EvCommand(UINT id, HWND hWndCtl, UINT notifyCode);
+    LRESULT   EvCommand(uint id, HWND hWndCtl, uint notifyCode);
     void      EvCommandEnable(TCommandEnabler& ce);
 
     //
     // message response functions
     //
-    void      EvMenuSelect(UINT menuItemId, UINT flags, HMENU hMenu);
-    void      EvEnterIdle(UINT source, HWND hWndDlg);
-    void      EvSize(UINT sizeType, TSize& size) {TLayoutWindow::EvSize(sizeType, size);}
+    void      EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu);
+    void      EvEnterIdle(uint source, HWND hWndDlg);
+    void      EvSize(uint sizeType, TSize& size) {TLayoutWindow::EvSize(sizeType, size);}
 
   private:
     void      InsertAtTop(TWindow& decoration, TWindow* insertAbove);
     void      InsertAtBottom(TWindow& decoration, TWindow* insertBelow);
     void      InsertAtLeft(TWindow& decoration, TWindow* insertLeftOf);
     void      InsertAtRight(TWindow& decoration, TWindow* insertRightOf);
+
+    bool      SettingClient;
 
     //
     // hidden to prevent accidental copying or assignment
@@ -76,4 +83,4 @@ class _OWLCLASS TDecoratedFrame : virtual public TFrameWindow, public TLayoutWin
   DECLARE_STREAMABLE(_OWLCLASS, TDecoratedFrame, 1);
 };
 
-#endif  // __OWL_DECFRAME_H
+#endif  // OWL_DECFRAME_H

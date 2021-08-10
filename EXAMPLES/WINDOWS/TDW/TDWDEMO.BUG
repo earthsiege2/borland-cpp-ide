@@ -14,7 +14,7 @@
 
 //   FUNCTION PROTOTYPES
 
-int  DoWMCommand(WORD wParam, HWND hWnd);
+int  DoWMCommand(WPARAM wParam, HWND hWnd);
 void DoLButtonDown(HWND hWnd, LONG lParam);
 void DoLButtonUp(HWND hWnd, LONG lParam);
 void DoMouseMove(HWND hWnd, LONG lParam);
@@ -42,7 +42,7 @@ typedef struct SSHAPE           // Struct which tracks the drawn shapes.
         RECT       Points;      // Location of shape.
         int        PenWidth;    // Pen width for the shape.
         int        Shape;       // Type of shape.
-        COLORREF   PenColor;    // Color of shape.
+		  COLORREF   PenColor;    // Color of shape.
         int        Slope;       // Used to draw lines correctly.
 } SHAPE;
 
@@ -60,7 +60,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     HWND        hWnd;
 
     /*
-     * Register window class style if first
+	  * Register window class style if first
      * instance of this program.
      */
     if (!hPrevInstance)
@@ -70,7 +70,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         wndClass.cbClsExtra     = 0;
         wndClass.cbWndExtra     = 0;
         wndClass.hInstance      = hInstance;
-        wndClass.hIcon          = LoadIcon(hInstance, "IDI_SIMPLEPAINT");
+		  wndClass.hIcon          = LoadIcon(hInstance, "IDI_SIMPLEPAINT");
         wndClass.hCursor        = LoadCursor(NULL, IDC_ARROW);
         wndClass.hbrBackground  = GetStockObject(WHITE_BRUSH);
         wndClass.lpszMenuName   = szAppName;
@@ -78,7 +78,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
         if (!RegisterClass(&wndClass))
             return FALSE;
-    }
+	 }
 
     /*
      * Create and display the window.
@@ -88,7 +88,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
     ShowWindow(hWnd, nCmdShow);
-    UpdateWindow(hWnd);
+	 UpdateWindow(hWnd);
 
     while (GetMessage(&msg, NULL, 0, 0))
         TranslateMessage(&msg);
@@ -106,7 +106,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT Message,
     switch(Message)
     {
         case WM_COMMAND:
-            return DoWMCommand(wParam, hWnd);
+				return DoWMCommand(wParam, hWnd);
 
         case WM_LBUTTONDOWN:
             DoLButtonDown(hWnd, lParam);
@@ -114,7 +114,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT Message,
 
         case WM_LBUTTONUP:
             DoLButtonUp(hWnd, lParam);
-            break;
+				break;
 
         case WM_MOUSEMOVE:
             DoMouseMove(hWnd, lParam);
@@ -124,14 +124,14 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT Message,
             DoPaint(hWnd);
             break;
 
-        case WM_DESTROY:
+		  case WM_DESTROY:
             PostQuitMessage(0);
-            break;
+				break;
 
-        default:
-            return DefWindowProc(hWnd, Message, wParam, lParam);
-    }
-    return 0;
+		  default:
+				return DefWindowProc(hWnd, Message, wParam, lParam);
+	 }
+	 return 0;
 }
 
 /*****************************************************************
@@ -143,49 +143,49 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT Message,
  *****************************************************************/
 #pragma argsused
 void DrawShape(HDC hdc, int x, int y, int x2, int y2, int Shape,
-               int PenWidth, COLORREF PenColor, int Slope)
+					int PenWidth, COLORREF PenColor, int Slope)
 {
-    HANDLE      saveObject;
+	 HANDLE      saveObject;
 
-    /*
-     * Create the proper pen for this shape. Save the
-     * previously selected object from this DC.
-     */
-    saveObject = SelectObject(hdc, CreatePen(PS_SOLID,
-                              PenWidth, PenColor));
-    switch(Shape)
-    {
-        case LINE:
-            /* If Slope is set, then draw from LowerRight to UpperLeft. If
-             * Slope is not set then draw from UpperLeft to LowerRight.
-             */
-            if (Slope = 1)
-            {
-                MoveToEx(hdc, x, y2, NULL);
-                LineTo(hdc, x2, y);
-            }
-            else 
-            {
-                MoveToEx(hdc, x, y, NULL);
-                LineTo(hdc, x2, y2)
-            }
-            break;
+	 /*
+	  * Create the proper pen for this shape. Save the
+	  * previously selected object from this DC.
+	  */
+	 saveObject = SelectObject(hdc, CreatePen(PS_SOLID,
+										PenWidth, PenColor));
+	 switch(Shape)
+	 {
+		  case LINE:
+				/* If Slope is set, then draw from LowerRight to UpperLeft. If
+				 * Slope is not set then draw from UpperLeft to LowerRight.
+				 */
+				if (Slope = 1)
+				{
+					 MoveToEx(hdc, x, y2, NULL);
+					 LineTo(hdc, x2, y);
+				}
+				else 
+				{
+					 MoveToEx(hdc, x, y, NULL);
+					 LineTo(hdc, x2, y2)
+				}
+				break;
 
-        case ELLIPSE:
-            Ellipse(hdc, x, y, x2, y2);
-            break;
+		  case ELLIPSE:
+				Ellipse(hdc, x, y, x2, y2);
+				break;
 
-        case RECTANGLE:
-            Rectangle(hdc, x, y, x2, y2);
-            break;
-    }
+		  case RECTANGLE:
+				Rectangle(hdc, x, y, x2, y2);
+				break;
+	 }
 
-    /*
-     * Delete the currently selected object (the pen) and select whatever
-     * object was selected when we entered this routine.
-     */
+	 /*
+	  * Delete the currently selected object (the pen) and select whatever
+	  * object was selected when we entered this routine.
+	  */
 
-    DeleteObject(SelectObject(hdc, saveObject));
+	 DeleteObject(SelectObject(hdc, saveObject));
 }
 
 /****************************************************************
@@ -210,10 +210,10 @@ void DoPaint(HWND hWnd)
          * Determine which rectangle on the window is invalid.
          * If no rectangle is marked invalid, it will be a full
          * window repaint.
-         */
+			*/
         GetUpdateRect(hWnd, &theRect, 0);
         if (IsRectEmpty(&theRect))
-            GetClientRect(hWnd, &theRect);
+				GetClientRect(hWnd, &theRect);
 
         /*
          * Create a memory DC and bitmap the same
@@ -228,10 +228,10 @@ void DoPaint(HWND hWnd)
         /*
          * Erase the memBitmap.
          */
-        BitBlt(hMemDC, 0, 0,
+		  BitBlt(hMemDC, 0, 0,
                theRect.right-theRect.left,
                theRect.bottom-theRect.top,
-               hdc, 0, 0, SRCCOPY);
+					hdc, 0, 0, SRCCOPY);
 
         /*
          * Draw only those shapes that lie
@@ -246,10 +246,10 @@ void DoPaint(HWND hWnd)
                     Shapes[i].Points.top-theRect.top,
                     Shapes[i].Points.right-theRect.left,
                     Shapes[i].Points.bottom-theRect.top,
-                    Shapes[i].Shape,
+						  Shapes[i].Shape,
                     Shapes[i].PenWidth,
                     Shapes[i].PenColor,
-                    Shapes[i].Slope);
+						  Shapes[i].Slope);
             /*
              * Note that when drawing the shape, the shape's
              * position was transformed so that the origin was
@@ -264,10 +264,10 @@ void DoPaint(HWND hWnd)
          */
         BitBlt(hdc, theRect.left, theRect.top,
                theRect.right-theRect.left,
-               theRect.bottom-theRect.top,
+					theRect.bottom-theRect.top,
                hMemDC, 0, 0, SRCCOPY);
 
-        DeleteDC(hMemDC);
+		  DeleteDC(hMemDC);
         DeleteObject(theBitmap);
     }
     EndPaint(hWnd, &ps);
@@ -318,10 +318,10 @@ void DoLButtonUp(HWND hWnd, LONG lParam)
 
     ReleaseCapture();
 
-    /*
+	 /*
      * For rectangles to work with the IntersectRect function,
      * they must be stored as left, top, right, bottom.
-     */
+	  */
 
     SetRect(&Shapes[ShapeNumber].Points,
         min(Shapes[ShapeNumber].Points.left, LOWORD(lParam)),
@@ -336,16 +336,16 @@ void DoLButtonUp(HWND hWnd, LONG lParam)
      */
 
     if (CurrentShape == LINE)
-        Shapes[ShapeNumber].Slope = ((Shapes[ShapeNumber].Points.left ==
-            LOWORD(lParam)) ^ (Shapes[ShapeNumber].Points.top ==
-            HIWORD(lParam))) ?  0 : 1;
+		  Shapes[ShapeNumber].Slope = ((Shapes[ShapeNumber].Points.left ==
+				LOWORD(lParam)) ^ (Shapes[ShapeNumber].Points.top ==
+				HIWORD(lParam))) ?  0 : 1;
 
-        /*
-         * This statement uses an exclusive-or because the following
-         * is true for a line drawn from LowerRight to UpperLeft:
-         *     ((Shapes[ShapeNumber].Points.left == LOWORD) &&
-         *         (Shapes[ShapeNumber].Points.right == HIWORD)).
-         */
+		  /*
+			* This statement uses an exclusive-or because the following
+			* is true for a line drawn from LowerRight to UpperLeft:
+			*     ((Shapes[ShapeNumber].Points.left == LOWORD) &&
+			*         (Shapes[ShapeNumber].Points.right == HIWORD)).
+			*/
 
     /*
      * Mark this region on the window as needing redrawing and force an 
@@ -354,7 +354,7 @@ void DoLButtonUp(HWND hWnd, LONG lParam)
 
     InvalidateRect(hWnd, &Shapes[ShapeNumber].Points, 0);
     UpdateWindow(hWnd);
-    mouseDown = 0;
+	 mouseDown = 0;
     oldx = -1;
     oldy = -1;
 }
@@ -372,7 +372,7 @@ static int SaveROP;
  **********************************************************************/
 void DoMouseMove(HWND hWnd, LONG lParam)
 {
-    HDC hdc;
+	 HDC hdc;
 
     if (mouseDown)
     {
@@ -390,7 +390,7 @@ void DoMouseMove(HWND hWnd, LONG lParam)
         /*
          * Draw the new shape to the new mouse position.
          */
-        oldy = LOWORD(lParam);
+		  oldy = LOWORD(lParam);
         oldx = HIWORD(lParam);
         DrawShape(hdc, Shapes[ShapeNumber].Points.left,
                   Shapes[ShapeNumber].Points.top, oldx, oldy,
@@ -408,7 +408,7 @@ void DoMouseMove(HWND hWnd, LONG lParam)
  *    When a menu item is selected, this function changes the current
  *    state of shape selections to match the user's menu selection.
  *******************************************************************/
-int DoWMCommand(WORD wParam, HWND hWnd)
+int DoWMCommand(WPARAM wParam, HWND hWnd)
 {
     switch(wParam)
     {

@@ -123,7 +123,7 @@ void
 TSysInfoWindow::GetSysInformation()
 {
 #if defined(__WIN32__)
-  DWORD ver = GetVersion();
+  DWORD ver = ::GetVersion();
   wsprintf(TransferRecord.WindowsVersion, "%d.%d", (int)LOBYTE(ver), (int)HIBYTE(ver));
 
   SYSTEM_INFO systemInfo;
@@ -146,7 +146,7 @@ TSysInfoWindow::GetSysInformation()
 
   wsprintf(TransferRecord.InstanceNumber, "%d", GetApplication()->GetModuleUsage());
 
-  DWORD ver = GetVersion();
+  DWORD ver = ::GetVersion();
   wsprintf(TransferRecord.WindowsVersion, "%d.%d", (int)LOBYTE(ver), (int)HIBYTE(ver));
 
   if (SysFlags & WF_ENHANCED)

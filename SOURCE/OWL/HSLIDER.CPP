@@ -1,11 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\hslider.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of THSlider, horizontal slider UI widget
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\slider.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/slider.h>
+#include <owl/dc.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -17,26 +19,27 @@ THSlider::THSlider(TWindow*        parent,
                    int x, int y, int w, int h,
                    TResId          thumbResId,
                    TModule*        module)
-  : TSlider(parent, id, x, y, w, h, thumbResId, module)
+:
+  TSlider(parent, id, x, y, w, h, thumbResId, module)
 {
   ThumbRect = TRect(0, 0, 9, 20);
   CaretRect = TRect(3, 3, 3+3, 3+13);
 
   // get slot size from Attr.H set by TScrollBar ?
   if (!h)
-    h = 32;
+    Attr.H = 32;
 
   SlotThick = 17;
 }
 
 //
-// Calculate and return position given a thumb upper left point 
+// Calculate and return position given a thumb upper left point
 // and vice versa.
 //
 int
 THSlider::PointToPos(TPoint& point)
 {
-  return int(((long)point.x*Range)/(Attr.W-ThumbRect.Width()) + Min);
+  return int(((long)point.x*(long)Range)/(Attr.W-ThumbRect.Width()) + Min);
 }
 
 TPoint
@@ -52,7 +55,7 @@ THSlider::PosToPoint(int pos)
 void
 THSlider::NotifyParent(int scrollCode, int pos)
 {
-  #if defined(__WIN32__)
+  #if defined(BI_PLAT_WIN32)
     Parent->HandleMessage(WM_HSCROLL, MAKEWPARAM(scrollCode, pos), LPARAM(HWindow));
   #else
     Parent->HandleMessage(WM_HSCROLL, scrollCode, MAKELPARAM(pos, HWindow));
@@ -60,7 +63,7 @@ THSlider::NotifyParent(int scrollCode, int pos)
 }
 
 //
-// Determines if a point is within the thumb, or other hot areas of the 
+// Determines if a point is within the thumb, or other hot areas of the
 // slider. Uses region if available, else uses thumb bounding rect.
 // Returns -1 if no hit.
 //
@@ -69,10 +72,10 @@ THSlider::HitTest(TPoint& point)
 {
   if (ThumbRgn ? ThumbRgn->Contains(point) : ThumbRect.Contains(point))
     return SB_THUMBTRACK;
-  
+
   if (point.y > ThumbRect.bottom)
     return SB_THUMBPOSITION;
-      
+
   else if (point.x < ThumbRect.left)
     return SB_PAGEUP;
 
@@ -84,7 +87,7 @@ THSlider::HitTest(TPoint& point)
 
 //
 // Paint the ruler. The ruler doesn't overlap with the thumb or slot.
-// SysColors for text fg or bg are never dithered & can use TextRect. 
+// SysColors for text fg or bg are never dithered & can use TextRect.
 //
 void
 THSlider::PaintRuler(TDC& dc)

@@ -1,7 +1,5 @@
 /*++ BUILD Version: 0003    // Increment this if a change has global effects
 
-Copyright (c) 1990-1993  Microsoft Corporation
-
 Module Name:
 
     LMCONS.H (was NETCONS.H in LM 2.x)
@@ -53,10 +51,20 @@ Revision History:
 
 --*/
 
-/*NOINC*/
-#ifndef __LMCONS_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
+/*NOINC*/
+#ifndef NETCONS_INCLUDED
+
+#define NETCONS_INCLUDED
 #define __LMCONS_H
+
 /*INC*/
 
 #ifndef PASCAL
@@ -197,11 +205,11 @@ Revision History:
 /**END_INTERNAL**/
 
 #ifndef NULL
-#ifdef __cplusplus
-#define NULL   0
-#else
-#define NULL   ((void *)0)
-#endif
+#    if defined(__cplusplus)
+#      define NULL 0
+#    else
+#      define NULL ((void *)0)
+#    endif
 #endif
 
 //
@@ -210,7 +218,7 @@ Revision History:
 
 #define NET_API_STATUS          DWORD
 #define API_RET_TYPE            NET_API_STATUS      // Old value: do not use
-#if (_MSC_VER >= 800)
+#if (_MSC_VER >= 800) || defined(__BORLANDC__)
 #define NET_API_FUNCTION    __stdcall
 #else
 #define NET_API_FUNCTION
@@ -265,6 +273,6 @@ Revision History:
 #define MAX_LANMAN_MESSAGE_ID  5799
 
 /*NOINC*/
-#endif // __LMCONS_H
+#endif // NETCONS_INCLUDED
 /*INC*/
-
+

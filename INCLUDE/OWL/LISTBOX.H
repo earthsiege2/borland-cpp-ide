@@ -1,17 +1,18 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\listbox.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of class TListBox and TlistBoxData.  This defines the
 //   basic behavior of all list box controls.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_LISTBOX_H)
-#define __OWL_LISTBOX_H
+#if !defined(OWL_LISTBOX_H)
+#define OWL_LISTBOX_H
 
-#if !defined(__OWL_CONTROL_H)
-  #include <owl\control.h>
+#if !defined(OWL_CONTROL_H)
+# include <owl/control.h>
 #endif
-#if !defined(__CLASSLIB_ARRAYS_H)
-  #include <classlib\arrays.h>
+#if !defined(CLASSLIB_ARRAYS_H)
+# include <classlib/arrays.h>
 #endif
 
 //
@@ -35,21 +36,21 @@ class _OWLCLASS TListBox : public TControl {
     int           FindExactString(const char far* str, int searchIndex) const;
     int           GetTopIndex() const;
     int           SetTopIndex(int index);
-    BOOL          SetTabStops(int numTabs, int far* tabs);
+    bool          SetTabStops(int numTabs, int far* tabs);
 
     int           GetHorizontalExtent() const;
     void          SetHorizontalExtent(int horzExtent);
     void          SetColumnWidth(int width);
     int           GetCaretIndex() const;
-    int           SetCaretIndex(int index, BOOL partScrollOk);
+    int           SetCaretIndex(int index, bool partScrollOk);
 
     //
     // query individual list items
     //
     virtual int   GetStringLen(int index) const;
     virtual int   GetString(char far* str, int index) const;
-    virtual DWORD GetItemData(int index) const;
-    virtual int   SetItemData(int index, DWORD itemData);
+    virtual uint32 GetItemData(int index) const;
+    virtual int   SetItemData(int index, uint32 itemData);
 
     int           GetItemRect(int index, TRect& rect) const;
     virtual int   GetItemHeight(int index) const;
@@ -59,7 +60,7 @@ class _OWLCLASS TListBox : public TControl {
     // operations on the list box itself
     //
     virtual void  ClearList();
-    virtual int   DirectoryList(UINT attrs, const char far* fileSpec);
+    virtual int   DirectoryList(uint attrs, const char far* fileSpec);
 
     //
     // operations on individual list box items
@@ -83,17 +84,17 @@ class _OWLCLASS TListBox : public TControl {
     int           GetSelStrings(char far** strs, int maxCount,
                                 int maxChars) const;
     int           SetSelStrings(const char far** prefixes, int numSelections,
-                                BOOL shouldSet);
+                                bool shouldSet);
     int           GetSelIndexes(int* indexes, int maxCount) const;
-    int           SetSelIndexes(int* indexes, int numSelections, BOOL shouldSet);
-    BOOL          GetSel(int index) const;
-    int           SetSel(int index, BOOL select);
-    int           SetSelItemRange(BOOL select, int first, int last);
+    int           SetSelIndexes(int* indexes, int numSelections, bool shouldSet);
+    bool          GetSel(int index) const;
+    int           SetSel(int index, bool select);
+    int           SetSelItemRange(bool select, int first, int last);
 
     //
     // Override TWindow virtual member functions
     //
-    UINT          Transfer(void *buffer, TTransferDirection direction);
+    uint          Transfer(void *buffer, TTransferDirection direction);
 
   protected:
     //
@@ -126,31 +127,30 @@ class _OWLCLASS TListBox : public TControl {
 //  --------- -------
 //
 
-class _OWLCLASS TStringArray
-{
+class _OWLCLASS TStringArray {
   public:
-    typedef void (*IterFunc)(string &, void *);
-    typedef int  (*CondFunc)(const string &, void *);
+    typedef void (*IterFunc)(string&, void*);
+    typedef int  (*CondFunc)(const string&, void*);
 
-    TStringArray( int upper, int lower, int delta );
+    TStringArray(int upper, int lower, int delta);
     int LowerBound() const;
     int UpperBound() const;
     unsigned ArraySize() const;
     int IsFull() const;
     int IsEmpty() const;
     unsigned GetItemsInContainer() const;
-    int Add( const string & t );
-    int Detach( const string & t );
-    int Detach( int loc );
-    int Destroy( const string & t );
-    int Destroy( int loc );
-    int HasMember( const string & t ) const;
-    int Find( const string & t ) const;
-    string & operator []( int loc );
-    string & operator []( int loc ) const;
-    void ForEach( IterFunc iter, void *args );
-    string *FirstThat( CondFunc cond, void *args ) const;
-    string *LastThat( CondFunc cond, void *args ) const;
+    int Add(const string& t);
+    int Detach(const string& t);
+    int Detach(int loc);
+    int Destroy(const string& t);
+    int Destroy(int loc);
+    int HasMember(const string& t) const;
+    int Find(const string& t) const;
+    string& operator [](int loc);
+    string& operator [](int loc) const;
+    void ForEach(IterFunc iter, void* args);
+    string* FirstThat(CondFunc cond, void* args) const;
+    string* LastThat(CondFunc cond, void* args) const;
     void Flush();
 
   private:
@@ -172,31 +172,30 @@ struct TInt {
   operator int() const {return i;}
 };
 
-class _OWLCLASS TIntArray
-{
+class _OWLCLASS TIntArray {
   public:
-    typedef void (*IterFunc)(TInt &, void *);
-    typedef int  (*CondFunc)(const TInt &, void *);
+    typedef void (*IterFunc)(TInt&, void*);
+    typedef int  (*CondFunc)(const TInt&, void*);
 
-    TIntArray( int upper, int lower, int delta );
+    TIntArray(int upper, int lower, int delta);
     int LowerBound() const;
     int UpperBound() const;
     unsigned ArraySize() const;
     int IsFull() const;
     int IsEmpty() const;
     unsigned GetItemsInContainer() const;
-    int Add( const TInt & t );
-    int Detach( const TInt & t );
-    int Detach( int loc );
-    int Destroy( const TInt & t );
-    int Destroy( int loc );
-    int HasMember( const TInt & t ) const;
-    int Find( const TInt & t ) const;
-    TInt & operator []( int loc );
-    TInt & operator []( int loc ) const;
-    void ForEach( IterFunc iter, void *args );
-    TInt *FirstThat( CondFunc cond, void *args ) const;
-    TInt *LastThat( CondFunc cond, void *args ) const;
+    int Add(const TInt& t);
+    int Detach(const TInt& t);
+    int Detach(int loc);
+    int Destroy(const TInt& t);
+    int Destroy(int loc);
+    int HasMember(const TInt& t) const;
+    int Find(const TInt& t) const;
+    TInt& operator [](int loc);
+    TInt& operator [](int loc) const;
+    void ForEach(IterFunc iter, void* args);
+    TInt* FirstThat(CondFunc cond, void* args) const;
+    TInt* LastThat(CondFunc cond, void* args) const;
     void Flush();
 
   private:
@@ -211,43 +210,42 @@ class TIntArrayIterator : public TArrayAsVectorIterator<TInt> {
         : TArrayAsVectorIterator<TInt>(array.Data) {}
 };
 
-class _OWLCLASS TDwordArray
-{
+class _OWLCLASS TDwordArray {
   public:
-    typedef void (*IterFunc)(DWORD &, void *);
-    typedef int  (*CondFunc)(const DWORD &, void *);
+    typedef void (*IterFunc)(uint32&, void*);
+    typedef int  (*CondFunc)(const uint32&, void*);
 
-    TDwordArray( int upper, int lower, int delta );
+    TDwordArray(int upper, int lower, int delta);
     int LowerBound() const;
     int UpperBound() const;
     unsigned ArraySize() const;
     int IsFull() const;
     int IsEmpty() const;
     unsigned GetItemsInContainer() const;
-    int Add( const DWORD & t );
-    int Detach( const DWORD & t );
-    int Detach( int loc );
-    int Destroy( const DWORD & t );
-    int Destroy( int loc );
-    int HasMember( const DWORD & t ) const;
-    int Find( const DWORD & t ) const;
-    DWORD & operator []( int loc );
-    DWORD & operator []( int loc ) const;
-    void ForEach( IterFunc iter, void *args );
-    DWORD *FirstThat( CondFunc cond, void *args ) const;
-    DWORD *LastThat( CondFunc cond, void *args ) const;
+    int Add(const uint32& t);
+    int Detach(const uint32& t);
+    int Detach(int loc);
+    int Destroy(const uint32& t);
+    int Destroy(int loc);
+    int HasMember(const uint32& t) const;
+    int Find(const uint32& t) const;
+    uint32& operator [](int loc);
+    uint32& operator [](int loc) const;
+    void ForEach(IterFunc iter, void* args);
+    uint32* FirstThat(CondFunc cond, void* args) const;
+    uint32* LastThat(CondFunc cond, void* args) const;
     void Flush();
 
   private:
-    TArrayAsVector<DWORD> Data;
+    TArrayAsVector<uint32> Data;
 
   friend class TDwordArrayIterator;
 };
 
-class TDwordArrayIterator : public TArrayAsVectorIterator<DWORD> {
+class TDwordArrayIterator : public TArrayAsVectorIterator<uint32> {
   public:
     TDwordArrayIterator(const TDwordArray& array)
-        : TArrayAsVectorIterator<DWORD>(array.Data) {}
+        : TArrayAsVectorIterator<uint32>(array.Data) {}
 };
 
 //
@@ -263,8 +261,8 @@ class _OWLCLASS TListBoxData {
     TDwordArray&    GetItemDatas() {return ItemDatas;}
     TIntArray&      GetSelIndices() {return SelIndices;}
 
-    void    AddString(const char* str, BOOL isSelected = FALSE);
-    void    AddStringItem(const char* str, DWORD itemData, BOOL isSelected = FALSE);
+    void    AddString(const char* str, bool isSelected = false);
+    void    AddStringItem(const char* str, uint32 itemData, bool isSelected = false);
     void    Clear() {Strings.Flush(); ItemDatas.Flush(); ResetSelections();}
 
     void    Select(int index);
@@ -294,8 +292,8 @@ inline int TListBox::SetTopIndex(int index) {
   return (int)HandleMessage(LB_SETTOPINDEX, index);
 }
 
-inline BOOL TListBox::SetTabStops(int numTabs, int far* tabs) {
-  return (BOOL)HandleMessage(LB_SETTABSTOPS, numTabs, (LPARAM)tabs);
+inline bool TListBox::SetTabStops(int numTabs, int far* tabs) {
+  return (bool)HandleMessage(LB_SETTABSTOPS, numTabs, (LPARAM)tabs);
 }
 
 inline int TListBox::GetHorizontalExtent() const {
@@ -314,15 +312,15 @@ inline int TListBox::GetCaretIndex() const {
   return (int)CONST_CAST(TListBox*,this)->HandleMessage(LB_GETCARETINDEX);
 }
 
-inline int TListBox::SetCaretIndex(int index, BOOL partScrollOk) {
+inline int TListBox::SetCaretIndex(int index, bool partScrollOk) {
   return (int)HandleMessage(LB_SETCARETINDEX, index, MAKELPARAM(partScrollOk,0));
 }
 
-inline DWORD TListBox::GetItemData(int index) const {
+inline uint32 TListBox::GetItemData(int index) const {
   return CONST_CAST(TListBox*,this)->HandleMessage(LB_GETITEMDATA, index);
 }
 
-inline int TListBox::SetItemData(int index, DWORD itemData) {
+inline int TListBox::SetItemData(int index, uint32 itemData) {
   return (int)HandleMessage(LB_SETITEMDATA, index, itemData);
 }
 
@@ -340,7 +338,7 @@ inline int TListBox::SetItemHeight(int index, int height) {
   return (int)HandleMessage(LB_SETITEMHEIGHT, index, MAKELPARAM(height, 0));
 }
 
-inline int TListBox::DirectoryList(UINT attrs, const char far* fileSpec) {
+inline int TListBox::DirectoryList(uint attrs, const char far* fileSpec) {
   return (int)HandleMessage(LB_DIR, attrs, (LPARAM)fileSpec);
 }
 
@@ -415,12 +413,23 @@ inline int TListBox::GetStringLen(int index) const {
   return (int)CONST_CAST(TListBox*,this)->HandleMessage(LB_GETTEXTLEN, index);
 }
 
-inline int TListBox::SetSel(int index, BOOL select) {
+//
+// Get the selection state (true/false) of a particular item at 'index'
+//
+inline bool TListBox::GetSel(int index) const {
+  return (bool)CONST_CAST(TListBox*,this)->HandleMessage(LB_GETSEL, index);
+}
+
+//
+// Set the selection state (true/false) of a particular item at 'index',
+// or all items if index is -1
+//
+inline int TListBox::SetSel(int index, bool select) {
   return (int)HandleMessage(LB_SETSEL, select, MAKELPARAM(index, 0));
 }
 
-inline int TListBox::SetSelItemRange(BOOL select, int first, int last) {
+inline int TListBox::SetSelItemRange(bool select, int first, int last) {
   return (int)HandleMessage(LB_SELITEMRANGE, select, MAKELPARAM(first, last));
 }
 
-#endif  // __OWL_LISTBOX_H
+#endif  // OWL_LISTBOX_H

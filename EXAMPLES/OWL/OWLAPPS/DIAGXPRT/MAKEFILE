@@ -5,16 +5,16 @@
 # diagnostics.  The diagnostic settings for an application are read from
 # OWL.INI when the application loads.  In order to allow OWL applications
 # that use the OWL DLL to re-start with new diagnostic settings, this 
-# utility should not be built as a DLL.  Doing so would cause the OWL DLL 
-# to not be reloaded when the application re-starts and would result in the
-# new diagnostic settings being ignored.
+# utility should not be built using the DLL version of OWL. Doing so would
+# prevent the DLL from being reloaded when the applications re-start
+# and would result in the new diagnostic settings to be ignored.
 #
 
-MODEL=l #Can't build DLL, so force it to l
+MODELS=l                      #Allowable memory models
+SYSTEM=WIN16                  #Toolhelp only available in 16-bit currently
+MODEL=l                       #Default to only allowable model
+EXERES=diagxprt
 
-EXERES = diagxprt
-
-MODELS=l
 
 OBJEXE=diagxprt.obj cback.obj setup.obj toolhelp.obj
 !include $(BCEXAMPLEDIR)\owlmake.gen

@@ -1,0 +1,45 @@
+;[]-----------------------------------------------------------------[]
+;|  MATHERR.ASI -- Data structures useful for reporting math errors. |
+;[]-----------------------------------------------------------------[]
+
+;
+;       C/C++ Run Time Library - Version 6.5
+; 
+;       Copyright (c) 1987, 1994 by Borland International
+;       All Rights Reserved.
+; 
+
+;  The exceptionPlus is the standard matherr exception plus a
+;  pointer to an iNDP-87 environment dump.
+
+exceptionPlus  STRUC
+   exc_type dw ?
+   exc_name dd ?
+   exc_arg1 dq ?
+   exc_arg2 dq ?
+   exc_retval  dq ?
+   exc_environ dd ?  ; used when iNDP-87 interrupts
+exceptionPlus  ENDS
+
+
+; enumerated values of exc_type:
+
+_DOMAIN     equ   1  ; parameter not in valid domain
+_SING       equ   2  ; function is incalculable at this place
+_OVERFLOW   equ   3  ; result exceeds representable range
+_UNDERFLOW  equ   4  ; result too close to zero to be represented
+_TLOSS      equ   5  ; total loss of precision (eg. Sine (2**65))
+_PLOSS      equ   6  ; partial precision loss
+
+
+; An iNDP_image is put into memory by the FSTENV instruction.
+
+iNDP_environ   STRUC
+   ndp_control dw ?
+   ndp_status  dw ?
+   ndp_tags dw ?
+   ndp_ip      dw ?
+   ndp_ip_opcode  dw ?
+   ndp_dp      dw ?
+   ndp_dptop   dw ?
+iNDP_environ   ENDS

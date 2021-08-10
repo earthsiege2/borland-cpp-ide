@@ -6,9 +6,9 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1993 by Borland International
+ *      Copyright (c) 1993, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -36,10 +36,6 @@
 #include <string.h>
 #endif
 
-#if !defined(__WINDOWS_H) && defined(_Windows)
-#include <windows.h>
-#endif
-
 #if !defined(__REF_H)
 #include <ref.h>
 #endif
@@ -56,13 +52,33 @@
 #include <except.h>
 #endif
 
-#pragma option -a-      // byte packing
-#pragma option -Vo-     // set standard C++ options
-#pragma option -RT
+#if defined(_Windows) && !defined(__WINDOWS_H)    
+#include <windows.h>
+#endif
 
-#if defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+
+#if !defined(RC_INVOKED)
+
+#pragma option -a-      // byte packing
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
 #pragma option -po-     // disable Object data calling convention
 #endif
+#endif
+
+#if !defined(__TINY__)
+#pragma option -RT
+#endif
+
+#pragma option -Vo-     // set standard C++ options
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 class _EXPCLASS string;
 class _EXPCLASS TRegexp;
@@ -446,7 +462,6 @@ private:
 };
 
 #if defined( BI_OLDNAMES )
-#define TString string
 #define BI_String string
 #endif
 
@@ -1121,13 +1136,29 @@ inline const TSubString _RTLENTRY string::operator()( const TRegexp _FAR &r ) co
     return (*this)(r,0);
 }
 
-#if defined(__BCOPT__) && !defined(__FLAT__)
-#pragma option -po.     // restore Object Data calling convention
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
 
-#pragma option -RT.
 #pragma option -Vo.     // restore user C++ options
+
+#if !defined(__TINY__)
+#pragma option -RT.
+#endif
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po.     // restore Object data calling convention
+#endif
+#endif
+
 #pragma option -a.      // restore default packing
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  // __CSTRING_H
 

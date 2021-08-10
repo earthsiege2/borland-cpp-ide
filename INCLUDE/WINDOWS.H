@@ -1,3 +1,14 @@
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#if !defined(__FLAT__)
+
+
 /*****************************************************************************\
 *                                                                             *
 * windows.h -   Windows functions, types, and definitions                     *
@@ -69,14 +80,6 @@
 *
 \****************************************************************************/
 
-/*
- *      C/C++ Run Time Library - Version 6.0
- *
- *      Copyright (c) 1987, 1993 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef __WINDOWS_H     /* prevent multiple includes */
 #define __WINDOWS_H
 
@@ -88,7 +91,21 @@
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
 
-#if !defined(__FLAT__)
+#if defined(__BORLANDC__)
+    #define WIN16
+    #define NO_ANONYMOUS_STRUCT
+    #if defined(__cplusplus)
+        #define _WCHAR_T_DEFINED
+    #else
+        #define NONAMELESSUNION         /* Sould be NO_ANONYMOUS_UNION (correct term)*/
+    #endif
+#endif
+
+#if defined(NONAMELESSUNION)
+# define _UNION_NAME(X) X
+#else
+# define _UNION_NAME(X)
+#endif
 
 /* If WINVER is not defined, assume version 3.1 */
 #ifndef WINVER
@@ -162,7 +179,7 @@ typedef signed long         LONG;
 
 #define MAKELONG(low, high) ((LONG)(((WORD)(low)) | (((DWORD)((WORD)(high))) << 16)))
 
-#if defined(__MSC) || !defined(NOMINMAX) && !defined(__cplusplus)
+#if !defined(__cplusplus) && (defined(__MSC) || !defined(NOMINMAX))
 #ifndef max
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
@@ -181,8 +198,12 @@ typedef LONG LRESULT;
 
 /****** Common pointer types ************************************************/
 
-#ifndef NULL
-#define NULL                0
+#if !defined(NULL)
+#if defined(__TINY__) || defined(__SMALL__) || defined(__MEDIUM__)
+#  define NULL    0
+#else
+#  define NULL    0L
+#endif
 #endif
 
 typedef char NEAR*          PSTR;
@@ -542,7 +563,7 @@ int     WINAPI GetModuleFileName(HINSTANCE, LPSTR, int);
 
 FARPROC WINAPI GetProcAddress(HINSTANCE, LPCSTR);
 
-int     WINAPI GetInstanceData(HINSTANCE, BYTE*, int);
+int     WINAPI GetInstanceData(HINSTANCE, PBYTE, int);
 
 HGLOBAL WINAPI GetCodeHandle(FARPROC);
 
@@ -5393,8 +5414,36 @@ BOOL    WINAPI GetDriverInfo(HDRVR, DRIVERINFOSTRUCT FAR*);
 #endif  /* WINVER >= 0x030a */
 #endif  /* NOUSER */
 
-#else     /* defined __FLAT__ */
 
+#ifdef  __cplusplus
+}
+#endif
+
+#ifndef RC_INVOKED
+#pragma option -a.      /* Revert to default packing */
+#endif  /* RC_INVOKED */
+
+#endif  /* __WINDOWS_H */
+
+
+#else  /* !__FLAT__ */
+
+
+/*++ BUILD Version: 0001    Increment this if a change has global effects
+
+Module Name:
+
+    windows.h
+
+Abstract:
+
+    Master include file for Windows applications.
+
+--*/
+
+#ifndef _WINDOWS_
+#define _WINDOWS_
+#define __WINDOWS_H
 
 /*  If defined, the following flags inhibit definition
  *     of the indicated items.
@@ -5410,6 +5459,7 @@ BOOL    WINAPI GetDriverInfo(HDRVR, DRIVERINFOSTRUCT FAR*);
  *  NOSYSCOMMANDS     - SC_*
  *  NORASTEROPS       - Binary and Tertiary raster ops
  *  NOSHOWWINDOW      - SW_*
+ *  OEMRESOURCE       - OEM Resource values
  *  NOATOM            - Atom Manager routines
  *  NOCLIPBOARD       - Clipboard routines
  *  NOCOLOR           - Screen colors
@@ -5418,6 +5468,7 @@ BOOL    WINAPI GetDriverInfo(HDRVR, DRIVERINFOSTRUCT FAR*);
  *  NOGDI             - All GDI defines and routines
  *  NOKERNEL          - All KERNEL defines and routines
  *  NOUSER            - All USER defines and routines
+ *  NONLS             - All NLS defines and routines
  *  NOMB              - MB_* and MessageBox()
  *  NOMEMMGR          - GMEM_*, LMEM_*, GHND, LHND, associated routines
  *  NOMETAFILE        - typedef METAFILEPICT
@@ -5425,22 +5476,17 @@ BOOL    WINAPI GetDriverInfo(HDRVR, DRIVERINFOSTRUCT FAR*);
  *  NOMSG             - typedef MSG and associated routines
  *  NOOPENFILE        - OpenFile(), OemToAnsi, AnsiToOem, and OF_*
  *  NOSCROLL          - SB_* and scrolling routines
+ *  NOSERVICE         - All Service Controller routines, SERVICE_ equates, etc.
  *  NOSOUND           - Sound driver routines
  *  NOTEXTMETRIC      - typedef TEXTMETRIC and associated routines
  *  NOWH              - SetWindowsHook and WH_*
  *  NOWINOFFSETS      - GWL_*, GCL_*, associated routines
  *  NOCOMM            - COMM driver routines
+ *  NOKANJI           - Kanji support stuff.
  *  NOHELP            - Help engine interface.
  *  NOPROFILER        - Profiler interface.
  *  NODEFERWINDOWPOS  - DeferWindowPos routines
  */
-
-#if defined(__BORLANDC__) && defined(__WIN32__)
-#  ifndef _X86_
-#    define _X86_
-#  endif
-#  define WIN32
-#endif
 
 #ifdef RC_INVOKED
 
@@ -5463,33 +5509,59 @@ BOOL    WINAPI GetDriverInfo(HDRVR, DRIVERINFOSTRUCT FAR*);
 
 #endif /* RC_INVOKED */
 
+#if defined(__BORLANDC__)
+    #define _X86_
+    #define i386
+    #define WIN32
+    #define _M_IX86 300
+    #define NO_ANONYMOUS_STRUCT
+
+    #if defined(__cplusplus)
+        #define _WCHAR_T_DEFINED
+    #else
+        #define NONAMELESSUNION         /* Sould be NO_ANONYMOUS_UNION (correct term)*/
+    #endif
+
+    // set default packing to 4
+    #include <pshpack4.h>
+#endif
+
+#if defined(NONAMELESSUNION) || (defined(_MAC) && !defined(__cplusplus) && !defined(_MSC_VER))
+# define _UNION_NAME(X) X
+#else
+# define _UNION_NAME(X)
+#endif
+
+#if !defined(_PPC_) && !defined(_ALPHA_) && !defined(_MIPS_) && !defined(_X86_) && defined(_M_IX86)
+#define _X86_
+#endif
+
+#if !defined(_PPC_) && !defined(_ALPHA_) && !defined(_X86_) && !defined(_MIPS_) && defined(_M_MRX000)
+#define _MIPS_
+#endif
+
+#if !defined(_PPC_) && !defined(_ALPHA_) && !defined(_X86_) && !defined(_MIPS_) && defined(_M_ALPHA)
+#define _ALPHA_
+#endif
+
+#if !defined(_PPC_) && !defined(_ALPHA_) && !defined(_X86_) && !defined(_MIPS_) && defined(_M_PPC)
+#define _PPC_
+#endif
+
 #ifndef RC_INVOKED
+#if     ( _MSC_VER >= 800 )
+#pragma warning(disable:4001)
+#endif
 #include <excpt.h>
 #include <stdarg.h>
 #endif /* RC_INVOKED */
 
-#ifdef  __cplusplus
-}
-#endif
-
-#include <windef.h>     /* exclude windef from extern "C" wrapper */
-
-#ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
-
+#include <windef.h>
 #include <winbase.h>
 #include <wingdi.h>
 #include <winuser.h>
 #include <winnls.h>
-#include <winmm.h>
-#ifndef RC_INVOKED
-#pragma pack(4)
-#endif  /* RC_INVOKED */
 #include <wincon.h>
-#ifndef RC_INVOKED
-#pragma pack(1)
-#endif  /* RC_INVOKED */
 #include <winver.h>
 #include <winreg.h>
 #include <winnetwk.h>
@@ -5502,43 +5574,41 @@ extern "C" {            /* Assume C declarations for C++ */
 #include <lzexpand.h>
 #include <mmsystem.h>
 #include <nb30.h>
-#if defined(INC_RPC)
 #include <rpc.h>
-#endif // Include RPC
 #include <shellapi.h>
 #include <winperf.h>
 #include <winsock.h>
 #ifndef NOGDI
 #include <commdlg.h>
-#include <drivinit.h>
 #include <winspool.h>
 #ifndef INC_OLE2
 #include <ole.h>
-#else
+#endif /* OLE2 */
+#endif /* !NOGDI */
+#endif /* WIN32_LEAN_AND_MEAN */
+
+#ifndef RC_INVOKED
+#ifdef INC_OLE2
 #include <ole2.h>
 #endif /* OLE2 */
-
-#endif // !NOGDI
-#endif /* WIN32_LEAN_AND_MEAN */
+#endif /* RC_INVOKED */
 
 #ifndef NOSERVICE
 #include <winsvc.h>
 #endif
+
 #ifndef RC_INVOKED
-#pragma pack()
-#endif  /* RC_INVOKED */
+#if     ( _MSC_VER >= 800 )
+#pragma warning(default:4001)
+#endif
+#endif /* RC_INVOKED */
+
+#if defined(__BORLANDC__)
+    // reset to default packing
+    #include <poppack.h>
+#endif
+
+#endif /* _WINDOWS_ */
 
 
 #endif  /* __FLAT__ */
-
-#ifdef  __cplusplus
-}
-#endif
-
-#ifndef RC_INVOKED
-#pragma option -a.      /* Revert to default packing */
-#endif  /* RC_INVOKED */
-
-#endif  /* __WINDOWS_H */
-
-

@@ -1,6 +1,4 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992, Microsoft Corporation
+/*++
 
 Module Name:
 
@@ -10,29 +8,24 @@ Abstract:
 
     Definitions for SNMP Management API Development.
 
-
-    This PRE-RELEASE header file contains definitions that may change
-    prior to the official release of Windows NT.   Microsoft makes no
-    warranty of any kind as to the suitability or correctness of this
-    code.
-
-
 --*/
 
-#ifndef __MGMTAPI_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef mgmtapi_h
+#define mgmtapi_h
 #define __MGMTAPI_H
-
-static char *mgmtapi__h = "@(#) $Logfile:   Y:/ADMIN/BC4RTL/RTLAPI/MGMTAPI.H_V  $ $Revision:   1.0  $";
-
 
 // Necessary includes.
 
-#ifndef __WINSOCK_H
 #include <winsock.h>
-#endif
-#ifndef __SNMP_H
 #include <snmp.h>
-#endif
 
 
 // Errors... (unique from those in snmp.h)
@@ -63,21 +56,25 @@ typedef struct _SNMP_MGR_SESSION {
     char            recvBuf[RECVBUFSIZE]; // receive buffer
 } SNMP_MGR_SESSION, *LPSNMP_MGR_SESSION;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 // Prototypes...
 
-LPSNMP_MGR_SESSION
+extern LPSNMP_MGR_SESSION
 SNMP_FUNC_TYPE SnmpMgrOpen(
     IN LPSTR lpAgentAddress,    // Name/address of target SNMP agent
     IN LPSTR lpAgentCommunity,  // Community for target SNMP agent
     IN INT   nTimeOut,          // Communication time-out in milliseconds
     IN INT   nRetries);         // Communication time-out/retry count
 
-BOOL
+extern BOOL
 SNMP_FUNC_TYPE SnmpMgrClose(
     IN LPSNMP_MGR_SESSION session);   // SNMP session pointer
 
-SNMPAPI
+extern SNMPAPI
 SNMP_FUNC_TYPE SnmpMgrRequest(
     IN     LPSNMP_MGR_SESSION session,           // SNMP session pointer
     IN     BYTE               requestType,       // Get, GetNext, or Set
@@ -86,22 +83,22 @@ SNMP_FUNC_TYPE SnmpMgrRequest(
     OUT    AsnInteger         *errorIndex);      // Result error index
 
 
-BOOL
+extern BOOL
 SNMP_FUNC_TYPE SnmpMgrStrToOid(
     IN  LPSTR               string,   // OID string to be converted
     OUT AsnObjectIdentifier *oid);    // OID internal representation
 
-BOOL
+extern BOOL
 SNMP_FUNC_TYPE SnmpMgrOidToStr(
     IN  AsnObjectIdentifier *oid,     // OID internal rep to be converted
     OUT LPSTR               *string); // OID string representation
 
 
-BOOL
+extern BOOL
 SNMP_FUNC_TYPE SnmpMgrTrapListen(
     OUT HANDLE *phTrapAvailable); // Event handle indicating trap(s) available
 
-BOOL
+extern BOOL
 SNMP_FUNC_TYPE SnmpMgrGetTrap(
     OUT AsnObjectIdentifier *enterprise,       // Generating enterprise
     OUT AsnNetworkAddress   *IPAddress,        // Generating IP address
@@ -110,6 +107,9 @@ SNMP_FUNC_TYPE SnmpMgrGetTrap(
     OUT AsnTimeticks        *timeStamp,        // Time stamp
     OUT RFC1157VarBindList  *variableBindings);// Variable bindings
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* mgmtapi_h */
 

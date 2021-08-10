@@ -1136,14 +1136,14 @@ OBJXREF Examples
 These examples assume that the application files are in
 the current directory of the default drive and that the
 Borland C++ startup files (C0x.OBJ) and the library
-files are in the \BC4\LIB directory.
+files are in the \BC45\LIB directory.
 
 
-EXAMPLE 1  C>OBJXREF \BC4\lib\c0l test1 test2 \BC4\lib\cl.lib
+EXAMPLE 1  C>OBJXREF \BC45\lib\c0l test1 test2 \BC45\lib\cl.lib
 
 In this example, the TEST1.OBJ and TEST2.OBJ files and the
-Borland C++ startup file \BC4\LIB\C0L.OBJ and the library
-file \BC4\LIB\CL.LIB are specified. Since no report type is
+Borland C++ startup file \BC45\LIB\C0L.OBJ and the library
+file \BC45\LIB\CL.LIB are specified. Since no report type is
 specified, the resulting report is the default report by
 reference, listing public names and the modules that
 reference them.
@@ -1155,14 +1155,14 @@ The TLINK response file TEST1.ARF contains the same
 list of files as the command line in Example 1. The /RV
 option is specified, so a report of every type is
 generated. TEST1.ARF contains
-     \BC4\lib\c0l
+     \BC45\lib\c0l
      test1 test2
      test1.exe
      test1.map
-     \BC4\lib\cl
+     \BC45\lib\cl
 
 
-EXAMPLE 3       C>OBJXREF /F /RV \BC4\lib\cs.lib
+EXAMPLE 3       C>OBJXREF /F /RV \BC45\lib\cs.lib
 
 This example reports on all the modules in the Borland
 C++ library file CS.LIB; OBJXREF can produce useful

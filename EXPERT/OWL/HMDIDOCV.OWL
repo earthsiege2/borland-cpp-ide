@@ -1,0 +1,97 @@
+##{hheader.snp}
+#include <owl\owlpch.h>
+#pragma hdrstop
+
+##@QUERY_APPL_OLE_AUTO 2
+#include <ocf\automacr.h>
+
+##@OPT_APPL_DRAGDROP 2
+#include <classlib\bags.h>
+
+##<<TMDIClient QUERY_FILE_H [[FileName]]
+#include "[[FileName]]"
+
+##QUERY_FILENAME_CPP [[FileName]]
+#include "[[FileName]].rh"            // Definition of all resources.
+
+
+##{dragdrop.owl}
+//{{TApplication = [[TApplication]]}}
+##@QUERY_APPL_OLE == VALUE_NOOLE
+class [[TApplication]] : public TApplication {
+##@QUERY_APPL_OLE != VALUE_NOOLE
+class [[TApplication]] : public TApplication, public TOcModule {
+private:
+##@OPT_APPL_HELP 4
+    bool            HelpState;                          // Has the help engine been used.
+    bool            ContextHelp;                        // SHIFT-F1 state (context sensitive HELP).
+    HCURSOR         HelpCursor;                         // Context sensitive help cursor.
+
+##--BEGIN-- @OPT_APPL_TOOLBAR || @OPT_APPL_DRAGDROP
+##--BEGIN-- @OPT_APPL_TOOLBAR
+##@QUERY_APPL_OLE != VALUE_NOOLE
+    void SetupSpeedBar (TOleMDIFrame *frame);
+##@QUERY_APPL_OLE == VALUE_NOOLE
+    void SetupSpeedBar (TDecoratedMDIFrame *frame);
+##--END-- @OPT_APPL_TOOLBAR
+##@OPT_APPL_DRAGDROP
+    void AddFiles (TFileList* files);
+
+##--END-- @OPT_APPL_TOOLBAR || @OPT_APPL_DRAGDROP
+public:
+    [[TApplication]] ();
+    virtual ~[[TApplication]] ();
+
+##@OPT_APPL_TOOLBAR 2
+    void CreateGadgets (TControlBar *cb, bool server = false);
+
+##<<TMDIClient QUERY_CLASS_NAME [[TMDIClient]]
+    [[TMDIClient]]  *mdiClient;
+
+##@OPT_APPL_PRINTING 4
+    // Public data members used by the print menu commands and Paint routine in MDIChild.
+    TPrinter        *Printer;                           // Printer support.
+    int             Printing;                           // Printing in progress.
+
+//{{[[TApplication]]VIRTUAL_BEGIN}}
+public:
+    virtual void InitMainWindow ();
+##:DBVirtual(\\"[[TApplication]]", "InitMainWindow")
+##--BEGIN-- @OPT_APPL_DRAGDROP
+    virtual void InitInstance ();
+##:DBVirtual(\\"[[TApplication]]", "InitInstance")
+##--END-- @OPT_APPL_DRAGDROP
+##@OPT_APPL_HELP 2
+##:DBVirtual(\\"[[TApplication]]", "CanClose")
+    virtual bool CanClose ();
+##:DBVirtual(\\"[[TApplication]]", "ProcessAppMsg")
+    virtual bool ProcessAppMsg (MSG& msg);
+//{{[[TApplication]]VIRTUAL_END}}
+
+//{{[[TApplication]]RSP_TBL_BEGIN}}
+protected:
+    void EvNewView (TView& view);
+    void EvCloseView (TView& view);
+    void CmHelpAbout ();
+##@OPT_APPL_HELP 2
+    void CmHelpContents ();
+    void CmHelpUsing ();
+##@OPT_APPL_DRAGDROP
+    void EvDropFiles (TDropInfo drop);
+##@OPT_APPL_PRINTING
+    void EvWinIniChange (char far* section);
+//{{[[TApplication]]RSP_TBL_END}}
+##--BEGIN-- @QUERY_APPL_OLE_AUTO
+
+##@QUERY_APPL_OLE != VALUE_NOOLE
+DECLARE_AUTOAGGREGATE([[TApplication]])
+##@QUERY_APPL_OLE == VALUE_NOOLE
+DECLARE_AUTOCLASS([[TApplication]])
+AUTODETACH
+//{{[[TApplication]]AUTO_TBL_BEGIN}}
+//{{[[TApplication]]AUTO_TBL_END}}
+
+##--END-- @QUERY_APPL_OLE_AUTO
+DECLARE_RESPONSE_TABLE([[TApplication]]);
+};    //{{[[TApplication]]}}
+##{hfooter.snp}

@@ -1,24 +1,25 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\chooseco.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of Choose Color Common Dialog class
 //----------------------------------------------------------------------------
-#if !defined(__OWL_CHOOSECO_H)
-#define __OWL_CHOOSECO_H
+#if !defined(OWL_CHOOSECO_H)
+#define OWL_CHOOSECO_H
 
-#if !defined(__COMMDIAL_H)
-  #include <owl\commdial.h>
+#if !defined(OWL_COMMDIAL_H)
+# include <owl/commdial.h>
 #endif
-#if !defined(__COLOR_H)
-  #include <owl\color.h>
+#if !defined(OWL_COLOR_H)
+# include <owl/color.h>
 #endif
 
 class _OWLCLASS TChooseColorDialog : public TCommonDialog {
   public:
     class _OWLCLASS TData {
       public:
-        DWORD       Flags;
-        DWORD       Error;
+        uint32      Flags;
+        uint32      Error;
         TColor      Color;
         TColor*     CustColors;
     };
@@ -39,12 +40,12 @@ class _OWLCLASS TChooseColorDialog : public TCommonDialog {
     TData&       Data;
 
     int     DoExecute();
-    BOOL    DialogFunction(UINT message, WPARAM, LPARAM);
+    bool    DialogFunction(uint message, WPARAM, LPARAM);
 
     //
     // Registered messages this class sends (to itself)
     //
-    static UINT SetRGBMsgId;
+    static uint SetRGBMsgId;
 
     //
     // Default behavior inline for message response functions
@@ -60,4 +61,4 @@ class _OWLCLASS TChooseColorDialog : public TCommonDialog {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_CHOOSECO_H
+#endif  // OWL_CHOOSECO_H

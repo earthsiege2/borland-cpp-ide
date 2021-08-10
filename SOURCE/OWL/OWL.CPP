@@ -1,21 +1,22 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\owl.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
+//   Internal object thunk creation & maintanance.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\window.h>
+#include <owl/owlpch.h>
+#include <owl/window.h>
 #include <dos.h>
 #include <mem.h>
-
-#if defined(__WIN32__)
-  #include <stddef.h>
+#if defined(BI_PLAT_WIN32)
+# include <stddef.h>
 #endif
 
-LRESULT FAR PASCAL _export StdWndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT FAR PASCAL _export StdWndProc(HWND, uint, WPARAM, LPARAM);
 TProcInstance StdWndProcInstance((FARPROC)StdWndProc);
 
 //
-// creation window pointers for InitWndProc
+// Creation window pointer for InitWndProc
 //
 TWindow* _OWLDATA CreationWindow = 0;
 
@@ -25,52 +26,54 @@ SetCreationWindow(TWindow* w)
   CreationWindow = w;
 }
 
-unsigned short far _OWLFUNC
+uint16 far _OWLFUNC
 OWLGetVersion()
 {
   return OWLVersion;
 }
 
 //
-// subclasses the window function and installs the thunk
+// Initial WndProc called when an Owl window is first created.
+// Subclasses the window function by installing the thunk then calls the
+// thunk to get this first message to the window.
 //
-LRESULT
-FAR PASCAL _export
-InitWndProc(HWND hWindow, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK __export
+InitWndProc(HWND hWindow, uint message, WPARAM wParam, LPARAM lParam)
 {
-  // If there's no creation window, ie we'll be aliasing a resource
+  // If there's no creation window, i.e. we'll be aliasing a resource,
   // then we can't do anything now.  Create() will take care of it later
   //
   if (!CreationWindow)
     return ::DefWindowProc(hWindow, message, wParam, lParam);
 
-  //
   // install "DefWindowProc" as the window function BEFORE we request the
   // subclassings; otherwise it looks like we subclassed "InitWndProc"
   //
   CreationWindow->HWindow = hWindow;
-  #if defined(__WIN32__)
-    CreationWindow->DefaultProc = (WNDPROC)GetProcAddress(
+#if defined(BI_PLAT_WIN32)
+  CreationWindow->DefaultProc = (WNDPROC)GetProcAddress(
       (HINSTANCE)GetModuleHandle("USER32"), "DefWindowProcA");
-  #else
-    CreationWindow->DefaultProc = ::DefWindowProc;
-  #endif
+#else
+  CreationWindow->DefaultProc = ::DefWindowProc;
+#endif
 
-  //
   // Get the thunk & then zero out creation window so that it is not 
   // inadvertently used.
   //
   WNDPROC thunk = CreationWindow->GetThunk();
   CreationWindow = 0;
 
-  //
   // Set the thunk as the window proc, & call it with this first message.
   //
-  SetWindowLong(hWindow, GWL_WNDPROC, DWORD(thunk));
+  SetWindowLong(hWindow, GWL_WNDPROC, uint32(thunk));
   return (*(WNDPROC)(thunk))(hWindow, message, wParam, lParam);
 }
 
-#if defined(__WIN32__)
+//
+// Win32 version of the instance thunking mechanism
+//
+#if defined(BI_PLAT_WIN32)
+
 struct TInstanceThunk {
   char     Call;
   int      Offset;
@@ -81,30 +84,6 @@ struct TInstanceThunk {
 
 static const int  CODEDISP = offsetof(TInstanceThunk, Code) -
                              offsetof(TInstanceThunk, WndProcPtr);
-
-//
-// return pointer to TWindow given a window handle
-//
-UINT _OWLDATA GetWindowPtrMsgId = 0;
-
-TWindow* _OWLFUNC
-GetWindowPtr(HWND hWnd)
-{
-  //
-  // determine the object pointer by sending a "GetWindowPtr()" message
-  // to the window.  When the first StdWndProc() in the subclass chain
-  // receives this message it returns a pointer to the object (via the
-  // thunking mechanism).
-  //
-  if (!hWnd)
-    return 0;
-//  return (TWindow*)::SendMessage(hWnd, GetWindowPtrMsgId, 0, 0);
-
-  WNDPROC wndProc = (WNDPROC)::GetWindowLong(hWnd, GWL_WNDPROC);
-  if (!wndProc)
-    return 0;
-  return (TWindow*)::CallWindowProc(wndProc, hWnd, GetWindowPtrMsgId, 0, 0);
-}
 
 WNDPROC
 CreateInstanceThunk(TWindow* w)
@@ -149,16 +128,19 @@ FreeInstanceThunk(WNDPROC proc)
   delete (TInstanceThunk*)proc;
 }
 
-#else  // Win16
+//
+// Win16 version of the instance thunking mechanism
+//
+#elif defined(BI_PLAT_WIN16)
 
 //
 // AllocCSToDSAlias was not declared in windows.h
 //
-extern "C" WORD FAR PASCAL AllocCSToDSAlias(WORD);
+extern "C" uint16 FAR PASCAL AllocCSToDSAlias(uint16);
 
 struct TInstanceThunk {
   char   Code;
-  WORD   Offset;
+  uint16 Offset;
 
   union Ptr {
     struct TInstanceThunk far* Next;
@@ -167,38 +149,14 @@ struct TInstanceThunk {
 };
 
 struct TThunkBlock {
-  WORD      Next;
+  uint16    Next;
   char      Code[5];
   void far* WndProcPtr;
   struct TInstanceThunk Thunks[34];
 };
 
-static WORD                ThunkBlockList = 0;
+static uint16              ThunkBlockList = 0;
 static TInstanceThunk far* ThunkFreeList = 0;
-
-//
-// return pointer to TWindow given a window handle
-//
-UINT _OWLDATA GetWindowPtrMsgId = 0;
-
-//
-// determine the object pointer by sending a "GetWindowPtr()" message
-// to the window.  When the first StdWndProc() in the subclass chain
-// receives this message it returns a pointer to the object (via the
-// thunking mechanism).
-//
-TWindow* _OWLFUNC
-GetWindowPtr(HWND hWnd)
-{
-  if (!hWnd)
-    return 0;
-//  return (TWindow*)::SendMessage(hWnd, GetWindowPtrMsgId, 0, 0);
-
-  WNDPROC wndProc = (WNDPROC)::GetWindowLong(hWnd, GWL_WNDPROC);
-  if (!wndProc)
-    return 0;
-  return (TWindow*)::CallWindowProc(wndProc, hWnd, GetWindowPtrMsgId, 0, 0);
-}
 
 WNDPROC
 CreateInstanceThunk(TWindow* w)
@@ -220,7 +178,7 @@ CreateInstanceThunk(TWindow* w)
   blockCode[4] = 0xea;
 
   if (!ThunkFreeList) {
-    block = (TThunkBlock far*)GlobalLock(GlobalAlloc(GMEM_FIXED | GMEM_DDESHARE | GMEM_NOT_BANKED,
+    block = (TThunkBlock far*)GlobalLock(GlobalAlloc(GMEM_FIXED | GMEM_SHARE | GMEM_NOT_BANKED,
                                          sizeof(TThunkBlock)));
     block->Next = ThunkBlockList;
     memcpy(block->Code, blockCode, 5);
@@ -262,4 +220,4 @@ FreeInstanceThunk(WNDPROC p)
   ThunkFreeList = (TInstanceThunk far*)p;
 }
 
-#endif //__WIN32__
+#endif  // BI_PLAT_XXX

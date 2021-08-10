@@ -1,0 +1,134 @@
+<<[CPP]
+##^BOF
+##FALSE [[RegAndFact]]
+##FALSE [[Template]]
+##--BEGIN-- ? "BEGIN_REGISTRATION(ApplicationReg)" [[RegThere]]
+##      --BEGIN-- RegThere == FALSE
+##          --BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##              :"//{{[[ClassName]] Implementation}}" [[ClassMarker]]
+##              :\\ClassMarker [[LookUp]]
+##              :QUERY_FILE_CPP [[FileName]]
+##              :^BOF
+##              :? LookUp [[Search]]
+##              :Search == FALSE
+##                  :%\\"Unable to add application registration to [[FileName]].  "
+##*
+##              :^BOL
+##          --END-- QUERY_CLASS_NAME [[ClassName]]
+DEFINE_APP_DICTIONARY(AppDictionary);
+##@QUERY_APPL_OLE == VALUE_NOOLE
+static TPointer<TRegistrar> Registrar;
+##@QUERY_APPL_OLE != VALUE_NOOLE
+static TPointer<TOcRegistrar> Registrar;
+
+REGISTRATION_FORMAT_BUFFER(100)
+
+BEGIN_REGISTRATION(ApplicationReg)
+##          --BEGIN-- @QUERY_OLE_GUID [[GUID]]
+##              :GUID != ""
+    REGDATA(clsid, "{[[GUID]]}")
+##              :GUID == ""
+    REGDATA(clsid, "{544C5355-4547-4C4C-5248-4C4C75636173}")
+##          --END-- @QUERY_OLE_GUID [[GUID]]
+##          --BEGIN-- @QUERY_PRJ_NAME [[AppTitle]]
+    REGDATA(progid, "[[AppTitle]].Application.1")
+    REGDATA(appname, "[[AppTitle]] Server")
+    REGDATA(description, "[[AppTitle]] Server Application")
+    REGDATA(cmdline, "/Automation")
+//    REGDATA(debugger, "TDW")
+##          --END-- @QUERY_PRJ_NAME [[AppTitle]]
+END_REGISTRATION
+
+##      --END-- RegThere == FALSE
+##      --BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##          :^BOF
+##          :? "TApplication("
+##              :^EOS
+##              :YPos() [[CurrYLine]]
+##              :XPos() [[CurrXCol]]
+##              :? ","
+##                  :YPos() != CurrYLine
+##                      :^@CurrYLine, CurrXCol
+##                      :? ")"
+##                          :YPos() == CurrYLine
+##                              :^BOS
+##                              :XPos() [[X1Pos]]
+##                              :^@CurrYLine, CurrXCol
+##                              :^DROP
+##                              :^@CurrYLine, (X1Pos - 1)
+##                              :^RAISE
+##                              :InsertText("::ApplicationReg[\"appname\"], ::Module, &::AppDictionary")
+##*
+##          :^BOF
+##          :? " TOcRegistrar(" RegAndFact
+##          RegAndFact == FALSE
+##              :^BOF
+##              :? " TRegistrar(" RegAndFact
+##          FALSE [[AppFound]]
+##          FALSE [[appFound]]
+##          --BEGIN-- RegAndFact == FALSE
+##              :^BOF
+##              :? " OwlMain"
+##                  :? \\"[[ClassName]] "
+##                      :^BOL
+##                      :^DELL
+##                      --BEGIN-- @QUERY_APPL_OLE == VALUE_NOOLE
+        ::Registrar = new TRegistrar(::ApplicationReg, TAutoFactory<[[ClassName]]>(), TApplication::GetCmdLine(), _hInstance);
+        if (::Registrar->IsOptionSet(amAnyRegOption))
+            return 0;
+
+##                      --END-- @QUERY_APPL_OLE == VALUE_NOOLE
+##                      --BEGIN-- @QUERY_APPL_OLE != VALUE_NOOLE
+        ::Registrar = new TOcRegistrar(::ApplicationReg, TOleDocViewAutoFactory<[[ClassName]]>(), TApplication::GetCmdLine(), ::DocTemplateStaticHead);
+        if (::Registrar->IsOptionSet(amAnyRegOption))
+            return 0;
+
+##                      --END-- @QUERY_APPL_OLE != VALUE_NOOLE
+##                      :? \\"App.Run(" AppFound
+##                      :AppFound == FALSE
+##                          :? \\"app.Run(" appFound
+##*
+##                      :((AppFound == TRUE) || (appFound == TRUE))
+##                          :^BOS
+##                          :YPos() [[CurrYPos]]
+##                          :XPos() [[CurrXPos]]
+##                          :^@CurrYPos, CurrXPos
+##                          :^DROP
+##                          :^@CurrYPos, (CurrXPos + 3)
+##                          :^RAISE
+##                          :InsertText("::Registrar->")
+##*
+##          --END-- RegAndFact == FALSE
+##          --BEGIN-- RegAndFact == TRUE
+##              :YPos() [[CurrYLine]]
+##              :? ","
+##                  :YPos() == CurrYLine
+##                      :^EOS
+##                      :XPos() [[X1Pos]]
+##                      :? ","
+##                          :YPos() == CurrYLine
+##                              :^BOS
+##                              :XPos() [[X2Pos]]
+##                              :^@CurrYLine, X1Pos
+##                              :^DROP
+##                              :^@CurrYLine, (X2Pos - 1)
+##                              :^RAISE
+##                              --BEGIN-- TRUE
+##                                  :@QUERY_APPL_OLE == VALUE_NOOLE
+##                                      :InsertText(\\" TAutoFactory<[[ClassName]]>()")
+##*
+##                                  :@QUERY_APPL_OLE != VALUE_NOOLE
+##                                      :InsertText(\\" TOleDocViewAutoFactory<[[ClassName]]>()")
+##*
+##                              --END-- TRUE
+##*
+##              :^BOF
+##              :? "REGDATA(cmdline, \""
+##              :^EOS
+##              :? "/Automation" == FALSE
+##                  :InsertText("/Automation")
+##*
+##          --END-- RegAndFact == TRUE
+##      --END-- QUERY_CLASS_NAME [[ClassName]]
+##--END-- ? "BEGIN_REGISTRATION(ApplicationReg)" [[RegThere]]
+>>[CPP]

@@ -1,15 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\inputdia.cpp
-//   Defines type TInputDialog.  This defines the basic
-//   behavior of all input dialogs.
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TInputDialog.  User string input dialog box
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\inputdia.h>
+#include <owl/owlpch.h>
+#include <owl/inputdia.h>
 #include <string.h>
-#include <owl\edit.h>
-#include <owl\validate.h>
+#include <owl/edit.h>
+#include <owl/validate.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -19,22 +19,23 @@ TInputDialog::TInputDialog(TWindow*        parent,
                            char far*       buffer,
                            int             bufferSize,
                            TModule*        module,
-                           TValidator*     valid)
-  : TWindow(parent, title, module),
-    TDialog(parent, IDD_INPUTDIALOG, module)
+                           TValidator*     validator)
+:
+  TWindow(parent, title, module),
+  TDialog(parent, IDD_INPUTDIALOG, module)
 {
   PRECONDITION(buffer);
   SetCaption(title);
   Prompt = strnewdup(prompt);
   Buffer = buffer;
   BufferSize = bufferSize;
-  if (valid)
-    new TEdit(this,ID_INPUT)->SetValidator(valid);
+  if (validator)
+    new TEdit(this,ID_INPUT)->SetValidator(validator);
 }
 
 TInputDialog::~TInputDialog()
 {
-  delete Prompt;
+  delete [] Prompt;
 }
 
 //
@@ -46,8 +47,8 @@ TInputDialog::TransferData(TTransferDirection direction)
   if (direction == tdSetData) {
     SetDlgItemText(ID_PROMPT, Prompt);
     SetDlgItemText(ID_INPUT, Buffer);
-
-  } else if (direction == tdGetData) {
+  }
+  else if (direction == tdGetData) {
     GetDlgItemText(ID_INPUT, Buffer, BufferSize);
   }
 }

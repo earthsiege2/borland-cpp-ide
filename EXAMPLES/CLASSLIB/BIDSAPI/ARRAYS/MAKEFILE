@@ -1,0 +1,30 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for ARRAY examples                                            #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = array
+EXEALL = array.exe iarray.exe sarray.exe isarray.exe
+
+EXEMAKE= $(ARRAY) $(IARRAY) $(SARRAY) $(ISARRAY)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+ARRAY=$(EXERULE:array.obj=array.obj myclass.obj)
+IARRAY=$(ARRAY:array=iarray)
+
+SARRAY=$(ARRAY:array=sarray)
+ISARRAY=$(ARRAY:array=isarray)
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

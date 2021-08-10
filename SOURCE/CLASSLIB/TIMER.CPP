@@ -2,18 +2,20 @@
 /*                                                                        */
 /*  TIMER.CPP                                                             */
 /*                                                                        */
-/*  Copyright Borland International 1991, 1993                            */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
 #if !defined( __DOS_H )
 #include <dos.h>
-#endif  // __DOS_H
+#endif
 
-#if !defined( __TIMER_H )
-#include "classlib\timer.h"
-#endif  // __TIMER_H
+#define BUILDBIDSTIMER
+
+#if !defined( CLASSLIB_TIMER_H )
+#include <classlib/timer.h>
+#endif
 
 const unsigned long far * const dosTime =
     (const unsigned long far * const)MK_FP( 0x40, 0x6C );
@@ -103,6 +105,6 @@ int main( void )
         }
     return 0;
 }
-#endif /* TEST_TIMER */
+#endif
 
 

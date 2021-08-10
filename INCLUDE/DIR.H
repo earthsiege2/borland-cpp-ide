@@ -6,9 +6,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -19,6 +19,16 @@
 #if !defined(___DEFS_H)
 #include <_defs.h>
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #define WILDCARDS 0x01
 #define EXTENSION 0x02
@@ -49,7 +59,9 @@ struct  ffblk   {
 
 #else  /* defined __FLAT__ */
 
+#if !defined(RC_INVOKED)
 #pragma option -a-
+#endif
 
 #ifndef _FFBLK_DEF
 #define _FFBLK_DEF
@@ -68,7 +80,9 @@ struct  ffblk   {
 #define MAXFILE   256
 #define MAXEXT    256
 
+#if !defined(RC_INVOKED)
 #pragma option -a.  /* restore default packing */
+#endif
 
 #endif  /* __FLAT__  */
 
@@ -103,6 +117,16 @@ int         _RTLENTRY  _EXPFUNC32   setdisk( int __drive );
 #ifdef __cplusplus
 }
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __DIR_H */
 

@@ -19,11 +19,11 @@ IDM_DUMPVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
 BEGIN
   POPUP "&Edit"
   BEGIN
-    MenuItem  "&Undo\aAlt+BkSp",      CM_DUMPUNDO
+    MenuItem  "&Undo\aCtrl+Z",        CM_DUMPUNDO
     MenuItem  SEPARATOR
-    MenuItem  "&Cut\aShift+Del",      CM_DUMPCUT
-    MenuItem  "C&opy\aCtrl+Ins",      CM_DUMPCOPY
-    MenuItem  "&Paste\aShift+Ins",    CM_DUMPPASTE
+    MenuItem  "&Cut\aCtrl+X",         CM_DUMPCUT
+    MenuItem  "C&opy\aCtrl+C",        CM_DUMPCOPY
+    MenuItem  "&Paste\aCtrl+V",       CM_DUMPPASTE
     MenuItem  "&Edit Item\aAlt+Enter",CM_DUMPEDIT
   END
   POPUP "&Help"
@@ -34,6 +34,7 @@ END
 
 IDA_DUMPVIEW ACCELERATORS
 BEGIN
+  "^z",      CM_DUMPUNDO,
   "^x",      CM_DUMPCUT,
   "^c",      CM_DUMPCOPY,
   "^v",      CM_DUMPPASTE,
@@ -41,7 +42,7 @@ BEGIN
   VK_INSERT, CM_DUMPCOPY,  VIRTKEY, CONTROL
   VK_INSERT, CM_DUMPPASTE, VIRTKEY, SHIFT
   VK_BACK,   CM_DUMPUNDO,  VIRTKEY, ALT
-  VK_RETURN, CM_DUMPEDIT,  VIRTKEY, ALT
+  VK_RETURN, CM_DUMPEDIT,  VIRTKEY
 END
 
 STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE

@@ -2,41 +2,41 @@
 /*                                                                        */
 /*  VECTIMP.H                                                             */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_VECTIMP_H )
-#define __CLASSLIB_VECTIMP_H
+#if !defined( CLASSLIB_VECTIMP_H )
+#define CLASSLIB_VECTIMP_H
 
 #if !defined( __LIMITS_H )
 #include <limits.h>
-#endif  // __LIMITS_H
+#endif
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_STDTEMPL_H )
-#include "classlib\stdtempl.h"
-#endif  // __CLASSLIB_STDTEMPL_H
+#if !defined( CLASSLIB_STDTEMPL_H )
+#include <classlib/stdtempl.h>
+#endif
 
-#if !defined( __CLASSLIB_ALLOCTR_H )
-#include "classlib\alloctr.h"
-#endif  // __CLASSLIB_ALLOCTR_H
+#if !defined( CLASSLIB_ALLOCTR_H )
+#include <classlib/alloctr.h>
+#endif
 
-#if !defined( __CLASSLIB_MEMMGR_H )
-#include "classlib\memmgr.h"
-#endif  // __CLASSLIB_MEMMGR_H
+#if !defined( CLASSLIB_MEMMGR_H )
+#include <classlib/memmgr.h>
+#endif
 
-#if !defined( __CLASSLIB_VOIDP_H )
-#include "classlib\voidp.h"
-#endif  // __CLASSLIB_VOIDP_H
+#if !defined( CLASSLIB_VOIDP_H )
+#include <classlib/voidp.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -1445,5 +1445,5 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_VECTIMP_H
+#endif  // CLASSLIB_VECTIMP_H
 

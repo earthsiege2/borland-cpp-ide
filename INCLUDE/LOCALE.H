@@ -3,9 +3,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -22,12 +22,20 @@
 #endif
 
 
-#ifndef __OS2__
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
+
 #ifndef _SIZE_T
 #    define _SIZE_T
 typedef unsigned size_t;
 #endif
-#endif
+
 
 #define LC_ALL      0
 #define LC_COLLATE  1
@@ -35,11 +43,9 @@ typedef unsigned size_t;
 #define LC_MONETARY 3
 #define LC_NUMERIC  4
 #define LC_TIME     5
-#ifndef __OS2__
 #define LC_MESSAGES 6
 #define LC_userdef  7
-#define LC_LAST   LC_userdef
-#endif
+#define LC_LAST     LC_userdef
 
 #if !defined(__FLAT__)
 
@@ -122,6 +128,16 @@ struct lconv * _RTLENTRY _EXPFUNC _llocaleconv( void );
 #define setlocale  _lsetlocale
 #define localeconv _llocaleconv
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __LOCALE_H */
 

@@ -536,6 +536,7 @@ void TNewSubscribers::Update()
             else
                 List.AddSubscription( newSubscription );
             }
+        newSubscriptions >> ws;
         }
 }
 

@@ -7,8 +7,11 @@
 #include <owl\mdi.rh>           // Get mdi resource & command IDs
 #include "mdifile.h"
 
+#define IDW_STATUSBAR  32040    // Grabbed from OWL's headers
+#define IDW_TOOLBAR    32041
+
 #include <owl\except.rc>        // Get exception string resources
-#include <owl\editsear.rc>      // Get TEditFile resources
+#include <owl\editsear.rc>      // Get TEditSearch resources
 #include <owl\editfile.rc>      // Get TEditFile resources
 #include <owl\statusba.rc>      // Get status bar's sysmenu strings
 
@@ -21,53 +24,51 @@ IDA_MDIFILE ACCELERATORS
   VK_F12, CM_FILEOPEN, VIRTKEY
 }
 
-IDM_EDITFILE_DOC MENU 
+IDM_EDITFILE_DOC MENU
 {
   POPUP "&File"
   {
-    MENUITEM "&New", CM_FILENEW
-    MENUITEM "&Open...", CM_FILEOPEN
-    MENUITEM "&Save", CM_FILESAVE, GRAYED
-    MENUITEM "Save &As...", CM_FILESAVEAS, GRAYED
-    MENUITEM SEPARATOR
-    MENUITEM "E&xit", CM_EXIT
+    MenuItem "&New",        CM_FILENEW
+    MenuItem "&Open...",    CM_FILEOPEN
+    MenuItem "&Save",       CM_FILESAVE, GRAYED
+    MenuItem "Save &As...", CM_FILESAVEAS, GRAYED
+    MenuItem SEPARATOR
+    MenuItem "E&xit",       CM_EXIT
   }
-
   POPUP "&View"
   {
-    MENUITEM "&Status bar", IDW_STATUSBAR, CHECKED
-    MENUITEM "&Toolbar", IDW_TOOLBAR, CHECKED
-    MENUITEM SEPARATOR
-    MENUITEM "&Flyover Hints", CM_TOGGLEHINT, CHECKED
+    MenuItem "&Status bar",    IDW_STATUSBAR, CHECKED
+    MenuItem "&Toolbar",       IDW_TOOLBAR, CHECKED
+    MenuItem SEPARATOR
+    MenuItem "&Flyover Hints", CM_TOGGLEHINT, CHECKED
   }
-
   POPUP "&Window"
   {
-    MENUITEM "&Cascade", CM_CASCADECHILDREN, GRAYED
-    MENUITEM "&Tile", CM_TILECHILDREN, GRAYED
-    MENUITEM "Arrange &Icons", CM_ARRANGEICONS, GRAYED
-    MENUITEM "C&lose All", CM_CLOSECHILDREN, GRAYED
+    MenuItem "&Cascade",       CM_CASCADECHILDREN, GRAYED
+    MenuItem "&Tile",          CM_TILECHILDREN, GRAYED
+    MenuItem "Arrange &Icons", CM_ARRANGEICONS, GRAYED
+    MenuItem "C&lose All",     CM_CLOSECHILDREN, GRAYED
   }
 }
 
-IDM_EDITFILE_CHILD MENU 
+IDM_EDITFILE_CHILD MENU
 {
   POPUP "&Edit"
   {
-    MENUITEM "&Undo\aAlt+BkSp", CM_EDITUNDO
-    MENUITEM SEPARATOR
-    MENUITEM "&Cut\aShift+Del", CM_EDITCUT
-    MENUITEM "C&opy\aCtrl+Ins", CM_EDITCOPY
-    MENUITEM "&Paste\aShift+Ins", CM_EDITPASTE
-    MENUITEM "&Delete\aDel", CM_EDITDELETE
-    MENUITEM "C&lear All\aCtrl+Del", CM_EDITCLEAR
+    MenuItem  "&Undo\aCtrl+Z",        CM_EDITUNDO
+    MenuItem  SEPARATOR
+    MenuItem  "&Cut\aCtrl+X",         CM_EDITCUT
+    MenuItem  "C&opy\aCtrl+C",        CM_EDITCOPY
+    MenuItem  "&Paste\aCtrl+V",       CM_EDITPASTE
+    MenuItem  "&Delete\aDel",         CM_EDITDELETE
+    MenuItem  "C&lear All\aCtrl+Del", CM_EDITCLEAR
   }
 
   POPUP "&Search"
   {
-    MENUITEM "&Find...", CM_EDITFIND
-    MENUITEM "&Replace...", CM_EDITREPLACE
-    MENUITEM "&Next\aF3", CM_EDITFINDNEXT
+    MenuItem "&Find...",    CM_EDITFIND
+    MenuItem "&Replace...", CM_EDITREPLACE
+    MenuItem "&Next\aF3",   CM_EDITFINDNEXT
   }
 }
 
@@ -77,16 +78,16 @@ STRINGTABLE
   CM_FILEOPEN, "Opens an existing document"
   CM_FILESAVE, "Saves the active document"
   CM_FILESAVEAS, "Saves the active document with a new name"
+//  CM_EDITUNDO, "Reverses the last operation"
+//  CM_EDITCUT, "Cuts the selection and puts it on the Clipboard"
+//  CM_EDITCOPY, "Copies the selection and puts it on the Clipboard"
+//  CM_EDITPASTE, "Inserts the Clipboard contents at the insertion point"
+//  CM_EDITDELETE, "Deletes the selection"
+//  CM_EDITCLEAR, "Clears the active document"
+//  CM_EDITFIND, "Finds the specified text"
+//  CM_EDITREPLACE, "Finds the specified text and changes it"
+//  CM_EDITFINDNEXT, "Finds the next match"
   CM_EXIT, "Quits MDI File Editor and prompts to save document(s)"
-  CM_EDITUNDO, "Reverses the last operation"
-  CM_EDITCUT, "Cuts the selection and puts it on the Clipboard"
-  CM_EDITCOPY, "Copies the selection and puts it on the Clipboard"
-  CM_EDITPASTE, "Inserts the Clipboard contents at the insertion point"
-  CM_EDITDELETE, "Deletes the selection"
-  CM_EDITCLEAR, "Clears the active document"
-  CM_EDITFIND, "Finds the specified text"
-  CM_EDITREPLACE, "Finds the specified text and changes it"
-  CM_EDITFINDNEXT, "Finds the next match"
   IDW_STATUSBAR, "Toggles display of status bar"
   IDW_TOOLBAR, "Toggles display of tool bar"
   CM_CASCADECHILDREN, "Cascades open windows"
@@ -97,7 +98,7 @@ STRINGTABLE
   CM_TOGGLEBAR, "Toggles tool bar position"
 }
 
-IDI_DOC ICON 
+IDI_DOC ICON
 {
  '00 00 01 00 01 00 20 20 10 00 00 00 00 00 E8 02'
  '00 00 16 00 00 00 28 00 00 00 20 00 00 00 40 00'
@@ -149,7 +150,7 @@ IDI_DOC ICON
  '00 03 E0 00 00 03 E0 00 00 07 FF FF FF FF'
 }
 
-IDI_MULTIFILE ICON 
+IDI_MULTIFILE ICON
 {
  '00 00 01 00 01 00 20 20 10 00 00 00 00 00 E8 02'
  '00 00 16 00 00 00 28 00 00 00 20 00 00 00 40 00'
@@ -201,7 +202,7 @@ IDI_MULTIFILE ICON
  '3F FF 80 00 3F FF 80 00 3F FF 80 00 7F FF'
 }
 
-CM_FILENEW BITMAP 
+CM_FILENEW BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -228,7 +229,7 @@ CM_FILENEW BITMAP
  '88 88 88 88 99 5C'
 }
 
-CM_FILEOPEN BITMAP 
+CM_FILEOPEN BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -255,7 +256,7 @@ CM_FILEOPEN BITMAP
  '88 88 88 88 01 12'
 }
 
-CM_FILESAVE BITMAP 
+CM_FILESAVE BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -282,7 +283,7 @@ CM_FILESAVE BITMAP
  '88 88 88 88 46 64'
 }
 
-CM_FILESAVEAS BITMAP 
+CM_FILESAVEAS BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -309,7 +310,7 @@ CM_FILESAVEAS BITMAP
  '88 88 88 88 00 00'
 }
 
-CM_FILEPRINT BITMAP 
+CM_FILEPRINT BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -336,7 +337,7 @@ CM_FILEPRINT BITMAP
  '88 88 88 88 01 12'
 }
 
-CM_EDITCUT BITMAP 
+CM_EDITCUT BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -363,7 +364,7 @@ CM_EDITCUT BITMAP
  '88 88 88 88 40 20'
 }
 
-CM_EDITCOPY BITMAP 
+CM_EDITCOPY BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -390,7 +391,7 @@ CM_EDITCOPY BITMAP
  '88 88 88 88 07 35'
 }
 
-CM_EDITPASTE BITMAP 
+CM_EDITPASTE BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -417,7 +418,7 @@ CM_EDITPASTE BITMAP
  '88 88 88 88 7A 00'
 }
 
-CM_EDITFIND BITMAP 
+CM_EDITFIND BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -444,7 +445,7 @@ CM_EDITFIND BITMAP
  '88 88 88 88 0B 00'
 }
 
-CM_EDITREPLACE BITMAP 
+CM_EDITREPLACE BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -471,7 +472,7 @@ CM_EDITREPLACE BITMAP
  '88 88 88 88 00 00'
 }
 
-CM_EDITFINDNEXT BITMAP 
+CM_EDITFINDNEXT BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -498,7 +499,7 @@ CM_EDITFINDNEXT BITMAP
  '88 88 88 88 65 F0'
 }
 
-CM_TOGGLEHINT BITMAP 
+CM_TOGGLEHINT BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -525,7 +526,7 @@ CM_TOGGLEHINT BITMAP
  '88 88 88 88 00 00'
 }
 
-CM_TOGGLEBAR BITMAP 
+CM_TOGGLEBAR BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -552,7 +553,7 @@ CM_TOGGLEBAR BITMAP
  '88 88 88 88 00 00'
 }
 
-CM_SETUP BITMAP 
+CM_SETUP BITMAP
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'
@@ -579,7 +580,7 @@ CM_SETUP BITMAP
  '88 88 88 88 01 12'
 }
 
-CM_EDITUNDO BITMAP LOADONCALL MOVEABLE 
+CM_EDITUNDO BITMAP LOADONCALL MOVEABLE
 {
  '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
  '00 00 14 00 00 00 14 00 00 00 01 00 04 00 00 00'

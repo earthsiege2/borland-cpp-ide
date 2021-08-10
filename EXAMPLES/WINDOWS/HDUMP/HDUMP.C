@@ -1,4 +1,4 @@
-// Borland C++ - (C) Copyright 1991, 1992 by Borland International
+// Borland C++ - (C) Copyright 1991, 1994 by Borland International
 
 //*******************************************************************
 //
@@ -141,7 +141,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     InitHdump(hInstance, hPrevInstance, lpszCmdLine, cmdShow);
 
     // Get and dispatch messages for this applicaton.
-    while (GetMessage(&msg, NULL, NULL, NULL))
+    while (GetMessage(&msg, NULL, 0, 0))
     {
 	TranslateMessage(&msg);
   DispatchMessage(&msg);
@@ -360,6 +360,7 @@ BOOL CALLBACK _export About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 //             depends on message.
 //
 //*******************************************************************
+#pragma warn -eff
 LRESULT CALLBACK _export HdumpWndProc(HWND hWnd, UINT message,
            WPARAM wParam, LPARAM lParam)
 {
@@ -624,6 +625,7 @@ LRESULT CALLBACK _export HdumpWndProc(HWND hWnd, UINT message,
 
     return(0L);
 }
+#pragma warn .eff
 
 //*******************************************************************
 // SetupScroll - setup scroll ranges
@@ -781,8 +783,6 @@ char *SnapLine(char *szBuf, LPSTR mem, int len, int dwid, char *olbl)
         len = dwid;
 
     *szBuf = 0;
-    i = 0;
-    j = 0;
 
     // Show offset for this line.
     sprintf((char *)tbuf, "%04X  ", olbl);
@@ -840,6 +840,7 @@ char *SnapLine(char *szBuf, LPSTR mem, int len, int dwid, char *olbl)
 //             0 - if file not selected
 //
 //*******************************************************************
+#pragma warn -eff
 DoFileOpenDlg(HINSTANCE hInst, HWND hWnd,
               char *szFileSpecIn, char *szDefExtIn,
               WORD wFileAttrIn,
@@ -869,6 +870,7 @@ DoFileOpenDlg(HINSTANCE hInst, HWND hWnd,
 
     return(iReturn);
 }
+#pragma warn .eff
 
 //*******************************************************************
 // FileOpenDlgProc - get the name of a file to open
@@ -887,7 +889,7 @@ BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
         WPARAM wParam, LPARAM lParam)
 {
     static char   curpath[64];
-    char          tempDir[80], *tempStr;
+    char          tempDir[80], *tempStr = NULL;
     unsigned      attrib;
     char          cLastChar;
     int           nLen;
@@ -927,9 +929,8 @@ BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
       case LBN_DBLCLK:
           if (DlgDirSelectEx(hDlg, szFileName, sizeof (szFileName), IDD_FLIST))
           {
-        strcat(szFileName, szFileSpec);
-        DlgDirList(hDlg, szFileName, IDD_FLIST, IDD_FPATH, wFileAttr);
-        SetDlgItemText(hDlg, IDD_FNAME, szFileSpec);
+        SendMessage(hDlg, WM_COMMAND,
+              GET_WM_COMMAND_MPS (IDOK, 0, 0));
           }
           else
           {
@@ -957,7 +958,11 @@ BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
 
         // Save new spec. & directory
         strcpy(tempDir, szFileName);
+#ifdef __FLAT__
+        attrib = GetFileAttributes( (LPCTSTR) tempDir );
+#else
         _dos_getfileattr(tempDir, &attrib);
+#endif
         if(!(attrib == _A_SUBDIR) )
         {
          tempStr = strrchr(tempDir, '\\');
@@ -966,8 +971,7 @@ BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
         }
         if(tempStr || (attrib == _A_SUBDIR))
         {
-           strcpy(szFilePath, tempDir);
-           chdir(szFilePath);
+           strcat(szFilePath, tempDir);
         }
 
         cLastChar = *AnsiPrev(szFileName, szFileName + nLen);
@@ -977,6 +981,14 @@ BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
          chdir(szFilePath);
          SetDlgItemText(hDlg, IDD_FPATH, szFilePath);
          strcat(szFileName, szFileSpec);
+        }
+        if( szFileName[ 1 ] == ':' && 
+            strcmp( "*.*", &szFileName[ 2 ] ) == 0 )
+        {
+         strcpy( szFilePath, szFileName );
+         szFilePath[ 2 ] = 0x0;
+         chdir(szFilePath);
+         SetDlgItemText(hDlg, IDD_FPATH, szFilePath);
         }
 
         if (strchr(szFileName, '*') || strchr(szFileName, '?'))
@@ -1017,8 +1029,10 @@ BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
         }
 
         strupr(szFilePath);
-        if (szFilePath[strlen(szFilePath) - 1] != '\\')
-         strcat(szFilePath, "\\");
+        nLen = strlen( szFilePath ) - 1;
+        if (szFilePath[ nLen ] != '\\' &&
+            szFilePath[ nLen ] != ':' )
+               strcat(szFilePath, "\\");
 
         // Return selected file name.
         strcpy(szFileName, fileinfo.ff_name);
@@ -1051,4 +1065,4 @@ BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
 }
 
 //*******************************************************************
-
+

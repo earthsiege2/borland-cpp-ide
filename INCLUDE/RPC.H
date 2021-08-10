@@ -1,30 +1,37 @@
-/*********************************************************/
-/**               Microsoft LAN Manager                 **/
-/**                                                     **/
-/**              Base Include file for NT               **/
-/**                                                     **/
-/*********************************************************/
+/*++
+
+Module Name:
+
+    rpc.h
+
+Abstract:
+
+    Master include file for RPC applications.
+
+--*/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1992, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
 #ifndef __RPC_H__
 #define __RPC_H__
+#define __RPC_H
 
-#ifndef RC_INVOKED
-#pragma option -a
-#endif /* RC_INVOKED */
+#ifndef RPC_NO_WINDOWS_H
+#include <windows.h>
+#endif // RPC_NO_WINDOWS_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #define __RPC_WIN32__
+#define __RPC_NT__
 
 #ifndef __MIDL_USER_DEFINED
 #define midl_user_allocate MIDL_user_allocate
@@ -60,26 +67,19 @@ typedef long RPC_STATUS;
 #include "rpcnsi.h"
 #include "rpcnterr.h"
 
-#ifndef RPC_NO_WINDOWS_H
-#include <windows.h>
-#endif // RPC_NO_WINDOWS_H
 
 #include <excpt.h>
 #include <winerror.h>
 
-#ifndef RC_INVOKED
-#pragma option -a
-#endif /* RC_INVOKED */
-
 #define RpcTryExcept \
-    try \
+    __try \
         {
 
 // trystmts
 
 #define RpcExcept(expr) \
         } \
-    except (expr) \
+    __except (expr) \
         {
 
 // exceptstmts
@@ -88,14 +88,14 @@ typedef long RPC_STATUS;
         }
 
 #define RpcTryFinally \
-    try \
+    __try \
         {
 
 // trystmts
 
 #define RpcFinally \
         } \
-    finally \
+    __finally \
         {
 
 // finallystmts
@@ -115,7 +115,7 @@ RPC_STATUS RPC_ENTRY
 RpcRevertToSelf (
     );
 
-unsigned long RPC_ENTRY
+long RPC_ENTRY
 I_RpcMapWin32Status (
     IN RPC_STATUS Status
     );
@@ -124,9 +124,5 @@ I_RpcMapWin32Status (
 }
 #endif
 
-#ifndef RC_INVOKED
-#pragma option -a.
-#endif /* RC_INVOKED */
-
 #endif // __RPC_H__
-
+

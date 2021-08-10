@@ -46,14 +46,14 @@ BOOL TModuleDocument::Open(int /*mode*/, const char far* path)
   TDocTemplate** tplhead;
   TDocTemplate** PASCAL(*entry)(int version);
   (FARPROC)entry = Module->GetProcAddress("GetDocTemplateHead");
-  if (!entry || (tplhead = entry(0x200)) == 0) {
+  if (!entry || (tplhead = entry(OWLVersion)) == 0) {
     delete Module;
     Module = 0;
     return FALSE;
   }
   TDocTemplate* tpl = *tplhead;
-  for (; tpl; tpl = GetDocManager().GetNextTemplate(tpl))
-    tpl->Clone(Module);
+  for (; tpl; tpl = GetDocManager().GetNextTemplate(tpl)) 
+    tpl->Clone(Module)->SetDocManager(&GetDocManager());
   return TRUE;
 }
 

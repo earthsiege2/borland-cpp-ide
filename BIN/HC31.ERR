@@ -12,7 +12,7 @@
 1150	"Cannot overwrite file '%s'."
 1170	"File '%s' is a directory."
 
-1190	"Cannot use reserved DOS file name '%s'."
+1190	"Cannot use reserved MS-DOS file name '%s'."
 
 1230	"File '%s' not found."
 

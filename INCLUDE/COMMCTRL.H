@@ -4,15 +4,22 @@
 *                                                                             *
 *               Version 3.10                                                  *
 *                                                                             *
-*               Copyright (c) 1991-1992, Microsoft Corp. All rights reserved. *
-*                                                                             *
 *  FILE HISTORY:                                                              *
 *                                                                             *
 *    AlbertT    27-Oct-1992 Addfiled; ported from winball                     *
-*                                                                             *
+*    a-lynnb    27-Dec-1993 A and W version of messages                       *
 *******************************************************************************/
 
-#ifndef __COMMCTRL_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _INC_COMMCTRL
+#define _INC_COMMCTRL
 #define __COMMCTRL_H
 
 #ifdef __cplusplus            /* Assume C declaration for C++ */
@@ -24,13 +31,25 @@ extern "C" {
 #ifndef _INC_TOOLBAR
 #define _INC_TOOLBAR
 
+#define TOOLBARCLASSNAMEW   L"ToolbarWindow32"
+#define TOOLBARCLASSNAMEA   "ToolbarWindow32"
+
+#ifdef  UNICODE
+#define TOOLBARCLASSNAME    TOOLBARCLASSNAMEW
+#else
+#define TOOLBARCLASSNAME    TOOLBARCLASSNAMEA
+#endif  //UNICODE
+
 typedef struct {
     INT iBitmap;     /* index into mondo bitmap of this button's picture */
     INT idCommand;   /* WM_COMMAND menu ID that this button sends */
     BYTE fsState;    /* button's state, see TBSTATE_XXXX below */
     BYTE fsStyle;    /* button's style, see TBSTYLE_XXXX below */
     INT idsHelp;     /* string ID for button's status bar help */
+    DWORD dwData;    /* app defined data */
+    int iString;     /* index into string list */
 } TBBUTTON, NEAR *PTBBUTTON, FAR *LPTBBUTTON;
+typedef const TBBUTTON FAR* LPCTBBUTTON;
 
 #define TBSTATE_CHECKED    0x01  /* radio button is checked */
 #define TBSTATE_PRESSED    0x02  /* button is being depressed (any style) */
@@ -43,9 +62,10 @@ typedef struct {
 #define TBSTYLE_GROUP      0x04  /* this is a check button (it stays down) */
 #define TBSTYLE_CHECKGROUP (TBSTYLE_GROUP | TBSTYLE_CHECK)      /* this group is a member of a group radio group */
 
+
 typedef struct {
     TBBUTTON tbButton;
-    CHAR szDescription[1];
+    TCHAR szDescription[1];
 } ADJUSTINFO, FAR *LPADJUSTINFO;
 
 HWND  WINAPI
@@ -70,6 +90,7 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT idBitmap, BOOL bDisca
 // wParam button ID, LOWORD(lParam) == TRUE -> hide FALSE -> show
 #define TB_HIDEBUTTON   (WM_USER + 4)
 
+
 // Messages up to WM_USER+8 are reserved until we defin more state bits
 
 // wParam button ID, LOWORD(lResult) != 0 enabled
@@ -83,8 +104,6 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT idBitmap, BOOL bDisca
 
 // wParam button ID, LOWORD(lResult) != 0 pressed
 #define TB_ISBUTTONHIDDEN  (WM_USER + 12)
-
-// Messages up to WM_USER+16 are reserved until we defin more state bits
 
 // wParam is the button ID to set the TBSTATE_ state bits from LOWORD(lParam)
 #define TB_SETSTATE             (WM_USER + 17)
@@ -120,31 +139,43 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT idBitmap, BOOL bDisca
 // wParam is the index of the button to modify, and lParam is a valid
 // LPTBBUTTON.
 
-#define TB_SETBUTTON    (WM_USER + 24)
+#define TB_BUTTONCOUNT      (WM_USER + 24)
+    /* wParam: not used, 0
+    ** lParam: not used, 0
+    ** return: UINT LOWORD, number of buttons; HIWORD not used
+    */
 
-// Returns the number of buttons in the toolbar.
+#define TB_COMMANDTOINDEX   (WM_USER + 25)
+    /* wParam: UINT, command id
+    ** lParam: not used, 0
+    ** return: UINT LOWORD, index of button (-1 if command not found);
+    **         HIWORD not used
+    **/
 
-#define TB_BUTTONCOUNT     (WM_USER + 25)
+#define TB_SAVERESTORE      (WM_USER + 26)
+    /* wParam: BOOL, save state if nonzero (otherwise restore)
+    ** lParam: LPTSTR FAR*, pointer to two LPTSTRs:
+    **         (LPTSTR FAR*)(lParam)[0]: ini section name
+    **         (LPTSTR FAR*)(lParam)[1]: ini file name or NULL for WIN.INI
+    ** return: not used
+    */
 
-// wParam is the Command ID.  Returns the index of the button.
+#define TB_CUSTOMIZE            (WM_USER + 27)
+    /* wParam: not used, 0
+    ** lParam: not used, 0
+    ** return: not used
+    */
 
-#define TB_COMMANDTOINDEX  (WM_USER + 26)
+// wParam is the index of the button to modify, and lParam is a valid
+// LPTBBUTTON.
+
+#define TB_SETBUTTON    (WM_USER + 39)
 
 // wParam is the index of the button to retrieve, and lParam is a valid
 // PRECT.
 
-#define TB_GETBUTTONRECT        (WM_USER + 27)
+#define TB_GETBUTTONRECT        (WM_USER + 40)
 
-// Specifies to save/restore the state of the toolbar. wParam == FALSE means
-// to restore the state.  lParam is a pointer to an array of two LPSTR's:
-// the first is the section to write to, and the second is the file (if the
-// second is NULL, it will write to win.ini).
-
-#define TB_SAVERESTORE     (WM_USER + 28)
-
-// bring up the toolbar customize dialog
-
-#define TB_CUSTOMIZE            (WM_USER + 29)
 
 #endif   /* _INC_TOOLBAR */
 #endif
@@ -156,7 +187,17 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT idBitmap, BOOL bDisca
 
 #ifndef _INC_STATUSBAR
 #define _INC_STATUSBAR
-VOID WINAPI DrawStatusText(HDC hDC, LPRECT lprc, LPSTR szText, UINT uFlags);
+
+// SBS_* styles need to not overlap with CCS_* values
+
+
+VOID WINAPI DrawStatusTextA(HDC hDC, LPRECT lprc, LPCSTR szText, UINT uFlags);
+VOID WINAPI DrawStatusTextW(HDC hDC, LPRECT lprc, LPCWSTR szText, UINT uFlags);
+#ifdef UNICODE
+#define DrawStatusText DrawStatusTextW
+#else
+#define DrawStatusText DrawStatusTextA
+#endif // !UNICODE
 /* This is used if the app wants to draw status in its client rect,
  * instead of just creating a window.  Note that this same function is
  * used internally in the status bar window's WM_PAINT message.
@@ -168,10 +209,24 @@ VOID WINAPI DrawStatusText(HDC hDC, LPRECT lprc, LPSTR szText, UINT uFlags);
  * properly when drawing the text.
  */
 
-HWND WINAPI CreateStatusWindow(LONG style, LPSTR lpszText,
+HWND WINAPI CreateStatusWindowA(LONG style, LPCSTR lpszText,
       HWND hwndParent, WORD wID);
-HWND WINAPI CreateHeaderWindow(LONG style, LPSTR lpszText,
+HWND WINAPI CreateStatusWindowW(LONG style, LPCWSTR lpszText,
       HWND hwndParent, WORD wID);
+#ifdef UNICODE
+#define CreateStatusWindow CreateStatusWindowW
+#else
+#define CreateStatusWindow CreateStatusWindowA
+#endif // !UNICODE
+HWND WINAPI CreateHeaderWindowA(LONG style, LPCSTR lpszText,
+      HWND hwndParent, WORD wID);
+HWND WINAPI CreateHeaderWindowW(LONG style, LPCWSTR lpszText,
+      HWND hwndParent, WORD wID);
+#ifdef UNICODE
+#define CreateHeaderWindow CreateHeaderWindowW
+#else
+#define CreateHeaderWindow CreateHeaderWindowA
+#endif // !UNICODE
 /* This creates a "default" status/header window.  This window will have the
  * default borders around the text, the default font, and only one pane.
  * It may also automatically resize and move itself (depending on the SBS_*
@@ -187,19 +242,45 @@ HWND WINAPI CreateHeaderWindow(LONG style, LPSTR lpszText,
  * STATUSCLASSNAME/HEADERCLASSNAME to create a window of a specific size.
  */
 
+#define STATUSCLASSNAMEW L"msctls_statusbar32"
+#define STATUSCLASSNAMEA "msctls_statusbar32"
 
-#define STATUSCLASSNAME "msctls_statusbar"
+#ifdef UNICODE
+#define STATUSCLASSNAME STATUSCLASSNAMEW
+#else
+#define STATUSCLASSNAME STATUSCLASSNAMEA
+#endif
+
 /* This is the name of the status bar class (it will probably change later
  * so use the #define here).
  */
-#define HEADERCLASSNAME "msctls_headerbar"
-/* This is the name of the status bar class (it will probably change later
+#define HEADERCLASSNAMEW L"msctls_headerbar"
+#define HEADERCLASSNAMEA "msctls_headerbar"
+
+#ifdef UNICODE
+#define HEADERCLASSNAME HEADERCLASSNAMEW
+#else
+#define HEADERCLASSNAME HEADERCLASSNAMEA
+#endif
+
+/* This is the name of the header class (it will probably change later
  * so use the #define here).
  */
 
 
-#define SB_SETTEXT      WM_USER+1
-#define SB_GETTEXT      WM_USER+2
+#define SB_SETTEXTA      WM_USER+1
+#define SB_GETTEXTA      WM_USER+2
+#define SB_GETTEXTW      WM_USER+10
+#define SB_SETTEXTW      WM_USER+11
+
+#ifdef UNICODE
+#define SB_GETTEXT       SB_GETTEXTW
+#define SB_SETTEXT       SB_SETTEXTW
+#else
+#define SB_GETTEXT       SB_GETTEXTA
+#define SB_SETTEXT       SB_SETTEXTA
+#endif // UNICODE
+
 #define SB_GETTEXTLENGTH   WM_USER+3
 /* Just like WM_?ETTEXT*, with wParam specifying the pane that is referenced
  * (at most 255).
@@ -251,11 +332,10 @@ HWND WINAPI CreateHeaderWindow(LONG style, LPSTR lpszText,
  * implement help text when scrolling through a menu.
  */
 
-
 #define HB_SAVERESTORE     WM_USER+0x100
 /* This gets a header bar to read or write its state to or from an ini file.
  * wParam is 0 for reading, non-zero for writing.  lParam is a pointer to
- * an array of two LPSTR's: the section and file respectively.
+ * an array of two LPTSTR's: the section and file respectively.
  * Note that the correct number of partitions must be set before calling this.
  */
 #define HB_ADJUST    WM_USER+0x101
@@ -325,7 +405,7 @@ HWND WINAPI CreateHeaderWindow(LONG style, LPSTR lpszText,
  *       case WM_MOUSEMOVE:
  *         wsprintf(szBuf, "%d,%d", LOWORD(lParam), HIWORD(lParam));
  *         SendDlgItemMessage(hDlg, IDC_STATUS, SB_SETTEXT, 0,
- *               (LPARAM)(LPSTR)szBuf);
+ *               (LPARAM)(LPTSTR)szBuf);
  *         break;
  *
  *       default:
@@ -345,10 +425,24 @@ HWND WINAPI CreateHeaderWindow(LONG style, LPSTR lpszText,
 
 // for winball only, these are in the Chicago kernel
 
-BOOL WINAPI WritePrivateProfileStruct(LPSTR szSection, LPSTR szKey,
-      LPBYTE lpStruct, UINT uSizeStruct, LPSTR szFile);
-BOOL WINAPI GetPrivateProfileStruct(LPSTR szSection, LPSTR szKey,
-      LPBYTE lpStruct, UINT uSizeStruct, LPSTR szFile);
+BOOL WINAPI WritePrivateProfileStructA(LPCSTR szSection, LPCSTR szKey,
+      LPBYTE lpStruct, UINT uSizeStruct, LPCSTR szFile);
+BOOL WINAPI WritePrivateProfileStructW(LPCWSTR szSection, LPCWSTR szKey,
+      LPBYTE lpStruct, UINT uSizeStruct, LPCWSTR szFile);
+#ifdef UNICODE
+#define WritePrivateProfileStruct WritePrivateProfileStructW
+#else
+#define WritePrivateProfileStruct WritePrivateProfileStructA
+#endif // !UNICODE
+BOOL WINAPI GetPrivateProfileStructA(LPCSTR szSection, LPCSTR szKey,
+      LPBYTE lpStruct, UINT uSizeStruct, LPCSTR szFile);
+BOOL WINAPI GetPrivateProfileStructW(LPCWSTR szSection, LPCWSTR szKey,
+      LPBYTE lpStruct, UINT uSizeStruct, LPCWSTR szFile);
+#ifdef UNICODE
+#define GetPrivateProfileStruct GetPrivateProfileStructW
+#else
+#define GetPrivateProfileStruct GetPrivateProfileStructA
+#endif // !UNICODE
 
 
 VOID WINAPI MenuHelp(WORD iMessage, WPARAM wParam, LPARAM lParam,
@@ -456,7 +550,7 @@ VOID WINAPI GetEffectiveClientRect(HWND hWnd, LPRECT lprc, LPINT lpInfo);
 #define _INC_BTNLIST
 
 /* Class name */
-#define BUTTONLISTBOX           "ButtonListBox"
+#define BUTTONLISTBOX           L"ButtonListBox"
 
 /* Button List Box Styles */
 #define BLS_NUMBUTTONS      0x00FFL
@@ -598,7 +692,14 @@ typedef CREATELISTBUTTON * LPCREATELISTBUTTON;
     TBM_SETRANGEMAX
 */
 
-#define TRACKBAR_CLASS          "msctls_trackbar"
+#define TRACKBAR_CLASSA "msctls_trackbar32"
+#define TRACKBAR_CLASSW L"msctls_trackbar32"
+
+#ifdef UNICODE
+#define TRACKBAR_CLASS TRACKBAR_CLASSW
+#else
+#define TRACKBAR_CLASS TRACKBAR_CLASSA
+#endif
 
 /* Trackbar styles */
 
@@ -686,17 +787,18 @@ typedef struct
     POINT ptCursor;
   } DRAGLISTINFO, FAR *LPDRAGLISTINFO;
 
-#define DL_BEGINDRAG (LB_MSGMAX+100)
-#define DL_DRAGGING  (LB_MSGMAX+101)
-#define DL_DROPPED   (LB_MSGMAX+102)
-#define DL_CANCELDRAG   (LB_MSGMAX+103)
+
+#define DL_BEGINDRAG    (WM_USER+133)
+#define DL_DRAGGING     (WM_USER+134)
+#define DL_DROPPED      (WM_USER+135)
+#define DL_CANCELDRAG   (WM_USER+136)
 
 #define DL_CURSORSET 0
 #define DL_STOPCURSOR   1
 #define DL_COPYCURSOR   2
 #define DL_MOVECURSOR   3
 
-#define DRAGLISTMSGSTRING "commctrl_DragListMsg"
+#define DRAGLISTMSGSTRING L"commctrl_DragListMsg"
 
 /* Exported functions and variables
  */
@@ -789,7 +891,6 @@ typedef struct tagUDACCEL
 #define UDS_ARROWKEYS      0x0020
    /* subclasses the buddy to steal the up and down arrow keys */
 
-
 /* MESSAGES */
 
 #define UDM_SETRANGE    (WM_USER+101)
@@ -866,7 +967,7 @@ typedef struct tagUDACCEL
 
 /* HELPER APIs */
 
-#define UPDOWN_CLASS "msctls_updown"
+#define UPDOWN_CLASS L"msctls_updown"
    /* For dialog-box resource creation or manual CreateWindow use.
    */
 HWND WINAPI CreateUpDownControl(DWORD dwStyle, int x, int y, int cx, int cy,
@@ -990,11 +1091,11 @@ HWND WINAPI CreateUpDownControl(DWORD dwStyle, int x, int y, int cx, int cy,
 /* This allows a toolbar (header bar?) to be configured by the user.
  */
 
+
 /* Stub function to call if all you want to do is make sure this DLL is loaded
  */
 VOID WINAPI InitCommonControls(VOID);
 
-// albertt 13 2.8
 #define SST_RESOURCE 0x1
 #define SST_FORMAT   0x2
 
@@ -1002,4 +1103,5 @@ VOID WINAPI InitCommonControls(VOID);
 }                  /* End of extern "C" { */
 #endif             /* __cplusplus */
 
-#endif             /* __COMMCTRL_H */
+#endif             /* _INC_COMMCTRL */
+

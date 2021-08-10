@@ -6,12 +6,16 @@
 # Defines:
 #   MODEL=<d|s|m|l|f>   one of: dll(default), small, medium, large or flat
 #   WIN32        enables win32 static (flat) or DLL
-#   DIAGS        enables runtime diagnostic library (adds 'd' to lib name)
+#   DIAGS        enables runtime diagnostics (adds 'd' to lib name before 'w')
 #   DEBUG        enables debug info for TDW & TD32
 #   NOOWLPCH     disables precompiled headers for owl
 #   OWLSECTION   enables sectioning of sources into multiple small objs
 #   OWLNAME=Xxx  lib & DLL name base, Defaults to 'Owl'. Req. for non-diag DLLs
-#   OWLVER=nnn   version for Owl DLL. Defaults to 200. Req. for non-diag DLLs
+#   OWLVER=nnn   version for Owl DLL. Defaults to 250. Req. for non-diag DLLs
+#   USERDLL      builds Owl for use in a user DLL (adds 'u' to lib name after
+#                model)
+#   OWLFARVTABLE moves owl class vtables out of dgroup
+#   DISABLE_EXCEPTIONS disables exception use in Owl & in macros
 #
 # Define these for alternate owl build directories:
 #   OWLSRCDIR    defaults to: $(BCROOT)\source\owl
@@ -23,17 +27,17 @@
 #   make MODEL=s -DOWLSECTION            small model library (owlws.lib)
 #   make MODEL=m -DOWLSECTION            medium model library (owlwm.lib)
 #   make MODEL=l -DOWLSECTION            large model library (owlwl.lib)
-#   make OWLNAME=Owl OWLVER=200          16bit DLL (owlwi.lib & owl200.dll)
+#   make OWLNAME=Owl OWLVER=250          16bit DLL (owlwi.lib, owl250.dll)
 #   make -DWIN32 -DOWLSECTION            32bit flat model library (owlwf.lib)
-#   make -DWIN32 OWLNAME=Owl OWLVER=200  32bit DLL (owlwfi.lib & owl200f.dll)
+#   make -DWIN32 OWLNAME=Owl OWLVER=250  32bit DLL (owlwfi.lib, owl250f.dll)
 #
 # Diagnostic builds:
-#   make MODEL=s -DOWLSECTION -DDIAGS    small model diag library (owldws.lib)
-#   make MODEL=m -DOWLSECTION -DDIAGS    medium model diag library (owldwm.lib)
-#   make MODEL=l -DOWLSECTION -DDIAGS    large model diag library (owldwl.lib)
-#   make -DDIAGS                         16bit diag DLL (owldwi.lib & 0wl200d.dll)
-#   make -DWIN32 -DOWLSECTION -DDIAGS    32bit flat model diag library (owldwf.lib)
-#   make -DWIN32 -DDIAGS                 32bit diag DLL (owldwfi.lib & 0wl200df.dll)
+#   make MODEL=s -DOWLSECTION -DDIAGS  small model diag library (owldws.lib)
+#   make MODEL=m -DOWLSECTION -DDIAGS  medium model diag library (owldwm.lib)
+#   make MODEL=l -DOWLSECTION -DDIAGS  large model diag library (owldwl.lib)
+#   make -DDIAGS                       16bit diag DLL (owldwi.lib, owl250d.dll)
+#   make -DWIN32 -DOWLSECTION -DDIAGS  32bit flat model diag lib (owldwf.lib)
+#   make -DWIN32 -DDIAGS               32bit diag DLL (owldwfi.lib, owl250df.dll)
 #
 # Notes:
 #   The owl16.ord file should be maintained if Owl functions are changed
@@ -51,6 +55,9 @@
 !if !$d(MODEL) || $(MODEL) == d
   DLL = 1
 !endif
+!if $(MODEL) == f
+  WIN32 = 1
+!endif
 !if $d(WIN32)
   MODEL = f
 !elif $d(DLL) || !$d(MODEL)
@@ -66,21 +73,25 @@
 !   error MUST DEFINE LIBRARY NAME, e.g. "MAKE MODEL=d OWLNAME=YourName"
 ! endif
 ! if $d(WIN32)
-    KEY = wfi
+    KEY = wfi                   # 32bit DLL import library
 ! else
-    KEY = wi
+    KEY = wi                    # 16bit DLL import library
 ! endif
 
 !else
 
-  KEY = w$(MODEL)
+KEY = w$(MODEL)                 # Static library
 
 !endif  # if/else $d(DLL)
+
+! if $d(USERDLL)
+  KEY = $(KEY)u                 # Static or import library for use by dlls
+! endif
 
 !if !$d(OWLNAME)
   OWLNAME=Owl
 ! if !$d(OWLVER)
-    OWLVER=200
+    OWLVER=250
 ! endif
 !endif
 
@@ -122,8 +133,22 @@
 #--------------------------------------------------------------------
 # dir & search paths, & precompiled headers
 #--------------------------------------------------------------------
+
+#
+# BC tools BCBINDIR can be based on MAKEDIR if no BCROOT is defined
+#
+!if $d(BCROOT)
+  BCBINDIR = $(BCROOT)\bin
+!else
+  BCBINDIR = $(MAKEDIR)
+!endif
+
+#
+# default bcroot to whatever is in bcroot.inc
+#
 !if !$d(BCROOT)
-!  include $(MAKEDIR)\bcroot.inc   # Use bcroot.inc setup by install if no var
+  #BCROOT = $(MAKEDIR)\..
+  !include $(MAKEDIR)\bcroot.inc
 !endif
 
 #
@@ -148,7 +173,6 @@
 #
 # Where to find BC tools, libraries and include files
 #
-BCBINDIR = $(BCROOT)\bin
 BCINCDIR = $(BCROOT)\include
 BCLIBDIR = $(BCROOT)\lib
 
@@ -163,7 +187,7 @@ BCLIBDIR = $(BCROOT)\lib
   RCINCLUDEPATH = -i$(OWLINCDIR) -i$(BCINCDIR)
 !endif
 
-OWLOBJDIR = $(OWLSRCDIR)\object\$(OD)$(KEY)    # Keep seperate diag/nondiag dirs
+OWLOBJDIR = $(OWLSRCDIR)\object\$(OD)$(KEY)   # Keep seperate diag/nondiag dirs
 
 .PATH.obj = $(OWLOBJDIR)
 .PATH.res = $(OWLOBJDIR)
@@ -172,10 +196,13 @@ OWLOBJDIR = $(OWLSRCDIR)\object\$(OD)$(KEY)    # Keep seperate diag/nondiag dirs
 .PATH.cpp = $(OWLSRCDIR)
 
 #
-# Define this to enable the use of Precompiled headers when building Owl
+# Define NOOWLPCH to disable the use of Precompiled headers when building Owl
 #
 !if !$d(NOOWLPCH)
-  CPCH= -H=$(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).csm -H"owl\owlpch.h" -D_OWLPCH
+  CPCH= -H=$(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).csm -H"owl/owlpch.h" -D_OWLPCH
+! if $d(WIN32)
+  CPCH= $(CPCH) -Hc
+! endif
 !endif
 
 #--------------------------------------------------------------------
@@ -204,8 +231,7 @@ OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
   IMPLIB   = $(BCBINDIR)\implib      # Import library generator
   TDSTRIP  = $(BCBINDIR)\tdstrp32    # Debug info extractor
 
-  #COPTS    = -d -k- -O1gmpv          # Optimizations
-  COPTS    = -d -k-
+  COPTS    = -d -k- -O1gmpv          # Optimizations
   CFGFILE  = bcc32.cfg               # Name of compiler's config file
 ! if $d(DEBUG)
     TLIBOPTS = /P512
@@ -245,11 +271,14 @@ OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
     COPTS = $(COPTS) -dc
 ! endif
 ! if $(MODEL) == s                   # Small model turns off some options
-    NO_CPP_EXCEPTIONS = 1
+    DISABLE_EXCEPTIONS = 1
     COPTS = $(COPTS) -DNO_GDI_ORPHAN_CONTROL
 ! endif
-! if $d(NO_CPP_EXCEPTIONS)
-    COPTS = $(COPTS) -DNO_CPP_EXCEPTIONS -x-
+! if $d(OWLFARVTABLE)
+    COPTS = $(COPTS) -D_OWLFARVTABLE;_BIDSFARVTABLE #;_RTLFARVTABLE
+! endif
+! if $d(DISABLE_EXCEPTIONS)
+    COPTS = $(COPTS) -DDISABLE_EXCEPTIONS -x-
 ! endif
   CFGFILE = turboc.cfg
 
@@ -259,16 +288,21 @@ OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
     TLIBOPTS = /P32 /0
 ! endif
 
-! if $d(DLL)
-    CWIN = -WDE -D_BUILDOWLDLL -zEOWL_FARDATA
-    LFLAGS = $(LDBG) -Twd -n -s -c -C
+! if $d(DLL)                         # Build the 16bit Owl DLL
+    # Dll, explicit export, far data into seg named OWL_FARDATA, compat excptns
+    CWIN = -WDE -D_BUILDOWLDLL -zEOWL_FARDATA -xc
+    LFLAGS = $(LDBG) -Twd -n -s -c -C -Oc -Oi -Oa -Or
 !   if !$d(BIDSILIB)
       BIDSILIB = bids$(BD)i
 !   endif
     STDLIBS  = import crtldll        # Libs for linking the Owl DLL
+
 ! else
-    CWIN = -WSE
-    TLIBOPTS = $(TLIBOPTS) /E        # 16bit static libs get extended dicts
+!   if $d(USERDLL)
+      CWIN = -WDE -xc                # Build static Owl lib for use in DLLs
+!   else
+      CWIN = -WSE                    # Build static Owl lib for use in EXEs
+!   endif
 ! endif
 
 !endif
@@ -283,24 +317,19 @@ OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
   $(BCC) {$. }
 
 #--------------------------------------------------------------------
-#
 # Various file lists needed for dependency checking and LIBing.
 #
-#   OBJSn is the main list
-#
-#   DEPOBJS is the list of object files for dependency checking
-#
-#   LIBOBJS is the list of object files for building the library
-#
+#   OBJS_CMN are the objs common to static libs and the dll
+#   OBJS_LIB are the objs that go into libs and implibs only, not the dlls
+#   OBJS_DLL are the objs that go into the owl dll only
+#   LIBDEPOBJS is the list of object files for lib/implib dependency checking
+#   LIBOBJS is the list of object files for building/addingto the libraries
 #   LINKOBJS is the list of object files for building the DLL
-#
-#   ILIBOBJS is the list of object files added to the import library
-#
 #--------------------------------------------------------------------
 
-# General Objs
+# Common Objs go into static libs and DLLs
 #
-OBJS1 = \
+OBJS_CMN =\
  PFXappdict.obj\
  PFXbitmap.obj\
  PFXbitmapga.obj\
@@ -344,26 +373,21 @@ OBJS1 = \
  PFXpen.obj\
  PFXpreview.obj\
  PFXprintdc.obj\
+ PFXprofile.obj\
  PFXregion.obj\
  PFXstatusba.obj\
  PFXswindow.obj\
  PFXtextgadg.obj\
  PFXtoolbox.obj\
+ PFXuihandle.obj\
  PFXversion.obj\
  PFXwindow.obj\
  PFXwindowdc.obj
 
-# Add in these objs when exceptions are disabled
-#
-! if $d(NO_CPP_EXCEPTIONS)
-OBJS1 = $(OBJS1)\
- PFXnoxx.obj
-!endif
-
 # Add in these objs when sectioning
 #
 !if $d(OWLSECTION)
-OBJS1 = $(OBJS1)\
+OBJS_CMN = $(OBJS_CMN)\
  PFXapplica1.obj\
  PFXapplica2.obj\
  PFXapplica3.obj\
@@ -390,6 +414,8 @@ OBJS1 = $(OBJS1)\
  PFXdib6.obj\
  PFXdocmang1.obj\
  PFXdocmang2.obj\
+ PFXdoctpl1.obj\
+ PFXdoctpl2.obj\
  PFXdocview1.obj\
  PFXdocview2.obj\
  PFXedit1.obj\
@@ -439,9 +465,6 @@ OBJS1 = $(OBJS1)\
  PFXopensav2.obj\
  PFXpictval1.obj\
  PFXpictval2.obj\
- PFXpoint1.obj\
- PFXpoint2.obj\
- PFXpoint3.obj\
  PFXprintdi1.obj\
  PFXprintdi2.obj\
  PFXprinter1.obj\
@@ -470,7 +493,7 @@ OBJS1 = $(OBJS1)\
 # Add in these objs when not sectioning
 #
 !else
-OBJS1 = $(OBJS1)\
+OBJS_CMN = $(OBJS_CMN)\
  PFXapplicat.obj\
  PFXbutton.obj\
  PFXcheckbox.obj\
@@ -481,6 +504,7 @@ OBJS1 = $(OBJS1)\
  PFXdialog.obj\
  PFXdecmdifr.obj\
  PFXdocmanag.obj\
+ PFXdoctpl.obj\
  PFXdocview.obj\
  PFXedit.obj\
  PFXeditfile.obj\
@@ -504,7 +528,6 @@ OBJS1 = $(OBJS1)\
  PFXmodule.obj\
  PFXopensave.obj\
  PFXpictval.obj\
- PFXpoint.obj\
  PFXprinter.obj\
  PFXprintdia.obj\
  PFXprintout.obj\
@@ -519,31 +542,64 @@ OBJS1 = $(OBJS1)\
  PFXvslider.obj
 !endif
 
-# Static libs and import libs
+# Objs that go into static libs and import libs, but not in the owl dll itself
+# These also get built differently when in the import library. Note that
+# classes in the modules are declared _USERCLASS instead of _OWLCLASS
 #
-OBJS2 = \
- PFXwinmain.obj\
+OBJS_LIB =\
  PFXglobal.obj
 
-# Import libs only
+# OLE 2 classes get put into the lib. Small & medium model not supported
 #
-OBJS3 = \
- PFXlibmain.obj
-
-# 16bit only
-#
-!if !$d(WIN32)
-OBJS16 = \
- PFXvbxctl.obj
+!if $(MODEL) == l || $(MODEL) == f
+OBJS_OLE2=\
+ PFXstgdoc.obj\
+ PFXolewindo.obj\
+ PFXoledoc.obj\
+ PFXoleframe.obj\
+ PFXolemdifr.obj\
+ PFXoleview.obj
+!if $(MODEL) == l
+OBJS_OLE2=$(OBJS_OLE2)\
+ PFXoledlg.obj\
+ PFXchgicon.obj\
+ PFXinsobj.obj\
+ PFXpastespc.obj\
+ PFXlinks.obj\
+ PFXlinkguid.obj\
+ PFXolemeta.obj
+!endif
+OBJS_LIB = $(OBJS_LIB) $(OBJS_OLE2)
 !endif
 
-# Put together obj groups into lists for different targets
+OBJS_LIB = $(OBJS_LIB)\
+ PFXvbxctl.obj
+
+!if $d(USERDLL) || $d(WIN32)   # Lib for use by DLLs
+OBJS_LIB = $(OBJS_LIB)\
+ PFXlibmain.obj\
+ PFXowlmain.obj
+!endif
+!if !$d(USERDLL) || $d(WIN32)  # Lib for use in EXEs
+OBJS_LIB = $(OBJS_LIB)\
+ PFXwinmain.obj
+!endif
+
+# Objs that go into the Owl DLL only
 #
-LIBDEPOBJS  = $(OBJS1:PFX=)  $(OBJS2:PFX=)  $(OBJS16:PFX=)
-LIBOBJS     = $(OBJS1:PFX=+) $(OBJS2:PFX=+) $(OBJS16:PFX=+)
-ILIBDEPOBJS = $(OBJS1:PFX=)  $(OBJS2:PFX=)  $(OBJS3:PFX=) $(OBJS16:PFX=)
-LINKOBJS    = $(OBJS1:PFX=)
-ILIBOBJS    = $(OBJS3:PFX=+) $(OBJS2:PFX=+) $(OBJS16:PFX=+)
+!if $d(DLL)
+OBJS_DLL =
+!endif
+
+# Put together obj groups into lists for different dependencies & tools
+#
+LIBDEPOBJS = $(OBJS_CMN:PFX=) $(OBJS_LIB:PFX=) $(OBJS_DLL:PFX=)
+!if $(DLL)
+ LIBOBJS   = $(OBJS_LIB:PFX=+)
+ LINKOBJS  = $(OBJS_CMN:PFX=)  $(OBJS_DLL:PFX=)
+!else
+ LIBOBJS   = $(OBJS_CMN:PFX=+) $(OBJS_LIB:PFX=+)
+!endif
 
 #--------------------------------------------------------------------
 # targets
@@ -551,8 +607,8 @@ ILIBOBJS    = $(OBJS3:PFX=+) $(OBJS2:PFX=+) $(OBJS16:PFX=+)
 all: cfgfile $(OWLLIB)
 
 cfgfile:
-  @-if not exist $(.PATH.obj)\..\NUL md $(.PATH.obj)\..
-  @-if not exist $(.PATH.obj)\NUL md $(.PATH.obj)
+  @-if not exist $(OWLSRCDIR)\object\NUL md $(OWLSRCDIR)\object
+  @-if not exist $(OWLOBJDIR)\NUL md $(OWLOBJDIR)
   @copy &&|
 -I$(INCLUDE)
 -c -w $(CMDL) $(CWIN) $(COPTS)
@@ -564,23 +620,23 @@ $(CPCH) -n$(.PATH.obj) $(CCFOWL)
 
 !if $d(WIN32)
 
-$(OWLLIB): $(ILIBDEPOBJS) $(.PATH.obj)\$(OWLDEF) $(.PATH.obj)\$(OWLRES)
+$(OWLLIB): $(LIBDEPOBJS) $(.PATH.obj)\$(OWLDEF) $(.PATH.obj)\$(OWLRES)
   @cd $(.PATH.obj)
   $(TLINK) @&&|
 $(LFLAGS) -L$(BCLIBDIR) c0d32 +
 $(LINKOBJS)
 $(OWLDLL)
 
--v- $(BIDSILIB) $(STDLIBS)
+$(BIDSILIB) $(STDLIBS)
 $(OWLDEF)
 $(OWLRES)
 |
   $(TDSTRIP) -s $(OWLDLL)
   $(IMPLIB) $(OWLLIB) $(OWLDLL)
   $(TLIB) $(TLIBOPTS) $(OWLLIB) @&&|
-$(ILIBOBJS)
+$(LIBOBJS)
 |
-  @del $*.bak
+  @-del $*.bak
   @cd $(.PATH.cpp)
 
 $(.PATH.obj)\$(OWLRES):
@@ -596,8 +652,15 @@ DATA        MULTIPLE NONSHARED
 | $(OWLDEF) > NUL
   @cd $(.PATH.cpp)
 
-winmain.obj:
-  $(BCC) -W -D_OWLDLL -U_BUILDOWLDLL $&.cpp
+# Compile objs that aren't part of the Owl DLL as if they were user EXE or
+# user DLL objs
+#
+$(OBJS_LIB:PFX=):
+!if $d(USERDLL)
+  $(BCC)    -D_OWLDLL -U_BUILDOWLDLL {$&.cpp }
+!else
+  $(BCC) -W -D_OWLDLL -U_BUILDOWLDLL {$&.cpp }
+!endif
 
 !else  # ! WIN32
 
@@ -606,38 +669,38 @@ winmain.obj:
 # finish lib by adding additional objs,
 # then re-link stripping name tables, add resources & tdstrip debug info
 #
-$(OWLLIB): $(ILIBDEPOBJS) $(.PATH.obj)\$(OWLDEF) $(.PATH.obj)\$(OWLRES)
+$(OWLLIB): $(LIBDEPOBJS) $(.PATH.obj)\$(OWLDEF) $(.PATH.obj)\$(OWLRES)
   @cd $(.PATH.obj)
   $(TLINK) @&&|
 $(LFLAGS) -Gn -L$(BCLIBDIR) c0dl +
 $(LINKOBJS)
 $(OWLDLL)
 
--v- $(BIDSILIB) $(STDLIBS)
+$(BIDSILIB) $(STDLIBS)
 $(OWLDEF)
 
 |
   $(IMPLIB) -i $(OWLLIB) $(OWLDEF) $(OWLDLL)
   $(TLIB) $(TLIBOPTS) $(OWLLIB) @&&|
-$(ILIBOBJS)
+$(LIBOBJS)
 |
   $(TLINK) @&&|
 $(LFLAGS) -Gr -Gn -L$(BCLIBDIR) c0dl +
 $(LINKOBJS)
 $(OWLDLL)
 
--v- $(BIDSILIB) $(STDLIBS)
+$(BIDSILIB) $(STDLIBS)
 $(OWLDEF)
 $(OWLRES)
 |
   $(TDSTRIP) -s $(OWLDLL)
-  @del $*.bak
+  @-del $*.bak
   @cd $(.PATH.cpp)
 
 $(.PATH.obj)\$(OWLRES):
   $(BRCC) $(RCINCLUDEPATH) -fo$@ $&.rc
 
-$(.PATH.obj)\$(OWLDEF): $(ILIBDEPOBJS) $(.PATH.cpp)\owl16.ord
+$(.PATH.obj)\$(OWLDEF): $(LIBDEPOBJS) $(.PATH.cpp)\owl16.ord
   @copy &&|
 LIBRARY     $(OWLNAME)$(OWLVER)$(OD)
 DESCRIPTION 'ObjectWindows DLL'
@@ -649,15 +712,26 @@ EXPORTS
     WEP @1 RESIDENTNAME
 | + $(.PATH.cpp)\owl16.ord $(.PATH.obj)\$(OWLDEF) > NUL
 
-winmain.obj:
-  $(BCC) -WSE -D_OWLDLL -U_BUILDOWLDLL $&.cpp
-
+# Compile objs that aren't part of the Owl DLL as if they were user EXE or
+# user DLL objs
+#
+$(OBJS_LIB:PFX=):
+!if $d(USERDLL)
+  $(BCC)     -D_OWLDLL -U_BUILDOWLDLL {$&.cpp }
+!else
+  # smart callback, far data into normal data seg DATA, could use CODE if RO
+  $(BCC) -WS -D_OWLDLL -U_BUILDOWLDLL -zFDATA {$&.cpp }
 !endif
+
+localex.obj: locale.cpp
+  $(BCC) -o$< locale.cpp
+
+!endif # if/else WIN32
 
 !else  # ! DLL
 
 $(OWLLIB): $(LIBDEPOBJS)
-  @del $(OWLLIB)
+  @-del $(OWLLIB)
   @cd $(.PATH.obj)
   $(TLIB) $(TLIBOPTS) $(OWLLIB) @&&|
 $(LIBOBJS)
@@ -668,8 +742,8 @@ $(LIBOBJS)
 
 clean:
   @echo Removing .OBJs from $(.PATH.obj)
-  @if exist $(.PATH.obj)\*.obj del $(.PATH.obj)\*.obj
-  @if exist $(.PATH.obj)\*.csm del $(.PATH.obj)\*.csm
+  @-if exist $(.PATH.obj)\*.obj del $(.PATH.obj)\*.obj
+  @-if exist $(.PATH.obj)\*.csm del $(.PATH.obj)\*.csm
 
 applica1.obj: applicat.cpp
   $(BCC) -o$< -DSECTION=1 applicat.cpp
@@ -732,6 +806,11 @@ docmang1.obj: docmanag.cpp
   $(BCC) -o$< -DSECTION=1 docmanag.cpp
 docmang2.obj: docmanag.cpp
   $(BCC) -o$< -DSECTION=2 docmanag.cpp
+
+doctpl1.obj: doctpl.cpp
+  $(BCC) -o$< -DSECTION=1 doctpl.cpp
+doctpl2.obj: doctpl.cpp
+  $(BCC) -o$< -DSECTION=2 doctpl.cpp
 
 docview1.obj: docview.cpp
   $(BCC) -o$< -DSECTION=1 docview.cpp
@@ -797,7 +876,7 @@ hslider2.obj: hslider.cpp
 
 inputdi1.obj: inputdia.cpp
   $(BCC) -o$< -DSECTION=1 inputdia.cpp
-inputdi2.obj: inputdia2.cpp
+inputdi2.obj: inputdia.cpp
   $(BCC) -o$< -DSECTION=2 inputdia.cpp
 
 listbox1.obj: listbox.cpp
@@ -853,13 +932,6 @@ pictval1.obj: pictval.cpp
   $(BCC) -o$< -DSECTION=1 pictval.cpp
 pictval2.obj: pictval.cpp
   $(BCC) -o$< -DSECTION=2 pictval.cpp
-
-point1.obj: point.cpp
-  $(BCC) -o$< -DSECTION=1 point.cpp
-point2.obj: point.cpp
-  $(BCC) -o$< -DSECTION=2 point.cpp
-point3.obj: point.cpp
-  $(BCC) -o$< -DSECTION=3 point.cpp
 
 printou1.obj: printout.cpp
   $(BCC) -o$< -DSECTION=1 printout.cpp

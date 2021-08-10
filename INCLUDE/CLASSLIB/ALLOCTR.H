@@ -2,21 +2,25 @@
 /*                                                                    */
 /*  ALLOCTR.H                                                         */
 /*                                                                    */
-/*  Copyright (c) 1992, 1993 Borland International                    */
+/*  Copyright (c) 1992, 1994 Borland International                    */
 /*  All Rights Reserved                                               */
 /*                                                                    */
 /*--------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_ALLOCTR_H )
-#define __CLASSLIB_ALLOCTR_H
+#if !defined( CLASSLIB_ALLOCTR_H )
+#define CLASSLIB_ALLOCTR_H
+
+#if !defined(___DEFS_H)
+#include <_defs.h>
+#endif
 
 #if !defined( __STDLIB_H )
 #include <stdlib.h>
-#endif  // __STDLIB_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
@@ -37,17 +41,21 @@
 class _BIDSCLASS TStandardAllocator
 {
 public:
-    friend void _BIDSFAR *operator new( size_t sz, const TStandardAllocator& )
+    friend void _BIDSFAR * _RTLENTRY _EXPFUNC32 
+            operator new( size_t sz, const TStandardAllocator& )
         { return ::operator new( sz ); }
-    friend void _BIDSFAR *operator new [] ( size_t sz, const TStandardAllocator& )
+    friend void _BIDSFAR * _RTLENTRY _EXPFUNC32 
+            operator new [] ( size_t sz, const TStandardAllocator& )
         { return ::operator new [] ( sz ); }
-    friend void *operator new( unsigned, void *ptr )
+    friend void _BIDSFAR * _RTLENTRY _EXPFUNC32 
+         operator new( unsigned, void *ptr )
         { return ptr; }
-    friend void *operator new [] ( unsigned, void *ptr )
+    friend void _BIDSFAR * _RTLENTRY _EXPFUNC32 
+         operator new [] ( unsigned, void *ptr )
         { return ptr; }
-    void operator delete( void _BIDSFAR *ptr )
+    void _RTLENTRY _EXPFUNC32 operator delete( void _BIDSFAR *ptr )
         { ::operator delete( ptr ); }
-    void operator delete [] ( void _BIDSFAR *ptr )
+    void _RTLENTRY _EXPFUNC32 operator delete [] ( void _BIDSFAR *ptr )
         { ::operator delete [] ( ptr ); }
 };
 
@@ -64,13 +72,13 @@ public:
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-class _BIDSCLASS TSharedAllocator
+class _BIDSFARCLASS TSharedAllocator
 {
 public:
-    friend void _BIDSFAR *operator new( size_t sz, const TSharedAllocator& );
-    friend void _BIDSFAR *operator new [] ( size_t sz, const TSharedAllocator& );
-    void operator delete( void _BIDSFAR *ptr );
-    void operator delete [] ( void _BIDSFAR *ptr );
+    friend void _BIDSFARDATA *operator new( size_t sz, const TSharedAllocator& );
+    friend void _BIDSFARDATA *operator new [] ( size_t sz, const TSharedAllocator& );
+    void operator delete( void _BIDSFARDATA *ptr );
+    void operator delete [] ( void _BIDSFARDATA *ptr );
 };
 
 #if defined( BI_OLDNAMES )
@@ -132,33 +140,42 @@ private:
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if defined( __WINDOWS__ )
+#if !defined( BI_PLAT_WIN32 ) && !defined( BI_PLAT_OS2 )
+//  Can't test for BI_PLAT_WIN16, because some memory models
+//  of the classlib aren't built with Windows switches
 
+#if !defined( __WINDOWS_H )
+#define STRICT
 #include <windows.h>
+#endif
 
-inline void _BIDSFAR *operator new( size_t sz,
+#if !defined( __DOS_H )
+#include <dos.h>
+#endif
+
+inline void _BIDSFARDATA *operator new( size_t sz,
                                 const TSharedAllocator& )
 {
     return GlobalLock( GlobalAlloc( GPTR | GMEM_DDESHARE, sz ) );
 }
 
-inline void _BIDSFAR *::operator new [] ( size_t sz,
+inline void _BIDSFARDATA *operator new [] ( size_t sz,
                                       const TSharedAllocator& )
 {
     return GlobalLock( GlobalAlloc( GPTR | GMEM_DDESHARE, sz ) );
 }
 
-inline void TSharedAllocator::operator delete( void _BIDSFAR *ptr )
+inline void TSharedAllocator::operator delete( void _BIDSFARDATA *ptr )
 {
     HGLOBAL hMem = (HGLOBAL)GlobalHandle(FP_SEG(ptr));
-    if (GlobalUnlock(hMem))
+    if( GlobalUnlock(hMem) == 0 )
         GlobalFree(hMem);
 }
 
-inline void TSharedAllocator::operator delete [] ( void _BIDSFAR *ptr )
+inline void TSharedAllocator::operator delete [] ( void _BIDSFARDATA *ptr )
 {
     HGLOBAL hMem = (HGLOBAL)GlobalHandle(FP_SEG(ptr));
-    if (GlobalUnlock(hMem))
+    if( GlobalUnlock(hMem) == 0 )
         GlobalFree(hMem);
 }
 
@@ -186,11 +203,11 @@ inline void TSharedAllocator::operator delete [] ( void _BIDSFAR *ptr )
     ::operator delete [] ( ptr );
 }
 
-#endif  // __WINDOWS__
+#endif  // !BI_PLAT_WIN32 && !BI_PLAT_OS2
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po.
 #endif
 
-#endif  // __CLASSLIB_ALLOCTR_H
+#endif  // CLASSLIB_ALLOCTR_H
 

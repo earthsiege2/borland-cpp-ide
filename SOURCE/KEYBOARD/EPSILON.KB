@@ -200,41 +200,15 @@ MACRO WordLeft
   FixScreenPos;
 END;
 
-MACRO WordRight
-  CursorRightSkipWordStream;
-  CursorRightSkipNonWord;
-  FixScreenPos;
-END;
-
-MACRO RightOfWord
-  CursorRightSkipWord;
-  CursorRightSkipNonWord;
-  FixScreenPos;
-END;
-
 MACRO EpsilonMarkKillLine
   SetBlockBeg;
-  IF InqEmptyLine THEN
+  IF InqCursorPastEOL THEN
     CursorCharRight
   ELSE
     RightOfLine
   ENDIF;
   SetBlockEnd;
   FixScreenPos;
-END;
-
-MACRO MacMarkWord
-    SetNonInclusiveBlock;
-    HideBlock;
-    SetTempPos;
-    CursorRight;
-    WordLeft;
-    RightOfWord;
-    SetBlockEnd;
-    WordLeft;
-    SetBlockBeg;
-    HighlightBlock;
-    MoveToTempPos;
 END;
 
 /*******************************************************************
@@ -308,13 +282,25 @@ END;
 /* MACRO bufed                         not implemented */
 
 MACRO capitalize_word
-    MacMarkWord;
+    SetNonInclusiveBlock;
+    HideBlock;
+    CursorRightSkipNonWord;
+    SetBlockBeg;
+    CursorRightSkipWord;
+    SetBlockEnd;
+    HighlightBlock;
     LowerCaseBlock;
     MoveToBlockBeg;
+    HideBlock;
+    SetBlockBeg;
     CursorRight;
     SetBlockEnd;
+    HighlightBlock;
     UpperCaseBlock;
+    CursorRightSkipWord;
+    HideBlock;
     ClipReplaceNextCut;
+    FixScreenPos;
 END;
 
 /* MACRO center_line                 not implemented */
@@ -442,7 +428,7 @@ MACRO find_delimiter                 /* same as backward_level */
 END;
 
 MACRO find_file
-    OpenFile;
+    OpenFileInPane;
     ClipReplaceNextCut;
 END;
 
@@ -460,8 +446,10 @@ END;
 /* MACRO forward_sentence         not implemented */
 
 MACRO forward_word
-    WordRight;
-    ClipReplaceNextCut;
+  CursorRightSkipNonWord;
+  CursorRightSkipWordStream;
+  FixScreenPos;
+  ClipReplaceNextCut;
 END;
 
 MACRO goto_beginning
@@ -485,19 +473,22 @@ MACRO goto_tag
 END;
 
 MACRO incremental_search
-    SetNonInclusiveBlock;HideBlock;IncrementalSearch;
+    SetNonInclusiveBlock;HideBlock;
+    SetSearchDirection(1);
+    SetSearchCase(0);
+    IncrementalSearch;
     ClipReplaceNextCut;
 END;
 
 /* MACRO indent_previous         not implemented */
 
 MACRO indent_region                 /* same as indent_rigidly */
-    IndentBlock(2);
+    IndentBlock;
     ClipReplaceNextCut;
 END;
 
 MACRO indent_rigidly
-    IndentBlock(2);
+    IndentBlock;
     ClipReplaceNextCut;
 END;
 
@@ -513,7 +504,9 @@ MACRO insert_file
     ClipReplaceNextCut;
 END;
 
-/* MACRO kill_buffer                 not implemented */
+MACRO kill_buffer
+  DeleteBuffer;
+END;
 
 MACRO kill_level                 /* point must be on '(', '{' or '[' */
     SetNonInclusiveBlock;
@@ -553,8 +546,8 @@ END;
 
 MACRO kill_word
     SetBlockBeg;
+    CursorRightSkipNonWord;
     CursorRightSkipWord;
-    CursorRightSkipWhite;
     SetBlockEnd;
     HighlightBlock;
     ClipMaybeAppendCut;
@@ -569,9 +562,17 @@ END;
 /* MACRO load_bytes                 not implemented */
 
 MACRO lower_case_word
-    MacMarkWord;
+    SetNonInclusiveBlock;
+    HideBlock;
+    CursorRightSkipNonWord;
+    SetBlockBeg;
+    CursorRightSkipWord;
+    SetBlockEnd;
+    HighlightBlock;
     LowerCaseBlock;
+    HideBlock;
     ClipReplaceNextCut;
+    FixScreenPos;
 END;
 
 MACRO make
@@ -612,7 +613,8 @@ END;
 
 MACRO open_line
     LiteralChar(13);
-    CursorSwitchedLeft;
+    CursorUp;
+    RightOfLine;
     ClipReplaceNextCut;
 END;
 
@@ -661,12 +663,13 @@ MACRO redo_changes                 /* same as redo */
 END;
 
 MACRO regex_replace
+    SetSearchRegExp(1);
     Replace;
     ClipReplaceNextCut;
 END;
 
 MACRO regex_search
-    SearchMenu;
+    GetFindString;
     ClipReplaceNextCut;
 END;
 
@@ -676,12 +679,16 @@ MACRO replace_string
 END;
 
 MACRO reverse_incremental_search
-    SearchMenu;
+    SetSearchDirection(0);
+    SetSearchCase(0);
+    IncrementalSearch;
     ClipReplaceNextCut;
 END;
 
 MACRO reverse_regex_search
-    SearchMenu;
+    SetSearchDirection(0);
+    SetSearchRegExp(1);
+    GetFindString;
     ClipReplaceNextCut;
 END;
 
@@ -752,6 +759,7 @@ MACRO to_indentation
 END;
 
 MACRO transpose_characters
+    /* this will only work if persistent blocks are on */
     SetBlockBeg;
     CursorSwitchedRight;
     SetBlockEnd;
@@ -764,6 +772,7 @@ MACRO transpose_characters
 END;
 
 MACRO transpose_lines
+    /* this will only work if persistent blocks are on */
     LeftOfLine;
     SetBlockBeg;
     RightOfLine;
@@ -779,6 +788,7 @@ MACRO transpose_lines
 END;
 
 MACRO transpose_words
+    /* this will only work if persistent blocks are on */
     CursorRightSkipNonWord;
     SetBlockBeg;
     CursorRightSkipWord;
@@ -811,9 +821,17 @@ MACRO up_line
 END;
 
 MACRO upper_case_word
-    MacMarkWord;
+    SetNonInclusiveBlock;
+    HideBlock;
+    CursorRightSkipNonWord;
+    SetBlockBeg;
+    CursorRightSkipWord;
+    SetBlockEnd;
+    HighlightBlock;
     UpperCaseBlock;
+    HideBlock;
     ClipReplaceNextCut;
+    FixScreenPos;
 END;
 
 /* MACRO visit_file                 not implemented */
@@ -836,7 +854,14 @@ END;
 /* MACRO write_state                 not implemented */
 
 MACRO yank
+    /* works everywhere but at start of file */
+    CursorCharLeft;
+    SetPrevPos;
+    CursorCharRight;
     ClipPaste;
+    SwapPrevPos;
+    CursorCharRight;
+    SwapPrevPos;
     ClipReplaceNextCut;
 END;
 
@@ -971,6 +996,7 @@ Ctrl-X+Ctrl-X : exchange_point_and_mark;
 /* Ctrl-X+Ctrl-Z : exit_level; */
 /* Alt-Q         : fill_paragraph;         not implemented */
 Alt-)              : find_delimiter;                 /* same as backward_level */
+Alt-shift-0        : find_delimiter;                 /* same as backward_level */
 Esc+)              : find_delimiter;                 /* same as backward_level */
 Ctrl-X+Ctrl-F : find_file;
 Ctrl-F        : forward_character;
@@ -994,8 +1020,10 @@ Ctrl-X+g     : goto_line;
 Ctrl-X+G     : goto_line;
 Ctrl-X+.      : goto_tag;
 Alt-?              : help;
+Alt-Shift-/        : help;
 Esc+?              : help;
 Ctrl-_              : help;
+Ctrl-Shift-dash     : help;
 Ctrl-S              : incremental_search;
 /* Tab           : indent_previous;         not implemented */
 Ctrl-Alt-\    : indent_region;                 /* same as indent_rigidly */
@@ -1006,7 +1034,7 @@ Alt-Tab       : indent_under;
 Esc+Tab       : indent_under;
 Ctrl-X+i      : insert_file;
 Ctrl-X+I      : insert_file;
-/* Ctrl-X+@K     : kill_buffer;                 not implemented */
+Ctrl-X+@K     : kill_buffer;
 Ctrl-Alt-K    : kill_level;                 /* point must be on '(', '{' or '[' */
 Esc+Ctrl-K    : kill_level;                 /* point must be on '(', '{' or '[' */
 Ctrl-K        : kill_line;
@@ -1047,6 +1075,7 @@ Ctrl-X+p      : previous_window;  /* N.B. must duplicate this due to quirk in ke
 Ctrl-X+P      : previous_window;  /* N.B. must duplicate this due to quirk in keymap processor */
 Ctrl-X+Ctrl-E : push;
 Alt-%      : query_replace;
+Alt-Shift-5: query_replace;
 Esc+%      : query_replace;
 Ctrl-Q        : quoted_insert;
 Ctrl-X+r     : _redo;
@@ -1059,6 +1088,7 @@ Esc+*              : regex_replace;
 Ctrl-Alt-S    : regex_search;
 Esc+Ctrl-S    : regex_search;
 Alt-&              : replace_string; : Replace
+Alt-Shift-7        : replace_string;
 Esc+&              : replace_string;
 Ctrl-R              : reverse_incremental_search;
 Ctrl-Alt-R    : reverse_regex_search;

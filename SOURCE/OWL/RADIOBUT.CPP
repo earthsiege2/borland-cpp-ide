@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\radiobut.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TRadioButton.  This defines the basic behavior
 //   for all radio buttons.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\radiobut.h>
-#include <owl\groupbox.h>
-#include <owl\applicat.h>
+#include <owl/owlpch.h>
+#include <owl/radiobut.h>
+#include <owl/groupbox.h>
+#include <owl/applicat.h>
 #include <bwcc.h>
 
 #if !defined(SECTION) || SECTION == 1
@@ -26,7 +27,8 @@ TRadioButton::TRadioButton(TWindow*        parent,
                            int x, int y, int w, int h,
                            TGroupBox*      group,
                            TModule*        module)
-  : TCheckBox(parent, id, title, x, y, w, h, group, module)
+:
+  TCheckBox(parent, id, title, x, y, w, h, group, module)
 {
   Attr.Style = WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON;
 }
@@ -35,7 +37,8 @@ TRadioButton::TRadioButton(TWindow*   parent,
                            int        resourceId,
                            TGroupBox* group,
                            TModule*   module)
-  : TCheckBox(parent, resourceId, group, module)
+:
+  TCheckBox(parent, resourceId, group, module)
 {
 }
 

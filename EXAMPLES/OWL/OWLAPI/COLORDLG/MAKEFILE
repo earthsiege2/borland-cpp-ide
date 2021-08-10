@@ -15,6 +15,9 @@
 # cctltest.exe is an owl program that calls the dll to display the dialog.
 # usecdll2.exe is a C program that calls the dll to display the dialog
 
+!if !$d(MODEL)
+MODEL=d
+!endif
 
 !if $(MODEL)!=d
 #This builds the static example

@@ -1,22 +1,21 @@
-/*****************************************************************************\
-*                                                                             *
-* dlgs.h -      Common dialog's dialog element ID numbers                     *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-\*****************************************************************************/
+/*---------------------------------------------------------------------------*/
+/* Dlgs.h : UI dialog header                                                 */
+/*                                                                           */
+/*---------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
-#ifndef __DLGS_H    /* prevent multiple includes */
+#ifndef _DLGSH_INCLUDED_
+#define _DLGSH_INCLUDED_
 #define __DLGS_H
 
+/*----Constants--------------------------------------------------------------*/
 #define ctlFirst    0x0400
 #define ctlLast     0x04ff
     /* Push buttons */
@@ -53,7 +52,7 @@
 #define chx13       0x041c
 #define chx14       0x041d
 #define chx15       0x041e
-#define chx16       chx14
+#define chx16       0x041d
     /* Radio buttons */
 #define rad1        0x0420
 #define rad2        0x0421
@@ -184,6 +183,7 @@
 
 /* These dialog resource ordinals really start at 0x0600, but the
  * RC Compiler can't handle hex for resource IDs, hence the decimal.
+ * 27 March 1991        clarkc
  */
 #define FILEOPENORD      1536
 #define MULTIFILEOPENORD 1537
@@ -195,14 +195,8 @@
 #define FORMATDLGORD31   1543
 #define FORMATDLGORD30   1544
 
-
 /*----Types------------------------------------------------------------------*/
-
-#if !defined(__FLAT__)
-
-#ifndef __WINDOWS_H
-#include <windows.h>
-#endif
+#if defined(__FLAT__)
 
 typedef struct tagCRGB
     {
@@ -213,8 +207,6 @@ typedef struct tagCRGB
     }
 CRGB;           /* RGB Color */
 
+#endif  /* __FLAT__ */
 
-#endif /* __FLAT__ */
-
-#endif  /* __DLGS_H */
-
+#endif // _DLGSH_INCLUDED_

@@ -1,0 +1,28 @@
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##      --BEGIN-- "DECLARE_AUTOCLASS" [[MacroName]]
+##          @QUERY_APPL_OLE != VALUE_NOOLE
+##              --BEGIN-- QUERY_BASE_NAME [[BaseName]]
+##                  :(BaseName == "TApplication") 
+##                      :\\"DECLARE_AUTOAGGREGATE" MacroName
+##*
+##              --END-- QUERY_BASE_NAME [[BaseName]]
+##          "[[MacroName]]([[ClassName]])" [[DeclareMacro]]
+##          ^BOF
+##          ? \\DeclareMacro [[SearchDeclare]]
+##          --BEGIN-- SearchDeclare == FALSE
+##              :"//{{[[ClassName]]}}" [[ClassTMarker]]
+##              :\\ClassTMarker [[ClassMarker]]
+##              :QUERY_FILE_H [[FileName]]
+##              :^BOF
+##              :? ClassMarker [[Search]]
+##              :Search == FALSE
+##                  :%\\"Unable to add class automation property table marker to [[FileName]].  "
+##*
+##          --END-- SearchDeclare == FALSE
+##      --END-- "DECLARE_AUTOCLASS" [[MacroName]]
+##      ^BOL
+//{{[[ClassName]]AUTO_PROP_BEGIN}}
+public:
+//{{[[ClassName]]AUTO_PROP_END}}
+
+##--END-- QUERY_CLASS_NAME [[ClassName]]

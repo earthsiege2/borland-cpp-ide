@@ -1,0 +1,28 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for Binary Search Tree examples                               #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = bintree
+EXEALL = bintree.exe ibintree.exe
+
+EXEMAKE= $(BINTREE) $(IBINTREE)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+BINTREE=$(EXERULE:bintree.obj=bintree.obj myclass.obj)
+IBINTREE=$(BINTREE:bintree=ibintree)
+
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

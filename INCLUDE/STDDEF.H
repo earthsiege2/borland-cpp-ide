@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -22,6 +22,16 @@
 #ifndef NULL
 #include <_null.h>
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #ifndef _PTRDIFF_T
 #define _PTRDIFF_T
@@ -42,6 +52,7 @@ typedef unsigned size_t;
 #ifndef __cplusplus
 #ifndef _WCHAR_T
 #define _WCHAR_T
+#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
 typedef unsigned short wchar_t;
 #endif
 #endif
@@ -58,5 +69,14 @@ extern unsigned long _RTLENTRY _EXPFUNC __threadid(void);
 #endif
 #endif  /* __OS2__ or __WIN32__ */
 
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
+
 #endif  /* __STDDEF_H */
-

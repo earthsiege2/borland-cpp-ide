@@ -17,15 +17,38 @@ SYSTEM  = CON32
 ! endif
 !endif
 
-!include $(BCEXAMPLEDIR)\makefile.gen
-
-!ifdef USEDLL
-CFLAGS = $(CFLAGS) -D_BIDSDLL
+#
+# If no model has been specified, use large so we don't default to DLL
+# which doesn't work with easywin apps
+#
+!if !$d(MODEL)
+MODEL=l
 !endif
+
+#----------------------------------------------------------------------------
+# dir & search paths
+#----------------------------------------------------------------------------
+
+!ifndef BIDSLIBDIR
+BIDSLIBDIR = $(BCLIBDIR)
+!endif
+
+!ifndef BIDSINCDIR
+BIDSINCDIR = $(BCINCDIR)
+!elif "$(BIDSINCDIR)" != "$(BCINCDIR)"
+SYSINCPATH = $(BIDSINCDIR)
+!endif
+
+SYSLIBS = 1   # force defined, will be reset after include of makefile.gen
+!include $(BCEXAMPLEDIR)\makefile.gen
 
 #----------------------------------------------------------------------------
 # additional libraries for BIDS
 #----------------------------------------------------------------------------
+
+!ifdef USEDLL
+CFLAGS = $(CFLAGS) -D_BIDSDLL
+!endif
 
 # determine library name suffix based upon model
 #
@@ -55,7 +78,8 @@ BIDSSFX = db$(_SFX_)  #use 'db' for 16 bit static for compatibility
 BIDSSFX = $(_SFX_)
 !endif
 #
-# add BIDS library before standard runtime libraries
+# add BIDS library before other libraries
 #
-BIDSLIBS = $(BCLIBDIR)\bids$(BIDSSFX)
-STDLIBS = $(BIDSLIBS) $(STDLIBS)
+SYSLIBS = $(BIDSLIBDIR)\bids$(BIDSSFX)
+
+$(MAKEFILE) :: $(BIDSLIBDIR)\bids$(BIDSSFX).lib

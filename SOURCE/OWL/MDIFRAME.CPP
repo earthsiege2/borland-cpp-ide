@@ -1,12 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\mdiframe.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TMDIFrame.  This defines the basic behavior of
 //   all MDI frame windows.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\mdi.h>
+#include <owl/owlpch.h>
+#include <owl/mdi.h>
+#include <owl/applicat.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -25,7 +27,7 @@ TMDIFrame::TMDIFrame(const char far* title,
   // Initialize virtual bases, in case the derived-most used default ctor
   //
   TWindow::Init(0, title, module);
-  TFrameWindow::Init(&clientWnd, FALSE);
+  TFrameWindow::Init(&clientWnd, false);
 
   if (menuResId)
     AssignMenu(menuResId);
@@ -38,8 +40,9 @@ TMDIFrame::TMDIFrame(const char far* title,
 TMDIFrame::TMDIFrame(HWND       hWnd,
                      HWND       clientHWnd,
                      TModule*   module)
-  : TFrameWindow(hWnd, module),
-    TWindow(hWnd, module)
+:
+  TFrameWindow(hWnd, module),
+  TWindow(hWnd, module)
 {
   CHECK(::GetParent(clientHWnd) == hWnd);
 
@@ -51,7 +54,7 @@ TMDIFrame::TMDIFrame(HWND       hWnd,
 }
 
 //
-//	an MDI frame must have a menu.  Give it an empty one if none supplied.
+//  an MDI frame must have a menu.  Give it an empty one if none supplied.
 //
 void
 TMDIFrame::PerformCreate(int menuOrId)
@@ -72,9 +75,9 @@ TMDIFrame::FindChildMenu(HMENU menu)
     for (int i = numItems-1; i >= 0; i--) {
       HMENU childMenu = ::GetSubMenu(menu, i);
       if (childMenu &&
-          ::GetMenuState(childMenu, CM_CASCADECHILDREN, MF_BYCOMMAND) != (UINT)-1 ||
-          ::GetMenuState(childMenu, CM_TILECHILDREN, MF_BYCOMMAND) != (UINT)-1 ||
-          ::GetMenuState(childMenu, CM_ARRANGEICONS, MF_BYCOMMAND) != (UINT)-1) {
+          (::GetMenuState(childMenu, CM_CASCADECHILDREN, MF_BYCOMMAND) != (uint)-1 ||
+           ::GetMenuState(childMenu, CM_TILECHILDREN, MF_BYCOMMAND) != (uint)-1 ||
+           ::GetMenuState(childMenu, CM_ARRANGEICONS, MF_BYCOMMAND) != (uint)-1)) {
         return childMenu;
       }
     }
@@ -86,28 +89,30 @@ TMDIFrame::FindChildMenu(HMENU menu)
 // MDI specific version of SetMenu uses WM_MDISETMENU to set a new
 // menu bar and childMenu within it.
 //
-BOOL
+bool
 TMDIFrame::SetMenu(HMENU newMenu)
 {
   PRECONDITION(newMenu);
 
-  HMENU childMenu = FindChildMenu(newMenu);
+  if (IsFlagSet(wfMainWindow))
+    GetApplication()->PreProcessMenu(newMenu);
 
   if (HWindow) {
-    #if defined(__WIN32__)
+    HMENU childMenu = FindChildMenu(newMenu);
+    #if defined(BI_PLAT_WIN32)
       HMENU oldMenu = (HMENU)ClientWnd->HandleMessage(WM_MDISETMENU,
                                                       (WPARAM)newMenu,
                                                       (LPARAM)childMenu);
     #else
       HMENU oldMenu = (HMENU)ClientWnd->HandleMessage(WM_MDISETMENU,
-                                                      FALSE,
+                                                      false,
                                                       MAKELPARAM(newMenu, childMenu));
     #endif
     DrawMenuBar();
     if (!oldMenu)
-      return FALSE;
+      return false;
   }
-  return TRUE;
+  return true;
 }
 
 TMDIClient*
@@ -117,11 +122,24 @@ TMDIFrame::GetClientWindow()
 }
 
 //
+// Locate and return the child window that is the target of command and command
+// enable messages. Pass this to our active mdi child, if any, to let it
+// locate its active command target.
+//
+HWND
+TMDIFrame::GetCommandTarget()
+{
+  TFrameWindow* mdiChild = GetClientWindow()->GetActiveMDIChild();
+
+  return mdiChild ? mdiChild->GetCommandTarget() : TFrameWindow::GetCommandTarget();
+}
+
+//
 // override TWindow method and call ::DefFrameProc() instead of
 // ::DefWindowProc()
 //
 LRESULT
-TMDIFrame::DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+TMDIFrame::DefWindowProc(uint message, WPARAM wParam, LPARAM lParam)
 {
   return ::DefFrameProc(HWindow, ClientWnd ? ClientWnd->HWindow : 0,
                         message, wParam, lParam);

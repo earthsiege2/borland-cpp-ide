@@ -290,7 +290,7 @@ LPARAM lParam)
                     if (!res)
                       MessageBox (hWnd, "Close", "Sounder", MB_OK);
 
-                    res = mciSendString ((LPSTR)"close sounder", NULL, 0, NULL);
+                    mciSendString ((LPSTR)"close sounder", NULL, 0, NULL);
                     ReleaseDC (hWnd, hdc);
                     break;
 
@@ -326,8 +326,8 @@ LPARAM lParam)
                     if (!res)
                       MessageBox (hWnd, "Close", "Sounder", MB_OK);
 
-                    res = mciSendCommand (wDeviceID, MCI_CLOSE, MCI_WAIT,
-                                          (DWORD)(LPMCI_GENERIC_PARMS)&MciGenParm);
+                    mciSendCommand (wDeviceID, MCI_CLOSE, MCI_WAIT,
+                                    (DWORD)(LPMCI_GENERIC_PARMS)&MciGenParm);
                     ReleaseDC (hWnd, hdc);
                     break;
 

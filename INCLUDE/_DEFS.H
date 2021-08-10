@@ -24,10 +24,15 @@
     _CLASSTYPE      Use _EXPCLASS
     _FARFUNC        Use _EXPFUNC
     _FARCALL        Use _EXPFUNC and declare function explicity __far
-
-    Copyright (c) 1991, 1992 by Borland International
-    All Rights Reserved.
 */
+
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1991, 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
 #if !defined(___DEFS_H)
 #define ___DEFS_H
@@ -59,7 +64,7 @@
 #       define _EXPCLASS  __export
 #       define _EXPDATA   __export
 #       define _EXPFUNC   __export
-#   elif defined(_RTLDLL)
+#   elif defined(_RTLDLL) && !defined(__OS2__)
 #       define _EXPCLASS  __import
 #       define _EXPDATA   __import
 #       define _EXPFUNC   __import

@@ -1,0 +1,16 @@
+##"//{{[[ClassName]]SYM_TBL_END}}" [[ClassTMarker]]
+##\\ClassTMarker [[ClassMarker]]
+##^BOF
+##--BEGIN-- ? ClassMarker [[Search]]
+##Search == FALSE
+##:     {CAddSym.SNP}
+##:     ^BOF
+##:     ? ClassMarker [[Search]]
+##*
+##--END-- ? ClassMarker [[Search]]
+##^BOL
+##(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
+##      :StripPtrRef(OLEType, [[StripType]]) [[AnyStripping]]
+##      :StripType OLEType
+##*
+    EXPOSE_PROPRW([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)

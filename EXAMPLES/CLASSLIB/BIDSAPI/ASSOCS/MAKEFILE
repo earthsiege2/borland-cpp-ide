@@ -1,0 +1,31 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for ARRAY examples                                            #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = assocdd
+EXEALL = assocdd.exe assocdi.exe associd.exe associi.exe associdd.exe
+
+EXEMAKE= $(ASSOCDD) $(ASSOCDI) $(ASSOCID) $(ASSOCII) $(ASSOCIDD)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+ASSOCDD=$(EXERULE:assocdd.obj=assocdd.obj myclass.obj)
+ASSOCDI=$(ASSOCDD:assocdd=assocdi)
+ASSOCID=$(ASSOCDD:assocdd=associd)
+ASSOCII=$(ASSOCDD:assocdd=associi)
+ASSOCIDD=$(ASSOCDD:assocdd=associdd)
+
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

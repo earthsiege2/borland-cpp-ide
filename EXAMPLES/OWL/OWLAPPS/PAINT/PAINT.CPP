@@ -849,9 +849,9 @@ TCanvas::SetupDib(TDib* dib, const char* name, const char* title)
   // Make sure we can get the Dib DC and palette before we commit to this dib.
   // Revert to a DDB and a memory DC if we can't create a DIB DC.
   //
-  TDC*      newDC = 0;
+  TDC*      newDC;
   TBitmap*  newBM = 0;
-  TPalette* newPalette = 0;
+  TPalette* newPalette;
   try {
     newDC = new TDibDC(*dib);
   }

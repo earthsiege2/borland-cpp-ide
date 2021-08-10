@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\dc.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of TDC
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/dc.h>
 
 void
 TDC::Init()
@@ -13,13 +14,14 @@ TDC::Init()
   OrgPen = 0;
   OrgFont = 0;
   OrgPalette = 0;
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
   OrgTextBrush = 0;
 #endif
 }
 
 TDC::TDC(HDC handle)
-  : TGdiBase(handle, NoAutoDelete)
+:
+  TGdiBase(handle, NoAutoDelete)
 {
   Init();
 }
@@ -33,7 +35,8 @@ TDC::TDC()
 }
 
 TDC::TDC(HDC handle, TAutoDelete autoDelete)
-  : TGdiBase(handle, autoDelete)
+:
+  TGdiBase(handle, autoDelete)
 {
   Init();
 }
@@ -58,11 +61,11 @@ TDC::SelectObject(const TPen& pen)
   HPEN oldPen = (HPEN)::SelectObject(GetHDC(), pen);
   if (oldPen) {
     OBJ_REF_INC(pen);
-    if ((BOOL)oldPen > 1)
+    if ((bool)oldPen > 1)
       if (!OrgPen)
         OrgPen = oldPen;
       else
-        OBJ_REF_DEC(oldPen, FALSE);
+        OBJ_REF_DEC(oldPen, false);
   }
 }
 
@@ -72,11 +75,11 @@ TDC::SelectObject(const TBrush& brush)
   HBRUSH oldBrush = (HBRUSH)::SelectObject(GetHDC(), brush);
   if (oldBrush) {
     OBJ_REF_INC(brush);
-    if ((BOOL)oldBrush > 1)
+    if ((bool)oldBrush > 1)
       if (!OrgBrush)
         OrgBrush = oldBrush;
       else
-        OBJ_REF_DEC(oldBrush, FALSE);
+        OBJ_REF_DEC(oldBrush, false);
   }
 }
 
@@ -86,25 +89,25 @@ TDC::SelectObject(const TFont& font)
   HFONT oldFont = (HFONT)::SelectObject(GetHDC(), font);
   if (oldFont) {
     OBJ_REF_INC(font);
-    if ((BOOL)oldFont > 1)
+    if ((bool)oldFont > 1)
       if (!OrgFont)
         OrgFont = oldFont;
       else
-        OBJ_REF_DEC(oldFont, FALSE);
+        OBJ_REF_DEC(oldFont, false);
   }
 }
 
 void
-TDC::SelectObject(const TPalette& palette, BOOL forceBackground)
+TDC::SelectObject(const TPalette& palette, bool forceBackground)
 {
   HPALETTE oldPalette = ::SelectPalette(GetHDC(), palette, forceBackground);
   if (oldPalette) {
     OBJ_REF_INC(palette);
-    if ((BOOL)oldPalette > 1)
+    if ((bool)oldPalette > 1)
       if (!OrgPalette)
         OrgPalette = oldPalette;
       else
-        OBJ_REF_DEC(oldPalette, FALSE);
+        OBJ_REF_DEC(oldPalette, false);
   }
 }
 
@@ -113,15 +116,15 @@ TDC::SelectStockObject(int index)
 {
   PRECONDITION(::GetStockObject(index));
   HANDLE oldObj = ::SelectObject(GetHDC(), ::GetStockObject(index));
-  if ((BOOL)oldObj > 1)
-      OBJ_REF_DEC(oldObj, FALSE);
+  if ((bool)oldObj > 1)
+      OBJ_REF_DEC(oldObj, false);
 }
 
 void
 TDC::RestorePen()
 {
   if (OrgPen) {
-    OBJ_REF_DEC(::SelectObject(GetHDC(), OrgPen), FALSE);
+    OBJ_REF_DEC(::SelectObject(GetHDC(), OrgPen), false);
     OrgPen = 0;
   }
 }
@@ -130,7 +133,7 @@ void
 TDC::RestoreBrush()
 {
   if (OrgBrush) {
-    OBJ_REF_DEC(::SelectObject(GetHDC(), OrgBrush), FALSE);
+    OBJ_REF_DEC(::SelectObject(GetHDC(), OrgBrush), false);
     OrgBrush = 0;
   }
 }
@@ -139,7 +142,7 @@ void
 TDC::RestoreFont()
 {
   if (OrgFont) {
-    OBJ_REF_DEC(::SelectObject(GetHDC(), OrgFont), FALSE);
+    OBJ_REF_DEC(::SelectObject(GetHDC(), OrgFont), false);
     OrgFont = 0;
   }
 }
@@ -148,17 +151,17 @@ void
 TDC::RestorePalette()
 {
   if (OrgPalette) {
-    OBJ_REF_DEC(::SelectPalette(GetHDC(), OrgPalette, FALSE), FALSE);
+    OBJ_REF_DEC(::SelectPalette(GetHDC(), OrgPalette, false), false);
     OrgPalette = 0;
   }
 }
 
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
 void
 TDC::RestoreTextBrush()
 {
   if (OrgTextBrush) {
-    OBJ_REF_DEC(::SelectObject(GetHDC(), OrgTextBrush), FALSE);
+    OBJ_REF_DEC(::SelectObject(GetHDC(), OrgTextBrush), false);
     OrgTextBrush = 0;
   }
 }
@@ -172,7 +175,7 @@ TDC::RestoreObjects()
     RestoreBrush();
     RestoreFont();
     RestorePalette();
-  #if defined(__WIN32__)
+  #if defined(BI_PLAT_WIN32)
     RestoreTextBrush();
   #endif
   }
@@ -182,12 +185,12 @@ TDC::RestoreObjects()
 // implement subset of Win32 GetCurrentObject for Win16 (& Win32s!)
 //
 HANDLE
-TDC::GetCurrentObject(UINT objectType) const
+TDC::GetCurrentObject(uint objectType) const
 {
   HGDIOBJ curObj;
 
-#if defined(__WIN32__)
-  static BOOL notImplemented = FALSE;
+#if defined(BI_PLAT_WIN32)
+  static bool notImplemented = false;
 
   //
   // Try the Win32 GetCurrentObject() function, will fail under Win32s
@@ -196,7 +199,7 @@ TDC::GetCurrentObject(UINT objectType) const
     curObj = ::GetCurrentObject(GetHDC(), objectType);
     if (GetLastError() != ERROR_CALL_NOT_IMPLEMENTED)
       return curObj;
-    notImplemented = TRUE;
+    notImplemented = true;
   }
 #endif
 
@@ -230,7 +233,7 @@ TDC::GetCurrentObject(UINT objectType) const
 //
 // Compile this in to get this function for 16bit
 //
-#if 0 && !defined(__WIN32__)
+#if !defined(BI_PLAT_WIN32)
 
 //
 // Use undocumented GDI GetClipRgn(HDC) to get the actual handle, and
@@ -239,25 +242,25 @@ TDC::GetCurrentObject(UINT objectType) const
 //
 extern "C" HRGN FAR PASCAL ::GetClipRgn(HDC);  // GDI.173
 
-BOOL
+bool
 TDC::GetClipRgn(TRegion& region) const
 {
   HRGN hRgn = ::GetClipRgn(GetHDC());
   if (!hRgn)
-    return FALSE;
-  region = TRegion(hRgn);   // make a copy of the region
-  return TRUE;
+    return false;
+  region = TRegion(hRgn);   // make a copy of the region using assignment
+  return true;
 }
 #endif
 
-extern "C" BOOL FAR PASCAL FastWindowFrame(HDC, LPRECT, int xWidth, int yWidth, long rop);
+extern "C" bool FAR PASCAL FastWindowFrame(HDC, LPRECT, int xWidth, int yWidth, long rop);
 
 void
 TDC::OWLFastWindowFrame(TBrush& brush, TRect& r, int xWidth, int yWidth)
 {
   SelectObject(brush);
 
-#if !defined(__WIN32__)
+#if !defined(BI_PLAT_WIN32)
   if (!FastWindowFrame(GetHDC(), &r, xWidth, yWidth, PATCOPY))
 #endif
   {
@@ -278,7 +281,7 @@ TDC::SaveDC() const
   return ::SaveDC(GetHDC());
 }
 
-BOOL
+bool
 TDC::RestoreDC(int savedIndex)
 {
   return ::RestoreDC(GetHDC(), savedIndex);
@@ -290,7 +293,7 @@ TDC::GetDeviceCaps(int index) const
   return ::GetDeviceCaps(GetAttributeHDC(), index);
 }
 
-BOOL
+bool
 TDC::ResetDC(DEVMODE far& devMode)
 {
   return ::ResetDC(GetHDC(), &devMode) != 0;
@@ -320,7 +323,7 @@ TDC::SetMapMode(int mode)
   return ::SetMapMode(GetAttributeHDC(), mode);
 }
 
-BOOL
+bool
 TDC::SetViewportOrg(const TPoint& point, TPoint far* oldOrg)
 {
   if (GetHDC() != GetAttributeHDC())
@@ -328,7 +331,7 @@ TDC::SetViewportOrg(const TPoint& point, TPoint far* oldOrg)
   return ::SetViewportOrgEx(GetAttributeHDC(), point.x, point.y, oldOrg);
 }
 
-BOOL
+bool
 TDC::OffsetViewportOrg(const TPoint& delta, TPoint far* oldOrg)
 {
   if (GetHDC() != GetAttributeHDC())
@@ -336,7 +339,7 @@ TDC::OffsetViewportOrg(const TPoint& delta, TPoint far* oldOrg)
   return ::OffsetViewportOrgEx(GetAttributeHDC(), delta.x, delta.y, oldOrg);
 }
 
-BOOL
+bool
 TDC::SetViewportExt(const TSize& extent, TSize far* oldExtent)
 {
   if (GetHDC() != GetAttributeHDC())
@@ -344,7 +347,7 @@ TDC::SetViewportExt(const TSize& extent, TSize far* oldExtent)
   return ::SetViewportExtEx(GetAttributeHDC(), extent.cx, extent.cy, oldExtent);
 }
 
-BOOL
+bool
 TDC::ScaleViewportExt(int xNum, int xDenom, int yNum, int yDenom,
                       TSize far* oldExtent)
 {
@@ -353,7 +356,7 @@ TDC::ScaleViewportExt(int xNum, int xDenom, int yNum, int yDenom,
   return ::ScaleViewportExtEx(GetAttributeHDC(), xNum, xDenom, yNum, yDenom, oldExtent);
 }
 
-BOOL
+bool
 TDC::SetWindowOrg(const TPoint& point, TPoint far* oldOrg)
 {
   if (GetHDC() != GetAttributeHDC())
@@ -361,7 +364,7 @@ TDC::SetWindowOrg(const TPoint& point, TPoint far* oldOrg)
   return ::SetWindowOrgEx(GetAttributeHDC(), point.x, point.y, oldOrg);
 }
 
-BOOL
+bool
 TDC::OffsetWindowOrg(const TPoint& delta, TPoint far* oldOrg)
 {
   if (GetHDC() != GetAttributeHDC())
@@ -369,7 +372,7 @@ TDC::OffsetWindowOrg(const TPoint& delta, TPoint far* oldOrg)
   return ::OffsetWindowOrgEx(GetAttributeHDC(), delta.x, delta.y, oldOrg);
 }
 
-BOOL
+bool
 TDC::SetWindowExt(const TSize& extent, TSize far* oldExtent)
 {
   if (GetHDC() != GetAttributeHDC())
@@ -377,7 +380,7 @@ TDC::SetWindowExt(const TSize& extent, TSize far* oldExtent)
   return ::SetWindowExtEx(GetAttributeHDC(), extent.cx, extent.cy, oldExtent);
 }
 
-BOOL
+bool
 TDC::ScaleWindowExt(int xNum, int xDenom, int yNum, int yDenom, TSize far* oldExtent)
 {
   if (GetHDC() != GetAttributeHDC())
@@ -385,42 +388,46 @@ TDC::ScaleWindowExt(int xNum, int xDenom, int yNum, int yDenom, TSize far* oldEx
   return ::ScaleWindowExtEx(GetAttributeHDC(), xNum, xDenom, yNum, yDenom, oldExtent);
 }
 
-BOOL
+bool
 TDC::TextOut(int x, int y, const char far* str, int count)
 {
   return ::TextOut(GetHDC(), x, y, str, count>=0 ? count : strlen(str));
 }
 
-BOOL
-TDC::ExtTextOut(int x, int y, WORD options, const TRect* rect,
+bool
+TDC::ExtTextOut(int x, int y, uint16 options, const TRect* rect,
                 const char far* str, int count, const int far* dx)
 {
-  return ::ExtTextOut(GetHDC(), x, y, options, rect, str, count, (int far*)dx);
-  // API typecast
+  return ::ExtTextOut(GetHDC(), x, y, options, rect, str,
+                      count>=0 ? count : strlen(str), (int far*)dx);
+                                                      // API typecast
 }
 
-//
-BOOL
+bool
 TDC::TabbedTextOut(const TPoint& p, const char far* str, int count,
-                               int numPositions, const int far* positions,
-                               int tabOrigin, TSize& size) {
-  size = (DWORD)::TabbedTextOut(GetHDC(), p.x, p.y, str, count, numPositions,
-                               (int far*)positions, tabOrigin);
-                                // API typecast
-  return TRUE;
+                   int numPositions, const int far* positions,
+                   int tabOrigin, TSize& size) {
+  size = (uint32)::TabbedTextOut(GetHDC(), p.x, p.y, str,
+                                 count>=0 ? count : strlen(str),
+                                 numPositions, (int far*)positions,
+                                 tabOrigin);
+                                                // API typecast
+  return true;
 }
 
-BOOL
-TDC::DrawText(const char far* str, int count, const TRect& rect, WORD format)
+int
+TDC::DrawText(const char far* str, int count, const TRect& rect, uint16 format)
 {
-  return ::DrawText(GetHDC(), str, count, (RECT*)&rect, format);
-                      // API typecast
+  return ::DrawText(GetHDC(), str, count,  // uses -1 to signify autocount
+                    (RECT*)&rect, format);
+                    // API typecast
 }
 
-BOOL
+bool
 TDC::GrayString(const TBrush& brush, GRAYSTRINGPROC outputFunc,
                 const char far* str, int count, const TRect& rect)
 {
-  return ::GrayString(GetHDC(), brush, outputFunc, (DWORD)str, count,
+  return ::GrayString(GetHDC(), brush, outputFunc, (uint32)str,
+                      count>=0 ? count : 0,  // uses 0 to signify autocount
                       rect.left, rect.top, rect.Width(), rect.Height());
 }

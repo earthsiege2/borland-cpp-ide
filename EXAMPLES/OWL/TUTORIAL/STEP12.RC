@@ -1,37 +1,25 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   Tutorial application -- step12.rc
+// ObjectWindows - (C) Copyright 1991, 1994 by Borland International
+//   Tutorial application -- step11.rc
 //----------------------------------------------------------------------------
-#ifndef WORKSHOP_INVOKED
-  #include <windows.h>
-#endif
+#include <owl/docview.rc>
+#include <owl/except.rc>
 
-#include <owl\docview.rc>
-#include <owl\except.rc>
-#include <owl\mdi.rh>
-
-#define CM_NOEDIT     204
 #define CM_ABOUT      205
 #define CM_PENSIZE    306
 #define CM_PENCOLOR   307
 #define IDD_ABOUT     211
 
-#ifdef RC_INVOKED 
+#ifdef RC_INVOKED
+#ifndef WORKSHOP_INVOKED
+# include <windows.h>
+#endif
 
-#include <owl\statusba.rc>
+#include <owl/statusba.rc>
 
 COMMANDS MENU 
 {
  MENUITEM "File",   0,GRAYED  ;placeholder for File menu from DocManager
- MENUITEM "Edit",   CM_NOEDIT ;placeholder for Edit menu from View
- POPUP "&Window"
- {
-  MENUITEM  "&Cascade",       CM_CASCADECHILDREN
-  MENUITEM  "&Tile",          CM_TILECHILDREN
-  MENUITEM  "Arrange &Icons", CM_ARRANGEICONS
-  MENUITEM  "C&lose All",     CM_CLOSECHILDREN
-  MENUITEM  "Add &View",      CM_VIEWCREATE
- }
  POPUP "&Help"
  {
   MENUITEM "&About",   CM_ABOUT
@@ -41,7 +29,6 @@ COMMANDS MENU
 STRINGTABLE 
 {
  CM_ABOUT, "Open an information dialog box"
- CM_NOEDIT, "No document to edit"
 }
 
 IDD_ABOUT DIALOG 37, 25, 170, 95
@@ -50,8 +37,8 @@ CAPTION "About Drawing Pad"
 FONT 8, "MS Sans Serif"
 {
  DEFPUSHBUTTON "Ok", IDOK, 60, 73, 50, 14
- CTEXT "ObjectWindows 2.0 Tutorial Application", -1, 10, 46, 150, 10
- CTEXT "Copyright 1991, 1993 by Borland International", -1, 10, 57, 150, 8
+ CTEXT "ObjectWindows 2.5 Tutorial Application", -1, 10, 46, 150, 10
+ CTEXT "Copyright 1991, 1994 by Borland International", -1, 10, 57, 150, 8
  ICON "IDI_TUTORIAL", -1, 78, 11, 14, 16
  CTEXT "Drawing Pad", -1, 10, 35, 150, 8
 }

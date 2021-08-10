@@ -1,0 +1,62 @@
+<<[CPP]
+##QUERY_SNP_AUTO_KIND [[Kind]]
+##QUERY_SNP_AUTO_NAME [[InternalName]]
+##QUERY_SNP_AUTO_GETNAME [[GetName]]
+##QUERY_SNP_AUTO_SETNAME [[SetName]]
+##QUERY_SNP_AUTO_CPPTYPE [[CPPType]]
+##QUERY_SNP_AUTO_OLETYPE [[OLEType]]
+##QUERY_SNP_AUTO_DESCR [[Description]]
+##QUERY_SNP_AUTO_GETPROPERTY [[GetProperty]]
+##QUERY_SNP_AUTO_SETPROPERTY [[SetProperty]]
+##QUERY_SNP_AUTO_CPPARGS [[CPPArguments]]
+##QUERY_SNP_AUTO_OLEARGS [[OLEArguments]]
+##QUERY_SNP_AUTO_VALIDATOR [[Validator]]
+##FALSE [[GetDuplicateFunc]]
+##FALSE [[SetDuplicateFunc]]
+##FALSE [[MethodDuplicateFunc]]
+##SetGlobal(FALSE)
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##Kind == VALUE_DATA
+##      :{CAddData.SNP}
+##*
+##Kind == VALUE_PROPERTY
+##      :{CAddProp.SNP}
+##      :(GetDuplicateFunc == TRUE) || (SetDuplicateFunc == TRUE)
+##      :SetGlobal(TRUE)
+##*
+##Kind == VALUE_METHOD
+##      :{CAddMeth.SNP}
+##      :MethodDuplicateFunc == TRUE
+##      :SetGlobal(TRUE)
+##*
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+##*
+>>[CPP]
+
+
+<<[H]
+##QUERY_SNP_AUTO_KIND [[Kind]]
+##QUERY_SNP_AUTO_NAME [[InternalName]]
+##QUERY_SNP_AUTO_GETNAME [[GetName]]
+##QUERY_SNP_AUTO_SETNAME [[SetName]]
+##QUERY_SNP_AUTO_CPPTYPE [[CPPType]]
+##QUERY_SNP_AUTO_OLETYPE [[OLEType]]
+##QUERY_SNP_AUTO_DESCR [[Description]]
+##QUERY_SNP_AUTO_GETPROPERTY [[GetProperty]]
+##QUERY_SNP_AUTO_SETPROPERTY [[SetProperty]]
+##QUERY_SNP_AUTO_CPPARGS [[CPPArguments]]
+##QUERY_SNP_AUTO_OLEARGS [[OLEArguments]]
+##QUERY_SNP_AUTO_VALIDATOR [[Validator]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##      Kind == VALUE_DATA
+##          :{HAddData.SNP}
+##*
+##      Kind == VALUE_PROPERTY
+##          :{HAddProp.SNP}
+##*
+##      Kind == VALUE_METHOD
+##          :{HAddMeth.SNP}
+##*
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+##*
+>>[H]

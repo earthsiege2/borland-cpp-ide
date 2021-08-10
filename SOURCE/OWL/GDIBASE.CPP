@@ -1,37 +1,40 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\gdibase.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of TGdiBase, base abstract GDI object class
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\gdibase.h>
+#include <owl/owlpch.h>
+#include <owl/gdibase.h>
 
 //
 // TGdiBase constructors
 //
 TGdiBase::TGdiBase()
-  : Handle(0),
-    ShouldDelete(TRUE)
+:
+  Handle(0),
+  ShouldDelete(true)
 {
   // Handle must be set by derived class
 }
 
 TGdiBase::TGdiBase(HANDLE handle, TAutoDelete autoDelete)
-  : Handle(handle),
-    ShouldDelete(autoDelete==AutoDelete)
+:
+  Handle(handle),
+  ShouldDelete(autoDelete==AutoDelete)
 {
   PRECONDITION(handle);
 }
 
 #pragma warn -par   // resId is never used in small model
 void
-TGdiBase::CheckValid(UINT resId)
+TGdiBase::CheckValid(uint resId)
 {
   CheckValid(Handle, resId);
 }
 
 void
-TGdiBase::CheckValid(HANDLE handle, UINT resId)
+TGdiBase::CheckValid(HANDLE handle, uint resId)
 {
   if (!handle)
     THROW( TXGdi(resId) );
@@ -41,7 +44,7 @@ TGdiBase::CheckValid(HANDLE handle, UINT resId)
 string
 TGdiBase::TXGdi::Msg(unsigned resId, HANDLE handle)
 {
-  BOOL   found;  // did we locate the string
+  bool   found;  // did we locate the string
   string rscMsg = ResourceIdToString(&found, resId);
 
   if (found) {
@@ -51,13 +54,14 @@ TGdiBase::TXGdi::Msg(unsigned resId, HANDLE handle)
     //
     wsprintf(buf, rscMsg.c_str(), handle);
     return string(buf);
-
-  } else
+  }
+  else
     return rscMsg;
 }
 
 TGdiBase::TXGdi::TXGdi(unsigned resId, HANDLE handle)
-  : TXOwl(Msg(resId, handle))
+:
+  TXOwl(Msg(resId, handle), resId)
 {
 }
 

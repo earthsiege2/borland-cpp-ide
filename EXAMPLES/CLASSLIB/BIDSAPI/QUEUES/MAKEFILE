@@ -1,0 +1,30 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for QUEUE examples                                            #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = queue
+EXEALL = queue.exe iqueue.exe quelist.exe iquelist.exe
+
+EXEMAKE= $(QUEUE) $(IQUEUE) $(QUELIST) $(IQUELIST)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+QUEUE=$(EXERULE:queue.obj=queue.obj myclass.obj)
+IQUEUE=$(QUEUE:queue=iqueue)
+
+QUELIST=$(QUEUE:queue=quelist)
+IQUELIST=$(QUEUE:queue=iquelist)
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

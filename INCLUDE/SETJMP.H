@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -23,7 +23,17 @@
 extern "C" {
 #endif
 
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
 #pragma option -a-
+
+#endif  /* !RC_INVOKED */
+
 
 #if !defined(__FLAT__)
 
@@ -38,16 +48,20 @@ typedef struct __jmp_buf {
     unsigned    j_es;
     unsigned    j_si;
     unsigned    j_ds;
+
+#if !defined(__TINY__)    
     unsigned    j_excep;
     unsigned    j_context;
+#endif  /* !__TINY__ */
+
 }   jmp_buf[1];
 
-#if !defined( _Windows ) || defined(_LFOOT)
+#if !defined( _Windows )
 void    _CType longjmp(jmp_buf __jmpb, int __retval);
 int     _CType setjmp(jmp_buf __jmpb);
 #else
-void far pascal longjmp( struct __jmp_buf far *__jmpb, int __retval );
-int far pascal setjmp( struct __jmp_buf far *__jmpb);
+void __far __pascal longjmp( struct __jmp_buf __far *__jmpb, int __retval );
+int __far __pascal setjmp( struct __jmp_buf __far *__jmpb);
 #endif
 
 #else    /* defined __FLAT__ */
@@ -59,10 +73,8 @@ typedef struct __jmp_buf {
     unsigned    j_esi;
     unsigned    j_esp;
     unsigned    j_ret;
-#if defined(__FLAT__)
     unsigned    j_excep;
     unsigned    j_context;
-#endif
 }   jmp_buf[1];
 
 void    _RTLENTRYF _EXPFUNC longjmp(jmp_buf __jmpb, int __retval);
@@ -70,11 +82,21 @@ int     _RTLENTRYF _EXPFUNC setjmp(jmp_buf __jmpb);
 
 #endif  /* __FLAT__ */
 
-#pragma option -a.  /* restore default packing */
-
 #ifdef __cplusplus
 }
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#pragma option -a.  /* restore default packing */
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __SETJMP_H */
 

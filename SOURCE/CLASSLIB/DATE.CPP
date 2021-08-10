@@ -2,38 +2,38 @@
 /*                                                                        */
 /*  DATE.CPP                                                              */
 /*                                                                        */
-/*  Copyright Borland International 1993                                  */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
 #if !defined( __STDIO_H )
 #include <stdio.h>
-#endif  // __STDIO_H
+#endif
 
 #if !defined( __TIME_H )
 #include <time.h>
-#endif  // __TIME_H
+#endif
 
 #if !defined( __STRING_H )
 #include <string.h>
-#endif  // __STRING_H
+#endif
 
 #if !defined( __CTYPE_H )
 #include <ctype.h>
-#endif  // __CTYPE_H
+#endif
 
 #if !defined( __CSTRING_H )
 #include <cstring.h>
-#endif  // __CSTRING_H
+#endif
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
-#if !defined( __CLASSLIB_DATE_H )
-#include "classlib\date.h"
-#endif  // __CLASSLIB_DATE_H
+#if !defined( CLASSLIB_DATE_H )
+#include <classlib/date.h>
+#endif
 
 /****************************************************************
  *                                                              *

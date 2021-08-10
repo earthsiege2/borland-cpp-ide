@@ -1,22 +1,24 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\rangeval.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TRangeValidator, integer numeric range input validator
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\validate.h>
-#include <owl\applicat.h>
-#include <classlib\objstrm.h>
+#include <owl/owlpch.h>
+#include <owl/validate.h>
+#include <owl/applicat.h>
+#include <owl/appdict.h>
+#include <owl/framewin.h>
 
 #if !defined(SECTION) || SECTION == 1
 
 //
-// TRangeValidator
 //
-
-
+//
 TRangeValidator::TRangeValidator(long min, long max)
-  : TFilterValidator("0-9+-")
+:
+  TFilterValidator("0-9+-")
 {
   if (min >= 0)
     ValidChars -= '-';
@@ -27,36 +29,42 @@ TRangeValidator::TRangeValidator(long min, long max)
 void
 TRangeValidator::Error()
 {
-  char msg[81];
-  wsprintf(msg, string(*GetApplicationObject(), IDS_VALNOTINRANGE).c_str(), Min, Max);
-  ::MessageBox(0, msg, GetApplicationObject()->GetName(), 
-    MB_ICONEXCLAMATION | MB_OK | MB_TASKMODAL);
+  TApplication* app = GetApplicationObject();
+  string msgTmpl = app->LoadString(IDS_VALNOTINRANGE).c_str();
+  char* msg = new char[msgTmpl.length() + 10 + 10 + 1];
+  wsprintf(msg, msgTmpl.c_str(), Min, Max);
+  TWindow* w = GetWindowPtr(app->GetMainWindow()->GetLastActivePopup());
+  if (w)
+    w->MessageBox(msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK);
+  else
+    ::MessageBox(0, msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK|MB_TASKMODAL);
+  delete [] msg;
 }
 
-BOOL
+bool
 TRangeValidator::IsValid(const char far* s)
 {
   if (TFilterValidator::IsValid(s)) {
     long value = atol(s);
     if (value >= Min && value <= Max)
-      return TRUE;
+      return true;
   }
-  return FALSE;
+  return false;
 }
 
-UINT
+uint
 TRangeValidator::Transfer(char far* s, void* buffer, TTransferDirection direction)
 {
   if (Options & voTransfer) {
     if (direction == tdGetData) {
       *(long*)buffer = atol(s);
-
-    } else if (direction == tdSetData) {
+    }
+    else if (direction == tdSetData) {
       wsprintf(s, "%ld", *(long*)buffer);
     }
     return sizeof(long);
-
-  } else
+  }
+  else
     return 0;
 }
 

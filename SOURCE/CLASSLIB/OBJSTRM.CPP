@@ -2,30 +2,34 @@
 /*                                                                        */
 /*  OBJSTRM.CPP                                                           */
 /*                                                                        */
-/*  Copyright (c) 1992, 1993 Borland International                        */
+/*  Copyright (c) 1992, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
+#if !defined( _Windows )
+#define _Windows
+#endif
+
 #if !defined( __ALLOC_H )
 #include <alloc.h>
-#endif  // __ALLOC_H
+#endif
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
 #if !defined( __CSTRING_H )
 #include <cstring.h>
-#endif  // __CSTRING_H
+#endif
 
-#if !defined( __CLASSLIB_STREAMBL_H )
-#include "classlib\streambl.h"
-#endif  // __CLASSLIB_STREAMBL_H
+#if !defined( CLASSLIB_STREAMBL_H )
+#include <classlib/streambl.h>
+#endif
 
-#if !defined( __CLASSLIB_OBJSTRM_H )
-#include "classlib\objstrm.h"
-#endif  // __CLASSLIB_OBJSTRM_H
+#if !defined( CLASSLIB_OBJSTRM_H )
+#include <classlib/objstrm.h>
+#endif
 
 #if defined( __FLAT__ )
 #define _fstrncpy strncpy
@@ -37,12 +41,13 @@
 
 DIAG_DEFINE_GROUP(Objstrm,1,0);
 
-const uint32 streamVersion = 0x0100;
+const uint32 streamVersion = 0x0101;
 const char versionIndicator = ':';
 
 const char EOS = '\0';
 
-const uint8 nullStringLen = UCHAR_MAX;
+const uint8  oldNullStringLen = UCHAR_MAX;
+const uint32 nullStringLen = ULONG_MAX;
 
 TStreamableTypes *pstream::types = 0;
 
@@ -60,7 +65,7 @@ TStreamableClass::TStreamableClass( const char *n,
 {
     ObjectId = new char[strlen(n)+1];
     strcpy( CONST_CAST(char *,ObjectId), n );
-    ipstream::initTypes();
+    pstream::initTypes();
     if( id != 0 )   // id == 0 is used only during lookup.
                     // It flags an instance that shouldn't be registered
         pstream::types->RegisterType( id, *this );
@@ -70,6 +75,7 @@ TStreamableClass::~TStreamableClass()
 {
     if( ModId != 0 )
         pstream::types->UnRegisterType( ModId, *this );
+
     delete [] CONST_CAST(char *,ObjectId);
 }
 
@@ -81,6 +87,8 @@ void TStreamableTypes::RegisterType( ModuleId, TStreamableClass& ts )
 void TStreamableTypes::UnRegisterType( ModuleId, TStreamableClass& ts )
 {
     Types.Detach(&ts);
+    if( Types.Count() == 0 )
+        pstream::releaseTypes();
 }
 
 const ObjectBuilder *TStreamableTypes::Lookup( ModuleId,
@@ -164,6 +172,12 @@ void pstream::initTypes()
 {
     if( types == 0 )
         types = new TStreamableTypes;
+}
+
+void pstream::releaseTypes()
+{
+    delete types;
+    types = 0;
 }
 
 streampos ipstream::tellg()
@@ -277,15 +291,32 @@ uint32 ipstream::readWord32()
         }
 }
 
+uint32 ipstream::readStringLength()
+{
+    uint32 len;
+    if( getVersion() > 0x0100 )
+        {
+        len = readWord32();
+        }
+    else
+        {
+        len = readByte();
+        if( len == oldNullStringLen )
+            len = nullStringLen;
+        }
+    return len;
+}
+
 char *ipstream::readString()
 {
     if( !good() )
         return 0;
     else
         {
-        uint8 len = readByte();
+        uint32 len = readStringLength();
         if( len == nullStringLen )
             return 0;
+
         char *buf = new char[len+1];
         if( buf == 0 )
             return 0;
@@ -303,8 +334,8 @@ char *ipstream::readString( char *buf, unsigned maxLen )
         return 0;
     else
         {
-        uint8 len = readByte();
-        if( len > maxLen-1 )
+        uint32 len = readStringLength();
+        if( len == nullStringLen || len > maxLen-1 )
             return 0;
         readBytes( buf, len );
         buf[len] = EOS;
@@ -318,7 +349,7 @@ char _BIDSFARDATA *ipstream::freadString()
         return 0;
     else
         {
-        uint8 len = readByte();
+        uint32 len = readStringLength();
         if( len == nullStringLen )
             return 0;
 
@@ -337,9 +368,8 @@ char _BIDSFARDATA *ipstream::freadString( char _BIDSFARDATA *buf, unsigned maxLe
         return 0;
     else
         {
-        uint8 len = readByte();
-
-        if( len > maxLen-1 )
+        uint32 len = readStringLength();
+        if( len == nullStringLen || len > maxLen-1 )
             return 0;
 
         freadBytes( buf, len);
@@ -603,11 +633,11 @@ void opstream::writeString( const char *str )
 
     if( str == 0 )
         {
-        writeByte( nullStringLen );
+        writeWord32( nullStringLen );
         return;
         }
-    int len = strlen( str );
-    writeByte( (uint8)len );
+    size_t len = strlen( str );
+    writeWord32( len );
     writeBytes( str, len );
 }
 
@@ -618,11 +648,11 @@ void opstream::fwriteString( const char _BIDSFARDATA * str )
 
     if( str == 0 )
         {
-        writeByte( nullStringLen );
+        writeWord32( nullStringLen );
         return;
         }
-    int len = _fstrlen( str );
-    writeByte( (uint8)len );
+    size_t len = _fstrlen( str );
+    writeWord32( len );
     fwriteBytes(str, len);
 }
 
@@ -738,7 +768,7 @@ ipstream _BIDSFAR& _BIDSENTRY _BIDSFUNC operator >> ( ipstream _BIDSFAR& is,
 {
     if( is.good() )
         {
-        uint8 len = is.readByte();
+        uint32 len = is.readStringLength();
         if( len == nullStringLen )
             str = "";
         else
@@ -747,6 +777,7 @@ ipstream _BIDSFAR& _BIDSENTRY _BIDSFUNC operator >> ( ipstream _BIDSFAR& is,
             is.readBytes( temp, len );
             temp[len] = EOS;
             str = temp;
+            delete [] temp;
             }
         }
     return is;

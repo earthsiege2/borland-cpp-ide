@@ -4,5 +4,5 @@
 
 EXERES = layout
 OBJEXE = layout.obj laydia.obj
-MODELS =ldf
+MODELS = mldf
 !include $(BCEXAMPLEDIR)\owlmake.gen

@@ -14,7 +14,7 @@
 //  class TBStaticBmp
 //  ----- -----------
 //
-class _EXPCLASS TBStaticBmp : public TControl {
+class  TBStaticBmp : public TControl {
   public:
     TBStaticBmp(TWindow*        parent,
                 int             id,
@@ -27,7 +27,7 @@ class _EXPCLASS TBStaticBmp : public TControl {
   protected:
     char far* GetClassName();
 
-  DECLARE_STREAMABLE_FROM_BASE(_EXPCLASS, TBStaticBmp, TControl);
+  DECLARE_STREAMABLE_FROM_BASE(, TBStaticBmp, TControl);
 };
 
 #endif //__BSTATBMP_H

@@ -1,0 +1,12 @@
+NAME            CHelp WINDOWAPI
+
+DESCRIPTION     'Borland HelpFile Demo Program'
+
+EXETYPE         WINDOWS
+
+CODE            PRELOAD MOVEABLE DISCARDABLE
+DATA            PRELOAD MOVEABLE MULTIPLE
+
+HEAPSIZE        2048
+STACKSIZE       8192
+

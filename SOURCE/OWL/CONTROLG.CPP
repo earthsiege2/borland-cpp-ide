@@ -1,14 +1,16 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\controlg.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TControlGadget.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\controlg.h>
-#include <owl\gadgetwi.h>
+#include <owl/owlpch.h>
+#include <owl/controlg.h>
+#include <owl/gadgetwi.h>
 
 TControlGadget::TControlGadget(TWindow& control, TBorderStyle border)
-  : TGadget(control.Attr.Id, border)
+:
+  TGadget(control.Attr.Id, border)
 {
   Control = &control;
 }
@@ -59,14 +61,14 @@ TControlGadget::Removed()
 }
 
 void
-TControlGadget::InvalidateRect(const TRect& rect, BOOL erase)
+TControlGadget::InvalidateRect(const TRect& rect, bool erase)
 {
   if (Control->HWindow)
     Control->InvalidateRect(rect, erase);
 }
 
 void
-TControlGadget::Invalidate(BOOL erase)
+TControlGadget::Invalidate(bool erase)
 {
   InvalidateRect(TRect(0, 0, Bounds.Width(), Bounds.Height()), erase);
 }

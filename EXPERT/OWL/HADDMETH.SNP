@@ -1,0 +1,32 @@
+##--BEGIN-- GetGlobal() == FALSE
+##      "//{{[[ClassName]]AUTO_METH_END}}" [[ClassTMarker]]
+##      \\ClassTMarker [[ClassMarker]]
+##      :^BOF
+##      --BEGIN-- ? ClassMarker [[Search]]
+##          :Search == FALSE
+##          :{HAddAMet.SNP}
+##          :^BOF
+##          :? ClassMarker [[Search]]
+##*
+##      --END-- ? ClassMarker [[Search]]
+##      :^BOL
+    [[CPPType]] [[InternalName]] [[CPPArguments]];
+##--END-- GetGlobal() == FALSE
+##"//{{[[ClassName]]AUTO_TBL_END}}" [[ClassTMarker]]
+##\\ClassTMarker [[ClassMarker]]
+##^BOF
+##--BEGIN-- ? ClassMarker [[Search]]
+##Search == FALSE
+##:     {HAddAuto.SNP}
+##:     ^BOF
+##:     ? ClassMarker [[Search]]
+##*
+##--END-- ? ClassMarker [[Search]]
+##^BOL
+##YPos() [[InsertLine]]
+##--BEGIN-- "" [[AutoFuncLine]]
+##{MethRip.SNP}
+##:         ^@InsertLine
+[[AutoFuncLine]]
+##--END-- "" [[AutoFuncLine]]
+##*

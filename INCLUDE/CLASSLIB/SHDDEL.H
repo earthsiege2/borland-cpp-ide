@@ -2,17 +2,17 @@
 /*                                                                        */
 /*  SHDDEL.H                                                              */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_SHDDEL_H )
-#define __CLASSLIB_SHDDEL_H
+#if !defined( CLASSLIB_SHDDEL_H )
+#define CLASSLIB_SHDDEL_H
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -71,5 +71,5 @@ private:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_SHDDEL_H
+#endif  // CLASSLIB_SHDDEL_H
 

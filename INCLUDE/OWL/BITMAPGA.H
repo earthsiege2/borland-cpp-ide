@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\bitmapga.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TBitmapGadget
 //----------------------------------------------------------------------------
-#if !defined(__OWL_BITMAPGA_H)
-#define __OWL_BITMAPGA_H
+#if !defined(OWL_BITMAPGA_H)
+#define OWL_BITMAPGA_H
 
-#if !defined(__OWL_GADGET_H)
-  #include "owl\gadget.h"
+#if !defined(OWL_GADGET_H)
+# include <owl/gadget.h>
 #endif
 class _OWLCLASS TCelArray;
 
@@ -26,9 +27,10 @@ class _OWLCLASS TBitmapGadget : public TGadget {
                   int startImage);
    ~TBitmapGadget();
     
-    int SelectImage(int imageNum, BOOL immediate);
+    int  SelectImage(int imageNum, bool immediate);
+    int  GetImage() const {return CurrentImage;}
 
-    void          SysColorChange();
+    void SysColorChange();
 
   protected:
     void Paint(TDC& dc);
@@ -44,4 +46,4 @@ class _OWLCLASS TBitmapGadget : public TGadget {
     TPoint     BitmapOrigin;
 };
 
-#endif  // __OWL_BITMAPGA_H
+#endif  // OWL_BITMAPGA_H

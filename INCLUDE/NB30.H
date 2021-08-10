@@ -1,29 +1,33 @@
 //*++
 //
-// Module Name: nb30.h
+// Module Name:
+//
+//  nb30.h
 //
 // Abstract:
 //
 //  This module contains the definitions for portable NetBIOS 3.0
 //  support.
 //
+// Author:
+//
+//  Colin Watson (ColinW) 06-Jun-1991
+//
+// Revision History:
+//
 //--*/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1991, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
 #ifndef NCB_INCLUDED
-
 #define NCB_INCLUDED
-
-#ifndef __WINDEF_H
-#include "windef.h"
-#endif
+#define __NB30_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,8 +39,8 @@ extern "C" {
  *                                                              *
  ****************************************************************/
 
-#define NCBNAMSZ        16    /* absolute length of a net name                */
-#define MAX_LANA        72    /* lana's in range 0 to MAX_LANA                */
+#define NCBNAMSZ        16    /* absolute length of a net name           */
+#define MAX_LANA       254    /* lana's in range 0 to MAX_LANA inclusive */
 
 /*
  * Network Control Block
@@ -162,7 +166,7 @@ typedef struct _SESSION_BUFFER {
 
 typedef struct _LANA_ENUM {
     UCHAR   length;         //  Number of valid entries in lana[]
-    UCHAR   lana[MAX_LANA];
+    UCHAR   lana[MAX_LANA+1];
 } LANA_ENUM, *PLANA_ENUM;
 
 /*

@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\scroller.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TScroller.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\scroller.h>
-#include <owl\window.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/scroller.h>
+#include <owl/window.h>
+#include <owl/dc.h>
 #include <stdlib.h>
 
 #define max(a,b)   (((a) > (b)) ? (a) : (b))
@@ -32,11 +33,11 @@ TScroller::TScroller(TWindow* window,
   YRange = yRange;
   XLine = 1;  YLine = 1;
   XPage = 1;  YPage = 1;
-  AutoMode = TRUE;
-  TrackMode = TRUE;
-  AutoOrg = TRUE;
-  HasHScrollBar = Window && (Window->Attr.Style&WS_HSCROLL);
-  HasVScrollBar = Window && (Window->Attr.Style&WS_VSCROLL);
+  AutoMode = true;
+  TrackMode = true;
+  AutoOrg = true;
+  HasHScrollBar = ToBool(Window && (Window->Attr.Style&WS_HSCROLL));
+  HasVScrollBar = ToBool(Window && (Window->Attr.Style&WS_VSCROLL));
 }
 
 //
@@ -111,7 +112,7 @@ TScroller::SetSBarRange()
       Window->GetScrollRange(SB_HORZ, curMin, curMax);
       int newMax = max(0, (int)min(XRange, SHRT_MAX));
       if (newMax != curMax || curMin != 0)
-        Window->SetScrollRange(SB_HORZ, 0, newMax, TRUE);
+        Window->SetScrollRange(SB_HORZ, 0, newMax, true);
     }
 
     if (HasVScrollBar) {
@@ -119,7 +120,7 @@ TScroller::SetSBarRange()
       Window->GetScrollRange(SB_VERT, curMin, curMax);
       int newMax = max(0, (int)min(YRange, SHRT_MAX));
       if (newMax != curMax || curMin != 0)
-        Window->SetScrollRange(SB_VERT, 0, newMax, TRUE);
+        Window->SetScrollRange(SB_VERT, 0, newMax, true);
     }
   }
 }
@@ -150,13 +151,13 @@ TScroller::EndView()
     if (HasHScrollBar) {
       int  newPos = XRange > SHRT_MAX ? XScrollValue(XPos) : (int)XPos;
       if (newPos != Window->GetScrollPos(SB_HORZ))
-        Window->SetScrollPos(SB_HORZ, newPos, TRUE);
+        Window->SetScrollPos(SB_HORZ, newPos, true);
     }
 
     if (HasVScrollBar) {
       int  newPos = YRange > SHRT_MAX ? YScrollValue(YPos) : (int)YPos;
       if (newPos != Window->GetScrollPos(SB_VERT))
-        Window->SetScrollPos(SB_VERT, newPos, TRUE);
+        Window->SetScrollPos(SB_VERT, newPos, true);
     }
   }
 }
@@ -165,7 +166,7 @@ TScroller::EndView()
 // scrolls vertically according to scroll action and thumb position
 //
 void
-TScroller::VScroll(UINT scrollEvent, int thumbPos)
+TScroller::VScroll(uint scrollEvent, int thumbPos)
 {
   switch (scrollEvent) {
     case SB_LINEDOWN:
@@ -209,7 +210,7 @@ TScroller::VScroll(UINT scrollEvent, int thumbPos)
          ScrollTo(XPos, thumbPos);
 
       if (Window && HasVScrollBar)
-        Window->SetScrollPos(SB_VERT, thumbPos, TRUE);
+        Window->SetScrollPos(SB_VERT, thumbPos, true);
       break;
   }
 }
@@ -218,7 +219,7 @@ TScroller::VScroll(UINT scrollEvent, int thumbPos)
 // scrolls horizontally according to scroll action and thumb position
 //
 void
-TScroller::HScroll(UINT scrollEvent, int thumbPos)
+TScroller::HScroll(uint scrollEvent, int thumbPos)
 {
   switch (scrollEvent) {
     case SB_LINEDOWN:
@@ -262,7 +263,7 @@ TScroller::HScroll(UINT scrollEvent, int thumbPos)
           ScrollTo(thumbPos, YPos);
 
       if (Window && HasHScrollBar)
-        Window->SetScrollPos(SB_HORZ, thumbPos, TRUE);
+        Window->SetScrollPos(SB_HORZ, thumbPos, true);
       break;
   }
 }
@@ -308,7 +309,7 @@ TScroller::ScrollTo(long x, long y)
 //
 //
 //
-BOOL
+bool
 TScroller::IsAutoMode()
 {
   return AutoMode;
@@ -317,7 +318,7 @@ TScroller::IsAutoMode()
 //
 // performs "auto-scrolling" (dragging the mouse from within the client
 // client area of the Window to without results in auto-scrolling when
-// the AutoMode data member of the Scroller is TRUE)
+// the AutoMode data member of the Scroller is true)
 //
 void
 TScroller::AutoScroll()

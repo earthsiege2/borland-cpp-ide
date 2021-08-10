@@ -1,7 +1,5 @@
 /*++ BUILD Version: 0010    // Increment this if a change has global effects
 
-Copyright (c) 1993  Microsoft Corporation
-
 Module Name:
 
     winsvc.h
@@ -18,13 +16,38 @@ Environment:
 
     User Mode - Win32
 
+Revision History:
+
+    05-Nov-1992     danl
+        Added Display Names
+
+    19-Jan-1992     danl
+        Created
 
 --*/
-#ifndef __WINSVC_H
+
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _WINSVC_
+#define _WINSVC_
 #define __WINSVC_H
 
-#ifndef __WINBASE_H
-#include <winbase.h>
+//
+// Define API decoration for direct importing of DLL references.
+//
+
+#if !defined(WINADVAPI)
+#if !defined(_ADVAPI32_)
+#define WINADVAPI DECLSPEC_IMPORT
+#else
+#define WINADVAPI
+#endif
 #endif
 
 #ifdef __cplusplus
@@ -268,12 +291,12 @@ typedef LPQUERY_SERVICE_CONFIGA LPQUERY_SERVICE_CONFIG;
 // Function Prototype for the Service Main Function
 //
 
-typedef VOID (*LPSERVICE_MAIN_FUNCTIONW)(
+typedef VOID (WINAPI *LPSERVICE_MAIN_FUNCTIONW)(
     DWORD   dwNumServicesArgs,
     LPWSTR  *lpServiceArgVectors
     );
 
-typedef VOID (*LPSERVICE_MAIN_FUNCTIONA)(
+typedef VOID (WINAPI *LPSERVICE_MAIN_FUNCTIONA)(
     DWORD   dwNumServicesArgs,
     LPSTR   *lpServiceArgVectors
     );
@@ -309,7 +332,7 @@ typedef LPSERVICE_TABLE_ENTRYA LPSERVICE_TABLE_ENTRY;
 // Prototype for the Service Control Handler Function
 //
 
-typedef VOID (*LPHANDLER_FUNCTION)(
+typedef VOID (WINAPI *LPHANDLER_FUNCTION)(
     DWORD    dwControl
     );
 
@@ -319,6 +342,7 @@ typedef VOID (*LPHANDLER_FUNCTION)(
 // API Function Prototypes
 ///////////////////////////////////////////////////////////////////////////
 
+WINADVAPI
 BOOL
 WINAPI
 ChangeServiceConfigA(
@@ -334,6 +358,7 @@ ChangeServiceConfigA(
     LPCSTR     lpPassword,
     LPCSTR     lpDisplayName
     );
+WINADVAPI
 BOOL
 WINAPI
 ChangeServiceConfigW(
@@ -355,12 +380,14 @@ ChangeServiceConfigW(
 #define ChangeServiceConfig  ChangeServiceConfigA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 CloseServiceHandle(
     SC_HANDLE   hSCObject
     );
 
+WINADVAPI
 BOOL
 WINAPI
 ControlService(
@@ -369,6 +396,7 @@ ControlService(
     LPSERVICE_STATUS    lpServiceStatus
     );
 
+WINADVAPI
 SC_HANDLE
 WINAPI
 CreateServiceA(
@@ -386,6 +414,7 @@ CreateServiceA(
     LPCSTR     lpServiceStartName,
     LPCSTR     lpPassword
     );
+WINADVAPI
 SC_HANDLE
 WINAPI
 CreateServiceW(
@@ -409,12 +438,14 @@ CreateServiceW(
 #define CreateService  CreateServiceA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 DeleteService(
     SC_HANDLE   hService
     );
 
+WINADVAPI
 BOOL
 WINAPI
 EnumDependentServicesA(
@@ -425,6 +456,7 @@ EnumDependentServicesA(
     LPDWORD                 pcbBytesNeeded,
     LPDWORD                 lpServicesReturned
     );
+WINADVAPI
 BOOL
 WINAPI
 EnumDependentServicesW(
@@ -441,6 +473,7 @@ EnumDependentServicesW(
 #define EnumDependentServices  EnumDependentServicesA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 EnumServicesStatusA(
@@ -453,6 +486,7 @@ EnumServicesStatusA(
     LPDWORD                 lpServicesReturned,
     LPDWORD                 lpResumeHandle
     );
+WINADVAPI
 BOOL
 WINAPI
 EnumServicesStatusW(
@@ -471,6 +505,7 @@ EnumServicesStatusW(
 #define EnumServicesStatus  EnumServicesStatusA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 GetServiceKeyNameA(
@@ -479,6 +514,7 @@ GetServiceKeyNameA(
     LPSTR                 lpServiceName,
     LPDWORD                 lpcchBuffer
     );
+WINADVAPI
 BOOL
 WINAPI
 GetServiceKeyNameW(
@@ -493,6 +529,7 @@ GetServiceKeyNameW(
 #define GetServiceKeyName  GetServiceKeyNameA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 GetServiceDisplayNameA(
@@ -501,6 +538,7 @@ GetServiceDisplayNameA(
     LPSTR                 lpDisplayName,
     LPDWORD                 lpcchBuffer
     );
+WINADVAPI
 BOOL
 WINAPI
 GetServiceDisplayNameW(
@@ -515,18 +553,21 @@ GetServiceDisplayNameW(
 #define GetServiceDisplayName  GetServiceDisplayNameA
 #endif // !UNICODE
 
+WINADVAPI
 SC_LOCK
 WINAPI
 LockServiceDatabase(
     SC_HANDLE   hSCManager
     );
 
+WINADVAPI
 BOOL
 WINAPI
 NotifyBootConfigStatus(
     BOOL     BootAcceptable
     );
 
+WINADVAPI
 SC_HANDLE
 WINAPI
 OpenSCManagerA(
@@ -534,6 +575,7 @@ OpenSCManagerA(
     LPCSTR lpDatabaseName,
     DWORD   dwDesiredAccess
     );
+WINADVAPI
 SC_HANDLE
 WINAPI
 OpenSCManagerW(
@@ -547,6 +589,7 @@ OpenSCManagerW(
 #define OpenSCManager  OpenSCManagerA
 #endif // !UNICODE
 
+WINADVAPI
 SC_HANDLE
 WINAPI
 OpenServiceA(
@@ -554,6 +597,7 @@ OpenServiceA(
     LPCSTR    lpServiceName,
     DWORD       dwDesiredAccess
     );
+WINADVAPI
 SC_HANDLE
 WINAPI
 OpenServiceW(
@@ -567,6 +611,7 @@ OpenServiceW(
 #define OpenService  OpenServiceA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 QueryServiceConfigA(
@@ -575,6 +620,7 @@ QueryServiceConfigA(
     DWORD                   cbBufSize,
     LPDWORD                 pcbBytesNeeded
     );
+WINADVAPI
 BOOL
 WINAPI
 QueryServiceConfigW(
@@ -589,6 +635,7 @@ QueryServiceConfigW(
 #define QueryServiceConfig  QueryServiceConfigA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 QueryServiceLockStatusA(
@@ -597,6 +644,7 @@ QueryServiceLockStatusA(
     DWORD                           cbBufSize,
     LPDWORD                         pcbBytesNeeded
     );
+WINADVAPI
 BOOL
 WINAPI
 QueryServiceLockStatusW(
@@ -611,6 +659,7 @@ QueryServiceLockStatusW(
 #define QueryServiceLockStatus  QueryServiceLockStatusA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 QueryServiceObjectSecurity(
@@ -621,6 +670,7 @@ QueryServiceObjectSecurity(
     LPDWORD                 pcbBytesNeeded
     );
 
+WINADVAPI
 BOOL
 WINAPI
 QueryServiceStatus(
@@ -628,12 +678,14 @@ QueryServiceStatus(
     LPSERVICE_STATUS    lpServiceStatus
     );
 
+WINADVAPI
 SERVICE_STATUS_HANDLE
 WINAPI
 RegisterServiceCtrlHandlerA(
     LPCSTR             lpServiceName,
     LPHANDLER_FUNCTION   lpHandlerProc
     );
+WINADVAPI
 SERVICE_STATUS_HANDLE
 WINAPI
 RegisterServiceCtrlHandlerW(
@@ -646,6 +698,7 @@ RegisterServiceCtrlHandlerW(
 #define RegisterServiceCtrlHandler  RegisterServiceCtrlHandlerA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 SetServiceObjectSecurity(
@@ -654,6 +707,7 @@ SetServiceObjectSecurity(
     PSECURITY_DESCRIPTOR    lpSecurityDescriptor
     );
 
+WINADVAPI
 BOOL
 WINAPI
 SetServiceStatus(
@@ -661,11 +715,13 @@ SetServiceStatus(
     LPSERVICE_STATUS        lpServiceStatus
     );
 
+WINADVAPI
 BOOL
 WINAPI
 StartServiceCtrlDispatcherA(
     LPSERVICE_TABLE_ENTRYA    lpServiceStartTable
     );
+WINADVAPI
 BOOL
 WINAPI
 StartServiceCtrlDispatcherW(
@@ -678,6 +734,7 @@ StartServiceCtrlDispatcherW(
 #endif // !UNICODE
 
 
+WINADVAPI
 BOOL
 WINAPI
 StartServiceA(
@@ -685,6 +742,7 @@ StartServiceA(
     DWORD                dwNumServiceArgs,
     LPCSTR             *lpServiceArgVectors
     );
+WINADVAPI
 BOOL
 WINAPI
 StartServiceW(
@@ -698,13 +756,12 @@ StartServiceW(
 #define StartService  StartServiceA
 #endif // !UNICODE
 
+WINADVAPI
 BOOL
 WINAPI
 UnlockServiceDatabase(
     SC_LOCK     ScLock
     );
-
-
 
 
 #ifdef __cplusplus

@@ -1,6 +1,8 @@
 /*++
 
-Module Name: rpcdcep.h
+Module Name:
+
+    rpcdcep.h
 
 Abstract:
 
@@ -8,32 +10,33 @@ Abstract:
     stubs and by support libraries.  Applications must not call these
     routines.
 
+Author:
+
+    Michael Montague (mikemon) 25-Sep-1991
+
+Revision History:
+
+    Connie Hoppe     (connieh) 26-Jul-1993  Add a few constants.
+
 --*/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1991, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
 #ifndef __RPCDCEP_H__
 #define __RPCDCEP_H__
+#define __RPCDCEP_H
 
 // Set the packing level for RPC structures for Dos and Windows.
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#ifndef RC_INVOKED
-#pragma option -a.
+#pragma option -a
 #endif
-#endif
-
-#ifdef __RPC_WIN32__
-#ifndef RC_INVOKED
-#pragma option -a-
-#endif /* RC_INVOKED */
-#endif /* __RPC_WIN32__ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,6 +67,33 @@ typedef struct _RPC_MESSAGE
     unsigned long RpcFlags;
 } RPC_MESSAGE, __RPC_FAR * PRPC_MESSAGE;
 
+
+typedef RPC_STATUS RPC_FORWARD_FUNCTION(
+                       IN UUID             __RPC_FAR * InterfaceId,
+                       IN RPC_VERSION      __RPC_FAR * InterfaceVersion,
+                       IN UUID             __RPC_FAR * ObjectId,
+                       IN unsigned char         __RPC_FAR * Rpcpro,
+                       IN void __RPC_FAR * __RPC_FAR * ppDestEndpoint);
+
+/*
+ * Types of function calls for datagram rpc
+ */
+
+#define RPC_NCA_FLAGS_DEFAULT       0x00000000  /* 0b000...000 */
+#define RPC_NCA_FLAGS_IDEMPOTENT    0x00000001  /* 0b000...001 */
+#define RPC_NCA_FLAGS_BROADCAST     0x00000002  /* 0b000...010 */
+#define RPC_NCA_FLAGS_MAYBE         0x00000004  /* 0b000...100 */
+#define RPCFLG_ASYNCHRONOUS         0x40000000UL
+#define RPCFLG_INPUT_SYNCHRONOUS    0x20000000UL
+
+#if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
+#define RPC_FLAGS_VALID_BIT 0x8000
+#endif
+
+#if defined(__RPC_WIN32__) || defined(__RPC_MAC__)
+#define RPC_FLAGS_VALID_BIT 0x00008000
+#endif
+
 typedef
 void
 (__RPC_STUB __RPC_FAR * RPC_DISPATCH_FUNCTION) (
@@ -83,7 +113,7 @@ typedef struct _RPC_PROTSEQ_ENDPOINT
 } RPC_PROTSEQ_ENDPOINT, __RPC_FAR * PRPC_PROTSEQ_ENDPOINT;
 
 /*
-Both of this types MUST start with the InterfaceId and TransferSyntax.
+Both of these types MUST start with the InterfaceId and TransferSyntax.
 Look at RpcIfInqId and I_RpcIfInqTransferSyntaxes to see why.
 */
 
@@ -95,7 +125,8 @@ typedef struct _RPC_SERVER_INTERFACE
     PRPC_DISPATCH_TABLE DispatchTable;
     unsigned int RpcProtseqEndpointCount;
     PRPC_PROTSEQ_ENDPOINT RpcProtseqEndpoint;
-    void __RPC_FAR * MopInterfaceInformation;
+    RPC_MGR_EPV __RPC_FAR *DefaultManagerEpv;
+    void const __RPC_FAR *InterpreterInfo;
 } RPC_SERVER_INTERFACE, __RPC_FAR * PRPC_SERVER_INTERFACE;
 
 typedef struct _RPC_CLIENT_INTERFACE
@@ -106,7 +137,8 @@ typedef struct _RPC_CLIENT_INTERFACE
     PRPC_DISPATCH_TABLE DispatchTable;
     unsigned int RpcProtseqEndpointCount;
     PRPC_PROTSEQ_ENDPOINT RpcProtseqEndpoint;
-    void __RPC_FAR * MopInterfaceInformation;
+    unsigned long Reserved;
+    void const __RPC_FAR * InterpreterInfo;
 } RPC_CLIENT_INTERFACE, __RPC_FAR * PRPC_CLIENT_INTERFACE;
 
 RPC_STATUS RPC_ENTRY
@@ -189,7 +221,7 @@ I_RpcSetAssociationContext (
     IN void __RPC_FAR * AssociationContext
     );
 
-#ifdef RPC_UNICODE_SUPPORTED
+#ifdef __RPC_NT__
 
 RPC_STATUS RPC_ENTRY
 I_RpcNsBindingSetEntryName (
@@ -198,7 +230,7 @@ I_RpcNsBindingSetEntryName (
     IN unsigned short __RPC_FAR * EntryName
     );
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else 
 
 RPC_STATUS RPC_ENTRY
 I_RpcNsBindingSetEntryName (
@@ -207,9 +239,9 @@ I_RpcNsBindingSetEntryName (
     IN unsigned char __RPC_FAR * EntryName
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif 
 
-#ifdef RPC_UNICODE_SUPPORTED
+#ifdef __RPC_NT__
 
 RPC_STATUS RPC_ENTRY
 I_RpcBindingInqDynamicEndpoint (
@@ -217,7 +249,7 @@ I_RpcBindingInqDynamicEndpoint (
     OUT unsigned short __RPC_FAR * __RPC_FAR * DynamicEndpoint
     );
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else 
 
 RPC_STATUS RPC_ENTRY
 I_RpcBindingInqDynamicEndpoint (
@@ -225,7 +257,17 @@ I_RpcBindingInqDynamicEndpoint (
     OUT unsigned char __RPC_FAR * __RPC_FAR * DynamicEndpoint
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif 
+
+#define TRANSPORT_TYPE_CN  0x1
+#define TRANSPORT_TYPE_DG  0x2
+#define TRANSPORT_TYPE_LPC 0x4
+
+RPC_STATUS RPC_ENTRY
+I_RpcBindingInqTransportType (
+    IN RPC_BINDING_HANDLE Binding,
+    OUT unsigned int __RPC_FAR * Type
+    );
 
 typedef struct _RPC_TRANSFER_SYNTAX
 {
@@ -264,36 +306,11 @@ I_RpcSsDontSerializeContext (
     void
     );
 
-/* Functions to do performace timing */
 
-extern unsigned long TraceCallTime;     /* Time to call the trace system */
-extern unsigned long ChargeCallTime;    /* Time to call the Charge API */
-
-typedef enum {
-
-    TIME_RUNTIME = 0,
-    TIME_STUB,
-    TIME_TRANSPORT,
-    TIME_USER,
-    TIME_MAX,
-    TIME_LOST
-
-} TIME_SLOT;
-
-void RPC_ENTRY
-I_RpcTimeReset(
-    void
-    );
-
-void RPC_ENTRY
-I_RpcTimeCharge(
-    IN TIME_SLOT Account
-    );
-
-unsigned long * RPC_ENTRY
-I_RpcTimeGet(
-    char __RPC_FAR * ApiName
-    );
+RPC_STATUS RPC_ENTRY
+I_RpcServerRegisterForwardFunction (
+    IN RPC_FORWARD_FUNCTION __RPC_FAR * pForwardFunction
+                       );
 
 #ifdef __cplusplus
 }
@@ -302,16 +319,7 @@ I_RpcTimeGet(
 // Reset the packing level for Dos and Windows.
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#ifndef RC_INVOKED
 #pragma option -a.
 #endif
-#endif
-
-#ifdef __RPC_WIN32__
-#ifndef RC_INVOKED
-#pragma option -a.
-#endif /* RC_INVOKED */
-#endif /* __RPC_WIN32__ */
 
 #endif /* __RPCDCEP_H__ */
-

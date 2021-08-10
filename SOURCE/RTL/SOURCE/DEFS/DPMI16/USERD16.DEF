@@ -1,0 +1,13 @@
+LIBRARY USER 
+ 
+EXPORTS
+            MESSAGEBOX	@1
+            INITAPP	@5
+            GETTICKCOUNT	@13
+            GETCURRENTTIME	@15
+            LOADSTRING	@176
+            ENUMTASKWINDOWS	@225
+            GETDESKTOPWINDOW	@286
+            _WSPRINTF	@420
+            ANSIUPPER	@431
+            ANSILOWER	@432

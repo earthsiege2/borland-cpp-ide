@@ -236,7 +236,7 @@ TMyFrame::TMyFrame(TWindow* client, char* title)
   // If we set the option CloseBox flag to true, then clicking the box
   // will close the window instead of displaying the system menu
   //
-  EnableTinyCaption(52, FALSE);
+  EnableTinyCaption(58, FALSE);
 
   //
   // Create our combo box and size it for an edit line and 5 text items
@@ -264,8 +264,10 @@ TMyFrame::SetupWindow()
              newRect.Width(), CaptionHeight + cr.Height(), TRUE);
 
   char buf[MAXDIR+1];
-  if (getcwd(buf, sizeof(buf)))
+  if (getcwd(buf, sizeof(buf))) {
+//    strlwr(buf);
     SetCaption(buf);
+  }
 }
 
 //------------------------------------------------------------------------

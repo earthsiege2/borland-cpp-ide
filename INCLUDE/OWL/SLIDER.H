@@ -1,19 +1,20 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\slider.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TSlider & TVSlider.  This defines the basic behavior
 //   of slider controls.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_SLIDER_H)
-#define __OWL_SLIDER_H
+#if !defined(OWL_SLIDER_H)
+#define OWL_SLIDER_H
 
-#if !defined(__OWL_SCROLLBA_H)
-  #include <owl\scrollba.h>
+#if !defined(OWL_SCROLLBA_H)
+# include <owl/scrollba.h>
 #endif
-#if !defined(__OWL_COLOR_H)
-  #include <owl\color.h>
+#if !defined(OWL_COLOR_H)
+# include <owl/color.h>
 #endif
-#include <owl\slider.rh>
+#include <owl/slider.rh>
 
 class _OWLCLASS TDC;
 class _OWLCLASS TRegion;
@@ -41,7 +42,7 @@ class _OWLCLASS TSlider : public TScrollBar {
     void          SetRange(int min, int max);
     void          SetPosition(int thumbPos);
     
-    void          SetRuler(int ticGap, BOOL snap = FALSE)
+    void          SetRuler(int ticGap, bool snap = false)
                     {TicGap = ticGap; Snap = snap;}
 
   protected:
@@ -72,22 +73,22 @@ class _OWLCLASS TSlider : public TScrollBar {
     //
     // message response functions
     //
-    void          EvSize(UINT sizeType, TSize& size);
-    UINT          EvGetDlgCode(MSG far*);
-    BOOL          EvEraseBkgnd(HDC hDC);
+    void          EvSize(uint sizeType, TSize& size);
+    uint          EvGetDlgCode(MSG far*);
+    bool          EvEraseBkgnd(HDC hDC);
     void          EvPaint();
-    void          EvLButtonDown(UINT modKeys, TPoint& point);
-    void          EvMouseMove(UINT modKeys, TPoint& point);
-    void          EvLButtonUp(UINT modKeys, TPoint& point);
-    void          EvLButtonDblClk(UINT modKeys, TPoint& point);
-    void          EvKeyDown(UINT key, UINT repeatCount, UINT flags);
+    void          EvLButtonDown(uint modKeys, TPoint& point);
+    void          EvMouseMove(uint modKeys, TPoint& point);
+    void          EvLButtonUp(uint modKeys, TPoint& point);
+    void          EvLButtonDblClk(uint modKeys, TPoint& point);
+    void          EvKeyDown(uint key, uint repeatCount, uint flags);
     void          EvSetFocus(HWND hWndLostFocus);
     void          EvKillFocus(HWND hWndGetFocus);
   
   protected:
     int           Min;        // Minimum position value
     int           Max;        // Maximum position value
-    UINT          Range;      // Positive range
+    uint          Range;      // Positive range
     int           Pos;        // Current position value
     TResId        ThumbResId; // Bitmap res id for thumb knob
     TRect         ThumbRect;  // Bounding rect of Thumb in pixels
@@ -95,9 +96,9 @@ class _OWLCLASS TSlider : public TScrollBar {
     TRect         CaretRect;  // Bounding rect of Thumb's blink caret
     int           SlotThick;  // Thickness(width or height) of slot
     int           TicGap;     // Gap between tics in pos units
-    BOOL          Snap;       // Snap Thumb to tics
+    bool          Snap;       // Snap Thumb to tics
 
-    BOOL          Sliding;
+    bool          Sliding;
     TColor        BkColor;    // color to use to paint background
 
     //
@@ -173,4 +174,4 @@ class _OWLCLASS TVSlider : public TSlider {
   DECLARE_STREAMABLE(_OWLCLASS, TVSlider, 1);
 };
 
-#endif  // __OWL_SLIDER_H
+#endif  // OWL_SLIDER_H

@@ -1,10 +1,11 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993, 1993 by Borland International
-//   source\owl\bitset.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\bitset.h>
-#include <classlib\objstrm.h>
+#include <owl/owlpch.h>
+#include <owl/bitset.h>
+#include <classlib/objstrm.h>
 
 uint8 near TBitSet::Masks[8] = {
   0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80
@@ -23,7 +24,7 @@ TBitSet::TBitSet(const TBitSet& bs)
 }
 
 int
-TBitSet::Has(int item)
+TBitSet::Has(uint8 item)
 {
   return (Bits[Loc(item)] & Mask(item)) != 0;
 }
@@ -38,7 +39,7 @@ TBitSet::operator ~() const
 }
 
 void
-TBitSet::DisableItem(int item)
+TBitSet::DisableItem(uint8 item)
 {
   Bits[Loc(item)] &= uint8(~Mask(item));
 }
@@ -58,7 +59,7 @@ TBitSet::DisableItem(const TBitSet& bs)
 }
 
 void
-TBitSet::EnableItem(int item)
+TBitSet::EnableItem(uint8 item)
 {
   Bits[Loc(item)] |= Mask(item);
 }
@@ -92,8 +93,8 @@ TBitSet::IsEmpty()
 {
   for (int i = 0; i < 32; i++)
     if (Bits[i] != 0)
-      return FALSE;
-  return TRUE;
+      return false;
+  return true;
 }
 
 int
@@ -101,8 +102,8 @@ operator ==(const TBitSet& bs1, const TBitSet& bs2)
 {
   for (int i = 0; i < 32; i++)
     if (bs1.Bits[i] != bs2.Bits[i])
-      return FALSE;
-  return TRUE;
+      return false;
+  return true;
 }
 
 opstream& operator <<(opstream& out, const TBitSet& bs)

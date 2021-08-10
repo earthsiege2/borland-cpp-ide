@@ -1,10 +1,12 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\gauge.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TGauge, gauge user interface widget
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\gauge.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/gauge.h>
+#include <owl/dc.h>
 
 DEFINE_RESPONSE_TABLE1(TGauge, TControl)
   EV_WM_ERASEBKGND,
@@ -17,10 +19,11 @@ TGauge::TGauge(TWindow*        parent,
                const char far* title,
                int             id,
                int x, int y, int w, int h,
-               BOOL            isHorizontal,
+               bool            isHorizontal,
                int             margin,
                TModule*        module)
-  : TControl(parent, id, title, x, y, w, h, module)
+:
+  TControl(parent, id, title, x, y, w, h, module)
 {
   SetRange(0, 100);
   Value = 0;
@@ -64,7 +67,7 @@ TGauge::SetValue(int value)
   //
   if (value != Value) {
     if (HWindow) {
-      Invalidate(FALSE);
+      Invalidate(false);
     }
     Value = value;
   }
@@ -115,7 +118,7 @@ TGauge::PaintBorder(TDC& dc)
 // Paint the whole gauge: border & graphic
 //
 void
-TGauge::Paint(TDC& dc, BOOL /*erase*/, TRect&)
+TGauge::Paint(TDC& dc, bool /*erase*/, TRect&)
 {
   PaintBorder(dc);
 
@@ -145,8 +148,8 @@ TGauge::Paint(TDC& dc, BOOL /*erase*/, TRect&)
         dc.FillRect(x+ledWidth, innerRect.top, x+ledWidth+gapWidth, innerRect.bottom, faceBrush);
       }
       dc.FillRect(x, innerRect.top, innerRect.right, innerRect.bottom, faceBrush);
-
-    } else {
+    }
+    else {
       int ledStep = int((long(innerRect.Height())*LedSpacing)/(Max-Min));
       int ledHeight = int((long(ledStep)*LedThick)/100);
       int gapHeight = ledStep - ledHeight;
@@ -159,15 +162,15 @@ TGauge::Paint(TDC& dc, BOOL /*erase*/, TRect&)
       }
       dc.FillRect(innerRect.left, innerRect.top, innerRect.right, y, faceBrush);
     }
-
-  } else {
+  }
+  else {
     TRect barRect(innerRect);
     TRect emptyRect(innerRect);
     if (IsHorizontal) {
       int w = int((long(Value-Min)*innerRect.Width())/(Max-Min));
       barRect.right = emptyRect.left = innerRect.left+w;
-
-    } else {
+    }
+    else {
       int h = innerRect.Height() -
               int((long(Value-Min)*innerRect.Height())/(Max-Min));
       barRect.top = emptyRect.bottom = innerRect.top+h;
@@ -206,8 +209,8 @@ TGauge::Paint(TDC& dc, BOOL /*erase*/, TRect&)
 //
 // We'll always erase as we paint to avoid flicker
 //
-BOOL
+bool
 TGauge::EvEraseBkgnd(HDC)
 {
-  return TRUE;
+  return true;
 }

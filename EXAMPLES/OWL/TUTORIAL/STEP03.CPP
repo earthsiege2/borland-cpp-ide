@@ -1,45 +1,47 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Tutorial application -- step03.cpp
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\framewin.h>
-#include <owl\dc.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
+#include <owl/framewin.h>
+#include <owl/dc.h>
 #include <string.h>
 
-class TMyWindow : public TWindow {
+class TDrawWindow : public TWindow {
   public:
-    TMyWindow(TWindow *parent = 0);
+    TDrawWindow(TWindow* parent = 0);
 
   protected:
     // Override member function of TWindow
-    BOOL CanClose();
+    bool CanClose();
 
     // Message response functions
-    void EvLButtonDown(UINT, TPoint&);
-    void EvRButtonDown(UINT, TPoint&);
+    void EvLButtonDown(uint, TPoint&);
+    void EvRButtonDown(uint, TPoint&);
 
-    DECLARE_RESPONSE_TABLE(TMyWindow);
+  DECLARE_RESPONSE_TABLE(TDrawWindow);
 };
 
-DEFINE_RESPONSE_TABLE1(TMyWindow, TWindow)
+DEFINE_RESPONSE_TABLE1(TDrawWindow, TWindow)
   EV_WM_LBUTTONDOWN,
   EV_WM_RBUTTONDOWN,
 END_RESPONSE_TABLE;
 
-TMyWindow::TMyWindow(TWindow *parent)
+TDrawWindow::TDrawWindow(TWindow* parent)
 {
   Init(parent, 0, 0);
 }
 
-BOOL TMyWindow::CanClose()
+bool
+TDrawWindow::CanClose()
 {
   return MessageBox("Do you want to save?", "Drawing has changed",
                     MB_YESNO | MB_ICONQUESTION) == IDNO;
 }
 
-void TMyWindow::EvLButtonDown(UINT, TPoint& point)
+void
+TDrawWindow::EvLButtonDown(uint, TPoint& point)
 {
   char s[16];
   TClientDC dc(*this);
@@ -48,22 +50,25 @@ void TMyWindow::EvLButtonDown(UINT, TPoint& point)
   dc.TextOut(point, s, strlen(s));
 }
 
-void TMyWindow::EvRButtonDown(UINT, TPoint&)
+void
+TDrawWindow::EvRButtonDown(uint, TPoint&)
 {
   Invalidate();
 }
 
-class TMyApp : public TApplication {
+class TDrawApp : public TApplication {
   public:
-    TMyApp() : TApplication() {}
+    TDrawApp() : TApplication() {}
 
     void InitMainWindow()
     {
-      SetMainWindow(new TFrameWindow(0, "Sample ObjectWindows Program", new TMyWindow));
+      SetMainWindow(new TFrameWindow(0, "Sample ObjectWindows Program",
+        new TDrawWindow));
     }
 };
 
-int OwlMain(int /*argc*/, char* /*argv*/ [])
+int
+OwlMain(int /*argc*/, char* /*argv*/ [])
 {
-  return TMyApp().Run();
+  return TDrawApp().Run();
 }

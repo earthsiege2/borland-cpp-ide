@@ -1,21 +1,34 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\applicat.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TApplication. This defines the basic behavior
 //   for OWL applications.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_APPLICAT_H)
-#define __OWL_APPLICAT_H
+#if !defined(OWL_APPLICAT_H)
+#define OWL_APPLICAT_H
 
-#if !defined(__OWL_MODULE_H)
-  #include <owl\module.h>
+#if !defined(OWL_MODULE_H)
+# include <owl/module.h>
 #endif
-#if defined(__WIN32__) && !defined(__CLASSLIB_THREAD_H)
-  #include <classlib\thread.h>
+#if defined(BI_MULTI_THREAD) && !defined(CLASSLIB_THREAD_H)
+# include <classlib/thread.h>
 #endif
 
+class _OWLCLASS TWindow;
 class _OWLCLASS TFrameWindow;
 class _OWLCLASS TDocManager;
+class _OWLCLASS TAppDictionary;
+
+//
+// Internal current event structure for windows events
+//
+struct TCurrentEvent {
+  TWindow*  Win;
+  uint      Message;
+  WPARAM    WParam;
+  LPARAM    LParam;
+};
 
 //
 //  class TApplication
@@ -26,7 +39,8 @@ class _OWLCLASS TApplication : public TModule {
     class _OWLCLASS_RTL TXInvalidMainWindow : public TXOwl {
       public:
         TXInvalidMainWindow();
-        TXOwl* Clone();
+       ~TXInvalidMainWindow();
+        TXInvalidMainWindow* Clone();
         void Throw();
     };
 
@@ -37,13 +51,19 @@ class _OWLCLASS TApplication : public TModule {
     TFrameWindow* MainWindow;  // will become private, use Get/SetMainWindow()
     HACCEL        HAccTable;
 
-    TApplication(const char far* name = 0, TModule*& gModule = ::Module);
+    // Constructors for TApplication. Default args for the ctor allow
+    // TApplication to access global pointers in the user exe/dll.
+    // Default OwlAppDictionary can be overridden by passing non-0 appDict arg
+    //
+    TApplication(const char far* name = 0, TModule*& gModule = ::Module,
+                 TAppDictionary* appDict = 0);
     TApplication(const char far* name,
                  HINSTANCE       hInstance,
                  HINSTANCE       hPrevInstance,
                  const char far* cmdLine,
                  int             cmdShow,
-                 TModule*&       gModule = ::Module);
+                 TModule*&       gModule = ::Module,
+                 TAppDictionary* appDict = 0);
 
    ~TApplication();
 
@@ -57,17 +77,18 @@ class _OWLCLASS TApplication : public TModule {
 
     void             GetWinMainParams();
 
-    virtual BOOL     CanClose();
+    virtual bool     CanClose();
     virtual int      Run();
+    virtual int      Start();
 
-#if defined(__WIN32__)
-    TMutex *GetMutex();
+#if defined(BI_MULTI_THREAD)
+    TMutex* GetMutex();
 
     class _OWLCLASS TAppMutex {
       public:
         TAppMutex();
-        ~TAppMutex();
-        TMutex *GetMutex();
+       ~TAppMutex();
+        TMutex* GetMutex();
         static int HasMutex();
       private:
         char Mutex[sizeof(TMutex)];
@@ -77,25 +98,24 @@ class _OWLCLASS TApplication : public TModule {
     class _OWLCLASS TAppLock {
       public:
         TAppLock(TApplication &app);
-        ~TAppLock();
+       ~TAppLock();
         void Release();
       private:
         char AppLock[sizeof(TMutex::Lock)];
     };
 
-    //
     // override TEventHandler::Dispatch() to handle multi-thread
     // synchronization
     //
     virtual LRESULT  Dispatch(TEventInfo& info, WPARAM wp, LPARAM lp = 0);
 #endif
 
-    BOOL             PumpWaitingMessages();  // pumps all waiting msgs
+    bool             PumpWaitingMessages();  // pumps all waiting msgs
     virtual int      MessageLoop();          // Loops until break or WM_QUIT
-    virtual BOOL     ProcessAppMsg(MSG& msg);
+    virtual bool     ProcessAppMsg(MSG& msg);
     void             SuspendThrow(xalloc& x); // saves xalloc exception info
     void             SuspendThrow(xmsg& x);   // saves xmsg exception info
-    void             SuspendThrow(TXOwl& x);  // saves copy of TXOwl exception
+    void             SuspendThrow(TXBase& x); // saves copy of TXBase exception
     void             SuspendThrow(int);       // set bit flag to log exception
     void             ResumeThrow(); // checks and rethrows suspended exceptions
     int              QueryThrow() {return XState;}  // return suspend flags
@@ -105,101 +125,113 @@ class _OWLCLASS TApplication : public TModule {
       xsBadTypeid = 4,
       xsMsg       = 8,
       xsAlloc     = 16,
-      xsOwl       = 32,
+      xsBase      = 32,
+      xsOwl       = 32,  // for compatibility
     };
 
+    // Get the TWindow pointer belonging to this app given an hWnd
     //
+    TWindow*         GetWindowPtr(HWND hWnd) const;
+
     // begin and end of a modal window's modal message loop
     //
     int              BeginModal(TWindow* window, int flags=MB_APPLMODAL);
     void             EndModal(int result);
     virtual void     PreProcessMenu(HMENU);  // called from MainWindow
 
+    // Is this Application object running? i.e. does it own the main msg loop
     //
+    bool             IsRunning() const {return Running;}
+
     // Dead TWindow garbage collection
     //
     void             Condemn(TWindow* win);
+    void             Uncondemn(TWindow* win);
 
-    //
     // Call this function after each msg dispatch if TApplication's message
     // loop is not used.
     //
     void             PostDispatchAction();
-  
-    //
-    // TApplication has no event table itself, defers event handling to 
+
+    // TApplication has no event table itself, defers event handling to
     // DocManager if it has been installed.
     //
-    BOOL  Find(TEventInfo&, TEqualOperator = 0);
+    bool             Find(TEventInfo&, TEqualOperator = 0);
 
-    void             EnableBWCC(BOOL enable = TRUE, UINT language = 0);
-    BOOL             BWCCEnabled() const {return BWCCOn;}
+    void             EnableBWCC(bool enable = true, uint language = 0);
+    bool             BWCCEnabled() const {return BWCCOn;}
     TModule*         GetBWCCModule() const {return BWCCModule;}
 
-    void             EnableCtl3d(BOOL enable = TRUE);
-    void             EnableCtl3dAutosubclass(BOOL enable);
-    BOOL             Ctl3dEnabled() const {return Ctl3dOn;}
+    void             EnableCtl3d(bool enable = true);
+    void             EnableCtl3dAutosubclass(bool enable);
+    bool             Ctl3dEnabled() const {return Ctl3dOn;}
     TModule*         GetCtl3dModule() const {return Ctl3dModule;}
 
+    static string&   GetCmdLine() {return InitCmdLine;}
+    TCurrentEvent&   GetCurrentEvent() {return CurrentEvent;}
+
   protected:
-    BOOL        BreakMessageLoop;
+    bool        BreakMessageLoop;
     int         MessageLoopResult;
+    string      CmdLine;                 // string object copy of cmd line
 
     virtual void     InitApplication();  // "first"-instance initialization
     virtual void     InitInstance();     // each-instance initialization
     virtual void     InitMainWindow();   // init application main window
     virtual int      TermInstance(int status); // each-instance termination
 
-    //
-    // (re)set a new main window either at construction or sometime later
+    // (re)set a new main-window and DocManager either at construction or
+    // sometime later
     //
     TFrameWindow*    SetMainWindow(TFrameWindow* window);
-
     TDocManager*     SetDocManager(TDocManager* docManager);
 
-    //
-    // called each time there are no messages in the queue. idle count is
+    // Called each time there are no messages in the queue. idle count is
     // incremented each time, & zeroed when messages are pumped. Return
     // whether or not more processing needs to be done.
     //
-    // default behavior is to give the main window an opportunity to do idle
+    // Default behavior is to give the main window an opportunity to do idle
     // processing by invoking its IdleAction() member function when
     // "idleCount" is 0
     //
-    virtual BOOL     IdleAction(long idleCount);
+    virtual bool     IdleAction(long idleCount);
 
   private:
-    BOOL          BWCCOn;
+    bool          BWCCOn;
     TModule*      BWCCModule;
 
-    BOOL          Ctl3dOn;
+    bool          Ctl3dOn;
     TModule*      Ctl3dModule;
-    
-#if defined(__WIN32__)
+
+    bool          Running;
+
+#if defined(BI_MULTI_THREAD)
     TAppMutex     Mutex;
 #endif
-    
-    static HINSTANCE       InitHInstance;
-    static HINSTANCE       InitHPrevInstance;
-    static const char far* InitCmdLine;
-    static int             InitCmdShow;
+    TCurrentEvent CurrentEvent;
 
-    //
-    // exception handling state
-    //
-    int    XState;
-    string XString;
-    size_t XSize;
-    TXOwl* XOwl;
+    static HINSTANCE  InitHInstance;
+    static HINSTANCE  InitHPrevInstance;
+    static string     InitCmdLine;
+    static int        InitCmdShow;
 
+    // Exception handling state
     //
+    int     XState;
+    string  XString;
+    size_t  XSize;
+    TXBase* XBase;
+
     // Condemned TWindow garbage collection
     //
     void             DeleteCondemned();
     TWindow*         CondemnedWindows;
 
+    // The dictionary that this app is in
     //
-    // hidden to prevent accidental copying or assignment
+    TAppDictionary*  Dictionary;
+
+    // Hidden to prevent accidental copying or assignment
     //
     TApplication(const TApplication&);
     TApplication& operator =(const TApplication&);
@@ -208,7 +240,7 @@ class _OWLCLASS TApplication : public TModule {
 };
 
 
-#if defined(__WIN32__)
+#if defined(BI_MULTI_THREAD)
 
 inline TMutex *TApplication::GetMutex()
 {
@@ -232,12 +264,12 @@ inline TMutex *TApplication::TAppMutex::GetMutex()
   if (!HasMutex())
     return 0;
   else
-    return REINTERPRET_CAST(TMutex *,(char *)Mutex);
+    return REINTERPRET_CAST(TMutex *,(char*)Mutex);
 }
 
 inline int TApplication::TAppMutex::HasMutex()
 {
-    return NotWIN32s;
+  return NotWIN32s;
 }
 
 inline TApplication::TAppLock::TAppLock(TApplication &app)
@@ -260,6 +292,12 @@ inline void TApplication::TAppLock::Release()
 
 #endif
 
+extern TWindow* GetWindowPtr(HWND, const TApplication*);
+inline TWindow* TApplication::GetWindowPtr(HWND hWnd) const
+{
+  return ::GetWindowPtr(hWnd, this);
+}
+
 inline void TApplication::SetWinMainParams(HINSTANCE       hInstance,
                                            HINSTANCE       hPrevInstance,
                                            const char far* cmdLine,
@@ -273,10 +311,9 @@ inline void TApplication::SetWinMainParams(HINSTANCE       hInstance,
 
 inline void TApplication::GetWinMainParams()
 {
-  InitModule(InitHInstance, InitCmdLine);
+  InitModule(InitHInstance, InitCmdLine.c_str());
   hPrevInstance = InitHPrevInstance;
   nCmdShow = InitCmdShow;
 }
 
-#endif  // __OWL_APPLICAT_H
-
+#endif  // OWL_APPLICAT_H

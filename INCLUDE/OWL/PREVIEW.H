@@ -1,17 +1,18 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\preview.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of print preview classes
 //----------------------------------------------------------------------------
-#if !defined(__OWL_PREVIEW_H)
-#define __OWL_PREVIEW_H
+#if !defined(OWL_PREVIEW_H)
+#define OWL_PREVIEW_H
 
-#if !defined(__OWL_WINDOW_H)
-  #include <owl\window.h>
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
 #endif
 
-#if !defined(__OWL_DC_H)
-  #include <owl\dc.h>
+#if !defined(OWL_DC_H)
+# include <owl/dc.h>
 #endif
 
 class _OWLCLASS TPrintout;
@@ -30,7 +31,7 @@ class _OWLCLASS TPreviewPage : public TWindow {
                  int        pagenum = 1);
 
     void  SetPageNumber(int newNum) {PageNum = newNum; if (HWindow) Invalidate();}
-    void  Paint(TDC& dc, BOOL, TRect& clip);
+    void  Paint(TDC& dc, bool, TRect& clip);
 
   protected:
     int        PageNum;
@@ -38,7 +39,7 @@ class _OWLCLASS TPreviewPage : public TWindow {
     TPrintout& Printout;
     TPrintDC&  PrintDC;
 
-    void  EvSize(UINT sizeType, TSize& size);
+    void  EvSize(uint sizeType, TSize& size);
 
   DECLARE_RESPONSE_TABLE(TPreviewPage);
   DECLARE_CASTABLE;
@@ -81,24 +82,24 @@ class _OWLCLASS TPrintPreviewDC : public TPrintDC {
     // override virtual TDC viewport & window mapping functions
     //
     int   SetMapMode(int mode);
-    BOOL  SetViewportOrg(const TPoint& origin, TPoint far* oldOrg=0);
-    BOOL  OffsetViewportOrg(const TPoint& delta, TPoint far* oldOrg=0);
+    bool  SetViewportOrg(const TPoint& origin, TPoint far* oldOrg=0);
+    bool  OffsetViewportOrg(const TPoint& delta, TPoint far* oldOrg=0);
 
-    BOOL  SetViewportExt(const TSize& extent, TSize far* oldExtent=0);
-    BOOL  ScaleViewportExt(int xNum, int xDenom, int yNum, int yDenom,
+    bool  SetViewportExt(const TSize& extent, TSize far* oldExtent=0);
+    bool  ScaleViewportExt(int xNum, int xDenom, int yNum, int yDenom,
                            TSize far* oldExtent=0);
 
-    BOOL  SetWindowExt(const TSize& extent, TSize far* oldExtent=0);
-    BOOL  ScaleWindowExt(int xNum, int xDenom, int yNum, int yDenom,
+    bool  SetWindowExt(const TSize& extent, TSize far* oldExtent=0);
+    bool  ScaleWindowExt(int xNum, int xDenom, int yNum, int yDenom,
                          TSize far* oldExtent=0);
 
     //
     // Screen device point to Logical point conversions
     //
-    BOOL  SDPtoLP(TPoint* points, int count = 1) const;
-    BOOL  SDPtoLP(TRect& rect) const;
-    BOOL  LPtoSDP(TPoint* points, int count = 1) const;
-    BOOL  LPtoSDP(TRect& rect) const;
+    bool  SDPtoLP(TPoint* points, int count = 1) const;
+    bool  SDPtoLP(TRect& rect) const;
+    bool  LPtoSDP(TPoint* points, int count = 1) const;
+    bool  LPtoSDP(TRect& rect) const;
 
   protected:
     HFONT     PrnFont;              // Handle of current font in the printer dc
@@ -108,23 +109,24 @@ class _OWLCLASS TPrintPreviewDC : public TPrintDC {
     HDC   GetAttributeHDC() const;
 };
 
-inline BOOL
+inline bool
 TPrintPreviewDC::SDPtoLP(TPoint* points, int count) const {
   return ::DPtoLP(HDC(Handle), points, count);
 }
 
-inline BOOL
+inline bool
 TPrintPreviewDC::SDPtoLP(TRect& rect) const {
   return SDPtoLP(rect, 2);
 }
 
-inline BOOL
+inline bool
 TPrintPreviewDC::LPtoSDP(TPoint* points, int count) const {
   return ::LPtoDP(HDC(Handle), points, count);
 }
 
-inline BOOL
+inline bool
 TPrintPreviewDC::LPtoSDP(TRect& rect) const {
   return LPtoSDP(rect, 2);
 }
-#endif  // __OWL_PREVIEW_H
+
+#endif  // OWL_PREVIEW_H

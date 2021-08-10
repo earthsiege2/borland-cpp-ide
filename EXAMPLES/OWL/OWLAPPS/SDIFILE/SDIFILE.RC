@@ -5,6 +5,7 @@
   #include <windows.h>
 #endif
 #include <owl\editfile.rc>
+#include <owl\editsear.rc>
 #include <owl\docview.rc>
 
 201 ICON 

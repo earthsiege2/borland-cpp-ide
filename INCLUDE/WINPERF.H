@@ -1,14 +1,12 @@
 /*++
 
-Copyright (c) 1993 Microsoft Corporation
-
 Module Name:
 
     winperf.h
 
 Abstract:
 
-    Header file for the Performance Monitor data
+    Header file for the Performance Monitor data.
 
     This file contains the definitions of the data structures returned
     by the Configuration Registry in response to a request for
@@ -19,56 +17,28 @@ Abstract:
 
                    HKEY_PERFORMANCE_DATA.
 
-    By querying that node with a subkey of "GLOBAL" the caller will
+    By querying that node with a subkey of "Global" the caller will
     retrieve the structures described here.
 
-    There is no need to RegOpenKey the reserved handle HKEY_PERFORMANCE_DATA,
-    but the caller should RegCloseKey the handle so that network transports
+    There is no need to RegOpenKey() the reserved handle HKEY_PERFORMANCE_DATA,
+    but the caller should RegCloseKey() the handle so that network transports
     and drivers can be removed or installed (which cannot happen while
-    they are open for monitoring.)
-
-
-Author:
-
-    Russ Blake  (russbl) 11/15/91
-
-Revision History:
-
-    russbl  -   1/22/92     - Add diagrams of data structures
-
-    russbl  -   4/14/92     - Add version/revision, signature,
-                                and pointer fields for titles
-                                strings reserved for analysis
-                                program usage
-
-    russbl  -   5/29/92     - Add default scale to counter
-                                definition, *Pstruct types to
-                                all structure defs, and counter
-                                types ..._MULTI_
-
-    a-robw  -   10/23/92    - Moved descriptive text and diagrams
-                                to spec. Added extensible object
-                                routine function typedefs. Changed
-                                type of NumInstances from DWORD to LONG.
-                                Corrected some of the remaining comments.
-                                Changed variables using -1 from, Unsigned
-                                to signed types
-
-
-    a-robw  -   11/16/92    - added PERF_ELAPSED_TIME counter type
-    a-robw  -   11/17/92    - added Object Timer fields
-    a-robw  -   12/4/92     - changed counter type defines (VER 1, REV 1)
-
+    they are open for monitoring.)  Remote requests must first
+    RegConnectRegistry().
 
 --*/
 
-#ifndef __WINPERF_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _WINPERF_
+#define _WINPERF_
 #define __WINPERF_H
-
-#ifndef __WINBASE_H
-#include <winbase.h>
-#endif
-
 
 //  Data structure definitions.
 
@@ -99,7 +69,7 @@ typedef struct _PERF_DATA_BLOCK {
                                         // being reported
     LONG            DefaultObject;      // Object Title Index of default
                                         // object to display when data from
-                                        // this system is retireved (-1 =
+                                        // this system is retrieved (-1 =
                                         // none, but this is not expected to
                                         // be used)
     SYSTEMTIME      SystemTime;         // Time at the system under
@@ -127,7 +97,7 @@ typedef struct _PERF_DATA_BLOCK {
 typedef struct _PERF_OBJECT_TYPE {
     DWORD           TotalByteLength;    // Length of this object definition
                                         // including this structure, the
-                                        // counter defintions, and the
+                                        // counter definitions, and the
                                         // instance definitions and the
                                         // counter blocks for each instance:
                                         // This is the offset from this
@@ -240,7 +210,7 @@ typedef struct _PERF_OBJECT_TYPE {
 #define PERF_COUNTER_HISTOGRAM  0x00060000  // Counter begins or ends a histogram
 //
 //  If the PERF_TYPE_TEXT value was selected, then select one of the
-//  following to indicat the type of TEXT data.
+//  following to indicate the type of TEXT data.
 //
 #define PERF_TEXT_UNICODE       0x00000000  // type of text in text field
 #define PERF_TEXT_ASCII         0x00010000  // ASCII using the CodePage field
@@ -302,6 +272,25 @@ typedef struct _PERF_OBJECT_TYPE {
 #define PERF_COUNTER_RAWCOUNT       \
             (PERF_SIZE_DWORD | PERF_TYPE_NUMBER | PERF_NUMBER_DECIMAL |\
             PERF_DISPLAY_NO_SUFFIX)
+
+// Same as PERF_COUNTER_RAWCOUNT except its size is a large integer
+#define PERF_COUNTER_LARGE_RAWCOUNT       \
+            (PERF_SIZE_LARGE | PERF_TYPE_NUMBER | PERF_NUMBER_DECIMAL |\
+            PERF_DISPLAY_NO_SUFFIX)
+
+// Special case for RAWCOUNT that want to be displayed in hex
+// Indicates the data is a counter  which should not be
+// time averaged on display (such as an error counter on a serial line)
+// Display as is.  No Display Suffix.
+#define PERF_COUNTER_RAWCOUNT_HEX       \
+            (PERF_SIZE_DWORD | PERF_TYPE_NUMBER | PERF_NUMBER_HEX |\
+            PERF_DISPLAY_NO_SUFFIX)
+
+// Same as PERF_COUNTER_RAWCOUNT_HEX except its size is a large integer
+#define PERF_COUNTER_LARGE_RAWCOUNT_HEX       \
+            (PERF_SIZE_LARGE | PERF_TYPE_NUMBER | PERF_NUMBER_HEX |\
+            PERF_DISPLAY_NO_SUFFIX)
+
 
 // A count which is either 1 or 0 on each sampling interrupt (% busy)
 // Divide delta by delta base. Display Suffix: "%"
@@ -389,7 +378,7 @@ typedef struct _PERF_OBJECT_TYPE {
             PERF_DELTA_COUNTER | PERF_MULTI_COUNTER | PERF_TIMER_TICK |\
             PERF_INVERSE_COUNTER | PERF_DISPLAY_PERCENT)
 
-// Number of instances to which the preceeding _MULTI_..._INV counter
+// Number of instances to which the preceding _MULTI_..._INV counter
 // applies.  Used as a factor to get the percentage.
 #define PERF_COUNTER_MULTI_BASE     \
             (PERF_SIZE_LARGE | PERF_TYPE_COUNTER | PERF_COUNTER_BASE |\
@@ -418,24 +407,26 @@ typedef struct _PERF_OBJECT_TYPE {
             (PERF_SIZE_DWORD | PERF_TYPE_COUNTER | PERF_COUNTER_FRACTION |\
             PERF_DISPLAY_PERCENT)
 
-// Indicates the data is a base for the preceeding counter  which should
+// Indicates the data is a base for the preceding counter which should
 // not be time averaged on display (such as free space over total space.)
 #define PERF_RAW_BASE               \
             (PERF_SIZE_DWORD | PERF_TYPE_COUNTER | PERF_COUNTER_BASE |\
             PERF_DISPLAY_NOSHOW |\
             0x00000003)  // for compatibility with pre-beta versions
 
-
-// the data collected is the difference between the current (i.e. sample)
-// time and the start time (i.e. the counter value) counter data is a
-// LARGE_INTEGER in 100NS units and is displayed as seconds
+// The data collected in this counter is actually the start time of the
+// item being measured. For display, this data is subtracted from the
+// sample time to yield the elapsed time as the difference between the two.
+// In the definition below, the PerfTime field of the Object contains
+// the sample time as indicated by the PERF_OBJECT_TIMER bit and the
+// difference is scaled by the PerfFreq of the Object to convert the time
+// units into seconds.
 #define PERF_ELAPSED_TIME           \
             (PERF_SIZE_LARGE | PERF_TYPE_COUNTER | PERF_COUNTER_ELAPSED |\
             PERF_OBJECT_TIMER | PERF_DISPLAY_SECONDS)
-
 //
-//  The following counter type can be used with the preceeding types to
-//  define a reange of values to be displayed in a histogram.
+//  The following counter type can be used with the preceding types to
+//  define a range of values to be displayed in a histogram.
 //
 
 #define PERF_COUNTER_HISTOGRAM_TYPE   0x80000000
@@ -522,7 +513,7 @@ typedef struct _PERF_INSTANCE_DEFINITION {
 } PERF_INSTANCE_DEFINITION, *PPERF_INSTANCE_DEFINITION;
 //
 //  If .ParentObjectName is 0, there
-//  is no parent-child hierarcy for this object type.  Otherwise,
+//  is no parent-child hierarchy for this object type.  Otherwise,
 //   the .ParentObjectInstance is an index, starting at 0, into the
 //  instances reported for the parent object type.  It is only
 //  meaningful if .ParentObjectName is not 0.  The purpose of all this
@@ -546,8 +537,10 @@ typedef struct _PERF_COUNTER_BLOCK {
 //
 //  function typedefs for extensible counter function prototypes
 //
-typedef DWORD (PM_OPEN_PROC) (LPWSTR);
-typedef DWORD (PM_COLLECT_PROC) (LPWSTR, LPVOID *, LPDWORD, LPDWORD);
-typedef DWORD (PM_CLOSE_PROC) ();
+typedef DWORD (APIENTRY PM_OPEN_PROC) (LPWSTR);
+typedef DWORD (APIENTRY PM_COLLECT_PROC) (LPWSTR, LPVOID *, LPDWORD, LPDWORD);
+typedef DWORD (APIENTRY PM_CLOSE_PROC) (void);
 
 #endif // _WINPERF_
+
+

@@ -1,0 +1,106 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1994 by Borland International
+//   Tutorial application
+//----------------------------------------------------------------------------
+#include <owl/window.rh>
+#include <owl/oleview.rh>
+
+#define CM_PENSIZE          306
+#define CM_PENCOLOR         307
+
+#define IDM_DRAWVIEW        218
+#define IDM_DRAWLISTVIEW    219
+#define IDA_DRAWLISTVIEW    220
+#define IDS_FILEINFO        221
+#define IDA_DRAWVIEW        222
+
+#ifdef RC_INVOKED
+#ifndef WORKSHOP_INVOKED
+# include <windows.h>
+#endif
+
+#include <owl/inputdia.rc>
+#include <owl/oleview.rc>
+
+IDM_DRAWVIEW MENU
+{
+ MENUITEM Separator  // Edit Group
+
+ POPUP "&Edit"
+ {
+  MENUITEM "&Undo\aCtrl+Z",        CM_EDITUNDO
+  MENUITEM Separator
+  MENUITEM "&Cut\aCtrl+X",         CM_EDITCUT
+  MENUITEM "C&opy\aCtrl+C",        CM_EDITCOPY
+  MENUITEM "&Paste\aCtrl+V",       CM_EDITPASTE
+  MENUITEM "Paste &Special...",    CM_EDITPASTESPECIAL
+  MENUITEM "Paste &Link",          CM_EDITPASTELINK
+  MENUITEM "&Delete\aDel",         CM_EDITDELETE
+  MENUITEM "C&lear All\aCtrl+Del", CM_EDITCLEAR
+  MENUITEM Separator
+  MENUITEM "&Insert Object...",    CM_EDITINSERTOBJECT
+  MENUITEM "&Links...",            CM_EDITLINKS
+  MENUITEM "&Object",              CM_EDITOBJECT
+  MENUITEM Separator
+  MENUITEM "&Show Objects",        CM_EDITSHOWOBJECTS
+ }
+
+ POPUP "&Tools"
+ {
+  MENUITEM "Pen Si&ze",            CM_PENSIZE
+  MENUITEM "Pen Colo&r",           CM_PENCOLOR
+ }
+}
+
+IDA_DRAWVIEW ACCELERATORS
+BEGIN
+  "^z",      CM_EDITUNDO,
+  "^x",      CM_EDITCUT,
+  "^c",      CM_EDITCOPY,
+  "^v",      CM_EDITPASTE,
+  VK_DELETE, CM_EDITDELETE VIRTKEY
+  VK_DELETE, CM_EDITCUT,   VIRTKEY, SHIFT
+  VK_DELETE, CM_EDITCLEAR, VIRTKEY, CONTROL
+  VK_INSERT, CM_EDITCOPY,  VIRTKEY, CONTROL
+  VK_INSERT, CM_EDITPASTE, VIRTKEY, SHIFT
+  VK_BACK,   CM_EDITUNDO,  VIRTKEY, ALT
+END
+
+IDM_DRAWLISTVIEW MENU 
+{
+ MENUITEM Separator  // Edit Group
+
+ POPUP "&Edit"
+ {
+  MENUITEM "&Undo\aCtrl+Z",        CM_EDITUNDO
+  MENUITEM Separator
+  MENUITEM "&Delete\aDel",         CM_EDITDELETE
+  MENUITEM "C&lear All\aCtrl+Del", CM_EDITCLEAR
+  MENUITEM Separator
+  MENUITEM "Pen Si&ze",            CM_PENSIZE
+  MENUITEM "Pen Colo&r",           CM_PENCOLOR
+ }
+}
+
+IDA_DRAWLISTVIEW ACCELERATORS
+BEGIN
+  "^z",      CM_EDITUNDO,
+  VK_DELETE, CM_EDITDELETE,  VIRTKEY
+  VK_DELETE, CM_EDITCLEAR,   VIRTKEY, CONTROL
+  VK_BACK,   CM_EDITUNDO,    VIRTKEY, ALT
+END
+
+STRINGTABLE
+{
+ CM_PENSIZE,    "Changes the pen width"
+ CM_PENCOLOR,   "Changes the pen color"
+ CM_EDITUNDO,   "Undo last action"
+ CM_EDITCUT,    "Cut the selected object"
+ CM_EDITCOPY,   "Copy the selected object"
+ CM_EDITPASTE,  "Paste object on the clipboard"
+ CM_EDITDELETE, "Delete selected object"
+ CM_EDITCLEAR,  "Erase all lines"
+ IDS_FILEINFO,  "Lines from Step 14"
+}
+
+#endif  // RC_INVOKED

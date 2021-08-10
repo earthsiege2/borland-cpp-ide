@@ -1,18 +1,18 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Tutorial application -- step09.cpp
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\framewin.h>
-#include <owl\dc.h>
-#include <owl\inputdia.h>
-#include <owl\opensave.h>
-#include <owl\gdiobjec.h>
-#include <owl\chooseco.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
+#include <owl/framewin.h>
+#include <owl/dc.h>
+#include <owl/inputdia.h>
+#include <owl/opensave.h>
+#include <owl/gdiobjec.h>
+#include <owl/chooseco.h>
+#include <classlib/arrays.h>
 #include <stdlib.h>
 #include <string.h>
-#include <classlib\arrays.h>
 #include "step09.rc"
 
 typedef TArray<TPoint> TPoints;
@@ -22,20 +22,32 @@ class TLine : public TPoints {
   public:
     // Constructor to allow construction from a color and a pen size.
     // Also serves as default constructor.
-    TLine(const TColor &color = TColor(0), int penSize = 1)
-      : TPoints(10, 0, 10), PenSize(penSize), Color(color) {}
+    TLine(const TColor& color = TColor(0), int penSize = 1) :
+      TPoints(10, 0, 10), PenSize(penSize), Color(color) {}
 
     // Functions to modify and query pen attributes.
-    int QueryPenSize() { return PenSize; }
-    TColor& QueryColor() { return Color; }
-    void SetPen(TColor &newColor, int penSize = 0);
+    int QueryPenSize() const
+    {
+      return PenSize;
+    }
+
+    TColor& QueryColor()
+    {
+      return Color;
+    }
+
+    void SetPen(TColor& newColor, int penSize = 0);
     void SetPen(int penSize);
 
-    // TLine draws itself.  Returns TRUE if everything went OK.
-    virtual BOOL Draw(TDC &) const;
+    // TLine draws itself.  Returns true if everything went OK.
+    virtual bool Draw(TDC&) const;
 
     // The == operator must be defined for the container class, even if unused
-    BOOL operator ==(const TLine& other) const { return &other == this; }
+    bool operator ==(const TLine& other) const
+    {
+      return &other == this;
+    }
+
     friend ostream& operator <<(ostream& os, const TLine& line);
     friend istream& operator >>(istream& is, TLine& line);
 
@@ -44,7 +56,8 @@ class TLine : public TPoints {
     TColor Color;
 };
 
-void TLine::SetPen(int penSize)
+void
+TLine::SetPen(int penSize)
 {
   if (penSize < 1)
     PenSize = 1;
@@ -52,7 +65,8 @@ void TLine::SetPen(int penSize)
     PenSize = penSize;
 }
 
-void TLine::SetPen(TColor &newColor, int penSize)
+void
+TLine::SetPen(TColor& newColor, int penSize)
 {
   // If penSize isn't the default (0), set PenSize to the new size.
   if (penSize)
@@ -61,7 +75,8 @@ void TLine::SetPen(TColor &newColor, int penSize)
   Color = newColor;
 }
 
-BOOL TLine::Draw(TDC &dc) const
+bool
+TLine::Draw(TDC& dc) const
 {
   // Set pen for the dc to the values for this line
   TPen pen(Color, PenSize);
@@ -69,7 +84,7 @@ BOOL TLine::Draw(TDC &dc) const
 
   // Iterates through the points in the line i.
   TPointsIterator j(*this);
-  BOOL first = TRUE;
+  bool first = true;
 
   while (j) {
     TPoint p = j++;
@@ -78,42 +93,47 @@ BOOL TLine::Draw(TDC &dc) const
       dc.LineTo(p);
     else {
       dc.MoveTo(p);
-      first = FALSE;
+      first = false;
     }
   }
   dc.RestorePen();
-  return TRUE;
+  return true;
 }
 
 typedef TArray<TLine> TLines;
 typedef TArrayIterator<TLine> TLinesIterator;
 
-class TMyWindow : public TWindow {
+class TDrawWindow : public TWindow {
   public:
-    TMyWindow(TWindow *parent = 0);
-   ~TMyWindow() {delete DragDC; delete Line; delete Lines; delete FileData;}
+    TDrawWindow(TWindow* parent = 0);
+   ~TDrawWindow()
+    {
+      delete DragDC;
+      delete Line;
+      delete Lines;
+      delete FileData;
+    }
 
   protected:
-    TDC *DragDC;
-    TPen *Pen;
-    TLines *Lines;
-    TLine *Line; // To hold a single line at a time that later gets
+    TDC* DragDC;
+    TPen* Pen;
+    TLines* Lines;
+    TLine* Line; // To hold a single line at a time that later gets
                  // stuck in Lines
-    TOpenSaveDialog::TData
-              *FileData;
-    BOOL IsDirty, IsNewFile;
+    TOpenSaveDialog::TData* FileData;
+    bool IsDirty, IsNewFile;
 
     void GetPenSize(); // GetPenSize always calls Line->SetPen().
 
     // Override member function of TWindow
-    BOOL CanClose();
+    bool CanClose();
 
     // Message response functions
-    void EvLButtonDown(UINT, TPoint&);
-    void EvRButtonDown(UINT, TPoint&);
-    void EvMouseMove(UINT, TPoint&);
-    void EvLButtonUp(UINT, TPoint&);
-    void Paint(TDC&, BOOL, TRect&);
+    void EvLButtonDown(uint, TPoint&);
+    void EvRButtonDown(uint, TPoint&);
+    void EvMouseMove(uint, TPoint&);
+    void EvLButtonUp(uint, TPoint&);
+    void Paint(TDC&, bool, TRect&);
     void CmFileNew();
     void CmFileOpen();
     void CmFileSave();
@@ -124,10 +144,10 @@ class TMyWindow : public TWindow {
     void SaveFile();
     void OpenFile();
 
-    DECLARE_RESPONSE_TABLE(TMyWindow);
+  DECLARE_RESPONSE_TABLE(TDrawWindow);
 };
 
-DEFINE_RESPONSE_TABLE1(TMyWindow, TWindow)
+DEFINE_RESPONSE_TABLE1(TDrawWindow, TWindow)
   EV_WM_LBUTTONDOWN,
   EV_WM_RBUTTONDOWN,
   EV_WM_MOUSEMOVE,
@@ -141,36 +161,38 @@ DEFINE_RESPONSE_TABLE1(TMyWindow, TWindow)
   EV_COMMAND(CM_ABOUT, CmAbout),
 END_RESPONSE_TABLE;
 
-TMyWindow::TMyWindow(TWindow *parent)
+TDrawWindow::TDrawWindow(TWindow* parent)
 {
   Init(parent, 0, 0);
-  DragDC = 0;
-  Lines = new TLines(5, 0, 5);
-  Line = new TLine(TColor::Black, 1);
-  IsNewFile = TRUE;
-  IsDirty = FALSE;
-  FileData = new TOpenSaveDialog::TData(OFN_HIDEREADONLY|OFN_FILEMUSTEXIST,
+  DragDC    = 0;
+  Lines     = new TLines(5, 0, 5);
+  Line      = new TLine(TColor::Black, 1);
+  IsNewFile = true;
+  IsDirty   = false;
+  FileData  = new TOpenSaveDialog::TData(OFN_HIDEREADONLY|OFN_FILEMUSTEXIST,
                                         "Point Files (*.PTS)|*.pts|", 0, "",
                                         "PTS");
 }
 
-BOOL TMyWindow::CanClose()
+bool
+TDrawWindow::CanClose()
 {
   if (IsDirty)
     switch(MessageBox("Do you want to save?", "Drawing has changed",
                       MB_YESNOCANCEL | MB_ICONQUESTION)) {
       case IDCANCEL:
-        // Choosing Cancel means to abort the close -- return FALSE.
-        return FALSE;
+        // Choosing Cancel means to abort the close -- return false.
+        return false;
 
       case IDYES:
         // Choosing Yes means to save the drawing.
         CmFileSave();
     }
-  return TRUE;
+  return true;
 }
 
-void TMyWindow::EvLButtonDown(UINT, TPoint& point)
+void
+TDrawWindow::EvLButtonDown(uint, TPoint& point)
 {
   if (!DragDC) {
     SetCapture();
@@ -179,16 +201,18 @@ void TMyWindow::EvLButtonDown(UINT, TPoint& point)
     DragDC->SelectObject(*Pen);
     DragDC->MoveTo(point);
     Line->Add(point);
-    IsDirty = TRUE;
+    IsDirty = true;
   }
 }
 
-void TMyWindow::EvRButtonDown(UINT, TPoint&)
+void
+TDrawWindow::EvRButtonDown(uint, TPoint&)
 {
   GetPenSize();
 }
 
-void TMyWindow::EvMouseMove(UINT, TPoint& point)
+void
+TDrawWindow::EvMouseMove(uint, TPoint& point)
 {
   if (DragDC) {
     DragDC->LineTo(point);
@@ -196,7 +220,8 @@ void TMyWindow::EvMouseMove(UINT, TPoint& point)
   }
 }
 
-void TMyWindow::EvLButtonUp(UINT, TPoint&)
+void
+TDrawWindow::EvLButtonUp(uint, TPoint&)
 {
   if (DragDC) {
     ReleaseCapture();
@@ -208,12 +233,14 @@ void TMyWindow::EvLButtonUp(UINT, TPoint&)
   }
 }
 
-void TMyWindow::CmPenSize()
+void
+TDrawWindow::CmPenSize()
 {
   GetPenSize();
 }
 
-void TMyWindow::CmPenColor()
+void
+TDrawWindow::CmPenColor()
 {
   TChooseColorDialog::TData colors;
   static TColor custColors[16] =
@@ -231,7 +258,8 @@ void TMyWindow::CmPenColor()
     Line->SetPen(colors.Color);
 }
 
-void TMyWindow::GetPenSize()
+void
+TDrawWindow::GetPenSize()
 {
   char inputText[6];
   int penSize = Line->QueryPenSize();
@@ -249,7 +277,8 @@ void TMyWindow::GetPenSize()
   Line->SetPen(penSize);
 }
 
-void TMyWindow::Paint(TDC& dc, BOOL, TRect&)
+void
+TDrawWindow::Paint(TDC& dc, bool, TRect&)
 {
   // Iterates through the array of line objects.
   TLinesIterator i(*Lines);
@@ -258,25 +287,28 @@ void TMyWindow::Paint(TDC& dc, BOOL, TRect&)
     i++.Draw(dc);
 }
 
-void TMyWindow::CmFileNew()
+void
+TDrawWindow::CmFileNew()
 {
   if (CanClose()) {
     Line->Flush();
     Lines->Flush();
     Invalidate();
-    IsDirty = FALSE;
-    IsNewFile = TRUE;
+    IsDirty = false;
+    IsNewFile = true;
   }
 }
 
-void TMyWindow::CmFileOpen()
+void
+TDrawWindow::CmFileOpen()
 {
   if (CanClose())
     if ((TFileOpenDialog(this, *FileData)).Execute() == IDOK)
       OpenFile();
 }
 
-void TMyWindow::CmFileSave()
+void
+TDrawWindow::CmFileSave()
 {
   if (IsNewFile)
     CmFileSaveAs();
@@ -284,7 +316,8 @@ void TMyWindow::CmFileSave()
     SaveFile();
 }
 
-void TMyWindow::CmFileSaveAs()
+void
+TDrawWindow::CmFileSaveAs()
 {
   if (IsNewFile)
     strcpy(FileData->FileName, "");
@@ -293,12 +326,14 @@ void TMyWindow::CmFileSaveAs()
     SaveFile();
 }
 
-void TMyWindow::CmAbout()
+void
+TDrawWindow::CmAbout()
 {
   TDialog(this, IDD_ABOUT).Execute();
 }
 
-void TMyWindow::SaveFile()
+void
+TDrawWindow::SaveFile()
 {
   ofstream os(FileData->FileName);
 
@@ -319,12 +354,13 @@ void TMyWindow::SaveFile()
       // Copy the current line from the iterator and increment the array.
       os << i++;
 
-    // Set new file and dirty display indicator to FALSE.
-    IsNewFile = IsDirty = FALSE;
+    // Set new file and dirty display indicator to false.
+    IsNewFile = IsDirty = false;
   }
 }
 
-void TMyWindow::OpenFile()
+void
+TDrawWindow::OpenFile()
 {
   ifstream is(FileData->FileName);
 
@@ -347,27 +383,29 @@ void TMyWindow::OpenFile()
       Lines->Add(line);
     }
   }
-  IsNewFile = IsDirty = FALSE;
+  IsNewFile = IsDirty = false;
   Invalidate();
 }
 
-class TMyApp : public TApplication {
+class TDrawApp : public TApplication {
   public:
-    TMyApp() : TApplication() {}
+    TDrawApp() : TApplication() {}
 
     void InitMainWindow()
     {
-      SetMainWindow(new TFrameWindow(0, "Drawing Pad", new TMyWindow));
+      SetMainWindow(new TFrameWindow(0, "Drawing Pad", new TDrawWindow));
       GetMainWindow()->AssignMenu("COMMANDS");
     }
 };
 
-int OwlMain(int /*argc*/, char* /*argv*/ [])
+int
+OwlMain(int /*argc*/, char* /*argv*/ [])
 {
-  return TMyApp().Run();
+  return TDrawApp().Run();
 }
 
-ostream& operator <<(ostream& os, const TLine& line)
+ostream&
+operator <<(ostream& os, const TLine& line)
 {
   // Write the number of points in the line
   os << line.GetItemsInContainer();
@@ -388,7 +426,8 @@ ostream& operator <<(ostream& os, const TLine& line)
   return os;
 }
 
-istream& operator >>(istream& is, TLine& line)
+istream&
+operator >>(istream& is, TLine& line)
 {
   unsigned numPoints;
   is >> numPoints;

@@ -1,46 +1,53 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\filtval.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\validate.h>
-#include <owl\applicat.h>
-#include <classlib\objstrm.h>
+#include <owl/owlpch.h>
+#include <owl/validate.h>
+#include <owl/applicat.h>
+#include <owl/appdict.h>
+#include <owl/framewin.h>
 
 #if !defined(SECTION) || SECTION == 1
 
 
 TFilterValidator::TFilterValidator(const TCharSet& validChars)
-  : TValidator()
+:
+  TValidator()
 {
   ValidChars = validChars;
 }
 
-BOOL
-TFilterValidator::IsValidInput(char far* str, BOOL /*suppressFill*/)
+bool
+TFilterValidator::IsValidInput(char far* str, bool /*suppressFill*/)
 {
   for (const char far* p = str; *p; p++)
     if (!ValidChars.Has(*p))
-      return FALSE;
-  return TRUE;
+      return false;
+  return true;
 }
 
-BOOL
+bool
 TFilterValidator::IsValid(const char far* str)
 {
   for (const char far* p = str; *p; p++)
     if (!ValidChars.Has(*p))
-      return FALSE;
-  return TRUE;
+      return false;
+  return true;
 }
 
 void
 TFilterValidator::Error()
 {
-  ::MessageBox(0, string(*GetApplicationObject(), IDS_VALINVALIDCHAR).c_str(),
-             GetApplicationObject()->GetName(),
-             MB_ICONEXCLAMATION | MB_OK | MB_TASKMODAL);
+  TApplication* app = GetApplicationObject();
+  string msg = app->LoadString(IDS_VALINVALIDCHAR);
+  TWindow* w = GetWindowPtr(app->GetMainWindow()->GetLastActivePopup());
+  if (w)
+    w->MessageBox(msg.c_str(), app->GetName(), MB_ICONEXCLAMATION|MB_OK);
+  else
+    ::MessageBox(0, msg.c_str(), app->GetName(), MB_ICONEXCLAMATION|MB_OK|MB_TASKMODAL);
 }
 
 #endif

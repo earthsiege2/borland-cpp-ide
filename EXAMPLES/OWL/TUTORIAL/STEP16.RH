@@ -1,0 +1,16 @@
+
+#define CM_PEN            300
+#define CM_SELECT         302
+#define CM_PENSIZE        306
+#define CM_PENCOLOR       307
+
+#define CM_NOEDIT         204
+#define CM_ABOUT          205
+#define IDD_ABOUT         211
+#define IDM_DRAWVIEW      213
+#define IDM_DRAWLISTVIEW  214
+#define IDA_DRAWLISTVIEW  215
+#define IDS_FILEINFO      216
+
+#define IDC_PENCIL        400
+

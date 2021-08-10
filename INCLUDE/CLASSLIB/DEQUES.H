@@ -2,33 +2,33 @@
 /*                                                                        */
 /*  DEQUES.H                                                              */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_DEQUES_H )
-#define __CLASSLIB_DEQUES_H
+#if !defined( CLASSLIB_DEQUES_H )
+#define CLASSLIB_DEQUES_H
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_SHDDEL_H )
-#include "classlib\shddel.h"
-#endif  // __CLASSLIB_SHDDEL_H
+#if !defined( CLASSLIB_SHDDEL_H )
+#include <classlib/shddel.h>
+#endif
 
-#if !defined( __CLASSLIB_VECTIMP_H )
-#include "classlib\vectimp.h"
-#endif  // __CLASSLIB_VECTIMP_H
+#if !defined( CLASSLIB_VECTIMP_H )
+#include <classlib/vectimp.h>
+#endif
 
-#if !defined( __CLASSLIB_DLISTIMP_H )
-#include "classlib\dlistimp.h"
-#endif  // __CLASSLIB_DLISTIMP_H
+#if !defined( CLASSLIB_DLISTIMP_H )
+#include <classlib/dlistimp.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -833,7 +833,7 @@ template <class T, class Alloc> T TMDequeAsDoubleList<T,Alloc>::GetLeft()
 {
     PRECONDITION( !IsEmpty() );
     T t = Data.PeekHead();
-    Data.Detach( t );
+    Data.DetachAtHead();
     return t;
 }
 
@@ -841,7 +841,7 @@ template <class T, class Alloc> T TMDequeAsDoubleList<T,Alloc>::GetRight()
 {
     PRECONDITION( !IsEmpty() );
     T t = Data.PeekTail();
-    Data.Detach( t );
+    Data.DetachAtTail();
     return t;
 }
 
@@ -1095,5 +1095,5 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_DEQUES_H
+#endif  // CLASSLIB_DEQUES_H
 

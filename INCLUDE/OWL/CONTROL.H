@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\control.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TControl.  This defines the basic behavior
 //   of all controls.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_CONTROL_H)
-#define __OWL_CONTROL_H
+#if !defined(OWL_CONTROL_H)
+#define OWL_CONTROL_H
 
-#if !defined(__OWL_WINDOW_H)
-  #include <owl\window.h>
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
 #endif
 
 //
@@ -47,10 +48,10 @@ class _OWLCLASS TControl : public TWindow {
     // message response functions
     //
     void          EvPaint();
-    LRESULT       EvCompareItem(UINT ctrlId, COMPAREITEMSTRUCT far& comp);
-    void          EvDeleteItem(UINT ctrlId, DELETEITEMSTRUCT far& del);
-    void          EvDrawItem(UINT ctrlId, DRAWITEMSTRUCT far& draw);
-    void          EvMeasureItem(UINT ctrlId, MEASUREITEMSTRUCT far& meas);
+    LRESULT       EvCompareItem(uint ctrlId, COMPAREITEMSTRUCT far& comp);
+    void          EvDeleteItem(uint ctrlId, DELETEITEMSTRUCT far& del);
+    void          EvDrawItem(uint ctrlId, DRAWITEMSTRUCT far& draw);
+    void          EvMeasureItem(uint ctrlId, MEASUREITEMSTRUCT far& meas);
 
   private:
     //
@@ -63,4 +64,4 @@ class _OWLCLASS TControl : public TWindow {
   DECLARE_STREAMABLE(_OWLCLASS, TControl, 1);
 };
 
-#endif  // __OWL_CONTROL_H
+#endif  // OWL_CONTROL_H

@@ -5,14 +5,17 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
-#if defined( _Windows )
+#if !defined(__GRAPHICS_H)
+#define __GRAPHICS_H
+
+#if defined( _Windows ) && !defined (__DPMI16__) && !defined(__DPMI32__)
 #error BGI graphics not supported under Windows
 #endif
 
@@ -20,11 +23,23 @@
 #error BGI graphics not ANSI compatible
 #endif
 
-#if !defined(__GRAPHICS_H)
-#define __GRAPHICS_H
-
 #if !defined(___DEFS_H)
 #include <_defs.h>
+#endif
+
+#if !defined(_BGIENTRY)
+    #if defined(__DPMI16__)
+        #define _BGIENTRY __pascal
+    #elif defined(__DPMI32__)
+        #define _BGIENTRY _RTLENTRY __import
+    #else
+        #define _BGIENTRY _RTLENTRY
+    #endif
+#endif
+
+#if defined(__DPMI32__)
+#define far
+#define huge
 #endif
 
 enum graphics_errors {      /* graphresult error return codes */
@@ -84,6 +99,69 @@ enum graphics_modes {       /* graphics modes for each driver */
     IBM8514LO  = 0,  /* 640x480 256 colors      */
     IBM8514HI  = 1   /*1024x768 256 colors      */
 };
+
+
+#if defined(__DPMI32__)
+/*  graphicx.h
+
+    Extended Definitions for Graphics Package.
+
+*/
+
+
+enum Xgraphics_drivers {     /* define extended graphics drivers */
+    DETECTX    = 256,
+    VGA256     = 11,
+    ATTDEB     = 12,
+    TOSHIBA    = 13,
+
+    SVGA16     = 14,
+    SVGA256    = 15,
+    SVGA32K    = 16,
+    SVGA64K    = 17,
+
+    VESA16     = 18,
+    VESA256    = 19,
+    VESA32K    = 20,
+    VESA64K    = 21,
+    VESA16M    = 22,
+
+    ATI16      = 23,
+    ATI256     = 24,
+    ATI32K     = 25,
+    COMPAQ     = 26,
+    TSENG316   = 27,
+    TSENG3256  = 28,
+    TSENG416   = 29,
+    TSENG4256  = 30,
+    TSENG432K  = 31,
+    GENOA5     = 32,
+    GENOA6     = 33,
+    OAK        = 34,
+    PARADIS16  = 35,
+    PARADIS256 = 36,
+    TECMAR     = 37,
+    TRIDENT16  = 38,
+    TRIDENT256 = 39,
+    VIDEO7     = 40,
+    VIDEO7II   = 41,
+
+    S3         = 42,
+    ATIGUP     = 43
+
+};
+
+enum Xgraphics_modes {       /* graphics modes for each driver */
+    RES640x350  = 0,
+    RES640x480  = 1,
+    RES800x600  = 2,
+    RES1024x768 = 3,
+    RES1280x1024 = 4,
+};
+
+
+#endif  /* !__DPMI32__ */
+
 
 /* Colors for setpalette and setallpalette */
 
@@ -259,105 +337,116 @@ struct arccoordstype {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void       far _RTLENTRY arc(int __x, int __y, int __stangle, int __endangle,
+
+#if defined(__DPMI16__)
+void       _bgilink (void);
+#pragma    extref _bgilink
+#endif
+
+void       far _BGIENTRY arc(int __x, int __y, int __stangle, int __endangle,
                              int __radius);
-void       far _RTLENTRY bar(int __left, int __top, int __right, int __bottom);
-void       far _RTLENTRY bar3d(int __left, int __top, int __right, int __bottom,
+void       far _BGIENTRY bar(int __left, int __top, int __right, int __bottom);
+void       far _BGIENTRY bar3d(int __left, int __top, int __right, int __bottom,
                                int __depth, int __topflag);
-void       far _RTLENTRY circle(int __x, int __y, int __radius);
-void       far _RTLENTRY cleardevice(void);
-void       far _RTLENTRY clearviewport(void);
-void       far _RTLENTRY closegraph(void);
-void       far _RTLENTRY detectgraph(int far *__graphdriver,int far *__graphmode);
-void       far _RTLENTRY drawpoly(int __numpoints, const int far *__polypoints);
-void       far _RTLENTRY ellipse(int __x, int __y, int __stangle, int __endangle,
+void       far _BGIENTRY circle(int __x, int __y, int __radius);
+void       far _BGIENTRY cleardevice(void);
+void       far _BGIENTRY clearviewport(void);
+void       far _BGIENTRY closegraph(void);
+void       far _BGIENTRY detectgraph(int far *__graphdriver,int far *__graphmode);
+void       far _BGIENTRY drawpoly(int __numpoints, const int far *__polypoints);
+void       far _BGIENTRY ellipse(int __x, int __y, int __stangle, int __endangle,
                                  int __xradius, int __yradius);
-void       far _RTLENTRY fillellipse( int __x, int __y, int __xradius, int __yradius );
-void       far _RTLENTRY fillpoly(int __numpoints, const int far *__polypoints);
-void       far _RTLENTRY floodfill(int __x, int __y, int __border);
-void       far _RTLENTRY getarccoords(struct arccoordstype far *__arccoords);
-void       far _RTLENTRY getaspectratio(int far *__xasp, int far *__yasp);
-int        far _RTLENTRY getbkcolor(void);
-int        far _RTLENTRY getcolor(void);
-struct palettetype far * far _RTLENTRY getdefaultpalette( void );
-char *     far _RTLENTRY getdrivername( void );
-void       far _RTLENTRY getfillpattern(char far *__pattern);
-void       far _RTLENTRY getfillsettings(struct fillsettingstype far *__fillinfo);
-int        far _RTLENTRY getgraphmode(void);
-void       far _RTLENTRY getimage(int __left, int __top, int __right, int __bottom,
+void       far _BGIENTRY fillellipse( int __x, int __y, int __xradius, int __yradius );
+void       far _BGIENTRY fillpoly(int __numpoints, const int far *__polypoints);
+void       far _BGIENTRY floodfill(int __x, int __y, int __border);
+void       far _BGIENTRY getarccoords(struct arccoordstype far *__arccoords);
+void       far _BGIENTRY getaspectratio(int far *__xasp, int far *__yasp);
+int        far _BGIENTRY getbkcolor(void);
+int        far _BGIENTRY getcolor(void);
+struct palettetype far * far _BGIENTRY getdefaultpalette( void );
+char *     far _BGIENTRY getdrivername( void );
+void       far _BGIENTRY getfillpattern(char far *__pattern);
+void       far _BGIENTRY getfillsettings(struct fillsettingstype far *__fillinfo);
+int        far _BGIENTRY getgraphmode(void);
+void       far _BGIENTRY getimage(int __left, int __top, int __right, int __bottom,
                                   void far *__bitmap);
-void       far _RTLENTRY getlinesettings(struct linesettingstype far *__lineinfo);
-int        far _RTLENTRY getmaxcolor(void);
-int        far _RTLENTRY getmaxmode(void);
-int        far _RTLENTRY getmaxx(void);
-int        far _RTLENTRY getmaxy(void);
-char *     far _RTLENTRY getmodename( int __mode_number );
-void       far _RTLENTRY getmoderange(int __graphdriver, int far *__lomode,
+void       far _BGIENTRY getlinesettings(struct linesettingstype far *__lineinfo);
+int        far _BGIENTRY getmaxcolor(void);
+int        far _BGIENTRY getmaxmode(void);
+int        far _BGIENTRY getmaxx(void);
+int        far _BGIENTRY getmaxy(void);
+char *     far _BGIENTRY getmodename( int __mode_number );
+void       far _BGIENTRY getmoderange(int __graphdriver, int far *__lomode,
                    int far *__himode);
-unsigned   far _RTLENTRY getpixel(int __x, int __y);
-void       far _RTLENTRY getpalette(struct palettetype far *__palette);
-int        far _RTLENTRY getpalettesize( void );
-void       far _RTLENTRY gettextsettings(struct textsettingstype far *__texttypeinfo);
-void       far _RTLENTRY getviewsettings(struct viewporttype far *__viewport);
-int        far _RTLENTRY getx(void);
-int        far _RTLENTRY gety(void);
-void       far _RTLENTRY graphdefaults(void);
-char *     far _RTLENTRY grapherrormsg(int __errorcode);
-void       far _RTLENTRY _graphfreemem(void far *__ptr, unsigned __size);
-void far * far _RTLENTRY _graphgetmem(unsigned __size);
-int        far _RTLENTRY graphresult(void);
-unsigned   far _RTLENTRY imagesize(int __left, int __top, int __right, int __bottom);
-void       far _RTLENTRY initgraph(int  far *__graphdriver,
+unsigned   far _BGIENTRY getpixel(int __x, int __y);
+void       far _BGIENTRY getpalette(struct palettetype far *__palette);
+int        far _BGIENTRY getpalettesize( void );
+void       far _BGIENTRY gettextsettings(struct textsettingstype far *__texttypeinfo);
+void       far _BGIENTRY getviewsettings(struct viewporttype far *__viewport);
+int        far _BGIENTRY getx(void);
+int        far _BGIENTRY gety(void);
+void       far _BGIENTRY graphdefaults(void);
+char *     far _BGIENTRY grapherrormsg(int __errorcode);
+void       far _BGIENTRY _graphfreemem(void far *__ptr, unsigned __size);
+void far * far _BGIENTRY _graphgetmem(unsigned __size);
+int        far _BGIENTRY graphresult(void);
+unsigned   far _BGIENTRY imagesize(int __left, int __top, int __right, int __bottom);
+void       far _BGIENTRY initgraph(int  far *__graphdriver,
                                    int  far *__graphmode,
                                    const char far *__pathtodriver);
-int        far _RTLENTRY installuserdriver(const char far *__name,
+int        far _BGIENTRY installuserdriver(const char far *__name,
                                            int huge (*detect)(void));
-int        far _RTLENTRY installuserfont(const char far *__name);
-void       far _RTLENTRY line(int __x1, int __y1, int __x2, int __y2);
-void       far _RTLENTRY linerel(int __dx, int __dy);
-void       far _RTLENTRY lineto(int __x, int __y);
-void       far _RTLENTRY moverel(int __dx, int __dy);
-void       far _RTLENTRY moveto(int __x, int __y);
-void       far _RTLENTRY outtext(const char far *__textstring);
-void       far _RTLENTRY outtextxy(int __x, int __y, const char far *__textstring);
-void       far _RTLENTRY pieslice(int __x, int __y, int __stangle, int __endangle,
+int        far _BGIENTRY installuserfont(const char far *__name);
+void       far _BGIENTRY line(int __x1, int __y1, int __x2, int __y2);
+void       far _BGIENTRY linerel(int __dx, int __dy);
+void       far _BGIENTRY lineto(int __x, int __y);
+void       far _BGIENTRY moverel(int __dx, int __dy);
+void       far _BGIENTRY moveto(int __x, int __y);
+void       far _BGIENTRY outtext(const char far *__textstring);
+void       far _BGIENTRY outtextxy(int __x, int __y, const char far *__textstring);
+void       far _BGIENTRY pieslice(int __x, int __y, int __stangle, int __endangle,
                                   int __radius);
-void       far _RTLENTRY putimage(int __left, int __top, const void far *__bitmap,
+void       far _BGIENTRY putimage(int __left, int __top, const void far *__bitmap,
                                   int __op);
-void       far _RTLENTRY putpixel(int __x, int __y, int __color);
-void       far _RTLENTRY rectangle(int __left, int __top, int __right, int __bottom);
-void       far _RTLENTRY restorecrtmode(void);
-void       far _RTLENTRY sector(int __X, int __Y, int __StAngle, int __EndAngle,
+void       far _BGIENTRY putpixel(int __x, int __y, int __color);
+void       far _BGIENTRY rectangle(int __left, int __top, int __right, int __bottom);
+void       far _BGIENTRY restorecrtmode(void);
+void       far _BGIENTRY sector(int __X, int __Y, int __StAngle, int __EndAngle,
                                 int __XRadius, int __YRadius);
-void       far _RTLENTRY setactivepage(int __page);
-void       far _RTLENTRY setallpalette(const struct palettetype far *__palette);
-void       far _RTLENTRY setaspectratio(int __xasp, int __yasp);
-void       far _RTLENTRY setbkcolor(int __color);
-void       far _RTLENTRY setcolor(int __color);
-void       far _RTLENTRY setfillpattern(const char far *__upattern, int __color);
-void       far _RTLENTRY setfillstyle(int __pattern, int __color);
-unsigned   far _RTLENTRY setgraphbufsize(unsigned __bufsize);
-void       far _RTLENTRY setgraphmode(int __mode);
-void       far _RTLENTRY setlinestyle(int __linestyle, unsigned __upattern,
+void       far _BGIENTRY setactivepage(int __page);
+void       far _BGIENTRY setallpalette(const struct palettetype far *__palette);
+void       far _BGIENTRY setaspectratio(int __xasp, int __yasp);
+void       far _BGIENTRY setbkcolor(int __color);
+void       far _BGIENTRY setcolor(int __color);
+void       far _BGIENTRY setfillpattern(const char far *__upattern, int __color);
+void       far _BGIENTRY setfillstyle(int __pattern, int __color);
+unsigned   far _BGIENTRY setgraphbufsize(unsigned __bufsize);
+void       far _BGIENTRY setgraphmode(int __mode);
+void       far _BGIENTRY setlinestyle(int __linestyle, unsigned __upattern,
                                       int __thickness);
-void       far _RTLENTRY setpalette(int __colornum, int __color);
-void       far _RTLENTRY setrgbpalette(int __colornum,
+void       far _BGIENTRY setpalette(int __colornum, int __color);
+void       far _BGIENTRY setrgbpalette(int __colornum,
                                        int __red, int __green, int __blue);
-void       far _RTLENTRY settextjustify(int __horiz, int __vert);
-void       far _RTLENTRY settextstyle(int __font, int __direction, int __charsize);
-void       far _RTLENTRY setusercharsize(int __multx, int __divx,
+void       far _BGIENTRY settextjustify(int __horiz, int __vert);
+void       far _BGIENTRY settextstyle(int __font, int __direction, int __charsize);
+void       far _BGIENTRY setusercharsize(int __multx, int __divx,
                                          int __multy, int __divy);
-void       far _RTLENTRY setviewport(int __left, int __top, int __right, int __bottom,
+void       far _BGIENTRY setviewport(int __left, int __top, int __right, int __bottom,
                                      int __clip);
-void       far _RTLENTRY setvisualpage(int __page);
-void       far _RTLENTRY setwritemode( int __mode );
-int        far _RTLENTRY textheight(const char far *__textstring);
-int        far _RTLENTRY textwidth(const char far *__textstring);
+void       far _BGIENTRY setvisualpage(int __page);
+void       far _BGIENTRY setwritemode( int __mode );
+int        far _BGIENTRY textheight(const char far *__textstring);
+int        far _BGIENTRY textwidth(const char far *__textstring);
 
 /***** graphics drivers *****/
 
-int        _RTLENTRY registerbgidriver(void (*driver)(void));
-int    far _RTLENTRY registerfarbgidriver(void far *__driver);
+int        _BGIENTRY registerbgidriver(void (*driver)(void));
+
+#if defined(__DPMI16__) || defined(__DPMI32__)
+#define registerfarbgidriver registerbgidriver
+#else
+int    far _BGIENTRY registerfarbgidriver(void far *__driver);
+#endif
 
 /* !!        These "functions" are NOT user-callable          !! */
 /* !! They are there just so you can link in graphics drivers !! */
@@ -369,18 +458,31 @@ void           _RTLENTRY Herc_driver(void);
 void           _RTLENTRY ATT_driver(void);
 void           _RTLENTRY PC3270_driver(void);
 
+#if defined(__DPMI16__)
+void           _RTLENTRY CGA_driver_far(void);
+void           _RTLENTRY EGAVGA_driver_far(void);
+void           _RTLENTRY IBM8514_driver_far(void);
+void           _RTLENTRY Herc_driver_far(void);
+void           _RTLENTRY ATT_driver_far(void);
+void           _RTLENTRY PC3270_driver_far(void);
+#else
 extern int far _RTLENTRY CGA_driver_far[];
 extern int far _RTLENTRY EGAVGA_driver_far[];
 extern int far _RTLENTRY IBM8514_driver_far[];
 extern int far _RTLENTRY Herc_driver_far[];
 extern int far _RTLENTRY ATT_driver_far[];
 extern int far _RTLENTRY PC3270_driver_far[];
-
+#endif
 
 /***** graphics fonts *****/
 
-int        _RTLENTRY registerbgifont(void (*font)(void));
-int    far _RTLENTRY registerfarbgifont(void far *__font);
+int        _BGIENTRY registerbgifont(void (*font)(void));
+
+#if defined(__DPMI16__) || defined(__DPMI32__)
+#define registerfarbgifont registerbgifont
+#else
+int    far _BGIENTRY registerfarbgifont(void far *__font);
+#endif
 
 /* !!   These "functions" are NOT user-callable,   !! */
 /* !! they are there just so you can link in fonts !! */

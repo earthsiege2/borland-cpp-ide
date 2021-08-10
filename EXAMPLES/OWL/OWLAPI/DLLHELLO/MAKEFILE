@@ -2,7 +2,7 @@
 # ObjectWindows - (C) Copyright 1991, 1993 by Borland International
 #----------------------------------------------------------------------------
 
-MODELS = d   #force use of DLL
+MODELS = d                            # force use of DLL
 EXERES = calldll
 LIBEXE = dllhello.lib
 DLLRES = dllhello                     # use this target for generating DLLRULE

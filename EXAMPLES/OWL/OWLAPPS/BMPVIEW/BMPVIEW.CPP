@@ -203,7 +203,7 @@ TBmpViewWindow::CmPaste()
 
   TPalette* newPal = 0;
   TDib*     newDib = 0;
-  TBitmap*  newBitmap = 0;
+  TBitmap*  newBitmap;
 
   // If there is a palette on the clipboard, get it & realize it
   //
@@ -242,6 +242,8 @@ TBmpViewWindow::CmPaste()
 
   if (!newDib)
     newDib = new TDib(*newBitmap, newPal);
+#else
+  }
 #endif
   delete Dib;
   Dib = newDib;
@@ -559,7 +561,16 @@ TBmpViewWindow::SetupFromDib(TDib* dib)
   delete Dib;
   Dib = dib;
   delete Palette;
-  Palette = new TPalette(*dib);
+  Palette = 0;
+  try {
+    Palette = new TPalette(*dib);
+  }
+  catch (...) {
+    MessageBox("Dib has no color table, using default palette",
+               GetApplication()->GetName(), MB_OK);
+    Palette = new TPalette((HPALETTE)::GetStockObject(DEFAULT_PALETTE));
+  }
+
   TRACEX(BmpView, 1, "SetupFromDib::Palette: " << hex << (UINT)(HPALETTE)*Palette);
 
 #if defined(USE_DDB)
@@ -609,7 +620,7 @@ TBmpViewWindow::LoadBitmapResource(WORD resId)
 BOOL
 TBmpViewWindow::LoadBitmapFile(const char* name)
 {
-  TDib* newDib = 0;
+  TDib* newDib;
   try {
     newDib = new TDib(name);
   }

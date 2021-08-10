@@ -1,17 +1,18 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\gauge.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TGauge.  This defines the basic behavior
 //   of gauge controls.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_GAUGE_H)
-#define __OWL_GAUGE_H
+#if !defined(OWL_GAUGE_H)
+#define OWL_GAUGE_H
 
-#if !defined(__OWL_CONTROL_H)
-  #include <owl\control.h>
+#if !defined(OWL_CONTROL_H)
+# include <owl/control.h>
 #endif
-#if !defined(__OWL_COLOR_H)
-  #include <owl\color.h>
+#if !defined(OWL_COLOR_H)
+# include <owl/color.h>
 #endif
 
 //
@@ -24,7 +25,7 @@ class _OWLCLASS TGauge : public TControl {
            const char far* title,
            int             id,
            int X, int Y, int W, int H,
-           BOOL            isHorizontal = TRUE,
+           bool            isHorizontal = true,
            int             margin = 0,
            TModule*        module = 0);
 
@@ -43,7 +44,7 @@ class _OWLCLASS TGauge : public TControl {
     //
     // Override TWindow virtual member functions
     //
-    void          Paint(TDC& dc, BOOL erase, TRect& rect);
+    void          Paint(TDC& dc, bool erase, TRect& rect);
 
     //
     // self sent by method Paint(). override this is if you want to
@@ -54,7 +55,7 @@ class _OWLCLASS TGauge : public TControl {
     //
     // message response functions
     //
-    BOOL          EvEraseBkgnd(HDC);
+    bool          EvEraseBkgnd(HDC);
   
   protected:
     int           Min;        // Minimum value
@@ -76,4 +77,4 @@ class _OWLCLASS TGauge : public TControl {
   DECLARE_RESPONSE_TABLE(TGauge);
 };
 
-#endif  // __OWL_GAUGE_H
+#endif  // OWL_GAUGE_H

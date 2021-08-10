@@ -1,12 +1,12 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   owl\source\except.cpp
-//   Defines type TXOwl.
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of class TXOwl.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\except.h>
-#include <owl\module.h>
-
+#include <owl/owlpch.h>
+#include <owl/except.h>
+#include <owl/module.h>
 
 //
 // mbModalFlag() determines the best MB modal flag to use in the current
@@ -14,15 +14,15 @@
 // one toplevel window. Uses MB_SYSTEMMODAL for win32s/win16 when there are
 // no windows.
 //
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
 
-BOOL CALLBACK threadHasWnd(HWND, BOOL* has) { *has = TRUE; return FALSE; }
+bool CALLBACK threadHasWnd(HWND, bool* has) { *has = true; return false; }
 
 static unsigned mbModalFlag()
 {
-  if (!(HIWORD(::GetVersion()) & 0x8000))   // NT can always open task modal
+  if (!(::GetVersion()&0x80000000))  // NT can always open task modal
     return MB_TASKMODAL;
-  BOOL has = FALSE;
+  bool has = false;
   ::EnumThreadWindows(GetCurrentThreadId(), (WNDENUMPROC)threadHasWnd,
                       LPARAM(&has));
   return has ? MB_TASKMODAL : MB_SYSTEMMODAL;
@@ -30,13 +30,13 @@ static unsigned mbModalFlag()
 
 #else
 
-BOOL CALLBACK taskHasWnd(HWND, BOOL far* has) { *has = TRUE; return FALSE; }
+bool CALLBACK taskHasWnd(HWND, bool far* has) { *has = true; return false; }
 
 static unsigned mbModalFlag()
 {
-  BOOL has = FALSE;
+  bool has = false;
   ::EnumTaskWindows(GetCurrentTask(), (WNDENUMPROC)taskHasWnd,
-                    LPARAM((BOOL far*)&has));
+                    LPARAM((bool far*)&has));
   return has ? MB_TASKMODAL : MB_SYSTEMMODAL;
 }
 
@@ -46,7 +46,7 @@ static unsigned mbModalFlag()
 // Global exception handler used when an application object is not available.
 // May be overriden by user code by redefining this function.  If a valid
 // application object is found by GetApplicationObject, then the virtual
-// TModule::Error(TXOwl& x, char* caption, BOOL canResume) is usually used
+// TModule::Error(TXOwl& x, char* caption, bool canResume) is usually used
 // instead.
 //
 int _OWLFUNC
@@ -76,16 +76,16 @@ HandleGlobalException(xmsg& x, char* caption, char* canResume)
 //
 // Static member function used to convert a resource id to a 'string'.  This
 // is necessary since we must pass a string to the xmsg base class
-// constructor.  Sets found to TRUE if the resource was located, otherwise
-// FALSE.  In either case, the string is initialized to something
+// constructor.  Sets found to true if the resource was located, otherwise
+// false.  In either case, the string is initialized to something
 // printable.
 //
 string
-TXOwl::ResourceIdToString(BOOL* found, unsigned resId, TModule* module)
+TXOwl::ResourceIdToString(bool* found, unsigned resId, TModule* module)
 {
   char buf[128];
 
-  BOOL status = (module && module->LoadString(resId, buf, sizeof(buf)) != 0);
+  bool status = (module && module->LoadString(resId, buf, sizeof(buf)) != 0);
   if (found)
     *found = status;
 
@@ -96,8 +96,18 @@ TXOwl::ResourceIdToString(BOOL* found, unsigned resId, TModule* module)
   return rscStr;
 }
 
+TXOwl::TXOwl(const string& msg, uint resId)
+  : TXBase(msg), ResId(resId)
+{
+}
+
 TXOwl::TXOwl(unsigned resId, TModule* module)
-  : xmsg(ResourceIdToString(0, resId, module))
+  : TXBase(ResourceIdToString(0, resId, module)),
+    ResId(resId)
+{
+}
+
+TXOwl::~TXOwl()
 {
 }
 
@@ -119,15 +129,22 @@ TXOwl::Throw()
   THROW( *this );
 }
 
-TXOutOfMemory::TXOutOfMemory() : TXOwl(IDS_OUTOFMEMORY)
+TXOutOfMemory::TXOutOfMemory()
+:
+  TXOwl(IDS_OUTOFMEMORY)
 {
 }
 
-TXOwl*
+TXOutOfMemory::~TXOutOfMemory()
+{
+}
+
+TXOutOfMemory*
 TXOutOfMemory::Clone()
 {
   return new TXOutOfMemory(*this);
 }
+
 void
 TXOutOfMemory::Throw()
 {

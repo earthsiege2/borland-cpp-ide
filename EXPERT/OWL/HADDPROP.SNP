@@ -1,0 +1,78 @@
+##--BEGIN-- GetGlobal() == FALSE
+##      "//{{[[ClassName]]AUTO_PROP_END}}" [[ClassTMarker]]
+##      \\ClassTMarker [[ClassMarker]]
+##      :^BOF
+##      --BEGIN-- ? ClassMarker [[Search]]
+##          :Search == FALSE
+##          :{HAddAPro.SNP}
+##          :^BOF
+##          :? ClassMarker [[Search]]
+##*
+##      --END-- ? ClassMarker [[Search]]
+##      :^BOL
+##      :GetProperty == TRUE
+    [[CPPType]] [[GetName]] ();
+##      :SetProperty == TRUE
+    void [[SetName]] ([[CPPType]]);
+##--END-- GetGlobal() == FALSE
+##"//{{[[ClassName]]AUTO_TBL_END}}" [[ClassTMarker]]
+##\\ClassTMarker [[ClassMarker]]
+##^BOF
+##--BEGIN-- ? ClassMarker [[Search]]
+##Search == FALSE
+##      :{HAddAuto.SNP}
+##      :^BOF
+##      :? ClassMarker [[Search]]
+##*
+##--END-- ? ClassMarker [[Search]]
+##"" [[XlateOLEProp]]
+##"" [[Comment]]
+##--BEGIN-- "" [[OLEAutoProp]]
+##      OLEType == "TAutoBool"
+##          :"TAutoBool" CPPType
+##*
+##      ^BOL
+##      (OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate") && (OLEType != "TAutoBool")
+##      --BEGIN-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
+##          !AnyStripping
+##              :\\"TAutoObject<[[CPPType]]>" OLEAutoProp
+##              :"    // Change to TAutoObjectDelete if owned by automation." Comment
+##*
+##          AnyStripping
+##              :\\"TAutoObject<[[StripCPPType]]>" OLEAutoProp
+##              :"    // Change to TAutoObjectDelete if owned by automation." Comment
+##*
+##      --END-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
+##      (OLEType != CPPType) && (OLEType != "TAutoString")
+##          :"[[CPPType]]" OLEAutoProp
+##*
+##      (OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate") || (OLEType == "TAutoBool"))
+##          :"[[CPPType]]" OLEAutoProp
+##*
+##      (OLEType == "TAutoString") && (CPPType != "string")
+##          :"TAutoString" OLEAutoProp
+##*
+##      (OLEType == "TAutoString") && (CPPType == "string")
+##          :"string" OLEAutoProp
+##*
+##      \\OLEAutoProp XlateOLEProp
+##      (GetProperty == TRUE) && (SetProperty == TRUE)
+AUTOPROP([[InternalName]], [[GetName]], [[SetName]], [[XlateOLEProp]],)[[Comment]]
+##      (GetProperty == TRUE) && (SetProperty == FALSE)
+AUTOPROPRO([[InternalName]], [[GetName]], [[XlateOLEProp]], )[[Comment]]
+##      (GetProperty == FALSE) && (SetProperty == TRUE)
+AUTOPROPWO([[InternalName]], [[SetName]], [[XlateOLEProp]], )[[Comment]]
+##--END-- "" [[OLEAutoProp]]
+##FALSE [[IncludeSearch]]
+##^BOF
+##StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
+##<<*StripCPPType QUERY_FILE_H [[IncludeFile]]
+##IncludeFile != ""
+##   :\\"#include \"[[IncludeFile]]\"" IncludeFile
+##   :^BOF
+##   :? IncludeFile IncludeSearch
+##   :IncludeSearch == FALSE
+##       : ^BOF
+##       : ?\\"#include \""
+##       : ^BOL
+[[IncludeFile]]     

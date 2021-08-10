@@ -1,10 +1,15 @@
 /*  conio.h
 
     Direct MSDOS console input/output.
-
-    Copyright (c) 1987, 1992 by Borland International
-    All Rights Reserved.
 */
+
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1987, 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
 #if !defined(__CONIO_H)
 #define __CONIO_H
@@ -13,9 +18,17 @@
 #include <_defs.h>
 #endif
 
-#if !defined(_RC_INVOKED)
-#pragma option -a-
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
 #endif
+
+#pragma option -a-
+
+#endif  /* !RC_INVOKED */
+
 
 #define _NOCURSOR      0
 #define _SOLIDCURSOR   1
@@ -70,7 +83,7 @@ enum text_modes {  LASTMODE=-1,
                    MONO=7,
                    C4350=64 };
 
-#if !defined(_Windows)
+#if defined(__DPMI16__) || !defined(_Windows)
 
 #if !defined(__STDC__)  /*  NON-ANSI  */
 #define directvideo  _directvideo
@@ -78,7 +91,7 @@ enum text_modes {  LASTMODE=-1,
 
 extern   int _RTLENTRY _directvideo;
 
-#endif  /* _windows */
+#endif  /* __DPMI16__ || !_Windows */
 
 extern   int _RTLENTRY _wscroll;
 
@@ -107,7 +120,7 @@ int             _RTLENTRY outp( unsigned __portid, int __value );
 unsigned        _RTLENTRY outpw( unsigned __portid, unsigned __value );
 #endif  /* !_PORT_DEFS */
 
-#if !defined(_Windows)
+#if defined(__DPMI16__) || !defined(_Windows)
 
 void        _RTLENTRY delline( void );
 int         _RTLENTRY gettext( int __left, int __top,
@@ -138,7 +151,7 @@ int         _RTLENTRY cscanf( const char *__format, ... );
 char *      _RTLENTRY getpass( const char *__prompt );
 int         _RTLENTRY ungetch( int __ch );
 
-#endif /* _Windows */
+#endif /* __DPMI16__ || !_Windows */
 
 #ifndef _PORT_DEFS
 #define _PORT_DEFS
@@ -285,8 +298,16 @@ int         _RTLENTRY _EXPFUNC wherey( void );
 
 #endif  /* __FLAT__  */
 
-#if !defined(_RC_INVOKED)
+
+#if !defined(RC_INVOKED)
+
 #pragma option -a.
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __CONIO_H */

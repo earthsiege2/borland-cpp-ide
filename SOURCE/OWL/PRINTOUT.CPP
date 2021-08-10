@@ -1,18 +1,19 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\printout.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\printer.h>
+#include <owl/owlpch.h>
+#include <owl/printer.h>
 
 #if !defined(SECTION) || SECTION == 1
 
 TPrintout::TPrintout(const char far* title)
 {
   Title = strnewdup(title);
-  Banding = FALSE;
-  ForceAllBands = TRUE;
+  Banding = false;
+  ForceAllBands = true;
 }
 
 TPrintout::~TPrintout()
@@ -46,7 +47,7 @@ TPrintout::BeginDocument(int, int, unsigned)
 {
 }
 
-BOOL
+bool
 TPrintout::HasPage(int page)
 {
   return page == 1;

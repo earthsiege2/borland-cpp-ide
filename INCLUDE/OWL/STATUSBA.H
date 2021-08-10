@@ -1,16 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\statusba.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Class TStatusBar.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_STATUSBA_H)
-#define __OWL_STATUSBA_H
+#if !defined(OWL_STATUSBA_H)
+#define OWL_STATUSBA_H
 
-#if !defined(__OWL_MESSAGEB_H)
-  #include "owl\messageb.h"
+#if !defined(OWL_MESSAGEB_H)
+# include <owl/messageb.h>
 #endif
-#if !defined(__OWL_TEXTGADG_H)
-  #include "owl\textgadg.h"
+#if !defined(OWL_TEXTGADG_H)
+# include <owl/textgadg.h>
 #endif
 
 //
@@ -23,16 +24,18 @@
 //
 class _OWLCLASS TStatusBar : public TMessageBar {
   public:
-    enum TModeIndicator {ExtendSelection = 1,
-                         CapsLock        = 1 << 1,
-                         NumLock         = 1 << 2,
-                         ScrollLock      = 1 << 3,
-                         Overtype        = 1 << 4,
-                         RecordingMacro  = 1 << 5};
+    enum TModeIndicator {
+      ExtendSelection = 1,
+      CapsLock        = 1 << 1,
+      NumLock         = 1 << 2,
+      ScrollLock      = 1 << 3,
+      Overtype        = 1 << 4,
+      RecordingMacro  = 1 << 5
+    };
 
     TStatusBar(TWindow*              parent = 0,
                TGadget::TBorderStyle borderStyle = TGadget::Recessed,
-               UINT                  modeIndicators = 0,
+               uint                  modeIndicators = 0,
                TFont*                font = new TGadgetWindowFont,
                TModule*              module = 0);
 
@@ -43,15 +46,15 @@ class _OWLCLASS TStatusBar : public TMessageBar {
     //
     void        Insert(TGadget& gadget, TPlacement = After, TGadget* sibling = 0);
 
-    TGadget*    operator [](UINT index);  // can't access mode indicator gadgets
+    TGadget*    operator [](uint index);  // can't access mode indicator gadgets
 
     //
     // in order for the mode indicator status to appear you must have
     // specified the mode when the window was constructed
     //
-    BOOL        GetModeIndicator(TModeIndicator i) const 
+    bool        GetModeIndicator(TModeIndicator i) const 
                   {return (ModeIndicatorState & i) ? 1 : 0;}
-    void        SetModeIndicator(TModeIndicator, BOOL state);
+    void        SetModeIndicator(TModeIndicator, bool state);
     void        ToggleModeIndicator(TModeIndicator);
 
     struct TSpacing {
@@ -69,17 +72,18 @@ class _OWLCLASS TStatusBar : public TMessageBar {
   protected:
     TGadget::TBorderStyle  BorderStyle;
     TSpacing               Spacing;
-    UINT                   NumModeIndicators;
-    UINT                   ModeIndicators;
-    UINT                   ModeIndicatorState;
+    uint                   NumModeIndicators;
+    uint                   ModeIndicators;
+    uint                   ModeIndicatorState;
 
     void        PositionGadget(TGadget* previous, TGadget* next, TPoint& point);
-    BOOL        PreProcessMsg(MSG& msg);
-    BOOL        IdleAction(long);
+    bool        PreProcessMsg(MSG& msg);
+    bool        IdleAction(long);
 
   private:
-    BOOL        GetGadgetAndString(TModeIndicator mode, TTextGadget*& gadget, char*& str);
-    BOOL        IsModeIndicator(TGadget* gadget);
+    bool        GetGadgetAndStrings(TModeIndicator mode, TTextGadget*& gadget,
+                                    const char*& strOn, const char*& strOff);
+    bool        IsModeIndicator(TGadget* gadget);
 
     //
     // hidden to prevent accidental copying or assignment
@@ -90,4 +94,4 @@ class _OWLCLASS TStatusBar : public TMessageBar {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_STATUSBA_H
+#endif  // OWL_STATUSBA_H

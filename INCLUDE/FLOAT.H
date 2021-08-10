@@ -6,9 +6,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -20,14 +20,24 @@
 #include <_defs.h>
 #endif
 
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
+
 #define FLT_RADIX           2
 #define FLT_ROUNDS          1
 #define FLT_GUARD           1
 #define FLT_NORMALIZE       1
 
 #define DBL_DIG             15
-#define FLT_DIG             7
-#define LDBL_DIG            19
+#define FLT_DIG             6
+#define LDBL_DIG            18
 
 #define DBL_MANT_DIG        53
 #define FLT_MANT_DIG        24
@@ -35,7 +45,7 @@
 
 #define DBL_EPSILON         2.2204460492503131E-16
 #define FLT_EPSILON         1.19209290E-07F
-#define LDBL_EPSILON        1.084202172485504E-19L
+#define LDBL_EPSILON        1.084202172485504434e-019L
 
 /* smallest positive IEEE normal numbers */
 #define DBL_MIN             2.2250738585072014E-308
@@ -155,6 +165,16 @@ extern unsigned int _RTLENTRY _default87;
 #endif
 
 #endif  /* !__STDC__ */
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __FLOAT_H */
 

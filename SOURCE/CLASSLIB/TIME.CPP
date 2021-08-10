@@ -2,26 +2,26 @@
 /*                                                                        */
 /*  TIME.CPP                                                              */
 /*                                                                        */
-/*  Copyright Borland International 1993                                  */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
 #if !defined( __TIME_H )
 #include <time.h>
-#endif  // __TIME_H
+#endif
 
 #if !defined( __STDIO_H )
 #include <stdio.h>
-#endif  // __STDIO_H
+#endif
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
-#if !defined( __CLASSLIB_TIME_H )
-#include "classlib\time.h"
-#endif  // __CLASSLIB_TIME_H
+#if !defined( CLASSLIB_TIME_H )
+#include <classlib/time.h>
+#endif
 
 enum TimeZone { CarolineIslands=-11,    MarianaIslands,         Japan, 
                 China,                  minusSeven,             minusSix, 

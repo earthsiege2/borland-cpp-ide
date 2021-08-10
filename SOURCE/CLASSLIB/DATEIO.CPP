@@ -2,30 +2,30 @@
 /*                                                                        */
 /*  DATEIO.CPP                                                            */
 /*                                                                        */
-/*  Copyright Borland International 1993                                  */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
 #if !defined( __STDIO_H )
 #include <stdio.h>
-#endif  // __STDIO_H
+#endif
 
 #if !defined( __CTYPE_H )
 #include <ctype.h>
-#endif  // __CTYPE_H
+#endif
 
 #if !defined( __STRSTREA_H )
 #include <strstrea.h>
-#endif  // __STRSTREA_H
+#endif
 
 #if !defined( __CSTRING_H )
 #include <cstring.h>
-#endif  // __CSTRING_H
+#endif
 
-#if !defined( __CLASSLIB_DATE_H )
-#include "classlib\date.h"
-#endif  // __CLASSLIB_DATE_H
+#if !defined( CLASSLIB_DATE_H )
+#include <classlib/date.h>
+#endif
 
 TDate::HowToPrint TDate::PrintOption = TDate::Normal;
 
@@ -158,7 +158,7 @@ ostream _BIDSFAR & _BIDSFUNC operator << ( ostream _BIDSFAR & s, const TDate _BI
         case TDate::European:
             out << d.DayOfMonth() << " "
                 << d.NameOfMonth() << " " 
-                << d.Year();
+                << d.Year() << ends;
             break;
         };
 

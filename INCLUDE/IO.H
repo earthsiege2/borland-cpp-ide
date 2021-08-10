@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -23,11 +23,19 @@
 #include <_nfile.h>
 #endif
 
-#ifdef __FLAT__
+
 #if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#if defined(__FLAT__)
 #pragma option -a-
 #endif
-#endif
+
+#endif  /* !RC_INVOKED */
+
 
 extern  unsigned    _RTLENTRY _EXPDATA _nfile;
 
@@ -53,8 +61,8 @@ int  _RTLENTRYF _EXPFUNC access  (const char _FAR *path, int amode);
 int  _RTLENTRY  _EXPFUNC _rtl_chmod  ();
 int  _RTLENTRY  _EXPFUNC _chmod  ();
 #else
-int  _RTLENTRY  _EXPFUNC _rtl_chmod  (const char _FAR *__pathname, int __func, ... );
-int  _RTLENTRY  _EXPFUNC _chmod  (const char _FAR *__pathname, int __func, ... );
+int  _RTLENTRY  _EXPFUNC _rtl_chmod (const char _FAR *__pathname, int __func, ... );
+int  _RTLENTRY  _EXPFUNC _chmod     (const char _FAR *__pathname, int __func, ... );
 #endif
 int  _RTLENTRY  _EXPFUNC chmod   (const char _FAR *__path, int __amode);
 int  _RTLENTRY  _EXPFUNC chsize  (int __handle, long __size);
@@ -72,10 +80,15 @@ int  _RTLENTRYF _EXPFUNC eof     (int __handle);
 long _RTLENTRYF _EXPFUNC filelength(int __handle);
 int  _RTLENTRY  _EXPFUNC32 getftime(int __handle, struct ftime _FAR *__ftimep);
 
-#if defined(__FLAT__)
+#if defined(__OS2__)
+int  _RTLENTRY  _EXPFUNC _truncate(const char *__path, long __size);
+int  _RTLENTRYF _EXPFUNC _ftruncate(int __handle, long __size);
+#endif  /* __OS2__ */
+
+#if defined(__WIN32__)
 long _RTLENTRY  _EXPFUNC _get_osfhandle(int __handle);
 int  _RTLENTRY  _EXPFUNC _open_osfhandle(long __osfhandle, int __oflag);
-#endif /* __FLAT__ */
+#endif  /* __FLAT__ */
 
 #ifdef __IN_IOCTL
 int  _RTLENTRY           ioctl   ();
@@ -119,18 +132,18 @@ int  _RTLENTRYF _EXPFUNC   _write(int __handle, const void _FAR *__buf, unsigned
 int  _RTLENTRYF _EXPFUNC   write (int __handle, const void _FAR *__buf, unsigned __len);
 
 #if !defined(__FLAT__)
-void _RTLENTRY           InitEasyWin(void);  /* Initialization call for Easy Windows */
+ /* Initialization call for Easy Windows */
+void _RTLENTRY		   _InitEasyWin(void); 
 #endif
 
 #if defined(__MSC)
-
 #define _lseek(__handle, __offset, __fromwhere) lseek(__handle, __offset, __fromwhere)
-
 #endif
 
 #ifdef __cplusplus
 }
 #endif
+
 
 #if !defined(RC_INVOKED)
 
@@ -142,13 +155,16 @@ void _RTLENTRY           InitEasyWin(void);  /* Initialization call for Easy Win
 #pragma obsolete _read
 #pragma obsolete _write
 
-#endif
-
-#ifdef __FLAT__
-#if !defined(RC_INVOKED)
+#if defined(__FLAT__)
 #pragma option -a. /*restore default packing */
 #endif
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __IO_H */
 

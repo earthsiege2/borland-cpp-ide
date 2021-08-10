@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\layoutco.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Declaration of class TLayoutConstraint.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_LAYOUTCO_H)
-#define __OWL_LAYOUTCO_H
+#if !defined(OWL_LAYOUTCO_H)
+#define OWL_LAYOUTCO_H
 
-#if !defined(__OWL_OWLDEFS_H)
-  #include <owl\owldefs.h>
+#if !defined(OWL_OWLDEFS_H)
+# include <owl/owldefs.h>
 #endif
 class _OWLCLASS TWindow;
 
@@ -18,12 +19,14 @@ enum TWidthHeight {lmWidth = lmCenter + 1, lmHeight};
 
 enum TMeasurementUnits {lmPixels, lmLayoutUnits};
 
-enum TRelationship {lmAsIs      = 0,
-                    lmPercentOf = 1,
-                    lmAbove     = 2, lmLeftOf = lmAbove,
-                    lmBelow     = 3, lmRightOf = lmBelow,
-                    lmSameAs    = 4,
-                    lmAbsolute  = 5};
+enum TRelationship {
+  lmAsIs      = 0,
+  lmPercentOf = 1,
+  lmAbove     = 2, lmLeftOf = lmAbove,
+  lmBelow     = 3, lmRightOf = lmBelow,
+  lmSameAs    = 4,
+  lmAbsolute  = 5
+};
 
 //
 //  struct TLayoutConstraint
@@ -59,10 +62,10 @@ enum TRelationship {lmAsIs      = 0,
 struct TLayoutConstraint {
   TWindow*           RelWin;            // relative window, lmParent for parent
 
-  UINT               MyEdge       : 4;  // edge or size (width/height)
+  uint               MyEdge       : 4;  // edge or size (width/height)
   TRelationship      Relationship : 4;
   TMeasurementUnits  Units        : 4;
-  UINT               OtherEdge    : 4;  // edge or size (width/height)
+  uint               OtherEdge    : 4;  // edge or size (width/height)
 
   //
   // this union is just for naming convenience
@@ -124,7 +127,7 @@ struct TEdgeConstraint : public TLayoutConstraint {
 //  struct TEdgeOrSizeConstraint
 //  ------ ---------------------
 //
-template<int widthOrHeight>
+template<TWidthHeight widthOrHeight>
 struct TEdgeOrSizeConstraint : public TEdgeConstraint {
   //
   // percent of another window's width/height (defaults to being the same
@@ -171,4 +174,4 @@ struct TEdgeOrSizeConstraint : public TEdgeConstraint {
 typedef TEdgeOrSizeConstraint<lmWidth>   TEdgeOrWidthConstraint;
 typedef TEdgeOrSizeConstraint<lmHeight>  TEdgeOrHeightConstraint;
 
-#endif  // __OWL_LAYOUTCO_H
+#endif  // OWL_LAYOUTCO_H

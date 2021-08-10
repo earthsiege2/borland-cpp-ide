@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  TMPLINST.CPP                                                          */
 /*                                                                        */
-/*  Copyright Borland International 1991, 1993                            */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*  Provides instantiations of the various Object containers,             */
@@ -13,12 +13,12 @@
 #pragma option -Jgd
 
 #if !defined( __HASHTBL_H )
-#include "classlib\obsolete\hashtbl.h"
-#endif	// __HASHTBL_H
+#include <classlib\obsolete\hashtbl.h>
+#endif
 
-#if !defined( __CLASSLIB_OBJSTRM_H )
-#include "classlib\objstrm.h"
-#endif	// __CLASSLIB_OBJSTRM_H
+#if !defined( CLASSLIB_OBJSTRM_H )
+#include <classlib/objstrm.h>
+#endif
 
 // needed for HashTable
 typedef TIVectorImp<Object> dummy1;
@@ -28,33 +28,33 @@ typedef TSVectorImp<TPWrittenObjects::TPWObj> dummy2;
 typedef TCVectorImp<const void *> dummy3;
 typedef TISVectorImp<TStreamableClass> dummy4;
 
-#if !defined( __CLASSLIB_VECTIMP_H )
-#include "classlib\vectimp.h"
-#endif	// __CLASSLIB_VECTIMP_H
+#if !defined( CLASSLIB_VECTIMP_H )
+#include <classlib/vectimp.h>
+#endif
 
-#if !defined( __CLASSLIB_STACKS_H )
-#include "classlib\stacks.h"
-#endif	// __CLASSLIB_STACKS_H
+#if !defined( CLASSLIB_STACKS_H )
+#include <classlib/stacks.h>
+#endif
 
-#if !defined( __CLASSLIB_QUEUES_H )
-#include "classlib\queues.h"
-#endif	// __CLASSLIB_QUEUES_H
+#if !defined( CLASSLIB_QUEUES_H )
+#include <classlib/queues.h>
+#endif
 
-#if !defined( __CLASSLIB_LISTIMP_H )
-#include "classlib\listimp.h"
-#endif	// __CLASSLIB_LISTIMP_H
+#if !defined( CLASSLIB_LISTIMP_H )
+#include <classlib/listimp.h>
+#endif
 
-#if !defined( __CLASSLIB_DLISTIMP_H )
-#include "classlib\dlistimp.h"
-#endif	// __CLASSLIB_DLISTIMP_H
+#if !defined( CLASSLIB_DLISTIMP_H )
+#include <classlib/dlistimp.h>
+#endif
 
-#if !defined( __CLASSLIB_DEQUES_H )
-#include "classlib\deques.h"
-#endif	// __CLASSLIB_DEQUES_H
+#if !defined( CLASSLIB_DEQUES_H )
+#include <classlib/deques.h>
+#endif
 
-#if !defined( __CLASSLIB_SETS_H )
-#include "classlib\sets.h"
-#endif	// __CLASSLIB_SETS_H
+#if !defined( CLASSLIB_SETS_H )
+#include <classlib/sets.h>
+#endif
 
 typedef TSDoubleListImp<void _FAR *> dummy6;
 typedef TDoubleListIteratorImp<void _FAR *> dummy7;

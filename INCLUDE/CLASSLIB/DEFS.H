@@ -1,32 +1,77 @@
 /*------------------------------------------------------------------------*/
 /*                                                                        */
-/*  DEFS.H                                                                */
+/*  CLASSLIB/DEFS.H                                                       */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_DEFS_H )
-#define __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#define CLASSLIB_DEFS_H
 
-#if !defined( __CLASSLIB_RESOURCE_H )
-#include "classlib\resource.h"
-#endif  // __CLASSLIB_RESOURCE_H
+#if !defined( CLASSLIB_COMPILER_H )
+#include <classlib/compiler.h>
+#endif
+
+#if !defined( CLASSLIB_RESOURCE_H )
+#include <classlib/resource.h>
+#endif
+
+//------------------------------------------------
+//
+//  To restore the old BIDS naming convention of data and function
+//  names beginning with lowercase letters, in addition to the
+//  new convention of uppercase letters, remove the // from the
+//  #define below. The libraries do not need to be rebuilt.
+//
+
+//  #define BI_OLDNAMES         // add names with initial lowercase
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
-/*  _RTTI provides a convenient macro for switching on the __rtti         */
+/*  OS-specific flags.                                                    */
+/*                                                                        */
+/*------------------------------------------------------------------------*/
+
+//
+//  Need to do some special stuff when the OS doesn't support
+//  per-instance data in DLLs.
+//
+#if defined(BI_PLAT_WIN16)
+#define BI_NO_PER_INSTANCE_DATA
+#endif
+
+//
+//  Sometimes we need to know if we're building for Windows 3.0.
+//
+#if defined(BI_PLAT_WIN16) && defined(WINVER) && WINVER < 0x030A
+#define BI_IS_WIN30
+#endif
+
+//
+//  Windows 3.1 provides functions to read and write huge buffers.
+//
+#if defined(BI_PTR_16_16) && !defined(BI_IS_WIN30)
+#define BI_HAS_HREADWRITE
+#endif
+
+//
+//  Under Windows 3.0 WEPs are seriously broken.
+//
+#if defined(BI_IS_WIN30)
+#define BI_WINDOWS_WEP_BUG
+#endif
+
+/*------------------------------------------------------------------------*/
+/*                                                                        */
+/*  _RTTI provides a convenient macro for switching on Borland's __rtti   */
 /*  keyword for finer grained control over generation of runtime type     */
 /*  information.                                                          */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if defined(__BORLANDC__) && !defined(BI_NO_RTTI)
 #define _RTTI __rtti
-#else
-#define _RTTI
-#endif
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
@@ -95,6 +140,34 @@
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
+/*  Provide expansions for mutable and bool when appropriate.             */
+/*                                                                        */
+/*------------------------------------------------------------------------*/
+
+#if defined( BI_NO_MUTABLE )
+#define mutable
+#endif
+
+#if defined( BI_NO_BOOL )
+enum TBool
+{
+    false,
+    true
+};
+#   if defined( EMULATE_BOOL )
+        typedef TBool bool;
+#       define BI_UNIQUE_BOOL
+#   else
+        typedef int bool;
+#       undef BI_UNIQUE_BOOL
+#   endif
+#else
+    typedef bool TBool;
+#   define BI_UNIQUE_BOOL
+#endif
+
+/*------------------------------------------------------------------------*/
+/*                                                                        */
 /*  Common definitions for pointer size and calling conventions.          */
 /*                                                                        */
 /*  Calling conventions:                                                  */
@@ -128,13 +201,13 @@
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if defined(__OS2__)
+#if defined(BI_PLAT_OS2)
 #    define _BIDSENTRY  __stdcall
 #else
 #    define _BIDSENTRY  __cdecl
 #endif
 
-#if defined(__FLAT__)
+#if defined(BI_PTR_0_32)
 #   define _BIDSFAR
 #   define _BIDSFARDATA
 #   define _BIDSFARFUNC
@@ -146,7 +219,7 @@
 #       define _BIDSCLASS  __export
 #       define _BIDSDATA   __export
 #       define _BIDSFUNC   __export
-#   elif defined(_BIDSDLL) && !defined(__OS2__)
+#   elif defined(_BIDSDLL) && !defined(BI_PLAT_OS2)
 #       define _BIDSCLASS  __import
 #       define _BIDSDATA   __import
 #       define _BIDSFUNC   __import
@@ -155,12 +228,15 @@
 #       define _BIDSDATA
 #       define _BIDSFUNC
 #   endif
+#   define _BIDSCLASS_RTL _BIDSCLASS
 #else
-#   if defined(__DLL__)
+#   if defined(BI_APP_DLL)
 #       if defined(_BUILDBIDSDLL)
 #           define _BIDSCLASS __export
 #       elif defined(_BIDSDLL) || defined(_CLASSDLL)
 #           define _BIDSCLASS __export
+#       elif defined(_BIDSFARVTABLE)
+#           define _BIDSCLASS     __huge
 #       else
 #           define _BIDSCLASS __far
 #       endif
@@ -181,13 +257,13 @@
 #       define _BIDSNEARFUNC __near
 #       define _BIDSNEARCLASS __near
 #   else
-#       if   defined(__TINY__) || defined(__SMALL__) || defined(__MEDIUM__)
+#       if   defined(BI_MODEL_TINY) || defined(BI_MODEL_SMALL) || defined(BI_MODEL_MEDIUM)
 #           if defined(_BIDSFARVTABLE)
 #               define _BIDSCLASS  __huge
 #           else
 #               define _BIDSCLASS  __near
 #           endif
-#       elif defined(__COMPACT__) || defined(__LARGE__)
+#       elif defined(BI_MODEL_COMPACT) || defined(BI_MODEL_LARGE)
 #           if defined(_BIDSFARVTABLE)
 #               define _BIDSCLASS  __huge
 #           else
@@ -214,7 +290,12 @@
 #       endif
 #   endif
 #   define _BIDSDATA
+#   if defined(_BIDSFARVTABLE)
+#       define _BIDSCLASS_RTL _EXPCLASS
+#   else
+#       define _BIDSCLASS_RTL _BIDSCLASS
+#   endif
 #endif
 
-#endif  // __CLASSLIB_DEFS_H
+#endif  // CLASSLIB_DEFS_H
 

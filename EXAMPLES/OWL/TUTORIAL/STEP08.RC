@@ -1,13 +1,9 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Tutorial application -- step08.rc
 //----------------------------------------------------------------------------
-#ifndef WORKSHOP_INVOKED
-  #include <windows.h>
-#endif
-
-#include <owl\inputdia.rc>
-#include <owl\except.rc>
+#include <owl/inputdia.rc>
+#include <owl/except.rc>
 
 #define CM_FILENEW    201
 #define CM_FILEOPEN   202
@@ -19,6 +15,9 @@
 #define IDD_ABOUT     211
 
 #ifdef RC_INVOKED 
+#ifndef WORKSHOP_INVOKED
+# include <windows.h>
+#endif
 
 COMMANDS MENU 
 {
@@ -45,8 +44,8 @@ CAPTION "About Drawing Pad"
 FONT 8, "MS Sans Serif"
 {
  DEFPUSHBUTTON "Ok", IDOK, 60, 73, 50, 14
- CTEXT "ObjectWindows 2.0 Tutorial Application", -1, 10, 46, 150, 10
- CTEXT "Copyright 1991, 1993 by Borland International", -1, 10, 57, 150, 8
+ CTEXT "ObjectWindows 2.5 Tutorial Application", -1, 10, 46, 150, 10
+ CTEXT "Copyright 1991, 1994 by Borland International", -1, 10, 57, 150, 8
  ICON "IDI_TUTORIAL", -1, 78, 11, 14, 16
  CTEXT "Drawing Pad", -1, 10, 35, 150, 8
 }

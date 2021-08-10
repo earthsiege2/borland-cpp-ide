@@ -1,0 +1,28 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for Set examples                                              #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = setx
+EXEALL = setx.exe iset.exe
+
+EXEMAKE= $(SET) $(ISET)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+SET=$(EXERULE:setx.obj=setx.obj myclass.obj)
+ISET=$(SET:setx=iset)
+
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

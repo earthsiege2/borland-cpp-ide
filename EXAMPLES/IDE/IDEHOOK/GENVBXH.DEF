@@ -1,0 +1,13 @@
+LIBRARY	    GENVBXH
+DESCRIPTION    'Frank Borland'
+EXETYPE		WINDOWS
+CODE       	LOADONCALL MOVEABLE DISCARDABLE
+DATA       	PRELOAD    MOVEABLE SINGLE
+HEAPSIZE   	4096
+SEGMENTS
+        _TEXT          PRELOAD  MOVEABLE
+
+EXPORTS
+            WEP                            @1   RESIDENTNAME
+            IDELIBMAIN                     @2
+

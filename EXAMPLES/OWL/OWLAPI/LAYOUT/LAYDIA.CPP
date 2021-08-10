@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
+// ObjectWindows - (C) Copyright 1993,1994 by Borland International
 //----------------------------------------------------------------------------
 
 //
@@ -34,7 +34,7 @@ TLayoutDialog::TLayoutDialog(TLayoutWindow* parent,
     LayoutWindow(parent),
     ChildInfo(childInfo)
 {
-  WindowList     = new TListBox(this, ID_WINDOWLIST);
+  WindowList  = new TListBox(this, ID_WINDOWLIST);
   
   X1EdgeCombo = new TComboBox(this,ID_X1_MYEDGE);
   X2EdgeCombo = new TComboBox(this,ID_X2_MYEDGE);
@@ -70,7 +70,7 @@ TLayoutDialog::TLayoutDialog(TLayoutWindow* parent,
 
 struct TEnumPair {
   char far* Name;
-  DWORD     Value;
+  uint32    Value;
 };
 #define ENUMPAIR(enum)   {#enum, enum}
 
@@ -160,15 +160,13 @@ void TLayoutDialog::SetupWindow()
 {
   TDialog::SetupWindow();
 
-
   // Fill the window list
+  //
   for (int i = 0; ChildInfo[i].Child && i < MaxWindows-1; i++) {
     WindowList->AddString(ChildInfo[i].Child->Title);
     RelWinPairs[i+1].Name = ChildInfo[i].Child->Title;
-    RelWinPairs[i+1].Value = DWORD(ChildInfo[i].Child);
+    RelWinPairs[i+1].Value = uint32(ChildInfo[i].Child);
   }
-
-  WindowList->SetSelIndex(0);
 
   FillCombo(X1EdgeCombo,X1EdgePairs,COUNTOF(X1EdgePairs));
   FillCombo(X2EdgeCombo,X2EdgePairs,COUNTOF(X2EdgePairs));
@@ -200,20 +198,36 @@ void TLayoutDialog::SetupWindow()
   FillCombo(Y1RelWinCombo, RelWinPairs, i+1);
   FillCombo(Y2RelWinCombo, RelWinPairs, i+1);
 
-  ChildNum = -1;  //Flag to signal initial call to HandleWindowChange
+  // This call will result in a LBN_SELCHANGE Message being sent to the 
+  // window, which will result in HandleWindowChange being called.
+  // This call can't be made until the above controls are setup, so wait until
+  // the end here.
+  //
+  ChildNum = -1;  // Flag to signal initial call to HandleWindowChange
+  WindowList->SetSelIndex(0);
   HandleWindowChange();
 }
 
-static void SelectItemData(TComboBox* combo, DWORD itemData)
+static void SelectItemData(TComboBox* combo, uint32 itemData)
 {
   int count = combo->GetCount();
-  combo->SetSelIndex(-1); //Clear the selection
+  combo->SetSelIndex(-1);  // Clear the selection
   for (int i = 0; i < count; i++)
     if (combo->GetItemData(i) == itemData) {
       combo->SetSelIndex(i);
       return;
     }
   TRACE("Couldn't find lmXxx (" << itemData <<") in list");
+}
+
+static void SelectItemData(TComboBox* combo, TWindow* win)
+{
+#if defined(BI_MODEL_NEAR_DATA)
+  if (OFFSETOF(win) == 0)
+    SelectItemData(combo, uint32(0));
+  else
+#endif
+  SelectItemData(combo, uint32(win));
 }
 
 //
@@ -227,7 +241,7 @@ void TLayoutDialog::SetLayoutConstraint(TLayoutConstraint& lc, Constraint which)
     case X1:
       SelectItemData(X1EdgeCombo, lc.MyEdge);
       SelectItemData(X1RelationCombo, lc.Relationship);
-      SelectItemData(X1RelWinCombo, DWORD(lc.RelWin));
+      SelectItemData(X1RelWinCombo, lc.RelWin);
       SelectItemData(X1OtherEdgeCombo, lc.OtherEdge);
       SelectItemData(X1UnitsCombo, lc.Units);
       wsprintf(buff, "%d", lc.Value);
@@ -237,7 +251,7 @@ void TLayoutDialog::SetLayoutConstraint(TLayoutConstraint& lc, Constraint which)
     case X2:
       SelectItemData(X2EdgeCombo, lc.MyEdge);
       SelectItemData(X2RelationCombo, lc.Relationship);
-      SelectItemData(X2RelWinCombo, DWORD(lc.RelWin));
+      SelectItemData(X2RelWinCombo, lc.RelWin);
       SelectItemData(X2OtherEdgeCombo, lc.OtherEdge);
       SelectItemData(X2UnitsCombo, lc.Units);
       wsprintf(buff, "%d", lc.Value);
@@ -247,7 +261,7 @@ void TLayoutDialog::SetLayoutConstraint(TLayoutConstraint& lc, Constraint which)
     case Y1:
       SelectItemData(Y1EdgeCombo, lc.MyEdge);
       SelectItemData(Y1RelationCombo, lc.Relationship);
-      SelectItemData(Y1RelWinCombo, DWORD(lc.RelWin));
+      SelectItemData(Y1RelWinCombo, lc.RelWin);
       SelectItemData(Y1OtherEdgeCombo, lc.OtherEdge);
       SelectItemData(Y1UnitsCombo, lc.Units);
       wsprintf(buff, "%d", lc.Value);
@@ -257,7 +271,7 @@ void TLayoutDialog::SetLayoutConstraint(TLayoutConstraint& lc, Constraint which)
     case Y2:
       SelectItemData(Y2EdgeCombo, lc.MyEdge);
       SelectItemData(Y2RelationCombo, lc.Relationship);
-      SelectItemData(Y2RelWinCombo, DWORD(lc.RelWin));
+      SelectItemData(Y2RelWinCombo, lc.RelWin);
       SelectItemData(Y2OtherEdgeCombo, lc.OtherEdge);
       SelectItemData(Y2UnitsCombo, lc.Units);
       wsprintf(buff, "%d", lc.Value);
@@ -312,31 +326,37 @@ void TLayoutDialog::GetLayoutConstraint(TLayoutConstraint& lc, Constraint which)
       Y2ValueEdit->GetText(buff, sizeof buff);
       lc.Value = atoi(buff);
       break;
-
   }
 }
 
+//
 // Window changed
 // Ask user to save current layout constraints?
-
+//
 void TLayoutDialog::HandleWindowChange()
 {
-  if (ChildNum>=0) {
+  if (ChildNum >= 0) {
     // Save all of the current settings, unless this is the first call
+    //
     GetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.X,X1);
     GetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.Width,X2);
     GetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.Y,Y1);
     GetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.Height,Y2);
   }
   // Switch to new window
+  //
   ChildNum = WindowList->GetSelIndex();
-  SetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.X,X1);
-  SetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.Width,X2);
-  SetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.Y,Y1);
-  SetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.Height,Y2);
+  if (ChildNum >= 0) {
+    SetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.X,X1);
+    SetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.Width,X2);
+    SetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.Y,Y1);
+    SetLayoutConstraint(ChildInfo[ChildNum].LayoutMetrics.Height,Y2);
+  }
 }
 
+//
 // Get the constraints from each window, update child window
+//
 void TLayoutDialog::HandleLayout()
 {
   TLayoutMetrics& lm = ChildInfo[ChildNum].LayoutMetrics;
@@ -347,14 +367,15 @@ void TLayoutDialog::HandleLayout()
   GetLayoutConstraint(lm.Height,Y2);
 
   // Check some basic restrictions
+  //
   if (lm.X.MyEdge == lm.Width.MyEdge) {
-      MessageBox("X1.MyEdge can not be the same as X2.MyEdge");
-      return;
-      }
+    MessageBox("X1.MyEdge can not be the same as X2.MyEdge");
+    return;
+  }
   if (lm.Y.MyEdge == lm.Height.MyEdge) {
-      MessageBox("Y1.MyEdge can not be the same as Y2.MyEdge");
-      return;
-      }
+    MessageBox("Y1.MyEdge can not be the same as Y2.MyEdge");
+    return;
+  }
 
   Parent->PostMessage(WM_COMMAND, CM_RELAYOUT);
 }

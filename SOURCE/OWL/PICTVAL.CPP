@@ -1,60 +1,69 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   source\owl\pictval.cpp
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TPXPictureValidator, Paradox-picture input validator
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\validate.h>
-#include <owl\applicat.h>
-#include <classlib\objstrm.h>
+#include <owl/owlpch.h>
+#include <owl/validate.h>
+#include <owl/applicat.h>
+#include <owl/appdict.h>
+#include <owl/framewin.h>
 #include <ctype.h>
 
 #if !defined(SECTION) || SECTION == 1
 
-TPXPictureValidator::TPXPictureValidator(const char far* pic, BOOL autoFill)
-  : TValidator(),
-    Pic(pic)
+TPXPictureValidator::TPXPictureValidator(const char far* pic, bool autoFill)
+:
+  TValidator(),
+  Pic(pic)
 {
   Options = voOnAppend;
   if (autoFill)
     Options |= voFill;
-  if (Picture(0, FALSE) != prEmpty)
+  if (Picture(0, false) != prEmpty)
     THROW( TValidator::TXValidator() );
 }
 
 void
 TPXPictureValidator::Error()
 {
-  char msg[256];
-  wsprintf(msg, string(*GetApplicationObject(), IDS_VALPXPCONFORM).c_str(),
-           (LPCSTR)Pic.c_str());
-  ::MessageBox(0, msg, GetApplicationObject()->GetName(), 
-    MB_ICONEXCLAMATION | MB_OK | MB_TASKMODAL);
+  TApplication* app = GetApplicationObject();
+  string msgTmpl = app->LoadString(IDS_VALPXPCONFORM).c_str();
+  char* msg = new char[msgTmpl.length() + Pic.length() + 1];
+  wsprintf(msg, msgTmpl.c_str(), (const char far*)Pic.c_str());
+  TWindow* w = GetWindowPtr(app->GetMainWindow()->GetLastActivePopup());
+  if (w)
+    w->MessageBox(msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK);
+  else
+    ::MessageBox(0, msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK|MB_TASKMODAL);
+  delete [] msg;
 }
 
-BOOL
-TPXPictureValidator::IsValidInput(char far* str, BOOL suppressFill)
+bool
+TPXPictureValidator::IsValidInput(char far* str, bool suppressFill)
 {
-  BOOL autoFill = (Options&voFill) && !suppressFill;
-  return Pic.is_null() || (Picture(str, autoFill) != prError);
+  bool autoFill = (Options&voFill) && !suppressFill;
+  return Pic.is_null() || Picture(str, autoFill) != prError;
 }
 
-BOOL
+bool
 TPXPictureValidator::IsValid(const char far* str)
 {
   if (Pic.is_null())
-    return TRUE;
-  TPicResult rslt = Picture((char far*)str, FALSE);
+    return true;
+  TPicResult rslt = Picture((char far*)str, false);
   return rslt == prComplete || rslt == prEmpty;
 }
 
-inline BOOL
+inline bool
 TPXPictureValidator::IsComplete(TPicResult rslt)
 {
   return rslt == prComplete || rslt == prAmbiguous;
 }
 
-inline BOOL
+inline bool
 TPXPictureValidator::IsIncomplete(TPicResult rslt)
 {
   return rslt == prIncomplete || rslt == prIncompNoFill;
@@ -64,7 +73,7 @@ TPXPictureValidator::IsIncomplete(TPicResult rslt)
 // Skip a character or a picture group
 //
 void
-TPXPictureValidator::ToGroupEnd(UINT termCh, UINT& i)
+TPXPictureValidator::ToGroupEnd(uint termCh, uint& i)
 {
   int brkLevel = 0;
   int brcLevel = 0;
@@ -92,13 +101,13 @@ TPXPictureValidator::ToGroupEnd(UINT termCh, UINT& i)
 //
 // Find the next comma separator
 //
-BOOL
-TPXPictureValidator::SkipToComma(UINT termCh, UINT& i)
+bool
+TPXPictureValidator::SkipToComma(uint termCh, uint& i)
 {
   for (;;) {
     ToGroupEnd(termCh, i);
     if (i == termCh)
-      return FALSE;
+      return false;
     if (Pic[i] == ',') {
       i++;
       return i < termCh;
@@ -107,10 +116,10 @@ TPXPictureValidator::SkipToComma(UINT termCh, UINT& i)
 }
 
 //
-// Calculate the end of a group(does not modify i)
+// Calculate the end of a group (does not modify i)
 //
-UINT
-TPXPictureValidator::CalcTerm(UINT termCh, UINT i)
+uint
+TPXPictureValidator::CalcTerm(uint termCh, uint i)
 {
   ToGroupEnd(termCh, i);
   return i;
@@ -120,16 +129,16 @@ TPXPictureValidator::CalcTerm(UINT termCh, UINT i)
 // The next group is repeated X times
 //
 TPicResult
-TPXPictureValidator::Iteration(char far* input, UINT termCh, UINT& i, UINT& j)
+TPXPictureValidator::Iteration(char far* input, uint termCh, uint& i, uint& j)
 {
   TPicResult rslt;
-  UINT newTermCh;
+  uint newTermCh;
 
   i++;  // Skip '*'
 
   // Retrieve number
 
-  UINT itr = 0;
+  uint itr = 0;
   for (; isdigit(Pic[i]); i++)
     itr = itr * 10 + Pic[i] - '0';
 
@@ -141,7 +150,7 @@ TPXPictureValidator::Iteration(char far* input, UINT termCh, UINT& i, UINT& j)
   //
   // if itr is 0 allow any number, otherwise enforce the number
   //
-  UINT k = i;
+  uint k = i;
   if (itr) {
     for (int m = 0; m < itr; m++) {
       i = k;
@@ -152,7 +161,8 @@ TPXPictureValidator::Iteration(char far* input, UINT termCh, UINT& i, UINT& j)
         return rslt;
       }
     }
-  } else {
+  }
+  else {
     do {
       i = k;
       rslt = Process(input, newTermCh, i, j);
@@ -170,13 +180,13 @@ TPXPictureValidator::Iteration(char far* input, UINT termCh, UINT& i, UINT& j)
 // Process a picture group
 //
 TPicResult
-TPXPictureValidator::Group(char far* input, UINT termCh, UINT& i, UINT& j)
+TPXPictureValidator::Group(char far* input, uint termCh, uint& i, uint& j)
 {
-  UINT groupTermCh = CalcTerm(termCh, i);
+  uint groupTermCh = CalcTerm(termCh, i);
   i++;
   TPicResult rslt = Process(input, groupTermCh - 1, i, j);
   if (!IsIncomplete(rslt))
-    i = termCh;
+    i = groupTermCh;
   return rslt;
 }
 
@@ -184,9 +194,9 @@ TPXPictureValidator::Group(char far* input, UINT termCh, UINT& i, UINT& j)
 //
 //
 TPicResult
-TPXPictureValidator::CheckComplete(UINT termCh, UINT& i, TPicResult rslt)
+TPXPictureValidator::CheckComplete(uint termCh, uint& i, TPicResult rslt)
 {
-  UINT j = i;
+  uint j = i;
   if (IsIncomplete(rslt)) {
     // Skip optional pieces
     for (;;) {
@@ -197,19 +207,22 @@ TPXPictureValidator::CheckComplete(UINT termCh, UINT& i, TPicResult rslt)
         if (!isdigit(Pic[j+1])) {
           j++;
           ToGroupEnd(termCh, j);
-        } else
+        }
+        else
           break;
-      } else
+      }
+      else
         break;
+
+      if (j == termCh)
+        return prAmbiguous;  // end of the string, don't know if complete
     }
-    if (j == termCh)
-      rslt = prAmbiguous;
   }
   return rslt;
 }
 
 TPicResult
-TPXPictureValidator::Scan(char far* input, UINT termCh, UINT& i, UINT& j)
+TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
 {
   char ch;
   TPicResult rslt = prEmpty;
@@ -293,15 +306,15 @@ TPXPictureValidator::Scan(char far* input, UINT termCh, UINT& i, UINT& j)
 }
 
 TPicResult
-TPXPictureValidator::Process(char far* input, UINT termCh, UINT& i, UINT& j)
+TPXPictureValidator::Process(char far* input, uint termCh, uint& i, uint& j)
 {
   TPicResult rslt;
-  UINT incompJ, incompI;
+  uint incompJ, incompI;
   incompJ = incompI = 0;
 
-  BOOL incomp = FALSE;
-  UINT oldI = i;
-  UINT oldJ = j;
+  bool incomp = false;
+  uint oldI = i;
+  uint oldJ = j;
   do {
     rslt = Scan(input, termCh, i, j);
 
@@ -316,7 +329,7 @@ TPXPictureValidator::Process(char far* input, UINT termCh, UINT& i, UINT& j)
 
     if (rslt == prError || rslt == prIncomplete) {
       if (!incomp && rslt == prIncomplete) {
-        incomp = TRUE;
+        incomp = true;
         incompI = i;
         incompJ = j;
       }
@@ -337,15 +350,15 @@ TPXPictureValidator::Process(char far* input, UINT termCh, UINT& i, UINT& j)
   return (rslt == prComplete && incomp) ? prAmbiguous : rslt;
 }
 
-BOOL
+bool
 TPXPictureValidator::SyntaxCheck()
 {
   if (Pic.is_null())
-    return FALSE;
+    return false;
   if (Pic[Pic.length()-1] == ';')
-    return FALSE;
+    return false;
   if (Pic[Pic.length()-1] == '*' && Pic[Pic.length()-2] != ';')
-    return FALSE;
+    return false;
 
   int brkLevel = 0;
   int brcLevel = 0;
@@ -362,33 +375,36 @@ TPXPictureValidator::SyntaxCheck()
 }
 
 TPicResult
-TPXPictureValidator::Picture(char far* input, BOOL autoFill)
+TPXPictureValidator::Picture(char far* input, bool autoFill)
 {
   if (!SyntaxCheck())
     return prSyntax;
   if (!input || !*input)
     return prEmpty;
 
-  UINT j = 0;  // index for input[]
-  UINT i = 0;  // index for Pic[]
+  uint j = 0;  // index for input[]
+  uint i = 0;  // index for Pic[]
 
   TPicResult rslt = Process(input, Pic.length(), i, j);
   if (rslt != prError && rslt != prSyntax && j < strlen(input))
     rslt = prError;
 
+  // If the result is incomplete & autofill is requested, then copy literal
+  // characters from the picture over to the input.
+  //
   if (rslt == prIncomplete && autoFill) {
-    BOOL  reprocess = FALSE;
+    bool  reprocess = false;
     while (i < Pic.length() && !strchr("#?&!@*{}[],", Pic[i])) {
       if (Pic[i] == ';')
         i++;
-      input = input + Pic[i];
-      i++;
-      reprocess = TRUE;
+      input[j++] = Pic[i++];
+      reprocess = true;
     }
-    j = 0;
-    i = 0;
-    if (reprocess)
+    if (reprocess) {
+      input[j] = 0;   // terminate the copy, since we are probably appending
+      j = i = 0;
       rslt = Process(input, Pic.length(), i, j);
+    }
   }
 
   return (rslt == prAmbiguous) ? prComplete

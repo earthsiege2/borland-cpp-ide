@@ -1,0 +1,58 @@
+##"" [[Arg1]]
+##"" [[Arg2]]
+##"" [[Arg3]]
+##"" [[Arg4]]
+##"" [[Arg5]]
+##"" [[Arg6]]
+##"" [[Arg7]]
+##"" [[Arg8]]
+##"" [[Arg9]]
+##"" [[Arg10]]
+##"" [[Type]]
+##0  [[Idx]]
+##"" [[GeneralArg]]
+##--BEGIN-- AutoParse(CPPArguments, OLEArguments) == TRUE
+##      --BEGIN--AutoCount() [[Count]]
+##          --FOR-- Index = 1 TO Count
+##              :{HAddMet1.SNP}
+##*
+##          --NEXT-- Index
+##          --BEGIN-- OLEType == "TAutoVoid"
+##              : \\"AUTOFUNC[[Count]]V([[InternalName]], [[InternalName]][[Arg1]][[Arg2]][[Arg3]][[Arg4]][[Arg5]][[Arg6]][[Arg7]][[Arg8]][[Arg9]][[Arg10]], )" AutoFuncLine
+##          --END-- OLEType == "TAutoVoid"
+##          --BEGIN-- OLEType != "TAutoVoid"
+##              :OLEType == CPPType
+##                  --BEGIN-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
+##                      :!AnyStripping
+##                          :\\"TAutoObjectByVal<[[CPPType]]>" Type
+##*
+##                      :AnyStripping
+##                          :\\"TAutoObjectDelete<[[StripCPPType]]>" Type
+##*
+##                  --END-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
+##*
+##                  :OLEType != CPPType
+##                      :\\"[[CPPType]]" Type
+##*
+##              --BEGIN-- OLEType == "TAutoString"
+##                  :"string" == CPPType
+##                      :"string" Type
+##*
+##                  :"string" != CPPType
+##                      :"TAutoString" Type
+##*
+##              --END-- OLEType == "TAutoString"
+##              :OLEType == "TAutoCurrency"
+##                  :"TAutoCurrency" Type
+##*
+##              :OLEType == "TAutoDate"
+##                  :"TAutoDate" Type
+##*
+##              :OLEType == "TAutoBool"
+##                  :"TAutoBool" Type
+##*
+##              :\\"AUTOFUNC[[Count]]([[InternalName]], [[InternalName]], [[Type]][[Arg1]][[Arg2]][[Arg3]][[Arg4]][[Arg5]][[Arg6]][[Arg7]][[Arg8]][[Arg9]][[Arg10]], )" AutoFuncLine
+##          --END-- OLEType != "TAutoVoid"
+##      --END--AutoCount() [[Count]]
+##--END-- AutoParse(CPPArguments, OLEArguments) == TRUE
+##AutoReset()

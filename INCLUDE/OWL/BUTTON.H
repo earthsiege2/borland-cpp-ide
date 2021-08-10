@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\button.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TButton.  This defines the basic behavior
 //   of all buttons.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_BUTTON_H)
-#define __OWL_BUTTON_H
+#if !defined(OWL_BUTTON_H)
+#define OWL_BUTTON_H
 
-#if !defined(__OWL_CONTROL_H)
-  #include <owl\control.h>
+#if !defined(OWL_CONTROL_H)
+# include <owl/control.h>
 #endif
 
 //
@@ -17,24 +18,24 @@
 //
 class _OWLCLASS TButton : public TControl {
   public:
-    BOOL  IsDefPB;
+    bool  IsDefPB;
 
     TButton(TWindow*        parent,
             int             id,
             const char far* text,
             int X, int Y, int W, int H,
-            BOOL            isDefault = FALSE,
+            bool            isDefault = false,
             TModule*        module = 0);
 
     TButton(TWindow *parent, int resourceId, TModule* module = 0);
 
   protected:
-    BOOL  IsCurrentDefPB;
+    bool  IsCurrentDefPB;
 
     //
     // message response functions
     //
-    UINT      EvGetDlgCode(MSG far*);
+    uint      EvGetDlgCode(MSG far*);
     LRESULT   BMSetStyle(WPARAM, LPARAM);
 
     //
@@ -64,4 +65,4 @@ class _OWLCLASS TButton : public TControl {
 // EV_BN_PAINT(id, method)
 // EV_BN_UNHILITE(id, method)
 
-#endif  // __OWL_BUTTON_H
+#endif  // OWL_BUTTON_H

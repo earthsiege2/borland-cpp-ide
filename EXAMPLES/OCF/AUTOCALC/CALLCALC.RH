@@ -1,0 +1,35 @@
+//----------------------------------------------------------------------------
+// ObjectComponents - (C) Copyright 1994 by Borland International
+//----------------------------------------------------------------------------
+
+#define IDD_OUT 1
+#define IDI_MAIN 1
+
+#define IDC_PASS        64
+#define IDC_BUTTON1     65
+#define IDC_BUTTON2     66
+#define IDC_BUTTON3     67
+#define IDC_BUTTON4     68
+#define IDC_BUTTON5     69
+#define IDC_BUTTON6     70
+#define IDC_BUTTON7     71
+#define IDC_BUTTON8     72
+#define IDC_BUTTON9     73
+#define IDC_BUTTON10    74
+#define IDC_BUTTON11    75
+#define IDC_BUTTON12    76
+#define IDC_BUTTON13    77
+#define IDC_BUTTON14    78
+#define IDC_BUTTON15    79
+#define IDC_BUTTON16    80
+#define IDC_CAPTION     81
+#define IDC_ACCUM       82
+#define IDC_ARRAY       83
+#define IDC_FIRSTBUTTON IDC_BUTTON1
+#define IDC_LASTBUTTON  IDC_BUTTON16
+#define IDC_FIRSTTEXT   IDC_CAPTION
+#define IDC_LASTTEXT    IDC_ARRAY
+#define IDC_EXIT        IDOK
+#define IDC_REPEAT      IDRETRY
+
+

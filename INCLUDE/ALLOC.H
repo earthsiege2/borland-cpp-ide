@@ -1,13 +1,13 @@
 /*  alloc.h
 
     memory management functions and variables.
-    
+
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -22,6 +22,16 @@
 #ifndef NULL
 #include <_null.h>
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #if !defined(__FLAT__)
 
@@ -78,53 +88,67 @@ struct heapinfo
 extern "C" {
 #endif
 
-void  _FAR *_Cdecl calloc(size_t __nitems, size_t __size);
-void        _Cdecl free(void _FAR *__block);
-void  _FAR *_Cdecl malloc(size_t __size);
-void  _FAR *_Cdecl realloc(void _FAR *__block, size_t __size);
+void  _FAR *_RTLENTRY calloc(size_t __nitems, size_t __size);
+void        _RTLENTRY free(void _FAR *__block);
+void  _FAR *_RTLENTRY malloc(size_t __size);
+void  _FAR *_RTLENTRY realloc(void _FAR *__block, size_t __size);
+
+#if !defined(_Windows)
+#if defined(__COMPACT__) || defined(__LARGE__) || defined(__HUGE__)
+unsigned long _RTLENTRY coreleft (void);
+#else
+unsigned      _RTLENTRY coreleft(void);
+#endif
+#endif
+
+#if defined(__DPMI16__) || !defined(_Windows)
+int           _RTLENTRY heapcheck(void);
+unsigned long _RTLENTRY farcoreleft(void);
+#endif
+
+#if defined(__DPMI16__)
+#define farheapcheck heapcheck
+#define coreleft     farcoreleft
+#endif
 
 #if !defined(_Windows)
 
-int         _Cdecl brk(void *__addr);
-void       *_Cdecl sbrk(int __incr);
+int         _RTLENTRY brk(void *__addr);
+void       *_RTLENTRY sbrk(int __incr);
 
-int         _Cdecl heapcheck(void);
-int         _Cdecl heapfillfree(unsigned int __fillvalue);
-int         _Cdecl heapcheckfree(unsigned int __fillvalue);
+int         _RTLENTRY heapfillfree(unsigned int __fillvalue);
+int         _RTLENTRY heapcheckfree(unsigned int __fillvalue);
 
 #if defined(__COMPACT__) || defined(__LARGE__) || defined(__HUGE__)
 
-unsigned long _Cdecl coreleft (void);
-
 #if !defined(__STDC__)  /* NON_ANSI */
-int         _Cdecl heapchecknode(void far *__node);
-int         _Cdecl heapwalk(struct farheapinfo far *__hi);
+int         _RTLENTRY heapchecknode(void far *__node);
+int         _RTLENTRY heapwalk(struct farheapinfo far *__hi);
 #endif
 
 #else
 
-unsigned    _Cdecl coreleft(void);
-int         _Cdecl heapchecknode(void *__node);
-int         _Cdecl heapwalk(struct heapinfo *__hi);
+int         _RTLENTRY heapchecknode(void *__node);
+int         _RTLENTRY heapwalk(struct heapinfo *__hi);
 
 #endif
 
 #if !defined(__STDC__)  /* NON_ANSI */
-unsigned long _Cdecl farcoreleft(void);
-int         _Cdecl farheapcheck(void);
-int         _Cdecl farheapchecknode(void far *__node);
-int         _Cdecl farheapfillfree(unsigned int __fillvalue);
-int         _Cdecl farheapcheckfree(unsigned int __fillvalue);
-int         _Cdecl farheapwalk(struct farheapinfo *__hi);
+unsigned long _RTLENTRY farcoreleft(void);
+int         _RTLENTRY farheapcheck(void);
+int         _RTLENTRY farheapchecknode(void far *__node);
+int         _RTLENTRY farheapfillfree(unsigned int __fillvalue);
+int         _RTLENTRY farheapcheckfree(unsigned int __fillvalue);
+int         _RTLENTRY farheapwalk(struct farheapinfo *__hi);
 #endif
 
 #endif  /* WINDOWS */
 
 #if !defined(__STDC__)  /* NON_ANSI */
-void far  * _Cdecl farcalloc(unsigned long __nunits, unsigned long __unitsz);
-void        _Cdecl farfree(void far *__block);
-void far  * _Cdecl farmalloc(unsigned long __nbytes);
-void far  * _Cdecl farrealloc(void far *__oldblock, unsigned long __nbytes);
+void far  * _RTLENTRY farcalloc(unsigned long __nunits, unsigned long __unitsz);
+void        _RTLENTRY farfree(void far *__block);
+void far  * _RTLENTRY farmalloc(unsigned long __nbytes);
+void far  * _RTLENTRY farrealloc(void far *__oldblock, unsigned long __nbytes);
 #endif
 
 #ifdef __cplusplus
@@ -160,16 +184,20 @@ struct heapinfo
 extern "C" {
 #endif
 
-void *_RTLENTRY _EXPFUNC calloc  (size_t __nitems, size_t __size);
-void  _RTLENTRY _EXPFUNC free    (void * __block);
-void *_RTLENTRY _EXPFUNC malloc  (size_t  __size);
-void *_RTLENTRY _EXPFUNC realloc (void * __block, size_t __size);
+void *   _RTLENTRY _EXPFUNC calloc(size_t __nitems, size_t __size);
+void     _RTLENTRY _EXPFUNC free(void * __block);
+void *   _RTLENTRY _EXPFUNC malloc(size_t  __size);
+void *   _RTLENTRY _EXPFUNC realloc(void * __block, size_t __size);
+int      _RTLENTRY _EXPFUNC heapcheck(void);
+int      _RTLENTRY _EXPFUNC heapfillfree(unsigned int __fillvalue);
+int      _RTLENTRY _EXPFUNC heapcheckfree(unsigned int __fillvalue);
+int      _RTLENTRY _EXPFUNC heapchecknode(void *__node);
+int      _RTLENTRY _EXPFUNC heapwalk(struct heapinfo *__hi);
 
-int   _RTLENTRY _EXPFUNC heapcheck    (void);
-int   _RTLENTRY _EXPFUNC heapfillfree (unsigned int __fillvalue);
-int   _RTLENTRY _EXPFUNC heapcheckfree(unsigned int __fillvalue);
-int   _RTLENTRY _EXPFUNC heapchecknode(void *__node);
-int   _RTLENTRY _EXPFUNC heapwalk     (struct heapinfo *__hi);
+#if defined(__DPMI32__)
+unsigned _RTLENTRY          coreleft(void);
+#endif
+
 #ifdef __cplusplus
 }
 #endif
@@ -188,8 +216,25 @@ int   _RTLENTRY _EXPFUNC heapwalk     (struct heapinfo *__hi);
 #define _HEAPBADNODE    -5
 #define _HEAPBADPTR     -6
 
+#if !defined(__STDC__)
+#define farcalloc   calloc
+#define farcoreleft coreleft
+#define farfree     free
+#define farmalloc   malloc
+#define farrealloc  realloc
+#endif
 
 #endif  /* __FLAT__ */
+
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __ALLOC_H */
 

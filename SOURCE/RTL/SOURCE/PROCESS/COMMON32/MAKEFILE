@@ -1,0 +1,75 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+OBJS =               \
+	cwait.obj    \
+	getpid.obj   \
+	abort.obj    \
+	atexit.obj   \
+	execl.obj    \
+	execle.obj   \
+	execlp.obj   \
+	execlpe.obj  \
+	execv.obj    \
+	execve.obj   \
+	execvp.obj   \
+	execvpe.obj  \
+	exit.obj     \
+	getenv.obj   \
+	lonedll.obj  \
+	nowild.obj   \
+	putenv.obj   \
+	setargv.obj  \
+	spawnl.obj   \
+	spawnle.obj  \
+	spawnlp.obj  \
+	spawnlpe.obj \
+	spawnv.obj   \
+	spawnve.obj  \
+	spawnvp.obj  \
+	spawnvpe.obj \
+	srchenv.obj  \
+	srchpath.obj \
+	srchstr.obj  \
+	wait.obj     \
+	wild.obj
+
+!if $d(DLL)
+    IMPOBJS =            \
+	    nowild.obj   \
+	    setargv2.obj
+!elif !$d(MT)
+    MISC = $(LIBDIR)\wildargs.obj
+!endif
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+TASMCFG = 1        # Force tasm.cfg creation
+
+!include rules.mak
+
+#############################################################################
+# MISC explicit rules.                                                      #
+#############################################################################
+$(LIBDIR)\wildargs.obj : wildargs.obj
+    copy $** $(LIBDIR)\$.
+

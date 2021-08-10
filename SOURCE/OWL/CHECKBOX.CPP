@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\checkbox.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implemenation ofclass TCheckBox.  This defines the basic behavior
 //   for all check boxes.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\checkbox.h>
-#include <owl\groupbox.h>
-#include <owl\applicat.h>
+#include <owl/owlpch.h>
+#include <owl/checkbox.h>
+#include <owl/groupbox.h>
+#include <owl/applicat.h>
 #include <bwcc.h>
 
 #if !defined(SECTION) || SECTION == 1
@@ -27,7 +28,8 @@ TCheckBox::TCheckBox(TWindow*        parent,
                      int x, int y, int w, int h,
                      TGroupBox*      group,
                      TModule*        module)
-  : TButton(parent, id, title, x, y, w, h, FALSE, module)
+:
+  TButton(parent, id, title, x, y, w, h, false, module)
 {
   Group = group;
   //
@@ -73,16 +75,16 @@ TCheckBox::GetClassName()
 //
 // the return value is the size (in bytes) of the transfer data
 //
-UINT
+uint
 TCheckBox::Transfer(void* buffer, TTransferDirection direction)
 {
   if (direction == tdGetData)
-    *(UINT*)buffer = GetCheck();
+    *(uint*)buffer = GetCheck();
 
   else if (direction == tdSetData)
-    SetCheck(*(UINT*)buffer);
+    SetCheck(*(uint*)buffer);
 
-  return sizeof(UINT);
+  return sizeof(uint);
 }
 
 //
@@ -95,9 +97,9 @@ TCheckBox::Transfer(void* buffer, TTransferDirection direction)
 // the state of the check box has changed
 //
 void
-TCheckBox::SetCheck(UINT check)
+TCheckBox::SetCheck(uint check)
 {
-  HandleMessage(BM_SETCHECK, check);
+  SendMessage(BM_SETCHECK, check);
 
   if (Group)
     Group->SelectionChanged(Attr.Id);

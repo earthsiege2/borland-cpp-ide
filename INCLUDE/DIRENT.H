@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1991, 1993 by Borland International
+ *      Copyright (c) 1991, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -23,12 +23,24 @@
 #include <_null.h>
 #endif
 
-#ifdef __cplusplus
-extern "C" {
+#if defined(__WIN32__)
+#include <windows.h>  /* For WIN32_FIND_DATA */
 #endif
 
-#if !defined(_RC_INVOKED)
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
 #pragma option -a-
+
+#endif  /* !RC_INVOKED */
+
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 
@@ -63,10 +75,6 @@ typedef struct
 #else    /* defined __FLAT__ */
 
 
-#if defined(__WIN32__)
-#include <winbase.h>
-#endif
-    
 /* DIR type returned by opendir().  The members of this structure
  * must not be accessed by application programs.
  */
@@ -94,13 +102,21 @@ struct dirent  _FAR * _RTLENTRY _EXPFUNC readdir  (DIR _FAR *__dir);
 int                   _RTLENTRY _EXPFUNC closedir (DIR _FAR *__dir);
 void                  _RTLENTRY _EXPFUNC rewinddir(DIR _FAR *__dir);
 
-#if !defined(_RC_INVOKED)
-#pragma option -a. /* restore default packing  */
-#endif
-
 #ifdef __cplusplus
 }
 #endif
+
+
+#if !defined(RC_INVOKED)
+
+#pragma option -a. /* restore default packing  */
+
+#if defined(__STDC__)
+#pragma warn .nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 #endif  /* __DIRENT_H */
 

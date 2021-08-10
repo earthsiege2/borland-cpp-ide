@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\moduleob.cpp
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of obsolete functions in class TModule.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\dialog.h>
-#include <owl\mdi.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
+#include <owl/dialog.h>
+#include <owl/mdi.h>
 
 TWindow*
 TModule::MakeWindow(TWindow* win)

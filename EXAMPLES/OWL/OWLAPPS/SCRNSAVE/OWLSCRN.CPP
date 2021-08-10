@@ -27,7 +27,7 @@ const int MaxBuilders = 8;
 class TScreenThing {
   public:
     TScreenThing(TSize& scrnSize);
-    
+
     virtual void Draw(TDC& dc) = 0;
 
   protected:
@@ -52,7 +52,7 @@ TScreenThing::TScreenThing(TSize& scrnSize)
 class TDot : public TScreenThing {
   public:
     TDot(TSize& scrnSize) : TScreenThing(scrnSize) {}
-    
+
     virtual void Draw(TDC& dc);
 
     static TScreenThing* Build(TSize& scrnSize) {return new TDot(scrnSize);}
@@ -70,11 +70,11 @@ class TLine : public TScreenThing  {
       End.x = random(scrnSize.cx + 1);
       End.y = random(scrnSize.cy + 1);
     }
-    
+
     virtual void Draw(TDC& dc);
 
     static TScreenThing* Build(TSize& scrnSize) {return new TLine(scrnSize);}
-    
+
   private:
     TPoint  End;
 };
@@ -94,10 +94,10 @@ class TBlob : public TScreenThing  {
       Rad.cx = random(scrnSize.cx/20);
       Rad.cy = random(scrnSize.cy/20);
     }
-    
+
     virtual void Draw(TDC& dc);
     static TScreenThing* Build(TSize& scrnSize) {return new TBlob(scrnSize);}
-    
+
   private:
     TSize  Rad;
 };
@@ -106,7 +106,7 @@ void
 TBlob::Draw(TDC& dc)
 {
   dc.SelectObject(TBrush(Color()));
-  dc.Ellipse(Position().x-Rad.cx, Position().y-Rad.cy, 
+  dc.Ellipse(Position().x-Rad.cx, Position().y-Rad.cy,
              Position().x+Rad.cx, Position().y+Rad.cy);
   dc.RestoreBrush();
 }
@@ -148,7 +148,7 @@ TMyScrnSavWindow::TMyScrnSavWindow(TWindow* parent, const char* title,
 
   GetProfileString(OwlScrnSectionStr, ObjectsStr, "1 0 0", settings, sizeof(settings));
   sscanf(settings, "%d %d %d", &DoDots, &DoLines, &DoBlobs);
-  
+
   NumBuilders = 0;
   if (DoDots)
     Builder[NumBuilders++] = TDot::Build;
@@ -160,7 +160,7 @@ TMyScrnSavWindow::TMyScrnSavWindow(TWindow* parent, const char* title,
   int speed;
   GetProfileString(OwlScrnSectionStr, SpeedStr, "2", settings, sizeof(settings));
   sscanf(settings, "%d", &speed);
-  
+
   ((TScrnSavApp*)GetApplication())->SetSpeed(speed);
 }
 
@@ -204,10 +204,10 @@ class TScrnSavDlg : public TDialog {
   public:
     TScrnSavDlg(TWindow* parent, const char* name, TModule* module)
       : TDialog(parent, name, module) {}
-      
+
     void SetupWindow();
     void CloseWindow(int retValue);
-   
+
   DECLARE_RESPONSE_TABLE(TScrnSavDlg);
 };
 
@@ -218,10 +218,11 @@ END_RESPONSE_TABLE;
 void
 TScrnSavDlg::SetupWindow()
 {
+  TDialog::SetupWindow();
   char settings[32];
-  
+
   int doDots, doLines, doBlobs;
-  ::GetProfileString(OwlScrnSectionStr, ObjectsStr, "1 0 0", 
+  ::GetProfileString(OwlScrnSectionStr, ObjectsStr, "1 0 0",
                      settings, sizeof(settings));
   sscanf(settings, "%d %d %d", &doDots, &doLines, &doBlobs);
   CheckDlgButton(ID_DOTS, doDots);
@@ -229,7 +230,7 @@ TScrnSavDlg::SetupWindow()
   CheckDlgButton(ID_BLOBS, doBlobs);
 
   int speed;
-  ::GetProfileString(OwlScrnSectionStr, SpeedStr, "2", 
+  ::GetProfileString(OwlScrnSectionStr, SpeedStr, "2",
                      settings, sizeof(settings));
   sscanf(settings, "%d", &speed);
   CheckRadioButton(ID_SLOW, ID_FAST, ID_SLOW+speed);
@@ -240,12 +241,12 @@ TScrnSavDlg::CloseWindow(int retValue)
 {
   char settings[32];
 
-  wsprintf(settings, "%d %d %d", IsDlgButtonChecked(ID_DOTS), 
-                                 IsDlgButtonChecked(ID_LINES), 
+  wsprintf(settings, "%d %d %d", IsDlgButtonChecked(ID_DOTS),
+                                 IsDlgButtonChecked(ID_LINES),
                                  IsDlgButtonChecked(ID_BLOBS));
   WriteProfileString(OwlScrnSectionStr, ObjectsStr, settings);
-  
-  wsprintf(settings, "%d", IsDlgButtonChecked(ID_SLOW) ? 0 : 
+
+  wsprintf(settings, "%d", IsDlgButtonChecked(ID_SLOW) ? 0 :
                            (IsDlgButtonChecked(ID_MED) ? 1 : 2));
   WriteProfileString(OwlScrnSectionStr, SpeedStr, settings);
 

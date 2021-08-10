@@ -1,0 +1,2 @@
+#define CM_INSERTOBJECT	102
+#define CM_EXIT	101

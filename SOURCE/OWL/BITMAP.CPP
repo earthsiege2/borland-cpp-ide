@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\bitmap.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of GDI Bitmap object class
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\gdiobjec.h>
-#include <owl\metafile.h>
-#include <owl\clipboar.h>
+#include <owl/owlpch.h>
+#include <owl/gdiobjec.h>
+#include <owl/metafile.h>
+#include <owl/clipboar.h>
 
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 DIAG_DECLARE_GROUP(OwlGDIOrphan);  // Orphan control tracing group
@@ -15,27 +16,30 @@ DIAG_DECLARE_GROUP(OwlGDIOrphan);  // Orphan control tracing group
 // Construct an alias TBitmap for an existing bitmap handle
 //
 TBitmap::TBitmap(HBITMAP handle, TAutoDelete autoDelete)
-  : TGdiObject(handle, autoDelete)
+:
+  TGdiObject(handle, autoDelete)
 {
-  #if !defined(NO_GDI_ORPHAN_CONTROL)
-    if (ShouldDelete)
-      OBJ_REF_ADD(Handle, Bitmap);
-  #endif
+#if !defined(NO_GDI_ORPHAN_CONTROL)
+  if (ShouldDelete)
+    OBJ_REF_ADD(Handle, Bitmap);
+#endif
 }
 
 TBitmap::TBitmap()
-  : TGdiObject()
+:
+  TGdiObject()
 {
 }
 
 TBitmap::TBitmap(const TClipboard& clipboard)
-  : TGdiObject(clipboard.GetClipboardData(CF_BITMAP))
+:
+  TGdiObject(clipboard.GetClipboardData(CF_BITMAP))
 {
   OBJ_REF_ADD(Handle, Bitmap);
   OBJ_REF_INC(Handle);
 }
 
-TBitmap::TBitmap(int width, int height, BYTE planes, BYTE bitCount, void far* bits)
+TBitmap::TBitmap(int width, int height, uint8 planes, uint8 bitCount, const void far* bits)
 {
   Handle = ::CreateBitmap(width, height, planes, bitCount, bits);
   WARNX(OwlGDI, !Handle, 0, "Cannot create bitmap (" << width << "x" <<
@@ -49,36 +53,37 @@ TBitmap::TBitmap(const BITMAP far* bitmap)
   PRECONDITION(bitmap);
   Handle = ::CreateBitmapIndirect((LPBITMAP)bitmap);  // API cast
   WARNX(OwlGDI, !Handle, 0, "Cannot create bitmap from BITMAP @" <<
-        hex << DWORD(LPVOID(bitmap)));
+        hex << uint32(LPVOID(bitmap)));
   CheckValid();
   OBJ_REF_ADD(Handle, Bitmap);
 }
 
-TBitmap::TBitmap(const TDC& dc, int width, int height, BOOL discardable)
+TBitmap::TBitmap(const TDC& dc, int width, int height, bool discardable)
 {
   if (discardable) {
     Handle = ::CreateDiscardableBitmap(dc, width, height);
     WARNX(OwlGDI, !Handle, 0, "Cannot create discardable bitmap (" << width <<
-          "x" << height << ") for " << hex << (UINT)(HDC)dc);
-  } else {
+          "x" << height << ") for " << hex << (uint)(HDC)dc);
+  }
+  else {
     Handle = ::CreateCompatibleBitmap(dc, width, height);
     WARNX(OwlGDI, !Handle, 0, "Cannot create compatible bitmap (" << width <<
-          "x" << height << ") for " << hex << (UINT)(HDC)dc);
+          "x" << height << ") for " << hex << (uint)(HDC)dc);
   }
   CheckValid();
   OBJ_REF_ADD(Handle, Bitmap);
 }
 
-TBitmap::TBitmap(const TDC& dc, const TDib& dib, DWORD usage)
+TBitmap::TBitmap(const TDC& dc, const TDib& dib, uint32 usage)
 {
   Handle = ::CreateDIBitmap(dc,
                             (BITMAPINFOHEADER far*)dib.GetInfoHeader(),
-                            usage, (const BYTE FAR*)dib.GetBits(),
+                            usage, (const uint8 FAR*)dib.GetBits(),
                             (BITMAPINFO far*)dib.GetInfo(),
                             dib.Usage());
                             // API casts
   WARNX(OwlGDI, !Handle, 0, "Cannot create bitmap from DIB " << hex <<
-        (UINT)(HANDLE)dib << " for " << (UINT)(HDC)dc);
+        (uint)(HANDLE)dib << " for " << (uint)(HDC)dc);
   CheckValid();
   OBJ_REF_ADD(Handle, Bitmap);
 }
@@ -87,7 +92,7 @@ TBitmap::TBitmap(HINSTANCE instance, TResId resId)
 {
   Handle = ::LoadBitmap(instance, resId);
   WARNX(OwlGDI, !Handle, 0, "Cannot load bitmap " << resId << " from " <<
-        hex << (UINT)instance);
+        hex << (uint)instance);
   CheckValid();
   OBJ_REF_ADD(Handle, Bitmap);
 }
@@ -113,12 +118,13 @@ TBitmap::TBitmap(const TMetaFilePict& metaFile, TPalette& palette, const TSize& 
 
   // Create bitmap, either mono or screen compatible
   //
-  WORD  nColors;
+  uint16  nColors;
   palette.GetObject(nColors);
   if (nColors > 2) {
     TScreenDC dc;
     Handle = ::CreateCompatibleBitmap(dc, size.cx, size.cy);
-  } else
+  }
+  else
     Handle = ::CreateBitmap(size.cx, size.cy, 1, 1, 0);
 
   CheckValid();
@@ -130,7 +136,7 @@ TBitmap::TBitmap(const TMetaFilePict& metaFile, TPalette& palette, const TSize& 
 
   memDC.SelectStockObject(WHITE_BRUSH);
   memDC.PatBlt(0, 0, size.cx, size.cy);
-  memDC.SelectObject(palette, FALSE);
+  memDC.SelectObject(palette, false);
 
   metaFile.PlayOnto(memDC, size);
 }
@@ -166,7 +172,7 @@ TBitmap::Height() const
   return bm.bmHeight;
 }
 
-BYTE
+uint8
 TBitmap::Planes() const
 {
   BITMAP bm;
@@ -174,7 +180,7 @@ TBitmap::Planes() const
   return bm.bmPlanes;
 }
 
-BYTE
+uint8
 TBitmap::BitsPixel() const
 {
   BITMAP bm;
@@ -190,7 +196,7 @@ void
 TBitmap::ToClipboard(TClipboard& clipboard)
 {
   clipboard.SetClipboardData(CF_BITMAP, Handle);
-  ShouldDelete = FALSE;
+  ShouldDelete = false;
   OBJ_REF_REMOVE(Handle);
 }
 
@@ -203,14 +209,14 @@ void
 TBitmap::Create(const TDib& dib, const TPalette& palette)
 {
   TScreenDC  dc;
-  dc.SelectObject(palette, FALSE);
+  dc.SelectObject(palette, false);
   dc.RealizePalette();
 
   Handle = ::CreateDIBitmap(
                dc,
                (LPBITMAPINFOHEADER)dib.GetInfoHeader(),
                CBM_INIT,
-               (const BYTE far*)dib.GetBits(),
+               (const uint8 far*)dib.GetBits(),
                (LPBITMAPINFO)dib.GetInfo(),
                dib.Usage()
             );             // API type casts
@@ -236,8 +242,8 @@ TBitmap::Create(const TBitmap& src)
     // create a color bitmap (Assume screen compatible)
     TScreenDC dc;
     Handle = ::CreateCompatibleBitmap(dc, bm.bmWidth, bm.bmHeight);
-
-  } else
+  }
+  else
     // create a mono bitmap
     Handle = ::CreateBitmap(bm.bmWidth, bm.bmHeight, 1, 1, 0);
 

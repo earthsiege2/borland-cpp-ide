@@ -1,5 +1,6 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\version.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
-#define InternalVersion 0x01634800L
+#define ObjectWindowsInternalVersion 0x02500700L

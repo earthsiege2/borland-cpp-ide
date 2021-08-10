@@ -6,9 +6,9 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1992, 1993 by Borland International
+ *      Copyright (c) 1992, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -16,8 +16,6 @@
 #ifndef __cplusplus
 #error Must use C++ for CHECKS.H
 #endif
-
-#pragma warn -nak   /* Ignore non-ansi keywords */
 
 #if !defined( __CHECKS_H )
 #define __CHECKS_H
@@ -30,13 +28,30 @@
 #include <cstring.h>
 #endif   // __CSTRING_H
 
+#if !defined(__EXCEPT_H)
+#include <except.h>
+#endif   // __EXCEPT_H
+
 #include <systypes.h>
 #include <strstrea.h>
 
-#pragma option -Vo-
-#if defined( __BCOPT__ ) && !defined( _RTL_ALLOW_po) && !defined(__FLAT__ )
-#pragma option -po-
+
+#if !defined(RC_INVOKED)
+
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po-     // disable Object data calling convention
 #endif
+#endif
+
+#pragma option -Vo-
+
+#if defined(__STDC__)
+#pragma warn -nak
+#endif
+
+#endif  /* !RC_INVOKED */
+
 
 //
 // TDiagBase - this class forms the base for TDiagGroup classes and
@@ -63,10 +78,6 @@ private:
                          const char *fname, uint32 line );
     static void _RTLENTRY Output( const char *msg );
 };
-
-#if !defined(__EXCEPT_H)
-#include <except.h>
-#endif
 
 
 class _EXPCLASS xerror : public xmsg
@@ -104,12 +115,26 @@ public:
               }
 };
 
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po) && !defined(__FLAT__ )
-#pragma option -po.
+
+#if !defined(RC_INVOKED)
+
+#if defined(__STDC__)
+#pragma warn .nak
 #endif
+
 #pragma option -Vo.
 
+#if defined(__BCOPT__)
+#if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
+#pragma option -po.     // restore Object data calling convention
+#endif
+#endif
+
+#endif  /* !RC_INVOKED */
+
+
 #endif  // __CHECKS_H
+
 
 #if !defined( __DEBUG )
 #define __DEBUG 0
@@ -141,8 +166,12 @@ public:
 
 #if defined(__TRACE) || defined(__WARN)
 
-#if defined( __DLL__ ) || defined( _BUILDRTLDLL ) 
+#if defined( __RTLDLL ) || defined( _BUILDRTLDLL )
+#if defined(__OS2__)    
+#define DIAG_IMPORT
+#else    
 #define DIAG_IMPORT __import
+#endif    
 #define DIAG_EXPORT __export
 #else
 #define DIAG_IMPORT
@@ -200,7 +229,7 @@ TDiagBase::Flags TDiagGroup##g::Flags = { (e), (l) }
 
 #if !defined(_BUILD_CHECKS) && !defined( _DEF_DECLARED )
 #define _DEF_DECLARED
-DIAG_DECLARE_GROUP(Def);
+DECLARE_DIAG_GROUP(Def, _EXPCLASS);
 #endif
 
 #else   // !defined(__TRACE) && !defined(__WARN)
@@ -242,9 +271,3 @@ DIAG_DECLARE_GROUP(Def);
     #define WARNX(g,c,l,m)              ((void)0)
 #endif
 
-
-#pragma warn .nak   /* Ignore non-ansi keywords */
-
-
-
-

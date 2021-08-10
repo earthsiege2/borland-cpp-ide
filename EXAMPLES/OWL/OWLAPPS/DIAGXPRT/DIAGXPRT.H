@@ -15,6 +15,10 @@
 #include <owl\menu.h>
 #include <owl\statusba.h>
 
+#if !defined(BI_PLAT_WIN16)
+#error  This sample requires TOOLHELP and must be built for the WIN16 env.
+#endif
+
 #include <toolhelp.h>
 #include <iostream.h>
 #include <cstring.h>

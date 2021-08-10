@@ -3,14 +3,13 @@
 //  Windows VBX Example - C/C++ Version
 //
 #include <windows.h>
+#include <windowsx.h>
 #pragma hdrstop
 #include <bivbx.h>
 #include "vbdialog.h"
 
 // some useful macros for working with VBX controls
 #define VBXGetDlgItem(w,i)          VBXGetHctl(GetDlgItem(w,i))
-#define VBXSetPropByName(c,n,v)     VBXSetProp(c,VBXGetPropIndex(c,n),v)
-#define VBXGetPropByName(c,n,v)     VBXGetProp(c,VBXGetPropIndex(c,n),v)
 
 
 static HINSTANCE hInst;
@@ -22,13 +21,13 @@ void SamplesEvent( VBXEVENT FAR * lpEvent )
   {
     case IDC_BIPICT3:
       if( ! lstrcmpi( lpEvent->EventName, "DragDrop" ) )
-        if( VBXGetPropByName(VBX_EVENTARGNUM(lpEvent,HCTL,0),"Picture",&val) )
-          VBXSetPropByName( lpEvent->Control, "Picture", val );
+	if( VBXGetPropByName(VBX_EVENTARGNUM(lpEvent,HCTL,0),"Picture",&val) )
+	  VBXSetPropByName( lpEvent->Control, "Picture", val );
       break;
     case IDC_BIPICT1:
     case IDC_BIPICT2:
       if( ! lstrcmpi( lpEvent->EventName, "DragDrop" ) )
-        MessageBeep(0);
+	MessageBeep(0);
       break;
   }
 }
@@ -46,7 +45,7 @@ void SamplesTimer( HWND hWnd, int iSwitch, int iGauge )
       VBXSetPropByName( hCtlGauge, "Value", (LONG) ( val + 5 ) % 100 );
 }
 
-LONG FAR PASCAL	SamplesDialog
+LONG FAR PASCAL SamplesDialog
 (
 HWND hWnd,
 WORD wMsg,
@@ -59,13 +58,13 @@ LONG lParam
   {
     // process command from one of the child controls
     case WM_COMMAND:
-      switch( wParam )
+      switch( GET_WM_COMMAND_ID(wParam,lParam) )
       {
-        // ok or cancel, so end the dialog
-        case IDOK:
-        case IDCANCEL:
-          EndDialog( hWnd, 0 );
-          break;
+	// ok or cancel, so end the dialog
+	case IDOK:
+	case IDCANCEL:
+	  EndDialog( hWnd, 0 );
+	  break;
       }
       break;
 
@@ -123,4 +122,3 @@ int       nCmdShow
   return 0;
 }
 
-

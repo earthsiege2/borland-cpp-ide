@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  CLASMAIN.CPP                                                          */
 /*                                                                        */
-/*  Copyright Borland International 1991, 1993                            */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*  Provides the LibMain() function for the DLL version                   */
@@ -12,7 +12,7 @@
 
 #if !defined( __WINDOWS_H )
 #include <windows.h>
-#endif	// __WINDOWS_H
+#endif
 
 #if defined(__WIN32__)
 
@@ -28,4 +28,4 @@ extern "C" int FAR PASCAL LibMain( HANDLE, WORD, WORD, LPSTR )
     return 1;
 }
 
-#endif  // __WIN32__
+#endif

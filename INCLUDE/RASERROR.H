@@ -1,11 +1,19 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
+/*
 ** raserror.h
 ** Remote Access external API
 ** RAS specific error codes
 */
 
-#ifndef __RASERROR_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef _RASERROR_H_
+#define _RASERROR_H_
 #define __RASERROR_H
 
 
@@ -23,7 +31,7 @@
 #define ERROR_EVENT_INVALID                  (RASBASE+7)
 #define ERROR_DEVICE_DOES_NOT_EXIST          (RASBASE+8)
 #define ERROR_DEVICETYPE_DOES_NOT_EXIST      (RASBASE+9)
-#define ERROR_INVALID_BUFFER                 (RASBASE+10)
+#define ERROR_BUFFER_INVALID                 (RASBASE+10)
 #define ERROR_ROUTE_NOT_AVAILABLE            (RASBASE+11)
 #define ERROR_ROUTE_NOT_ALLOCATED            (RASBASE+12)
 #define ERROR_INVALID_COMPRESSION_SPECIFIED  (RASBASE+13)
@@ -124,13 +132,42 @@
 #define ERROR_ACCT_EXPIRED                   (RASBASE+108)
 #define ERROR_CHANGING_PASSWORD              (RASBASE+109)
 #define ERROR_OVERRUN                        (RASBASE+110)
-#define ERROR_RASMAN_CANNOT_INITIALIZE      (RASBASE+111)
+#define ERROR_RASMAN_CANNOT_INITIALIZE       (RASBASE+111)
 #define ERROR_BIPLEX_PORT_NOT_AVAILABLE      (RASBASE+112)
 #define ERROR_NO_ACTIVE_ISDN_LINES           (RASBASE+113)
 #define ERROR_NO_ISDN_CHANNELS_AVAILABLE     (RASBASE+114)
 #define ERROR_TOO_MANY_LINE_ERRORS           (RASBASE+115)
+#define ERROR_IP_CONFIGURATION               (RASBASE+116)
+#define ERROR_NO_IP_ADDRESSES                (RASBASE+117)
+#define ERROR_PPP_TIMEOUT                    (RASBASE+118)
+#define ERROR_PPP_REMOTE_TERMINATED          (RASBASE+119)
+#define ERROR_PPP_NO_PROTOCOLS_CONFIGURED    (RASBASE+120)
+#define ERROR_PPP_NO_RESPONSE                (RASBASE+121)
+#define ERROR_PPP_INVALID_PACKET             (RASBASE+122)
+#define ERROR_PHONE_NUMBER_TOO_LONG          (RASBASE+123)
+#define ERROR_IPXCP_NO_DIALOUT_CONFIGURED    (RASBASE+124)
+#define ERROR_IPXCP_NO_DIALIN_CONFIGURED     (RASBASE+125)
+#define ERROR_IPXCP_DIALOUT_ALREADY_ACTIVE   (RASBASE+126)
+#define ERROR_ACCESSING_TCPCFGDLL            (RASBASE+127)
+#define ERROR_NO_IP_RAS_ADAPTER              (RASBASE+128)
+#define ERROR_SLIP_REQUIRES_IP               (RASBASE+129)
+#define ERROR_PROJECTION_NOT_COMPLETE        (RASBASE+130)
+#define ERROR_PROTOCOL_NOT_CONFIGURED        (RASBASE+131)
+#define ERROR_PPP_NOT_CONVERGING             (RASBASE+132)
+#define ERROR_PPP_CP_REJECTED                (RASBASE+133)
+#define ERROR_PPP_LCP_TERMINATED             (RASBASE+134)
+#define ERROR_PPP_REQUIRED_ADDRESS_REJECTED  (RASBASE+135)
+#define ERROR_PPP_NCP_TERMINATED             (RASBASE+136)
+#define ERROR_PPP_LOOPBACK_DETECTED          (RASBASE+137)
+#define ERROR_PPP_NO_ADDRESS_ASSIGNED        (RASBASE+138)
+#define ERROR_CANNOT_USE_LOGON_CREDENTIALS   (RASBASE+139)
+#define ERROR_TAPI_CONFIGURATION             (RASBASE+140)
+#define ERROR_NO_LOCAL_ENCRYPTION            (RASBASE+141)
+#define ERROR_NO_REMOTE_ENCRYPTION           (RASBASE+142)
+#define ERROR_REMOTE_REQUIRES_ENCRYPTION     (RASBASE+143)
+#define ERROR_IPXCP_NET_NUMBER_CONFLICT      (RASBASE+144)
 
-#define RASBASEEND              (RASBASE+115)
+#define RASBASEEND                           (RASBASE+144)
 
 
 #endif // _RASERROR_H_

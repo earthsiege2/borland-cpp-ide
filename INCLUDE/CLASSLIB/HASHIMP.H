@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  HASHIMP.H                                                             */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*  Note: Hash tables can determine the hash value of an object by        */
@@ -21,24 +21,24 @@
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_HASHIMP_H )
-#define __CLASSLIB_HASHIMP_H
+#if !defined( CLASSLIB_HASHIMP_H )
+#define CLASSLIB_HASHIMP_H
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_LISTIMP_H )
-#include "classlib\listimp.h"
-#endif  // __CLASSLIB_LISTIMP_H
+#if !defined( CLASSLIB_LISTIMP_H )
+#include <classlib/listimp.h>
+#endif
 
-#if !defined( __CLASSLIB_VECTIMP_H )
-#include "classlib\vectimp.h"
-#endif  // __CLASSLIB_VECTIMP_H
+#if !defined( CLASSLIB_VECTIMP_H )
+#include <classlib/vectimp.h>
+#endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
@@ -67,7 +67,7 @@ inline unsigned HashValue( const TVoidPointer& t )
     return unsigned(STATIC_CAST(void *,t));
 }
 
-template <class T> inline unsigned HashValue( const T& t )
+template <class T> unsigned HashValue( const T& t )
 {
     return t.HashValue();
 }
@@ -173,7 +173,7 @@ public:
         return t;
         }
         
-    T operator ++ ()
+    const T& operator ++ ()
         {
         PRECONDITION( ListIter != 0 );
         Scan();
@@ -589,5 +589,5 @@ public:
 
 #pragma option -Vo.
 
-#endif  // __CLASSLIB_HASHIMP_H
+#endif  // CLASSLIB_HASHIMP_H
 

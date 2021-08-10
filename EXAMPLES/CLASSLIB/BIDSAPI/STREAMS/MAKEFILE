@@ -1,0 +1,28 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for Persistent Stream examples                                #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = stream0
+EXEALL = stream0.exe stream1.exe stream2.exe stream3.exe
+
+EXEMAKE= $(STREAM0) $(STREAM1) $(STREAM2) $(STREAM3)
+
+STREAM0=$(EXERULE:stream0.obj=stream0.obj strmpnt.obj)
+STREAM1=$(STREAM0:stream0=stream1)
+STREAM2=$(STREAM0:stream0=stream2)
+STREAM3=$(STREAM0:stream0=stream3)
+
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

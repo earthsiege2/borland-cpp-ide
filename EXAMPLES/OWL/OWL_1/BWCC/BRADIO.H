@@ -14,7 +14,7 @@
 //  class TBRadioButton
 //  ----- -------------
 //
-class _EXPCLASS TBRadioButton : public TRadioButton {
+class  TBRadioButton : public TRadioButton {
   public:
     TBRadioButton(TWindow*        parent,
                   int             id,
@@ -31,7 +31,7 @@ class _EXPCLASS TBRadioButton : public TRadioButton {
   protected:
     char far* GetClassName();
 
-  DECLARE_STREAMABLE_FROM_BASE(_EXPCLASS, TBRadioButton, TRadioButton);
+  DECLARE_STREAMABLE_FROM_BASE(, TBRadioButton, TRadioButton);
 };
 
 #endif //__BRADIO_H

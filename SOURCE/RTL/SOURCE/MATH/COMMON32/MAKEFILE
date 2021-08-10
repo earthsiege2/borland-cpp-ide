@@ -1,0 +1,144 @@
+#############################################################################
+#
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+OBJS =               \
+        acosasin.obj \
+        acossinl.obj \
+        atan.obj     \
+        atan2.obj    \
+        atan2l.obj   \
+        atanl.obj    \
+        ceil.obj     \
+        ceill.obj    \
+        clear87.obj  \
+        cos.obj      \
+        cosh.obj     \
+        coshl.obj    \
+        cosl.obj     \
+        crotl.obj    \
+        crotr.obj    \
+        ctrl87.obj   \
+        cvtentry.obj \
+        div.obj      \
+        exp.obj      \
+        expl.obj     \
+        expld.obj    \
+        f87atan.obj  \
+        f87exp.obj   \
+        f87log.obj   \
+        f87sine.obj  \
+        fabs.obj     \
+        fabsl.obj    \
+        fbstp.obj    \
+        fildq.obj    \
+        fistq.obj    \
+        floor.obj    \
+        floorl.obj   \
+        fmod.obj     \
+        fmodl.obj    \
+        fpreset.obj  \
+        frexp.obj    \
+        frexpl.obj   \
+        ftol.obj     \
+        fuildq.obj   \
+        fuistq.obj   \
+        fxam.obj     \
+        hypot.obj    \
+        hypotl.obj   \
+        ldexp.obj    \
+        ldexpl.obj   \
+        log.obj      \
+        log10.obj    \
+        log10l.obj   \
+        logl.obj     \
+        lrotl.obj    \
+        lrotr.obj    \
+        modf.obj     \
+        modfl.obj    \
+        poly.obj     \
+        polyl.obj    \
+        pow.obj      \
+        powl.obj     \
+        qdiv10.obj   \
+        qmul10.obj   \
+        rotl.obj     \
+        rotr.obj     \
+        round.obj    \
+        sin.obj      \
+        sinh.obj     \
+        sinhl.obj    \
+        sinl.obj     \
+        sqrt.obj     \
+        sqrtl.obj    \
+        stat87.obj   \
+        tan.obj      \
+        tanh.obj     \
+        tanhl.obj    \
+        tanl.obj     \
+        8087.obj     \
+        abs.obj      \
+        atof.obj     \
+        atol.obj     \
+        atold.obj    \
+        bcd1.obj     \
+        cvtfak.obj   \
+        deflt87.obj  \
+        efcvt.obj    \
+        gcvt.obj     \
+        hugeval.obj  \
+        initcvt.obj  \
+        labs.obj     \
+        ldtrunc.obj  \
+        longtoa.obj  \
+        ltoa1.obj    \
+        matherr.obj  \
+        matherrl.obj \
+        mathptr.obj  \
+        mathwhy.obj  \
+        pow10d.obj   \
+        pow10l.obj   \
+        rand.obj     \
+        realcvt.obj  \
+        scantod.obj  \
+        strtod.obj   \
+        strtol.obj   \
+        strtoul.obj  \
+        xcvt.obj     \
+        _matherl.obj \
+        _matherr.obj \
+        _pow10.obj   \
+        bcd2.obj     \
+        cplx1.obj    \
+        cplx2.obj
+
+!if $d(DLL)
+IMPOBJS =            \
+        matherr.obj  \
+        matherrl.obj
+!endif
+
+#############################################################################
+# Configure the environment appropriately.                                  #
+#############################################################################
+TASMCFG = 1        # Force tasm.cfg creation
+
+!include rules.mak
+

@@ -1,30 +1,31 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\choosefo.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of Choose Font Common Dialog class
 //----------------------------------------------------------------------------
-#if !defined(__OWL_CHOOSEFO_H)
-#define __OWL_CHOOSEFO_H
+#if !defined(OWL_CHOOSEFO_H)
+#define OWL_CHOOSEFO_H
 
-#if !defined(__COMMDIAL_H)
-  #include <owl\commdial.h>
+#if !defined(OWL_COMMDIAL_H)
+# include <owl/commdial.h>
 #endif
-#if !defined(__COLOR_H)
-  #include <owl\color.h>
+#if !defined(OWL_COLOR_H)
+# include <owl/color.h>
 #endif
 
 class _OWLCLASS TChooseFontDialog : public TCommonDialog {
   public:
     class _OWLCLASS TData {
       public:
-        DWORD        Flags;
-        DWORD        Error;
+        uint32       Flags;
+        uint32       Error;
         HDC          DC;
         LOGFONT      LogFont;
         int          PointSize;
         TColor       Color;
         char far*    Style;
-        WORD         FontType;
+        uint16       FontType;
         int          SizeMin;
         int          SizeMax;                      
     };
@@ -40,7 +41,7 @@ class _OWLCLASS TChooseFontDialog : public TCommonDialog {
     TData&       Data;
 
     int     DoExecute();
-    BOOL    DialogFunction(UINT message, WPARAM, LPARAM);
+    bool    DialogFunction(uint message, WPARAM, LPARAM);
 
     // Default behavior inline for message response functions
     //
@@ -54,4 +55,4 @@ class _OWLCLASS TChooseFontDialog : public TCommonDialog {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_CHOOSEFO_H
+#endif  // OWL_CHOOSEFO_H

@@ -1,32 +1,41 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//  include\owl\docview.h
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //  Defines classes TDocument, TView,TWindowView, TStream,TInStream,TOutStream
 //----------------------------------------------------------------------------
-#if !defined(__OWL_DOCVIEW_H)
-#define __OWL_DOCVIEW_H
+#if !defined(OWL_DOCVIEW_H)
+#define OWL_DOCVIEW_H
 
-#if !defined(__OWL_APPLICAT_H)
-  #include <owl\applicat.h>
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
 #endif
-#if !defined(__OWL_FRAMEWIN_H)
-  #include <owl\framewin.h>
+#if !defined(OWL_FRAMEWIN_H)
+# include <owl/framewin.h>
 #endif
 #if !defined(__COMMDLG_H)
-  #include <commdlg.h>
+# include <commdlg.h>
 #endif
-#include <string.h>
-#include <alloc.h>
-#if !defined(__WIN32__)
-  #if !defined( _OLE2_H_ )
-    struct FAR FILETIME {DWORD dwLowDateTime; DWORD dwHighDateTime;};
-  #endif
-  #include <io.h>
-void DateTimeToFileTime(struct date* dosd, struct time* dost, FILETIME FAR* pft);
-BOOL FileTimeToDateTime(FILETIME FAR* pft, struct date* dosd, struct time* dost);
-int  FormatDateTime(struct date, struct time, void far* dest, int textlen);
+class _OWLCLASS TDocManager;
+class _OWLCLASS TDocTemplate;
+class _OWLCLASS TMenuDescr;
+
+//
+// Some types & functions available in Win32/Ole2 that are emulated under Win16
+// NOTE: This must always be in synch with Win32/Ole2 headers 
+//
+#if defined(BI_PLAT_WIN16)
+# if !defined(_FILETIME_)
+    struct far tagFILETIME {uint32 dwLowDateTime; uint32 dwHighDateTime;};
+    typedef tagFILETIME FILETIME;
+#   define _FILETIME_
+# endif
+# include <io.h>
+  void DateTimeToFileTime(struct date* dosd, struct time* dost, FILETIME far* pft);
+  bool FileTimeToDateTime(FILETIME far* pft, struct date* dosd, struct time* dost);
+  int  FormatDateTime(struct date, struct time, void far* dest, int textlen);
 #endif
-int  FormatFileTime(FILETIME* pft, void far* dest, int textlen);
+int _OWLFUNC FormatFileTime(FILETIME* pft, void far* dest, int textlen);
 
 //
 // document open and sharing modes - used in storage and stream constructors
@@ -51,32 +60,32 @@ enum {
   ofTemporary = 0x8000, // STGM_DELETEONRELEASE, delete when destructed
  
   shCompat    = 0x0600, // for non-compliant applications, avoid if possible
-  shNone      = 0x0800, // DENY_ALL functionality
+  shNone      = 0x0800, // EXCLUSIVE functionality
   shRead      = 0x0A00, // DENY_WRITE functionality
   shWrite     = 0x0C00, // DENY_READ functionality
   shReadWrite = 0x0E00, // DENY_NONE functionality
   shDefault   = 0,      // use stream implementation default value
   shMask      = (shCompat|shNone|shRead|shWrite)
 };
-#define PREV_OPEN (ofNoCreate|ofNoReplace)
+#define PREV_OPEN           (ofNoCreate|ofNoReplace)
 #define IS_PREV_OPEN(omode) ((omode & PREV_OPEN)==PREV_OPEN)
 
 //
-// definitions of vnXxxx view notification event IDs
+// Definitions of vnXxxx view notification event IDs
 // event ID's up to vnCustomBase reserved for general doc-view notifications
 //
-const int vnViewOpened = 1;   // a new view has just been constructed
-const int vnViewClosed = 2;   // another view is about to be destructed
-const int vnDocOpened  = 3;   // document has just been opened
-const int vnDocClosed  = 4;   // document has just been closed
-const int vnCommit     = 5;   // document is committing, flush cached changes
-const int vnRevert     = 6;   // document has reverted, reload data from doc
-const int vnIsDirty    = 7;   // respond TRUE if uncommitted changes present
-const int vnIsWindow   = 8;   // respond TRUE if passed HWND is that of view
-const int vnCustomBase = 100; // base of document class specific notifications
+const int vnViewOpened  = 1;   // a new view has just been constructed
+const int vnViewClosed  = 2;   // another view is about to be destructed
+const int vnDocOpened   = 3;   // document has just been opened
+const int vnDocClosed   = 4;   // document has just been closed
+const int vnCommit      = 5;   // document is committing, flush cached changes
+const int vnRevert      = 6;   // document has reverted, reload data from doc
+const int vnIsDirty     = 7;   // respond true if uncommitted changes present
+const int vnIsWindow    = 8;   // respond true if passed HWND is that of view
+const int vnCustomBase = 100;  // base of document class specific notifications
 
 //
-// document and view property access flags
+// Document and view property access flags
 //
 const int pfGetText   =  1;   // property accessible as text format
 const int pfGetBinary =  2;   // property accessible as native non-text format
@@ -86,14 +95,14 @@ const int pfUnknown   = 16;   // property defined but unavailable in object
 const int pfHidden    = 32;   // property should be hidden from normal browse
 const int pfUserDef   =128;   // property has been user-defined at run time
 
-class _OWLCLASS TDocManager;
-class _OWLCLASS TDocTemplate;
+//
+// Classes defined later in this file
+//
 class _OWLCLASS_RTL TStream;
 class _OWLCLASS_RTL TInStream;
 class _OWLCLASS_RTL TOutStream;
 class _OWLCLASS TDocument;
 class _OWLCLASS TView;
-class _OWLCLASS TMenuDescr;
 
 //
 //  class TDocument - abstract base class for document/view management
@@ -101,7 +110,7 @@ class _OWLCLASS TMenuDescr;
 //
 class _OWLCLASS TDocument : public TStreamableBase {
   public:
-    enum {
+    enum TDocProp {
       PrevProperty = 0,
       DocumentClass,     // text
       TemplateName,      // text
@@ -115,58 +124,64 @@ class _OWLCLASS TDocument : public TStreamableBase {
       public:
         List() : DocList(0) {}
        ~List() {Destroy();}
-        BOOL Insert(TDocument* doc);  // insert new document, fails if there
-        BOOL Remove(TDocument* doc);  // remove document, fails if not there
+        bool Insert(TDocument* doc);  // insert new document, fails if there
+        bool Remove(TDocument* doc);  // remove document, fails if not there
         TDocument* Next(const TDocument* doc); // returns first if doc=0
         void Destroy();               // deletes all documents
       private:
         TDocument* DocList;
     };
 
-    LPVOID        Tag;          // application hook, not used internally
+    void far*     Tag;          // application hook, not used internally
     List          ChildDoc;     // linked child document chain
 
     TDocument(TDocument* parent = 0);
     virtual ~TDocument();
-    virtual TInStream*  InStream  (int mode, LPCSTR strmId=0) {return 0;}
-    virtual TOutStream* OutStream (int mode, LPCSTR strmId=0) {return 0;}
-    virtual BOOL   Open(int mode, LPCSTR path=0) {return TRUE;}
-    virtual BOOL   Close();      // close document, does not delete or detach
-    virtual BOOL   Commit(BOOL force=FALSE); // save current data, force write
-    virtual BOOL   Revert(BOOL clear=FALSE); // abort changes, no reload if TRUE
+    virtual TInStream*  InStream(int mode, const char far* strmId=0) {return 0;}
+    virtual TOutStream* OutStream(int mode, const char far* strmId=0) {return 0;}
+    virtual bool   Open(int mode, const char far* path=0) {return true;}
+    virtual bool   Close();      // close document, does not delete or detach
+    virtual bool   Commit(bool force=false); // save current data, force write
+    virtual bool   Revert(bool clear=false); // abort changes, no reload if true
     virtual TDocument& RootDocument();
     TDocManager&   GetDocManager() {return *DocManager;}
     void           SetDocManager(TDocManager& dm);
     TDocument*     GetParentDoc() {return ParentDoc;}
 
     TDocTemplate*  GetTemplate() {return Template;}
-    BOOL           SetTemplate(TDocTemplate* tpl);
-    virtual BOOL   SetDocPath(LPCSTR path);
-    LPCSTR         GetDocPath() {return DocPath;}
-    virtual void   SetTitle(LPCSTR title);
-    LPCSTR         GetTitle() {return Title;}
-    virtual BOOL   IsDirty();           // also queries doc and view hierarchy
-    void           SetDirty(BOOL dirty = TRUE){DirtyFlag = dirty;}
-    virtual BOOL   IsOpen()                   {return StreamList != 0;}
-    virtual BOOL   CanClose();           // returns FALSE if unable to close
-    BOOL           HasFocus(HWND hwnd);
-    BOOL           NotifyViews(int event, long item=0, TView* exclude=0);
+    bool           SetTemplate(TDocTemplate* tpl);
+    virtual bool   SetDocPath(const char far* path);
+    const char far* GetDocPath() {return DocPath;}
+    virtual void   SetTitle(const char far* title);
+    const char far* GetTitle() {return Title;}
+    virtual bool   IsDirty();           // also queries doc and view hierarchy
+    void           SetDirty(bool dirty = true){DirtyFlag = dirty;}
+    virtual bool   IsOpen()                   {return StreamList != 0;}
+    virtual bool   CanClose();           // returns false if unable to close
+    virtual bool   HasFocus(HWND hwnd);
+    bool           NotifyViews(int event, long item=0, TView* exclude=0);
     TView*         QueryViews(int event, long item=0, TView* exclude=0);
-    virtual UINT   PostError(UINT sid, UINT choice = MB_OK);
+    virtual uint   PostError(uint sid, uint choice = MB_OK);
 
     virtual int    PropertyCount() {return NextProperty-1;}
     virtual int    FindProperty(const char far* name);// return property index
     virtual int    PropertyFlags(int index);          // pfXxxxx bit array
     virtual const char*  PropertyName(int index);     // locale invariant name
     virtual int    GetProperty(int index, void far* dest, int textlen=0);
-    virtual BOOL   SetProperty(int index, const void far* src); // native type
+    virtual bool   SetProperty(int index, const void far* src); // native type
     TStream*       NextStream(const TStream* strm);
     TView*         NextView(const TView* view);
     int            GetOpenMode();
     void           SetOpenMode(int mode);
+    TView*         InitView(TView* view);    // called from template InitView
+    bool           IsEmbedded() {return Embedded;}
+    void           SetEmbedded(bool embed) {Embedded = embed;}
+    virtual bool   InitDoc() {return true;}
 
   protected:
-    BOOL          DirtyFlag;    // document changed, might not represent views
+    bool          DirtyFlag;    // document changed, might not represent views
+    bool          Embedded;     // document is an embedding
+    static int    UntitledIndex;// last used index for Untitled document
     virtual void  AttachStream(TStream& strm);// called from TStream constructor
     virtual void  DetachStream(TStream& strm);// called from TStream destructor
 
@@ -176,17 +191,19 @@ class _OWLCLASS TDocument : public TStreamableBase {
     TView*        ViewList;     // head of linked view chain, 0 if no views
     TStream*      StreamList;   // head of linked stream chain, 0 if no streams
     int           OpenMode;     // mode and protection flags
-    LPSTR         DocPath;      // path used to open/save document
-    LPSTR         Title;        // current document title, 0 if untitled
+    char far*     DocPath;      // path used to open/save document
+    char far*     Title;        // current document title, 0 if untitled
     TDocument*    ParentDoc;    // parent document, 0 if this is root document
     TDocTemplate* Template;     // template associated with this document
 
     void   ReindexFrames();          // force view title and index update
     void   AttachView(TView& view);  // called from TView constructor
-    BOOL   DetachView(TView& view);  // called from TView destructor
-    TView* InitView(TView* view);    // called from template InitView
+    bool   DetachView(TView& view);  // called from TView destructor
+    TDocument(TDocManager* docMan) : // create a dummy document
+      ParentDoc(this), DocManager(docMan){}
 
-  DECLARE_ABSTRACT_STREAMABLE (_OWLCLASS,TDocument,1);
+
+  DECLARE_ABSTRACT_STREAMABLE(_OWLCLASS,TDocument,1);
   friend class _OWLCLASS TDocTemplate;  // access to InitView()
   friend class _OWLCLASS TView;         // access to AttachView(), DetatchView()
   friend class _OWLCLASS_RTL TStream;   // access to AttachStream(), DetachStream()
@@ -210,7 +227,7 @@ class _OWLCLASS_RTL TStream {
     TDocument& Doc;        // document owning this stream
     TStream* NextStream;   // next stream in linked list of active streams
 
-    TStream(TDocument& doc,     LPCSTR name,       int mode)
+    TStream(TDocument& doc, const char far* name, int mode)
                  : Doc(doc), StreamName(name), OpenMode(mode)
               {Doc.AttachStream(*this);}
 
@@ -227,8 +244,8 @@ class _OWLCLASS_RTL TStream {
 //
 class _OWLCLASS_RTL TInStream : public TStream, public istream {
   public:
-    TInStream(TDocument& doc, LPCSTR name, int mode)
-               : TStream(doc,        name,     mode), istream() {}
+    TInStream(TDocument& doc, const char far* name, int mode)
+               : TStream(doc, name, mode), istream() {}
 };
 
 //
@@ -237,8 +254,8 @@ class _OWLCLASS_RTL TInStream : public TStream, public istream {
 //
 class _OWLCLASS_RTL TOutStream : public TStream, public ostream {
   public:
-    TOutStream(TDocument& doc, LPCSTR name, int mode)
-                : TStream(doc,        name,     mode), ostream() {}
+    TOutStream(TDocument& doc, const char far* name, int mode)
+                : TStream(doc, name, mode), ostream() {}
 };
 
 //
@@ -254,41 +271,42 @@ class _OWLCLASS TView : virtual public TEventHandler,
       ViewName,                   // text
       NextProperty,
     };
-    LPVOID          Tag;        // application hook, not used internally
+    void far*     Tag;        // application hook, not used internally
 
     TView(TDocument& doc);
     virtual ~TView();
     TDocument&  GetDocument() {return *Doc;}
     unsigned    GetViewId()   {return ViewId;}
-    TMenuDescr* GetViewMenu() {return ViewMenu;} 
+    virtual TMenuDescr* GetViewMenu() {return ViewMenu;} 
     void        SetViewMenu(TMenuDescr* menu);
-    BOOL        IsOK() {return ViewId != 0;}  // TRUE if successfully created
+    bool        IsOK() {return ViewId != 0;}  // true if successfully created
     static unsigned GetNextViewId() {return NextViewId;} // next ID to assign
 
     // must implement, used by template manager for selection
-    // static LPCSTR StaticName() {return "name of view";}
-    virtual LPCSTR GetViewName()=0;         // return static name of view
+    // static const char far* StaticName() {return "name of view";}
+    virtual const char far* GetViewName()=0;         // return static name of view
 
     virtual TWindow* GetWindow() {return 0;} // if not derived from TWindow
-    virtual BOOL   SetDocTitle(LPCSTR docname, int index) {return FALSE;}
+    virtual bool   SetDocTitle(const char far* docname, int index) {return false;}
 
     virtual int    PropertyCount() {return NextProperty - 1;}
     virtual int    FindProperty(const char far* name);// return property index
     virtual int    PropertyFlags(int index);          // pfXxxxx bit array
     virtual const char*  PropertyName(int index);     // locale invariant name
     virtual int    GetProperty(int index, void far* dest, int textlen=0);
-    virtual BOOL   SetProperty(int index, const void far* src) {return FALSE;}
+    virtual bool   SetProperty(int index, const void far* src) {return false;}
 
   protected:
     TDocument*   Doc;
     void         NotOK() {ViewId = 0;}  // to flag errors in creation
+
   private:
-    TView*       NextView;   // linked view chain, 0 if no more views
-    unsigned     ViewId;     // unique ID for this view, used for controls
-    TMenuDescr*  ViewMenu;   // menu descriptor specific for this view or 0
+    TView*       NextView;      // linked view chain, 0 if no more views
+    unsigned     ViewId;        // unique ID for this view, used for controls
+    TMenuDescr*  ViewMenu;      // menu descriptor specific for this view or 0
     static unsigned NextViewId; // next view ID to be assigned
 
-  DECLARE_ABSTRACT_STREAMABLE (_OWLCLASS,TView,1);
+  DECLARE_ABSTRACT_STREAMABLE(_OWLCLASS,TView,1);
   friend class _OWLCLASS TDocument;   // needs access to NextView
   friend class TDocument::Streamer;   // needs access to NextView
 };
@@ -299,94 +317,86 @@ class _OWLCLASS TView : virtual public TEventHandler,
 //
 class _OWLCLASS TWindowView : public TWindow, public TView {
   public:
-    TWindowView(TDocument& doc, TWindow* parent = 0)
-      : TView(doc), TWindow(parent) {}
+    TWindowView(TDocument& doc, TWindow* parent = 0);
    ~TWindowView() {}
-    static LPCSTR StaticName() {return "Window View";}  // put in resource
-    //
+    static const char far* StaticName() {return "Window View";}  // put in resource
+
     // inherited virtuals from TWindow
     //
-    BOOL     CanClose()  {return TWindow::CanClose() && Doc->CanClose();}
-    //
+    bool     CanClose()  {return TWindow::CanClose() && Doc->CanClose();}
+
     // inherited virtuals from TView
     //
-    LPCSTR   GetViewName() {return StaticName();}
+    const char far* GetViewName() {return StaticName();}
     TWindow* GetWindow() {return (TWindow*)this;}
-    BOOL     SetDocTitle(LPCSTR docname, int index)
+    bool     SetDocTitle(const char far* docname, int index)
              { return TWindow::SetDocTitle(docname, index); }
   private:
-    //
     // event handlers
     //
-    BOOL     VnIsWindow(HWND hWnd) {return HWindow == hWnd;}
+    bool     VnIsWindow(HWND hWnd);
 
   DECLARE_RESPONSE_TABLE(TWindowView);
   DECLARE_STREAMABLE (_OWLCLASS, TWindowView,1);
 };
 
-//
+//----------------------------------------------------------------------------
 // View Notification Handler Definitions
 //
 
-// Dispatchers passing data in LPARAM and returning BOOL
-
-LRESULT _OWLFUNC
-B_long_Dispatch(GENERIC& generic, int (GENERIC::*pmf)(long), WPARAM, LPARAM);
-LRESULT _OWLFUNC
-B_int_Dispatch(GENERIC& generic, int (GENERIC::*pmf)(int), WPARAM, LPARAM);
-LRESULT _OWLFUNC
-B_void_Dispatch(GENERIC& generic, int (GENERIC::*pmf)(), WPARAM, LPARAM);
-LRESULT _OWLFUNC
-B_pointer_Dispatch(GENERIC& generic, int (GENERIC::*pmf)(void*), WPARAM, LPARAM);
+//
+// DocView aliases to actual dispatchers
+//
+#define U_void_Dispatch     U_Dispatch
+#define U_int_Dispatch      U_U_Dispatch
+#define U_pointer_Dispatch  U_POINTER_Dispatch
+#define U_long_Dispatch     U_LPARAM_Dispatch
 
 //
-// handlers for new document and view notifications
+// Define a DocView notification signature
+//   'id' is the vnXxxXxx name of the notification
+//   'arg' is the type of the arg passed to the handler
 //
-
-#define EV_OWLDOCUMENT(id, method)\
-  {WM_OWLDOCUMENT, id, (TAnyDispatcher)::v_POINTER_Dispatch,\
-   (TMyPMF)v_OWLDOCUMENT_Sig(&TMyClass::method)}
-
-#define EV_OWLVIEW(id, method)\
-  {WM_OWLVIEW, id, (TAnyDispatcher)::v_POINTER_Dispatch,\
-   (TMyPMF)v_OWLVIEW_Sig(&TMyClass::method)}
-
-#define EV_OWLNOTIFY(id, method)\
-  {WM_OWLNOTIFY, id, (TAnyDispatcher)::i_LPARAM_Dispatch,\
-   (TMyPMF)B_LPARAM_Sig(&TMyClass::method)}
- 
-#define EV_VIEWNOTIFY(id, method) \
-  {WM_OWLNOTIFY, id, (TAnyDispatcher)::B_long_Dispatch, \
-  (TMyPMF)B_LPARAM_Sig(&TMyClass::method)}
-
 #define NOTIFY_SIG(id, arg) \
   template <class T> \
-  inline BOOL (T::*id##_Sig(BOOL (T::*pmf)(arg)))(arg) { return pmf; }
-
-#define VN_DEFINE(id, method, disp) \
-  {WM_OWLNOTIFY, id, \
-  (TAnyDispatcher) ::B_##disp##_Dispatch, \
-  (TMyPMF)id##_Sig(&TMyClass::method)}
+  inline bool (T::*id##_Sig(bool (T::*pmf)(arg)))(arg) {return pmf;}
 
 NOTIFY_SIG(vnViewOpened,TView*)
 NOTIFY_SIG(vnViewClosed,TView*)
 NOTIFY_SIG(vnDocOpened, int)
 NOTIFY_SIG(vnDocClosed, int)
-NOTIFY_SIG(vnCommit, BOOL)
-NOTIFY_SIG(vnRevert, BOOL)
+NOTIFY_SIG(vnCommit, bool)
+NOTIFY_SIG(vnRevert, bool)
 NOTIFY_SIG(vnIsDirty, void)
 NOTIFY_SIG(vnIsWindow, HWND)
 
-#define EV_VN_VIEWOPENED VN_DEFINE(vnViewOpened,VnViewOpened,pointer)
-#define EV_VN_VIEWCLOSED VN_DEFINE(vnViewClosed,VnViewClosed,pointer)
-#define EV_VN_DOCOPENED  VN_DEFINE(vnDocOpened, VnDocOpened, int)
-#define EV_VN_DOCCLOSED  VN_DEFINE(vnDocClosed, VnDocClosed, int)
-#define EV_VN_COMMIT     VN_DEFINE(vnCommit,    VnCommit,    int)
-#define EV_VN_REVERT     VN_DEFINE(vnRevert,    VnRevert,    int)
-#define EV_VN_ISDIRTY    VN_DEFINE(vnIsDirty,   VnIsDirty,   void)
-#define EV_VN_ISWINDOW   VN_DEFINE(vnIsWindow,  VnIsWindow,  int)
+//
+// Define a DocView notification response entry
+//   'id' is the id from NOTIFY_SIG above
+//   'method' is the method name called by the notification
+//   'disp' is the type of the lParam dispacher to use, and can be:
+//     'void'    lParam not passed
+//     'int'     integer size (16bit for win16, or 32bit on win32)
+//     'pointer' pointer size (16bit for small & medium, or 32bit all other)
+//     'long'    32 bit passed always
+//
+#define VN_DEFINE(id, method, disp) \
+  {WM_OWLNOTIFY, id, \
+  (TAnyDispatcher) ::U_##disp##_Dispatch, \
+  (TMyPMF)id##_Sig(&TMyClass::method)}
 
+#define EV_VN_VIEWOPENED  VN_DEFINE(vnViewOpened,  VnViewOpened,  pointer)
+#define EV_VN_VIEWCLOSED  VN_DEFINE(vnViewClosed,  VnViewClosed,  pointer)
+#define EV_VN_DOCOPENED   VN_DEFINE(vnDocOpened,   VnDocOpened,   int)
+#define EV_VN_DOCCLOSED   VN_DEFINE(vnDocClosed,   VnDocClosed,   int)
+#define EV_VN_COMMIT      VN_DEFINE(vnCommit,      VnCommit,      int)
+#define EV_VN_REVERT      VN_DEFINE(vnRevert,      VnRevert,      int)
+#define EV_VN_ISDIRTY     VN_DEFINE(vnIsDirty,     VnIsDirty,     void)
+#define EV_VN_ISWINDOW    VN_DEFINE(vnIsWindow,    VnIsWindow,    int)
+
+//----------------------------------------------------------------------------
 // inline implementations
+//
 
 inline int
 TDocument::GetOpenMode()
@@ -412,4 +422,4 @@ TStream::GetOpenMode()
   return OpenMode;
 }
 
-#endif  // __OWL_DOCVIEW_H
+#endif  // OWL_DOCVIEW_H

@@ -1,0 +1,25 @@
+#----------------------------------------------------------------------------
+# ObjectComponents
+# (C) Copyright 1994 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+!if "$(MODEL)" == "f"
+
+EXE    = regist32
+OBJEXE = register.obj 
+RESEXE = register.res
+
+!else
+
+!if !$d(MODEL)
+MODEL = m
+!endif
+MODELS = ml
+EXERES = register
+DOSSTUB= wrw.stb
+
+!endif
+
+!include $(BCEXAMPLEDIR)\ocfmake.gen
+
+
+

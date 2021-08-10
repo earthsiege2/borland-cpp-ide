@@ -1,32 +1,21 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "" */
 /************************************************************************
 * Copyright (c) Wonderware Software Development Corp. 1991-1993.        *
 *               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-    
-    nddeapi.h
+************************************************************************/
 
-    Network DDE share and trusted share access and control function  
-    prototypes, structures and definitions.
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
-    NOTE: windows.h must be #included first
-
-    Revisions:
-    1.00    12/92   PhilH   Wonderware port from WFW to NT.
-    1.01     3/92   IgorM   Wonderware addition of separate SD access API
-                            and trusted share access API.
-
-   $History: End */
-
-
-#ifndef          __NDDEAPI_H
+#ifndef          _INC_NDDEAPI
+#define          _INC_NDDEAPI
 #define          __NDDEAPI_H
 
-#ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#include "pshpack1.h"   /* Assume byte packing throughout */
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -44,16 +33,16 @@ extern "C" {            /* Assume C declarations for C++ */
 #define BAR_WCHAR   L"|"
 
 /* API error codes  */
-#define NDDE_NO_ERROR                  0
-#define NDDE_ACCESS_DENIED             1
-#define NDDE_BUF_TOO_SMALL             2
-#define NDDE_ERROR_MORE_DATA           3
-#define NDDE_INVALID_SERVER            4
-#define NDDE_INVALID_SHARE             5
-#define NDDE_INVALID_PARAMETER         6
-#define NDDE_INVALID_LEVEL             7
-#define NDDE_INVALID_PASSWORD          8
-#define NDDE_INVALID_ITEMNAME          9
+#define NDDE_NO_ERROR                   0
+#define NDDE_ACCESS_DENIED              1
+#define NDDE_BUF_TOO_SMALL              2
+#define NDDE_ERROR_MORE_DATA            3
+#define NDDE_INVALID_SERVER             4
+#define NDDE_INVALID_SHARE              5
+#define NDDE_INVALID_PARAMETER          6
+#define NDDE_INVALID_LEVEL              7
+#define NDDE_INVALID_PASSWORD           8
+#define NDDE_INVALID_ITEMNAME           9
 #define NDDE_INVALID_TOPIC             10
 #define NDDE_INTERNAL_ERROR            11
 #define NDDE_OUT_OF_MEMORY             12
@@ -75,8 +64,8 @@ extern "C" {            /* Assume C declarations for C++ */
 
 /* string size constants */
 #define MAX_NDDESHARENAME       256
-#define MAX_USERNAME            15
 #define MAX_DOMAINNAME          15
+#define MAX_USERNAME            15
 #define MAX_APPNAME             255
 #define MAX_TOPICNAME           255
 #define MAX_ITEMNAME            255
@@ -110,7 +99,6 @@ typedef struct NDdeShareInfo_tag * PNDDESHAREINFO;
 #define SHARE_TYPE_NEW      0x02                // ExcelWorksheet|sheet1.xls
 #define SHARE_TYPE_STATIC   0x04                // ClipSrv|SalesData
 
-
 /*
     Add new share
 */
@@ -119,7 +107,7 @@ NDdeShareAddA (
     LPSTR                   lpszServer, // server to execute on ( must be NULL )
     UINT                    nLevel,     // info level must be 2
     PSECURITY_DESCRIPTOR    pSD,        // initial security descriptor (optional)
-    LPBYTE                  lpBuffer,   // contains (NDDESHAREINFO) + data 
+    LPBYTE                  lpBuffer,   // contains (NDDESHAREINFO) + data
     DWORD                   cBufSize    // sizeof supplied buffer
 );
 
@@ -128,7 +116,7 @@ NDdeShareAddW (
     LPWSTR                  lpszServer, // server to execute on ( must be NULL )
     UINT                    nLevel,     // info level must be 2
     PSECURITY_DESCRIPTOR    pSD,        // initial security descriptor (optional)
-    LPBYTE                  lpBuffer,   // contains (NDDESHAREINFO) + data 
+    LPBYTE                  lpBuffer,   // contains (NDDESHAREINFO) + data
     DWORD                   cBufSize    // sizeof supplied buffer
 );
 
@@ -224,7 +212,7 @@ NDdeShareGetInfoA (
     LPSTR   lpszServer,         // server to execute on ( must be NULL )
     LPSTR   lpszShareName,      // name of share
     UINT    nLevel,             // info level must be 2
-    LPBYTE  lpBuffer,           // gets struct containing (NDDESHAREINFO) + data 
+    LPBYTE  lpBuffer,           // gets struct containing (NDDESHAREINFO) + data
     DWORD   cBufSize,           // sizeof buffer
     LPDWORD lpnTotalAvailable,  // number of bytes available
     LPWORD  lpnItems            // item mask for partial getinfo (must be 0)
@@ -235,7 +223,7 @@ NDdeShareGetInfoW (
     LPWSTR  lpszServer,         // server to execute on ( must be NULL )
     LPWSTR  lpszShareName,      // name of share
     UINT    nLevel,             // info level must be 2
-    LPBYTE  lpBuffer,           // gets struct containing (NDDESHAREINFO) + data 
+    LPBYTE  lpBuffer,           // gets struct containing (NDDESHAREINFO) + data
     DWORD   cBufSize,           // sizeof buffer
     LPDWORD lpnTotalAvailable,  // number of bytes available
     LPWORD  lpnItems            // item mask for partial getinfo (must be 0)
@@ -249,7 +237,7 @@ NDdeShareSetInfoA (
     LPSTR   lpszServer,         // server to execute on ( must be NULL )
     LPSTR   lpszShareName,      // name of share
     UINT    nLevel,             // info level must be 2
-    LPBYTE  lpBuffer,           // points to struct with (NDDESHAREINFO) + data 
+    LPBYTE  lpBuffer,           // points to struct with (NDDESHAREINFO) + data
     DWORD   cBufSize,           // sizeof buffer
     WORD    sParmNum            // Parameter index ( must be 0 - entire )
 );
@@ -259,7 +247,7 @@ NDdeShareSetInfoW (
     LPWSTR  lpszServer,         // server to execute on ( must be NULL )
     LPWSTR  lpszShareName,      // name of share
     UINT    nLevel,             // info level must be 2
-    LPBYTE  lpBuffer,           // points to struct with (NDDESHAREINFO) + data 
+    LPBYTE  lpBuffer,           // points to struct with (NDDESHAREINFO) + data
     DWORD   cBufSize,           // sizeof buffer
     WORD    sParmNum            // Parameter index ( must be 0 - entire )
 );
@@ -273,10 +261,10 @@ NDdeSetTrustedShareA (
     LPSTR   lpszServer,         // server to execute on ( must be NULL )
     LPSTR   lpszShareName,      // name of share to delete
     DWORD   dwTrustOptions      // trust options to apply
-);                              
-                                
-UINT WINAPI                     
-NDdeSetTrustedShareW (               
+);
+
+UINT WINAPI
+NDdeSetTrustedShareW (
     LPWSTR  lpszServer,         // server to execute on ( must be NULL )
     LPWSTR  lpszShareName,      // name of share to delete
     DWORD   dwTrustOptions      // trust options to apply
@@ -300,10 +288,10 @@ NDdeGetTrustedShareA (
     LPDWORD     lpdwTrustOptions,   // trust options in effect
     LPDWORD     lpdwShareModId0,    // first word of share mod id
     LPDWORD     lpdwShareModId1     // second word of share mod id
-);                              
-                                
-UINT WINAPI                     
-NDdeGetTrustedShareW (               
+);
+
+UINT WINAPI
+NDdeGetTrustedShareW (
     LPWSTR      lpszServer,         // server to execute on ( must be NULL )
     LPWSTR      lpszShareName,      // name of share to query
     LPDWORD     lpdwTrustOptions,   // trust options in effect
@@ -378,26 +366,6 @@ NDdeIsValidAppTopicListW (
     LPWSTR targetTopic
 );
 
-UINT WINAPI
-NDdeSpecialCommandA(
-    LPSTR   lpszServer,
-    UINT    nCommand,
-    LPBYTE  lpDataIn,
-    UINT    nBytesDataIn,
-    LPBYTE  lpDataOut,
-    UINT   *lpBytesDataOut
-);
-
-UINT WINAPI
-NDdeSpecialCommandW(
-    LPWSTR  lpszServer,
-    UINT    nCommand,
-    LPBYTE  lpDataIn,
-    UINT    nBytesDataIn,
-    LPBYTE  lpDataOut,
-    UINT   *lpBytesDataOut
-);
-
 #ifdef UNICODE
 #define NDdeShareAdd            NDdeShareAddW
 #define NDdeShareDel            NDdeShareDelW
@@ -412,7 +380,6 @@ NDdeSpecialCommandW(
 #define NDdeSetTrustedShare     NDdeSetTrustedShareW
 #define NDdeGetTrustedShare     NDdeGetTrustedShareW
 #define NDdeTrustedShareEnum    NDdeTrustedShareEnumW
-#define NDdeSpecialCommand      NDdeSpecialCommandW
 #else
 #define NDdeShareAdd            NDdeShareAddA
 #define NDdeShareDel            NDdeShareDelA
@@ -427,17 +394,14 @@ NDdeSpecialCommandW(
 #define NDdeSetTrustedShare     NDdeSetTrustedShareA
 #define NDdeGetTrustedShare     NDdeGetTrustedShareA
 #define NDdeTrustedShareEnum    NDdeTrustedShareEnumA
-#define NDdeSpecialCommand      NDdeSpecialCommandA
 #endif
 
 #ifdef __cplusplus
 }
 #endif    /* __cplusplus */
 
-#ifndef RC_INVOKED
-#pragma pack()
-#endif  /* !RC_INVOKED */
+#include "poppack.h"
 
-#endif  /* __NDDEAPI_H */
-
-
+#endif  /* _INC_NDDEAPI */
+
+

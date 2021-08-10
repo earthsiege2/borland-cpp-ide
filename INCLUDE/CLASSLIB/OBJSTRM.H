@@ -2,45 +2,45 @@
 /*                                                                        */
 /*  OBJSTRM.H                                                             */
 /*                                                                        */
-/*  Copyright (c) 1992, 1993 Borland International                        */
+/*  Copyright (c) 1992, 1994 Borland International                        */
 /*  All Rights Reserved                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CLASSLIB_OBJSTRM_H )
-#define __CLASSLIB_OBJSTRM_H
+#if !defined( CLASSLIB_OBJSTRM_H )
+#define CLASSLIB_OBJSTRM_H
 
 #if !defined( __IOSTREAM_H )
 #include <iostream.h>
-#endif  // __IOSTREAM_H
+#endif
 
 #if !defined( __FSTREAM_H )
 #include <fstream.h>
-#endif  // __FSTREAM_H
+#endif
 
 #if !defined( __SYSTYPES_H )
 #include <systypes.h>
-#endif  // __SYSTYPES_H
+#endif
 
-#if !defined( __TYPEINFO_H )
+#if !defined( __TYPEINFO_H ) && !defined(BI_NO_RTTI)
 #include <typeinfo.h>
-#endif  // __TYPEINFO_H
+#endif
 
 #if !defined( __CHECKS_H )
 #include <checks.h>
-#endif  // __CHECKS_H
+#endif
 
-#if !defined( __CLASSLIB_DEFS_H )
-#include "classlib\defs.h"
-#endif  // __CLASSLIB_DEFS_H
+#if !defined( CLASSLIB_DEFS_H )
+#include <classlib/defs.h>
+#endif
 
-#if !defined( __CLASSLIB_STREAMBL_H )
-#include "classlib\streambl.h"
-#endif  // __CLASSLIB_STREAMBL_H
+#if !defined( CLASSLIB_STREAMBL_H )
+#include <classlib/streambl.h>
+#endif
 
-#if !defined( __CLASSLIB_VECTIMP_H )
-#include "classlib\vectimp.h"
-#endif  // __CLASSLIB_VECTIMP_H
+#if !defined( CLASSLIB_VECTIMP_H )
+#include <classlib/vectimp.h>
+#endif
 
 #if defined( BI_CLASSLIB_NO_po )
 #pragma option -po-
@@ -113,16 +113,16 @@ class _BIDSCLASS _RTTI TStreamableBase
 
 public:
 
-    virtual ~TStreamableBase();
+    virtual _BIDSENTRY ~TStreamableBase();
 
 #if defined( BI_NO_RTTI )
-    typedef const char *Type_id;
-    virtual void *FindBase( Type_id id ) const;
+    typedef const char * _BIDSENTRY Type_id;
+    virtual void * _BIDSENTRY FindBase( Type_id id ) const;
 
 public:
 
-    virtual Type_id CastableID() const = 0;
-    virtual void *MostDerived() const = 0;
+    virtual Type_id _BIDSENTRY CastableID() const = 0;
+    virtual void * _BIDSENTRY MostDerived() const = 0;
 #endif  // BI_NO_RTTI
 
 };
@@ -134,17 +134,17 @@ class _BIDSCLASS _RTTI TStreamable : public TStreamableBase
 
 protected:
 
-    virtual const char *streamableName() const = 0;
+    virtual const char * _BIDSENTRY streamableName() const = 0;
 
-    virtual void *read( ipstream& );
-    virtual void write( opstream& );
+    virtual void * _BIDSENTRY read( ipstream& );
+    virtual void _BIDSENTRY write( opstream& );
 
 #if defined( BI_NO_RTTI )
 public:
-    virtual void *FindBase( Type_id id ) const;
+    virtual void * _BIDSENTRY FindBase( Type_id id ) const;
 protected:
-    virtual Type_id CastableID() const { return streamableName(); }
-    virtual void *MostDerived() const { return 0; }
+    virtual Type_id _BIDSENTRY CastableID() const { return streamableName(); }
+    virtual void * _BIDSENTRY MostDerived() const { return 0; }
 #endif
 };
 
@@ -156,20 +156,20 @@ class _BIDSCLASS _RTTI TStreamer
 
 public:
 
-    TStreamableBase *GetObject() const { return object; }
+    TStreamableBase * _BIDSENTRY GetObject() const { return object; }
 
 protected:
 
-    TStreamer( TStreamableBase *obj ) : object(obj) {}
+    _BIDSENTRY TStreamer( TStreamableBase *obj ) : object(obj) {}
 
-    virtual const char *StreamableName() const = 0;
+    virtual const char * _BIDSENTRY StreamableName() const = 0;
 
-    virtual void *Read( ipstream&, uint32 ) const = 0;
-    virtual void Write( opstream& ) const = 0;
+    virtual void * _BIDSENTRY Read( ipstream&, uint32 ) const = 0;
+    virtual void _BIDSENTRY Write( opstream& ) const = 0;
 
 private:
 
-    virtual uint32 ClassVersion() const = 0;
+    virtual uint32 _BIDSENTRY ClassVersion() const = 0;
 
     TStreamableBase *object;
 
@@ -180,28 +180,28 @@ class _BIDSCLASS _RTTI TOldStreamer : public TStreamer
 
 public:
 
-    TOldStreamer( TStreamable *obj ) : TStreamer(obj) {};
+    _BIDSENTRY TOldStreamer( TStreamable *obj ) : TStreamer(obj) {};
 
 protected:
 
-    virtual const char *StreamableName() const
+    virtual const char * _BIDSENTRY StreamableName() const
         {
         return STATIC_CAST(TStreamable *,GetObject())->streamableName();
         }
 
-    virtual void *Read( ipstream& is, uint32 ) const
+    virtual void * _BIDSENTRY Read( ipstream& is, uint32 ) const
         {
         return STATIC_CAST(TStreamable *,GetObject())->read( is );
         }
 
-    virtual void Write( opstream& os ) const
+    virtual void _BIDSENTRY Write( opstream& os ) const
         {
         STATIC_CAST(TStreamable *,GetObject())->write( os );
         }
 
 private:
 
-    virtual uint32 ClassVersion() const
+    virtual uint32 _BIDSENTRY ClassVersion() const
         {
         return 0;
         }
@@ -213,11 +213,11 @@ class _BIDSCLASS _RTTI TNewStreamer : public TStreamer
 
 public:
 
-    TNewStreamer( TStreamableBase *obj ) : TStreamer(obj) {};
+    _BIDSENTRY TNewStreamer( TStreamableBase *obj ) : TStreamer(obj) {};
 
 protected:
 
-    virtual const char *StreamableName() const
+    virtual const char * _BIDSENTRY StreamableName() const
         {
         return _TYPENAME(GetObject());
         }
@@ -243,21 +243,21 @@ class _BIDSCLASS TPWrittenObjects
 
 public:
 
-    void RemoveAll();
+    void _BIDSENTRY RemoveAll();
 
     class _BIDSCLASS TPWObj
     {
 
     public:
 
-        TPWObj() : Address(0), Ident(0) {}
-        TPWObj( const void *adr, P_id_type id ) : 
+        _BIDSENTRY TPWObj() : Address(0), Ident(0) {}
+        _BIDSENTRY TPWObj( const void *adr, P_id_type id ) : 
             Address(adr), Ident(id) {}
 
-        friend int operator == ( const TPWObj& o1, const TPWObj& o2 )
+        friend int _BIDSENTRY operator == ( const TPWObj& o1, const TPWObj& o2 )
             { return o1.Address == o2.Address; }
 
-        friend int operator < ( const TPWObj& o1, const TPWObj& o2 )
+        friend int _BIDSENTRY operator < ( const TPWObj& o1, const TPWObj& o2 )
             { return o1.Address < o2.Address; }
 
         const void *Address;
@@ -267,12 +267,12 @@ public:
 
 private:
 
-    TPWrittenObjects();
+    _BIDSENTRY TPWrittenObjects();
 
-    void RegisterObject( TStreamableBase *adr );
-    void RegisterVB( const TStreamableBase *adr );
-    P_id_type FindObject( TStreamableBase *adr );
-    P_id_type FindVB( TStreamableBase *adr );
+    void _BIDSENTRY RegisterObject( TStreamableBase *adr );
+    void _BIDSENTRY RegisterVB( const TStreamableBase *adr );
+    P_id_type _BIDSENTRY FindObject( TStreamableBase *adr );
+    P_id_type _BIDSENTRY FindVB( TStreamableBase *adr );
 
     P_id_type CurId;
 
@@ -299,14 +299,14 @@ class _BIDSCLASS TPReadObjects
 
 public:
 
-    void RemoveAll();
+    void _BIDSENTRY RemoveAll();
 
 private:
 
-    TPReadObjects();
+    _BIDSENTRY TPReadObjects();
 
-    void RegisterObject( TStreamableBase *adr );
-    TStreamableBase *Find( P_id_type id );
+    void _BIDSENTRY RegisterObject( TStreamableBase *adr );
+    TStreamableBase * _BIDSENTRY Find( P_id_type id );
 
     TCVectorImp<TStreamableBase *> Data;
 
@@ -330,33 +330,34 @@ public:
 
     enum PointerTypes { ptNull, ptIndexed, ptObject };
 
-    _Cdecl pstream( streambuf _BIDSFAR * );
-    virtual _Cdecl ~pstream();
+    _BIDSENTRY pstream( streambuf _BIDSFAR * );
+    virtual _BIDSENTRY ~pstream();
 
-    int _Cdecl rdstate() const;
-    int _Cdecl eof() const;
-    int _Cdecl fail() const;
-    int _Cdecl bad() const;
-    int _Cdecl good() const;
-    void _Cdecl clear( int = 0 );
-    _Cdecl operator void *() const;
-    int _Cdecl operator ! () const;
+    int _BIDSENTRY rdstate() const;
+    int _BIDSENTRY eof() const;
+    int _BIDSENTRY fail() const;
+    int _BIDSENTRY bad() const;
+    int _BIDSENTRY good() const;
+    void _BIDSENTRY clear( int = 0 );
+    _BIDSENTRY operator void *() const;
+    int _BIDSENTRY operator ! () const;
 
-    streambuf _BIDSFAR * _Cdecl rdbuf() const;
+    streambuf _BIDSFAR * _BIDSENTRY rdbuf() const;
 
-    static void initTypes();
+    static void _BIDSENTRY initTypes();
+    static void _BIDSENTRY releaseTypes();
 
-    static void registerType( TStreamableClass *ts );
+    static void _BIDSENTRY registerType( TStreamableClass *ts );
 
 protected:
 
-    _Cdecl pstream();
+    _BIDSENTRY pstream();
 
     streambuf _BIDSFAR *bp;
     int state;
 
-    void _Cdecl init( streambuf _BIDSFAR * );
-    void _Cdecl setstate( int );
+    void _BIDSENTRY init( streambuf _BIDSFAR * );
+    void _BIDSENTRY setstate( int );
 
     static TStreamableTypes *types;
 
@@ -377,59 +378,64 @@ class _BIDSCLASS ipstream : virtual public pstream
 
 public:
 
-    _Cdecl ipstream( streambuf _BIDSFAR * );
+    _BIDSENTRY ipstream( streambuf _BIDSFAR * );
 
-    streampos _Cdecl tellg();
-    ipstream& _Cdecl seekg( streampos );
-    ipstream& _Cdecl seekg( streamoff, ios::seek_dir );
+    streampos _BIDSENTRY tellg();
+    ipstream& _BIDSENTRY seekg( streampos );
+    ipstream& _BIDSENTRY seekg( streamoff, ios::seek_dir );
 
-    uint8 _Cdecl readByte();
-    void _Cdecl readBytes( void _BIDSFAR *, size_t );
-    void _Cdecl freadBytes( void _BIDSFARDATA *data, size_t sz );
+    uint8 _BIDSENTRY readByte();
+    void _BIDSENTRY readBytes( void _BIDSFAR *, size_t );
+    void _BIDSENTRY freadBytes( void _BIDSFARDATA *data, size_t sz );
 
-    uint32 _Cdecl readWord();
-    uint16 _Cdecl readWord16();
-    uint32 _Cdecl readWord32();
+    uint32 _BIDSENTRY readWord();
+    uint16 _BIDSENTRY readWord16();
+    uint32 _BIDSENTRY readWord32();
 
-    char _BIDSFAR * _Cdecl readString();
-    char _BIDSFAR * _Cdecl readString( char _BIDSFAR *, unsigned );
-    char _BIDSFARDATA *freadString();
-    char _BIDSFARDATA *freadString( char _BIDSFARDATA *buf, unsigned maxLen );
+    char _BIDSFAR * _BIDSENTRY readString();
+    char _BIDSFAR * _BIDSENTRY readString( char _BIDSFAR *, unsigned );
+    char _BIDSFARDATA * _BIDSENTRY freadString();
+    char _BIDSFARDATA * _BIDSENTRY freadString( char _BIDSFARDATA *buf,
+                                            unsigned maxLen );
 
-    friend ipstream& _Cdecl operator >> ( ipstream&, signed char& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, unsigned char& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, char& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, signed short& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, unsigned short& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, signed int& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, unsigned int& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, signed long& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, unsigned long& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, float& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, double& );
-    friend ipstream& _Cdecl operator >> ( ipstream&, long double& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, signed char& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, unsigned char& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, char& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, signed short& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, unsigned short& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, signed int& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, unsigned int& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, signed long& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, unsigned long& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, float& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, double& );
+    friend ipstream& _BIDSENTRY operator >> ( ipstream&, long double& );
 
-    uint32 getVersion() const;
+    friend ipstream _BIDSFAR& _BIDSENTRY _BIDSFUNC
+            operator >> ( ipstream _BIDSFAR& is, string _BIDSFAR& str );
 
-    TStreamableBase _BIDSFAR *readObject( TStreamableBase _BIDSFAR *&mem, ModuleId mid = GetModuleId() );
-    TStreamableBase _BIDSFAR *readObjectPointer( TStreamableBase _BIDSFAR *&mem, ModuleId mid = GetModuleId() );
+    uint32 _BIDSENTRY getVersion() const;
 
-    TStreamableBase _BIDSFAR * _Cdecl find( P_id_type );
-    void _Cdecl registerObject( TStreamableBase _BIDSFAR *adr );
+    TStreamableBase _BIDSFAR * _BIDSENTRY readObject( TStreamableBase _BIDSFAR *&mem, ModuleId mid = GetModuleId() );
+    TStreamableBase _BIDSFAR * _BIDSENTRY readObjectPointer( TStreamableBase _BIDSFAR *&mem, ModuleId mid = GetModuleId() );
+
+    TStreamableBase _BIDSFAR * _BIDSENTRY find( P_id_type );
+    void _BIDSENTRY registerObject( TStreamableBase _BIDSFAR *adr );
 
 protected:
 
-    _Cdecl ipstream();
+    _BIDSENTRY ipstream();
 
-    const ObjectBuilder _BIDSFAR * _Cdecl readPrefix( ModuleId mid );
-    void _Cdecl readData( const ObjectBuilder _BIDSFAR *,
+    const ObjectBuilder _BIDSFAR * _BIDSENTRY readPrefix( ModuleId mid );
+    void _BIDSENTRY readData( const ObjectBuilder _BIDSFAR *,
                           TStreamableBase _BIDSFAR *& );
-    void _Cdecl readSuffix();
+    void _BIDSENTRY readSuffix();
 
-    void readVersion();
+    void _BIDSENTRY readVersion();
 
 private:
 
+    uint32 readStringLength();
     TPReadObjects objs;
     uint32 version;
 
@@ -448,58 +454,58 @@ class _BIDSCLASS opstream : virtual public pstream
 
 public:
 
-    _Cdecl opstream( streambuf _BIDSFAR * );
-    _Cdecl ~opstream();
+    _BIDSENTRY opstream( streambuf _BIDSFAR * );
+    _BIDSENTRY ~opstream();
 
-    streampos _Cdecl tellp();
-    opstream& _Cdecl seekp( streampos );
-    opstream& _Cdecl seekp( streamoff, ios::seek_dir );
-    opstream& _Cdecl flush();
+    streampos _BIDSENTRY tellp();
+    opstream& _BIDSENTRY seekp( streampos );
+    opstream& _BIDSENTRY seekp( streamoff, ios::seek_dir );
+    opstream& _BIDSENTRY flush();
 
-    void _Cdecl writeByte( uint8 );
-    void _Cdecl writeBytes( const void _BIDSFAR *, size_t );
-    void _Cdecl fwriteBytes( const void _BIDSFARDATA *data, size_t sz );
+    void _BIDSENTRY writeByte( uint8 );
+    void _BIDSENTRY writeBytes( const void _BIDSFAR *, size_t );
+    void _BIDSENTRY fwriteBytes( const void _BIDSFARDATA *data, size_t sz );
 
-    void _Cdecl writeWord( uint32 );
-    void _Cdecl writeWord16( uint16 );
-    void _Cdecl writeWord32( uint32 );
+    void _BIDSENTRY writeWord( uint32 );
+    void _BIDSENTRY writeWord16( uint16 );
+    void _BIDSENTRY writeWord32( uint32 );
 
-    void _Cdecl writeString( const char _BIDSFAR * );
-    void _Cdecl fwriteString( const char _BIDSFARDATA * str );
+    void _BIDSENTRY writeString( const char _BIDSFAR * );
+    void _BIDSENTRY fwriteString( const char _BIDSFARDATA * str );
 
-    friend opstream& _Cdecl operator << ( opstream&, signed char );
-    friend opstream& _Cdecl operator << ( opstream&, unsigned char );
-    friend opstream& _Cdecl operator << ( opstream&, char );
-    friend opstream& _Cdecl operator << ( opstream&, signed short );
-    friend opstream& _Cdecl operator << ( opstream&, unsigned short );
-    friend opstream& _Cdecl operator << ( opstream&, signed int );
-    friend opstream& _Cdecl operator << ( opstream&, unsigned int );
-    friend opstream& _Cdecl operator << ( opstream&, signed long );
-    friend opstream& _Cdecl operator << ( opstream&, unsigned long );
-    friend opstream& _Cdecl operator << ( opstream&, float );
-    friend opstream& _Cdecl operator << ( opstream&, double );
-    friend opstream& _Cdecl operator << ( opstream&, long double );
+    friend opstream& _BIDSENTRY operator << ( opstream&, signed char );
+    friend opstream& _BIDSENTRY operator << ( opstream&, unsigned char );
+    friend opstream& _BIDSENTRY operator << ( opstream&, char );
+    friend opstream& _BIDSENTRY operator << ( opstream&, signed short );
+    friend opstream& _BIDSENTRY operator << ( opstream&, unsigned short );
+    friend opstream& _BIDSENTRY operator << ( opstream&, signed int );
+    friend opstream& _BIDSENTRY operator << ( opstream&, unsigned int );
+    friend opstream& _BIDSENTRY operator << ( opstream&, signed long );
+    friend opstream& _BIDSENTRY operator << ( opstream&, unsigned long );
+    friend opstream& _BIDSENTRY operator << ( opstream&, float );
+    friend opstream& _BIDSENTRY operator << ( opstream&, double );
+    friend opstream& _BIDSENTRY operator << ( opstream&, long double );
 
-    void writeObject( const TStreamableBase _BIDSFAR *t, int isPtr = 0, ModuleId mid = GetModuleId() );
-    void writeObjectPointer( const TStreamableBase _BIDSFAR *t, ModuleId mid = GetModuleId() );
+    void _BIDSENTRY writeObject( const TStreamableBase _BIDSFAR *t, int isPtr = 0, ModuleId mid = GetModuleId() );
+    void _BIDSENTRY writeObjectPointer( const TStreamableBase _BIDSFAR *t, ModuleId mid = GetModuleId() );
 
-    P_id_type _Cdecl findObject( TStreamableBase _BIDSFAR *adr );
-    void _Cdecl registerObject( TStreamableBase _BIDSFAR *adr );
+    P_id_type _BIDSENTRY findObject( TStreamableBase _BIDSFAR *adr );
+    void _BIDSENTRY registerObject( TStreamableBase _BIDSFAR *adr );
 
-    P_id_type _Cdecl findVB( TStreamableBase _BIDSFAR *adr );
-    void _Cdecl registerVB( TStreamableBase _BIDSFAR *adr );
+    P_id_type _BIDSENTRY findVB( TStreamableBase _BIDSFAR *adr );
+    void _BIDSENTRY registerVB( TStreamableBase _BIDSFAR *adr );
 
 protected:
 
-    _Cdecl opstream();
+    _BIDSENTRY opstream();
 
-    void _Cdecl writePrefix( const TStreamableBase _BIDSFAR * );
-    void _Cdecl writeData( const TStreamableBase _BIDSFAR *, ModuleId mid );
-    void _Cdecl writeSuffix( const TStreamableBase _BIDSFAR * );
+    void _BIDSENTRY writePrefix( const TStreamableBase _BIDSFAR * );
+    void _BIDSENTRY writeData( const TStreamableBase _BIDSFAR *, ModuleId mid );
+    void _BIDSENTRY writeSuffix( const TStreamableBase _BIDSFAR * );
 
 private:
 
-    void writeVersion();
+    void _BIDSENTRY writeVersion();
 
     TPWrittenObjects *objs;
 
@@ -518,16 +524,16 @@ class _BIDSCLASS fpbase : virtual public pstream
 
 public:
 
-    _Cdecl fpbase();
-    _Cdecl fpbase( const char _BIDSFAR *, int, int = filebuf::openprot );
-    _Cdecl fpbase( int );
-    _Cdecl fpbase( int, char _BIDSFAR *, int );
+    _BIDSENTRY fpbase();
+    _BIDSENTRY fpbase( const char _BIDSFAR *, int, int = filebuf::openprot );
+    _BIDSENTRY fpbase( int );
+    _BIDSENTRY fpbase( int, char _BIDSFAR *, int );
 
-    void _Cdecl open( const char _BIDSFAR *, int, int = filebuf::openprot );
-    void _Cdecl attach( int );
-    void _Cdecl close();
-    void _Cdecl setbuf( char _BIDSFAR *, int );
-    filebuf _BIDSFAR * _Cdecl rdbuf();
+    void _BIDSENTRY open( const char _BIDSFAR *, int, int = filebuf::openprot );
+    void _BIDSENTRY attach( int );
+    void _BIDSENTRY close();
+    void _BIDSENTRY setbuf( char _BIDSFAR *, int );
+    filebuf _BIDSFAR * _BIDSENTRY rdbuf();
 
 private:
 
@@ -548,16 +554,16 @@ class _BIDSCLASS ifpstream : public fpbase, public ipstream
 
 public:
 
-    _Cdecl ifpstream();
-    _Cdecl ifpstream( const char _BIDSFAR *,
+    _BIDSENTRY ifpstream();
+    _BIDSENTRY ifpstream( const char _BIDSFAR *,
                       int = ios::in,
                       int = filebuf::openprot
                     );
-    _Cdecl ifpstream( int );
-    _Cdecl ifpstream( int, char _BIDSFAR *, int );
+    _BIDSENTRY ifpstream( int );
+    _BIDSENTRY ifpstream( int, char _BIDSFAR *, int );
 
-    filebuf _BIDSFAR * _Cdecl rdbuf();
-    void _Cdecl open( const char _BIDSFAR *,
+    filebuf _BIDSFAR * _BIDSENTRY rdbuf();
+    void _BIDSENTRY open( const char _BIDSFAR *,
                       int = ios::in,
                       int = filebuf::openprot
                     );
@@ -577,16 +583,16 @@ class _BIDSCLASS ofpstream : public fpbase, public opstream
 
 public:
 
-    _Cdecl ofpstream();
-    _Cdecl ofpstream( const char _BIDSFAR *,
+    _BIDSENTRY ofpstream();
+    _BIDSENTRY ofpstream( const char _BIDSFAR *,
                       int = ios::out,
                       int = filebuf::openprot
                     );
-    _Cdecl ofpstream( int );
-    _Cdecl ofpstream( int, char _BIDSFAR *, int );
+    _BIDSENTRY ofpstream( int );
+    _BIDSENTRY ofpstream( int, char _BIDSFAR *, int );
 
-    filebuf _BIDSFAR * _Cdecl rdbuf();
-    void _Cdecl open( const char _BIDSFAR *,
+    filebuf _BIDSFAR * _BIDSENTRY rdbuf();
+    void _BIDSENTRY open( const char _BIDSFAR *,
                       int = ios::out,
                       int = filebuf::openprot
                     );
@@ -599,358 +605,371 @@ public:
 /*                                                                         */
 /* ------------------------------------------------------------------------*/
 
-inline pstream::pstream( streambuf _BIDSFAR *sb )
+inline _BIDSENTRY pstream::pstream( streambuf _BIDSFAR *sb )
 {
     init( sb );
 }
 
-inline int pstream::rdstate() const
+inline int _BIDSENTRY pstream::rdstate() const
 {
     return state;
 }
 
-inline int pstream::eof() const
+inline int _BIDSENTRY pstream::eof() const
 {
     return state & ios::eofbit;
 }
 
-inline int pstream::fail() const
+inline int _BIDSENTRY pstream::fail() const
 {
     return state & (ios::failbit | ios::badbit | ios::hardfail);
 }
 
-inline int pstream::bad() const
+inline int _BIDSENTRY pstream::bad() const
 {
     return state & (ios::badbit | ios::hardfail);
 }
 
-inline int pstream::good() const
+inline int _BIDSENTRY pstream::good() const
 {
     return state == 0;
 }
 
-inline void pstream::clear( int i )
+inline void _BIDSENTRY pstream::clear( int i )
 {
     state = (i & 0xFF) | (state & ios::hardfail);
 }
 
-inline pstream::operator void _BIDSFAR *() const
+inline _BIDSENTRY pstream::operator void _BIDSFAR *() const
 {
     return fail() ? 0 : (void *)this;
 }
 
-inline int pstream::operator! () const
+inline int _BIDSENTRY pstream::operator! () const
 {
     return fail();
 }
 
-inline streambuf _BIDSFAR * pstream::rdbuf() const
+inline streambuf _BIDSFAR * _BIDSENTRY pstream::rdbuf() const
 {
     return bp;
 }
 
-inline pstream::pstream()
+inline _BIDSENTRY pstream::pstream()
 {
 }
 
-inline void pstream::init( streambuf *sbp )
+inline void _BIDSENTRY pstream::init( streambuf *sbp )
 {
     state = 0;
     bp = sbp;
 }
 
-inline void pstream::setstate( int b )
+inline void _BIDSENTRY pstream::setstate( int b )
 {
     state |= (b&0xFF);
 }
 
-inline ipstream::ipstream( streambuf _BIDSFAR *sb )
+inline _BIDSENTRY ipstream::ipstream( streambuf _BIDSFAR *sb )
 {
     pstream::init( sb );
     readVersion();
 }
 
-inline ipstream::ipstream()
+inline _BIDSENTRY ipstream::ipstream()
 {
     if( bp != 0 )
         readVersion();
 }
 
-inline TStreamableBase *ipstream::find( P_id_type id )
+inline TStreamableBase * _BIDSENTRY ipstream::find( P_id_type id )
 {
     return objs.Find( id );
 }
 
-inline void ipstream::registerObject( TStreamableBase *adr )
+inline void _BIDSENTRY ipstream::registerObject( TStreamableBase *adr )
 {
     objs.RegisterObject( adr );
 }
 
-inline uint32 ipstream::getVersion() const
+inline uint32 _BIDSENTRY ipstream::getVersion() const
 {
     return version;
 }
 
-inline void pstream::registerType( TStreamableClass *ts )
+inline void _BIDSENTRY pstream::registerType( TStreamableClass *ts )
 {
     types->RegisterType( GetModuleId(), *ts );
 }
 
-inline opstream::~opstream()
+inline _BIDSENTRY opstream::~opstream()
 {
     delete objs;
 }
 
-inline void opstream::writeWord( uint32 word32 )
+inline void _BIDSENTRY opstream::writeWord( uint32 word32 )
 {
     writeWord32( word32 );
 }
 
-inline void opstream::writeSuffix( const TStreamableBase * )
+inline void _BIDSENTRY opstream::writeSuffix( const TStreamableBase * )
 {
     writeByte( ']' );
 }
 
-inline P_id_type opstream::findObject( TStreamableBase *adr )
+inline P_id_type _BIDSENTRY opstream::findObject( TStreamableBase *adr )
 {
     return objs->FindObject( adr );
 }
 
-inline void opstream::registerObject( TStreamableBase *adr )
+inline void _BIDSENTRY opstream::registerObject( TStreamableBase *adr )
 {
     objs->RegisterObject( adr );
 }
 
-inline P_id_type opstream::findVB( TStreamableBase *adr )
+inline P_id_type _BIDSENTRY opstream::findVB( TStreamableBase *adr )
 {
     return objs->FindVB( adr );
 }
 
-inline void opstream::registerVB( TStreamableBase *adr )
+inline void _BIDSENTRY opstream::registerVB( TStreamableBase *adr )
 {
     objs->RegisterVB( adr );
 }
 
-inline fpbase::fpbase()
+inline _BIDSENTRY fpbase::fpbase()
 {
     pstream::init( &buf );
 }
 
-inline fpbase::fpbase( const char *name, int omode, int prot )
+inline _BIDSENTRY fpbase::fpbase( const char *name, int omode, int prot )
 {
     pstream::init( &buf );
     open( name, omode, prot );
 }
 
-inline fpbase::fpbase( int f ) : buf( f )
+inline _BIDSENTRY fpbase::fpbase( int f ) : buf( f )
 {
     pstream::init( &buf );
 }
 
-inline fpbase::fpbase( int f, char *b, int len ) : buf( f, b, len )
+inline _BIDSENTRY fpbase::fpbase( int f, char *b, int len ) : buf( f, b, len )
 {
     pstream::init( &buf );
 }
 
-inline filebuf *fpbase::rdbuf()
+inline filebuf * _BIDSENTRY fpbase::rdbuf()
 {
     return &buf;
 }
 
-inline ifpstream::ifpstream()
+inline _BIDSENTRY ifpstream::ifpstream()
 {
 }
 
-inline ifpstream::ifpstream( const char* name, int omode, int prot ) :
+inline _BIDSENTRY ifpstream::ifpstream( const char* name, int omode, int prot ) :
     fpbase( name, omode | ios::in | ios::binary, prot )
 {
 }
 
-inline ifpstream::ifpstream( int f ) : fpbase( f )
+inline _BIDSENTRY ifpstream::ifpstream( int f ) : fpbase( f )
 {
 }
 
-inline ifpstream::ifpstream(int f, char* b, int len) : fpbase(f, b, len)
+inline _BIDSENTRY ifpstream::ifpstream(int f, char* b, int len) : fpbase(f, b, len)
 {
 }
 
-inline filebuf *ifpstream::rdbuf()
+inline filebuf * _BIDSENTRY ifpstream::rdbuf()
 {
     return fpbase::rdbuf();
 }
 
-inline void ifpstream::open( const char _BIDSFAR *name, int omode, int prot )
+inline void _BIDSENTRY ifpstream::open( const char _BIDSFAR *name,
+                                    int omode,
+                                    int prot )
 {
     fpbase::open( name, omode | ios::in | ios::binary, prot );
     readVersion();
 }
 
-inline ofpstream::ofpstream()
+inline _BIDSENTRY ofpstream::ofpstream()
 {
 }
 
-inline ofpstream::ofpstream( const char* name, int omode, int prot ) :
+inline _BIDSENTRY ofpstream::ofpstream( const char* name, int omode, int prot ) :
     fpbase( name, omode | ios::out | ios::binary, prot )
 {
 }
 
-inline ofpstream::ofpstream( int f ) : fpbase( f )
+inline _BIDSENTRY ofpstream::ofpstream( int f ) : fpbase( f )
 {
 }
 
-inline ofpstream::ofpstream(int f, char* b, int len) : fpbase(f, b, len)
+inline _BIDSENTRY ofpstream::ofpstream(int f, char* b, int len) :
+    fpbase(f, b, len)
 {
 }
 
-inline filebuf *ofpstream::rdbuf()
+inline filebuf * _BIDSENTRY ofpstream::rdbuf()
 {
     return fpbase::rdbuf();
 }
 
-inline void ofpstream::open( const char _BIDSFAR *name, int omode, int prot )
+inline void _BIDSENTRY ofpstream::open( const char _BIDSFAR *name,
+                                    int omode,
+                                    int prot )
 {
     fpbase::open( name, omode | ios::out | ios::binary, prot );
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, signed char &ch )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, signed char &ch )
 {
     ch = ps.readByte();
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, unsigned char &ch )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, unsigned char &ch )
 {
     ch = ps.readByte();
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, char &ch )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, char &ch )
 {
     ch = ps.readByte();
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, signed short &sh )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, signed short &sh )
 {
     sh = ps.readWord16();
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, unsigned short &sh )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, unsigned short &sh )
 {
     sh = ps.readWord16();
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, signed int &i )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, signed int &i )
 {
     i = (int)(ps.readWord32());
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, unsigned int &i )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, unsigned int &i )
 {
     i = (unsigned int)(ps.readWord32());
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, signed long &l )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, signed long &l )
 {
     ps.readBytes( &l, sizeof(l) );
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, unsigned long &l )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, unsigned long &l )
 {
     ps.readBytes( &l, sizeof(l) );
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, float &f )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, float &f )
 {
     ps.readBytes( &f, sizeof(f) );
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, double &d )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, double &d )
 {
     ps.readBytes( &d, sizeof(d) );
     return ps;
 }
 
-inline ipstream& _Cdecl operator >> ( ipstream& ps, long double &l )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, long double &l )
 {
     ps.readBytes( &l, sizeof(l) );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, signed char ch )
+#if defined( UNIQUE_BOOL )
+inline ipstream& _BIDSENTRY operator >> ( ipstream& ps, bool &b )
+{
+    b = static_cast<bool>(ps.readWord32());
+    return ps;
+}
+#endif
+
+inline opstream& _BIDSENTRY operator << ( opstream& ps, signed char ch )
 {
     ps.writeByte( ch );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, unsigned char ch )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, unsigned char ch )
 {
     ps.writeByte( ch );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, char ch )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, char ch )
 {
     ps.writeByte( ch );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, signed short sh )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, signed short sh )
 {
     ps.writeWord16( sh );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, unsigned short sh )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, unsigned short sh )
 {
     ps.writeWord16( sh );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, signed int i )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, signed int i )
 {
     ps.writeWord32( i );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, unsigned int i )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, unsigned int i )
 {
     ps.writeWord32( i );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, signed long l )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, signed long l )
 {
     ps.writeBytes( &l, sizeof(l) );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, unsigned long l )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, unsigned long l )
 {
     ps.writeBytes( &l, sizeof(l) );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, float f )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, float f )
 {
     ps.writeBytes( &f, sizeof(f) );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, double d )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, double d )
 {
     ps.writeBytes( &d, sizeof(d) );
     return ps;
 }
 
-inline opstream& _Cdecl operator << ( opstream& ps, long double l )
+inline opstream& _BIDSENTRY operator << ( opstream& ps, long double l )
 {
     ps.writeBytes( &l, sizeof(l) );
     return ps;
@@ -1137,7 +1156,7 @@ public:                                                             \
     virtual void *MostDerived() const { return (void *)this; }      \
     static Type_id CastableIdent
 #else
-#define DECLARE_CASTABLE friend class Type_info
+#define DECLARE_CASTABLE friend class typeinfo
 #endif
 
 #define DECLARE_STREAMABLE( exp, cls, ver )                         \
@@ -1403,5 +1422,5 @@ IMPLEMENT_STREAMABLE_POINTER( cls )
 #pragma option -po.
 #endif
 
-#endif  // __CLASSLIB_OBJSTRM_H
+#endif  // CLASSLIB_OBJSTRM_H
 

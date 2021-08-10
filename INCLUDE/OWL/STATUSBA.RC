@@ -1,26 +1,34 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\statusba.rc
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Resources to use with TStatusBar.
 //----------------------------------------------------------------------------
 
-#define IDS_MODES  32530
+#include <owl/statusba.rh>
 
 #if defined(RC_INVOKED)
+
 #if !defined(NO_IDS_STATUSBAR) && !defined(__IDS_STATUSBAR)
 #define __IDS_STATUSBAR
 STRINGTABLE
-BEGIN
+{
   IDS_MODES      "EXT|CAPS|NUM|SCRL|OVR|REC"
-  SC_SIZE,       "Changes the size of the window"
-  SC_MOVE,       "Moves the window to another position"
-  SC_MINIMIZE,   "Reduces the window to an icon"
-  SC_MAXIMIZE,   "Enlarges the window to it maximum size"
-  SC_RESTORE,    "Restores the window to its previous size"
-  SC_CLOSE,      "Closes the window"
-  SC_TASKLIST,   "Opens task list"
-  SC_NEXTWINDOW, "Switches to next window"
-END
+  IDS_MODESOFF   "   |    |   |    |   |   "
+}
+STRINGTABLE
+{
+  SC_SIZE-1,     "Commands for manipulating this and other windows"
+  SC_SIZE,       "Resize this window"
+  SC_MOVE,       "Move the window to a different screen location"
+  SC_MINIMIZE,   "Collapse this window to an icon"
+  SC_MAXIMIZE,   "Expand this window to full screen size"
+  SC_NEXTWINDOW, "Switch to next window"
+  SC_PREVWINDOW, "Switch to previous window"
+  SC_CLOSE,      "Close this window"
+  SC_RESTORE,    "Restore this window to normal size"
+  SC_TASKLIST,   "Switch to another task"
+}
 #endif
 #undef NO_IDS_STATUSBAR
 

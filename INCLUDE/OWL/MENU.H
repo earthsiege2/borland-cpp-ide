@@ -1,59 +1,90 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\menu.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of Window Menu encapsulation class
 //----------------------------------------------------------------------------
-#if !defined(__OWL_MENU_H)
-#define __OWL_MENU_H
+#if !defined(OWL_MENU_H)
+#define OWL_MENU_H
 
-#if !defined(__OWL_GDIOBJEC_H)
-  #include <owl\gdiobjec.h>
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
 #endif
 
+//
+//  class TMenuItem
+//  ----- ---------
+//  Representation of a menu item which can be a uint Id/position or a popup
+//  menu handle.
+//
+#if 0  //!CQ A nice idea, but has a couple of snags yet
+class TMenuItem {
+  public:
+    TMenuItem(uint id) {Item = id;}
+    TMenuItem(HMENU popup) {Item = reinterpret_cast<uint>(popup);}
+    operator uint() {return Item;}
+
+  private:
+    uint Item;
+};
+#else
+typedef uint TMenuItem;
+#endif
+
+//
+//  class TMenu
+//  ----- -----
+//
 class _OWLCLASS TMenu {
   public:
     TMenu(TAutoDelete autoDelete = AutoDelete);
+    TMenu(const TMenu& original, TAutoDelete autoDelete = AutoDelete);
     TMenu(HMENU handle, TAutoDelete autoDelete = NoAutoDelete);
     TMenu(HWND hWnd, TAutoDelete autoDelete = NoAutoDelete);
-    TMenu(LPCVOID* menuTemplate);
+    TMenu(const void far* menuTemplate);
     TMenu(HINSTANCE instance, TResId resId);
     virtual ~TMenu();
 
+    TMenu& operator =(const TMenu&);
+    
     class _OWLCLASS_RTL TXMenu : public TXOwl {
       public:
         TXMenu(unsigned resId = IDS_GDIFAILURE);
         TXOwl* Clone();
         void Throw();
     };
-    void        CheckValid(UINT redId = IDS_MENUFAILURE);
+    void        CheckValid(uint redId = IDS_MENUFAILURE);
+    virtual HMENU GetHandle() const {return Handle;}
 
-    operator    UINT() {return (UINT)Handle;}
-    operator    HMENU() {return Handle;}
+    operator    uint() const {return reinterpret_cast<uint>(GetHandle());}
+    operator    HMENU() const {return GetHandle();}
 
-    BOOL        IsOK() const {return Handle != 0;}
+    bool        IsOK() const {return GetHandle() != 0;}
 
     //
     // HMENU encapsulated functions
     //
-    BOOL        AppendMenu(UINT flags, UINT idNewItem=-1, const char far* newItem=0);
-    BOOL        AppendMenu(UINT flags, UINT idNewItem, const TBitmap& newBmp);
-    BOOL        CheckMenuItem(UINT idItem, UINT check);
-    BOOL        DeleteMenu(UINT idItem, UINT flags);
-    BOOL        EnableMenuItem(UINT idItem, UINT enable);
-    UINT        GetMenuItemCount() const;
-    UINT        GetMenuItemID(int posItem) const;
-    UINT        GetMenuState(UINT idItem, UINT flags) const;
-    UINT        GetMenuString(UINT idItem, char* str, int count, UINT flags) const;
+    bool        AppendMenu(uint flags, TMenuItem newItem=-1, const char far* newStr=0);
+    bool        AppendMenu(uint flags, TMenuItem newitem, const TBitmap& newBmp);
+    bool        CheckMenuItem(TMenuItem item, uint check);
+    bool        DeleteMenu(TMenuItem item, uint flags);
+    bool        EnableMenuItem(TMenuItem item, uint enable);
+    uint        GetMenuItemCount() const;
+    uint        GetMenuItemID(int posItem) const;
+    uint        GetMenuState(TMenuItem item, uint flags) const;
+    uint        GetMenuString(TMenuItem item, char* str, int count, uint flags) const;
     HMENU       GetSubMenu(int posItem) const;
-    BOOL        InsertMenu(UINT idItem, UINT flags, UINT idNewItem=-1, const char far* newItem=0);
-    BOOL        InsertMenu(UINT idItem, UINT flags, UINT idNewItem, const TBitmap& newBmp);
-    BOOL        ModifyMenu(UINT idItem, UINT flags, UINT idNewItem=-1, const char far* newItem=0);
-    BOOL        ModifyMenu(UINT idItem, UINT flags, UINT idNewItem, const TBitmap& newBmp);
-    BOOL        RemoveMenu(UINT idItem, UINT flags);
-    BOOL        SetMenuItemBitmaps(UINT idItem, UINT flags,
+    bool        InsertMenu(TMenuItem item, uint flags, TMenuItem newItem=-1, const char far* newStr=0);
+    bool        InsertMenu(TMenuItem item, uint flags, TMenuItem newItem, const TBitmap& newBmp);
+    bool        ModifyMenu(TMenuItem item, uint flags, TMenuItem newItem=-1, const char far* newStr=0);
+    bool        ModifyMenu(TMenuItem item, uint flags, TMenuItem newItem, const TBitmap& newBmp);
+    bool        RemoveMenu(TMenuItem item, uint flags);
+    bool        SetMenuItemBitmaps(TMenuItem item, uint flags,
                                    const TBitmap* bmpUnchecked=0,
                                    const TBitmap* bmpChecked=0);
-    static BOOL GetMenuCheckMarkDimensions(TSize& size);
+
+    static bool  GetMenuCheckMarkDimensions(TSize& size);
+    static TSize GetMenuCheckMarkDimensions();
 
     //
     // virtual menu functions
@@ -63,35 +94,93 @@ class _OWLCLASS TMenu {
 
   protected:
     HMENU       Handle;
-    BOOL        ShouldDelete;   // Did C++ object create Menu?
+    bool        ShouldDelete;   // Should this object destroy Menu?
+
+    static void DeepCopy(TMenu& dest, const TMenu& source, int offset = 0, int count = -1);
+    static void DeepCopy(TMenu& dst, int dstOff, const TMenu& src, int srcOff = 0, int count = -1);
 
   private:
-    //
-    // hidden to prevent accidental copying or assignment
-    //
-    TMenu(const TMenu&);
-    TMenu& operator =(const TMenu&);
 };
 
+//
+//  class TSystemMenu
+//  ----- -----------
+//
 class _OWLCLASS TSystemMenu : public TMenu {
   public:
-    TSystemMenu(HWND wnd, BOOL revert= FALSE);
+    TSystemMenu(HWND wnd, bool revert= false);
 
   private:
     TSystemMenu();
     TSystemMenu(const TSystemMenu&);
 };
 
+//
+//  class TPopupMenu
+//  ----- ----------
+//
 class _OWLCLASS TPopupMenu : public TMenu {
   public:
     TPopupMenu(TAutoDelete autoDelete = AutoDelete);
     TPopupMenu(HMENU handle, TAutoDelete autoDelete = NoAutoDelete);
 
-    BOOL        TrackPopupMenu(UINT flags, int x, int y, int rsvd, HWND wnd, TRect* rect=0);
-    BOOL        TrackPopupMenu(UINT flags, TPoint& point, int rsvd, HWND wnd, TRect* rect=0);
+    bool        TrackPopupMenu(uint flags, int x, int y, int rsvd, HWND wnd,
+                               const TRect* rect=0);
+    bool        TrackPopupMenu(uint flags, const TPoint& point, int rsvd,
+                               HWND wnd, const TRect* rect=0);
 
   private:
     TPopupMenu(const TPopupMenu&);
+};
+
+//
+//  class TMenuDescr
+//  ----- ----------
+//
+//  Menu information used to allow merging of two menus
+//
+class _OWLCLASS TMenuDescr : public TMenu {
+  public:
+    enum TGroup {
+      FileGroup,
+      EditGroup,
+      ContainerGroup,
+      ObjectGroup,
+      WindowGroup,
+      HelpGroup,
+      NumGroups
+    };
+    TMenuDescr();
+    TMenuDescr(const TMenuDescr& original);
+    TMenuDescr(TResId id, int fg, int eg, int cg, int og, int wg, int hg,
+               TModule* module = ::Module);
+    TMenuDescr(TResId id, TModule* module = ::Module);
+    TMenuDescr(HMENU hMenu, int fg, int eg, int cg, int og, int wg, int hg,
+               TModule* module = ::Module);
+   ~TMenuDescr();
+
+    TMenuDescr& operator =(const TMenuDescr& original);
+
+    HMENU    GetHandle() const {return Handle;}
+    TModule* GetModule() const {return Module;}
+    void     SetModule(TModule* module) {Module = module;}
+    TResId   GetId() const {return Id;}
+    int      GetGroupCount(int group) const {return GroupCount[group];}
+    void     ClearServerGroupCount();
+    void     ClearContainerGroupCount();
+
+    bool     Merge(const TMenuDescr& sourceMenuDescr);
+    bool     Merge(const TMenuDescr& sourceMenuDescr, TMenu& destMenu);
+
+  protected:
+    TModule* Module;       // module where menu lives
+    TResId   Id;           // resource id of menu
+    int      GroupCount[NumGroups];
+
+    bool     ExtractGroups();
+
+  friend ipstream& operator >>(ipstream& is, TMenuDescr& m);
+  friend opstream& operator <<(opstream& os, const TMenuDescr& m);
 };
 
 
@@ -99,88 +188,90 @@ class _OWLCLASS TPopupMenu : public TMenu {
 // Inlines
 //----------------------------------------------------------------------------
 
-inline BOOL TMenu::AppendMenu(UINT flags, UINT idNewItem, const char far* newItem) {
-  return ::AppendMenu(Handle, flags, idNewItem, newItem);
+inline bool TMenu::AppendMenu(uint flags, TMenuItem newItem, const char far* newStr) {
+  return ::AppendMenu(Handle, flags, newItem, newStr);
 }
 
-inline BOOL TMenu::AppendMenu(UINT flags, UINT idNewItem, const TBitmap& newBmp) {
-  return ::AppendMenu(Handle, flags|MF_BITMAP, idNewItem,
+inline bool TMenu::AppendMenu(uint flags, TMenuItem newItem, const TBitmap& newBmp) {
+  return ::AppendMenu(Handle, flags|MF_BITMAP, newItem,
          (const char far*)HBITMAP(newBmp));
 }
 
-inline BOOL TMenu::CheckMenuItem(UINT idItem, UINT check) {
-  return ::CheckMenuItem(Handle, idItem, check);
+inline bool TMenu::CheckMenuItem(TMenuItem item, uint check) {
+  return ::CheckMenuItem(Handle, item, check);
 }
 
-inline BOOL TMenu::DeleteMenu(UINT idItem, UINT flags) {
-  return ::DeleteMenu(Handle, idItem, flags);
+inline bool TMenu::DeleteMenu(TMenuItem item, uint flags) {
+  return ::DeleteMenu(Handle, item, flags);
 }
 
-inline BOOL TMenu::EnableMenuItem(UINT idItem, UINT enable) {
-  return ::EnableMenuItem(Handle, idItem, enable);
+inline bool TMenu::EnableMenuItem(TMenuItem item, uint enable) {
+  return ::EnableMenuItem(Handle, item, enable);
 }
 
-inline UINT TMenu::GetMenuItemCount() const {
+inline uint TMenu::GetMenuItemCount() const {
   return ::GetMenuItemCount(Handle);
 }
 
-inline UINT TMenu::GetMenuItemID(int PosItem) const {
-  return ::GetMenuItemID(Handle, PosItem);
+inline uint TMenu::GetMenuState(TMenuItem item, uint flags) const {
+  return ::GetMenuState(Handle, item, flags);
 }
 
-inline UINT TMenu::GetMenuState(UINT idItem, UINT flags) const {
-  return ::GetMenuState(Handle, idItem, flags);
-}
-
-inline UINT TMenu::GetMenuString(UINT idItem, char* str, int count, UINT flags) const {
-  return ::GetMenuString(Handle, idItem, str, count, flags);
+inline uint TMenu::GetMenuString(TMenuItem item, char* str, int count, uint flags) const {
+  return ::GetMenuString(Handle, item, str, count, flags);
 }
 
 inline HMENU TMenu::GetSubMenu(int posItem) const {
   return ::GetSubMenu(Handle, posItem);
 }
 
-inline BOOL TMenu::InsertMenu(UINT idItem, UINT flags, UINT idNewItem, const char far* newItem) {
-  return ::InsertMenu(Handle, idItem, flags|MF_STRING, idNewItem, newItem);
+inline bool TMenu::InsertMenu(TMenuItem item, uint flags, TMenuItem newItem, const char far* newStr) {
+  return ::InsertMenu(Handle, item, flags|MF_STRING, newItem, newStr);
 }
 
-inline BOOL TMenu::InsertMenu(UINT idItem, UINT flags, UINT idNewItem, const TBitmap& newBmp) {
-  return ::InsertMenu(Handle, idItem, flags|MF_BITMAP, idNewItem,
+inline bool TMenu::InsertMenu(TMenuItem item, uint flags, TMenuItem newItem, const TBitmap& newBmp) {
+  return ::InsertMenu(Handle, item, flags|MF_BITMAP, newItem,
          (const char far*)HBITMAP(newBmp));
 }
 
-inline BOOL TMenu::ModifyMenu(UINT idItem, UINT flags, UINT idNewItem, const char far* newItem) {
-  return ::ModifyMenu(Handle, idItem, flags|MF_STRING, idNewItem, newItem);
+inline bool TMenu::ModifyMenu(TMenuItem item, uint flags, TMenuItem newItem, const char far* newStr) {
+  return ::ModifyMenu(Handle, item, flags|MF_STRING, newItem, newStr);
 }
 
-inline BOOL TMenu::ModifyMenu(UINT idItem, UINT flags, UINT idNewItem, const TBitmap& newBmp) {
-  return ::ModifyMenu(Handle, idItem, flags|MF_BITMAP, idNewItem,
+inline bool TMenu::ModifyMenu(TMenuItem item, uint flags, TMenuItem newItem, const TBitmap& newBmp) {
+  return ::ModifyMenu(Handle, item, flags|MF_BITMAP, newItem,
          (const char far*)HBITMAP(newBmp));
 }
 
-inline BOOL TMenu::RemoveMenu(UINT idItem, UINT flags) {
-  return ::RemoveMenu(Handle, idItem, flags);
+inline bool TMenu::RemoveMenu(TMenuItem item, uint flags) {
+  return ::RemoveMenu(Handle, item, flags);
 }
 
-inline BOOL TMenu::SetMenuItemBitmaps(UINT idItem, UINT flags,
+inline bool TMenu::SetMenuItemBitmaps(TMenuItem item, uint flags,
                                       const TBitmap* bmpUnchecked,
                                       const TBitmap* bmpChecked) {
-  return ::SetMenuItemBitmaps(Handle, idItem, flags,
+  return ::SetMenuItemBitmaps(Handle, item, flags,
   bmpUnchecked ? HBITMAP(*bmpUnchecked) : 0,
   bmpChecked ? HBITMAP(*bmpChecked) : 0);
 }
 
-inline BOOL TMenu::GetMenuCheckMarkDimensions(TSize& size) {
+inline bool TMenu::GetMenuCheckMarkDimensions(TSize& size) {
   size = ::GetMenuCheckMarkDimensions();
-  return TRUE;
+  return true;
 }
 
-inline BOOL TPopupMenu::TrackPopupMenu(UINT flags, int x, int y, int rsvd, HWND wnd, TRect* rect) {
+inline TSize TMenu::GetMenuCheckMarkDimensions() {
+  return ::GetMenuCheckMarkDimensions();
+}
+
+inline bool TPopupMenu::TrackPopupMenu(uint flags, int x, int y, int rsvd,
+                                       HWND wnd, const TRect* rect) {
   return ::TrackPopupMenu(Handle, flags, x, y, rsvd, wnd, rect);
 }
 
-inline BOOL TPopupMenu::TrackPopupMenu(UINT flags, TPoint& point, int rsvd, HWND wnd, TRect* rect) {
+inline bool TPopupMenu::TrackPopupMenu(uint flags, const TPoint& point,
+                                       int rsvd, HWND wnd, const TRect* rect) {
   return ::TrackPopupMenu(Handle, flags, point.x, point.y, rsvd, wnd, rect);
 }
 
-#endif  // __OWL_MENU_H
+#endif  // OWL_MENU_H

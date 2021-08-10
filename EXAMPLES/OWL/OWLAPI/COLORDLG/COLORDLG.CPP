@@ -1,17 +1,19 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-// This file implements a custom control (TColorControl) and a
-// dialog box (TColorDialog) that uses them.  
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
+//  This file implements a custom control (TColorControl) and a
+//  dialog box (TColorDialog) that uses them.  
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
+#include <owl/owlpch.h>
+#include <owl/applicat.h>
 #include "colordlg.h"
 #include <stdio.h>
 #include <dos.h>
 #include <mem.h>
 #include <string.h>
-#include <owl\scrollba.h>
-#include <owl\dc.h>
+#include <owl/scrollba.h>
+#include <owl/dc.h>
 
 const unsigned int CN_CLICKED = 1;      // color control notifications
 
@@ -22,25 +24,27 @@ END_RESPONSE_TABLE;
 
 // This is only included if we're building the DLL version of colordlg
 //
-#if defined(__DLL__)
+#if defined(BI_APP_DLL)
 
-  //This exported function provides C access to the dialog
-  extern "C" BOOL FAR PASCAL __export 
+  // This exported function provides C (non-OWL) access to the dialog
+  //
+  extern "C" bool FAR PASCAL __export 
   GetColor(HWND parentHWnd, COLORREF& colorBuffer)
   {
-    // 
-    // Simulate an OWL application so TDialog is happy
+    // Create an alias OWL application object when called from a non-OWL
+    // program so that TDialog is happy
     //
     TModule* appModule;
     TApplication dummyApp("color dialog app", appModule);
-    TWindow parentAlias(parentHWnd);
+    TWindow parentAlias(parentHWnd, ::Module);
     return TColorDialog(&parentAlias, (TColor&)colorBuffer).Execute() == IDOK;
   }
-
 #endif
 
 TColorControl::TColorControl(TWindow* parent, int resId, TColor color)
-             : TControl(parent, resId, ::Module), Color(color)
+:
+  TControl(parent, resId, ::Module),
+  Color(color)
 {
   DisableTransfer();
 }
@@ -48,15 +52,13 @@ TColorControl::TColorControl(TWindow* parent, int resId, TColor color)
 
 //
 // Must use EvPaint since TControl assumes a pre-defined class control has a
-// window's class that paints it. (see source\owl\control.cpp)
+// window's class that paints it. (see source\owl/control.cpp)
 //
 void
 TColorControl::EvPaint()
 {
-
   TPaintDC dc(*this);
   dc.FillRect(GetClientRect(), TBrush(Color));
-
 }
 
 void
@@ -66,10 +68,9 @@ TColorControl::SetColor(TColor color)
   Invalidate();
 }
 
-UINT
+uint
 TColorControl::Transfer(void* buffer, TTransferDirection direction)
 {
-
   if (direction == tdGetData)
     memcpy(buffer, &Color, sizeof Color);
 
@@ -84,7 +85,7 @@ TColorControl::Transfer(void* buffer, TTransferDirection direction)
 // Notify parent of a CN_CLICKED event by sending a WM_COMMAND message
 //
 void
-TColorControl::EvLButtonDown(UINT, TPoint&)
+TColorControl::EvLButtonDown(uint, TPoint&)
 {
   Parent->SendNotification(Attr.Id, CN_CLICKED, HWindow);
 }
@@ -112,7 +113,8 @@ DisableChildTransfer(TWindow* w, void*)
 }
 
 TColorDialog::TColorDialog(TWindow* parent, TColor& color)
-  : TDialog(parent, "COLORDIALOG", ::Module)
+:
+  TDialog(parent, "COLORDIALOG", ::Module)
 {
   new TColorControl(this, ID_COLOR1, TColor(000, 000, 000));
   new TColorControl(this, ID_COLOR2, TColor(255, 255, 255));
@@ -136,33 +138,28 @@ TColorDialog::TColorDialog(TWindow* parent, TColor& color)
 }
 
 // Handlers for each custom control
-void 
-TColorDialog::ClickFmControl1() {SetColorFmControl(ID_COLOR1);}
-void 
-TColorDialog::ClickFmControl2() {SetColorFmControl(ID_COLOR2);}
-void 
-TColorDialog::ClickFmControl3() {SetColorFmControl(ID_COLOR3);}
-void 
-TColorDialog::ClickFmControl4() {SetColorFmControl(ID_COLOR4);}
-void 
-TColorDialog::ClickFmControl5() {SetColorFmControl(ID_COLOR5);}
-void 
-TColorDialog::ClickFmControl6() {SetColorFmControl(ID_COLOR6);}
-void 
-TColorDialog::ClickFmControl7() {SetColorFmControl(ID_COLOR7);}
-void 
-TColorDialog::ClickFmControl8() {SetColorFmControl(ID_COLOR8);}
+//
+void TColorDialog::ClickFmControl1() {SetColorFmControl(ID_COLOR1);}
+void TColorDialog::ClickFmControl2() {SetColorFmControl(ID_COLOR2);}
+void TColorDialog::ClickFmControl3() {SetColorFmControl(ID_COLOR3);}
+void TColorDialog::ClickFmControl4() {SetColorFmControl(ID_COLOR4);}
+void TColorDialog::ClickFmControl5() {SetColorFmControl(ID_COLOR5);}
+void TColorDialog::ClickFmControl6() {SetColorFmControl(ID_COLOR6);}
+void TColorDialog::ClickFmControl7() {SetColorFmControl(ID_COLOR7);}
+void TColorDialog::ClickFmControl8() {SetColorFmControl(ID_COLOR8);}
 
 // Update the selected color control and bars with the chosen color
+//
 void
-TColorDialog::SetColorFmControl(UINT Id)
+TColorDialog::SetColorFmControl(uint Id)
 {
-  TColor color=((TColorControl *)ChildWithId(Id))->GetColor();
+  TColor color = ((TColorControl*)ChildWithId(Id))->GetColor();
   SelColor->SetColor(color);
   UpdateBars(color);
 }
 
 // Update the selected color control with the current slider values
+//
 void
 TColorDialog::SetColorFmSlider()
 {
@@ -182,11 +179,9 @@ TColorDialog::SetupWindow()
 void
 TColorDialog::TransferData(TTransferDirection transferFlag)
 {
-
   TDialog::TransferData(transferFlag);
   if (transferFlag == tdSetData)
     UpdateBars(SelColor->GetColor());
-
 }
 
 void

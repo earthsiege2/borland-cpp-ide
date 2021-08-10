@@ -15,16 +15,18 @@
 \*****************************************************************************/
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1987, 1993 by Borland International
+ *      Copyright (c) 1987, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
-#ifndef __VER_H         /* prevent multiple includes */
+#if !defined(__VER_H) && !defined(__WINVER_H) /* prevent multiple includes */
 #define __VER_H
+#define __WINVER_H
 
+#ifndef __FLAT__
 #if !defined(__WINDOWS_H) && !defined(LIB)
 #include <windows.h>    /* <windows.h> must be included */
 #endif  /* __WINDOWS_H */
@@ -32,11 +34,13 @@
 #ifndef RC_INVOKED
 #pragma option -a-      /* Assume byte packing throughout */
 #endif  /* RC_INVOKED */
+#endif  /* __FLAT__ */
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
 
+#ifndef __FLAT__
 /*
  * If .lib version is being used, declare types used in this file.
  */
@@ -88,6 +92,11 @@ typedef int             HFILE;
 #define VS_FILE_INFO            ID(16)          /* Version stamp res type */
 #define VS_VERSION_INFO         ID(1)           /* Version stamp res ID */
 #define VS_USER_DEFINED         ID(100)         /* User-defined res IDs */
+#else   // __FLAT__
+#define VS_FILE_INFO            RT_VERSION
+#define VS_VERSION_INFO         1
+#define VS_USER_DEFINED         100
+#endif  // __FLAT__
 
 /* ----- VS_VERSION.dwFileFlags ----- */
 #define VS_FFI_SIGNATURE        0xFEEF04BDL
@@ -185,10 +194,11 @@ typedef int             HFILE;
 
 #ifndef RC_INVOKED              /* RC doesn't need to see the rest of this */
 
-
 /* ----- Types and structures ----- */
 
+#ifndef __FLAT__
 typedef signed short int SHORT;
+#endif  // __FLAT__
 
 typedef struct tagVS_FIXEDFILEINFO
 {
@@ -209,6 +219,7 @@ typedef struct tagVS_FIXEDFILEINFO
 
 /* ----- Function prototypes ----- */
 
+#ifndef __FLAT__
 UINT WINAPI VerFindFile(UINT uFlags, LPCSTR szFileName,
       LPCSTR szWinDir, LPCSTR szAppDir,
       LPSTR szCurDir, UINT FAR* lpuCurDirLen,
@@ -255,15 +266,162 @@ UINT WINAPI GetSystemDir(LPCSTR szAppDir, LPSTR lpBuffer, int nSize);
 BOOL WINAPI VerQueryValue(const void FAR* pBlock, LPCSTR lpSubBlock,
       void FAR* FAR* lplpBuffer, UINT FAR* lpuLen);
 
-#endif  /* RC_INVOKED */
-
-#ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
-
 #if !defined(RC_INVOKED)
 #pragma option -a.      /* Revert to default packing */
 #endif
 
-#endif  /* __VER_H */
-
+#else   // __FLAT__
+DWORD
+APIENTRY
+VerFindFileA(
+        DWORD uFlags,
+        LPSTR szFileName,
+        LPSTR szWinDir,
+        LPSTR szAppDir,
+        LPSTR szCurDir,
+        PUINT lpuCurDirLen,
+        LPSTR szDestDir,
+        PUINT lpuDestDirLen
+        );
+DWORD
+APIENTRY
+VerFindFileW(
+        DWORD uFlags,
+        LPWSTR szFileName,
+        LPWSTR szWinDir,
+        LPWSTR szAppDir,
+        LPWSTR szCurDir,
+        PUINT lpuCurDirLen,
+        LPWSTR szDestDir,
+        PUINT lpuDestDirLen
+        );
+#ifdef UNICODE
+#define VerFindFile  VerFindFileW
+#else
+#define VerFindFile  VerFindFileA
+#endif // !UNICODE
+
+DWORD
+APIENTRY
+VerInstallFileA(
+        DWORD uFlags,
+        LPSTR szSrcFileName,
+        LPSTR szDestFileName,
+        LPSTR szSrcDir,
+        LPSTR szDestDir,
+        LPSTR szCurDir,
+        LPSTR szTmpFile,
+        PUINT lpuTmpFileLen
+        );
+DWORD
+APIENTRY
+VerInstallFileW(
+        DWORD uFlags,
+        LPWSTR szSrcFileName,
+        LPWSTR szDestFileName,
+        LPWSTR szSrcDir,
+        LPWSTR szDestDir,
+        LPWSTR szCurDir,
+        LPWSTR szTmpFile,
+        PUINT lpuTmpFileLen
+        );
+#ifdef UNICODE
+#define VerInstallFile  VerInstallFileW
+#else
+#define VerInstallFile  VerInstallFileA
+#endif // !UNICODE
+
+/* Returns size of version info in bytes */
+DWORD
+APIENTRY
+GetFileVersionInfoSizeA(
+        LPSTR lptstrFilename, /* Filename of version stamped file */
+        LPDWORD lpdwHandle
+        );                      /* Information for use by GetFileVersionInfo */
+/* Returns size of version info in bytes */
+DWORD
+APIENTRY
+GetFileVersionInfoSizeW(
+        LPWSTR lptstrFilename, /* Filename of version stamped file */
+        LPDWORD lpdwHandle
+        );                      /* Information for use by GetFileVersionInfo */
+#ifdef UNICODE
+#define GetFileVersionInfoSize  GetFileVersionInfoSizeW
+#else
+#define GetFileVersionInfoSize  GetFileVersionInfoSizeA
+#endif // !UNICODE
+
+/* Read version info into buffer */
+BOOL
+APIENTRY
+GetFileVersionInfoA(
+        LPSTR lptstrFilename, /* Filename of version stamped file */
+        DWORD dwHandle,         /* Information from GetFileVersionSize */
+        DWORD dwLen,            /* Length of buffer for info */
+        LPVOID lpData
+        );                      /* Buffer to place the data structure */
+/* Read version info into buffer */
+BOOL
+APIENTRY
+GetFileVersionInfoW(
+        LPWSTR lptstrFilename, /* Filename of version stamped file */
+        DWORD dwHandle,         /* Information from GetFileVersionSize */
+        DWORD dwLen,            /* Length of buffer for info */
+        LPVOID lpData
+        );                      /* Buffer to place the data structure */
+#ifdef UNICODE
+#define GetFileVersionInfo  GetFileVersionInfoW
+#else
+#define GetFileVersionInfo  GetFileVersionInfoA
+#endif // !UNICODE
+
+DWORD
+APIENTRY
+VerLanguageNameA(
+        DWORD wLang,
+        LPSTR szLang,
+        DWORD nSize
+        );
+DWORD
+APIENTRY
+VerLanguageNameW(
+        DWORD wLang,
+        LPWSTR szLang,
+        DWORD nSize
+        );
+#ifdef UNICODE
+#define VerLanguageName  VerLanguageNameW
+#else
+#define VerLanguageName  VerLanguageNameA
+#endif // !UNICODE
+
+BOOL
+APIENTRY
+VerQueryValueA(
+        const LPVOID pBlock,
+        LPSTR lpSubBlock,
+        LPVOID * lplpBuffer,
+        PUINT puLen
+        );
+BOOL
+APIENTRY
+VerQueryValueW(
+        const LPVOID pBlock,
+        LPWSTR lpSubBlock,
+        LPVOID * lplpBuffer,
+        PUINT puLen
+        );
+#ifdef UNICODE
+#define VerQueryValue  VerQueryValueW
+#else
+#define VerQueryValue  VerQueryValueA
+#endif // !UNICODE
+
+#endif  /* !RC_INVOKED */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif  /* !VER_H */
+#endif  // __FLAT__

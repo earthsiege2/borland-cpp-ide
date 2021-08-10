@@ -1,16 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\messageb.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Class TMessageBar.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_MESSAGEB_H)
-#define __OWL_MESSAGEB_H
+#if !defined(OWL_MESSAGEB_H)
+#define OWL_MESSAGEB_H
 
-#if !defined(__OWL_GADGETWI_H)
-  #include "owl\gadgetwi.h"
+#if !defined(OWL_GADGETWI_H)
+# include <owl/gadgetwi.h>
 #endif
 
-const int IDW_STATUSBAR = 32000;
+const int IDW_STATUSBAR     = 32040;  // Window ID used to locate status bars
 
 //
 //  class TMessageBar
@@ -40,7 +41,7 @@ class _OWLCLASS TMessageBar : public TGadgetWindow {
     virtual void    SetHintText(const char* text);
 
   protected:
-    BOOL   HighlightLine;  // does this bar have a upper highlight line?
+    bool   HighlightLine;  // does this bar have a upper highlight line?
     char*  HintText;       // current command hint being displayed, if any
 
     //
@@ -52,7 +53,7 @@ class _OWLCLASS TMessageBar : public TGadgetWindow {
     //
     // draw highlight line, then HintText if any, or gadgets
     //
-    void  PaintGadgets(TDC& dc, BOOL erase, TRect& rect);
+    void  PaintGadgets(TDC& dc, bool erase, TRect& rect);
 
   private:
     //
@@ -64,4 +65,4 @@ class _OWLCLASS TMessageBar : public TGadgetWindow {
   DECLARE_CASTABLE;
 };
 
-#endif  // __OWL_MESSAGEB_H
+#endif  // OWL_MESSAGEB_H

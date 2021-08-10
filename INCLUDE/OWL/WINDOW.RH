@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\window.rh
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Command IDs to use with window.h
 //----------------------------------------------------------------------------
 
@@ -8,6 +9,15 @@
 // Commands
 //
 #define CM_EXIT             24310
+
+#define CM_EDITUNDO         24321       // Common edit menu commands
+#define CM_EDITCUT          24322
+#define CM_EDITCOPY         24323
+#define CM_EDITPASTE        24324
+#define CM_EDITDELETE       24325
+#define CM_EDITCLEAR        24326
+#define CM_EDITADD          24327
+#define CM_EDITEDIT         24328
 
 //
 // Default Owl icon ID

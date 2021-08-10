@@ -1,15 +1,16 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\inputdia.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of TInputDialog class
 //----------------------------------------------------------------------------
-#if !defined(__OWL_INPUTDIA_H)
-#define __OWL_INPUTDIA_H
+#if !defined(OWL_INPUTDIA_H)
+#define OWL_INPUTDIA_H
 
-#if !defined(__OWL_DIALOG_H)
-  #include <owl\dialog.h>
+#if !defined(OWL_DIALOG_H)
+# include <owl/dialog.h>
 #endif
-#include <owl\inputdia.rh>
+#include <owl/inputdia.rh>
 
 class _OWLCLASS TValidator;
 
@@ -55,4 +56,4 @@ class _OWLCLASS TInputDialog : public TDialog {
   DECLARE_STREAMABLE(_OWLCLASS, TInputDialog, 1);
 };
 
-#endif  // __OWL_INPUTDIA_H
+#endif  // OWL_INPUTDIA_H

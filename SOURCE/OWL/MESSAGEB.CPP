@@ -1,33 +1,35 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\messageb.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TMessageBar.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\messageb.h>
-#include <owl\textgadg.h>
+#include <owl/owlpch.h>
+#include <owl/messageb.h>
+#include <owl/textgadg.h>
 
 TMessageBar::TMessageBar(TWindow*   parent,
                          TFont*     font,
                          TModule*   module)
-  : TGadgetWindow(parent, Horizontal, font, module)
+:
+  TGadgetWindow(parent, Horizontal, font, module)
 {
   TTextGadget*  textGadget = new TTextGadget(TGadget::None);
 
   Attr.Id = IDW_STATUSBAR;
-  HighlightLine = TRUE;
+  HighlightLine = true;
   HintText = 0;
-  textGadget->WideAsPossible = TRUE;
+  textGadget->WideAsPossible = true;
   Insert(*textGadget);
 }
 
 TMessageBar::~TMessageBar()
 {
-  delete HintText;
+  delete [] HintText;
 }
 
 void
-TMessageBar::PaintGadgets(TDC& dc, BOOL erase, TRect& rect)
+TMessageBar::PaintGadgets(TDC& dc, bool erase, TRect& rect)
 {
   if (HighlightLine && rect.top == 0)
     dc.TextRect(0, 0, rect.right, GetSystemMetrics(SM_CYBORDER),
@@ -42,8 +44,8 @@ TMessageBar::PaintGadgets(TDC& dc, BOOL erase, TRect& rect)
     dc.SelectObject(GetFont());
     dc.SetBkColor(GetSysColor(COLOR_BTNFACE));
     dc.ExtTextOut(5, y, ETO_OPAQUE, &clientRect, HintText, strlen(HintText));
-
-  } else {
+  }
+  else {
     TGadgetWindow::PaintGadgets(dc, erase, rect);
   }
 }
@@ -82,7 +84,7 @@ void
 TMessageBar::SetHintText(const char* text)
 {
   if (text != HintText) {
-    delete HintText;
+    delete [] HintText;
     HintText = text ? strnewdup(text) : 0;
     Invalidate();
   }

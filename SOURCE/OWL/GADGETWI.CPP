@@ -1,33 +1,34 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\gadgetwi.cpp
-//   Defines class TGadgetWindow.
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of class TGadgetWindow.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\gadget.h>
-#include <owl\gadgetwi.h>
+#include <owl/owlpch.h>
+#include <owl/gadget.h>
+#include <owl/gadgetwi.h>
 
 DEFINE_RESPONSE_TABLE1(TGadgetWindow, TWindow)
   EV_WM_CTLCOLOR,
   EV_WM_LBUTTONDOWN,
   EV_WM_LBUTTONUP,
+  EV_WM_LBUTTONDBLCLK,
   EV_WM_MOUSEMOVE,
   EV_WM_SIZE,
   EV_WM_SYSCOLORCHANGE,
 END_RESPONSE_TABLE;
 
-static inline int
-HeightInPixels(int pointSize)
+static inline int HeightInPixels(int pointSize)
 {
   TScreenDC  dc;
-
   return MulDiv(-pointSize, dc.GetDeviceCaps(LOGPIXELSY), 72);
 }
 
-TGadgetWindowFont::TGadgetWindowFont(int pointSize, BOOL bold, BOOL italic)
-  : TFont("MS Sans Serif", HeightInPixels(pointSize), 0, 0, 0,
-          bold ? FW_BOLD : FW_NORMAL,
-          BYTE(VARIABLE_PITCH | FF_SWISS), BYTE(italic))
+TGadgetWindowFont::TGadgetWindowFont(int pointSize, bool bold, bool italic)
+:
+  TFont("MS Sans Serif", HeightInPixels(pointSize), 0, 0, 0,
+        bold ? FW_BOLD : FW_NORMAL,
+        uint8(VARIABLE_PITCH | FF_SWISS), uint8(italic))
 {
 }
 
@@ -35,7 +36,8 @@ TGadgetWindow::TGadgetWindow(TWindow*       parent,
                              TTileDirection direction,
                              TFont*         font,
                              TModule*       module)
-  : TWindow(parent, 0, module)
+:
+  TWindow(parent, 0, module)
 {
   PRECONDITION(font);
 
@@ -45,17 +47,17 @@ TGadgetWindow::TGadgetWindow(TWindow*       parent,
   Font = font;
   Direction = direction;
   if (Direction == Horizontal) {
-    ShrinkWrapWidth = FALSE;
-    ShrinkWrapHeight = TRUE;
-
-  } else {
-    ShrinkWrapWidth = TRUE;
-    ShrinkWrapHeight = FALSE;
+    ShrinkWrapWidth = false;
+    ShrinkWrapHeight = true;
+  }
+  else {
+    ShrinkWrapWidth = true;
+    ShrinkWrapHeight = false;
   }
   HintMode = PressHints;
 
   WideAsPossible = 0;  // number of gadgets with "WideAsPossible" set
-  DirtyLayout = TRUE;
+  DirtyLayout = true;
   Gadgets = 0;
   NumGadgets = 0;
 
@@ -107,12 +109,12 @@ TGadgetWindow::EvSysColorChange()
   BkgndBrush = new TBrush(GetSysColor(COLOR_BTNFACE));
 }
 
-BOOL
+bool
 TGadgetWindow::IdleAction(long idleCount)
 {
   if (idleCount == 0) {
-    // See if we missed a mouse move & still need to send a MouseLeave to a 
-    // gadget 
+    // See if we missed a mouse move & still need to send a MouseLeave to a
+    // gadget
     //
     if (AtMouse) {
       TPoint crsPoint;
@@ -140,22 +142,22 @@ TGadgetWindow::GadgetWithId(int id) const
 }
 
 void
-TGadgetWindow::SetShrinkWrap(BOOL shrinkWrapWidth, BOOL shrinkWrapHeight)
+TGadgetWindow::SetShrinkWrap(bool shrinkWrapWidth, bool shrinkWrapHeight)
 {
   ShrinkWrapWidth = shrinkWrapWidth;
   ShrinkWrapHeight = shrinkWrapHeight;
 }
 
-BOOL
+bool
 TGadgetWindow::GadgetSetCapture(TGadget& gadget)
 {
-  if (Capture)
-    return FALSE;
-
+  if (Capture) {
+    return false;
+  }
   else {
     Capture = &gadget;
     SetCapture();
-    return TRUE;
+    return true;
   }
 }
 
@@ -176,17 +178,18 @@ void
 TGadgetWindow::SetHintCommand(int id)
 {
   if (Parent) {
-    if (id >= 0)
+    if (id > 0)
       Parent->HandleMessage(WM_MENUSELECT, id, 0);
 
     else
       // Send a menuselect w/ flags==0xFFFF and hMenu==0 to indicate end
       //
-    #if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
       Parent->HandleMessage(WM_MENUSELECT, 0xFFFF0000, 0); // flags+item, hmenu
-    #else
+#else
       Parent->HandleMessage(WM_MENUSELECT, 0, 0x0000FFFFL);// item, hmenu+flags
-    #endif
+#endif
+
     Parent->HandleMessage(WM_ENTERIDLE, MSGF_MENU);
   }
 }
@@ -287,8 +290,8 @@ TGadgetWindow::GetDesiredSize(TSize& size)
 
     if (lastGadget)
       size.cx += lastGadget->GetBounds().right;
-
-  } else {
+  }
+  else {
     size.cx = left + right + maxWidth;
 
     if (Attr.Style & WS_BORDER)
@@ -303,8 +306,8 @@ TGadgetWindow::GetDesiredSize(TSize& size)
 
     if (lastGadget)
       size.cx += lastGadget->GetBounds().bottom;
-
-  } else {
+  }
+  else {
     size.cy = top + bottom + maxHeight;
 
     if (Attr.Style & WS_BORDER)
@@ -312,7 +315,7 @@ TGadgetWindow::GetDesiredSize(TSize& size)
   }
 }
 
-BOOL
+bool
 TGadgetWindow::Create()
 {
   TSize  size;
@@ -325,7 +328,20 @@ TGadgetWindow::Create()
   if (ShrinkWrapHeight)
     Attr.H = size.cy;
 
-  return TWindow::Create();
+  bool r =  TWindow::Create();
+
+  GetDesiredSize(size);
+  if ((ShrinkWrapWidth && Attr.W != size.cx) || (ShrinkWrapHeight &&  Attr.H != size.cy)) {
+    if (ShrinkWrapWidth)
+      Attr.W = size.cx;
+
+    if (ShrinkWrapHeight)
+      Attr.H = size.cy;
+
+    LayoutSession();
+  }
+
+  return r;
 }
 
 //
@@ -338,12 +354,12 @@ TGadgetWindow::SetDirection(TTileDirection direction)
   if (Direction != direction) {
     Direction = direction;
     if (Direction == Horizontal) {
-      ShrinkWrapWidth = FALSE;
-      ShrinkWrapHeight = TRUE;
-
-    } else {
-      ShrinkWrapWidth = TRUE;
-      ShrinkWrapHeight = FALSE;
+      ShrinkWrapWidth = false;
+      ShrinkWrapHeight = true;
+    }
+    else {
+      ShrinkWrapWidth = true;
+      ShrinkWrapHeight = false;
     }
     //
     // Swap margin's X & Y axis
@@ -559,11 +575,11 @@ TGadgetWindow::Remove(TGadget& gadget)
   //
   if (&gadget == Gadgets) {
     Gadgets = Gadgets->Next;
-
+  }
   //
   // scan for gadget, looking one link ahead
   //
-  } else {
+  else {
     TGadget* g = Gadgets;
 
     while (g->Next && g->Next != &gadget)
@@ -594,12 +610,12 @@ TGadgetWindow::Remove(TGadget& gadget)
 }
 
 void
-TGadgetWindow::EvSize(UINT sizeType, TSize& size)
+TGadgetWindow::EvSize(uint sizeType, TSize& size)
 {
   TWindow::EvSize(sizeType, size);
 
   if (DirtyLayout || WideAsPossible > 0) {
-    DirtyLayout = FALSE;
+    DirtyLayout = false;
     TileGadgets();
     Invalidate();
   }
@@ -609,8 +625,9 @@ TGadgetWindow::EvSize(UINT sizeType, TSize& size)
 // Iterate thru the gadget list and paint each one.
 //
 void
-TGadgetWindow::PaintGadgets(TDC& dc, BOOL, TRect& rect)
+TGadgetWindow::PaintGadgets(TDC& dc, bool, TRect& rect)
 {
+  TPoint viewport = dc.GetViewportOrg();
   for (TGadget* gadget = Gadgets; gadget; gadget = gadget->Next) {
     if (gadget->Bounds.Touches(rect)) {
       dc.SetViewportOrg((TPoint&)gadget->Bounds);
@@ -626,10 +643,11 @@ TGadgetWindow::PaintGadgets(TDC& dc, BOOL, TRect& rect)
         dc.RestoreDC();
     }
   }
+  dc.SetViewportOrg(viewport);
 }
 
 void
-TGadgetWindow::Paint(TDC& dc, BOOL erase, TRect& rect)
+TGadgetWindow::Paint(TDC& dc, bool erase, TRect& rect)
 {
   dc.SelectObject(*Font);
   PaintGadgets(dc, erase, rect);
@@ -649,7 +667,7 @@ TGadgetWindow::GadgetFromPoint(TPoint& point) const
 }
 
 HBRUSH
-TGadgetWindow::EvCtlColor(HDC hDC, HWND /*hWndChild*/, UINT /*ctlType*/)
+TGadgetWindow::EvCtlColor(HDC hDC, HWND /*hWndChild*/, uint /*ctlType*/)
 {
   ::SetBkColor(hDC, BkgndColor);
   return HBRUSH(*BkgndBrush);
@@ -660,11 +678,13 @@ TGadgetWindow::EvCtlColor(HDC hDC, HWND /*hWndChild*/, UINT /*ctlType*/)
 // the gadget.
 //
 void
-TGadgetWindow::EvLButtonDown(UINT modKeys, TPoint& point)
+TGadgetWindow::EvLButtonDown(uint modKeys, TPoint& point)
 {
   TGadget* gadget = Capture ? Capture : GadgetFromPoint(point);
-  if (gadget && gadget->GetEnabled())
+
+  if (gadget && (gadget->GetEnabled() || Capture))
     gadget->LButtonDown(modKeys, point - *(TSize*)&gadget->Bounds.TopLeft());
+
   TWindow::EvLButtonDown(modKeys, point);
 }
 
@@ -673,14 +693,25 @@ TGadgetWindow::EvLButtonDown(UINT modKeys, TPoint& point)
 // to the gadget at the mouse pos
 //
 void
-TGadgetWindow::EvLButtonUp(UINT modKeys, TPoint& point)
+TGadgetWindow::EvLButtonUp(uint modKeys, TPoint& point)
 {
   TGadget* gadget = Capture ? Capture : GadgetFromPoint(point);
 
-  if (gadget && gadget->GetEnabled())
+  if (gadget && (gadget->GetEnabled() || Capture))
     gadget->LButtonUp(modKeys, TPoint(point.x - gadget->Bounds.left,
                                       point.y - gadget->Bounds.top));
   TWindow::EvLButtonUp(modKeys, point);
+}
+
+//
+// Pass double clicks thru as if they were just a second click, finish the
+// first click, & begin the second. Dn + Dbl + Up -> Dn + Up+Dn + Up
+//
+void
+TGadgetWindow::EvLButtonDblClk(uint modKeys, TPoint& point)
+{
+  EvLButtonUp(modKeys, point);
+  EvLButtonDown(modKeys, point);
 }
 
 //
@@ -691,13 +722,13 @@ TGadgetWindow::EvLButtonUp(UINT modKeys, TPoint& point)
 // in the same area for a while, or looking ahead in queue for mouse msgs.
 //
 void
-TGadgetWindow::EvMouseMove(UINT modKeys, TPoint& point)
+TGadgetWindow::EvMouseMove(uint modKeys, TPoint& point)
 {
   if (Capture) {
     Capture->MouseMove(modKeys, TPoint(point.x - Capture->Bounds.left,
                                        point.y - Capture->Bounds.top));
-
-  } else {
+  }
+  else {
     TGadget* gadget = GadgetFromPoint(point);
     if (gadget != AtMouse) {
       if (AtMouse)

@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\eventhan.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TEventHandler
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\point.h>
-#include <owl\eventhan.h>
+#include <owl/owlpch.h>
+#include <owl/point.h>
+#include <owl/eventhan.h>
 #include <stdlib.h>
 
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMsg, 1, 0);
@@ -13,7 +14,7 @@ DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMsg, 1, 0);
 
 #if defined(__TRACE) || defined(__WARN)
   struct WMSTR {
-    UINT    msg;
+    uint    msg;
     char*   str;
   };
 
@@ -210,10 +211,10 @@ DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMsg, 1, 0);
 #endif
 
 
-BOOL
+bool
 TEventHandler::Find(TEventInfo&, TEqualOperator)
 {
-  return FALSE;
+  return false;
 }
 
 LRESULT
@@ -227,7 +228,7 @@ TEventHandler::Dispatch(TEventInfo& eventInfo, WPARAM wParam, LPARAM lParam)
          );
 }
 
-BOOL
+bool
 TEventHandler::SearchEntries(TGenericTableEntry __RTFAR* entries,
                              TEventInfo&         eventInfo,
                              TEqualOperator      equal)
@@ -236,20 +237,20 @@ TEventHandler::SearchEntries(TGenericTableEntry __RTFAR* entries,
     while (entries->Dispatcher != 0) {
       if (equal(*entries, eventInfo)) {
         eventInfo.Entry = entries;
-        return TRUE;
+        return true;
       }
       entries++;
     }
-
-  } else {
+  }
+  else {
     while (entries->Dispatcher != 0) {
       if (entries->Msg == eventInfo.Msg && entries->Id == eventInfo.Id) {
         eventInfo.Entry = entries;
-        return TRUE;
+        return true;
       }
       entries++;
     }
   }
 
-  return FALSE;
+  return false;
 }

@@ -57,7 +57,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    if (!InitInstance(hInstance, nCmdShow))
        return (FALSE);
 
-   while (GetMessage(&msg, NULL, NULL, NULL)) {
+   while (GetMessage(&msg, NULL, 0, 0)) {
 
       /* Only translate message if it is not an accelerator message */
       if (!TranslateAccelerator(hWnd, hAccTable, &msg)) {
@@ -84,7 +84,7 @@ BOOL InitApplication(HINSTANCE hInstance)
 {
    WNDCLASS wc;
 
-   wc.style = NULL;
+   wc.style = 0;
    wc.lpfnWndProc = MainWndProc;
    wc.cbClsExtra = 0;
    wc.cbWndExtra = 0;
@@ -159,6 +159,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 ****************************************************************************/
 
+#pragma warn -eff
 LRESULT CALLBACK _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
    DLGPROC lpProcAbout;
@@ -351,9 +352,9 @@ LRESULT CALLBACK _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
            return (DefWindowProc(hWnd, message, wParam, lParam));
    }
 
-   return (NULL);
+   return 0L;
 }
-
+#pragma warn .eff
 
 /****************************************************************************
 

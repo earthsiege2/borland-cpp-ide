@@ -9,11 +9,11 @@
 #include "dllhello.h"
 #include "calldll.h"
 
-static TModule*    ResourceDll = 0;   // DLL to be loaded.
+static TModule  ResourceDll("resource.dll");   // DLL to be loaded.
 
 class TTestWindow : public TWindow {
   public:
-    TTestWindow() : TWindow(0, 0, 0) {}
+    TTestWindow() : TWindow(0, 0, ::Module) {} // associate with this module
 
     void SetupWindow();
     void CleanupWindow();
@@ -79,7 +79,7 @@ TTestWindow::CmRString()
 
   char far* str = new char[RESLEN];
 
-  ResourceDll->LoadString(ID_STRING, str, RESLEN);
+  ResourceDll.LoadString(ID_STRING, str, RESLEN);
   MessageBox(str, "The String Is!", MB_OK);
   delete[] str;
 }
@@ -90,7 +90,7 @@ TTestWindow::CmRString()
 void
 TTestWindow::CmRCursor()
 {
-  SetCursor(ResourceDll, ID_CURSOR);
+  SetCursor(&ResourceDll, ID_CURSOR);
 }
 
 //
@@ -105,7 +105,7 @@ TTestWindow::CmRIcon()
   itoa(ID_ICON, temp, 10);
   resIdAsString = "#";
   resIdAsString += temp;
-  SampleIcon = ResourceDll->LoadIcon(resIdAsString.c_str());
+  SampleIcon = ResourceDll.LoadIcon(resIdAsString.c_str());
   CHECK(SampleIcon);
   Invalidate();
 }
@@ -116,7 +116,7 @@ TTestWindow::CmRIcon()
 void
 TTestWindow::CmRBitmap()
 {
-  SampleBitmap = ResourceDll->LoadBitmap(ID_BITMAP);
+  SampleBitmap = ResourceDll.LoadBitmap(ID_BITMAP);
   CHECK(SampleBitmap);
   Invalidate();
 }
@@ -153,8 +153,5 @@ TCallDllApp::InitMainWindow()
 int
 OwlMain(int /*argc*/, char* /*argv*/ [])
 {
-  ResourceDll = new TModule("resource.dll");  // Load resource only DLL.
-  int ret = TCallDllApp().Run();
-  delete ResourceDll;   // unload resource only DLL.
-  return ret;
+  return TCallDllApp().Run();
 }

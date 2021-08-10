@@ -21,7 +21,7 @@
 #endif  // __SHDDEL_H
 
 #pragma option -Vo-
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po-
 #endif
 
@@ -29,7 +29,7 @@ _CLASSDEF(PriorityQueue)
 
 class _CLASSTYPE PriorityQueue :
     public Container,
-    public virtual TShouldDelete
+    public virtual Object::TShouldDelete
 {
 
 public:
@@ -113,7 +113,7 @@ private:
 
 };
 
-#if defined( __BCOPT__ ) && !defined( _ALLOW_po )
+#if defined( __BCOPT__ ) && !defined( __FLAT__ ) && !defined( _ALLOW_po )
 #pragma option -po.
 #endif
 #pragma option -Vo.

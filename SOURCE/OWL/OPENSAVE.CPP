@@ -1,49 +1,99 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\opensave.cpp
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of OpenSave abstract, FileOpen, FileSave Common Dialog
 //   classes
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\opensave.h>
+#include <owl/owlpch.h>
+#include <owl/opensave.h>
 #include <dir.h>
 
 #if !defined(SECTION) || SECTION == 1
 
-TOpenSaveDialog::TData::TData(DWORD flags,
-                              char* filter,
-                              char* customFilter,
-                              char* initialDir,
-                              char* defExt)
-  : Flags(flags), Error(0), FileName(0), Filter(0),
-    CustomFilter(customFilter), FilterIndex(0),
-    InitialDir(initialDir), DefExt(defExt)
+TOpenSaveDialog::TData::TData(uint32      flags,
+                              const char* filter,
+                              char*       customFilter,
+                              char*       initialDir,
+                              char*       defExt,
+                              int         maxPath)
+:
+  Flags(flags), Error(0), FileName(0), Filter(0),
+  CustomFilter(customFilter), FilterIndex(0),
+  InitialDir(initialDir), DefExt(defExt),
+  MaxPath(maxPath ? maxPath : MAXPATH)
 {
-  FileName = new char[MAXPATH];
+  FileName = new char[MaxPath];
   *FileName = 0;
   SetFilter(filter);
 }
 
+TOpenSaveDialog::TData::TData(const TData& src)
+:
+  Flags(src.Flags), Error(0), FileName(0), Filter(0),
+  CustomFilter(src.CustomFilter), FilterIndex(src.FilterIndex),
+  InitialDir(src.InitialDir), DefExt(src.DefExt),
+  MaxPath(src.MaxPath)
+{
+  FileName = strnewdup(src.FileName, MaxPath);
+  SetFilter(src.Filter);
+}
+
 TOpenSaveDialog::TData::~TData()
 {
-  delete FileName;
-  delete Filter;
+  delete [] FileName;
+  delete [] Filter;
+}
+
+TOpenSaveDialog::TData&
+TOpenSaveDialog::TData::operator =(const TData& src)
+{
+  Flags = src.Flags;
+  Error = 0;
+  CustomFilter = src.CustomFilter;
+  FilterIndex = src.FilterIndex;
+  InitialDir = src.InitialDir;
+  DefExt = src.DefExt;
+  MaxPath = src.MaxPath;
+
+  delete [] FileName;
+  FileName = strnewdup(src.FileName, MaxPath);
+
+  SetFilter(src.Filter);
+
+  return *this;
 }
 
 //
 // Set the file list box filter strings. Translates '|'s into 0s so that the
 // string can be kept as a resource with imbeded '|'s like:
 // "Text Files(*.txt)|*.TXT|All Files(*.*)|*.*|"
+// Can also handle already processed filter strings.
 //
 void
 TOpenSaveDialog::TData::SetFilter(const char* filter)
 {
+  // Copy filter string
+  //
   if (filter) {
-    delete Filter;
-    Filter = strcpy(new char[strlen(filter)+2], filter);
-    Filter[strlen(filter)+1] = 0;  // in case trailing '|' is missing
+    delete [] Filter;
+    if (strchr(filter, '|')) {
+      uint len = strlen(filter) + 2; // one for each terminating 0
+      Filter = strcpy(new char[len], filter);
+      Filter[len-1] = 0;             // in case trailing '|' is missing
+    }
+    else {
+      const char* p = filter;
+      while (*p)
+        p += strlen(p) + 1;             // scan for 00 at end
+      uint len = uint(p - filter) + 1;  // one more for last 0
+      Filter = new char[len];
+      memcpy(Filter, filter, len);
+    }
   }
+  // Stomp |s with 0s
+  //
   if (Filter)
     for (char* p = Filter; *p; p++)
       if (*p == '|')
@@ -56,7 +106,7 @@ TOpenSaveDialog::TData::SetFilter(const char* filter)
 DEFINE_RESPONSE_TABLE1(TOpenSaveDialog, TCommonDialog)
 END_RESPONSE_TABLE;
 
-UINT TOpenSaveDialog::ShareViMsgId = 0;
+uint TOpenSaveDialog::ShareViMsgId = 0;
 
 void
 TOpenSaveDialog::Init(TResId templateId)
@@ -72,21 +122,23 @@ TOpenSaveDialog::Init(TResId templateId)
   if (templateId) {
     ofn.lpTemplateName = templateId;
     ofn.Flags |= OFN_ENABLETEMPLATE;
-  } else
+  }
+  else
     ofn.Flags &= ~OFN_ENABLETEMPLATE;
   ofn.lpfnHook = 0;
 
   ofn.lpstrFilter = Data.Filter;
   ofn.nFilterIndex = Data.FilterIndex;
   ofn.lpstrFile = Data.FileName;
-  ofn.nMaxFile = MAXPATH;
+  ofn.nMaxFile = Data.MaxPath;
   ofn.lpstrInitialDir = Data.InitialDir;
   ofn.lpstrDefExt = Data.DefExt;
 }
 
 TOpenSaveDialog::TOpenSaveDialog(TWindow* parent, TData& data, TModule*   module)
-  : TCommonDialog(parent, 0, module),
-    Data(data)
+:
+  TCommonDialog(parent, 0, module),
+  Data(data)
 {
 }
 
@@ -95,23 +147,24 @@ TOpenSaveDialog::TOpenSaveDialog(TWindow*        parent,
                                  TResId          templateId,
                                  const char far* title,
                                  TModule*        module)
-  : TCommonDialog(parent, 0, module),
-    Data(data)
+:
+  TCommonDialog(parent, 0, module),
+  Data(data)
 {
   Init(templateId);
   (LPCSTR)ofn.lpstrTitle = title;
 }
 
-BOOL
-TOpenSaveDialog::DialogFunction(UINT msg, WPARAM wParam, LPARAM lParam)
+bool
+TOpenSaveDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
 {
   if (TCommonDialog::DialogFunction(msg, wParam, lParam))
-    return TRUE;
+    return true;
 
   if (msg == TOpenSaveDialog::ShareViMsgId)
-    return (BOOL)ShareViolation();
+    return (bool)ShareViolation();
 
-  return FALSE;
+  return false;
 }
 
 int
@@ -127,7 +180,8 @@ TFileOpenDialog::TFileOpenDialog(TWindow*        parent,
                                  TResId          templateId,
                                  const char far* title,
                                  TModule*        module)
-  : TOpenSaveDialog(parent, data, templateId, title, module)
+:
+  TOpenSaveDialog(parent, data, templateId, title, module)
 {
 }
 
@@ -139,7 +193,8 @@ TFileOpenDialog::DoExecute()
   if (ret) {
     Data.Flags = ofn.Flags;
     Data.Error = 0;
-  } else {
+  }
+  else {
     Data.Error = ::CommDlgExtendedError();
   }
   return ret ? IDOK : IDCANCEL;
@@ -153,7 +208,8 @@ TFileSaveDialog::TFileSaveDialog(TWindow*        parent,
                                  TResId          templateId,
                                  const char far* title,
                                  TModule*        module)
-  : TOpenSaveDialog(parent, data, templateId, title, module)
+:
+  TOpenSaveDialog(parent, data, templateId, title, module)
 {
 }
 
@@ -165,7 +221,8 @@ TFileSaveDialog::DoExecute()
   if (ret) {
     Data.Flags = ofn.Flags;
     Data.Error = 0;
-  } else {
+  }
+  else {
     Data.Error = ::CommDlgExtendedError();
   }
   return ret ? IDOK : IDCANCEL;
@@ -201,4 +258,3 @@ TOpenSaveDialog::TData::Write(opstream& os)
 }
 
 #endif
-

@@ -1,7 +1,5 @@
 /*++
 
-Copyright (c) 1992-1993 Microsoft Corporation
-
 Module Name:
 
     rpcnsip.h
@@ -13,8 +11,17 @@ Abstract:
 
 --*/
 
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
 #ifndef __RPCNSIP_H__
 #define __RPCNSIP_H__
+#define __RPCNSIP_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -6,17 +6,13 @@
 /*
  *      C/C++ Run Time Library - Version 6.0
  *
- *      Copyright (c) 1993 by Borland International
+ *      Copyright (c) 1993, 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
 #ifndef __BIVBX_H
 #define __BIVBX_H
-
-#ifdef WIN32
-  #error 16bit compilations only, do not build 32bit applications using VBX support
-#endif
 
 #define STRICT
 #include <windows.h>
@@ -25,9 +21,14 @@
   extern "C" {            /* Assume C declarations for C++ */
 #endif
 
+#include <pshpack1.h>
+
 #ifndef __VBX_H
 
-  typedef LPSTR          HSZ;
+  #if ! defined(__DDEML_H) && ! defined(_HSZ_DEFINED)
+    #define _HSZ_DEFINED
+    typedef LPSTR          HSZ;
+  #endif
   typedef unsigned char  ENUM;
   typedef LPVOID         HCTL;
   typedef short          SHORT;
@@ -66,21 +67,21 @@ typedef struct VBXEVENT {
   (((HLSTR FAR *)(event)->ParamList)[(event)->NumParams - (index) - 1])
   
 /* Initialization */
-BOOL FAR _export PASCAL VBXInit(HINSTANCE instance, LPCSTR classPrefix);
-void FAR _export PASCAL VBXTerm(void);
-BOOL FAR _export PASCAL VBXEnableDLL(HINSTANCE instApp, HINSTANCE instDLL);
+BOOL WINAPI VBXInit(HINSTANCE instance, LPCSTR classPrefix);
+void WINAPI VBXTerm(void);
+BOOL WINAPI VBXEnableDLL(HINSTANCE instApp, HINSTANCE instDLL);
 
 /* Controls */
-HCTL FAR _export PASCAL VBXGetHctl(HWND window);
-HWND FAR _export PASCAL VBXGetHwnd(HCTL control);
-HCTL FAR _export PASCAL VBXCreate(HWND windowParent, UINT id,
+HCTL WINAPI VBXGetHctl(HWND window);
+HWND WINAPI VBXGetHwnd(HCTL control);
+HCTL WINAPI VBXCreate(HWND windowParent, UINT id,
                                   LPCSTR library, LPCSTR cls,
                                   LPCSTR title, DWORD style,
                                   int x, int y, int w, int h,
                                   HFORMFILE file);
 
 /* Dialogs */
-BOOL FAR _export PASCAL VBXInitDialog(HWND window, HINSTANCE instance, LPSTR id);
+BOOL WINAPI VBXInitDialog(HWND window, HINSTANCE instance, LPSTR id);
 
 /* Properties */
 #define PTYPE_CSTRING    0x01  /* HSZ */
@@ -97,42 +98,46 @@ BOOL FAR _export PASCAL VBXInitDialog(HWND window, HINSTANCE instance, LPSTR id)
 #define PTYPE_PICTURE    0x0C  /* HPIC */
 #define PTYPE_BSTRING    0x0D  /* HLSTR */
 
-int    FAR _export PASCAL VBXGetNumProps(HCTL control);
-BOOL   FAR _export PASCAL VBXGetProp(HCTL control, int index, LPVOID value);
-ERR    FAR _export PASCAL VBXGetPropByName(HCTL control, LPSTR name, LPVOID value);
-int    FAR _export PASCAL VBXGetPropIndex(HCTL control, LPCSTR name);
-LPCSTR FAR _export PASCAL VBXGetPropName(HCTL control, int index);
-USHORT FAR _export PASCAL VBXGetPropType(HCTL control, int index);
-BOOL   FAR _export PASCAL VBXIsArrayProp(HCTL control, int index);
-BOOL   FAR _export PASCAL VBXSetProp(HCTL control, int index, LONG value);
-ERR    FAR _export PASCAL VBXSetPropByName(HCTL control, LPSTR name, LONG value);
+BOOL   WINAPI VBXGetArrayProp(HCTL control, int index, int element, LPVOID value);
+BOOL   WINAPI VBXGetArrayPropByName(HCTL control, LPSTR name, int element, LPVOID value);
+int    WINAPI VBXGetNumProps(HCTL control);
+BOOL   WINAPI VBXGetProp(HCTL control, int index, LPVOID value);
+ERR    WINAPI VBXGetPropByName(HCTL control, LPSTR name, LPVOID value);
+int    WINAPI VBXGetPropIndex(HCTL control, LPCSTR name);
+int    WINAPI VBXGetPropNameBuf(HCTL control, int index, LPSTR buffer, int len);
+USHORT WINAPI VBXGetPropType(HCTL control, int index);
+BOOL   WINAPI VBXIsArrayProp(HCTL control, int index);
+BOOL   WINAPI VBXSetArrayProp(HCTL control, int index, int element, LONG value);
+BOOL   WINAPI VBXSetArrayPropByName(HCTL control, LPSTR name, int element, LONG value);
+BOOL   WINAPI VBXSetProp(HCTL control, int index, LONG value);
+ERR    WINAPI VBXSetPropByName(HCTL control, LPSTR name, LONG value);
 
 /* Events */
-int    FAR _export PASCAL VBXGetEventIndex(HCTL control, LPCSTR name);
-LPCSTR FAR _export PASCAL VBXGetEventName(HCTL control, int index);
-int    FAR _export PASCAL VBXGetNumEvents(HCTL control);
+int    WINAPI VBXGetEventIndex(HCTL control, LPCSTR name);
+int    WINAPI VBXGetEventNameBuf(HCTL control, int index, LPSTR buffer, int len);
+int    WINAPI VBXGetNumEvents(HCTL control);
 
 /* methods */
-BOOL FAR _export PASCAL VBXMethod(HCTL control, int method, long far * args);
-BOOL FAR _export PASCAL VBXMethodAddItem(HCTL control, int index, LPCSTR item);
-BOOL FAR _export PASCAL VBXMethodDrag(HCTL control, int action);
-BOOL FAR _export PASCAL VBXMethodMove(HCTL control, long x, long y, long w, long h);
-BOOL FAR _export PASCAL VBXMethodRefresh(HCTL control);
-BOOL FAR _export PASCAL VBXMethodRemoveItem(HCTL control, int item);
+BOOL   WINAPI VBXMethodAddItem(HCTL control, int index, LPCSTR item);
+BOOL   WINAPI VBXMethodDrag(HCTL control, int action);
+BOOL   WINAPI VBXMethodMove(HCTL control, long x, long y, long w, long h);
+BOOL   WINAPI VBXMethodRefresh(HCTL control);
+BOOL   WINAPI VBXMethodRemoveItem(HCTL control, int item);
 
 /* pixel/twips conversions */
-SHORT FAR _export PASCAL VBXTwp2PixY(LONG twips);
-SHORT FAR _export PASCAL VBXTwp2PixX(LONG twips);
-LONG  FAR _export PASCAL VBXPix2TwpY(SHORT pixels);
-LONG  FAR _export PASCAL VBXPix2TwpX(SHORT pixels);
+SHORT  WINAPI VBXTwp2PixY(LONG twips);
+SHORT  WINAPI VBXTwp2PixX(LONG twips);
+LONG   WINAPI VBXPix2TwpY(SHORT pixels);
+LONG   WINAPI VBXPix2TwpX(SHORT pixels);
 
 /* dynamic strings (HSZ) */
-HSZ   FAR _export PASCAL VBXCreateCString(HANDLE segment, LPSTR string);
-LPSTR FAR _export PASCAL VBXGetCStringPtr(HSZ string);
-HSZ   FAR _export PASCAL VBXDestroyCString(HSZ string);
-LPSTR FAR _export PASCAL VBXLockCString(HSZ string);
-VOID  FAR _export PASCAL VBXUnlockCString(HSZ string);
-
+HSZ    WINAPI VBXCreateCString(HANDLE segment, LPSTR string);
+HSZ    WINAPI VBXDestroyCString(HSZ string);
+int    WINAPI VBXGetCStringBuf(HSZ string, LPSTR buffer, int len);
+int    WINAPI VBXGetCStringLength(HSZ string);
+int    WINAPI VBXLockCStringBuf(HSZ string, LPSTR buffer, int len);
+VOID   WINAPI VBXUnlockCString(HSZ string);
+       
 /* color properties */
 #define COLOR_SYSCOLOR          0x80000000L
 #define MAKESYSCOLOR(iColor)    ((COLORREF)((iColor)|COLOR_SYSCOLOR))
@@ -158,27 +163,56 @@ typedef struct PICTURE {
   BYTE unused1;
   BYTE unused2;
   BYTE unused3;
-} PICTURE, FAR * LPPICTURE, NEAR * NPPICTURE;
+} PICTURE;
 
 #define PICTURE_EMPTY       0
 #define PICTURE_BMP         1
 #define PICTURE_META        2
 #define PICTURE_ICON        3
 
-HPIC FAR _export PASCAL VBXCreatePicture(LPPICTURE picture);
-VOID FAR _export PASCAL VBXDestroyPicture(HPIC pic);
-HPIC FAR _export PASCAL VBXGetPicture(HPIC pic, LPPICTURE picture);
-ERR  FAR _export PASCAL VBXGetPictureFromClipboard(HPIC FAR *pic, HANDLE data, WORD format);
-HPIC FAR _export PASCAL VBXReferencePicture(HPIC pic);
+HPIC   WINAPI VBXCreatePicture(PICTURE FAR * picture);
+VOID   WINAPI VBXDestroyPicture(HPIC pic);
+HPIC   WINAPI VBXGetPicture(HPIC pic, PICTURE FAR * picture);
+ERR    WINAPI VBXGetPictureFromClipboard(HPIC FAR *pic, HANDLE data, WORD format);
+HPIC   WINAPI VBXReferencePicture(HPIC pic);
 
 /* Basic language strings (HLSTR) */
-HLSTR  FAR _export PASCAL VBXCreateBasicString(LPVOID buffer, USHORT len);
-LPSTR  FAR _export PASCAL VBXGetBasicStringPtr(HLSTR string);
-VOID   FAR _export PASCAL VBXDestroyBasicString(HLSTR string);
-USHORT FAR _export PASCAL VBXGetBasicStringLength(HLSTR string);
-ERR    FAR _export PASCAL VBXSetBasicString(HLSTR far *string, LPVOID buffer, USHORT len);
+HLSTR  WINAPI VBXCreateBasicString(LPVOID buffer, USHORT len);
+VOID   WINAPI VBXDestroyBasicString(HLSTR string);
+int    WINAPI VBXGetBasicStringBuf(HLSTR string, LPSTR buffer, int len);
+USHORT WINAPI VBXGetBasicStringLength(HLSTR string);
+ERR    WINAPI VBXSetBasicString(HLSTR far *string, LPVOID buffer, USHORT len);
 
-/* array property structure */
+/* form files */
+HFORMFILE WINAPI VBXCreateFormFile(LONG len, LPVOID data);
+BOOL      WINAPI VBXDeleteFormFile(HFORMFILE file);
+
+/*
+ * obsolete functions - these functions are limited to 16-bit only
+ * and should be replaced as follows:
+ *
+ * Old (16-bit only)          New (16-bit and 32-bit)
+ * -----------------          -----------------------
+ * VBXGetBasicStringPtr       VBXGetBasicStringBuf
+ * VBXGetCStringPtr           VBXGetCStringBuf
+ * VBXGetEventName            VBXGetEventNameBuf
+ * VBXGetPropName             VBXGetPropNameBuf
+ * VBXLockCString             VBXLockCStringBuf
+ * VBXGetProp w/ELEMENTSTRUCT VBXGetArrayProp            
+ * VBXSetProp w/ELEMENTSTRUCT VBXSetArrayProp
+ * VBXMethod                  not supported
+ *
+ */
+
+#if !defined(__FLAT__)
+
+LPSTR  WINAPI VBXGetBasicStringPtr(HLSTR string);
+LPSTR  WINAPI VBXGetCStringPtr(HSZ string);
+LPCSTR WINAPI VBXGetEventName(HCTL control, int index);
+LPCSTR WINAPI VBXGetPropName(HCTL control, int index);
+LPSTR  WINAPI VBXLockCString(HSZ string);
+BOOL   WINAPI VBXMethod(HCTL control, int method, long far * args);
+
 typedef struct ELEMENTSTRUCT {
   LONG   Value;
   USHORT NumElems;
@@ -188,9 +222,9 @@ typedef struct ELEMENTSTRUCT {
   } Element[1];
 } ELEMENTSTRUCT, FAR * LPELEMENTSTRUCT, NEAR * NPELEMENTSTRUCT;
 
-/* form files */
-HFORMFILE FAR _export PASCAL VBXCreateFormFile(LONG len, LPVOID data);
-BOOL      FAR _export PASCAL VBXDeleteFormFile(HFORMFILE file);
+#endif
+
+#include <poppack.h>
 
 #ifdef __cplusplus
   }
@@ -198,4 +232,3 @@ BOOL      FAR _export PASCAL VBXDeleteFormFile(HFORMFILE file);
 
 #endif  /* __BIVBX_H */
 
-

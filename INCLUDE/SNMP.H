@@ -1,6 +1,4 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992, Microsoft Corporation
+/*++
 
 Module Name:
 
@@ -10,24 +8,21 @@ Abstract:
 
     Type definitions for SNMP Extension Agent Development.
 
-
-    This PRE-RELEASE header file contains definitions that may change
-    prior to the official release of Windows NT.   Microsoft makes no
-    warranty of any kind as to the suitability or correctness of this
-    code.
-
-
 --*/
 
-#ifndef __SNMP_H
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#ifndef snmp_h
+#define snmp_h
 #define __SNMP_H
 
-static char *snmp__h = "@(#) $Logfile:   Y:/ADMIN/BC4RTL/RTLAPI/SNMP.H_V  $ $Revision:   1.1  $";
-
-
-#ifndef __WINDOWS_H
 #include <windows.h>
-#endif
 
 
 //
@@ -266,21 +261,25 @@ typedef struct {
 #define SNMP_realloc(x, y)  realloc(x, y)
 #endif
 
-void
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern void
 SNMP_FUNC_TYPE SNMP_DBG_free(
     IN void *x,
     IN int line,
     IN char *file
     );
 
-void *
+extern void *
 SNMP_FUNC_TYPE SNMP_DBG_malloc(
     IN unsigned int x,
     IN int line,
     IN char *file
     );
 
-void *
+extern void *
 SNMP_FUNC_TYPE SNMP_DBG_realloc(
     IN void *x,
     IN unsigned int y,
@@ -288,19 +287,19 @@ SNMP_FUNC_TYPE SNMP_DBG_realloc(
     IN char *file
     );
 
-SNMPAPI
+extern SNMPAPI
 SNMP_FUNC_TYPE SNMP_oidcpy(
     OUT AsnObjectIdentifier *DestObjId, // Destination OID
     IN AsnObjectIdentifier *SrcObjId    // Source OID
     );
 
-SNMPAPI
+extern SNMPAPI
 SNMP_FUNC_TYPE SNMP_oidappend(
     IN OUT AsnObjectIdentifier *DestObjId, // Destination OID
     IN AsnObjectIdentifier *SrcObjId       // Source OID
     );
 
-SNMPAPI
+extern SNMPAPI
 SNMP_FUNC_TYPE SNMP_oidncmp(
     IN AsnObjectIdentifier *A, // First OID
     IN AsnObjectIdentifier *B, // Second OID
@@ -309,40 +308,43 @@ SNMP_FUNC_TYPE SNMP_oidncmp(
 
 #define SNMP_oidcmp(A,B) SNMP_oidncmp(A,B,max((A)->idLength,(B)->idLength))
 
-void
+extern void
 SNMP_FUNC_TYPE SNMP_oidfree(
     IN OUT AsnObjectIdentifier *Obj // OID to free
     );
 
-SNMPAPI
+extern SNMPAPI
 SNMP_FUNC_TYPE SNMP_CopyVarBindList(
     RFC1157VarBindList *dst, // Destination var bind list
     RFC1157VarBindList *src  // Source var bind list
     );
 
-SNMPAPI
+extern SNMPAPI
 SNMP_FUNC_TYPE SNMP_CopyVarBind(
     RFC1157VarBind *dst, // Destination var bind
     RFC1157VarBind *src  // Source var bind
     );
 
 
-void
+extern void
 SNMP_FUNC_TYPE SNMP_FreeVarBindList(
     RFC1157VarBindList *VarBindList // Variable bindings list to free
     );
 
-void
+extern void
 SNMP_FUNC_TYPE SNMP_FreeVarBind(
     RFC1157VarBind *VarBind // Variable binding to free
     );
 
 
-void
+extern void
 SNMP_FUNC_TYPE SNMP_printany(
     IN AsnAny *Any
     );
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* snmp_h */
 

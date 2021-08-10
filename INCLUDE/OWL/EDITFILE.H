@@ -1,19 +1,20 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include\owl\editfile.h
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of class TEditFile, a text edit which can find/replace
 //   and read/write from/to a file.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_EDITFILE_H)
-#define __OWL_EDITFILE_H
+#if !defined(OWL_EDITFILE_H)
+#define OWL_EDITFILE_H
 
-#if !defined(__OWL_EDITSEAR_H)
-  #include <owl\editsear.h>
+#if !defined(OWL_EDITSEAR_H)
+# include <owl/editsear.h>
 #endif
-#if !defined(__OWL_OPENSAVE_H)
-  #include <owl\opensave.h>
+#if !defined(OWL_OPENSAVE_H)
+# include <owl/opensave.h>
 #endif
-#include <owl\editfile.rh>
+#include <owl/editfile.rh>
 
 //
 //  class TEditFile
@@ -33,17 +34,17 @@ class _OWLCLASS TEditFile : public TEditSearch {
 
    ~TEditFile();
 
-    virtual BOOL  CanClear();
-    virtual BOOL  CanClose();
+    virtual bool  CanClear();
+    virtual bool  CanClose();
 
     void          NewFile();
     void          Open();
-    BOOL          Read(const char far* fileName=0);
+    bool          Read(const char far* fileName=0);
     void          ReplaceWith(const char far* fileName);
-    BOOL          Save();
-    BOOL          SaveAs();
+    bool          Save();
+    bool          SaveAs();
     void          SetFileName(const char far* fileName);
-    BOOL          Write(const char far* fileName=0);
+    bool          Write(const char far* fileName=0);
 
     //
     // command response functions
@@ -75,4 +76,4 @@ class _OWLCLASS TEditFile : public TEditSearch {
   DECLARE_STREAMABLE(_OWLCLASS, TEditFile, 1);
 };
 
-#endif  // __OWL_EDITFILE_H
+#endif  // OWL_EDITFILE_H

@@ -1,29 +1,51 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   source\owl\statusba.cpp
-//   Defines class TStatusBar.
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
+//   Implementation of TStatusBar
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\statusba.h>
-#include <owl\statusba.rc>
+#include <owl/owlpch.h>
+#include <owl/statusba.h>
+#include <owl/statusba.rh>
 
-static char   DefModes[] = "EXT|CAPS|NUM|SCRL|OVR|REC";
-static char*  ModeBuff;
-static char** ModeStrings;
-static int    NumModes = 0;
+//
+// Local class to manage the mode indicator strings
+//
+class TModeStrings {
+  public:
+    // constructor
+    TModeStrings() : ModeBuff(0), ModeStrings(0), NumModes(0) {}
+   ~TModeStrings()
+    {
+      delete [] ModeBuff;
+      delete [] ModeStrings;
+    }
+
+    void Init(TModule* module, uint16 resId, const char* defaultModes);
+   
+    // access
+    int          Count() const            { return NumModes; }
+    const char*  operator [](int i) const { return ModeStrings[i]; }
+
+  private:
+    int    NumModes;
+    char*  ModeBuff;
+    char** ModeStrings;
+};
 
 //
 // Gets the mode string array from a single resource string, like:
 //   "EXT|CAPS|NUM|SCRL|OVR|REC"
+// using the provided default string if resource not found.
 //
-static void
-GetModes(HINSTANCE hInstance)
+void
+TModeStrings::Init(TModule* module, uint16 resId, const char* defaultModes)
 {
   if (!ModeStrings) {
-    string modeResString(hInstance, IDS_MODES);
+    string modeResString(module->LoadString(resId));
     ModeBuff = strnewdup(modeResString.length() > 0 ?
                          modeResString.c_str() :
-                         DefModes);
+                         defaultModes);
     NumModes = 1;
     for (char* p = ModeBuff; *p; p++)
       if (*p == '|') {
@@ -41,26 +63,36 @@ GetModes(HINSTANCE hInstance)
   }
 }
 
+//
+// Static mode string object, & default mode indicator strings
+//
+static TModeStrings ModeOnStrings;
+static TModeStrings ModeOffStrings;
+static char         DefOnModes[] =  "EXT|CAPS|NUM|SCRL|OVR|REC";
+static char         DefOffModes[] = "   |    |   |    |   |   ";
+
 IMPLEMENT_CASTABLE(TStatusBar);
 
 TStatusBar::TStatusBar(TWindow*              parent,
                        TGadget::TBorderStyle borderStyle,
-                       UINT                  modeIndicators,
+                       uint                  modeIndicators,
                        TFont*                font,
                        TModule*              module)
-  : TMessageBar(parent, font, module)
+:
+  TMessageBar(parent, font, module)
 {
   BorderStyle = borderStyle;
   ModeIndicators = modeIndicators;
   ModeIndicatorState = 0;
   NumModeIndicators = 0;
-  ::GetModes(*GetModule());
+  ModeOnStrings.Init(GetModule(), IDS_MODES, DefOnModes);
+  ModeOffStrings.Init(GetModule(), IDS_MODESOFF, DefOffModes);
 
   if (BorderStyle == TGadget::Plain || BorderStyle == TGadget::Embossed)
-    HighlightLine = FALSE;
+    HighlightLine = false;
 
   else
-    Spacing.Value = 2;  // 1/4 em quad
+    Spacing.Value = 2;  // Hilight line + 1/4-em margin on raised & recessed
 
   switch (BorderStyle) {
     case TGadget::Raised:
@@ -84,20 +116,20 @@ TStatusBar::TStatusBar(TWindow*              parent,
   Gadgets->SetBorderStyle(BorderStyle); // Set border style for first gadget
 
   //
-  // create text gadgets for any mode indicators the user requested
+  // create text gadgets for any mode indicators the user requested,
+  // using provided border style.
   //
   TScreenDC   dc;
 
   dc.SelectObject(*Font);
 
-  for (int i = 0; i < NumModes; i++)
+  for (int i = 0; i < ModeOnStrings.Count(); i++)
     if (ModeIndicators & (1 << i)) {
       const int    SMALL_MARGIN = 1;
-      TSize        extent;
-      int          left, top, right, bottom;
+      int          maxLen = max(strlen(ModeOnStrings[i]), strlen(ModeOffStrings[i]));
       TTextGadget* gadget = new TTextGadget(0, BorderStyle,
-                                            TTextGadget::Left,
-                                            strlen(ModeStrings[i]));
+                                            TTextGadget::Left, maxLen,
+                                            ModeOffStrings[i]);
       TMargins     margins = gadget->GetMargins();
 
       //
@@ -110,10 +142,18 @@ TStatusBar::TStatusBar(TWindow*              parent,
       // turn off shrink wrapping for the width and choose a width that is
       // custom fit for the string
       //
-      dc.GetTextExtent(ModeStrings[i], strlen(ModeStrings[i]), extent);
-      gadget->SetShrinkWrap(FALSE, TRUE);
+      gadget->SetShrinkWrap(false, true);
       TMessageBar::Insert(*gadget);
+
+      TSize        onExtent;
+      dc.GetTextExtent(ModeOnStrings[i], strlen(ModeOnStrings[i]), onExtent);
+      TSize        offExtent;
+      dc.GetTextExtent(ModeOffStrings[i], strlen(ModeOffStrings[i]), offExtent);
+      TSize extent(max(onExtent.cx, offExtent.cx), onExtent.cy);
+
+      int          left, top, right, bottom;
       gadget->GetOuterSizes(left, right, top, bottom);
+
       extent.cx += left + right;
       gadget->SetSize(extent);
 
@@ -121,7 +161,7 @@ TStatusBar::TStatusBar(TWindow*              parent,
     }
 }
 
-BOOL
+bool
 TStatusBar::IsModeIndicator(TGadget* gadget)
 {
   int      nonModeIndicators = NumGadgets - NumModeIndicators;
@@ -129,12 +169,12 @@ TStatusBar::IsModeIndicator(TGadget* gadget)
 
   for (int i = 0; i < nonModeIndicators; i++) {
     if (gadget == g)
-      return FALSE;
+      return false;
 
     g = g->NextGadget();
   }
 
-  return TRUE;
+  return true;
 }
 
 //
@@ -184,7 +224,7 @@ TStatusBar::Insert(TGadget& gadget, TPlacement placement, TGadget* sibling)
 // return gadget at a given index, except mode indicator gadgets
 //
 TGadget*
-TStatusBar::operator [](UINT index)
+TStatusBar::operator [](uint index)
 {
   PRECONDITION(index < NumGadgets - NumModeIndicators);
 
@@ -195,27 +235,29 @@ TStatusBar::operator [](UINT index)
 }
 
 //
-// Get the text gadget & the mode string associated with a mode indicator 
+// Get the text gadget & the mode string associated with a mode indicator
 //
-BOOL
-TStatusBar::GetGadgetAndString(TModeIndicator mode, TTextGadget*& gadget, char*& str)
+bool
+TStatusBar::GetGadgetAndStrings(TModeIndicator mode, TTextGadget*& gadget,
+                                const char*& strOn, const char*& strOff)
 {
   if ((ModeIndicators & mode) == 0) {
-    return FALSE;  // tracing
+    return false;  // tracing
+  }
+  else {
+    uint  slot = NumGadgets - 1;
 
-  } else {
-    UINT  slot = NumGadgets - 1;
-
-    for (int index = NumModes - 1; (1 << index) > mode; index--)
+    for (int index = ModeOnStrings.Count() - 1; (1 << index) > mode; index--)
       if (ModeIndicators & (1 << index))
         slot--;
 
-    str = ModeStrings[index];
+    strOn  = ModeOnStrings[index];
+    strOff = ModeOffStrings[index];
 
     for (gadget = (TTextGadget*)Gadgets; slot > 0; slot--)
       gadget = (TTextGadget*)gadget->NextGadget();
 
-    return TRUE;
+    return true;
   }
 }
 
@@ -226,28 +268,29 @@ TStatusBar::ToggleModeIndicator(TModeIndicator mode)
 }
 
 void
-TStatusBar::SetModeIndicator(TModeIndicator mode, BOOL on)
+TStatusBar::SetModeIndicator(TModeIndicator mode, bool on)
 {
   TTextGadget*  gadget;
-  char*         str;
+  const char*   strOn;
+  const char*   strOff;
 
-  if (GetGadgetAndString(mode, gadget, str))
-    gadget->SetText(on ? str : 0);
-  
+  if (GetGadgetAndStrings(mode, gadget, strOn, strOff))
+    gadget->SetText(on ? strOn : strOff);
+
   if (on)
     ModeIndicatorState |= mode;
   else
     ModeIndicatorState &= ~mode;
 }
 
-BOOL
+bool
 TStatusBar::PreProcessMsg(MSG& msg)
 {
-  if (msg.message == WM_KEYDOWN) {  
+  if (msg.message == WM_KEYDOWN) {
 
     switch (msg.wParam) {
       case VK_SCROLL:
-        
+
         if (ModeIndicators & ScrollLock) {
           //ScrollLockModeChange();
           ToggleModeIndicator(ScrollLock);
@@ -256,6 +299,11 @@ TStatusBar::PreProcessMsg(MSG& msg)
 
       case VK_INSERT:
         if (ModeIndicators & Overtype) {
+          //
+          // Skip if CTRL+INS or SHIFT+INS
+          //
+          if (((::GetKeyState(VK_CONTROL) & 0x8000) == 0) &&
+              ((::GetKeyState(VK_SHIFT)   & 0x8000) == 0))
           //OvertypeModeChange();
           ToggleModeIndicator(Overtype);
         }
@@ -272,21 +320,19 @@ TStatusBar::PreProcessMsg(MSG& msg)
         break;
     }
   }
-  
-  return FALSE;
+
+  return false;
 }
 
 //
 //  Make sure that we are in sync with the physical KB indicators
 //
-BOOL
+bool
 TStatusBar::IdleAction(long idleCount)
 {
   if (idleCount == 0) {
     if ((::GetKeyState(VK_SCROLL) & 0x0001) != GetModeIndicator(ScrollLock))
       ToggleModeIndicator(ScrollLock);
-    if ((::GetKeyState(VK_INSERT) & 0x0001) != !GetModeIndicator(Overtype))
-      ToggleModeIndicator(Overtype);
     if ((::GetKeyState(VK_CAPITAL) & 0x0001) != GetModeIndicator(CapsLock))
       ToggleModeIndicator(CapsLock);
     if ((::GetKeyState(VK_NUMLOCK) & 0x0001) != GetModeIndicator(NumLock))

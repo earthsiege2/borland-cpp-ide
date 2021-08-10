@@ -1,0 +1,59 @@
+;[]-----------------------------------------------------------------[]
+;|      _COLLATE.MAC  --  Macros & Rules for collation code          |
+;[]-----------------------------------------------------------------[]
+
+;
+;       C/C++ Run Time Library - Version 6.5
+; 
+;       Copyright (c) 1992, 1994 by Borland International
+;       All Rights Reserved.
+; 
+
+STRINGSTATUS        STRUC   
+
+; count of characters processed in the string
+CURRENT_POSITION    DW      ?
+
+; address of current/next character to be processed in the auxiliary string
+AUX_STRING_ADDR     _DPTR_ALLOC
+
+; number of characters remaining to process in the current auxiliary string
+AUX_STRING_CNT      DW      ?
+
+STRINGSTATUS        ENDS
+
+
+    LOCALS
+
+    LOCAL_VARS MACRO
+
+    LOCAL S1_STATUS           : STRINGSTATUS, \
+          S2_STATUS           : STRINGSTATUS, \
+          WEIGHT_DIFFERENCE   : WORD,         \
+          POSITION_DIFFERENCE : WORD,         \
+          pCHARCLASS          : DWORD,        \
+          LEVEL               : WORD,        \
+          LEVELOFFSET         : DWORD,         \
+          MAXLEVEL            : WORD,         \
+          MAXKEYLEN           : DWORD,        \
+          _pLOCALE_local      : DWORD = STACKFRAMESIZE
+
+		ENDM
+
+SET_STACKVARS MACRO
+
+	; generate stack argument and variable relative stack offsets
+	; as used by strcoll() and strxfrm()
+	; used for common collation related functions in collate.asm
+
+_X  PROC DIST
+
+ARG __s1 : DATAPTR, __s2 : DATAPTR, __n : WORD
+
+	LOCAL_VARS
+	ENTER	STACKFRAMESIZE, 0
+	LEAVE
+	RET
+_X ENDP
+
+ENDM

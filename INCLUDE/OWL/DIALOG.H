@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\dialog.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Definition of TDialog class and TDialogAttr struct
 //----------------------------------------------------------------------------
-#if !defined(__OWL_DIALOG_H)
-#define __OWL_DIALOG_H
+#if !defined(OWL_DIALOG_H)
+#define OWL_DIALOG_H
 
-#if !defined(__OWL_WINDOW_H)
-  #include <owl\window.h>
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
 #endif
 
 //
@@ -18,7 +19,7 @@
 //
 struct TDialogAttr {
   char far* Name;
-  DWORD     Param;
+  uint32    Param;
 };
 
 //
@@ -28,7 +29,7 @@ struct TDialogAttr {
 class _OWLCLASS TDialog : virtual public TWindow {
   public:
     TDialogAttr  Attr;
-    BOOL         IsModal;
+    bool         IsModal;
 
     TDialog(TWindow* parent, TResId resId, TModule* module = 0);
 
@@ -36,34 +37,35 @@ class _OWLCLASS TDialog : virtual public TWindow {
 
     //
     // override this to process messages within the dialog function
-    // Return TRUE if message handled, FALSE if not.
+    // Return true if message handled, false if not.
     //
     // default behavior is to call EvInitDialog & EvSetFont
     //
-    virtual BOOL    DialogFunction(UINT message, WPARAM wParam, LPARAM lParam);
+    virtual bool    DialogFunction(uint message, WPARAM wParam, LPARAM lParam);
 
     //
-    // override this to process WM_INITDIALOG message
+    // virtual handler for WM_INITDIALOG message, called from DialogFunction()
     //
     // default behavior is to call PerformDlgInit & SetupWindow() and return 
-    // TRUE
+    // true
     //
-    virtual BOOL    EvInitDialog(HWND hWndFocus);
+    virtual bool    EvInitDialog(HWND hWndFocus);
 
     //
     // Initialize dialog controls with contents of RT_DLGINIT
     //
-    BOOL            PerformDlgInit();
+    bool            PerformDlgInit();
 
     //
-    // override this to process WM_SETFONT
+    // Handler for WM_SETFONT, is dispatched from DialogFunction() once
+    // during dialog creation, subsequently as normal.
     //
-    virtual void    EvSetFont(HFONT);
+    void            EvSetFont(HFONT hFont, bool redraw);
 
     //
     // create a modeless dialog box, and perform actual create call
     //
-    virtual BOOL    Create();
+    virtual bool    Create();
     virtual HWND    DoCreate();
 
     //
@@ -75,7 +77,7 @@ class _OWLCLASS TDialog : virtual public TWindow {
     //
     // override virtual functions defined by class TWindow
     //
-    BOOL            PreProcessMsg(MSG& msg);
+    bool            PreProcessMsg(MSG& msg);
     void            CloseWindow(int retValue = IDCANCEL);
     void            Destroy(int retValue = IDCANCEL);
 
@@ -91,17 +93,17 @@ class _OWLCLASS TDialog : virtual public TWindow {
     // sends the passed message to the dialog's control which has id DlgItemId
     // Obsolete- use TWindow::SendDlgItemMessage()
     //
-    DWORD SendDlgItemMsg(int ChildId, WORD Msg, WORD WParam, DWORD LParam);
+    uint32 SendDlgItemMsg(int childId, uint16 msg, uint16 wParam, uint32 lParam);
 
-    UINT            GetDefaultId() const;
-    void            SetDefaultId(UINT Id) {HandleMessage(DM_SETDEFID, Id, 0);}
+    uint            GetDefaultId() const;
+    void            SetDefaultId(uint id) {HandleMessage(DM_SETDEFID, id, 0);}
 
     //
     // message response functions
     //
     void            EvClose();
     void            EvPaint();
-    HBRUSH          EvCtlColor(HDC, HWND hWndChild, UINT ctlType);
+    HBRUSH          EvCtlColor(HDC, HWND hWndChild, uint ctlType);
 
     //
     // child notifications
@@ -129,14 +131,14 @@ class _OWLCLASS TDialog : virtual public TWindow {
 };
 
 
-inline DWORD
-TDialog::SendDlgItemMsg(int ChildId, WORD Msg, WORD WParam, DWORD LParam) {
+inline uint32
+TDialog::SendDlgItemMsg(int ChildId, uint16 Msg, uint16 WParam, uint32 LParam) {
   return SendDlgItemMessage(ChildId, Msg, WParam, LParam);
 }
 
-inline UINT
+inline uint
 TDialog::GetDefaultId() const {
   return LOWORD(CONST_CAST(TDialog*,this)->HandleMessage(DM_GETDEFID));
 }
 
-#endif  // __OWL_DIALOG_H
+#endif  // OWL_DIALOG_H

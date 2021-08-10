@@ -1,0 +1,36 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for List examples                                             #
+#                                                                          #
+#   Copyright (c) 1994 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make -DCON32                    for 32-bit Windows Console         #
+#       make MODEL={s|m|c|l}            for 16-bit Windows using EasyWin   #
+#       make MODEL={s|m|c|l|h} -DDOS16  for 16-bit DOS                     #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE    = listx
+EXEALL = listx.exe ilist.exe slist.exe islist.exe \
+         dlist.exe idlist.exe sdlist.exe isdlist.exe
+
+EXEMAKE= $(LIST) $(ILIST) $(SLIST) $(ISLIST) \
+         $(DLIST) $(IDLIST) $(SDLIST) $(ISDLIST)
+
+RULES  = myclass.obj: ..\myclass.cpp
+
+LIST=$(EXERULE:listx.obj=listx.obj myclass.obj)
+ILIST=$(LIST:listx=ilist)
+SLIST=$(LIST:listx=slist)
+ISLIST=$(LIST:listx=islist)
+DLIST=$(LIST:listx=dlist)
+IDLIST=$(LIST:listx=idlist)
+SDLIST=$(LIST:listx=sdlist)
+ISDLIST=$(LIST:listx=isdlist)
+
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen
+

@@ -1,7 +1,5 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1985-1993, Microsoft Corporation
-
 Module Name:
 
     vdmdbg.h
@@ -13,23 +11,23 @@ Abstract:
 
 --*/
 
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
 #ifndef _VDMDBG_
 #define _VDMDBG_
-
-
-#ifndef __WINDEF_H
-#include <windef.h>
-#endif
-
-#ifndef __WINBASE_H
-#include <winbase.h>
-#endif
+#define __VDMDBG_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#pragma option -a-
+#include "pshpack4.h"
 
 #define STATUS_VDM_EVENT    STATUS_SEGMENT_NOTIFICATION
 
@@ -328,7 +326,7 @@ typedef DWORD (CALLBACK* DEBUGEVENTPROC)( LPDEBUG_EVENT, LPVOID );
 #define DW3(x) (x.ExceptionInformation[2])
 #define DW4(x) (x.ExceptionInformation[3])
 
-#pragma option -a.
+#include "poppack.h"
 
 BOOL
 WINAPI
@@ -472,6 +470,7 @@ VDMBreakThread(
     HANDLE          hProcess,
     HANDLE          hThread
 );
+
 #ifdef __cplusplus
 }
 #endif

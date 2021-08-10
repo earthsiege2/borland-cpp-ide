@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   source\owl\static.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Implementation of class TStatic.  This defines the basic behavior of
 //   static controls
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl\owlpch.h>
-#include <owl\static.h>
-#include <owl\applicat.h>
+#include <owl/owlpch.h>
+#include <owl/static.h>
+#include <owl/applicat.h>
 #include <bwcc.h>
 
 #if !defined(SECTION) || SECTION == 1
@@ -25,9 +26,10 @@ TStatic::TStatic(TWindow*        parent,
                  int             id,
                  const char far* title,
                  int x, int y, int w, int h,
-                 UINT            textLen,
+                 uint            textLen,
                  TModule*        module)
-  : TControl(parent, id, title, x, y, w, h, module)
+:
+  TControl(parent, id, title, x, y, w, h, module)
 {
   TextLen = textLen;
   Attr.Style = (Attr.Style | SS_LEFT) & ~WS_TABSTOP;
@@ -43,9 +45,10 @@ TStatic::TStatic(TWindow*        parent,
 //
 TStatic::TStatic(TWindow*   parent,
                  int        resourceId,
-                 UINT       textLen,
+                 uint       textLen,
                  TModule*   module)
-  : TControl(parent, resourceId, module)
+:
+  TControl(parent, resourceId, module)
 {
   TextLen = textLen;
   DisableTransfer();
@@ -56,7 +59,7 @@ TStatic::TStatic(TWindow*   parent,
 // This will force them to be re-painted
 //
 void
-TStatic::EvSize(UINT sizeType, TSize& size)
+TStatic::EvSize(uint sizeType, TSize& size)
 {
   Invalidate();
   TControl::EvSize(sizeType,size);
@@ -65,7 +68,7 @@ TStatic::EvSize(UINT sizeType, TSize& size)
 //
 // Return name of predefined BWCC or Windows static class
 //
-char far *
+char far*
 TStatic::GetClassName()
 {
   if (GetApplication()->BWCCEnabled())
@@ -83,7 +86,7 @@ TStatic::GetClassName()
 //
 // the return value is the size (in bytes) of the transfer data
 //
-UINT
+uint
 TStatic::Transfer(void* buffer, TTransferDirection direction)
 {
   if (direction == tdGetData)

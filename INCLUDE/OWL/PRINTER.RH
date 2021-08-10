@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
-//   include/owl/printer.rh
+// ObjectWindows
+// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+//
 //   Resource IDs to use with printer.rc and printer.h
 //----------------------------------------------------------------------------
 
@@ -20,6 +21,7 @@
 // Printer abort dialog & control IDs
 //
 #define IDD_ABORTDIALOG      32599 // keep different than any string IDs
-#define ID_TITLE  101
-#define ID_DEVICE 102
-#define ID_PORT   103
+#define ID_PAGE   104              // Page # text control
+#define ID_TITLE  101              // Document title text control
+#define ID_DEVICE 102              // Device & optional port text control
+#define ID_PORT   103              // Old port text control, unused

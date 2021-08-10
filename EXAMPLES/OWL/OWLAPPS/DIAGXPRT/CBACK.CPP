@@ -66,5 +66,6 @@ Callback(WORD id, DWORD data) {
       // TDiagClient::pThis->PostMessage(CM_DEFAULT, id, 0);
       break;
   }
-  return TRUE;
+  return FALSE;
 }
+

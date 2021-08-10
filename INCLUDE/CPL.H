@@ -2,6 +2,7 @@
 *                                                                             *
 * cpl.h -       Control panel extension DLL definitions                       *
 *                                                                             *
+*               Version 3.10                                                  *
 *                                                                             *
 ******************************************************************************
 *  General rules for being installed in the Control Panel:
@@ -32,32 +33,22 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.0
+ *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1992, 1993 by Borland International
+ *      Copyright (c) 1994 by Borland International
  *      All Rights Reserved.
  *
  */
 
-
-#ifndef __CPL_H         /* prevent multiple includes */
+#ifndef _INC_CPL
+#define _INC_CPL
 #define __CPL_H
 
-#ifndef __WINDOWS_H
-#include <windows.h>    /* <windows.h> must be included */
-#endif  /* __WINDOWS_H */
-
-#if !defined(WINVER) || (WINVER < 0x030a)
-#error Control panel extensions require Windows 3.1
-#endif
-
-#ifndef RC_INVOKED
-#pragma option -a-      /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#include "pshpack1.h"
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+#endif /* __cplusplus */
 
 /*
  * CONTROL.EXE will answer this message and launch an applet
@@ -65,7 +56,7 @@ extern "C" {            /* Assume C declarations for C++ */
  * WM_CPL_LAUNCH
  *
  *      wParam      - window handle of calling app
- *      lParam      - LPSTR of name of applet to launch
+ *      lParam      - LPTSTR of name of applet to launch
  *
  * WM_CPL_LAUNCHED
  *
@@ -81,12 +72,12 @@ extern "C" {            /* Assume C declarations for C++ */
 
 /* A function prototype for CPlApplet() */
 
-#ifndef __FLAT__
+#if !defined(__FLAT__)
 typedef LRESULT (CALLBACK *APPLET_PROC)(HWND hwndCpl, UINT msg, LPARAM lParam1, LPARAM lParam2);
 #else
 //typedef LRESULT (APIENTRY *APPLET_PROC)(HWND hwndCpl, UINT msg, LPARAM lParam1, LPARAM lParam2);
 typedef LONG (APIENTRY *APPLET_PROC)(HWND hwndCpl, UINT msg, LONG lParam1, LONG lParam2);
-#endif  /* __FLAT__  */
+#endif  /* !__FLAT__  */
 
 /* The data structure CPlApplet() must fill in. */
 
@@ -97,6 +88,8 @@ typedef struct tagCPLINFO
     int     idInfo;     /* info string res. id, provided by CPlApplet() */
     LONG    lData;      /* user defined data */
 } CPLINFO, *PCPLINFO, FAR *LPCPLINFO;
+
+#if !defined(__FLAT__)
 
 typedef struct tagNEWCPLINFO
 {
@@ -110,6 +103,43 @@ typedef struct tagNEWCPLINFO
     char        szHelpFile[128];/* path to help file to use */
 } NEWCPLINFO, *PNEWCPLINFO, FAR *LPNEWCPLINFO;
 
+#else
+
+typedef struct tagNEWCPLINFOA
+{
+    DWORD   dwSize;         /* similar to the commdlg */
+    DWORD   dwFlags;
+    DWORD   dwHelpContext;  /* help context to use */
+    LONG    lData;          /* user defined data */
+    HICON   hIcon;          /* icon to use, this is owned by CONTROL.EXE (may be deleted) */
+    CHAR    szName[32];     /* short name */
+    CHAR    szInfo[64];     /* long name (status line) */
+    CHAR    szHelpFile[128];/* path to help file to use */
+} NEWCPLINFOA;
+
+typedef struct tagNEWCPLINFOW
+{
+    DWORD   dwSize;         /* similar to the commdlg */
+    DWORD   dwFlags;
+    DWORD   dwHelpContext;  /* help context to use */
+    LONG    lData;          /* user defined data */
+    HICON   hIcon;          /* icon to use, this is owned by CONTROL.EXE (may be deleted) */
+    WCHAR   szName[32];     /* short name */
+    WCHAR   szInfo[64];     /* long name (status line) */
+    WCHAR   szHelpFile[128];/* path to help file to use */
+} NEWCPLINFOW;
+
+#ifdef UNICODE
+#define NEWCPLINFO NEWCPLINFOW
+#else
+#define NEWCPLINFO NEWCPLINFOA
+#endif
+
+typedef NEWCPLINFOA * LPNEWCPLINFOA;
+typedef NEWCPLINFOW * LPNEWCPLINFOW;
+typedef NEWCPLINFO  * LPNEWCPLINFO;
+
+#endif
 
 /* The messages CPlApplet() must handle: */
 
@@ -160,21 +190,23 @@ typedef struct tagNEWCPLINFO
 /*  Do non-applet specific cleaning up here. */
 
 
-#define CPL_NEWINQUIRE  8
+#define CPL_NEWINQUIRE    8
 /* this is the same as CPL_INQUIRE execpt lParam2 is a pointer to a */
 /* NEWCPLINFO structure.  this will be sent before the CPL_INQUIRE */
 /* and if it is responed to (return != 0) CPL_INQUIRE will not be sent */
 
-
 #define CPL_DO_PRINTER_SETUP    100    /* ;Internal */
 #define CPL_DO_NETPRN_SETUP     101    /* ;Internal */
 
+/* This message is internal to the Control Panel and MAIN applets.  */
+/* It is only sent when an applet is invoked from the Command line  */
+/* during system installation.                                      */
+#define CPL_SETUP               200
+
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}
+#endif    /* __cplusplus */
 
-#ifndef RC_INVOKED
-#pragma option -a.      /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#include "poppack.h"
 
-#endif  /* __CPL_H */
+#endif  /* _INC_CPL */

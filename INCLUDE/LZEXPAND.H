@@ -1,3 +1,14 @@
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#if !defined(__FLAT__)
+
+
 /*****************************************************************************\
 *                                                                             *
 * lzexpand.h    Public interfaces for LZEXPAND.DLL.                           *
@@ -13,14 +24,6 @@
 *
 \*****************************************************************************/
 
-/*
- *      C/C++ Run Time Library - Version 6.0
- *
- *      Copyright (c) 1987, 1993 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef __LZEXPAND_H    /* prevent multiple includes */
 #define __LZEXPAND_H
 
@@ -31,8 +34,6 @@ extern "C" {            /* Assume C declarations for C++ */
 #if !defined(__WINDOWS_H) && !defined(LIB)
 #include <windows.h>    /* <windows.h> must be included */
 #endif  /* __WINDOWS_H */
-
-#if !defined(__FLAT__)
 
 /*
  * If .lib version is being used, declare types used in this file.
@@ -97,7 +98,28 @@ LONG    LZAPI LZSeek(HFILE, LONG, int);
 int     LZAPI LZRead(HFILE, void FAR*, int);
 void    LZAPI LZClose(HFILE);
 
+#ifdef __cplusplus
+}       /* End of extern "C" { */
+#endif  /* __cplusplus */
+
+
+#endif // _LZEXPAND_INCLUDED_
+
+
 #else    /* defined __FLAT__ */
+
+
+/*
+** lzdos.h - Public interface to LZEXP?.LIB.
+*/
+
+#ifndef _LZEXPAND_
+#define _LZEXPAND_
+#define __LZEXPAND_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
 ** Error Return Codes
@@ -120,101 +142,101 @@ void    LZAPI LZClose(HFILE);
 INT
 APIENTRY
 LZStart(
-        VOID
-        );
+	VOID
+	);
 
 VOID
 APIENTRY
 LZDone(
-        VOID
-        );
+	VOID
+	);
 
 LONG
 APIENTRY
 CopyLZFile(
-        INT,
-        INT
-        );
+	INT,
+	INT
+	);
 
 LONG
 APIENTRY
 LZCopy(
-        INT,
-        INT
-        );
-
+	INT,
+	INT
+	);
 
 INT
 APIENTRY
 LZInit(
-        INT
-        );
+	INT
+	);
 
 INT
 APIENTRY
 GetExpandedNameA(
-        LPSTR,
-        LPSTR
-        );
+	LPSTR,
+	LPSTR
+	);
 INT
 APIENTRY
 GetExpandedNameW(
-        LPWSTR,
-        LPWSTR
-        );
+	LPWSTR,
+	LPWSTR
+	);
 #ifdef UNICODE
-#define GetExpandedName GetExpandedNameW
+#define GetExpandedName  GetExpandedNameW
 #else
-#define GetExpandedName GetExpandedNameA
+#define GetExpandedName  GetExpandedNameA
 #endif // !UNICODE
 
 INT
 APIENTRY
 LZOpenFileA(
-        LPSTR,
-        LPOFSTRUCT,
-        WORD
-        );
+	LPSTR,
+	LPOFSTRUCT,
+	WORD
+	);
 INT
 APIENTRY
 LZOpenFileW(
-        LPWSTR,
-        LPOFSTRUCT,
-        WORD
-        );
+	LPWSTR,
+	LPOFSTRUCT,
+	WORD
+	);
 #ifdef UNICODE
-#define LZOpenFile LZOpenFileW
+#define LZOpenFile  LZOpenFileW
 #else
-#define LZOpenFile LZOpenFileA
+#define LZOpenFile  LZOpenFileA
 #endif // !UNICODE
 
 LONG
 APIENTRY
 LZSeek(
-        INT,
-        LONG,
-        INT
-        );
+	INT,
+	LONG,
+	INT
+	);
 
 INT
 APIENTRY
 LZRead(
-        INT,
-        LPSTR,
-        INT
-        );
+	INT,
+	LPSTR,
+	INT
+	);
 
 VOID
 APIENTRY
 LZClose(
-        INT
-        );
-
-#endif  /* __FLAT__ */
+	INT
+	);
 
 #ifdef __cplusplus
-}       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}
+#endif
 
 
-#endif // _LZEXPAND_INCLUDED_
+#endif // _LZEXPAND_
+
+
+#endif  /* __FLAT__ */

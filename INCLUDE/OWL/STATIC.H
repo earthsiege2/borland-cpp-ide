@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\static.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Defines class TStatic.  This defines the basic behavior of static
 //   controls
 //----------------------------------------------------------------------------
-#if !defined(__OWL_STATIC_H)
-#define __OWL_STATIC_H
+#if !defined(OWL_STATIC_H)
+#define OWL_STATIC_H
 
-#if !defined(__OWL_CONTROL_H)
-  #include <owl\control.h>
+#if !defined(OWL_CONTROL_H)
+# include <owl/control.h>
 #endif
 
 //
@@ -17,18 +18,18 @@
 //
 class _OWLCLASS TStatic : public TControl {
   public:
-    UINT  TextLen;
+    uint  TextLen;
 
     TStatic(TWindow*        parent,
             int             id,
             const char far* title,
             int x, int y, int w, int h,
-            UINT            textLen = 0,
+            uint            textLen = 0,
             TModule*        module = 0);
 
     TStatic(TWindow*   parent,
             int        resourceId,
-            UINT       textLen = 0,
+            uint       textLen = 0,
             TModule*   module = 0);
 
     //
@@ -57,7 +58,7 @@ class _OWLCLASS TStatic : public TControl {
     //
     // Override TWindow virtual member functions
     //
-    UINT  Transfer(void* buffer, TTransferDirection direction);
+    uint  Transfer(void* buffer, TTransferDirection direction);
 
   protected:
     //
@@ -66,7 +67,7 @@ class _OWLCLASS TStatic : public TControl {
     char far* GetClassName();
 
     // Make sure that control is re-painted when resized
-    void EvSize(UINT sizeType, TSize& size);
+    void EvSize(uint sizeType, TSize& size);
 
   private:
     //
@@ -79,4 +80,4 @@ class _OWLCLASS TStatic : public TControl {
   DECLARE_RESPONSE_TABLE(TStatic);
 };
 
-#endif  // __OWL_STATIC_H
+#endif  // OWL_STATIC_H

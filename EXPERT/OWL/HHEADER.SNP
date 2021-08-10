@@ -1,7 +1,9 @@
 ##--BEGIN-- TRUE
-##QUERY_FILENAME_H [[Filename]]  2
+##QUERY_FILENAME_H [[HFileName]]
+##--BEGIN-- StripDiacritic(HFileName) [[Filename]]
 #if !defined(__[[Filename]]_h)              // Sentry, use file only if it's not already included.
 #define __[[Filename]]_h
+##--END-- StripDiacritic(HFileName) [[Filename]]
 
 ##@QUERY_PRJ_NAME [[Project]]
 /*  Project [[Project]]

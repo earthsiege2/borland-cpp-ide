@@ -1,86 +1,70 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1993 by Borland International
-//   include\owl\listview.rc
+// ObjectWindows
+// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+//
 //   Menu and accelerators for use with TListView
 //----------------------------------------------------------------------------
 
-#include <owl\inputdia.rh>
-
-#define CM_LISTUNDO         24381
-#define CM_LISTCUT          24382
-#define CM_LISTCOPY         24383
-#define CM_LISTPASTE        24384
-#define CM_LISTDELETE       24385
-#define CM_LISTCLEAR        24386
-#define CM_LISTADD          24387
-#define CM_LISTEDIT         24388
-#define IDM_LISTVIEW        32582
-#define IDA_LISTVIEW        32582
-#define IDS_LISTNUM         32582
+#include <owl/inputdia.rh>
+#include <owl/listview.rh>
 
 #if defined(RC_INVOKED)
 
-#include <owl\inputdia.rc>
-#define NO_IDD_INPUTDIALOG
+#define NO_IDM_EDITSEARCH
+#define NO_IDA_EDITSEARCH
+#include <owl/editsear.rc>      // Get the edit menu help strings
+#include <owl/inputdia.rc>      // Get the TInputDialog dialog resource
 
 #if !defined(NO_IDM_LISTVIEW) && !defined(__IDM_LISTVIEW)
 #define __IDM_LISTVIEW
 IDM_LISTVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
-BEGIN
+{
   POPUP "&Edit"
-  BEGIN
-    MenuItem  "&Undo\aAlt+BkSp",      CM_LISTUNDO
+  {
+    MenuItem  "&Undo\aCtrl+Z",        CM_EDITUNDO
     MenuItem  SEPARATOR
-    MenuItem  "&Cut\aShift+Del",      CM_LISTCUT
-    MenuItem  "C&opy\aCtrl+Ins",      CM_LISTCOPY
-    MenuItem  "&Paste\aShift+Ins",    CM_LISTPASTE
-    MenuItem  "&Delete\aDel",         CM_LISTDELETE
-    MenuItem  "&Add Item\aEnter",     CM_LISTADD
-    MenuItem  "&Edit Item\aAlt+Enter",CM_LISTEDIT
-    MenuItem  "C&lear All\aCtrl+Del", CM_LISTCLEAR
-  END
+    MenuItem  "&Cut\aCtrl+X",         CM_EDITCUT
+    MenuItem  "C&opy\aCtrl+C",        CM_EDITCOPY
+    MenuItem  "&Paste\aCtrl+V",       CM_EDITPASTE
+    MenuItem  "&Delete\aDel",         CM_EDITDELETE
+    MenuItem  "&Add Item\aIns",       CM_EDITADD
+    MenuItem  "&Edit Item\aEnter",    CM_EDITEDIT
+    MenuItem  "C&lear All\aCtrl+Del", CM_EDITCLEAR
+  }
   POPUP "&Help"
-  BEGIN
+  {
     MenuItem  "OWL ListView", 0, INACTIVE
-  END
-END
+  }
+}
 #endif
 #undef NO_IDM_LISTVIEW
 
 #if !defined(NO_IDA_LISTVIEW) && !defined(__IDA_LISTVIEW)
 #define __IDA_LISTVIEW
 IDA_LISTVIEW ACCELERATORS
-BEGIN
-  "^x",      CM_LISTCUT,
-  "^c",      CM_LISTCOPY,
-  "^v",      CM_LISTPASTE,
-  VK_DELETE, CM_LISTDELETE VIRTKEY
-  VK_DELETE, CM_LISTCUT,   VIRTKEY, SHIFT
-  VK_DELETE, CM_LISTCLEAR, VIRTKEY, CONTROL
-  VK_INSERT, CM_LISTCOPY,  VIRTKEY, CONTROL
-  VK_INSERT, CM_LISTPASTE, VIRTKEY, SHIFT
-  VK_BACK,   CM_LISTUNDO,  VIRTKEY, ALT
-  VK_RETURN, CM_LISTADD,   VIRTKEY
-  VK_RETURN, CM_LISTEDIT,  VIRTKEY, ALT
-END
+{
+  "^z",      CM_EDITUNDO,
+  "^x",      CM_EDITCUT,
+  "^c",      CM_EDITCOPY,
+  "^v",      CM_EDITPASTE,
+  VK_DELETE, CM_EDITDELETE VIRTKEY
+  VK_DELETE, CM_EDITCUT,   VIRTKEY, SHIFT
+  VK_DELETE, CM_EDITCLEAR, VIRTKEY, CONTROL
+  VK_INSERT, CM_EDITCOPY,  VIRTKEY, CONTROL
+  VK_INSERT, CM_EDITPASTE, VIRTKEY, SHIFT
+  VK_BACK,   CM_EDITUNDO,  VIRTKEY, ALT
+  VK_INSERT, CM_EDITADD,   VIRTKEY
+  VK_RETURN, CM_EDITEDIT,  VIRTKEY,
+}
 #endif
 #undef NO_IDA_LISTVIEW
 
 #if !defined(NO_IDS_LISTVIEW) && !defined(__IDS_LISTVIEW)
 #define __IDS_LISTVIEW
 STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
-BEGIN
-  CM_LISTUNDO,  "Reverses the last operation"
-  CM_LISTCUT,   "Cuts the selection and puts it on the Clipboard"
-  CM_LISTCOPY,  "Copies the selection to the Clipboard"
-  CM_LISTPASTE, "Inserts the Clipboard contents at the caret"
-  CM_LISTDELETE,"Deletes the selection"
-  CM_LISTCLEAR, "Clear the document"
-  CM_LISTADD,   "Insert a new line"
-  CM_LISTEDIT,  "Edit the current line"
-
+{
   IDS_LISTNUM,  "Line number %d"
-END
+}
 #endif
 #undef NO_IDS_LISTVIEW
 

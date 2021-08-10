@@ -1,13 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//   include\owl\mdichild.h
+// ObjectWindows
+// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+//
 //   Declaration of class TMDIChild.
 //----------------------------------------------------------------------------
-#if !defined(__OWL_MDICHILD_H)
-#define __OWL_MDICHILD_H
+#if !defined(OWL_MDICHILD_H)
+#define OWL_MDICHILD_H
 
-#if !defined(__OWL_FRAMEWIN_H)
-  #include <owl\framewin.h>
+#if !defined(OWL_FRAMEWIN_H)
+# include <owl/framewin.h>
 #endif
 
 class _OWLCLASS TMDIClient;
@@ -21,7 +22,7 @@ class _OWLCLASS TMDIChild : virtual public TFrameWindow {
     TMDIChild(TMDIClient&     parent,
               const char far* title = 0,
               TWindow*        clientWnd = 0,
-              BOOL            shrinkToClient = FALSE,
+              bool            shrinkToClient = false,
               TModule*        module = 0);
 
     TMDIChild(HWND hWnd, TModule* module = 0);
@@ -31,17 +32,17 @@ class _OWLCLASS TMDIChild : virtual public TFrameWindow {
     //
     // override virtual methods defined by TWindow
     //
-    BOOL       PreProcessMsg(MSG& msg);
-    BOOL       ShowWindow(int cmdShow);
-    BOOL       EnableWindow(BOOL enable);
+    bool       PreProcessMsg(MSG& msg);
+    bool       ShowWindow(int cmdShow);
+    bool       EnableWindow(bool enable);
+    void       Destroy(int retVal = 0);
 
   protected:
-    void       Destroy(int retVal = 0);
     void       PerformCreate(int menuOrId);
-    LRESULT    DefWindowProc(UINT msg, WPARAM wParam, LPARAM lParam);
+    LRESULT    DefWindowProc(uint msg, WPARAM wParam, LPARAM lParam);
     void       EvMDIActivate(HWND hWndActivated,
                              HWND hWndDeactivated);
-    BOOL       EvNCActivate(BOOL active);
+    bool       EvNCActivate(bool active);
 
   private:
     //
@@ -54,4 +55,4 @@ class _OWLCLASS TMDIChild : virtual public TFrameWindow {
   DECLARE_STREAMABLE(_OWLCLASS, TMDIChild, 1);
 };
 
-#endif  // __OWL_MDICHILD_H
+#endif  // OWL_MDICHILD_H
