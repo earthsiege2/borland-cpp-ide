@@ -129,10 +129,19 @@ OBJS =               \
         cplx1.obj    \
         cplx2.obj
 
+AUXOBJS =            \
+        fdiv32.obj
+
 !if $d(DLL)
 IMPOBJS =            \
         matherr.obj  \
         matherrl.obj
+!endif
+
+!if $d(DLL)
+    IMPOBJS = $(AUXOBJS) $(IMPOBJS)
+!else
+    OBJS    = $(AUXOBJS) $(OBJS)
 !endif
 
 #############################################################################

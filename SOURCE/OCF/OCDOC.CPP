@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -110,6 +111,7 @@ TOcDocument::SetStorage(const char far* path)
 {
   delete Storage;
   Storage = new TOcStorage(path, false);
+  SetName(path);    // new Storage now has path as a name
 }
 
 //
@@ -306,6 +308,8 @@ TOcDocument::Close()
     TOcLinkView& view = *j.Current();
     view.Disconnect();
   }
+
+  ViewCollection.Clear(); // remove the link views now
 }
 
 void
@@ -327,5 +331,6 @@ TOcDocument::SetName(const string& newName)
   if (!Name.is_null() && ActiveView)
     ActiveView->Rename();
 }
+
 
 

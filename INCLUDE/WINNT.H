@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0093     Increment this if a change has global effects
 
+Copyright (c) 1990-1995  Microsoft Corporation
+
 Module Name:
 
     winnt.h
@@ -13,14 +15,6 @@ Revision History:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WINNT_
 #define _WINNT_
 
@@ -30,21 +24,33 @@ extern "C" {
 
 #include <ctype.h>
 #define ANYSIZE_ARRAY 1
-#if defined(_MIPS_) || defined(_ALPHA_) || defined(_PPC_)
+
+#if defined(_M_MRX000) && !(defined(MIDL_PASS) || defined(RC_INVOKED)) && defined(ENABLE_RESTRICTED)
+#define RESTRICTED_POINTER __restrict
+#else
+#define RESTRICTED_POINTER
+#endif
+
+#if defined(_M_MRX000) || defined(_M_ALPHA) || defined(_M_PPC)
 #define UNALIGNED __unaligned
 #else
 #define UNALIGNED
 #endif
 
-#if !defined(__BORLANDC__) && (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_ALPHA) || defined(_M_PPC)) && !defined(MIDL_PASS)
+
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
+#define DECLSPEC_IMPORT
+#else
+#if (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_ALPHA) || defined(_M_PPC)) && !defined(MIDL_PASS)
 #define DECLSPEC_IMPORT __declspec(dllimport)
 #else
 #define DECLSPEC_IMPORT
 #endif
+#endif
 
 typedef void *PVOID;
 
-#if (_MSC_VER >= 800)
+#if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
 #define NTAPI __stdcall
 #else
 #define _cdecl
@@ -76,14 +82,6 @@ typedef long LONG;
 //
 // UNICODE (Wide Character) types
 //
-
-// Borland C++ : wchar_t is standard C++ type
-#if !defined(__cplusplus) || !defined(__BORLANDC__)
-#ifndef _WCHAR_T_DEFINED
-typedef unsigned short wchar_t;
-#define _WCHAR_T_DEFINED
-#endif
-#endif
 
 typedef wchar_t WCHAR;    // wc,   16-bit UNICODE character
 
@@ -180,16 +178,20 @@ typedef double DWORDLONG;
 typedef LONGLONG *PLONGLONG;
 typedef DWORDLONG *PDWORDLONG;
 
+// Update Sequence Number
+
+typedef LONGLONG USN;
+
 #if defined(MIDL_PASS)
 typedef struct _LARGE_INTEGER {
 #else // MIDL_PASS
 typedef union _LARGE_INTEGER {
-#if !defined(NO_ANONYMOUS_STRUCT)
+#if defined(_ANONYMOUS_STRUCT)
     struct {
         DWORD LowPart;
         LONG HighPart;
     };
-#endif // !NO_ANONYMOUS_STRUCT
+#endif
     struct {
         DWORD LowPart;
         LONG HighPart;
@@ -200,16 +202,17 @@ typedef union _LARGE_INTEGER {
 
 typedef LARGE_INTEGER *PLARGE_INTEGER;
 
+
 #if defined(MIDL_PASS)
 typedef struct _ULARGE_INTEGER {
 #else // MIDL_PASS
 typedef union _ULARGE_INTEGER {
-#if !defined(NO_ANONYMOUS_STRUCT)
+#if defined(_ANONYMOUS_STRUCT)
     struct {
         DWORD LowPart;
         DWORD HighPart;
     };
-#endif // !NO_ANONYMOUS_STRUCT
+#endif
     struct {
         DWORD LowPart;
         DWORD HighPart;
@@ -220,7 +223,7 @@ typedef union _ULARGE_INTEGER {
 
 typedef ULARGE_INTEGER *PULARGE_INTEGER;
 
-// end_ntminiport
+// end_ntminiport end_ntndis
 
 //
 // Locally Unique Identifier
@@ -317,7 +320,7 @@ Int64ShrlMod32 (
 
 //
 // The x86 C compiler understands inline assembler. Therefore, inline functions
-// that employ inline assembelr are used for shifts of 0..31.  The multiplies
+// that employ inline assembler are used for shifts of 0..31.  The multiplies
 // rely on the compiler recognizing the cast of the multiplicand to int64 to
 // generate the optimal code inline.
 //
@@ -346,15 +349,11 @@ Int64ShrlMod32 (
     DWORD ShiftCount
     );
 
-#if !defined (__cplusplus) && defined(INCL_INLINE)
+#if !defined (__cplusplus) && !defined(__BORLANDC__)
 
-#define INLINE
-
-#if defined(RC_INVOKED)
 #pragma warning(disable:4035)               // re-enable below
-#endif
 
-INLINE DWORDLONG
+__inline DWORDLONG
 NTAPI
 Int64ShllMod32 (
     DWORDLONG Value,
@@ -362,7 +361,7 @@ Int64ShllMod32 (
     )
 {
     _asm    {
-        mov     ecx, ShiftCount             ; must be 0..31
+        mov     ecx, ShiftCount
         mov     eax, dword ptr [Value]
         mov     edx, dword ptr [Value+4]
         shld    edx, eax, cl
@@ -378,7 +377,7 @@ Int64ShraMod32 (
     )
 {
     _asm {
-        mov     ecx, ShiftCount             ; must be 0..31
+        mov     ecx, ShiftCount
         mov     eax, dword ptr [Value]
         mov     edx, dword ptr [Value+4]
         shrd    eax, edx, cl
@@ -394,7 +393,7 @@ Int64ShrlMod32 (
     )
 {
     _asm    {
-        mov     ecx, ShiftCount             ; must be 0..31
+        mov     ecx, ShiftCount
         mov     eax, dword ptr [Value]
         mov     edx, dword ptr [Value+4]
         shrd    eax, edx, cl
@@ -408,11 +407,9 @@ Int64ShrlMod32 (
 #define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
 #define Int64ShrlMod32(a, b) ((DWORDLONG)(a) >> (b))
 
-#endif // !defined (__cplusplus) && INCL_INLINE
+#endif // !defined (__cplusplus)
 
-#if defined(RC_INVOKED)
 #pragma warning(default:4035)
-#endif
 
 #elif defined(_M_ALPHA)
 
@@ -457,8 +454,7 @@ typedef BOOLEAN *PBOOLEAN;
 typedef struct _LIST_ENTRY {
    struct _LIST_ENTRY *Flink;
    struct _LIST_ENTRY *Blink;
-} LIST_ENTRY;
-typedef LIST_ENTRY *PLIST_ENTRY;
+} LIST_ENTRY, *PLIST_ENTRY, *RESTRICTED_POINTER PRLIST_ENTRY;
 
 //
 //  Singly linked list structure. Can be used as either a list head, or
@@ -469,13 +465,37 @@ typedef struct _SINGLE_LIST_ENTRY {
     struct _SINGLE_LIST_ENTRY *Next;
 } SINGLE_LIST_ENTRY, *PSINGLE_LIST_ENTRY;
 
-// Borland C++ values.h uses uppercase hex digits for MAXSHORT, MAXINT, MAXLONG
+//
+// Base data structures for OLE support
+//
+
+#ifndef GUID_DEFINED
+#define GUID_DEFINED
+
+typedef struct _GUID {          // size is 16
+    DWORD Data1;
+    WORD   Data2;
+    WORD   Data3;
+    BYTE  Data4[8];
+} GUID;
+
+#endif // !GUID_DEFINED
+
+#ifndef __OBJECTID_DEFINED
+#define __OBJECTID_DEFINED
+
+typedef struct  _OBJECTID {     // size is 20
+    GUID Lineage;
+    DWORD Uniquifier;
+} OBJECTID;
+#endif // !_OBJECTID_DEFINED
+
 #define MINCHAR     0x80
-#define MAXCHAR     0x7F
+#define MAXCHAR     0x7f
 #define MINSHORT    0x8000
-#define MAXSHORT    0x7FFF
-#define MINLONG     0x80000000L
-#define MAXLONG     0x7FFFFFFFL
+#define MAXSHORT    0x7fff
+#define MINLONG     0x80000000
+#define MAXLONG     0x7fffffff
 #define MAXBYTE     0xff
 #define MAXWORD     0xffff
 #define MAXDWORD    0xffffffff
@@ -511,24 +531,38 @@ typedef struct _SINGLE_LIST_ENTRY {
 /*
  *  Primary language IDs.
  */
+
 #define LANG_NEUTRAL                     0x00
 
+#define LANG_ARABIC                      0x01
+#define LANG_AFRIKAANS                   0x36
+#define LANG_ALBANIAN                    0x1c
+#define LANG_BASQUE                      0x2d
 #define LANG_BULGARIAN                   0x02
+#define LANG_BYELORUSSIAN                0x23
+#define LANG_CATALAN                     0x03
 #define LANG_CHINESE                     0x04
 #define LANG_CROATIAN                    0x1a
 #define LANG_CZECH                       0x05
 #define LANG_DANISH                      0x06
 #define LANG_DUTCH                       0x13
 #define LANG_ENGLISH                     0x09
+#define LANG_ESTONIAN                    0x25
+#define LANG_FAEROESE                    0x38
+#define LANG_FARSI                       0x29
 #define LANG_FINNISH                     0x0b
 #define LANG_FRENCH                      0x0c
 #define LANG_GERMAN                      0x07
 #define LANG_GREEK                       0x08
+#define LANG_HEBREW                      0x0D
 #define LANG_HUNGARIAN                   0x0e
 #define LANG_ICELANDIC                   0x0f
+#define LANG_INDONESIAN                  0x21
 #define LANG_ITALIAN                     0x10
 #define LANG_JAPANESE                    0x11
 #define LANG_KOREAN                      0x12
+#define LANG_LATVIAN                     0x26
+#define LANG_LITHUANIAN                  0x27
 #define LANG_NORWEGIAN                   0x14
 #define LANG_POLISH                      0x15
 #define LANG_PORTUGUESE                  0x16
@@ -536,9 +570,12 @@ typedef struct _SINGLE_LIST_ENTRY {
 #define LANG_RUSSIAN                     0x19
 #define LANG_SLOVAK                      0x1b
 #define LANG_SLOVENIAN                   0x24
+#define LANG_SORBIAN                     0x2e
 #define LANG_SPANISH                     0x0a
 #define LANG_SWEDISH                     0x1d
+#define LANG_THAI                        0x1e
 #define LANG_TURKISH                     0x1f
+#define LANG_UKRAINIAN                   0x22
 
 /*
  *  Sublanguage IDs.
@@ -551,6 +588,22 @@ typedef struct _SINGLE_LIST_ENTRY {
 #define SUBLANG_DEFAULT                  0x01    /* user default */
 #define SUBLANG_SYS_DEFAULT              0x02    /* system default */
 
+#define SUBLANG_ARABIC                   0x01    /* Arabic (Saudi Arabia) */
+#define SUBLANG_ARABIC_IRAQ              0x02    /* Arabic (Iraq) */
+#define SUBLANG_ARABIC_EGYPT             0x03    /* Arabic (Egypt) */
+#define SUBLANG_ARABIC_LIBYA             0x04    /* Arabic (Libya) */
+#define SUBLANG_ARABIC_ALGERIA           0x05    /* Arabic (Algeria) */
+#define SUBLANG_ARABIC_MOROCCO           0x06    /* Arabic (Morocco) */
+#define SUBLANG_ARABIC_TUNISIA           0x07    /* Arabic (Tunisia) */
+#define SUBLANG_ARABIC_OMAN              0x08    /* Arabic (Oman) */
+#define SUBLANG_ARABIC_YEMEN             0x09    /* Arabic (Yemen) */
+#define SUBLANG_ARABIC_SYRIA             0x10    /* Arabic (Syria) */
+#define SUBLANG_ARABIC_JORDAN            0x11    /* Arabic (Jordan) */
+#define SUBLANG_ARABIC_LEBANON           0x12    /* Arabic (Lebanon) */
+#define SUBLANG_ARABIC_KUWAIT            0x13    /* Arabic (Kuwait) */
+#define SUBLANG_ARABIC_UAE               0x14    /* Arabic (United Arab Emirates) */
+#define SUBLANG_ARABIC_BAHRAIN           0x15    /* Arabic (Bahrain) */
+#define SUBLANG_ARABIC_QATAR             0x16    /* Arabic (Qatar) */
 #define SUBLANG_CHINESE_TRADITIONAL      0x01    /* Chinese (Taiwan) */
 #define SUBLANG_CHINESE_SIMPLIFIED       0x02    /* Chinese (PR China) */
 #define SUBLANG_CHINESE_HONGKONG         0x03    /* Chinese (Hong Kong) */
@@ -563,15 +616,23 @@ typedef struct _SINGLE_LIST_ENTRY {
 #define SUBLANG_ENGLISH_CAN              0x04    /* English (Canadian) */
 #define SUBLANG_ENGLISH_NZ               0x05    /* English (New Zealand) */
 #define SUBLANG_ENGLISH_EIRE             0x06    /* English (Irish) */
+#define SUBLANG_ENGLISH_SAFRICA          0x07    /* English (South Africa) */
+#define SUBLANG_ENGLISH_JAMAICA          0x08    /* English (Jamaica) */
+#define SUBLANG_ENGLISH_CARRIBEAN        0x09    /* English (Carribean) */
 #define SUBLANG_FRENCH                   0x01    /* French */
 #define SUBLANG_FRENCH_BELGIAN           0x02    /* French (Belgian) */
 #define SUBLANG_FRENCH_CANADIAN          0x03    /* French (Canadian) */
 #define SUBLANG_FRENCH_SWISS             0x04    /* French (Swiss) */
+#define SUBLANG_FRENCH_LUXEMBOURG        0x05    /* French (Luxembourg) */
 #define SUBLANG_GERMAN                   0x01    /* German */
 #define SUBLANG_GERMAN_SWISS             0x02    /* German (Swiss) */
 #define SUBLANG_GERMAN_AUSTRIAN          0x03    /* German (Austrian) */
+#define SUBLANG_GERMAN_LUXEMBOURG        0x04    /* German (Luxembourg) */
+#define SUBLANG_GERMAN_LIECHTENSTEIN     0x05    /* German (Liechtenstein) */
 #define SUBLANG_ITALIAN                  0x01    /* Italian */
 #define SUBLANG_ITALIAN_SWISS            0x02    /* Italian (Swiss) */
+#define SUBLANG_KOREAN                   0x01    /* Korean */
+#define SUBLANG_KOREAN_JOHAB             0x02    /* Korean (Johab) */
 #define SUBLANG_NORWEGIAN_BOKMAL         0x01    /* Norwegian (Bokmal) */
 #define SUBLANG_NORWEGIAN_NYNORSK        0x02    /* Norwegian (Nynorsk) */
 #define SUBLANG_PORTUGUESE               0x02    /* Portuguese */
@@ -579,6 +640,19 @@ typedef struct _SINGLE_LIST_ENTRY {
 #define SUBLANG_SPANISH                  0x01    /* Spanish (Castilian) */
 #define SUBLANG_SPANISH_MEXICAN          0x02    /* Spanish (Mexican) */
 #define SUBLANG_SPANISH_MODERN           0x03    /* Spanish (Modern) */
+#define SUBLANG_SPANISH_GUATEMALA        0x04    /* Spanish (Guatemala) */
+#define SUBLANG_SPANISH_COSTARICA        0x05    /* Spanish (Costa Rica) */
+#define SUBLANG_SPANISH_PANAMA           0x06    /* Spanish (Panama) */
+#define SUBLANG_SPANISH_DOMINICAN        0x07    /* Spanish (Dominican Republic) */
+#define SUBLANG_SPANISH_VENEZUELA        0x08    /* Spanish (Venezuela) */
+#define SUBLANG_SPANISH_COLOMBIA         0x09    /* Spanish (Colombia) */
+#define SUBLANG_SPANISH_PERU             0x10    /* Spanish (Peru) */
+#define SUBLANG_SPANISH_ARGENTINA        0x11    /* Spanish (Argentina) */
+#define SUBLANG_SPANISH_ECUADOR          0x12    /* Spanish (Ecuador) */
+#define SUBLANG_SPANISH_CHILE            0x13    /* Spanish (Chile) */
+#define SUBLANG_SPANISH_URUGUAY          0x14    /* Spanish (Uruguay) */
+#define SUBLANG_SPANISH_PARAGUAY         0x15    /* Spanish (Paraguay) */
+#define SUBLANG_SPANISH_BOLIVIA          0x16    /* Spanish (Bolivia) */
 
 /*
  *  Sorting IDs.
@@ -655,7 +729,7 @@ typedef struct _SINGLE_LIST_ENTRY {
 
 
 
-// begin_ntminiport
+// begin_ntminiport begin_ntndis
 
 //
 // Macros used to eliminate compiler warning generated when formal
@@ -707,40 +781,43 @@ typedef struct _SINGLE_LIST_ENTRY {
 #endif // lint or _lint
 
 
-/*lint -save -e767 */
-#define STATUS_WAIT_0                    ((DWORD   )0x00000000L)
-#define STATUS_ABANDONED_WAIT_0          ((DWORD   )0x00000080L)
-#define STATUS_USER_APC                  ((DWORD   )0x000000C0L)
-#define STATUS_TIMEOUT                   ((DWORD   )0x00000102L)
-#define STATUS_PENDING                   ((DWORD   )0x00000103L)
-#define STATUS_GUARD_PAGE_VIOLATION      ((DWORD   )0x80000001L)
-#define STATUS_DATATYPE_MISALIGNMENT     ((DWORD   )0x80000002L)
-#define STATUS_BREAKPOINT                ((DWORD   )0x80000003L)
-#define STATUS_SINGLE_STEP               ((DWORD   )0x80000004L)
-#define STATUS_ACCESS_VIOLATION          ((DWORD   )0xC0000005L)
-#define STATUS_IN_PAGE_ERROR             ((DWORD   )0xC0000006L)
-#define STATUS_NO_MEMORY                 ((DWORD   )0xC0000017L)
-#define STATUS_ILLEGAL_INSTRUCTION       ((DWORD   )0xC000001DL)
-#define STATUS_NONCONTINUABLE_EXCEPTION  ((DWORD   )0xC0000025L)
-#define STATUS_INVALID_DISPOSITION       ((DWORD   )0xC0000026L)
-#define STATUS_ARRAY_BOUNDS_EXCEEDED     ((DWORD   )0xC000008CL)
-#define STATUS_FLOAT_DENORMAL_OPERAND    ((DWORD   )0xC000008DL)
-#define STATUS_FLOAT_DIVIDE_BY_ZERO      ((DWORD   )0xC000008EL)
-#define STATUS_FLOAT_INEXACT_RESULT      ((DWORD   )0xC000008FL)
-#define STATUS_FLOAT_INVALID_OPERATION   ((DWORD   )0xC0000090L)
-#define STATUS_FLOAT_OVERFLOW            ((DWORD   )0xC0000091L)
-#define STATUS_FLOAT_STACK_CHECK         ((DWORD   )0xC0000092L)
-#define STATUS_FLOAT_UNDERFLOW           ((DWORD   )0xC0000093L)
-#define STATUS_INTEGER_DIVIDE_BY_ZERO    ((DWORD   )0xC0000094L)
-#define STATUS_INTEGER_OVERFLOW          ((DWORD   )0xC0000095L)
-#define STATUS_PRIVILEGED_INSTRUCTION    ((DWORD   )0xC0000096L)
-#define STATUS_STACK_OVERFLOW            ((DWORD   )0xC00000FDL)
-#define STATUS_CONTROL_C_EXIT            ((DWORD   )0xC000013AL)
-/*lint -restore */
+#ifndef WIN32_NO_STATUS 
+/*lint -save -e767 */  
+#define STATUS_WAIT_0                    ((DWORD   )0x00000000L)    
+#define STATUS_ABANDONED_WAIT_0          ((DWORD   )0x00000080L)    
+#define STATUS_USER_APC                  ((DWORD   )0x000000C0L)    
+#define STATUS_TIMEOUT                   ((DWORD   )0x00000102L)    
+#define STATUS_PENDING                   ((DWORD   )0x00000103L)    
+#define STATUS_SEGMENT_NOTIFICATION      ((DWORD   )0x40000005L)    
+#define STATUS_GUARD_PAGE_VIOLATION      ((DWORD   )0x80000001L)    
+#define STATUS_DATATYPE_MISALIGNMENT     ((DWORD   )0x80000002L)    
+#define STATUS_BREAKPOINT                ((DWORD   )0x80000003L)    
+#define STATUS_SINGLE_STEP               ((DWORD   )0x80000004L)    
+#define STATUS_ACCESS_VIOLATION          ((DWORD   )0xC0000005L)    
+#define STATUS_IN_PAGE_ERROR             ((DWORD   )0xC0000006L)    
+#define STATUS_NO_MEMORY                 ((DWORD   )0xC0000017L)    
+#define STATUS_ILLEGAL_INSTRUCTION       ((DWORD   )0xC000001DL)    
+#define STATUS_NONCONTINUABLE_EXCEPTION  ((DWORD   )0xC0000025L)    
+#define STATUS_INVALID_DISPOSITION       ((DWORD   )0xC0000026L)    
+#define STATUS_ARRAY_BOUNDS_EXCEEDED     ((DWORD   )0xC000008CL)    
+#define STATUS_FLOAT_DENORMAL_OPERAND    ((DWORD   )0xC000008DL)    
+#define STATUS_FLOAT_DIVIDE_BY_ZERO      ((DWORD   )0xC000008EL)    
+#define STATUS_FLOAT_INEXACT_RESULT      ((DWORD   )0xC000008FL)    
+#define STATUS_FLOAT_INVALID_OPERATION   ((DWORD   )0xC0000090L)    
+#define STATUS_FLOAT_OVERFLOW            ((DWORD   )0xC0000091L)    
+#define STATUS_FLOAT_STACK_CHECK         ((DWORD   )0xC0000092L)    
+#define STATUS_FLOAT_UNDERFLOW           ((DWORD   )0xC0000093L)    
+#define STATUS_INTEGER_DIVIDE_BY_ZERO    ((DWORD   )0xC0000094L)    
+#define STATUS_INTEGER_OVERFLOW          ((DWORD   )0xC0000095L)    
+#define STATUS_PRIVILEGED_INSTRUCTION    ((DWORD   )0xC0000096L)    
+#define STATUS_STACK_OVERFLOW            ((DWORD   )0xC00000FDL)    
+#define STATUS_CONTROL_C_EXIT            ((DWORD   )0xC000013AL)    
+/*lint -restore */  
+#endif 
 #define MAXIMUM_WAIT_OBJECTS 64     // Maximum number of wait objects
 
 #define MAXIMUM_SUSPEND_COUNT MAXCHAR // Maximum times thread can be suspended
-typedef DWORD KSPIN_LOCK;
+typedef DWORD KSPIN_LOCK;  
 
 #ifdef _ALPHA_
 
@@ -748,6 +825,8 @@ typedef DWORD KSPIN_LOCK;
 //
 // The following flags control the contents of the CONTEXT structure.
 //
+
+#if !defined(RC_INVOKED)
 
 #define CONTEXT_PORTABLE_32BIT     0x00100000
 #define CONTEXT_ALPHA              0x00020000
@@ -757,6 +836,8 @@ typedef DWORD KSPIN_LOCK;
 #define CONTEXT_INTEGER         (CONTEXT_ALPHA | 0x00000004L)
 
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
+
+#endif
 
 #ifndef _PORTABLE_32BIT_CONTEXT
 
@@ -1111,7 +1192,7 @@ __jump_unwind (
 #endif // _ALPHA_
 
 
-#ifdef _X86_
+#ifdef _M_IX86
 
 //
 // Disable these two pramas that evaluate to "sti" "cli" on x86 so that driver
@@ -1144,6 +1225,8 @@ __jump_unwind (
 // The following flags control the contents of the CONTEXT structure.
 //
 
+#if !defined(RC_INVOKED)
+
 #define CONTEXT_i386    0x00010000    // this assumes that i386 and
 #define CONTEXT_i486    0x00010000    // i486 have identical context records
 
@@ -1155,6 +1238,8 @@ __jump_unwind (
 
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_INTEGER |\
                       CONTEXT_SEGMENTS)
+
+#endif
 
 typedef struct _FLOATING_SAVE_AREA {
     DWORD   ControlWord;
@@ -1264,8 +1349,7 @@ typedef CONTEXT *PCONTEXT;
 
 // begin_ntminiport
 
-#endif //_X86_
-
+#endif //_M_IX86
 
 #if !defined(RC_INVOKED)
 #pragma warn -bbf
@@ -1300,13 +1384,14 @@ typedef struct _LDT_ENTRY {
 #pragma warn .bbf
 #endif
 
-
 #if defined(_MIPS_)
 
 // begin_ntddk begin_nthal
 //
 // The following flags control the contents of the CONTEXT structure.
 //
+
+#if !defined(RC_INVOKED)
 
 #define CONTEXT_R4000   0x00010000    // r4000 context
 
@@ -1315,6 +1400,8 @@ typedef struct _LDT_ENTRY {
 #define CONTEXT_INTEGER         (CONTEXT_R4000 | 0x00000004L)
 
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
+
+#endif
 
 //
 // Context Frame
@@ -1480,6 +1567,7 @@ __jump_unwind (
 
 #endif // MIPS
 
+
 #if defined(_PPC_)
 
 // begin_ntddk begin_nthal
@@ -1487,11 +1575,16 @@ __jump_unwind (
 // The following flags control the contents of the CONTEXT structure.
 //
 
+#if !defined(RC_INVOKED)
+
 #define CONTEXT_CONTROL         0x00000001L
 #define CONTEXT_FLOATING_POINT  0x00000002L
 #define CONTEXT_INTEGER         0x00000004L
+#define CONTEXT_DEBUG_REGISTERS 0x00000008L
 
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_FLOATING_POINT | CONTEXT_INTEGER)
+
+#endif
 
 //
 // Context Frame
@@ -1620,6 +1713,21 @@ typedef struct _CONTEXT {
     DWORD ContextFlags;
 
     DWORD Fill[3];                      // Pad out to multiple of 16 bytes
+
+    //
+    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
+    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
+    // included in CONTEXT_FULL.
+    //
+    DWORD Dr0;                          // Breakpoint Register 1
+    DWORD Dr1;                          // Breakpoint Register 2
+    DWORD Dr2;                          // Breakpoint Register 3
+    DWORD Dr3;                          // Breakpoint Register 4
+    DWORD Dr4;                          // Breakpoint Register 5
+    DWORD Dr5;                          // Breakpoint Register 6
+    DWORD Dr6;                          // Debug Status Register
+    DWORD Dr7;                          // Debug Control Register
+
 } CONTEXT, *PCONTEXT;
 
 // end_ntddk end_nthal
@@ -1671,8 +1779,7 @@ __jump_unwind (
 
 #endif // _PPC_
 
-#define EXCEPTION_CONTINUABLE         0 // Continuable exception
-#define EXCEPTION_NONCONTINUABLE    0x1 // Noncontinuable exception
+#define EXCEPTION_NONCONTINUABLE 0x1    // Noncontinuable exception
 #define EXCEPTION_MAXIMUM_PARAMETERS 15 // maximum number of exception parameters
 
 //
@@ -1733,6 +1840,17 @@ typedef struct _EXCEPTION_POINTERS {
 #define THREAD_BASE_PRIORITY_MAX    2   // maximum thread base priority boost
 #define THREAD_BASE_PRIORITY_MIN    -2  // minimum thread base priority boost
 #define THREAD_BASE_PRIORITY_IDLE   -15 // value that gets a thread to idle
+
+typedef struct _QUOTA_LIMITS {
+    DWORD PagedPoolLimit;
+    DWORD NonPagedPoolLimit;
+    DWORD MinimumWorkingSetSize;
+    DWORD MaximumWorkingSetSize;
+    DWORD PagefileLimit;
+    LARGE_INTEGER TimeLimit;
+} QUOTA_LIMITS;
+typedef QUOTA_LIMITS *PQUOTA_LIMITS;
+
 #define EVENT_MODIFY_STATE      0x0002
 #define EVENT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
 #define MUTANT_QUERY_STATE      0x0001
@@ -1748,15 +1866,14 @@ typedef struct _EXCEPTION_POINTERS {
 #define PROCESSOR_INTEL_386     386
 #define PROCESSOR_INTEL_486     486
 #define PROCESSOR_INTEL_PENTIUM 586
-#define PROCESSOR_INTEL_860     860
-#define PROCESSOR_MIPS_R2000    2000
-#define PROCESSOR_MIPS_R3000    3000
 #define PROCESSOR_MIPS_R4000    4000
 #define PROCESSOR_ALPHA_21064   21064
-#define PROCESSOR_PPC_601       601
-#define PROCESSOR_PPC_603       603
-#define PROCESSOR_PPC_604       604
-#define PROCESSOR_PPC_620       620
+
+#define PROCESSOR_ARCHITECTURE_INTEL 0
+#define PROCESSOR_ARCHITECTURE_MIPS  1
+#define PROCESSOR_ARCHITECTURE_ALPHA 2
+#define PROCESSOR_ARCHITECTURE_PPC   3
+#define PROCESSOR_ARCHITECTURE_UNKNOWN 0xFFFF
 
 typedef struct _MEMORY_BASIC_INFORMATION {
     PVOID BaseAddress;
@@ -1842,7 +1959,6 @@ typedef struct _MEMORY_BASIC_INFORMATION {
 
 #define FILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x1FF)
 
-
 #define FILE_GENERIC_READ         (STANDARD_RIGHTS_READ     |\
                                    FILE_READ_DATA           |\
                                    FILE_READ_ATTRIBUTES     |\
@@ -1872,10 +1988,7 @@ typedef struct _MEMORY_BASIC_INFORMATION {
 #define FILE_ATTRIBUTE_ARCHIVE          0x00000020
 #define FILE_ATTRIBUTE_NORMAL           0x00000080
 #define FILE_ATTRIBUTE_TEMPORARY        0x00000100
-#define FILE_ATTRIBUTE_ATOMIC_WRITE     0x00000200
-#define FILE_ATTRIBUTE_XACTION_WRITE    0x00000400
 #define FILE_ATTRIBUTE_COMPRESSED       0x00000800
-#define FILE_ATTRIBUTE_HAS_EMBEDDING    0x00001000
 #define FILE_NOTIFY_CHANGE_FILE_NAME    0x00000001
 #define FILE_NOTIFY_CHANGE_DIR_NAME     0x00000002
 #define FILE_NOTIFY_CHANGE_ATTRIBUTES   0x00000004
@@ -2013,7 +2126,7 @@ typedef GENERIC_MAPPING *PGENERIC_MAPPING;
 //
 
 
-#include "pshpack4.h"
+#include <pshpack4.h>
 
 typedef struct _LUID_AND_ATTRIBUTES {
     LUID Luid;
@@ -2022,7 +2135,8 @@ typedef struct _LUID_AND_ATTRIBUTES {
 typedef LUID_AND_ATTRIBUTES LUID_AND_ATTRIBUTES_ARRAY[ANYSIZE_ARRAY];
 typedef LUID_AND_ATTRIBUTES_ARRAY *PLUID_AND_ATTRIBUTES_ARRAY;
 
-#include "poppack.h"
+#include <poppack.h>
+
 
 ////////////////////////////////////////////////////////////////////////
 //                                                                    //
@@ -2926,6 +3040,7 @@ typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 #define IMAGE_DOS_SIGNATURE                 0x5A4D      // MZ
 #define IMAGE_OS2_SIGNATURE                 0x454E      // NE
 #define IMAGE_OS2_SIGNATURE_LE              0x454C      // LE
+#define IMAGE_VXD_SIGNATURE                 0x454C      // LE
 #define IMAGE_NT_SIGNATURE                  0x00004550  // PE00
 
 typedef struct _IMAGE_DOS_HEADER {      // DOS .EXE header
@@ -2983,6 +3098,60 @@ typedef struct _IMAGE_OS2_HEADER {      // OS/2 .EXE header
     WORD   ne_expver;                   // Expected Windows version number
   } IMAGE_OS2_HEADER, *PIMAGE_OS2_HEADER;
 
+typedef struct _IMAGE_VXD_HEADER {      // Windows VXD header
+    WORD   e32_magic;                   // Magic number
+    BYTE   e32_border;                  // The byte ordering for the VXD
+    BYTE   e32_worder;                  // The word ordering for the VXD
+    DWORD  e32_level;                   // The EXE format level for now = 0
+    WORD   e32_cpu;                     // The CPU type
+    WORD   e32_os;                      // The OS type
+    DWORD  e32_ver;                     // Module version
+    DWORD  e32_mflags;                  // Module flags
+    DWORD  e32_mpages;                  // Module # pages
+    DWORD  e32_startobj;                // Object # for instruction pointer
+    DWORD  e32_eip;                     // Extended instruction pointer
+    DWORD  e32_stackobj;                // Object # for stack pointer
+    DWORD  e32_esp;                     // Extended stack pointer
+    DWORD  e32_pagesize;                // VXD page size
+    DWORD  e32_lastpagesize;            // Last page size in VXD
+    DWORD  e32_fixupsize;               // Fixup section size
+    DWORD  e32_fixupsum;                // Fixup section checksum
+    DWORD  e32_ldrsize;                 // Loader section size
+    DWORD  e32_ldrsum;                  // Loader section checksum
+    DWORD  e32_objtab;                  // Object table offset
+    DWORD  e32_objcnt;                  // Number of objects in module
+    DWORD  e32_objmap;                  // Object page map offset
+    DWORD  e32_itermap;                 // Object iterated data map offset
+    DWORD  e32_rsrctab;                 // Offset of Resource Table
+    DWORD  e32_rsrccnt;                 // Number of resource entries
+    DWORD  e32_restab;                  // Offset of resident name table
+    DWORD  e32_enttab;                  // Offset of Entry Table
+    DWORD  e32_dirtab;                  // Offset of Module Directive Table
+    DWORD  e32_dircnt;                  // Number of module directives
+    DWORD  e32_fpagetab;                // Offset of Fixup Page Table
+    DWORD  e32_frectab;                 // Offset of Fixup Record Table
+    DWORD  e32_impmod;                  // Offset of Import Module Name Table
+    DWORD  e32_impmodcnt;               // Number of entries in Import Module Name Table
+    DWORD  e32_impproc;                 // Offset of Import Procedure Name Table
+    DWORD  e32_pagesum;                 // Offset of Per-Page Checksum Table
+    DWORD  e32_datapage;                // Offset of Enumerated Data Pages
+    DWORD  e32_preload;                 // Number of preload pages
+    DWORD  e32_nrestab;                 // Offset of Non-resident Names Table
+    DWORD  e32_cbnrestab;               // Size of Non-resident Name Table
+    DWORD  e32_nressum;                 // Non-resident Name Table Checksum
+    DWORD  e32_autodata;                // Object # for automatic data object
+    DWORD  e32_debuginfo;               // Offset of the debugging information
+    DWORD  e32_debuglen;                // The length of the debugging info. in bytes
+    DWORD  e32_instpreload;             // Number of instance pages in preload section of VXD file
+    DWORD  e32_instdemand;              // Number of instance pages in demand load section of VXD file
+    DWORD  e32_heapsize;                // Size of heap - for 16-bit apps
+    BYTE   e32_res3[12];                // Reserved words
+    DWORD  e32_winresoff;
+    DWORD  e32_winreslen;
+    WORD   e32_devid;                   // Device ID for VxD
+    WORD   e32_ddkver;                  // DDK version for VxD
+  } IMAGE_VXD_HEADER, *PIMAGE_VXD_HEADER;
+
 //
 // File header format.
 //
@@ -3003,21 +3172,18 @@ typedef struct _IMAGE_FILE_HEADER {
 #define IMAGE_FILE_EXECUTABLE_IMAGE          0x0002  // File is executable  (i.e. no unresolved externel references).
 #define IMAGE_FILE_LINE_NUMS_STRIPPED        0x0004  // Line nunbers stripped from file.
 #define IMAGE_FILE_LOCAL_SYMS_STRIPPED       0x0008  // Local symbols stripped from file.
-#define IMAGE_FILE_MINIMAL_OBJECT            0x0010  // Reserved.
-#define IMAGE_FILE_UPDATE_OBJECT             0x0020  // Reserved.
-#define IMAGE_FILE_16BIT_MACHINE             0x0040  // 16 bit word machine.
 #define IMAGE_FILE_BYTES_REVERSED_LO         0x0080  // Bytes of machine word are reversed.
 #define IMAGE_FILE_32BIT_MACHINE             0x0100  // 32 bit word machine.
 #define IMAGE_FILE_DEBUG_STRIPPED            0x0200  // Debugging info stripped from file in .DBG file
-#define IMAGE_FILE_PATCH                     0x0400  // Reserved.
 #define IMAGE_FILE_SYSTEM                    0x1000  // System File.
 #define IMAGE_FILE_DLL                       0x2000  // File is a DLL.
 #define IMAGE_FILE_BYTES_REVERSED_HI         0x8000  // Bytes of machine word are reversed.
 
 #define IMAGE_FILE_MACHINE_UNKNOWN           0
 #define IMAGE_FILE_MACHINE_I386              0x14c   // Intel 386.
-#define IMAGE_FILE_MACHINE_R3000             0x162   // MIPS little-endian, 0540 big-endian
+#define IMAGE_FILE_MACHINE_R3000             0x162   // MIPS little-endian, 0x160 big-endian
 #define IMAGE_FILE_MACHINE_R4000             0x166   // MIPS little-endian
+#define IMAGE_FILE_MACHINE_R10000            0x168   // MIPS little-endian
 #define IMAGE_FILE_MACHINE_ALPHA             0x184   // Alpha_AXP
 #define IMAGE_FILE_MACHINE_POWERPC           0x1F0   // IBM PowerPC Little-Endian
 
@@ -3129,20 +3295,6 @@ typedef struct _IMAGE_ROM_HEADERS {
 #define IMAGE_SUBSYSTEM_OS2_CUI              5   // image runs in the OS/2 character subsystem.
 #define IMAGE_SUBSYSTEM_POSIX_CUI            7   // image run  in the Posix character subsystem.
 
-// Dll Characteristics
-
-#define IMAGE_LIBRARY_PROCESS_INIT           1   // Dll has a process initialization routine.
-#define IMAGE_LIBRARY_PROCESS_TERM           2   // Dll has a thread termination routine.
-#define IMAGE_LIBRARY_THREAD_INIT            4   // Dll has a thread initialization routine.
-#define IMAGE_LIBRARY_THREAD_TERM            8   // Dll has a thread termination routine.
-
-//
-// Loader Flags
-//
-
-#define IMAGE_LOADER_FLAGS_BREAK_ON_LOAD    0x00000001
-#define IMAGE_LOADER_FLAGS_DEBUG_ON_LOAD    0x00000002
-
 
 // Directory Entries
 
@@ -3157,6 +3309,8 @@ typedef struct _IMAGE_ROM_HEADERS {
 #define IMAGE_DIRECTORY_ENTRY_GLOBALPTR      8   // Machine Value (MIPS GP)
 #define IMAGE_DIRECTORY_ENTRY_TLS            9   // TLS Directory
 #define IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG   10   // Load Configuration Directory
+#define IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT  11   // Bound Import Directory in headers
+#define IMAGE_DIRECTORY_ENTRY_IAT           12   // Import Address Table
 
 //
 // Section header format.
@@ -3182,12 +3336,16 @@ typedef struct _IMAGE_SECTION_HEADER {
 
 #define IMAGE_SIZEOF_SECTION_HEADER          40
 
-#define IMAGE_SCN_TYPE_REGULAR               0x00000000  //
-#define IMAGE_SCN_TYPE_DUMMY                 0x00000001  // Reserved.
-#define IMAGE_SCN_TYPE_NO_LOAD               0x00000002  // Reserved.
-#define IMAGE_SCN_TYPE_GROUPED               0x00000004  // Used for 16-bit offset code.
+//
+// Section characteristics.
+//
+
+//      IMAGE_SCN_TYPE_REG                   0x00000000  // Reserved.
+//      IMAGE_SCN_TYPE_DSECT                 0x00000001  // Reserved.
+//      IMAGE_SCN_TYPE_NOLOAD                0x00000002  // Reserved.
+//      IMAGE_SCN_TYPE_GROUP                 0x00000004  // Reserved.
 #define IMAGE_SCN_TYPE_NO_PAD                0x00000008  // Reserved.
-#define IMAGE_SCN_TYPE_COPY                  0x00000010  // Reserved.
+//      IMAGE_SCN_TYPE_COPY                  0x00000010  // Reserved.
 
 #define IMAGE_SCN_CNT_CODE                   0x00000020  // Section contains code.
 #define IMAGE_SCN_CNT_INITIALIZED_DATA       0x00000040  // Section contains initialized data.
@@ -3195,9 +3353,18 @@ typedef struct _IMAGE_SECTION_HEADER {
 
 #define IMAGE_SCN_LNK_OTHER                  0x00000100  // Reserved.
 #define IMAGE_SCN_LNK_INFO                   0x00000200  // Section contains comments or some other type of information.
-#define IMAGE_SCN_LNK_OVERLAY                0x00000400  // Section contains an overlay.
+//      IMAGE_SCN_TYPE_OVER                  0x00000400  // Reserved.
 #define IMAGE_SCN_LNK_REMOVE                 0x00000800  // Section contents will not become part of image.
 #define IMAGE_SCN_LNK_COMDAT                 0x00001000  // Section contents comdat.
+//                                           0x00002000  // Reserved.
+
+//      IMAGE_SCN_MEM_PROTECTED - Obsolete   0x00004000
+#define IMAGE_SCN_MEM_FARDATA                0x00008000
+//      IMAGE_SCN_MEM_SYSHEAP  - Obsolete    0x00010000
+#define IMAGE_SCN_MEM_PURGEABLE              0x00020000
+#define IMAGE_SCN_MEM_16BIT                  0x00020000
+#define IMAGE_SCN_MEM_LOCKED                 0x00040000
+#define IMAGE_SCN_MEM_PRELOAD                0x00080000
 
 #define IMAGE_SCN_ALIGN_1BYTES               0x00100000  //
 #define IMAGE_SCN_ALIGN_2BYTES               0x00200000  //
@@ -3206,7 +3373,9 @@ typedef struct _IMAGE_SECTION_HEADER {
 #define IMAGE_SCN_ALIGN_16BYTES              0x00500000  // Default alignment if no others are specified.
 #define IMAGE_SCN_ALIGN_32BYTES              0x00600000  //
 #define IMAGE_SCN_ALIGN_64BYTES              0x00700000  //
+// Unused                                    0x00800000
 
+#define IMAGE_SCN_LNK_NRELOC_OVFL            0x01000000  // Section contains extended relocations.
 #define IMAGE_SCN_MEM_DISCARDABLE            0x02000000  // Section can be discarded.
 #define IMAGE_SCN_MEM_NOT_CACHED             0x04000000  // Section is not cachable.
 #define IMAGE_SCN_MEM_NOT_PAGED              0x08000000  // Section is not pageable.
@@ -3245,78 +3414,82 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 // defined. Otherwise, section numbers have the following meanings:
 //
 
-#define IMAGE_SYM_UNDEFINED           (SHORT)0           // Symbol is undefined or is common.
-#define IMAGE_SYM_ABSOLUTE            (SHORT)-1          // Symbol is an absolute value.
-#define IMAGE_SYM_DEBUG               (SHORT)-2          // Symbol is a special debug item.
+#define IMAGE_SYM_UNDEFINED           (SHORT)0          // Symbol is undefined or is common.
+#define IMAGE_SYM_ABSOLUTE            (SHORT)-1         // Symbol is an absolute value.
+#define IMAGE_SYM_DEBUG               (SHORT)-2         // Symbol is a special debug item.
 
 //
 // Type (fundamental) values.
 //
 
-#define IMAGE_SYM_TYPE_NULL                  0           // no type.
-#define IMAGE_SYM_TYPE_VOID                  1           //
-#define IMAGE_SYM_TYPE_CHAR                  2           // type character.
-#define IMAGE_SYM_TYPE_SHORT                 3           // type short integer.
-#define IMAGE_SYM_TYPE_INT                   4           //
-#define IMAGE_SYM_TYPE_LONG                  5           //
-#define IMAGE_SYM_TYPE_FLOAT                 6           //
-#define IMAGE_SYM_TYPE_DOUBLE                7           //
-#define IMAGE_SYM_TYPE_STRUCT                8           //
-#define IMAGE_SYM_TYPE_UNION                 9           //
-#define IMAGE_SYM_TYPE_ENUM                  10          // enumeration.
-#define IMAGE_SYM_TYPE_MOE                   11          // member of enumeration.
-#define IMAGE_SYM_TYPE_BYTE                  12          //
-#define IMAGE_SYM_TYPE_WORD                  13          //
-#define IMAGE_SYM_TYPE_UINT                  14          //
-#define IMAGE_SYM_TYPE_DWORD                 15          //
+#define IMAGE_SYM_TYPE_NULL                 0x0000  // no type.
+#define IMAGE_SYM_TYPE_VOID                 0x0001  //
+#define IMAGE_SYM_TYPE_CHAR                 0x0002  // type character.
+#define IMAGE_SYM_TYPE_SHORT                0x0003  // type short integer.
+#define IMAGE_SYM_TYPE_INT                  0x0004  //
+#define IMAGE_SYM_TYPE_LONG                 0x0005  //
+#define IMAGE_SYM_TYPE_FLOAT                0x0006  //
+#define IMAGE_SYM_TYPE_DOUBLE               0x0007  //
+#define IMAGE_SYM_TYPE_STRUCT               0x0008  //
+#define IMAGE_SYM_TYPE_UNION                0x0009  //
+#define IMAGE_SYM_TYPE_ENUM                 0x000A  // enumeration.
+#define IMAGE_SYM_TYPE_MOE                  0x000B  // member of enumeration.
+#define IMAGE_SYM_TYPE_BYTE                 0x000C  //
+#define IMAGE_SYM_TYPE_WORD                 0x000D  //
+#define IMAGE_SYM_TYPE_UINT                 0x000E  //
+#define IMAGE_SYM_TYPE_DWORD                0x000F  //
+#define IMAGE_SYM_TYPE_PCODE                0x8000  //
 
 //
 // Type (derived) values.
 //
 
-#define IMAGE_SYM_DTYPE_NULL                 0           // no derived type.
-#define IMAGE_SYM_DTYPE_POINTER              1           // pointer.
-#define IMAGE_SYM_DTYPE_FUNCTION             2           // function.
-#define IMAGE_SYM_DTYPE_ARRAY                3           // array.
+#define IMAGE_SYM_DTYPE_NULL                0       // no derived type.
+#define IMAGE_SYM_DTYPE_POINTER             1       // pointer.
+#define IMAGE_SYM_DTYPE_FUNCTION            2       // function.
+#define IMAGE_SYM_DTYPE_ARRAY               3       // array.
 
 //
 // Storage classes.
 //
 
-#define IMAGE_SYM_CLASS_END_OF_FUNCTION      (BYTE )-1
-#define IMAGE_SYM_CLASS_NULL                 0
-#define IMAGE_SYM_CLASS_AUTOMATIC            1
-#define IMAGE_SYM_CLASS_EXTERNAL             2
-#define IMAGE_SYM_CLASS_STATIC               3
-#define IMAGE_SYM_CLASS_REGISTER             4
-#define IMAGE_SYM_CLASS_EXTERNAL_DEF         5
-#define IMAGE_SYM_CLASS_LABEL                6
-#define IMAGE_SYM_CLASS_UNDEFINED_LABEL      7
-#define IMAGE_SYM_CLASS_MEMBER_OF_STRUCT     8
-#define IMAGE_SYM_CLASS_ARGUMENT             9
-#define IMAGE_SYM_CLASS_STRUCT_TAG           10
-#define IMAGE_SYM_CLASS_MEMBER_OF_UNION      11
-#define IMAGE_SYM_CLASS_UNION_TAG            12
-#define IMAGE_SYM_CLASS_TYPE_DEFINITION      13
-#define IMAGE_SYM_CLASS_UNDEFINED_STATIC     14
-#define IMAGE_SYM_CLASS_ENUM_TAG             15
-#define IMAGE_SYM_CLASS_MEMBER_OF_ENUM       16
-#define IMAGE_SYM_CLASS_REGISTER_PARAM       17
-#define IMAGE_SYM_CLASS_BIT_FIELD            18
-#define IMAGE_SYM_CLASS_BLOCK                100
-#define IMAGE_SYM_CLASS_FUNCTION             101
-#define IMAGE_SYM_CLASS_END_OF_STRUCT        102
-#define IMAGE_SYM_CLASS_FILE                 103
+#define IMAGE_SYM_CLASS_END_OF_FUNCTION     (BYTE )-1
+#define IMAGE_SYM_CLASS_NULL                0x0000
+#define IMAGE_SYM_CLASS_AUTOMATIC           0x0001
+#define IMAGE_SYM_CLASS_EXTERNAL            0x0002
+#define IMAGE_SYM_CLASS_STATIC              0x0003
+#define IMAGE_SYM_CLASS_REGISTER            0x0004
+#define IMAGE_SYM_CLASS_EXTERNAL_DEF        0x0005
+#define IMAGE_SYM_CLASS_LABEL               0x0006
+#define IMAGE_SYM_CLASS_UNDEFINED_LABEL     0x0007
+#define IMAGE_SYM_CLASS_MEMBER_OF_STRUCT    0x0008
+#define IMAGE_SYM_CLASS_ARGUMENT            0x0009
+#define IMAGE_SYM_CLASS_STRUCT_TAG          0x000A
+#define IMAGE_SYM_CLASS_MEMBER_OF_UNION     0x000B
+#define IMAGE_SYM_CLASS_UNION_TAG           0x000C
+#define IMAGE_SYM_CLASS_TYPE_DEFINITION     0x000D
+#define IMAGE_SYM_CLASS_UNDEFINED_STATIC    0x000E
+#define IMAGE_SYM_CLASS_ENUM_TAG            0x000F
+#define IMAGE_SYM_CLASS_MEMBER_OF_ENUM      0x0010
+#define IMAGE_SYM_CLASS_REGISTER_PARAM      0x0011
+#define IMAGE_SYM_CLASS_BIT_FIELD           0x0012
+
+#define IMAGE_SYM_CLASS_FAR_EXTERNAL        0x0044  //
+
+#define IMAGE_SYM_CLASS_BLOCK               0x0064
+#define IMAGE_SYM_CLASS_FUNCTION            0x0065
+#define IMAGE_SYM_CLASS_END_OF_STRUCT       0x0066
+#define IMAGE_SYM_CLASS_FILE                0x0067
 // new
-#define IMAGE_SYM_CLASS_SECTION              104
-#define IMAGE_SYM_CLASS_WEAK_EXTERNAL        105
+#define IMAGE_SYM_CLASS_SECTION             0x0068
+#define IMAGE_SYM_CLASS_WEAK_EXTERNAL       0x0069
 
 // type packing constants
 
-#define N_BTMASK                            017
-#define N_TMASK                             060
-#define N_TMASK1                            0300
-#define N_TMASK2                            0360
+#define N_BTMASK                            0x000F
+#define N_TMASK                             0x0030
+#define N_TMASK1                            0x00C0
+#define N_TMASK2                            0x00F0
 #define N_BTSHFT                            4
 #define N_TSHIFT                            2
 
@@ -3392,120 +3565,134 @@ typedef union _IMAGE_AUX_SYMBOL {
 } IMAGE_AUX_SYMBOL;
 typedef IMAGE_AUX_SYMBOL UNALIGNED *PIMAGE_AUX_SYMBOL;
 
-#define IMAGE_SIZEOF_AUX_SYMBOL              18
+#define IMAGE_SIZEOF_AUX_SYMBOL             18
 
 //
 // Communal selection types.
 //
 
-#define IMAGE_COMDAT_SELECT_UNKNOWN        0
-#define IMAGE_COMDAT_SELECT_NODUPLICATES   1
-#define IMAGE_COMDAT_SELECT_ANY            2
-#define IMAGE_COMDAT_SELECT_SAME_SIZE      3
-#define IMAGE_COMDAT_SELECT_EXACT_MATCH    4
-#define IMAGE_COMDAT_SELECT_ASSOCIATIVE    5
+#define IMAGE_COMDAT_SELECT_NODUPLICATES    1
+#define IMAGE_COMDAT_SELECT_ANY             2
+#define IMAGE_COMDAT_SELECT_SAME_SIZE       3
+#define IMAGE_COMDAT_SELECT_EXACT_MATCH     4
+#define IMAGE_COMDAT_SELECT_ASSOCIATIVE     5
+#define IMAGE_COMDAT_SELECT_LARGEST         6
+#define IMAGE_COMDAT_SELECT_NEWEST          7
 
-#define IMAGE_WEAK_EXTERN_SEARCH_UNKNOWN   0
-#define IMAGE_WEAK_EXTERN_SEARCH_NOLIBRARY 1
-#define IMAGE_WEAK_EXTERN_SEARCH_LIBRARY   2
-#define IMAGE_WEAK_EXTERN_SEARCH_ALIAS     3
-
+#define IMAGE_WEAK_EXTERN_SEARCH_NOLIBRARY  1
+#define IMAGE_WEAK_EXTERN_SEARCH_LIBRARY    2
+#define IMAGE_WEAK_EXTERN_SEARCH_ALIAS      3
 
 //
 // Relocation format.
 //
 
 typedef struct _IMAGE_RELOCATION {
-    DWORD   VirtualAddress;
+    union {
+        DWORD   VirtualAddress;
+        DWORD   RelocCount;             // Set to the real count when IMAGE_SCN_LNK_NRELOC_OVFL is set
+#if defined(__cplusplus) || defined(_ANONYMOUS_UNION)
+    };
+#else
+    }u;
+#endif
     DWORD   SymbolTableIndex;
-         WORD    Type;
+    WORD    Type;
 } IMAGE_RELOCATION;
 typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 
-#define IMAGE_SIZEOF_RELOCATION              10
+#define IMAGE_SIZEOF_RELOCATION         10
 
 //
 // I386 relocation types.
 //
 
-#define IMAGE_REL_I386_ABSOLUTE              0           // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_I386_DIR16                 01          // Direct 16-bit reference to the symbols virtual address
-#define IMAGE_REL_I386_REL16                 02          // PC-relative 16-bit reference to the symbols virtual address
-#define IMAGE_REL_I386_DIR32                 06          // Direct 32-bit reference to the symbols virtual address
-#define IMAGE_REL_I386_DIR32NB               07          // Direct 32-bit reference to the symbols virtual address, base not included
-#define IMAGE_REL_I386_SEG12                 011         // Direct 16-bit reference to the segment-selector bits of a 32-bit virtual address
-#define IMAGE_REL_I386_SECTION               012
-#define IMAGE_REL_I386_SECREL                013
-#define IMAGE_REL_I386_REL32                 024         // PC-relative 32-bit reference to the symbols virtual address
+#define IMAGE_REL_I386_ABSOLUTE         0x0000  // Reference is absolute, no relocation is necessary
+#define IMAGE_REL_I386_DIR16            0x0001  // Direct 16-bit reference to the symbols virtual address
+#define IMAGE_REL_I386_REL16            0x0002  // PC-relative 16-bit reference to the symbols virtual address
+#define IMAGE_REL_I386_DIR32            0x0006  // Direct 32-bit reference to the symbols virtual address
+#define IMAGE_REL_I386_DIR32NB          0x0007  // Direct 32-bit reference to the symbols virtual address, base not included
+#define IMAGE_REL_I386_SEG12            0x0009  // Direct 16-bit reference to the segment-selector bits of a 32-bit virtual address
+#define IMAGE_REL_I386_SECTION          0x000A
+#define IMAGE_REL_I386_SECREL           0x000B
+#define IMAGE_REL_I386_REL32            0x0014  // PC-relative 32-bit reference to the symbols virtual address
 
 //
 // MIPS relocation types.
 //
 
-#define IMAGE_REL_MIPS_ABSOLUTE              0           // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_MIPS_REFHALF               01
-#define IMAGE_REL_MIPS_REFWORD               02
-#define IMAGE_REL_MIPS_JMPADDR               03
-#define IMAGE_REL_MIPS_REFHI                 04
-#define IMAGE_REL_MIPS_REFLO                 05
-#define IMAGE_REL_MIPS_GPREL                 06
-#define IMAGE_REL_MIPS_LITERAL               07
-#define IMAGE_REL_MIPS_SECTION               012
-#define IMAGE_REL_MIPS_SECREL                013
-#define IMAGE_REL_MIPS_REFWORDNB             042
-#define IMAGE_REL_MIPS_PAIR                  045
+#define IMAGE_REL_MIPS_ABSOLUTE         0x0000  // Reference is absolute, no relocation is necessary
+#define IMAGE_REL_MIPS_REFHALF          0x0001
+#define IMAGE_REL_MIPS_REFWORD          0x0002
+#define IMAGE_REL_MIPS_JMPADDR          0x0003
+#define IMAGE_REL_MIPS_REFHI            0x0004
+#define IMAGE_REL_MIPS_REFLO            0x0005
+#define IMAGE_REL_MIPS_GPREL            0x0006
+#define IMAGE_REL_MIPS_LITERAL          0x0007
+#define IMAGE_REL_MIPS_SECTION          0x000A
+#define IMAGE_REL_MIPS_SECREL           0x000B
+#define IMAGE_REL_MIPS_SECRELLO         0x000C  // Low 16-bit section relative referemce (used for >32k TLS)
+#define IMAGE_REL_MIPS_SECRELHI         0x000D  // High 16-bit section relative reference (used for >32k TLS)
+#define IMAGE_REL_MIPS_REFWORDNB        0x0022
+#define IMAGE_REL_MIPS_PAIR             0x0025
 
 //
 // Alpha Relocation types.
 //
 
-#define IMAGE_REL_ALPHA_ABSOLUTE             0x0
-#define IMAGE_REL_ALPHA_REFLONG              0x1
-#define IMAGE_REL_ALPHA_REFQUAD              0x2
-#define IMAGE_REL_ALPHA_GPREL32              0x3
-#define IMAGE_REL_ALPHA_LITERAL              0x4
-#define IMAGE_REL_ALPHA_LITUSE               0x5
-#define IMAGE_REL_ALPHA_GPDISP               0x6
-#define IMAGE_REL_ALPHA_BRADDR               0x7
-#define IMAGE_REL_ALPHA_HINT                 0x8
-#define IMAGE_REL_ALPHA_INLINE_REFLONG       0x9
-#define IMAGE_REL_ALPHA_REFHI                0xA
-#define IMAGE_REL_ALPHA_REFLO                0xB
-#define IMAGE_REL_ALPHA_PAIR                 0xC
-#define IMAGE_REL_ALPHA_MATCH                0xD
-#define IMAGE_REL_ALPHA_SECTION              0xE
-#define IMAGE_REL_ALPHA_SECREL               0xF
-#define IMAGE_REL_ALPHA_REFLONGNB            0x10
+#define IMAGE_REL_ALPHA_ABSOLUTE        0x0000
+#define IMAGE_REL_ALPHA_REFLONG         0x0001
+#define IMAGE_REL_ALPHA_REFQUAD         0x0002
+#define IMAGE_REL_ALPHA_GPREL32         0x0003
+#define IMAGE_REL_ALPHA_LITERAL         0x0004
+#define IMAGE_REL_ALPHA_LITUSE          0x0005
+#define IMAGE_REL_ALPHA_GPDISP          0x0006
+#define IMAGE_REL_ALPHA_BRADDR          0x0007
+#define IMAGE_REL_ALPHA_HINT            0x0008
+#define IMAGE_REL_ALPHA_INLINE_REFLONG  0x0009
+#define IMAGE_REL_ALPHA_REFHI           0x000A
+#define IMAGE_REL_ALPHA_REFLO           0x000B
+#define IMAGE_REL_ALPHA_PAIR            0x000C
+#define IMAGE_REL_ALPHA_MATCH           0x000D
+#define IMAGE_REL_ALPHA_SECTION         0x000E
+#define IMAGE_REL_ALPHA_SECREL          0x000F
+#define IMAGE_REL_ALPHA_REFLONGNB       0x0010
+#define IMAGE_REL_ALPHA_SECRELLO        0x0011  // Low 16-bit section relative reference
+#define IMAGE_REL_ALPHA_SECRELHI        0x0012  // High 16-bit section relative reference
 
 //
 // IBM PowerPC relocation types.
 //
 
-#define IMAGE_REL_PPC_ABSOLUTE 0x0000  // NOP
-#define IMAGE_REL_PPC_ADDR64   0x0001  // 64-bit address
-#define IMAGE_REL_PPC_ADDR32   0x0002  // 32-bit address
-#define IMAGE_REL_PPC_ADDR24   0x0003  // 26-bit address, shifted left 2 (branch absolute)
-#define IMAGE_REL_PPC_ADDR16   0x0004  // 16-bit address
-#define IMAGE_REL_PPC_ADDR14   0x0005  // 16-bit address, shifted left 2 (load doubleword)
-#define IMAGE_REL_PPC_REL24    0x0006  // 26-bit PC-relative offset, shifted left 2 (branch relative)
-#define IMAGE_REL_PPC_REL14    0x0007  // 16-bit PC-relative offset, shifted left 2 (br cond relative)
-#define IMAGE_REL_PPC_TOCREL16 0x0008  // 16-bit offset from TOC base
-#define IMAGE_REL_PPC_TOCREL14 0x0009  // 16-bit offset from TOC base, shifted left 2 (load doubleword)
+#define IMAGE_REL_PPC_ABSOLUTE          0x0000  // NOP
+#define IMAGE_REL_PPC_ADDR64            0x0001  // 64-bit address
+#define IMAGE_REL_PPC_ADDR32            0x0002  // 32-bit address
+#define IMAGE_REL_PPC_ADDR24            0x0003  // 26-bit address, shifted left 2 (branch absolute)
+#define IMAGE_REL_PPC_ADDR16            0x0004  // 16-bit address
+#define IMAGE_REL_PPC_ADDR14            0x0005  // 16-bit address, shifted left 2 (load doubleword)
+#define IMAGE_REL_PPC_REL24             0x0006  // 26-bit PC-relative offset, shifted left 2 (branch relative)
+#define IMAGE_REL_PPC_REL14             0x0007  // 16-bit PC-relative offset, shifted left 2 (br cond relative)
+#define IMAGE_REL_PPC_TOCREL16          0x0008  // 16-bit offset from TOC base
+#define IMAGE_REL_PPC_TOCREL14          0x0009  // 16-bit offset from TOC base, shifted left 2 (load doubleword)
 
-#define IMAGE_REL_PPC_ADDR32NB 0x000A  // 32-bit addr w/o image base
-#define IMAGE_REL_PPC_SECREL   0x000B  // va of containing section (as in an image sectionhdr)
-#define IMAGE_REL_PPC_SECTION  0x000C  // sectionheader number
-#define IMAGE_REL_PPC_IFGLUE   0x000D  // substitute TOC restore instruction iff symbol is glue code
-#define IMAGE_REL_PPC_IMGLUE   0x000E  // symbol is glue code; virtual address is TOC restore instruction
+#define IMAGE_REL_PPC_ADDR32NB          0x000A  // 32-bit addr w/o image base
+#define IMAGE_REL_PPC_SECREL            0x000B  // va of containing section (as in an image sectionhdr)
+#define IMAGE_REL_PPC_SECTION           0x000C  // sectionheader number
+#define IMAGE_REL_PPC_IFGLUE            0x000D  // substitute TOC restore instruction iff symbol is glue code
+#define IMAGE_REL_PPC_IMGLUE            0x000E  // symbol is glue code; virtual address is TOC restore instruction
+#define IMAGE_REL_PPC_SECREL16          0x000F  // va of containing section (limited to 16 bits)
+#define IMAGE_REL_PPC_REFHI             0x0010
+#define IMAGE_REL_PPC_REFLO             0x0011
+#define IMAGE_REL_PPC_PAIR              0x0012
 
-#define IMAGE_REL_PPC_TYPEMASK 0x00FF  // mask to isolate above values in IMAGE_RELOCATION.Type
+#define IMAGE_REL_PPC_TYPEMASK          0x00FF  // mask to isolate above values in IMAGE_RELOCATION.Type
 
 // Flag bits in IMAGE_RELOCATION.TYPE
 
-#define IMAGE_REL_PPC_NEG      0x0100  // subtract reloc value rather than adding it
-#define IMAGE_REL_PPC_BRTAKEN  0x0200  // fix branch prediction bit to predict branch taken
-#define IMAGE_REL_PPC_BRNTAKEN 0x0400  // fix branch prediction bit to predict branch not taken
-#define IMAGE_REL_PPC_TOCDEFN  0x0800  // toc slot defined in file (or, data in toc)
+#define IMAGE_REL_PPC_NEG               0x0100  // subtract reloc value rather than adding it
+#define IMAGE_REL_PPC_BRTAKEN           0x0200  // fix branch prediction bit to predict branch taken
+#define IMAGE_REL_PPC_BRNTAKEN          0x0400  // fix branch prediction bit to predict branch not taken
+#define IMAGE_REL_PPC_TOCDEFN           0x0800  // toc slot defined in file (or, data in toc)
 
 //
 // Based relocation format.
@@ -3536,10 +3723,10 @@ typedef struct _IMAGE_BASE_RELOCATION {
 
 typedef struct _IMAGE_LINENUMBER {
     union {
-        DWORD   SymbolTableIndex;                       // Symbol table index of function name if Linenumber is 0.
-        DWORD   VirtualAddress;                         // Virtual address of line number.
+        DWORD   SymbolTableIndex;               // Symbol table index of function name if Linenumber is 0.
+        DWORD   VirtualAddress;                 // Virtual address of line number.
     } Type;
-    WORD    Linenumber;                                 // Line number.
+    WORD    Linenumber;                         // Line number.
 } IMAGE_LINENUMBER;
 typedef IMAGE_LINENUMBER UNALIGNED *PIMAGE_LINENUMBER;
 
@@ -3557,13 +3744,13 @@ typedef IMAGE_LINENUMBER UNALIGNED *PIMAGE_LINENUMBER;
 #define IMAGE_ARCHIVE_LONGNAMES_MEMBER       "//              "
 
 typedef struct _IMAGE_ARCHIVE_MEMBER_HEADER {
-    BYTE     Name[16];                                  // File member name - `/' terminated.
-    BYTE     Date[12];                                  // File member date - decimal.
-    BYTE     UserID[6];                                 // File member user id - decimal.
-    BYTE     GroupID[6];                                // File member group id - decimal.
-    BYTE     Mode[8];                                   // File member mode - octal.
-    BYTE     Size[10];                                  // File member size - decimal.
-    BYTE     EndHeader[2];                              // String to end header.
+    BYTE     Name[16];                          // File member name - `/' terminated.
+    BYTE     Date[12];                          // File member date - decimal.
+    BYTE     UserID[6];                         // File member user id - decimal.
+    BYTE     GroupID[6];                        // File member group id - decimal.
+    BYTE     Mode[8];                           // File member mode - octal.
+    BYTE     Size[10];                          // File member size - decimal.
+    BYTE     EndHeader[2];                      // String to end header.
 } IMAGE_ARCHIVE_MEMBER_HEADER, *PIMAGE_ARCHIVE_MEMBER_HEADER;
 
 #define IMAGE_SIZEOF_ARCHIVE_MEMBER_HDR      60
@@ -3601,6 +3788,7 @@ typedef struct _IMAGE_IMPORT_BY_NAME {
 
 typedef struct _IMAGE_THUNK_DATA {
     union {
+        PBYTE  ForwarderString;
         PDWORD Function;
         DWORD Ordinal;
         PIMAGE_IMPORT_BY_NAME AddressOfData;
@@ -3612,12 +3800,41 @@ typedef struct _IMAGE_THUNK_DATA {
 #define IMAGE_ORDINAL(Ordinal) (Ordinal & 0xffff)
 
 typedef struct _IMAGE_IMPORT_DESCRIPTOR {
-    DWORD   Characteristics;
-    DWORD   TimeDateStamp;
-    DWORD   ForwarderChain;
+    union {
+        DWORD   Characteristics;                // 0 for terminating null import descriptor
+        PIMAGE_THUNK_DATA OriginalFirstThunk;   // RVA to original unbound IAT
+#if defined(__cplusplus) || defined(_ANONYMOUS_UNION)
+    };
+#else
+    }u;
+#endif
+    DWORD   TimeDateStamp;                  // 0 if not bound,
+                                            // -1 if bound, and real date\time stamp
+                                            //     in IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT (new BIND)
+                                            // O.W. date/time stamp of DLL bound to (Old BIND)
+
+    DWORD   ForwarderChain;                 // -1 if no forwarders
     DWORD   Name;
-    PIMAGE_THUNK_DATA FirstThunk;
+    PIMAGE_THUNK_DATA FirstThunk;           // RVA to IAT (if bound this IAT has actual addresses)
 } IMAGE_IMPORT_DESCRIPTOR, *PIMAGE_IMPORT_DESCRIPTOR;
+
+//
+// New format import descriptors pointed to by DataDirectory[ IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT ]
+//
+
+typedef struct _IMAGE_BOUND_IMPORT_DESCRIPTOR {
+    DWORD   TimeDateStamp;
+    WORD    OffsetModuleName;
+    WORD    NumberOfModuleForwarderRefs;
+// Array of zero or more IMAGE_BOUND_FORWARDER_REF follows
+} IMAGE_BOUND_IMPORT_DESCRIPTOR, *PIMAGE_BOUND_IMPORT_DESCRIPTOR;
+
+typedef struct _IMAGE_BOUND_FORWARDER_REF {
+    DWORD   TimeDateStamp;
+    WORD    OffsetModuleName;
+    WORD    Reserved;
+} IMAGE_BOUND_FORWARDER_REF, *PIMAGE_BOUND_FORWARDER_REF;
+
 
 //
 // Thread Local Storage
@@ -3650,7 +3867,7 @@ typedef struct _IMAGE_TLS_DIRECTORY {
 // beginning of the array that have actual names associated with each entry.
 // The entries are in ascending order, case insensitive strings.  The second
 // count is the number of entries that immediately follow the named entries.
-// This second count identifies the number of entries that have 31-bit integer
+// This second count identifies the number of entries that have 16-bit integer
 // Ids as their name.  These entries are also sorted in ascending order.
 //
 // This structure allows fast lookup by either name or number, but for any
@@ -3679,17 +3896,54 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY {
 // is set to one and the low order 31-bits are an offset, relative to the
 // beginning of the resource directory of the string, which is of type
 // IMAGE_RESOURCE_DIRECTORY_STRING.  Otherwise the high bit is clear and the
-// low-order 31-bits are the integer Id that identify this resource directory
+// low-order 16-bits are the integer Id that identify this resource directory
 // entry. If the directory entry is yet another resource directory (i.e. a
 // subdirectory), then the high order bit of the offset field will be
 // set to indicate this.  Otherwise the high bit is clear and the offset
 // field points to a resource data entry.
 //
 
+#if !defined(RC_INVOKED)
+#pragma warn -bbf
+#endif
+
 typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
-    DWORD   Name;
-    DWORD   OffsetToData;
+    union {
+        struct {
+            DWORD NameOffset:31;
+            DWORD NameIsString:1;
+#if defined(_ANONYMOUS_STRUCT)
+        };
+#else
+	}s;
+#endif	
+        DWORD   Name;
+        WORD    Id;
+#if defined(_ANONYMOUS_UNION) || !defined(__BORLANDC__)
+    };
+#else
+    }u;
+#endif	
+    union {
+        DWORD   OffsetToData;
+        struct {
+            DWORD   OffsetToDirectory:31;
+            DWORD   DataIsDirectory:1;
+#if defined(_ANONYMOUS_STRUCT)
+        };
+#else
+	}s;
+#endif	
+#if defined(_ANONYMOUS_UNION) || !defined(__BORLANDC__)
+    };
+#else
+    }u2;
+#endif
 } IMAGE_RESOURCE_DIRECTORY_ENTRY, *PIMAGE_RESOURCE_DIRECTORY_ENTRY;
+
+#if !defined(RC_INVOKED)
+#pragma warn .bbf
+#endif
 
 //
 // For resource directory entries that have actual string names, the Name
@@ -3745,7 +3999,8 @@ typedef struct _IMAGE_LOAD_CONFIG_DIRECTORY {
     PVOID   LockPrefixTable;
     DWORD   MaximumAllocationSize;
     DWORD   VirtualMemoryThreshold;
-    DWORD   Reserved[ 5 ];
+    DWORD   ProcessHeapFlags;
+    DWORD   Reserved[ 4 ];
 } IMAGE_LOAD_CONFIG_DIRECTORY, *PIMAGE_LOAD_CONFIG_DIRECTORY;
 
 
@@ -3800,9 +4055,10 @@ typedef struct _IMAGE_COFF_SYMBOLS_HEADER {
     DWORD   RvaToLastByteOfData;
 } IMAGE_COFF_SYMBOLS_HEADER, *PIMAGE_COFF_SYMBOLS_HEADER;
 
-#define FRAME_FPO   0
-#define FRAME_TRAP  1
-#define FRAME_TSS   2
+#define FRAME_FPO       0
+#define FRAME_TRAP      1
+#define FRAME_TSS       2
+#define FRAME_NONFPO    3
 
 #if !defined(RC_INVOKED)
 #pragma warn -bbf
@@ -3820,13 +4076,11 @@ typedef struct _FPO_DATA {
     WORD        reserved : 1;           // reserved for future use
     WORD        cbFrame  : 2;           // frame type
 } FPO_DATA, *PFPO_DATA;
+#define SIZEOF_RFPO_DATA 16
 
 #if !defined(RC_INVOKED)
 #pragma warn .bbf
 #endif
-
-#define SIZEOF_RFPO_DATA 16
-
 
 #define IMAGE_DEBUG_MISC_EXENAME    1
 
@@ -3884,12 +4138,13 @@ typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
     DWORD       NumberOfSections;
     DWORD       ExportedNamesSize;
     DWORD       DebugDirectorySize;
-    DWORD       Reserved[ 3 ];
+    DWORD       Reserved[ 3 ];          // Note: reserved[0] is actually the section alignment
 } IMAGE_SEPARATE_DEBUG_HEADER, *PIMAGE_SEPARATE_DEBUG_HEADER;
 
 #define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4944
 
 #include "poppack.h"
+
 //
 // End Image Format
 //
@@ -3906,6 +4161,12 @@ typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
 #define HEAP_TAIL_CHECKING_ENABLED      0x00000020
 #define HEAP_FREE_CHECKING_ENABLED      0x00000040
 #define HEAP_DISABLE_COALESCE_ON_FREE   0x00000080
+#define HEAP_CREATE_ALIGN_16            0x00010000
+#define HEAP_CREATE_ENABLE_TRACING      0x00020000
+#define HEAP_MAXIMUM_TAG                0x0FFF
+#define HEAP_PSEUDO_TAG_FLAG            0x8000
+#define HEAP_TAG_SHIFT                  16
+#define HEAP_MAKE_TAG_FLAGS( b, o ) ((DWORD)((b) + ((o) << 16)))
 
 #define IS_TEXT_UNICODE_ASCII16               0x0001
 #define IS_TEXT_UNICODE_REVERSE_ASCII16       0x0010
@@ -3940,14 +4201,22 @@ typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
 #define RtlFillMemory(Destination,Length,Fill) memset((Destination),(Fill),(Length))
 #define RtlZeroMemory(Destination,Length) memset((Destination),0,(Length))
 #else
-#define RtlCopyMemory(Destination,Source,Length) RtlMoveMemory((Destination),(Source),(Length))
+
+NTSYSAPI
+VOID
+NTAPI
+RtlCopyMemory (
+   VOID UNALIGNED *Destination,
+   CONST VOID UNALIGNED *Source,
+   DWORD Length
+   );
 
 NTSYSAPI
 VOID
 NTAPI
 RtlMoveMemory (
-   PVOID Destination,
-   CONST VOID *Source,
+   VOID UNALIGNED *Destination,
+   CONST VOID UNALIGNED *Source,
    DWORD Length
    );
 
@@ -3955,7 +4224,7 @@ NTSYSAPI
 VOID
 NTAPI
 RtlFillMemory (
-   PVOID Destination,
+   VOID UNALIGNED *Destination,
    DWORD Length,
    BYTE  Fill
    );
@@ -3964,7 +4233,7 @@ NTSYSAPI
 VOID
 NTAPI
 RtlZeroMemory (
-   PVOID Destination,
+   VOID UNALIGNED *Destination,
    DWORD Length
    );
 #endif
@@ -3988,6 +4257,7 @@ typedef struct _MESSAGE_RESOURCE_DATA {
     MESSAGE_RESOURCE_BLOCK Blocks[ 1 ];
 } MESSAGE_RESOURCE_DATA, *PMESSAGE_RESOURCE_DATA;
 
+
 typedef struct _RTL_CRITICAL_SECTION_DEBUG {
     WORD   Type;
     WORD   CreatorBackTraceIndex;
@@ -3995,8 +4265,7 @@ typedef struct _RTL_CRITICAL_SECTION_DEBUG {
     LIST_ENTRY ProcessLocksList;
     DWORD EntryCount;
     DWORD ContentionCount;
-    DWORD Depth;
-    PVOID OwnerBackTrace[ 5 ];
+    DWORD Spare[ 2 ];
 } RTL_CRITICAL_SECTION_DEBUG, *PRTL_CRITICAL_SECTION_DEBUG;
 
 #define RTL_CRITSECT_TYPE 0
@@ -4238,6 +4507,7 @@ typedef struct _EVENTLOGRECORD {
                                         SERVICE_ADAPTER | \
                                         SERVICE_DRIVER  | \
                                         SERVICE_INTERACTIVE_PROCESS)
+
 //
 // Start Type
 //

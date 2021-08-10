@@ -64,6 +64,7 @@ AUXOBJS =            \
 
 !if $(MODEL) != t
     AUXOBJS = $(AUXOBJS) \
+            fdiv16.obj   \
             fpstklen.obj
 !endif
 

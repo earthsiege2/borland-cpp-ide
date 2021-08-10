@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -237,7 +238,7 @@ long OcRegisterClass(TRegList& regInfo, HINSTANCE module, ostream& out,
     _buf() { buf = new char[ bufSize + pathSize + langSize + guidSize
                            + OcRegTemplateCount * sizeof(char)
                            + OcRegParamCount * sizeof(char*) ]; }
-   ~_buf() {delete buf;}
+   ~_buf() {delete[] buf;}
     operator char*() {return buf;}
   } buf;
   char*  path = buf + bufSize;
@@ -722,3 +723,4 @@ STDAPI __export DllUnregisterServer()
 {
   return DllRegisterCommand("/UnregServer");
 }
+

@@ -27,6 +27,7 @@ Abstract:
  *      All Rights Reserved.
  *
  */
+#pragma nopackwarning
 
 #if ! (defined(lint) || defined(_lint))
 #  if ( _MSC_VER >= 800 ) || (defined(__BORLANDC__) && defined(__FLAT__))

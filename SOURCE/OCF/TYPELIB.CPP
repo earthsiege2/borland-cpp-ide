@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -481,7 +482,7 @@ TServedObject::GetRefTypeOfImplType(unsigned int /*index*/,
 }
 
 HRESULT _IFUNC
-TServedObject::GetDllEntry(MEMBERID /*memid*/, INVOKEKIND /*invkind*/, 
+TServedObject::GetDllEntry(MEMBERID /*memid*/, INVOKEKIND /*invkind*/,
                            BSTR far* /*pbstrDllName*/, BSTR far* /*pbstrName*/,
                            unsigned short far* /*pwOrdinal*/)
 {
@@ -511,7 +512,7 @@ struct TOleCreateInfo {
   ITypeInfo*       OleTypeInfo;  // type info obtained from ICreatTypeInfo
   ICreateTypeInfo* CreateInfo;   // interface obtained from ICreateTypeLib
   TOleCreateInfo() : OurTypeInfo(0), OleTypeInfo(0), CreateInfo(0) {}
- ~TOleCreateInfo(); 
+ ~TOleCreateInfo();
 };
 
 TOleCreateInfo::~TOleCreateInfo()
@@ -540,7 +541,7 @@ struct TOleCreateList {
 
   TOleCreateList(ITypeLib* typeLib, const char far* fileName);
   void FixupTypeDescRef(int typeIndex, TYPEDESC far& typeDesc);
-  void Close(const char far* helpDir); 
+  void Close(const char far* helpDir);
   void Clear();
  ~TOleCreateList() {Clear();}
 };
@@ -574,8 +575,11 @@ TOleCreateList::TOleCreateList(ITypeLib* typeLib, const char far* fileName)
     OLECALL(CreateLib->SetName(libName), "Set TypeLib name");
   if (!!libDoc)
     OLECALL(CreateLib->SetDocString(libDoc), "Set TypeLib doc");
-  OLECALL(CreateLib->SetHelpFileName(helpFile), "SetHelpFileName");  
-  OLECALL(CreateLib->SetHelpContext(helpId), "HelpContext");
+  if (!!helpFile)
+  {
+    OLECALL(CreateLib->SetHelpFileName(helpFile), "SetHelpFileName");
+    OLECALL(CreateLib->SetHelpContext(helpId), "HelpContext");
+  }
   OLECALL(CreateLib->SetVersion(LibAttr->wMajorVerNum,
                                 LibAttr->wMinorVerNum), "Set TypeLib version");
   //  allocate all ITypeInfo's upfront to force consistent references
@@ -616,7 +620,7 @@ TOleCreateList::TOleCreateList(ITypeLib* typeLib, const char far* fileName)
 
 void TOleCreateList::Close(const char far* helpDir)
 {
-  OLECALL(CreateLib->SaveAllChanges(), "Write and close TypeLib file");  
+  OLECALL(CreateLib->SaveAllChanges(), "Write and close TypeLib file");
   CreateLib->Release();
   CreateLib = 0;
   OLECALL(::RegisterTypeLib(TypeLib,
@@ -670,7 +674,7 @@ TAppDescriptor::WriteTypeLibrary(TLangId lang, const char far* file)
   TBSTR libDoc;
   ulong helpId;
   FUNCDESC far* funcDesc = 0;
-  VARDESC far* varDesc = 0;    
+  VARDESC far* varDesc = 0;
   TOleCreateList typeList(new TTypeLibrary(*this, lang), file);
   for (int nInfo = 0; nInfo < typeList.Count; nInfo++) {
     TOleCreateInfo& curInfo = typeList.List[nInfo];
@@ -739,7 +743,7 @@ TAppDescriptor::WriteTypeLibrary(TLangId lang, const char far* file)
     ::GetModuleFileName(AppInstance, path, sizeof(path));
     _splitpath(path, drive, dir, 0, 0);
     _makepath (path, drive, dir, 0, 0);
-    helpDir = path;    
+    helpDir = path;
   }
   typeList.Close(helpDir);
 
@@ -995,7 +999,7 @@ TCoClassInfo::TCoClassInfo(TAppDescriptor& appDesc, uint16 typeFlags, int implCo
           DefaultEvent = iclass;
       } else {
         if (typeFlags & TYPEFLAG_FAPPOBJECT)
-          iapp = iclass;    
+          iapp = iclass;
         if (implFlags & IMPLTYPEFLAG_FDEFAULT)
           Default = iclass;
       }
@@ -1205,4 +1209,5 @@ TCoClassInfo::AddressOfMember(MEMBERID, INVOKEKIND, void far* far*)
 {
   return HR_TYPE_WRONGTYPEKIND;
 }
+
 

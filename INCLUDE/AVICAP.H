@@ -27,7 +27,7 @@
 #define __AVICAP_H
 
 #if !defined(RC_INVOKED) && !defined(VFWAPI)
-#ifdef WIN32
+#ifdef _WIN32
     #define VFWAPI  __stdcall
     #define VFWAPIV __stdcall
     #define _LOADDS
@@ -48,9 +48,9 @@
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
 
-#ifndef RC_INVOKED
-#pragma option -a-         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#ifdef __BORLANDC__
+  #include <pshpack1.h>
+#endif
 
 #ifndef RC_INVOKED
 
@@ -82,7 +82,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define WM_CAP_GET_CAPSTREAMPTR         (WM_CAP_START+  1)
 
-#ifdef WIN32
+#ifdef _WIN32
 #define WM_CAP_SET_CALLBACK_ERRORW     (WM_CAP_UNICODE_START+  2)
 #define WM_CAP_SET_CALLBACK_STATUSW    (WM_CAP_UNICODE_START+  3)
 #define WM_CAP_SET_CALLBACK_ERRORA     (WM_CAP_START+  2)
@@ -110,7 +110,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define WM_CAP_DRIVER_CONNECT           (WM_CAP_START+  10)
 #define WM_CAP_DRIVER_DISCONNECT        (WM_CAP_START+  11)
 
-#ifdef WIN32
+#ifdef _WIN32
 #define WM_CAP_DRIVER_GET_NAMEA        (WM_CAP_START+  12)
 #define WM_CAP_DRIVER_GET_VERSIONA     (WM_CAP_START+  13)
 #define WM_CAP_DRIVER_GET_NAMEW        (WM_CAP_UNICODE_START+  12)
@@ -129,7 +129,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define WM_CAP_DRIVER_GET_CAPS          (WM_CAP_START+  14)
 
-#ifdef WIN32
+#ifdef _WIN32
 #define WM_CAP_FILE_SET_CAPTURE_FILEA  (WM_CAP_START+  20)
 #define WM_CAP_FILE_GET_CAPTURE_FILEA  (WM_CAP_START+  21)
 #define WM_CAP_FILE_SAVEASA            (WM_CAP_START+  23)
@@ -187,7 +187,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define WM_CAP_SET_SEQUENCE_SETUP       (WM_CAP_START+  64)
 #define WM_CAP_GET_SEQUENCE_SETUP       (WM_CAP_START+  65)
 
-#ifdef WIN32
+#ifdef _WIN32
 #define WM_CAP_SET_MCI_DEVICEA         (WM_CAP_START+  66)
 #define WM_CAP_GET_MCI_DEVICEA         (WM_CAP_START+  67)
 #define WM_CAP_SET_MCI_DEVICEW         (WM_CAP_UNICODE_START+  66)
@@ -213,7 +213,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define WM_CAP_SINGLE_FRAME_CLOSE       (WM_CAP_START+  71)
 #define WM_CAP_SINGLE_FRAME             (WM_CAP_START+  72)
 
-#ifdef WIN32
+#ifdef _WIN32
 #define WM_CAP_PAL_OPENA               (WM_CAP_START+  80)
 #define WM_CAP_PAL_SAVEA               (WM_CAP_START+  81)
 #define WM_CAP_PAL_OPENW               (WM_CAP_UNICODE_START+  80)
@@ -239,7 +239,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 
 // Defines end of the message range
-#ifdef WIN32
+#ifdef _WIN32
 #define WM_CAP_UNICODE_END              WM_CAP_PAL_SAVEW
 #define WM_CAP_END                      WM_CAP_UNICODE_END
 #else
@@ -404,7 +404,7 @@ typedef struct tagCapInfoChunk {
 // ------------------------------------------------------------------
 
 typedef LRESULT (CALLBACK* CAPYIELDCALLBACK)  (HWND hWnd);
-#ifdef WIN32
+#ifdef _WIN32
 typedef LRESULT (CALLBACK* CAPSTATUSCALLBACKW) (HWND hWnd, int nID, LPCWSTR lpsz);
 typedef LRESULT (CALLBACK* CAPERRORCALLBACKW)  (HWND hWnd, int nID, LPCWSTR lpsz);
 typedef LRESULT (CALLBACK* CAPSTATUSCALLBACKA) (HWND hWnd, int nID, LPCSTR lpsz);
@@ -434,7 +434,7 @@ typedef LRESULT (CALLBACK* CAPCONTROLCALLBACK)(HWND hWnd, int nState);
 //  The only exported functions from AVICAP.DLL
 // ------------------------------------------------------------------
 
-#ifdef WIN32
+#ifdef _WIN32
 HWND VFWAPI capCreateCaptureWindowA (
 	LPCSTR lpszWindowName,
 	DWORD dwStyle,
@@ -550,9 +550,10 @@ BOOL VFWAPI capGetDriverDescription (UINT wDriverIndex,
 #define IDS_CAP_STAT_VIDEOAUDIO     511  /* "Captured %d.%03d sec.  %ld frames (%ld dropped) (%d.%03d fps).  %ld audio bytes (%d,%03d sps)" */
 #define IDS_CAP_STAT_VIDEOONLY      512  /* "Captured %d.%03d sec.  %ld frames (%ld dropped) (%d.%03d fps)" */
 #define IDS_CAP_STAT_FRAMESDROPPED  513  /* "Dropped %ld of %ld frames (%d.%02d%%) during capture." */
-#ifndef RC_INVOKED
-#pragma option -a.          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+
+#ifdef __BORLANDC__
+  #include <poppack.h>
+#endif
 
 #ifdef __cplusplus
 }                       /* End of extern "C" { */

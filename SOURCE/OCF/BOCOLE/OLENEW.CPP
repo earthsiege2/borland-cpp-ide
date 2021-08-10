@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // OleNew.cpp -- Remap global operator new to use the current Ole2 allocator
@@ -86,4 +86,5 @@ void _cdecl _FARFUNC operator delete[] (void *p)
 {
 	OleFree(p);
 }
+
 

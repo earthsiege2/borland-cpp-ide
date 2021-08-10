@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 // 
 // BOleComp.cpp -- Provides a default IUnknownMain implementation for all
@@ -45,4 +45,4 @@ BOleComponent::~BOleComponent()
 {
 }
 
-
+

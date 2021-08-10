@@ -14,13 +14,10 @@
  *
  */
 
+#if !defined(__FLAT__)
 #if !defined( _MONIKER_H_ )
 #define _MONIKER_H_
 #define __MONIKER_H
-
-
-#if !defined(__FLAT__)
-
 
 #define MK_E_CONNECTMANUALLY        MK_E_FIRST
 #define MK_E_EXCEEDEDDEADLINE       (MK_E_FIRST + 1)
@@ -254,14 +251,12 @@ STDAPI  CreatePointerMoniker(LPUNKNOWN punk, LPMONIKER FAR* ppmk);
 
 STDAPI  GetRunningObjectTable( DWORD reserved, LPRUNNINGOBJECTTABLE FAR* pprot);
 
-
+#endif  // _MONIKER_H_
 #else  /* !__FLAT__ */
-
+#ifndef RC_INVOKED
+#pragma message("WARNING: your code should #include objbase.h instead of moniker.h")
+#endif /* !RC_INVOKED */
 
 #include <objbase.h>
 
-
 #endif  /* __FLAT__ */
-
-
-#endif  // _MONIKER_H_

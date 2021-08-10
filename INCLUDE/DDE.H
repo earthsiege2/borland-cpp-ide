@@ -13,8 +13,6 @@
  */
 
 #if !defined(__FLAT__)
-
-
 #ifndef __DDE_H         /* prevent multiple includes */
 #define __DDE_H
 
@@ -167,19 +165,19 @@ typedef struct tagDDEUP
 
 
 #else     /* defined __FLAT__ */
-
-
+/*****************************************************************************\
+*                                                                             *
+* dde.h -       Dynamic Data Exchange structures and definitions              *
+*                                                                             *
+* Copyright (c) 1993-1995, Microsoft Corp.	All rights reserved	      *
+*                                                                             *
+\*****************************************************************************/
 #ifndef _DDEHEADER_INCLUDED_
 #define _DDEHEADER_INCLUDED_
-#define __DDE_H
 
 #ifndef _WINDEF_
 #include <windef.h>
 #endif
-
-#ifndef RC_INVOKED
-#pragma warn -bbf       /* Turn off warning about bitfields */
-#endif  /* RC_INVOKED */
 
 #ifdef __cplusplus
 extern "C" {
@@ -198,6 +196,10 @@ extern "C" {
 #define WM_DDE_POKE	        (WM_DDE_FIRST+7)
 #define WM_DDE_EXECUTE	    (WM_DDE_FIRST+8)
 #define WM_DDE_LAST	        (WM_DDE_FIRST+8)
+
+#if !defined(RC_INVOKED)
+#pragma warn -bbf
+#endif
 
 /*----------------------------------------------------------------------------
 |       DDEACK structure
@@ -300,6 +302,10 @@ typedef struct {
 } DDEUP;
 
 
+#if !defined(RC_INVOKED)
+#pragma warn .bbf
+#endif
+
 /*
  * DDE SECURITY
  */
@@ -329,10 +335,7 @@ LONG APIENTRY ReuseDDElParam(LONG lParam, UINT msgIn, UINT msgOut, UINT uiLo, UI
 }
 #endif
 
-#ifndef RC_INVOKED
-#pragma warn .bbf       /* Turn off warning about bitfields */
-#endif  /* RC_INVOKED */
-
 #endif // _DDEHEADER_INCLUDED_
+
 
 #endif  /* __FLAT__ */

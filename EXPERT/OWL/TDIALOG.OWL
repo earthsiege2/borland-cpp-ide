@@ -125,8 +125,11 @@ bool ProjectRCVersion::GetProductName (LPSTR &prodName)
     UINT    vSize;
     char    subBlockName[255];
 
-    wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"ProductName");
-    return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&prodName, &vSize) : false;
+    if (FVData) {
+        wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"ProductName");
+        return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&prodName, &vSize) : false;
+    } else
+        return false;
 }
 
 
@@ -135,8 +138,11 @@ bool ProjectRCVersion::GetProductVersion (LPSTR &prodVersion)
     UINT    vSize;
     char    subBlockName[255];
 
-    wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"ProductVersion");
-    return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&prodVersion, &vSize) : false;
+    if (FVData) {
+        wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"ProductVersion");
+        return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&prodVersion, &vSize) : false;
+    } else
+        return false;
 }
 
 
@@ -145,8 +151,11 @@ bool ProjectRCVersion::GetCopyright (LPSTR &copyright)
     UINT    vSize;
     char    subBlockName[255];
 
-    wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"LegalCopyright");
-    return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&copyright, &vSize) : false;
+    if (FVData) {
+        wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"LegalCopyright");
+        return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&copyright, &vSize) : false;
+    } else
+        return false;
 }
 
 
@@ -155,8 +164,11 @@ bool ProjectRCVersion::GetDebug (LPSTR &debug)
     UINT    vSize;
     char    subBlockName[255];
 
-    wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"SpecialBuild");
-    return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&debug, &vSize) : false;
+    if (FVData) {
+        wsprintf(subBlockName, "\\StringFileInfo\\%08lx\\%s", *(DWORD *)TransBlock, (LPSTR)"SpecialBuild");
+        return FVData ? ::VerQueryValue(FVData, subBlockName, (void FAR* FAR*)&debug, &vSize) : false;
+    } else
+        return false;
 }
 
 

@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -103,7 +104,7 @@ TOcStream::TOcStream(TOcStorage& storage, const char far* name, bool create, uin
   HRESULT hr = storage.OpenStream(name, 0, mode, 0, &StreamI);
   if (!StreamI && create)
     hr = storage.CreateStream(name, mode, 0, 0, &StreamI);
-  TXObjComp::Check(hr, TXObjComp::xStreamOpenError);
+  TXObjComp::Check(hr, TXObjComp::xStreamOpenError, name);
 }
 
 //
@@ -576,3 +577,4 @@ TOcStorage::SetTimes(char const far* name, FILETIME const far* ctime, FILETIME c
 
   return ::StgSetTimes(OleStr(name), ctime, atime, mtime);
 }
+

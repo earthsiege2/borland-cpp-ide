@@ -1,5 +1,7 @@
 /*++
 
+Copyright (c) 1992-1995 Microsoft Corporation
+
 Module Name:
 
     rpcndr.h
@@ -8,57 +10,28 @@ Abstract:
 
     Definitions for stub data structures and prototypes of helper functions.
 
-Author:
-
-    DonnaLi (01-01-91)
-
 Environment:
 
     DOS, Win 3.X, and Win/NT.
 
-Revision History:
-
-   DONNALI  08-29-91     Start recording history
-   donnali  09-11-91     change conversion macros
-   donnali  09-18-91     check in files for moving
-   STEVEZ   10-15-91     Merge with NT tree
-   donnali  10-28-91     add prototype
-   donnali  11-19-91     bugfix for strings
-   MIKEMON  12-17-91     DCE runtime API conversion
-   donnali  03-24-92     change rpc public header f
-   STEVEZ   04-04-92     add nsi include
-   mikemon  04-18-92     security support and misc
-   DovhH    04-24-24     Changed signature of <int>_from_ndr
-                         (to unsigned <int>)
-                         Added <base_type>_array_from_ndr routines
-   RyszardK 06-17-93     Added support for hyper
-   VibhasC  09-11-93     Created rpcndrn.h
-   DKays    10-14-93     Fixed up rpcndrn.h MIDL 2.0
-   RyszardK 01-15-94     Merged in the midl 2.0 changes from rpcndrn.h
-
 --*/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef __RPCNDR_H__
 #define __RPCNDR_H__
-#define __RPCNDR_H
 
 //
-// Set the packing level for RPC structures for Dos and Windows.
+// Set the packing level for RPC structures for Dos, Windows and Mac.
 //
 
-#if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#include "pshpack2.h"
+#if defined(__RPC_DOS__) || defined(__RPC_WIN16__) || defined(__RPC_MAC__)
+#pragma pack(2)
 #endif
 
-#include "rpcnsip.h"
+#if defined(__RPC_MAC__)
+#define _MAC_
+#endif
+
+#include <rpcnsip.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -119,7 +92,13 @@ extern "C" {
 #define NDR_ASCII_CHAR                  (unsigned long)0X00000000L
 #define NDR_EBCDIC_CHAR                 (unsigned long)0X00000001L
 
+#if defined(__RPC_MAC__)
+#define NDR_LOCAL_DATA_REPRESENTATION   (unsigned long)0X00000000L
+#define NDR_LOCAL_ENDIAN                NDR_BIG_ENDIAN
+#else
 #define NDR_LOCAL_DATA_REPRESENTATION   (unsigned long)0X00000010L
+#define NDR_LOCAL_ENDIAN                NDR_LITTLE_ENDIAN
+#endif
 
 /****************************************************************************
  *  Other MIDL base types / predefined types:
@@ -132,7 +111,7 @@ typedef unsigned char boolean;
 #ifndef _HYPER_DEFINED
 #define _HYPER_DEFINED
 
-#if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64))
+#if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__) && !defined(__RPC_MAC__) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64))
 #define  hyper           __int64
 #define MIDL_uhyper  unsigned __int64
 #else
@@ -142,12 +121,9 @@ typedef double MIDL_uhyper;
 
 #endif // _HYPER_DEFINED
 
-// Borland C++ : wchar_t is standard C++ type
-#ifndef __cplusplus
-#ifndef _WCHAR_T_DEFINED
+#if !defined(__cplusplus) && !defined(_WCHAR_T_DEFINED)
 typedef unsigned short wchar_t;
 #define _WCHAR_T_DEFINED
-#endif
 #endif
 
 #ifndef _SIZE_T_DEFINED
@@ -164,15 +140,15 @@ typedef unsigned int size_t;
 #endif
 
 #ifdef __RPC_WIN32__
-#if   (_MSC_VER >= 800) || defined(__BORLANDC__)
+#if   (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
 #define __RPC_CALLEE       __stdcall
 #else
 #define __RPC_CALLEE
 #endif
 #endif
 
-#ifdef __RPC_OS2_1X__
-#define __RPC_CALLEE_STUB  __far __pascal __loadds
+#ifdef __RPC_MAC__
+#define __RPC_CALLEE __far
 #endif
 
 #ifndef __MIDL_USER_DEFINED
@@ -337,22 +313,13 @@ RpcSsDestroyClientContext (
     _fmemset(s,c,n)
 #endif
 
-#ifdef __RPC_WIN32__
+#if defined(__RPC_WIN32__) || defined(__RPC_MAC__)
 #define MIDL_ascii_strlen(string) \
     strlen(string)
 #define MIDL_ascii_strcpy(target,source) \
     strcpy(target,source)
 #define MIDL_memset(s,c,n) \
     memset(s,c,n)
-#endif
-
-#ifdef __RPC_OS2_1X__
-#define MIDL_ascii_strlen(string) \
-    _fstrlen(string)
-#define MIDL_ascii_strcpy(target,source) \
-    _fstrcpy(target,source)
-#define MIDL_memset(s,c,n) \
-    _fmemset(s,c,n)
 #endif
 
 /****************************************************************************
@@ -599,7 +566,15 @@ typedef unsigned long error_status_t;
 #define NdrFieldOffset(s,f)     (long)(& (((s __RPC_FAR *)0)->f))
 #define NdrFieldPad(s,f,p,t)    (NdrFieldOffset(s,f) - NdrFieldOffset(s,p) - sizeof(t))
 
-#define NdrFcShort(s)      (unsigned char)(s & 0xff), (unsigned char)(s >> 8)
+#if defined(__RPC_MAC__)
+#define NdrFcShort(s)   (unsigned char)(s >> 8), (unsigned char)(s & 0xff)
+#define NdrFcLong(s)    (unsigned char)(s >> 24), (unsigned char)((s & 0x00ff0000) >> 16), \
+                        (unsigned char)((s & 0x0000ff00) >> 8), (unsigned char)(s & 0xff)
+#else
+#define NdrFcShort(s)   (unsigned char)(s & 0xff), (unsigned char)(s >> 8)
+#define NdrFcLong(s)    (unsigned char)(s & 0xff), (unsigned char)((s & 0x0000ff00) >> 8), \
+                        (unsigned char)((s & 0x00ff0000) >> 16), (unsigned char)(s >> 24)
+#endif //  Mac
 
 /////////////////////////////////////////////////////////////////////////////
 // Some stub helper functions.
@@ -641,8 +616,8 @@ typedef struct
 /*
  * MIDL Stub Message
  */
-#if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__)
-#include "pshpack4.h"
+#if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__) && !defined(__RPC_MAC__)
+#include <pshpack4.h>
 #endif
 
 typedef struct _MIDL_STUB_MESSAGE
@@ -709,9 +684,9 @@ typedef struct _MIDL_STUB_MESSAGE
     unsigned char               fBufferValid;
 
     /*
-     * Interpreter field for context handle house keeping.
+     * Obsolete unused field (formerly MaxContextHandleNumber).
      */
-    unsigned char               MaxContextHandleNumber;
+    unsigned char               Unused;
 
     /*
      * Used internally by the Ndr routines.  Holds the max counts for
@@ -781,11 +756,12 @@ typedef struct _MIDL_STUB_MESSAGE
     int                             fInDontFree       :1;
     int                             fDontCallFreeInst :1;
     int                             fInOnlyParam      :1;
+    int                             fHasReturn        :1;
 
     unsigned long                   dwDestContext;
     void __RPC_FAR *                pvDestContext;
 
-    PSCONTEXT_QUEUE                 pSavedHContext;
+    NDR_SCONTEXT *                  SavedContextHandles;
 
     long                            ParamNumber;
 
@@ -802,15 +778,22 @@ typedef struct _MIDL_STUB_MESSAGE
     unsigned long __RPC_FAR *       SizePtrLengthArray;
 
     /*
+     * Interpreter argument queue.  Used on server side only.
+     */
+    void __RPC_FAR *                pArgQueue;
+
+    unsigned long                   dwStubPhase;
+
+    /*
      * Reserved for future use.
      */
 
-    unsigned long                   Reserved[7];
+    unsigned long                   Reserved[5];
 
     } MIDL_STUB_MESSAGE, __RPC_FAR *PMIDL_STUB_MESSAGE;
 
-#if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__)
-#include "poppack.h"
+#if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__) && !defined(__RPC_MAC__)
+#include <poppack.h>
 #endif
 
 /*
@@ -849,6 +832,18 @@ typedef struct _XMIT_ROUTINE_QUINTUPLE
     XMIT_HELPER_ROUTINE     pfnFreeInst;
     } XMIT_ROUTINE_QUINTUPLE, __RPC_FAR *PXMIT_ROUTINE_QUINTUPLE;
 
+typedef struct _MALLOC_FREE_STRUCT
+    {
+    void __RPC_FAR *	(__RPC_FAR __RPC_USER * pfnAllocate)(size_t);
+    void                (__RPC_FAR __RPC_USER * pfnFree)(void __RPC_FAR *);
+    } MALLOC_FREE_STRUCT;
+
+typedef struct _COMM_FAULT_OFFSETS
+    {
+    short       CommOffset;
+    short       FaultOffset;
+    } COMM_FAULT_OFFSETS;
+
 /*
  * MIDL Stub Descriptor
  */
@@ -884,9 +879,12 @@ typedef struct _MIDL_STUB_DESC
     /*
      * Reserved for future use.
      */
-    long                                Reserved1;
-    long                                Reserved2;
-    long                                Reserved3;
+
+    MALLOC_FREE_STRUCT __RPC_FAR *      pMallocFreeStruct;
+
+    long                                MIDLVersion;
+
+    const COMM_FAULT_OFFSETS __RPC_FAR *    CommFaultOffsets;
 
     } MIDL_STUB_DESC;
 
@@ -929,12 +927,24 @@ typedef struct  _MIDL_SERVER_INFO_
     } MIDL_SERVER_INFO, *PMIDL_SERVER_INFO;
 
 /*
+ * Stubless object proxy information structure.
+ */
+typedef struct _MIDL_STUBLESS_PROXY_INFO
+    {
+    PMIDL_STUB_DESC                     pStubDesc;
+    PFORMAT_STRING                      ProcFormatString;
+    const unsigned short __RPC_FAR *    FormatStringOffset;
+    } MIDL_STUBLESS_PROXY_INFO;
+
+typedef MIDL_STUBLESS_PROXY_INFO __RPC_FAR * PMIDL_STUBLESS_PROXY_INFO;
+
+/*
  * This is the return value from NdrClientCall.
  */
 typedef union _CLIENT_CALL_RETURN
     {
     void __RPC_FAR *        Pointer;
-    long        Simple;
+    long                    Simple;
     } CLIENT_CALL_RETURN;
 
 /*
@@ -1024,7 +1034,7 @@ NdrPointerMarshall(
 
 /* Structures */
 
-unsigned char * RPC_ENTRY
+unsigned char __RPC_FAR * RPC_ENTRY
 NdrSimpleStructMarshall(
     PMIDL_STUB_MESSAGE                  pStubMsg,
     unsigned char __RPC_FAR *           pMemory,
@@ -1040,6 +1050,13 @@ NdrConformantStructMarshall(
 
 unsigned char __RPC_FAR * RPC_ENTRY
 NdrConformantVaryingStructMarshall(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    unsigned char __RPC_FAR *           pMemory,
+    PFORMAT_STRING                      pFormat
+    );
+
+unsigned char __RPC_FAR * RPC_ENTRY
+NdrHardStructMarshall(
     PMIDL_STUB_MESSAGE                  pStubMsg,
     unsigned char __RPC_FAR *           pMemory,
     PFORMAT_STRING                      pFormat
@@ -1203,6 +1220,14 @@ NdrConformantStructUnmarshall(
 
 unsigned char __RPC_FAR * RPC_ENTRY
 NdrConformantVaryingStructUnmarshall(
+    PMIDL_STUB_MESSAGE                      pStubMsg,
+    unsigned char __RPC_FAR * __RPC_FAR *   ppMemory,
+    PFORMAT_STRING                          pFormat,
+    unsigned char                           fMustAlloc
+    );
+
+unsigned char __RPC_FAR * RPC_ENTRY
+NdrHardStructUnmarshall(
     PMIDL_STUB_MESSAGE                      pStubMsg,
     unsigned char __RPC_FAR * __RPC_FAR *   ppMemory,
     PFORMAT_STRING                          pFormat,
@@ -1374,6 +1399,13 @@ NdrConformantVaryingStructBufferSize(
     );
 
 void RPC_ENTRY
+NdrHardStructBufferSize(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    unsigned char __RPC_FAR *           pMemory,
+    PFORMAT_STRING                      pFormat
+    );
+
+void RPC_ENTRY
 NdrComplexStructBufferSize(
     PMIDL_STUB_MESSAGE                  pStubMsg,
     unsigned char __RPC_FAR *           pMemory,
@@ -1516,6 +1548,12 @@ NdrConformantVaryingStructMemorySize(
     );
 
 unsigned long RPC_ENTRY
+NdrHardStructMemorySize(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    PFORMAT_STRING                      pFormat
+    );
+
+unsigned long RPC_ENTRY
 NdrComplexStructMemorySize(
     PMIDL_STUB_MESSAGE                  pStubMsg,
     PFORMAT_STRING                      pFormat
@@ -1626,6 +1664,13 @@ NdrConformantStructFree(
 
 void RPC_ENTRY
 NdrConformantVaryingStructFree(
+    PMIDL_STUB_MESSAGE                  pStubMsg,
+    unsigned char __RPC_FAR *           pMemory,
+    PFORMAT_STRING                      pFormat
+    );
+
+void RPC_ENTRY
+NdrHardStructFree(
     PMIDL_STUB_MESSAGE                  pStubMsg,
     unsigned char __RPC_FAR *           pMemory,
     PFORMAT_STRING                      pFormat
@@ -1827,6 +1872,14 @@ typedef enum {
     STUB_MARSHAL,
     STUB_CALL_SERVER_NO_HRESULT
 }STUB_PHASE;
+
+typedef enum {
+    PROXY_CALCSIZE,
+    PROXY_GETBUFFER,
+    PROXY_MARSHAL,
+    PROXY_SENDRECEIVE,
+    PROXY_UNMARSHAL
+}PROXY_PHASE;
 
 
 long RPC_ENTRY
@@ -2200,10 +2253,10 @@ NdrOleFree (
 }
 #endif
 
-// Reset the packing level for DOS and Windows.
+// Reset the packing level for DOS, Windows and Mac.
 
-#if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#include "poppack.h"
+#if defined(__RPC_DOS__) || defined(__RPC_WIN16__) || defined(__RPC_MAC__)
+#pragma pack()
 #endif
 
 #endif /* __RPCNDR_H__ */

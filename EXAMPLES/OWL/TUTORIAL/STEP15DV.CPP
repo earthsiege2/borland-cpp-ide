@@ -153,7 +153,7 @@ class _USERCLASS TDrawListView : public TListBox, public TView {
 
     // Overridden virtuals from TWindow
     //
-    bool CanClose() {return TListBox::CanClose() && Doc->CanClose();}
+    bool CanClose();
     bool Create();
 
   protected:
@@ -382,8 +382,12 @@ TDrawDocument::Open(int mode, const char far* path)
 bool
 TDrawDocument::Close()
 {
-  Lines->Flush();
-  return TOleDocument::Close();
+  if (TOleDocument::Close()) {
+    Lines->Flush();
+    return true;
+  }
+
+  return false;
 }
 
 TLine*
@@ -710,6 +714,20 @@ TDrawListView::TDrawListView(TDrawDocument& doc,TWindow* parent) :
   Attr.Style |= LBS_NOINTEGRALHEIGHT;
   Attr.AccelTable = IDA_DRAWLISTVIEW;
   SetViewMenu(new TMenuDescr(IDM_DRAWLISTVIEW));
+}
+
+bool
+TDrawListView::CanClose()
+{
+  TView* curView = Doc->GetViewList();
+  while (curView) {
+    if (curView != this)
+      return true;
+
+    curView = curView->GetNextView();
+  }
+
+  return Doc->CanClose();
 }
 
 bool

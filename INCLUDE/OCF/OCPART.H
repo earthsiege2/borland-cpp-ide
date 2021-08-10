@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -95,6 +96,9 @@ class _ICLASS TOcPart : public TUnknown, private IBSite {
     bool    DoVerb(uint);
     LPCOLESTR    GetServerName(TOcPartName partName)
         {return const_cast<LPOLESTR>(BPartI->GetName((TOcPartName)partName));}
+    HRESULT QueryServer(const IID far& iid, void far* far* iface);
+
+    bool    SetFormatData(TOcFormatInfo far* fmt, HANDLE data, bool release);
 
     // Object reference & lifetime managment
     // For internal OCF use only
@@ -107,7 +111,6 @@ class _ICLASS TOcPart : public TUnknown, private IBSite {
   protected:
    ~TOcPart();
 
-  private:
     void    Init(TOcInitInfo far& initInfo);  // ctor helper
 
     // TUnknown virtual overrides
@@ -127,7 +130,7 @@ class _ICLASS TOcPart : public TUnknown, private IBSite {
     HRESULT   _IFUNC Init(IBDataProvider far*, IBPart far*, LPCOLESTR, bool);
     void      _IFUNC Disconnect();
 
-  private:
+  protected:
     IUnknown*    BPart;      // Our corresponding helper object & interfaces
     IBPart*      BPartI;
     IBLinkable*  BLPartI;
@@ -227,3 +230,4 @@ class TOcPartChangeInfo {
     TOcPart*    Part;
 };
 #endif
+

@@ -1,4 +1,4 @@
-/* $Header:   Y:/ADMIN/OCF/SOURCE/BOCOLE/BOLEUI32/OLESTD.H_V   1.1   15 Nov 1994 17:56:48   CQUINN  $ */
+//
 /*************************************************************************
 **
 **    OLE 2.0 Standard Utilities
@@ -14,10 +14,7 @@
 **          reference counting debug support
 **          OleStd API's for common compound-document app support
 **
-**    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-**
 *************************************************************************/
-
 /*
  *      C/C++ Run Time Library - Version 6.5
  *
@@ -412,10 +409,10 @@ typedef LPOLEUIPASTEENTRYA LPOLEUIPASTEENTRY;
 #else
 
 #define MAP_PIX_TO_LOGHIM(pixel, pixelsPerInch) \
-	((ULONG) ((((ULONG)HIMETRIC_PER_INCH) * pixel) / pixelsPerInch))
+        ((ULONG) ((((ULONG)HIMETRIC_PER_INCH) * pixel + (pixelsPerInch >> 1)) / pixelsPerInch))
 
 #define MAP_LOGHIM_TO_PIX(hiMetric, pixelsPerInch) \
-	(UINT) ((((double) hiMetric) * pixelsPerInch) / HIMETRIC_PER_INCH)
+    (UINT) ((((double) hiMetric) * pixelsPerInch + (HIMETRIC_PER_INCH >> 1)) / HIMETRIC_PER_INCH)
 
 #endif
 
@@ -892,3 +889,4 @@ STDAPI_(DWORD) OleStdGetDropEffect ( DWORD grfKeyState );
 #endif  /* RC_INVOKED */
 
 #endif // _OLESTD_H_
+

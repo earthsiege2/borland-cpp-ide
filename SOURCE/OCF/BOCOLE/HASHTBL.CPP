@@ -1,4 +1,4 @@
-//$Header:   Y:/ADMIN/OCF/SOURCE/BOCOLE/HASHTBL.CPV   1.0   06 Nov 1994 11:37:00   CQUINN  $
+//
 
 
 #include <hashtbl.h>
@@ -29,5 +29,6 @@ IHashable<T> *&HashTable<T, SIZE>::Find(IHashable<T> *pKey)
 	}
 	return *ppElem;
 }
+
 
 

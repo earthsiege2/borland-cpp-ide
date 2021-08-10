@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -175,3 +176,4 @@ class TXObjComp : public TXOle {
 };
 
 #endif  // OCF_OCDEFS_H
+

@@ -1,5 +1,7 @@
 /*++
 
+Copyright (c) 1991-1995 Microsoft Corporation
+
 Module Name:
 
     rpc.h
@@ -10,28 +12,22 @@ Abstract:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
-#ifndef __RPC_H__
-#define __RPC_H__
-#define __RPC_H
-
 #ifndef RPC_NO_WINDOWS_H
 #include <windows.h>
 #endif // RPC_NO_WINDOWS_H
+
+#ifndef __RPC_H__
+#define __RPC_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #define __RPC_WIN32__
+
+#ifndef _WIN95      /* Default to NT */
 #define __RPC_NT__
+#endif /* !WIN95 */
 
 #ifndef __MIDL_USER_DEFINED
 #define midl_user_allocate MIDL_user_allocate
@@ -43,7 +39,7 @@ typedef void * I_RPC_HANDLE;
 typedef long RPC_STATUS;
 
 #define RPC_UNICODE_SUPPORTED
-#if   (_MSC_VER >= 800) || defined(__BORLANDC__)
+#if   (_MSC_VER >= 800) || defined (_STDCALL_SUPPORTED) || defined (__BORLANDC__)
 #define __RPC_FAR
 #define __RPC_API  __stdcall
 #define __RPC_USER __stdcall
@@ -63,9 +59,9 @@ typedef long RPC_STATUS;
 #undef OPTIONAL
 #endif /* IN */
 
-#include "rpcdce.h"
-#include "rpcnsi.h"
-#include "rpcnterr.h"
+#include <rpcdce.h>
+#include <rpcnsi.h>
+#include <rpcnterr.h>
 
 
 #include <excpt.h>

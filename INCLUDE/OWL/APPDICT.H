@@ -59,12 +59,10 @@ extern TAppDictionary _OWLDATA OwlAppDictionary;
 
 //
 // Global function that calls GetApplication() on owl's app-dictionary.
-// Used by EXEs, or DLLs statically linking Owl. May return 0.
-// Primarily for compatibility
+// Used by EXEs, or DLLs statically linking Owl. Never returns 0, will make
+// an alias app if needed. Primarily for compatibility
 //
-inline TApplication* GetApplicationObject(unsigned pid = 0) {
-  return ::OwlAppDictionary.GetApplication(pid);
-}
+TApplication* _OWLFUNC GetApplicationObject(unsigned pid = 0);
 
 //
 // Convenient macro to define a 'AppDictionary' ref and object as needed

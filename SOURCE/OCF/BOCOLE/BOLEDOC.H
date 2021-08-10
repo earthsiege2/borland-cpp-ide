@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleDoc.h -- Declares the document-level helper object for containers
@@ -179,4 +179,5 @@ private:
 };
 
 #endif _BOLEDOC_H
+
 

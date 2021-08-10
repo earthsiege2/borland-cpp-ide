@@ -1,4 +1,4 @@
-/* $Header:   Y:/ADMIN/OCF/SOURCE/BOCOLE/BOLEUI/OLESTD.H_V   1.1   15 Nov 1994 17:56:42   CQUINN  $ */
+//
 /*************************************************************************
 **
 **    OLE 2.0 Standard Utilities
@@ -13,8 +13,6 @@
 **          HIMETRIC conversion routines
 **          reference counting debug support
 **          OleStd API's for common compound-document app support
-**
-**    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
 **
 *************************************************************************/
 /*
@@ -858,3 +856,4 @@ STDAPI_(DWORD) OleStdGetDropEffect ( DWORD grfKeyState );
 #endif  /* RC_INVOKED */
 
 #endif // _OLESTD_H_
+

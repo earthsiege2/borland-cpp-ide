@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -208,4 +209,5 @@ bool TAutoEnumeratorBase::Step()
     return true;
   return false;
 }
+
 

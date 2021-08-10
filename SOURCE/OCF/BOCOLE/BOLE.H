@@ -1,7 +1,7 @@
-
+//
 //**************************************************************************
 //
-// BOle.h -- Common private header file for BOle modules. 
+// BOle.h -- Common private header file for BOle modules.
 //
 // Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
 //
@@ -20,7 +20,7 @@
 #endif
 
 #if !defined(__WINDOWS_H)
-  #undef NULL
+//  #undef NULL
   #define STRICT
   #include <windows.h>
 #endif
@@ -28,7 +28,11 @@
 
 #include <Ole2.h>
 #include <BOleintf.h>		// ole2 must come before boleintf.h
-#include <Dispatch.h>
+#if defined(WIN32)
+  #include <oleauto.h>
+#else
+  #include <Dispatch.h>
+#endif
 
 #define OLE    /* use OLE::func to disambiguate OLEAPI global functions */
 #define WIN    /* use WIN::func to disambiguate WINAPI global functions */
@@ -158,6 +162,13 @@ DEFINE_INLINE_QI(IRunnableObject,  IUnknown)
 
 extern HINSTANCE boleInst;
 
+
+#ifdef ANSI
+  #include "Utils.h"
 #endif
 
-
+#endif
+
+
+
+

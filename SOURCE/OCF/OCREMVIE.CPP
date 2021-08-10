@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -34,7 +35,7 @@ TOcRemView::TOcRemView(TOcDocument& doc, TRegList* regList, IUnknown* outer)
     if (BSiteI) {
       const char* progid = regList->Lookup(OcApp.IsOptionSet(amDebug) ?
                                            "debugprogid" : "progid");
-      BSiteI->Init(this, this, OleStr(progid), true);
+      BSiteI->Init((IBDataProvider2*)this, this, OleStr(progid), true);
     }
 
     if (SUCCEEDED(BSite->QueryInterface(IID_IBContainer, &(LPVOID)BContainerI)))
@@ -55,7 +56,7 @@ TOcRemView::~TOcRemView()
   //
   if (Kind == LoadFromFile && State != Closing)
     EvClose();
-  
+
   // Disconnect the TOleView with this
   //
   ForwardEvent(OC_VIEWCLOSE);
@@ -92,8 +93,8 @@ TOcRemView::QueryObject(const IID far& iid, void far* far* iface)
 
   // interfaces
   //
-     SUCCEEDED(hr = IBPart_QueryInterface(this, iid, iface))
-  || SUCCEEDED(hr = IBDataProvider_QueryInterface(this, iid, iface))
+     SUCCEEDED(hr = IBPart2_QueryInterface(this, iid, iface))
+  || SUCCEEDED(hr = IBDataProvider2_QueryInterface(this, iid, iface))
 
   // helpers
   //
@@ -354,7 +355,7 @@ TOcRemView::Init(LPCOLESTR path)
 
   // Read object's data from storage
   //
-  if (!ForwardEvent(OC_VIEWOPENDOC, path))
+  if (!ForwardEvent(OC_VIEWOPENDOC, (const char far*)OleStr(path)))
     return HR_FAIL;
 
   // Pretend we are open editing to make sure that the doc server is attached
@@ -439,6 +440,24 @@ TOcRemView::GetFormatData(TOcFormatInfo far* fmt)
     return formatData.Handle;
   else
     return 0;
+}
+
+//
+// Request native data for pasting into client application.
+// This is only called at paste time (not at copy time).
+//
+HRESULT _IFUNC
+TOcRemView::SetFormatData(TOcFormatInfo far* fmt, HANDLE data, bool /*release*/)
+{
+  PRECONDITION(fmt);
+  PRECONDITION(data);
+
+  TOcFormat* format = FormatList.Find(fmt->Id);
+  if (!format)
+    return 0;
+
+  TOcFormatData formatData(*format, 0, data);
+  return HRFailIfZero((bool)(ForwardEvent(OC_VIEWSETDATA, &formatData)));
 }
 
 #if defined(BI_PLAT_WIN16)
@@ -586,7 +605,7 @@ HRESULT _IFUNC
 TOcRemView::Close()
 {
   TRACEX(OcRemView, 1, "Close() on " << (void*)this <<
-         " Closing:" << State==Closing << " Win:" << hex << (uint)Win);
+         " Closing:" << (State==Closing) << " Win:" << hex << (uint)Win);
 
   // Keep DLL server in memory until its ref count goes to 0
   //
@@ -706,7 +725,9 @@ TOcRemView::Open(bool open)
         char in[32];
         ::LoadString(_hInstance, IDS_IN, in, sizeof in);
         newTitle += in;
-        newTitle += OleStr(BContainerI->GetWindowTitle());
+        LPCOLESTR str = BContainerI->GetWindowTitle();
+        if (str)
+          newTitle += OleStr(str);
         ForwardEvent(OC_VIEWSETTITLE, newTitle.c_str());
       }
     }
@@ -736,9 +757,9 @@ TOcRemView::EnumVerbs(TOcVerb far*)
 // Perform a verb on our document
 //
 HRESULT _IFUNC
-TOcRemView::DoVerb(uint)
+TOcRemView::DoVerb(uint verb)
 {
-  return HR_FAIL;  // Not called on BOle parts
+  return HRFailIfZero((bool)ForwardEvent(OC_VIEWDOVERB, verb));
 }
 
 //
@@ -1022,3 +1043,4 @@ TOcRemView::GetName(TOcPartName)
 {
   return 0;  // not called on BOle parts
 }
+

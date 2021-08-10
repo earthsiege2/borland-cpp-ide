@@ -106,7 +106,7 @@ typedef struct sockaddr_at
 
 typedef union
 {
-#if !defined(NO_ANONYMOUS_STRUCT)
+#if defined(_ANONYMOUS_STRUCT)
     struct
     {
         USHORT      Network;

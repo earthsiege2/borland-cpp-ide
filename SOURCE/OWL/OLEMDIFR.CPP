@@ -26,9 +26,7 @@ TOleMDIFrame::TOleMDIFrame(const char far* title,
                            TModule*        module)
 :
   TOleFrame(title, &clientWnd, trackMenuSelection, module),
-  TMDIFrame(title, menuResId, clientWnd, module),
-  TFrameWindow(0, title, &clientWnd, false, module),
-  TWindow(0, title, module)
+  TMDIFrame(title, menuResId, clientWnd, module)
 {
 }
 

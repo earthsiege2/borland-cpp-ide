@@ -1,0 +1,30 @@
+/****************************************************************************
+
+
+meteor.rh
+
+produced by Borland Resource Workshop
+
+
+*****************************************************************************/
+
+#define DEBUG_OPTIONS        1
+#define ABOUT_BOX            2
+
+
+#define IDC_GROUPBOX1         101
+#define IDC_GROUPBOX2         102
+#define IDC_EDIT3             104
+#define IDC_EDIT4             106
+#define IDC_CHECKBOX3         107
+#define IDC_HEIGHT            110
+#define IDC_WIDTH             111
+#define IDC_MONOCHROME_BITMAP 112
+#define IDC_COMPATIBLE_BITMAP 113
+
+#define MENU_1                 1
+
+#define CM_HELPABOUT           101
+#define CM_GAME_EXIT           103
+
+#define ICON_1                 1

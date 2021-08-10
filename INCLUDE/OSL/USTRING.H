@@ -13,7 +13,7 @@
 #   define INC_OLE2        // Locale needs Ole2 when 16bit, let osl/defs get it
 # endif
 # include <osl/defs.h>
-#elif !defined(__OLE2_H)
+#elif !defined(__OLE2_H) && !defined(_OLE2_H_)
 # if defined(BI_PLAT_WIN16)
 #   include <ole2.h>       // Get Win16 Ole2 headers now if we missed above
 #   if !defined(__DISPATCH_H)

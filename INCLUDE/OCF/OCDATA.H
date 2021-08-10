@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -78,4 +79,5 @@ class _OCFCLASS TOcDataProvider : public TUnknown,
 };
 
 #endif  // OCF_OCDATA_H
+
 

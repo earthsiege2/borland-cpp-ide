@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 // 
 // BHatch.cpp -- An implementation of the hatched border around inplace
@@ -13,40 +13,59 @@
 
 #include "BOleSite.h"
 
+#define CLIPPED				0x0001
+#define CLIPPED_LEFT 		0x0002
+#define CLIPPED_TOP        0x0004
+#define CLIPPED_TOPLEFT    CLIPPED_LEFT|CLIPPED_TOP
+
+void SetRectExt (RECT FAR *,UINT,UINT,UINT);
+
 class BOleHatchWindow {
 
 public:
 
-	static Register (HINSTANCE hInst);
-	static BOleHatchWindow* Create (HWND hWndParent, HINSTANCE hInst, BOleSite *pBack);
-
-	void SetSize (LPRECT lprcIPObjRect, LPRECT lprcClipRect, LPPOINT lpptOffset);
+	BOleHatchWindow (HWND,HINSTANCE,BOleSite*);
 	~BOleHatchWindow();
 
-	void Paint ();
-	static void InitWidth ();
-	UINT HitTestHandles (LPPOINT);
-	void SetHandleCursor (UINT);
-	void Show (BOOL, LPOLEINPLACESITE pS = NULL);
-	void NegotiateSize (WINDOWPOS*);
- 	UINT GetWidth ();
-	
-	operator HWND () {return hWndHatch;}
+	static 					Register (HINSTANCE hInst); // register window
+	static void 			InitWidth ();
+
+	// window messages related member functions
+#ifdef ANSI
+	LRESULT 					wmCreate (LPCREATESTRUCTA);
+#else
+	LRESULT 					wmCreate (LPCREATESTRUCT);
+#endif
+	LRESULT 					wmPaint ();
+	UINT 						wmNCHitTest (LPPOINT);
+	LRESULT 					wmSetCursor (HWND, UINT, UINT);
+	UINT 						wmMouseActivate (HWND, UINT, UINT);
+	LRESULT 					wmNCLButtonDown (UINT, LPPOINT);
+	LRESULT 					wmGetMinMaxInfo (MINMAXINFO*);
+	LRESULT 					wmWindowPosChanging (LPWINDOWPOS);
+
+	void 						Show (BOOL, LPOLEINPLACESITE = NULL);
+	void 						SetSize (LPRECT,LPRECT,LPPOINT);
+	void 						NegotiateSize (WINDOWPOS*);
+	UINT 						GetWidth ();
+
+	operator 				HWND () {return hWndHatch;}
 
 protected:
 
-	HWND hWndHatch;
-	RECT hatchRect;
-	static UINT hatchWidth;
-	LPOLEINPLACESITE pSite;
-	BOleSite *pBack;
-	
-	BOleHatchWindow (BOleSite *pB);
+	static UINT 			hatchWidth; // hatch border size
 
-	void GetHatchRect (LPRECT lpHatchRect);
-	void SetHatchRect (LPRECT lpHatchRect);
+	HWND 						hWndHatch; // hatch window handle
+	RECT 						hatchRect; // keep server window rectangle in client coordinates
 
-	void SetRectExt (RECT FAR *, UINT, UINT, UINT);
+	int 						nClippedFlag; // clipped status flag
+	RECT 						MoveRect; // temp rect used only inside WM_WINDOWPOSCHANGING (orrible!)
+	BOOL 						fInMouseDown; // used to signal when mouse left button is kept down
+
+	LPOLEINPLACESITE 		pSite;
+	BOleSite *				pBack;
+
 };
 
 #endif
+

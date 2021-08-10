@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleCont.h --   Implements the server helper for documents by masquerading
@@ -84,4 +84,5 @@ public:
 };
 
 #endif _BOLECONT_H
+
 

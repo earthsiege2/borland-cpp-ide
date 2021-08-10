@@ -108,6 +108,13 @@ inline bool(T::*B_OC_PO_Sig(bool(T::*pmf)(TOcInitInfo&)))(TOcInitInfo&)
   return pmf;
 }
 
+
+template <class T>
+inline bool(T::*B_U_Sig(bool(T::*pmf)(uint)))(uint)
+{
+  return pmf;
+}
+
 //----------------------------------------------------------------------------
 // Event response table macros for ObjectConnections events
 //
@@ -229,6 +236,10 @@ inline bool(T::*B_OC_PO_Sig(bool(T::*pmf)(TOcInitInfo&)))(TOcInitInfo&)
   {WM_OCEVENT, OC_VIEWCLIPDATA, (TAnyDispatcher)::U_LPARAM_Dispatch,\
    (TMyPMF)B_OC_VCF_Sig(&TMyClass::EvOcViewClipData)}
 
+#define EV_OC_VIEWSETDATA\
+  {WM_OCEVENT, OC_VIEWSETDATA, (TAnyDispatcher)::U_LPARAM_Dispatch,\
+   (TMyPMF)B_OC_VCF_Sig(&TMyClass::EvOcViewSetData)}
+
 #define EV_OC_VIEWPARTSIZE\
   {WM_OCEVENT, OC_VIEWPARTSIZE, (TAnyDispatcher)::U_LPARAM_Dispatch,\
    (TMyPMF)B_OC_PS_Sig(&TMyClass::EvOcViewPartSize)}
@@ -276,5 +287,9 @@ inline bool(T::*B_OC_PO_Sig(bool(T::*pmf)(TOcInitInfo&)))(TOcInitInfo&)
 #define EV_OC_VIEWPASTEOBJECT\
   {WM_OCEVENT, OC_VIEWPASTEOBJECT, (TAnyDispatcher)::U_LPARAM_Dispatch,\
    (TMyPMF)B_OC_PO_Sig(&TMyClass::EvOcViewPasteObject)}
+
+#define EV_OC_VIEWDOVERB\
+  {WM_OCEVENT, OC_VIEWDOVERB, (TAnyDispatcher)::U_U_Dispatch,\
+   (TMyPMF)B_U_Sig(&TMyClass::EvOcViewDoVerb)}
 
 #endif

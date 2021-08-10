@@ -29,7 +29,7 @@
 #endif
 
 #if defined(OWLRTFAR)
-# define __RTFAR  far
+# define __RTFAR  __far
 #else
 # define __RTFAR
 #endif

@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -199,6 +200,17 @@ TOcPart::QueryObject(const IID far& iid, void far* far* iface)
 }
 
 //
+// Query server for its interfaces
+//
+HRESULT
+TOcPart::QueryServer(const IID far& iid, void far* far* iface)
+{
+  PRECONDITION(iface);
+  return BPartI->DoQueryInterface(iid, iface);
+}
+
+
+//
 // Disconnect servers by closing & releasing our BOle helper
 //
 bool
@@ -359,8 +371,8 @@ TOcPart::SetSiteExtent(const TSize far* newSize)
 
   // Only accept server's size if we don't have a size yet. Always say OK.
   //
-  if (Size.cx > 0 && Size.cy > 0)
-    return HR_NOERROR;
+//  if (Size.cx > 0 && Size.cy > 0)
+//    return HR_NOERROR;
 
   // Give other views a chance to update
   //
@@ -615,6 +627,23 @@ TOcPart::FinishLoading()
   }
 }
 
+
+//
+// Set data into the server object
+//
+bool
+TOcPart::SetFormatData(TOcFormatInfo far* fmt, HANDLE data, bool release)
+{
+  IBPart2* bPartI2;
+  if (HRSucceeded(BPart->QueryInterface(IID_IBPart2, &(LPVOID)bPartI2)))
+    ((IBPart*)bPartI2)->Release();
+  else
+    return false;
+
+  return HRSucceeded(bPartI2->SetFormatData(fmt, data, release));
+}
+
+
 bool
 TOcPart::Save(IStorage* storage, bool sameAsLoad, bool remember)
 {
@@ -642,6 +671,14 @@ TOcPart::Draw(HDC dc, const TRect& pos, const TRect& clip, TOcAspect aspect)
   if (!BPartI) {
     TOcInitInfo initInfo(ihEmbed, iwStorage, OcDocument.GetActiveView());
     Init(initInfo);
+    // Update the link
+    //
+    if (IsLink()) {
+      TOcView* view = OcDocument.GetActiveView();
+      if (view)
+        view->UpdateLinks();
+    }
+
   }
 
   return HRSucceeded(BPartI->Draw(dc, &posl, &clipl, aspect, drNone));
@@ -711,7 +748,7 @@ TOcPart*
 TOcPartCollection::Locate(TPoint& logicalPoint)
 {
   TRect hitRect(logicalPoint, TSize(1,1));
-  
+
   TOcPart* p = 0;
   for (TOcPartCollectionIter i(*this); i; i++)
     if (i.Current()->IsVisible(hitRect))
@@ -749,3 +786,4 @@ TOcVerb::TOcVerb()
   CanDirty(false)
 {
 }
+

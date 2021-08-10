@@ -17,13 +17,10 @@
  *
  */
 
+#if !defined(__FLAT__)
 #ifndef _DISPATCH_H_
 #define _DISPATCH_H_
 #define __DISPATCH_H
-
-
-#if !defined(__FLAT__)
-
 
 #include "variant.h"
 
@@ -1410,15 +1407,14 @@ GetActiveObject(
 
 STDAPI_(unsigned long) OaBuildVersion(void);
 
+#endif /* _DISPATCH_H_ */
 
 #else  /* !__FLAT__ */
-
+#ifndef RC_INVOKED
+#pragma message("WARNING: your code should #include oleauto.h instead of dispatch.h")
+#endif /* !RC_INVOKED */
 
 #include <oleauto.h>
 
-
 #endif  /* __FLAT__ */
-
-
-#endif /* _DISPATCH_H_ */
 

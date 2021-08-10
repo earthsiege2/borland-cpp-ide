@@ -82,6 +82,7 @@
 
 #ifndef __WINDOWS_H     /* prevent multiple includes */
 #define __WINDOWS_H
+#define _INC_WINDOWS
 
 #ifndef RC_INVOKED
 #pragma option -a-      /* Assume byte packing throughout */
@@ -94,9 +95,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #if defined(__BORLANDC__)
     #define WIN16
     #define NO_ANONYMOUS_STRUCT
-    #if defined(__cplusplus)
-        #define _WCHAR_T_DEFINED
-    #else
+    #if !defined(__cplusplus)
         #define NONAMELESSUNION         /* Sould be NO_ANONYMOUS_UNION (correct term)*/
     #endif
 #endif
@@ -163,6 +162,7 @@ typedef unsigned char       BYTE;
 typedef unsigned short      WORD;
 typedef unsigned long       DWORD;
 
+typedef unsigned short      USHORT;
 typedef unsigned int        UINT;
 
 #ifdef STRICT
@@ -442,6 +442,7 @@ typedef struct tagWINDEBUGINFO
 BOOL    WINAPI GetWinDebugInfo(WINDEBUGINFO FAR* lpwdi, UINT flags);
 BOOL    WINAPI SetWinDebugInfo(const WINDEBUGINFO FAR* lpwdi);
 
+#define DebugOutput DEBUGOUTPUT
 void    FAR _cdecl DebugOutput(UINT flags, LPCSTR lpsz, ...);
 
 /* WINDEBUGINFO flags values */
@@ -5427,11 +5428,12 @@ BOOL    WINAPI GetDriverInfo(HDRVR, DRIVERINFOSTRUCT FAR*);
 
 
 #else  /* !__FLAT__ */
-
-
 /*++ BUILD Version: 0001    Increment this if a change has global effects
 
+Copyright (c) 1985-1995, Microsoft Corporation
+
 Module Name:
+
 
     windows.h
 
@@ -5443,7 +5445,14 @@ Abstract:
 
 #ifndef _WINDOWS_
 #define _WINDOWS_
-#define __WINDOWS_H
+
+
+#ifndef _INC_WINDOWS    
+#define _INC_WINDOWS 
+
+#ifndef WINVER
+#define WINVER 0x0400
+#endif
 
 /*  If defined, the following flags inhibit definition
  *     of the indicated items.
@@ -5486,13 +5495,13 @@ Abstract:
  *  NOHELP            - Help engine interface.
  *  NOPROFILER        - Profiler interface.
  *  NODEFERWINDOWPOS  - DeferWindowPos routines
+ *  NOMCX             - Modem Configuration Extensions
  */
 
 #ifdef RC_INVOKED
 
 /* Turn off a bunch of stuff to ensure that RC files compile OK. */
 #define NOATOM
-#define NOGDI
 #define NOGDICAPMASKS
 #define NOMETAFILE
 #define NOMINMAX
@@ -5506,24 +5515,27 @@ Abstract:
 #define NOWH
 #define NOCOMM
 #define NOKANJI
-
+#define NOMCX
 #endif /* RC_INVOKED */
 
 #if defined(__BORLANDC__)
-    #define _X86_
-    #define i386
-    #define WIN32
+    #define _X86_ 
+    #define i386  
+    #define WIN32 
+    #define _WIN32
     #define _M_IX86 300
-    #define NO_ANONYMOUS_STRUCT
+    #define NO_ANONYMOUS_STRUCT  
+    #undef  _ANONYMOUS_STRUCT    /* The correct term */
 
     #if defined(__cplusplus)
-        #define _WCHAR_T_DEFINED
+        #ifndef _WCHAR_T_DEFINED
+           #define _WCHAR_T_DEFINED
+        #endif
     #else
-        #define NONAMELESSUNION         /* Sould be NO_ANONYMOUS_UNION (correct term)*/
+        #define NONAMELESSUNION     
+        #define NO_ANONYMOUS_UNION  
+        #undef  _ANONYMOUS_UNION    /* The correct term */
     #endif
-
-    // set default packing to 4
-    #include <pshpack4.h>
 #endif
 
 #if defined(NONAMELESSUNION) || (defined(_MAC) && !defined(__cplusplus) && !defined(_MSC_VER))
@@ -5549,7 +5561,7 @@ Abstract:
 #endif
 
 #ifndef RC_INVOKED
-#if     ( _MSC_VER >= 800 )
+#if	( _MSC_VER >= 800 )
 #pragma warning(disable:4001)
 #endif
 #include <excpt.h>
@@ -5581,33 +5593,39 @@ Abstract:
 #ifndef NOGDI
 #include <commdlg.h>
 #include <winspool.h>
-#ifndef INC_OLE2
+#ifdef INC_OLE1
 #include <ole.h>
-#endif /* OLE2 */
+#else
+#include <ole2.h>
+#endif /* !INC_OLE1 */
 #endif /* !NOGDI */
 #endif /* WIN32_LEAN_AND_MEAN */
 
-#ifndef RC_INVOKED
 #ifdef INC_OLE2
 #include <ole2.h>
-#endif /* OLE2 */
-#endif /* RC_INVOKED */
+#endif /* INC_OLE2 */
 
 #ifndef NOSERVICE
 #include <winsvc.h>
 #endif
 
+#if(WINVER >= 0x0400)
+#ifndef NOMCX          
+#include <mcx.h>
+#endif /* NOMCX */
+
+#ifndef NOIME
+#include <imm.h>
+#endif                  
+#endif /* WINVER >= 0x0400 */
+
 #ifndef RC_INVOKED
-#if     ( _MSC_VER >= 800 )
+#if	( _MSC_VER >= 800 )
 #pragma warning(default:4001)
 #endif
 #endif /* RC_INVOKED */
 
-#if defined(__BORLANDC__)
-    // reset to default packing
-    #include <poppack.h>
-#endif
-
+#endif /* _INC_WINDOWS */
 #endif /* _WINDOWS_ */
 
 

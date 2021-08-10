@@ -1,5 +1,7 @@
 /*++
 
+Copyright (c) 1991-1995 Microsoft Corporation
+
 Module Name:
 
     rpcdcep.h
@@ -10,32 +12,15 @@ Abstract:
     stubs and by support libraries.  Applications must not call these
     routines.
 
-Author:
-
-    Michael Montague (mikemon) 25-Sep-1991
-
-Revision History:
-
-    Connie Hoppe     (connieh) 26-Jul-1993  Add a few constants.
-
 --*/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef __RPCDCEP_H__
 #define __RPCDCEP_H__
-#define __RPCDCEP_H
 
 // Set the packing level for RPC structures for Dos and Windows.
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#pragma option -a
+#pragma pack(2)
 #endif
 
 #ifdef __cplusplus
@@ -68,7 +53,7 @@ typedef struct _RPC_MESSAGE
 } RPC_MESSAGE, __RPC_FAR * PRPC_MESSAGE;
 
 
-typedef RPC_STATUS RPC_FORWARD_FUNCTION(
+typedef RPC_STATUS RPC_ENTRY RPC_FORWARD_FUNCTION(
                        IN UUID             __RPC_FAR * InterfaceId,
                        IN RPC_VERSION      __RPC_FAR * InterfaceVersion,
                        IN UUID             __RPC_FAR * ObjectId,
@@ -76,7 +61,7 @@ typedef RPC_STATUS RPC_FORWARD_FUNCTION(
                        IN void __RPC_FAR * __RPC_FAR * ppDestEndpoint);
 
 /*
- * Types of function calls for datagram rpc
+ * Types of function calls for datagram and rpc
  */
 
 #define RPC_NCA_FLAGS_DEFAULT       0x00000000  /* 0b000...000 */
@@ -259,9 +244,10 @@ I_RpcBindingInqDynamicEndpoint (
 
 #endif 
 
-#define TRANSPORT_TYPE_CN  0x1
-#define TRANSPORT_TYPE_DG  0x2
-#define TRANSPORT_TYPE_LPC 0x4
+#define TRANSPORT_TYPE_CN   0x1
+#define TRANSPORT_TYPE_DG   0x2
+#define TRANSPORT_TYPE_LPC  0x4
+#define TRANSPORT_TYPE_WMSG 0x8
 
 RPC_STATUS RPC_ENTRY
 I_RpcBindingInqTransportType (
@@ -311,6 +297,71 @@ RPC_STATUS RPC_ENTRY
 I_RpcServerRegisterForwardFunction (
     IN RPC_FORWARD_FUNCTION __RPC_FAR * pForwardFunction
                        );
+RPC_STATUS RPC_ENTRY
+I_RpcConnectionInqSockBuffSize(
+  OUT unsigned long __RPC_FAR * RecvBuffSize,
+  OUT unsigned long __RPC_FAR * SendBuffSize
+  );
+
+RPC_STATUS RPC_ENTRY
+I_RpcConnectionSetSockBuffSize(
+  IN unsigned long RecvBuffSize,
+  IN unsigned long SendBuffSize
+  );
+
+#ifdef __RPC_WIN32__
+
+typedef
+RPC_STATUS
+(__RPC_USER __RPC_FAR * RPC_BLOCKING_FUNCTION) (
+    IN void __RPC_FAR *RpcWindowHandle,
+    IN void __RPC_FAR *Context
+    );
+
+RPC_STATUS RPC_ENTRY
+I_RpcBindingSetAsync(
+    IN RPC_BINDING_HANDLE Binding,
+    IN RPC_BLOCKING_FUNCTION BlockingHook
+    );
+
+RPC_STATUS RPC_ENTRY
+I_RpcAsyncSendReceive(
+    IN OUT RPC_MESSAGE __RPC_FAR * Message,
+    IN void __RPC_FAR * Context
+    );
+
+RPC_STATUS RPC_ENTRY
+I_RpcGetThreadWindowHandle(
+    OUT void __RPC_FAR * __RPC_FAR * WindowHandle
+    );
+
+RPC_STATUS RPC_ENTRY
+I_RpcServerThreadPauseListening(
+    );
+
+RPC_STATUS RPC_ENTRY
+I_RpcServerThreadContinueListening(
+    );
+
+RPC_STATUS RPC_ENTRY
+I_RpcServerUnregisterEndpointA (
+    IN unsigned char * Protseq,
+    IN unsigned char * Endpoint
+    );
+
+RPC_STATUS RPC_ENTRY
+I_RpcServerUnregisterEndpointW (
+    IN unsigned short * Protseq,
+    IN unsigned short * Endpoint
+    );
+
+#ifdef UNICODE
+#define I_RpcServerUnregisterEndpoint I_RpcServerUnregisterEndpointW
+#else
+#define I_RpcServerUnregisterEndpoint I_RpcServerUnregisterEndpointA
+#endif
+
+#endif // __RPC_WIN32__
 
 #ifdef __cplusplus
 }
@@ -319,7 +370,7 @@ I_RpcServerRegisterForwardFunction (
 // Reset the packing level for Dos and Windows.
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#pragma option -a.
+#pragma pack()
 #endif
 
 #endif /* __RPCDCEP_H__ */

@@ -20,19 +20,30 @@ const int IDW_MDICLIENT     = 32000;  // ID of MDI client window
 const int IDW_FIRSTMDICHILD = 32001;  // child window IDs, 32 max to 32032
 
 //
+//  class TMenuItemEnabler
+//  ----- ----------------
+//
 // command enabler for menu items
 //
 class _OWLCLASS TMenuItemEnabler : public TCommandEnabler {
   public:
     TMenuItemEnabler(HMENU hMenu, uint id, HWND hWndReceiver, int position)
-      : TCommandEnabler(id, hWndReceiver) {HMenu = hMenu; Position = position;}
+    : TCommandEnabler(id, hWndReceiver)
+    {
+      HMenu = hMenu;
+      Position = position;
+      if (::GetMenuItemID(HMenu, Position) == uint(-1))
+        Handled = NonSender;
+    }
 
-    //
-    // override member functions of TCommandEnabler
+    // Override member functions of TCommandEnabler
     //
     void  Enable(bool);
     void  SetText(const char far*);
     void  SetCheck(int);
+
+    // Menu specific menber functions
+    //
     HMENU GetMenu() {return HMenu;}
     int   GetPosition() {return Position;}
 

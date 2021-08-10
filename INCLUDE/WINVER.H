@@ -6,19 +6,12 @@
 *               designed to allow version stamping of Windows executable files*
 *               and of special .VER files for DOS executable files.           *
 *                                                                             *
+*               Copyright (c) 1993, Microsoft Corp.  All rights reserved      *
+*                                                                             *
 \*****************************************************************************/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef VER_H
 #define VER_H
-#define __WINVER_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -82,6 +75,7 @@ extern "C" {
 #define VFT2_DRV_INSTALLABLE    0x00000008L
 #define VFT2_DRV_SOUND          0x00000009L
 #define VFT2_DRV_COMM           0x0000000AL
+#define VFT2_DRV_INPUTMETHOD    0x0000000BL
 
 /* ----- VS_VERSION.dwFileSubtype for VFT_WINDOWS_FONT ----- */
 #define VFT2_FONT_RASTER        0x00000001L

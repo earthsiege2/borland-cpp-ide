@@ -25,8 +25,9 @@
 
 streampos filebuf::seekoff(streamoff off, ios::seek_dir dir, int /* mode ignored */)
 {
-#if 0
+#if 1
 /*
+	Note: sync() doesn't handle text mode so we have to do it here currently
 	Removed because filebuf doesn't know how to talk to CRTL.  The mode
 	flag serves double duty in that it also specifies whether filebuf
 	opened the handle.  Possibly revert if filebuf gains CRTL knowledge.

@@ -1,5 +1,7 @@
 /*++
 
+Copyright (c) 1991-1995  Microsoft Corporation
+
 Module Name:
 
     nspapi.h
@@ -11,10 +13,6 @@ Abstract:
     details.
     
 
-Author:
-
-    Chuck Y Chan (ChuckC)   19-Apr-1994
-
 Environment:
 
     User Mode -Win32
@@ -25,27 +23,10 @@ Notes:
     use definitions from base files rather than redefine here.
     Unfortunately, so such base file exists.
 
-Revision History:
-
-    19-Apr-1994     ChuckC       Created first cut.
-    28-Apr-1994     DavidTr      Various enahncements for actual
-                                 implementation.
-    25-May-1994     ChuckC       Added structures for Get/Set Service.
-                                 Misc cleanup.
-
 --*/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef _NSPAPI_INCLUDED
 #define _NSPAPI_INCLUDED
-#define __NSPAPI_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -133,6 +114,7 @@ typedef GUID *LPGUID;
 
 #define NS_SAP                      (1)
 #define NS_NDS                      (2)
+#define NS_PEER_BROWSE              (3)
 
 #define NS_TCPIP_LOCAL              (10)
 #define NS_TCPIP_HOSTS              (11)
@@ -227,7 +209,7 @@ typedef struct _NS_INFOA {
     DWORD dwNameSpace ;
     DWORD dwNameSpaceFlags ;
     LPSTR   lpNameSpace ;
-} NS_INFOA, PNS_INFOA, FAR * LPNS_INFOA;
+} NS_INFOA,  * PNS_INFOA, FAR * LPNS_INFOA;
 //
 // Name Space Information
 //
@@ -235,7 +217,7 @@ typedef struct _NS_INFOW {
     DWORD dwNameSpace ;
     DWORD dwNameSpaceFlags ;
     LPWSTR  lpNameSpace ;
-} NS_INFOW, PNS_INFOW, FAR * LPNS_INFOW;
+} NS_INFOW,  * PNS_INFOW, FAR * LPNS_INFOW;
 #ifdef UNICODE
 typedef NS_INFOW NS_INFO;
 typedef PNS_INFOW PNS_INFO;

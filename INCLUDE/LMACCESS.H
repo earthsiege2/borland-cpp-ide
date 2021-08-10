@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0002    // Increment this if a change has global effects
 
+Copyright (c) 1991-1995  Microsoft Corporation
+
 Module Name:
 
     lmaccess.h
@@ -8,10 +10,6 @@ Abstract:
 
     This file contains structures, function prototypes, and definitions
     for the NetUser, NetUserModals, NetGroup, NetAccess, and NetLogon API.
-
-Author:
-
-    Dan Lafferty (danl) 10-Mar-1991
 
 Environment:
 
@@ -22,53 +20,7 @@ Notes:
     You must include NETCONS.H before this file, since this file depends
     on values defined in NETCONS.H.
 
-Revision History:
-
-    10-Mar-1991 danl
-    Created from LM2.0 header files and NT-LAN API Spec.
-
-    11-Apr-1991 danhi
-    Changed usrmod0_passwd_hist_len to usrmod0_password_hist_len to match
-    the LM 2.0 name.
-
-    12-Apr-1991 cliffv
-    Moved internal info level 99 out of this public file.
-
-    14-Apr-1991 w-shanku
-    Changed ParmNum constants to allow consistency with OS/2 parmnums.
-
-    17-Apr-1991 cliffv
-    Added OPTIONAL keyword to function prototypes.
-
-    29-Apr-1991 w-shanku
-    Fixed USER_LOGON_INFO structure definition - was given without
-    'typedef' keyword.
-
-    21-Jun-1991 cliffv
-    Converted to UNICODE.  Added info level for each parmnum.
-
-    16-Jul-1991 JohnRo
-    Clarify that NetGetDCName's domain name is OPTIONAL (default is primary
-    domain.)
-
-    18-Jul-1991 RFirth
-        Created XXX_XXX_INFOLEVELs as counterparts of XXX_XXX_PARMNUMs
-
-    21-Jan-1992 madana
-        Sundry API changes
-
-    26-Nov-1992 ritaw
-        Added NetLocalGroup APIs.
-
 --*/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 //
 // User Class
@@ -76,7 +28,6 @@ Revision History:
 
 #ifndef _LMUSER_
 #define _LMUSER_
-#define __LMACCESS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -177,6 +128,15 @@ NetUserModalsSet (
     IN  LPBYTE    buf,
     OUT LPDWORD   parm_err OPTIONAL
     );
+
+NET_API_STATUS NET_API_FUNCTION
+NetUserChangePassword (
+    IN  LPWSTR   domainname OPTIONAL,
+    IN  LPWSTR   username OPTIONAL,
+    IN  LPWSTR   oldpassword,
+    IN  LPWSTR   newpassword
+    );
+
 
 //
 //  Data Structures - User
@@ -988,6 +948,24 @@ NetLocalGroupSetMembers (
     IN  DWORD      totalentries
     );
 
+NET_API_STATUS NET_API_FUNCTION
+NetLocalGroupAddMembers (
+    IN  LPWSTR     servername OPTIONAL,
+    IN  LPWSTR     groupname,
+    IN  DWORD      level,
+    IN  LPBYTE     buf,
+    IN  DWORD      totalentries
+    );
+
+NET_API_STATUS NET_API_FUNCTION
+NetLocalGroupDelMembers (
+    IN  LPWSTR     servername OPTIONAL,
+    IN  LPWSTR     groupname,
+    IN  DWORD      level,
+    IN  LPBYTE     buf,
+    IN  DWORD      totalentries
+    );
+
 //
 //  Data Structures - LocalGroup
 //
@@ -1017,6 +995,18 @@ typedef struct _LOCALGROUP_MEMBERS_INFO_1 {
 } LOCALGROUP_MEMBERS_INFO_1, *PLOCALGROUP_MEMBERS_INFO_1,
   *LPLOCALGROUP_MEMBERS_INFO_1;
 
+typedef struct _LOCALGROUP_MEMBERS_INFO_2 {
+     PSID         lgrmi2_sid;
+     SID_NAME_USE lgrmi2_sidusage;
+     LPWSTR       lgrmi2_domainandname;
+} LOCALGROUP_MEMBERS_INFO_2, *PLOCALGROUP_MEMBERS_INFO_2,
+  *LPLOCALGROUP_MEMBERS_INFO_2;
+
+typedef struct _LOCALGROUP_MEMBERS_INFO_3 {
+     LPWSTR       lgrmi3_domainandname;
+} LOCALGROUP_MEMBERS_INFO_3, *PLOCALGROUP_MEMBERS_INFO_3,
+  *LPLOCALGROUP_MEMBERS_INFO_3;
+
 typedef struct _LOCALGROUP_USERS_INFO_0 {
      LPWSTR  lgrui0_name;
 } LOCALGROUP_USERS_INFO_0, *PLOCALGROUP_USERS_INFO_0,
@@ -1025,6 +1015,55 @@ typedef struct _LOCALGROUP_USERS_INFO_0 {
 
 #define LOCALGROUP_NAME_PARMNUM          1
 #define LOCALGROUP_COMMENT_PARMNUM       2
+
+//
+// Display Information APIs
+//
+
+NET_API_STATUS NET_API_FUNCTION
+NetQueryDisplayInformation(
+    IN LPWSTR ServerName OPTIONAL,
+    IN DWORD Level,
+    IN DWORD Index,
+    IN DWORD EntriesRequested,
+    IN DWORD PreferredMaximumLength,
+    OUT LPDWORD ReturnedEntryCount,
+    OUT PVOID   *SortedBuffer );
+
+NET_API_STATUS NET_API_FUNCTION
+NetGetDisplayInformationIndex(
+    IN LPWSTR ServerName OPTIONAL,
+    IN DWORD Level,
+    IN LPWSTR Prefix,
+    OUT LPDWORD Index );
+
+//
+// QueryDisplayInformation levels
+
+typedef struct _NET_DISPLAY_USER {
+    LPWSTR   usri1_name;
+    LPWSTR   usri1_comment;
+    DWORD    usri1_flags;
+    LPWSTR   usri1_full_name;
+    DWORD    usri1_user_id;
+    DWORD    usri1_next_index;
+} NET_DISPLAY_USER, *PNET_DISPLAY_USER;
+
+typedef struct _NET_DISPLAY_MACHINE {
+    LPWSTR   usri2_name;
+    LPWSTR   usri2_comment;
+    DWORD    usri2_flags;
+    DWORD    usri2_user_id;
+    DWORD    usri2_next_index;
+} NET_DISPLAY_MACHINE, *PNET_DISPLAY_MACHINE;
+
+typedef struct _NET_DISPLAY_GROUP {
+    LPWSTR   grpi3_name;
+    LPWSTR   grpi3_comment;
+    DWORD    grpi3_group_id;
+    DWORD    grpi3_attributes;
+    DWORD    grpi3_next_index;
+} NET_DISPLAY_GROUP, *PNET_DISPLAY_GROUP;
 
 #endif  // _LMLOCALGROUP_
 
@@ -1309,6 +1348,16 @@ typedef struct _NETLOGON_INFO_2 {
 #endif // MIDL_PASS
         NET_API_STATUS netlog2_tc_connection_status;
 } NETLOGON_INFO_2, *PNETLOGON_INFO_2;
+
+typedef struct _NETLOGON_INFO_3 {
+        DWORD netlog3_flags;
+        DWORD netlog3_logon_attempts;
+        DWORD netlog3_reserved1;
+        DWORD netlog3_reserved2;
+        DWORD netlog3_reserved3;
+        DWORD netlog3_reserved4;
+        DWORD netlog3_reserved5;
+} NETLOGON_INFO_3, *PNETLOGON_INFO_3;
 
 //
 // Values of netlog1_flags

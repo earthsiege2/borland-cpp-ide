@@ -1,21 +1,14 @@
 /************************************************************************
 * Copyright (c) Wonderware Software Development Corp. 1991-1993.        *
 *               All Rights Reserved.                                    *
+* Copyright (c) Microsoft Inc. 1995                                     *
+*               All Rights Reserved.                                    *
 ************************************************************************/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef          _INC_NDDEAPI
 #define          _INC_NDDEAPI
-#define          __NDDEAPI_H
 
-#include "pshpack1.h"   /* Assume byte packing throughout */
+#include <pshpack1.h>   /* Assume byte packing throughout */
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -400,7 +393,7 @@ NDdeIsValidAppTopicListW (
 }
 #endif    /* __cplusplus */
 
-#include "poppack.h"
+#include <poppack.h>
 
 #endif  /* _INC_NDDEAPI */
 

@@ -1,6 +1,9 @@
 /*
  *   wsipx.h
  *
+ *   Microsoft Windows
+ *   Copyright (C) Microsoft Corporation, 1992 - 1995.
+ *
  *   Windows Sockets include file for IPX/SPX.  This file contains all
  *   standardized IPX/SPX information.  Include this header file after
  *   winsock.h.
@@ -27,17 +30,12 @@
  *
  */
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WSIPX_
 #define _WSIPX_
-#define __WSIPX_H
+
+#ifdef __BORLANDC__
+  #include <pshpack8.h>
+#endif
 
 /*
  *   This is the structure of the SOCKADDR structure for IPX and SPX.
@@ -59,6 +57,10 @@ typedef struct sockaddr_ipx {
 #define NSPROTO_IPX      1000
 #define NSPROTO_SPX      1256
 #define NSPROTO_SPXII    1257
+
+#ifdef __BORLANDC__
+  #include <poppack.h>
+#endif
 
 #endif
 

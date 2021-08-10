@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -14,7 +15,7 @@
 //
 // Remote Viewer object for a server document
 //
-class _ICLASS TOcRemView : public TOcView, private IBPart {
+class _ICLASS TOcRemView : public TOcView, public IBPart2 {
   public:
     TOcRemView(TOcDocument& doc, TRegList* regList = 0, IUnknown* outer = 0);
 
@@ -67,7 +68,7 @@ class _ICLASS TOcRemView : public TOcView, private IBPart {
     HRESULT _IFUNC QueryInterface(const GUID far& iid, void far*far* iface);
 
 
-  private:
+  protected:
     // IBContains forwarding to base
     //
     HRESULT _IFUNC Init(LPCOLESTR path);
@@ -93,9 +94,10 @@ class _ICLASS TOcRemView : public TOcView, private IBPart {
     uint     _IFUNC CountFormats();
     HRESULT  _IFUNC GetFormat(uint index, TOcFormatInfo far* fmt);
 
-    // IBDataProvider implementation
+    // IBDataProvider2 implementation
     //
     HANDLE  _IFUNC  GetFormatData(TOcFormatInfo far*);
+    HRESULT _IFUNC  SetFormatData(TOcFormatInfo far* fmt, HANDLE data, bool release);
     HRESULT _IFUNC  Draw(HDC, const RECTL far*, const RECTL far*, TOcAspect, TOcDraw bd);
     HRESULT _IFUNC  GetPartSize(TSize far*);
     HRESULT _IFUNC  Save(IStorage*, bool sameAsLoad, bool remember);
@@ -122,7 +124,7 @@ class _ICLASS TOcRemView : public TOcView, private IBPart {
     HRESULT _IFUNC  DoQueryInterface(const IID far& iid, void far* far* pif);
     LPOLESTR _IFUNC GetName(TOcPartName);
 
-  private:
+  protected:
    ~TOcRemView();
 
     IBContainer*    BContainerI;     //
@@ -142,4 +144,5 @@ inline bool TOcRemView::SetContainerStatusText(const char far* text) {
 }
 
 #endif  // OCF_OCREMVIE_H
+
 

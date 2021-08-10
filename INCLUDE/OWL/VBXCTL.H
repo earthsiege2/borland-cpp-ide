@@ -6,6 +6,7 @@
 //----------------------------------------------------------------------------
 #if !defined(OWL_VBXCTL_H)
 #define OWL_VBXCTL_H
+#define __OWL_VBXCTL_H   // Old-style define for VbxGen compatibility
 
 #if !defined(OWL_CONTROL_H)
 # include <owl/control.h>
@@ -17,10 +18,6 @@
 # error VBX supported only under MS Windows
 #endif
 
-// Old-style defines for VbxGen compatibility
-//
-#define __OWL_VBXCTL_H
-#define __OWL_OWLDEFS_H
 
 //
 //  class TBIVbxLibrary

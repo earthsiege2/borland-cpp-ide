@@ -1,30 +1,24 @@
-/*++ BUILD Version: 0001    Increment this if a change has global effects
+/****************************************************************************
+*                                                                           *
+* windef.h -- Basic Windows Type Definitions                                *
+*                                                                           *
+* Copyright (c) 1985-1995, Microsoft Corp. All rights reserved.             *
+*                                                                           *
+****************************************************************************/
 
-Module Name:
-
-    windef.h
-
-Abstract:
-
-    Type definitions for Windows' basic types.
-
---*/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef _WINDEF_
 #define _WINDEF_
-#define __WINDEF_H
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#ifndef WINVER
+#define WINVER 0x0400
+#endif
+
 
 /*
  * BASETYPES is defined in ntdef.h if these types are already defined
@@ -44,11 +38,11 @@ typedef char *PSZ;
 #define MAX_PATH          260
 
 #ifndef NULL
-#    if defined(__cplusplus) || defined(_Windows)
-#      define NULL 0
-#    else
-#      define NULL ((void *)0)
-#    endif
+#ifdef __cplusplus
+#define NULL    0
+#else
+#define NULL    ((void *)0)
+#endif
 #endif
 
 #ifndef FALSE
@@ -75,9 +69,27 @@ typedef char *PSZ;
 #undef near
 #undef pascal
 
+#if defined(__BORLANDC__)
+#define _STDCALL_SUPPORTED
+#define _PUSHPOP_SUPPORTED
+#if (__BORLANDC__ < 0x500)
+#define _M_IX86 300
+#ifndef _WIN32
+#define _WIN32
+#endif
+#ifndef __cplusplus
+#ifndef _WCHAR_T
+#define _WCHAR_T
+#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
+typedef unsigned short wchar_t;
+#endif
+#endif
+#endif
+#endif
+
 #define far
 #define near
-#if (_MSC_VER >= 800) || defined(__BORLANDC__)
+#if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
 #define pascal __stdcall
 #else
 #define pascal
@@ -95,10 +107,10 @@ typedef char *PSZ;
 #endif
 #endif
 
-#if (_MSC_VER >= 800) || defined(__BORLANDC__)
+#if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
 #define CALLBACK    __stdcall
 #define WINAPI      __stdcall __import
-#define WINAPIV     __cdecl __import
+#define WINAPIV     __cdecl
 #define APIENTRY    WINAPI
 #define APIPRIVATE  __stdcall
 #define PASCAL      __stdcall
@@ -111,9 +123,7 @@ typedef char *PSZ;
 #define PASCAL      pascal
 #endif
 
-#undef  FAR
 #define FAR                 far
-#undef  NEAR
 #define NEAR                near
 #ifndef CONST
 #define CONST               const
@@ -162,7 +172,7 @@ typedef LONG LRESULT;
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-#endif  /* !NOMINMAX && !__cplusplus */
+#endif  /* NOMINMAX && !__cplusplus */
 
 #define MAKEWORD(a, b)      ((WORD)(((BYTE)(a)) | (((WORD)((BYTE)(b))) << 8)))
 #define MAKELONG(a, b)      ((LONG)(((WORD)(a)) | (((DWORD)((WORD)(b))) << 16)))
@@ -198,8 +208,11 @@ DECLARE_HANDLE(HGDIOBJ);
 DECLARE_HANDLE(HACCEL);
 DECLARE_HANDLE(HBITMAP);
 DECLARE_HANDLE(HBRUSH);
+#if(WINVER >= 0x0400)
+DECLARE_HANDLE(HCOLORSPACE);
+#endif /* WINVER >= 0x0400 */
 DECLARE_HANDLE(HDC);
-DECLARE_HANDLE(HGLRC);            // OpenGL
+DECLARE_HANDLE(HGLRC);          // OpenGL
 DECLARE_HANDLE(HDESK);
 DECLARE_HANDLE(HENHMETAFILE);
 DECLARE_HANDLE(HFONT);
@@ -233,6 +246,8 @@ typedef struct tagRECT
     LONG    bottom;
 } RECT, *PRECT, NEAR *NPRECT, FAR *LPRECT;
 
+typedef const RECT FAR* LPCRECT;
+
 typedef struct _RECTL       /* rcl */
 {
     LONG    left;
@@ -240,6 +255,8 @@ typedef struct _RECTL       /* rcl */
     LONG    right;
     LONG    bottom;
 } RECTL, *PRECTL, *LPRECTL;
+
+typedef const RECTL FAR* LPCRECTL;
 
 typedef struct tagPOINT
 {
@@ -302,5 +319,6 @@ typedef struct tagPOINTS
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif /* _WINDEF_ */

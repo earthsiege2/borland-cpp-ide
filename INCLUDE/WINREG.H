@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1991-1995 Microsoft Corporation
+
 Module Name:
 
     Winreg.h
@@ -9,27 +11,16 @@ Abstract:
     This module contains the function prototypes and constant, type and
     structure definitions for the Windows 32-Bit Registry API.
 
-Author:
-
-    David J. Gilman (davegi) 07-Nov-1991
-
 --*/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef _WINREG_
 #define _WINREG_
-#define __WINREG_H
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 //
 // Requested Key access mask type.
@@ -53,8 +44,85 @@ typedef HKEY *PHKEY;
 #define HKEY_LOCAL_MACHINE          (( HKEY ) 0x80000002 )
 #define HKEY_USERS                  (( HKEY ) 0x80000003 )
 #define HKEY_PERFORMANCE_DATA       (( HKEY ) 0x80000004 )
-#define HKEY_PERFORMANCE_TEXT       (( HKEY ) 0x80000050 )
-#define HKEY_PERFORMANCE_NLSTEXT    (( HKEY ) 0x80000060 )
+#if(WINVER >= 0x0400)
+#define HKEY_CURRENT_CONFIG         (( HKEY ) 0x80000005 )
+#define HKEY_DYN_DATA               (( HKEY ) 0x80000006 )
+
+/*NOINC*/
+#ifndef _PROVIDER_STRUCTS_DEFINED
+#define _PROVIDER_STRUCTS_DEFINED
+
+#define PROVIDER_KEEPS_VALUE_LENGTH 0x1
+struct val_context {
+    int valuelen;       // the total length of this value
+    LPVOID value_context;   // provider's context
+    LPVOID val_buff_ptr;    // where in the ouput buffer the value is.
+};
+
+typedef struct val_context FAR *PVALCONTEXT;
+
+typedef struct pvalueA {           // Provider supplied value/context.
+    LPSTR   pv_valuename;          // The value name pointer
+    int pv_valuelen;
+    LPVOID pv_value_context;
+    DWORD pv_type;
+}PVALUEA, FAR *PPVALUEA;
+typedef struct pvalueW {           // Provider supplied value/context.
+    LPWSTR  pv_valuename;          // The value name pointer
+    int pv_valuelen;
+    LPVOID pv_value_context;
+    DWORD pv_type;
+}PVALUEW, FAR *PPVALUEW;
+#ifdef UNICODE
+typedef PVALUEW PVALUE;
+typedef PPVALUEW PPVALUE;
+#else
+typedef PVALUEA PVALUE;
+typedef PPVALUEA PPVALUE;
+#endif // UNICODE
+
+typedef
+DWORD _cdecl
+QUERYHANDLER (LPVOID keycontext, PVALCONTEXT val_list, DWORD num_vals,
+          LPVOID outputbuffer, DWORD FAR *total_outlen, DWORD input_blen);
+
+typedef QUERYHANDLER FAR *PQUERYHANDLER;
+
+typedef struct provider_info {
+    PQUERYHANDLER pi_R0_1val;
+    PQUERYHANDLER pi_R0_allvals;
+    PQUERYHANDLER pi_R3_1val;
+    PQUERYHANDLER pi_R3_allvals;
+    DWORD pi_flags;    // capability flags (none defined yet).
+    LPVOID pi_key_context;
+}REG_PROVIDER;
+
+typedef struct provider_info FAR *PPROVIDER;
+
+typedef struct value_entA {
+    LPSTR   ve_valuename;
+    DWORD ve_valuelen;
+    DWORD ve_valueptr;
+    DWORD ve_type;
+}VALENTA, FAR *PVALENTA;
+typedef struct value_entW {
+    LPWSTR  ve_valuename;
+    DWORD ve_valuelen;
+    DWORD ve_valueptr;
+    DWORD ve_type;
+}VALENTW, FAR *PVALENTW;
+#ifdef UNICODE
+typedef VALENTW VALENT;
+typedef PVALENTW PVALENT;
+#else
+typedef VALENTA VALENT;
+typedef PVALENTA PVALENT;
+#endif // UNICODE
+
+#endif // not(_PROVIDER_STRUCTS_DEFINED)
+/*INC*/
+
+#endif /* WINVER >= 0x0400 */
 
 //
 // Default values for parameters that do not exist in the Win 3.1
@@ -178,14 +246,14 @@ LONG
 APIENTRY
 RegDeleteValueA (
     HKEY hKey,
-    LPSTR lpValueName
+    LPCSTR lpValueName
     );
 WINADVAPI
 LONG
 APIENTRY
 RegDeleteValueW (
     HKEY hKey,
-    LPWSTR lpValueName
+    LPCWSTR lpValueName
     );
 #ifdef UNICODE
 #define RegDeleteValue  RegDeleteValueW
@@ -443,12 +511,40 @@ RegQueryValueW (
 #define RegQueryValue  RegQueryValueA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINADVAPI
+LONG
+APIENTRY
+RegQueryMultipleValuesA (
+    HKEY hKey,
+    PVALENTA val_list,
+    DWORD num_vals,
+    LPSTR lpValueBuf,
+    LPDWORD ldwTotsize
+    );
+WINADVAPI
+LONG
+APIENTRY
+RegQueryMultipleValuesW (
+    HKEY hKey,
+    PVALENTW val_list,
+    DWORD num_vals,
+    LPWSTR lpValueBuf,
+    LPDWORD ldwTotsize
+    );
+#ifdef UNICODE
+#define RegQueryMultipleValues  RegQueryMultipleValuesW
+#else
+#define RegQueryMultipleValues  RegQueryMultipleValuesA
+#endif // !UNICODE
+#endif /* WINVER >= 0x0400 */
+
 WINADVAPI
 LONG
 APIENTRY
 RegQueryValueExA (
     HKEY hKey,
-    LPSTR lpValueName,
+    LPCSTR lpValueName,
     LPDWORD lpReserved,
     LPDWORD lpType,
     LPBYTE lpData,
@@ -459,7 +555,7 @@ LONG
 APIENTRY
 RegQueryValueExW (
     HKEY hKey,
-    LPWSTR lpValueName,
+    LPCWSTR lpValueName,
     LPDWORD lpReserved,
     LPDWORD lpType,
     LPBYTE lpData,
@@ -675,5 +771,6 @@ AbortSystemShutdownW(
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif // _WINREG_

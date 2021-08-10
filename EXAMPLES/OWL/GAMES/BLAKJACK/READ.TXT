@@ -1,0 +1,116 @@
+This is a subset of a standard blackjack game. It uses a card VBX control
+to display the cards.
+
+Objective: One player and one dealer can play this game.
+			  The player enters amount of money
+			  using the "Bankroll" button at the begining of the game.
+			  After entering the bankroll amount, the player can go on
+			  pressing "Hit" button until the score is near 21.
+			  If the player scores more than 21, he looses.
+			  The trick is to hit "Stand" button when the score is near 21.
+			  After you loose or win, you can bet again using the "Bet" button.
+			  Player plays the game until the bankroll is exhausted,
+			  at that time he can input more money in bankroll.
+
+
+Buttons   Explanation
+-------------------------------------------------------------------------------
+
+Bankroll- Hit this button and enter the amount you want to play (Max 9999)
+
+Bet     - Hit this button when you want to bet part of the money from
+			 bankroll. No letters, negative numbers are allowed in the
+			 input dialog, it will not accept the input at all.
+
+Play    - After you hit the bet button it toggles to a 'Play' button.
+			 Pressing this button starts the game.
+			 At start, immediately after betting, the player and the dealer are
+			 issued 2 cards. If any one of these hand add up to 21 the party
+			 wins immediately. If both are 21, the game is draw.
+			 Dealer shows only one card face up all the time, along with the
+			 points.
+
+Hit      -Player receives one card from dealer when he hits this button. The
+			 issued card is immediately displayed with the new total points.
+			 At this point dealer may choose a card if his total point is less
+			 than 17, which is not displayed as usual(dealers algorithm to hit
+			 a card).
+
+Stand    -This button is hit when the player no longer wishes to play.
+			 At this point dealer may deal a card to himself if his points are
+			 less than 17. At the end dealers hand is displayed and the scores
+			 are announced.
+
+Help:      Shows help|About dialog.
+
+// Design Overview:
+// -----------------
+//
+// Classes:
+// ------------
+// There are 2 cpp files blakjack.cpp and owlmain.cpp
+// blakjack.cpp - contains the engine for the game.
+// owlmain.cpp  - contains the windows user interface.
+// blakjack.h   - contains the class declarations for the engine.
+// owlmain.h    - contains the class declaration for GUI interface.
+// blakjack.rc  - contains the dialog resources and card resources(VBX control)
+
+// Following objects(classes) are used in this program.
+// These are declared in blakjack.h
+// card - The card object.
+// deck (is implemented in terms of cards, 52)
+// hand - state of a player, cards, points etc.
+// dealer:public hand
+// player:public hand
+// bankroll - amount of money
+// blackjack - the game.
+//
+// The following classes are defined in owlmain.h
+// These are used to implement the User Interface.
+//
+// TBlackjackFrame - Used to move the frame window, in SetupWindow())
+// TBlackjack - This is the dialog which displays all the buttons and
+//              the cards.
+// TBlackjackApp - The standard OWL application object.
+// MovableDialog - Is used to move the about box.
+
+// General Concepts:
+// -----------------
+// First the Bankroll is entered by the user and stored in the "Bankroll"
+// class. The increment and decrement of the bankroll is done by the
+// member funtions in that class.
+
+// 52 cards are "new"-ed  of type "TVbxMhCardDeck" and stored in  the
+// array "TBlackjack::ppVBXCard[]" in the constructor of
+// "TBlackjack" class.
+// "TVbxMhCardDeck" type of cards are VBX controls.
+// The "Card" object stores only the Suit and Number information.
+// ("Card" object is defined in blakjack.h)
+
+// When a "Card" is displayed the Suit and Number informations are
+// taken from the "Card" object, the displayable VBX card is taken from
+// "TBlackjack::ppVBXCard[VBXCardCount]" array. Each VBX card can have 52
+// possible values. The VBX card is displayed according to the
+// above Suit and Number information.
+
+// "TBlackjack::VBXCardCount", points to the next VBX card in the
+// "TBlackjack::ppVBXCard[]" array which is available.
+// eg: Count 12 means, cards from ppVBXCard[0] through ppVBXCard[11]
+// have already been dealt and displayed, and ppVBXCard[12] is
+// the next VBX card available.
+
+// Suffling and dealing are done using "Card" and "Deck"
+// objects. "TBlackjack::ppVBXCard[]" array only holds the
+// displayable VBX cards. Each "Card" object stores an
+// array index of the "TBlackjack::ppVBXCard[]" array in "Card::pVBXCard"
+// data member.
+// The VBX card at this index( in "TBlackjack::ppVBXCard[]" array)
+// is used to display that particular "Card" object.
+// This keeps the engine and UI part seperate.
+
+// Dealer is assumed to have infinite amount of money.
+
+// The cards in a particular suit are numbered from 0 - 12
+// eg: Ace->0, Two->1..., Jack->10, King->11, Queen->12
+// These numbers have nothing to do with the actual blackjack
+// points, it is used only to keep track of the cards.

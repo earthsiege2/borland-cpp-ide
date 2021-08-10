@@ -1,6 +1,8 @@
 
 /*++ BUILD Version: 0007    // Increment this if a change has global effects
 
+Copyright (c) 1990-1995  Microsoft Corporation
+
 Module Name:
 
     lmbrowsr.h
@@ -13,10 +15,6 @@ Abstract:
         Data Structures
         Definition of special values
 
-Author:
-
-    Dan Lafferty (danl)  24-Jan-1991
-
 Environment:
 
     User Mode - Win32
@@ -26,41 +24,11 @@ Notes:
     You must include NETCONS.H before this file, since this file depends
     on values defined in NETCONS.H.
 
-Revision History:
-
-    25-Jan-1991  Danl
-        Ported from LM2.0
-    12-Feb-1991  danl
-        Changed info levels to match current spec - no more info level 3.
-    14-Apr-1991  w-shanku
-        Changed parmnum constants to be more consistent with OS/2 parmnums.
-    19-Apr-1991 JohnRo
-        Added OPTIONAL keywords to APIs.  Added SV_MAX_SRV_HEUR_LEN from LM 2.x
-    09-May-1991 JohnRo
-        Implement UNICODE.
-    22-May-1991 JohnRo
-        Added three new SV_TYPE equates from LM 2.x source.
-    23-May-1991 JohnRo
-        Added sv403_autopath.
-    26-May-1991 JohnRo
-        Corrected value of SV_ERRORALERT_PARMNUM.
-    18-Jun-1991 JohnRo
-        Changed sv102_disc to be signed, and changed SV_NODISC to be 32-bits.
-        Added sv102_licenses.
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _LMBROWSR_
 #define _LMBROWSR_
-#define __LMBROWSR_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -151,6 +119,17 @@ NET_API_STATUS
 I_BrowserResetNetlogonState (
     IN  LPTSTR      servername OPTIONAL
     );
+
+NET_API_STATUS
+I_BrowserSetNetlogonState(
+    IN LPWSTR ServerName OPTIONAL,
+    IN LPWSTR DomainName,
+    IN LPWSTR EmulatedServerName OPTIONAL,
+    IN DWORD Role
+    );
+
+#define BROWSER_ROLE_PDC 0x1
+#define BROWSER_ROLE_BDC 0x2
 
 NET_API_STATUS
 I_BrowserQueryStatistics (

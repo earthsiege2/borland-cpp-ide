@@ -2,19 +2,13 @@
 *                                                                         *
 * wingdi.h -- GDI procedure declarations, constant definitions and macros *
 *                                                                         *
+* Copyright (c) 1985-1995, Microsoft Corp. All rights reserved.           *
+*                                                                         *
 **************************************************************************/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef _WINGDI_
 #define _WINGDI_
-#define __WINGDI_H
+
 
 //
 // Define API decoration for direct importing of DLL references.
@@ -112,6 +106,13 @@ extern "C" {
 #define HALFTONE                     4
 #define MAXSTRETCHBLTMODE            4
 
+#if(WINVER >= 0x0400)
+/* New StretchBlt() Modes */
+#define STRETCH_ANDSCANS    BLACKONWHITE
+#define STRETCH_ORSCANS     WHITEONBLACK
+#define STRETCH_DELETESCANS COLORONCOLOR
+#define STRETCH_HALFTONE    HALFTONE
+#endif /* WINVER >= 0x0400 */
 
 /* PolyFill() Modes */
 #define ALTERNATE                    1
@@ -129,7 +130,12 @@ extern "C" {
 #define TA_TOP                       0
 #define TA_BOTTOM                    8
 #define TA_BASELINE                  24
+#if (WINVER >= 0x0400)
+#define TA_RTLREADING                256
+#define TA_MASK       (TA_BASELINE+TA_CENTER+TA_UPDATECP+TA_RTLREADING)
+#else
 #define TA_MASK       (TA_BASELINE+TA_CENTER+TA_UPDATECP)
+#endif
 
 #define VTA_BASELINE TA_BASELINE
 #define VTA_LEFT     TA_BOTTOM
@@ -138,10 +144,12 @@ extern "C" {
 #define VTA_BOTTOM   TA_RIGHT
 #define VTA_TOP      TA_LEFT
 
-
-#define ETO_GRAYED                   0x0001
 #define ETO_OPAQUE                   0x0002
 #define ETO_CLIPPED                  0x0004
+#if(WINVER >= 0x0400)
+#define ETO_GLYPH_INDEX              0x0010
+#define ETO_RTLREADING               0x0080
+#endif /* WINVER >= 0x0400 */
 
 #define ASPECT_FILTERING             0x0001
 
@@ -370,11 +378,13 @@ typedef struct tagBITMAP
     LPVOID      bmBits;
   } BITMAP, *PBITMAP, NEAR *NPBITMAP, FAR *LPBITMAP;
 
+#include <pshpack1.h>
 typedef struct tagRGBTRIPLE {
         BYTE    rgbtBlue;
         BYTE    rgbtGreen;
         BYTE    rgbtRed;
 } RGBTRIPLE;
+#include <poppack.h>
 
 typedef struct tagRGBQUAD {
         BYTE    rgbBlue;
@@ -384,6 +394,93 @@ typedef struct tagRGBQUAD {
 } RGBQUAD;
 typedef RGBQUAD FAR* LPRGBQUAD;
 
+#if(WINVER >= 0x0400)
+
+/* Image Color Matching color definitions */
+
+typedef LONG	LCSCSTYPE;
+#define LCS_CALIBRATED_RGB		0x00000000L
+#define LCS_DEVICE_RGB			0x00000001L
+#define LCS_DEVICE_CMYK			0x00000002L
+
+typedef	LONG	LCSGAMUTMATCH;
+#define LCS_GM_BUSINESS			0x00000001L
+#define LCS_GM_GRAPHICS			0x00000002L
+#define LCS_GM_IMAGES			0x00000004L
+
+/* ICM Defines for results from CheckColorInGamut() */
+#define CM_OUT_OF_GAMUT		255
+#define CM_IN_GAMUT			0
+
+/* Macros to retrieve CMYK values from a COLORREF */
+#define GetCValue(cmyk)      ((BYTE)(cmyk))
+#define GetMValue(cmyk)      ((BYTE)((cmyk)>> 8))
+#define GetYValue(cmyk)      ((BYTE)((cmyk)>>16))
+#define GetKValue(cmyk)      ((BYTE)((cmyk)>>24))
+
+#define CMYK(c,m,y,k)       ((COLORREF)((((BYTE)(c)|((WORD)((BYTE)(m))<<8))|(((DWORD)(BYTE)(y))<<16))|(((DWORD)(BYTE)(k))<<24)))
+
+typedef long            FXPT16DOT16, FAR *LPFXPT16DOT16;
+typedef long            FXPT2DOT30, FAR *LPFXPT2DOT30;
+
+/* ICM Color Definitions */
+// The following two structures are used for defining RGB's in terms of
+// CIEXYZ. The values are fixed point 16.16.
+
+typedef struct tagCIEXYZ
+{
+	FXPT2DOT30 ciexyzX;
+	FXPT2DOT30 ciexyzY;
+	FXPT2DOT30 ciexyzZ;
+} CIEXYZ;
+typedef CIEXYZ  FAR *LPCIEXYZ;
+
+typedef struct tagICEXYZTRIPLE
+{
+	CIEXYZ  ciexyzRed;
+	CIEXYZ  ciexyzGreen;
+	CIEXYZ  ciexyzBlue;
+} CIEXYZTRIPLE;
+typedef CIEXYZTRIPLE    FAR *LPCIEXYZTRIPLE;
+
+// The next structures the logical color space. Unlike pens and brushes,
+// but like palettes, there is only one way to create a LogColorSpace.
+// A pointer to it must be passed, its elements can't be pushed as
+// arguments.
+
+typedef struct tagLOGCOLORSPACEA {
+    DWORD lcsSignature;
+    DWORD lcsVersion;
+    DWORD lcsSize;
+    LCSCSTYPE lcsCSType;
+    LCSGAMUTMATCH lcsIntent;
+    CIEXYZTRIPLE lcsEndpoints;
+    DWORD lcsGammaRed;
+    DWORD lcsGammaGreen;
+    DWORD lcsGammaBlue;
+    CHAR   lcsFilename[MAX_PATH];
+} LOGCOLORSPACEA, *LPLOGCOLORSPACEA;
+typedef struct tagLOGCOLORSPACEW {
+    DWORD lcsSignature;
+    DWORD lcsVersion;
+    DWORD lcsSize;
+    LCSCSTYPE lcsCSType;
+    LCSGAMUTMATCH lcsIntent;
+    CIEXYZTRIPLE lcsEndpoints;
+    DWORD lcsGammaRed;
+    DWORD lcsGammaGreen;
+    DWORD lcsGammaBlue;
+    WCHAR  lcsFilename[MAX_PATH];
+} LOGCOLORSPACEW, *LPLOGCOLORSPACEW;
+#ifdef UNICODE
+typedef LOGCOLORSPACEW LOGCOLORSPACE;
+typedef LPLOGCOLORSPACEW LPLOGCOLORSPACE;
+#else
+typedef LOGCOLORSPACEA LOGCOLORSPACE;
+typedef LPLOGCOLORSPACEA LPLOGCOLORSPACE;
+#endif // UNICODE
+
+#endif /* WINVER >= 0x0400 */
 
 
 /* structures for defining DIBs */
@@ -410,6 +507,32 @@ typedef struct tagBITMAPINFOHEADER{
         DWORD      biClrImportant;
 } BITMAPINFOHEADER, FAR *LPBITMAPINFOHEADER, *PBITMAPINFOHEADER;
 
+
+#if(WINVER >= 0x0400)
+typedef struct {
+        DWORD        bV4Size;
+        LONG         bV4Width;
+        LONG         bV4Height;
+        WORD         bV4Planes;
+        WORD         bV4BitCount;
+        DWORD        bV4V4Compression;
+        DWORD        bV4SizeImage;
+        LONG         bV4XPelsPerMeter;
+        LONG         bV4YPelsPerMeter;
+        DWORD        bV4ClrUsed;
+        DWORD        bV4ClrImportant;
+        DWORD        bV4RedMask;
+        DWORD        bV4GreenMask;
+        DWORD        bV4BlueMask;
+        DWORD        bV4AlphaMask;
+        DWORD        bV4CSType;
+        CIEXYZTRIPLE bV4Endpoints;
+        DWORD        bV4GammaRed;
+        DWORD        bV4GammaGreen;
+        DWORD        bV4GammaBlue;
+} BITMAPV4HEADER, FAR *LPBITMAPV4HEADER, *PBITMAPV4HEADER;
+#endif /* WINVER >= 0x0400 */
+
 /* constants for the biCompression field */
 #define BI_RGB        0L
 #define BI_RLE8       1L
@@ -426,7 +549,7 @@ typedef struct tagBITMAPCOREINFO {
     RGBTRIPLE           bmciColors[1];
 } BITMAPCOREINFO, FAR *LPBITMAPCOREINFO, *PBITMAPCOREINFO;
 
-#include "pshpack2.h"
+#include <pshpack2.h>
 typedef struct tagBITMAPFILEHEADER {
         WORD    bfType;
         DWORD   bfSize;
@@ -434,10 +557,38 @@ typedef struct tagBITMAPFILEHEADER {
         WORD    bfReserved2;
         DWORD   bfOffBits;
 } BITMAPFILEHEADER, FAR *LPBITMAPFILEHEADER, *PBITMAPFILEHEADER;
-#include "poppack.h"
+#include <poppack.h>
 
 #define MAKEPOINTS(l)       (*((POINTS FAR *)&(l)))
 
+#if(WINVER >= 0x0400)
+#ifndef NOFONTSIG
+typedef struct tagFONTSIGNATURE
+{
+    DWORD fsUsb[4];
+    DWORD fsCsb[2];
+} FONTSIGNATURE, *PFONTSIGNATURE,FAR *LPFONTSIGNATURE;
+
+typedef struct tagCHARSETINFO
+{
+    UINT ciCharset;
+    UINT ciACP;
+    FONTSIGNATURE fs;
+} CHARSETINFO, *PCHARSETINFO, NEAR *NPCHARSETINFO, FAR *LPCHARSETINFO;
+
+#define TCI_SRCCHARSET	1
+#define TCI_SRCCODEPAGE	2
+#define TCI_SRCFONTSIG	3
+
+typedef struct tagLOCALESIGNATURE
+{
+    DWORD lsUsb[4];
+    DWORD lsCsbDefault[2];
+    DWORD lsCsbSupported[2];
+} LOCALESIGNATURE, *PLOCALESIGNATURE,FAR *LPLOCALESIGNATURE;
+
+#endif
+#endif /* WINVER >= 0x0400 */
 #ifndef NOMETAFILE
 
 /* Clipboard Metafile Picture Structure */
@@ -463,7 +614,7 @@ typedef struct tagMETAFILEPICT
     HMETAFILE   hMF;
   } METAFILEPICT, FAR *LPMETAFILEPICT;
 
-#include "pshpack2.h"
+#include <pshpack2.h>
 typedef struct tagMETAHEADER
 {
     WORD        mtType;
@@ -477,7 +628,7 @@ typedef struct tagMETAHEADER
 typedef struct tagMETAHEADER UNALIGNED *PMETAHEADER;
 typedef struct tagMETAHEADER UNALIGNED FAR *LPMETAHEADER;
 
-#include "poppack.h"
+#include <poppack.h>
 
 /* Enhanced Metafile structures */
 typedef struct tagENHMETARECORD
@@ -519,6 +670,16 @@ typedef struct tagENHMETAHEADER
 #define TMPF_VECTOR             0x02
 #define TMPF_DEVICE             0x08
 #define TMPF_TRUETYPE       0x04
+
+//
+// BCHAR definition for APPs
+//
+#ifdef UNICODE
+    typedef WCHAR BCHAR;
+#else
+    typedef BYTE BCHAR;
+#endif
+
 
 typedef struct tagTEXTMETRICA
 {
@@ -583,6 +744,7 @@ typedef LPTEXTMETRICA LPTEXTMETRIC;
 #define NTM_BOLD        0x00000020L
 #define NTM_ITALIC      0x00000001L
 
+#include <pshpack4.h>
 typedef struct tagNEWTEXTMETRICA
 {
     LONG        tmHeight;
@@ -648,7 +810,25 @@ typedef PNEWTEXTMETRICA PNEWTEXTMETRIC;
 typedef NPNEWTEXTMETRICA NPNEWTEXTMETRIC;
 typedef LPNEWTEXTMETRICA LPNEWTEXTMETRIC;
 #endif // UNICODE
+#include <poppack.h>
 
+#if(WINVER >= 0x0400)
+typedef struct tagNEWTEXTMETRICEXA
+{
+    NEWTEXTMETRICA  ntmTm;
+    FONTSIGNATURE   ntmFontSig;
+}NEWTEXTMETRICEXA;
+typedef struct tagNEWTEXTMETRICEXW
+{
+    NEWTEXTMETRICW  ntmTm;
+    FONTSIGNATURE   ntmFontSig;
+}NEWTEXTMETRICEXW;
+#ifdef UNICODE
+typedef NEWTEXTMETRICEXW NEWTEXTMETRICEX;
+#else
+typedef NEWTEXTMETRICEXA NEWTEXTMETRICEX;
+#endif // UNICODE
+#endif /* WINVER >= 0x0400 */
 
 #endif /* NOTEXTMETRIC */
 /* GDI Logical Objects: */
@@ -782,6 +962,29 @@ typedef ENUMLOGFONTA ENUMLOGFONT;
 typedef LPENUMLOGFONTA LPENUMLOGFONT;
 #endif // UNICODE
 
+#if(WINVER >= 0x0400)
+typedef struct tagENUMLOGFONTEXA
+{
+    LOGFONTA    elfLogFont;
+    BYTE        elfFullName[LF_FULLFACESIZE];
+    BYTE        elfStyle[LF_FACESIZE];
+    BYTE        elfScript[LF_FACESIZE];
+} ENUMLOGFONTEXA, FAR *LPENUMLOGFONTEXA;
+typedef struct tagENUMLOGFONTEXW
+{
+    LOGFONTW    elfLogFont;
+    BYTE        elfFullName[LF_FULLFACESIZE];
+    BYTE        elfStyle[LF_FACESIZE];
+    BYTE        elfScript[LF_FACESIZE];
+} ENUMLOGFONTEXW, FAR *LPENUMLOGFONTEXW;
+#ifdef UNICODE
+typedef ENUMLOGFONTEXW ENUMLOGFONTEX;
+typedef LPENUMLOGFONTEXW LPENUMLOGFONTEX;
+#else
+typedef ENUMLOGFONTEXA ENUMLOGFONTEX;
+typedef LPENUMLOGFONTEXA LPENUMLOGFONTEX;
+#endif // UNICODE
+#endif /* WINVER >= 0x0400 */
 
 #define OUT_DEFAULT_PRECIS      0
 #define OUT_STRING_PRECIS       1
@@ -804,10 +1007,17 @@ typedef LPENUMLOGFONTA LPENUMLOGFONT;
 #define DEFAULT_QUALITY         0
 #define DRAFT_QUALITY           1
 #define PROOF_QUALITY           2
+#if(WINVER >= 0x0400)
+#define NONANTIALIASED_QUALITY  3
+#define ANTIALIASED_QUALITY     4
+#endif /* WINVER >= 0x0400 */
 
 #define DEFAULT_PITCH           0
 #define FIXED_PITCH             1
 #define VARIABLE_PITCH          2
+#if(WINVER >= 0x0400)
+#define MONO_FONT               8
+#endif /* WINVER >= 0x0400 */
 
 #define ANSI_CHARSET            0
 #define DEFAULT_CHARSET         1
@@ -817,7 +1027,35 @@ typedef LPENUMLOGFONTA LPENUMLOGFONT;
 #define GB2312_CHARSET          134
 #define CHINESEBIG5_CHARSET     136
 #define OEM_CHARSET             255
+#if(WINVER >= 0x0400)
+#define JOHAB_CHARSET           130
+#define HEBREW_CHARSET          177
+#define ARABIC_CHARSET          178
+#define GREEK_CHARSET           161
+#define TURKISH_CHARSET         162
+#define THAI_CHARSET            222
+#define EASTEUROPE_CHARSET      238
+#define RUSSIAN_CHARSET         204
 
+#define MAC_CHARSET             77
+#define BALTIC_CHARSET          186
+
+#define FS_LATIN1		0x00000001L
+#define FS_LATIN2		0x00000002L
+#define FS_CYRILLIC		0x00000004L
+#define FS_GREEK		0x00000008L
+#define FS_TURKISH		0x00000010L
+#define FS_HEBREW		0x00000020L
+#define FS_ARABIC		0x00000040L
+#define FS_BALTIC		0x00000080L
+#define FS_THAI			0x00010000L
+#define FS_JISJAPAN		0x00020000L
+#define FS_CHINESESIMP  0x00040000L
+#define FS_WANSUNG		0x00080000L
+#define FS_CHINESETRAD	0x00100000L
+#define FS_JOHAB        0x00200000L
+#define FS_SYMBOL	    0x80000000L
+#endif /* WINVER >= 0x0400 */
 
 /* Font Families */
 #define FF_DONTCARE         (0<<4)  /* Don't care or don't know. */
@@ -1101,7 +1339,15 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define DEVICE_DEFAULT_FONT 14
 #define DEFAULT_PALETTE     15
 #define SYSTEM_FIXED_FONT   16
+#if(WINVER >= 0x0400)
+#define DEFAULT_GUI_FONT    17
+#endif /* WINVER >= 0x0400 */
+
+#if (WINVER >= 0x0400)
+#define STOCK_LAST          17
+#else
 #define STOCK_LAST          16
+#endif
 
 #define CLR_INVALID     0xFFFFFFFF
 
@@ -1124,13 +1370,6 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define HS_BDIAGONAL        3       /* ///// */
 #define HS_CROSS            4       /* +++++ */
 #define HS_DIAGCROSS        5       /* xxxxx */
-#define HS_SOLIDCLR         6
-#define HS_DITHEREDCLR      7
-#define HS_SOLIDTEXTCLR     8
-#define HS_DITHEREDTEXTCLR  9
-#define HS_SOLIDBKCLR       10
-#define HS_DITHEREDBKCLR    11
-#define HS_API_MAX          12
 
 /* Pen Styles */
 #define PS_SOLID            0
@@ -1259,11 +1498,13 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define PC_STYLED           32  /* Can do styled borders            */
 #define PC_WIDESTYLED       64  /* Can do wide styled borders       */
 #define PC_INTERIORS        128 /* Can do interiors                 */
+#define PC_POLYPOLYGON      256 /* Can do polypolygons              */
+#define PC_PATHS            512 /* Can do paths                     */
 
-/* Polygonal Capabilities */
+/* Clipping Capabilities */
 #define CP_NONE             0   /* No clipping of output            */
 #define CP_RECTANGLE        1   /* Output clipped to rects          */
-#define CP_REGION           2   /*                                  */
+#define CP_REGION           2   /* obsolete                         */
 
 /* Text Capabilities */
 #define TC_OP_CHARACTER     0x00000001  /* Can do OutputPrecision   CHARACTER      */
@@ -1310,9 +1551,6 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 
 #define DIB_RGB_COLORS      0 /* color table in RGBs */
 #define DIB_PAL_COLORS      1 /* color table in palette indices */
-#define DIB_PAL_INDICES     2 /* No color table indices into surf palette */
-#define DIB_PAL_PHYSINDICES 2 /* No color table indices into surf palette */
-#define DIB_PAL_LOGINDICES  4 /* No color table indices into DC palette */
 
 /* constants for Get/SetSystemPaletteUse() */
 
@@ -1321,7 +1559,6 @@ typedef LPEXTLOGFONTA LPEXTLOGFONT;
 #define SYSPAL_NOSTATIC 2
 
 /* constants for CreateDIBitmap */
-#define CBM_CREATEDIB   0x02L   /* create DIB bitmap */
 #define CBM_INIT        0x04L   /* initialize bitmap */
 
 /* ExtFloodFill style flags */
@@ -1361,6 +1598,14 @@ typedef struct _devicemodeA {
     DWORD  dmPelsHeight;
     DWORD  dmDisplayFlags;
     DWORD  dmDisplayFrequency;
+#if (WINVER >= 0x0400)
+    DWORD  dmICMMethod;
+    DWORD  dmICMIntent;
+    DWORD  dmMediaType;
+    DWORD  dmDitherType;
+    DWORD  dmReserved1;
+    DWORD  dmReserved2;
+#endif /* WINVER */
 } DEVMODEA, *PDEVMODEA, *NPDEVMODEA, *LPDEVMODEA;
 typedef struct _devicemodeW {
     WCHAR  dmDeviceName[CCHDEVICENAME];
@@ -1389,6 +1634,14 @@ typedef struct _devicemodeW {
     DWORD  dmPelsHeight;
     DWORD  dmDisplayFlags;
     DWORD  dmDisplayFrequency;
+#if (WINVER >= 0x0400)
+    DWORD  dmICMMethod;
+    DWORD  dmICMIntent;
+    DWORD  dmMediaType;
+    DWORD  dmDitherType;
+    DWORD  dmReserved1;
+    DWORD  dmReserved2;
+#endif /* WINVER */
 } DEVMODEW, *PDEVMODEW, *NPDEVMODEW, *LPDEVMODEW;
 #ifdef UNICODE
 typedef DEVMODEW DEVMODE;
@@ -1403,8 +1656,11 @@ typedef LPDEVMODEA LPDEVMODE;
 #endif // UNICODE
 
 /* current version of specification */
-
+#if (WINVER >= 0x0400)
+#define DM_SPECVERSION 0x0400
+#else
 #define DM_SPECVERSION 0x0320
+#endif /* WINVER */
 
 /* field selection bits */
 #define DM_ORIENTATION      0x00000001L
@@ -1421,58 +1677,103 @@ typedef LPDEVMODEA LPDEVMODE;
 #define DM_TTOPTION         0x00004000L
 #define DM_COLLATE          0x00008000L
 #define DM_FORMNAME         0x00010000L
+#define DM_LOGPIXELS        0x00020000L
+#define DM_BITSPERPEL       0x00040000L
+#define DM_PELSWIDTH        0x00080000L
+#define DM_PELSHEIGHT       0x00100000L
+#define DM_DISPLAYFLAGS     0x00200000L
+#define DM_DISPLAYFREQUENCY 0x00400000L
+#if(WINVER >= 0x0400)
+#define DM_ICMMETHOD	    0x00800000L
+#define DM_ICMINTENT	    0x01000000L
+#define DM_MEDIATYPE	    0x02000000L
+#define DM_DITHERTYPE	    0x04000000L
+#endif /* WINVER >= 0x0400 */
 
 /* orientation selections */
 #define DMORIENT_PORTRAIT   1
 #define DMORIENT_LANDSCAPE  2
 
 /* paper selections */
-#define DMPAPER_FIRST       DMPAPER_LETTER
-#define DMPAPER_LETTER      1           /* Letter 8 1/2 x 11 in               */
-#define DMPAPER_LETTERSMALL 2           /* Letter Small 8 1/2 x 11 in         */
-#define DMPAPER_TABLOID     3           /* Tabloid 11 x 17 in                 */
-#define DMPAPER_LEDGER      4           /* Ledger 17 x 11 in                  */
-#define DMPAPER_LEGAL       5           /* Legal 8 1/2 x 14 in                */
-#define DMPAPER_STATEMENT   6           /* Statement 5 1/2 x 8 1/2 in         */
-#define DMPAPER_EXECUTIVE   7           /* Executive 7 1/4 x 10 1/2 in        */
-#define DMPAPER_A3          8           /* A3 297 x 420 mm                    */
-#define DMPAPER_A4          9           /* A4 210 x 297 mm                    */
-#define DMPAPER_A4SMALL     10          /* A4 Small 210 x 297 mm              */
-#define DMPAPER_A5          11          /* A5 148 x 210 mm                    */
-#define DMPAPER_B4          12          /* B4 250 x 354                       */
-#define DMPAPER_B5          13          /* B5 182 x 257 mm                    */
-#define DMPAPER_FOLIO       14          /* Folio 8 1/2 x 13 in                */
-#define DMPAPER_QUARTO      15          /* Quarto 215 x 275 mm                */
-#define DMPAPER_10X14       16          /* 10x14 in                           */
-#define DMPAPER_11X17       17          /* 11x17 in                           */
-#define DMPAPER_NOTE        18          /* Note 8 1/2 x 11 in                 */
-#define DMPAPER_ENV_9       19          /* Envelope #9 3 7/8 x 8 7/8          */
-#define DMPAPER_ENV_10      20          /* Envelope #10 4 1/8 x 9 1/2         */
-#define DMPAPER_ENV_11      21          /* Envelope #11 4 1/2 x 10 3/8        */
-#define DMPAPER_ENV_12      22          /* Envelope #12 4 \276 x 11           */
-#define DMPAPER_ENV_14      23          /* Envelope #14 5 x 11 1/2            */
-#define DMPAPER_CSHEET      24          /* C size sheet                       */
-#define DMPAPER_DSHEET      25          /* D size sheet                       */
-#define DMPAPER_ESHEET      26          /* E size sheet                       */
-#define DMPAPER_ENV_DL      27          /* Envelope DL 110 x 220mm            */
-#define DMPAPER_ENV_C5      28          /* Envelope C5 162 x 229 mm           */
-#define DMPAPER_ENV_C3      29          /* Envelope C3  324 x 458 mm          */
-#define DMPAPER_ENV_C4      30          /* Envelope C4  229 x 324 mm          */
-#define DMPAPER_ENV_C6      31          /* Envelope C6  114 x 162 mm          */
-#define DMPAPER_ENV_C65     32          /* Envelope C65 114 x 229 mm          */
-#define DMPAPER_ENV_B4      33          /* Envelope B4  250 x 353 mm          */
-#define DMPAPER_ENV_B5      34          /* Envelope B5  176 x 250 mm          */
-#define DMPAPER_ENV_B6      35          /* Envelope B6  176 x 125 mm          */
-#define DMPAPER_ENV_ITALY   36          /* Envelope 110 x 230 mm              */
-#define DMPAPER_ENV_MONARCH 37          /* Envelope Monarch 3.875 x 7.5 in    */
-#define DMPAPER_ENV_PERSONAL 38         /* 6 3/4 Envelope 3 5/8 x 6 1/2 in    */
-#define DMPAPER_FANFOLD_US  39          /* US Std Fanfold 14 7/8 x 11 in      */
+#define DMPAPER_FIRST                DMPAPER_LETTER
+#define DMPAPER_LETTER               1  /* Letter 8 1/2 x 11 in               */
+#define DMPAPER_LETTERSMALL          2  /* Letter Small 8 1/2 x 11 in         */
+#define DMPAPER_TABLOID              3  /* Tabloid 11 x 17 in                 */
+#define DMPAPER_LEDGER               4  /* Ledger 17 x 11 in                  */
+#define DMPAPER_LEGAL                5  /* Legal 8 1/2 x 14 in                */
+#define DMPAPER_STATEMENT            6  /* Statement 5 1/2 x 8 1/2 in         */
+#define DMPAPER_EXECUTIVE            7  /* Executive 7 1/4 x 10 1/2 in        */
+#define DMPAPER_A3                   8  /* A3 297 x 420 mm                    */
+#define DMPAPER_A4                   9  /* A4 210 x 297 mm                    */
+#define DMPAPER_A4SMALL             10  /* A4 Small 210 x 297 mm              */
+#define DMPAPER_A5                  11  /* A5 148 x 210 mm                    */
+#define DMPAPER_B4                  12  /* B4 (JIS) 250 x 354                 */
+#define DMPAPER_B5                  13  /* B5 (JIS) 182 x 257 mm              */
+#define DMPAPER_FOLIO               14  /* Folio 8 1/2 x 13 in                */
+#define DMPAPER_QUARTO              15  /* Quarto 215 x 275 mm                */
+#define DMPAPER_10X14               16  /* 10x14 in                           */
+#define DMPAPER_11X17               17  /* 11x17 in                           */
+#define DMPAPER_NOTE                18  /* Note 8 1/2 x 11 in                 */
+#define DMPAPER_ENV_9               19  /* Envelope #9 3 7/8 x 8 7/8          */
+#define DMPAPER_ENV_10              20  /* Envelope #10 4 1/8 x 9 1/2         */
+#define DMPAPER_ENV_11              21  /* Envelope #11 4 1/2 x 10 3/8        */
+#define DMPAPER_ENV_12              22  /* Envelope #12 4 \276 x 11           */
+#define DMPAPER_ENV_14              23  /* Envelope #14 5 x 11 1/2            */
+#define DMPAPER_CSHEET              24  /* C size sheet                       */
+#define DMPAPER_DSHEET              25  /* D size sheet                       */
+#define DMPAPER_ESHEET              26  /* E size sheet                       */
+#define DMPAPER_ENV_DL              27  /* Envelope DL 110 x 220mm            */
+#define DMPAPER_ENV_C5              28  /* Envelope C5 162 x 229 mm           */
+#define DMPAPER_ENV_C3              29  /* Envelope C3  324 x 458 mm          */
+#define DMPAPER_ENV_C4              30  /* Envelope C4  229 x 324 mm          */
+#define DMPAPER_ENV_C6              31  /* Envelope C6  114 x 162 mm          */
+#define DMPAPER_ENV_C65             32  /* Envelope C65 114 x 229 mm          */
+#define DMPAPER_ENV_B4              33  /* Envelope B4  250 x 353 mm          */
+#define DMPAPER_ENV_B5              34  /* Envelope B5  176 x 250 mm          */
+#define DMPAPER_ENV_B6              35  /* Envelope B6  176 x 125 mm          */
+#define DMPAPER_ENV_ITALY           36  /* Envelope 110 x 230 mm              */
+#define DMPAPER_ENV_MONARCH         37  /* Envelope Monarch 3.875 x 7.5 in    */
+#define DMPAPER_ENV_PERSONAL        38  /* 6 3/4 Envelope 3 5/8 x 6 1/2 in    */
+#define DMPAPER_FANFOLD_US          39  /* US Std Fanfold 14 7/8 x 11 in      */
 #define DMPAPER_FANFOLD_STD_GERMAN  40  /* German Std Fanfold 8 1/2 x 12 in   */
 #define DMPAPER_FANFOLD_LGL_GERMAN  41  /* German Legal Fanfold 8 1/2 x 13 in */
+#if(WINVER >= 0x0400)
+#define DMPAPER_ISO_B4              42  /* B4 (ISO) 250 x 353 mm              */
+#define DMPAPER_JAPANESE_POSTCARD   43  /* Japanese Postcard 100 x 148 mm     */
+#define DMPAPER_9X11                44  /* 9 x 11 in                          */
+#define DMPAPER_10X11               45  /* 10 x 11 in                         */
+#define DMPAPER_15X11               46  /* 15 x 11 in                         */
+#define DMPAPER_ENV_INVITE          47  /* Envelope Invite 220 x 220 mm       */
+#define DMPAPER_RESERVED_48         48  /* RESERVED--DO NOT USE               */
+#define DMPAPER_RESERVED_49         49  /* RESERVED--DO NOT USE               */
+#define DMPAPER_LETTER_EXTRA	    50  /* Letter Extra 9 \275 x 12 in        */
+#define DMPAPER_LEGAL_EXTRA 	    51  /* Legal Extra 9 \275 x 15 in         */
+#define DMPAPER_TABLOID_EXTRA	    52  /* Tabloid Extra 11.69 x 18 in        */
+#define DMPAPER_A4_EXTRA     	    53  /* A4 Extra 9.27 x 12.69 in           */
+#define DMPAPER_LETTER_TRANSVERSE   54  /* Letter Transverse 8 \275 x 11 in   */
+#define DMPAPER_A4_TRANSVERSE       55  /* A4 Transverse 210 x 297 mm         */
+#define DMPAPER_LETTER_EXTRA_TRANSVERSE 56 /* Letter Extra Transverse 9\275 x 12 in */
+#define DMPAPER_A_PLUS              57  /* SuperA/SuperA/A4 227 x 356 mm      */
+#define DMPAPER_B_PLUS              58  /* SuperB/SuperB/A3 305 x 487 mm      */
+#define DMPAPER_LETTER_PLUS         59  /* Letter Plus 8.5 x 12.69 in         */
+#define DMPAPER_A4_PLUS             60  /* A4 Plus 210 x 330 mm               */
+#define DMPAPER_A5_TRANSVERSE       61  /* A5 Transverse 148 x 210 mm         */
+#define DMPAPER_B5_TRANSVERSE       62  /* B5 (JIS) Transverse 182 x 257 mm   */
+#define DMPAPER_A3_EXTRA            63  /* A3 Extra 322 x 445 mm              */
+#define DMPAPER_A5_EXTRA            64  /* A5 Extra 174 x 235 mm              */
+#define DMPAPER_B5_EXTRA            65  /* B5 (ISO) Extra 201 x 276 mm        */
+#define DMPAPER_A2                  66  /* A2 420 x 594 mm                    */
+#define DMPAPER_A3_TRANSVERSE       67  /* A3 Transverse 297 x 420 mm         */
+#define DMPAPER_A3_EXTRA_TRANSVERSE 68  /* A3 Extra Transverse 322 x 445 mm   */
+#endif /* WINVER >= 0x0400 */
 
-#define DMPAPER_LAST        DMPAPER_FANFOLD_LGL_GERMAN
+#if (WINVER >= 0x0400)
+#define DMPAPER_LAST                DMPAPER_A3_EXTRA_TRANSVERSE
+#else
+#define DMPAPER_LAST                DMPAPER_FANFOLD_LGL_GERMAN
+#endif
 
-#define DMPAPER_USER        256
+#define DMPAPER_USER                256
 
 /* bin selections */
 #define DMBIN_FIRST         DMBIN_UPPER
@@ -1513,6 +1814,9 @@ typedef LPDEVMODEA LPDEVMODE;
 #define DMTT_BITMAP     1       /* print TT fonts as graphics */
 #define DMTT_DOWNLOAD   2       /* download TT fonts as soft fonts */
 #define DMTT_SUBDEV     3       /* substitute device fonts for TT fonts */
+#if(WINVER >= 0x0400)
+#define DMTT_DOWNLOAD_OUTLINE 4 /* download TT fonts as outline soft fonts */
+#endif /* WINVER >= 0x0400 */
 
 /* Collation selections */
 #define DMCOLLATE_FALSE  0
@@ -1523,6 +1827,46 @@ typedef LPDEVMODEA LPDEVMODE;
 #define DM_GRAYSCALE  0x00000001
 #define DM_INTERLACED 0x00000002
 
+#if(WINVER >= 0x0400)
+/* ICM methods */
+#define DMICMMETHOD_NONE    1   /* ICM disabled */
+#define DMICMMETHOD_SYSTEM  2   /* ICM handled by system */
+#define DMICMMETHOD_DRIVER  3   /* ICM handled by driver */
+#define DMICMMETHOD_DEVICE  4   /* ICM handled by device */
+
+#define DMICMMETHOD_USER  256   /* Device-specific methods start here */
+
+/* ICM Intents */
+#define DMICM_SATURATE      1   /* Maximize color saturation */
+#define DMICM_CONTRAST      2   /* Maximize color contrast */
+#define DMICM_COLORMETRIC   3   /* Use specific color metric */
+
+#define DMICM_USER        256   /* Device-specific intents start here */
+
+/* Media types */
+
+#define DMMEDIA_STANDARD      1   /* Standard paper */
+#define DMMEDIA_TRANSPARENCY  2   /* Transparency */
+#define DMMEDIA_GLOSSY        3   /* Glossy paper */
+
+#define DMMEDIA_USER        256   /* Device-specific media start here */
+
+/* Dither types */
+#define DMDITHER_NONE		1   /* No dithering */
+#define DMDITHER_COARSE 	2   /* Dither with a coarse brush */
+#define DMDITHER_FINE		3   /* Dither with a fine brush */
+#define DMDITHER_LINEART	4   /* LineArt dithering */
+
+#define DMDITHER_ERRORDIFFUSION 5 /* LineArt dithering */
+#define DMDITHER_RESERVED6	6   /* LineArt dithering */
+#define DMDITHER_RESERVED7	7   /* LineArt dithering */
+#define DMDITHER_RESERVED8	8   /* LineArt dithering */
+#define DMDITHER_RESERVED9	9   /* LineArt dithering */
+
+#define DMDITHER_GRAYSCALE     10   /* Device does grayscaling */
+
+#define DMDITHER_USER     256   /* Device-specific dithers start here */
+#endif /* WINVER >= 0x0400 */
 
 /* GetRegionData/ExtCreateRegion */
 
@@ -1700,6 +2044,12 @@ typedef struct _GLYPHMETRICS {
 #define GGO_BITMAP         1
 #define GGO_NATIVE         2
 
+#if(WINVER >= 0x0400)
+#define  GGO_GRAY2_BITMAP   4
+#define  GGO_GRAY4_BITMAP   5
+#define  GGO_GRAY8_BITMAP   6
+#define  GGO_GLYPH_INDEX    0x0080
+#endif /* WINVER >= 0x0400 */
 
 #define TT_POLYGON_TYPE   24
 
@@ -1727,6 +2077,81 @@ typedef struct tagTTPOLYGONHEADER
 } TTPOLYGONHEADER, FAR* LPTTPOLYGONHEADER;
 
 
+#if(WINVER >= 0x0400)
+#define GCP_DBCS           0x0001
+#define GCP_REORDER        0x0002
+#define GCP_USEKERNING     0x0008
+#define GCP_GLYPHSHAPE     0x0010
+#define GCP_LIGATE         0x0020
+////#define GCP_GLYPHINDEXING  0x0080
+#define GCP_DIACRITIC      0x0100
+#define GCP_KASHIDA	   0x0400
+#define GCP_ERROR          0x8000
+#define FLI_MASK	   0x103B
+
+#define GCP_JUSTIFY        0x00010000L
+////#define GCP_NODIACRITICS   0x00020000L
+#define FLI_GLYPHS	   0x00040000L
+#define GCP_CLASSIN        0x00080000L	
+#define GCP_MAXEXTENT      0x00100000L
+#define GCP_JUSTIFYIN	   0x00200000L
+#define GCP_DISPLAYZWG      0x00400000L
+#define GCP_SYMSWAPOFF      0x00800000L
+#define GCP_NUMERICOVERRIDE 0x01000000L
+#define GCP_NEUTRALOVERRIDE 0x02000000L
+#define GCP_NUMERICSLATIN   0x04000000L
+#define GCP_NUMERICSLOCAL   0x08000000L
+
+#define GCPCLASS_LATIN                  1
+#define GCPCLASS_HEBREW                 2
+#define GCPCLASS_ARABIC                 2
+#define GCPCLASS_NEUTRAL                3
+#define GCPCLASS_LOCALNUMBER            4
+#define GCPCLASS_LATINNUMBER            5
+#define GCPCLASS_LATINNUMERICTERMINATOR 6
+#define GCPCLASS_LATINNUMERICSEPARATOR  7
+#define GCPCLASS_NUMERICSEPARATOR       8
+#define GCPCLASS_PREBOUNDLTR         0x80
+#define GCPCLASS_PREBOUNDRTL         0x40
+#define GCPCLASS_POSTBOUNDLTR        0x20
+#define GCPCLASS_POSTBOUNDRTL        0x10
+
+#define GCPGLYPH_LINKBEFORE          0x8000
+#define GCPGLYPH_LINKAFTER           0x4000
+
+
+typedef struct tagGCP_RESULTSA
+    {
+    DWORD   lStructSize;
+    LPSTR     lpOutString;
+    UINT FAR *lpOrder;
+    int FAR  *lpDx;
+    int FAR  *lpCaretPos;
+    LPSTR     lpClass;
+    LPWSTR  lpGlyphs;
+    UINT    nGlyphs;
+    int     nMaxFit;
+    } GCP_RESULTSA, FAR* LPGCP_RESULTSA;
+typedef struct tagGCP_RESULTSW
+    {
+    DWORD   lStructSize;
+    LPWSTR    lpOutString;
+    UINT FAR *lpOrder;
+    int FAR  *lpDx;
+    int FAR  *lpCaretPos;
+    LPWSTR    lpClass;
+    LPWSTR  lpGlyphs;
+    UINT    nGlyphs;
+    int     nMaxFit;
+    } GCP_RESULTSW, FAR* LPGCP_RESULTSW;
+#ifdef UNICODE
+typedef GCP_RESULTSW GCP_RESULTS;
+typedef LPGCP_RESULTSW LPGCP_RESULTS;
+#else
+typedef GCP_RESULTSA GCP_RESULTS;
+typedef LPGCP_RESULTSA LPGCP_RESULTS;
+#endif // UNICODE
+#endif /* WINVER >= 0x0400 */
 
 typedef struct _RASTERIZER_STATUS {
     short   nSize;
@@ -1788,6 +2213,8 @@ typedef struct tagPIXELFORMATDESCRIPTOR
 #define PFD_GENERIC_FORMAT          0x00000040
 #define PFD_NEED_PALETTE            0x00000080
 #define PFD_NEED_SYSTEM_PALETTE     0x00000100
+#define PFD_SWAP_EXCHANGE           0x00000200
+#define PFD_SWAP_COPY               0x00000400
 
 /* PIXELFORMATDESCRIPTOR flags for use in ChoosePixelFormat only */
 #define PFD_DOUBLEBUFFER_DONTCARE   0x40000000
@@ -1795,19 +2222,45 @@ typedef struct tagPIXELFORMATDESCRIPTOR
 
 #ifdef STRICT
 #if !defined(NOTEXTMETRIC)
-typedef int (CALLBACK* OLDFONTENUMPROC)(CONST LOGFONT *, CONST TEXTMETRIC *, DWORD, LPARAM);
+typedef int (CALLBACK* OLDFONTENUMPROCA)(CONST LOGFONTA *, CONST TEXTMETRICA *, DWORD, LPARAM);
+typedef int (CALLBACK* OLDFONTENUMPROCW)(CONST LOGFONTW *, CONST TEXTMETRICW *, DWORD, LPARAM);
+#ifdef UNICODE
+#define OLDFONTENUMPROC  OLDFONTENUMPROCW
 #else
-typedef int (CALLBACK* OLDFONTENUMPROC)(CONST LOGFONT * ,CONST VOID *, DWORD, LPARAM);
+#define OLDFONTENUMPROC  OLDFONTENUMPROCA
+#endif // !UNICODE
+#else
+typedef int (CALLBACK* OLDFONTENUMPROCA)(CONST LOGFONTA * ,CONST VOID *, DWORD, LPARAM);
+typedef int (CALLBACK* OLDFONTENUMPROCW)(CONST LOGFONTW * ,CONST VOID *, DWORD, LPARAM);
+#ifdef UNICODE
+#define OLDFONTENUMPROC  OLDFONTENUMPROCW
+#else
+#define OLDFONTENUMPROC  OLDFONTENUMPROCA
+#endif // !UNICODE
 #endif
+
+typedef OLDFONTENUMPROCA    FONTENUMPROCA;
+typedef OLDFONTENUMPROCW    FONTENUMPROCW;
+#ifdef UNICODE
+typedef FONTENUMPROCW FONTENUMPROC;
+#else
+typedef FONTENUMPROCA FONTENUMPROC;
+#endif // UNICODE
+
 typedef int (CALLBACK* GOBJENUMPROC)(LPVOID, LPARAM);
 typedef VOID (CALLBACK* LINEDDAPROC)(int, int, LPARAM);
 #else
 typedef FARPROC OLDFONTENUMPROC;
+typedef FARPROC FONTENUMPROCA;
+typedef FARPROC FONTENUMPROCW;
+#ifdef UNICODE
+typedef FONTENUMPROCW FONTENUMPROC;
+#else
+typedef FONTENUMPROCA FONTENUMPROC;
+#endif // UNICODE
 typedef FARPROC GOBJENUMPROC;
 typedef FARPROC LINEDDAPROC;
 #endif
-
-typedef OLDFONTENUMPROC FONTENUMPROC;
 
 WINGDIAPI int WINAPI AddFontResourceA(LPCSTR);
 WINGDIAPI int WINAPI AddFontResourceW(LPCWSTR);
@@ -1944,11 +2397,31 @@ typedef DWORD  (CALLBACK* LPFNDEVCAPS)(LPSTR, LPSTR, UINT, LPSTR, LPDEVMODE);
 #define DC_PAPERNAMES       16
 #define DC_ORIENTATION      17
 #define DC_COPIES           18
+#if(WINVER >= 0x0400)
+#define DC_BINADJUST            19
+#define DC_EMF_COMPLIANT        20
+#define DC_DATATYPE_PRODUCED    21
+#define DC_MANUFACTURER 	23
+#define DC_MODEL		24
+#endif /* WINVER >= 0x0400 */
 
 /* bit fields of the return value (DWORD) for DC_TRUETYPE */
 #define DCTT_BITMAP             0x0000001L
 #define DCTT_DOWNLOAD           0x0000002L
 #define DCTT_SUBDEV             0x0000004L
+#if(WINVER >= 0x0400)
+#define DCTT_DOWNLOAD_OUTLINE   0x0000008L
+
+/* return values for DC_BINADJUST */
+#define DCBA_FACEUPNONE       0x0000
+#define DCBA_FACEUPCENTER     0x0001
+#define DCBA_FACEUPLEFT       0x0002
+#define DCBA_FACEUPRIGHT      0x0003
+#define DCBA_FACEDOWNNONE     0x0100
+#define DCBA_FACEDOWNCENTER   0x0101
+#define DCBA_FACEDOWNLEFT     0x0102
+#define DCBA_FACEDOWNRIGHT    0x0103
+#endif /* WINVER >= 0x0400 */
 
 WINSPOOLAPI int  WINAPI DeviceCapabilitiesA(LPCSTR, LPCSTR, WORD,
                                 LPSTR, CONST DEVMODEA *);
@@ -1963,16 +2436,25 @@ WINSPOOLAPI int  WINAPI DeviceCapabilitiesW(LPCWSTR, LPCWSTR, WORD,
 WINGDIAPI int  WINAPI DrawEscape(HDC, int, int, LPCSTR);
 WINGDIAPI BOOL WINAPI Ellipse(HDC, int, int, int, int);
 
+#if(WINVER >= 0x0400)
+WINGDIAPI int  WINAPI EnumFontFamiliesExA(HDC, LPLOGFONTA,FONTENUMPROCA, LPARAM,DWORD);
+WINGDIAPI int  WINAPI EnumFontFamiliesExW(HDC, LPLOGFONTW,FONTENUMPROCW, LPARAM,DWORD);
+#ifdef UNICODE
+#define EnumFontFamiliesEx  EnumFontFamiliesExW
+#else
+#define EnumFontFamiliesEx  EnumFontFamiliesExA
+#endif // !UNICODE
+#endif /* WINVER >= 0x0400 */
 
-WINGDIAPI int  WINAPI EnumFontFamiliesA(HDC, LPCSTR, FONTENUMPROC, LPARAM);
-WINGDIAPI int  WINAPI EnumFontFamiliesW(HDC, LPCWSTR, FONTENUMPROC, LPARAM);
+WINGDIAPI int  WINAPI EnumFontFamiliesA(HDC, LPCSTR, FONTENUMPROCA, LPARAM);
+WINGDIAPI int  WINAPI EnumFontFamiliesW(HDC, LPCWSTR, FONTENUMPROCW, LPARAM);
 #ifdef UNICODE
 #define EnumFontFamilies  EnumFontFamiliesW
 #else
 #define EnumFontFamilies  EnumFontFamiliesA
 #endif // !UNICODE
-WINGDIAPI int  WINAPI EnumFontsA(HDC, LPCSTR,  FONTENUMPROC, LPARAM);
-WINGDIAPI int  WINAPI EnumFontsW(HDC, LPCWSTR,  FONTENUMPROC, LPARAM);
+WINGDIAPI int  WINAPI EnumFontsA(HDC, LPCSTR,  FONTENUMPROCA, LPARAM);
+WINGDIAPI int  WINAPI EnumFontsW(HDC, LPCWSTR,  FONTENUMPROCW, LPARAM);
 #ifdef UNICODE
 #define EnumFonts  EnumFontsW
 #else
@@ -2158,6 +2640,19 @@ WINGDIAPI BOOL  APIENTRY GetTextExtentExPointW(
 #define GetTextExtentExPoint  GetTextExtentExPointA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINGDIAPI int WINAPI GetTextCharset(HDC hdc);
+WINGDIAPI int WINAPI GetTextCharsetInfo(HDC hdc, LPFONTSIGNATURE lpSig, DWORD dwFlags);
+WINGDIAPI BOOL WINAPI TranslateCharsetInfo( DWORD FAR *lpSrc, LPCHARSETINFO lpCs, DWORD dwFlags);
+WINGDIAPI DWORD WINAPI GetFontLanguageInfo( HDC );
+WINGDIAPI DWORD WINAPI GetCharacterPlacementA(HDC, LPCSTR, int, int, LPGCP_RESULTSA, DWORD);
+WINGDIAPI DWORD WINAPI GetCharacterPlacementW(HDC, LPCWSTR, int, int, LPGCP_RESULTSW, DWORD);
+#ifdef UNICODE
+#define GetCharacterPlacement  GetCharacterPlacementW
+#else
+#define GetCharacterPlacement  GetCharacterPlacementA
+#endif // !UNICODE
+#endif /* WINVER >= 0x0400 */
 
 WINGDIAPI BOOL  WINAPI GetViewportExtEx(HDC, LPSIZE);
 WINGDIAPI BOOL  WINAPI GetViewportOrgEx(HDC, LPPOINT);
@@ -2390,11 +2885,19 @@ typedef struct _DOCINFOA {
     int     cbSize;
     LPCSTR   lpszDocName;
     LPCSTR   lpszOutput;
+#if (WINVER >= 0x0400)
+    LPCSTR   lpszDatatype;
+    DWORD    fwType;
+#endif /* WINVER */
 } DOCINFOA, *LPDOCINFOA;
 typedef struct _DOCINFOW {
     int     cbSize;
     LPCWSTR  lpszDocName;
     LPCWSTR  lpszOutput;
+#if (WINVER >= 0x0400)
+    LPCWSTR  lpszDatatype;
+    DWORD    fwType;
+#endif /* WINVER */
 } DOCINFOW, *LPDOCINFOW;
 #ifdef UNICODE
 typedef DOCINFOW DOCINFO;
@@ -2403,6 +2906,10 @@ typedef LPDOCINFOW LPDOCINFO;
 typedef DOCINFOA DOCINFO;
 typedef LPDOCINFOA LPDOCINFO;
 #endif // UNICODE
+
+#if(WINVER >= 0x0400)
+#define DI_APPBANDING   0x0001
+#endif /* WINVER >= 0x0400 */
 
 WINGDIAPI int WINAPI StartDocA(HDC, CONST DOCINFOA *);
 WINGDIAPI int WINAPI StartDocW(HDC, CONST DOCINFOW *);
@@ -2521,6 +3028,71 @@ WINGDIAPI BOOL  WINAPI GdiFlush();
 WINGDIAPI DWORD WINAPI GdiSetBatchLimit(DWORD);
 WINGDIAPI DWORD WINAPI GdiGetBatchLimit();
 
+#if(WINVER >= 0x0400)
+
+#define ICM_OFF   1
+#define ICM_ON	  2
+#define ICM_QUERY 3
+
+int WINAPI SetICMMode(HDC, int);
+BOOL WINAPI CheckColorsInGamut(HDC,LPVOID,LPVOID,DWORD);
+HANDLE WINAPI GetColorSpace(HDC);
+BOOL WINAPI GetLogColorSpaceA(HCOLORSPACE,LPLOGCOLORSPACEA,DWORD);
+BOOL WINAPI GetLogColorSpaceW(HCOLORSPACE,LPLOGCOLORSPACEW,DWORD);
+#ifdef UNICODE
+#define GetLogColorSpace  GetLogColorSpaceW
+#else
+#define GetLogColorSpace  GetLogColorSpaceA
+#endif // !UNICODE
+HCOLORSPACE WINAPI CreateColorSpaceA(LPLOGCOLORSPACEA);
+HCOLORSPACE WINAPI CreateColorSpaceW(LPLOGCOLORSPACEW);
+#ifdef UNICODE
+#define CreateColorSpace  CreateColorSpaceW
+#else
+#define CreateColorSpace  CreateColorSpaceA
+#endif // !UNICODE
+BOOL WINAPI SetColorSpace(HDC,HCOLORSPACE);
+BOOL WINAPI DeleteColorSpace(HCOLORSPACE);
+BOOL WINAPI GetICMProfileA(HDC,LPDWORD,LPSTR);
+BOOL WINAPI GetICMProfileW(HDC,LPDWORD,LPWSTR);
+#ifdef UNICODE
+#define GetICMProfile  GetICMProfileW
+#else
+#define GetICMProfile  GetICMProfileA
+#endif // !UNICODE
+BOOL WINAPI SetICMProfileA(HDC,LPSTR);
+BOOL WINAPI SetICMProfileW(HDC,LPWSTR);
+#ifdef UNICODE
+#define SetICMProfile  SetICMProfileW
+#else
+#define SetICMProfile  SetICMProfileA
+#endif // !UNICODE
+BOOL WINAPI GetDeviceGammaRamp(HDC,LPVOID);
+BOOL WINAPI SetDeviceGammaRamp(HDC,LPVOID);
+BOOL WINAPI ColorMatchToTarget(HDC,HDC,DWORD);
+BOOL WINAPI UpdateICMRegKeyA(DWORD, DWORD, LPSTR, UINT);
+BOOL WINAPI UpdateICMRegKeyW(DWORD, DWORD, LPWSTR, UINT);
+#ifdef UNICODE
+#define UpdateICMRegKey  UpdateICMRegKeyW
+#else
+#define UpdateICMRegKey  UpdateICMRegKeyA
+#endif // !UNICODE
+typedef int (CALLBACK* ICMENUMPROCA)(LPSTR, LPARAM);
+typedef int (CALLBACK* ICMENUMPROCW)(LPWSTR, LPARAM);
+#ifdef UNICODE
+#define ICMENUMPROC  ICMENUMPROCW
+#else
+#define ICMENUMPROC  ICMENUMPROCA
+#endif // !UNICODE
+int WINAPI EnumICMProfilesA(HDC,ICMENUMPROCA,LPARAM);
+int WINAPI EnumICMProfilesW(HDC,ICMENUMPROCW,LPARAM);
+#ifdef UNICODE
+#define EnumICMProfiles  EnumICMProfilesW
+#else
+#define EnumICMProfiles  EnumICMProfilesA
+#endif // !UNICODE
+
+#endif /* WINVER >= 0x0400 */
 #ifndef NOMETAFILE
 
 // Enhanced metafile constants.
@@ -2633,9 +3205,20 @@ WINGDIAPI DWORD WINAPI GdiGetBatchLimit();
 #define EMR_EXTCREATEPEN                95
 #define EMR_POLYTEXTOUTA                96
 #define EMR_POLYTEXTOUTW                97
+#if(WINVER >= 0x0400)
+#define EMR_SETICMMODE			98
+#define EMR_CREATECOLORSPACE            99
+#define EMR_SETCOLORSPACE              100
+#define EMR_DELETECOLORSPACE           101
+#endif /* WINVER >= 0x0400 */
 
 #define EMR_MIN                         1
+
+#if (WINVER >= 0x0400)
+#define EMR_MAX                        101
+#else
 #define EMR_MAX                         97
+#endif
 
 // Base record type for the enhanced metafile.
 
@@ -2684,6 +3267,7 @@ typedef struct tagEMRSELECTCLIPPATH
   EMRSETPOLYFILLMODE,   *PEMRSETPOLYFILLMODE,
   EMRSETROP2,           *PEMRSETROP2,
   EMRSETSTRETCHBLTMODE, *PEMRSETSTRETCHBLTMODE,
+  EMRSETICMMODE,	*PEMRSETICMMODE,
   EMRSETTEXTALIGN,      *PEMRSETTEXTALIGN;
 
 typedef struct tagEMRSETMITERLIMIT
@@ -2725,6 +3309,14 @@ typedef struct tagEMRSELECTOBJECT
 } EMRSELECTOBJECT, *PEMRSELECTOBJECT,
   EMRDELETEOBJECT, *PEMRDELETEOBJECT;
 
+#if(WINVER >= 0x0400)
+typedef struct tagEMRSELECTCOLORSPACE
+{
+    EMR     emr;
+    DWORD   ihCS;               // ColorSpace handle index
+} EMRSELECTCOLORSPACE, *PEMRSELECTCOLORSPACE,
+  EMRDELETECOLORSPACE, *PEMRDELETECOLORSPACE;
+#endif /* WINVER >= 0x0400 */
 
 typedef struct tagEMRSELECTPALETTE
 {
@@ -3163,6 +3755,16 @@ typedef struct tagEMRCREATEPALETTE
                                 // do not contain any flags
 } EMRCREATEPALETTE, *PEMRCREATEPALETTE;
 
+#if(WINVER >= 0x0400)
+
+typedef struct tagEMRCREATECOLORSPACE
+{
+    EMR 	    emr;
+    DWORD	    ihCS;	// ColorSpace handle index
+    LOGCOLORSPACEW  lcs;
+} EMRCREATECOLORSPACE, *PEMRCREATECOLORSPACE;
+
+#endif /* WINVER >= 0x0400 */
 
 typedef struct tagEMRCREATEPEN
 {
@@ -3242,7 +3844,9 @@ WINGDIAPI HGLRC WINAPI wglCreateContext(HDC);
 WINGDIAPI BOOL  WINAPI wglDeleteContext(HGLRC);
 WINGDIAPI HGLRC WINAPI wglGetCurrentContext(VOID);
 WINGDIAPI HDC   WINAPI wglGetCurrentDC(VOID);
+WINGDIAPI PROC  WINAPI wglGetProcAddress(LPCSTR);
 WINGDIAPI BOOL  WINAPI wglMakeCurrent(HDC, HGLRC);
+WINGDIAPI BOOL  WINAPI wglShareLists(HGLRC, HGLRC);
 WINGDIAPI BOOL  WINAPI wglUseFontBitmapsA(HDC, DWORD, DWORD, DWORD);
 WINGDIAPI BOOL  WINAPI wglUseFontBitmapsW(HDC, DWORD, DWORD, DWORD);
 #ifdef UNICODE
@@ -3251,6 +3855,32 @@ WINGDIAPI BOOL  WINAPI wglUseFontBitmapsW(HDC, DWORD, DWORD, DWORD);
 #define wglUseFontBitmaps  wglUseFontBitmapsA
 #endif // !UNICODE
 WINGDIAPI BOOL  WINAPI SwapBuffers(HDC);
+
+typedef struct _POINTFLOAT {
+    FLOAT   x;
+    FLOAT   y;
+} POINTFLOAT, *PPOINTFLOAT;
+
+typedef struct _GLYPHMETRICSFLOAT {
+    FLOAT       gmfBlackBoxX;
+    FLOAT       gmfBlackBoxY;
+    POINTFLOAT  gmfptGlyphOrigin;
+    FLOAT       gmfCellIncX;
+    FLOAT       gmfCellIncY;
+} GLYPHMETRICSFLOAT, *PGLYPHMETRICSFLOAT, FAR *LPGLYPHMETRICSFLOAT;
+
+#define WGL_FONT_LINES      0
+#define WGL_FONT_POLYGONS   1
+WINGDIAPI BOOL  WINAPI wglUseFontOutlinesA(HDC, DWORD, DWORD, DWORD, FLOAT,
+                                           FLOAT, int, LPGLYPHMETRICSFLOAT);
+WINGDIAPI BOOL  WINAPI wglUseFontOutlinesW(HDC, DWORD, DWORD, DWORD, FLOAT,
+                                           FLOAT, int, LPGLYPHMETRICSFLOAT);
+#ifdef UNICODE
+#define wglUseFontOutlines  wglUseFontOutlinesW
+#else
+#define wglUseFontOutlines  wglUseFontOutlinesA
+#endif // !UNICODE
+
 
 #endif /* NOGDI */
 

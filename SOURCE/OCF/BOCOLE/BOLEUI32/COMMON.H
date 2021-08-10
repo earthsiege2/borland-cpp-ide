@@ -1,12 +1,9 @@
-/* $Header:   Y:/ADMIN/OCF/SOURCE/BOCOLE/BOLEUI32/COMMON.H_V   1.1   15 Nov 1994 17:56:44   CQUINN  $ */
+//
 /*
  * COMMON.H
  *
  * Structures and definitions applicable to all OLE 2.0 UI dialogs.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
  */
-
 /*
  *      C/C++ Run Time Library - Version 6.5
  *
@@ -61,7 +58,7 @@
             SendMessage(hWnd, EM_SETSEL, 0, MAKELPARAM(nStart, nEnd))
 #endif  //SendSetSel
 
-#endif  //!WIN32
+#endif  //
 
 
 
@@ -88,11 +85,9 @@ typedef struct tagOLEUISTANDARD
    LPCOLESTR       lpszTemplate;   //Customized template name
    HRSRC           hResource;      //Customized template handle
 
-	//If the Microsoft guys had a clue, you could use inheritance for this
-	//
-	DWORD           dwIBApplication;  //Bolero app ptr for help
-	HHOOK           hHook;            //Bolero F1 hook
-	HTASK           hTask;            //Bolero task for F1 hook
+   DWORD           dwIBApplication;  //Bolero app ptr for help
+   HHOOK           hHook;            //Bolero F1 hook
+   HTASK           hTask;            //Bolero task for F1 hook
 	} OLEUISTANDARD, *POLEUISTANDARD, FAR *LPOLEUISTANDARD;
 
 
@@ -180,4 +175,4 @@ extern UINT       cfFileName;
 #define ID_NULL                         98
 
 #endif //_COMMON_H_
-
+

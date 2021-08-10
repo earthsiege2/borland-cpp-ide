@@ -1,5 +1,7 @@
 /*++
 
+Copyright (c) 1991-1995 Microsoft Corporation
+
 Module Name:
 
     rpcdce.h
@@ -8,25 +10,10 @@ Abstract:
 
     This module contains the DCE RPC runtime APIs.
 
-Author:
-
-    Michael Montague (mikemon) 25-Sep-1991
-
-Revision History:
-
 --*/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef __RPCDCE_H__
 #define __RPCDCE_H__
-#define __RPCDCE_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -778,6 +765,36 @@ RpcMgmtInqServerPrincName (
 
 #endif /* RPC_UNICODE_SUPPORTED */
 
+#ifdef RPC_UNICODE_SUPPORTED
+
+RPC_STATUS RPC_ENTRY
+RpcServerInqDefaultPrincNameA (
+    IN unsigned long AuthnSvc,
+    OUT unsigned char __RPC_FAR * __RPC_FAR * PrincName
+    );
+
+RPC_STATUS RPC_ENTRY
+RpcServerInqDefaultPrincNameW (
+    IN unsigned long AuthnSvc,
+    OUT unsigned short __RPC_FAR * __RPC_FAR * PrincName
+    );
+
+#ifdef UNICODE
+#define RpcServerInqDefaultPrincName RpcServerInqDefaultPrincNameW
+#else /* UNICODE */
+#define RpcServerInqDefaultPrincName RpcServerInqDefaultPrincNameA
+#endif /* UNICODE */
+
+#else /* RPC_UNICODE_SUPPORTED */
+
+RPC_STATUS RPC_ENTRY
+RpcServerInqDefaultPrincName (
+    IN unsigned long AuthnSvc,
+    OUT unsigned char __RPC_FAR * __RPC_FAR * PrincName
+    );
+
+#endif /* RPC_UNICODE_SUPPORTED */
+
 /* client */
 RPC_STATUS RPC_ENTRY
 RpcEpResolveBinding (
@@ -1359,7 +1376,7 @@ RpcMgmtSetAuthorizationFn (
     IN RPC_MGMT_AUTHORIZATION_FN AuthorizationFn
     );
 
-#include "rpcdcep.h"
+#include <rpcdcep.h>
 
 #ifdef __cplusplus
 }

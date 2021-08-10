@@ -53,7 +53,8 @@ class _USERCLASS TOleDocument : public TStorageDocument {
     virtual IStorage* GetNewStorage();
 
     // Utilities
-    bool         PathChanged();
+    bool PathChanged();
+    void OleViewClose();
 
   private:
     TOcDocument*      OcDoc;    // OCF document partner

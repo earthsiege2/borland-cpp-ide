@@ -2,19 +2,14 @@
 *                                                                         *
 * winnls.h -- NLS procedure declarations, constant definitions and macros *
 *                                                                         *
+* Copyright (c) 1991-1995, Microsoft Corp. All rights reserved.           *
+*                                                                         *
 **************************************************************************/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef _WINNLS_
 #define _WINNLS_
-#define __WINNLS_H
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -145,6 +140,7 @@ extern "C" {
 #define LCMAP_KATAKANA          0x00200000  /* map hiragana to katakana */
 #define LCMAP_HALFWIDTH         0x00400000  /* map double byte to single byte */
 #define LCMAP_FULLWIDTH         0x00800000  /* map single byte to double byte */
+
 
 
 /*
@@ -367,6 +363,9 @@ extern "C" {
 #define LOCALE_INEGSYMPRECEDES      0x00000056   /* mon sym precedes neg amt */
 #define LOCALE_INEGSEPBYSPACE       0x00000057   /* mon sym sep by space from neg amt */
 
+#if(WINVER >= 0x0400)
+#define LOCALE_FONTSIGNATURE       0x00000058   /* font signature */
+#endif /* WINVER >= 0x0400 */
 
 /*
  *  Time Flags for GetTimeFormatW.
@@ -994,7 +993,6 @@ LCID
 WINAPI
 GetUserDefaultLCID(void);
 
-
 /*
  *  Locale Independent APIs.
  */
@@ -1027,7 +1025,7 @@ GetStringTypeExW(
  *  NOTE: The parameters for GetStringTypeA and GetStringTypeW are
  *        NOT the same.  The W version was shipped in NT 3.1.  The
  *        A version was then shipped in 16-bit OLE with the wrong
- *        parameters (ported from Chicago).  To be compatible, we
+ *        parameters (ported from Win95).  To be compatible, we
  *        must break the relationship between the A and W versions
  *        of GetStringType.  There will be NO function call for the
  *        generic GetStringType.

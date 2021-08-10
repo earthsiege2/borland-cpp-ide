@@ -91,6 +91,8 @@ char* _BIDSFUNC strnewdup(const char* s, size_t allocSize = 0);
 #endif
 #if !defined(BI_PLAT_WIN16)
   wchar_t* _BIDSFUNC strnewdup(const wchar_t* s, size_t allocSize = 0);
+  wchar_t* _BIDSFUNC strcpy(wchar_t* dst, const wchar_t* src);
+  size_t   _BIDSFUNC strlen(const wchar_t* s);
 #endif
   
 #endif  // OSL_INLINES_H

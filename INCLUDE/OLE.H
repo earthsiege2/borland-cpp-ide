@@ -6,22 +6,15 @@
 *                                                                             *
 *               NOTE: windows.h must be #included first                       *
 *                                                                             *
+*               Copyright (c) 1990-1995, Microsoft Corp.  All rights reserved.*
+*                                                                             *
 \*****************************************************************************/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef _INC_OLE
 #define _INC_OLE
-#define __OLE_H
 
 #ifdef WIN16
-#include "pshpack1.h"   /* Assume byte packing throughout */
+#include <pshpack1.h>   /* Assume byte packing throughout */
 #endif
 
 #ifdef __cplusplus
@@ -504,7 +497,7 @@ typedef struct _OLESERVERDOC
 #endif  /* __cplusplus */
 
 #ifdef WIN16
-#include "poppack.h"
+#include <poppack.h>
 #endif
 
 #endif  /* !_INC_OLE */

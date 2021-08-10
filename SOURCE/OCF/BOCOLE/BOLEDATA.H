@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 // 
 // BOleData.h --   Declares a data cache object which is used for delayed
@@ -24,9 +24,9 @@ typedef struct FAR tagBOleDataItem {
 
 // BOleData -- Provides a data cache object for use when copying from
 //             an embedding.
-
-
-
+//
+//
+//
 //
 class _ICLASS BOleData : public BOleComponent, 
                          public IDataObject
@@ -142,4 +142,5 @@ class _ICLASS BOleShadowData : public BOleComponent, public IDataObject
 };
 
 #endif
+
 

@@ -257,6 +257,11 @@ SetUnhandledExceptionFilter(
  */
 #if   ( (_MSC_VER >= 800) && (_M_IX86 >= 300) ) || defined(__BORLANDC__)
 
+/* From WINNT.H */
+#define EXCEPTION_CONTINUABLE        0      // Continuable exception
+#define EXCEPTION_NONCONTINUABLE     0x1    // Noncontinuable exception
+#define EXCEPTION_MAXIMUM_PARAMETERS 15     // maximum number of exception parameters
+
 /*
  * Definitions for MS C8-32 (386/486) compiler
  */
@@ -329,7 +334,24 @@ EXCEPTION_DISPOSITION __C_specific_handler (
  * Keywords and intrinsics for SEH
  */
 
-#if     ( _MSC_VER >= 800 )
+#if defined(__BORLANDC__)
+/*
+ * Borland C++
+ */
+#ifndef __cplusplus
+#  define try                       __try
+#  define finally                   __finally
+#  define AbnormalTermination()     __abnormal_termination
+#  define abnormal_termination()    __abnormal_termination
+#endif
+
+#  define except                    __except
+#  define GetExceptionCode()        __exception_code
+#  define exception_code()          __exception_code
+#  define GetExceptionInformation() ((PEXCEPTION_POINTERS)__exception_info)
+#  define exception_info()          ((PEXCEPTION_POINTERS)__exception_info)
+
+#elif     ( _MSC_VER >= 800 )
 /*
  * MS C8-32 (386/486)
  */
@@ -347,24 +369,6 @@ EXCEPTION_DISPOSITION __C_specific_handler (
 unsigned long _CRTAPI1 _exception_code(void);
 void *        _CRTAPI1 _exception_info(void);
 int           _CRTAPI1 _abnormal_termination(void);
-
-#elif   ( __BORLANDC__ )
-/*
- * Borland C++
- */
-#ifndef __cplusplus
-#  define try                       __try
-#  define finally                   __finally
-#  define AbnormalTermination()     __abnormal_termination
-#  define abnormal_termination()    __abnormal_termination
-#endif
-
-#  define except                    __except
-#  define GetExceptionCode()        __exception_code
-#  define exception_code()          __exception_code
-#  define GetExceptionInformation() ((PEXCEPTION_POINTERS)__exception_info)
-#  define exception_info()          ((PEXCEPTION_POINTERS)__exception_info)
-
 
 #elif defined(_M_MRX000) || defined(_MIPS_) || defined(_ALPHA_)
 /*
@@ -401,4 +405,3 @@ extern int           __abnormal_termination;
 #endif
 
 #endif  /* __EXCPT_H */
-

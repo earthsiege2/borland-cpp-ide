@@ -10,13 +10,34 @@
 # include <classlib/defs.h>
 #endif
 
+
 //----------------------------------------------------------------------------
 //
 // Include windows.h, if indicated, with necessary macros defined
 //
 
+#if defined(BI_PLAT_WIN32) && !defined(_OLEAUTO_H_)
+//
+// NOTE: 'tagCY' seems to undergo several changes [from struct to union,
+//       then to union containing a struct] making it hard to properly
+//       choose between inheritance and containment.
+//       The following approach ensures the it can be used as a base class.
+//
+#ifndef _tagCY_DEFINED
+#define _tagCY_DEFINED
+#define _CY_DEFINED
+                        /* size is 8 */
+typedef struct  tagCY
+    {
+    unsigned long Lo;
+    long Hi;
+    }   CY;
+
+#endif
+#endif
+
 #if defined(BI_PLAT_MSW)
-# if defined(__WINDOWS_H)
+# if defined(__WINDOWS_H) && !defined(INC_WINDOWS)
 #   if !defined(STRICT)
 #     error if windows.h is included before osl/defs.h, STRICT must be defined
 #   endif
@@ -35,17 +56,17 @@
 #     include <windows.h>
 #   endif
 # endif
-# if !defined(__SHELLAPI_H) && !defined(BI_PLAT_WIN32)
+# if !defined(__SHELLAPI_H) && !defined(_INC_SHELLAPI) && !defined(BI_PLAT_WIN32)
 #   include <shellapi.h>
 # endif
 # if defined(BI_PLAT_WIN16) && defined(INC_OLE2)
-#   if !defined(__OLE2_H)
+#   if !defined(__OLE2_H) && !defined(_OLE2_H_)
 #     include <ole2.h>
 #   endif
 #   if !defined(__DISPATCH_H)
 #     include <dispatch.h>
 #   endif
-#   if !defined(__OLENLS_H)
+#   if !defined(__OLENLS_H) && !defined(_OLENLS_)
 #     include <olenls.h>
 #   endif
 # endif
@@ -62,10 +83,12 @@ typedef unsigned short ushort;
 // Shorthand 'far' keyword evaluates to __far when needed & supported, else
 // nothing
 //
-#if defined(BI_DATA_NEAR)
-# define far __far
-#else
-# define far
+#if !defined(far)
+# if defined(BI_PTR_0_32)
+#   define far
+# else
+#   define far __far
+# endif
 #endif
 #if defined(BI_NO_BOOL) && defined(EMULATE_BOOL)
   template<class T> inline bool ToBool(const T& t) {

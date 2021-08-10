@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // OleDebug.cpp -- Some debugging utilities for getting symbolic output
@@ -148,7 +148,7 @@ void cdecl cDebug::DebugPrintf (LPOLESTR s, ...)
 	va_start (paramList, s);
 	if (DebugMode) {
 		char buf1 [BUFFERSIZE];
-		vwsprintf (buf1, s, paramList);
+		vsprintf (buf1, s, paramList);
 		char buf [BUFFERSIZE];
 		wsprintf (prepareBuf(buf), "%s\n\r", buf1);
 		OleDbgOut (buf);
@@ -1485,4 +1485,5 @@ ReleaseWatcher::Release(){
 }
 
 #endif
+
 

@@ -12,7 +12,7 @@
 class [[TDialog]] : public TDialog {
 public:
 ##QUERY_DLOG [[DLogRsrc]]
-    [[TDialog]] (TWindow *parent, TResId resId = [[DLogRsrc]], TModule *module = 0);
+	 [[TDialog]] (TWindow *parent, TResId resId = [[DLogRsrc]], TModule *module = 0);
     virtual ~[[TDialog]] ();
 
 };    //{{[[TDialog]]}}
@@ -21,7 +21,10 @@ public:
 //{{TDialog = [[TDialog]]}}
 class [[TDialog]] : public TDialog, public TView {
 public:
-    [[TDialog]] (TDocument& doc, TWindow* parent = 0);
+##QUERY_DLOG [[DLogRsrc]]
+//	 [[TDialog]] (TWindow *parent, TResId resId = [[DLogRsrc]], TModule *module = 0);  //{{DIALOG_ASSOCIATION}}
+
+	 [[TDialog]] (TDocument& doc, TWindow* parent = 0);
     virtual ~[[TDialog]] ();
 
     static const char far* StaticName() {return "Dialog View";}  // put in resource

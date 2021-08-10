@@ -28,6 +28,7 @@ DEFINE_RESPONSE_TABLE1(TOleView, TOleWindow)
   //
   EV_VN_INVALIDATE,
   EV_VN_DOCOPENED,
+  EV_VN_DOCCLOSED,
   EV_OC_VIEWPARTINVALID,
 
   // Server specific messages
@@ -48,6 +49,7 @@ TOleView::TOleView(TDocument& doc, TWindow* parent)
   TView(doc),
   TOleWindow(parent, doc.GetDocManager().GetApplication())
 {
+  Destroying = false;
   TOleDocument* oleDoc = TYPESAFE_DOWNCAST(&GetDocument(), TOleDocument);
   CHECK(oleDoc);
   OcDoc = oleDoc->GetOcDoc(); // Let OleWindow member point to it for accessor
@@ -55,7 +57,9 @@ TOleView::TOleView(TDocument& doc, TWindow* parent)
 
 TOleView::~TOleView()
 {
-  Destroy();  // make sure that derived TWindow shutdown virtuals get called
+  Destroying = true;
+  if (IsRemote())
+    Destroy();  // make sure that derived TWindow shutdown virtuals get called
   OcDoc = 0;  // we don't own it, don't let TOleWindow delete it
 }
 
@@ -111,8 +115,82 @@ TOleView::VnIsWindow(HWND hWnd)
 bool
 TOleView::CanClose()
 {
-  return (GetOcRemView() || TWindow::CanClose()) && Doc->CanClose();
+  // We don't want to close the view for DLL servers
+  //
+  if (IsOpenEditing() && !OcApp->IsOptionSet(amExeMode)) {
+    TOleFrame* olefr = TYPESAFE_DOWNCAST(GetApplication()->GetMainWindow(), TOleFrame);
+    CHECK(olefr);
+    olefr->ShowWindow(SW_HIDE);
+    TOleWindow::OleShutDown();
+    return false;
+  }
+
+  // say yes if there are more than one TOleView's attached to the document
+  //
+  if (OtherViewExists() || GetOcRemView())
+    return true;
+
+  if (Doc->CanClose())
+  {
+    if (OcDoc)
+      OcDoc->Close();
+    return true;
+  }
+
+  return false;
+
 }
+
+//
+//  Check if other TOleView already exists
+//
+bool
+TOleView::OtherViewExists()
+{
+  TView* curView = GetDocument().GetViewList();
+  while (curView) {
+    TOleLinkView* oleLinkView = TYPESAFE_DOWNCAST(curView, TOleLinkView);
+    if (!oleLinkView && curView != this)
+      return true;
+
+    curView = curView->GetNextView();
+  }
+
+  return false;
+}
+
+//
+// Perform normal CleanupWindow, plus let the OcView object know we have closed
+//
+void
+TOleView::CleanupWindow()
+{
+  if (!OtherViewExists()) {
+
+    TOleWindow::CleanupWindow();
+
+    // Delete the TOleView now rather wait until ~TOleFrame if its parent
+    // is TRemViewBucket
+    //
+    TOleFrame* mainWindow = TYPESAFE_DOWNCAST(GetApplication()->GetMainWindow(),
+                                            TOleFrame);
+    if (mainWindow && mainWindow->GetRemViewBucket() == Parent && !Destroying)
+      GetApplication()->Condemn(this);
+  }
+}
+
+//
+// Shut down the associated OCF partners if possible
+//
+bool
+TOleView::OleShutDown()
+{
+  TOleWindow::OleShutDown();
+  if (OcDoc && !OtherViewExists())
+    OcDoc->Close();
+  return true;
+}
+
 
 //
 //  Invalidate the view region specified by rect
@@ -126,14 +204,24 @@ TOleView::VnInvalidate(TRect& rect)
 }
 
 //
-//  A doc is opened
+//  The associated doc is opened
 //
 bool
-TOleView::VnDocOpened(int)
+TOleView::VnDocOpened(int /*omode*/)
 {
   DragPart = 0;
   Pos.SetNull();
   Scale.Reset();
+  return true;
+}
+
+//
+//  The associated doc is closed
+//
+bool
+TOleView::VnDocClosed(int /*omode*/)
+{
+  OcDoc = 0;
   return true;
 }
 

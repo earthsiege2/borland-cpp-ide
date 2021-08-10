@@ -1,3 +1,4 @@
+//
 /*
  * ansiapi.h
  * This file contains prototypes of ANSI version of OLE apis
@@ -154,4 +155,4 @@ HRESULT IMoniker_GetDisplayNameA(LPMONIKER pm, LPBC p1, LPMONIKER p2, LPSTR FAR 
 #endif // !UNICODEOLE32
 
 #endif //  _ANSIAPI_INCL
-
+

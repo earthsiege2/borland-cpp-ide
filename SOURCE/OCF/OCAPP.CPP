@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -196,7 +197,8 @@ TOcApp::RegisterClasses()
       bool multiUse = !IsOptionSet(amSingleUse);
       if (multiUse) {
         const char* usage = regList.Lookup("usage");
-        multiUse = ToBool(!(usage && *usage == *ocrSingleUse));
+        char su[] = ocrSingleUse;
+        multiUse = ToBool(!(usage && *usage == *su));
       }
       if (!RegisterClass(progid, reinterpret_cast<BCID>(link), multiUse))
         TXObjComp::Throw(TXObjComp::xDocFactoryFail);
@@ -272,9 +274,11 @@ TOcApp::EvActivate(bool active)
 bool
 TOcApp::RegisterClass(const string& className, BCID classId, bool multiUse)
 {
+  // Self-embedding works only if the app is multi-use
+  //
   if (BServiceI)
     return HRSucceeded(BServiceI->RegisterClass(OleStr(className.c_str()),
-                       this, classId, true, ToBool(!multiUse)));
+                       this, classId, ToBool(multiUse), ToBool(!multiUse)));
   return false;
 }
 
@@ -571,7 +575,10 @@ TOcApp::AppendWindowTitle(LPCOLESTR /*title*/)
 HRESULT _IFUNC
 TOcApp::SetStatusText(LPCOLESTR text)
 {
-  return HRFailIfZero((bool)ForwardEvent(OC_APPSTATUSTEXT, text));
+  // Convert ole str into ascii
+  //
+
+  return HRFailIfZero((bool)ForwardEvent(OC_APPSTATUSTEXT, (const char far*)OleStr(text)));
 }
 
 //
@@ -647,13 +654,19 @@ TOcApp::ShutdownMaybe()
 uint32
 TOcApp::ForwardEvent(int eventId, const void far* param)
 {
-  return ::SendMessage(GetWindow(), WM_OCEVENT, eventId, (LPARAM)param);
+  if (::IsWindow(GetWindow()))
+    return ::SendMessage(GetWindow(), WM_OCEVENT, eventId, (LPARAM)param);
+
+  return 0;
 }
 
 uint32
 TOcApp::ForwardEvent(int eventId, uint32 param)
 {
-  return ::SendMessage(GetWindow(), WM_OCEVENT, eventId, param);
+  if (::IsWindow(GetWindow()))
+    return ::SendMessage(GetWindow(), WM_OCEVENT, eventId, param);
+
+  return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -919,11 +932,27 @@ TOcRegistrar::LoadBOle()
   // Check BOle DLL existance & version first, failing if it is incompatible
   // (old)
   //
+  char name[30];
   OFSTRUCT ofs;
   ofs.cBytes = sizeof ofs;
-  if (::OpenFile(BOLEDLL, &ofs, OF_EXIST) >= 0) {
+
+#if defined(BI_PLAT_WIN32)
+  bool winNT = !ToBool(::GetVersion()&0x80000000);
+  if (winNT) // NT platform
+  {
+    lstrcpy(name, BOLEDLLW);
+
+    // Try the ANSI dll if couldn't find Unicode version
+    if (::OpenFile(name, &ofs, OF_EXIST) == HFILE_ERROR)
+      lstrcpy(name, BOLEDLL);
+  }
+  else
+#endif
+    lstrcpy(name, BOLEDLL);
+
+  if (::OpenFile(name, &ofs, OF_EXIST) >= 0) {
     VS_FIXEDFILEINFO vInfo;
-    if (!sGetFileVersionInfo(BOLEDLL, vInfo) ||
+    if (!sGetFileVersionInfo(name, vInfo) ||
         vInfo.dwFileVersionMS < BOLE_FILEVER_MS ||
           vInfo.dwFileVersionMS == BOLE_FILEVER_MS &&
           vInfo.dwFileVersionLS < BOLE_FILEVER_LS)
@@ -1009,3 +1038,4 @@ TOcInitInfo::TOcInitInfo(TOcInitHow how, TOcInitWhere where, IBContainer far* co
   Storage(0)
 {
 }
+

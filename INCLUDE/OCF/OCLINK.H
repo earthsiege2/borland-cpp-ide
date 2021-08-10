@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -155,4 +156,5 @@ class TOcViewCollectionIter : private TCVectorIteratorImp<TOcLinkView*> {
 };
 
 #endif  // OCF_OCLINK_H
+
 

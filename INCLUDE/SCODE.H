@@ -6,9 +6,6 @@
  *
  */
 
-#if !defined(__FLAT__)
-
-
 /*****************************************************************************\
 *                                                                             *
 * scode.h -     Defines standard status code services.                                            *
@@ -18,6 +15,7 @@
 \*****************************************************************************/
 
 
+#if !defined(__FLAT__)
 #ifndef __SCODE_H__
 #define __SCODE_H__
 #define __SCODE_H
@@ -291,14 +289,24 @@ STDAPI PropagateResult(HRESULT hrPrev, SCODE scNew);
 
 #endif      // ifndef __SCODE_H__
 
-
 #else  /* !__FLAT__ */
+/*++
 
+Copyright (c) 1992 - 1995 Microsoft Corporation
 
-#if !defined(__WINERROR_H)
-	#include "winerror.h"
+Module Name:
+
+    scode.h
+
+Abstract:
+
+    Obsolete SCODE header file.  Use WINERROR.H
+
+--*/
+
+#ifndef  _WINERROR_
+#include <winerror.h>
 #endif
-
 
 #endif  /* __FLAT__ */
 

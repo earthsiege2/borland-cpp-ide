@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 // 
 // BOleCMan.h --   Declares an IBClassMgr "factory" which can create Bolero
@@ -57,3 +57,4 @@ public:
 };
 
 #endif
+

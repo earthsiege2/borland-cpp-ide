@@ -1,8 +1,10 @@
 /*++ BUILD Version: 0002    // Increment this if a change has global effects
 
+Copyright (c) 1989-1995  Microsoft Corporation
+
 Module Name:
 
-    wincon.x
+    wincon.h
 
 Abstract:
 
@@ -17,22 +19,10 @@ Revision History:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WINCON_
 #define _WINCON_
-#define __WINCON_H
 
-#if defined(__BORLANDC__)
-// set default packing to 4
 #include <pshpack4.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -200,7 +190,7 @@ BOOL
 // Output Mode flags:
 //
 
-#define ENABLE_PROCESSED_OUTPUT  0x0001
+#define ENABLE_PROCESSED_OUTPUT    0x0001
 #define ENABLE_WRAP_AT_EOL_OUTPUT  0x0002
 
 //
@@ -735,9 +725,6 @@ SetConsoleOutputCP(
 }
 #endif
 
-#if defined(__BORLANDC__)
-// reset to default packing
 #include <poppack.h>
-#endif
 
 #endif // _WINCON_

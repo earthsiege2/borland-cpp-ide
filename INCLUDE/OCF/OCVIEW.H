@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -44,7 +45,7 @@ class TOcFormat {
     void SetFormatId(uint id) {Id = id;}
     void SetFormatName(char far* name, TOcApp& ocApp);
     void SetFormatName(uint id, TOcApp& ocApp);
-    void SetMedium(uint medium) {Medium = medium;}
+    void SetMedium(uint medium) {Medium = (ocrMedium)medium;}
     void SetAspect(uint aspect) {Aspect = aspect;}
     void SetDirection(uint direction) {Direction = direction;}
     void SetLinkable(bool link = true) {IsLinkable = link;}
@@ -61,12 +62,12 @@ class TOcFormat {
     void GetFormatInfo(TOcFormatInfo far& f);
 
   private:
-    uint Id;
-    char RegName[32];
-    char Name[32];
-    char ResultName[32];
-    uint Medium;
-    bool IsLinkable;
+    uint      Id;
+    char      RegName[32];
+    char      Name[32];
+    char      ResultName[32];
+    ocrMedium Medium;
+    bool      IsLinkable;
 
     uint Aspect;      // last three data members added & maintained by ocf
     uint Direction;
@@ -171,6 +172,7 @@ class _ICLASS TOcView : public TUnknown,
     virtual bool EvSetFocus(bool set);
     bool         EnumLinks(IBLinkInfo far* far*);
     bool         BrowseLinks();
+    bool         UpdateLinks();
 
     // Object reference & lifetime managment
     // For internal OCF use only
@@ -252,13 +254,15 @@ class _ICLASS TOcView : public TUnknown,
 #if defined(BI_DATA_NEAR)
     TPoint&          Origin;       // Origin of view topleft relative to the document
     TSize&           Extent;       // Extent of view's perception of document?
-    string&          WinTitle;     // Original window title string
+    string&          WinTitle;     // Merged window title string
     TOcFormatList&   FormatList;   // list of clipboard formats supported
+    TString&         OrgTitle;     // Original window title string
 #else
     TPoint           Origin;
     TSize            Extent;
     string           WinTitle;
     TOcFormatList    FormatList;
+    TString          OrgTitle;     // Original window title string
 #endif
     int              LinkFormat;   // adjustment for format count
     TRegList*        RegList;
@@ -291,18 +295,22 @@ class _ICLASS TOcView : public TUnknown,
 #define OC_VIEWSHOWTOOLS      0x0305  // ask server to show its tools
 #define OC_VIEWGETPALETTE     0x0306  //
 #define OC_VIEWCLIPDATA       0x0307  // ask server for a clip data in a format
-#define OC_VIEWPARTSIZE       0x0308  // ask server for a its extent
-#define OC_VIEWOPENDOC        0x0309  // ask server for a its extent
-#define OC_VIEWATTACHWINDOW   0x030A  // ask server to attach to its owner window
-#define OC_VIEWSETSCALE       0x030B  // ask server to handle scaling
-#define OC_VIEWGETSCALE       0x030C  // ask container to give scaling info
-#define OC_VIEWGETSITERECT    0x030D  // ask container for the site rect
-#define OC_VIEWSETSITERECT    0x030E  // ask container to set the site rect
-#define OC_VIEWGETITEMNAME    0x030F  // ask server to name its content or selection
-#define OC_VIEWSETLINK        0x0310  // ask server to establish link to item
-#define OC_VIEWBREAKLINK      0x0311  // ask server to break link to item
-#define OC_VIEWPARTACTIVATE   0x0312  // let container know the part is activated
-#define OC_VIEWPASTEOBJECT    0x0313  // let container know a part is pasted
+#define OC_VIEWSETDATA        0x0308  // set format data into server
+#define OC_VIEWPARTSIZE       0x0309  // ask server for a its extent
+#define OC_VIEWOPENDOC        0x030A  // ask server for a its extent
+#define OC_VIEWATTACHWINDOW   0x030B  // ask server to attach to its owner window
+#define OC_VIEWSETSCALE       0x030C  // ask server to handle scaling
+#define OC_VIEWGETSCALE       0x030D  // ask container to give scaling info
+#define OC_VIEWGETSITERECT    0x030E  // ask container for the site rect
+#define OC_VIEWSETSITERECT    0x030F  // ask container to set the site rect
+#define OC_VIEWGETITEMNAME    0x0310  // ask server to name its content or selection
+#define OC_VIEWSETLINK        0x0311  // ask server to establish link to item
+#define OC_VIEWBREAKLINK      0x0312  // ask server to break link to item
+#define OC_VIEWPARTACTIVATE   0x0313  // let container know the part is activated
+#define OC_VIEWPASTEOBJECT    0x0314  // let container know a part is pasted
+#define OC_VIEWDOVERB         0x0315  // ask server to do a verb
+
+#define OC_USEREVENT          0xF000  // User defined events
 
 
 struct TOcDragDrop {   // for viewdrop & viewdrag
@@ -464,3 +472,4 @@ inline void TOcView::SetOption(uint32 bit, bool state)
                {if (state) Options |= bit; else Options &= ~bit;}
 
 #endif  // OCF_OCVIEW_H
+

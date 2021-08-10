@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // OleDebug.h -- Some debugging utilities for getting symbolic output
@@ -236,3 +236,4 @@ class _ICLASS cDebugEnum;
 #define OLE_FUNC DebugFunc
 
 #endif
+

@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -44,18 +45,18 @@ const int ocrFormatLimit = 8;  // maximum number of data formats per class
 // format: standard clipboard numeric format, or name of custom format
 //
 enum ocrClipFormat {
-  ocrText           =  1,  // CF_TEXT          
-  ocrBitmap         =  2,  // CF_BITMAP       
-  ocrMetafilePict   =  3,  // CF_METAFILEPICT 
-  ocrSylk           =  4,  // CF_SYLK         
-  ocrDif            =  5,  // CF_DIF          
-  ocrTiff           =  6,  // CF_TIFF         
-  ocrOemText        =  7,  // CF_OEMTEXT      
-  ocrDib            =  8,  // CF_DIB          
-  ocrPalette        =  9,  // CF_PALETTE      
-  ocrPenData        = 10,  // CF_PENDATA      
-  ocrRiff           = 11,  // CF_RIFF         
-  ocrWave           = 12,  // CF_WAVE         
+  ocrText           =  1,  // CF_TEXT
+  ocrBitmap         =  2,  // CF_BITMAP
+  ocrMetafilePict   =  3,  // CF_METAFILEPICT
+  ocrSylk           =  4,  // CF_SYLK
+  ocrDif            =  5,  // CF_DIF
+  ocrTiff           =  6,  // CF_TIFF
+  ocrOemText        =  7,  // CF_OEMTEXT
+  ocrDib            =  8,  // CF_DIB
+  ocrPalette        =  9,  // CF_PALETTE
+  ocrPenData        = 10,  // CF_PENDATA
+  ocrRiff           = 11,  // CF_RIFF
+  ocrWave           = 12,  // CF_WAVE
   ocrUnicodeText    = 13,  // CF_UNICODETEXT  Win32 only
   ocrEnhMetafile    = 14,  // CF_ENHMETAFILE  Win32 only
 };
@@ -78,6 +79,7 @@ enum ocrAspect {
 // medium: means of data transfer
 //
 enum ocrMedium {
+  ocrNull       = 0,
   ocrHGlobal    = 1,  // TYMED_HGLOBAL  global memory handle
   ocrFile       = 2,  // TYMED_FILE     data as contents of file
   ocrIStream    = 4,  // TYMED_ISTREAM  instance of an IStream object
@@ -331,14 +333,14 @@ TOcAutoFactory<T>::Create(IUnknown* outer, uint32 options, uint32 /*id*/)
 #endif
 
 inline TUnknown*
-TRegistrar::CreateAutoApp(TObjectDescriptor app, uint32 opts, IUnknown* outer) 
+TRegistrar::CreateAutoApp(TObjectDescriptor app, uint32 opts, IUnknown* outer)
                              {return AppDesc.CreateAutoApp(app, opts, outer);}
 inline void
 TRegistrar::ReleaseAutoApp(TObjectDescriptor app)
                                 {AppDesc.ReleaseAutoApp(app);}
 inline TUnknown*
 TRegistrar::CreateAutoObject(TObjectDescriptor doc, TServedObject& app,
-                             IUnknown* outer) 
+                             IUnknown* outer)
                            {return AppDesc.CreateAutoObject(doc, app, outer);}
 inline TUnknown*
 TRegistrar::CreateAutoObject(const void* obj, const typeinfo& objInfo,
@@ -355,3 +357,4 @@ inline void TRegistrar::SetOption(uint32 bit, bool state)
 inline void TRegistrar::ProcessCmdLine(string& cmdLine)
                                             {AppDesc.ProcessCmdLine(cmdLine);}
 #endif  // OCF_OCREG_H
+

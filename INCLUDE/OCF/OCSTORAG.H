@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -244,3 +245,4 @@ class _OCFCLASS TOcStorage {
 };
 
 #endif  // OCF_OCSTORAG_H
+

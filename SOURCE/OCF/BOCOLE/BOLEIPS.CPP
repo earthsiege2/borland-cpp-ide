@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleIPS.cpp --	Implements the Bolero half of the OLE2 in-process
@@ -153,13 +153,13 @@ HRESULT _IFUNC BOleInProcHandler::SetAdvise (DWORD aspects, DWORD advf, LPADVISE
 		pAdviseView->Release();
 	pAdviseView = pAdvSink;
 
-
-
-
-
-
-
-
+//
+//
+//
+//
+//
+//
+//
 
 	if (advf | ADVF_PRIMEFIRST)
 		// Cause advises now
@@ -228,7 +228,7 @@ HRESULT _IFUNC BOleInProcHandler::Init(PIBDataProvider pDP,
 		hr = pDefHandler->QueryInterface(IID_IBSite, &(LPVOID)pDefSite);
 		if (SUCCEEDED(hr)) {
 			pDefSite->Release();     // prevent aggregation deadlock
-
+			//
 			hr = pDefSite->Init(pDP, pP, szProgId, fHatchWnd);
 		}
 	}
@@ -286,7 +286,7 @@ void _IFUNC BOleInProcHandler::Invalidate( BOleInvalidate b)
 			pAdviseView = NULL;
 			dwAdviseAspects = 0L;
 			dwAdviseFlags = 0L;
-
+//
 		}
 	}
 	if (b)  // VIEW or DATA or PERSIST remains invalid
@@ -330,7 +330,7 @@ HRESULT _IFUNC BOleInProcHandler::ContextSensitiveHelp(BOOL fEnterMode)
 HRESULT _IFUNC BOleInProcHandler::TranslateAccelerator (LPMSG lpmsg)
 {
 	return pService->GetApplication()->Accelerator(lpmsg);
-
+//
 }
 
 HRESULT _IFUNC BOleInProcHandler::OnFrameWindowActivate (BOOL fActivate)
@@ -494,13 +494,13 @@ HRESULT _IFUNC BOleInProcServer::SetAdvise (DWORD aspects, DWORD advf, LPADVISES
 		pAdviseView->Release();
 	pAdviseView = pAdvSink;
 
-
-
-
-
-
-
-
+//
+//
+//
+//
+//
+//
+//
 
 	if (advf & ADVF_PRIMEFIRST)
 		// Cause advises now
@@ -640,9 +640,9 @@ HRESULT _IFUNC BOleInProcServer::Init(PIBDataProvider pDP,
 		//
 		CreateDataCache(AsPIUnknown(pObjOuter),cid, IID_IUnknown,
 			&(LPVOID)pDefHandler);
-
-
-
+//
+//
+//
 	}
 
 	// initialize default IPS
@@ -659,7 +659,7 @@ void _IFUNC BOleInProcServer::Invalidate( BOleInvalidate b)
 			pAdviseView = NULL;
 			dwAdviseAspects = 0L;
 			dwAdviseFlags = 0L;
-
+//
 		}
 	}
 	if (b)  // VIEW or DATA or PERSIST remains invalid
@@ -718,13 +718,13 @@ HRESULT _IFUNC BOleInProcServer::Run(LPBINDCTX pbc)
 	//
 	if (!fRunningMode) {
 		fRunningMode = TRUE;
-
-
-
-
-
-
-
+//
+//
+//
+//
+//
+//
+//
 		// Should register the moniker here.
 		// Don't register if this is a clone (pPart is NULL)
 		// otherwise we would link to what's on the clipboard...
@@ -775,3 +775,4 @@ HRESULT _IFUNC BOleInProcServer::Close (DWORD dwSaveOption)
 	fRunningMode = FALSE;
 	return BOleSite::Close(dwSaveOption);
 }
+

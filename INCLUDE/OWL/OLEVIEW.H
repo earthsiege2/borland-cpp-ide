@@ -46,15 +46,20 @@ class _USERCLASS TOleView : public TOleWindow, public TView {
     TWindow* GetWindow() {return (TWindow*)this;}
     bool     SetDocTitle(const char far* docname, int index)
                {return TWindow::SetDocTitle(docname, index);}
+    bool     OleShutDown();
 
   protected:
     bool CanClose();
     TOcView* CreateOcView(TRegLink* link, bool isEmbedded, IUnknown* outer);
+    void CleanupWindow();
+    bool OtherViewExists();
 
     // View notifications
     //
     bool VnInvalidate(TRect& rect);
     bool VnDocOpened(int omode);
+    bool VnDocClosed(int omode);
+
     TMenuDescr* GetViewMenu();
 
     bool EvOcViewPartInvalid(TOcPartChangeInfo& changeInfo);
@@ -77,7 +82,7 @@ class _USERCLASS TOleView : public TOleWindow, public TView {
     bool   EvOcViewGetItemName(TOcItemName& item);
 
   private:
-//    TDocTemplate* FindTemplate(TDocument& doc);
+    bool   Destroying;
 
     // event handlers
     //

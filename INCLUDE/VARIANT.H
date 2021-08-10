@@ -17,13 +17,29 @@
  *
  */
 
+#if !defined(__FLAT__)
+/***
+*variant.h
+*
+*Purpose:
+*  This file declares VARIANT, and related data types.
+*
+*Implementation Notes:
+*  This file requires ole2.h
+*
+*****************************************************************************/
+
+/*
+ *      C/C++ Run Time Library - Version 6.5
+ *
+ *      Copyright (c) 1994 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
 #ifndef _VARIANT_H_
 #define _VARIANT_H_
 #define __VARIANT_H
-
-
-#if !defined(__FLAT__)
-
 
 #ifndef HUGEP
 # ifdef _MAC
@@ -289,16 +305,14 @@ struct FARSTRUCT tagVARIANT{
 #define V_ARRAYREF(X)    V_UNION(X, pparray)
 #define V_BYREF(X)       V_UNION(X, byref)
 
+#endif /* _VARIANT_H_ */
 
 #else  /* !__FLAT__ */
-
+#ifndef RC_INVOKED
+#pragma message("WARNING: your code should #include oleauto.h instead of variant.h")
+#endif /* !RC_INVOKED */
 
 #include <oleauto.h>
 
-
 #endif  /* __FLAT__ */
-
-
-#endif /* _VARIANT_H_ */
-
 

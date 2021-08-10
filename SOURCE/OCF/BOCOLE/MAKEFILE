@@ -1,17 +1,60 @@
+# $Header:   N:\admin\ocf\source\bocole\makefile.__v   2.0.1.0   10 Apr 1995 18:06:46   CQUINN  $
 #-----------------------------------------------------------------------------
 # ObjectComponents - (C) Copyright 1991, 1993 by Borland International
 #
 # MAKEFILE for ObjectComponents BOcOle Dlls
 #
+# To get 16 bit non-debug Bocole.dll, do
+#   make
+# To get 16 bit debug BocoleD.dll, do
+#   make DEBUG=1
+#
+# To get 32 bit non-debug BocoleF.dll, do
+#   make WIN32=1 ANSI=1
+# To get 32 bit debug BocoleDF.dll, do
+#   make WIN32=1 DEBUG=1 ANSI=1
+#
+# The ANSI symbol is not needed for 16-bit Bocole, nor for UNICODE apps.
+# Build with ANSI flag if you want to use Bocole under both NT and Win95
+# since Win95 does not support Unicode.
+#
+# Rename the debug versions of BOCOLED, BOCODF and BOCODFW to
+# BOCOLE, BOCOF.dll and BOCOFW.dll respectively to use them for debugging.
+#
 #------------------------------------------------------------------------
-!ifdef WIN32
-MODEL = 32
-APP   = BOCOLEF
-UNICODE = UNICODE
-!else
-MODEL = l
-APP   = BOCOLE
+!if $d(DEBUG)
+KEY = D
 !endif
+
+!if !$d(ANSI)
+WIDE = W
+!endif
+
+!if !$d(APP)
+! ifdef WIN32
+  FILENAME   = BOCO$(KEY)F$(WIDE)
+  APP = BOCOF$(WIDE)
+! else
+  FILENAME   = BOCOLE$(KEY)
+  APP = BOCOLE
+! endif
+!else
+  FILENAME = $(APP)
+!endif
+
+! ifdef WIN32
+  DEFNAME = BOCOF
+! else
+  DEFNAME = BOCOLE
+! endif
+
+! ifdef WIN32
+  MODEL = 32
+  UNICODE = UNICODE
+! else
+  MODEL = l
+! endif
+
 DLL = 1
 VERSION = 1
 
@@ -31,7 +74,14 @@ OBJS = \
    olenew.obj \
    boledata.obj\
    bolehelp.obj \
-   boleguid.obj
+   boleguid.obj \
+   bolever.obj
+
+!if $d(ANSI)
+OBJS = $(OBJS) \
+   utils.obj
+!endif
+
 !if $d(DIAGS)
 OBJS = $(OBJS) \
   hashtbl.obj  \
@@ -41,17 +91,17 @@ OBJS = $(OBJS) \
 !ifndef WIN32
 DEBUG_TARGETS =   \
    $(RELDIR)\$(APP).map
-#  $(RELDIR)\$(APP).sym   
+#  $(RELDIR)\$(APP).sym
 !endif
 
 OTHER_TARGETS = \
-   $(RELDIR)\$(APP).res   \
+   $(RELDIR)\$(DEFNAME).res   \
    $(RELDIR)\$(APP).dll   \
 #  $(RELDIR)\$(APP).lib   \
 #  $(RELDIR)\bolever.h   \
    $(DEBUG_TARGETS)
 
-OBJDIR = $(MODEL)BIN
+OBJDIR = BIN$(MODEL)$(KEY)$(WIDE)
 
 !ifdef WIN32
    RESOURCES = $(SRCDIR)\boleui32\boleui32.res
@@ -64,19 +114,20 @@ OBJDIR = $(MODEL)BIN
 !include make.inc
 
 $(RELDIR)\$(APP).dll :  $(APP).dll
-   copy $(APP).dll $(RELDIR)\$(APP).dll
-!ifndef WIN32
-   tdstrip -s $(RELDIR)\$(APP).dll
-!else
-   tdstrp32 -s $(RELDIR)\$(APP).dll
-!endif
+   copy $(APP).dll $(RELDIR)\$(FILENAME).dll
+
+#!ifndef WIN32
+#   tdstrip -s $(RELDIR)\$(APP).dll
+#!else
+#   tdstrp32 -s $(RELDIR)\$(APP).dll
+#!endif
 
 $(RELDIR)\$(APP).map :  $(APP).map
-   copy $(APP).map $(RELDIR)\$(APP).map
+   copy $(APP).map $(RELDIR)\$(FILENAME).map
 
 $(RELDIR)\$(APP).sym :  $(APP).map
    $(MAPSYM) $(APP).map
-   copy $(APP).sym $(RELDIR)\$(APP).sym
+   copy $(APP).sym $(RELDIR)\$(FILENAME).sym
    del $(APP).sym
 
 $(RELDIR)\bolever.h : $(SRCDIR)\bolever.h
@@ -84,19 +135,20 @@ $(RELDIR)\bolever.h : $(SRCDIR)\bolever.h
 
 !ifndef  WIN32
 boleguid.obj: $(SRCDIR)\boleguid.cpp
-  $(CPP) -zE_TEXT -zFCODE $(SRCDIR)\boleguid.cpp      
+  $(CPP) -zE_TEXT -zFCODE $(SRCDIR)\boleguid.cpp
 # put data into code segment in this module
 !endif
 
 !ifdef WIN32
-# $(APP).res: $(SRCDIR)\bole16.rc $(SRCDIR)\bole32.rc
+# $(DEFNAME).res: $(SRCDIR)\bole16.rc $(SRCDIR)\bole32.rc
 #         $(BCROOT)\bin\brc32 -r @&&|
 #         -I$(BCROOT)\include;$(OLEROOT)\h;$(SRCDIR) \
-#         $(SRCDIR)\bole32.rc -fo $(APP).res
+#         $(SRCDIR)\bole32.rc -fo $(DEFNAME).res
 # |
 !else
-$(APP).res: $(SRCDIR)\bole16.rc
+$(DEFNAME).res: $(SRCDIR)\bole16.rc
         $(BCROOT)\bin\brc -r @&&|
-        -I.;$(BCROOT)\include $(SRCDIR)\bole16.rc -fo $(APP).res
+        -I.;$(BCROOT)\include $(SRCDIR)\bole16.rc -fo $(DEFNAME).res
 |
 !endif
+

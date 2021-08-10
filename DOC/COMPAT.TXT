@@ -1,115 +1,66 @@
 COMPAT.TXT - Compatibility Information
-
-Using the Paradox Engine And Database Frameworks with BC 4.5
-============================================================
-
-THE PARADOX ENGINE
-
-There is only one significant detail regarding the use of the Paradox
-Engine 3.0x with Borland C++ 4.5.  The BC 3.1 versions of setjump and
-longjump will have to be linked into your application in order to create
-DOS Paradox Engine and Database Framework applications.  The object
-module, setjmp.obj, is provided in the BC45\LIB\COMPAT directory. Linking
-this module into your application will replace the BC 4.5 version of
-these functions.  To do this, simply add the file
-\BC45\LIB\COMPAT\SETJMP.OBJ to your project file or to the link command
-in your makefile.
+(C) Copyright 1995 by Borland International
 
 
-REBUILDING THE DATABASE FRAMEWORKS
-
-Due to changes in the debug information format, symbol length, and
-runtime library, the Database Framework library must be recompiled with
-Borland C++ 4.5.
-
-A number of changes will have to be made to the Paradox Engine DBF v3.01
-makefile in order for it to work with BC 4.5 (this makefile is available
-from our local BBS at (408) 431-5096 as the file TI1169.ZIP and from
-TechFax at (800) 822-4269, document number 1169):
-
-1. Copy makefile.bc to make40.mak
-
-2. Make certain that a turboc.cfg file exists in the BC45\BIN directory
-   containing:
-
-      -Ic:\bc45\include
-      -Lc:\bc45\lib
-
-   Make certain that a tlink.cfg file exist in the BC45\BIN directory
-   containing:
-
-      -Lc:\bc45\lib
-
-   Adjust the above paths to reflect your systems' configuration.
-
-3. Make the following changes:
-
-   Line 83: Change the 'CCINCLUDE=' line to contain the path to the BC
-            4.5 include directory.
-   Line 168: Delete the blank space at the end of the 'DEBUGFLAG=v ' line
-   Line 172: Delete the blank space at the end of the 'DYNAMICFLAG=d ' line
-   Line 202: Add '-DWindows' after '-DWINDOWS'
-   Line 204: Add '-DWindows' after '-DWINDOWS'
-   Line 206: Add '-DWindows' after '-DWINDOWS'
-   Line 239: Replace '$D' with 'BuildDir'
-   Line 249: Replace '$D' with 'BuildDir'
-   Line 261: Replace '$D' with 'BuildDir'
-
-Then use the following command to create a Database Framework Library.
-Add one or both of the options -DDBG and -DWINDOWS to add debug info or
-build for use in WINDOWS code. (Refer to the makefile for even more
-options.)
-
-   make -fmake40.mak
-
-For example, the following command will create a large model, static
-windows DBF library with debug info:
-
-   make -DWINDOWS -DDBG -fmake40.mak
-
-The libraries will be created in the PXENG30\C\LIB directory.  These
-libraries are now ready for use in your Database Frameworks Program.
+Contents:
+========
+   Using ObjectWindows 1.0 with Borland C++ 4.5
+   Downloading OWL1.PAK
+   Using Turbo Assembler 4.0 with Borland C++ 4.5
+   Using the Object Based Class Library with Borland C++ 4.5
+   Using Turbo Vision 1.0x with Borland C++ 4.5
+   Using the Paradox Engine and Database Frameworks with BC 4.5
 
 
-CHANGES TO USER CODE WITH RESPECT TO DBF
+Using ObjectWindows 1.0 with Borland C++ 4.5
+============================================
 
-The only change to your source code involves the use of the 'new'
-operator. In BC++ 4.5, the new operator no longer returns NULL in case
-of failure, rather the xalloc exception is thrown.  To change this back
-so operator new returns NULL, call set_new_handler(0).
+The ObjectWindows 1.0 library can be built with Borland C++ 4.5 for
+developing OWL 1.0 native applications. With the increased capacity of the
+Borland tools as compared to Borland C++ 3.1, you can now use OWL libraries
+with full symbolic debug information and debug your application in either
+the Integrated Development Environment or in Tubro Debugger for Windows.
 
-The only remaining issue is with using the new operator in the
-constructor of global objects.  How do you call set_new_handler(0)
-before a global object's constructor is called?  This is accomplished by
-using a #pragma startup function with a priority higher than that of the
-startup function used to call the particular global object's
-constructor.  The following code shows an example of changing the
-behavior of new:
+The overall process requires modifying ObjectWindows source files and
+rebuilding the object-based container library as well as ObjectWindows. All
+necessary files are contained in OWL1.PAK which is on the Borland C++
+compact disk in the \bc45\install directory. If you obtained Borland C++ on
+5-1/4" disks instead of compact disk, you will need to download OWL1.PAK
+from Borland's ftp site, local bulletin board, or CompuServe. (See
+"Downloading OWL1.PAK".)
 
-   #include <new.h>
+To begin the process, copy OWL1.PAK to the \bc45 directory and use
+unpaq.exe (in the \bc45 directory) to extract the files. When using unpaq,
+be sure to set:
 
-   void old_new(void)
-   {
-      set_new_handler(0);
-   }
+   Restore directories: checked
+   Archive name:        \bc45\owl1.pak
+   Destination dir:     \bc45
 
-   #pragma startup old_new 31
+Next, select Open archive. By default, all files are selected and if you
+de-select any, they will not be installed. Now select Decompress.
 
-   BEngine eng(pxWin);
+Building and using ObjectWindows and the object-based container library are
+described in 1OWL45.TXT which you will now find in the directory
+\bc45\source\owl1.
 
-   int main (void)
-   {
-   .
-   .
-   .
-      return 0;
-   }
 
-Note that creating global instances of Database Framework objects is not
-recommended because it can make error checking difficult.
 
-The other option is to change the source of the Database Frameworks: Add
-the try {} catch(xalloc) clause everywhere that new is called.
+Downloading OWL1.PAK
+====================
+
+OWL1.PAK can be obtained from the following sources:
+
+   Borland's anonymous ftp site: ftp.borland.com
+
+   CompuServe: !go BCPPWin and look in library 2.
+
+   Borland's Download Bulletin:
+      The DLBBS can be dialed at 408-431-5096. Simply join the C++
+      Conference (number 12). And from the File menu, select download
+      and enter OWL1.PAK (you do not need to be in the specific file
+      area).
+
 
 Using Turbo Assembler 4.0 with Borland C++ 4.5
 ==============================================
@@ -139,6 +90,31 @@ line 565, change:
 call WriteAsciizString,ds,offset Syntax
 to:
 call WriteASCIIZString,ds,offset Syntax
+
+
+Using the Object Based Class Library with Borland C++ 4.5
+=========================================================
+
+The object based class library, while still included with Borland C++
+4.5, must be compiled before it can be used.  Here are instructions for
+doing so:
+
+There is a makefile in the source directory, \BC45\SOURCE\CLASSLIB which
+can be used to build all versions of the class library.  For example, to
+build a large model static version for use with Object Windows, run the
+following command:
+
+   MAKE -DDOS -DOBJECTS "-DBCC=bcc -x-" -DMODEL=l -DNAME=tclassl
+
+To build a debugging dynamic version of the class library DLL, run the
+following command:
+
+   MAKE -DDOS -DDBG -DOBJECTS "-DBCC=bcc -x-" -DDLL -DNAME=tclass
+
+Note that to successfully use the DLL version of the class library you will
+have to copy TCLASS40.DLL from the \BC45\LIB directory into the \BC45\BIN
+directory.
+
 
 
 Using Turbo Vision 1.0x with Borland C++ 4.5
@@ -333,510 +309,115 @@ Here are the steps required to build an overlayable version of TV.LIB:
 
 
 
-Using the Object Based Class Library with Borland C++ 4.5
-=========================================================
+Using the Paradox Engine And Database Frameworks with BC 4.5
+============================================================
 
-The object based class library, while still included with Borland C++
-4.5, must be compiled before it can be used.  Here are instructions for
-doing so:
+THE PARADOX ENGINE
 
-There is a makefile in the source directory, \BC45\SOURCE\CLASSLIB which
-can be used to build all versions of the class library.  For example, to
-build a large model static version for use with Object Windows, run the
-following command:
-
-   MAKE -DDOS -DOBJECTS "-DBCC=bcc -x-" -DMODEL=l -DNAME=tclassl
-
-To build a debugging dynamic version of the class library DLL, run the
-following command:
-
-   MAKE -DDOS -DDBG -DOBJECTS "-DBCC=bcc -x-" -DDLL -DNAME=tclass
-
-Note that to successfully use the DLL version of the class library you will
-have to copy TCLASS40.DLL from the \BC45\LIB directory into the \BC45\BIN
-directory.
+There is only one significant detail regarding the use of the Paradox
+Engine 3.0x with Borland C++ 4.5.  The BC 3.1 versions of setjump and
+longjump will have to be linked into your application in order to create
+DOS Paradox Engine and Database Framework applications.  The object
+module, setjmp.obj, is provided in the BC45\LIB\COMPAT directory. Linking
+this module into your application will replace the BC 4.5 version of
+these functions.  To do this, simply add the file
+\BC45\LIB\COMPAT\SETJMP.OBJ to your project file or to the link command
+in your makefile.
 
 
-
-Using OWL 1.0 with Borland C++ 4.5
-==================================
-
-REBUILDING THE OWL LIBRARY:
+REBUILDING THE DATABASE FRAMEWORKS
 
 Due to changes in the debug information format, symbol length, and
-runtime library, the Object Windows library must be recompiled with
+runtime library, the Database Framework library must be recompiled with
 Borland C++ 4.5.
 
-Rebuilding Object Windows requires that you first rebuild the Object
-Based Class Library.  If you have not already done so, go to the section
-above marked "Using the Object Based Class Library with Borland C++ 4.5"
-and follow those directions before continuing here.
-
-There are 4 steps to this process:
-
-   1. Copy the old 3.1 OWL source into the new BC45 directory structure.
-   2. Extract the new makefile from the end of this file and save it.
-   3. Make a slight modification to OWLDLL.DEF.
-   4. Run MAKE to build the various OWL libraries you need to continue
-      your work.
-
-These steps are now presented in more detail:  Note that the Borland C++
-root directory is assumed to be \BC45.  Change this as necessary for your
-particular installation.
-
-First, go to the \BC45\SOURCE directory and create a new subdirectory
-called OWL1.  In OWL1, make three more subdirectories called SOURCE,
-LIB, and OBJECT.  In OBJECT, make directories called WS, WM, WL, and WD.
-Copy the entire contents of the \BC31\OWL\SOURCE directory from Borland
-C++ 3.1 into \BC45\SOURCE\OWL1\SOURCE.  The following batch text
-(modified to reflect your systems directory structure) will automate
-these tasks for you:
+A number of changes will have to be made to the Paradox Engine DBF v3.01
+makefile in order for it to work with BC 4.5 (this makefile is available
+from our local BBS at (408) 431-5096 as the file TI1169.ZIP and from
+TechFax at (800) 822-4269, document number 1169):
 
-   CD \BC45\SOURCE
-   MKDIR OWL1
-   CD OWL1
-   MKDIR OBJECT
-   MKDIR SOURCE
-   CD OBJECT
-   MKDIR WS
-   MKDIR WM
-   MKDIR WL
-   MKDIR DL
-   CD ..\SOURCE
-   XCOPY \BC31\OWL\SOURCE .
-
-You are now ready to make the necessary modifications before rebuilding
-the library.
+1. Copy makefile.bc to make40.mak
 
-The makefile for OWL 1.0 needed some changes to be suitable for use with
-Borland C++ 4.5.  Due to the number of changes, we have enclosed a new
-makefile and the end of this document.  Extract it using your favorite
-editor (e.g. the IDE) and save it in the OWL1\SOURCE directory as
-MAKEFILE.
-
-There are now new names for the OWL 1.0 libraries to avoid conflicts
-with the OWL 2.5 libraries.  The new names are:
-
-   OWL100WS.LIB   Small model
-   OWL100WM.LIB   Medium model
-   OWL100WL.LIB   Large model
-   OWL100I.LIB    Import library for DLL
-   OWL100.DLL     OWL 1.0 DLL
-
-In order to properly rename the DLL, the file OWLDLL.DEF in the
-OWL1\SOURCE directory must be modified as well.  Change line 1 of this
-file from "LIBRARY OWL31" to "LIBRARY OWL100".
-
-The Object Window's makefile can now be invoked via MAKE.EXE to rebuild
-the entire library.  For example, to rebuild the large model static
-library with no debug information, run MAKE with this option:
-
-   MAKE -DMODEL=l
-
-To build the dynamic library with full debug info, run MAKE as follows:
-
-   MAKE -DDLL -DDEBUG
-
-*** If you did not purchase the Turbo Assembler 4.5, you can only
-rebuild the large model static library or the dynamic library.  You must
-also define NOTASM when running MAKE.  The following command will build
-the large model static library.
-
-   MAKE -DMODEL=l -DNOTASM
-
-
-
-USING THE NEW OWL 1.0 LIBRARIES
-
-To import your old OWL 1.0 projects into BC++ 4.5, only a few changes
-are needed.  First load the .PRJ file into the IDE via Project | Open
-Project. After the project file is loaded, perform the following
-changes:
-
-   1. Using TargetExpert (see the local menu for the project file
-      target) uncheck OWL and the Class Library.  Also double check that
-      the target is Windows 16-bit, and that the memory model is
-      correct.
-
-   2. If using the static versions of these libraries, add as
-      dependencies to the target node TCLASSx.LIB and OWL100Wx.LIB where
-      'x' is the letter of the memory model being used.
-
-      If using the dynamic versions, add as dependencies to the target
-      node TCLASSI.LIB and OWL100I.LIB.
-
-   3. Select the Project Notebook (via Options | Project).
-      Under Directories.  Set the Include path to:
-         \BC45\INCLUDE;\BC45\INCLUDE\CLASSLIB\OBSOLETE;\BC45\INCLUDE\OWLCVT
-      Set the Library path to:
-         \BC45\LIB
-      Under C++ Options | Exception Handling/RTTI turn off all checkboxes.
+2. Make certain that a turboc.cfg file exists in the BC45\BIN directory
+   containing:
 
-      If using the dynamic versions of these libraries, go to Options |
-      Project | Compiler | Defines and add the symbol _CLASSDLL.
+      -Ic:\bc45\include
+      -Lc:\bc45\lib
 
-   4. If you are using OWL.DEF from OWL 1.0, make sure you copy it from
-      the old OWL 1.0 LIB directory to a new area and modify the project
-      node for this item accordingly.
+   Make certain that a tlink.cfg file exist in the BC45\BIN directory
+   containing:
 
-*** Note that just as in Borland C++ 3.1, if you are using the dynamic
-version of OWL, you must also use the dymamic version of the class
-library and of the runtime library.
+      -Lc:\bc45\lib
 
+   Adjust the above paths to reflect your systems' configuration.
 
+3. Make the following changes:
 
-TEXT FOR NEW OWL 1.0 MAKEFILE:
-==============================
-# ObjectWindows - (C) Copyright 1992 by Borland International
-
-.autodepend
-.swap
+   Line 83: Change the 'CCINCLUDE=' line to contain the path to the BC
+            4.5 include directory.
+   Line 168: Delete the blank space at the end of the 'DEBUGFLAG=v ' line
+   Line 172: Delete the blank space at the end of the 'DYNAMICFLAG=d ' line
+   Line 202: Add '-DWindows' after '-DWINDOWS'
+   Line 204: Add '-DWindows' after '-DWINDOWS'
+   Line 206: Add '-DWindows' after '-DWINDOWS'
+   Line 239: Replace '$D' with 'BuildDir'
+   Line 249: Replace '$D' with 'BuildDir'
+   Line 261: Replace '$D' with 'BuildDir'
 
-!if $d(DEBUG)
-DBG = -v
-!endif
+Then use the following command to create a Database Framework Library.
+Add one or both of the options -DDBG and -DWINDOWS to add debug info or
+build for use in WINDOWS code. (Refer to the makefile for even more
+options.)
 
-VERSION = 100
-
-!if !$d(MODEL)
-!if $d(DLL)
-MODEL = l
-!else
-MODEL = l
-!endif
-!endif
-
-!if $d(DLL)
-WIN = -WDE -D_CLASSDLL
-D = d
-SWINDOBJNAME=swndobjd.obj
-OWLMATHNAME=owlmathd.obj
-VERSIONNAME=versiond.obj
-!else
-WIN = -WE
-D = w
-SWINDOBJNAME=swndobj$(MODEL).obj
-OWLMATHNAME=owlmath$(MODEL).obj
-VERSIONNAME=version$(MODEL).obj
-!endif
-
-#
-# By default, build OWL with STRICT and WIN30 and WIN31 entry points.
-#
-
-WINMODE = -DWIN30;WIN31;STRICT
-
-!if $d(STRICT)
-
-WINMODE = -DSTRICT
-!if $d(WIN31)
-WINMODE = -DWIN31 $(WINMODE)
-!endif
-!if $d(WIN30)
-WINMODE = -DWIN30 $(WINMODE)
-!endif
-
-!else # !STRICT
-
-!if $d(WIN31)
-WINMODE = -DWIN31
-!if $d(WIN30)
-WINMODE = -DWIN30 $(WINMODE)
-!endif
-
-!else # !WIN31 && !STRICT
-
-!if $d(WIN30)
-WINMODE = -DWIN30
-!endif
-
-!endif # !WIN31
-!endif # !STRICT
-
-
-!if !$d(BCROOT)
-BCROOT=..\..\..
-!endif
-
-!if !$d(OWLROOT)
-OWLROOT=$(BCROOT)\source\owl1
-!endif
-
-!if !$d(CLASSDIR)
-CLASSDIR = $(BCROOT)\source\classlib\obsolete
-!endif
-
-KEY = $(D)$(MODEL)
-OBJDIR = ..\object\$(KEY)
-
-.path.obj = $(OBJDIR)
-
-!if $d(DEBUG)
-TLIB = $(BCROOT)\bin\tlib /P128
-!else
-TLIB = $(BCROOT)\bin\tlib /0
-!endif
-
-CC = $(BCROOT)\bin\bcc
-TLINK = $(BCROOT)\bin\tlink
-ASM = $(BCROOT)\bin\tasmx
-
-INCLUDE = $(BCROOT)\include\owlcvt;$(BCROOT)\include\classlib\obsolete;$(BCROOT)\include
-LIBDIR = $(BCROOT)\lib
-
-!if $d(DLL)
-CFLAGS = -c -x- -RT- -v -vi $(WINMODE);BUILD_OWL $(WIN) -m$(MODEL) -n$(OBJDIR) -2
-!else
-CFLAGS = -c -x- -RT- $(DBG) $(WINMODE);BUILD_OWL $(WIN) -m$(MODEL) -n$(OBJDIR) -2
-!endif
-
-ASMFLAGS = /o /D__LARGE__ /D__CDECL__ /e /ml
-
-BCC = $(CC)
-!if $d(DLL)
-TBCC = $(CC) -TD_CLASSDLL
-!else
-TBCC = $(CC)
-!endif
-
-#used for linking DLL
-LFLAGS = /v /Twd /n /x /c /C
-BCLIBDIR = $(BCROOT)\lib
-DCLASSLIB = $(BCLIBDIR)\tclassi.lib
-STDLIBS = $(BCLIBDIR)\import $(BCLIBDIR)\crtldll $(BCLIBDIR)\cwl
-
-OBJS = \
-   module.obj     \
-   applicat.obj   \
-   window.obj     \
-   owl.obj        \
-   dialog.obj     \
-   scroller.obj   \
-   control.obj    \
-   button.obj     \
-   checkbox.obj   \
-   static.obj     \
-   edit.obj       \
-   groupbox.obj   \
-   radiobut.obj   \
-   listbox.obj    \
-   combobox.obj   \
-   scrollba.obj   \
-   mdiframe.obj   \
-   mdiclien.obj   \
-   inputdia.obj   \
-   filedial.obj   \
-   editwnd.obj    \
-   filewnd.obj    \
-   bbutton.obj    \
-   bchkbox.obj    \
-   bradio.obj     \
-   bdivider.obj   \
-   bgrpbox.obj    \
-   bstatic.obj    \
-   bstatbmp.obj   \
-   bwindow.obj    \
-   safepool.obj   \
-   objstrm.obj    \
-   tcollect.obj   \
-   tsortcol.obj   \
-   appdict.obj    \
-   windobj.obj    \
-   version.obj    \
-   owlmath.obj    \
-   swindobj.obj
-
-.cpp.obj:
-    $(BCC) {$. }
-
-.c.obj:
-    $(BCC) {$. }
-
-.asm.obj:
-    $(TBCC) $.
-
-!if $d(DLL)
-all: config $(LIBDIR)\owl.lib
-!else
-all: config $(LIBDIR)\owl$(VERSION)$(KEY).lib
-!endif
-
-config: makefile
-   echo -I$(INCLUDE) > turboc.cfg
-   echo $(CFLAGS) >> turboc.cfg
-
-swindobj.obj: swindobj.cpp
-!if !$d(NOTASM)
-   $(CC) $(CFLAGS) -S swindobj.cpp
-   $(ASM) $(ASMFLAGS) $(OBJDIR)\swindobj.asm,$(OBJDIR)\swindobj.obj
-!else
-    copy $(BCROOT)\LIB\COMPAT\$(SWINDOBJNAME) $(OBJDIR)\swindobj.obj
-!endif
-
-owlmath.obj: owlmath.cpp
-!if !$d(NOTASM)
-   $(CC) $(CFLAGS) -S owlmath.cpp
-   $(ASM) $(ASMFLAGS) $(OBJDIR)\owlmath.asm,$(OBJDIR)\owlmath.obj
-!else
-   copy $(BCROOT)\LIB\COMPAT\$(OWLMATHNAME) $(OBJDIR)\owlmath.obj
-!endif
-
-version.obj:
-   copy $(BCROOT)\LIB\COMPAT\$(VERSIONNAME) $(OBJDIR)\version.obj
-
-tcollect.obj: tcollect.cpp
-   $(BCC) -RT- $?
-
-tsortcol.obj: tsortcol.cpp
-   $(BCC) -RT- $?
-
-$(LIBDIR)\owl.lib: $(OBJS) $(DCLASSLIB)
-   $(TLINK) $(LFLAGS) @&&!
-$(BCLIBDIR)\c0$(KEY) +
-$(OBJDIR)\windobj    +
-$(OBJDIR)\swindobj   +
-$(OBJDIR)\applicat   +
-$(OBJDIR)\window     +
-$(OBJDIR)\owl        +
-$(OBJDIR)\dialog     +
-$(OBJDIR)\scroller   +
-$(OBJDIR)\owlmath    +
-$(OBJDIR)\inputdia   +
-$(OBJDIR)\filedial   +
-$(OBJDIR)\control    +
-$(OBJDIR)\button     +
-$(OBJDIR)\checkbox   +
-$(OBJDIR)\static     +
-$(OBJDIR)\edit       +
-$(OBJDIR)\radiobut   +
-$(OBJDIR)\groupbox   +
-$(OBJDIR)\listbox    +
-$(OBJDIR)\combobox   +
-$(OBJDIR)\mdiframe   +
-$(OBJDIR)\mdiclien   +
-$(OBJDIR)\scrollba   +
-$(OBJDIR)\editwnd    +
-$(OBJDIR)\filewnd    +
-$(OBJDIR)\module     +
-$(OBJDIR)\bbutton    +
-$(OBJDIR)\bchkbox    +
-$(OBJDIR)\bradio     +
-$(OBJDIR)\bdivider   +
-$(OBJDIR)\bgrpbox    +
-$(OBJDIR)\bstatic    +
-$(OBJDIR)\bstatbmp   +
-$(OBJDIR)\bwindow    +
-$(OBJDIR)\safepool   +
-$(OBJDIR)\objstrm    +
-$(OBJDIR)\tcollect   +
-$(OBJDIR)\tsortcol   +
-$(OBJDIR)\appdict    +
-$(OBJDIR)\version
-! $(LIBDIR)\owl$(VERSION).dll,, @&&!
-/v- $(DCLASSLIB) $(STDLIBS)
-!,owldll.def
-   implib $(LIBDIR)\owl$(VERSION)i.lib $(LIBDIR)\owl$(VERSION).dll
-   copy $(LIBDIR)\owl$(VERSION).dll $(BCROOT)\bin
-   tdstrip -s $(BCROOT)\bin\owl$(VERSION).dll
-   del $(LIBDIR)\owl$(VERSION).dll
-
-$(LIBDIR)\owl$(VERSION)$(KEY).lib: $(OBJS)
-   del $(LIBDIR)\owl$(VERSION)$(KEY).lib
-   $(TLIB) $(LIBDIR)\owl$(VERSION)$(KEY).lib @&&!
-+$(OBJDIR)\windobj   &
-+$(OBJDIR)\swindobj  &
-+$(OBJDIR)\window    &
-+$(OBJDIR)\applicat  &
-+$(OBJDIR)\owl       &
-+$(OBJDIR)\dialog    &
-+$(OBJDIR)\scroller  &
-+$(OBJDIR)\owlmath   &
-+$(OBJDIR)\inputdia  &
-+$(OBJDIR)\filedial  &
-+$(OBJDIR)\control   &
-+$(OBJDIR)\button    &
-+$(OBJDIR)\checkbox  &
-+$(OBJDIR)\static    &
-+$(OBJDIR)\edit      &
-+$(OBJDIR)\radiobut  &
-+$(OBJDIR)\groupbox  &
-+$(OBJDIR)\listbox   &
-+$(OBJDIR)\combobox  &
-+$(OBJDIR)\mdiframe  &
-+$(OBJDIR)\mdiclien  &
-+$(OBJDIR)\scrollba  &
-+$(OBJDIR)\editwnd   &
-+$(OBJDIR)\filewnd   &
-+$(OBJDIR)\module    &
-+$(OBJDIR)\bbutton   &
-+$(OBJDIR)\bchkbox   &
-+$(OBJDIR)\bradio    &
-+$(OBJDIR)\bdivider  &
-+$(OBJDIR)\bgrpbox   &
-+$(OBJDIR)\bstatic   &
-+$(OBJDIR)\bstatbmp  &
-+$(OBJDIR)\bwindow   &
-+$(OBJDIR)\safepool  &
-+$(OBJDIR)\objstrm   &
-+$(OBJDIR)\tcollect  &
-+$(OBJDIR)\tsortcol  &
-+$(OBJDIR)\appdict   &
-+$(OBJDIR)\version
-!
-
-clean:
-   @echo Removing .OBJ's and .ASM's from $(OBJDIR)
-   @if exist .\version.cpp  \
-      if exist $(OBJDIR)\version.obj  del $(OBJDIR)\version.obj
-!if !$d(NOTASM)
-   @if exist .\owlmath.cpp  \
-      if exist $(OBJDIR)\owlmath.obj  del $(OBJDIR)\owlmath.obj
-   @if exist .\swindobj.cpp \
-      if exist $(OBJDIR)\swindobj.obj del $(OBJDIR)\swindobj.obj
-   @if exist $(OBJDIR)\swindobj.asm   del $(OBJDIR)\swindobj.asm
-!endif
-   @if exist $(OBJDIR)\module.obj     del $(OBJDIR)\module.obj
-   @if exist $(OBJDIR)\applicat.obj   del $(OBJDIR)\applicat.obj
-   @if exist $(OBJDIR)\window.obj     del $(OBJDIR)\window.obj
-   @if exist $(OBJDIR)\owl.obj        del $(OBJDIR)\owl.obj
-   @if exist $(OBJDIR)\dialog.obj     del $(OBJDIR)\dialog.obj
-   @if exist $(OBJDIR)\scroller.obj   del $(OBJDIR)\scroller.obj
-   @if exist $(OBJDIR)\control.obj    del $(OBJDIR)\control.obj
-   @if exist $(OBJDIR)\button.obj     del $(OBJDIR)\button.obj
-   @if exist $(OBJDIR)\checkbox.obj   del $(OBJDIR)\checkbox.obj
-   @if exist $(OBJDIR)\static.obj     del $(OBJDIR)\static.obj
-   @if exist $(OBJDIR)\edit.obj       del $(OBJDIR)\edit.obj
-   @if exist $(OBJDIR)\groupbox.obj   del $(OBJDIR)\groupbox.obj
-   @if exist $(OBJDIR)\radiobut.obj   del $(OBJDIR)\radiobut.obj
-   @if exist $(OBJDIR)\listbox.obj    del $(OBJDIR)\listbox.obj
-   @if exist $(OBJDIR)\combobox.obj   del $(OBJDIR)\combobox.obj
-   @if exist $(OBJDIR)\scrollba.obj   del $(OBJDIR)\scrollba.obj
-   @if exist $(OBJDIR)\mdiframe.obj   del $(OBJDIR)\mdiframe.obj
-   @if exist $(OBJDIR)\mdiclien.obj   del $(OBJDIR)\mdiclien.obj
-   @if exist $(OBJDIR)\inputdia.obj   del $(OBJDIR)\inputdia.obj
-   @if exist $(OBJDIR)\filedial.obj   del $(OBJDIR)\filedial.obj
-   @if exist $(OBJDIR)\editwnd.obj    del $(OBJDIR)\editwnd.obj
-   @if exist $(OBJDIR)\filewnd.obj    del $(OBJDIR)\filewnd.obj
-   @if exist $(OBJDIR)\bbutton.obj    del $(OBJDIR)\bbutton.obj
-   @if exist $(OBJDIR)\bchkbox.obj    del $(OBJDIR)\bchkbox.obj
-   @if exist $(OBJDIR)\bradio.obj     del $(OBJDIR)\bradio.obj
-   @if exist $(OBJDIR)\bdivider.obj   del $(OBJDIR)\bdivider.obj
-   @if exist $(OBJDIR)\bgrpbox.obj    del $(OBJDIR)\bgrpbox.obj
-   @if exist $(OBJDIR)\bstatic.obj    del $(OBJDIR)\bstatic.obj
-   @if exist $(OBJDIR)\bstatbmp.obj   del $(OBJDIR)\bstatbmp.obj
-   @if exist $(OBJDIR)\bwindow.obj    del $(OBJDIR)\bwindow.obj
-   @if exist $(OBJDIR)\safepool.obj   del $(OBJDIR)\safepool.obj
-   @if exist $(OBJDIR)\objstrm.obj    del $(OBJDIR)\objstrm.obj
-   @if exist $(OBJDIR)\tcollect.obj   del $(OBJDIR)\tcollect.obj
-   @if exist $(OBJDIR)\tsortcol.obj   del $(OBJDIR)\tsortcol.obj
-   @if exist $(OBJDIR)\appdict.obj    del $(OBJDIR)\appdict.obj
-   @if exist $(OBJDIR)\windobj.obj    del $(OBJDIR)\windobj.obj
-   @if exist $(OBJDIR)\bwindow.obj    del $(OBJDIR)\bwindow.obj
-   @if exist $(OBJDIR)\safepool.obj   del $(OBJDIR)\safepool.obj
-   @if exist $(OBJDIR)\objstrm.obj    del $(OBJDIR)\objstrm.obj
-   @if exist $(OBJDIR)\tcollect.obj   del $(OBJDIR)\tcollect.obj
-   @if exist $(OBJDIR)\tsortcol.obj   del $(OBJDIR)\tsortcol.obj
-   @if exist $(OBJDIR)\appdict.obj    del $(OBJDIR)\appdict.obj
-   @if exist $(OBJDIR)\windobj.obj    del $(OBJDIR)\windobj.obj
-
-# End of MAKEFILE for OWL 1.0
+   make -fmake40.mak
+
+For example, the following command will create a large model, static
+windows DBF library with debug info:
+
+   make -DWINDOWS -DDBG -fmake40.mak
+
+The libraries will be created in the PXENG30\C\LIB directory.  These
+libraries are now ready for use in your Database Frameworks Program.
+
+
+CHANGES TO USER CODE WITH RESPECT TO DBF
+
+The only change to your source code involves the use of the 'new'
+operator. In BC++ 4.5, the new operator no longer returns NULL in case
+of failure, rather the xalloc exception is thrown.  To change this back
+so operator new returns NULL, call set_new_handler(0).
+
+The only remaining issue is with using the new operator in the
+constructor of global objects.  How do you call set_new_handler(0)
+before a global object's constructor is called?  This is accomplished by
+using a #pragma startup function with a priority higher than that of the
+startup function used to call the particular global object's
+constructor.  The following code shows an example of changing the
+behavior of new:
+
+   #include <new.h>
+
+   void old_new(void)
+   {
+      set_new_handler(0);
+   }
+
+   #pragma startup old_new 31
+
+   BEngine eng(pxWin);
+
+   int main (void)
+   {
+   .
+   .
+   .
+      return 0;
+   }
+
+Note that creating global instances of Database Framework objects is not
+recommended because it can make error checking difficult.
+
+The other option is to change the source of the Database Frameworks: Add
+the try {} catch(xalloc) clause everywhere that new is called.
+
+

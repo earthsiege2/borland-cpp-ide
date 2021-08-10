@@ -247,6 +247,11 @@ TDocument::SetDocManager(TDocManager& dm)
 bool
 TDocument::SetDocPath(const char far* path)
 {
+  // path has been set already
+  //
+  if (path && (path == DocPath))
+    return true;
+
   delete DocPath;
   DocPath = (path && *path) ? strnewdup(path) : 0;
 
@@ -474,11 +479,6 @@ TDocument::HasFocus(HWND hwnd)
 bool
 TDocument::CanClose()
 {
-  // Just say yes if we have multiple views open
-  //
-  if (NextView(NextView(0)))
-    return true;
-
   TDocument* pdoc = 0;
   while ((pdoc = ChildDoc.Next(pdoc)) != 0)
     if (!pdoc->CanClose())

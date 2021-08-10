@@ -14,6 +14,7 @@
 #include <ocf/ocapp.h>
 #include <owl/oledoc.h>
 #include <owl/oleframe.h>
+#include <owl/oleview.h>
 
 
 TOleDocument::TOleDocument(TDocument* parent)
@@ -42,16 +43,26 @@ TOleDocument::CanClose()
   // Just say yes if we are already in the closing process, or are embedded,
   // or have multiple views open
   //
-  if (Closing || IsEmbedded() || NextView(NextView(0)))
+  if (Closing || IsEmbedded())
     return true;
 
-  if (TDocument::CanClose()) {
-    OcDoc->Close();  //!CQ actually close here on CanClose!!??
-    Closing = true;
-    return true;
+  return TDocument::CanClose();
+}
+
+//
+//  Shut down the TOleView's
+//
+void
+TOleDocument::OleViewClose()
+{
+  TView* curView = GetViewList();
+  while (curView) {
+    TOleView* oleView = TYPESAFE_DOWNCAST(curView, TOleView);
+    if (oleView)
+      oleView->OleShutDown();
+
+    curView = curView->GetNextView();
   }
-
-  return false;
 }
 
 //
@@ -60,6 +71,9 @@ TOleDocument::CanClose()
 bool
 TOleDocument::Close()
 {
+  // Make sure that TOleView's are closed first
+  //
+  OleViewClose();
   OcDoc->Close();
   return TStorageDocument::Close();
 }
@@ -199,8 +213,8 @@ TOleDocument::Write()
   // Switch to new storage if path has changed & it is permanent ("SaveAs")
   //
   IStorage* newStorageI;
-  bool saveAs = PathChanged() && !OrgStorageI;  // also is 'remember'
-  bool sameAsLoad = !PathChanged();
+  bool saveAs = PathChanged() && !OrgStorageI;      // also is 'remember'
+  bool sameAsLoad = !PathChanged() && !OrgStorageI; // use current storage
   if (saveAs) {
     // Update link monikers
     //

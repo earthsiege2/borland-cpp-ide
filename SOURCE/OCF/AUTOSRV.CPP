@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -679,4 +680,5 @@ TDispatch::Invoke(DISPID dispidMember, const IID far& /*riid*/, LCID lcid,
     return HR_DISP_OVERFLOW;  // no appropriate error for other
   }
 }
+
 

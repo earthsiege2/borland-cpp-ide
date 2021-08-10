@@ -218,7 +218,7 @@ Revision History:
 
 #define NET_API_STATUS          DWORD
 #define API_RET_TYPE            NET_API_STATUS      // Old value: do not use
-#if (_MSC_VER >= 800) || defined(__BORLANDC__)
+#if (_MSC_VER >= 800) || defined (_STDCALL_SUPPORTED) || defined(__BORLANDC__)
 #define NET_API_FUNCTION    __stdcall
 #else
 #define NET_API_FUNCTION

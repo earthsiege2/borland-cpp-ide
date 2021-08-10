@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleHelp.cpp -- Implements message hooks for catching F1 in the dialogs
@@ -85,7 +85,11 @@ extern "C" LRESULT _loadds CALLBACK MyHookProc (int code, WPARAM wParam, LPARAM 
 		// dialog is its parent
 		//
 		HWND w = GetParent (((LPMSG) lParam)->hwnd);
-		::PostMessage (w, RegisterWindowMessage(HELPMSGSTRING), 0, 0);
+#ifdef ANSI
+		::PostMessageA(w, RegisterWindowMessageA(HELPMSGSTRINGA), 0, 0);
+#else
+		::PostMessage(w, RegisterWindowMessage(HELPMSGSTRING), 0, 0);
+#endif
 		return ::CallNextHookEx (hHook, code, wParam, lParam);
 	}
 
@@ -116,7 +120,7 @@ void _IFUNC BOleService::EnterBOleDialog (BOOL fEnter, HHOOK& hHook, HTASK& hTas
 
 	// Find the address of the callback for the Windows hook
 	//
-	HOOKPROC hookProc = (HOOKPROC)MyHookProc; //!::GetProcAddress (boleInst, "MYHOOKPROC");
+	HOOKPROC hookProc = (HOOKPROC)MyHookProc; //
 	if (!hookProc) 
 		fHookSuccess = FALSE;
 
@@ -127,7 +131,11 @@ void _IFUNC BOleService::EnterBOleDialog (BOOL fEnter, HHOOK& hHook, HTASK& hTas
 		hHook = ::SetWindowsHook (WH_MSGFILTER, hookProc);
 
 #else
-		hHook = ::SetWindowsHookEx (WH_MSGFILTER, hookProc, NULL, GetCurrentThreadId() );
+#ifdef ANSI
+		hHook = ::SetWindowsHookExA(WH_MSGFILTER, hookProc, NULL, GetCurrentThreadId() );
+#else
+		hHook = ::SetWindowsHookEx(WH_MSGFILTER, hookProc, NULL, GetCurrentThreadId() );
+#endif
 #endif
 		if (!hHook) 
 			fHookSuccess = FALSE;
@@ -181,5 +189,6 @@ extern "C" void BOleHelpNotify (DWORD pCastToApp, int dialogResId)
 	PIBApplication pIApp = (PIBApplication) pCastToApp;
 	pIApp->DialogHelpNotify (helpCode);
 }
+
 
 

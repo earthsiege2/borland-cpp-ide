@@ -1,5 +1,7 @@
 /*++
 
+Copyright (c) 1992-1995 Microsoft Corporation
+
 Module Name:
 
     rpcnsi.h
@@ -11,17 +13,8 @@ Abstract:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef __RPCNSI_H__
 #define __RPCNSI_H__
-#define __RPCNSI_H
 
 typedef void __RPC_FAR * RPC_NS_HANDLE;
 

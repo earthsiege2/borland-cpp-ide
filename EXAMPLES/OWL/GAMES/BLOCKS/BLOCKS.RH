@@ -1,0 +1,22 @@
+/****************************************************************************
+
+
+blocks.rh
+
+produced by Borland Resource Workshop
+
+
+*****************************************************************************/
+
+#define ACCELERATORS_1    1
+
+#define ICON_1            1
+
+#define MAIN_MENU         1
+
+#define CM_GAME_NEW       101
+#define CM_GAMEPAUSE      102
+#define CM_GAMEEXIT       103
+#define CM_HELP_ABOUT     104
+
+#define ABOUT_BOX        1

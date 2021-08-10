@@ -1,5 +1,7 @@
 /*++
 
+Copyright (c) 1991-1995 Microsoft Corporation
+
 Module Name:
 
     midles.h
@@ -9,25 +11,10 @@ Abstract:
     This module contains definitions needed for encoding/decoding
     support (serializing/deserializing a.k.a. pickling).
 
-Author:
-
-    Ryszard K. Kott (ryszardk)  Oct 12, 1993
-
-Revision History:
-
 --*/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef __MIDLES_H__
 #define __MIDLES_H__
-#define __MIDLES_H
 
 #include <rpcndr.h>
 
@@ -36,7 +23,11 @@ Revision History:
 //
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#pragma option -a
+#pragma pack(2)
+#endif
+
+#ifdef __BORLANDC__
+  #include <pshpack8.h>
 #endif
 
 #ifdef __cplusplus
@@ -75,10 +66,6 @@ typedef void (__RPC_USER *  MIDL_ES_READ)
                   OUT     char __RPC_FAR *  __RPC_FAR * pbuffer,
                   IN OUT     unsigned int __RPC_FAR * psize );
 
-#if defined(__BORLANDC__)
-#pragma warn -bbf
-#endif
-
 typedef struct _MIDL_ES_MESSAGE
 {
     MIDL_STUB_MESSAGE                       StubMsg;
@@ -101,10 +88,6 @@ typedef struct _MIDL_ES_MESSAGE
     unsigned long                           IncrDataSize;
     unsigned long                           ByteCount;
 } MIDL_ES_MESSAGE, __RPC_FAR * PMIDL_ES_MESSAGE;
-
-#if defined(__BORLANDC__)
-#pragma warn .bbf
-#endif
 
 typedef  PMIDL_ES_MESSAGE  MIDL_ES_HANDLE;
 
@@ -222,7 +205,7 @@ void  RPC_VAR_ENTRY
 NdrMesProcEncodeDecode(
     handle_t            Handle,
     PMIDL_STUB_DESC     pStubDesc,
-    PFORMAT_STRING      pFormatString, 
+    PFORMAT_STRING      pFormatString,
     ... );
 
 
@@ -230,10 +213,15 @@ NdrMesProcEncodeDecode(
 }
 #endif
 
+
+#ifdef __BORLANDC__
+  #include <poppack.h>
+#endif
+
 // Reset the packing level for DOS and Windows.
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#pragma option -a.
+#pragma pack()
 #endif
 
 #endif /* __MIDLES_H__ */

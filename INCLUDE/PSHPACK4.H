@@ -24,6 +24,7 @@ Abstract:
  *      All Rights Reserved.
  *
  */
+#pragma nopackwarning
 
 #if ! (defined(lint) || defined(_lint))
 #  ifndef RC_INVOKED

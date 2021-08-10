@@ -1,10 +1,12 @@
+# $Header:   N:\admin\ocf\source\bocole\make.inv   2.0.1.0   10 Apr 1995 18:05:34   CQUINN  $
 #-----------------------------------------------------------------------------
 # ObjectComponents - (C) Copyright 1991, 1993 by Borland International
 #
 # MAKEFILE for ObjectComponents BOcOle Dlls
 #
 #  BCROOT  = Borland compiler root directory, parent of BIN, LIB, INCLUDE
-#  APP     = base name of application (uppercase), used for .EXE, .RES, .DEF
+#  APP     = name of application, used for .DLL
+#  DEFNAME = name of .def, .res file
 #  OBJS    = list of object files for link, each with .obj extension
 #  LIBS    = list of library files to be searched in addition to standard ones
 #  OBJDIR  = name of build directory, child of source directory
@@ -29,8 +31,6 @@ WSWITCH    = S
 DEBUG = 1
 TRACE = 1
 WARN  = 1
-!else
-DEBUG = 0
 !endif
 
 !if !$d(BCROOT)
@@ -73,33 +73,40 @@ RLINK     = $(BCROOT)\BIN\RLINK -fi
 !endif
 MAPSYM    = $(BCROOT)\BIN\TMAPSYM
 CPPFLAGS  = -DINC_OLE2 # -DLOOSE_HRESULT
+
 !if $(DEBUG)
   CPPFLAGS  = $(CPPFLAGS) -v -vi -D_DEBUG
 !else
 !ifdef WIN32                               # NDEBUG turns assert() off.
   CPPFLAGS  = $(CPPFLAGS) -DNDEBUG -k-     # -k- optimized stack frames.
-!else                                      # -OW no inc/dec bp in 
+!else                                      # -OW no inc/dec bp in
   CPPFLAGS  = $(CPPFLAGS) -DNDEBUG -OW -k- #     prolog/epilog (16 bit only).
 !endif
 !endif
+
 !ifdef TRACE
 CPPFLAGS  = $(CPPFLAGS) -D__TRACE
 !endif
 !ifdef WARN
 CPPFLAGS  = $(CPPFLAGS) -D__WARN
 !endif
+
 !ifdef WIN32
-  CPPFLAGS  = $(CPPFLAGS) -DWIN32 -a4 -v
+  CPPFLAGS  = $(CPPFLAGS) -DWIN32 -a4
+!ifdef ANSI
+  CPPFLAGS =  $(CPPFLAGS) -DANSI
 !endif
+!endif
+
 !ifdef UNICODE
-  CPPFLAGS =  $(CPPFLAGS) -DUNICODE 
+  CPPFLAGS =  $(CPPFLAGS) -DUNICODE
 !endif
 !if $d(WIN32)
-LINKFLAGS   = -c -C -Tw  -A=16 -n -v -s c0w$(MODEL)+
-LINKFLAGSD  =       -Tpd -A=16 -n -v -s c0d32+
+LINKFLAGS   = -c -C -Tw -n -s c0w$(MODEL)+
+LINKFLAGSD  =       -Tpd -n -v -s c0d32+
 !else
-LINKFLAGS   = -c -C -Tw  -A=16 -n -v -s -Oc -Oi c0w$(MODEL)+
-LINKFLAGSD  = -c -C -Twd -A=16 -n -v -s -Oc -Oi c0dl+
+LINKFLAGS   = -c -C -Tw  -A=16 -n -s c0w$(MODEL)+
+LINKFLAGSD  = -c -C -Twd -A=16 -n -v -s c0dl+
 !endif
 
 !ifdef WIN32
@@ -132,7 +139,7 @@ turboc.cfg: $(MAKEINC)
   @echo  Building tasm.cfg
   @copy &&|
   /mx/Zi
-|       tasm.cfg 
+|       tasm.cfg
 
 bcc32.cfg: $(MAKEINC)
   @echo  Building bcc32.cfg
@@ -144,39 +151,39 @@ bcc32.cfg: $(MAKEINC)
   -c -3 -i60 -d -W$(WSWITCH) -O -Obels -Z -RT- -x-
 |       bcc32.cfg
 
-$(APP).dll: $(OBJS) $(SRCDIR)\$(APP).def $(SRCDIR)\$(APP).res $(RESOURCES)
+$(APP).dll: $(OBJS) $(SRCDIR)\$(DEFNAME).def $(SRCDIR)\$(DEFNAME).res $(RESOURCES)
   $(LINK) $(LINKFLAGSD) @&&|
   -L$(LIBPATH) +
   $(OBJS)
   $@
   $(APP).map
   $(LIBS)
-  $(SRCDIR)\$(APP).def
+  $(SRCDIR)\$(DEFNAME).def
 !ifdef WIN32
-  $(SRCDIR)\$(APP).res $(RESOURCES) 
+  $(SRCDIR)\$(DEFNAME).res $(RESOURCES)
 !endif
 |
 !ifndef WIN32
-  $(RLINK) $(SRCDIR)\$(APP).res $(RESOURCES) $@
+  $(RLINK) $(SRCDIR)\$(DEFNAME).res $(RESOURCES) $@
 !endif
 #  copy $(APP).dll $(RELDIR)
-  $(IMPLIB) $(RELDIR)\$(APP).lib $(APP).dll
+  $(IMPLIB) $(RELDIR)\$(FILENAME).lib $(APP).dll
 
-$(APP).exe : $(OBJS) $(APP).def $(APP).res
+$(APP).exe : $(OBJS) $(DEFNAME).def $(DEFNAME).res
   $(LINK) $(LINKFLAGS) @<<$(APP).lnk
   -L$(LIBPATH) +
   $(OBJS:.obj =+)
   $@
   $(APP).map
   $(LIBS)
-  $(APP).def
+  $(DEFNAME).def
 <<KEEP
-  $(RLINK) $(APP).res $@
+  $(RLINK) $(DEFNAME).res $@
   copy $(APP).exe $(RELDIR)
 
 ## .DEF File Generation ##
 
-$(APP).def : $(MAKEINC)
+$(DEFNAME).def : $(MAKEINC)
   copy &&|
   NAME       $(APP)
   DESCRIPTION 'OLE 2.0 $(APP) Sample'
@@ -185,7 +192,7 @@ $(APP).def : $(MAKEINC)
   DATA        PRELOAD MOVEABLE MULTIPLE
   HEAPSIZE    4096
   STACKSIZE   8192
-|       $(APP).def
+|       $(DEFNAME).def
 
 ## IMPLICIT RULES ##
 
@@ -203,3 +210,4 @@ $(APP).def : $(MAKEINC)
 
 {$(SRCDIR)}.rc{}.res:
        $(RC) -r -i$(SRCDIR) -fo$@ $<
+

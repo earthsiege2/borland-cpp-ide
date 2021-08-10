@@ -177,6 +177,7 @@ class _OWLCLASS TDocument : public TStreamableBase {
     bool           IsEmbedded() {return Embedded;}
     void           SetEmbedded(bool embed) {Embedded = embed;}
     virtual bool   InitDoc() {return true;}
+    TView*         GetViewList() {return ViewList;}
 
   protected:
     bool          DirtyFlag;    // document changed, might not represent views
@@ -281,6 +282,7 @@ class _OWLCLASS TView : virtual public TEventHandler,
     void        SetViewMenu(TMenuDescr* menu);
     bool        IsOK() {return ViewId != 0;}  // true if successfully created
     static unsigned GetNextViewId() {return NextViewId;} // next ID to assign
+    TView*      GetNextView() {return NextView;}
 
     // must implement, used by template manager for selection
     // static const char far* StaticName() {return "name of view";}

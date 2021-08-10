@@ -14,12 +14,10 @@
  *
  */
 
+#if !defined(__FLAT__)
 #if !defined( _DVOBJ_H_ )
 #define _DVOBJ_H_
 #define __DVOBJ_H
-
-
-#if !defined(__FLAT__)
 
 /****** DV value types ******************************************************/
 
@@ -483,13 +481,14 @@ STDAPI CreateDataAdviseHolder(LPDATAADVISEHOLDER FAR* ppDAHolder);
 STDAPI CreateDataCache(LPUNKNOWN pUnkOuter, REFCLSID rclsid,
                                         REFIID iid, LPVOID FAR* ppv);
 
-#else  /* !__FLAT__ */
+#endif // _DVOBJ_H_
 
+
+#else  /* !__FLAT__ */
+#ifndef RC_INVOKED
+#pragma message("WARNING: your code should include ole2.h instead of dvobj.h")
+#endif /* !RC_INVOKED */
 
 #include <ole2.h>
 
-
 #endif  /* __FLAT__ */
-
-
-#endif // _DVOBJ_H_

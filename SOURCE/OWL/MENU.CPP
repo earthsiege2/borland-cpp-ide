@@ -116,7 +116,7 @@ uint
 TMenu::GetMenuItemID(int pos) const
 {
   uint  id = ::GetMenuItemID(Handle, pos);
-  if (id != (uint)-1)
+  if (id != uint(-1))
     return id;
 
   // Maybe a submenu

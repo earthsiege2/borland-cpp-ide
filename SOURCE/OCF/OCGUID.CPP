@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -11,3 +12,4 @@
 #define INIT_BGUID       // force only Bolero GUIDs to be defined
 #include <ocf/ocdefs.h>
 #include <ocf/boleintf.h>
+

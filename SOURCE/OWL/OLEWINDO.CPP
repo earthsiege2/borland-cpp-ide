@@ -62,7 +62,6 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_WM_HSCROLL,
   EV_WM_MENUSELECT,
 
-  EV_COMMAND(CM_FILECLOSE, CmFileClose),
   EV_COMMAND_ENABLE(CM_FILECLOSE, CeFileClose),
 
   EV_COMMAND(CM_EDITDELETE, CmEditDelete),
@@ -115,6 +114,7 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_OC_VIEWSHOWTOOLS,
   EV_OC_VIEWGETPALETTE,
   EV_OC_VIEWCLIPDATA,
+  EV_OC_VIEWSETDATA,
   EV_OC_VIEWCLOSE,
   EV_OC_VIEWPARTSIZE,
   EV_OC_VIEWOPENDOC,
@@ -123,6 +123,7 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_OC_VIEWGETITEMNAME,
   EV_OC_VIEWSETLINK,
   EV_OC_VIEWBREAKLINK,
+  EV_OC_VIEWDOVERB,
 END_RESPONSE_TABLE;
 
 TOleWindow::TOleWindow(TWindow* parent, TModule* module)
@@ -154,6 +155,14 @@ TOleWindow::Init()
   DragHit   = TUIHandle::Outside;
   DragPart  = 0;
   DragDC    = 0;
+
+  // Minimum part size
+  //
+  HDC dc = GetDC(0);
+  MinWidth  = GetDeviceCaps(dc, LOGPIXELSX) / 4;
+  MinHeight = GetDeviceCaps(dc, LOGPIXELSY) / 4;
+  ReleaseDC(0, dc);
+
 
   // Snag the OcApp from the TOleFrame object for quick reference
   //
@@ -268,6 +277,16 @@ TOleWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
 bool
 TOleWindow::CanClose()
 {
+  // We don't want to close the view for DLL servers
+  //
+  if (IsOpenEditing() && !OcApp->IsOptionSet(amExeMode)) {
+    TOleFrame* olefr = TYPESAFE_DOWNCAST(GetApplication()->GetMainWindow(), TOleFrame);
+    CHECK(olefr);
+    olefr->ShowWindow(SW_HIDE);
+    OleShutDown();
+    return false;
+  }
+
   if (GetOcRemView() || TWindow::CanClose()) {
     if (OcDoc)
       OcDoc->Close();
@@ -294,28 +313,6 @@ TOleWindow::IsOpenEditing() const
 {
   TOcRemView* ocRemView = const_cast<TOleWindow*>(this)->GetOcRemView();
   return ocRemView && ocRemView->GetState() == TOcRemView::OpenEditing;
-}
-
-//
-//
-//
-void
-TOleWindow::EvClose()
-{
-  if (IsRemote())
-    OleShutDown();
-  else
-    TWindow::EvClose();
-}
-
-//
-// Intercept File>Close menu option to route thru parent window to allow our
-// single CanClose() method to deal with open editing, etc.
-//
-void
-TOleWindow::CmFileClose()
-{
-  Parent->PostMessage(WM_CLOSE);
 }
 
 //
@@ -912,10 +909,17 @@ TOleWindow::EvMouseMove(uint modKeys, TPoint& point)
     int dt = (DragHit/3) == 0 ? point.y - DragPt.y : 0;
     int db = (DragHit/3) == 2 ? point.y - DragPt.y : 0;
 
-    DragRect.left += dl;
-    DragRect.top  += dt;
-    DragRect.right += dr;
-    DragRect.bottom += db;
+    // maintain minimum part size
+    //
+    if ((DragRect.Width() + dr - dl) >= MinWidth) {
+      DragRect.left += dl;
+      DragRect.right += dr;
+    }
+    if ((DragRect.Height() + db - dt) >= MinHeight) {
+      DragRect.top  += dt;
+      DragRect.bottom += db;
+    }
+
     DragDC->DrawFocusRect(DragRect);   // draw new rect
   }
 
@@ -1019,6 +1023,7 @@ TOleWindow::EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl)
 void
 TOleWindow::EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu)
 {
+
   if (GetOcRemView()) {
     if (flags == 0xFFFF && hMenu == 0) {  // menu closing
       GetOcRemView()->SetContainerStatusText("");
@@ -1315,12 +1320,22 @@ TOleWindow::EvOcViewClipData(TOcFormatData far& /*format*/)
 }
 
 //
+// Set format data into server
+//
+bool
+TOleWindow::EvOcViewSetData(TOcFormatData far& /*format*/)
+{
+  return false;
+}
+
+//
 // Paint the embedded objects
 //
 bool
 TOleWindow::PaintParts(TDC& dc, bool, TRect&, bool metafile)
 {
-  PRECONDITION(GetOcDoc());
+  if (!GetOcDoc())
+    return false;
 
   TRect clientRect;
   TRect logicalRect = GetClientRect();
@@ -1502,7 +1517,7 @@ TOleWindow::CreateVerbPopup(const TOcVerb& ocVerb)
   while (DragPart->EnumVerbs(ocVerb)) {
     verbMenu->AppendMenu(MF_STRING|MF_ENABLED,
                          (uint)CM_EDITFIRSTVERB + ocVerb.VerbIndex,
-                         (const char far*)ocVerb.VerbName);
+                         (const char far*)OleStr(ocVerb.VerbName));
   }
 
   verbMenu->AppendMenu(MF_SEPARATOR, 0, 0);
@@ -1548,6 +1563,16 @@ TOleWindow::EvOcViewAttachWindow(bool attach)
   }
   return true;
 }
+
+//
+// Perform the action indentified by verb
+//
+bool
+TOleWindow::EvOcViewDoVerb(uint /*verb*/)
+{
+  return false;
+}
+
 
 //
 // Shut down the associated OCF partners if possible

@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 // 
 // BOleGUID.cpp -- Forces the OLE2 GUIDs to be compiled into the code
@@ -23,4 +23,5 @@
 #define INIT_BGUID		// stick the guids in this module
 
 #include "BOle.h"
+
 

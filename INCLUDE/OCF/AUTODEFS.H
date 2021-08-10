@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -306,7 +307,7 @@ enum AutoDataType {
   atBool              = 0x000B,   //  True=-1, False=0
   atVariant           = 0x000C,   //  VARIANT FAR*
   atUnknown           = 0x000D,   //  IUnknown*
-  atByte              = 0x0011,	 //  byte, unsigned char
+  atByte              = 0x0011,  //  byte, unsigned char
   atObjectDesc        = 0x001D,   //  object precursor state (internal use only)
   atLoanedBSTR        = 0x001A,   //  BSTR owned by TUString (internal use only)
   atTypeMask          = 0x001F,   //  base type code without bit flags
@@ -465,7 +466,7 @@ class far TAutoVal {
     operator TBool();
     operator TBool far*();
     operator TAutoBool();
-    operator TAutoBoolRef();   
+    operator TAutoBoolRef();
     operator TAutoCurrency();
     operator TAutoCurrency far*();
     operator TAutoDate();
@@ -899,7 +900,7 @@ TAutoObject<T>::TAutoObject(IDispatch& ifc)
   TServedObject* obj;
   if (ifc.QueryInterface(IID_TServedObject, (void far* far*)&obj) != 0)
     throw TXAuto(TXAuto::xForeignIDispatch);
-  P = (T*)DynamicCast(obj->Object, obj->Class->GetTypeInfo(), typeid(F()));
+  P = (T*)DynamicCast(obj->Object, obj->Class->GetTypeInfo(), typeid(T));
   if (!P)
     throw TXAuto(TXAuto::xTypeMismatch);
 }
@@ -910,7 +911,7 @@ TAutoObject<T>::operator=(IDispatch& ifc)
   TServedObject* obj;
   if (ifc.QueryInterface(IID_TServedObject, (void far* far*)&obj) != 0)
     throw TXAuto(TXAuto::xForeignIDispatch);
-  P = (T*)DynamicCast(obj->Object, obj->Class->GetTypeInfo(), typeid(F()));
+  P = (T*)DynamicCast(obj->Object, obj->Class->GetTypeInfo(), typeid(T));
   if (!P)
     throw TXAuto(TXAuto::xTypeMismatch);
 }
@@ -1034,7 +1035,7 @@ class TAutoProxy {
 };
 
 struct TAutoDispId {
-  TAutoDispId(TAutoProxy* prx, char* name) : Id(prx->Lookup(name)) {}
+  TAutoDispId(TAutoProxy* prx, const char* name) : Id(prx->Lookup(name)) {}
   TAutoDispId(TAutoProxy*, long id) : Id(id) {}
   long Id;
   operator long*()  {return &Id;}
@@ -1476,4 +1477,5 @@ TAutoCommand::SetCommandHook(TAutoCommand::TCommandHook callback){
 }
 
 #endif  // OCF_AUTODEFS_H
+
 

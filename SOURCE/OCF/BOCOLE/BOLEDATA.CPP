@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleData.cpp --   Implements a data cache object which is used for delayed
@@ -121,7 +121,8 @@ BOleData::~BOleData ()
 
 void BOleData::FreeItems()
 {
-	// JP: Release the mediums we might have created for deferred rendering
+	// Release the mediums we might have created for deferred rendering
+	//
 	LPMALLOC pMalloc;
 	CoGetMalloc( MEMCTX_TASK, &pMalloc );
 	
@@ -368,14 +369,7 @@ HRESULT _IFUNC BOleEnumFormatEtc::QueryInterface(REFIID iid, LPVOID FAR *ppv)
 	*ppv = NULL;
 
 	// interfaces
-
-	SUCCEEDED(hr = IEnumFORMATETC_QueryInterface(this, iid, ppv))
-
-	// base classes
-
-	// helpers
-
-	;
+	hr = IEnumFORMATETC_QueryInterface(this, iid, ppv);
 
 	return hr;
 }
@@ -518,10 +512,11 @@ HRESULT _IFUNC BOleEnumFormatEtc::Clone (LPENUMFORMATETC FAR* ppEnum)
 
 
 void BOleEnumFormatEtc::Resync(){
-	// JP: Now that the enumerator is seperated from the data object, we have
+	// Now that the enumerator is seperated from the data object, we have
 	// to make sure the format list is still the same. The cheap way is just
 	// to check that the two ends of the list are still the same, otherwise
 	// we decide to restart
+	//
 	if( pFirstItem != pData->pFirstItem || pLastItem != pData->pLastItem ){
 		pFirstItem = pData->pFirstItem;
 		pLastItem = pData->pLastItem;
@@ -615,4 +610,5 @@ HRESULT _IFUNC BOleShadowData::EnumDAdvise (LPENUMSTATDATA FAR* ppenumAdvise)
 {
 	return pDelegate->EnumDAdvise (ppenumAdvise);
 }
+
 

@@ -2,7 +2,12 @@
 ;|      E87TRANS.ASM                                            |
 ;[]------------------------------------------------------------[]
 
-; $Copyright: 1986$
+;
+;       C/C++ Run Time Library - Version 6.5
+; 
+;       Copyright (c) 1986, 1994 by Borland International
+;       All Rights Reserved.
+; 
 
 
 subttl  e87trans

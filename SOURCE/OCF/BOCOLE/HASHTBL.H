@@ -1,4 +1,4 @@
-//$Header:   Y:/ADMIN/OCF/SOURCE/BOCOLE/HASHTBL.H_V   1.0   06 Nov 1994 11:37:02   CQUINN  $
+//
 
 #ifndef _HASHTBL_H
 #define		_HASHTBL_H
@@ -84,3 +84,4 @@ void	HashTable<T, SIZE>::Remove(IHashable<T> *pKey)
 }
 
 #endif
+

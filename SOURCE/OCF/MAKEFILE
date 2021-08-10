@@ -1,3 +1,4 @@
+# $Header:   N:\admin\ocf\source\makefile.__v   2.0.1.0   10 Apr 1995 18:05:12   CQUINN  $
 #-----------------------------------------------------------------------------
 # ObjectComponents - (C) Copyright 1991, 1993 by Borland International
 #
@@ -236,9 +237,6 @@ OCFLIB = $(OCFLIBDIR)\$(NAME)$(OD)$(KEY).lib
 ! if $(MODEL) != s && $(MODEL) != m  # Large models can put strs in code seg
     COPTS = $(COPTS) -dc
 ! endif
-! if $(MODEL) == s                   # Small model turns off some options
-    NO_CPP_EXCEPTIONS = 1
-! endif
 ! if $d(NO_CPP_EXCEPTIONS)
     COPTS = $(COPTS) -DNO_CPP_EXCEPTIONS -x-
 ! endif
@@ -360,3 +358,4 @@ ocguid.obj: ocguid.cpp
 ocguid.obj: ocguid.cpp
   $(BCC) -H- -zE_TEXT -zFCODE ocguid.cpp
 !endif
+

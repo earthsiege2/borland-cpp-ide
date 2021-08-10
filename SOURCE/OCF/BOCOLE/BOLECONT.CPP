@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleCont.cpp -- Implements the server helper for documents by masquerading
@@ -24,7 +24,7 @@ HRESULT _IFUNC BOleContainer::QueryInterfaceMain(REFIID iid, LPVOID FAR *ppv)
 	   SUCCEEDED(hr = IBRootLinkable_QueryInterface(this, iid, ppv))
 	|| SUCCEEDED(hr = IPersistFile_QueryInterface(this, iid, ppv))
 	|| SUCCEEDED(hr = IOleItemContainer_QueryInterface(this, iid, ppv))
-
+//
 	// base classes
 
 	|| SUCCEEDED(hr = BOleComponent::QueryInterfaceMain(iid, ppv))
@@ -73,7 +73,7 @@ HRESULT _IFUNC BOleContainer::IsDirty ()
 {
 	HRESULT hrErr = ResultFromScode (S_OK);
 
-
+	//
 	
 	return hrErr;
 }
@@ -139,10 +139,10 @@ HRESULT _IFUNC BOleContainer::LockContainer (BOOL fLock)
 	//  work (otherwise, Close gets called).
 	//
 
-
-
-
-
+	//
+	//
+	//
+	//
 	if (fLock)
 		AddRef();
 	else
@@ -150,7 +150,7 @@ HRESULT _IFUNC BOleContainer::LockContainer (BOOL fLock)
 	
 	return NOERROR;
 
-
+//
 }
 
 HRESULT _IFUNC BOleContainer::GetObject (LPOLESTR lpszItem,
@@ -378,27 +378,28 @@ HRESULT _IFUNC BOleContainer::GetMoniker(LPMONIKER *ppMon)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 

@@ -7,8 +7,6 @@
  */
 
 #if !defined(__FLAT__)
-
-
 /*****************************************************************************\
 *                                                                             *
 * commdlg.h -   Common dialog functions, types, and definitions               *
@@ -327,117 +325,106 @@ DWORD   WINAPI CommDlgExtendedError(void);
 
 #endif  /* __COMMDLG_H */
 
-
 #else  /* __FLAT__ */
-
-
-/*++
-
-Module Name:
-
-    commdlg.h
-
-Abstract:
-
-    common dialog definitions; #include <windows.h> must be precluded
-
-Revision History:
-
---*/
-
+/************************************************************************
+*                                                                       *
+*   commdlg.h -- This module defines the 32-Bit Common Dialog APIs      *
+*                                                                       *
+*   Copyright (c) 1992-1995, Microsoft Corp. All rights reserved.       *
+*                                                                       *
+************************************************************************/
 #ifndef _INC_COMMDLG
 #define _INC_COMMDLG
-#define __COMMDLG_H
 
-#include "pshpack1.h"   /* Assume byte packing throughout */
+#include <pshpack1.h>         /* Assume byte packing throughout */
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
 
+#if(WINVER >= 0x0400)
+#ifdef __cplusplus
+#define SNDMSG ::SendMessage
+#else   /* __cplusplus */
+#define SNDMSG SendMessage
+#endif  /* __cplusplus */
+#endif /* WINVER >= 0x0400 */
+
 typedef UINT (APIENTRY *LPOFNHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 
 typedef struct tagOFNA {
-   DWORD   lStructSize;
-   HWND    hwndOwner;
-   HINSTANCE  hInstance;
-   LPCSTR   lpstrFilter;
-   LPSTR   lpstrCustomFilter;
-   DWORD   nMaxCustFilter;
-   DWORD   nFilterIndex;
-   LPSTR   lpstrFile;
-   DWORD   nMaxFile;
-   LPSTR   lpstrFileTitle;
-   DWORD   nMaxFileTitle;
-   LPCSTR   lpstrInitialDir;
-   LPCSTR   lpstrTitle;
-   DWORD   Flags;
-   WORD    nFileOffset;
-   WORD    nFileExtension;
-   LPCSTR   lpstrDefExt;
-   LPARAM   lCustData;
+   DWORD        lStructSize;
+   HWND         hwndOwner;
+   HINSTANCE    hInstance;
+   LPCSTR       lpstrFilter;
+   LPSTR        lpstrCustomFilter;
+   DWORD        nMaxCustFilter;
+   DWORD        nFilterIndex;
+   LPSTR        lpstrFile;
+   DWORD        nMaxFile;
+   LPSTR        lpstrFileTitle;
+   DWORD        nMaxFileTitle;
+   LPCSTR       lpstrInitialDir;
+   LPCSTR       lpstrTitle;
+   DWORD        Flags;
+   WORD         nFileOffset;
+   WORD         nFileExtension;
+   LPCSTR       lpstrDefExt;
+   LPARAM       lCustData;
    LPOFNHOOKPROC lpfnHook;
-   LPCSTR   lpTemplateName;
-} OPENFILENAMEA;
-
+   LPCSTR       lpTemplateName;
+} OPENFILENAMEA, *LPOPENFILENAMEA;
 typedef struct tagOFNW {
-   DWORD   lStructSize;
-   HWND    hwndOwner;
-   HINSTANCE  hInstance;
-   LPCWSTR  lpstrFilter;
-   LPWSTR  lpstrCustomFilter;
-   DWORD   nMaxCustFilter;
-   DWORD   nFilterIndex;
-   LPWSTR  lpstrFile;
-   DWORD   nMaxFile;
-   LPWSTR  lpstrFileTitle;
-   DWORD   nMaxFileTitle;
-   LPCWSTR  lpstrInitialDir;
-   LPCWSTR  lpstrTitle;
-   DWORD   Flags;
-   WORD    nFileOffset;
-   WORD    nFileExtension;
-   LPCWSTR  lpstrDefExt;
-   LPARAM   lCustData;
+   DWORD        lStructSize;
+   HWND         hwndOwner;
+   HINSTANCE    hInstance;
+   LPCWSTR      lpstrFilter;
+   LPWSTR       lpstrCustomFilter;
+   DWORD        nMaxCustFilter;
+   DWORD        nFilterIndex;
+   LPWSTR       lpstrFile;
+   DWORD        nMaxFile;
+   LPWSTR       lpstrFileTitle;
+   DWORD        nMaxFileTitle;
+   LPCWSTR      lpstrInitialDir;
+   LPCWSTR      lpstrTitle;
+   DWORD        Flags;
+   WORD         nFileOffset;
+   WORD         nFileExtension;
+   LPCWSTR      lpstrDefExt;
+   LPARAM       lCustData;
    LPOFNHOOKPROC lpfnHook;
-   LPCWSTR   lpTemplateName;
-} OPENFILENAMEW;
-
+   LPCWSTR      lpTemplateName;
+} OPENFILENAMEW, *LPOPENFILENAMEW;
 #ifdef UNICODE
-#define OPENFILENAME OPENFILENAMEW
+typedef OPENFILENAMEW OPENFILENAME;
+typedef LPOPENFILENAMEW LPOPENFILENAME;
 #else
-#define OPENFILENAME OPENFILENAMEA
-#endif // ! UNICODE
-
-typedef OPENFILENAMEA * LPOPENFILENAMEA;
-typedef OPENFILENAMEW * LPOPENFILENAMEW;
-typedef OPENFILENAME * LPOPENFILENAME;
+typedef OPENFILENAMEA OPENFILENAME;
+typedef LPOPENFILENAMEA LPOPENFILENAME;
+#endif // UNICODE
 
 BOOL  APIENTRY     GetOpenFileNameA(LPOPENFILENAMEA);
 BOOL  APIENTRY     GetOpenFileNameW(LPOPENFILENAMEW);
-
 #ifdef UNICODE
-#define GetOpenFileName GetOpenFileNameW
+#define GetOpenFileName  GetOpenFileNameW
 #else
-#define GetOpenFileName GetOpenFileNameA
-#endif // ! UNICODE
-
+#define GetOpenFileName  GetOpenFileNameA
+#endif // !UNICODE
 BOOL  APIENTRY     GetSaveFileNameA(LPOPENFILENAMEA);
 BOOL  APIENTRY     GetSaveFileNameW(LPOPENFILENAMEW);
 #ifdef UNICODE
-#define GetSaveFileName GetSaveFileNameW
+#define GetSaveFileName  GetSaveFileNameW
 #else
-#define GetSaveFileName GetSaveFileNameA
-#endif // ! UNICODE
-
+#define GetSaveFileName  GetSaveFileNameA
+#endif // !UNICODE
 short APIENTRY     GetFileTitleA(LPCSTR, LPSTR, WORD);
 short APIENTRY     GetFileTitleW(LPCWSTR, LPWSTR, WORD);
-
 #ifdef UNICODE
-#define GetFileTitle GetFileTitleW
+#define GetFileTitle  GetFileTitleW
 #else
-#define GetFileTitle GetFileTitleA
-#endif // ! UNICODE
+#define GetFileTitle  GetFileTitleA
+#endif // !UNICODE
 
 #define OFN_READONLY                 0x00000001
 #define OFN_OVERWRITEPROMPT          0x00000002
@@ -457,7 +444,12 @@ short APIENTRY     GetFileTitleW(LPCWSTR, LPWSTR, WORD);
 #define OFN_NOREADONLYRETURN         0x00008000
 #define OFN_NOTESTFILECREATE         0x00010000
 #define OFN_NONETWORKBUTTON          0x00020000
-#define OFN_NOLONGNAMES              0x00040000
+#define OFN_NOLONGNAMES              0x00040000     // force no long names for 4.x modules
+#if(WINVER >= 0x0400)
+#define OFN_EXPLORER                 0x00080000     // new look commdlg
+#define OFN_NODEREFERENCELINKS       0x00100000
+#define OFN_LONGNAMES                0x00200000     // force long names for 3.x modules
+#endif /* WINVER >= 0x0400 */
 
 // Return values for the registered message sent to the hook function
 // when a sharing violation occurs.  OFN_SHAREFALLTHROUGH allows the
@@ -475,48 +467,154 @@ short APIENTRY     GetFileTitleW(LPCWSTR, LPWSTR, WORD);
 
 typedef UINT (APIENTRY *LPCCHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 
-typedef struct tagCHOOSECOLORA {
-   DWORD   lStructSize;
-   HWND    hwndOwner;
-   HWND    hInstance;
-   COLORREF  rgbResult;
-   COLORREF* lpCustColors;
-   DWORD   Flags;
-   LPARAM  lCustData;
-   LPCCHOOKPROC lpfnHook;
-   LPCSTR   lpTemplateName;
-} CHOOSECOLORA;
-
-typedef struct tagCHOOSECOLORW {
-   DWORD   lStructSize;
-   HWND    hwndOwner;
-   HWND    hInstance;
-   COLORREF  rgbResult;
-   COLORREF* lpCustColors;
-   DWORD   Flags;
-   LPARAM  lCustData;
-   LPCCHOOKPROC lpfnHook;
-   LPCWSTR   lpTemplateName;
-} CHOOSECOLORW;
-
+#if(WINVER >= 0x0400)
+// Structure used for all OpenFileName notifications
+typedef struct _OFNOTIFYA
+{
+        NMHDR           hdr;
+        LPOPENFILENAMEA lpOFN;
+        LPSTR           pszFile;        // May be NULL
+} OFNOTIFYA, FAR *LPOFNOTIFYA;
+// Structure used for all OpenFileName notifications
+typedef struct _OFNOTIFYW
+{
+        NMHDR           hdr;
+        LPOPENFILENAMEW lpOFN;
+        LPWSTR          pszFile;        // May be NULL
+} OFNOTIFYW, FAR *LPOFNOTIFYW;
 #ifdef UNICODE
-#define CHOOSECOLOR CHOOSECOLORW
+typedef OFNOTIFYW OFNOTIFY;
+typedef LPOFNOTIFYW LPOFNOTIFY;
 #else
-#define CHOOSECOLOR CHOOSECOLORA
-#endif // ! UNICODE
+typedef OFNOTIFYA OFNOTIFY;
+typedef LPOFNOTIFYA LPOFNOTIFY;
+#endif // UNICODE
 
-typedef CHOOSECOLORA *LPCHOOSECOLORA;
-typedef CHOOSECOLORW *LPCHOOSECOLORW;
-typedef CHOOSECOLOR *LPCHOOSECOLOR;
+#define CDN_FIRST   (0U-601U)
+#define CDN_LAST    (0U-699U)
+
+// Notifications when Open or Save dialog status changes
+#define CDN_INITDONE            (CDN_FIRST - 0x0000)
+#define CDN_SELCHANGE           (CDN_FIRST - 0x0001)
+#define CDN_FOLDERCHANGE        (CDN_FIRST - 0x0002)
+#define CDN_SHAREVIOLATION      (CDN_FIRST - 0x0003)
+#define CDN_HELP                (CDN_FIRST - 0x0004)
+#define CDN_FILEOK              (CDN_FIRST - 0x0005)
+#define CDN_TYPECHANGE          (CDN_FIRST - 0x0006)
+
+#define CDM_FIRST       (WM_USER + 100)
+#define CDM_LAST        (WM_USER + 200)
+
+// Messages to query information from the Open or Save dialogs
+
+// lParam = pointer to text buffer that gets filled in
+// wParam = max number of characters of the text buffer (including NULL)
+// return = < 0 if error; number of characters needed (including NULL)
+#define CDM_GETSPEC             (CDM_FIRST + 0x0000)
+#define CommDlg_OpenSave_GetSpecA(_hdlg, _psz, _cbmax) \
+        (int)SNDMSG(_hdlg, CDM_GETSPEC, (WPARAM)_cbmax, (LPARAM)(LPSTR)_psz)
+#define CommDlg_OpenSave_GetSpecW(_hdlg, _psz, _cbmax) \
+        (int)SNDMSG(_hdlg, CDM_GETSPEC, (WPARAM)_cbmax, (LPARAM)(LPWSTR)_psz)
+#ifdef UNICODE
+#define CommDlg_OpenSave_GetSpec  CommDlg_OpenSave_GetSpecW
+#else
+#define CommDlg_OpenSave_GetSpec  CommDlg_OpenSave_GetSpecA
+#endif // !UNICODE
+
+// lParam = pointer to text buffer that gets filled in
+// wParam = max number of characters of the text buffer (including NULL)
+// return = < 0 if error; number of characters needed (including NULL)
+#define CDM_GETFILEPATH         (CDM_FIRST + 0x0001)
+#define CommDlg_OpenSave_GetFilePathA(_hdlg, _psz, _cbmax) \
+        (int)SNDMSG(_hdlg, CDM_GETFILEPATH, (WPARAM)_cbmax, (LPARAM)(LPSTR)_psz)
+#define CommDlg_OpenSave_GetFilePathW(_hdlg, _psz, _cbmax) \
+        (int)SNDMSG(_hdlg, CDM_GETFILEPATH, (WPARAM)_cbmax, (LPARAM)(LPWSTR)_psz)
+#ifdef UNICODE
+#define CommDlg_OpenSave_GetFilePath  CommDlg_OpenSave_GetFilePathW
+#else
+#define CommDlg_OpenSave_GetFilePath  CommDlg_OpenSave_GetFilePathA
+#endif // !UNICODE
+
+// lParam = pointer to text buffer that gets filled in
+// wParam = max number of characters of the text buffer (including NULL)
+// return = < 0 if error; number of characters needed (including NULL)
+#define CDM_GETFOLDERPATH       (CDM_FIRST + 0x0002)
+#define CommDlg_OpenSave_GetFolderPathA(_hdlg, _psz, _cbmax) \
+        (int)SNDMSG(_hdlg, CDM_GETFOLDERPATH, (WPARAM)_cbmax, (LPARAM)(LPSTR)_psz)
+#define CommDlg_OpenSave_GetFolderPathW(_hdlg, _psz, _cbmax) \
+        (int)SNDMSG(_hdlg, CDM_GETFOLDERPATH, (WPARAM)_cbmax, (LPARAM)(LPWSTR)_psz)
+#ifdef UNICODE
+#define CommDlg_OpenSave_GetFolderPath  CommDlg_OpenSave_GetFolderPathW
+#else
+#define CommDlg_OpenSave_GetFolderPath  CommDlg_OpenSave_GetFolderPathA
+#endif // !UNICODE
+
+// lParam = pointer to ITEMIDLIST buffer that gets filled in
+// wParam = size of the ITEMIDLIST buffer
+// return = < 0 if error; length of buffer needed
+#define CDM_GETFOLDERIDLIST     (CDM_FIRST + 0x0003)
+#define CommDlg_OpenSave_GetFolderIDList(_hdlg, _pidl, _cbmax) \
+        (int)SNDMSG(_hdlg, CDM_GETFOLDERIDLIST, (WPARAM)_cbmax, (LPARAM)(LPVOID)_pidl)
+
+// lParam = pointer to a string
+// wParam = ID of control to change
+// return = not used
+#define CDM_SETCONTROLTEXT      (CDM_FIRST + 0x0004)
+#define CommDlg_OpenSave_SetControlText(_hdlg, _id, _text) \
+        (void)SNDMSG(_hdlg, CDM_SETCONTROLTEXT, (WPARAM)_id, (LPARAM)(LPSTR)_text)
+
+// lParam = not used
+// wParam = ID of control to change
+// return = not used
+#define CDM_HIDECONTROL         (CDM_FIRST + 0x0005)
+#define CommDlg_OpenSave_HideControl(_hdlg, _id) \
+        (void)SNDMSG(_hdlg, CDM_HIDECONTROL, (WPARAM)_id, 0)
+
+// lParam = pointer to default extension (no dot)
+// wParam = not used
+// return = not used
+#define CDM_SETDEFEXT           (CDM_FIRST + 0x0006)
+#define CommDlg_OpenSave_SetDefExt(_hdlg, _pszext) \
+        (void)SNDMSG(_hdlg, CDM_SETDEFEXT, 0, (LPARAM)(LPSTR)_pszext)
+#endif /* WINVER >= 0x0400 */
+
+typedef struct tagCHOOSECOLORA {
+   DWORD        lStructSize;
+   HWND         hwndOwner;
+   HWND         hInstance;
+   COLORREF     rgbResult;
+   COLORREF*    lpCustColors;
+   DWORD        Flags;
+   LPARAM       lCustData;
+   LPCCHOOKPROC lpfnHook;
+   LPCSTR       lpTemplateName;
+} CHOOSECOLORA, *LPCHOOSECOLORA;
+typedef struct tagCHOOSECOLORW {
+   DWORD        lStructSize;
+   HWND         hwndOwner;
+   HWND         hInstance;
+   COLORREF     rgbResult;
+   COLORREF*    lpCustColors;
+   DWORD        Flags;
+   LPARAM       lCustData;
+   LPCCHOOKPROC lpfnHook;
+   LPCWSTR      lpTemplateName;
+} CHOOSECOLORW, *LPCHOOSECOLORW;
+#ifdef UNICODE
+typedef CHOOSECOLORW CHOOSECOLOR;
+typedef LPCHOOSECOLORW LPCHOOSECOLOR;
+#else
+typedef CHOOSECOLORA CHOOSECOLOR;
+typedef LPCHOOSECOLORA LPCHOOSECOLOR;
+#endif // UNICODE
 
 BOOL  APIENTRY ChooseColorA(LPCHOOSECOLORA);
 BOOL  APIENTRY ChooseColorW(LPCHOOSECOLORW);
-
 #ifdef UNICODE
-#define ChooseColor ChooseColorW
+#define ChooseColor  ChooseColorW
 #else
-#define ChooseColor ChooseColorA
-#endif // ! UNICODE
+#define ChooseColor  ChooseColorA
+#endif // !UNICODE
 
 #define CC_RGBINIT               0x00000001
 #define CC_FULLOPEN              0x00000002
@@ -525,48 +623,48 @@ BOOL  APIENTRY ChooseColorW(LPCHOOSECOLORW);
 #define CC_ENABLEHOOK            0x00000010
 #define CC_ENABLETEMPLATE        0x00000020
 #define CC_ENABLETEMPLATEHANDLE  0x00000040
+#if(WINVER >= 0x0400)
+#define CC_SOLIDCOLOR            0x00000080
+#define CC_ANYCOLOR              0x00000100
+#endif /* WINVER >= 0x0400 */
 
 typedef UINT (APIENTRY *LPFRHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 
 typedef struct tagFINDREPLACEA {
-   DWORD    lStructSize;        // size of this struct 0x20
-   HWND     hwndOwner;          // handle to owner's window
-   HINSTANCE hInstance;          // instance handle of.EXE that
-                                //   contains cust. dlg. template
-   DWORD    Flags;              // one or more of the FR_??
-   LPSTR    lpstrFindWhat;      // ptr. to search string
-   LPSTR    lpstrReplaceWith;   // ptr. to replace string
-   WORD     wFindWhatLen;       // size of find buffer
-   WORD     wReplaceWithLen;    // size of replace buffer
-   LPARAM   lCustData;          // data passed to hook fn.
-   LPFRHOOKPROC lpfnHook;       // ptr. to hook fn. or NULL
-   LPCSTR    lpTemplateName;     // custom template name
-} FINDREPLACEA;
-
+   DWORD        lStructSize;        // size of this struct 0x20
+   HWND         hwndOwner;          // handle to owner's window
+   HINSTANCE    hInstance;          // instance handle of.EXE that
+                                    //   contains cust. dlg. template
+   DWORD        Flags;              // one or more of the FR_??
+   LPSTR        lpstrFindWhat;      // ptr. to search string
+   LPSTR        lpstrReplaceWith;   // ptr. to replace string
+   WORD         wFindWhatLen;       // size of find buffer
+   WORD         wReplaceWithLen;    // size of replace buffer
+   LPARAM       lCustData;          // data passed to hook fn.
+   LPFRHOOKPROC lpfnHook;           // ptr. to hook fn. or NULL
+   LPCSTR       lpTemplateName;     // custom template name
+} FINDREPLACEA, *LPFINDREPLACEA;
 typedef struct tagFINDREPLACEW {
-   DWORD    lStructSize;        // size of this struct 0x20
-   HWND     hwndOwner;          // handle to owner's window
-   HINSTANCE hInstance;          // instance handle of.EXE that
-                                //   contains cust. dlg. template
-   DWORD    Flags;              // one or more of the FR_??
-   LPWSTR   lpstrFindWhat;      // ptr. to search string
-   LPWSTR   lpstrReplaceWith;   // ptr. to replace string
-   WORD     wFindWhatLen;       // size of find buffer
-   WORD     wReplaceWithLen;    // size of replace buffer
-   LPARAM   lCustData;          // data passed to hook fn.
-   LPFRHOOKPROC lpfnHook;       // ptr. to hook fn. or NULL
-   LPCWSTR   lpTemplateName;     // custom template name
-} FINDREPLACEW;
-
+   DWORD        lStructSize;        // size of this struct 0x20
+   HWND         hwndOwner;          // handle to owner's window
+   HINSTANCE    hInstance;          // instance handle of.EXE that
+                                    //   contains cust. dlg. template
+   DWORD        Flags;              // one or more of the FR_??
+   LPWSTR       lpstrFindWhat;      // ptr. to search string
+   LPWSTR       lpstrReplaceWith;   // ptr. to replace string
+   WORD         wFindWhatLen;       // size of find buffer
+   WORD         wReplaceWithLen;    // size of replace buffer
+   LPARAM       lCustData;          // data passed to hook fn.
+   LPFRHOOKPROC lpfnHook;           // ptr. to hook fn. or NULL
+   LPCWSTR      lpTemplateName;     // custom template name
+} FINDREPLACEW, *LPFINDREPLACEW;
 #ifdef UNICODE
-#define FINDREPLACE FINDREPLACEW
+typedef FINDREPLACEW FINDREPLACE;
+typedef LPFINDREPLACEW LPFINDREPLACE;
 #else
-#define FINDREPLACE FINDREPLACEA
-#endif // ! UNICODE
-
-typedef FINDREPLACEA  *LPFINDREPLACEA;
-typedef FINDREPLACEW *LPFINDREPLACEW;
-typedef FINDREPLACE *LPFINDREPLACE;
+typedef FINDREPLACEA FINDREPLACE;
+typedef LPFINDREPLACEA LPFINDREPLACE;
+#endif // UNICODE
 
 #define FR_DOWN                         0x00000001
 #define FR_WHOLEWORD                    0x00000002
@@ -588,21 +686,18 @@ typedef FINDREPLACE *LPFINDREPLACE;
 
 HWND  APIENTRY    FindTextA(LPFINDREPLACEA);
 HWND  APIENTRY    FindTextW(LPFINDREPLACEW);
-
 #ifdef UNICODE
-#define FindText FindTextW
+#define FindText  FindTextW
 #else
-#define FindText FindTextA
-#endif // ! UNICODE
-
+#define FindText  FindTextA
+#endif // !UNICODE
 HWND  APIENTRY    ReplaceTextA(LPFINDREPLACEA);
 HWND  APIENTRY    ReplaceTextW(LPFINDREPLACEW);
-
 #ifdef UNICODE
-#define ReplaceText ReplaceTextW
+#define ReplaceText  ReplaceTextW
 #else
-#define ReplaceText ReplaceTextA
-#endif // ! UNICODE
+#define ReplaceText  ReplaceTextA
+#endif // !UNICODE
 
 typedef UINT (APIENTRY *LPCFHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 
@@ -616,7 +711,7 @@ typedef struct tagCHOOSEFONTA {
    COLORREF        rgbColors;          // returned text color
    LPARAM          lCustData;          // data passed to hook fn.
    LPCFHOOKPROC    lpfnHook;           // ptr. to hook function
-   LPCSTR           lpTemplateName;     // custom template name
+   LPCSTR          lpTemplateName;     // custom template name
    HINSTANCE       hInstance;          // instance handle of.EXE that
                                        //   contains cust. dlg. template
    LPSTR           lpszStyle;          // return the style field here
@@ -628,8 +723,7 @@ typedef struct tagCHOOSEFONTA {
    INT             nSizeMin;           // minimum pt size allowed &
    INT             nSizeMax;           // max pt size allowed if
                                        //   CF_LIMITSIZE is used
-} CHOOSEFONTA;
-
+} CHOOSEFONTA, *LPCHOOSEFONTA;
 typedef struct tagCHOOSEFONTW {
    DWORD           lStructSize;
    HWND            hwndOwner;          // caller's window handle
@@ -639,10 +733,10 @@ typedef struct tagCHOOSEFONTW {
    DWORD           Flags;              // enum. type flags
    COLORREF        rgbColors;          // returned text color
    LPARAM          lCustData;          // data passed to hook fn.
-   LPCFHOOKPROC lpfnHook;              // ptr. to hook function
-   LPCWSTR          lpTemplateName;     // custom template name
+   LPCFHOOKPROC    lpfnHook;           // ptr. to hook function
+   LPCWSTR         lpTemplateName;     // custom template name
    HINSTANCE       hInstance;          // instance handle of.EXE that
-                                       // contains cust. dlg. template
+                                       //   contains cust. dlg. template
    LPWSTR          lpszStyle;          // return the style field here
                                        // must be LF_FACESIZE or bigger
    WORD            nFontType;          // same value reported to the EnumFonts
@@ -652,25 +746,21 @@ typedef struct tagCHOOSEFONTW {
    INT             nSizeMin;           // minimum pt size allowed &
    INT             nSizeMax;           // max pt size allowed if
                                        //   CF_LIMITSIZE is used
-} CHOOSEFONTW;
-
+} CHOOSEFONTW, *LPCHOOSEFONTW;
 #ifdef UNICODE
-#define CHOOSEFONT CHOOSEFONTW
+typedef CHOOSEFONTW CHOOSEFONT;
+typedef LPCHOOSEFONTW LPCHOOSEFONT;
 #else
-#define CHOOSEFONT CHOOSEFONTA
-#endif // ! UNICODE
-
-typedef CHOOSEFONTA *LPCHOOSEFONTA;
-typedef CHOOSEFONTW *LPCHOOSEFONTW;
-typedef CHOOSEFONT *LPCHOOSEFONT;
+typedef CHOOSEFONTA CHOOSEFONT;
+typedef LPCHOOSEFONTA LPCHOOSEFONT;
+#endif // UNICODE
 
 BOOL APIENTRY ChooseFontA(LPCHOOSEFONTA);
 BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
-
 #ifdef UNICODE
-#define ChooseFont ChooseFontW
+#define ChooseFont  ChooseFontW
 #else
-#define ChooseFont ChooseFontA
+#define ChooseFont  ChooseFontA
 #endif // !UNICODE
 
 #define CF_SCREENFONTS             0x00000001
@@ -685,6 +775,9 @@ BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define CF_EFFECTS                 0x00000100L
 #define CF_APPLY                   0x00000200L
 #define CF_ANSIONLY                0x00000400L
+#if(WINVER >= 0x0400)
+#define CF_SCRIPTSONLY             CF_ANSIONLY
+#endif /* WINVER >= 0x0400 */
 #define CF_NOVECTORFONTS           0x00000800L
 #define CF_NOOEMFONTS              CF_NOVECTORFONTS
 #define CF_NOSIMULATIONS           0x00001000L
@@ -697,6 +790,11 @@ BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define CF_NOFACESEL               0x00080000L
 #define CF_NOSTYLESEL              0x00100000L
 #define CF_NOSIZESEL               0x00200000L
+#if(WINVER >= 0x0400)
+#define CF_SELECTSCRIPT            0x00400000L
+#define CF_NOSCRIPTSEL             0x00800000L
+#define CF_NOVERTFONTS             0x01000000L
+#endif /* WINVER >= 0x0400 */
 
 // these are extra nFontType bits that are added to what is returned to the
 // EnumFonts callback routine
@@ -709,6 +807,8 @@ BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define REGULAR_FONTTYPE      0x0400
 
 #define WM_CHOOSEFONT_GETLOGFONT      (WM_USER + 1)
+#define WM_CHOOSEFONT_SETLOGFONT      (WM_USER + 101)
+#define WM_CHOOSEFONT_SETFLAGS        (WM_USER + 102)
 
 // strings used to obtain unique window message for communication
 // between dialog and caller
@@ -757,67 +857,62 @@ typedef UINT (APIENTRY *LPPRINTHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 typedef UINT (APIENTRY *LPSETUPHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 
 typedef struct tagPDA {
-   DWORD   lStructSize;
-   HWND    hwndOwner;
-   HGLOBAL hDevMode;
-   HGLOBAL hDevNames;
-   HDC     hDC;
-   DWORD   Flags;
-   WORD    nFromPage;
-   WORD    nToPage;
-   WORD    nMinPage;
-   WORD    nMaxPage;
-   WORD    nCopies;
-   HINSTANCE hInstance;
-   LPARAM  lCustData;
-   LPPRINTHOOKPROC lpfnPrintHook;
-   LPSETUPHOOKPROC lpfnSetupHook;
-   LPCSTR   lpPrintTemplateName;
-   LPCSTR   lpSetupTemplateName;
-   HGLOBAL  hPrintTemplate;
-   HGLOBAL  hSetupTemplate;
-} PRINTDLGA;
-
+   DWORD            lStructSize;
+   HWND             hwndOwner;
+   HGLOBAL          hDevMode;
+   HGLOBAL          hDevNames;
+   HDC              hDC;
+   DWORD            Flags;
+   WORD             nFromPage;
+   WORD             nToPage;
+   WORD             nMinPage;
+   WORD             nMaxPage;
+   WORD             nCopies;
+   HINSTANCE        hInstance;
+   LPARAM           lCustData;
+   LPPRINTHOOKPROC  lpfnPrintHook;
+   LPSETUPHOOKPROC  lpfnSetupHook;
+   LPCSTR           lpPrintTemplateName;
+   LPCSTR           lpSetupTemplateName;
+   HGLOBAL          hPrintTemplate;
+   HGLOBAL          hSetupTemplate;
+} PRINTDLGA, *LPPRINTDLGA;
 typedef struct tagPDW {
-   DWORD   lStructSize;
-   HWND    hwndOwner;
-   HGLOBAL hDevMode;
-   HGLOBAL  hDevNames;
-   HDC     hDC;
-   DWORD   Flags;
-   WORD    nFromPage;
-   WORD    nToPage;
-   WORD    nMinPage;
-   WORD    nMaxPage;
-   WORD    nCopies;
-   HINSTANCE hInstance;
-   LPARAM  lCustData;
-   LPPRINTHOOKPROC lpfnPrintHook;
-   LPSETUPHOOKPROC lpfnSetupHook;
-   LPCWSTR  lpPrintTemplateName;
-   LPCWSTR  lpSetupTemplateName;
-   HGLOBAL  hPrintTemplate;
-   HGLOBAL  hSetupTemplate;
-}  PRINTDLGW;
-
+   DWORD            lStructSize;
+   HWND             hwndOwner;
+   HGLOBAL          hDevMode;
+   HGLOBAL          hDevNames;
+   HDC              hDC;
+   DWORD            Flags;
+   WORD             nFromPage;
+   WORD             nToPage;
+   WORD             nMinPage;
+   WORD             nMaxPage;
+   WORD             nCopies;
+   HINSTANCE        hInstance;
+   LPARAM           lCustData;
+   LPPRINTHOOKPROC  lpfnPrintHook;
+   LPSETUPHOOKPROC  lpfnSetupHook;
+   LPCWSTR          lpPrintTemplateName;
+   LPCWSTR          lpSetupTemplateName;
+   HGLOBAL          hPrintTemplate;
+   HGLOBAL          hSetupTemplate;
+} PRINTDLGW, *LPPRINTDLGW;
 #ifdef UNICODE
-#define PRINTDLG PRINTDLGW
+typedef PRINTDLGW PRINTDLG;
+typedef LPPRINTDLGW LPPRINTDLG;
 #else
-#define PRINTDLG PRINTDLGA
-#endif // ! UNICODE
-
-typedef PRINTDLGA * LPPRINTDLGA;
-typedef PRINTDLGW * LPPRINTDLGW;
-typedef PRINTDLG  * LPPRINTDLG;
+typedef PRINTDLGA PRINTDLG;
+typedef LPPRINTDLGA LPPRINTDLG;
+#endif // UNICODE
 
 BOOL  APIENTRY     PrintDlgA(LPPRINTDLGA);
 BOOL  APIENTRY     PrintDlgW(LPPRINTDLGW);
-
 #ifdef UNICODE
-#define PrintDlg PrintDlgW
+#define PrintDlg  PrintDlgW
 #else
-#define PrintDlg PrintDlgA
-#endif // ! UNICODE
+#define PrintDlg  PrintDlgA
+#endif // !UNICODE
 
 #define PD_ALLPAGES                  0x00000000
 #define PD_SELECTION                 0x00000001
@@ -839,6 +934,7 @@ BOOL  APIENTRY     PrintDlgW(LPPRINTDLGW);
 #define PD_ENABLEPRINTTEMPLATEHANDLE 0x00010000
 #define PD_ENABLESETUPTEMPLATEHANDLE 0x00020000
 #define PD_USEDEVMODECOPIES          0x00040000
+#define PD_USEDEVMODECOPIESANDCOLLATE 0x00040000
 #define PD_DISABLEPRINTTOFILE        0x00080000
 #define PD_HIDEPRINTTOFILE           0x00100000
 #define PD_NONETWORKBUTTON           0x00200000
@@ -856,12 +952,94 @@ typedef DEVNAMES * LPDEVNAMES;
 
 DWORD APIENTRY     CommDlgExtendedError(VOID);
 
+#if(WINVER >= 0x0400)
+#define WM_PSD_PAGESETUPDLG     (WM_USER  )
+#define WM_PSD_FULLPAGERECT     (WM_USER+1)
+#define WM_PSD_MINMARGINRECT    (WM_USER+2)
+#define WM_PSD_MARGINRECT       (WM_USER+3)
+#define WM_PSD_GREEKTEXTRECT    (WM_USER+4)
+#define WM_PSD_ENVSTAMPRECT     (WM_USER+5)
+#define WM_PSD_YAFULLPAGERECT   (WM_USER+6)
+
+typedef UINT (APIENTRY* LPPAGEPAINTHOOK)( HWND, UINT, WPARAM, LPARAM );
+typedef UINT (APIENTRY* LPPAGESETUPHOOK)( HWND, UINT, WPARAM, LPARAM );
+
+typedef struct tagPSDA
+{
+    DWORD           lStructSize;
+    HWND            hwndOwner;
+    HGLOBAL         hDevMode;
+    HGLOBAL         hDevNames;
+    DWORD           Flags;
+    POINT           ptPaperSize;
+    RECT            rtMinMargin;
+    RECT            rtMargin;
+    HINSTANCE       hInstance;
+    LPARAM          lCustData;
+    LPPAGESETUPHOOK lpfnPageSetupHook;
+    LPPAGEPAINTHOOK lpfnPagePaintHook;
+    LPCSTR          lpPageSetupTemplateName;
+    HGLOBAL         hPageSetupTemplate;
+} PAGESETUPDLGA, * LPPAGESETUPDLGA;
+typedef struct tagPSDW
+{
+    DWORD           lStructSize;
+    HWND            hwndOwner;
+    HGLOBAL         hDevMode;
+    HGLOBAL         hDevNames;
+    DWORD           Flags;
+    POINT           ptPaperSize;
+    RECT            rtMinMargin;
+    RECT            rtMargin;
+    HINSTANCE       hInstance;
+    LPARAM          lCustData;
+    LPPAGESETUPHOOK lpfnPageSetupHook;
+    LPPAGEPAINTHOOK lpfnPagePaintHook;
+    LPCWSTR         lpPageSetupTemplateName;
+    HGLOBAL         hPageSetupTemplate;
+} PAGESETUPDLGW, * LPPAGESETUPDLGW;
+#ifdef UNICODE
+typedef PAGESETUPDLGW PAGESETUPDLG;
+typedef LPPAGESETUPDLGW LPPAGESETUPDLG;
+#else
+typedef PAGESETUPDLGA PAGESETUPDLG;
+typedef LPPAGESETUPDLGA LPPAGESETUPDLG;
+#endif // UNICODE
+
+BOOL APIENTRY PageSetupDlgA( LPPAGESETUPDLGA );
+BOOL APIENTRY PageSetupDlgW( LPPAGESETUPDLGW );
+#ifdef UNICODE
+#define PageSetupDlg  PageSetupDlgW
+#else
+#define PageSetupDlg  PageSetupDlgA
+#endif // !UNICODE
+
+#define PSD_DEFAULTMINMARGINS             0x00000000 // default (printer's)
+#define PSD_INWININIINTLMEASURE           0x00000000 // 1st of 4 possible
+
+#define PSD_MINMARGINS                    0x00000001 // use caller's
+#define PSD_MARGINS                       0x00000002 // use caller's
+#define PSD_INTHOUSANDTHSOFINCHES         0x00000004 // 2nd of 4 possible
+#define PSD_INHUNDREDTHSOFMILLIMETERS     0x00000008 // 3rd of 4 possible
+#define PSD_DISABLEMARGINS                0x00000010
+#define PSD_DISABLEPRINTER                0x00000020
+#define PSD_NOWARNING                     0x00000080 // must be same as PD_*
+#define PSD_DISABLEORIENTATION            0x00000100
+#define PSD_RETURNDEFAULT                 0x00000400 // must be same as PD_*
+#define PSD_DISABLEPAPER                  0x00000200
+#define PSD_SHOWHELP                      0x00000800 // must be same as PD_*
+#define PSD_ENABLEPAGESETUPHOOK           0x00002000 // must be same as PD_*
+#define PSD_ENABLEPAGESETUPTEMPLATE       0x00008000 // must be same as PD_*
+#define PSD_ENABLEPAGESETUPTEMPLATEHANDLE 0x00020000 // must be same as PD_*
+#define PSD_ENABLEPAGEPAINTHOOK           0x00040000
+#define PSD_DISABLEPAGEPAINTING           0x00080000
+#endif /* WINVER >= 0x0400 */
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
-#include "poppack.h"
-
+#include <poppack.h>
 #endif  /* !_INC_COMMDLG */
 
 

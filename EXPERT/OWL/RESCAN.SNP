@@ -64,6 +64,8 @@
 ##      --END-- ? \\"//{{[[ClassName]]XFER_DEF}}"
 ##--END-- QUERY_BASE_NAME == "TDialog"
 ##--BEGIN-- @OPT_APPL_DOCVIEW
+##		  0 [[StartLine]]
+##		  1 [[EndLine]]
 ##      --BEGIN-- QUERY_BASE_NAME == "TApplication"
 ##          :^BOF
 ##          --BEGIN-- ? "//{{DOC_VIEW}}"
@@ -72,14 +74,14 @@
 ##*
 ##              --BEGIN-- @QUERY_APPL_OLE == VALUE_NOOLE
 ##                  :^1
-##                  :YPos() [[StartLine]]
+##                  :YPos() StartLine
 ##                  --BEGIN-- ? "//{{DOC_VIEW_END}}"
 ##                      :^-1
-##                      :YPos() [[EndLine]]
+##                      :YPos() EndLine
 ##                      :^@StartLine
 ##                      :^BOL
 ##                      :0 [[CurrViewLine]]
-##                      :--FOR-- ViewEntry = 1 TO ((EndLine - StartLine) + 1)
+##                      --FOR-- ViewEntry = 1 TO ((EndLine - StartLine) + 1)
 ##                          :ScanViewEntry([[Template]], [[TDocument]], [[TView]]) [[viewResult]]
 ##                          :YPos() CurrViewLine
 ##                          :? "//{{DOC_MANAGER}}"
@@ -92,7 +94,7 @@
 ##                              :^@CurrViewLine
 ##*
 ##                          :^1
-##                      :--NEXT-- ViewEntry
+##                      --NEXT-- ViewEntry
 ##                  --END-- ? "//{{DOC_VIEW_END}}"
 ##              --END-- @QUERY_APPL_OLE == VALUE_NOOLE
 ##          --END-- ? "//{{DOC_VIEW}}"

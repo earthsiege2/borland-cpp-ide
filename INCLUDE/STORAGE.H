@@ -14,17 +14,12 @@
  *
  */
 
-
+#if !defined(__FLAT__)
 #if !defined( _STORAGE_H_ )
 #define _STORAGE_H_
 #define __STORAGE_H
 
-
-#if !defined(__FLAT__)
-
-
 #include <compobj.h>
-
 
 /****** Storage Error Codes *************************************************/
 
@@ -464,14 +459,11 @@ STDAPI StgSetTimes(char const FAR* lpszName,
 		  FILETIME const FAR* patime,
 		  FILETIME const FAR* pmtime);
 
+#endif // _STORAGE_H_
 
 #else  /* !__FLAT__ */
-
-
+#ifndef RC_INVOKED
+#pragma message("WARNING: your code should #include objbase.h instead of storage.h")
+#endif /* !RC_INVOKED */
 #include <objbase.h>
-
-
 #endif  /* __FLAT__ */
-
-
-#endif

@@ -2,19 +2,12 @@
 *                                                                           *
 * winuser.h -- USER procedure declarations, constant definitions and macros *
 *                                                                           *
+* Copyright (c) 1985-1995, Microsoft Corp. All rights reserved.             *
+*                                                                           *
 ****************************************************************************/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 #ifndef _WINUSER_
 #define _WINUSER_
-#define __WINUSER_H
 
 //
 // Define API decoration for direct importing of DLL references.
@@ -31,7 +24,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #ifndef WINVER
-#define WINVER  0x030A      /* version 3.1 */
+#define WINVER  0x0400      /* version 4.0 */
 #endif /* !WINVER */
 
 #include <stdarg.h>
@@ -74,6 +67,9 @@ typedef BOOL (CALLBACK* PROPENUMPROCEXW)(HWND, LPWSTR, HANDLE, DWORD);
 typedef int (CALLBACK* EDITWORDBREAKPROCA)(LPSTR lpch, int ichCurrent, int cch, int code);
 typedef int (CALLBACK* EDITWORDBREAKPROCW)(LPWSTR lpch, int ichCurrent, int cch, int code);
 
+#if(WINVER >= 0x0400)
+typedef BOOL (CALLBACK* DRAWSTATEPROC)(HDC hdc, LPARAM lData, WPARAM wData, int cx, int cy);
+#endif /* WINVER >= 0x0400 */
 #else /* !STRICT */
 
 typedef FARPROC DLGPROC;
@@ -92,6 +88,9 @@ typedef FARPROC PROPENUMPROCW;
 typedef FARPROC PROPENUMPROCEXA;
 typedef FARPROC PROPENUMPROCEXW;
 
+#if(WINVER >= 0x0400)
+typedef FARPROC DRAWSTATEPROC;
+#endif /* WINVER >= 0x0400 */
 #endif /* !STRICT */
 
 #ifdef UNICODE
@@ -104,6 +103,34 @@ typedef PROPENUMPROCEXA      PROPENUMPROCEX;
 typedef EDITWORDBREAKPROCA   EDITWORDBREAKPROC;
 #endif /* UNICODE */
 
+#ifdef STRICT
+
+typedef BOOL (CALLBACK* NAMEENUMPROCA)(LPSTR, LPARAM);
+typedef BOOL (CALLBACK* NAMEENUMPROCW)(LPWSTR, LPARAM);
+
+typedef NAMEENUMPROCA   WINSTAENUMPROCA;
+typedef NAMEENUMPROCA   DESKTOPENUMPROCA;
+typedef NAMEENUMPROCW   WINSTAENUMPROCW;
+typedef NAMEENUMPROCW   DESKTOPENUMPROCW;
+
+#else /* !STRICT */
+
+typedef FARPROC NAMEENUMPROCA;
+typedef FARPROC NAMEENUMPROCW;
+typedef FARPROC WINSTAENUMPROCA;
+typedef FARPROC DESKTOPENUMPROCA;
+typedef FARPROC WINSTAENUMPROCW;
+typedef FARPROC DESKTOPENUMPROCW;
+
+#endif /* !STRICT */
+
+#ifdef UNICODE
+typedef WINSTAENUMPROCW     WINSTAENUMPROC;
+typedef DESKTOPENUMPROCW    DESKTOPENUMPROC;
+#else  /* !UNICODE */
+typedef WINSTAENUMPROCA     WINSTAENUMPROC;
+typedef DESKTOPENUMPROCA    DESKTOPENUMPROC;
+#endif /* UNICODE */
 
 #define MAKEINTRESOURCEA(i) (LPSTR)((DWORD)((WORD)(i)))
 #define MAKEINTRESOURCEW(i) (LPWSTR)((DWORD)((WORD)(i)))
@@ -135,6 +162,10 @@ typedef EDITWORDBREAKPROCA   EDITWORDBREAKPROC;
 #define RT_GROUP_ICON   MAKEINTRESOURCE((DWORD)RT_ICON + DIFFERENCE)
 #define RT_VERSION      MAKEINTRESOURCE(16)
 #define RT_DLGINCLUDE   MAKEINTRESOURCE(17)
+#if(WINVER >= 0x0400)
+#define RT_PLUGPLAY     MAKEINTRESOURCE(19)
+#define RT_VXD          MAKEINTRESOURCE(20)
+#endif /* WINVER >= 0x0400 */
 
 #endif /* !NORESOURCE */
 
@@ -350,6 +381,10 @@ WINUSERAPI int WINAPIV wsprintfW(LPWSTR, LPCWSTR, ...);
 #define VK_LMENU          0xA4
 #define VK_RMENU          0xA5
 
+#if(WINVER >= 0x0400)
+#define VK_PROCESSKEY     0xE5
+#endif /* WINVER >= 0x0400 */
+
 #define VK_ATTN           0xF6
 #define VK_CRSEL          0xF7
 #define VK_EXSEL          0xF8
@@ -381,7 +416,16 @@ WINUSERAPI int WINAPIV wsprintfW(LPWSTR, LPCWSTR, ...);
 #define WH_DEBUG            9
 #define WH_SHELL           10
 #define WH_FOREGROUNDIDLE  11
+#if(WINVER >= 0x0400)
+#define WH_CALLWNDPROCRET  12
+#endif /* WINVER >= 0x0400 */
+#if(WINVER >= 0x0400)
+#define WH_MAX             12
+#else
 #define WH_MAX             11
+#endif
+#define WH_MINHOOK         WH_MIN
+#define WH_MAXHOOK         WH_MAX
 
 /*
  * Hook Codes
@@ -462,6 +506,14 @@ typedef struct tagCBTACTIVATESTRUCT
 #define HSHELL_WINDOWDESTROYED      2
 #define HSHELL_ACTIVATESHELLWINDOW  3
 
+#if(WINVER >= 0x0400)
+#define HSHELL_WINDOWACTIVATED      4
+#define HSHELL_GETMINRECT           5
+#define HSHELL_REDRAW               6
+#define HSHELL_TASKMAN              7
+#define HSHELL_LANGUAGE             8
+#endif /* WINVER >= 0x0400 */
+
 /*
  * Message Structure used in Journaling
  */
@@ -485,6 +537,18 @@ typedef struct tagCWPSTRUCT {
     HWND    hwnd;
 } CWPSTRUCT, *PCWPSTRUCT, NEAR *NPCWPSTRUCT, FAR *LPCWPSTRUCT;
 
+#if(WINVER >= 0x0400)
+/*
+ * Message structure used by WH_CALLWNDPROCRET
+ */
+typedef struct tagCWPRETSTRUCT {
+    LRESULT lResult;
+    LPARAM  lParam;
+    WPARAM  wParam;
+    UINT    message;
+    HWND    hwnd;
+} CWPRETSTRUCT, *PCWPRETSTRUCT, NEAR *NPCWPRETSTRUCT, FAR *LPCWPRETSTRUCT;
+#endif /* WINVER >= 0x0400 */
 
 /*
  * Structure used by WH_DEBUG
@@ -507,8 +571,18 @@ typedef struct tagMOUSEHOOKSTRUCT {
     UINT    wHitTestCode;
     DWORD   dwExtraInfo;
 } MOUSEHOOKSTRUCT, FAR *LPMOUSEHOOKSTRUCT, *PMOUSEHOOKSTRUCT;
+#if(WINVER >= 0x0400)
+/*
+ * Structure used by WH_HARDWARE
+ */
+typedef struct tagHARDWAREHOOKSTRUCT {
+    HWND    hwnd;
+    UINT    message;
+    WPARAM  wParam;
+    LPARAM  lParam;
+} HARDWAREHOOKSTRUCT, FAR *LPHARDWAREHOOKSTRUCT, *PHARDWAREHOOKSTRUCT;
+#endif /* WINVER >= 0x0400 */
 #endif /* !NOWH */
-
 
 /*
  * Keyboard Layout API
@@ -520,6 +594,10 @@ typedef struct tagMOUSEHOOKSTRUCT {
 #define KLF_SUBSTITUTE_OK   0x00000002
 #define KLF_UNLOADPREVIOUS  0x00000004
 #define KLF_REORDER         0x00000008
+#if(WINVER >= 0x0400)
+#define KLF_REPLACELANG     0x00000010
+#define KLF_NOTELLSHELL     0x00000080
+#endif /* WINVER >= 0x0400 */
 
 /*
  * Size of KeyboardLayoutName (number of characters), including nul terminator
@@ -544,12 +622,35 @@ LoadKeyboardLayoutW(
 #define LoadKeyboardLayout  LoadKeyboardLayoutA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+HKL
+WINAPI
+ActivateKeyboardLayout(
+    HKL hkl,
+    UINT Flags);
+#else
 WINUSERAPI
 BOOL
 WINAPI
 ActivateKeyboardLayout(
     HKL hkl,
     UINT Flags);
+#endif /* WINVER >= 0x0400 */
+
+#if(WINVER >= 0x0400)
+WINUSERAPI
+int
+WINAPI
+ToUnicodeEx(
+    UINT wVirtKey,
+    UINT wScanCode,
+    PBYTE lpKeyState,
+    LPWSTR pwszBuff,
+    int cchBuff,
+    UINT wFlags,
+    HKL dwhkl);
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -573,6 +674,21 @@ GetKeyboardLayoutNameW(
 #define GetKeyboardLayoutName  GetKeyboardLayoutNameA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+int
+WINAPI
+GetKeyboardLayoutList(
+	int nBuff,
+	HKL FAR *lpList);
+
+WINUSERAPI
+HKL
+WINAPI
+GetKeyboardLayout(
+    DWORD dwLayout
+);
+#endif /* WINVER >= 0x0400 */
 
 #ifndef NODESKTOP
 /*
@@ -586,12 +702,126 @@ GetKeyboardLayoutNameW(
 #define DESKTOP_JOURNALPLAYBACK     0x0020L
 #define DESKTOP_ENUMERATE           0x0040L
 #define DESKTOP_WRITEOBJECTS        0x0080L
+#define DESKTOP_SWITCHDESKTOP       0x0100L
+
+/*
+ * Desktop-specific control flags
+ */
+#define DF_ALLOWOTHERACCOUNTHOOK    0x0001L
+
+#ifdef _WINGDI_
+#ifndef NOGDI
+
+WINUSERAPI
+HDESK
+WINAPI
+CreateDesktopA(
+    LPSTR lpszDesktop,
+    LPSTR lpszDevice,
+    LPDEVMODEA pDevmode,
+    DWORD dwFlags,
+    DWORD dwDesiredAccess,
+    LPSECURITY_ATTRIBUTES lpsa);
+WINUSERAPI
+HDESK
+WINAPI
+CreateDesktopW(
+    LPWSTR lpszDesktop,
+    LPWSTR lpszDevice,
+    LPDEVMODEW pDevmode,
+    DWORD dwFlags,
+    DWORD dwDesiredAccess,
+    LPSECURITY_ATTRIBUTES lpsa);
+#ifdef UNICODE
+#define CreateDesktop  CreateDesktopW
+#else
+#define CreateDesktop  CreateDesktopA
+#endif // !UNICODE
+
+#endif /* NOGDI */
+#endif /* _WINGDI_ */
+
+WINUSERAPI
+HDESK
+WINAPI
+OpenDesktopA(
+    LPSTR lpszDesktop,
+    DWORD dwFlags,
+    BOOL fInherit,
+    DWORD dwDesiredAccess);
+WINUSERAPI
+HDESK
+WINAPI
+OpenDesktopW(
+    LPWSTR lpszDesktop,
+    DWORD dwFlags,
+    BOOL fInherit,
+    DWORD dwDesiredAccess);
+#ifdef UNICODE
+#define OpenDesktop  OpenDesktopW
+#else
+#define OpenDesktop  OpenDesktopA
+#endif // !UNICODE
+
+WINUSERAPI
+HDESK
+WINAPI
+OpenInputDesktop(
+    DWORD dwFlags,
+    BOOL fInherit,
+    DWORD dwDesiredAccess);
+
+WINUSERAPI
+BOOL
+WINAPI
+EnumDesktopsA(
+    HWINSTA hwinsta,
+    DESKTOPENUMPROCA lpEnumFunc,
+    LPARAM lParam);
+WINUSERAPI
+BOOL
+WINAPI
+EnumDesktopsW(
+    HWINSTA hwinsta,
+    DESKTOPENUMPROCW lpEnumFunc,
+    LPARAM lParam);
+#ifdef UNICODE
+#define EnumDesktops  EnumDesktopsW
+#else
+#define EnumDesktops  EnumDesktopsA
+#endif // !UNICODE
+
+WINUSERAPI
+BOOL
+WINAPI
+EnumDesktopWindows(
+    HDESK hDesktop,
+    WNDENUMPROC lpfn,
+    LPARAM lParam);
+
+WINUSERAPI
+BOOL
+WINAPI
+SwitchDesktop(
+    HDESK hDesktop);
+
+WINUSERAPI
+BOOL
+WINAPI
+SetThreadDesktop(
+    HDESK hDesktop);
+
+WINUSERAPI
+BOOL
+WINAPI
+CloseDesktop(
+    HDESK hDesktop);
 
 WINUSERAPI
 HDESK
 WINAPI
 GetThreadDesktop(
-    DWORD);
+    DWORD dwThreadId);
 
 #endif  /* !NODESKTOP */
 
@@ -608,6 +838,83 @@ GetThreadDesktop(
 #define WINSTA_EXITWINDOWS          0x0040L
 #define WINSTA_ENUMERATE            0x0100L
 #define WINSTA_READSCREEN           0x0200L
+
+/*
+ * Windowstation-specific attribute flags
+ */
+#define WSF_VISIBLE                 0x0001L
+
+WINUSERAPI
+HWINSTA
+WINAPI
+CreateWindowStationA(
+    LPSTR lpwinsta,
+    DWORD dwReserved,
+    DWORD dwDesiredAccess,
+    LPSECURITY_ATTRIBUTES lpsa);
+WINUSERAPI
+HWINSTA
+WINAPI
+CreateWindowStationW(
+    LPWSTR lpwinsta,
+    DWORD dwReserved,
+    DWORD dwDesiredAccess,
+    LPSECURITY_ATTRIBUTES lpsa);
+#ifdef UNICODE
+#define CreateWindowStation  CreateWindowStationW
+#else
+#define CreateWindowStation  CreateWindowStationA
+#endif // !UNICODE
+
+WINUSERAPI
+HWINSTA
+WINAPI
+OpenWindowStationA(
+    LPSTR lpszWinSta,
+    BOOL fInherit,
+    DWORD dwDesiredAccess);
+WINUSERAPI
+HWINSTA
+WINAPI
+OpenWindowStationW(
+    LPWSTR lpszWinSta,
+    BOOL fInherit,
+    DWORD dwDesiredAccess);
+#ifdef UNICODE
+#define OpenWindowStation  OpenWindowStationW
+#else
+#define OpenWindowStation  OpenWindowStationA
+#endif // !UNICODE
+
+WINUSERAPI
+BOOL
+WINAPI
+EnumWindowStationsA(
+    WINSTAENUMPROCA lpEnumFunc,
+    LPARAM lParam);
+WINUSERAPI
+BOOL
+WINAPI
+EnumWindowStationsW(
+    WINSTAENUMPROCW lpEnumFunc,
+    LPARAM lParam);
+#ifdef UNICODE
+#define EnumWindowStations  EnumWindowStationsW
+#else
+#define EnumWindowStations  EnumWindowStationsA
+#endif // !UNICODE
+
+WINUSERAPI
+BOOL
+WINAPI
+CloseWindowStation(
+    HWINSTA hWinSta);
+
+WINUSERAPI
+BOOL
+WINAPI
+SetProcessWindowStation(
+    HWINSTA hWinSta);
 
 WINUSERAPI
 HWINSTA
@@ -636,8 +943,109 @@ GetUserObjectSecurity(
     DWORD nLength,
     LPDWORD lpnLengthNeeded);
 
+#define UOI_FLAGS       1
+#define UOI_NAME        2
+#define UOI_TYPE        3
+
+typedef struct tagUSEROBJECTFLAGS {
+    BOOL fInherit;
+    BOOL fReserved;
+    DWORD dwFlags;
+} USEROBJECTFLAGS, *PUSEROBJECTFLAGS;
+
+WINUSERAPI
+BOOL
+WINAPI
+GetUserObjectInformationA(
+    HANDLE hObj,
+    int nIndex,
+    PVOID pvInfo,
+    DWORD nLength,
+    LPDWORD lpnLengthNeeded);
+WINUSERAPI
+BOOL
+WINAPI
+GetUserObjectInformationW(
+    HANDLE hObj,
+    int nIndex,
+    PVOID pvInfo,
+    DWORD nLength,
+    LPDWORD lpnLengthNeeded);
+#ifdef UNICODE
+#define GetUserObjectInformation  GetUserObjectInformationW
+#else
+#define GetUserObjectInformation  GetUserObjectInformationA
+#endif // !UNICODE
+
+WINUSERAPI
+BOOL
+WINAPI
+SetUserObjectInformationA(
+    HANDLE hObj,
+    int nIndex,
+    PVOID pvInfo,
+    DWORD nLength);
+WINUSERAPI
+BOOL
+WINAPI
+SetUserObjectInformationW(
+    HANDLE hObj,
+    int nIndex,
+    PVOID pvInfo,
+    DWORD nLength);
+#ifdef UNICODE
+#define SetUserObjectInformation  SetUserObjectInformationW
+#else
+#define SetUserObjectInformation  SetUserObjectInformationA
+#endif // !UNICODE
+
 #endif  /* !NOSECURITY */
 
+#if(WINVER >= 0x0400)
+typedef struct tagWNDCLASSEXA {
+    UINT        cbSize;
+    /* Win 3.x */
+    UINT        style;
+    WNDPROC     lpfnWndProc;
+    int         cbClsExtra;
+    int         cbWndExtra;
+    HINSTANCE   hInstance;
+    HICON       hIcon;
+    HCURSOR     hCursor;
+    HBRUSH      hbrBackground;
+    LPCSTR      lpszMenuName;
+    LPCSTR      lpszClassName;
+    /* Win 4.0 */
+    HICON       hIconSm;
+} WNDCLASSEXA, *PWNDCLASSEXA, NEAR *NPWNDCLASSEXA, FAR *LPWNDCLASSEXA;
+typedef struct tagWNDCLASSEXW {
+    UINT        cbSize;
+    /* Win 3.x */
+    UINT        style;
+    WNDPROC     lpfnWndProc;
+    int         cbClsExtra;
+    int         cbWndExtra;
+    HINSTANCE   hInstance;
+    HICON       hIcon;
+    HCURSOR     hCursor;
+    HBRUSH      hbrBackground;
+    LPCWSTR     lpszMenuName;
+    LPCWSTR     lpszClassName;
+    /* Win 4.0 */
+    HICON       hIconSm;
+} WNDCLASSEXW, *PWNDCLASSEXW, NEAR *NPWNDCLASSEXW, FAR *LPWNDCLASSEXW;
+#ifdef UNICODE
+typedef WNDCLASSEXW WNDCLASSEX;
+typedef PWNDCLASSEXW PWNDCLASSEX;
+typedef NPWNDCLASSEXW NPWNDCLASSEX;
+typedef LPWNDCLASSEXW LPWNDCLASSEX;
+#else
+typedef WNDCLASSEXA WNDCLASSEX;
+typedef PWNDCLASSEXA PWNDCLASSEX;
+typedef NPWNDCLASSEXA NPWNDCLASSEX;
+typedef LPWNDCLASSEXA LPWNDCLASSEX;
+#endif // UNICODE
+#endif /* WINVER >= 0x0400 */
 
 typedef struct tagWNDCLASSA {
     UINT        style;
@@ -675,9 +1083,6 @@ typedef NPWNDCLASSA NPWNDCLASS;
 typedef LPWNDCLASSA LPWNDCLASS;
 #endif // UNICODE
 
-
-
-
 #ifndef NOMSG
 
 /*
@@ -700,7 +1105,6 @@ typedef struct tagMSG {
 #define MAKEWPARAM(l, h)      (WPARAM)MAKELONG(l, h)
 #define MAKELPARAM(l, h)      (LPARAM)MAKELONG(l, h)
 #define MAKELRESULT(l, h)     (LRESULT)MAKELONG(l, h)
-
 
 #endif /* !NOMSG */
 
@@ -731,6 +1135,9 @@ typedef struct tagMSG {
 #define GCL_STYLE           (-26)
 #define GCW_ATOM            (-32)
 
+#if(WINVER >= 0x0400)
+#define GCL_HICONSM         (-34)
+#endif /* WINVER >= 0x0400 */
 
 #endif /* !NOWINOFFSETS */
 
@@ -771,8 +1178,9 @@ typedef struct tagMSG {
 #define WM_ENDSESSION                   0x0016
 #define WM_SHOWWINDOW                   0x0018
 #define WM_WININICHANGE                 0x001A
-
-
+#if(WINVER >= 0x0400)
+#define WM_SETTINGCHANGE                WM_WININICHANGE
+#endif /* WINVER >= 0x0400 */
 
 #define WM_DEVMODECHANGE                0x001B
 #define WM_ACTIVATEAPP                  0x001C
@@ -795,7 +1203,6 @@ typedef struct tagMINMAXINFO {
     POINT ptMinTrackSize;
     POINT ptMaxTrackSize;
 } MINMAXINFO, *PMINMAXINFO, *LPMINMAXINFO;
-
 
 #define WM_PAINTICON                    0x0026
 #define WM_ICONERASEBKGND               0x0027
@@ -839,7 +1246,27 @@ typedef struct tagCOPYDATASTRUCT {
     PVOID lpData;
 } COPYDATASTRUCT, *PCOPYDATASTRUCT;
 
+#if(WINVER >= 0x0400)
+#define WM_NOTIFY                       0x004E
+#define WM_INPUTLANGCHANGEREQUEST       0x0050
+#define WM_INPUTLANGCHANGE              0x0051
+#define WM_TCARD                        0x0052
+#define WM_HELP                         0x0053
+#define WM_USERCHANGED                  0x0054
+#define WM_NOTIFYFORMAT                 0x0055
 
+#define NFR_ANSI                             1
+#define NFR_UNICODE                          2
+#define NF_QUERY                             3
+#define NF_REQUERY                           4
+
+#define WM_CONTEXTMENU                  0x007B
+#define WM_STYLECHANGING                0x007C
+#define WM_STYLECHANGED                 0x007D
+#define WM_DISPLAYCHANGE                0x007E
+#define WM_GETICON                      0x007F
+#define WM_SETICON                      0x0080
+#endif /* WINVER >= 0x0400 */
 
 #define WM_NCCREATE                     0x0081
 #define WM_NCDESTROY                    0x0082
@@ -871,6 +1298,13 @@ typedef struct tagCOPYDATASTRUCT {
 #define WM_SYSDEADCHAR                  0x0107
 #define WM_KEYLAST                      0x0108
 
+#if(WINVER >= 0x0400)
+#define WM_IME_STARTCOMPOSITION         0x010D
+#define WM_IME_ENDCOMPOSITION           0x010E
+#define WM_IME_COMPOSITION              0x010F
+#define WM_IME_KEYLAST                  0x010F
+#endif /* WINVER >= 0x0400 */
+
 #define WM_INITDIALOG                   0x0110
 #define WM_COMMAND                      0x0111
 #define WM_SYSCOMMAND                   0x0112
@@ -891,8 +1325,6 @@ typedef struct tagCOPYDATASTRUCT {
 #define WM_CTLCOLORSCROLLBAR            0x0137
 #define WM_CTLCOLORSTATIC               0x0138
 
-
-
 #define WM_MOUSEFIRST                   0x0200
 #define WM_MOUSEMOVE                    0x0200
 #define WM_LBUTTONDOWN                  0x0201
@@ -907,9 +1339,36 @@ typedef struct tagCOPYDATASTRUCT {
 #define WM_MOUSELAST                    0x0209
 
 #define WM_PARENTNOTIFY                 0x0210
+#define MENULOOP_WINDOW                 0
+#define MENULOOP_POPUP                  1
 #define WM_ENTERMENULOOP                0x0211
 #define WM_EXITMENULOOP                 0x0212
 
+#if(WINVER >= 0x0400)
+#define WM_NEXTMENU                     0x0213
+
+typedef struct tagMDINEXTMENU
+{
+    HMENU   hmenuIn;
+    HMENU   hmenuNext;
+    HWND    hwndNext;
+} MDINEXTMENU, * PMDINEXTMENU, FAR * LPMDINEXTMENU;
+
+#define WM_SIZING                       0x0214
+#define WM_CAPTURECHANGED               0x0215
+#define WM_MOVING                       0x0216
+#define WM_POWERBROADCAST               0x0218
+#define WM_DEVICECHANGE                 0x0219
+
+#define WM_IME_SETCONTEXT               0x0281
+#define WM_IME_NOTIFY                   0x0282
+#define WM_IME_CONTROL                  0x0283
+#define WM_IME_COMPOSITIONFULL          0x0284
+#define WM_IME_SELECT                   0x0285
+#define WM_IME_CHAR                     0x0286
+#define WM_IME_KEYDOWN                  0x0290
+#define WM_IME_KEYUP                    0x0291
+#endif /* WINVER >= 0x0400 */
 
 #define WM_MDICREATE                    0x0220
 #define WM_MDIDESTROY                   0x0221
@@ -922,12 +1381,11 @@ typedef struct tagCOPYDATASTRUCT {
 #define WM_MDIICONARRANGE               0x0228
 #define WM_MDIGETACTIVE                 0x0229
 
-
-
 #define WM_MDISETMENU                   0x0230
+#define WM_ENTERSIZEMOVE                0x0231
+#define WM_EXITSIZEMOVE                 0x0232
 #define WM_DROPFILES                    0x0233
 #define WM_MDIREFRESHMENU               0x0234
-
 
 #define WM_CUT                          0x0300
 #define WM_COPY                         0x0301
@@ -949,18 +1407,23 @@ typedef struct tagCOPYDATASTRUCT {
 #define WM_PALETTECHANGED               0x0311
 #define WM_HOTKEY                       0x0312
 
+#if(WINVER >= 0x0400)
+#define WM_PRINT                        0x0317
+#define WM_PRINTCLIENT                  0x0318
+
+#define WM_HANDHELDFIRST                0x0358
+#define WM_HANDHELDLAST                 0x035F
+
+#define WM_AFXFIRST                     0x0360
+#define WM_AFXLAST                      0x037F
+#endif /* WINVER >= 0x0400 */
 
 #define WM_PENWINFIRST                  0x0380
 #define WM_PENWINLAST                   0x038F
 
-
-
-
-
-
-
-
-
+#if(WINVER >= 0x0400)
+#define WM_APP                          0x8000
+#endif /* WINVER >= 0x0400 */
 
 /*
  * NOTE: All Message Numbers below 0x0400 are RESERVED.
@@ -969,6 +1432,17 @@ typedef struct tagCOPYDATASTRUCT {
  */
 #define WM_USER                         0x0400
 
+#if(WINVER >= 0x0400)
+/*  wParam for WM_SIZING message  */
+#define WMSZ_LEFT           1
+#define WMSZ_RIGHT          2
+#define WMSZ_TOP            3
+#define WMSZ_TOPLEFT        4
+#define WMSZ_TOPRIGHT       5
+#define WMSZ_BOTTOM         6
+#define WMSZ_BOTTOMLEFT     7
+#define WMSZ_BOTTOMRIGHT    8
+#endif /* WINVER >= 0x0400 */
 
 #ifndef NONCMESSAGES
 
@@ -1007,6 +1481,11 @@ typedef struct tagCOPYDATASTRUCT {
 #define HTZOOM              HTMAXBUTTON
 #define HTSIZEFIRST         HTLEFT
 #define HTSIZELAST          HTBOTTOMRIGHT
+#if(WINVER >= 0x0400)
+#define HTOBJECT            19
+#define HTCLOSE             20
+#define HTHELP              21
+#endif /* WINVER >= 0x0400 */
 
 /*
  * SendMessageTimeout values
@@ -1093,7 +1572,6 @@ typedef struct tagNCCALCSIZE_PARAMS {
                             WVR_VREDRAW)
 #define WVR_VALIDRECTS      0x0400
 
-
 #ifndef NOKEYSTATES
 
 /*
@@ -1165,8 +1643,28 @@ typedef struct tagNCCALCSIZE_PARAMS {
 #define WS_EX_TOPMOST        0x00000008L
 #define WS_EX_ACCEPTFILES    0x00000010L
 #define WS_EX_TRANSPARENT    0x00000020L
+#if(WINVER >= 0x0400)
+#define WS_EX_MDICHILD          0x00000040L
+#define WS_EX_TOOLWINDOW        0x00000080L
+#define WS_EX_WINDOWEDGE        0x00000100L
+#define WS_EX_CLIENTEDGE        0x00000200L
+#define WS_EX_CONTEXTHELP       0x00000400L
 
+#define WS_EX_RIGHT             0x00001000L
+#define WS_EX_LEFT              0x00000000L
+#define WS_EX_RTLREADING        0x00002000L
+#define WS_EX_LTRREADING        0x00000000L
+#define WS_EX_LEFTSCROLLBAR     0x00004000L
+#define WS_EX_RIGHTSCROLLBAR    0x00000000L
 
+#define WS_EX_CONTROLPARENT     0x00010000L
+#define WS_EX_STATICEDGE        0x00020000L
+#define WS_EX_APPWINDOW         0x00040000L
+
+#define WS_EX_OVERLAPPEDWINDOW  (WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE)
+#define WS_EX_PALETTEWINDOW     (WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST)
+
+#endif /* WINVER >= 0x0400 */
 
 /*
  * Class styles
@@ -1185,8 +1683,124 @@ typedef struct tagNCCALCSIZE_PARAMS {
 #define CS_BYTEALIGNWINDOW  0x2000
 #define CS_GLOBALCLASS      0x4000
 
+#if(WINVER >= 0x0400)
+#define CS_IME              0x00010000
+#endif /* WINVER >= 0x0400 */
 
 #endif /* !NOWINSTYLES */
+#if(WINVER >= 0x0400)
+/* WM_PRINT flags */
+#define PRF_CHECKVISIBLE    0x00000001L
+#define PRF_NONCLIENT       0x00000002L
+#define PRF_CLIENT          0x00000004L
+#define PRF_ERASEBKGND      0x00000008L
+#define PRF_CHILDREN        0x00000010L
+#define PRF_OWNED           0x00000020L
+
+/* 3D border styles */
+#define BDR_RAISEDOUTER 0x0001
+#define BDR_SUNKENOUTER 0x0002
+#define BDR_RAISEDINNER 0x0004
+#define BDR_SUNKENINNER 0x0008
+
+#define BDR_OUTER       0x0003
+#define BDR_INNER       0x000c
+#define BDR_RAISED      0x0005
+#define BDR_SUNKEN      0x000a
+
+#define EDGE_RAISED     (BDR_RAISEDOUTER | BDR_RAISEDINNER)
+#define EDGE_SUNKEN     (BDR_SUNKENOUTER | BDR_SUNKENINNER)
+#define EDGE_ETCHED     (BDR_SUNKENOUTER | BDR_RAISEDINNER)
+#define EDGE_BUMP       (BDR_RAISEDOUTER | BDR_SUNKENINNER)
+
+/* Border flags */
+#define BF_LEFT         0x0001
+#define BF_TOP          0x0002
+#define BF_RIGHT        0x0004
+#define BF_BOTTOM       0x0008
+
+#define BF_TOPLEFT      (BF_TOP | BF_LEFT)
+#define BF_TOPRIGHT     (BF_TOP | BF_RIGHT)
+#define BF_BOTTOMLEFT   (BF_BOTTOM | BF_LEFT)
+#define BF_BOTTOMRIGHT  (BF_BOTTOM | BF_RIGHT)
+#define BF_RECT         (BF_LEFT | BF_TOP | BF_RIGHT | BF_BOTTOM)
+
+#define BF_DIAGONAL     0x0010
+
+// For diagonal lines, the BF_RECT flags specify the end point of the
+// vector bounded by the rectangle parameter.
+#define BF_DIAGONAL_ENDTOPRIGHT     (BF_DIAGONAL | BF_TOP | BF_RIGHT)
+#define BF_DIAGONAL_ENDTOPLEFT      (BF_DIAGONAL | BF_TOP | BF_LEFT)
+#define BF_DIAGONAL_ENDBOTTOMLEFT   (BF_DIAGONAL | BF_BOTTOM | BF_LEFT)
+#define BF_DIAGONAL_ENDBOTTOMRIGHT  (BF_DIAGONAL | BF_BOTTOM | BF_RIGHT)
+
+#define BF_MIDDLE       0x0800  /* Fill in the middle */
+#define BF_SOFT         0x1000  /* For softer buttons */
+#define BF_ADJUST       0x2000  /* Calculate the space left over */
+#define BF_FLAT         0x4000  /* For flat rather than 3D borders */
+#define BF_MONO         0x8000  /* For monochrome borders */
+
+WINUSERAPI BOOL WINAPI DrawEdge(HDC hdc, LPRECT qrc, UINT edge, UINT grfFlags);
+
+/* flags for DrawFrameControl */
+
+#define DFC_CAPTION             1
+#define DFC_MENU                2
+#define DFC_SCROLL              3
+#define DFC_BUTTON              4
+
+#define DFCS_CAPTIONCLOSE       0x0000
+#define DFCS_CAPTIONMIN         0x0001
+#define DFCS_CAPTIONMAX         0x0002
+#define DFCS_CAPTIONRESTORE     0x0003
+#define DFCS_CAPTIONHELP        0x0004
+
+#define DFCS_MENUARROW          0x0000
+#define DFCS_MENUCHECK          0x0001
+#define DFCS_MENUBULLET         0x0002
+#define DFCS_MENUARROWRIGHT     0x0004
+
+#define DFCS_SCROLLUP           0x0000
+#define DFCS_SCROLLDOWN         0x0001
+#define DFCS_SCROLLLEFT         0x0002
+#define DFCS_SCROLLRIGHT        0x0003
+#define DFCS_SCROLLCOMBOBOX     0x0005
+#define DFCS_SCROLLSIZEGRIP     0x0008
+#define DFCS_SCROLLSIZEGRIPRIGHT 0x0010
+
+#define DFCS_BUTTONCHECK        0x0000
+#define DFCS_BUTTONRADIOIMAGE   0x0001
+#define DFCS_BUTTONRADIOMASK    0x0002
+#define DFCS_BUTTONRADIO        0x0004
+#define DFCS_BUTTON3STATE       0x0008
+#define DFCS_BUTTONPUSH         0x0010
+
+#define DFCS_INACTIVE           0x0100
+#define DFCS_PUSHED             0x0200
+#define DFCS_CHECKED            0x0400
+#define DFCS_ADJUSTRECT         0x2000
+#define DFCS_FLAT               0x4000
+#define DFCS_MONO               0x8000
+
+WINUSERAPI BOOL    WINAPI DrawFrameControl(HDC, LPRECT, UINT, UINT);
+
+/* flags for DrawCaption */
+#define DC_ACTIVE           0x0001
+#define DC_SMALLCAP         0x0002
+#define DC_ICON             0x0004
+#define DC_TEXT             0x0008
+#define DC_INBUTTON         0x0010
+#define DC_CAPTION          (DC_ICON | DC_TEXT | DC_BUTTONS)
+#define DC_NC               (DC_CAPTION | DC_FRAME)
+
+WINUSERAPI BOOL    WINAPI DrawCaption(HWND, HDC, CONST RECT *, UINT);
+
+#define IDANI_OPEN          1
+#define IDANI_CLOSE         2
+#define IDANI_CAPTION       3
+WINUSERAPI BOOL    WINAPI DrawAnimatedRects(HWND hwnd, int idAni, CONST RECT * lprcFrom, CONST RECT * lprcTo);
+
+#endif /* WINVER >= 0x0400 */
 
 #ifndef NOCLIPBOARD
 
@@ -1207,6 +1821,11 @@ typedef struct tagNCCALCSIZE_PARAMS {
 #define CF_WAVE             12
 #define CF_UNICODETEXT      13
 #define CF_ENHMETAFILE      14
+#if(WINVER >= 0x0400)
+#define CF_HDROP            15
+#define CF_LOCALE           16
+#define CF_MAX              17
+#endif /* WINVER >= 0x0400 */
 
 #define CF_OWNERDISPLAY     0x0080
 #define CF_DSPTEXT          0x0081
@@ -1300,7 +1919,21 @@ typedef WINDOWPLACEMENT *PWINDOWPLACEMENT, *LPWINDOWPLACEMENT;
 
 #define WPF_SETMINPOSITION      0x0001
 #define WPF_RESTORETOMAXIMIZED  0x0002
+#if(WINVER >= 0x0400)
+typedef struct tagNMHDR
+{
+    HWND  hwndFrom;
+    UINT  idFrom;
+    UINT  code;         // NM_ code
+}   NMHDR;
+typedef NMHDR FAR * LPNMHDR;
 
+typedef struct tagSTYLESTRUCT
+{
+    DWORD   styleOld;
+    DWORD   styleNew;
+} STYLESTRUCT, * LPSTYLESTRUCT;
+#endif /* WINVER >= 0x0400 */
 
 /*
  * Owner draw control types
@@ -1309,6 +1942,9 @@ typedef WINDOWPLACEMENT *PWINDOWPLACEMENT, *LPWINDOWPLACEMENT;
 #define ODT_LISTBOX     2
 #define ODT_COMBOBOX    3
 #define ODT_BUTTON      4
+#if(WINVER >= 0x0400)
+#define ODT_STATIC      5
+#endif /* WINVER >= 0x0400 */
 
 /*
  * Owner draw actions
@@ -1325,6 +1961,10 @@ typedef WINDOWPLACEMENT *PWINDOWPLACEMENT, *LPWINDOWPLACEMENT;
 #define ODS_DISABLED    0x0004
 #define ODS_CHECKED     0x0008
 #define ODS_FOCUS       0x0010
+#if(WINVER >= 0x0400)
+#define ODS_DEFAULT         0x0020
+#define ODS_COMBOBOXEDIT    0x1000
+#endif /* WINVER >= 0x0400 */
 
 /*
  * MEASUREITEMSTRUCT for ownerdraw
@@ -1337,8 +1977,6 @@ typedef struct tagMEASUREITEMSTRUCT {
     UINT       itemHeight;
     DWORD      itemData;
 } MEASUREITEMSTRUCT, NEAR *PMEASUREITEMSTRUCT, FAR *LPMEASUREITEMSTRUCT;
-
-
 
 /*
  * DRAWITEMSTRUCT for ownerdraw
@@ -1430,7 +2068,6 @@ DispatchMessageW(
 #define DispatchMessage  DispatchMessageA
 #endif // !UNICODE
 
-
 WINUSERAPI
 BOOL
 WINAPI
@@ -1489,6 +2126,7 @@ UnregisterHotKey(
 #define MOD_ALT         0x0001
 #define MOD_CONTROL     0x0002
 #define MOD_SHIFT       0x0004
+#define MOD_WIN         0x0008
 
 #define IDHOT_SNAPWINDOW        (-1)    /* SHIFT-PRINTSCRN  */
 #define IDHOT_SNAPDESKTOP       (-2)    /* PRINTSCRN        */
@@ -1502,13 +2140,17 @@ UnregisterHotKey(
     #endif /* LFILEIO */
 #endif /* WIN_INTERNAL */
 
+#if(WINVER >= 0x0400)
+#define EW_RESTARTWINDOWS    0x0042L
+#define EW_REBOOTSYSTEM      0x0043L
+#define EW_EXITANDEXECAPP    0x0044L
+#endif /* WINVER >= 0x0400 */
 
 #define EWX_LOGOFF   0
 #define EWX_SHUTDOWN 1
 #define EWX_REBOOT   2
 #define EWX_FORCE    4
 #define EWX_POWEROFF 8
-
 
 #define ExitWindows(dwReserved, Code) ExitWindowsEx(EWX_LOGOFF, 0xFFFFFFFF)
 
@@ -1543,6 +2185,13 @@ WINAPI
 GetMessageExtraInfo(
     VOID);
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+LPARAM
+WINAPI
+SetMessageExtraInfo(
+    LPARAM lParam);
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 LRESULT
@@ -1642,6 +2291,36 @@ SendMessageCallbackW(
 #define SendMessageCallback  SendMessageCallbackA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINUSERAPI long  WINAPI  BroadcastSystemMessage(DWORD, LPDWORD, UINT, WPARAM, LPARAM);
+//Broadcast Special Message Recipient list
+#define BSM_ALLCOMPONENTS       0x00000000
+#define BSM_VXDS                0x00000001
+#define BSM_NETDRIVER           0x00000002
+#define BSM_INSTALLABLEDRIVERS  0x00000004
+#define BSM_APPLICATIONS        0x00000008
+
+//Broadcast Special Message Flags
+#define BSF_QUERY               0x00000001
+#define BSF_IGNORECURRENTTASK   0x00000002
+#define BSF_FLUSHDISK           0x00000004
+#define BSF_NOHANG              0x00000008
+#define BSF_POSTMESSAGE         0x00000010
+#define BSF_FORCEIFHUNG         0x00000020
+#define BSF_NOTIMEOUTIFNOTHUNG  0x00000040
+
+typedef struct tagBROADCASTSYSMSG
+{
+    UINT    uiMessage;
+    WPARAM  wParam;
+    LPARAM  lParam;
+} BROADCASTSYSMSG;
+typedef BROADCASTSYSMSG  FAR *LPBROADCASTSYSMSG;
+
+#define DBWF_LPARAMPOINTER  0x8000
+
+#define BROADCAST_QUERY_DENY         0x424D5144  // Return this value to deny a query.
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -1709,7 +2388,6 @@ AttachThreadInput(
     DWORD idAttach,
     DWORD idAttachTo,
     BOOL fAttach);
-
 
 WINUSERAPI
 BOOL
@@ -1884,6 +2562,36 @@ GetClassInfoW(
 #define GetClassInfo  GetClassInfoA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+ATOM
+WINAPI
+RegisterClassExA(CONST WNDCLASSEXA *);
+WINUSERAPI
+ATOM
+WINAPI
+RegisterClassExW(CONST WNDCLASSEXW *);
+#ifdef UNICODE
+#define RegisterClassEx  RegisterClassExW
+#else
+#define RegisterClassEx  RegisterClassExA
+#endif // !UNICODE
+
+WINUSERAPI
+BOOL
+WINAPI
+GetClassInfoExA(HINSTANCE, LPCSTR, LPWNDCLASSEXA);
+WINUSERAPI
+BOOL
+WINAPI
+GetClassInfoExW(HINSTANCE, LPCWSTR, LPWNDCLASSEXW);
+#ifdef UNICODE
+#define GetClassInfoEx  GetClassInfoExW
+#else
+#define GetClassInfoEx  GetClassInfoExA
+#endif // !UNICODE
+
+#endif /* WINVER >= 0x0400 */
 
 #define CW_USEDEFAULT       ((int)0x80000000)
 
@@ -1976,6 +2684,14 @@ ShowWindow(
     HWND hWnd,
     int nCmdShow);
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+BOOL
+WINAPI
+ShowWindowAsync(
+    HWND hWnd,
+    int nCmdShow);
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -2014,7 +2730,6 @@ MoveWindow(
     int nHeight,
     BOOL bRepaint);
 
-
 WINUSERAPI
 BOOL
 WINAPI
@@ -2040,7 +2755,6 @@ WINAPI
 SetWindowPlacement(
     HWND hWnd,
     CONST WINDOWPLACEMENT *lpwndpl);
-
 
 #ifndef NODEFERWINDOWPOS
 
@@ -2114,19 +2828,20 @@ IsZoomed(
 #define SWP_HIDEWINDOW      0x0080
 #define SWP_NOCOPYBITS      0x0100
 #define SWP_NOOWNERZORDER   0x0200  /* Don't do owner Z ordering */
+#define SWP_NOSENDCHANGING  0x0400  /* Don't send WM_WINDOWPOSCHANGING */
 
 #define SWP_DRAWFRAME       SWP_FRAMECHANGED
 #define SWP_NOREPOSITION    SWP_NOOWNERZORDER
 
-
-
-
+#if(WINVER >= 0x0400)
+#define SWP_DEFERERASE      0x2000
+#define SWP_ASYNCWINDOWPOS  0x4000
+#endif /* WINVER >= 0x0400 */
 
 #define HWND_TOP        ((HWND)0)
 #define HWND_BOTTOM     ((HWND)1)
 #define HWND_TOPMOST    ((HWND)-1)
 #define HWND_NOTOPMOST  ((HWND)-2)
-
 
 #ifndef NOCTLMGR
 
@@ -2135,7 +2850,7 @@ IsZoomed(
  * The following structures must NOT be DWORD padded because they are
  * followed by strings, etc that do not have to be DWORD aligned.
  */
-#include "pshpack2.h"
+#include <pshpack2.h>
 
 /*
  * original NT 32 bit dialog template:
@@ -2191,8 +2906,7 @@ typedef LPDLGITEMTEMPLATEW LPDLGITEMTEMPLATE;
 typedef LPDLGITEMTEMPLATEA LPDLGITEMTEMPLATE;
 #endif // UNICODE
 
-
-#include "poppack.h" /* Resume normal packing */
+#include <poppack.h> /* Resume normal packing */
 
 WINUSERAPI
 HWND
@@ -2843,6 +3557,25 @@ CharPrevW(
 #define CharPrev  CharPrevA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+LPSTR
+WINAPI
+CharNextExA(
+     WORD CodePage,
+     LPCSTR lpCurrentChar,
+     DWORD dwFlags);
+
+WINUSERAPI
+LPSTR
+WINAPI
+CharPrevExA(
+     WORD CodePage,
+     LPCSTR lpStart,
+     LPCSTR lpCurrentChar,
+     DWORD dwFlags);
+#endif /* WINVER >= 0x0400 */
+
 /*
  * Compatibility defines for character translation routines
  */
@@ -3014,6 +3747,18 @@ ToAscii(
     LPWORD lpChar,
     UINT uFlags);
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+int
+WINAPI
+ToAsciiEx(
+    UINT uVirtKey,
+    UINT uScanCode,
+    PBYTE lpKeyState,
+    LPWORD lpChar,
+    UINT uFlags,
+    HKL dwhkl);
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 int
@@ -3048,6 +3793,23 @@ VkKeyScanW(
 #define VkKeyScan  VkKeyScanA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+SHORT
+WINAPI VkKeyScanExA(
+    CHAR  ch,
+    HKL   dwhkl);
+WINUSERAPI
+SHORT
+WINAPI VkKeyScanExW(
+    WCHAR  ch,
+    HKL   dwhkl);
+#ifdef UNICODE
+#define VkKeyScanEx  VkKeyScanExW
+#else
+#define VkKeyScanEx  VkKeyScanExA
+#endif // !UNICODE
+#endif /* WINVER >= 0x0400 */
 #define KEYEVENTF_EXTENDEDKEY 0x0001
 #define KEYEVENTF_KEYUP       0x0002
 
@@ -3097,6 +3859,27 @@ MapVirtualKeyW(
 #define MapVirtualKey  MapVirtualKeyA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+UINT
+WINAPI
+MapVirtualKeyExA(
+    UINT uCode,
+    UINT uMapType,
+    HKL dwhkl);
+WINUSERAPI
+UINT
+WINAPI
+MapVirtualKeyExW(
+    UINT uCode,
+    UINT uMapType,
+    HKL dwhkl);
+#ifdef UNICODE
+#define MapVirtualKeyEx  MapVirtualKeyExW
+#else
+#define MapVirtualKeyEx  MapVirtualKeyExA
+#endif // !UNICODE
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -3141,36 +3924,33 @@ MsgWaitForMultipleObjects(
 /*
  * Queue status flags for GetQueueStatus() and MsgWaitForMultipleObjects()
  */
-#define QS_KEY           0x01
-#define QS_MOUSEMOVE     0x02
-#define QS_MOUSEBUTTON   0x04
-#define QS_POSTMESSAGE   0x08
-#define QS_TIMER         0x10
-#define QS_PAINT         0x20
-#define QS_SENDMESSAGE   0x40
-#define QS_HOTKEY        0x80
+#define QS_KEY              0x0001
+#define QS_MOUSEMOVE        0x0002
+#define QS_MOUSEBUTTON      0x0004
+#define QS_POSTMESSAGE      0x0008
+#define QS_TIMER            0x0010
+#define QS_PAINT            0x0020
+#define QS_SENDMESSAGE      0x0040
+#define QS_HOTKEY           0x0080
 
-#define QS_MOUSE        (QS_MOUSEMOVE     | \
-                         QS_MOUSEBUTTON)
+#define QS_MOUSE           (QS_MOUSEMOVE     | \
+                            QS_MOUSEBUTTON)
 
-#define QS_INPUT        (QS_MOUSE         | \
-                         QS_KEY)
+#define QS_INPUT           (QS_MOUSE         | \
+                            QS_KEY)
 
-#define QS_ALLEVENTS    (QS_INPUT         | \
-                         QS_POSTMESSAGE   | \
-                         QS_TIMER         | \
-                         QS_PAINT         | \
-                         QS_HOTKEY)
+#define QS_ALLEVENTS       (QS_INPUT         | \
+                            QS_POSTMESSAGE   | \
+                            QS_TIMER         | \
+                            QS_PAINT         | \
+                            QS_HOTKEY)
 
-#define QS_ALLINPUT     (QS_SENDMESSAGE   | \
-                         QS_PAINT         | \
-                         QS_TIMER         | \
-                         QS_POSTMESSAGE   | \
-                         QS_MOUSEBUTTON   | \
-                         QS_MOUSEMOVE     | \
-                         QS_HOTKEY        | \
-                         QS_KEY)
-
+#define QS_ALLINPUT        (QS_INPUT         | \
+                            QS_POSTMESSAGE   | \
+                            QS_TIMER         | \
+                            QS_PAINT         | \
+                            QS_HOTKEY        | \
+                            QS_SENDMESSAGE)
 
 /*
  * Windows Functions
@@ -3345,9 +4125,44 @@ TranslateAcceleratorW(
 #define SM_DBCSENABLED          42
 #define SM_CMOUSEBUTTONS        43
 
-#define SM_SHOWSOUNDS           70
+#if(WINVER >= 0x0400)
+#define SM_CXFIXEDFRAME           SM_CXDLGFRAME  /* ;win40 name change */
+#define SM_CYFIXEDFRAME           SM_CYDLGFRAME  /* ;win40 name change */
+#define SM_CXSIZEFRAME            SM_CXFRAME     /* ;win40 name change */
+#define SM_CYSIZEFRAME            SM_CYFRAME     /* ;win40 name change */
 
-#define SM_CMETRICS             71
+#define SM_SECURE               44
+#define SM_CXEDGE               45
+#define SM_CYEDGE               46
+#define SM_CXMINSPACING         47
+#define SM_CYMINSPACING         48
+#define SM_CXSMICON             49
+#define SM_CYSMICON             50
+#define SM_CYSMCAPTION          51
+#define SM_CXSMSIZE             52
+#define SM_CYSMSIZE             53
+#define SM_CXMENUSIZE           54
+#define SM_CYMENUSIZE           55
+#define SM_ARRANGE              56
+#define SM_CXMINIMIZED          57
+#define SM_CYMINIMIZED          58
+#define SM_CXMAXTRACK           59
+#define SM_CYMAXTRACK           60
+#define SM_CXMAXIMIZED          61
+#define SM_CYMAXIMIZED          62
+#define SM_NETWORK              63
+#define SM_CLEANBOOT            67
+#define SM_CXDRAG               68
+#define SM_CYDRAG               69
+#endif /* WINVER >= 0x0400 */
+#define SM_SHOWSOUNDS           70
+#if(WINVER >= 0x0400)
+#define SM_CXMENUCHECK          71   /* Use instead of GetMenuCheckMarkDimensions()! */
+#define SM_CYMENUCHECK          72
+#define SM_SLOWMACHINE          73
+#define SM_MIDEASTENABLED       74
+#endif /* WINVER >= 0x0400 */
+#define SM_CMETRICS             75
 
 WINUSERAPI
 int
@@ -3477,15 +4292,12 @@ WINAPI
 DrawMenuBar(
     HWND hWnd);
 
-
 WINUSERAPI
 HMENU
 WINAPI
 GetSystemMenu(
     HWND hWnd,
     BOOL bRevert);
-
-
 
 WINUSERAPI
 HMENU
@@ -3660,6 +4472,154 @@ TrackPopupMenu(
     HWND hWnd,
     CONST RECT *prcRect);
 
+#if(WINVER >= 0x0400)
+/* return codes for WM_MENUCHAR */
+#define MNC_IGNORE  0
+#define MNC_CLOSE   1
+#define MNC_EXECUTE 2
+#define MNC_SELECT  3
+
+typedef struct tagTPMPARAMS
+{
+    UINT    cbSize;     /* Size of structure */
+    RECT    rcExclude;  /* Screen coordinates of rectangle to exclude when positioning */
+}   TPMPARAMS;
+typedef TPMPARAMS FAR *LPTPMPARAMS;
+
+WINUSERAPI BOOL    WINAPI TrackPopupMenuEx(HMENU, UINT, int, int, HWND, LPTPMPARAMS);
+
+#define MIIM_STATE       0x00000001
+#define MIIM_ID          0x00000002
+#define MIIM_SUBMENU     0x00000004
+#define MIIM_CHECKMARKS  0x00000008
+#define MIIM_TYPE        0x00000010
+#define MIIM_DATA        0x00000020
+
+typedef struct tagMENUITEMINFOA
+{
+    UINT    cbSize;
+    UINT    fMask;
+    UINT    fType;          // used if MIIM_TYPE
+    UINT    fState;         // used if MIIM_STATE
+    UINT    wID;            // used if MIIM_ID
+    HMENU   hSubMenu;       // used if MIIM_SUBMENU
+    HBITMAP hbmpChecked;    // used if MIIM_CHECKMARKS
+    HBITMAP hbmpUnchecked;  // used if MIIM_CHECKMARKS
+    DWORD   dwItemData;     // used if MIIM_DATA
+    LPSTR   dwTypeData;     // used if MIIM_TYPE
+    UINT    cch;            // used if MIIM_TYPE
+}   MENUITEMINFOA, FAR *LPMENUITEMINFOA;
+typedef struct tagMENUITEMINFOW
+{
+    UINT    cbSize;
+    UINT    fMask;
+    UINT    fType;          // used if MIIM_TYPE
+    UINT    fState;         // used if MIIM_STATE
+    UINT    wID;            // used if MIIM_ID
+    HMENU   hSubMenu;       // used if MIIM_SUBMENU
+    HBITMAP hbmpChecked;    // used if MIIM_CHECKMARKS
+    HBITMAP hbmpUnchecked;  // used if MIIM_CHECKMARKS
+    DWORD   dwItemData;     // used if MIIM_DATA
+    LPWSTR  dwTypeData;     // used if MIIM_TYPE
+    UINT    cch;            // used if MIIM_TYPE
+}   MENUITEMINFOW, FAR *LPMENUITEMINFOW;
+#ifdef UNICODE
+typedef MENUITEMINFOW MENUITEMINFO;
+typedef LPMENUITEMINFOW LPMENUITEMINFO;
+#else
+typedef MENUITEMINFOA MENUITEMINFO;
+typedef LPMENUITEMINFOA LPMENUITEMINFO;
+#endif // UNICODE
+typedef MENUITEMINFOA CONST FAR *LPCMENUITEMINFOA;
+typedef MENUITEMINFOW CONST FAR *LPCMENUITEMINFOW;
+#ifdef UNICODE
+typedef LPCMENUITEMINFOW LPCMENUITEMINFO;
+#else
+typedef LPCMENUITEMINFOA LPCMENUITEMINFO;
+#endif // UNICODE
+
+WINUSERAPI
+BOOL
+WINAPI
+InsertMenuItemA(
+    HMENU,
+    UINT,
+    BOOL,
+    LPCMENUITEMINFOA
+    );
+WINUSERAPI
+BOOL
+WINAPI
+InsertMenuItemW(
+    HMENU,
+    UINT,
+    BOOL,
+    LPCMENUITEMINFOW
+    );
+#ifdef UNICODE
+#define InsertMenuItem  InsertMenuItemW
+#else
+#define InsertMenuItem  InsertMenuItemA
+#endif // !UNICODE
+
+WINUSERAPI
+BOOL
+WINAPI
+GetMenuItemInfoA(
+    HMENU,
+    UINT,
+    BOOL,
+    LPMENUITEMINFOA
+    );
+WINUSERAPI
+BOOL
+WINAPI
+GetMenuItemInfoW(
+    HMENU,
+    UINT,
+    BOOL,
+    LPMENUITEMINFOW
+    );
+#ifdef UNICODE
+#define GetMenuItemInfo  GetMenuItemInfoW
+#else
+#define GetMenuItemInfo  GetMenuItemInfoA
+#endif // !UNICODE
+
+WINUSERAPI
+BOOL
+WINAPI
+SetMenuItemInfoA(
+    HMENU,
+    UINT,
+    BOOL,
+    LPCMENUITEMINFOA
+    );
+WINUSERAPI
+BOOL
+WINAPI
+SetMenuItemInfoW(
+    HMENU,
+    UINT,
+    BOOL,
+    LPCMENUITEMINFOW
+    );
+#ifdef UNICODE
+#define SetMenuItemInfo  SetMenuItemInfoW
+#else
+#define SetMenuItemInfo  SetMenuItemInfoA
+#endif // !UNICODE
+
+#define GMDI_USEDISABLED    0x0001L
+#define GMDI_GOINTOPOPUPS   0x0002L
+
+WINUSERAPI UINT    WINAPI GetMenuDefaultItem(HMENU hMenu, UINT fByPos, UINT gmdiFlags);
+WINUSERAPI BOOL    WINAPI SetMenuDefaultItem(HMENU hMenu, UINT uItem, UINT fByPos);
+
+WINUSERAPI BOOL    WINAPI GetMenuItemRect(HWND hWnd, HMENU hMenu, UINT uItem, LPRECT lprcItem);
+WINUSERAPI int     WINAPI MenuItemFromPoint(HWND hWnd, HMENU hMenu, POINT ptScreen);
+
+#endif /* WINVER >= 0x0400 */
 /*
  * Flags for TrackPopupMenu
  */
@@ -3668,10 +4628,54 @@ TrackPopupMenu(
 #define TPM_LEFTALIGN   0x0000L
 #define TPM_CENTERALIGN 0x0004L
 #define TPM_RIGHTALIGN  0x0008L
+#if(WINVER >= 0x0400)
+#define TPM_TOPALIGN        0x0000L
+#define TPM_VCENTERALIGN    0x0010L
+#define TPM_BOTTOMALIGN     0x0020L
+
+#define TPM_HORIZONTAL      0x0000L     /* Horz alignment matters more */
+#define TPM_VERTICAL        0x0040L     /* Vert alignment matters more */
+#define TPM_NONOTIFY        0x0080L     /* Don't send any notification msgs */
+#define TPM_RETURNCMD       0x0100L
+#endif /* WINVER >= 0x0400 */
 
 #endif /* !NOMENUS */
 
+#if(WINVER >= 0x0400)
+//
+// Drag-and-drop support
+//
 
+typedef struct tagDROPSTRUCT
+{
+    HWND    hwndSource;
+    HWND    hwndSink;
+    DWORD   wFmt;
+    DWORD   dwData;
+    POINT   ptDrop;
+    DWORD   dwControlData;
+} DROPSTRUCT, *PDROPSTRUCT, *LPDROPSTRUCT;
+
+#define DOF_EXECUTABLE      0x8001
+#define DOF_DOCUMENT        0x8002
+#define DOF_DIRECTORY       0x8003
+#define DOF_MULTIPLE        0x8004
+#define DOF_PROGMAN         0x0001
+#define DOF_SHELLDATA       0x0002
+
+#define DO_DROPFILE         0x454C4946L
+#define DO_PRINTFILE        0x544E5250L
+
+WINUSERAPI
+DWORD
+WINAPI
+DragObject(HWND, HWND, UINT, DWORD, HCURSOR);
+
+WINUSERAPI
+BOOL
+WINAPI
+DragDetect(HWND, POINT);
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -3703,9 +4707,23 @@ DrawIcon(
 #define DT_NOPREFIX         0x00000800
 #define DT_INTERNAL         0x00001000
 
+#if(WINVER >= 0x0400)
+#define DT_EDITCONTROL      0x00002000
+#define DT_PATH_ELLIPSIS    0x00004000
+#define DT_END_ELLIPSIS     0x00008000
+#define DT_MODIFYSTRING     0x00010000
+#define DT_RTLREADING       0x00020000
+#define DT_WORD_ELLIPSIS    0x00040000
 
-
-
+typedef struct tagDRAWTEXTPARAMS
+{
+    UINT    cbSize;
+    int     iTabLength;
+    int     iLeftMargin;
+    int     iRightMargin;
+    UINT    uiLengthDrawn;
+} DRAWTEXTPARAMS, FAR *LPDRAWTEXTPARAMS;
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 int
@@ -3731,7 +4749,21 @@ DrawTextW(
 #define DrawText  DrawTextA
 #endif // !UNICODE
 
-
+#if(WINVER >= 0x0400)
+WINUSERAPI
+int
+WINAPI
+DrawTextExA(HDC, LPSTR, int, LPRECT, UINT, LPDRAWTEXTPARAMS);
+WINUSERAPI
+int
+WINAPI
+DrawTextExW(HDC, LPWSTR, int, LPRECT, UINT, LPDRAWTEXTPARAMS);
+#ifdef UNICODE
+#define DrawTextEx  DrawTextExW
+#else
+#define DrawTextEx  DrawTextExA
+#endif // !UNICODE
+#endif /* WINVER >= 0x0400 */
 
 #endif /* !NODRAWTEXT */
 
@@ -3767,7 +4799,30 @@ GrayStringW(
 #define GrayString  GrayStringA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+/* Monolithic state-drawing routine */
+/* Image type */
+#define DST_COMPLEX     0x0000
+#define DST_TEXT        0x0001
+#define DST_PREFIXTEXT  0x0002
+#define DST_ICON        0x0003
+#define DST_BITMAP      0x0004
 
+/* State type */
+#define DSS_NORMAL      0x0000
+#define DSS_UNION       0x0010  /* Gray string appearance */
+#define DSS_DISABLED    0x0020
+#define DSS_MONO        0x0080
+#define DSS_RIGHT       0x8000
+
+WINUSERAPI BOOL WINAPI DrawStateA(HDC, HBRUSH, DRAWSTATEPROC, LPARAM, WPARAM, int, int, int, int, UINT);
+WINUSERAPI BOOL WINAPI DrawStateW(HDC, HBRUSH, DRAWSTATEPROC, LPARAM, WPARAM, int, int, int, int, UINT);
+#ifdef UNICODE
+#define DrawState  DrawStateW
+#else
+#define DrawState  DrawStateA
+#endif // !UNICODE
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 LONG
@@ -3841,6 +4896,10 @@ WINAPI
 GetForegroundWindow(
     VOID);
 
+#if(WINVER >= 0x0400)
+WINUSERAPI BOOL WINAPI PaintDesktop(HDC hdc);
+
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -3886,11 +4945,7 @@ GetDCEx(
 
 #define DCX_LOCKWINDOWUPDATE 0x00000400L
 
-#define DCX_NORECOMPUTE      0x00100000L
 #define DCX_VALIDATE         0x00200000L
-
-
-
 
 WINUSERAPI
 HDC
@@ -3938,6 +4993,21 @@ GetUpdateRgn(
 WINUSERAPI
 int
 WINAPI
+SetWindowRgn(
+    HWND hWnd,
+    HRGN hRgn,
+    BOOL bRedraw);
+
+WINUSERAPI
+int
+WINAPI
+GetWindowRgn(
+    HWND hWnd,
+    HRGN hRgn);
+
+WINUSERAPI
+int
+WINAPI
 ExcludeUpdateRgn(
     HDC hDC,
     HWND hWnd);
@@ -3972,7 +5042,6 @@ ValidateRgn(
     HWND hWnd,
     HRGN hRgn);
 
-
 WINUSERAPI
 BOOL
 WINAPI
@@ -4001,8 +5070,6 @@ RedrawWindow(
 
 #define RDW_FRAME               0x0400
 #define RDW_NOFRAME             0x0800
-
-
 
 /*
  * LockWindowUpdate API
@@ -4053,8 +5120,6 @@ ScrollWindowEx(
 #define SW_INVALIDATE       0x0002  /* Invalidate after scrolling */
 #define SW_ERASE            0x0004  /* If SW_INVALIDATE, don't send WM_ERASEBACKGROUND */
 
-
-
 #ifndef NOSCROLL
 
 WINUSERAPI
@@ -4092,7 +5157,6 @@ GetScrollRange(
     LPINT lpMinPos,
     LPINT lpMaxPos);
 
-
 WINUSERAPI
 BOOL
 WINAPI
@@ -4109,7 +5173,6 @@ EnableScrollBar(
     UINT wSBflags,
     UINT wArrows);
 
-
 /*
  * EnableScrollBar() flags
  */
@@ -4124,7 +5187,6 @@ EnableScrollBar(
 
 #define ESB_DISABLE_LTUP    ESB_DISABLE_LEFT
 #define ESB_DISABLE_RTDN    ESB_DISABLE_RIGHT
-
 
 #endif  /* !NOSCROLL */
 
@@ -4307,8 +5369,25 @@ AdjustWindowRectEx(
     BOOL bMenu,
     DWORD dwExStyle);
 
+#if(WINVER >= 0x0400)
+#define HELPINFO_WINDOW    0x0001
+#define HELPINFO_MENUITEM  0x0002
+typedef struct tagHELPINFO      /* Structure pointed to by lParam of WM_HELP */
+{
+    UINT    cbSize;             /* Size in bytes of this struct  */
+    int     iContextType;       /* Either HELPINFO_WINDOW or HELPINFO_MENUITEM */
+    int     iCtrlId;            /* Control Id or a Menu item Id. */
+    HANDLE  hItemHandle;        /* hWnd of control or hMenu.     */
+    DWORD   dwContextId;        /* Context Id associated with this item */
+    POINT   MousePos;           /* Mouse Position in screen co-ordinates */
+}  HELPINFO, FAR *LPHELPINFO;
 
+WINUSERAPI BOOL  WINAPI  SetWindowContextHelpId(HWND, DWORD);
+WINUSERAPI DWORD WINAPI  GetWindowContextHelpId(HWND);
+WINUSERAPI BOOL  WINAPI  SetMenuContextHelpId(HMENU, DWORD);
+WINUSERAPI DWORD WINAPI  GetMenuContextHelpId(HMENU);
 
+#endif /* WINVER >= 0x0400 */
 
 #ifndef NOMB
 
@@ -4327,16 +5406,29 @@ AdjustWindowRectEx(
 #define MB_ICONEXCLAMATION          0x00000030L
 #define MB_ICONASTERISK             0x00000040L
 
+#if(WINVER >= 0x0400)
+#define MB_ICONWARNING              MB_ICONEXCLAMATION
+#define MB_ICONERROR                MB_ICONHAND
+#endif /* WINVER >= 0x0400 */
+
 #define MB_ICONINFORMATION          MB_ICONASTERISK
 #define MB_ICONSTOP                 MB_ICONHAND
 
 #define MB_DEFBUTTON1               0x00000000L
 #define MB_DEFBUTTON2               0x00000100L
 #define MB_DEFBUTTON3               0x00000200L
+#if(WINVER >= 0x0400)
+#define MB_DEFBUTTON4               0x00000300L
+#endif /* WINVER >= 0x0400 */
 
 #define MB_APPLMODAL                0x00000000L
 #define MB_SYSTEMMODAL              0x00001000L
 #define MB_TASKMODAL                0x00002000L
+#if(WINVER >= 0x0400)
+#define MB_HELP                     0x00004000L // Help Button
+#define MB_RIGHT                    0x00080000L
+#define MB_RTLREADING               0x00100000L
+#endif /* WINVER >= 0x0400 */
 
 #define MB_NOFOCUS                  0x00008000L
 #define MB_SETFOREGROUND            0x00010000L
@@ -4344,6 +5436,9 @@ AdjustWindowRectEx(
 #define MB_SERVICE_NOTIFICATION     0x00040000L
 
 #define MB_TYPEMASK                 0x0000000FL
+#if(WINVER >= 0x0400)
+#define MB_USERICON                 0x00000080L
+#endif /* WINVER >= 0x0400 */
 #define MB_ICONMASK                 0x000000F0L
 #define MB_DEFMASK                  0x00000F00L
 #define MB_MODEMASK                 0x00003000L
@@ -4395,8 +5490,55 @@ MessageBoxExW(
 #define MessageBoxEx  MessageBoxExA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+#define MB_TOPMOST          0x00040000L
 
+typedef void (CALLBACK *MSGBOXCALLBACK)(LPHELPINFO lpHelpInfo);
 
+typedef struct tagMSGBOXPARAMSA
+{
+    UINT        cbSize;
+    HWND        hwndOwner;
+    HINSTANCE   hInstance;
+    LPCSTR      lpszText;
+    LPCSTR      lpszCaption;
+    DWORD       dwStyle;
+    LPCSTR      lpszIcon;
+    DWORD       dwContextHelpId;
+    MSGBOXCALLBACK      lpfnMsgBoxCallback;
+    DWORD   dwLanguageId;
+} MSGBOXPARAMSA, *PMSGBOXPARAMSA, *LPMSGBOXPARAMSA;
+typedef struct tagMSGBOXPARAMSW
+{
+    UINT        cbSize;
+    HWND        hwndOwner;
+    HINSTANCE   hInstance;
+    LPCWSTR     lpszText;
+    LPCWSTR     lpszCaption;
+    DWORD       dwStyle;
+    LPCWSTR     lpszIcon;
+    DWORD       dwContextHelpId;
+    MSGBOXCALLBACK      lpfnMsgBoxCallback;
+    DWORD   dwLanguageId;
+} MSGBOXPARAMSW, *PMSGBOXPARAMSW, *LPMSGBOXPARAMSW;
+#ifdef UNICODE
+typedef MSGBOXPARAMSW MSGBOXPARAMS;
+typedef PMSGBOXPARAMSW PMSGBOXPARAMS;
+typedef LPMSGBOXPARAMSW LPMSGBOXPARAMS;
+#else
+typedef MSGBOXPARAMSA MSGBOXPARAMS;
+typedef PMSGBOXPARAMSA PMSGBOXPARAMS;
+typedef LPMSGBOXPARAMSA LPMSGBOXPARAMS;
+#endif // UNICODE
+
+WINUSERAPI int     WINAPI MessageBoxIndirectA(LPMSGBOXPARAMSA);
+WINUSERAPI int     WINAPI MessageBoxIndirectW(LPMSGBOXPARAMSW);
+#ifdef UNICODE
+#define MessageBoxIndirect  MessageBoxIndirectW
+#else
+#define MessageBoxIndirect  MessageBoxIndirectA
+#endif // !UNICODE
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -4537,6 +5679,14 @@ ChildWindowFromPoint(
     HWND hWndParent,
     POINT Point);
 
+#if(WINVER >= 0x0400)
+#define CWP_ALL             0x0000
+#define CWP_SKIPINVISIBLE   0x0001
+#define CWP_SKIPDISABLED    0x0002
+#define CWP_SKIPTRANSPARENT 0x0004
+
+WINUSERAPI HWND    WINAPI ChildWindowFromPointEx(HWND, POINT, UINT);
+#endif /* WINVER >= 0x0400 */
 
 #ifndef NOCOLOR
 
@@ -4574,8 +5724,19 @@ ChildWindowFromPoint(
 #define COLOR_INACTIVECAPTIONTEXT 19
 #define COLOR_BTNHIGHLIGHT      20
 
+#if(WINVER >= 0x0400)
+#define COLOR_3DDKSHADOW        21
+#define COLOR_3DLIGHT           22
+#define COLOR_INFOTEXT          23
+#define COLOR_INFOBK            24
 
-
+#define COLOR_DESKTOP           COLOR_BACKGROUND
+#define COLOR_3DFACE            COLOR_BTNFACE
+#define COLOR_3DSHADOW          COLOR_BTNSHADOW
+#define COLOR_3DHIGHLIGHT       COLOR_BTNHIGHLIGHT
+#define COLOR_3DHILIGHT         COLOR_BTNHIGHLIGHT
+#define COLOR_BTNHILIGHT        COLOR_BTNHIGHLIGHT
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 DWORD
@@ -4583,6 +5744,14 @@ WINAPI
 GetSysColor(
     int nIndex);
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+HBRUSH
+WINAPI
+GetSysColorBrush(
+    int nIndex);
+
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -4823,7 +5992,6 @@ WINAPI
 GetDesktopWindow(
     VOID);
 
-
 WINUSERAPI
 HWND
 WINAPI
@@ -4863,6 +6031,16 @@ FindWindowW(
 #define FindWindow  FindWindowA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINUSERAPI HWND    WINAPI FindWindowExA(HWND, HWND, LPCSTR, LPCSTR);
+WINUSERAPI HWND    WINAPI FindWindowExW(HWND, HWND, LPCWSTR, LPCWSTR);
+#ifdef UNICODE
+#define FindWindowEx  FindWindowExW
+#else
+#define FindWindowEx  FindWindowExA
+#endif // !UNICODE
+
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -4944,8 +6122,6 @@ WINAPI
 GetWindow(
     HWND hWnd,
     UINT uCmd);
-
-
 
 #ifndef NOWH
 
@@ -5084,27 +6260,46 @@ CallNextHookEx(
 #define MF_UNHILITE         0x00000000L
 #define MF_HILITE           0x00000080L
 
-#define MF_SYSMENU          0x00002000L  /* Passed back during WM_MENUSELECT */
+#if(WINVER >= 0x0400)
+#define MF_DEFAULT          0x00001000L
+#endif /* WINVER >= 0x0400 */
+#define MF_SYSMENU          0x00002000L
 #define MF_HELP             0x00004000L
-#define MF_MOUSESELECT      0x00008000L  /* Passed back during WM_MENUSELECT */
+#if(WINVER >= 0x0400)
+#define MF_RIGHTJUSTIFY     0x00004000L
+#endif /* WINVER >= 0x0400 */
 
+#define MF_MOUSESELECT      0x00008000L
+#if(WINVER >= 0x0400)
+#define MF_END              0x00000080L  /* Obsolete -- only used by old RES files */
+#endif /* WINVER >= 0x0400 */
 
+#if(WINVER >= 0x0400)
+#define MFT_STRING          MF_STRING
+#define MFT_BITMAP          MF_BITMAP
+#define MFT_MENUBARBREAK    MF_MENUBARBREAK
+#define MFT_MENUBREAK       MF_MENUBREAK
+#define MFT_OWNERDRAW       MF_OWNERDRAW
+#define MFT_RADIOCHECK      0x00000200L
+#define MFT_SEPARATOR       MF_SEPARATOR
+#define MFT_RIGHTORDER      0x00002000L
+#define MFT_RIGHTJUSTIFY    MF_RIGHTJUSTIFY
 
+/* Menu flags for Add/Check/EnableMenuItem() */
+#define MFS_GRAYED          0x00000003L
+#define MFS_DISABLED        MFS_GRAYED
+#define MFS_CHECKED         MF_CHECKED
+#define MFS_HILITE          MF_HILITE
+#define MFS_ENABLED         MF_ENABLED
+#define MFS_UNCHECKED       MF_UNCHECKED
+#define MFS_UNHILITE        MF_UNHILITE
+#define MFS_DEFAULT         MF_DEFAULT
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+WINUSERAPI
+BOOL
+WINAPI
+CheckMenuRadioItem(HMENU, UINT, UINT, UINT, UINT);
+#endif /* WINVER >= 0x0400 */
 
 /*
  * Menu item resource format
@@ -5144,7 +6339,12 @@ typedef struct {        // version 0
 #define SC_TASKLIST     0xF130
 #define SC_SCREENSAVE   0xF140
 #define SC_HOTKEY       0xF150
-
+#if(WINVER >= 0x0400)
+#define SC_DEFAULT      0xF160
+#define SC_MONITORPOWER 0xF170
+#define SC_CONTEXTHELP  0xF180
+#define SC_SEPARATOR    0xF00F
+#endif /* WINVER >= 0x0400 */
 /*
  * Obsolete names
  */
@@ -5193,6 +6393,21 @@ LoadCursorW(
 #define LoadCursor  LoadCursorA
 #endif // !UNICODE
 
+WINUSERAPI
+HCURSOR
+WINAPI
+LoadCursorFromFileA(
+    LPCSTR    lpFileName);
+WINUSERAPI
+HCURSOR
+WINAPI
+LoadCursorFromFileW(
+    LPCWSTR    lpFileName);
+#ifdef UNICODE
+#define LoadCursorFromFile  LoadCursorFromFileW
+#else
+#define LoadCursorFromFile  LoadCursorFromFileA
+#endif // !UNICODE
 
 WINUSERAPI
 HCURSOR
@@ -5222,15 +6437,25 @@ DestroyCursor(
 #define IDC_WAIT            MAKEINTRESOURCE(32514)
 #define IDC_CROSS           MAKEINTRESOURCE(32515)
 #define IDC_UPARROW         MAKEINTRESOURCE(32516)
-#define IDC_SIZE            MAKEINTRESOURCE(32640)
-#define IDC_ICON            MAKEINTRESOURCE(32641)
+#define IDC_SIZE            MAKEINTRESOURCE(32640)  /* OBSOLETE: use IDC_SIZEALL */
+#define IDC_ICON            MAKEINTRESOURCE(32641)  /* OBSOLETE: use IDC_ARROW */
 #define IDC_SIZENWSE        MAKEINTRESOURCE(32642)
 #define IDC_SIZENESW        MAKEINTRESOURCE(32643)
 #define IDC_SIZEWE          MAKEINTRESOURCE(32644)
 #define IDC_SIZENS          MAKEINTRESOURCE(32645)
-#define IDC_SIZEALL         MAKEINTRESOURCE(32646) /*not in win3.1 */
+#define IDC_SIZEALL         MAKEINTRESOURCE(32646)
 #define IDC_NO              MAKEINTRESOURCE(32648) /*not in win3.1 */
 #define IDC_APPSTARTING     MAKEINTRESOURCE(32650) /*not in win3.1 */
+#if(WINVER >= 0x0400)
+#define IDC_HELP            MAKEINTRESOURCE(32651)
+#endif /* WINVER >= 0x0400 */
+
+WINUSERAPI
+BOOL
+WINAPI
+SetSystemCursor(
+    HCURSOR hcur,
+    DWORD   id);
 
 typedef struct _ICONINFO {
     BOOL    fIcon;
@@ -5284,6 +6509,17 @@ LookupIconIdFromDirectory(
     PBYTE presbits,
     BOOL fIcon);
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+int
+WINAPI
+LookupIconIdFromDirectoryEx(
+    PBYTE presbits,
+    BOOL  fIcon,
+    int   cxDesired,
+    int   cyDesired,
+    UINT  Flags);
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 HICON
@@ -5294,6 +6530,97 @@ CreateIconFromResource(
     BOOL fIcon,
     DWORD dwVer);
 
+#if(WINVER >= 0x0400)
+WINUSERAPI
+HICON
+WINAPI
+CreateIconFromResourceEx(
+    PBYTE presbits,
+    DWORD dwResSize,
+    BOOL  fIcon,
+    DWORD dwVer,
+    int   cxDesired,
+    int   cyDesired,
+    UINT  Flags);
+
+/* Icon/Cursor header */
+typedef struct tagCURSORSHAPE
+{
+    int     xHotSpot;
+    int     yHotSpot;
+    int     cx;
+    int     cy;
+    int     cbWidth;
+    BYTE    Planes;
+    BYTE    BitsPixel;
+} CURSORSHAPE, FAR *LPCURSORSHAPE;
+#endif /* WINVER >= 0x0400 */
+
+#define IMAGE_BITMAP        0
+#define IMAGE_ICON          1
+#define IMAGE_CURSOR        2
+#if(WINVER >= 0x0400)
+#define IMAGE_ENHMETAFILE   3
+
+#define LR_DEFAULTCOLOR     0x0000
+#define LR_MONOCHROME       0x0001
+#define LR_COLOR            0x0002
+#define LR_COPYRETURNORG    0x0004
+#define LR_COPYDELETEORG    0x0008
+#define LR_LOADFROMFILE     0x0010
+#define LR_LOADTRANSPARENT  0x0020
+#define LR_DEFAULTSIZE      0x0040
+#define LR_LOADMAP3DCOLORS  0x1000
+#define LR_CREATEDIBSECTION 0x2000
+#define LR_COPYFROMRESOURCE 0x4000      
+#define LR_SHARED           0x8000      
+
+WINUSERAPI
+HANDLE
+WINAPI
+LoadImageA(
+    HINSTANCE,
+    LPCSTR,
+    UINT,
+    int,
+    int,
+    UINT);
+WINUSERAPI
+HANDLE
+WINAPI
+LoadImageW(
+    HINSTANCE,
+    LPCWSTR,
+    UINT,
+    int,
+    int,
+    UINT);
+#ifdef UNICODE
+#define LoadImage  LoadImageW
+#else
+#define LoadImage  LoadImageA
+#endif // !UNICODE
+
+WINUSERAPI
+HICON
+WINAPI
+CopyImage(
+    HANDLE,
+    UINT,
+    int,
+    int,
+    UINT);
+
+#define DI_MASK         0x0001
+#define DI_IMAGE        0x0002
+#define DI_NORMAL       0x0003
+#define DI_COMPAT       0x0004
+#define DI_DEFAULTSIZE  0x0008
+
+WINUSERAPI BOOL WINAPI DrawIconEx(HDC hdc, int xLeft, int yTop,
+              HICON hIcon, int cxWidth, int cyWidth,
+              UINT istepIfAniCur, HBRUSH hbrFlickerFreeDraw, UINT diFlags);
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 HICON
@@ -5314,6 +6641,10 @@ GetIconInfo(
     HICON hIcon,
     PICONINFO piconinfo);
 
+#if(WINVER >= 0x0400)
+#define RES_ICON    1
+#define RES_CURSOR  2
+#endif /* WINVER >= 0x0400 */
 
 #ifdef OEMRESOURCE
 
@@ -5361,24 +6692,30 @@ GetIconInfo(
 #define OCR_WAIT            32514
 #define OCR_CROSS           32515
 #define OCR_UP              32516
-#define OCR_SIZE            32640
-#define OCR_ICON            32641
+#define OCR_SIZE            32640   /* OBSOLETE: use OCR_SIZEALL */
+#define OCR_ICON            32641   /* OBSOLETE: use OCR_NORMAL */
 #define OCR_SIZENWSE        32642
 #define OCR_SIZENESW        32643
 #define OCR_SIZEWE          32644
 #define OCR_SIZENS          32645
 #define OCR_SIZEALL         32646
-#define OCR_ICOCUR          32647
-#define OCR_NO              32648 /*not in win3.1 */
-
-
+#define OCR_ICOCUR          32647   /* OBSOLETE: use OIC_WINLOGO */
+#define OCR_NO              32648
+#if(WINVER >= 0x0400)
+#define OCR_APPSTARTING     32650
+#endif /* WINVER >= 0x0400 */
 
 #define OIC_SAMPLE          32512
 #define OIC_HAND            32513
 #define OIC_QUES            32514
 #define OIC_BANG            32515
 #define OIC_NOTE            32516
-
+#if(WINVER >= 0x0400)
+#define OIC_WINLOGO         32517
+#define OIC_WARNING         OIC_BANG
+#define OIC_ERROR           OIC_HAND
+#define OIC_INFORMATION     OIC_NOTE
+#endif /* WINVER >= 0x0400 */
 
 #endif /* OEMRESOURCE */
 
@@ -5397,13 +6734,25 @@ GetIconInfo(
 #define IDI_QUESTION        32514
 #define IDI_EXCLAMATION     32515
 #define IDI_ASTERISK        32516
+#if(WINVER >= 0x0400)
+#define IDI_WINLOGO         32517
+#endif /* WINVER >= 0x0400 */
 #else
-#define IDI_APPLICATION   MAKEINTRESOURCE(32512)
-#define IDI_HAND          MAKEINTRESOURCE(32513)
-#define IDI_QUESTION      MAKEINTRESOURCE(32514)
-#define IDI_EXCLAMATION   MAKEINTRESOURCE(32515)
-#define IDI_ASTERISK      MAKEINTRESOURCE(32516)
+#define IDI_APPLICATION     MAKEINTRESOURCE(32512)
+#define IDI_HAND            MAKEINTRESOURCE(32513)
+#define IDI_QUESTION        MAKEINTRESOURCE(32514)
+#define IDI_EXCLAMATION     MAKEINTRESOURCE(32515)
+#define IDI_ASTERISK        MAKEINTRESOURCE(32516)
+#if(WINVER >= 0x0400)
+#define IDI_WINLOGO         MAKEINTRESOURCE(32517)
+#endif /* WINVER >= 0x0400 */
 #endif /* RC_INVOKED */
+
+#if(WINVER >= 0x0400)
+#define IDI_WARNING     IDI_EXCLAMATION
+#define IDI_ERROR       IDI_HAND
+#define IDI_INFORMATION IDI_ASTERISK
+#endif /* WINVER >= 0x0400 */
 
 #endif /* !NOICONS */
 
@@ -5439,6 +6788,10 @@ LoadStringW(
 #define IDIGNORE            5
 #define IDYES               6
 #define IDNO                7
+#if(WINVER >= 0x0400)
+#define IDCLOSE         8
+#define IDHELP          9
+#endif /* WINVER >= 0x0400 */
 
 #ifndef NOCTLMGR
 
@@ -5464,7 +6817,9 @@ LoadStringW(
 #define ES_OEMCONVERT       0x0400L
 #define ES_READONLY         0x0800L
 #define ES_WANTRETURN       0x1000L
-
+#if(WINVER >= 0x0400)
+#define ES_NUMBER           0x2000L
+#endif /* WINVER >= 0x0400 */
 
 #endif /* !NOWINSTYLES */
 
@@ -5480,6 +6835,12 @@ LoadStringW(
 #define EN_HSCROLL          0x0601
 #define EN_VSCROLL          0x0602
 
+#if(WINVER >= 0x0400)
+/* Edit control EM_SETMARGIN parameters */
+#define EC_LEFTMARGIN       0x0001
+#define EC_RIGHTMARGIN      0x0002
+#define EC_USEFONTINFO      0xffff
+#endif /* WINVER >= 0x0400 */
 
 #ifndef NOWINMESSAGES
 
@@ -5517,7 +6878,14 @@ LoadStringW(
 #define EM_SETWORDBREAKPROC     0x00D0
 #define EM_GETWORDBREAKPROC     0x00D1
 #define EM_GETPASSWORDCHAR      0x00D2
-
+#if(WINVER >= 0x0400)
+#define EM_SETMARGINS           0x00D3
+#define EM_GETMARGINS           0x00D4
+#define EM_SETLIMITTEXT         EM_LIMITTEXT   /* ;win40 Name change */
+#define EM_GETLIMITTEXT         0x00D5
+#define EM_POSFROMCHAR          0x00D6
+#define EM_CHARFROMPOS          0x00D7
+#endif /* WINVER >= 0x0400 */
 
 #endif /* !NOWINMESSAGES */
 
@@ -5543,7 +6911,22 @@ LoadStringW(
 #define BS_AUTORADIOBUTTON  0x00000009L
 #define BS_OWNERDRAW        0x0000000BL
 #define BS_LEFTTEXT         0x00000020L
-
+#if(WINVER >= 0x0400)
+#define BS_TEXT             0x00000000L
+#define BS_ICON             0x00000040L
+#define BS_BITMAP           0x00000080L
+#define BS_LEFT             0x00000100L
+#define BS_RIGHT            0x00000200L
+#define BS_CENTER           0x00000300L
+#define BS_TOP              0x00000400L
+#define BS_BOTTOM           0x00000800L
+#define BS_VCENTER          0x00000C00L
+#define BS_PUSHLIKE         0x00001000L
+#define BS_MULTILINE        0x00002000L
+#define BS_NOTIFY           0x00004000L
+#define BS_FLAT             0x00008000L
+#define BS_RIGHTBUTTON      BS_LEFTTEXT
+#endif /* WINVER >= 0x0400 */
 
 /*
  * User Button Notification Codes
@@ -5554,6 +6937,13 @@ LoadStringW(
 #define BN_UNHILITE         3
 #define BN_DISABLE          4
 #define BN_DOUBLECLICKED    5
+#if(WINVER >= 0x0400)
+#define BN_PUSHED           BN_HILITE
+#define BN_UNPUSHED         BN_UNHILITE
+#define BN_DBLCLK           BN_DOUBLECLICKED
+#define BN_SETFOCUS         6
+#define BN_KILLFOCUS        7
+#endif /* WINVER >= 0x0400 */
 
 /*
  * Button Control Messages
@@ -5563,6 +6953,17 @@ LoadStringW(
 #define BM_GETSTATE        0x00F2
 #define BM_SETSTATE        0x00F3
 #define BM_SETSTYLE        0x00F4
+#if(WINVER >= 0x0400)
+#define BM_CLICK           0x00F5
+#define BM_GETIMAGE        0x00F6
+#define BM_SETIMAGE        0x00F7
+
+#define BST_UNCHECKED      0x0000
+#define BST_CHECKED        0x0001
+#define BST_INDETERMINATE  0x0002
+#define BST_PUSHED         0x0004
+#define BST_FOCUS          0x0008
+#endif /* WINVER >= 0x0400 */
 
 /*
  * Static Control Constants
@@ -5580,7 +6981,25 @@ LoadStringW(
 #define SS_USERITEM         0x0000000AL
 #define SS_SIMPLE           0x0000000BL
 #define SS_LEFTNOWORDWRAP   0x0000000CL
+#define SS_BITMAP           0x0000000EL
+#if(WINVER >= 0x0400)
+#define SS_OWNERDRAW        0x0000000DL
+#define SS_ENHMETAFILE      0x0000000FL
+#define SS_ETCHEDHORZ       0x00000010L
+#define SS_ETCHEDVERT       0x00000011L
+#define SS_ETCHEDFRAME      0x00000012L
+#define SS_TYPEMASK         0x0000001FL
+#endif /* WINVER >= 0x0400 */
 #define SS_NOPREFIX         0x00000080L /* Don't do "&" character translation */
+#if(WINVER >= 0x0400)
+#define SS_NOTIFY           0x00000100L
+#endif /* WINVER >= 0x0400 */
+#define SS_CENTERIMAGE      0x00000200L
+#if(WINVER >= 0x0400)
+#define SS_RIGHTJUST        0x00000400L
+#define SS_REALSIZEIMAGE    0x00000800L
+#define SS_SUNKEN           0x00001000L
+#endif /* WINVER >= 0x0400 */
 
 #ifndef NOWINMESSAGES
 /*
@@ -5588,8 +7007,15 @@ LoadStringW(
  */
 #define STM_SETICON         0x0170
 #define STM_GETICON         0x0171
-#define STM_MSGMAX          0x0172
-
+#define STM_SETIMAGE        0x0172
+#define STM_GETIMAGE        0x0173
+#if(WINVER >= 0x0400)
+#define STN_CLICKED         0
+#define STN_DBLCLK          1
+#define STN_ENABLE          2
+#define STN_DISABLE         3
+#endif /* WINVER >= 0x0400 */
+#define STM_MSGMAX          0x0174
 #endif /* !NOWINMESSAGES */
 
 /*
@@ -5743,8 +7169,6 @@ DlgDirSelectComboBoxExW(
 #define DlgDirSelectComboBoxEx  DlgDirSelectComboBoxExA
 #endif // !UNICODE
 
-
-
 /*
  * Dialog Styles
  */
@@ -5756,12 +7180,38 @@ DlgDirSelectComboBoxExW(
 #define DS_NOIDLEMSG        0x100L  /* WM_ENTERIDLE message will not be sent */
 #define DS_SETFOREGROUND    0x200L  /* not in win3.1 */
 
+#if(WINVER >= 0x0400)
+#define DS_3DLOOK           0x0004L
+#define DS_FIXEDSYS         0x0008L
+#define DS_NOFAILCREATE     0x0010L
+#define DS_CONTROL          0x0400L
+#define DS_CENTER           0x0800L
+#define DS_CENTERMOUSE      0x1000L
+#define DS_CONTEXTHELP      0x2000L
 
-
+#endif /* WINVER >= 0x0400 */
 
 #define DM_GETDEFID         (WM_USER+0)
 #define DM_SETDEFID         (WM_USER+1)
 
+#if(WINVER >= 0x0400)
+#define DM_REPOSITION       (WM_USER+2)
+
+#define PSM_PAGEINFO        (WM_USER+100)
+#define PSM_SHEETINFO       (WM_USER+101)
+
+#define PSI_SETACTIVE       0x0001L
+#define PSI_KILLACTIVE      0x0002L
+#define PSI_APPLY           0x0003L
+#define PSI_RESET           0x0004L
+#define PSI_HASHELP         0x0005L
+#define PSI_HELP            0x0006L
+
+#define PSI_CHANGED         0x0001L
+#define PSI_GUISTART        0x0002L
+#define PSI_REBOOT          0x0003L
+#define PSI_GETSIBLINGS     0x0004L
+#endif /* WINVER >= 0x0400 */
 /*
  * Returned in HIWORD() of DM_GETDEFID result if msg is supported
  */
@@ -5798,7 +7248,6 @@ DlgDirSelectComboBoxExW(
 */
                                   /* all other details also will be returned */
 
-
 /*
  * Listbox Notification Codes
  */
@@ -5808,8 +7257,6 @@ DlgDirSelectComboBoxExW(
 #define LBN_SELCANCEL       3
 #define LBN_SETFOCUS        4
 #define LBN_KILLFOCUS       5
-
-
 
 #ifndef NOWINMESSAGES
 
@@ -5854,8 +7301,15 @@ DlgDirSelectComboBoxExW(
 #define LB_SETLOCALE            0x01A5
 #define LB_GETLOCALE            0x01A6
 #define LB_SETCOUNT             0x01A7
-
+#if(WINVER >= 0x0400)
+#define LB_INITSTORAGE          0x01A8
+#define LB_ITEMFROMPOINT        0x01A9
+#endif /* WINVER >= 0x0400 */
+#if(WINVER >= 0x0400)
+#define LB_MSGMAX               0x01B0
+#else
 #define LB_MSGMAX               0x01A8
+#endif
 
 #endif /* !NOWINMESSAGES */
 
@@ -5878,10 +7332,12 @@ DlgDirSelectComboBoxExW(
 #define LBS_EXTENDEDSEL       0x0800L
 #define LBS_DISABLENOSCROLL   0x1000L
 #define LBS_NODATA            0x2000L
+#if(WINVER >= 0x0400)
+#define LBS_NOSEL             0x4000L
+#endif /* WINVER >= 0x0400 */
 #define LBS_STANDARD          (LBS_NOTIFY | LBS_SORT | WS_VSCROLL | WS_BORDER)
 
 #endif /* !NOWINSTYLES */
-
 
 /*
  * Combo Box return Values
@@ -5889,7 +7345,6 @@ DlgDirSelectComboBoxExW(
 #define CB_OKAY             0
 #define CB_ERR              (-1)
 #define CB_ERRSPACE         (-2)
-
 
 /*
  * Combo Box Notification Codes
@@ -5921,8 +7376,11 @@ DlgDirSelectComboBoxExW(
 #define CBS_HASSTRINGS        0x0200L
 #define CBS_NOINTEGRALHEIGHT  0x0400L
 #define CBS_DISABLENOSCROLL   0x0800L
+#if(WINVER >= 0x0400)
+#define CBS_UPPERCASE           0x2000L
+#define CBS_LOWERCASE           0x4000L
+#endif /* WINVER >= 0x0400 */
 #endif  /* !NOWINSTYLES */
-
 
 /*
  * Combo Box messages
@@ -5955,10 +7413,21 @@ DlgDirSelectComboBoxExW(
 #define CB_FINDSTRINGEXACT          0x0158
 #define CB_SETLOCALE                0x0159
 #define CB_GETLOCALE                0x015A
+#if(WINVER >= 0x0400)
+#define CB_GETTOPINDEX              0x015b
+#define CB_SETTOPINDEX              0x015c
+#define CB_GETHORIZONTALEXTENT      0x015d
+#define CB_SETHORIZONTALEXTENT      0x015e
+#define CB_GETDROPPEDWIDTH          0x015f
+#define CB_SETDROPPEDWIDTH          0x0160
+#define CB_INITSTORAGE              0x0161
+#endif /* WINVER >= 0x0400 */
+#if(WINVER >= 0x0400)
+#define CB_MSGMAX                   0x0162
+#else
 #define CB_MSGMAX                   0x015B
+#endif
 #endif  /* !NOWINMESSAGES */
-
-
 
 #ifndef NOWINSTYLES
 
@@ -5974,6 +7443,9 @@ DlgDirSelectComboBoxExW(
 #define SBS_SIZEBOXTOPLEFTALIGN     0x0002L
 #define SBS_SIZEBOXBOTTOMRIGHTALIGN 0x0004L
 #define SBS_SIZEBOX                 0x0008L
+#if(WINVER >= 0x0400)
+#define SBS_SIZEGRIP                0x0010L
+#endif /* WINVER >= 0x0400 */
 #endif /* !NOWINSTYLES */
 
 /*
@@ -5986,6 +7458,32 @@ DlgDirSelectComboBoxExW(
 #define SBM_SETRANGEREDRAW          0x00E6 /*not in win3.1 */
 #define SBM_GETRANGE                0x00E3 /*not in win3.1 */
 #define SBM_ENABLE_ARROWS           0x00E4 /*not in win3.1 */
+#if(WINVER >= 0x0400)
+#define SBM_SETSCROLLINFO           0x00E9
+#define SBM_GETSCROLLINFO           0x00EA
+
+#define SIF_RANGE           0x0001
+#define SIF_PAGE            0x0002
+#define SIF_POS             0x0004
+#define SIF_DISABLENOSCROLL 0x0008
+#define SIF_TRACKPOS        0x0010
+#define SIF_ALL             (SIF_RANGE | SIF_PAGE | SIF_POS | SIF_TRACKPOS)
+
+typedef struct tagSCROLLINFO
+{
+    UINT    cbSize;
+    UINT    fMask;
+    int     nMin;
+    int     nMax;
+    UINT    nPage;
+    int     nPos;
+    int     nTrackPos;
+}   SCROLLINFO, FAR *LPSCROLLINFO;
+typedef SCROLLINFO CONST FAR *LPCSCROLLINFO;
+
+WINUSERAPI int     WINAPI SetScrollInfo(HWND, int, LPCSCROLLINFO, BOOL);
+WINUSERAPI BOOL    WINAPI GetScrollInfo(HWND, int, LPSCROLLINFO);
+#endif /* WINVER >= 0x0400 */
 #endif /* !NOWINMESSAGES */
 #endif /* !NOCTLMGR */
 
@@ -6002,7 +7500,6 @@ DlgDirSelectComboBoxExW(
 #define MDITILE_VERTICAL       0x0000 /*not in win3.1 */
 #define MDITILE_HORIZONTAL     0x0001 /*not in win3.1 */
 #define MDITILE_SKIPDISABLED   0x0002 /*not in win3.1 */
-
 
 typedef struct tagMDICREATESTRUCTA {
     LPCSTR   szClass;
@@ -6138,7 +7635,49 @@ CreateMDIWindowW(
 #define CreateMDIWindow  CreateMDIWindowA
 #endif // !UNICODE
 
+#if(WINVER >= 0x0400)
+WINUSERAPI WORD    WINAPI TileWindows(HWND hwndParent, UINT wHow, CONST RECT * lpRect, UINT cKids, const HWND FAR * lpKids);
+WINUSERAPI WORD    WINAPI CascadeWindows(HWND hwndParent, UINT wHow, CONST RECT * lpRect, UINT cKids,  const HWND FAR * lpKids);
+#endif /* WINVER >= 0x0400 */
 #endif /* !NOMDI */
+
+#if(WINVER >= 0x0400)
+#ifndef NOIME
+
+/*
+ *  IME class support
+ */
+
+// wParam for WM_IME_CONTROL
+#define IMC_GETCANDIDATEPOS             0x0007
+#define IMC_SETCANDIDATEPOS             0x0008
+#define IMC_GETCOMPOSITIONFONT          0x0009
+#define IMC_SETCOMPOSITIONFONT          0x000A
+#define IMC_GETCOMPOSITIONWINDOW        0x000B
+#define IMC_SETCOMPOSITIONWINDOW        0x000C
+#define IMC_GETSTATUSWINDOWPOS          0x000F
+#define IMC_SETSTATUSWINDOWPOS          0x0010
+#define IMC_CLOSESTATUSWINDOW           0x0021
+#define IMC_OPENSTATUSWINDOW            0x0022
+
+// wParam of report message WM_IME_NOTIFY
+#define IMN_CLOSESTATUSWINDOW      0x0001
+#define IMN_OPENSTATUSWINDOW       0x0002
+#define IMN_CHANGECANDIDATE        0x0003
+#define IMN_CLOSECANDIDATE         0x0004
+#define IMN_OPENCANDIDATE          0x0005
+#define IMN_SETCONVERSIONMODE      0x0006
+#define IMN_SETSENTENCEMODE        0x0007
+#define IMN_SETOPENSTATUS          0x0008
+#define IMN_SETCANDIDATEPOS        0x0009
+#define IMN_SETCOMPOSITIONFONT     0x000A
+#define IMN_SETCOMPOSITIONWINDOW   0x000B
+#define IMN_SETSTATUSWINDOWPOS     0x000C
+#define IMN_GUIDELINE              0x000D
+#define IMN_PRIVATE                0x000E
+
+#endif /* !NOIME */
+#endif /* WINVER >= 0x0400 */
 #endif /* !NOUSER */
 
 /****** Help support ********************************************************/
@@ -6211,8 +7750,25 @@ typedef LPHELPWININFOA LPHELPWININFO;
 #define HELP_PARTIALKEY   0x0105L
 #define HELP_MULTIKEY     0x0201L
 #define HELP_SETWINPOS    0x0203L
+#if(WINVER >= 0x0400)
+#define HELP_CONTEXTMENU  0x000a
+#define HELP_FINDER       0x000b
+#define HELP_WM_HELP      0x000c
+#define HELP_SETPOPUP_POS 0x000d
 
+#define HELP_TCARD              0x8000
+#define HELP_TCARD_DATA         0x0010
+#define HELP_TCARD_OTHER_CALLER 0x0011
 
+// These are in winhelp.h in Win95.
+#define IDH_NO_HELP                     28440
+#define IDH_MISSING_CONTEXT             28441 // Control doesn't have matching help context
+#define IDH_GENERIC_HELP_BUTTON         28442 // Property sheet help button
+#define IDH_OK                          28443
+#define IDH_CANCEL                      28444
+#define IDH_HELP                        28445
+
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -6241,7 +7797,6 @@ WinHelpW(
 #endif /* !NOHELP */
 
 #ifndef NOSYSPARAMSINFO
-
 
 /*
  * Parameter for SystemParametersInfo()
@@ -6280,6 +7835,50 @@ WinHelpW(
 #define SPI_SETICONTITLELOGFONT    34
 #define SPI_GETFASTTASKSWITCH      35
 #define SPI_SETFASTTASKSWITCH      36
+#if(WINVER >= 0x0400)
+#define SPI_SETDRAGFULLWINDOWS     37
+#define SPI_GETDRAGFULLWINDOWS     38
+#define SPI_GETNONCLIENTMETRICS    41
+#define SPI_SETNONCLIENTMETRICS    42
+#define SPI_GETMINIMIZEDMETRICS    43
+#define SPI_SETMINIMIZEDMETRICS    44
+#define SPI_GETICONMETRICS         45
+#define SPI_SETICONMETRICS         46
+#define SPI_SETWORKAREA            47
+#define SPI_GETWORKAREA            48
+#define SPI_SETPENWINDOWS          49
+
+#define SPI_GETHIGHCONTRAST        66
+#define SPI_SETHIGHCONTRAST        67
+#define SPI_GETKEYBOARDPREF        68
+#define SPI_SETKEYBOARDPREF        69
+#define SPI_GETSCREENREADER        70
+#define SPI_SETSCREENREADER        71
+#define SPI_GETANIMATION           72
+#define SPI_SETANIMATION           73
+#define SPI_GETFONTSMOOTHING       74
+#define SPI_SETFONTSMOOTHING       75
+#define SPI_SETDRAGWIDTH           76
+#define SPI_SETDRAGHEIGHT          77
+#define SPI_SETHANDHELD            78
+#define SPI_GETLOWPOWERTIMEOUT     79
+#define SPI_GETPOWEROFFTIMEOUT     80
+#define SPI_SETLOWPOWERTIMEOUT     81
+#define SPI_SETPOWEROFFTIMEOUT     82
+#define SPI_GETLOWPOWERACTIVE      83
+#define SPI_GETPOWEROFFACTIVE      84
+#define SPI_SETLOWPOWERACTIVE      85
+#define SPI_SETPOWEROFFACTIVE      86
+#define SPI_SETCURSORS             87
+#define SPI_SETICONS               88
+#define SPI_GETDEFAULTINPUTLANG    89
+#define SPI_SETDEFAULTINPUTLANG    90
+#define SPI_SETLANGTOGGLE          91
+#define SPI_GETWINDOWSEXTENSION    92
+#define SPI_SETMOUSETRAILS         93
+#define SPI_GETMOUSETRAILS         94
+#define SPI_SCREENSAVERRUNNING     97
+#endif /* WINVER >= 0x0400 */
 #define SPI_GETFILTERKEYS          50
 #define SPI_SETFILTERKEYS          51
 #define SPI_GETTOGGLEKEYS          52
@@ -6292,6 +7891,10 @@ WinHelpW(
 #define SPI_SETSTICKYKEYS          59
 #define SPI_GETACCESSTIMEOUT       60
 #define SPI_SETACCESSTIMEOUT       61
+#if(WINVER >= 0x0400)
+#define SPI_GETSERIALKEYS          62
+#define SPI_SETSERIALKEYS          63
+#endif /* WINVER >= 0x0400 */
 #define SPI_GETSOUNDSENTRY         64
 #define SPI_SETSOUNDSENTRY         65
 
@@ -6302,26 +7905,228 @@ WinHelpW(
 #define SPIF_SENDWININICHANGE 0x0002
 #define SPIF_SENDCHANGE       SPIF_SENDWININICHANGE
 
+#if(WINVER >= 0x0400)
+#define METRICS_USEDEFAULT -1
+#ifdef _WINGDI_
+#ifndef NOGDI
+typedef struct tagNONCLIENTMETRICSA
+{
+    UINT    cbSize;
+    int     iBorderWidth;
+    int     iScrollWidth;
+    int     iScrollHeight;
+    int     iCaptionWidth;
+    int     iCaptionHeight;
+    LOGFONTA lfCaptionFont;
+    int     iSmCaptionWidth;
+    int     iSmCaptionHeight;
+    LOGFONTA lfSmCaptionFont;
+    int     iMenuWidth;
+    int     iMenuHeight;
+    LOGFONTA lfMenuFont;
+    LOGFONTA lfStatusFont;
+    LOGFONTA lfMessageFont;
+}   NONCLIENTMETRICSA, *PNONCLIENTMETRICSA, FAR* LPNONCLIENTMETRICSA;
+typedef struct tagNONCLIENTMETRICSW
+{
+    UINT    cbSize;
+    int     iBorderWidth;
+    int     iScrollWidth;
+    int     iScrollHeight;
+    int     iCaptionWidth;
+    int     iCaptionHeight;
+    LOGFONTW lfCaptionFont;
+    int     iSmCaptionWidth;
+    int     iSmCaptionHeight;
+    LOGFONTW lfSmCaptionFont;
+    int     iMenuWidth;
+    int     iMenuHeight;
+    LOGFONTW lfMenuFont;
+    LOGFONTW lfStatusFont;
+    LOGFONTW lfMessageFont;
+}   NONCLIENTMETRICSW, *PNONCLIENTMETRICSW, FAR* LPNONCLIENTMETRICSW;
+#ifdef UNICODE
+typedef NONCLIENTMETRICSW NONCLIENTMETRICS;
+typedef PNONCLIENTMETRICSW PNONCLIENTMETRICS;
+typedef LPNONCLIENTMETRICSW LPNONCLIENTMETRICS;
+#else
+typedef NONCLIENTMETRICSA NONCLIENTMETRICS;
+typedef PNONCLIENTMETRICSA PNONCLIENTMETRICS;
+typedef LPNONCLIENTMETRICSA LPNONCLIENTMETRICS;
+#endif // UNICODE
+#endif /* NOGDI */
+#endif /* _WINGDI_ */
 
-/* SoundSentry window flash parameters */
-#define SSWF_NONE       0
-#define SSWF_TITLE      1
-#define SSWF_WINDOW     2
-#define SSWF_DISPLAY    3
-#define SSWF_CUSTOM     4
+#define ARW_BOTTOMLEFT              0x0000L
+#define ARW_BOTTOMRIGHT             0x0001L
+#define ARW_TOPLEFT                 0x0002L
+#define ARW_TOPRIGHT                0x0003L
+#define ARW_STARTMASK               0x0003L
+#define ARW_STARTRIGHT              0x0001L
+#define ARW_STARTTOP                0x0002L
 
-/* SoundSentry graphic flash parameters */
-#define SSGF_NONE       0
-#define SSGF_DISPLAY    3
+#define ARW_LEFT                    0x0000L
+#define ARW_RIGHT                   0x0000L
+#define ARW_UP                      0x0004L
+#define ARW_DOWN                    0x0004L
+#define ARW_HIDE                    0x0008L
+#define ARW_VALID                   0x000FL
 
-/* SoundSentry text flash parameters */
-#define SSTF_NONE       0
-#define SSTF_CHARS      1
-#define SSTF_BORDER     2
-#define SSTF_DISPLAY    3
+typedef struct tagMINIMIZEDMETRICS
+{
+    UINT    cbSize;
+    int     iWidth;
+    int     iHorzGap;
+    int     iVertGap;
+    int     iArrange;
+}   MINIMIZEDMETRICS, *PMINIMIZEDMETRICS, *LPMINIMIZEDMETRICS;
 
+typedef struct tagICONMETRICSA
+{
+    UINT    cbSize;
+    int     iHorzSpacing;
+    int     iVertSpacing;
+    int     iTitleWrap;
+    LOGFONTA lfFont;
+}   ICONMETRICSA, *PICONMETRICSA, *LPICONMETRICSA;
+typedef struct tagICONMETRICSW
+{
+    UINT    cbSize;
+    int     iHorzSpacing;
+    int     iVertSpacing;
+    int     iTitleWrap;
+    LOGFONTW lfFont;
+}   ICONMETRICSW, *PICONMETRICSW, *LPICONMETRICSW;
+#ifdef UNICODE
+typedef ICONMETRICSW ICONMETRICS;
+typedef PICONMETRICSW PICONMETRICS;
+typedef LPICONMETRICSW LPICONMETRICS;
+#else
+typedef ICONMETRICSA ICONMETRICS;
+typedef PICONMETRICSA PICONMETRICS;
+typedef LPICONMETRICSA LPICONMETRICS;
+#endif // UNICODE
 
+typedef struct tagANIMATIONINFO
+{
+    UINT    cbSize;
+    int     iMinAnimate;
+}   ANIMATIONINFO, *LPANIMATIONINFO;
 
+typedef struct tagSERIALKEYSA
+{
+    UINT    cbSize;
+    DWORD   dwFlags;
+    LPSTR     lpszActivePort;
+    LPSTR     lpszPort;
+    UINT    iBaudRate;
+    UINT    iPortState;
+    UINT    iActive;
+}   SERIALKEYSA, *LPSERIALKEYSA;
+typedef struct tagSERIALKEYSW
+{
+    UINT    cbSize;
+    DWORD   dwFlags;
+    LPWSTR    lpszActivePort;
+    LPWSTR    lpszPort;
+    UINT    iBaudRate;
+    UINT    iPortState;
+    UINT    iActive;
+}   SERIALKEYSW, *LPSERIALKEYSW;
+#ifdef UNICODE
+typedef SERIALKEYSW SERIALKEYS;
+typedef LPSERIALKEYSW LPSERIALKEYS;
+#else
+typedef SERIALKEYSA SERIALKEYS;
+typedef LPSERIALKEYSA LPSERIALKEYS;
+#endif // UNICODE
+
+/* flags for SERIALKEYS dwFlags field */
+#define SERKF_SERIALKEYSON  0x00000001
+#define SERKF_AVAILABLE     0x00000002
+#define SERKF_INDICATOR     0x00000004
+
+typedef struct tagHIGHCONTRASTA
+{
+    UINT    cbSize;
+    DWORD   dwFlags;
+    LPSTR   lpszDefaultScheme;
+}   HIGHCONTRASTA, *LPHIGHCONTRASTA;
+typedef struct tagHIGHCONTRASTW
+{
+    UINT    cbSize;
+    DWORD   dwFlags;
+    LPWSTR  lpszDefaultScheme;
+}   HIGHCONTRASTW, *LPHIGHCONTRASTW;
+#ifdef UNICODE
+typedef HIGHCONTRASTW HIGHCONTRAST;
+typedef LPHIGHCONTRASTW LPHIGHCONTRAST;
+#else
+typedef HIGHCONTRASTA HIGHCONTRAST;
+typedef LPHIGHCONTRASTA LPHIGHCONTRAST;
+#endif // UNICODE
+
+/* flags for HIGHCONTRAST dwFlags field */
+#define HCF_HIGHCONTRASTON  0x00000001
+#define HCF_AVAILABLE       0x00000002
+#define HCF_HOTKEYACTIVE    0x00000004
+#define HCF_CONFIRMHOTKEY   0x00000008
+#define HCF_HOTKEYSOUND     0x00000010
+#define HCF_INDICATOR       0x00000020
+#define HCF_HOTKEYAVAILABLE 0x00000040
+
+/* Flags for ChangeDisplaySettings */
+#define CDS_UPDATEREGISTRY  0x00000001
+#define CDS_TEST            0x00000002
+#define CDS_FULLSCREEN      0x00000004
+
+/* Return values */
+#define DISP_CHANGE_SUCCESSFUL       0
+#define DISP_CHANGE_RESTART          1
+#define DISP_CHANGE_FAILED          -1
+#define DISP_CHANGE_BADMODE         -2
+#define DISP_CHANGE_NOTUPDATED      -3
+#define DISP_CHANGE_BADFLAGS        -4
+
+WINUSERAPI
+LONG
+WINAPI
+ChangeDisplaySettingsA(
+    LPDEVMODEA lpDevMode,
+    DWORD dwFlags);
+WINUSERAPI
+LONG
+WINAPI
+ChangeDisplaySettingsW(
+    LPDEVMODEW lpDevMode,
+    DWORD dwFlags);
+#ifdef UNICODE
+#define ChangeDisplaySettings  ChangeDisplaySettingsW
+#else
+#define ChangeDisplaySettings  ChangeDisplaySettingsA
+#endif // !UNICODE
+
+WINUSERAPI
+BOOL
+WINAPI
+EnumDisplaySettingsA(
+    LPCSTR lpszDeviceName,
+    DWORD iModeNum,
+    LPDEVMODEA lpDevMode);
+WINUSERAPI
+BOOL
+WINAPI
+EnumDisplaySettingsW(
+    LPCWSTR lpszDeviceName,
+    DWORD iModeNum,
+    LPDEVMODEW lpDevMode);
+#ifdef UNICODE
+#define EnumDisplaySettings  EnumDisplaySettingsW
+#else
+#define EnumDisplaySettings  EnumDisplaySettingsA
+#endif // !UNICODE
+
+#endif /* WINVER >= 0x0400 */
 
 WINUSERAPI
 BOOL
@@ -6352,7 +8157,7 @@ SystemParametersInfoW(
  */
 typedef struct tagFILTERKEYS
 {
-    DWORD cbSize;
+    UINT  cbSize;
     DWORD dwFlags;
     DWORD iWaitMSec;            // Acceptance Delay
     DWORD iDelayMSec;           // Delay Until Repeat
@@ -6373,7 +8178,7 @@ typedef struct tagFILTERKEYS
 
 typedef struct tagSTICKYKEYS
 {
-    DWORD cbSize;
+    UINT  cbSize;
     DWORD dwFlags;
 } STICKYKEYS, *LPSTICKYKEYS;
 
@@ -6392,7 +8197,7 @@ typedef struct tagSTICKYKEYS
 
 typedef struct tagMOUSEKEYS
 {
-    DWORD cbSize;
+    UINT cbSize;
     DWORD dwFlags;
     DWORD iMaxSpeed;
     DWORD iTimeToMaxSpeed;
@@ -6415,7 +8220,7 @@ typedef struct tagMOUSEKEYS
 
 typedef struct tagACCESSTIMEOUT
 {
-    DWORD cbSize;
+    UINT  cbSize;
     DWORD dwFlags;
     DWORD iTimeOutMSec;
 } ACCESSTIMEOUT, *LPACCESSTIMEOUT;
@@ -6426,9 +8231,17 @@ typedef struct tagACCESSTIMEOUT
 #define ATF_TIMEOUTON       0x00000001
 #define ATF_ONOFFFEEDBACK   0x00000002
 
-/*
- * Define SoundSentry window flash parameters
- */
+/* values for SOUNDSENTRY iFSGrafEffect field */
+#define SSGF_NONE       0
+#define SSGF_DISPLAY    3
+
+/* values for SOUNDSENTRY iFSTextEffect field */
+#define SSTF_NONE       0
+#define SSTF_CHARS      1
+#define SSTF_BORDER     2
+#define SSTF_DISPLAY    3
+
+/* values for SOUNDSENTRY iWindowsEffect field */
 #define SSWF_NONE     0
 #define SSWF_TITLE    1
 #define SSWF_WINDOW   2
@@ -6437,7 +8250,7 @@ typedef struct tagACCESSTIMEOUT
 
 typedef struct tagSOUNDSENTRYA
 {
-    DWORD cbSize;
+    UINT cbSize;
     DWORD dwFlags;
     DWORD iFSTextEffect;
     DWORD iFSTextEffectMSec;
@@ -6452,7 +8265,7 @@ typedef struct tagSOUNDSENTRYA
 } SOUNDSENTRYA, *LPSOUNDSENTRYA;
 typedef struct tagSOUNDSENTRYW
 {
-    DWORD cbSize;
+    UINT cbSize;
     DWORD dwFlags;
     DWORD iFSTextEffect;
     DWORD iFSTextEffectMSec;
@@ -6482,7 +8295,7 @@ typedef LPSOUNDSENTRYA LPSOUNDSENTRY;
 
 typedef struct tagTOGGLEKEYS
 {
-    DWORD cbSize;
+    UINT cbSize;
     DWORD dwFlags;
 } TOGGLEKEYS, *LPTOGGLEKEYS;
 
@@ -6495,10 +8308,6 @@ typedef struct tagTOGGLEKEYS
 #define TKF_CONFIRMHOTKEY   0x00000008
 #define TKF_HOTKEYSOUND     0x00000010
 #define TKF_INDICATOR       0x00000020
-
-
-
-
 
 /*
  * Set debug level
@@ -6526,8 +8335,6 @@ SetLastErrorEx(
     DWORD dwErrCode,
     DWORD dwType
     );
-
-
 
 #ifdef __cplusplus
 }

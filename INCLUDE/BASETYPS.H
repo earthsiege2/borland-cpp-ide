@@ -1,31 +1,22 @@
 //+---------------------------------------------------------------------------
 //
+//  Microsoft Windows
+//  Copyright (C) Microsoft Corporation, 1992 - 1995.
+//
 //  File:       basetyps.h
-//
-//  Contents:   This contains the portions of windows.h that is not contained
-//              in the type library windows.tdl. WIndows.h includes winole.h which
-//              is generated from windows.tdl. In the furture this windows.h, along with
-//              winole.h will contain the complete contains of the current windows.h from
-//              NT, along with the CAIRO specific information. Currently, this version of
-//              windows.h just contains the TDL base type to all compliation of the
-//              UUID librarys generated in this directory.
-//
-//
-//  History:    6-18-93   terryru   Created
 //
 //----------------------------------------------------------------------------
 
 /*
  *      C/C++ Run Time Library - Version 6.5
  *
- *      Copyright (c) 1994 by Borland International
+ *      Copyright (c) 1995 by Borland International
  *      All Rights Reserved.
  *
  */
 
 #if !defined( _BASETYPS_H_ )
 #define _BASETYPS_H_
-#define __BASETYPS_H
 
 // Common macros gleamed from COMPOBJ.H
 
@@ -35,7 +26,7 @@
     #define EXTERN_C    extern
 #endif
 
-#if defined(WIN32) && !defined(__BORLANDC__)
+#if defined(_WIN32) && !defined(__BORLANDC__)
 
 // Win32 doesn't support __export
 

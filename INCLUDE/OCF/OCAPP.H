@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -315,3 +316,4 @@ inline void TOcModule::OcInit(TOcRegistrar& registrar, uint32 options) {
 }
 
 #endif  // OCF_OCAPP_H
+

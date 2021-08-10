@@ -75,6 +75,31 @@ strnewdup(const wchar_t* s, size_t allocSize)
   int alloc = max((size_t)lstrlenW(s)+1, allocSize);
   return lstrcpyW(new wchar_t[alloc], s);
 }
+
+//
+// Wide string copy function. 
+//
+wchar_t* _BIDSFUNC
+strcpy(wchar_t* dst, const wchar_t* src)
+{
+  wchar_t* p = dst;
+  while ((*p++ = *src++) != 0)
+    ;
+  return dst;
+}
+
+//
+// Wide string length function. 
+//
+size_t _BIDSFUNC
+strlen(const wchar_t* str)
+{
+  const wchar_t* p = str;
+  for (; *p; p++)
+    ;
+  return p - str;
+}
+
 #endif
 
 //----------------------------------------------------------------------------

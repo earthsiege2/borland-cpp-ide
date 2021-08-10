@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0012    // Increment this if a change has global effects
 
+Copyright (c) 1990-1995  Microsoft Corporation
+
 Module Name:
 
     winioctl.h
@@ -12,17 +14,9 @@ Revision History:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WINIOCTL_
 #define _WINIOCTL_
-#define __WINIOCTL_H
+
 
 #ifndef _DEVIOCTL_
 #define _DEVIOCTL_
@@ -76,6 +70,8 @@ Revision History:
 #define FILE_DEVICE_WAVE_OUT            0x00000026
 #define FILE_DEVICE_8042_PORT           0x00000027
 #define FILE_DEVICE_NETWORK_REDIRECTOR  0x00000028
+#define FILE_DEVICE_BATTERY             0x00000029
+#define FILE_DEVICE_BUS_EXTENDER        0x0000002a
 
 //
 // Macro definition for defining IOCTL and FSCTL function control codes.  Note
@@ -132,6 +128,11 @@ Revision History:
 #define IOCTL_DISK_IS_WRITABLE          CTL_CODE(IOCTL_DISK_BASE, 0x0009, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DISK_LOGGING              CTL_CODE(IOCTL_DISK_BASE, 0x000a, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DISK_FORMAT_TRACKS_EX     CTL_CODE(IOCTL_DISK_BASE, 0x000b, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_DISK_HISTOGRAM_STRUCTURE	CTL_CODE(IOCTL_DISK_BASE, 0x000c, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_HISTOGRAM_DATA	CTL_CODE(IOCTL_DISK_BASE, 0x000d, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_HISTOGRAM_RESET	CTL_CODE(IOCTL_DISK_BASE, 0x000e, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_REQUEST_STRUCTURE	CTL_CODE(IOCTL_DISK_BASE, 0x000f, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_REQUEST_DATA		CTL_CODE(IOCTL_DISK_BASE, 0x0010, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 //
 // The following device control codes are common for all class drivers.  The
@@ -161,9 +162,17 @@ Revision History:
 #define PARTITION_EXTENDED              0x05      // Extended partition entry
 #define PARTITION_HUGE                  0x06      // Huge partition MS-DOS V4
 #define PARTITION_IFS                   0x07      // IFS Partition
+#define PARTITION_PREP                  0x41      // PowerPC Reference Platform (PReP) Boot Partition
 #define PARTITION_UNIX                  0x63      // Unix
 
 #define VALID_NTFT                      0xC0      // NTFT uses high order bits
+
+//
+// The high bit of the partition type code indicates that a partition
+// is part of an NTFT mirror or striped array.
+//
+
+#define PARTITION_NTFT                  0x80     // NTFT partition
 
 //
 // The following macro is used to determine which partitions should be
@@ -194,17 +203,14 @@ Revision History:
 //--
 
 #define IsRecognizedPartition( PartitionType ) (       \
-    (((PartitionType & ~0xC0) == PARTITION_FAT_12) ||  \
-     ((PartitionType & ~0xC0) == PARTITION_FAT_16) ||  \
-     ((PartitionType & ~0xC0) == PARTITION_IFS)    ||  \
-     ((PartitionType & ~0xC0) == PARTITION_HUGE)) )
-
-//
-// The high bit of the partition type code indicates that a partition
-// is part of an NTFT mirror or striped array.
-//
-
-#define PARTITION_NTFT                  0x80     // NTFT partition
+     ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT_12)) ||  \
+     ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT_16)) ||  \
+     ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_IFS)) ||  \
+     ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_HUGE)) ||  \
+     ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT_12) ||  \
+     ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT_16) ||  \
+     ((PartitionType & ~PARTITION_NTFT) == PARTITION_IFS)    ||  \
+     ((PartitionType & ~PARTITION_NTFT) == PARTITION_HUGE) )
 
 //
 // Define the media types supported by the driver.
@@ -351,6 +357,47 @@ typedef struct _REASSIGN_BLOCKS {
 typedef struct _PREVENT_MEDIA_REMOVAL {
     BOOLEAN PreventMediaRemoval;
 } PREVENT_MEDIA_REMOVAL, *PPREVENT_MEDIA_REMOVAL;
+
+///////////////////////////////////////////////////////
+//                                                   //
+// The following structures define disk performance  //
+// statistics: specifically the locations of all the //
+// reads and writes which have occured on the disk.  //
+//                                                   //
+// To use these structures, you must issue an IOCTL_ //
+// DISK_HIST_STRUCTURE (with a DISK_HISTOGRAM) to    //
+// obtain the basic histogram information. The       //
+// number of buckets which must allocated is part of //
+// this structure. Allocate the required number of   //
+// buckets and call an IOCTL_DISK_HIST_DATA to fill  //
+// in the data                                       //
+//                                                   //
+///////////////////////////////////////////////////////
+
+#define HIST_NO_OF_BUCKETS	24
+
+typedef struct _HISTOGRAM_BUCKET {
+    DWORD 		Reads;
+    DWORD		Writes;
+} HISTOGRAM_BUCKET, *PHISTOGRAM_BUCKET;
+
+#define HISTOGRAM_BUCKET_SIZE	sizeof(HISTOGRAM_BUCKET)
+
+typedef struct _DISK_HISTOGRAM {
+    LARGE_INTEGER	DiskSize;
+    LARGE_INTEGER	Start;
+    LARGE_INTEGER	End;
+    LARGE_INTEGER	Average;
+    LARGE_INTEGER	AverageRead;
+    LARGE_INTEGER	AverageWrite;
+    DWORD		Granularity;
+    DWORD		Size;
+    DWORD		ReadCount;
+    DWORD		WriteCount;
+    PHISTOGRAM_BUCKET	Histogram;
+} DISK_HISTOGRAM, *PDISK_HISTOGRAM;
+
+#define DISK_HISTOGRAM_SIZE	sizeof(DISK_HISTOGRAM)
 
 ///////////////////////////////////////////////////////
 //                                                   //
@@ -516,16 +563,14 @@ typedef struct _BIN_RESULTS {
 //
 #define SERIAL_LSRMST_MST        ((BYTE )0x03)
 
-
 #define FSCTL_LOCK_VOLUME               CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 6, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_UNLOCK_VOLUME             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 7, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DISMOUNT_VOLUME           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 8, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_MOUNT_DBLS_VOLUME         CTL_CODE(FILE_DEVICE_FILE_SYSTEM,13, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_GET_COMPRESSION           CTL_CODE(FILE_DEVICE_FILE_SYSTEM,15, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define FSCTL_SET_COMPRESSION           CTL_CODE(FILE_DEVICE_FILE_SYSTEM,16, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define FSCTL_READ_COMPRESSION          CTL_CODE(FILE_DEVICE_FILE_SYSTEM,17, METHOD_NEITHER,  FILE_ANY_ACCESS)
-#define FSCTL_WRITE_COMPRESSION         CTL_CODE(FILE_DEVICE_FILE_SYSTEM,18, METHOD_NEITHER,  FILE_ANY_ACCESS)
-
+#define FSCTL_SET_COMPRESSION           CTL_CODE(FILE_DEVICE_FILE_SYSTEM,16, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA)
+#define FSCTL_READ_COMPRESSION          CTL_CODE(FILE_DEVICE_FILE_SYSTEM,17, METHOD_NEITHER,  FILE_READ_DATA)
+#define FSCTL_WRITE_COMPRESSION         CTL_CODE(FILE_DEVICE_FILE_SYSTEM,18, METHOD_NEITHER,  FILE_WRITE_DATA)
 
 #endif // _WINIOCTL_
 

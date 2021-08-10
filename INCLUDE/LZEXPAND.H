@@ -107,15 +107,12 @@ void    LZAPI LZClose(HFILE);
 
 
 #else    /* defined __FLAT__ */
-
-
 /*
 ** lzdos.h - Public interface to LZEXP?.LIB.
 */
 
 #ifndef _LZEXPAND_
 #define _LZEXPAND_
-#define __LZEXPAND_H
 
 #ifdef __cplusplus
 extern "C" {

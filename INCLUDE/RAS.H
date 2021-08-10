@@ -1,20 +1,12 @@
-/*
+/* Copyright (c) 1992-1995, Microsoft Corporation, all rights reserved
+**
 ** ras.h
 ** Remote Access external API
 ** Public header for external API clients
 */
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _RAS_H_
 #define _RAS_H_
-#define __RAS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,17 +16,22 @@ extern "C" {
 #include <lmcons.h>
 #endif
 
-#include "pshpack4.h"
+#include <pshpack4.h>
 
-#define RAS_MaxEntryName      20
-#define RAS_MaxDeviceName     32
 #define RAS_MaxDeviceType     16
-#define RAS_MaxParamKey       32
-#define RAS_MaxParamValue     128
 #define RAS_MaxPhoneNumber    128
-#define RAS_MaxCallbackNumber 48
 #define RAS_MaxIpAddress      15
 #define RAS_MaxIpxAddress     21
+
+#if (WINVER >= 0x400)
+#define RAS_MaxEntryName      256
+#define RAS_MaxDeviceName     128
+#define RAS_MaxCallbackNumber RAS_MaxPhoneNumber
+#else
+#define RAS_MaxEntryName      20
+#define RAS_MaxDeviceName     32
+#define RAS_MaxCallbackNumber 48
+#endif
 
 
 DECLARE_HANDLE( HRASCONN );
@@ -44,12 +41,16 @@ DECLARE_HANDLE( HRASCONN );
 /* Identifies an active RAS connection.  (See RasEnumConnections)
 */
 #define RASCONNW struct tagRASCONNW
-
 RASCONNW
 {
     DWORD    dwSize;
     HRASCONN hrasconn;
     WCHAR    szEntryName[ RAS_MaxEntryName + 1 ];
+
+#if (WINVER >= 0x400)
+    WCHAR    szDeviceType[ RAS_MaxDeviceType + 1 ];
+    WCHAR    szDeviceName[ RAS_MaxDeviceName + 1 ];
+#endif
 };
 
 #define RASCONNA struct tagRASCONNA
@@ -58,6 +59,11 @@ RASCONNA
     DWORD    dwSize;
     HRASCONN hrasconn;
     CHAR     szEntryName[ RAS_MaxEntryName + 1 ];
+
+#if (WINVER >= 0x400)
+    CHAR     szDeviceType[ RAS_MaxDeviceType + 1 ];
+    CHAR     szDeviceName[ RAS_MaxDeviceName + 1 ];
+#endif
 };
 
 #ifdef UNICODE
@@ -98,6 +104,12 @@ RASCONNSTATE
     RASCS_WaitForModemReset,
     RASCS_WaitForCallback,
     RASCS_Projected,
+
+#if (WINVER >= 0x400)
+    RASCS_StartAuthentication,
+    RASCS_CallbackComplete,
+    RASCS_LogonNetwork,
+#endif
 
     RASCS_Interactive = RASCS_PAUSED,
     RASCS_RetryAuthentication,
@@ -239,7 +251,7 @@ RASPROJECTION
     RASP_Amb = 0x10000,
     RASP_PppNbf = 0x803F,
     RASP_PppIpx = 0x802B,
-    RASP_PppIp = 0x8021
+    RASP_PppIp = 0x8021,
 };
 
 #define LPRASPROJECTION RASPROJECTION*
@@ -344,7 +356,7 @@ RASPPPIPXA
 #define LPRASPPPIPX  RASPPPIPX*
 
 
-/* Describes the results of an PPP IP (Internet) projection.
+/* Describes the results of a PPP IP (Internet) projection.
 */
 #define RASPPPIPW struct tagRASPPPIPW
 RASPPPIPW
@@ -352,6 +364,21 @@ RASPPPIPW
     DWORD dwSize;
     DWORD dwError;
     WCHAR szIpAddress[ RAS_MaxIpAddress + 1 ];
+
+#ifndef WINNT35COMPATIBLE
+
+    /* This field was added between Windows NT 3.51 beta and Windows NT 3.51
+    ** final, and between Windows 95 M8 beta and Windows 95 final.  If you do
+    ** not require the server address and wish to retrieve PPP IP information
+    ** from Windows NT 3.5 or early Windows NT 3.51 betas, or on early Windows
+    ** 95 betas, define WINNT35COMPATIBLE.
+    **
+    ** The server IP address is not provided by all PPP implementations,
+    ** though Windows NT server's do provide it.
+    */
+    WCHAR szServerIpAddress[ RAS_MaxIpAddress + 1 ];
+
+#endif
 };
 
 #define RASPPPIPA struct tagRASPPPIPA
@@ -360,6 +387,14 @@ RASPPPIPA
     DWORD dwSize;
     DWORD dwError;
     CHAR  szIpAddress[ RAS_MaxIpAddress + 1 ];
+
+#ifndef WINNT35COMPATIBLE
+
+    /* See RASPPPIPW comment.
+    */
+    CHAR  szServerIpAddress[ RAS_MaxIpAddress + 1 ];
+
+#endif
 };
 
 #ifdef UNICODE
@@ -371,7 +406,6 @@ RASPPPIPA
 #define LPRASPPPIPW RASPPPIPW*
 #define LPRASPPPIPA RASPPPIPA*
 #define LPRASPPPIP  RASPPPIP*
-
 
 /* If using RasDial message notifications, get the notification message code
 ** by passing this string to the RegisterWindowMessageA() API.
@@ -425,28 +459,52 @@ DWORD APIENTRY RasGetProjectionInfoA( HRASCONN, RASPROJECTION, LPVOID,
 DWORD APIENTRY RasGetProjectionInfoW( HRASCONN, RASPROJECTION, LPVOID,
                    LPDWORD );
 
+DWORD APIENTRY RasCreatePhonebookEntryA( HWND, LPSTR );
+
+DWORD APIENTRY RasCreatePhonebookEntryW( HWND, LPWSTR );
+
+DWORD APIENTRY RasEditPhonebookEntryA( HWND, LPSTR, LPSTR );
+
+DWORD APIENTRY RasEditPhonebookEntryW( HWND, LPWSTR, LPWSTR );
+
+DWORD APIENTRY RasSetEntryDialParamsA( LPSTR, LPRASDIALPARAMSA, BOOL );
+
+DWORD APIENTRY RasSetEntryDialParamsW( LPWSTR, LPRASDIALPARAMSW, BOOL );
+
+DWORD APIENTRY RasGetEntryDialParamsA( LPSTR, LPRASDIALPARAMSA, LPBOOL );
+
+DWORD APIENTRY RasGetEntryDialParamsW( LPWSTR, LPRASDIALPARAMSW, LPBOOL );
+
 #ifdef UNICODE
-#define RasDial              RasDialW
-#define RasEnumConnections   RasEnumConnectionsW
-#define RasEnumEntries       RasEnumEntriesW
-#define RasGetConnectStatus  RasGetConnectStatusW
-#define RasGetErrorString    RasGetErrorStringW
-#define RasHangUp            RasHangUpW
-#define RasGetProjectionInfo RasGetProjectionInfoW
+#define RasDial                 RasDialW
+#define RasEnumConnections      RasEnumConnectionsW
+#define RasEnumEntries          RasEnumEntriesW
+#define RasGetConnectStatus     RasGetConnectStatusW
+#define RasGetErrorString       RasGetErrorStringW
+#define RasHangUp               RasHangUpW
+#define RasGetProjectionInfo    RasGetProjectionInfoW
+#define RasCreatePhonebookEntry RasCreatePhonebookEntryW
+#define RasEditPhonebookEntry   RasEditPhonebookEntryW
+#define RasSetEntryDialParams   RasSetEntryDialParamsW
+#define RasGetEntryDialParams   RasGetEntryDialParamsW
 #else
-#define RasDial              RasDialA
-#define RasEnumConnections   RasEnumConnectionsA
-#define RasEnumEntries       RasEnumEntriesA
-#define RasGetConnectStatus  RasGetConnectStatusA
-#define RasGetErrorString    RasGetErrorStringA
-#define RasHangUp            RasHangUpA
-#define RasGetProjectionInfo RasGetProjectionInfoA
+#define RasDial                 RasDialA
+#define RasEnumConnections      RasEnumConnectionsA
+#define RasEnumEntries          RasEnumEntriesA
+#define RasGetConnectStatus     RasGetConnectStatusA
+#define RasGetErrorString       RasGetErrorStringA
+#define RasHangUp               RasHangUpA
+#define RasGetProjectionInfo    RasGetProjectionInfoA
+#define RasCreatePhonebookEntry RasCreatePhonebookEntryA
+#define RasEditPhonebookEntry   RasEditPhonebookEntryA
+#define RasSetEntryDialParams   RasSetEntryDialParamsA
+#define RasGetEntryDialParams   RasGetEntryDialParamsA
 #endif
 
 #ifdef __cplusplus
 }
 #endif
 
-#include "poppack.h"
+#include <poppack.h>
 
 #endif // _RAS_H_

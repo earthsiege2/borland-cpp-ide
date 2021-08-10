@@ -1,39 +1,14 @@
 //+-------------------------------------------------------------------------
 //
+//  Microsoft Windows
+//  Copyright (C) Microsoft Corporation, 1992 - 1995.
+//
 //  File:       cguid.h
-//
-//  Contents:   CAIROLE guid definitions
-//
-//  History:    03-Dec-92 Ricksa    Ported from OLE 2.0 sources
-//              19-Jul-93 TerryRu   Modified to only define GUIDS noted defined
-//                                  by an IDL file.
-//
-//  Notes:      this file contains ONLY the Ole2 defined GUIDS. All
-//              CAIRO defined guids should go in the interface definition
-//              file, and be created by MIDL.
-//
-//      The declarations herein are backed by definitions (actual allocations)
-//      in cguid_i.c, which is currently not a generated file.
-//      cguid.h and cguid_i.c need to keep in sync.
-//
 //
 //--------------------------------------------------------------------------
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef __CGUID_H__
 #define __CGUID_H__
-#define __CGUID_H
-
-// BUGBUG, what about class ID's
-
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -125,6 +100,8 @@ extern const CLSID CLSID_CWSJArticlePage;
 extern const CLSID CLSID_CSystemPage;
 
 extern const CLSID CLSID_IdentityUnmarshal;
+extern const CLSID CLSID_InProcFreeMarshaler;
+
 extern const CLSID CLSID_Picture_Metafile;
 extern const CLSID CLSID_Picture_EnhMetafile;
 extern const CLSID CLSID_Picture_Dib;

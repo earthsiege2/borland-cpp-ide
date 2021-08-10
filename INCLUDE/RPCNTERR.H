@@ -1,17 +1,10 @@
 /*********************************************************/
 /**               Microsoft LAN Manager                 **/
+/**       Copyright(c) Microsoft Corp., 1987-1995       **/
 /**                                                     **/
 /**     Rpc Error Codes from the compiler and runtime   **/
 /**                                                     **/
 /*********************************************************/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
 
 /*
 If you change this file, you must also change rpcerr.h.
@@ -19,7 +12,6 @@ If you change this file, you must also change rpcerr.h.
 
 #ifndef __RPCNTERR_H__
 #define __RPCNTERR_H__
-#define __RPCNTERR_H
 
 #define RPC_S_OK                          ERROR_SUCCESS
 #define RPC_S_INVALID_ARG                 ERROR_INVALID_PARAMETER

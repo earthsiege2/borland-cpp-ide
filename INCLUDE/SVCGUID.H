@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1992-1995  Microsoft Corporation
+
 Module Name:
 
     svcguid.h
@@ -20,17 +22,8 @@ Revision History:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _SVCGUID_
 #define _SVCGUID_
-#define __SVCGUID_H
 
 #include  <basetyps.h>
 
@@ -251,7 +244,7 @@ Revision History:
 #define SVCID_NBDATAGRAM_UDP          SVCID_UDP( 138 )
 #define SVCID_SGMP_UDP                SVCID_UDP( 153 )
 #define SVCID_SNMP_UDP                SVCID_UDP( 161 )
-#define SVCID_SNMP_TRAP_UDP           SVCID_UDP( 167 )
+#define SVCID_SNMP_TRAP_UDP           SVCID_UDP( 162 )
 #define SVCID_LOAD_UDP                SVCID_UDP( 315 )
 #define SVCID_SYTEK_UDP               SVCID_UDP( 500 )
 #define SVCID_BIFF_UDP                SVCID_UDP( 512 )

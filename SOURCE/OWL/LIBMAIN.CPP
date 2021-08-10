@@ -50,7 +50,7 @@ static HINSTANCE OwlInst;
 void lockDlls()
 {
   BidsInst = ::LoadLibrary("BIDS45.DLL");  // load lowlevel to hilevel order
-  OwlInst = ::LoadLibrary("OWL250.DLL");
+  OwlInst = ::LoadLibrary("OWL252.DLL");
 }
 #pragma startup lockDlls 0
 

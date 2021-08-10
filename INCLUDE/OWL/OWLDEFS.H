@@ -7,6 +7,7 @@
 //----------------------------------------------------------------------------
 #if !defined(OWL_OWLDEFS_H)
 #define OWL_OWLDEFS_H
+#define __OWL_OWLDEFS_H   // Old-style define for VbxGen compatibility
 
 //----------------------------------------------------------------------------
 // We must use all libraries in DLLs if we are using Owl in a DLL

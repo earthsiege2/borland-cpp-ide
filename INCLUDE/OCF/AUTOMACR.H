@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -748,3 +749,4 @@ typedef unsigned char TAutoByteEnum;
 #define AUTOCALL_PROP_CONV(t)    return t(Invoke(acPropGet, a_, i_, i_));
 
 #endif  // OCF_AUTOMACR_H
+

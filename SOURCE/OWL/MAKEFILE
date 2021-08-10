@@ -631,7 +631,9 @@ $(BIDSILIB) $(STDLIBS)
 $(OWLDEF)
 $(OWLRES)
 |
+!if !$d(DIAGS)
   $(TDSTRIP) -s $(OWLDLL)
+!endif
   $(IMPLIB) $(OWLLIB) $(OWLDLL)
   $(TLIB) $(TLIBOPTS) $(OWLLIB) @&&|
 $(LIBOBJS)
@@ -693,7 +695,9 @@ $(BIDSILIB) $(STDLIBS)
 $(OWLDEF)
 $(OWLRES)
 |
+!if !$d(DIAGS)
   $(TDSTRIP) -s $(OWLDLL)
+!endif
   @-del $*.bak
   @cd $(.PATH.cpp)
 

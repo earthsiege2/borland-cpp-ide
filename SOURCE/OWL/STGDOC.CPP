@@ -126,8 +126,6 @@ TStorageDocument::Open(int omode, const char far* name)
     return true;
   }
   do {  // establish try block
-    bool stgopen = true;
-    bool stgcreate = false;
     HRESULT hres;
     IStorage* parentStg;
     int pmode = 0;
@@ -145,12 +143,25 @@ TStorageDocument::Open(int omode, const char far* name)
       omode = pmode;
     if (!(omode & (ofRead | ofWrite)))
       break;
+
+    // Provide default share mode flags & enforce root storage restrictions
+    // when in direct mode
+    //
     if (!(omode & shMask)) {
-      if ((omode & (ofRead | ofWrite)) == (ofRead | ofWrite))
-        omode |= shRead;       // let others read if we are read/write
-      else
-        omode |= shReadWrite;  // let others read/write if we are readonly
+      if (!(omode & ofTransacted) && !GetParentDoc()) { // direct mode root stg
+        if (omode & ofWrite)
+          omode |= ofRead | shNone; // let others do nothing if we are writing
+        else
+          omode |= shRead;          // let others only read if we are readonly
+      }
+      else {
+        if (omode & ofWrite)
+          omode |= shRead;       // let others only read if we are writing
+        else
+          omode |= shReadWrite;  // let others read/write if we are readonly
+      }
     }
+
     ThisOpen = omode;
     SetOpenMode(omode);  // remember the open mode
     if (name && name[0])
@@ -163,6 +174,9 @@ TStorageDocument::Open(int omode, const char far* name)
                  | ((long)(omode & (ofTransacted|ofPreserve|ofPriority)) << 4)
                  | ((omode & ofTemporary) ? STGM_DELETEONRELEASE : 0);
     long childMode = (grfMode ^ shareMode) | STGM_SHARE_EXCLUSIVE;
+
+    bool stgopen = true;
+    bool stgcreate = false;
 
     if (omode & ofWrite) {
       if (omode & ofNoReplace) {
@@ -309,12 +323,9 @@ TStorageDocument::OpenHandle(int omode, HANDLE hGlobal)
     omode = pmode;
   if (!(omode & (ofRead | ofWrite)))
     return false;
-  if (!(omode & shMask)) {
-    if ((omode & (ofRead | ofWrite)) == (ofRead | ofWrite))
-      omode |= shNone;
-    else
-      omode |= shReadWrite;  // let others read/write if we are readonly
-  }
+  if (!(omode & shMask))
+    omode |= shNone;
+
   ThisOpen = omode;
   SetOpenMode(omode);  // remember the open mode
   long shareMode = ((omode & shMask) - shCompat) >> 5;
@@ -349,12 +360,9 @@ TStorageDocument::SetHandle(int omode, HANDLE hGlobal, bool create, bool remembe
     omode = pmode;
   if (!(omode & (ofRead | ofWrite)))
     return false;
-  if (!(omode & shMask)) {
-    if ((omode & (ofRead | ofWrite)) == (ofRead | ofWrite))
-      omode |= shNone;
-    else
-      omode |= shReadWrite;  // let others read/write if we are readonly
-  }
+  if (!(omode & shMask))
+    omode |= shNone;
+
   ThisOpen = omode;
   SetOpenMode(omode);  // remember the open mode
   long shareMode = ((omode & shMask) - shCompat) >> 5;
@@ -378,8 +386,12 @@ TStorageDocument::SetHandle(int omode, HANDLE hGlobal, bool create, bool remembe
   }
 
   RefCountCheck(storageI);
-  SetDocPath("ILockByte");
+
+  // Don't change the embedded flag
+  bool embed = IsEmbedded();
   SetStorage(storageI, remember);
+  SetEmbedded(embed);
+
   storageI->Release(); // release extra refcount held by SetStorage
   return true;
 }
@@ -746,17 +758,10 @@ TStorageBuf::~TStorageBuf()
 //
 TStorageBuf* TStorageBuf::open(IStorage& stg, const char far* name, int omode)
 {
-  int     how;
-  bool    stgopen = true;
-  bool    stgcreate = false;
-  HRESULT hres;
-
 //int share = omode & shMask;
 //if (share < shCompat)
 //  share = shNone;
 //how = (share-shCompat) >> 5;
-
-  how = (int)STGM_SHARE_EXCLUSIVE;// must open streams and child stg exclusive
 
   if (opened || !omode)
     return 0;
@@ -764,13 +769,17 @@ TStorageBuf* TStorageBuf::open(IStorage& stg, const char far* name, int omode)
   if (!name)
     name = DefaultStreamName;
 
+  bool  stgopen = true;
+  bool  stgcreate = false;
+  uint32 how = STGM_SHARE_EXCLUSIVE;  // must open streams and child stg exclusive
+
   if (omode & ofWrite) {
     if (!(mode & (ofAtEnd | ofAppend | ofRead)))
-      omode |= ofTruncate; // output implies truncate unless in, app, or ate
+      omode |= ofTruncate;  // output implies truncate unless in, app, or ate
     if (omode & ofRead)
-      how |= (int)STGM_READWRITE;
+      how |= STGM_READWRITE;
     else
-      how |= (int)STGM_WRITE;
+      how |= STGM_WRITE;
     if (omode & ofNoReplace) {
       stgopen = false;
       stgcreate = true;
@@ -779,40 +788,39 @@ TStorageBuf* TStorageBuf::open(IStorage& stg, const char far* name, int omode)
       stgcreate = true;
       if (omode & ofTruncate) {
         stgopen = false;
-        how |= (int)STGM_CREATE;
+        how |= STGM_CREATE;
       }
     }
   }
   else if (omode & ofRead)
-      how |= (int)STGM_READ;
+    how |= STGM_READ;
   else
-      return 0;   // must specfify in, out, or in/out
+    return 0;   // must specfify in, out, or in/out
 
 //if (omode & ofAppend)    // what does this mean for docfile?!!
 //    how |= O_APPEND;
 
-  // now try to open
+  // Now try to open or create
   //
   if (stgopen) {
-    hres = stg.OpenStream(OleStr(name), 0, (uint32)how, 0, &strm);
+    HRESULT hres = stg.OpenStream(OleStr(name), 0, how, 0, &strm);
     if (SUCCEEDED(hres))
       stgcreate = false;
     else
       return 0;
   }
   if (stgcreate) {
-    hres = stg.CreateStream(OleStr(name), (uint32)how, 0, 0, &strm);
-    if (!SUCCEEDED(hres) && !stgcreate) {
+    HRESULT hres = stg.CreateStream(OleStr(name), how, 0, 0, &strm);
+    if (!SUCCEEDED(hres))
       return 0;
-    }
   }
 
-  // finish up
+  // Finish up
   //
   opened = 1;
   mode = omode;
   if ((omode & ofAtEnd) != 0
-      && !SUCCEEDED(strm->Seek(int64(), STREAM_SEEK_END, &(ULARGE_INTEGER)last_seek))) {
+      && !SUCCEEDED(strm->Seek(int64(), STREAM_SEEK_END, (ULARGE_INTEGER*)&last_seek))) {
     strm->Release();
     strm = 0;
     return 0;
@@ -912,11 +920,11 @@ TStorageBuf::seekoff(streamoff off, ios::seek_dir dir, int /* mode ignored */)
       }
     }
 
-  int w = (dir == ios::beg) ? STREAM_SEEK_SET
+  uint32 w = (dir == ios::beg) ? STREAM_SEEK_SET
        : ((dir == ios::cur) ? STREAM_SEEK_CUR
        :       /* ios::end */ STREAM_SEEK_END);
 
-  if (!SUCCEEDED(strm->Seek(int64(loff), w, &(ULARGE_INTEGER)last_seek)))
+  if (!SUCCEEDED(strm->Seek(int64(loff), w, (ULARGE_INTEGER*)&last_seek)))
     return EOF; //?!!
   if (!unbuffered() && base()) {      // set up get and put areas
     int pb = (blen() > 8) ? 4 : 1;  // putback area size
@@ -971,7 +979,7 @@ int TStorageBuf::sync()
 
   }
   else if (in_avail()) {
-    if (!SUCCEEDED(strm->Seek(int64(long(-in_avail())), STREAM_SEEK_CUR, &(ULARGE_INTEGER)last_seek)))
+    if (!SUCCEEDED(strm->Seek(int64(long(-in_avail())), STREAM_SEEK_CUR, (ULARGE_INTEGER*)&last_seek)))
       return EOF;
     setg(eback(), gptr(), gptr());
     setp(gptr(), gptr());

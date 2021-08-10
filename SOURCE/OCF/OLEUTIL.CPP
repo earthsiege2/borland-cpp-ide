@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -348,3 +349,4 @@ TLocaleString::CompareLang(const char far* s1, const char far* s2, TLangId lang)
 }
 
 #endif
+

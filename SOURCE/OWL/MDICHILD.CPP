@@ -13,6 +13,11 @@
 
 DIAG_DECLARE_GROUP(OwlWin);  // diagnostic group for windows
 
+// Define to work around here in the child, the 'creating MDI child maximized
+// corrupts the menu bar' bug 
+//
+#define MDIMAX_WORKAROUND
+
 #if !defined(SECTION) || SECTION == 1
 
 DEFINE_RESPONSE_TABLE1(TMDIChild, TFrameWindow)
@@ -175,7 +180,29 @@ TMDIChild::PerformCreate(int)
   createStruct.style = Attr.Style;
   createStruct.lParam = (LPARAM)Attr.Param;
 
+  // Work around a Windows MDI bug w/ bad menus if MDI child is created
+  // maximized, by hiding child now & maximizing later
+  //
+#if defined(MDIMAX_WORKAROUND)
+  uint32 origStyle = Attr.Style;
+  if (createStruct.style & WS_MAXIMIZE)
+    createStruct.style &= ~(WS_MAXIMIZE | WS_VISIBLE);
+#endif
+
   HWindow = (HWND)Parent->HandleMessage(WM_MDICREATE, 0, (LPARAM)&createStruct);
+
+  // Finish up maximized MDI child workaround
+  //
+#if defined(MDIMAX_WORKAROUND)
+  if (HWindow && (origStyle & WS_MAXIMIZE)) {
+    Parent->HandleMessage(WM_MDIMAXIMIZE, WPARAM(HWindow));
+#if defined(BI_PLAT_WIN32)
+    Parent->HandleMessage(WM_MDIREFRESHMENU);
+#else
+    Parent->HandleMessage(WM_MDISETMENU, true);
+#endif
+  }
+#endif
 }
 
 void
@@ -214,7 +241,7 @@ TMDIChild::EvMDIActivate(HWND hWndActivated, HWND hWndDeactivated)
   TWindow* w = GetClientWindow();
   if (w && w->IsWindow())
 #if defined(BI_PLAT_WIN32)
-    w->HandleMessage(WM_MDIACTIVATE, WPARAM(hWndActivated), LPARAM(hWndDeactivated));
+    w->HandleMessage(WM_MDIACTIVATE, WPARAM(hWndDeactivated), LPARAM(hWndActivated));
 #else
     w->HandleMessage(WM_MDIACTIVATE, 0, MAKELPARAM(hWndActivated,hWndDeactivated));
 #endif

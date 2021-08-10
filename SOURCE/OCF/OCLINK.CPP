@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -153,9 +154,15 @@ TOcLinkView::GetFormatData(TOcFormatInfo far* fmt)
 {
   PRECONDITION(fmt);
 
-  TOcFormat format;
-  format = *fmt;
-  return (HANDLE)OcView->ForwardEvent(OC_VIEWCLIPDATA, &format);
+  TOcFormat* format = OcView->FormatList.Find(fmt->Id);
+  if (!format)
+    return 0;
+
+  TOcFormatData formatData(*format);
+  if (OcView->ForwardEvent(OC_VIEWCLIPDATA, &formatData))
+    return formatData.Handle;
+  else
+    return 0;
 }
 
 //
@@ -473,4 +480,5 @@ TOcViewCollection::Find(TString const moniker) const
 
   return 0;
 }
+
 

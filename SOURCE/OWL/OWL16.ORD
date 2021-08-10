@@ -349,7 +349,7 @@
     @TGdiObject@0RefAdd$qpxv16TGdiObject@TType	@343
     @TGdiObject@0RefRemove$qpxv	@344
     @TGdiObject@0RefInc$qpxv	@345
-;;;;@TGdiObject@0RefDec$qpxv	@346
+    @TGdiObject@0RefDec$qpxv	@346
     @TGdiObject@0RefCount$qpxv	@347
     @TGdiObject@0$bctr$qv	@348
     @TGdiObject@0$bctr$qpxv11TAutoDelete	@349
@@ -1857,4 +1857,4 @@
 ;    @TVSlider@0writeRef$qm8opstreammx8TVSlider	@1851
 ;    @TVSlider@0writePtr$qm8opstreamnx8TVSlider	@1852
 ;    @TVSlider@0$bctr$q14StreamableInit	@1853
-
+     @GetApplicationObject$qui @1854

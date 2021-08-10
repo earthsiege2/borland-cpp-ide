@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleIPS.h -- Implements the Bolero half of the OLE2 in-process server
@@ -200,3 +200,4 @@ public:
 };
 
 #endif
+

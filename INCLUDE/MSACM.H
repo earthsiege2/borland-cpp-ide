@@ -2,6 +2,8 @@
 //
 //  msacm.h
 //
+//  Copyright (c) 1992-1995 Microsoft Corporation.  All Rights Reserved.
+//
 //  Description:
 //      Audio Compression Manager Public Header File
 //
@@ -9,17 +11,8 @@
 //
 //==========================================================================;
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _INC_ACM
 #define _INC_ACM        /* #defined if msacm.h has been included */
-#define __MSACM_H
 
 #if !defined(_INC_MMREG) || (_INC_MMREG < 142)
 #ifndef RC_INVOKED
@@ -41,12 +34,13 @@
 #define _UNICODE
 #endif
 
-#include "pshpack1.h"   /* Assume byte packing throughout */
+#ifdef __BORLANDC__
+  #include <pshpack1.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -62,7 +56,6 @@ extern "C" {            /* Assume C declarations for C++ */
 #ifndef DRV_MAPPER_PREFERRED_OUTPUT_GET
 #define DRV_MAPPER_PREFERRED_OUTPUT_GET (DRV_USER + 2)
 #endif
-
 
 #ifndef DRVM_MAPPER_STATUS
 #define DRVM_MAPPER_STATUS              (0x2000)
@@ -82,7 +75,6 @@ extern "C" {            /* Assume C declarations for C++ */
 #define WAVEOUT_MAPPER_STATUS_FORMAT    2
 #endif
 
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //
@@ -98,7 +90,6 @@ extern "C" {            /* Assume C declarations for C++ */
     #define ACMAPI              _far _pascal
 #endif
 #endif
-
 
 //--------------------------------------------------------------------------;
 //
@@ -148,8 +139,6 @@ DECLARE_HANDLE(HACMOBJ);
 typedef HACMOBJ            *PHACMOBJ;
 typedef HACMOBJ        FAR *LPHACMOBJ;
 
-
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  ACM Error Codes
@@ -170,6 +159,21 @@ typedef UINT                MMRESULT;
 #define ACMERR_UNPREPARED   (ACMERR_BASE + 2)
 #define ACMERR_CANCELED     (ACMERR_BASE + 3)
 
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+//
+//  ACM Window Messages
+//
+//  These window messages are sent by the ACM or ACM drivers to notify
+//  applications of events.
+//
+//  Note that these window message numbers will also be defined in
+//  mmsystem.
+//
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+
+#define MM_ACM_OPEN         (MM_STREAM_OPEN)  // conversion callback messages
+#define MM_ACM_CLOSE        (MM_STREAM_CLOSE)
+#define MM_ACM_DONE         (MM_STREAM_DONE)
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -194,7 +198,6 @@ DWORD ACMAPI acmGetVersion
 (
     void
 );
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -227,7 +230,6 @@ MMRESULT ACMAPI acmMetrics
 #define ACM_METRIC_MAX_SIZE_FILTER          51
 #define ACM_METRIC_DRIVER_SUPPORT           100
 #define ACM_METRIC_DRIVER_PRIORITY          101
-
 
 //--------------------------------------------------------------------------;
 //
@@ -262,9 +264,6 @@ MMRESULT ACMAPI acmDriverEnum
 #define ACM_DRIVERENUMF_NOLOCAL     0x40000000L
 #define ACM_DRIVERENUMF_DISABLED    0x80000000L
 
-
-
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmDriverID()
@@ -278,8 +277,6 @@ MMRESULT ACMAPI acmDriverID
     LPHACMDRIVERID          phadid,
     DWORD                   fdwDriverID
 );
-
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -329,15 +326,12 @@ MMRESULT ACMAPI acmDriverAdd
 #define ACM_DRIVERADDF_LOCAL        0x00000000L  // is local to current task
 #define ACM_DRIVERADDF_GLOBAL       0x00000008L  // is global
 
-
-
 //
 //  prototype for ACM driver procedures that are installed as _functions_
 //  or _notifations_ instead of as a standalone installable driver.
 //
 typedef LRESULT (CALLBACK *ACMDRIVERPROC)(DWORD, HACMDRIVERID, UINT, LPARAM, LPARAM);
 typedef ACMDRIVERPROC FAR *LPACMDRIVERPROC;
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -351,8 +345,6 @@ MMRESULT ACMAPI acmDriverRemove
     HACMDRIVERID            hadid,
     DWORD                   fdwRemove
 );
-
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -368,8 +360,6 @@ MMRESULT ACMAPI acmDriverOpen
     DWORD                   fdwOpen
 );
 
-
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmDriverClose()
@@ -382,8 +372,6 @@ MMRESULT ACMAPI acmDriverClose
     HACMDRIVER              had,
     DWORD                   fdwClose
 );
-
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -400,7 +388,6 @@ LRESULT ACMAPI acmDriverMessage
     LPARAM                  lParam2
 );
 
-
 //
 //
 //
@@ -412,7 +399,6 @@ LRESULT ACMAPI acmDriverMessage
 #define ACMDM_BASE                  ACMDM_RESERVED_LOW
 
 #define ACMDM_DRIVER_ABOUT          (ACMDM_BASE + 11)
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -428,17 +414,12 @@ MMRESULT ACMAPI acmDriverPriority
     DWORD                   fdwPriority
 );
 
-
 #define ACM_DRIVERPRIORITYF_ENABLE      0x00000001L
 #define ACM_DRIVERPRIORITYF_DISABLE     0x00000002L
 #define ACM_DRIVERPRIORITYF_ABLEMASK    0x00000003L
 #define ACM_DRIVERPRIORITYF_BEGIN       0x00010000L
 #define ACM_DRIVERPRIORITYF_END         0x00020000L
 #define ACM_DRIVERPRIORITYF_DEFERMASK   0x00030000L
-
-
-
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -569,7 +550,6 @@ typedef struct tACMDRIVERDETAILS
 #define ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC mmioFOURCC('a', 'u', 'd', 'c')
 #define ACMDRIVERDETAILS_FCCCOMP_UNDEFINED  mmioFOURCC('\0', '\0', '\0', '\0')
 
-
 //
 //  the following flags are used to specify the type of conversion(s) that
 //  the converter/codec/filter supports. these are placed in the fdwSupport
@@ -615,7 +595,6 @@ typedef struct tACMDRIVERDETAILS
 #define ACMDRIVERDETAILS_SUPPORTF_LOCAL     0x40000000L
 #define ACMDRIVERDETAILS_SUPPORTF_DISABLED  0x80000000L
 
-
 #ifdef _WIN32
 MMRESULT ACMAPI acmDriverDetailsA
 (
@@ -644,8 +623,6 @@ MMRESULT ACMAPI acmDriverDetails
     DWORD                   fdwDetails
 );
 #endif
-
-
 
  
 //--------------------------------------------------------------------------;
@@ -749,8 +726,6 @@ MMRESULT ACMAPI acmFormatTagDetails
 #define ACM_FORMATTAGDETAILSF_LARGESTSIZE   0x00000002L
 #define ACM_FORMATTAGDETAILSF_QUERYMASK     0x0000000FL
 
-
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmFormatTagEnum()
@@ -819,8 +794,6 @@ MMRESULT ACMAPI acmFormatTagEnum
 );
 #endif
 
-
-
 //--------------------------------------------------------------------------;
 //
 //  ACM Formats
@@ -887,7 +860,6 @@ typedef struct tACMFORMATDETAILS
 } ACMFORMATDETAILS, *PACMFORMATDETAILS, FAR *LPACMFORMATDETAILS;
 #endif
 
-
 #ifdef _WIN32
 MMRESULT ACMAPI acmFormatDetailsA
 (
@@ -920,8 +892,6 @@ MMRESULT ACMAPI acmFormatDetails
 #define ACM_FORMATDETAILSF_INDEX        0x00000000L
 #define ACM_FORMATDETAILSF_FORMAT       0x00000001L
 #define ACM_FORMATDETAILSF_QUERYMASK    0x0000000FL
-
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -1001,7 +971,6 @@ MMRESULT ACMAPI acmFormatEnum
 #define ACM_FORMATENUMF_INPUT            0x00800000L
 #define ACM_FORMATENUMF_OUTPUT           0x01000000L
 
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmFormatSuggest()
@@ -1026,7 +995,6 @@ MMRESULT ACMAPI acmFormatSuggest
 
 #define ACM_FORMATSUGGESTF_TYPEMASK         0x00FF0000L
 
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmFormatChoose()
@@ -1037,13 +1005,23 @@ MMRESULT ACMAPI acmFormatSuggest
 #ifdef _WIN32
 #define ACMHELPMSGSTRINGA       "acmchoose_help"
 #define ACMHELPMSGSTRINGW       L"acmchoose_help"
+#define ACMHELPMSGCONTEXTMENUA  "acmchoose_contextmenu"
+#define ACMHELPMSGCONTEXTMENUW  L"acmchoose_contextmenu"
+#define ACMHELPMSGCONTEXTHELPA  "acmchoose_contexthelp"
+#define ACMHELPMSGCONTEXTHELPW  L"acmchoose_contexthelp"
 #ifdef _UNICODE
 #define ACMHELPMSGSTRING        ACMHELPMSGSTRINGW
+#define ACMHELPMSGCONTEXTMENU   ACMHELPMSGCONTEXTMENUW
+#define ACMHELPMSGCONTEXTHELP   ACMHELPMSGCONTEXTHELPW
 #else
 #define ACMHELPMSGSTRING        ACMHELPMSGSTRINGA
+#define ACMHELPMSGCONTEXTMENU   ACMHELPMSGCONTEXTMENUA
+#define ACMHELPMSGCONTEXTHELP   ACMHELPMSGCONTEXTHELPA
 #endif
 #else
 #define ACMHELPMSGSTRING        "acmchoose_help"
+#define ACMHELPMSGCONTEXTMENU   "acmchoose_contextmenu"
+#define ACMHELPMSGCONTEXTHELP   "acmchoose_contexthelp"
 #endif
 
 //
@@ -1056,7 +1034,6 @@ MMRESULT ACMAPI acmFormatSuggest
 #define FORMATCHOOSE_FORMATTAG_VERIFY   (FORMATCHOOSE_MESSAGE+0)
 #define FORMATCHOOSE_FORMAT_VERIFY      (FORMATCHOOSE_MESSAGE+1)
 #define FORMATCHOOSE_CUSTOM_VERIFY      (FORMATCHOOSE_MESSAGE+2)
-
 
 #ifdef _WIN32
 typedef UINT (CALLBACK *ACMFORMATCHOOSEHOOKPROCA)
@@ -1115,18 +1092,10 @@ typedef struct tACMFORMATCHOOSEA
     DWORD           fdwEnum;            // format enumeration restrictions
     LPWAVEFORMATEX  pwfxEnum;           // format describing restrictions
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFORMATCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFORMATCHOOSE_STYLEF_ENABLEHOOK is
-    //  not specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
+    HINSTANCE       hInstance;          // app instance containing dlg template
     LPCSTR          pszTemplateName;    // custom template name
     LPARAM          lCustData;          // data passed to hook fn.
-    ACMFORMATCHOOSEHOOKPROCA pfnHook;    // ptr to hook function
+    ACMFORMATCHOOSEHOOKPROCA pfnHook;   // ptr to hook function
 
 } ACMFORMATCHOOSEA, *PACMFORMATCHOOSEA, FAR *LPACMFORMATCHOOSEA;
 
@@ -1150,18 +1119,10 @@ typedef struct tACMFORMATCHOOSEW
     DWORD           fdwEnum;            // format enumeration restrictions
     LPWAVEFORMATEX  pwfxEnum;           // format describing restrictions
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFORMATCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFORMATCHOOSE_STYLEF_ENABLEHOOK is
-    //  not specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
+    HINSTANCE       hInstance;          // app instance containing dlg template
     LPCWSTR         pszTemplateName;    // custom template name
     LPARAM          lCustData;          // data passed to hook fn.
-    ACMFORMATCHOOSEHOOKPROCW pfnHook;    // ptr to hook function
+    ACMFORMATCHOOSEHOOKPROCW pfnHook;   // ptr to hook function
 
 } ACMFORMATCHOOSEW, *PACMFORMATCHOOSEW, FAR *LPACMFORMATCHOOSEW;
 
@@ -1195,15 +1156,7 @@ typedef struct tACMFORMATCHOOSE
     DWORD           fdwEnum;            // format enumeration restrictions
     LPWAVEFORMATEX  pwfxEnum;           // format describing restrictions
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFORMATCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFORMATCHOOSE_STYLEF_ENABLEHOOK is
-    //  not specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
+    HINSTANCE       hInstance;          // app instance containing dlg template
     LPCSTR          pszTemplateName;    // custom template name
     LPARAM          lCustData;          // data passed to hook fn.
     ACMFORMATCHOOSEHOOKPROC pfnHook;    // ptr to hook function
@@ -1221,6 +1174,7 @@ typedef struct tACMFORMATCHOOSE
 #define ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATE        0x00000010L
 #define ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATEHANDLE  0x00000020L
 #define ACMFORMATCHOOSE_STYLEF_INITTOWFXSTRUCT       0x00000040L
+#define ACMFORMATCHOOSE_STYLEF_CONTEXTHELP           0x00000080L
 
 #ifdef _WIN32
 MMRESULT ACMAPI acmFormatChooseA
@@ -1244,7 +1198,6 @@ MMRESULT ACMAPI acmFormatChoose
     LPACMFORMATCHOOSE       pafmtc
 );
 #endif
-
 
 //--------------------------------------------------------------------------;
 //
@@ -1346,8 +1299,6 @@ MMRESULT ACMAPI acmFilterTagDetails
 #define ACM_FILTERTAGDETAILSF_LARGESTSIZE   0x00000002L
 #define ACM_FILTERTAGDETAILSF_QUERYMASK     0x0000000FL
 
-
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmFilterTagEnum()
@@ -1416,8 +1367,6 @@ MMRESULT ACMAPI acmFilterTagEnum
     DWORD                   fdwEnum
 );
 #endif
-
-
 
 //--------------------------------------------------------------------------;
 //
@@ -1517,8 +1466,6 @@ MMRESULT ACMAPI acmFilterDetails
 #define ACM_FILTERDETAILSF_FILTER       0x00000001L
 #define ACM_FILTERDETAILSF_QUERYMASK    0x0000000FL
 
-
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmFilterEnum()
@@ -1589,9 +1536,6 @@ MMRESULT ACMAPI acmFilterEnum
 
 #define ACM_FILTERENUMF_DWFILTERTAG         0x00010000L
 
-
-
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmFilterChoose()
@@ -1609,7 +1553,6 @@ MMRESULT ACMAPI acmFilterEnum
 #define FILTERCHOOSE_FILTERTAG_VERIFY   (FILTERCHOOSE_MESSAGE+0)
 #define FILTERCHOOSE_FILTER_VERIFY      (FILTERCHOOSE_MESSAGE+1)
 #define FILTERCHOOSE_CUSTOM_VERIFY      (FILTERCHOOSE_MESSAGE+2)
-
 
 #ifdef _WIN32
 typedef UINT (CALLBACK *ACMFILTERCHOOSEHOOKPROCA)
@@ -1668,15 +1611,7 @@ typedef struct tACMFILTERCHOOSEA
     DWORD           fdwEnum;            // filter enumeration restrictions
     LPWAVEFILTER    pwfltrEnum;         // filter describing restrictions
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFILTERCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFILTERCHOOSE_STYLEF_ENABLEHOOK is not
-    //  specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
+    HINSTANCE       hInstance;          // app instance containing dlg template
     LPCSTR          pszTemplateName;    // custom template name
     LPARAM          lCustData;          // data passed to hook fn.
     ACMFILTERCHOOSEHOOKPROCA pfnHook;    // ptr to hook function
@@ -1703,15 +1638,7 @@ typedef struct tACMFILTERCHOOSEW
     DWORD           fdwEnum;            // filter enumeration restrictions
     LPWAVEFILTER    pwfltrEnum;         // filter describing restrictions
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFILTERCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFILTERCHOOSE_STYLEF_ENABLEHOOK is not
-    //  specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
+    HINSTANCE       hInstance;          // app instance containing dlg template
     LPCWSTR         pszTemplateName;    // custom template name
     LPARAM          lCustData;          // data passed to hook fn.
     ACMFILTERCHOOSEHOOKPROCW pfnHook;    // ptr to hook function
@@ -1748,15 +1675,7 @@ typedef struct tACMFILTERCHOOSE
     DWORD           fdwEnum;            // filter enumeration restrictions
     LPWAVEFILTER    pwfltrEnum;         // filter describing restrictions
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFILTERCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFILTERCHOOSE_STYLEF_ENABLEHOOK is not
-    //  specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
+    HINSTANCE       hInstance;          // app instance containing dlg template
     LPCSTR          pszTemplateName;    // custom template name
     LPARAM          lCustData;          // data passed to hook fn.
     ACMFILTERCHOOSEHOOKPROC pfnHook;    // ptr to hook function
@@ -1773,6 +1692,7 @@ typedef struct tACMFILTERCHOOSE
 #define ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATE        0x00000010L
 #define ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATEHANDLE  0x00000020L
 #define ACMFILTERCHOOSE_STYLEF_INITTOFILTERSTRUCT    0x00000040L
+#define ACMFILTERCHOOSE_STYLEF_CONTEXTHELP           0x00000080L
 
 #ifdef _WIN32
 MMRESULT ACMAPI acmFilterChooseA
@@ -1796,7 +1716,6 @@ MMRESULT ACMAPI acmFilterChoose
     LPACMFILTERCHOOSE       pafltrc
 );
 #endif
-
 
 //--------------------------------------------------------------------------;
 //
@@ -1839,8 +1758,6 @@ typedef struct tACMSTREAMHEADER
 #define ACMSTREAMHEADER_STATUSF_PREPARED    0x00020000L
 #define ACMSTREAMHEADER_STATUSF_INQUEUE     0x00100000L
 
-
-
 MMRESULT ACMAPI acmStreamOpen
 (
     LPHACMSTREAM            phas,       // pointer to stream handle
@@ -1857,7 +1774,6 @@ MMRESULT ACMAPI acmStreamOpen
 #define ACM_STREAMOPENF_ASYNC           0x00000002
 #define ACM_STREAMOPENF_NONREALTIME     0x00000004
 
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmStreamClose()
@@ -1870,8 +1786,6 @@ MMRESULT ACMAPI acmStreamClose
     HACMSTREAM              has,
     DWORD                   fdwClose
 );
-
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -1892,8 +1806,6 @@ MMRESULT ACMAPI acmStreamSize
 #define ACM_STREAMSIZEF_DESTINATION     0x00000001L
 #define ACM_STREAMSIZEF_QUERYMASK       0x0000000FL
 
-
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmStreamReset()
@@ -1907,7 +1819,20 @@ MMRESULT ACMAPI acmStreamReset
     DWORD                   fdwReset
 );
 
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+//
+//  acmStreamMessage()
+//
+//
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 
+MMRESULT ACMAPI acmStreamMessage
+(
+    HACMSTREAM              has,
+    UINT                    uMsg, 
+    LPARAM                  lParam1,
+    LPARAM                  lParam2
+);
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -1927,7 +1852,6 @@ MMRESULT ACMAPI acmStreamConvert
 #define ACM_STREAMCONVERTF_START        0x00000010
 #define ACM_STREAMCONVERTF_END          0x00000020
 
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
 //  acmStreamPrepareHeader()
@@ -1941,9 +1865,6 @@ MMRESULT ACMAPI acmStreamPrepareHeader
     LPACMSTREAMHEADER   pash,
     DWORD               fdwPrepare
 );
-
-
-
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
 //
@@ -1960,8 +1881,9 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
 );
                                        
 
-
-#include "poppack.h"    /* Revert to default packing */
+#ifdef __BORLANDC__
+  #include <poppack.h>
+#endif
 
 #ifdef __cplusplus
 }                       /* End of extern "C" { */

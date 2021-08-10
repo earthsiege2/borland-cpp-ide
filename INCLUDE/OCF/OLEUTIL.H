@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -31,7 +32,7 @@
 #   include <olenls.h>
 # endif
 #endif
-#if defined(BI_PLAT_WIN32) && !defined(__OLE2_H)
+#if defined(BI_PLAT_WIN32) && !defined(__OLE2_H) && !defined(_OLE2_H_)
 # error INC_OLE2 must be defined before osl/defs.h is included. Include ocdefs.h first
 #endif
 
@@ -45,7 +46,7 @@
 #     define _ICLASS
 #   endif
 # else
-#   define _ICLASS  FAR   
+#   define _ICLASS  FAR
 # endif
 #endif
 
@@ -247,8 +248,8 @@ void CmpGuidOle(IUnknown* This, REFIID req, void far*far* pif);
 
 class _ICLASS TUnknown {
   public:
-    operator IUnknown&() {return *Outer;} 
-    operator IUnknown*() {Outer->AddRef(); return Outer;} 
+    operator IUnknown&() {return *Outer;}
+    operator IUnknown*() {Outer->AddRef(); return Outer;}
     IUnknown* SetOuter(IUnknown* outer = 0);
     IUnknown* GetOuter() {return Outer;}
     unsigned long GetRefCount();
@@ -442,3 +443,5 @@ inline unsigned long TUnknown::AdjustRefCount(int i)
   };
 
 #endif  //  OCF_OLEUTIL_H
+
+

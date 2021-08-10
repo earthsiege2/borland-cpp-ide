@@ -14,13 +14,10 @@
  *
  */
 
+#if !defined(__FLAT__)
 #if !defined( _COMPOBJ_H_ )
 #define _COMPOBJ_H_
 #define __COMPOBJ_H
-
-
-#if !defined(__FLAT__)
-
 
 /****** Linkage Definitions *************************************************/
 
@@ -1042,14 +1039,12 @@ typedef HRESULT (STDAPICALLTYPE FAR* LPFNCANUNLOADNOW)(void);
 STDAPI FnAssert(LPSTR lpstrExpr, LPSTR lpstrMsg, LPSTR lpstrFileName, UINT iLine);
 #endif  //  _DEBUG
 
-
+#endif // _COMPOBJ_H_
 #else  /* !__FLAT__ */
-
+#ifndef RC_INVOKED
+#pragma message("WARNING: your code should #include objbase.h instead of compobj.h")
+#endif /* !RC_INVOKED */
 
 #include <objbase.h>
 
-
 #endif  /* __FLAT__ */
-
-
-#endif // _COMPOBJ_H_

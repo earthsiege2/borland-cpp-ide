@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleFact.cpp -- Implements the server-side helper for allowing OLE2 to
@@ -17,9 +17,9 @@
 //
 //	DllGetClassObject
 //
-
-
-
+//
+//
+//
 
 STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, void FAR* FAR* ppv)
 {
@@ -332,4 +332,5 @@ HRESULT _IFUNC BOleInProcFactory::LockServer (BOOL fLock)
 	pFactory->ServerCount (fLock ? 1L : -1L);
 	return NOERROR;
 }
+
 

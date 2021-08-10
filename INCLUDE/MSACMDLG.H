@@ -2,21 +2,12 @@
  *
  *  msacmdlg.h
  *
+ *  Copyright (c) 1991-1995 Microsoft Corporation.  All Rights Reserved.
+ *
  *  Description:
  *      Audio Compression Manager Common Dialogs Identifiers
  *
  ***************************************************************************/
-
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
-#if !defined(__MSACMDLG_H)
-#define __MSACMDLG_H
 
 
 #define DLG_ACMFORMATCHOOSE_ID              70
@@ -37,4 +28,5 @@
 #define IDD_ACMFILTERCHOOSE_BTN_DELNAME     104
 
 
-#endif  /* !__MSACMDLG_H */
+
+

@@ -1,11 +1,10 @@
-/* $Header:   Y:/ADMIN/OCF/SOURCE/BOCOLE/BOLEUI/OLE2UI.H_V   1.1   15 Nov 1994 17:56:40   CQUINN  $ */
+//
 /*
  * OLE2UI.H
  *
  * Published definitions, structures, types, and function prototypes for the
  * OLE 2.0 User Interface support library.
  *
- * Copyright (c)1993 Microsoft Corporation, All Rights Reserved
  */
 
 /* NOTE: All dialog and string resource ID's defined in this file are
@@ -988,3 +987,4 @@ STDAPI_(void) SetHatchWindowSize(
 #define OLEUI_VERSION_MAGIC 0x4D42
 
 #endif  //_OLE2UI_H_
+

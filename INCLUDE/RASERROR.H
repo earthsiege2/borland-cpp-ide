@@ -1,20 +1,12 @@
-/*
+/* Copyright (c) 1992-1995, Microsoft Corporation, all rights reserved
+**
 ** raserror.h
 ** Remote Access external API
 ** RAS specific error codes
 */
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _RASERROR_H_
 #define _RASERROR_H_
-#define __RASERROR_H
 
 
 #define RASBASE 600
@@ -132,7 +124,7 @@
 #define ERROR_ACCT_EXPIRED                   (RASBASE+108)
 #define ERROR_CHANGING_PASSWORD              (RASBASE+109)
 #define ERROR_OVERRUN                        (RASBASE+110)
-#define ERROR_RASMAN_CANNOT_INITIALIZE       (RASBASE+111)
+#define ERROR_RASMAN_CANNOT_INITIALIZE	     (RASBASE+111)
 #define ERROR_BIPLEX_PORT_NOT_AVAILABLE      (RASBASE+112)
 #define ERROR_NO_ACTIVE_ISDN_LINES           (RASBASE+113)
 #define ERROR_NO_ISDN_CHANNELS_AVAILABLE     (RASBASE+114)
@@ -166,8 +158,14 @@
 #define ERROR_NO_REMOTE_ENCRYPTION           (RASBASE+142)
 #define ERROR_REMOTE_REQUIRES_ENCRYPTION     (RASBASE+143)
 #define ERROR_IPXCP_NET_NUMBER_CONFLICT      (RASBASE+144)
+#define ERROR_INVALID_SMM                    (RASBASE+145)
+#define ERROR_SMM_UNINITIALIZED              (RASBASE+146)
+#define ERROR_NO_MAC_FOR_PORT                (RASBASE+147)
+#define ERROR_SMM_TIMEOUT                    (RASBASE+148)
+#define ERROR_BAD_PHONE_NUMBER               (RASBASE+149)
+#define ERROR_WRONG_MODULE                   (RASBASE+150)
 
-#define RASBASEEND                           (RASBASE+144)
+#define RASBASEEND                           (RASBASE+150)
 
 
 #endif // _RASERROR_H_

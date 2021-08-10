@@ -650,8 +650,8 @@ TWindow::EvCommandEnable(TCommandEnabler& commandEnabler)
 void
 TWindow::RouteCommandEnable(HWND hInitCmdTarget, TCommandEnabler& commandEnabler)
 {
-  // Extra processing for commands: send the command down the command chain
-  // if we are the original receiver
+  // Extra processing for commands & commandEnablers: send the command down the
+  // command chain if we are the original receiver
   //
   if (commandEnabler.IsReceiver(*this)) {
     HWND  hCmdTarget = hInitCmdTarget;
@@ -668,13 +668,18 @@ TWindow::RouteCommandEnable(HWND hInitCmdTarget, TCommandEnabler& commandEnabler
     }
   }
 
-  TWindow::EvCommandEnable(commandEnabler);  // always call base handler
+  // Always call base handler
+  //
+  TWindow::EvCommandEnable(commandEnabler);
 
-  if (commandEnabler.IsReceiver(*this) && !commandEnabler.GetHandled()) {
-    // No one explicitly enabled/disabled the command
-    // Now run up the command chain checking for if any one is going to
-    // handle the command; if not then disable it...
-    //
+  // No one explicitly enabled/disabled the command via the enabler, so run up
+  // the command chain checking for any one who is going to handle the command
+  // itself; if not then disable it...
+  // Don't do this for command senders that don't actually generate commands,
+  // like popup menu items.
+  //
+  if (commandEnabler.IsReceiver(*this) && !commandEnabler.GetHandled()
+      && commandEnabler.SendsCommand()) {
     bool        enable = false;
     TEventInfo  eventInfo(0, commandEnabler.Id);
 
@@ -683,10 +688,9 @@ TWindow::RouteCommandEnable(HWND hInitCmdTarget, TCommandEnabler& commandEnabler
       TWindow*  cmdTarget = GetWindowPtr(hCmdTarget);
 
       if (cmdTarget && cmdTarget->Find(eventInfo)) {
-        enable = true;  // will be handled
+        enable = true;  // command will be handled, leave sender alone
         break;
       }
-
       if (!hCmdTarget || hCmdTarget == *this)
         break;
 
@@ -959,32 +963,35 @@ TWindow* _OWLFUNC GetWindowPtr(HWND hWnd, const TApplication* app)
   if (!hWnd /* && ::IsWindow(hWnd) */)  // could also check handle validity
     return 0;
 
+#if defined(BI_DATA_NEAR)
+  LPARAM param2 = app ? LPARAM(app) : 0;
+#else
+  LPARAM param2 = LPARAM(app);
+#endif
+
   // Avoid SendMessage to cutdown the overhead & message spy tool flooding
   //
   // Under Win16, need to fallback to SendMessage when the given hWnd is owned
   // by another task. Using CallWindowProc on it would result in a bad SS
   // setup when it received the message.
   //
-#if defined(BI_DATA_NEAR)
-  LPARAM lParam = app ? LPARAM(app) : 0;
+  // Under Win32 don't even try if it is not our process. Some Win32's will
+  // return a wndProc that crashes.
+  //
+#if defined(BI_PLAT_WIN16)
+  if (::GetWindowTask(hWnd) != ::GetCurrentTask())
+    return (TWindow*)::SendMessage(hWnd, GetWindowPtrMsgId, 0, param2);
 #else
-  LPARAM lParam = LPARAM(app);
+  uint32 processId;
+  ::GetWindowThreadProcessId(hWnd, &processId);
+  if (processId != ::GetCurrentProcessId())
+    return 0;
 #endif
 
-#if defined(BI_PLAT_WIN16)
-  if (::GetWindowTask(hWnd) == ::GetCurrentTask()) {
-#endif
-
-    WNDPROC wndProc = (WNDPROC)::GetWindowLong(hWnd, GWL_WNDPROC);
-    if (!wndProc)
-      return 0;
-    return (TWindow*)::CallWindowProc(wndProc, hWnd, GetWindowPtrMsgId, 0, lParam);
-
-#if defined(BI_PLAT_WIN16)
-  }
-  else
-    return (TWindow*)::SendMessage(hWnd, GetWindowPtrMsgId, 0, lParam);
-#endif
+  WNDPROC wndProc = (WNDPROC)::GetWindowLong(hWnd, GWL_WNDPROC);
+  if (!wndProc)
+    return 0;
+  return (TWindow*)::CallWindowProc(wndProc, hWnd, GetWindowPtrMsgId, 0, param2);
 }
 
 //
@@ -1650,22 +1657,21 @@ TWindow::TransferData(TTransferDirection direction)
 bool
 TWindow::Register()
 {
-  WNDCLASS  windowClass;
-  bool gc;
-
-  //
   // Only check for globally registered classes if not in an NT WoW box,
   // since WoW plays nasty games with class registration.
   //
 #if defined(BI_PLAT_WIN32)
-  gc = ToBool(::GetClassInfo(0, GetClassName(), &windowClass));
+  static bool checkGlobal = ToBool(::GetVersion()&0x80000000);  // not NT
 #else
-  static bool isWoW = ToBool(::GetWinFlags()&0x4000);
-  if (!isWoW)
+  static bool checkGlobal = !ToBool(::GetWinFlags()&0x4000);  // not WoW box
+#endif
+
+  WNDCLASS  windowClass;
+  bool gc;
+  if (checkGlobal)
     gc = ToBool(::GetClassInfo(0, GetClassName(), &windowClass));
   else
     gc = false;
-#endif
 
   if (!gc && !GetModule()->GetClassInfo(GetClassName(), &windowClass)) {
     GetWindowClass(windowClass);
@@ -2403,11 +2409,10 @@ TWindow::EvInitMenuPopup(HMENU hPopupMenu, uint /*index*/, bool sysMenu)
         id = ::GetMenuItemID(hPopupMenu, pos);
 
       else {
-        // for second level and below menus, return the implied id
-        // for popup sub-menus. The implied id for a sub-menu is the
-        // id of the first item in the popup sub-menu less 1.
-        // If there are more than one level of popup menus, it will
-        // recursively look into those sub-menus as well.
+        // For second level and below menus, return the implied id for popup
+        // sub-menus. The implied id for a sub-menu is the id of the first item
+        // in the popup sub-menu less 1. If there are more than one level of
+        // popup menus, it will recursively look into those sub-menus as well.
         //
         TMenu popupMenu(hPopupMenu);
         id = popupMenu.GetMenuItemID(pos);

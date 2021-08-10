@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -261,4 +262,5 @@ typedef HRESULT STDAPICALLTYPE (*TDllUnregisterServer)();
 typedef HRESULT STDAPICALLTYPE (*TDllRegisterCommand)(const char far* cmdLine);
 
 #endif // OCF_APPDESC_H
+
 

@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -458,3 +459,4 @@ TAutoVal::operator IUnknown&()
     return **ppunkVal;
   throw TXAuto(TXAuto::xConversionFailure);
 }
+

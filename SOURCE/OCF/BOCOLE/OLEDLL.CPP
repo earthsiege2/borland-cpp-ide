@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 // 
 // OleDLL.cpp -- DLL entry/exit points for BOLE.DLL
@@ -60,5 +60,6 @@ extern "C" BOOL WINAPI DllEntryPoint( HINSTANCE hInst, DWORD dwReason, LPVOID )
 }
 
 #endif
+
 
 

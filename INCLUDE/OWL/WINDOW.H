@@ -108,15 +108,24 @@ class _OWLCLASS TCommandEnabler {
 
     virtual void  Enable(bool enable = true);  // sets "Handled" to true
     virtual void  SetText(const char far* text) = 0;
-    enum {Unchecked, Checked, Indeterminate};
-    virtual void  SetCheck(int check) = 0;  // Unchecked, Checked, or Indeterminate
 
-    bool        GetHandled() {return Handled;}
+    enum {Unchecked, Checked, Indeterminate};
+    virtual void  SetCheck(int check) = 0;  // Pass above enum
+
+    bool        SendsCommand() const {return !(Handled&NonSender);}
+
+    bool        GetHandled() {return Handled & WasHandled;}
     bool        IsReceiver(HWND hReceiver) {return hReceiver==HWndReceiver;}
 
   protected:
+    void        SetHandled() {Handled |= WasHandled;}
     const HWND  HWndReceiver;
-    bool        Handled;
+
+    enum {WasHandled = 1, NonSender = 2};
+
+    // Will rename this member in a later rev. Use accessors to Get/Set
+    //
+    uint        Handled;
 };
 
 //

@@ -9,6 +9,11 @@
 #include <owl/owlpch.h>
 #include <owl/mdi.h>
 
+// Define to work around here in the client, the 'creating MDI child maximized
+// corrupts the menu bar' bug 
+//
+#define MDIMAX_WORKAROUND
+
 #if !defined(SECTION) || SECTION == 1
 
 DEFINE_RESPONSE_TABLE1(TMDIClient, TWindow)
@@ -177,18 +182,45 @@ TMDIClient::CloseChildren()
 }
 
 //
-// fill in default child window styles if they request style 0 since this
-// client by default has set allchildstyles
+// Handle WM_MDICREATE to perform actual creation of MDI children.
 //
 LRESULT
 TMDIClient::EvMDICreate(MDICREATESTRUCT far& createStruct)
 {
+  // Fill in default child window styles if they request style 0 since this
+  // client by default has set allchildstyles
+  //
   if ((Attr.Style&MDIS_ALLCHILDSTYLES) && !createStruct.style)
     createStruct.style =
                WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
                WS_SYSMENU | WS_CAPTION | WS_THICKFRAME |
                WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
-  return DefaultProcessing();
+
+  // Work around a Windows MDI bug w/ bad menus if MDI child is created
+  // maximized, by hiding child now & maximizing later
+  //
+#if defined(MDIMAX_WORKAROUND)
+  uint32 origStyle = createStruct.style;
+  if (createStruct.style & WS_MAXIMIZE)
+    createStruct.style &= ~(WS_MAXIMIZE | WS_VISIBLE);
+#endif
+
+  LRESULT result = DefaultProcessing();
+
+  // Finish up maximized MDI child workaround
+  //
+#if defined(MDIMAX_WORKAROUND)
+  if (HWND(result) && (origStyle & WS_MAXIMIZE)) {
+    HandleMessage(WM_MDIMAXIMIZE, WPARAM(result));
+#if defined(BI_PLAT_WIN32)
+    HandleMessage(WM_MDIREFRESHMENU);
+#else
+    HandleMessage(WM_MDISETMENU, true);
+#endif
+  }
+#endif
+
+  return result;
 }
 
 //

@@ -62,13 +62,14 @@ IDM_DRAWVIEW MENU
   MENUITEM "&Select", CM_SELECT
  }
 
- MENUITEM Separator  // Container Group (2)
- POPUP "&Zoom"
+  POPUP "&Zoom"
  {
   MENUITEM "&100%", CM_ORGSIZE, CHECKED
   MENUITEM "&200%", CM_DOUBLESIZE
   MENUITEM "&50%",  CM_HALFSIZE
  }
+
+ MENUITEM Separator  // Container Group (2)
 }
 
 

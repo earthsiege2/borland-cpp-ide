@@ -13,7 +13,6 @@
  */
 
 #if !defined(__FLAT__)
-
 #ifndef __CUSTCNTL_H    /* prevent multiple includes */
 #define __CUSTCNTL_H
 
@@ -318,12 +317,17 @@ typedef HGLOBAL (CALLBACK *LPFNLIST)
 
 #endif  /* __CUSTCNTL_H */
 
-
 #else  /* !__FLAT__ */
+/*****************************************************************************\
+*                                                                             *
+* custcntl.h -  Custom Control Library header file                            *
+*                                                                             *
+*               Copyright (c) 1992-1995, Microsoft Corp.  All rights reserved *
+*                                                                             *
+\*****************************************************************************/
 
 #ifndef _INC_CUSTCNTL
 #define _INC_CUSTCNTL
-#define __CUSTCNTL_H
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */

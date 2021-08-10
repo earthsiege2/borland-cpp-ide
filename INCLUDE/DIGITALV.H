@@ -4,27 +4,24 @@
 /*                                                                          */
 /*                              Version 1.0                                 */
 /*                                                                          */
+/*        Copyright (c) 1992-1995, Microsoft Corp.  All rights reserved.    */
+/*                                                                          */
 /*  Date            Modification                                            */
 /*  ------------    ------------                                            */
-/*  Aug 19, 1992    -Version 1.0 Release
+/*  Aug 19, 1992    -Version 1.0 Release                                    */
 /*                                                                          */
 /****************************************************************************/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _INC_DIGITALV
 #define _INC_DIGITALV  100
-#define __DIGITALV_H
+
+#if !defined(_WIN32) && !defined(LPWSTR)
+    #define LPWSTR LPSTR
+#endif
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+#endif	/* __cplusplus */
 
 #define MCI_TEST                            0x00000020L
 
@@ -78,7 +75,9 @@ extern "C" {            /* Assume C declarations for C++ */
 
 /* Window message for signal notification */
 
+#ifndef MM_MCISIGNAL
 #define MM_MCISIGNAL                        0x3CB
+#endif
 
 /* error values */
 
@@ -206,6 +205,8 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MCI_DGV_OPEN_WS                     0x00010000L
 #define MCI_DGV_OPEN_PARENT                 0x00020000L
 #define MCI_DGV_OPEN_NOSTATIC               0x00040000L
+#define MCI_DGV_OPEN_16BIT                  0x00080000L
+#define MCI_DGV_OPEN_32BIT                  0x00100000L
 
 /* flags for dwFlags parameter of MCI_PASTE command message */
 
@@ -491,7 +492,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
 } MCI_DGV_RECT_PARMS;
@@ -505,7 +506,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
 } MCI_DGV_CAPTURE_PARMSA;
@@ -515,7 +516,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
 } MCI_DGV_CAPTURE_PARMSW;
@@ -546,7 +547,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
     DWORD   dwAudioStream;
@@ -571,7 +572,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
     DWORD   dwAudioStream;
@@ -588,7 +589,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
     DWORD   dwAudioStream;
@@ -679,7 +680,7 @@ typedef MCI_DGV_MONITOR_PARMS FAR * LPMCI_DGV_MONITOR_PARMS;
 typedef struct {
     DWORD   dwCallback;
     UINT    wDeviceID;
-#ifndef WIN32
+#ifndef _WIN32
     WORD    wReserved0;
 #endif
     LPSTR   lpstrDeviceType;
@@ -687,14 +688,14 @@ typedef struct {
     LPSTR   lpstrAlias;
     DWORD   dwStyle;
     HWND    hWndParent;
-#ifndef WIN32
+#ifndef _WIN32
     WORD    wReserved1;
 #endif
 } MCI_DGV_OPEN_PARMSA;
 typedef struct {
     DWORD   dwCallback;
     UINT    wDeviceID;
-#ifndef WIN32
+#ifndef _WIN32
     WORD    wReserved0;
 #endif
     LPWSTR  lpstrDeviceType;
@@ -702,7 +703,7 @@ typedef struct {
     LPWSTR  lpstrAlias;
     DWORD   dwStyle;
     HWND    hWndParent;
-#ifndef WIN32
+#ifndef _WIN32
     WORD    wReserved1;
 #endif
 } MCI_DGV_OPEN_PARMSW;
@@ -732,7 +733,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
     DWORD   dwAudioStream;
@@ -793,7 +794,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
     DWORD   dwAudioStream;
@@ -834,7 +835,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
 } MCI_DGV_RESTORE_PARMSA;
@@ -844,7 +845,7 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
 } MCI_DGV_RESTORE_PARMSW;
@@ -1032,12 +1033,12 @@ typedef struct {
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   
+#else	
     RECT    rc;
 #endif
     HDC     hDC;
 
-#ifndef WIN32
+#ifndef _WIN32
     WORD    wReserved0;
 #endif
 } MCI_DGV_UPDATE_PARMS;
@@ -1053,11 +1054,11 @@ typedef MCI_DGV_WHERE_PARMS FAR * LPMCI_DGV_WHERE_PARMS;
 typedef struct {
     DWORD   dwCallback;
     HWND    hWnd;
-#ifndef WIN32
+#ifndef _WIN32
     WORD    wReserved1;
 #endif
     UINT    nCmdShow;
-#ifndef WIN32
+#ifndef _WIN32
     WORD    wReserved2;
 #endif
     LPSTR   lpstrText;
@@ -1065,11 +1066,11 @@ typedef struct {
 typedef struct {
     DWORD   dwCallback;
     HWND    hWnd;
-#ifndef WIN32
+#ifndef _WIN32
     WORD    wReserved1;
 #endif
     UINT    nCmdShow;
-#ifndef WIN32
+#ifndef _WIN32
     WORD    wReserved2;
 #endif
     LPWSTR  lpstrText;
@@ -1089,6 +1090,6 @@ typedef LPMCI_DGV_WINDOW_PARMSA LPMCI_DGV_WINDOW_PARMS;
 
 #ifdef __cplusplus
 }                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+#endif	/* __cplusplus */
 
 #endif  /* !_INC_DIGITALV */

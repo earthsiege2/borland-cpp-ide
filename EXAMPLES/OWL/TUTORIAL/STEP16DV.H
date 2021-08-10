@@ -243,11 +243,7 @@ class _USERCLASS TDrawListView : public TListBox, public TView {
 
     // Overridden virtuals from TWindow
     //
-    bool CanClose()
-    {
-      return TListBox::CanClose() && Doc->CanClose();
-    }
-
+    bool CanClose();
     bool Create();
 
   protected:

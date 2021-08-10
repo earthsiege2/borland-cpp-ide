@@ -1,3 +1,4 @@
+// $Header:   N:\admin\ocf\include\ocf\boleintf.h_v   2.0.1.0   10 Apr 1995 18:04:52   CQUINN  $
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -21,12 +22,14 @@
 // BOcOle DLL name, entry point and version resource
 //
 #if defined(BI_PLAT_WIN32)
-# define BOLEDLL "BOCOLEF.DLL"
+# define BOLEDLL "BOCOF.DLL"
+# define BOLEDLLW "BOCOFW.DLL"
 #else
 # define BOLEDLL "BOCOLE.DLL"
+# define BOLEDLLW BOLEDLL
 #endif
 #define BOLEBIND "CreateClassMgr"
-#define BOLE_FILEVER_LS 0x00010044L
+#define BOLE_FILEVER_LS 0x00010053L
 #define BOLE_FILEVER_MS 0x00010000L
 
 //
@@ -61,6 +64,12 @@ DEFINE_BOLEGUID(IID_IBDropDest,      0x02A115L);
 DEFINE_BOLEGUID(IID_BOleShadowData,  0x02A116L);
 DEFINE_BOLEGUID(IID_IBClass,         0x02A117L);
 DEFINE_BOLEGUID(IID_IBOverrideBrowseLinks, 0x02A118L);
+DEFINE_BOLEGUID(IID_BOleSite,        0x02A119L);
+DEFINE_BOLEGUID(IID_IBSite2,         0x02A11AL);
+DEFINE_BOLEGUID(IID_IBOverrideHelpButton,  0x02A11BL);
+DEFINE_BOLEGUID(IID_IBDataProvider2,  0x02A11CL);
+DEFINE_BOLEGUID(IID_IBPart2,          0x02A11DL);
+//DEFINE_BOLEGUID(IID_BOlePart2,        0x02A11EL);
 
 //
 // BOle Class ids for instantiating BOle objects (helpers)
@@ -75,7 +84,7 @@ const BCID  cidBOleContainer    = 6L;   // helper for part documents
 const BCID  cidBOleData         = 7L;   // helper for data transfer
 const BCID  cidBOleFactory      = 8L;   // helper for class factory
 const BCID  cidBOleShadowData   = 9L;   // helper for non delayed rendering
-const BCID  cidBOleInProcHandler= 10L;	// helper for dll handler parts
+const BCID  cidBOleInProcHandler= 10L;  // helper for dll handler parts
 
 //
 // Forward declarations
@@ -98,6 +107,11 @@ class _ICLASS IBWindow;
 class _ICLASS IBDropDest;
 class _ICLASS IBClass;
 class _ICLASS IBOverrideBrowseLinks;
+class _ICLASS IBSite2;
+class _ICLASS IBOverrideHelpButton;
+class _ICLASS IBPart2;
+class _ICLASS IBDataProvider2;
+
 
 //
 // IClassMgr abstract base class
@@ -144,9 +158,19 @@ class _ICLASS IBDataProvider : public IBDataNegotiator {
                                 const RECTL far*, TOcAspect,
                                 TOcDraw bd = drNone)               = 0;
     virtual HRESULT _IFUNC GetPartSize(TSize far*)                 = 0;
-    virtual HRESULT _IFUNC Save(IStorage far*, bool fSamAsLoad, 
+    virtual HRESULT _IFUNC Save(IStorage far*, bool fSamAsLoad,
                                 bool fRemember)                    = 0;
 };
+
+
+// IBDataProvider2 -- new version of IBDataProvider
+//
+class _ICLASS IBDataProvider2 : public IBDataProvider {
+  public:
+
+    virtual HRESULT _IFUNC SetFormatData(TOcFormatInfo far* fmt, HANDLE data, BOOL release) = 0;
+};
+
 
 //
 // IBPart -- Supported by server objects
@@ -174,6 +198,14 @@ class _ICLASS IBPart : public IBDataProvider {
 
     virtual LPOLESTR _IFUNC GetName(TOcPartName)                   = 0;
 };
+
+
+// IBPart2 -- Supported by server objects
+//
+class _ICLASS IBPart2 : public IBPart,
+                        public IBDataProvider2 {
+};
+
 
 //
 // IService abstract base class
@@ -204,9 +236,9 @@ class _ICLASS IBService : public IUnknown {
                                  TOcDropAction far*)             = 0;
     virtual IStorage FAR* _IFUNC CreateStorageOnFile(LPCOLESTR,
                                                      bool)       = 0;
-    virtual HRESULT _IFUNC ConvertUI(IBPart far*, bool, 
+    virtual HRESULT _IFUNC ConvertUI(IBPart far*, bool,
                                      TOcConvertInfo far*)        = 0;
-    virtual HRESULT _IFUNC ConvertGuts(IBPart far*, bool, 
+    virtual HRESULT _IFUNC ConvertGuts(IBPart far*, bool,
                                        TOcConvertInfo far*)      = 0;
     virtual TOcMenuEnable _IFUNC EnableEditMenu(TOcMenuEnable,
                                                 IBDataConsumer far*)= 0;
@@ -277,10 +309,10 @@ class _ICLASS IBWindow : public IUnknown {
     virtual LPCOLESTR _IFUNC GetWindowTitle()                         = 0;
     virtual void     _IFUNC AppendWindowTitle(LPCOLESTR)              = 0;
     virtual HRESULT  _IFUNC SetStatusText(LPCOLESTR)                  = 0;
-    
+
     virtual HRESULT  _IFUNC RequestBorderSpace(const TRect far*)      = 0;
     virtual HRESULT  _IFUNC SetBorderSpace(const TRect far*)          = 0;
-    
+
     virtual HRESULT  _IFUNC InsertContainerMenus(HMENU,
                                                  TOcMenuWidths far*)  = 0;
     virtual HRESULT  _IFUNC SetFrameMenu(HMENU)                       = 0;
@@ -307,7 +339,7 @@ class _ICLASS IBDropDest : public IBDataConsumer {
   public:
     virtual HRESULT  _IFUNC Drop(TOcInitInfo far*, TPoint far*,
                                  const TRect far*)                    = 0;
-    virtual void     _IFUNC DragFeedback(TPoint far*, const TRect far*, 
+    virtual void     _IFUNC DragFeedback(TPoint far*, const TRect far*,
                                          TOcMouseAction, uint, HRESULT&) = 0;
     virtual HRESULT  _IFUNC Scroll(TOcScrollDir scrollDir)            = 0;
     virtual HRESULT  _IFUNC GetScrollRect(TRect far*)                 = 0;
@@ -404,6 +436,15 @@ inline HRESULT _IFUNC I##_QueryInterface(I FAR* This, REFIID iid, LPVOID FAR* pi
     P##_QueryInterface(This, iid, pif);      \
 }
 
+#define DEFINE_INLINE_QI2(I, P1, P2) \
+inline HRESULT _IFUNC I##_QueryInterface(I FAR* This, REFIID iid, LPVOID FAR* pif) \
+{                                            \
+  return (iid == IID_##I) ?                  \
+    (*pif = This), ((P1*)This)->AddRef(), HR_OK : \
+    SUCCEEDED(P1##_QueryInterface(This, iid, pif))? HR_OK :\
+    P2##_QueryInterface(This, iid, pif);      \
+}
+
 DEFINE_INLINE_QI(IBDataNegotiator, IUnknown)
 DEFINE_INLINE_QI(IBDataConsumer, IUnknown)
 DEFINE_INLINE_QI(IBDropDest, IBDataConsumer)
@@ -427,6 +468,9 @@ DEFINE_INLINE_QI(IClassFactory, IUnknown)
 DEFINE_INLINE_QI(IBClass, IClassFactory)
 
 DEFINE_INLINE_QI(IBOverrideBrowseLinks, IUnknown)
+DEFINE_INLINE_QI(IBDataProvider2, IBDataProvider)
+DEFINE_INLINE_QI2(IBPart2, IBPart, IBDataProvider2)
+
 //----------------------------------------------------------------------------
 
 #if defined(WIN32)

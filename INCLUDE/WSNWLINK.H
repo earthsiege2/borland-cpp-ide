@@ -1,6 +1,9 @@
 /*
  *   wsnwlink.h
  *
+ *
+ *  Microsoft Windows
+ *  Copyright (C) Microsoft Corporation, 1992 - 1995.
  *   Microsoft-specific extensions to the Windows NT IPX/SPX Windows
  *   Sockets interface.  These extensions are provided for use as
  *   necessary for compatibility with existing applications.  They are
@@ -24,17 +27,12 @@
  *
  */
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WSNWLINK_
 #define _WSNWLINK_
-#define __WSNWLINK_H
+
+#ifdef __BORLANDC__
+  #include <pshpack8.h>
+#endif
 
 /*
  *   Set/get the IPX packet type.  The value specified in the
@@ -279,6 +277,10 @@ typedef struct _IPX_SPXCONNSTATUS_DATA {
  */
 
 #define IPX_IMMEDIATESPXACK     0x4010
+
+#ifdef __BORLANDC__
+  #include <poppack.h>
+#endif
 
 #endif
 

@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleFact.h --   Declares the server-side helper for allowing OLE2 to
@@ -96,3 +96,4 @@ class _ICLASS BOleInProcFactory : public BOleComponent, public IClassFactory
 };
 
 #endif
+

@@ -1104,7 +1104,7 @@ NetErrorLogWrite (
 
 #define NELOG_NetlogonAddNameFailure              (ERRLOG2_BASE + 41)
     /*
-    * Netlogon could not register the %1<1E> name for the following reason: %n%2
+    * Netlogon could not register the %1<1B> name for the following reason: %n%2
     */
 
 //
@@ -1257,5 +1257,17 @@ NetErrorLogWrite (
     * Service failed to initialize from its restored database.  Service
     * will not start.
     */
+
+//
+// More Netlogon service events
+//
+#define NELOG_NetlogonSessionTypeWrong            (ERRLOG2_BASE + 70)
+    /*
+     * The session setup to the Windows NT Domain Controller %1 from computer
+     * %2 using account %4 failed.  %2 is declared to be a BDC in domain %3.
+     * However, %2 tried to connect as either a DC in a trusted domain,
+     * a member workstation in domain %3, or as a server in domain %3.
+     * Use the Server Manager to remove the BDC account for %2.
+     */
 
 #endif // _LMERRLOG_

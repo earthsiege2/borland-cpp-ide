@@ -13,6 +13,11 @@
  */
 
 #if !defined(__FLAT__)
+/*****************************************************************************\
+*                                                                             *
+*  ddeml.h -    DDEML API header file                                         *
+*                                                                             *
+\*****************************************************************************/
 
 #ifndef __DDEML_H       /* prevent multiple includes */
 #define __DDEML_H
@@ -470,13 +475,20 @@ typedef struct tagMONCONVSTRUCT
 #endif  /* RC_INVOKED */
 
 #endif  /* __DDEML_H */
-
-
 #else  /* !__FLAT__ */
+/*++ BUILD Version: 0001 // Increment this if a change has global effects --*/
 
+/*****************************************************************************\
+*                                                                             *
+*  ddeml.h -    DDEML API header file                                         *
+*                                                                             *
+*               Version 3.10                                                  *
+*                                                                             *
+*               Copyright (c) 1993-95, Microsoft Corp.  All rights reserved.  *
+*                                                                             *
+\*****************************************************************************/
 #ifndef _INC_DDEMLH
 #define _INC_DDEMLH
-#define __DDEML_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -484,10 +496,13 @@ extern "C" {
 
 /******** public types ********/
 
-typedef DWORD           HCONVLIST;
-typedef DWORD           HCONV;
-typedef DWORD           HSZ;
-typedef DWORD           HDDEDATA;
+DECLARE_HANDLE(HCONVLIST);
+DECLARE_HANDLE(HCONV);
+DECLARE_HANDLE(HSZ);
+// Used by BIVBX
+#define _HSZ_DEFINED
+
+DECLARE_HANDLE(HDDEDATA);
 #define EXPENTRY        CALLBACK
 
 /* the following structure is for use with XTYP_WILDCONNECT processing. */
@@ -665,7 +680,7 @@ typedef HDDEDATA CALLBACK FNCALLBACK(UINT wType, UINT wFmt, HCONV hConv,
 typedef HDDEDATA (CALLBACK *PFNCALLBACK)(UINT wType, UINT wFmt, HCONV hConv,
         HSZ hsz1, HSZ hsz2, HDDEDATA hData, DWORD dwData1, DWORD dwData2);
 
-#define     CBR_BLOCK                0xffffffffL
+#define     CBR_BLOCK           ((HDDEDATA)0xffffffffL)
 
 /* DLL registration functions */
 
@@ -807,8 +822,8 @@ UINT WINAPI DdeGetLastError(DWORD idInst);
 
 #define     DMLERR_LAST                        0x4011
 
-HSZ  WINAPI DdeCreateStringHandleA(DWORD idInst, LPSTR psz, int iCodePage);
-HSZ  WINAPI DdeCreateStringHandleW(DWORD idInst, LPWSTR psz, int iCodePage);
+HSZ  WINAPI DdeCreateStringHandleA(DWORD idInst, LPCSTR psz, int iCodePage);
+HSZ  WINAPI DdeCreateStringHandleW(DWORD idInst, LPCWSTR psz, int iCodePage);
 #ifdef UNICODE
 #define DdeCreateStringHandle  DdeCreateStringHandleW
 #else
@@ -928,7 +943,7 @@ typedef struct tagMONCONVSTRUCT {
     HSZ     hszTopic;
     HCONV   hConvClient;        // Globally unique value != apps local hConv
     HCONV   hConvServer;        // Globally unique value != apps local hConv
-} MONCONVSTRUCT, PMONCONVSTRUCT;
+} MONCONVSTRUCT, *PMONCONVSTRUCT;
 
 #define     MAX_MONITORS            4
 #define     APPCLASS_MONITOR        0x00000001L
@@ -954,6 +969,4 @@ typedef struct tagMONCONVSTRUCT {
 #endif  /* __cplusplus */
 
 #endif /* _INC_DDEMLH */
-
-
 #endif  /* __FLAT__ */

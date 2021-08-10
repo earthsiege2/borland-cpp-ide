@@ -1,5 +1,7 @@
 /*++
 
+Copyright (C) 1993 - 1995 Microsoft Corporation
+
 Module Name:
 
     winperf.h
@@ -28,17 +30,8 @@ Abstract:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WINPERF_
 #define _WINPERF_
-#define __WINPERF_H
 
 //  Data structure definitions.
 

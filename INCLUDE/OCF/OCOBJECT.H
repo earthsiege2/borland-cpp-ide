@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -9,6 +10,9 @@
 
 #if !defined(OCF_OCDEFS_H)
 # include <ocf/ocdefs.h>
+#endif
+#if !defined(OCF_OCREG_H)
+# include <ocf/ocreg.h>
 #endif
 class _ICLASS IBContainer; // forward references
 class TOcVerb;
@@ -171,11 +175,12 @@ enum TOcLinkUpdate {
 };
 
 struct TOcFormatInfo {
-  WORD    Id;
-  OLECHAR Name[32];
-  OLECHAR ResultName[32];
-  uint    Medium;              // BOleMedium
-  bool    IsLinkable;
+  uint      Id;
+  OLECHAR   Name[32];
+  OLECHAR   ResultName[32];
+  ocrMedium Medium;              // BOleMedium
+  BOOL      IsLinkable;
 };
 
 #endif  // OCF_OCOBJECT_H
+

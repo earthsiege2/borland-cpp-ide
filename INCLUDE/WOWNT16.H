@@ -1,8 +1,10 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1995, Microsoft Corporation
+
 Module Name:
 
-    ntwow16.h
+    wownt16.h
 
 Abstract:
 
@@ -11,17 +13,12 @@ Abstract:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
+#ifndef _WOWNT16_
+#define _WOWNT16_
 
-#ifndef _NTWOW16_
-#define _NTWOW16_
-#define __WOWNT16_H
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 //
 // 16:16 -> 0:32 Pointer translation.
@@ -124,4 +121,8 @@ DWORD FAR CallProcEx32W( DWORD, DWORD, DWORD, ... );
 #define CPEX_DEST_STDCALL   0x00000000L
 #define CPEX_DEST_CDECL     0x80000000L
 
-#endif /* !_NTWOW16_ */
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* !_WOWNT16_ */

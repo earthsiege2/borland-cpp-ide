@@ -1,5 +1,6 @@
 /*
  *   wsnetbs.h
+ *   Copyright (c) 1994-1995, Microsoft Corp. All rights reserved.
  *
  *   Windows Sockets include file for NETBIOS.  This file contains all
  *   standardized NETBIOS information.  Include this header file after
@@ -7,17 +8,8 @@
  *
  */
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WSNETBS_
 #define _WSNETBS_
-#define __WSNETBS_H
 
 /*
  *   This is the structure of the SOCKADDR structure for NETBIOS.
@@ -37,13 +29,10 @@ typedef struct sockaddr_nb {
  *
  */
 
-#define NETBIOS_GROUP_NAME      0x80
-#define NETBIOS_UNIQUE_NAME     0x00
-#define NETBIOS_REGISTERING     0x00
-#define NETBIOS_REGISTERED      0x04
-#define NETBIOS_DEREGISTERED    0x05
-#define NETBIOS_DUPLICATE       0x06
-#define NETBIOS_DUPLICATE_DEREG 0x07
+#define NETBIOS_UNIQUE_NAME         (0x0000)
+#define NETBIOS_GROUP_NAME          (0x0001)
+#define NETBIOS_TYPE_QUICK_UNIQUE   (0x0002)
+#define NETBIOS_TYPE_QUICK_GROUP    (0x0003)
 
 /*
  * A macro convenient for setting up NETBIOS SOCKADDRs.
@@ -65,11 +54,16 @@ typedef struct sockaddr_nb {
     }
 
 /*
- *   Protocol families used in the "protocol" parameter of the socket() API.
+ *   To open a NetBIOS socket, call the socket() function as follows:
+ *
+ *       s = socket( AF_NETBIOS, {SOCK_SEQPACKET|SOCK_DGRAM}, -Lana );
+ *
+ *   where Lana is the NetBIOS Lana number of interest.  For example, to
+ *   open a socket for Lana 2, specify -2 as the "protocol" parameter
+ *   to the socket() function.
  *
  */
 
-#define NBPROTO_NETBEUI  17001
 
 #endif
 

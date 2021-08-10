@@ -34,7 +34,13 @@ BEGIN_REGISTRATION(DocReg)
   REGDATA(extension,  "p17")
   REGDATA(docfilter,  "*.p17")
   REGDOCFLAGS(dtAutoOpen | dtAutoDelete | dtUpdateDir | dtCreatePrompt | dtRegisterExt)
-//REGDATA(debugger,   "tdw")
+#if defined(BI_PLAT_WIN32)
+  REGDATA(debugger,   "TD32")
+#else
+  REGDATA(debugger,   "TDW")
+#endif
+  REGDATA(debugprogid,"DrawPad.Drawing.D.17")
+  REGDATA(debugdesc,  "DrawPad (Step17--AutoContServer, debug) Drawing")
   REGDATA(insertable, "")
   REGDATA(verb0,      "&Edit")
   REGDATA(verb1,      "&Open")
@@ -375,32 +381,28 @@ TDrawDocument::OpenSelection(int mode, const char far* path, TPoint far* where)
   char fileinfo[100];
 
   TOleDocument::Open(mode, path);   // normally path should be null
-  if (GetDocPath()) {
-    TInStream* is = (TInStream*)InStream(ofRead);
-    if (!is)
-      return false;
+  TInStream* is = (TInStream*)InStream(ofRead);
+  if (!is)
+    return false;
 
-    unsigned numLines;
-    *is >> numLines;
-    is->getline(fileinfo, sizeof(fileinfo));
-    while (numLines--) {
-      TLine line;
-      *is >> line;
-      if (where) {
-        TPoint newPos(where->x, where->y);
-        newPos -= line.GetBound().TopLeft();
-        line.UpdatePosition(newPos);
-      }
-      line.UpdateBound();
-      Lines->Add(line);
+  unsigned numLines;
+  *is >> numLines;
+  is->getline(fileinfo, sizeof(fileinfo));
+  while (numLines--) {
+    TLine line;
+    *is >> line;
+    if (where) {
+      TPoint newPos(where->x, where->y);
+      newPos -= line.GetBound().TopLeft();
+      line.UpdatePosition(newPos);
     }
-
-    delete is;
-
-    FileInfo = fileinfo;
-  } else {
-    FileInfo = string(*::Module,IDS_FILEINFO);
+    line.UpdateBound();
+    Lines->Add(line);
   }
+
+  delete is;
+
+  FileInfo = fileinfo;
   SetDirty(false);
   UndoState = UndoNone;
   return true;
@@ -409,8 +411,12 @@ TDrawDocument::OpenSelection(int mode, const char far* path, TPoint far* where)
 bool
 TDrawDocument::Close()
 {
-  Lines->Flush();
-  return TOleDocument::Close();
+  if (TOleDocument::Close()) {
+    Lines->Flush();
+    return true;
+  }
+
+  return false;
 }
 
 TLine*
@@ -1285,6 +1291,20 @@ TDrawListView::TDrawListView(TDrawDocument& doc,TWindow *parent)
   Attr.Style |= LBS_NOINTEGRALHEIGHT;
   Attr.AccelTable = IDA_DRAWLISTVIEW;
   SetViewMenu(new TMenuDescr(IDM_DRAWLISTVIEW));
+}
+
+bool
+TDrawListView::CanClose()
+{
+  TView* curView = Doc->GetViewList();
+  while (curView) {
+    if (curView != this)
+      return true;
+
+    curView = curView->GetNextView();
+  }
+
+  return Doc->CanClose();
 }
 
 bool

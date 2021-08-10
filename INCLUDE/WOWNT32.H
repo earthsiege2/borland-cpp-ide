@@ -1,8 +1,10 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
+Copyright (c) 1995, Microsoft Corporation
+
 Module Name:
 
-    ntwow32.h
+    wownt32.h
 
 Abstract:
 
@@ -11,17 +13,12 @@ Abstract:
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _WOWNT32_
 #define _WOWNT32_
-#define __WOWNT32_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 //
 // 16:16 -> 0:32 Pointer translation.
@@ -42,17 +39,17 @@ Abstract:
 //
 
 LPVOID WINAPI WOWGetVDMPointer(DWORD vp, DWORD dwBytes,
-			       BOOL fProtectedMode);
+                               BOOL fProtectedMode);
 
 //
 // The following two functions are here for compatibility with
-// Windows Chicago.  On Chicago, the global heap can be rearranged,
+// Windows 95.  On Win95, the global heap can be rearranged,
 // invalidating flat pointers returned by WOWGetVDMPointer, while
 // a thunk is executing.  On Windows NT, the 16-bit VDM is completely
 // halted while a thunk executes, so the only way the heap will
 // be rearranged is if a callback is made to Win16 code.
 //
-// The Chicago versions of these functions call GlobalFix to
+// The Win95 versions of these functions call GlobalFix to
 // lock down a segment's flat address, and GlobalUnfix to
 // release the segment.
 //
@@ -65,7 +62,7 @@ LPVOID WINAPI WOWGetVDMPointer(DWORD vp, DWORD dwBytes,
 //
 
 LPVOID WINAPI WOWGetVDMPointerFix(DWORD vp, DWORD dwBytes,
-				  BOOL fProtectedMode);
+                                  BOOL fProtectedMode);
 VOID WINAPI WOWGetVDMPointerUnfix(DWORD vp);
 
 
@@ -149,8 +146,8 @@ WORD WINAPI WOWHandle16 (HANDLE, WOW_HANDLE_TYPE);
 #define HBRUSH_32(h16)    ((HBRUSH)    (WOWHandle32(h16, WOW_TYPE_HBRUSH)))
 #define HPALETTE_32(h16)  ((HPALETTE)  (WOWHandle32(h16, WOW_TYPE_HPALETTE)))
 #define HPEN_32(h16)      ((HPEN)      (WOWHandle32(h16, WOW_TYPE_HPEN)))
-#define HACCEL_32(h16)    ((HACCEL)    (WOWHandle32(h16, WOW_TYPE_HACCEL)))
-#define HTASK_32(h16)     ((DWORD)     (WOWHandle32(h16, WOW_TYPE_HTASK)))
+#define HACCEL_32(h16)	  ((HACCEL)    (WOWHandle32(h16, WOW_TYPE_HACCEL)))
+#define HTASK_32(h16)	  ((DWORD)     (WOWHandle32(h16, WOW_TYPE_HTASK)))
 #define FULLHWND_32(h16)  ((HWND)      (WOWHandle32(h16, WOW_TYPE_FULLHWND)))
 
 #define HWND_16(h32)      (WOWHandle16(h32, WOW_TYPE_HWND))
@@ -165,8 +162,8 @@ WORD WINAPI WOWHandle16 (HANDLE, WOW_HANDLE_TYPE);
 #define HBRUSH_16(h32)    (WOWHandle16(h32, WOW_TYPE_HBRUSH))
 #define HPALETTE_16(h32)  (WOWHandle16(h32, WOW_TYPE_HPALETTE))
 #define HPEN_16(h32)      (WOWHandle16(h32, WOW_TYPE_HPEN))
-#define HACCEL_16(h32)    (WOWHandle16(h32, WOW_TYPE_HACCEL))
-#define HTASK_16(h32)     (WOWHandle16(h32, WOW_TYPE_HTASK))
+#define HACCEL_16(h32)	  (WOWHandle16(h32, WOW_TYPE_HACCEL))
+#define HTASK_16(h32)	  (WOWHandle16(h32, WOW_TYPE_HTASK))
 
 //
 // Generic Callbacks.
@@ -251,11 +248,15 @@ DWORD WINAPI WOWCallback16(DWORD vpfn16, DWORD dwParam);
 #define WCB16_CDECL      (0x1)
 
 BOOL WINAPI WOWCallback16Ex(
-		DWORD  vpfn16,
-		DWORD  dwFlags,
-		DWORD  cbArgs,
-		PVOID  pArgs,
-		PDWORD pdwRetCode
-		);
+                DWORD  vpfn16,
+                DWORD  dwFlags,
+                DWORD  cbArgs,
+                PVOID  pArgs,
+                PDWORD pdwRetCode
+                );
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* !_WOWNT32_ */

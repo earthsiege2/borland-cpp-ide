@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 // 
 // BOleCMan.cpp -- Declares an IBClassMgr "factory" which can create Bolero
@@ -48,7 +48,7 @@ BOleClassManager::BOleClassManager(IBUnknownMain *pObj) :
 	nServerCount = 0;
 }
 
-
+//
 
 BOleClassManager::~BOleClassManager()
 {
@@ -150,6 +150,7 @@ HRESULT PASCAL FAR _export _loadds CreateClassMgr (
 	*pCM = new BOleClassManager (AsPIUnknownMain(pOuter));
 	return (*pCM) ?NOERROR:ResultFromScode(E_OUTOFMEMORY);
 }
+
 
 
 

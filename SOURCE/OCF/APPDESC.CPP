@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -73,7 +74,8 @@ void TAppDescriptor::Init(IMalloc* alloc)
   //
   if (Options & amExeModule) {   // inproc servers are multiple-use
     const char* usage = RegInfo.Lookup("usage");
-    if (usage && *usage == *ocrSingleUse)
+    char su[] = ocrSingleUse;
+    if (usage && *usage == *su)
       Options |= amSingleUse;
   }
 
@@ -804,4 +806,5 @@ TAutoClass::TClassList::MergeAutoClasses(TAutoClass::TAutoClassRef* array)
     array = link->Classes->MergeAutoClasses(array);
   return array;
 }
+
 

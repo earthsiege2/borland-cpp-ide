@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 //
 // BOleDoc.cpp --	Implements the Bolero half of the document-level
@@ -31,6 +31,21 @@ DEFINE_INLINE_QI(IOleUILinkContainer, IUnknown)
 
 // CLIPFORMAT is a WORD while RegisterClipboardFormat returns a UINT
 
+#ifdef ANSI
+CLIPFORMAT BOleDocument::oleEmbdObjClipFmt   = RegisterClipboardFormatA("Embedded Object");
+CLIPFORMAT BOleDocument::oleEmbSrcClipFmt    = RegisterClipboardFormatA("Embed Source");
+CLIPFORMAT BOleDocument::oleLinkSrcClipFmt   = RegisterClipboardFormatA("Link Source");
+CLIPFORMAT BOleDocument::oleLinkSrcDescFmt	= RegisterClipboardFormatA("Link Source Descriptor");
+
+CLIPFORMAT BOleDocument::oleLinkClipFmt      = RegisterClipboardFormatA("ObjectLink");
+CLIPFORMAT BOleDocument::oleNativeClipFmt    = RegisterClipboardFormatA("Native");
+CLIPFORMAT BOleDocument::oleOwnerLinkClipFmt = RegisterClipboardFormatA("OwnerLink");
+CLIPFORMAT BOleDocument::oleObjectDescFmt    = RegisterClipboardFormatA("Object Descriptor");
+
+UINT BOleDocument::dragScrollInset = GetProfileIntA ("windows", "DragScrollInset", DD_DEFSCROLLINSET);
+UINT BOleDocument::dragScrollDelay = GetProfileIntA ("windows", "DragScrollDelay", DD_DEFSCROLLDELAY);
+UINT BOleDocument::dragScrollInterval = GetProfileIntA ("windows", "DragScrollInterval", DD_DEFSCROLLINTERVAL);
+#else
 CLIPFORMAT BOleDocument::oleEmbdObjClipFmt   = RegisterClipboardFormat (OLESTR("Embedded Object"));
 CLIPFORMAT BOleDocument::oleEmbSrcClipFmt    = RegisterClipboardFormat (OLESTR("Embed Source"));
 CLIPFORMAT BOleDocument::oleLinkSrcClipFmt   = RegisterClipboardFormat (OLESTR("Link Source"));
@@ -44,6 +59,7 @@ CLIPFORMAT BOleDocument::oleObjectDescFmt    = RegisterClipboardFormat (OLESTR("
 UINT BOleDocument::dragScrollInset = GetProfileInt (OLESTR("windows"), OLESTR("DragScrollInset"), DD_DEFSCROLLINSET);
 UINT BOleDocument::dragScrollDelay = GetProfileInt (OLESTR("windows"), OLESTR("DragScrollDelay"), DD_DEFSCROLLDELAY);
 UINT BOleDocument::dragScrollInterval = GetProfileInt (OLESTR("windows"), OLESTR("DragScrollInterval"), DD_DEFSCROLLINTERVAL);
+#endif
 
 #ifdef OLEDBG
 OLEDBGDATA;
@@ -336,7 +352,7 @@ HRESULT _IFUNC BOleDocument::BrowseLinks ()
 	fInBrowseLinks--;
 
 	if (r == 1)
-		return ResultFromScode (S_OK); //PHP this isn't really dirty...
+		return ResultFromScode (S_OK); //
 	return ResultFromScode (S_FALSE);
 }
 
@@ -386,8 +402,8 @@ HRESULT _IFUNC BOleDocument::RequestBorderSpace (LPCRECT prectWidths)
 
 HRESULT _IFUNC BOleDocument::SetBorderSpace (LPCBORDERWIDTHS prectWidths)
 {
-	// PHP Can we use RestoreUI instead of promulgating the semantics of
-	// SetBorderSpace (NULL)?
+
+
 
 	OLERET(SUCCEEDED(pContainer->SetBorderSpace(prectWidths))
 		? S_OK : OLE_E_INVALIDRECT);
@@ -525,7 +541,7 @@ BOleScroll _IFUNC BOleDocument::DragScrollReqd (POINTL *where)
 	//
 	BOleScroll ret = (BOleScroll) 0;
 	POINT shortWhere = {where->x, where->y};
-	HWND w = pContainer->GetWindow(); // PHP Cache this;
+	HWND w = pContainer->GetWindow(); //
 	WIN::ScreenToClient (w, &shortWhere);
 	if (::PtInRect (&rcScrollLeft, shortWhere))
 		ret = ret | BOLE_SCROLL_RIGHT;
@@ -936,7 +952,7 @@ HRESULT _IFUNC BOleDocument::Drop (IDataObject *dataObj, DWORD keyState,
 			bii.whereHandle.dataFormat = cf;
 			bii.whereHandle.data = pService->GetDataFromDataObject (
 				dataObj, cf, NULL, DVASPECT_CONTENT, &medium);
-				//PHP need to release medium?
+
 			bii.pStorage = NULL;
 		}
 
@@ -1213,9 +1229,9 @@ HRESULT _IFUNC BOleDocument::SetMenu (HMENU hmenuShared, HOLEMENU holeMenu, HWND
 
 HRESULT _IFUNC BOleDocument::RemoveMenus (HMENU hmenuShared)
 {
-	// PHP I'm not sure about this logic. Are we sure we can remove
-	// *all* the menus in this hMenu? What about the server's menus?
-	// Do we need to send this back to the client?
+
+
+
 	BOOL fNoError = TRUE;
 
 	// Remove container group menus
@@ -1248,4 +1264,5 @@ HRESULT _IFUNC BOleDocument::TranslateAccelerator (MSG FAR* msg, WORD wID)
 	msg->hwnd = oldhwnd;
 	return hr;
 }
+
 

@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -88,3 +89,4 @@ class _ICLASS TOcDocument {
 };
 
 #endif  // OCF_OCDOC_H
+

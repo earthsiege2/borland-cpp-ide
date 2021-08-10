@@ -344,7 +344,7 @@ TAppDictPidImp::AllocTable(int count)
 {
   TAppDictionary::TEntry* entries;
 #if defined(LOCALALLOC_TABLE)
-  entries = (TAppDictionary::TEntry*)LocalLock(LocalAlloc(LMEM_ZEROINIT,
+  entries = (TAppDictionary::TEntry*)::LocalLock(::LocalAlloc(LMEM_ZEROINIT,
                 count * sizeof(TAppDictionary::TEntry)));
   if (!entries)
     THROW( xalloc(__FILE__ __LINE__, count * sizeof(TAppDictionary::TEntry)) );
@@ -365,14 +365,14 @@ TAppDictPidImp::FreeTable(TAppDictionary::TEntry* table)
   if (!table)
     return;
 #if defined(BI_PLAT_WIN32)
-  HLOCAL  hMem = LocalHandle(table);
+  HLOCAL  hMem = ::LocalHandle(table);
 #else
-  HLOCAL  hMem = LocalHandle((void NEAR*)FP_OFF(table));  // strip off ds:
+  HLOCAL  hMem = ::LocalHandle((void NEAR*)FP_OFF(table));  // strip off ds:
 #endif
-  if (LocalUnlock(hMem))
-    LocalFree(hMem);
+  if (::LocalUnlock(hMem))
+    ::LocalFree(hMem);
 #else
-  delete [] table;
+  delete[] table;
 #endif
 }
 
@@ -404,3 +404,24 @@ TAppDictPidImp::GrowTable()
 }
 
 #endif  // defined(BI_APP_DLL)
+
+//
+// Global function that calls GetApplication() on owl's app-dictionary.
+// Used by EXEs, or DLLs statically linking Owl. Never returns 0, will make
+// an alias app if needed. Primarily for compatibility
+//
+TApplication* _OWLFUNC GetApplicationObject(unsigned pid)
+{
+  TApplication* app = ::OwlAppDictionary.GetApplication(pid);
+  if (app)
+    return app;
+
+  // Make alias app (will add itself to dictionary) because Owl always needs an
+  // app around. If the app is non-Owl, no TApplication will have been
+  // constructed.
+  // Override default constructor argument to prevent overwrite of ::Module,
+  // and pass the default dictionary.
+  //
+  TModule* tempModule;
+  return new TApplication("ALIAS", tempModule, &OwlAppDictionary);
+}

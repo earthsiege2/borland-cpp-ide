@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -33,7 +34,8 @@ TOcView::TOcView(TOcDocument& doc, TRegList* regList, IUnknown* outer)
   WinTitle(*new string),
   Origin(*new TPoint(0,0)),
   Extent(*new TSize(0,0)),
-  FormatList(*new TOcFormatList)
+  FormatList(*new TOcFormatList),
+  OrgTitle(*new TString)
 #else
   Origin(0,0),
   Extent(0,0)
@@ -83,6 +85,7 @@ TOcView::~TOcView()
   delete &FormatList;
   delete &Origin;
   delete &Extent;
+  delete &OrgTitle;
 #endif
 }
 
@@ -267,6 +270,12 @@ TOcView::BrowseLinks()
   return BDocumentI ? HRSucceeded(BDocumentI->BrowseLinks()) : false;
 }
 
+bool
+TOcView::UpdateLinks()
+{
+  return BDocumentI ? HRSucceeded(BDocumentI->UpdateLinks()) : false;
+}
+
 void
 TOcView::Rename()
 {
@@ -353,7 +362,7 @@ TOcView::ForwardEvent(int eventId, uint32 param)
 HRESULT _IFUNC
 TOcView::Init(LPCOLESTR path)
 {
-  bool result = (bool)ForwardEvent(OC_VIEWOPENDOC, path);
+  bool result = (bool)ForwardEvent(OC_VIEWOPENDOC, (const char far*)OleStr(path));
   if (result) {
     // register this document in running object table
     //
@@ -462,7 +471,8 @@ TOcView::GetWindowTitle()
 {
   // Delegate to app's view window to get its title
   //
-  return (LPCOLESTR)ForwardEvent(OC_VIEWTITLE);
+  OrgTitle = (const char far*)ForwardEvent(OC_VIEWTITLE);
+  return (LPCOLESTR)OrgTitle;
 }
 
 //
@@ -811,7 +821,7 @@ TOcFormat::TOcFormat()
   RegName[0] = 0;
   strcpy(Name, fstr);
   strcpy(ResultName, fstr);
-  Medium     = 0;
+  Medium     = ocrNull;
   IsLinkable = false;
   Aspect     = 1;  // content
   Direction  = 1;  // get
@@ -821,8 +831,8 @@ TOcFormat::TOcFormat(uint id, char far* name, char far* resultName,
                      uint medium, bool isLinkable,
                      uint aspect, uint direction)
 {
-  Id         = id;
-  Medium     = medium;
+  Id         = (WORD)id;
+  Medium     = (ocrMedium)medium;
   IsLinkable = isLinkable;
   Aspect     = aspect;
   Direction  = direction;
@@ -847,15 +857,16 @@ TOcFormat::GetFormatInfo(TOcFormatInfo far& f)
 {
   f.Id = uint16(Id);
 #if defined(BI_OLECHAR_WIDE)
-  lstrcpyW(f.Name, OleStr(Name));
-  lstrcpyW(f.ResultName, OleStr(ResultName));
+//  lstrcpyW(f.Name, OleStr(Name));
+  memcpy(f.Name, (LPCWSTR)OleStr(Name), (strlen(Name)+1)*2);
+// lstrcpyW(f.ResultName, OleStr(ResultName));
+  memcpy(f.ResultName, (LPCWSTR)OleStr(ResultName), (strlen(ResultName)+1)*2);
 #else
   strncpy(f.Name, Name, sizeof Name);
   strncpy(f.ResultName, ResultName, sizeof ResultName);
 #endif
-//  f.Medium = (BOleMedium)Medium;
-  f.Medium = Medium;
-  f.IsLinkable = IsLinkable;
+  f.Medium = (ocrMedium)Medium;
+  f.IsLinkable = (BOOL)IsLinkable;
 }
 
 void
@@ -1009,3 +1020,4 @@ TOcScaleFactor::Reset()
   PartSize.cx = PartSize.cy = 1;
   SiteSize.cx = SiteSize.cy = 1;
 }
+

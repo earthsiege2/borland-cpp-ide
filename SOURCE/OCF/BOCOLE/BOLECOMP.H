@@ -1,4 +1,4 @@
-
+//
 //**************************************************************************
 // 
 // BOleComp.h --   Provides a default IUnknownMain implementation for all
@@ -53,3 +53,4 @@ public:
 };
 
 #endif
+

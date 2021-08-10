@@ -1,5 +1,7 @@
 /*++ BUILD Version: 0002    // Increment this if a change has global effects
 
+Copyright (c) 1991-1995  Microsoft Corporation
+
 Module Name:
 
     lmsname.h
@@ -8,32 +10,15 @@ Abstract:
 
     This file contains service name strings.  It is included by lmsvc.h.
 
-Author:
-
-    Rita Wong (ritaw)     14-Feb-1992
-
 Environment:
 
     User Mode -Win32
 
-Revision History:
-
-    01-May-1992 JohnRo
-        Added equates for old-style names (SERVICE_LM20_xxx).
 
 --*/
 
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
- */
-
 #ifndef _LMSNAME_
 #define _LMSNAME_
-#define __LMSNAME_H
 
 //
 //  Standard LAN Manager service names.
@@ -113,6 +98,6 @@ Revision History:
 #define SERVICE_LM20_NWSAP        SERVICE_NWSAP
 #define NWSAP_DISPLAY_NAME        TEXT("NW Sap Agent")
 
-#endif
+#define SERVICE_NWCS           TEXT("NWCWorkstation")
 
-
+#endif

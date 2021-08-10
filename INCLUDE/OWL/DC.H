@@ -25,7 +25,7 @@ class _OWLCLASS TRegion;
 class _OWLCLASS TMetaFilePict;
 
 #if defined(BI_PLAT_WIN32)
-# define OLDFONTENUMPROC FONTENUMPROC
+// # define OLDFONTENUMPROC FONTENUMPROC
 #else
   // Win 32 object defines for 16 bit GetCurrentObject emulation
 # define OBJ_PEN         1

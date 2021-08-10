@@ -51,7 +51,7 @@ TControl::TControl(TWindow*   parent,
   TWindow(parent, 0, module)
 {
   if (HIWORD(Title))
-    delete Title;     // Free memory allocated by TWindow's constructor
+    delete[] Title;     // Free memory allocated by TWindow's constructor
   Title = 0;
 
   SetFlag(wfFromResource);

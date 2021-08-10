@@ -1,38 +1,42 @@
-/*
- *      C/C++ Run Time Library - Version 6.5
- *
- *      Copyright (c) 1994 by Borland International
- *      All Rights Reserved.
- *
+/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+
+
+/* File created by MIDL compiler version 2.00.0102 */
+/* at Fri Apr 28 07:02:29 1995
  */
+//@@MIDL_FILE_HEADING(  )
+#include "rpc.h"
+#include "rpcndr.h"
 
 #ifndef __wtypes_h__
 #define __wtypes_h__
-#define __WTYPE_H
-
-#include "rpc.h"
-#include "rpcndr.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-/* Forward Declarations */
+/* Forward Declarations */ 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * );
+void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
 #ifndef __IWinTypes_INTERFACE_DEFINED__
 #define __IWinTypes_INTERFACE_DEFINED__
 
 /****************************************
  * Generated header for interface: IWinTypes
- * at Mon Aug 29 14:02:57 1994
- * using MIDL 2.00.71
+ * at Fri Apr 28 07:02:29 1995
+ * using MIDL 2.00.0102
  ****************************************/
 /* [auto_handle][unique][version][uuid] */ 
 
 
+//+-------------------------------------------------------------------------
+//
+//  Microsoft Windows
+//  Copyright (C) Microsoft Corporation, 1992 - 1995.
+//
+//--------------------------------------------------------------------------
 			/* size is 8 */
 typedef struct  tagRemHGLOBAL
     {
@@ -82,7 +86,7 @@ typedef struct  tagRemBRUSH
     /* [size_is] */ byte data[ 1 ];
     }	RemHBRUSH;
 
-#ifndef WIN32           // The following code is for Win16 only
+#ifndef _WIN32           // The following code is for Win16 only
 #ifndef WINAPI          // If not included with 3.1 headers... 
 #define FAR             _far
 #define PASCAL          _pascal
@@ -429,7 +433,7 @@ typedef struct tagSIZEL __RPC_FAR *LPSIZEL;
 
 #endif  //WINAPI
 #endif  //!WIN32
-#if defined(WIN32) && !defined(OLE2ANSI)
+#if defined(_WIN32) && !defined(OLE2ANSI)
 			/* size is 2 */
 typedef WCHAR OLECHAR;
 
@@ -446,10 +450,10 @@ typedef LPSTR     LPOLESTR;
 typedef LPCSTR    LPCOLESTR;
 #define OLESTR(str) str
 #endif
+#ifndef _WINDEF_
 			/* size is 4 */
 typedef const RECTL __RPC_FAR *LPCRECTL;
 
-#ifndef _WINDEF_
 			/* size is 4 */
 typedef void __RPC_FAR *PVOID;
 
@@ -471,6 +475,9 @@ typedef struct tagRECT __RPC_FAR *PRECT;
 			/* size is 4 */
 typedef struct tagRECT __RPC_FAR *LPRECT;
 
+			/* size is 4 */
+typedef const RECT __RPC_FAR *LPCRECT;
+
 #endif  //_WINDEF_
 			/* size is 1 */
 typedef unsigned char UCHAR;
@@ -489,7 +496,7 @@ typedef DWORD ULONG;
 typedef hyper LONGLONG;
 
 			/* size is 8 */
-typedef unsigned hyper ULONGLONG;
+typedef MIDL_uhyper ULONGLONG;
 
 			/* size is 4 */
 typedef LONGLONG __RPC_FAR *PLONGLONG;
@@ -718,6 +725,10 @@ enum tagMEMCTX
 #define _ROTFLAGS_DEFINED
 #define ROTFLAGS_REGISTRATIONKEEPSALIVE 1
 #endif // !_ROTFLAGS_DEFINED
+#ifndef _ROT_COMPARE_MAX_DEFINED
+#define _ROT_COMPARE_MAX_DEFINED
+#define ROT_COMPARE_MAX 2048
+#endif // !_ROT_COMPARE_MAX_DEFINED
 			/* size is 2 */
 typedef 
 enum tagCLSCTX
@@ -740,7 +751,8 @@ typedef
 enum tagMSHCTX
     {	MSHCTX_LOCAL	= 0,
 	MSHCTX_NOSHAREDMEM	= 1,
-	MSHCTX_DIFFERENTMACHINE	= 2
+	MSHCTX_DIFFERENTMACHINE	= 2,
+	MSHCTX_INPROC	= 3
     }	MSHCTX;
 
 			/* size is 2 */
@@ -784,9 +796,6 @@ typedef /* [context_handle] */ void __RPC_FAR *HCONTEXT;
 typedef DWORD LCID;
 
 #endif // !_LCID_DEFINED
-			/* size is 4 */
-typedef const RECT __RPC_FAR *LPCRECT;
-
 void __RPC_API HGLOBAL_to_xmit (HGLOBAL __RPC_FAR *, RemHGLOBAL __RPC_FAR * __RPC_FAR *);
 void __RPC_API HGLOBAL_from_xmit (RemHGLOBAL __RPC_FAR *, HGLOBAL __RPC_FAR *);
 void __RPC_API HGLOBAL_free_inst (HGLOBAL __RPC_FAR *);

@@ -44,11 +44,11 @@ class _USERCLASS TOleWindow : public TWindow {
     TOcApp*      GetOcApp() {return OcApp;}
     bool         HasActivePart();
     bool         SelectEmbedded() {return DragPart != 0;}
-    bool         OleShutDown();
 
     bool IsOpenEditing() const;
     bool IsRemote() const {return Remote;}
 
+    virtual bool OleShutDown();
     virtual void SetupDC(TDC& dc, bool scale = true);
     virtual TOcView* CreateOcView(TRegLink* link, bool isRemote, IUnknown* outer);
 
@@ -87,8 +87,6 @@ class _USERCLASS TOleWindow : public TWindow {
 
     virtual bool EvOcViewPartInvalid(TOcPartChangeInfo& changeInfo);
 
-    void EvClose();
-    void CmFileClose();
     void CeFileClose(TCommandEnabler& ce);
 
     void CmEditDelete();
@@ -155,6 +153,7 @@ class _USERCLASS TOleWindow : public TWindow {
     bool   EvOcViewShowTools(TOcToolBarInfo far& tbi);
     bool   EvOcViewGetPalette(LOGPALETTE far* far* palette);
     bool   EvOcViewClipData(TOcFormatData far& format);
+    bool   EvOcViewSetData(TOcFormatData far& format);
     bool   EvOcViewClose();
     bool   EvOcViewPartSize(TOcPartSize far& size);
     bool   EvOcViewOpenDoc(const char far* path);
@@ -163,6 +162,7 @@ class _USERCLASS TOleWindow : public TWindow {
     bool   EvOcViewGetItemName(TOcItemName& item);
     bool   EvOcViewSetLink(TOcLinkView& view);
     bool   EvOcViewBreakLink(TOcLinkView& view);
+    bool   EvOcViewDoVerb(uint verb);
 
     TPopupMenu* CreateVerbPopup(const TOcVerb& ocVerb);
     void EvDoVerb(uint whichVerb);
@@ -185,6 +185,9 @@ class _USERCLASS TOleWindow : public TWindow {
 
     bool              Remote;             // Using a remote OC view?
     bool              ShowObjects;        // Show embedded part frames?
+
+    int               MinWidth;           // minimum width of part
+    int               MinHeight;          // minimum height of part
 
   DECLARE_RESPONSE_TABLE(TOleWindow);
 };

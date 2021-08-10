@@ -11,14 +11,10 @@
 # define INC_OLE2      // Make sure we get Ole2 headers
 #endif
 #include <osl/ustring.h>
+#include <osl/inlines.h>
 #include <string.h>
 
 TUString TUString::Null;   // null TAutoStrings reference this object
-
-#if !defined(BI_HAS_WCHAR)
-# define lstrcpyA lstrcpy
-# define lstrlenA lstrlen
-#endif
 
 #if defined(BI_HAS_WCHAR)
 //
@@ -63,7 +59,7 @@ char* TUString::ChangeToCopy()
       return 0;
     case isConst:
       src = Const;
-      len = lstrlenA(Const);
+      len = strlen(Const);
       break;
     case isCopy:
       return Copy;
@@ -94,7 +90,7 @@ char* TUString::ChangeToCopy()
   }
   if (!dst) {
     dst = new char[len+1];
-    _fmemcpy(dst, src, len+1);
+    memcpy(dst, src, len+1);
   }
   if (Kind == isBstr)
     ::SysFreeString(Bstr);
@@ -124,7 +120,7 @@ wchar_t* TUString::ChangeToWCopy()
       break;
     case isWConst:
       src = WConst;
-      len = lstrlenW(WConst);
+      len = strlen(WConst);
       break;
     case isWCopy:
       return WCopy;
@@ -149,7 +145,7 @@ wchar_t* TUString::ChangeToWCopy()
   }
   if (!dst) {
     dst = new wchar_t[len+1];
-    _fmemcpy(dst, src, (len+1) * sizeof(wchar_t));
+    memcpy(dst, src, (len+1) * sizeof(wchar_t));
   }
   Kind = isWCopy;
   WCopy = dst;
@@ -170,8 +166,8 @@ inline TUString::TUString(char& str)
 :
   Kind(isCopy), RefCnt(1), Lang(0)
 {
-  Copy = new char[lstrlenA(&str)+1];
-  lstrcpyA(Copy, &str);
+  Copy = new char[strlen(&str)+1];
+  strcpy(Copy, &str);
 }
 
 #if defined(BI_HAS_WCHAR)
@@ -185,8 +181,8 @@ inline TUString::TUString(wchar_t& str)
 :
   Kind(isWCopy), RefCnt(1), Lang(0)
 {
-  WCopy = new wchar_t[lstrlenW(&str)+1];
-  lstrcpyW(WCopy, &str);
+  WCopy = new wchar_t[strlen(&str)+1];
+  strcpy(WCopy, &str);
 }
 #endif
 
@@ -250,8 +246,8 @@ TUString* TUString::Assign(const TUString& s)
   else
     --*this;
 
-  const_cast<TUString&>(s).RefCnt++;
-  return &const_cast<TUString&>(s);
+  CONST_CAST(TUString&,s).RefCnt++;
+  return &CONST_CAST(TUString&,s);
 }
 
 TUString* TUString::Assign(const string& s)
@@ -287,8 +283,8 @@ TUString* TUString::Assign(char* s)
   if (s && *s && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
     Free();
     Kind = isCopy;
-    Copy = new char[lstrlenA(s)+1];
-    lstrcpyA(Copy, s);
+    Copy = new char[strlen(s)+1];
+    strcpy(Copy, s);
     return this;
   }
   else {
@@ -317,8 +313,8 @@ TUString* TUString::Assign(wchar_t* s)
   if (s && *s && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
     Free();
     Kind = isWCopy;
-    WCopy = new wchar_t[lstrlenW(s)+1];
-    lstrcpyW(WCopy, s);
+    WCopy = new wchar_t[strlen(s)+1];
+    strcpy(WCopy, s);
     return this;
   }
   else {
@@ -355,13 +351,13 @@ TUString::operator const char far*() const
     case isString:  return ((string*)&String)->c_str();
 #if defined(BI_OLECHAR_WIDE)
     case isBstr:
-    case isExtBstr: return const_cast<TUString*>(this)->ChangeToCopy();
+    case isExtBstr: return CONST_CAST(TUString*,this)->ChangeToCopy();
 #else
     case isBstr:
     case isExtBstr: return Bstr;
 #endif
     case isWConst:
-    case isWCopy:   return const_cast<TUString*>(this)->ChangeToCopy();
+    case isWCopy:   return CONST_CAST(TUString*,this)->ChangeToCopy();
   }
   return 0; // suppress warning
 }
@@ -383,11 +379,11 @@ TUString::operator const wchar_t*() const
     case isExtBstr: return Bstr;
 #else
     case isBstr:
-    case isExtBstr: return const_cast<TUString*>(this)->ChangeToWCopy();
+    case isExtBstr: return CONST_CAST(TUString*,this)->ChangeToWCopy();
 #endif
     case isConst:
     case isCopy: 
-    case isString:  return const_cast<TUString*>(this)->ChangeToWCopy();
+    case isString:  return CONST_CAST(TUString*,this)->ChangeToWCopy();
   }
   return 0; // suppress warning
 }
@@ -406,13 +402,13 @@ int TUString::Length() const
   switch (Kind) {
     case isNull:    return 0;
 #if defined(BI_HAS_WCHAR)
-    case isWConst:  return lstrlenW(WConst);
-    case isWCopy:   return lstrlenW(WCopy);
+    case isWConst:  return strlen(WConst);
+    case isWCopy:   return strlen(WCopy);
 #endif
     case isBstr:
     case isExtBstr: return ::SysStringLen(Bstr);
-    case isConst:   return lstrlenA(Const);
-    case isCopy:    return lstrlenA(Copy);
+    case isConst:   return strlen(Const);
+    case isCopy:    return strlen(Copy);
     case isString:  return ((string*)&String)->length();
   }
   return 0; // suppress warning
@@ -432,11 +428,11 @@ void TUString::RevokeBstr(BSTR s)
   }
   Kind = isCopy;
 #if defined(BI_OLECHAR_WIDE)
-  WCopy = new wchar_t[lstrlenW(s)+1];
-  lstrcpyW(WCopy, s);
+  WCopy = new wchar_t[strlen(s)+1];
+  strcpy(WCopy, s);
 #else
-  Copy = new char[lstrlenA(s)+1];
-  lstrcpyA(Copy, s);
+  Copy = new char[strlen(s)+1];
+  strcpy(Copy, s);
 #endif
 }
 

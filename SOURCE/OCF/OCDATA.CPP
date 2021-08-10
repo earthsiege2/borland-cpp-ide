@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 // ObjectComponents
 // (C) Copyright 1994 by Borland International, All Rights Reserved
@@ -142,7 +143,7 @@ TOcDataProvider::GetFormatData(TOcFormatInfo far* fmt)
   PRECONDITION(fmt);
 
   TOcFormat* format = OcView.FormatList.Find(fmt->Id);
-  if (!format)
+  if (!format || (*format->GetRegName() == 0))
     return 0;
 
   TOcFormatData formatData(*format, UserData);
@@ -224,6 +225,7 @@ TOcDataProvider::Save(IStorage* storage, BOOL sameAsLoad, BOOL remember)
 
   return HRFailIfZero((bool)OcView.ForwardEvent(OC_VIEWSAVEPART, &ocSave));
 }
+
 
 
 

@@ -661,7 +661,7 @@ static void termModal(TEnumInfo& ei)
   if (ei.Wnds) {
     for (HWND* wnd = ei.Wnds; *wnd; wnd++)
       ::EnableWindow(*wnd, true);
-    delete ei.Wnds;
+    delete[] ei.Wnds;
     ei.Wnds = 0;
   }
   else {
